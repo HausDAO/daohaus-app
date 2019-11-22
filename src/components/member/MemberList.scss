@@ -1,0 +1,30 @@
+@import '../../variables';
+
+.MemberList {
+    > .MemberLink {text-decoration: none; transition: all .15s linear;}
+    @media (min-width: $phone) {
+        display: flex;
+        justify-content: space-evenly;
+        align-content: flex-start;
+        flex-wrap: wrap;
+        .MemberCard {
+            width: 320px;
+            border: 2px solid $app-dark;
+            margin-bottom: 25px;
+            border-radius: 10px;
+            box-shadow: 0px 0px 10px rgba(0,0,0,0.1);
+        }
+    }
+    .MemberCard {
+        background-color: $app-light;
+        margin-top: 25px;
+        border-bottom: 2px solid $app-dark;
+        transition: all .15s linear;
+    }
+    .MemberLink:hover .MemberCard {
+        background-color: $primary;
+        color: white;
+        @media (min-width: $phone)
+        { scale: 1.05; }
+    }
+}

@@ -1,0 +1,14 @@
+@import '../../variables';
+
+.MemberLink {
+    color: $base-font-color;
+    .MemberCard {
+        @media (min-width: $phone) {
+            border-radius: 10px;
+        }
+        h3 { margin: 10px 0px; }
+        .Addr {
+            margin-bottom: 10px;
+        }
+    }
+}

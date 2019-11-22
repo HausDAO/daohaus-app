@@ -1,0 +1,21 @@
+@import '../../variables';
+
+.ProposalList {
+    @media (min-width: $phone) {
+        display: flex;
+        justify-content: space-evenly;
+        align-content: flex-start;
+        flex-wrap: wrap;
+        .ProposalCard {
+            width: 320px;
+            border: 2px solid $app-dark;
+            margin-bottom: 25px;
+            border-radius: 10px;
+            box-shadow: 0px 0px 10px rgba(0,0,0,0.1);            
+        }
+    }
+    .ProposalCard {
+        margin-top: 25px;
+        border-bottom: 2px solid $app-dark;
+    }
+}

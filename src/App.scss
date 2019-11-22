@@ -1,0 +1,477 @@
+@import './variables';
+
+/* Commented out for testing
+.Brand {
+  background-image: url('/assets/' + $brand);
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center left;
+  height: 60px;
+  width: 180px;
+  display: block;
+}
+*/
+
+body { 
+  background-color: $app-background;
+  color: $base-font-color;
+}
+
+// Typography
+
+body,
+p,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-family: $base-font;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-weight: 900;
+}
+
+.Data {
+  font-family: $data-font;
+  font-weight: 400;
+  word-break: break-all;
+  margin: 0;
+}
+
+.Bold {
+  font-weight: 900;
+}
+
+// Links and Buttons
+a {
+  color: $primary;
+  fill: $primary;
+  text-decoration: none;
+  transition: all .15s linear;
+  vertical-align: middle;
+  cursor: pointer;
+  svg {
+    display: inline-block;
+    margin: 0;
+    padding: 0px;
+    vertical-align: middle;
+    width: 24px;
+    height: 24px; 
+    margin-top: -3px;
+    &.IconLeft {
+      margin-right: 5px;
+    }
+    &.IconRight {
+      margin-left: 5px;
+    }
+  }
+  &:hover {
+    color: $primary-hover;
+    fill: $primary-hover;
+  }
+}
+
+button,
+.Button {
+  // Reset
+  appearance: none;
+  outline: none;
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
+  text-decoration: none;
+  position: relative;
+  // Style
+  transition: all 0.15s ease-in-out;
+  background-color: $secondary;
+  color: white;
+  border-radius: 50px;
+  padding: 15px 30px;
+  max-width: 100%;
+  display: block;
+  margin: 15px 0px;
+  font-size: 16px;
+  text-align: center;
+  font-weight: 900;
+  &:hover {
+    background-color: $secondary-hover;
+    color: white;
+    fill: white;
+  }
+  &.Disabled {
+    opacity: 0.5;
+  }
+  &.Back {
+    margin: 0;
+    padding-top: 20px;
+    padding-left: 0px;
+    margin-left: 0px;
+    left: 0;
+    text-align: left;
+    background-color: transparent;
+    color: black !important;
+    svg {fill: black !important;}
+    border-radius: 0px;
+    width: auto;
+    &:hover {
+      margin-left: -5px;
+    }
+  }
+  svg {
+    display: inline-block;
+    margin: 0;
+    padding: 0px;
+    vertical-align: middle;
+    fill: white;
+    &.IconLeft {
+      margin-right: 5px;
+    }
+    &.IconRight {
+      margin-left: 5px;
+    }
+  }
+  &--Tertiary {
+    background-color: $tertiary;
+    &:hover { background-color: $tertiary-hover; }
+  }
+  &--Primary {
+    background-color: $primary;
+    &:hover { background-color: $primary-hover; }
+  }
+  &--Cancel {
+    background-color: transparent;
+    color: $primary;
+    border: 2px solid $primary;
+    &:hover { 
+      color: $primary-hover; 
+      border-color: $primary-hover;
+      background-color: transparent;
+    }
+  }
+  &--Input {
+    background-color: $app-light;
+    min-width: 300px;
+    border-radius: 30px;
+    padding: 15px;
+    padding-right: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    color: $primary;
+    box-shadow: $shadow;
+    &.Verified, &.Verified:hover {
+      background-color: $success;
+      color: white;
+      svg { fill: $app-light;}
+    }
+    svg { 
+      height: 24px; fill: $primary; margin-right: 5px; 
+    }
+    &:hover {
+      color: $primary-hover;
+      background-color: $app-light;
+      fill: $primary-hover;
+    }
+  }
+  .AddItem {
+    fill: $primary; 
+    position: absolute;
+    right: 15px;
+  }
+}
+
+.LinkButton {
+  background-color: transparent;
+  color: $primary;
+  padding: 0px;
+  margin: 0px;
+  &:hover {
+    background-color: transparent;
+    color: $primary-hover;
+  }
+}
+
+button.Tab {
+  background-color: transparent;
+  font-size: 1em;
+}
+
+.ButtonGroup {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+}
+
+// Proposal Utils
+
+.ProposalCard,
+.MemberCard {
+  padding: 25px;
+  border-top: 2px solid #eee;
+}
+.ProposalDetail {
+  padding: 25px;
+  padding-bottom: 120px;
+}
+
+.MemberDetail {
+  padding: 25px;
+  padding-bottom: 120px;
+}
+
+.Offer {
+  display: flex;
+  justify-content: flex-start;
+  align-content: flex-start;
+  div:first-child {
+    margin-right: 25px;
+  }
+  h5 {
+    margin: 0px;
+  }
+  h2 {
+    margin: 0px;
+  }
+}
+
+// Components
+
+.MainNav {
+  display: flex;
+  align-content: center;
+  justify-content: space-evenly;
+}
+
+.Timer {
+  display: flex;
+  align-content: center;
+  svg {
+    margin: 0;
+    margin-top: -4px;
+    margin-right: 5px;
+    fill: $base-font-color;
+  }
+  p { margin: 0; }
+}
+
+.IconWarning svg {
+  fill: $danger;
+}
+
+.QR svg:not(.IconRight) { padding: 25px; background-color: white; }
+
+// Utils
+
+.AddDevice {
+  max-width: 600px;
+  margin: 50px auto;
+  background-color: $app-light;
+  text-align: center;
+  button { margin: 0 auto; }
+  padding: 25px;
+  border-radius: 10px;
+  box-shadow: 0px 0px 10px rgba(0,0,0,0.1);
+}
+
+.View {
+  padding-bottom: 117px;
+}
+
+.Pad {
+  padding-left: 15px;
+  padding-right: 15px;
+}
+
+.Row {
+  display: flex;
+  align-content: center;
+  justify-content: space-between;
+}
+
+.Label {
+  margin: 0;
+  margin-bottom: 5px;
+  color: rgb(182, 182, 182);
+}
+
+.Danger {
+  color: $danger;
+}
+
+.AltOption {
+  display: block;
+  text-align: center;
+  width: max-content;
+  padding: 25px 25px;
+  margin: 0 auto;
+}
+
+.Video {
+  max-width: 100%;
+  div:first-child {
+    max-width: 100%;
+  }
+}
+
+.FlexCenter {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  .Form { max-width: 600px; width: 100%; }
+}
+
+.FlexContainer {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+  padding: $base-padding;
+  width: calc(100% - 30px);
+  overflow-x: hidden;
+  // hidden to make loading work properly on small screen.
+}
+
+.Truncate { 
+  width: 65px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+  margin-right: 5px;
+}
+
+.Strikethrough {
+  text-decoration: line-through; 
+}
+
+.EthLogo {
+  width: 36px;
+}
+
+.Note {
+  display: inline-block;
+  margin-left: 5px;
+  padding: 0px 5px;
+  cursor: pointer;
+  &.Allowance:hover:after {
+    content: "Your allowance is lower than your balance. Consider giving it a raise.";
+    font-family: $base-font;
+    font-size: 0.5em;
+    vertical-align: middle;
+    margin-left: 5px;
+  }
+  &.Gas:hover:after {
+    content: "Your Eth is really low. Consider topping it off.";
+    font-family: $base-font;
+    font-size: 0.5em;
+    vertical-align: middle;
+    margin-left: 5px;
+  }
+}
+
+// Forms
+.Form {
+  padding: $base-padding;
+  max-width: 340px;
+  margin: 0 auto;
+  .Error {
+    color: red;
+    font-size: 13px;
+    position: relative;
+    top: 20px;
+    left: 20px;
+    margin-bottom: 40px;
+  }
+}
+
+input,
+textarea {
+  // Reset
+  outline: none;
+  appearance: none;
+  border: none;
+  background-color: $app-light;
+  color: black;
+  // Style
+  border: none;
+  min-width: 300px;
+  max-width: 100%;
+  font-size: 21px;
+  padding: 20px 20px 10px 20px;
+  border-radius: 35px;
+  box-shadow: $shadow;
+}
+
+.Field {
+  position: relative;
+  margin-top: 25px;
+  label {
+    pointer-events: none;
+    position: absolute;
+    left: 20px;
+    top: 17px;
+    color: lighten($primary, 10%);
+    background-color: transparent;
+    z-index: 10;
+    transition: transform 150ms ease-out, font-size 150ms ease-out;
+  }
+  &.HasValue {
+    label {
+      transform: translateY(-75%);
+      font-size: .75em;
+    }
+  }
+}
+
+.EmailConfirmed {
+  margin: 25px auto 0px;
+  max-width: 340px;
+  color: $success;
+  text-transform: capitalize;
+  svg {
+    fill: $success;
+    vertical-align: middle;
+  }
+}
+
+.AccountAddr {
+  margin-top: 20px;
+  margin-bottom: 20px;
+  width: 100%;
+  .Label {
+    display: block;
+
+  }
+}
+
+.RiskyBiz {
+  margin: 25px auto;
+  font-weight: 500;
+  background-color: $danger;
+  &:hover { background-color: $danger-hover; }
+  &.Short {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    svg, span { margin: 5px auto; }
+  }
+  @media (max-width: $phone) {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    svg, span { margin: 5px auto; }
+    border-radius: 0px;
+  }
+}

@@ -1,0 +1,20 @@
+service: pokemol-v2
+
+plugins:
+  - serverless-single-page-app-plugin
+
+custom:
+  stage: ${opt:stage, self:provider.stage}
+  s3HostingBucket: ${self:service}-${self:custom.stage}-hosting
+
+provider:
+  name: aws
+  runtime: nodejs8.10
+  stage: dev
+  region: us-east-1
+  profile: default
+
+resources:
+  - ${file(resources/s3-hosting-bucket.yml)}
+  - ${file(resources/cognito-user-pool.yml)}
+  - ${file(resources/cognito-identity-pool.yml)}

@@ -1,0 +1,301 @@
+@import '../../variables';
+.UserWallet {
+  position: relative;
+}
+.Wallet {
+  border: 1px solid #efefef;
+  border-radius: 10px;
+  position: relative;
+  top: -2px;
+  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+  background-color: $app-light;
+  .Header {
+    height: 98px;
+    border-bottom: 1px solid #efefef;
+    border-top-right-radius: 10px;
+    border-top-left-radius: 10px;
+    display: flex;
+    flex-direction: row;
+    align-content: center;
+    justify-content: space-between;
+    background-color: $primary-hover;
+    .WalletInfo {
+      .Address {
+        margin: 0;
+        padding: 0px;
+        border: none;
+        background: none;
+        color: white;
+        width: auto;
+        display: flex;
+        align-content: center;
+        &:hover {
+          color: $secondary;
+          fill: $secondary;
+        }
+        p {
+          color: white;
+        }
+        svg {
+          display: inline-block;
+          fill: $secondary;
+          width: 18px;
+          height: 18px;
+          margin-left: 5px;
+        }
+      }
+      .Status {
+        font-size: 0.85em;
+        position: relative;
+        color: $secondary;
+        margin-left: 15px;
+        margin-top: 0;
+        margin-bottom: 5px;
+        &:before {
+          content: '';
+          width: 8px;
+          height: 8px;
+          border-radius: 50%;
+          background-color: $secondary;
+          display: block;
+          position: absolute;
+          left: 0;
+          top: 50%;
+          transform: translateY(-50%);
+          margin-left: -15px;
+        }
+        &.Disconnected {
+          color: $danger;
+          &:before {
+            background-color: $danger;
+          }
+        }
+      }
+    }
+    .ActionsDropdownContent {
+      position: absolute;
+      right: -15px;
+      background-color: $app-light;
+      min-width: 200px;
+      max-width: 100%;
+      box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.15);
+      padding: 12px 16px;
+      z-index: 1;
+      button {
+        background-color: transparent;
+        color: $primary;
+        text-align: left;
+        padding: 15px 0px;
+        margin: 0;
+        &:hover {
+          color: $primary-hover;
+        }
+        &.Button--Primary {
+          color: $primary;
+          &:hover {
+            color: $primary-hover;
+          }
+        }
+        &.Button--Secondary {
+          color: $secondary;
+          &:hover {
+            color: $secondary-hover;
+          }
+        }
+        &.Button--Tertiary {
+          color: $tertiary;
+          &:hover {
+            color: $tertiary-hover;
+          }
+        }
+      }
+    }
+    .ActionsDropdown {
+      color: $app-light;
+      position: relative;
+      button {
+        background-color: transparent;
+        img {
+          margin-left: 5px;
+          vertical-align: middle;
+        }
+      }
+    }
+  }
+  .SwitchHeader {
+    width: calc(100% - 30px);
+    background-color: #911094;
+    display: flex;
+    justify-content: flex-start;
+    padding: 0px 15px;
+    button {
+      color: $secondary;
+      background-color: transparent;
+      border-radius: 0px;
+      margin: 0;
+      margin-right: 25px;
+      border-bottom: 4px solid transparent;
+      padding: 15px 0px;
+      &.SelectedElement {
+        color: #ffffff;
+        border-bottom: 4px solid $secondary;
+      }
+    }
+  }
+  .Contents {
+    min-height: 300px;
+  }
+  &__Footer {
+    .Powered {
+      font-size: 0.85em;
+      font-weight: 700;
+      color: #ccc;
+      text-align: center;
+    }
+  }
+}
+
+.Balances {
+  min-height: 300px;
+  .Item {
+    display: flex;
+    align-content: center;
+    justify-content: space-between;
+    padding: 15px 15px;
+    flex-direction: column;
+    background-color: $app-light;
+    @media (min-width: $tablet) {
+      flex-direction: column;
+    }
+    p {
+      margin: 0;
+      padding: 0px;
+    }
+    border-bottom: 1px solid #efefef;
+    p:nth-child(1) {
+      font-size: 0.85em;
+      color: #333;
+    }
+    p:nth-child(2) {
+      font-size: 1.5em;
+    }
+  }
+}
+
+.Transactions {
+  min-height: 300px;
+  .Item {
+    display: flex;
+    align-content: center;
+    justify-content: space-between;
+    padding: 15px 15px;
+    flex-direction: row;
+    background-color: $app-light;
+    .Description {
+      display: flex;
+      align-content: center;
+      justify-content: flex-start;
+      flex-direction: column;
+      &__Title {
+        font-size: 1.3em;
+        margin: 0;
+        margin-bottom: 5px;
+        margin-top: 5px;
+      }
+      a {
+        color: #aaa;
+      }
+    }
+    .Status {
+      display: flex;
+      align-content: center;
+      justify-content: center;
+      flex-direction: column;
+      text-align: center;
+      width: 80px;
+      svg {
+        width: 36px;
+        height: 36px;
+      }
+    }
+    p:not(.Description__Title) {
+      font-size: 0.85em;
+      margin: 0;
+      color: #aaa;
+    }
+    border-bottom: 1px solid $app-dark;
+  }
+}
+
+.Actions {
+  display: flex;
+  align-content: center;
+  justify-content: space-around;
+  flex-direction: column;
+  padding: 0px 25px;
+  margin-bottom: 50px;
+  button {
+    margin: 10px 0px;
+  }
+}
+
+.WalletOverlay {
+  width: 100%;
+  min-height: 100%;
+  position: absolute;
+  z-index: 1;
+  background-color: $primary;
+  color: white;
+  border: none;
+  p { text-align: center; }
+  .Contents {
+    padding: 50px;
+  }
+}
+
+.TinyButton {
+  margin: 0;
+  display: inline-block;
+  font-size: 0.5em;
+  padding: 7px 10px;
+  vertical-align: middle;
+  margin-top: -5px;
+  margin-left: 10px;
+  background-color: $danger;
+  &:hover { background-color: $danger-hover; }
+  span {
+    color: white;
+    height: 13px;
+    width: 13px;
+    border-radius: 50%;
+    border: 1px solid white;
+    font-size: 0.85em;
+    float: left;
+    margin-right: 5px;
+  }
+}
+
+@media (min-width: $phone) {
+  .UserWallet {
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+  .Actions {
+    flex-direction: column;
+  }
+  .Wallet {
+    width: 60%;
+    margin: 25px auto;
+    position: relative;
+  }
+  .Transactions {
+    width: 100%;
+    clear: both;
+    margin: 0 auto;
+    max-width: 1160px;
+  }
+  .WalletOverlay {
+    border-radius: 10px;
+    border: none;
+  }
+}
