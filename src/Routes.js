@@ -16,21 +16,37 @@ import ResendCode from './views/auth/ResendCode';
 
 const Routes = () => (
   <Switch>
-    <Route path="/" exact component={Home} />
-    <Route path="/proposals" exact component={Proposals} />
-    <Route path="/proposals/:filter" exact component={Proposals} />
-    <Route path="/proposal/:id" exact component={Proposal} />
-    <Route path="/proposal-new" exact component={ProposalNew} />
-    <Route path="/members" exact component={Members} />
-    <Route path="/member/:id" exact component={Member} />
-    <Route path="/account" exact component={Account} />
-    <Route path="/sign-up" exact component={SignUp} />
-    <Route path="/sign-in" exact component={SignIn} />
-    <Route path="/sign-out" exact component={SignOut} />
-    <Route path="/confirm" exact component={Confirm} />
-    <Route path="/resend-code" exact component={ResendCode} />
+    <DaoRoute path="/" exact component={Home} />
+    <DaoRoute path="/proposals" exact component={Proposals} />
+    <DaoRoute path="/proposals/:filter" exact component={Proposals} />
+    <DaoRoute path="/proposal/:id" exact component={Proposal} />
+    <DaoRoute path="/proposal-new" exact component={ProposalNew} />
+    <DaoRoute path="/members" exact component={Members} />
+    <DaoRoute path="/member/:id" exact component={Member} />
+    <DaoRoute path="/account" exact component={Account} />
+    <DaoRoute path="/sign-up" exact component={SignUp} />
+    <DaoRoute path="/sign-in" exact component={SignIn} />
+    <DaoRoute path="/sign-out" exact component={SignOut} />
+    <DaoRoute path="/confirm" exact component={Confirm} />
+    <DaoRoute path="/resend-code" exact component={ResendCode} />
     <Route path="*" component={FourOhFour} />
   </Switch>
 );
+
+const DaoRoute = (props) => {
+  const { component, path } = props;
+  //This can pull from the store/daoContext to see if whitelisted
+  const isValidDao = true;
+
+  return (
+    <>
+      {isValidDao ? (
+        <Route path={path} component={component} />
+      ) : (
+        <Redirect to="*" />
+      )}
+    </>
+  );
+};
 
 export default Routes;
