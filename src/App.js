@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useContext } from 'react';
 import { BrowserRouter as Router } from 'react-router-dom';
 
 import Routes from './Routes';
@@ -9,25 +9,40 @@ import Web3Service from './utils/Web3Service';
 import TokenService from './utils/TokenService';
 
 import './App.scss';
+import { DaoContext } from './contexts/Store';
 
-const mcDao = new McDaoService();
 const web3 = new Web3Service();
 
 const App = ({ client }) => {
   const [loading, setloading] = useState(true);
+  const [daoService, setDaoService] = useContext(DaoContext);
+
+  useEffect(()=> {
+    const initDao = async () => {
+      var pathname = window.location.pathname.split( '/' );
+      console.log('pathname', pathname[1]);
+      const _mcDao = new McDaoService(pathname[1]);
+      await _mcDao.initContract()
+      setDaoService(_mcDao)
+    }
+    initDao();
+
+  },[])
 
   useEffect(() => {
     // save all web3 data to apollo cache
     const fetchData = async () => {
-      const currentPeriod = await mcDao.getCurrentPeriod();
-      const totalShares = await mcDao.getTotalShares();
-      const guildBankAddr = await mcDao.getGuildBankAddr();
-      const gracePeriodLength = await mcDao.getGracePeriodLength();
-      const votingPeriodLength = await mcDao.getVotingPeriodLength();
-      const periodDuration = await mcDao.getPeriodDuration();
-      const processingReward = await mcDao.getProcessingReward();
-      const proposalDeposit = await mcDao.getProposalDeposit();
-      const approvedToken = await mcDao.approvedToken();
+      console.log('dao', daoService);
+      
+      const currentPeriod = await daoService.getCurrentPeriod();
+      const totalShares = await daoService.getTotalShares();
+      const guildBankAddr = await daoService.getGuildBankAddr();
+      const gracePeriodLength = await daoService.getGracePeriodLength();
+      const votingPeriodLength = await daoService.getVotingPeriodLength();
+      const periodDuration = await daoService.getPeriodDuration();
+      const processingReward = await daoService.getProcessingReward();
+      const proposalDeposit = await daoService.getProposalDeposit();
+      const approvedToken = await daoService.approvedToken();
 
       const tokenService = new TokenService(approvedToken);
       const guildBankValue = await tokenService.balanceOf(guildBankAddr);
@@ -51,9 +66,10 @@ const App = ({ client }) => {
       });
       setloading(false);
     };
-
-    fetchData();
-  }, [client]);
+    if(daoService){
+      fetchData();
+    }
+  }, [client, daoService]);
   return (
     <div className="App">
       {loading ? (

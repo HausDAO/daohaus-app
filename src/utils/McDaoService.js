@@ -1,6 +1,5 @@
 import DaoAbi from '../contracts/mcdao.json';
 import Web3Service from '../utils/Web3Service';
-import config from '../config';
 
 export default class McDaoService {
   contractAddr;
@@ -8,19 +7,22 @@ export default class McDaoService {
   contract;
   daoAbi;
 
-  constructor() {
-    this.contractAddr = config.CONTRACT_ADDRESS;
+  constructor(contractAddr) {
+    console.log(contractAddr);
+    
+    this.contractAddr = contractAddr;
     this.web3Service = new Web3Service();
     this.daoAbi = DaoAbi;
-
-    this.initContract();
   }
 
   async initContract() {
+    console.log('what is this addr', this.contractAddr);
+    
     this.contract = await this.web3Service.initContract(
       this.daoAbi,
       this.contractAddr,
     );
+    return this.contract;
   }
 
   async getAllEvents() {
@@ -36,8 +38,13 @@ export default class McDaoService {
 
   async getCurrentPeriod() {
     if (!this.contract) {
+      console.log("create contract here????");
+      
       await this.initContract();
     }
+    console.log('this.contract',this.contract);
+    console.log('this.contract',this.contract);
+    
     let currentPeriod = await this.contract.methods.getCurrentPeriod().call();
     return currentPeriod;
   }
