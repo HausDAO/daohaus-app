@@ -36,7 +36,7 @@ const Routes = () => (
 const DaoRoute = (props) => {
   const { component, path } = props;
   //This can pull from the store/daoContext to see if whitelisted
-  console.log('path', path);
+  console.log('path from dao route:', path);
   
   const isValidDao = true;
 

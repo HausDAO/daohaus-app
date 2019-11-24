@@ -4,36 +4,71 @@ import { BrowserRouter as Router } from 'react-router-dom';
 import Routes from './Routes';
 import Header from './components/header/Header';
 import Loading from './components/shared/Loading';
+import { get } from './utils/Requests';
+
 import McDaoService from './utils/McDaoService';
 import Web3Service from './utils/Web3Service';
 import TokenService from './utils/TokenService';
 
-import './App.scss';
 import { DaoContext } from './contexts/Store';
+
+import './App.scss';
 
 const web3 = new Web3Service();
 
 const App = ({ client }) => {
   const [loading, setloading] = useState(true);
+  const [daoPath, setDaoPath] = useState('');
+  const [daoData, setDaoData] = useState('');
   const [daoService, setDaoService] = useContext(DaoContext);
 
-  useEffect(()=> {
-    const initDao = async () => {
-      var pathname = window.location.pathname.split( '/' );
-      console.log('pathname', pathname[1]);
-      const _mcDao = new McDaoService(pathname[1]);
-      await _mcDao.initContract()
-      setDaoService(_mcDao)
-    }
-    initDao();
+  useEffect(() => {
+    // get dao from daohaus api and check if exists and is whitelisted
+    console.log('get dao api', daoService);
+    var pathname = window.location.pathname.split('/');
+    console.log('pathname', pathname[1]);
 
-  },[])
+    const getDao = async () => {
+      let apiData = '';
+      try {
+        const daoRes = await get(`moloch/${pathname[1]}`);
+        apiData = daoRes.data;
+        if(apiData.whitelisted){
+          setDaoPath(pathname[1]);
+          setDaoData(apiData);
+        }
+        
+      } catch (e) {
+        console.log('error on dao api call', e);
+      }
+      console.log(apiData);
+    };
+
+    getDao();
+  }, []);
+
+  useEffect(() => {
+    const initDao = async () => {
+      try {
+        const _mcDao = new McDaoService(daoPath);
+        await _mcDao.initContract();
+        setDaoService(_mcDao);
+      } catch (err) {
+        console.log('error init contract:', err);
+      }
+    };
+    console.log(daoPath);
+
+    if (daoPath) {
+      initDao();
+    }
+  }, [daoPath]);
 
   useEffect(() => {
     // save all web3 data to apollo cache
     const fetchData = async () => {
       console.log('dao', daoService);
-      
+
       const currentPeriod = await daoService.getCurrentPeriod();
       const totalShares = await daoService.getTotalShares();
       const guildBankAddr = await daoService.getGuildBankAddr();
@@ -66,7 +101,7 @@ const App = ({ client }) => {
       });
       setloading(false);
     };
-    if(daoService){
+    if (daoService) {
       fetchData();
     }
   }, [client, daoService]);
