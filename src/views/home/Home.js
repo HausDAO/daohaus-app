@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useContext } from 'react';
 import { Query } from 'react-apollo';
 import { withApollo } from 'react-apollo';
 import { ResponsiveContainer, AreaChart, Area } from 'recharts';
@@ -6,18 +6,19 @@ import { ResponsiveContainer, AreaChart, Area } from 'recharts';
 import { GET_METADATA } from '../../utils/Queries';
 import TokenService from '../../utils/TokenService';
 import StateModals from '../../components/shared/StateModals';
-import McDaoService from '../../utils/McDaoService';
 import Web3Service from '../../utils/Web3Service';
 import BottomNav from '../../components/shared/BottomNav';
 import ErrorMessage from '../../components/shared/ErrorMessage';
 import Loading from '../../components/shared/Loading';
 import ValueDisplay from '../../components/shared/ValueDisplay';
+import { DaoContext } from '../../contexts/Store';
 
 import './Home.scss';
 
 const Home = ({ client }) => {
   const [vizData, setVizData] = useState([]);
   const [chartView, setChartView] = useState('bank');
+  const [daoService] = useContext(DaoContext);
 
   const { guildBankAddr, approvedToken } = client.cache.readQuery({
     query: GET_METADATA,
@@ -27,7 +28,8 @@ const Home = ({ client }) => {
     const fetchData = async () => {
       const web3Service = new Web3Service();
       const tokenService = new TokenService(approvedToken);
-      const mcDao = new McDaoService();
+      const mcDao = daoService;
+      console.log('>>>>>>>>>>>>>>>>>>>>', mcDao);
 
       if (guildBankAddr) {
         const events = await mcDao.getAllEvents();
@@ -101,7 +103,7 @@ const Home = ({ client }) => {
     };
 
     fetchData();
-  }, [guildBankAddr, chartView, approvedToken]);
+  }, [daoService, guildBankAddr, chartView, approvedToken]);
 
   return (
     <Query query={GET_METADATA} pollInterval={30000}>
@@ -116,6 +118,7 @@ const Home = ({ client }) => {
             <div className="Home">
               <div className="Intro">
                 <h1>PokéMol DAO</h1>
+                <p>{daoService.contract.options.address}</p>
                 <p>Put a Moloch in Your Pocket</p>
               </div>
               <div className="Chart" style={{ width: '100%', height: '33vh' }}>

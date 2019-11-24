@@ -14,28 +14,42 @@ import Confirm from './views/auth/Confirm';
 import SignOut from './views/auth/SignOut';
 import ResendCode from './views/auth/ResendCode';
 
-const Routes = () => (
+const Routes = (props) => {
+  const {isValid} = props;
+  console.log('isValid', isValid);
+  
+  return (
   <Switch>
-    <DaoRoute path="/" exact component={Home} />
-    <DaoRoute path="/proposals" exact component={Proposals} />
-    <DaoRoute path="/proposals/:filter" exact component={Proposals} />
-    <DaoRoute path="/proposal/:id" exact component={Proposal} />
-    <DaoRoute path="/proposal-new" exact component={ProposalNew} />
-    <DaoRoute path="/members" exact component={Members} />
-    <DaoRoute path="/member/:id" exact component={Member} />
-    <DaoRoute path="/account" exact component={Account} />
-    <DaoRoute path="/sign-up" exact component={SignUp} />
-    <DaoRoute path="/sign-in" exact component={SignIn} />
-    <DaoRoute path="/sign-out" exact component={SignOut} />
-    <DaoRoute path="/confirm" exact component={Confirm} />
-    <DaoRoute path="/resend-code" exact component={ResendCode} />
+    {isValid ? (
+      <>
+    <Route path="/:dao/" exact component={Home} />
+    <Route path="/:dao/proposals" exact component={Proposals} />
+    <Route path="/:dao/proposals/:filter" exact component={Proposals} />
+    <Route path="/:dao/proposal/:id" exact component={Proposal} />
+    <Route path="/:dao/proposal-new" exact component={ProposalNew} />
+    <Route path="/:dao/members" exact component={Members} />
+    <Route path="/:dao/member/:id" exact component={Member} />
+    <Route path="/:dao/account" exact component={Account} />
+    <Route path="/:dao/sign-up" exact component={SignUp} />
+    <Route path="/:dao/sign-in" exact component={SignIn} />
+    <Route path="/:dao/sign-out" exact component={SignOut} />
+    <Route path="/:dao/confirm" exact component={Confirm} />
+    <Route path="/:dao/resend-code" exact component={ResendCode} />
     <Route path="*" component={FourOhFour} />
+    </>
+    ) : (
+      <Route path="*" component={FourOhFour} />
+
+    )}
   </Switch>
-);
+)
+};
 
 const DaoRoute = (props) => {
   const { component, path } = props;
   //This can pull from the store/daoContext to see if whitelisted
+  console.log('path from dao route:', path);
+  
   const isValidDao = true;
 
   return (
@@ -43,7 +57,7 @@ const DaoRoute = (props) => {
       {isValidDao ? (
         <Route path={path} component={component} />
       ) : (
-        <Redirect to="*" />
+        <Route path="*" component={FourOhFour} />
       )}
     </>
   );
