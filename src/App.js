@@ -30,15 +30,22 @@ const App = ({ client }) => {
 
     const getDao = async () => {
       let apiData = '';
+      if(!pathname[1]){
+        setloading(false);
+        return false;
+      }
       try {
         const daoRes = await get(`moloch/${pathname[1]}`);
         apiData = daoRes.data;
         if(apiData.whitelisted){
           setDaoPath(pathname[1]);
           setDaoData(apiData);
+        } else {
+          setloading(false);
         }
-        
+
       } catch (e) {
+        setloading(false);
         console.log('error on dao api call', e);
       }
       console.log(apiData);
@@ -112,7 +119,7 @@ const App = ({ client }) => {
       ) : (
         <Router>
           <Header />
-          <Routes />
+          <Routes isValid={!!daoPath} />
         </Router>
       )}
     </div>

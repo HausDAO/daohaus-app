@@ -14,24 +14,36 @@ import Confirm from './views/auth/Confirm';
 import SignOut from './views/auth/SignOut';
 import ResendCode from './views/auth/ResendCode';
 
-const Routes = () => (
+const Routes = (props) => {
+  const {isValid} = props;
+  console.log('isValid', isValid);
+  
+  return (
   <Switch>
-    <DaoRoute path="/:dao/" exact component={Home} />
-    <DaoRoute path="/:dao/proposals" exact component={Proposals} />
-    <DaoRoute path="/:dao/proposals/:filter" exact component={Proposals} />
-    <DaoRoute path="/:dao/proposal/:id" exact component={Proposal} />
-    <DaoRoute path="/:dao/proposal-new" exact component={ProposalNew} />
-    <DaoRoute path="/:dao/members" exact component={Members} />
-    <DaoRoute path="/:dao/member/:id" exact component={Member} />
-    <DaoRoute path="/:dao/account" exact component={Account} />
-    <DaoRoute path="/:dao/sign-up" exact component={SignUp} />
-    <DaoRoute path="/:dao/sign-in" exact component={SignIn} />
-    <DaoRoute path="/:dao/sign-out" exact component={SignOut} />
-    <DaoRoute path="/:dao/confirm" exact component={Confirm} />
-    <DaoRoute path="/:dao/resend-code" exact component={ResendCode} />
+    {isValid ? (
+      <>
+    <Route path="/:dao/" exact component={Home} />
+    <Route path="/:dao/proposals" exact component={Proposals} />
+    <Route path="/:dao/proposals/:filter" exact component={Proposals} />
+    <Route path="/:dao/proposal/:id" exact component={Proposal} />
+    <Route path="/:dao/proposal-new" exact component={ProposalNew} />
+    <Route path="/:dao/members" exact component={Members} />
+    <Route path="/:dao/member/:id" exact component={Member} />
+    <Route path="/:dao/account" exact component={Account} />
+    <Route path="/:dao/sign-up" exact component={SignUp} />
+    <Route path="/:dao/sign-in" exact component={SignIn} />
+    <Route path="/:dao/sign-out" exact component={SignOut} />
+    <Route path="/:dao/confirm" exact component={Confirm} />
+    <Route path="/:dao/resend-code" exact component={ResendCode} />
     <Route path="*" component={FourOhFour} />
+    </>
+    ) : (
+      <Route path="*" component={FourOhFour} />
+
+    )}
   </Switch>
-);
+)
+};
 
 const DaoRoute = (props) => {
   const { component, path } = props;
