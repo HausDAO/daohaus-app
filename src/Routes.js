@@ -45,22 +45,4 @@ const Routes = (props) => {
 )
 };
 
-const DaoRoute = (props) => {
-  const { component, path } = props;
-  //This can pull from the store/daoContext to see if whitelisted
-  console.log('path from dao route:', path);
-  
-  const isValidDao = true;
-
-  return (
-    <>
-      {isValidDao ? (
-        <Route path={path} component={component} />
-      ) : (
-        <Route path="*" component={FourOhFour} />
-      )}
-    </>
-  );
-};
-
 export default Routes;

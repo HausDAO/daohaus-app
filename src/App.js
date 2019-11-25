@@ -74,7 +74,7 @@ const App = ({ client }) => {
   useEffect(() => {
     // save all web3 data to apollo cache
     const fetchData = async () => {
-      console.log('dao', daoService);
+      console.log('dao fetch web3', daoService);
 
       const currentPeriod = await daoService.getCurrentPeriod();
       const totalShares = await daoService.getTotalShares();

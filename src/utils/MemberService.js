@@ -16,8 +16,8 @@ export const GetMetaData = async (id) => {
 };
 
 export const GET_MEMBERS_QUERY = gql`
-  query {
-    members(orderBy: shares) {
+  query members($contractAddr: String!) {
+    members(orderBy: shares, where: { molochAddress: $contractAddr }) {
       id
       delegateKey
       shares
@@ -29,21 +29,15 @@ export const GET_MEMBERS_QUERY = gql`
 `;
 
 export const GET_MEMBER_QUERY = gql`
-  query member($id: String!) {
-    member(id: $id) {
+  query member($id: String!, $contractAddr: String!) {
+    member(id: $id, where: { molochAddress: $contractAddr }) {
       id
       delegateKey
       shares
       isActive
       tokenTribute
       didRagequit
-      votes {
-        proposal {
-          proposalIndex
-          yesVotes
-          noVotes
-        }
-      }
+
       submissions {
         proposalIndex
         yesVotes
@@ -55,3 +49,12 @@ export const GET_MEMBER_QUERY = gql`
     }
   }
 `;
+
+//hand tgo remove
+// votes {
+//   proposal {
+//     proposalIndex
+//     yesVotes
+//     noVotes
+//   }
+// }

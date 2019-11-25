@@ -20,7 +20,6 @@ const ProposalCard = ({ proposal, client }) => {
   const { periodDuration } = client.cache.readQuery({
     query: GET_METADATA,
   });
-  console.log('proposal card', proposal);
   
   const countDown = getProposalCountdownText(proposal, periodDuration);
   const title = titleMaker(proposal);

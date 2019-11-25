@@ -141,7 +141,6 @@ const Proposal = (props) => {
       {({ loading, error, data }) => {
         if (loading) return <Loading />;
         if (error) return <ErrorMessage message={error} />;
-        console.log('data', data, `${daoService.contract.options.address.toLowerCase()}-${id}`);
         
         return (
           <Fragment>

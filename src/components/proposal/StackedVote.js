@@ -4,9 +4,7 @@ import { DaoContext } from '../../contexts/Store';
 
 const StackedVote = ({
   id,
-  baseColor,
-  noColor,
-  yesColor,
+
   currentYesVote,
   currentNoVote,
 }) => {
@@ -25,7 +23,6 @@ const StackedVote = ({
 
   useEffect(() => {
     const currentProposal = async () => {
-      console.log('stacked vote id', id);
       
       const info = await daoService.proposalQueue(id.split("-")[1]);
       const noVoteShares = parseInt(info.noVotes) + currentNoVote;
@@ -40,7 +37,7 @@ const StackedVote = ({
       setPercentageSharesNo(percentageSharesNo);
     };
     currentProposal();
-  }, [id, currentYesVote, currentNoVote]);
+  }, [daoService, id, currentYesVote, currentNoVote]);
 
   // const noVotes = {
   //   textAlign: 'center',
