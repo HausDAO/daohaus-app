@@ -35,7 +35,7 @@ const Routes = (props) => {
     <Route path="/:dao/sign-out" exact component={SignOut} />
     <Route path="/:dao/confirm" exact component={Confirm} />
     <Route path="/:dao/resend-code" exact component={ResendCode} />
-    <Route path="*" component={FourOhFour} />
+    {/* <Route path="*" component={FourOhFour} /> */}
     </>
     ) : (
       <Route path="*" component={FourOhFour} />
@@ -43,24 +43,6 @@ const Routes = (props) => {
     )}
   </Switch>
 )
-};
-
-const DaoRoute = (props) => {
-  const { component, path } = props;
-  //This can pull from the store/daoContext to see if whitelisted
-  console.log('path from dao route:', path);
-  
-  const isValidDao = true;
-
-  return (
-    <>
-      {isValidDao ? (
-        <Route path={path} component={component} />
-      ) : (
-        <Route path="*" component={FourOhFour} />
-      )}
-    </>
-  );
 };
 
 export default Routes;

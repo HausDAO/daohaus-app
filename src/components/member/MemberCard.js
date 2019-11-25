@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { Link } from 'react-router-dom';
 
 import Web3Service from '../../utils/Web3Service';
@@ -7,26 +7,28 @@ import { GetMetaData } from '../../utils/MemberService';
 import ValueDisplay from '../shared/ValueDisplay';
 
 import './MemberCard.scss';
+import { DaoContext } from '../../contexts/Store';
 
 const web3Service = new Web3Service();
 
 const MemberCard = ({ member }) => {
   const [s3Data, setS3Data] = useState({});
-
+  const [daoService] = useContext(DaoContext)
   useEffect(() => {
     const fetchData = async () => {
-      let metaData = await GetMetaData(member.delegateKey);
-      setS3Data(metaData);
+      //let metaData = await GetMetaData(member.delegateKey);
+      //setS3Data(metaData);
+      setS3Data({});
     };
 
     fetchData();
   }, [member.delegateKey]);
-
+const memberId = member.id.split("-")[1]
   return (
-    <Link className="MemberLink" to={{ pathname: '/member/' + member.id }}>
+    <Link className="MemberLink" to={{ pathname: '/' + daoService.contract.options.address + '/member/' + member.id }}>
       <div className="MemberCard">
         <h3>{s3Data.username || 'unknown'}</h3>
-        <p className="Data Addr">{truncateAddr(member.id)}</p>
+        <p className="Data Addr">{truncateAddr(memberId)}</p>
         <div className="Offer">
           <div className="Shares">
             <h5>Shares</h5>

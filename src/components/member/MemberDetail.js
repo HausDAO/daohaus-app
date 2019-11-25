@@ -13,8 +13,9 @@ const MemberDetail = ({ member }) => {
 
   useEffect(() => {
     const fetchData = async () => {
-      let metaData = await GetMetaData(member.delegateKey);
-      setS3Data(metaData);
+      // let metaData = await GetMetaData(member.delegateKey);
+      // setS3Data(metaData);
+      setS3Data({});
     };
 
     fetchData();
@@ -23,7 +24,7 @@ const MemberDetail = ({ member }) => {
   return (
     <div className="MemberDetail">
       <h2>{s3Data.username}</h2>
-      <p className="Data">{member.id}</p>
+      <p className="Data">{member.id.split("-")[1]}</p>
       <div className="Offer">
         <div className="Shares">
           <h5>Shares</h5>

@@ -42,8 +42,6 @@ export default class McDaoService {
       
       await this.initContract();
     }
-    console.log('this.contract',this.contract);
-    console.log('this.contract',this.contract);
     
     let currentPeriod = await this.contract.methods.getCurrentPeriod().call();
     return currentPeriod;
