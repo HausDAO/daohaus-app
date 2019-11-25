@@ -12,7 +12,7 @@ import {
 
 import config from '../../config';
 
-import { CurrentUserContext } from '../../contexts/Store';
+import { CurrentUserContext, DaoContext } from '../../contexts/Store';
 import Loading from '../../components/shared/Loading';
 import Web3Service from '../../utils/Web3Service';
 
@@ -24,6 +24,7 @@ const SignIn = (props) => {
   const [authError, setAuthError] = useState();
   const [pseudonymTouch, setPseudonymTouch] = useState(false);
   const [passwordTouch, setPasswordTouch] = useState(false);
+  const [daoService] = useContext(DaoContext);
 
   let historyState = history.location.state;
 
@@ -107,7 +108,7 @@ const SignIn = (props) => {
                 };
                 setCurrentUser({ ...realuser, ...{ sdk } });
                 setSubmitting(false);
-                history.push('/proposals');
+                history.push(`/${daoService.contract.options.address}/proposals`);
               } catch (err) {
                 console.log(err); // {"error":"account device not found"}
               }
@@ -175,7 +176,7 @@ const SignIn = (props) => {
               setSubmitting(false);
 
               history.push({
-                pathname: '/',
+                pathname: `/${daoService.contract.options.address}/`,
                 state: { signUpModal: true },
               });
             }
@@ -194,7 +195,9 @@ const SignIn = (props) => {
           return (
             <Form className="Form">
               <h2>Sign in</h2>
-              <Link to="/sign-up">Create a new account =></Link>
+              <Link to={`/${daoService.contract.options.address}/sign-up`}>
+                Create a new account =>
+              </Link>
               {authError && (
                 <div className="Form__auth-error">
                   <p className="Danger">{authError.message}</p>
