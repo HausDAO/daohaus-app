@@ -1,7 +1,7 @@
 import React, { useContext } from 'react';
 import { withRouter, Link } from 'react-router-dom';
 
-import { CurrentUserContext } from '../../contexts/Store';
+import { CurrentUserContext, DaoContext } from '../../contexts/Store';
 import BcToast from './BcToast';
 
 import Brand from '../../assets/PokéMol__Logo.svg';
@@ -11,6 +11,7 @@ import Modal from './Modal';
 
 const TopNav = (props) => {
   const [currentUser] = useContext(CurrentUserContext);
+  const [daoService] = useContext(DaoContext)
 
   // Toggle functions
   const [isElementOpen, setElementOpen] = React.useState(false);
@@ -27,22 +28,22 @@ const TopNav = (props) => {
         className={isElementOpen ? 'Backdrop__Open' : 'Backdrop'}
         onClick={toggleElement}
       />
-      {pathname === '/sign-in' ? (
+      {daoService && pathname === `/${daoService.contract.options.address}/sign-in` ? (
         <div className="Button Back">
-          <Link to="/">{'<='} Back</Link>
+          <Link to={`${daoService.contract.options.address}/`}>{'<='} Back</Link>
         </div>
       ) : (
         <>
-          {pathname === '/sign-up' || pathname === '/confirm' ? (
+          {daoService && pathname === `/${daoService.contract.options.address}/sign-in` || pathname === `/${daoService.contract.options.address}/confirm` ? (
             <div className="Button Back">
-              <Link to="/">{'<='} Back</Link>
+              <Link to={`${daoService.contract.options.address}/`}>{'<='} Back</Link>
             </div>
           ) : (
             <>
-              {props.match.params.name === '/proposal/' ? (
+              {daoService && props.match.params.name === '/proposal/' ? (
                 <p>Back</p>
               ) : (
-                <Link className="Brand" to="/">
+                <Link className="Brand" to={`/${daoService.contract.options.address}/`}>
                   <img src={Brand} alt="Pocket Moloch" />
                 </Link>
               )}
@@ -68,7 +69,7 @@ const TopNav = (props) => {
           <div className={isElementOpen ? 'Dropdown__Open' : 'Dropdown'}>
             <Link
               className="Dropdown__Open--Item"
-              to="/account"
+              to={`/${daoService.contract.options.address}/account`}
               onClick={toggleElement}
             >
               Account
@@ -97,7 +98,7 @@ const TopNav = (props) => {
               </div>
               <Link
                 className="AltOption"
-                to="/sign-out"
+                to={`/${daoService.contract.options.address}/sign-out`}
                 onClick={() => {
                   toggle('signOutMsg');
                   toggleElement();
@@ -110,7 +111,7 @@ const TopNav = (props) => {
         </div>
       ) : (
         <div className="Auth">
-          <Link className="Auth__Button" to="/sign-in">
+          <Link className="Auth__Button" to={`/${daoService.contract.options.address}/sign-in`}>
             Sign in {'=>'}
           </Link>
         </div>

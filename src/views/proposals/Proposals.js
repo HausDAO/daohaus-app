@@ -7,18 +7,26 @@ import ProposalFilter from '../../components/proposal/ProposalFilter';
 import ErrorMessage from '../../components/shared/ErrorMessage';
 import BottomNav from '../../components/shared/BottomNav';
 import Loading from '../../components/shared/Loading';
-import { CurrentWalletContext } from '../../contexts/Store';
+import { CurrentWalletContext, DaoContext } from '../../contexts/Store';
 import StateModals from '../../components/shared/StateModals';
 
 const Proposals = ({ match, history }) => {
   const [currentWallet] = useContext(CurrentWalletContext);
+  const [daoService] = useContext(DaoContext);
+  console.log('dao addr', daoService.contract.options.address);
 
   return (
     <Fragment>
       <StateModals />
 
-      <Query query={GET_PROPOSALS_QUERY} pollInterval={20000}>
+      <Query
+        query={GET_PROPOSALS_QUERY}
+        variables={{ contractAddr: daoService.contract.options.address.toLowerCase() }}
+        pollInterval={20000}
+      >
         {({ loading, error, data }) => {
+          console.log('proposal data', data);
+
           if (loading) return <Loading />;
           if (error) return <ErrorMessage message={error} />;
 

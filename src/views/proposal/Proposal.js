@@ -8,7 +8,6 @@ import { GET_PROPOSAL_QUERY } from '../../utils/ProposalService';
 import ProposalDetail from '../../components/proposal/ProposalDetail';
 import ErrorMessage from '../../components/shared/ErrorMessage';
 import Loading from '../../components/shared/Loading';
-import McDaoService from '../../utils/McDaoService';
 import Web3Service from '../../utils/Web3Service';
 import BcProcessorService from '../../utils/BcProcessorService';
 
@@ -16,6 +15,7 @@ import {
   LoaderContext,
   CurrentWalletContext,
   CurrentUserContext,
+  DaoContext,
 } from '../../contexts/Store';
 
 const Proposal = (props) => {
@@ -24,7 +24,7 @@ const Proposal = (props) => {
   const [currentUser] = useContext(CurrentUserContext);
   const [currentWallet] = useContext(CurrentWalletContext);
 
-  const dao = new McDaoService();
+  const [daoService] = useContext(DaoContext);
   const web3Service = new Web3Service();
   const bcprocessor = new BcProcessorService();
 
@@ -33,7 +33,7 @@ const Proposal = (props) => {
     const bnZed = ethToWei(0);
 
     setTxLoading(true);
-    dao
+    daoService
       .processProposal(
         currentUser.attributes['custom:account_address'],
         id,
@@ -41,7 +41,11 @@ const Proposal = (props) => {
       )
       .then((data) => {
         sdk
-          .estimateAccountTransaction(dao.contractAddr, bnZed, data)
+          .estimateAccountTransaction(
+            daoService.contract.options.address,
+            bnZed,
+            data,
+          )
           .then((estimated) => {
             if (ethToWei(currentWallet.eth).lt(estimated.totalCost)) {
               alert(
@@ -80,7 +84,7 @@ const Proposal = (props) => {
 
     if (currentWallet.shares) {
       setTxLoading(true);
-      dao
+      daoService
         .submitVote(
           currentUser.attributes['custom:account_address'],
           proposal.id,
@@ -89,7 +93,11 @@ const Proposal = (props) => {
         )
         .then((data) => {
           sdk
-            .estimateAccountTransaction(dao.contractAddr, bnZed, data)
+            .estimateAccountTransaction(
+              daoService.contract.options.address,
+              bnZed,
+              data,
+            )
             .then((estimated) => {
               if (ethToWei(currentWallet.eth).lt(estimated.totalCost)) {
                 alert(
@@ -125,10 +133,16 @@ const Proposal = (props) => {
   };
 
   return (
-    <Query query={GET_PROPOSAL_QUERY} variables={{ id }} pollInterval={2000}>
+    <Query
+      query={GET_PROPOSAL_QUERY}
+      variables={{ id: `${daoService.contract.options.address.toLowerCase()}-${id}` }}
+      
+    >
       {({ loading, error, data }) => {
         if (loading) return <Loading />;
         if (error) return <ErrorMessage message={error} />;
+        console.log('data', data, `${daoService.contract.options.address.toLowerCase()}-${id}`);
+        
         return (
           <Fragment>
             {txLoading && <Loading />}

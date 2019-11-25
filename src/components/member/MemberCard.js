@@ -15,8 +15,9 @@ const MemberCard = ({ member }) => {
 
   useEffect(() => {
     const fetchData = async () => {
-      let metaData = await GetMetaData(member.delegateKey);
-      setS3Data(metaData);
+      //let metaData = await GetMetaData(member.delegateKey);
+      //setS3Data(metaData);
+      setS3Data({});
     };
 
     fetchData();

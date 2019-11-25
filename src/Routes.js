@@ -35,7 +35,7 @@ const Routes = (props) => {
     <Route path="/:dao/sign-out" exact component={SignOut} />
     <Route path="/:dao/confirm" exact component={Confirm} />
     <Route path="/:dao/resend-code" exact component={ResendCode} />
-    <Route path="*" component={FourOhFour} />
+    {/* <Route path="*" component={FourOhFour} /> */}
     </>
     ) : (
       <Route path="*" component={FourOhFour} />

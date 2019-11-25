@@ -16,7 +16,7 @@ const MemberVotes = (props) => {
             ) : (
               <img width="36px" src={VoteNo} alt="No" />
             )}
-            <p>{vote.member.shares} Shares </p>
+            {/* <p>{vote.member.shares} Shares </p> */}
           </div>
         </div>
       );

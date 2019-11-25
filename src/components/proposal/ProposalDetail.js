@@ -30,17 +30,22 @@ const ProposalDetail = ({
     query: GET_METADATA,
   });
 
+  console.log('proposal detail', proposal);
+  
+
   useEffect(() => {
     const fetchData = async () => {
       const uuid = proposal.details.split('~')[1];
 
-      if (uuid) {
-        let metaData = await GetMetaData(uuid);
-        setS3Data(metaData);
-      } else {
-        let metaData = await GetMetaData(proposal.id);
-        setS3Data(metaData);
-      }
+      // if (uuid) {
+      //   let metaData = await GetMetaData(uuid);
+      //   setS3Data(metaData);
+      // } else {
+      //   let metaData = await GetMetaData(proposal.id);
+      //   setS3Data(metaData);
+      // }
+      setS3Data({});
+
     };
 
     fetchData();

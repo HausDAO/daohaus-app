@@ -17,8 +17,12 @@ export const GetMetaData = async (id) => {
 };
 
 export const GET_PROPOSALS_QUERY = gql`
-  query {
-    proposals(orderBy: proposalIndex, orderDirection: desc) {
+  query proposals($contractAddr: String!) {
+    proposals(
+      where: { molochAddress: $contractAddr }
+      orderBy: proposalIndex
+      orderDirection: desc
+    ) {
       id
       timestamp
       startingPeriod
@@ -40,9 +44,7 @@ export const GET_PROPOSALS_QUERY = gql`
       votes {
         memberAddress
         uintVote
-        member {
-          shares
-        }
+
       }
     }
   }
@@ -71,10 +73,13 @@ export const GET_PROPOSAL_QUERY = gql`
       votes {
         memberAddress
         uintVote
-        member {
-          shares
-        }
+
       }
     }
   }
 `;
+
+// have to remove
+// member {
+//   shares
+// }
