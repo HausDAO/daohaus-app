@@ -7,19 +7,20 @@ import { GET_METADATA } from '../../utils/Queries';
 import TokenService from '../../utils/TokenService';
 import Web3Service from '../../utils/Web3Service';
 import BcProcessorService from '../../utils/BcProcessorService';
-import McDaoService from '../../utils/McDaoService';
 import Loading from '../shared/Loading';
 
 import {
   CurrentUserContext,
   CurrentWalletContext,
   LoaderContext,
+  DaoContext,
 } from '../../contexts/Store';
 
 const ApproveAllowance = ({ client }) => {
   const [currentUser] = useContext(CurrentUserContext);
   const [loading, setLoading] = useContext(LoaderContext);
   const [currentWallet] = useContext(CurrentWalletContext);
+  const [daoService] = useContext(DaoContext)
   const [formSuccess, setFormSuccess] = useState(false);
   const { approvedToken } = client.cache.readQuery({
     query: GET_METADATA,
@@ -49,7 +50,7 @@ const ApproveAllowance = ({ client }) => {
         onSubmit={async (values, { setSubmitting, resetForm }) => {
           const sdk = currentUser.sdk;
           const tokenService = new TokenService(approvedToken);
-          const daoService = new McDaoService();
+
           const web3Service = new Web3Service();
           const bcprocessor = new BcProcessorService();
 

@@ -12,7 +12,7 @@ import {
 
 import config from '../../config';
 
-import { CurrentUserContext } from '../../contexts/Store';
+import { CurrentUserContext, DaoContext } from '../../contexts/Store';
 import Loading from '../../components/shared/Loading';
 import Web3Service from '../../utils/Web3Service';
 
@@ -21,6 +21,7 @@ const sdkEnv = getSdkEnvironment(SdkEnvironmentNames[`${config.SDK_ENV}`]); // k
 const SignIn = (props) => {
   const { history } = props;
   const [, setCurrentUser] = useContext(CurrentUserContext);
+  const [daoService] = useContext(DaoContext);
   const [authError, setAuthError] = useState();
   const [pseudonymTouch, setPseudonymTouch] = useState(false);
   const [passwordTouch, setPasswordTouch] = useState(false);
@@ -194,7 +195,9 @@ const SignIn = (props) => {
           return (
             <Form className="Form">
               <h2>Sign in</h2>
-              <Link to="/sign-up">Create a new account =></Link>
+              <Link to={`/${daoService.contract.options.address}/sign-up`}>
+                Create a new account =>
+              </Link>
               {authError && (
                 <div className="Form__auth-error">
                   <p className="Danger">{authError.message}</p>
