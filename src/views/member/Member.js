@@ -18,7 +18,7 @@ const Member = (props) => {
         query={GET_MEMBER_QUERY}
         variables={{
           id,
-          contractAddr: daoService.contract.options.address.toLowerCase(),
+          contractAddr: daoService.contractAddr.toLowerCase(),
         }}
       >
         {({ loading, error, data }) => {

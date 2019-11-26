@@ -62,7 +62,7 @@ const SignUp = ({ history }) => {
               },
             });
             history.push({
-              pathname: `/${daoService.contract.options.address}/confirm`,
+              pathname: `/${daoService.contractAddr}/confirm`,
               state: { userName: values.username },
             });
           } catch (err) {

@@ -74,7 +74,7 @@ const ProposalForm = (props) => {
                   true,
                 );
                 const estimated = await sdk.estimateAccountTransaction(
-                  daoService.contract.options.address,
+                  daoService.contractAddr,
                   bnZed,
                   data,
                 );
@@ -112,7 +112,7 @@ const ProposalForm = (props) => {
                 setSubmitting(false);
                 setLoading(false);
 
-                history.push(`/${daoService.contract.options.address}/proposals`);
+                history.push(`/${daoService.contractAddr}/proposals`);
               } catch (err) {
                 console.log('submit error', err);
                 setSubmitting(false);
@@ -240,7 +240,7 @@ const ProposalForm = (props) => {
               Account to top them off.
             </p>
             <p>
-              <Link to={`/${daoService.contract.options.address}/account`}>
+              <Link to={`/${daoService.contractAddr}/account`}>
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   width="24"

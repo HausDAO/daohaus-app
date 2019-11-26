@@ -17,7 +17,7 @@ const Members = () => {
 
       <Query 
         query={GET_MEMBERS_QUERY} 
-        variables={{ contractAddr: daoService.contract.options.address.toLowerCase() }}
+        variables={{ contractAddr: daoService.contractAddr.toLowerCase() }}
         >
         {({ loading, error, data }) => {
           if (loading) return <Loading />;

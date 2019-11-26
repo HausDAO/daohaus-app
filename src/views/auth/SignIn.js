@@ -25,7 +25,6 @@ const SignIn = (props) => {
   const [authError, setAuthError] = useState();
   const [pseudonymTouch, setPseudonymTouch] = useState(false);
   const [passwordTouch, setPasswordTouch] = useState(false);
-  const [daoService] = useContext(DaoContext);
 
   let historyState = history.location.state;
 
@@ -109,7 +108,7 @@ const SignIn = (props) => {
                 };
                 setCurrentUser({ ...realuser, ...{ sdk } });
                 setSubmitting(false);
-                history.push(`/${daoService.contract.options.address}/proposals`);
+                history.push(`/${daoService.contractAddr}/proposals`);
               } catch (err) {
                 console.log(err); // {"error":"account device not found"}
               }
@@ -178,7 +177,7 @@ const SignIn = (props) => {
               setSubmitting(false);
 
               history.push({
-                pathname: `/${daoService.contract.options.address}/`,
+                pathname: `/${daoService.contractAddr}/`,
                 state: { signUpModal: true },
               });
             }
@@ -197,7 +196,7 @@ const SignIn = (props) => {
           return (
             <Form className="Form">
               <h2>Sign in</h2>
-              <Link to={`/${daoService.contract.options.address}/sign-up`}>
+              <Link to={`/${daoService.contractAddr}/sign-up`}>
                 Create a new account =>
               </Link>
               {authError && (

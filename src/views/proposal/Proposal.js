@@ -42,7 +42,7 @@ const Proposal = (props) => {
       .then((data) => {
         sdk
           .estimateAccountTransaction(
-            daoService.contract.options.address,
+            daoService.contractAddr,
             bnZed,
             data,
           )
@@ -94,7 +94,7 @@ const Proposal = (props) => {
         .then((data) => {
           sdk
             .estimateAccountTransaction(
-              daoService.contract.options.address,
+              daoService.contractAddr,
               bnZed,
               data,
             )
@@ -135,7 +135,7 @@ const Proposal = (props) => {
   return (
     <Query
       query={GET_PROPOSAL_QUERY}
-      variables={{ id: `${daoService.contract.options.address.toLowerCase()}-${id}` }}
+      variables={{ id: `${daoService.contractAddr.toLowerCase()}-${id}` }}
       
     >
       {({ loading, error, data }) => {
