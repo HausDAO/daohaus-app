@@ -17,7 +17,6 @@ import InvalidRoute from './views/invalidRoute/InvalidRoute';
 
 const Routes = (props) => {
   const { isValid } = props;
-  console.log('isValid', isValid);
 
   return (
     <>

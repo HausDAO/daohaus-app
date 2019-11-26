@@ -19,6 +19,7 @@ import Loading from '../shared/Loading';
 
 import { GET_METADATA } from '../../utils/Queries';
 import { withApollo } from 'react-apollo';
+import { post } from '../../utils/Requests';
 
 const ProposalForm = (props) => {
   const { history, client } = props;
@@ -69,7 +70,7 @@ const ProposalForm = (props) => {
                   currentUser.attributes['custom:account_address'],
                   values.applicant,
                   web3Service.toWei(values.tokenTribute),
-                  values.sharesRequested + '',
+                  Math.floor(values.sharesRequested) + '',
                   `id~${uuid}~title~${values.title}`,
                   true,
                 );
@@ -89,8 +90,20 @@ const ProposalForm = (props) => {
                   return false;
                 }
 
+                const queueLength = await daoService.getProposalQueueLength();
                 const hash = await sdk.submitAccountTransaction(estimated);
                 // TODO: use api
+                
+                const proposalObj = {
+                  proposalId: (parseInt(queueLength) + 1) + '',
+                  molochContractAddress: daoService.contractAddr,
+                  title: values.title,
+                  description: values.description,
+                  link: values.link,
+                };
+
+                post('moloch/proposal', proposalObj);
+
                 // const jsonse = JSON.stringify(values, null, 2);
                 // const blob = new Blob([jsonse], {
                 //   type: 'application/json',
@@ -168,7 +181,11 @@ const ProposalForm = (props) => {
                 </ErrorMessage>
                 <Field name="tokenTribute">
                   {({ field, form }) => (
-                    <div className={field.value ? 'Field HasValue' : 'Field '}>
+                    <div
+                      className={
+                        field.value !== '' ? 'Field HasValue' : 'Field '
+                      }
+                    >
                       <label>Token Tribute</label>
                       <input type="number" {...field} />
                     </div>
@@ -180,9 +197,13 @@ const ProposalForm = (props) => {
 
                 <Field name="sharesRequested">
                   {({ field, form }) => (
-                    <div className={field.value ? 'Field HasValue' : 'Field '}>
+                    <div
+                      className={
+                        field.value !== '' ? 'Field HasValue' : 'Field '
+                      }
+                    >
                       <label>Shares Requested</label>
-                      <input type="number" {...field} />
+                      <input min="0" step="1" type="number" {...field} />
                     </div>
                   )}
                 </Field>
