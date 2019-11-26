@@ -13,36 +13,90 @@ import SignIn from './views/auth/SignIn';
 import Confirm from './views/auth/Confirm';
 import SignOut from './views/auth/SignOut';
 import ResendCode from './views/auth/ResendCode';
+import InvalidRoute from './views/invalidRoute/InvalidRoute';
 
 const Routes = (props) => {
-  const {isValid} = props;
+  const { isValid } = props;
   console.log('isValid', isValid);
-  
-  return (
-  <Switch>
-    {isValid ? (
-      <>
-    <Route path="/:dao/" exact component={Home} />
-    <Route path="/:dao/proposals" exact component={Proposals} />
-    <Route path="/:dao/proposals/:filter" exact component={Proposals} />
-    <Route path="/:dao/proposal/:id" exact component={Proposal} />
-    <Route path="/:dao/proposal-new" exact component={ProposalNew} />
-    <Route path="/:dao/members" exact component={Members} />
-    <Route path="/:dao/member/:id" exact component={Member} />
-    <Route path="/:dao/account" exact component={Account} />
-    <Route path="/:dao/sign-up" exact component={SignUp} />
-    <Route path="/:dao/sign-in" exact component={SignIn} />
-    <Route path="/:dao/sign-out" exact component={SignOut} />
-    <Route path="/:dao/confirm" exact component={Confirm} />
-    <Route path="/:dao/resend-code" exact component={ResendCode} />
-    {/* <Route path="*" component={FourOhFour} /> */}
-    </>
-    ) : (
-      <Route path="*" component={FourOhFour} />
 
-    )}
-  </Switch>
-)
+  return (
+    <>
+      {isValid ? (
+        <Switch>
+          <Route
+            path="/dao/:dao(\b0x[0-9a-f]{10,40}\b)/"
+            exact
+            component={Home}
+          />
+          <Route
+            path="/dao/:dao(\b0x[0-9a-f]{10,40}\b)/proposals"
+            exact
+            component={Proposals}
+          />
+          <Route
+            path="/dao/:dao(\b0x[0-9a-f]{10,40}\b)/proposals/:filter"
+            exact
+            component={Proposals}
+          />
+          <Route
+            path="/dao/:dao(\b0x[0-9a-f]{10,40}\b)/proposal/:id"
+            exact
+            component={Proposal}
+          />
+          <Route
+            path="/dao/:dao(\b0x[0-9a-f]{10,40}\b)/proposal-new"
+            exact
+            component={ProposalNew}
+          />
+          <Route
+            path="/dao/:dao(\b0x[0-9a-f]{10,40}\b)/members"
+            exact
+            component={Members}
+          />
+          <Route
+            path="/dao/:dao(\b0x[0-9a-f]{10,40}\b)/member/:id"
+            exact
+            component={Member}
+          />
+          <Route
+            path="/dao/:dao(\b0x[0-9a-f]{10,40}\b)/account"
+            exact
+            component={Account}
+          />
+          <Route
+            path="/dao/:dao(\b0x[0-9a-f]{10,40}\b)/sign-up"
+            exact
+            component={SignUp}
+          />
+          <Route
+            path="/dao/:dao(\b0x[0-9a-f]{10,40}\b)/sign-in"
+            exact
+            component={SignIn}
+          />
+          <Route
+            path="/dao/:dao(\b0x[0-9a-f]{10,40}\b)/sign-out"
+            exact
+            component={SignOut}
+          />
+          <Route
+            path="/dao/:dao(\b0x[0-9a-f]{10,40}\b)/confirm"
+            exact
+            component={Confirm}
+          />
+          <Route
+            path="/dao/:dao(\b0x[0-9a-f]{10,40}\b)/resend-code"
+            exact
+            component={ResendCode}
+          />
+          <Route path="*" component={FourOhFour} />
+        </Switch>
+      ) : (
+        <Switch>
+          <Route path="*" component={InvalidRoute} />
+        </Switch>
+      )}
+    </>
+  );
 };
 
 export default Routes;

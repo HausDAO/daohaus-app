@@ -37,7 +37,10 @@ const Proposals = ({ match, history }) => {
                 {currentWallet.shares ? (
                   <div>
                     <p>
-                      <Link to={`/${daoService.contractAddr}/proposal-new`} className="Bold">
+                      <Link
+                        to={`/dao/${daoService.contractAddr}/proposal-new`}
+                        className="Bold"
+                      >
                         <svg
                           className="IconLeft"
                           xmlns="http://www.w3.org/2000/svg"
