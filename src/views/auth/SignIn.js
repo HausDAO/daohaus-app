@@ -1,7 +1,7 @@
 import React, { useContext, useState } from 'react';
 import { Link, withRouter } from 'react-router-dom';
 import { Formik, Form, Field, ErrorMessage } from 'formik';
-import { Auth, Storage } from 'aws-amplify';
+import { Auth } from 'aws-amplify';
 import shortid from 'shortid';
 
 import {
@@ -25,6 +25,7 @@ const SignIn = (props) => {
   const [authError, setAuthError] = useState();
   const [pseudonymTouch, setPseudonymTouch] = useState(false);
   const [passwordTouch, setPasswordTouch] = useState(false);
+  const [daoService] = useContext(DaoContext);
 
   let historyState = history.location.state;
 
@@ -108,7 +109,7 @@ const SignIn = (props) => {
                 };
                 setCurrentUser({ ...realuser, ...{ sdk } });
                 setSubmitting(false);
-                history.push('/proposals');
+                history.push(`/${daoService.contract.options.address}/proposals`);
               } catch (err) {
                 console.log(err); // {"error":"account device not found"}
               }
@@ -142,29 +143,30 @@ const SignIn = (props) => {
                 }),
                 'custom:encrypted_ks': JSON.stringify(store),
               });
-              const jsonse = JSON.stringify(
-                {
-                  username: user.username,
-                  deviceId: accountDevices.items[0].device.address,
-                },
-                null,
-                2,
-              );
-              const blob = new Blob([jsonse], {
-                type: 'application/json',
-              });
-              try {
-                // save user meta to S3
-                Storage.put(
-                  `member_${account.address.toUpperCase()}.json`,
-                  blob,
-                  {
-                    contentType: 'text/json',
-                  },
-                );
-              } catch (err) {
-                console.log('storage error', err);
-              }
+              // TODO: replace with api 
+              // const jsonse = JSON.stringify(
+              //   {
+              //     username: user.username,
+              //     deviceId: accountDevices.items[0].device.address,
+              //   },
+              //   null,
+              //   2,
+              // );
+              // const blob = new Blob([jsonse], {
+              //   type: 'application/json',
+              // });
+              // try {
+              //   // save user meta to S3
+              //   Storage.put(
+              //     `member_${account.address.toUpperCase()}.json`,
+              //     blob,
+              //     {
+              //       contentType: 'text/json',
+              //     },
+              //   );
+              // } catch (err) {
+              //   console.log('storage error', err);
+              // }
 
               const attributes = await Auth.currentUserInfo();
               const realuser = {
@@ -176,7 +178,7 @@ const SignIn = (props) => {
               setSubmitting(false);
 
               history.push({
-                pathname: '/',
+                pathname: `/${daoService.contract.options.address}/`,
                 state: { signUpModal: true },
               });
             }
