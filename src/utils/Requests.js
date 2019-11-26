@@ -1,7 +1,8 @@
 import axios from "axios";
+import config from "../config";
 
 export const BaseUrl = () => {
-  return process.env.REACT_APP_DEV_API;
+  return config.API;
 };
 
 export const get = async endpoint => {

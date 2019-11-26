@@ -175,6 +175,12 @@ export default class McDaoService {
     return info;
   }
 
+  async getProposalQueueLength() {
+
+    let len = await this.contract.methods.getProposalQueueLength().call();
+    return len;
+  }
+
   async processProposal(from, id, encodedPayload) {
 
 
