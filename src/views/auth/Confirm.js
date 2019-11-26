@@ -1,13 +1,15 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import { withRouter } from 'react-router-dom';
 import { Formik, Form, Field, ErrorMessage } from 'formik';
 import { Auth } from 'aws-amplify';
 
 import Loading from '../../components/shared/Loading';
+import { DaoContext } from '../../contexts/Store';
 
 const Confirm = (props) => {
   const { history } = props;
   const [focused, setFocused] = useState(false);
+  const [daoService] = useContext(DaoContext);
   let historyState = history.location.state;
   let authError = null;
 
@@ -39,7 +41,7 @@ const Confirm = (props) => {
               setSubmitting(false);
               if (!!data) {
                 history.push({
-                  pathname: '/sign-in',
+                  pathname: `/${daoService.contract.options.address}/sign-in`,
                   state: { msg: 'email confirmed' },
                 });
               }
@@ -54,7 +56,7 @@ const Confirm = (props) => {
               setSubmitting(false);
               if (!!data) {
                 history.push({
-                  pathname: '/sign-in',
+                  pathname: `/${daoService.contract.options.address}/sign-in`,
                   state: { msg: 'email confirmed' },
                 });
               }
