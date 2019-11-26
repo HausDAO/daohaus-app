@@ -13,12 +13,12 @@ const BottomNav = (props) => {
     <div
       className={
         'MainNav ' +
-        (props.location.pathname === `/${daoService.contract.options.address}`
+        (props.location.pathname === `/${daoService.contractAddr}`
           ? ''
           : 'Global')
       }
     >
-      <Link to={`/${daoService.contract.options.address}/proposals`}>
+      <Link to={`/${daoService.contractAddr}/proposals`}>
         <svg
           xmlns="http://www.w3.org/2000/svg"
           width="24"
@@ -30,7 +30,7 @@ const BottomNav = (props) => {
         </svg>
         Proposals
       </Link>
-      <Link to={`/${daoService.contract.options.address}/members`}>
+      <Link to={`/${daoService.contractAddr}/members`}>
         <svg
           xmlns="http://www.w3.org/2000/svg"
           width="24"
@@ -43,7 +43,7 @@ const BottomNav = (props) => {
         Members
       </Link>
       {currentUser ? (
-        <Link to={`/${daoService.contract.options.address}/account`}>
+        <Link to={`/${daoService.contractAddr}/account`}>
           <svg
             xmlns="http://www.w3.org/2000/svg"
             width="24"
@@ -56,7 +56,7 @@ const BottomNav = (props) => {
           Account
         </Link>
       ) : (
-        <Link to={`/${daoService.contract.options.address}/sign-in`}>
+        <Link to={`/${daoService.contractAddr}/sign-in`}>
           <svg
             xmlns="http://www.w3.org/2000/svg"
             width="24"

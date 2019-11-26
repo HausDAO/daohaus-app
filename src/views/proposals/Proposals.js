@@ -13,7 +13,7 @@ import StateModals from '../../components/shared/StateModals';
 const Proposals = ({ match, history }) => {
   const [currentWallet] = useContext(CurrentWalletContext);
   const [daoService] = useContext(DaoContext);
-  console.log('dao addr', daoService.contract.options.address);
+  console.log('dao addr', daoService.contractAddr);
 
   return (
     <Fragment>
@@ -21,7 +21,7 @@ const Proposals = ({ match, history }) => {
 
       <Query
         query={GET_PROPOSALS_QUERY}
-        variables={{ contractAddr: daoService.contract.options.address.toLowerCase() }}
+        variables={{ contractAddr: daoService.contractAddr.toLowerCase() }}
         pollInterval={20000}
       >
         {({ loading, error, data }) => {
@@ -37,7 +37,7 @@ const Proposals = ({ match, history }) => {
                 {currentWallet.shares ? (
                   <div>
                     <p>
-                      <Link to="/proposal-new" className="Bold">
+                      <Link to={`/${daoService.contractAddr}/proposal-new`} className="Bold">
                         <svg
                           className="IconLeft"
                           xmlns="http://www.w3.org/2000/svg"

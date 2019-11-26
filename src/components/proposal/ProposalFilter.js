@@ -13,7 +13,7 @@ const ProposalFilter = ({ proposals, filter, history }) => {
 
   const handleSelect = (list, listName) => {
     setFilteredProposals(list);
-    history.push(`/${daoService.contract.options.address}/proposals/${listName}`);
+    history.push(`/${daoService.contractAddr}/proposals/${listName}`);
   };
 
   useEffect(() => {
@@ -25,9 +25,9 @@ const ProposalFilter = ({ proposals, filter, history }) => {
         setFilteredProposals(groupedProps[filter]);
       } else {
         if (groupedProps.VotingPeriod.length > 0) {
-          history.push(`/${daoService.contract.options.address}/proposals/VotingPeriod`);
+          history.push(`/${daoService.contractAddr}/proposals/VotingPeriod`);
         } else {
-          history.push(`/${daoService.contract.options.address}/proposals/Completed`);
+          history.push(`/${daoService.contractAddr}/proposals/Completed`);
         }
       }
     }

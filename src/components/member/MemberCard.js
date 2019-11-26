@@ -25,7 +25,7 @@ const MemberCard = ({ member }) => {
   }, [member.delegateKey]);
 const memberId = member.id.split("-")[1]
   return (
-    <Link className="MemberLink" to={{ pathname: '/' + daoService.contract.options.address + '/member/' + member.id }}>
+    <Link className="MemberLink" to={{ pathname: '/' + daoService.contractAddr + '/member/' + member.id }}>
       <div className="MemberCard">
         <h3>{s3Data.username || 'unknown'}</h3>
         <p className="Data Addr">{truncateAddr(memberId)}</p>

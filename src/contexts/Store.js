@@ -103,8 +103,9 @@ const Store = ({ children }) => {
 
   //global polling service
   useInterval(async () => {
+    
     // run on interval defined by $delay only if authenticated
-    if (currentUser) {
+    if (currentUser && daoService) {
       let accountDevices = null;
       // get account address from aws
       const acctAddr = currentUser.attributes['custom:account_address'];

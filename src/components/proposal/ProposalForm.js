@@ -2,12 +2,10 @@ import React, { useContext } from 'react';
 import { withRouter, Link } from 'react-router-dom';
 
 import { Formik, Form, Field, ErrorMessage } from 'formik';
-import { Storage } from 'aws-amplify';
 import shortid from 'shortid';
 
 import { ethToWei } from '@netgum/utils'; // returns BN
 
-import McDaoService from '../../utils/McDaoService';
 import Web3Service from '../../utils/Web3Service';
 import BcProcessorService from '../../utils/BcProcessorService';
 
@@ -15,6 +13,7 @@ import {
   LoaderContext,
   CurrentUserContext,
   CurrentWalletContext,
+  DaoContext,
 } from '../../contexts/Store';
 import Loading from '../shared/Loading';
 
@@ -27,6 +26,7 @@ const ProposalForm = (props) => {
   const [loading, setLoading] = useContext(LoaderContext);
   const [currentUser] = useContext(CurrentUserContext);
   const [currentWallet] = useContext(CurrentWalletContext);
+  const [daoService] = useContext(DaoContext)
 
   return (
     <div>
@@ -56,7 +56,6 @@ const ProposalForm = (props) => {
               return errors;
             }}
             onSubmit={async (values, { setSubmitting }) => {
-              const dao = new McDaoService();
               const web3Service = new Web3Service();
               const bcprocessor = new BcProcessorService();
 
@@ -66,7 +65,7 @@ const ProposalForm = (props) => {
               setLoading(true);
 
               try {
-                const data = await dao.submitProposal(
+                const data = await daoService.submitProposal(
                   currentUser.attributes['custom:account_address'],
                   values.applicant,
                   web3Service.toWei(values.tokenTribute),
@@ -75,7 +74,7 @@ const ProposalForm = (props) => {
                   true,
                 );
                 const estimated = await sdk.estimateAccountTransaction(
-                  dao.contractAddr,
+                  daoService.contractAddr,
                   bnZed,
                   data,
                 );
@@ -91,16 +90,17 @@ const ProposalForm = (props) => {
                 }
                 
                 const hash = await sdk.submitAccountTransaction(estimated);
-                const jsonse = JSON.stringify(values, null, 2);
-                const blob = new Blob([jsonse], {
-                  type: 'application/json',
-                });
+                // TODO: use api
+                // const jsonse = JSON.stringify(values, null, 2);
+                // const blob = new Blob([jsonse], {
+                //   type: 'application/json',
+                // });
 
-                Storage.put(`proposal_${uuid}.json`, blob, {
-                  contentType: 'text/json',
-                })
-                  .then((result) => console.log(result))
-                  .catch((err) => console.log(err));
+                // Storage.put(`proposal_${uuid}.json`, blob, {
+                //   contentType: 'text/json',
+                // })
+                //   .then((result) => console.log(result))
+                //   .catch((err) => console.log(err));
 
                 bcprocessor.setTx(
                   hash,
@@ -112,7 +112,7 @@ const ProposalForm = (props) => {
                 setSubmitting(false);
                 setLoading(false);
 
-                history.push('/proposals');
+                history.push(`/${daoService.contractAddr}/proposals`);
               } catch (err) {
                 console.log('submit error', err);
                 setSubmitting(false);
@@ -240,7 +240,7 @@ const ProposalForm = (props) => {
               Account to top them off.
             </p>
             <p>
-              <Link to="/account">
+              <Link to={`/${daoService.contractAddr}/account`}>
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   width="24"
