@@ -108,7 +108,7 @@ const SignIn = (props) => {
                 };
                 setCurrentUser({ ...realuser, ...{ sdk } });
                 setSubmitting(false);
-                history.push(`/${daoService.contractAddr}/proposals`);
+                history.push(`/dao/${daoService.contractAddr}/proposals`);
               } catch (err) {
                 console.log(err); // {"error":"account device not found"}
               }
@@ -142,7 +142,7 @@ const SignIn = (props) => {
                 }),
                 'custom:encrypted_ks': JSON.stringify(store),
               });
-              // TODO: replace with api 
+              // TODO: replace with api
               // const jsonse = JSON.stringify(
               //   {
               //     username: user.username,
@@ -177,7 +177,7 @@ const SignIn = (props) => {
               setSubmitting(false);
 
               history.push({
-                pathname: `/${daoService.contractAddr}/`,
+                pathname: `/dao/${daoService.contractAddr}/`,
                 state: { signUpModal: true },
               });
             }
@@ -196,7 +196,7 @@ const SignIn = (props) => {
           return (
             <Form className="Form">
               <h2>Sign in</h2>
-              <Link to={`/${daoService.contractAddr}/sign-up`}>
+              <Link to={`/dao/${daoService.contractAddr}/sign-up`}>
                 Create a new account =>
               </Link>
               {authError && (

@@ -26,24 +26,24 @@ const App = ({ client }) => {
     // get dao from daohaus api and check if exists and is whitelisted
     console.log('get dao api', daoService);
     var pathname = window.location.pathname.split('/');
-    console.log('pathname', pathname[1]);
+    const daoParam = pathname[2];
+    console.log('pathname', daoParam);
 
     const getDao = async () => {
       let apiData = '';
-      if(!pathname[1]){
+      if (!daoParam) {
         setloading(false);
         return false;
       }
       try {
-        const daoRes = await get(`moloch/${pathname[1]}`);
+        const daoRes = await get(`moloch/${daoParam}`);
         apiData = daoRes.data;
-        if(apiData.whitelisted || true){
-          setDaoPath(pathname[1]);
+        if (apiData.whitelisted || true) {
+          setDaoPath(daoParam);
           setDaoData(apiData);
         } else {
           setloading(false);
         }
-
       } catch (e) {
         setloading(false);
         console.log('error on dao api call', e);

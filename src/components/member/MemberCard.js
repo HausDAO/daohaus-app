@@ -13,7 +13,7 @@ const web3Service = new Web3Service();
 
 const MemberCard = ({ member }) => {
   const [s3Data, setS3Data] = useState({});
-  const [daoService] = useContext(DaoContext)
+  const [daoService] = useContext(DaoContext);
   useEffect(() => {
     const fetchData = async () => {
       //let metaData = await GetMetaData(member.delegateKey);
@@ -23,9 +23,14 @@ const MemberCard = ({ member }) => {
 
     fetchData();
   }, [member.delegateKey]);
-const memberId = member.id.split("-")[1]
+  const memberId = member.id.split('-')[1];
   return (
-    <Link className="MemberLink" to={{ pathname: '/' + daoService.contractAddr + '/member/' + member.id }}>
+    <Link
+      className="MemberLink"
+      to={{
+        pathname: '/dao/' + daoService.contractAddr + '/member/' + member.id,
+      }}
+    >
       <div className="MemberCard">
         <h3>{s3Data.username || 'unknown'}</h3>
         <p className="Data Addr">{truncateAddr(memberId)}</p>

@@ -41,7 +41,7 @@ const Confirm = (props) => {
               setSubmitting(false);
               if (!!data) {
                 history.push({
-                  pathname: `/${daoService.contractAddr}/sign-in`,
+                  pathname: `/dao/${daoService.contractAddr}/sign-in`,
                   state: { msg: 'email confirmed' },
                 });
               }
@@ -56,7 +56,7 @@ const Confirm = (props) => {
               setSubmitting(false);
               if (!!data) {
                 history.push({
-                  pathname: `/${daoService.contractAddr}/sign-in`,
+                  pathname: `/dao/${daoService.contractAddr}/sign-in`,
                   state: { msg: 'email confirmed' },
                 });
               }

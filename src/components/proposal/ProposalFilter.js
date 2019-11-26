@@ -9,11 +9,11 @@ import { DaoContext } from '../../contexts/Store';
 const ProposalFilter = ({ proposals, filter, history }) => {
   const [groupedProposals, setGroupedProposals] = useState();
   const [filteredProposals, setFilteredProposals] = useState([]);
-  const [daoService] = useContext(DaoContext)
+  const [daoService] = useContext(DaoContext);
 
   const handleSelect = (list, listName) => {
     setFilteredProposals(list);
-    history.push(`/${daoService.contractAddr}/proposals/${listName}`);
+    history.push(`/dao/${daoService.contractAddr}/proposals/${listName}`);
   };
 
   useEffect(() => {
@@ -25,9 +25,11 @@ const ProposalFilter = ({ proposals, filter, history }) => {
         setFilteredProposals(groupedProps[filter]);
       } else {
         if (groupedProps.VotingPeriod.length > 0) {
-          history.push(`/${daoService.contractAddr}/proposals/VotingPeriod`);
+          history.push(
+            `/dao/${daoService.contractAddr}/proposals/VotingPeriod`,
+          );
         } else {
-          history.push(`/${daoService.contractAddr}/proposals/Completed`);
+          history.push(`/dao/${daoService.contractAddr}/proposals/Completed`);
         }
       }
     }
