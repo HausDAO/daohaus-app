@@ -8,7 +8,6 @@ export default class McDaoService {
   daoAbi;
 
   constructor(contractAddr) {
-    console.log(contractAddr);
     
     this.contractAddr = contractAddr;
     this.web3Service = new Web3Service();
@@ -16,7 +15,6 @@ export default class McDaoService {
   }
 
   async initContract() {
-    console.log('what is this addr', this.contractAddr);
     
     this.contract = await this.web3Service.initContract(
       this.daoAbi,
@@ -35,11 +33,7 @@ export default class McDaoService {
   }
 
   async getCurrentPeriod() {
-    if (!this.contract) {
-      console.log("create contract here????");
-      
-      await this.initContract();
-    }
+
     
     let currentPeriod = await this.contract.methods.getCurrentPeriod().call();
     return currentPeriod;

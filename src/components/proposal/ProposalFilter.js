@@ -33,7 +33,7 @@ const ProposalFilter = ({ proposals, filter, history }) => {
         }
       }
     }
-  }, [proposals, filter, history]);
+  }, [daoService.contractAddr, proposals, filter, history]);
 
   if (!groupedProposals) {
     return <></>;

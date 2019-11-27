@@ -2,7 +2,6 @@ import React, { useEffect, useState, useContext } from 'react';
 import ReactPlayer from 'react-player';
 import { withApollo } from 'react-apollo';
 
-import { GetMetaData } from '../../utils/ProposalService';
 import {
   getProposalCountdownText,
   titleMaker,
@@ -31,23 +30,13 @@ const ProposalDetail = ({
     query: GET_METADATA,
   });
 
-  console.log('proposal detail', proposal);
   
 
   useEffect(() => {
     const fetchData = async () => {
-      const uuid = proposal.details.split('~')[1];
-      console.log('proposal', proposal)
-      // if (uuid) {
-      //   let metaData = await GetMetaData(uuid);
-      //   setS3Data(metaData);
-      // } else {
-      //   let metaData = await GetMetaData(proposal.id);
-      //   setS3Data(metaData);
-      // }
+
       try{
         let metaData = await get(`moloch/proposal/${proposal.id}`);
-        console.log('proposal metaData',metaData);
         
         setS3Data(metaData.data);
       } catch (err) {

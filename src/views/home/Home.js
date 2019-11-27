@@ -30,7 +30,6 @@ const Home = ({ client }) => {
       const web3Service = new Web3Service();
       const tokenService = new TokenService(approvedToken);
       const mcDao = daoService;
-      console.log('>>>>>>>>>>>>>>>>>>>> ddata', daoData);
 
       if (guildBankAddr) {
         const events = await mcDao.getAllEvents();

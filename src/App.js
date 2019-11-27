@@ -24,10 +24,8 @@ const App = ({ client }) => {
 
   useEffect(() => {
     // get dao from daohaus api and check if exists and is whitelisted
-    console.log('get dao api', daoService);
     var pathname = window.location.pathname.split('/');
     const daoParam = pathname[2];
-    console.log('pathname', daoParam);
 
     const getDao = async () => {
       let apiData = '';
@@ -48,7 +46,6 @@ const App = ({ client }) => {
         setloading(false);
         console.log('error on dao api call', e);
       }
-      console.log(apiData);
     };
 
     getDao();
@@ -64,7 +61,6 @@ const App = ({ client }) => {
         console.log('error init contract:', err);
       }
     };
-    console.log(daoPath);
 
     if (daoPath) {
       initDao();
@@ -74,7 +70,6 @@ const App = ({ client }) => {
   useEffect(() => {
     // save all web3 data to apollo cache
     const fetchData = async () => {
-      console.log('dao fetch web3', daoService);
 
       const currentPeriod = await daoService.getCurrentPeriod();
       const totalShares = await daoService.getTotalShares();

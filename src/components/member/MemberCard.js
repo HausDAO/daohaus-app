@@ -1,9 +1,8 @@
-import React, { useState, useEffect, useContext } from 'react';
+import React, { useState, useContext } from 'react';
 import { Link } from 'react-router-dom';
 
 import Web3Service from '../../utils/Web3Service';
 import { truncateAddr } from '../../utils/Helpers';
-import { GetMetaData } from '../../utils/MemberService';
 import ValueDisplay from '../shared/ValueDisplay';
 
 import './MemberCard.scss';
@@ -12,17 +11,10 @@ import { DaoContext } from '../../contexts/Store';
 const web3Service = new Web3Service();
 
 const MemberCard = ({ member }) => {
-  const [s3Data, setS3Data] = useState({});
+  //TODO get profile from 3box or something
+  const [s3Data] = useState({});
   const [daoService] = useContext(DaoContext);
-  useEffect(() => {
-    const fetchData = async () => {
-      //let metaData = await GetMetaData(member.delegateKey);
-      //setS3Data(metaData);
-      setS3Data({});
-    };
 
-    fetchData();
-  }, [member.delegateKey]);
   const memberId = member.id.split('-')[1];
   return (
     <Link
