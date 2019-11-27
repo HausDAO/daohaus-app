@@ -25,7 +25,7 @@ const ProposalDetail = ({
   canVote,
   client,
 }) => {
-  const [s3Data, setS3Data] = useState({});
+  const [s3Data, setS3Data] = useState();
   const [currentUser] = useContext(CurrentUserContext);
   const { periodDuration } = client.cache.readQuery({
     query: GET_METADATA,
@@ -47,12 +47,11 @@ const ProposalDetail = ({
       // }
       try{
         let metaData = await get(`moloch/proposal/${proposal.id}`);
-        console.log(metaData);
+        console.log('proposal metaData',metaData);
         
         setS3Data(metaData.data);
       } catch (err) {
         console.log(err);
-        setS3Data({});
 
       }
 
@@ -102,19 +101,19 @@ const ProposalDetail = ({
         <button onClick={() => processProposal(proposal.id)}>Process</button>
       )}
       <div>
-        {s3Data.data && s3Data.data.description ? (
+        {s3Data && s3Data.description ? (
           <div>
             <h5>Description</h5>
-            <p>{s3Data.data.description}</p>
+            <p>{s3Data.description}</p>
           </div>
         ) : null}
-        {s3Data.data && s3Data.data.link && ReactPlayer.canPlay(s3Data.data.link) ? (
+        {s3Data && s3Data.link && ReactPlayer.canPlay(s3Data.link) ? (
           <div className="Video">
-            <ReactPlayer url={s3Data.data.link} playing={false} loop={false} />
+            <ReactPlayer url={s3Data.link} playing={false} loop={false} />
           </div>
-        ) : s3Data.data && s3Data.data.link && s3Data.data.link.indexOf('http') > -1 ? (
+        ) : s3Data && s3Data.link && s3Data.link.indexOf('http') > -1 ? (
           <div className="Link">
-            <a href={s3Data.data.link} rel="noopener noreferrer" target="_blank">
+            <a href={s3Data.link} rel="noopener noreferrer" target="_blank">
               Link
             </a>
           </div>

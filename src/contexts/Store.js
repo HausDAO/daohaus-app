@@ -21,6 +21,7 @@ export const LoaderContext = createContext(false);
 export const ModalContext = createContext();
 export const RefreshContext = createContext();
 export const DaoContext = createContext();
+export const DaoDataContext = createContext();
 
 // main store of global state
 const Store = ({ children }) => {
@@ -50,6 +51,7 @@ const Store = ({ children }) => {
   const [numTries, setNumTries] = useState(0);
 
   const [daoService, setDaoService] = useState();
+  const [daoData, setDaoData] = useState();
 
   const web3Service = new Web3Service();
   //const daoService = new McDaoService();
@@ -103,7 +105,6 @@ const Store = ({ children }) => {
 
   //global polling service
   useInterval(async () => {
-    
     // run on interval defined by $delay only if authenticated
     if (currentUser && daoService) {
       let accountDevices = null;
@@ -218,17 +219,21 @@ const Store = ({ children }) => {
   return (
     <LoaderContext.Provider value={[loading, setLoading]}>
       <DaoContext.Provider value={[daoService, setDaoService]}>
-        <ModalContext.Provider value={[hasOpened, setHasOpened]}>
-          <RefreshContext.Provider value={[delay, setDelay]}>
-            <CurrentUserContext.Provider value={[currentUser, setCurrentUser]}>
-              <CurrentWalletContext.Provider
-                value={[currentWallet, setCurrentWallet]}
+        <DaoDataContext.Provider value={[daoData, setDaoData]}>
+          <ModalContext.Provider value={[hasOpened, setHasOpened]}>
+            <RefreshContext.Provider value={[delay, setDelay]}>
+              <CurrentUserContext.Provider
+                value={[currentUser, setCurrentUser]}
               >
-                {children}
-              </CurrentWalletContext.Provider>
-            </CurrentUserContext.Provider>
-          </RefreshContext.Provider>
-        </ModalContext.Provider>
+                <CurrentWalletContext.Provider
+                  value={[currentWallet, setCurrentWallet]}
+                >
+                  {children}
+                </CurrentWalletContext.Provider>
+              </CurrentUserContext.Provider>
+            </RefreshContext.Provider>
+          </ModalContext.Provider>
+        </DaoDataContext.Provider>
       </DaoContext.Provider>
     </LoaderContext.Provider>
   );
