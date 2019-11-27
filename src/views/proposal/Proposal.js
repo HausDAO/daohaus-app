@@ -63,14 +63,18 @@ const Proposal = (props) => {
                 );
 
                 setTxLoading(false);
-                props.history.push('/proposals');
+                props.history.push(`/dao/${daoService.contractAddr}/proposals`);
               })
               .catch((err) => {
                 console.log('catch', err);
                 setTxLoading(false);
               });
           })
-          .catch(console.error);
+          .catch((err) => {
+            setTxLoading(false);
+            alert('Something went wrong, must process in order submitted')
+            console.log(err);
+          });
       });
   };
 
