@@ -13,7 +13,6 @@ import StateModals from '../../components/shared/StateModals';
 const Proposals = ({ match, history }) => {
   const [currentWallet] = useContext(CurrentWalletContext);
   const [daoService] = useContext(DaoContext);
-  console.log('dao addr', daoService.contractAddr);
 
   return (
     <Fragment>
@@ -25,7 +24,6 @@ const Proposals = ({ match, history }) => {
         pollInterval={20000}
       >
         {({ loading, error, data }) => {
-          console.log('proposal data', data);
 
           if (loading) return <Loading />;
           if (error) return <ErrorMessage message={error} />;

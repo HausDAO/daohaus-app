@@ -41,11 +41,7 @@ const Proposal = (props) => {
       )
       .then((data) => {
         sdk
-          .estimateAccountTransaction(
-            daoService.contractAddr,
-            bnZed,
-            data,
-          )
+          .estimateAccountTransaction(daoService.contractAddr, bnZed, data)
           .then((estimated) => {
             if (ethToWei(currentWallet.eth).lt(estimated.totalCost)) {
               alert(
@@ -82,22 +78,28 @@ const Proposal = (props) => {
     const sdk = currentUser.sdk;
     const bnZed = ethToWei(0);
 
-    if (currentWallet.shares) {
+    if (
+      proposal.votes.some(
+        (_vote) =>
+          _vote.memberAddress.toLowerCase() ===
+          currentWallet.addrByBelegateKey.toLowerCase(),
+      )
+    ) {
+      return false;
+    }
+
+    if (currentWallet.shares && proposal.status === 'VotingPeriod') {
       setTxLoading(true);
       daoService
         .submitVote(
           currentUser.attributes['custom:account_address'],
-          proposal.id,
+          proposal.id.split('-')[1],
           vote,
           true,
         )
         .then((data) => {
           sdk
-            .estimateAccountTransaction(
-              daoService.contractAddr,
-              bnZed,
-              data,
-            )
+            .estimateAccountTransaction(daoService.contractAddr, bnZed, data)
             .then((estimated) => {
               if (ethToWei(currentWallet.eth).lt(estimated.totalCost)) {
                 alert(
@@ -115,7 +117,7 @@ const Proposal = (props) => {
                     hash,
                     currentUser.attributes['custom:account_address'],
                     `Submit ${vote === 1 ? 'yes' : 'no'} vote on proposal ${
-                      proposal.id
+                      proposal.id.split('-')[1]
                     }`,
                     true,
                   );
@@ -136,12 +138,11 @@ const Proposal = (props) => {
     <Query
       query={GET_PROPOSAL_QUERY}
       variables={{ id: `${daoService.contractAddr.toLowerCase()}-${id}` }}
-      
     >
       {({ loading, error, data }) => {
         if (loading) return <Loading />;
         if (error) return <ErrorMessage message={error} />;
-        
+
         return (
           <Fragment>
             {txLoading && <Loading />}
