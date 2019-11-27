@@ -1,20 +1,4 @@
-import { Storage } from 'aws-amplify';
 import { gql } from 'apollo-boost';
-
-export const GetMetaData = async (id) => {
-  const uri = await Storage.get(`proposal_${id}.json`);
-
-  try {
-    const res = await fetch(uri);
-    
-    if (!res.ok) {
-      throw new Error(res.statusText);
-    }
-    return res.json();
-  } catch (err) {
-    return { error: err };
-  }
-};
 
 export const GET_PROPOSALS_QUERY = gql`
   query proposals($contractAddr: String!) {

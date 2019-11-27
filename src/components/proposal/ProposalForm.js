@@ -92,10 +92,9 @@ const ProposalForm = (props) => {
 
                 const queueLength = await daoService.getProposalQueueLength();
                 const hash = await sdk.submitAccountTransaction(estimated);
-                // TODO: use api
                 
                 const proposalObj = {
-                  proposalId: (parseInt(queueLength) + 1) + '',
+                  proposalId: queueLength + '',
                   molochContractAddress: daoService.contractAddr,
                   title: values.title,
                   description: values.description,
@@ -103,17 +102,6 @@ const ProposalForm = (props) => {
                 };
 
                 post('moloch/proposal', proposalObj);
-
-                // const jsonse = JSON.stringify(values, null, 2);
-                // const blob = new Blob([jsonse], {
-                //   type: 'application/json',
-                // });
-
-                // Storage.put(`proposal_${uuid}.json`, blob, {
-                //   contentType: 'text/json',
-                // })
-                //   .then((result) => console.log(result))
-                //   .catch((err) => console.log(err));
 
                 bcprocessor.setTx(
                   hash,

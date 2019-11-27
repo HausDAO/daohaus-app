@@ -14,6 +14,7 @@ import VoteControl from './VoteControl';
 import ValueDisplay from '../shared/ValueDisplay';
 
 import './ProposalDetail.scss';
+import { get } from '../../utils/Requests';
 
 const web3Service = new Web3Service();
 
@@ -36,7 +37,7 @@ const ProposalDetail = ({
   useEffect(() => {
     const fetchData = async () => {
       const uuid = proposal.details.split('~')[1];
-
+      console.log('proposal', proposal)
       // if (uuid) {
       //   let metaData = await GetMetaData(uuid);
       //   setS3Data(metaData);
@@ -44,7 +45,16 @@ const ProposalDetail = ({
       //   let metaData = await GetMetaData(proposal.id);
       //   setS3Data(metaData);
       // }
-      setS3Data({});
+      try{
+        let metaData = await get(`moloch/proposal/${proposal.id}`);
+        console.log(metaData);
+        
+        setS3Data(metaData.data);
+      } catch (err) {
+        console.log(err);
+        setS3Data({});
+
+      }
 
     };
 
@@ -92,19 +102,19 @@ const ProposalDetail = ({
         <button onClick={() => processProposal(proposal.id)}>Process</button>
       )}
       <div>
-        {s3Data.description ? (
+        {s3Data.data && s3Data.data.description ? (
           <div>
             <h5>Description</h5>
-            <p>{s3Data.description}</p>
+            <p>{s3Data.data.description}</p>
           </div>
         ) : null}
-        {s3Data.link && ReactPlayer.canPlay(s3Data.link) ? (
+        {s3Data.data && s3Data.data.link && ReactPlayer.canPlay(s3Data.data.link) ? (
           <div className="Video">
-            <ReactPlayer url={s3Data.link} playing={false} loop={false} />
+            <ReactPlayer url={s3Data.data.link} playing={false} loop={false} />
           </div>
-        ) : s3Data.link && s3Data.link.indexOf('http') > -1 ? (
+        ) : s3Data.data && s3Data.data.link && s3Data.data.link.indexOf('http') > -1 ? (
           <div className="Link">
-            <a href={s3Data.link} rel="noopener noreferrer" target="_blank">
+            <a href={s3Data.data.link} rel="noopener noreferrer" target="_blank">
               Link
             </a>
           </div>
