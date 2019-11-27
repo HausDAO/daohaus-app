@@ -11,7 +11,7 @@ import BottomNav from '../../components/shared/BottomNav';
 import ErrorMessage from '../../components/shared/ErrorMessage';
 import Loading from '../../components/shared/Loading';
 import ValueDisplay from '../../components/shared/ValueDisplay';
-import { DaoContext } from '../../contexts/Store';
+import { DaoContext, DaoDataContext } from '../../contexts/Store';
 
 import './Home.scss';
 
@@ -19,6 +19,7 @@ const Home = ({ client }) => {
   const [vizData, setVizData] = useState([]);
   const [chartView, setChartView] = useState('bank');
   const [daoService] = useContext(DaoContext);
+  const [daoData] = useContext(DaoDataContext);
 
   const { guildBankAddr, approvedToken } = client.cache.readQuery({
     query: GET_METADATA,
@@ -29,7 +30,7 @@ const Home = ({ client }) => {
       const web3Service = new Web3Service();
       const tokenService = new TokenService(approvedToken);
       const mcDao = daoService;
-      console.log('>>>>>>>>>>>>>>>>>>>>', mcDao);
+      console.log('>>>>>>>>>>>>>>>>>>>> ddata', daoData);
 
       if (guildBankAddr) {
         const events = await mcDao.getAllEvents();
@@ -117,9 +118,9 @@ const Home = ({ client }) => {
 
             <div className="Home">
               <div className="Intro">
-                <h1>PokéMol DAO</h1>
+                <h1>{daoData.name || 'PokéMol DAO'}</h1>
                 <p>{daoService.contractAddr}</p>
-                <p>Put a Moloch in Your Pocket</p>
+                <p>{daoData.description || 'Put a Moloch in Your Pocket'}</p>
               </div>
               <div className="Chart" style={{ width: '100%', height: '33vh' }}>
                 <ResponsiveContainer>

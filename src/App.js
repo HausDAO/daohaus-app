@@ -10,7 +10,7 @@ import McDaoService from './utils/McDaoService';
 import Web3Service from './utils/Web3Service';
 import TokenService from './utils/TokenService';
 
-import { DaoContext } from './contexts/Store';
+import { DaoContext, DaoDataContext } from './contexts/Store';
 
 import './App.scss';
 
@@ -19,7 +19,7 @@ const web3 = new Web3Service();
 const App = ({ client }) => {
   const [loading, setloading] = useState(true);
   const [daoPath, setDaoPath] = useState('');
-  const [daoData, setDaoData] = useState('');
+  const [daoData, setDaoData] = useContext(DaoDataContext);
   const [daoService, setDaoService] = useContext(DaoContext);
 
   useEffect(() => {
