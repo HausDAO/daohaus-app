@@ -146,6 +146,7 @@ export function determineProposalStatus(
 
 //TODO: graph query
 export const groupByStatus = (proposals) => {
+  
   return {
     VotingPeriod: proposals.filter((p) => p.status === 'VotingPeriod'),
     GracePeriod: proposals.filter((p) => p.status === 'GracePeriod'),

@@ -87,7 +87,7 @@ const ProposalDetail = ({
       </div>
       <p>{proposal.description}</p>
       {proposal.status === 'ReadyForProcessing' && currentUser && (
-        <button onClick={() => processProposal(proposal.id)}>Process</button>
+        <button onClick={() => processProposal(proposal.id.split("-")[1])}>Process</button>
       )}
       <div>
         {s3Data && s3Data.description ? (
