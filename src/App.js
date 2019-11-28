@@ -19,11 +19,10 @@ const web3 = new Web3Service();
 const App = ({ client }) => {
   const [loading, setloading] = useState(true);
   const [daoPath, setDaoPath] = useState('');
-  const [daoData, setDaoData] = useContext(DaoDataContext);
+  const [, setDaoData] = useContext(DaoDataContext);
   const [daoService, setDaoService] = useContext(DaoContext);
 
   useEffect(() => {
-    // get dao from daohaus api and check if exists and is whitelisted
     var pathname = window.location.pathname.split('/');
     const daoParam = pathname[2];
 
@@ -36,7 +35,8 @@ const App = ({ client }) => {
       try {
         const daoRes = await get(`moloch/${daoParam}`);
         apiData = daoRes.data;
-        if (apiData.whitelisted) {
+
+        if (!apiData.isLegacy) {
           setDaoPath(daoParam);
           setDaoData(apiData);
         } else {
@@ -49,6 +49,7 @@ const App = ({ client }) => {
     };
 
     getDao();
+    // eslint-disable-next-line
   }, []);
 
   useEffect(() => {
@@ -65,6 +66,7 @@ const App = ({ client }) => {
     if (daoPath) {
       initDao();
     }
+    // eslint-disable-next-line
   }, [daoPath]);
 
   useEffect(() => {
