@@ -1,7 +1,6 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState} from 'react';
 
 import Web3Service from '../../utils/Web3Service';
-import { GetMetaData } from '../../utils/MemberService';
 import ValueDisplay from '../shared/ValueDisplay';
 
 import './MemberDetail.scss';
@@ -9,21 +8,14 @@ import './MemberDetail.scss';
 const web3Service = new Web3Service();
 
 const MemberDetail = ({ member }) => {
-  const [s3Data, setS3Data] = useState({});
+  const [s3Data] = useState({});
 
-  useEffect(() => {
-    const fetchData = async () => {
-      let metaData = await GetMetaData(member.delegateKey);
-      setS3Data(metaData);
-    };
-
-    fetchData();
-  }, [member.delegateKey]);
+  //TODO get profile from 3box or something
 
   return (
     <div className="MemberDetail">
       <h2>{s3Data.username}</h2>
-      <p className="Data">{member.id}</p>
+      <p className="Data">{member.id.split("-")[1]}</p>
       <div className="Offer">
         <div className="Shares">
           <h5>Shares</h5>

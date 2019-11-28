@@ -1,17 +1,19 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 
 import ProposalList from './ProposalList';
 import { groupByStatus } from '../../utils/ProposalHelper';
 
 import './ProposalFilter.scss';
+import { DaoContext } from '../../contexts/Store';
 
 const ProposalFilter = ({ proposals, filter, history }) => {
   const [groupedProposals, setGroupedProposals] = useState();
   const [filteredProposals, setFilteredProposals] = useState([]);
+  const [daoService] = useContext(DaoContext);
 
   const handleSelect = (list, listName) => {
     setFilteredProposals(list);
-    history.push(`/proposals/${listName}`);
+    history.push(`/dao/${daoService.contractAddr}/proposals/${listName}`);
   };
 
   useEffect(() => {
@@ -23,13 +25,15 @@ const ProposalFilter = ({ proposals, filter, history }) => {
         setFilteredProposals(groupedProps[filter]);
       } else {
         if (groupedProps.VotingPeriod.length > 0) {
-          history.push(`/proposals/VotingPeriod`);
+          history.push(
+            `/dao/${daoService.contractAddr}/proposals/VotingPeriod`,
+          );
         } else {
-          history.push(`/proposals/Completed`);
+          history.push(`/dao/${daoService.contractAddr}/proposals/Completed`);
         }
       }
     }
-  }, [proposals, filter, history]);
+  }, [daoService.contractAddr, proposals, filter, history]);
 
   if (!groupedProposals) {
     return <></>;

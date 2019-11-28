@@ -1,13 +1,15 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import { withRouter } from 'react-router-dom';
 import { Formik, Form, Field, ErrorMessage } from 'formik';
 
 import { Auth } from 'aws-amplify';
 
 import Loading from '../../components/shared/Loading';
+import { DaoContext } from '../../contexts/Store';
 
 const SignUp = ({ history }) => {
   const [authError, setAuthError] = useState();
+  const [daoService] = useContext(DaoContext);
 
   return (
     <div>
@@ -60,7 +62,7 @@ const SignUp = ({ history }) => {
               },
             });
             history.push({
-              pathname: '/confirm',
+              pathname: `/dao/${daoService.contractAddr}/confirm`,
               state: { userName: values.username },
             });
           } catch (err) {

@@ -1,24 +1,12 @@
-import { Storage } from 'aws-amplify';
 import { gql } from 'apollo-boost';
 
-export const GetMetaData = async (id) => {
-  const uri = await Storage.get(`proposal_${id}.json`);
-
-  try {
-    const res = await fetch(uri);
-    
-    if (!res.ok) {
-      throw new Error(res.statusText);
-    }
-    return res.json();
-  } catch (err) {
-    return { error: err };
-  }
-};
-
 export const GET_PROPOSALS_QUERY = gql`
-  query {
-    proposals(orderBy: proposalIndex, orderDirection: desc) {
+  query proposals($contractAddr: String!) {
+    proposals(
+      where: { molochAddress: $contractAddr }
+      orderBy: proposalIndex
+      orderDirection: desc
+    ) {
       id
       timestamp
       startingPeriod
@@ -40,9 +28,7 @@ export const GET_PROPOSALS_QUERY = gql`
       votes {
         memberAddress
         uintVote
-        member {
-          shares
-        }
+
       }
     }
   }
@@ -71,10 +57,13 @@ export const GET_PROPOSAL_QUERY = gql`
       votes {
         memberAddress
         uintVote
-        member {
-          shares
-        }
+
       }
     }
   }
 `;
+
+// have to remove
+// member {
+//   shares
+// }

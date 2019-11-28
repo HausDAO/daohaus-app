@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { Link } from 'react-router-dom';
 import { withApollo } from 'react-apollo';
 
@@ -12,6 +12,7 @@ import StackedVote from './StackedVote';
 import ValueDisplay from '../shared/ValueDisplay';
 
 import './ProposalCard.scss';
+import { DaoContext } from '../../contexts/Store';
 
 const web3Service = new Web3Service();
 
@@ -19,8 +20,10 @@ const ProposalCard = ({ proposal, client }) => {
   const { periodDuration } = client.cache.readQuery({
     query: GET_METADATA,
   });
+
   const countDown = getProposalCountdownText(proposal, periodDuration);
   const title = titleMaker(proposal);
+  const [daoService] = useContext(DaoContext);
 
   return (
     <div className="ProposalCard">
@@ -52,7 +55,14 @@ const ProposalCard = ({ proposal, client }) => {
       <div className="CardVote">
         <StackedVote id={proposal.id} />
       </div>
-      <Link className="Button" to={{ pathname: '/proposal/' + proposal.id }}>
+      <Link
+        className="Button"
+        to={{
+          pathname: `/dao/${daoService.contractAddr}/proposal/${
+            proposal.id.split('-')[1]
+          }`,
+        }}
+      >
         View Proposal
       </Link>
     </div>

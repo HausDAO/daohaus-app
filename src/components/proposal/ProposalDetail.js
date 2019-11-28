@@ -2,7 +2,6 @@ import React, { useEffect, useState, useContext } from 'react';
 import ReactPlayer from 'react-player';
 import { withApollo } from 'react-apollo';
 
-import { GetMetaData } from '../../utils/ProposalService';
 import {
   getProposalCountdownText,
   titleMaker,
@@ -14,6 +13,7 @@ import VoteControl from './VoteControl';
 import ValueDisplay from '../shared/ValueDisplay';
 
 import './ProposalDetail.scss';
+import { get } from '../../utils/Requests';
 
 const web3Service = new Web3Service();
 
@@ -24,23 +24,26 @@ const ProposalDetail = ({
   canVote,
   client,
 }) => {
-  const [s3Data, setS3Data] = useState({});
+  const [s3Data, setS3Data] = useState();
   const [currentUser] = useContext(CurrentUserContext);
   const { periodDuration } = client.cache.readQuery({
     query: GET_METADATA,
   });
 
+  
+
   useEffect(() => {
     const fetchData = async () => {
-      const uuid = proposal.details.split('~')[1];
 
-      if (uuid) {
-        let metaData = await GetMetaData(uuid);
-        setS3Data(metaData);
-      } else {
-        let metaData = await GetMetaData(proposal.id);
-        setS3Data(metaData);
+      try{
+        let metaData = await get(`moloch/proposal/${proposal.id}`);
+        
+        setS3Data(metaData.data);
+      } catch (err) {
+        console.log(err);
+
       }
+
     };
 
     fetchData();
@@ -84,20 +87,20 @@ const ProposalDetail = ({
       </div>
       <p>{proposal.description}</p>
       {proposal.status === 'ReadyForProcessing' && currentUser && (
-        <button onClick={() => processProposal(proposal.id)}>Process</button>
+        <button onClick={() => processProposal(proposal.id.split("-")[1])}>Process</button>
       )}
       <div>
-        {s3Data.description ? (
+        {s3Data && s3Data.description ? (
           <div>
             <h5>Description</h5>
             <p>{s3Data.description}</p>
           </div>
         ) : null}
-        {s3Data.link && ReactPlayer.canPlay(s3Data.link) ? (
+        {s3Data && s3Data.link && ReactPlayer.canPlay(s3Data.link) ? (
           <div className="Video">
             <ReactPlayer url={s3Data.link} playing={false} loop={false} />
           </div>
-        ) : s3Data.link && s3Data.link.indexOf('http') > -1 ? (
+        ) : s3Data && s3Data.link && s3Data.link.indexOf('http') > -1 ? (
           <div className="Link">
             <a href={s3Data.link} rel="noopener noreferrer" target="_blank">
               Link

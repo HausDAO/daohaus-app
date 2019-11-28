@@ -12,7 +12,6 @@ import config from '../config';
 import useInterval from '../utils/PollingUtil';
 import TokenService from '../utils/TokenService';
 import Web3Service from '../utils/Web3Service';
-import McDaoService from '../utils/McDaoService';
 import BcProcessorService from '../utils/BcProcessorService';
 import { WalletStatuses, currentStatus } from '../utils/WalletStatus';
 
@@ -21,6 +20,8 @@ export const CurrentWalletContext = createContext();
 export const LoaderContext = createContext(false);
 export const ModalContext = createContext();
 export const RefreshContext = createContext();
+export const DaoContext = createContext();
+export const DaoDataContext = createContext();
 
 // main store of global state
 const Store = ({ children }) => {
@@ -49,8 +50,11 @@ const Store = ({ children }) => {
   // track number of times to do a 1 second update
   const [numTries, setNumTries] = useState(0);
 
+  const [daoService, setDaoService] = useState();
+  const [daoData, setDaoData] = useState();
+
   const web3Service = new Web3Service();
-  const daoService = new McDaoService();
+  //const daoService = new McDaoService();
   const bcProcessorService = new BcProcessorService();
 
   useEffect(() => {
@@ -102,7 +106,7 @@ const Store = ({ children }) => {
   //global polling service
   useInterval(async () => {
     // run on interval defined by $delay only if authenticated
-    if (currentUser) {
+    if (currentUser && daoService) {
       let accountDevices = null;
       // get account address from aws
       const acctAddr = currentUser.attributes['custom:account_address'];
@@ -214,17 +218,23 @@ const Store = ({ children }) => {
 
   return (
     <LoaderContext.Provider value={[loading, setLoading]}>
-      <ModalContext.Provider value={[hasOpened, setHasOpened]}>
-        <RefreshContext.Provider value={[delay, setDelay]}>
-          <CurrentUserContext.Provider value={[currentUser, setCurrentUser]}>
-            <CurrentWalletContext.Provider
-              value={[currentWallet, setCurrentWallet]}
-            >
-              {children}
-            </CurrentWalletContext.Provider>
-          </CurrentUserContext.Provider>
-        </RefreshContext.Provider>
-      </ModalContext.Provider>
+      <DaoContext.Provider value={[daoService, setDaoService]}>
+        <DaoDataContext.Provider value={[daoData, setDaoData]}>
+          <ModalContext.Provider value={[hasOpened, setHasOpened]}>
+            <RefreshContext.Provider value={[delay, setDelay]}>
+              <CurrentUserContext.Provider
+                value={[currentUser, setCurrentUser]}
+              >
+                <CurrentWalletContext.Provider
+                  value={[currentWallet, setCurrentWallet]}
+                >
+                  {children}
+                </CurrentWalletContext.Provider>
+              </CurrentUserContext.Provider>
+            </RefreshContext.Provider>
+          </ModalContext.Provider>
+        </DaoDataContext.Provider>
+      </DaoContext.Provider>
     </LoaderContext.Provider>
   );
 };

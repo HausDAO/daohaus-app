@@ -7,18 +7,24 @@ import ProposalFilter from '../../components/proposal/ProposalFilter';
 import ErrorMessage from '../../components/shared/ErrorMessage';
 import BottomNav from '../../components/shared/BottomNav';
 import Loading from '../../components/shared/Loading';
-import { CurrentWalletContext } from '../../contexts/Store';
+import { CurrentWalletContext, DaoContext } from '../../contexts/Store';
 import StateModals from '../../components/shared/StateModals';
 
 const Proposals = ({ match, history }) => {
   const [currentWallet] = useContext(CurrentWalletContext);
+  const [daoService] = useContext(DaoContext);
 
   return (
     <Fragment>
       <StateModals />
 
-      <Query query={GET_PROPOSALS_QUERY} pollInterval={20000}>
+      <Query
+        query={GET_PROPOSALS_QUERY}
+        variables={{ contractAddr: daoService.contractAddr.toLowerCase() }}
+        pollInterval={20000}
+      >
         {({ loading, error, data }) => {
+
           if (loading) return <Loading />;
           if (error) return <ErrorMessage message={error} />;
 
@@ -29,7 +35,10 @@ const Proposals = ({ match, history }) => {
                 {currentWallet.shares ? (
                   <div>
                     <p>
-                      <Link to="/proposal-new" className="Bold">
+                      <Link
+                        to={`/dao/${daoService.contractAddr}/proposal-new`}
+                        className="Bold"
+                      >
                         <svg
                           className="IconLeft"
                           xmlns="http://www.w3.org/2000/svg"

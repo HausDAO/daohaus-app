@@ -1,6 +1,5 @@
 import DaoAbi from '../contracts/mcdao.json';
 import Web3Service from '../utils/Web3Service';
-import config from '../config';
 
 export default class McDaoService {
   contractAddr;
@@ -8,25 +7,24 @@ export default class McDaoService {
   contract;
   daoAbi;
 
-  constructor() {
-    this.contractAddr = config.CONTRACT_ADDRESS;
+  constructor(contractAddr) {
+    
+    this.contractAddr = contractAddr;
     this.web3Service = new Web3Service();
     this.daoAbi = DaoAbi;
-
-    this.initContract();
   }
 
   async initContract() {
+    
     this.contract = await this.web3Service.initContract(
       this.daoAbi,
       this.contractAddr,
     );
+    return this.contract;
   }
 
   async getAllEvents() {
-    if (!this.contract) {
-      await this.initContract();
-    }
+
     let events = await this.contract.getPastEvents('allEvents', {
       fromBlock: 0,
       toBlock: 'latest',
@@ -35,17 +33,14 @@ export default class McDaoService {
   }
 
   async getCurrentPeriod() {
-    if (!this.contract) {
-      await this.initContract();
-    }
+
+    
     let currentPeriod = await this.contract.methods.getCurrentPeriod().call();
     return currentPeriod;
   }
 
   async getTotalShares(atBlock = 'latest') {
-    if (!this.contract) {
-      await this.initContract();
-    }
+
     let totalShares = await this.contract.methods
       .totalShares()
       .call({}, atBlock);
@@ -53,33 +48,25 @@ export default class McDaoService {
   }
 
   async getGracePeriodLength() {
-    if (!this.contract) {
-      await this.initContract();
-    }
+
     let gracePeriod = await this.contract.methods.gracePeriodLength().call();
     return gracePeriod;
   }
 
   async getVotingPeriodLength() {
-    if (!this.contract) {
-      await this.initContract();
-    }
+
     let votingPeriod = await this.contract.methods.votingPeriodLength().call();
     return votingPeriod;
   }
 
   async getPeriodDuration() {
-    if (!this.contract) {
-      await this.initContract();
-    }
+
     let periodDuration = await this.contract.methods.periodDuration().call();
     return periodDuration;
   }
 
   async getProcessingReward() {
-    if (!this.contract) {
-      await this.initContract();
-    }
+
     let processingReward = await this.contract.methods
       .processingReward()
       .call();
@@ -87,42 +74,32 @@ export default class McDaoService {
   }
 
   async getProposalDeposit() {
-    if (!this.contract) {
-      await this.initContract();
-    }
+
     let proposalDeposit = await this.contract.methods.proposalDeposit().call();
     return proposalDeposit;
   }
 
   async getGuildBankAddr() {
-    if (!this.contract) {
-      await this.initContract();
-    }
+
     let guildBank = await this.contract.methods.guildBank().call();
     return guildBank;
   }
 
   async approvedToken() {
-    if (!this.contract) {
-      await this.initContract();
-    }
+
 
     let tokenAddress = await this.contract.methods.approvedToken().call();
     return tokenAddress;
   }
 
   async members(account) {
-    if (!this.contract) {
-      await this.initContract();
-    }
+
     let members = await this.contract.methods.members(account).call();
     return members;
   }
 
   async memberAddressByDelegateKey(account) {
-    if (!this.contract) {
-      await this.initContract();
-    }
+
     let addressByDelegateKey = await this.contract.methods
       .memberAddressByDelegateKey(account)
       .call();
@@ -130,9 +107,7 @@ export default class McDaoService {
   }
 
   async submitVote(from, proposalIndex, uintVote, encodedPayload) {
-    if (!this.contract) {
-      await this.initContract();
-    }
+
 
     if (encodedPayload) {
       const data = this.contract.methods
@@ -156,9 +131,7 @@ export default class McDaoService {
   }
 
   async rageQuit(from, amount, encodedPayload) {
-    if (!this.contract) {
-      await this.initContract();
-    }
+
     if (encodedPayload) {
       const data = this.contract.methods.ragequit(amount).encodeABI();
       return data;
@@ -179,33 +152,31 @@ export default class McDaoService {
   }
 
   async canRagequit() {
-    if (!this.contract) {
-      await this.initContract();
-    }
+
     let canRage = await this.contract.methods.canRagequit().call();
     return canRage;
   }
 
   async guildBank() {
-    if (!this.contract) {
-      await this.initContract();
-    }
+
     let guildBank = await this.contract.methods.guildBank().call();
     return guildBank;
   }
 
   async proposalQueue(id) {
-    if (!this.contract) {
-      await this.initContract();
-    }
+
     let info = await this.contract.methods.proposalQueue(id).call();
     return info;
   }
 
+  async getProposalQueueLength() {
+
+    let len = await this.contract.methods.getProposalQueueLength().call();
+    return len;
+  }
+
   async processProposal(from, id, encodedPayload) {
-    if (!this.contract) {
-      await this.initContract();
-    }
+
 
     if (encodedPayload) {
       const data = this.contract.methods.processProposal(id).encodeABI();
@@ -221,9 +192,7 @@ export default class McDaoService {
     details,
     encodedPayload = false,
   ) {
-    if (!this.contract) {
-      await this.initContract();
-    }
+
 
     if (encodedPayload) {
       const data = this.contract.methods
