@@ -36,7 +36,7 @@ const App = ({ client }) => {
       try {
         const daoRes = await get(`moloch/${daoParam}`);
         apiData = daoRes.data;
-        if (apiData.whitelisted || true) {
+        if (apiData.whitelisted) {
           setDaoPath(daoParam);
           setDaoData(apiData);
         } else {
@@ -70,7 +70,6 @@ const App = ({ client }) => {
   useEffect(() => {
     // save all web3 data to apollo cache
     const fetchData = async () => {
-
       const currentPeriod = await daoService.getCurrentPeriod();
       const totalShares = await daoService.getTotalShares();
       const guildBankAddr = await daoService.getGuildBankAddr();
@@ -107,6 +106,7 @@ const App = ({ client }) => {
       fetchData();
     }
   }, [client, daoService]);
+
   return (
     <div className="App">
       {loading ? (
