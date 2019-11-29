@@ -10,7 +10,7 @@ const InvalidRoute = () => (
       <div className="Contents">
         <img src={Brand} />
         <h2>Put a Moloch in Your Pocket</h2>
-        <p>Pokemol is a mobile-first frontend for Moloch daos. If a dao was summoned on DAOHaus, you can view, submit and vote on proposals here.</p>
+        <p>Pokemol is a mobile-first frontend for Moloch daos. If a dao was summoned on DAOHaus, you can view, submit and vote on proposals here at Pokemol.</p>
         <p>Example URL:</p>
         <pre>https://pokemol.com/dao/{'{dao contract address}'}</pre>
       </div>
@@ -22,6 +22,10 @@ const InvalidRoute = () => (
         <p>Discover and pledge to existing Moloch daos, or Summon your own.</p>
         <a className="BigLink" href="https://daohaus.club/">
           Go to DAOHaus ->
+        </a>
+        <p>If a dao was recently summoned, it can take a few minutes. If you think there may be an issue with your dao, visit us in our Telegram Support Goup.</p>
+        <a className="BigLink" href="https://t.me/joinchat/IJqu9xeMfqWoLnO_kc03QA">
+          Telegram Support ->
         </a>
       </div>
     </div>
