@@ -1,7 +1,7 @@
 import React, { useContext } from 'react';
 import { withRouter, Link } from 'react-router-dom';
 
-import { CurrentUserContext, DaoContext } from '../../contexts/Store';
+import { CurrentUserContext, DaoContext, DaoDataContext } from '../../contexts/Store';
 import BcToast from './BcToast';
 
 import Brand from '../../assets/PokeMol__Logo.svg';
@@ -12,6 +12,7 @@ import Modal from './Modal';
 const TopNav = (props) => {
   const [currentUser] = useContext(CurrentUserContext);
   const [daoService] = useContext(DaoContext);
+  const [daoData] = useContext(DaoDataContext);
 
   // Toggle functions
   const [isElementOpen, setElementOpen] = React.useState(false);
@@ -52,7 +53,7 @@ const TopNav = (props) => {
                       className="Brand"
                       to={`/dao/${daoService.contractAddr}/`}
                     >
-                      <img src={Brand} alt="Pocket Moloch" />
+                      {daoData.name || 'PokéMol DAO'}
                     </Link>
                   )}
                 </>
