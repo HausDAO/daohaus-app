@@ -4,7 +4,7 @@ import { withRouter, Link } from 'react-router-dom';
 import { CurrentUserContext, DaoContext } from '../../contexts/Store';
 import BcToast from './BcToast';
 
-import Brand from '../../assets/PokéMol__Logo.svg';
+import Brand from '../../assets/PokeMol__Logo.svg';
 import './TopNav.scss';
 import useModal from './useModal';
 import Modal from './Modal';
