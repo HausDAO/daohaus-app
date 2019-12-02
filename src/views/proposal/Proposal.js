@@ -16,6 +16,7 @@ import {
   CurrentWalletContext,
   CurrentUserContext,
   DaoContext,
+  DaoDataContext,
 } from '../../contexts/Store';
 
 const Proposal = (props) => {
@@ -25,12 +26,24 @@ const Proposal = (props) => {
   const [currentWallet] = useContext(CurrentWalletContext);
 
   const [daoService] = useContext(DaoContext);
+  const [daoData] = useContext(DaoDataContext);
   const web3Service = new Web3Service();
   const bcprocessor = new BcProcessorService();
 
-  const { loading, error, data } = useQuery(GET_PROPOSAL_QUERY, {
-    variables: { id: `${daoService.contractAddr.toLowerCase()}-${id}` },
-  });
+  let options;
+
+  if (daoData.isLegacy) {
+    options = {
+      client: daoData.legacyClient,
+      variables: { id },
+    };
+  } else {
+    options = {
+      variables: { id: `${daoService.contractAddr.toLowerCase()}-${id}` },
+    };
+  }
+
+  const { loading, error, data } = useQuery(GET_PROPOSAL_QUERY, options);
 
   const processProposal = (id) => {
     const sdk = currentUser.sdk;
