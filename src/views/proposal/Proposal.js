@@ -1,6 +1,6 @@
-import React, { Fragment, useContext } from 'react';
+import React, { useContext } from 'react';
 import { withRouter } from 'react-router-dom';
-import { Query } from 'react-apollo';
+import { useQuery } from '@apollo/react-hooks';
 
 import { ethToWei } from '@netgum/utils'; // returns BN
 
@@ -27,6 +27,10 @@ const Proposal = (props) => {
   const [daoService] = useContext(DaoContext);
   const web3Service = new Web3Service();
   const bcprocessor = new BcProcessorService();
+
+  const { loading, error, data } = useQuery(GET_PROPOSAL_QUERY, {
+    variables: { id: `${daoService.contractAddr.toLowerCase()}-${id}` },
+  });
 
   const processProposal = (id) => {
     const sdk = currentUser.sdk;
@@ -72,7 +76,7 @@ const Proposal = (props) => {
           })
           .catch((err) => {
             setTxLoading(false);
-            alert('Something went wrong, must process in order submitted')
+            alert('Something went wrong, must process in order submitted');
             console.log(err);
           });
       });
@@ -138,27 +142,18 @@ const Proposal = (props) => {
     }
   };
 
-  return (
-    <Query
-      query={GET_PROPOSAL_QUERY}
-      variables={{ id: `${daoService.contractAddr.toLowerCase()}-${id}` }}
-    >
-      {({ loading, error, data }) => {
-        if (loading) return <Loading />;
-        if (error) return <ErrorMessage message={error} />;
+  if (loading) return <Loading />;
+  if (error) return <ErrorMessage message={error} />;
 
-        return (
-          <Fragment>
-            {txLoading && <Loading />}
-            <ProposalDetail
-              submitVote={submitVote}
-              processProposal={processProposal}
-              proposal={data.proposal}
-            />
-          </Fragment>
-        );
-      }}
-    </Query>
+  return (
+    <>
+      {txLoading && <Loading />}
+      <ProposalDetail
+        submitVote={submitVote}
+        processProposal={processProposal}
+        proposal={data.proposal}
+      />
+    </>
   );
 };
 
