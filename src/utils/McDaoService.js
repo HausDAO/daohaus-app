@@ -8,14 +8,12 @@ export default class McDaoService {
   daoAbi;
 
   constructor(contractAddr) {
-    
     this.contractAddr = contractAddr;
     this.web3Service = new Web3Service();
     this.daoAbi = DaoAbi;
   }
 
   async initContract() {
-    
     this.contract = await this.web3Service.initContract(
       this.daoAbi,
       this.contractAddr,
@@ -24,8 +22,7 @@ export default class McDaoService {
   }
 
   async getAllEvents() {
-
-    let events = await this.contract.getPastEvents('allEvents', {
+    const events = await this.contract.getPastEvents('allEvents', {
       fromBlock: 0,
       toBlock: 'latest',
     });
@@ -33,82 +30,71 @@ export default class McDaoService {
   }
 
   async getCurrentPeriod() {
-
-    
-    let currentPeriod = await this.contract.methods.getCurrentPeriod().call();
+    const currentPeriod = await this.contract.methods.getCurrentPeriod().call();
     return currentPeriod;
   }
 
   async getTotalShares(atBlock = 'latest') {
-
-    let totalShares = await this.contract.methods
+    const totalShares = await this.contract.methods
       .totalShares()
       .call({}, atBlock);
     return totalShares;
   }
 
   async getGracePeriodLength() {
-
-    let gracePeriod = await this.contract.methods.gracePeriodLength().call();
+    const gracePeriod = await this.contract.methods.gracePeriodLength().call();
     return gracePeriod;
   }
 
   async getVotingPeriodLength() {
-
-    let votingPeriod = await this.contract.methods.votingPeriodLength().call();
+    const votingPeriod = await this.contract.methods
+      .votingPeriodLength()
+      .call();
     return votingPeriod;
   }
 
   async getPeriodDuration() {
-
-    let periodDuration = await this.contract.methods.periodDuration().call();
+    const periodDuration = await this.contract.methods.periodDuration().call();
     return periodDuration;
   }
 
   async getProcessingReward() {
-
-    let processingReward = await this.contract.methods
+    const processingReward = await this.contract.methods
       .processingReward()
       .call();
     return processingReward;
   }
 
   async getProposalDeposit() {
-
-    let proposalDeposit = await this.contract.methods.proposalDeposit().call();
+    const proposalDeposit = await this.contract.methods
+      .proposalDeposit()
+      .call();
     return proposalDeposit;
   }
 
   async getGuildBankAddr() {
-
-    let guildBank = await this.contract.methods.guildBank().call();
+    const guildBank = await this.contract.methods.guildBank().call();
     return guildBank;
   }
 
   async approvedToken() {
-
-
-    let tokenAddress = await this.contract.methods.approvedToken().call();
+    const tokenAddress = await this.contract.methods.approvedToken().call();
     return tokenAddress;
   }
 
   async members(account) {
-
-    let members = await this.contract.methods.members(account).call();
+    const members = await this.contract.methods.members(account).call();
     return members;
   }
 
   async memberAddressByDelegateKey(account) {
-
-    let addressByDelegateKey = await this.contract.methods
+    const addressByDelegateKey = await this.contract.methods
       .memberAddressByDelegateKey(account)
       .call();
     return addressByDelegateKey;
   }
 
   async submitVote(from, proposalIndex, uintVote, encodedPayload) {
-
-
     if (encodedPayload) {
       const data = this.contract.methods
         .submitVote(proposalIndex, uintVote)
@@ -116,7 +102,7 @@ export default class McDaoService {
       return data;
     }
 
-    let vote = this.contract.methods
+    const vote = this.contract.methods
       .submitVote(proposalIndex, uintVote)
       .send({ from })
       .once('transactionHash', (txHash) => {})
@@ -131,13 +117,12 @@ export default class McDaoService {
   }
 
   async rageQuit(from, amount, encodedPayload) {
-
     if (encodedPayload) {
       const data = this.contract.methods.ragequit(amount).encodeABI();
       return data;
     }
 
-    let rage = this.contract.methods
+    const rage = this.contract.methods
       .ragequit(amount)
       .send({ from })
       .once('transactionHash', (txHash) => {})
@@ -152,32 +137,26 @@ export default class McDaoService {
   }
 
   async canRagequit() {
-
-    let canRage = await this.contract.methods.canRagequit().call();
+    const canRage = await this.contract.methods.canRagequit().call();
     return canRage;
   }
 
   async guildBank() {
-
-    let guildBank = await this.contract.methods.guildBank().call();
+    const guildBank = await this.contract.methods.guildBank().call();
     return guildBank;
   }
 
   async proposalQueue(id) {
-
-    let info = await this.contract.methods.proposalQueue(id).call();
+    const info = await this.contract.methods.proposalQueue(id).call();
     return info;
   }
 
   async getProposalQueueLength() {
-
-    let len = await this.contract.methods.getProposalQueueLength().call();
+    const len = await this.contract.methods.getProposalQueueLength().call();
     return len;
   }
 
   async processProposal(from, id, encodedPayload) {
-
-
     if (encodedPayload) {
       const data = this.contract.methods.processProposal(id).encodeABI();
       return data;
@@ -192,8 +171,6 @@ export default class McDaoService {
     details,
     encodedPayload = false,
   ) {
-
-
     if (encodedPayload) {
       const data = this.contract.methods
         .submitProposal(applicant, tokenTribute, sharesRequested, details)
@@ -201,7 +178,7 @@ export default class McDaoService {
       return data;
     }
 
-    let proposal = this.contract.methods
+    const proposal = this.contract.methods
       .submitProposal(applicant, tokenTribute, sharesRequested, details)
       .send({ from })
       .once('transactionHash', (txHash) => {})

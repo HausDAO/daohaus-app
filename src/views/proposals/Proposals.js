@@ -2,25 +2,57 @@ import React, { useContext, Fragment } from 'react';
 import { Link } from 'react-router-dom';
 import { useQuery } from '@apollo/react-hooks';
 
-import { GET_PROPOSALS_QUERY } from '../../utils/ProposalService';
+import { GET_PROPOSALS_QUERY, GET_PROPOSALS_LEGACY } from '../../utils/Queries';
 import ProposalFilter from '../../components/proposal/ProposalFilter';
 import ErrorMessage from '../../components/shared/ErrorMessage';
 import BottomNav from '../../components/shared/BottomNav';
 import Loading from '../../components/shared/Loading';
-import { CurrentWalletContext, DaoContext } from '../../contexts/Store';
+import {
+  CurrentWalletContext,
+  DaoContext,
+  DaoDataContext,
+} from '../../contexts/Store';
 import StateModals from '../../components/shared/StateModals';
+
+// import { resolvers } from '../../utils/Resolvers';
+// import ApolloClient from 'apollo-boost';
 
 const Proposals = ({ match, history }) => {
   const [currentWallet] = useContext(CurrentWalletContext);
   const [daoService] = useContext(DaoContext);
+  const [daoData] = useContext(DaoDataContext);
 
-  const { loading, error, data } = useQuery(GET_PROPOSALS_QUERY, {
-    variables: { contractAddr: daoService.contractAddr.toLowerCase() },
-    pollInterval: 20000,
-  });
+  let proposalQuery, options;
+
+  console.log('daoData', daoData);
+
+  if (daoData.isLegacy) {
+    proposalQuery = GET_PROPOSALS_LEGACY;
+    options = { client: daoData.legacyClient, pollInterval: 0 };
+  } else {
+    proposalQuery = GET_PROPOSALS_QUERY;
+    options = {
+      variables: { contractAddr: daoService.contractAddr.toLowerCase() },
+      pollInterval: 20000,
+    };
+  }
+
+  // console.log('proposalQuery', proposalQuery);
+  // console.log('options', options);
+
+  const { loading, error, data } = useQuery(proposalQuery, options);
+  console.log('data', data);
+  console.log('error', error);
+
+  // const { loading, error, data } = useQuery(proposalQuery, {
+  //   variables: { contractAddr: daoService.contractAddr.toLowerCase() },
+  //   pollInterval: 20000,
+  // });
 
   if (loading) return <Loading />;
   if (error) return <ErrorMessage message={error} />;
+
+  console.log('data', data);
 
   return (
     <Fragment>

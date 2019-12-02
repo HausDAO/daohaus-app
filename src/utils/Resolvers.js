@@ -9,28 +9,12 @@ import { gql } from 'apollo-boost';
 import { GET_METADATA } from './Queries';
 
 export const resolvers = {
-  apiData: async (moloch, _args) => {
-    console.log(moloch);
-    
-    // let apiData = [];
-    // try {
-    //   const daoRes = await get(`moloch/${moloch.moloch}`);
-    //   apiData = daoRes.data;
-    // } catch (e) {
-    //   console.log('error on dao api call', e);
-    // }
-
-    // if (apiData.isLegacy && apiData.graphNodeUri) {
-    //   let legacyData = await legacyGraph(
-    //     apiData.graphNodeUri,
-    //     GET_MEMBERDATA_LEGACY,
-    //   );
-    //   apiData.legacyData = legacyData.data.data;
-    // }
-
-    // return apiData;
-  },
   Proposal: {
+    formattedId: (proposal, _args, { cache }) => {
+      console.log('proposal in formattedID', proposal);
+
+      // return proposal.id.split("-")[1] ?
+    },
     status: (proposal, _args, { cache }) => {
       const {
         currentPeriod,
