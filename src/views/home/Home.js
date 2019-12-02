@@ -118,7 +118,6 @@ const Home = ({ client }) => {
             <div className="Home">
               <div className="Intro">
                 <h1>{daoData.name || 'PokéMol DAO'}</h1>
-                <p>{daoService.contractAddr}</p>
                 <p>{daoData.description || 'Put a Moloch in Your Pocket'}</p>
               </div>
               <div className="Chart" style={{ width: '100%', height: '33vh' }}>

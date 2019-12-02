@@ -10,7 +10,18 @@
     top: 50%;
     transform: translate(0, -50%);
     z-index: 1;
+    font-weight: 900;
+    color: black;
+    &:hover { color: $primary; }
+    font-size: 1.5em;
     img { height: 48px; }
+    @media (max-width: $phone) {
+      font-size: 1.15em;
+      max-width: 50%;
+      text-overflow: ellipsis;
+      overflow: hidden;
+      white-space: nowrap;
+    }
   }
   .Auth {
     position: absolute;

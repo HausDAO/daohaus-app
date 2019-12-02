@@ -272,6 +272,29 @@ button.Tab {
 
 // Utils
 
+.Column {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  &--50 { 
+    width: 50%;
+    @media (max-width: $tablet){
+      width: 100%; 
+    } 
+  }
+}
+
+.Block {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  &__Contents {
+  }
+}
+
 .AddDevice {
   max-width: 600px;
   margin: 50px auto;
@@ -292,10 +315,15 @@ button.Tab {
   padding-right: 15px;
 }
 
+.PadAround {
+  padding: $base-padding; 
+}
+
 .Row {
   display: flex;
   align-content: center;
   justify-content: space-between;
+  flex-wrap: wrap;
 }
 
 .Label {
@@ -474,4 +502,59 @@ textarea {
     svg, span { margin: 5px auto; }
     border-radius: 0px;
   }
+}
+
+.InvalidRoute {
+  position: absolute;
+  top: 0;
+  width: 100%; 
+}
+
+.Info {
+  min-height: 100vh;
+  .Contents {
+    padding: 50px;
+    max-width: 800px;
+  }
+  img { max-width: 320px; }
+  h2 { 
+    color: white;
+    font-size: 2.5em;
+  }
+  p { 
+    color: white; 
+    font-size: 1.35em; 
+    font-weight: 700; 
+  }
+  pre {
+    color: white; 
+    font-size: 1.35em;
+    white-space: pre-wrap;
+  }
+  &--Daohaus {
+    background-color: #020436;
+    background-size: cover; 
+    background-position: center bottom;
+  }
+  &--Pokemol {
+    background-color: $pokemol-background;
+  }
+  @media (max-width: $tablet) {
+    min-height: 50vh;
+    h2 { 
+      color: white;
+      font-size: 1.5em;
+    }
+    p { 
+      color: white; 
+      font-size: 1em; 
+      font-weight: 700; 
+    }
+  }
+}
+
+.BigLink {
+  font-size: 1.5em;
+  color: #4EBD9E;
+  font-weight: 700;
 }
