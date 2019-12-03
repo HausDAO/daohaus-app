@@ -31,17 +31,17 @@ export default class WethService {
     try {
       if (!this.contract) {
         this.contract = await this.initContract(Erc20Abi);
-        console.log('this.contract', this.contract);
+        //console.log('this.contract', this.contract);
       }
-      console.log('callinf symbol 1st time');
+      //console.log('callinf symbol 1st time');
       symbol = await this.contract.methods.symbol().call();
     } catch {
       if (!this.contract32) {
-        console.log('contract32');
+        //console.log('contract32');
         this.contract32 = await this.initContract(Erc20Bytes32Abi);
-        console.log('this.contract32', this.contract32);
+        //console.log('this.contract32', this.contract32);
       }
-      console.log('callinf symbol 2nd time');
+      //console.log('callinf symbol 2nd time');
       symbol = await this.contract32.methods.symbol().call();
     }
 
