@@ -46,7 +46,7 @@ const ProposalForm = (props) => {
               sharesRequested: 0,
             }}
             validate={(values) => {
-              let errors = {};
+              const errors = {};
               if (!values.title) {
                 errors.title = 'Required';
               }
@@ -92,7 +92,7 @@ const ProposalForm = (props) => {
 
                 const queueLength = await daoService.getProposalQueueLength();
                 const hash = await sdk.submitAccountTransaction(estimated);
-                
+
                 const proposalObj = {
                   proposalId: queueLength + '',
                   molochContractAddress: daoService.contractAddr,

@@ -2,7 +2,7 @@ import React, { useContext, Fragment } from 'react';
 import { Link } from 'react-router-dom';
 import { useQuery } from '@apollo/react-hooks';
 
-import { GET_PROPOSALS_QUERY, GET_PROPOSALS_LEGACY } from '../../utils/Queries';
+import { GET_PROPOSALS, GET_PROPOSALS_LEGACY } from '../../utils/Queries';
 import ProposalFilter from '../../components/proposal/ProposalFilter';
 import ErrorMessage from '../../components/shared/ErrorMessage';
 import BottomNav from '../../components/shared/BottomNav';
@@ -25,7 +25,7 @@ const Proposals = ({ match, history }) => {
     proposalQuery = GET_PROPOSALS_LEGACY;
     options = { client: daoData.legacyClient, pollInterval: 20000 };
   } else {
-    proposalQuery = GET_PROPOSALS_QUERY;
+    proposalQuery = GET_PROPOSALS;
     options = {
       variables: { contractAddr: daoService.contractAddr.toLowerCase() },
       pollInterval: 20000,

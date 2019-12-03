@@ -17,35 +17,39 @@ export const GET_METADATA = gql`
   }
 `;
 
-export const GET_PROPOSALS_QUERY = gql`
+const baseProposalFields = `
+  id
+  timestamp
+  startingPeriod
+  tokenTribute
+  sharesRequested
+  yesVotes
+  noVotes
+  applicantAddress
+  proposalIndex
+  didPass
+  aborted
+  details
+  processed
+  status @client
+  gracePeriod @client
+  votingEnds @client
+  votingStarts @client
+  readyForProcessing @client
+  votes {
+    memberAddress
+    uintVote
+  }
+`;
+
+export const GET_PROPOSALS = gql`
   query proposals($contractAddr: String!) {
     proposals(
       where: { molochAddress: $contractAddr }
       orderBy: proposalIndex
       orderDirection: desc
     ) {
-      id
-      timestamp
-      startingPeriod
-      tokenTribute
-      sharesRequested
-      yesVotes
-      noVotes
-      applicantAddress
-      proposalIndex
-      didPass
-      aborted
-      details
-      processed
-      status @client
-      gracePeriod @client
-      votingEnds @client
-      votingStarts @client
-      readyForProcessing @client
-      votes {
-        memberAddress
-        uintVote
-      }
+      ${baseProposalFields}
     }
   }
 `;
@@ -53,57 +57,15 @@ export const GET_PROPOSALS_QUERY = gql`
 export const GET_PROPOSALS_LEGACY = gql`
   query {
     proposals(orderBy: proposalIndex, orderDirection: desc) {
-      id
-      timestamp
-      tokenTribute
-      sharesRequested
-      startingPeriod
-      applicantAddress
-      proposalIndex
-      yesVotes
-      noVotes
-      didPass
-      aborted
-      details
-      processed
-      status @client
-      gracePeriod @client
-      votingEnds @client
-      votingStarts @client
-      readyForProcessing @client
-      votes {
-        memberAddress
-        uintVote
-      }
+      ${baseProposalFields}
     }
   }
 `;
 
-export const GET_PROPOSAL_QUERY = gql`
+export const GET_PROPOSAL = gql`
   query proposal($id: String!) {
     proposal(id: $id) {
-      id
-      timestamp
-      tokenTribute
-      sharesRequested
-      startingPeriod
-      applicantAddress
-      proposalIndex
-      yesVotes
-      noVotes
-      didPass
-      aborted
-      details
-      processed
-      status @client
-      gracePeriod @client
-      votingEnds @client
-      votingStarts @client
-      readyForProcessing @client
-      votes {
-        memberAddress
-        uintVote
-      }
+      ${baseProposalFields}
     }
   }
 `;
