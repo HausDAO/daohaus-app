@@ -69,3 +69,50 @@ export const GET_PROPOSAL = gql`
     }
   }
 `;
+
+export const GET_MEMBERS = gql`
+  query members($contractAddr: String!) {
+    members(orderBy: shares, where: { molochAddress: $contractAddr }) {
+      id
+      delegateKey
+      shares
+      isActive
+      tokenTribute
+      didRagequit
+    }
+  }
+`;
+
+export const GET_MEMBERS_LEGACY = gql`
+  query {
+    members(orderBy: shares) {
+      id
+      delegateKey
+      shares
+      isActive
+      tokenTribute
+      didRagequit
+    }
+  }
+`;
+
+export const GET_MEMBER = gql`
+  query member($id: String!) {
+    member(id: $id) {
+      id
+      delegateKey
+      shares
+      isActive
+      tokenTribute
+      didRagequit
+      submissions {
+        proposalIndex
+        yesVotes
+        noVotes
+        processed
+        didPass
+        aborted
+      }
+    }
+  }
+`;

@@ -1,20 +1,24 @@
 import React, { useContext } from 'react';
 import { useQuery } from '@apollo/react-hooks';
 
-import { GET_MEMBER_QUERY } from '../../utils/MemberService';
+import { GET_MEMBER } from '../../utils/Queries';
+import { DaoDataContext } from '../../contexts/Store';
 import MemberDetail from '../../components/member/MemberDetail';
 import ErrorMessage from '../../components/shared/ErrorMessage';
 import BottomNav from '../../components/shared/BottomNav';
 import Loading from '../../components/shared/Loading';
-import { DaoContext } from '../../contexts/Store';
 
 const Member = (props) => {
   const id = props.match.params.id;
-  const [daoService] = useContext(DaoContext);
+  const [daoData] = useContext(DaoDataContext);
 
-  const { loading, error, data } = useQuery(GET_MEMBER_QUERY, {
-    variables: { id, contractAddr: daoService.contractAddr.toLowerCase() },
-  });
+  const options = { variables: { id } };
+
+  if (daoData.isLegacy) {
+    options.client = daoData.legacyClient;
+  }
+
+  const { loading, error, data } = useQuery(GET_MEMBER, options);
 
   if (loading) return <Loading />;
   if (error) return <ErrorMessage message={error} />;

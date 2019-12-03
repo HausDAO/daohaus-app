@@ -45,8 +45,8 @@ const ProposalDetail = ({
         console.log(err);
       }
     };
-    // eslint-disable-next-line
     fetchData();
+    // eslint-disable-next-line
   }, []);
 
   const countDown = getProposalCountdownText(proposal, periodDuration);
