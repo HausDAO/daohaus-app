@@ -34,7 +34,7 @@ const VoteControl = ({ submitVote, proposal }) => {
 
   const usersVote = (votes) => {
     // get current users vote, no or yes
-    
+
     return (
       currentUser &&
       votes.filter(
@@ -46,8 +46,9 @@ const VoteControl = ({ submitVote, proposal }) => {
   };
 
   const votedYes = (proposal) => {
-    // used for className 
-    return (currentUser && proposal.votes &&
+    // used for className
+    return (currentUser &&
+      proposal.votes &&
       usersVote(proposal.votes)[0] &&
       usersVote(proposal.votes)[0].uintVote === 1) ||
       currentYesVote
@@ -56,8 +57,9 @@ const VoteControl = ({ submitVote, proposal }) => {
   };
 
   const votedNo = (proposal) => {
-    // used for className 
-    return (currentUser && proposal.votes &&
+    // used for className
+    return (currentUser &&
+      proposal.votes &&
       usersVote(proposal.votes)[0] &&
       usersVote(proposal.votes)[0].uintVote !== 1) ||
       currentNoVote
@@ -90,7 +92,7 @@ const VoteControl = ({ submitVote, proposal }) => {
             </button>
             <div className="StackedVote">
               <StackedVote
-                id={proposal.id}
+                id={proposal.proposalIndex}
                 currentYesVote={currentYesVote}
                 currentNoVote={currentNoVote}
               />
@@ -112,7 +114,7 @@ const VoteControl = ({ submitVote, proposal }) => {
             </button>
             <div className="StackedVote">
               <StackedVote
-                id={proposal.id}
+                id={proposal.proposalIndex}
                 currentYesVote={currentYesVote}
                 currentNoVote={currentNoVote}
               />

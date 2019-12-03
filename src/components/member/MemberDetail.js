@@ -1,4 +1,4 @@
-import React, { useState} from 'react';
+import React, { useState } from 'react';
 
 import Web3Service from '../../utils/Web3Service';
 import ValueDisplay from '../shared/ValueDisplay';
@@ -8,14 +8,17 @@ import './MemberDetail.scss';
 const web3Service = new Web3Service();
 
 const MemberDetail = ({ member }) => {
+  // TODO get profile from 3box or something
   const [s3Data] = useState({});
 
-  //TODO get profile from 3box or something
+  const memberId = member.id.split('-')[1]
+    ? member.id.split('-')[1]
+    : member.id;
 
   return (
     <div className="MemberDetail">
       <h2>{s3Data.username}</h2>
-      <p className="Data">{member.id.split("-")[1]}</p>
+      <p className="Data">{memberId}</p>
       <div className="Offer">
         <div className="Shares">
           <h5>Shares</h5>

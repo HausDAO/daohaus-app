@@ -53,14 +53,12 @@ const ProposalCard = ({ proposal, client }) => {
         </div>
       </div>
       <div className="CardVote">
-        <StackedVote id={proposal.id} />
+        <StackedVote id={proposal.proposalIndex} />
       </div>
       <Link
         className="Button"
         to={{
-          pathname: `/dao/${daoService.contractAddr}/proposal/${
-            proposal.id.split('-')[1]
-          }`,
+          pathname: `/dao/${daoService.contractAddr}/proposal/${proposal.proposalIndex}`,
         }}
       >
         View Proposal

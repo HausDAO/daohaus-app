@@ -11,11 +11,14 @@ import { DaoContext } from '../../contexts/Store';
 const web3Service = new Web3Service();
 
 const MemberCard = ({ member }) => {
-  //TODO get profile from 3box or something
+  // TODO get profile from 3box or something
   const [s3Data] = useState({});
   const [daoService] = useContext(DaoContext);
 
-  const memberId = member.id.split('-')[1];
+  const memberId = member.id.split('-')[1]
+    ? member.id.split('-')[1]
+    : member.id;
+
   return (
     <Link
       className="MemberLink"
