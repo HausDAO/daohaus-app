@@ -114,7 +114,7 @@ const Proposal = (props) => {
       daoService
         .submitVote(
           currentUser.attributes['custom:account_address'],
-          proposal.id.split('-')[1],
+          proposal.proposalIndex,
           vote,
           true,
         )
@@ -138,7 +138,7 @@ const Proposal = (props) => {
                     hash,
                     currentUser.attributes['custom:account_address'],
                     `Submit ${vote === 1 ? 'yes' : 'no'} vote on proposal ${
-                      proposal.id.split('-')[1]
+                      proposal.proposalIndex
                     }`,
                     true,
                   );

@@ -10,11 +10,6 @@ import { GET_METADATA } from './Queries';
 
 export const resolvers = {
   Proposal: {
-    formattedId: (proposal, _args, { cache }) => {
-      console.log('proposal in formattedID', proposal);
-
-      // return proposal.id.split("-")[1] ?
-    },
     status: (proposal, _args, { cache }) => {
       const {
         currentPeriod,

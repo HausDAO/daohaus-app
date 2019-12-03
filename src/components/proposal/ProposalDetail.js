@@ -6,14 +6,14 @@ import {
   getProposalCountdownText,
   titleMaker,
 } from '../../utils/ProposalHelper';
-import { CurrentUserContext } from '../../contexts/Store';
+import { CurrentUserContext, DaoContext } from '../../contexts/Store';
 import { GET_METADATA } from '../../utils/Queries';
+import { get } from '../../utils/Requests';
 import Web3Service from '../../utils/Web3Service';
 import VoteControl from './VoteControl';
 import ValueDisplay from '../shared/ValueDisplay';
 
 import './ProposalDetail.scss';
-import { get } from '../../utils/Requests';
 
 const web3Service = new Web3Service();
 
@@ -26,28 +26,28 @@ const ProposalDetail = ({
 }) => {
   const [s3Data, setS3Data] = useState();
   const [currentUser] = useContext(CurrentUserContext);
+  const [daoService] = useContext(DaoContext);
   const { periodDuration } = client.cache.readQuery({
     query: GET_METADATA,
   });
 
-  
-
   useEffect(() => {
     const fetchData = async () => {
+      try {
+        const metaData = await get(
+          `moloch/proposal/${daoService.contractAddr.toLowerCase()}-${
+            proposal.proposalIndex
+          }`,
+        );
 
-      try{
-        let metaData = await get(`moloch/proposal/${proposal.id}`);
-        
         setS3Data(metaData.data);
       } catch (err) {
         console.log(err);
-
       }
-
     };
 
     fetchData();
-  }, [proposal.details, proposal.id]);
+  }, [proposal]);
 
   const countDown = getProposalCountdownText(proposal, periodDuration);
   const title = titleMaker(proposal);
@@ -87,7 +87,9 @@ const ProposalDetail = ({
       </div>
       <p>{proposal.description}</p>
       {proposal.status === 'ReadyForProcessing' && currentUser && (
-        <button onClick={() => processProposal(proposal.id.split("-")[1])}>Process</button>
+        <button onClick={() => processProposal(proposal.proposalIndex)}>
+          Process
+        </button>
       )}
       <div>
         {s3Data && s3Data.description ? (

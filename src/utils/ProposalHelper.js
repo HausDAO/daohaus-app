@@ -146,7 +146,6 @@ export function determineProposalStatus(
 
 //TODO: graph query
 export const groupByStatus = (proposals) => {
-  
   return {
     VotingPeriod: proposals.filter((p) => p.status === 'VotingPeriod'),
     GracePeriod: proposals.filter((p) => p.status === 'GracePeriod'),
@@ -171,6 +170,6 @@ export const titleMaker = (proposal) => {
   if (details[0] === 'id') {
     return details[3];
   } else {
-    return `Genesis Proposal ${proposal.id}`;
+    return `Genesis Proposal ${proposal.proposalIndex}`;
   }
 };

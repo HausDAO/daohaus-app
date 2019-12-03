@@ -14,9 +14,6 @@ import {
 } from '../../contexts/Store';
 import StateModals from '../../components/shared/StateModals';
 
-// import { resolvers } from '../../utils/Resolvers';
-// import ApolloClient from 'apollo-boost';
-
 const Proposals = ({ match, history }) => {
   const [currentWallet] = useContext(CurrentWalletContext);
   const [daoService] = useContext(DaoContext);
@@ -24,11 +21,9 @@ const Proposals = ({ match, history }) => {
 
   let proposalQuery, options;
 
-  console.log('daoData', daoData);
-
   if (daoData.isLegacy) {
     proposalQuery = GET_PROPOSALS_LEGACY;
-    options = { client: daoData.legacyClient, pollInterval: 0 };
+    options = { client: daoData.legacyClient, pollInterval: 20000 };
   } else {
     proposalQuery = GET_PROPOSALS_QUERY;
     options = {
@@ -37,22 +32,10 @@ const Proposals = ({ match, history }) => {
     };
   }
 
-  // console.log('proposalQuery', proposalQuery);
-  // console.log('options', options);
-
   const { loading, error, data } = useQuery(proposalQuery, options);
-  console.log('data', data);
-  console.log('error', error);
-
-  // const { loading, error, data } = useQuery(proposalQuery, {
-  //   variables: { contractAddr: daoService.contractAddr.toLowerCase() },
-  //   pollInterval: 20000,
-  // });
 
   if (loading) return <Loading />;
   if (error) return <ErrorMessage message={error} />;
-
-  console.log('data', data);
 
   return (
     <Fragment>
