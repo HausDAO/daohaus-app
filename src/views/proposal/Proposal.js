@@ -1,10 +1,10 @@
-import React, { Fragment, useContext } from 'react';
+import React, { useContext } from 'react';
 import { withRouter } from 'react-router-dom';
-import { Query } from 'react-apollo';
+import { useQuery } from '@apollo/react-hooks';
 
 import { ethToWei } from '@netgum/utils'; // returns BN
 
-import { GET_PROPOSAL_QUERY } from '../../utils/ProposalService';
+import { GET_PROPOSAL } from '../../utils/Queries';
 import ProposalDetail from '../../components/proposal/ProposalDetail';
 import ErrorMessage from '../../components/shared/ErrorMessage';
 import Loading from '../../components/shared/Loading';
@@ -16,6 +16,7 @@ import {
   CurrentWalletContext,
   CurrentUserContext,
   DaoContext,
+  DaoDataContext,
 } from '../../contexts/Store';
 
 const Proposal = (props) => {
@@ -25,8 +26,24 @@ const Proposal = (props) => {
   const [currentWallet] = useContext(CurrentWalletContext);
 
   const [daoService] = useContext(DaoContext);
+  const [daoData] = useContext(DaoDataContext);
   const web3Service = new Web3Service();
   const bcprocessor = new BcProcessorService();
+
+  let options;
+
+  if (daoData.isLegacy) {
+    options = {
+      client: daoData.legacyClient,
+      variables: { id },
+    };
+  } else {
+    options = {
+      variables: { id: `${daoService.contractAddr.toLowerCase()}-${id}` },
+    };
+  }
+
+  const { loading, error, data } = useQuery(GET_PROPOSAL, options);
 
   const processProposal = (id) => {
     const sdk = currentUser.sdk;
@@ -72,7 +89,7 @@ const Proposal = (props) => {
           })
           .catch((err) => {
             setTxLoading(false);
-            alert('Something went wrong, must process in order submitted')
+            alert('Something went wrong, must process in order submitted');
             console.log(err);
           });
       });
@@ -97,7 +114,7 @@ const Proposal = (props) => {
       daoService
         .submitVote(
           currentUser.attributes['custom:account_address'],
-          proposal.id.split('-')[1],
+          proposal.proposalIndex,
           vote,
           true,
         )
@@ -121,7 +138,7 @@ const Proposal = (props) => {
                     hash,
                     currentUser.attributes['custom:account_address'],
                     `Submit ${vote === 1 ? 'yes' : 'no'} vote on proposal ${
-                      proposal.id.split('-')[1]
+                      proposal.proposalIndex
                     }`,
                     true,
                   );
@@ -138,27 +155,18 @@ const Proposal = (props) => {
     }
   };
 
-  return (
-    <Query
-      query={GET_PROPOSAL_QUERY}
-      variables={{ id: `${daoService.contractAddr.toLowerCase()}-${id}` }}
-    >
-      {({ loading, error, data }) => {
-        if (loading) return <Loading />;
-        if (error) return <ErrorMessage message={error} />;
+  if (loading) return <Loading />;
+  if (error) return <ErrorMessage message={error} />;
 
-        return (
-          <Fragment>
-            {txLoading && <Loading />}
-            <ProposalDetail
-              submitVote={submitVote}
-              processProposal={processProposal}
-              proposal={data.proposal}
-            />
-          </Fragment>
-        );
-      }}
-    </Query>
+  return (
+    <>
+      {txLoading && <Loading />}
+      <ProposalDetail
+        submitVote={submitVote}
+        processProposal={processProposal}
+        proposal={data.proposal}
+      />
+    </>
   );
 };
 

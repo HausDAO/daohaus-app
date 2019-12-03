@@ -31,6 +31,10 @@ export default class Web3Service {
     return this.web3.utils.toWei(amount.toString(), 'ether');
   }
 
+  toUtf8(hexString) {
+    return this.web3.utils.hexToUtf8(hexString);
+  }
+
   toNumber(num) {
     return num.toNumber();
   }

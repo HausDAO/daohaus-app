@@ -1,5 +1,6 @@
 import Web3Service from '../utils/Web3Service';
 import Erc20Abi from '../contracts/erc20a.json';
+import Erc20Bytes32Abi from '../contracts/erc20Bytes32.json';
 
 export default class WethService {
   contractAddr;
@@ -15,20 +16,39 @@ export default class WethService {
     this.initContract();
   }
 
-  async initContract() {
+  async initContract(abi = this.abi) {
+
     this.contract = await this.web3Service.initContract(
-      this.abi,
+      abi,
       this.contractAddr,
     );
     return this.contract;
   }
 
   async getSymbol() {
-    if (!this.contract) {
-      await this.initContract();
+    let symbol;
+
+    try {
+      if (!this.contract) {
+        this.contract = await this.initContract(Erc20Abi);
+        //console.log('this.contract', this.contract);
+      }
+      //console.log('callinf symbol 1st time');
+      symbol = await this.contract.methods.symbol().call();
+    } catch {
+      if (!this.contract32) {
+        //console.log('contract32');
+        this.contract32 = await this.initContract(Erc20Bytes32Abi);
+        //console.log('this.contract32', this.contract32);
+      }
+      //console.log('callinf symbol 2nd time');
+      symbol = await this.contract32.methods.symbol().call();
     }
 
-    const symbol = await this.contract.methods.symbol().call();
+    if (symbol.indexOf('0x') > -1) {
+      symbol = this.web3Service.toUtf8(symbol);
+    }
+
     return symbol;
   }
 

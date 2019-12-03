@@ -1,18 +1,15 @@
 import React, { useState, useEffect, useContext } from 'react';
-import './StackedVote.scss';
+
 import { DaoContext } from '../../contexts/Store';
 
-const StackedVote = ({
-  id,
+import './StackedVote.scss';
 
-  currentYesVote,
-  currentNoVote,
-}) => {
+const StackedVote = ({ id, currentYesVote, currentNoVote }) => {
   const [noVoteShares, setNoVoteShares] = useState(0);
   const [yesVoteShares, setYesVoteShares] = useState(0);
   const [percentageSharesYes, setPercentageSharesYes] = useState(0);
   const [percentageSharesNo, setPercentageSharesNo] = useState(0);
-  const [daoService] = useContext(DaoContext)
+  const [daoService] = useContext(DaoContext);
 
   if (currentYesVote === undefined) {
     currentYesVote = 0;
@@ -23,8 +20,7 @@ const StackedVote = ({
 
   useEffect(() => {
     const currentProposal = async () => {
-      
-      const info = await daoService.proposalQueue(id.split("-")[1]);
+      const info = await daoService.proposalQueue(id);
       const noVoteShares = parseInt(info.noVotes) + currentNoVote;
       const yesVoteShares = parseInt(info.yesVotes) + currentYesVote;
       const totalVoteShares = noVoteShares + yesVoteShares;
@@ -39,9 +35,6 @@ const StackedVote = ({
     currentProposal();
   }, [daoService, id, currentYesVote, currentNoVote]);
 
-  // const noVotes = {
-  //   textAlign: 'center',
-  // };
   const noBar = {
     width: percentageSharesNo + '%',
   };
