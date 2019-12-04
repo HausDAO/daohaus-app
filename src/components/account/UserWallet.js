@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useState } from 'react';
 
-import { CurrentUserContext, LoaderContext } from '../../contexts/Store';
+import { CurrentUserContext, LoaderContext, DaoContext } from '../../contexts/Store';
 import useModal from '../shared/useModal';
 import Modal from '../shared/Modal';
 import Loading from '../shared/Loading';
@@ -17,6 +17,7 @@ import './UserWallet.scss';
 const UserWallet = () => {
   const [currentUser] = useContext(CurrentUserContext);
   const [loading] = useContext(LoaderContext);
+  const [daoService] = useContext(DaoContext)
   const [livesDangerously, setLivesDangerously] = useState(false);
   const { isShowing, toggle } = useModal();
 
@@ -100,7 +101,7 @@ const UserWallet = () => {
               className="Button"
               rel="noopener noreferrer"
               target="_blank"
-              href="https://daohaus.club/"
+              href={`https://daohaus.club/dao/${daoService.contractAddr}`}
             >
               Continue to DAOHaus
             </a>
