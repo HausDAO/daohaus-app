@@ -37,11 +37,14 @@ const VoteControl = ({ submitVote, proposal }) => {
 
     return (
       currentUser &&
-      votes.filter(
-        (vote) =>
+      currentWallet &&
+      votes.filter((vote) => {
+        return (
+          vote.memberAddress &&
           vote.memberAddress.toLowerCase() ===
-          currentWallet.addrByBelegateKey.toLowerCase(),
-      )
+            currentWallet.addrByBelegateKey.toLowerCase()
+        );
+      })
     );
   };
 
