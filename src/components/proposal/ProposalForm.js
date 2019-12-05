@@ -50,8 +50,14 @@ const ProposalForm = (props) => {
               if (!values.title) {
                 errors.title = 'Required';
               }
-              if (!values.title) {
+              if (!values.description) {
                 errors.description = 'Required';
+              }
+              if (!values.link) {
+                errors.link = 'Required';
+              }
+              if (!values.applicant) {
+                errors.applicant = 'Required';
               }
 
               return errors;
@@ -111,7 +117,6 @@ const ProposalForm = (props) => {
                 );
 
                 setSubmitting(false);
-                setLoading(false);
 
                 history.push(`/dao/${daoService.contractAddr}/proposals`);
               } catch (err) {
@@ -174,7 +179,7 @@ const ProposalForm = (props) => {
                         field.value !== '' ? 'Field HasValue' : 'Field '
                       }
                     >
-                      <label>Token Tribute</label>
+                      <label>Token Tribute (will fail if applicant has not approved)</label>
                       <input type="number" {...field} />
                     </div>
                   )}

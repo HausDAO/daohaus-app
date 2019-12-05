@@ -38,6 +38,7 @@ const VoteControl = ({ submitVote, proposal }) => {
     return (
       currentUser &&
       currentWallet &&
+      currentWallet.addrByBelegateKey &&
       votes.filter((vote) => {
         return (
           vote.memberAddress &&
@@ -49,6 +50,9 @@ const VoteControl = ({ submitVote, proposal }) => {
   };
 
   const votedYes = (proposal) => {
+    //weird error
+    //console.log('prop', proposal, usersVote(proposal.votes));
+    
     // used for className
     return (currentUser &&
       proposal.votes &&
@@ -61,6 +65,7 @@ const VoteControl = ({ submitVote, proposal }) => {
 
   const votedNo = (proposal) => {
     // used for className
+
     return (currentUser &&
       proposal.votes &&
       usersVote(proposal.votes)[0] &&
