@@ -153,7 +153,7 @@ export const groupByStatus = (proposals) => {
       (p) => p.status === 'ReadyForProcessing',
     ),
     InQueue: proposals.filter((p) => p.status === 'InQueue'),
-    Completed: proposals.filter((p) => {
+    Completed: proposals.filter((p) => {      
       return (
         // 'Aborted', 'Passed', 'Failed', 'Unknown'
         p.status !== 'VotingPeriod' &&
