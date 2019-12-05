@@ -205,11 +205,10 @@ const ProposalForm = (props) => {
             )}
           </Formik>
         ) : (
-          <>
-            <p className="Pad">Your ETH is empty or dangerously low.</p>
-            <p className="Pad">
-              If you are going to submit a proposal you need some ETH for gas
-              and approved token for deposit ({proposalDeposit}). Go to your
+          <div className="ProposalWarning">
+            <h3>Not enough Tokens</h3>
+            <p>
+              To submit a proposal, you need ({proposalDeposit}) token(s) for a deposit (and unlock them), as well as some ETH to run transactions. Go to your
               Account to top them off.
             </p>
             <p>
@@ -226,7 +225,7 @@ const ProposalForm = (props) => {
                 Account
               </Link>
             </p>
-          </>
+          </div>
         )}
       </div>
     </div>

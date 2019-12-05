@@ -168,9 +168,9 @@ button,
     color: $primary;
     box-shadow: $shadow;
     &.Verified, &.Verified:hover {
-      background-color: $success;
-      color: white;
-      svg { fill: $app-light;}
+      background-color: white;
+      color: $success;
+      svg { fill: $success; }
     }
     svg { 
       height: 24px; fill: $primary; margin-right: 5px; 
@@ -243,6 +243,11 @@ button.Tab {
     margin: 0px;
   }
 }
+
+.ProposalWarning {
+  padding: $base-padding;
+}
+
 
 // Components
 
