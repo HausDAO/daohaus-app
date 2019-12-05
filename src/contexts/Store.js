@@ -159,7 +159,11 @@ const Store = ({ children }) => {
         setLoading(false);
 
         // check acount devices on sdk
+        try{
         accountDevices = await sdk.getConnectedAccountDevices();
+        } catch (error){
+          accountDevices = [];
+        }
         // will be 'Created' or 'Delpoyed'
         state = sdk && sdk.state.account.state;
         // console.log('state', state);
