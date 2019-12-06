@@ -29,11 +29,6 @@ const TopNav = (props) => {
     <div className="TopNav">
       {daoService && daoService.contract && (
         <>
-          {currentUser && <BcToast />}
-          <div
-            className={isElementOpen ? 'Backdrop__Open' : 'Backdrop'}
-            onClick={toggleElement}
-          />
           {pathname === `/dao/${daoService.contractAddr}/sign-in` ? (
             <div className="Button Back">
               <Link to={`/dao/${daoService.contractAddr}/`}>{'<='} Back</Link>
@@ -63,7 +58,7 @@ const TopNav = (props) => {
               )}
             </>
           )}
-
+          {currentUser && <BcToast />}
           {currentUser ? (
             <div className="Auth">
               <button className="Auth__Button" onClick={toggleElement}>

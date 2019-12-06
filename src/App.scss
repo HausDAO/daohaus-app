@@ -39,6 +39,12 @@ h6 {
   font-weight: 900;
 }
 
+ol {
+  li {
+    margin: 15px 0px;
+  }
+}
+
 .Data {
   font-family: $data-font;
   font-weight: 400;
@@ -168,9 +174,9 @@ button,
     color: $primary;
     box-shadow: $shadow;
     &.Verified, &.Verified:hover {
-      background-color: $success;
-      color: white;
-      svg { fill: $app-light;}
+      background-color: white;
+      color: $success;
+      svg { fill: $success; }
     }
     svg { 
       height: 24px; fill: $primary; margin-right: 5px; 
@@ -243,6 +249,11 @@ button.Tab {
     margin: 0px;
   }
 }
+
+.ProposalWarning {
+  padding: $base-padding;
+}
+
 
 // Components
 
@@ -356,7 +367,6 @@ button.Tab {
   align-items: center;
   justify-content: center;
   flex-direction: column;
-  .Form { max-width: 600px; width: 100%; }
 }
 
 .FlexContainer {
@@ -407,9 +417,35 @@ button.Tab {
   }
 }
 
+.Backdrop {
+  background-color: rgba(0,0,0,0);
+  transition: all .15s linear;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: 2;
+  pointer-events: none;
+}
+.Backdrop__Open {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: 2;
+  background-color: rgba(0,0,0,0.85);
+  pointer-events: cursor;
+  &.Actions {
+    background-color: rgba(0,0,0,0);
+  }
+}
+
 // Forms
 .Form {
   padding: $base-padding;
+  width: calc(100% - $base-padding-2x);
   max-width: 340px;
   margin: 0 auto;
   .Error {

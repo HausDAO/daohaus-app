@@ -66,8 +66,6 @@ const UserBalance = (props) => {
 
   return (
     <div className="Wallet">
-      {/* <p>{currentWallet.state}</p>
-      <p>{WalletStatuses.Deployed}</p> */}
       {currentWallet.state !== WalletStatuses.Connecting &&
         currentWallet.state === WalletStatuses.Created && (
           <div className="WalletOverlay FlexCenter">
@@ -143,21 +141,27 @@ const UserBalance = (props) => {
           </CopyToClipboard>
         </div>
         <div className="ActionsDropdown">
+          
           <button onClick={() => toggleActions()}>
             Actions <img src={Arrow} alt="arrow" />
           </button>
 
           {actionsOpen ? (
+            <>
+            <div
+              className={actionsOpen ? 'Backdrop__Open Actions' : 'Backdrop Actions'}
+              onClick={toggleActions}
+            />
             <div className="ActionsDropdownContent">
               <button
                 onClick={() => toggleActions('depositForm')}
-                className="Button--Secondary"
+                className="Button--Primary"
               >
                 Deposit
               </button>
               {currentWallet.state === WalletStatuses.Deployed && (
                 <button
-                  className="Button--Secondary"
+                  className="Button--Primary"
                   onClick={() => toggleActions('sendEth')}
                 >
                   Send ETH
@@ -165,7 +169,7 @@ const UserBalance = (props) => {
               )}
               {currentWallet.state === WalletStatuses.Deployed && (
                 <button
-                  className="Button--Secondary"
+                  className="Button--Primary"
                   onClick={() => toggleActions('sendToken')}
                 >
                   Send {tokenSymbol}
@@ -173,13 +177,14 @@ const UserBalance = (props) => {
               )}
               {currentWallet.state === WalletStatuses.Deployed && (
                 <button
-                className="Button--Secondary"
+                className="Button--Primary"
                 onClick={() => toggleActions('daohaus')}
                 >
                   Manage on DAOHaus
                 </button>
               )}
             </div>
+            </>
           ) : null}
         </div>
       </div>
@@ -210,7 +215,18 @@ const UserBalance = (props) => {
           <div className="Balances">
             <div className="Item">
               <p>Shares</p>
-              <p className="Data">{currentWallet.shares}</p>
+              <p className="Data">
+                {currentWallet.shares}
+                {currentWallet.shares === 0 && (
+                    <button
+                      className="TinyButton"
+                      onClick={() => toggleActions('daohaus')}
+                    >
+                      <span>?</span> Update Delegate
+                    </button>
+                )}
+              </p>
+              
             </div>
             <div className="Item">
               <p>ETH</p>

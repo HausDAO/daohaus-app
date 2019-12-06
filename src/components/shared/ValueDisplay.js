@@ -10,13 +10,13 @@ const ValueDisplay = ({ value, client }) => {
   });
 
   const showSymbol = () => {
-    return tokenSymbol !== 'WETH' && tokenSymbol !== 'DAI';
+    return tokenSymbol !== 'WETH';
   };
 
   return (
     <>
       <SymbolIcon tokenSymbol={tokenSymbol} />
-      {value}
+      {value}{' '}
       {showSymbol() ? tokenSymbol : null}
     </>
   );

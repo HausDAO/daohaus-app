@@ -9,9 +9,13 @@
   top: -2px;
   box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
   background-color: $app-light;
+  @media (max-width: $phone) {
+    border-radius: 0px;
+    border: none;
+  }
   .Header {
     height: 98px;
-    border-bottom: 1px solid #efefef;
+    border-bottom: 1px solid $primary-hover;
     border-top-right-radius: 10px;
     border-top-left-radius: 10px;
     display: flex;
@@ -19,6 +23,10 @@
     align-content: center;
     justify-content: space-between;
     background-color: $primary-hover;
+    @media (max-width: $phone) {
+      border-radius: 0px;
+      border: none;
+    }
     .WalletInfo {
       .Address {
         margin: 0;
@@ -80,7 +88,7 @@
       max-width: 100%;
       box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.15);
       padding: 12px 16px;
-      z-index: 1;
+      z-index: 3;
       button {
         background-color: transparent;
         color: $primary;
