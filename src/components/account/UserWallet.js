@@ -94,7 +94,7 @@ const UserWallet = () => {
           <Modal isShowing={isShowing.daohaus} hide={() => toggle('daohaus')}>
             <h3>Manage Shares</h3>
             <p>
-              If you made your initial pledge on DAOHaus you you can ragequit
+              If you made your initial pledge on DAOHaus, you can ragequit
               shares and update your delegate key there.
             </p>
             <a

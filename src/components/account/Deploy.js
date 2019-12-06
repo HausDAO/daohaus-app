@@ -62,7 +62,7 @@ const Deploy = (props) => {
           </button>
         )}
       {currentWallet.state === 'Deployed' && (
-        <h2>Successfully Deployed</h2>
+        <h2>Success! Your account is ready.</h2>
       )}
     </>
   );
