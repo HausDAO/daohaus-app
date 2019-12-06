@@ -16,7 +16,7 @@ const ValueDisplay = ({ value, client }) => {
   return (
     <>
       <SymbolIcon tokenSymbol={tokenSymbol} />
-      {value}
+      {value}{' '}
       {showSymbol() ? tokenSymbol : null}
     </>
   );
