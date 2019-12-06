@@ -143,21 +143,27 @@ const UserBalance = (props) => {
           </CopyToClipboard>
         </div>
         <div className="ActionsDropdown">
+          
           <button onClick={() => toggleActions()}>
             Actions <img src={Arrow} alt="arrow" />
           </button>
 
           {actionsOpen ? (
+            <>
+            <div
+              className={actionsOpen ? 'Backdrop__Open Actions' : 'Backdrop Actions'}
+              onClick={toggleActions}
+            />
             <div className="ActionsDropdownContent">
               <button
                 onClick={() => toggleActions('depositForm')}
-                className="Button--Secondary"
+                className="Button--Primary"
               >
                 Deposit
               </button>
               {currentWallet.state === WalletStatuses.Deployed && (
                 <button
-                  className="Button--Secondary"
+                  className="Button--Primary"
                   onClick={() => toggleActions('sendEth')}
                 >
                   Send ETH
@@ -165,7 +171,7 @@ const UserBalance = (props) => {
               )}
               {currentWallet.state === WalletStatuses.Deployed && (
                 <button
-                  className="Button--Secondary"
+                  className="Button--Primary"
                   onClick={() => toggleActions('sendToken')}
                 >
                   Send {tokenSymbol}
@@ -173,13 +179,14 @@ const UserBalance = (props) => {
               )}
               {currentWallet.state === WalletStatuses.Deployed && (
                 <button
-                className="Button--Secondary"
+                className="Button--Primary"
                 onClick={() => toggleActions('daohaus')}
                 >
                   Manage on DAOHaus
                 </button>
               )}
             </div>
+            </>
           ) : null}
         </div>
       </div>
