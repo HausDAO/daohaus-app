@@ -12,7 +12,7 @@
 }
 */
 
-body { 
+body {
   background-color: $app-background;
   color: $base-font-color;
 }
@@ -61,7 +61,7 @@ a {
   color: $primary;
   fill: $primary;
   text-decoration: none;
-  transition: all .15s linear;
+  transition: all 0.15s linear;
   vertical-align: middle;
   cursor: pointer;
   svg {
@@ -70,7 +70,7 @@ a {
     padding: 0px;
     vertical-align: middle;
     width: 24px;
-    height: 24px; 
+    height: 24px;
     margin-top: -3px;
     &.IconLeft {
       margin-right: 5px;
@@ -124,7 +124,9 @@ button,
     text-align: left;
     background-color: transparent;
     color: black !important;
-    svg {fill: black !important;}
+    svg {
+      fill: black !important;
+    }
     border-radius: 0px;
     width: auto;
     &:hover {
@@ -146,18 +148,22 @@ button,
   }
   &--Tertiary {
     background-color: $tertiary;
-    &:hover { background-color: $tertiary-hover; }
+    &:hover {
+      background-color: $tertiary-hover;
+    }
   }
   &--Primary {
     background-color: $primary;
-    &:hover { background-color: $primary-hover; }
+    &:hover {
+      background-color: $primary-hover;
+    }
   }
   &--Cancel {
     background-color: transparent;
     color: $primary;
     border: 2px solid $primary;
-    &:hover { 
-      color: $primary-hover; 
+    &:hover {
+      color: $primary-hover;
       border-color: $primary-hover;
       background-color: transparent;
     }
@@ -173,13 +179,18 @@ button,
     justify-content: flex-start;
     color: $primary;
     box-shadow: $shadow;
-    &.Verified, &.Verified:hover {
+    &.Verified,
+    &.Verified:hover {
       background-color: white;
       color: $success;
-      svg { fill: $success; }
+      svg {
+        fill: $success;
+      }
     }
-    svg { 
-      height: 24px; fill: $primary; margin-right: 5px; 
+    svg {
+      height: 24px;
+      fill: $primary;
+      margin-right: 5px;
     }
     &:hover {
       color: $primary-hover;
@@ -188,7 +199,7 @@ button,
     }
   }
   .AddItem {
-    fill: $primary; 
+    fill: $primary;
     position: absolute;
     right: 15px;
   }
@@ -254,7 +265,6 @@ button.Tab {
   padding: $base-padding;
 }
 
-
 // Components
 
 .MainNav {
@@ -272,14 +282,19 @@ button.Tab {
     margin-right: 5px;
     fill: $base-font-color;
   }
-  p { margin: 0; }
+  p {
+    margin: 0;
+  }
 }
 
 .IconWarning svg {
   fill: $danger;
 }
 
-.QR svg:not(.IconRight) { padding: 25px; background-color: white; }
+.QR svg:not(.IconRight) {
+  padding: 25px;
+  background-color: white;
+}
 
 // Utils
 
@@ -288,11 +303,11 @@ button.Tab {
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  &--50 { 
+  &--50 {
     width: 50%;
-    @media (max-width: $tablet){
-      width: 100%; 
-    } 
+    @media (max-width: $tablet) {
+      width: 100%;
+    }
   }
 }
 
@@ -311,10 +326,12 @@ button.Tab {
   margin: 50px auto;
   background-color: $app-light;
   text-align: center;
-  button { margin: 0 auto; }
+  button {
+    margin: 0 auto;
+  }
   padding: 25px;
   border-radius: 10px;
-  box-shadow: 0px 0px 10px rgba(0,0,0,0.1);
+  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
 }
 
 .View {
@@ -327,7 +344,7 @@ button.Tab {
 }
 
 .PadAround {
-  padding: $base-padding; 
+  padding: $base-padding;
 }
 
 .Row {
@@ -380,7 +397,7 @@ button.Tab {
   // hidden to make loading work properly on small screen.
 }
 
-.Truncate { 
+.Truncate {
   width: 65px;
   text-overflow: ellipsis;
   white-space: nowrap;
@@ -389,7 +406,7 @@ button.Tab {
 }
 
 .Strikethrough {
-  text-decoration: line-through; 
+  text-decoration: line-through;
 }
 
 .EthLogo {
@@ -402,14 +419,14 @@ button.Tab {
   padding: 0px 5px;
   cursor: pointer;
   &.Allowance:hover:after {
-    content: "Your allowance is lower than your balance. Consider giving it a raise.";
+    content: 'Your allowance is lower than your balance. Consider giving it a raise.';
     font-family: $base-font;
     font-size: 0.5em;
     vertical-align: middle;
     margin-left: 5px;
   }
   &.Gas:hover:after {
-    content: "Your Eth is really low. Consider topping it off.";
+    content: 'Your Eth is really low. Consider topping it off.';
     font-family: $base-font;
     font-size: 0.5em;
     vertical-align: middle;
@@ -418,8 +435,8 @@ button.Tab {
 }
 
 .Backdrop {
-  background-color: rgba(0,0,0,0);
-  transition: all .15s linear;
+  background-color: rgba(0, 0, 0, 0);
+  transition: all 0.15s linear;
   position: fixed;
   top: 0;
   left: 0;
@@ -435,17 +452,17 @@ button.Tab {
   width: 100vw;
   height: 100vh;
   z-index: 2;
-  background-color: rgba(0,0,0,0.85);
+  background-color: rgba(0, 0, 0, 0.85);
   pointer-events: cursor;
   &.Actions {
-    background-color: rgba(0,0,0,0);
+    background-color: rgba(0, 0, 0, 0);
   }
 }
 
 // Forms
 .Form {
   padding: $base-padding;
-  width: calc(100% - $base-padding-2x);
+  width: calc(100% - 30px);
   max-width: 340px;
   margin: 0 auto;
   .Error {
@@ -492,7 +509,7 @@ textarea {
   &.HasValue {
     label {
       transform: translateY(-75%);
-      font-size: .75em;
+      font-size: 0.75em;
     }
   }
 }
@@ -514,7 +531,6 @@ textarea {
   width: 100%;
   .Label {
     display: block;
-
   }
 }
 
@@ -522,20 +538,28 @@ textarea {
   margin: 25px auto;
   font-weight: 500;
   background-color: $danger;
-  &:hover { background-color: $danger-hover; }
+  &:hover {
+    background-color: $danger-hover;
+  }
   &.Short {
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    svg, span { margin: 5px auto; }
+    svg,
+    span {
+      margin: 5px auto;
+    }
   }
   @media (max-width: $phone) {
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    svg, span { margin: 5px auto; }
+    svg,
+    span {
+      margin: 5px auto;
+    }
     border-radius: 0px;
   }
 }
@@ -543,7 +567,7 @@ textarea {
 .InvalidRoute {
   position: absolute;
   top: 0;
-  width: 100%; 
+  width: 100%;
 }
 
 .Info {
@@ -552,24 +576,26 @@ textarea {
     padding: 50px;
     max-width: 800px;
   }
-  img { max-width: 320px; }
-  h2 { 
+  img {
+    max-width: 320px;
+  }
+  h2 {
     color: white;
     font-size: 2.5em;
   }
-  p { 
-    color: white; 
-    font-size: 1.35em; 
-    font-weight: 700; 
+  p {
+    color: white;
+    font-size: 1.35em;
+    font-weight: 700;
   }
   pre {
-    color: white; 
+    color: white;
     font-size: 1.35em;
     white-space: pre-wrap;
   }
   &--Daohaus {
     background-color: #020436;
-    background-size: cover; 
+    background-size: cover;
     background-position: center bottom;
   }
   &--Pokemol {
@@ -577,20 +603,20 @@ textarea {
   }
   @media (max-width: $tablet) {
     min-height: 50vh;
-    h2 { 
+    h2 {
       color: white;
       font-size: 1.5em;
     }
-    p { 
-      color: white; 
-      font-size: 1em; 
-      font-weight: 700; 
+    p {
+      color: white;
+      font-size: 1em;
+      font-weight: 700;
     }
   }
 }
 
 .BigLink {
   font-size: 1.5em;
-  color: #4EBD9E;
+  color: #4ebd9e;
   font-weight: 700;
 }
