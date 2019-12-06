@@ -66,8 +66,6 @@ const UserBalance = (props) => {
 
   return (
     <div className="Wallet">
-      {/* <p>{currentWallet.state}</p>
-      <p>{WalletStatuses.Deployed}</p> */}
       {currentWallet.state !== WalletStatuses.Connecting &&
         currentWallet.state === WalletStatuses.Created && (
           <div className="WalletOverlay FlexCenter">
@@ -217,7 +215,18 @@ const UserBalance = (props) => {
           <div className="Balances">
             <div className="Item">
               <p>Shares</p>
-              <p className="Data">{currentWallet.shares}</p>
+              <p className="Data">
+                {currentWallet.shares}
+                {currentWallet.shares === 0 && (
+                    <button
+                      className="TinyButton"
+                      onClick={() => toggleActions('daohaus')}
+                    >
+                      <span>?</span> Update Delegate
+                    </button>
+                )}
+              </p>
+              
             </div>
             <div className="Item">
               <p>ETH</p>

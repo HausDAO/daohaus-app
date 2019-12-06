@@ -39,6 +39,12 @@ h6 {
   font-weight: 900;
 }
 
+ol {
+  li {
+    margin: 15px 0px;
+  }
+}
+
 .Data {
   font-family: $data-font;
   font-weight: 400;
