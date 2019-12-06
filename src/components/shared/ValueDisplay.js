@@ -10,7 +10,7 @@ const ValueDisplay = ({ value, client }) => {
   });
 
   const showSymbol = () => {
-    return tokenSymbol !== 'WETH' && tokenSymbol !== 'DAI';
+    return tokenSymbol !== 'WETH';
   };
 
   return (
