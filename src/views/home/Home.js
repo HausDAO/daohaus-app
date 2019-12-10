@@ -13,6 +13,7 @@ import Loading from '../../components/shared/Loading';
 import ValueDisplay from '../../components/shared/ValueDisplay';
 
 import './Home.scss';
+import HeadTags from '../../components/shared/HeadTags';
 
 const Home = () => {
   const [vizData, setVizData] = useState([]);
@@ -109,6 +110,7 @@ const Home = () => {
 
   return (
     <>
+      {daoData ? <HeadTags daoData={daoData} /> : null}
       <StateModals />
 
       <div className="Home">
