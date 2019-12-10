@@ -20,11 +20,11 @@ const InvalidRoute = () => (
     </div>
     <div className="Column Column--50 Info Info--Daohaus">
       <div className="Contents">
-        <img src={DaohausLogo} alt="DAOHaus" />
+        <img src={DaohausLogo} alt="Daohaus" />
         <h2>Looking for a Dao?</h2>
         <p>Discover and pledge to existing Moloch daos, or Summon your own.</p>
         <a className="BigLink" href="https://daohaus.club/">
-          Go to DAOHaus ->
+          Go to Daohaus ->
         </a>
         <p>
           If a dao was recently summoned, it can take a few minutes. If you
