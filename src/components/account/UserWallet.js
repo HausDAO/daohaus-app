@@ -1,6 +1,11 @@
 import React, { useContext, useEffect, useState } from 'react';
 
-import { CurrentUserContext, LoaderContext, DaoContext } from '../../contexts/Store';
+import {
+  CurrentUserContext,
+  LoaderContext,
+  DaoContext,
+} from '../../contexts/Store';
+import config from '../../config';
 import useModal from '../shared/useModal';
 import Modal from '../shared/Modal';
 import Loading from '../shared/Loading';
@@ -17,7 +22,7 @@ import './UserWallet.scss';
 const UserWallet = () => {
   const [currentUser] = useContext(CurrentUserContext);
   const [loading] = useContext(LoaderContext);
-  const [daoService] = useContext(DaoContext)
+  const [daoService] = useContext(DaoContext);
   const [livesDangerously, setLivesDangerously] = useState(false);
   const { isShowing, toggle } = useModal();
 
@@ -94,19 +99,24 @@ const UserWallet = () => {
           <Modal isShowing={isShowing.daohaus} hide={() => toggle('daohaus')}>
             <h3>Manage Shares</h3>
             <p>
-              If you made your initial pledge on DAOHaus you can go there to:
+              If you made your initial pledge on Daohaus you can go there to:
             </p>
             <ol>
-              <li><strong>Update Delegate</strong> to get access to your Shares here</li>
-              <li><strong>Ragequit</strong> to burn Shares for Tribute</li>
+              <li>
+                <strong>Update Delegate</strong> to get access to your Shares
+                here
+              </li>
+              <li>
+                <strong>Ragequit</strong> to burn Shares for Tribute
+              </li>
             </ol>
             <a
               className="Button"
               rel="noopener noreferrer"
               target="_blank"
-              href={`${process.env.REACT_APP_DEV_DAOHAUS}/${daoService.contractAddr}`}
+              href={`${config.DAOHAUS_URL}/dao/${daoService.contractAddr}`}
             >
-              Continue to DAOHaus
+              Continue to Daohaus
             </a>
           </Modal>
         </div>

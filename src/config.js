@@ -9,6 +9,7 @@ const dev = {
     IDENTITY_POOL_ID: process.env.REACT_APP_DEV_COGNITO_IDENTITY_POOL_ID,
   },
   API: process.env.REACT_APP_DEV_API,
+  DAOHAUS_URL: process.env.REACT_APP_DEV_DAOHAUS,
 };
 
 const prod = {
@@ -22,6 +23,7 @@ const prod = {
     IDENTITY_POOL_ID: process.env.REACT_APP_COGNITO_IDENTITY_POOL_ID,
   },
   API: process.env.REACT_APP_PROD_API,
+  DAOHAUS_URL: process.env.REACT_APP_PROD_DAOHAUS,
 };
 
 const config = process.env.REACT_APP_STAGE === 'prod' ? prod : dev;
