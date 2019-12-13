@@ -103,17 +103,19 @@ const UserWallet = () => {
             </p>
             <ol>
               <li>
-                <strong>Update Delegate</strong> to get access to your dao Shares
+                <strong>Update Delegate</strong> to get access to your dao
+                Shares
               </li>
               <li>
-                <strong>Ragequit</strong> to exit dao and burn Shares for Tribute
+                <strong>Ragequit</strong> to exit dao and burn Shares for
+                Tribute
               </li>
             </ol>
             <a
               className="Button"
               rel="noopener noreferrer"
               target="_blank"
-              href={`${config.DAOHAUS_URL}/${daoService.contractAddr}`}
+              href={`${config.DAOHAUS_URL}/dao/${daoService.contractAddr}`}
             >
               Continue to Daohaus
             </a>
