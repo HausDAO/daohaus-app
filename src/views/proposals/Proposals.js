@@ -9,14 +9,14 @@ import BottomNav from '../../components/shared/BottomNav';
 import Loading from '../../components/shared/Loading';
 import {
   CurrentWalletContext,
-  DaoContext,
+  DaoServiceContext,
   DaoDataContext,
 } from '../../contexts/Store';
 import StateModals from '../../components/shared/StateModals';
 
 const Proposals = ({ match, history }) => {
   const [currentWallet] = useContext(CurrentWalletContext);
-  const [daoService] = useContext(DaoContext);
+  const [daoService] = useContext(DaoServiceContext);
   const [daoData] = useContext(DaoDataContext);
 
   let proposalQuery, options;

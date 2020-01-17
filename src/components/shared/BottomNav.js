@@ -1,13 +1,13 @@
 import React, { useContext } from 'react';
 import { withRouter, Link } from 'react-router-dom';
 
-import { CurrentUserContext, DaoContext } from '../../contexts/Store';
+import { CurrentUserContext, DaoServiceContext } from '../../contexts/Store';
 
 import './MainNav.scss';
 
 const BottomNav = (props) => {
   const [currentUser] = useContext(CurrentUserContext);
-  const [daoService] = useContext(DaoContext);
+  const [daoService] = useContext(DaoServiceContext);
 
   return (
     <div

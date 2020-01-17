@@ -6,14 +6,14 @@ import { getProfile } from '3box/lib/api';
 import Web3Service from '../../utils/Web3Service';
 import { truncateAddr } from '../../utils/Helpers';
 import ValueDisplay from '../shared/ValueDisplay';
-import { DaoContext } from '../../contexts/Store';
+import { DaoServiceContext } from '../../contexts/Store';
 
 import './MemberCard.scss';
 
 const web3Service = new Web3Service();
 
 const MemberCard = ({ member }) => {
-  const [daoService] = useContext(DaoContext);
+  const [daoService] = useContext(DaoServiceContext);
   const [memberProfile, setMemberProfile] = useState({});
 
   const memberId = member.id.split('-')[1]

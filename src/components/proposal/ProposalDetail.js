@@ -6,7 +6,7 @@ import {
   getProposalCountdownText,
   titleMaker,
 } from '../../utils/ProposalHelper';
-import { CurrentUserContext, DaoContext } from '../../contexts/Store';
+import { CurrentUserContext, DaoServiceContext } from '../../contexts/Store';
 import { GET_METADATA } from '../../utils/Queries';
 import { get } from '../../utils/Requests';
 import Web3Service from '../../utils/Web3Service';
@@ -26,7 +26,7 @@ const ProposalDetail = ({
 }) => {
   const [s3Data, setS3Data] = useState();
   const [currentUser] = useContext(CurrentUserContext);
-  const [daoService] = useContext(DaoContext);
+  const [daoService] = useContext(DaoServiceContext);
   const { periodDuration } = client.cache.readQuery({
     query: GET_METADATA,
   });

@@ -12,7 +12,7 @@ import {
 
 import config from '../../config';
 
-import { CurrentUserContext, DaoContext } from '../../contexts/Store';
+import { CurrentUserContext, DaoServiceContext } from '../../contexts/Store';
 import Loading from '../../components/shared/Loading';
 import Web3Service from '../../utils/Web3Service';
 
@@ -21,7 +21,7 @@ const sdkEnv = getSdkEnvironment(SdkEnvironmentNames[`${config.SDK_ENV}`]); // k
 const SignIn = (props) => {
   const { history } = props;
   const [, setCurrentUser] = useContext(CurrentUserContext);
-  const [daoService] = useContext(DaoContext);
+  const [daoService] = useContext(DaoServiceContext);
   const [authError, setAuthError] = useState();
   const [pseudonymTouch, setPseudonymTouch] = useState(false);
   const [passwordTouch, setPasswordTouch] = useState(false);

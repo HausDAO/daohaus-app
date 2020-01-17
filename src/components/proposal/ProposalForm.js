@@ -7,13 +7,13 @@ import shortid from 'shortid';
 import { ethToWei } from '@netgum/utils'; // returns BN
 
 import Web3Service from '../../utils/Web3Service';
-import BcProcessorService from '../../utils/BcProcessorService';
+import { BcProcessorService } from '../../utils/BcProcessorService';
 
 import {
   LoaderContext,
   CurrentUserContext,
   CurrentWalletContext,
-  DaoContext,
+  DaoServiceContext,
 } from '../../contexts/Store';
 import Loading from '../shared/Loading';
 
@@ -23,11 +23,13 @@ import { post } from '../../utils/Requests';
 
 const ProposalForm = (props) => {
   const { history, client } = props;
-  const { proposalDeposit, tokenSymbol } = client.cache.readQuery({ query: GET_METADATA });
+  const { proposalDeposit, tokenSymbol } = client.cache.readQuery({
+    query: GET_METADATA,
+  });
   const [loading, setLoading] = useContext(LoaderContext);
   const [currentUser] = useContext(CurrentUserContext);
   const [currentWallet] = useContext(CurrentWalletContext);
-  const [daoService] = useContext(DaoContext);
+  const [daoService] = useContext(DaoServiceContext);
 
   return (
     <div>
@@ -179,7 +181,9 @@ const ProposalForm = (props) => {
                         field.value !== '' ? 'Field HasValue' : 'Field '
                       }
                     >
-                      <label>Token Tribute (will fail if applicant has not approved)</label>
+                      <label>
+                        Token Tribute (will fail if applicant has not approved)
+                      </label>
                       <input type="number" {...field} />
                     </div>
                   )}
@@ -214,16 +218,26 @@ const ProposalForm = (props) => {
             <h3>Not enough Eth or {tokenSymbol} in your account.</h3>
             <p>
               <strong>
-               To submit a proposal, you need the following in your account:
+                To submit a proposal, you need the following in your account:
               </strong>
             </p>
             <ol>
-              <li>{proposalDeposit} {tokenSymbol} for a deposit.</li>
-              <li>{tokenSymbol} unlocked so the dao can use it for the deposit.</li>
+              <li>
+                {proposalDeposit} {tokenSymbol} for a deposit.
+              </li>
+              <li>
+                {tokenSymbol} unlocked so the dao can use it for the deposit.
+              </li>
               <li>Enough Eth to run the transaction.</li>
             </ol>
-            <p><strong>
-              You can address any of these in your <Link to={`/dao/${daoService.contractAddr}/account`}>Account</Link> page.</strong>
+            <p>
+              <strong>
+                You can address any of these in your{' '}
+                <Link to={`/dao/${daoService.contractAddr}/account`}>
+                  Account
+                </Link>{' '}
+                page.
+              </strong>
             </p>
           </div>
         )}

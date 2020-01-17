@@ -12,7 +12,7 @@ import StackedVote from './StackedVote';
 import ValueDisplay from '../shared/ValueDisplay';
 
 import './ProposalCard.scss';
-import { DaoContext } from '../../contexts/Store';
+import { DaoServiceContext } from '../../contexts/Store';
 
 const web3Service = new Web3Service();
 
@@ -23,7 +23,7 @@ const ProposalCard = ({ proposal, client }) => {
 
   const countDown = getProposalCountdownText(proposal, periodDuration);
   const title = titleMaker(proposal);
-  const [daoService] = useContext(DaoContext);
+  const [daoService] = useContext(DaoServiceContext);
 
   return (
     <div className="ProposalCard">

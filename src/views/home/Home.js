@@ -3,22 +3,20 @@ import { useQuery } from '@apollo/react-hooks';
 import { ResponsiveContainer, AreaChart, Area } from 'recharts';
 
 import { GET_METADATA } from '../../utils/Queries';
-import { DaoContext, DaoDataContext } from '../../contexts/Store';
-import TokenService from '../../utils/TokenService';
+import { DaoServiceContext, DaoDataContext } from '../../contexts/Store';
 import StateModals from '../../components/shared/StateModals';
-import Web3Service from '../../utils/Web3Service';
 import BottomNav from '../../components/shared/BottomNav';
 import ErrorMessage from '../../components/shared/ErrorMessage';
 import Loading from '../../components/shared/Loading';
 import ValueDisplay from '../../components/shared/ValueDisplay';
+import HeadTags from '../../components/shared/HeadTags';
 
 import './Home.scss';
-import HeadTags from '../../components/shared/HeadTags';
 
 const Home = () => {
   const [vizData, setVizData] = useState([]);
   const [chartView, setChartView] = useState('bank');
-  const [daoService] = useContext(DaoContext);
+  const [daoService] = useContext(DaoServiceContext);
   const [daoData] = useContext(DaoDataContext);
 
   const { loading, error, data } = useQuery(GET_METADATA, {
@@ -27,14 +25,12 @@ const Home = () => {
 
   useEffect(() => {
     const fetchData = async () => {
-      const web3Service = new Web3Service();
-      const tokenService = new TokenService(data.approvedToken);
       const mcDao = daoService;
 
       if (data.guildBankAddr) {
         const events = await mcDao.getAllEvents();
         const firstBlock = events[0].blockNumber;
-        const latestBlock = await web3Service.latestBlock();
+        const latestBlock = await daoService.web3.eth.latestBlock();
         const blocksAlive = latestBlock.number - firstBlock;
 
         const blockIntervals = 10;
@@ -46,7 +42,7 @@ const Home = () => {
           for (let x = 0; x <= blockIntervals; x++) {
             const atBlock = firstBlock + Math.floor(dataLength) * x;
             balancePromises.push(
-              tokenService.balanceOf(data.guildBankAddr, atBlock),
+              daoService.token.balanceOf(data.guildBankAddr, atBlock),
             );
             indexes.push(x);
           }
@@ -85,7 +81,7 @@ const Home = () => {
             const atBlock = firstBlock + Math.floor(dataLength) * x;
             sharePromises.push(mcDao.getTotalShares(atBlock));
             balancePromises.push(
-              tokenService.balanceOf(data.guildBankAddr, atBlock),
+              daoService.token.balanceOf(data.guildBankAddr, atBlock),
             );
             indexes.push(x);
           }

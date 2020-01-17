@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useContext } from 'react';
 import { BrowserRouter as Router } from 'react-router-dom';
-// import ApolloClient from 'apollo-boost';
+import ApolloClient from 'apollo-boost';
 
 import { get } from './utils/Requests';
 import Routes from './Routes';
@@ -8,20 +8,20 @@ import Header from './components/header/Header';
 import Loading from './components/shared/Loading';
 import McDaoService from './utils/McDaoService';
 import Web3Service from './utils/Web3Service';
-import TokenService from './utils/TokenService';
-// import { resolvers } from './utils/Resolvers';
+// import TokenService from './utils/TokenService';
+import { resolvers } from './utils/Resolvers';
 
-import { DaoContext, DaoDataContext } from './contexts/Store';
+import { DaoDataContext, DaoServiceContext } from './contexts/Store';
 
 import './App.scss';
 
-const web3 = new Web3Service();
+// const web3 = new Web3Service();
 
 const App = ({ client }) => {
   const [loading, setloading] = useState(true);
   const [daoPath, setDaoPath] = useState('');
   const [daoData, setDaoData] = useContext(DaoDataContext);
-  const [daoService, setDaoService] = useContext(DaoContext);
+  const [daoService] = useContext(DaoServiceContext);
 
   useEffect(() => {
     var pathname = window.location.pathname.split('/');
@@ -63,22 +63,22 @@ const App = ({ client }) => {
     // eslint-disable-next-line
   }, []);
 
-  useEffect(() => {
-    const initDao = async () => {
-      try {
-        const _mcDao = new McDaoService(daoPath);
-        await _mcDao.initContract();
-        setDaoService(_mcDao);
-      } catch (err) {
-        console.log('error init contract:', err);
-      }
-    };
+  // useEffect(() => {
+  //   const initDao = async () => {
+  //     try {
+  //       const _mcDao = new McDaoService(daoPath);
+  //       await _mcDao.initContract();
+  //       setDaoService(_mcDao);
+  //     } catch (err) {
+  //       console.log('error init contract:', err);
+  //     }
+  //   };
 
-    if (daoPath) {
-      initDao();
-    }
-    // eslint-disable-next-line
-  }, [daoPath]);
+  //   if (daoPath) {
+  //     initDao();
+  //   }
+  //   // eslint-disable-next-line
+  // }, [daoPath]);
 
   useEffect(() => {
     // save all web3 data to apollo cache
@@ -155,7 +155,7 @@ const App = ({ client }) => {
     // if (daoService) {
     fetchData();
     // }
-  }, [client, daoService, daoData]);
+  }, [client, daoService, daoData, daoPath]);
 
   return (
     <div className="App">

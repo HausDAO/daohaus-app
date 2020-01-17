@@ -4,12 +4,12 @@ import ProposalList from './ProposalList';
 import { groupByStatus } from '../../utils/ProposalHelper';
 
 import './ProposalFilter.scss';
-import { DaoContext } from '../../contexts/Store';
+import { DaoServiceContext } from '../../contexts/Store';
 
 const ProposalFilter = ({ proposals, filter, history }) => {
   const [groupedProposals, setGroupedProposals] = useState();
   const [filteredProposals, setFilteredProposals] = useState([]);
-  const [daoService] = useContext(DaoContext);
+  const [daoService] = useContext(DaoServiceContext);
 
   const handleSelect = (list, listName) => {
     setFilteredProposals(list);

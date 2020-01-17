@@ -3,7 +3,7 @@ import { withRouter, Link } from 'react-router-dom';
 
 import {
   CurrentUserContext,
-  DaoContext,
+  DaoServiceContext,
   DaoDataContext,
 } from '../../contexts/Store';
 import BcToast from './BcToast';
@@ -14,7 +14,7 @@ import Modal from './Modal';
 
 const TopNav = (props) => {
   const [currentUser] = useContext(CurrentUserContext);
-  const [daoService] = useContext(DaoContext);
+  const [daoService] = useContext(DaoServiceContext);
   const [daoData] = useContext(DaoDataContext);
 
   // Toggle functions

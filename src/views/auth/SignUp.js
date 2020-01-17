@@ -5,11 +5,11 @@ import { Formik, Form, Field, ErrorMessage } from 'formik';
 import { Auth } from 'aws-amplify';
 
 import Loading from '../../components/shared/Loading';
-import { DaoContext } from '../../contexts/Store';
+import { DaoServiceContext } from '../../contexts/Store';
 
 const SignUp = ({ history }) => {
   const [authError, setAuthError] = useState();
-  const [daoService] = useContext(DaoContext);
+  const [daoService] = useContext(DaoServiceContext);
 
   return (
     <div>

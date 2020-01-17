@@ -10,8 +10,9 @@ export const CurrentWalletContext = createContext();
 export const LoaderContext = createContext(false);
 export const ModalContext = createContext();
 export const RefreshContext = createContext();
-export const DaoContext = createContext();
+// export const DaoContext = createContext();
 export const DaoDataContext = createContext();
+export const DaoServiceContext = createContext();
 
 // main store of global state
 const Store = ({ children }) => {
@@ -204,10 +205,11 @@ const Store = ({ children }) => {
 
   return (
     <LoaderContext.Provider value={[loading, setLoading]}>
-      <DaoContext.Provider value={[daoService, setDaoService]}>
-        <DaoDataContext.Provider value={[daoData, setDaoData]}>
-          <ModalContext.Provider value={[hasOpened, setHasOpened]}>
-            <RefreshContext.Provider value={[delay, setDelay]}>
+      {/* <DaoContext.Provider value={[daoService, setDaoService]}> */}
+      <DaoDataContext.Provider value={[daoData, setDaoData]}>
+        <ModalContext.Provider value={[hasOpened, setHasOpened]}>
+          <RefreshContext.Provider value={[delay, setDelay]}>
+            <DaoServiceContext.Provider value={[daoService, setDaoService]}>
               <CurrentUserContext.Provider
                 value={[currentUser, setCurrentUser]}
               >
@@ -217,10 +219,11 @@ const Store = ({ children }) => {
                   {children}
                 </CurrentWalletContext.Provider>
               </CurrentUserContext.Provider>
-            </RefreshContext.Provider>
-          </ModalContext.Provider>
-        </DaoDataContext.Provider>
-      </DaoContext.Provider>
+            </DaoServiceContext.Provider>
+          </RefreshContext.Provider>
+        </ModalContext.Provider>
+      </DaoDataContext.Provider>
+      {/* </DaoContext.Provider> */}
     </LoaderContext.Provider>
   );
 };

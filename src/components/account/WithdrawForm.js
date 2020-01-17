@@ -1,25 +1,21 @@
 import React, { useState, useContext } from 'react';
 import { withApollo } from 'react-apollo';
 import { Formik, Form, Field, ErrorMessage } from 'formik';
-import { ethToWei } from '@netgum/utils'; // returns BN
 
 import {
   CurrentUserContext,
   LoaderContext,
-  CurrentWalletContext,
+  DaoServiceContext,
 } from '../../contexts/Store';
 import { GET_METADATA } from '../../utils/Queries';
-import Web3Service from '../../utils/Web3Service';
-import TokenService from '../../utils/TokenService';
-import BcProcessorService from '../../utils/BcProcessorService';
 import Loading from '../shared/Loading';
 
 const WithdrawForm = ({ client }) => {
+  const [daoService] = useContext(DaoServiceContext);
   const [currentUser] = useContext(CurrentUserContext);
   const [loading, setLoading] = useContext(LoaderContext);
-  const [currentWallet] = useContext(CurrentWalletContext);
   const [formSuccess, setFormSuccess] = useState(false);
-  const { approvedToken, tokenSymbol } = client.cache.readQuery({
+  const { tokenSymbol } = client.cache.readQuery({
     query: GET_METADATA,
   });
 
@@ -35,7 +31,7 @@ const WithdrawForm = ({ client }) => {
           dist: '',
         }}
         validate={(values) => {
-          let errors = {};
+          const errors = {};
           if (!values.amount) {
             errors.amount = 'Required';
           }
@@ -46,57 +42,21 @@ const WithdrawForm = ({ client }) => {
           return errors;
         }}
         onSubmit={async (values, { setSubmitting, resetForm }) => {
-          const sdk = currentUser.sdk;
-          const tokenService = new TokenService(approvedToken);
-          const web3Service = new Web3Service();
-          const bcprocessor = new BcProcessorService();
-
-          const bnZed = ethToWei(0);
-
           setLoading(true);
           try {
-            const data = await tokenService.transfer(
-              values.addr,
+            await daoService.token.transfer(
               values.dist,
-              web3Service.toWei(values.amount),
-              true,
+              daoService.web3.utils.toWei('' + values.amount),
             );
-
-            const estimated = await sdk.estimateAccountTransaction(
-              tokenService.contractAddr,
-              bnZed,
-              data,
-            );
-
-            console.log(estimated);
-            if (ethToWei(currentWallet.eth).lt(estimated.totalCost)) {
-              alert(
-                `You need more gas, at least: ${web3Service.fromWei(
-                  estimated.totalCost.toString(),
-                )}`,
-              );
-              setLoading(false);
-              setSubmitting(false);
-              return false;
-            }
-
-            const hash = await sdk.submitAccountTransaction(estimated);
-
-            bcprocessor.setTx(
-              hash,
-              currentUser.attributes['custom:account_address'],
-              `Withdraw weth: ${values.amount}`,
-              true,
-            );
-          } catch (err) {
-            console.log(err);
+          } catch (e) {
+            console.error(`Error withdrawing: ${e.toString()}`);
             alert(`Something went wrong. Please try again.`);
+          } finally {
+            resetForm();
+            setLoading(false);
+            setSubmitting(false);
+            setFormSuccess(true);
           }
-
-          resetForm();
-          setLoading(false);
-          setSubmitting(false);
-          setFormSuccess(true);
         }}
       >
         {({ isSubmitting }) =>

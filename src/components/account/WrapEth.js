@@ -4,7 +4,7 @@ import { ethToWei } from '@netgum/utils'; // returns BN
 
 import WethService from '../../utils/WethService';
 import Web3Service from '../../utils/Web3Service';
-import BcProcessorService from '../../utils/BcProcessorService';
+import { BcProcessorService } from '../../utils/BcProcessorService';
 import Loading from '../shared/Loading';
 import DepositForm from './DepositForm';
 
@@ -42,9 +42,7 @@ const WrapEth = () => {
             }
 
             if (values.amount > currentWallet.eth) {
-              errors.amount = `You can not wrap more eth than you have, remember to leave some for gas. You have ${
-                currentWallet.eth
-              } `;
+              errors.amount = `You can not wrap more eth than you have, remember to leave some for gas. You have ${currentWallet.eth} `;
             }
 
             return errors;
@@ -103,20 +101,23 @@ const WrapEth = () => {
           {({ isSubmitting }) => (
             <Form className="Form">
               <Field name="amount">
-              {({ field, form }) => (
-                <div
-                  className={
-                    field.value
-                      ? 'Field HasValue'
-                      : 'Field '
-                  }
-                >
-                  <label>Amount</label>
-                  <input min="0" type="number" inputMode="numeric" step="any" {...field} />
-                </div>
-              )}
+                {({ field, form }) => (
+                  <div className={field.value ? 'Field HasValue' : 'Field '}>
+                    <label>Amount</label>
+                    <input
+                      min="0"
+                      type="number"
+                      inputMode="numeric"
+                      step="any"
+                      {...field}
+                    />
+                  </div>
+                )}
               </Field>
-              <ErrorMessage name="amount" render={msg => <div className="Error">{msg}</div>} />
+              <ErrorMessage
+                name="amount"
+                render={(msg) => <div className="Error">{msg}</div>}
+              />
               <button type="submit" disabled={isSubmitting}>
                 Wrap
               </button>

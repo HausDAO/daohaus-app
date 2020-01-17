@@ -1,7 +1,7 @@
 import React, { useContext } from 'react';
 import { useQuery } from '@apollo/react-hooks';
 
-import { DaoContext, DaoDataContext } from '../../contexts/Store';
+import { DaoServiceContext, DaoDataContext } from '../../contexts/Store';
 import { GET_MEMBERS_LEGACY, GET_MEMBERS } from '../../utils/Queries';
 import MemberList from '../../components/member/MemberList';
 import ErrorMessage from '../../components/shared/ErrorMessage';
@@ -10,7 +10,7 @@ import Loading from '../../components/shared/Loading';
 import StateModals from '../../components/shared/StateModals';
 
 const Members = () => {
-  const [daoService] = useContext(DaoContext);
+  const [daoService] = useContext(DaoServiceContext);
   const [daoData] = useContext(DaoDataContext);
 
   let memberQuery, options;

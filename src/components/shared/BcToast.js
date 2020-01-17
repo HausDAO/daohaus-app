@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 import {
   CurrentUserContext,
   CurrentWalletContext,
-  DaoContext,
+  DaoServiceContext,
 } from '../../contexts/Store';
 import { WalletStatuses } from '../../utils/WalletStatus';
 import IconProcessing from './IconProcessing';
@@ -13,7 +13,7 @@ import './BcToast.scss';
 import config from '../../config';
 
 const BcToast = () => {
-  const [daoService] = useContext(DaoContext);
+  const [daoService] = useContext(DaoServiceContext);
 
   const [currentUser] = useContext(CurrentUserContext);
   const [currentWallet] = useContext(CurrentWalletContext);

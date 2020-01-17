@@ -3,7 +3,7 @@ import React, { useContext, useEffect, useState } from 'react';
 import {
   CurrentUserContext,
   LoaderContext,
-  DaoContext,
+  DaoServiceContext,
 } from '../../contexts/Store';
 import config from '../../config';
 import useModal from '../shared/useModal';
@@ -17,12 +17,15 @@ import ApproveAllowance from './ApproveAllowance';
 import DepositForm from './DepositForm';
 import StateModals from '../shared/StateModals';
 
+// import RagequitForm from './RagequitForm';
+// import ChangeDelegateKeyForm from './ChangeDelegateKey';
+
 import './UserWallet.scss';
 
 const UserWallet = () => {
   const [currentUser] = useContext(CurrentUserContext);
   const [loading] = useContext(LoaderContext);
-  const [daoService] = useContext(DaoContext);
+  const [daoService] = useContext(DaoServiceContext);
   const [livesDangerously, setLivesDangerously] = useState(false);
   const { isShowing, toggle } = useModal();
 

@@ -6,21 +6,21 @@ import { ethToWei } from '@netgum/utils'; // returns BN
 import { GET_METADATA } from '../../utils/Queries';
 import TokenService from '../../utils/TokenService';
 import Web3Service from '../../utils/Web3Service';
-import BcProcessorService from '../../utils/BcProcessorService';
+import { BcProcessorService } from '../../utils/BcProcessorService';
 import Loading from '../shared/Loading';
 
 import {
   CurrentUserContext,
   CurrentWalletContext,
   LoaderContext,
-  DaoContext,
+  DaoServiceContext,
 } from '../../contexts/Store';
 
 const ApproveAllowance = ({ client }) => {
   const [currentUser] = useContext(CurrentUserContext);
   const [loading, setLoading] = useContext(LoaderContext);
   const [currentWallet] = useContext(CurrentWalletContext);
-  const [daoService] = useContext(DaoContext)
+  const [daoService] = useContext(DaoServiceContext);
   const [formSuccess, setFormSuccess] = useState(false);
   const { approvedToken } = client.cache.readQuery({
     query: GET_METADATA,
