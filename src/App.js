@@ -1,16 +1,15 @@
 import React, { useEffect, useState, useContext } from 'react';
 import { BrowserRouter as Router } from 'react-router-dom';
-import ApolloClient from 'apollo-boost';
+// import ApolloClient from 'apollo-boost';
 
+import { get } from './utils/Requests';
 import Routes from './Routes';
 import Header from './components/header/Header';
 import Loading from './components/shared/Loading';
-import { get } from './utils/Requests';
-
 import McDaoService from './utils/McDaoService';
 import Web3Service from './utils/Web3Service';
 import TokenService from './utils/TokenService';
-import { resolvers } from './utils/Resolvers';
+// import { resolvers } from './utils/Resolvers';
 
 import { DaoContext, DaoDataContext } from './contexts/Store';
 

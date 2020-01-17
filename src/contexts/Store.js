@@ -1,23 +1,6 @@
 import React, { useState, useEffect, createContext } from 'react';
 
-// x
-import { Auth } from 'aws-amplify';
-import {
-  SdkEnvironmentNames,
-  getSdkEnvironment,
-  createSdk,
-} from '@archanova/sdk';
-import config from '../config';
-// x
-
 import { useInterval } from '../utils/PollingUtil';
-
-// x
-import TokenService from '../utils/TokenService';
-import Web3Service from '../utils/Web3Service';
-import BcProcessorService from '../utils/BcProcessorService';
-// x
-
 import { WalletStatuses, currentStatus } from '../utils/WalletStatus';
 import { signInWithWeb3, signInWithSdk } from '../utils/Auth';
 import { DaoService, USER_TYPE } from '../utils/DaoService';
@@ -60,12 +43,6 @@ const Store = ({ children }) => {
 
   const [daoService, setDaoService] = useState();
   const [daoData, setDaoData] = useState();
-
-  // x
-  // const web3Service = new Web3Service();
-  // const daoService = new McDaoService();
-  // const bcProcessorService = new BcProcessorService();
-  // x
 
   useEffect(() => {
     // runs on app load, sets up user auth and sdk if necessary
@@ -113,121 +90,72 @@ const Store = ({ children }) => {
     initCurrentUser();
   }, [currentUser, loginType, setDaoService]);
 
-  //   // runs on app load, sets up user auth and sdk
-  //   const currentUser = async () => {
-  //     try {
-  //       // check if user is authenticated
-  //       // try will throw if not
-  //       const user = await Auth.currentAuthenticatedUser();
-  //       // attributes are only updated here until re-auth
-  //       // so grab attributes from here
-  //       const attributes = await Auth.currentUserInfo();
-  //       const realuser = { ...user, ...{ attributes: attributes.attributes } };
-
-  //       setCurrentUser(realuser);
-
-  //       // attach sdk
-  //       // console.log("in load: realuser", realuser);
-  //       const sdkEnv = getSdkEnvironment(
-  //         SdkEnvironmentNames[`${config.SDK_ENV}`],
-  //       );
-  //       // check or set up local storage and initialize sdk connection
-  //       const sdk = new createSdk(
-  //         sdkEnv.setConfig('storageAdapter', localStorage),
-  //       );
-  //       await sdk.initialize();
-  //       // check if account is connected in local storage
-
-  //       const accounts = await sdk.getConnectedAccounts();
-  //       // if the there is an account connect it
-  //       // this should never not exsist, it is added to AWS on first signin
-  //       if (accounts.items.length) {
-  //         await sdk.connectAccount(
-  //           realuser.attributes['custom:account_address'],
-  //         );
-  //       }
-  //       // store sdk instance (needed?)
-  //       //setUserSdk(sdk);
-  //       // add sdk instance to current user
-  //       setCurrentUser({ ...realuser, ...{ sdk } });
-  //     } catch (err) {
-  //       console.log(err);
-  //     }
-  //   };
-
-  //   currentUser();
-  // }, []);
-
   //global polling service
   useInterval(async () => {
-    // run on interval defined by $delay only if authenticated
-    if (currentUser && daoService) {
-      let accountDevices = null;
-      // get account address from aws
-      const acctAddr = currentUser.attributes['custom:account_address'];
-      // get delegate key from contract to see if it is different
-      const addrByBelegateKey = await daoService.memberAddressByDelegateKey(
-        acctAddr,
-      );
+    if (!daoService) {
+      console.log(`DaoService not initialized yet`);
+      return;
+    }
 
-      // get weth balance and allowance of contract
-      // const wethWei = await tokenService.balanceOf(acctAddr);
-      const approvedToken = await daoService.approvedToken();
-      const tokenService = new TokenService(approvedToken);
-      const tokenBalanceWei = await tokenService.balanceOf(acctAddr);
-      const allowanceWei = await tokenService.allowance(
-        acctAddr,
-        daoService.contractAddr,
-      );
-      // convert from wei to eth
-      const tokenBalance = web3Service.fromWei(tokenBalanceWei);
-      const allowance = web3Service.fromWei(allowanceWei);
+    if (!currentUser || currentUser.type === USER_TYPE.READ_ONLY) {
+      // early return
+      return;
+    }
 
-      // get member shares of dao contract
-      const member = await daoService.members(addrByBelegateKey);
-      // shares will be 0 if not a member, could also be 0 if rage quit
-      // TODO: check membersheip a different way
-      const shares = parseInt(member.shares);
+    let accountDevices = null;
+    // get account address from aws
+    const acctAddr = currentUser.attributes['custom:account_address'];
+    // get delegate key from contract to see if it is different
+    const addrByDelegateKey = await daoService.mcDao.memberAddressByDelegateKey(
+      acctAddr,
+    );
 
-      // use attached sdk
-      const sdk = currentUser.sdk;
+    // get weth balance and allowance of contract
+    // const wethWei = await tokenService.balanceOf(acctAddr);
+    const tokenBalanceWei = await daoService.token.balanceOf(acctAddr);
+    const allowanceWei = await daoService.token.allowance(
+      acctAddr,
+      daoService.daoAddress,
+    );
+    // convert from wei to eth
+    const tokenBalance = daoService.web3.utils.fromWei(tokenBalanceWei);
+    const allowance = daoService.web3.utils.fromWei(allowanceWei);
 
-      // set initial values of contract wallet
-      // these are set to zero every interval, maybe needed when user logs out
-      let ethWei = 0;
-      let eth = 0;
-      let state = WalletStatuses.Unknown;
-      setLoading(true);
+    // get member shares of dao contract
+    const member = await daoService.mcDao.members(addrByDelegateKey);
+    // shares will be 0 if not a member, could also be 0 if rage quit
+    // TODO: check membersheip a different way
+    const shares = parseInt(member.shares);
 
-      // state.account will be undefined if not connected
-      // should be loading durring this?
-      //     it seems the sdk loads and then it takes a bit to get the account info
-      //     could i check earlier that there is no account info
-      //     not with getConnectedDevices because it errors before account connected
+    // use attached sdk
+    const sdk = currentUser.sdk;
+
+    // set initial values of contract wallet
+    // these are set to zero every interval, maybe needed when user logs out
+
+    let eth = 0;
+    let state = WalletStatuses.Unknown;
+
+    eth = await daoService.getAccountEth();
+    state = daoService.getAccountState();
+    setLoading(false);
+
+    // state.account will be undefined if not connected
+    // should be loading durring this?
+    //     it seems the sdk loads and then it takes a bit to get the account info
+    //     could i check earlier that there is no account info
+    //     not with getConnectedDevices because it errors before account connected
+    if (loginType === USER_TYPE.SDK) {
       if (sdk && sdk.state.account) {
-        //console.log('connected state', sdk.state);
-
-        ethWei = (sdk && sdk.state.account.balance.real.toString()) || 0;
-        eth = web3Service.fromWei(ethWei);
-        // state.account.state undefined if still connecting?
-
-        setLoading(false);
-
+        // console.log('connected state', sdk.state);
         // check acount devices on sdk
-        try {
-          accountDevices = await sdk.getConnectedAccountDevices();
-        } catch (error) {
-          accountDevices = [];
-        }
-        // will be 'Created' or 'Delpoyed'
-        state = sdk && sdk.state.account.state;
+        accountDevices = await sdk.getConnectedAccountDevices();
         // console.log('state', state);
 
-        //console.log('when connected?', sdk && sdk.state.account.state);
+        // console.log('when connected?', sdk && sdk.state.account.state);
         // set delay to 10 seconds after sdk balance is updated
-        setDelay(10000);
       } else {
-        //console.log('not connected, try again', sdk);
+        // console.log('not connected, try again', sdk);
         state = WalletStatuses.Connecting;
 
         setNumTries(numTries + 1);
@@ -238,41 +166,40 @@ const Store = ({ children }) => {
         if (numTries >= 5) {
           state = WalletStatuses.NotConnected;
           setLoading(false);
-
-          setDelay(10000);
         }
       }
-
-      // check transactions left over in bcprocessor storage
-      const _txList = bcProcessorService.getTxList(acctAddr);
-      const pendingList = bcProcessorService.getTxPendingList(acctAddr);
-
-      if (pendingList.length) {
-        for (let i = 0; i < pendingList.length; i++) {
-          await bcProcessorService.checkTransaction(pendingList[i].tx);
-        }
-      }
-
-      const status = currentStatus(currentWallet, currentUser, state);
-
-      // set state
-      setCurrentWallet({
-        ...currentWallet,
-        ...{
-          // tokenBalance: +tokenBalance,
-          // allowance: +allowance,
-          tokenBalance,
-          allowance,
-          eth,
-          state,
-          shares,
-          accountDevices,
-          _txList,
-          addrByBelegateKey,
-          status,
-        },
-      });
     }
+    setDelay(10000);
+
+    // check transactions left over in bcprocessor storage
+    const _txList = daoService.bcProcessor.getTxList(acctAddr);
+    const pendingList = daoService.bcProcessor.getTxPendingList(acctAddr);
+
+    if (pendingList.length) {
+      for (let i = 0; i < pendingList.length; i++) {
+        await daoService.bcProcessor.checkTransaction(pendingList[i].tx);
+      }
+    }
+
+    const status = currentStatus(currentWallet, currentUser, state);
+
+    // set state
+    setCurrentWallet({
+      ...currentWallet,
+      ...{
+        // tokenBalance: +tokenBalance,
+        // allowance: +allowance,
+        tokenBalance,
+        allowance,
+        eth,
+        state,
+        shares,
+        accountDevices,
+        _txList,
+        addrByDelegateKey,
+        status,
+      },
+    });
   }, delay);
 
   return (
