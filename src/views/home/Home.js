@@ -25,76 +25,75 @@ const Home = () => {
 
   useEffect(() => {
     const fetchData = async () => {
-      const mcDao = daoService;
+      if (!data.guildBankAddr) {
+        return;
+      }
+      const events = await daoService.mcDao.getAllEvents();
+      const firstBlock = events[0].blockNumber;
+      const latestBlock = await daoService.web3.eth.getBlock('latest');
+      const blocksAlive = latestBlock.number - firstBlock;
 
-      if (data.guildBankAddr) {
-        const events = await mcDao.getAllEvents();
-        const firstBlock = events[0].blockNumber;
-        const latestBlock = await daoService.web3.eth.latestBlock();
-        const blocksAlive = latestBlock.number - firstBlock;
+      const blockIntervals = 10;
+      const dataLength = blocksAlive / blockIntervals;
 
-        const blockIntervals = 10;
-        const dataLength = blocksAlive / blockIntervals;
-
-        if (chartView === 'bank') {
-          const balancePromises = [];
-          const indexes = [];
-          for (let x = 0; x <= blockIntervals; x++) {
-            const atBlock = firstBlock + Math.floor(dataLength) * x;
-            balancePromises.push(
-              daoService.token.balanceOf(data.guildBankAddr, atBlock),
-            );
-            indexes.push(x);
-          }
-          const balanceData = await Promise.all(balancePromises);
-          setVizData(
-            balanceData.map((balance, index) => ({
-              x: indexes[index],
-              y: balance,
-            })),
+      if (chartView === 'bank') {
+        const balancePromises = [];
+        const indexes = [];
+        for (let x = 0; x <= blockIntervals; x++) {
+          const atBlock = firstBlock + Math.floor(dataLength) * x;
+          balancePromises.push(
+            daoService.token.balanceOf(data.guildBankAddr, atBlock),
           );
+          indexes.push(x);
         }
+        const balanceData = await Promise.all(balancePromises);
+        setVizData(
+          balanceData.map((balance, index) => ({
+            x: indexes[index],
+            y: balance,
+          })),
+        );
+      }
 
-        if (chartView === 'shares') {
-          const sharesPromises = [];
-          const indexes = [];
-          for (let x = 0; x <= blockIntervals; x++) {
-            const atBlock = firstBlock + Math.floor(dataLength) * x;
-            sharesPromises.push(mcDao.getTotalShares(atBlock));
-            indexes.push(x);
-          }
-          const sharesData = await Promise.all(sharesPromises);
-          setVizData(
-            sharesData.map((shares, index) => ({
-              x: indexes[index],
-              y: shares,
-            })),
+      if (chartView === 'shares') {
+        const sharesPromises = [];
+        const indexes = [];
+        for (let x = 0; x <= blockIntervals; x++) {
+          const atBlock = firstBlock + Math.floor(dataLength) * x;
+          sharesPromises.push(daoService.mcDao.getTotalShares(atBlock));
+          indexes.push(x);
+        }
+        const sharesData = await Promise.all(sharesPromises);
+        setVizData(
+          sharesData.map((shares, index) => ({
+            x: indexes[index],
+            y: shares,
+          })),
+        );
+      }
+
+      if (chartView === 'value') {
+        const sharePromises = [];
+        const balancePromises = [];
+
+        const indexes = [];
+        for (let x = 0; x <= blockIntervals; x++) {
+          const atBlock = firstBlock + Math.floor(dataLength) * x;
+          sharePromises.push(daoService.mcDao.getTotalShares(atBlock));
+          balancePromises.push(
+            daoService.token.balanceOf(data.guildBankAddr, atBlock),
           );
+          indexes.push(x);
         }
+        const shareData = await Promise.all(sharePromises);
+        const balanceData = await Promise.all(balancePromises);
 
-        if (chartView === 'value') {
-          const sharePromises = [];
-          const balancePromises = [];
-
-          const indexes = [];
-          for (let x = 0; x <= blockIntervals; x++) {
-            const atBlock = firstBlock + Math.floor(dataLength) * x;
-            sharePromises.push(mcDao.getTotalShares(atBlock));
-            balancePromises.push(
-              daoService.token.balanceOf(data.guildBankAddr, atBlock),
-            );
-            indexes.push(x);
-          }
-          const shareData = await Promise.all(sharePromises);
-          const balanceData = await Promise.all(balancePromises);
-
-          setVizData(
-            indexes.map((value) => ({
-              x: indexes[value],
-              y: balanceData[value] / shareData[value],
-            })),
-          );
-        }
+        setVizData(
+          indexes.map((value) => ({
+            x: indexes[value],
+            y: balanceData[value] / shareData[value],
+          })),
+        );
       }
     };
 

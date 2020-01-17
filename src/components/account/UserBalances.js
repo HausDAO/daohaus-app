@@ -5,7 +5,7 @@ import { CurrentUserContext, CurrentWalletContext } from '../../contexts/Store';
 import { WalletStatuses } from '../../utils/WalletStatus';
 import { truncateAddr } from '../../utils/Helpers';
 import Arrow from '../../assets/DropArrow.svg';
-import useInterval from '../../utils/PollingUtil';
+import { useInterval } from '../../utils/PollingUtil';
 import Deploy from './Deploy';
 import UserTransactions from './UserTransactions';
 import AccountList from './AccountList';

@@ -10,12 +10,11 @@ export const CurrentWalletContext = createContext();
 export const LoaderContext = createContext(false);
 export const ModalContext = createContext();
 export const RefreshContext = createContext();
-// export const DaoContext = createContext();
 export const DaoDataContext = createContext();
 export const DaoServiceContext = createContext();
 
 // main store of global state
-const Store = ({ children }) => {
+const Store = ({ children, daoParam }) => {
   const loginType = localStorage.getItem('loginType') || USER_TYPE.READ_ONLY;
   // store of aws auth information and sdk
   const [currentUser, setCurrentUser] = useState();
@@ -52,6 +51,10 @@ const Store = ({ children }) => {
       if (currentUser && currentUser.type === loginType) {
         return;
       }
+
+      if (!daoParam) {
+        return;
+      }
       let user;
       let dao;
       try {
@@ -62,6 +65,7 @@ const Store = ({ children }) => {
             dao = await DaoService.instantiateWithWeb3(
               user.attributes['custom:account_address'],
               window.ethereum,
+              daoParam,
             );
             break;
           case USER_TYPE.SDK:
@@ -69,11 +73,12 @@ const Store = ({ children }) => {
             dao = await DaoService.instantiateWithSDK(
               user.attributes['custom:account_address'],
               user.sdk,
+              daoParam,
             );
             break;
           case USER_TYPE.READ_ONLY:
           default:
-            dao = await DaoService.instantiateWithReadOnly();
+            dao = await DaoService.instantiateWithReadOnly(daoParam);
             break;
         }
         setCurrentUser(user);
@@ -82,14 +87,15 @@ const Store = ({ children }) => {
         console.error(
           `Could not log in with loginType ${loginType}: ${e.toString()}`,
         );
-        dao = await DaoService.instantiateWithReadOnly();
+
+        dao = await DaoService.instantiateWithReadOnly(daoParam);
       } finally {
         setDaoService(dao);
       }
     };
 
     initCurrentUser();
-  }, [currentUser, loginType, setDaoService]);
+  }, [currentUser, loginType, setDaoService, daoParam]);
 
   //global polling service
   useInterval(async () => {

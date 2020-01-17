@@ -25,22 +25,22 @@ const TopNav = (props) => {
     location: { pathname },
   } = props;
 
+  console.log('daoService', daoService);
+
   return (
     <div className="TopNav">
-      {daoService && daoService.contract && (
+      {daoService && daoService.mcDao.daoContract && (
         <>
-          {pathname === `/dao/${daoService.contractAddr}/sign-in` ? (
+          {pathname === `/dao/${daoService.daoAddress}/sign-in` ? (
             <div className="Button Back">
-              <Link to={`/dao/${daoService.contractAddr}/`}>{'<='} Back</Link>
+              <Link to={`/dao/${daoService.daoAddress}/`}>{'<='} Back</Link>
             </div>
           ) : (
             <>
-              {pathname === `/dao/${daoService.contractAddr}/sign-in` ||
-              pathname === `/dao/${daoService.contractAddr}/confirm` ? (
+              {pathname === `/dao/${daoService.daoAddress}/sign-in` ||
+              pathname === `/dao/${daoService.daoAddress}/confirm` ? (
                 <div className="Button Back">
-                  <Link to={`/dao/${daoService.contractAddr}/`}>
-                    {'<='} Back
-                  </Link>
+                  <Link to={`/dao/${daoService.daoAddress}/`}>{'<='} Back</Link>
                 </div>
               ) : (
                 <>
@@ -49,7 +49,7 @@ const TopNav = (props) => {
                   ) : (
                     <Link
                       className="Brand"
-                      to={`/dao/${daoService.contractAddr}/`}
+                      to={`/dao/${daoService.daoAddress}/`}
                     >
                       {daoData.name || 'PokéMol DAO'}
                     </Link>
@@ -76,7 +76,7 @@ const TopNav = (props) => {
               <div className={isElementOpen ? 'Dropdown__Open' : 'Dropdown'}>
                 <Link
                   className="Dropdown__Open--Item"
-                  to={`/dao/${daoService.contractAddr}/account`}
+                  to={`/dao/${daoService.daoAddress}/account`}
                   onClick={toggleElement}
                 >
                   Account
@@ -105,7 +105,7 @@ const TopNav = (props) => {
                   </div>
                   <Link
                     className="AltOption"
-                    to={`/dao/${daoService.contractAddr}/sign-out`}
+                    to={`/dao/${daoService.daoAddress}/sign-out`}
                     onClick={() => {
                       toggle('signOutMsg');
                       toggleElement();
@@ -120,7 +120,7 @@ const TopNav = (props) => {
             <div className="Auth">
               <Link
                 className="Auth__Button"
-                to={`/dao/${daoService.contractAddr}/sign-in`}
+                to={`/dao/${daoService.daoAddress}/sign-in`}
               >
                 Sign in {'=>'}
               </Link>

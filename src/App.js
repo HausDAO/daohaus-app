@@ -6,16 +6,11 @@ import { get } from './utils/Requests';
 import Routes from './Routes';
 import Header from './components/header/Header';
 import Loading from './components/shared/Loading';
-import McDaoService from './utils/McDaoService';
-import Web3Service from './utils/Web3Service';
-// import TokenService from './utils/TokenService';
 import { resolvers } from './utils/Resolvers';
 
 import { DaoDataContext, DaoServiceContext } from './contexts/Store';
 
 import './App.scss';
-
-// const web3 = new Web3Service();
 
 const App = ({ client }) => {
   const [loading, setloading] = useState(true);
@@ -63,23 +58,6 @@ const App = ({ client }) => {
     // eslint-disable-next-line
   }, []);
 
-  // useEffect(() => {
-  //   const initDao = async () => {
-  //     try {
-  //       const _mcDao = new McDaoService(daoPath);
-  //       await _mcDao.initContract();
-  //       setDaoService(_mcDao);
-  //     } catch (err) {
-  //       console.log('error init contract:', err);
-  //     }
-  //   };
-
-  //   if (daoPath) {
-  //     initDao();
-  //   }
-  //   // eslint-disable-next-line
-  // }, [daoPath]);
-
   useEffect(() => {
     // save all web3 data to apollo cache
     const fetchData = async () => {
@@ -113,7 +91,6 @@ const App = ({ client }) => {
       const proposalDeposit = await daoService.mcDao.getProposalDeposit();
       const approvedToken = await daoService.mcDao.approvedToken();
 
-      // const tokenService = new TokenService(approvedToken);
       const guildBankValue = await daoService.token.balanceOf(guildBankAddr);
       const tokenSymbol = await daoService.token.getSymbol();
 
@@ -153,7 +130,9 @@ const App = ({ client }) => {
       setloading(false);
     };
     // if (daoService) {
-    fetchData();
+    if (daoPath) {
+      fetchData();
+    }
     // }
   }, [client, daoService, daoData, daoPath]);
 
