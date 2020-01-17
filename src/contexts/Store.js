@@ -1,19 +1,26 @@
 import React, { useState, useEffect, createContext } from 'react';
-import { Auth } from 'aws-amplify';
 
+// x
+import { Auth } from 'aws-amplify';
 import {
   SdkEnvironmentNames,
   getSdkEnvironment,
   createSdk,
 } from '@archanova/sdk';
-
 import config from '../config';
+// x
 
-import useInterval from '../utils/PollingUtil';
+import { useInterval } from '../utils/PollingUtil';
+
+// x
 import TokenService from '../utils/TokenService';
 import Web3Service from '../utils/Web3Service';
 import BcProcessorService from '../utils/BcProcessorService';
+// x
+
 import { WalletStatuses, currentStatus } from '../utils/WalletStatus';
+import { signInWithWeb3, signInWithSdk } from '../utils/Auth';
+import { DaoService, USER_TYPE } from '../utils/DaoService';
 
 export const CurrentUserContext = createContext();
 export const CurrentWalletContext = createContext();
@@ -25,6 +32,7 @@ export const DaoDataContext = createContext();
 
 // main store of global state
 const Store = ({ children }) => {
+  const loginType = localStorage.getItem('loginType') || USER_TYPE.READ_ONLY;
   // store of aws auth information and sdk
   const [currentUser, setCurrentUser] = useState();
   // stores user wallet balances and shares
@@ -53,55 +61,102 @@ const Store = ({ children }) => {
   const [daoService, setDaoService] = useState();
   const [daoData, setDaoData] = useState();
 
-  const web3Service = new Web3Service();
-  //const daoService = new McDaoService();
-  const bcProcessorService = new BcProcessorService();
+  // x
+  // const web3Service = new Web3Service();
+  // const daoService = new McDaoService();
+  // const bcProcessorService = new BcProcessorService();
+  // x
 
   useEffect(() => {
-    // runs on app load, sets up user auth and sdk
-    const currentUser = async () => {
+    // runs on app load, sets up user auth and sdk if necessary
+    const initCurrentUser = async () => {
+      // do nothing if user is set correctly
+      if (currentUser && currentUser.type === loginType) {
+        return;
+      }
+      let user;
+      let dao;
       try {
-        // check if user is authenticated
-        // try will throw if not
-        const user = await Auth.currentAuthenticatedUser();
-        // attributes are only updated here until re-auth
-        // so grab attributes from here
-        const attributes = await Auth.currentUserInfo();
-        const realuser = { ...user, ...{ attributes: attributes.attributes } };
-
-        setCurrentUser(realuser);
-
-        // attach sdk
-        // console.log("in load: realuser", realuser);
-        const sdkEnv = getSdkEnvironment(
-          SdkEnvironmentNames[`${config.SDK_ENV}`],
-        );
-        // check or set up local storage and initialize sdk connection
-        const sdk = new createSdk(
-          sdkEnv.setConfig('storageAdapter', localStorage),
-        );
-        await sdk.initialize();
-        // check if account is connected in local storage
-
-        const accounts = await sdk.getConnectedAccounts();
-        // if the there is an account connect it
-        // this should never not exsist, it is added to AWS on first signin
-        if (accounts.items.length) {
-          await sdk.connectAccount(
-            realuser.attributes['custom:account_address'],
-          );
+        console.log(`Initializing user type: ${loginType || 'read-only'}`);
+        switch (loginType) {
+          case USER_TYPE.WEB3:
+            user = await signInWithWeb3();
+            dao = await DaoService.instantiateWithWeb3(
+              user.attributes['custom:account_address'],
+              window.ethereum,
+            );
+            break;
+          case USER_TYPE.SDK:
+            user = await signInWithSdk();
+            dao = await DaoService.instantiateWithSDK(
+              user.attributes['custom:account_address'],
+              user.sdk,
+            );
+            break;
+          case USER_TYPE.READ_ONLY:
+          default:
+            dao = await DaoService.instantiateWithReadOnly();
+            break;
         }
-        // store sdk instance (needed?)
-        //setUserSdk(sdk);
-        // add sdk instance to current user
-        setCurrentUser({ ...realuser, ...{ sdk } });
-      } catch (err) {
-        console.log(err);
+        setCurrentUser(user);
+        localStorage.setItem('loginType', loginType);
+      } catch (e) {
+        console.error(
+          `Could not log in with loginType ${loginType}: ${e.toString()}`,
+        );
+        dao = await DaoService.instantiateWithReadOnly();
+      } finally {
+        setDaoService(dao);
       }
     };
 
-    currentUser();
-  }, []);
+    initCurrentUser();
+  }, [currentUser, loginType, setDaoService]);
+
+  //   // runs on app load, sets up user auth and sdk
+  //   const currentUser = async () => {
+  //     try {
+  //       // check if user is authenticated
+  //       // try will throw if not
+  //       const user = await Auth.currentAuthenticatedUser();
+  //       // attributes are only updated here until re-auth
+  //       // so grab attributes from here
+  //       const attributes = await Auth.currentUserInfo();
+  //       const realuser = { ...user, ...{ attributes: attributes.attributes } };
+
+  //       setCurrentUser(realuser);
+
+  //       // attach sdk
+  //       // console.log("in load: realuser", realuser);
+  //       const sdkEnv = getSdkEnvironment(
+  //         SdkEnvironmentNames[`${config.SDK_ENV}`],
+  //       );
+  //       // check or set up local storage and initialize sdk connection
+  //       const sdk = new createSdk(
+  //         sdkEnv.setConfig('storageAdapter', localStorage),
+  //       );
+  //       await sdk.initialize();
+  //       // check if account is connected in local storage
+
+  //       const accounts = await sdk.getConnectedAccounts();
+  //       // if the there is an account connect it
+  //       // this should never not exsist, it is added to AWS on first signin
+  //       if (accounts.items.length) {
+  //         await sdk.connectAccount(
+  //           realuser.attributes['custom:account_address'],
+  //         );
+  //       }
+  //       // store sdk instance (needed?)
+  //       //setUserSdk(sdk);
+  //       // add sdk instance to current user
+  //       setCurrentUser({ ...realuser, ...{ sdk } });
+  //     } catch (err) {
+  //       console.log(err);
+  //     }
+  //   };
+
+  //   currentUser();
+  // }, []);
 
   //global polling service
   useInterval(async () => {
@@ -159,9 +214,9 @@ const Store = ({ children }) => {
         setLoading(false);
 
         // check acount devices on sdk
-        try{
-        accountDevices = await sdk.getConnectedAccountDevices();
-        } catch (error){
+        try {
+          accountDevices = await sdk.getConnectedAccountDevices();
+        } catch (error) {
           accountDevices = [];
         }
         // will be 'Created' or 'Delpoyed'

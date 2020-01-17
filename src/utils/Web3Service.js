@@ -2,9 +2,23 @@ import Web3 from 'web3';
 
 import config from '../config';
 
+let singleton;
+
 export default class Web3Service {
-  constructor() {
-    this.web3 = new Web3(new Web3.providers.HttpProvider(config.INFURA_URI));
+  // make singleton
+  static create(useInjected) {
+    if (!singleton) {
+      singleton = new Web3Service(useInjected);
+    }
+    return singleton;
+  }
+
+  constructor(injected) {
+    if (injected) {
+      this.web3 = new Web3(injected);
+    } else {
+      this.web3 = new Web3(new Web3.providers.HttpProvider(config.INFURA_URI));
+    }
   }
 
   getKeyStore(privateKey, password) {
@@ -16,7 +30,8 @@ export default class Web3Service {
   }
 
   async latestBlock() {
-    return await this.web3.eth.getBlock('latest');
+    // return await this.web3.eth.getBlock('latest');
+    return this.web3.eth.getBlock('latest');
   }
 
   fromWei(amount) {
