@@ -3,10 +3,10 @@ import { BrowserRouter as Router } from 'react-router-dom';
 import ApolloClient from 'apollo-boost';
 
 import { get } from './utils/Requests';
+import { resolvers } from './utils/Resolvers';
 import Routes from './Routes';
 import Header from './components/header/Header';
 import Loading from './components/shared/Loading';
-import { resolvers } from './utils/Resolvers';
 
 import { DaoDataContext, DaoServiceContext } from './contexts/Store';
 
@@ -61,7 +61,7 @@ const App = ({ client }) => {
   useEffect(() => {
     // save all web3 data to apollo cache
     const fetchData = async () => {
-      if (!daoService) {
+      if (!daoService || !daoData) {
         client.writeData({
           data: {
             currentPeriod: 0,
@@ -129,12 +129,9 @@ const App = ({ client }) => {
 
       setloading(false);
     };
-    // if (daoService) {
-    if (daoPath) {
-      fetchData();
-    }
-    // }
-  }, [client, daoService, daoData, daoPath]);
+
+    fetchData();
+  }, [client, daoData, daoService, daoPath]);
 
   return (
     <div className="App">

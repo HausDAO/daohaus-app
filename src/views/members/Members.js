@@ -21,7 +21,7 @@ const Members = () => {
   } else {
     memberQuery = GET_MEMBERS;
     options = {
-      variables: { contractAddr: daoService.contractAddr.toLowerCase() },
+      variables: { contractAddr: daoService.daoAddress.toLowerCase() },
     };
   }
 

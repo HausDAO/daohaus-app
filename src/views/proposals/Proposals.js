@@ -27,7 +27,7 @@ const Proposals = ({ match, history }) => {
   } else {
     proposalQuery = GET_PROPOSALS;
     options = {
-      variables: { contractAddr: daoService.contractAddr.toLowerCase() },
+      variables: { contractAddr: daoService.daoAddress.toLowerCase() },
       pollInterval: 20000,
     };
   }
@@ -48,7 +48,7 @@ const Proposals = ({ match, history }) => {
             <div>
               <p>
                 <Link
-                  to={`/dao/${daoService.contractAddr}/proposal-new`}
+                  to={`/dao/${daoService.daoAddress}/proposal-new`}
                   className="Bold"
                 >
                   <svg

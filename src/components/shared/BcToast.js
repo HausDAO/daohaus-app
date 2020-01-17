@@ -98,7 +98,7 @@ const BcToast = () => {
           ) : (
             <Link
               className="Processor__Button"
-              to={`/dao/${daoService.contractAddr}/account`}
+              to={`/dao/${daoService.daoAddress}/account`}
             >
               <div className="BcStatic">
                 <div className="BcStatic__Inner WarningIcon" />
@@ -119,7 +119,7 @@ const BcToast = () => {
             {renderList()}
             <div className="Dropdown__Footer">
               <Link
-                to={`/dao/${daoService.contractAddr}/account`}
+                to={`/dao/${daoService.daoAddress}/account`}
                 onClick={toggleElement}
               >
                 View all transactions

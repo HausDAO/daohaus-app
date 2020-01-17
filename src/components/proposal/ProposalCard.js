@@ -58,7 +58,7 @@ const ProposalCard = ({ proposal, client }) => {
       <Link
         className="Button"
         to={{
-          pathname: `/dao/${daoService.contractAddr}/proposal/${proposal.proposalIndex}`,
+          pathname: `/dao/${daoService.daoAddress}/proposal/${proposal.proposalIndex}`,
         }}
       >
         View Proposal

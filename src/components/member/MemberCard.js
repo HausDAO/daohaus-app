@@ -39,7 +39,7 @@ const MemberCard = ({ member }) => {
     <Link
       className="MemberLink"
       to={{
-        pathname: '/dao/' + daoService.contractAddr + '/member/' + member.id,
+        pathname: '/dao/' + daoService.daoAddress + '/member/' + member.id,
       }}
     >
       <div className="MemberCard">

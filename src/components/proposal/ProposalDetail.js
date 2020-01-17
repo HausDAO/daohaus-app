@@ -35,7 +35,7 @@ const ProposalDetail = ({
     const fetchData = async () => {
       try {
         const metaData = await get(
-          `moloch/proposal/${daoService.contractAddr.toLowerCase()}-${
+          `moloch/proposal/${daoService.daoAddress.toLowerCase()}-${
             proposal.proposalIndex
           }`,
         );

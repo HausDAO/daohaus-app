@@ -118,7 +118,7 @@ const UserWallet = () => {
               className="Button"
               rel="noopener noreferrer"
               target="_blank"
-              href={`${config.DAOHAUS_URL}/dao/${daoService.contractAddr}`}
+              href={`${config.DAOHAUS_URL}/dao/${daoService.daoAddress}`}
             >
               Continue to Daohaus
             </a>

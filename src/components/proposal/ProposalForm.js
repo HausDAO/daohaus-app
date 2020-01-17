@@ -83,7 +83,7 @@ const ProposalForm = (props) => {
                   true,
                 );
                 const estimated = await sdk.estimateAccountTransaction(
-                  daoService.contractAddr,
+                  daoService.daoAddress,
                   bnZed,
                   data,
                 );
@@ -103,7 +103,7 @@ const ProposalForm = (props) => {
 
                 const proposalObj = {
                   proposalId: queueLength + '',
-                  molochContractAddress: daoService.contractAddr,
+                  molochContractAddress: daoService.daoAddress,
                   title: values.title,
                   description: values.description,
                   link: values.link,
@@ -120,7 +120,7 @@ const ProposalForm = (props) => {
 
                 setSubmitting(false);
 
-                history.push(`/dao/${daoService.contractAddr}/proposals`);
+                history.push(`/dao/${daoService.daoAddress}/proposals`);
               } catch (err) {
                 console.log('submit error', err);
                 setSubmitting(false);
@@ -233,7 +233,7 @@ const ProposalForm = (props) => {
             <p>
               <strong>
                 You can address any of these in your{' '}
-                <Link to={`/dao/${daoService.contractAddr}/account`}>
+                <Link to={`/dao/${daoService.daoAddress}/account`}>
                   Account
                 </Link>{' '}
                 page.

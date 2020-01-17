@@ -35,7 +35,7 @@ const Proposal = (props) => {
     };
   } else {
     options = {
-      variables: { id: `${daoService.contractAddr.toLowerCase()}-${id}` },
+      variables: { id: `${daoService.daoAddress.toLowerCase()}-${id}` },
     };
   }
 

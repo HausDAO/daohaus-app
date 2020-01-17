@@ -8,7 +8,7 @@ const FourOhFour = () => {
   return (
     <div>
       You seem to be lost.
-      <Link to={`/dao/${daoService.contractAddr}`}>Go back home.</Link>
+      <Link to={`/dao/${daoService.daoAddress}`}>Go back home.</Link>
     </div>
   );
 };
