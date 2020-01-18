@@ -67,6 +67,8 @@ const Store = ({ children, daoParam }) => {
               window.ethereum,
               daoParam,
             );
+            // TODO: why is this not set in daoService?
+            dao.daoAddress = daoParam;
             break;
           case USER_TYPE.SDK:
             user = await signInWithSdk();
@@ -75,6 +77,8 @@ const Store = ({ children, daoParam }) => {
               user.sdk,
               daoParam,
             );
+            // TODO: why is this not set in daoService?
+            dao.daoAddress = daoParam;
             break;
           case USER_TYPE.READ_ONLY:
           default:
