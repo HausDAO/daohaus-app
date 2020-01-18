@@ -1,7 +1,9 @@
 import Web3 from 'web3';
 
 const bnZed = Web3.utils.toBN(0);
+import { sdkConstants } from '@archanova/sdk';
 
+const gasPriceStrategy = sdkConstants.GasPriceStrategies.Fast;
 export default class SdkService {
   sdk;
   constructor(sdk) {
@@ -17,7 +19,7 @@ export default class SdkService {
   }
 
   async deployAccount() {
-    const estimated = await this.sdk.estimateAccountDeployment();
+    const estimated = await this.sdk.estimateAccountDeployment(gasPriceStrategy);
     if (this.getWeiBalance().lt(estimated.totalCost)) {
       throw new Error(
         `you need more ETH for gas, at least: ${this.web3.utils.fromWei(
