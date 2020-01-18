@@ -78,6 +78,7 @@ const VoteControl = ({ submitVote, proposal }) => {
   const optimisticVote = (proposal, vote) => {
     // set vote imediatly to give user feedback
     // a yes vote is uint 1
+    
     if (vote !== 1) {
       setCurrentNoVote(currentWallet.shares);
     } else {

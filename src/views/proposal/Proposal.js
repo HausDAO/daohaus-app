@@ -61,7 +61,7 @@ const Proposal = (props) => {
     setTxLoading(true);
     try {
       await daoService.mcDao.submitVote(
-        proposal.id,
+        proposal.id.split('-')[1],
         vote,
         ethToWei(currentWallet.eth),
       );

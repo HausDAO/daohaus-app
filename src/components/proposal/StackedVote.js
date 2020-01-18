@@ -20,7 +20,7 @@ const StackedVote = ({ id, currentYesVote, currentNoVote }) => {
 
   useEffect(() => {
     const currentProposal = async () => {
-      const info = await daoService.mcDao.proposalQueue(id.split('-')[0]);
+      const info = await daoService.mcDao.proposalQueue(id.split('-')[1]);
       const noVoteShares = parseInt(info.noVotes) + currentNoVote;
       const yesVoteShares = parseInt(info.yesVotes) + currentYesVote;
       const totalVoteShares = noVoteShares + yesVoteShares;
