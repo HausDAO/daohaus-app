@@ -74,7 +74,7 @@ const TopNav = (props) => {
               <div className={isElementOpen ? 'Dropdown__Open' : 'Dropdown'}>
                 <Link
                   className="Dropdown__Open--Item"
-                  to="/account"
+                  to={'/dao/'+daoService.daoAddress.toLowerCase()+'/account'}
                   onClick={toggleElement}
                 >
                   Account

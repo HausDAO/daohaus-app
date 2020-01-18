@@ -181,7 +181,6 @@ export class SdkMcDaoService extends McDaoService {
     const encodedData = this.daoContract.methods
       .submitProposal(applicant, tokenTribute, sharesRequested, details)
       .encodeABI();
-
     const hash = await this.sdkService.submit(
       encodedData,
       this.daoContract.options.address,

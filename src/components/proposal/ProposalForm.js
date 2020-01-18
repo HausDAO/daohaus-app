@@ -6,12 +6,8 @@ import shortid from 'shortid';
 
 import { ethToWei } from '@netgum/utils'; // returns BN
 
-import Web3Service from '../../utils/Web3Service';
-import { BcProcessorService } from '../../utils/BcProcessorService';
-
 import {
   LoaderContext,
-  CurrentUserContext,
   CurrentWalletContext,
   DaoServiceContext,
 } from '../../contexts/Store';
@@ -19,7 +15,6 @@ import Loading from '../shared/Loading';
 
 import { GET_METADATA } from '../../utils/Queries';
 import { withApollo } from 'react-apollo';
-import { post } from '../../utils/Requests';
 
 const ProposalForm = (props) => {
   const { history, client } = props;
@@ -27,7 +22,6 @@ const ProposalForm = (props) => {
     query: GET_METADATA,
   });
   const [loading, setLoading] = useContext(LoaderContext);
-  const [currentUser] = useContext(CurrentUserContext);
   const [currentWallet] = useContext(CurrentWalletContext);
   const [daoService] = useContext(DaoServiceContext);
 
@@ -64,66 +58,28 @@ const ProposalForm = (props) => {
 
               return errors;
             }}
-            onSubmit={async (values, { setSubmitting }) => {
-              const web3Service = new Web3Service();
-              const bcprocessor = new BcProcessorService();
-
-              const bnZed = ethToWei(0);
-              const sdk = currentUser.sdk;
+            onSubmit={async (values, { setSubmitting }) =>  {
               const uuid = shortid.generate();
               setLoading(true);
-
               try {
-                const data = await daoService.submitProposal(
-                  currentUser.attributes['custom:account_address'],
+                await daoService.mcDao.submitProposal(
                   values.applicant,
-                  web3Service.toWei(values.tokenTribute),
-                  Math.floor(values.sharesRequested) + '',
-                  `id~${uuid}~title~${values.title}`,
-                  true,
+                  ethToWei(values.tokenTribute.toString()),
+                  values.sharesRequested + '',
+                  JSON.stringify({
+                    id: uuid,
+                    title: values.title,
+                    description: values.description,
+                    link: values.link,
+                  }),
                 );
-                const estimated = await sdk.estimateAccountTransaction(
-                  daoService.daoAddress,
-                  bnZed,
-                  data,
-                );
-                if (ethToWei(currentWallet.eth).lt(estimated.totalCost)) {
-                  alert(
-                    `you need more gas, at least: ${web3Service.fromWei(
-                      estimated.totalCost.toString(),
-                    )}`,
-                  );
-                  setLoading(false);
-                  setSubmitting(false);
-                  return false;
-                }
-
-                const queueLength = await daoService.getProposalQueueLength();
-                const hash = await sdk.submitAccountTransaction(estimated);
-
-                const proposalObj = {
-                  proposalId: queueLength + '',
-                  molochContractAddress: daoService.daoAddress,
-                  title: values.title,
-                  description: values.description,
-                  link: values.link,
-                };
-
-                post('moloch/proposal', proposalObj);
-
-                bcprocessor.setTx(
-                  hash,
-                  currentUser.attributes['custom:account_address'],
-                  `Submit proposal (${values.title})`,
-                  true,
-                );
-
-                setSubmitting(false);
 
                 history.push(`/dao/${daoService.daoAddress}/proposals`);
-              } catch (err) {
-                console.log('submit error', err);
+              } catch (e) {
+                console.error(`Error processing proposal: ${e.toString()}`);
+              } finally {
                 setSubmitting(false);
+                setLoading(false);
               }
             }}
           >

@@ -1,15 +1,13 @@
-// import Web3Service from './Web3Service';
 
 export class BcProcessorService {
   // web3Service;
   web3;
   constructor(web3) {
-    // this.web3Service = new Web3Service();
     this.web3 = web3;
   }
 
   async checkTransaction(transactionHash, account) {
-    const status = await this.web3Service.getTransaction(transactionHash);
+    const status = await this.web3.eth.getTransaction(transactionHash);
     if (status && status.blockNumber) {
       this.setTx(transactionHash, account, 'completed', false);
     }

@@ -116,7 +116,7 @@ const SignIn = ({ history }) => {
                   sdk.connectAccount(user.attributes['custom:account_address']);
                   localStorage.setItem('loginType', USER_TYPE.SDK);
                   setSubmitting(false);
-                  history.push('/proposals');
+                  history.push('/dao/'+daoService.daoAddress.toLowerCase()+'/proposals');
                   window.location.reload();
                 } catch (err) {
                   console.error(err); // {"error":"account device not found"}

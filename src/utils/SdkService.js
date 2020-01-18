@@ -34,6 +34,7 @@ export default class SdkService {
     destinationAddress = this.daoAddress,
     value = bnZed,
   ) {
+    
     const estimated = await this.sdk.estimateAccountTransaction(
       destinationAddress,
       value,
