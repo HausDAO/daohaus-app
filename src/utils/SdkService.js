@@ -1,7 +1,7 @@
 import Web3 from 'web3';
+import { sdkConstants } from '@archanova/sdk';
 
 const bnZed = Web3.utils.toBN(0);
-import { sdkConstants } from '@archanova/sdk';
 
 const gasPriceStrategy = sdkConstants.GasPriceStrategies.Fast;
 export default class SdkService {
