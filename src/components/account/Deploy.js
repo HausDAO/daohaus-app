@@ -9,6 +9,10 @@ import Loading from '../shared/Loading';
 
 import { CurrentUserContext, CurrentWalletContext } from '../../contexts/Store';
 
+import { sdkConstants } from '@archanova/sdk';
+
+const gasPriceStrategy = sdkConstants.GasPriceStrategies.Fast;
+
 const Deploy = (props) => {
   const [currentUser] = useContext(CurrentUserContext);
   const [currentWallet] = useContext(CurrentWalletContext);
@@ -29,7 +33,7 @@ const Deploy = (props) => {
               const bcprocessor = new BcProcessorService();
 
               sdk
-                .estimateAccountDeployment()
+                .estimateAccountDeployment(gasPriceStrategy)
                 .then((estimated) => {
                   // console.log(estimated);
                   if (ethToWei(currentWallet.eth).lt(estimated.totalCost)) {
