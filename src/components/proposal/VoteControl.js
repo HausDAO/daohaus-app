@@ -38,24 +38,24 @@ const VoteControl = ({ submitVote, proposal }) => {
     return (
       currentUser &&
       currentWallet &&
-      currentWallet.addrByBelegateKey &&
+      currentWallet.addrByDelegateKey &&
       votes.filter((vote) => {
         return (
           vote.memberAddress &&
           vote.memberAddress.toLowerCase() ===
-            currentWallet.addrByBelegateKey.toLowerCase()
+          currentWallet.addrByDelegateKey.toLowerCase()
         );
       })
     );
+
   };
 
+
   const votedYes = (proposal) => {
-    //weird error
-    //console.log('prop', proposal, usersVote(proposal.votes));
+    // used for className 
     
-    // used for className
     return (currentUser &&
-      proposal.votes &&
+      usersVote(proposal.votes) &&
       usersVote(proposal.votes)[0] &&
       usersVote(proposal.votes)[0].uintVote === 1) ||
       currentYesVote
@@ -64,10 +64,10 @@ const VoteControl = ({ submitVote, proposal }) => {
   };
 
   const votedNo = (proposal) => {
-    // used for className
+    // used for className 
 
     return (currentUser &&
-      proposal.votes &&
+      usersVote(proposal.votes) &&
       usersVote(proposal.votes)[0] &&
       usersVote(proposal.votes)[0].uintVote !== 1) ||
       currentNoVote
@@ -100,7 +100,7 @@ const VoteControl = ({ submitVote, proposal }) => {
             </button>
             <div className="StackedVote">
               <StackedVote
-                id={proposal.proposalIndex}
+                id={proposal.id}
                 currentYesVote={currentYesVote}
                 currentNoVote={currentNoVote}
               />
@@ -122,7 +122,7 @@ const VoteControl = ({ submitVote, proposal }) => {
             </button>
             <div className="StackedVote">
               <StackedVote
-                id={proposal.proposalIndex}
+                id={proposal.id}
                 currentYesVote={currentYesVote}
                 currentNoVote={currentNoVote}
               />
