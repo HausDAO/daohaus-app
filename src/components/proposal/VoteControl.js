@@ -43,17 +43,15 @@ const VoteControl = ({ submitVote, proposal }) => {
         return (
           vote.memberAddress &&
           vote.memberAddress.toLowerCase() ===
-          currentWallet.addrByDelegateKey.toLowerCase()
+            currentWallet.addrByDelegateKey.toLowerCase()
         );
       })
     );
-
   };
 
-
   const votedYes = (proposal) => {
-    // used for className 
-    
+    // used for className
+
     return (currentUser &&
       usersVote(proposal.votes) &&
       usersVote(proposal.votes)[0] &&
@@ -64,7 +62,7 @@ const VoteControl = ({ submitVote, proposal }) => {
   };
 
   const votedNo = (proposal) => {
-    // used for className 
+    // used for className
 
     return (currentUser &&
       usersVote(proposal.votes) &&
@@ -78,7 +76,7 @@ const VoteControl = ({ submitVote, proposal }) => {
   const optimisticVote = (proposal, vote) => {
     // set vote imediatly to give user feedback
     // a yes vote is uint 1
-    
+
     if (vote !== 1) {
       setCurrentNoVote(currentWallet.shares);
     } else {
@@ -101,7 +99,7 @@ const VoteControl = ({ submitVote, proposal }) => {
             </button>
             <div className="StackedVote">
               <StackedVote
-                id={proposal.id}
+                id={proposal.proposalIndex}
                 currentYesVote={currentYesVote}
                 currentNoVote={currentNoVote}
               />
@@ -123,7 +121,7 @@ const VoteControl = ({ submitVote, proposal }) => {
             </button>
             <div className="StackedVote">
               <StackedVote
-                id={proposal.id}
+                id={proposal.proposalIndex}
                 currentYesVote={currentYesVote}
                 currentNoVote={currentNoVote}
               />
