@@ -83,8 +83,8 @@ export const inGracePeriod = (
   votingPeriodLength,
   gracePeriodLength,
 ) =>
-  currentPeriod > proposal.startingPeriod + votingPeriodLength &&
-  currentPeriod <
+  currentPeriod >= proposal.startingPeriod + votingPeriodLength &&
+  currentPeriod <=
     proposal.startingPeriod + votingPeriodLength + gracePeriodLength;
 
 export const inVotingPeriod = (proposal, currentPeriod, votingPeriodLength) =>

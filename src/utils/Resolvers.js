@@ -42,7 +42,7 @@ export const resolvers = {
           +proposal.startingPeriod +
           votingPeriodLength +
           gracePeriodLength -
-          currentPeriod
+          currentPeriod + 1
         );
       }
       return 0;
