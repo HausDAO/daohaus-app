@@ -188,7 +188,9 @@ export class SdkMcDaoService extends McDaoService {
       this.daoContract.options.address,
     );
 
-    const queueLength = await this.daoContract.methods.getProposalQueueLength().call();
+    const queueLength = await this.daoContract.methods
+      .getProposalQueueLength()
+      .call();
     const parseDetails = JSON.parse(details);
     const proposalObj = {
       proposalId: queueLength + '',
@@ -197,7 +199,6 @@ export class SdkMcDaoService extends McDaoService {
       description: parseDetails.description,
       link: parseDetails.link,
     };
-
 
     post('moloch/proposal', proposalObj);
 
@@ -300,13 +301,13 @@ export class Web3McDaoService extends McDaoService {
   }
 
   async submitProposal(applicant, tokenTribute, sharesRequested, details) {
-
-    
     const txReceipt = await this.daoContract.methods
       .submitProposal(applicant, tokenTribute, sharesRequested, details)
       .send({ from: this.accountAddr });
 
-    const queueLength = await this.daoContract.methods.getProposalQueueLength().call();
+    const queueLength = await this.daoContract.methods
+      .getProposalQueueLength()
+      .call();
     const parseDetails = JSON.parse(details);
 
     const proposalObj = {
