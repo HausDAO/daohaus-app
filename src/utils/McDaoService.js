@@ -188,24 +188,23 @@ export class SdkMcDaoService extends McDaoService {
       this.daoContract.options.address,
     );
 
-    const queueLength = await this.daoContract.methods.getProposalQueueLength();
-
+    const queueLength = await this.daoContract.methods.getProposalQueueLength().call();
+    const parseDetails = JSON.parse(details);
     const proposalObj = {
       proposalId: queueLength + '',
       molochContractAddress: this.contractAddr,
-      title: details.title,
-      description: details.description,
-      link: details.link,
+      title: parseDetails.title,
+      description: parseDetails.description,
+      link: parseDetails.link,
     };
 
-    console.log('sdk prodetails', proposalObj);
 
     post('moloch/proposal', proposalObj);
 
     this.bcProcessor.setTx(
       hash,
       this.accountAddr,
-      `Submit proposal (${details.title})`,
+      `Submit proposal (${parseDetails.title})`,
       true,
     );
     return hash;
@@ -301,36 +300,29 @@ export class Web3McDaoService extends McDaoService {
   }
 
   async submitProposal(applicant, tokenTribute, sharesRequested, details) {
-    console.log(
-      'submitting',
-      applicant,
-      tokenTribute,
-      sharesRequested,
-      details,
-    );
 
+    
     const txReceipt = await this.daoContract.methods
       .submitProposal(applicant, tokenTribute, sharesRequested, details)
       .send({ from: this.accountAddr });
 
-    const queueLength = await this.daoContract.methods.getProposalQueueLength();
+    const queueLength = await this.daoContract.methods.getProposalQueueLength().call();
+    const parseDetails = JSON.parse(details);
 
     const proposalObj = {
       proposalId: queueLength + '',
       molochContractAddress: this.contractAddr,
-      title: details.title,
-      description: details.description,
-      link: details.link,
+      title: parseDetails.title,
+      description: parseDetails.description,
+      link: parseDetails.link,
     };
-
-    console.log('web3 prodetails', proposalObj);
 
     post('moloch/proposal', proposalObj);
 
     this.bcProcessor.setTx(
       txReceipt.transactionHash,
       this.accountAddr,
-      `Submit proposal (${details.title})`,
+      `Submit proposal (${parseDetails.title})`,
       true,
     );
     return txReceipt.transactionHash;
