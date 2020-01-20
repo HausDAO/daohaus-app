@@ -311,7 +311,7 @@ export class Web3McDaoService extends McDaoService {
     const parseDetails = JSON.parse(details);
 
     const proposalObj = {
-      proposalId: queueLength + '',
+      proposalId: queueLength - 1 + '',
       molochContractAddress: this.contractAddr,
       title: parseDetails.title,
       description: parseDetails.description,
