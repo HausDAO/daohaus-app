@@ -45,7 +45,7 @@ const Proposal = (props) => {
     setTxLoading(true);
     try {
       await daoService.mcDao.processProposal(id, ethToWei(currentWallet.eth));
-      props.history.push('/proposals');
+      props.history.push(`/dao/${daoService.daoAddress}/proposals`);
     } catch (e) {
       console.error(`Error processing proposal: ${e.toString()}`);
     } finally {

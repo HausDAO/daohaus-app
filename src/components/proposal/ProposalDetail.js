@@ -40,7 +40,7 @@ const ProposalDetail = ({
           }`,
         );
         console.log('metaData', metaData);
-        
+
         setDetailData(metaData.data);
       } catch (err) {
         console.log(err);
@@ -99,11 +99,15 @@ const ProposalDetail = ({
             <p>{detailData.description}</p>
           </div>
         ) : null}
-        {detailData && detailData.link && ReactPlayer.canPlay(detailData.link) ? (
+        {detailData &&
+        detailData.link &&
+        ReactPlayer.canPlay(detailData.link) ? (
           <div className="Video">
             <ReactPlayer url={detailData.link} playing={false} loop={false} />
           </div>
-        ) : detailData && detailData.link && detailData.link.indexOf('http') > -1 ? (
+        ) : detailData &&
+          detailData.link &&
+          detailData.link.indexOf('http') > -1 ? (
           <div className="Link">
             <a href={detailData.link} rel="noopener noreferrer" target="_blank">
               Link
