@@ -1,4 +1,5 @@
 import DaoAbi from '../contracts/mcdao.json';
+import { post } from './Requests';
 
 export class McDaoService {
   web3;
@@ -28,6 +29,7 @@ export class McDaoService {
       .call();
     return currentPeriod;
   }
+  R;
 
   async getTotalShares(atBlock = 'latest') {
     const totalShares = await this.daoContract.methods
@@ -186,6 +188,20 @@ export class SdkMcDaoService extends McDaoService {
       this.daoContract.options.address,
     );
 
+    const queueLength = await this.daoContract.methods.getProposalQueueLength();
+
+    const proposalObj = {
+      proposalId: queueLength + '',
+      molochContractAddress: this.contractAddr,
+      title: details.title,
+      description: details.description,
+      link: details.link,
+    };
+
+    console.log('sdk prodetails', proposalObj);
+
+    post('moloch/proposal', proposalObj);
+
     this.bcProcessor.setTx(
       hash,
       this.accountAddr,
@@ -296,6 +312,21 @@ export class Web3McDaoService extends McDaoService {
     const txReceipt = await this.daoContract.methods
       .submitProposal(applicant, tokenTribute, sharesRequested, details)
       .send({ from: this.accountAddr });
+
+    const queueLength = await this.daoContract.methods.getProposalQueueLength();
+
+    const proposalObj = {
+      proposalId: queueLength + '',
+      molochContractAddress: this.contractAddr,
+      title: details.title,
+      description: details.description,
+      link: details.link,
+    };
+
+    console.log('web3 prodetails', proposalObj);
+
+    post('moloch/proposal', proposalObj);
+
     this.bcProcessor.setTx(
       txReceipt.transactionHash,
       this.accountAddr,

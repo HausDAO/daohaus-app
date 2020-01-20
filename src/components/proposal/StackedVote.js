@@ -5,7 +5,6 @@ import { DaoServiceContext } from '../../contexts/Store';
 import './StackedVote.scss';
 
 const StackedVote = ({ id, currentYesVote, currentNoVote }) => {
-  console.log('id', id);
   const [noVoteShares, setNoVoteShares] = useState(0);
   const [yesVoteShares, setYesVoteShares] = useState(0);
   const [percentageSharesYes, setPercentageSharesYes] = useState(0);

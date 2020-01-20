@@ -19,7 +19,9 @@ export default class SdkService {
   }
 
   async deployAccount() {
-    const estimated = await this.sdk.estimateAccountDeployment(gasPriceStrategy);
+    const estimated = await this.sdk.estimateAccountDeployment(
+      gasPriceStrategy,
+    );
     if (this.getWeiBalance().lt(estimated.totalCost)) {
       throw new Error(
         `you need more ETH for gas, at least: ${this.web3.utils.fromWei(
@@ -36,7 +38,6 @@ export default class SdkService {
     destinationAddress = this.daoAddress,
     value = bnZed,
   ) {
-    
     const estimated = await this.sdk.estimateAccountTransaction(
       destinationAddress,
       value,
