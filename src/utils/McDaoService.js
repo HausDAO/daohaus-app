@@ -304,7 +304,7 @@ export class Web3McDaoService extends McDaoService {
     const txReceipt = await this.daoContract.methods
       .submitProposal(applicant, tokenTribute, sharesRequested, details)
       .send({ from: this.accountAddr });
-
+    
     const queueLength = await this.daoContract.methods
       .getProposalQueueLength()
       .call();

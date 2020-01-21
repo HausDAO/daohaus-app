@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React, { useContext, useState } from 'react';
 import { withRouter, Link } from 'react-router-dom';
 
 import { Formik, Form, Field, ErrorMessage } from 'formik';
@@ -21,13 +21,15 @@ const ProposalForm = (props) => {
   const { proposalDeposit, tokenSymbol } = client.cache.readQuery({
     query: GET_METADATA,
   });
-  const [loading, setLoading] = useContext(LoaderContext);
+  const [gloading] = useContext(LoaderContext);
+  const [loading, setLoading] = useState(false);
   const [currentWallet] = useContext(CurrentWalletContext);
   const [daoService] = useContext(DaoServiceContext);
 
   return (
     <div>
       {loading && <Loading />}
+      {gloading && <Loading />}
 
       <div>
         {+currentWallet.tokenBalance >= +proposalDeposit &&
@@ -73,11 +75,14 @@ const ProposalForm = (props) => {
                     link: values.link,
                   }),
                 );
+                
 
                 history.push(`/dao/${daoService.daoAddress}/proposals`);
               } catch (e) {
                 console.error(`Error processing proposal: ${e.toString()}`);
               } finally {
+                console.log('done it it');
+
                 setSubmitting(false);
                 setLoading(false);
               }
