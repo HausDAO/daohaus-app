@@ -2,7 +2,6 @@ import React, { useState, useContext } from 'react';
 import { withApollo } from 'react-apollo';
 import { Formik, Form } from 'formik';
 
-import { GET_METADATA } from '../../utils/Queries';
 import Loading from '../shared/Loading';
 
 import {
@@ -18,10 +17,6 @@ const ApproveAllowance = ({ client }) => {
   const [currentWallet] = useContext(CurrentWalletContext);
   const [daoService] = useContext(DaoServiceContext);
   const [formSuccess, setFormSuccess] = useState(false);
-
-  const { approvedToken } = client.cache.readQuery({
-    query: GET_METADATA,
-  });
 
   return (
     <>
