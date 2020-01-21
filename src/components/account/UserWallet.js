@@ -15,6 +15,7 @@ import WithdrawForm from './WithdrawForm';
 import ApproveAllowance from './ApproveAllowance';
 import DepositForm from './DepositForm';
 import StateModals from '../shared/StateModals';
+import { USER_TYPE } from '../../utils/DaoService';
 
 import config from '../../config';
 
@@ -26,6 +27,7 @@ const UserWallet = () => {
   const [loading] = useContext(LoaderContext);
   const [livesDangerously, setLivesDangerously] = useState(false);
   const { isShowing, toggle } = useModal();
+  const loginType = localStorage.getItem('loginType') || USER_TYPE.READ_ONLY;
 
   useEffect(() => {
     setLivesDangerously(JSON.parse(localStorage.getItem('walletWarning')));
@@ -47,7 +49,7 @@ const UserWallet = () => {
         <div className="UserWallet">
           <StateModals />
 
-          {!livesDangerously ? (
+          {!livesDangerously && loginType !== USER_TYPE.WEB3 ? (
             <button className="RiskyBiz" onClick={() => acceptWarning()}>
               <span role="alert" aria-label="skull and crossbones">
                 ☠
