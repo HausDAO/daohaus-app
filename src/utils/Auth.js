@@ -23,7 +23,8 @@ export const signInWithWeb3 = async () => {
   window.ethereum.on('chainChanged', () => {
     document.location.reload();
   });
-  window.ethereum.autoRefreshOnNetworkChange = false;
+
+  window.ethereum.autoRefreshOnNetworkChange = true;
   return createWeb3User(account);
 };
 
