@@ -23,11 +23,30 @@ const Home = () => {
     pollInterval: 20000,
   });
 
+  const getShares = async () => {
+    const events = await daoService.mcDao.daoContract.getPastEvents('ProcessProposal',{fromBlock: 0, toBlock: 'latest'})
+    return events.filter((event) => event.returnValues.didPass).map(passed => ({ 
+      shares: passed.returnValues.sharesRequested,
+      blockNumber: passed.blockNumber
+    }))
+  }
+
   useEffect(() => {
+    console.log('daoService.mcDao');
+    console.log(daoService.mcDao);
+
+    
     const fetchData = async () => {
       if (!data.guildBankAddr) {
         return;
       }
+      console.log('token withdraw');
+      
+      console.log(daoService.token.contract.getPastEvents('Transfer', {filter: {dst:data.guildBankAddr}, fromBlock: 0, toBlock: 'latest'}));
+      console.log('process prop');
+      const shares = await getShares();
+      console.log(shares);
+
       const events = await daoService.mcDao.getAllEvents();
       const firstBlock = events[0].blockNumber;
       const latestBlock = await daoService.web3.eth.getBlock('latest');
