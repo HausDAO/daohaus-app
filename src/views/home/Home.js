@@ -24,48 +24,85 @@ const Home = () => {
   });
 
   const getShares = async () => {
-    const events = await daoService.mcDao.daoContract.getPastEvents('ProcessProposal',{fromBlock: 0, toBlock: 'latest'})
-    return events.filter((event) => event.returnValues.didPass).map(passed => ({ 
-      shares: passed.returnValues.sharesRequested,
-      blockNumber: passed.blockNumber
-    }))
-  }
+    const events = await daoService.mcDao.daoContract.getPastEvents(
+      'ProcessProposal',
+      { fromBlock: 0, toBlock: 'latest' },
+    );
+    return events
+      .filter((event) => event.returnValues.didPass)
+      .map((passed) => ({
+        shares: passed.returnValues.sharesRequested,
+        blockNumber: passed.blockNumber,
+      }));
+  };
 
   const getBalance = async () => {
-    const deposit = await daoService.token.contract.getPastEvents('Transfer', {filter: {dst:data.guildBankAddr}, fromBlock: 0, toBlock: 'latest'})
-    const withdraw = await daoService.token.contract.getPastEvents('Transfer', {filter: {src:data.guildBankAddr}, fromBlock: 0, toBlock: 'latest'})
-    const deposits = deposit.map(item => ({ 
+    const deposit = await daoService.token.contract.getPastEvents('Transfer', {
+      filter: { dst: data.guildBankAddr },
+      fromBlock: 0,
+      toBlock: 'latest',
+    });
+    const withdraw = await daoService.token.contract.getPastEvents('Transfer', {
+      filter: { src: data.guildBankAddr },
+      fromBlock: 0,
+      toBlock: 'latest',
+    });
+    const deposits = deposit.map((item) => ({
       balance: daoService.web3.utils.fromWei(item.returnValues.wad.toString()),
-      blockNumber: item.blockNumber
-    }))
-    const withdraws = deposit.map((item, idx) => ({ 
-      balance: "-" + daoService.web3.utils.fromWei(item.returnValues.wad.toString()),
-      blockNumber: item.blockNumber
-    }))
-    return deposits.concat(withdraws).sort((a,b) => a.blockNumber - b.blockNumber).reduce((sum, item) => ({
-      balance: item.balance,
       blockNumber: item.blockNumber,
-      currentBalance: 0
-    }),[]);
-  }
+    }));
+    const withdraws = withdraw.map((item, idx) => ({
+      balance:
+        '-' + daoService.web3.utils.fromWei(item.returnValues.wad.toString()),
+      blockNumber: item.blockNumber,
+    }));
+    const sorted = deposits
+      .concat(withdraws)
+      .sort((a, b) => a.blockNumber - b.blockNumber);
+
+    return sorted.reduce(
+      (sum, item, idx) => {
+        sum.push({
+          balance: item.balance,
+          blockNumber: item.blockNumber,
+          currentBalance: sum[idx].currentBalance + +item.balance,
+        });
+
+        return sum;
+      },
+      [{ ...sorted[0], currentBalance: 0 }],
+    );
+  };
 
   useEffect(() => {
     console.log('daoService.mcDao');
     console.log(daoService.mcDao);
 
-    
     const fetchData = async () => {
       if (!data.guildBankAddr) {
         return;
       }
       console.log('token withdraw');
-      
-      console.log(daoService.token.contract.getPastEvents('Transfer', {filter: {dst:data.guildBankAddr}, fromBlock: 0, toBlock: 'latest'}));
+
+      console.log(
+        daoService.token.contract.getPastEvents('Transfer', {
+          filter: { dst: data.guildBankAddr },
+          fromBlock: 0,
+          toBlock: 'latest',
+        }),
+      );
       console.log('process prop');
       const shares = await getShares();
       console.log(shares);
       const balance = await getBalance();
       console.log(balance);
+
+      setVizData(
+        balance.map((balance) => ({
+          x: balance.blockNumber,
+          y: balance.currentBalance,
+        })),
+      );
 
       const events = await daoService.mcDao.getAllEvents();
       const firstBlock = events[0].blockNumber;
@@ -76,63 +113,61 @@ const Home = () => {
       const dataLength = blocksAlive / blockIntervals;
 
       if (chartView === 'bank') {
-        const balancePromises = [];
-        const indexes = [];
-        for (let x = 0; x <= blockIntervals; x++) {
-          const atBlock = firstBlock + Math.floor(dataLength) * x;
-          balancePromises.push(
-            daoService.token.balanceOf(data.guildBankAddr, atBlock),
-          );
-          indexes.push(x);
-        }
-        const balanceData = await Promise.all(balancePromises);
-        setVizData(
-          balanceData.map((balance, index) => ({
-            x: indexes[index],
-            y: balance,
-          })),
-        );
+        // const balancePromises = [];
+        // const indexes = [];
+        // for (let x = 0; x <= blockIntervals; x++) {
+        //   const atBlock = firstBlock + Math.floor(dataLength) * x;
+        //   balancePromises.push(
+        //     daoService.token.balanceOf(data.guildBankAddr, atBlock),
+        //   );
+        //   indexes.push(x);
+        // }
+        // const balanceData = await Promise.all(balancePromises);
+        // setVizData(
+        //   balanceData.map((balance, index) => ({
+        //     x: indexes[index],
+        //     y: balance,
+        //   })),
+        // );
       }
 
       if (chartView === 'shares') {
-        const sharesPromises = [];
-        const indexes = [];
-        for (let x = 0; x <= blockIntervals; x++) {
-          const atBlock = firstBlock + Math.floor(dataLength) * x;
-          sharesPromises.push(daoService.mcDao.getTotalShares(atBlock));
-          indexes.push(x);
-        }
-        const sharesData = await Promise.all(sharesPromises);
-        setVizData(
-          sharesData.map((shares, index) => ({
-            x: indexes[index],
-            y: shares,
-          })),
-        );
+        // const sharesPromises = [];
+        // const indexes = [];
+        // for (let x = 0; x <= blockIntervals; x++) {
+        //   const atBlock = firstBlock + Math.floor(dataLength) * x;
+        //   sharesPromises.push(daoService.mcDao.getTotalShares(atBlock));
+        //   indexes.push(x);
+        // }
+        // const sharesData = await Promise.all(sharesPromises);
+        // setVizData(
+        //   sharesData.map((shares, index) => ({
+        //     x: indexes[index],
+        //     y: shares,
+        //   })),
+        // );
       }
 
       if (chartView === 'value') {
-        const sharePromises = [];
-        const balancePromises = [];
-
-        const indexes = [];
-        for (let x = 0; x <= blockIntervals; x++) {
-          const atBlock = firstBlock + Math.floor(dataLength) * x;
-          sharePromises.push(daoService.mcDao.getTotalShares(atBlock));
-          balancePromises.push(
-            daoService.token.balanceOf(data.guildBankAddr, atBlock),
-          );
-          indexes.push(x);
-        }
-        const shareData = await Promise.all(sharePromises);
-        const balanceData = await Promise.all(balancePromises);
-
-        setVizData(
-          indexes.map((value) => ({
-            x: indexes[value],
-            y: balanceData[value] / shareData[value],
-          })),
-        );
+        // const sharePromises = [];
+        // const balancePromises = [];
+        // const indexes = [];
+        // for (let x = 0; x <= blockIntervals; x++) {
+        //   const atBlock = firstBlock + Math.floor(dataLength) * x;
+        //   sharePromises.push(daoService.mcDao.getTotalShares(atBlock));
+        //   balancePromises.push(
+        //     daoService.token.balanceOf(data.guildBankAddr, atBlock),
+        //   );
+        //   indexes.push(x);
+        // }
+        // const shareData = await Promise.all(sharePromises);
+        // const balanceData = await Promise.all(balancePromises);
+        // setVizData(
+        //   indexes.map((value) => ({
+        //     x: indexes[value],
+        //     y: balanceData[value] / shareData[value],
+        //   })),
+        // );
       }
     };
 
