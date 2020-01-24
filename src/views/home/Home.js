@@ -24,16 +24,45 @@ const Home = () => {
   });
 
   const getShares = async () => {
-    const events = await daoService.mcDao.daoContract.getPastEvents(
+    const events = await daoService.mcDao.getAllEvents();
+    const firstBlock = events[0].blockNumber;
+    const minted = await daoService.mcDao.daoContract.getPastEvents(
       'ProcessProposal',
-      { fromBlock: 0, toBlock: 'latest' },
+      { fromBlock: firstBlock , toBlock: 'latest' },
     );
-    return events
-      .filter((event) => event.returnValues.didPass)
-      .map((passed) => ({
-        shares: passed.returnValues.sharesRequested,
-        blockNumber: passed.blockNumber,
-      }));
+    const burned = await daoService.mcDao.daoContract.getPastEvents(
+      'Ragequit',
+      { fromBlock: firstBlock , toBlock: 'latest' },
+    );
+
+    const passed = minted.filter((event) => event.returnValues.didPass)
+    .map((item) => ({
+      shares: item.returnValues.sharesRequested,
+      blockNumber: item.blockNumber,
+    }));
+
+    const burnt = burned
+    .map((item) => ({
+      shares: "-"+item.returnValues.sharesToBurn,
+      blockNumber: item.blockNumber,
+    }));
+
+    const sorted = passed
+    .concat(burnt)
+    .sort((a, b) => a.blockNumber - b.blockNumber);
+
+  return sorted.reduce(
+    (sum, item, idx) => {
+      sum.push({
+        shares: item.shares,
+        blockNumber: item.blockNumber,
+        currentShares: sum[idx].currentShares + +item.shares,
+      });
+
+      return sum;
+    },
+    [{ ...sorted[0], currentShares: 1 }],
+  );
   };
 
   const getBalance = async () => {
@@ -97,12 +126,7 @@ const Home = () => {
       const balance = await getBalance();
       console.log(balance);
 
-      setVizData(
-        balance.map((balance) => ({
-          x: balance.blockNumber,
-          y: balance.currentBalance,
-        })),
-      );
+
 
       const events = await daoService.mcDao.getAllEvents();
       const firstBlock = events[0].blockNumber;
@@ -113,59 +137,28 @@ const Home = () => {
       const dataLength = blocksAlive / blockIntervals;
 
       if (chartView === 'bank') {
-        // const balancePromises = [];
-        // const indexes = [];
-        // for (let x = 0; x <= blockIntervals; x++) {
-        //   const atBlock = firstBlock + Math.floor(dataLength) * x;
-        //   balancePromises.push(
-        //     daoService.token.balanceOf(data.guildBankAddr, atBlock),
-        //   );
-        //   indexes.push(x);
-        // }
-        // const balanceData = await Promise.all(balancePromises);
-        // setVizData(
-        //   balanceData.map((balance, index) => ({
-        //     x: indexes[index],
-        //     y: balance,
-        //   })),
-        // );
+        setVizData(
+          balance.map((balance) => ({
+            x: balance.blockNumber,
+            y: balance.currentBalance,
+          })),
+        );
       }
 
       if (chartView === 'shares') {
-        // const sharesPromises = [];
-        // const indexes = [];
-        // for (let x = 0; x <= blockIntervals; x++) {
-        //   const atBlock = firstBlock + Math.floor(dataLength) * x;
-        //   sharesPromises.push(daoService.mcDao.getTotalShares(atBlock));
-        //   indexes.push(x);
-        // }
-        // const sharesData = await Promise.all(sharesPromises);
-        // setVizData(
-        //   sharesData.map((shares, index) => ({
-        //     x: indexes[index],
-        //     y: shares,
-        //   })),
-        // );
+        setVizData(
+          shares.map((shares) => ({
+            x: shares.blockNumber,
+            y: shares.currentShares,
+          })),
+        );
       }
 
       if (chartView === 'value') {
-        // const sharePromises = [];
-        // const balancePromises = [];
-        // const indexes = [];
-        // for (let x = 0; x <= blockIntervals; x++) {
-        //   const atBlock = firstBlock + Math.floor(dataLength) * x;
-        //   sharePromises.push(daoService.mcDao.getTotalShares(atBlock));
-        //   balancePromises.push(
-        //     daoService.token.balanceOf(data.guildBankAddr, atBlock),
-        //   );
-        //   indexes.push(x);
-        // }
-        // const shareData = await Promise.all(sharePromises);
-        // const balanceData = await Promise.all(balancePromises);
         // setVizData(
-        //   indexes.map((value) => ({
-        //     x: indexes[value],
-        //     y: balanceData[value] / shareData[value],
+        //   shares.map((shares) => ({
+        //     x: shares.blockNumber,
+        //     y: shares.currentShares / balance.currentBalance,
         //   })),
         // );
       }
