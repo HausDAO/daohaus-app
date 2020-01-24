@@ -31,6 +31,24 @@ const Home = () => {
     }))
   }
 
+  const getBalance = async () => {
+    const deposit = await daoService.token.contract.getPastEvents('Transfer', {filter: {dst:data.guildBankAddr}, fromBlock: 0, toBlock: 'latest'})
+    const withdraw = await daoService.token.contract.getPastEvents('Transfer', {filter: {src:data.guildBankAddr}, fromBlock: 0, toBlock: 'latest'})
+    const deposits = deposit.map(item => ({ 
+      balance: daoService.web3.utils.fromWei(item.returnValues.wad.toString()),
+      blockNumber: item.blockNumber
+    }))
+    const withdraws = deposit.map((item, idx) => ({ 
+      balance: "-" + daoService.web3.utils.fromWei(item.returnValues.wad.toString()),
+      blockNumber: item.blockNumber
+    }))
+    return deposits.concat(withdraws).sort((a,b) => a.blockNumber - b.blockNumber).reduce((sum, item) => ({
+      balance: item.balance,
+      blockNumber: item.blockNumber,
+      currentBalance: 0
+    }),[]);
+  }
+
   useEffect(() => {
     console.log('daoService.mcDao');
     console.log(daoService.mcDao);
@@ -46,6 +64,8 @@ const Home = () => {
       console.log('process prop');
       const shares = await getShares();
       console.log(shares);
+      const balance = await getBalance();
+      console.log(balance);
 
       const events = await daoService.mcDao.getAllEvents();
       const firstBlock = events[0].blockNumber;
