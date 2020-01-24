@@ -25,10 +25,20 @@ const Members = () => {
     };
   }
 
-  const { loading, error, data } = useQuery(memberQuery, options);
+  const { loading, error, data, fetchMore } = useQuery(memberQuery, options);
 
   if (loading) return <Loading />;
   if (error) return <ErrorMessage message={error} />;
+
+  fetchMore({
+    variables: { skip: data.members.length },
+    updateQuery: (prev, { fetchMoreResult }) => {
+      if (!fetchMoreResult) return;
+      return Object.assign({}, prev, {
+        members: [...prev.members, ...fetchMoreResult.members],
+      });
+    },
+  });
 
   return (
     <div className="View">

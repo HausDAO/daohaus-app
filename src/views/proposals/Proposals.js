@@ -32,10 +32,20 @@ const Proposals = ({ match, history }) => {
     };
   }
 
-  const { loading, error, data } = useQuery(proposalQuery, options);
+  const { loading, error, data, fetchMore } = useQuery(proposalQuery, options);
 
   if (loading) return <Loading />;
   if (error) return <ErrorMessage message={error} />;
+
+  fetchMore({
+    variables: { skip: data.proposals.length },
+    updateQuery: (prev, { fetchMoreResult }) => {
+      if (!fetchMoreResult) return;
+      return Object.assign({}, prev, {
+        proposals: [...prev.proposals, ...fetchMoreResult.proposals],
+      });
+    },
+  });
 
   return (
     <Fragment>
