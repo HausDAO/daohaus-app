@@ -17,6 +17,7 @@ import DepositForm from './DepositForm';
 import StateModals from '../shared/StateModals';
 import { USER_TYPE } from '../../utils/DaoService';
 import RagequitForm from './RagequitForm';
+import ChangeDelegateKeyForm from './ChangeDelegateKeyForm';
 
 import config from '../../config';
 
@@ -102,6 +103,13 @@ const UserWallet = () => {
 
           <Modal isShowing={isShowing.ragequit} hide={() => toggle('ragequit')}>
             <RagequitForm />
+          </Modal>
+
+          <Modal
+            isShowing={isShowing.changeDelegateKey}
+            hide={() => toggle('changeDelegateKey')}
+          >
+            <ChangeDelegateKeyForm />
           </Modal>
 
           <Modal isShowing={isShowing.daohaus} hide={() => toggle('daohaus')}>

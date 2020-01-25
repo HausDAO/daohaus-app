@@ -21,8 +21,7 @@ import { GET_METADATA } from '../../utils/Queries';
 import UpgradeKeystore from '../../auth/UpgradeKeystore';
 import { USER_TYPE } from '../../utils/DaoService';
 
-const UserBalance = (props) => {
-  const { toggle, client } = props;
+const UserBalance = ({ toggle, client }) => {
   const { tokenSymbol } = client.cache.readQuery({
     query: GET_METADATA,
   });
@@ -215,6 +214,7 @@ const UserBalance = (props) => {
                     <button
                       onClick={() => toggleActions('ragequit')}
                       className="Button--Secondary"
+                      // disabled={!memberAddressLoggedIn}
                     >
                       Rage Quit
                     </button>
@@ -224,7 +224,7 @@ const UserBalance = (props) => {
                     <button
                       onClick={() => toggleActions('changeDelegateKey')}
                       className="Button--Secondary"
-                      disabled={!memberAddressLoggedIn}
+                      // disabled={!memberAddressLoggedIn}
                     >
                       Change Delegate Key
                     </button>

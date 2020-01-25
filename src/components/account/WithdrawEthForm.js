@@ -29,7 +29,7 @@ const WithdrawEthForm = () => {
           dist: '',
         }}
         validate={(values) => {
-          let errors = {};
+          const errors = {};
           if (!values.amount) {
             errors.amount = 'Required';
           }
