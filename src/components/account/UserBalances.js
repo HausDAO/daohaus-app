@@ -38,7 +38,7 @@ const UserBalance = ({ toggle, client }) => {
 
   useEffect(() => {
     (async () => {
-      if (!daoService.mcDaoService) {
+      if (!daoService.mcDao) {
         return;
       }
 
@@ -60,7 +60,7 @@ const UserBalance = ({ toggle, client }) => {
           currentUser.attributes['custom:account_address'] === memberAddress,
       );
     })();
-  }, [currentUser, daoService.mcDao, daoService.mcDaoService]);
+  }, [currentUser, daoService.mcDao]);
 
   const onCopy = () => {
     setDelay(2500);
@@ -214,7 +214,7 @@ const UserBalance = ({ toggle, client }) => {
                     <button
                       onClick={() => toggleActions('ragequit')}
                       className="Button--Secondary"
-                      // disabled={!memberAddressLoggedIn}
+                      disabled={!memberAddressLoggedIn}
                     >
                       Rage Quit
                     </button>
@@ -224,7 +224,7 @@ const UserBalance = ({ toggle, client }) => {
                     <button
                       onClick={() => toggleActions('changeDelegateKey')}
                       className="Button--Secondary"
-                      // disabled={!memberAddressLoggedIn}
+                      disabled={!memberAddressLoggedIn}
                     >
                       Change Delegate Key
                     </button>

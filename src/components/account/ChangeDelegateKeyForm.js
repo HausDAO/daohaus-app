@@ -33,7 +33,7 @@ const ChangeDelegateKeyForm = () => {
         onSubmit={async (values, { setSubmitting, resetForm }) => {
           setLoading(true);
           try {
-            await daoService.mcDao.rageQuit(values.numShares);
+            await daoService.mcDao.updateDelegateKey(values.newDelegateKey);
             setFormSuccess(true);
           } catch (e) {
             console.error(`Error changing delegate key: ${e.toString()}`);
@@ -51,7 +51,7 @@ const ChangeDelegateKeyForm = () => {
               <Field name="newDelegateKey">
                 {({ field }) => (
                   <div className={field.value ? 'Field HasValue' : 'Field '}>
-                    <label>New Delegate Key</label>
+                    <label>New Delegate Key Address</label>
                     <input type="text" {...field} />
                   </div>
                 )}
@@ -65,7 +65,7 @@ const ChangeDelegateKeyForm = () => {
               </button>
             </Form>
           ) : (
-            <h2>Delegate Key Changed</h2>
+            <h2>Delegate Key Changed Successfully!</h2>
           )
         }
       </Formik>
