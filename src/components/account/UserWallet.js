@@ -16,6 +16,7 @@ import ApproveAllowance from './ApproveAllowance';
 import DepositForm from './DepositForm';
 import StateModals from '../shared/StateModals';
 import { USER_TYPE } from '../../utils/DaoService';
+import RagequitForm from './RagequitForm';
 
 import config from '../../config';
 
@@ -97,6 +98,10 @@ const UserWallet = () => {
             hide={() => toggle('sendToken')}
           >
             <WithdrawForm />
+          </Modal>
+
+          <Modal isShowing={isShowing.ragequit} hide={() => toggle('ragequit')}>
+            <RagequitForm />
           </Modal>
 
           <Modal isShowing={isShowing.daohaus} hide={() => toggle('daohaus')}>
