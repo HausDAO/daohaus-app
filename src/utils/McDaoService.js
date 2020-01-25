@@ -92,7 +92,7 @@ export class McDaoService {
     const addressByDelegateKey = await this.daoContract.methods
       .memberAddressByDelegateKey(account)
       .call();
-    return addressByDelegateKey;
+    return addressByDelegateKey.toLowerCase();
   }
 
   async canRagequit() {
