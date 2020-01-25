@@ -92,6 +92,8 @@ const Store = ({ children, daoParam }) => {
           `Could not log in with loginType ${loginType}: ${e.toString()}`,
         );
 
+        localStorage.setItem('loginType', '');
+
         dao = await DaoService.instantiateWithReadOnly(daoParam);
       } finally {
         setDaoService(dao);
