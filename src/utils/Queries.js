@@ -108,6 +108,31 @@ export const GET_MEMBERS_LEGACY = gql`
   }
 `;
 
+export const GET_MEMBER_OR_DELEGATE = gql`
+  query members(
+    $address: String!
+    $combinedContractPlusMemberAddress: String!
+  ) {
+    isDelegate: members(where: { delegateKey: $address }) {
+      id
+      delegateKey
+      shares
+      isActive
+      tokenTribute
+      didRagequit
+    }
+
+    isMember: members(where: { id: $combinedContractPlusMemberAddress }) {
+      id
+      delegateKey
+      shares
+      isActive
+      tokenTribute
+      didRagequit
+    }
+  }
+`;
+
 export const GET_MEMBER = gql`
   query member($id: String!) {
     member(id: $id) {
