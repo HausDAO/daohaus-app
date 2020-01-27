@@ -4,18 +4,23 @@ import { ResponsiveContainer, AreaChart, Area } from 'recharts';
 import { DaoServiceContext } from '../../contexts/Store';
 
 const HomeChart = ({ guildBankAddr, chartView }) => {
-  const [rawData, setRawData] = useState({ balance: [], shares: [] });
+  const [rawData, setRawData] = useState({
+    balances: [],
+    shares: [],
+    shareValues: [],
+  });
   const [vizData, setVizData] = useState([]);
   const [daoService] = useContext(DaoServiceContext);
 
   useEffect(() => {
     const fetchData = async () => {
-      const balance = await getBalance();
+      const balances = await getBalance();
       const shares = await getShares();
+      const shareValues = getShareValues(balances, shares);
 
-      setRawData({ balance, shares });
+      setRawData({ balances, shares, shareValues });
       setVizData(
-        balance.map((balance) => ({
+        balances.map((balance) => ({
           x: balance.blockNumber,
           y: balance.currentBalance,
         })),
@@ -31,7 +36,7 @@ const HomeChart = ({ guildBankAddr, chartView }) => {
     const fetchData = async () => {
       if (chartView === 'bank') {
         setVizData(
-          rawData.balance.map((balance) => ({
+          rawData.balances.map((balance) => ({
             x: balance.blockNumber,
             y: balance.currentBalance,
           })),
@@ -48,7 +53,12 @@ const HomeChart = ({ guildBankAddr, chartView }) => {
       }
 
       if (chartView === 'value') {
-        console.log('todo share value');
+        setVizData(
+          rawData.shareValues.map((values) => ({
+            x: values.blockNumber,
+            y: values.shareValue,
+          })),
+        );
       }
     };
 
@@ -135,6 +145,25 @@ const HomeChart = ({ guildBankAddr, chartView }) => {
       },
       [{ ...sorted[0], currentBalance: 0 }],
     );
+  };
+
+  const getShareValues = (balances, shares) => {
+    const baseCollection = balances.length < shares.length ? balances : shares;
+    const compareCollection =
+      balances.length < shares.length ? shares : balances;
+
+    return baseCollection.map((baseValue, idx) => {
+      const bal = baseValue.balance
+        ? baseValue.currentBalance
+        : compareCollection[idx].currentBalance;
+      const shares = baseValue.balance
+        ? compareCollection[idx].currentShares
+        : baseValue.currentShares;
+      return {
+        blockNumber: baseValue.blockNumber,
+        shareValue: +bal / +shares,
+      };
+    });
   };
 
   return (
