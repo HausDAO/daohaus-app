@@ -10,6 +10,7 @@ export class TokenService {
   constructor(web3, daoToken, daoAddress, accountAddress, bcProcessor) {
     this.web3 = web3;
     this.contract = new web3.eth.Contract(Erc20Abi, daoToken);
+    this.contract32 = new web3.eth.Contract(Erc20Bytes32Abi, daoToken);
     this.daoAddress = daoAddress;
     this.accountAddress = accountAddress;
     this.bcProcessor = bcProcessor;
@@ -21,9 +22,6 @@ export class TokenService {
     try {
       symbol = await this.contract.methods.symbol().call();
     } catch {
-      if (!this.contract32) {
-        this.contract32 = await this.initContract(Erc20Bytes32Abi);
-      }
       symbol = await this.contract32.methods.symbol().call();
     }
 
