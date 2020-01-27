@@ -9,14 +9,14 @@ import BottomNav from '../../components/shared/BottomNav';
 import Loading from '../../components/shared/Loading';
 import {
   CurrentWalletContext,
-  DaoContext,
+  DaoServiceContext,
   DaoDataContext,
 } from '../../contexts/Store';
 import StateModals from '../../components/shared/StateModals';
 
 const Proposals = ({ match, history }) => {
   const [currentWallet] = useContext(CurrentWalletContext);
-  const [daoService] = useContext(DaoContext);
+  const [daoService] = useContext(DaoServiceContext);
   const [daoData] = useContext(DaoDataContext);
 
   let proposalQuery, options;
@@ -27,15 +27,25 @@ const Proposals = ({ match, history }) => {
   } else {
     proposalQuery = GET_PROPOSALS;
     options = {
-      variables: { contractAddr: daoService.contractAddr.toLowerCase() },
+      variables: { contractAddr: daoService.daoAddress.toLowerCase() },
       pollInterval: 20000,
     };
   }
 
-  const { loading, error, data } = useQuery(proposalQuery, options);
+  const { loading, error, data, fetchMore } = useQuery(proposalQuery, options);
 
   if (loading) return <Loading />;
   if (error) return <ErrorMessage message={error} />;
+
+  fetchMore({
+    variables: { skip: data.proposals.length },
+    updateQuery: (prev, { fetchMoreResult }) => {
+      if (!fetchMoreResult) return;
+      return Object.assign({}, prev, {
+        proposals: [...prev.proposals, ...fetchMoreResult.proposals],
+      });
+    },
+  });
 
   return (
     <Fragment>
@@ -48,7 +58,7 @@ const Proposals = ({ match, history }) => {
             <div>
               <p>
                 <Link
-                  to={`/dao/${daoService.contractAddr}/proposal-new`}
+                  to={`/dao/${daoService.daoAddress}/proposal-new`}
                   className="Bold"
                 >
                   <svg

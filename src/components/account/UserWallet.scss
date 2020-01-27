@@ -109,6 +109,9 @@
           &:hover {
             color: $secondary-hover;
           }
+          &:disabled {
+            color: grey;
+          }
         }
         &.Button--Tertiary {
           color: $tertiary;

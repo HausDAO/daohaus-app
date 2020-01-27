@@ -10,6 +10,7 @@ const dev = {
   },
   API: process.env.REACT_APP_DEV_API,
   DAOHAUS_URL: process.env.REACT_APP_DEV_DAOHAUS,
+  CHAIN_ID: 42, // TODO: do we still need this file
 };
 
 const prod = {
@@ -24,6 +25,7 @@ const prod = {
   },
   API: process.env.REACT_APP_PROD_API,
   DAOHAUS_URL: process.env.REACT_APP_PROD_DAOHAUS,
+  CHAIN_ID: 1,
 };
 
 const config = process.env.REACT_APP_STAGE === 'prod' ? prod : dev;

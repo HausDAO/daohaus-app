@@ -8,7 +8,7 @@ import {
   CurrentWalletContext,
 } from '../../contexts/Store';
 import Web3Service from '../../utils/Web3Service';
-import BcProcessorService from '../../utils/BcProcessorService';
+import { BcProcessorService } from '../../utils/BcProcessorService';
 import Loading from '../shared/Loading';
 
 const WithdrawEthForm = () => {
@@ -29,7 +29,7 @@ const WithdrawEthForm = () => {
           dist: '',
         }}
         validate={(values) => {
-          let errors = {};
+          const errors = {};
           if (!values.amount) {
             errors.amount = 'Required';
           }

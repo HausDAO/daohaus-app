@@ -1,11 +1,7 @@
 import React, { useContext } from 'react';
 import { withRouter, Link } from 'react-router-dom';
 
-import {
-  CurrentUserContext,
-  DaoContext,
-  DaoDataContext,
-} from '../../contexts/Store';
+import { CurrentUserContext, DaoServiceContext, DaoDataContext } from '../../contexts/Store';
 import BcToast from './BcToast';
 
 import './TopNav.scss';
@@ -14,7 +10,7 @@ import Modal from './Modal';
 
 const TopNav = (props) => {
   const [currentUser] = useContext(CurrentUserContext);
-  const [daoService] = useContext(DaoContext);
+  const [daoService] = useContext(DaoServiceContext);
   const [daoData] = useContext(DaoDataContext);
 
   // Toggle functions
@@ -27,38 +23,40 @@ const TopNav = (props) => {
 
   return (
     <div className="TopNav">
-      {daoService && daoService.contract && (
+      {daoService && daoService.mcDao.daoContract && (
         <>
-          {pathname === `/dao/${daoService.contractAddr}/sign-in` ? (
+          <div
+            className={isElementOpen ? 'Backdrop__Open Blank' : 'Backdrop Blank'}
+            onClick={toggleElement}
+          />
+          {currentUser && <BcToast />}
+          {pathname === `/dao/${daoService.daoAddress}/sign-in` ? (
             <div className="Button Back">
-              <Link to={`/dao/${daoService.contractAddr}/`}>{'<='} Back</Link>
+              <Link to={`/dao/${daoService.daoAddress}/`}>{'<='} Back</Link>
             </div>
           ) : (
-            <>
-              {pathname === `/dao/${daoService.contractAddr}/sign-in` ||
-              pathname === `/dao/${daoService.contractAddr}/confirm` ? (
-                <div className="Button Back">
-                  <Link to={`/dao/${daoService.contractAddr}/`}>
-                    {'<='} Back
-                  </Link>
-                </div>
-              ) : (
-                <>
-                  {props.match.params.name === '/proposal/' ? (
-                    <p>Back</p>
-                  ) : (
-                    <Link
-                      className="Brand"
-                      to={`/dao/${daoService.contractAddr}/`}
-                    >
-                      {daoData.name || 'PokéMol DAO'}
-                    </Link>
+              <>
+                {pathname === `/dao/${daoService.daoAddress}/sign-up` || pathname === '/confirm' ? (
+                  <div className="Button Back">
+                    <Link to={`/dao/${daoService.daoAddress}/`}>{'<='} Back</Link>
+                  </div>
+                ) : (
+                    <>
+                      {props.match.params.name === `/dao/${daoService.daoAddress}/proposal/` ? (
+                        <p>Back</p>
+                      ) : (
+                          <Link
+                            className="Brand"
+                            to={`/dao/${daoService.daoAddress}/`}
+                          >
+                            {daoData.name || 'PokéMol DAO'}
+                          </Link>
+                        )}
+                    </>
                   )}
-                </>
-              )}
-            </>
-          )}
-          {currentUser && <BcToast />}
+              </>
+            )}
+
           {currentUser ? (
             <div className="Auth">
               <button className="Auth__Button" onClick={toggleElement}>
@@ -76,17 +74,20 @@ const TopNav = (props) => {
               <div className={isElementOpen ? 'Dropdown__Open' : 'Dropdown'}>
                 <Link
                   className="Dropdown__Open--Item"
-                  to={`/dao/${daoService.contractAddr}/account`}
+                  to={'/dao/'+daoService.daoAddress.toLowerCase()+'/account'}
                   onClick={toggleElement}
                 >
                   Account
-                </Link>
+            </Link>
                 <button
                   className="Dropdown__Open--Item LinkButton"
-                  onClick={() => toggle('signOutMsg')}
+                  onClick={() => {
+                    toggleElement();
+                    toggle('signOutMsg');
+                  }}
                 >
                   {'<='} Sign out
-                </button>
+            </button>
                 <Modal
                   isShowing={isShowing.signOutMsg}
                   hide={() => toggle('signOutMsg')}
@@ -105,27 +106,24 @@ const TopNav = (props) => {
                   </div>
                   <Link
                     className="AltOption"
-                    to={`/dao/${daoService.contractAddr}/sign-out`}
+                    to={`/dao/${daoService.daoAddress}/sign-out`}
                     onClick={() => {
                       toggle('signOutMsg');
                       toggleElement();
                     }}
                   >
                     Yes, sign me out.
-                  </Link>
+              </Link>
                 </Modal>
               </div>
             </div>
           ) : (
-            <div className="Auth">
-              <Link
-                className="Auth__Button"
-                to={`/dao/${daoService.contractAddr}/sign-in`}
-              >
-                Sign in {'=>'}
-              </Link>
-            </div>
-          )}
+              <div className="Auth">
+                <Link className="Auth__Button" to={`/dao/${daoService.daoAddress}/sign-in`}>
+                  Sign in {'=>'}
+                </Link>
+              </div>
+            )}
         </>
       )}
     </div>

@@ -1,24 +1,24 @@
 import React, { useContext } from 'react';
 import { withRouter, Link } from 'react-router-dom';
 
-import { CurrentUserContext, DaoContext } from '../../contexts/Store';
+import { CurrentUserContext, DaoServiceContext } from '../../contexts/Store';
 
 import './MainNav.scss';
 
 const BottomNav = (props) => {
   const [currentUser] = useContext(CurrentUserContext);
-  const [daoService] = useContext(DaoContext);
+  const [daoService] = useContext(DaoServiceContext);
 
   return (
     <div
       className={
         'MainNav ' +
-        (props.location.pathname === `/dao/${daoService.contractAddr}`
+        (props.location.pathname === `/dao/${daoService.daoAddress}`
           ? ''
           : 'Global')
       }
     >
-      <Link to={`/dao/${daoService.contractAddr}/proposals`}>
+      <Link to={`/dao/${daoService.daoAddress}/proposals`}>
         <svg
           xmlns="http://www.w3.org/2000/svg"
           width="24"
@@ -30,7 +30,7 @@ const BottomNav = (props) => {
         </svg>
         Proposals
       </Link>
-      <Link to={`/dao/${daoService.contractAddr}/members`}>
+      <Link to={`/dao/${daoService.daoAddress}/members`}>
         <svg
           xmlns="http://www.w3.org/2000/svg"
           width="24"
@@ -43,7 +43,7 @@ const BottomNav = (props) => {
         Members
       </Link>
       {currentUser ? (
-        <Link to={`/dao/${daoService.contractAddr}/account`}>
+        <Link to={`/dao/${daoService.daoAddress}/account`}>
           <svg
             xmlns="http://www.w3.org/2000/svg"
             width="24"
@@ -56,7 +56,7 @@ const BottomNav = (props) => {
           Account
         </Link>
       ) : (
-        <Link to={`/dao/${daoService.contractAddr}/sign-in`}>
+        <Link to={`/dao/${daoService.daoAddress}/sign-in`}>
           <svg
             xmlns="http://www.w3.org/2000/svg"
             width="24"

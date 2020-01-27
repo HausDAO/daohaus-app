@@ -1,5 +1,4 @@
 import Web3Service from './Web3Service';
-const web3Service = new Web3Service();
 const minDevices = 1; // first device and extention
 const minDeployEth = 0.05; // first device and extention
 
@@ -19,6 +18,7 @@ export const WalletStatuses = {
 };
 
 export const currentStatus = (currentWallet, currentUser, state = null) => {
+  const web3Service = Web3Service.create();
   const _accountDevices = currentWallet.accountDevices;
   const _state = state || currentWallet.state || '';
   // NotConnected user should see signup flow

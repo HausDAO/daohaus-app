@@ -1,12 +1,12 @@
 import React from 'react';
 import TopNav from '../shared/TopNav';
-import './Header.scss';
+import { StyledHeader } from './Header.style';
 
 const Header = () => {
   return (
-    <header className="Header">
+    <StyledHeader>
       <TopNav />
-    </header>
+    </StyledHeader>
   );
 };
 export default Header;

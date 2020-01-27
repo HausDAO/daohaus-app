@@ -42,7 +42,7 @@ export const resolvers = {
           +proposal.startingPeriod +
           votingPeriodLength +
           gracePeriodLength -
-          currentPeriod
+          currentPeriod + 1 // TODO: why plus 1 here? abort? ¯\_(ツ)_/¯
         );
       }
       return 0;
