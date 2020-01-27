@@ -4,11 +4,7 @@ import { Link } from 'react-router-dom';
 import {
   CurrentUserContext,
   CurrentWalletContext,
-<<<<<<< HEAD
-  DaoContext,
-=======
   DaoServiceContext,
->>>>>>> 1979b4f31d5afc396efb66e9b9745d98ecb477e2
 } from '../../contexts/Store';
 import { WalletStatuses } from '../../utils/WalletStatus';
 import IconProcessing from './IconProcessing';
