@@ -11,9 +11,13 @@
     transform: translate(0, -50%);
     font-weight: 900;
     color: black;
-    &:hover { color: $primary; }
+    &:hover {
+      color: $primary;
+    }
     font-size: 1.5em;
-    img { height: 48px; }
+    img {
+      height: 48px;
+    }
     @media (max-width: $phone) {
       font-size: 1.15em;
       max-width: 50%;
@@ -31,7 +35,7 @@
     border-radius: 16px;
     padding: 5px 15px;
     background-color: $app-light;
-    transition: all .15s linear;
+    transition: all 0.15s linear;
     font-weight: 900;
     z-index: 98;
     &__Button {
@@ -40,7 +44,7 @@
       padding-right: 12px;
       margin: 0;
       text-decoration: none;
-      transition: all .15s ease-in-out;
+      transition: all 0.15s ease-in-out;
       background-color: transparent;
       color: $base-font-color;
       width: 90px;
@@ -57,21 +61,21 @@
       }
       &:hover {
         color: $primary-hover;
-        svg { 
+        svg {
           fill: $primary-hover;
         }
       }
     }
-  } 
+  }
 }
 
 .Dropdown {
   position: relative;
   height: 0px;
   overflow: hidden;
-  transition: all .15s linear;
+  transition: all 0.15s linear;
   &__Open {
-    transition: all .15s linear;
+    transition: all 0.15s linear;
     height: auto;
     overflow: visible;
     &--Item {
