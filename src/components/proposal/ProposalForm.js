@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React, { useContext, useState } from 'react';
 import { withRouter, Link } from 'react-router-dom';
 
 import { Formik, Form, Field, ErrorMessage } from 'formik';
@@ -6,32 +6,30 @@ import shortid from 'shortid';
 
 import { ethToWei } from '@netgum/utils'; // returns BN
 
-import Web3Service from '../../utils/Web3Service';
-import BcProcessorService from '../../utils/BcProcessorService';
-
 import {
   LoaderContext,
-  CurrentUserContext,
   CurrentWalletContext,
-  DaoContext,
+  DaoServiceContext,
 } from '../../contexts/Store';
 import Loading from '../shared/Loading';
 
 import { GET_METADATA } from '../../utils/Queries';
 import { withApollo } from 'react-apollo';
-import { post } from '../../utils/Requests';
 
 const ProposalForm = (props) => {
   const { history, client } = props;
-  const { proposalDeposit, tokenSymbol } = client.cache.readQuery({ query: GET_METADATA });
-  const [loading, setLoading] = useContext(LoaderContext);
-  const [currentUser] = useContext(CurrentUserContext);
+  const { proposalDeposit, tokenSymbol } = client.cache.readQuery({
+    query: GET_METADATA,
+  });
+  const [gloading] = useContext(LoaderContext);
+  const [loading, setLoading] = useState(false);
   const [currentWallet] = useContext(CurrentWalletContext);
-  const [daoService] = useContext(DaoContext);
+  const [daoService] = useContext(DaoServiceContext);
 
   return (
     <div>
       {loading && <Loading />}
+      {gloading && <Loading />}
 
       <div>
         {+currentWallet.tokenBalance >= +proposalDeposit &&
@@ -62,66 +60,31 @@ const ProposalForm = (props) => {
 
               return errors;
             }}
-            onSubmit={async (values, { setSubmitting }) => {
-              const web3Service = new Web3Service();
-              const bcprocessor = new BcProcessorService();
-
-              const bnZed = ethToWei(0);
-              const sdk = currentUser.sdk;
+            onSubmit={async (values, { setSubmitting }) =>  {
               const uuid = shortid.generate();
               setLoading(true);
-
               try {
-                const data = await daoService.submitProposal(
-                  currentUser.attributes['custom:account_address'],
+                await daoService.mcDao.submitProposal(
                   values.applicant,
-                  web3Service.toWei(values.tokenTribute),
-                  Math.floor(values.sharesRequested) + '',
-                  `id~${uuid}~title~${values.title}`,
-                  true,
+                  ethToWei(values.tokenTribute.toString()),
+                  values.sharesRequested + '',
+                  JSON.stringify({
+                    id: uuid,
+                    title: values.title,
+                    description: values.description,
+                    link: values.link,
+                  }),
                 );
-                const estimated = await sdk.estimateAccountTransaction(
-                  daoService.contractAddr,
-                  bnZed,
-                  data,
-                );
-                if (ethToWei(currentWallet.eth).lt(estimated.totalCost)) {
-                  alert(
-                    `you need more gas, at least: ${web3Service.fromWei(
-                      estimated.totalCost.toString(),
-                    )}`,
-                  );
-                  setLoading(false);
-                  setSubmitting(false);
-                  return false;
-                }
+                
 
-                const queueLength = await daoService.getProposalQueueLength();
-                const hash = await sdk.submitAccountTransaction(estimated);
-
-                const proposalObj = {
-                  proposalId: queueLength + '',
-                  molochContractAddress: daoService.contractAddr,
-                  title: values.title,
-                  description: values.description,
-                  link: values.link,
-                };
-
-                post('moloch/proposal', proposalObj);
-
-                bcprocessor.setTx(
-                  hash,
-                  currentUser.attributes['custom:account_address'],
-                  `Submit proposal (${values.title})`,
-                  true,
-                );
+                history.push(`/dao/${daoService.daoAddress}/proposals`);
+              } catch (e) {
+                console.error(`Error processing proposal: ${e.toString()}`);
+              } finally {
+                console.log('done it it');
 
                 setSubmitting(false);
-
-                history.push(`/dao/${daoService.contractAddr}/proposals`);
-              } catch (err) {
-                console.log('submit error', err);
-                setSubmitting(false);
+                setLoading(false);
               }
             }}
           >
@@ -179,7 +142,9 @@ const ProposalForm = (props) => {
                         field.value !== '' ? 'Field HasValue' : 'Field '
                       }
                     >
-                      <label>Token Tribute (will fail if applicant has not approved)</label>
+                      <label>
+                        Token Tribute (will fail if applicant has not approved)
+                      </label>
                       <input type="number" {...field} />
                     </div>
                   )}
@@ -214,16 +179,26 @@ const ProposalForm = (props) => {
             <h3>Not enough Eth or {tokenSymbol} in your account.</h3>
             <p>
               <strong>
-               To submit a proposal, you need the following in your account:
+                To submit a proposal, you need the following in your account:
               </strong>
             </p>
             <ol>
-              <li>{proposalDeposit} {tokenSymbol} for a deposit.</li>
-              <li>{tokenSymbol} unlocked so the dao can use it for the deposit.</li>
+              <li>
+                {proposalDeposit} {tokenSymbol} for a deposit.
+              </li>
+              <li>
+                {tokenSymbol} unlocked so the dao can use it for the deposit.
+              </li>
               <li>Enough Eth to run the transaction.</li>
             </ol>
-            <p><strong>
-              You can address any of these in your <Link to={`/dao/${daoService.contractAddr}/account`}>Account</Link> page.</strong>
+            <p>
+              <strong>
+                You can address any of these in your{' '}
+                <Link to={`/dao/${daoService.daoAddress}/account`}>
+                  Account
+                </Link>{' '}
+                page.
+              </strong>
             </p>
           </div>
         )}

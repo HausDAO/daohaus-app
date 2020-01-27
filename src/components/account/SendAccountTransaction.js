@@ -3,7 +3,7 @@ import React, { useContext } from 'react';
 import { Formik, Form, Field, ErrorMessage } from 'formik';
 
 import { ethToWei } from '@netgum/utils'; // returns BN
-import BcProcessorService from '../../utils/BcProcessorService';
+import { BcProcessorService } from '../../utils/BcProcessorService';
 import Web3Service from '../../utils/Web3Service';
 
 import {

@@ -1,7 +1,7 @@
 import React, { useContext } from 'react';
 
 import { CurrentUserContext } from '../../contexts/Store';
-import BcProcessorService from '../../utils/BcProcessorService';
+import { BcProcessorService } from '../../utils/BcProcessorService';
 import config from '../../config';
 
 const UserTransactions = () => {
@@ -114,13 +114,7 @@ const UserTransactions = () => {
   };
 
   return (
-    <div className="Transactions">
-      {currentUser && (
-        <>
-          {renderList()}
-        </>
-      )}
-    </div>
+    <div className="Transactions">{currentUser && <>{renderList()}</>}</div>
   );
 };
 

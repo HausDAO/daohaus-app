@@ -83,8 +83,8 @@ export const inGracePeriod = (
   votingPeriodLength,
   gracePeriodLength,
 ) =>
-  currentPeriod > proposal.startingPeriod + votingPeriodLength &&
-  currentPeriod <
+  currentPeriod >= proposal.startingPeriod + votingPeriodLength &&
+  currentPeriod <=
     proposal.startingPeriod + votingPeriodLength + gracePeriodLength;
 
 export const inVotingPeriod = (proposal, currentPeriod, votingPeriodLength) =>
@@ -153,7 +153,7 @@ export const groupByStatus = (proposals) => {
       (p) => p.status === 'ReadyForProcessing',
     ),
     InQueue: proposals.filter((p) => p.status === 'InQueue'),
-    Completed: proposals.filter((p) => {      
+    Completed: proposals.filter((p) => {
       return (
         // 'Aborted', 'Passed', 'Failed', 'Unknown'
         p.status !== 'VotingPeriod' &&
@@ -166,9 +166,11 @@ export const groupByStatus = (proposals) => {
 };
 
 export const titleMaker = (proposal) => {
-  let details = proposal.details.split('~');
+  const details = proposal.details.split('~');
   if (details[0] === 'id') {
     return details[3];
+  } else if (details[0][0] === '{') {
+    return JSON.parse(details[0]).title;
   } else {
     return `Genesis Proposal ${proposal.proposalIndex}`;
   }

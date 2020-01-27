@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useContext } from 'react';
 
-import { DaoContext } from '../../contexts/Store';
+import { DaoServiceContext } from '../../contexts/Store';
 
 import './StackedVote.scss';
 
@@ -9,7 +9,7 @@ const StackedVote = ({ id, currentYesVote, currentNoVote }) => {
   const [yesVoteShares, setYesVoteShares] = useState(0);
   const [percentageSharesYes, setPercentageSharesYes] = useState(0);
   const [percentageSharesNo, setPercentageSharesNo] = useState(0);
-  const [daoService] = useContext(DaoContext);
+  const [daoService] = useContext(DaoServiceContext);
 
   if (currentYesVote === undefined) {
     currentYesVote = 0;
@@ -20,7 +20,7 @@ const StackedVote = ({ id, currentYesVote, currentNoVote }) => {
 
   useEffect(() => {
     const currentProposal = async () => {
-      const info = await daoService.proposalQueue(id);
+      const info = await daoService.mcDao.proposalQueue(id);
       const noVoteShares = parseInt(info.noVotes) + currentNoVote;
       const yesVoteShares = parseInt(info.yesVotes) + currentYesVote;
       const totalVoteShares = noVoteShares + yesVoteShares;

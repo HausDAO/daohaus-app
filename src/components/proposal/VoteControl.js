@@ -38,24 +38,22 @@ const VoteControl = ({ submitVote, proposal }) => {
     return (
       currentUser &&
       currentWallet &&
-      currentWallet.addrByBelegateKey &&
+      currentWallet.addrByDelegateKey &&
       votes.filter((vote) => {
         return (
           vote.memberAddress &&
           vote.memberAddress.toLowerCase() ===
-            currentWallet.addrByBelegateKey.toLowerCase()
+            currentWallet.addrByDelegateKey.toLowerCase()
         );
       })
     );
   };
 
   const votedYes = (proposal) => {
-    //weird error
-    //console.log('prop', proposal, usersVote(proposal.votes));
-    
     // used for className
+
     return (currentUser &&
-      proposal.votes &&
+      usersVote(proposal.votes) &&
       usersVote(proposal.votes)[0] &&
       usersVote(proposal.votes)[0].uintVote === 1) ||
       currentYesVote
@@ -67,7 +65,7 @@ const VoteControl = ({ submitVote, proposal }) => {
     // used for className
 
     return (currentUser &&
-      proposal.votes &&
+      usersVote(proposal.votes) &&
       usersVote(proposal.votes)[0] &&
       usersVote(proposal.votes)[0].uintVote !== 1) ||
       currentNoVote
@@ -78,6 +76,7 @@ const VoteControl = ({ submitVote, proposal }) => {
   const optimisticVote = (proposal, vote) => {
     // set vote imediatly to give user feedback
     // a yes vote is uint 1
+
     if (vote !== 1) {
       setCurrentNoVote(currentWallet.shares);
     } else {
