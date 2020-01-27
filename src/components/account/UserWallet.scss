@@ -20,9 +20,10 @@
     border-top-left-radius: 10px;
     display: flex;
     flex-direction: row;
-    align-content: center;
+    align-items: center;
     justify-content: space-between;
     background-color: $primary-hover;
+    padding: 0 15px;
     @media (max-width: $phone) {
       border-radius: 0px;
       border: none;
@@ -258,7 +259,9 @@
   background-color: $primary;
   color: white;
   border: none;
-  p { text-align: center; }
+  p {
+    text-align: center;
+  }
   .Contents {
     padding: 50px;
   }
@@ -273,7 +276,9 @@
   margin-top: -5px;
   margin-left: 10px;
   background-color: $danger;
-  &:hover { background-color: $danger-hover; }
+  &:hover {
+    background-color: $danger-hover;
+  }
   span {
     color: white;
     height: 13px;
