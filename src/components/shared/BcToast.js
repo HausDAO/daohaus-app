@@ -1,7 +1,11 @@
 import React, { useContext } from 'react';
 import { Link } from 'react-router-dom';
 
-import { CurrentUserContext, CurrentWalletContext, DaoContext } from '../../contexts/Store';
+import {
+  CurrentUserContext,
+  CurrentWalletContext,
+  DaoContext,
+} from '../../contexts/Store';
 import { WalletStatuses } from '../../utils/WalletStatus';
 import BcProcessorService from '../../utils/BcProcessorService';
 import IconProcessing from './IconProcessing';
@@ -85,32 +89,44 @@ const BcToast = () => {
       <>
         <div className="Processor">
           {currentWallet.state === WalletStatuses.Deployed ? (
-          <button className="Processor__Button" onClick={toggleElement}>
-            {pendingLength() ? (
-              <IconProcessing />
-            ) : (
-              <div className="BcStatic">
-                <div className="BcStatic__Inner" />
-              </div>
-            )}
-          </button>
-          ):(
-            <Link className="Processor__Button" to={`/dao/${daoService.contractAddr}/account`}>
+            <button className="Processor__Button" onClick={toggleElement}>
+              {pendingLength() ? (
+                <IconProcessing />
+              ) : (
+                <div className="BcStatic">
+                  <div className="BcStatic__Inner" />
+                </div>
+              )}
+            </button>
+          ) : (
+            <Link
+              className="Processor__Button"
+              to={`/dao/${daoService.contractAddr}/account`}
+            >
               <div className="BcStatic">
                 <div className="BcStatic__Inner WarningIcon" />
               </div>
             </Link>
           )}
         </div>
+        {/* Commented out. Don't think we need this Backdrop
         <div
           className={isElementOpen ? 'Backdrop__Open' : 'Backdrop'}
           onClick={toggleElement}
         />
-        <div className={isElementOpen ? 'ProcessorDropdown__Open' : 'ProcessorDropdown'}>
+        */}
+        <div
+          className={
+            isElementOpen ? 'ProcessorDropdown__Open' : 'ProcessorDropdown'
+          }
+        >
           <div className="Toast">
             {renderList()}
             <div className="Dropdown__Footer">
-              <Link to={`/dao/${daoService.contractAddr}/account`} onClick={toggleElement}>
+              <Link
+                to={`/dao/${daoService.contractAddr}/account`}
+                onClick={toggleElement}
+              >
                 View all transactions
               </Link>
             </div>

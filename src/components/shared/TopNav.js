@@ -83,7 +83,10 @@ const TopNav = (props) => {
                 </Link>
                 <button
                   className="Dropdown__Open--Item LinkButton"
-                  onClick={() => toggle('signOutMsg')}
+                  onClick={() => {
+                    toggleElement();
+                    toggle('signOutMsg');
+                  }}
                 >
                   {'<='} Sign out
                 </button>
