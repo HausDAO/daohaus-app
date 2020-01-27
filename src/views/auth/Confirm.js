@@ -4,13 +4,13 @@ import { Formik, Form, Field, ErrorMessage } from 'formik';
 import { Auth } from 'aws-amplify';
 
 import Loading from '../../components/shared/Loading';
-import { DaoContext } from '../../contexts/Store';
+import { DaoServiceContext } from '../../contexts/Store';
 
 const Confirm = (props) => {
   const { history } = props;
   const [focused, setFocused] = useState(false);
-  const [daoService] = useContext(DaoContext);
-  let historyState = history.location.state;
+  const [daoService] = useContext(DaoServiceContext);
+  const historyState = history.location.state;
   let authError = null;
 
   return (
@@ -41,7 +41,7 @@ const Confirm = (props) => {
               setSubmitting(false);
               if (!!data) {
                 history.push({
-                  pathname: `/dao/${daoService.contractAddr}/sign-in`,
+                  pathname: `/dao/${daoService.daoAddress}/sign-in`,
                   state: { msg: 'email confirmed' },
                 });
               }
@@ -56,7 +56,7 @@ const Confirm = (props) => {
               setSubmitting(false);
               if (!!data) {
                 history.push({
-                  pathname: `/dao/${daoService.contractAddr}/sign-in`,
+                  pathname: `/dao/${daoService.daoAddress}/sign-in`,
                   state: { msg: 'email confirmed' },
                 });
               }

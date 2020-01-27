@@ -5,8 +5,10 @@ import { withApollo } from 'react-apollo';
 import {
   getProposalCountdownText,
   titleMaker,
+  descriptionMaker,
+  linkMaker,
 } from '../../utils/ProposalHelper';
-import { CurrentUserContext, DaoContext } from '../../contexts/Store';
+import { CurrentUserContext, DaoServiceContext } from '../../contexts/Store';
 import { GET_METADATA } from '../../utils/Queries';
 import { get } from '../../utils/Requests';
 import Web3Service from '../../utils/Web3Service';
@@ -24,9 +26,9 @@ const ProposalDetail = ({
   canVote,
   client,
 }) => {
-  const [s3Data, setS3Data] = useState();
+  const [detailData, setDetailData] = useState();
   const [currentUser] = useContext(CurrentUserContext);
-  const [daoService] = useContext(DaoContext);
+  const [daoService] = useContext(DaoServiceContext);
   const { periodDuration } = client.cache.readQuery({
     query: GET_METADATA,
   });
@@ -35,14 +37,19 @@ const ProposalDetail = ({
     const fetchData = async () => {
       try {
         const metaData = await get(
-          `moloch/proposal/${daoService.contractAddr.toLowerCase()}-${
+          `moloch/proposal/${daoService.daoAddress.toLowerCase()}-${
             proposal.proposalIndex
           }`,
         );
 
-        setS3Data(metaData.data);
+        setDetailData(metaData.data);
       } catch (err) {
         console.log(err);
+
+        setDetailData({
+          description: descriptionMaker(proposal),
+          link: linkMaker(proposal),
+        });
       }
     };
     fetchData();
@@ -92,19 +99,33 @@ const ProposalDetail = ({
         </button>
       )}
       <div>
-        {s3Data && s3Data.description ? (
+        {detailData && detailData.description ? (
           <div>
             <h5>Description</h5>
-            <p>{s3Data.description}</p>
+            {detailData.description.indexOf('http') > -1 ? (
+              <a
+                href={detailData.description}
+                rel="noopener noreferrer"
+                target="_blank"
+              >
+                {detailData.description}
+              </a>
+            ) : (
+              <p>{detailData.description}</p>
+            )}
           </div>
         ) : null}
-        {s3Data && s3Data.link && ReactPlayer.canPlay(s3Data.link) ? (
+        {detailData &&
+        detailData.link &&
+        ReactPlayer.canPlay(detailData.link) ? (
           <div className="Video">
-            <ReactPlayer url={s3Data.link} playing={false} loop={false} />
+            <ReactPlayer url={detailData.link} playing={false} loop={false} />
           </div>
-        ) : s3Data && s3Data.link && s3Data.link.indexOf('http') > -1 ? (
+        ) : detailData &&
+          detailData.link &&
+          detailData.link.indexOf('http') > -1 ? (
           <div className="Link">
-            <a href={s3Data.link} rel="noopener noreferrer" target="_blank">
+            <a href={detailData.link} rel="noopener noreferrer" target="_blank">
               Link
             </a>
           </div>

@@ -7,13 +7,14 @@ const useModal = () => {
   const [isShowing, setIsShowing] = useState({
     depositForm: false,
     depositFormInitial: false,
-    rageForm: false,
+    ragequit: false,
     deviceNotConnectedModal: false,
     addDeviceModa: false,
     newDeviceDetectedModal: false,
     getQrCode: false,
     changePassword: false,
     daohaus: false,
+    changeDelegateKey: false,
   });
 
   function toggle(modalName) {

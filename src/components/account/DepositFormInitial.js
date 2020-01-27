@@ -2,7 +2,7 @@ import React, { useContext, useState } from 'react';
 import CopyToClipboard from 'react-copy-to-clipboard';
 
 import { CurrentUserContext } from '../../contexts/Store';
-import useInterval from '../../utils/PollingUtil';
+import { useInterval } from '../../utils/PollingUtil';
 
 const DepositFormInitial = () => {
   const [currentUser] = useContext(CurrentUserContext);
@@ -25,11 +25,20 @@ const DepositFormInitial = () => {
           <p>Copied!</p>
         </div>
       )}
-      <h3><span role="img" aria-label="lightning bolt">⚡</span> Account almost ready <span role="img" aria-label="lightning bolt">⚡</span></h3>
+      <h3>
+        <span role="img" aria-label="lightning bolt">
+          ⚡
+        </span>{' '}
+        Account almost ready{' '}
+        <span role="img" aria-label="lightning bolt">
+          ⚡
+        </span>
+      </h3>
       <h2>Step 1 of 2: Deposit</h2>
       <p>
-        Send 0.05 ETH to your new account address. This will be enough to deploy your account and leave some for ongoing participation.
-      </p>        
+        Send 0.05 ETH to your new account address. This will be enough to deploy
+        your account and leave some for ongoing participation.
+      </p>
       <p className="Data AccountAddr">
         <span className="Label">Account Address</span>
         {currentUser.attributes['custom:account_address']}

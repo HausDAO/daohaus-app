@@ -43,11 +43,13 @@ const baseProposalFields = `
 `;
 
 export const GET_PROPOSALS = gql`
-  query proposals($contractAddr: String!) {
+  query proposals($contractAddr: String!, $skip: Int) {
     proposals(
       where: { molochAddress: $contractAddr }
       orderBy: proposalIndex
       orderDirection: desc
+      first: 100
+      skip: $skip
     ) {
       ${baseProposalFields}
     }
@@ -55,8 +57,13 @@ export const GET_PROPOSALS = gql`
 `;
 
 export const GET_PROPOSALS_LEGACY = gql`
-  query {
-    proposals(orderBy: proposalIndex, orderDirection: desc) {
+  query proposals($skip: Int) {
+    proposals(
+      orderBy: proposalIndex
+      orderDirection: desc
+      first: 100
+      skip: $skip
+    ) {
       ${baseProposalFields}
     }
   }
@@ -71,8 +78,13 @@ export const GET_PROPOSAL = gql`
 `;
 
 export const GET_MEMBERS = gql`
-  query members($contractAddr: String!) {
-    members(orderBy: shares, where: { molochAddress: $contractAddr }) {
+  query members($contractAddr: String!, $skip: Int) {
+    members(
+      where: { molochAddress: $contractAddr }
+      orderBy: shares
+      first: 100
+      skip: $skip
+    ) {
       id
       delegateKey
       shares
@@ -84,8 +96,33 @@ export const GET_MEMBERS = gql`
 `;
 
 export const GET_MEMBERS_LEGACY = gql`
-  query {
-    members(orderBy: shares) {
+  query members($skip: Int) {
+    members(orderBy: shares, first: 100, skip: $skip) {
+      id
+      delegateKey
+      shares
+      isActive
+      tokenTribute
+      didRagequit
+    }
+  }
+`;
+
+export const GET_MEMBER_OR_DELEGATE = gql`
+  query members(
+    $address: String!
+    $combinedContractPlusMemberAddress: String!
+  ) {
+    isDelegate: members(where: { delegateKey: $address }) {
+      id
+      delegateKey
+      shares
+      isActive
+      tokenTribute
+      didRagequit
+    }
+
+    isMember: members(where: { id: $combinedContractPlusMemberAddress }) {
       id
       delegateKey
       shares

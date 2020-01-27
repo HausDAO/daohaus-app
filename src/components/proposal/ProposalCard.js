@@ -12,7 +12,7 @@ import StackedVote from './StackedVote';
 import ValueDisplay from '../shared/ValueDisplay';
 
 import './ProposalCard.scss';
-import { DaoContext } from '../../contexts/Store';
+import { DaoServiceContext } from '../../contexts/Store';
 
 const web3Service = new Web3Service();
 
@@ -21,9 +21,9 @@ const ProposalCard = ({ proposal, client }) => {
     query: GET_METADATA,
   });
 
+  const [daoService] = useContext(DaoServiceContext);
   const countDown = getProposalCountdownText(proposal, periodDuration);
   const title = titleMaker(proposal);
-  const [daoService] = useContext(DaoContext);
 
   return (
     <div className="ProposalCard">
@@ -58,7 +58,7 @@ const ProposalCard = ({ proposal, client }) => {
       <Link
         className="Button"
         to={{
-          pathname: `/dao/${daoService.contractAddr}/proposal/${proposal.proposalIndex}`,
+          pathname: `/dao/${daoService.daoAddress}/proposal/${proposal.proposalIndex}`,
         }}
       >
         View Proposal

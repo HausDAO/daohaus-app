@@ -1,33 +1,24 @@
-import React, { Component } from 'react';
+import React, { useContext } from 'react';
+
+import { CurrentUserContext } from '../../contexts/Store';
 import ProposalForm from '../../components/proposal/ProposalForm';
-import { Auth } from 'aws-amplify';
 
-class ProposalNew extends Component {
-  state = {
-    user: null,
-  };
+const ProposalNew = () => {
+  const [currentUser] = useContext(CurrentUserContext);
 
-  async componentDidMount() {
-    const user = await Auth.currentAuthenticatedUser();
-
-    this.setState({ user });
-  }
-
-  render() {
-    const user = this.state.user;
-    return (
-      <div>
-        {user ? (
-          <div>
-            <h1 className="Pad">New Proposal</h1>
-            <ProposalForm />
-          </div>
-        ) : (
-          <p>Not logged in</p>
-        )}
-      </div>
-    );
-  }
-}
+  const user = currentUser;
+  return (
+    <div>
+      {user ? (
+        <div>
+          <h1 className="Pad">New Proposal</h1>
+          <ProposalForm />
+        </div>
+      ) : (
+        <p>Not logged in</p>
+      )}
+    </div>
+  );
+};
 
 export default ProposalNew;

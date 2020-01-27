@@ -4,19 +4,21 @@ import { Link } from 'react-router-dom';
 import {
   CurrentUserContext,
   CurrentWalletContext,
+<<<<<<< HEAD
   DaoContext,
+=======
+  DaoServiceContext,
+>>>>>>> 1979b4f31d5afc396efb66e9b9745d98ecb477e2
 } from '../../contexts/Store';
 import { WalletStatuses } from '../../utils/WalletStatus';
-import BcProcessorService from '../../utils/BcProcessorService';
 import IconProcessing from './IconProcessing';
 
 import './BcToast.scss';
 import config from '../../config';
+import { USER_TYPE } from '../../utils/DaoService';
 
 const BcToast = () => {
-  const bcprocessor = new BcProcessorService();
-
-  const [daoService] = useContext(DaoContext);
+  const [daoService] = useContext(DaoServiceContext);
 
   const [currentUser] = useContext(CurrentUserContext);
   const [currentWallet] = useContext(CurrentWalletContext);
@@ -25,13 +27,13 @@ const BcToast = () => {
   const toggleElement = () => setElementOpen(!isElementOpen);
 
   const pendingLength = () => {
-    return bcprocessor.getTxPendingList(
+    return daoService.bcProcessor.getTxPendingList(
       currentUser.attributes['custom:account_address'],
     ).length;
   };
 
   const renderList = () => {
-    return bcprocessor
+    return daoService.bcProcessor
       .getTxList(currentUser.attributes['custom:account_address'])
       .slice(-3)
       .reverse()
@@ -87,8 +89,15 @@ const BcToast = () => {
   return (
     currentUser && (
       <>
+        <div
+          className={isElementOpen ? 'Backdrop__Open' : 'Backdrop'}
+          onClick={toggleElement}
+        />
         <div className="Processor">
-          {currentWallet.state === WalletStatuses.Deployed ? (
+          {(currentUser.type === USER_TYPE.SDK &&
+            currentWallet.state === WalletStatuses.Deployed) ||
+          (currentUser.type === USER_TYPE.WEB3 &&
+            currentWallet.state === WalletStatuses.Connected) ? (
             <button className="Processor__Button" onClick={toggleElement}>
               {pendingLength() ? (
                 <IconProcessing />
@@ -99,22 +108,13 @@ const BcToast = () => {
               )}
             </button>
           ) : (
-            <Link
-              className="Processor__Button"
-              to={`/dao/${daoService.contractAddr}/account`}
-            >
+            <Link className="Processor__Button" to="/account">
               <div className="BcStatic">
                 <div className="BcStatic__Inner WarningIcon" />
               </div>
             </Link>
           )}
         </div>
-        {/* Commented out. Don't think we need this Backdrop
-        <div
-          className={isElementOpen ? 'Backdrop__Open' : 'Backdrop'}
-          onClick={toggleElement}
-        />
-        */}
         <div
           className={
             isElementOpen ? 'ProcessorDropdown__Open' : 'ProcessorDropdown'
@@ -123,10 +123,7 @@ const BcToast = () => {
           <div className="Toast">
             {renderList()}
             <div className="Dropdown__Footer">
-              <Link
-                to={`/dao/${daoService.contractAddr}/account`}
-                onClick={toggleElement}
-              >
+              <Link to="/account" onClick={toggleElement}>
                 View all transactions
               </Link>
             </div>

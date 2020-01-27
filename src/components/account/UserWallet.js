@@ -1,6 +1,10 @@
 import React, { useContext, useEffect, useState } from 'react';
 
-import { CurrentUserContext, LoaderContext, DaoContext } from '../../contexts/Store';
+import {
+  CurrentUserContext,
+  LoaderContext,
+  DaoServiceContext,
+} from '../../contexts/Store';
 import useModal from '../shared/useModal';
 import Modal from '../shared/Modal';
 import Loading from '../shared/Loading';
@@ -11,15 +15,21 @@ import WithdrawForm from './WithdrawForm';
 import ApproveAllowance from './ApproveAllowance';
 import DepositForm from './DepositForm';
 import StateModals from '../shared/StateModals';
+import { USER_TYPE } from '../../utils/DaoService';
+import RagequitForm from './RagequitForm';
+import ChangeDelegateKeyForm from './ChangeDelegateKeyForm';
+
+import config from '../../config';
 
 import './UserWallet.scss';
 
 const UserWallet = () => {
   const [currentUser] = useContext(CurrentUserContext);
+  const [daoService] = useContext(DaoServiceContext);
   const [loading] = useContext(LoaderContext);
-  const [daoService] = useContext(DaoContext)
   const [livesDangerously, setLivesDangerously] = useState(false);
   const { isShowing, toggle } = useModal();
+  const loginType = localStorage.getItem('loginType') || USER_TYPE.READ_ONLY;
 
   useEffect(() => {
     setLivesDangerously(JSON.parse(localStorage.getItem('walletWarning')));
@@ -37,11 +47,11 @@ const UserWallet = () => {
   return (
     <>
       {loading && <Loading />}
-      {currentUser && currentUser.sdk && (
+      {currentUser && (
         <div className="UserWallet">
           <StateModals />
 
-          {!livesDangerously ? (
+          {!livesDangerously && loginType !== USER_TYPE.WEB3 ? (
             <button className="RiskyBiz" onClick={() => acceptWarning()}>
               <span role="alert" aria-label="skull and crossbones">
                 ☠
@@ -91,20 +101,28 @@ const UserWallet = () => {
             <WithdrawForm />
           </Modal>
 
+          <Modal isShowing={isShowing.ragequit} hide={() => toggle('ragequit')}>
+            <RagequitForm />
+          </Modal>
+
+          <Modal
+            isShowing={isShowing.changeDelegateKey}
+            hide={() => toggle('changeDelegateKey')}
+          >
+            <ChangeDelegateKeyForm />
+          </Modal>
+
           <Modal isShowing={isShowing.daohaus} hide={() => toggle('daohaus')}>
             <h3>Manage Shares</h3>
             <p>
-              If you made your initial pledge on DAOHaus you can go there to:
+              If you made your initial pledge on DAOHaus you you can ragequit
+              shares and update your delegate key there.
             </p>
-            <ol>
-              <li><strong>Update Delegate</strong> to get access to your Shares here</li>
-              <li><strong>Ragequit</strong> to burn Shares for Tribute</li>
-            </ol>
             <a
               className="Button"
               rel="noopener noreferrer"
               target="_blank"
-              href={`${process.env.REACT_APP_DEV_DAOHAUS}/${daoService.contractAddr}`}
+              href={`${config.DAOHAUS_URL}/${daoService.daoAddress}`}
             >
               Continue to DAOHaus
             </a>

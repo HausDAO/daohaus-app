@@ -83,8 +83,8 @@ export const inGracePeriod = (
   votingPeriodLength,
   gracePeriodLength,
 ) =>
-  currentPeriod > proposal.startingPeriod + votingPeriodLength &&
-  currentPeriod <
+  currentPeriod >= proposal.startingPeriod + votingPeriodLength &&
+  currentPeriod <=
     proposal.startingPeriod + votingPeriodLength + gracePeriodLength;
 
 export const inVotingPeriod = (proposal, currentPeriod, votingPeriodLength) =>
@@ -153,7 +153,7 @@ export const groupByStatus = (proposals) => {
       (p) => p.status === 'ReadyForProcessing',
     ),
     InQueue: proposals.filter((p) => p.status === 'InQueue'),
-    Completed: proposals.filter((p) => {      
+    Completed: proposals.filter((p) => {
       return (
         // 'Aborted', 'Passed', 'Failed', 'Unknown'
         p.status !== 'VotingPeriod' &&
@@ -166,10 +166,43 @@ export const groupByStatus = (proposals) => {
 };
 
 export const titleMaker = (proposal) => {
-  let details = proposal.details.split('~');
+  const details = proposal.details.split('~');
+
   if (details[0] === 'id') {
     return details[3];
+  } else if (details[0][0] === '{') {
+    let parsedDetails;
+
+    try {
+      parsedDetails = JSON.parse(proposal.details);
+      return parsedDetails.title;
+    } catch {
+      console.log(`Couldn't parse JSON from metadata`);
+      return `Proposal ${proposal.proposalIndex}`;
+    }
   } else {
-    return `Genesis Proposal ${proposal.proposalIndex}`;
+    return proposal.details
+      ? proposal.details
+      : `Proposal ${proposal.proposalIndex}`;
   }
+};
+
+export const descriptionMaker = (proposal) => {
+  try {
+    const parsed = JSON.parse(proposal.details);
+    return parsed.description;
+  } catch (e) {
+    console.log(`Couldn't parse JSON from metadata`);
+  }
+  return ``;
+};
+
+export const linkMaker = (proposal) => {
+  try {
+    const parsed = JSON.parse(proposal.details);
+    return typeof parsed.link === 'function' ? null : parsed.link;
+  } catch (e) {
+    console.log(`Couldn't parse JSON from metadata`);
+  }
+  return null;
 };

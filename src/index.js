@@ -19,7 +19,7 @@ Amplify.configure({
     userPoolId: config.cognito.USER_POOL_ID,
     identityPoolId: config.cognito.IDENTITY_POOL_ID,
     userPoolWebClientId: config.cognito.APP_CLIENT_ID,
-  }
+  },
 });
 
 const client = new ApolloClient({
@@ -29,13 +29,21 @@ const client = new ApolloClient({
   },
 });
 
-const Index = () => (
-  <ApolloProvider client={client}>
-    <Store apolloClient={client}>
-      <App client={client} />
-    </Store>
-  </ApolloProvider>
-);
+const Index = () => {
+  var pathname = window.location.pathname.split('/');
+  const daoParam = pathname[2];
+  const regex = RegExp('0x[0-9a-f]{10,40}');
+  const validParam =
+    pathname[1] === 'dao' && regex.test(daoParam) ? daoParam : false;
+
+  return (
+    <ApolloProvider client={client}>
+      <Store apolloClient={client} daoParam={validParam}>
+        <App client={client} />
+      </Store>
+    </ApolloProvider>
+  );
+};
 ReactDOM.render(<Index />, document.getElementById('root'));
 
 serviceWorker.unregister();
