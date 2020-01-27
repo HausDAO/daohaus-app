@@ -9,9 +9,9 @@ import ErrorMessage from '../../components/shared/ErrorMessage';
 import Loading from '../../components/shared/Loading';
 import ValueDisplay from '../../components/shared/ValueDisplay';
 import HeadTags from '../../components/shared/HeadTags';
+import HomeChart from '../../components/shared/HomeChart';
 
 import './Home.scss';
-import HomeChart from '../../components/shared/HomeChart';
 
 const Home = () => {
   const [chartView, setChartView] = useState('bank');

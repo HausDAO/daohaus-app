@@ -5,6 +5,8 @@ import { withApollo } from 'react-apollo';
 import {
   getProposalCountdownText,
   titleMaker,
+  descriptionMaker,
+  linkMaker,
 } from '../../utils/ProposalHelper';
 import { CurrentUserContext, DaoServiceContext } from '../../contexts/Store';
 import { GET_METADATA } from '../../utils/Queries';
@@ -39,11 +41,15 @@ const ProposalDetail = ({
             proposal.proposalIndex
           }`,
         );
-        console.log('metaData', metaData);
 
         setDetailData(metaData.data);
       } catch (err) {
         console.log(err);
+
+        setDetailData({
+          description: descriptionMaker(proposal),
+          link: linkMaker(proposal),
+        });
       }
     };
     fetchData();
@@ -96,7 +102,17 @@ const ProposalDetail = ({
         {detailData && detailData.description ? (
           <div>
             <h5>Description</h5>
-            <p>{detailData.description}</p>
+            {detailData.description.indexOf('http') > -1 ? (
+              <a
+                href={detailData.description}
+                rel="noopener noreferrer"
+                target="_blank"
+              >
+                {detailData.description}
+              </a>
+            ) : (
+              <p>{detailData.description}</p>
+            )}
           </div>
         ) : null}
         {detailData &&

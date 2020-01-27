@@ -21,9 +21,9 @@ const ProposalCard = ({ proposal, client }) => {
     query: GET_METADATA,
   });
 
+  const [daoService] = useContext(DaoServiceContext);
   const countDown = getProposalCountdownText(proposal, periodDuration);
   const title = titleMaker(proposal);
-  const [daoService] = useContext(DaoServiceContext);
 
   return (
     <div className="ProposalCard">

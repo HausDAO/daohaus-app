@@ -36,6 +36,7 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "prod-build": "REACT_APP_STAGE=prod npm run build",
+    "prod-start": "REACT_APP_STAGE=prod react-scripts start",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
   },
