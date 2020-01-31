@@ -116,7 +116,11 @@ const SignIn = ({ history }) => {
                   sdk.connectAccount(user.attributes['custom:account_address']);
                   localStorage.setItem('loginType', USER_TYPE.SDK);
                   setSubmitting(false);
-                  history.push('/dao/'+daoService.daoAddress.toLowerCase()+'/proposals');
+                  history.push(
+                    '/dao/' +
+                      daoService.daoAddress.toLowerCase() +
+                      '/proposals',
+                  );
                   window.location.reload();
                 } catch (err) {
                   console.error(err); // {"error":"account device not found"}
@@ -177,7 +181,7 @@ const SignIn = ({ history }) => {
 
             return (
               <Form>
-                <Link to="/sign-up">Create a new account &gt;</Link>
+                <Link to="sign-up">Create a new account &gt;</Link>
                 {authError && (
                   <div className="Form__auth-error">
                     <p className="Danger">{authError.message}</p>
