@@ -335,7 +335,7 @@ export class Web3McDaoService extends McDaoService {
 }
 
 
-export class Web3McDaoServiceV2 extends McDaoService {
+export class Web3McDaoServiceV2 extends Web3McDaoService {
   bcProcessor;
 
   constructor(web3, daoAddress, accountAddr, bcProcessor) {
