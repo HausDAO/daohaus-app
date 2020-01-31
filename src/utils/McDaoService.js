@@ -140,7 +140,7 @@ export class SdkMcDaoService extends McDaoService {
       hash,
       this.accountAddr,
       `Submit ${
-        uintVote === 1 ? 'yes' : 'no'
+      uintVote === 1 ? 'yes' : 'no'
       } vote on proposal ${proposalIndex}`,
       true,
     );
@@ -254,7 +254,7 @@ export class Web3McDaoService extends McDaoService {
       txReceipt.transactionHash,
       this.accountAddr,
       `Submit ${
-        uintVote === 1 ? 'yes' : 'no'
+      uintVote === 1 ? 'yes' : 'no'
       } vote on proposal ${proposalIndex}`,
       true,
     );
@@ -304,7 +304,7 @@ export class Web3McDaoService extends McDaoService {
     const txReceipt = await this.daoContract.methods
       .submitProposal(applicant, tokenTribute, sharesRequested, details)
       .send({ from: this.accountAddr });
-    
+
     const queueLength = await this.daoContract.methods
       .getProposalQueueLength()
       .call();
@@ -332,4 +332,212 @@ export class Web3McDaoService extends McDaoService {
   async deployAccount() {
     throw new Error(`This account type cannot call deployAccount`);
   }
+}
+
+
+export class Web3McDaoServiceV2 extends McDaoService {
+  bcProcessor;
+
+  constructor(web3, daoAddress, accountAddr, bcProcessor) {
+    super(web3, daoAddress, accountAddr, bcProcessor);
+    // this.bcProcessor = bcProcessor;
+  }
+
+  async rageQuit(amountShares = 0, amountLoot = 0) {
+    const txReceipt = await this.daoContract.methods
+      .ragequit(amountShares, amountLoot)
+      .send({ from: this.accountAddr });
+    this.bcProcessor.setTx(
+      txReceipt.transactionHash,
+      this.accountAddr,
+      `Rage quit burn shares: ${amountShares} loot: ${amountLoot}`,
+      true,
+    );
+    return txReceipt.transactionHash;
+  }
+
+  async cancelProposal(id) {
+    const txReceipt = await this.daoContract.methods
+      .cancelProposal(id)
+      .send({ from: this.accountAddr });
+    this.bcProcessor.setTx(
+      txReceipt.transactionHash,
+      this.accountAddr,
+      `Cancel proposal. id: ${id}`,
+      true,
+    );
+    return txReceipt.transactionHash;
+  }
+
+  async processGuildKickProposal(id) {
+    const txReceipt = await this.daoContract.methods
+      .processGuildKickProposal(id)
+      .send({ from: this.accountAddr });
+    this.bcProcessor.setTx(
+      txReceipt.transactionHash,
+      this.accountAddr,
+      `Process Guild Kick Proposal. id: ${id}`,
+      true,
+    );
+    return txReceipt.transactionHash;
+  }
+
+  async processWhitelistProposal(id) {
+    const txReceipt = await this.daoContract.methods
+      .processWhitelistProposal(id)
+      .send({ from: this.accountAddr });
+    this.bcProcessor.setTx(
+      txReceipt.transactionHash,
+      this.accountAddr,
+      `Process Whitelist Proposal. id: ${id}`,
+      true,
+    );
+    return txReceipt.transactionHash;
+  }
+
+  async ragekick(address) {
+    const txReceipt = await this.daoContract.methods
+      .ragekick(address)
+      .send({ from: this.accountAddr });
+    this.bcProcessor.setTx(
+      txReceipt.transactionHash,
+      this.accountAddr,
+      `Rage Kick. address: ${address}`,
+      true,
+    );
+    return txReceipt.transactionHash;
+  }
+
+  async sponsorProposal(id) {
+    const txReceipt = await this.daoContract.methods
+      .sponsorProposal(id)
+      .send({ from: this.accountAddr });
+    this.bcProcessor.setTx(
+      txReceipt.transactionHash,
+      this.accountAddr,
+      `Sponsor Proposal. id: ${id}`,
+      true,
+    );
+    return txReceipt.transactionHash;
+  }
+
+  async submitProposal(
+    applicant,
+    sharesRequested,
+    lootRequested,
+    tributeOffered,
+    tributeToken,
+    paymentRequested,
+    PaymentToken,
+    details) {
+    const txReceipt = await this.daoContract.methods
+      .submitGuildKickProposal(
+        applicant,
+        sharesRequested,
+        lootRequested,
+        tributeOffered,
+        tributeToken,
+        paymentRequested,
+        PaymentToken,
+        details)
+      .send({ from: this.accountAddr });
+
+    const queueLength = await this.daoContract.methods
+      .getProposalQueueLength()
+      .call();
+    const parseDetails = JSON.parse(details);
+
+    // TODO: we want to do anything different on this metadat?
+    // const proposalObj = {
+    //   proposalId: queueLength - 1 + '',
+    //   molochContractAddress: this.contractAddr,
+    //   title: parseDetails.title,
+    //   description: parseDetails.description,
+    //   link: parseDetails.link,
+    // };
+
+    // post('moloch/proposal', proposalObj);
+
+    this.bcProcessor.setTx(
+      txReceipt.transactionHash,
+      this.accountAddr,
+      `Submit proposal (${parseDetails.title})`,
+      true,
+    );
+    return txReceipt.transactionHash;
+  }
+
+  async submitGuildKickProposal(memberToKick, details) {
+    const txReceipt = await this.daoContract.methods
+      .submitGuildKickProposal(memberToKick, details)
+      .send({ from: this.accountAddr });
+
+    const queueLength = await this.daoContract.methods
+      .getProposalQueueLength()
+      .call();
+    const parseDetails = JSON.parse(details);
+
+    // TODO: we want to do anything different on this metadat?
+    // const proposalObj = {
+    //   proposalId: queueLength - 1 + '',
+    //   molochContractAddress: this.contractAddr,
+    //   title: parseDetails.title,
+    //   description: parseDetails.description,
+    //   link: parseDetails.link,
+    // };
+
+    // post('moloch/proposal', proposalObj);
+
+    this.bcProcessor.setTx(
+      txReceipt.transactionHash,
+      this.accountAddr,
+      `Submit guild kick proposal (${parseDetails.title})`,
+      true,
+    );
+    return txReceipt.transactionHash;
+  }
+
+  async submitWhiteListProposal(address, details) {
+    const txReceipt = await this.daoContract.methods
+      .submitWhiteListProposal(address, details)
+      .send({ from: this.accountAddr });
+
+    // TODO: we want to do anything different on this metadat?
+
+
+    this.bcProcessor.setTx(
+      txReceipt.transactionHash,
+      this.accountAddr,
+      `Submit whitelist proposal (${parseDetails.title})`,
+      true,
+    );
+    return txReceipt.transactionHash;
+  }
+
+  async withdrawBalance(token, amount) {
+    const txReceipt = await this.daoContract.methods
+      .withdrawBalance(token, amount)
+      .send({ from: this.accountAddr });
+    this.bcProcessor.setTx(
+      txReceipt.transactionHash,
+      this.accountAddr,
+      `Withdraw Token. address: ${id}, amount ${amount}`,
+      true,
+    );
+    return txReceipt.transactionHash;
+  }
+
+  async withdrawBalances(tokens, amounts, max) {
+    const txReceipt = await this.daoContract.methods
+      .withdrawBalances(tokens, amounts, max)
+      .send({ from: this.accountAddr });
+    this.bcProcessor.setTx(
+      txReceipt.transactionHash,
+      this.accountAddr,
+      `Withdraw Token. address: ${id}, amount ${amount}`,
+      true,
+    );
+    return txReceipt.transactionHash;
+  }
+
 }
