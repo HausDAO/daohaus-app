@@ -109,6 +109,64 @@ export class McDaoService {
     const info = await this.daoContract.methods.proposalQueue(id).call();
     return info;
   }
+
+  // V2 call functions TODO: maybe not needed, can we get these from thegraph?
+
+  async getApprovedTokens() {
+    const tokenAddresses = await this.daoContract.methods.approvedTokens().call();
+    return tokenAddresses;
+  }
+
+  async getDepositToken() {
+    const token = await this.daoContract.methods.depositToken().call();
+    return token;
+  }
+
+  async getMemberProposalVote(address, index) {
+    const proposalVote = await this.daoContract.methods.getMemberProposalVote(address, index).call();
+    return proposalVote;
+  }
+
+  async getProposalFlags(id) {
+    const flags = await this.daoContract.methods.getProposalFlags(id).call();
+    return flags;
+  }
+
+  async getUserTokenBalance(userAddress, tokenAddress) {
+    const balance = await this.daoContract.methods.getUserTokenBalance(userAddress, tokenAddress).call();
+    return balance;
+  }
+
+  async hasVotingPeriodExpired(period) {
+    const expired = await this.daoContract.methods.hasVotingPeriodExpired(period).call();
+    return expired;
+  }
+
+  async proposedToKick(address) {
+    const kick = await this.daoContract.methods.proposedToKick(address).call();
+    return kick;
+  }
+
+  async proposedToWhitelist(address) {
+    const whitelist = await this.daoContract.methods.proposedToWhitelist(address).call();
+    return whitelist;
+  }
+
+  async getTokenWhitelist(address) {
+    const whitelist = await this.daoContract.methods.tokenWhitelist(address).call();
+    return whitelist;
+  }
+
+  async getTotalLoot() {
+    const loot = await this.daoContract.methods.totalLoot().call();
+    return loot;
+  }
+
+  async getUserTokenBalances(userAddress) {
+    // TODO: does this only work on the guild address?
+
+  }
+
 }
 
 export class ReadonlyMcDaoService extends McDaoService {
