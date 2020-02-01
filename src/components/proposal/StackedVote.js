@@ -1,10 +1,93 @@
 import React, { useState, useEffect, useContext } from 'react';
+import styled from 'styled-components';
 
 import { DaoServiceContext } from '../../contexts/Store';
+import { primary, tertiary, appDark } from '../../variables.styles';
 
 import './StackedVote.scss';
 
-const StackedVote = ({ id, currentYesVote, currentNoVote }) => {
+const FullBarDiv = styled.div`
+  width: ${(props) =>
+    props.page === 'ProposalCard' ? 'calc(100%)!important' : '100%'};
+  height: 5px;
+  position: relative;
+  margin-top: ${(props) => (props.page === 'ProposalCard' ? '50px' : 'auto')};
+`;
+
+const LabelsDiv = styled.div`
+  position: relative;
+  min-height: 5px;
+  width: 100%;
+`;
+
+const YesLabelSpan = styled.span`
+  width: ${(props) =>
+    props.page === 'ProposalCard' ? 'auto !important' : '65px'};
+  padding: 0px;
+  position: absolute;
+  top: ${(props) =>
+    props.page === 'ProposalCard' ? '-25px !important' : '-50px'};
+  left: ${(props) =>
+    props.page === 'ProposalCard' ? '0px !important' : '-62px'};
+  text-align: ${(props) =>
+    props.page === 'ProposalCard' ? 'right' : 'center'};
+  background-color: transparent;
+  font-weight: 900;
+  width: 65px;
+  color: ${primary};
+`;
+
+const NoLabelSpan = styled.span`
+  width: ${(props) =>
+    props.page === 'ProposalCard' ? 'auto !important' : '65px'};
+  padding: 0px;
+  position: absolute;
+  top: ${(props) =>
+    props.page === 'ProposalCard' ? '-25px !important' : '-50px'};
+  right: ${(props) =>
+    props.page === 'ProposalCard' ? '0px !important' : '-62px'};
+  text-align: ${(props) =>
+    props.page === 'ProposalCard' ? 'right' : 'center'};
+  background-color: transparent;
+  font-weight: 900;
+  width: 65px;
+  color: ${tertiary};
+`;
+
+const BaseBarDiv = styled.div`
+  width: 100%;
+  height: 5px;
+  position: absolute;
+  background-color: ${appDark};
+`;
+
+const YesBarDiv = styled.div`
+  height: 5px;
+  position: absolute;
+  background-color: ${primary};
+  left: 0px;
+  width: ${(props) => props.percentageShares + '%'};
+`;
+
+const NoBarDiv = styled.div`
+  height: 5px;
+  right: 0px;
+  position: absolute;
+  background-color: ${tertiary};
+  width: ${(props) => props.percentageShares + '%'};
+`;
+
+const QuorumBarDiv = styled.div`
+  width: 2px;
+  height: 5px;
+  position: absolute;
+  top: 0px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 1;
+`;
+
+const StackedVote = ({ id, currentYesVote, currentNoVote, page }) => {
   const [noVoteShares, setNoVoteShares] = useState(0);
   const [yesVoteShares, setYesVoteShares] = useState(0);
   const [percentageSharesYes, setPercentageSharesYes] = useState(0);
@@ -35,24 +118,17 @@ const StackedVote = ({ id, currentYesVote, currentNoVote }) => {
     currentProposal();
   }, [daoService, id, currentYesVote, currentNoVote]);
 
-  const noBar = {
-    width: percentageSharesNo + '%',
-  };
-  const yesBar = {
-    width: percentageSharesYes + '%',
-  };
-
   return (
-    <div className="FullBar">
-      <div className="Labels">
-        <span className="YesLabel">{yesVoteShares}</span>
-        <span className="NoLabel">{noVoteShares}</span>
-      </div>
-      <div className="BaseBar" />
-      <div className="NoBar" style={noBar} />
-      <div className="YesBar" style={yesBar} />
-      <div className="QuorumBar" />
-    </div>
+    <FullBarDiv>
+      <LabelsDiv>
+        <YesLabelSpan page={page}>{yesVoteShares}</YesLabelSpan>
+        <NoLabelSpan page={page}>{noVoteShares}</NoLabelSpan>
+      </LabelsDiv>
+      <BaseBarDiv />
+      <YesBarDiv percentageShares={percentageSharesNo} />
+      <NoBarDiv percentageShares={percentageSharesYes} />
+      <QuorumBarDiv />
+    </FullBarDiv>
   );
 };
 

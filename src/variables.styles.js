@@ -10,7 +10,7 @@ export const brand = 'japanese-ogre.png';
 // Color Palette
 export const appBackground = `#F8F8FC`;
 export const appLight = lighten(0.9, appBackground);
-export const appDark = darken(0.9, appBackground);
+export const appDark = darken(0.1, appBackground);
 export const primary = `rgba(203,46,206,1)`;
 export const secondary = `rgba(47,233,167,1)`;
 export const tertiary = `rgba(239,73,123,1)`;
@@ -21,3 +21,8 @@ export const danger = `rgba(239,73,95,1)`;
 export const dangerHover = darken(0.9, danger);
 export const success = `rgba(77,204,44,1)`;
 export const bright = `rgba(189,134,254,1)`;
+
+// Media Queries
+export const grid = '1200px';
+export const tablet = '768px';
+export const phone = '640px';
