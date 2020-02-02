@@ -50,6 +50,10 @@ const CardVoteDiv = styled.div`
   margin: 25px auto;
 `;
 
+const OfferDivProposalCard = styled(OfferDiv)`
+  padding-bottom: 25px;
+`;
+
 const ProposalCard = ({ proposal, client }) => {
   const { periodDuration } = client.cache.readQuery({
     query: GET_METADATA,
@@ -74,7 +78,7 @@ const ProposalCard = ({ proposal, client }) => {
         <DataP>{countDown}</DataP>
       </TimerDiv>
       <h3>{title}</h3>
-      <OfferDiv>
+      <OfferDivProposalCard>
         <div>
           <h5>Shares</h5>
           <DataH2>{proposal.sharesRequested}</DataH2>
@@ -85,7 +89,7 @@ const ProposalCard = ({ proposal, client }) => {
             <ValueDisplay value={Web3.utils.fromWei(proposal.tokenTribute)} />
           </DataH2>
         </div>
-      </OfferDiv>
+      </OfferDivProposalCard>
       <CardVoteDiv>
         <StackedVote id={proposal.proposalIndex} page="ProposalCard" />
       </CardVoteDiv>
