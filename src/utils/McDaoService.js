@@ -396,10 +396,10 @@ export class Web3McDaoService extends McDaoService {
 export class Web3McDaoServiceV2 extends Web3McDaoService {
   bcProcessor;
 
-  constructor(web3, daoAddress, accountAddr, bcProcessor) {
-    super(web3, daoAddress, accountAddr, bcProcessor);
-    // this.bcProcessor = bcProcessor;
-  }
+  // constructor(web3, daoAddress, accountAddr, bcProcessor) {
+  //   super(web3, daoAddress, accountAddr, bcProcessor);
+  //   this.bcProcessor = bcProcessor;
+  // }
 
   async rageQuit(amountShares = 0, amountLoot = 0) {
     const txReceipt = await this.daoContract.methods
@@ -500,9 +500,9 @@ export class Web3McDaoServiceV2 extends Web3McDaoService {
         details)
       .send({ from: this.accountAddr });
 
-    const queueLength = await this.daoContract.methods
-      .getProposalQueueLength()
-      .call();
+    // const queueLength = await this.daoContract.methods
+    //   .getProposalQueueLength()
+    //   .call();
     const parseDetails = JSON.parse(details);
 
     // TODO: we want to do anything different on this metadat?
@@ -530,9 +530,9 @@ export class Web3McDaoServiceV2 extends Web3McDaoService {
       .submitGuildKickProposal(memberToKick, details)
       .send({ from: this.accountAddr });
 
-    const queueLength = await this.daoContract.methods
-      .getProposalQueueLength()
-      .call();
+    // const queueLength = await this.daoContract.methods
+    //   .getProposalQueueLength()
+    //   .call();
     const parseDetails = JSON.parse(details);
 
     // TODO: we want to do anything different on this metadat?
@@ -560,8 +560,8 @@ export class Web3McDaoServiceV2 extends Web3McDaoService {
       .submitWhiteListProposal(address, details)
       .send({ from: this.accountAddr });
 
-    // TODO: we want to do anything different on this metadat?
-
+    // TODO: we want to do anything different on this metadata?
+    const parseDetails = JSON.parse(details);
 
     this.bcProcessor.setTx(
       txReceipt.transactionHash,
@@ -579,7 +579,7 @@ export class Web3McDaoServiceV2 extends Web3McDaoService {
     this.bcProcessor.setTx(
       txReceipt.transactionHash,
       this.accountAddr,
-      `Withdraw Token. address: ${id}, amount ${amount}`,
+      `Withdraw Token. address: ${token}, amount ${amount}`,
       true,
     );
     return txReceipt.transactionHash;
@@ -592,7 +592,7 @@ export class Web3McDaoServiceV2 extends Web3McDaoService {
     this.bcProcessor.setTx(
       txReceipt.transactionHash,
       this.accountAddr,
-      `Withdraw Token. address: ${id}, amount ${amount}`,
+      `Withdraw Token. tokens..., amounts...`,
       true,
     );
     return txReceipt.transactionHash;
