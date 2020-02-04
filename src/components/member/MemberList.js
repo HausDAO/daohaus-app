@@ -1,6 +1,17 @@
 import React from 'react';
+import styled from 'styled-components';
+
+import { phone } from '../../variables.styles';
 import MemberCard from './MemberCard';
-import './MemberList.scss';
+
+const MemberListDiv = styled.div`
+  @media (min-width: ${phone}) {
+    display: flex;
+    justify-content: space-evenly;
+    align-content: flex-start;
+    flex-wrap: wrap;
+  }
+`;
 
 const MemberList = (props) => {
   const renderList = () => {
@@ -9,7 +20,7 @@ const MemberList = (props) => {
     });
   };
 
-  return <div className="MemberList">{renderList()}</div>;
+  return <MemberListDiv>{renderList()}</MemberListDiv>;
 };
 
 export default MemberList;
