@@ -10,12 +10,13 @@ import ValueDisplay from '../shared/ValueDisplay';
 import { DaoServiceContext } from '../../contexts/Store';
 
 import { appDark, appLight, phone, primary } from '../../variables.styles';
+import { DataP, DataH2, ProposalAndMemberCardDiv } from '../../App.styles';
 import {
-  DataP,
-  DataH2,
-  ProposalAndMemberCardDiv,
-  OfferDiv,
-} from '../../App.styles';
+  MemberCardIdentityDiv,
+  MemberCardImage,
+  ProfileImgCard,
+  OfferDivMemberCard,
+} from './Member.styles';
 
 const MemberCardDiv = styled(ProposalAndMemberCardDiv)`
   background-color: ${appLight};
@@ -45,31 +46,8 @@ const MemberCardDiv = styled(ProposalAndMemberCardDiv)`
   }
 `;
 
-const MemberCardIdentityDiv = styled.div`
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-`;
-
-const MemberCardImage = styled.div`
-  margin-right: 10px;
-`;
-
-const ProfileImgCard = styled.div`
-  width: 50px;
-  height: 50px;
-  background-size: cover;
-  background-repeat: no-repeat;
-  border-radius: 50%;
-`;
-
 const MemberAddr = styled(DataP)`
   margin-bottom: 10px;
-`;
-
-const OfferDivMemberCard = styled(OfferDiv)`
-  margin-top: 25px;
-  margin-bottom: 25px;
 `;
 
 const web3Service = new Web3Service();

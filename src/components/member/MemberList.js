@@ -4,8 +4,6 @@ import styled from 'styled-components';
 import { phone } from '../../variables.styles';
 import MemberCard from './MemberCard';
 
-// import './MemberList.scss';
-
 const MemberListDiv = styled.div`
   @media (min-width: ${phone}) {
     display: flex;
