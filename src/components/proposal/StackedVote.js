@@ -4,8 +4,6 @@ import styled from 'styled-components';
 import { DaoServiceContext } from '../../contexts/Store';
 import { primary, tertiary, appDark } from '../../variables.styles';
 
-import './StackedVote.scss';
-
 const FullBarDiv = styled.div`
   width: ${(props) =>
     props.page === 'ProposalCard' ? 'calc(100%)!important' : '100%'};
