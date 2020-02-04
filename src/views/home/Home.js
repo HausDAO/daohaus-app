@@ -10,8 +10,14 @@ import Loading from '../../components/shared/Loading';
 import ValueDisplay from '../../components/shared/ValueDisplay';
 import HeadTags from '../../components/shared/HeadTags';
 import HomeChart from '../../components/shared/HomeChart';
+import styled from 'styled-components';
 
 import './Home.scss';
+
+const HomeDiv = styled.div`
+  width: 100%;
+  text-align: center;
+`;
 
 const Home = () => {
   const [chartView, setChartView] = useState('bank');
@@ -29,7 +35,7 @@ const Home = () => {
       {daoData ? <HeadTags daoData={daoData} /> : null}
       <StateModals />
 
-      <div className="Home">
+      <HomeDiv>
         <div className="Intro">
           <h1>{daoData.name || 'PokéMol DAO'}</h1>
           <p>{daoData.description || 'Put a Moloch in Your Pocket'}</p>
@@ -71,7 +77,7 @@ const Home = () => {
           </div>
         </div>
         <BottomNav />
-      </div>
+      </HomeDiv>
     </>
   );
 };
