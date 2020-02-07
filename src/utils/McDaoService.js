@@ -405,10 +405,10 @@ export class Web3McDaoService extends McDaoService {
 export class Web3McDaoServiceV2 extends Web3McDaoService {
   bcProcessor;
 
-  constructor(web3, daoAddress, accountAddr, bcProcessor) {
-    super(web3, daoAddress, accountAddr, bcProcessor);
-    // this.bcProcessor = bcProcessor;
-  }
+  // constructor(web3, daoAddress, accountAddr, bcProcessor) {
+  //   super(web3, daoAddress, accountAddr, bcProcessor);
+  //   this.bcProcessor = bcProcessor;
+  // }
 
   // async rageQuit(amountShares = 0, amountLoot = 0) {
   //   const txReceipt = await this.daoContract.methods
