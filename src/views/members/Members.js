@@ -8,6 +8,7 @@ import ErrorMessage from '../../components/shared/ErrorMessage';
 import BottomNav from '../../components/shared/BottomNav';
 import Loading from '../../components/shared/Loading';
 import StateModals from '../../components/shared/StateModals';
+import { ViewDiv, PadDiv } from '../../App.styles';
 
 const Members = () => {
   const [daoService] = useContext(DaoServiceContext);
@@ -41,14 +42,16 @@ const Members = () => {
   });
 
   return (
-    <div className="View">
+    <ViewDiv>
       <StateModals />
-      <div className="Members">
-        <h3 className="Pad">Members</h3>
-        <MemberList members={data.members} />
+      <div>
+        <PadDiv>
+          <h3>Members</h3>
+          <MemberList members={data.members} />
+        </PadDiv>
       </div>
       <BottomNav />
-    </div>
+    </ViewDiv>
   );
 };
 
