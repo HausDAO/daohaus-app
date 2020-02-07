@@ -93,3 +93,12 @@ export const BackdropDiv = styled.div`
   z-index: 2;
   pointer-events: none;
 `;
+
+export const ViewDiv = styled.div`
+  padding-bottom: 117px;
+`;
+
+export const PadDiv = styled.div`
+  padding-left: 15px;
+  padding-right: 15px;
+`;

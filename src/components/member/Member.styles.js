@@ -24,3 +24,10 @@ export const OfferDivMemberCard = styled(OfferDiv)`
   margin-top: 25px;
   margin-bottom: 25px;
 `;
+
+export const MemberDetailDiv = styled.div`
+   {
+    padding: 25px;
+    padding-bottom: 120px;
+  }
+`;
