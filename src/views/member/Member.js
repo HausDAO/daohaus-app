@@ -7,6 +7,8 @@ import MemberDetail from '../../components/member/MemberDetail';
 import ErrorMessage from '../../components/shared/ErrorMessage';
 import BottomNav from '../../components/shared/BottomNav';
 import Loading from '../../components/shared/Loading';
+import { ViewDiv } from '../../App.styles';
+import { MemberDetailDiv } from '../../components/member/Member.styles';
 
 const Member = (props) => {
   const id = props.match.params.id;
@@ -24,12 +26,12 @@ const Member = (props) => {
   if (error) return <ErrorMessage message={error} />;
 
   return (
-    <div className="View">
-      <div className="MemberDetail">
+    <ViewDiv>
+      <MemberDetailDiv>
         <MemberDetail member={data.member} />
-      </div>
+      </MemberDetailDiv>
       <BottomNav />
-    </div>
+    </ViewDiv>
   );
 };
 
