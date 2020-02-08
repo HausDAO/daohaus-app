@@ -24,7 +24,6 @@ export const Web3ConnectContext = createContext();
 
 // main store of global state
 const Store = ({ children, daoParam }) => {
-  let loginType = localStorage.getItem('loginType') || USER_TYPE.READ_ONLY;
   // store of aws auth information and sdk
   const [currentUser, setCurrentUser] = useState();
   // stores user wallet balances and shares
@@ -64,6 +63,7 @@ const Store = ({ children, daoParam }) => {
   useEffect(() => {
     // runs on app load, sets up user auth and sdk if necessary
     const initCurrentUser = async () => {
+      let loginType = localStorage.getItem('loginType') || USER_TYPE.READ_ONLY;
       // do nothing if user is set correctly
       if (currentUser && currentUser.type === loginType) {
         return;
@@ -133,7 +133,7 @@ const Store = ({ children, daoParam }) => {
     };
 
     initCurrentUser();
-  }, [currentUser, loginType, setDaoService, daoParam, web3Connect]);
+  }, [currentUser, setDaoService, daoParam, web3Connect]);
 
   // global polling service
   useInterval(async () => {
@@ -190,7 +190,7 @@ const Store = ({ children, daoParam }) => {
     //     it seems the sdk loads and then it takes a bit to get the account info
     //     could i check earlier that there is no account info
     //     not with getConnectedDevices because it errors before account connected
-    if (loginType === USER_TYPE.SDK) {
+    if (currentUser.type === USER_TYPE.SDK) {
       if (sdk && sdk.state.account) {
         // console.log('connected state', sdk.state);
         // check acount devices on sdk
