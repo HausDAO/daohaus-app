@@ -87,7 +87,7 @@ h3 { font-size: 28px; }
 const Home = () => {
   const [chartView, setChartView] = useState('bank');
   const [daoData] = useContext(DaoDataContext);
-  const [themeVariables] = useContext(ThemeContext);
+  const [themeVariables] = useContext(ThemeContext);  
   
   const { loading, error, data } = useQuery(GET_METADATA, {
     pollInterval: 20000,
@@ -95,7 +95,7 @@ const Home = () => {
 
 
   const ThemedIntroDiv = styled(IntroDiv)`
-    color: ${daoData.themeMap && daoData.themeMap.color};
+    color: ${themeVariables && themeVariables.primary};
   `
   const ThemedHomeoDiv = styled(HomeDiv)`
   background-image: url(${daoData.themeMap && daoData.themeMap.bgImage});

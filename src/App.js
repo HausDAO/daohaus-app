@@ -47,13 +47,7 @@ const App = ({ client }) => {
                 })
               : undefined,
           });
-          const primary = daoData.themeMap && daoData.themeMap.color;
-          console.log('primary', primary);
-          
-          const themeService = new ThemeService(primary || 'black');
-          console.log('themeService', themeService);
-          
-          setThemeVariables(themeService);
+
         } else {
           setloading(false);
         }
@@ -66,6 +60,13 @@ const App = ({ client }) => {
     getDao();
     // eslint-disable-next-line
   }, []);
+
+  useEffect(()=>{
+    const primary = daoData && daoData.themeMap.color;    
+    const themeService = new ThemeService(primary || 'black');
+    
+    setThemeVariables(themeService);
+  }, [daoData])
 
   useEffect(() => {
     // save all web3 data to apollo cache
