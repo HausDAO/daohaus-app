@@ -12,6 +12,7 @@ export const ModalContext = createContext();
 export const RefreshContext = createContext();
 export const DaoDataContext = createContext();
 export const DaoServiceContext = createContext();
+export const ThemeContext = createContext();
 
 // main store of global state
 const Store = ({ children, daoParam }) => {
@@ -43,6 +44,7 @@ const Store = ({ children, daoParam }) => {
 
   const [daoService, setDaoService] = useState();
   const [daoData, setDaoData] = useState();
+  const [themeVariables, setThemeVariables] = useState();
 
   useEffect(() => {
     // runs on app load, sets up user auth and sdk if necessary
@@ -216,27 +218,29 @@ const Store = ({ children, daoParam }) => {
   }, delay);
 
   return (
-    <LoaderContext.Provider value={[loading, setLoading]}>
-      {/* <DaoContext.Provider value={[daoService, setDaoService]}> */}
-      <DaoDataContext.Provider value={[daoData, setDaoData]}>
-        <ModalContext.Provider value={[hasOpened, setHasOpened]}>
-          <RefreshContext.Provider value={[delay, setDelay]}>
-            <DaoServiceContext.Provider value={[daoService, setDaoService]}>
-              <CurrentUserContext.Provider
-                value={[currentUser, setCurrentUser]}
-              >
-                <CurrentWalletContext.Provider
-                  value={[currentWallet, setCurrentWallet]}
+    <ThemeContext value={[themeVariables, setThemeVariables]}>
+      <LoaderContext.Provider value={[loading, setLoading]}>
+        {/* <DaoContext.Provider value={[daoService, setDaoService]}> */}
+        <DaoDataContext.Provider value={[daoData, setDaoData]}>
+          <ModalContext.Provider value={[hasOpened, setHasOpened]}>
+            <RefreshContext.Provider value={[delay, setDelay]}>
+              <DaoServiceContext.Provider value={[daoService, setDaoService]}>
+                <CurrentUserContext.Provider
+                  value={[currentUser, setCurrentUser]}
                 >
-                  {children}
-                </CurrentWalletContext.Provider>
-              </CurrentUserContext.Provider>
-            </DaoServiceContext.Provider>
-          </RefreshContext.Provider>
-        </ModalContext.Provider>
-      </DaoDataContext.Provider>
-      {/* </DaoContext.Provider> */}
-    </LoaderContext.Provider>
+                  <CurrentWalletContext.Provider
+                    value={[currentWallet, setCurrentWallet]}
+                  >
+                    {children}
+                  </CurrentWalletContext.Provider>
+                </CurrentUserContext.Provider>
+              </DaoServiceContext.Provider>
+            </RefreshContext.Provider>
+          </ModalContext.Provider>
+        </DaoDataContext.Provider>
+        {/* </DaoContext.Provider> */}
+      </LoaderContext.Provider>
+    </ThemeContext>
   );
 };
 

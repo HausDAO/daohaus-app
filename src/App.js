@@ -8,14 +8,16 @@ import Routes from './Routes';
 import Header from './components/header/Header';
 import Loading from './components/shared/Loading';
 
-import { DaoDataContext, DaoServiceContext } from './contexts/Store';
+import { DaoDataContext, DaoServiceContext, ThemeContext } from './contexts/Store';
 
 import './App.scss';
+import { ThemeService } from './utils/ThemeService';
 
 const App = ({ client }) => {
   const [loading, setloading] = useState(true);
   const [daoPath, setDaoPath] = useState('');
   const [daoData, setDaoData] = useContext(DaoDataContext);
+  const [, setThemeVariables] = useContext(ThemeContext);
   const [daoService] = useContext(DaoServiceContext);
 
   useEffect(() => {
@@ -45,6 +47,8 @@ const App = ({ client }) => {
                 })
               : undefined,
           });
+          const themeService = new ThemeService();
+          setThemeVariables(themeService);
         } else {
           setloading(false);
         }
