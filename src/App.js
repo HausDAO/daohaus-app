@@ -47,7 +47,12 @@ const App = ({ client }) => {
                 })
               : undefined,
           });
-          const themeService = new ThemeService();
+          const primary = daoData.themeMap && daoData.themeMap.color;
+          console.log('primary', primary);
+          
+          const themeService = new ThemeService(primary || 'black');
+          console.log('themeService', themeService);
+          
           setThemeVariables(themeService);
         } else {
           setloading(false);

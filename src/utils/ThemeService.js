@@ -33,7 +33,7 @@ export class ThemeService {
     ButtonSecondary;
     ButtonTertiary;
 
-    constructor() {
+    constructor(primary) {
     this.baseFont = `'Roboto', sans-serif`;
     this.dataFont = `'Share Tech Mono', sans-serif`;
     this.baseFontColor = 'black';
@@ -45,7 +45,7 @@ export class ThemeService {
     this.appBackground = `#F8F8FC`;
     this.appLight = lighten(0.1, this.appBackground);
     this.appDark = darken(0.1, this.appBackground);
-    this.primary = `rgba(203,46,206,1)`;
+    this.primary = primary; // `rgba(203,46,206,1)`;
     this.secondary = `rgba(47,233,167,1)`;
     this.tertiary = `rgba(239,73,123,1)`;
     this.primaryHover = darken(0.1, this.primary);

@@ -218,7 +218,7 @@ const Store = ({ children, daoParam }) => {
   }, delay);
 
   return (
-    <ThemeContext value={[themeVariables, setThemeVariables]}>
+    <ThemeContext.Provider value={[themeVariables, setThemeVariables]}>
       <LoaderContext.Provider value={[loading, setLoading]}>
         {/* <DaoContext.Provider value={[daoService, setDaoService]}> */}
         <DaoDataContext.Provider value={[daoData, setDaoData]}>
@@ -240,7 +240,7 @@ const Store = ({ children, daoParam }) => {
         </DaoDataContext.Provider>
         {/* </DaoContext.Provider> */}
       </LoaderContext.Provider>
-    </ThemeContext>
+    </ThemeContext.Provider>
   );
 };
 

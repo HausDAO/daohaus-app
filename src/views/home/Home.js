@@ -2,7 +2,7 @@ import React, { useState, useContext } from 'react';
 import { useQuery } from '@apollo/react-hooks';
 
 import { GET_METADATA } from '../../utils/Queries';
-import { DaoDataContext } from '../../contexts/Store';
+import { DaoDataContext, ThemeContext } from '../../contexts/Store';
 import StateModals from '../../components/shared/StateModals';
 import BottomNav from '../../components/shared/BottomNav';
 import ErrorMessage from '../../components/shared/ErrorMessage';
@@ -87,7 +87,8 @@ h3 { font-size: 28px; }
 const Home = () => {
   const [chartView, setChartView] = useState('bank');
   const [daoData] = useContext(DaoDataContext);
-
+  const [themeVariables] = useContext(ThemeContext);
+  
   const { loading, error, data } = useQuery(GET_METADATA, {
     pollInterval: 20000,
   });
@@ -102,7 +103,7 @@ const Home = () => {
 
   const ThemedDataDiv = styled(DataDiv)`
   .Bank, .Shares, .ShareValue {
-    &:hover h5 { color: ${daoData.themeMap && daoData.themeMap.color}; }
+    &:hover h5 { color: ${themeVariables && themeVariables.primary}; }
   }
   `
 

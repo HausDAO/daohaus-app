@@ -4,6 +4,7 @@ import {
   CurrentUserContext,
   LoaderContext,
   DaoServiceContext,
+  ThemeContext,
 } from '../../contexts/Store';
 import useModal from '../shared/useModal';
 import Modal from '../shared/Modal';
@@ -23,23 +24,27 @@ import config from '../../config';
 
 import styled from 'styled-components';
 import { RiskyBizButton } from '../../App.styles';
-import { phone } from '../../variables.styles';
+// import { phone } from '../../variables.styles';
 
 export const UserWalletDiv = styled.div`
   position: relative;
-  @media (min-width: ${phone}) {
-    max-width: 1200px;
-    margin: 0 auto;
-  }
 `;
 
 const UserWallet = () => {
   const [currentUser] = useContext(CurrentUserContext);
   const [daoService] = useContext(DaoServiceContext);
+  const [themeService] = useContext(ThemeContext);
   const [loading] = useContext(LoaderContext);
   const [livesDangerously, setLivesDangerously] = useState(false);
   const { isShowing, toggle } = useModal();
   const loginType = localStorage.getItem('loginType') || USER_TYPE.READ_ONLY;
+
+  const ThemedUserWalletDiv = styled(UserWalletDiv)`
+  @media (min-width: ${themeService.phone}) {
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+  `
 
   useEffect(() => {
     setLivesDangerously(JSON.parse(localStorage.getItem('walletWarning')));
@@ -58,7 +63,7 @@ const UserWallet = () => {
     <>
       {loading && <Loading />}
       {currentUser && (
-        <UserWalletDiv>
+        <ThemedUserWalletDiv>
           <StateModals />
 
           {!livesDangerously && loginType !== USER_TYPE.WEB3 ? (
@@ -137,7 +142,7 @@ const UserWallet = () => {
               Continue to DAOHaus
             </a>
           </Modal>
-        </UserWalletDiv>
+        </ThemedUserWalletDiv>
       )}
     </>
   );
