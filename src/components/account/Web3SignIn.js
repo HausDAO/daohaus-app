@@ -19,12 +19,16 @@ export const Web3SignIn = ({ history }) => {
           cacheProvider: true,
         });
 
-        await w3connect(web3Connect);
-        setWeb3Connect(web3Connect);
-        history.push(
-          '/dao/' + daoService.daoAddress.toLowerCase() + '/proposals',
-        );
-        window.location.reload();
+        try {
+          await w3connect(web3Connect);
+          setWeb3Connect(web3Connect);
+          history.push(
+            '/dao/' + daoService.daoAddress.toLowerCase() + '/proposals',
+          );
+          window.location.reload();
+        } catch (err) {
+          console.log('web3Connect error', err);
+        }
       }}
     >
       Sign In With Web3

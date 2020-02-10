@@ -2,7 +2,7 @@
 # yarn lockfile v1
 
 
-"3box-orbitdb-plugins@github:3box/3box-orbitdb-plugins#feat/orbit-23":
+"3box-orbitdb-plugins@3box/3box-orbitdb-plugins#feat/orbit-23":
   version "1.0.7"
   resolved "https://codeload.github.com/3box/3box-orbitdb-plugins/tar.gz/b46d28ea94a508810d82c6c4c0b340676dd3e7f6"
   dependencies:
