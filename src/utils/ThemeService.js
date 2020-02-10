@@ -38,6 +38,7 @@ export class ThemeService {
     secondary = `rgba(47,233,167,1)`,
     tertiary = `rgba(239,73,123,1)`,
     danger = `rgba(239,73,95,1)`,
+    success = `rgba(77,204,44,1)`,
     appBackground = `#F8F8FC`) {
     this.baseFont = `'Roboto', sans-serif`;
     this.dataFont = `'Share Tech Mono', sans-serif`;
@@ -58,8 +59,10 @@ export class ThemeService {
     this.tertiaryHover = darken(0.1, this.tertiary);
     this.danger = danger;
     this.dangerHover = darken(0.1, this.danger);
-    this.success = `rgba(77,204,44,1)`;
+    this.success = success;
     this.bright = `rgba(189,134,254,1)`;
+
+    this.shadow = `0px 0px 10px ${appBackground}`;
 
     // Media Queries
     this.grid = '1200px';

@@ -5,6 +5,7 @@ import {
   CurrentUserContext,
   CurrentWalletContext,
   DaoServiceContext,
+  ThemeContext,
 } from '../../contexts/Store';
 import { WalletStatuses } from '../../utils/WalletStatus';
 import { truncateAddr } from '../../utils/Helpers';
@@ -23,9 +24,12 @@ import styled from 'styled-components';
 import {
   secondary,
   primaryHover,
+  secondaryHover,
+  tertiaryHover,
   phone,
   danger,
   primary,
+  tertiary,
   appLight,
   FlashDiv,
   ButtonSecondary,
@@ -107,7 +111,7 @@ const StatusP = styled.p`
     height: 8px;
     border-radius: 50%;
     background-color: ${(props) =>
-      props.status === 'disconnected' ? danger : secondary};
+    props.status === 'disconnected' ? danger : secondary};
     display: block;
     position: absolute;
     left: 0;
@@ -156,7 +160,7 @@ const ActionsDropdownDiv = styled.div`
 
 const SwitchHeaderDiv = styled.div`
   width: calc(100% - 30px);
-  background-color: #911094;
+  background-color: #911094; //TODO: this color is not a variable
   display: flex;
   justify-content: flex-start;
   padding: 0px 15px;
@@ -197,24 +201,24 @@ const ActionsDropdownContentDiv = styled.div`
       color: ${primaryHover};
     }
     &.Button--Primary {
-      color: $primary;
+      color: ${primary};
       &:hover {
-        color: $primary-hover;
+        color: ${primaryHover};
       }
     }
     &.Button--Secondary {
-      color: $secondary;
+      color: ${secondary};
       &:hover {
-        color: $secondary-hover;
+        color: ${secondaryHover};
       }
       &:disabled {
         color: grey;
       }
     }
     &.Button--Tertiary {
-      color: $tertiary;
+      color: ${tertiary};
       &:hover {
-        color: $tertiary-hover;
+        color: ${tertiaryHover};
       }
     }
   }
@@ -284,6 +288,7 @@ const UserBalance = ({ toggle, client }) => {
   const [daoService] = useContext(DaoServiceContext);
   const [currentUser] = useContext(CurrentUserContext);
   const [currentWallet] = useContext(CurrentWalletContext);
+  const [themeVariables] = useContext(ThemeContext);
   const [delay, setDelay] = useState(null);
   const [copied, setCopied] = useState(false);
   const [actionsOpen, setActionsOpen] = useState(false);
@@ -312,7 +317,7 @@ const UserBalance = ({ toggle, client }) => {
       );
       setMemberAddressLoggedIn(
         currentUser &&
-          currentUser.attributes['custom:account_address'] === memberAddress,
+        currentUser.attributes['custom:account_address'] === memberAddress,
       );
     })();
   }, [currentUser, daoService.mcDao]);
@@ -336,13 +341,119 @@ const UserBalance = ({ toggle, client }) => {
     }
   };
 
+
+  const ThemedWalletDiv = styled(WalletDiv)`
+  background-color: ${themeVariables.appLight};
+  @media (max-width: ${themeVariables.phone}) {
+    border-radius: 0px;
+    border: none;
+  }
+  @media (min-width: ${themeVariables.phone}) {
+    width: 60%;
+    margin: 25px auto;
+    position: relative;
+  }
+`;
+
+  const ThemedWalletHeaderDiv = styled(WalletHeaderDiv)`
+  border-bottom: 1px solid ${themeVariables.primaryHover};
+  background-color: ${themeVariables.primaryHover};
+  @media (max-width: ${themeVariables.phone}) {
+    border-radius: 0px;
+    border: none;
+  }
+`;
+
+  const TemedWalletOverlayDiv = styled(WalletOverlayDiv)`
+  background-color: ${themeVariables.primary};
+  @media (min-width: ${themeVariables.phone}) {
+    border-radius: 10px;
+    border: none;
+  }
+`;
+
+  const ThemedStatusP = styled(StatusP)`
+  color: ${(props) => (props.status === 'disconnected' ? themeVariables.danger : themeVariables.secondary)};
+  &:before {
+    background-color: ${(props) =>
+      props.status === 'disconnected' ? themeVariables.danger : themeVariables.secondary};
+  }
+`;
+
+const ThemedAddressButton = styled(AddressButton)`
+  &:hover {
+    color: ${themeVariables.secondary};
+    fill: ${themeVariables.secondary};
+  }
+  p {
+    color: white;
+  }
+  svg {
+    fill: ${themeVariables.secondary};
+  }
+`;
+
+const ThemedActionsDropdownDiv = styled(ActionsDropdownDiv)`
+  color: ${themeVariables.appLight};
+`;
+
+const ThemedSwitchHeaderDiv = styled(SwitchHeaderDiv)`
+  background-color: ${themeVariables.primary};
+
+  button {
+    color: ${themeVariables.secondary};
+  }
+`;
+
+const ThemedSelectedElementButton = styled(SelectedElementButton)`
+  border-bottom: ${(props) => (props.selected ? '4px solid' + themeVariables.secondary : '')};
+`;
+
+const ThemedActionsDropdownContentDiv = styled(ActionsDropdownContentDiv)`
+  background-color: ${themeVariables.appLight};
+  button {
+    color: ${themeVariables.primary};
+    &:hover {
+      color: ${themeVariables.primaryHover};
+    }
+    &.Button--Primary {
+      color: ${themeVariables.primary};
+      &:hover {
+        color: ${themeVariables.primaryHover};
+      }
+    }
+    &.Button--Secondary {
+      color: ${themeVariables.secondary};
+      &:hover {
+        color: ${themeVariables.secondaryHover};
+      }
+      &:disabled {
+        color: grey;
+      }
+    }
+    &.Button--Tertiary {
+      color: ${themeVariables.tertiary};
+      &:hover {
+        color: ${themeVariables.tertiaryHover};
+      }
+    }
+  }
+`;
+
+const ThemedTinyButton = styled(TinyButton)`
+  background-color: ${themeVariables.danger};
+  &:hover {
+    background-color: ${themeVariables.dangerHover};
+  }
+`;
+
   return (
-    <WalletDiv>
+    <ThemedWalletDiv>
       {/* <p>{currentWallet.state}</p>
       <p>{WalletStatuses.Deployed}</p> */}
       {currentWallet.state !== WalletStatuses.Connecting &&
         currentWallet.state === WalletStatuses.Created && (
-          <WalletOverlayDiv>
+          <TemedWalletOverlayDiv>
             <WalletOverlayContentsDiv>
               {currentWallet.eth < 0.05 && <DepositFormInitial />}
               {currentWallet.eth >= 0.05 && (
@@ -369,7 +480,7 @@ const UserBalance = ({ toggle, client }) => {
                 </p>
               )}
             </WalletOverlayContentsDiv>
-          </WalletOverlayDiv>
+          </TemedWalletOverlayDiv>
         )}
       {currentWallet.state === WalletStatuses.Deployed && !keystoreExists && (
         <WalletOverlayDiv>
@@ -379,25 +490,25 @@ const UserBalance = ({ toggle, client }) => {
           </WalletOverlayContentsDiv>
         </WalletOverlayDiv>
       )}
-      <WalletHeaderDiv>
+      <ThemedWalletHeaderDiv>
         <div className="WalletInfo">
-          <StatusP
+          <ThemedStatusP
             status={
               (currentUser.type === USER_TYPE.SDK &&
                 currentWallet.state !== 'Deployed') ||
-              (currentUser.type === USER_TYPE.WEB3 &&
-                currentWallet.state !== 'Connected')
+                (currentUser.type === USER_TYPE.WEB3 &&
+                  currentWallet.state !== 'Connected')
                 ? 'Disconnected'
                 : ''
             }
           >
             {currentWallet.state || 'Connecting'}
-          </StatusP>
+          </ThemedStatusP>
           <CopyToClipboard
             onCopy={onCopy}
             text={currentUser.attributes['custom:account_address']}
           >
-            <AddressButton>
+            <ThemedAddressButton>
               <DataP>
                 {truncateAddr(currentUser.attributes['custom:account_address'])}
               </DataP>{' '}
@@ -415,10 +526,10 @@ const UserBalance = ({ toggle, client }) => {
                   <p>Copied!</p>
                 </FlashDiv>
               )}
-            </AddressButton>
+            </ThemedAddressButton>
           </CopyToClipboard>
         </div>
-        <ActionsDropdownDiv>
+        <ThemedActionsDropdownDiv>
           <button onClick={() => toggleActions()}>
             Actions <img src={Arrow} alt="arrow" />
           </button>
@@ -427,7 +538,7 @@ const UserBalance = ({ toggle, client }) => {
             <>
               <BackdropOpenDiv onClick={toggleActions} />
 
-              <ActionsDropdownContentDiv>
+              <ThemedActionsDropdownContentDiv>
                 <ButtonSecondary onClick={() => toggleActions('depositForm')}>
                   Deposit
                 </ButtonSecondary>
@@ -464,33 +575,33 @@ const UserBalance = ({ toggle, client }) => {
                       Change Delegate Key
                     </ButtonSecondary>
                   )}
-              </ActionsDropdownContentDiv>
+              </ThemedActionsDropdownContentDiv>
             </>
           ) : null}
-        </ActionsDropdownDiv>
-      </WalletHeaderDiv>
-      <SwitchHeaderDiv>
-        <SelectedElementButton
+        </ThemedActionsDropdownDiv>
+      </ThemedWalletHeaderDiv>
+      <ThemedSwitchHeaderDiv>
+        <ThemedSelectedElementButton
           selected={headerSwitch === 'Balances'}
           onClick={() => setHeaderSwitch('Balances')}
         >
           Balances
-        </SelectedElementButton>
-        <SelectedElementButton
+        </ThemedSelectedElementButton>
+        <ThemedSelectedElementButton
           selected={headerSwitch === 'Transactions'}
           onClick={() => setHeaderSwitch('Transactions')}
         >
           Transactions
-        </SelectedElementButton>
+        </ThemedSelectedElementButton>
         {currentUser && currentUser.type === USER_TYPE.SDK && (
-          <SelectedElementButton
+          <ThemedSelectedElementButton
             selected={headerSwitch === 'Accounts'}
             onClick={() => setHeaderSwitch('Accounts')}
           >
             Settings
-          </SelectedElementButton>
+          </ThemedSelectedElementButton>
         )}
-      </SwitchHeaderDiv>
+      </ThemedSwitchHeaderDiv>
       <WalletContents>
         {headerSwitch === 'Balances' && (
           <BalancesDiv>
@@ -504,9 +615,9 @@ const UserBalance = ({ toggle, client }) => {
                 {currentWallet.eth}
                 {currentWallet.state !== WalletStatuses.Connecting &&
                   currentWallet.eth < 0.01 && (
-                    <TinyButton onClick={() => toggle('depositForm')}>
+                    <ThemedTinyButton onClick={() => toggle('depositForm')}>
                       <span>!</span> Low Eth
-                    </TinyButton>
+                    </ThemedTinyButton>
                   )}
               </DataP>
             </BalanceItemDiv>
@@ -526,7 +637,7 @@ const UserBalance = ({ toggle, client }) => {
         {headerSwitch === 'Transactions' && <UserTransactions />}
         {headerSwitch === 'Accounts' && <AccountList />}
       </WalletContents>
-    </WalletDiv>
+    </ThemedWalletDiv>
   );
 };
 

@@ -33,7 +33,7 @@ export const UserWalletDiv = styled.div`
 const UserWallet = () => {
   const [currentUser] = useContext(CurrentUserContext);
   const [daoService] = useContext(DaoServiceContext);
-  const [themeService] = useContext(ThemeContext);
+  const [themeVariables] = useContext(ThemeContext);
   const [loading] = useContext(LoaderContext);
   const [livesDangerously, setLivesDangerously] = useState(false);
   const { isShowing, toggle } = useModal();
@@ -41,14 +41,14 @@ const UserWallet = () => {
 
   const ThemedUserWalletDiv = styled(UserWalletDiv)`
   
-  @media (min-width: ${themeService.phone}) {
+  @media (min-width: ${themeVariables.phone}) {
     max-width: 1200px;
     margin: 0 auto;
   }
   `
 
-  const StyledA = themeService.StyledA;
-  const StyledButton = themeService.StyledButton;
+  const StyledA = themeVariables.StyledA;
+  const StyledButton = themeVariables.StyledButton;
 
   useEffect(() => {
     setLivesDangerously(JSON.parse(localStorage.getItem('walletWarning')));
