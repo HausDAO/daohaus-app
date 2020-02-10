@@ -1,9 +1,17 @@
 import React, { useState, useEffect, createContext } from 'react';
+import Web3Connect from 'web3connect';
 
 import { useInterval } from '../utils/PollingUtil';
 import { WalletStatuses, currentStatus } from '../utils/WalletStatus';
-import { signInWithWeb3, signInWithSdk } from '../utils/Auth';
+import {
+  signInWithSdk,
+  createWeb3User,
+  w3connect,
+  providerOptions,
+} from '../utils/Auth';
 import { DaoService, USER_TYPE } from '../utils/DaoService';
+import { getChainData } from '../utils/chains';
+import config from '../config';
 
 export const CurrentUserContext = createContext();
 export const CurrentWalletContext = createContext();
@@ -12,10 +20,10 @@ export const ModalContext = createContext();
 export const RefreshContext = createContext();
 export const DaoDataContext = createContext();
 export const DaoServiceContext = createContext();
+export const Web3ConnectContext = createContext();
 
 // main store of global state
 const Store = ({ children, daoParam }) => {
-  const loginType = localStorage.getItem('loginType') || USER_TYPE.READ_ONLY;
   // store of aws auth information and sdk
   const [currentUser, setCurrentUser] = useState();
   // stores user wallet balances and shares
@@ -44,9 +52,18 @@ const Store = ({ children, daoParam }) => {
   const [daoService, setDaoService] = useState();
   const [daoData, setDaoData] = useState();
 
+  const [web3Connect, setWeb3Connect] = useState(
+    new Web3Connect.Core({
+      network: getChainData(config.CHAIN_ID).network, // optional
+      providerOptions, // required
+      cacheProvider: true,
+    }),
+  );
+
   useEffect(() => {
     // runs on app load, sets up user auth and sdk if necessary
     const initCurrentUser = async () => {
+      let loginType = localStorage.getItem('loginType') || USER_TYPE.READ_ONLY;
       // do nothing if user is set correctly
       if (currentUser && currentUser.type === loginType) {
         return;
@@ -55,21 +72,36 @@ const Store = ({ children, daoParam }) => {
       if (!daoParam) {
         return;
       }
+
+      if (web3Connect.cachedProvider) {
+        loginType = USER_TYPE.WEB3;
+      }
+
       let user;
       let dao;
       try {
         console.log(`Initializing user type: ${loginType || 'read-only'}`);
         switch (loginType) {
-          case USER_TYPE.WEB3:
-            user = await signInWithWeb3();
-            dao = await DaoService.instantiateWithWeb3(
-              user.attributes['custom:account_address'],
-              window.ethereum,
-              daoParam,
-            );
-            // TODO: why is this not set in daoService?
-            dao.daoAddress = daoParam;
+          case USER_TYPE.WEB3: {
+            if (web3Connect.cachedProvider) {
+              const { web3Connect: w3c, web3, provider } = await w3connect(
+                web3Connect,
+              );
+              const [account] = await web3.eth.getAccounts();
+
+              setWeb3Connect(w3c);
+              user = createWeb3User(account);
+              dao = await DaoService.instantiateWithWeb3(
+                user.attributes['custom:account_address'],
+                provider,
+                daoParam,
+              );
+              dao.daoAddress = daoParam;
+            } else {
+              dao = await DaoService.instantiateWithReadOnly(daoParam);
+            }
             break;
+          }
           case USER_TYPE.SDK:
             user = await signInWithSdk();
             dao = await DaoService.instantiateWithSDK(
@@ -101,9 +133,9 @@ const Store = ({ children, daoParam }) => {
     };
 
     initCurrentUser();
-  }, [currentUser, loginType, setDaoService, daoParam]);
+  }, [currentUser, setDaoService, daoParam, web3Connect]);
 
-  //global polling service
+  // global polling service
   useInterval(async () => {
     if (!daoService) {
       console.log(`DaoService not initialized yet`);
@@ -158,7 +190,7 @@ const Store = ({ children, daoParam }) => {
     //     it seems the sdk loads and then it takes a bit to get the account info
     //     could i check earlier that there is no account info
     //     not with getConnectedDevices because it errors before account connected
-    if (loginType === USER_TYPE.SDK) {
+    if (currentUser.type === USER_TYPE.SDK) {
       if (sdk && sdk.state.account) {
         // console.log('connected state', sdk.state);
         // check acount devices on sdk
@@ -221,17 +253,19 @@ const Store = ({ children, daoParam }) => {
       <DaoDataContext.Provider value={[daoData, setDaoData]}>
         <ModalContext.Provider value={[hasOpened, setHasOpened]}>
           <RefreshContext.Provider value={[delay, setDelay]}>
-            <DaoServiceContext.Provider value={[daoService, setDaoService]}>
-              <CurrentUserContext.Provider
-                value={[currentUser, setCurrentUser]}
-              >
-                <CurrentWalletContext.Provider
-                  value={[currentWallet, setCurrentWallet]}
+            <Web3ConnectContext.Provider value={[web3Connect, setWeb3Connect]}>
+              <DaoServiceContext.Provider value={[daoService, setDaoService]}>
+                <CurrentUserContext.Provider
+                  value={[currentUser, setCurrentUser]}
                 >
-                  {children}
-                </CurrentWalletContext.Provider>
-              </CurrentUserContext.Provider>
-            </DaoServiceContext.Provider>
+                  <CurrentWalletContext.Provider
+                    value={[currentWallet, setCurrentWallet]}
+                  >
+                    {children}
+                  </CurrentWalletContext.Provider>
+                </CurrentUserContext.Provider>
+              </DaoServiceContext.Provider>
+            </Web3ConnectContext.Provider>
           </RefreshContext.Provider>
         </ModalContext.Provider>
       </DaoDataContext.Provider>

@@ -1,7 +1,11 @@
 import React, { useContext } from 'react';
 import { withRouter, Link } from 'react-router-dom';
 
-import { CurrentUserContext, DaoServiceContext, DaoDataContext } from '../../contexts/Store';
+import {
+  CurrentUserContext,
+  DaoServiceContext,
+  DaoDataContext,
+} from '../../contexts/Store';
 import BcToast from './BcToast';
 
 import './TopNav.scss';
@@ -26,7 +30,9 @@ const TopNav = (props) => {
       {daoService && daoService.mcDao.daoContract && (
         <>
           <div
-            className={isElementOpen ? 'Backdrop__Open Blank' : 'Backdrop Blank'}
+            className={
+              isElementOpen ? 'Backdrop__Open Blank' : 'Backdrop Blank'
+            }
             onClick={toggleElement}
           />
           {currentUser && <BcToast />}
@@ -35,27 +41,29 @@ const TopNav = (props) => {
               <Link to={`/dao/${daoService.daoAddress}/`}>{'<='} Back</Link>
             </div>
           ) : (
-              <>
-                {pathname === `/dao/${daoService.daoAddress}/sign-up` || pathname === '/confirm' ? (
-                  <div className="Button Back">
-                    <Link to={`/dao/${daoService.daoAddress}/`}>{'<='} Back</Link>
-                  </div>
-                ) : (
-                    <>
-                      {props.match.params.name === `/dao/${daoService.daoAddress}/proposal/` ? (
-                        <p>Back</p>
-                      ) : (
-                          <Link
-                            className="Brand"
-                            to={`/dao/${daoService.daoAddress}/`}
-                          >
-                            {daoData.name || 'PokéMol DAO'}
-                          </Link>
-                        )}
-                    </>
+            <>
+              {pathname === `/dao/${daoService.daoAddress}/sign-up` ||
+              pathname === '/confirm' ? (
+                <div className="Button Back">
+                  <Link to={`/dao/${daoService.daoAddress}/`}>{'<='} Back</Link>
+                </div>
+              ) : (
+                <>
+                  {props.match.params.name ===
+                  `/dao/${daoService.daoAddress}/proposal/` ? (
+                    <p>Back</p>
+                  ) : (
+                    <Link
+                      className="Brand"
+                      to={`/dao/${daoService.daoAddress}/`}
+                    >
+                      {(daoData && daoData.name) || 'PokéMol DAO'}
+                    </Link>
                   )}
-              </>
-            )}
+                </>
+              )}
+            </>
+          )}
 
           {currentUser ? (
             <div className="Auth">
@@ -74,11 +82,13 @@ const TopNav = (props) => {
               <div className={isElementOpen ? 'Dropdown__Open' : 'Dropdown'}>
                 <Link
                   className="Dropdown__Open--Item"
-                  to={'/dao/'+daoService.daoAddress.toLowerCase()+'/account'}
+                  to={
+                    '/dao/' + daoService.daoAddress.toLowerCase() + '/account'
+                  }
                   onClick={toggleElement}
                 >
                   Account
-            </Link>
+                </Link>
                 <button
                   className="Dropdown__Open--Item LinkButton"
                   onClick={() => {
@@ -87,7 +97,7 @@ const TopNav = (props) => {
                   }}
                 >
                   {'<='} Sign out
-            </button>
+                </button>
                 <Modal
                   isShowing={isShowing.signOutMsg}
                   hide={() => toggle('signOutMsg')}
@@ -113,17 +123,20 @@ const TopNav = (props) => {
                     }}
                   >
                     Yes, sign me out.
-              </Link>
+                  </Link>
                 </Modal>
               </div>
             </div>
           ) : (
-              <div className="Auth">
-                <Link className="Auth__Button" to={`/dao/${daoService.daoAddress}/sign-in`}>
-                  Sign in {'=>'}
-                </Link>
-              </div>
-            )}
+            <div className="Auth">
+              <Link
+                className="Auth__Button"
+                to={`/dao/${daoService.daoAddress}/sign-in`}
+              >
+                Sign in {'=>'}
+              </Link>
+            </div>
+          )}
         </>
       )}
     </div>

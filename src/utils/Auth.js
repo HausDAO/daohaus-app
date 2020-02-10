@@ -4,9 +4,13 @@ import {
   createSdk,
 } from '@archanova/sdk';
 import { Auth } from 'aws-amplify';
+import Web3 from 'web3';
+import Web3Connect from 'web3connect';
+import WalletConnectProvider from '@walletconnect/web3-provider';
 
 import config from '../config';
 import { USER_TYPE } from './DaoService';
+import { getChainData } from './chains';
 
 const getChainIdName = (chainId) => {
   switch (chainId) {
@@ -27,9 +31,58 @@ const getChainIdName = (chainId) => {
   }
 };
 
+export const providerOptions = {
+  walletconnect: {
+    package: WalletConnectProvider, // required
+    options: {
+      infuraId: config.INFURA_URI.split('/').pop(),
+    },
+  },
+};
+
+export const w3connect = async (web3Connect) => {
+  const provider = await web3Connect.connect();
+
+  const web3 = new Web3(provider);
+
+  const injectedChainId = await web3.eth.getChainId();
+
+  if (injectedChainId !== config.CHAIN_ID) {
+    alert(
+      `Please switch Web3 to the correct network and try signing in again. Detected network: ${
+        getChainData(injectedChainId).network
+      }, Required network: ${getChainData(config.CHAIN_ID).network}`,
+    );
+    throw new Error(
+      `Injected web3 chainId: ${injectedChainId}, config: ${config.CHAIN_ID}`,
+    );
+  }
+
+  return { web3Connect, web3, provider };
+};
+
 export const signInWithWeb3 = async () => {
-  const [account] = await window.ethereum.enable();
-  const injectedChainId = parseInt(window.ethereum.chainId);
+  // const infuraId = config.INFURA_URI.split('/').pop();
+
+  console.log('config.CHAIN_ID: ', config.CHAIN_ID);
+  const web3Connect = new Web3Connect.Core({
+    network: getChainData(config.CHAIN_ID).network, // optional
+    providerOptions, // required
+  });
+  console.log('web3Connect: ', web3Connect);
+
+  const provider = await web3Connect.connect();
+  console.log('provider: ', provider);
+
+  const web3 = new Web3(provider);
+  console.log('web3: ', web3);
+
+  const injectedChainId = await web3.eth.getChainId();
+  console.log('injectedChainId: ', injectedChainId);
+
+  const [account] = await web3.eth.getAccounts();
+  console.log('account: ', account);
+
   if (injectedChainId !== config.CHAIN_ID) {
     alert(
       `Please switch Web3 to the correct network and try signing in again. Detected network: ${getChainIdName(
@@ -41,12 +94,7 @@ export const signInWithWeb3 = async () => {
     );
   }
 
-  window.ethereum.on('chainChanged', () => {
-    document.location.reload();
-  });
-
-  window.ethereum.autoRefreshOnNetworkChange = true;
-  return createWeb3User(account);
+  return { user: createWeb3User(account), provider };
 };
 
 export const signInWithSdk = async () => {
@@ -76,7 +124,7 @@ export const signInWithSdk = async () => {
   // store sdk instance (needed?)
   // setUserSdk(sdk);
   // add sdk instance to current user
-  return { ...realuser, ...{ sdk } };
+  return { user: { ...realuser, ...{ sdk } } };
 };
 
 export const createWeb3User = (accountAddress) => {
