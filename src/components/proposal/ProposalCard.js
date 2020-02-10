@@ -9,7 +9,7 @@ import {
   titleMaker,
 } from '../../utils/ProposalHelper';
 import { GET_METADATA } from '../../utils/Queries';
-import { DaoServiceContext } from '../../contexts/Store';
+import { DaoServiceContext, ThemeContext } from '../../contexts/Store';
 import ValueDisplay from '../shared/ValueDisplay';
 import { appDark, appLight } from '../../variables.styles';
 import {
@@ -60,8 +60,13 @@ const ProposalCard = ({ proposal, client }) => {
   });
 
   const [daoService] = useContext(DaoServiceContext);
+  const [themeVariables] = useContext(ThemeContext);  
+
   const countDown = getProposalCountdownText(proposal, periodDuration);
   const title = titleMaker(proposal);
+
+  const StyledA = themeVariables.StyledButton;
+
 
   return (
     <ProposalCardDiv>
@@ -93,14 +98,11 @@ const ProposalCard = ({ proposal, client }) => {
       <CardVoteDiv>
         <StackedVote id={proposal.proposalIndex} page="ProposalCard" />
       </CardVoteDiv>
-      <Link
-        className="Button"
-        to={{
-          pathname: `/dao/${daoService.daoAddress}/proposal/${proposal.proposalIndex}`,
-        }}
+      <StyledA
+        href={`/dao/${daoService.daoAddress}/proposal/${proposal.proposalIndex}`}
       >
         View Proposal
-      </Link>
+      </StyledA>
     </ProposalCardDiv>
   );
 };

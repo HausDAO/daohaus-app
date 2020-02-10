@@ -97,7 +97,7 @@ const Home = () => {
   const ThemedIntroDiv = styled(IntroDiv)`
     color: ${themeVariables && themeVariables.primary};
   `
-  const ThemedHomeoDiv = styled(HomeDiv)`
+  const ThemedHomeDiv = styled(HomeDiv)`
   background-image: url(${daoData.themeMap && daoData.themeMap.bgImage});
   `
 
@@ -115,7 +115,7 @@ const Home = () => {
       {daoData ? <HeadTags daoData={daoData} /> : null}
       <StateModals />
 
-      <ThemedHomeoDiv>
+      <ThemedHomeDiv>
         <ThemedIntroDiv>
           <h1>{daoData.name || 'PokéMol DAO'}</h1>
           <p>{daoData.description || 'Put a Moloch in Your Pocket'}</p>
@@ -157,7 +157,7 @@ const Home = () => {
           </div>
         </ThemedDataDiv>
         <BottomNav />
-      </ThemedHomeoDiv>
+      </ThemedHomeDiv>
     </>
   );
 };

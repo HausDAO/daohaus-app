@@ -94,7 +94,7 @@ export class ThemeService {
   }
 `
 
-this.StyledButton = styled.div`
+this.StyledButton = styled.a`
 
   // Reset
   appearance: none;
