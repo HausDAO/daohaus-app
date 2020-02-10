@@ -40,11 +40,15 @@ const UserWallet = () => {
   const loginType = localStorage.getItem('loginType') || USER_TYPE.READ_ONLY;
 
   const ThemedUserWalletDiv = styled(UserWalletDiv)`
+  
   @media (min-width: ${themeService.phone}) {
     max-width: 1200px;
     margin: 0 auto;
   }
   `
+
+  const StyledA = themeService.StyledA;
+  const StyledButton = themeService.StyledButton;
 
   useEffect(() => {
     setLivesDangerously(JSON.parse(localStorage.getItem('walletWarning')));
@@ -133,14 +137,13 @@ const UserWallet = () => {
               If you made your initial pledge on DAOHaus you you can ragequit
               shares and update your delegate key there.
             </p>
-            <a
-              className="Button"
+            <StyledButton
               rel="noopener noreferrer"
               target="_blank"
               href={`${config.DAOHAUS_URL}/${daoService.daoAddress}`}
             >
               Continue to DAOHaus
-            </a>
+            </StyledButton>
           </Modal>
         </ThemedUserWalletDiv>
       )}

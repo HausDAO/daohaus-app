@@ -40,11 +40,11 @@ const App = ({ client }) => {
             ...apiData,
             legacyClient: apiData.isLegacy
               ? new ApolloClient({
-                  uri: apiData.graphNodeUri,
-                  clientState: {
-                    resolvers,
-                  },
-                })
+                uri: apiData.graphNodeUri,
+                clientState: {
+                  resolvers,
+                },
+              })
               : undefined,
           });
 
@@ -61,11 +61,16 @@ const App = ({ client }) => {
     // eslint-disable-next-line
   }, []);
 
-  useEffect(()=>{
-    const primary = daoData && daoData.themeMap.color;    
-    const themeService = new ThemeService(primary || 'black');
-    
+  useEffect(() => {
+    if(!daoData) {
+      return
+    }
+    const primary = daoData && daoData.themeMap.primary;
+    const secondary = daoData && daoData.themeMap.secondary;
+    const themeService = new ThemeService(primary, secondary);
+
     setThemeVariables(themeService);
+    // eslint-disable-next-line
   }, [daoData])
 
   useEffect(() => {
@@ -148,11 +153,11 @@ const App = ({ client }) => {
       {loading ? (
         <Loading />
       ) : (
-        <Router>
-          <Header />
-          <Routes isValid={!!daoPath} />
-        </Router>
-      )}
+          <Router>
+            <Header />
+            <Routes isValid={!!daoPath} />
+          </Router>
+        )}
     </div>
   );
 };

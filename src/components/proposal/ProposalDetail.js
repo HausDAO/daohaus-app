@@ -8,7 +8,7 @@ import {
   descriptionMaker,
   linkMaker,
 } from '../../utils/ProposalHelper';
-import { CurrentUserContext, DaoServiceContext } from '../../contexts/Store';
+import { CurrentUserContext, DaoServiceContext, ThemeContext } from '../../contexts/Store';
 import { GET_METADATA } from '../../utils/Queries';
 import { get } from '../../utils/Requests';
 import Web3Service from '../../utils/Web3Service';
@@ -29,9 +29,13 @@ const ProposalDetail = ({
   const [detailData, setDetailData] = useState();
   const [currentUser] = useContext(CurrentUserContext);
   const [daoService] = useContext(DaoServiceContext);
+  const [themeService] = useContext(ThemeContext);
+
   const { periodDuration } = client.cache.readQuery({
     query: GET_METADATA,
   });
+
+  const StyledA = themeService.StyledA;
 
   useEffect(() => {
     const fetchData = async () => {
@@ -125,9 +129,9 @@ const ProposalDetail = ({
           detailData.link &&
           detailData.link.indexOf('http') > -1 ? (
           <div className="Link">
-            <a href={detailData.link} rel="noopener noreferrer" target="_blank">
+            <StyledA href={detailData.link} rel="noopener noreferrer" target="_blank">
               Link
-            </a>
+            </StyledA>
           </div>
         ) : null}
       </div>

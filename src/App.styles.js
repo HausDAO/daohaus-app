@@ -2,6 +2,34 @@ import styled from 'styled-components';
 
 import { dataFont, danger, dangerHover, phone } from './variables.styles';
 
+// export const StyledA = styled.a`
+//   color: $primary;
+//   fill: $primary;
+//   text-decoration: none;
+//   transition: all 0.15s linear;
+//   vertical-align: middle;
+//   cursor: pointer;
+//   svg {
+//     display: inline-block;
+//     margin: 0;
+//     padding: 0px;
+//     vertical-align: middle;
+//     width: 24px;
+//     height: 24px;
+//     margin-top: -3px;
+//     &.IconLeft {
+//       margin-right: 5px;
+//     }
+//     &.IconRight {
+//       margin-left: 5px;
+//     }
+//   }
+//   &:hover {
+//     color: $primary-hover;
+//     fill: $primary-hover;
+//   }
+// `
+
 export const ProposalAndMemberCardDiv = styled.div`
   padding: 25px;
   border-top: 2px solid #eee;
