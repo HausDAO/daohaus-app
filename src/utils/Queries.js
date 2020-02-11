@@ -17,7 +17,6 @@ export const GET_METADATA = gql`
   }
 `;
 
-export const GET_METADATA_V2 = gql``;
 
 const baseProposalFields = `
   id
