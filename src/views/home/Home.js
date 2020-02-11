@@ -139,8 +139,6 @@ const Home = () => {
     pollInterval: 20000,
   });
 
-  console.log('****************', loading, error, data );
-  
 
   if (loading) return <Loading />;
   if (error) return <ErrorMessage message={error} />;
@@ -156,7 +154,7 @@ const Home = () => {
           <p>{daoData.description || 'Put a Moloch in Your Pocket'}</p>
         </ThemedIntroDiv>
         <ChartDiv>
-          <HomeChart guildBankAddr={data.guildBankAddr} chartView={chartView} />
+          {daoData.version === 1 && <HomeChart guildBankAddr={data.guildBankAddr} chartView={chartView} />}
         </ChartDiv>
         <ThemedDataDiv daoData={daoData}>
           <div

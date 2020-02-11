@@ -9,7 +9,10 @@ const BottomNav = (props) => {
   const [currentUser] = useContext(CurrentUserContext);
   const [daoService] = useContext(DaoServiceContext);
 
-  console.log('daoService', daoService);
+  console.log('daoService needs dao address!!!', daoService);
+  if(!daoService){
+    return <p>error</p>
+  }
   
 
   return (
