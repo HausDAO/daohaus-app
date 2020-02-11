@@ -17,6 +17,23 @@ export const GET_METADATA = gql`
   }
 `;
 
+export const GET_METADATA_V2 = gql`
+  query Metadata {
+    currentPeriod @client
+    totalShares @client
+    guildBankAddr @client
+    gracePeriodLength @client
+    votingPeriodLength @client
+    periodDuration @client
+    processingReward @client
+    proposalDeposit @client
+    guildBankValue @client
+    shareValue @client
+    approvedToken @client
+    tokenSymbol @client
+  }
+`;
+
 const baseProposalFields = `
   id
   timestamp

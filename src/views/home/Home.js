@@ -1,7 +1,7 @@
 import React, { useState, useContext } from 'react';
 import { useQuery } from '@apollo/react-hooks';
 
-import { GET_METADATA } from '../../utils/Queries';
+import { GET_METADATA, GET_METADATA_V2 } from '../../utils/Queries';
 import { DaoDataContext } from '../../contexts/Store';
 import StateModals from '../../components/shared/StateModals';
 import BottomNav from '../../components/shared/BottomNav';
@@ -133,9 +133,14 @@ const Home = () => {
   const [chartView, setChartView] = useState('bank');
   const [daoData] = useContext(DaoDataContext);
 
-  const { loading, error, data } = useQuery(GET_METADATA, {
+  const query = daoData.version === 2 ? GET_METADATA_V2 : GET_METADATA
+
+  const { loading, error, data } = useQuery(query, {
     pollInterval: 20000,
   });
+
+  console.log('****************', loading, error, data );
+  
 
   if (loading) return <Loading />;
   if (error) return <ErrorMessage message={error} />;

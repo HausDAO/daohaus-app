@@ -61,7 +61,10 @@ const App = ({ client }) => {
   useEffect(() => {
     // save all web3 data to apollo cache
     const fetchData = async () => {
-      if (!daoService || !daoData) {
+      console.log('daoData', daoData);
+      
+      if (!daoService || !daoData || daoData.version === 2) {
+    
         client.writeData({
           data: {
             currentPeriod: 0,
@@ -78,21 +81,25 @@ const App = ({ client }) => {
             shareValue: 0,
           },
         });
+
+        if(daoData && daoData.version === 2){
+          setloading(false);
+        }
         return;
       }
 
-      const currentPeriod = await daoService.mcDao.getCurrentPeriod();
-      const totalShares = await daoService.mcDao.getTotalShares();
-      const guildBankAddr = await daoService.mcDao.getGuildBankAddr();
-      const gracePeriodLength = await daoService.mcDao.getGracePeriodLength();
-      const votingPeriodLength = await daoService.mcDao.getVotingPeriodLength();
-      const periodDuration = await daoService.mcDao.getPeriodDuration();
-      const processingReward = await daoService.mcDao.getProcessingReward();
-      const proposalDeposit = await daoService.mcDao.getProposalDeposit();
-      const approvedToken = await daoService.mcDao.approvedToken();
+        const currentPeriod = await daoService.mcDao.getCurrentPeriod();
+        const totalShares = await daoService.mcDao.getTotalShares();
+        const guildBankAddr = await daoService.mcDao.getGuildBankAddr();
+        const gracePeriodLength = await daoService.mcDao.getGracePeriodLength();
+        const votingPeriodLength = await daoService.mcDao.getVotingPeriodLength();
+        const periodDuration = await daoService.mcDao.getPeriodDuration();
+        const processingReward = await daoService.mcDao.getProcessingReward();
+        const proposalDeposit = await daoService.mcDao.getProposalDeposit();
+        const approvedToken = await daoService.mcDao.approvedToken();
+        const guildBankValue = await daoService.token.balanceOf(guildBankAddr);
+        const tokenSymbol = await daoService.token.getSymbol();
 
-      const guildBankValue = await daoService.token.balanceOf(guildBankAddr);
-      const tokenSymbol = await daoService.token.getSymbol();
 
       const cacheData = {
         currentPeriod: parseInt(currentPeriod),
@@ -116,6 +123,9 @@ const App = ({ client }) => {
           ),
         ),
       };
+
+      console.log('cacheData', cacheData);
+      
 
       client.writeData({
         data: cacheData,
