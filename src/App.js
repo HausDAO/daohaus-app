@@ -11,6 +11,7 @@ import Loading from './components/shared/Loading';
 import { DaoDataContext, DaoServiceContext } from './contexts/Store';
 
 import './App.scss';
+import config from './config';
 
 const App = ({ client }) => {
   const [loading, setloading] = useState(true);
@@ -44,6 +45,15 @@ const App = ({ client }) => {
                   },
                 })
               : undefined,
+            v2Client:
+              +apiData.version === 2
+                ? new ApolloClient({
+                    uri: config.GRAPH_NODE_URI,
+                    // clientState: {
+                    //   resolvers,
+                    // },
+                  })
+                : undefined,
           });
         } else {
           setloading(false);
