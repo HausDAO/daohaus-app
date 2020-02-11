@@ -12,6 +12,7 @@ import {
 import { DaoService, USER_TYPE } from '../utils/DaoService';
 import { getChainData } from '../utils/chains';
 import config from '../config';
+import { get } from '../utils/Requests';
 
 export const CurrentUserContext = createContext();
 export const CurrentWalletContext = createContext();
@@ -69,7 +70,20 @@ const Store = ({ children, daoParam }) => {
         return;
       }
 
-      if (!daoParam) {
+      let apiData = null;
+      let version = null;
+
+      try {
+        const daoRes = await get(`moloch/${daoParam}`);
+        apiData = daoRes.data;
+        version = apiData.version || '1';
+        console.log('apiData', apiData);
+      } catch (err) {
+        console.log('api fetch error');
+      }
+
+      // if (!daoParam || !apiData) {
+      if (!daoParam || !apiData) {
         return;
       }
 
@@ -95,10 +109,11 @@ const Store = ({ children, daoParam }) => {
                 user.attributes['custom:account_address'],
                 provider,
                 daoParam,
+                version,
               );
               dao.daoAddress = daoParam;
             } else {
-              dao = await DaoService.instantiateWithReadOnly(daoParam);
+              dao = await DaoService.instantiateWithReadOnly(daoParam, version);
             }
             break;
           }
@@ -108,13 +123,14 @@ const Store = ({ children, daoParam }) => {
               user.attributes['custom:account_address'],
               user.sdk,
               daoParam,
+              version,
             );
             // TODO: why is this not set in daoService?
             dao.daoAddress = daoParam;
             break;
           case USER_TYPE.READ_ONLY:
           default:
-            dao = await DaoService.instantiateWithReadOnly(daoParam);
+            dao = await DaoService.instantiateWithReadOnly(daoParam, version);
             break;
         }
         setCurrentUser(user);
@@ -126,7 +142,7 @@ const Store = ({ children, daoParam }) => {
 
         localStorage.setItem('loginType', '');
 
-        dao = await DaoService.instantiateWithReadOnly(daoParam);
+        dao = await DaoService.instantiateWithReadOnly(daoParam, version);
       } finally {
         setDaoService(dao);
       }
