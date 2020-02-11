@@ -4,12 +4,14 @@ import ProposalList from './ProposalList';
 import { groupByStatus } from '../../utils/ProposalHelper';
 
 import './ProposalFilter.scss';
-import { DaoServiceContext } from '../../contexts/Store';
+import { DaoServiceContext, ThemeContext } from '../../contexts/Store';
 
 const ProposalFilter = ({ proposals, filter, history }) => {
   const [groupedProposals, setGroupedProposals] = useState();
   const [filteredProposals, setFilteredProposals] = useState([]);
   const [daoService] = useContext(DaoServiceContext);
+  const [themeVariables] = useContext(ThemeContext);
+  const StyledButton = themeVariables.StyledButton;
 
   const handleSelect = (list, listName) => {
     setFilteredProposals(list);
@@ -40,23 +42,23 @@ const ProposalFilter = ({ proposals, filter, history }) => {
   return (
     <div className="ProposalFilter">
       <div className="ProposalFilter__Filters">
-        <button
+        <StyledButton
           onClick={() =>
             handleSelect(groupedProposals.VotingPeriod, 'VotingPeriod')
           }
           className={filter === 'VotingPeriod' ? 'Active' : null}
         >
           Voting Period ({groupedProposals.VotingPeriod.length})
-        </button>
-        <button
+        </StyledButton>
+        <StyledButton
           onClick={() =>
             handleSelect(groupedProposals.GracePeriod, 'GracePeriod')
           }
           className={filter === 'GracePeriod' ? 'Active' : null}
         >
           Grace Period ({groupedProposals.GracePeriod.length})
-        </button>
-        <button
+        </StyledButton>
+        <StyledButton
           onClick={() =>
             handleSelect(
               groupedProposals.ReadyForProcessing,
@@ -66,19 +68,19 @@ const ProposalFilter = ({ proposals, filter, history }) => {
           className={filter === 'ReadyForProcessing' ? 'Active' : null}
         >
           Ready For Processing ({groupedProposals.ReadyForProcessing.length})
-        </button>
-        <button
+        </StyledButton>
+        <StyledButton
           onClick={() => handleSelect(groupedProposals.Completed, 'Completed')}
           className={filter === 'Completed' ? 'Active' : null}
         >
           Completed ({groupedProposals.Completed.length})
-        </button>
-        <button
+        </StyledButton>
+        <StyledButton
           onClick={() => handleSelect(groupedProposals.InQueue, 'InQueue')}
           className={filter === 'InQueue' ? 'Active' : null}
         >
           In Queue ({groupedProposals.InQueue.length})
-        </button>
+        </StyledButton>
         {}
       </div>
       <ProposalList proposals={filteredProposals} />

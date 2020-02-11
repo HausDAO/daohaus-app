@@ -1,10 +1,15 @@
 import React, {useContext} from 'react';
-import { DaoServiceContext } from '../../contexts/Store';
+import { DaoServiceContext, ThemeContext } from '../../contexts/Store';
 
 export const Web3SignIn = ({ history }) => {
     const [daoService] = useContext(DaoServiceContext);
+    const [themeVariables] = useContext(ThemeContext);  
+
+    const ThemedButton = themeVariables.StyledButton;
+
+
     return (
-        <button
+        <ThemedButton
             onClick={async () => {
                 localStorage.setItem('loginType', 'web3');
                 history.push('/dao/'+daoService.daoAddress.toLowerCase()+'/proposals');
@@ -12,6 +17,6 @@ export const Web3SignIn = ({ history }) => {
             }}
         >
             Sign In With Web3
-    </button>
+    </ThemedButton>
     );
 };

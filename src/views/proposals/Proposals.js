@@ -11,6 +11,7 @@ import {
   CurrentWalletContext,
   DaoServiceContext,
   DaoDataContext,
+  ThemeContext,
 } from '../../contexts/Store';
 import StateModals from '../../components/shared/StateModals';
 
@@ -18,6 +19,8 @@ const Proposals = ({ match, history }) => {
   const [currentWallet] = useContext(CurrentWalletContext);
   const [daoService] = useContext(DaoServiceContext);
   const [daoData] = useContext(DaoDataContext);
+  const [themeVariables] = useContext(ThemeContext);
+  const StyledA = themeVariables.StyledA;
 
   let proposalQuery, options;
 
@@ -57,8 +60,8 @@ const Proposals = ({ match, history }) => {
           {currentWallet.shares ? (
             <div>
               <p>
-                <Link
-                  to={`/dao/${daoService.daoAddress}/proposal-new`}
+                <StyledA
+                  href={`/dao/${daoService.daoAddress}/proposal-new`}
                   className="Bold"
                 >
                   <svg
@@ -72,7 +75,7 @@ const Proposals = ({ match, history }) => {
                     <path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z" />
                   </svg>
                   New Proposal
-                </Link>
+                </StyledA>
               </p>
             </div>
           ) : null}

@@ -12,7 +12,7 @@ import {
 
 import config from '../../config';
 
-import { CurrentUserContext, DaoServiceContext } from '../../contexts/Store';
+import { CurrentUserContext, DaoServiceContext, ThemeContext } from '../../contexts/Store';
 import Loading from '../../components/shared/Loading';
 import { Web3SignIn } from '../../components/account/Web3SignIn';
 import { USER_TYPE } from '../../utils/DaoService';
@@ -26,11 +26,15 @@ const signinTypes = {
 const SignIn = ({ history }) => {
   const [daoService] = useContext(DaoServiceContext);
   const [, setCurrentUser] = useContext(CurrentUserContext);
+  const [themeVariables] = useContext(ThemeContext);  
+
   const [authError, setAuthError] = useState();
   const [pseudonymTouch, setPseudonymTouch] = useState(false);
   const [passwordTouch, setPasswordTouch] = useState(false);
   const [signinType, setSigninType] = useState(null);
   const historyState = history.location.state;
+
+  const ThemedButton = themeVariables.StyledButton;
 
   return (
     <div className="Form">
@@ -53,9 +57,9 @@ const SignIn = ({ history }) => {
       {signinType !== signinTypes.password && (
         <>
           <Web3SignIn history={history} setCurrentUser={setCurrentUser} />
-          <button onClick={() => setSigninType(signinTypes.password)}>
+          <ThemedButton onClick={() => setSigninType(signinTypes.password)}>
             Sign in With Password
-          </button>
+          </ThemedButton>
         </>
       )}
       {signinType === signinTypes.password && (
@@ -220,7 +224,7 @@ const SignIn = ({ history }) => {
                   render={(msg) => <div className="Error">{msg}</div>}
                 />
                 <div className="ButtonGroup">
-                  <button
+                  <ThemedButton
                     type="submit"
                     className={
                       Object.keys(errors).length < 1 &&
@@ -232,7 +236,7 @@ const SignIn = ({ history }) => {
                     disabled={isSubmitting}
                   >
                     Sign In
-                  </button>
+                  </ThemedButton>
                   {/* Commented out until possible <Link to="/forgot-password">Forgot Password?</Link> */}
                 </div>
               </Form>

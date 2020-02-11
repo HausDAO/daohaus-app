@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useContext } from 'react';
 import styled from 'styled-components';
 
-import { DaoServiceContext } from '../../contexts/Store';
+import { DaoServiceContext, ThemeContext } from '../../contexts/Store';
 import { primary, tertiary, appDark } from '../../variables.styles';
 
 const FullBarDiv = styled.div`
@@ -91,6 +91,8 @@ const StackedVote = ({ id, currentYesVote, currentNoVote, page }) => {
   const [percentageSharesYes, setPercentageSharesYes] = useState(0);
   const [percentageSharesNo, setPercentageSharesNo] = useState(0);
   const [daoService] = useContext(DaoServiceContext);
+  const [themeVariables] = useContext(ThemeContext);  
+
 
   if (currentYesVote === undefined) {
     currentYesVote = 0;
@@ -116,15 +118,35 @@ const StackedVote = ({ id, currentYesVote, currentNoVote, page }) => {
     currentProposal();
   }, [daoService, id, currentYesVote, currentNoVote]);
 
+const ThemedYesLabelSpan = styled(YesLabelSpan)`
+  color: ${themeVariables.primary};
+`;
+
+const ThemedNoLabelSpan = styled(NoLabelSpan)`
+  color: ${themeVariables.tertiary};
+`;
+
+const ThemedBaseBarDiv = styled(BaseBarDiv)`
+  background-color: ${themeVariables.appDark};
+`;
+
+const ThemedYesBarDiv = styled(YesBarDiv)`
+  background-color: ${themeVariables.primary};
+`;
+
+const ThemedNoBarDiv = styled(NoBarDiv)`
+  background-color: ${themeVariables.tertiary};
+`;
+
   return (
     <FullBarDiv>
       <LabelsDiv>
-        <YesLabelSpan page={page}>{yesVoteShares}</YesLabelSpan>
-        <NoLabelSpan page={page}>{noVoteShares}</NoLabelSpan>
+        <ThemedYesLabelSpan page={page}>{yesVoteShares}</ThemedYesLabelSpan>
+        <ThemedNoLabelSpan page={page}>{noVoteShares}</ThemedNoLabelSpan>
       </LabelsDiv>
-      <BaseBarDiv />
-      <YesBarDiv percentageShares={percentageSharesNo} />
-      <NoBarDiv percentageShares={percentageSharesYes} />
+      <ThemedBaseBarDiv />
+      <ThemedYesBarDiv percentageShares={percentageSharesNo} />
+      <ThemedNoBarDiv percentageShares={percentageSharesYes} />
       <QuorumBarDiv />
     </FullBarDiv>
   );

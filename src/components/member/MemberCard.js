@@ -7,7 +7,7 @@ import styled from 'styled-components';
 import Web3Service from '../../utils/Web3Service';
 import { truncateAddr } from '../../utils/Helpers';
 import ValueDisplay from '../shared/ValueDisplay';
-import { DaoServiceContext } from '../../contexts/Store';
+import { DaoServiceContext, ThemeContext } from '../../contexts/Store';
 
 import { appDark, appLight, phone, primary } from '../../variables.styles';
 import { DataP, DataH2, ProposalAndMemberCardDiv } from '../../App.styles';
@@ -55,6 +55,20 @@ const web3Service = new Web3Service();
 const MemberCard = ({ member }) => {
   const [daoService] = useContext(DaoServiceContext);
   const [memberProfile, setMemberProfile] = useState({});
+  const [themeVariables] = useContext(ThemeContext);  
+
+  const ThemedMemberCardDiv = styled(MemberCardDiv)`
+  background-color: ${themeVariables.appLight};
+  border: 2px solid ${themeVariables.appDark};
+
+  @media (min-width: ${themeVariables.phone}) {
+    border: 2px solid ${themeVariables.appDark};
+  }
+
+  &:hover {
+    background-color: ${themeVariables.primary};
+  }
+  `
 
   const memberId = member.id.split('-')[1]
     ? member.id.split('-')[1]
@@ -82,7 +96,7 @@ const MemberCard = ({ member }) => {
         pathname: '/dao/' + daoService.daoAddress + '/member/' + member.id,
       }}
     >
-      <MemberCardDiv>
+      <ThemedMemberCardDiv>
         <MemberCardIdentityDiv>
           <MemberCardImage>
             {memberProfile && memberProfile.image && memberProfile.image[0] ? (
@@ -124,7 +138,7 @@ const MemberCard = ({ member }) => {
             </DataH2>
           </div>
         </OfferDivMemberCard>
-      </MemberCardDiv>
+      </ThemedMemberCardDiv>
     </Link>
   );
 };

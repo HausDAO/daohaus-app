@@ -1,10 +1,12 @@
 import React, { useContext } from 'react';
 import { withRouter, Link } from 'react-router-dom';
+import styled from 'styled-components';
 
-import { CurrentUserContext, DaoServiceContext, DaoDataContext } from '../../contexts/Store';
+import { CurrentUserContext, DaoServiceContext, DaoDataContext, ThemeContext } from '../../contexts/Store';
 import BcToast from './BcToast';
 
 import './TopNav.scss';
+import {AuthDiv, TopNavDiv} from './TopNav.styles'
 import useModal from './useModal';
 import Modal from './Modal';
 
@@ -12,6 +14,7 @@ const TopNav = (props) => {
   const [currentUser] = useContext(CurrentUserContext);
   const [daoService] = useContext(DaoServiceContext);
   const [daoData] = useContext(DaoDataContext);
+  const [themeVariables] = useContext(ThemeContext);
 
   // Toggle functions
   const [isElementOpen, setElementOpen] = React.useState(false);
@@ -20,6 +23,42 @@ const TopNav = (props) => {
   const {
     location: { pathname },
   } = props;
+
+
+  // const ThemedAuthDiv = styled(AuthDiv)`
+  // border: 2px solid ${themeVariables.baseFontColor};
+  // background-color: ${themeVariables.appLight};
+  // &__Button {
+  //   color: ${themeVariables.baseFontColor};
+  //   svg {
+  //     fill: ${themeVariables.baseFontColor};
+  //   }
+  //   &:hover {
+  //     color: ${themeVariables.primaryHover};
+  //     svg {
+  //       fill: ${themeVariables.primaryHover};
+  //     }
+  //   }
+  // }
+  // `
+
+  // const ThemedTopNavDiv = styled(TopNavDiv)`
+  // .Brand {
+  //   &:hover {
+  //     color: ${themeVariables.primary};
+  //   }
+  //   img {
+  //     height: 48px;
+  //   }
+  //   @media (max-width: ${themeVariables.phone}) {
+  //     font-size: 1.15em;
+  //     max-width: 50%;
+  //     text-overflow: ellipsis;
+  //     overflow: hidden;
+  //     white-space: nowrap;
+  //   }
+  // `
+
 
   return (
     <div className="TopNav">
