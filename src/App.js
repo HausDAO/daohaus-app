@@ -67,7 +67,11 @@ const App = ({ client }) => {
     }
     const primary = daoData && daoData.themeMap.primary;
     const secondary = daoData && daoData.themeMap.secondary;
-    const themeService = new ThemeService(primary, secondary);
+    const tertiary = daoData && daoData.themeMap.tertiary;
+    const danger = daoData && daoData.themeMap.danger;
+    const success = daoData && daoData.themeMap.success;
+    const appBackground =  daoData && daoData.themeMap.appBackground;
+    const themeService = new ThemeService(primary, secondary, tertiary, danger, success, appBackground);
 
     setThemeVariables(themeService);
     // eslint-disable-next-line

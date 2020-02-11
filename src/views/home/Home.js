@@ -84,6 +84,19 @@ h3 { font-size: 28px; }
 
 `;
 
+const ThemedIntroDiv = styled(IntroDiv)`
+color: ${({ themeVariables }) => themeVariables && themeVariables.primary};
+`
+const ThemedHomeDiv = styled(HomeDiv)`
+background-image: url(${({ themeVariables }) => themeVariables.themeMap && themeVariables.themeMap.bgImage});
+`
+
+const ThemedDataDiv = styled(DataDiv)`
+.Bank, .Shares, .ShareValue {
+&:hover h5 { color: ${({ themeVariables }) => themeVariables && themeVariables.primary}}
+}
+`
+
 const Home = () => {
   const [chartView, setChartView] = useState('bank');
   const [daoData] = useContext(DaoDataContext);
@@ -93,20 +106,6 @@ const Home = () => {
     pollInterval: 20000,
   });
 
-
-  const ThemedIntroDiv = styled(IntroDiv)`
-    color: ${themeVariables && themeVariables.primary};
-  `
-  const ThemedHomeDiv = styled(HomeDiv)`
-  background-image: url(${daoData.themeMap && daoData.themeMap.bgImage});
-  `
-
-  const ThemedDataDiv = styled(DataDiv)`
-  .Bank, .Shares, .ShareValue {
-    &:hover h5 { color: ${themeVariables && themeVariables.primary}; }
-  }
-  `
-
   if (loading) return <Loading />;
   if (error) return <ErrorMessage message={error} />;
 
@@ -115,15 +114,15 @@ const Home = () => {
       {daoData ? <HeadTags daoData={daoData} /> : null}
       <StateModals />
 
-      <ThemedHomeDiv>
-        <ThemedIntroDiv>
+      <ThemedHomeDiv themeVariables={themeVariables}>
+        <ThemedIntroDiv themeVariables={themeVariables}>
           <h1>{daoData.name || 'PokéMol DAO'}</h1>
           <p>{daoData.description || 'Put a Moloch in Your Pocket'}</p>
         </ThemedIntroDiv>
         <ChartDiv>
           <HomeChart guildBankAddr={data.guildBankAddr} chartView={chartView} />
         </ChartDiv>
-        <ThemedDataDiv>
+        <ThemedDataDiv  themeVariables={themeVariables}>
           <div
             onClick={() => setChartView('bank')}
             className={'Bank' + (chartView === 'bank' ? ' Selected' : '')}

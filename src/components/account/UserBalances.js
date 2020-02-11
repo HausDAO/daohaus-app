@@ -280,6 +280,113 @@ export const TinyButton = styled.div`
   }
 `;
 
+
+
+const ThemedWalletDiv = styled(WalletDiv)`
+  background-color: ${({ themeVariables }) => themeVariables.appLight};
+  @media (max-width: ${({ themeVariables }) => themeVariables.phone}) {
+    border-radius: 0px;
+    border: none;
+  }
+  @media (min-width: ${({ themeVariables }) => themeVariables.phone}) {
+    width: 60%;
+    margin: 25px auto;
+    position: relative;
+  }
+`;
+
+const ThemedWalletHeaderDiv = styled(WalletHeaderDiv)`
+  border-bottom: 1px solid ${({ themeVariables }) => themeVariables.primaryHover};
+  background-color: ${({ themeVariables }) => themeVariables.primaryHover};
+  @media (max-width: ${({ themeVariables }) => themeVariables.phone}) {
+    border-radius: 0px;
+    border: none;
+  }
+`;
+
+const TemedWalletOverlayDiv = styled(WalletOverlayDiv)`
+  background-color: ${({ themeVariables }) => themeVariables.primary};
+  @media (min-width: ${({ themeVariables }) => themeVariables.phone}) {
+    border-radius: 10px;
+    border: none;
+  }
+`;
+
+const ThemedStatusP = styled(StatusP)`
+  color: ${(props) => (props.status === 'disconnected' ? props.themeVariables.danger : props.themeVariables.secondary)};
+  &:before {
+    background-color: ${(props) =>
+    props.status === 'disconnected' ? props.themeVariables.danger : props.themeVariables.secondary};
+  }
+`;
+
+const ThemedAddressButton = styled(AddressButton)`
+  &:hover {
+    color: ${({ themeVariables }) => themeVariables.secondary};
+    fill: ${({ themeVariables }) => themeVariables.secondary};
+  }
+  p {
+    color: white;
+  }
+  svg {
+    fill: ${({ themeVariables }) => themeVariables.secondary};
+  }
+`;
+
+const ThemedActionsDropdownDiv = styled(ActionsDropdownDiv)`
+  color: ${({ themeVariables }) => themeVariables.appLight};
+`;
+
+const ThemedSwitchHeaderDiv = styled(SwitchHeaderDiv)`
+  background-color: ${({ themeVariables }) => themeVariables.primary};
+
+  button {
+    color: ${({ themeVariables }) => themeVariables.secondary};
+  }
+`;
+
+const ThemedSelectedElementButton = styled(SelectedElementButton)`
+  border-bottom: ${(props) => (props.selected ? '4px solid' + props.themeVariables.secondary : '')};
+`;
+
+const ThemedActionsDropdownContentDiv = styled(ActionsDropdownContentDiv)`
+  background-color: ${({ themeVariables }) => themeVariables.appLight};
+  button {
+    color: ${({ themeVariables }) => themeVariables.primary};
+    &:hover {
+      color: ${({ themeVariables }) => themeVariables.primaryHover};
+    }
+    &.Button--Primary {
+      color: ${({ themeVariables }) => themeVariables.primary};
+      &:hover {
+        color: ${({ themeVariables }) => themeVariables.primaryHover};
+      }
+    }
+    &.Button--Secondary {
+      color: ${({ themeVariables }) => themeVariables.secondary};
+      &:hover {
+        color: ${({ themeVariables }) => themeVariables.secondaryHover};
+      }
+      &:disabled {
+        color: grey;
+      }
+    }
+    &.Button--Tertiary {
+      color: ${({ themeVariables }) => themeVariables.tertiary};
+      &:hover {
+        color: ${({ themeVariables }) => themeVariables.tertiaryHover};
+      }
+    }
+  }
+`;
+
+const ThemedTinyButton = styled(TinyButton)`
+  background-color: ${({ themeVariables }) => themeVariables.danger};
+  &:hover {
+    background-color: ${({ themeVariables }) => themeVariables.dangerHover};
+  }
+`;
+
 const UserBalance = ({ toggle, client }) => {
   const { tokenSymbol } = client.cache.readQuery({
     query: GET_METADATA,
@@ -341,120 +448,14 @@ const UserBalance = ({ toggle, client }) => {
     }
   };
 
-
-  const ThemedWalletDiv = styled(WalletDiv)`
-  background-color: ${themeVariables.appLight};
-  @media (max-width: ${themeVariables.phone}) {
-    border-radius: 0px;
-    border: none;
-  }
-  @media (min-width: ${themeVariables.phone}) {
-    width: 60%;
-    margin: 25px auto;
-    position: relative;
-  }
-`;
-
-  const ThemedWalletHeaderDiv = styled(WalletHeaderDiv)`
-  border-bottom: 1px solid ${themeVariables.primaryHover};
-  background-color: ${themeVariables.primaryHover};
-  @media (max-width: ${themeVariables.phone}) {
-    border-radius: 0px;
-    border: none;
-  }
-`;
-
-  const TemedWalletOverlayDiv = styled(WalletOverlayDiv)`
-  background-color: ${themeVariables.primary};
-  @media (min-width: ${themeVariables.phone}) {
-    border-radius: 10px;
-    border: none;
-  }
-`;
-
-  const ThemedStatusP = styled(StatusP)`
-  color: ${(props) => (props.status === 'disconnected' ? themeVariables.danger : themeVariables.secondary)};
-  &:before {
-    background-color: ${(props) =>
-      props.status === 'disconnected' ? themeVariables.danger : themeVariables.secondary};
-  }
-`;
-
-const ThemedAddressButton = styled(AddressButton)`
-  &:hover {
-    color: ${themeVariables.secondary};
-    fill: ${themeVariables.secondary};
-  }
-  p {
-    color: white;
-  }
-  svg {
-    fill: ${themeVariables.secondary};
-  }
-`;
-
-const ThemedActionsDropdownDiv = styled(ActionsDropdownDiv)`
-  color: ${themeVariables.appLight};
-`;
-
-const ThemedSwitchHeaderDiv = styled(SwitchHeaderDiv)`
-  background-color: ${themeVariables.primary};
-
-  button {
-    color: ${themeVariables.secondary};
-  }
-`;
-
-const ThemedSelectedElementButton = styled(SelectedElementButton)`
-  border-bottom: ${(props) => (props.selected ? '4px solid' + themeVariables.secondary : '')};
-`;
-
-const ThemedActionsDropdownContentDiv = styled(ActionsDropdownContentDiv)`
-  background-color: ${themeVariables.appLight};
-  button {
-    color: ${themeVariables.primary};
-    &:hover {
-      color: ${themeVariables.primaryHover};
-    }
-    &.Button--Primary {
-      color: ${themeVariables.primary};
-      &:hover {
-        color: ${themeVariables.primaryHover};
-      }
-    }
-    &.Button--Secondary {
-      color: ${themeVariables.secondary};
-      &:hover {
-        color: ${themeVariables.secondaryHover};
-      }
-      &:disabled {
-        color: grey;
-      }
-    }
-    &.Button--Tertiary {
-      color: ${themeVariables.tertiary};
-      &:hover {
-        color: ${themeVariables.tertiaryHover};
-      }
-    }
-  }
-`;
-
-const ThemedTinyButton = styled(TinyButton)`
-  background-color: ${themeVariables.danger};
-  &:hover {
-    background-color: ${themeVariables.dangerHover};
-  }
-`;
-
   return (
-    <ThemedWalletDiv>
+    <ThemedWalletDiv themeVariables={themeVariables}>
       {/* <p>{currentWallet.state}</p>
       <p>{WalletStatuses.Deployed}</p> */}
       {currentWallet.state !== WalletStatuses.Connecting &&
         currentWallet.state === WalletStatuses.Created && (
-          <TemedWalletOverlayDiv>
-            <WalletOverlayContentsDiv>
+          <TemedWalletOverlayDiv themeVariables={themeVariables}>
+            <WalletOverlayContentsDiv themeVariables={themeVariables}>
               {currentWallet.eth < 0.05 && <DepositFormInitial />}
               {currentWallet.eth >= 0.05 && (
                 <>
@@ -490,9 +491,9 @@ const ThemedTinyButton = styled(TinyButton)`
           </WalletOverlayContentsDiv>
         </WalletOverlayDiv>
       )}
-      <ThemedWalletHeaderDiv>
+      <ThemedWalletHeaderDiv themeVariables={themeVariables}>
         <div className="WalletInfo">
-          <ThemedStatusP
+          <ThemedStatusP themeVariables={themeVariables}
             status={
               (currentUser.type === USER_TYPE.SDK &&
                 currentWallet.state !== 'Deployed') ||
@@ -529,7 +530,7 @@ const ThemedTinyButton = styled(TinyButton)`
             </ThemedAddressButton>
           </CopyToClipboard>
         </div>
-        <ThemedActionsDropdownDiv>
+        <ThemedActionsDropdownDiv themeVariables={themeVariables}>
           <button onClick={() => toggleActions()}>
             Actions <img src={Arrow} alt="arrow" />
           </button>
@@ -538,7 +539,7 @@ const ThemedTinyButton = styled(TinyButton)`
             <>
               <BackdropOpenDiv onClick={toggleActions} />
 
-              <ThemedActionsDropdownContentDiv>
+              <ThemedActionsDropdownContentDiv themeVariables={themeVariables}>
                 <ButtonSecondary onClick={() => toggleActions('depositForm')}>
                   Deposit
                 </ButtonSecondary>
@@ -580,8 +581,9 @@ const ThemedTinyButton = styled(TinyButton)`
           ) : null}
         </ThemedActionsDropdownDiv>
       </ThemedWalletHeaderDiv>
-      <ThemedSwitchHeaderDiv>
+      <ThemedSwitchHeaderDiv themeVariables={themeVariables}>
         <ThemedSelectedElementButton
+          themeVariables={themeVariables}
           selected={headerSwitch === 'Balances'}
           onClick={() => setHeaderSwitch('Balances')}
         >
