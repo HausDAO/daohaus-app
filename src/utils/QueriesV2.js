@@ -15,4 +15,29 @@ query Metadata {
   approvedToken @client
   tokenSymbol @client
 }
-`;;
+`;
+
+export const GET_MOLOCHES_V2 = gql`
+  query daos($skip: Int) {
+    daos(orderBy: count, first: 100, skip: $skip) {
+      apiData @client
+      id
+      index
+      count
+      moloch
+      summoner
+      newContract
+      version
+      title
+      tokenInfo @client
+    }
+    moloches(orderBy: summoningTime, first: 100, skip: $skip) {
+      id
+      totalShares
+      summoningTime
+      members {
+        id
+      }
+    }
+  }
+`;
