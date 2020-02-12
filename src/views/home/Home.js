@@ -1,7 +1,8 @@
 import React, { useState, useContext } from 'react';
 import { useQuery } from '@apollo/react-hooks';
 
-import { GET_METADATA, GET_METADATA_V2 } from '../../utils/Queries';
+import { GET_METADATA } from '../../utils/Queries';
+import { GET_METADATA_V2 } from '../../utils/QueriesV2';
 import { DaoDataContext } from '../../contexts/Store';
 import StateModals from '../../components/shared/StateModals';
 import BottomNav from '../../components/shared/BottomNav';
