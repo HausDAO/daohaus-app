@@ -1,20 +1,20 @@
 import { gql } from 'apollo-boost';
 
 export const GET_METADATA_V2 = gql`
-query Metadata {
-  currentPeriod @client
-  totalShares @client
-  guildBankAddr @client
-  gracePeriodLength @client
-  votingPeriodLength @client
-  periodDuration @client
-  processingReward @client
-  proposalDeposit @client
-  guildBankValue @client
-  shareValue @client
-  approvedToken @client
-  tokenSymbol @client
-}
+  query Metadata {
+    currentPeriod @client
+    totalShares @client
+    guildBankAddr @client
+    gracePeriodLength @client
+    votingPeriodLength @client
+    periodDuration @client
+    processingReward @client
+    proposalDeposit @client
+    guildBankValue @client
+    shareValue @client
+    approvedToken @client
+    tokenSymbol @client
+  }
 `;
 
 export const GET_MOLOCHES_V2 = gql`
@@ -38,6 +38,24 @@ export const GET_MOLOCHES_V2 = gql`
       members {
         id
       }
+    }
+  }
+`;
+
+const baseProposalFields = `
+  proposalIndex
+`;
+
+export const GET_PROPOSALS_V2 = gql`
+  query proposals($contractAddr: String!, $skip: Int) {
+    proposals(
+      where: { molochAddress: $contractAddr }
+      orderBy: proposalIndex
+      orderDirection: desc
+      first: 100
+      skip: $skip
+    ) {
+      ${baseProposalFields}
     }
   }
 `;

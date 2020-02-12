@@ -3,6 +3,8 @@ import { Link } from 'react-router-dom';
 import { useQuery } from '@apollo/react-hooks';
 
 import { GET_PROPOSALS, GET_PROPOSALS_LEGACY } from '../../utils/Queries';
+import { GET_PROPOSALS_V2 } from '../../utils/QueriesV2';
+
 import ProposalFilter from '../../components/proposal/ProposalFilter';
 import ErrorMessage from '../../components/shared/ErrorMessage';
 import BottomNav from '../../components/shared/BottomNav';
@@ -25,14 +27,29 @@ const Proposals = ({ match, history }) => {
     proposalQuery = GET_PROPOSALS_LEGACY;
     options = { client: daoData.legacyClient, pollInterval: 20000 };
   } else {
-    proposalQuery = GET_PROPOSALS;
-    options = {
-      variables: { contractAddr: daoService.daoAddress.toLowerCase() },
-      pollInterval: 20000,
-    };
+    if (daoData.version === 2) {
+      console.log('v2 querying', daoData.v2Client);
+      proposalQuery = GET_PROPOSALS_V2;
+      console.log('proposalQuery', proposalQuery);
+      options = {
+        client: daoData.v2Client,
+        variables: {
+          contractAddr: daoService.daoAddress.toLowerCase(),
+        },
+        pollInterval: 20000,
+      };
+    } else {
+      proposalQuery = GET_PROPOSALS;
+      options = {
+        variables: { contractAddr: daoService.daoAddress.toLowerCase() },
+        pollInterval: 20000,
+      };
+    }
   }
 
   const { loading, error, data, fetchMore } = useQuery(proposalQuery, options);
+
+  console.log('data', data);
 
   if (loading) return <Loading />;
   if (error) return <ErrorMessage message={error} />;
