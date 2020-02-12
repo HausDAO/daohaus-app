@@ -117,7 +117,8 @@ const ThemedIntroDiv = styled(IntroDiv)`
   color: ${({ daoData }) => daoData.themeMap && daoData.themeMap.color};
 `;
 const ThemedHomeoDiv = styled(HomeDiv)`
-  background-image: url(${({ daoData }) => daoData.themeMap && daoData.themeMap.bgImage});
+  background-image: url(${({ daoData }) =>
+    daoData.themeMap && daoData.themeMap.bgImage});
 `;
 
 const ThemedDataDiv = styled(DataDiv)`
@@ -134,12 +135,11 @@ const Home = () => {
   const [chartView, setChartView] = useState('bank');
   const [daoData] = useContext(DaoDataContext);
 
-  const query = daoData.version === 2 ? GET_METADATA_V2 : GET_METADATA
+  const query = daoData.version === 2 ? GET_METADATA_V2 : GET_METADATA;
 
   const { loading, error, data } = useQuery(query, {
     pollInterval: 20000,
   });
-
 
   if (loading) return <Loading />;
   if (error) return <ErrorMessage message={error} />;
@@ -155,40 +155,56 @@ const Home = () => {
           <p>{daoData.description || 'Put a Moloch in Your Pocket'}</p>
         </ThemedIntroDiv>
         <ChartDiv>
-          {daoData.version === 1 && <HomeChart guildBankAddr={data.guildBankAddr} chartView={chartView} />}
+          {daoData.version === 1 && (
+            <HomeChart
+              guildBankAddr={data.guildBankAddr}
+              chartView={chartView}
+            />
+          )}
         </ChartDiv>
         <ThemedDataDiv daoData={daoData}>
-          <div
-            onClick={() => setChartView('bank')}
-            className={'Bank' + (chartView === 'bank' ? ' Selected' : '')}
-          >
-            <h5>Bank</h5>
-            <h2>
-              <ValueDisplay
-                value={parseFloat(data.guildBankValue).toFixed(4)}
-              />
-            </h2>
-          </div>
-          <div className="Row">
-            <div
-              onClick={() => setChartView('shares')}
-              className={'Shares' + (chartView === 'shares' ? ' Selected' : '')}
-            >
+          {+daoData.version === 2 ? (
+            <div>
               <h5>Shares</h5>
-              <h3>{data.totalShares}</h3>
+              <h2>{data.totalShares}</h2>
             </div>
-            <div
-              onClick={() => setChartView('value')}
-              className={
-                'ShareValue' + (chartView === 'value' ? ' Selected' : '')
-              }
-            >
-              <h5>Share Value</h5>
-              <h3>
-                <ValueDisplay value={data.shareValue.toFixed(4)} />
-              </h3>
-            </div>
-          </div>
+          ) : (
+            <>
+              <div
+                onClick={() => setChartView('bank')}
+                className={'Bank' + (chartView === 'bank' ? ' Selected' : '')}
+              >
+                <h5>Bank</h5>
+                <h2>
+                  <ValueDisplay
+                    value={parseFloat(data.guildBankValue).toFixed(4)}
+                  />
+                </h2>
+              </div>
+              <div className="Row">
+                <div
+                  onClick={() => setChartView('shares')}
+                  className={
+                    'Shares' + (chartView === 'shares' ? ' Selected' : '')
+                  }
+                >
+                  <h5>Shares</h5>
+                  <h3>{data.totalShares}</h3>
+                </div>
+                <div
+                  onClick={() => setChartView('value')}
+                  className={
+                    'ShareValue' + (chartView === 'value' ? ' Selected' : '')
+                  }
+                >
+                  <h5>Share Value</h5>
+                  <h3>
+                    <ValueDisplay value={data.shareValue.toFixed(4)} />
+                  </h3>
+                </div>
+              </div>
+            </>
+          )}
         </ThemedDataDiv>
         <BottomNav />
       </ThemedHomeoDiv>
