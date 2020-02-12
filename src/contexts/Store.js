@@ -132,7 +132,6 @@ const Store = ({ children, daoParam }) => {
             break;
           case USER_TYPE.READ_ONLY:
           default:
-            console.log('WTFWTFWTF');
             
             dao = await DaoService.instantiateWithReadOnly(daoParam, version);
             break;
