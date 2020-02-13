@@ -77,3 +77,24 @@ export const GET_MEMBERS_V2 = gql`
     }
   }
 `;
+
+export const GET_MEMBER_V2 = gql`
+  query member($id: String!) {
+    member(id: $id) {
+      id
+      delegateKey
+      shares
+      kicked
+      tokenTribute
+      didRagequit
+      submissions {
+        proposalIndex
+        yesVotes
+        noVotes
+        processed
+        didPass
+        cancelled
+      }
+    }
+  }
+`;
