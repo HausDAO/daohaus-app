@@ -49,13 +49,31 @@ const baseProposalFields = `
 export const GET_PROPOSALS_V2 = gql`
   query proposals($contractAddr: String!, $skip: Int) {
     proposals(
-      where: { molochAddress: $contractAddr }
+      where: { moloch: $contractAddr }
       orderBy: proposalIndex
       orderDirection: desc
       first: 100
       skip: $skip
     ) {
       ${baseProposalFields}
+    }
+  }
+`;
+
+export const GET_MEMBERS_V2 = gql`
+  query members($contractAddr: String!, $skip: Int) {
+    members(
+      where: { molochAddress: $contractAddr }
+      orderBy: shares
+      first: 100
+      skip: $skip
+    ) {
+      id
+      delegateKey
+      shares
+      isActive
+      tokenTribute
+      didRagequit
     }
   }
 `;

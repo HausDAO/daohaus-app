@@ -2,16 +2,15 @@ import React, { useEffect, useState, useContext } from 'react';
 import { BrowserRouter as Router } from 'react-router-dom';
 import ApolloClient from 'apollo-boost';
 
+import { DaoDataContext, DaoServiceContext } from './contexts/Store';
 import { get } from './utils/Requests';
 import { resolvers } from './utils/Resolvers';
 import Routes from './Routes';
 import Header from './components/header/Header';
 import Loading from './components/shared/Loading';
-
-import { DaoDataContext, DaoServiceContext } from './contexts/Store';
+import config from './config';
 
 import './App.scss';
-import config from './config';
 
 const App = ({ client }) => {
   const [loading, setloading] = useState(true);
@@ -39,10 +38,11 @@ const App = ({ client }) => {
           let altClient;
           // TODO: Swap resolvers on version
           if (apiData.isLegacy || +apiData.version === 2) {
+            console.log('setting up alt client', config.GRAPH_NODE_URI_V2);
             altClient = new ApolloClient({
               uri: apiData.isLegacy
                 ? apiData.graphNodeUri
-                : config.GRAPH_NODE_URI,
+                : config.GRAPH_NODE_URI_V2,
               clientState: {
                 resolvers,
               },
@@ -89,8 +89,8 @@ const App = ({ client }) => {
 
         if (daoData && daoData.version === 2 && daoService) {
           const currentPeriod = await daoService.mcDao.getCurrentPeriod();
-          // client.writeData({
-          daoData.altClient.writeData({
+          client.writeData({
+            // daoData.altClient.writeData({
             data: { currentPeriod: parseInt(currentPeriod) },
           });
 

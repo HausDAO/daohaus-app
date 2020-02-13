@@ -23,28 +23,34 @@ const Proposals = ({ match, history }) => {
 
   let proposalQuery, options;
 
-  if (daoData.isLegacy) {
-    proposalQuery = GET_PROPOSALS_LEGACY;
-    options = { client: daoData.altClient, pollInterval: 20000 };
+  if (daoData.isLegacy || daoData.version === 2) {
+    proposalQuery = daoData.isLegacy ? GET_PROPOSALS_LEGACY : GET_PROPOSALS_V2;
+    options = {
+      client: daoData.altClient,
+      variables: daoData.isLegacy
+        ? {}
+        : { contractAddr: daoService.daoAddress.toLowerCase() },
+      pollInterval: 20000,
+    };
   } else {
-    if (daoData.version === 2) {
-      console.log('v2 querying', daoData.altClient);
-      proposalQuery = GET_PROPOSALS_V2;
-      console.log('proposalQuery', proposalQuery);
-      options = {
-        client: daoData.altClient,
-        variables: {
-          contractAddr: daoService.daoAddress.toLowerCase(),
-        },
-        pollInterval: 20000,
-      };
-    } else {
-      proposalQuery = GET_PROPOSALS;
-      options = {
-        variables: { contractAddr: daoService.daoAddress.toLowerCase() },
-        pollInterval: 20000,
-      };
-    }
+    // if (daoData.version === 2) {
+    //   console.log('v2 querying', daoData.altClient);
+    //   proposalQuery = GET_PROPOSALS_V2;
+    //   console.log('proposalQuery', proposalQuery);
+    //   options = {
+    //     client: daoData.altClient,
+    //     variables: {
+    //       contractAddr: daoService.daoAddress.toLowerCase(),
+    //     },
+    //     pollInterval: 20000,
+    //   };
+    // } else {
+    proposalQuery = GET_PROPOSALS;
+    options = {
+      variables: { contractAddr: daoService.daoAddress.toLowerCase() },
+      pollInterval: 20000,
+    };
+    // }
   }
 
   const { loading, error, data, fetchMore } = useQuery(proposalQuery, options);
