@@ -35,25 +35,23 @@ const App = ({ client }) => {
 
         if (apiData) {
           setDaoPath(daoParam);
+
+          let altClient;
+          // TODO: Swap resolvers on version
+          if (apiData.isLegacy || +apiData.version === 2) {
+            altClient = new ApolloClient({
+              uri: apiData.isLegacy
+                ? apiData.graphNodeUri
+                : config.GRAPH_NODE_URI,
+              clientState: {
+                resolvers,
+              },
+            });
+          }
+
           setDaoData({
             ...apiData,
-            legacyClient: apiData.isLegacy
-              ? new ApolloClient({
-                  uri: apiData.graphNodeUri,
-                  clientState: {
-                    resolvers,
-                  },
-                })
-              : undefined,
-            v2Client:
-              +apiData.version === 2
-                ? new ApolloClient({
-                    uri: config.GRAPH_NODE_URI,
-                    // clientState: {
-                    //   resolvers,
-                    // },
-                  })
-                : undefined,
+            altClient,
           });
         } else {
           setloading(false);
@@ -91,8 +89,8 @@ const App = ({ client }) => {
 
         if (daoData && daoData.version === 2 && daoService) {
           const currentPeriod = await daoService.mcDao.getCurrentPeriod();
-
-          client.writeData({
+          // client.writeData({
+          daoData.altClient.writeData({
             data: { currentPeriod: parseInt(currentPeriod) },
           });
 
@@ -139,7 +137,7 @@ const App = ({ client }) => {
       });
 
       if (daoData.isLegacy) {
-        daoData.legacyClient.writeData({
+        daoData.altClient.writeData({
           data: cacheData,
         });
       }

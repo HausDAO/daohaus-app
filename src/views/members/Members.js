@@ -18,7 +18,7 @@ const Members = () => {
 
   if (daoData.isLegacy) {
     memberQuery = GET_MEMBERS_LEGACY;
-    options = { client: daoData.legacyClient };
+    options = { client: daoData.altClient };
   } else {
     memberQuery = GET_MEMBERS;
     options = {

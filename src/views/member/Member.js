@@ -17,7 +17,7 @@ const Member = (props) => {
   const options = { variables: { id } };
 
   if (daoData.isLegacy) {
-    options.client = daoData.legacyClient;
+    options.client = daoData.altClient;
   }
 
   const { loading, error, data } = useQuery(GET_MEMBER, options);

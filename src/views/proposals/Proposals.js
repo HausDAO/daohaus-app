@@ -25,14 +25,14 @@ const Proposals = ({ match, history }) => {
 
   if (daoData.isLegacy) {
     proposalQuery = GET_PROPOSALS_LEGACY;
-    options = { client: daoData.legacyClient, pollInterval: 20000 };
+    options = { client: daoData.altClient, pollInterval: 20000 };
   } else {
     if (daoData.version === 2) {
-      console.log('v2 querying', daoData.v2Client);
+      console.log('v2 querying', daoData.altClient);
       proposalQuery = GET_PROPOSALS_V2;
       console.log('proposalQuery', proposalQuery);
       options = {
-        client: daoData.v2Client,
+        client: daoData.altClient,
         variables: {
           contractAddr: daoService.daoAddress.toLowerCase(),
         },

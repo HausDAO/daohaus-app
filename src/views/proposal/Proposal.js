@@ -30,7 +30,7 @@ const Proposal = (props) => {
 
   if (daoData.isLegacy) {
     options = {
-      client: daoData.legacyClient,
+      client: daoData.altClient,
       variables: { id },
     };
   } else {
