@@ -33,7 +33,8 @@
     "styled-components": "^5.0.1",
     "styled-system": "^5.1.4",
     "web3": "^1.2.6",
-    "web3connect": "^1.0.0-beta.29"
+    "web3connect": "^1.0.0-beta.29",
+    "yup": "^0.28.1"
   },
   "scripts": {
     "start": "react-scripts start",
