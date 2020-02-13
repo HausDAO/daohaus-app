@@ -63,7 +63,7 @@ export const GET_PROPOSALS_V2 = gql`
 export const GET_MEMBERS_V2 = gql`
   query members($contractAddr: String!, $skip: Int) {
     members(
-      where: { molochAddress: $contractAddr }
+      where: { moloch: $contractAddr }
       orderBy: shares
       first: 100
       skip: $skip
@@ -71,7 +71,7 @@ export const GET_MEMBERS_V2 = gql`
       id
       delegateKey
       shares
-      isActive
+      kicked
       tokenTribute
       didRagequit
     }

@@ -33,24 +33,11 @@ const Proposals = ({ match, history }) => {
       pollInterval: 20000,
     };
   } else {
-    // if (daoData.version === 2) {
-    //   console.log('v2 querying', daoData.altClient);
-    //   proposalQuery = GET_PROPOSALS_V2;
-    //   console.log('proposalQuery', proposalQuery);
-    //   options = {
-    //     client: daoData.altClient,
-    //     variables: {
-    //       contractAddr: daoService.daoAddress.toLowerCase(),
-    //     },
-    //     pollInterval: 20000,
-    //   };
-    // } else {
     proposalQuery = GET_PROPOSALS;
     options = {
       variables: { contractAddr: daoService.daoAddress.toLowerCase() },
       pollInterval: 20000,
     };
-    // }
   }
 
   const { loading, error, data, fetchMore } = useQuery(proposalQuery, options);
