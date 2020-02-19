@@ -34,6 +34,8 @@ const Members = () => {
 
   const { loading, error, data, fetchMore } = useQuery(memberQuery, options);
 
+  console.log('data', data);
+
   if (loading) return <Loading />;
   if (error) return <ErrorMessage message={error} />;
 

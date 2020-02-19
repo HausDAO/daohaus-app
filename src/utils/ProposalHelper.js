@@ -109,7 +109,10 @@ export function determineProposalStatus(
   proposal.startingPeriod = +proposal.startingPeriod;
 
   let status;
-  if (proposal.processed && proposal.aborted) {
+  // TODO: handle V2 - no aborted
+  const abortedOrCancelled = proposal.aborted || proposal.cancelled;
+  // if (proposal.processed && proposal.aborted) {
+  if (proposal.processed && abortedOrCancelled) {
     status = ProposalStatus.Aborted;
   } else if (proposal.processed && proposal.didPass) {
     status = ProposalStatus.Passed;

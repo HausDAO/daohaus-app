@@ -56,9 +56,11 @@ const MemberCard = ({ member }) => {
   const [daoService] = useContext(DaoServiceContext);
   const [memberProfile, setMemberProfile] = useState({});
 
-  const memberId = member.id.split('-')[1]
+  const parsedMemberId = member.id.split('-')[1]
     ? member.id.split('-')[1]
     : member.id;
+
+  const memberId = member.memberAddress || parsedMemberId;
 
   useEffect(() => {
     const setup = async () => {

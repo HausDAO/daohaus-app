@@ -23,9 +23,11 @@ const web3Service = new Web3Service();
 const MemberDetail = ({ member }) => {
   const [memberProfile, setMemberProfile] = useState({});
 
-  const memberId = member.id.split('-')[1]
+  const parsedMemberId = member.id.split('-')[1]
     ? member.id.split('-')[1]
     : member.id;
+
+  const memberId = member.memberAddress || parsedMemberId;
 
   useEffect(() => {
     const setup = async () => {

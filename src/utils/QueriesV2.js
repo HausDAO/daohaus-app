@@ -44,12 +44,44 @@ export const GET_MOLOCHES_V2 = gql`
 
 const baseProposalFields = `
   proposalIndex
+  cancelled
+  moloch
+  id
+  startingPeriod
+  tributeOffered
+  tributeToken
+  sharesRequested
+  lootRequested
+  paymentToken
+  yesVotes
+  noVotes
+  applicant
+  didPass
+  details
+  processed
+  guildkick
+  whitelist
+  newMember
+  sponsor
+  sponsored
+  trade
+  yesShares
+  noShares
+  timestamp
+  memberAddress
+  proposer
 `;
+
+// status @client
+// gracePeriod @client
+// votingEnds @client
+// votingStarts @client
+// readyForProcessing @client
 
 export const GET_PROPOSALS_V2 = gql`
   query proposals($contractAddr: String!, $skip: Int) {
     proposals(
-      where: { moloch: $contractAddr }
+      where: { molochAddress: $contractAddr }
       orderBy: proposalIndex
       orderDirection: desc
       first: 100
@@ -63,7 +95,7 @@ export const GET_PROPOSALS_V2 = gql`
 export const GET_MEMBERS_V2 = gql`
   query members($contractAddr: String!, $skip: Int) {
     members(
-      where: { moloch: $contractAddr }
+      where: { molochAddress: $contractAddr }
       orderBy: shares
       first: 100
       skip: $skip
@@ -74,6 +106,7 @@ export const GET_MEMBERS_V2 = gql`
       kicked
       tokenTribute
       didRagequit
+      memberAddress
     }
   }
 `;
@@ -86,6 +119,7 @@ export const GET_MEMBER_V2 = gql`
       shares
       kicked
       tokenTribute
+      memberAddress
       didRagequit
       submissions {
         proposalIndex

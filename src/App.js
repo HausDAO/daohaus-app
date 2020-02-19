@@ -38,7 +38,6 @@ const App = ({ client }) => {
           let altClient;
           // TODO: Swap resolvers on version
           if (apiData.isLegacy || +apiData.version === 2) {
-            console.log('setting up alt client', config.GRAPH_NODE_URI_V2);
             altClient = new ApolloClient({
               uri: apiData.isLegacy
                 ? apiData.graphNodeUri
