@@ -15,10 +15,7 @@ const TributeInput = ({
             <input type="number" {...field} />
             <TinyButton >
                 <span>!</span> Unlock Token
-                  </TinyButton>
-            <TinyButton >
-                token list
-                  </TinyButton>
+            </TinyButton>
         </div>
     );
 

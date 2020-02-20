@@ -14,16 +14,19 @@ export const ProposalSchema = Yup.object().shape({
         .url('Invalid url')
         .required('Required'),
     applicant: Yup.string()
-        .matches(/\b0x[0-9a-f]{10,40}\b/, 'Invalid Address')
+        .matches(/\b0x[0-9a-fA-F]{10,40}\b/, 'Invalid Address')
         .required('Required'),
-    tokenTribute: Yup.number()
-        .positive('Number must positive'),
+    tokenOffered: Yup.number()
+        .min(0, 'Number must be 0 or positive'),
+    tributeToken: Yup.string()
+    .matches(/\b0x[0-9a-fA-F]{10,40}\b/, 'Invalid Address')
+    .required('Required'),
     paymentRequested: Yup.number()
-        .positive('Number must positive'),
+        .min(0, 'Number must be 0 or positive'),
     sharesRequested: Yup.number()
-        .moreThan(-1, 'Number must be 0 or positive')
+        .min(0, 'Number must be 0 or positive')
         .integer('Invalid Number'),
     lootRequested: Yup.number()
-        .moreThan(-1, 'Number must be 0 or positive')
+        .min(0, 'Number must be 0 or positive')
         .integer('Invalid Number'),
 });
