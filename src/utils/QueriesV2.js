@@ -17,21 +17,19 @@ export const GET_METADATA_V2 = gql`
   }
 `;
 
-export const GET_MOLOCHES_V2 = gql`
-  query daos($skip: Int) {
-    daos(orderBy: count, first: 100, skip: $skip) {
-      apiData @client
+// /apiData @client
+
+export const GET_MOLOCH_V2 = gql`
+  query dao($contractAddr: String!) {
+    dao(id: $contractAddr) {
       id
       index
-      count
       moloch
       summoner
-      newContract
       version
       title
-      tokenInfo @client
     }
-    moloches(orderBy: summoningTime, first: 100, skip: $skip) {
+    moloch(id: $contractAddr) {
       id
       totalShares
       summoningTime
