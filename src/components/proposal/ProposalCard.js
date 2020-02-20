@@ -59,17 +59,14 @@ const ProposalCard = ({ proposal, client }) => {
     query: GET_METADATA,
   });
 
-  // TODO: GET FROM Moloch query
-  // console.log('periodDuration', periodDuration);
-
-  console.log('proposal', proposal);
-
   const [daoService] = useContext(DaoServiceContext);
   const [daoData] = useContext(DaoDataContext);
   const countDown = getProposalCountdownText(proposal, periodDuration);
   const title = titleMaker(proposal);
   const tribute =
     +daoData.version === 2 ? proposal.tributeOffered : proposal.tokenTribute;
+  const id =
+    +daoData.version === 2 ? proposal.proposalId : proposal.proposalIndex;
 
   return (
     <ProposalCardDiv>
@@ -100,13 +97,13 @@ const ProposalCard = ({ proposal, client }) => {
       </OfferDivProposalCard>
       <CardVoteDiv>
         {daoData.version !== 2 ? (
-          <StackedVote id={proposal.proposalIndex} page="ProposalCard" />
+          <StackedVote id={id} page="ProposalCard" />
         ) : null}
       </CardVoteDiv>
       <Link
         className="Button"
         to={{
-          pathname: `/dao/${daoService.daoAddress}/proposal/${proposal.proposalIndex}`,
+          pathname: `/dao/${daoService.daoAddress}/proposal/${id}`,
         }}
       >
         View Proposal
