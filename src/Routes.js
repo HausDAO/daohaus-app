@@ -14,6 +14,8 @@ import Confirm from './views/auth/Confirm';
 import SignOut from './views/auth/SignOut';
 import ResendCode from './views/auth/ResendCode';
 import InvalidRoute from './views/invalidRoute/InvalidRoute';
+import ProposalEngine from './views/proposal-new-v2/ProposalEngine';
+import NewMemberForm from './components/proposal-v2/NewMemberForm';
 
 const Routes = (props) => {
   const { isValid } = props;
@@ -46,6 +48,16 @@ const Routes = (props) => {
             path="/dao/:dao(\b0x[0-9a-f]{10,40}\b)/proposal-new"
             exact
             component={ProposalNew}
+          />
+          <Route
+            path="/dao/:dao(\b0x[0-9a-f]{10,40}\b)/proposal-engine"
+            exact
+            component={ProposalEngine}
+          />
+          <Route
+            path="/dao/:dao(\b0x[0-9a-f]{10,40}\b)/proposal-member"
+            exact
+            component={NewMemberForm}
           />
           <Route
             path="/dao/:dao(\b0x[0-9a-f]{10,40}\b)/members"
