@@ -45,9 +45,9 @@ const NewMemberForm = (props) => {
                         onSubmit={async (values, { setSubmitting }) => {
                             console.log(values);
 
-                            try {
-                                await daoService.mcDao.submitProposal()
-                            }
+                            // try {
+                            //     await daoService.mcDao.submitProposal()
+                            // }
 
 
                             // submitProposal(
