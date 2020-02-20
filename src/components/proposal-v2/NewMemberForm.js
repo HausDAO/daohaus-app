@@ -45,6 +45,21 @@ const NewMemberForm = (props) => {
                         onSubmit={async (values, { setSubmitting }) => {
                             console.log(values);
 
+                            // try {
+                            //     await daoService.mcDao.submitProposal()
+                            // }
+
+
+                            // submitProposal(
+                            //     applicant,
+                            //     sharesRequested,
+                            //     lootRequested,
+                            //     tributeOffered,
+                            //     tributeToken,
+                            //     paymentRequested,
+                            //     PaymentToken,
+                            //     details,
+
                             // const uuid = shortid.generate();
                             // setLoading(true);
                             // try {

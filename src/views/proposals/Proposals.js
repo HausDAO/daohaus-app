@@ -43,6 +43,8 @@ const Proposals = ({ match, history }) => {
   const { loading, error, data, fetchMore } = useQuery(proposalQuery, options);
 
   console.log('data', data);
+  console.log(daoData);
+  
 
   if (loading) return <Loading />;
   if (error) return <ErrorMessage message={error} />;
@@ -68,7 +70,7 @@ const Proposals = ({ match, history }) => {
             <div>
               <p>
                 <Link
-                  to={`/dao/${daoService.daoAddress}/proposal-new`}
+                  to={daoData.version === 2 ? `/dao/${daoService.daoAddress}/proposal-engine` : `/dao/${daoService.daoAddress}/proposal-new`}
                   className="Bold"
                 >
                   <svg

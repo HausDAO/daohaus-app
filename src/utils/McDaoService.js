@@ -502,7 +502,7 @@ export class Web3McDaoServiceV2 extends Web3McDaoService {
     details,
   ) {
     const txReceipt = await this.daoContract.methods
-      .submitGuildKickProposal(
+      .submitProposal(
         applicant,
         sharesRequested,
         lootRequested,
