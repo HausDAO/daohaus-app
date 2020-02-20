@@ -91,6 +91,14 @@ export const GET_PROPOSALS_V2 = gql`
   }
 `;
 
+export const GET_PROPOSAL_V2 = gql`
+  query proposal($id: String!) {
+    proposal(id: $id) {
+      ${baseProposalFields}
+    }
+  }
+`;
+
 export const GET_MEMBERS_V2 = gql`
   query members($contractAddr: String!, $skip: Int) {
     members(
