@@ -9,7 +9,7 @@ import {
   titleMaker,
 } from '../../utils/ProposalHelper';
 import { GET_METADATA } from '../../utils/Queries';
-import { DaoServiceContext } from '../../contexts/Store';
+import { DaoServiceContext, DaoDataContext } from '../../contexts/Store';
 import ValueDisplay from '../shared/ValueDisplay';
 import { appDark, appLight } from '../../variables.styles';
 import {
@@ -59,9 +59,17 @@ const ProposalCard = ({ proposal, client }) => {
     query: GET_METADATA,
   });
 
+  // TODO: GET FROM Moloch query
+  // console.log('periodDuration', periodDuration);
+
+  console.log('proposal', proposal);
+
   const [daoService] = useContext(DaoServiceContext);
+  const [daoData] = useContext(DaoDataContext);
   const countDown = getProposalCountdownText(proposal, periodDuration);
   const title = titleMaker(proposal);
+  const tribute =
+    +daoData.version === 2 ? proposal.tributeOffered : proposal.tokenTribute;
 
   return (
     <ProposalCardDiv>
@@ -86,12 +94,14 @@ const ProposalCard = ({ proposal, client }) => {
         <div>
           <h5>Tribute</h5>
           <DataH2>
-            <ValueDisplay value={Web3.utils.fromWei(proposal.tokenTribute)} />
+            <ValueDisplay value={Web3.utils.fromWei(tribute)} />
           </DataH2>
         </div>
       </OfferDivProposalCard>
       <CardVoteDiv>
-        <StackedVote id={proposal.proposalIndex} page="ProposalCard" />
+        {daoData.version !== 2 ? (
+          <StackedVote id={proposal.proposalIndex} page="ProposalCard" />
+        ) : null}
       </CardVoteDiv>
       <Link
         className="Button"

@@ -43,8 +43,9 @@ export const GET_MOLOCH_V2 = gql`
 const baseProposalFields = `
   proposalIndex
   cancelled
-  moloch
+  molochAddress
   id
+  proposalId
   startingPeriod
   tributeOffered
   tributeToken
@@ -80,7 +81,7 @@ export const GET_PROPOSALS_V2 = gql`
   query proposals($contractAddr: String!, $skip: Int) {
     proposals(
       where: { molochAddress: $contractAddr }
-      orderBy: proposalIndex
+      orderBy: proposalId
       orderDirection: desc
       first: 100
       skip: $skip

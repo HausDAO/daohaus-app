@@ -77,7 +77,6 @@ const Store = ({ children, daoParam }) => {
         const daoRes = await get(`moloch/${daoParam}`);
         apiData = daoRes.data;
         version = apiData.version || '1';
-        console.log('apiData', apiData);
       } catch (err) {
         console.log('api fetch error');
       }
@@ -96,7 +95,7 @@ const Store = ({ children, daoParam }) => {
       try {
         console.log(`Initializing user type: ${loginType || 'read-only'}`);
         console.log(loginType);
-        
+
         switch (loginType) {
           case USER_TYPE.WEB3: {
             if (web3Connect.cachedProvider) {
@@ -132,7 +131,6 @@ const Store = ({ children, daoParam }) => {
             break;
           case USER_TYPE.READ_ONLY:
           default:
-            
             dao = await DaoService.instantiateWithReadOnly(daoParam, version);
             break;
         }

@@ -1,4 +1,4 @@
-import React, { useContext, Fragment } from 'react';
+import React, { useContext, Fragment, useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { useQuery } from '@apollo/react-hooks';
 
@@ -15,11 +15,14 @@ import {
   DaoDataContext,
 } from '../../contexts/Store';
 import StateModals from '../../components/shared/StateModals';
+import ProposalTypeToggle from '../../components/proposal-v2/ProposalTypeToggle';
 
 const Proposals = ({ match, history }) => {
   const [currentWallet] = useContext(CurrentWalletContext);
   const [daoService] = useContext(DaoServiceContext);
   const [daoData] = useContext(DaoDataContext);
+  const [proposals, setProposals] = useState([]);
+  const [sponsored, setSponsored] = useState(true);
 
   let proposalQuery, options;
 
@@ -42,9 +45,18 @@ const Proposals = ({ match, history }) => {
 
   const { loading, error, data, fetchMore } = useQuery(proposalQuery, options);
 
-  console.log('data', data);
-  console.log(daoData);
-  
+  useEffect(() => {
+    if (data && data.proposals) {
+      if (+daoData.version === 2) {
+        const filteredProposals = data.proposals.filter(
+          (prop) => prop.sponsored === sponsored,
+        );
+        setProposals(filteredProposals);
+      } else {
+        setProposals(data.proposals);
+      }
+    }
+  }, [data, sponsored]);
 
   if (loading) return <Loading />;
   if (error) return <ErrorMessage message={error} />;
@@ -70,7 +82,11 @@ const Proposals = ({ match, history }) => {
             <div>
               <p>
                 <Link
-                  to={daoData.version === 2 ? `/dao/${daoService.daoAddress}/proposal-engine` : `/dao/${daoService.daoAddress}/proposal-new`}
+                  to={
+                    daoData.version === 2
+                      ? `/dao/${daoService.daoAddress}/proposal-engine`
+                      : `/dao/${daoService.daoAddress}/proposal-new`
+                  }
                   className="Bold"
                 >
                   <svg
@@ -89,8 +105,14 @@ const Proposals = ({ match, history }) => {
             </div>
           ) : null}
         </div>
+        {+daoData.version === 2 ? (
+          <ProposalTypeToggle
+            handleTypeChange={setSponsored}
+            sponsored={sponsored}
+          />
+        ) : null}
         <ProposalFilter
-          proposals={data.proposals}
+          proposals={proposals}
           filter={match.params.filter || 'na'}
           history={history}
         />
