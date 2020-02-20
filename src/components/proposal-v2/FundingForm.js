@@ -37,7 +37,7 @@ const FundingForm = (props) => {
                             description: '',
                             link: '',
                             applicant: '',
-                            tokenTribute: 0,
+                            tributeOffered: 0,
                             paymentRequested: 0,
                             sharesRequested: 0,
                             lootRequested: 0,
@@ -51,7 +51,7 @@ const FundingForm = (props) => {
                             // try {
                             //     await daoService.mcDao.submitProposal(
                             //         values.applicant,
-                            //         ethToWei(values.tokenTribute.toString()),
+                            //         ethToWei(values.tributeOffered.toString()),
                             //         values.sharesRequested + '',
                             //         JSON.stringify({
                             //             id: uuid,
@@ -162,9 +162,9 @@ const FundingForm = (props) => {
                                     {(msg) => <div className="Error">{msg}</div>}
                                 </ErrorMessage>
                                 <Expandable label='TRIBUTE'>
-                                    <Field name="tokenTribute" component={TributeInput} label="Token Tribute"></Field>
+                                    <Field name="tributeOffered" component={TributeInput} label="Token Tribute"></Field>
                                 </Expandable>
-                                <ErrorMessage name="tokenTribute">
+                                <ErrorMessage name="tributeOffered">
                                     {(msg) => <div className="Error">{msg}</div>}
                                 </ErrorMessage>
                                 <button type="submit" disabled={isSubmitting}>

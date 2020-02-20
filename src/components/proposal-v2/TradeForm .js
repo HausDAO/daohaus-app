@@ -36,7 +36,7 @@ const TradeForm = (props) => {
                             description: '',
                             link: '',
                             applicant: '',
-                            tokenTribute: 0,
+                            tributeOffered: 0,
                             paymentRequested: 0,
                             sharesRequested: 0,
                             lootRequested: 0,
@@ -50,7 +50,7 @@ const TradeForm = (props) => {
                             // try {
                             //     await daoService.mcDao.submitProposal(
                             //         values.applicant,
-                            //         ethToWei(values.tokenTribute.toString()),
+                            //         ethToWei(values.tributeOffered.toString()),
                             //         values.sharesRequested + '',
                             //         JSON.stringify({
                             //             id: uuid,
@@ -121,9 +121,9 @@ const TradeForm = (props) => {
                                 </ErrorMessage>
 
 
-                                <Field name="tokenTribute" component={TributeInput} label="Input"></Field>
+                                <Field name="tributeOffered" component={TributeInput} label="Input"></Field>
 
-                                <ErrorMessage name="tokenTribute">
+                                <ErrorMessage name="tributeOffered">
                                     {(msg) => <div className="Error">{msg}</div>}
                                 </ErrorMessage>
 

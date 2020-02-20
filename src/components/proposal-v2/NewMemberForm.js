@@ -1,25 +1,30 @@
 import React, { useContext, useState } from 'react';
 import { withRouter } from 'react-router-dom';
+import { ethToWei } from '@netgum/utils'; // returns BN
 
 import { Formik, Form, Field, ErrorMessage } from 'formik';
 
 import {
-    LoaderContext,
-    // DaoServiceContext,
+    LoaderContext, DaoServiceContext,
 } from '../../contexts/Store';
 import Loading from '../shared/Loading';
 
 import { withApollo } from 'react-apollo';
 import TributeInput from './TributeInput';
 import Expandable from '../shared/Expandable';
-import {ProposalSchema} from './Validation';
+import { ProposalSchema } from './Validation';
+import shortid from 'shortid';
+import TokenSelect from './TokenSelect';
 
 const NewMemberForm = (props) => {
     // const { history } = props;
 
     const [gloading] = useContext(LoaderContext);
-    const [loading,] = useState(false);
-    //const [daoService] = useContext(DaoServiceContext);
+    const [loading, setLoading] = useState(false);
+    const [daoService] = useContext(DaoServiceContext);
+
+    // get whitelist
+    const data = [{label: 'Weth', value: '0xd0a1e359811322d97991e03f863a0c30c2cf029c'}];
 
     return (
         <div>
@@ -36,7 +41,8 @@ const NewMemberForm = (props) => {
                             description: '',
                             link: '',
                             applicant: '',
-                            tokenTribute: 0,
+                            tributeOffered: 0,
+                            tributeToken: '',
                             paymentRequested: 0,
                             sharesRequested: 0,
                             lootRequested: 0,
@@ -44,10 +50,13 @@ const NewMemberForm = (props) => {
                         validationSchema={ProposalSchema}
                         onSubmit={async (values, { setSubmitting }) => {
                             console.log(values);
-
-                            // try {
-                            //     await daoService.mcDao.submitProposal()
-                            // }
+                            const uuid = shortid.generate();
+                            const detailsObj = JSON.stringify({
+                                id: uuid,
+                                title: values.title,
+                                description: values.description,
+                                link: values.link,
+                            })
 
 
                             // submitProposal(
@@ -60,31 +69,24 @@ const NewMemberForm = (props) => {
                             //     PaymentToken,
                             //     details,
 
-                            // const uuid = shortid.generate();
-                            // setLoading(true);
-                            // try {
-                            //     await daoService.mcDao.submitProposal(
-                            //         values.applicant,
-                            //         ethToWei(values.tokenTribute.toString()),
-                            //         values.sharesRequested + '',
-                            //         JSON.stringify({
-                            //             id: uuid,
-                            //             title: values.title,
-                            //             description: values.description,
-                            //             link: values.link,
-                            //         }),
-                            //     );
+                            const submitRes = await daoService.mcDao.submitProposal(
+                                values.applicant,
+                                values.sharesRequested,
+                                values.lootRequested,
+                                ethToWei(values.tributeOffered.toString()), // this needs to convert on token decimal length not just wei
+                                values.tributeToken,
+                                0,
+                                "0xd0a1e359811322d97991e03f863a0c30c2cf029c",
+                                detailsObj
+                            )
+
+                            console.log('submitRes', submitRes);
+
+                            setSubmitting(false);
+                            setLoading(false);
 
 
-                            //     history.push(`/dao/${daoService.daoAddress}/proposals`);
-                            // } catch (e) {
-                            //     console.error(`Error processing proposal: ${e.toString()}`);
-                            // } finally {
-                            //     console.log('done it it');
 
-                            //     setSubmitting(false);
-                            //     setLoading(false);
-                            // }
                         }}
                     >
                         {({ isSubmitting }) => (
@@ -137,10 +139,13 @@ const NewMemberForm = (props) => {
                                 <ErrorMessage name="sharesRequested">
                                     {(msg) => <div className="Error">{msg}</div>}
                                 </ErrorMessage>
-                                <Field name="tokenTribute" component={TributeInput} label="Token Tribute"></Field>
-                                <ErrorMessage name="tokenTribute">
+                                <Field name="tributeOffered" component={TributeInput} label="Token Tribute"></Field>
+                                <Field name="tributeToken" component={TokenSelect} label="Token Tribute" data={data}></Field>
+
+                                <ErrorMessage name="tributeOffered">
                                     {(msg) => <div className="Error">{msg}</div>}
                                 </ErrorMessage>
+       
                                 <Field name="applicant">
                                     {({ field, form }) => (
                                         <div className={field.value ? 'Field HasValue' : 'Field '}>

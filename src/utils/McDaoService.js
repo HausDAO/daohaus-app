@@ -514,21 +514,23 @@ export class Web3McDaoServiceV2 extends Web3McDaoService {
       )
       .send({ from: this.accountAddr });
 
-    // const queueLength = await this.daoContract.methods
-    //   .getProposalQueueLength()
-    //   .call();
+    const queueLength = await this.daoContract.methods
+      .proposalCount()
+      .call();
     const parseDetails = JSON.parse(details);
+    console.log('queueLength', queueLength);
+    
 
     // TODO: we want to do anything different on this metadat?
-    // const proposalObj = {
-    //   proposalId: queueLength - 1 + '',
-    //   molochContractAddress: this.contractAddr,
-    //   title: parseDetails.title,
-    //   description: parseDetails.description,
-    //   link: parseDetails.link,
-    // };
+    const proposalObj = {
+      proposalId: queueLength + '',
+      molochContractAddress: this.contractAddr,
+      title: parseDetails.title,
+      description: parseDetails.description,
+      link: parseDetails.link,
+    };
 
-    // post('moloch/proposal', proposalObj);
+    post('moloch/proposal', proposalObj);
 
     this.bcProcessor.setTx(
       txReceipt.transactionHash,
