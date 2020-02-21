@@ -181,6 +181,7 @@ const Home = () => {
                   (token) => token.guildBank,
                 )}
               />
+              <div></div>
             </>
           ) : (
             <>

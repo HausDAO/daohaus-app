@@ -106,6 +106,7 @@ const ProposalDetail = ({
             {web3Service && (
               <ValueDisplay
                 value={web3Service.fromWei(proposal.tokenTribute)}
+                symbolOverride={proposal.tributeTokenSymbol}
               />
             )}
           </h2>
