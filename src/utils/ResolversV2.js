@@ -1,3 +1,5 @@
+import Web3 from 'web3';
+
 import {
   determineProposalStatus,
   inGracePeriod,
@@ -6,8 +8,13 @@ import {
   passedVotingAndGrace,
 } from './ProposalHelper';
 import { GET_METADATA } from './Queries';
+import { TokenService } from './TokenService';
 
-export const resolvers = {
+import config from '../config';
+
+const _web3 = new Web3(new Web3.providers.HttpProvider(config.INFURA_URI));
+
+export const resolversV2 = {
   Proposal: {
     status: (proposal, _args, { cache }) => {
       const {
@@ -82,6 +89,20 @@ export const resolvers = {
         return true;
       }
       return false;
+    },
+  },
+  TokenBalance: {
+    symbol: async (tokenBalance, _args, { cache }) => {
+      if (tokenBalance.guildBank) {
+        const tokenService = new TokenService(
+          _web3,
+          tokenBalance.token.tokenAddress,
+        );
+        const symbol = await tokenService.getSymbol();
+        return symbol;
+      } else {
+        return null;
+      }
     },
   },
 };

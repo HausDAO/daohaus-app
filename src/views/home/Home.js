@@ -12,6 +12,7 @@ import ValueDisplay from '../../components/shared/ValueDisplay';
 import HeadTags from '../../components/shared/HeadTags';
 import HomeChart from '../../components/shared/HomeChart';
 import styled from 'styled-components';
+import WhiteListTokenBalances from '../../components/tokens/WhitelistTokenBalances';
 
 // import './Home.scss';
 
@@ -161,7 +162,7 @@ const Home = () => {
           <p>{daoData.description || 'Put a Moloch in Your Pocket'}</p>
         </ThemedIntroDiv>
         <ChartDiv>
-          {daoData.version === 1 && (
+          {+daoData.version !== 2 && (
             <HomeChart
               guildBankAddr={data.guildBankAddr}
               chartView={chartView}
@@ -170,10 +171,17 @@ const Home = () => {
         </ChartDiv>
         <ThemedDataDiv daoData={daoData}>
           {+daoData.version === 2 ? (
-            <div>
-              <h5>Shares</h5>
-              <h2>{data.moloch.totalShares}</h2>
-            </div>
+            <>
+              <div>
+                <h5>Shares</h5>
+                <h2>{data.moloch.totalShares}</h2>
+              </div>
+              <WhiteListTokenBalances
+                tokens={data.moloch.tokenBalances.filter(
+                  (token) => token.guildBank,
+                )}
+              />
+            </>
           ) : (
             <>
               <div
@@ -212,6 +220,7 @@ const Home = () => {
             </>
           )}
         </ThemedDataDiv>
+
         <BottomNav />
       </ThemedHomeoDiv>
     </>

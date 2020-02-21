@@ -4,20 +4,21 @@ import { withApollo } from 'react-apollo';
 import SymbolIcon from './SymbolIcon';
 import { GET_METADATA } from '../../utils/Queries';
 
-const ValueDisplay = ({ value, client }) => {
+const ValueDisplay = ({ value, client, symbolOverride }) => {
   const { tokenSymbol } = client.cache.readQuery({
     query: GET_METADATA,
   });
 
+  const symbol = symbolOverride || tokenSymbol;
+
   const showSymbol = () => {
-    return tokenSymbol !== 'WETH';
+    return symbol !== 'WETH';
   };
 
   return (
     <>
-      <SymbolIcon tokenSymbol={tokenSymbol} />
-      {value}{' '}
-      {showSymbol() ? tokenSymbol : null}
+      <SymbolIcon tokenSymbol={symbol} />
+      {value} {showSymbol() ? symbol : null}
     </>
   );
 };

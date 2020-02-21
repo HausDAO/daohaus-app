@@ -5,6 +5,7 @@ import ApolloClient from 'apollo-boost';
 import { DaoDataContext, DaoServiceContext } from './contexts/Store';
 import { get } from './utils/Requests';
 import { resolvers } from './utils/Resolvers';
+import { resolversV2 } from './utils/ResolversV2';
 import Routes from './Routes';
 import Header from './components/header/Header';
 import Loading from './components/shared/Loading';
@@ -37,13 +38,14 @@ const App = ({ client }) => {
 
           let altClient;
           // TODO: Swap resolvers on version
+
           if (apiData.isLegacy || +apiData.version === 2) {
             altClient = new ApolloClient({
               uri: apiData.isLegacy
                 ? apiData.graphNodeUri
                 : config.GRAPH_NODE_URI_V2,
               clientState: {
-                resolvers,
+                resolvers: apiData.isLegacy ? resolvers : resolversV2,
               },
             });
           }
