@@ -12,7 +12,7 @@ import ValueDisplay from '../../components/shared/ValueDisplay';
 import HeadTags from '../../components/shared/HeadTags';
 import HomeChart from '../../components/shared/HomeChart';
 import styled from 'styled-components';
-import WhiteListTokenBalances from '../../components/tokens/WhitelistTokenBalances';
+import WhitelistTokenBalances from '../../components/tokens/WhitelistTokenBalances';
 
 // import './Home.scss';
 
@@ -176,7 +176,7 @@ const Home = () => {
                 <h5>Shares</h5>
                 <h2>{data.moloch.totalShares}</h2>
               </div>
-              <WhiteListTokenBalances
+              <WhitelistTokenBalances
                 tokens={data.moloch.tokenBalances.filter(
                   (token) => token.guildBank,
                 )}
