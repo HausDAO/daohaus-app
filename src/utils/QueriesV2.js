@@ -20,7 +20,7 @@ export const GET_METADATA_V2 = gql`
 // /apiData @client
 
 export const GET_MOLOCH_V2 = gql`
-  query dao($contractAddr: String!) {
+  query daos($contractAddr: String!) {
     dao(id: $contractAddr) {
       id
       index
@@ -33,8 +33,17 @@ export const GET_MOLOCH_V2 = gql`
       id
       totalShares
       summoningTime
+
       members {
         id
+      }
+      tokenBalances {
+        token {
+          tokenAddress
+        }
+        symbol @client
+        tokenBalance
+        guildBank
       }
     }
   }
@@ -141,12 +150,12 @@ export const GET_MEMBER_V2 = gql`
 `;
 
 export const GET_TOKENS_V2 = gql`
-query dao($contractAddr: String!) {
-  moloch(id: $contractAddr) {
-    approvedTokens {
-      tokenAddress
-      ticker
+  query dao($contractAddr: String!) {
+    moloch(id: $contractAddr) {
+      approvedTokens {
+        tokenAddress
+        ticker
+      }
     }
   }
-}
 `;
