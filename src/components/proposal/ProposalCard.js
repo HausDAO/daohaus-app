@@ -82,6 +82,7 @@ const ProposalCard = ({ proposal, client }) => {
         </svg>
         <DataP>{countDown}</DataP>
       </TimerDiv>
+      {proposal.newMember ? <h5>New Member Proposal</h5> : null}
       <h3>{title}</h3>
       <OfferDivProposalCard>
         <div>

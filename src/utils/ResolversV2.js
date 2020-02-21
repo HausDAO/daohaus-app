@@ -110,4 +110,11 @@ export const resolversV2 = {
       }
     },
   },
+  Token: {
+    symbol: async (approvedToken, _args, { cache }) => {
+      const tokenService = new TokenService(_web3, approvedToken.tokenAddress);
+      const symbol = await tokenService.getSymbol();
+      return symbol;
+    },
+  },
 };
