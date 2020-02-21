@@ -492,7 +492,6 @@ export class Web3McDaoServiceV2 extends Web3McDaoService {
   }
 
   async submitProposal(
-    applicant,
     sharesRequested,
     lootRequested,
     tributeOffered,
@@ -503,7 +502,7 @@ export class Web3McDaoServiceV2 extends Web3McDaoService {
   ) {
     const txReceipt = await this.daoContract.methods
       .submitProposal(
-        applicant,
+        this.accountAddr,
         sharesRequested,
         lootRequested,
         tributeOffered,

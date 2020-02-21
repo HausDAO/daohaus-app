@@ -14,8 +14,7 @@ export const ProposalSchema = Yup.object().shape({
         .url('Invalid url')
         .required('Required'),
     applicant: Yup.string()
-        .matches(/\b0x[0-9a-fA-F]{10,40}\b/, 'Invalid Address')
-        .required('Required'),
+        .matches(/\b0x[0-9a-fA-F]{10,40}\b/, 'Invalid Address'),
     tokenOffered: Yup.number()
         .min(0, 'Number must be 0 or positive'),
     tributeToken: Yup.string()
