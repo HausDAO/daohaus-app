@@ -3,7 +3,7 @@ import React from 'react';
 const TokenSelect = ({ field, form: { touched, errors }, ...props }) => {
   const options = props.data.map((i) => (
     <option key={i.value} value={i.value}>
-      {i.symbol} {i.label}
+      {i.label}
     </option>
   ));
   return (

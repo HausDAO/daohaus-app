@@ -1,7 +1,8 @@
 import React from 'react';
 import ValueDisplay from '../shared/ValueDisplay';
+import './WhitelistTokenBalances.scss';
 
-const WhiteListTokenBalances = (tokens) => {
+const WhitelistTokenBalances = (tokens) => {
   const renderList = () => {
     return tokens.tokens.map((token) => {
       return (
@@ -16,11 +17,11 @@ const WhiteListTokenBalances = (tokens) => {
   };
 
   return (
-    <div className="WhiteListTokenBalances">
+    <div className="WhitelistTokenBalances">
       <h5>Guildbank Token Balances</h5>
       {renderList()}
     </div>
   );
 };
 
-export default WhiteListTokenBalances;
+export default WhitelistTokenBalances;
