@@ -1,4 +1,4 @@
-import React, {useContext} from 'react';
+import React, { useContext, useState } from 'react';
 import { TinyButton } from '../account/UserBalances';
 import { DaoServiceContext } from '../../contexts/Store';
 
@@ -8,14 +8,31 @@ const TributeInput = ({
     token,
     ...props
 }) => {
-    
+    const [unlocked, setUnlocked] = useState(false)
     const [daoService] = useContext(DaoServiceContext);
 
-    const approve = (token) => {
-        daoService.token.unlock(10, token)
+    const unlock = (token) => {
+        daoService.token.unlock(token)
+            .on("transactionHash", (txHash) => {
+                console.log('txhash, txhash');
+            }).on('receipt', () => {
+                setUnlocked(true);
+            });
     }
-    
-    
+
+    const isUnlocked = async (token, amount) => {
+        console.log('check allownace', token);
+        if(!amount) {
+            return
+        }
+
+        const isUnlocked = await daoService.token.allowance(token)
+        console.log('isUnlocked', isUnlocked);
+        
+        setUnlocked(isUnlocked);
+    }
+
+//await isUnlocked(token, field.value)
     return (
         <div className={
             field.value !== '' ? 'Field HasValue' : 'Field '
@@ -23,11 +40,14 @@ const TributeInput = ({
             <label>
                 {props.label}
             </label>
-            <input type="number" {...field} />
-            <TinyButton onClick={() => approve(token)}>
+            <input type="number" onBlur={() => console.log('test')} {...field} />
+            {!unlocked && (
+            <TinyButton onClick={() => unlock(token)} >
                 <span>!</span> Unlock Token
             </TinyButton>
+            )}
         </div>
-    )};
+    )
+};
 
 export default TributeInput

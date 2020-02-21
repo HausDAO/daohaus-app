@@ -159,15 +159,16 @@ export class Web3TokenService extends TokenService {
     return txReceipt.transactionHash;
   }
 
-  async unlock(wad, token) {
+  async unlock(token) {
     const contract = new this.web3.eth.Contract(Erc20Abi, token);
+    const max = this.web3.utils.toBN(2).pow(this.web3.utils.toBN(255));
     const txReceipt = await contract.methods
-      .approve(this.daoAddress, wad)
+      .approve(this.daoAddress, max.toString())
       .send({ from: this.accountAddress });
     this.bcProcessor.setTx(
       txReceipt.transactionHash,
       this.accountAddress,
-      `Unulock Token Allowance to ${wad}`,
+      `Unulock Token ${token}`,
       true,
     );
     return txReceipt.transactionHash;
