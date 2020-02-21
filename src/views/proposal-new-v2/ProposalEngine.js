@@ -11,12 +11,11 @@ const ProposalEngine = () => {
         <div>
             <h1 className="Pad">New Proposal</h1>
             <ul>
-                {/* TODO add full routes  */}
                 <li><Link to={`/dao/${daoData.contractAddress}/proposal-member`}>Member</Link></li>
-                <li><Link to={`/dao/${daoData.contractAddress}/proposal-funding`}>Funding</Link></li>
-                <li><Link to={`/dao/${daoData.contractAddress}/proposal-whitelist`}>Whitelist Token</Link></li>
-                <li><Link to={`/dao/${daoData.contractAddress}/proposal-guildkick`}>Guildkick</Link></li>
-                <li><Link to={`/dao/${daoData.contractAddress}/proposal-trade`}>Trade</Link></li>
+                <li><Link className='disabled-link' to={`/dao/${daoData.contractAddress}/proposal-funding`}>Funding (comming soon) </Link></li>
+                <li><Link className='disabled-link' to={`/dao/${daoData.contractAddress}/proposal-whitelist`}>Whitelist Token (comming soon) </Link></li>
+                <li><Link className='disabled-link' to={`/dao/${daoData.contractAddress}/proposal-guildkick`}>Guildkick (comming soon) </Link></li>
+                <li><Link className='disabled-link' to={`/dao/${daoData.contractAddress}/proposal-trade`}>Trade (comming soon) </Link></li>
             </ul>
         </div>
 
