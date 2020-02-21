@@ -131,3 +131,14 @@ export const GET_MEMBER_V2 = gql`
     }
   }
 `;
+
+export const GET_TOKENS_V2 = gql`
+query dao($contractAddr: String!) {
+  moloch(id: $contractAddr) {
+    approvedTokens {
+      tokenAddress
+      ticker
+    }
+  }
+}
+`;

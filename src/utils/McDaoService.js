@@ -523,7 +523,7 @@ export class Web3McDaoServiceV2 extends Web3McDaoService {
 
     // TODO: we want to do anything different on this metadat?
     const proposalObj = {
-      proposalId: queueLength + '',
+      proposalId: queueLength - 1 + '',
       molochContractAddress: this.contractAddr,
       title: parseDetails.title,
       description: parseDetails.description,

@@ -78,7 +78,7 @@ const Proposals = ({ match, history }) => {
       <div className="View">
         <div className="Row Pad">
           <h3>Proposals</h3>
-          {currentWallet.shares ? (
+          {currentWallet.shares || daoData.version === 2 ? (
             <div>
               <p>
                 <Link
