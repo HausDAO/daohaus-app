@@ -24,7 +24,6 @@ const NewMemberForm = (props) => {
     const [formLoading, setFormLoading] = useState(false);
     const [daoService] = useContext(DaoServiceContext);
     const [daoData] = useContext(DaoDataContext);
-console.log('daoData', daoData);
 
     const options = {
         variables: { contractAddr: daoData.contractAddress },
@@ -38,7 +37,6 @@ console.log('daoData', daoData);
     if (loading) return <Loading />;
     if (error) {console.log('error', error);
     }
-    console.log('data', data);
     
 
     // get whitelist
@@ -159,7 +157,7 @@ console.log('daoData', daoData);
                                     {(msg) => <div className="Error">{msg}</div>}
                                 </ErrorMessage>
                                 
-                                <Field name="tributeOffered" component={TributeInput} label="Token Tribute" token={tokenData[0].value}></Field>
+                                <Field name="tributeOffered" component={TributeInput} label="Token Tribute" token={tokenData[0].value} ></Field>
                                 <Field name="tributeToken" component={TokenSelect} label="Token Tribute" data={tokenData}></Field>
 
                                 <ErrorMessage name="tributeOffered">

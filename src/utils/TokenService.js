@@ -173,5 +173,17 @@ export class Web3TokenService extends TokenService {
     );
     return txReceipt.transactionHash;
   }
+
+  async unlocked(
+    token,
+    accountAddr = this.accountAddress,
+    contractAddr = this.daoAddress,
+  ) {
+    const contract = new this.web3.eth.Contract(Erc20Abi, token);
+    const allowance = await contract.methods
+      .allowance(accountAddr, contractAddr)
+      .call();
+    return allowance;
+  }
 }
 
