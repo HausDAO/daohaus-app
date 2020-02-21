@@ -160,6 +160,9 @@ export class Web3TokenService extends TokenService {
   }
 
   async unlock(token) {
+    if(token==="0x000000000000000"){
+      return;
+    }
     const contract = new this.web3.eth.Contract(Erc20Abi, token);
     const max = this.web3.utils.toBN(2).pow(this.web3.utils.toBN(255));
     const txReceipt = await contract.methods
@@ -179,6 +182,9 @@ export class Web3TokenService extends TokenService {
     accountAddr = this.accountAddress,
     contractAddr = this.daoAddress,
   ) {
+    if(token==="0x000000000000000"){
+      return 0;
+    }
     const contract = new this.web3.eth.Contract(Erc20Abi, token);
     const allowance = await contract.methods
       .allowance(accountAddr, contractAddr)
