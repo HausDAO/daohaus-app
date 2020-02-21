@@ -205,6 +205,11 @@ button,
   }
 }
 
+.disabled-link {
+  pointer-events: none;
+  color: #ccc;
+}
+
 .LinkButton {
   background-color: transparent;
   color: $primary;
