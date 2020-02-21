@@ -80,6 +80,7 @@ const ProposalDetail = ({
         </svg>
         <p className="Data">{countDown}</p>
       </div>
+      {proposal.newMember ? <h5>New Member Proposal</h5> : null}
       <h2>{title}</h2>
       {+daoData.version === 2 ? (
         <>
