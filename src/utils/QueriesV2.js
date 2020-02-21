@@ -33,7 +33,6 @@ export const GET_MOLOCH_V2 = gql`
       id
       totalShares
       summoningTime
-
       members {
         id
       }
@@ -156,6 +155,7 @@ export const GET_TOKENS_V2 = gql`
       approvedTokens {
         tokenAddress
         ticker
+        symbol @client
       }
     }
   }

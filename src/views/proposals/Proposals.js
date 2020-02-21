@@ -16,6 +16,7 @@ import {
 } from '../../contexts/Store';
 import StateModals from '../../components/shared/StateModals';
 import ProposalTypeToggle from '../../components/proposal-v2/ProposalTypeToggle';
+import ProposalList from '../../components/proposal/ProposalList';
 
 const Proposals = ({ match, history }) => {
   const [currentWallet] = useContext(CurrentWalletContext);
@@ -111,11 +112,16 @@ const Proposals = ({ match, history }) => {
             sponsored={sponsored}
           />
         ) : null}
-        <ProposalFilter
-          proposals={proposals}
-          filter={match.params.filter || 'na'}
-          history={history}
-        />
+
+        {+daoData.version === 2 && !sponsored ? (
+          <ProposalList proposals={proposals} />
+        ) : (
+          <ProposalFilter
+            proposals={proposals}
+            filter={match.params.filter || 'na'}
+            history={history}
+          />
+        )}
       </div>
       <BottomNav />
     </Fragment>
