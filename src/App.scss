@@ -514,6 +514,57 @@ textarea {
   }
 }
 
+.DropdownInput {
+  position: relative;
+  .UnlockButton {
+    position: absolute;
+    top: 50%;
+    right: 15px;
+    transform: translateY(-50%);
+    width: 145px;
+    padding: 5px;
+    outline: none;
+    font-size: 0.75em;
+    border-radius: 25px;
+    border: 2px solid $primary;
+    background-color: $primary;
+    color: white;
+    cursor: pointer;
+    transition: all 0.15s linear;
+    &:hover {
+      border: 2px solid $primary-hover;
+      background-color: $primary-hover;
+    }
+    svg {
+      width: 12px;
+      height: 12px;
+      margin: 2px auto 0px;
+    }
+  }
+  .TokenSelect {
+    position: absolute;
+    top: 50%;
+    right: 15px;
+    transform: translateY(-50%);
+    width: 100px;
+    select {
+      font-size: 0.75em;
+      width: 100px;
+      appearance: none;
+      padding: 5px;
+      border: 2px solid $primary;
+      border-radius: 25px;
+      outline: none;
+      color: $primary;
+      cursor: pointer;
+      &:hover {
+        border: 2px solid $primary-hover;
+        color: $primary-hover;
+      }
+    }
+  }
+}
+
 .EmailConfirmed {
   margin: 25px auto 0px;
   max-width: 340px;

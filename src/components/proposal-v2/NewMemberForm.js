@@ -42,12 +42,10 @@ const NewMemberForm = (props) => {
       console.log('set');
 
       setTokenData(
-        data.moloch.approvedTokens
-          .reverse()
-          .map((token) => ({
-            label: token.ticker || token.tokenAddress,
-            value: token.tokenAddress,
-          })),
+        data.moloch.approvedTokens.reverse().map((token) => ({
+          label: token.ticker || token.tokenAddress,
+          value: token.tokenAddress,
+        })),
       );
     }
   }, [data]);
@@ -176,19 +174,20 @@ const NewMemberForm = (props) => {
                   <ErrorMessage name="sharesRequested">
                     {(msg) => <div className="Error">{msg}</div>}
                   </ErrorMessage>
-
-                  <Field
-                    name="tributeOffered"
-                    component={TributeInput}
-                    label="Token Tribute"
-                    token={props.values.tributeToken}
-                  ></Field>
-                  <Field
-                    name="tributeToken"
-                    component={TokenSelect}
-                    label="Token Tribute"
-                    data={tokenData}
-                  ></Field>
+                  <div className="DropdownInput">
+                    <Field
+                      name="tributeOffered"
+                      component={TributeInput}
+                      label="Token Tribute"
+                      token={props.values.tributeToken}
+                    ></Field>
+                    <Field
+                      name="tributeToken"
+                      component={TokenSelect}
+                      label="Token Tribute"
+                      data={tokenData}
+                    ></Field>
+                  </div>
                   <ErrorMessage name="tributeOffered">
                     {(msg) => (
                       <div className="Error">Tribute Offered: {msg}</div>

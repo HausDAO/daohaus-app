@@ -13,6 +13,7 @@ import {
   CurrentWalletContext,
   DaoServiceContext,
   DaoDataContext,
+  CurrentUserContext,
 } from '../../contexts/Store';
 import StateModals from '../../components/shared/StateModals';
 import ProposalTypeToggle from '../../components/proposal-v2/ProposalTypeToggle';
@@ -20,6 +21,7 @@ import ProposalList from '../../components/proposal/ProposalList';
 
 const Proposals = ({ match, history }) => {
   const [currentWallet] = useContext(CurrentWalletContext);
+  const [currentUser] = useContext(CurrentUserContext);
   const [daoService] = useContext(DaoServiceContext);
   const [daoData] = useContext(DaoDataContext);
   const [proposals, setProposals] = useState([]);
@@ -79,7 +81,7 @@ const Proposals = ({ match, history }) => {
       <div className="View">
         <div className="Row Pad">
           <h3>Proposals</h3>
-          {currentWallet.shares || daoData.version === 2 ? (
+          {currentWallet.shares || (daoData.version === 2 && currentUser) ? (
             <div>
               <p>
                 <Link
