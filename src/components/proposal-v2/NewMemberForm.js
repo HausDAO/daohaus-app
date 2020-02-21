@@ -31,6 +31,7 @@ const NewMemberForm = (props) => {
   const options = {
     variables: { contractAddr: daoData.contractAddress },
     client: daoData.altClient,
+    fetchPolicy: 'no-cache'
   };
   const query = GET_TOKENS_V2;
 
@@ -43,7 +44,7 @@ const NewMemberForm = (props) => {
 
       setTokenData(
         data.moloch.approvedTokens.reverse().map((token) => ({
-          label: token.ticker || token.tokenAddress,
+          label: token.symbol || token.tokenAddress,
           value: token.tokenAddress,
         })),
       );
