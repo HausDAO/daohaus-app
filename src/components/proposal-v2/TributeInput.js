@@ -1,7 +1,6 @@
 import React, { useContext, useState, useEffect } from 'react';
-import { TinyButton } from '../account/UserBalances';
 import { DaoServiceContext } from '../../contexts/Store';
-import Loading from '../shared/Loading';
+import TinyLoader from '../shared/TinyLoader';
 
 const TributeInput = ({
   field,
@@ -55,12 +54,11 @@ const TributeInput = ({
           checkUnlocked(token, field.value);
         }}
       />
-      {!unlocked && !loading && (
-        <TinyButton onClick={() => unlock(token)}>
-          <span>!</span> Unlock Token
-        </TinyButton>
+      {!unlocked && (
+        <div className="UnlockButton" onClick={() => unlock(token)}>
+          {!loading ? <span>! Unlock</span> : <TinyLoader />}
+        </div>
       )}
-      {loading && <Loading />}
     </div>
   );
 };
