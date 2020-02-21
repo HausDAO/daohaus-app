@@ -90,6 +90,11 @@ export const resolversV2 = {
       }
       return false;
     },
+    tributeTokenSymbol: async (proposal, _args, { cache }) => {
+      const tokenService = new TokenService(_web3, proposal.tributeToken);
+      const symbol = await tokenService.getSymbol();
+      return symbol;
+    },
   },
   TokenBalance: {
     symbol: async (tokenBalance, _args, { cache }) => {

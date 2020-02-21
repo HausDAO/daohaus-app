@@ -78,6 +78,7 @@ const baseProposalFields = `
   timestamp
   memberAddress
   proposer
+  tributeTokenSymbol @client
 `;
 
 // status @client

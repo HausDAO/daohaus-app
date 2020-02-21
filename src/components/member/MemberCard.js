@@ -7,7 +7,7 @@ import styled from 'styled-components';
 import Web3Service from '../../utils/Web3Service';
 import { truncateAddr } from '../../utils/Helpers';
 import ValueDisplay from '../shared/ValueDisplay';
-import { DaoServiceContext } from '../../contexts/Store';
+import { DaoServiceContext, DaoDataContext } from '../../contexts/Store';
 
 import { appDark, appLight, phone, primary } from '../../variables.styles';
 import { DataP, DataH2, ProposalAndMemberCardDiv } from '../../App.styles';
@@ -54,6 +54,7 @@ const web3Service = new Web3Service();
 
 const MemberCard = ({ member }) => {
   const [daoService] = useContext(DaoServiceContext);
+  const [daoData] = useContext(DaoDataContext);
   const [memberProfile, setMemberProfile] = useState({});
 
   const parsedMemberId = member.id.split('-')[1]
@@ -119,12 +120,16 @@ const MemberCard = ({ member }) => {
             <h5>Shares</h5>
             <DataH2>{member.shares}</DataH2>
           </div>
-          <div>
-            <h5>Tribute</h5>
-            <DataH2>
-              <ValueDisplay value={web3Service.fromWei(member.tokenTribute)} />
-            </DataH2>
-          </div>
+          {+daoData.version !== 2 ? (
+            <div>
+              <h5>Tribute</h5>
+              <DataH2>
+                <ValueDisplay
+                  value={web3Service.fromWei(member.tokenTribute)}
+                />
+              </DataH2>
+            </div>
+          ) : null}
         </OfferDivMemberCard>
       </MemberCardDiv>
     </Link>

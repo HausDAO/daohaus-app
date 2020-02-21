@@ -91,7 +91,10 @@ const ProposalCard = ({ proposal, client }) => {
         <div>
           <h5>Tribute</h5>
           <DataH2>
-            <ValueDisplay value={Web3.utils.fromWei(tribute)} />
+            <ValueDisplay
+              value={Web3.utils.fromWei(tribute)}
+              symbolOverride={proposal.tributeTokenSymbol}
+            />
           </DataH2>
         </div>
       </OfferDivProposalCard>
