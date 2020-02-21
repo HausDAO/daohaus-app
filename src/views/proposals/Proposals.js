@@ -113,7 +113,8 @@ const Proposals = ({ match, history }) => {
           />
         ) : null}
 
-        {+daoData.version === 2 && !sponsored ? (
+        {/* {+daoData.version === 2 && !sponsored ? ( */}
+        {+daoData.version === 2 ? (
           <ProposalList proposals={proposals} />
         ) : (
           <ProposalFilter
