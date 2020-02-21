@@ -514,6 +514,25 @@ textarea {
   }
 }
 
+.DropdownInput {
+  position: relative;
+  .TokenSelect {
+    position: absolute;
+    top: 50%;
+    right: 15px;
+    transform: translateY(-50%);
+    width: 100px;
+    select {
+      width: 100px;
+      appearance: none;
+      padding: 5px;
+      border: 2px solid $primary;
+      border-radius: 25px;
+      outline: none;
+    }
+  }
+}
+
 .EmailConfirmed {
   margin: 25px auto 0px;
   max-width: 340px;
