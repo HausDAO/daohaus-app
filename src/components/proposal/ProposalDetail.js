@@ -12,6 +12,7 @@ import {
   CurrentUserContext,
   DaoServiceContext,
   DaoDataContext,
+  CurrentWalletContext,
 } from '../../contexts/Store';
 import { GET_METADATA } from '../../utils/Queries';
 import { get } from '../../utils/Requests';
@@ -20,6 +21,7 @@ import VoteControl from './VoteControl';
 import ValueDisplay from '../shared/ValueDisplay';
 
 import './ProposalDetail.scss';
+import TinyLoader from '../shared/TinyLoader';
 
 const web3Service = new Web3Service();
 
@@ -34,6 +36,9 @@ const ProposalDetail = ({
   const [currentUser] = useContext(CurrentUserContext);
   const [daoService] = useContext(DaoServiceContext);
   const [daoData] = useContext(DaoDataContext);
+  const [currentWallet] = useContext(CurrentWalletContext);
+  const [loading, setLoading] = useState(false);
+
   const { periodDuration } = client.cache.readQuery({
     query: GET_METADATA,
   });
@@ -41,6 +46,7 @@ const ProposalDetail = ({
     +daoData.version === 2 ? proposal.proposalId : proposal.proposalIndex;
 
   console.log('proposal', proposal);
+  console.log('currentWallet', currentWallet);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -62,6 +68,18 @@ const ProposalDetail = ({
     fetchData();
     // eslint-disable-next-line
   }, []);
+
+  const cancelProposal = async (id) => {
+    console.log('cancel ', id);
+    setLoading(true);
+    try {
+      const cancelled = await daoService.mcDao.cancelProposal(id)
+    } catch (err) {
+      console.log('user rejected or transaction failed');
+    } finally {
+      setLoading(false);
+    }
+  }
 
   const countDown = getProposalCountdownText(proposal, periodDuration);
   const title = titleMaker(proposal);
@@ -88,13 +106,20 @@ const ProposalDetail = ({
           <p className="Data">{proposal.proposer}</p>
           <h5 className="Label">Applicant Address</h5>
           <p className="Data">{proposal.applicant}</p>
+          {proposal.cancelled && <p>Proposal Cancelled</p>}
+          {!proposal.cancelled && proposal.proposer.toLowerCase() === currentWallet.addrByDelegateKey && (
+            <>
+              {loading ? (<TinyLoader />) : (<button onClick={() => cancelProposal(proposal.proposalId)}>cancel</button>)}
+            </>
+          )}
+
         </>
       ) : (
-        <>
-          <h5 className="Label">Applicant Address</h5>
-          <p className="Data">{proposal.applicantAddress}</p>
-        </>
-      )}
+          <>
+            <h5 className="Label">Applicant Address</h5>
+            <p className="Data">{proposal.applicantAddress}</p>
+          </>
+        )}
 
       <div className="Offer">
         <div className="Shares">
@@ -132,25 +157,25 @@ const ProposalDetail = ({
                 {detailData.description}
               </a>
             ) : (
-              <p>{detailData.description}</p>
-            )}
+                <p>{detailData.description}</p>
+              )}
           </div>
         ) : null}
         {detailData &&
-        detailData.link &&
-        ReactPlayer.canPlay(detailData.link) ? (
-          <div className="Video">
-            <ReactPlayer url={detailData.link} playing={false} loop={false} />
-          </div>
-        ) : detailData &&
           detailData.link &&
-          detailData.link.indexOf('http') > -1 ? (
-          <div className="Link">
-            <a href={detailData.link} rel="noopener noreferrer" target="_blank">
-              Link
+          ReactPlayer.canPlay(detailData.link) ? (
+            <div className="Video">
+              <ReactPlayer url={detailData.link} playing={false} loop={false} />
+            </div>
+          ) : detailData &&
+            detailData.link &&
+            detailData.link.indexOf('http') > -1 ? (
+              <div className="Link">
+                <a href={detailData.link} rel="noopener noreferrer" target="_blank">
+                  Link
             </a>
-          </div>
-        ) : null}
+              </div>
+            ) : null}
       </div>
       {+daoData.version !== 2 ? (
         <VoteControl
