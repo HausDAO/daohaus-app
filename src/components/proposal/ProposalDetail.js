@@ -37,10 +37,10 @@ const ProposalDetail = ({
   const { periodDuration } = client.cache.readQuery({
     query: GET_METADATA,
   });
+  const tribute =
+    +daoData.version === 2 ? proposal.tributeOffered : proposal.tokenTribute;
   const id =
     +daoData.version === 2 ? proposal.proposalId : proposal.proposalIndex;
-
-  console.log('proposal', proposal);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -106,7 +106,7 @@ const ProposalDetail = ({
           <h2 className="Data">
             {web3Service && (
               <ValueDisplay
-                value={web3Service.fromWei(proposal.tokenTribute)}
+                value={web3Service.fromWei(tribute)}
                 symbolOverride={proposal.tributeTokenSymbol}
               />
             )}
