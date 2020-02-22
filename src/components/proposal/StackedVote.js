@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useContext } from 'react';
 import styled from 'styled-components';
 
-import { DaoServiceContext } from '../../contexts/Store';
+import { DaoServiceContext, DaoDataContext } from '../../contexts/Store';
 import { primary, tertiary, appDark } from '../../variables.styles';
 
 const FullBarDiv = styled.div`
@@ -91,6 +91,8 @@ const StackedVote = ({ id, currentYesVote, currentNoVote, page }) => {
   const [percentageSharesYes, setPercentageSharesYes] = useState(0);
   const [percentageSharesNo, setPercentageSharesNo] = useState(0);
   const [daoService] = useContext(DaoServiceContext);
+  const [daoData] = useContext(DaoDataContext);
+
 
   if (currentYesVote === undefined) {
     currentYesVote = 0;
@@ -101,12 +103,21 @@ const StackedVote = ({ id, currentYesVote, currentNoVote, page }) => {
 
   useEffect(() => {
     const currentProposal = async () => {
-      const info = await daoService.mcDao.proposalQueue(id);
+      console.log('id', id);
+      
+      // TODO: why am i doing this? should be using the subgraph
+      const info =  (+daoData.version === 2) ? await daoService.mcDao.proposals(id) : await daoService.mcDao.proposalQueue(id);
+      console.log('info', info);
+      
+
       const noVoteShares = parseInt(info.noVotes) + currentNoVote;
       const yesVoteShares = parseInt(info.yesVotes) + currentYesVote;
       const totalVoteShares = noVoteShares + yesVoteShares;
       const percentageSharesYes = (yesVoteShares / totalVoteShares) * 100 || 0;
       const percentageSharesNo = (noVoteShares / totalVoteShares) * 100 || 0;
+
+      console.log(noVoteShares, yesVoteShares, totalVoteShares);
+      
 
       setNoVoteShares(noVoteShares);
       setYesVoteShares(yesVoteShares);

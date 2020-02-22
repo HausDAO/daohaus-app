@@ -78,6 +78,14 @@ const baseProposalFields = `
   memberAddress
   proposer
   tributeTokenSymbol @client
+  votes {
+    id
+    timestamp
+    uintVote
+    member {
+      memberAddress
+    }
+  }
 `;
 
 // status @client
