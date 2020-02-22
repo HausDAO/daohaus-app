@@ -1,15 +1,19 @@
-import React from 'react';
+import React, {useContext} from 'react';
 import { truncateAddr } from '../../utils/Helpers';
 import VoteYes from '../../assets/star-struck.png';
 import VoteNo from '../../assets/thumbs-down.png';
 import './MemberVotes.scss';
+import { DaoDataContext } from '../../contexts/Store';
 
 const MemberVotes = (props) => {
+  const [daoData] = useContext(DaoDataContext);
+
   const renderList = () => {
     return props.votes.map((vote) => {
+      const memberAddress = (+daoData.version === 2) ? vote.member.memberAddress : vote.memberAddress;
       return (
-        <div className="Item" key={vote.memberAddress}>
-          <p className="Data">{truncateAddr(vote.memberAddress)}</p>
+        <div className="Item" key={memberAddress}>
+          <p className="Data">{truncateAddr(memberAddress)}</p>
           <div className="VoteCount">
             {vote.uintVote === 1 ? (
               <img src={VoteYes} alt="Yes" width="36px" />

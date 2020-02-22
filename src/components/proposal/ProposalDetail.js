@@ -93,7 +93,7 @@ const ProposalDetail = ({
   }
 
   console.log(proposal);
-  
+
 
   const countDown = getProposalCountdownText(proposal, periodDuration);
   const title = titleMaker(proposal);
@@ -122,20 +122,11 @@ const ProposalDetail = ({
           <p className="Data">{proposal.applicant}</p>
           {proposal.cancelled && <p>Proposal Cancelled</p>}
           {proposal.sponsored && (
-          <>
-          <h5 className="Label">Proposal Sponsored By</h5>
-          <p className="Data">{proposal.sponsor}</p>
-          </>)}
-          {!proposal.sponsored && !proposal.cancelled && proposal.proposer.toLowerCase() === currentWallet.addrByDelegateKey && (
             <>
-              {loading ? (<TinyLoader />) : (<button onClick={() => cancelProposal(proposal.proposalId)}>cancel</button>)}
-            </>
-          )}
-          {!proposal.sponsored && !proposal.cancelled && currentWallet.shares > 0 && (
-            <>
-              {loading ? (<TinyLoader />) : (<button onClick={() => sponsorProposal(proposal.proposalId)}>sponsor</button>)}
-            </>
-          )}
+              <h5 className="Label">Proposal Sponsored By</h5>
+              <p className="Data">{proposal.sponsor}</p>
+            </>)}
+
 
         </>
       ) : (
@@ -201,13 +192,26 @@ const ProposalDetail = ({
               </div>
             ) : null}
       </div>
-      {+daoData.version !== 2 ? (
+      {proposal.sponsored ? (
         <VoteControl
           submitVote={submitVote}
           proposal={proposal}
           canVote={canVote}
         />
-      ) : null}
+      ) : (
+          <>
+            {!proposal.sponsored && !proposal.cancelled && proposal.proposer.toLowerCase() === currentWallet.addrByDelegateKey && (
+              <>
+                {loading ? (<TinyLoader />) : (<button onClick={() => cancelProposal(proposal.proposalId)}>cancel</button>)}
+              </>
+            )}
+            {!proposal.sponsored && !proposal.cancelled && currentWallet.shares > 0 && (
+              <>
+                {loading ? (<TinyLoader />) : (<button onClick={() => sponsorProposal(proposal.proposalId)}>sponsor</button>)}
+              </>
+            )}
+          </>
+        )}
     </div>
   );
 };

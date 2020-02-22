@@ -153,6 +153,11 @@ export class McDaoService {
     return expired;
   }
 
+  async proposals(id) {
+    const info = await this.daoContract.methods.proposals(+id).call();
+    return info;
+  }
+
   async proposedToKick(address) {
     const kick = await this.daoContract.methods.proposedToKick(address).call();
     return kick;
