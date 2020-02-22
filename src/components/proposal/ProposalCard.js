@@ -9,7 +9,7 @@ import {
   titleMaker,
 } from '../../utils/ProposalHelper';
 import { GET_METADATA } from '../../utils/Queries';
-import { DaoServiceContext } from '../../contexts/Store';
+import { DaoServiceContext, DaoDataContext } from '../../contexts/Store';
 import ValueDisplay from '../shared/ValueDisplay';
 import { appDark, appLight } from '../../variables.styles';
 import {
@@ -60,8 +60,13 @@ const ProposalCard = ({ proposal, client }) => {
   });
 
   const [daoService] = useContext(DaoServiceContext);
+  const [daoData] = useContext(DaoDataContext);
   const countDown = getProposalCountdownText(proposal, periodDuration);
   const title = titleMaker(proposal);
+  const tribute =
+    +daoData.version === 2 ? proposal.tributeOffered : proposal.tokenTribute;
+  const id =
+    +daoData.version === 2 ? proposal.proposalId : proposal.proposalIndex;
 
   return (
     <ProposalCardDiv>
@@ -77,6 +82,7 @@ const ProposalCard = ({ proposal, client }) => {
         </svg>
         <DataP>{countDown}</DataP>
       </TimerDiv>
+      {proposal.newMember ? <h5>New Member Proposal</h5> : null}
       <h3>{title}</h3>
       <OfferDivProposalCard>
         <div>
@@ -86,17 +92,22 @@ const ProposalCard = ({ proposal, client }) => {
         <div>
           <h5>Tribute</h5>
           <DataH2>
-            <ValueDisplay value={Web3.utils.fromWei(proposal.tokenTribute)} />
+            <ValueDisplay
+              value={Web3.utils.fromWei(tribute)}
+              symbolOverride={proposal.tributeTokenSymbol}
+            />
           </DataH2>
         </div>
       </OfferDivProposalCard>
       <CardVoteDiv>
-        <StackedVote id={proposal.proposalIndex} page="ProposalCard" />
+        {daoData.version !== 2 ? (
+          <StackedVote id={id} page="ProposalCard" />
+        ) : null}
       </CardVoteDiv>
       <Link
         className="Button"
         to={{
-          pathname: `/dao/${daoService.daoAddress}/proposal/${proposal.proposalIndex}`,
+          pathname: `/dao/${daoService.daoAddress}/proposal/${id}`,
         }}
       >
         View Proposal

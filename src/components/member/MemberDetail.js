@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import makeBlockie from 'ethereum-blockies-base64';
 import { getProfile } from '3box/lib/api';
 import styled from 'styled-components';
@@ -13,6 +13,7 @@ import {
   ProfileImgCard,
   OfferDivMemberCard,
 } from './Member.styles';
+import { DaoDataContext } from '../../contexts/Store';
 
 const MemberDetailDiv = styled.div`
   padding: 25px 25px 120px;
@@ -22,10 +23,13 @@ const web3Service = new Web3Service();
 
 const MemberDetail = ({ member }) => {
   const [memberProfile, setMemberProfile] = useState({});
+  const [daoData] = useContext(DaoDataContext);
 
-  const memberId = member.id.split('-')[1]
+  const parsedMemberId = member.id.split('-')[1]
     ? member.id.split('-')[1]
     : member.id;
+
+  const memberId = member.memberAddress || parsedMemberId;
 
   useEffect(() => {
     const setup = async () => {
@@ -75,12 +79,14 @@ const MemberDetail = ({ member }) => {
           <h5>Shares</h5>
           <DataH2>{member.shares}</DataH2>
         </div>
-        <div>
-          <h5>Tribute</h5>
-          <DataH2>
-            <ValueDisplay value={web3Service.fromWei(member.tokenTribute)} />
-          </DataH2>
-        </div>
+        {+daoData.version !== 2 ? (
+          <div>
+            <h5>Tribute</h5>
+            <DataH2>
+              <ValueDisplay value={web3Service.fromWei(member.tokenTribute)} />
+            </DataH2>
+          </div>
+        ) : null}
       </OfferDivMemberCard>
       <h5>Delegate Key</h5>
       <DataP>{member.delegateKey}</DataP>

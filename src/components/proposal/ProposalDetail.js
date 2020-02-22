@@ -8,7 +8,11 @@ import {
   descriptionMaker,
   linkMaker,
 } from '../../utils/ProposalHelper';
-import { CurrentUserContext, DaoServiceContext } from '../../contexts/Store';
+import {
+  CurrentUserContext,
+  DaoServiceContext,
+  DaoDataContext,
+} from '../../contexts/Store';
 import { GET_METADATA } from '../../utils/Queries';
 import { get } from '../../utils/Requests';
 import Web3Service from '../../utils/Web3Service';
@@ -29,17 +33,20 @@ const ProposalDetail = ({
   const [detailData, setDetailData] = useState();
   const [currentUser] = useContext(CurrentUserContext);
   const [daoService] = useContext(DaoServiceContext);
+  const [daoData] = useContext(DaoDataContext);
   const { periodDuration } = client.cache.readQuery({
     query: GET_METADATA,
   });
+  const id =
+    +daoData.version === 2 ? proposal.proposalId : proposal.proposalIndex;
+
+  console.log('proposal', proposal);
 
   useEffect(() => {
     const fetchData = async () => {
       try {
         const metaData = await get(
-          `moloch/proposal/${daoService.daoAddress.toLowerCase()}-${
-            proposal.proposalIndex
-          }`,
+          `moloch/proposal/${daoService.daoAddress.toLowerCase()}-${id}`,
         );
 
         setDetailData(metaData.data);
@@ -73,9 +80,22 @@ const ProposalDetail = ({
         </svg>
         <p className="Data">{countDown}</p>
       </div>
+      {proposal.newMember ? <h5>New Member Proposal</h5> : null}
       <h2>{title}</h2>
-      <h5 className="Label">Applicant Address</h5>
-      <p className="Data">{proposal.applicantAddress}</p>
+      {+daoData.version === 2 ? (
+        <>
+          <h5 className="Label">Proposer Address</h5>
+          <p className="Data">{proposal.proposer}</p>
+          <h5 className="Label">Applicant Address</h5>
+          <p className="Data">{proposal.applicant}</p>
+        </>
+      ) : (
+        <>
+          <h5 className="Label">Applicant Address</h5>
+          <p className="Data">{proposal.applicantAddress}</p>
+        </>
+      )}
+
       <div className="Offer">
         <div className="Shares">
           <h5>Shares</h5>
@@ -87,6 +107,7 @@ const ProposalDetail = ({
             {web3Service && (
               <ValueDisplay
                 value={web3Service.fromWei(proposal.tokenTribute)}
+                symbolOverride={proposal.tributeTokenSymbol}
               />
             )}
           </h2>
@@ -131,11 +152,13 @@ const ProposalDetail = ({
           </div>
         ) : null}
       </div>
-      <VoteControl
-        submitVote={submitVote}
-        proposal={proposal}
-        canVote={canVote}
-      />
+      {+daoData.version !== 2 ? (
+        <VoteControl
+          submitVote={submitVote}
+          proposal={proposal}
+          canVote={canVote}
+        />
+      ) : null}
     </div>
   );
 };

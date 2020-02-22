@@ -2,6 +2,7 @@ import React, { useState, useContext } from 'react';
 import { useQuery } from '@apollo/react-hooks';
 
 import { GET_METADATA } from '../../utils/Queries';
+import { GET_MOLOCH_V2 } from '../../utils/QueriesV2';
 import { DaoDataContext } from '../../contexts/Store';
 import StateModals from '../../components/shared/StateModals';
 import BottomNav from '../../components/shared/BottomNav';
@@ -11,6 +12,7 @@ import ValueDisplay from '../../components/shared/ValueDisplay';
 import HeadTags from '../../components/shared/HeadTags';
 import HomeChart from '../../components/shared/HomeChart';
 import styled from 'styled-components';
+import WhitelistTokenBalances from '../../components/tokens/WhitelistTokenBalances';
 
 // import './Home.scss';
 
@@ -116,7 +118,8 @@ const ThemedIntroDiv = styled(IntroDiv)`
   color: ${({ daoData }) => daoData.themeMap && daoData.themeMap.color};
 `;
 const ThemedHomeoDiv = styled(HomeDiv)`
-  background-image: url(${({ daoData }) => daoData.themeMap && daoData.themeMap.bgImage});
+  background-image: url(${({ daoData }) =>
+    daoData.themeMap && daoData.themeMap.bgImage});
 `;
 
 const ThemedDataDiv = styled(DataDiv)`
@@ -133,9 +136,17 @@ const Home = () => {
   const [chartView, setChartView] = useState('bank');
   const [daoData] = useContext(DaoDataContext);
 
-  const { loading, error, data } = useQuery(GET_METADATA, {
+  const options = {
     pollInterval: 20000,
-  });
+    variables:
+      daoData.version === 2 ? { contractAddr: daoData.contractAddress } : {},
+  };
+  const query = daoData.version === 2 ? GET_MOLOCH_V2 : GET_METADATA;
+  if (daoData.isLegacy || daoData.version === 2) {
+    options.client = daoData.altClient;
+  }
+
+  const { loading, error, data } = useQuery(query, options);
 
   if (loading) return <Loading />;
   if (error) return <ErrorMessage message={error} />;
@@ -151,41 +162,66 @@ const Home = () => {
           <p>{daoData.description || 'Put a Moloch in Your Pocket'}</p>
         </ThemedIntroDiv>
         <ChartDiv>
-          <HomeChart guildBankAddr={data.guildBankAddr} chartView={chartView} />
+          {+daoData.version !== 2 && (
+            <HomeChart
+              guildBankAddr={data.guildBankAddr}
+              chartView={chartView}
+            />
+          )}
         </ChartDiv>
         <ThemedDataDiv daoData={daoData}>
-          <div
-            onClick={() => setChartView('bank')}
-            className={'Bank' + (chartView === 'bank' ? ' Selected' : '')}
-          >
-            <h5>Bank</h5>
-            <h2>
-              <ValueDisplay
-                value={parseFloat(data.guildBankValue).toFixed(4)}
+          {+daoData.version === 2 ? (
+            <>
+              <div>
+                <h5>Shares</h5>
+                <h2>{data.moloch.totalShares}</h2>
+              </div>
+              <WhitelistTokenBalances
+                tokens={data.moloch.tokenBalances.filter(
+                  (token) => token.guildBank,
+                )}
               />
-            </h2>
-          </div>
-          <div className="Row">
-            <div
-              onClick={() => setChartView('shares')}
-              className={'Shares' + (chartView === 'shares' ? ' Selected' : '')}
-            >
-              <h5>Shares</h5>
-              <h3>{data.totalShares}</h3>
-            </div>
-            <div
-              onClick={() => setChartView('value')}
-              className={
-                'ShareValue' + (chartView === 'value' ? ' Selected' : '')
-              }
-            >
-              <h5>Share Value</h5>
-              <h3>
-                <ValueDisplay value={data.shareValue.toFixed(4)} />
-              </h3>
-            </div>
-          </div>
+              <div></div>
+            </>
+          ) : (
+            <>
+              <div
+                onClick={() => setChartView('bank')}
+                className={'Bank' + (chartView === 'bank' ? ' Selected' : '')}
+              >
+                <h5>Bank</h5>
+                <h2>
+                  <ValueDisplay
+                    value={parseFloat(data.guildBankValue).toFixed(4)}
+                  />
+                </h2>
+              </div>
+              <div className="Row">
+                <div
+                  onClick={() => setChartView('shares')}
+                  className={
+                    'Shares' + (chartView === 'shares' ? ' Selected' : '')
+                  }
+                >
+                  <h5>Shares</h5>
+                  <h3>{data.totalShares}</h3>
+                </div>
+                <div
+                  onClick={() => setChartView('value')}
+                  className={
+                    'ShareValue' + (chartView === 'value' ? ' Selected' : '')
+                  }
+                >
+                  <h5>Share Value</h5>
+                  <h3>
+                    <ValueDisplay value={data.shareValue.toFixed(4)} />
+                  </h3>
+                </div>
+              </div>
+            </>
+          )}
         </ThemedDataDiv>
+
         <BottomNav />
       </ThemedHomeoDiv>
     </>

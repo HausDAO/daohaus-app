@@ -2,13 +2,14 @@ import React, { useEffect, useState, useContext } from 'react';
 import { BrowserRouter as Router } from 'react-router-dom';
 import ApolloClient from 'apollo-boost';
 
+import { DaoDataContext, DaoServiceContext } from './contexts/Store';
 import { get } from './utils/Requests';
 import { resolvers } from './utils/Resolvers';
+import { resolversV2 } from './utils/ResolversV2';
 import Routes from './Routes';
 import Header from './components/header/Header';
 import Loading from './components/shared/Loading';
-
-import { DaoDataContext, DaoServiceContext } from './contexts/Store';
+import config from './config';
 
 import './App.scss';
 
@@ -34,16 +35,24 @@ const App = ({ client }) => {
 
         if (apiData) {
           setDaoPath(daoParam);
+
+          let altClient;
+          // TODO: Swap resolvers on version
+
+          if (apiData.isLegacy || +apiData.version === 2) {
+            altClient = new ApolloClient({
+              uri: apiData.isLegacy
+                ? apiData.graphNodeUri
+                : config.GRAPH_NODE_URI_V2,
+              clientState: {
+                resolvers: apiData.isLegacy ? resolvers : resolversV2,
+              },
+            });
+          }
+
           setDaoData({
             ...apiData,
-            legacyClient: apiData.isLegacy
-              ? new ApolloClient({
-                  uri: apiData.graphNodeUri,
-                  clientState: {
-                    resolvers,
-                  },
-                })
-              : undefined,
+            altClient,
           });
         } else {
           setloading(false);
@@ -61,7 +70,7 @@ const App = ({ client }) => {
   useEffect(() => {
     // save all web3 data to apollo cache
     const fetchData = async () => {
-      if (!daoService || !daoData) {
+      if (!daoService || !daoData || daoData.version === 2) {
         client.writeData({
           data: {
             currentPeriod: 0,
@@ -78,6 +87,16 @@ const App = ({ client }) => {
             shareValue: 0,
           },
         });
+
+        if (daoData && daoData.version === 2 && daoService) {
+          const currentPeriod = await daoService.mcDao.getCurrentPeriod();
+          client.writeData({
+            // daoData.altClient.writeData({
+            data: { currentPeriod: parseInt(currentPeriod) },
+          });
+
+          setloading(false);
+        }
         return;
       }
 
@@ -90,7 +109,6 @@ const App = ({ client }) => {
       const processingReward = await daoService.mcDao.getProcessingReward();
       const proposalDeposit = await daoService.mcDao.getProposalDeposit();
       const approvedToken = await daoService.mcDao.approvedToken();
-
       const guildBankValue = await daoService.token.balanceOf(guildBankAddr);
       const tokenSymbol = await daoService.token.getSymbol();
 
@@ -106,8 +124,6 @@ const App = ({ client }) => {
         processingReward: daoService.web3.utils.fromWei(processingReward),
         proposalDeposit: daoService.web3.utils.fromWei(proposalDeposit),
         guildBankValue: daoService.web3.utils.fromWei(guildBankValue),
-        // pre web3:
-        // shareValue: web3.fromWei(guildBankValue) / totalShares,
         shareValue: parseFloat(
           daoService.web3.utils.fromWei(
             daoService.web3.utils
@@ -122,7 +138,7 @@ const App = ({ client }) => {
       });
 
       if (daoData.isLegacy) {
-        daoData.legacyClient.writeData({
+        daoData.altClient.writeData({
           data: cacheData,
         });
       }

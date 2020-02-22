@@ -2,6 +2,7 @@ import React, { useContext } from 'react';
 import { useQuery } from '@apollo/react-hooks';
 
 import { GET_MEMBER } from '../../utils/Queries';
+import { GET_MEMBER_V2 } from '../../utils/QueriesV2';
 import { DaoDataContext } from '../../contexts/Store';
 import MemberDetail from '../../components/member/MemberDetail';
 import ErrorMessage from '../../components/shared/ErrorMessage';
@@ -15,12 +16,12 @@ const Member = (props) => {
   const [daoData] = useContext(DaoDataContext);
 
   const options = { variables: { id } };
-
-  if (daoData.isLegacy) {
-    options.client = daoData.legacyClient;
+  const query = daoData.version === 2 ? GET_MEMBER_V2 : GET_MEMBER;
+  if (daoData.isLegacy || daoData.version === 2) {
+    options.client = daoData.altClient;
   }
 
-  const { loading, error, data } = useQuery(GET_MEMBER, options);
+  const { loading, error, data } = useQuery(query, options);
 
   if (loading) return <Loading />;
   if (error) return <ErrorMessage message={error} />;
