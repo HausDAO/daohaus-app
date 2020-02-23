@@ -216,7 +216,7 @@ export class SdkMcDaoService extends McDaoService {
       hash,
       this.accountAddr,
       `Submit ${
-        uintVote === 1 ? 'yes' : 'no'
+      uintVote === 1 ? 'yes' : 'no'
       } vote on proposal ${proposalIndex}`,
       true,
     );
@@ -330,7 +330,7 @@ export class Web3McDaoService extends McDaoService {
       txReceipt.transactionHash,
       this.accountAddr,
       `Submit ${
-        uintVote === 1 ? 'yes' : 'no'
+      uintVote === 1 ? 'yes' : 'no'
       } vote on proposal ${proposalIndex}`,
       true,
     );
@@ -504,10 +504,11 @@ export class Web3McDaoServiceV2 extends Web3McDaoService {
     paymentRequested,
     PaymentToken,
     details,
+    applicant = this.accountAddr,
   ) {
     const txReceipt = await this.daoContract.methods
       .submitProposal(
-        this.accountAddr,
+        applicant,
         sharesRequested,
         lootRequested,
         tributeOffered,
@@ -523,9 +524,7 @@ export class Web3McDaoServiceV2 extends Web3McDaoService {
       .call();
     const parseDetails = JSON.parse(details);
     console.log('queueLength', queueLength);
-    
 
-    // TODO: we want to do anything different on this metadat?
     const proposalObj = {
       proposalId: queueLength - 1 + '',
       molochContractAddress: this.contractAddr,
@@ -550,21 +549,21 @@ export class Web3McDaoServiceV2 extends Web3McDaoService {
       .submitGuildKickProposal(memberToKick, details)
       .send({ from: this.accountAddr });
 
-    // const queueLength = await this.daoContract.methods
-    //   .getProposalQueueLength()
-    //   .call();
+      const queueLength = await this.daoContract.methods
+      .proposalCount()
+      .call();
     const parseDetails = JSON.parse(details);
+    console.log('queueLength', queueLength);
 
-    // TODO: we want to do anything different on this metadat?
-    // const proposalObj = {
-    //   proposalId: queueLength - 1 + '',
-    //   molochContractAddress: this.contractAddr,
-    //   title: parseDetails.title,
-    //   description: parseDetails.description,
-    //   link: parseDetails.link,
-    // };
+    const proposalObj = {
+      proposalId: queueLength - 1 + '',
+      molochContractAddress: this.contractAddr,
+      title: parseDetails.title,
+      description: parseDetails.description,
+      link: parseDetails.link,
+    };
 
-    // post('moloch/proposal', proposalObj);
+    post('moloch/proposal', proposalObj);
 
     this.bcProcessor.setTx(
       txReceipt.transactionHash,
@@ -580,8 +579,21 @@ export class Web3McDaoServiceV2 extends Web3McDaoService {
       .submitWhiteListProposal(address, details)
       .send({ from: this.accountAddr });
 
-    // TODO: we want to do anything different on this metadata?
+    const queueLength = await this.daoContract.methods
+      .proposalCount()
+      .call();
     const parseDetails = JSON.parse(details);
+    console.log('queueLength', queueLength);
+
+    const proposalObj = {
+      proposalId: queueLength - 1 + '',
+      molochContractAddress: this.contractAddr,
+      title: parseDetails.title,
+      description: parseDetails.description,
+      link: parseDetails.link,
+    };
+
+    post('moloch/proposal', proposalObj);
 
     this.bcProcessor.setTx(
       txReceipt.transactionHash,

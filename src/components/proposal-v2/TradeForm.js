@@ -1,31 +1,65 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext, useState, useEffect } from 'react';
 import { withRouter } from 'react-router-dom';
 
 import { Formik, Form, Field, ErrorMessage } from 'formik';
 
 import {
-    LoaderContext,
+    LoaderContext, DaoServiceContext, DaoDataContext, CurrentUserContext,
     // DaoServiceContext,
 } from '../../contexts/Store';
 import Loading from '../shared/Loading';
 
-import { withApollo } from 'react-apollo';
+import { withApollo, useQuery } from 'react-apollo';
 import TributeInput from './TributeInput';
 import PaymentInput from './PaymentInput';
 import { ProposalSchema } from './Validation';
+import { GET_TOKENS_V2 } from '../../utils/QueriesV2';
+import TokenSelect from './TokenSelect';
 
 const TradeForm = (props) => {
-    // const { history } = props;
+    const { history } = props;
 
     const [gloading] = useContext(LoaderContext);
-    const [loading,] = useState(false);
-    //const [daoService] = useContext(DaoServiceContext);
+    const [formLoading, setFormLoading] = useState(false);
+    const [tokenData, setTokenData] = useState([]);
+    const [daoService] = useContext(DaoServiceContext);
+    const [daoData] = useContext(DaoDataContext);
+    const [currentUser] = useContext(CurrentUserContext);
+  
+  
+    const options = {
+      variables: { contractAddr: daoData.contractAddress },
+      client: daoData.altClient,
+      fetchPolicy: 'no-cache'
+    };
+    const query = GET_TOKENS_V2;
+  
+    const { loading, error, data } = useQuery(query, options);
+  
+    // get whitelist
+    useEffect(() => {
+      if (data && data.moloch) {
+        console.log('set');
+  
+        setTokenData(
+          data.moloch.approvedTokens.reverse().map((token) => ({
+            label: token.symbol || token.tokenAddress,
+            value: token.tokenAddress,
+          })),
+        );
+      }
+    }, [data]);
+
+    if (loading) return <Loading />;
+    if (error) {
+      console.log('error', error);
+    }
 
     return (
         <div>
             <h1 className="Pad">Trade Proposal</h1>
             <div>
-                {loading && <Loading />}
+                {formLoading && <Loading />}
                 {gloading && <Loading />}
 
                 <div>
@@ -45,34 +79,10 @@ const TradeForm = (props) => {
                         onSubmit={async (values, { setSubmitting }) => {
                             console.log(values);
 
-                            // const uuid = shortid.generate();
-                            // setLoading(true);
-                            // try {
-                            //     await daoService.mcDao.submitProposal(
-                            //         values.applicant,
-                            //         ethToWei(values.tributeOffered.toString()),
-                            //         values.sharesRequested + '',
-                            //         JSON.stringify({
-                            //             id: uuid,
-                            //             title: values.title,
-                            //             description: values.description,
-                            //             link: values.link,
-                            //         }),
-                            //     );
 
-
-                            //     history.push(`/dao/${daoService.daoAddress}/proposals`);
-                            // } catch (e) {
-                            //     console.error(`Error processing proposal: ${e.toString()}`);
-                            // } finally {
-                            //     console.log('done it it');
-
-                            //     setSubmitting(false);
-                            //     setLoading(false);
-                            // }
                         }}
                     >
-                        {({ isSubmitting }) => (
+                        {({ isSubmitting, ...props }) => (
                             <Form className="Form">
                                 <Field name="title">
                                     {({ field, form }) => (
@@ -121,13 +131,37 @@ const TradeForm = (props) => {
                                 </ErrorMessage>
 
 
-                                <Field name="tributeOffered" component={TributeInput} label="Input"></Field>
+                                <div className="DropdownInput">
+                                    <Field
+                                        name="tributeOffered"
+                                        component={TributeInput}
+                                        label="Token Tribute"
+                                        token={props.values.tributeToken}
+                                    ></Field>
+                                    <Field
+                                        name="tributeToken"
+                                        component={TokenSelect}
+                                        label="Token Tribute"
+                                        data={tokenData}
+                                    ></Field>
+                                </div>
 
                                 <ErrorMessage name="tributeOffered">
                                     {(msg) => <div className="Error">{msg}</div>}
                                 </ErrorMessage>
 
-                                <Field name="paymentRequested" component={PaymentInput} label="Output"></Field>
+                                <div className="DropdownInput">
+                                        <Field
+                                            name="paymentRequested"
+                                            component={PaymentInput}
+                                            label="Payment Requested"></Field>
+                                        <Field
+                                            name="paymentToken"
+                                            component={TokenSelect}
+                                            label="Payment Token"
+                                            data={tokenData}
+                                        ></Field>
+                                    </div>
 
                                 <ErrorMessage name="paymentRequested">
                                     {(msg) => <div className="Error">{msg}</div>}
