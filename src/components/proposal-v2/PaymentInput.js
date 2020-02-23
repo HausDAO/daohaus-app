@@ -14,9 +14,6 @@ const PaymentInput = ({
             </label>
             <input type="number" {...field} />
 
-            <TinyButton >
-                token list
-            </TinyButton>
         </div>
     );
 

@@ -4,123 +4,123 @@ import { withRouter } from 'react-router-dom';
 import { Formik, Form, Field, ErrorMessage } from 'formik';
 
 import {
-    LoaderContext,
+    LoaderContext, CurrentUserContext, DaoServiceContext,
     // DaoServiceContext,
 } from '../../contexts/Store';
 import Loading from '../shared/Loading';
 
 import { withApollo } from 'react-apollo';
 import { ProposalSchema } from './Validation';
+import shortid from 'shortid';
 
 const WhitelistForm = (props) => {
-    // const { history } = props;
+    const { history } = props;
 
     const [gloading] = useContext(LoaderContext);
-    const [loading,] = useState(false);
+    const [formLoading, setFormLoading] = useState(false);
+    const [currentUser] = useContext(CurrentUserContext);
+    const [daoService] = useContext(DaoServiceContext);
+
     //const [daoService] = useContext(DaoServiceContext);
 
     return (
         <div>
             <h1 className="Pad">Whitelist Token Proposal</h1>
             <div>
-                {loading && <Loading />}
+                {formLoading && <Loading />}
                 {gloading && <Loading />}
 
                 <div>
+                    {currentUser.username && (
+                        <Formik
+                            initialValues={{
+                                title: '',
+                                description: '',
+                                link: '',
+                                applicant: '',
+                            }}
+                            validationSchema={ProposalSchema}
+                            onSubmit={async (values, { setSubmitting }) => {
+                                console.log(values);
 
-                    <Formik
-                        initialValues={{
-                            title: '',
-                            description: '',
-                            link: '',
-                            applicant: '',
-                        }}
-                        validationSchema={ProposalSchema}
-                        onSubmit={async (values, { setSubmitting }) => {
-                            console.log(values);
+                                const uuid = shortid.generate();
+                                const detailsObj = JSON.stringify({
+                                    id: uuid,
+                                    title: values.title,
+                                    description: values.description,
+                                    link: values.link,
+                                });
 
-                            // const uuid = shortid.generate();
-                            // setLoading(true);
-                            // try {
-                            //     await daoService.mcDao.submitProposal(
-                            //         values.applicant,
-                            //         ethToWei(values.tokenTribute.toString()),
-                            //         values.sharesRequested + '',
-                            //         JSON.stringify({
-                            //             id: uuid,
-                            //             title: values.title,
-                            //             description: values.description,
-                            //             link: values.link,
-                            //         }),
-                            //     );
+                                try {
+                                    const submitRes = await daoService.mcDao.submitWhiteListProposal(
+                                        values.applicant,
+                                        detailsObj,
+                                    );
+                                    history.push(`/dao/${daoService.daoAddress}/proposals`);
+                                    setSubmitting(false);
+                                    setFormLoading(false);
+                                } catch (err) {
+                                    console.log('cancelled');
+                                    setSubmitting(false);
+                                    setFormLoading(false);
+                                }
+                            }}
+                        >
+                            {({ isSubmitting }) => (
+                                <Form className="Form">
+                                    <Field name="title">
+                                        {({ field, form }) => (
+                                            <div className={field.value ? 'Field HasValue' : 'Field '}>
+                                                <label>Ticker</label>
+                                                <input type="text" {...field} />
+                                            </div>
+                                        )}
+                                    </Field>
+                                    <ErrorMessage name="title">
+                                        {(msg) => <div className="Error">{msg}</div>}
+                                    </ErrorMessage>
+                                    <Field name="description">
+                                        {({ field, form }) => (
+                                            <div className={field.value ? 'Field HasValue' : 'Field '}>
+                                                <label>Short Description</label>
+                                                <textarea {...field} />
+                                            </div>
+                                        )}
+                                    </Field>
+                                    <ErrorMessage name="description">
+                                        {(msg) => <div className="Error">{msg}</div>}
+                                    </ErrorMessage>
+                                    <Field name="link">
+                                        {({ field, form }) => (
+                                            <div className={field.value ? 'Field HasValue' : 'Field '}>
+                                                <label>Link</label>
+                                                <input type="text" {...field} />
+                                            </div>
+                                        )}
+                                    </Field>
+                                    <ErrorMessage name="link">
+                                        {(msg) => <div className="Error">{msg}</div>}
+                                    </ErrorMessage>
 
+                                    <Field name="applicant">
+                                        {({ field, form }) => (
+                                            <div className={field.value ? 'Field HasValue' : 'Field '}>
+                                                <label>Token Address</label>
+                                                <input type="text" {...field} />
+                                            </div>
+                                        )}
+                                    </Field>
+                                    <ErrorMessage name="applicant">
+                                        {(msg) => <div className="Error">{msg}</div>}
+                                    </ErrorMessage>
 
-                            //     history.push(`/dao/${daoService.daoAddress}/proposals`);
-                            // } catch (e) {
-                            //     console.error(`Error processing proposal: ${e.toString()}`);
-                            // } finally {
-                            //     console.log('done it it');
-
-                            //     setSubmitting(false);
-                            //     setLoading(false);
-                            // }
-                        }}
-                    >
-                        {({ isSubmitting }) => (
-                            <Form className="Form">
-                                <Field name="title">
-                                    {({ field, form }) => (
-                                        <div className={field.value ? 'Field HasValue' : 'Field '}>
-                                            <label>Title</label>
-                                            <input type="text" {...field} />
-                                        </div>
-                                    )}
-                                </Field>
-                                <ErrorMessage name="title">
-                                    {(msg) => <div className="Error">{msg}</div>}
-                                </ErrorMessage>
-                                <Field name="description">
-                                    {({ field, form }) => (
-                                        <div className={field.value ? 'Field HasValue' : 'Field '}>
-                                            <label>Short Description</label>
-                                            <textarea {...field} />
-                                        </div>
-                                    )}
-                                </Field>
-                                <ErrorMessage name="description">
-                                    {(msg) => <div className="Error">{msg}</div>}
-                                </ErrorMessage>
-                                <Field name="link">
-                                    {({ field, form }) => (
-                                        <div className={field.value ? 'Field HasValue' : 'Field '}>
-                                            <label>Link</label>
-                                            <input type="text" {...field} />
-                                        </div>
-                                    )}
-                                </Field>
-                                <ErrorMessage name="link">
-                                    {(msg) => <div className="Error">{msg}</div>}
-                                </ErrorMessage>
-
-                                <Field name="applicant">
-                                    {({ field, form }) => (
-                                        <div className={field.value ? 'Field HasValue' : 'Field '}>
-                                            <label>Token Address</label>
-                                            <input type="text" {...field} />
-                                        </div>
-                                    )}
-                                </Field>
-                                <ErrorMessage name="applicant">
-                                    {(msg) => <div className="Error">{msg}</div>}
-                                </ErrorMessage>
-
-                                <button type="submit" disabled={isSubmitting}>
-                                    Submit
-                            </button>
-                            </Form>
-                        )}
-                    </Formik>
-
+                                    <button type="submit" disabled={isSubmitting}>
+                                        Submit
+                                    </button>
+                                </Form>
+                            )}
+                        </Formik>
+                    )}
                 </div>
             </div>
         </div>
