@@ -69,16 +69,23 @@ const baseProposalFields = `
   moloch {
     votingPeriodLength
     gracePeriodLength
+    periodDuration
+  }
+  votes {
+    id
+    timestamp
+    uintVote
+    member {
+      memberAddress
+    }
   }
   tributeTokenSymbol @client
   status @client
+  gracePeriod @client
+  votingEnds @client
+  votingStarts @client
+  readyForProcessing @client
 `;
-
-// status @client
-// gracePeriod @client
-// votingEnds @client
-// votingStarts @client
-// readyForProcessing @client
 
 export const GET_PROPOSALS_V2 = gql`
   query proposals($contractAddr: String!, $skip: Int) {

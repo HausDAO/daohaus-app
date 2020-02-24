@@ -70,6 +70,8 @@ export function getProposalCountdownText(proposal, periodDuration) {
       return <span className="subtext">Aborted</span>;
     case ProposalStatus.ReadyForProcessing:
       return <span className="subtext">Ready For Processing</span>;
+    case ProposalStatus.Unsponsored:
+      return <span className="subtext">Unsponsored</span>;
     default:
       return <Fragment />;
   }
@@ -97,9 +99,17 @@ export const passedVotingAndGrace = (
   currentPeriod,
   votingPeriodLength,
   gracePeriodLength,
-) =>
-  currentPeriod >
-  proposal.startingPeriod + votingPeriodLength + gracePeriodLength;
+  version = 1,
+) => {
+  if (version === 2 && !proposal.sponsored) {
+    return false;
+  } else {
+    return (
+      currentPeriod >
+      proposal.startingPeriod + votingPeriodLength + gracePeriodLength
+    );
+  }
+};
 
 export function determineProposalStatus(
   proposal,
@@ -147,8 +157,6 @@ export function determineProposalStatus(
   } else {
     status = ProposalStatus.Unknown;
   }
-
-  console.log('setting status', status);
 
   return status;
 }

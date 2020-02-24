@@ -8,6 +8,7 @@ import {
   LoaderContext,
   DaoServiceContext,
   DaoDataContext,
+  CurrentUserContext,
 } from '../../contexts/Store';
 import Loading from '../shared/Loading';
 
@@ -27,6 +28,8 @@ const NewMemberForm = (props) => {
   const [tokenData, setTokenData] = useState([]);
   const [daoService] = useContext(DaoServiceContext);
   const [daoData] = useContext(DaoDataContext);
+  const [currentUser] = useContext(CurrentUserContext);
+
 
   const options = {
     variables: { contractAddr: daoData.contractAddress },
@@ -64,7 +67,7 @@ const NewMemberForm = (props) => {
         {gloading && <Loading />}
 
         <div>
-          {tokenData.length ? (
+          {tokenData.length && currentUser.username ? (
             <Formik
               initialValues={{
                 title: '',
@@ -90,15 +93,6 @@ const NewMemberForm = (props) => {
                   link: values.link,
                 });
 
-                // submitProposal(
-                //     applicant,
-                //     sharesRequested,
-                //     lootRequested,
-                //     tributeOffered,
-                //     tributeToken,
-                //     paymentRequested,
-                //     PaymentToken,
-                //     details,
                 try {
                   const submitRes = await daoService.mcDao.submitProposal(
                     values.sharesRequested,

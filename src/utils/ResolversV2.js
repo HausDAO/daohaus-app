@@ -8,7 +8,6 @@ import {
   passedVotingAndGrace,
 } from './ProposalHelper';
 import { GET_METADATA_V2 } from './QueriesV2';
-import { GET_METADATA } from './Queries';
 import { TokenService } from './TokenService';
 
 import config from '../config';
@@ -31,24 +30,22 @@ export const resolversV2 = {
       );
     },
     gracePeriod: (proposal, _args, { cache }) => {
-      const {
-        currentPeriod,
-        votingPeriodLength,
-        gracePeriodLength,
-      } = cache.readQuery({ query: GET_METADATA_V2 });
+      const { currentPeriod } = cache.readQuery({
+        query: GET_METADATA_V2,
+      });
 
       if (
         inGracePeriod(
           proposal,
           currentPeriod,
-          votingPeriodLength,
-          gracePeriodLength,
+          +proposal.moloch.votingPeriodLength,
+          +proposal.moloch.gracePeriodLength,
         )
       ) {
         return (
           +proposal.startingPeriod +
-          votingPeriodLength +
-          gracePeriodLength -
+          +proposal.moloch.votingPeriodLength +
+          +proposal.moloch.gracePeriodLength -
           currentPeriod +
           1 // TODO: why plus 1 here? abort? ¯\_(ツ)_/¯
         );
@@ -56,12 +53,22 @@ export const resolversV2 = {
       return 0;
     },
     votingEnds: (proposal, _args, { cache }) => {
-      const { currentPeriod, votingPeriodLength } = cache.readQuery({
+      const { currentPeriod } = cache.readQuery({
         query: GET_METADATA_V2,
       });
 
-      if (inVotingPeriod(proposal, currentPeriod, votingPeriodLength)) {
-        return proposal.startingPeriod + votingPeriodLength - currentPeriod;
+      if (
+        inVotingPeriod(
+          proposal,
+          currentPeriod,
+          +proposal.moloch.votingPeriodLength,
+        )
+      ) {
+        return (
+          proposal.startingPeriod +
+          +proposal.moloch.votingPeriodLength -
+          currentPeriod
+        );
       }
       return 0;
     },
@@ -73,17 +80,14 @@ export const resolversV2 = {
       return 0;
     },
     readyForProcessing: (proposal, _args, { cache }) => {
-      const {
-        currentPeriod,
-        votingPeriodLength,
-        gracePeriodLength,
-      } = cache.readQuery({ query: GET_METADATA_V2 });
+      const { currentPeriod } = cache.readQuery({ query: GET_METADATA_V2 });
       if (
         passedVotingAndGrace(
           proposal,
           currentPeriod,
-          votingPeriodLength,
-          gracePeriodLength,
+          +proposal.moloch.votingPeriodLength,
+          +proposal.moloch.gracePeriodLength,
+          2,
         ) &&
         !proposal.processed
       ) {
