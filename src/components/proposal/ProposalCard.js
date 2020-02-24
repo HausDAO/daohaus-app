@@ -9,6 +9,8 @@ import {
   titleMaker,
 } from '../../utils/ProposalHelper';
 import { GET_METADATA } from '../../utils/Queries';
+import { GET_METADATA_V2 } from '../../utils/QueriesV2';
+
 import { DaoServiceContext, DaoDataContext } from '../../contexts/Store';
 import ValueDisplay from '../shared/ValueDisplay';
 import { appDark, appLight } from '../../variables.styles';
@@ -55,6 +57,7 @@ const OfferDivProposalCard = styled(OfferDiv)`
 `;
 
 const ProposalCard = ({ proposal, client }) => {
+  // TODO: Switch on version
   const { periodDuration } = client.cache.readQuery({
     query: GET_METADATA,
   });

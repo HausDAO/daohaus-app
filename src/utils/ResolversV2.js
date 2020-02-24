@@ -7,6 +7,7 @@ import {
   inQueue,
   passedVotingAndGrace,
 } from './ProposalHelper';
+import { GET_METADATA_V2 } from './QueriesV2';
 import { GET_METADATA } from './Queries';
 import { TokenService } from './TokenService';
 
@@ -17,16 +18,16 @@ const _web3 = new Web3(new Web3.providers.HttpProvider(config.INFURA_URI));
 export const resolversV2 = {
   Proposal: {
     status: (proposal, _args, { cache }) => {
-      const {
-        currentPeriod,
-        votingPeriodLength,
-        gracePeriodLength,
-      } = cache.readQuery({ query: GET_METADATA });
+      const { currentPeriod } = cache.readQuery({
+        query: GET_METADATA_V2,
+      });
+
       return determineProposalStatus(
         proposal,
         +currentPeriod,
-        +votingPeriodLength,
-        +gracePeriodLength,
+        +proposal.moloch.votingPeriodLength,
+        +proposal.moloch.gracePeriodLength,
+        2,
       );
     },
     gracePeriod: (proposal, _args, { cache }) => {
@@ -34,7 +35,7 @@ export const resolversV2 = {
         currentPeriod,
         votingPeriodLength,
         gracePeriodLength,
-      } = cache.readQuery({ query: GET_METADATA });
+      } = cache.readQuery({ query: GET_METADATA_V2 });
 
       if (
         inGracePeriod(
@@ -56,7 +57,7 @@ export const resolversV2 = {
     },
     votingEnds: (proposal, _args, { cache }) => {
       const { currentPeriod, votingPeriodLength } = cache.readQuery({
-        query: GET_METADATA,
+        query: GET_METADATA_V2,
       });
 
       if (inVotingPeriod(proposal, currentPeriod, votingPeriodLength)) {
@@ -65,7 +66,7 @@ export const resolversV2 = {
       return 0;
     },
     votingStarts: (proposal, _args, { cache }) => {
-      const { currentPeriod } = cache.readQuery({ query: GET_METADATA });
+      const { currentPeriod } = cache.readQuery({ query: GET_METADATA_V2 });
       if (inQueue(proposal, currentPeriod)) {
         return proposal.startingPeriod - currentPeriod;
       }
@@ -76,7 +77,7 @@ export const resolversV2 = {
         currentPeriod,
         votingPeriodLength,
         gracePeriodLength,
-      } = cache.readQuery({ query: GET_METADATA });
+      } = cache.readQuery({ query: GET_METADATA_V2 });
       if (
         passedVotingAndGrace(
           proposal,

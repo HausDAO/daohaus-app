@@ -9,6 +9,7 @@ export const ProposalStatus = {
   Passed: 'Passed',
   Failed: 'Failed',
   ReadyForProcessing: 'ReadyForProcessing',
+  Unsponsored: 'Unsponsored',
 };
 
 const periodsToTime = (periods, periodDuration) => {
@@ -105,6 +106,7 @@ export function determineProposalStatus(
   currentPeriod,
   votingPeriodLength,
   gracePeriodLength,
+  version = 1,
 ) {
   proposal.startingPeriod = +proposal.startingPeriod;
 
@@ -114,6 +116,8 @@ export function determineProposalStatus(
   // if (proposal.processed && proposal.aborted) {
   if (proposal.processed && abortedOrCancelled) {
     status = ProposalStatus.Aborted;
+  } else if (version === 2 && !proposal.sponsored) {
+    status = ProposalStatus.Unsponsored;
   } else if (proposal.processed && proposal.didPass) {
     status = ProposalStatus.Passed;
   } else if (proposal.processed && !proposal.didPass) {
@@ -143,6 +147,8 @@ export function determineProposalStatus(
   } else {
     status = ProposalStatus.Unknown;
   }
+
+  console.log('setting status', status);
 
   return status;
 }
