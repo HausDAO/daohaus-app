@@ -124,7 +124,13 @@ const Proposals = ({ match, history }) => {
                 history={history}
               />
             ) : (
-              <ProposalList proposals={proposals} />
+              // <ProposalList proposals={proposals} />
+              <ProposalFilter
+                proposals={proposals}
+                filter={match.params.filter || 'na'}
+                history={history}
+                unsponsoredView={true}
+              />
             )}
           </>
         ) : (
