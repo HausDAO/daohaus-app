@@ -115,31 +115,12 @@ const Proposals = ({ match, history }) => {
           />
         ) : null}
 
-        {+daoData.version === 2 ? (
-          <>
-            {sponsored ? (
-              <ProposalFilter
-                proposals={proposals}
-                filter={match.params.filter || 'na'}
-                history={history}
-              />
-            ) : (
-              // <ProposalList proposals={proposals} />
-              <ProposalFilter
-                proposals={proposals}
-                filter={match.params.filter || 'na'}
-                history={history}
-                unsponsoredView={true}
-              />
-            )}
-          </>
-        ) : (
-          <ProposalFilter
-            proposals={proposals}
-            filter={match.params.filter || 'na'}
-            history={history}
-          />
-        )}
+        <ProposalFilter
+          proposals={proposals}
+          filter={match.params.filter || 'na'}
+          history={history}
+          unsponsoredView={!sponsored}
+        />
       </div>
       <BottomNav />
     </Fragment>
