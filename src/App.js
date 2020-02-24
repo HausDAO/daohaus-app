@@ -90,8 +90,7 @@ const App = ({ client }) => {
 
         if (daoData && daoData.version === 2 && daoService) {
           const currentPeriod = await daoService.mcDao.getCurrentPeriod();
-          client.writeData({
-            // daoData.altClient.writeData({
+          daoData.altClient.writeData({
             data: { currentPeriod: parseInt(currentPeriod) },
           });
 

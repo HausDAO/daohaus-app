@@ -3,17 +3,6 @@ import { gql } from 'apollo-boost';
 export const GET_METADATA_V2 = gql`
   query Metadata {
     currentPeriod @client
-    totalShares @client
-    guildBankAddr @client
-    gracePeriodLength @client
-    votingPeriodLength @client
-    periodDuration @client
-    processingReward @client
-    proposalDeposit @client
-    guildBankValue @client
-    shareValue @client
-    approvedToken @client
-    tokenSymbol @client
   }
 `;
 
@@ -77,7 +66,11 @@ const baseProposalFields = `
   timestamp
   memberAddress
   proposer
-  tributeTokenSymbol @client
+  moloch {
+    votingPeriodLength
+    gracePeriodLength
+    periodDuration
+  }
   votes {
     id
     timestamp
@@ -86,13 +79,13 @@ const baseProposalFields = `
       memberAddress
     }
   }
+  tributeTokenSymbol @client
+  status @client
+  gracePeriod @client
+  votingEnds @client
+  votingStarts @client
+  readyForProcessing @client
 `;
-
-// status @client
-// gracePeriod @client
-// votingEnds @client
-// votingStarts @client
-// readyForProcessing @client
 
 export const GET_PROPOSALS_V2 = gql`
   query proposals($contractAddr: String!, $skip: Int) {

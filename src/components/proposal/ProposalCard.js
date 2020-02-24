@@ -9,6 +9,7 @@ import {
   titleMaker,
 } from '../../utils/ProposalHelper';
 import { GET_METADATA } from '../../utils/Queries';
+
 import { DaoServiceContext, DaoDataContext } from '../../contexts/Store';
 import ValueDisplay from '../shared/ValueDisplay';
 import { appDark, appLight } from '../../variables.styles';
@@ -55,13 +56,17 @@ const OfferDivProposalCard = styled(OfferDiv)`
 `;
 
 const ProposalCard = ({ proposal, client }) => {
-  const { periodDuration } = client.cache.readQuery({
-    query: GET_METADATA,
-  });
-
   const [daoService] = useContext(DaoServiceContext);
   const [daoData] = useContext(DaoDataContext);
+
+  const { periodDuration } =
+    +daoData.version === 2
+      ? { periodDuration: proposal.moloch.periodDuration }
+      : client.cache.readQuery({
+          query: GET_METADATA,
+        });
   const countDown = getProposalCountdownText(proposal, periodDuration);
+
   const title = titleMaker(proposal);
   const tribute =
     +daoData.version === 2 ? proposal.tributeOffered : proposal.tokenTribute;

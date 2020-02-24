@@ -93,7 +93,6 @@ const StackedVote = ({ id, currentYesVote, currentNoVote, page }) => {
   const [daoService] = useContext(DaoServiceContext);
   const [daoData] = useContext(DaoDataContext);
 
-
   if (currentYesVote === undefined) {
     currentYesVote = 0;
   }
@@ -104,11 +103,13 @@ const StackedVote = ({ id, currentYesVote, currentNoVote, page }) => {
   useEffect(() => {
     const currentProposal = async () => {
       console.log('id', id);
-      
+
       // TODO: why am i doing this? should be using the subgraph
-      const info =  (+daoData.version === 2) ? await daoService.mcDao.proposals(id) : await daoService.mcDao.proposalQueue(id);
+      const info =
+        +daoData.version === 2
+          ? await daoService.mcDao.proposals(id)
+          : await daoService.mcDao.proposalQueue(id);
       console.log('info', info);
-      
 
       const noVoteShares = parseInt(info.noVotes) + currentNoVote;
       const yesVoteShares = parseInt(info.yesVotes) + currentYesVote;
@@ -117,14 +118,16 @@ const StackedVote = ({ id, currentYesVote, currentNoVote, page }) => {
       const percentageSharesNo = (noVoteShares / totalVoteShares) * 100 || 0;
 
       console.log(noVoteShares, yesVoteShares, totalVoteShares);
-      
 
       setNoVoteShares(noVoteShares);
       setYesVoteShares(yesVoteShares);
       setPercentageSharesYes(percentageSharesYes);
       setPercentageSharesNo(percentageSharesNo);
     };
+
     currentProposal();
+
+    // eslint-disable-next-line
   }, [daoService, id, currentYesVote, currentNoVote]);
 
   return (

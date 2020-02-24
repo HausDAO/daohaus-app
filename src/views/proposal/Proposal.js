@@ -47,8 +47,6 @@ const Proposal = (props) => {
 
   const { loading, error, data } = useQuery(query, options);
 
-  console.log('data', data);
-
   const processProposal = async (id) => {
     setTxLoading(true);
     try {

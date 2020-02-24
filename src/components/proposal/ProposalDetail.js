@@ -39,9 +39,12 @@ const ProposalDetail = ({
   const [currentWallet] = useContext(CurrentWalletContext);
   const [loading, setLoading] = useState(false);
 
-  const { periodDuration } = client.cache.readQuery({
-    query: GET_METADATA,
-  });
+  const { periodDuration } =
+    +daoData.version === 2
+      ? { periodDuration: proposal.moloch.periodDuration }
+      : client.cache.readQuery({
+          query: GET_METADATA,
+        });
   const tribute =
     +daoData.version === 2 ? proposal.tributeOffered : proposal.tokenTribute;
   const id =
@@ -72,28 +75,25 @@ const ProposalDetail = ({
     console.log('cancel ', id);
     setLoading(true);
     try {
-      await daoService.mcDao.cancelProposal(id)
+      await daoService.mcDao.cancelProposal(id);
     } catch (err) {
       console.log('user rejected or transaction failed');
     } finally {
       setLoading(false);
     }
-  }
+  };
 
   const sponsorProposal = async (id) => {
     console.log('sponsor ', id);
     setLoading(true);
     try {
-      await daoService.mcDao.sponsorProposal(id)
+      await daoService.mcDao.sponsorProposal(id);
     } catch (err) {
       console.log('user rejected or transaction failed');
     } finally {
       setLoading(false);
     }
-  }
-
-  console.log(proposal);
-
+  };
 
   const countDown = getProposalCountdownText(proposal, periodDuration);
   const title = titleMaker(proposal);
@@ -125,16 +125,15 @@ const ProposalDetail = ({
             <>
               <h5 className="Label">Proposal Sponsored By</h5>
               <p className="Data">{proposal.sponsor}</p>
-            </>)}
-
-
+            </>
+          )}
         </>
       ) : (
-          <>
-            <h5 className="Label">Applicant Address</h5>
-            <p className="Data">{proposal.applicantAddress}</p>
-          </>
-        )}
+        <>
+          <h5 className="Label">Applicant Address</h5>
+          <p className="Data">{proposal.applicantAddress}</p>
+        </>
+      )}
 
       <div className="Offer">
         <div className="Shares">
@@ -172,25 +171,25 @@ const ProposalDetail = ({
                 {detailData.description}
               </a>
             ) : (
-                <p>{detailData.description}</p>
-              )}
+              <p>{detailData.description}</p>
+            )}
           </div>
         ) : null}
         {detailData &&
+        detailData.link &&
+        ReactPlayer.canPlay(detailData.link) ? (
+          <div className="Video">
+            <ReactPlayer url={detailData.link} playing={false} loop={false} />
+          </div>
+        ) : detailData &&
           detailData.link &&
-          ReactPlayer.canPlay(detailData.link) ? (
-            <div className="Video">
-              <ReactPlayer url={detailData.link} playing={false} loop={false} />
-            </div>
-          ) : detailData &&
-            detailData.link &&
-            detailData.link.indexOf('http') > -1 ? (
-              <div className="Link">
-                <a href={detailData.link} rel="noopener noreferrer" target="_blank">
-                  Link
+          detailData.link.indexOf('http') > -1 ? (
+          <div className="Link">
+            <a href={detailData.link} rel="noopener noreferrer" target="_blank">
+              Link
             </a>
-              </div>
-            ) : null}
+          </div>
+        ) : null}
       </div>
       {proposal.sponsored ? (
         <VoteControl
@@ -199,19 +198,44 @@ const ProposalDetail = ({
           canVote={canVote}
         />
       ) : (
-          <>
-            {!proposal.sponsored && !proposal.cancelled && proposal.proposer.toLowerCase() === currentWallet.addrByDelegateKey && (
-              <>
-                {loading ? (<TinyLoader />) : (<button onClick={() => cancelProposal(proposal.proposalId)}>cancel</button>)}
-              </>
-            )}
-            {!proposal.sponsored && !proposal.cancelled && currentWallet.shares > 0 && (
-              <>
-                {loading ? (<TinyLoader />) : (<button onClick={() => sponsorProposal(proposal.proposalId)}>sponsor</button>)}
-              </>
-            )}
-          </>
-        )}
+        <>
+          {+daoData.version === 2 ? (
+            <>
+              {!proposal.sponsored &&
+                !proposal.cancelled &&
+                proposal.proposer.toLowerCase() ===
+                  currentWallet.addrByDelegateKey && (
+                  <>
+                    {loading ? (
+                      <TinyLoader />
+                    ) : (
+                      <button
+                        onClick={() => cancelProposal(proposal.proposalId)}
+                      >
+                        cancel
+                      </button>
+                    )}
+                  </>
+                )}
+              {!proposal.sponsored &&
+                !proposal.cancelled &&
+                currentWallet.shares > 0 && (
+                  <>
+                    {loading ? (
+                      <TinyLoader />
+                    ) : (
+                      <button
+                        onClick={() => sponsorProposal(proposal.proposalId)}
+                      >
+                        sponsor
+                      </button>
+                    )}
+                  </>
+                )}
+            </>
+          ) : null}
+        </>
+      )}
     </div>
   );
 };
