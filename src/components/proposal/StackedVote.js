@@ -2,7 +2,7 @@ import React, { useState, useEffect, useContext } from 'react';
 import styled from 'styled-components';
 
 import { DaoServiceContext, DaoDataContext } from '../../contexts/Store';
-import { primary, tertiary, appDark } from '../../variables.styles';
+import { getAppDark } from '../../variables.styles';
 
 const FullBarDiv = styled.div`
   width: ${(props) =>
@@ -32,7 +32,7 @@ const YesLabelSpan = styled.span`
   background-color: transparent;
   font-weight: 900;
   width: 65px;
-  color: ${primary};
+  color: ${(props) => props.theme.primary};
 `;
 
 const NoLabelSpan = styled.span`
@@ -49,20 +49,20 @@ const NoLabelSpan = styled.span`
   background-color: transparent;
   font-weight: 900;
   width: 65px;
-  color: ${tertiary};
+  color: ${(props) => props.theme.tertiary};
 `;
 
 const BaseBarDiv = styled.div`
   width: 100%;
   height: 5px;
   position: absolute;
-  background-color: ${appDark};
+  background-color: ${(props) => getAppDark(props.theme)};
 `;
 
 const YesBarDiv = styled.div`
   height: 5px;
   position: absolute;
-  background-color: ${primary};
+  background-color: ${(props) => props.theme.primary};
   left: 0px;
   width: ${(props) => props.percentageShares + '%'};
 `;
@@ -71,7 +71,7 @@ const NoBarDiv = styled.div`
   height: 5px;
   right: 0px;
   position: absolute;
-  background-color: ${tertiary};
+  background-color: ${(props) => props.theme.tertiary};
   width: ${(props) => props.percentageShares + '%'};
 `;
 

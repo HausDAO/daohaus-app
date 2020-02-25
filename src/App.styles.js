@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 
-import { dataFont, danger, dangerHover, phone } from './variables.styles';
+import { phone, getDangerHover } from './variables.styles';
 
 export const ProposalAndMemberCardDiv = styled.div`
   padding: 25px;
@@ -8,14 +8,14 @@ export const ProposalAndMemberCardDiv = styled.div`
 `;
 
 export const DataP = styled.p`
-  font-family: ${dataFont};
+  font-family: ${(props) => props.theme.dataFont};
   font-weight: 400;
   word-break: break-all;
   margin: 0;
 `;
 
 export const DataDiv = styled.div`
-  font-family: ${dataFont};
+  font-family: ${(props) => props.theme.dataFont};
   font-weight: 400;
   word-break: break-all;
   margin: 0;
@@ -23,14 +23,14 @@ export const DataDiv = styled.div`
 `;
 
 export const DataButton = styled.button`
-  font-family: ${dataFont};
+  font-family: ${(props) => props.theme.dataFont};
   font-weight: 400;
   word-break: break-all;
   margin: 0;
 `;
 
 export const DataH2 = styled.h2`
-  font-family: ${dataFont};
+  font-family: ${(props) => props.theme.dataFont};
   font-weight: 400;
   word-break: break-all;
   margin: 0;
@@ -54,9 +54,9 @@ export const OfferDiv = styled.div`
 export const RiskyBizButton = styled.button`
   margin: 25px auto;
   font-weight: 500;
-  background-color: ${danger};
+  background-color: ${(props) => props.theme.danger};
   &:hover {
-    background-color: ${dangerHover};
+    background-color: ${(props) => getDangerHover(props.theme)};
   }
   @media (max-width: ${phone}) {
     display: flex;

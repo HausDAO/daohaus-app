@@ -12,7 +12,6 @@ import { GET_METADATA } from '../../utils/Queries';
 
 import { DaoServiceContext, DaoDataContext } from '../../contexts/Store';
 import ValueDisplay from '../shared/ValueDisplay';
-import { appDark, appLight } from '../../variables.styles';
 import {
   DataP,
   DataH2,
@@ -22,11 +21,12 @@ import {
 
 import StackedVote from './StackedVote';
 import './ProposalCard.scss';
+import { getAppLight, getAppDark } from '../../variables.styles';
 
 const ProposalCardDiv = styled(ProposalAndMemberCardDiv)`
-  background-color: ${appLight};
+  background-color: ${(props) => getAppLight(props.theme)};
   width: 320px;
-  border: 2px solid ${appDark};
+  border: 2px solid ${(props) => getAppDark(props.theme)};
   border-radius: 10px;
   margin-bottom: 25px;
   margin-top: 25px;

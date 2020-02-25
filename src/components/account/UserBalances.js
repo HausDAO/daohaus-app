@@ -21,15 +21,12 @@ import UpgradeKeystore from '../../auth/UpgradeKeystore';
 import { USER_TYPE } from '../../utils/DaoService';
 import styled from 'styled-components';
 import {
-  secondary,
-  primaryHover,
   phone,
-  danger,
-  primary,
-  appLight,
   FlashDiv,
   ButtonSecondary,
-  dangerHover,
+  getAppLight,
+  getPrimaryHover,
+  getDangerHover,
 } from '../../variables.styles';
 import {
   FlexCenterDiv,
@@ -45,7 +42,7 @@ const WalletDiv = styled.div`
   position: relative;
   top: -2px;
   box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
-  background-color: ${appLight};
+  background-color: ${(props) => getAppLight(props.theme)};
   @media (max-width: ${phone}) {
     border-radius: 0px;
     border: none;
@@ -59,14 +56,14 @@ const WalletDiv = styled.div`
 
 const WalletHeaderDiv = styled.div`
   height: 98px;
-  border-bottom: 1px solid ${primaryHover};
+  border-bottom: 1px solid ${(props) => getPrimaryHover(props.theme)};
   border-top-right-radius: 10px;
   border-top-left-radius: 10px;
   display: flex;
   flex-direction: row;
   align-items: center;
   justify-content: space-between;
-  background-color: ${primaryHover};
+  background-color: ${(props) => getPrimaryHover(props.theme)};
   padding: 0 15px;
   @media (max-width: ${phone}) {
     border-radius: 0px;
@@ -79,7 +76,7 @@ const WalletOverlayDiv = styled(FlexCenterDiv)`
   min-height: 100%;
   position: absolute;
   z-index: 1;
-  background-color: ${primary};
+  background-color: ${(props) => props.theme.primary};
   color: white;
   border: none;
   p {
@@ -98,7 +95,10 @@ const WalletOverlayContentsDiv = styled(FlexCenterDiv)`
 const StatusP = styled.p`
   font-size: 0.85em;
   position: relative;
-  color: ${(props) => (props.status === 'disconnected' ? danger : secondary)};
+  color: ${(props) =>
+    props.status === 'disconnected'
+      ? props.theme.danger
+      : props.theme.secondary};
   margin-left: 15px;
   margin-top: 0;
   margin-bottom: 5px;
@@ -108,7 +108,9 @@ const StatusP = styled.p`
     height: 8px;
     border-radius: 50%;
     background-color: ${(props) =>
-      props.status === 'disconnected' ? danger : secondary};
+      props.status === 'disconnected'
+        ? props.theme.danger
+        : props.theme.secondary};
     display: block;
     position: absolute;
     left: 0;
@@ -128,15 +130,15 @@ const AddressButton = styled(DataButton)`
   display: flex;
   align-content: center;
   &:hover {
-    color: ${secondary};
-    fill: ${secondary};
+    color: ${(props) => props.theme.secondary};
+    fill: ${(props) => props.theme.secondary};
   }
   p {
     color: white;
   }
   svg {
     display: inline-block;
-    fill: ${secondary};
+    fill: ${(props) => props.theme.secondary};
     width: 18px;
     height: 18px;
     margin-left: 5px;
@@ -144,7 +146,7 @@ const AddressButton = styled(DataButton)`
 `;
 
 const ActionsDropdownDiv = styled.div`
-  color: ${appLight};
+  color: ${(props) => getAppLight(props.theme)};
   position: relative;
   button {
     background-color: transparent;
@@ -162,7 +164,7 @@ const SwitchHeaderDiv = styled.div`
   justify-content: flex-start;
   padding: 0px 15px;
   button {
-    color: ${secondary};
+    color: ${(props) => props.theme.secondary};
     background-color: transparent;
     border-radius: 0px;
     margin: 0;
@@ -174,7 +176,8 @@ const SwitchHeaderDiv = styled.div`
 
 const SelectedElementButton = styled.button`
   color: ${(props) => (props.selected ? '#ffffff' : '')};
-  border-bottom: ${(props) => (props.selected ? '4px solid' + secondary : '')};
+  border-bottom: ${(props) =>
+    props.selected ? '4px solid' + props.theme.secondary : ''};
   background-color: ${(props) => (props.selected ? 'transparent' : '')};
   font-size: ${(props) => (props.selected ? '1em' : '')};
 `;
@@ -182,7 +185,7 @@ const SelectedElementButton = styled.button`
 const ActionsDropdownContentDiv = styled.div`
   position: absolute;
   right: -15px;
-  background-color: ${appLight};
+  background-color: ${(props) => getAppLight(props.theme)};
   min-width: 200px;
   max-width: 100%;
   box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.15);
@@ -190,12 +193,12 @@ const ActionsDropdownContentDiv = styled.div`
   z-index: 3;
   button {
     background-color: transparent;
-    color: ${primary};
+    color: ${(props) => props.theme.primary};
     text-align: left;
     padding: 15px 0px;
     margin: 0;
     &:hover {
-      color: ${primaryHover};
+      color: ${(props) => getPrimaryHover(props.theme)};
     }
     &.Button--Primary {
       color: $primary;
@@ -261,9 +264,9 @@ export const TinyButton = styled.div`
   vertical-align: middle;
   margin-top: -5px;
   margin-left: 10px;
-  background-color: ${danger};
+  background-color: ${(props) => props.theme.danger};
   &:hover {
-    background-color: ${dangerHover};
+    background-color: ${(props) => getDangerHover(props.theme)};
   }
   span {
     color: white;

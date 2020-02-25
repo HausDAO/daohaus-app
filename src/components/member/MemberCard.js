@@ -9,7 +9,7 @@ import { truncateAddr } from '../../utils/Helpers';
 import ValueDisplay from '../shared/ValueDisplay';
 import { DaoServiceContext, DaoDataContext } from '../../contexts/Store';
 
-import { appDark, appLight, phone, primary } from '../../variables.styles';
+import { phone, getAppLight, getAppDark } from '../../variables.styles';
 import { DataP, DataH2, ProposalAndMemberCardDiv } from '../../App.styles';
 import {
   MemberCardIdentityDiv,
@@ -19,24 +19,24 @@ import {
 } from './Member.styles';
 
 const MemberCardDiv = styled(ProposalAndMemberCardDiv)`
-  background-color: ${appLight};
+  background-color: ${(props) => getAppLight(props.theme)};
   color: black;
   margin-top: 25px;
-  border: 2px solid ${appDark};
+  border: 2px solid ${(props) => getAppDark(props.theme)};
   transition: all 0.15s linear;
 
   @media (min-width: ${phone}) {
     width: 320px;
-    border: 2px solid ${appDark};
+    border: 2px solid ${(props) => props.theme.appDark};
     margin-bottom: 25px;
     border-radius: 10px;
     box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
   }
 
   &:hover {
-    background-color: ${primary};
+    background-color: ${(props) => props.theme.primary};
     color: white;
-    @media (min-width: $phone) {
+    @media (min-width: phone) {
       scale: 1.05;
     }
   }
@@ -75,7 +75,6 @@ const MemberCard = ({ member }) => {
     };
 
     setup();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (
