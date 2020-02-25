@@ -67,8 +67,6 @@ const HomeChart = ({ guildBankAddr, chartView }) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [chartView]);
 
-  console.log('chartView', chartView);
-
   const getShares = async () => {
     const events = await daoService.mcDao.getAllEvents();
     const firstBlock = events[0].blockNumber;

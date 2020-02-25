@@ -16,8 +16,6 @@ import { USER_TYPE } from '../../utils/DaoService';
 const BcToast = () => {
   const [daoService] = useContext(DaoServiceContext);
 
-  console.log('daoService', daoService);
-
   const [currentUser] = useContext(CurrentUserContext);
   const [currentWallet] = useContext(CurrentWalletContext);
 
