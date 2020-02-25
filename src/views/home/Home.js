@@ -126,6 +126,7 @@ const ThemedDataDiv = styled(DataDiv)`
   .Bank,
   .Shares,
   .ShareValue {
+    z-index: 100;
     &:hover h5 {
       color: ${({ daoData }) => daoData.themeMap && daoData.themeMap.color};
     }

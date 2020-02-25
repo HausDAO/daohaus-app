@@ -114,6 +114,19 @@ export const resolversV2 = {
         return null;
       }
     },
+    decimals: async (tokenBalance, _args, { cache }) => {
+      if (tokenBalance.guildBank) {
+        const tokenService = new TokenService(
+          _web3,
+          tokenBalance.token.tokenAddress,
+        );
+
+        const decimals = await tokenService.getDecimals();
+        return decimals;
+      } else {
+        return null;
+      }
+    },
   },
   Token: {
     symbol: async (approvedToken, _args, { cache }) => {

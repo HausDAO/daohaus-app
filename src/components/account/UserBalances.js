@@ -35,6 +35,7 @@ import {
   FlexCenterDiv,
   DataButton,
   DataP,
+  DataDiv,
   BackdropOpenDiv,
 } from '../../App.styles';
 
@@ -500,7 +501,7 @@ const UserBalance = ({ toggle, client }) => {
             </BalanceItemDiv>
             <BalanceItemDiv>
               <p>ETH</p>
-              <DataP>
+              <DataDiv>
                 {currentWallet.eth}
                 {currentWallet.state !== WalletStatuses.Connecting &&
                   currentWallet.eth < 0.01 && (
@@ -508,18 +509,18 @@ const UserBalance = ({ toggle, client }) => {
                       <span>!</span> Low Eth
                     </TinyButton>
                   )}
-              </DataP>
+              </DataDiv>
             </BalanceItemDiv>
             <BalanceItemDiv>
               <p>{tokenSymbol}</p>
-              <DataP>
+              <DataDiv>
                 {currentWallet.tokenBalance}
                 {currentWallet.tokenBalance > currentWallet.allowance && (
                   <TinyButton onClick={() => toggle('allowanceForm')}>
                     <span>!</span> Unlock Token
                   </TinyButton>
                 )}
-              </DataP>
+              </DataDiv>
             </BalanceItemDiv>
           </BalancesDiv>
         )}

@@ -32,6 +32,17 @@ export class TokenService {
     return symbol;
   }
 
+  async getDecimals() {
+    let decimals;
+
+    try {
+      decimals = await this.contract.methods.decimals().call();
+      return decimals;
+    } catch {
+      return 18;
+    }
+  }
+
   async totalSupply() {
     const totalSupply = await this.contract.methods.totalSupply().call();
     return totalSupply;
@@ -160,7 +171,7 @@ export class Web3TokenService extends TokenService {
   }
 
   async unlock(token) {
-    if(token==="0x000000000000000"){
+    if (token === '0x000000000000000') {
       return;
     }
     const contract = new this.web3.eth.Contract(Erc20Abi, token);
@@ -182,7 +193,7 @@ export class Web3TokenService extends TokenService {
     accountAddr = this.accountAddress,
     contractAddr = this.daoAddress,
   ) {
-    if(token==="0x000000000000000"){
+    if (token === '0x000000000000000') {
       return 0;
     }
     const contract = new this.web3.eth.Contract(Erc20Abi, token);
@@ -192,4 +203,3 @@ export class Web3TokenService extends TokenService {
     return allowance;
   }
 }
-

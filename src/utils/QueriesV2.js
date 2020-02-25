@@ -30,6 +30,7 @@ export const GET_MOLOCH_V2 = gql`
           tokenAddress
         }
         symbol @client
+        decimals @client
         tokenBalance
         guildBank
       }

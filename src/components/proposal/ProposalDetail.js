@@ -22,6 +22,7 @@ import ValueDisplay from '../shared/ValueDisplay';
 
 import './ProposalDetail.scss';
 import TinyLoader from '../shared/TinyLoader';
+import { withRouter } from 'react-router-dom';
 
 const web3Service = new Web3Service();
 
@@ -31,6 +32,7 @@ const ProposalDetail = ({
   submitVote,
   canVote,
   client,
+  history,
 }) => {
   const [detailData, setDetailData] = useState();
   const [currentUser] = useContext(CurrentUserContext);
@@ -72,7 +74,6 @@ const ProposalDetail = ({
   }, []);
 
   const cancelProposal = async (id) => {
-    console.log('cancel ', id);
     setLoading(true);
     try {
       await daoService.mcDao.cancelProposal(id);
@@ -80,6 +81,7 @@ const ProposalDetail = ({
       console.log('user rejected or transaction failed');
     } finally {
       setLoading(false);
+      history.push(`/dao/${daoService.daoAddress}/proposals`);
     }
   };
 
@@ -92,6 +94,7 @@ const ProposalDetail = ({
       console.log('user rejected or transaction failed');
     } finally {
       setLoading(false);
+      history.push(`/dao/${daoService.daoAddress}/proposals`);
     }
   };
 
@@ -120,7 +123,9 @@ const ProposalDetail = ({
           <p className="Data">{proposal.proposer}</p>
           <h5 className="Label">Applicant Address</h5>
           <p className="Data">{proposal.applicant}</p>
-          {proposal.cancelled && <p>Proposal Cancelled</p>}
+          {proposal.cancelled && (
+            <p style={{ color: 'red' }}>Proposal Cancelled</p>
+          )}
           {proposal.sponsored && (
             <>
               <h5 className="Label">Proposal Sponsored By</h5>
@@ -199,12 +204,12 @@ const ProposalDetail = ({
         />
       ) : (
         <>
-          {+daoData.version === 2 ? (
+          {+daoData.version === 2 && currentUser ? (
             <>
               {!proposal.sponsored &&
                 !proposal.cancelled &&
                 proposal.proposer.toLowerCase() ===
-                  currentWallet.addrByDelegateKey && (
+                  currentUser.username.toLowerCase() && (
                   <>
                     {loading ? (
                       <TinyLoader />
@@ -212,7 +217,7 @@ const ProposalDetail = ({
                       <button
                         onClick={() => cancelProposal(proposal.proposalId)}
                       >
-                        cancel
+                        Cancel My Proposal
                       </button>
                     )}
                   </>
@@ -227,7 +232,7 @@ const ProposalDetail = ({
                       <button
                         onClick={() => sponsorProposal(proposal.proposalId)}
                       >
-                        sponsor
+                        Sponsor Proposal
                       </button>
                     )}
                   </>
@@ -240,4 +245,4 @@ const ProposalDetail = ({
   );
 };
 
-export default withApollo(ProposalDetail);
+export default withRouter(withApollo(ProposalDetail));

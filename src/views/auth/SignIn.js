@@ -12,7 +12,11 @@ import {
 
 import config from '../../config';
 
-import { CurrentUserContext, DaoServiceContext } from '../../contexts/Store';
+import {
+  CurrentUserContext,
+  DaoServiceContext,
+  DaoDataContext,
+} from '../../contexts/Store';
 import Loading from '../../components/shared/Loading';
 import { Web3SignIn } from '../../components/account/Web3SignIn';
 import { USER_TYPE } from '../../utils/DaoService';
@@ -25,6 +29,7 @@ const signinTypes = {
 
 const SignIn = ({ history }) => {
   const [daoService] = useContext(DaoServiceContext);
+  const [daoData] = useContext(DaoDataContext);
   const [, setCurrentUser] = useContext(CurrentUserContext);
   const [authError, setAuthError] = useState();
   const [pseudonymTouch, setPseudonymTouch] = useState(false);
@@ -53,9 +58,12 @@ const SignIn = ({ history }) => {
       {signinType !== signinTypes.password && (
         <>
           <Web3SignIn history={history} setCurrentUser={setCurrentUser} />
-          <button onClick={() => setSigninType(signinTypes.password)}>
-            Sign in With Password
-          </button>
+
+          {+daoData.version !== 2 ? (
+            <button onClick={() => setSigninType(signinTypes.password)}>
+              Sign in With Password
+            </button>
+          ) : null}
         </>
       )}
       {signinType === signinTypes.password && (
