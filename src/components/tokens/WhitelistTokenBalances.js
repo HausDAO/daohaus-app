@@ -8,7 +8,9 @@ const WhitelistTokenBalances = (tokens) => {
       return (
         <div key={token.token.tokenAddress}>
           <ValueDisplay
-            value={parseFloat(token.tokenBalance).toFixed(4)}
+            value={parseFloat(
+              token.tokenBalance / 10 ** +token.decimals,
+            ).toFixed(4)}
             symbolOverride={token.symbol}
           />
         </div>
