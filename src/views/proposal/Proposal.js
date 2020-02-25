@@ -5,16 +5,14 @@ import { useQuery } from '@apollo/react-hooks';
 import { ethToWei } from '@netgum/utils'; // returns BN
 
 import { GET_PROPOSAL } from '../../utils/Queries';
+import { GET_PROPOSAL_V2 } from '../../utils/QueriesV2';
 import ProposalDetail from '../../components/proposal/ProposalDetail';
 import ErrorMessage from '../../components/shared/ErrorMessage';
 import Loading from '../../components/shared/Loading';
-// import Web3Service from '../../utils/Web3Service';
-// import { BcProcessorService } from '../../utils/BcProcessorService';
 
 import {
   LoaderContext,
   CurrentWalletContext,
-  // CurrentUserContext,
   DaoServiceContext,
   DaoDataContext,
 } from '../../contexts/Store';
@@ -27,11 +25,19 @@ const Proposal = (props) => {
   const [daoData] = useContext(DaoDataContext);
 
   let options;
+  const query = daoData.version === 2 ? GET_PROPOSAL_V2 : GET_PROPOSAL;
 
   if (daoData.isLegacy) {
     options = {
-      client: daoData.legacyClient,
+      client: daoData.altClient,
       variables: { id },
+    };
+  } else if (+daoData.version === 2) {
+    options = {
+      client: daoData.altClient,
+      variables: {
+        id: `${daoService.daoAddress.toLowerCase()}-proposal-${id}`,
+      },
     };
   } else {
     options = {
@@ -39,7 +45,7 @@ const Proposal = (props) => {
     };
   }
 
-  const { loading, error, data } = useQuery(GET_PROPOSAL, options);
+  const { loading, error, data } = useQuery(query, options);
 
   const processProposal = async (id) => {
     setTxLoading(true);

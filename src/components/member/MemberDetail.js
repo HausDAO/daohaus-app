@@ -1,20 +1,35 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import makeBlockie from 'ethereum-blockies-base64';
 import { getProfile } from '3box/lib/api';
+import styled from 'styled-components';
 
 import Web3Service from '../../utils/Web3Service';
 import ValueDisplay from '../shared/ValueDisplay';
 
-import './MemberDetail.scss';
+import { DataP, DataH2 } from '../../App.styles';
+import {
+  MemberCardIdentityDiv,
+  MemberCardImage,
+  ProfileImgCard,
+  OfferDivMemberCard,
+} from './Member.styles';
+import { DaoDataContext } from '../../contexts/Store';
+
+const MemberDetailDiv = styled.div`
+  padding: 25px 25px 120px;
+`;
 
 const web3Service = new Web3Service();
 
 const MemberDetail = ({ member }) => {
   const [memberProfile, setMemberProfile] = useState({});
+  const [daoData] = useContext(DaoDataContext);
 
-  const memberId = member.id.split('-')[1]
+  const parsedMemberId = member.id.split('-')[1]
     ? member.id.split('-')[1]
     : member.id;
+
+  const memberId = member.memberAddress || parsedMemberId;
 
   useEffect(() => {
     const setup = async () => {
@@ -32,50 +47,50 @@ const MemberDetail = ({ member }) => {
   }, []);
 
   return (
-    <div className="MemberDetail">
-      <div className="MemberCard__identity">
-        <div className="MemberCard__image">
+    <MemberDetailDiv>
+      <MemberCardIdentityDiv>
+        <MemberCardImage>
           {memberProfile && memberProfile.image && memberProfile.image[0] ? (
-            <div
-              className="ProfileImgCard"
+            <ProfileImgCard
               style={{
                 backgroundImage: `url(${'https://ipfs.infura.io/ipfs/' +
                   memberProfile.image[0].contentUrl['/']})`,
               }}
             >
               {''}
-            </div>
+            </ProfileImgCard>
           ) : (
-            <div
-              className="ProfileImgCard"
+            <ProfileImgCard
               style={{
                 backgroundImage: `url("${makeBlockie(memberId)}")`,
               }}
             >
               {''}
-            </div>
+            </ProfileImgCard>
           )}
-        </div>
+        </MemberCardImage>
         <div>
           <h2>{memberProfile.name}</h2>
           <p className="Data">{memberId}</p>
         </div>
-      </div>
-      <div className="Offer">
-        <div className="Shares">
+      </MemberCardIdentityDiv>
+      <OfferDivMemberCard>
+        <div>
           <h5>Shares</h5>
-          <h2 className="Data">{member.shares}</h2>
+          <DataH2>{member.shares}</DataH2>
         </div>
-        <div className="Tribute">
-          <h5>Tribute</h5>
-          <h2 className="Data">
-            <ValueDisplay value={web3Service.fromWei(member.tokenTribute)} />
-          </h2>
-        </div>
-      </div>
+        {+daoData.version !== 2 ? (
+          <div>
+            <h5>Tribute</h5>
+            <DataH2>
+              <ValueDisplay value={web3Service.fromWei(member.tokenTribute)} />
+            </DataH2>
+          </div>
+        ) : null}
+      </OfferDivMemberCard>
       <h5>Delegate Key</h5>
-      <p className="Data">{member.delegateKey}</p>
-    </div>
+      <DataP>{member.delegateKey}</DataP>
+    </MemberDetailDiv>
   );
 };
 

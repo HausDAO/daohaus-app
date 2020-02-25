@@ -6,11 +6,13 @@ import VoteNo from '../../assets/thumbs-down.png';
 
 import './VoteControl.scss';
 import MemberVotes from './MemberVotes';
-import { CurrentUserContext, CurrentWalletContext } from '../../contexts/Store';
+import { CurrentUserContext, CurrentWalletContext, DaoDataContext } from '../../contexts/Store';
 
 const VoteControl = ({ submitVote, proposal }) => {
   const [currentUser] = useContext(CurrentUserContext);
   const [currentWallet] = useContext(CurrentWalletContext);
+  const [daoData] = useContext(DaoDataContext);
+
   const [isElementOpen, setElementOpen] = useState(false);
   const toggleElement = () => setElementOpen(!isElementOpen);
   const [currentYesVote, setCurrentYesVote] = useState(0);
@@ -19,6 +21,8 @@ const VoteControl = ({ submitVote, proposal }) => {
   const canVote = (proposal) => {
     // check if user has votes
     // does not seem to work
+    console.log('vote ptoposal', proposal);
+    
     if (currentYesVote || currentNoVote) {
       return false;
     }
@@ -29,7 +33,8 @@ const VoteControl = ({ submitVote, proposal }) => {
     if (hasVoted && hasVoted.length) {
       return false;
     }
-    return proposal.status === 'VotingPeriod';
+    // TODO: can we get voting period status on v2
+    return (+daoData.version === 2) ? proposal.sponsored : proposal.status === 'VotingPeriod';
   };
 
   const usersVote = (votes) => {
@@ -40,7 +45,11 @@ const VoteControl = ({ submitVote, proposal }) => {
       currentWallet &&
       currentWallet.addrByDelegateKey &&
       votes.filter((vote) => {
-        return (
+        return (+daoData.version === 2) ? (
+          vote.member.memberAddress &&
+          vote.member.memberAddress.toLowerCase() ===
+            currentWallet.addrByDelegateKey.toLowerCase()
+        ) : (
           vote.memberAddress &&
           vote.memberAddress.toLowerCase() ===
             currentWallet.addrByDelegateKey.toLowerCase()
@@ -99,7 +108,7 @@ const VoteControl = ({ submitVote, proposal }) => {
             </button>
             <div className="StackedVote">
               <StackedVote
-                id={proposal.proposalIndex}
+                id={(+daoData.version === 2) ? proposal.proposalId : proposal.proposalIndex}
                 currentYesVote={currentYesVote}
                 currentNoVote={currentNoVote}
               />
@@ -121,7 +130,7 @@ const VoteControl = ({ submitVote, proposal }) => {
             </button>
             <div className="StackedVote">
               <StackedVote
-                id={proposal.proposalIndex}
+                id={(+daoData.version === 2) ? proposal.proposalId : proposal.proposalIndex}
                 currentYesVote={currentYesVote}
                 currentNoVote={currentNoVote}
               />

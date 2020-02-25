@@ -2,23 +2,66 @@ import React, { useState, useContext, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import makeBlockie from 'ethereum-blockies-base64';
 import { getProfile } from '3box/lib/api';
+import styled from 'styled-components';
 
 import Web3Service from '../../utils/Web3Service';
 import { truncateAddr } from '../../utils/Helpers';
 import ValueDisplay from '../shared/ValueDisplay';
-import { DaoServiceContext } from '../../contexts/Store';
+import { DaoServiceContext, DaoDataContext } from '../../contexts/Store';
 
-import './MemberCard.scss';
+import { appDark, appLight, phone, primary } from '../../variables.styles';
+import { DataP, DataH2, ProposalAndMemberCardDiv } from '../../App.styles';
+import {
+  MemberCardIdentityDiv,
+  MemberCardImage,
+  ProfileImgCard,
+  OfferDivMemberCard,
+} from './Member.styles';
+
+const MemberCardDiv = styled(ProposalAndMemberCardDiv)`
+  background-color: ${appLight};
+  color: black;
+  margin-top: 25px;
+  border: 2px solid ${appDark};
+  transition: all 0.15s linear;
+
+  @media (min-width: ${phone}) {
+    width: 320px;
+    border: 2px solid ${appDark};
+    margin-bottom: 25px;
+    border-radius: 10px;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+  }
+
+  &:hover {
+    background-color: ${primary};
+    color: white;
+    @media (min-width: $phone) {
+      scale: 1.05;
+    }
+  }
+
+  h3 {
+    margin: 10px 0px;
+  }
+`;
+
+const MemberAddr = styled(DataP)`
+  margin-bottom: 10px;
+`;
 
 const web3Service = new Web3Service();
 
 const MemberCard = ({ member }) => {
   const [daoService] = useContext(DaoServiceContext);
+  const [daoData] = useContext(DaoDataContext);
   const [memberProfile, setMemberProfile] = useState({});
 
-  const memberId = member.id.split('-')[1]
+  const parsedMemberId = member.id.split('-')[1]
     ? member.id.split('-')[1]
     : member.id;
+
+  const memberId = member.memberAddress || parsedMemberId;
 
   useEffect(() => {
     const setup = async () => {
@@ -42,51 +85,53 @@ const MemberCard = ({ member }) => {
         pathname: '/dao/' + daoService.daoAddress + '/member/' + member.id,
       }}
     >
-      <div className="MemberCard">
-        <div className="MemberCard__identity">
-          <div className="MemberCard__image">
+      <MemberCardDiv>
+        <MemberCardIdentityDiv>
+          <MemberCardImage>
             {memberProfile && memberProfile.image && memberProfile.image[0] ? (
-              <div
-                className="ProfileImgCard"
+              <ProfileImgCard
                 style={{
                   backgroundImage: `url(${'https://ipfs.infura.io/ipfs/' +
                     memberProfile.image[0].contentUrl['/']})`,
                 }}
               >
                 {''}
-              </div>
+              </ProfileImgCard>
             ) : (
-              <div
-                className="ProfileImgCard"
+              <ProfileImgCard
                 style={{
                   backgroundImage: `url("${makeBlockie(memberId)}")`,
                 }}
               >
                 {''}
-              </div>
+              </ProfileImgCard>
             )}
-          </div>
+          </MemberCardImage>
           <div>
             <h3>
               {memberProfile.name || 'unknown'}{' '}
               {memberProfile.emoji ? <span>{memberProfile.emoji} </span> : null}
             </h3>
-            <p className="Data Addr">{truncateAddr(memberId)}</p>
+            <MemberAddr>{truncateAddr(memberId)}</MemberAddr>
           </div>
-        </div>
-        <div className="Offer">
-          <div className="Shares">
+        </MemberCardIdentityDiv>
+        <OfferDivMemberCard>
+          <div>
             <h5>Shares</h5>
-            <h2 className="Data">{member.shares}</h2>
+            <DataH2>{member.shares}</DataH2>
           </div>
-          <div className="Tribute">
-            <h5>Tribute</h5>
-            <h2 className="Data">
-              <ValueDisplay value={web3Service.fromWei(member.tokenTribute)} />
-            </h2>
-          </div>
-        </div>
-      </div>
+          {+daoData.version !== 2 ? (
+            <div>
+              <h5>Tribute</h5>
+              <DataH2>
+                <ValueDisplay
+                  value={web3Service.fromWei(member.tokenTribute)}
+                />
+              </DataH2>
+            </div>
+          ) : null}
+        </OfferDivMemberCard>
+      </MemberCardDiv>
     </Link>
   );
 };

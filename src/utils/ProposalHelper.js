@@ -9,6 +9,7 @@ export const ProposalStatus = {
   Passed: 'Passed',
   Failed: 'Failed',
   ReadyForProcessing: 'ReadyForProcessing',
+  Unsponsored: 'Unsponsored',
 };
 
 const periodsToTime = (periods, periodDuration) => {
@@ -69,6 +70,8 @@ export function getProposalCountdownText(proposal, periodDuration) {
       return <span className="subtext">Aborted</span>;
     case ProposalStatus.ReadyForProcessing:
       return <span className="subtext">Ready For Processing</span>;
+    case ProposalStatus.Unsponsored:
+      return <span className="subtext">Unsponsored</span>;
     default:
       return <Fragment />;
   }
@@ -96,21 +99,35 @@ export const passedVotingAndGrace = (
   currentPeriod,
   votingPeriodLength,
   gracePeriodLength,
-) =>
-  currentPeriod >
-  proposal.startingPeriod + votingPeriodLength + gracePeriodLength;
+  version = 1,
+) => {
+  if (version === 2 && !proposal.sponsored) {
+    return false;
+  } else {
+    return (
+      currentPeriod >
+      proposal.startingPeriod + votingPeriodLength + gracePeriodLength
+    );
+  }
+};
 
 export function determineProposalStatus(
   proposal,
   currentPeriod,
   votingPeriodLength,
   gracePeriodLength,
+  version = 1,
 ) {
   proposal.startingPeriod = +proposal.startingPeriod;
 
   let status;
-  if (proposal.processed && proposal.aborted) {
+  // TODO: handle V2 - no aborted
+  const abortedOrCancelled = proposal.aborted || proposal.cancelled;
+  // if (proposal.processed && proposal.aborted) {
+  if (proposal.processed && abortedOrCancelled) {
     status = ProposalStatus.Aborted;
+  } else if (version === 2 && !proposal.sponsored) {
+    status = ProposalStatus.Unsponsored;
   } else if (proposal.processed && proposal.didPass) {
     status = ProposalStatus.Passed;
   } else if (proposal.processed && !proposal.didPass) {
@@ -145,23 +162,32 @@ export function determineProposalStatus(
 }
 
 //TODO: graph query
-export const groupByStatus = (proposals) => {
+export const groupByStatus = (proposals, unsponsoredView) => {
   return {
-    VotingPeriod: proposals.filter((p) => p.status === 'VotingPeriod'),
-    GracePeriod: proposals.filter((p) => p.status === 'GracePeriod'),
-    ReadyForProcessing: proposals.filter(
-      (p) => p.status === 'ReadyForProcessing',
-    ),
-    InQueue: proposals.filter((p) => p.status === 'InQueue'),
-    Completed: proposals.filter((p) => {
-      return (
-        // 'Aborted', 'Passed', 'Failed', 'Unknown'
-        p.status !== 'VotingPeriod' &&
-        p.status !== 'GracePeriod' &&
-        p.status !== 'ReadyForProcessing' &&
-        p.status !== 'InQueue'
-      );
-    }),
+    Unsponsored: {
+      Cancelled: proposals.filter((p) => p.cancelled),
+      Unsponsored: proposals.filter((p) => {
+        return unsponsoredView && !p.cancelled && !p.processed;
+      }),
+    },
+    Base: {
+      VotingPeriod: proposals.filter((p) => p.status === 'VotingPeriod'),
+      GracePeriod: proposals.filter((p) => p.status === 'GracePeriod'),
+      ReadyForProcessing: proposals.filter(
+        (p) => p.status === 'ReadyForProcessing',
+      ),
+      InQueue: proposals.filter((p) => p.status === 'InQueue'),
+      Completed: proposals.filter((p) => {
+        return (
+          // 'Aborted', 'Passed', 'Failed', 'Unknown'
+          !unsponsoredView &&
+          p.status !== 'VotingPeriod' &&
+          p.status !== 'GracePeriod' &&
+          p.status !== 'ReadyForProcessing' &&
+          p.status !== 'InQueue'
+        );
+      }),
+    },
   };
 };
 

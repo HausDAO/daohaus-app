@@ -1,5 +1,6 @@
 const dev = {
   GRAPH_NODE_URI: process.env.REACT_APP_DEV_GRAPH_NODE_URI, // replace with subgraph for your moloch
+  GRAPH_NODE_URI_V2: process.env.REACT_APP_DEV_GRAPH_NODE_URI_V2,
   INFURA_URI: process.env.REACT_APP_DEV_INFURA_URI, // replace with your infura key
   SDK_ENV: process.env.REACT_APP_DEV_SDK_ENV, // replace network for sdk if not Kovan
   cognito: {
@@ -15,6 +16,7 @@ const dev = {
 
 const prod = {
   GRAPH_NODE_URI: process.env.REACT_APP_GRAPH_NODE_URI, // replace with subgraph for your moloch
+  GRAPH_NODE_URI_V2: process.env.REACT_APP_GRAPH_NODE_URI_V2,
   INFURA_URI: process.env.REACT_APP_INFURA_URI, // replace with your infura key
   SDK_ENV: process.env.REACT_APP_SDK_ENV,
   cognito: {

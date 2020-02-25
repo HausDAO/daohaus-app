@@ -8,7 +8,12 @@ import {
   descriptionMaker,
   linkMaker,
 } from '../../utils/ProposalHelper';
-import { CurrentUserContext, DaoServiceContext } from '../../contexts/Store';
+import {
+  CurrentUserContext,
+  DaoServiceContext,
+  DaoDataContext,
+  CurrentWalletContext,
+} from '../../contexts/Store';
 import { GET_METADATA } from '../../utils/Queries';
 import { get } from '../../utils/Requests';
 import Web3Service from '../../utils/Web3Service';
@@ -16,6 +21,8 @@ import VoteControl from './VoteControl';
 import ValueDisplay from '../shared/ValueDisplay';
 
 import './ProposalDetail.scss';
+import TinyLoader from '../shared/TinyLoader';
+import { withRouter } from 'react-router-dom';
 
 const web3Service = new Web3Service();
 
@@ -25,21 +32,31 @@ const ProposalDetail = ({
   submitVote,
   canVote,
   client,
+  history,
 }) => {
   const [detailData, setDetailData] = useState();
   const [currentUser] = useContext(CurrentUserContext);
   const [daoService] = useContext(DaoServiceContext);
-  const { periodDuration } = client.cache.readQuery({
-    query: GET_METADATA,
-  });
+  const [daoData] = useContext(DaoDataContext);
+  const [currentWallet] = useContext(CurrentWalletContext);
+  const [loading, setLoading] = useState(false);
+
+  const { periodDuration } =
+    +daoData.version === 2
+      ? { periodDuration: proposal.moloch.periodDuration }
+      : client.cache.readQuery({
+          query: GET_METADATA,
+        });
+  const tribute =
+    +daoData.version === 2 ? proposal.tributeOffered : proposal.tokenTribute;
+  const id =
+    +daoData.version === 2 ? proposal.proposalId : proposal.proposalIndex;
 
   useEffect(() => {
     const fetchData = async () => {
       try {
         const metaData = await get(
-          `moloch/proposal/${daoService.daoAddress.toLowerCase()}-${
-            proposal.proposalIndex
-          }`,
+          `moloch/proposal/${daoService.daoAddress.toLowerCase()}-${id}`,
         );
 
         setDetailData(metaData.data);
@@ -55,6 +72,31 @@ const ProposalDetail = ({
     fetchData();
     // eslint-disable-next-line
   }, []);
+
+  const cancelProposal = async (id) => {
+    setLoading(true);
+    try {
+      await daoService.mcDao.cancelProposal(id);
+    } catch (err) {
+      console.log('user rejected or transaction failed');
+    } finally {
+      setLoading(false);
+      history.push(`/dao/${daoService.daoAddress}/proposals`);
+    }
+  };
+
+  const sponsorProposal = async (id) => {
+    console.log('sponsor ', id);
+    setLoading(true);
+    try {
+      await daoService.mcDao.sponsorProposal(id);
+    } catch (err) {
+      console.log('user rejected or transaction failed');
+    } finally {
+      setLoading(false);
+      history.push(`/dao/${daoService.daoAddress}/proposals`);
+    }
+  };
 
   const countDown = getProposalCountdownText(proposal, periodDuration);
   const title = titleMaker(proposal);
@@ -73,9 +115,31 @@ const ProposalDetail = ({
         </svg>
         <p className="Data">{countDown}</p>
       </div>
+      {proposal.newMember ? <h5>New Member Proposal</h5> : null}
       <h2>{title}</h2>
-      <h5 className="Label">Applicant Address</h5>
-      <p className="Data">{proposal.applicantAddress}</p>
+      {+daoData.version === 2 ? (
+        <>
+          <h5 className="Label">Proposer Address</h5>
+          <p className="Data">{proposal.proposer}</p>
+          <h5 className="Label">Applicant Address</h5>
+          <p className="Data">{proposal.applicant}</p>
+          {proposal.cancelled && (
+            <p style={{ color: 'red' }}>Proposal Cancelled</p>
+          )}
+          {proposal.sponsored && (
+            <>
+              <h5 className="Label">Proposal Sponsored By</h5>
+              <p className="Data">{proposal.sponsor}</p>
+            </>
+          )}
+        </>
+      ) : (
+        <>
+          <h5 className="Label">Applicant Address</h5>
+          <p className="Data">{proposal.applicantAddress}</p>
+        </>
+      )}
+
       <div className="Offer">
         <div className="Shares">
           <h5>Shares</h5>
@@ -86,7 +150,8 @@ const ProposalDetail = ({
           <h2 className="Data">
             {web3Service && (
               <ValueDisplay
-                value={web3Service.fromWei(proposal.tokenTribute)}
+                value={web3Service.fromWei(tribute)}
+                symbolOverride={proposal.tributeTokenSymbol}
               />
             )}
           </h2>
@@ -131,13 +196,53 @@ const ProposalDetail = ({
           </div>
         ) : null}
       </div>
-      <VoteControl
-        submitVote={submitVote}
-        proposal={proposal}
-        canVote={canVote}
-      />
+      {proposal.sponsored ? (
+        <VoteControl
+          submitVote={submitVote}
+          proposal={proposal}
+          canVote={canVote}
+        />
+      ) : (
+        <>
+          {+daoData.version === 2 && currentUser ? (
+            <>
+              {!proposal.sponsored &&
+                !proposal.cancelled &&
+                proposal.proposer.toLowerCase() ===
+                  currentUser.username.toLowerCase() && (
+                  <>
+                    {loading ? (
+                      <TinyLoader />
+                    ) : (
+                      <button
+                        onClick={() => cancelProposal(proposal.proposalId)}
+                      >
+                        Cancel My Proposal
+                      </button>
+                    )}
+                  </>
+                )}
+              {!proposal.sponsored &&
+                !proposal.cancelled &&
+                currentWallet.shares > 0 && (
+                  <>
+                    {loading ? (
+                      <TinyLoader />
+                    ) : (
+                      <button
+                        onClick={() => sponsorProposal(proposal.proposalId)}
+                      >
+                        Sponsor Proposal
+                      </button>
+                    )}
+                  </>
+                )}
+            </>
+          ) : null}
+        </>
+      )}
     </div>
   );
 };
 
-export default withApollo(ProposalDetail);
+export default withRouter(withApollo(ProposalDetail));

@@ -21,7 +21,17 @@ import ChangeDelegateKeyForm from './ChangeDelegateKeyForm';
 
 import config from '../../config';
 
-import './UserWallet.scss';
+import styled from 'styled-components';
+import { RiskyBizButton } from '../../App.styles';
+import { phone } from '../../variables.styles';
+
+export const UserWalletDiv = styled.div`
+  position: relative;
+  @media (min-width: ${phone}) {
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+`;
 
 const UserWallet = () => {
   const [currentUser] = useContext(CurrentUserContext);
@@ -48,11 +58,11 @@ const UserWallet = () => {
     <>
       {loading && <Loading />}
       {currentUser && (
-        <div className="UserWallet">
+        <UserWalletDiv>
           <StateModals />
 
           {!livesDangerously && loginType !== USER_TYPE.WEB3 ? (
-            <button className="RiskyBiz" onClick={() => acceptWarning()}>
+            <RiskyBizButton onClick={() => acceptWarning()}>
               <span role="alert" aria-label="skull and crossbones">
                 ☠
               </span>
@@ -67,7 +77,7 @@ const UserWallet = () => {
                 <path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z" />
                 <path d="M0 0h24v24H0z" fill="none" />
               </svg>
-            </button>
+            </RiskyBizButton>
           ) : null}
 
           <UserBalance toggle={handleToggle} />
@@ -127,7 +137,7 @@ const UserWallet = () => {
               Continue to DAOHaus
             </a>
           </Modal>
-        </div>
+        </UserWalletDiv>
       )}
     </>
   );

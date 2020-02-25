@@ -3,6 +3,7 @@ import Web3 from 'web3';
 import {
   SdkMcDaoService,
   Web3McDaoService,
+  Web3McDaoServiceV2,
   ReadonlyMcDaoService,
 } from './McDaoService';
 import {
@@ -50,16 +51,44 @@ export class DaoService {
     return singleton || undefined;
   }
 
-  static async instantiateWithWeb3(accountAddr, injected, contractAddr) {
+  static async instantiateWithWeb3(
+    accountAddr,
+    injected,
+    contractAddr,
+    version,
+  ) {
     const web3 = new Web3(injected);
     const bcProcessor = new BcProcessorService(web3);
-    const mcDao = new Web3McDaoService(
-      web3,
-      contractAddr,
-      accountAddr,
-      bcProcessor,
-    );
-    const approvedToken = await mcDao.approvedToken();
+
+    let mcDao;
+    let approvedToken;
+    if (version === 2) {
+      mcDao = new Web3McDaoServiceV2(
+        web3,
+        contractAddr,
+        accountAddr,
+        bcProcessor,
+        version,
+      );
+      approvedToken = await mcDao.getDepositToken();
+    } else {
+      mcDao = new Web3McDaoService(
+        web3,
+        contractAddr,
+        accountAddr,
+        bcProcessor,
+        version,
+      );
+      approvedToken = await mcDao.approvedToken();
+    }
+    // const mcDao = new Web3McDaoService(
+    //   web3,
+    //   contractAddr,
+    //   accountAddr,
+    //   bcProcessor,
+    //   version,
+    // );
+    // const approvedToken = await mcDao.approvedToken();
     const token = new Web3TokenService(
       web3,
       approvedToken,
@@ -67,6 +96,7 @@ export class DaoService {
       accountAddr,
       bcProcessor,
     );
+
     singleton = new Web3DaoService(
       accountAddr,
       web3,
@@ -77,7 +107,7 @@ export class DaoService {
     return singleton;
   }
 
-  static async instantiateWithSDK(accountAddr, sdk, contractAddr) {
+  static async instantiateWithSDK(accountAddr, sdk, contractAddr, version) {
     const web3 = new Web3(new Web3.providers.HttpProvider(config.INFURA_URI));
     const sdkService = new SdkService(sdk);
     const bcProcessor = new BcProcessorService(web3);
@@ -87,6 +117,7 @@ export class DaoService {
       accountAddr,
       bcProcessor,
       sdkService,
+      version,
     );
     const approvedToken = await mcDao.approvedToken();
     const token = new SdkTokenService(
@@ -108,13 +139,20 @@ export class DaoService {
     return singleton;
   }
 
-  static async instantiateWithReadOnly(contractAddr) {
+  static async instantiateWithReadOnly(contractAddr, version) {
     const web3 = new Web3(new Web3.providers.HttpProvider(config.INFURA_URI));
     const bcProcessor = new ReadOnlyBcProcessorService(web3);
-    const mcDao = new ReadonlyMcDaoService(web3, contractAddr, '');
 
-    const approvedToken = await mcDao.approvedToken();
+    const mcDao = new ReadonlyMcDaoService(web3, contractAddr, '', version);
+
+    let approvedToken;
+    if (version === 2) {
+      approvedToken = await mcDao.getDepositToken();
+    } else {
+      approvedToken = await mcDao.approvedToken();
+    }
     const token = new SdkTokenService(web3, approvedToken);
+
     singleton = new ReadonlyDaoService(
       '',
       web3,

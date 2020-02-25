@@ -9,6 +9,10 @@ const BottomNav = (props) => {
   const [currentUser] = useContext(CurrentUserContext);
   const [daoService] = useContext(DaoServiceContext);
 
+  if (!daoService) {
+    return <p>error</p>;
+  }
+
   return (
     <div
       className={

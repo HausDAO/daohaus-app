@@ -32,6 +32,17 @@ export class TokenService {
     return symbol;
   }
 
+  async getDecimals() {
+    let decimals;
+
+    try {
+      decimals = await this.contract.methods.decimals().call();
+      return decimals;
+    } catch {
+      return 18;
+    }
+  }
+
   async totalSupply() {
     const totalSupply = await this.contract.methods.totalSupply().call();
     return totalSupply;
@@ -157,5 +168,38 @@ export class Web3TokenService extends TokenService {
       true,
     );
     return txReceipt.transactionHash;
+  }
+
+  async unlock(token) {
+    if (token === '0x000000000000000') {
+      return;
+    }
+    const contract = new this.web3.eth.Contract(Erc20Abi, token);
+    const max = this.web3.utils.toBN(2).pow(this.web3.utils.toBN(255));
+    const txReceipt = await contract.methods
+      .approve(this.daoAddress, max.toString())
+      .send({ from: this.accountAddress });
+    this.bcProcessor.setTx(
+      txReceipt.transactionHash,
+      this.accountAddress,
+      `Unulock Token ${token}`,
+      true,
+    );
+    return txReceipt.transactionHash;
+  }
+
+  async unlocked(
+    token,
+    accountAddr = this.accountAddress,
+    contractAddr = this.daoAddress,
+  ) {
+    if (token === '0x000000000000000') {
+      return 0;
+    }
+    const contract = new this.web3.eth.Contract(Erc20Abi, token);
+    const allowance = await contract.methods
+      .allowance(accountAddr, contractAddr)
+      .call();
+    return allowance;
   }
 }

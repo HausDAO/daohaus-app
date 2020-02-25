@@ -17,6 +17,7 @@ export const GET_METADATA = gql`
   }
 `;
 
+
 const baseProposalFields = `
   id
   timestamp

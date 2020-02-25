@@ -1,0 +1,17 @@
+@import '../../variables';
+
+.ProposalTypeToggle {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+}
+
+.active-toggle {
+  color: $primary;
+  cursor: pointer;
+}
+
+.toggle:hover {
+  color: $primary-hover;
+  cursor: pointer;
+}

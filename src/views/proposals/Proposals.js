@@ -1,8 +1,10 @@
-import React, { useContext, Fragment } from 'react';
+import React, { useContext, Fragment, useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { useQuery } from '@apollo/react-hooks';
 
 import { GET_PROPOSALS, GET_PROPOSALS_LEGACY } from '../../utils/Queries';
+import { GET_PROPOSALS_V2 } from '../../utils/QueriesV2';
+
 import ProposalFilter from '../../components/proposal/ProposalFilter';
 import ErrorMessage from '../../components/shared/ErrorMessage';
 import BottomNav from '../../components/shared/BottomNav';
@@ -11,19 +13,30 @@ import {
   CurrentWalletContext,
   DaoServiceContext,
   DaoDataContext,
+  CurrentUserContext,
 } from '../../contexts/Store';
 import StateModals from '../../components/shared/StateModals';
+import ProposalTypeToggle from '../../components/proposal-v2/ProposalTypeToggle';
 
 const Proposals = ({ match, history }) => {
   const [currentWallet] = useContext(CurrentWalletContext);
+  const [currentUser] = useContext(CurrentUserContext);
   const [daoService] = useContext(DaoServiceContext);
   const [daoData] = useContext(DaoDataContext);
+  const [proposals, setProposals] = useState([]);
+  const [sponsored, setSponsored] = useState(true);
 
   let proposalQuery, options;
 
-  if (daoData.isLegacy) {
-    proposalQuery = GET_PROPOSALS_LEGACY;
-    options = { client: daoData.legacyClient, pollInterval: 20000 };
+  if (daoData.isLegacy || daoData.version === 2) {
+    proposalQuery = daoData.isLegacy ? GET_PROPOSALS_LEGACY : GET_PROPOSALS_V2;
+    options = {
+      client: daoData.altClient,
+      variables: daoData.isLegacy
+        ? {}
+        : { contractAddr: daoService.daoAddress.toLowerCase() },
+      pollInterval: 20000,
+    };
   } else {
     proposalQuery = GET_PROPOSALS;
     options = {
@@ -33,6 +46,19 @@ const Proposals = ({ match, history }) => {
   }
 
   const { loading, error, data, fetchMore } = useQuery(proposalQuery, options);
+
+  useEffect(() => {
+    if (data && data.proposals) {
+      if (+daoData.version === 2) {
+        const filteredProposals = data.proposals.filter(
+          (prop) => prop.sponsored === sponsored,
+        );
+        setProposals(filteredProposals);
+      } else {
+        setProposals(data.proposals);
+      }
+    }
+  }, [data, sponsored]);
 
   if (loading) return <Loading />;
   if (error) return <ErrorMessage message={error} />;
@@ -54,11 +80,15 @@ const Proposals = ({ match, history }) => {
       <div className="View">
         <div className="Row Pad">
           <h3>Proposals</h3>
-          {currentWallet.shares ? (
+          {currentWallet.shares || (daoData.version === 2 && currentUser) ? (
             <div>
               <p>
                 <Link
-                  to={`/dao/${daoService.daoAddress}/proposal-new`}
+                  to={
+                    daoData.version === 2
+                      ? `/dao/${daoService.daoAddress}/proposal-engine`
+                      : `/dao/${daoService.daoAddress}/proposal-new`
+                  }
                   className="Bold"
                 >
                   <svg
@@ -77,10 +107,18 @@ const Proposals = ({ match, history }) => {
             </div>
           ) : null}
         </div>
+        {+daoData.version === 2 ? (
+          <ProposalTypeToggle
+            handleTypeChange={setSponsored}
+            sponsored={sponsored}
+          />
+        ) : null}
+
         <ProposalFilter
-          proposals={data.proposals}
+          proposals={proposals}
           filter={match.params.filter || 'na'}
           history={history}
+          unsponsoredView={!sponsored}
         />
       </div>
       <BottomNav />

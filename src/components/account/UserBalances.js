@@ -14,12 +14,268 @@ import Deploy from './Deploy';
 import UserTransactions from './UserTransactions';
 import AccountList from './AccountList';
 
-import './UserWallet.scss';
 import DepositFormInitial from './DepositFormInitial';
 import { withApollo } from 'react-apollo';
 import { GET_METADATA } from '../../utils/Queries';
 import UpgradeKeystore from '../../auth/UpgradeKeystore';
 import { USER_TYPE } from '../../utils/DaoService';
+import styled from 'styled-components';
+import {
+  secondary,
+  primaryHover,
+  phone,
+  danger,
+  primary,
+  appLight,
+  FlashDiv,
+  ButtonSecondary,
+  dangerHover,
+} from '../../variables.styles';
+import {
+  FlexCenterDiv,
+  DataButton,
+  DataP,
+  DataDiv,
+  BackdropOpenDiv,
+} from '../../App.styles';
+
+const WalletDiv = styled.div`
+  border: 1px solid #efefef;
+  border-radius: 10px;
+  position: relative;
+  top: -2px;
+  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+  background-color: ${appLight};
+  @media (max-width: ${phone}) {
+    border-radius: 0px;
+    border: none;
+  }
+  @media (min-width: ${phone}) {
+    width: 60%;
+    margin: 25px auto;
+    position: relative;
+  }
+`;
+
+const WalletHeaderDiv = styled.div`
+  height: 98px;
+  border-bottom: 1px solid ${primaryHover};
+  border-top-right-radius: 10px;
+  border-top-left-radius: 10px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  background-color: ${primaryHover};
+  padding: 0 15px;
+  @media (max-width: ${phone}) {
+    border-radius: 0px;
+    border: none;
+  }
+`;
+
+const WalletOverlayDiv = styled(FlexCenterDiv)`
+  width: 100%;
+  min-height: 100%;
+  position: absolute;
+  z-index: 1;
+  background-color: ${primary};
+  color: white;
+  border: none;
+  p {
+    text-align: center;
+  }
+  @media (min-width: ${phone}) {
+    border-radius: 10px;
+    border: none;
+  }
+`;
+
+const WalletOverlayContentsDiv = styled(FlexCenterDiv)`
+  padding: 50px;
+`;
+
+const StatusP = styled.p`
+  font-size: 0.85em;
+  position: relative;
+  color: ${(props) => (props.status === 'disconnected' ? danger : secondary)};
+  margin-left: 15px;
+  margin-top: 0;
+  margin-bottom: 5px;
+  &:before {
+    content: '';
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background-color: ${(props) =>
+      props.status === 'disconnected' ? danger : secondary};
+    display: block;
+    position: absolute;
+    left: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    margin-left: -15px;
+  }
+`;
+
+const AddressButton = styled(DataButton)`
+  margin: 0;
+  padding: 0px;
+  border: none;
+  background: none;
+  color: white;
+  width: auto;
+  display: flex;
+  align-content: center;
+  &:hover {
+    color: ${secondary};
+    fill: ${secondary};
+  }
+  p {
+    color: white;
+  }
+  svg {
+    display: inline-block;
+    fill: ${secondary};
+    width: 18px;
+    height: 18px;
+    margin-left: 5px;
+  }
+`;
+
+const ActionsDropdownDiv = styled.div`
+  color: ${appLight};
+  position: relative;
+  button {
+    background-color: transparent;
+    img {
+      margin-left: 5px;
+      vertical-align: middle;
+    }
+  }
+`;
+
+const SwitchHeaderDiv = styled.div`
+  width: calc(100% - 30px);
+  background-color: #911094;
+  display: flex;
+  justify-content: flex-start;
+  padding: 0px 15px;
+  button {
+    color: ${secondary};
+    background-color: transparent;
+    border-radius: 0px;
+    margin: 0;
+    margin-right: 25px;
+    border-bottom: 4px solid transparent;
+    padding: 15px 0px;
+  }
+`;
+
+const SelectedElementButton = styled.button`
+  color: ${(props) => (props.selected ? '#ffffff' : '')};
+  border-bottom: ${(props) => (props.selected ? '4px solid' + secondary : '')};
+  background-color: ${(props) => (props.selected ? 'transparent' : '')};
+  font-size: ${(props) => (props.selected ? '1em' : '')};
+`;
+
+const ActionsDropdownContentDiv = styled.div`
+  position: absolute;
+  right: -15px;
+  background-color: ${appLight};
+  min-width: 200px;
+  max-width: 100%;
+  box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.15);
+  padding: 12px 16px;
+  z-index: 3;
+  button {
+    background-color: transparent;
+    color: ${primary};
+    text-align: left;
+    padding: 15px 0px;
+    margin: 0;
+    &:hover {
+      color: ${primaryHover};
+    }
+    &.Button--Primary {
+      color: $primary;
+      &:hover {
+        color: $primary-hover;
+      }
+    }
+    &.Button--Secondary {
+      color: $secondary;
+      &:hover {
+        color: $secondary-hover;
+      }
+      &:disabled {
+        color: grey;
+      }
+    }
+    &.Button--Tertiary {
+      color: $tertiary;
+      &:hover {
+        color: $tertiary-hover;
+      }
+    }
+  }
+`;
+
+const WalletContents = styled.div`
+  min-height: 300px;
+`;
+
+const BalancesDiv = styled.div`
+  min-height: 300px;
+`;
+
+const BalanceItemDiv = styled.div`
+  display: flex;
+  align-content: center;
+  justify-content: space-between;
+  padding: 15px 15px;
+  flex-direction: column;
+  background-color: $app-light;
+  @media (min-width: $tablet) {
+    flex-direction: column;
+  }
+  p {
+    margin: 0;
+    padding: 0px;
+  }
+  border-bottom: 1px solid #efefef;
+  p:nth-child(1) {
+    font-size: 0.85em;
+    color: #333;
+  }
+  p:nth-child(2) {
+    font-size: 1.5em;
+  }
+`;
+
+export const TinyButton = styled.div`
+  margin: 0;
+  display: inline-block;
+  font-size: 0.5em;
+  padding: 7px 10px;
+  vertical-align: middle;
+  margin-top: -5px;
+  margin-left: 10px;
+  background-color: ${danger};
+  &:hover {
+    background-color: ${dangerHover};
+  }
+  span {
+    color: white;
+    height: 13px;
+    width: 13px;
+    border-radius: 50%;
+    border: 1px solid white;
+    font-size: 0.85em;
+    float: left;
+    margin-right: 5px;
+  }
+`;
 
 const UserBalance = ({ toggle, client }) => {
   const { tokenSymbol } = client.cache.readQuery({
@@ -82,13 +338,13 @@ const UserBalance = ({ toggle, client }) => {
   };
 
   return (
-    <div className="Wallet">
+    <WalletDiv>
       {/* <p>{currentWallet.state}</p>
       <p>{WalletStatuses.Deployed}</p> */}
       {currentWallet.state !== WalletStatuses.Connecting &&
         currentWallet.state === WalletStatuses.Created && (
-          <div className="WalletOverlay FlexCenter">
-            <div className="Contents FlexCenter">
+          <WalletOverlayDiv>
+            <WalletOverlayContentsDiv>
               {currentWallet.eth < 0.05 && <DepositFormInitial />}
               {currentWallet.eth >= 0.05 && (
                 <>
@@ -113,40 +369,39 @@ const UserBalance = ({ toggle, client }) => {
                   </a>
                 </p>
               )}
-            </div>
-          </div>
+            </WalletOverlayContentsDiv>
+          </WalletOverlayDiv>
         )}
       {currentWallet.state === WalletStatuses.Deployed && !keystoreExists && (
-        <div className="WalletOverlay FlexCenter">
-          <div className="Contents FlexCenter">
+        <WalletOverlayDiv>
+          <WalletOverlayContentsDiv>
             <h2>Please upgrade your account.</h2>
             {!keystoreExists && <UpgradeKeystore />}
-          </div>
-        </div>
+          </WalletOverlayContentsDiv>
+        </WalletOverlayDiv>
       )}
-      <div className="Header">
+      <WalletHeaderDiv>
         <div className="WalletInfo">
-          <p
-            className={
-              'Status ' +
-              ((currentUser.type === USER_TYPE.SDK &&
+          <StatusP
+            status={
+              (currentUser.type === USER_TYPE.SDK &&
                 currentWallet.state !== 'Deployed') ||
               (currentUser.type === USER_TYPE.WEB3 &&
                 currentWallet.state !== 'Connected')
                 ? 'Disconnected'
-                : '')
+                : ''
             }
           >
             {currentWallet.state || 'Connecting'}
-          </p>
+          </StatusP>
           <CopyToClipboard
             onCopy={onCopy}
             text={currentUser.attributes['custom:account_address']}
           >
-            <button className="Address Data">
-              <p className="Data">
+            <AddressButton>
+              <DataP>
                 {truncateAddr(currentUser.attributes['custom:account_address'])}
-              </p>{' '}
+              </DataP>{' '}
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 width="24"
@@ -157,154 +412,122 @@ const UserBalance = ({ toggle, client }) => {
                 <path d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm-1 4H8c-1.1 0-1.99.9-1.99 2L6 21c0 1.1.89 2 1.99 2H19c1.1 0 2-.9 2-2V11l-6-6zM8 21V7h6v5h5v9H8z" />
               </svg>
               {copied && (
-                <div className="Flash">
+                <FlashDiv>
                   <p>Copied!</p>
-                </div>
+                </FlashDiv>
               )}
-            </button>
+            </AddressButton>
           </CopyToClipboard>
         </div>
-        <div className="ActionsDropdown">
+        <ActionsDropdownDiv>
           <button onClick={() => toggleActions()}>
             Actions <img src={Arrow} alt="arrow" />
           </button>
 
           {actionsOpen ? (
             <>
-              <div
-                className={
-                  actionsOpen ? 'Backdrop__Open Blank' : 'Backdrop Blank'
-                }
-                onClick={toggleActions}
-              />
+              <BackdropOpenDiv onClick={toggleActions} />
 
-              <div className="ActionsDropdownContent">
-                <button
-                  onClick={() => toggleActions('depositForm')}
-                  className="Button--Secondary"
-                >
+              <ActionsDropdownContentDiv>
+                <ButtonSecondary onClick={() => toggleActions('depositForm')}>
                   Deposit
-                </button>
+                </ButtonSecondary>
                 {currentWallet.state === WalletStatuses.Deployed && (
-                  <button
-                    className="Button--Secondary"
-                    onClick={() => toggleActions('sendEth')}
-                  >
+                  <ButtonSecondary onClick={() => toggleActions('sendEth')}>
                     Send ETH
-                  </button>
+                  </ButtonSecondary>
                 )}
                 {currentWallet.state === WalletStatuses.Deployed && (
-                  <button
-                    className="Button--Secondary"
-                    onClick={() => toggleActions('sendToken')}
-                  >
+                  <ButtonSecondary onClick={() => toggleActions('sendToken')}>
                     Send {tokenSymbol}
-                  </button>
+                  </ButtonSecondary>
                 )}
                 {currentWallet.state === WalletStatuses.Deployed && (
-                  <button
-                    className="Button--Secondary"
-                    onClick={() => toggleActions('daohaus')}
-                  >
+                  <ButtonSecondary onClick={() => toggleActions('daohaus')}>
                     Manage on DAOHaus
-                  </button>
+                  </ButtonSecondary>
                 )}
                 {currentUser.type === USER_TYPE.WEB3 &&
                   currentWallet.shares > 0 && (
-                    <button
+                    <ButtonSecondary
                       onClick={() => toggleActions('ragequit')}
-                      className="Button--Secondary"
                       disabled={!memberAddressLoggedIn}
                     >
                       Rage Quit
-                    </button>
+                    </ButtonSecondary>
                   )}
                 {currentUser.type === USER_TYPE.WEB3 &&
                   currentWallet.shares > 0 && (
-                    <button
+                    <ButtonSecondary
                       onClick={() => toggleActions('changeDelegateKey')}
-                      className="Button--Secondary"
                       disabled={!memberAddressLoggedIn}
                     >
                       Change Delegate Key
-                    </button>
+                    </ButtonSecondary>
                   )}
-              </div>
+              </ActionsDropdownContentDiv>
             </>
           ) : null}
-        </div>
-      </div>
-      <div className="SwitchHeader">
-        <button
-          className={headerSwitch === 'Balances' ? 'Tab SelectedElement' : ''}
+        </ActionsDropdownDiv>
+      </WalletHeaderDiv>
+      <SwitchHeaderDiv>
+        <SelectedElementButton
+          selected={headerSwitch === 'Balances'}
           onClick={() => setHeaderSwitch('Balances')}
         >
           Balances
-        </button>
-        <button
-          className={
-            headerSwitch === 'Transactions' ? 'Tab SelectedElement' : ''
-          }
+        </SelectedElementButton>
+        <SelectedElementButton
+          selected={headerSwitch === 'Transactions'}
           onClick={() => setHeaderSwitch('Transactions')}
         >
           Transactions
-        </button>
+        </SelectedElementButton>
         {currentUser && currentUser.type === USER_TYPE.SDK && (
-          <button
-            className={headerSwitch === 'Accounts' ? 'Tab SelectedElement' : ''}
+          <SelectedElementButton
+            selected={headerSwitch === 'Accounts'}
             onClick={() => setHeaderSwitch('Accounts')}
           >
             Settings
-          </button>
+          </SelectedElementButton>
         )}
-      </div>
-      <div className="Contents">
+      </SwitchHeaderDiv>
+      <WalletContents>
         {headerSwitch === 'Balances' && (
-          <div className="Balances">
-            <div className="Item">
+          <BalancesDiv>
+            <BalanceItemDiv>
               <p>Shares</p>
-              <p className="Data">{currentWallet.shares}</p>
-            </div>
-            <div className="Item">
+              <DataP>{currentWallet.shares}</DataP>
+            </BalanceItemDiv>
+            <BalanceItemDiv>
               <p>ETH</p>
-              <p className="Data">
+              <DataDiv>
                 {currentWallet.eth}
                 {currentWallet.state !== WalletStatuses.Connecting &&
                   currentWallet.eth < 0.01 && (
-                    <button
-                      className="TinyButton"
-                      onClick={() => toggle('depositForm')}
-                    >
+                    <TinyButton onClick={() => toggle('depositForm')}>
                       <span>!</span> Low Eth
-                    </button>
+                    </TinyButton>
                   )}
-              </p>
-            </div>
-            <div className="Item">
+              </DataDiv>
+            </BalanceItemDiv>
+            <BalanceItemDiv>
               <p>{tokenSymbol}</p>
-              <p className="Data">
+              <DataDiv>
                 {currentWallet.tokenBalance}
                 {currentWallet.tokenBalance > currentWallet.allowance && (
-                  <button
-                    className="TinyButton"
-                    onClick={() => toggle('allowanceForm')}
-                  >
+                  <TinyButton onClick={() => toggle('allowanceForm')}>
                     <span>!</span> Unlock Token
-                  </button>
+                  </TinyButton>
                 )}
-              </p>
-            </div>
-          </div>
+              </DataDiv>
+            </BalanceItemDiv>
+          </BalancesDiv>
         )}
         {headerSwitch === 'Transactions' && <UserTransactions />}
         {headerSwitch === 'Accounts' && <AccountList />}
-      </div>
-      <div className="Wallet__Footer">
-        <p className="Powered">
-          {/* &nbsp;Powered by <a href="http://abridged.io">Abridged</a> */}
-        </p>
-      </div>
-    </div>
+      </WalletContents>
+    </WalletDiv>
   );
 };
 
