@@ -17,7 +17,6 @@ import {
 } from '../../contexts/Store';
 import StateModals from '../../components/shared/StateModals';
 import ProposalTypeToggle from '../../components/proposal-v2/ProposalTypeToggle';
-import ProposalList from '../../components/proposal/ProposalList';
 
 const Proposals = ({ match, history }) => {
   const [currentWallet] = useContext(CurrentWalletContext);
