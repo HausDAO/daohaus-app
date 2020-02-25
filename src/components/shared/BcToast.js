@@ -16,6 +16,8 @@ import { USER_TYPE } from '../../utils/DaoService';
 const BcToast = () => {
   const [daoService] = useContext(DaoServiceContext);
 
+  console.log('daoService', daoService);
+
   const [currentUser] = useContext(CurrentUserContext);
   const [currentWallet] = useContext(CurrentWalletContext);
 
@@ -119,7 +121,10 @@ const BcToast = () => {
           <div className="Toast">
             {renderList()}
             <div className="Dropdown__Footer">
-              <Link to="/account" onClick={toggleElement}>
+              <Link
+                to={`/dao/${daoService.accountAddr}/account`}
+                onClick={toggleElement}
+              >
                 View all transactions
               </Link>
             </div>
