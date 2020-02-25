@@ -14,6 +14,14 @@ export const DataP = styled.p`
   margin: 0;
 `;
 
+export const DataDiv = styled.div`
+  font-family: ${dataFont};
+  font-weight: 400;
+  word-break: break-all;
+  margin: 0;
+  font-size: 1.5em;
+`;
+
 export const DataButton = styled.button`
   font-family: ${dataFont};
   font-weight: 400;
