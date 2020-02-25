@@ -167,7 +167,7 @@ export const groupByStatus = (proposals, unsponsoredView) => {
     Unsponsored: {
       Cancelled: proposals.filter((p) => p.cancelled),
       Unsponsored: proposals.filter((p) => {
-        return unsponsoredView && !p.processed;
+        return unsponsoredView && !p.cancelled && !p.processed;
       }),
     },
     Base: {

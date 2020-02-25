@@ -21,6 +21,8 @@ const ProposalFilter = ({ proposals, filter, history, unsponsoredView }) => {
       const groupedProps = groupByStatus(proposals, unsponsoredView);
       const groupedKey = unsponsoredView ? 'Unsponsored' : 'Base';
 
+      console.log('groupedProps', groupedProps);
+
       if (Object.keys(groupedProps[groupedKey]).includes(filter)) {
         setGroupedProposals(groupedProps[groupedKey]);
         setFilteredProposals(groupedProps[groupedKey][filter]);
