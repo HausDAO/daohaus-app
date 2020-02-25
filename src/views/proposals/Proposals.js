@@ -58,6 +58,7 @@ const Proposals = ({ match, history }) => {
         setProposals(data.proposals);
       }
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [data, sponsored]);
 
   if (loading) return <Loading />;

@@ -94,7 +94,7 @@ const NewMemberForm = (props) => {
                 });
 
                 try {
-                  const submitRes = await daoService.mcDao.submitProposal(
+                  await daoService.mcDao.submitProposal(
                     values.sharesRequested,
                     values.lootRequested,
                     ethToWei(values.tributeOffered.toString()), // this needs to convert on token decimal length not just wei

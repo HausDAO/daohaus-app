@@ -52,7 +52,7 @@ const WhitelistForm = (props) => {
                                 });
 
                                 try {
-                                    const submitRes = await daoService.mcDao.submitWhiteListProposal(
+                                    await daoService.mcDao.submitWhiteListProposal(
                                         values.applicant,
                                         detailsObj,
                                     );

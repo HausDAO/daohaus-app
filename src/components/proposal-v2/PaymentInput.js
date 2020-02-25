@@ -1,5 +1,4 @@
 import React from 'react';
-import { TinyButton } from '../account/UserBalances';
 
 const PaymentInput = ({
     field,
