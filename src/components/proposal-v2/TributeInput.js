@@ -40,6 +40,7 @@ const TributeInput = ({
       return true;
     };
     runCheck();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (

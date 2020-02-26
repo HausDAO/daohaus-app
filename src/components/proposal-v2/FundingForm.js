@@ -19,7 +19,7 @@ import TokenSelect from './TokenSelect';
 import { GET_TOKENS_V2 } from '../../utils/QueriesV2';
 
 const FundingForm = (props) => {
-    // const { history } = props;
+    const { history } = props;
 
     const [gloading] = useContext(LoaderContext);
     const [formLoading, setFormLoading] = useState(false);
@@ -93,7 +93,7 @@ const FundingForm = (props) => {
                                     link: values.link,
                                 })
 
-                                const submitRes = await daoService.mcDao.submitProposal(
+                                await daoService.mcDao.submitProposal(
                                     
                                     values.sharesRequested,
                                     values.lootRequested,
@@ -105,7 +105,8 @@ const FundingForm = (props) => {
                                     values.applicant
                                 )
 
-                                console.log('submitRes', submitRes);
+                                history.push(`/dao/${daoService.daoAddress}/proposals`);
+
                                 setSubmitting(false);
                                 setFormLoading(false);
                             }}
