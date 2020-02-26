@@ -93,6 +93,7 @@ const TradeForm = (props) => {
                                 });
 
                                 try {
+                                    //TODO: this needs to be for trades
                                     await daoService.mcDao.submitProposal(
                                         values.sharesRequested,
                                         values.lootRequested,
@@ -102,6 +103,7 @@ const TradeForm = (props) => {
                                         values.paymentToken,
                                         detailsObj,
                                     );
+                                    
                                     history.push(`/dao/${daoService.daoAddress}/proposals`);
                                     setSubmitting(false);
                                     setFormLoading(false);
