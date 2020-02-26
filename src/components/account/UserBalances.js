@@ -23,7 +23,6 @@ import styled from 'styled-components';
 import {
   phone,
   FlashDiv,
-  ButtonSecondary,
   getAppLight,
   getPrimaryHover,
   getDangerHover,
@@ -34,6 +33,7 @@ import {
   DataP,
   DataDiv,
   BackdropOpenDiv,
+  ButtonSecondary,
 } from '../../App.styles';
 
 const WalletDiv = styled.div`

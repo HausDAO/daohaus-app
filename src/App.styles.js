@@ -1,6 +1,149 @@
 import styled from 'styled-components';
 
-import { phone, getDangerHover } from './variables.styles';
+import {
+  phone,
+  getDangerHover,
+  getSecondaryHover,
+  getPrimaryHover,
+  getTertiaryHover,
+} from './variables.styles';
+
+export const ButtonButton = styled.button`
+  appearance: none;
+  outline: none;
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
+  text-decoration: none;
+  position: relative;
+  transition: all 0.15s ease-in-out;
+  background-color: ${(props) => props.theme.secondary};
+  color: white;
+  border-radius: 50px;
+  padding: 15px 30px;
+  max-width: 100%;
+  display: block;
+  margin: 15px 0px;
+  font-size: 16px;
+  text-align: center;
+  font-weight: 900;
+  &:hover {
+    background-color: ${(props) => getSecondaryHover(props.theme)};
+    color: white;
+    fill: white;
+  }
+  svg {
+    display: inline-block;
+    margin: 0;
+    padding: 0px;
+    vertical-align: middle;
+    fill: white;
+    margin-right: ${(props) => (props.iconLeft ? '5px' : '0')};
+    margin-left: ${(props) => (props.iconRight ? '5px' : '0')};
+  }
+`;
+
+export const ButtonDiv = styled.div`
+  appearance: none;
+  outline: none;
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
+  text-decoration: none;
+  position: relative;
+  transition: all 0.15s ease-in-out;
+  background-color: ${(props) => props.theme.secondary};
+  color: white;
+  border-radius: 50px;
+  padding: 15px 30px;
+  max-width: 100%;
+  display: block;
+  margin: 15px 0px;
+  font-size: 16px;
+  text-align: center;
+  font-weight: 900;
+  &:hover {
+    background-color: ${(props) => getSecondaryHover(props.theme)};
+    color: white;
+    fill: white;
+  }
+  svg {
+    display: inline-block;
+    margin: 0;
+    padding: 0px;
+    vertical-align: middle;
+    fill: white;
+    margin-right: ${(props) => (props.iconLeft ? '5px' : '0')};
+    margin-left: ${(props) => (props.iconRight ? '5px' : '0')};
+  }
+`;
+
+export const ButtonDivPrimary = styled(ButtonDiv)`
+  color: ${(props) => props.theme.primary};
+  &:hover {
+    color: ${(props) => getPrimaryHover(props.theme)};
+  }
+`;
+
+export const ButtonDivSecondary = styled(ButtonDiv)`
+  color: ${(props) => props.theme.secondary};
+  &:hover {
+    color: ${(props) => getSecondaryHover(props.theme)};
+  }
+  &:disabled {
+    color: grey;
+  }
+`;
+
+export const ButtonDivTertiary = styled(ButtonDiv)`
+  color: ${(props) => props.theme.tertiary};
+  &:hover {
+    color: ${(props) => getTertiaryHover(props.theme)};
+  }
+`;
+
+export const ButtonPrimary = styled(ButtonButton)`
+  color: ${(props) => props.theme.primary};
+  &:hover {
+    color: ${(props) => getPrimaryHover(props.theme)};
+  }
+`;
+
+export const ButtonSecondary = styled(ButtonButton)`
+  color: ${(props) => props.theme.secondary};
+  &:hover {
+    color: ${(props) => getSecondaryHover(props.theme)};
+  }
+  &:disabled {
+    color: grey;
+  }
+`;
+
+export const ButtonTertiary = styled(ButtonButton)`
+  color: ${(props) => props.theme.tertiary};
+  &:hover {
+    color: ${(props) => getTertiaryHover(props.theme)};
+  }
+`;
+
+export const ButtonBackDiv = styled(ButtonDiv)`
+  margin: 0;
+  padding-top: 20px;
+  padding-left: 0px;
+  margin-left: 0px;
+  left: 0;
+  text-align: left;
+  background-color: transparent;
+  color: black !important;
+  svg {
+    fill: black !important;
+  }
+  border-radius: 0px;
+  width: auto;
+  &:hover {
+    margin-left: -5px;
+  }
+`;
 
 export const ProposalAndMemberCardDiv = styled.div`
   padding: 25px;
@@ -109,4 +252,15 @@ export const ViewDiv = styled.div`
 export const PadDiv = styled.div`
   padding-left: 15px;
   padding-right: 15px;
+`;
+
+export const LinkButton = styled.button`
+  background-color: transparent;
+  color: ${(props) => props.theme.primary};
+  padding: 0px;
+  margin: 0px;
+  &:hover {
+    background-color: transparent;
+    color: ${(props) => getPrimaryHover(props.theme)};
+  }
 `;

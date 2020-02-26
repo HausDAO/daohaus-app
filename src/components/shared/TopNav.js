@@ -8,9 +8,99 @@ import {
 } from '../../contexts/Store';
 import BcToast from './BcToast';
 
-import './TopNav.scss';
 import useModal from './useModal';
 import Modal from './Modal';
+import styled from 'styled-components';
+import { phone, getAppLight, getPrimaryHover } from '../../variables.styles';
+import {
+  BackdropOpenDiv,
+  BackdropDiv,
+  ButtonBackDiv,
+  LinkButton,
+} from '../../App.styles';
+
+const TopNavDiv = styled.div`
+  position: relative;
+  width: 100%;
+  height: 62px;
+`;
+
+const BrandLink = styled(Link)`
+  position: absolute;
+  left: 0;
+  top: 50%;
+  transform: translate(0, -50%);
+  font-weight: 900;
+  color: black;
+  &:hover {
+    color: ${(props) => props.theme.primary};
+  }
+  font-size: 1.5em;
+  img {
+    height: 48px;
+  }
+  @media (max-width: ${phone}) {
+    font-size: 1.15em;
+    max-width: 50%;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+  }
+`;
+
+const AuthDiv = styled.div`
+  position: absolute;
+  top: 15px;
+  right: 0px;
+  border: 2px solid ${(props) => props.theme.baseFontColor};
+  border-radius: 16px;
+  padding: 5px 15px;
+  background-color: ${(props) => getAppLight(props.theme)};
+  transition: all 0.15s linear;
+  font-weight: 900;
+  z-index: 98;
+`;
+
+const AuthButton = styled.button`
+  border-radius: 0px;
+  padding: 0px;
+  padding-right: 12px;
+  margin: 0;
+  text-decoration: none;
+  transition: all 0.15s ease-in-out;
+  background-color: transparent;
+  color: ${(props) => props.theme.baseFontColor};
+  width: 90px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+  text-align: left;
+  svg {
+    display: block;
+    position: absolute;
+    right: -5px;
+    top: -3px;
+    fill: ${(props) => props.theme.baseFontColor};
+  }
+  &:hover {
+    color: ${(props) => getPrimaryHover(props.theme)};
+    svg {
+      fill: ${(props) => getPrimaryHover(props.theme)};
+    }
+  }
+`;
+
+const DropdownDiv = styled.div`
+  position: relative;
+  height: ${(props) => (props.open ? 'auto' : '0px')};
+  overflow: ${(props) => (props.open ? 'visible' : 'hidden')};
+  transition: all 0.15s linear;
+`;
+
+const DropdownItemDiv = styled(DropdownDiv)`
+  margin: 20px 0px !important;
+  display: block;
+`;
 
 const TopNav = (props) => {
   const [currentUser] = useContext(CurrentUserContext);
@@ -26,39 +116,35 @@ const TopNav = (props) => {
   } = props;
 
   return (
-    <div className="TopNav">
+    <TopNavDiv>
       {daoService && daoService.mcDao.daoContract && (
         <>
-          <div
-            className={
-              isElementOpen ? 'Backdrop__Open Blank' : 'Backdrop Blank'
-            }
-            onClick={toggleElement}
-          />
+          {isElementOpen ? (
+            <BackdropOpenDiv blank onClick={toggleElement} />
+          ) : (
+            <BackdropDiv onClick={toggleElement} />
+          )}
           {currentUser && <BcToast />}
           {pathname === `/dao/${daoService.daoAddress}/sign-in` ? (
-            <div className="Button Back">
+            <ButtonBackDiv>
               <Link to={`/dao/${daoService.daoAddress}/`}>{'<='} Back</Link>
-            </div>
+            </ButtonBackDiv>
           ) : (
             <>
               {pathname === `/dao/${daoService.daoAddress}/sign-up` ||
               pathname === '/confirm' ? (
-                <div className="Button Back">
+                <ButtonBackDiv>
                   <Link to={`/dao/${daoService.daoAddress}/`}>{'<='} Back</Link>
-                </div>
+                </ButtonBackDiv>
               ) : (
                 <>
                   {props.match.params.name ===
                   `/dao/${daoService.daoAddress}/proposal/` ? (
                     <p>Back</p>
                   ) : (
-                    <Link
-                      className="Brand"
-                      to={`/dao/${daoService.daoAddress}/`}
-                    >
+                    <BrandLink to={`/dao/${daoService.daoAddress}/`}>
                       {(daoData && daoData.name) || 'PokéMol DAO'}
-                    </Link>
+                    </BrandLink>
                   )}
                 </>
               )}
@@ -66,8 +152,8 @@ const TopNav = (props) => {
           )}
 
           {currentUser ? (
-            <div className="Auth">
-              <button className="Auth__Button" onClick={toggleElement}>
+            <AuthDiv>
+              <AuthButton onClick={toggleElement}>
                 {currentUser.username}
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
@@ -78,26 +164,26 @@ const TopNav = (props) => {
                   <path d="M7 10l5 5 5-5z" />
                   <path d="M0 0h24v24H0z" fill="none" />
                 </svg>
-              </button>
-              <div className={isElementOpen ? 'Dropdown__Open' : 'Dropdown'}>
-                <Link
-                  className="Dropdown__Open--Item"
-                  to={
-                    '/dao/' + daoService.daoAddress.toLowerCase() + '/account'
-                  }
-                  onClick={toggleElement}
-                >
-                  Account
-                </Link>
-                <button
-                  className="Dropdown__Open--Item LinkButton"
-                  onClick={() => {
-                    toggleElement();
-                    toggle('signOutMsg');
-                  }}
-                >
-                  {'<='} Sign out
-                </button>
+              </AuthButton>
+              <DropdownDiv open={isElementOpen}>
+                <DropdownItemDiv open>
+                  <Link
+                    to={
+                      '/dao/' + daoService.daoAddress.toLowerCase() + '/account'
+                    }
+                    onClick={toggleElement}
+                  >
+                    Account
+                  </Link>
+                  <LinkButton
+                    onClick={() => {
+                      toggleElement();
+                      toggle('signOutMsg');
+                    }}
+                  >
+                    {'<='} Sign out
+                  </LinkButton>
+                </DropdownItemDiv>
                 <Modal
                   isShowing={isShowing.signOutMsg}
                   hide={() => toggle('signOutMsg')}
@@ -125,21 +211,21 @@ const TopNav = (props) => {
                     Yes, sign me out.
                   </Link>
                 </Modal>
-              </div>
-            </div>
+              </DropdownDiv>
+            </AuthDiv>
           ) : (
-            <div className="Auth">
+            <AuthDiv>
               <Link
                 className="Auth__Button"
                 to={`/dao/${daoService.daoAddress}/sign-in`}
               >
                 Sign in {'=>'}
               </Link>
-            </div>
+            </AuthDiv>
           )}
         </>
       )}
-    </div>
+    </TopNavDiv>
   );
 };
 export default withRouter(TopNav);

@@ -80,27 +80,3 @@ export const FlashDiv = styled.div`
   }
   z-index: 99;
 `;
-
-export const ButtonPrimary = styled.button`
-  color: ${(props) => props.theme.primary};
-  &:hover {
-    color: ${(props) => getPrimaryHover(props.theme)};
-  }
-`;
-
-export const ButtonSecondary = styled.button`
-  color: ${(props) => props.theme.secondary};
-  &:hover {
-    color: ${(props) => getSecondaryHover(props.theme)};
-  }
-  &:disabled {
-    color: grey;
-  }
-`;
-
-export const ButtonTertiary = styled.button`
-  color: ${(props) => props.theme.tertiary};
-  &:hover {
-    color: ${(props) => getTertiaryHover(props.theme)};
-  }
-`;
