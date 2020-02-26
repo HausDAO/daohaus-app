@@ -255,7 +255,7 @@ button.Tab {
   display: flex;
   justify-content: flex-start;
   align-content: flex-start;
-  div:first-child {
+  div:first-child, div:nth-child(2) {
     margin-right: 25px;
   }
   h5 {
