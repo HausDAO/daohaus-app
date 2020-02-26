@@ -146,7 +146,7 @@ const ProposalDetail = ({
           <h2 className="Data">{proposal.sharesRequested}</h2>
         </div>
         {+daoData.version === 2 && (
-        <div className="Shares" style="margin-right: 25px">
+        <div className="Shares">
           <h5>Loot</h5>
           <h2 className="Data">{proposal.lootRequested}</h2>
         </div>
