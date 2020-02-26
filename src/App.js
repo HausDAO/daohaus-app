@@ -111,8 +111,6 @@ const App = ({ client }) => {
       const guildBankValue = await daoService.token.balanceOf(guildBankAddr);
       const tokenSymbol = await daoService.token.getSymbol();
 
-      console.log('currentPeriod', currentPeriod);
-
       const cacheData = {
         currentPeriod: parseInt(currentPeriod),
         totalShares: parseInt(totalShares),
