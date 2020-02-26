@@ -8,7 +8,8 @@ const StackedVoteDiv = styled.div`
   position: ${(props) =>
     props.page === 'ProposalCard' ? 'relative' : 'absolute'};
   left: ${(props) => (props.page === 'ProposalCard' ? '0' : '50%')};
-  transform: ${(props) => (props.page === 'none' ? '0' : 'translateX(-50%)')};
+  transform: ${(props) =>
+    props.page === 'ProposalCard' ? 'translateX(0%)' : 'translateX(-50%)'};
   bottom: ${(props) => (props.page === 'ProposalCard' ? '0px' : '47px')};
   width: ${(props) =>
     props.page === 'ProposalCard' ? '100%' : 'calc(100% - 150px)'};
@@ -134,9 +135,9 @@ const StackedVote = ({ id, currentYesVote, currentNoVote, page }) => {
   }, [daoService, id, currentYesVote, currentNoVote]);
 
   return (
-    <StackedVoteDiv>
-      <FullBarDiv>
-        <LabelsDiv>
+    <StackedVoteDiv page={page}>
+      <FullBarDiv page={page}>
+        <LabelsDiv page={page}>
           <YesLabelSpan page={page}>{yesVoteShares}</YesLabelSpan>
           <NoLabelSpan page={page}>{noVoteShares}</NoLabelSpan>
         </LabelsDiv>
