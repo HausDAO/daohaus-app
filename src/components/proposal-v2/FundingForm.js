@@ -76,6 +76,7 @@ const FundingForm = (props) => {
                                 tributeOffered: 0,
                                 tributeToken: tokenData[0].value,
                                 paymentRequested: 0,
+                                paymentToken: tokenData[0].value,
                                 sharesRequested: 0,
                                 lootRequested: 0,
                             }}
@@ -99,8 +100,8 @@ const FundingForm = (props) => {
                                     values.lootRequested,
                                     ethToWei(values.tributeOffered.toString()), // this needs to convert on token decimal length not just wei
                                     values.tributeToken,
-                                    0,
-                                    tokenData[0].value,
+                                    ethToWei(values.paymentRequested.toString()), // this needs to convert on token decimal length not just wei
+                                    values.paymentToken,
                                     detailsObj,
                                     values.applicant
                                 )
