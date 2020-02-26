@@ -5,11 +5,14 @@ import { DaoServiceContext, DaoDataContext } from '../../contexts/Store';
 import { primary, tertiary, appDark } from '../../variables.styles';
 
 const StackedVoteDiv = styled.div`
-  position: absolute;
-  left: 50%;
-  transform: translateX(-50%);
-  bottom: 47px;
-  width: calc(100% - 150px);
+  position: ${(props) =>
+    props.page === 'ProposalCard' ? 'relative' : 'absolute'};
+  left: ${(props) => (props.page === 'ProposalCard' ? '0' : '50%')};
+  transform: ${(props) =>
+    props.page === 'ProposalCard' ? 'translateX(0%)' : 'translateX(-50%)'};
+  bottom: ${(props) => (props.page === 'ProposalCard' ? '0px' : '47px')};
+  width: ${(props) =>
+    props.page === 'ProposalCard' ? '100%' : 'calc(100% - 150px)'};
 `;
 
 const FullBarDiv = styled.div`
@@ -39,7 +42,6 @@ const YesLabelSpan = styled.span`
     props.page === 'ProposalCard' ? 'right' : 'center'};
   background-color: transparent;
   font-weight: 900;
-  width: 65px;
   color: ${primary};
 `;
 
@@ -56,7 +58,6 @@ const NoLabelSpan = styled.span`
     props.page === 'ProposalCard' ? 'right' : 'center'};
   background-color: transparent;
   font-weight: 900;
-  width: 65px;
   color: ${tertiary};
 `;
 
@@ -134,9 +135,9 @@ const StackedVote = ({ id, currentYesVote, currentNoVote, page }) => {
   }, [daoService, id, currentYesVote, currentNoVote]);
 
   return (
-    <StackedVoteDiv>
-      <FullBarDiv>
-        <LabelsDiv>
+    <StackedVoteDiv page={page}>
+      <FullBarDiv page={page}>
+        <LabelsDiv page={page}>
           <YesLabelSpan page={page}>{yesVoteShares}</YesLabelSpan>
           <NoLabelSpan page={page}>{noVoteShares}</NoLabelSpan>
         </LabelsDiv>
