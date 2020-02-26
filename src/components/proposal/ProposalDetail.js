@@ -146,10 +146,10 @@ const ProposalDetail = ({
           <h2 className="Data">{proposal.sharesRequested}</h2>
         </div>
         {+daoData.version === 2 && (
-        <div className="Shares">
-          <h5>Loot</h5>
-          <h2 className="Data">{proposal.lootRequested}</h2>
-        </div>
+          <div className="Shares">
+            <h5>Loot</h5>
+            <h2 className="Data">{proposal.lootRequested}</h2>
+          </div>
         )}
         <div className="Tribute">
           <h5>Tribute</h5>
@@ -202,7 +202,7 @@ const ProposalDetail = ({
           </div>
         ) : null}
       </div>
-      {proposal.sponsored ? (
+      {+daoData.version !== 2 || proposal.sponsored ? (
         <VoteControl
           submitVote={submitVote}
           proposal={proposal}
