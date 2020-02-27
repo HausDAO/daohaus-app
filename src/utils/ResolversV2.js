@@ -109,10 +109,16 @@ export const resolversV2 = {
           tokenBalance.token.tokenAddress,
         );
         const symbol = await tokenService.getSymbol();
+
+        console.log('tokenBalance', tokenBalance);
+
+        console.log('symbol', symbol);
         return symbol;
       } else {
         return null;
       }
+
+      // return null;
     },
     decimals: async (tokenBalance, _args, { cache }) => {
       if (tokenBalance.guildBank) {
@@ -122,6 +128,8 @@ export const resolversV2 = {
         );
 
         const decimals = await tokenService.getDecimals();
+
+        console.log('decimals', decimals);
         return decimals;
       } else {
         return null;

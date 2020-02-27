@@ -22,7 +22,11 @@ export class TokenService {
     try {
       symbol = await this.contract.methods.symbol().call();
     } catch {
-      symbol = await this.contract32.methods.symbol().call();
+      try {
+        symbol = await this.contract32.methods.symbol().call();
+      } catch {
+        symbol = 'unknown';
+      }
     }
 
     if (symbol.indexOf('0x') > -1) {
