@@ -149,8 +149,6 @@ const Home = () => {
 
   const { loading, error, data } = useQuery(query, options);
 
-  console.log('error', error);
-
   if (loading) return <Loading />;
   if (error) return <ErrorMessage message={error} />;
 

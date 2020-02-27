@@ -110,9 +110,6 @@ export const resolversV2 = {
         );
         const symbol = await tokenService.getSymbol();
 
-        console.log('tokenBalance', tokenBalance);
-
-        console.log('symbol', symbol);
         return symbol;
       } else {
         return null;
