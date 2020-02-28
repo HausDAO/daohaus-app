@@ -3,42 +3,42 @@ import { withApollo } from 'react-apollo';
 import { withRouter } from 'react-router-dom';
 
 import {
-    CurrentUserContext,
-    CurrentWalletContext,
-    DaoServiceContext,
+  CurrentUserContext,
+  CurrentWalletContext,
+  DaoServiceContext,
 } from '../../contexts/Store';
 import TinyLoader from '../shared/TinyLoader';
 
 const ProposalActions = ({ client, proposal, history }) => {
-    const [currentUser] = useContext(CurrentUserContext);
-    const [loading, setLoading] = useState(false);
-    const [currentWallet] = useContext(CurrentWalletContext);
-    const [daoService] = useContext(DaoServiceContext);
+  const [currentUser] = useContext(CurrentUserContext);
+  const [loading, setLoading] = useState(false);
+  const [currentWallet] = useContext(CurrentWalletContext);
+  const [daoService] = useContext(DaoServiceContext);
 
-    const cancelProposal = async (id) => {
-        setLoading(true);
-        try {
-            await daoService.mcDao.cancelProposal(id);
-        } catch (err) {
-            console.log('user rejected or transaction failed');
-        } finally {
-            setLoading(false);
-            history.push(`/dao/${daoService.daoAddress}/proposals`);
-        }
-    };
+  const cancelProposal = async (id) => {
+    setLoading(true);
+    try {
+      await daoService.mcDao.cancelProposal(id);
+    } catch (err) {
+      console.log('user rejected or transaction failed');
+    } finally {
+      setLoading(false);
+      history.push(`/dao/${daoService.daoAddress}/proposals`);
+    }
+  };
 
-    const sponsorProposal = async (id) => {
-        console.log('sponsor ', id);
-        setLoading(true);
-        try {
-            await daoService.mcDao.sponsorProposal(id);
-        } catch (err) {
-            console.log('user rejected or transaction failed');
-        } finally {
-            setLoading(false);
-            history.push(`/dao/${daoService.daoAddress}/proposals`);
-        }
-    };
+  const sponsorProposal = async (id) => {
+    console.log('sponsor ', id);
+    setLoading(true);
+    try {
+      await daoService.mcDao.sponsorProposal(id);
+    } catch (err) {
+      console.log('user rejected or transaction failed');
+    } finally {
+      setLoading(false);
+      history.push(`/dao/${daoService.daoAddress}/proposals`);
+    }
+  };
 
     const unlock = async (token) => {
         console.log('unlock ', token);
@@ -93,6 +93,7 @@ const ProposalActions = ({ client, proposal, history }) => {
                 )}
         </>
     );
+
 };
 
 export default withRouter(withApollo(ProposalActions));
