@@ -81,6 +81,7 @@ const baseProposalFields = `
     }
   }
   tributeTokenSymbol @client
+  tributeTokenDecimals @client
   status @client
   gracePeriod @client
   votingEnds @client

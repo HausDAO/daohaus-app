@@ -43,7 +43,6 @@ const NewMemberForm = (props) => {
   // get whitelist
   useEffect(() => {
     if (data && data.moloch) {
-      console.log('set', data.moloch.approvedTokens);
 
       setTokenData(
         data.moloch.approvedTokens.reverse().map((token) => ({
@@ -63,12 +62,9 @@ const NewMemberForm = (props) => {
 
 
   const valToDecimal = (value, tokenAddress, tokens) => {
-    const tdata = tokens.find((token) => token.tokenAddress === tokenAddress);
-    console.log(tdata, tokens, tokenAddress);
-    
-    console.log('token tdata', tdata, value * 10**tdata.decimals);
-    
-    return "" + (value * 10**data.decimals);
+    const tdata = tokens.find((token) => token.value === tokenAddress);
+    const decimals = +tdata.decimals;    
+    return "" + (value * 10**decimals);
   }
 
   return (
