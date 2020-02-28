@@ -158,6 +158,7 @@ export const GET_TOKENS_V2 = gql`
         tokenAddress
         ticker
         symbol @client
+        decimals @client
       }
     }
   }

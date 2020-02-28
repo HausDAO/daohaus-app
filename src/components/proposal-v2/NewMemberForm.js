@@ -43,12 +43,13 @@ const NewMemberForm = (props) => {
   // get whitelist
   useEffect(() => {
     if (data && data.moloch) {
-      console.log('set');
+      console.log('set', data.moloch.approvedTokens);
 
       setTokenData(
         data.moloch.approvedTokens.reverse().map((token) => ({
           label: token.symbol || token.tokenAddress,
           value: token.tokenAddress,
+          decimals: token.decimals,
         })),
       );
     }
@@ -57,6 +58,17 @@ const NewMemberForm = (props) => {
   if (loading) return <Loading />;
   if (error) {
     console.log('error', error);
+  }
+
+
+
+  const valToDecimal = (value, tokenAddress, tokens) => {
+    const tdata = tokens.find((token) => token.tokenAddress === tokenAddress);
+    console.log(tdata, tokens, tokenAddress);
+    
+    console.log('token tdata', tdata, value * 10**tdata.decimals);
+    
+    return "" + (value * 10**data.decimals);
   }
 
   return (
@@ -92,12 +104,13 @@ const NewMemberForm = (props) => {
                   description: values.description,
                   link: values.link,
                 });
-
+                console.log(valToDecimal(values.tributeOffered, values.tributeToken, tokenData));
+                
                 try {
                   await daoService.mcDao.submitProposal(
                     values.sharesRequested,
                     values.lootRequested,
-                    ethToWei(values.tributeOffered.toString()), // this needs to convert on token decimal length not just wei
+                    valToDecimal(values.tributeOffered, values.tributeToken, tokenData), // this needs to convert on token decimal length not just wei
                     values.tributeToken,
                     0,
                     tokenData[0].value,
