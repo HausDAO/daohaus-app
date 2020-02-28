@@ -71,6 +71,10 @@ const baseProposalFields = `
     votingPeriodLength
     gracePeriodLength
     periodDuration
+    proposalDeposit
+    depositToken {
+      tokenAddress
+    }
   }
   votes {
     id

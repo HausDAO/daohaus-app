@@ -43,58 +43,54 @@ const ProposalActions = ({ client, proposal, history }) => {
     const unlock = async (token) => {
         console.log('unlock ', token);
         setLoading(true);
-        const ul = await daoService.token.unlock(token);
-        console.log(ul);
-
-        setLoading(false);
+        try {
+            await daoService.token.unlock(token);
+        } catch {
+            console.log('failes');
+        } finally {
+            setLoading(false);
+        }
     };
 
     console.log('currentWallet', currentWallet);
+    console.log('proposal actions', proposal);
+
 
 
     return (
         <>
-            <>
-                {!proposal.sponsored &&
-                    !proposal.cancelled &&
-                    proposal.proposer.toLowerCase() ===
-                    currentUser.username.toLowerCase() && (
-                        <>
-                            {loading ? (
-                                <TinyLoader />
-                            ) : (
-                                    <button
-                                        onClick={() => cancelProposal(proposal.proposalId)}
-                                    >
-                                        Cancel My Proposal
-                      </button>
-                                )}
-                        </>
-                    )}
-                {currentWallet.allowance > 0 ? (
+            {loading ? (
+                <button>
+                    <TinyLoader />
+                </button>
+            ) : (
                     <>
                         {!proposal.sponsored &&
                             !proposal.cancelled &&
-                            currentWallet.shares > 0 && (
-                                <>
-                                    {loading ? (
-                                        <TinyLoader />
-                                    ) : (
-                                            <button
-                                                onClick={() => sponsorProposal(proposal.proposalId)}
-                                            >
-                                                Sponsor Proposal
-                      </button>
-                                        )}
-                                </>
+                            proposal.proposer.toLowerCase() ===
+                            currentUser.username.toLowerCase() && (
+                                <button onClick={() => cancelProposal(proposal.proposalId)}>
+                                    <span>Cancel My Proposal</span>
+                                </button>
+                            )}
+                        {currentWallet.allowance > 0 ? (
+                            <>
+                                {!proposal.sponsored &&
+                                    !proposal.cancelled &&
+                                    currentWallet.shares > 0 && (
+                                        <button
+                                            onClick={() => sponsorProposal(proposal.proposalId)}>
+                                            <span>Sponsor Proposal</span>
+                                        </button>
+                                    )}
+                            </>
+                        ) : (
+                                <button className="UnlockButton" onClick={() => unlock(proposal.moloch.depositToken.tokenAddress)}>
+                                    <span>Unlock Token To Sponsor</span>
+                                </button>
                             )}
                     </>
-                ) : (
-                        <div className="UnlockButton" onClick={() => unlock('0xd0a1e359811322d97991e03f863a0c30c2cf029c')}>
-                            {!loading ? <span>! Unlock</span> : <TinyLoader />}
-                        </div>
-                    )}
-            </>
+                )}
         </>
     );
 };
