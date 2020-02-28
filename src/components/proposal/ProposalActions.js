@@ -93,6 +93,7 @@ const ProposalActions = ({ client, proposal, history }) => {
                 )}
         </>
     );
+
 };
 
 export default withRouter(withApollo(ProposalActions));
