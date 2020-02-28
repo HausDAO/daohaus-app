@@ -5,6 +5,7 @@ import {
   CurrentUserContext,
   CurrentWalletContext,
   DaoServiceContext,
+  DaoDataContext,
 } from '../../contexts/Store';
 import { WalletStatuses } from '../../utils/WalletStatus';
 import { truncateAddr } from '../../utils/Helpers';
@@ -15,7 +16,7 @@ import UserTransactions from './UserTransactions';
 import AccountList from './AccountList';
 
 import DepositFormInitial from './DepositFormInitial';
-import { withApollo } from 'react-apollo';
+import { withApollo, useQuery } from 'react-apollo';
 import { GET_METADATA } from '../../utils/Queries';
 import UpgradeKeystore from '../../auth/UpgradeKeystore';
 import { USER_TYPE } from '../../utils/DaoService';
@@ -38,6 +39,7 @@ import {
   DataDiv,
   BackdropOpenDiv,
 } from '../../App.styles';
+import { GET_MEMBER_V2 } from '../../utils/QueriesV2';
 
 const WalletDiv = styled.div`
   border: 1px solid #efefef;
@@ -108,7 +110,7 @@ const StatusP = styled.p`
     height: 8px;
     border-radius: 50%;
     background-color: ${(props) =>
-      props.status === 'disconnected' ? danger : secondary};
+    props.status === 'disconnected' ? danger : secondary};
     display: block;
     position: absolute;
     left: 0;
@@ -277,10 +279,10 @@ export const TinyButton = styled.div`
   }
 `;
 
-const UserBalance = ({ toggle, client }) => {
-  const { tokenSymbol } = client.cache.readQuery({
-    query: GET_METADATA,
-  });
+const UserBalance = ({ toggle, client, match }) => {
+
+  const [daoData] = useContext(DaoDataContext);
+
 
   const [daoService] = useContext(DaoServiceContext);
   const [currentUser] = useContext(CurrentUserContext);
@@ -290,7 +292,39 @@ const UserBalance = ({ toggle, client }) => {
   const [actionsOpen, setActionsOpen] = useState(false);
   const [headerSwitch, setHeaderSwitch] = useState('Balances');
   const [keystoreExists, setKeystoreExists] = useState(true);
+  const [tokenBalances, setTokenBalances] = useState([]);
   const [memberAddressLoggedIn, setMemberAddressLoggedIn] = useState(false);
+
+  const { tokenSymbol } = client.cache.readQuery({
+    query: GET_METADATA,
+  });
+  console.log('daoData', daoData);
+  console.log('currentUser', currentUser);
+
+
+
+  const id = `${daoData.contractAddress.toLowerCase()}-member-${currentUser.username.toLowerCase()}`
+  console.log('id', id);
+
+  const options = { variables: { id } };
+  const query = GET_MEMBER_V2;
+  if (daoData.isLegacy || daoData.version === 2) {
+    options.client = daoData.altClient;
+  }
+
+  const { loading, error, data } = useQuery(query, options);
+  console.log('data', data);
+
+  useEffect(() => {
+    console.log('hook data', data);
+
+    if (!data || !data.member) {
+      return;
+    }
+    console.log('hook', data.member.tokenBalances);
+
+    setTokenBalances(data.member.tokenBalances);
+  }, [data])
 
   useEffect(() => {
     (async () => {
@@ -313,7 +347,7 @@ const UserBalance = ({ toggle, client }) => {
       );
       setMemberAddressLoggedIn(
         currentUser &&
-          currentUser.attributes['custom:account_address'] === memberAddress,
+        currentUser.attributes['custom:account_address'] === memberAddress,
       );
     })();
   }, [currentUser, daoService.mcDao]);
@@ -336,6 +370,28 @@ const UserBalance = ({ toggle, client }) => {
       setActionsOpen(!actionsOpen);
     }
   };
+
+  const renderBalances = (tokens) => {
+    console.log('render tokens', tokens);
+
+    return tokens.map((token) => {
+      return <BalanceItemDiv key={token.token.tokenAddress}>
+        <p>{token.token.tokenAddress}</p>
+        <DataDiv>{token.tokenBalance}</DataDiv>
+      </BalanceItemDiv>;
+    });
+  }
+
+  const withdrawBalances = (tokens) => {
+    const tokensArr = tokens.map((token) => token.token.tokenAddress);
+    const balancesArr = tokens.map((balance) => balance.tokenBalance)
+    try {
+      daoService.mcDao.withdrawBalances(tokensArr, balancesArr, true);
+    } catch (err) {
+      console.log(err);
+
+    }
+  }
 
   return (
     <WalletDiv>
@@ -386,8 +442,8 @@ const UserBalance = ({ toggle, client }) => {
             status={
               (currentUser.type === USER_TYPE.SDK &&
                 currentWallet.state !== 'Deployed') ||
-              (currentUser.type === USER_TYPE.WEB3 &&
-                currentWallet.state !== 'Connected')
+                (currentUser.type === USER_TYPE.WEB3 &&
+                  currentWallet.state !== 'Connected')
                 ? 'Disconnected'
                 : ''
             }
@@ -521,6 +577,18 @@ const UserBalance = ({ toggle, client }) => {
                   </TinyButton>
                 )}
               </DataDiv>
+            </BalanceItemDiv>
+            {daoData.version === 2 && (
+              <div>
+                <BalanceItemDiv>
+                  <p>Member Balances</p>
+                </BalanceItemDiv>
+                {renderBalances(tokenBalances)}</div>
+
+
+            )}
+            <BalanceItemDiv>
+              <button onClick={() => withdrawBalances(tokenBalances)}>withdraw member balances</button>
             </BalanceItemDiv>
           </BalancesDiv>
         )}
