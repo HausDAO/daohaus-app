@@ -12,7 +12,6 @@ import {
   CurrentUserContext,
   DaoServiceContext,
   DaoDataContext,
-  CurrentWalletContext,
 } from '../../contexts/Store';
 import { GET_METADATA } from '../../utils/Queries';
 import { get } from '../../utils/Requests';
@@ -21,8 +20,8 @@ import VoteControl from './VoteControl';
 import ValueDisplay from '../shared/ValueDisplay';
 
 import './ProposalDetail.scss';
-import TinyLoader from '../shared/TinyLoader';
 import { withRouter } from 'react-router-dom';
+import ProposalActions from './ProposalActions';
 
 const web3Service = new Web3Service();
 
@@ -32,14 +31,11 @@ const ProposalDetail = ({
   submitVote,
   canVote,
   client,
-  history,
 }) => {
   const [detailData, setDetailData] = useState();
   const [currentUser] = useContext(CurrentUserContext);
   const [daoService] = useContext(DaoServiceContext);
   const [daoData] = useContext(DaoDataContext);
-  const [currentWallet] = useContext(CurrentWalletContext);
-  const [loading, setLoading] = useState(false);
 
   const { periodDuration } =
     +daoData.version === 2
@@ -72,31 +68,6 @@ const ProposalDetail = ({
     fetchData();
     // eslint-disable-next-line
   }, []);
-
-  const cancelProposal = async (id) => {
-    setLoading(true);
-    try {
-      await daoService.mcDao.cancelProposal(id);
-    } catch (err) {
-      console.log('user rejected or transaction failed');
-    } finally {
-      setLoading(false);
-      history.push(`/dao/${daoService.daoAddress}/proposals`);
-    }
-  };
-
-  const sponsorProposal = async (id) => {
-    console.log('sponsor ', id);
-    setLoading(true);
-    try {
-      await daoService.mcDao.sponsorProposal(id);
-    } catch (err) {
-      console.log('user rejected or transaction failed');
-    } finally {
-      setLoading(false);
-      history.push(`/dao/${daoService.daoAddress}/proposals`);
-    }
-  };
 
   const countDown = getProposalCountdownText(proposal, periodDuration);
   const title = titleMaker(proposal);
@@ -147,21 +118,21 @@ const ProposalDetail = ({
         </div>
         {+daoData.version === 2 ? (
           <>
-          <div className="Shares">
-            <h5>Loot</h5>
-            <h2 className="Data">{proposal.lootRequested}</h2>
-          </div>
-          <div className="Tribute">
-            <h5>Tribute</h5>
-            <h2 className="Data">
-              {web3Service && (
-                <ValueDisplay
-                  value={tribute / 10 ** proposal.tributeTokenDecimals}
-                  symbolOverride={proposal.tributeTokenSymbol}
-                />
-              )}
-            </h2>
-          </div>
+            <div className="Shares">
+              <h5>Loot</h5>
+              <h2 className="Data">{proposal.lootRequested}</h2>
+            </div>
+            <div className="Tribute">
+              <h5>Tribute</h5>
+              <h2 className="Data">
+                {web3Service && (
+                  <ValueDisplay
+                    value={tribute / 10 ** proposal.tributeTokenDecimals}
+                    symbolOverride={proposal.tributeTokenSymbol}
+                  />
+                )}
+              </h2>
+            </div>
           </>
         ) : (
             <div className="Tribute">
@@ -226,39 +197,7 @@ const ProposalDetail = ({
       ) : (
           <>
             {+daoData.version === 2 && currentUser ? (
-              <>
-                {!proposal.sponsored &&
-                  !proposal.cancelled &&
-                  proposal.proposer.toLowerCase() ===
-                  currentUser.username.toLowerCase() && (
-                    <>
-                      {loading ? (
-                        <TinyLoader />
-                      ) : (
-                          <button
-                            onClick={() => cancelProposal(proposal.proposalId)}
-                          >
-                            Cancel My Proposal
-                      </button>
-                        )}
-                    </>
-                  )}
-                {!proposal.sponsored &&
-                  !proposal.cancelled &&
-                  currentWallet.shares > 0 && (
-                    <>
-                      {loading ? (
-                        <TinyLoader />
-                      ) : (
-                          <button
-                            onClick={() => sponsorProposal(proposal.proposalId)}
-                          >
-                            Sponsor Proposal
-                      </button>
-                        )}
-                    </>
-                  )}
-              </>
+              <ProposalActions proposal={proposal} />
             ) : null}
           </>
         )}

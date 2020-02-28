@@ -1,6 +1,5 @@
 import React, { useContext, useState, useEffect } from 'react';
 import { withRouter } from 'react-router-dom';
-import { ethToWei } from '@netgum/utils'; // returns BN
 
 import { Formik, Form, Field, ErrorMessage } from 'formik';
 
