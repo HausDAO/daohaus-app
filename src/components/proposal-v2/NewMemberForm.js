@@ -1,6 +1,5 @@
 import React, { useContext, useState, useEffect } from 'react';
 import { withRouter } from 'react-router-dom';
-import { ethToWei } from '@netgum/utils'; // returns BN
 
 import { Formik, Form, Field, ErrorMessage } from 'formik';
 
@@ -43,12 +42,12 @@ const NewMemberForm = (props) => {
   // get whitelist
   useEffect(() => {
     if (data && data.moloch) {
-      console.log('set');
 
       setTokenData(
         data.moloch.approvedTokens.reverse().map((token) => ({
           label: token.symbol || token.tokenAddress,
           value: token.tokenAddress,
+          decimals: token.decimals,
         })),
       );
     }
@@ -57,6 +56,14 @@ const NewMemberForm = (props) => {
   if (loading) return <Loading />;
   if (error) {
     console.log('error', error);
+  }
+
+
+
+  const valToDecimal = (value, tokenAddress, tokens) => {
+    const tdata = tokens.find((token) => token.value === tokenAddress);
+    const decimals = +tdata.decimals;    
+    return "" + (value * 10**decimals);
   }
 
   return (
@@ -92,12 +99,12 @@ const NewMemberForm = (props) => {
                   description: values.description,
                   link: values.link,
                 });
-
+                
                 try {
                   await daoService.mcDao.submitProposal(
                     values.sharesRequested,
                     values.lootRequested,
-                    ethToWei(values.tributeOffered.toString()), // this needs to convert on token decimal length not just wei
+                    valToDecimal(values.tributeOffered, values.tributeToken, tokenData), 
                     values.tributeToken,
                     0,
                     tokenData[0].value,
