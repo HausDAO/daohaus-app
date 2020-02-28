@@ -36,12 +36,14 @@ const TributeInput = ({
 
   useEffect(() => {
     const runCheck = async () => {
+      console.log('checking unlocked');
+      
       await checkUnlocked(token, field.value);
       return true;
     };
     runCheck();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [token]);
 
   return (
     <div className={field.value !== '' ? 'Field HasValue' : 'Field '}>
