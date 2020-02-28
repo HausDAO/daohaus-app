@@ -53,6 +53,13 @@ const FundingForm = (props) => {
         }
     }, [data]);
 
+    const valToDecimal = (value, tokenAddress, tokens) => {
+        const tdata = tokens.find((token) => token.value === tokenAddress);
+        const decimals = +tdata.decimals;    
+        return "" + (value * 10**decimals);
+      }
+    
+
     if (loading) return <Loading />;
     if (error) {
         console.log('error', error);
@@ -98,9 +105,9 @@ const FundingForm = (props) => {
                                     
                                     values.sharesRequested,
                                     values.lootRequested,
-                                    ethToWei(values.tributeOffered.toString()), // this needs to convert on token decimal length not just wei
+                                    valToDecimal(values.tributeOffered, values.tributeToken, tokenData),
                                     values.tributeToken,
-                                    ethToWei(values.paymentRequested.toString()), // this needs to convert on token decimal length not just wei
+                                    valToDecimal(values.paymentRequested, values.paymentToken, tokenData), 
                                     values.paymentToken,
                                     detailsObj,
                                     values.applicant

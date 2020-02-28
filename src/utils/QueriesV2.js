@@ -81,6 +81,7 @@ const baseProposalFields = `
     }
   }
   tributeTokenSymbol @client
+  tributeTokenDecimals @client
   status @client
   gracePeriod @client
   votingEnds @client
@@ -158,6 +159,7 @@ export const GET_TOKENS_V2 = gql`
         tokenAddress
         ticker
         symbol @client
+        decimals @client
       }
     }
   }
