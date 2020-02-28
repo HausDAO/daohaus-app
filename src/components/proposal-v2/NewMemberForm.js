@@ -100,13 +100,12 @@ const NewMemberForm = (props) => {
                   description: values.description,
                   link: values.link,
                 });
-                console.log(valToDecimal(values.tributeOffered, values.tributeToken, tokenData));
                 
                 try {
                   await daoService.mcDao.submitProposal(
                     values.sharesRequested,
                     values.lootRequested,
-                    valToDecimal(values.tributeOffered, values.tributeToken, tokenData), // this needs to convert on token decimal length not just wei
+                    valToDecimal(values.tributeOffered, values.tributeToken, tokenData), 
                     values.tributeToken,
                     0,
                     tokenData[0].value,
