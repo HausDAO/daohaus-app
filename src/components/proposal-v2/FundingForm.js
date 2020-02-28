@@ -58,10 +58,6 @@ const FundingForm = (props) => {
     const tdata = tokens.find((token) => token.value === tokenAddress);
     const decimals = +tdata.decimals;
 
-    console.log('tdata', tdata);
-    console.log('decimals', decimals);
-    console.log('value', value);
-    console.log("' + value * 10 ** decimals;", '' + value * 10 ** decimals);
     return '' + value * 10 ** decimals;
   };
 
