@@ -305,12 +305,12 @@ const UserBalance = ({ toggle, client, match }) => {
           Transactions
         </SelectedElementButton>
 
-        <SelectedElementButton
-          selected={headerSwitch === 'UserBalances'}
-          onClick={() => setHeaderSwitch('UserBalances')}
+        {daoData.version === 2 && (<SelectedElementButton
+          selected={headerSwitch === 'InternalBalances'}
+          onClick={() => setHeaderSwitch('InternalBalances')}
         >
           Internal Balances
-        </SelectedElementButton>
+        </SelectedElementButton>)}
 
         {currentUser && currentUser.type === USER_TYPE.SDK && (
           <SelectedElementButton
@@ -354,15 +354,15 @@ const UserBalance = ({ toggle, client, match }) => {
 
           </BalancesDiv>
         )}
-        {headerSwitch === 'UserBalances' && daoData.version === 2 && (
+        {headerSwitch === 'InternalBalances' && daoData.version === 2 && (
           <BalancesDiv>
             <BalanceItemDiv>
               <p>Member Balances</p>
             </BalanceItemDiv>
             {renderBalances(tokenBalances)}
-            <BalanceItemDiv>
+            {tokenBalances.length && (<BalanceItemDiv>
               <button onClick={() => withdrawBalances(tokenBalances)}>withdraw member balances</button>
-            </BalanceItemDiv>
+            </BalanceItemDiv>)}
           </BalancesDiv>
         )}
         {headerSwitch === 'Transactions' && <UserTransactions />}
