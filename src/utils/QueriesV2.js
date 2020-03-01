@@ -91,6 +91,7 @@ const baseProposalFields = `
   votingEnds @client
   votingStarts @client
   readyForProcessing @client
+  proposalType @client
 `;
 
 export const GET_PROPOSALS_V2 = gql`
