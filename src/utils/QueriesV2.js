@@ -145,6 +145,12 @@ export const GET_MEMBER_V2 = gql`
       tokenTribute
       memberAddress
       didRagequit
+      tokenBalances {
+        token {
+          tokenAddress
+        }
+        tokenBalance
+      }
       submissions {
         proposalIndex
         yesVotes
