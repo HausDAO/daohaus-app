@@ -141,8 +141,8 @@ const UserBalance = ({ toggle, client, match }) => {
 
     return tokens.map((token) => {
       return <BalanceItemDiv key={token.token.tokenAddress}>
-        <p>{token.token.tokenAddress}</p>
-        <DataDiv>{token.tokenBalance}</DataDiv>
+        <p>{token.token.symbol} {token.token.tokenAddress}</p>
+        <DataDiv>{token.tokenBalance / 10**token.token.decimals}</DataDiv>
       </BalanceItemDiv>;
     });
   }
