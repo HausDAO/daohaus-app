@@ -91,6 +91,7 @@ const baseProposalFields = `
   votingEnds @client
   votingStarts @client
   readyForProcessing @client
+  proposalType @client
 `;
 
 export const GET_PROPOSALS_V2 = gql`
@@ -144,6 +145,14 @@ export const GET_MEMBER_V2 = gql`
       tokenTribute
       memberAddress
       didRagequit
+      tokenBalances {
+        token {
+          tokenAddress
+          symbol @client
+          decimals @client
+        }
+        tokenBalance
+      }
       submissions {
         proposalIndex
         yesVotes

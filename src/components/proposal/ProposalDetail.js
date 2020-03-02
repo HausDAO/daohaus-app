@@ -41,8 +41,8 @@ const ProposalDetail = ({
     +daoData.version === 2
       ? { periodDuration: proposal.moloch.periodDuration }
       : client.cache.readQuery({
-        query: GET_METADATA,
-      });
+          query: GET_METADATA,
+        });
   const tribute =
     +daoData.version === 2 ? proposal.tributeOffered : proposal.tokenTribute;
   const id =
@@ -86,7 +86,9 @@ const ProposalDetail = ({
         </svg>
         <p className="Data">{countDown}</p>
       </div>
-      {proposal.newMember ? <h5>New Member Proposal</h5> : null}
+      {/* {proposal.newMember ? <h5>New Member Proposal</h5> : null} */}
+      {proposal.proposalType ? <h5>{proposal.proposalType}</h5> : null}
+
       <h2>{title}</h2>
       {+daoData.version === 2 ? (
         <>
@@ -105,11 +107,11 @@ const ProposalDetail = ({
           )}
         </>
       ) : (
-          <>
-            <h5 className="Label">Applicant Address</h5>
-            <p className="Data">{proposal.applicantAddress}</p>
-          </>
-        )}
+        <>
+          <h5 className="Label">Applicant Address</h5>
+          <p className="Data">{proposal.applicantAddress}</p>
+        </>
+      )}
 
       <div className="Offer">
         <div className="Shares">
@@ -118,10 +120,6 @@ const ProposalDetail = ({
         </div>
         {+daoData.version === 2 ? (
           <>
-            <div className="Shares">
-              <h5>Loot</h5>
-              <h2 className="Data">{proposal.lootRequested}</h2>
-            </div>
             <div className="Tribute">
               <h5>Tribute</h5>
               <h2 className="Data">
@@ -135,20 +133,35 @@ const ProposalDetail = ({
             </div>
           </>
         ) : (
-            <div className="Tribute">
-              <h5>Tribute</h5>
-              <h2 className="Data">
-                {web3Service && (
-                  <ValueDisplay
-                    value={web3Service.fromWei(tribute)}
-                    symbolOverride={proposal.tributeTokenSymbol}
-                  />
-                )}
-              </h2>
-            </div>
-          )}
-
+          <div className="Tribute">
+            <h5>Tribute</h5>
+            <h2 className="Data">
+              {web3Service && (
+                <ValueDisplay
+                  value={web3Service.fromWei(tribute)}
+                  symbolOverride={proposal.tributeTokenSymbol}
+                />
+              )}
+            </h2>
+          </div>
+        )}
       </div>
+      {+daoData.version === 2 ? (
+        <div className="Offer">
+          <div className="Shares">
+            <h5>Loot</h5>
+            <h2 className="Data">
+              <ValueDisplay
+                value={
+                  proposal.lootRequested / 10 ** proposal.tributeTokenDecimals
+                }
+                symbolOverride={proposal.tributeTokenSymbol}
+              />
+            </h2>
+          </div>
+        </div>
+      ) : null}
+
       <p>{proposal.description}</p>
       {proposal.status === 'ReadyForProcessing' && currentUser && (
         <button onClick={() => processProposal(proposal.proposalIndex)}>
@@ -168,25 +181,25 @@ const ProposalDetail = ({
                 {detailData.description}
               </a>
             ) : (
-                <p>{detailData.description}</p>
-              )}
+              <p>{detailData.description}</p>
+            )}
           </div>
         ) : null}
         {detailData &&
+        detailData.link &&
+        ReactPlayer.canPlay(detailData.link) ? (
+          <div className="Video">
+            <ReactPlayer url={detailData.link} playing={false} loop={false} />
+          </div>
+        ) : detailData &&
           detailData.link &&
-          ReactPlayer.canPlay(detailData.link) ? (
-            <div className="Video">
-              <ReactPlayer url={detailData.link} playing={false} loop={false} />
-            </div>
-          ) : detailData &&
-            detailData.link &&
-            detailData.link.indexOf('http') > -1 ? (
-              <div className="Link">
-                <a href={detailData.link} rel="noopener noreferrer" target="_blank">
-                  Link
+          detailData.link.indexOf('http') > -1 ? (
+          <div className="Link">
+            <a href={detailData.link} rel="noopener noreferrer" target="_blank">
+              Link
             </a>
-              </div>
-            ) : null}
+          </div>
+        ) : null}
       </div>
       {+daoData.version !== 2 || proposal.sponsored ? (
         <VoteControl
@@ -195,12 +208,12 @@ const ProposalDetail = ({
           canVote={canVote}
         />
       ) : (
-          <>
-            {+daoData.version === 2 && currentUser ? (
-              <ProposalActions proposal={proposal} />
-            ) : null}
-          </>
-        )}
+        <>
+          {+daoData.version === 2 && currentUser ? (
+            <ProposalActions proposal={proposal} />
+          ) : null}
+        </>
+      )}
     </div>
   );
 };

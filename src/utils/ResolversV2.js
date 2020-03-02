@@ -6,6 +6,7 @@ import {
   inVotingPeriod,
   inQueue,
   passedVotingAndGrace,
+  determineProposalType,
 } from './ProposalHelper';
 import { GET_METADATA_V2 } from './QueriesV2';
 import { TokenService } from './TokenService';
@@ -105,6 +106,9 @@ export const resolversV2 = {
       const decimals = await tokenService.getDecimals();
       return +decimals;
     },
+    proposalType: (proposal, _args, { cache }) => {
+      return determineProposalType(proposal);
+    },
   },
   TokenBalance: {
     symbol: async (tokenBalance, _args, { cache }) => {
@@ -144,15 +148,11 @@ export const resolversV2 = {
       return symbol;
     },
     decimals: async (approvedToken, _args, { cache }) => {
-        const tokenService = new TokenService(
-          _web3,
-          approvedToken.tokenAddress,
-        );
+      const tokenService = new TokenService(_web3, approvedToken.tokenAddress);
 
-        const decimals = await tokenService.getDecimals();
+      const decimals = await tokenService.getDecimals();
 
-        return +decimals;
-
+      return +decimals;
     },
   },
 };
