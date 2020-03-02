@@ -63,8 +63,8 @@ const ProposalCard = ({ proposal, client }) => {
     +daoData.version === 2
       ? { periodDuration: proposal.moloch.periodDuration }
       : client.cache.readQuery({
-        query: GET_METADATA,
-      });
+          query: GET_METADATA,
+        });
   const countDown = getProposalCountdownText(proposal, periodDuration);
 
   const title = titleMaker(proposal);
@@ -87,7 +87,7 @@ const ProposalCard = ({ proposal, client }) => {
         </svg>
         <DataP>{countDown}</DataP>
       </TimerDiv>
-      {proposal.newMember ? <h5>New Member Proposal</h5> : null}
+      {proposal.proposalType ? <h5>{proposal.proposalType}</h5> : null}
       <h3>{title}</h3>
       <OfferDivProposalCard>
         <div>
@@ -105,16 +105,16 @@ const ProposalCard = ({ proposal, client }) => {
             </DataH2>
           </div>
         ) : (
-            <div>
-              <h5>Tribute</h5>
-              <DataH2>
-                <ValueDisplay
-                  value={Web3.utils.fromWei(tribute)}
-                  symbolOverride={proposal.tributeTokenSymbol}
-                />
-              </DataH2>
-            </div>
-          )}
+          <div>
+            <h5>Tribute</h5>
+            <DataH2>
+              <ValueDisplay
+                value={Web3.utils.fromWei(tribute)}
+                symbolOverride={proposal.tributeTokenSymbol}
+              />
+            </DataH2>
+          </div>
+        )}
       </OfferDivProposalCard>
       <CardVoteDiv>
         {daoData.version !== 2 ? (

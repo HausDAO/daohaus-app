@@ -1,10 +1,13 @@
 import React, { useContext, useState, useEffect } from 'react';
+
 import CopyToClipboard from 'react-copy-to-clipboard';
+import { withApollo, useQuery } from 'react-apollo';
 
 import {
   CurrentUserContext,
   CurrentWalletContext,
   DaoServiceContext,
+  DaoDataContext,
 } from '../../contexts/Store';
 import { WalletStatuses } from '../../utils/WalletStatus';
 import { truncateAddr } from '../../utils/Helpers';
@@ -13,274 +16,43 @@ import { useInterval } from '../../utils/PollingUtil';
 import Deploy from './Deploy';
 import UserTransactions from './UserTransactions';
 import AccountList from './AccountList';
-
 import DepositFormInitial from './DepositFormInitial';
-import { withApollo } from 'react-apollo';
-import { GET_METADATA } from '../../utils/Queries';
 import UpgradeKeystore from '../../auth/UpgradeKeystore';
 import { USER_TYPE } from '../../utils/DaoService';
-import styled from 'styled-components';
 import {
-  secondary,
-  primaryHover,
-  phone,
-  danger,
-  primary,
-  appLight,
   FlashDiv,
   ButtonSecondary,
-  dangerHover,
 } from '../../variables.styles';
 import {
-  FlexCenterDiv,
-  DataButton,
   DataP,
   DataDiv,
   BackdropOpenDiv,
 } from '../../App.styles';
+import {
+  WalletDiv,
+  WalletHeaderDiv,
+  WalletOverlayDiv,
+  WalletOverlayContentsDiv,
+  StatusP,
+  AddressButton,
+  ActionsDropdownDiv,
+  SwitchHeaderDiv,
+  SelectedElementButton,
+  ActionsDropdownContentDiv,
+  WalletContents,
+  BalancesDiv,
+  BalanceItemDiv,
+  TinyButton
+} from './UserBalances.styles'
 
-const WalletDiv = styled.div`
-  border: 1px solid #efefef;
-  border-radius: 10px;
-  position: relative;
-  top: -2px;
-  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
-  background-color: ${appLight};
-  @media (max-width: ${phone}) {
-    border-radius: 0px;
-    border: none;
-  }
-  @media (min-width: ${phone}) {
-    width: 60%;
-    margin: 25px auto;
-    position: relative;
-  }
-`;
+import { GET_METADATA, GET_MEMBER } from '../../utils/Queries';
+import { GET_MEMBER_V2 } from '../../utils/QueriesV2';
 
-const WalletHeaderDiv = styled.div`
-  height: 98px;
-  border-bottom: 1px solid ${primaryHover};
-  border-top-right-radius: 10px;
-  border-top-left-radius: 10px;
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: space-between;
-  background-color: ${primaryHover};
-  padding: 0 15px;
-  @media (max-width: ${phone}) {
-    border-radius: 0px;
-    border: none;
-  }
-`;
 
-const WalletOverlayDiv = styled(FlexCenterDiv)`
-  width: 100%;
-  min-height: 100%;
-  position: absolute;
-  z-index: 1;
-  background-color: ${primary};
-  color: white;
-  border: none;
-  p {
-    text-align: center;
-  }
-  @media (min-width: ${phone}) {
-    border-radius: 10px;
-    border: none;
-  }
-`;
+const UserBalance = ({ toggle, client, match }) => {
 
-const WalletOverlayContentsDiv = styled(FlexCenterDiv)`
-  padding: 50px;
-`;
+  const [daoData] = useContext(DaoDataContext);
 
-const StatusP = styled.p`
-  font-size: 0.85em;
-  position: relative;
-  color: ${(props) => (props.status === 'disconnected' ? danger : secondary)};
-  margin-left: 15px;
-  margin-top: 0;
-  margin-bottom: 5px;
-  &:before {
-    content: '';
-    width: 8px;
-    height: 8px;
-    border-radius: 50%;
-    background-color: ${(props) =>
-      props.status === 'disconnected' ? danger : secondary};
-    display: block;
-    position: absolute;
-    left: 0;
-    top: 50%;
-    transform: translateY(-50%);
-    margin-left: -15px;
-  }
-`;
-
-const AddressButton = styled(DataButton)`
-  margin: 0;
-  padding: 0px;
-  border: none;
-  background: none;
-  color: white;
-  width: auto;
-  display: flex;
-  align-content: center;
-  &:hover {
-    color: ${secondary};
-    fill: ${secondary};
-  }
-  p {
-    color: white;
-  }
-  svg {
-    display: inline-block;
-    fill: ${secondary};
-    width: 18px;
-    height: 18px;
-    margin-left: 5px;
-  }
-`;
-
-const ActionsDropdownDiv = styled.div`
-  color: ${appLight};
-  position: relative;
-  button {
-    background-color: transparent;
-    img {
-      margin-left: 5px;
-      vertical-align: middle;
-    }
-  }
-`;
-
-const SwitchHeaderDiv = styled.div`
-  width: calc(100% - 30px);
-  background-color: #911094;
-  display: flex;
-  justify-content: flex-start;
-  padding: 0px 15px;
-  button {
-    color: ${secondary};
-    background-color: transparent;
-    border-radius: 0px;
-    margin: 0;
-    margin-right: 25px;
-    border-bottom: 4px solid transparent;
-    padding: 15px 0px;
-  }
-`;
-
-const SelectedElementButton = styled.button`
-  color: ${(props) => (props.selected ? '#ffffff' : '')};
-  border-bottom: ${(props) => (props.selected ? '4px solid' + secondary : '')};
-  background-color: ${(props) => (props.selected ? 'transparent' : '')};
-  font-size: ${(props) => (props.selected ? '1em' : '')};
-`;
-
-const ActionsDropdownContentDiv = styled.div`
-  position: absolute;
-  right: -15px;
-  background-color: ${appLight};
-  min-width: 200px;
-  max-width: 100%;
-  box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.15);
-  padding: 12px 16px;
-  z-index: 3;
-  button {
-    background-color: transparent;
-    color: ${primary};
-    text-align: left;
-    padding: 15px 0px;
-    margin: 0;
-    &:hover {
-      color: ${primaryHover};
-    }
-    &.Button--Primary {
-      color: $primary;
-      &:hover {
-        color: $primary-hover;
-      }
-    }
-    &.Button--Secondary {
-      color: $secondary;
-      &:hover {
-        color: $secondary-hover;
-      }
-      &:disabled {
-        color: grey;
-      }
-    }
-    &.Button--Tertiary {
-      color: $tertiary;
-      &:hover {
-        color: $tertiary-hover;
-      }
-    }
-  }
-`;
-
-const WalletContents = styled.div`
-  min-height: 300px;
-`;
-
-const BalancesDiv = styled.div`
-  min-height: 300px;
-`;
-
-const BalanceItemDiv = styled.div`
-  display: flex;
-  align-content: center;
-  justify-content: space-between;
-  padding: 15px 15px;
-  flex-direction: column;
-  background-color: $app-light;
-  @media (min-width: $tablet) {
-    flex-direction: column;
-  }
-  p {
-    margin: 0;
-    padding: 0px;
-  }
-  border-bottom: 1px solid #efefef;
-  p:nth-child(1) {
-    font-size: 0.85em;
-    color: #333;
-  }
-  p:nth-child(2) {
-    font-size: 1.5em;
-  }
-`;
-
-export const TinyButton = styled.div`
-  margin: 0;
-  display: inline-block;
-  font-size: 0.5em;
-  padding: 7px 10px;
-  vertical-align: middle;
-  margin-top: -5px;
-  margin-left: 10px;
-  background-color: ${danger};
-  &:hover {
-    background-color: ${dangerHover};
-  }
-  span {
-    color: white;
-    height: 13px;
-    width: 13px;
-    border-radius: 50%;
-    border: 1px solid white;
-    font-size: 0.85em;
-    float: left;
-    margin-right: 5px;
-  }
-`;
-
-const UserBalance = ({ toggle, client }) => {
-  const { tokenSymbol } = client.cache.readQuery({
-    query: GET_METADATA,
-  });
 
   const [daoService] = useContext(DaoServiceContext);
   const [currentUser] = useContext(CurrentUserContext);
@@ -290,7 +62,34 @@ const UserBalance = ({ toggle, client }) => {
   const [actionsOpen, setActionsOpen] = useState(false);
   const [headerSwitch, setHeaderSwitch] = useState('Balances');
   const [keystoreExists, setKeystoreExists] = useState(true);
+  const [tokenBalances, setTokenBalances] = useState([]);
   const [memberAddressLoggedIn, setMemberAddressLoggedIn] = useState(false);
+
+  const { tokenSymbol } = client.cache.readQuery({
+    query: GET_METADATA,
+  });
+
+  const id = `${daoData.contractAddress.toLowerCase()}-member-${currentUser.username.toLowerCase()}`
+
+  const options = {
+    pollInterval: 10000,
+    variables: { id }
+  };
+  const query = daoData.version === 2 ? GET_MEMBER_V2 : GET_MEMBER;
+  if (daoData.isLegacy || daoData.version === 2) {
+    options.client = daoData.altClient;
+  }
+
+  const { loading, error, data } = useQuery(query, options);
+
+  useEffect(() => {
+
+    if (!data || !data.member) {
+      return;
+    }
+
+    setTokenBalances(data.member.tokenBalances);
+  }, [data])
 
   useEffect(() => {
     (async () => {
@@ -313,7 +112,7 @@ const UserBalance = ({ toggle, client }) => {
       );
       setMemberAddressLoggedIn(
         currentUser &&
-          currentUser.attributes['custom:account_address'] === memberAddress,
+        currentUser.attributes['custom:account_address'] === memberAddress,
       );
     })();
   }, [currentUser, daoService.mcDao]);
@@ -336,6 +135,28 @@ const UserBalance = ({ toggle, client }) => {
       setActionsOpen(!actionsOpen);
     }
   };
+
+  const renderBalances = (tokens) => {
+    console.log('render tokens', tokens);
+
+    return tokens.map((token) => {
+      return <BalanceItemDiv key={token.token.tokenAddress}>
+        <p>{token.token.symbol} {token.token.tokenAddress}</p>
+        <DataDiv>{token.tokenBalance / 10**token.token.decimals}</DataDiv>
+      </BalanceItemDiv>;
+    });
+  }
+
+  const withdrawBalances = (tokens) => {
+    const tokensArr = tokens.map((token) => token.token.tokenAddress);
+    const balancesArr = tokens.map((balance) => balance.tokenBalance)
+    try {
+      daoService.mcDao.withdrawBalances(tokensArr, balancesArr, true);
+    } catch (err) {
+      console.log(err);
+
+    }
+  }
 
   return (
     <WalletDiv>
@@ -386,8 +207,8 @@ const UserBalance = ({ toggle, client }) => {
             status={
               (currentUser.type === USER_TYPE.SDK &&
                 currentWallet.state !== 'Deployed') ||
-              (currentUser.type === USER_TYPE.WEB3 &&
-                currentWallet.state !== 'Connected')
+                (currentUser.type === USER_TYPE.WEB3 &&
+                  currentWallet.state !== 'Connected')
                 ? 'Disconnected'
                 : ''
             }
@@ -483,6 +304,14 @@ const UserBalance = ({ toggle, client }) => {
         >
           Transactions
         </SelectedElementButton>
+
+        {daoData.version === 2 && (<SelectedElementButton
+          selected={headerSwitch === 'InternalBalances'}
+          onClick={() => setHeaderSwitch('InternalBalances')}
+        >
+          Internal Balances
+        </SelectedElementButton>)}
+
         {currentUser && currentUser.type === USER_TYPE.SDK && (
           <SelectedElementButton
             selected={headerSwitch === 'Accounts'}
@@ -522,6 +351,18 @@ const UserBalance = ({ toggle, client }) => {
                 )}
               </DataDiv>
             </BalanceItemDiv>
+
+          </BalancesDiv>
+        )}
+        {headerSwitch === 'InternalBalances' && daoData.version === 2 && (
+          <BalancesDiv>
+            <BalanceItemDiv>
+              <p>Member Balances</p>
+            </BalanceItemDiv>
+            {renderBalances(tokenBalances)}
+            {tokenBalances.length && (<BalanceItemDiv>
+              <button onClick={() => withdrawBalances(tokenBalances)}>withdraw member balances</button>
+            </BalanceItemDiv>)}
           </BalancesDiv>
         )}
         {headerSwitch === 'Transactions' && <UserTransactions />}
