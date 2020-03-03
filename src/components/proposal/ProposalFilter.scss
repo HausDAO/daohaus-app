@@ -13,17 +13,19 @@
       flex-direction: row;
       justify-content: space-around;
     }
-    button { 
+    button {
       display: inline;
-      min-width: auto; 
+      min-width: auto;
       margin: 0;
       background-color: transparent;
       color: #ccc;
       &:hover {
         color: black;
+        background-color: transparent;
       }
       &.Active {
         color: black;
+        background-color: transparent;
       }
     }
   }

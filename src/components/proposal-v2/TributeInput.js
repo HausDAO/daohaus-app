@@ -37,7 +37,7 @@ const TributeInput = ({
   useEffect(() => {
     const runCheck = async () => {
       console.log('checking unlocked');
-      
+
       await checkUnlocked(token, field.value);
       return true;
     };
@@ -57,11 +57,11 @@ const TributeInput = ({
           checkUnlocked(token, field.value);
         }}
       />
-      {!unlocked && (
+      {field.value && field.value !== 0 && !unlocked ? (
         <div className="UnlockButton" onClick={() => unlock(token)}>
           {!loading ? <span>! Unlock</span> : <TinyLoader />}
         </div>
-      )}
+      ) : null}
     </div>
   );
 };
