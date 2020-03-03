@@ -124,7 +124,7 @@ export const signInWithSdk = async () => {
   // store sdk instance (needed?)
   // setUserSdk(sdk);
   // add sdk instance to current user
-  return { user: { ...realuser, ...{ sdk } } };
+  return { ...realuser, ...{ sdk } };
 };
 
 export const createWeb3User = (accountAddress) => {
