@@ -101,6 +101,7 @@ const UserBalance = ({ toggle, client, match }) => {
 
 
     setTokenBalances(data.member.tokenBalances);
+    // eslint-disable-next-line
   }, [data])
 
   useEffect(() => {
