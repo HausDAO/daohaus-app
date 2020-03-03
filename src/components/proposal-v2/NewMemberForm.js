@@ -29,11 +29,10 @@ const NewMemberForm = (props) => {
   const [daoData] = useContext(DaoDataContext);
   const [currentUser] = useContext(CurrentUserContext);
 
-
   const options = {
     variables: { contractAddr: daoData.contractAddress },
     client: daoData.altClient,
-    fetchPolicy: 'no-cache'
+    fetchPolicy: 'no-cache',
   };
   const query = GET_TOKENS_V2;
 
@@ -42,7 +41,6 @@ const NewMemberForm = (props) => {
   // get whitelist
   useEffect(() => {
     if (data && data.moloch) {
-
       setTokenData(
         data.moloch.approvedTokens.reverse().map((token) => ({
           label: token.symbol || token.tokenAddress,
@@ -58,13 +56,11 @@ const NewMemberForm = (props) => {
     console.log('error', error);
   }
 
-
-
   const valToDecimal = (value, tokenAddress, tokens) => {
     const tdata = tokens.find((token) => token.value === tokenAddress);
-    const decimals = +tdata.decimals;    
-    return "" + (value * 10**decimals);
-  }
+    const decimals = +tdata.decimals;
+    return '' + value * 10 ** decimals;
+  };
 
   return (
     <div>
@@ -99,12 +95,16 @@ const NewMemberForm = (props) => {
                   description: values.description,
                   link: values.link,
                 });
-                
+
                 try {
                   await daoService.mcDao.submitProposal(
                     values.sharesRequested,
                     values.lootRequested,
-                    valToDecimal(values.tributeOffered, values.tributeToken, tokenData), 
+                    valToDecimal(
+                      values.tributeOffered,
+                      values.tributeToken,
+                      tokenData,
+                    ),
                     values.tributeToken,
                     0,
                     tokenData[0].value,
@@ -199,7 +199,7 @@ const NewMemberForm = (props) => {
                     {(msg) => <div className="Error">Tribute Token: {msg}</div>}
                   </ErrorMessage>
 
-                  <Expandable label="LOOT">
+                  <Expandable label="Loot">
                     <Field name="lootRequested">
                       {({ field, form }) => (
                         <div

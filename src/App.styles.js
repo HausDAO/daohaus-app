@@ -2,11 +2,6 @@ import styled from 'styled-components';
 
 import { dataFont, danger, dangerHover, phone } from './variables.styles';
 
-export const ProposalAndMemberCardDiv = styled.div`
-  padding: 25px;
-  border-top: 2px solid #eee;
-`;
-
 export const DataP = styled.p`
   font-family: ${dataFont};
   font-weight: 400;

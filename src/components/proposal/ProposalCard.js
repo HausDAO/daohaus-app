@@ -12,25 +12,25 @@ import { GET_METADATA } from '../../utils/Queries';
 
 import { DaoServiceContext, DaoDataContext } from '../../contexts/Store';
 import ValueDisplay from '../shared/ValueDisplay';
-import { appDark, appLight } from '../../variables.styles';
-import {
-  DataP,
-  DataH2,
-  ProposalAndMemberCardDiv,
-  OfferDiv,
-} from '../../App.styles';
+import { appDark, appLight, phone } from '../../variables.styles';
+import { DataP, DataH2, OfferDiv } from '../../App.styles';
 
 import StackedVote from './StackedVote';
-import './ProposalCard.scss';
+// import './ProposalCard.scss';
 
-const ProposalCardDiv = styled(ProposalAndMemberCardDiv)`
-  background-color: ${appLight};
-  width: 320px;
-  border: 2px solid ${appDark};
-  border-radius: 10px;
-  margin-bottom: 25px;
+const ProposalCardDiv = styled.div`
   margin-top: 25px;
-  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+  border-top: 2px solid ${appDark};
+  border-bottom: 2px solid ${appDark};
+  background-color: ${appLight};
+  padding: 25px;
+  @media (min-width: ${phone}) {
+    width: 320px;
+    border: 2px solid ${appDark};
+    border-radius: 10px;
+    margin-bottom: 25px;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+  }
 `;
 
 const TimerDiv = styled.div`
