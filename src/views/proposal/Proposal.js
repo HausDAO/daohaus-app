@@ -47,15 +47,23 @@ const Proposal = (props) => {
 
   const { loading, error, data } = useQuery(query, options);
 
-  const processProposal = async (id) => {
+  const processProposal = async (proposal) => {
     setTxLoading(true);
     try {
-      await daoService.mcDao.processProposal(id, ethToWei(currentWallet.eth));
-      props.history.push(`/dao/${daoService.daoAddress}/proposals`);
+      if(proposal.whitelist) {        
+        await daoService.mcDao.processWhitelistProposal(proposal.proposalIndex);
+
+      } else if (proposal.guildkick) {
+        await daoService.mcDao.processGuildKickProposal(proposal.proposalIndex);
+
+      } else {
+        await daoService.mcDao.processProposal(proposal.proposalIndex);
+      }
     } catch (e) {
       console.error(`Error processing proposal: ${e.toString()}`);
     } finally {
       setTxLoading(false);
+      props.history.push(`/dao/${daoService.daoAddress}/proposals`);
     }
   };
 
