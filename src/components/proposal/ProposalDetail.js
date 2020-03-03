@@ -164,7 +164,7 @@ const ProposalDetail = ({
 
       <p>{proposal.description}</p>
       {proposal.status === 'ReadyForProcessing' && currentUser && (
-        <button onClick={() => processProposal(proposal.proposalIndex)}>
+        <button onClick={() => processProposal(proposal)}>
           Process
         </button>
       )}

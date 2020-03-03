@@ -10,7 +10,7 @@ import {
 import Loading from '../shared/Loading';
 
 import { withApollo } from 'react-apollo';
-import { ProposalSchema } from './Validation';
+import { WhiteListSchema } from './Validation';
 import shortid from 'shortid';
 
 const WhitelistForm = (props) => {
@@ -39,9 +39,10 @@ const WhitelistForm = (props) => {
                                 link: '',
                                 applicant: '',
                             }}
-                            validationSchema={ProposalSchema}
+                            validationSchema={WhiteListSchema}
                             onSubmit={async (values, { setSubmitting }) => {
                                 console.log(values);
+                                setFormLoading(true);
 
                                 const uuid = shortid.generate();
                                 const detailsObj = JSON.stringify({
