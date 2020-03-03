@@ -75,6 +75,8 @@ const UserBalance = ({ toggle, client, match }) => {
     pollInterval: 10000,
     variables: { id }
   };
+
+   // TODO: will not work if v1 so maybe don't worry about it
   const query = daoData.version === 2 ? GET_MEMBER_V2 : GET_MEMBER;
   if (daoData.isLegacy || daoData.version === 2) {
     options.client = daoData.altClient;
@@ -82,11 +84,21 @@ const UserBalance = ({ toggle, client, match }) => {
 
   const { loading, error, data } = useQuery(query, options);
 
+  
   useEffect(() => {
-
-    if (!data || !data.member) {
+    if (loading) {
       return;
     }
+    if (error) {
+      console.log('error', error);
+      
+      return;
+    }
+    if (!data || !data.member) {
+     
+      return;
+    }
+
 
     setTokenBalances(data.member.tokenBalances);
   }, [data])

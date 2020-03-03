@@ -118,6 +118,7 @@ const Store = ({ children, daoParam }) => {
             break;
           }
           case USER_TYPE.SDK:
+            // TODO: this makes username the cognito username. in web3 login it is the account addr. is this a problem?
             user = await signInWithSdk();
             
             dao = await DaoService.instantiateWithSDK(
