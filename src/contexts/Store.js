@@ -94,7 +94,6 @@ const Store = ({ children, daoParam }) => {
       let dao;
       try {
         console.log(`Initializing user type: ${loginType || 'read-only'}`);
-        console.log(loginType);
 
         switch (loginType) {
           case USER_TYPE.WEB3: {
@@ -120,6 +119,7 @@ const Store = ({ children, daoParam }) => {
           }
           case USER_TYPE.SDK:
             user = await signInWithSdk();
+            
             dao = await DaoService.instantiateWithSDK(
               user.attributes['custom:account_address'],
               user.sdk,
@@ -145,8 +145,6 @@ const Store = ({ children, daoParam }) => {
 
         dao = await DaoService.instantiateWithReadOnly(daoParam, version);
       } finally {
-        console.log('finally', dao);
-
         setDaoService(dao);
       }
     };
