@@ -1,18 +1,15 @@
 import styled from 'styled-components';
 
 import {
-    secondary,
-    primaryHover,
-    phone,
-    danger,
-    primary,
-    appLight,
-    dangerHover,
-  } from '../../variables.styles';
-  import {
-    FlexCenterDiv,
-    DataButton,
-  } from '../../App.styles';
+  secondary,
+  primaryHover,
+  phone,
+  danger,
+  primary,
+  appLight,
+  dangerHover,
+} from '../../variables.styles';
+import { FlexCenterDiv, DataButton } from '../../App.styles';
 
 export const WalletDiv = styled.div`
   border: 1px solid #efefef;
@@ -83,7 +80,7 @@ export const StatusP = styled.p`
     height: 8px;
     border-radius: 50%;
     background-color: ${(props) =>
-    props.status === 'disconnected' ? danger : secondary};
+      props.status === 'disconnected' ? danger : secondary};
     display: block;
     position: absolute;
     left: 0;
@@ -144,6 +141,9 @@ export const SwitchHeaderDiv = styled.div`
     margin-right: 25px;
     border-bottom: 4px solid transparent;
     padding: 15px 0px;
+    &:hover {
+      background-color: transparent;
+    }
   }
 `;
 
@@ -228,7 +228,7 @@ export const BalanceItemDiv = styled.div`
   }
 `;
 
-export  const TinyButton = styled.div`
+export const TinyButton = styled.div`
   margin: 0;
   display: inline-block;
   font-size: 0.5em;
