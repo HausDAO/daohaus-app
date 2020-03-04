@@ -81,7 +81,7 @@ export const BackdropOpenDiv = styled.div`
   height: 100%;
   z-index: 2;
   background-color: ${(props) =>
-    props.blank ? 'rgba(0, 0, 0, 0)' : 'rgba(0, 0, 0, 0.85)'};
+    props.blank ? 'rgba(0, 0, 0, 0)' : 'rgba(0, 0, 0, 0)'};
   pointer-events: cursor;
 `;
 
