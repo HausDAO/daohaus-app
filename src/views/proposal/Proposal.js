@@ -51,13 +51,13 @@ const Proposal = (props) => {
     setTxLoading(true);
     try {
       if(proposal.whitelist) {        
-        await daoService.mcDao.processWhitelistProposal(proposal.proposalIndex);
+        await daoService.mcDao.processWhitelistProposal(proposal.proposalId);
 
       } else if (proposal.guildkick) {
-        await daoService.mcDao.processGuildKickProposal(proposal.proposalIndex);
+        await daoService.mcDao.processGuildKickProposal(proposal.proposalId);
 
       } else {
-        await daoService.mcDao.processProposal(proposal.proposalIndex);
+        await daoService.mcDao.processProposal(proposal.proposalId);
       }
     } catch (e) {
       console.error(`Error processing proposal: ${e.toString()}`);
