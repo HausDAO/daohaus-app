@@ -123,6 +123,7 @@ const UserBalance = ({ toggle, client, match }) => {
       const memberAddress = await daoService.mcDao.memberAddressByDelegateKey(
         currentUser.attributes['custom:account_address'],
       );
+      
       setMemberAddressLoggedIn(
         currentUser &&
         currentUser.attributes['custom:account_address'] === memberAddress,
@@ -282,7 +283,7 @@ const UserBalance = ({ toggle, client, match }) => {
                   </ButtonSecondary>
                 )}
                 {currentUser.type === USER_TYPE.WEB3 &&
-                  currentWallet.shares > 0 && (
+                  (currentWallet.shares > 0 || currentWallet.loot > 0) && (
                     <ButtonSecondary
                       onClick={() => toggleActions('ragequit')}
                       disabled={!memberAddressLoggedIn}
@@ -291,7 +292,7 @@ const UserBalance = ({ toggle, client, match }) => {
                     </ButtonSecondary>
                   )}
                 {currentUser.type === USER_TYPE.WEB3 &&
-                  currentWallet.shares > 0 && (
+                  (currentWallet.shares > 0 || currentWallet.loot > 0) && (
                     <ButtonSecondary
                       onClick={() => toggleActions('changeDelegateKey')}
                       disabled={!memberAddressLoggedIn}
