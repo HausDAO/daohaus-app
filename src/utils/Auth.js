@@ -130,7 +130,7 @@ export const signInWithSdk = async () => {
 export const createWeb3User = (accountAddress) => {
   return {
     type: USER_TYPE.WEB3,
-    attributes: { 'custom:account_address': accountAddress },
+    attributes: { 'custom:account_address': accountAddress.toLowerCase() },
     username: accountAddress,
   };
 };
