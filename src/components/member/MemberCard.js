@@ -10,7 +10,7 @@ import ValueDisplay from '../shared/ValueDisplay';
 import { DaoServiceContext, DaoDataContext } from '../../contexts/Store';
 
 import { appDark, appLight, phone, primary } from '../../variables.styles';
-import { DataP, DataH2, ProposalAndMemberCardDiv } from '../../App.styles';
+import { DataP, DataH2 } from '../../App.styles';
 import {
   MemberCardIdentityDiv,
   MemberCardImage,
@@ -18,12 +18,14 @@ import {
   OfferDivMemberCard,
 } from './Member.styles';
 
-const MemberCardDiv = styled(ProposalAndMemberCardDiv)`
+const MemberCardDiv = styled.div`
   background-color: ${appLight};
   color: black;
   margin-top: 25px;
-  border: 2px solid ${appDark};
+  border-top: 2px solid ${appDark};
+  border-bottom: 2px solid ${appDark};
   transition: all 0.15s linear;
+  padding: 25px;
 
   @media (min-width: ${phone}) {
     width: 320px;

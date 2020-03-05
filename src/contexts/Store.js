@@ -189,6 +189,9 @@ const Store = ({ children, daoParam }) => {
     // shares will be 0 if not a member, could also be 0 if rage quit
     // TODO: check membersheip a different way
     const shares = parseInt(member.shares);
+    const loot = parseInt(member.loot);
+    const jailed = member.jailed;
+    const highestIndexYesVote = member.highestIndexYesVote;    
 
     // use attached sdk
     const sdk = currentUser.sdk;
@@ -256,6 +259,9 @@ const Store = ({ children, daoParam }) => {
         allowance,
         eth,
         state,
+        loot,
+        highestIndexYesVote,
+        jailed,
         shares,
         accountDevices,
         _txList,

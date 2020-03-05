@@ -19,15 +19,8 @@ import AccountList from './AccountList';
 import DepositFormInitial from './DepositFormInitial';
 import UpgradeKeystore from '../../auth/UpgradeKeystore';
 import { USER_TYPE } from '../../utils/DaoService';
-import {
-  FlashDiv,
-  ButtonSecondary,
-} from '../../variables.styles';
-import {
-  DataP,
-  DataDiv,
-  BackdropOpenDiv,
-} from '../../App.styles';
+import { FlashDiv, ButtonSecondary } from '../../variables.styles';
+import { DataP, DataDiv, BackdropOpenDiv } from '../../App.styles';
 import {
   WalletDiv,
   WalletHeaderDiv,
@@ -42,17 +35,14 @@ import {
   WalletContents,
   BalancesDiv,
   BalanceItemDiv,
-  TinyButton
-} from './UserBalances.styles'
+  TinyButton,
+} from './UserBalances.styles';
 
 import { GET_METADATA, GET_MEMBER } from '../../utils/Queries';
 import { GET_MEMBER_V2 } from '../../utils/QueriesV2';
 
-
 const UserBalance = ({ toggle, client, match }) => {
-
   const [daoData] = useContext(DaoDataContext);
-
 
   const [daoService] = useContext(DaoServiceContext);
   const [currentUser] = useContext(CurrentUserContext);
@@ -69,14 +59,14 @@ const UserBalance = ({ toggle, client, match }) => {
     query: GET_METADATA,
   });
 
-  const id = `${daoData.contractAddress.toLowerCase()}-member-${currentUser.username.toLowerCase()}`
+  const id = `${daoData.contractAddress.toLowerCase()}-member-${currentUser.username.toLowerCase()}`;
 
   const options = {
     pollInterval: 10000,
-    variables: { id }
+    variables: { id },
   };
 
-   // TODO: will not work if v1 so maybe don't worry about it
+  // TODO: will not work if v1 so maybe don't worry about it
   const query = daoData.version === 2 ? GET_MEMBER_V2 : GET_MEMBER;
   if (daoData.isLegacy || daoData.version === 2) {
     options.client = daoData.altClient;
@@ -84,25 +74,22 @@ const UserBalance = ({ toggle, client, match }) => {
 
   const { loading, error, data } = useQuery(query, options);
 
-  
   useEffect(() => {
     if (loading) {
       return;
     }
     if (error) {
       console.log('error', error);
-      
+
       return;
     }
     if (!data || !data.member) {
-     
       return;
     }
 
-
     setTokenBalances(data.member.tokenBalances);
     // eslint-disable-next-line
-  }, [data])
+  }, [data]);
 
   useEffect(() => {
     (async () => {
@@ -123,9 +110,10 @@ const UserBalance = ({ toggle, client, match }) => {
       const memberAddress = await daoService.mcDao.memberAddressByDelegateKey(
         currentUser.attributes['custom:account_address'],
       );
+      
       setMemberAddressLoggedIn(
         currentUser &&
-        currentUser.attributes['custom:account_address'] === memberAddress,
+          currentUser.attributes['custom:account_address'] === memberAddress,
       );
     })();
   }, [currentUser, daoService.mcDao]);
@@ -153,23 +141,26 @@ const UserBalance = ({ toggle, client, match }) => {
     console.log('render tokens', tokens);
 
     return tokens.map((token) => {
-      return <BalanceItemDiv key={token.token.tokenAddress}>
-        <p>{token.token.symbol} {token.token.tokenAddress}</p>
-        <DataDiv>{token.tokenBalance / 10**token.token.decimals}</DataDiv>
-      </BalanceItemDiv>;
+      return (
+        <BalanceItemDiv key={token.token.tokenAddress}>
+          <p>
+            {token.token.symbol} {token.token.tokenAddress}
+          </p>
+          <DataDiv>{token.tokenBalance / 10 ** token.token.decimals}</DataDiv>
+        </BalanceItemDiv>
+      );
     });
-  }
+  };
 
   const withdrawBalances = (tokens) => {
     const tokensArr = tokens.map((token) => token.token.tokenAddress);
-    const balancesArr = tokens.map((balance) => balance.tokenBalance)
+    const balancesArr = tokens.map((balance) => balance.tokenBalance);
     try {
       daoService.mcDao.withdrawBalances(tokensArr, balancesArr, true);
     } catch (err) {
       console.log(err);
-
     }
-  }
+  };
 
   return (
     <WalletDiv>
@@ -220,8 +211,8 @@ const UserBalance = ({ toggle, client, match }) => {
             status={
               (currentUser.type === USER_TYPE.SDK &&
                 currentWallet.state !== 'Deployed') ||
-                (currentUser.type === USER_TYPE.WEB3 &&
-                  currentWallet.state !== 'Connected')
+              (currentUser.type === USER_TYPE.WEB3 &&
+                currentWallet.state !== 'Connected')
                 ? 'Disconnected'
                 : ''
             }
@@ -282,7 +273,7 @@ const UserBalance = ({ toggle, client, match }) => {
                   </ButtonSecondary>
                 )}
                 {currentUser.type === USER_TYPE.WEB3 &&
-                  currentWallet.shares > 0 && (
+                  (currentWallet.shares > 0 || currentWallet.loot > 0) && (
                     <ButtonSecondary
                       onClick={() => toggleActions('ragequit')}
                       disabled={!memberAddressLoggedIn}
@@ -291,7 +282,7 @@ const UserBalance = ({ toggle, client, match }) => {
                     </ButtonSecondary>
                   )}
                 {currentUser.type === USER_TYPE.WEB3 &&
-                  currentWallet.shares > 0 && (
+                  (currentWallet.shares > 0 || currentWallet.loot > 0) && (
                     <ButtonSecondary
                       onClick={() => toggleActions('changeDelegateKey')}
                       disabled={!memberAddressLoggedIn}
@@ -311,19 +302,24 @@ const UserBalance = ({ toggle, client, match }) => {
         >
           Balances
         </SelectedElementButton>
-        <SelectedElementButton
-          selected={headerSwitch === 'Transactions'}
-          onClick={() => setHeaderSwitch('Transactions')}
-        >
-          Transactions
-        </SelectedElementButton>
 
-        {daoData.version === 2 && (<SelectedElementButton
-          selected={headerSwitch === 'InternalBalances'}
-          onClick={() => setHeaderSwitch('InternalBalances')}
-        >
-          Internal Balances
-        </SelectedElementButton>)}
+        {daoData.version === 2 && (
+          <SelectedElementButton
+            selected={headerSwitch === 'InternalBalances'}
+            onClick={() => setHeaderSwitch('InternalBalances')}
+          >
+            Internal Balances
+          </SelectedElementButton>
+        )}
+
+        {daoData.version !== 2 && (
+          <SelectedElementButton
+            selected={headerSwitch === 'Transactions'}
+            onClick={() => setHeaderSwitch('Transactions')}
+          >
+            Transactions
+          </SelectedElementButton>
+        )}
 
         {currentUser && currentUser.type === USER_TYPE.SDK && (
           <SelectedElementButton
@@ -364,18 +360,21 @@ const UserBalance = ({ toggle, client, match }) => {
                 )}
               </DataDiv>
             </BalanceItemDiv>
-
           </BalancesDiv>
         )}
         {headerSwitch === 'InternalBalances' && daoData.version === 2 && (
           <BalancesDiv>
             <BalanceItemDiv>
-              <p>Member Balances</p>
+              <p>{tokenBalances.tokenSymbol}</p>
+              <DataP>{renderBalances(tokenBalances)}</DataP>
             </BalanceItemDiv>
-            {renderBalances(tokenBalances)}
-            {tokenBalances.length && (<BalanceItemDiv>
-              <button onClick={() => withdrawBalances(tokenBalances)}>withdraw member balances</button>
-            </BalanceItemDiv>)}
+            {tokenBalances.length && (
+              <BalanceItemDiv>
+                <button onClick={() => withdrawBalances(tokenBalances)}>
+                  Withdraw Tokens
+                </button>
+              </BalanceItemDiv>
+            )}
           </BalancesDiv>
         )}
         {headerSwitch === 'Transactions' && <UserTransactions />}
