@@ -1,6 +1,5 @@
-import React, { useContext, useState, useEffect } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { withRouter } from 'react-router-dom';
-import { ethToWei } from '@netgum/utils'; // returns BN
 
 import { Formik, Form, Field, ErrorMessage } from 'formik';
 
@@ -9,17 +8,17 @@ import {
   DaoServiceContext,
   DaoDataContext,
   CurrentUserContext,
-  // DaoServiceContext,
 } from '../../contexts/Store';
 import Loading from '../shared/Loading';
 
 import { withApollo, useQuery } from 'react-apollo';
 import TributeInput from './TributeInput';
 import PaymentInput from './PaymentInput';
+import Expandable from '../shared/Expandable';
 import { ProposalSchema } from './Validation';
-import { GET_TOKENS_V2 } from '../../utils/QueriesV2';
-import TokenSelect from './TokenSelect';
 import shortid from 'shortid';
+import TokenSelect from './TokenSelect';
+import { GET_TOKENS_V2, GET_MOLOCH_V2 } from '../../utils/QueriesV2';
 
 const TradeForm = (props) => {
   const { history } = props;
@@ -27,6 +26,7 @@ const TradeForm = (props) => {
   const [gloading] = useContext(LoaderContext);
   const [formLoading, setFormLoading] = useState(false);
   const [tokenData, setTokenData] = useState([]);
+  const [tokenBalance] = useState();
   const [daoService] = useContext(DaoServiceContext);
   const [daoData] = useContext(DaoDataContext);
   const [currentUser] = useContext(CurrentUserContext);
@@ -36,23 +36,34 @@ const TradeForm = (props) => {
     client: daoData.altClient,
     fetchPolicy: 'no-cache',
   };
-  const query = GET_TOKENS_V2;
+  const query = GET_MOLOCH_V2;
 
   const { loading, error, data } = useQuery(query, options);
 
   // get whitelist
   useEffect(() => {
     if (data && data.moloch) {
-      console.log('set');
+      console.log('set', data);
 
       setTokenData(
-        data.moloch.approvedTokens.reverse().map((token) => ({
+        data.moloch.tokenBalances.reverse()
+        .filter((token) => token.guildBank)
+        .map((token) => ({
           label: token.symbol || token.tokenAddress,
-          value: token.tokenAddress,
+          value: token.token.tokenAddress,
+          decimals: token.decimals,
+          balance: token.tokenBalance,
         })),
       );
     }
   }, [data]);
+
+  const valToDecimal = (value, tokenAddress, tokens) => {
+    const tdata = tokens.find((token) => token.value === tokenAddress);
+    const decimals = +tdata.decimals;
+
+    return '' + value * 10 ** decimals;
+  };
 
   if (loading) return <Loading />;
   if (error) {
@@ -67,7 +78,7 @@ const TradeForm = (props) => {
         {gloading && <Loading />}
 
         <div>
-          {currentUser.username && (
+          {tokenData.length && currentUser.username ? (
             <Formik
               initialValues={{
                 title: '',
@@ -75,10 +86,11 @@ const TradeForm = (props) => {
                 link: '',
                 applicant: '',
                 tributeOffered: 0,
+                tributeToken: tokenData[0].value,
                 paymentRequested: 0,
-                paymentToken: 0,
+                paymentToken: tokenData[0].value,
                 sharesRequested: 0,
-                lootRequested: 0,
+                lootRequested:0
               }}
               validationSchema={ProposalSchema}
               onSubmit={async (values, { setSubmitting }) => {
@@ -94,26 +106,27 @@ const TradeForm = (props) => {
                   link: values.link,
                 });
 
-                try {
-                  //TODO: this needs to be for trades
-                  await daoService.mcDao.submitProposal(
-                    values.sharesRequested,
-                    values.lootRequested,
-                    ethToWei(values.tributeOffered.toString()), // this needs to convert on token decimal length not just wei
+                await daoService.mcDao.submitProposal(
+                  values.sharesRequested,
+                  values.lootRequested,
+                  valToDecimal(
+                    values.tributeOffered,
                     values.tributeToken,
-                    ethToWei(values.paymentRequested.toString()), // this needs to convert on token decimal length not just wei
+                    tokenData,
+                  ),
+                  values.tributeToken,
+                  valToDecimal(
+                    values.paymentRequested,
                     values.paymentToken,
-                    detailsObj,
-                  );
+                    tokenData,
+                  ),
+                  values.paymentToken,
+                  detailsObj,
+                );
 
-                  setSubmitting(false);
-                  setFormLoading(false);
-                  history.push(`/dao/${daoService.daoAddress}/success`);
-                } catch (err) {
-                  console.log('cancelled');
-                  setSubmitting(false);
-                  setFormLoading(false);
-                }
+                setSubmitting(false);
+                setFormLoading(false);
+                history.push(`/dao/${daoService.daoAddress}/success`);
               }}
             >
               {({ isSubmitting, ...props }) => (
@@ -158,20 +171,6 @@ const TradeForm = (props) => {
                     {(msg) => <div className="Error">{msg}</div>}
                   </ErrorMessage>
 
-                  <Field name="applicant">
-                    {({ field, form }) => (
-                      <div
-                        className={field.value ? 'Field HasValue' : 'Field '}
-                      >
-                        <label>Applicant Address</label>
-                        <input type="text" {...field} />
-                      </div>
-                    )}
-                  </Field>
-                  <ErrorMessage name="applicant">
-                    {(msg) => <div className="Error">{msg}</div>}
-                  </ErrorMessage>
-
                   <div className="DropdownInput">
                     <Field
                       name="tributeOffered"
@@ -186,10 +185,22 @@ const TradeForm = (props) => {
                       data={tokenData}
                     ></Field>
                   </div>
+                  <ErrorMessage name="tributeOffered">
+                    {(msg) => (
+                      <div className="Error">Tribute Offered: {msg}</div>
+                    )}
+                  </ErrorMessage>
+                  <ErrorMessage name="tributeToken">
+                    {(msg) => (
+                      <div className="Error">Tribute Token: {msg}</div>
+                    )}
+                  </ErrorMessage>
 
                   <ErrorMessage name="tributeOffered">
                     {(msg) => <div className="Error">{msg}</div>}
                   </ErrorMessage>
+
+                  <h2>↓</h2>
 
                   <div className="DropdownInput">
                     <Field
@@ -202,6 +213,7 @@ const TradeForm = (props) => {
                       component={TokenSelect}
                       label="Payment Token"
                       data={tokenData}
+                      token={props.values.paymentToken || ''} 
                     ></Field>
                   </div>
 
@@ -215,7 +227,9 @@ const TradeForm = (props) => {
                 </Form>
               )}
             </Formik>
-          )}
+          ) : (
+              <Loading />
+            )}
         </div>
       </div>
     </div>
