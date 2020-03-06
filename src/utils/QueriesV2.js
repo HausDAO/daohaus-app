@@ -67,6 +67,8 @@ const baseProposalFields = `
   timestamp
   memberAddress
   proposer
+  paymentToken
+  paymentRequested
   moloch {
     votingPeriodLength
     gracePeriodLength
@@ -86,6 +88,8 @@ const baseProposalFields = `
   }
   tributeTokenSymbol @client
   tributeTokenDecimals @client
+  paymentTokenSymbol @client
+  paymentTokenDecimals @client
   status @client
   gracePeriod @client
   votingEnds @client
