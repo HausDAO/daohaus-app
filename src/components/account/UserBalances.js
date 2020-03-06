@@ -110,7 +110,7 @@ const UserBalance = ({ toggle, client, match }) => {
       const memberAddress = await daoService.mcDao.memberAddressByDelegateKey(
         currentUser.attributes['custom:account_address'],
       );
-      
+
       setMemberAddressLoggedIn(
         currentUser &&
           currentUser.attributes['custom:account_address'] === memberAddress,
@@ -337,6 +337,12 @@ const UserBalance = ({ toggle, client, match }) => {
               <p>Shares</p>
               <DataP>{currentWallet.shares}</DataP>
             </BalanceItemDiv>
+            {+daoData.version === 2 && data ? (
+              <BalanceItemDiv>
+                <p>Loot</p>
+                <DataP>{currentWallet.loot}</DataP>
+              </BalanceItemDiv>
+            ) : null}
             <BalanceItemDiv>
               <p>ETH</p>
               <DataDiv>
@@ -350,7 +356,11 @@ const UserBalance = ({ toggle, client, match }) => {
               </DataDiv>
             </BalanceItemDiv>
             <BalanceItemDiv>
-              <p>{tokenSymbol}</p>
+              {+daoData.version === 2 && data ? (
+                <p>Deposit Token: {data.member.moloch.depositToken.symbol}</p>
+              ) : (
+                <p>{tokenSymbol}</p>
+              )}
               <DataDiv>
                 {currentWallet.tokenBalance}
                 {currentWallet.tokenBalance > currentWallet.allowance && (

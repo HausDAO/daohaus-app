@@ -141,6 +141,7 @@ export const GET_MEMBER_V2 = gql`
       id
       delegateKey
       shares
+      loot
       kicked
       tokenTribute
       memberAddress
@@ -160,6 +161,13 @@ export const GET_MEMBER_V2 = gql`
         processed
         didPass
         cancelled
+      }
+      moloch {
+        depositToken {
+          tokenAddress
+          symbol @client
+          decimals @client
+        }
       }
     }
   }
