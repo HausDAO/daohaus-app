@@ -41,12 +41,14 @@ const ProposalDetail = ({
     +daoData.version === 2
       ? { periodDuration: proposal.moloch.periodDuration }
       : client.cache.readQuery({
-        query: GET_METADATA,
-      });
+          query: GET_METADATA,
+        });
   const tribute =
     +daoData.version === 2 ? proposal.tributeOffered : proposal.tokenTribute;
   const id =
     +daoData.version === 2 ? proposal.proposalId : proposal.proposalIndex;
+
+  console.log('proposal', proposal);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -99,13 +101,12 @@ const ProposalDetail = ({
               <h5 className="Label">Applicant Address</h5>
               <p className="Data">{proposal.applicant}</p>
             </>
-          ) :
-            (
-              <>
-                <h5 className="Label">Token to Whitelist</h5>
-                <p className="Data">{proposal.tributeToken}</p>
-              </>
-            )}
+          ) : (
+            <>
+              <h5 className="Label">Token to Whitelist</h5>
+              <p className="Data">{proposal.tributeToken}</p>
+            </>
+          )}
           {proposal.cancelled && (
             <p style={{ color: 'red' }}>Proposal Cancelled</p>
           )}
@@ -117,11 +118,11 @@ const ProposalDetail = ({
           )}
         </>
       ) : (
-          <>
-            <h5 className="Label">Applicant Address</h5>
-            <p className="Data">{proposal.applicantAddress}</p>
-          </>
-        )}
+        <>
+          <h5 className="Label">Applicant Address</h5>
+          <p className="Data">{proposal.applicantAddress}</p>
+        </>
+      )}
       {!proposal.whitelist && (
         <>
           <div className="Offer">
@@ -143,33 +144,25 @@ const ProposalDetail = ({
                 </h2>
               </div>
             ) : (
-                <div className="Tribute">
-                  <h5>Tribute</h5>
-                  <h2 className="Data">
-                    {web3Service && (
-                      <ValueDisplay
-                        value={web3Service.fromWei(tribute)}
-                        symbolOverride={proposal.tributeTokenSymbol}
-                      />
-                    )}
-                  </h2>
-                </div>
-              )}
-
+              <div className="Tribute">
+                <h5>Tribute</h5>
+                <h2 className="Data">
+                  {web3Service && (
+                    <ValueDisplay
+                      value={web3Service.fromWei(tribute)}
+                      symbolOverride={proposal.tributeTokenSymbol}
+                    />
+                  )}
+                </h2>
+              </div>
+            )}
           </div>
 
           {+daoData.version === 2 ? (
             <div className="Offer">
               <div className="Shares">
                 <h5>Loot</h5>
-                <h2 className="Data">
-                  <ValueDisplay
-                    value={
-                      proposal.lootRequested / 10 ** proposal.tributeTokenDecimals
-                    }
-                    symbolOverride={proposal.tributeTokenSymbol}
-                  />
-                </h2>
+                <h2 className="Data">{proposal.lootRequested}</h2>
               </div>
             </div>
           ) : null}
@@ -178,9 +171,7 @@ const ProposalDetail = ({
 
       <p>{proposal.description}</p>
       {proposal.status === 'ReadyForProcessing' && currentUser && (
-        <button onClick={() => processProposal(proposal)}>
-          Process
-        </button>
+        <button onClick={() => processProposal(proposal)}>Process</button>
       )}
       <div>
         {detailData && detailData.description ? (
@@ -195,25 +186,25 @@ const ProposalDetail = ({
                 {detailData.description}
               </a>
             ) : (
-                <p>{detailData.description}</p>
-              )}
+              <p>{detailData.description}</p>
+            )}
           </div>
         ) : null}
         {detailData &&
+        detailData.link &&
+        ReactPlayer.canPlay(detailData.link) ? (
+          <div className="Video">
+            <ReactPlayer url={detailData.link} playing={false} loop={false} />
+          </div>
+        ) : detailData &&
           detailData.link &&
-          ReactPlayer.canPlay(detailData.link) ? (
-            <div className="Video">
-              <ReactPlayer url={detailData.link} playing={false} loop={false} />
-            </div>
-          ) : detailData &&
-            detailData.link &&
-            detailData.link.indexOf('http') > -1 ? (
-              <div className="Link">
-                <a href={detailData.link} rel="noopener noreferrer" target="_blank">
-                  Link
+          detailData.link.indexOf('http') > -1 ? (
+          <div className="Link">
+            <a href={detailData.link} rel="noopener noreferrer" target="_blank">
+              Link
             </a>
-              </div>
-            ) : null}
+          </div>
+        ) : null}
       </div>
       {+daoData.version !== 2 || proposal.sponsored ? (
         <VoteControl
@@ -222,12 +213,12 @@ const ProposalDetail = ({
           canVote={canVote}
         />
       ) : (
-          <>
-            {+daoData.version === 2 && currentUser ? (
-              <ProposalActions proposal={proposal} />
-            ) : null}
-          </>
-        )}
+        <>
+          {+daoData.version === 2 && currentUser ? (
+            <ProposalActions proposal={proposal} />
+          ) : null}
+        </>
+      )}
     </div>
   );
 };
