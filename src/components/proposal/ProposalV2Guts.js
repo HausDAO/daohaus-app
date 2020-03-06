@@ -1,11 +1,8 @@
 import React from 'react';
 
 import ValueDisplay from '../shared/ValueDisplay';
-import Web3Service from '../../utils/Web3Service';
-import config from '../../config';
 import ProposalKickedMember from './ProposalKickedMember';
-
-const web3Service = new Web3Service();
+import config from '../../config';
 
 const ProposalGutsV2 = ({ proposal }) => {
   return (
@@ -21,9 +18,6 @@ const ProposalGutsV2 = ({ proposal }) => {
 
       {proposal.newMember || proposal.proposalType === 'Funding Proposal' ? (
         <>
-          {/* <h5 className="Label">Applicant</h5>
-          <p className="Data">{proposal.applicant}</p> */}
-
           {proposal.proposalType === 'Funding Proposal' ? (
             <>
               <h5 className="Label">Proposed by</h5>
@@ -42,15 +36,13 @@ const ProposalGutsV2 = ({ proposal }) => {
             <div className="Tribute">
               <h5>Tribute</h5>
               <h2 className="Data">
-                {web3Service && (
-                  <ValueDisplay
-                    value={
-                      proposal.tributeOffered /
-                      10 ** proposal.tributeTokenDecimals
-                    }
-                    symbolOverride={proposal.tributeTokenSymbol}
-                  />
-                )}
+                <ValueDisplay
+                  value={
+                    proposal.tributeOffered /
+                    10 ** proposal.tributeTokenDecimals
+                  }
+                  symbolOverride={proposal.tributeTokenSymbol}
+                />
               </h2>
             </div>
           ) : null}
@@ -107,10 +99,7 @@ const ProposalGutsV2 = ({ proposal }) => {
 
       {proposal.trade ? (
         <>
-          {/* <h5 className="Label">Applicant</h5>
-          <p className="Data">{proposal.applicant}</p> */}
-
-          <h5 className="Label">Member to kick</h5>
+          <h5 className="Label">Applicant</h5>
           <p className="Data">{proposal.applicant}</p>
 
           <h5 className="Label">Proposed by</h5>
@@ -120,15 +109,13 @@ const ProposalGutsV2 = ({ proposal }) => {
             <div className="Shares">
               <h5>Giving</h5>
               <h2 className="Data">
-                {web3Service && (
-                  <ValueDisplay
-                    value={
-                      proposal.tributeOffered /
-                      10 ** proposal.tributeTokenDecimals
-                    }
-                    symbolOverride={proposal.tributeTokenSymbol}
-                  />
-                )}
+                <ValueDisplay
+                  value={
+                    proposal.tributeOffered /
+                    10 ** proposal.tributeTokenDecimals
+                  }
+                  symbolOverride={proposal.tributeTokenSymbol}
+                />
               </h2>
             </div>
           </div>
@@ -137,16 +124,13 @@ const ProposalGutsV2 = ({ proposal }) => {
             <div className="Shares">
               <h5>Requesting</h5>
               <h2 className="Data">
-                {' '}
-                {web3Service && (
-                  <ValueDisplay
-                    value={
-                      proposal.paymentRequested /
-                      10 ** proposal.tributeTokenDecimals
-                    }
-                    symbolOverride={proposal.tributeTokenSymbol}
-                  />
-                )}
+                <ValueDisplay
+                  value={
+                    proposal.paymentRequested /
+                    10 ** proposal.tributeTokenDecimals
+                  }
+                  symbolOverride={proposal.tributeTokenSymbol}
+                />
               </h2>
             </div>
           </div>
