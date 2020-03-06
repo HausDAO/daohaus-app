@@ -12,25 +12,26 @@ import { GET_METADATA } from '../../utils/Queries';
 
 import { DaoServiceContext, DaoDataContext } from '../../contexts/Store';
 import ValueDisplay from '../shared/ValueDisplay';
-import {
-  DataP,
-  DataH2,
-  ProposalAndMemberCardDiv,
-  OfferDiv,
-} from '../../App.styles';
+
+import { appDark, appLight, phone } from '../../variables.styles';
+import { DataP, DataH2, OfferDiv } from '../../App.styles';
 
 import StackedVote from './StackedVote';
-import './ProposalCard.scss';
-import { getAppLight, getAppDark } from '../../variables.styles';
+// import './ProposalCard.scss';
 
-const ProposalCardDiv = styled(ProposalAndMemberCardDiv)`
-  background-color: ${(props) => getAppLight(props.theme)};
-  width: 320px;
-  border: 2px solid ${(props) => getAppDark(props.theme)};
-  border-radius: 10px;
-  margin-bottom: 25px;
+const ProposalCardDiv = styled.div`
   margin-top: 25px;
-  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+  border-top: 2px solid ${appDark};
+  border-bottom: 2px solid ${appDark};
+  background-color: ${appLight};
+  padding: 25px;
+  @media (min-width: ${phone}) {
+    width: 320px;
+    border: 2px solid ${appDark};
+    border-radius: 10px;
+    margin-bottom: 25px;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+  }
 `;
 
 const TimerDiv = styled.div`
@@ -87,22 +88,34 @@ const ProposalCard = ({ proposal, client }) => {
         </svg>
         <DataP>{countDown}</DataP>
       </TimerDiv>
-      {proposal.newMember ? <h5>New Member Proposal</h5> : null}
+      {proposal.proposalType ? <h5>{proposal.proposalType}</h5> : null}
       <h3>{title}</h3>
       <OfferDivProposalCard>
         <div>
           <h5>Shares</h5>
           <DataH2>{proposal.sharesRequested}</DataH2>
         </div>
-        <div>
-          <h5>Tribute</h5>
-          <DataH2>
-            <ValueDisplay
-              value={Web3.utils.fromWei(tribute)}
-              symbolOverride={proposal.tributeTokenSymbol}
-            />
-          </DataH2>
-        </div>
+        {+daoData.version === 2 ? (
+          <div>
+            <h5>Tribute</h5>
+            <DataH2>
+              <ValueDisplay
+                value={tribute / 10 ** proposal.tributeTokenDecimals}
+                symbolOverride={proposal.tributeTokenSymbol}
+              />
+            </DataH2>
+          </div>
+        ) : (
+          <div>
+            <h5>Tribute</h5>
+            <DataH2>
+              <ValueDisplay
+                value={Web3.utils.fromWei(tribute)}
+                symbolOverride={proposal.tributeTokenSymbol}
+              />
+            </DataH2>
+          </div>
+        )}
       </OfferDivProposalCard>
       <CardVoteDiv>
         {daoData.version !== 2 ? (

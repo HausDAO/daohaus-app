@@ -39,17 +39,20 @@ export const getTertiaryHover = (theme) => darken(0.1, theme.tertiary);
 export const getDangerHover = (theme) => darken(0.1, theme.danger);
 
 // Color Palette
-// const appBackground = `#F8F8FC`;
-// const appLight = lighten(0.1, appBackground);
-// const appDark = darken(0.1, appBackground);
-// const primary = `rgba(203,46,206,1)`;
-// const secondary = `rgba(47,233,167,1)`;
-// const tertiary = `rgba(239,73,123,1)`;
-// const primaryHover = darken(0.1, primary);
-// const secondaryHover = darken(0.1, secondary);
-// const tertiaryHover = darken(0.1, tertiary);
-// const danger = `rgba(239,73,95,1)`;
-// const dangerHover = darken(0.1, danger);
+export const appBackground = `#F8F8FC`;
+export const appLight = lighten(0.1, appBackground);
+export const appDark = darken(0.1, appBackground);
+export const primary = `rgba(203,46,206,1)`;
+export const secondary = `rgba(47,233,167,1)`;
+export const tertiary = `rgba(239,73,123,1)`;
+export const primaryHover = darken(0.1, primary);
+export const secondaryHover = darken(0.1, secondary);
+export const tertiaryHover = darken(0.1, tertiary);
+export const danger = `rgba(239,73,95,1)`;
+export const dangerHover = darken(0.1, danger);
+export const success = `rgba(77,204,44,1)`;
+export const bright = `rgba(189,134,254,1)`;
+export const subdued = `#ccc`;
 
 // Media Queries
 export const grid = '1200px';
@@ -79,4 +82,26 @@ export const FlashDiv = styled.div`
     font-weight: 900;
   }
   z-index: 99;
+`;
+
+export const ButtonPrimary = styled.button`
+  color: ${primary};
+  &:hover {
+    color: ${primaryHover};
+  }
+`;
+export const ButtonSecondary = styled.button`
+  color: ${secondary};
+  &:hover {
+    color: ${secondaryHover};
+  }
+  &:disabled {
+    color: grey;
+  }
+`;
+export const ButtonTertiary = styled.button`
+  color: ${tertiary};
+  &:hover {
+    color: ${tertiaryHover};
+  }
 `;

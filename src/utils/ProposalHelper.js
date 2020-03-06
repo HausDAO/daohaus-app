@@ -232,3 +232,17 @@ export const linkMaker = (proposal) => {
   }
   return null;
 };
+
+export const determineProposalType = (proposal) => {
+  if (proposal.newMember) {
+    return 'New Member Proposal';
+  } else if (proposal.whitelist) {
+    return 'Whitelist Token Proposal';
+  } else if (proposal.guildkick) {
+    return 'Guildkick Proposal';
+  } else if (proposal.trade) {
+    return 'Trade Proposal';
+  } else {
+    return 'Funding Proposal';
+  }
+};

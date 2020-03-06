@@ -13,6 +13,8 @@ import { MemberDetailDiv } from '../../components/member/Member.styles';
 
 const Member = (props) => {
   const id = props.match.params.id;
+  console.log('id', id);
+  
   const [daoData] = useContext(DaoDataContext);
 
   const options = { variables: { id } };
@@ -22,6 +24,7 @@ const Member = (props) => {
   }
 
   const { loading, error, data } = useQuery(query, options);
+
 
   if (loading) return <Loading />;
   if (error) return <ErrorMessage message={error} />;

@@ -145,11 +145,6 @@ export const ButtonBackDiv = styled(ButtonDiv)`
   }
 `;
 
-export const ProposalAndMemberCardDiv = styled.div`
-  padding: 25px;
-  border-top: 2px solid #eee;
-`;
-
 export const DataP = styled.p`
   font-family: ${(props) => props.theme.dataFont};
   font-weight: 400;
@@ -229,7 +224,7 @@ export const BackdropOpenDiv = styled.div`
   height: 100%;
   z-index: 2;
   background-color: ${(props) =>
-    props.blank ? 'rgba(0, 0, 0, 0)' : 'rgba(0, 0, 0, 0.85)'};
+    props.blank ? 'rgba(0, 0, 0, 0)' : 'rgba(0, 0, 0, 0)'};
   pointer-events: cursor;
 `;
 

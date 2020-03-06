@@ -4,6 +4,17 @@ import styled from 'styled-components';
 import { DaoServiceContext, DaoDataContext } from '../../contexts/Store';
 import { getAppDark } from '../../variables.styles';
 
+const StackedVoteDiv = styled.div`
+  position: ${(props) =>
+    props.page === 'ProposalCard' ? 'relative' : 'absolute'};
+  left: ${(props) => (props.page === 'ProposalCard' ? '0' : '50%')};
+  transform: ${(props) =>
+    props.page === 'ProposalCard' ? 'translateX(0%)' : 'translateX(-50%)'};
+  bottom: ${(props) => (props.page === 'ProposalCard' ? '0px' : '47px')};
+  width: ${(props) =>
+    props.page === 'ProposalCard' ? '100%' : 'calc(100% - 150px)'};
+`;
+
 const FullBarDiv = styled.div`
   width: ${(props) =>
     props.page === 'ProposalCard' ? 'calc(100%)!important' : '100%'};
@@ -31,7 +42,6 @@ const YesLabelSpan = styled.span`
     props.page === 'ProposalCard' ? 'right' : 'center'};
   background-color: transparent;
   font-weight: 900;
-  width: 65px;
   color: ${(props) => props.theme.primary};
 `;
 
@@ -48,7 +58,6 @@ const NoLabelSpan = styled.span`
     props.page === 'ProposalCard' ? 'right' : 'center'};
   background-color: transparent;
   font-weight: 900;
-  width: 65px;
   color: ${(props) => props.theme.tertiary};
 `;
 
@@ -126,16 +135,18 @@ const StackedVote = ({ id, currentYesVote, currentNoVote, page }) => {
   }, [daoService, id, currentYesVote, currentNoVote]);
 
   return (
-    <FullBarDiv>
-      <LabelsDiv>
-        <YesLabelSpan page={page}>{yesVoteShares}</YesLabelSpan>
-        <NoLabelSpan page={page}>{noVoteShares}</NoLabelSpan>
-      </LabelsDiv>
-      <BaseBarDiv />
-      <YesBarDiv percentageShares={percentageSharesNo} />
-      <NoBarDiv percentageShares={percentageSharesYes} />
-      <QuorumBarDiv />
-    </FullBarDiv>
+    <StackedVoteDiv page={page}>
+      <FullBarDiv page={page}>
+        <LabelsDiv page={page}>
+          <YesLabelSpan page={page}>{yesVoteShares}</YesLabelSpan>
+          <NoLabelSpan page={page}>{noVoteShares}</NoLabelSpan>
+        </LabelsDiv>
+        <BaseBarDiv />
+        <YesBarDiv percentageShares={percentageSharesYes} />
+        <NoBarDiv percentageShares={percentageSharesNo} />
+        <QuorumBarDiv />
+      </FullBarDiv>
+    </StackedVoteDiv>
   );
 };
 

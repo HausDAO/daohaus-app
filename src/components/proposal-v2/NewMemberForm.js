@@ -1,6 +1,5 @@
 import React, { useContext, useState, useEffect } from 'react';
 import { withRouter } from 'react-router-dom';
-import { ethToWei } from '@netgum/utils'; // returns BN
 
 import { Formik, Form, Field, ErrorMessage } from 'formik';
 
@@ -30,11 +29,10 @@ const NewMemberForm = (props) => {
   const [daoData] = useContext(DaoDataContext);
   const [currentUser] = useContext(CurrentUserContext);
 
-
   const options = {
     variables: { contractAddr: daoData.contractAddress },
     client: daoData.altClient,
-    fetchPolicy: 'no-cache'
+    fetchPolicy: 'no-cache',
   };
   const query = GET_TOKENS_V2;
 
@@ -43,12 +41,11 @@ const NewMemberForm = (props) => {
   // get whitelist
   useEffect(() => {
     if (data && data.moloch) {
-      console.log('set');
-
       setTokenData(
         data.moloch.approvedTokens.reverse().map((token) => ({
           label: token.symbol || token.tokenAddress,
           value: token.tokenAddress,
+          decimals: token.decimals,
         })),
       );
     }
@@ -58,6 +55,12 @@ const NewMemberForm = (props) => {
   if (error) {
     console.log('error', error);
   }
+
+  const valToDecimal = (value, tokenAddress, tokens) => {
+    const tdata = tokens.find((token) => token.value === tokenAddress);
+    const decimals = +tdata.decimals;
+    return '' + value * 10 ** decimals;
+  };
 
   return (
     <div>
@@ -94,10 +97,14 @@ const NewMemberForm = (props) => {
                 });
 
                 try {
-                  const submitRes = await daoService.mcDao.submitProposal(
+                  await daoService.mcDao.submitProposal(
                     values.sharesRequested,
                     values.lootRequested,
-                    ethToWei(values.tributeOffered.toString()), // this needs to convert on token decimal length not just wei
+                    valToDecimal(
+                      values.tributeOffered,
+                      values.tributeToken,
+                      tokenData,
+                    ),
                     values.tributeToken,
                     0,
                     tokenData[0].value,
@@ -192,7 +199,7 @@ const NewMemberForm = (props) => {
                     {(msg) => <div className="Error">Tribute Token: {msg}</div>}
                   </ErrorMessage>
 
-                  <Expandable label="LOOT">
+                  <Expandable label="Loot">
                     <Field name="lootRequested">
                       {({ field, form }) => (
                         <div

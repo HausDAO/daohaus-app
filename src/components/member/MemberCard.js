@@ -9,8 +9,8 @@ import { truncateAddr } from '../../utils/Helpers';
 import ValueDisplay from '../shared/ValueDisplay';
 import { DaoServiceContext, DaoDataContext } from '../../contexts/Store';
 
-import { phone, getAppLight, getAppDark } from '../../variables.styles';
-import { DataP, DataH2, ProposalAndMemberCardDiv } from '../../App.styles';
+import { phone, getAppDark, getAppLight } from '../../variables.styles';
+import { DataP, DataH2 } from '../../App.styles';
 import {
   MemberCardIdentityDiv,
   MemberCardImage,
@@ -18,12 +18,14 @@ import {
   OfferDivMemberCard,
 } from './Member.styles';
 
-const MemberCardDiv = styled(ProposalAndMemberCardDiv)`
+const MemberCardDiv = styled.div`
   background-color: ${(props) => getAppLight(props.theme)};
   color: black;
   margin-top: 25px;
-  border: 2px solid ${(props) => getAppDark(props.theme)};
+  border-top: 2px solid ${(props) => getAppDark(props.theme)};
+  border-bottom: 2px solid ${(props) => getAppDark(props.theme)};
   transition: all 0.15s linear;
+  padding: 25px;
 
   @media (min-width: ${phone}) {
     width: 320px;

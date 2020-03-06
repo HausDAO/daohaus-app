@@ -94,7 +94,6 @@ const Store = ({ children, daoParam }) => {
       let dao;
       try {
         console.log(`Initializing user type: ${loginType || 'read-only'}`);
-        console.log(loginType);
 
         switch (loginType) {
           case USER_TYPE.WEB3: {
@@ -119,7 +118,9 @@ const Store = ({ children, daoParam }) => {
             break;
           }
           case USER_TYPE.SDK:
+            // TODO: this makes username the cognito username. in web3 login it is the account addr. is this a problem?
             user = await signInWithSdk();
+            
             dao = await DaoService.instantiateWithSDK(
               user.attributes['custom:account_address'],
               user.sdk,
@@ -145,8 +146,6 @@ const Store = ({ children, daoParam }) => {
 
         dao = await DaoService.instantiateWithReadOnly(daoParam, version);
       } finally {
-        console.log('finally', dao);
-
         setDaoService(dao);
       }
     };
@@ -190,6 +189,9 @@ const Store = ({ children, daoParam }) => {
     // shares will be 0 if not a member, could also be 0 if rage quit
     // TODO: check membersheip a different way
     const shares = parseInt(member.shares);
+    const loot = parseInt(member.loot);
+    const jailed = member.jailed;
+    const highestIndexYesVote = member.highestIndexYesVote;    
 
     // use attached sdk
     const sdk = currentUser.sdk;
@@ -257,6 +259,9 @@ const Store = ({ children, daoParam }) => {
         allowance,
         eth,
         state,
+        loot,
+        highestIndexYesVote,
+        jailed,
         shares,
         accountDevices,
         _txList,

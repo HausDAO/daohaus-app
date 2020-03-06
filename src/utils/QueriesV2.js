@@ -71,6 +71,10 @@ const baseProposalFields = `
     votingPeriodLength
     gracePeriodLength
     periodDuration
+    proposalDeposit
+    depositToken {
+      tokenAddress
+    }
   }
   votes {
     id
@@ -81,11 +85,13 @@ const baseProposalFields = `
     }
   }
   tributeTokenSymbol @client
+  tributeTokenDecimals @client
   status @client
   gracePeriod @client
   votingEnds @client
   votingStarts @client
   readyForProcessing @client
+  proposalType @client
 `;
 
 export const GET_PROPOSALS_V2 = gql`
@@ -113,7 +119,7 @@ export const GET_PROPOSAL_V2 = gql`
 export const GET_MEMBERS_V2 = gql`
   query members($contractAddr: String!, $skip: Int) {
     members(
-      where: { molochAddress: $contractAddr }
+      where: { molochAddress: $contractAddr, exists: true }
       orderBy: shares
       first: 100
       skip: $skip
@@ -139,6 +145,14 @@ export const GET_MEMBER_V2 = gql`
       tokenTribute
       memberAddress
       didRagequit
+      tokenBalances {
+        token {
+          tokenAddress
+          symbol @client
+          decimals @client
+        }
+        tokenBalance
+      }
       submissions {
         proposalIndex
         yesVotes
@@ -158,6 +172,7 @@ export const GET_TOKENS_V2 = gql`
         tokenAddress
         ticker
         symbol @client
+        decimals @client
       }
     }
   }

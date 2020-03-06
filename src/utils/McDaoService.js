@@ -575,9 +575,18 @@ export class Web3McDaoServiceV2 extends Web3McDaoService {
   }
 
   async submitWhiteListProposal(address, details) {
-    const txReceipt = await this.daoContract.methods
-      .submitWhiteListProposal(address, details)
+    console.log(address, details);
+    let txReceipt = ''
+    
+    try{
+      txReceipt = await this.daoContract.methods
+      .submitWhitelistProposal(address, details)
       .send({ from: this.accountAddr });
+    } catch(err){
+      console.log(err);
+      
+    }
+
 
     const queueLength = await this.daoContract.methods
       .proposalCount()

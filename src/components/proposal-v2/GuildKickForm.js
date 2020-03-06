@@ -49,7 +49,7 @@ const GuildKickForm = (props) => {
                                 });
 
                                 try {
-                                    const submitRes = await daoService.mcDao.submitGuildKickProposal(
+                                    await daoService.mcDao.submitGuildKickProposal(
                                         values.applicant,
                                         detailsObj,
                                     );

@@ -6,6 +6,7 @@ import {
   inVotingPeriod,
   inQueue,
   passedVotingAndGrace,
+  determineProposalType,
 } from './ProposalHelper';
 import { GET_METADATA_V2 } from './QueriesV2';
 import { TokenService } from './TokenService';
@@ -100,6 +101,14 @@ export const resolversV2 = {
       const symbol = await tokenService.getSymbol();
       return symbol;
     },
+    tributeTokenDecimals: async (proposal, _args, { cache }) => {
+      const tokenService = new TokenService(_web3, proposal.tributeToken);
+      const decimals = await tokenService.getDecimals();
+      return +decimals;
+    },
+    proposalType: (proposal, _args, { cache }) => {
+      return determineProposalType(proposal);
+    },
   },
   TokenBalance: {
     symbol: async (tokenBalance, _args, { cache }) => {
@@ -109,10 +118,13 @@ export const resolversV2 = {
           tokenBalance.token.tokenAddress,
         );
         const symbol = await tokenService.getSymbol();
+
         return symbol;
       } else {
         return null;
       }
+
+      // return null;
     },
     decimals: async (tokenBalance, _args, { cache }) => {
       if (tokenBalance.guildBank) {
@@ -122,7 +134,8 @@ export const resolversV2 = {
         );
 
         const decimals = await tokenService.getDecimals();
-        return decimals;
+
+        return +decimals;
       } else {
         return null;
       }
@@ -133,6 +146,13 @@ export const resolversV2 = {
       const tokenService = new TokenService(_web3, approvedToken.tokenAddress);
       const symbol = await tokenService.getSymbol();
       return symbol;
+    },
+    decimals: async (approvedToken, _args, { cache }) => {
+      const tokenService = new TokenService(_web3, approvedToken.tokenAddress);
+
+      const decimals = await tokenService.getDecimals();
+
+      return +decimals;
     },
   },
 };

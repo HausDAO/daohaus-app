@@ -13,17 +13,11 @@ const ProposalEngine = () => {
       <h1 className="Pad">Submit Proposal</h1>
       <p>Select Proposal Type</p>
       <Link to={`/dao/${daoData.contractAddress}/proposal-member`}>Member</Link>
+      <Link to={`/dao/${daoData.contractAddress}/proposal-funding`}>Funding</Link>
       <Link
-        className="disabled-link"
-        to={`/dao/${daoData.contractAddress}/proposal-funding`}
-      >
-        Funding (coming soon)
-      </Link>
-      <Link
-        className="disabled-link"
         to={`/dao/${daoData.contractAddress}/proposal-whitelist`}
       >
-        Whitelist Token (coming soon)
+        Whitelist Token
       </Link>
       <Link
         className="disabled-link"
