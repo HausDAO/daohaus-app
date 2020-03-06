@@ -218,6 +218,7 @@ const UserBalance = ({ toggle, client, match }) => {
             }
           >
             {currentWallet.state || 'Connecting'}
+            {currentWallet.jailed && 'In Jail. proceed to ragequit.'}
           </StatusP>
           <CopyToClipboard
             onCopy={onCopy}
@@ -329,6 +330,7 @@ const UserBalance = ({ toggle, client, match }) => {
             Settings
           </SelectedElementButton>
         )}
+
       </SwitchHeaderDiv>
       <WalletContents>
         {headerSwitch === 'Balances' && (
