@@ -12,7 +12,7 @@ import {
 import Loading from '../shared/Loading';
 
 import { withApollo } from 'react-apollo';
-import { ProposalSchema } from './Validation';
+import { WhiteListGuildKickSchema } from './Validation';
 import shortid from 'shortid';
 
 const GuildKickForm = (props) => {
@@ -39,7 +39,7 @@ const GuildKickForm = (props) => {
                 link: '',
                 applicant: '',
               }}
-              validationSchema={ProposalSchema}
+              validationSchema={WhiteListGuildKickSchema}
               onSubmit={async (values, { setSubmitting }) => {
                 console.log(values);
                 const uuid = shortid.generate();

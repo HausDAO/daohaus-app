@@ -12,7 +12,7 @@ import {
 import Loading from '../shared/Loading';
 
 import { withApollo } from 'react-apollo';
-import { WhiteListSchema } from './Validation';
+import { WhiteListGuildKickSchema } from './Validation';
 import shortid from 'shortid';
 
 const WhitelistForm = (props) => {
@@ -41,7 +41,7 @@ const WhitelistForm = (props) => {
                 link: '',
                 applicant: '',
               }}
-              validationSchema={WhiteListSchema}
+              validationSchema={WhiteListGuildKickSchema}
               onSubmit={async (values, { setSubmitting }) => {
                 console.log(values);
                 setFormLoading(true);
