@@ -235,7 +235,7 @@ export const linkMaker = (proposal) => {
 
 export const determineProposalType = (proposal) => {
   if (proposal.newMember) {
-    return 'New Member Proposal';
+    return 'Member Proposal';
   } else if (proposal.whitelist) {
     return 'Whitelist Token Proposal';
   } else if (proposal.guildkick) {

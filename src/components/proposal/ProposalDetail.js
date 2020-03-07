@@ -22,6 +22,7 @@ import ValueDisplay from '../shared/ValueDisplay';
 import './ProposalDetail.scss';
 import { withRouter } from 'react-router-dom';
 import ProposalActions from './ProposalActions';
+import ProposalV2Guts from './ProposalV2Guts';
 
 const web3Service = new Web3Service();
 
@@ -43,12 +44,11 @@ const ProposalDetail = ({
       : client.cache.readQuery({
           query: GET_METADATA,
         });
-  const tribute =
-    +daoData.version === 2 ? proposal.tributeOffered : proposal.tokenTribute;
+
   const id =
     +daoData.version === 2 ? proposal.proposalId : proposal.proposalIndex;
-
-  console.log('proposal', proposal);
+  const tribute =
+    +daoData.version === 2 ? proposal.tributeOffered : proposal.tokenTribute;
 
   useEffect(() => {
     const fetchData = async () => {
@@ -88,91 +88,42 @@ const ProposalDetail = ({
         </svg>
         <p className="Data">{countDown}</p>
       </div>
-      {/* {proposal.newMember ? <h5>New Member Proposal</h5> : null} */}
       {proposal.proposalType ? <h5>{proposal.proposalType}</h5> : null}
 
       <h2>{title}</h2>
       {+daoData.version === 2 ? (
-        <>
-          <h5 className="Label">Proposer Address</h5>
-          <p className="Data">{proposal.proposer}</p>
-          {!proposal.whitelist ? (
-            <>
-              <h5 className="Label">Applicant Address</h5>
-              <p className="Data">{proposal.applicant}</p>
-            </>
-          ) : (
-            <>
-              <h5 className="Label">Token to Whitelist</h5>
-              <p className="Data">{proposal.tributeToken}</p>
-            </>
-          )}
-          {proposal.cancelled && (
-            <p style={{ color: 'red' }}>Proposal Cancelled</p>
-          )}
-          {proposal.sponsored && (
-            <>
-              <h5 className="Label">Proposal Sponsored By</h5>
-              <p className="Data">{proposal.sponsor}</p>
-            </>
-          )}
-        </>
+        <ProposalV2Guts proposal={proposal} />
       ) : (
         <>
           <h5 className="Label">Applicant Address</h5>
           <p className="Data">{proposal.applicantAddress}</p>
-        </>
-      )}
-      {!proposal.whitelist && (
-        <>
+
           <div className="Offer">
             <div className="Shares">
               <h5>Shares</h5>
               <h2 className="Data">{proposal.sharesRequested}</h2>
             </div>
-
-            {+daoData.version === 2 ? (
-              <div className="Tribute">
-                <h5>Tribute</h5>
-                <h2 className="Data">
-                  {web3Service && (
-                    <ValueDisplay
-                      value={tribute / 10 ** proposal.tributeTokenDecimals}
-                      symbolOverride={proposal.tributeTokenSymbol}
-                    />
-                  )}
-                </h2>
-              </div>
-            ) : (
-              <div className="Tribute">
-                <h5>Tribute</h5>
-                <h2 className="Data">
-                  {web3Service && (
-                    <ValueDisplay
-                      value={web3Service.fromWei(tribute)}
-                      symbolOverride={proposal.tributeTokenSymbol}
-                    />
-                  )}
-                </h2>
-              </div>
-            )}
-          </div>
-
-          {+daoData.version === 2 ? (
-            <div className="Offer">
-              <div className="Shares">
-                <h5>Loot</h5>
-                <h2 className="Data">{proposal.lootRequested}</h2>
-              </div>
+            <div className="Tribute">
+              <h5>Tribute</h5>
+              <h2 className="Data">
+                {web3Service && (
+                  <ValueDisplay
+                    value={web3Service.fromWei(tribute)}
+                    symbolOverride={proposal.tributeTokenSymbol}
+                  />
+                )}
+              </h2>
             </div>
-          ) : null}
+          </div>
         </>
       )}
 
       <p>{proposal.description}</p>
+
       {proposal.status === 'ReadyForProcessing' && currentUser && (
         <button onClick={() => processProposal(proposal)}>Process</button>
       )}
+
       <div>
         {detailData && detailData.description ? (
           <div>
