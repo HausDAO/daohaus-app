@@ -60,7 +60,7 @@ const ProposalForm = (props) => {
 
               return errors;
             }}
-            onSubmit={async (values, { setSubmitting }) =>  {
+            onSubmit={async (values, { setSubmitting }) => {
               const uuid = shortid.generate();
               setLoading(true);
               try {
@@ -75,9 +75,6 @@ const ProposalForm = (props) => {
                     link: values.link,
                   }),
                 );
-                
-
-                history.push(`/dao/${daoService.daoAddress}/proposals`);
               } catch (e) {
                 console.error(`Error processing proposal: ${e.toString()}`);
               } finally {
@@ -85,6 +82,7 @@ const ProposalForm = (props) => {
 
                 setSubmitting(false);
                 setLoading(false);
+                history.push(`/dao/${daoService.daoAddress}/success`);
               }
             }}
           >
@@ -127,7 +125,7 @@ const ProposalForm = (props) => {
                 <Field name="applicant">
                   {({ field, form }) => (
                     <div className={field.value ? 'Field HasValue' : 'Field '}>
-                      <label>Applicant</label>
+                      <label>Applicant Ethereum Address</label>
                       <input type="text" {...field} />
                     </div>
                   )}

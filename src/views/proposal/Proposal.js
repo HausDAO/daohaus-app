@@ -50,12 +50,10 @@ const Proposal = (props) => {
   const processProposal = async (proposal) => {
     setTxLoading(true);
     try {
-      if(proposal.whitelist) {        
+      if (proposal.whitelist) {
         await daoService.mcDao.processWhitelistProposal(proposal.proposalIndex);
-
       } else if (proposal.guildkick) {
         await daoService.mcDao.processGuildKickProposal(proposal.proposalIndex);
-
       } else {
         await daoService.mcDao.processProposal(proposal.proposalIndex);
       }
@@ -63,7 +61,9 @@ const Proposal = (props) => {
       console.error(`Error processing proposal: ${e.toString()}`);
     } finally {
       setTxLoading(false);
-      props.history.push(`/dao/${daoService.daoAddress}/proposals`);
+      props.history.push(
+        `/dao/${daoService.daoAddress}/success?action=processed`,
+      );
     }
   };
 

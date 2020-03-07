@@ -23,7 +23,7 @@ const ProposalActions = ({ client, proposal, history }) => {
       console.log('user rejected or transaction failed');
     } finally {
       setLoading(false);
-      history.push(`/dao/${daoService.daoAddress}/proposals`);
+      history.push(`/dao/${daoService.daoAddress}/success?action=cancelled`);
     }
   };
 
@@ -36,7 +36,7 @@ const ProposalActions = ({ client, proposal, history }) => {
       console.log('user rejected or transaction failed');
     } finally {
       setLoading(false);
-      history.push(`/dao/${daoService.daoAddress}/proposals`);
+      history.push(`/dao/${daoService.daoAddress}/success?action=sponsored`);
     }
   };
 

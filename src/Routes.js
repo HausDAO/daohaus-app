@@ -20,6 +20,7 @@ import FundingForm from './components/proposal-v2/FundingForm';
 import WhitelistForm from './components/proposal-v2/WhitelistForm';
 import GuildKickForm from './components/proposal-v2/GuildKickForm';
 import TradeForm from './components/proposal-v2/TradeForm';
+import Success from './views/success/Success';
 
 const Routes = (props) => {
   const { isValid } = props;
@@ -73,7 +74,7 @@ const Routes = (props) => {
             exact
             component={WhitelistForm}
           />
-           <Route
+          <Route
             path="/dao/:dao(\b0x[0-9a-f]{10,40}\b)/proposal-guildkick"
             exact
             component={GuildKickForm}
@@ -82,6 +83,11 @@ const Routes = (props) => {
             path="/dao/:dao(\b0x[0-9a-f]{10,40}\b)/proposal-trade"
             exact
             component={TradeForm}
+          />
+          <Route
+            path="/dao/:dao(\b0x[0-9a-f]{10,40}\b)/success"
+            exact
+            component={Success}
           />
           <Route
             path="/dao/:dao(\b0x[0-9a-f]{10,40}\b)/members"
