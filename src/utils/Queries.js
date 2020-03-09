@@ -79,6 +79,28 @@ export const GET_PROPOSAL = gql`
   }
 `;
 
+// removed member.shares because error. TODO: is this needed
+// votes {
+//   memberAddress
+//   uintVote
+//   member {
+//     shares
+//   }
+// }
+export const GET_ACTIVE_PROPOSALS_QUERY = gql`
+  query proposals($skip: Int) {
+    proposals(
+      orderBy: proposalIndex, 
+      orderDirection: desc, 
+      first: 100, 
+      skip: $skip, 
+      where: { processed: false }
+    ) {
+      ${baseProposalFields}
+    }
+  }
+`;
+
 export const GET_MEMBERS = gql`
   query members($contractAddr: String!, $skip: Int) {
     members(
