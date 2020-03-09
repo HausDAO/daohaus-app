@@ -4,7 +4,8 @@ import ValueDisplay from '../shared/ValueDisplay';
 import ProposalKickedMember from './ProposalKickedMember';
 import config from '../../config';
 
-const ProposalGutsV2 = ({ proposal }) => {
+const ProposalGutsV2 = ({ proposal, daoData }) => {
+  const memberUrlV2 = `/dao/${daoData.contractAddress}/member/${daoData.contractAddress}-member-${proposal.sponsor}`
   return (
     <div className="ProposalGuts">
       {proposal.cancelled && <p style={{ color: 'red' }}>Proposal Cancelled</p>}
@@ -12,7 +13,7 @@ const ProposalGutsV2 = ({ proposal }) => {
       {proposal.sponsored ? (
         <>
           <h5 className="Label">Sponsored By</h5>
-          <p className="Data">{proposal.sponsor}</p>
+          <p className="Data"><a href={memberUrlV2}>{proposal.sponsor}</a></p>
         </>
       ) : null}
 
