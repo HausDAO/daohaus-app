@@ -106,6 +106,24 @@ export const resolversV2 = {
       const decimals = await tokenService.getDecimals();
       return +decimals;
     },
+    paymentTokenSymbol: async (proposal, _args, { cache }) => {
+      if (proposal.trade) {
+        const tokenService = new TokenService(_web3, proposal.paymentToken);
+        const symbol = await tokenService.getSymbol();
+        return symbol;
+      } else {
+        return null;
+      }
+    },
+    paymentTokenDecimals: async (proposal, _args, { cache }) => {
+      if (proposal.trade) {
+        const tokenService = new TokenService(_web3, proposal.paymentToken);
+        const decimals = await tokenService.getDecimals();
+        return +decimals;
+      } else {
+        return null;
+      }
+    },
     proposalType: (proposal, _args, { cache }) => {
       return determineProposalType(proposal);
     },

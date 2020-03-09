@@ -121,10 +121,9 @@ const FundingForm = (props) => {
                   values.applicant,
                 );
 
-                history.push(`/dao/${daoService.daoAddress}/proposals`);
-
                 setSubmitting(false);
                 setFormLoading(false);
+                history.push(`/dao/${daoService.daoAddress}/success`);
               }}
             >
               {({ isSubmitting, ...props }) => (

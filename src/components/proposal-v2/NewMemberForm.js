@@ -110,9 +110,9 @@ const NewMemberForm = (props) => {
                     tokenData[0].value,
                     detailsObj,
                   );
-                  history.push(`/dao/${daoService.daoAddress}/proposals`);
                   setSubmitting(false);
                   setFormLoading(false);
+                  history.push(`/dao/${daoService.daoAddress}/success`);
                 } catch (err) {
                   console.log('cancelled');
                   setSubmitting(false);
