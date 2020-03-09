@@ -1,4 +1,4 @@
-import React, { useState, useContext } from 'react';
+import React, { useState, useContext, useEffect } from 'react';
 import { Formik, Form, Field, ErrorMessage } from 'formik';
 
 import {
@@ -14,8 +14,24 @@ const RagequitForm = () => {
   const [currentWallet] = useContext(CurrentWalletContext);
   const [loading, setLoading] = useContext(LoaderContext);
   const [formSuccess, setFormSuccess] = useState(false);
+  const [canRage, setCanRage] = useState(true);
   const [daoData] = useContext(DaoDataContext);
-  
+
+  useEffect(() => {
+    const checkCanRage = async () => {
+      const rageOk = await daoService.mcDao.canRagequit(currentWallet.highestIndexYesVote)
+      setCanRage(rageOk);
+    }
+
+    checkCanRage();
+    
+    // eslint-disable-next-line
+  }, [currentWallet])
+
+
+  if (!canRage) {
+    return (<h2>Cannot Rage while yes votes on open proposals</h2>)
+  }
 
   return (
     <>
@@ -37,14 +53,14 @@ const RagequitForm = () => {
         onSubmit={async (values, { setSubmitting, resetForm }) => {
           setLoading(true);
           console.log(values);
-          
+
           try {
-            if(daoData.version === 2){
+            if (daoData.version === 2) {
               await daoService.mcDao.rageQuit(values.numShares || 0, values.numLoot || 0);
             } else {
               await daoService.mcDao.rageQuit(values.numShares || 0);
             }
-            
+
             setFormSuccess(true);
           } catch (e) {
             console.error(`Error ragequitting: ${e.toString()}`);

@@ -98,8 +98,8 @@ export class McDaoService {
     return addressByDelegateKey.toLowerCase();
   }
 
-  async canRagequit() {
-    const canRage = await this.daoContract.methods.canRagequit().call();
+  async canRagequit(highestIndexYesVote) {
+    const canRage = await this.daoContract.methods.canRagequit(highestIndexYesVote).call();
     return canRage;
   }
 
