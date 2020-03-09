@@ -99,9 +99,9 @@ const ProposalCard = ({ proposal, client }) => {
                 <ValueDisplay
                   value={
                     proposal.paymentRequested /
-                    10 ** proposal.tributeTokenDecimals
+                    10 ** proposal.paymentTokenDecimals
                   }
-                  symbolOverride={proposal.tributeTokenSymbol}
+                  symbolOverride={proposal.paymentTokenSymbol}
                 />
               </DataH2>
             </div>

@@ -37,6 +37,7 @@ const baseProposalFields = `
   votingEnds @client
   votingStarts @client
   readyForProcessing @client
+  memberAddress
   votes {
     memberAddress
     uintVote
