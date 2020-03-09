@@ -5,6 +5,7 @@ import ProposalKickedMember from './ProposalKickedMember';
 import config from '../../config';
 
 const ProposalGutsV2 = ({ proposal }) => {
+  console.log('proposal', proposal);
   return (
     <div className="ProposalGuts">
       {proposal.cancelled && <p style={{ color: 'red' }}>Proposal Cancelled</p>}
@@ -127,9 +128,9 @@ const ProposalGutsV2 = ({ proposal }) => {
                 <ValueDisplay
                   value={
                     proposal.paymentRequested /
-                    10 ** proposal.tributeTokenDecimals
+                    10 ** proposal.paymentTokenDecimals
                   }
-                  symbolOverride={proposal.tributeTokenSymbol}
+                  symbolOverride={proposal.paymentTokenSymbol}
                 />
               </h2>
             </div>
