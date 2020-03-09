@@ -5,7 +5,6 @@ import ProposalKickedMember from './ProposalKickedMember';
 import config from '../../config';
 
 const ProposalGutsV2 = ({ proposal }) => {
-  console.log('proposal', proposal);
   return (
     <div className="ProposalGuts">
       {proposal.cancelled && <p style={{ color: 'red' }}>Proposal Cancelled</p>}
