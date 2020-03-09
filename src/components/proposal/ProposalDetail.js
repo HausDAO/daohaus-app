@@ -73,6 +73,8 @@ const ProposalDetail = ({
 
   const countDown = getProposalCountdownText(proposal, periodDuration);
   const title = titleMaker(proposal);
+  const memberUrlV1 = `/dao/${daoData.contractAddress}/member/${daoData.contractAddress}-${proposal.memberAddress}`;
+
 
   return (
     <div className="ProposalDetail">
@@ -92,11 +94,13 @@ const ProposalDetail = ({
 
       <h2>{title}</h2>
       {+daoData.version === 2 ? (
-        <ProposalV2Guts proposal={proposal} />
+        <ProposalV2Guts proposal={proposal} daoData={daoData} />
       ) : (
         <>
           <h5 className="Label">Applicant Address</h5>
           <p className="Data">{proposal.applicantAddress}</p>
+          <h5 className="Label">Proposor Address</h5>
+          <p className="Data"><a href={memberUrlV1}>{proposal.memberAddress}</a></p>
 
           <div className="Offer">
             <div className="Shares">
