@@ -3,8 +3,7 @@ import { withRouter, Link } from 'react-router-dom';
 
 import { Formik, Form, Field, ErrorMessage } from 'formik';
 import shortid from 'shortid';
-
-import { ethToWei } from '@netgum/utils'; // returns BN
+import { weiToEth, anyToBN, ethToWei } from '@netgum/utils';
 
 import {
   LoaderContext,
@@ -13,18 +12,56 @@ import {
 } from '../../contexts/Store';
 import Loading from '../shared/Loading';
 
-import { GET_METADATA } from '../../utils/Queries';
-import { withApollo } from 'react-apollo';
+import { GET_METADATA, GET_ACTIVE_PROPOSALS_QUERY } from '../../utils/Queries';
+import { withApollo, useQuery } from 'react-apollo';
+
+import ValueDisplay from '../shared/ValueDisplay';
 
 const ProposalForm = (props) => {
   const { history, client } = props;
-  const { proposalDeposit, tokenSymbol } = client.cache.readQuery({
+  const { proposalDeposit, 
+    tokenSymbol,
+    totalShares,
+    guildBankValue, } = client.cache.readQuery({
     query: GET_METADATA,
   });
   const [gloading] = useContext(LoaderContext);
   const [loading, setLoading] = useState(false);
   const [currentWallet] = useContext(CurrentWalletContext);
   const [daoService] = useContext(DaoServiceContext);
+  const [estimatedProposalValue, setEstimatedProposalValue] = useState(0);
+
+  const { loading: activeProposalsLoading, error, data } = useQuery(
+    GET_ACTIVE_PROPOSALS_QUERY,
+  );
+
+  const calculateEstimatedProposalValue = (
+    numSharesRequested,
+    tokenTribute,
+  ) => {
+    let guildBankValuePlusPending = ethToWei(guildBankValue).add(ethToWei(tokenTribute));
+    let totalSharesPlusPending = totalShares + +numSharesRequested;
+    for (const proposal of data.proposals) {
+      // if proposal is likely passing, add tribute and shares
+      if (+proposal.yesVotes > +proposal.noVotes) {
+        guildBankValuePlusPending.add(anyToBN(proposal.tokenTribute));
+        totalSharesPlusPending += +proposal.sharesRequested;
+      }
+    }
+
+    const estimatedShareValue = parseFloat(
+      weiToEth(
+        anyToBN(guildBankValuePlusPending)
+          .div(anyToBN(totalSharesPlusPending)),
+      ),
+    );
+
+    const estimatedProposal = estimatedShareValue * numSharesRequested;
+    return estimatedProposal;
+  };
+
+  if (activeProposalsLoading) return <Loading />;
+  if (error) return <ErrorMessage message={error} />;
 
   return (
     <div>
@@ -58,6 +95,9 @@ const ProposalForm = (props) => {
                 errors.applicant = 'Required';
               }
 
+              const estimated = calculateEstimatedProposalValue(values.sharesRequested, values.tokenTribute);
+              setEstimatedProposalValue(estimated);
+
               return errors;
             }}
             onSubmit={async (values, { setSubmitting }) => {
@@ -88,7 +128,7 @@ const ProposalForm = (props) => {
           >
             {({ isSubmitting }) => (
               <Form className="Form">
-                <h3>Proposal deposit: {proposalDeposit} token</h3>
+                <h3>Proposal deposit: <ValueDisplay value={proposalDeposit} /></h3>
                 <Field name="title">
                   {({ field, form }) => (
                     <div className={field.value ? 'Field HasValue' : 'Field '}>
@@ -143,7 +183,7 @@ const ProposalForm = (props) => {
                       <label>
                         Token Tribute (will fail if applicant has not approved)
                       </label>
-                      <input type="number" {...field} />
+                      <input min="0" type="number" {...field} />
                     </div>
                   )}
                 </Field>
@@ -163,6 +203,10 @@ const ProposalForm = (props) => {
                     </div>
                   )}
                 </Field>
+                <span>
+                  {' '}
+                  Estimated Value: <ValueDisplay value={estimatedProposalValue} />
+                </span>
                 <ErrorMessage name="sharesRequested">
                   {(msg) => <div className="Error">{msg}</div>}
                 </ErrorMessage>

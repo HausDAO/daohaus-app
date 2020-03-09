@@ -330,7 +330,6 @@ const UserBalance = ({ toggle, client, match }) => {
             Settings
           </SelectedElementButton>
         )}
-
       </SwitchHeaderDiv>
       <WalletContents>
         {headerSwitch === 'Balances' && (
@@ -357,21 +356,23 @@ const UserBalance = ({ toggle, client, match }) => {
                   )}
               </DataDiv>
             </BalanceItemDiv>
-            <BalanceItemDiv>
-              {+daoData.version === 2 && data ? (
-                <p>Deposit Token: {data.member.moloch.depositToken.symbol}</p>
-              ) : (
-                <p>{tokenSymbol}</p>
-              )}
-              <DataDiv>
-                {currentWallet.tokenBalance}
-                {currentWallet.tokenBalance > currentWallet.allowance && (
-                  <TinyButton onClick={() => toggle('allowanceForm')}>
-                    <span>!</span> Unlock Token
-                  </TinyButton>
+            {currentWallet.shares > 0 || currentWallet.loot > 0 ? (
+              <BalanceItemDiv>
+                {+daoData.version === 2 && data && data.member ? (
+                  <p>Deposit Token: {data.member.moloch.depositToken.symbol}</p>
+                ) : (
+                  <p>{tokenSymbol}</p>
                 )}
-              </DataDiv>
-            </BalanceItemDiv>
+                <DataDiv>
+                  {currentWallet.tokenBalance}
+                  {currentWallet.tokenBalance > currentWallet.allowance && (
+                    <TinyButton onClick={() => toggle('allowanceForm')}>
+                      <span>!</span> Unlock Token
+                    </TinyButton>
+                  )}
+                </DataDiv>
+              </BalanceItemDiv>
+            ) : null}
           </BalancesDiv>
         )}
         {headerSwitch === 'InternalBalances' && daoData.version === 2 && (
