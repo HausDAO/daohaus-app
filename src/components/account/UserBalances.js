@@ -54,6 +54,7 @@ const UserBalance = ({ toggle, client, match }) => {
   const [keystoreExists, setKeystoreExists] = useState(true);
   const [tokenBalances, setTokenBalances] = useState([]);
   const [memberAddressLoggedIn, setMemberAddressLoggedIn] = useState(false);
+  const [memberAddress, setMemberAddress] = useState(false);
 
   const { tokenSymbol } = client.cache.readQuery({
     query: GET_METADATA,
@@ -107,13 +108,13 @@ const UserBalance = ({ toggle, client, match }) => {
         }
       }
 
-      const memberAddress = await daoService.mcDao.memberAddressByDelegateKey(
+      const _memberAddress = await daoService.mcDao.memberAddressByDelegateKey(
         currentUser.attributes['custom:account_address'],
       );
-
+      setMemberAddress(_memberAddress)
       setMemberAddressLoggedIn(
         currentUser &&
-          currentUser.attributes['custom:account_address'] === memberAddress,
+          currentUser.attributes['custom:account_address'] === _memberAddress,
       );
     })();
   }, [currentUser, daoService.mcDao]);
@@ -138,7 +139,6 @@ const UserBalance = ({ toggle, client, match }) => {
   };
 
   const renderBalances = (tokens) => {
-    console.log('render tokens', tokens);
 
     return tokens.map((token) => {
       return (
@@ -218,7 +218,9 @@ const UserBalance = ({ toggle, client, match }) => {
             }
           >
             {currentWallet.state || 'Connecting'}
-            {currentWallet.jailed && 'In Jail. proceed to ragequit.'}
+            {currentWallet.jailed ? ' In Jail. proceed to ragequit.' : null}
+            {!memberAddressLoggedIn && parseInt(memberAddress) ? ` as delegate for ${memberAddress && truncateAddr(memberAddress)}` : null }
+            {!parseInt(memberAddress) ? ` (has delegate)` : null }
           </StatusP>
           <CopyToClipboard
             onCopy={onCopy}
@@ -274,19 +276,19 @@ const UserBalance = ({ toggle, client, match }) => {
                   </ButtonSecondary>
                 )}
                 {currentUser.type === USER_TYPE.WEB3 &&
-                  (currentWallet.shares > 0 || currentWallet.loot > 0) && (
+                   (
                     <ButtonSecondary
                       onClick={() => toggleActions('ragequit')}
-                      disabled={!memberAddressLoggedIn}
+                      disabled={!memberAddressLoggedIn && parseInt(memberAddress)}
                     >
                       Rage Quit
                     </ButtonSecondary>
                   )}
                 {currentUser.type === USER_TYPE.WEB3 &&
-                  (currentWallet.shares > 0 || currentWallet.loot > 0) && (
+                   (
                     <ButtonSecondary
                       onClick={() => toggleActions('changeDelegateKey')}
-                      disabled={!memberAddressLoggedIn}
+                      disabled={!memberAddressLoggedIn && parseInt(memberAddress)}
                     >
                       Change Delegate Key
                     </ButtonSecondary>
