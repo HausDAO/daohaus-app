@@ -5,7 +5,8 @@ export const defaultTheme = {
   baseFont: `'Roboto', sans-serif`,
   dataFont: `'Share Tech Mono', sans-serif`,
   baseFontColor: 'black',
-  brand: 'japanese-ogre.png',
+  brand: '/themes/pokemol/pokemol__brand--standard.png',
+  brandBg: '',
   appBackground: `#F8F8FC`,
   primary: `rgba(203,46,206,1)`,
   secondary: `rgba(47,233,167,1)`,
@@ -19,7 +20,8 @@ export const molochTheme = {
   baseFont: `'Roboto', sans-serif`,
   dataFont: `'Share Tech Mono', sans-serif`,
   baseFontColor: 'white',
-  brand: 'japanese-ogre.png',
+  brand: '/themes/moloch/moloch__logo--simple--red.png',
+  brandBg: '/themes/moloch/moloch__meme--trans15.png',
   appBackground: `rgba(0, 0, 0, 0.95)`,
   primary: `#aa174c`,
   secondary: `#aa174c`,
@@ -37,6 +39,7 @@ export const getPrimaryHover = (theme) => darken(0.1, theme.primary);
 export const getSecondaryHover = (theme) => darken(0.1, theme.secondary);
 export const getTertiaryHover = (theme) => darken(0.1, theme.tertiary);
 export const getDangerHover = (theme) => darken(0.1, theme.danger);
+export const getBrandBg = (theme) => theme.brandBg;
 
 // Color Palette
 export const appBackground = `#F8F8FC`;

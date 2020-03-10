@@ -19,6 +19,7 @@ const App = ({ client }) => {
   const [loading, setloading] = useState(true);
   const [daoPath, setDaoPath] = useState('');
   const [daoData, setDaoData] = useContext(DaoDataContext);
+  const [theme, setTheme] = useState(defaultTheme);
   const [daoService] = useContext(DaoServiceContext);
 
   useEffect(() => {
@@ -56,6 +57,8 @@ const App = ({ client }) => {
             ...apiData,
             altClient,
           });
+          console.log(apiData.molochTheme);
+          setTheme(apiData.molochTheme ? molochTheme : defaultTheme);
         } else {
           setloading(false);
         }
@@ -157,7 +160,7 @@ const App = ({ client }) => {
         <Loading />
       ) : (
         <Router>
-          <ThemeProvider theme={molochTheme}>
+          <ThemeProvider theme={theme}>
             <Header />
             <Routes isValid={!!daoPath} />
           </ThemeProvider>

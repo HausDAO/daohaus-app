@@ -13,7 +13,7 @@ import HeadTags from '../../components/shared/HeadTags';
 import HomeChart from '../../components/shared/HomeChart';
 import styled from 'styled-components';
 import WhitelistTokenBalances from '../../components/tokens/WhitelistTokenBalances';
-import { basePadding } from '../../variables.styles';
+import { basePadding, getBrandBg } from '../../variables.styles';
 
 // import './Home.scss';
 
@@ -140,6 +140,9 @@ const Home = () => {
       <StateModals />
 
       <HomeDiv>
+        {getBrandBg(props.theme) !== '' && (
+          <img src={'/assets/themes/molochTheme/' + props.theme} />
+        )}
         <IntroDiv>
           <h1>{daoData.name || 'PokéMol DAO'}</h1>
           <p>{daoData.description || 'Put a Moloch in Your Pocket'}</p>
