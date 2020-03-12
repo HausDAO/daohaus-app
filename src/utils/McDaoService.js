@@ -98,8 +98,8 @@ export class McDaoService {
     return addressByDelegateKey.toLowerCase();
   }
 
-  async canRagequit() {
-    const canRage = await this.daoContract.methods.canRagequit().call();
+  async canRagequit(highestIndexYesVote) {
+    const canRage = await this.daoContract.methods.canRagequit(highestIndexYesVote).call();
     return canRage;
   }
 
@@ -387,7 +387,7 @@ export class Web3McDaoService extends McDaoService {
     const parseDetails = JSON.parse(details);
 
     const proposalObj = {
-      proposalId: queueLength - 1 + '',
+      proposalId: queueLength + '',
       molochContractAddress: this.contractAddr,
       title: parseDetails.title,
       description: parseDetails.description,

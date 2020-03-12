@@ -4,7 +4,7 @@ import styled from 'styled-components';
 import { getAppDark, getAppLight } from '../../variables.styles';
 
 export const StyledHeader = styled.header`
-  background-color: ${(props) => getAppLight(props.theme)};
+  background-color: transparent;
   height: 60px;
   display: flex;
   flex-direction: row;

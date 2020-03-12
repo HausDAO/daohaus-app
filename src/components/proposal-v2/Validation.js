@@ -30,7 +30,7 @@ export const ProposalSchema = Yup.object().shape({
         .integer('Invalid Number'),
 });
 
-export const WhiteListSchema = Yup.object().shape({
+export const WhiteListGuildKickSchema = Yup.object().shape({
     title: Yup.string()
         .min(2, 'Too Short!')
         .max(50, 'Too Long!')

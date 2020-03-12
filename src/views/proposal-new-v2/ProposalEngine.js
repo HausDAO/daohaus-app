@@ -20,16 +20,14 @@ const ProposalEngine = () => {
         Whitelist Token
       </Link>
       <Link
-        className="disabled-link"
         to={`/dao/${daoData.contractAddress}/proposal-guildkick`}
       >
-        Guildkick (coming soon)
+        Guildkick
       </Link>
       <Link
-        className="disabled-link"
         to={`/dao/${daoData.contractAddress}/proposal-trade`}
       >
-        Trade (coming soon)
+        Trade
       </Link>
     </div>
   );

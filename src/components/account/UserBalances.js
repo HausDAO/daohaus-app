@@ -54,6 +54,8 @@ const UserBalance = ({ toggle, client, match }) => {
   const [keystoreExists, setKeystoreExists] = useState(true);
   const [tokenBalances, setTokenBalances] = useState([]);
   const [memberAddressLoggedIn, setMemberAddressLoggedIn] = useState(false);
+  const [memberAddress, setMemberAddress] = useState(false);
+
   const { tokenSymbol } = client.cache.readQuery({
     query: GET_METADATA,
   });
@@ -105,13 +107,13 @@ const UserBalance = ({ toggle, client, match }) => {
         }
       }
 
-      const memberAddress = await daoService.mcDao.memberAddressByDelegateKey(
+      const _memberAddress = await daoService.mcDao.memberAddressByDelegateKey(
         currentUser.attributes['custom:account_address'],
       );
-
+      setMemberAddress(_memberAddress);
       setMemberAddressLoggedIn(
         currentUser &&
-          currentUser.attributes['custom:account_address'] === memberAddress,
+          currentUser.attributes['custom:account_address'] === _memberAddress,
       );
     })();
   }, [currentUser, daoService.mcDao]);
@@ -136,8 +138,6 @@ const UserBalance = ({ toggle, client, match }) => {
   };
 
   const renderBalances = (tokens) => {
-    console.log('render tokens', tokens);
-
     return tokens.map((token) => {
       return (
         <BalanceItemDiv key={token.token.tokenAddress}>
@@ -216,6 +216,12 @@ const UserBalance = ({ toggle, client, match }) => {
             }
           >
             {currentWallet.state || 'Connecting'}
+            {currentWallet.jailed ? ' In Jail. proceed to ragequit.' : null}
+            {!memberAddressLoggedIn && parseInt(memberAddress)
+              ? ` as delegate for ${memberAddress &&
+                  truncateAddr(memberAddress)}`
+              : null}
+            {!parseInt(memberAddress) ? ` (has delegate)` : null}
           </StatusP>
           <CopyToClipboard
             onCopy={onCopy}
@@ -270,24 +276,22 @@ const UserBalance = ({ toggle, client, match }) => {
                     Manage on DAOHaus
                   </ButtonSecondary>
                 )}
-                {currentUser.type === USER_TYPE.WEB3 &&
-                  (currentWallet.shares > 0 || currentWallet.loot > 0) && (
-                    <ButtonSecondary
-                      onClick={() => toggleActions('ragequit')}
-                      disabled={!memberAddressLoggedIn}
-                    >
-                      Rage Quit
-                    </ButtonSecondary>
-                  )}
-                {currentUser.type === USER_TYPE.WEB3 &&
-                  (currentWallet.shares > 0 || currentWallet.loot > 0) && (
-                    <ButtonSecondary
-                      onClick={() => toggleActions('changeDelegateKey')}
-                      disabled={!memberAddressLoggedIn}
-                    >
-                      Change Delegate Key
-                    </ButtonSecondary>
-                  )}
+                {currentUser.type === USER_TYPE.WEB3 && (
+                  <ButtonSecondary
+                    onClick={() => toggleActions('ragequit')}
+                    disabled={!memberAddressLoggedIn && parseInt(memberAddress)}
+                  >
+                    Rage Quit
+                  </ButtonSecondary>
+                )}
+                {currentUser.type === USER_TYPE.WEB3 && (
+                  <ButtonSecondary
+                    onClick={() => toggleActions('changeDelegateKey')}
+                    disabled={!memberAddressLoggedIn && parseInt(memberAddress)}
+                  >
+                    Change Delegate Key
+                  </ButtonSecondary>
+                )}
               </ActionsDropdownContentDiv>
             </>
           ) : null}
@@ -335,6 +339,12 @@ const UserBalance = ({ toggle, client, match }) => {
               <p>Shares</p>
               <DataP>{currentWallet.shares}</DataP>
             </BalanceItemDiv>
+            {+daoData.version === 2 && data ? (
+              <BalanceItemDiv>
+                <p>Loot</p>
+                <DataP>{currentWallet.loot}</DataP>
+              </BalanceItemDiv>
+            ) : null}
             <BalanceItemDiv>
               <p>ETH</p>
               <DataDiv>
@@ -347,17 +357,23 @@ const UserBalance = ({ toggle, client, match }) => {
                   )}
               </DataDiv>
             </BalanceItemDiv>
-            <BalanceItemDiv>
-              <p>{tokenSymbol}</p>
-              <DataDiv>
-                {currentWallet.tokenBalance}
-                {currentWallet.tokenBalance > currentWallet.allowance && (
-                  <TinyButton onClick={() => toggle('allowanceForm')}>
-                    <span>!</span> Unlock Token
-                  </TinyButton>
+            {currentWallet.shares > 0 || currentWallet.loot > 0 ? (
+              <BalanceItemDiv>
+                {+daoData.version === 2 && data && data.member ? (
+                  <p>Deposit Token: {data.member.moloch.depositToken.symbol}</p>
+                ) : (
+                  <p>{tokenSymbol}</p>
                 )}
-              </DataDiv>
-            </BalanceItemDiv>
+                <DataDiv>
+                  {currentWallet.tokenBalance}
+                  {currentWallet.tokenBalance > currentWallet.allowance && (
+                    <TinyButton onClick={() => toggle('allowanceForm')}>
+                      <span>!</span> Unlock Token
+                    </TinyButton>
+                  )}
+                </DataDiv>
+              </BalanceItemDiv>
+            ) : null}
           </BalancesDiv>
         )}
         {headerSwitch === 'InternalBalances' && daoData.version === 2 && (

@@ -11,14 +11,28 @@ import Routes from './Routes';
 import Header from './components/header/Header';
 import Loading from './components/shared/Loading';
 import config from './config';
-import { defaultTheme, molochTheme } from './variables.styles';
+import styled from 'styled-components';
+import {
+  defaultTheme,
+  molochTheme,
+  getAppBackground,
+  getBaseFontColor,
+  GlobalStyle,
+} from './variables.styles';
 
-import './App.scss';
+// import './App.scss';
+
+const AppDiv = styled.div`
+  background-color: ${(props) => getAppBackground(props.theme)};
+  min-height: 100vh;
+  min-width: 100vw;
+`;
 
 const App = ({ client }) => {
   const [loading, setloading] = useState(true);
   const [daoPath, setDaoPath] = useState('');
   const [daoData, setDaoData] = useContext(DaoDataContext);
+  const [theme, setTheme] = useState(defaultTheme);
   const [daoService] = useContext(DaoServiceContext);
 
   useEffect(() => {
@@ -56,6 +70,8 @@ const App = ({ client }) => {
             ...apiData,
             altClient,
           });
+          console.log(apiData.molochTheme);
+          setTheme(apiData.molochTheme ? molochTheme : defaultTheme);
         } else {
           setloading(false);
         }
@@ -157,9 +173,12 @@ const App = ({ client }) => {
         <Loading />
       ) : (
         <Router>
-          <ThemeProvider theme={molochTheme}>
-            <Header />
-            <Routes isValid={!!daoPath} />
+          <ThemeProvider theme={theme}>
+            <GlobalStyle />
+            <AppDiv>
+              <Header />
+              <Routes isValid={!!daoPath} />
+            </AppDiv>
           </ThemeProvider>
         </Router>
       )}

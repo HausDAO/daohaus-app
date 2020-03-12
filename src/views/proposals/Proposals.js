@@ -36,12 +36,14 @@ const Proposals = ({ match, history }) => {
         ? {}
         : { contractAddr: daoService.daoAddress.toLowerCase() },
       pollInterval: 20000,
+      fetchPolicy: 'network-only',
     };
   } else {
     proposalQuery = GET_PROPOSALS;
     options = {
       variables: { contractAddr: daoService.daoAddress.toLowerCase() },
       pollInterval: 20000,
+      fetchPolicy: 'network-only',
     };
   }
 

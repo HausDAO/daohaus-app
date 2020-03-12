@@ -1,11 +1,14 @@
 import { lighten, darken } from 'polished';
 import styled from 'styled-components';
+import { createGlobalStyle } from 'styled-components';
+import molochBg from './assets/themes/molochTheme/moloch__meme--trans15.png';
 
 export const defaultTheme = {
   baseFont: `'Roboto', sans-serif`,
   dataFont: `'Share Tech Mono', sans-serif`,
   baseFontColor: 'black',
-  brand: 'japanese-ogre.png',
+  brand: '/themes/pokemol/pokemol__brand--standard.png',
+  brandBg: '',
   appBackground: `#F8F8FC`,
   primary: `rgba(203,46,206,1)`,
   secondary: `rgba(47,233,167,1)`,
@@ -19,7 +22,8 @@ export const molochTheme = {
   baseFont: `'Roboto', sans-serif`,
   dataFont: `'Share Tech Mono', sans-serif`,
   baseFontColor: 'white',
-  brand: 'japanese-ogre.png',
+  brand: '/themes/moloch/moloch__logo--simple--red.png',
+  brandBg: molochBg,
   appBackground: `rgba(0, 0, 0, 0.95)`,
   primary: `#aa174c`,
   secondary: `#aa174c`,
@@ -37,6 +41,10 @@ export const getPrimaryHover = (theme) => darken(0.1, theme.primary);
 export const getSecondaryHover = (theme) => darken(0.1, theme.secondary);
 export const getTertiaryHover = (theme) => darken(0.1, theme.tertiary);
 export const getDangerHover = (theme) => darken(0.1, theme.danger);
+export const getBrandBg = (theme) => theme.brandBg;
+export const getBrand = (theme) => theme.brand;
+export const getAppBackground = (theme) => theme.appBackground;
+export const getBaseFontColor = (theme) => theme.baseFontColor;
 
 // Color Palette
 export const appBackground = `#F8F8FC`;
@@ -58,6 +66,13 @@ export const subdued = `#ccc`;
 export const grid = '1200px';
 export const tablet = '768px';
 export const phone = '640px';
+
+// Global
+export const GlobalStyle = createGlobalStyle`
+  body {
+    color: ${(props) => props.theme.baseFontColor};
+  }
+`;
 
 export const FlashDiv = styled.div`
   opacity: 0; /* make things invisible upon start */
