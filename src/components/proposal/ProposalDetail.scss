@@ -16,6 +16,9 @@
       z-index: 99;
       transition: all .15s ease-in-out;
       pointer-events: none;
+      a {
+        pointer-events: auto;
+      }
       h3 { margin-top: 50px; }
       .DrawerToggle {
         position: absolute;

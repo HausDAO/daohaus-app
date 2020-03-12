@@ -49,7 +49,6 @@ const VoteControl = ({ submitVote, proposal }) => {
   const canVote = (proposal) => {
     // check if user has votes
     // does not seem to work
-    console.log('vote ptoposal', proposal);
 
     if (currentYesVote || currentNoVote) {
       return false;

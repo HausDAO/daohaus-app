@@ -90,33 +90,60 @@ const ProposalCard = ({ proposal, client }) => {
       </TimerDiv>
       {proposal.proposalType ? <h5>{proposal.proposalType}</h5> : null}
       <h3>{title}</h3>
-      <OfferDivProposalCard>
-        <div>
-          <h5>Shares</h5>
-          <DataH2>{proposal.sharesRequested}</DataH2>
-        </div>
-        {+daoData.version === 2 ? (
-          <div>
-            <h5>Tribute</h5>
-            <DataH2>
-              <ValueDisplay
-                value={tribute / 10 ** proposal.tributeTokenDecimals}
-                symbolOverride={proposal.tributeTokenSymbol}
-              />
-            </DataH2>
-          </div>
-        ) : (
-          <div>
-            <h5>Tribute</h5>
-            <DataH2>
-              <ValueDisplay
-                value={Web3.utils.fromWei(tribute)}
-                symbolOverride={proposal.tributeTokenSymbol}
-              />
-            </DataH2>
-          </div>
-        )}
-      </OfferDivProposalCard>
+      {!proposal.guildkick && !proposal.whitelist ? (
+        <OfferDivProposalCard>
+          {proposal.trade ? (
+            <div>
+              <h5>Requesting</h5>
+
+              <DataH2>
+                <ValueDisplay
+                  value={
+                    proposal.paymentRequested /
+                    10 ** proposal.paymentTokenDecimals
+                  }
+                  symbolOverride={proposal.paymentTokenSymbol}
+                />
+              </DataH2>
+            </div>
+          ) : (
+            <div>
+              <h5>Shares</h5>
+              <DataH2>{proposal.sharesRequested}</DataH2>
+            </div>
+          )}
+
+          {+daoData.version === 2 ? (
+            <div>
+              <h5>{proposal.trade ? 'Giving' : 'Tribute'}</h5>
+              <DataH2>
+                <ValueDisplay
+                  value={tribute / 10 ** proposal.tributeTokenDecimals}
+                  symbolOverride={proposal.tributeTokenSymbol}
+                />
+              </DataH2>
+            </div>
+          ) : (
+            <div>
+              <h5>Tribute</h5>
+              <DataH2>
+                <ValueDisplay
+                  value={Web3.utils.fromWei(tribute)}
+                  symbolOverride={proposal.tributeTokenSymbol}
+                />
+              </DataH2>
+            </div>
+          )}
+        </OfferDivProposalCard>
+      ) : null}
+
+      {proposal.whitelist ? (
+        <>
+          <h5>Token Symbol</h5>
+          <p className="Data">{proposal.tributeTokenSymbol}</p>
+        </>
+      ) : null}
+
       <CardVoteDiv>
         {daoData.version !== 2 ? (
           <StackedVote id={id} page="ProposalCard" />

@@ -37,6 +37,7 @@ const baseProposalFields = `
   votingEnds @client
   votingStarts @client
   readyForProcessing @client
+  memberAddress
   votes {
     memberAddress
     uintVote
@@ -73,6 +74,28 @@ export const GET_PROPOSALS_LEGACY = gql`
 export const GET_PROPOSAL = gql`
   query proposal($id: String!) {
     proposal(id: $id) {
+      ${baseProposalFields}
+    }
+  }
+`;
+
+// removed member.shares because error. TODO: is this needed
+// votes {
+//   memberAddress
+//   uintVote
+//   member {
+//     shares
+//   }
+// }
+export const GET_ACTIVE_PROPOSALS_QUERY = gql`
+  query proposals($skip: Int) {
+    proposals(
+      orderBy: proposalIndex, 
+      orderDirection: desc, 
+      first: 100, 
+      skip: $skip, 
+      where: { processed: false }
+    ) {
       ${baseProposalFields}
     }
   }

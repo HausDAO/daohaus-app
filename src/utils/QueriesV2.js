@@ -67,6 +67,8 @@ const baseProposalFields = `
   timestamp
   memberAddress
   proposer
+  paymentToken
+  paymentRequested
   moloch {
     votingPeriodLength
     gracePeriodLength
@@ -86,6 +88,8 @@ const baseProposalFields = `
   }
   tributeTokenSymbol @client
   tributeTokenDecimals @client
+  paymentTokenSymbol @client
+  paymentTokenDecimals @client
   status @client
   gracePeriod @client
   votingEnds @client
@@ -141,6 +145,7 @@ export const GET_MEMBER_V2 = gql`
       id
       delegateKey
       shares
+      loot
       kicked
       tokenTribute
       memberAddress
@@ -160,6 +165,13 @@ export const GET_MEMBER_V2 = gql`
         processed
         didPass
         cancelled
+      }
+      moloch {
+        depositToken {
+          tokenAddress
+          symbol @client
+          decimals @client
+        }
       }
     }
   }
