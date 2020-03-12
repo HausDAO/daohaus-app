@@ -11,9 +11,22 @@ import Routes from './Routes';
 import Header from './components/header/Header';
 import Loading from './components/shared/Loading';
 import config from './config';
-import { defaultTheme, molochTheme } from './variables.styles';
+import styled from 'styled-components';
+import {
+  defaultTheme,
+  molochTheme,
+  getAppBackground,
+  getBaseFontColor,
+  GlobalStyle,
+} from './variables.styles';
 
-import './App.scss';
+// import './App.scss';
+
+const AppDiv = styled.div`
+  background-color: ${(props) => getAppBackground(props.theme)};
+  min-height: 100vh;
+  min-width: 100vw;
+`;
 
 const App = ({ client }) => {
   const [loading, setloading] = useState(true);
@@ -161,8 +174,11 @@ const App = ({ client }) => {
       ) : (
         <Router>
           <ThemeProvider theme={theme}>
-            <Header />
-            <Routes isValid={!!daoPath} />
+            <GlobalStyle />
+            <AppDiv>
+              <Header />
+              <Routes isValid={!!daoPath} />
+            </AppDiv>
           </ThemeProvider>
         </Router>
       )}

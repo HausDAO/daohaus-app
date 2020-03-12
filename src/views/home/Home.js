@@ -14,6 +14,7 @@ import HomeChart from '../../components/shared/HomeChart';
 import styled from 'styled-components';
 import WhitelistTokenBalances from '../../components/tokens/WhitelistTokenBalances';
 import { basePadding, getBrandBg } from '../../variables.styles';
+import { globalStyle } from '../../App.styles';
 
 // import './Home.scss';
 
@@ -27,6 +28,7 @@ const HomeDiv = styled.div`
   background-position: center center;
   background-repeat: no-repeat;
   height: 100vh;
+  background-image: url(${(props) => props.theme.brandBg});
   h1 {
     text-align: center;
     font-size: 36px;
@@ -115,7 +117,7 @@ const DataDiv = styled.div`
   }
 `;
 
-const Home = () => {
+const Home = (props) => {
   const [chartView, setChartView] = useState('bank');
   const [daoData] = useContext(DaoDataContext);
 
@@ -140,9 +142,6 @@ const Home = () => {
       <StateModals />
 
       <HomeDiv>
-        {getBrandBg(props.theme) !== '' && (
-          <img src={'/assets/themes/molochTheme/' + props.theme} />
-        )}
         <IntroDiv>
           <h1>{daoData.name || 'PokéMol DAO'}</h1>
           <p>{daoData.description || 'Put a Moloch in Your Pocket'}</p>
