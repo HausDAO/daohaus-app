@@ -17,6 +17,8 @@ import {
   ProfileImgCard,
   OfferDivMemberCard,
 } from './Member.styles';
+import { withApollo } from 'react-apollo';
+import { GET_METADATA } from '../../utils/Queries';
 
 const MemberCardDiv = styled.div`
   background-color: ${appLight};
@@ -46,6 +48,10 @@ const MemberCardDiv = styled.div`
   h3 {
     margin: 10px 0px;
   }
+
+  .VotePower {
+    margin-left: 25px;
+  }
 `;
 
 const MemberAddr = styled(DataP)`
@@ -54,10 +60,14 @@ const MemberAddr = styled(DataP)`
 
 const web3Service = new Web3Service();
 
-const MemberCard = ({ member }) => {
+const MemberCard = ({ member, client }) => {
   const [daoService] = useContext(DaoServiceContext);
   const [daoData] = useContext(DaoDataContext);
   const [memberProfile, setMemberProfile] = useState({});
+
+  const { totalShares } = client.cache.readQuery({
+    query: GET_METADATA,
+  });
 
   const parsedMemberId = member.id.split('-')[1]
     ? member.id.split('-')[1]
@@ -79,6 +89,10 @@ const MemberCard = ({ member }) => {
     setup();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  const totalDaoShares =
+    +daoData.version === 2 ? +member.moloch.totalShares : +totalShares;
+  const votingPower = ((member.shares / totalDaoShares) * 100).toFixed();
 
   return (
     <Link
@@ -132,10 +146,14 @@ const MemberCard = ({ member }) => {
               </DataH2>
             </div>
           ) : null}
+          <div className="VotePower">
+            <h5>Vote Power</h5>
+            <DataH2>{votingPower} %</DataH2>
+          </div>
         </OfferDivMemberCard>
       </MemberCardDiv>
     </Link>
   );
 };
 
-export default MemberCard;
+export default withApollo(MemberCard);

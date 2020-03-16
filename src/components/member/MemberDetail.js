@@ -14,6 +14,8 @@ import {
   OfferDivMemberCard,
 } from './Member.styles';
 import { DaoDataContext } from '../../contexts/Store';
+import { GET_METADATA } from '../../utils/Queries';
+import { withApollo } from 'react-apollo';
 
 const MemberDetailDiv = styled.div`
   padding: 25px 25px 120px;
@@ -21,9 +23,13 @@ const MemberDetailDiv = styled.div`
 
 const web3Service = new Web3Service();
 
-const MemberDetail = ({ member }) => {
+const MemberDetail = ({ member, client }) => {
   const [memberProfile, setMemberProfile] = useState({});
   const [daoData] = useContext(DaoDataContext);
+
+  const { totalShares } = client.cache.readQuery({
+    query: GET_METADATA,
+  });
 
   const parsedMemberId = member.id.split('-')[1]
     ? member.id.split('-')[1]
@@ -45,6 +51,10 @@ const MemberDetail = ({ member }) => {
     setup();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  const totalDaoShares =
+    +daoData.version === 2 ? +member.moloch.totalShares : +totalShares;
+  const votingPower = ((member.shares / totalDaoShares) * 100).toFixed();
 
   return (
     <MemberDetailDiv>
@@ -88,10 +98,14 @@ const MemberDetail = ({ member }) => {
           </div>
         ) : null}
       </OfferDivMemberCard>
+      <div>
+        <h5>Vote Power</h5>
+        <DataH2>{votingPower} %</DataH2>
+      </div>
       <h5>Delegate Key</h5>
       <DataP>{member.delegateKey}</DataP>
     </MemberDetailDiv>
   );
 };
 
-export default MemberDetail;
+export default withApollo(MemberDetail);

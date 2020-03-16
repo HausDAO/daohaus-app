@@ -135,6 +135,9 @@ export const GET_MEMBERS_V2 = gql`
       tokenTribute
       didRagequit
       memberAddress
+      moloch {
+        totalShares
+      }
     }
   }
 `;
@@ -167,6 +170,7 @@ export const GET_MEMBER_V2 = gql`
         cancelled
       }
       moloch {
+        totalShares
         depositToken {
           tokenAddress
           symbol @client
