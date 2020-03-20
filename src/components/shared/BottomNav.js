@@ -1,9 +1,50 @@
 import React, { useContext } from 'react';
 import { withRouter, Link } from 'react-router-dom';
+import styled from 'styled-components';
+import { getAppLight, getPrimaryHover } from '../../variables.styles.js';
 
 import { CurrentUserContext, DaoServiceContext } from '../../contexts/Store';
 
-import './MainNav.scss';
+const BottomNavDiv = styled.div`
+  position: fixed;
+  bottom: 0;
+  height: 90px;
+  width: 100%;
+  z-index: 1;
+  display: flex;
+  justify-content: space-evenly;
+  background-color: ${(props) =>
+    props.location.pathname === `/dao/${props.daoAddress}/`
+      ? 'transparent'
+      : getAppLight(props.theme)};
+  a {
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-content: center;
+    justify-content: center;
+    text-decoration: none;
+    transition: all 0.15s ease-in-out;
+    font-weight: 900;
+    color: ${(props) => props.theme.baseFontColor};
+    &:hover {
+      color: ${(props) => getPrimaryHover(props.theme)};
+      svg {
+        fill: ${(props) => getPrimaryHover(props.theme)};
+      }
+    }
+    svg {
+      width: 24px;
+      height: auto;
+      margin: 0 auto;
+      fill: ${(props) => props.theme.baseFontColor};
+    }
+  }
+  &.Global {
+    background-color: $app-light;
+    border-top: 2px solid $app-dark;
+  }
+`;
 
 const BottomNav = (props) => {
   const [currentUser] = useContext(CurrentUserContext);
@@ -14,14 +55,7 @@ const BottomNav = (props) => {
   }
 
   return (
-    <div
-      className={
-        'MainNav ' +
-        (props.location.pathname === `/dao/${daoService.daoAddress}`
-          ? ''
-          : 'Global')
-      }
-    >
+    <BottomNavDiv daoAddress={daoService.daoAddress} location={props.location}>
       <Link to={`/dao/${daoService.daoAddress}/proposals`}>
         <svg
           xmlns="http://www.w3.org/2000/svg"
@@ -73,7 +107,7 @@ const BottomNav = (props) => {
           Sign In
         </Link>
       )}
-    </div>
+    </BottomNavDiv>
   );
 };
 

@@ -72,6 +72,21 @@ export const GlobalStyle = createGlobalStyle`
   body {
     color: ${(props) => props.theme.baseFontColor};
   }
+  a {
+    color: ${(props) => props.theme.primary};
+    text-decoration: none;
+    transition: all 0.15s linear;
+    vertical-align: middle;
+    cursor: pointer;
+    svg { fill: ${(props) => getPrimaryHover(props.theme)}; }
+    &:hover {
+      color: ${(props) => getPrimaryHover(props.theme)};
+      svg { fill: ${(props) => getPrimaryHover(props.theme)}; }
+    }
+  }
+  button {
+    border: none;
+  }
 `;
 
 export const FlashDiv = styled.div`

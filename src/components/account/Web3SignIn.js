@@ -6,12 +6,14 @@ import config from '../../config';
 import { getChainData } from '../../utils/chains';
 import { w3connect, providerOptions } from '../../utils/Auth';
 
+import { ButtonPrimary } from '../../App.styles.js';
+
 export const Web3SignIn = ({ history }) => {
   const [daoService] = useContext(DaoServiceContext);
   const [, setWeb3Connect] = useContext(Web3ConnectContext);
 
   return (
-    <button
+    <ButtonPrimary
       onClick={async () => {
         const web3Connect = new Web3Connect.Core({
           network: getChainData(config.CHAIN_ID).network, // optional
@@ -31,7 +33,8 @@ export const Web3SignIn = ({ history }) => {
         }
       }}
     >
+      {' '}
       Sign In With Web3
-    </button>
+    </ButtonPrimary>
   );
 };

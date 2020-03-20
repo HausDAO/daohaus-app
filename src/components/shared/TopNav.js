@@ -17,6 +17,7 @@ import {
   BackdropDiv,
   ButtonBackDiv,
   LinkButton,
+  ButtonButton,
 } from '../../App.styles';
 
 const TopNavDiv = styled.div`
@@ -31,7 +32,7 @@ const BrandLink = styled(Link)`
   top: 50%;
   transform: translate(0, -50%);
   font-weight: 900;
-  color: black;
+  color: ${(props) => props.theme.baseFontColor};
   &:hover {
     color: ${(props) => props.theme.primary};
   }
@@ -59,9 +60,15 @@ const AuthDiv = styled.div`
   transition: all 0.15s linear;
   font-weight: 900;
   z-index: 98;
+  a {
+    color: ${(props) => props.theme.baseFontColor};
+    &:hover {
+      color: ${(props) => props.theme.primary};
+    }
+  }
 `;
 
-const AuthButton = styled.button`
+const AuthButton = styled(ButtonButton)`
   border-radius: 0px;
   padding: 0px;
   padding-right: 12px;
@@ -84,6 +91,7 @@ const AuthButton = styled.button`
   }
   &:hover {
     color: ${(props) => getPrimaryHover(props.theme)};
+    background: transparent;
     svg {
       fill: ${(props) => getPrimaryHover(props.theme)};
     }
@@ -97,8 +105,8 @@ const DropdownDiv = styled.div`
   transition: all 0.15s linear;
 `;
 
-const DropdownItemDiv = styled(DropdownDiv)`
-  margin: 20px 0px !important;
+const DropdownItemDiv = styled.div`
+  margin: 20px 0px;
   display: block;
 `;
 
@@ -175,6 +183,8 @@ const TopNav = (props) => {
                   >
                     Account
                   </Link>
+                </DropdownItemDiv>
+                <DropdownItemDiv open>
                   <LinkButton
                     onClick={() => {
                       toggleElement();
