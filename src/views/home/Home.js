@@ -13,8 +13,7 @@ import HeadTags from '../../components/shared/HeadTags';
 import HomeChart from '../../components/shared/HomeChart';
 import styled from 'styled-components';
 import WhitelistTokenBalances from '../../components/tokens/WhitelistTokenBalances';
-import { basePadding, getBrandBg } from '../../variables.styles';
-import { globalStyle } from '../../App.styles';
+import { basePadding } from '../../variables.styles';
 
 // import './Home.scss';
 

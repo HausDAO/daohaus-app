@@ -103,9 +103,9 @@ export const ButtonDivTertiary = styled(ButtonDiv)`
 `;
 
 export const ButtonPrimary = styled(ButtonButton)`
-  color: ${(props) => props.theme.primary};
+  background-color: ${(props) => props.theme.primary};
   &:hover {
-    color: ${(props) => getPrimaryHover(props.theme)};
+    background-color: ${(props) => getPrimaryHover(props.theme)};
   }
 `;
 
@@ -134,14 +134,15 @@ export const ButtonBackDiv = styled(ButtonDiv)`
   left: 0;
   text-align: left;
   background-color: transparent;
-  color: black !important;
+  color: ${(props) => props.theme.baseFontColor};
   svg {
-    fill: black !important;
+    fill: ${(props) => props.theme.baseFontColor};
   }
   border-radius: 0px;
   width: auto;
   &:hover {
     margin-left: -5px;
+    background-color: transparent;
   }
 `;
 
@@ -249,7 +250,7 @@ export const PadDiv = styled.div`
   padding-right: 15px;
 `;
 
-export const LinkButton = styled.button`
+export const LinkButton = styled(ButtonButton)`
   background-color: transparent;
   color: ${(props) => props.theme.primary};
   padding: 0px;

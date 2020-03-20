@@ -13,21 +13,27 @@ import { GET_METADATA } from '../../utils/Queries';
 import { DaoServiceContext, DaoDataContext } from '../../contexts/Store';
 import ValueDisplay from '../shared/ValueDisplay';
 
-import { appDark, appLight, phone } from '../../variables.styles';
-import { DataP, DataH2, OfferDiv } from '../../App.styles';
+import { getAppDark, getAppLight, phone } from '../../variables.styles';
+import {
+  DataP,
+  DataH2,
+  OfferDiv,
+  ButtonDiv,
+  LinkButton,
+} from '../../App.styles';
 
 import StackedVote from './StackedVote';
 // import './ProposalCard.scss';
 
 const ProposalCardDiv = styled.div`
   margin-top: 25px;
-  border-top: 2px solid ${appDark};
-  border-bottom: 2px solid ${appDark};
-  background-color: ${appLight};
+  border-top: 2px solid ${(props) => getAppDark(props.theme)};
+  border-bottom: 2px solid ${(props) => getAppDark(props.theme)};
+  background-color: ${(props) => getAppLight(props.theme)};
   padding: 25px;
   @media (min-width: ${phone}) {
     width: 320px;
-    border: 2px solid ${appDark};
+    border: 2px solid ${(props) => getAppDark(props.theme)};
     border-radius: 10px;
     margin-bottom: 25px;
     box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
@@ -41,7 +47,7 @@ const TimerDiv = styled.div`
     margin: 0;
     margin-top: -4px;
     margin-right: 5px;
-    fill: $base-font-color;
+    fill: ${(props) => props.theme.baseFontColor};
   }
   p {
     margin: 0;
@@ -149,14 +155,13 @@ const ProposalCard = ({ proposal, client }) => {
           <StackedVote id={id} page="ProposalCard" />
         ) : null}
       </CardVoteDiv>
-      <Link
-        className="Button"
+      <LinkButton
         to={{
           pathname: `/dao/${daoService.daoAddress}/proposal/${id}`,
         }}
       >
         View Proposal
-      </Link>
+      </LinkButton>
     </ProposalCardDiv>
   );
 };
