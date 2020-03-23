@@ -9,8 +9,10 @@ const TributeInput = ({
   ...props
 }) => {
   const [unlocked, setUnlocked] = useState(false);
+  const [balance, setBalance] = useState(0);
   const [loading, setLoading] = useState(false);
   const [daoService] = useContext(DaoServiceContext);
+
 
   const unlock = async (token) => {
     console.log('unlock ', token);
@@ -28,10 +30,19 @@ const TributeInput = ({
     }
     console.log('check unlocked', token, amount);
     console.log('unlock props ', props);
-
     const amountApproved = await daoService.token.unlocked(token);
     const isUnlocked = amountApproved > amount;
     setUnlocked(isUnlocked);
+  };
+
+
+  const getMax = async (token) => {
+
+    const max = await daoService.token.balanceOfToken(token);
+    console.log('max', max);
+    
+    setBalance(max);
+    
   };
 
   useEffect(() => {
@@ -39,6 +50,7 @@ const TributeInput = ({
       console.log('checking unlocked');
 
       await checkUnlocked(token, field.value);
+      await getMax(token);
       return true;
     };
     runCheck();
@@ -57,9 +69,12 @@ const TributeInput = ({
           checkUnlocked(token, field.value);
         }}
       />
+      <div className="MaxLabel">
+        max: {balance.toFixed(4)}
+      </div>
       {field.value && field.value !== 0 && !unlocked ? (
         <div className="UnlockButton" onClick={() => unlock(token)}>
-          {!loading ? <span>! Unlock</span> : <TinyLoader />}
+          {!loading ? <span>! Unlock </span> : <TinyLoader />}
         </div>
       ) : null}
     </div>
