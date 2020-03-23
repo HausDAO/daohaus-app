@@ -3,17 +3,60 @@ import React, { useState, useEffect, useContext } from 'react';
 import ProposalList from './ProposalList';
 import { groupByStatus } from '../../utils/ProposalHelper';
 import { DaoServiceContext } from '../../contexts/Store';
+import styled from 'styled-components';
+import { getAppLight, grid } from '../../variables.styles.js';
 
-import './ProposalFilter.scss';
+export const ProposalFilterDiv = styled.div`
+  width: 100%;
+  border-top: 2px solid ${(props) => getAppLight(props.theme)};
+`;
+
+export const ProposalFiltersDiv = styled.div`
+  max-width: 100%;
+  overflow: auto;
+  white-space: nowrap;
+  padding: 10px 0px;
+  @media (min-width: ${grid}) {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+  }
+`;
+
+export const FilterButton = styled.button`
+  appearance: none;
+  outline: none;
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
+  text-decoration: none;
+  position: relative;
+  transition: all 0.15s ease-in-out;
+  color: ${(props) =>
+    props.active ? props.theme.baseFontColor : props.theme.secondary};
+  border-radius: 50px;
+  padding: 15px 30px;
+  max-width: 100%;
+  display: block;
+  margin: 15px 0px;
+  font-size: 16px;
+  text-align: center;
+  font-weight: 900;
+  &:hover {
+    color: ${(props) => props.theme.baseFontColor};
+  }
+`;
 
 const ProposalFilter = ({ proposals, filter, history, unsponsoredView }) => {
   const [groupedProposals, setGroupedProposals] = useState();
   const [filteredProposals, setFilteredProposals] = useState([]);
+  const [activeItem, setActiveItem] = useState(false);
   const [daoService] = useContext(DaoServiceContext);
 
   const handleSelect = (list, listName) => {
     setFilteredProposals(list);
     history.push(`/dao/${daoService.daoAddress}/proposals/${listName}`);
+    setActiveItem(activeItem);
   };
 
   useEffect(() => {
@@ -41,91 +84,91 @@ const ProposalFilter = ({ proposals, filter, history, unsponsoredView }) => {
   }
 
   return (
-    <div className="ProposalFilter">
-      <div className="ProposalFilter__Filters">
+    <ProposalFilterDiv>
+      <ProposalFiltersDiv>
         {!unsponsoredView ? (
           <>
-            <button
+            <FilterButton
               onClick={() =>
                 handleSelect(groupedProposals.VotingPeriod, 'VotingPeriod')
               }
-              className={filter === 'VotingPeriod' ? 'Active' : null}
+              active={filter === 'Voting' ? true : false}
             >
               Voting Period (
               {groupedProposals.VotingPeriod &&
                 groupedProposals.VotingPeriod.length}
               )
-            </button>
-            <button
+            </FilterButton>
+            <FilterButton
               onClick={() =>
                 handleSelect(groupedProposals.GracePeriod, 'GracePeriod')
               }
-              className={filter === 'GracePeriod' ? 'Active' : null}
+              className={activeItem ? 'Active' : null}
             >
               Grace Period (
               {groupedProposals.GracePeriod &&
                 groupedProposals.GracePeriod.length}
               )
-            </button>
-            <button
+            </FilterButton>
+            <FilterButton
               onClick={() =>
                 handleSelect(
                   groupedProposals.ReadyForProcessing,
                   'ReadyForProcessing',
                 )
               }
-              className={filter === 'ReadyForProcessing' ? 'Active' : null}
+              className={activeItem ? 'Active' : null}
             >
               Ready For Processing (
               {groupedProposals.ReadyForProcessing &&
                 groupedProposals.ReadyForProcessing.length}
               )
-            </button>
-            <button
+            </FilterButton>
+            <FilterButton
               onClick={() =>
                 handleSelect(groupedProposals.Completed, 'Completed')
               }
-              className={filter === 'Completed' ? 'Active' : null}
+              className={activeItem ? 'Active' : null}
             >
               Completed (
               {groupedProposals.Completed && groupedProposals.Completed.length})
-            </button>
-            <button
+            </FilterButton>
+            <FilterButton
               onClick={() => handleSelect(groupedProposals.InQueue, 'InQueue')}
-              className={filter === 'InQueue' ? 'Active' : null}
+              className={activeItem ? 'Active' : null}
             >
               In Queue (
               {groupedProposals.InQueue && groupedProposals.InQueue.length})
-            </button>
+            </FilterButton>
           </>
         ) : (
           <>
-            <button
+            <FilterButton
               onClick={() =>
                 handleSelect(groupedProposals.Unsponsored, 'Unsponsored')
               }
-              className={filter === 'Unsponsored' ? 'Active' : null}
+              className={activeItem ? 'Active' : null}
             >
               Open (
               {groupedProposals.Unsponsored &&
                 groupedProposals.Unsponsored.length}
               )
-            </button>
+            </FilterButton>
 
-            <button
+            <FilterButton
               onClick={() =>
                 handleSelect(groupedProposals.Cancelled, 'Cancelled')
               }
-              className={filter === 'Cancelled' ? 'Active' : null}
+              className={activeItem ? 'Active' : null}
             >
               Cancelled (
               {groupedProposals.Cancelled && groupedProposals.Cancelled.length})
-            </button>
+            </FilterButton>
           </>
         )}
-      </div>
+      </ProposalFiltersDiv>
       <ProposalList proposals={filteredProposals} />
-    </div>
+    </ProposalFilterDiv>
   );
 };
 
