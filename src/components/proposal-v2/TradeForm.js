@@ -14,10 +14,10 @@ import Loading from '../shared/Loading';
 import { withApollo, useQuery } from 'react-apollo';
 import TributeInput from './TributeInput';
 import PaymentInput from './PaymentInput';
-import Expandable from '../shared/Expandable';
 import { ProposalSchema } from './Validation';
 import shortid from 'shortid';
 import TokenSelect from './TokenSelect';
+import { valToDecimalString } from '../../utils/Helpers';
 import { GET_TOKENS_V2, GET_MOLOCH_V2 } from '../../utils/QueriesV2';
 
 const TradeForm = (props) => {
@@ -26,7 +26,6 @@ const TradeForm = (props) => {
   const [gloading] = useContext(LoaderContext);
   const [formLoading, setFormLoading] = useState(false);
   const [tokenData, setTokenData] = useState([]);
-  const [tokenBalance] = useState();
   const [daoService] = useContext(DaoServiceContext);
   const [daoData] = useContext(DaoDataContext);
   const [currentUser] = useContext(CurrentUserContext);
@@ -57,13 +56,6 @@ const TradeForm = (props) => {
       );
     }
   }, [data]);
-
-  const valToDecimal = (value, tokenAddress, tokens) => {
-    const tdata = tokens.find((token) => token.value === tokenAddress);
-    const decimals = +tdata.decimals;
-
-    return '' + value * 10 ** decimals;
-  };
 
   if (loading) return <Loading />;
   if (error) {
@@ -109,13 +101,13 @@ const TradeForm = (props) => {
                 await daoService.mcDao.submitProposal(
                   values.sharesRequested,
                   values.lootRequested,
-                  valToDecimal(
+                  valToDecimalString(
                     values.tributeOffered,
                     values.tributeToken,
                     tokenData,
                   ),
                   values.tributeToken,
-                  valToDecimal(
+                  valToDecimalString(
                     values.paymentRequested,
                     values.paymentToken,
                     tokenData,

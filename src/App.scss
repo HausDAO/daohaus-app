@@ -516,6 +516,11 @@ textarea {
 
 .DropdownInput {
   position: relative;
+  .MaxLabel { 
+    position: absolute;
+    right: 20px;
+    font-size: 0.75em;
+  }
   .UnlockButton {
     position: absolute;
     top: 50%;
