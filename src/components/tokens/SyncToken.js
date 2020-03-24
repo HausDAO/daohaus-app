@@ -4,14 +4,30 @@ import styled from 'styled-components';
 import { DaoServiceContext, CurrentWalletContext } from '../../contexts/Store';
 import Loading from '../shared/Loading';
 
+import useModal from '../shared/useModal';
+import Modal from '../shared/Modal';
+
 const SyncTokenDiv = styled.div`
   z-index: 1000;
+  display: inline-block;
+  margin-left: 10px;
+  .TinyButton {
+    padding: 5px 15px;
+    background-color: ${(props) => props.theme.danger};
+    margin: 0px;
+  }
 }`;
 
 const SyncToken = ({ token }) => {
   const [daoService] = useContext(DaoServiceContext);
   const [currentWallet] = useContext(CurrentWalletContext);
   const [loading, setLoading] = useState(false);
+
+  const { isShowing, toggle } = useModal();
+
+  const handleToggle = (modal) => {
+    toggle(modal);
+  };
 
   const syncToken = async () => {
     console.log('syncing', token);
@@ -34,13 +50,21 @@ const SyncToken = ({ token }) => {
         <>
           {currentWallet.shares > 0 ? (
             <>
-              <p>
-                This balance is{' '}
-                {parseFloat(diff / 10 ** +token.decimals).toFixed(4)} less than
-                the on-chain balance. Funds might have been sent directly to the
-                Guildbank.
-              </p>
-              <button onClick={() => syncToken()}>Sync</button>
+              <button className="TinyButton" onClick={() => toggle('syncForm')}>
+                !
+              </button>
+              <Modal
+                isShowing={isShowing.syncForm}
+                hide={() => toggle('syncForm')}
+              >
+                <p>
+                  The balance of this token is{' '}
+                  {parseFloat(diff / 10 ** +token.decimals).toFixed(4)} less
+                  than the on-chain balance. Funds might have been sent directly
+                  to the DAO. Sync to update the balance.
+                </p>
+                <button onClick={() => syncToken()}>Sync</button>
+              </Modal>
             </>
           ) : null}
         </>
