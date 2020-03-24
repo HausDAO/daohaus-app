@@ -60,6 +60,22 @@ export class TokenService {
     return balanceOf;
   }
 
+  async balanceOfToken(token) {
+    if(!token) {
+      return;
+    }
+    const contract = new this.web3.eth.Contract(Erc20Abi, token);    
+
+    const balanceOf = await contract.methods
+      .balanceOf(this.accountAddress)
+      .call({});
+    const decimals = await contract.methods.decimals().call();
+
+    return balanceOf / 10 ** decimals;
+  }
+
+
+
   async allowance(
     accountAddr = this.accountAddress,
     contractAddr = this.daoAddress,

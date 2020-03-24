@@ -635,6 +635,7 @@ export class Web3McDaoServiceV2 extends Web3McDaoService {
 
   async collectTokens(token) {
     console.log('token in service', token);
+    console.log('daoContract.methods', this.daoContract.methods);
     const txReceipt = await this.daoContract.methods
       .collectTokens(token)
       .send({ from: this.accountAddr });

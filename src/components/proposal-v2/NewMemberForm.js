@@ -17,6 +17,7 @@ import Expandable from '../shared/Expandable';
 import { ProposalSchema } from './Validation';
 import shortid from 'shortid';
 import TokenSelect from './TokenSelect';
+import { valToDecimalString } from '../../utils/Helpers';
 import { GET_TOKENS_V2 } from '../../utils/QueriesV2';
 
 const NewMemberForm = (props) => {
@@ -56,12 +57,6 @@ const NewMemberForm = (props) => {
     console.log('error', error);
   }
 
-  const valToDecimal = (value, tokenAddress, tokens) => {
-    const tdata = tokens.find((token) => token.value === tokenAddress);
-    const decimals = +tdata.decimals;
-    return '' + value * 10 ** decimals;
-  };
-
   return (
     <div>
       <h1 className="Pad">New Member Proposal</h1>
@@ -100,7 +95,7 @@ const NewMemberForm = (props) => {
                   await daoService.mcDao.submitProposal(
                     values.sharesRequested,
                     values.lootRequested,
-                    valToDecimal(
+                    valToDecimalString(
                       values.tributeOffered,
                       values.tributeToken,
                       tokenData,
@@ -114,7 +109,7 @@ const NewMemberForm = (props) => {
                   setFormLoading(false);
                   history.push(`/dao/${daoService.daoAddress}/success`);
                 } catch (err) {
-                  console.log('cancelled');
+                  console.log('cancelled', err);
                   setSubmitting(false);
                   setFormLoading(false);
                 }

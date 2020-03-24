@@ -17,6 +17,7 @@ import PaymentInput from './PaymentInput';
 import { ProposalSchema } from './Validation';
 import shortid from 'shortid';
 import TokenSelect from './TokenSelect';
+import { valToDecimalString } from '../../utils/Helpers';
 import { GET_MOLOCH_V2 } from '../../utils/QueriesV2';
 
 const TradeForm = (props) => {
@@ -56,13 +57,6 @@ const TradeForm = (props) => {
       );
     }
   }, [data]);
-
-  const valToDecimal = (value, tokenAddress, tokens) => {
-    const tdata = tokens.find((token) => token.value === tokenAddress);
-    const decimals = +tdata.decimals;
-
-    return '' + value * 10 ** decimals;
-  };
 
   if (loading) return <Loading />;
   if (error) {
@@ -108,13 +102,13 @@ const TradeForm = (props) => {
                 await daoService.mcDao.submitProposal(
                   values.sharesRequested,
                   values.lootRequested,
-                  valToDecimal(
+                  valToDecimalString(
                     values.tributeOffered,
                     values.tributeToken,
                     tokenData,
                   ),
                   values.tributeToken,
-                  valToDecimal(
+                  valToDecimalString(
                     values.paymentRequested,
                     values.paymentToken,
                     tokenData,
