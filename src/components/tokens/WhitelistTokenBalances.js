@@ -37,7 +37,6 @@ const WhitelistTokenBalancesDiv = styled.div`
 `;
 
 const WhitelistTokenBalances = (tokens) => {
-  console.log('tokens', tokens);
   const renderList = () => {
     return tokens.tokens.map((token) => {
       const needSync = token.contractTokenBalance !== token.contractBabeBalance;
