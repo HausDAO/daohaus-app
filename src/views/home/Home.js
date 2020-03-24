@@ -152,9 +152,6 @@ const Home = () => {
   if (loading) return <Loading />;
   if (error) return <ErrorMessage message={error} />;
 
-  console.log('data', data);
-  console.log('error', error);
-
   return (
     <>
       {daoData ? <HeadTags daoData={daoData} /> : null}
@@ -165,14 +162,14 @@ const Home = () => {
           <h1>{daoData.name || 'PokéMol DAO'}</h1>
           <p>{daoData.description || 'Put a Moloch in Your Pocket'}</p>
         </ThemedIntroDiv>
-        <ChartDiv>
-          {+daoData.version !== 2 && (
+        {+daoData.version !== 2 && (
+          <ChartDiv>
             <HomeChart
               guildBankAddr={data.guildBankAddr}
               chartView={chartView}
             />
-          )}
-        </ChartDiv>
+          </ChartDiv>
+        )}
         <ThemedDataDiv daoData={daoData}>
           {+daoData.version === 2 ? (
             <>
