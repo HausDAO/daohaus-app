@@ -99,7 +99,9 @@ export class McDaoService {
   }
 
   async canRagequit(highestIndexYesVote) {
-    const canRage = await this.daoContract.methods.canRagequit(highestIndexYesVote).call();
+    const canRage = await this.daoContract.methods
+      .canRagequit(highestIndexYesVote)
+      .call();
     return canRage;
   }
 
@@ -216,7 +218,7 @@ export class SdkMcDaoService extends McDaoService {
       hash,
       this.accountAddr,
       `Submit ${
-      uintVote === 1 ? 'yes' : 'no'
+        uintVote === 1 ? 'yes' : 'no'
       } vote on proposal ${proposalIndex}`,
       true,
     );
@@ -330,7 +332,7 @@ export class Web3McDaoService extends McDaoService {
       txReceipt.transactionHash,
       this.accountAddr,
       `Submit ${
-      uintVote === 1 ? 'yes' : 'no'
+        uintVote === 1 ? 'yes' : 'no'
       } vote on proposal ${proposalIndex}`,
       true,
     );
@@ -519,9 +521,7 @@ export class Web3McDaoServiceV2 extends Web3McDaoService {
       )
       .send({ from: this.accountAddr });
 
-    const queueLength = await this.daoContract.methods
-      .proposalCount()
-      .call();
+    const queueLength = await this.daoContract.methods.proposalCount().call();
     const parseDetails = JSON.parse(details);
     console.log('queueLength', queueLength);
 
@@ -549,9 +549,7 @@ export class Web3McDaoServiceV2 extends Web3McDaoService {
       .submitGuildKickProposal(memberToKick, details)
       .send({ from: this.accountAddr });
 
-      const queueLength = await this.daoContract.methods
-      .proposalCount()
-      .call();
+    const queueLength = await this.daoContract.methods.proposalCount().call();
     const parseDetails = JSON.parse(details);
     console.log('queueLength', queueLength);
 
@@ -576,21 +574,17 @@ export class Web3McDaoServiceV2 extends Web3McDaoService {
 
   async submitWhiteListProposal(address, details) {
     console.log(address, details);
-    let txReceipt = ''
-    
-    try{
+    let txReceipt = '';
+
+    try {
       txReceipt = await this.daoContract.methods
-      .submitWhitelistProposal(address, details)
-      .send({ from: this.accountAddr });
-    } catch(err){
+        .submitWhitelistProposal(address, details)
+        .send({ from: this.accountAddr });
+    } catch (err) {
       console.log(err);
-      
     }
 
-
-    const queueLength = await this.daoContract.methods
-      .proposalCount()
-      .call();
+    const queueLength = await this.daoContract.methods.proposalCount().call();
     const parseDetails = JSON.parse(details);
     console.log('queueLength', queueLength);
 
@@ -634,6 +628,21 @@ export class Web3McDaoServiceV2 extends Web3McDaoService {
       txReceipt.transactionHash,
       this.accountAddr,
       `Withdraw Token. tokens..., amounts...`,
+      true,
+    );
+    return txReceipt.transactionHash;
+  }
+
+  async collectTokens(token) {
+    console.log('token in service', token);
+    console.log('daoContract.methods', this.daoContract.methods);
+    const txReceipt = await this.daoContract.methods
+      .collectTokens(token)
+      .send({ from: this.accountAddr });
+    this.bcProcessor.setTx(
+      txReceipt.transactionHash,
+      this.accountAddr,
+      `Collect Token. token...`,
       true,
     );
     return txReceipt.transactionHash;

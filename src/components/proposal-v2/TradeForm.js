@@ -18,7 +18,7 @@ import { ProposalSchema } from './Validation';
 import shortid from 'shortid';
 import TokenSelect from './TokenSelect';
 import { valToDecimalString } from '../../utils/Helpers';
-import { GET_TOKENS_V2, GET_MOLOCH_V2 } from '../../utils/QueriesV2';
+import { GET_MOLOCH_V2 } from '../../utils/QueriesV2';
 
 const TradeForm = (props) => {
   const { history } = props;
@@ -45,14 +45,15 @@ const TradeForm = (props) => {
       console.log('set', data);
 
       setTokenData(
-        data.moloch.tokenBalances.reverse()
-        .filter((token) => token.guildBank)
-        .map((token) => ({
-          label: token.symbol || token.tokenAddress,
-          value: token.token.tokenAddress,
-          decimals: token.decimals,
-          balance: token.tokenBalance,
-        })),
+        data.moloch.tokenBalances
+          .reverse()
+          .filter((token) => token.guildBank)
+          .map((token) => ({
+            label: token.symbol || token.tokenAddress,
+            value: token.token.tokenAddress,
+            decimals: token.decimals,
+            balance: token.tokenBalance,
+          })),
       );
     }
   }, [data]);
@@ -82,7 +83,7 @@ const TradeForm = (props) => {
                 paymentRequested: 0,
                 paymentToken: tokenData[0].value,
                 sharesRequested: 0,
-                lootRequested:0
+                lootRequested: 0,
               }}
               validationSchema={ProposalSchema}
               onSubmit={async (values, { setSubmitting }) => {
@@ -183,9 +184,7 @@ const TradeForm = (props) => {
                     )}
                   </ErrorMessage>
                   <ErrorMessage name="tributeToken">
-                    {(msg) => (
-                      <div className="Error">Tribute Token: {msg}</div>
-                    )}
+                    {(msg) => <div className="Error">Tribute Token: {msg}</div>}
                   </ErrorMessage>
 
                   <ErrorMessage name="tributeOffered">
@@ -205,7 +204,7 @@ const TradeForm = (props) => {
                       component={TokenSelect}
                       label="Payment Token"
                       data={tokenData}
-                      token={props.values.paymentToken || ''} 
+                      token={props.values.paymentToken || ''}
                     ></Field>
                   </div>
 
@@ -220,8 +219,8 @@ const TradeForm = (props) => {
               )}
             </Formik>
           ) : (
-              <Loading />
-            )}
+            <Loading />
+          )}
         </div>
       </div>
     </div>

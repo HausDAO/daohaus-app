@@ -8,6 +8,41 @@ export const GET_METADATA_V2 = gql`
 
 // /apiData @client
 
+export const GET_MOLOCH_V2_HOME = gql`
+  query daos($contractAddr: String!) {
+    dao(id: $contractAddr) {
+      id
+      index
+      moloch
+      summoner
+      version
+      title
+    }
+    moloch(id: $contractAddr) {
+      id
+      totalShares
+      summoningTime
+      members {
+        id
+      }
+      tokenBalances {
+        token {
+          tokenAddress
+        }
+        symbol @client
+        decimals @client
+        tokenBalance
+        guildBank
+        contractTokenBalance @client
+        contractBabeBalance @client
+        moloch {
+          id
+        }
+      }
+    }
+  }
+`;
+
 export const GET_MOLOCH_V2 = gql`
   query daos($contractAddr: String!) {
     dao(id: $contractAddr) {
@@ -135,6 +170,9 @@ export const GET_MEMBERS_V2 = gql`
       tokenTribute
       didRagequit
       memberAddress
+      moloch {
+        totalShares
+      }
     }
   }
 `;
@@ -167,6 +205,7 @@ export const GET_MEMBER_V2 = gql`
         cancelled
       }
       moloch {
+        totalShares
         depositToken {
           tokenAddress
           symbol @client
