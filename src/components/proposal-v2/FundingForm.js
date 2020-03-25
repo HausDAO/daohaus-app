@@ -19,7 +19,7 @@ import { ProposalSchema } from './Validation';
 import shortid from 'shortid';
 import TokenSelect from './TokenSelect';
 import { valToDecimalString } from '../../utils/Helpers';
-import { GET_TOKENS_V2 } from '../../utils/QueriesV2';
+import { GET_MOLOCH_V2 } from '../../utils/QueriesV2';
 
 const FundingForm = (props) => {
   const { history } = props;
@@ -36,7 +36,7 @@ const FundingForm = (props) => {
     client: daoData.altClient,
     fetchPolicy: 'no-cache',
   };
-  const query = GET_TOKENS_V2;
+  const query = GET_MOLOCH_V2;
 
   const { loading, error, data } = useQuery(query, options);
 
@@ -46,10 +46,14 @@ const FundingForm = (props) => {
       console.log('set');
 
       setTokenData(
-        data.moloch.approvedTokens.reverse().map((token) => ({
+        data.moloch.tokenBalances
+          .reverse()
+          .filter((token) => token.guildBank)
+          .map((token) => ({
           label: token.symbol || token.tokenAddress,
-          value: token.tokenAddress,
+          value: token.token.tokenAddress,
           decimals: token.decimals,
+          balance: token.tokenBalance,
         })),
       );
     }
@@ -180,6 +184,8 @@ const FundingForm = (props) => {
                     <Field
                       name="paymentRequested"
                       component={PaymentInput}
+                      data={tokenData}
+                      token={props.values.paymentToken || ''}
                       label="Payment Requested"
                     ></Field>
                     <Field

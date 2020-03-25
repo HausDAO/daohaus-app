@@ -197,6 +197,8 @@ const TradeForm = (props) => {
                     <Field
                       name="paymentRequested"
                       component={PaymentInput}
+                      data={tokenData}
+                      token={props.values.paymentToken || ''}
                       label="Payment Requested"
                     ></Field>
                     <Field
@@ -204,7 +206,6 @@ const TradeForm = (props) => {
                       component={TokenSelect}
                       label="Payment Token"
                       data={tokenData}
-                      token={props.values.paymentToken || ''}
                     ></Field>
                   </div>
 
