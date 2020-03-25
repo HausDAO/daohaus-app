@@ -2,7 +2,7 @@ import React, { useState, useContext } from 'react';
 import { useQuery } from '@apollo/react-hooks';
 
 import { GET_METADATA } from '../../utils/Queries';
-import { GET_MOLOCH_V2 } from '../../utils/QueriesV2';
+import { GET_MOLOCH_V2_HOME } from '../../utils/QueriesV2';
 import { DaoDataContext } from '../../contexts/Store';
 import StateModals from '../../components/shared/StateModals';
 import BottomNav from '../../components/shared/BottomNav';
@@ -125,7 +125,7 @@ const Home = (props) => {
     variables:
       daoData.version === 2 ? { contractAddr: daoData.contractAddress } : {},
   };
-  const query = daoData.version === 2 ? GET_MOLOCH_V2 : GET_METADATA;
+  const query = daoData.version === 2 ? GET_MOLOCH_V2_HOME : GET_METADATA;
   if (daoData.isLegacy || daoData.version === 2) {
     options.client = daoData.altClient;
   }
@@ -145,14 +145,14 @@ const Home = (props) => {
           <h1>{daoData.name || 'PokéMol DAO'}</h1>
           <p>{daoData.description || 'Put a Moloch in Your Pocket'}</p>
         </IntroDiv>
-        <ChartDiv>
-          {+daoData.version !== 2 && (
+        {+daoData.version !== 2 && (
+          <ChartDiv>
             <HomeChart
               guildBankAddr={data.guildBankAddr}
               chartView={chartView}
             />
-          )}
-        </ChartDiv>
+          </ChartDiv>
+        )}
         <DataDiv>
           {+daoData.version === 2 ? (
             <>

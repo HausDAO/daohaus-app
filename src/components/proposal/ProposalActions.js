@@ -1,4 +1,4 @@
-import React, { useState, useContext } from 'react';
+import React, { useState, useContext, useEffect } from 'react';
 import { withApollo } from 'react-apollo';
 import { withRouter } from 'react-router-dom';
 
@@ -12,8 +12,20 @@ import TinyLoader from '../shared/TinyLoader';
 const ProposalActions = ({ client, proposal, history }) => {
   const [currentUser] = useContext(CurrentUserContext);
   const [loading, setLoading] = useState(false);
+  const [deposit, setDeposit] = useState(false);
   const [currentWallet] = useContext(CurrentWalletContext);
   const [daoService] = useContext(DaoServiceContext);
+
+  useEffect(() => {
+    const getDeposit = async () => {
+      const propDeposit = await daoService.mcDao.getProposalDeposit();
+      const symbol = await daoService.token.getSymbol();
+      const decimals = await daoService.token.getDecimals();
+      setDeposit(`${propDeposit / 10 ** decimals} ${symbol}`);
+    }
+    getDeposit();
+    // eslint-disable-next-line
+  }, [])
 
   const cancelProposal = async (id) => {
     setLoading(true);
@@ -38,6 +50,8 @@ const ProposalActions = ({ client, proposal, history }) => {
       setLoading(false);
       history.push(`/dao/${daoService.daoAddress}/success?action=sponsored`);
     }
+
+
   };
 
   const unlock = async (token) => {
@@ -52,9 +66,6 @@ const ProposalActions = ({ client, proposal, history }) => {
     }
   };
 
-  console.log('currentWallet', currentWallet);
-  console.log('proposal actions', proposal);
-
   return (
     <>
       {loading ? (
@@ -62,35 +73,35 @@ const ProposalActions = ({ client, proposal, history }) => {
           <TinyLoader />
         </button>
       ) : (
-        <>
-          {!proposal.sponsored &&
-            !proposal.cancelled &&
-            proposal.proposer.toLowerCase() ===
+          <>
+            {!proposal.sponsored &&
+              !proposal.cancelled &&
+              proposal.proposer.toLowerCase() ===
               currentUser.username.toLowerCase() && (
-              <button onClick={() => cancelProposal(proposal.proposalId)}>
-                <span>Cancel My Proposal</span>
-              </button>
-            )}
-          {currentWallet.allowance > 0 ? (
-            <>
-              {!proposal.sponsored &&
-                !proposal.cancelled &&
-                currentWallet.shares > 0 && (
-                  <button onClick={() => sponsorProposal(proposal.proposalId)}>
-                    <span>Sponsor Proposal</span>
-                  </button>
-                )}
-            </>
-          ) : (
-            <button
-              className="UnlockButton"
-              onClick={() => unlock(proposal.moloch.depositToken.tokenAddress)}
-            >
-              <span>Unlock Token To Sponsor</span>
-            </button>
-          )}
-        </>
-      )}
+                <button onClick={() => cancelProposal(proposal.proposalId)}>
+                  <span>Cancel My Proposal</span>
+                </button>
+              )}
+            {currentWallet.allowance > 0 ? (
+              <>
+                {!proposal.sponsored &&
+                  !proposal.cancelled &&
+                  currentWallet.shares > 0 && (
+                    <button onClick={() => sponsorProposal(proposal.proposalId)}>
+                      <span>Sponsor Proposal ({deposit})</span>
+                    </button>
+                  )}
+              </>
+            ) : (
+                <button
+                  className="UnlockButton"
+                  onClick={() => unlock(proposal.moloch.depositToken.tokenAddress)}
+                >
+                  <span>Unlock Token To Sponsor</span>
+                </button>
+              )}
+          </>
+        )}
     </>
   );
 };
