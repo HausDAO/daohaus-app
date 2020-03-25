@@ -1,32 +1,5 @@
 @import '../../variables';
 
-.ProposalFilter {
-  width: 100%;
-  border-top: 2px solid #efefef;
-  &__Filters {
-    max-width: 100%;
-    overflow: auto;
-    white-space: nowrap;
-    padding: 10px 0px;
-    @media (min-width: $grid) {
-      display: flex;
-      flex-direction: row;
-      justify-content: space-around;
-    }
-    button {
-      display: inline;
-      min-width: auto;
-      margin: 0;
-      background-color: transparent;
-      color: #ccc;
-      &:hover {
-        color: black;
-        background-color: transparent;
-      }
-      &.Active {
-        color: black;
-        background-color: transparent;
-      }
-    }
-  }
+.Active {
+  color: white;
 }
