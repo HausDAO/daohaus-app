@@ -19,6 +19,7 @@ const SyncTokenDiv = styled.div`
 }`;
 
 const SyncToken = ({ token }) => {
+  console.log('token', token);
   const [daoService] = useContext(DaoServiceContext);
   const [currentWallet] = useContext(CurrentWalletContext);
   const [loading, setLoading] = useState(false);
@@ -63,7 +64,14 @@ const SyncToken = ({ token }) => {
                   than the on-chain balance. Funds might have been sent directly
                   to the DAO. Sync to update the balance.
                 </p>
-                <button onClick={() => syncToken()}>Sync</button>
+                {token.tokenBalance > 0 ? (
+                  <button onClick={() => syncToken()}>Sync</button>
+                ) : (
+                  <p>
+                    The sync will only work if the token balance is more than 0.
+                    You will need to add to that through a tribute proposal.
+                  </p>
+                )}
               </Modal>
             </>
           ) : null}
