@@ -13,7 +13,12 @@ const Success = ({ location }) => {
     <>
       <div className="Block" style={{ textAlign: 'center' }}>
         <div className="Pad">
-          <h2>Success 🤩</h2>
+          <h2>
+            Success{' '}
+            <span role="img" aria-label="success">
+              🤩
+            </span>
+          </h2>
           {action ? (
             <p>
               Your proposal hase been {action} on chain. The update will show in
