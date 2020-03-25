@@ -32,8 +32,11 @@ export const FilterButton = styled.button`
   text-decoration: none;
   position: relative;
   transition: all 0.15s ease-in-out;
-  color: ${(props) =>
-    props.active ? props.theme.baseFontColor : props.theme.secondary};
+  color: ${(props) => {
+    return props.activeClass
+      ? props.theme.baseFontColor
+      : props.theme.secondary;
+  }};
   border-radius: 50px;
   padding: 15px 30px;
   max-width: 100%;
@@ -83,6 +86,9 @@ const ProposalFilter = ({ proposals, filter, history, unsponsoredView }) => {
     return <></>;
   }
 
+  console.log('filter', filter);
+  console.log('unsponsoredView', unsponsoredView);
+
   return (
     <ProposalFilterDiv>
       <ProposalFiltersDiv>
@@ -92,7 +98,7 @@ const ProposalFilter = ({ proposals, filter, history, unsponsoredView }) => {
               onClick={() =>
                 handleSelect(groupedProposals.VotingPeriod, 'VotingPeriod')
               }
-              active={filter === 'Voting' ? true : false}
+              activeClass={filter === 'VotingPeriod'}
             >
               Voting Period (
               {groupedProposals.VotingPeriod &&
@@ -103,7 +109,7 @@ const ProposalFilter = ({ proposals, filter, history, unsponsoredView }) => {
               onClick={() =>
                 handleSelect(groupedProposals.GracePeriod, 'GracePeriod')
               }
-              className={activeItem ? 'Active' : null}
+              activeClass={filter === 'GracePeriod'}
             >
               Grace Period (
               {groupedProposals.GracePeriod &&
@@ -117,7 +123,7 @@ const ProposalFilter = ({ proposals, filter, history, unsponsoredView }) => {
                   'ReadyForProcessing',
                 )
               }
-              className={activeItem ? 'Active' : null}
+              activeClass={filter === 'ReadyForProcessing'}
             >
               Ready For Processing (
               {groupedProposals.ReadyForProcessing &&
@@ -128,14 +134,14 @@ const ProposalFilter = ({ proposals, filter, history, unsponsoredView }) => {
               onClick={() =>
                 handleSelect(groupedProposals.Completed, 'Completed')
               }
-              className={activeItem ? 'Active' : null}
+              activeClass={filter === 'Completed'}
             >
               Completed (
               {groupedProposals.Completed && groupedProposals.Completed.length})
             </FilterButton>
             <FilterButton
               onClick={() => handleSelect(groupedProposals.InQueue, 'InQueue')}
-              className={activeItem ? 'Active' : null}
+              activeClass={filter === 'InQueue'}
             >
               In Queue (
               {groupedProposals.InQueue && groupedProposals.InQueue.length})
@@ -147,7 +153,7 @@ const ProposalFilter = ({ proposals, filter, history, unsponsoredView }) => {
               onClick={() =>
                 handleSelect(groupedProposals.Unsponsored, 'Unsponsored')
               }
-              className={activeItem ? 'Active' : null}
+              activeClass={filter === 'Unsponsored'}
             >
               Open (
               {groupedProposals.Unsponsored &&
@@ -159,7 +165,7 @@ const ProposalFilter = ({ proposals, filter, history, unsponsoredView }) => {
               onClick={() =>
                 handleSelect(groupedProposals.Cancelled, 'Cancelled')
               }
-              className={activeItem ? 'Active' : null}
+              activeClass={filter === 'Cancelled'}
             >
               Cancelled (
               {groupedProposals.Cancelled && groupedProposals.Cancelled.length})
