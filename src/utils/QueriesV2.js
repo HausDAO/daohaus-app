@@ -225,6 +225,12 @@ export const GET_TOKENS_V2 = gql`
         symbol @client
         decimals @client
       }
+      tokens {
+        tokenAddress
+        ticker
+        symbol @client
+        decimals @client
+      }
     }
   }
 `;
