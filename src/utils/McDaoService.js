@@ -379,13 +379,16 @@ export class Web3McDaoService extends McDaoService {
   }
 
   async submitProposal(applicant, tokenTribute, sharesRequested, details) {
+
+    const queueLength = await this.daoContract.methods
+    .getProposalQueueLength()
+    .call();
+
     const txReceipt = await this.daoContract.methods
       .submitProposal(applicant, tokenTribute, sharesRequested, details)
       .send({ from: this.accountAddr });
-
-    const queueLength = await this.daoContract.methods
-      .getProposalQueueLength()
-      .call();
+    console.log(txReceipt);
+    
     const parseDetails = JSON.parse(details);
 
     const proposalObj = {
