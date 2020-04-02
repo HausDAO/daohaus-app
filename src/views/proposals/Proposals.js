@@ -25,6 +25,7 @@ const Proposals = ({ match, history }) => {
   const [daoData] = useContext(DaoDataContext);
   const [proposals, setProposals] = useState([]);
   const [sponsored, setSponsored] = useState(true);
+  const [fetched, setFetched] = useState(false);
 
   let proposalQuery, options;
 
@@ -50,7 +51,7 @@ const Proposals = ({ match, history }) => {
   const { loading, error, data, fetchMore } = useQuery(proposalQuery, options);
 
   useEffect(() => {
-    if (data && data.proposals) {
+    if (data && data.proposals && fetched) {
       if (+daoData.version === 2) {
         const filteredProposals = data.proposals.filter(
           (prop) => prop.sponsored === sponsored,
@@ -61,7 +62,7 @@ const Proposals = ({ match, history }) => {
       }
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [data, sponsored]);
+  }, [data, sponsored, fetched]);
 
   if (loading) return <Loading />;
   if (error) return <ErrorMessage message={error} />;
@@ -69,7 +70,10 @@ const Proposals = ({ match, history }) => {
   fetchMore({
     variables: { skip: data.proposals.length },
     updateQuery: (prev, { fetchMoreResult }) => {
-      if (!fetchMoreResult) return;
+      if (!fetchMoreResult.proposals.length) {
+        setFetched(true);
+        return;
+      }
       return Object.assign({}, prev, {
         proposals: [...prev.proposals, ...fetchMoreResult.proposals],
       });
