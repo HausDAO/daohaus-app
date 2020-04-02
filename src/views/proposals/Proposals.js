@@ -1,6 +1,7 @@
 import React, { useContext, Fragment, useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { useQuery } from '@apollo/react-hooks';
+import _ from 'lodash';
 
 import { GET_PROPOSALS, GET_PROPOSALS_LEGACY } from '../../utils/Queries';
 import { GET_PROPOSALS_V2 } from '../../utils/QueriesV2';
@@ -75,7 +76,10 @@ const Proposals = ({ match, history }) => {
         return;
       }
       return Object.assign({}, prev, {
-        proposals: [...prev.proposals, ...fetchMoreResult.proposals],
+        proposals: _.uniqBy(
+          [...prev.proposals, ...fetchMoreResult.proposals],
+          'id',
+        ),
       });
     },
   });
