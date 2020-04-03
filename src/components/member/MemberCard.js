@@ -20,7 +20,7 @@ import {
 
 const MemberCardDiv = styled.div`
   background-color: ${(props) => getAppLight(props.theme)};
-  color: black;
+  color: ${(props) => props.theme.baseFontColor};
   margin-top: 25px;
   border-top: 2px solid ${(props) => getAppDark(props.theme)};
   border-bottom: 2px solid ${(props) => getAppDark(props.theme)};
@@ -29,7 +29,7 @@ const MemberCardDiv = styled.div`
 
   @media (min-width: ${phone}) {
     width: 320px;
-    border: 2px solid ${(props) => props.theme.appDark};
+    border: 2px solid ${(props) => getAppDark(props.theme)};
     margin-bottom: 25px;
     border-radius: 10px;
     box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
@@ -38,7 +38,7 @@ const MemberCardDiv = styled.div`
   &:hover {
     background-color: ${(props) => props.theme.primary};
     color: white;
-    @media (min-width: phone) {
+    @media (min-width: ${phone}) {
       scale: 1.05;
     }
   }

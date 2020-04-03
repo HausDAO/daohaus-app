@@ -16,11 +16,8 @@ import {
   defaultTheme,
   molochTheme,
   getAppBackground,
-  getBaseFontColor,
   GlobalStyle,
 } from './variables.styles';
-
-// import './App.scss';
 
 const AppDiv = styled.div`
   background-color: ${(props) => getAppBackground(props.theme)};

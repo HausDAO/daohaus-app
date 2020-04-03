@@ -16,6 +16,7 @@ export const ProposalFiltersDiv = styled.div`
   overflow: auto;
   white-space: nowrap;
   padding: 10px 0px;
+  display: inline-flex;
   @media (min-width: ${grid}) {
     display: flex;
     flex-direction: row;
