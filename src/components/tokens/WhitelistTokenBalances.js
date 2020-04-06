@@ -9,6 +9,7 @@ const WhitelistTokenBalancesDiv = styled.div`
   max-width: 600px;
   width: 100%;
   margin: 50px auto 0px;
+  padding-bottom: 120px;
   > h5 {
     font-size: 1.25em;
     margin-bottom: 25px; // brokenStyle

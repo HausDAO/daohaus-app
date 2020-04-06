@@ -8,6 +8,8 @@ import {
   getTertiaryHover,
 } from './variables.styles';
 
+import { Link } from 'react-router-dom';
+
 export const ButtonButton = styled.button`
   appearance: none;
   outline: none;
@@ -250,11 +252,12 @@ export const PadDiv = styled.div`
   padding-right: 15px;
 `;
 
-export const LinkButton = styled(ButtonButton)`
+export const LinkButton = styled(Link)`
   background-color: transparent;
   color: ${(props) => props.theme.primary};
   padding: 0px;
   margin: 0px;
+  font-weight: bold;
   &:hover {
     background-color: transparent;
     color: ${(props) => getPrimaryHover(props.theme)};

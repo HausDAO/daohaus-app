@@ -4,8 +4,6 @@ import { useQuery } from 'react-apollo';
 import { GET_MEMBER_V2 } from '../../utils/QueriesV2';
 import Loading from '../shared/Loading';
 
-import './ProposalDetail.scss';
-
 const ProposalKickedMember = ({ proposal }) => {
   const [daoData] = useContext(DaoDataContext);
 

@@ -16,11 +16,8 @@ import {
   defaultTheme,
   molochTheme,
   getAppBackground,
-  getBaseFontColor,
   GlobalStyle,
 } from './variables.styles';
-
-// import './App.scss';
 
 const AppDiv = styled.div`
   background-color: ${(props) => getAppBackground(props.theme)};
@@ -170,7 +167,9 @@ const App = ({ client }) => {
   return (
     <div className="App">
       {loading ? (
-        <Loading />
+        <ThemeProvider theme={theme}>
+          <Loading />
+        </ThemeProvider>
       ) : (
         <Router>
           <ThemeProvider theme={theme}>

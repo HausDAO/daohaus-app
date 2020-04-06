@@ -1,6 +1,8 @@
 import React, { useEffect, useState, useContext } from 'react';
 import ReactPlayer from 'react-player';
 import { withApollo } from 'react-apollo';
+import styled from 'styled-components';
+import { basePadding } from '../../variables.styles';
 
 import {
   getProposalCountdownText,
@@ -18,13 +20,29 @@ import { get } from '../../utils/Requests';
 import Web3Service from '../../utils/Web3Service';
 import VoteControl from './VoteControl';
 import ValueDisplay from '../shared/ValueDisplay';
-
-import './ProposalDetail.scss';
 import { withRouter } from 'react-router-dom';
 import ProposalActions from './ProposalActions';
 import ProposalV2Guts from './ProposalV2Guts';
 
 const web3Service = new Web3Service();
+
+const ProposalDetailDiv = styled.div`
+  padding: ${basePadding};
+`;
+
+const TimerDiv = styled.div`
+  display: flex;
+  align-content: center;
+  svg {
+    margin: 0;
+    margin-top: -4px;
+    margin-right: 5px;
+    fill: ${(props) => props.theme.baseFontColor};
+  }
+  p {
+    margin: 0;
+  }
+`;
 
 const ProposalDetail = ({
   proposal,
@@ -75,10 +93,9 @@ const ProposalDetail = ({
   const title = titleMaker(proposal);
   const memberUrlV1 = `/dao/${daoData.contractAddress}/member/${daoData.contractAddress}-${proposal.memberAddress}`;
 
-
   return (
-    <div className="ProposalDetail">
-      <div className="Timer">
+    <ProposalDetailDiv>
+      <TimerDiv>
         <svg
           xmlns="http://www.w3.org/2000/svg"
           width="24"
@@ -89,7 +106,7 @@ const ProposalDetail = ({
           <path d="M15 1H9v2h6V1zm-4 13h2V8h-2v6zm8.03-6.61l1.42-1.42c-.43-.51-.9-.99-1.41-1.41l-1.42 1.42C16.07 4.74 14.12 4 12 4c-4.97 0-9 4.03-9 9s4.02 9 9 9 9-4.03 9-9c0-2.12-.74-4.07-1.97-5.61zM12 20c-3.87 0-7-3.13-7-7s3.13-7 7-7 7 3.13 7 7-3.13 7-7 7z" />
         </svg>
         <p className="Data">{countDown}</p>
-      </div>
+      </TimerDiv>
       {proposal.proposalType ? <h5>{proposal.proposalType}</h5> : null}
 
       <h2>{title}</h2>
@@ -100,7 +117,9 @@ const ProposalDetail = ({
           <h5 className="Label">Applicant Address</h5>
           <p className="Data">{proposal.applicantAddress}</p>
           <h5 className="Label">Proposor Address</h5>
-          <p className="Data"><a href={memberUrlV1}>{proposal.memberAddress}</a></p>
+          <p className="Data">
+            <a href={memberUrlV1}>{proposal.memberAddress}</a>
+          </p>
 
           <div className="Offer">
             <div className="Shares">
@@ -174,7 +193,7 @@ const ProposalDetail = ({
           ) : null}
         </>
       )}
-    </div>
+    </ProposalDetailDiv>
   );
 };
 
