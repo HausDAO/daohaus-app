@@ -15,8 +15,6 @@ import styled from 'styled-components';
 import WhitelistTokenBalances from '../../components/tokens/WhitelistTokenBalances';
 import { basePadding } from '../../variables.styles';
 
-// import './Home.scss';
-
 const HomeDiv = styled.div`
   width: 100%;
   text-align: center;
@@ -26,7 +24,7 @@ const HomeDiv = styled.div`
   background-size: cover;
   background-position: center center;
   background-repeat: no-repeat;
-  height: 100vh;
+  min-height: calc(100vh - 62px);
   background-image: url(${(props) => props.theme.brandBg});
   h1 {
     text-align: center;
@@ -88,6 +86,7 @@ const DataDiv = styled.div`
     font-size: 28px;
   }
   .Row {
+    display: flex;
     justify-content: space-evenly;
     margin-top: 25px;
   }

@@ -1,16 +1,18 @@
 import styled from 'styled-components';
 
 import {
+  appLight,
   phone,
   primary,
   getPrimaryHover,
   getAppLight,
+  getAppDark,
   getDangerHover,
 } from '../../variables.styles';
 import { FlexCenterDiv, DataButton } from '../../App.styles';
 
 export const WalletDiv = styled.div`
-  border: 1px solid #efefef;
+  border: none;
   border-radius: 10px;
   position: relative;
   top: -2px;
@@ -132,7 +134,7 @@ export const ActionsDropdownDiv = styled.div`
 
 export const SwitchHeaderDiv = styled.div`
   width: calc(100% - 30px);
-  background-color: #911094;
+  background-color: ${(props) => getAppLight(props.theme)};
   display: flex;
   justify-content: flex-start;
   padding: 0px 15px;
@@ -169,33 +171,12 @@ export const ActionsDropdownContentDiv = styled.div`
   z-index: 3;
   button {
     background-color: transparent;
-    color: ${primary};
+    color: ${(props) => props.theme.primary};
     text-align: left;
     padding: 15px 0px;
     margin: 0;
     &:hover {
       color: ${(props) => getPrimaryHover(props.theme)};
-    }
-    &.Button--Primary {
-      color: $primary;
-      &:hover {
-        color: $primary-hover;
-      }
-    }
-    &.Button--Secondary {
-      color: $secondary;
-      &:hover {
-        color: $secondary-hover;
-      }
-      &:disabled {
-        color: grey;
-      }
-    }
-    &.Button--Tertiary {
-      color: $tertiary;
-      &:hover {
-        color: $tertiary-hover;
-      }
     }
   }
 `;
@@ -214,7 +195,7 @@ export const BalanceItemDiv = styled.div`
   justify-content: space-between;
   padding: 15px 15px;
   flex-direction: column;
-  background-color: $app-light;
+  background-color: ${(props) => getAppLight(props.theme)};
   @media (min-width: $tablet) {
     flex-direction: column;
   }
@@ -222,10 +203,10 @@ export const BalanceItemDiv = styled.div`
     margin: 0;
     padding: 0px;
   }
-  border-bottom: 1px solid #efefef;
+  border-bottom: 1px solid ${(props) => getAppDark(props.theme)};
   p:nth-child(1) {
     font-size: 0.85em;
-    color: #333;
+    color: ${(props) => getAppDark(props.theme)};
   }
   p:nth-child(2) {
     font-size: 1.5em;

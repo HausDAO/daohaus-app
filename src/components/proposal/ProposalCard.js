@@ -1,5 +1,4 @@
 import React, { useContext } from 'react';
-import { Link } from 'react-router-dom';
 import { withApollo } from 'react-apollo';
 import Web3 from 'web3';
 import styled from 'styled-components';
@@ -14,13 +13,7 @@ import { DaoServiceContext, DaoDataContext } from '../../contexts/Store';
 import ValueDisplay from '../shared/ValueDisplay';
 
 import { getAppDark, getAppLight, phone } from '../../variables.styles';
-import {
-  DataP,
-  DataH2,
-  OfferDiv,
-  ButtonDiv,
-  LinkButton,
-} from '../../App.styles';
+import { DataP, DataH2, OfferDiv, LinkButton } from '../../App.styles';
 
 import StackedVote from './StackedVote';
 // import './ProposalCard.scss';

@@ -4,10 +4,8 @@ import styled from 'styled-components';
 import {
   primary,
   tertiary,
-  appDark,
   getAppLight,
   getAppDark,
-  appLight,
 } from '../../variables.styles';
 
 import VoteYes from '../../assets/thumbs-up.png';
@@ -26,21 +24,20 @@ const VoteControlDiv = styled.div`
   bottom: 0;
   height: 105px;
   width: calc(100% - 0px);
-  margin-left: 0;
+  margin-left: -15px;
   border-top: 1px solid ${(props) => getAppDark(props.theme)};
   background-color: ${(props) => getAppLight(props.theme)};
   z-index: 1;
   .Contents {
-      position: relative; 
-      width: 100%;
-      height: 100%;
+    position: relative;
+    width: 100%;
+    height: 100%;
   }
   .Voter {
-      width: 100%;
-      height: 100%;
-      position: relative;
+    width: 100%;
+    height: 100%;
+    position: relative;
   }
-}
 `;
 
 const VoteButton = styled.button`
@@ -259,12 +256,12 @@ const VoteControl = ({ submitVote, proposal }) => {
           </div>
         ) : (
           <div className="Voter">
-            <button
+            <VoteButton
               onClick={() => alert('You can not vote at this time')}
               className={votedNo(proposal)}
             >
               <img src={VoteNo} alt="Vote No" />
-            </button>
+            </VoteButton>
             <StackedVote
               id={
                 +daoData.version === 2
@@ -274,12 +271,12 @@ const VoteControl = ({ submitVote, proposal }) => {
               currentYesVote={currentYesVote}
               currentNoVote={currentNoVote}
             />
-            <button
+            <VoteButton
               onClick={() => alert('You can not vote at this time')}
               className={votedYes(proposal)}
             >
               <img src={VoteYes} alt="Vote Yes" />
-            </button>
+            </VoteButton>
           </div>
         )}
       </div>

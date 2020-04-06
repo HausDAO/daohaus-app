@@ -190,6 +190,7 @@ const TopNav = (props) => {
                       toggleElement();
                       toggle('signOutMsg');
                     }}
+                    to="/"
                   >
                     {'<='} Sign out
                   </LinkButton>

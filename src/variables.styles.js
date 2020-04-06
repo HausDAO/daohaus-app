@@ -104,6 +104,21 @@ export const GlobalStyle = createGlobalStyle`
     text-align: center;
     font-weight: 900;
   }
+  input,
+  textarea {
+    outline: none;
+    appearance: none;
+    border: none;
+    background-color: ${(props) => getAppLight(props.theme)};
+    color: ${(props) => props.theme.baseFontColor};
+    border: none;
+    min-width: 240px;
+    width: calc(100% - 40px);
+    font-size: 21px;
+    padding: 20px 20px 10px 20px;
+    border-radius: 35px;
+    box-shadow: $shadow;
+  }
 `;
 
 export const FlashDiv = styled.div`

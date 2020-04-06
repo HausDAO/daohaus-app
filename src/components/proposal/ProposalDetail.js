@@ -20,8 +20,6 @@ import { get } from '../../utils/Requests';
 import Web3Service from '../../utils/Web3Service';
 import VoteControl from './VoteControl';
 import ValueDisplay from '../shared/ValueDisplay';
-
-// import './ProposalDetail.scss';
 import { withRouter } from 'react-router-dom';
 import ProposalActions from './ProposalActions';
 import ProposalV2Guts from './ProposalV2Guts';

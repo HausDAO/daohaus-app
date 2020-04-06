@@ -167,7 +167,9 @@ const App = ({ client }) => {
   return (
     <div className="App">
       {loading ? (
-        <Loading />
+        <ThemeProvider theme={theme}>
+          <Loading />
+        </ThemeProvider>
       ) : (
         <Router>
           <ThemeProvider theme={theme}>

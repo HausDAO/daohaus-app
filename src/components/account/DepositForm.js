@@ -4,6 +4,8 @@ import CopyToClipboard from 'react-copy-to-clipboard';
 import { CurrentUserContext } from '../../contexts/Store';
 import { useInterval } from '../../utils/PollingUtil';
 
+import { FlashDiv } from '../../variables.styles';
+
 const DepositForm = () => {
   const [currentUser] = useContext(CurrentUserContext);
   const [delay, setDelay] = useState(null);
@@ -27,19 +29,19 @@ const DepositForm = () => {
   return (
     <React.Fragment>
       {copied && (
-        <div className="Flash">
+        <FlashDiv>
           <p>Copied!</p>
-        </div>
+        </FlashDiv>
       )}
       <h2>Send funds to your account address</h2>
       <p>You need Eth in your account to run transactions.</p>
       <p>
         <svg
-          className="EthLogo"
           viewBox="0 0 256 417"
           version="1.1"
           xmlns="http://www.w3.org/2000/svg"
           preserveAspectRatio="xMidYMid"
+          style={{ width: '36px' }}
         >
           <g>
             <polygon
@@ -77,7 +79,7 @@ const DepositForm = () => {
       >
         <path fill="none" d="M0 0h24v24H0V0z" />
         <path
-          fill="#010101"
+          fill="white"
           d="M20 12l-1.41-1.41L13 16.17V4h-2v12.17l-5.58-5.59L4 12l8 8 8-8z"
         />
       </svg>

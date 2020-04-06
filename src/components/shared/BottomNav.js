@@ -55,7 +55,7 @@ const BottomNav = (props) => {
   }
 
   return (
-    <BottomNavDiv daoAddress={daoService.daoAddress} location={props.location}>
+    <BottomNavDiv location={props.location} daoAddress={daoService.daoAddress}>
       <Link to={`/dao/${daoService.daoAddress}/proposals`}>
         <svg
           xmlns="http://www.w3.org/2000/svg"
