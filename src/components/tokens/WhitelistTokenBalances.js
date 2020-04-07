@@ -1,8 +1,9 @@
 import React from 'react';
 import ValueDisplay from '../shared/ValueDisplay';
-
 import styled from 'styled-components';
+
 import { phone, appDark } from '../../variables.styles';
+import SyncToken from './SyncToken';
 
 const WhitelistTokenBalancesDiv = styled.div`
   max-width: 600px;
@@ -39,6 +40,8 @@ const WhitelistTokenBalancesDiv = styled.div`
 const WhitelistTokenBalances = (tokens) => {
   const renderList = () => {
     return tokens.tokens.map((token) => {
+      const needSync = token.contractTokenBalance !== token.contractBabeBalance;
+
       return (
         <div key={token.token.tokenAddress}>
           <ValueDisplay
@@ -47,6 +50,7 @@ const WhitelistTokenBalances = (tokens) => {
             ).toFixed(4)}
             symbolOverride={token.symbol}
           />
+          {needSync ? <SyncToken token={token} /> : null}
         </div>
       );
     });

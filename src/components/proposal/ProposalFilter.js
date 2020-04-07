@@ -36,8 +36,11 @@ export const FilterButton = styled.button`
   text-decoration: none;
   position: relative;
   transition: all 0.15s ease-in-out;
-  color: ${(props) =>
-    props.active ? props.theme.baseFontColor : props.theme.secondary};
+  color: ${(props) => {
+    return props.activeClass
+      ? props.theme.baseFontColor
+      : props.theme.secondary;
+  }};
   border-radius: 50px;
   padding: 15px 30px;
   max-width: 100%;
@@ -85,6 +88,9 @@ const ProposalFilter = ({ proposals, filter, history, unsponsoredView }) => {
     return <></>;
   }
 
+  console.log('filter', filter);
+  console.log('unsponsoredView', unsponsoredView);
+
   return (
     <ProposalFilterDiv>
       <ProposalFiltersDiv>
@@ -130,6 +136,7 @@ const ProposalFilter = ({ proposals, filter, history, unsponsoredView }) => {
               onClick={() =>
                 handleSelect(groupedProposals.Completed, 'Completed')
               }
+
               active={filter === 'Completed' ? true : false}
             >
               Completed (
