@@ -98,7 +98,7 @@ export const AddressButton = styled(DataButton)`
   padding: 0px;
   border: none;
   background: transparent;
-  color: ${(props) => props.theme.baseFontColor};
+  color: white;
   width: auto;
   display: flex;
   align-content: center;
@@ -107,7 +107,7 @@ export const AddressButton = styled(DataButton)`
     fill: ${(props) => props.theme.secondary};
   }
   p {
-    color: ${(props) => props.theme.baseFontColor};
+    color: white;
   }
   svg {
     display: inline-block;
@@ -137,7 +137,7 @@ export const SwitchHeaderDiv = styled.div`
   justify-content: flex-start;
   padding: 0px 15px;
   button {
-    color: ${(props) => props.theme.baseFontColor};
+    color: white;
     background-color: transparent;
     border-radius: 0px;
     margin: 0;
@@ -146,7 +146,7 @@ export const SwitchHeaderDiv = styled.div`
     padding: 15px 0px;
     &:hover {
       background-color: transparent;
-      border-bottom: 4px solid ${(props) => props.theme.baseFontColor};
+      border-bottom: 4px solid white;
     }
   }
 `;
@@ -212,7 +212,7 @@ export const BalanceItemDiv = styled.div`
   }
 `;
 
-export const TinyButton = styled.div`
+export const TinyButton = styled.button`
   margin: 0;
   display: inline-block;
   font-size: 0.5em;

@@ -17,6 +17,9 @@ export const ProposalFiltersDiv = styled.div`
   white-space: nowrap;
   padding: 10px 0px;
   display: inline-flex;
+  .Active {
+    color: white;
+  }
   @media (min-width: ${grid}) {
     display: flex;
     flex-direction: row;
@@ -51,13 +54,11 @@ export const FilterButton = styled.button`
 const ProposalFilter = ({ proposals, filter, history, unsponsoredView }) => {
   const [groupedProposals, setGroupedProposals] = useState();
   const [filteredProposals, setFilteredProposals] = useState([]);
-  const [activeItem, setActiveItem] = useState(false);
   const [daoService] = useContext(DaoServiceContext);
 
   const handleSelect = (list, listName) => {
     setFilteredProposals(list);
     history.push(`/dao/${daoService.daoAddress}/proposals/${listName}`);
-    setActiveItem(activeItem);
   };
 
   useEffect(() => {
@@ -93,7 +94,7 @@ const ProposalFilter = ({ proposals, filter, history, unsponsoredView }) => {
               onClick={() =>
                 handleSelect(groupedProposals.VotingPeriod, 'VotingPeriod')
               }
-              active={filter === 'Voting' ? true : false}
+              active={filter === 'VotingPeriod' ? true : false}
             >
               Voting Period (
               {groupedProposals.VotingPeriod &&
@@ -104,7 +105,7 @@ const ProposalFilter = ({ proposals, filter, history, unsponsoredView }) => {
               onClick={() =>
                 handleSelect(groupedProposals.GracePeriod, 'GracePeriod')
               }
-              className={activeItem ? 'Active' : null}
+              active={filter === 'GracePeriod' ? true : false}
             >
               Grace Period (
               {groupedProposals.GracePeriod &&
@@ -118,7 +119,7 @@ const ProposalFilter = ({ proposals, filter, history, unsponsoredView }) => {
                   'ReadyForProcessing',
                 )
               }
-              className={activeItem ? 'Active' : null}
+              active={filter === 'ReadyForProcessing' ? true : false}
             >
               Ready For Processing (
               {groupedProposals.ReadyForProcessing &&
@@ -129,14 +130,14 @@ const ProposalFilter = ({ proposals, filter, history, unsponsoredView }) => {
               onClick={() =>
                 handleSelect(groupedProposals.Completed, 'Completed')
               }
-              className={activeItem ? 'Active' : null}
+              active={filter === 'Completed' ? true : false}
             >
               Completed (
               {groupedProposals.Completed && groupedProposals.Completed.length})
             </FilterButton>
             <FilterButton
               onClick={() => handleSelect(groupedProposals.InQueue, 'InQueue')}
-              className={activeItem ? 'Active' : null}
+              active={filter === 'InQueue' ? true : false}
             >
               In Queue (
               {groupedProposals.InQueue && groupedProposals.InQueue.length})
@@ -148,7 +149,7 @@ const ProposalFilter = ({ proposals, filter, history, unsponsoredView }) => {
               onClick={() =>
                 handleSelect(groupedProposals.Unsponsored, 'Unsponsored')
               }
-              className={activeItem ? 'Active' : null}
+              active={filter === 'Unsponsored' ? true : false}
             >
               Open (
               {groupedProposals.Unsponsored &&
@@ -160,7 +161,7 @@ const ProposalFilter = ({ proposals, filter, history, unsponsoredView }) => {
               onClick={() =>
                 handleSelect(groupedProposals.Cancelled, 'Cancelled')
               }
-              className={activeItem ? 'Active' : null}
+              active={filter === 'Cancelled' ? true : false}
             >
               Cancelled (
               {groupedProposals.Cancelled && groupedProposals.Cancelled.length})
