@@ -25,24 +25,6 @@ import styled from 'styled-components';
 import { RiskyBizButton } from '../../App.styles';
 import { phone } from '../../variables.styles';
 
-import { DataP, DataDiv, BackdropOpenDiv } from '../../App.styles';
-import {
-  WalletDiv,
-  WalletHeaderDiv,
-  WalletOverlayDiv,
-  WalletOverlayContentsDiv,
-  StatusP,
-  AddressButton,
-  ActionsDropdownDiv,
-  SwitchHeaderDiv,
-  SelectedElementButton,
-  ActionsDropdownContentDiv,
-  WalletContents,
-  BalancesDiv,
-  BalanceItemDiv,
-  TinyButton,
-} from './UserBalances.styles';
-
 export const UserWalletDiv = styled.div`
   position: relative;
   @media (min-width: ${phone}) {

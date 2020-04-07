@@ -1,6 +1,5 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-// import './Modal.scss';
 import styled from 'styled-components';
 import { basePadding, getAppBackground } from '../../variables.styles';
 

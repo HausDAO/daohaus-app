@@ -14,7 +14,8 @@ const BottomNavDiv = styled.div`
   display: flex;
   justify-content: space-evenly;
   background-color: ${(props) =>
-    props.location.pathname === `/dao/${props.daoAddress}/`
+    props.location.pathname === `/dao/${props.daoAddress}/` ||
+    `/dao/${props.daoAddress}`
       ? 'transparent'
       : getAppLight(props.theme)};
   a {
