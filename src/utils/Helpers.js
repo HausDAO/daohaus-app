@@ -5,11 +5,18 @@ export const truncateAddr = (addr) => {
 };
 
 export const valToDecimalString = (value, tokenAddress, tokens) => {
+
   const tdata = tokens.find((token) => token.value === tokenAddress);
+  // TODO: this does not work with decimals
+  if(value>1000000){
   const decimals = anyToBN(tdata.decimals);
-  const exp = anyToBN(10).pow(decimals)
-  // keep big number a string
+  const exp = anyToBN(10).pow(decimals);
   console.log('decimalstring', anyToBN(value).mul(exp));
   
   return anyToBN(value).mul(exp);
+  } else {
+    console.log('decimalstring lt 1', (value * 10 ** tdata.decimals).toString());
+    return (value * 10 ** tdata.decimals).toString()
+  }
+
 };
