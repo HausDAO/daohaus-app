@@ -15,6 +15,7 @@
     "ethereum-blockies-base64": "^1.0.2",
     "formik": "^2.1.4",
     "graphql": "^14.6.0",
+    "lodash": "^4.17.15",
     "node-sass": "^4.13.1",
     "polished": "^3.4.4",
     "react": "^16.12.0",

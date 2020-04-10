@@ -18,7 +18,7 @@ import { ProposalSchema } from './Validation';
 import shortid from 'shortid';
 import TokenSelect from './TokenSelect';
 import { valToDecimalString } from '../../utils/Helpers';
-import { GET_TOKENS_V2 } from '../../utils/QueriesV2';
+import { GET_MOLOCH_V2 } from '../../utils/QueriesV2';
 
 const NewMemberForm = (props) => {
   const { history } = props;
@@ -35,7 +35,7 @@ const NewMemberForm = (props) => {
     client: daoData.altClient,
     fetchPolicy: 'no-cache',
   };
-  const query = GET_TOKENS_V2;
+  const query = GET_MOLOCH_V2;
 
   const { loading, error, data } = useQuery(query, options);
 
@@ -43,9 +43,11 @@ const NewMemberForm = (props) => {
   useEffect(() => {
     if (data && data.moloch) {
       setTokenData(
-        data.moloch.approvedTokens.reverse().map((token) => ({
+        data.moloch.tokenBalances
+        .filter((token) => token.guildBank)
+        .reverse().map((token) => ({
           label: token.symbol || token.tokenAddress,
-          value: token.tokenAddress,
+          value: token.token.tokenAddress,
           decimals: token.decimals,
         })),
       );
