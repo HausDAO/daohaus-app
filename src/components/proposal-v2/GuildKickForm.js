@@ -2,6 +2,7 @@ import React, { useContext, useState } from 'react';
 import { withRouter } from 'react-router-dom';
 
 import { Formik, Form, Field, ErrorMessage } from 'formik';
+import { FormContainer, FieldContainer } from '../../App.styles';
 
 import {
   LoaderContext,
@@ -24,8 +25,8 @@ const GuildKickForm = (props) => {
   const [daoService] = useContext(DaoServiceContext);
 
   return (
-    <div>
-      <h1 className="Pad">GuildKick Member Proposal</h1>
+    <FormContainer>
+      <h1>GuildKick Member Proposal</h1>
       <div>
         {formLoading && <Loading />}
         {gloading && <Loading />}
@@ -69,12 +70,12 @@ const GuildKickForm = (props) => {
                 <Form className="Form">
                   <Field name="title">
                     {({ field, form }) => (
-                      <div
+                      <FieldContainer
                         className={field.value ? 'Field HasValue' : 'Field '}
                       >
                         <label>Title</label>
                         <input type="text" {...field} />
-                      </div>
+                      </FieldContainer>
                     )}
                   </Field>
                   <ErrorMessage name="title">
@@ -82,12 +83,12 @@ const GuildKickForm = (props) => {
                   </ErrorMessage>
                   <Field name="description">
                     {({ field, form }) => (
-                      <div
+                      <FieldContainer
                         className={field.value ? 'Field HasValue' : 'Field '}
                       >
                         <label>Short Description</label>
                         <textarea {...field} />
-                      </div>
+                      </FieldContainer>
                     )}
                   </Field>
                   <ErrorMessage name="description">
@@ -95,12 +96,12 @@ const GuildKickForm = (props) => {
                   </ErrorMessage>
                   <Field name="link">
                     {({ field, form }) => (
-                      <div
+                      <FieldContainer
                         className={field.value ? 'Field HasValue' : 'Field '}
                       >
                         <label>Link</label>
                         <input type="text" {...field} />
-                      </div>
+                      </FieldContainer>
                     )}
                   </Field>
                   <ErrorMessage name="link">
@@ -109,12 +110,12 @@ const GuildKickForm = (props) => {
 
                   <Field name="applicant">
                     {({ field, form }) => (
-                      <div
+                      <FieldContainer
                         className={field.value ? 'Field HasValue' : 'Field '}
                       >
                         <label>Member Address</label>
                         <input type="text" {...field} />
-                      </div>
+                      </FieldContainer>
                     )}
                   </Field>
                   <ErrorMessage name="applicant">
@@ -130,7 +131,7 @@ const GuildKickForm = (props) => {
           )}
         </div>
       </div>
-    </div>
+    </FormContainer>
   );
 };
 

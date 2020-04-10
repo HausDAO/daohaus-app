@@ -9,6 +9,7 @@ import {
   DaoServiceContext,
   DaoDataContext,
 } from '../../contexts/Store';
+import config from '../../config';
 import { WalletStatuses } from '../../utils/WalletStatus';
 import { truncateAddr } from '../../utils/Helpers';
 import Arrow from '../../assets/DropArrow.svg';
@@ -87,7 +88,6 @@ const UserBalance = ({ toggle, client, match }) => {
     if (!data || !data.member) {
       return;
     }
-
     setTokenBalances(data.member.tokenBalances);
     // eslint-disable-next-line
   }, [data]);
@@ -111,7 +111,7 @@ const UserBalance = ({ toggle, client, match }) => {
       const _memberAddress = await daoService.mcDao.memberAddressByDelegateKey(
         currentUser.attributes['custom:account_address'],
       );
-      setMemberAddress(_memberAddress)
+      setMemberAddress(_memberAddress);
       setMemberAddressLoggedIn(
         currentUser &&
           currentUser.attributes['custom:account_address'] === _memberAddress,
@@ -139,14 +139,24 @@ const UserBalance = ({ toggle, client, match }) => {
   };
 
   const renderBalances = (tokens) => {
-
     return tokens.map((token) => {
       return (
         <BalanceItemDiv key={token.token.tokenAddress}>
           <p>
-            {token.token.symbol} {token.token.tokenAddress}
+            <a
+              href={
+                config.SDK_ENV === 'Kovan'
+                  ? 'https://kovan.etherscan.io/token/' +
+                    token.token.tokenAddress
+                  : 'https://etherscan.io/token/' + token.token.tokenAddress
+              }
+              rel="noopener noreferrer"
+              target="_blank"
+            >
+              {token.token.symbol}
+            </a>
           </p>
-          <DataDiv>{token.tokenBalance / 10 ** token.token.decimals}</DataDiv>
+          <DataP>{token.tokenBalance / 10 ** token.token.decimals}</DataP>
         </BalanceItemDiv>
       );
     });
@@ -219,8 +229,11 @@ const UserBalance = ({ toggle, client, match }) => {
           >
             {currentWallet.state || 'Connecting'}
             {currentWallet.jailed ? ' In Jail. proceed to ragequit.' : null}
-            {!memberAddressLoggedIn && parseInt(memberAddress) ? ` as delegate for ${memberAddress && truncateAddr(memberAddress)}` : null }
-            {!parseInt(memberAddress) ? ` (has delegate)` : null }
+            {!memberAddressLoggedIn && parseInt(memberAddress)
+              ? ` as delegate for ${memberAddress &&
+                  truncateAddr(memberAddress)}`
+              : null}
+            {!parseInt(memberAddress) ? ` (has delegate)` : null}
           </StatusP>
           <CopyToClipboard
             onCopy={onCopy}
@@ -257,9 +270,11 @@ const UserBalance = ({ toggle, client, match }) => {
               <BackdropOpenDiv onClick={toggleActions} />
 
               <ActionsDropdownContentDiv>
-                <ButtonSecondary onClick={() => toggleActions('depositForm')}>
-                  Deposit
-                </ButtonSecondary>
+                {currentUser.type !== USER_TYPE.WEB3 && (
+                  <ButtonSecondary onClick={() => toggleActions('depositForm')}>
+                    Deposit
+                  </ButtonSecondary>
+                )}
                 {currentWallet.state === WalletStatuses.Deployed && (
                   <ButtonSecondary onClick={() => toggleActions('sendEth')}>
                     Send ETH
@@ -275,24 +290,22 @@ const UserBalance = ({ toggle, client, match }) => {
                     Manage on DAOHaus
                   </ButtonSecondary>
                 )}
-                {currentUser.type === USER_TYPE.WEB3 &&
-                   (
-                    <ButtonSecondary
-                      onClick={() => toggleActions('ragequit')}
-                      disabled={!memberAddressLoggedIn && parseInt(memberAddress)}
-                    >
-                      Rage Quit
-                    </ButtonSecondary>
-                  )}
-                {currentUser.type === USER_TYPE.WEB3 &&
-                   (
-                    <ButtonSecondary
-                      onClick={() => toggleActions('changeDelegateKey')}
-                      disabled={!memberAddressLoggedIn && parseInt(memberAddress)}
-                    >
-                      Change Delegate Key
-                    </ButtonSecondary>
-                  )}
+                {currentUser.type === USER_TYPE.WEB3 && (
+                  <ButtonSecondary
+                    onClick={() => toggleActions('ragequit')}
+                    disabled={!memberAddressLoggedIn && parseInt(memberAddress)}
+                  >
+                    Rage Quit
+                  </ButtonSecondary>
+                )}
+                {currentUser.type === USER_TYPE.WEB3 && (
+                  <ButtonSecondary
+                    onClick={() => toggleActions('changeDelegateKey')}
+                    disabled={!memberAddressLoggedIn && parseInt(memberAddress)}
+                  >
+                    Change Delegate Key
+                  </ButtonSecondary>
+                )}
               </ActionsDropdownContentDiv>
             </>
           ) : null}
@@ -379,10 +392,7 @@ const UserBalance = ({ toggle, client, match }) => {
         )}
         {headerSwitch === 'InternalBalances' && daoData.version === 2 && (
           <BalancesDiv>
-            <BalanceItemDiv>
-              <p>{tokenBalances.tokenSymbol}</p>
-              <DataP>{renderBalances(tokenBalances)}</DataP>
-            </BalanceItemDiv>
+            {renderBalances(tokenBalances)}
             {tokenBalances.length && (
               <BalanceItemDiv>
                 <button onClick={() => withdrawBalances(tokenBalances)}>

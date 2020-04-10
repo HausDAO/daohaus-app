@@ -17,6 +17,8 @@ import {
   DaoServiceContext,
   DaoDataContext,
 } from '../../contexts/Store';
+
+import { ButtonPrimary } from '../../App.styles.js';
 import Loading from '../../components/shared/Loading';
 import { Web3SignIn } from '../../components/account/Web3SignIn';
 import { USER_TYPE } from '../../utils/DaoService';
@@ -60,9 +62,9 @@ const SignIn = ({ history }) => {
           <Web3SignIn history={history} setCurrentUser={setCurrentUser} />
 
           {+daoData.version !== 2 ? (
-            <button onClick={() => setSigninType(signinTypes.password)}>
+            <ButtonPrimary onClick={() => setSigninType(signinTypes.password)}>
               Sign in With Password
-            </button>
+            </ButtonPrimary>
           ) : null}
         </>
       )}

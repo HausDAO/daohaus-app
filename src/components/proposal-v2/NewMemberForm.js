@@ -4,6 +4,12 @@ import { withRouter } from 'react-router-dom';
 import { Formik, Form, Field, ErrorMessage } from 'formik';
 
 import {
+  FormContainer,
+  FieldContainer,
+  DropdownInputDiv,
+} from '../../App.styles';
+
+import {
   LoaderContext,
   DaoServiceContext,
   DaoDataContext,
@@ -44,12 +50,13 @@ const NewMemberForm = (props) => {
     if (data && data.moloch) {
       setTokenData(
         data.moloch.tokenBalances
-        .filter((token) => token.guildBank)
-        .reverse().map((token) => ({
-          label: token.symbol || token.tokenAddress,
-          value: token.token.tokenAddress,
-          decimals: token.decimals,
-        })),
+          .filter((token) => token.guildBank)
+          .reverse()
+          .map((token) => ({
+            label: token.symbol || token.tokenAddress,
+            value: token.token.tokenAddress,
+            decimals: token.decimals,
+          })),
       );
     }
   }, [data]);
@@ -60,7 +67,7 @@ const NewMemberForm = (props) => {
   }
 
   return (
-    <div>
+    <FormContainer>
       <h1 className="Pad">New Member Proposal</h1>
       <div>
         {formLoading && <Loading />}
@@ -121,12 +128,12 @@ const NewMemberForm = (props) => {
                 <Form className="Form">
                   <Field name="title">
                     {({ field, form }) => (
-                      <div
+                      <FieldContainer
                         className={field.value ? 'Field HasValue' : 'Field '}
                       >
                         <label>Title</label>
                         <input type="text" {...field} />
-                      </div>
+                      </FieldContainer>
                     )}
                   </Field>
                   <ErrorMessage name="title">
@@ -134,12 +141,12 @@ const NewMemberForm = (props) => {
                   </ErrorMessage>
                   <Field name="description">
                     {({ field, form }) => (
-                      <div
+                      <FieldContainer
                         className={field.value ? 'Field HasValue' : 'Field '}
                       >
                         <label>Short Description</label>
                         <textarea {...field} />
-                      </div>
+                      </FieldContainer>
                     )}
                   </Field>
                   <ErrorMessage name="description">
@@ -147,12 +154,12 @@ const NewMemberForm = (props) => {
                   </ErrorMessage>
                   <Field name="link">
                     {({ field, form }) => (
-                      <div
+                      <FieldContainer
                         className={field.value ? 'Field HasValue' : 'Field '}
                       >
                         <label>Link</label>
                         <input type="text" {...field} />
-                      </div>
+                      </FieldContainer>
                     )}
                   </Field>
                   <ErrorMessage name="link">
@@ -160,20 +167,20 @@ const NewMemberForm = (props) => {
                   </ErrorMessage>
                   <Field name="sharesRequested">
                     {({ field, form }) => (
-                      <div
+                      <FieldContainer
                         className={
                           field.value !== '' ? 'Field HasValue' : 'Field '
                         }
                       >
                         <label>Shares Requested</label>
                         <input min="0" step="1" type="number" {...field} />
-                      </div>
+                      </FieldContainer>
                     )}
                   </Field>
                   <ErrorMessage name="sharesRequested">
                     {(msg) => <div className="Error">{msg}</div>}
                   </ErrorMessage>
-                  <div className="DropdownInput">
+                  <DropdownInputDiv>
                     <Field
                       name="tributeOffered"
                       component={TributeInput}
@@ -186,7 +193,7 @@ const NewMemberForm = (props) => {
                       label="Token Tribute"
                       data={tokenData}
                     ></Field>
-                  </div>
+                  </DropdownInputDiv>
                   <ErrorMessage name="tributeOffered">
                     {(msg) => (
                       <div className="Error">Tribute Offered: {msg}</div>
@@ -199,14 +206,14 @@ const NewMemberForm = (props) => {
                   <Expandable label="Loot">
                     <Field name="lootRequested">
                       {({ field, form }) => (
-                        <div
+                        <FieldContainer
                           className={
                             field.value !== '' ? 'Field HasValue' : 'Field '
                           }
                         >
                           <label>Loot Requested</label>
                           <input min="0" step="1" type="number" {...field} />
-                        </div>
+                        </FieldContainer>
                       )}
                     </Field>
                   </Expandable>
@@ -224,7 +231,7 @@ const NewMemberForm = (props) => {
           )}
         </div>
       </div>
-    </div>
+    </FormContainer>
   );
 };
 

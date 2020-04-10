@@ -1,6 +1,7 @@
 import React, { useEffect, useState, useContext } from 'react';
 import { BrowserRouter as Router } from 'react-router-dom';
 import ApolloClient from 'apollo-boost';
+import { ThemeProvider } from 'styled-components';
 
 import { DaoDataContext, DaoServiceContext } from './contexts/Store';
 import { get } from './utils/Requests';
@@ -10,13 +11,27 @@ import Routes from './Routes';
 import Header from './components/header/Header';
 import Loading from './components/shared/Loading';
 import config from './config';
+import styled from 'styled-components';
+import {
+  defaultTheme,
+  defaultDarkTheme,
+  molochTheme,
+  raidTheme,
+  getAppBackground,
+  GlobalStyle,
+} from './variables.styles';
 
-import './App.scss';
+const AppDiv = styled.div`
+  background-color: ${(props) => getAppBackground(props.theme)};
+  min-height: 100vh;
+  min-width: 100vw;
+`;
 
 const App = ({ client }) => {
   const [loading, setloading] = useState(true);
   const [daoPath, setDaoPath] = useState('');
   const [daoData, setDaoData] = useContext(DaoDataContext);
+  const [theme, setTheme] = useState(defaultTheme);
   const [daoService] = useContext(DaoServiceContext);
 
   useEffect(() => {
@@ -54,6 +69,14 @@ const App = ({ client }) => {
             ...apiData,
             altClient,
           });
+          let customTheme = defaultTheme;
+          if (apiData.molochTheme) {
+            customTheme = molochTheme;
+          }
+          if (apiData.raidTheme) {
+            customTheme = raidTheme;
+          }
+          setTheme(customTheme);
         } else {
           setloading(false);
         }
@@ -152,11 +175,18 @@ const App = ({ client }) => {
   return (
     <div className="App">
       {loading ? (
-        <Loading />
+        <ThemeProvider theme={theme}>
+          <Loading />
+        </ThemeProvider>
       ) : (
         <Router>
-          <Header />
-          <Routes isValid={!!daoPath} />
+          <ThemeProvider theme={theme}>
+            <GlobalStyle />
+            <AppDiv>
+              <Header />
+              <Routes isValid={!!daoPath} />
+            </AppDiv>
+          </ThemeProvider>
         </Router>
       )}
     </div>

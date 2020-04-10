@@ -1,15 +1,16 @@
 import React from 'react';
 
 import styled from 'styled-components';
-import { subdued, primaryHover } from '../../variables.styles';
-
-import './ProposalTypeToggle.scss';
+import { subdued } from '../../variables.styles';
 
 const ProposalTypeToggleDiv = styled.div`
   display: flex;
   flex-direction: row;
   align-items: flex-start;
-  padding-left: 15px;
+  padding-left: 25px;
+  .active-toggle {
+    color: ${(props) => props.theme.baseFontColor};
+  }
 `;
 
 const ToggleP = styled.p`
@@ -20,7 +21,7 @@ const ToggleP = styled.p`
     margin-right: 25px;
   }
   &:not(.active-toggle):hover {
-    color: ${primaryHover};
+    color: ${(props) => props.theme.baseFontColor};
     cursor: pointer;
   }
 `;

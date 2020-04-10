@@ -1,5 +1,6 @@
 import React, { useState, useContext, useEffect } from 'react';
 import { Formik, Form, Field, ErrorMessage } from 'formik';
+import { FormContainer, FieldContainer } from '../../App.styles';
 
 import {
   LoaderContext,
@@ -19,18 +20,19 @@ const RagequitForm = () => {
 
   useEffect(() => {
     const checkCanRage = async () => {
-      const rageOk = await daoService.mcDao.canRagequit(currentWallet.highestIndexYesVote)
+      const rageOk = await daoService.mcDao.canRagequit(
+        currentWallet.highestIndexYesVote,
+      );
       setCanRage(rageOk);
-    }
+    };
 
     checkCanRage();
-    
-    // eslint-disable-next-line
-  }, [currentWallet])
 
+    // eslint-disable-next-line
+  }, [currentWallet]);
 
   if (!canRage) {
-    return (<h2>Cannot Rage while yes votes on open proposals</h2>)
+    return <h2>Cannot Rage while yes votes on open proposals</h2>;
   }
 
   return (
@@ -56,7 +58,10 @@ const RagequitForm = () => {
 
           try {
             if (daoData.version === 2) {
-              await daoService.mcDao.rageQuit(values.numShares || 0, values.numLoot || 0);
+              await daoService.mcDao.rageQuit(
+                values.numShares || 0,
+                values.numLoot || 0,
+              );
             } else {
               await daoService.mcDao.rageQuit(values.numShares || 0);
             }
@@ -71,7 +76,6 @@ const RagequitForm = () => {
             setLoading(false);
             setSubmitting(false);
           }
-
         }}
       >
         {({ isSubmitting }) =>
@@ -79,7 +83,9 @@ const RagequitForm = () => {
             <Form className="Form">
               <Field name="numShares">
                 {({ field }) => (
-                  <div className={field.value ? 'Field HasValue' : 'Field '}>
+                  <FieldContainer
+                    className={field.value ? 'Field HasValue' : 'Field '}
+                  >
                     <label>Number of Shares</label>
                     <input
                       min="0"
@@ -89,7 +95,7 @@ const RagequitForm = () => {
                       {...field}
                     />
                     <p>Ragequit Up To {currentWallet.shares} Shares</p>
-                  </div>
+                  </FieldContainer>
                 )}
               </Field>
               <ErrorMessage
@@ -100,7 +106,9 @@ const RagequitForm = () => {
                 <>
                   <Field name="numLoot">
                     {({ field }) => (
-                      <div className={field.value ? 'Field HasValue' : 'Field '}>
+                      <FieldContainer
+                        className={field.value ? 'Field HasValue' : 'Field '}
+                      >
                         <label>Number of Loot Shares</label>
                         <input
                           min="0"
@@ -110,7 +118,7 @@ const RagequitForm = () => {
                           {...field}
                         />
                         <p>Ragequit Up To {currentWallet.loot} Loot</p>
-                      </div>
+                      </FieldContainer>
                     )}
                   </Field>
                   <ErrorMessage
@@ -124,8 +132,8 @@ const RagequitForm = () => {
               </button>
             </Form>
           ) : (
-              <h2>Ragequit Successful</h2>
-            )
+            <h2>Ragequit Successful</h2>
+          )
         }
       </Formik>
     </>
