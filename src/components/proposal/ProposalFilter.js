@@ -4,7 +4,7 @@ import ProposalList from './ProposalList';
 import { groupByStatus } from '../../utils/ProposalHelper';
 import { DaoServiceContext } from '../../contexts/Store';
 import styled from 'styled-components';
-import { getAppLight, grid } from '../../variables.styles.js';
+import { getAppLight, grid, subdued } from '../../variables.styles.js';
 
 export const ProposalFilterDiv = styled.div`
   width: 100%;
@@ -17,9 +17,6 @@ export const ProposalFiltersDiv = styled.div`
   white-space: nowrap;
   padding: 10px 0px;
   display: inline-flex;
-  .Active {
-    color: white;
-  }
   @media (min-width: ${grid}) {
     display: flex;
     flex-direction: row;
@@ -37,9 +34,7 @@ export const FilterButton = styled.button`
   position: relative;
   transition: all 0.15s ease-in-out;
   color: ${(props) => {
-    return props.activeClass
-      ? props.theme.baseFontColor
-      : props.theme.secondary;
+    return props.active ? props.theme.baseFontColor : subdued;
   }};
   border-radius: 50px;
   padding: 15px 30px;
@@ -136,7 +131,6 @@ const ProposalFilter = ({ proposals, filter, history, unsponsoredView }) => {
               onClick={() =>
                 handleSelect(groupedProposals.Completed, 'Completed')
               }
-
               active={filter === 'Completed' ? true : false}
             >
               Completed (

@@ -1,7 +1,13 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { withRouter } from 'react-router-dom';
+import styled from 'styled-components';
 
 import { Formik, Form, Field, ErrorMessage } from 'formik';
+import {
+  FormContainer,
+  FieldContainer,
+  DropdownInputDiv,
+} from '../../App.styles';
 
 import {
   LoaderContext,
@@ -19,6 +25,11 @@ import shortid from 'shortid';
 import TokenSelect from './TokenSelect';
 import { valToDecimalString } from '../../utils/Helpers';
 import { GET_MOLOCH_V2 } from '../../utils/QueriesV2';
+
+const H2Arrow = styled.h2`
+  text-align: center;
+  color: ${(props) => props.theme.primary};
+`;
 
 const TradeForm = (props) => {
   const { history } = props;
@@ -64,8 +75,8 @@ const TradeForm = (props) => {
   }
 
   return (
-    <div>
-      <h1 className="Pad">Trade Proposal</h1>
+    <FormContainer>
+      <h1>Trade Proposal</h1>
       <div>
         {formLoading && <Loading />}
         {gloading && <Loading />}
@@ -126,12 +137,12 @@ const TradeForm = (props) => {
                 <Form className="Form">
                   <Field name="title">
                     {({ field, form }) => (
-                      <div
+                      <FieldContainer
                         className={field.value ? 'Field HasValue' : 'Field '}
                       >
                         <label>Title</label>
                         <input type="text" {...field} />
-                      </div>
+                      </FieldContainer>
                     )}
                   </Field>
                   <ErrorMessage name="title">
@@ -139,12 +150,12 @@ const TradeForm = (props) => {
                   </ErrorMessage>
                   <Field name="description">
                     {({ field, form }) => (
-                      <div
+                      <FieldContainer
                         className={field.value ? 'Field HasValue' : 'Field '}
                       >
                         <label>Short Description</label>
                         <textarea {...field} />
-                      </div>
+                      </FieldContainer>
                     )}
                   </Field>
                   <ErrorMessage name="description">
@@ -152,19 +163,19 @@ const TradeForm = (props) => {
                   </ErrorMessage>
                   <Field name="link">
                     {({ field, form }) => (
-                      <div
+                      <FieldContainer
                         className={field.value ? 'Field HasValue' : 'Field '}
                       >
                         <label>Link</label>
                         <input type="text" {...field} />
-                      </div>
+                      </FieldContainer>
                     )}
                   </Field>
                   <ErrorMessage name="link">
                     {(msg) => <div className="Error">{msg}</div>}
                   </ErrorMessage>
 
-                  <div className="DropdownInput">
+                  <DropdownInputDiv>
                     <Field
                       name="tributeOffered"
                       component={TributeInput}
@@ -177,7 +188,7 @@ const TradeForm = (props) => {
                       label="Token Tribute"
                       data={tokenData}
                     ></Field>
-                  </div>
+                  </DropdownInputDiv>
                   <ErrorMessage name="tributeOffered">
                     {(msg) => (
                       <div className="Error">Tribute Offered: {msg}</div>
@@ -191,9 +202,9 @@ const TradeForm = (props) => {
                     {(msg) => <div className="Error">{msg}</div>}
                   </ErrorMessage>
 
-                  <h2>↓</h2>
+                  <H2Arrow>↓</H2Arrow>
 
-                  <div className="DropdownInput">
+                  <DropdownInputDiv>
                     <Field
                       name="paymentRequested"
                       component={PaymentInput}
@@ -207,7 +218,7 @@ const TradeForm = (props) => {
                       label="Payment Token"
                       data={tokenData}
                     ></Field>
-                  </div>
+                  </DropdownInputDiv>
 
                   <ErrorMessage name="paymentRequested">
                     {(msg) => <div className="Error">{msg}</div>}
@@ -224,7 +235,7 @@ const TradeForm = (props) => {
           )}
         </div>
       </div>
-    </div>
+    </FormContainer>
   );
 };
 

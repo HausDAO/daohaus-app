@@ -142,9 +142,17 @@ const UserBalance = ({ toggle, client, match }) => {
       return (
         <BalanceItemDiv key={token.token.tokenAddress}>
           <p>
-            {token.token.symbol} {token.token.tokenAddress}
+            <a
+              href={
+                'https://kovan.etherscan.io/token/' + token.token.tokenAddress
+              }
+              rel="noopener noreferrer"
+              target="_blank"
+            >
+              {token.token.symbol}
+            </a>
           </p>
-          <DataDiv>{token.tokenBalance / 10 ** token.token.decimals}</DataDiv>
+          <DataP>{token.tokenBalance / 10 ** token.token.decimals}</DataP>
         </BalanceItemDiv>
       );
     });
@@ -378,10 +386,7 @@ const UserBalance = ({ toggle, client, match }) => {
         )}
         {headerSwitch === 'InternalBalances' && daoData.version === 2 && (
           <BalancesDiv>
-            <BalanceItemDiv>
-              <p>{tokenBalances.tokenSymbol}</p>
-              <DataP>{renderBalances(tokenBalances)}</DataP>
-            </BalanceItemDiv>
+            {renderBalances(tokenBalances)}
             {tokenBalances.length && (
               <BalanceItemDiv>
                 <button onClick={() => withdrawBalances(tokenBalances)}>

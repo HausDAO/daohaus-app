@@ -16,7 +16,6 @@ import { getAppDark, getAppLight, phone } from '../../variables.styles';
 import { DataP, DataH2, OfferDiv, LinkButton } from '../../App.styles';
 
 import StackedVote from './StackedVote';
-// import './ProposalCard.scss';
 
 const ProposalCardDiv = styled.div`
   margin-top: 25px;
@@ -145,6 +144,9 @@ const ProposalCard = ({ proposal, client }) => {
 
       <CardVoteDiv>
         {daoData.version !== 2 ? (
+          <StackedVote id={id} page="ProposalCard" />
+        ) : null}
+        {daoData.version === 2 && proposal.sponsored ? (
           <StackedVote id={id} page="ProposalCard" />
         ) : null}
       </CardVoteDiv>

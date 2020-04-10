@@ -16,13 +16,16 @@ import { GET_METADATA, GET_ACTIVE_PROPOSALS_QUERY } from '../../utils/Queries';
 import { withApollo, useQuery } from 'react-apollo';
 
 import ValueDisplay from '../shared/ValueDisplay';
+import { FieldContainer } from '../../App.styles';
 
 const ProposalForm = (props) => {
   const { history, client } = props;
-  const { proposalDeposit, 
+  const {
+    proposalDeposit,
     tokenSymbol,
     totalShares,
-    guildBankValue, } = client.cache.readQuery({
+    guildBankValue,
+  } = client.cache.readQuery({
     query: GET_METADATA,
   });
   const [gloading] = useContext(LoaderContext);
@@ -39,7 +42,9 @@ const ProposalForm = (props) => {
     numSharesRequested,
     tokenTribute,
   ) => {
-    let guildBankValuePlusPending = ethToWei(guildBankValue).add(ethToWei(tokenTribute));
+    let guildBankValuePlusPending = ethToWei(guildBankValue).add(
+      ethToWei(tokenTribute),
+    );
     let totalSharesPlusPending = totalShares + +numSharesRequested;
     for (const proposal of data.proposals) {
       // if proposal is likely passing, add tribute and shares
@@ -51,8 +56,7 @@ const ProposalForm = (props) => {
 
     const estimatedShareValue = parseFloat(
       weiToEth(
-        anyToBN(guildBankValuePlusPending)
-          .div(anyToBN(totalSharesPlusPending)),
+        anyToBN(guildBankValuePlusPending).div(anyToBN(totalSharesPlusPending)),
       ),
     );
 
@@ -95,7 +99,10 @@ const ProposalForm = (props) => {
                 errors.applicant = 'Required';
               }
 
-              const estimated = calculateEstimatedProposalValue(values.sharesRequested, values.tokenTribute);
+              const estimated = calculateEstimatedProposalValue(
+                values.sharesRequested,
+                values.tokenTribute,
+              );
               setEstimatedProposalValue(estimated);
 
               return errors;
@@ -128,13 +135,17 @@ const ProposalForm = (props) => {
           >
             {({ isSubmitting }) => (
               <Form className="Form">
-                <h3>Proposal deposit: <ValueDisplay value={proposalDeposit} /></h3>
+                <h3>
+                  Proposal deposit: <ValueDisplay value={proposalDeposit} />
+                </h3>
                 <Field name="title">
                   {({ field, form }) => (
-                    <div className={field.value ? 'Field HasValue' : 'Field '}>
+                    <FieldContainer
+                      className={field.value ? 'Field HasValue' : 'Field '}
+                    >
                       <label>Title</label>
                       <input type="text" {...field} />
-                    </div>
+                    </FieldContainer>
                   )}
                 </Field>
                 <ErrorMessage name="title">
@@ -142,10 +153,12 @@ const ProposalForm = (props) => {
                 </ErrorMessage>
                 <Field name="description">
                   {({ field, form }) => (
-                    <div className={field.value ? 'Field HasValue' : 'Field '}>
+                    <FieldContainer
+                      className={field.value ? 'Field HasValue' : 'Field '}
+                    >
                       <label>Short Description</label>
                       <textarea {...field} />
-                    </div>
+                    </FieldContainer>
                   )}
                 </Field>
                 <ErrorMessage name="description">
@@ -153,10 +166,12 @@ const ProposalForm = (props) => {
                 </ErrorMessage>
                 <Field name="link">
                   {({ field, form }) => (
-                    <div className={field.value ? 'Field HasValue' : 'Field '}>
+                    <FieldContainer
+                      className={field.value ? 'Field HasValue' : 'Field '}
+                    >
                       <label>Link</label>
                       <input type="text" {...field} />
-                    </div>
+                    </FieldContainer>
                   )}
                 </Field>
                 <ErrorMessage name="link">
@@ -164,10 +179,12 @@ const ProposalForm = (props) => {
                 </ErrorMessage>
                 <Field name="applicant">
                   {({ field, form }) => (
-                    <div className={field.value ? 'Field HasValue' : 'Field '}>
+                    <FieldContainer
+                      className={field.value ? 'Field HasValue' : 'Field '}
+                    >
                       <label>Applicant Ethereum Address</label>
                       <input type="text" {...field} />
-                    </div>
+                    </FieldContainer>
                   )}
                 </Field>
                 <ErrorMessage name="applicant">
@@ -175,7 +192,7 @@ const ProposalForm = (props) => {
                 </ErrorMessage>
                 <Field name="tokenTribute">
                   {({ field, form }) => (
-                    <div
+                    <FieldContainer
                       className={
                         field.value !== '' ? 'Field HasValue' : 'Field '
                       }
@@ -184,7 +201,7 @@ const ProposalForm = (props) => {
                         Token Tribute (will fail if applicant has not approved)
                       </label>
                       <input min="0" type="number" {...field} />
-                    </div>
+                    </FieldContainer>
                   )}
                 </Field>
                 <ErrorMessage name="tokenTribute">
@@ -193,19 +210,20 @@ const ProposalForm = (props) => {
 
                 <Field name="sharesRequested">
                   {({ field, form }) => (
-                    <div
+                    <FieldContainer
                       className={
                         field.value !== '' ? 'Field HasValue' : 'Field '
                       }
                     >
                       <label>Shares Requested</label>
                       <input min="0" step="1" type="number" {...field} />
-                    </div>
+                    </FieldContainer>
                   )}
                 </Field>
                 <span>
                   {' '}
-                  Estimated Value: <ValueDisplay value={estimatedProposalValue} />
+                  Estimated Value:{' '}
+                  <ValueDisplay value={estimatedProposalValue} />
                 </span>
                 <ErrorMessage name="sharesRequested">
                   {(msg) => <div className="Error">{msg}</div>}
