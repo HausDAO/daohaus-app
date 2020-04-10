@@ -6,6 +6,7 @@ import { phone } from '../../variables.styles';
 import ProposalCard from './ProposalCard';
 
 const ProposalListDiv = styled.div`
+  padding-bottom: 90px;
   @media (min-width: ${phone}) {
     display: flex;
     justify-content: space-evenly;

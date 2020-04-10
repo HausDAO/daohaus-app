@@ -2,6 +2,8 @@ import React, { useContext, useState, useEffect } from 'react';
 import { DaoServiceContext } from '../../contexts/Store';
 import TinyLoader from '../shared/TinyLoader';
 
+import { FieldContainer } from '../../App.styles';
+
 const TributeInput = ({
   field,
   form: { touched, errors },
@@ -12,7 +14,6 @@ const TributeInput = ({
   const [balance, setBalance] = useState(0);
   const [loading, setLoading] = useState(false);
   const [daoService] = useContext(DaoServiceContext);
-
 
   const unlock = async (token) => {
     console.log('unlock ', token);
@@ -35,14 +36,11 @@ const TributeInput = ({
     setUnlocked(isUnlocked);
   };
 
-
   const getMax = async (token) => {
-
     const max = await daoService.token.balanceOfToken(token);
     console.log('max', max);
-    
+
     setBalance(max);
-    
   };
 
   useEffect(() => {
@@ -58,7 +56,9 @@ const TributeInput = ({
   }, [token]);
 
   return (
-    <div className={field.value !== '' ? 'Field HasValue' : 'Field '}>
+    <FieldContainer
+      className={field.value !== '' ? 'Field HasValue' : 'Field '}
+    >
       <label>{props.label}</label>
       <input
         type="number"
@@ -69,15 +69,13 @@ const TributeInput = ({
           checkUnlocked(token, field.value);
         }}
       />
-      <div className="MaxLabel">
-        max: {balance.toFixed(4)}
-      </div>
+      <div className="MaxLabel">Max: {balance.toFixed(4)}</div>
       {field.value && field.value !== 0 && !unlocked ? (
         <div className="UnlockButton" onClick={() => unlock(token)}>
           {!loading ? <span>! Unlock </span> : <TinyLoader />}
         </div>
       ) : null}
-    </div>
+    </FieldContainer>
   );
 };
 

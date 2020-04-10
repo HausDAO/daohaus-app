@@ -2,16 +2,17 @@ import React from 'react';
 import ValueDisplay from '../shared/ValueDisplay';
 import styled from 'styled-components';
 
-import { phone, appDark } from '../../variables.styles';
+import { phone, getAppDark } from '../../variables.styles';
 import SyncToken from './SyncToken';
 
 const WhitelistTokenBalancesDiv = styled.div`
   max-width: 600px;
   width: 100%;
   margin: 50px auto 0px;
-  > h5 {
+  padding-bottom: 120px;
+  h5 {
     font-size: 1.25em;
-    margin-bottom: 25px; // brokenStyle
+    margin-bottom: 25px !important;
   }
   p {
     margin: 0;
@@ -20,18 +21,18 @@ const WhitelistTokenBalancesDiv = styled.div`
     padding: 15px;
     width: calc(100% - 30px);
     font-size: 1.35em;
-    border-top: 1px solid ${appDark};
-    border-left: 1px solid ${appDark};
-    border-right: 1px solid ${appDark};
+    border-top: 1px solid ${(props) => getAppDark(props.theme)};
+    border-left: 1px solid ${(props) => getAppDark(props.theme)};
+    border-right: 1px solid ${(props) => getAppDark(props.theme)};
     @media (max-width: ${phone}) {
-      border-left: 0px solid ${appDark};
-      border-right: 0px solid ${appDark};
+      border-left: 0px solid ${(props) => getAppDark(props.theme)};
+      border-right: 0px solid ${(props) => getAppDark(props.theme)};
     }
     &:nth-child(odd) {
       background-color: rgba(0, 0, 0, 0.01);
     }
     &:last-child {
-      border-bottom: 1px solid ${appDark};
+      border-bottom: 1px solid ${(props) => getAppDark(props.theme)};
     }
   }
 `;

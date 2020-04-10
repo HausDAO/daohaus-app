@@ -9,7 +9,7 @@ import { truncateAddr } from '../../utils/Helpers';
 import ValueDisplay from '../shared/ValueDisplay';
 import { DaoServiceContext, DaoDataContext } from '../../contexts/Store';
 
-import { appDark, appLight, phone, primary } from '../../variables.styles';
+import { phone, getAppDark, getAppLight } from '../../variables.styles';
 import { DataP, DataH2 } from '../../App.styles';
 import {
   MemberCardIdentityDiv,
@@ -21,26 +21,26 @@ import { withApollo } from 'react-apollo';
 import { GET_METADATA } from '../../utils/Queries';
 
 const MemberCardDiv = styled.div`
-  background-color: ${appLight};
-  color: black;
+  background-color: ${(props) => getAppLight(props.theme)};
+  color: ${(props) => props.theme.baseFontColor};
   margin-top: 25px;
-  border-top: 2px solid ${appDark};
-  border-bottom: 2px solid ${appDark};
+  border-top: 2px solid ${(props) => getAppDark(props.theme)};
+  border-bottom: 2px solid ${(props) => getAppDark(props.theme)};
   transition: all 0.15s linear;
   padding: 25px;
 
   @media (min-width: ${phone}) {
     width: 320px;
-    border: 2px solid ${appDark};
+    border: 2px solid ${(props) => getAppDark(props.theme)};
     margin-bottom: 25px;
     border-radius: 10px;
     box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
   }
 
   &:hover {
-    background-color: ${primary};
+    background-color: ${(props) => props.theme.primary};
     color: white;
-    @media (min-width: $phone) {
+    @media (min-width: ${phone}) {
       scale: 1.05;
     }
   }
@@ -87,7 +87,6 @@ const MemberCard = ({ member, client }) => {
     };
 
     setup();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const totalDaoShares =

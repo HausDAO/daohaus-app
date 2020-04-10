@@ -13,8 +13,7 @@ import HeadTags from '../../components/shared/HeadTags';
 import HomeChart from '../../components/shared/HomeChart';
 import styled from 'styled-components';
 import WhitelistTokenBalances from '../../components/tokens/WhitelistTokenBalances';
-
-// import './Home.scss';
+import { basePadding } from '../../variables.styles';
 
 const HomeDiv = styled.div`
   width: 100%;
@@ -25,7 +24,8 @@ const HomeDiv = styled.div`
   background-size: cover;
   background-position: center center;
   background-repeat: no-repeat;
-  height: 100vh;
+  min-height: calc(100vh - 62px);
+  background-image: url(${(props) => props.theme.brandBg});
   h1 {
     text-align: center;
     font-size: 36px;
@@ -42,7 +42,7 @@ const HomeDiv = styled.div`
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    padding: $base-padding;
+    padding: ${basePadding};
   }
 `;
 
@@ -52,7 +52,7 @@ const IntroDiv = styled.div`
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  padding: $base-padding;
+  padding: ${basePadding};
 `;
 
 const ChartDiv = styled.div`
@@ -86,6 +86,7 @@ const DataDiv = styled.div`
     font-size: 28px;
   }
   .Row {
+    display: flex;
     justify-content: space-evenly;
     margin-top: 25px;
   }
@@ -114,26 +115,7 @@ const DataDiv = styled.div`
   }
 `;
 
-const ThemedIntroDiv = styled(IntroDiv)`
-  color: ${({ daoData }) => daoData.themeMap && daoData.themeMap.color};
-`;
-const ThemedHomeoDiv = styled(HomeDiv)`
-  background-image: url(${({ daoData }) =>
-    daoData.themeMap && daoData.themeMap.bgImage});
-`;
-
-const ThemedDataDiv = styled(DataDiv)`
-  .Bank,
-  .Shares,
-  .ShareValue {
-    z-index: 100;
-    &:hover h5 {
-      color: ${({ daoData }) => daoData.themeMap && daoData.themeMap.color};
-    }
-  }
-`;
-
-const Home = () => {
+const Home = (props) => {
   const [chartView, setChartView] = useState('bank');
   const [daoData] = useContext(DaoDataContext);
 
@@ -157,11 +139,11 @@ const Home = () => {
       {daoData ? <HeadTags daoData={daoData} /> : null}
       <StateModals />
 
-      <ThemedHomeoDiv daoData={daoData}>
-        <ThemedIntroDiv daoData={daoData}>
+      <HomeDiv>
+        <IntroDiv>
           <h1>{daoData.name || 'PokéMol DAO'}</h1>
           <p>{daoData.description || 'Put a Moloch in Your Pocket'}</p>
-        </ThemedIntroDiv>
+        </IntroDiv>
         {+daoData.version !== 2 && (
           <ChartDiv>
             <HomeChart
@@ -170,7 +152,7 @@ const Home = () => {
             />
           </ChartDiv>
         )}
-        <ThemedDataDiv daoData={daoData}>
+        <DataDiv>
           {+daoData.version === 2 ? (
             <>
               <div>
@@ -221,10 +203,10 @@ const Home = () => {
               </div>
             </>
           )}
-        </ThemedDataDiv>
+        </DataDiv>
 
         <BottomNav />
-      </ThemedHomeoDiv>
+      </HomeDiv>
     </>
   );
 };

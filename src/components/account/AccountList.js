@@ -4,9 +4,19 @@ import { Auth } from 'aws-amplify';
 import { CurrentUserContext } from '../../contexts/Store';
 import useModal from '../../components/shared/useModal';
 
-import './AccountList.scss';
+import styled from 'styled-components';
+
 import Modal from '../shared/Modal';
 import ChangePassword from '../../auth/ChangePassword';
+
+import { basePadding } from '../../variables.styles.js';
+
+const AccountListDiv = styled.div`
+  h5 {
+    margin: 5px 0px;
+  }
+  padding: ${basePadding};
+`;
 
 const AccountList = () => {
   const [currentUser] = useContext(CurrentUserContext);
@@ -60,7 +70,7 @@ const AccountList = () => {
   }, [currentUser]);
 
   return (
-    <div className="AccountList">
+    <AccountListDiv>
       <h5>Password</h5>
       <button className="" onClick={() => toggle('changePassword')}>
         Change Password
@@ -72,7 +82,15 @@ const AccountList = () => {
           isThisDeviceAdded ? 'Button--Input Verified' : 'Button--Input'
         }
       >
-        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path d="M0 0h24v24H0z" fill="none"/><path d="M12.65 10C11.83 7.67 9.61 6 7 6c-3.31 0-6 2.69-6 6s2.69 6 6 6c2.61 0 4.83-1.67 5.65-4H17v4h4v-4h2v-4H12.65zM7 14c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2z"/></svg>
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="24"
+          height="24"
+          viewBox="0 0 24 24"
+        >
+          <path d="M0 0h24v24H0z" fill="none" />
+          <path d="M12.65 10C11.83 7.67 9.61 6 7 6c-3.31 0-6 2.69-6 6s2.69 6 6 6c2.61 0 4.83-1.67 5.65-4H17v4h4v-4h2v-4H12.65zM7 14c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2z" />
+        </svg>
         {isThisDeviceAdded ? 'PP Keystore' : 'Add this device'}
         {isThisDeviceAdded ? (
           <svg
@@ -121,7 +139,7 @@ const AccountList = () => {
       >
         <ChangePassword></ChangePassword>
       </Modal>
-    </div>
+    </AccountListDiv>
   );
 };
 
