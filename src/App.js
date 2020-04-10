@@ -14,7 +14,9 @@ import config from './config';
 import styled from 'styled-components';
 import {
   defaultTheme,
+  defaultDarkTheme,
   molochTheme,
+  raidTheme,
   getAppBackground,
   GlobalStyle,
 } from './variables.styles';
@@ -67,8 +69,14 @@ const App = ({ client }) => {
             ...apiData,
             altClient,
           });
-          console.log(apiData.molochTheme);
-          setTheme(apiData.molochTheme ? molochTheme : defaultTheme);
+          let customTheme = defaultTheme;
+          if (apiData.molochTheme) {
+            customTheme = molochTheme;
+          }
+          if (apiData.raidTheme) {
+            customTheme = raidTheme;
+          }
+          setTheme(customTheme);
         } else {
           setloading(false);
         }

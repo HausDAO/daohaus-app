@@ -9,6 +9,7 @@ import {
   DaoServiceContext,
   DaoDataContext,
 } from '../../contexts/Store';
+import config from '../../config';
 import { WalletStatuses } from '../../utils/WalletStatus';
 import { truncateAddr } from '../../utils/Helpers';
 import Arrow from '../../assets/DropArrow.svg';
@@ -144,7 +145,10 @@ const UserBalance = ({ toggle, client, match }) => {
           <p>
             <a
               href={
-                'https://kovan.etherscan.io/token/' + token.token.tokenAddress
+                config.SDK_ENV === 'Kovan'
+                  ? 'https://kovan.etherscan.io/token/' +
+                    token.token.tokenAddress
+                  : 'https://etherscan.io/token/' + token.token.tokenAddress
               }
               rel="noopener noreferrer"
               target="_blank"
@@ -266,9 +270,11 @@ const UserBalance = ({ toggle, client, match }) => {
               <BackdropOpenDiv onClick={toggleActions} />
 
               <ActionsDropdownContentDiv>
-                <ButtonSecondary onClick={() => toggleActions('depositForm')}>
-                  Deposit
-                </ButtonSecondary>
+                {currentUser.type !== USER_TYPE.WEB3 && (
+                  <ButtonSecondary onClick={() => toggleActions('depositForm')}>
+                    Deposit
+                  </ButtonSecondary>
+                )}
                 {currentWallet.state === WalletStatuses.Deployed && (
                   <ButtonSecondary onClick={() => toggleActions('sendEth')}>
                     Send ETH

@@ -2,14 +2,31 @@ import { lighten, darken } from 'polished';
 import styled from 'styled-components';
 import { createGlobalStyle } from 'styled-components';
 import molochBg from './assets/themes/molochTheme/moloch__meme--trans15.png';
-
+import molochBrand from './assets/themes/molochTheme/moloch__logo--simple--red.png';
+import raidBrand from './assets/themes/raidTheme/raidguild__logo.png';
+import raidBg from './assets/themes/raidTheme/raid__fantasy--bg.jpg';
 export const defaultTheme = {
   baseFont: `'Roboto', sans-serif`,
   dataFont: `'Share Tech Mono', sans-serif`,
   baseFontColor: 'black',
-  brand: '/themes/pokemol/pokemol__brand--standard.png',
+  brand: '',
   brandBg: '',
   appBackground: `#F8F8FC`,
+  primary: `rgba(203,46,206,1)`,
+  secondary: `rgba(47,233,167,1)`,
+  tertiary: `rgba(239,73,123,1)`,
+  danger: `rgba(239,73,95,1)`,
+  success: `rgba(77,204,44,1)`,
+  bright: `rgba(189,134,254,1)`,
+};
+
+export const defaultDarkTheme = {
+  baseFont: `'Roboto', sans-serif`,
+  dataFont: `'Share Tech Mono', sans-serif`,
+  baseFontColor: 'white',
+  brand: '',
+  brandBg: '',
+  appBackground: `rgba(0, 0, 0, 0.95)`,
   primary: `rgba(203,46,206,1)`,
   secondary: `rgba(47,233,167,1)`,
   tertiary: `rgba(239,73,123,1)`,
@@ -22,12 +39,27 @@ export const molochTheme = {
   baseFont: `'Roboto', sans-serif`,
   dataFont: `'Share Tech Mono', sans-serif`,
   baseFontColor: 'white',
-  brand: '/themes/moloch/moloch__logo--simple--red.png',
+  brand: molochBrand,
   brandBg: molochBg,
   appBackground: `rgba(0, 0, 0, 0.95)`,
   primary: `#aa174c`,
   secondary: `#aa174c`,
   tertiary: `#aa174c`,
+  danger: `rgba(239,73,95,1)`,
+  success: `rgba(77,204,44,1)`,
+  bright: `rgba(189,134,254,1)`,
+};
+
+export const raidTheme = {
+  baseFont: `'Roboto', sans-serif`,
+  dataFont: `'Share Tech Mono', sans-serif`,
+  baseFontColor: 'white',
+  brand: raidBrand,
+  brandBg: raidBg,
+  appBackground: `rgba(0, 0, 0, 1)`,
+  primary: `#ff3864`,
+  secondary: `rgba(47,233,167,1)`,
+  tertiary: `rgba(239,73,123,1)`,
   danger: `rgba(239,73,95,1)`,
   success: `rgba(77,204,44,1)`,
   bright: `rgba(189,134,254,1)`,
@@ -60,7 +92,7 @@ export const danger = `rgba(239,73,95,1)`;
 export const dangerHover = darken(0.1, danger);
 export const success = `rgba(77,204,44,1)`;
 export const bright = `rgba(189,134,254,1)`;
-export const subdued = `#ccc`;
+export const subdued = `#aaa`;
 
 // Media Queries
 export const grid = '1200px';
