@@ -1,7 +1,7 @@
 import React from 'react';
 import TopNav from '../shared/TopNav';
 import styled from 'styled-components';
-import { getAppDark, getAppLight } from '../../variables.styles';
+import { getAppDark } from '../../variables.styles';
 
 export const StyledHeader = styled.header`
   background-color: transparent;

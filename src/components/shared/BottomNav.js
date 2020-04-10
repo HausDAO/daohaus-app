@@ -14,7 +14,8 @@ const BottomNavDiv = styled.div`
   display: flex;
   justify-content: space-evenly;
   background-color: ${(props) =>
-    props.location.pathname === `/dao/${props.daoAddress}/`
+    props.location.pathname === `/dao/${props.daoAddress}/` ||
+    `/dao/${props.daoAddress}`
       ? 'transparent'
       : getAppLight(props.theme)};
   a {
@@ -55,7 +56,7 @@ const BottomNav = (props) => {
   }
 
   return (
-    <BottomNavDiv daoAddress={daoService.daoAddress} location={props.location}>
+    <BottomNavDiv location={props.location} daoAddress={daoService.daoAddress}>
       <Link to={`/dao/${daoService.daoAddress}/proposals`}>
         <svg
           xmlns="http://www.w3.org/2000/svg"

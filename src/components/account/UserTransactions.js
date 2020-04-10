@@ -4,6 +4,51 @@ import { CurrentUserContext } from '../../contexts/Store';
 import { BcProcessorService } from '../../utils/BcProcessorService';
 import config from '../../config';
 
+import styled from 'styled-components';
+import { getAppLight, getAppDark } from '../../variables.styles';
+
+const TransactionsDiv = styled.div`
+  width: 100%;
+  .Item {
+    display: flex;
+    align-content: center;
+    justify-content: space-between;
+    padding: 15px 15px;
+    flex-direction: row;
+    background-color: ${(props) => getAppLight(props.theme)};
+    .Description {
+      display: flex;
+      align-content: center;
+      justify-content: flex-start;
+      flex-direction: column;
+      &__Title {
+        font-size: 1em;
+        margin: 0;
+        margin-bottom: 5px;
+        margin-top: 5px;
+      }
+    }
+    .Status {
+      display: flex;
+      align-content: center;
+      justify-content: center;
+      flex-direction: column;
+      text-align: center;
+      width: 80px;
+      svg {
+        width: 36px;
+        height: 36px;
+      }
+    }
+    p:not(.Description__Title) {
+      font-size: 0.85em;
+      margin: 0;
+      color: #aaa;
+    }
+    border-bottom: 1px solid ${(props) => getAppDark(props.theme)};
+  }
+`;
+
 const UserTransactions = () => {
   const bcprocessor = new BcProcessorService();
 
@@ -114,7 +159,7 @@ const UserTransactions = () => {
   };
 
   return (
-    <div className="Transactions">{currentUser && <>{renderList()}</>}</div>
+    <TransactionsDiv>{currentUser && <>{renderList()}</>}</TransactionsDiv>
   );
 };
 

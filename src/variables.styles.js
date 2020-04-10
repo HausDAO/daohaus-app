@@ -85,12 +85,44 @@ export const GlobalStyle = createGlobalStyle`
     }
   }
   button {
+    appearance: none;
+    outline: none;
+    background-color: transparent;
     border: none;
+    cursor: pointer;
+    text-decoration: none;
+    position: relative;
+    transition: all 0.15s ease-in-out;
+    background-color: ${(props) => props.theme.secondary};
+    color: white;
+    border-radius: 50px;
+    padding: 15px 30px;
+    max-width: 100%;
+    display: block;
+    margin: 15px 0px;
+    font-size: 16px;
+    text-align: center;
+    font-weight: 900;
+  }
+  input,
+  textarea {
+    outline: none;
+    appearance: none;
+    border: none;
+    background-color: ${(props) => getAppLight(props.theme)};
+    color: ${(props) => props.theme.baseFontColor};
+    border: none;
+    min-width: 240px;
+    width: calc(100% - 40px);
+    font-size: 21px;
+    padding: 20px 20px 10px 20px;
+    border-radius: 35px;
+    box-shadow: $shadow;
   }
 `;
 
 export const FlashDiv = styled.div`
-  opacity: 0; /* make things invisible upon start */
+  opacity: 0;
   top: 0px;
   animation: fadeIn, fadeOut;
   animation-fill-mode: forwards, forwards;
@@ -101,7 +133,7 @@ export const FlashDiv = styled.div`
   left: 50%;
   transform: translateX(-50%);
   position: fixed;
-  background-color: $primary;
+  background-color: ${(props) => props.theme.primary};
   color: white;
   width: 100%;
   height: 60px;
@@ -115,23 +147,23 @@ export const FlashDiv = styled.div`
 `;
 
 export const ButtonPrimary = styled.button`
-  color: ${primary};
+  color: ${(props) => props.theme.primary};
   &:hover {
-    color: ${primaryHover};
+    color: ${(props) => getPrimaryHover(props.theme)};
   }
 `;
 export const ButtonSecondary = styled.button`
-  color: ${secondary};
+  color: ${(props) => props.theme.secondary};
   &:hover {
-    color: ${secondaryHover};
+    color: ${(props) => getSecondaryHover(props.theme)};
   }
   &:disabled {
     color: grey;
   }
 `;
 export const ButtonTertiary = styled.button`
-  color: ${tertiary};
+  color: ${(props) => props.theme.tertiary};
   &:hover {
-    color: ${tertiaryHover};
+    color: ${(props) => getTertiaryHover(props.theme)};
   }
 `;
