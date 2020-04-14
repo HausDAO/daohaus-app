@@ -58,7 +58,7 @@ const NoLabelSpan = styled.span`
     props.page === 'ProposalCard' ? 'right' : 'center'};
   background-color: transparent;
   font-weight: 900;
-  color: ${(props) => props.theme.tertiary};
+  color: ${(props) => props.theme.danger};
 `;
 
 const BaseBarDiv = styled.div`
@@ -80,7 +80,7 @@ const NoBarDiv = styled.div`
   height: 5px;
   right: 0px;
   position: absolute;
-  background-color: ${(props) => props.theme.tertiary};
+  background-color: ${(props) => props.theme.danger};
   width: ${(props) => props.percentageShares + '%'};
 `;
 
