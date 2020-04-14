@@ -125,7 +125,7 @@ export const GlobalStyle = createGlobalStyle`
     text-decoration: none;
     position: relative;
     transition: all 0.15s ease-in-out;
-    background-color: ${(props) => props.theme.secondary};
+    background-color: ${(props) => props.theme.primary};
     color: white;
     border-radius: 50px;
     padding: 15px 30px;
@@ -135,6 +135,16 @@ export const GlobalStyle = createGlobalStyle`
     font-size: 16px;
     text-align: center;
     font-weight: 900;
+    svg {
+      display: inline-block;
+      margin: 0;
+      margin-top: -3px;
+      padding: 0px;
+      vertical-align: middle;
+      fill: white;
+      margin-right: ${(props) => (props.iconLeft ? '5px' : '0')};
+      margin-left: ${(props) => (props.iconRight ? '5px' : '0')};
+    }
   }
   input,
   textarea {

@@ -19,14 +19,14 @@ import StateModals from '../../components/shared/StateModals';
 import ProposalTypeToggle from '../../components/proposal-v2/ProposalTypeToggle';
 
 import styled from 'styled-components';
-import { RowDiv, LinkButton } from '../../App.styles';
+import { RowDiv, ButtonLink } from '../../App.styles';
 
 const ProposalsHeaderRow = styled(RowDiv)`
   padding-left: 25px;
   padding-right: 25px;
 `;
 
-const NewProposalLinkButton = styled(LinkButton)``;
+const NewProposalButton = styled(ButtonLink)``;
 
 const Proposals = ({ match, history }) => {
   const [currentWallet] = useContext(CurrentWalletContext);
@@ -99,7 +99,7 @@ const Proposals = ({ match, history }) => {
       <ProposalsHeaderRow>
         <h3>Proposals</h3>
         {currentWallet.shares || (daoData.version === 2 && currentUser) ? (
-          <NewProposalLinkButton
+          <NewProposalButton
             to={
               daoData.version === 2
                 ? `/dao/${daoService.daoAddress}/proposal-engine`
@@ -107,17 +107,17 @@ const Proposals = ({ match, history }) => {
             }
           >
             <svg
-              className="IconLeft"
               xmlns="http://www.w3.org/2000/svg"
               width="24"
               height="24"
               viewBox="0 0 24 24"
+              style={{ marginRight: '5px' }}
             >
               <path fill="none" d="M0 0h24v24H0V0z" />
               <path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z" />
             </svg>
             New Proposal
-          </NewProposalLinkButton>
+          </NewProposalButton>
         ) : null}
       </ProposalsHeaderRow>
       {+daoData.version === 2 ? (

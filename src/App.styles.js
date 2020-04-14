@@ -323,6 +323,38 @@ export const LinkButton = styled(Link)`
   }
 `;
 
+export const ButtonLink = styled(Link)`
+  appearance: none;
+  outline: none;
+  border: none;
+  cursor: pointer;
+  text-decoration: none;
+  position: relative;
+  transition: all 0.15s ease-in-out;
+  background-color: ${(props) => props.theme.primary};
+  color: white;
+  border-radius: 50px;
+  padding: 15px 30px;
+  max-width: 100%;
+  display: block;
+  margin: 15px 0px;
+  font-size: 16px;
+  text-align: center;
+  font-weight: 900;
+  &:hover {
+    background-color: ${(props) => getPrimaryHover(props.theme)};
+    color: white;
+  }
+  svg {
+    display: inline-block;
+    margin: 0;
+    margin-top: -3px;
+    padding: 0px;
+    vertical-align: middle;
+    fill: white !important;
+  }
+`;
+
 export const DropdownInputDiv = styled.div`
   position: relative;
   .MaxLabel {
