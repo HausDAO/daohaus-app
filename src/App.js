@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useContext } from 'react';
 import { BrowserRouter as Router } from 'react-router-dom';
 import ApolloClient from 'apollo-boost';
-import { ThemeProvider } from 'styled-components';
+import styled, { ThemeProvider } from 'styled-components';
 
 import { DaoDataContext, DaoServiceContext } from './contexts/Store';
 import { get } from './utils/Requests';
@@ -11,7 +11,6 @@ import Routes from './Routes';
 import Header from './components/header/Header';
 import Loading from './components/shared/Loading';
 import config from './config';
-import styled from 'styled-components';
 import {
   defaultTheme,
   molochTheme,
@@ -49,25 +48,9 @@ const App = ({ client }) => {
         if (apiData) {
           setDaoPath(daoParam);
 
-          let altClient;
-          // TODO: Swap resolvers on version
-
-          if (apiData.isLegacy || +apiData.version === 2) {
-            altClient = new ApolloClient({
-              uri: apiData.isLegacy
-                ? apiData.graphNodeUri
-                : config.GRAPH_NODE_URI_V2,
-              clientState: {
-                resolvers: apiData.isLegacy ? resolvers : resolversV2,
-              },
-            });
-          }
-
           setDaoData({
             ...apiData,
-            altClient,
           });
-          console.log(apiData.molochTheme);
           setTheme(apiData.molochTheme ? molochTheme : defaultTheme);
         } else {
           setloading(false);
@@ -85,78 +68,46 @@ const App = ({ client }) => {
   useEffect(() => {
     // save all web3 data to apollo cache
     const fetchData = async () => {
-      if (!daoService || !daoData || daoData.version === 2) {
+      if (!daoService || !daoData) {
         client.writeData({
           data: {
             currentPeriod: 0,
-            totalShares: 0,
-            guildBankAddr: '0x00000000000000000000',
-            approvedToken: '0x00000000000000000000',
             tokenSymbol: 'DAO',
-            gracePeriodLength: 0,
-            votingPeriodLength: 0,
-            periodDuration: 0,
-            processingReward: 0,
-            proposalDeposit: 0,
             guildBankValue: 0,
             shareValue: 0,
           },
         });
 
-        if (daoData && daoData.version === 2 && daoService) {
-          const currentPeriod = await daoService.mcDao.getCurrentPeriod();
-
-          daoData.altClient.writeData({
-            data: { currentPeriod: parseInt(currentPeriod) },
-          });
-
-          setloading(false);
-        }
         return;
       }
 
       const currentPeriod = await daoService.mcDao.getCurrentPeriod();
       const totalShares = await daoService.mcDao.getTotalShares();
-      const guildBankAddr = await daoService.mcDao.getGuildBankAddr();
-      const gracePeriodLength = await daoService.mcDao.getGracePeriodLength();
-      const votingPeriodLength = await daoService.mcDao.getVotingPeriodLength();
-      const periodDuration = await daoService.mcDao.getPeriodDuration();
-      const processingReward = await daoService.mcDao.getProcessingReward();
-      const proposalDeposit = await daoService.mcDao.getProposalDeposit();
-      const approvedToken = await daoService.mcDao.approvedToken();
-      const guildBankValue = await daoService.token.balanceOf(guildBankAddr);
-      const tokenSymbol = await daoService.token.getSymbol();
 
+      let guildBankAddr, guildBankValue;
       const cacheData = {
         currentPeriod: parseInt(currentPeriod),
-        totalShares: parseInt(totalShares),
-        guildBankAddr,
-        approvedToken,
-        tokenSymbol,
-        gracePeriodLength: parseInt(gracePeriodLength),
-        votingPeriodLength: parseInt(votingPeriodLength),
-        periodDuration: parseInt(periodDuration),
-        processingReward: daoService.web3.utils.fromWei(processingReward),
-        proposalDeposit: daoService.web3.utils.fromWei(proposalDeposit),
-        guildBankValue: daoService.web3.utils.fromWei(guildBankValue),
-        shareValue: parseFloat(
+      };
+
+      if (daoData.version !== 2) {
+        guildBankAddr = await daoService.mcDao.getGuildBankAddr();
+        guildBankValue = await daoService.token.balanceOf(guildBankAddr);
+        cacheData.guildBankValue = daoService.web3.utils.fromWei(
+          guildBankValue,
+        );
+        cacheData.tokenSymbol = await daoService.token.getSymbol();
+        cacheData.shareValue = parseFloat(
           daoService.web3.utils.fromWei(
             daoService.web3.utils
               .toBN(guildBankValue)
               .div(daoService.web3.utils.toBN(totalShares)),
           ),
-        ),
-      };
+        );
+      }
 
       client.writeData({
         data: cacheData,
       });
-
-      if (daoData.isLegacy) {
-        daoData.altClient.writeData({
-          data: cacheData,
-        });
-      }
 
       setloading(false);
     };

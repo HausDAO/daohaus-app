@@ -23,7 +23,9 @@ Amplify.configure({
 });
 
 const client = new ApolloClient({
-  uri: config.GRAPH_NODE_URI,
+  uri: config.GRAPH_NODE_URI_SUPER,
+  // uri: config.GRAPH_NODE_URI,
+
   clientState: {
     resolvers,
   },

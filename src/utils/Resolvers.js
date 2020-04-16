@@ -1,3 +1,6 @@
+import { gql } from 'apollo-boost';
+import Web3 from 'web3';
+
 import {
   determineProposalStatus,
   inGracePeriod,
@@ -5,8 +8,13 @@ import {
   inQueue,
   passedVotingAndGrace,
 } from './ProposalHelper';
-import { gql } from 'apollo-boost';
+import { TokenService } from './TokenService';
+import { McDaoService } from './McDaoService';
 import { GET_METADATA } from './Queries';
+import { GET_METADATA_SUPER } from './QueriesSuper';
+import config from '../config';
+
+const _web3 = new Web3(new Web3.providers.HttpProvider(config.INFURA_URI));
 
 export const resolvers = {
   Proposal: {
@@ -110,6 +118,78 @@ export const resolvers = {
       };
       cache.writeData({ id, data });
       return data;
+    },
+  },
+  // SUPER STUFF BELOW
+  Moloch: {
+    meta: (_, _args, { cache }) => {
+      return cache.readQuery({
+        query: GET_METADATA_SUPER,
+      });
+    },
+  },
+  TokenBalance: {
+    symbol: async (tokenBalance, _args, { cache }) => {
+      if (tokenBalance.guildBank) {
+        const tokenService = new TokenService(
+          _web3,
+          tokenBalance.token.tokenAddress,
+        );
+        const symbol = await tokenService.getSymbol();
+
+        return symbol;
+      } else {
+        return null;
+      }
+
+      // return null;
+    },
+    decimals: async (tokenBalance, _args, { cache }) => {
+      if (tokenBalance.guildBank) {
+        const tokenService = new TokenService(
+          _web3,
+          tokenBalance.token.tokenAddress,
+        );
+
+        const decimals = await tokenService.getDecimals();
+
+        return +decimals;
+      } else {
+        return null;
+      }
+    },
+    contractTokenBalance: async (tokenBalance, _args, { cache }) => {
+      if (tokenBalance.guildBank) {
+        const tokenService = new TokenService(
+          _web3,
+          tokenBalance.token.tokenAddress,
+        );
+
+        const balance = await tokenService.balanceOf(tokenBalance.moloch.id);
+
+        return balance;
+      } else {
+        return null;
+      }
+    },
+    contractBabeBalance: async (tokenBalance, _args, { cache }) => {
+      if (tokenBalance.guildBank) {
+        const mcDaoService = new McDaoService(
+          _web3,
+          tokenBalance.moloch.id,
+          null,
+          2,
+        );
+
+        const balance = await mcDaoService.getUserTokenBalance(
+          '0x000000000000000000000000000000000000baBe',
+          tokenBalance.token.tokenAddress,
+        );
+
+        return balance;
+      } else {
+        return null;
+      }
     },
   },
 };
