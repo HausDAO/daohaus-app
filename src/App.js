@@ -1,19 +1,14 @@
 import React, { useEffect, useState, useContext } from 'react';
 import { BrowserRouter as Router } from 'react-router-dom';
-import ApolloClient from 'apollo-boost';
 import styled, { ThemeProvider } from 'styled-components';
 
 import { DaoDataContext, DaoServiceContext } from './contexts/Store';
 import { get } from './utils/Requests';
-import { resolvers } from './utils/Resolvers';
-import { resolversV2 } from './utils/ResolversV2';
 import Routes from './Routes';
 import Header from './components/header/Header';
 import Loading from './components/shared/Loading';
-import config from './config';
 import {
   defaultTheme,
-  defaultDarkTheme,
   molochTheme,
   raidTheme,
   getAppBackground,
