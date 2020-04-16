@@ -1,4 +1,5 @@
 import styled from 'styled-components';
+import { lighten, darken } from 'polished';
 
 import {
   phone,
@@ -6,6 +7,7 @@ import {
   getSecondaryHover,
   getPrimaryHover,
   getTertiaryHover,
+  basePadding,
 } from './variables.styles';
 
 import { Link } from 'react-router-dom';
@@ -181,7 +183,7 @@ export const OfferDiv = styled.div`
   display: flex;
   justify-content: flex-start;
   align-content: flex-start;
-  div:first-child {
+  > div:not(:last-child) {
     margin-right: 25px;
   }
   h5 {
@@ -189,6 +191,42 @@ export const OfferDiv = styled.div`
   }
   h2 {
     margin: 0px;
+  }
+`;
+
+export const FormContainer = styled.div`
+  padding: ${basePadding};
+  width: calc(100% - 30px);
+  max-width: 340px;
+  margin: 0 auto;
+  .Error {
+    color: red;
+    font-size: 13px;
+    position: relative;
+    top: 20px;
+    left: 20px;
+    margin-bottom: 40px;
+  }
+`;
+
+export const FieldContainer = styled.div` {
+  position: relative;
+  margin-top: 25px;
+  label {
+    pointer-events: none;
+    position: absolute;
+    left: 20px;
+    top: 17px;
+    color: ${(props) => lighten(0.1, props.theme.primary)};
+    background-color: transparent;
+    z-index: 7;
+    transition: transform 150ms ease-out, font-size 150ms ease-out;
+  }
+  &.HasValue {
+    label {
+      transform: translateY(-75%);
+      font-size: 0.75em;
+    }
   }
 `;
 
@@ -210,6 +248,12 @@ export const RiskyBizButton = styled.button`
     }
     border-radius: 0px;
   }
+`;
+
+export const RowDiv = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
 `;
 
 export const FlexCenterDiv = styled.div`
@@ -261,5 +305,112 @@ export const LinkButton = styled(Link)`
   &:hover {
     background-color: transparent;
     color: ${(props) => getPrimaryHover(props.theme)};
+  }
+  svg {
+    display: inline-block;
+    margin: 0;
+    padding: 0px;
+    vertical-align: middle;
+    width: 24px;
+    height: 24px;
+    margin-top: -3px;
+    &.IconLeft {
+      margin-right: 5px;
+    }
+    &.IconRight {
+      margin-left: 5px;
+    }
+  }
+`;
+
+export const ButtonLink = styled(Link)`
+  appearance: none;
+  outline: none;
+  border: none;
+  cursor: pointer;
+  text-decoration: none;
+  position: relative;
+  transition: all 0.15s ease-in-out;
+  background-color: ${(props) => props.theme.primary};
+  color: white;
+  border-radius: 50px;
+  padding: 15px 30px;
+  max-width: 100%;
+  display: block;
+  margin: 15px 0px;
+  font-size: 16px;
+  text-align: center;
+  font-weight: 900;
+  &:hover {
+    background-color: ${(props) => getPrimaryHover(props.theme)};
+    color: white;
+  }
+  svg {
+    display: inline-block;
+    margin: 0;
+    margin-top: -3px;
+    padding: 0px;
+    vertical-align: middle;
+    fill: white !important;
+  }
+`;
+
+export const DropdownInputDiv = styled.div`
+  position: relative;
+  .MaxLabel {
+    position: absolute;
+    top: 3px;
+    right: 20px;
+    font-size: 0.75em;
+    color: ${(props) => props.theme.primary};
+    cursor: pointer;
+    &:hover {
+      color: ${(props) => getPrimaryHover(props.theme)};
+    }
+  }
+  .UnlockButton {
+    position: absolute;
+    top: 19px;
+    right: 9px;
+    width: 145px;
+    padding: 5px;
+    outline: none;
+    font-size: 0.75em;
+    border-radius: 25px;
+    border: 2px solid ${(props) => props.theme.primary};
+    background-color: ${(props) => props.theme.primary};
+    color: white;
+    cursor: pointer;
+    transition: all 0.15s linear;
+    &:hover {
+      border: 2px solid ${(props) => getPrimaryHover(props.theme)};
+      background-color: ${(props) => getPrimaryHover(props.theme)};
+    }
+    svg {
+      width: 12px;
+      height: 12px;
+      margin: 2px auto 0px;
+    }
+  }
+  .TokenSelect {
+    position: absolute;
+    top: 19px;
+    right: 9px;
+    width: 100px;
+    select {
+      font-size: 0.75em;
+      width: 100px;
+      appearance: none;
+      padding: 5px;
+      border: 2px solid ${(props) => props.theme.primary};
+      border-radius: 25px;
+      outline: none;
+      color: ${(props) => props.theme.primary};
+      cursor: pointer;
+      &:hover {
+        border: 2px solid ${(props) => getPrimaryHover(props.theme)};
+        color: ${(props) => getPrimaryHover(props.theme)};
+      }
+    }
   }
 `;

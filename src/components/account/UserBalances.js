@@ -9,6 +9,7 @@ import {
   DaoServiceContext,
   DaoDataContext,
 } from '../../contexts/Store';
+import config from '../../config';
 import { WalletStatuses } from '../../utils/WalletStatus';
 import { truncateAddr } from '../../utils/Helpers';
 import Arrow from '../../assets/DropArrow.svg';
@@ -142,9 +143,20 @@ const UserBalance = ({ toggle, client, match }) => {
       return (
         <BalanceItemDiv key={token.token.tokenAddress}>
           <p>
-            {token.token.symbol} {token.token.tokenAddress}
+            <a
+              href={
+                config.SDK_ENV === 'Kovan'
+                  ? 'https://kovan.etherscan.io/token/' +
+                    token.token.tokenAddress
+                  : 'https://etherscan.io/token/' + token.token.tokenAddress
+              }
+              rel="noopener noreferrer"
+              target="_blank"
+            >
+              {token.token.symbol}
+            </a>
           </p>
-          <DataDiv>{token.tokenBalance / 10 ** token.token.decimals}</DataDiv>
+          <DataP>{token.tokenBalance / 10 ** token.token.decimals}</DataP>
         </BalanceItemDiv>
       );
     });
@@ -258,9 +270,11 @@ const UserBalance = ({ toggle, client, match }) => {
               <BackdropOpenDiv onClick={toggleActions} />
 
               <ActionsDropdownContentDiv>
-                <ButtonSecondary onClick={() => toggleActions('depositForm')}>
-                  Deposit
-                </ButtonSecondary>
+                {currentUser.type !== USER_TYPE.WEB3 && (
+                  <ButtonSecondary onClick={() => toggleActions('depositForm')}>
+                    Deposit
+                  </ButtonSecondary>
+                )}
                 {currentWallet.state === WalletStatuses.Deployed && (
                   <ButtonSecondary onClick={() => toggleActions('sendEth')}>
                     Send ETH
@@ -378,10 +392,7 @@ const UserBalance = ({ toggle, client, match }) => {
         )}
         {headerSwitch === 'InternalBalances' && daoData.version === 2 && (
           <BalancesDiv>
-            <BalanceItemDiv>
-              <p>{tokenBalances.tokenSymbol}</p>
-              <DataP>{renderBalances(tokenBalances)}</DataP>
-            </BalanceItemDiv>
+            {renderBalances(tokenBalances)}
             {tokenBalances.length && (
               <BalanceItemDiv>
                 <button onClick={() => withdrawBalances(tokenBalances)}>

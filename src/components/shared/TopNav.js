@@ -33,12 +33,22 @@ const BrandLink = styled(Link)`
   transform: translate(0, -50%);
   font-weight: 900;
   color: ${(props) => props.theme.baseFontColor};
-  &:hover {
-    color: ${(props) => props.theme.primary};
-  }
+  background-image: url(${(props) => props.theme.brand});
+  background-size: contain;
+  background-repeat: no-repeat;
+  height: 48px;
+  width: ${(props) => (props.theme.brand === '' ? 'auto' : '180px')};
+  min-width: 180px;
   font-size: 1.5em;
+  .DaoText {
+    display: ${(props) => (props.theme.brand === '' ? 'block' : 'none')};
+    margin-top: 8px;
+  }
   img {
     height: 48px;
+  }
+  &:hover {
+    color: ${(props) => props.theme.primary};
   }
   @media (max-width: ${phone}) {
     font-size: 1.15em;
@@ -125,6 +135,7 @@ const TopNav = (props) => {
 
   return (
     <TopNavDiv>
+      {console.log(props)}
       {daoService && daoService.mcDao.daoContract && (
         <>
           {isElementOpen ? (
@@ -133,6 +144,7 @@ const TopNav = (props) => {
             <BackdropDiv onClick={toggleElement} />
           )}
           {currentUser && <BcToast />}
+
           {pathname === `/dao/${daoService.daoAddress}/sign-in` ? (
             <ButtonBackDiv>
               <Link to={`/dao/${daoService.daoAddress}/`}>{'<='} Back</Link>
@@ -146,12 +158,18 @@ const TopNav = (props) => {
                 </ButtonBackDiv>
               ) : (
                 <>
-                  {props.match.params.name ===
-                  `/dao/${daoService.daoAddress}/proposal/` ? (
-                    <p>Back</p>
+                  {pathname ===
+                  `/dao/${daoService.daoAddress}/proposal-engine` ? (
+                    <ButtonBackDiv>
+                      <Link to={`/dao/${daoService.daoAddress}/proposals`}>
+                        {'<='} Back
+                      </Link>
+                    </ButtonBackDiv>
                   ) : (
                     <BrandLink to={`/dao/${daoService.daoAddress}/`}>
-                      {(daoData && daoData.name) || 'PokéMol DAO'}
+                      <span className="DaoText">
+                        {(daoData && daoData.name) || 'PokéMol DAO'}
+                      </span>
                     </BrandLink>
                   )}
                 </>

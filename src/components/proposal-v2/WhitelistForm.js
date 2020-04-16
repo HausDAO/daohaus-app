@@ -2,6 +2,7 @@ import React, { useContext, useState } from 'react';
 import { withRouter } from 'react-router-dom';
 
 import { Formik, Form, Field, ErrorMessage } from 'formik';
+import { FormContainer, FieldContainer } from '../../App.styles';
 
 import {
   LoaderContext,
@@ -26,8 +27,8 @@ const WhitelistForm = (props) => {
   //const [daoService] = useContext(DaoServiceContext);
 
   return (
-    <div>
-      <h1 className="Pad">Whitelist Token Proposal</h1>
+    <FormContainer>
+      <h1>Whitelist Token Proposal</h1>
       <div>
         {formLoading && <Loading />}
         {gloading && <Loading />}
@@ -73,12 +74,12 @@ const WhitelistForm = (props) => {
                 <Form className="Form">
                   <Field name="title">
                     {({ field, form }) => (
-                      <div
+                      <FieldContainer
                         className={field.value ? 'Field HasValue' : 'Field '}
                       >
                         <label>Ticker</label>
                         <input type="text" {...field} />
-                      </div>
+                      </FieldContainer>
                     )}
                   </Field>
                   <ErrorMessage name="title">
@@ -86,12 +87,12 @@ const WhitelistForm = (props) => {
                   </ErrorMessage>
                   <Field name="description">
                     {({ field, form }) => (
-                      <div
+                      <FieldContainer
                         className={field.value ? 'Field HasValue' : 'Field '}
                       >
                         <label>Short Description</label>
                         <textarea {...field} />
-                      </div>
+                      </FieldContainer>
                     )}
                   </Field>
                   <ErrorMessage name="description">
@@ -99,12 +100,12 @@ const WhitelistForm = (props) => {
                   </ErrorMessage>
                   <Field name="link">
                     {({ field, form }) => (
-                      <div
+                      <FieldContainer
                         className={field.value ? 'Field HasValue' : 'Field '}
                       >
                         <label>Link</label>
                         <input type="text" {...field} />
-                      </div>
+                      </FieldContainer>
                     )}
                   </Field>
                   <ErrorMessage name="link">
@@ -113,12 +114,12 @@ const WhitelistForm = (props) => {
 
                   <Field name="applicant">
                     {({ field, form }) => (
-                      <div
+                      <FieldContainer
                         className={field.value ? 'Field HasValue' : 'Field '}
                       >
                         <label>Token Address</label>
                         <input type="text" {...field} />
-                      </div>
+                      </FieldContainer>
                     )}
                   </Field>
                   <ErrorMessage name="applicant">
@@ -134,7 +135,7 @@ const WhitelistForm = (props) => {
           )}
         </div>
       </div>
-    </div>
+    </FormContainer>
   );
 };
 

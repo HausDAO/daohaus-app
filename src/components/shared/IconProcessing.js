@@ -1,8 +1,5 @@
 import React from 'react';
-
 import styled from 'styled-components';
-
-import { primary } from '../../variables.styles';
 
 const IconProcessingStroke = styled.svg`
   stroke: ${(props) => props.theme.primary};

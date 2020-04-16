@@ -28,6 +28,7 @@ const web3Service = new Web3Service();
 
 const ProposalDetailDiv = styled.div`
   padding: ${basePadding};
+  padding-bottom: 120px;
 `;
 
 const TimerDiv = styled.div`

@@ -15,7 +15,7 @@ export const WalletDiv = styled.div`
   position: relative;
   top: -2px;
   box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
-  background-color: ${(props) => getAppDark(props.theme)};
+  background-color: ${(props) => getAppLight(props.theme)};
   @media (max-width: ${phone}) {
     border-radius: 0px;
     border: none;

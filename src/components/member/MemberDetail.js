@@ -81,9 +81,16 @@ const MemberDetail = ({ member, client }) => {
         </MemberCardImage>
         <div>
           <h2>{memberProfile.name}</h2>
-          <p className="Data">{memberId}</p>
         </div>
       </MemberCardIdentityDiv>
+      <h5>Member Address</h5>
+      <DataP>{memberId}</DataP>
+      {member.delegateKey !== memberId && (
+        <>
+          <h5>Delegate Key</h5>
+          <DataP>{member.delegateKey}</DataP>
+        </>
+      )}
       <OfferDivMemberCard>
         <div>
           <h5>Shares</h5>
@@ -97,13 +104,11 @@ const MemberDetail = ({ member, client }) => {
             </DataH2>
           </div>
         ) : null}
+        <div>
+          <h5>Vote Power</h5>
+          <DataH2>{votingPower} %</DataH2>
+        </div>
       </OfferDivMemberCard>
-      <div>
-        <h5>Vote Power</h5>
-        <DataH2>{votingPower} %</DataH2>
-      </div>
-      <h5>Delegate Key</h5>
-      <DataP>{member.delegateKey}</DataP>
     </MemberDetailDiv>
   );
 };
