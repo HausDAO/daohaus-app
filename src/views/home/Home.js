@@ -144,14 +144,6 @@ const Home = (props) => {
           <h1>{daoData.name || 'PokéMol DAO'}</h1>
           <p>{daoData.description || 'Put a Moloch in Your Pocket'}</p>
         </IntroDiv>
-        {+daoData.version !== 2 && (
-          <ChartDiv>
-            <HomeChart
-              guildBankAddr={data.guildBankAddr}
-              chartView={chartView}
-            />
-          </ChartDiv>
-        )}
         <DataDiv>
           {+daoData.version === 2 ? (
             <>
@@ -204,7 +196,14 @@ const Home = (props) => {
             </>
           )}
         </DataDiv>
-
+        {+daoData.version !== 2 && (
+          <ChartDiv>
+            <HomeChart
+              guildBankAddr={data.guildBankAddr}
+              chartView={chartView}
+            />
+          </ChartDiv>
+        )}
         <BottomNav />
       </HomeDiv>
     </>

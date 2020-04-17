@@ -93,6 +93,7 @@ export const dangerHover = darken(0.1, danger);
 export const success = `rgba(77,204,44,1)`;
 export const bright = `rgba(189,134,254,1)`;
 export const subdued = `#aaa`;
+export const pokemolBackground = `#AA174C`;
 
 // Media Queries
 export const grid = '1200px';
