@@ -62,12 +62,16 @@ const ChartDiv = styled.div`
   // max-width: 420px;
   left: 50%;
   transform: translate(-50%, -50%);
-  z-index: 1;
+  z-index: 0;
   width: 100%;
   height: 33vh;
+  pointer-events: none;
 `;
 
 const DataDiv = styled.div`
+  position: relative;
+  z-index: 1;
+  width: 100%;
   h4,
   h5,
   h3,
@@ -99,7 +103,6 @@ const DataDiv = styled.div`
       font-weight: 300;
       transition: all 0.15s linear;
     }
-
     &.Selected {
       h2,
       h3 {
@@ -144,14 +147,6 @@ const Home = (props) => {
           <h1>{daoData.name || 'PokéMol DAO'}</h1>
           <p>{daoData.description || 'Put a Moloch in Your Pocket'}</p>
         </IntroDiv>
-        {+daoData.version !== 2 && (
-          <ChartDiv>
-            <HomeChart
-              guildBankAddr={data.guildBankAddr}
-              chartView={chartView}
-            />
-          </ChartDiv>
-        )}
         <DataDiv>
           {+daoData.version === 2 ? (
             <>
@@ -204,7 +199,14 @@ const Home = (props) => {
             </>
           )}
         </DataDiv>
-
+        {+daoData.version !== 2 && (
+          <ChartDiv>
+            <HomeChart
+              guildBankAddr={data.guildBankAddr}
+              chartView={chartView}
+            />
+          </ChartDiv>
+        )}
         <BottomNav />
       </HomeDiv>
     </>
