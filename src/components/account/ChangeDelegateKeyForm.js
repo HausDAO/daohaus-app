@@ -1,6 +1,8 @@
 import React, { useState, useContext } from 'react';
 import { Formik, Form, Field, ErrorMessage } from 'formik';
 
+import { FormContainer, FieldContainer } from '../../App.styles';
+
 import { LoaderContext, DaoServiceContext } from '../../contexts/Store';
 import Loading from '../shared/Loading';
 import Web3 from 'web3';
@@ -11,7 +13,7 @@ const ChangeDelegateKeyForm = () => {
   const [formSuccess, setFormSuccess] = useState(false);
 
   return (
-    <>
+    <FormContainer>
       {loading && <Loading />}
 
       <h2>Change Delegate Key</h2>
@@ -50,10 +52,12 @@ const ChangeDelegateKeyForm = () => {
             <Form className="Form">
               <Field name="newDelegateKey">
                 {({ field }) => (
-                  <div className={field.value ? 'Field HasValue' : 'Field '}>
+                  <FieldContainer
+                    className={field.value ? 'Field HasValue' : 'Field '}
+                  >
                     <label>New Delegate Key Address</label>
                     <input type="text" {...field} />
-                  </div>
+                  </FieldContainer>
                 )}
               </Field>
               <ErrorMessage
@@ -69,7 +73,7 @@ const ChangeDelegateKeyForm = () => {
           )
         }
       </Formik>
-    </>
+    </FormContainer>
   );
 };
 
