@@ -81,6 +81,7 @@ const RagequitForm = () => {
         {({ isSubmitting }) =>
           !formSuccess && !loading ? (
             <Form className="Form">
+              <p>Ragequit up to {currentWallet.shares} Shares</p>
               <Field name="numShares">
                 {({ field }) => (
                   <FieldContainer
@@ -94,7 +95,6 @@ const RagequitForm = () => {
                       step="any"
                       {...field}
                     />
-                    <p>Ragequit Up To {currentWallet.shares} Shares</p>
                   </FieldContainer>
                 )}
               </Field>
@@ -104,6 +104,7 @@ const RagequitForm = () => {
               />
               {daoData.version === 2 && (
                 <>
+                  <p>Ragequit up to {currentWallet.loot} Loot</p>
                   <Field name="numLoot">
                     {({ field }) => (
                       <FieldContainer
@@ -117,7 +118,6 @@ const RagequitForm = () => {
                           step="any"
                           {...field}
                         />
-                        <p>Ragequit Up To {currentWallet.loot} Loot</p>
                       </FieldContainer>
                     )}
                   </Field>

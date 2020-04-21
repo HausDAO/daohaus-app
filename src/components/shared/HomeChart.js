@@ -2,8 +2,10 @@ import React, { useEffect, useState, useContext } from 'react';
 import { ResponsiveContainer, AreaChart, Area } from 'recharts';
 
 import { DaoServiceContext } from '../../contexts/Store';
+import { withTheme } from 'styled-components';
+import { getPrimaryHover } from '../../variables.styles';
 
-const HomeChart = ({ guildBankAddr, chartView }) => {
+const HomeChart = ({ guildBankAddr, chartView, theme }) => {
   const [rawData, setRawData] = useState({
     balances: [],
     shares: [],
@@ -171,18 +173,14 @@ const HomeChart = ({ guildBankAddr, chartView }) => {
       <AreaChart data={vizData}>
         <defs>
           <linearGradient id="grade" x1="0%" y1="0%" x2="0%" y2="100%">
-            <stop offset="0%" stopColor="rgba(189,134,254,1)" stopOpacity={1} />
-            <stop
-              offset="100%"
-              stopColor="rgba(189,134,254,1)"
-              stopOpacity={0}
-            />
+            <stop offset="0%" stopColor={theme.primary} stopOpacity={1} />
+            <stop offset="100%" stopColor={theme.primary} stopOpacity={0} />
           </linearGradient>
         </defs>
         <Area
           type="monotone"
           dataKey="y"
-          stroke="rgba(203,46,206,1)"
+          stroke={getPrimaryHover(theme)}
           fill="url(#grade)"
         />
       </AreaChart>
@@ -190,4 +188,4 @@ const HomeChart = ({ guildBankAddr, chartView }) => {
   );
 };
 
-export default HomeChart;
+export default withTheme(HomeChart);

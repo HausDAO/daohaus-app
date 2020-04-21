@@ -3,6 +3,7 @@ import { Link, withRouter } from 'react-router-dom';
 import { Formik, Form, Field, ErrorMessage } from 'formik';
 import { Auth } from 'aws-amplify';
 import shortid from 'shortid';
+import { FormContainer } from '../../App.styles';
 
 import {
   SdkEnvironmentNames,
@@ -40,7 +41,7 @@ const SignIn = ({ history }) => {
   const historyState = history.location.state;
 
   return (
-    <div className="Form">
+    <FormContainer>
       {historyState && historyState.msg && (
         <div className="EmailConfirmed">
           <svg
@@ -250,7 +251,7 @@ const SignIn = ({ history }) => {
           }}
         </Formik>
       )}
-    </div>
+    </FormContainer>
   );
 };
 export default withRouter(SignIn);
