@@ -1,29 +1,34 @@
 import React, { useState, useContext } from 'react';
-import { withApollo } from 'react-apollo';
+import { useQuery } from 'react-apollo';
 import { Formik, Form, Field, ErrorMessage } from 'formik';
 
 import {
   CurrentUserContext,
   LoaderContext,
   DaoServiceContext,
+  DaoDataContext,
 } from '../../contexts/Store';
-import { GET_METADATA } from '../../utils/Queries';
+import { GET_MOLOCH_SUPER } from '../../utils/QueriesSuper';
 import Loading from '../shared/Loading';
 
 const WithdrawForm = ({ client }) => {
   const [daoService] = useContext(DaoServiceContext);
+  const [daoData] = useContext(DaoDataContext);
   const [currentUser] = useContext(CurrentUserContext);
   const [loading, setLoading] = useContext(LoaderContext);
   const [formSuccess, setFormSuccess] = useState(false);
-  const { tokenSymbol } = client.cache.readQuery({
-    query: GET_METADATA,
+
+  const { error, data } = useQuery(GET_MOLOCH_SUPER, {
+    variables: { contractAddr: daoData.contractAddress },
   });
+
+  if (error) return <ErrorMessage message={error} />;
 
   return (
     <>
       {loading && <Loading />}
 
-      <h2>Send {tokenSymbol} from your wallet</h2>
+      <h2>Send {data.tokenSymbol} from your wallet</h2>
       <Formik
         initialValues={{
           amount: '',
@@ -105,4 +110,4 @@ const WithdrawForm = ({ client }) => {
   );
 };
 
-export default withApollo(WithdrawForm);
+export default WithdrawForm;

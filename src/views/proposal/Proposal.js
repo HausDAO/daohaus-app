@@ -1,11 +1,9 @@
 import React, { useContext } from 'react';
 import { withRouter } from 'react-router-dom';
 import { useQuery } from '@apollo/react-hooks';
-
 import { ethToWei } from '@netgum/utils'; // returns BN
 
-import { GET_PROPOSAL } from '../../utils/Queries';
-import { GET_PROPOSAL_V2 } from '../../utils/QueriesV2';
+import { GET_PROPOSAL_SUPER } from '../../utils/QueriesSuper';
 import ProposalDetail from '../../components/proposal/ProposalDetail';
 import ErrorMessage from '../../components/shared/ErrorMessage';
 import Loading from '../../components/shared/Loading';
@@ -14,7 +12,6 @@ import {
   LoaderContext,
   CurrentWalletContext,
   DaoServiceContext,
-  DaoDataContext,
 } from '../../contexts/Store';
 
 const Proposal = (props) => {
@@ -22,41 +19,19 @@ const Proposal = (props) => {
   const [txLoading, setTxLoading] = useContext(LoaderContext);
   const [currentWallet] = useContext(CurrentWalletContext);
   const [daoService] = useContext(DaoServiceContext);
-  const [daoData] = useContext(DaoDataContext);
 
-  let options;
-  const query = daoData.version === 2 ? GET_PROPOSAL_V2 : GET_PROPOSAL;
-
-  if (daoData.isLegacy) {
-    options = {
-      client: daoData.altClient,
-      variables: { id },
-    };
-  } else if (+daoData.version === 2) {
-    options = {
-      client: daoData.altClient,
-      variables: {
-        id: `${daoService.daoAddress.toLowerCase()}-proposal-${id}`,
-      },
-    };
-  } else {
-    options = {
-      variables: { id: `${daoService.daoAddress.toLowerCase()}-${id}` },
-    };
-  }
-
-  const { loading, error, data } = useQuery(query, options);  
+  const { loading, error, data } = useQuery(GET_PROPOSAL_SUPER, {
+    variables: { id: `${daoService.daoAddress.toLowerCase()}-proposal-${id}` },
+  });
 
   const processProposal = async (proposal) => {
-    console.log('process proposal', proposal);
-    
     setTxLoading(true);
     try {
       if (proposal.whitelist) {
         await daoService.mcDao.processWhitelistProposal(proposal.proposalIndex);
       } else if (proposal.guildkick) {
         console.log('guildkick process');
-        
+
         await daoService.mcDao.processGuildKickProposal(proposal.proposalIndex);
       } else {
         await daoService.mcDao.processProposal(proposal.proposalIndex);
@@ -92,7 +67,6 @@ const Proposal = (props) => {
 
   if (loading) return <Loading />;
   if (error) return <ErrorMessage message={error} />;
-console.log('prop', data.proposal);
 
   return (
     <>

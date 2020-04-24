@@ -7,10 +7,10 @@ import {
   inVotingPeriod,
   inQueue,
   passedVotingAndGrace,
+  determineProposalType,
 } from './ProposalHelper';
 import { TokenService } from './TokenService';
 import { McDaoService } from './McDaoService';
-import { GET_METADATA } from './Queries';
 import { GET_METADATA_SUPER } from './QueriesSuper';
 import config from '../config';
 
@@ -19,37 +19,35 @@ const _web3 = new Web3(new Web3.providers.HttpProvider(config.INFURA_URI));
 export const resolvers = {
   Proposal: {
     status: (proposal, _args, { cache }) => {
-      const {
-        currentPeriod,
-        votingPeriodLength,
-        gracePeriodLength,
-      } = cache.readQuery({ query: GET_METADATA });
+      const { currentPeriod } = cache.readQuery({
+        query: GET_METADATA_SUPER,
+      });
+
       return determineProposalStatus(
         proposal,
         +currentPeriod,
-        +votingPeriodLength,
-        +gracePeriodLength,
+        +proposal.moloch.votingPeriodLength,
+        +proposal.moloch.gracePeriodLength,
+        +proposal.moloch.version,
       );
     },
     gracePeriod: (proposal, _args, { cache }) => {
-      const {
-        currentPeriod,
-        votingPeriodLength,
-        gracePeriodLength,
-      } = cache.readQuery({ query: GET_METADATA });
+      const { currentPeriod } = cache.readQuery({
+        query: GET_METADATA_SUPER,
+      });
 
       if (
         inGracePeriod(
           proposal,
           currentPeriod,
-          votingPeriodLength,
-          gracePeriodLength,
+          +proposal.moloch.votingPeriodLength,
+          +proposal.moloch.gracePeriodLength,
         )
       ) {
         return (
           +proposal.startingPeriod +
-          votingPeriodLength +
-          gracePeriodLength -
+          +proposal.moloch.votingPeriodLength +
+          +proposal.moloch.gracePeriodLength -
           currentPeriod +
           1 // TODO: why plus 1 here? abort? ¯\_(ツ)_/¯
         );
@@ -57,34 +55,41 @@ export const resolvers = {
       return 0;
     },
     votingEnds: (proposal, _args, { cache }) => {
-      const { currentPeriod, votingPeriodLength } = cache.readQuery({
-        query: GET_METADATA,
+      const { currentPeriod } = cache.readQuery({
+        query: GET_METADATA_SUPER,
       });
 
-      if (inVotingPeriod(proposal, currentPeriod, votingPeriodLength)) {
-        return proposal.startingPeriod + votingPeriodLength - currentPeriod;
+      if (
+        inVotingPeriod(
+          proposal,
+          currentPeriod,
+          +proposal.moloch.votingPeriodLength,
+        )
+      ) {
+        return (
+          proposal.startingPeriod +
+          +proposal.moloch.votingPeriodLength -
+          currentPeriod
+        );
       }
       return 0;
     },
     votingStarts: (proposal, _args, { cache }) => {
-      const { currentPeriod } = cache.readQuery({ query: GET_METADATA });
+      const { currentPeriod } = cache.readQuery({ query: GET_METADATA_SUPER });
       if (inQueue(proposal, currentPeriod)) {
         return proposal.startingPeriod - currentPeriod;
       }
       return 0;
     },
     readyForProcessing: (proposal, _args, { cache }) => {
-      const {
-        currentPeriod,
-        votingPeriodLength,
-        gracePeriodLength,
-      } = cache.readQuery({ query: GET_METADATA });
+      const { currentPeriod } = cache.readQuery({ query: GET_METADATA_SUPER });
       if (
         passedVotingAndGrace(
           proposal,
           currentPeriod,
-          votingPeriodLength,
-          gracePeriodLength,
+          +proposal.moloch.votingPeriodLength,
+          +proposal.moloch.gracePeriodLength,
+          +proposal.moloch.version,
         ) &&
         !proposal.processed
       ) {
@@ -92,35 +97,39 @@ export const resolvers = {
       }
       return false;
     },
-  },
-  Mutation: {
-    setAttributes: (_, variables, { cache }) => {
-      const id = `Proposal:${variables.id}`;
-      const fragment = gql`
-        fragment getMeta on Proposal {
-          status
-          gracePeriod
-          votingEnds
-          votingStarts
-          readyForProcessing
-        }
-      `;
-      const proposal = cache.readFragment({ fragment, id });
-      const data = {
-        ...proposal,
-        status: variables.status,
-        title: variables.title,
-        description: variables.description,
-        gracePeriod: variables.gracePeriod,
-        votingEnds: variables.votingEnds,
-        votingStarts: variables.votingStarts,
-        readyForProcessing: variables.readyForProcessing,
-      };
-      cache.writeData({ id, data });
-      return data;
+    tributeTokenSymbol: async (proposal, _args, { cache }) => {
+      const tokenService = new TokenService(_web3, proposal.tributeToken);
+      const symbol = await tokenService.getSymbol();
+      return symbol;
+    },
+    tributeTokenDecimals: async (proposal, _args, { cache }) => {
+      const tokenService = new TokenService(_web3, proposal.tributeToken);
+      const decimals = await tokenService.getDecimals();
+      return +decimals;
+    },
+    paymentTokenSymbol: async (proposal, _args, { cache }) => {
+      if (proposal.trade) {
+        const tokenService = new TokenService(_web3, proposal.paymentToken);
+        const symbol = await tokenService.getSymbol();
+        return symbol;
+      } else {
+        return null;
+      }
+    },
+    paymentTokenDecimals: async (proposal, _args, { cache }) => {
+      if (proposal.trade) {
+        const tokenService = new TokenService(_web3, proposal.paymentToken);
+        const decimals = await tokenService.getDecimals();
+        return +decimals;
+      } else {
+        return null;
+      }
+    },
+    proposalType: (proposal, _args, { cache }) => {
+      return determineProposalType(proposal);
     },
   },
-  // SUPER STUFF BELOW
+
   Moloch: {
     meta: (_, _args, { cache }) => {
       return cache.readQuery({

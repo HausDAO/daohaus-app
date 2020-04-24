@@ -56,11 +56,11 @@ const UserBalance = ({ toggle }) => {
   const [memberAddressLoggedIn, setMemberAddressLoggedIn] = useState(false);
   const [memberAddress, setMemberAddress] = useState(false);
 
-  const id = `${daoData.contractAddress.toLowerCase()}-member-${currentUser.username.toLowerCase()}`;
-
   const options = {
     pollInterval: 10000,
-    variables: { id },
+    variables: {
+      id: `${daoData.contractAddress.toLowerCase()}-member-${currentUser.username.toLowerCase()}`,
+    },
   };
 
   const { loading, error, data } = useQuery(GET_MEMBER_SUPER, options);

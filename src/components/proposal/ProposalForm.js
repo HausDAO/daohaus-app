@@ -42,7 +42,7 @@ const ProposalForm = (props) => {
     numSharesRequested,
     tokenTribute,
   ) => {
-    let guildBankValuePlusPending = ethToWei(guildBankValue).add(
+    const guildBankValuePlusPending = ethToWei(guildBankValue).add(
       ethToWei(tokenTribute),
     );
     let totalSharesPlusPending = totalShares + +numSharesRequested;

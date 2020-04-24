@@ -37,6 +37,7 @@ const SyncToken = ({ token }) => {
   };
 
   const diff = token.contractTokenBalance - token.contractBabeBalance;
+
   return (
     <SyncTokenDiv>
       {loading ? (
