@@ -1,9 +1,8 @@
 import React, { useContext } from 'react';
 import { useQuery } from '@apollo/react-hooks';
 
-import { DaoServiceContext, DaoDataContext } from '../../contexts/Store';
-import { GET_MEMBERS_LEGACY, GET_MEMBERS } from '../../utils/Queries';
-import { GET_MEMBERS_V2 } from '../../utils/QueriesV2';
+import { DaoServiceContext } from '../../contexts/Store';
+import { GET_MEMBERS_SUPER } from '../../utils/QueriesSuper';
 import MemberList from '../../components/member/MemberList';
 import ErrorMessage from '../../components/shared/ErrorMessage';
 import BottomNav from '../../components/shared/BottomNav';
@@ -13,28 +12,10 @@ import { ViewDiv, PadDiv } from '../../App.styles';
 
 const Members = () => {
   const [daoService] = useContext(DaoServiceContext);
-  const [daoData] = useContext(DaoDataContext);
 
-  let memberQuery, options;
-
-  if (daoData.isLegacy || daoData.version === 2) {
-    memberQuery = daoData.isLegacy ? GET_MEMBERS_LEGACY : GET_MEMBERS_V2;
-    options = {
-      client: daoData.altClient,
-      variables: daoData.isLegacy
-        ? {}
-        : { contractAddr: daoService.daoAddress.toLowerCase() },
-    };
-  } else {
-    memberQuery = GET_MEMBERS;
-    options = {
-      variables: { contractAddr: daoService.daoAddress.toLowerCase() },
-    };
-  }
-
-  const { loading, error, data, fetchMore } = useQuery(memberQuery, options);
-
-  console.log('data', data);
+  const { loading, error, data, fetchMore } = useQuery(GET_MEMBERS_SUPER, {
+    variables: { contractAddr: daoService.daoAddress.toLowerCase() },
+  });
 
   if (loading) return <Loading />;
   if (error) return <ErrorMessage message={error} />;

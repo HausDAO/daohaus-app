@@ -38,3 +38,44 @@ export const GET_MOLOCH_SUPER = gql`
     }
   }
 `;
+
+export const GET_MEMBERS_SUPER = gql`
+  query members($contractAddr: String!, $skip: Int) {
+    members(
+      where: { molochAddress: $contractAddr, exists: true }
+      orderBy: shares
+      orderDirection: desc
+      first: 100
+      skip: $skip
+    ) {
+      id
+      delegateKey
+      shares
+      kicked
+      tokenTribute
+      didRagequit
+      memberAddress
+      moloch {
+        totalShares
+      }
+    }
+  }
+`;
+
+export const GET_MEMBER_SUPER = gql`
+  query member($id: String!) {
+    member(id: $id) {
+      id
+      delegateKey
+      shares
+      loot
+      kicked
+      tokenTribute
+      memberAddress
+      didRagequit
+      moloch {
+        totalShares
+      }
+    }
+  }
+`;
