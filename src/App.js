@@ -15,6 +15,7 @@ import styled from 'styled-components';
 import {
   defaultTheme,
   defaultDarkTheme,
+  metaclanTheme,
   molochTheme,
   raidTheme,
   getAppBackground,
@@ -75,6 +76,9 @@ const App = ({ client }) => {
           }
           if (apiData.raidTheme) {
             customTheme = raidTheme;
+          }
+          if (apiData.metaclanTheme) {
+            customTheme = metaclanTheme;
           }
           setTheme(customTheme);
         } else {
