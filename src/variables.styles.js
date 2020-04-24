@@ -5,6 +5,9 @@ import molochBg from './assets/themes/molochTheme/moloch__meme--trans15.png';
 import molochBrand from './assets/themes/molochTheme/moloch__logo--simple--red.png';
 import raidBrand from './assets/themes/raidTheme/raidguild__logo.png';
 import raidBg from './assets/themes/raidTheme/raid__fantasy--bg.jpg';
+import metaclanBrand from './assets/themes/metaclanTheme/MetaClan_Text.png';
+import metaclanBg from './assets/themes/metaclanTheme/MetaClan-Pokemol-Background.jpg';
+
 export const defaultTheme = {
   baseFont: `'Roboto', sans-serif`,
   dataFont: `'Share Tech Mono', sans-serif`,
@@ -62,6 +65,21 @@ export const raidTheme = {
   tertiary: `rgba(239,73,123,1)`,
   danger: `rgba(239,73,95,1)`,
   success: `rgba(77,204,44,1)`,
+  bright: `rgba(189,134,254,1)`,
+};
+
+export const metaclanTheme = {
+  baseFont: `'Roboto', sans-serif`,
+  dataFont: `'Share Tech Mono', sans-serif`,
+  baseFontColor: 'white',
+  brand: metaclanBrand,
+  brandBg: metaclanBg,
+  appBackground: `#000F1F`,
+  primary: `#04d904`,
+  secondary: `#04d904`,
+  tertiary: `#04d904`,
+  danger: `rgba(239,73,95,1)`,
+  success: `#04d904`,
   bright: `rgba(189,134,254,1)`,
 };
 
