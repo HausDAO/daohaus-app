@@ -19,19 +19,13 @@ const SyncTokenDiv = styled.div`
 }`;
 
 const SyncToken = ({ token }) => {
-  console.log('token', token);
   const [daoService] = useContext(DaoServiceContext);
   const [currentWallet] = useContext(CurrentWalletContext);
   const [loading, setLoading] = useState(false);
 
   const { isShowing, toggle } = useModal();
 
-  const handleToggle = (modal) => {
-    toggle(modal);
-  };
-
   const syncToken = async () => {
-    console.log('syncing', token);
     setLoading(true);
     try {
       await daoService.mcDao.collectTokens(token.token.tokenAddress);

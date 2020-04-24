@@ -117,7 +117,7 @@ const DataDiv = styled.div`
   }
 `;
 
-const Home = (props) => {
+const Home = () => {
   const [chartView, setChartView] = useState('bank');
   const [daoData] = useContext(DaoDataContext);
 
@@ -127,8 +127,6 @@ const Home = (props) => {
   };
 
   const { loading, error, data } = useQuery(GET_MOLOCH_SUPER, options);
-
-  console.log('data', data);
 
   if (loading) return <Loading />;
   if (error) return <ErrorMessage message={error} />;
