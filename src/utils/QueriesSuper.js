@@ -73,8 +73,29 @@ export const GET_MEMBER_SUPER = gql`
       tokenTribute
       memberAddress
       didRagequit
+      tokenBalances {
+        token {
+          tokenAddress
+          symbol @client
+          decimals @client
+        }
+        tokenBalance
+      }
+      submissions {
+        proposalIndex
+        yesVotes
+        noVotes
+        processed
+        didPass
+        cancelled
+      }
       moloch {
         totalShares
+        depositToken {
+          tokenAddress
+          symbol @client
+          decimals @client
+        }
       }
     }
   }

@@ -192,4 +192,18 @@ export const resolvers = {
       }
     },
   },
+  Token: {
+    symbol: async (approvedToken, _args, { cache }) => {
+      const tokenService = new TokenService(_web3, approvedToken.tokenAddress);
+      const symbol = await tokenService.getSymbol();
+      return symbol;
+    },
+    decimals: async (approvedToken, _args, { cache }) => {
+      const tokenService = new TokenService(_web3, approvedToken.tokenAddress);
+
+      const decimals = await tokenService.getDecimals();
+
+      return +decimals;
+    },
+  },
 };
