@@ -11,7 +11,7 @@ import {
   DaoServiceContext,
 } from '../../contexts/Store';
 import Loading from '../shared/Loading';
-import { GET_ACTIVE_PROPOSALS_SUPER } from '../../utils/QueriesSuper';
+import { GET_ACTIVE_PROPOSALS } from '../../utils/Queries';
 import ValueDisplay from '../shared/ValueDisplay';
 
 import { FieldContainer } from '../../App.styles';
@@ -24,7 +24,7 @@ const ProposalForm = ({ history }) => {
   const [estimatedProposalValue, setEstimatedProposalValue] = useState(0);
 
   const { loading: activeProposalsLoading, error, data } = useQuery(
-    GET_ACTIVE_PROPOSALS_SUPER,
+    GET_ACTIVE_PROPOSALS,
     {
       variables: { contractAddr: daoService.daoAddress },
     },

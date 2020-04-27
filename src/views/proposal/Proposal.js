@@ -3,7 +3,7 @@ import { withRouter } from 'react-router-dom';
 import { useQuery } from '@apollo/react-hooks';
 import { ethToWei } from '@netgum/utils'; // returns BN
 
-import { GET_PROPOSAL_SUPER } from '../../utils/QueriesSuper';
+import { GET_PROPOSAL } from '../../utils/Queries';
 import ProposalDetail from '../../components/proposal/ProposalDetail';
 import ErrorMessage from '../../components/shared/ErrorMessage';
 import Loading from '../../components/shared/Loading';
@@ -20,7 +20,7 @@ const Proposal = (props) => {
   const [currentWallet] = useContext(CurrentWalletContext);
   const [daoService] = useContext(DaoServiceContext);
 
-  const { loading, error, data } = useQuery(GET_PROPOSAL_SUPER, {
+  const { loading, error, data } = useQuery(GET_PROPOSAL, {
     variables: { id: `${daoService.daoAddress.toLowerCase()}-proposal-${id}` },
   });
 

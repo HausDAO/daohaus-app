@@ -39,7 +39,7 @@ import {
   TinyButton,
 } from './UserBalances.styles';
 
-import { GET_MEMBER_SUPER } from '../../utils/QueriesSuper';
+import { GET_MEMBER } from '../../utils/Queries';
 
 const UserBalance = ({ toggle }) => {
   const [daoData] = useContext(DaoDataContext);
@@ -63,7 +63,7 @@ const UserBalance = ({ toggle }) => {
     },
   };
 
-  const { loading, error, data } = useQuery(GET_MEMBER_SUPER, options);
+  const { loading, error, data } = useQuery(GET_MEMBER, options);
 
   useEffect(() => {
     if (loading) {

@@ -8,7 +8,7 @@ import {
   DaoServiceContext,
   DaoDataContext,
 } from '../../contexts/Store';
-import { GET_MOLOCH_SUPER } from '../../utils/QueriesSuper';
+import { GET_MOLOCH } from '../../utils/Queries';
 import Loading from '../shared/Loading';
 
 const WithdrawForm = ({ client }) => {
@@ -18,7 +18,7 @@ const WithdrawForm = ({ client }) => {
   const [loading, setLoading] = useContext(LoaderContext);
   const [formSuccess, setFormSuccess] = useState(false);
 
-  const { error, data } = useQuery(GET_MOLOCH_SUPER, {
+  const { error, data } = useQuery(GET_MOLOCH, {
     variables: { contractAddr: daoData.contractAddress },
   });
 

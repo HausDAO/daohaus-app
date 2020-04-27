@@ -12,7 +12,7 @@ import HeadTags from '../../components/shared/HeadTags';
 import HomeChart from '../../components/shared/HomeChart';
 import WhitelistTokenBalances from '../../components/tokens/WhitelistTokenBalances';
 import { basePadding } from '../../variables.styles';
-import { GET_MOLOCH_SUPER } from '../../utils/QueriesSuper';
+import { GET_MOLOCH } from '../../utils/Queries';
 
 const HomeDiv = styled.div`
   width: 100%;
@@ -126,7 +126,7 @@ const Home = () => {
     variables: { contractAddr: daoData.contractAddress },
   };
 
-  const { loading, error, data } = useQuery(GET_MOLOCH_SUPER, options);
+  const { loading, error, data } = useQuery(GET_MOLOCH, options);
 
   if (loading) return <Loading />;
   if (error) return <ErrorMessage message={error} />;

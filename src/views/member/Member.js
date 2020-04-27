@@ -7,10 +7,10 @@ import BottomNav from '../../components/shared/BottomNav';
 import Loading from '../../components/shared/Loading';
 import { ViewDiv } from '../../App.styles';
 import { MemberDetailDiv } from '../../components/member/Member.styles';
-import { GET_MEMBER_SUPER } from '../../utils/QueriesSuper';
+import { GET_MEMBER } from '../../utils/Queries';
 
 const Member = (props) => {
-  const { loading, error, data } = useQuery(GET_MEMBER_SUPER, {
+  const { loading, error, data } = useQuery(GET_MEMBER, {
     variables: { id: props.match.params.id },
   });
 

@@ -24,7 +24,7 @@ import { ProposalSchema } from './Validation';
 import shortid from 'shortid';
 import TokenSelect from './TokenSelect';
 import { valToDecimalString } from '../../utils/Helpers';
-import { GET_MOLOCH_SUPER } from '../../utils/QueriesSuper';
+import { GET_MOLOCH } from '../../utils/Queries';
 
 const FundingForm = (props) => {
   const { history } = props;
@@ -40,7 +40,7 @@ const FundingForm = (props) => {
     variables: { contractAddr: daoData.contractAddress },
     fetchPolicy: 'no-cache',
   };
-  const query = GET_MOLOCH_SUPER;
+  const query = GET_MOLOCH;
 
   const { loading, error, data } = useQuery(query, options);
 

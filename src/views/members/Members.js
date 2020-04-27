@@ -2,7 +2,7 @@ import React, { useContext } from 'react';
 import { useQuery } from '@apollo/react-hooks';
 
 import { DaoServiceContext } from '../../contexts/Store';
-import { GET_MEMBERS_SUPER } from '../../utils/QueriesSuper';
+import { GET_MEMBERS } from '../../utils/Queries';
 import MemberList from '../../components/member/MemberList';
 import ErrorMessage from '../../components/shared/ErrorMessage';
 import BottomNav from '../../components/shared/BottomNav';
@@ -13,7 +13,7 @@ import { ViewDiv, PadDiv } from '../../App.styles';
 const Members = () => {
   const [daoService] = useContext(DaoServiceContext);
 
-  const { loading, error, data, fetchMore } = useQuery(GET_MEMBERS_SUPER, {
+  const { loading, error, data, fetchMore } = useQuery(GET_MEMBERS, {
     variables: { contractAddr: daoService.daoAddress.toLowerCase() },
   });
 

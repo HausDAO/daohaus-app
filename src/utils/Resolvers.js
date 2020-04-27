@@ -10,7 +10,7 @@ import {
 } from './ProposalHelper';
 import { TokenService } from './TokenService';
 import { McDaoService } from './McDaoService';
-import { GET_METADATA_SUPER } from './QueriesSuper';
+import { GET_METADATA } from './Queries';
 import config from '../config';
 
 const _web3 = new Web3(new Web3.providers.HttpProvider(config.INFURA_URI));
@@ -19,7 +19,7 @@ export const resolvers = {
   Proposal: {
     status: (proposal, _args, { cache }) => {
       const { currentPeriod } = cache.readQuery({
-        query: GET_METADATA_SUPER,
+        query: GET_METADATA,
       });
 
       return determineProposalStatus(
@@ -32,7 +32,7 @@ export const resolvers = {
     },
     gracePeriod: (proposal, _args, { cache }) => {
       const { currentPeriod } = cache.readQuery({
-        query: GET_METADATA_SUPER,
+        query: GET_METADATA,
       });
 
       if (
@@ -55,7 +55,7 @@ export const resolvers = {
     },
     votingEnds: (proposal, _args, { cache }) => {
       const { currentPeriod } = cache.readQuery({
-        query: GET_METADATA_SUPER,
+        query: GET_METADATA,
       });
 
       if (
@@ -74,14 +74,14 @@ export const resolvers = {
       return 0;
     },
     votingStarts: (proposal, _args, { cache }) => {
-      const { currentPeriod } = cache.readQuery({ query: GET_METADATA_SUPER });
+      const { currentPeriod } = cache.readQuery({ query: GET_METADATA });
       if (inQueue(proposal, currentPeriod)) {
         return proposal.startingPeriod - currentPeriod;
       }
       return 0;
     },
     readyForProcessing: (proposal, _args, { cache }) => {
-      const { currentPeriod } = cache.readQuery({ query: GET_METADATA_SUPER });
+      const { currentPeriod } = cache.readQuery({ query: GET_METADATA });
       if (
         passedVotingAndGrace(
           proposal,
@@ -132,7 +132,7 @@ export const resolvers = {
   Moloch: {
     meta: (_, _args, { cache }) => {
       return cache.readQuery({
-        query: GET_METADATA_SUPER,
+        query: GET_METADATA,
       });
     },
   },
