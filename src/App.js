@@ -9,6 +9,7 @@ import Header from './components/header/Header';
 import Loading from './components/shared/Loading';
 import {
   defaultTheme,
+  metaclanTheme,
   molochTheme,
   raidTheme,
   getAppBackground,
@@ -54,6 +55,9 @@ const App = ({ client }) => {
           }
           if (apiData.raidTheme) {
             customTheme = raidTheme;
+          }
+          if (apiData.metaclanTheme) {
+            customTheme = metaclanTheme;
           }
           setTheme(customTheme);
         } else {
