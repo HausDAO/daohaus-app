@@ -2,9 +2,6 @@ import React, { useContext, useState, useEffect } from 'react';
 import { useQuery } from '@apollo/react-hooks';
 import _ from 'lodash';
 
-import { GET_PROPOSALS, GET_PROPOSALS_LEGACY } from '../../utils/Queries';
-import { GET_PROPOSALS_V2 } from '../../utils/QueriesV2';
-
 import ProposalFilter from '../../components/proposal/ProposalFilter';
 import ErrorMessage from '../../components/shared/ErrorMessage';
 import BottomNav from '../../components/shared/BottomNav';
@@ -20,6 +17,7 @@ import ProposalTypeToggle from '../../components/proposal-v2/ProposalTypeToggle'
 
 import styled from 'styled-components';
 import { RowDiv, ButtonLink } from '../../App.styles';
+import { GET_PROPOSALS } from '../../utils/Queries';
 
 const ProposalsHeaderRow = styled(RowDiv)`
   padding-left: 25px;
@@ -37,28 +35,13 @@ const Proposals = ({ match, history }) => {
   const [sponsored, setSponsored] = useState(true);
   const [fetched, setFetched] = useState(false);
 
-  let proposalQuery, options;
+  const options = {
+    variables: { contractAddr: daoService.daoAddress.toLowerCase() },
+    pollInterval: 20000,
+    fetchPolicy: 'network-only',
+  };
 
-  if (daoData.isLegacy || daoData.version === 2) {
-    proposalQuery = daoData.isLegacy ? GET_PROPOSALS_LEGACY : GET_PROPOSALS_V2;
-    options = {
-      client: daoData.altClient,
-      variables: daoData.isLegacy
-        ? {}
-        : { contractAddr: daoService.daoAddress.toLowerCase() },
-      pollInterval: 20000,
-      fetchPolicy: 'network-only',
-    };
-  } else {
-    proposalQuery = GET_PROPOSALS;
-    options = {
-      variables: { contractAddr: daoService.daoAddress.toLowerCase() },
-      pollInterval: 20000,
-      fetchPolicy: 'network-only',
-    };
-  }
-
-  const { loading, error, data, fetchMore } = useQuery(proposalQuery, options);
+  const { loading, error, data, fetchMore } = useQuery(GET_PROPOSALS, options);
 
   useEffect(() => {
     if (data && data.proposals && fetched) {

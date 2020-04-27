@@ -8,7 +8,6 @@ import {
   LoaderContext,
   CurrentUserContext,
   DaoServiceContext,
-  // DaoServiceContext,
 } from '../../contexts/Store';
 import Loading from '../shared/Loading';
 
@@ -23,8 +22,6 @@ const WhitelistForm = (props) => {
   const [formLoading, setFormLoading] = useState(false);
   const [currentUser] = useContext(CurrentUserContext);
   const [daoService] = useContext(DaoServiceContext);
-
-  //const [daoService] = useContext(DaoServiceContext);
 
   return (
     <FormContainer>

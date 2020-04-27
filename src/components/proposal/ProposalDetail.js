@@ -1,8 +1,6 @@
 import React, { useEffect, useState, useContext } from 'react';
 import ReactPlayer from 'react-player';
-import { withApollo } from 'react-apollo';
 import styled from 'styled-components';
-import { basePadding } from '../../variables.styles';
 
 import {
   getProposalCountdownText,
@@ -15,7 +13,6 @@ import {
   DaoServiceContext,
   DaoDataContext,
 } from '../../contexts/Store';
-import { GET_METADATA } from '../../utils/Queries';
 import { get } from '../../utils/Requests';
 import Web3Service from '../../utils/Web3Service';
 import VoteControl from './VoteControl';
@@ -23,6 +20,8 @@ import ValueDisplay from '../shared/ValueDisplay';
 import { withRouter } from 'react-router-dom';
 import ProposalActions from './ProposalActions';
 import ProposalV2Guts from './ProposalV2Guts';
+
+import { basePadding } from '../../variables.styles';
 
 const web3Service = new Web3Service();
 
@@ -45,29 +44,14 @@ const TimerDiv = styled.div`
   }
 `;
 
-const ProposalDetail = ({
-  proposal,
-  processProposal,
-  submitVote,
-  canVote,
-  client,
-}) => {
+const ProposalDetail = ({ proposal, processProposal, submitVote, canVote }) => {
   const [detailData, setDetailData] = useState();
   const [currentUser] = useContext(CurrentUserContext);
   const [daoService] = useContext(DaoServiceContext);
   const [daoData] = useContext(DaoDataContext);
 
-  const { periodDuration } =
-    +daoData.version === 2
-      ? { periodDuration: proposal.moloch.periodDuration }
-      : client.cache.readQuery({
-          query: GET_METADATA,
-        });
-
   const id =
     +daoData.version === 2 ? proposal.proposalId : proposal.proposalIndex;
-  const tribute =
-    +daoData.version === 2 ? proposal.tributeOffered : proposal.tokenTribute;
 
   useEffect(() => {
     const fetchData = async () => {
@@ -90,7 +74,10 @@ const ProposalDetail = ({
     // eslint-disable-next-line
   }, []);
 
-  const countDown = getProposalCountdownText(proposal, periodDuration);
+  const countDown = getProposalCountdownText(
+    proposal,
+    proposal.moloch.periodDuration,
+  );
   const title = titleMaker(proposal);
   const memberUrlV1 = `/dao/${daoData.contractAddress}/member/${daoData.contractAddress}-${proposal.memberAddress}`;
 
@@ -132,7 +119,7 @@ const ProposalDetail = ({
               <h2 className="Data">
                 {web3Service && (
                   <ValueDisplay
-                    value={web3Service.fromWei(tribute)}
+                    value={web3Service.fromWei(proposal.tributeOffered)}
                     symbolOverride={proposal.tributeTokenSymbol}
                   />
                 )}
@@ -198,4 +185,4 @@ const ProposalDetail = ({
   );
 };
 
-export default withRouter(withApollo(ProposalDetail));
+export default withRouter(ProposalDetail);

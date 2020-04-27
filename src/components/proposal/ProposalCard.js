@@ -7,7 +7,6 @@ import {
   getProposalCountdownText,
   titleMaker,
 } from '../../utils/ProposalHelper';
-import { GET_METADATA } from '../../utils/Queries';
 
 import { DaoServiceContext, DaoDataContext } from '../../contexts/Store';
 import ValueDisplay from '../shared/ValueDisplay';
@@ -58,17 +57,13 @@ const ProposalCard = ({ proposal, client }) => {
   const [daoService] = useContext(DaoServiceContext);
   const [daoData] = useContext(DaoDataContext);
 
-  const { periodDuration } =
-    +daoData.version === 2
-      ? { periodDuration: proposal.moloch.periodDuration }
-      : client.cache.readQuery({
-          query: GET_METADATA,
-        });
-  const countDown = getProposalCountdownText(proposal, periodDuration);
+  const countDown = getProposalCountdownText(
+    proposal,
+    proposal.moloch.periodDuration,
+  );
 
   const title = titleMaker(proposal);
-  const tribute =
-    +daoData.version === 2 ? proposal.tributeOffered : proposal.tokenTribute;
+
   const id =
     +daoData.version === 2 ? proposal.proposalId : proposal.proposalIndex;
 
@@ -116,7 +111,10 @@ const ProposalCard = ({ proposal, client }) => {
               <h5>{proposal.trade ? 'Giving' : 'Tribute'}</h5>
               <DataH2>
                 <ValueDisplay
-                  value={tribute / 10 ** proposal.tributeTokenDecimals}
+                  value={
+                    proposal.tributeOffered /
+                    10 ** proposal.tributeTokenDecimals
+                  }
                   symbolOverride={proposal.tributeTokenSymbol}
                 />
               </DataH2>
@@ -126,7 +124,7 @@ const ProposalCard = ({ proposal, client }) => {
               <h5>Tribute</h5>
               <DataH2>
                 <ValueDisplay
-                  value={Web3.utils.fromWei(tribute)}
+                  value={Web3.utils.fromWei(proposal.tributeOffered)}
                   symbolOverride={proposal.tributeTokenSymbol}
                 />
               </DataH2>

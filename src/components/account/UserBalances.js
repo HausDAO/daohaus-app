@@ -39,10 +39,9 @@ import {
   TinyButton,
 } from './UserBalances.styles';
 
-import { GET_METADATA, GET_MEMBER } from '../../utils/Queries';
-import { GET_MEMBER_V2 } from '../../utils/QueriesV2';
+import { GET_MEMBER } from '../../utils/Queries';
 
-const UserBalance = ({ toggle, client, match }) => {
+const UserBalance = ({ toggle }) => {
   const [daoData] = useContext(DaoDataContext);
 
   const [daoService] = useContext(DaoServiceContext);
@@ -57,24 +56,14 @@ const UserBalance = ({ toggle, client, match }) => {
   const [memberAddressLoggedIn, setMemberAddressLoggedIn] = useState(false);
   const [memberAddress, setMemberAddress] = useState(false);
 
-  const { tokenSymbol } = client.cache.readQuery({
-    query: GET_METADATA,
-  });
-
-  const id = `${daoData.contractAddress.toLowerCase()}-member-${currentUser.username.toLowerCase()}`;
-
   const options = {
     pollInterval: 10000,
-    variables: { id },
+    variables: {
+      id: `${daoData.contractAddress.toLowerCase()}-member-${currentUser.username.toLowerCase()}`,
+    },
   };
 
-  // TODO: will not work if v1 so maybe don't worry about it
-  const query = daoData.version === 2 ? GET_MEMBER_V2 : GET_MEMBER;
-  if (daoData.isLegacy || daoData.version === 2) {
-    options.client = daoData.altClient;
-  }
-
-  const { loading, error, data } = useQuery(query, options);
+  const { loading, error, data } = useQuery(GET_MEMBER, options);
 
   useEffect(() => {
     if (loading) {
@@ -282,7 +271,7 @@ const UserBalance = ({ toggle, client, match }) => {
                 )}
                 {currentWallet.state === WalletStatuses.Deployed && (
                   <ButtonSecondary onClick={() => toggleActions('sendToken')}>
-                    Send {tokenSymbol}
+                    Send {data.member.moloch.tokenSymbol}
                   </ButtonSecondary>
                 )}
                 {currentWallet.state === WalletStatuses.Deployed && (
@@ -376,7 +365,7 @@ const UserBalance = ({ toggle, client, match }) => {
                 {+daoData.version === 2 && data && data.member ? (
                   <p>Deposit Token: {data.member.moloch.depositToken.symbol}</p>
                 ) : (
-                  <p>{tokenSymbol}</p>
+                  <>{data && <p>{data.member.moloch.tokenSymbol}</p>}</>
                 )}
                 <DataDiv>
                   {currentWallet.tokenBalance}

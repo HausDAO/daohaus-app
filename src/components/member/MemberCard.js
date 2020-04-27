@@ -17,8 +17,6 @@ import {
   ProfileImgCard,
   OfferDivMemberCard,
 } from './Member.styles';
-import { withApollo } from 'react-apollo';
-import { GET_METADATA } from '../../utils/Queries';
 
 const MemberCardDiv = styled.div`
   background-color: ${(props) => getAppLight(props.theme)};
@@ -60,26 +58,16 @@ const MemberAddr = styled(DataP)`
 
 const web3Service = new Web3Service();
 
-const MemberCard = ({ member, client }) => {
+const MemberCard = ({ member }) => {
   const [daoService] = useContext(DaoServiceContext);
   const [daoData] = useContext(DaoDataContext);
   const [memberProfile, setMemberProfile] = useState({});
-
-  const { totalShares } = client.cache.readQuery({
-    query: GET_METADATA,
-  });
-
-  const parsedMemberId = member.id.split('-')[1]
-    ? member.id.split('-')[1]
-    : member.id;
-
-  const memberId = member.memberAddress || parsedMemberId;
 
   useEffect(() => {
     const setup = async () => {
       let profile;
       try {
-        profile = await getProfile(memberId);
+        profile = await getProfile(member.memberAddress);
       } catch {
         profile = {};
       }
@@ -87,11 +75,14 @@ const MemberCard = ({ member, client }) => {
     };
 
     setup();
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const totalDaoShares =
-    +daoData.version === 2 ? +member.moloch.totalShares : +totalShares;
-  const votingPower = ((member.shares / totalDaoShares) * 100).toFixed();
+  const votingPower = (
+    (member.shares / +member.moloch.totalShares) *
+    100
+  ).toFixed();
 
   return (
     <Link
@@ -115,7 +106,9 @@ const MemberCard = ({ member, client }) => {
             ) : (
               <ProfileImgCard
                 style={{
-                  backgroundImage: `url("${makeBlockie(memberId)}")`,
+                  backgroundImage: `url("${makeBlockie(
+                    member.memberAddress,
+                  )}")`,
                 }}
               >
                 {''}
@@ -127,7 +120,7 @@ const MemberCard = ({ member, client }) => {
               {memberProfile.name || 'unknown'}{' '}
               {memberProfile.emoji ? <span>{memberProfile.emoji} </span> : null}
             </h3>
-            <MemberAddr>{truncateAddr(memberId)}</MemberAddr>
+            <MemberAddr>{truncateAddr(member.memberAddress)}</MemberAddr>
           </div>
         </MemberCardIdentityDiv>
         <OfferDivMemberCard>
@@ -155,4 +148,4 @@ const MemberCard = ({ member, client }) => {
   );
 };
 
-export default withApollo(MemberCard);
+export default MemberCard;

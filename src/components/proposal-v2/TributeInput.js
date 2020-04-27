@@ -16,7 +16,6 @@ const TributeInput = ({
   const [daoService] = useContext(DaoServiceContext);
 
   const unlock = async (token) => {
-    console.log('unlock ', token);
     setLoading(true);
     const ul = await daoService.token.unlock(token);
     console.log(ul);
@@ -29,8 +28,6 @@ const TributeInput = ({
     if (amount === '') {
       return;
     }
-    console.log('check unlocked', token, amount);
-    console.log('unlock props ', props);
     const amountApproved = await daoService.token.unlocked(token);
     const isUnlocked = amountApproved > amount;
     setUnlocked(isUnlocked);
@@ -38,15 +35,11 @@ const TributeInput = ({
 
   const getMax = async (token) => {
     const max = await daoService.token.balanceOfToken(token);
-    console.log('max', max);
-
     setBalance(max);
   };
 
   useEffect(() => {
     const runCheck = async () => {
-      console.log('checking unlocked');
-
       await checkUnlocked(token, field.value);
       await getMax(token);
       return true;

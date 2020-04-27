@@ -5,6 +5,7 @@ import styled from 'styled-components';
 
 import Web3Service from '../../utils/Web3Service';
 import ValueDisplay from '../shared/ValueDisplay';
+import { DaoDataContext } from '../../contexts/Store';
 
 import { DataP, DataH2 } from '../../App.styles';
 import {
@@ -13,9 +14,6 @@ import {
   ProfileImgCard,
   OfferDivMemberCard,
 } from './Member.styles';
-import { DaoDataContext } from '../../contexts/Store';
-import { GET_METADATA } from '../../utils/Queries';
-import { withApollo } from 'react-apollo';
 
 const MemberDetailDiv = styled.div`
   padding: 25px 25px 120px;
@@ -27,21 +25,11 @@ const MemberDetail = ({ member, client }) => {
   const [memberProfile, setMemberProfile] = useState({});
   const [daoData] = useContext(DaoDataContext);
 
-  const { totalShares } = client.cache.readQuery({
-    query: GET_METADATA,
-  });
-
-  const parsedMemberId = member.id.split('-')[1]
-    ? member.id.split('-')[1]
-    : member.id;
-
-  const memberId = member.memberAddress || parsedMemberId;
-
   useEffect(() => {
     const setup = async () => {
       let profile;
       try {
-        profile = await getProfile(memberId);
+        profile = await getProfile(member.memberAddress);
       } catch {
         profile = {};
       }
@@ -52,9 +40,10 @@ const MemberDetail = ({ member, client }) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const totalDaoShares =
-    +daoData.version === 2 ? +member.moloch.totalShares : +totalShares;
-  const votingPower = ((member.shares / totalDaoShares) * 100).toFixed();
+  const votingPower = (
+    (member.shares / +member.moloch.totalShares) *
+    100
+  ).toFixed();
 
   return (
     <MemberDetailDiv>
@@ -72,7 +61,7 @@ const MemberDetail = ({ member, client }) => {
           ) : (
             <ProfileImgCard
               style={{
-                backgroundImage: `url("${makeBlockie(memberId)}")`,
+                backgroundImage: `url("${makeBlockie(member.memberAddress)}")`,
               }}
             >
               {''}
@@ -84,8 +73,8 @@ const MemberDetail = ({ member, client }) => {
         </div>
       </MemberCardIdentityDiv>
       <h5>Member Address</h5>
-      <DataP>{memberId}</DataP>
-      {member.delegateKey !== memberId && (
+      <DataP>{member.memberAddress}</DataP>
+      {member.delegateKey !== member.memberAddress && (
         <>
           <h5>Delegate Key</h5>
           <DataP>{member.delegateKey}</DataP>
@@ -113,4 +102,4 @@ const MemberDetail = ({ member, client }) => {
   );
 };
 
-export default withApollo(MemberDetail);
+export default MemberDetail;
