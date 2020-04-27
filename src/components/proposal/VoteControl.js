@@ -4,6 +4,8 @@ import styled from 'styled-components';
 import {
   primary,
   tertiary,
+  success,
+  danger,
   getAppLight,
   getAppDark,
 } from '../../variables.styles';
@@ -68,23 +70,23 @@ const VoteButton = styled.button`
     }
   }
   &.Yes {
-    border-color: ${primary};
+    border-color: ${(props) => props.theme.success};
     &:hover {
-      border-color: ${primary};
-      background-color: ${primary};
+      border-color: ${(props) => props.theme.success};
+      background-color: ${(props) => props.theme.success};
     }
     &.Voted {
-      background-color: ${primary};
+      background-color: ${(props) => props.theme.success};
     }
   }
   &.No {
-    border-color: ${tertiary};
+    border-color: ${(props) => props.theme.danger};
     &:hover {
-      border-color: ${tertiary};
-      background-color: ${tertiary};
+      border-color: ${(props) => props.theme.danger};
+      background-color: ${(props) => props.theme.danger};
     }
     &.Voted {
-      background-color: ${tertiary};
+      background-color: ${(props) => props.theme.danger};
     }
   }
 `;
