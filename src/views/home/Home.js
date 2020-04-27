@@ -1,8 +1,7 @@
 import React, { useState, useContext } from 'react';
 import { useQuery } from '@apollo/react-hooks';
+import styled from 'styled-components';
 
-import { GET_METADATA } from '../../utils/Queries';
-import { GET_MOLOCH_V2_HOME } from '../../utils/QueriesV2';
 import { DaoDataContext } from '../../contexts/Store';
 import StateModals from '../../components/shared/StateModals';
 import BottomNav from '../../components/shared/BottomNav';
@@ -11,9 +10,9 @@ import Loading from '../../components/shared/Loading';
 import ValueDisplay from '../../components/shared/ValueDisplay';
 import HeadTags from '../../components/shared/HeadTags';
 import HomeChart from '../../components/shared/HomeChart';
-import styled from 'styled-components';
 import WhitelistTokenBalances from '../../components/tokens/WhitelistTokenBalances';
 import { basePadding } from '../../variables.styles';
+import { GET_MOLOCH } from '../../utils/Queries';
 
 const HomeDiv = styled.div`
   width: 100%;
@@ -118,21 +117,16 @@ const DataDiv = styled.div`
   }
 `;
 
-const Home = (props) => {
+const Home = () => {
   const [chartView, setChartView] = useState('bank');
   const [daoData] = useContext(DaoDataContext);
 
   const options = {
     pollInterval: 20000,
-    variables:
-      daoData.version === 2 ? { contractAddr: daoData.contractAddress } : {},
+    variables: { contractAddr: daoData.contractAddress },
   };
-  const query = daoData.version === 2 ? GET_MOLOCH_V2_HOME : GET_METADATA;
-  if (daoData.isLegacy || daoData.version === 2) {
-    options.client = daoData.altClient;
-  }
 
-  const { loading, error, data } = useQuery(query, options);
+  const { loading, error, data } = useQuery(GET_MOLOCH, options);
 
   if (loading) return <Loading />;
   if (error) return <ErrorMessage message={error} />;
@@ -170,7 +164,10 @@ const Home = (props) => {
                 <h5>Bank</h5>
                 <h2>
                   <ValueDisplay
-                    value={parseFloat(data.guildBankValue).toFixed(4)}
+                    value={parseFloat(data.moloch.meta.guildBankValue).toFixed(
+                      4,
+                    )}
+                    symbolOverride={data.moloch.meta.tokenSymbol}
                   />
                 </h2>
               </div>
@@ -182,7 +179,7 @@ const Home = (props) => {
                   }
                 >
                   <h5>Shares</h5>
-                  <h3>{data.totalShares}</h3>
+                  <h3>{data.moloch.totalShares}</h3>
                 </div>
                 <div
                   onClick={() => setChartView('value')}
@@ -192,7 +189,10 @@ const Home = (props) => {
                 >
                   <h5>Share Value</h5>
                   <h3>
-                    <ValueDisplay value={data.shareValue.toFixed(4)} />
+                    <ValueDisplay
+                      value={data.moloch.meta.shareValue.toFixed(4)}
+                      symbolOverride={data.moloch.meta.tokenSymbol}
+                    />
                   </h3>
                 </div>
               </div>
@@ -202,7 +202,7 @@ const Home = (props) => {
         {+daoData.version !== 2 && (
           <ChartDiv>
             <HomeChart
-              guildBankAddr={data.guildBankAddr}
+              guildBankAddr={data.moloch.guildBankAddress}
               chartView={chartView}
             />
           </ChartDiv>

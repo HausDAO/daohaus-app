@@ -39,21 +39,26 @@ const WhitelistTokenBalancesDiv = styled.div`
 
 const WhitelistTokenBalances = (tokens) => {
   const renderList = () => {
-    return tokens.tokens.map((token) => {
-      const needSync = token.contractTokenBalance !== token.contractBabeBalance;
+    return tokens.tokens
+      .sort((a, b) => {
+        return +b.tokenBalance - a.tokenBalance;
+      })
+      .map((token) => {
+        const needSync =
+          token.contractTokenBalance !== token.contractBabeBalance;
 
-      return (
-        <div key={token.token.tokenAddress}>
-          <ValueDisplay
-            value={parseFloat(
-              token.tokenBalance / 10 ** +token.decimals,
-            ).toFixed(4)}
-            symbolOverride={token.symbol}
-          />
-          {needSync ? <SyncToken token={token} /> : null}
-        </div>
-      );
-    });
+        return (
+          <div key={token.token.tokenAddress}>
+            <ValueDisplay
+              value={parseFloat(
+                token.tokenBalance / 10 ** +token.decimals,
+              ).toFixed(4)}
+              symbolOverride={token.symbol}
+            />
+            {needSync ? <SyncToken token={token} /> : null}
+          </div>
+        );
+      });
   };
 
   return (

@@ -99,7 +99,7 @@ export const passedVotingAndGrace = (
   currentPeriod,
   votingPeriodLength,
   gracePeriodLength,
-  version = 1,
+  version,
 ) => {
   if (version === 2 && !proposal.sponsored) {
     return false;
@@ -116,7 +116,7 @@ export function determineProposalStatus(
   currentPeriod,
   votingPeriodLength,
   gracePeriodLength,
-  version = 1,
+  version,
 ) {
   proposal.startingPeriod = +proposal.startingPeriod;
 

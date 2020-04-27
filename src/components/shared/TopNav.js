@@ -124,8 +124,6 @@ const TopNav = (props) => {
   const [currentUser] = useContext(CurrentUserContext);
   const [daoService] = useContext(DaoServiceContext);
   const [daoData] = useContext(DaoDataContext);
-
-  // Toggle functions
   const [isElementOpen, setElementOpen] = React.useState(false);
   const toggleElement = () => setElementOpen(!isElementOpen);
   const { isShowing, toggle } = useModal();
@@ -135,7 +133,6 @@ const TopNav = (props) => {
 
   return (
     <TopNavDiv>
-      {console.log(props)}
       {daoService && daoService.mcDao.daoContract && (
         <>
           {isElementOpen ? (

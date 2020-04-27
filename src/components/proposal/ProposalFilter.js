@@ -83,9 +83,6 @@ const ProposalFilter = ({ proposals, filter, history, unsponsoredView }) => {
     return <></>;
   }
 
-  console.log('filter', filter);
-  console.log('unsponsoredView', unsponsoredView);
-
   return (
     <ProposalFilterDiv>
       <ProposalFiltersDiv>
@@ -95,7 +92,7 @@ const ProposalFilter = ({ proposals, filter, history, unsponsoredView }) => {
               onClick={() =>
                 handleSelect(groupedProposals.VotingPeriod, 'VotingPeriod')
               }
-              active={filter === 'VotingPeriod' ? true : false}
+              active={filter === 'VotingPeriod'}
             >
               Voting Period (
               {groupedProposals.VotingPeriod &&
@@ -106,7 +103,7 @@ const ProposalFilter = ({ proposals, filter, history, unsponsoredView }) => {
               onClick={() =>
                 handleSelect(groupedProposals.GracePeriod, 'GracePeriod')
               }
-              active={filter === 'GracePeriod' ? true : false}
+              active={filter === 'GracePeriod'}
             >
               Grace Period (
               {groupedProposals.GracePeriod &&
@@ -120,7 +117,7 @@ const ProposalFilter = ({ proposals, filter, history, unsponsoredView }) => {
                   'ReadyForProcessing',
                 )
               }
-              active={filter === 'ReadyForProcessing' ? true : false}
+              active={filter === 'ReadyForProcessing'}
             >
               Ready For Processing (
               {groupedProposals.ReadyForProcessing &&
@@ -131,14 +128,14 @@ const ProposalFilter = ({ proposals, filter, history, unsponsoredView }) => {
               onClick={() =>
                 handleSelect(groupedProposals.Completed, 'Completed')
               }
-              active={filter === 'Completed' ? true : false}
+              active={filter === 'Completed'}
             >
               Completed (
               {groupedProposals.Completed && groupedProposals.Completed.length})
             </FilterButton>
             <FilterButton
               onClick={() => handleSelect(groupedProposals.InQueue, 'InQueue')}
-              active={filter === 'InQueue' ? true : false}
+              active={filter === 'InQueue'}
             >
               In Queue (
               {groupedProposals.InQueue && groupedProposals.InQueue.length})
@@ -150,7 +147,7 @@ const ProposalFilter = ({ proposals, filter, history, unsponsoredView }) => {
               onClick={() =>
                 handleSelect(groupedProposals.Unsponsored, 'Unsponsored')
               }
-              active={filter === 'Unsponsored' ? true : false}
+              active={filter === 'Unsponsored'}
             >
               Open (
               {groupedProposals.Unsponsored &&
@@ -162,7 +159,7 @@ const ProposalFilter = ({ proposals, filter, history, unsponsoredView }) => {
               onClick={() =>
                 handleSelect(groupedProposals.Cancelled, 'Cancelled')
               }
-              active={filter === 'Cancelled' ? true : false}
+              active={filter === 'Cancelled'}
             >
               Cancelled (
               {groupedProposals.Cancelled && groupedProposals.Cancelled.length})

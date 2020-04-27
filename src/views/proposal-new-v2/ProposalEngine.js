@@ -24,7 +24,6 @@ const ProposalEngineDiv = styled.div`
 
 const ProposalEngine = () => {
   const [daoData] = useContext(DaoDataContext);
-  console.log('daoData', daoData);
 
   return (
     <ProposalEngineDiv>

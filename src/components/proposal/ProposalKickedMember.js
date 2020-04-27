@@ -1,13 +1,14 @@
 import React, { useContext } from 'react';
-import { DaoDataContext } from '../../contexts/Store';
 import { useQuery } from 'react-apollo';
-import { GET_MEMBER_V2 } from '../../utils/QueriesV2';
+
+import { DaoDataContext } from '../../contexts/Store';
+import { GET_MEMBER } from '../../utils/Queries';
 import Loading from '../shared/Loading';
 
 const ProposalKickedMember = ({ proposal }) => {
   const [daoData] = useContext(DaoDataContext);
 
-  const { loading, error, data } = useQuery(GET_MEMBER_V2, {
+  const { loading, error, data } = useQuery(GET_MEMBER, {
     variables: {
       id: `${daoData.contractAddress}-member-${proposal.applicant}`,
     },

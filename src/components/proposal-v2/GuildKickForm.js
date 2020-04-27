@@ -1,6 +1,7 @@
 import React, { useContext, useState } from 'react';
 import { withRouter } from 'react-router-dom';
-
+import shortid from 'shortid';
+import { withApollo } from 'react-apollo';
 import { Formik, Form, Field, ErrorMessage } from 'formik';
 import { FormContainer, FieldContainer } from '../../App.styles';
 
@@ -8,13 +9,10 @@ import {
   LoaderContext,
   DaoServiceContext,
   CurrentUserContext,
-  // DaoServiceContext,
 } from '../../contexts/Store';
 import Loading from '../shared/Loading';
 
-import { withApollo } from 'react-apollo';
 import { WhiteListGuildKickSchema } from './Validation';
-import shortid from 'shortid';
 
 const GuildKickForm = (props) => {
   const { history } = props;
@@ -42,7 +40,6 @@ const GuildKickForm = (props) => {
               }}
               validationSchema={WhiteListGuildKickSchema}
               onSubmit={async (values, { setSubmitting }) => {
-                console.log(values);
                 const uuid = shortid.generate();
                 const detailsObj = JSON.stringify({
                   id: uuid,
@@ -60,7 +57,6 @@ const GuildKickForm = (props) => {
                   setFormLoading(false);
                   history.push(`/dao/${daoService.daoAddress}/success`);
                 } catch (err) {
-                  console.log('cancelled');
                   setSubmitting(false);
                   setFormLoading(false);
                 }
