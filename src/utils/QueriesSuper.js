@@ -183,3 +183,21 @@ export const GET_PROPOSAL_SUPER = gql`
     }
   }
 `;
+
+export const GET_ACTIVE_PROPOSALS_SUPER = gql`
+  query proposals($contractAddr: String!) {
+    proposals(
+      orderBy: proposalIndex, 
+      orderDirection: desc, 
+      where: { processed: false, molochAddress: $contractAddr }
+    ) {
+      ${baseProposalFields}
+    }
+
+    moloch(id: $contractAddr) {
+      meta @client
+      proposalDeposit
+      totalShares
+    }
+  }
+`;

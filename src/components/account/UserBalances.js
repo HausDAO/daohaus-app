@@ -365,7 +365,7 @@ const UserBalance = ({ toggle }) => {
                 {+daoData.version === 2 && data && data.member ? (
                   <p>Deposit Token: {data.member.moloch.depositToken.symbol}</p>
                 ) : (
-                  <p>{data.member.moloch.tokenSymbol}</p>
+                  <>{data && <p>{data.member.moloch.tokenSymbol}</p>}</>
                 )}
                 <DataDiv>
                   {currentWallet.tokenBalance}

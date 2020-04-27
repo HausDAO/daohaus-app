@@ -1,6 +1,6 @@
 import React, { useContext, useState } from 'react';
 import { withRouter, Link } from 'react-router-dom';
-
+import { useQuery } from 'react-apollo';
 import { Formik, Form, Field, ErrorMessage } from 'formik';
 import shortid from 'shortid';
 import { weiToEth, anyToBN, ethToWei } from '@netgum/utils';
@@ -11,23 +11,12 @@ import {
   DaoServiceContext,
 } from '../../contexts/Store';
 import Loading from '../shared/Loading';
-
-import { GET_METADATA, GET_ACTIVE_PROPOSALS_QUERY } from '../../utils/Queries';
-import { withApollo, useQuery } from 'react-apollo';
-
+import { GET_ACTIVE_PROPOSALS_SUPER } from '../../utils/QueriesSuper';
 import ValueDisplay from '../shared/ValueDisplay';
+
 import { FieldContainer } from '../../App.styles';
 
-const ProposalForm = (props) => {
-  const { history, client } = props;
-  const {
-    proposalDeposit,
-    tokenSymbol,
-    totalShares,
-    guildBankValue,
-  } = client.cache.readQuery({
-    query: GET_METADATA,
-  });
+const ProposalForm = ({ history }) => {
   const [gloading] = useContext(LoaderContext);
   const [loading, setLoading] = useState(false);
   const [currentWallet] = useContext(CurrentWalletContext);
@@ -35,17 +24,20 @@ const ProposalForm = (props) => {
   const [estimatedProposalValue, setEstimatedProposalValue] = useState(0);
 
   const { loading: activeProposalsLoading, error, data } = useQuery(
-    GET_ACTIVE_PROPOSALS_QUERY,
+    GET_ACTIVE_PROPOSALS_SUPER,
+    {
+      variables: { contractAddr: daoService.daoAddress },
+    },
   );
 
   const calculateEstimatedProposalValue = (
     numSharesRequested,
     tokenTribute,
   ) => {
-    const guildBankValuePlusPending = ethToWei(guildBankValue).add(
-      ethToWei(tokenTribute),
-    );
-    let totalSharesPlusPending = totalShares + +numSharesRequested;
+    const guildBankValuePlusPending = ethToWei(
+      data.moloch.meta.guildBankValue,
+    ).add(ethToWei(tokenTribute));
+    let totalSharesPlusPending = data.moloch.totalShares + +numSharesRequested;
     for (const proposal of data.proposals) {
       // if proposal is likely passing, add tribute and shares
       if (+proposal.yesVotes > +proposal.noVotes) {
@@ -67,14 +59,16 @@ const ProposalForm = (props) => {
   if (activeProposalsLoading) return <Loading />;
   if (error) return <ErrorMessage message={error} />;
 
+  const proposalDeposit = weiToEth(+data.moloch.proposalDeposit);
+
   return (
     <div>
       {loading && <Loading />}
       {gloading && <Loading />}
 
       <div>
-        {+currentWallet.tokenBalance >= +proposalDeposit &&
-        +currentWallet.allowance >= +proposalDeposit ? (
+        {+currentWallet.tokenBalance >= proposalDeposit &&
+        +currentWallet.allowance >= proposalDeposit ? (
           <Formik
             initialValues={{
               title: '',
@@ -136,7 +130,11 @@ const ProposalForm = (props) => {
             {({ isSubmitting }) => (
               <Form className="Form">
                 <h3>
-                  Proposal deposit: <ValueDisplay value={proposalDeposit} />
+                  Proposal deposit:{' '}
+                  <ValueDisplay
+                    value={proposalDeposit}
+                    symbolOverride={data.moloch.meta.tokenSymbol}
+                  />
                 </h3>
                 <Field name="title">
                   {({ field, form }) => (
@@ -236,7 +234,9 @@ const ProposalForm = (props) => {
           </Formik>
         ) : (
           <div className="ProposalWarning">
-            <h3>Not enough Eth or {tokenSymbol} in your account.</h3>
+            <h3>
+              Not enough Eth or {data.moloch.meta.tokenSymbol} in your account.
+            </h3>
             <p>
               <strong>
                 To submit a proposal, you need the following in your account:
@@ -244,10 +244,12 @@ const ProposalForm = (props) => {
             </p>
             <ol>
               <li>
-                {proposalDeposit} {tokenSymbol} for a deposit.
+                {data.moloch.proposalDeposit} {data.moloch.meta.tokenSymbol} for
+                a deposit.
               </li>
               <li>
-                {tokenSymbol} unlocked so the dao can use it for the deposit.
+                {data.moloch.meta.tokenSymbol} unlocked so the dao can use it
+                for the deposit.
               </li>
               <li>Enough Eth to run the transaction.</li>
             </ol>
@@ -267,4 +269,4 @@ const ProposalForm = (props) => {
   );
 };
 
-export default withRouter(withApollo(ProposalForm));
+export default withRouter(ProposalForm);

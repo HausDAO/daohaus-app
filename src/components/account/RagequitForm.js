@@ -1,6 +1,6 @@
 import React, { useState, useContext, useEffect } from 'react';
 import { Formik, Form, Field, ErrorMessage } from 'formik';
-import { FormContainer, FieldContainer } from '../../App.styles';
+import { FieldContainer } from '../../App.styles';
 
 import {
   LoaderContext,

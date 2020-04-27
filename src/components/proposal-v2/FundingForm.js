@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { withRouter } from 'react-router-dom';
-
+import { withApollo, useQuery } from 'react-apollo';
 import { Formik, Form, Field, ErrorMessage } from 'formik';
 
 import {
@@ -17,7 +17,6 @@ import {
 } from '../../contexts/Store';
 import Loading from '../shared/Loading';
 
-import { withApollo, useQuery } from 'react-apollo';
 import TributeInput from './TributeInput';
 import PaymentInput from './PaymentInput';
 import Expandable from '../shared/Expandable';
@@ -25,7 +24,7 @@ import { ProposalSchema } from './Validation';
 import shortid from 'shortid';
 import TokenSelect from './TokenSelect';
 import { valToDecimalString } from '../../utils/Helpers';
-import { GET_MOLOCH_V2 } from '../../utils/QueriesV2';
+import { GET_MOLOCH_SUPER } from '../../utils/QueriesSuper';
 
 const FundingForm = (props) => {
   const { history } = props;
@@ -39,18 +38,15 @@ const FundingForm = (props) => {
 
   const options = {
     variables: { contractAddr: daoData.contractAddress },
-    client: daoData.altClient,
     fetchPolicy: 'no-cache',
   };
-  const query = GET_MOLOCH_V2;
+  const query = GET_MOLOCH_SUPER;
 
   const { loading, error, data } = useQuery(query, options);
 
   // get whitelist
   useEffect(() => {
     if (data && data.moloch) {
-      console.log('set');
-
       setTokenData(
         data.moloch.tokenBalances
           .reverse()

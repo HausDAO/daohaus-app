@@ -1,4 +1,3 @@
-import { gql } from 'apollo-boost';
 import Web3 from 'web3';
 
 import {

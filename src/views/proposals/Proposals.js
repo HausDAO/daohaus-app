@@ -2,9 +2,6 @@ import React, { useContext, useState, useEffect } from 'react';
 import { useQuery } from '@apollo/react-hooks';
 import _ from 'lodash';
 
-import { GET_PROPOSALS, GET_PROPOSALS_LEGACY } from '../../utils/Queries';
-import { GET_PROPOSALS_V2 } from '../../utils/QueriesV2';
-
 import ProposalFilter from '../../components/proposal/ProposalFilter';
 import ErrorMessage from '../../components/shared/ErrorMessage';
 import BottomNav from '../../components/shared/BottomNav';

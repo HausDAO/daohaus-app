@@ -75,6 +75,8 @@ const MemberCard = ({ member }) => {
     };
 
     setup();
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const votingPower = (
