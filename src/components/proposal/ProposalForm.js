@@ -59,7 +59,9 @@ const ProposalForm = ({ history }) => {
   if (activeProposalsLoading) return <Loading />;
   if (error) return <ErrorMessage message={error} />;
 
-  const proposalDeposit = weiToEth(+data.moloch.proposalDeposit);
+  const proposalDeposit = daoService.web3.utils.fromWei(
+    data.moloch.proposalDeposit,
+  );
 
   return (
     <div>
@@ -244,8 +246,7 @@ const ProposalForm = ({ history }) => {
             </p>
             <ol>
               <li>
-                {data.moloch.proposalDeposit} {data.moloch.meta.tokenSymbol} for
-                a deposit.
+                {proposalDeposit} {data.moloch.meta.tokenSymbol} for a deposit.
               </li>
               <li>
                 {data.moloch.meta.tokenSymbol} unlocked so the dao can use it
