@@ -29,14 +29,13 @@ export const WalletDiv = styled.div`
 
 export const WalletHeaderDiv = styled.div`
   height: 98px;
-  border-bottom: 1px solid ${(props) => getPrimaryHover(props.theme)};
   border-top-right-radius: 10px;
   border-top-left-radius: 10px;
   display: flex;
   flex-direction: row;
   align-items: center;
   justify-content: space-between;
-  background-color: ${(props) => getPrimaryHover(props.theme)};
+  background-color: ${(props) => props.theme.primary};
   padding: 0 15px;
   @media (max-width: ${phone}) {
     border-radius: 0px;
@@ -69,9 +68,7 @@ export const StatusP = styled.p`
   font-size: 0.85em;
   position: relative;
   color: ${(props) =>
-    props.status === 'disconnected'
-      ? props.theme.danger
-      : props.theme.secondary};
+    props.status === 'disconnected' ? props.theme.danger : props.theme.success};
   margin-left: 15px;
   margin-top: 0;
   margin-bottom: 5px;
@@ -83,7 +80,7 @@ export const StatusP = styled.p`
     background-color: ${(props) =>
       props.status === 'disconnected'
         ? props.theme.danger
-        : props.theme.secondary};
+        : props.theme.success};
     display: block;
     position: absolute;
     left: 0;
@@ -103,7 +100,7 @@ export const AddressButton = styled(DataButton)`
   display: flex;
   align-content: center;
   &:hover {
-    color: ${(props) => props.theme.secondary};
+    color: ${(props) => props.theme.tertiary};
     fill: ${(props) => props.theme.secondary};
   }
   p {
@@ -111,7 +108,7 @@ export const AddressButton = styled(DataButton)`
   }
   svg {
     display: inline-block;
-    fill: ${(props) => props.theme.secondary};
+    fill: white;
     width: 18px;
     height: 18px;
     margin-left: 5px;
@@ -132,7 +129,7 @@ export const ActionsDropdownDiv = styled.div`
 
 export const SwitchHeaderDiv = styled.div`
   width: calc(100% - 30px);
-  background-color: ${(props) => props.theme.secondary};
+  background-color: ${(props) => getPrimaryHover(props.theme)};
   display: flex;
   justify-content: flex-start;
   padding: 0px 15px;

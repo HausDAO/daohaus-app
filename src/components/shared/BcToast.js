@@ -54,10 +54,10 @@ const ProcessorButton = styled.button`
 
 const ProcessorDropdownDiv = styled.div`
   transition: all 0.15s linear;
-  position: ${(props) => (props.isElementOpen ? 'relative' : 'relative')};
-  width: ${(props) => (props.isElementOpen ? '100%' : '0px')};
+  position: ${(props) => (props.isElementOpen ? 'absolute' : 'absolute')};
+  width: ${(props) => (props.isElementOpen ? '100%' : '100%')};
   height: ${(props) => (props.isElementOpen ? 'auto' : '0px')};
-  max-width: ${(props) => (props.isElementOpen ? '600px' : '0px')};
+  max-width: ${(props) => (props.isElementOpen ? '600px' : '600px')};
   overflow: ${(props) => (props.isElementOpen ? 'visible' : 'hidden')};
   top: 0px;
   right: 0;
