@@ -1,7 +1,11 @@
 import React, { useContext } from 'react';
 import { withRouter, Link } from 'react-router-dom';
 import styled from 'styled-components';
-import { getAppLight, getPrimaryHover } from '../../variables.styles.js';
+import {
+  getPrimaryHover,
+  getAppLight,
+  getAppDark,
+} from '../../variables.styles.js';
 
 import { CurrentUserContext, DaoServiceContext } from '../../contexts/Store';
 
@@ -13,11 +17,8 @@ const BottomNavDiv = styled.div`
   z-index: 1;
   display: flex;
   justify-content: space-evenly;
-  background-color: ${(props) =>
-    props.location.pathname === `/dao/${props.daoAddress}/` ||
-    `/dao/${props.daoAddress}`
-      ? 'transparent'
-      : getAppLight(props.theme)};
+  background-color: ${(props) => getAppLight(props.theme)};
+  box-shadow: 0px -5px 15px rgba(0, 0, 0, 0.05);
   a {
     text-align: center;
     display: flex;
@@ -27,23 +28,19 @@ const BottomNavDiv = styled.div`
     text-decoration: none;
     transition: all 0.15s ease-in-out;
     font-weight: 900;
-    color: ${(props) => props.theme.baseFontColor};
+    color: ${(props) => props.theme.primary};
+    svg {
+      width: 24px;
+      height: auto;
+      margin: 0 auto;
+      fill: ${(props) => props.theme.primary};
+    }
     &:hover {
       color: ${(props) => getPrimaryHover(props.theme)};
       svg {
         fill: ${(props) => getPrimaryHover(props.theme)};
       }
     }
-    svg {
-      width: 24px;
-      height: auto;
-      margin: 0 auto;
-      fill: ${(props) => props.theme.baseFontColor};
-    }
-  }
-  &.Global {
-    background-color: $app-light;
-    border-top: 2px solid $app-dark;
   }
 `;
 

@@ -42,7 +42,7 @@ const YesLabelSpan = styled.span`
     props.page === 'ProposalCard' ? 'right' : 'center'};
   background-color: transparent;
   font-weight: 900;
-  color: ${(props) => props.theme.primary};
+  color: ${(props) => props.theme.success};
 `;
 
 const NoLabelSpan = styled.span`
@@ -71,7 +71,7 @@ const BaseBarDiv = styled.div`
 const YesBarDiv = styled.div`
   height: 5px;
   position: absolute;
-  background-color: ${(props) => props.theme.primary};
+  background-color: ${(props) => props.theme.success};
   left: 0px;
   width: ${(props) => props.percentageShares + '%'};
 `;
