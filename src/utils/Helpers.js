@@ -20,9 +20,8 @@ export const valToDecimalString = (value, tokenAddress, tokens) => {
         .toString(),
     );
 
-    return anyToBN(value)
-      .mul(exp)
-      .toString();
+    return anyToBN(value).mul(exp);
+    // .toString();
   } else {
     console.log(
       'decimalstring < 1000',
