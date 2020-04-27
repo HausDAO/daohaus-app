@@ -179,13 +179,19 @@ const VoteControl = ({ submitVote, proposal }) => {
       currentWallet &&
       currentWallet.addrByDelegateKey &&
       votes.filter((vote) => {
-        return +daoData.version === 2
-          ? vote.member.memberAddress &&
-              vote.member.memberAddress.toLowerCase() ===
-                currentWallet.addrByDelegateKey.toLowerCase()
-          : vote.memberAddress &&
-              vote.memberAddress.toLowerCase() ===
-                currentWallet.addrByDelegateKey.toLowerCase();
+        // return +daoData.version === 2
+        //   ? vote.member.memberAddress &&
+        //       vote.member.memberAddress.toLowerCase() ===
+        //         currentWallet.addrByDelegateKey.toLowerCase()
+        //   : vote.memberAddress &&
+        //       vote.memberAddress.toLowerCase() ===
+        //         currentWallet.addrByDelegateKey.toLowerCase();
+
+        return (
+          vote.member.memberAddress &&
+          vote.member.memberAddress.toLowerCase() ===
+            currentWallet.addrByDelegateKey.toLowerCase()
+        );
       })
     );
   };

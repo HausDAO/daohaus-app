@@ -38,23 +38,15 @@ const MemberVotesDiv = styled.div`
 
 const MemberVotes = (props) => {
   const [daoData] = useContext(DaoDataContext);
-  console.log(props.votes);
-  console.log(daoData);
 
   const renderList = () => {
     return props.votes.map((vote) => {
-      const memberAddress =
-        +daoData.version === 2 ? vote.member.memberAddress : vote.memberAddress;
-
-      const memberUrl =
-        +daoData.version === 2
-          ? `/dao/${daoData.contractAddress}/member/${daoData.contractAddress}-member-${memberAddress}`
-          : `/dao/${daoData.contractAddress}/member/${daoData.contractAddress}-${vote.memberAddress}`;
+      const memberUrl = `/dao/${daoData.contractAddress}/member/${daoData.contractAddress}-member-${vote.member.memberAddress}`;
 
       return (
-        <div className="Item" key={memberAddress}>
+        <div className="Item" key={vote.member.memberAddress}>
           <a href={memberUrl}>
-            <p className="Data">{truncateAddr(memberAddress)}</p>
+            <p className="Data">{truncateAddr(vote.member.memberAddress)}</p>
           </a>
           <div className="VoteCount">
             {vote.uintVote === 1 ? (
