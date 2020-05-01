@@ -195,6 +195,7 @@ export const GET_ACTIVE_PROPOSALS = gql`
     }
 
     moloch(id: $contractAddr) {
+      id
       meta @client
       proposalDeposit
       totalShares

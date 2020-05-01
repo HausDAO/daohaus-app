@@ -57,7 +57,7 @@ const ProposalForm = ({ history }) => {
   };
 
   if (activeProposalsLoading) return <Loading />;
-  if (error) return <ErrorMessage message={error} />;
+  if (error) return <ErrorMessage />;
 
   const proposalDeposit = daoService.web3.utils.fromWei(
     data.moloch.proposalDeposit,
@@ -69,7 +69,8 @@ const ProposalForm = ({ history }) => {
       {gloading && <Loading />}
 
       <div>
-        {+currentWallet.tokenBalance >= proposalDeposit &&
+        {currentWallet &&
+        +currentWallet.tokenBalance >= proposalDeposit &&
         +currentWallet.allowance >= proposalDeposit ? (
           <Formik
             initialValues={{
