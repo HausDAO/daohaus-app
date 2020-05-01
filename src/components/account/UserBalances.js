@@ -20,6 +20,9 @@ import AccountList from './AccountList';
 import DepositFormInitial from './DepositFormInitial';
 import UpgradeKeystore from '../../auth/UpgradeKeystore';
 import { USER_TYPE } from '../../utils/DaoService';
+import { GET_MEMBER } from '../../utils/Queries';
+import { ThemeContext } from 'styled-components';
+
 import { FlashDiv, ButtonSecondary } from '../../variables.styles';
 import { DataP, DataDiv, BackdropOpenDiv } from '../../App.styles';
 import {
@@ -39,11 +42,9 @@ import {
   TinyButton,
 } from './UserBalances.styles';
 
-import { GET_MEMBER } from '../../utils/Queries';
-
 const UserBalance = ({ toggle }) => {
   const [daoData] = useContext(DaoDataContext);
-
+  const theme = useContext(ThemeContext);
   const [daoService] = useContext(DaoServiceContext);
   const [currentUser] = useContext(CurrentUserContext);
   const [currentWallet] = useContext(CurrentWalletContext);
@@ -249,56 +250,64 @@ const UserBalance = ({ toggle }) => {
             </AddressButton>
           </CopyToClipboard>
         </div>
-        <ActionsDropdownDiv>
-          <button onClick={() => toggleActions()}>
-            Actions <img src={Arrow} alt="arrow" />
-          </button>
+        {!theme.mfBrand ? (
+          <ActionsDropdownDiv>
+            <button onClick={() => toggleActions()}>
+              Actions <img src={Arrow} alt="arrow" />
+            </button>
 
-          {actionsOpen ? (
-            <>
-              <BackdropOpenDiv onClick={toggleActions} />
+            {actionsOpen ? (
+              <>
+                <BackdropOpenDiv onClick={toggleActions} />
 
-              <ActionsDropdownContentDiv>
-                {currentUser.type !== USER_TYPE.WEB3 && (
-                  <ButtonSecondary onClick={() => toggleActions('depositForm')}>
-                    Deposit
-                  </ButtonSecondary>
-                )}
-                {currentWallet.state === WalletStatuses.Deployed && (
-                  <ButtonSecondary onClick={() => toggleActions('sendEth')}>
-                    Send ETH
-                  </ButtonSecondary>
-                )}
-                {currentWallet.state === WalletStatuses.Deployed && (
-                  <ButtonSecondary onClick={() => toggleActions('sendToken')}>
-                    Send {data.member.moloch.tokenSymbol}
-                  </ButtonSecondary>
-                )}
-                {currentWallet.state === WalletStatuses.Deployed && (
-                  <ButtonSecondary onClick={() => toggleActions('daohaus')}>
-                    Manage on DAOHaus
-                  </ButtonSecondary>
-                )}
-                {currentUser.type === USER_TYPE.WEB3 && (
-                  <ButtonSecondary
-                    onClick={() => toggleActions('ragequit')}
-                    disabled={!memberAddressLoggedIn && parseInt(memberAddress)}
-                  >
-                    Rage Quit
-                  </ButtonSecondary>
-                )}
-                {currentUser.type === USER_TYPE.WEB3 && (
-                  <ButtonSecondary
-                    onClick={() => toggleActions('changeDelegateKey')}
-                    disabled={!memberAddressLoggedIn && parseInt(memberAddress)}
-                  >
-                    Change Delegate Key
-                  </ButtonSecondary>
-                )}
-              </ActionsDropdownContentDiv>
-            </>
-          ) : null}
-        </ActionsDropdownDiv>
+                <ActionsDropdownContentDiv>
+                  {currentUser.type !== USER_TYPE.WEB3 && (
+                    <ButtonSecondary
+                      onClick={() => toggleActions('depositForm')}
+                    >
+                      Deposit
+                    </ButtonSecondary>
+                  )}
+                  {currentWallet.state === WalletStatuses.Deployed && (
+                    <ButtonSecondary onClick={() => toggleActions('sendEth')}>
+                      Send ETH
+                    </ButtonSecondary>
+                  )}
+                  {currentWallet.state === WalletStatuses.Deployed && (
+                    <ButtonSecondary onClick={() => toggleActions('sendToken')}>
+                      Send {data.member.moloch.tokenSymbol}
+                    </ButtonSecondary>
+                  )}
+                  {currentWallet.state === WalletStatuses.Deployed && (
+                    <ButtonSecondary onClick={() => toggleActions('daohaus')}>
+                      Manage on DAOHaus
+                    </ButtonSecondary>
+                  )}
+                  {currentUser.type === USER_TYPE.WEB3 && (
+                    <ButtonSecondary
+                      onClick={() => toggleActions('ragequit')}
+                      disabled={
+                        !memberAddressLoggedIn && parseInt(memberAddress)
+                      }
+                    >
+                      Rage Quit
+                    </ButtonSecondary>
+                  )}
+                  {currentUser.type === USER_TYPE.WEB3 && (
+                    <ButtonSecondary
+                      onClick={() => toggleActions('changeDelegateKey')}
+                      disabled={
+                        !memberAddressLoggedIn && parseInt(memberAddress)
+                      }
+                    >
+                      Change Delegate Key
+                    </ButtonSecondary>
+                  )}
+                </ActionsDropdownContentDiv>
+              </>
+            ) : null}
+          </ActionsDropdownDiv>
+        ) : null}
       </WalletHeaderDiv>
       <SwitchHeaderDiv>
         <SelectedElementButton
