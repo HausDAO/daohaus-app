@@ -51,8 +51,12 @@ const App = ({ client }) => {
             ...apiData,
           });
 
-          setTheme(themeMap[apiData.themeName] || defaultTheme);
-          i18n.changeLanguage(themeMap[apiData.themeName].language || 'en');
+          if (themeMap[apiData.themeName]) {
+            setTheme(themeMap[apiData.themeName]);
+            if (themeMap[apiData.themeName].language) {
+              i18n.changeLanguage(themeMap[apiData.themeName].language);
+            }
+          }
         } else {
           setloading(false);
         }
