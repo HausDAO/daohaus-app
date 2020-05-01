@@ -1,6 +1,7 @@
 import React, { useEffect, useState, useContext } from 'react';
 import { BrowserRouter as Router } from 'react-router-dom';
 import styled, { ThemeProvider } from 'styled-components';
+import { useTranslation } from 'react-i18next';
 
 import { DaoDataContext, DaoServiceContext } from './contexts/Store';
 import { get } from './utils/Requests';
@@ -27,6 +28,8 @@ const App = ({ client }) => {
   const [theme, setTheme] = useState(defaultTheme);
   const [daoService] = useContext(DaoServiceContext);
 
+  const { i18n } = useTranslation();
+
   useEffect(() => {
     var pathname = window.location.pathname.split('/');
     const daoParam = pathname[2];
@@ -48,9 +51,8 @@ const App = ({ client }) => {
             ...apiData,
           });
 
-          if (themeMap[apiData.themeName]) {
-            setTheme(themeMap[apiData.themeName]);
-          }
+          setTheme(themeMap[apiData.themeName] || defaultTheme);
+          i18n.changeLanguage(themeMap[apiData.themeName].language || 'en');
         } else {
           setloading(false);
         }
@@ -94,7 +96,10 @@ const App = ({ client }) => {
         cacheData.guildBankValue = daoService.web3.utils.fromWei(
           guildBankValue,
         );
-        cacheData.tokenSymbol = await daoService.token.getSymbol();
+        cacheData.tokenSymbol = await daoService.token.getSymbol(
+          theme.symbolOverride,
+        );
+
         cacheData.shareValue = parseFloat(
           daoService.web3.utils.fromWei(
             daoService.web3.utils
