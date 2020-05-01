@@ -49,6 +49,8 @@ export const themeMap = {
     bright: `rgba(189,134,254,1)`,
   },
   metafactory: {
+    language: 'mfPoke',
+    symbolOverride: 'mf',
     baseFont: `'Roboto', sans-serif`,
     dataFont: `'Share Tech Mono', sans-serif`,
     baseFontColor: 'white',
