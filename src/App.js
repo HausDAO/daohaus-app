@@ -9,12 +9,10 @@ import Header from './components/header/Header';
 import Loading from './components/shared/Loading';
 import {
   defaultTheme,
-  metaclanTheme,
-  molochTheme,
-  raidTheme,
   getAppBackground,
   GlobalStyle,
 } from './variables.styles';
+import { themeMap } from './themes/themes';
 
 const AppDiv = styled.div`
   background-color: ${(props) => getAppBackground(props.theme)};
@@ -49,17 +47,10 @@ const App = ({ client }) => {
           setDaoData({
             ...apiData,
           });
-          let customTheme = defaultTheme;
-          if (apiData.molochTheme) {
-            customTheme = molochTheme;
+
+          if (themeMap[apiData.themeName]) {
+            setTheme(themeMap[apiData.themeName]);
           }
-          if (apiData.raidTheme) {
-            customTheme = raidTheme;
-          }
-          if (apiData.metaclanTheme) {
-            customTheme = metaclanTheme;
-          }
-          setTheme(customTheme);
         } else {
           setloading(false);
         }
