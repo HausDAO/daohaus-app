@@ -51,8 +51,16 @@ const App = ({ client }) => {
             ...apiData,
           });
 
+          console.log(apiData);
+          console.log('themeMap[apiData.themeName', themeMap);
+
           if (themeMap[apiData.themeName]) {
             setTheme(themeMap[apiData.themeName]);
+
+            console.log(
+              'themeMap[apiData.themeName].language',
+              themeMap[apiData.themeName].language,
+            );
             if (themeMap[apiData.themeName].language) {
               i18n.changeLanguage(themeMap[apiData.themeName].language);
             }
@@ -121,6 +129,8 @@ const App = ({ client }) => {
     };
 
     fetchData();
+
+    // eslint-disable-next-line
   }, [client, daoData, daoService, daoPath]);
 
   return (

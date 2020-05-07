@@ -21,7 +21,6 @@ import DepositFormInitial from './DepositFormInitial';
 import UpgradeKeystore from '../../auth/UpgradeKeystore';
 import { USER_TYPE } from '../../utils/DaoService';
 import { GET_MEMBER } from '../../utils/Queries';
-import { ThemeContext } from 'styled-components';
 
 import { FlashDiv, ButtonSecondary } from '../../variables.styles';
 import { DataP, DataDiv, BackdropOpenDiv } from '../../App.styles';
@@ -44,7 +43,6 @@ import {
 
 const UserBalance = ({ toggle }) => {
   const [daoData] = useContext(DaoDataContext);
-  const theme = useContext(ThemeContext);
   const [daoService] = useContext(DaoServiceContext);
   const [currentUser] = useContext(CurrentUserContext);
   const [currentWallet] = useContext(CurrentWalletContext);
@@ -57,12 +55,19 @@ const UserBalance = ({ toggle }) => {
   const [memberAddressLoggedIn, setMemberAddressLoggedIn] = useState(false);
   const [memberAddress, setMemberAddress] = useState(false);
 
+  const memberAddr =
+    currentUser.type === USER_TYPE.SDK
+      ? currentUser.attributes['custom:account_address'].toLowerCase()
+      : currentUser.username.toLowerCase();
   const options = {
     pollInterval: 10000,
     variables: {
-      id: `${daoData.contractAddress.toLowerCase()}-member-${currentUser.username.toLowerCase()}`,
+      id: `${daoData.contractAddress.toLowerCase()}-member-${memberAddr}`,
     },
   };
+
+  console.log('options.variables', options.variables);
+  console.log('currentUser', currentUser);
 
   const { loading, error, data } = useQuery(GET_MEMBER, options);
 
@@ -161,6 +166,8 @@ const UserBalance = ({ toggle }) => {
       console.log(err);
     }
   };
+
+  console.log('data', data);
 
   return (
     <WalletDiv>
@@ -270,11 +277,12 @@ const UserBalance = ({ toggle }) => {
                     Send ETH
                   </ButtonSecondary>
                 )}
-                {currentWallet.state === WalletStatuses.Deployed && (
+                {currentWallet.state === WalletStatuses.Deployed &&
+                data.member ? (
                   <ButtonSecondary onClick={() => toggleActions('sendToken')}>
                     Send {data.member.moloch.tokenSymbol}
                   </ButtonSecondary>
-                )}
+                ) : null}
                 {currentWallet.state === WalletStatuses.Deployed && (
                   <ButtonSecondary onClick={() => toggleActions('daohaus')}>
                     Manage on DAOHaus

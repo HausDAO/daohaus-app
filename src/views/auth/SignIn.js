@@ -22,7 +22,6 @@ import { ButtonPrimary, FormContainer } from '../../App.styles.js';
 import Loading from '../../components/shared/Loading';
 import { Web3SignIn } from '../../components/account/Web3SignIn';
 import { USER_TYPE } from '../../utils/DaoService';
-import { ThemeContext } from 'styled-components';
 
 const sdkEnv = getSdkEnvironment(SdkEnvironmentNames[`${config.SDK_ENV}`]); // kovan env by default
 const signinTypes = {
@@ -31,7 +30,6 @@ const signinTypes = {
 };
 
 const SignIn = ({ history }) => {
-  const theme = useContext(ThemeContext);
   const [daoService] = useContext(DaoServiceContext);
   const [daoData] = useContext(DaoDataContext);
   const [, setCurrentUser] = useContext(CurrentUserContext);
