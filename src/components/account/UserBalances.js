@@ -66,9 +66,6 @@ const UserBalance = ({ toggle }) => {
     },
   };
 
-  console.log('options.variables', options.variables);
-  console.log('currentUser', currentUser);
-
   const { loading, error, data } = useQuery(GET_MEMBER, options);
 
   useEffect(() => {
@@ -166,8 +163,6 @@ const UserBalance = ({ toggle }) => {
       console.log(err);
     }
   };
-
-  console.log('data', data);
 
   return (
     <WalletDiv>
