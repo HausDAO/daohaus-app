@@ -16,6 +16,7 @@
     "formik": "^2.1.4",
     "graphql": "^14.6.0",
     "i18next": "^19.4.4",
+    "i18next-browser-languagedetector": "^4.1.1",
     "lodash": "^4.17.15",
     "node-sass": "^4.13.1",
     "polished": "^3.4.4",

@@ -1,14 +1,7 @@
 import React, { useState, useContext } from 'react';
 import StackedVote from './StackedVote';
 import styled from 'styled-components';
-import {
-  primary,
-  tertiary,
-  success,
-  danger,
-  getAppLight,
-  getAppDark,
-} from '../../variables.styles';
+import { getAppLight, getAppDark } from '../../variables.styles';
 
 import VoteYes from '../../assets/thumbs-up.png';
 import VoteNo from '../../assets/thumbs-down.png';
