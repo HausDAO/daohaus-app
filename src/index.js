@@ -1,11 +1,12 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import App from './App';
-import * as serviceWorker from './serviceWorker';
 import Amplify from 'aws-amplify';
 import ApolloClient from 'apollo-boost';
 import { ApolloProvider } from 'react-apollo';
 
+import './themes/i18n';
+import App from './App';
+import * as serviceWorker from './serviceWorker';
 import config from './config';
 import { resolvers } from './utils/Resolvers';
 import Store from './contexts/Store';

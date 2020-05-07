@@ -1,6 +1,7 @@
 import React, { useEffect, useState, useContext } from 'react';
 import { BrowserRouter as Router } from 'react-router-dom';
 import styled, { ThemeProvider } from 'styled-components';
+import { useTranslation } from 'react-i18next';
 
 import { DaoDataContext, DaoServiceContext } from './contexts/Store';
 import { get } from './utils/Requests';
@@ -9,12 +10,10 @@ import Header from './components/header/Header';
 import Loading from './components/shared/Loading';
 import {
   defaultTheme,
-  metaclanTheme,
-  molochTheme,
-  raidTheme,
   getAppBackground,
   GlobalStyle,
 } from './variables.styles';
+import { themeMap } from './themes/themes';
 
 const AppDiv = styled.div`
   background-color: ${(props) => getAppBackground(props.theme)};
@@ -28,6 +27,8 @@ const App = ({ client }) => {
   const [daoData, setDaoData] = useContext(DaoDataContext);
   const [theme, setTheme] = useState(defaultTheme);
   const [daoService] = useContext(DaoServiceContext);
+
+  const { i18n } = useTranslation();
 
   useEffect(() => {
     var pathname = window.location.pathname.split('/');
@@ -49,17 +50,13 @@ const App = ({ client }) => {
           setDaoData({
             ...apiData,
           });
-          let customTheme = defaultTheme;
-          if (apiData.molochTheme) {
-            customTheme = molochTheme;
+
+          if (themeMap[apiData.themeName]) {
+            setTheme(themeMap[apiData.themeName]);
+            if (themeMap[apiData.themeName].language) {
+              i18n.changeLanguage(themeMap[apiData.themeName].language);
+            }
           }
-          if (apiData.raidTheme) {
-            customTheme = raidTheme;
-          }
-          if (apiData.metaclanTheme) {
-            customTheme = metaclanTheme;
-          }
-          setTheme(customTheme);
         } else {
           setloading(false);
         }
@@ -103,7 +100,10 @@ const App = ({ client }) => {
         cacheData.guildBankValue = daoService.web3.utils.fromWei(
           guildBankValue,
         );
-        cacheData.tokenSymbol = await daoService.token.getSymbol();
+        cacheData.tokenSymbol = await daoService.token.getSymbol(
+          theme.symbolOverride,
+        );
+
         cacheData.shareValue = parseFloat(
           daoService.web3.utils.fromWei(
             daoService.web3.utils
@@ -121,6 +121,8 @@ const App = ({ client }) => {
     };
 
     fetchData();
+
+    // eslint-disable-next-line
   }, [client, daoData, daoService, daoPath]);
 
   return (

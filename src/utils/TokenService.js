@@ -16,8 +16,12 @@ export class TokenService {
     this.bcProcessor = bcProcessor;
   }
 
-  async getSymbol() {
+  async getSymbol(override) {
     let symbol;
+
+    if (override) {
+      return override;
+    }
 
     try {
       symbol = await this.contract.methods.symbol().call();
@@ -61,10 +65,10 @@ export class TokenService {
   }
 
   async balanceOfToken(token) {
-    if(!token) {
+    if (!token) {
       return;
     }
-    const contract = new this.web3.eth.Contract(Erc20Abi, token);    
+    const contract = new this.web3.eth.Contract(Erc20Abi, token);
 
     const balanceOf = await contract.methods
       .balanceOf(this.accountAddress)
@@ -73,8 +77,6 @@ export class TokenService {
 
     return balanceOf / 10 ** decimals;
   }
-
-
 
   async allowance(
     accountAddr = this.accountAddress,

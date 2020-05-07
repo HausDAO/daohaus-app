@@ -20,6 +20,8 @@ import AccountList from './AccountList';
 import DepositFormInitial from './DepositFormInitial';
 import UpgradeKeystore from '../../auth/UpgradeKeystore';
 import { USER_TYPE } from '../../utils/DaoService';
+import { GET_MEMBER } from '../../utils/Queries';
+
 import { FlashDiv, ButtonSecondary } from '../../variables.styles';
 import { DataP, DataDiv, BackdropOpenDiv } from '../../App.styles';
 import {
@@ -39,11 +41,8 @@ import {
   TinyButton,
 } from './UserBalances.styles';
 
-import { GET_MEMBER } from '../../utils/Queries';
-
 const UserBalance = ({ toggle }) => {
   const [daoData] = useContext(DaoDataContext);
-
   const [daoService] = useContext(DaoServiceContext);
   const [currentUser] = useContext(CurrentUserContext);
   const [currentWallet] = useContext(CurrentWalletContext);
@@ -56,10 +55,14 @@ const UserBalance = ({ toggle }) => {
   const [memberAddressLoggedIn, setMemberAddressLoggedIn] = useState(false);
   const [memberAddress, setMemberAddress] = useState(false);
 
+  const memberAddr =
+    currentUser.type === USER_TYPE.SDK
+      ? currentUser.attributes['custom:account_address'].toLowerCase()
+      : currentUser.username.toLowerCase();
   const options = {
     pollInterval: 10000,
     variables: {
-      id: `${daoData.contractAddress.toLowerCase()}-member-${currentUser.username.toLowerCase()}`,
+      id: `${daoData.contractAddress.toLowerCase()}-member-${memberAddr}`,
     },
   };
 
@@ -269,11 +272,12 @@ const UserBalance = ({ toggle }) => {
                     Send ETH
                   </ButtonSecondary>
                 )}
-                {currentWallet.state === WalletStatuses.Deployed && (
+                {currentWallet.state === WalletStatuses.Deployed &&
+                data.member ? (
                   <ButtonSecondary onClick={() => toggleActions('sendToken')}>
                     Send {data.member.moloch.tokenSymbol}
                   </ButtonSecondary>
-                )}
+                ) : null}
                 {currentWallet.state === WalletStatuses.Deployed && (
                   <ButtonSecondary onClick={() => toggleActions('daohaus')}>
                     Manage on DAOHaus

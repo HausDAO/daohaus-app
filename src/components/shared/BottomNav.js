@@ -1,11 +1,7 @@
 import React, { useContext } from 'react';
 import { withRouter, Link } from 'react-router-dom';
 import styled from 'styled-components';
-import {
-  getPrimaryHover,
-  getAppLight,
-  getAppDark,
-} from '../../variables.styles.js';
+import { getPrimaryHover, getAppLight } from '../../variables.styles.js';
 
 import { CurrentUserContext, DaoServiceContext } from '../../contexts/Store';
 

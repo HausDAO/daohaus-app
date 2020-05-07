@@ -3,7 +3,6 @@ import { Link, withRouter } from 'react-router-dom';
 import { Formik, Form, Field, ErrorMessage } from 'formik';
 import { Auth } from 'aws-amplify';
 import shortid from 'shortid';
-import { FormContainer } from '../../App.styles';
 
 import {
   SdkEnvironmentNames,
@@ -19,7 +18,7 @@ import {
   DaoDataContext,
 } from '../../contexts/Store';
 
-import { ButtonPrimary } from '../../App.styles.js';
+import { ButtonPrimary, FormContainer } from '../../App.styles.js';
 import Loading from '../../components/shared/Loading';
 import { Web3SignIn } from '../../components/account/Web3SignIn';
 import { USER_TYPE } from '../../utils/DaoService';

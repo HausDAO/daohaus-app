@@ -1,6 +1,7 @@
 import React, { useState, useContext } from 'react';
 import { useQuery } from '@apollo/react-hooks';
 import styled from 'styled-components';
+import { useTranslation } from 'react-i18next';
 
 import { DaoDataContext } from '../../contexts/Store';
 import StateModals from '../../components/shared/StateModals';
@@ -120,6 +121,7 @@ const DataDiv = styled.div`
 const Home = () => {
   const [chartView, setChartView] = useState('bank');
   const [daoData] = useContext(DaoDataContext);
+  const { t } = useTranslation();
 
   const options = {
     pollInterval: 20000,
@@ -161,7 +163,7 @@ const Home = () => {
                 onClick={() => setChartView('bank')}
                 className={'Bank' + (chartView === 'bank' ? ' Selected' : '')}
               >
-                <h5>Bank</h5>
+                <h5>{t('Bank')}</h5>
                 <h2>
                   <ValueDisplay
                     value={parseFloat(data.moloch.meta.guildBankValue).toFixed(
