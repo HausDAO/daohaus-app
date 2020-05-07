@@ -63,7 +63,7 @@ const SignIn = ({ history }) => {
         <>
           <Web3SignIn history={history} setCurrentUser={setCurrentUser} />
 
-          {+daoData.version !== 2 && !theme.mfBrand ? (
+          {+daoData.version !== 2 ? (
             <ButtonPrimary onClick={() => setSigninType(signinTypes.password)}>
               Sign in With Password
             </ButtonPrimary>

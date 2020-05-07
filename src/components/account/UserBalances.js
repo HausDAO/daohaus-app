@@ -250,64 +250,56 @@ const UserBalance = ({ toggle }) => {
             </AddressButton>
           </CopyToClipboard>
         </div>
-        {!theme.mfBrand ? (
-          <ActionsDropdownDiv>
-            <button onClick={() => toggleActions()}>
-              Actions <img src={Arrow} alt="arrow" />
-            </button>
+        <ActionsDropdownDiv>
+          <button onClick={() => toggleActions()}>
+            Actions <img src={Arrow} alt="arrow" />
+          </button>
 
-            {actionsOpen ? (
-              <>
-                <BackdropOpenDiv onClick={toggleActions} />
+          {actionsOpen ? (
+            <>
+              <BackdropOpenDiv onClick={toggleActions} />
 
-                <ActionsDropdownContentDiv>
-                  {currentUser.type !== USER_TYPE.WEB3 && (
-                    <ButtonSecondary
-                      onClick={() => toggleActions('depositForm')}
-                    >
-                      Deposit
-                    </ButtonSecondary>
-                  )}
-                  {currentWallet.state === WalletStatuses.Deployed && (
-                    <ButtonSecondary onClick={() => toggleActions('sendEth')}>
-                      Send ETH
-                    </ButtonSecondary>
-                  )}
-                  {currentWallet.state === WalletStatuses.Deployed && (
-                    <ButtonSecondary onClick={() => toggleActions('sendToken')}>
-                      Send {data.member.moloch.tokenSymbol}
-                    </ButtonSecondary>
-                  )}
-                  {currentWallet.state === WalletStatuses.Deployed && (
-                    <ButtonSecondary onClick={() => toggleActions('daohaus')}>
-                      Manage on DAOHaus
-                    </ButtonSecondary>
-                  )}
-                  {currentUser.type === USER_TYPE.WEB3 && (
-                    <ButtonSecondary
-                      onClick={() => toggleActions('ragequit')}
-                      disabled={
-                        !memberAddressLoggedIn && parseInt(memberAddress)
-                      }
-                    >
-                      Rage Quit
-                    </ButtonSecondary>
-                  )}
-                  {currentUser.type === USER_TYPE.WEB3 && (
-                    <ButtonSecondary
-                      onClick={() => toggleActions('changeDelegateKey')}
-                      disabled={
-                        !memberAddressLoggedIn && parseInt(memberAddress)
-                      }
-                    >
-                      Change Delegate Key
-                    </ButtonSecondary>
-                  )}
-                </ActionsDropdownContentDiv>
-              </>
-            ) : null}
-          </ActionsDropdownDiv>
-        ) : null}
+              <ActionsDropdownContentDiv>
+                {currentUser.type !== USER_TYPE.WEB3 && (
+                  <ButtonSecondary onClick={() => toggleActions('depositForm')}>
+                    Deposit
+                  </ButtonSecondary>
+                )}
+                {currentWallet.state === WalletStatuses.Deployed && (
+                  <ButtonSecondary onClick={() => toggleActions('sendEth')}>
+                    Send ETH
+                  </ButtonSecondary>
+                )}
+                {currentWallet.state === WalletStatuses.Deployed && (
+                  <ButtonSecondary onClick={() => toggleActions('sendToken')}>
+                    Send {data.member.moloch.tokenSymbol}
+                  </ButtonSecondary>
+                )}
+                {currentWallet.state === WalletStatuses.Deployed && (
+                  <ButtonSecondary onClick={() => toggleActions('daohaus')}>
+                    Manage on DAOHaus
+                  </ButtonSecondary>
+                )}
+                {currentUser.type === USER_TYPE.WEB3 && (
+                  <ButtonSecondary
+                    onClick={() => toggleActions('ragequit')}
+                    disabled={!memberAddressLoggedIn && parseInt(memberAddress)}
+                  >
+                    Rage Quit
+                  </ButtonSecondary>
+                )}
+                {currentUser.type === USER_TYPE.WEB3 && (
+                  <ButtonSecondary
+                    onClick={() => toggleActions('changeDelegateKey')}
+                    disabled={!memberAddressLoggedIn && parseInt(memberAddress)}
+                  >
+                    Change Delegate Key
+                  </ButtonSecondary>
+                )}
+              </ActionsDropdownContentDiv>
+            </>
+          ) : null}
+        </ActionsDropdownDiv>
       </WalletHeaderDiv>
       <SwitchHeaderDiv>
         <SelectedElementButton
