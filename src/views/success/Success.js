@@ -21,12 +21,12 @@ const Success = ({ location }) => {
           </h2>
           {action ? (
             <p>
-              Your proposal hase been {action} on chain. The update will show in
+              Your proposal has been {action} on chain. The update will show in
               the proposal details soon.
             </p>
           ) : (
             <p>
-              Your proposal hase been submitted on chain. It will show up in the
+              Your proposal has been submitted on chain. It will show up in the
               proposal list soon.
             </p>
           )}
