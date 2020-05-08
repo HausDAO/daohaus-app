@@ -225,7 +225,7 @@ const UserBalance = ({ toggle }) => {
               ? ` as delegate for ${memberAddress &&
                   truncateAddr(memberAddress)}`
               : null}
-            {!parseInt(memberAddress) ? ` (has delegate)` : null}
+            {memberAddress != 0x00 ? ` (has delegate ${memberAddress})` : null}
           </StatusP>
           <CopyToClipboard
             onCopy={onCopy}
@@ -369,7 +369,7 @@ const UserBalance = ({ toggle }) => {
                 {+daoData.version === 2 && data && data.member ? (
                   <p>Deposit Token: {data.member.moloch.depositToken.symbol}</p>
                 ) : (
-                  <>{data && <p>{data.member.moloch.tokenSymbol}</p>}</>
+                  <>{data && data.member && <p>{data.member.moloch.tokenSymbol}</p>}</>
                 )}
                 <DataDiv>
                   {currentWallet.tokenBalance}
