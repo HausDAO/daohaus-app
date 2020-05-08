@@ -5,6 +5,8 @@ import ProposalKickedMember from './ProposalKickedMember';
 import config from '../../config';
 
 const ProposalGutsV2 = ({ proposal, daoData }) => {
+  console.log(proposal);
+  
   const memberUrlV2 = (addr) => {
     return  `/dao/${daoData.contractAddress}/member/${daoData.contractAddress}-member-${addr}`
   }
@@ -26,7 +28,7 @@ const ProposalGutsV2 = ({ proposal, daoData }) => {
           {proposal.proposalType === 'Funding Proposal' ? (
             <>
               <h5 className="Label">Proposed by</h5>
-              <p className="Data">{proposal.memberAddress}</p>
+              <p className="Data">{proposal.proposer}</p>
               <h5 className="Label">Funding for</h5>
               <p className="Data">{proposal.applicant}</p>
             </>
