@@ -225,7 +225,7 @@ const UserBalance = ({ toggle }) => {
               ? ` as delegate for ${memberAddress &&
                   truncateAddr(memberAddress)}`
               : null}
-            {memberAddress != 0x00 ? ` (has delegate ${memberAddress})` : null}
+            {/* {!parseInt(memberAddress) ? ` (has delegate)` : null} */}
           </StatusP>
           <CopyToClipboard
             onCopy={onCopy}
