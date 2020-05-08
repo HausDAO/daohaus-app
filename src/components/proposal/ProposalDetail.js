@@ -79,8 +79,12 @@ const ProposalDetail = ({ proposal, processProposal, submitVote, canVote }) => {
     proposal.moloch.periodDuration,
   );
   const title = titleMaker(proposal);
-  const memberUrlV1 = `/dao/${daoData.contractAddress}/member/${daoData.contractAddress}-${proposal.memberAddress}`;
-
+  console.log('proposal', proposal);
+  
+  //const memberUrlV1 = `/dao/${daoData.contractAddress}/member/${daoData.contractAddress}-member-${proposal.memberAddress}`;
+  const memberUrlV1 = (addr) => {
+    return  `/dao/${daoData.contractAddress}/member/${daoData.contractAddress}-member-${addr}`
+  }
   return (
     <ProposalDetailDiv>
       <TimerDiv>
@@ -103,10 +107,10 @@ const ProposalDetail = ({ proposal, processProposal, submitVote, canVote }) => {
       ) : (
         <>
           <h5 className="Label">Applicant Address</h5>
-          <p className="Data">{proposal.applicantAddress}</p>
+          <p className="Data">{proposal.applicant}</p>
           <h5 className="Label">Proposor Address</h5>
           <p className="Data">
-            <a href={memberUrlV1}>{proposal.memberAddress}</a>
+            <a href={memberUrlV1(proposal.memberAddress)}>{proposal.memberAddress}</a>
           </p>
 
           <div className="Offer">
