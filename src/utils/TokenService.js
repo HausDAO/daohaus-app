@@ -114,7 +114,7 @@ export class SdkTokenService extends TokenService {
     this.bcProcessor.setTx(
       hash,
       this.accountAddress,
-      `Update Token Allowance to ${wad}`,
+      `Update Token Allowance`,
       true,
     );
     return hash;
