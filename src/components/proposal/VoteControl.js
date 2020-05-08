@@ -161,9 +161,8 @@ const VoteControl = ({ submitVote, proposal }) => {
       return false;
     }
     // TODO: can we get voting period status on v2
-    return +daoData.version === 2
-      ? proposal.sponsored
-      : proposal.status === 'VotingPeriod';
+    
+    return proposal.status === 'VotingPeriod';
   };
 
   const usersVote = (votes) => {
