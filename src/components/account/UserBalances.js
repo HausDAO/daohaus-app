@@ -80,6 +80,8 @@ const UserBalance = ({ toggle }) => {
     if (!data || !data.member) {
       return;
     }
+    console.log(data);
+    
     setTokenBalances(data.member.tokenBalances);
     // eslint-disable-next-line
   }, [data]);
@@ -225,7 +227,7 @@ const UserBalance = ({ toggle }) => {
               ? ` as delegate for ${memberAddress &&
                   truncateAddr(memberAddress)}`
               : null}
-            {/* {!parseInt(memberAddress) ? ` (has delegate)` : null} */}
+            {data && data.member && data.member.delegateKey !== data.member.memberAddress ? ` (has delegate ${truncateAddr(data.member.delegateKey)})` : null}
           </StatusP>
           <CopyToClipboard
             onCopy={onCopy}
