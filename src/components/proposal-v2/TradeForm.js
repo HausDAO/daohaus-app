@@ -52,12 +52,19 @@ const TradeForm = (props) => {
   // get whitelist
   useEffect(() => {
     if (data && data.moloch) {
-      console.log('set', data);
+      const depositToken = data.moloch.depositToken.tokenAddress;
 
       setTokenData(
         data.moloch.tokenBalances
-          .reverse()
           .filter((token) => token.guildBank)
+          // move deposit token to the top
+          .sort((x, y) => {
+            return x.token.tokenAddress === depositToken
+              ? -1
+              : y.token.tokenAddress === depositToken
+              ? 1
+              : 0;
+          })
           .map((token) => ({
             label: token.symbol || token.tokenAddress,
             value: token.token.tokenAddress,
