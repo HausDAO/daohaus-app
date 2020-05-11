@@ -10,7 +10,7 @@ import {
 } from '../../contexts/Store';
 import Loading from '../shared/Loading';
 
-const RagequitForm = () => {
+const RagequitForm = ({ hide }) => {
   const [daoService] = useContext(DaoServiceContext);
   const [currentWallet] = useContext(CurrentWalletContext);
   const [loading, setLoading] = useContext(LoaderContext);
@@ -27,7 +27,6 @@ const RagequitForm = () => {
     };
 
     checkCanRage();
-
     // eslint-disable-next-line
   }, [currentWallet]);
 
@@ -54,7 +53,6 @@ const RagequitForm = () => {
         }}
         onSubmit={async (values, { setSubmitting, resetForm }) => {
           setLoading(true);
-          console.log(values);
 
           try {
             if (daoData.version === 2) {
@@ -75,6 +73,7 @@ const RagequitForm = () => {
             resetForm();
             setLoading(false);
             setSubmitting(false);
+            hide('ragequit');
           }
         }}
       >
