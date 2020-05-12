@@ -47,10 +47,18 @@ const NewMemberForm = (props) => {
   // get whitelist
   useEffect(() => {
     if (data && data.moloch) {
+      const depositToken = data.moloch.depositToken.tokenAddress;
       setTokenData(
         data.moloch.tokenBalances
           .filter((token) => token.guildBank)
-          .reverse()
+          // move deposit token to the top
+          .sort((x, y) => {
+            return x.token.tokenAddress === depositToken
+              ? -1
+              : y.token.tokenAddress === depositToken
+              ? 1
+              : 0;
+          })
           .map((token) => ({
             label: token.symbol || token.tokenAddress,
             value: token.token.tokenAddress,

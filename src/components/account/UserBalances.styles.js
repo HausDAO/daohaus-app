@@ -67,8 +67,7 @@ export const WalletOverlayContentsDiv = styled(FlexCenterDiv)`
 export const StatusP = styled.p`
   font-size: 0.85em;
   position: relative;
-  color: ${(props) =>
-    props.status === 'disconnected' ? props.theme.danger : props.theme.success};
+  color: rgba(255, 255, 255, 0.85);
   margin-left: 15px;
   margin-top: 0;
   margin-bottom: 5px;
