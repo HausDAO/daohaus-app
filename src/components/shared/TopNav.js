@@ -36,6 +36,7 @@ const BrandLink = styled(Link)`
   background-image: url(${(props) => props.theme.brand});
   background-size: contain;
   background-repeat: no-repeat;
+  background-position: center center;
   height: 48px;
   width: ${(props) => (props.theme.brand === '' ? 'auto' : '180px')};
   min-width: 180px;
