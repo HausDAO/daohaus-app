@@ -47,15 +47,22 @@ const NewMemberForm = (props) => {
   // get whitelist
   useEffect(() => {
     if (data && data.moloch) {
+      const depositTokenAddress = data.moloch.depositToken.tokenAddress;
+      const depositToken = data.moloch.tokenBalances.find(
+        (token) => token.token.tokenAddress === depositTokenAddress,
+      );
+      const tokenArray = data.moloch.tokenBalances.filter(
+        (token) =>
+          token.guildBank && token.token.tokenAddress !== depositTokenAddress,
+      );
+      tokenArray.unshift(depositToken);
       setTokenData(
-        data.moloch.tokenBalances
-          .filter((token) => token.guildBank)
-          .reverse()
-          .map((token) => ({
-            label: token.symbol || token.tokenAddress,
-            value: token.token.tokenAddress,
-            decimals: token.decimals,
-          })),
+        tokenArray.map((token) => ({
+          label: token.symbol || token.tokenAddress,
+          value: token.token.tokenAddress,
+          decimals: token.decimals,
+          balance: token.tokenBalance,
+        })),
       );
     }
   }, [data]);
@@ -64,6 +71,20 @@ const NewMemberForm = (props) => {
   if (error) {
     console.log('error', error);
   }
+
+  const validateUnlockedBalance = async (amount, token) => {
+    // this is triggered on any blur
+    const balance = await daoService.token.balanceOfToken(token);
+    if (amount && amount > balance) {
+      return 'Not enough tokens to tribute';
+    }
+
+    const amountApproved = await daoService.token.unlocked(token);
+    if (!amount || amountApproved > 0) {
+      return false;
+    }
+    return 'Tribute token must be unlocked';
+  };
 
   return (
     <FormContainer>
@@ -117,7 +138,7 @@ const NewMemberForm = (props) => {
                   setFormLoading(false);
                   history.push(`/dao/${daoService.daoAddress}/success`);
                 } catch (err) {
-                  console.log('cancelled', err);
+                  console.log('Error: ', err);
                   setSubmitting(false);
                   setFormLoading(false);
                 }
@@ -185,6 +206,12 @@ const NewMemberForm = (props) => {
                       component={TributeInput}
                       label="Token Tribute"
                       token={props.values.tributeToken}
+                      validate={() =>
+                        validateUnlockedBalance(
+                          props.values.tributeOffered,
+                          props.values.tributeToken,
+                        )
+                      }
                     ></Field>
                     <Field
                       name="tributeToken"
