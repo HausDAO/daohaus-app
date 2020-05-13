@@ -77,6 +77,20 @@ const TradeForm = (props) => {
     console.log('error', error);
   }
 
+  const validateUnlockedBalance = async (amount, token) => {
+    // this is triggered on any blur
+    const balance = await daoService.token.balanceOfToken(token);
+    if (amount && amount > balance) {
+      return 'Not enough tokens to tribute';
+    }
+
+    const amountApproved = await daoService.token.unlocked(token);
+    if (!amount || amountApproved > 0) {
+      return false;
+    }
+    return 'Tribute token must be unlocked';
+  };
+
   return (
     <FormContainer>
       <h1>Trade Proposal</h1>
@@ -188,6 +202,12 @@ const TradeForm = (props) => {
                       component={TributeInput}
                       label="Token Tribute"
                       token={props.values.tributeToken}
+                      validate={() =>
+                        validateUnlockedBalance(
+                          props.values.tributeOffered,
+                          props.values.tributeToken,
+                        )
+                      }
                     ></Field>
                     <Field
                       name="tributeToken"

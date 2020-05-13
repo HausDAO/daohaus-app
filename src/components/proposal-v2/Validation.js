@@ -45,3 +45,4 @@ export const WhiteListGuildKickSchema = Yup.object().shape({
     .matches(/\b0x[0-9a-fA-F]{10,40}\b/, 'Invalid Address')
     .required('Required'),
 });
+
