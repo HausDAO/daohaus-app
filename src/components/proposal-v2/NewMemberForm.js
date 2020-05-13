@@ -124,7 +124,7 @@ const NewMemberForm = (props) => {
                   setFormLoading(false);
                   history.push(`/dao/${daoService.daoAddress}/success`);
                 } catch (err) {
-                  console.log('cancelled', err);
+                  console.log('Error: ', err);
                   setSubmitting(false);
                   setFormLoading(false);
                 }

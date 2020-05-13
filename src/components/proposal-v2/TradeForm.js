@@ -112,28 +112,32 @@ const TradeForm = (props) => {
                   description: values.description,
                   link: values.link,
                 });
-
-                await daoService.mcDao.submitProposal(
-                  values.sharesRequested,
-                  values.lootRequested,
-                  valToDecimalString(
-                    values.tributeOffered,
+                try {
+                  await daoService.mcDao.submitProposal(
+                    values.sharesRequested,
+                    values.lootRequested,
+                    valToDecimalString(
+                      values.tributeOffered,
+                      values.tributeToken,
+                      tokenData,
+                    ),
                     values.tributeToken,
-                    tokenData,
-                  ),
-                  values.tributeToken,
-                  valToDecimalString(
-                    values.paymentRequested,
+                    valToDecimalString(
+                      values.paymentRequested,
+                      values.paymentToken,
+                      tokenData,
+                    ),
                     values.paymentToken,
-                    tokenData,
-                  ),
-                  values.paymentToken,
-                  detailsObj,
-                );
-
-                setSubmitting(false);
-                setFormLoading(false);
-                history.push(`/dao/${daoService.daoAddress}/success`);
+                    detailsObj,
+                  );
+                  setSubmitting(false);
+                  setFormLoading(false);
+                  history.push(`/dao/${daoService.daoAddress}/success`);
+                } catch (err) {
+                  setSubmitting(false);
+                  setFormLoading(false);
+                  console.log('Error:', err);
+                }
               }}
             >
               {({ isSubmitting, ...props }) => (
