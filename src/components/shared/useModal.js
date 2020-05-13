@@ -18,10 +18,10 @@ const useModal = () => {
   });
 
   function toggle(modalName) {
-    setIsShowing({
-      ...isShowing,
+    setIsShowing((s) => ({
+      ...s,
       ...{ [modalName]: !isShowing[modalName] },
-    });
+    }));
   }
 
   function open(modalName) {

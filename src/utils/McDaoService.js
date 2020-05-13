@@ -115,8 +115,6 @@ export class McDaoService {
     return info;
   }
 
-  // V2 call functions TODO: maybe not needed, can we get these from thegraph?
-
   async getApprovedTokens() {
     const tokenAddresses = await this.daoContract.methods
       .approvedTokens()
@@ -266,19 +264,7 @@ export class SdkMcDaoService extends McDaoService {
       this.daoContract.options.address,
     );
 
-    const queueLength = await this.daoContract.methods
-      .getProposalQueueLength()
-      .call();
     const parseDetails = JSON.parse(details);
-    const proposalObj = {
-      proposalId: queueLength + '',
-      molochContractAddress: this.contractAddr,
-      title: parseDetails.title,
-      description: parseDetails.description,
-      link: parseDetails.link,
-    };
-
-    post('moloch/proposal', proposalObj);
 
     this.bcProcessor.setTx(
       hash,
@@ -379,27 +365,11 @@ export class Web3McDaoService extends McDaoService {
   }
 
   async submitProposal(applicant, tokenTribute, sharesRequested, details) {
-
-    const queueLength = await this.daoContract.methods
-    .getProposalQueueLength()
-    .call();
-
     const txReceipt = await this.daoContract.methods
       .submitProposal(applicant, tokenTribute, sharesRequested, details)
       .send({ from: this.accountAddr });
-    console.log(txReceipt);
-    
+
     const parseDetails = JSON.parse(details);
-
-    const proposalObj = {
-      proposalId: queueLength + '',
-      molochContractAddress: this.contractAddr,
-      title: parseDetails.title,
-      description: parseDetails.description,
-      link: parseDetails.link,
-    };
-
-    post('moloch/proposal', proposalObj);
 
     this.bcProcessor.setTx(
       txReceipt.transactionHash,
@@ -524,19 +494,7 @@ export class Web3McDaoServiceV2 extends Web3McDaoService {
       )
       .send({ from: this.accountAddr });
 
-    const queueLength = await this.daoContract.methods.proposalCount().call();
     const parseDetails = JSON.parse(details);
-    console.log('queueLength', queueLength);
-
-    const proposalObj = {
-      proposalId: queueLength - 1 + '',
-      molochContractAddress: this.contractAddr,
-      title: parseDetails.title,
-      description: parseDetails.description,
-      link: parseDetails.link,
-    };
-
-    post('moloch/proposal', proposalObj);
 
     this.bcProcessor.setTx(
       txReceipt.transactionHash,
@@ -552,19 +510,7 @@ export class Web3McDaoServiceV2 extends Web3McDaoService {
       .submitGuildKickProposal(memberToKick, details)
       .send({ from: this.accountAddr });
 
-    const queueLength = await this.daoContract.methods.proposalCount().call();
     const parseDetails = JSON.parse(details);
-    console.log('queueLength', queueLength);
-
-    const proposalObj = {
-      proposalId: queueLength - 1 + '',
-      molochContractAddress: this.contractAddr,
-      title: parseDetails.title,
-      description: parseDetails.description,
-      link: parseDetails.link,
-    };
-
-    post('moloch/proposal', proposalObj);
 
     this.bcProcessor.setTx(
       txReceipt.transactionHash,
@@ -587,19 +533,7 @@ export class Web3McDaoServiceV2 extends Web3McDaoService {
       console.log(err);
     }
 
-    const queueLength = await this.daoContract.methods.proposalCount().call();
     const parseDetails = JSON.parse(details);
-    console.log('queueLength', queueLength);
-
-    const proposalObj = {
-      proposalId: queueLength - 1 + '',
-      molochContractAddress: this.contractAddr,
-      title: parseDetails.title,
-      description: parseDetails.description,
-      link: parseDetails.link,
-    };
-
-    post('moloch/proposal', proposalObj);
 
     this.bcProcessor.setTx(
       txReceipt.transactionHash,

@@ -11,7 +11,7 @@ import {
   DaoServiceContext,
 } from '../../contexts/Store';
 
-const ApproveAllowance = ({ client }) => {
+const ApproveAllowance = ({ client, hide }) => {
   const [currentUser] = useContext(CurrentUserContext);
   const [loading, setLoading] = useContext(LoaderContext);
   const [currentWallet] = useContext(CurrentWalletContext);
@@ -46,6 +46,7 @@ const ApproveAllowance = ({ client }) => {
               daoService.web3.utils.toWei(values.amount),
             );
             setFormSuccess(true);
+            hide('allowanceForm');
           } catch (e) {
             console.error(`Approving weth: ${e.toString()}`);
             alert(`Something went wrong. Please try again.`);

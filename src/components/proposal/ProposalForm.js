@@ -2,7 +2,6 @@ import React, { useContext, useState } from 'react';
 import { withRouter, Link } from 'react-router-dom';
 import { useQuery } from 'react-apollo';
 import { Formik, Form, Field, ErrorMessage } from 'formik';
-import shortid from 'shortid';
 import { weiToEth, anyToBN, ethToWei } from '@netgum/utils';
 
 import {
@@ -105,7 +104,6 @@ const ProposalForm = ({ history }) => {
               return errors;
             }}
             onSubmit={async (values, { setSubmitting }) => {
-              const uuid = shortid.generate();
               setLoading(true);
               try {
                 await daoService.mcDao.submitProposal(
@@ -113,7 +111,6 @@ const ProposalForm = ({ history }) => {
                   ethToWei(values.tokenTribute.toString()),
                   values.sharesRequested + '',
                   JSON.stringify({
-                    id: uuid,
                     title: values.title,
                     description: values.description,
                     link: values.link,

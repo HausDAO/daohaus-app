@@ -5,10 +5,9 @@ import ProposalKickedMember from './ProposalKickedMember';
 import config from '../../config';
 
 const ProposalGutsV2 = ({ proposal, daoData }) => {
-  
   const memberUrlV2 = (addr) => {
-    return  `/dao/${daoData.contractAddress}/member/${daoData.contractAddress}-member-${addr}`
-  }
+    return `/dao/${daoData.contractAddress}/member/${daoData.contractAddress}-member-${addr}`;
+  };
   return (
     <div className="ProposalGuts">
       {proposal.cancelled && <p style={{ color: 'red' }}>Proposal Cancelled</p>}
@@ -81,7 +80,7 @@ const ProposalGutsV2 = ({ proposal, daoData }) => {
       {proposal.whitelist ? (
         <>
           <h5 className="Label">Proposed by</h5>
-          <p className="Data">{proposal.memberAddress}</p>
+          <p className="Data">{proposal.proposer}</p>
           <h5 className="Label">Token Symbol</h5>
           <p className="Data">{proposal.tributeTokenSymbol}</p>
           <h5 className="Label">Token Contract</h5>
@@ -110,7 +109,7 @@ const ProposalGutsV2 = ({ proposal, daoData }) => {
           <p className="Data">{proposal.applicant}</p>
 
           <h5 className="Label">Proposed by</h5>
-          <p className="Data">{proposal.memberAddress}</p>
+          <p className="Data">{proposal.proposer}</p>
           <ProposalKickedMember proposal={proposal} />
         </>
       ) : null}
@@ -121,7 +120,7 @@ const ProposalGutsV2 = ({ proposal, daoData }) => {
           <p className="Data">{proposal.applicant}</p>
 
           <h5 className="Label">Proposed by</h5>
-          <p className="Data">{proposal.memberAddress}</p>
+          <p className="Data">{proposal.proposer}</p>
 
           <div className="Offer">
             <div className="Shares">

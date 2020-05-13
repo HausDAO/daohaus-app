@@ -7,7 +7,7 @@ import { LoaderContext, DaoServiceContext } from '../../contexts/Store';
 import Loading from '../shared/Loading';
 import Web3 from 'web3';
 
-const ChangeDelegateKeyForm = () => {
+const ChangeDelegateKeyForm = ({ hide }) => {
   const [daoService] = useContext(DaoServiceContext);
   const [loading, setLoading] = useContext(LoaderContext);
   const [formSuccess, setFormSuccess] = useState(false);
@@ -37,6 +37,7 @@ const ChangeDelegateKeyForm = () => {
           try {
             await daoService.mcDao.updateDelegateKey(values.newDelegateKey);
             setFormSuccess(true);
+            hide('changeDelegateKey');
           } catch (e) {
             console.error(`Error changing delegate key: ${e.toString()}`);
             alert(`Something went wrong. Please try again.`);
