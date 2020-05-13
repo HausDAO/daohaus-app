@@ -75,6 +75,10 @@ const FundingForm = (props) => {
   const validateUnlockedBalance = async (amount, token) => {
     // this is triggered on any blur
     const balance = await daoService.token.balanceOfToken(token);
+
+    console.log('balance', balance);
+    console.log('token', token);
+
     if (amount && amount > balance) {
       return 'Not enough tokens to tribute';
     }

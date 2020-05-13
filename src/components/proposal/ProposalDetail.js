@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useContext } from 'react';
+import React, { useContext } from 'react';
 import ReactPlayer from 'react-player';
 import styled from 'styled-components';
 
@@ -8,12 +8,7 @@ import {
   descriptionMaker,
   linkMaker,
 } from '../../utils/ProposalHelper';
-import {
-  CurrentUserContext,
-  DaoServiceContext,
-  DaoDataContext,
-} from '../../contexts/Store';
-import { get } from '../../utils/Requests';
+import { CurrentUserContext, DaoDataContext } from '../../contexts/Store';
 import Web3Service from '../../utils/Web3Service';
 import VoteControl from './VoteControl';
 import ValueDisplay from '../shared/ValueDisplay';
@@ -45,46 +40,20 @@ const TimerDiv = styled.div`
 `;
 
 const ProposalDetail = ({ proposal, processProposal, submitVote, canVote }) => {
-  const [detailData, setDetailData] = useState();
   const [currentUser] = useContext(CurrentUserContext);
-  const [daoService] = useContext(DaoServiceContext);
   const [daoData] = useContext(DaoDataContext);
-
-  const id =
-    +daoData.version === 2 ? proposal.proposalId : proposal.proposalIndex;
-
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const metaData = await get(
-          `moloch/proposal/${daoService.daoAddress.toLowerCase()}-${id}`,
-        );
-
-        setDetailData(metaData.data);
-      } catch (err) {
-        console.log(err);
-
-        setDetailData({
-          description: descriptionMaker(proposal),
-          link: linkMaker(proposal),
-        });
-      }
-    };
-    fetchData();
-    // eslint-disable-next-line
-  }, []);
 
   const countDown = getProposalCountdownText(
     proposal,
     proposal.moloch.periodDuration,
   );
   const title = titleMaker(proposal);
-  console.log('proposal', proposal);
-  
-  //const memberUrlV1 = `/dao/${daoData.contractAddress}/member/${daoData.contractAddress}-member-${proposal.memberAddress}`;
+  const description = descriptionMaker(proposal);
+  const link = linkMaker(proposal);
+
   const memberUrlV1 = (addr) => {
-    return  `/dao/${daoData.contractAddress}/member/${daoData.contractAddress}-member-${addr}`
-  }
+    return `/dao/${daoData.contractAddress}/member/${daoData.contractAddress}-member-${addr}`;
+  };
   return (
     <ProposalDetailDiv>
       <TimerDiv>
@@ -110,7 +79,9 @@ const ProposalDetail = ({ proposal, processProposal, submitVote, canVote }) => {
           <p className="Data">{proposal.applicant}</p>
           <h5 className="Label">Proposor Address</h5>
           <p className="Data">
-            <a href={memberUrlV1(proposal.memberAddress)}>{proposal.memberAddress}</a>
+            <a href={memberUrlV1(proposal.memberAddress)}>
+              {proposal.memberAddress}
+            </a>
           </p>
 
           <div className="Offer">
@@ -140,33 +111,25 @@ const ProposalDetail = ({ proposal, processProposal, submitVote, canVote }) => {
       )}
 
       <div>
-        {detailData && detailData.description ? (
+        {description ? (
           <div>
             <h5>Description</h5>
-            {detailData.description.indexOf('http') > -1 ? (
-              <a
-                href={detailData.description}
-                rel="noopener noreferrer"
-                target="_blank"
-              >
-                {detailData.description}
+            {description.indexOf('http') > -1 ? (
+              <a href={description} rel="noopener noreferrer" target="_blank">
+                {description}
               </a>
             ) : (
-              <p>{detailData.description}</p>
+              <p>{description}</p>
             )}
           </div>
         ) : null}
-        {detailData &&
-        detailData.link &&
-        ReactPlayer.canPlay(detailData.link) ? (
+        {link && ReactPlayer.canPlay(link) ? (
           <div className="Video">
-            <ReactPlayer url={detailData.link} playing={false} loop={false} />
+            <ReactPlayer url={link} playing={false} loop={false} />
           </div>
-        ) : detailData &&
-          detailData.link &&
-          detailData.link.indexOf('http') > -1 ? (
+        ) : link && link.indexOf('http') > -1 ? (
           <div className="Link">
-            <a href={detailData.link} rel="noopener noreferrer" target="_blank">
+            <a href={link} rel="noopener noreferrer" target="_blank">
               Link
             </a>
           </div>
