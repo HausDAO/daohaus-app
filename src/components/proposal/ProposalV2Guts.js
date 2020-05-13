@@ -63,6 +63,18 @@ const ProposalGutsV2 = ({ proposal, daoData }) => {
               <h5>Loot</h5>
               <h2 className="Data">{proposal.lootRequested}</h2>
             </div>
+            <div className="Shares">
+              <h5>Requesting</h5>
+              <h2 className="Data">
+                <ValueDisplay
+                  value={
+                    proposal.paymentRequested /
+                    10 ** proposal.paymentTokenDecimals
+                  }
+                  symbolOverride={proposal.paymentTokenSymbol}
+                />
+              </h2>
+            </div>
           </div>
         </>
       ) : null}
