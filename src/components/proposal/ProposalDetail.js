@@ -79,7 +79,9 @@ const ProposalDetail = ({ proposal, processProposal, submitVote, canVote }) => {
           <p className="Data">{proposal.applicant}</p>
           <h5 className="Label">Proposor Address</h5>
           <p className="Data">
-            <a href={memberUrlV1(proposal.proposer)}>{proposal.proposer}</a>
+            <a href={memberUrlV1(proposal.memberAddress)}>
+              {proposal.memberAddress}
+            </a>
           </p>
 
           <div className="Offer">
