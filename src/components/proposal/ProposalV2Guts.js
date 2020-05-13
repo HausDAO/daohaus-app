@@ -5,7 +5,6 @@ import ProposalKickedMember from './ProposalKickedMember';
 import config from '../../config';
 
 const ProposalGutsV2 = ({ proposal, daoData }) => {
-  console.log(proposal);
   
   const memberUrlV2 = (addr) => {
     return  `/dao/${daoData.contractAddress}/member/${daoData.contractAddress}-member-${addr}`
