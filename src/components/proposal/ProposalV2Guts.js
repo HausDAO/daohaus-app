@@ -5,7 +5,6 @@ import ProposalKickedMember from './ProposalKickedMember';
 import config from '../../config';
 
 const ProposalGutsV2 = ({ proposal, daoData }) => {
-  console.log(proposal);
   
   const memberUrlV2 = (addr) => {
     return  `/dao/${daoData.contractAddress}/member/${daoData.contractAddress}-member-${addr}`
@@ -62,6 +61,18 @@ const ProposalGutsV2 = ({ proposal, daoData }) => {
             <div className="Shares">
               <h5>Loot</h5>
               <h2 className="Data">{proposal.lootRequested}</h2>
+            </div>
+            <div className="Shares">
+              <h5>Requesting</h5>
+              <h2 className="Data">
+                <ValueDisplay
+                  value={
+                    proposal.paymentRequested /
+                    10 ** proposal.paymentTokenDecimals
+                  }
+                  symbolOverride={proposal.paymentTokenSymbol}
+                />
+              </h2>
             </div>
           </div>
         </>

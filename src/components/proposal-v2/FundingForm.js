@@ -47,25 +47,22 @@ const FundingForm = (props) => {
   // get whitelist
   useEffect(() => {
     if (data && data.moloch) {
-      const depositToken = data.moloch.depositToken.tokenAddress;
-
+      const depositTokenAddress = data.moloch.depositToken.tokenAddress;
+      const depositToken = data.moloch.tokenBalances.find(
+        (token) => token.token.tokenAddress === depositTokenAddress,
+      );
+      const tokenArray = data.moloch.tokenBalances.filter(
+        (token) =>
+          token.guildBank && token.token.tokenAddress !== depositTokenAddress,
+      );
+      tokenArray.unshift(depositToken);
       setTokenData(
-        data.moloch.tokenBalances
-          .filter((token) => token.guildBank)
-          // move deposit token to the top
-          .sort((x, y) => {
-            return x.token.tokenAddress === depositToken
-              ? -1
-              : y.token.tokenAddress === depositToken
-              ? 1
-              : 0;
-          })
-          .map((token) => ({
-            label: token.symbol || token.tokenAddress,
-            value: token.token.tokenAddress,
-            decimals: token.decimals,
-            balance: token.tokenBalance,
-          })),
+        tokenArray.map((token) => ({
+          label: token.symbol || token.tokenAddress,
+          value: token.token.tokenAddress,
+          decimals: token.decimals,
+          balance: token.tokenBalance,
+        })),
       );
     }
   }, [data]);
@@ -74,6 +71,20 @@ const FundingForm = (props) => {
   if (error) {
     console.log('error', error);
   }
+
+  const validateUnlockedBalance = async (amount, token) => {
+    // this is triggered on any blur
+    const balance = await daoService.token.balanceOfToken(token);
+    if (amount && amount > balance) {
+      return 'Not enough tokens to tribute';
+    }
+
+    const amountApproved = await daoService.token.unlocked(token);
+    if (!amount || amountApproved > 0) {
+      return false;
+    }
+    return 'Tribute token must be unlocked';
+  };
 
   return (
     <FormContainer>
@@ -110,32 +121,36 @@ const FundingForm = (props) => {
                   description: values.description,
                   link: values.link,
                 });
-
-                await daoService.mcDao.submitProposal(
-                  values.sharesRequested,
-                  values.lootRequested,
-                  valToDecimalString(
-                    values.tributeOffered,
+                try {
+                  await daoService.mcDao.submitProposal(
+                    values.sharesRequested,
+                    values.lootRequested,
+                    valToDecimalString(
+                      values.tributeOffered,
+                      values.tributeToken,
+                      tokenData,
+                    ),
                     values.tributeToken,
-                    tokenData,
-                  ),
-                  values.tributeToken,
-                  valToDecimalString(
-                    values.paymentRequested,
+                    valToDecimalString(
+                      values.paymentRequested,
+                      values.paymentToken,
+                      tokenData,
+                    ),
                     values.paymentToken,
-                    tokenData,
-                  ),
-                  values.paymentToken,
-                  detailsObj,
-                  values.applicant,
-                );
-
-                setSubmitting(false);
-                setFormLoading(false);
-                history.push(`/dao/${daoService.daoAddress}/success`);
+                    detailsObj,
+                    values.applicant,
+                  );
+                  setSubmitting(false);
+                  setFormLoading(false);
+                  history.push(`/dao/${daoService.daoAddress}/success`);
+                } catch (err) {
+                  setSubmitting(false);
+                  setFormLoading(false);
+                  console.log('Error:', err);
+                }
               }}
             >
-              {({ isSubmitting, ...props }) => (
+              {({ isSubmitting, errors, ...props }) => (
                 <Form className="Form">
                   <Field name="title">
                     {({ field, form }) => (
@@ -251,6 +266,12 @@ const FundingForm = (props) => {
                         component={TributeInput}
                         label="Token Tribute"
                         token={props.values.tributeToken}
+                        validate={() =>
+                          validateUnlockedBalance(
+                            props.values.tributeOffered,
+                            props.values.tributeToken,
+                          )
+                        }
                       ></Field>
                       <Field
                         name="tributeToken"
@@ -259,11 +280,6 @@ const FundingForm = (props) => {
                         data={tokenData}
                       ></Field>
                     </DropdownInputDiv>
-                    <ErrorMessage name="tributeOffered">
-                      {(msg) => (
-                        <div className="Error">Tribute Offered: {msg}</div>
-                      )}
-                    </ErrorMessage>
                     <ErrorMessage name="tributeToken">
                       {(msg) => (
                         <div className="Error">Tribute Token: {msg}</div>
@@ -273,7 +289,10 @@ const FundingForm = (props) => {
                   <ErrorMessage name="tributeOffered">
                     {(msg) => <div className="Error">{msg}</div>}
                   </ErrorMessage>
-                  <button type="submit" disabled={isSubmitting}>
+                  <button
+                    type="submit"
+                    disabled={isSubmitting || errors.length}
+                  >
                     Submit
                   </button>
                 </Form>
