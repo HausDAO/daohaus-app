@@ -97,7 +97,7 @@ const UserWallet = () => {
             isShowing={isShowing.allowanceForm}
             hide={() => toggle('allowanceForm')}
           >
-            <ApproveAllowance />
+            <ApproveAllowance hide={toggle} />
           </Modal>
 
           <Modal isShowing={isShowing.sendEth} hide={() => toggle('sendEth')}>
@@ -112,14 +112,14 @@ const UserWallet = () => {
           </Modal>
 
           <Modal isShowing={isShowing.ragequit} hide={() => toggle('ragequit')}>
-            <RagequitForm />
+            <RagequitForm hide={toggle} />
           </Modal>
 
           <Modal
             isShowing={isShowing.changeDelegateKey}
             hide={() => toggle('changeDelegateKey')}
           >
-            <ChangeDelegateKeyForm />
+            <ChangeDelegateKeyForm hide={toggle} />
           </Modal>
 
           <Modal isShowing={isShowing.daohaus} hide={() => toggle('daohaus')}>
