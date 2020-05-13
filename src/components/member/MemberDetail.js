@@ -43,7 +43,7 @@ const MemberDetail = ({ member, client }) => {
   const votingPower = (
     (member.shares / +member.moloch.totalShares) *
     100
-  ).toFixed();
+  ).toFixed(1);
 
   return (
     <MemberDetailDiv>
