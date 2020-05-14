@@ -44,21 +44,18 @@ const SyncToken = ({ token }) => {
         <Loading />
       ) : (
         <>
-          {currentWallet.shares > 0 ? (
-            <>
-              <button className="TinyButton" onClick={() => toggle('syncForm')}>
-                !
-              </button>
-              <Modal
-                isShowing={isShowing.syncForm}
-                hide={() => toggle('syncForm')}
-              >
-                <p>
-                  The balance of this token is{' '}
-                  {parseFloat(diff / 10 ** +token.decimals).toFixed(4)} less
-                  than the on-chain balance. Funds might have been sent directly
-                  to the DAO. Sync to update the balance.
-                </p>
+          <button className="TinyButton" onClick={() => toggle('syncForm')}>
+            !
+          </button>
+          <Modal isShowing={isShowing.syncForm} hide={() => toggle('syncForm')}>
+            <p>
+              The balance of this token is{' '}
+              {parseFloat(diff / 10 ** +token.decimals).toFixed(4)} less than
+              the on-chain balance. Funds might have been sent directly to the
+              DAO. Sync to update the balance.
+            </p>
+            {currentWallet.shares > 0 ? (
+              <>
                 {token.tokenBalance > 0 ? (
                   <button onClick={() => syncToken()}>Sync</button>
                 ) : (
@@ -67,9 +64,9 @@ const SyncToken = ({ token }) => {
                     You will need to add to that through a tribute proposal.
                   </p>
                 )}
-              </Modal>
-            </>
-          ) : null}
+              </>
+            ) : null}
+          </Modal>
         </>
       )}
     </SyncTokenDiv>

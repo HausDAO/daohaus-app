@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, { useState } from 'react';
 import ValueDisplay from '../shared/ValueDisplay';
 import styled from 'styled-components';
 
@@ -14,7 +14,7 @@ const WhitelistTokenBalancesDiv = styled.div`
     font-size: 1.25em;
     margin-bottom: 25px !important;
   }
-  a{
+  a {
     margin-bottom: 25px !important;
   }
   p {
@@ -42,11 +42,16 @@ const WhitelistTokenBalancesDiv = styled.div`
 
 const WhitelistTokenBalances = (tokens) => {
   const [hideZeroBalance, setHideZeroBalance] = useState(true);
+
+  const hasZeroBalances = tokens.tokens.some(
+    (token) => !parseInt(token.contractTokenBalance),
+  );
+
   const renderList = () => {
     return tokens.tokens
       .filter((token) => {
-        if(hideZeroBalance){
-          return token.contractTokenBalance > 0
+        if (hideZeroBalance) {
+          return token.contractTokenBalance > 0;
         }
         return true;
       })
@@ -74,7 +79,11 @@ const WhitelistTokenBalances = (tokens) => {
   return (
     <WhitelistTokenBalancesDiv>
       <h5>Guildbank Token Balances</h5>
-      <a onClick={() => setHideZeroBalance(!hideZeroBalance)}>{!hideZeroBalance ? 'Hide' : 'Show'} Zero Balance</a>
+      {hasZeroBalances && (
+        <a onClick={() => setHideZeroBalance(!hideZeroBalance)}>
+          {!hideZeroBalance ? 'Hide' : 'Show'} Zero Balances
+        </a>
+      )}
       {renderList()}
     </WhitelistTokenBalancesDiv>
   );
