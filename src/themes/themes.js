@@ -6,6 +6,7 @@ import metaclanBrand from '../assets/themes/metaclanTheme/MetaClan_Text.png';
 import metaclanBg from '../assets/themes/metaclanTheme/MetaClan-Pokemol-Background.jpg';
 import daosquareBrand from '../assets/themes/daosquare/daosquare__logo.png';
 import daosquareBg from '../assets/themes/daosquare/daosquare__bg.jpg';
+import redditmoonsBrand from '../assets/themes/redditmoonsTheme/MOONS.png';
 import redditmoonsBg from '../assets/themes/redditmoonsTheme/moonsBg.jpg';
 
 export const themeMap = {
@@ -85,12 +86,12 @@ export const themeMap = {
   redditmoons: {
     baseFont: `'Roboto', sans-serif`,
     dataFont: `'Share Tech Mono', sans-serif`,
-    baseFontColor: 'white',
-    brand: raidBrand,
+    baseFontColor: 'black',
+    brand: redditmoonsBrand,
     brandBg: redditmoonsBg,
-    appBackground: `rgb(1,2,30)`,
-    primary: `#ff3864`,
-    secondary: `rgb(1,2,30)`,
+    appBackground: `rgba(255,255,255,0.85)`,
+    primary: `#ff4215`,
+    secondary: `#ff4215`,
     tertiary: `rgba(239,73,123,1)`,
     danger: `rgba(239,73,95,1)`,
     success: `rgba(77,204,44,1)`,
