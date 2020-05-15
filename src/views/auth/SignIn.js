@@ -191,7 +191,7 @@ const SignIn = ({ history }) => {
 
             return (
               <Form>
-                <Link to="sign-up">Create a new account &gt;</Link>
+                {/* <Link to="sign-up">Create a new account &gt;</Link> */}
                 {authError && (
                   <div className="Form__auth-error">
                     <p className="Danger">{authError.message}</p>
