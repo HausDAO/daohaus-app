@@ -145,6 +145,11 @@ export const resolvers = {
         );
         const symbol = await tokenService.getSymbol();
 
+        console.log(
+          'kenBalance.token.tokenAddress',
+          tokenBalance.token.tokenAddress,
+        );
+
         return symbol;
       } else {
         return null;
@@ -161,6 +166,8 @@ export const resolvers = {
 
         const decimals = await tokenService.getDecimals();
 
+        console.log('decimals', decimals);
+
         return +decimals;
       } else {
         return null;
@@ -174,6 +181,8 @@ export const resolvers = {
         );
 
         const balance = await tokenService.balanceOf(tokenBalance.moloch.id);
+
+        console.log('balance', balance);
 
         return balance;
       } else {
@@ -193,6 +202,8 @@ export const resolvers = {
           '0x000000000000000000000000000000000000baBe',
           tokenBalance.token.tokenAddress,
         );
+
+        console.log('balance', balance);
 
         return balance;
       } else {

@@ -130,6 +130,8 @@ const Home = () => {
 
   const { loading, error, data } = useQuery(GET_MOLOCH, options);
 
+  console.log('error', error);
+
   if (loading) return <Loading />;
   if (error) return <ErrorMessage message={error} />;
 

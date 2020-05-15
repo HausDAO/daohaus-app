@@ -6,6 +6,7 @@ import metaclanBrand from '../assets/themes/metaclanTheme/MetaClan_Text.png';
 import metaclanBg from '../assets/themes/metaclanTheme/MetaClan-Pokemol-Background.jpg';
 import daosquareBrand from '../assets/themes/daosquare/daosquare__logo.png';
 import daosquareBg from '../assets/themes/daosquare/daosquare__bg.jpg';
+import redditmoonsBg from '../assets/themes/redditmoonsTheme/moonsBg.jpg';
 
 export const themeMap = {
   moloch: {
@@ -79,6 +80,20 @@ export const themeMap = {
     tertiary: `#04d904`,
     danger: `rgba(239,73,95,1)`,
     success: `#04d904`,
+    bright: `rgba(189,134,254,1)`,
+  },
+  redditmoons: {
+    baseFont: `'Roboto', sans-serif`,
+    dataFont: `'Share Tech Mono', sans-serif`,
+    baseFontColor: 'white',
+    brand: raidBrand,
+    brandBg: redditmoonsBg,
+    appBackground: `rgb(1,2,30)`,
+    primary: `#ff3864`,
+    secondary: `rgb(1,2,30)`,
+    tertiary: `rgba(239,73,123,1)`,
+    danger: `rgba(239,73,95,1)`,
+    success: `rgba(77,204,44,1)`,
     bright: `rgba(189,134,254,1)`,
   },
 };
