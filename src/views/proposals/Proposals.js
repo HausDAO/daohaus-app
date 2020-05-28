@@ -37,7 +37,7 @@ const Proposals = ({ match, history }) => {
 
   const options = {
     variables: { contractAddr: daoService.daoAddress.toLowerCase() },
-    pollInterval: 20000,
+    pollInterval: 60000,
     fetchPolicy: 'network-only',
   };
 
