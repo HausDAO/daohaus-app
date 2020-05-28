@@ -82,7 +82,7 @@ const MemberCard = ({ member }) => {
   const votingPower = (
     (member.shares / +member.moloch.totalShares) *
     100
-  ).toFixed(1);
+  ).toFixed(2);
 
   return (
     <Link
