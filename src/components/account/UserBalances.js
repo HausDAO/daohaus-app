@@ -60,7 +60,7 @@ const UserBalance = ({ toggle }) => {
       ? currentUser.attributes['custom:account_address'].toLowerCase()
       : currentUser.username.toLowerCase();
   const options = {
-    pollInterval: 10000,
+    pollInterval: 60000,
     variables: {
       id: `${daoData.contractAddress.toLowerCase()}-member-${memberAddr}`,
     },

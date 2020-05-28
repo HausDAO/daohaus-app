@@ -124,7 +124,7 @@ const Home = () => {
   const { t } = useTranslation();
 
   const options = {
-    pollInterval: 20000,
+    pollInterval: 60000,
     variables: { contractAddr: daoData.contractAddress },
   };
 
