@@ -97,29 +97,35 @@ export const resolvers = {
       return false;
     },
     tributeTokenSymbol: async (proposal, _args, { cache }) => {
-      const tokenService = new TokenService(_web3, proposal.tributeToken);
-      const symbol = await tokenService.getSymbol();
-      return symbol;
+      const symbol = proposal.moloch.tokenBalances.find(
+        (token) => token.token.tokenAddress === proposal.tributeToken,
+      );
+      return symbol ? symbol.token.symbol : null;
     },
     tributeTokenDecimals: async (proposal, _args, { cache }) => {
-      const tokenService = new TokenService(_web3, proposal.tributeToken);
-      const decimals = await tokenService.getDecimals();
-      return +decimals;
+      const decimals = proposal.moloch.tokenBalances.find(
+        (token) => token.token.tokenAddress === proposal.tributeToken,
+      );
+
+      return decimals ? decimals.token.decimals : null;
     },
     paymentTokenSymbol: async (proposal, _args, { cache }) => {
       if (proposal.trade) {
-        const tokenService = new TokenService(_web3, proposal.paymentToken);
-        const symbol = await tokenService.getSymbol();
-        return symbol;
+        const symbol = proposal.moloch.tokenBalances.find(
+          (token) => token.token.tokenAddress === proposal.paymentToken,
+        );
+        return symbol ? symbol.token.symbol : null;
       } else {
         return null;
       }
     },
     paymentTokenDecimals: async (proposal, _args, { cache }) => {
       if (proposal.trade) {
-        const tokenService = new TokenService(_web3, proposal.paymentToken);
-        const decimals = await tokenService.getDecimals();
-        return +decimals;
+        const decimals = proposal.moloch.tokenBalances.find(
+          (token) => token.token.tokenAddress === proposal.paymentToken,
+        );
+
+        return decimals ? decimals.token.decimals : null;
       } else {
         return null;
       }
@@ -139,11 +145,8 @@ export const resolvers = {
   TokenBalance: {
     symbol: async (tokenBalance, _args, { cache }) => {
       if (tokenBalance.guildBank) {
-        const tokenService = new TokenService(
-          _web3,
-          tokenBalance.token.tokenAddress,
-        );
-        const symbol = await tokenService.getSymbol();
+
+        const symbol = tokenBalance.token.symbol;
 
         return symbol;
       } else {
@@ -154,12 +157,9 @@ export const resolvers = {
     },
     decimals: async (tokenBalance, _args, { cache }) => {
       if (tokenBalance.guildBank) {
-        const tokenService = new TokenService(
-          _web3,
-          tokenBalance.token.tokenAddress,
-        );
 
-        const decimals = await tokenService.getDecimals();
+
+        const decimals = tokenBalance.token.decimals;
 
         return +decimals;
       } else {
@@ -168,14 +168,11 @@ export const resolvers = {
     },
     contractTokenBalance: async (tokenBalance, _args, { cache }) => {
       if (tokenBalance.guildBank) {
-        const tokenService = new TokenService(
-          _web3,
-          tokenBalance.token.tokenAddress,
-        );
 
-        const balance = await tokenService.balanceOf(tokenBalance.moloch.id);
 
-        return balance;
+        const balance = tokenBalance.tokenBalance;
+
+        return +balance;
       } else {
         return null;
       }
@@ -194,7 +191,7 @@ export const resolvers = {
           tokenBalance.token.tokenAddress,
         );
 
-        return balance;
+        return +balance;
       } else {
         return null;
       }
@@ -202,14 +199,11 @@ export const resolvers = {
   },
   Token: {
     symbol: async (approvedToken, _args, { cache }) => {
-      const tokenService = new TokenService(_web3, approvedToken.tokenAddress);
-      const symbol = await tokenService.getSymbol();
+      const symbol = approvedToken.symbol;
       return symbol;
     },
     decimals: async (approvedToken, _args, { cache }) => {
-      const tokenService = new TokenService(_web3, approvedToken.tokenAddress);
-
-      const decimals = await tokenService.getDecimals();
+      const decimals = approvedToken.decimals;
 
       return +decimals;
     },
