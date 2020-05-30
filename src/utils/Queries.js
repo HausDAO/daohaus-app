@@ -23,10 +23,14 @@ export const GET_MOLOCH = gql`
       guildBankAddress
       depositToken {
         tokenAddress
+        symbol
+        decimals
       }
       tokenBalances {
         token {
           tokenAddress
+          symbol
+          decimals
         }
         symbol @client
         decimals @client
@@ -96,8 +100,8 @@ export const GET_MEMBER = gql`
         totalShares
         depositToken {
           tokenAddress
-          symbol @client
-          decimals @client
+          symbol
+          decimals
         }
       }
     }
@@ -143,7 +147,17 @@ const baseProposalFields = `
     proposalDeposit
     depositToken {
       tokenAddress
+      symbol
+      decimals
     }
+    tokenBalances {
+      token {
+        tokenAddress
+        symbol
+        decimals
+      }
+    }
+    
   }
   votes {
     id
@@ -153,6 +167,7 @@ const baseProposalFields = `
       memberAddress
     }
   }
+  
   tributeTokenSymbol @client
   tributeTokenDecimals @client
   paymentTokenSymbol @client

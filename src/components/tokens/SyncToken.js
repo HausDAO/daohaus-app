@@ -28,6 +28,8 @@ const SyncToken = ({ token }) => {
   const syncToken = async () => {
     setLoading(true);
     try {
+      console.log('token address', token.token.tokenAddress);
+      
       await daoService.mcDao.collectTokens(token.token.tokenAddress);
       setLoading(false);
     } catch (err) {
@@ -55,7 +57,7 @@ const SyncToken = ({ token }) => {
               >
                 <p>
                   The balance of this token is{' '}
-                  {parseFloat(diff / 10 ** +token.decimals).toFixed(4)} less
+                  {parseFloat(diff / 10 ** +token.token.decimals).toFixed(4)} less
                   than the on-chain balance. Funds might have been sent directly
                   to the DAO. Sync to update the balance.
                 </p>
