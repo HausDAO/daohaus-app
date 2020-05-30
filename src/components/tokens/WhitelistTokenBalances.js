@@ -54,6 +54,7 @@ const WhitelistTokenBalances = (tokens) => {
         return +b.tokenBalance - a.tokenBalance;
       })
       .map((token) => {
+        
         const needSync =
           token.contractTokenBalance !== token.contractBabeBalance;
 

@@ -170,7 +170,12 @@ export const resolvers = {
       if (tokenBalance.guildBank) {
 
 
-        const balance = tokenBalance.tokenBalance;
+        const tokenService = new TokenService(
+          _web3,
+          tokenBalance.token.tokenAddress,
+        );
+
+        const balance = await tokenService.balanceOf(tokenBalance.moloch.id);
 
         return +balance;
       } else {
@@ -189,7 +194,7 @@ export const resolvers = {
         const balance = await mcDaoService.getUserTokenBalance(
           '0x000000000000000000000000000000000000baBe',
           tokenBalance.token.tokenAddress,
-        );
+        );        
 
         return +balance;
       } else {
