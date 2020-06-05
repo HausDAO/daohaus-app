@@ -150,11 +150,15 @@ export const ButtonBackDiv = styled(ButtonDiv)`
   }
 `;
 
+export const LabelH5 = styled.h5`
+  margin: 5px 0px;
+`;
+
 export const DataP = styled.p`
   font-family: ${(props) => props.theme.dataFont};
   font-weight: 400;
   word-break: break-all;
-  margin: 0;
+  margin: 0px 0px 20px 0px;
 `;
 
 export const DataDiv = styled.div`
@@ -176,7 +180,7 @@ export const DataH2 = styled.h2`
   font-family: ${(props) => props.theme.dataFont};
   font-weight: 400;
   word-break: break-all;
-  margin: 0;
+  margin: 0px 0px 20px 0px;
 `;
 
 export const OfferDiv = styled.div`
