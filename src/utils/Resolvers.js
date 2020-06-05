@@ -110,7 +110,7 @@ export const resolvers = {
       return decimals ? decimals.token.decimals : null;
     },
     paymentTokenSymbol: async (proposal, _args, { cache }) => {
-      if (proposal.trade) {
+      if (proposal.paymentRequested > 0) {
         const symbol = proposal.moloch.tokenBalances.find(
           (token) => token.token.tokenAddress === proposal.paymentToken,
         );
@@ -120,7 +120,7 @@ export const resolvers = {
       }
     },
     paymentTokenDecimals: async (proposal, _args, { cache }) => {
-      if (proposal.trade) {
+      if (proposal.paymentRequested > 0) {
         const decimals = proposal.moloch.tokenBalances.find(
           (token) => token.token.tokenAddress === proposal.paymentToken,
         );
