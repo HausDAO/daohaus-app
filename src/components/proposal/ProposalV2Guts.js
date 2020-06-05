@@ -3,6 +3,7 @@ import React from 'react';
 import ValueDisplay from '../shared/ValueDisplay';
 import ProposalKickedMember from './ProposalKickedMember';
 import config from '../../config';
+import { DataP, LabelH5, DataH2 } from '../../App.styles';
 
 const ProposalGutsV2 = ({ proposal, daoData }) => {
   const memberUrlV2 = (addr) => {
@@ -15,10 +16,10 @@ const ProposalGutsV2 = ({ proposal, daoData }) => {
 
       {proposal.sponsored ? (
         <>
-          <h5 className="Label">Sponsored By</h5>
-          <p className="Data">
+          <LabelH5>Sponsored By</LabelH5>
+          <DataP>
             <a href={memberUrlV2(proposal.sponsor)}>{proposal.sponsor}</a>
-          </p>
+          </DataP>
         </>
       ) : null}
 
@@ -26,22 +27,22 @@ const ProposalGutsV2 = ({ proposal, daoData }) => {
         <>
           {proposal.proposalType === 'Funding Proposal' ? (
             <>
-              <h5 className="Label">Proposed by</h5>
-              <p className="Data">{proposal.proposer}</p>
-              <h5 className="Label">Funding for</h5>
-              <p className="Data">{proposal.applicant}</p>
+              <LabelH5>Proposed by</LabelH5>
+              <DataP>{proposal.proposer}</DataP>
+              <LabelH5>Funding for</LabelH5>
+              <DataP>{proposal.applicant}</DataP>
             </>
           ) : (
             <>
-              <h5 className="Label">Applicant</h5>
-              <p className="Data">{proposal.applicant}</p>
+              <LabelH5>Applicant</LabelH5>
+              <DataP>{proposal.applicant}</DataP>
             </>
           )}
 
           {proposal.newMember || +proposal.tributeOffered > 0 ? (
             <div className="Tribute">
-              <h5>Tribute</h5>
-              <h2 className="Data">
+              <LabelH5>Tribute</LabelH5>
+              <DataH2>
                 <ValueDisplay
                   value={
                     proposal.tributeOffered /
@@ -49,22 +50,22 @@ const ProposalGutsV2 = ({ proposal, daoData }) => {
                   }
                   symbolOverride={proposal.tributeTokenSymbol}
                 />
-              </h2>
+              </DataH2>
             </div>
           ) : null}
 
           <div className="Offer">
             <div className="Shares">
-              <h5>Shares</h5>
-              <h2 className="Data">{proposal.sharesRequested}</h2>
+              <LabelH5>Shares</LabelH5>
+              <DataH2>{proposal.sharesRequested}</DataH2>
             </div>
             <div className="Shares">
-              <h5>Loot</h5>
-              <h2 className="Data">{proposal.lootRequested}</h2>
+              <LabelH5>Loot</LabelH5>
+              <DataH2>{proposal.lootRequested}</DataH2>
             </div>
             <div className="Shares">
-              <h5>Requesting</h5>
-              <h2 className="Data">
+              <LabelH5>Requesting</LabelH5>
+              <DataH2>
                 <ValueDisplay
                   value={
                     proposal.paymentRequested /
@@ -72,7 +73,7 @@ const ProposalGutsV2 = ({ proposal, daoData }) => {
                   }
                   symbolOverride={proposal.paymentTokenSymbol}
                 />
-              </h2>
+              </DataH2>
             </div>
           </div>
         </>
@@ -80,14 +81,14 @@ const ProposalGutsV2 = ({ proposal, daoData }) => {
 
       {proposal.whitelist ? (
         <>
-          <h5 className="Label">Proposed by</h5>
-          <p className="Data">{proposal.proposer}</p>
-          <h5 className="Label">Token Symbol</h5>
-          <p className="Data">{proposal.tributeTokenSymbol}</p>
-          <h5 className="Label">Token Contract</h5>
-          <p className="Data">{proposal.tributeToken}</p>
+          <LabelH5>Proposed by</LabelH5>
+          <DataP>{proposal.proposer}</DataP>
+          <LabelH5>Token Symbol</LabelH5>
+          <DataP>{proposal.tributeTokenSymbol}</DataP>
+          <LabelH5>Token Contract</LabelH5>
+          <DataP>{proposal.tributeToken}</DataP>
 
-          <p className="Data">
+          <DataP>
             <a
               href={
                 config.SDK_ENV === 'Kovan'
@@ -100,33 +101,33 @@ const ProposalGutsV2 = ({ proposal, daoData }) => {
             >
               View Token on Etherscan
             </a>
-          </p>
+          </DataP>
         </>
       ) : null}
 
       {proposal.guildkick ? (
         <>
-          <h5 className="Label">Member to kick</h5>
-          <p className="Data">{proposal.applicant}</p>
+          <LabelH5>Member to kick</LabelH5>
+          <DataP>{proposal.applicant}</DataP>
 
-          <h5 className="Label">Proposed by</h5>
-          <p className="Data">{proposal.proposer}</p>
+          <LabelH5>Proposed by</LabelH5>
+          <DataP>{proposal.proposer}</DataP>
           <ProposalKickedMember proposal={proposal} />
         </>
       ) : null}
 
       {proposal.trade ? (
         <>
-          <h5 className="Label">Applicant</h5>
-          <p className="Data">{proposal.applicant}</p>
+          <LabelH5>Applicant</LabelH5>
+          <DataP>{proposal.applicant}</DataP>
 
-          <h5 className="Label">Proposed by</h5>
-          <p className="Data">{proposal.proposer}</p>
+          <LabelH5>Proposed by</LabelH5>
+          <DataP>{proposal.proposer}</DataP>
 
           <div className="Offer">
             <div className="Shares">
-              <h5>Giving</h5>
-              <h2 className="Data">
+              <LabelH5>Giving</LabelH5>
+              <DataH2>
                 <ValueDisplay
                   value={
                     proposal.tributeOffered /
@@ -134,14 +135,14 @@ const ProposalGutsV2 = ({ proposal, daoData }) => {
                   }
                   symbolOverride={proposal.tributeTokenSymbol}
                 />
-              </h2>
+              </DataH2>
             </div>
           </div>
 
           <div className="Offer">
             <div className="Shares">
-              <h5>Requesting</h5>
-              <h2 className="Data">
+              <LabelH5>Requesting</LabelH5>
+              <DataH2>
                 <ValueDisplay
                   value={
                     proposal.paymentRequested /
@@ -149,7 +150,7 @@ const ProposalGutsV2 = ({ proposal, daoData }) => {
                   }
                   symbolOverride={proposal.paymentTokenSymbol}
                 />
-              </h2>
+              </DataH2>
             </div>
           </div>
         </>
