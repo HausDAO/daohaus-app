@@ -9,7 +9,6 @@ const ProposalGutsV2 = ({ proposal, daoData }) => {
   const memberUrlV2 = (addr) => {
     return `/dao/${daoData.contractAddress}/member/${daoData.contractAddress}-member-${addr}`;
   };
-  console.log(proposal);
 
   return (
     <div className="ProposalGuts">
