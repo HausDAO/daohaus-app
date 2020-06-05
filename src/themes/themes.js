@@ -6,6 +6,8 @@ import metaclanBrand from '../assets/themes/metaclanTheme/MetaClan_Text.png';
 import metaclanBg from '../assets/themes/metaclanTheme/MetaClan-Pokemol-Background.jpg';
 import daosquareBrand from '../assets/themes/daosquare/daosquare__logo.png';
 import daosquareBg from '../assets/themes/daosquare/daosquare__bg.jpg';
+import machixBrand from '../assets/themes/machix/machixBrand.png';
+import machixBg from '../assets/themes/machix/machixBg.png';
 
 export const themeMap = {
   moloch: {
@@ -18,6 +20,20 @@ export const themeMap = {
     primary: `#aa174c`,
     secondary: `#aa174c`,
     tertiary: `#aa174c`,
+    danger: `rgba(239,73,95,1)`,
+    success: `rgba(77,204,44,1)`,
+    bright: `rgba(189,134,254,1)`,
+  },
+  machix: {
+    baseFont: `'Roboto', sans-serif`,
+    dataFont: `'Share Tech Mono', sans-serif`,
+    baseFontColor: 'white',
+    brand: machixBrand,
+    brandBg: machixBg,
+    appBackground: `rgba(0, 0, 0, 0.85)`,
+    primary: `#f6d82c`,
+    secondary: `rgba(47,233,167,1)`,
+    tertiary: `rgba(239,73,123,1)`,
     danger: `rgba(239,73,95,1)`,
     success: `rgba(77,204,44,1)`,
     bright: `rgba(189,134,254,1)`,
