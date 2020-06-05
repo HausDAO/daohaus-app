@@ -26,6 +26,7 @@ const HomeDiv = styled.div`
   background-repeat: no-repeat;
   min-height: calc(100vh - 62px);
   background-image: url(${(props) => props.theme.brandBg});
+  background-attachment: fixed;
   h1 {
     text-align: center;
     font-size: 36px;
