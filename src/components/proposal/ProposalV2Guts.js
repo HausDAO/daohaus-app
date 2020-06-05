@@ -8,6 +8,8 @@ const ProposalGutsV2 = ({ proposal, daoData }) => {
   const memberUrlV2 = (addr) => {
     return `/dao/${daoData.contractAddress}/member/${daoData.contractAddress}-member-${addr}`;
   };
+  console.log(proposal);
+  
   return (
     <div className="ProposalGuts">
       {proposal.cancelled && <p style={{ color: 'red' }}>Proposal Cancelled</p>}
@@ -129,7 +131,7 @@ const ProposalGutsV2 = ({ proposal, daoData }) => {
                 <ValueDisplay
                   value={
                     proposal.tributeOffered /
-                    10 ** proposal.tributeTokenDecimals
+                    10 ** (proposal.tributeTokenDecimals || 18)
                   }
                   symbolOverride={proposal.tributeTokenSymbol}
                 />
@@ -144,7 +146,7 @@ const ProposalGutsV2 = ({ proposal, daoData }) => {
                 <ValueDisplay
                   value={
                     proposal.paymentRequested /
-                    10 ** proposal.paymentTokenDecimals
+                    10 ** (proposal.paymentTokenDecimals || 18)
                   }
                   symbolOverride={proposal.paymentTokenSymbol}
                 />

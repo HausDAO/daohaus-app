@@ -93,7 +93,7 @@ const ProposalCard = ({ proposal, client }) => {
                 <ValueDisplay
                   value={
                     proposal.paymentRequested /
-                    10 ** proposal.paymentTokenDecimals
+                    10 ** (proposal.paymentTokenDecimals || 18)
                   }
                   symbolOverride={proposal.paymentTokenSymbol}
                 />
