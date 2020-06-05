@@ -235,7 +235,7 @@ const Store = ({ children, daoParam }) => {
         }
       }
     }
-    setDelay(20000);
+    setDelay(60000);
 
     // check transactions left over in bcprocessor storage
     const _txList = daoService.bcProcessor.getTxList(acctAddr);

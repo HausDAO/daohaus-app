@@ -28,6 +28,8 @@ const SyncToken = ({ token }) => {
   const syncToken = async () => {
     setLoading(true);
     try {
+      console.log('token address', token.token.tokenAddress);
+      
       await daoService.mcDao.collectTokens(token.token.tokenAddress);
       setLoading(false);
     } catch (err) {
@@ -44,18 +46,21 @@ const SyncToken = ({ token }) => {
         <Loading />
       ) : (
         <>
-          <button className="TinyButton" onClick={() => toggle('syncForm')}>
-            !
-          </button>
-          <Modal isShowing={isShowing.syncForm} hide={() => toggle('syncForm')}>
-            <p>
-              The balance of this token is{' '}
-              {parseFloat(diff / 10 ** +token.decimals).toFixed(4)} less than
-              the on-chain balance. Funds might have been sent directly to the
-              DAO. Sync to update the balance.
-            </p>
-            {currentWallet.shares > 0 ? (
-              <>
+          {currentWallet.shares > 0 ? (
+            <>
+              <button className="TinyButton" onClick={() => toggle('syncForm')}>
+                !
+              </button>
+              <Modal
+                isShowing={isShowing.syncForm}
+                hide={() => toggle('syncForm')}
+              >
+                <p>
+                  The balance of this token is{' '}
+                  {parseFloat(diff / 10 ** +token.token.decimals).toFixed(4)} less
+                  than the on-chain balance. Funds might have been sent directly
+                  to the DAO. Sync to update the balance.
+                </p>
                 {token.tokenBalance > 0 ? (
                   <button onClick={() => syncToken()}>Sync</button>
                 ) : (

@@ -59,6 +59,7 @@ const WhitelistTokenBalances = (tokens) => {
         return +b.tokenBalance - a.tokenBalance;
       })
       .map((token) => {
+        
         const needSync =
           token.contractTokenBalance !== token.contractBabeBalance;
 
@@ -66,9 +67,9 @@ const WhitelistTokenBalances = (tokens) => {
           <div key={token.token.tokenAddress}>
             <ValueDisplay
               value={parseFloat(
-                token.tokenBalance / 10 ** +token.decimals,
+                token.tokenBalance / 10 ** +token.token.decimals,
               ).toFixed(4)}
-              symbolOverride={token.symbol}
+              symbolOverride={token.token.symbol}
             />
             {needSync ? <SyncToken token={token} /> : null}
           </div>

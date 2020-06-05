@@ -26,6 +26,7 @@ const HomeDiv = styled.div`
   background-repeat: no-repeat;
   min-height: calc(100vh - 62px);
   background-image: url(${(props) => props.theme.brandBg});
+  background-attachment: fixed;
   h1 {
     text-align: center;
     font-size: 36px;
@@ -124,7 +125,7 @@ const Home = () => {
   const { t } = useTranslation();
 
   const options = {
-    pollInterval: 20000,
+    pollInterval: 60000,
     variables: { contractAddr: daoData.contractAddress },
   };
 
@@ -132,7 +133,7 @@ const Home = () => {
 
   if (loading) return <Loading />;
   if (error) return <ErrorMessage message={error} />;
-
+  
   return (
     <>
       {daoData ? <HeadTags daoData={daoData} /> : null}
