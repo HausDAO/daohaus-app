@@ -69,9 +69,9 @@ const SyncToken = ({ token }) => {
                     You will need to add to that through a tribute proposal.
                   </p>
                 )}
-              </Modal>
-            </>
-          ) : null}
+              </>
+            ) : null}
+          </Modal>
         </>
       )}
     </SyncTokenDiv>
