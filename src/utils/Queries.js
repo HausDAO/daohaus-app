@@ -83,8 +83,8 @@ export const GET_MEMBER = gql`
       tokenBalances {
         token {
           tokenAddress
-          symbol @client
-          decimals @client
+          symbol
+          decimals
         }
         tokenBalance
       }
