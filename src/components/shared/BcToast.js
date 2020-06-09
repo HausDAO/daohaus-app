@@ -228,8 +228,7 @@ const BcToast = () => {
           onClick={toggleElement}
         />
         <ProcessorDiv>
-          {(currentUser.type === USER_TYPE.SDK &&
-            currentWallet.state === WalletStatuses.Deployed) ||
+          {
           (currentUser.type === USER_TYPE.WEB3 &&
             currentWallet.state === WalletStatuses.Connected) ? (
             <ProcessorButton onClick={toggleElement}>

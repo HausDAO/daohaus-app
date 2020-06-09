@@ -4,7 +4,6 @@ import styled from 'styled-components';
 import { useTranslation } from 'react-i18next';
 
 import { DaoDataContext } from '../../contexts/Store';
-import StateModals from '../../components/shared/StateModals';
 import BottomNav from '../../components/shared/BottomNav';
 import ErrorMessage from '../../components/shared/ErrorMessage';
 import Loading from '../../components/shared/Loading';
@@ -137,7 +136,6 @@ const Home = () => {
   return (
     <>
       {daoData ? <HeadTags daoData={daoData} /> : null}
-      <StateModals />
 
       <HomeDiv>
         <IntroDiv>

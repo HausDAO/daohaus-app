@@ -17,7 +17,6 @@ let singleton;
 
 export const USER_TYPE = {
   WEB3: 'web3',
-  // SDK: 'sdk',
   READ_ONLY: 'readonly',
 };
 

@@ -14,11 +14,7 @@ import { WalletStatuses } from '../../utils/WalletStatus';
 import { truncateAddr } from '../../utils/Helpers';
 import Arrow from '../../assets/DropArrow.svg';
 import { useInterval } from '../../utils/PollingUtil';
-import Deploy from './Deploy';
 import UserTransactions from './UserTransactions';
-import AccountList from './AccountList';
-import DepositFormInitial from './DepositFormInitial';
-import UpgradeKeystore from '../../auth/UpgradeKeystore';
 import { USER_TYPE } from '../../utils/DaoService';
 import { GET_MEMBER } from '../../utils/Queries';
 
@@ -27,8 +23,6 @@ import { DataP, DataDiv, BackdropOpenDiv } from '../../App.styles';
 import {
   WalletDiv,
   WalletHeaderDiv,
-  WalletOverlayDiv,
-  WalletOverlayContentsDiv,
   StatusP,
   AddressButton,
   ActionsDropdownDiv,
@@ -50,15 +44,12 @@ const UserBalance = ({ toggle }) => {
   const [copied, setCopied] = useState(false);
   const [actionsOpen, setActionsOpen] = useState(false);
   const [headerSwitch, setHeaderSwitch] = useState('Balances');
-  const [keystoreExists, setKeystoreExists] = useState(true);
   const [tokenBalances, setTokenBalances] = useState([]);
   const [memberAddressLoggedIn, setMemberAddressLoggedIn] = useState(false);
   const [memberAddress, setMemberAddress] = useState(false);
 
   const memberAddr =
-    currentUser.type === USER_TYPE.SDK
-      ? currentUser.attributes['custom:account_address'].toLowerCase()
-      : currentUser.username.toLowerCase();
+    currentUser.type === currentUser.username.toLowerCase();
   const options = {
     pollInterval: 60000,
     variables: {
@@ -92,16 +83,6 @@ const UserBalance = ({ toggle }) => {
         return;
       }
 
-      if (currentUser && currentUser.type === USER_TYPE.SDK) {
-        try {
-          const userAttributes = currentUser.attributes;
-
-          setKeystoreExists(!!userAttributes['custom:encrypted_ks']);
-        } catch (error) {
-          console.error(error);
-        }
-      }
-
       const _memberAddress = await daoService.mcDao.memberAddressByDelegateKey(
         currentUser.attributes['custom:account_address'],
       );
@@ -133,6 +114,7 @@ const UserBalance = ({ toggle }) => {
   };
 
   const renderBalances = (tokens) => {
+    // TODO kovan is hardcoded here so will break rinkeby
     return tokens.map((token) => {
       return (
         <BalanceItemDiv key={token.token.tokenAddress}>
@@ -168,53 +150,11 @@ const UserBalance = ({ toggle }) => {
 
   return (
     <WalletDiv>
-      {/* <p>{currentWallet.state}</p>
-      <p>{WalletStatuses.Deployed}</p> */}
-      {currentWallet.state !== WalletStatuses.Connecting &&
-        currentWallet.state === WalletStatuses.Created && (
-          <WalletOverlayDiv>
-            <WalletOverlayContentsDiv>
-              {currentWallet.eth < 0.05 && <DepositFormInitial />}
-              {currentWallet.eth >= 0.05 && (
-                <>
-                  <h3>
-                    <span role="img" aria-label="party popper">
-                      🎉
-                    </span>{' '}
-                    Congrats!{' '}
-                    <span role="img" aria-label="party popper">
-                      🎉
-                    </span>
-                  </h3>
-                  <h2>Your account is ready to deploy.</h2>
-                  <Deploy />
-                </>
-              )}
-              {!keystoreExists && (
-                <p>
-                  Contact Support in{' '}
-                  <a href="https://t.me/joinchat/IJqu9xeMfqWoLnO_kc03QA">
-                    Telegram
-                  </a>
-                </p>
-              )}
-            </WalletOverlayContentsDiv>
-          </WalletOverlayDiv>
-        )}
-      {currentWallet.state === WalletStatuses.Deployed && !keystoreExists && (
-        <WalletOverlayDiv>
-          <WalletOverlayContentsDiv>
-            <h2>Please upgrade your account.</h2>
-            {!keystoreExists && <UpgradeKeystore />}
-          </WalletOverlayContentsDiv>
-        </WalletOverlayDiv>
-      )}
+
       <WalletHeaderDiv>
         <div className="WalletInfo">
           <StatusP
             status={
-              (currentUser.type === USER_TYPE.SDK &&
-                currentWallet.state !== 'Deployed') ||
               (currentUser.type === USER_TYPE.WEB3 &&
                 currentWallet.state !== 'Connected')
                 ? 'Disconnected'
@@ -332,14 +272,6 @@ const UserBalance = ({ toggle }) => {
           </SelectedElementButton>
         )}
 
-        {currentUser && currentUser.type === USER_TYPE.SDK && (
-          <SelectedElementButton
-            selected={headerSwitch === 'Accounts'}
-            onClick={() => setHeaderSwitch('Accounts')}
-          >
-            Settings
-          </SelectedElementButton>
-        )}
       </SwitchHeaderDiv>
       <WalletContents>
         {headerSwitch === 'Balances' && (
@@ -398,7 +330,6 @@ const UserBalance = ({ toggle }) => {
           </BalancesDiv>
         )}
         {headerSwitch === 'Transactions' && <UserTransactions />}
-        {headerSwitch === 'Accounts' && <AccountList />}
       </WalletContents>
     </WalletDiv>
   );
