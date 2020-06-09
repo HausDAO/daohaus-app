@@ -89,69 +89,6 @@ export class TokenService {
   }
 }
 
-export class SdkTokenService extends TokenService {
-  sdkService;
-  constructor(
-    web3,
-    daoToken,
-    daoAddress,
-    accountAddress,
-    bcProcessor,
-    sdkService,
-  ) {
-    super(web3, daoToken, daoAddress, accountAddress, bcProcessor);
-    this.sdkService = sdkService;
-  }
-
-  async approve(wad) {
-    const encodedData = this.contract.methods
-      .approve(this.daoAddress, wad)
-      .encodeABI();
-    const hash = await this.sdkService.submit(
-      encodedData,
-      this.contract.options.address,
-    );
-    this.bcProcessor.setTx(
-      hash,
-      this.accountAddress,
-      `Update Token Allowance`,
-      true,
-    );
-    return hash;
-  }
-
-  // weth wrap
-  async deposit(amount) {
-    const encodedData = this.contract.methods.deposit().encodeABI();
-    const hash = await this.sdkService.submit(
-      encodedData,
-      this.contract.options.address,
-    );
-    this.bcProcessor.setTx(
-      hash,
-      this.accountAddress,
-      `Deposit ${amount} Tokens`,
-      true,
-    );
-    return hash;
-  }
-
-  async transfer(dest, wad) {
-    const encodedData = this.contract.methods.transfer(dest, wad).encodeABI();
-    const hash = await this.sdkService.submit(
-      encodedData,
-      this.contract.options.address,
-    );
-    this.bcProcessor.setTx(
-      hash,
-      this.accountAddress,
-      `Transfer ${wad} Tokens to ${dest}`,
-      true,
-    );
-    return hash;
-  }
-}
-
 export class Web3TokenService extends TokenService {
   async approve(wad) {
     const txReceipt = await this.contract.methods

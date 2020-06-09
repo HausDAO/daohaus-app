@@ -1,6 +1,5 @@
 import DaoAbi from '../contracts/mcdao.json';
 import DaoAbiV2 from '../contracts/molochv2.json';
-import { post } from './Requests';
 
 export class McDaoService {
   web3;
@@ -190,115 +189,6 @@ export class McDaoService {
 export class ReadonlyMcDaoService extends McDaoService {
   async deployAccount() {
     throw new Error(`This account type cannot call deployAccount`);
-  }
-}
-
-export class SdkMcDaoService extends McDaoService {
-  sdkService;
-  bcProcessor;
-
-  constructor(web3, daoAddress, accountAddr, bcProcessor, sdkService, version) {
-    super(web3, daoAddress, accountAddr, version);
-    this.sdkService = sdkService;
-    this.bcProcessor = bcProcessor;
-  }
-
-  async submitVote(proposalIndex, uintVote) {
-    const encodedData = this.daoContract.methods
-      .submitVote(proposalIndex, uintVote)
-      .encodeABI();
-
-    const hash = await this.sdkService.submit(
-      encodedData,
-      this.daoContract.options.address,
-    );
-    this.bcProcessor.setTx(
-      hash,
-      this.accountAddr,
-      `Submit ${
-        uintVote === 1 ? 'yes' : 'no'
-      } vote on proposal ${proposalIndex}`,
-      true,
-    );
-    return hash;
-  }
-
-  async rageQuit(amount) {
-    const encodedData = this.daoContract.methods.ragequit(amount).encodeABI();
-    const hash = await this.sdkService.submit(
-      encodedData,
-      this.daoContract.options.address,
-    );
-    this.bcProcessor.setTx(
-      hash,
-      this.accountAddr,
-      `Rage quit amount: ${amount}`,
-      true,
-    );
-    return hash;
-  }
-
-  async processProposal(id) {
-    const encodedData = this.daoContract.methods
-      .processProposal(id)
-      .encodeABI();
-    const hash = await this.sdkService.submit(
-      encodedData,
-      this.daoContract.options.address,
-    );
-    this.bcProcessor.setTx(
-      hash,
-      this.accountAddr,
-      `Process proposal. id: ${id}`,
-      true,
-    );
-    return hash;
-  }
-
-  async submitProposal(applicant, tokenTribute, sharesRequested, details) {
-    const encodedData = this.daoContract.methods
-      .submitProposal(applicant, tokenTribute, sharesRequested, details)
-      .encodeABI();
-    const hash = await this.sdkService.submit(
-      encodedData,
-      this.daoContract.options.address,
-    );
-
-    const parseDetails = JSON.parse(details);
-
-    this.bcProcessor.setTx(
-      hash,
-      this.accountAddr,
-      `Submit proposal (${parseDetails.title})`,
-      true,
-    );
-    return hash;
-  }
-
-  async deployAccount() {
-    const data = await this.sdkService.deployAccount();
-    this.bcProcessor.setTx(
-      data,
-      this.accountAddr,
-      'Deploy contract wallet.',
-      true,
-    );
-    return data;
-  }
-
-  async updateDelegateKey() {
-    throw new Error('Unimplemented');
-  }
-
-  async withdrawEth(destinationAddress, amount) {
-    const hash = await this.sdkService.submit(null, destinationAddress, amount);
-    this.bcProcessor.setTx(
-      hash,
-      this.accountAddr,
-      `Withdraw Eth: ${amount}`,
-      true,
-    );
-    return hash;
   }
 }
 

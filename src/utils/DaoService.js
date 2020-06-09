@@ -1,7 +1,6 @@
 import Web3 from 'web3';
 
 import {
-  SdkMcDaoService,
   Web3McDaoService,
   Web3McDaoServiceV2,
   ReadonlyMcDaoService,
@@ -10,16 +9,15 @@ import {
   BcProcessorService,
   ReadOnlyBcProcessorService,
 } from './BcProcessorService';
-import { Web3TokenService, SdkTokenService } from './TokenService';
+import { Web3TokenService, TokenService } from './TokenService';
 import config from '../config';
 import { WalletStatuses } from './WalletStatus';
-import SdkService from './SdkService';
 
 let singleton;
 
 export const USER_TYPE = {
   WEB3: 'web3',
-  SDK: 'sdk',
+  // SDK: 'sdk',
   READ_ONLY: 'readonly',
 };
 
@@ -81,14 +79,7 @@ export class DaoService {
       );
       approvedToken = await mcDao.approvedToken();
     }
-    // const mcDao = new Web3McDaoService(
-    //   web3,
-    //   contractAddr,
-    //   accountAddr,
-    //   bcProcessor,
-    //   version,
-    // );
-    // const approvedToken = await mcDao.approvedToken();
+
     const token = new Web3TokenService(
       web3,
       approvedToken,
@@ -107,38 +98,6 @@ export class DaoService {
     return singleton;
   }
 
-  static async instantiateWithSDK(accountAddr, sdk, contractAddr, version) {
-    const web3 = new Web3(new Web3.providers.HttpProvider(config.INFURA_URI));
-    const sdkService = new SdkService(sdk);
-    const bcProcessor = new BcProcessorService(web3);
-    const mcDao = new SdkMcDaoService(
-      web3,
-      contractAddr,
-      accountAddr,
-      bcProcessor,
-      sdkService,
-      version,
-    );
-    const approvedToken = await mcDao.approvedToken();
-    const token = new SdkTokenService(
-      web3,
-      approvedToken,
-      contractAddr,
-      accountAddr,
-      bcProcessor,
-      sdkService,
-    );
-    singleton = new SdkDaoService(
-      accountAddr,
-      web3,
-      mcDao,
-      token,
-      bcProcessor,
-      sdkService,
-    );
-    return singleton;
-  }
-
   static async instantiateWithReadOnly(contractAddr, version) {
     const web3 = new Web3(new Web3.providers.HttpProvider(config.INFURA_URI));
     const bcProcessor = new ReadOnlyBcProcessorService(web3);
@@ -151,7 +110,8 @@ export class DaoService {
     } else {
       approvedToken = await mcDao.approvedToken();
     }
-    const token = new SdkTokenService(web3, approvedToken);
+    // TODO: is this needed?
+    const token = new TokenService(web3, approvedToken);
 
     singleton = new ReadonlyDaoService(
       '',
@@ -200,31 +160,5 @@ export class Web3DaoService extends DaoService {
 
   getAccountState() {
     return WalletStatuses.Connected;
-  }
-}
-
-export class SdkDaoService extends DaoService {
-  userType = USER_TYPE.SDK;
-  sdkService;
-
-  constructor(
-    accountAddr,
-    web3,
-    mcDaoService,
-    token,
-    bcProcessorService,
-    sdkService,
-  ) {
-    super(accountAddr, web3, mcDaoService, token, bcProcessorService);
-    this.sdkService = sdkService;
-  }
-
-  async getAccountWei() {
-    const ethWei = this.sdkService.getWeiBalance();
-    return ethWei;
-  }
-
-  getAccountState() {
-    return this.sdkService.getAccountState();
   }
 }
