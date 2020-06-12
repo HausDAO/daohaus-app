@@ -80,10 +80,8 @@ const ProposalGutsV2 = ({ proposal, daoData }) => {
 
       {proposal.whitelist ? (
         <>
-          <LabelH5>Proposed by</LabelH5>
-          <AddressProfileDisplay address={proposal.proposer} />
           <LabelH5>Token Symbol</LabelH5>
-          <DataP>{proposal.tributeTokenSymbol}</DataP>
+          <DataP>{proposal.tributeTokenSymbol || 'N/A'}</DataP>
           <LabelH5>Token Contract</LabelH5>
           <DataP>{proposal.tributeToken}</DataP>
 
@@ -101,6 +99,8 @@ const ProposalGutsV2 = ({ proposal, daoData }) => {
               View Token on Etherscan
             </a>
           </DataP>
+          <LabelH5>Proposed by</LabelH5>
+          <AddressProfileDisplay address={proposal.proposer} />
         </>
       ) : null}
 
