@@ -172,7 +172,7 @@ const FundingForm = (props) => {
                         className={field.value ? 'Field HasValue' : 'Field '}
                       >
                         <label>Short Description</label>
-                        <textarea {...field} />
+                        <textarea rows="5" {...field} />
                       </FieldContainer>
                     )}
                   </Field>
