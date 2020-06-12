@@ -81,7 +81,7 @@ const UserBalance = ({ toggle }) => {
       return;
     }
     console.log(data);
-    
+
     setTokenBalances(data.member.tokenBalances);
     // eslint-disable-next-line
   }, [data]);
@@ -227,7 +227,11 @@ const UserBalance = ({ toggle }) => {
               ? ` as delegate for ${memberAddress &&
                   truncateAddr(memberAddress)}`
               : null}
-            {data && data.member && data.member.delegateKey !== data.member.memberAddress ? ` (has delegate ${truncateAddr(data.member.delegateKey)})` : null}
+            {data &&
+            data.member &&
+            data.member.delegateKey !== data.member.memberAddress
+              ? ` (has delegate ${truncateAddr(data.member.delegateKey)})`
+              : null}
           </StatusP>
           <CopyToClipboard
             onCopy={onCopy}
@@ -350,7 +354,7 @@ const UserBalance = ({ toggle }) => {
             </BalanceItemDiv>
             {+daoData.version === 2 && data ? (
               <BalanceItemDiv>
-                <p>Loot</p>
+                <p>Loot (Non-voting Shares)</p>
                 <DataP>{currentWallet.loot}</DataP>
               </BalanceItemDiv>
             ) : null}
@@ -371,7 +375,11 @@ const UserBalance = ({ toggle }) => {
                 {+daoData.version === 2 && data && data.member ? (
                   <p>Deposit Token: {data.member.moloch.depositToken.symbol}</p>
                 ) : (
-                  <>{data && data.member && <p>{data.member.moloch.tokenSymbol}</p>}</>
+                  <>
+                    {data && data.member && (
+                      <p>{data.member.moloch.tokenSymbol}</p>
+                    )}
+                  </>
                 )}
                 <DataDiv>
                   {currentWallet.tokenBalance}
