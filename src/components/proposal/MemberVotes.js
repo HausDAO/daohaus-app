@@ -6,6 +6,7 @@ import { DaoDataContext } from '../../contexts/Store';
 
 import styled from 'styled-components';
 import { getAppDark } from '../../variables.styles';
+import AddressProfileDisplay from '../shared/AddressProfileDisplay';
 
 const MemberVotesDiv = styled.div`
   padding-bottom: 50px;
@@ -37,24 +38,17 @@ const MemberVotesDiv = styled.div`
 `;
 
 const MemberVotes = (props) => {
-  const [daoData] = useContext(DaoDataContext);
-
   const renderList = () => {
     return props.votes.map((vote) => {
-      const memberUrl = `/dao/${daoData.contractAddress}/member/${daoData.contractAddress}-member-${vote.member.memberAddress}`;
-
       return (
         <div className="Item" key={vote.member.memberAddress}>
-          <a href={memberUrl}>
-            <p className="Data">{truncateAddr(vote.member.memberAddress)}</p>
-          </a>
+          <AddressProfileDisplay address={vote.member.memberAddress} />
           <div className="VoteCount">
             {vote.uintVote === 1 ? (
               <img src={VoteYes} alt="Yes" width="36px" />
             ) : (
               <img width="36px" src={VoteNo} alt="No" />
             )}
-            {/* <p>{vote.member.shares} Shares </p> */}
           </div>
         </div>
       );
