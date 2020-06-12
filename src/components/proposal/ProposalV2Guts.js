@@ -9,7 +9,7 @@ const ProposalGutsV2 = ({ proposal, daoData }) => {
   const memberUrlV2 = (addr) => {
     return `/dao/${daoData.contractAddress}/member/${daoData.contractAddress}-member-${addr}`;
   };
-  
+
   return (
     <div className="ProposalGuts">
       {proposal.cancelled && <p style={{ color: 'red' }}>Proposal Cancelled</p>}
@@ -60,7 +60,7 @@ const ProposalGutsV2 = ({ proposal, daoData }) => {
               <DataH2>{proposal.sharesRequested}</DataH2>
             </div>
             <div className="Shares">
-              <LabelH5>Loot</LabelH5>
+              <LabelH5>Loot (Non-voting Shares)</LabelH5>
               <DataH2>{proposal.lootRequested}</DataH2>
             </div>
             <div className="Shares">

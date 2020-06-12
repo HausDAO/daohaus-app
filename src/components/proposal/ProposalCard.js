@@ -82,7 +82,16 @@ const ProposalCard = ({ proposal, client }) => {
         <DataP>{countDown}</DataP>
       </TimerDiv>
       {proposal.proposalType ? <h5>{proposal.proposalType}</h5> : null}
-      <h3>{title}</h3>
+      <h3
+        style={{
+          wordBreak: 'break-word',
+          maxHeight: '67px',
+          overflow: 'hidden',
+          textOverflow: 'ellipsis',
+        }}
+      >
+        {title}
+      </h3>
       {!proposal.guildkick && !proposal.whitelist ? (
         <OfferDivProposalCard>
           {proposal.trade ? (

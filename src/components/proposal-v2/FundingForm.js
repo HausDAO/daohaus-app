@@ -234,7 +234,7 @@ const FundingForm = (props) => {
                             field.value !== '' ? 'Field HasValue' : 'Field '
                           }
                         >
-                          <label>Loot Requested</label>
+                          <label>Loot Requested (Non-voting Shares)</label>
                           <input min="0" step="1" type="number" {...field} />
                         </FieldContainer>
                       )}
