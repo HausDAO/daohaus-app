@@ -106,7 +106,7 @@ const ProposalDetail = ({ proposal, processProposal, submitVote, canVote }) => {
           <ReactPlayer url={link} playing={false} loop={false} />
         </VideoDiv>
       ) : link && link.indexOf('http') > -1 ? (
-        <div className="Link">
+        <div className="Link" style={{ marginBottom: '25px' }}>
           <a href={link} rel="noopener noreferrer" target="_blank">
             Link
           </a>
