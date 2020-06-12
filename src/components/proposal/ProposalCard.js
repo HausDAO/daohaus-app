@@ -1,5 +1,6 @@
 import React, { useContext } from 'react';
 import { withApollo } from 'react-apollo';
+import { Link } from 'react-router-dom';
 import Web3 from 'web3';
 import styled from 'styled-components';
 
@@ -17,11 +18,25 @@ import { DataP, DataH2, OfferDiv, LinkButton } from '../../App.styles';
 import StackedVote from './StackedVote';
 
 const ProposalCardDiv = styled.div`
+  position: relative;
   margin-top: 25px;
   border-top: 2px solid ${(props) => getAppDark(props.theme)};
   border-bottom: 2px solid ${(props) => getAppDark(props.theme)};
   background-color: ${(props) => getAppLight(props.theme)};
   padding: 25px;
+  transition: all 0.15s linear;
+  &:hover {
+    background-color: ${(props) => getAppDark(props.theme)};
+    color: white;
+    @media (min-width: ${phone}) {
+      scale: 1.05;
+    }
+  }
+  a {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+  }
   @media (min-width: ${phone}) {
     width: 320px;
     border: 2px solid ${(props) => getAppDark(props.theme)};
@@ -69,6 +84,11 @@ const ProposalCard = ({ proposal, client }) => {
 
   return (
     <ProposalCardDiv>
+      <Link
+        to={{
+          pathname: `/dao/${daoService.daoAddress}/proposal/${id}`,
+        }}
+      ></Link>
       <TimerDiv>
         <svg
           xmlns="http://www.w3.org/2000/svg"
@@ -157,13 +177,6 @@ const ProposalCard = ({ proposal, client }) => {
           <StackedVote id={id} page="ProposalCard" />
         ) : null}
       </CardVoteDiv>
-      <LinkButton
-        to={{
-          pathname: `/dao/${daoService.daoAddress}/proposal/${id}`,
-        }}
-      >
-        View Proposal
-      </LinkButton>
     </ProposalCardDiv>
   );
 };
