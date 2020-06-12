@@ -1,15 +1,57 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 
 import ValueDisplay from '../shared/ValueDisplay';
 import ProposalKickedMember from './ProposalKickedMember';
 import config from '../../config';
 import { DataP, LabelH5, DataH2 } from '../../App.styles';
 
+import { truncateAddr } from '../../utils/Helpers';
+import makeBlockie from 'ethereum-blockies-base64';
+import { getProfile } from '3box/lib/api';
+import {
+  MemberCardIdentityDiv,
+  MemberCardImage,
+  ProfileImgCard,
+} from '../member/Member.styles';
+
 const ProposalGutsV2 = ({ proposal, daoData }) => {
+  const [
+    proposerProfile,
+    sponsorerProfile,
+    applicantProfile,
+    setProposerProfile,
+    setApplicantProfile,
+    setSponsorerProfile,
+  ] = useState({});
+
+  useEffect(() => {
+    const setup = async () => {
+      let proposerProfile;
+      let sponsorerProfile;
+      let applicantProfile;
+      try {
+        proposerProfile = await getProfile(proposal.proposer);
+        sponsorerProfile = await getProfile(proposal.sponsor);
+        applicantProfile = await getProfile(proposal.applicant);
+      } catch {
+        proposerProfile = {};
+        sponsorerProfile = {};
+        applicantProfile = {};
+      }
+      setProposerProfile(proposerProfile);
+      setSponsorerProfile(sponsorerProfile);
+      setApplicantProfile(applicantProfile);
+    };
+
+    setup();
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
   const memberUrlV2 = (addr) => {
     return `/dao/${daoData.contractAddress}/member/${daoData.contractAddress}-member-${addr}`;
   };
-  
+
   return (
     <div className="ProposalGuts">
       {proposal.cancelled && <p style={{ color: 'red' }}>Proposal Cancelled</p>}
@@ -17,6 +59,39 @@ const ProposalGutsV2 = ({ proposal, daoData }) => {
       {proposal.sponsored ? (
         <>
           <LabelH5>Sponsored By</LabelH5>
+          <MemberCardIdentityDiv>
+            <MemberCardImage>
+              {sponsorerProfile &&
+              sponsorerProfile.image &&
+              sponsorerProfile.image[0] ? (
+                <ProfileImgCard
+                  style={{
+                    backgroundImage: `url(${'https://ipfs.infura.io/ipfs/' +
+                      sponsorerProfile.image[0].contentUrl['/']})`,
+                  }}
+                >
+                  {''}
+                </ProfileImgCard>
+              ) : (
+                <ProfileImgCard
+                  style={{
+                    backgroundImage: `url("${makeBlockie(proposal.sponsor)}")`,
+                  }}
+                >
+                  {''}
+                </ProfileImgCard>
+              )}
+            </MemberCardImage>
+            <div>
+              <h3>
+                {sponsorerProfile.name || 'unknown'}{' '}
+                {sponsorerProfile.emoji ? (
+                  <span>{sponsorerProfile.emoji} </span>
+                ) : null}
+              </h3>
+              <DataP>{truncateAddr(proposal.sponsor)}</DataP>
+            </div>
+          </MemberCardIdentityDiv>
           <DataP>
             <a href={memberUrlV2(proposal.sponsor)}>{proposal.sponsor}</a>
           </DataP>
@@ -25,20 +100,6 @@ const ProposalGutsV2 = ({ proposal, daoData }) => {
 
       {proposal.newMember || proposal.proposalType === 'Funding Proposal' ? (
         <>
-          {proposal.proposalType === 'Funding Proposal' ? (
-            <>
-              <LabelH5>Proposed by</LabelH5>
-              <DataP>{proposal.proposer}</DataP>
-              <LabelH5>Funding for</LabelH5>
-              <DataP>{proposal.applicant}</DataP>
-            </>
-          ) : (
-            <>
-              <LabelH5>Applicant</LabelH5>
-              <DataP>{proposal.applicant}</DataP>
-            </>
-          )}
-
           {proposal.newMember || +proposal.tributeOffered > 0 ? (
             <div className="Tribute">
               <LabelH5>Tribute</LabelH5>
@@ -76,6 +137,122 @@ const ProposalGutsV2 = ({ proposal, daoData }) => {
               </DataH2>
             </div>
           </div>
+
+          {proposal.proposalType === 'Funding Proposal' ? (
+            <>
+              <LabelH5>Proposed by</LabelH5>
+              <MemberCardIdentityDiv>
+                <MemberCardImage>
+                  {proposerProfile &&
+                  proposerProfile.image &&
+                  proposerProfile.image[0] ? (
+                    <ProfileImgCard
+                      style={{
+                        backgroundImage: `url(${'https://ipfs.infura.io/ipfs/' +
+                          proposerProfile.image[0].contentUrl['/']})`,
+                      }}
+                    >
+                      {''}
+                    </ProfileImgCard>
+                  ) : (
+                    <ProfileImgCard
+                      style={{
+                        backgroundImage: `url("${makeBlockie(
+                          proposal.proposer,
+                        )}")`,
+                      }}
+                    >
+                      {''}
+                    </ProfileImgCard>
+                  )}
+                </MemberCardImage>
+                <div>
+                  <h3>
+                    {proposerProfile.name || 'unknown'}{' '}
+                    {proposerProfile.emoji ? (
+                      <span>{proposerProfile.emoji} </span>
+                    ) : null}
+                  </h3>
+                  <DataP>{truncateAddr(proposal.proposer)}</DataP>
+                </div>
+              </MemberCardIdentityDiv>
+              <LabelH5>Funding for</LabelH5>
+              <MemberCardIdentityDiv>
+                <MemberCardImage>
+                  {applicantProfile &&
+                  applicantProfile.image &&
+                  applicantProfile.image[0] ? (
+                    <ProfileImgCard
+                      style={{
+                        backgroundImage: `url(${'https://ipfs.infura.io/ipfs/' +
+                          applicantProfile.image[0].contentUrl['/']})`,
+                      }}
+                    >
+                      {''}
+                    </ProfileImgCard>
+                  ) : (
+                    <ProfileImgCard
+                      style={{
+                        backgroundImage: `url("${makeBlockie(
+                          proposal.applicant,
+                        )}")`,
+                      }}
+                    >
+                      {''}
+                    </ProfileImgCard>
+                  )}
+                </MemberCardImage>
+                <div>
+                  <h3>
+                    {applicantProfile.name || 'unknown'}{' '}
+                    {applicantProfile.emoji ? (
+                      <span>{applicantProfile.emoji} </span>
+                    ) : null}
+                  </h3>
+                  <DataP>{truncateAddr(proposal.applicant)}</DataP>
+                </div>
+              </MemberCardIdentityDiv>
+            </>
+          ) : (
+            <>
+              <LabelH5>Applicant</LabelH5>
+              <MemberCardIdentityDiv>
+                <MemberCardImage>
+                  {applicantProfile &&
+                  applicantProfile.image &&
+                  applicantProfile.image[0] ? (
+                    <ProfileImgCard
+                      style={{
+                        backgroundImage: `url(${'https://ipfs.infura.io/ipfs/' +
+                          applicantProfile.image[0].contentUrl['/']})`,
+                      }}
+                    >
+                      {''}
+                    </ProfileImgCard>
+                  ) : (
+                    <ProfileImgCard
+                      style={{
+                        backgroundImage: `url("${makeBlockie(
+                          proposal.applicant,
+                        )}")`,
+                      }}
+                    >
+                      {''}
+                    </ProfileImgCard>
+                  )}
+                </MemberCardImage>
+                <div>
+                  <h3>
+                    {applicantProfile.name || 'unknown'}{' '}
+                    {applicantProfile.emoji ? (
+                      <span>{applicantProfile.emoji} </span>
+                    ) : null}
+                  </h3>
+                  <DataP>{truncateAddr(proposal.applicant)}</DataP>
+                </div>
+              </MemberCardIdentityDiv>
+            </>
+          )}
         </>
       ) : null}
 

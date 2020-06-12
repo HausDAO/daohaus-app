@@ -24,6 +24,8 @@ const web3Service = new Web3Service();
 const ProposalDetailDiv = styled.div`
   padding: ${basePadding};
   padding-bottom: 120px;
+  margin: 25px auto 0px;
+  max-width: 420px;
 `;
 
 const TimerDiv = styled.div`
@@ -37,6 +39,20 @@ const TimerDiv = styled.div`
   }
   p {
     margin: 0;
+  }
+`;
+
+const VideoDiv = styled.div`
+  max-width: 100%;
+  position: relative;
+  padding-bottom: 56.25%; /* 16:9 */
+  height: 0;
+  iframe {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
   }
 `;
 
@@ -88,9 +104,9 @@ const ProposalDetail = ({ proposal, processProposal, submitVote, canVote }) => {
         </div>
       ) : null}
       {link && ReactPlayer.canPlay(link) ? (
-        <div className="Video">
+        <VideoDiv>
           <ReactPlayer url={link} playing={false} loop={false} />
-        </div>
+        </VideoDiv>
       ) : link && link.indexOf('http') > -1 ? (
         <div className="Link">
           <a href={link} rel="noopener noreferrer" target="_blank">
