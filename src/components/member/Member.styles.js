@@ -6,6 +6,17 @@ export const MemberCardIdentityDiv = styled.div`
   display: flex;
   flex-direction: row;
   align-items: center;
+  justify-content: flex-start;
+  padding-top: 0px;
+  padding-bottom: 25px;
+  > div:last-child {
+    h3 {
+      margin: 0;
+    }
+    p {
+      margin: 0;
+    }
+  }
 `;
 
 export const MemberCardImage = styled.div`

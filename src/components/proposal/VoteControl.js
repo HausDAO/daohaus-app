@@ -19,7 +19,7 @@ const VoteControlDiv = styled.div`
   bottom: 0;
   height: 105px;
   width: calc(100% - 0px);
-  margin-left: -15px;
+  left: 0px;
   border-top: 1px solid ${(props) => getAppDark(props.theme)};
   background-color: ${(props) => getAppLight(props.theme)};
   z-index: 1;
@@ -161,7 +161,7 @@ const VoteControl = ({ submitVote, proposal }) => {
       return false;
     }
     // TODO: can we get voting period status on v2
-    
+
     return proposal.status === 'VotingPeriod';
   };
 
