@@ -216,6 +216,7 @@ export const FormContainer = styled.div`
 export const FieldContainer = styled.div` {
   position: relative;
   margin-top: 25px;
+  textarea { resize: vertical; }
   label {
     pointer-events: none;
     position: absolute;
@@ -403,14 +404,16 @@ export const DropdownInputDiv = styled.div`
     width: 100px;
     select {
       font-size: 0.75em;
+      font-weight: 700;
       width: 100px;
       appearance: none;
       padding: 5px;
       border: 2px solid ${(props) => props.theme.primary};
-      border-radius: 25px;
+      border-radius: 50px;
       outline: none;
       color: ${(props) => props.theme.primary};
       cursor: pointer;
+      background-color: transparent;
       &:hover {
         border: 2px solid ${(props) => getPrimaryHover(props.theme)};
         color: ${(props) => getPrimaryHover(props.theme)};
