@@ -1,22 +1,15 @@
-import React, { useState, useContext, useEffect } from 'react';
+import React, { useContext } from 'react';
 import { Link } from 'react-router-dom';
-import makeBlockie from 'ethereum-blockies-base64';
-import { getProfile } from '3box/lib/api';
 import styled from 'styled-components';
 
 import Web3Service from '../../utils/Web3Service';
-import { truncateAddr } from '../../utils/Helpers';
-import ValueDisplay from '../shared/ValueDisplay';
 import { DaoServiceContext, DaoDataContext } from '../../contexts/Store';
 
 import { phone, getAppDark, getAppLight } from '../../variables.styles';
-import { DataP, DataH2 } from '../../App.styles';
-import {
-  MemberCardIdentityDiv,
-  MemberCardImage,
-  ProfileImgCard,
-  OfferDivMemberCard,
-} from './Member.styles';
+import { DataH2 } from '../../App.styles';
+import { OfferDivMemberCard } from './Member.styles';
+import AddressProfileDisplay from '../shared/AddressProfileDisplay';
+import ValueDisplay from '../shared/ValueDisplay';
 
 const MemberCardDiv = styled.div`
   background-color: ${(props) => getAppLight(props.theme)};
@@ -52,32 +45,11 @@ const MemberCardDiv = styled.div`
   }
 `;
 
-const MemberAddr = styled(DataP)`
-  margin-bottom: 10px;
-`;
-
 const web3Service = new Web3Service();
 
 const MemberCard = ({ member }) => {
   const [daoService] = useContext(DaoServiceContext);
   const [daoData] = useContext(DaoDataContext);
-  const [memberProfile, setMemberProfile] = useState({});
-
-  useEffect(() => {
-    const setup = async () => {
-      let profile;
-      try {
-        profile = await getProfile(member.memberAddress);
-      } catch {
-        profile = {};
-      }
-      setMemberProfile(profile);
-    };
-
-    setup();
-
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
 
   const votingPower = (
     (member.shares / +member.moloch.totalShares) *
@@ -92,37 +64,7 @@ const MemberCard = ({ member }) => {
       }}
     >
       <MemberCardDiv>
-        <MemberCardIdentityDiv>
-          <MemberCardImage>
-            {memberProfile && memberProfile.image && memberProfile.image[0] ? (
-              <ProfileImgCard
-                style={{
-                  backgroundImage: `url(${'https://ipfs.infura.io/ipfs/' +
-                    memberProfile.image[0].contentUrl['/']})`,
-                }}
-              >
-                {''}
-              </ProfileImgCard>
-            ) : (
-              <ProfileImgCard
-                style={{
-                  backgroundImage: `url("${makeBlockie(
-                    member.memberAddress,
-                  )}")`,
-                }}
-              >
-                {''}
-              </ProfileImgCard>
-            )}
-          </MemberCardImage>
-          <div>
-            <h3>
-              {memberProfile.name || 'unknown'}{' '}
-              {memberProfile.emoji ? <span>{memberProfile.emoji} </span> : null}
-            </h3>
-            <MemberAddr>{truncateAddr(member.memberAddress)}</MemberAddr>
-          </div>
-        </MemberCardIdentityDiv>
+        <AddressProfileDisplay address={member.memberAddress} />
         <OfferDivMemberCard>
           <div>
             <h5>Shares</h5>

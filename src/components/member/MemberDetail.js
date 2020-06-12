@@ -69,7 +69,7 @@ const MemberDetail = ({ member, client }) => {
           )}
         </MemberCardImage>
         <div>
-          <h2>{memberProfile.name}</h2>
+          <h2>{memberProfile.name || 'unknown'}</h2>
         </div>
       </MemberCardIdentityDiv>
       <h5>Member Address</h5>

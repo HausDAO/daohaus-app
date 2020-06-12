@@ -4,6 +4,7 @@ import ValueDisplay from '../shared/ValueDisplay';
 import ProposalKickedMember from './ProposalKickedMember';
 import config from '../../config';
 import { DataP, LabelH5, DataH2 } from '../../App.styles';
+import AddressProfileDisplay from '../shared/AddressProfileDisplay';
 
 const ProposalGutsV2 = ({ proposal, daoData }) => {
   const memberUrlV2 = (addr) => {
@@ -14,31 +15,8 @@ const ProposalGutsV2 = ({ proposal, daoData }) => {
     <div className="ProposalGuts">
       {proposal.cancelled && <p style={{ color: 'red' }}>Proposal Cancelled</p>}
 
-      {proposal.sponsored ? (
-        <>
-          <LabelH5>Sponsored By</LabelH5>
-          <DataP>
-            <a href={memberUrlV2(proposal.sponsor)}>{proposal.sponsor}</a>
-          </DataP>
-        </>
-      ) : null}
-
       {proposal.newMember || proposal.proposalType === 'Funding Proposal' ? (
         <>
-          {proposal.proposalType === 'Funding Proposal' ? (
-            <>
-              <LabelH5>Proposed by</LabelH5>
-              <DataP>{proposal.proposer}</DataP>
-              <LabelH5>Funding for</LabelH5>
-              <DataP>{proposal.applicant}</DataP>
-            </>
-          ) : (
-            <>
-              <LabelH5>Applicant</LabelH5>
-              <DataP>{proposal.applicant}</DataP>
-            </>
-          )}
-
           {proposal.newMember || +proposal.tributeOffered > 0 ? (
             <div className="Tribute">
               <LabelH5>Tribute</LabelH5>
@@ -55,34 +33,55 @@ const ProposalGutsV2 = ({ proposal, daoData }) => {
           ) : null}
 
           <div className="Offer">
-            <div className="Shares">
-              <LabelH5>Shares</LabelH5>
-              <DataH2>{proposal.sharesRequested}</DataH2>
-            </div>
-            <div className="Shares">
-              <LabelH5>Loot (Non-voting Shares)</LabelH5>
-              <DataH2>{proposal.lootRequested}</DataH2>
-            </div>
-            <div className="Shares">
-              <LabelH5>Requesting</LabelH5>
-              <DataH2>
-                <ValueDisplay
-                  value={
-                    proposal.paymentRequested /
-                    10 ** proposal.paymentTokenDecimals
-                  }
-                  symbolOverride={proposal.paymentTokenSymbol}
-                />
-              </DataH2>
-            </div>
+            {proposal.sharesRequested > 0 ? (
+              <div className="Shares">
+                <LabelH5>Shares Requested</LabelH5>
+                <DataH2>{proposal.sharesRequested}</DataH2>
+              </div>
+            ) : null}
+            {proposal.lootRequested > 0 ? (
+              <div className="Shares">
+                <LabelH5>Loot Requested (Non-voting Shares)</LabelH5>
+                <DataH2>{proposal.lootRequested}</DataH2>
+              </div>
+            ) : null}
+            {proposal.paymentRequested > 0 ? (
+              <div className="Shares">
+                <LabelH5>Requesting</LabelH5>
+                <DataH2>
+                  <ValueDisplay
+                    value={
+                      proposal.paymentRequested /
+                      10 ** proposal.paymentTokenDecimals
+                    }
+                    symbolOverride={proposal.paymentTokenSymbol}
+                  />
+                </DataH2>
+              </div>
+            ) : null}
           </div>
+
+          {proposal.proposalType === 'Funding Proposal' ? (
+            <>
+              <LabelH5>Funding for</LabelH5>
+              <AddressProfileDisplay address={proposal.applicant} />
+
+              <LabelH5>Proposed by</LabelH5>
+              <AddressProfileDisplay address={proposal.proposer} />
+            </>
+          ) : (
+            <>
+              <LabelH5>Applicant</LabelH5>
+              <AddressProfileDisplay address={proposal.applicant} />
+            </>
+          )}
         </>
       ) : null}
 
       {proposal.whitelist ? (
         <>
           <LabelH5>Proposed by</LabelH5>
-          <DataP>{proposal.proposer}</DataP>
+          <AddressProfileDisplay address={proposal.proposer} />
           <LabelH5>Token Symbol</LabelH5>
           <DataP>{proposal.tributeTokenSymbol}</DataP>
           <LabelH5>Token Contract</LabelH5>
@@ -107,11 +106,11 @@ const ProposalGutsV2 = ({ proposal, daoData }) => {
 
       {proposal.guildkick ? (
         <>
-          <LabelH5>Member to kick</LabelH5>
-          <DataP>{proposal.applicant}</DataP>
+          <LabelH5>Member to Kick</LabelH5>
+          <AddressProfileDisplay address={proposal.applicant} />
 
           <LabelH5>Proposed by</LabelH5>
-          <DataP>{proposal.proposer}</DataP>
+          <AddressProfileDisplay address={proposal.proposer} />
           <ProposalKickedMember proposal={proposal} />
         </>
       ) : null}
@@ -119,10 +118,10 @@ const ProposalGutsV2 = ({ proposal, daoData }) => {
       {proposal.trade ? (
         <>
           <LabelH5>Applicant</LabelH5>
-          <DataP>{proposal.applicant}</DataP>
+          <AddressProfileDisplay address={proposal.applicant} />
 
           <LabelH5>Proposed by</LabelH5>
-          <DataP>{proposal.proposer}</DataP>
+          <AddressProfileDisplay address={proposal.proposer} />
 
           <div className="Offer">
             <div className="Shares">
@@ -153,6 +152,12 @@ const ProposalGutsV2 = ({ proposal, daoData }) => {
               </DataH2>
             </div>
           </div>
+        </>
+      ) : null}
+      {proposal.sponsored ? (
+        <>
+          <LabelH5>Sponsored By</LabelH5>
+          <AddressProfileDisplay address={proposal.sponsor} />
         </>
       ) : null}
     </div>

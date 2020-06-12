@@ -18,12 +18,15 @@ import ProposalV2Guts from './ProposalV2Guts';
 
 import { basePadding } from '../../variables.styles';
 import { DataP, LabelH5, DataH2 } from '../../App.styles';
+import AddressProfileDisplay from '../shared/AddressProfileDisplay';
 
 const web3Service = new Web3Service();
 
 const ProposalDetailDiv = styled.div`
   padding: ${basePadding};
   padding-bottom: 120px;
+  margin: 25px auto 0px;
+  max-width: 420px;
 `;
 
 const TimerDiv = styled.div`
@@ -40,6 +43,20 @@ const TimerDiv = styled.div`
   }
 `;
 
+const VideoDiv = styled.div`
+  max-width: 100%;
+  position: relative;
+  padding-bottom: 56.25%; /* 16:9 */
+  height: 0;
+  iframe {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+  }
+`;
+
 const ProposalDetail = ({ proposal, processProposal, submitVote, canVote }) => {
   const [currentUser] = useContext(CurrentUserContext);
   const [daoData] = useContext(DaoDataContext);
@@ -52,9 +69,6 @@ const ProposalDetail = ({ proposal, processProposal, submitVote, canVote }) => {
   const description = descriptionMaker(proposal);
   const link = linkMaker(proposal);
 
-  const memberUrlV1 = (addr) => {
-    return `/dao/${daoData.contractAddress}/member/${daoData.contractAddress}-member-${addr}`;
-  };
   return (
     <ProposalDetailDiv>
       <TimerDiv>
@@ -88,9 +102,9 @@ const ProposalDetail = ({ proposal, processProposal, submitVote, canVote }) => {
         </div>
       ) : null}
       {link && ReactPlayer.canPlay(link) ? (
-        <div className="Video">
+        <VideoDiv>
           <ReactPlayer url={link} playing={false} loop={false} />
-        </div>
+        </VideoDiv>
       ) : link && link.indexOf('http') > -1 ? (
         <div className="Link">
           <a href={link} rel="noopener noreferrer" target="_blank">
@@ -103,14 +117,10 @@ const ProposalDetail = ({ proposal, processProposal, submitVote, canVote }) => {
         <ProposalV2Guts proposal={proposal} daoData={daoData} />
       ) : (
         <>
-          <LabelH5>Applicant Address</LabelH5>
-          <DataP>{proposal.applicant}</DataP>
-          <LabelH5>Proposor Address</LabelH5>
-          <DataP>
-            <a href={memberUrlV1(proposal.memberAddress)}>
-              {proposal.memberAddress}
-            </a>
-          </DataP>
+          <LabelH5>Applicant</LabelH5>
+          <AddressProfileDisplay address={proposal.applicant} />
+          <LabelH5>Proposed by</LabelH5>
+          <AddressProfileDisplay address={proposal.memberAddress} />
 
           <div className="Offer">
             <div className="Shares">
