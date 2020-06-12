@@ -15,14 +15,9 @@ import {
 } from '../member/Member.styles';
 
 const ProposalGutsV2 = ({ proposal, daoData }) => {
-  const [
-    proposerProfile,
-    sponsorerProfile,
-    applicantProfile,
-    setProposerProfile,
-    setApplicantProfile,
-    setSponsorerProfile,
-  ] = useState({});
+  const [proposerProfile, setProposerProfile] = useState({});
+  const [sponsorerProfile, setSponsorerProfile] = useState({});
+  const [applicantProfile, setApplicantProfile] = useState({});
 
   useEffect(() => {
     const setup = async () => {
