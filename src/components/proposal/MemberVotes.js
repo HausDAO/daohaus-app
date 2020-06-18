@@ -1,8 +1,6 @@
-import React, { useContext } from 'react';
-import { truncateAddr } from '../../utils/Helpers';
+import React from 'react';
 import VoteYes from '../../assets/star-struck.png';
 import VoteNo from '../../assets/thumbs-down.png';
-import { DaoDataContext } from '../../contexts/Store';
 
 import styled from 'styled-components';
 import { getAppDark } from '../../variables.styles';

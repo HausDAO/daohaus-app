@@ -7,10 +7,6 @@ import { DataP, LabelH5, DataH2 } from '../../App.styles';
 import AddressProfileDisplay from '../shared/AddressProfileDisplay';
 
 const ProposalGutsV2 = ({ proposal, daoData }) => {
-  const memberUrlV2 = (addr) => {
-    return `/dao/${daoData.contractAddress}/member/${daoData.contractAddress}-member-${addr}`;
-  };
-
   return (
     <div className="ProposalGuts">
       {proposal.cancelled && <p style={{ color: 'red' }}>Proposal Cancelled</p>}
