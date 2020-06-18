@@ -59,7 +59,6 @@ const WhitelistTokenBalances = (tokens) => {
         return +b.tokenBalance - a.tokenBalance;
       })
       .map((token) => {
-        
         const needSync =
           token.contractTokenBalance !== token.contractBabeBalance;
 
@@ -81,9 +80,9 @@ const WhitelistTokenBalances = (tokens) => {
     <WhitelistTokenBalancesDiv>
       <h5>Guildbank Token Balances</h5>
       {hasZeroBalances && (
-        <a onClick={() => setHideZeroBalance(!hideZeroBalance)}>
+        <span onClick={() => setHideZeroBalance(!hideZeroBalance)}>
           {!hideZeroBalance ? 'Hide' : 'Show'} Zero Balances
-        </a>
+        </span>
       )}
       {renderList()}
     </WhitelistTokenBalancesDiv>

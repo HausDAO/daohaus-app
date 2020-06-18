@@ -1,6 +1,5 @@
 import DaoAbi from '../contracts/mcdao.json';
 import DaoAbiV2 from '../contracts/molochv2.json';
-import { post } from './Requests';
 
 export class McDaoService {
   web3;
