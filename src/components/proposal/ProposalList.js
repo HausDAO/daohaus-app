@@ -17,8 +17,8 @@ const ProposalListDiv = styled.div`
 
 const ProposalList = ({ proposals }) => {
   const renderList = () => {
-    return proposals.map((proposal) => {
-      return <ProposalCard proposal={proposal} key={proposal.id} />;
+    return proposals.map((proposal, i) => {
+      return <ProposalCard proposal={proposal} key={proposal.id} index={i} />;
     });
   };
 

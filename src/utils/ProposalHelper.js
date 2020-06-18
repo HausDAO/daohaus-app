@@ -161,7 +161,6 @@ export function determineProposalStatus(
   return status;
 }
 
-//TODO: graph query
 export const groupByStatus = (proposals, unsponsoredView) => {
   return {
     Unsponsored: {
@@ -173,9 +172,9 @@ export const groupByStatus = (proposals, unsponsoredView) => {
     Base: {
       VotingPeriod: proposals.filter((p) => p.status === 'VotingPeriod'),
       GracePeriod: proposals.filter((p) => p.status === 'GracePeriod'),
-      ReadyForProcessing: proposals.filter(
-        (p) => p.status === 'ReadyForProcessing',
-      ),
+      ReadyForProcessing: proposals
+        .filter((p) => p.status === 'ReadyForProcessing')
+        .sort((a, b) => a.proposalId - b.proposalId),
       InQueue: proposals.filter((p) => p.status === 'InQueue'),
       Completed: proposals.filter((p) => {
         return (
