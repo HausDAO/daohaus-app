@@ -205,7 +205,7 @@ export const titleMaker = (proposal) => {
       if (proposal.details && proposal.details.indexOf('link:') > -1) {
         const fixedDetail = proposal.details.replace('link:', '"link":');
         const fixedParsed = JSON.parse(fixedDetail);
-        return fixedParsed.description;
+        return fixedParsed.title;
       } else {
         console.log(`Couldn't parse JSON from metadata`);
         return `Proposal ${proposal.proposalIndex}`;
@@ -226,7 +226,7 @@ export const descriptionMaker = (proposal) => {
     if (proposal.details && proposal.details.indexOf('link:') > -1) {
       const fixedDetail = proposal.details.replace('link:', '"link":');
       const fixedParsed = JSON.parse(fixedDetail);
-      return fixedParsed.description;
+      return fixedParsed.details;
     } else {
       console.log(`Couldn't parse JSON from metadata`);
     }
