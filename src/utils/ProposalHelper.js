@@ -202,8 +202,8 @@ export const titleMaker = (proposal) => {
       parsedDetails = JSON.parse(proposal.details);
       return parsedDetails.title;
     } catch {
-      if (proposal.detail && proposal.detail.indexOf('link:') > -1) {
-        const fixedDetail = proposal.detail.replace('link:', '"link":');
+      if (proposal.details && proposal.details.indexOf('link:') > -1) {
+        const fixedDetail = proposal.details.replace('link:', '"link":');
         const fixedParsed = JSON.parse(fixedDetail);
         return fixedParsed.description;
       } else {
@@ -223,8 +223,8 @@ export const descriptionMaker = (proposal) => {
     const parsed = JSON.parse(proposal.details);
     return parsed.description;
   } catch (e) {
-    if (proposal.detail && proposal.detail.indexOf('link:') > -1) {
-      const fixedDetail = proposal.detail.replace('link:', '"link":');
+    if (proposal.details && proposal.details.indexOf('link:') > -1) {
+      const fixedDetail = proposal.details.replace('link:', '"link":');
       const fixedParsed = JSON.parse(fixedDetail);
       return fixedParsed.description;
     } else {
@@ -239,7 +239,7 @@ export const linkMaker = (proposal) => {
     const parsed = JSON.parse(proposal.details);
     return typeof parsed.link === 'function' ? null : parsed.link;
   } catch (e) {
-    if (proposal.detail && proposal.detail.indexOf('link:') > -1) {
+    if (proposal.details && proposal.details.indexOf('link:') > -1) {
       return 'https://credits.raidguild.org/';
     } else {
       console.log(`Couldn't parse JSON from metadata`);
