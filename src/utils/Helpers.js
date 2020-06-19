@@ -31,3 +31,9 @@ export const valToDecimalString = (value, tokenAddress, tokens) => {
     return (value * 10 ** tdata.decimals).toString();
   }
 };
+
+export const hydrateBoosts = (boosts) => {
+  return {
+    proposalComments: boosts.some((boost) => boost.boost === '7'),
+  };
+};

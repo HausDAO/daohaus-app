@@ -13,6 +13,7 @@ import { DaoService, USER_TYPE } from '../utils/DaoService';
 import { getChainData } from '../utils/chains';
 import config from '../config';
 import { get } from '../utils/Requests';
+import { hydrateBoosts } from '../utils/Helpers';
 
 export const CurrentUserContext = createContext();
 export const CurrentWalletContext = createContext();
@@ -22,6 +23,7 @@ export const RefreshContext = createContext();
 export const DaoDataContext = createContext();
 export const DaoServiceContext = createContext();
 export const Web3ConnectContext = createContext();
+export const BoostContext = createContext();
 
 // main store of global state
 const Store = ({ children, daoParam }) => {
@@ -52,6 +54,7 @@ const Store = ({ children, daoParam }) => {
 
   const [daoService, setDaoService] = useState();
   const [daoData, setDaoData] = useState();
+  const [boosts, setBoosts] = useState();
 
   const [web3Connect, setWeb3Connect] = useState(
     new Web3Connect.Core({
@@ -120,7 +123,7 @@ const Store = ({ children, daoParam }) => {
           case USER_TYPE.SDK:
             // TODO: this makes username the cognito username. in web3 login it is the account addr. is this a problem?
             user = await signInWithSdk();
-            
+
             dao = await DaoService.instantiateWithSDK(
               user.attributes['custom:account_address'],
               user.sdk,
@@ -152,6 +155,24 @@ const Store = ({ children, daoParam }) => {
 
     initCurrentUser();
   }, [currentUser, setDaoService, daoParam, web3Connect]);
+
+  useEffect(() => {
+    const fetchBoosts = async () => {
+      // TODO: get from api proxy with daoParam
+      const boostRes = [
+        {
+          daoAddress: '0x501f352e32ec0c981268dc5b5ba1d3661b1acbc6',
+          boost: '7',
+        },
+      ];
+
+      setBoosts(hydrateBoosts(boostRes));
+    };
+
+    if (daoParam) {
+      fetchBoosts();
+    }
+  }, [daoParam]);
 
   // global polling service
   useInterval(async () => {
@@ -189,9 +210,9 @@ const Store = ({ children, daoParam }) => {
     // shares will be 0 if not a member, could also be 0 if rage quit
     // TODO: check membersheip a different way
     const shares = parseInt(member.shares);
-    const loot = parseInt(member.loot);    
+    const loot = parseInt(member.loot);
     const jailed = parseInt(member.jailed);
-    const highestIndexYesVote = member.highestIndexYesVote;    
+    const highestIndexYesVote = member.highestIndexYesVote;
 
     // use attached sdk
     const sdk = currentUser.sdk;
@@ -279,15 +300,17 @@ const Store = ({ children, daoParam }) => {
           <RefreshContext.Provider value={[delay, setDelay]}>
             <Web3ConnectContext.Provider value={[web3Connect, setWeb3Connect]}>
               <DaoServiceContext.Provider value={[daoService, setDaoService]}>
-                <CurrentUserContext.Provider
-                  value={[currentUser, setCurrentUser]}
-                >
-                  <CurrentWalletContext.Provider
-                    value={[currentWallet, setCurrentWallet]}
+                <BoostContext.Provider value={[boosts, setBoosts]}>
+                  <CurrentUserContext.Provider
+                    value={[currentUser, setCurrentUser]}
                   >
-                    {children}
-                  </CurrentWalletContext.Provider>
-                </CurrentUserContext.Provider>
+                    <CurrentWalletContext.Provider
+                      value={[currentWallet, setCurrentWallet]}
+                    >
+                      {children}
+                    </CurrentWalletContext.Provider>
+                  </CurrentUserContext.Provider>
+                </BoostContext.Provider>
               </DaoServiceContext.Provider>
             </Web3ConnectContext.Provider>
           </RefreshContext.Provider>
