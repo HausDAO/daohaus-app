@@ -34,6 +34,7 @@ export const valToDecimalString = (value, tokenAddress, tokens) => {
 
 export const hydrateBoosts = (boosts) => {
   return {
-    proposalComments: boosts.some((boost) => boost.boost === '7'),
+    proposalComments: boosts.some((boost) => boost.boostId.includes(7)),
+    customTheme: boosts.some((boost) => boost.boostId.includes(1)),
   };
 };

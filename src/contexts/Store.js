@@ -158,15 +158,9 @@ const Store = ({ children, daoParam }) => {
 
   useEffect(() => {
     const fetchBoosts = async () => {
-      // TODO: get from api proxy with daoParam
-      const boostRes = [
-        {
-          daoAddress: '0x501f352e32ec0c981268dc5b5ba1d3661b1acbc6',
-          boost: '7',
-        },
-      ];
+      const boostRes = await get(`boosts/${daoParam}`);
 
-      setBoosts(hydrateBoosts(boostRes));
+      setBoosts(hydrateBoosts(boostRes.data));
     };
 
     if (daoParam) {
