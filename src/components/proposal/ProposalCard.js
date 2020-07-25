@@ -170,16 +170,29 @@ const ProposalCard = ({ proposal, index }) => {
           )}
         </OfferDivProposalCard>
       ) : null}
-      {proposal.funding ? (
-        <>
-          <h5>Requesting</h5>
-          <DataH2>
-            <ValueDisplay
-              value={Web3.utils.fromWei(proposal.fundingRequested)}
-              symbolOverride={proposal.fundingRequested}
-            />
-          </DataH2>
-        </>
+      {proposal.proposalType === 'Funding Proposal' ? (
+        <OfferDivProposalCard>
+          {proposal.paymentRequested > 0 ? (
+            <div className="Shares">
+              <h5>Funds Requested</h5>
+              <DataH2>
+                <ValueDisplay
+                  value={
+                    proposal.paymentRequested /
+                    10 ** (proposal.paymentTokenDecimals || 18)
+                  }
+                  symbolOverride={proposal.paymentTokenSymbol}
+                />
+              </DataH2>
+            </div>
+          ) : null}
+          {proposal.lootRequested > 0 ? (
+            <div className="Shares">
+              <h5>Loot Requested</h5>
+              <DataH2>{proposal.lootRequested} LOOT</DataH2>
+            </div>
+          ) : null}
+        </OfferDivProposalCard>
       ) : null}
 
       {proposal.whitelist ? (
