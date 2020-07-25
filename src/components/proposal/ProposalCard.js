@@ -170,6 +170,17 @@ const ProposalCard = ({ proposal, index }) => {
           )}
         </OfferDivProposalCard>
       ) : null}
+      {proposal.funding ? (
+        <>
+          <h5>Requesting</h5>
+          <DataH2>
+            <ValueDisplay
+              value={Web3.utils.fromWei(proposal.fundingRequested)}
+              symbolOverride={proposal.fundingRequested}
+            />
+          </DataH2>
+        </>
+      ) : null}
 
       {proposal.whitelist ? (
         <>
