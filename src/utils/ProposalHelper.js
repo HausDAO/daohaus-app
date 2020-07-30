@@ -191,9 +191,9 @@ export const groupByStatus = (proposals, unsponsoredView) => {
 };
 
 export const titleMaker = (proposal) => {
-  if (containsNonLatinCodepoints(proposal.details)) {
-    return `Proposal ${proposal.proposalId}`;
-  }
+  // if (containsNonLatinCodepoints(proposal.details)) {
+  //   return `Proposal ${proposal.proposalId}`;
+  // }
 
   const details = proposal.details.split('~');
 
@@ -266,7 +266,7 @@ export const determineProposalType = (proposal) => {
   }
 };
 
-export const containsNonLatinCodepoints = (s) => {
-  // eslint-disable-next-line
-  return /[^\u0000-\u00ff]/.test(s);
-};
+// export const containsNonLatinCodepoints = (s) => {
+//   // eslint-disable-next-line
+//   return /[^\u0000-\u00ff]/.test(s);
+// };
