@@ -8,6 +8,11 @@ import daosquareBrand from '../assets/themes/daosquare/daosquare__logo.png';
 import daosquareBg from '../assets/themes/daosquare/daosquare__bg.jpg';
 import machixBrand from '../assets/themes/machix/machixBrand.png';
 import machixBg from '../assets/themes/machix/machixBg.png';
+// import hausBrand from '../assets/themes/hausdao/Daohaus__Castle--Dark.svg';
+import hausBrand from '../assets/themes/hausdao/hausdao__logo.png';
+// import hausBg from '../assets/themes/hausdao/daohaus__hero--falling.png';
+import hausBg from '../assets/themes/hausdao/Banner.png';
+// import hausBrand from '../assets/themes/hausdao/daohaus__logo--white.png';
 
 export const themeMap = {
   moloch: {
@@ -76,6 +81,20 @@ export const themeMap = {
     primary: `#04d904`,
     secondary: `#04d904`,
     tertiary: `#04d904`,
+    danger: `rgba(239,73,95,1)`,
+    success: `#04d904`,
+    bright: `rgba(189,134,254,1)`,
+  },
+  hausdao: {
+    baseFont: `'Roboto', sans-serif`,
+    dataFont: `'Share Tech Mono', sans-serif`,
+    baseFontColor: 'white',
+    brand: hausBrand,
+    brandBg: hausBg,
+    appBackground: `#0E1235`,
+    primary: `#EB8A23`,
+    secondary: `#513E99`,
+    tertiary: `#129AC6`,
     danger: `rgba(239,73,95,1)`,
     success: `#04d904`,
     bright: `rgba(189,134,254,1)`,
