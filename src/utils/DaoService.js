@@ -140,14 +140,28 @@ export class DaoService {
   }
 
   static async instantiateWithReadOnly(contractAddr, version) {
+    console.log(
+      'instantiateWithReadOnly',
+      new Web3.providers.HttpProvider(config.INFURA_URI),
+    );
     const web3 = new Web3(new Web3.providers.HttpProvider(config.INFURA_URI));
+
+    console.log('web3', web3);
     const bcProcessor = new ReadOnlyBcProcessorService(web3);
 
+    console.log('bcProcessor', bcProcessor);
+
     const mcDao = new ReadonlyMcDaoService(web3, contractAddr, '', version);
+
+    console.log('mcDao', mcDao);
+
+    console.log('version', version);
 
     let approvedToken;
     if (version === 2) {
       approvedToken = await mcDao.getDepositToken();
+
+      console.log('approvedToken', approvedToken);
     } else {
       approvedToken = await mcDao.approvedToken();
     }

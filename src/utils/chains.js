@@ -84,7 +84,7 @@ const supportedChains = [
 
 export function getChainData(chainId) {
   const chainData = supportedChains.filter(
-    (chain) => chain.chain_id === chainId,
+    (chain) => chain.chain_id === +chainId,
   )[0];
 
   if (!chainData) {
