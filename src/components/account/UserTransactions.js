@@ -50,6 +50,7 @@ const TransactionsDiv = styled.div`
 `;
 
 const UserTransactions = () => {
+  // TODO kovan is hardcoded here so will break rinkeby
   const bcprocessor = new BcProcessorService();
 
   const [currentUser] = useContext(CurrentUserContext);

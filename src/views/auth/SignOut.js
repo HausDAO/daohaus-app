@@ -1,6 +1,5 @@
 import React, { useContext, useEffect } from 'react';
 import { Redirect } from 'react-router-dom';
-import { Auth } from 'aws-amplify';
 
 import { CurrentUserContext, DaoServiceContext } from '../../contexts/Store';
 
@@ -14,7 +13,6 @@ const SignOut = () => {
     // probably should clear sdk from local storage but no way to recover yet
     const currentUser = async () => {
       try {
-        await Auth.signOut();
         setCurrentUser();
         localStorage.clear();
         window.location.reload();

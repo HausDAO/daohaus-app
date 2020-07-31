@@ -7,7 +7,6 @@ import MemberList from '../../components/member/MemberList';
 import ErrorMessage from '../../components/shared/ErrorMessage';
 import BottomNav from '../../components/shared/BottomNav';
 import Loading from '../../components/shared/Loading';
-import StateModals from '../../components/shared/StateModals';
 import { ViewDiv, PadDiv } from '../../App.styles';
 
 const Members = () => {
@@ -32,7 +31,6 @@ const Members = () => {
 
   return (
     <ViewDiv>
-      <StateModals />
       <div>
         <PadDiv>
           <h3>Members</h3>

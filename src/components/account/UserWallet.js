@@ -14,7 +14,6 @@ import WithdrawForm from './WithdrawForm';
 // import WrapEth from './WrapEth';
 import ApproveAllowance from './ApproveAllowance';
 import DepositForm from './DepositForm';
-import StateModals from '../shared/StateModals';
 import { USER_TYPE } from '../../utils/DaoService';
 import RagequitForm from './RagequitForm';
 import ChangeDelegateKeyForm from './ChangeDelegateKeyForm';
@@ -59,7 +58,6 @@ const UserWallet = () => {
       {loading && <Loading />}
       {currentUser && (
         <UserWalletDiv>
-          <StateModals />
 
           {!livesDangerously && loginType !== USER_TYPE.WEB3 ? (
             <RiskyBizButton onClick={() => acceptWarning()}>
