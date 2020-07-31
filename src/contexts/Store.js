@@ -1,14 +1,9 @@
 import React, { useState, useEffect, createContext } from 'react';
-import Web3Connect from 'web3connect';
+import Web3Modal from 'web3modal';
 
 import { useInterval } from '../utils/PollingUtil';
 import { WalletStatuses, currentStatus } from '../utils/WalletStatus';
-import {
-  signInWithSdk,
-  createWeb3User,
-  w3connect,
-  providerOptions,
-} from '../utils/Auth';
+import { createWeb3User, w3connect, providerOptions } from '../utils/Auth';
 import { DaoService, USER_TYPE } from '../utils/DaoService';
 import { getChainData } from '../utils/chains';
 import config from '../config';
@@ -47,14 +42,12 @@ const Store = ({ children, daoParam }) => {
   const [loading, setLoading] = useState(false);
   // set initial delay to 1 second to update sdk balance
   const [delay, setDelay] = useState(1000);
-  // track number of times to do a 1 second update
-  const [numTries, setNumTries] = useState(0);
 
   const [daoService, setDaoService] = useState();
   const [daoData, setDaoData] = useState();
 
   const [web3Connect, setWeb3Connect] = useState(
-    new Web3Connect.Core({
+    new Web3Modal({
       network: getChainData(config.CHAIN_ID).network, // optional
       providerOptions, // required
       cacheProvider: true,
@@ -117,19 +110,6 @@ const Store = ({ children, daoParam }) => {
             }
             break;
           }
-          case USER_TYPE.SDK:
-            // TODO: this makes username the cognito username. in web3 login it is the account addr. is this a problem?
-            user = await signInWithSdk();
-            
-            dao = await DaoService.instantiateWithSDK(
-              user.attributes['custom:account_address'],
-              user.sdk,
-              daoParam,
-              version,
-            );
-            // TODO: why is this not set in daoService?
-            dao.daoAddress = daoParam;
-            break;
           case USER_TYPE.READ_ONLY:
           default:
             dao = await DaoService.instantiateWithReadOnly(daoParam, version);
@@ -165,7 +145,7 @@ const Store = ({ children, daoParam }) => {
       return;
     }
 
-    let accountDevices = null;
+    const accountDevices = null;
     // get account address from aws
     const acctAddr = currentUser.attributes['custom:account_address'];
     // get delegate key from contract to see if it is different
@@ -189,15 +169,9 @@ const Store = ({ children, daoParam }) => {
     // shares will be 0 if not a member, could also be 0 if rage quit
     // TODO: check membersheip a different way
     const shares = parseInt(member.shares);
-    const loot = parseInt(member.loot);    
+    const loot = parseInt(member.loot);
     const jailed = parseInt(member.jailed);
-    const highestIndexYesVote = member.highestIndexYesVote;    
-
-    // use attached sdk
-    const sdk = currentUser.sdk;
-
-    // set initial values of contract wallet
-    // these are set to zero every interval, maybe needed when user logs out
+    const highestIndexYesVote = member.highestIndexYesVote;
 
     let eth = 0;
     let state = WalletStatuses.Unknown;
@@ -206,35 +180,6 @@ const Store = ({ children, daoParam }) => {
     state = daoService.getAccountState();
     setLoading(false);
 
-    // state.account will be undefined if not connected
-    // should be loading durring this?
-    //     it seems the sdk loads and then it takes a bit to get the account info
-    //     could i check earlier that there is no account info
-    //     not with getConnectedDevices because it errors before account connected
-    if (currentUser.type === USER_TYPE.SDK) {
-      if (sdk && sdk.state.account) {
-        // console.log('connected state', sdk.state);
-        // check acount devices on sdk
-        accountDevices = await sdk.getConnectedAccountDevices();
-        // console.log('state', state);
-
-        // console.log('when connected?', sdk && sdk.state.account.state);
-        // set delay to 10 seconds after sdk balance is updated
-      } else {
-        // console.log('not connected, try again', sdk);
-        state = WalletStatuses.Connecting;
-
-        setNumTries(numTries + 1);
-        // console.log('tries', numTries);
-        // if sdk is not connected withen 5 seconds it probably is a new account
-        // should be loading durring this?
-        // TODO: need a better way to check this
-        if (numTries >= 5) {
-          state = WalletStatuses.NotConnected;
-          setLoading(false);
-        }
-      }
-    }
     setDelay(60000);
 
     // check transactions left over in bcprocessor storage

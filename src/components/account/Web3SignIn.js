@@ -1,5 +1,5 @@
 import React, { useContext } from 'react';
-import Web3Connect from 'web3connect';
+import Web3Modal from 'web3modal';
 
 import { DaoServiceContext, Web3ConnectContext } from '../../contexts/Store';
 import config from '../../config';
@@ -15,7 +15,7 @@ export const Web3SignIn = ({ history }) => {
   return (
     <ButtonPrimary
       onClick={async () => {
-        const web3Connect = new Web3Connect.Core({
+        const web3Connect = new Web3Modal({
           network: getChainData(config.CHAIN_ID).network, // optional
           providerOptions, // required
           cacheProvider: true,

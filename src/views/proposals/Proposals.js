@@ -12,7 +12,6 @@ import {
   DaoDataContext,
   CurrentUserContext,
 } from '../../contexts/Store';
-import StateModals from '../../components/shared/StateModals';
 import ProposalTypeToggle from '../../components/proposal-v2/ProposalTypeToggle';
 
 import styled from 'styled-components';
@@ -78,7 +77,6 @@ const Proposals = ({ match, history }) => {
 
   return (
     <>
-      <StateModals />
       <ProposalsHeaderRow>
         <h3>Proposals</h3>
         {currentWallet.shares || (daoData.version === 2 && currentUser) ? (

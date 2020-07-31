@@ -14,11 +14,7 @@ import { WalletStatuses } from '../../utils/WalletStatus';
 import { truncateAddr } from '../../utils/Helpers';
 import Arrow from '../../assets/DropArrow.svg';
 import { useInterval } from '../../utils/PollingUtil';
-import Deploy from './Deploy';
 import UserTransactions from './UserTransactions';
-import AccountList from './AccountList';
-import DepositFormInitial from './DepositFormInitial';
-import UpgradeKeystore from '../../auth/UpgradeKeystore';
 import { USER_TYPE } from '../../utils/DaoService';
 import { GET_MEMBER } from '../../utils/Queries';
 
@@ -27,8 +23,6 @@ import { DataP, DataDiv, BackdropOpenDiv } from '../../App.styles';
 import {
   WalletDiv,
   WalletHeaderDiv,
-  WalletOverlayDiv,
-  WalletOverlayContentsDiv,
   StatusP,
   AddressButton,
   ActionsDropdownDiv,
@@ -40,6 +34,7 @@ import {
   BalanceItemDiv,
   TinyButton,
 } from './UserBalances.styles';
+import EtherscanLink from '../shared/EtherscanLink';
 
 const UserBalance = ({ toggle }) => {
   const [daoData] = useContext(DaoDataContext);
@@ -50,15 +45,11 @@ const UserBalance = ({ toggle }) => {
   const [copied, setCopied] = useState(false);
   const [actionsOpen, setActionsOpen] = useState(false);
   const [headerSwitch, setHeaderSwitch] = useState('Balances');
-  const [keystoreExists, setKeystoreExists] = useState(true);
   const [tokenBalances, setTokenBalances] = useState([]);
   const [memberAddressLoggedIn, setMemberAddressLoggedIn] = useState(false);
   const [memberAddress, setMemberAddress] = useState(false);
 
-  const memberAddr =
-    currentUser.type === USER_TYPE.SDK
-      ? currentUser.attributes['custom:account_address'].toLowerCase()
-      : currentUser.username.toLowerCase();
+  const memberAddr = currentUser.username.toLowerCase();
   const options = {
     pollInterval: 60000,
     variables: {
@@ -80,7 +71,6 @@ const UserBalance = ({ toggle }) => {
     if (!data || !data.member) {
       return;
     }
-    console.log(data);
 
     setTokenBalances(data.member.tokenBalances);
     // eslint-disable-next-line
@@ -90,16 +80,6 @@ const UserBalance = ({ toggle }) => {
     (async () => {
       if (!daoService.mcDao) {
         return;
-      }
-
-      if (currentUser && currentUser.type === USER_TYPE.SDK) {
-        try {
-          const userAttributes = currentUser.attributes;
-
-          setKeystoreExists(!!userAttributes['custom:encrypted_ks']);
-        } catch (error) {
-          console.error(error);
-        }
       }
 
       const _memberAddress = await daoService.mcDao.memberAddressByDelegateKey(
@@ -136,20 +116,11 @@ const UserBalance = ({ toggle }) => {
     return tokens.map((token) => {
       return (
         <BalanceItemDiv key={token.token.tokenAddress}>
-          <p>
-            <a
-              href={
-                config.SDK_ENV === 'Kovan'
-                  ? 'https://kovan.etherscan.io/token/' +
-                    token.token.tokenAddress
-                  : 'https://etherscan.io/token/' + token.token.tokenAddress
-              }
-              rel="noopener noreferrer"
-              target="_blank"
-            >
-              {token.token.symbol}
-            </a>
-          </p>
+          <EtherscanLink
+            type="address"
+            hash={token.token.tokenAddress}
+            linkText={token.token.symbol}
+          />
           <DataP>{token.tokenBalance / 10 ** token.token.decimals}</DataP>
         </BalanceItemDiv>
       );
@@ -168,55 +139,12 @@ const UserBalance = ({ toggle }) => {
 
   return (
     <WalletDiv>
-      {/* <p>{currentWallet.state}</p>
-      <p>{WalletStatuses.Deployed}</p> */}
-      {currentWallet.state !== WalletStatuses.Connecting &&
-        currentWallet.state === WalletStatuses.Created && (
-          <WalletOverlayDiv>
-            <WalletOverlayContentsDiv>
-              {currentWallet.eth < 0.05 && <DepositFormInitial />}
-              {currentWallet.eth >= 0.05 && (
-                <>
-                  <h3>
-                    <span role="img" aria-label="party popper">
-                      🎉
-                    </span>{' '}
-                    Congrats!{' '}
-                    <span role="img" aria-label="party popper">
-                      🎉
-                    </span>
-                  </h3>
-                  <h2>Your account is ready to deploy.</h2>
-                  <Deploy />
-                </>
-              )}
-              {!keystoreExists && (
-                <p>
-                  Contact Support in{' '}
-                  <a href="https://t.me/joinchat/IJqu9xeMfqWoLnO_kc03QA">
-                    Telegram
-                  </a>
-                </p>
-              )}
-            </WalletOverlayContentsDiv>
-          </WalletOverlayDiv>
-        )}
-      {currentWallet.state === WalletStatuses.Deployed && !keystoreExists && (
-        <WalletOverlayDiv>
-          <WalletOverlayContentsDiv>
-            <h2>Please upgrade your account.</h2>
-            {!keystoreExists && <UpgradeKeystore />}
-          </WalletOverlayContentsDiv>
-        </WalletOverlayDiv>
-      )}
       <WalletHeaderDiv>
         <div className="WalletInfo">
           <StatusP
             status={
-              (currentUser.type === USER_TYPE.SDK &&
-                currentWallet.state !== 'Deployed') ||
-              (currentUser.type === USER_TYPE.WEB3 &&
-                currentWallet.state !== 'Connected')
+              currentUser.type === USER_TYPE.WEB3 &&
+              currentWallet.state !== 'Connected'
                 ? 'Disconnected'
                 : ''
             }
@@ -275,7 +203,7 @@ const UserBalance = ({ toggle }) => {
                 )}
                 {currentWallet.state === WalletStatuses.Deployed && (
                   <ButtonSecondary onClick={() => toggleActions('sendEth')}>
-                    Send ETH
+                    Send {+config.CHAIN_ID === 100 ? 'XDAI' : 'ETH'}
                   </ButtonSecondary>
                 )}
                 {currentWallet.state === WalletStatuses.Deployed &&
@@ -335,15 +263,6 @@ const UserBalance = ({ toggle }) => {
             Transactions
           </SelectedElementButton>
         )}
-
-        {currentUser && currentUser.type === USER_TYPE.SDK && (
-          <SelectedElementButton
-            selected={headerSwitch === 'Accounts'}
-            onClick={() => setHeaderSwitch('Accounts')}
-          >
-            Settings
-          </SelectedElementButton>
-        )}
       </SwitchHeaderDiv>
       <WalletContents>
         {headerSwitch === 'Balances' && (
@@ -359,13 +278,14 @@ const UserBalance = ({ toggle }) => {
               </BalanceItemDiv>
             ) : null}
             <BalanceItemDiv>
-              <p>ETH</p>
+              <p>{+config.CHAIN_ID === 100 ? 'XDAI' : 'ETH'}</p>
               <DataDiv>
                 {currentWallet.eth}
                 {currentWallet.state !== WalletStatuses.Connecting &&
                   currentWallet.eth < 0.01 && (
                     <TinyButton onClick={() => toggle('depositForm')}>
-                      <span>!</span> Low Eth
+                      <span>!</span> Low{' '}
+                      {+config.CHAIN_ID === 100 ? 'XDAI' : 'ETH'}
                     </TinyButton>
                   )}
               </DataDiv>
@@ -406,7 +326,6 @@ const UserBalance = ({ toggle }) => {
           </BalancesDiv>
         )}
         {headerSwitch === 'Transactions' && <UserTransactions />}
-        {headerSwitch === 'Accounts' && <AccountList />}
       </WalletContents>
     </WalletDiv>
   );
