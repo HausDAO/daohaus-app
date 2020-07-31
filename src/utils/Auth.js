@@ -1,5 +1,5 @@
 import Web3 from 'web3';
-import Web3Connect from 'web3connect';
+import Web3Modal from 'web3modal';
 import WalletConnectProvider from '@walletconnect/web3-provider';
 
 import config from '../config';
@@ -63,7 +63,7 @@ export const signInWithWeb3 = async () => {
   // const infuraId = config.INFURA_URI.split('/').pop();
 
   console.log('config.CHAIN_ID: ', config.CHAIN_ID);
-  const web3Connect = new Web3Connect.Core({
+  const web3Connect = new Web3Modal({
     network: getChainData(config.CHAIN_ID).network, // optional
     providerOptions, // required
   });

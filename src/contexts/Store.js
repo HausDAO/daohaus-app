@@ -1,5 +1,5 @@
 import React, { useState, useEffect, createContext } from 'react';
-import Web3Connect from 'web3connect';
+import Web3Modal from 'web3modal';
 
 import { useInterval } from '../utils/PollingUtil';
 import { WalletStatuses, currentStatus } from '../utils/WalletStatus';
@@ -47,7 +47,7 @@ const Store = ({ children, daoParam }) => {
   const [daoData, setDaoData] = useState();
 
   const [web3Connect, setWeb3Connect] = useState(
-    new Web3Connect.Core({
+    new Web3Modal({
       network: getChainData(config.CHAIN_ID).network, // optional
       providerOptions, // required
       cacheProvider: true,
