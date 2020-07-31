@@ -6,6 +6,7 @@ import config from '../../config';
 
 import styled from 'styled-components';
 import { getAppLight, getAppDark } from '../../variables.styles';
+import EtherscanLink from '../shared/EtherscanLink';
 
 const TransactionsDiv = styled.div`
   width: 100%;
@@ -64,17 +65,15 @@ const UserTransactions = () => {
             <div className="Description">
               <p className="Description__Title">{tx.description}</p>
               <p className="Data">
-                <a
-                  href={
-                    config.SDK_ENV === 'Kovan'
-                      ? 'https://kovan.etherscan.io/tx/' + tx.tx
-                      : 'https://etherscan.io/tx/' + tx.tx
+                <EtherscanLink
+                  type="tx"
+                  hash={tx.tx}
+                  linkText={
+                    config.CHAIN_ID === '100'
+                      ? 'Check on Blockscout'
+                      : 'Check on Etherscan'
                   }
-                  target="_blank"
-                  rel="noreferrer noopener"
-                >
-                  Check on Etherscan
-                </a>
+                />
               </p>
             </div>
             <div className="Status">

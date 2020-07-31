@@ -34,6 +34,7 @@ import {
   BalanceItemDiv,
   TinyButton,
 } from './UserBalances.styles';
+import EtherscanLink from '../shared/EtherscanLink';
 
 const UserBalance = ({ toggle }) => {
   const [daoData] = useContext(DaoDataContext);
@@ -112,24 +113,14 @@ const UserBalance = ({ toggle }) => {
   };
 
   const renderBalances = (tokens) => {
-    // TODO kovan is hardcoded here so will break rinkeby
     return tokens.map((token) => {
       return (
         <BalanceItemDiv key={token.token.tokenAddress}>
-          <p>
-            <a
-              href={
-                config.SDK_ENV === 'Kovan'
-                  ? 'https://kovan.etherscan.io/token/' +
-                    token.token.tokenAddress
-                  : 'https://etherscan.io/token/' + token.token.tokenAddress
-              }
-              rel="noopener noreferrer"
-              target="_blank"
-            >
-              {token.token.symbol}
-            </a>
-          </p>
+          <EtherscanLink
+            type="address"
+            hash={token.token.tokenAddress}
+            linkText={token.token.symbol}
+          />
           <DataP>{token.tokenBalance / 10 ** token.token.decimals}</DataP>
         </BalanceItemDiv>
       );
