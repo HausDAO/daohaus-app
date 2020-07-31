@@ -81,7 +81,7 @@ export const signInWithWeb3 = async () => {
   const [account] = await web3.eth.getAccounts();
   console.log('account: ', account);
 
-  if (injectedChainId !== config.CHAIN_ID) {
+  if (injectedChainId !== +config.CHAIN_ID) {
     alert(
       `Please switch Web3 to the correct network and try signing in again. Detected network: ${getChainIdName(
         injectedChainId,
