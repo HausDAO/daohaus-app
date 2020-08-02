@@ -174,7 +174,7 @@ export const groupByStatus = (proposals, unsponsoredView) => {
       GracePeriod: proposals.filter((p) => p.status === 'GracePeriod'),
       ReadyForProcessing: proposals
         .filter((p) => p.status === 'ReadyForProcessing')
-        .sort((a, b) => a.proposalId - b.proposalId),
+        .sort((a, b) => a.proposalIndex - b.proposalIndex),
       InQueue: proposals.filter((p) => p.status === 'InQueue'),
       Completed: proposals.filter((p) => {
         return (
