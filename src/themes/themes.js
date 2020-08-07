@@ -8,11 +8,10 @@ import daosquareBrand from '../assets/themes/daosquare/daosquare__logo.png';
 import daosquareBg from '../assets/themes/daosquare/daosquare__bg.jpg';
 import machixBrand from '../assets/themes/machix/machixBrand.png';
 import machixBg from '../assets/themes/machix/machixBg.png';
-// import hausBrand from '../assets/themes/hausdao/Daohaus__Castle--Dark.svg';
 import hausBrand from '../assets/themes/hausdao/hausdao__logo.png';
-// import hausBg from '../assets/themes/hausdao/daohaus__hero--falling.png';
 import hausBg from '../assets/themes/hausdao/Banner.png';
-// import hausBrand from '../assets/themes/hausdao/daohaus__logo--white.png';
+import yearnBg from '../assets/themes/yearn/yearn__bg--pattern--blueonwhite--light.png';
+import yearnBrand from '../assets/themes/yearn/yearn__brand.png';
 
 export const themeMap = {
   moloch: {
@@ -21,6 +20,7 @@ export const themeMap = {
     baseFontColor: 'white',
     brand: molochBrand,
     brandBg: molochBg,
+    bgPosition: 'center center',
     appBackground: `rgba(0, 0, 0, 0.95)`,
     primary: `#aa174c`,
     secondary: `#aa174c`,
@@ -35,6 +35,7 @@ export const themeMap = {
     baseFontColor: 'white',
     brand: machixBrand,
     brandBg: machixBg,
+    bgPosition: 'center center',
     appBackground: `rgba(0, 0, 0, 0.85)`,
     primary: `#f6d82c`,
     secondary: `rgba(47,233,167,1)`,
@@ -49,6 +50,7 @@ export const themeMap = {
     baseFontColor: 'white',
     brand: daosquareBrand,
     brandBg: daosquareBg,
+    bgPosition: 'center center',
     appBackground: `rgba(0, 0, 0, 0.85)`,
     primary: `#ff0844`,
     secondary: `rgba(47,233,167,1)`,
@@ -63,6 +65,7 @@ export const themeMap = {
     baseFontColor: 'white',
     brand: raidBrand,
     brandBg: raidBg,
+    bgPosition: 'center center',
     appBackground: `rgba(0, 0, 0, 1)`,
     primary: `#ff3864`,
     secondary: `rgba(47,233,167,1)`,
@@ -77,6 +80,7 @@ export const themeMap = {
     baseFontColor: 'white',
     brand: metaclanBrand,
     brandBg: metaclanBg,
+    bgPosition: 'center center',
     appBackground: `#000F1F`,
     primary: `#04d904`,
     secondary: `#04d904`,
@@ -88,13 +92,29 @@ export const themeMap = {
   hausdao: {
     baseFont: `'Roboto', sans-serif`,
     dataFont: `'Share Tech Mono', sans-serif`,
-    baseFontColor: 'white',
+    baseFontColor: '#fff',
     brand: hausBrand,
     brandBg: hausBg,
+    bgPosition: 'center bottom',
     appBackground: `#0E1235`,
     primary: `#EB8A23`,
     secondary: `#513E99`,
     tertiary: `#129AC6`,
+    danger: `rgba(239,73,95,1)`,
+    success: `#04d904`,
+    bright: `rgba(189,134,254,1)`,
+  },
+  yearn: {
+    baseFont: `'Work Sans', sans-serif`,
+    dataFont: `'Share Tech Mono', sans-serif`,
+    baseFontColor: '#212529',
+    brand: yearnBrand,
+    brandBg: yearnBg,
+    bgPosition: 'center bottom',
+    appBackground: `rgba(255,255,255,0.9)`,
+    primary: `#007bff`,
+    secondary: `#DC6BE5`,
+    tertiary: `#0a5cae`,
     danger: `rgba(239,73,95,1)`,
     success: `#04d904`,
     bright: `rgba(189,134,254,1)`,
@@ -108,6 +128,7 @@ export const themeMap = {
     baseFontColor: 'white',
     brand: metaclanBrand,
     brandBg: metaclanBg,
+    bgPosition: 'center center',
     appBackground: `#000F1F`,
     primary: `#04d904`,
     secondary: `#04d904`,

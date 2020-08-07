@@ -26,7 +26,7 @@ const ProposalCardDiv = styled.div`
   padding: 25px;
   transition: all 0.15s linear;
   &:hover {
-    background-color: ${(props) => getAppDark(props.theme)};
+    background-color: ${(props) => props.theme.primary};
     color: white;
     @media (min-width: ${phone}) {
       scale: 1.05;

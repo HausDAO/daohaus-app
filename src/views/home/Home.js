@@ -21,7 +21,7 @@ const HomeDiv = styled.div`
     width: 200px;
   }
   background-size: cover;
-  background-position: center center;
+  background-position: ${(props) => props.theme.bgPosition};
   background-repeat: no-repeat;
   min-height: calc(100vh - 62px);
   background-image: url(${(props) => props.theme.brandBg});
@@ -132,7 +132,7 @@ const Home = () => {
 
   if (loading) return <Loading />;
   if (error) return <ErrorMessage message={error} />;
-  
+
   return (
     <>
       {daoData ? <HeadTags daoData={daoData} /> : null}
