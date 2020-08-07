@@ -11,7 +11,6 @@ import machixBg from '../assets/themes/machix/machixBg.png';
 import hausBrand from '../assets/themes/hausdao/hausdao__logo.png';
 import hausBg from '../assets/themes/hausdao/Banner.png';
 import yearnBg from '../assets/themes/yearn/yearn__bg--pattern--blueonwhite--light.png';
-// import yearnBg from '../assets/themes/yearn/yearn__waifu--a.png';
 import yearnBrand from '../assets/themes/yearn/yearn__brand.png';
 
 export const themeMap = {
