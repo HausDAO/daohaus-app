@@ -96,7 +96,7 @@ const Store = ({ children, daoParam }) => {
               );
               const [account] = await web3.eth.getAccounts();
 
-              setWeb3Connect(w3c);
+              setWeb3Connect(web3Connect);
               user = createWeb3User(account);
               dao = await DaoService.instantiateWithWeb3(
                 user.attributes['custom:account_address'],

@@ -40,6 +40,9 @@ const ProposalEngine = () => {
         Guildkick
       </Link>
       <Link to={`/dao/${daoData.contractAddress}/proposal-trade`}>Trade</Link>
+      <Link to={`/dao/${daoData.contractAddress}/proposal-transmutation`}>
+        Transmutation
+      </Link>
     </ProposalEngineDiv>
   );
 };
