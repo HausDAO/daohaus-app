@@ -37,7 +37,8 @@ export const providerOptions = {
 };
 
 export const w3connect = async (web3Connect) => {
-  const provider = await web3Connect.connect();
+  const w3c = web3Connect.w3c;
+  const provider = await w3c.connect();
 
   const web3 = new Web3(provider);
 
@@ -56,20 +57,22 @@ export const w3connect = async (web3Connect) => {
     );
   }
 
-  return { web3Connect, web3, provider };
+  return { w3c, web3, provider };
 };
 
 export const signInWithWeb3 = async () => {
   // const infuraId = config.INFURA_URI.split('/').pop();
 
   console.log('config.CHAIN_ID: ', config.CHAIN_ID);
-  const web3Connect = new Web3Modal({
-    network: getChainData(config.CHAIN_ID).network, // optional
-    providerOptions, // required
-  });
+  const web3Connect = {
+    w3c: new Web3Modal({
+      network: getChainData(config.CHAIN_ID).network, // optional
+      providerOptions, // required
+    }),
+  };
   console.log('web3Connect: ', web3Connect);
 
-  const provider = await web3Connect.connect();
+  const provider = await web3Connect.w3c.connect();
   console.log('provider: ', provider);
 
   const web3 = new Web3(provider);

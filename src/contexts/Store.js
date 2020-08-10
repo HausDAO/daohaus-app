@@ -46,13 +46,13 @@ const Store = ({ children, daoParam }) => {
   const [daoService, setDaoService] = useState();
   const [daoData, setDaoData] = useState();
 
-  const [web3Connect, setWeb3Connect] = useState(
-    new Web3Modal({
+  const [web3Connect, setWeb3Connect] = useState({
+    w3c: new Web3Modal({
       network: getChainData(config.CHAIN_ID).network, // optional
       providerOptions, // required
       cacheProvider: true,
     }),
-  );
+  });
 
   useEffect(() => {
     // runs on app load, sets up user auth and sdk if necessary
@@ -78,8 +78,8 @@ const Store = ({ children, daoParam }) => {
       if (!daoParam || !apiData) {
         return;
       }
-
-      if (web3Connect.cachedProvider) {
+      console.log('web3Connect????', web3Connect);
+      if (web3Connect.w3c.cachedProvider) {
         loginType = USER_TYPE.WEB3;
       }
 
@@ -90,14 +90,14 @@ const Store = ({ children, daoParam }) => {
 
         switch (loginType) {
           case USER_TYPE.WEB3: {
-            if (web3Connect.cachedProvider) {
-              const { web3Connect: w3c, web3, provider } = await w3connect(
-                web3Connect,
-              );
+            if (web3Connect.w3c.cachedProvider) {
+              const { w3c, web3, provider } = await w3connect(web3Connect);
+              console.log('w3c???', w3c);
               const [account] = await web3.eth.getAccounts();
 
-              setWeb3Connect(web3Connect);
+              setWeb3Connect({ w3c, web3, provider });
               user = createWeb3User(account);
+              console.log('user?', user);
               dao = await DaoService.instantiateWithWeb3(
                 user.attributes['custom:account_address'],
                 provider,

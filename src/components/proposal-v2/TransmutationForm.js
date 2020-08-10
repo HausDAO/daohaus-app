@@ -13,7 +13,7 @@ import {
 } from '../../contexts/Store';
 import Loading from '../shared/Loading';
 
-import { ProposalSchema } from './Validation';
+import abi from '../../contracts/transmutation.json';
 
 const H2Arrow = styled.h2`
   text-align: center;
@@ -30,19 +30,38 @@ const TransmutationForm = (props) => {
   const [web3Connect] = useContext(Web3ConnectContext);
 
   const setupValues = {
-    contractAddress: '',
-    exchangeRate: '',
+    contractAddress: '0x8fB2cEa12c43573616be80148C182fCA14Eb9a26',
+    exchangeRate: 2,
+    paddingNumber: 100,
   };
-  const submitProposal = async (
-    tributeOffered,
-    paymentRequested,
-    paymentToken,
-    description,
-  ) => {
+  const submitProposal = async (paymentRequested, description) => {
     console.log(web3Connect, setupValues, currentUser);
-    // this.daoContract = new web3.eth.Contract(abi, daoAddress);
-    // const web3 = new Web3(injected);
+    const contract = new web3Connect.web3.eth.Contract(
+      abi,
+      setupValues.contractAddress,
+    );
+
+    const bnExchange = web3Connect.web3.utils.toBN(
+      setupValues.exchangeRate * setupValues.paddingNumber,
+    );
     // const bcProcessor = new BcProcessorService(web3);
+
+    const bnTributeOffered = web3Connect.web3.utils
+      .toBN(paymentRequested)
+      .mul(web3Connect.web3.utils.toBN(setupValues.paddingNumber));
+    const tributeOffered = bnTributeOffered
+      .mul(bnExchange)
+      .div(web3Connect.web3.utils.toBN(setupValues.paddingNumber));
+
+    console.log('contract', contract);
+    return contract.methods
+      .propose(
+        currentUser.username,
+        tributeOffered,
+        paymentRequested,
+        description,
+      )
+      .send({ from: currentUser.username });
   };
 
   //   function propose(
@@ -60,7 +79,7 @@ const TransmutationForm = (props) => {
         {gloading && <Loading />}
 
         <div>
-          {currentUser.username ? (
+          {currentUser && currentUser.username ? (
             <Formik
               initialValues={{
                 description: '',
@@ -75,9 +94,7 @@ const TransmutationForm = (props) => {
                 setSubmitting(true);
                 try {
                   await submitProposal(
-                    values.tributeOffered,
                     values.paymentRequested,
-                    values.paymentToken,
                     values.description,
                   );
                   setSubmitting(false);
@@ -105,32 +122,8 @@ const TransmutationForm = (props) => {
                   <ErrorMessage name="description">
                     {(msg) => <div className="Error">{msg}</div>}
                   </ErrorMessage>
-                  {/* <Field name="link">
-                    {({ field, form }) => (
-                      <FieldContainer
-                        className={field.value ? 'Field HasValue' : 'Field '}
-                      >
-                        <label>Link</label>
-                        <input type="text" {...field} />
-                      </FieldContainer>
-                    )}
-                  </Field>
-                  <ErrorMessage name="link">
-                    {(msg) => <div className="Error">{msg}</div>}
-                  </ErrorMessage> */}
-                  <Field name="tributeOffered">
-                    {({ field, form }) => (
-                      <FieldContainer
-                        className={field.value ? 'Field HasValue' : 'Field '}
-                      >
-                        <label>Give Amount</label>
-                        <input type="text" {...field} />
-                      </FieldContainer>
-                    )}
-                  </Field>
-                  <ErrorMessage name="tributeOffered">
-                    {(msg) => <div className="Error">{msg}</div>}
-                  </ErrorMessage>
+
+                  <h2>{setupValues.exchangeRate}</h2>
 
                   <H2Arrow>↓</H2Arrow>
 

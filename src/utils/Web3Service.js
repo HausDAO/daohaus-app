@@ -16,7 +16,10 @@ export default class Web3Service {
   constructor(injected) {
     if (injected) {
       this.web3 = new Web3(injected);
+      console.log('web3service injected');
     } else {
+      console.log('web3service not injected');
+
       this.web3 = new Web3(new Web3.providers.HttpProvider(config.INFURA_URI));
     }
   }

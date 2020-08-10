@@ -22,8 +22,8 @@ export const Web3SignIn = ({ history }) => {
         });
 
         try {
-          await w3connect(web3Connect);
-          setWeb3Connect(web3Connect);
+          const { w3c, web3, provider } = await w3connect(web3Connect);
+          setWeb3Connect({ w3c, web3, provider });
           history.push(
             '/dao/' + daoService.daoAddress.toLowerCase() + '/proposals',
           );
