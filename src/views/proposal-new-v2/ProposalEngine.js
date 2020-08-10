@@ -1,6 +1,6 @@
 import React, { useContext } from 'react';
 import { Link } from 'react-router-dom';
-import { DaoDataContext } from '../../contexts/Store';
+import { DaoDataContext, CurrentWalletContext } from '../../contexts/Store';
 import styled from 'styled-components';
 
 const ProposalEngineDiv = styled.div`
@@ -24,6 +24,7 @@ const ProposalEngineDiv = styled.div`
 
 const ProposalEngine = () => {
   const [daoData] = useContext(DaoDataContext);
+  const [currentWallet] = useContext(CurrentWalletContext);
 
   return (
     <ProposalEngineDiv>
@@ -40,9 +41,12 @@ const ProposalEngine = () => {
         Guildkick
       </Link>
       <Link to={`/dao/${daoData.contractAddress}/proposal-trade`}>Trade</Link>
-      <Link to={`/dao/${daoData.contractAddress}/proposal-transmutation`}>
-        Transmutation
-      </Link>
+      {/* TODO: houseDAO only */}
+      {currentWallet.shares > 0 && (
+        <Link to={`/dao/${daoData.contractAddress}/proposal-transmutation`}>
+          Transmutation
+        </Link>
+      )}
     </ProposalEngineDiv>
   );
 };
