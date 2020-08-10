@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext, useState, useEffect } from 'react';
 import { withRouter } from 'react-router-dom';
 import styled from 'styled-components';
 
@@ -13,6 +13,8 @@ import {
 } from '../../contexts/Store';
 import Loading from '../shared/Loading';
 
+import { TokenService } from '../../utils/TokenService';
+
 import abi from '../../contracts/transmutation.json';
 
 const H2Arrow = styled.h2`
@@ -25,6 +27,7 @@ const TransmutationForm = (props) => {
 
   const [gloading] = useContext(LoaderContext);
   const [formLoading, setFormLoading] = useState(false);
+  const [balance, setBalance] = useState(0);
   const [daoService] = useContext(DaoServiceContext);
   const [currentUser] = useContext(CurrentUserContext);
   const [web3Connect] = useContext(Web3ConnectContext);
@@ -76,12 +79,23 @@ const TransmutationForm = (props) => {
       .send({ from: currentUser.username });
   };
 
-  //   function propose(
-  //     address _applicant,
-  //     uint256 _giveAmt,
-  //     uint256 _getAmt,
-  //     string calldata _details
-  // )
+  useEffect(() => {
+    const getBalance = async () => {
+      const contract = new web3Connect.web3.eth.Contract(
+        abi,
+        setupValues.contractAddress,
+      );
+      const token = await contract.methods.giveToken().call();
+
+      const tokenService = new TokenService(web3Connect.web3, token);
+
+      const balance = await tokenService.balanceOf(setupValues.contractAddress);
+
+      console.log('balance', web3Connect.web3.utils.fromWei(balance));
+      setBalance(web3Connect.web3.utils.fromWei(balance));
+    };
+    getBalance();
+  }, [setupValues.contractAddress, web3Connect.web3]);
 
   return (
     <FormContainer>
@@ -168,6 +182,7 @@ const TransmutationForm = (props) => {
 
                   <H2Arrow>↓</H2Arrow>
 
+                  <h2>Transmutation Balance: {balance}</h2>
                   <h2>Exchange Rate: {setupValues.exchangeRate}</h2>
                   <h2>
                     {displayTribute(
