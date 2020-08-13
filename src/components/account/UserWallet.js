@@ -58,7 +58,6 @@ const UserWallet = () => {
       {loading && <Loading />}
       {currentUser && (
         <UserWalletDiv>
-
           {!livesDangerously && loginType !== USER_TYPE.WEB3 ? (
             <RiskyBizButton onClick={() => acceptWarning()}>
               <span role="alert" aria-label="skull and crossbones">
