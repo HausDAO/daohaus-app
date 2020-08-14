@@ -12,6 +12,8 @@ import hausBrand from '../assets/themes/hausdao/hausdao__logo.png';
 import hausBg from '../assets/themes/hausdao/Banner.png';
 import yearnBg from '../assets/themes/yearn/yearn__bg--pattern--blueonwhite--light.png';
 import yearnBrand from '../assets/themes/yearn/yearn__brand.png';
+import mcvBg from '../assets/themes/mcv/mcv__bg.jpg';
+import mcvBrand from '../assets/themes/mcv/mcv__brand.png';
 
 export const themeMap = {
   moloch: {
@@ -55,6 +57,21 @@ export const themeMap = {
     primary: `#ff0844`,
     secondary: `rgba(47,233,167,1)`,
     tertiary: `rgba(239,73,123,1)`,
+    danger: `rgba(239,73,95,1)`,
+    success: `rgba(77,204,44,1)`,
+    bright: `rgba(189,134,254,1)`,
+  },
+  mcv: {
+    baseFont: `'Roboto', sans-serif`,
+    dataFont: `'Share Tech Mono', sans-serif`,
+    baseFontColor: 'white',
+    brand: mcvBrand,
+    brandBg: mcvBg,
+    bgPosition: 'center center',
+    appBackground: `rgba(0, 0, 0, 1)`,
+    primary: `#C93C4F`,
+    secondary: `#FFA229`,
+    tertiary: `#38ECAB`,
     danger: `rgba(239,73,95,1)`,
     success: `rgba(77,204,44,1)`,
     bright: `rgba(189,134,254,1)`,
