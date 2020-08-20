@@ -14,6 +14,8 @@ import yearnBg from '../assets/themes/yearn/yearn__bg--pattern--blueonwhite--lig
 import yearnBrand from '../assets/themes/yearn/yearn__brand.png';
 import mcvBg from '../assets/themes/mcv/mcv__bg.jpg';
 import mcvBrand from '../assets/themes/mcv/mcv__brand.png';
+import fedpapersBrand from '../assets/themes/fedPapersTheme/fedpapers-brand.png';
+import fedpapersBG from '../assets/themes/fedPapersTheme/fedpapers-bg.png';
 
 export const themeMap = {
   moloch: {
@@ -152,6 +154,21 @@ export const themeMap = {
     tertiary: `#04d904`,
     danger: `rgba(239,73,95,1)`,
     success: `#04d904`,
+    bright: `rgba(189,134,254,1)`,
+  },
+  federalistpapers: {
+    baseFont: `'Roboto', sans-serif`,
+    dataFont: `'Share Tech Mono', sans-serif`,
+    baseFontColor: 'white',
+    brand: fedpapersBrand,
+    brandBg: fedpapersBG,
+    bgPosition: 'center center',
+    appBackground: `rgba(0, 0, 0, 1)`,
+    primary: `#C93C4F`,
+    secondary: `#FFA229`,
+    tertiary: `#38ECAB`,
+    danger: `rgba(239,73,95,1)`,
+    success: `rgba(77,204,44,1)`,
     bright: `rgba(189,134,254,1)`,
   },
 };
