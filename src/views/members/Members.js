@@ -8,6 +8,7 @@ import ErrorMessage from '../../components/shared/ErrorMessage';
 import BottomNav from '../../components/shared/BottomNav';
 import Loading from '../../components/shared/Loading';
 import { ViewDiv, PadDiv } from '../../App.styles';
+import { Link } from 'react-router-dom';
 
 const Members = () => {
   const [daoService] = useContext(DaoServiceContext);
@@ -34,6 +35,9 @@ const Members = () => {
       <div>
         <PadDiv>
           <h3>Members</h3>
+          <Link to={`/dao/${daoService.daoAddress}/rage`}>
+            Check out Rage Quit History
+          </Link>
           <MemberList members={data.members} />
         </PadDiv>
       </div>

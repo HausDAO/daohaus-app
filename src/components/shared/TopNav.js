@@ -201,14 +201,6 @@ const TopNav = (props) => {
                   </Link>
                 </DropdownItemDiv>
                 <DropdownItemDiv open>
-                  <Link
-                    to={`/dao/${daoService.daoAddress}/rage`}
-                    onClick={toggleElement}
-                  >
-                    Rage Quits
-                  </Link>
-                </DropdownItemDiv>
-                <DropdownItemDiv open>
                   <LinkButton
                     onClick={() => {
                       toggleElement();
@@ -256,7 +248,6 @@ const TopNav = (props) => {
               >
                 Sign in {'=>'}
               </Link>
-              <Link to={`/dao/${daoService.daoAddress}/rage`}>Rage Quits</Link>
             </AuthDiv>
           )}
         </>
