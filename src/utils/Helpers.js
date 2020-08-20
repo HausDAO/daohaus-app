@@ -1,4 +1,5 @@
 import { anyToBN } from '@netgum/utils';
+import moment from 'moment';
 
 export const truncateAddr = (addr) => {
   return addr.slice(0, 6) + '...' + addr.slice(-4);
@@ -30,4 +31,8 @@ export const valToDecimalString = (value, tokenAddress, tokens) => {
     // );
     return (value * 10 ** tdata.decimals).toString();
   }
+};
+
+export const formatCreatedAt = (createdAt) => {
+  return moment.unix(createdAt).format('MMM Do');
 };
