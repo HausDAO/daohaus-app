@@ -14,8 +14,8 @@ import yearnBg from '../assets/themes/yearn/yearn__bg--pattern--blueonwhite--lig
 import yearnBrand from '../assets/themes/yearn/yearn__brand.png';
 import mcvBg from '../assets/themes/mcv/mcv__bg.jpg';
 import mcvBrand from '../assets/themes/mcv/mcv__brand.png';
-import fedpapersBrand from '../assets/themes/fedPapersTheme/fedpapers-brand.png';
-import fedpapersBG from '../assets/themes/fedPapersTheme/fedpapers-bg.png';
+import fedpapersBrand from '../assets/themes/fedpapersTheme/fedpapers-brand.png';
+import fedpapersBG from '../assets/themes/fedpapersTheme/fedpapers-bg.png';
 
 export const themeMap = {
   moloch: {
