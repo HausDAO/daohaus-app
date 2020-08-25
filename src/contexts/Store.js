@@ -6,7 +6,6 @@ import { WalletStatuses, currentStatus } from '../utils/WalletStatus';
 import { createWeb3User, w3connect, providerOptions } from '../utils/Auth';
 import { DaoService, USER_TYPE } from '../utils/DaoService';
 import { getChainData } from '../utils/chains';
-import config from '../config';
 import { get } from '../utils/Requests';
 
 export const CurrentUserContext = createContext();
@@ -48,7 +47,7 @@ const Store = ({ children, daoParam }) => {
 
   const [web3Connect, setWeb3Connect] = useState(
     new Web3Modal({
-      network: getChainData(config.CHAIN_ID).network, // optional
+      network: getChainData(+process.env.REACT_APP_NETWORK_ID).network, // optional
       providerOptions, // required
       cacheProvider: true,
     }),

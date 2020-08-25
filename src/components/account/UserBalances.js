@@ -9,7 +9,6 @@ import {
   DaoServiceContext,
   DaoDataContext,
 } from '../../contexts/Store';
-import config from '../../config';
 import { WalletStatuses } from '../../utils/WalletStatus';
 import { truncateAddr } from '../../utils/Helpers';
 import Arrow from '../../assets/DropArrow.svg';
@@ -203,7 +202,8 @@ const UserBalance = ({ toggle }) => {
                 )}
                 {currentWallet.state === WalletStatuses.Deployed && (
                   <ButtonSecondary onClick={() => toggleActions('sendEth')}>
-                    Send {+config.CHAIN_ID === 100 ? 'XDAI' : 'ETH'}
+                    Send{' '}
+                    {+process.env.REACT_APP_NETWORK_ID === 100 ? 'XDAI' : 'ETH'}
                   </ButtonSecondary>
                 )}
                 {currentWallet.state === WalletStatuses.Deployed &&
@@ -278,14 +278,18 @@ const UserBalance = ({ toggle }) => {
               </BalanceItemDiv>
             ) : null}
             <BalanceItemDiv>
-              <p>{+config.CHAIN_ID === 100 ? 'XDAI' : 'ETH'}</p>
+              <p>
+                {+process.env.REACT_APP_NETWORK_ID === 100 ? 'XDAI' : 'ETH'}
+              </p>
               <DataDiv>
                 {currentWallet.eth}
                 {currentWallet.state !== WalletStatuses.Connecting &&
                   currentWallet.eth < 0.01 && (
                     <TinyButton onClick={() => toggle('depositForm')}>
                       <span>!</span> Low{' '}
-                      {+config.CHAIN_ID === 100 ? 'XDAI' : 'ETH'}
+                      {+process.env.REACT_APP_NETWORK_ID === 100
+                        ? 'XDAI'
+                        : 'ETH'}
                     </TinyButton>
                   )}
               </DataDiv>
