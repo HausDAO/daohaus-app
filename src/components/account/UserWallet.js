@@ -1,4 +1,5 @@
 import React, { useContext, useEffect, useState } from 'react';
+import styled from 'styled-components';
 
 import {
   CurrentUserContext,
@@ -17,12 +18,12 @@ import DepositForm from './DepositForm';
 import { USER_TYPE } from '../../utils/DaoService';
 import RagequitForm from './RagequitForm';
 import ChangeDelegateKeyForm from './ChangeDelegateKeyForm';
+import supportedChains from '../../utils/chains';
 
-import config from '../../config';
-
-import styled from 'styled-components';
 import { RiskyBizButton } from '../../App.styles';
 import { phone } from '../../variables.styles';
+
+const chainData = supportedChains[+process.env.REACT_APP_NETWORK_ID];
 
 export const UserWalletDiv = styled.div`
   position: relative;
@@ -129,7 +130,7 @@ const UserWallet = () => {
               className="Button"
               rel="noopener noreferrer"
               target="_blank"
-              href={`${config.DAOHAUS_URL}/${daoService.daoAddress}`}
+              href={`${chainData.doahaus_url}/${daoService.daoAddress}`}
             >
               Continue to DAOHaus
             </a>

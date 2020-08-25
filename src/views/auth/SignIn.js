@@ -1,10 +1,7 @@
 import React, { useContext, useState } from 'react';
-import {  withRouter } from 'react-router-dom';
+import { withRouter } from 'react-router-dom';
 
-import {
-  CurrentUserContext,
-  DaoDataContext,
-} from '../../contexts/Store';
+import { CurrentUserContext, DaoDataContext } from '../../contexts/Store';
 
 import { ButtonPrimary, FormContainer } from '../../App.styles.js';
 import { Web3SignIn } from '../../components/account/Web3SignIn';
@@ -43,14 +40,13 @@ const SignIn = ({ history }) => {
         <>
           <Web3SignIn history={history} setCurrentUser={setCurrentUser} />
 
-          {+daoData.version !== 2 ? (
+          {/* {+daoData.version !== 2 ? (
             <ButtonPrimary onClick={() => setSigninType(signinTypes.password)}>
               Sign in With Password
             </ButtonPrimary>
-          ) : null}
+          ) : null} */}
         </>
       )}
-
     </FormContainer>
   );
 };

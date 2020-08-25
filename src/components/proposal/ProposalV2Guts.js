@@ -2,7 +2,6 @@ import React from 'react';
 
 import ValueDisplay from '../shared/ValueDisplay';
 import ProposalKickedMember from './ProposalKickedMember';
-import config from '../../config';
 import { DataP, LabelH5, DataH2 } from '../../App.styles';
 import AddressProfileDisplay from '../shared/AddressProfileDisplay';
 import EtherscanLink from '../shared/EtherscanLink';
@@ -87,7 +86,7 @@ const ProposalGutsV2 = ({ proposal, daoData }) => {
               type="address"
               hash={proposal.tributeToken}
               linkText={
-                config.CHAIN_ID === '100'
+                process.env.REACT_APP_NETWORK_ID === '100'
                   ? 'View Token on Blockscout'
                   : 'View Token on Etherscan'
               }
