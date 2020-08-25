@@ -13,7 +13,6 @@ import './themes/i18n';
 import './index.css';
 
 const chainData = supportedChains[+process.env.REACT_APP_NETWORK_ID];
-console.log('chainData', chainData);
 
 const client = new ApolloClient({
   uri: chainData.subgraph_url,
