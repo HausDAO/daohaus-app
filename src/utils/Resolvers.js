@@ -11,9 +11,10 @@ import {
 import { TokenService } from './TokenService';
 import { McDaoService } from './McDaoService';
 import { GET_METADATA } from './Queries';
-import config from '../config';
 
-const _web3 = new Web3(new Web3.providers.HttpProvider(config.INFURA_URI));
+const _web3 = new Web3(
+  new Web3.providers.HttpProvider(process.env.REACT_APP_INFURA_URI),
+);
 
 export const resolvers = {
   Proposal: {
@@ -145,7 +146,6 @@ export const resolvers = {
   TokenBalance: {
     symbol: async (tokenBalance, _args, { cache }) => {
       if (tokenBalance.guildBank) {
-
         const symbol = tokenBalance.token.symbol;
 
         return symbol;
@@ -157,8 +157,6 @@ export const resolvers = {
     },
     decimals: async (tokenBalance, _args, { cache }) => {
       if (tokenBalance.guildBank) {
-
-
         const decimals = tokenBalance.token.decimals;
 
         return +decimals;
@@ -168,8 +166,6 @@ export const resolvers = {
     },
     contractTokenBalance: async (tokenBalance, _args, { cache }) => {
       if (tokenBalance.guildBank) {
-
-
         const tokenService = new TokenService(
           _web3,
           tokenBalance.token.tokenAddress,
@@ -194,7 +190,7 @@ export const resolvers = {
         const balance = await mcDaoService.getUserTokenBalance(
           '0x000000000000000000000000000000000000baBe',
           tokenBalance.token.tokenAddress,
-        );        
+        );
 
         return +balance;
       } else {

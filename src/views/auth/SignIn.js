@@ -1,24 +1,14 @@
-import React, { useContext, useState } from 'react';
-import {  withRouter } from 'react-router-dom';
+import React, { useContext } from 'react';
+import { withRouter } from 'react-router-dom';
 
-import {
-  CurrentUserContext,
-  DaoDataContext,
-} from '../../contexts/Store';
+import { CurrentUserContext } from '../../contexts/Store';
 
-import { ButtonPrimary, FormContainer } from '../../App.styles.js';
+import { FormContainer } from '../../App.styles.js';
 import { Web3SignIn } from '../../components/account/Web3SignIn';
 
-const signinTypes = {
-  web3: 'Web3',
-  password: 'Password',
-};
-
 const SignIn = ({ history }) => {
-  const [daoData] = useContext(DaoDataContext);
   const [, setCurrentUser] = useContext(CurrentUserContext);
 
-  const [signinType, setSigninType] = useState(null);
   const historyState = history.location.state;
 
   return (
@@ -39,18 +29,7 @@ const SignIn = ({ history }) => {
       )}
 
       <h2>Sign in</h2>
-      {signinType !== signinTypes.password && (
-        <>
-          <Web3SignIn history={history} setCurrentUser={setCurrentUser} />
-
-          {+daoData.version !== 2 ? (
-            <ButtonPrimary onClick={() => setSigninType(signinTypes.password)}>
-              Sign in With Password
-            </ButtonPrimary>
-          ) : null}
-        </>
-      )}
-
+      <Web3SignIn history={history} setCurrentUser={setCurrentUser} />
     </FormContainer>
   );
 };
