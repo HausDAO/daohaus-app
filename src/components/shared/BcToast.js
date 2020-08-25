@@ -17,7 +17,6 @@ import {
   getAppLight,
 } from '../../variables.styles';
 
-import config from '../../config';
 import { USER_TYPE } from '../../utils/DaoService';
 import EtherscanLink from './EtherscanLink';
 
@@ -183,7 +182,7 @@ const BcToast = () => {
                   type="tx"
                   hash={tx.tx}
                   linkText={
-                    config.CHAIN_ID === '100'
+                    process.env.REACT_APP_NETWORK_ID === '100'
                       ? 'Check on Blockscout'
                       : 'Check on Etherscan'
                   }

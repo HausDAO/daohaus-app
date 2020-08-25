@@ -1,10 +1,8 @@
 import React, { useContext } from 'react';
+import styled from 'styled-components';
 
 import { CurrentUserContext } from '../../contexts/Store';
 import { BcProcessorService } from '../../utils/BcProcessorService';
-import config from '../../config';
-
-import styled from 'styled-components';
 import { getAppLight, getAppDark } from '../../variables.styles';
 import EtherscanLink from '../shared/EtherscanLink';
 
@@ -69,7 +67,7 @@ const UserTransactions = () => {
                   type="tx"
                   hash={tx.tx}
                   linkText={
-                    config.CHAIN_ID === '100'
+                    process.env.REACT_APP_NETWORK_ID === '100'
                       ? 'Check on Blockscout'
                       : 'Check on Etherscan'
                   }
