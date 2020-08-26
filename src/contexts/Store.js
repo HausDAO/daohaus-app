@@ -217,7 +217,6 @@ const Store = ({ children, daoParam }) => {
 
   return (
     <LoaderContext.Provider value={[loading, setLoading]}>
-      {/* <DaoContext.Provider value={[daoService, setDaoService]}> */}
       <DaoDataContext.Provider value={[daoData, setDaoData]}>
         <ModalContext.Provider value={[hasOpened, setHasOpened]}>
           <RefreshContext.Provider value={[delay, setDelay]}>
@@ -237,7 +236,6 @@ const Store = ({ children, daoParam }) => {
           </RefreshContext.Provider>
         </ModalContext.Provider>
       </DaoDataContext.Provider>
-      {/* </DaoContext.Provider> */}
     </LoaderContext.Provider>
   );
 };
