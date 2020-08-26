@@ -13,6 +13,7 @@ import HomeChart from '../../components/shared/HomeChart';
 import WhitelistTokenBalances from '../../components/tokens/WhitelistTokenBalances';
 import { basePadding } from '../../variables.styles';
 import { GET_MOLOCH } from '../../utils/Queries';
+import { Link } from 'react-router-dom';
 
 const HomeDiv = styled.div`
   width: 100%;
@@ -141,6 +142,7 @@ const Home = () => {
         <IntroDiv>
           <h1>{daoData.name || 'PokéMol DAO'}</h1>
           <p>{daoData.description || 'Put a Moloch in Your Pocket'}</p>
+          <Link to={`/dao/${daoData.contractAddress}/stats`}>stats</Link>
         </IntroDiv>
         <DataDiv>
           {+daoData.version === 2 ? (

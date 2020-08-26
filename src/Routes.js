@@ -19,6 +19,7 @@ import GuildKickForm from './components/proposal-v2/GuildKickForm';
 import TradeForm from './components/proposal-v2/TradeForm';
 import Success from './views/success/Success';
 import Rage from './views/rage/Rage';
+import Stats from './views/stats/Stats';
 
 const Routes = (props) => {
   const { isValid } = props;
@@ -131,6 +132,11 @@ const Routes = (props) => {
             path="/dao/:dao(\b0x[0-9a-f]{10,40}\b)/rage"
             exact
             component={Rage}
+          />
+          <Route
+            path="/dao/:dao(\b0x[0-9a-f]{10,40}\b)/stats"
+            exact
+            component={Stats}
           />
           <Route path="*" component={FourOhFour} />
         </Switch>
