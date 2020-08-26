@@ -19,20 +19,13 @@ const transmutationMeta = {
 
 const Stats = () => {
   const [daoService] = useContext(DaoServiceContext);
-  // const [tokens, setTokens] = useState([]);
-
   const { loading, error, data } = useQuery(GET_MOLOCH, {
     variables: { contractAddr: daoService.daoAddress.toLowerCase() },
   });
 
   if (loading) return <Loading />;
   if (error) return <ErrorMessage message={error} />;
-  console.log('stats', data);
-
-  //   useEffect(()=>{
-  //     _tokens = {};
-  //     getTokenMeta = data.moloch.tokenBalances.filter((token) => token.token.tokenAddress === transmutationMeta.giveTokenAddress)
-  //   }, data)
+  // console.log('stats', data);
 
   return (
     <ViewDiv>
