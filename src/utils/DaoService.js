@@ -142,14 +142,6 @@ export class DaoService {
     return singleton;
   }
 
-  async getAccountWei() {
-    throw new Error(`Not implemented by subclass.`);
-  }
-
-  async getAccountState() {
-    throw new Error(`Not implemented by subclass.`);
-  }
-
   async getAccountEth() {
     const wei = await this.getAccountWei();
     return this.web3.utils.fromWei(wei);
@@ -162,10 +154,6 @@ export class ReadonlyDaoService extends DaoService {
   async getAccountWei() {
     return '0';
   }
-
-  getAccountState() {
-    return WalletStatuses.NotConnected;
-  }
 }
 
 export class Web3DaoService extends DaoService {
@@ -174,9 +162,5 @@ export class Web3DaoService extends DaoService {
   async getAccountWei() {
     const ethWei = await this.web3.eth.getBalance(this.accountAddr);
     return ethWei;
-  }
-
-  getAccountState() {
-    return WalletStatuses.Connected;
   }
 }

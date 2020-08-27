@@ -7,7 +7,6 @@ import { createWeb3User, w3connect, providerOptions } from '../utils/Auth';
 import { DaoService, USER_TYPE } from '../utils/DaoService';
 import { getChainData } from '../utils/chains';
 import { get } from '../utils/Requests';
-import { hydrateBoosts } from '../utils/Helpers';
 
 export const CurrentUserContext = createContext();
 export const CurrentWalletContext = createContext();
@@ -76,7 +75,6 @@ const Store = ({ children, daoParam }) => {
         console.log('api fetch error');
       }
 
-      // if (!daoParam || !apiData) {
       if (!daoParam || !apiData) {
         return;
       }
