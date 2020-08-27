@@ -22,13 +22,6 @@ export const valToDecimalString = (value, tokenAddress, tokens) => {
   }
 };
 
-export const hydrateBoosts = (boosts) => {
-  return {
-    proposalComments: boosts.some((boost) => boost.boostId.includes(7)),
-    customTheme: boosts.some((boost) => boost.boostId.includes(1)),
-  };
-};
-
 export const formatCreatedAt = (createdAt) => {
   return moment.unix(createdAt).format('MMM Do');
 };

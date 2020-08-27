@@ -139,7 +139,12 @@ const Store = ({ children, daoParam }) => {
     const fetchBoosts = async () => {
       const boostRes = await get(`boosts/${daoParam}`);
 
-      setBoosts(hydrateBoosts(boostRes.data));
+      setBoosts(
+        boostRes.data.reduce((boosts, boostData) => {
+          boosts[boostData.boostKey] = boostData.active;
+          return boosts;
+        }, {}),
+      );
     };
 
     if (daoParam) {
