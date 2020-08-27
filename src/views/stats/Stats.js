@@ -26,7 +26,7 @@ const transmutationMeta = {
   giveTokenAddress: '0xd0a1e359811322d97991e03f863a0c30c2cf029c',
   getTokenAddress: '0x091f54f042635060bbd480a871cc7a9ae4139ecf',
   maxBurnRatePerMo: '25',
-  githubRepo: 'https://github.com',
+  githubRepo: 'https://github.com/HausDAO',
 };
 
 const Stats = () => {
@@ -155,7 +155,10 @@ const Stats = () => {
           </div>
           <div>
             <h4>Github</h4>
-            <p>repo status: {transmutationMeta.githubRepo}</p>
+            <p>
+              repo status: <a href={transmutationMeta.githubRepo}>link</a>
+            </p>
+            <img src="https://i.imgur.com/p8rXwlW.png" />
           </div>
           <div>
             <h4>live Proposals</h4>
