@@ -26,7 +26,7 @@ const ProposalCardDiv = styled.div`
   padding: 25px;
   transition: all 0.15s linear;
   &:hover {
-    background-color: ${(props) => getAppDark(props.theme)};
+    background-color: ${(props) => props.theme.primary};
     color: white;
     @media (min-width: ${phone}) {
       scale: 1.05;
@@ -168,6 +168,30 @@ const ProposalCard = ({ proposal, index }) => {
               </DataH2>
             </div>
           )}
+        </OfferDivProposalCard>
+      ) : null}
+      {proposal.proposalType === 'Funding Proposal' ? (
+        <OfferDivProposalCard>
+          {proposal.paymentRequested > 0 ? (
+            <div className="Shares">
+              <h5>Funds Requested</h5>
+              <DataH2>
+                <ValueDisplay
+                  value={
+                    proposal.paymentRequested /
+                    10 ** (proposal.paymentTokenDecimals || 18)
+                  }
+                  symbolOverride={proposal.paymentTokenSymbol}
+                />
+              </DataH2>
+            </div>
+          ) : null}
+          {proposal.lootRequested > 0 ? (
+            <div className="Shares">
+              <h5>Loot Requested</h5>
+              <DataH2>{proposal.lootRequested} LOOT</DataH2>
+            </div>
+          ) : null}
         </OfferDivProposalCard>
       ) : null}
 

@@ -2,9 +2,9 @@ import React from 'react';
 
 import ValueDisplay from '../shared/ValueDisplay';
 import ProposalKickedMember from './ProposalKickedMember';
-import config from '../../config';
 import { DataP, LabelH5, DataH2 } from '../../App.styles';
 import AddressProfileDisplay from '../shared/AddressProfileDisplay';
+import EtherscanLink from '../shared/EtherscanLink';
 
 const ProposalGutsV2 = ({ proposal, daoData }) => {
   return (
@@ -82,18 +82,15 @@ const ProposalGutsV2 = ({ proposal, daoData }) => {
           <DataP>{proposal.tributeToken}</DataP>
 
           <DataP>
-            <a
-              href={
-                config.SDK_ENV === 'Kovan'
-                  ? 'https://kovan.etherscan.io/address/' +
-                    proposal.tributeToken
-                  : 'https://etherscan.io/address/' + proposal.tributeToken
+            <EtherscanLink
+              type="address"
+              hash={proposal.tributeToken}
+              linkText={
+                process.env.REACT_APP_NETWORK_ID === '100'
+                  ? 'View Token on Blockscout'
+                  : 'View Token on Etherscan'
               }
-              target="_blank"
-              rel="noreferrer noopener"
-            >
-              View Token on Etherscan
-            </a>
+            />
           </DataP>
           <LabelH5>Proposed by</LabelH5>
           <AddressProfileDisplay address={proposal.proposer} />

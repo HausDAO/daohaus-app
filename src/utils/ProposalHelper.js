@@ -174,7 +174,7 @@ export const groupByStatus = (proposals, unsponsoredView) => {
       GracePeriod: proposals.filter((p) => p.status === 'GracePeriod'),
       ReadyForProcessing: proposals
         .filter((p) => p.status === 'ReadyForProcessing')
-        .sort((a, b) => a.proposalId - b.proposalId),
+        .sort((a, b) => a.proposalIndex - b.proposalIndex),
       InQueue: proposals.filter((p) => p.status === 'InQueue'),
       Completed: proposals.filter((p) => {
         return (
@@ -191,6 +191,10 @@ export const groupByStatus = (proposals, unsponsoredView) => {
 };
 
 export const titleMaker = (proposal) => {
+  // if (containsNonLatinCodepoints(proposal.details)) {
+  //   return `Proposal ${proposal.proposalId}`;
+  // }
+
   const details = proposal.details.split('~');
 
   if (details[0] === 'id') {
@@ -202,8 +206,14 @@ export const titleMaker = (proposal) => {
       parsedDetails = JSON.parse(proposal.details);
       return parsedDetails.title;
     } catch {
-      console.log(`Couldn't parse JSON from metadata`);
-      return `Proposal ${proposal.proposalIndex}`;
+      if (proposal.details && proposal.details.indexOf('link:') > -1) {
+        const fixedDetail = proposal.details.replace('link:', '"link":');
+        const fixedParsed = JSON.parse(fixedDetail);
+        return fixedParsed.title;
+      } else {
+        console.log(`Couldn't parse JSON from metadata`);
+        return `Proposal ${proposal.proposalIndex}`;
+      }
     }
   } else {
     return proposal.details
@@ -217,7 +227,13 @@ export const descriptionMaker = (proposal) => {
     const parsed = JSON.parse(proposal.details);
     return parsed.description;
   } catch (e) {
-    console.log(`Couldn't parse JSON from metadata`);
+    if (proposal.details && proposal.details.indexOf('link:') > -1) {
+      const fixedDetail = proposal.details.replace('link:', '"link":');
+      const fixedParsed = JSON.parse(fixedDetail);
+      return fixedParsed.details;
+    } else {
+      console.log(`Couldn't parse JSON from metadata`);
+    }
   }
   return ``;
 };
@@ -227,7 +243,11 @@ export const linkMaker = (proposal) => {
     const parsed = JSON.parse(proposal.details);
     return typeof parsed.link === 'function' ? null : parsed.link;
   } catch (e) {
-    console.log(`Couldn't parse JSON from metadata`);
+    if (proposal.details && proposal.details.indexOf('link:') > -1) {
+      return 'https://credits.raidguild.org/';
+    } else {
+      console.log(`Couldn't parse JSON from metadata`);
+    }
   }
   return null;
 };
@@ -245,3 +265,8 @@ export const determineProposalType = (proposal) => {
     return 'Funding Proposal';
   }
 };
+
+// export const containsNonLatinCodepoints = (s) => {
+//   // eslint-disable-next-line
+//   return /[^\u0000-\u00ff]/.test(s);
+// };

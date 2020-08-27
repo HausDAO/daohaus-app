@@ -8,11 +8,8 @@ import ProposalNew from './views/proposal-new/ProposalNew';
 import Members from './views/members/Members';
 import Member from './views/member/Member';
 import Account from './views/account/Account';
-import SignUp from './views/auth/SignUp';
 import SignIn from './views/auth/SignIn';
-import Confirm from './views/auth/Confirm';
 import SignOut from './views/auth/SignOut';
-import ResendCode from './views/auth/ResendCode';
 import InvalidRoute from './views/invalidRoute/InvalidRoute';
 import ProposalEngine from './views/proposal-new-v2/ProposalEngine';
 import NewMemberForm from './components/proposal-v2/NewMemberForm';
@@ -21,6 +18,7 @@ import WhitelistForm from './components/proposal-v2/WhitelistForm';
 import GuildKickForm from './components/proposal-v2/GuildKickForm';
 import TradeForm from './components/proposal-v2/TradeForm';
 import Success from './views/success/Success';
+import Rage from './views/rage/Rage';
 
 const Routes = (props) => {
   const { isValid } = props;
@@ -104,11 +102,11 @@ const Routes = (props) => {
             exact
             component={Account}
           />
-          <Route
+          {/* <Route
             path="/dao/:dao(\b0x[0-9a-f]{10,40}\b)/sign-up"
             exact
             component={SignUp}
-          />
+          /> */}
           <Route
             path="/dao/:dao(\b0x[0-9a-f]{10,40}\b)/sign-in"
             exact
@@ -119,7 +117,7 @@ const Routes = (props) => {
             exact
             component={SignOut}
           />
-          <Route
+          {/* <Route
             path="/dao/:dao(\b0x[0-9a-f]{10,40}\b)/confirm"
             exact
             component={Confirm}
@@ -128,6 +126,11 @@ const Routes = (props) => {
             path="/dao/:dao(\b0x[0-9a-f]{10,40}\b)/resend-code"
             exact
             component={ResendCode}
+          /> */}
+          <Route
+            path="/dao/:dao(\b0x[0-9a-f]{10,40}\b)/rage"
+            exact
+            component={Rage}
           />
           <Route path="*" component={FourOhFour} />
         </Switch>

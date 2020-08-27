@@ -17,8 +17,8 @@ import {
   getAppLight,
 } from '../../variables.styles';
 
-import config from '../../config';
 import { USER_TYPE } from '../../utils/DaoService';
+import EtherscanLink from './EtherscanLink';
 
 const ProcessorDiv = styled.div`
   position: absolute;
@@ -177,18 +177,16 @@ const BcToast = () => {
             <div className="Description">
               <p className="Description__Title">{tx.description}</p>
               <p className="Data">
-                <a
-                  href={
-                    config.SDK_ENV === 'Kovan'
-                      ? 'https://kovan.etherscan.io/tx/' + tx.tx
-                      : 'https://etherscan.io/tx/' + tx.tx
-                  }
-                  target="_blank"
-                  rel="noreferrer noopener"
+                <EtherscanLink
                   onClick={toggleElement}
-                >
-                  Check on Etherscan
-                </a>
+                  type="tx"
+                  hash={tx.tx}
+                  linkText={
+                    process.env.REACT_APP_NETWORK_ID === '100'
+                      ? 'Check on Blockscout'
+                      : 'Check on Etherscan'
+                  }
+                />
               </p>
             </div>
             <div className="Status">
@@ -228,10 +226,8 @@ const BcToast = () => {
           onClick={toggleElement}
         />
         <ProcessorDiv>
-          {(currentUser.type === USER_TYPE.SDK &&
-            currentWallet.state === WalletStatuses.Deployed) ||
-          (currentUser.type === USER_TYPE.WEB3 &&
-            currentWallet.state === WalletStatuses.Connected) ? (
+          {currentUser.type === USER_TYPE.WEB3 &&
+          currentWallet.state === WalletStatuses.Connected ? (
             <ProcessorButton onClick={toggleElement}>
               {pendingLength() ? (
                 <IconProcessing />

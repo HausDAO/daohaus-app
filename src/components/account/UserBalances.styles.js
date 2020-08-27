@@ -7,7 +7,7 @@ import {
   getAppDark,
   getDangerHover,
 } from '../../variables.styles';
-import { FlexCenterDiv, DataButton } from '../../App.styles';
+import { DataButton } from '../../App.styles';
 
 export const WalletDiv = styled.div`
   border: none;
@@ -41,27 +41,6 @@ export const WalletHeaderDiv = styled.div`
     border-radius: 0px;
     border: none;
   }
-`;
-
-export const WalletOverlayDiv = styled(FlexCenterDiv)`
-  width: 100%;
-  min-height: 100%;
-  position: absolute;
-  z-index: 1;
-  background-color: ${(props) => props.theme.primary};
-  color: white;
-  border: none;
-  p {
-    text-align: center;
-  }
-  @media (min-width: ${phone}) {
-    border-radius: 10px;
-    border: none;
-  }
-`;
-
-export const WalletOverlayContentsDiv = styled(FlexCenterDiv)`
-  padding: 50px;
 `;
 
 export const StatusP = styled.p`

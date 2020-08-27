@@ -4,7 +4,6 @@ import styled from 'styled-components';
 import { useTranslation } from 'react-i18next';
 
 import { DaoDataContext } from '../../contexts/Store';
-import StateModals from '../../components/shared/StateModals';
 import BottomNav from '../../components/shared/BottomNav';
 import ErrorMessage from '../../components/shared/ErrorMessage';
 import Loading from '../../components/shared/Loading';
@@ -22,7 +21,7 @@ const HomeDiv = styled.div`
     width: 200px;
   }
   background-size: cover;
-  background-position: center center;
+  background-position: ${(props) => props.theme.bgPosition};
   background-repeat: no-repeat;
   min-height: calc(100vh - 62px);
   background-image: url(${(props) => props.theme.brandBg});
@@ -137,7 +136,6 @@ const Home = () => {
   return (
     <>
       {daoData ? <HeadTags daoData={daoData} /> : null}
-      <StateModals />
 
       <HomeDiv>
         <IntroDiv>

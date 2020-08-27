@@ -1,5 +1,5 @@
-const supportedChains = [
-  {
+export const supportedChains = {
+  1: {
     name: 'Ethereum Mainnet',
     short_name: 'eth',
     chain: 'ETH',
@@ -7,17 +7,12 @@ const supportedChains = [
     chain_id: 1,
     network_id: 1,
     rpc_url: 'https://mainnet.infura.io/',
+    api_url: 'https://luizh7qidl.execute-api.us-east-1.amazonaws.com/prod',
+    daohaus_url: 'https://daohaus.club',
+    subgraph_url:
+      'https://api.thegraph.com/subgraphs/name/odyssy-automaton/daohaus',
   },
-  {
-    name: 'Ethereum Ropsten',
-    short_name: 'rop',
-    chain: 'ETH',
-    network: 'ropsten',
-    chain_id: 3,
-    network_id: 3,
-    rpc_url: 'https://ropsten.infura.io/',
-  },
-  {
+  4: {
     name: 'Ethereum Rinkeby',
     short_name: 'rin',
     chain: 'ETH',
@@ -25,17 +20,12 @@ const supportedChains = [
     chain_id: 4,
     network_id: 4,
     rpc_url: 'https://rinkeby.infura.io/',
+    api_url: 'https://e5sk5e8me2.execute-api.us-east-1.amazonaws.com/rinkeby',
+    daohaus_url: 'https://rinkeby.daohaus.club',
+    subgraph_url:
+      'https://api.thegraph.com/subgraphs/name/odyssy-automaton/daohaus-rinkeby',
   },
-  {
-    name: 'Ethereum Görli',
-    short_name: 'gor',
-    chain: 'ETH',
-    network: 'goerli',
-    chain_id: 5,
-    network_id: 5,
-    rpc_url: 'https://rpc.goerli.mudit.blog/',
-  },
-  {
+  42: {
     name: 'Ethereum Kovan',
     short_name: 'kov',
     chain: 'ETH',
@@ -43,35 +33,12 @@ const supportedChains = [
     chain_id: 42,
     network_id: 42,
     rpc_url: 'https://kovan.infura.io/',
+    api_url: 'https://kp7w1od8kd.execute-api.us-east-1.amazonaws.com/kovan',
+    daohaus_url: 'https://kovan.daohaus.club',
+    subgraph_url:
+      'https://api.thegraph.com/subgraphs/name/odyssy-automaton/daohaus-kovan',
   },
-  {
-    name: 'Ethereum Classic Mainnet',
-    short_name: 'etc',
-    chain: 'ETC',
-    network: 'mainnet',
-    chain_id: 61,
-    network_id: 1,
-    rpc_url: 'https://ethereumclassic.network',
-  },
-  {
-    name: 'POA Network Sokol',
-    short_name: 'poa',
-    chain: 'POA',
-    network: 'sokol',
-    chain_id: 77,
-    network_id: 1,
-    rpc_url: 'https://sokol.poa.network',
-  },
-  {
-    name: 'POA Network Core',
-    short_name: 'skl',
-    chain: 'POA',
-    network: 'core',
-    chain_id: 99,
-    network_id: 2,
-    rpc_url: 'https://core.poa.network',
-  },
-  {
+  100: {
     name: 'xDAI Chain',
     short_name: 'xdai',
     chain: 'xDAI',
@@ -79,13 +46,15 @@ const supportedChains = [
     chain_id: 100,
     network_id: 1,
     rpc_url: 'https://dai.poa.network',
+    api_url: 'https://fbpzfkbqyi.execute-api.us-east-1.amazonaws.com/xdai',
+    daohaus_url: 'https://kovanxdai.daohaus.club',
+    subgraph_url:
+      'https://api.thegraph.com/subgraphs/name/odyssy-automaton/daohaus-xdai',
   },
-];
+};
 
 export function getChainData(chainId) {
-  const chainData = supportedChains.filter(
-    (chain) => chain.chain_id === chainId,
-  )[0];
+  const chainData = supportedChains[+chainId];
 
   if (!chainData) {
     throw new Error('ChainId missing or not supported');

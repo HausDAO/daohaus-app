@@ -220,3 +220,22 @@ export const GET_ACTIVE_PROPOSALS = gql`
     }
   }
 `;
+
+export const GET_RAGES = gql`
+  query rageQuits($contractAddr: String!, $skip: Int) {
+    rageQuits(
+      where: { molochAddress: $contractAddr }
+      orderBy: createdAt
+      orderDirection: desc
+      first: 100
+      skip: $skip
+    ) {
+      id
+      createdAt
+      shares
+      loot
+      memberAddress
+      molochAddress
+    }
+  }
+`;

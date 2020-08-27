@@ -1,11 +1,10 @@
 import React, { useContext } from 'react';
+import styled from 'styled-components';
 
 import { CurrentUserContext } from '../../contexts/Store';
 import { BcProcessorService } from '../../utils/BcProcessorService';
-import config from '../../config';
-
-import styled from 'styled-components';
 import { getAppLight, getAppDark } from '../../variables.styles';
+import EtherscanLink from '../shared/EtherscanLink';
 
 const TransactionsDiv = styled.div`
   width: 100%;
@@ -50,6 +49,7 @@ const TransactionsDiv = styled.div`
 `;
 
 const UserTransactions = () => {
+  // TODO kovan is hardcoded here so will break rinkeby
   const bcprocessor = new BcProcessorService();
 
   const [currentUser] = useContext(CurrentUserContext);
@@ -63,17 +63,15 @@ const UserTransactions = () => {
             <div className="Description">
               <p className="Description__Title">{tx.description}</p>
               <p className="Data">
-                <a
-                  href={
-                    config.SDK_ENV === 'Kovan'
-                      ? 'https://kovan.etherscan.io/tx/' + tx.tx
-                      : 'https://etherscan.io/tx/' + tx.tx
+                <EtherscanLink
+                  type="tx"
+                  hash={tx.tx}
+                  linkText={
+                    process.env.REACT_APP_NETWORK_ID === '100'
+                      ? 'Check on Blockscout'
+                      : 'Check on Etherscan'
                   }
-                  target="_blank"
-                  rel="noreferrer noopener"
-                >
-                  Check on Etherscan
-                </a>
+                />
               </p>
             </div>
             <div className="Status">
