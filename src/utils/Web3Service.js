@@ -1,7 +1,5 @@
 import Web3 from 'web3';
 
-import config from '../config';
-
 let singleton;
 
 export default class Web3Service {
@@ -18,9 +16,9 @@ export default class Web3Service {
       this.web3 = new Web3(injected);
       console.log('web3service injected');
     } else {
-      console.log('web3service not injected');
-
-      this.web3 = new Web3(new Web3.providers.HttpProvider(config.INFURA_URI));
+      this.web3 = new Web3(
+        new Web3.providers.HttpProvider(process.env.REACT_APP_INFURA_URI),
+      );
     }
   }
 

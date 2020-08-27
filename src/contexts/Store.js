@@ -6,7 +6,6 @@ import { WalletStatuses, currentStatus } from '../utils/WalletStatus';
 import { createWeb3User, w3connect, providerOptions } from '../utils/Auth';
 import { DaoService, USER_TYPE } from '../utils/DaoService';
 import { getChainData } from '../utils/chains';
-import config from '../config';
 import { get } from '../utils/Requests';
 
 export const CurrentUserContext = createContext();
@@ -17,6 +16,7 @@ export const RefreshContext = createContext();
 export const DaoDataContext = createContext();
 export const DaoServiceContext = createContext();
 export const Web3ConnectContext = createContext();
+export const BoostContext = createContext();
 
 // main store of global state
 const Store = ({ children, daoParam }) => {
@@ -45,14 +45,15 @@ const Store = ({ children, daoParam }) => {
 
   const [daoService, setDaoService] = useState();
   const [daoData, setDaoData] = useState();
+  const [boosts, setBoosts] = useState();
 
-  const [web3Connect, setWeb3Connect] = useState({
-    w3c: new Web3Modal({
-      network: getChainData(config.CHAIN_ID).network, // optional
+  const [web3Connect, setWeb3Connect] = useState(
+    new Web3Modal({
+      network: getChainData(+process.env.REACT_APP_NETWORK_ID).network, // optional
       providerOptions, // required
       cacheProvider: true,
     }),
-  });
+  );
 
   useEffect(() => {
     // runs on app load, sets up user auth and sdk if necessary
@@ -74,12 +75,11 @@ const Store = ({ children, daoParam }) => {
         console.log('api fetch error');
       }
 
-      // if (!daoParam || !apiData) {
       if (!daoParam || !apiData) {
         return;
       }
-      console.log('web3Connect????', web3Connect);
-      if (web3Connect.w3c.cachedProvider) {
+
+      if (web3Connect.cachedProvider) {
         loginType = USER_TYPE.WEB3;
       }
 
@@ -90,14 +90,14 @@ const Store = ({ children, daoParam }) => {
 
         switch (loginType) {
           case USER_TYPE.WEB3: {
-            if (web3Connect.w3c.cachedProvider) {
-              const { w3c, web3, provider } = await w3connect(web3Connect);
-              console.log('w3c???', w3c);
+            if (web3Connect.cachedProvider) {
+              const { web3Connect: w3c, web3, provider } = await w3connect(
+                web3Connect,
+              );
               const [account] = await web3.eth.getAccounts();
 
-              setWeb3Connect({ w3c, web3, provider });
+              setWeb3Connect(w3c);
               user = createWeb3User(account);
-              console.log('user?', user);
               dao = await DaoService.instantiateWithWeb3(
                 user.attributes['custom:account_address'],
                 provider,
@@ -132,6 +132,23 @@ const Store = ({ children, daoParam }) => {
 
     initCurrentUser();
   }, [currentUser, setDaoService, daoParam, web3Connect]);
+
+  useEffect(() => {
+    const fetchBoosts = async () => {
+      const boostRes = await get(`boosts/${daoParam}`);
+
+      setBoosts(
+        boostRes.data.reduce((boosts, boostData) => {
+          boosts[boostData.boostKey] = boostData.active;
+          return boosts;
+        }, {}),
+      );
+    };
+
+    if (daoParam) {
+      fetchBoosts();
+    }
+  }, [daoParam]);
 
   // global polling service
   useInterval(async () => {
@@ -218,27 +235,27 @@ const Store = ({ children, daoParam }) => {
 
   return (
     <LoaderContext.Provider value={[loading, setLoading]}>
-      {/* <DaoContext.Provider value={[daoService, setDaoService]}> */}
       <DaoDataContext.Provider value={[daoData, setDaoData]}>
         <ModalContext.Provider value={[hasOpened, setHasOpened]}>
           <RefreshContext.Provider value={[delay, setDelay]}>
             <Web3ConnectContext.Provider value={[web3Connect, setWeb3Connect]}>
               <DaoServiceContext.Provider value={[daoService, setDaoService]}>
-                <CurrentUserContext.Provider
-                  value={[currentUser, setCurrentUser]}
-                >
-                  <CurrentWalletContext.Provider
-                    value={[currentWallet, setCurrentWallet]}
+                <BoostContext.Provider value={[boosts, setBoosts]}>
+                  <CurrentUserContext.Provider
+                    value={[currentUser, setCurrentUser]}
                   >
-                    {children}
-                  </CurrentWalletContext.Provider>
-                </CurrentUserContext.Provider>
+                    <CurrentWalletContext.Provider
+                      value={[currentWallet, setCurrentWallet]}
+                    >
+                      {children}
+                    </CurrentWalletContext.Provider>
+                  </CurrentUserContext.Provider>
+                </BoostContext.Provider>
               </DaoServiceContext.Provider>
             </Web3ConnectContext.Provider>
           </RefreshContext.Provider>
         </ModalContext.Provider>
       </DaoDataContext.Provider>
-      {/* </DaoContext.Provider> */}
     </LoaderContext.Provider>
   );
 };

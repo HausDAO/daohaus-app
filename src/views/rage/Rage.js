@@ -2,18 +2,17 @@ import React, { useContext } from 'react';
 import { useQuery } from '@apollo/react-hooks';
 
 import { DaoServiceContext } from '../../contexts/Store';
-import { GET_MEMBERS } from '../../utils/Queries';
-import MemberList from '../../components/member/MemberList';
+import { GET_RAGES } from '../../utils/Queries';
 import ErrorMessage from '../../components/shared/ErrorMessage';
 import BottomNav from '../../components/shared/BottomNav';
+import RageList from '../../components/rage/RageList';
 import Loading from '../../components/shared/Loading';
 import { ViewDiv, PadDiv } from '../../App.styles';
-import { Link } from 'react-router-dom';
 
-const Members = () => {
+const Rage = () => {
   const [daoService] = useContext(DaoServiceContext);
 
-  const { loading, error, data, fetchMore } = useQuery(GET_MEMBERS, {
+  const { loading, error, data, fetchMore } = useQuery(GET_RAGES, {
     variables: { contractAddr: daoService.daoAddress.toLowerCase() },
   });
 
@@ -21,11 +20,11 @@ const Members = () => {
   if (error) return <ErrorMessage message={error} />;
 
   fetchMore({
-    variables: { skip: data.members.length },
+    variables: { skip: data.rageQuits.length },
     updateQuery: (prev, { fetchMoreResult }) => {
       if (!fetchMoreResult) return;
       return Object.assign({}, prev, {
-        members: [...prev.members, ...fetchMoreResult.members],
+        rageQuits: [...prev.rageQuits, ...fetchMoreResult.rageQuits],
       });
     },
   });
@@ -34,11 +33,8 @@ const Members = () => {
     <ViewDiv>
       <div>
         <PadDiv>
-          <h3>Members</h3>
-          <Link to={`/dao/${daoService.daoAddress}/rage`}>
-            Check out Rage Quit History
-          </Link>
-          <MemberList members={data.members} />
+          <h3>Rage Quits</h3>
+          <RageList rages={data.rageQuits} />
         </PadDiv>
       </div>
       <BottomNav />
@@ -46,4 +42,4 @@ const Members = () => {
   );
 };
 
-export default Members;
+export default Rage;

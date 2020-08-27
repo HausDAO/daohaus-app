@@ -1,9 +1,8 @@
 import React from 'react';
-import config from '../../config';
 
 const EtherscanLink = ({ type, hash, linkText }) => {
   const uri = () => {
-    switch (config.CHAIN_ID) {
+    switch (process.env.REACT_APP_NETWORK_ID) {
       case '1': {
         return `https://etherscan.io/${type}/`;
       }
