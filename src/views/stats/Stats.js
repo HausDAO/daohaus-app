@@ -158,7 +158,7 @@ const Stats = () => {
             <p>
               repo status: <a href={transmutationMeta.githubRepo}>link</a>
             </p>
-            <img src="https://i.imgur.com/p8rXwlW.png" />
+            <img src="https://i.imgur.com/p8rXwlW.png" alt="github charts" />
           </div>
           <div>
             <h4>live Proposals</h4>

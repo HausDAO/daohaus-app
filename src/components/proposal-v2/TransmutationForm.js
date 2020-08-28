@@ -85,6 +85,8 @@ const TransmutationForm = (props) => {
       setBalance(web3Connect.web3.utils.fromWei(balance));
     };
     getBalance();
+
+    // eslint-disable-next-line
   }, [web3Connect.web3]);
 
   // get whitelist
@@ -113,6 +115,7 @@ const TransmutationForm = (props) => {
     if (data && data.moloch) {
       getTokenBalance();
     }
+    // eslint-disable-next-line
   }, [data]);
 
   if (loading) return <Loading />;
