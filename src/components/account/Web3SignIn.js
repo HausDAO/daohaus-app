@@ -14,15 +14,17 @@ export const Web3SignIn = ({ history }) => {
   return (
     <ButtonPrimary
       onClick={async () => {
-        const web3Connect = new Web3Modal({
-          network: getChainData(+process.env.REACT_APP_NETWORK_ID).network, // optional
-          providerOptions, // required
-          cacheProvider: true,
-        });
+        const _web3Connect = {
+          w3c: new Web3Modal({
+            network: getChainData(+process.env.REACT_APP_NETWORK_ID).network, // optional
+            providerOptions, // required
+            cacheProvider: true,
+          }),
+        };
 
         try {
-          await w3connect(web3Connect);
-          setWeb3Connect(web3Connect);
+          const { w3c, web3, provider } = await w3connect(_web3Connect);
+          setWeb3Connect({ w3c, web3, provider });
           history.push(
             '/dao/' + daoService.daoAddress.toLowerCase() + '/proposals',
           );

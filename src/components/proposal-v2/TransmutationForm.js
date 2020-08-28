@@ -3,19 +3,31 @@ import { withRouter } from 'react-router-dom';
 import styled from 'styled-components';
 
 import { Formik, Form, Field, ErrorMessage } from 'formik';
-import { FormContainer, FieldContainer } from '../../App.styles';
+import {
+  FormContainer,
+  FieldContainer,
+  DropdownInputDiv,
+} from '../../App.styles';
+import PaymentInput from './PaymentInput';
+import TokenSelect from './TokenSelect';
 
 import {
   LoaderContext,
   DaoServiceContext,
   CurrentUserContext,
   Web3ConnectContext,
+  DaoDataContext,
 } from '../../contexts/Store';
 import Loading from '../shared/Loading';
 
 import { TokenService } from '../../utils/TokenService';
-
-import abi from '../../contracts/transmutation.json';
+import {
+  TransmutationService,
+  setupValues,
+} from '../../utils/TransmutationService';
+import { BcProcessorService } from '../../utils/BcProcessorService';
+import { GET_MOLOCH } from '../../utils/Queries';
+import { useQuery } from 'react-apollo';
 
 const H2Arrow = styled.h2`
   text-align: center;
@@ -31,61 +43,39 @@ const TransmutationForm = (props) => {
   const [daoService] = useContext(DaoServiceContext);
   const [currentUser] = useContext(CurrentUserContext);
   const [web3Connect] = useContext(Web3ConnectContext);
+  const [daoData] = useContext(DaoDataContext);
+  const [tokenData, setTokenData] = useState([]);
 
-  const setupValues = {
-    contractAddress: '0x8fB2cEa12c43573616be80148C182fCA14Eb9a26',
-    exchangeRate: 0.5,
-    paddingNumber: 10000,
+  const bcProcessor = new BcProcessorService(web3Connect.web3);
+  const transmutationService = new TransmutationService(
+    web3Connect.web3,
+    currentUser.user,
+    bcProcessor,
+  );
+
+  const options = {
+    variables: { contractAddr: daoData.contractAddress },
+    fetchPolicy: 'no-cache',
   };
+  const query = GET_MOLOCH;
 
-  const calcTribute = (paymentRequested) => {
-    if (!paymentRequested || isNaN(paymentRequested)) {
-      return '0';
-    }
-    const bnExchange = web3Connect.web3.utils.toBN(
-      setupValues.exchangeRate * setupValues.paddingNumber,
-    );
-    // const bcProcessor = new BcProcessorService(web3);
-
-    const bnTributeOffered = web3Connect.web3.utils.toBN(
-      web3Connect.web3.utils.toWei('' + paymentRequested),
-    );
-    const tributeOffered = bnTributeOffered
-      .mul(bnExchange)
-      .div(web3Connect.web3.utils.toBN(setupValues.paddingNumber));
-
-    return tributeOffered;
-  };
+  const { loading, error, data } = useQuery(query, options);
 
   const displayTribute = (val) => {
     return web3Connect.web3.utils.fromWei('' + val);
   };
 
   const submitProposal = async (paymentRequested, applicant, description) => {
-    console.log(web3Connect, setupValues, currentUser);
-    const contract = new web3Connect.web3.eth.Contract(
-      abi,
-      setupValues.contractAddress,
+    return transmutationService.propose(
+      applicant,
+      paymentRequested,
+      description,
     );
-
-    console.log('contract', contract);
-    return contract.methods
-      .propose(
-        applicant,
-        calcTribute(paymentRequested),
-        web3Connect.web3.utils.toWei('' + paymentRequested),
-        description,
-      )
-      .send({ from: currentUser.username });
   };
 
   useEffect(() => {
     const getBalance = async () => {
-      const contract = new web3Connect.web3.eth.Contract(
-        abi,
-        setupValues.contractAddress,
-      );
-      const token = await contract.methods.giveToken().call();
+      const token = await transmutationService.giveToken();
 
       const tokenService = new TokenService(web3Connect.web3, token);
 
@@ -95,7 +85,40 @@ const TransmutationForm = (props) => {
       setBalance(web3Connect.web3.utils.fromWei(balance));
     };
     getBalance();
-  }, [setupValues.contractAddress, web3Connect.web3]);
+  }, [web3Connect.web3]);
+
+  // get whitelist
+  useEffect(() => {
+    const getTokenBalance = async () => {
+      const getTokenAddress = await transmutationService.getToken();
+      console.log('getTokenAddress', getTokenAddress);
+      const tokenArray = data.moloch.tokenBalances.filter(
+        (token) =>
+          token.token.tokenAddress === getTokenAddress.toLowerCase() &&
+          token.guildBank,
+      );
+      if (!tokenArray) {
+        setTokenData([]);
+        return;
+      }
+      setTokenData(
+        tokenArray.map((token) => ({
+          label: token.token.symbol || token.tokenAddress,
+          value: token.token.tokenAddress,
+          decimals: token.token.decimals,
+          balance: token.tokenBalance,
+        })),
+      );
+    };
+    if (data && data.moloch) {
+      getTokenBalance();
+    }
+  }, [data]);
+
+  if (loading) return <Loading />;
+  if (error) {
+    console.log('error', error);
+  }
 
   return (
     <FormContainer>
@@ -166,16 +189,22 @@ const TransmutationForm = (props) => {
                     {(msg) => <div className="Error">{msg}</div>}
                   </ErrorMessage>
 
-                  <Field name="paymentRequested">
-                    {({ field, form }) => (
-                      <FieldContainer
-                        className={field.value ? 'Field HasValue' : 'Field '}
-                      >
-                        <label>Get Amount</label>
-                        <input type="text" {...field} />
-                      </FieldContainer>
-                    )}
-                  </Field>
+                  <DropdownInputDiv>
+                    <Field
+                      name="paymentRequested"
+                      component={PaymentInput}
+                      data={tokenData}
+                      token={props.values.paymentToken || ''}
+                      label="Payment Requested"
+                    ></Field>
+                    <Field
+                      name="paymentToken"
+                      component={TokenSelect}
+                      label="Payment Token"
+                      data={tokenData}
+                    ></Field>
+                  </DropdownInputDiv>
+
                   <ErrorMessage name="paymentRequested">
                     {(msg) => <div className="Error">{msg}</div>}
                   </ErrorMessage>
@@ -186,7 +215,9 @@ const TransmutationForm = (props) => {
                   <h2>Exchange Rate: {setupValues.exchangeRate}</h2>
                   <h2>
                     {displayTribute(
-                      calcTribute(props.values.paymentRequested).toString(),
+                      transmutationService
+                        .calcTribute(props.values.paymentRequested)
+                        .toString(),
                     )}
                   </h2>
 
