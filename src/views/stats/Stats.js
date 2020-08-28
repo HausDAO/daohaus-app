@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { useQuery } from '@apollo/react-hooks';
 
 import {
@@ -19,26 +19,58 @@ import ErrorMessage from '../../components/shared/ErrorMessage';
 import BottomNav from '../../components/shared/BottomNav';
 import Loading from '../../components/shared/Loading';
 import { ViewDiv, PadDiv } from '../../App.styles';
-
-const transmutationMeta = {
-  minCap: 1,
-  maxCap: 2.5,
-  giveTokenAddress: '0xd0a1e359811322d97991e03f863a0c30c2cf029c',
-  getTokenAddress: '0x091f54f042635060bbd480a871cc7a9ae4139ecf',
-  maxBurnRatePerMo: '25',
-  githubRepo: 'https://github.com/HausDAO',
-};
+import { setupValues } from '../../utils/TransmutationService';
 
 const Stats = () => {
   const [daoService] = useContext(DaoServiceContext);
+  const [tokenInfo, setTokenInfo] = useState([]);
+
   const { loading, error, data } = useQuery(GET_MOLOCH, {
     variables: { contractAddr: daoService.daoAddress.toLowerCase() },
   });
 
-  const getTokenTotalSupply = (data, tokenAddress) => {
-    return data.moloch.tokenBalances.find(
-      (token) => token.token.tokenAddress === tokenAddress,
-    ).contractTokenTotalSupply;
+  useEffect(() => {
+    const tokens = async () => {
+      const info = await getTokenInfo('getToken', setupValues.getTokenAddress);
+      console.log('info', info);
+      tokenInfo.push(info);
+      setTokenInfo(tokenInfo);
+    };
+    tokens();
+    // eslint-disable-next-line
+  }, [daoService]);
+
+  const getTokenInfo = async (name, tokenAddress) => {
+    const totalSupply = await daoService.token.totalSupply(tokenAddress);
+    const transSupply = await daoService.token.balanceOf(
+      setupValues.transmutation,
+      'latest',
+      tokenAddress,
+    );
+    const trustSupply = await daoService.token.balanceOf(
+      setupValues.trust,
+      'latest',
+      tokenAddress,
+    );
+    const minionSupply = await daoService.token.balanceOf(
+      setupValues.minion,
+      'latest',
+      tokenAddress,
+    );
+    const daoSupply = await daoService.token.balanceOf(
+      setupValues.moloch,
+      'latest',
+      tokenAddress,
+    );
+    return {
+      tokenAddress: tokenAddress,
+      totalSupply,
+      transSupply,
+      trustSupply,
+      minionSupply,
+      daoSupply,
+      name,
+    };
   };
 
   const getToken = (data, tokenAddress) => {
@@ -66,6 +98,25 @@ const Stats = () => {
     ];
   };
 
+  const pieDistroData = (info) => {
+    const data = [
+      { name: 'transmutation', value: +info.transSupply },
+      { name: 'trust', value: +info.trustSupply },
+      { name: 'minion', value: +info.minionSupply },
+      { name: 'dao', value: +info.daoSupply },
+      {
+        name: 'other',
+        value:
+          info.totalSupply -
+          info.transSupply -
+          info.trustSupply -
+          info.minionSupply -
+          info.daoSupply,
+      },
+    ];
+    return data;
+  };
+
   if (loading) return <Loading />;
   if (error) return <ErrorMessage message={error} />;
   console.log('stats', data);
@@ -77,26 +128,26 @@ const Stats = () => {
           <h3>Stats</h3>
           <div>
             <h4>Loot Grab</h4>
-            <p>Min Cap: {transmutationMeta.minCap}</p>
-            <p>Max Cap: {transmutationMeta.maxCap}</p>
+            <p>Min Cap: {setupValues.minCap}</p>
+            <p>Max Cap: {setupValues.maxCap}</p>
             <p>
               Total Raised:{' '}
               {daoService.web3.utils.fromWei(
                 '' +
-                  getToken(data, transmutationMeta.giveTokenAddress)
+                  getToken(data, setupValues.giveTokenAddress)
                     .contractBabeBalance,
               )}{' '}
-              {getToken(data, transmutationMeta.giveTokenAddress).symbol}
+              {getToken(data, setupValues.giveTokenAddress).symbol}
             </p>
             <BarChart
               width={500}
               height={300}
               data={barData(
-                transmutationMeta.minCap,
-                transmutationMeta.maxCap,
+                setupValues.minCap,
+                setupValues.maxCap,
                 daoService.web3.utils.fromWei(
                   '' +
-                    getToken(data, transmutationMeta.giveTokenAddress)
+                    getToken(data, setupValues.giveTokenAddress)
                       .contractBabeBalance,
                 ),
               )}
@@ -111,6 +162,7 @@ const Stats = () => {
               <Bar dataKey="contrib" fill="#ffc658" />
             </BarChart>
             <p>Loot distro chart</p>
+            <p>Share distro chart</p>
             <p>Loot/share distro chart</p>
             <PieChart width={400} height={400}>
               <Pie
@@ -138,17 +190,42 @@ const Stats = () => {
           </div>
           <div>
             <h4>Token Info</h4>
-            <p>token address: {transmutationMeta.getTokenAddress}</p>
+            <p>token address: {setupValues.getTokenAddress}</p>
             <p>
               Total tokens:{' '}
-              {getTokenTotalSupply(data, transmutationMeta.getTokenAddress)}
+              {tokenInfo.length &&
+                tokenInfo.find((token) => token.name === 'getToken')
+                  ?.totalSupply}
             </p>
             <p>token distro</p>
+            {tokenInfo.length && (
+              <PieChart width={400} height={400}>
+                <Pie
+                  dataKey="value"
+                  startAngle={360}
+                  endAngle={0}
+                  data={pieDistroData(
+                    tokenInfo.find((token) => token.name === 'getToken'),
+                  )}
+                  cx={200}
+                  cy={200}
+                  outerRadius={80}
+                  fill="#8884d8"
+                  margin={{
+                    top: 20,
+                    right: 30,
+                    left: 20,
+                    bottom: 5,
+                  }}
+                  label
+                />
+              </PieChart>
+            )}
           </div>
           <div>
             <h4>Transmutation Status</h4>
             <p>start date</p>
-            <p>max monthly burn rate: {transmutationMeta.maxBurnRatePerMo}</p>
+            <p>max monthly burn rate: {setupValues.maxBurnRatePerMo}</p>
             <p>current avg burn rate</p>
             <p>number proposals made</p>
             <p>amount transmuted/remaining</p>
@@ -156,7 +233,7 @@ const Stats = () => {
           <div>
             <h4>Github</h4>
             <p>
-              repo status: <a href={transmutationMeta.githubRepo}>link</a>
+              repo status: <a href={setupValues.githubRepo}>link</a>
             </p>
             <img src="https://i.imgur.com/p8rXwlW.png" alt="github charts" />
           </div>

@@ -38,7 +38,6 @@ export const GET_MOLOCH = gql`
         tokenBalance
         guildBank
         contractTokenBalance @client
-        contractTokenTotalSupply @client
         contractBabeBalance @client
         moloch {
           id

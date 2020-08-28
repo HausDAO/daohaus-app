@@ -178,7 +178,7 @@ export const resolvers = {
         return null;
       }
     },
-    contractTokenTotalSupply: async (tokenBalance, _args, { cache }) => {
+    tokenTotalSupply: async (tokenBalance, _args, { cache }) => {
       if (tokenBalance.guildBank) {
         const tokenService = new TokenService(
           _web3,

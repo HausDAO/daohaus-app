@@ -219,7 +219,7 @@ const TransmutationForm = (props) => {
                   )}
                   <H2Arrow>↓</H2Arrow>
 
-                  <h2>Transmutation Balance: {balance}</h2>
+                  <h2>Balance in transmutation contract: {balance}</h2>
                   <h2>Exchange Rate: {setupValues.exchangeRate}</h2>
                   <h2>
                     {displayTribute(

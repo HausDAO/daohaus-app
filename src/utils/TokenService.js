@@ -51,13 +51,23 @@ export class TokenService {
     }
   }
 
-  async totalSupply() {
-    const totalSupply = await this.contract.methods.totalSupply().call();
+  async totalSupply(token) {
+    const contract = token
+      ? new this.web3.eth.Contract(Erc20Abi, token)
+      : this.contract;
+    const totalSupply = await contract.methods.totalSupply().call();
     return totalSupply;
   }
 
-  async balanceOf(account = this.accountAddress, atBlock = 'latest') {
-    const balanceOf = await this.contract.methods
+  async balanceOf(
+    account = this.accountAddress,
+    atBlock = 'latest',
+    token = null,
+  ) {
+    const contract = token
+      ? new this.web3.eth.Contract(Erc20Abi, token)
+      : this.contract;
+    const balanceOf = await contract.methods
       .balanceOf(account)
       .call({}, atBlock);
 
