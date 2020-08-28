@@ -4,6 +4,7 @@ export const setupValues = {
   contractAddress: '0x8fB2cEa12c43573616be80148C182fCA14Eb9a26',
   exchangeRate: 0.5,
   paddingNumber: 10000,
+  burnRate: 0.25,
 };
 
 export class TransmutationService {

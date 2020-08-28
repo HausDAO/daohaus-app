@@ -3,13 +3,7 @@ import { withRouter } from 'react-router-dom';
 import styled from 'styled-components';
 
 import { Formik, Form, Field, ErrorMessage } from 'formik';
-import {
-  FormContainer,
-  FieldContainer,
-  DropdownInputDiv,
-} from '../../App.styles';
-import PaymentInput from './PaymentInput';
-import TokenSelect from './TokenSelect';
+import { FormContainer, FieldContainer } from '../../App.styles';
 
 import {
   LoaderContext,
@@ -89,7 +83,7 @@ const TransmutationForm = (props) => {
     // eslint-disable-next-line
   }, [web3Connect.web3]);
 
-  // get whitelist
+  // get getToken
   useEffect(() => {
     const getTokenBalance = async () => {
       const getTokenAddress = await transmutationService.getToken();
@@ -103,12 +97,14 @@ const TransmutationForm = (props) => {
         setTokenData([]);
         return;
       }
+      console.log('tokenArray', tokenArray);
       setTokenData(
         tokenArray.map((token) => ({
           label: token.token.symbol || token.tokenAddress,
           value: token.token.tokenAddress,
           decimals: token.token.decimals,
-          balance: token.tokenBalance,
+          balanceWei: token.tokenBalance,
+          balance: web3Connect.web3.utils.fromWei(token.tokenBalance),
         })),
       );
     };
@@ -116,7 +112,7 @@ const TransmutationForm = (props) => {
       getTokenBalance();
     }
     // eslint-disable-next-line
-  }, [data]);
+  }, [data, web3Connect]);
 
   if (loading) return <Loading />;
   if (error) {
@@ -158,7 +154,7 @@ const TransmutationForm = (props) => {
                 }
               }}
             >
-              {({ isSubmitting, ...props }) => (
+              {({ isSubmitting, setFieldValue, ...props }) => (
                 <Form className="Form">
                   <Field name="description">
                     {({ field, form }) => (
@@ -192,26 +188,35 @@ const TransmutationForm = (props) => {
                     {(msg) => <div className="Error">{msg}</div>}
                   </ErrorMessage>
 
-                  <DropdownInputDiv>
-                    <Field
-                      name="paymentRequested"
-                      component={PaymentInput}
-                      data={tokenData}
-                      token={props.values.paymentToken || ''}
-                      label="Payment Requested"
-                    ></Field>
-                    <Field
-                      name="paymentToken"
-                      component={TokenSelect}
-                      label="Payment Token"
-                      data={tokenData}
-                    ></Field>
-                  </DropdownInputDiv>
-
+                  <Field name="paymentRequested">
+                    {({ field, form }) => (
+                      <FieldContainer
+                        className={field.value ? 'Field HasValue' : 'Field '}
+                      >
+                        <label>Get Amount</label>
+                        <input type="text" {...field} />
+                      </FieldContainer>
+                    )}
+                  </Field>
                   <ErrorMessage name="paymentRequested">
                     {(msg) => <div className="Error">{msg}</div>}
                   </ErrorMessage>
 
+                  <ErrorMessage name="paymentRequested">
+                    {(msg) => <div className="Error">{msg}</div>}
+                  </ErrorMessage>
+                  <p>
+                    Max {tokenData[0] && tokenData[0].balance.substring(0, 6)}
+                  </p>
+                  {tokenData[0] && (
+                    <p
+                      onClick={() => {
+                        setFieldValue('paymentRequested', tokenData[0].balance);
+                      }}
+                    >
+                      use max
+                    </p>
+                  )}
                   <H2Arrow>↓</H2Arrow>
 
                   <h2>Transmutation Balance: {balance}</h2>
