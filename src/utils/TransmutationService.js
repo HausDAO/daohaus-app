@@ -13,7 +13,7 @@ export const setupValues = {
   burnRate: 0.25,
   minCap: 1,
   maxCap: 2.5,
-  contributionRoundPerc: .1,
+  contributionRoundPerc: 0.1,
   githubRepo: 'https://github.com/HausDAO',
 };
 
@@ -57,6 +57,13 @@ export class TransmutationService {
   }
 
   async propose(applicant, paymentRequested, description) {
+    console.log(
+      applicant,
+      this.calcTribute(paymentRequested),
+      this.web3.utils.toWei('' + paymentRequested),
+      description,
+      this.accountAddress,
+    );
     const txReceipt = await this.contract.methods
       .propose(
         applicant,

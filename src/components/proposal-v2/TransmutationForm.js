@@ -43,7 +43,7 @@ const TransmutationForm = (props) => {
   const bcProcessor = new BcProcessorService(web3Connect.web3);
   const transmutationService = new TransmutationService(
     web3Connect.web3,
-    currentUser.user,
+    currentUser.username,
     bcProcessor,
   );
 
