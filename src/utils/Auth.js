@@ -32,7 +32,7 @@ export const w3connect = async (web3Connect) => {
       `Injected web3 chainId: ${injectedChainId}, config: ${process.env.REACT_APP_NETWORK_ID}`,
     );
   }
-  console.log('w3connect', web3Connect);
+  // console.log('w3connect', web3Connect);
   const w3c = web3Connect.w3c;
   return { w3c, web3, provider };
 };

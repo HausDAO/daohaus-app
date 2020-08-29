@@ -78,7 +78,6 @@ const Store = ({ children, daoParam }) => {
       if (!daoParam || !apiData) {
         return;
       }
-      console.log('web3Connect.w3c.cachedProvider', web3Connect);
       if (web3Connect.w3c.cachedProvider) {
         loginType = USER_TYPE.WEB3;
       }
@@ -90,9 +89,7 @@ const Store = ({ children, daoParam }) => {
 
         switch (loginType) {
           case USER_TYPE.WEB3: {
-            console.log('web3');
             if (web3Connect.w3c.cachedProvider) {
-              console.log('web3 cached');
 
               const { w3c, web3, provider } = await w3connect(web3Connect);
               const [account] = await web3.eth.getAccounts();
