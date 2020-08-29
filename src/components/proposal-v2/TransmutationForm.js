@@ -73,7 +73,7 @@ const TransmutationForm = (props) => {
 
       const tokenService = new TokenService(web3Connect.web3, token);
 
-      const balance = await tokenService.balanceOf(setupValues.contractAddress);
+      const balance = await tokenService.balanceOf(setupValues.transmutation);
 
       console.log('balance', web3Connect.web3.utils.fromWei(balance));
       setBalance(web3Connect.web3.utils.fromWei(balance));

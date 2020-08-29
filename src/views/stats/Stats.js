@@ -220,7 +220,11 @@ const Stats = () => {
           <div>
             <h4>Token Info</h4>
             <p>token address: {setupValues.getTokenAddress}</p>
-            <p>Total tokens: {tokenInfo && tokenInfo.totalSupply}</p>
+            <p>
+              Total tokens (wei):{' '}
+              {tokenInfo &&
+                daoService.web3.utils.fromWei(tokenInfo.totalSupply)}
+            </p>
             <p>token distro</p>
             {tokenDistroInfo ? (
               <PieChart width={400} height={400}>
