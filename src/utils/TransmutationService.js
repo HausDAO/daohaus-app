@@ -13,6 +13,7 @@ export const setupValues = {
   burnRate: 0.25,
   minCap: 1,
   maxCap: 2.5,
+  contributionRoundPerc: .1,
   githubRepo: 'https://github.com/HausDAO',
 };
 

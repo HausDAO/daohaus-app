@@ -30,6 +30,7 @@ const Stats = () => {
   const [daoDistroInfo, setDaoDistroInfo] = useState();
   const [tokenDistroInfo, setTokenDistroInfo] = useState();
   const [lootGrabData, setLootGrabData] = useState();
+  const [transDistroInfo, setTransDistroInfo] = useState();
 
   const { loading, error, data } = useQuery(GET_MOLOCH, {
     variables: { contractAddr: daoService.daoAddress.toLowerCase() },
@@ -112,6 +113,16 @@ const Stats = () => {
     return data;
   };
 
+  const pieTransmutationData = (info) => {
+    const round = info.totalSupply * setupValues.contributionRoundPerc;
+    const data = [
+      { name: 'availible', value: +info.transSupply },
+      { name: 'transmuted', value: round - info.transSupply },
+    ];
+    console.log('pieTransmutationData', data, round);
+    return data;
+  };
+
   useEffect(() => {
     const tokens = async () => {
       const info = await getTokenInfo(
@@ -123,6 +134,7 @@ const Stats = () => {
       setDaoDistroInfo(
         pieDaoData(data.moloch.totalLoot, data.moloch.totalShares),
       );
+      setTransDistroInfo(pieTransmutationData(info));
 
       setLootGrabData(
         barLootGrabData(
@@ -243,6 +255,31 @@ const Stats = () => {
             <p>current avg burn rate</p>
             <p>number proposals made</p>
             <p>amount transmuted/remaining</p>
+            {transDistroInfo ? (
+              <PieChart width={400} height={400}>
+                <Pie
+                  dataKey="value"
+                  startAngle={360}
+                  endAngle={0}
+                  data={transDistroInfo}
+                  cx={200}
+                  cy={200}
+                  outerRadius={80}
+                  fill="#8884d8"
+                  legendType={'circle'}
+                  label
+                  labelLine
+                >
+                  {transDistroInfo.map((entry, index) => (
+                    <Cell
+                      key={`cell-${index}`}
+                      fill={PIECOLORS[index % PIECOLORS.length]}
+                    />
+                  ))}
+                </Pie>
+                <Legend />
+              </PieChart>
+            ) : null}
           </div>
           <div>
             <h4>Github</h4>
