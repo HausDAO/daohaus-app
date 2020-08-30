@@ -18,7 +18,7 @@ import WhitelistForm from './components/proposal-v2/WhitelistForm';
 import GuildKickForm from './components/proposal-v2/GuildKickForm';
 import TradeForm from './components/proposal-v2/TradeForm';
 import Success from './views/success/Success';
-import TransmutationForm from './components/proposal-v2/TransmutationForm';
+import Transmutation from './views/boosts/transmutation/Transmutation';
 import Rage from './views/rage/Rage';
 import Stats from './views/stats/Stats';
 
@@ -87,7 +87,7 @@ const Routes = (props) => {
           <Route
             path="/dao/:dao(\b0x[0-9a-f]{10,40}\b)/proposal-transmutation"
             exact
-            component={TransmutationForm}
+            component={Transmutation}
           />
           <Route
             path="/dao/:dao(\b0x[0-9a-f]{10,40}\b)/success"

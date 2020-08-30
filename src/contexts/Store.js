@@ -90,7 +90,6 @@ const Store = ({ children, daoParam }) => {
         switch (loginType) {
           case USER_TYPE.WEB3: {
             if (web3Connect.w3c.cachedProvider) {
-
               const { w3c, web3, provider } = await w3connect(web3Connect);
               const [account] = await web3.eth.getAccounts();
 
@@ -135,9 +134,17 @@ const Store = ({ children, daoParam }) => {
     const fetchBoosts = async () => {
       const boostRes = await get(`boosts/${daoParam}`);
 
+      console.log('boostRes', boostRes);
+
       setBoosts(
         boostRes.data.reduce((boosts, boostData) => {
-          boosts[boostData.boostKey] = boostData.active;
+          const metadata = boostData.metadata
+            ? JSON.parse(boostData.metadata[0])
+            : null;
+          boosts[boostData.boostKey] = {
+            active: boostData.active,
+            metadata,
+          };
           return boosts;
         }, {}),
       );

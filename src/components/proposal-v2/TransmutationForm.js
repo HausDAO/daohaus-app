@@ -40,6 +40,8 @@ const TransmutationForm = (props) => {
   const [daoData] = useContext(DaoDataContext);
   const [tokenData, setTokenData] = useState([]);
 
+  console.log('daoData', daoData);
+
   const bcProcessor = new BcProcessorService(web3Connect.web3);
   const transmutationService = new TransmutationService(
     web3Connect.web3,
@@ -93,6 +95,7 @@ const TransmutationForm = (props) => {
           token.token.tokenAddress === getTokenAddress.toLowerCase() &&
           token.guildBank,
       );
+
       if (!tokenArray) {
         setTokenData([]);
         return;

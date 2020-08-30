@@ -44,7 +44,7 @@ const ProposalEngine = () => {
       </Link>
       <Link to={`/dao/${daoData.contractAddress}/proposal-trade`}>Trade</Link>
 
-      {boosts.transmutation ? (
+      {boosts.transmutation.active ? (
         <Link to={`/dao/${daoData.contractAddress}/proposal-transmutation`}>
           Transmutation Proposal
         </Link>

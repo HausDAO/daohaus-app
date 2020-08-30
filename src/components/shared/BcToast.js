@@ -176,7 +176,7 @@ const BcToast = () => {
           <div className="Item" key={tx.tx}>
             <div className="Description">
               <p className="Description__Title">{tx.description}</p>
-              <p className="Data">
+              <div className="Data">
                 <EtherscanLink
                   onClick={toggleElement}
                   type="tx"
@@ -187,7 +187,7 @@ const BcToast = () => {
                       : 'Check on Etherscan'
                   }
                 />
-              </p>
+              </div>
             </div>
             <div className="Status">
               {tx.open && (
