@@ -1,9 +1,5 @@
 import React, { useContext } from 'react';
-import { useQuery } from '@apollo/react-hooks';
 
-import { GET_MEMBER } from '../../../utils/Queries';
-import ErrorMessage from '../../../components/shared/ErrorMessage';
-import Loading from '../../../components/shared/Loading';
 import TransmutationForm from '../../../components/proposal-v2/TransmutationForm';
 import { DaoDataContext } from '../../../contexts/Store';
 
