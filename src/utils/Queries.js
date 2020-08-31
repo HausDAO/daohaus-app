@@ -240,3 +240,18 @@ export const GET_RAGES = gql`
     }
   }
 `;
+
+export const GET_TRANSMUTATION = gql`
+  query transmutations($contractAddr: String!) {
+    transmutations(where: { moloch: $contractAddr }) {
+      id
+      transmutation
+      moloch
+      distributionToken
+      minion
+      trust
+      getToken
+      giveToken
+    }
+  }
+`;

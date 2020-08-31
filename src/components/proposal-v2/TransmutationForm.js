@@ -15,11 +15,6 @@ import {
 import Loading from '../shared/Loading';
 
 import { TokenService } from '../../utils/TokenService';
-import {
-  TransmutationService,
-  setupValues,
-} from '../../utils/TransmutationService';
-import { BcProcessorService } from '../../utils/BcProcessorService';
 import { GET_MOLOCH } from '../../utils/Queries';
 import { useQuery } from 'react-apollo';
 
@@ -29,7 +24,7 @@ const H2Arrow = styled.h2`
 `;
 
 const TransmutationForm = (props) => {
-  const { history } = props;
+  const { history, transmutationService } = props;
 
   const [gloading] = useContext(LoaderContext);
   const [formLoading, setFormLoading] = useState(false);
@@ -41,13 +36,6 @@ const TransmutationForm = (props) => {
   const [tokenData, setTokenData] = useState([]);
 
   console.log('daoData', daoData);
-
-  const bcProcessor = new BcProcessorService(web3Connect.web3);
-  const transmutationService = new TransmutationService(
-    web3Connect.web3,
-    currentUser.username,
-    bcProcessor,
-  );
 
   const options = {
     variables: { contractAddr: daoData.contractAddress },
@@ -75,7 +63,9 @@ const TransmutationForm = (props) => {
 
       const tokenService = new TokenService(web3Connect.web3, token);
 
-      const balance = await tokenService.balanceOf(setupValues.transmutation);
+      const balance = await tokenService.balanceOf(
+        transmutationService.setupValues.transmutation,
+      );
 
       console.log('balance', web3Connect.web3.utils.fromWei(balance));
       setBalance(web3Connect.web3.utils.fromWei(balance));
@@ -223,7 +213,10 @@ const TransmutationForm = (props) => {
                   <H2Arrow>↓</H2Arrow>
 
                   <h2>Balance in transmutation contract: {balance}</h2>
-                  <h2>Exchange Rate: {setupValues.exchangeRate}</h2>
+                  <h2>
+                    Exchange Rate:{' '}
+                    {transmutationService.setupValues.exchangeRate}
+                  </h2>
                   <h2>
                     {displayTribute(
                       transmutationService

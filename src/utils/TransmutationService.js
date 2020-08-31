@@ -22,11 +22,13 @@ export class TransmutationService {
   contract;
   daoAddress;
   accountAddress;
+  setupValues;
 
-  constructor(web3, accountAddress, bcProcessor = null) {
+  constructor(web3, accountAddress, setupValues, bcProcessor = null) {
     this.web3 = web3;
     this.contract = new web3.eth.Contract(abi, setupValues.transmutation);
     this.accountAddress = accountAddress;
+    this.setupValues = setupValues;
     this.bcProcessor = bcProcessor;
   }
 
@@ -35,7 +37,7 @@ export class TransmutationService {
       return '0';
     }
     const bnExchange = this.web3.utils.toBN(
-      setupValues.exchangeRate * setupValues.paddingNumber,
+      this.setupValues.exchangeRate * this.setupValues.paddingNumber,
     );
 
     const bnTributeOffered = this.web3.utils.toBN(
@@ -43,7 +45,7 @@ export class TransmutationService {
     );
     const tributeOffered = bnTributeOffered
       .mul(bnExchange)
-      .div(this.web3.utils.toBN(setupValues.paddingNumber));
+      .div(this.web3.utils.toBN(this.setupValues.paddingNumber));
 
     return tributeOffered;
   }
