@@ -9,7 +9,6 @@ const TokenInfo = (props) => {
   const [tokenDistroInfo, setTokenDistroInfo] = useState();
   const [daoService] = useContext(DaoServiceContext);
 
-
   const pieDistroData = (info) => {
     const data = [
       { name: 'transmutation', value: +info.transSupply },
