@@ -12,7 +12,6 @@ const TransmutationStatus = (props) => {
       { name: 'availible', value: +info.transSupply },
       { name: 'transmuted', value: round - info.transSupply },
     ];
-    console.log('pieTransmutationData', data, round);
     return data;
   };
 

@@ -59,6 +59,7 @@ export const GET_MEMBERS = gql`
       id
       delegateKey
       shares
+      loot
       kicked
       tokenTribute
       didRagequit
