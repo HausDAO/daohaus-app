@@ -154,6 +154,8 @@ const Home = () => {
               <div>
                 <h5>Shares</h5>
                 <h2>{data.moloch.totalShares}</h2>
+                <h5>Loot</h5>
+                <h2>{data.moloch.totalLoot}</h2>
               </div>
               <WhitelistTokenBalances
                 tokens={data.moloch.tokenBalances.filter(
