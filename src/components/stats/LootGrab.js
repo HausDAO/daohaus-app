@@ -27,8 +27,7 @@ const LootGrab = (props) => {
           setupValues.maxCap,
           daoService.web3.utils.fromWei(
             '' +
-              getRequestToken(data, setupValues.giveTokenAddress)
-                .contractBabeBalance,
+              getRequestToken(data, setupValues.giveToken).contractBabeBalance,
           ),
         ),
       );
@@ -56,11 +55,9 @@ const LootGrab = (props) => {
       <p>
         Total Contributed:{' '}
         {daoService.web3.utils.fromWei(
-          '' +
-            getRequestToken(data, setupValues.giveTokenAddress)
-              .contractBabeBalance,
+          '' + getRequestToken(data, setupValues.giveToken).contractBabeBalance,
         )}{' '}
-        {getRequestToken(data, setupValues.giveTokenAddress).symbol}
+        {getRequestToken(data, setupValues.giveToken).symbol}
       </p>
     </div>
   );
