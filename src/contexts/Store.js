@@ -190,8 +190,6 @@ const Store = ({ children, daoParam }) => {
     eth = await daoService.getAccountEth();
     setLoading(false);
 
-    setDelay(60000);
-
     // check transactions left over in bcprocessor storage
     const _txList = daoService.bcProcessor.getTxList(acctAddr);
     const pendingList = daoService.bcProcessor.getTxPendingList(acctAddr);
@@ -218,7 +216,7 @@ const Store = ({ children, daoParam }) => {
         addrByDelegateKey,
       },
     });
-  }, delay);
+  });
 
   return (
     <LoaderContext.Provider value={[loading, setLoading]}>
