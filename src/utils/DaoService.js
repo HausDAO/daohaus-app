@@ -19,7 +19,7 @@ export const USER_TYPE = {
 };
 
 export class DaoService {
-  bcProcessor;
+  // bcProcessor;
   accountAddr;
   web3;
   mcDao;
@@ -31,14 +31,14 @@ export class DaoService {
     web3,
     mcDaoService,
     token,
-    bcProcessor,
+    // bcProcessor,
     contractAddr,
   ) {
     this.accountAddr = accountAddr;
     this.web3 = web3;
     this.mcDao = mcDaoService;
     this.token = token;
-    this.bcProcessor = bcProcessor;
+    // this.bcProcessor = bcProcessor;
     this.daoAddress = contractAddr;
   }
 
@@ -53,7 +53,7 @@ export class DaoService {
     version,
   ) {
     const web3 = new Web3(injected);
-    const bcProcessor = new BcProcessorService(web3);
+    // const bcProcessor = new BcProcessorService(web3);
 
     let mcDao;
     let approvedToken;
@@ -62,7 +62,7 @@ export class DaoService {
         web3,
         contractAddr,
         accountAddr,
-        bcProcessor,
+        // bcProcessor,
         version,
       );
       approvedToken = await mcDao.getDepositToken();
@@ -71,7 +71,7 @@ export class DaoService {
         web3,
         contractAddr,
         accountAddr,
-        bcProcessor,
+        // bcProcessor,
         version,
       );
       approvedToken = await mcDao.approvedToken();
@@ -82,7 +82,7 @@ export class DaoService {
       approvedToken,
       contractAddr,
       accountAddr,
-      bcProcessor,
+      // bcProcessor,
     );
 
     singleton = new Web3DaoService(
@@ -90,7 +90,7 @@ export class DaoService {
       web3,
       mcDao,
       token,
-      bcProcessor,
+      // bcProcessor,
     );
     return singleton;
   }
@@ -100,7 +100,7 @@ export class DaoService {
       new Web3.providers.HttpProvider(process.env.REACT_APP_INFURA_URI),
     );
 
-    const bcProcessor = new ReadOnlyBcProcessorService(web3);
+    // const bcProcessor = new ReadOnlyBcProcessorService(web3);
     const mcDao = new ReadonlyMcDaoService(web3, contractAddr, '', version);
 
     let approvedToken;
@@ -115,7 +115,7 @@ export class DaoService {
       web3,
       mcDao,
       token,
-      bcProcessor,
+      // bcProcessor,
       contractAddr,
     );
     return singleton;

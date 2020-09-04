@@ -191,14 +191,14 @@ const Store = ({ children, daoParam }) => {
     setLoading(false);
 
     // check transactions left over in bcprocessor storage
-    const _txList = daoService.bcProcessor.getTxList(acctAddr);
-    const pendingList = daoService.bcProcessor.getTxPendingList(acctAddr);
+    // const _txList = daoService.bcProcessor.getTxList(acctAddr);
+    // const pendingList = daoService.bcProcessor.getTxPendingList(acctAddr);
 
-    if (pendingList.length) {
-      for (let i = 0; i < pendingList.length; i++) {
-        await daoService.bcProcessor.checkTransaction(pendingList[i].tx);
-      }
-    }
+    // if (pendingList.length) {
+    //   for (let i = 0; i < pendingList.length; i++) {
+    //     await daoService.bcProcessor.checkTransaction(pendingList[i].tx);
+    //   }
+    // }
 
     // set state
     setCurrentWallet({
@@ -212,7 +212,7 @@ const Store = ({ children, daoParam }) => {
         jailed,
         shares,
         accountDevices,
-        _txList,
+        // _txList,
         addrByDelegateKey,
       },
     });

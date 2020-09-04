@@ -5,7 +5,7 @@ export class McDaoService {
   web3;
   daoContract;
   accountAddr;
-  bcProcessor;
+  // bcProcessor;
   contractAddr;
   version;
 
@@ -122,7 +122,6 @@ export class McDaoService {
   }
 
   async getDepositToken() {
-
     const token = await this.daoContract.methods.depositToken().call();
     return token;
   }
@@ -194,11 +193,11 @@ export class ReadonlyMcDaoService extends McDaoService {
 }
 
 export class Web3McDaoService extends McDaoService {
-  bcProcessor;
+  // bcProcessor;
 
-  constructor(web3, daoAddress, accountAddr, bcProcessor, version) {
+  constructor(web3, daoAddress, accountAddr, version) {
     super(web3, daoAddress, accountAddr, version);
-    this.bcProcessor = bcProcessor;
+    // this.bcProcessor = bcProcessor;
   }
 
   async submitVote(proposalIndex, uintVote) {
