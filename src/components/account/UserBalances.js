@@ -9,7 +9,6 @@ import {
   DaoServiceContext,
   DaoDataContext,
 } from '../../contexts/Store';
-import { WalletStatuses } from '../../utils/WalletStatus';
 import { truncateAddr } from '../../utils/Helpers';
 import Arrow from '../../assets/DropArrow.svg';
 import { useInterval } from '../../utils/PollingUtil';
@@ -64,7 +63,6 @@ const UserBalance = ({ toggle }) => {
     }
     if (error) {
       console.log('error', error);
-
       return;
     }
     if (!data || !data.member) {
@@ -82,12 +80,13 @@ const UserBalance = ({ toggle }) => {
       }
 
       const _memberAddress = await daoService.mcDao.memberAddressByDelegateKey(
-        currentUser.attributes['custom:account_address'],
+        currentUser.username,
       );
+
       setMemberAddress(_memberAddress);
       setMemberAddressLoggedIn(
         currentUser &&
-          currentUser.attributes['custom:account_address'] === _memberAddress,
+          currentUser.username.toLowerCase() === _memberAddress.toLowerCase(),
       );
     })();
   }, [currentUser, daoService.mcDao]);
@@ -140,15 +139,8 @@ const UserBalance = ({ toggle }) => {
     <WalletDiv>
       <WalletHeaderDiv>
         <div className="WalletInfo">
-          <StatusP
-            status={
-              currentUser.type === USER_TYPE.WEB3 &&
-              currentWallet.state !== 'Connected'
-                ? 'Disconnected'
-                : ''
-            }
-          >
-            {currentWallet.state || 'Connecting'}
+          <StatusP status={currentUser.type === USER_TYPE.WEB3}>
+            Connected
             {currentWallet.jailed ? ' In Jail. proceed to ragequit.' : null}
             {!memberAddressLoggedIn && parseInt(memberAddress)
               ? ` as delegate for ${memberAddress &&
@@ -160,14 +152,9 @@ const UserBalance = ({ toggle }) => {
               ? ` (has delegate ${truncateAddr(data.member.delegateKey)})`
               : null}
           </StatusP>
-          <CopyToClipboard
-            onCopy={onCopy}
-            text={currentUser.attributes['custom:account_address']}
-          >
+          <CopyToClipboard onCopy={onCopy} text={currentUser.username}>
             <AddressButton>
-              <DataP>
-                {truncateAddr(currentUser.attributes['custom:account_address'])}
-              </DataP>{' '}
+              <DataP>{truncateAddr(currentUser.username)}</DataP>{' '}
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 width="24"
@@ -195,44 +182,37 @@ const UserBalance = ({ toggle }) => {
               <BackdropOpenDiv onClick={toggleActions} />
 
               <ActionsDropdownContentDiv>
-                {currentUser.type !== USER_TYPE.WEB3 && (
-                  <ButtonSecondary onClick={() => toggleActions('depositForm')}>
-                    Deposit
-                  </ButtonSecondary>
-                )}
-                {currentWallet.state === WalletStatuses.Deployed && (
-                  <ButtonSecondary onClick={() => toggleActions('sendEth')}>
-                    Send{' '}
-                    {+process.env.REACT_APP_NETWORK_ID === 100 ? 'XDAI' : 'ETH'}
-                  </ButtonSecondary>
-                )}
-                {currentWallet.state === WalletStatuses.Deployed &&
-                data.member ? (
-                  <ButtonSecondary onClick={() => toggleActions('sendToken')}>
-                    Send {data.member.moloch.tokenSymbol}
-                  </ButtonSecondary>
+                {currentUser.type === USER_TYPE.WEB3 ? (
+                  <>
+                    <ButtonSecondary
+                      onClick={() => toggleActions('ragequit')}
+                      disabled={
+                        !memberAddressLoggedIn && parseInt(memberAddress)
+                      }
+                    >
+                      Rage Quit
+                    </ButtonSecondary>
+
+                    <ButtonSecondary
+                      onClick={() => toggleActions('changeDelegateKey')}
+                      disabled={
+                        !memberAddressLoggedIn && parseInt(memberAddress)
+                      }
+                    >
+                      Change Delegate Key
+                    </ButtonSecondary>
+                  </>
                 ) : null}
-                {currentWallet.state === WalletStatuses.Deployed && (
-                  <ButtonSecondary onClick={() => toggleActions('daohaus')}>
-                    Manage on DAOHaus
-                  </ButtonSecondary>
-                )}
-                {currentUser.type === USER_TYPE.WEB3 && (
-                  <ButtonSecondary
-                    onClick={() => toggleActions('ragequit')}
-                    disabled={!memberAddressLoggedIn && parseInt(memberAddress)}
+                <ButtonSecondary>
+                  <a
+                    className="Button"
+                    rel="noopener noreferrer"
+                    target="_blank"
+                    href="https://wrapeth.com/"
                   >
-                    Rage Quit
-                  </ButtonSecondary>
-                )}
-                {currentUser.type === USER_TYPE.WEB3 && (
-                  <ButtonSecondary
-                    onClick={() => toggleActions('changeDelegateKey')}
-                    disabled={!memberAddressLoggedIn && parseInt(memberAddress)}
-                  >
-                    Change Delegate Key
-                  </ButtonSecondary>
-                )}
+                    Wrap Eth
+                  </a>
+                </ButtonSecondary>
               </ActionsDropdownContentDiv>
             </>
           ) : null}
@@ -255,14 +235,12 @@ const UserBalance = ({ toggle }) => {
           </SelectedElementButton>
         )}
 
-        {daoData.version !== 2 && (
-          <SelectedElementButton
-            selected={headerSwitch === 'Transactions'}
-            onClick={() => setHeaderSwitch('Transactions')}
-          >
-            Transactions
-          </SelectedElementButton>
-        )}
+        <SelectedElementButton
+          selected={headerSwitch === 'Transactions'}
+          onClick={() => setHeaderSwitch('Transactions')}
+        >
+          Transactions
+        </SelectedElementButton>
       </SwitchHeaderDiv>
       <WalletContents>
         {headerSwitch === 'Balances' && (
@@ -283,15 +261,12 @@ const UserBalance = ({ toggle }) => {
               </p>
               <DataDiv>
                 {currentWallet.eth}
-                {currentWallet.state !== WalletStatuses.Connecting &&
-                  currentWallet.eth < 0.01 && (
-                    <TinyButton onClick={() => toggle('depositForm')}>
-                      <span>!</span> Low{' '}
-                      {+process.env.REACT_APP_NETWORK_ID === 100
-                        ? 'XDAI'
-                        : 'ETH'}
-                    </TinyButton>
-                  )}
+                {currentWallet.eth < 0.01 ? (
+                  <TinyButton onClick={() => toggle('depositForm')}>
+                    <span>!</span> Low{' '}
+                    {+process.env.REACT_APP_NETWORK_ID === 100 ? 'XDAI' : 'ETH'}
+                  </TinyButton>
+                ) : null}
               </DataDiv>
             </BalanceItemDiv>
             {currentWallet.shares > 0 || currentWallet.loot > 0 ? (

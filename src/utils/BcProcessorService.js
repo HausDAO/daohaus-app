@@ -1,6 +1,4 @@
-
 export class BcProcessorService {
-  // web3Service;
   web3;
   constructor(web3) {
     this.web3 = web3;

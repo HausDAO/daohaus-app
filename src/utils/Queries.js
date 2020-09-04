@@ -28,6 +28,7 @@ export const GET_MOLOCH = gql`
         decimals
       }
       tokenBalances {
+        id
         token {
           tokenAddress
           symbol
