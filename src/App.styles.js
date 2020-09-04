@@ -2,8 +2,6 @@ import styled from 'styled-components';
 import { lighten } from 'polished';
 
 import {
-  phone,
-  getDangerHover,
   getSecondaryHover,
   getPrimaryHover,
   getTertiaryHover,
@@ -232,26 +230,6 @@ export const FieldContainer = styled.div` {
       transform: translateY(-75%);
       font-size: 0.75em;
     }
-  }
-`;
-
-export const RiskyBizButton = styled.button`
-  margin: 25px auto;
-  font-weight: 500;
-  background-color: ${(props) => props.theme.danger};
-  &:hover {
-    background-color: ${(props) => getDangerHover(props.theme)};
-  }
-  @media (max-width: ${phone}) {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    svg,
-    span {
-      margin: 5px auto;
-    }
-    border-radius: 0px;
   }
 `;
 

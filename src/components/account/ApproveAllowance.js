@@ -29,7 +29,7 @@ const ApproveAllowance = ({ client, hide }) => {
       <Formik
         initialValues={{
           amount: currentWallet.tokenBalance,
-          addr: currentUser.attributes['custom:account_address'],
+          addr: currentUser.username,
         }}
         validate={(values) => {
           const errors = {};

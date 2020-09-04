@@ -18,6 +18,7 @@ import WhitelistForm from './components/proposal-v2/WhitelistForm';
 import GuildKickForm from './components/proposal-v2/GuildKickForm';
 import TradeForm from './components/proposal-v2/TradeForm';
 import Success from './views/success/Success';
+import Transmutation from './views/boosts/transmutation/Transmutation';
 import Rage from './views/rage/Rage';
 
 const Routes = (props) => {
@@ -83,6 +84,16 @@ const Routes = (props) => {
             component={TradeForm}
           />
           <Route
+            path="/dao/:dao(\b0x[0-9a-f]{10,40}\b)/proposal-transmutation"
+            exact
+            component={Transmutation}
+          />
+          <Route
+            path="/dao/:dao(\b0x[0-9a-f]{10,40}\b)/stats-transmutation"
+            exact
+            component={Transmutation}
+          />
+          <Route
             path="/dao/:dao(\b0x[0-9a-f]{10,40}\b)/success"
             exact
             component={Success}
@@ -102,11 +113,6 @@ const Routes = (props) => {
             exact
             component={Account}
           />
-          {/* <Route
-            path="/dao/:dao(\b0x[0-9a-f]{10,40}\b)/sign-up"
-            exact
-            component={SignUp}
-          /> */}
           <Route
             path="/dao/:dao(\b0x[0-9a-f]{10,40}\b)/sign-in"
             exact
@@ -117,16 +123,6 @@ const Routes = (props) => {
             exact
             component={SignOut}
           />
-          {/* <Route
-            path="/dao/:dao(\b0x[0-9a-f]{10,40}\b)/confirm"
-            exact
-            component={Confirm}
-          />
-          <Route
-            path="/dao/:dao(\b0x[0-9a-f]{10,40}\b)/resend-code"
-            exact
-            component={ResendCode}
-          /> */}
           <Route
             path="/dao/:dao(\b0x[0-9a-f]{10,40}\b)/rage"
             exact

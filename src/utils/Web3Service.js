@@ -14,6 +14,7 @@ export default class Web3Service {
   constructor(injected) {
     if (injected) {
       this.web3 = new Web3(injected);
+      console.log('web3service injected');
     } else {
       this.web3 = new Web3(
         new Web3.providers.HttpProvider(process.env.REACT_APP_INFURA_URI),
@@ -21,16 +22,7 @@ export default class Web3Service {
     }
   }
 
-  getKeyStore(privateKey, password) {
-    return this.web3.eth.accounts.encrypt(privateKey, password);
-  }
-
-  decryptKeyStore(keystore, password) {
-    return this.web3.eth.accounts.decrypt(keystore, password);
-  }
-
   async latestBlock() {
-    // return await this.web3.eth.getBlock('latest');
     return this.web3.eth.getBlock('latest');
   }
 

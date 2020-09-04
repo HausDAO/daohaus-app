@@ -178,6 +178,20 @@ export const resolvers = {
         return null;
       }
     },
+    tokenTotalSupply: async (tokenBalance, _args, { cache }) => {
+      if (tokenBalance.guildBank) {
+        const tokenService = new TokenService(
+          _web3,
+          tokenBalance.token.tokenAddress,
+        );
+
+        const totalSupply = await tokenService.totalSupply();
+
+        return +totalSupply;
+      } else {
+        return null;
+      }
+    },
     contractBabeBalance: async (tokenBalance, _args, { cache }) => {
       if (tokenBalance.guildBank) {
         const mcDaoService = new McDaoService(

@@ -3,7 +3,7 @@ import { useQuery } from '@apollo/react-hooks';
 import styled from 'styled-components';
 import { useTranslation } from 'react-i18next';
 
-import { DaoDataContext } from '../../contexts/Store';
+import { DaoDataContext, BoostContext } from '../../contexts/Store';
 import BottomNav from '../../components/shared/BottomNav';
 import ErrorMessage from '../../components/shared/ErrorMessage';
 import Loading from '../../components/shared/Loading';
@@ -13,6 +13,7 @@ import HomeChart from '../../components/shared/HomeChart';
 import WhitelistTokenBalances from '../../components/tokens/WhitelistTokenBalances';
 import { basePadding } from '../../variables.styles';
 import { GET_MOLOCH } from '../../utils/Queries';
+import { Link } from 'react-router-dom';
 
 const HomeDiv = styled.div`
   width: 100%;
@@ -121,6 +122,8 @@ const DataDiv = styled.div`
 const Home = () => {
   const [chartView, setChartView] = useState('bank');
   const [daoData] = useContext(DaoDataContext);
+  const [boosts] = useContext(BoostContext);
+
   const { t } = useTranslation();
 
   const options = {
@@ -141,6 +144,9 @@ const Home = () => {
         <IntroDiv>
           <h1>{daoData.name || 'PokéMol DAO'}</h1>
           <p>{daoData.description || 'Put a Moloch in Your Pocket'}</p>
+          {boosts.transmutation ? (
+            <Link to={`/dao/${daoData.contractAddress}/stats`}>stats</Link>
+          ) : null}
         </IntroDiv>
         <DataDiv>
           {+daoData.version === 2 ? (
@@ -148,6 +154,8 @@ const Home = () => {
               <div>
                 <h5>Shares</h5>
                 <h2>{data.moloch.totalShares}</h2>
+                <h5>Loot</h5>
+                <h2>{data.moloch.totalLoot}</h2>
               </div>
               <WhitelistTokenBalances
                 tokens={data.moloch.tokenBalances.filter(
