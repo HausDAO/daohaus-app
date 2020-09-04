@@ -19,10 +19,7 @@ const PIECOLORS = ['#0088FE', '#00C49F', '#FFBB28', '#FF8042', '#8884d8'];
 const TransmutationStats = (props) => {
   const { transmutationService } = props;
   const [daoService] = useContext(DaoServiceContext);
-  console.log(
-    'transmutationService.setupValue',
-    transmutationService.setupValues,
-  );
+
   const { loading, error, data } = useQuery(GET_MOLOCH, {
     variables: { contractAddr: daoService.daoAddress.toLowerCase() },
   });
@@ -64,7 +61,7 @@ const TransmutationStats = (props) => {
     const token = data.moloch.tokenBalances.find(
       (token) => token.token.tokenAddress === tokenAddress,
     );
-      console.log('data, tokenAddress', data, tokenAddress);
+    console.log('data, tokenAddress', data, tokenAddress);
     return token;
   };
 

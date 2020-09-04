@@ -11,18 +11,29 @@ const TokenInfo = (props) => {
 
   const pieDistroData = (info) => {
     const data = [
-      { name: 'transmutation', value: +info.transSupply },
-      { name: 'trust', value: +info.trustSupply },
-      { name: 'minion', value: +info.minionSupply },
-      { name: 'dao', value: +info.daoSupply },
+      {
+        name: 'transmutation',
+        value: +daoService.web3.utils.fromWei(info.transSupply),
+      },
+      {
+        name: 'trust',
+        value: +daoService.web3.utils.fromWei(info.trustSupply),
+      },
+      {
+        name: 'minion',
+        value: +daoService.web3.utils.fromWei(info.minionSupply),
+      },
+      { name: 'dao', value: +daoService.web3.utils.fromWei(info.daoSupply) },
       {
         name: 'other',
-        value:
-          info.totalSupply -
-          info.transSupply -
-          info.trustSupply -
-          info.minionSupply -
-          info.daoSupply,
+        value: daoService.web3.utils.fromWei(
+          '' +
+            (info.totalSupply -
+              info.transSupply -
+              info.trustSupply -
+              info.minionSupply -
+              info.daoSupply),
+        ),
       },
     ];
     return data;
@@ -30,10 +41,7 @@ const TokenInfo = (props) => {
 
   useEffect(() => {
     const tokens = async () => {
-      const info = await getTokenInfo(
-        'getRequestToken',
-        setupValues.getTokenAddress,
-      );
+      const info = await getTokenInfo('getRequestToken', setupValues.giveToken);
       setTokenInfo(info);
       setTokenDistroInfo(pieDistroData(info));
     };
@@ -71,12 +79,12 @@ const TokenInfo = (props) => {
           <Legend />
         </PieChart>
       ) : null}
-      <p>token address: {setupValues.getTokenAddress}</p>
+      <p>token address: {setupValues.giveToken}</p>
       <p>
-        Total tokens (wei):{' '}
+        Total tokens:{' '}
         {tokenInfo && daoService.web3.utils.fromWei(tokenInfo.totalSupply)}
       </p>
-      <p>token distro</p>
+      <p>link to token distro</p>
     </div>
   );
 };
