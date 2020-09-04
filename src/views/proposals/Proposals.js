@@ -38,6 +38,7 @@ const Proposals = ({ match, history }) => {
     variables: { contractAddr: daoService.daoAddress.toLowerCase() },
     pollInterval: 60000,
     fetchPolicy: 'network-only',
+    // fetchPolicy: 'cache-only',
   };
 
   const { loading, error, data, fetchMore } = useQuery(GET_PROPOSALS, options);
@@ -56,30 +57,48 @@ const Proposals = ({ match, history }) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [data, sponsored, fetched]);
 
+  useEffect(() => {
+    const fetch = async () => {
+      try {
+        fetchMore({
+          variables: { skip: data.proposals.length },
+          updateQuery: (prev, { fetchMoreResult }) => {
+            if (!fetchMoreResult.proposals.length) {
+              setFetched(true);
+              return;
+            }
+            return Object.assign({}, prev, {
+              proposals: _.uniqBy(
+                [...prev.proposals, ...fetchMoreResult.proposals],
+                'id',
+              ),
+            });
+          },
+        });
+      } catch (err) {
+        console.log('err', err);
+      }
+    };
+
+    if (data) {
+      fetch();
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [data]);
+
   if (loading) return <Loading />;
   if (error) return <ErrorMessage message={error} />;
 
-  fetchMore({
-    variables: { skip: data.proposals.length },
-    updateQuery: (prev, { fetchMoreResult }) => {
-      if (!fetchMoreResult.proposals.length) {
-        setFetched(true);
-        return;
-      }
-      return Object.assign({}, prev, {
-        proposals: _.uniqBy(
-          [...prev.proposals, ...fetchMoreResult.proposals],
-          'id',
-        ),
-      });
-    },
-  });
+  const canSubmitProposal =
+    daoData.version === 1
+      ? fetched && currentWallet.shares > 0
+      : fetched && currentUser;
 
   return (
     <>
       <ProposalsHeaderRow>
         <h3>Proposals</h3>
-        {currentWallet.shares || (daoData.version === 2 && currentUser) ? (
+        {canSubmitProposal ? (
           <NewProposalButton
             to={
               daoData.version === 2

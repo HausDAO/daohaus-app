@@ -7,10 +7,9 @@ import { FormContainer } from '../../App.styles';
 const ProposalNew = () => {
   const [currentUser] = useContext(CurrentUserContext);
 
-  const user = currentUser;
   return (
     <>
-      {user ? (
+      {currentUser ? (
         <FormContainer>
           <h1>New Proposal</h1>
           <ProposalForm />
