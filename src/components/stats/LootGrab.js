@@ -21,15 +21,15 @@ const LootGrab = (props) => {
 
   useEffect(() => {
     const tokens = async () => {
+      let tokenWei = 0;
+      if (getRequestToken(data, setupValues.giveToken)) {
+        tokenWei = daoService.web3.utils.fromWei(
+          '' + getRequestToken(data, setupValues.giveToken).contractBabeBalance,
+        );
+      }
+
       setChartData(
-        barLootGrabData(
-          setupValues.minCap,
-          setupValues.maxCap,
-          daoService.web3.utils.fromWei(
-            '' +
-              getRequestToken(data, setupValues.giveToken).contractBabeBalance,
-          ),
-        ),
+        barLootGrabData(setupValues.minCap, setupValues.maxCap, tokenWei),
       );
     };
     if (data) {
@@ -52,13 +52,16 @@ const LootGrab = (props) => {
       </BarChart>
       <p>Min Cap: {setupValues.minCap}</p>
       <p>Max Cap: {setupValues.maxCap}</p>
-      <p>
-        Total Contributed:{' '}
-        {daoService.web3.utils.fromWei(
-          '' + getRequestToken(data, setupValues.giveToken).contractBabeBalance,
-        )}{' '}
-        {getRequestToken(data, setupValues.giveToken).symbol}
-      </p>
+      {getRequestToken(data, setupValues.giveToken) && (
+        <p>
+          Total Contributed:
+          {daoService.web3.utils.fromWei(
+            '' +
+              getRequestToken(data, setupValues.giveToken).contractBabeBalance,
+          )}{' '}
+          {getRequestToken(data, setupValues.giveToken).symbol}
+        </p>
+      )}
     </div>
   );
 };

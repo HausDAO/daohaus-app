@@ -17,7 +17,7 @@ import { TransmutationService } from '../../utils/TransmutationService';
 
 const transClient = new ApolloClient({
   uri:
-    'https://api.thegraph.com/subgraphs/name/odyssy-automaton/daohaus-transmutation',
+    'https://api.thegraph.com/subgraphs/name/odyssy-automaton/daohaus-transmutation-xdai',
 });
 
 const Transmutation = () => {
