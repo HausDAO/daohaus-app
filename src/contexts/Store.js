@@ -216,7 +216,7 @@ const Store = ({ children, daoParam }) => {
         addrByDelegateKey,
       },
     });
-  });
+  }, 60000);
 
   return (
     <LoaderContext.Provider value={[loading, setLoading]}>
