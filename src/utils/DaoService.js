@@ -102,11 +102,6 @@ export class DaoService {
 
     const bcProcessor = new ReadOnlyBcProcessorService(web3);
     const mcDao = new ReadonlyMcDaoService(web3, contractAddr, '', version);
-    // web3.eth.getBlock('latest', false).then((block) => {
-    //   console.log(
-    //     `The latest block number was ${block.number}. It contained ${block.transactions.length} transactions.`,
-    //   );
-    // });
 
     let approvedToken;
     if (version === 2) {

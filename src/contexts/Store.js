@@ -11,7 +11,6 @@ export const CurrentUserContext = createContext();
 export const CurrentWalletContext = createContext();
 export const LoaderContext = createContext(false);
 export const ModalContext = createContext();
-export const RefreshContext = createContext();
 export const DaoDataContext = createContext();
 export const DaoServiceContext = createContext();
 export const Web3ConnectContext = createContext();
@@ -34,11 +33,7 @@ const Store = ({ children, daoParam }) => {
 
   // modal state for open once
   const [hasOpened, setHasOpened] = useState({});
-  // const [name, setName] = useState('MetaCartel DAO');
   const [loading, setLoading] = useState(false);
-  // set initial delay to 1 second to update sdk balance
-  const [delay, setDelay] = useState(1000);
-
   const [daoService, setDaoService] = useState();
   const [daoData, setDaoData] = useState();
   const [boosts, setBoosts] = useState();
@@ -229,23 +224,21 @@ const Store = ({ children, daoParam }) => {
     <LoaderContext.Provider value={[loading, setLoading]}>
       <DaoDataContext.Provider value={[daoData, setDaoData]}>
         <ModalContext.Provider value={[hasOpened, setHasOpened]}>
-          <RefreshContext.Provider value={[delay, setDelay]}>
-            <Web3ConnectContext.Provider value={[web3Connect, setWeb3Connect]}>
-              <DaoServiceContext.Provider value={[daoService, setDaoService]}>
-                <BoostContext.Provider value={[boosts, setBoosts]}>
-                  <CurrentUserContext.Provider
-                    value={[currentUser, setCurrentUser]}
+          <Web3ConnectContext.Provider value={[web3Connect, setWeb3Connect]}>
+            <DaoServiceContext.Provider value={[daoService, setDaoService]}>
+              <BoostContext.Provider value={[boosts, setBoosts]}>
+                <CurrentUserContext.Provider
+                  value={[currentUser, setCurrentUser]}
+                >
+                  <CurrentWalletContext.Provider
+                    value={[currentWallet, setCurrentWallet]}
                   >
-                    <CurrentWalletContext.Provider
-                      value={[currentWallet, setCurrentWallet]}
-                    >
-                      {children}
-                    </CurrentWalletContext.Provider>
-                  </CurrentUserContext.Provider>
-                </BoostContext.Provider>
-              </DaoServiceContext.Provider>
-            </Web3ConnectContext.Provider>
-          </RefreshContext.Provider>
+                    {children}
+                  </CurrentWalletContext.Provider>
+                </CurrentUserContext.Provider>
+              </BoostContext.Provider>
+            </DaoServiceContext.Provider>
+          </Web3ConnectContext.Provider>
         </ModalContext.Provider>
       </DaoDataContext.Provider>
     </LoaderContext.Provider>
