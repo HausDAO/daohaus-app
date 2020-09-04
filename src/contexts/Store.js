@@ -2,7 +2,6 @@ import React, { useState, useEffect, createContext } from 'react';
 import Web3Modal from 'web3modal';
 
 import { useInterval } from '../utils/PollingUtil';
-import { WalletStatuses, currentStatus } from '../utils/WalletStatus';
 import { createWeb3User, w3connect, providerOptions } from '../utils/Auth';
 import { DaoService, USER_TYPE } from '../utils/DaoService';
 import { getChainData } from '../utils/chains';
@@ -12,7 +11,6 @@ export const CurrentUserContext = createContext();
 export const CurrentWalletContext = createContext();
 export const LoaderContext = createContext(false);
 export const ModalContext = createContext();
-export const RefreshContext = createContext();
 export const DaoDataContext = createContext();
 export const DaoServiceContext = createContext();
 export const Web3ConnectContext = createContext();
@@ -28,21 +26,14 @@ const Store = ({ children, daoParam }) => {
     tokenBalance: 0,
     allowance: 0,
     shares: 0,
-    state: null,
     devices: null,
     _txList: [],
     addrByBelegateKey: null,
-    status: WalletStatuses.Unknown,
   });
 
   // modal state for open once
   const [hasOpened, setHasOpened] = useState({});
-
-  // const [name, setName] = useState('MetaCartel DAO');
   const [loading, setLoading] = useState(false);
-  // set initial delay to 1 second to update sdk balance
-  const [delay, setDelay] = useState(1000);
-
   const [daoService, setDaoService] = useState();
   const [daoData, setDaoData] = useState();
   const [boosts, setBoosts] = useState();
@@ -94,9 +85,10 @@ const Store = ({ children, daoParam }) => {
               const [account] = await web3.eth.getAccounts();
 
               setWeb3Connect({ w3c, web3, provider });
+
               user = createWeb3User(account);
               dao = await DaoService.instantiateWithWeb3(
-                user.attributes['custom:account_address'],
+                user.username,
                 provider,
                 daoParam,
                 version,
@@ -169,7 +161,7 @@ const Store = ({ children, daoParam }) => {
 
     const accountDevices = null;
     // get account address from aws
-    const acctAddr = currentUser.attributes['custom:account_address'];
+    const acctAddr = currentUser.username;
     // get delegate key from contract to see if it is different
     const addrByDelegateKey = await daoService.mcDao.memberAddressByDelegateKey(
       acctAddr,
@@ -189,20 +181,14 @@ const Store = ({ children, daoParam }) => {
     // get member shares of dao contract
     const member = await daoService.mcDao.members(addrByDelegateKey);
     // shares will be 0 if not a member, could also be 0 if rage quit
-    // TODO: check membersheip a different way
     const shares = parseInt(member.shares);
     const loot = parseInt(member.loot);
     const jailed = parseInt(member.jailed);
     const highestIndexYesVote = member.highestIndexYesVote;
 
     let eth = 0;
-    let state = WalletStatuses.Unknown;
-
     eth = await daoService.getAccountEth();
-    state = daoService.getAccountState();
     setLoading(false);
-
-    setDelay(60000);
 
     // check transactions left over in bcprocessor storage
     const _txList = daoService.bcProcessor.getTxList(acctAddr);
@@ -214,18 +200,13 @@ const Store = ({ children, daoParam }) => {
       }
     }
 
-    const status = currentStatus(currentWallet, currentUser, state);
-
     // set state
     setCurrentWallet({
       ...currentWallet,
       ...{
-        // tokenBalance: +tokenBalance,
-        // allowance: +allowance,
         tokenBalance,
         allowance,
         eth,
-        state,
         loot,
         highestIndexYesVote,
         jailed,
@@ -233,32 +214,29 @@ const Store = ({ children, daoParam }) => {
         accountDevices,
         _txList,
         addrByDelegateKey,
-        status,
       },
     });
-  }, delay);
+  });
 
   return (
     <LoaderContext.Provider value={[loading, setLoading]}>
       <DaoDataContext.Provider value={[daoData, setDaoData]}>
         <ModalContext.Provider value={[hasOpened, setHasOpened]}>
-          <RefreshContext.Provider value={[delay, setDelay]}>
-            <Web3ConnectContext.Provider value={[web3Connect, setWeb3Connect]}>
-              <DaoServiceContext.Provider value={[daoService, setDaoService]}>
-                <BoostContext.Provider value={[boosts, setBoosts]}>
-                  <CurrentUserContext.Provider
-                    value={[currentUser, setCurrentUser]}
+          <Web3ConnectContext.Provider value={[web3Connect, setWeb3Connect]}>
+            <DaoServiceContext.Provider value={[daoService, setDaoService]}>
+              <BoostContext.Provider value={[boosts, setBoosts]}>
+                <CurrentUserContext.Provider
+                  value={[currentUser, setCurrentUser]}
+                >
+                  <CurrentWalletContext.Provider
+                    value={[currentWallet, setCurrentWallet]}
                   >
-                    <CurrentWalletContext.Provider
-                      value={[currentWallet, setCurrentWallet]}
-                    >
-                      {children}
-                    </CurrentWalletContext.Provider>
-                  </CurrentUserContext.Provider>
-                </BoostContext.Provider>
-              </DaoServiceContext.Provider>
-            </Web3ConnectContext.Provider>
-          </RefreshContext.Provider>
+                    {children}
+                  </CurrentWalletContext.Provider>
+                </CurrentUserContext.Provider>
+              </BoostContext.Provider>
+            </DaoServiceContext.Provider>
+          </Web3ConnectContext.Provider>
         </ModalContext.Provider>
       </DaoDataContext.Provider>
     </LoaderContext.Provider>

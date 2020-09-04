@@ -26,8 +26,6 @@ const ProposalEngine = () => {
   const [daoData] = useContext(DaoDataContext);
   const [boosts] = useContext(BoostContext);
 
-  console.log('boosts', boosts);
-
   return (
     <ProposalEngineDiv>
       <h1 style={{ textAlign: 'center' }}>Submit Proposal</h1>
