@@ -32,6 +32,7 @@
     "react-qr-reader": "^2.2.1",
     "react-router-dom": "^5.1.2",
     "react-scripts": "3.4.0",
+    "rebass": "^4.0.7",
     "recharts": "^2.0.0-beta.1",
     "shortid": "^2.2.15",
     "styled-components": "^5.0.1",

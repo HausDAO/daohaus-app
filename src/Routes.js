@@ -18,7 +18,9 @@ import WhitelistForm from './components/proposal-v2/WhitelistForm';
 import GuildKickForm from './components/proposal-v2/GuildKickForm';
 import TradeForm from './components/proposal-v2/TradeForm';
 import Success from './views/success/Success';
+import Transmutation from './views/boosts/transmutation/Transmutation';
 import Rage from './views/rage/Rage';
+import Stats from './views/stats/Stats';
 
 const Routes = (props) => {
   const { isValid } = props;
@@ -83,6 +85,11 @@ const Routes = (props) => {
             component={TradeForm}
           />
           <Route
+            path="/dao/:dao(\b0x[0-9a-f]{10,40}\b)/proposal-transmutation"
+            exact
+            component={Transmutation}
+          />
+          <Route
             path="/dao/:dao(\b0x[0-9a-f]{10,40}\b)/success"
             exact
             component={Success}
@@ -131,6 +138,11 @@ const Routes = (props) => {
             path="/dao/:dao(\b0x[0-9a-f]{10,40}\b)/rage"
             exact
             component={Rage}
+          />
+          <Route
+            path="/dao/:dao(\b0x[0-9a-f]{10,40}\b)/stats"
+            exact
+            component={Stats}
           />
           <Route path="*" component={FourOhFour} />
         </Switch>

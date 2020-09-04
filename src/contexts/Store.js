@@ -47,13 +47,13 @@ const Store = ({ children, daoParam }) => {
   const [daoData, setDaoData] = useState();
   const [boosts, setBoosts] = useState();
 
-  const [web3Connect, setWeb3Connect] = useState(
-    new Web3Modal({
+  const [web3Connect, setWeb3Connect] = useState({
+    w3c: new Web3Modal({
       network: getChainData(+process.env.REACT_APP_NETWORK_ID).network, // optional
       providerOptions, // required
       cacheProvider: true,
     }),
-  );
+  });
 
   useEffect(() => {
     // runs on app load, sets up user auth and sdk if necessary
@@ -78,8 +78,7 @@ const Store = ({ children, daoParam }) => {
       if (!daoParam || !apiData) {
         return;
       }
-
-      if (web3Connect.cachedProvider) {
+      if (web3Connect.w3c.cachedProvider) {
         loginType = USER_TYPE.WEB3;
       }
 
@@ -90,13 +89,11 @@ const Store = ({ children, daoParam }) => {
 
         switch (loginType) {
           case USER_TYPE.WEB3: {
-            if (web3Connect.cachedProvider) {
-              const { web3Connect: w3c, web3, provider } = await w3connect(
-                web3Connect,
-              );
+            if (web3Connect.w3c.cachedProvider) {
+              const { w3c, web3, provider } = await w3connect(web3Connect);
               const [account] = await web3.eth.getAccounts();
 
-              setWeb3Connect(w3c);
+              setWeb3Connect({ w3c, web3, provider });
               user = createWeb3User(account);
               dao = await DaoService.instantiateWithWeb3(
                 user.attributes['custom:account_address'],
@@ -137,9 +134,17 @@ const Store = ({ children, daoParam }) => {
     const fetchBoosts = async () => {
       const boostRes = await get(`boosts/${daoParam}`);
 
+      console.log('boostRes', boostRes);
+
       setBoosts(
         boostRes.data.reduce((boosts, boostData) => {
-          boosts[boostData.boostKey] = boostData.active;
+          const metadata = boostData.metadata
+            ? JSON.parse(boostData.metadata[0])
+            : null;
+          boosts[boostData.boostKey] = {
+            active: boostData.active,
+            metadata,
+          };
           return boosts;
         }, {}),
       );

@@ -70,6 +70,10 @@ const MemberCard = ({ member }) => {
             <h5>Shares</h5>
             <DataH2>{member.shares}</DataH2>
           </div>
+          <div>
+            <h5>Loot</h5>
+            <DataH2>{member.loot}</DataH2>
+          </div>
           {+daoData.version !== 2 ? (
             <div>
               <h5>Tribute</h5>

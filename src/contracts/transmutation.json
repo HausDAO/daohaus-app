@@ -1,0 +1,178 @@
+[
+	{
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "_moloch",
+				"type": "address"
+			},
+			{
+				"internalType": "address",
+				"name": "_giveToken",
+				"type": "address"
+			},
+			{
+				"internalType": "address",
+				"name": "_getToken",
+				"type": "address"
+			},
+			{
+				"internalType": "address",
+				"name": "_owner",
+				"type": "address"
+			}
+		],
+		"payable": false,
+		"stateMutability": "nonpayable",
+		"type": "constructor"
+	},
+	{
+		"anonymous": false,
+		"inputs": [
+			{
+				"indexed": false,
+				"internalType": "uint256",
+				"name": "proposalId",
+				"type": "uint256"
+			},
+			{
+				"indexed": false,
+				"internalType": "address",
+				"name": "sender",
+				"type": "address"
+			}
+		],
+		"name": "Cancel",
+		"type": "event"
+	},
+	{
+		"anonymous": false,
+		"inputs": [
+			{
+				"indexed": false,
+				"internalType": "uint256",
+				"name": "proposalId",
+				"type": "uint256"
+			},
+			{
+				"indexed": false,
+				"internalType": "address",
+				"name": "sender",
+				"type": "address"
+			}
+		],
+		"name": "Propose",
+		"type": "event"
+	},
+	{
+		"constant": true,
+		"inputs": [],
+		"name": "TRANSMUTATION_DETAILS",
+		"outputs": [
+			{
+				"internalType": "string",
+				"name": "",
+				"type": "string"
+			}
+		],
+		"payable": false,
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"constant": false,
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "_proposalId",
+				"type": "uint256"
+			}
+		],
+		"name": "cancel",
+		"outputs": [],
+		"payable": false,
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"constant": true,
+		"inputs": [],
+		"name": "getToken",
+		"outputs": [
+			{
+				"internalType": "address",
+				"name": "",
+				"type": "address"
+			}
+		],
+		"payable": false,
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"constant": true,
+		"inputs": [],
+		"name": "giveToken",
+		"outputs": [
+			{
+				"internalType": "address",
+				"name": "",
+				"type": "address"
+			}
+		],
+		"payable": false,
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"constant": true,
+		"inputs": [],
+		"name": "moloch",
+		"outputs": [
+			{
+				"internalType": "contract Moloch",
+				"name": "",
+				"type": "address"
+			}
+		],
+		"payable": false,
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"constant": false,
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "_applicant",
+				"type": "address"
+			},
+			{
+				"internalType": "uint256",
+				"name": "_giveAmt",
+				"type": "uint256"
+			},
+			{
+				"internalType": "uint256",
+				"name": "_getAmt",
+				"type": "uint256"
+			},
+			{
+				"internalType": "string",
+				"name": "_details",
+				"type": "string"
+			}
+		],
+		"name": "propose",
+		"outputs": [
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"payable": false,
+		"stateMutability": "nonpayable",
+		"type": "function"
+	}
+]
