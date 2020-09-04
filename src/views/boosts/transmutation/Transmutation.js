@@ -14,6 +14,8 @@ import {
 } from '../../../contexts/Store';
 import { BcProcessorService } from '../../../utils/BcProcessorService';
 import { TransmutationService } from '../../../utils/TransmutationService';
+import { useLocation } from 'react-router-dom';
+import TransmutationStats from '../../../components/stats/TransmutationStats';
 
 const transClient = new ApolloClient({
   uri:
@@ -21,6 +23,7 @@ const transClient = new ApolloClient({
 });
 
 const Transmutation = () => {
+  const location = useLocation();
   const [daoData] = useContext(DaoDataContext);
   const [web3Connect] = useContext(Web3ConnectContext);
   const [currentUser] = useContext(CurrentUserContext);
@@ -63,13 +66,25 @@ const Transmutation = () => {
   if (loading) return <Loading />;
   if (error) return <ErrorMessage message={error} />;
 
-  return (
-    <>
-      {transmutationService ? (
-        <TransmutationForm transmutationService={transmutationService} />
-      ) : null}
-    </>
-  );
+  const renderTrans = () => {
+    switch (location.pathname.split('/')[3]) {
+      case 'proposal-transmutation': {
+        return (
+          <TransmutationForm transmutationService={transmutationService} />
+        );
+      }
+      case 'stats-transmutation': {
+        return (
+          <TransmutationStats transmutationService={transmutationService} />
+        );
+      }
+      default: {
+        return null;
+      }
+    }
+  };
+
+  return <>{transmutationService ? <>{renderTrans()}</> : null}</>;
 };
 
 export default Transmutation;
