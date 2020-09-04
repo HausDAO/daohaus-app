@@ -2,8 +2,6 @@ import styled from 'styled-components';
 import { lighten } from 'polished';
 
 import {
-  phone,
-  getDangerHover,
   getSecondaryHover,
   getPrimaryHover,
   getTertiaryHover,
