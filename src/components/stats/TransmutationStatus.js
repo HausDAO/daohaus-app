@@ -1,26 +1,32 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useContext } from 'react';
 
 import { Legend, PieChart, Pie, Cell } from 'recharts';
+import { DaoServiceContext } from '../../contexts/Store';
 
 const TransmutationStatus = (props) => {
   const { setupValues, PIECOLORS, getTokenInfo } = props;
+  const [daoService] = useContext(DaoServiceContext);
+
   const [transDistroInfo, setTransDistroInfo] = useState();
 
   const pieTransmutationData = (info) => {
     const round = info.totalSupply * setupValues.contributionRoundPerc;
     const data = [
-      { name: 'availible', value: +info.transSupply },
-      { name: 'transmuted', value: round - info.transSupply },
+      {
+        name: 'availible',
+        value: +daoService.web3.utils.fromWei(info.transSupply),
+      },
+      {
+        name: 'transmuted',
+        value: +daoService.web3.utils.fromWei('' + (round - info.transSupply)),
+      },
     ];
     return data;
   };
 
   useEffect(() => {
     const tokens = async () => {
-      const info = await getTokenInfo(
-        'getRequestToken',
-        setupValues.getTokenAddress,
-      );
+      const info = await getTokenInfo('getRequestToken', setupValues.giveToken);
 
       setTransDistroInfo(pieTransmutationData(info));
     };

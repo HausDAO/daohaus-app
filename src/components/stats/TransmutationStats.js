@@ -9,7 +9,6 @@ import BottomNav from '../shared/BottomNav';
 import ErrorMessage from '../shared/ErrorMessage';
 import Loading from '../shared/Loading';
 import { ViewDiv } from '../../App.styles';
-import { setupValues } from '../../utils/TransmutationService';
 import LootGrab from './LootGrab';
 import LootShareDistro from './LootSharesDistro';
 import TokenInfo from './TokenInfo';
@@ -17,7 +16,8 @@ import TransmutationStatus from './TransmutationStatus';
 
 const PIECOLORS = ['#0088FE', '#00C49F', '#FFBB28', '#FF8042', '#8884d8'];
 
-const TransmutationStats = () => {
+const TransmutationStats = (props) => {
+  const { transmutationService } = props;
   const [daoService] = useContext(DaoServiceContext);
 
   const { loading, error, data } = useQuery(GET_MOLOCH, {
@@ -27,22 +27,22 @@ const TransmutationStats = () => {
   const getTokenInfo = async (name, tokenAddress) => {
     const totalSupply = await daoService.token.totalSupply(tokenAddress);
     const transSupply = await daoService.token.balanceOf(
-      setupValues.transmutation,
+      transmutationService.setupValues.transmutation,
       'latest',
       tokenAddress,
     );
     const trustSupply = await daoService.token.balanceOf(
-      setupValues.trust,
+      transmutationService.setupValues.trust,
       'latest',
       tokenAddress,
     );
     const minionSupply = await daoService.token.balanceOf(
-      setupValues.minion,
+      transmutationService.setupValues.minion,
       'latest',
       tokenAddress,
     );
     const daoSupply = await daoService.token.balanceOf(
-      setupValues.moloch,
+      transmutationService.setupValues.moloch,
       'latest',
       tokenAddress,
     );
@@ -61,6 +61,7 @@ const TransmutationStats = () => {
     const token = data.moloch.tokenBalances.find(
       (token) => token.token.tokenAddress === tokenAddress,
     );
+    console.log('data, tokenAddress', data, tokenAddress);
     return token;
   };
 
@@ -74,7 +75,7 @@ const TransmutationStats = () => {
         <Box p={3} width={1 / 2}>
           <LootGrab
             data={data}
-            setupValues={setupValues}
+            setupValues={transmutationService.setupValues}
             getRequestToken={getRequestToken}
           />
         </Box>
@@ -85,14 +86,14 @@ const TransmutationStats = () => {
       <Flex>
         <Box p={3} width={1 / 2}>
           <TokenInfo
-            setupValues={setupValues}
+            setupValues={transmutationService.setupValues}
             PIECOLORS={PIECOLORS}
             getTokenInfo={getTokenInfo}
           />
         </Box>
         <Box p={3} width={1 / 2}>
           <TransmutationStatus
-            setupValues={setupValues}
+            setupValues={transmutationService.setupValues}
             PIECOLORS={PIECOLORS}
             getTokenInfo={getTokenInfo}
           />
@@ -102,7 +103,8 @@ const TransmutationStats = () => {
         <Box p={3} width={1 / 2}>
           <h4>Github</h4>
           <p>
-            repo status: <a href={setupValues.githubRepo}>link</a>
+            repo status:{' '}
+            <a href={transmutationService.setupValues.githubRepo}>link</a>
           </p>
           {/* <img src="https://i.imgur.com/p8rXwlW.png" alt="github charts" /> */}
         </Box>
