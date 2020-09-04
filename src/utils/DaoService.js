@@ -10,7 +10,6 @@ import {
   ReadOnlyBcProcessorService,
 } from './BcProcessorService';
 import { Web3TokenService, TokenService } from './TokenService';
-import { WalletStatuses } from './WalletStatus';
 
 let singleton;
 
@@ -97,30 +96,17 @@ export class DaoService {
   }
 
   static async instantiateWithReadOnly(contractAddr, version) {
-    console.log(
-      'instantiateWithReadOnly',
-      new Web3.providers.HttpProvider(process.env.REACT_APP_INFURA_URI),
-    );
     const web3 = new Web3(
       new Web3.providers.HttpProvider(process.env.REACT_APP_INFURA_URI),
     );
 
-    console.log('web3', web3);
     const bcProcessor = new ReadOnlyBcProcessorService(web3);
-
-    console.log('bcProcessor', bcProcessor);
-
     const mcDao = new ReadonlyMcDaoService(web3, contractAddr, '', version);
-
-    console.log('mcDao', mcDao);
-
-    console.log('version', version);
-
-    web3.eth.getBlock('latest', false).then((block) => {
-      console.log(
-        `The latest block number was ${block.number}. It contained ${block.transactions.length} transactions.`,
-      );
-    });
+    // web3.eth.getBlock('latest', false).then((block) => {
+    //   console.log(
+    //     `The latest block number was ${block.number}. It contained ${block.transactions.length} transactions.`,
+    //   );
+    // });
 
     let approvedToken;
     if (version === 2) {
@@ -128,9 +114,7 @@ export class DaoService {
     } else {
       approvedToken = await mcDao.approvedToken();
     }
-    // TODO: is this needed?
     const token = new TokenService(web3, approvedToken);
-
     singleton = new ReadonlyDaoService(
       '',
       web3,
