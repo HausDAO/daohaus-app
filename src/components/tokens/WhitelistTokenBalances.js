@@ -43,6 +43,8 @@ const WhitelistTokenBalancesDiv = styled.div`
 const WhitelistTokenBalances = (tokens) => {
   const [hideZeroBalance, setHideZeroBalance] = useState(true);
 
+  console.log('tokens', tokens);
+
   const hasZeroBalances = tokens.tokens.some(
     (token) => !parseInt(token.contractTokenBalance),
   );

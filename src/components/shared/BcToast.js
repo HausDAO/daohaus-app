@@ -1,12 +1,7 @@
 import React, { useContext } from 'react';
 import { Link } from 'react-router-dom';
 
-import {
-  CurrentUserContext,
-  CurrentWalletContext,
-  DaoServiceContext,
-} from '../../contexts/Store';
-import { WalletStatuses } from '../../utils/WalletStatus';
+import { CurrentUserContext, DaoServiceContext } from '../../contexts/Store';
 import IconProcessing from './IconProcessing';
 
 import styled from 'styled-components';
@@ -153,22 +148,17 @@ const DropdownFooterDiv = styled.div`
 
 const BcToast = () => {
   const [daoService] = useContext(DaoServiceContext);
-
   const [currentUser] = useContext(CurrentUserContext);
-  const [currentWallet] = useContext(CurrentWalletContext);
-
   const [isElementOpen, setElementOpen] = React.useState(false);
   const toggleElement = () => setElementOpen(!isElementOpen);
 
   const pendingLength = () => {
-    return daoService.bcProcessor.getTxPendingList(
-      currentUser.attributes['custom:account_address'],
-    ).length;
+    return daoService.bcProcessor.getTxPendingList(currentUser.username).length;
   };
 
   const renderList = () => {
     return daoService.bcProcessor
-      .getTxList(currentUser.attributes['custom:account_address'])
+      .getTxList(currentUser.username)
       .slice(-3)
       .reverse()
       .map((tx) => {
@@ -176,7 +166,7 @@ const BcToast = () => {
           <div className="Item" key={tx.tx}>
             <div className="Description">
               <p className="Description__Title">{tx.description}</p>
-              <p className="Data">
+              <div className="Data">
                 <EtherscanLink
                   onClick={toggleElement}
                   type="tx"
@@ -187,7 +177,7 @@ const BcToast = () => {
                       : 'Check on Etherscan'
                   }
                 />
-              </p>
+              </div>
             </div>
             <div className="Status">
               {tx.open && (
@@ -226,8 +216,7 @@ const BcToast = () => {
           onClick={toggleElement}
         />
         <ProcessorDiv>
-          {currentUser.type === USER_TYPE.WEB3 &&
-          currentWallet.state === WalletStatuses.Connected ? (
+          {currentUser.type === USER_TYPE.WEB3 ? (
             <ProcessorButton onClick={toggleElement}>
               {pendingLength() ? (
                 <IconProcessing />
