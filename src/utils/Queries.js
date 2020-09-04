@@ -19,6 +19,7 @@ export const GET_MOLOCH = gql`
       summoningTime
       newContract
       totalShares
+      totalLoot
       version
       guildBankAddress
       depositToken {
@@ -27,6 +28,7 @@ export const GET_MOLOCH = gql`
         decimals
       }
       tokenBalances {
+        id
         token {
           tokenAddress
           symbol
@@ -58,6 +60,7 @@ export const GET_MEMBERS = gql`
       id
       delegateKey
       shares
+      loot
       kicked
       tokenTribute
       didRagequit
@@ -236,6 +239,21 @@ export const GET_RAGES = gql`
       loot
       memberAddress
       molochAddress
+    }
+  }
+`;
+
+export const GET_TRANSMUTATION = gql`
+  query transmutations($contractAddr: String!) {
+    transmutations(where: { moloch: $contractAddr }) {
+      id
+      transmutation
+      moloch
+      distributionToken
+      minion
+      trust
+      getToken
+      giveToken
     }
   }
 `;
