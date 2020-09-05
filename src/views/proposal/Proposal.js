@@ -20,7 +20,7 @@ const Proposal = (props) => {
   const [currentWallet] = useContext(CurrentWalletContext);
   const [daoService] = useContext(DaoServiceContext);
 
-  const { loading, error, data } = useQuery(GET_PROPOSAL, {
+  const { loading, error, data, refetch } = useQuery(GET_PROPOSAL, {
     variables: { id: `${daoService.daoAddress.toLowerCase()}-proposal-${id}` },
   });
 
@@ -39,6 +39,8 @@ const Proposal = (props) => {
     } catch (e) {
       console.error(`Error processing proposal: ${e.toString()}`);
     } finally {
+      console.log('finally');
+      refetch();
       setTxLoading(false);
       props.history.push(
         `/dao/${daoService.daoAddress}/success?action=processed`,
@@ -61,6 +63,7 @@ const Proposal = (props) => {
     } catch (e) {
       console.error(`Error processing proposal: ${e.toString()}`);
     } finally {
+      refetch();
       setTxLoading(false);
     }
   };
@@ -70,6 +73,7 @@ const Proposal = (props) => {
 
   return (
     <>
+      <p>{'' + txLoading}</p>
       {txLoading && <Loading />}
       <ProposalDetail
         submitVote={submitVote}
