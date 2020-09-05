@@ -55,7 +55,7 @@ const UserBalance = ({ toggle }) => {
     },
   };
 
-  const { loading, error, data } = useQuery(GET_MEMBER, options);
+  const { loading, error, data, refetch } = useQuery(GET_MEMBER, options);
 
   useEffect(() => {
     const checkBalance = async (data) => {
@@ -163,6 +163,8 @@ const UserBalance = ({ toggle }) => {
       tokens.forEach((token) => (token.tokenBalance = 0));
     } catch (err) {
       console.log(err);
+    } finally {
+      refetch();
     }
   };
 

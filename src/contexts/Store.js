@@ -160,6 +160,7 @@ const Store = ({ children, daoParam }) => {
     }
 
     const userSetup = async () => {
+      console.log('user setup');
       const accountDevices = null;
       // get account address from aws
       const acctAddr = currentUser.username;
@@ -218,7 +219,8 @@ const Store = ({ children, daoParam }) => {
       });
     };
     userSetup();
-  }, [currentUser, currentWallet, daoService]);
+    // eslint-disable-next-line
+  }, [currentUser, daoService]);
 
   return (
     <LoaderContext.Provider value={[loading, setLoading]}>
