@@ -122,7 +122,6 @@ export class McDaoService {
   }
 
   async getDepositToken() {
-
     const token = await this.daoContract.methods.depositToken().call();
     return token;
   }

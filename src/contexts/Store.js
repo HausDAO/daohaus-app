@@ -1,7 +1,7 @@
 import React, { useState, useEffect, createContext } from 'react';
 import Web3Modal from 'web3modal';
 
-import { useInterval } from '../utils/PollingUtil';
+// import { useInterval } from '../utils/PollingUtil';
 import { createWeb3User, w3connect, providerOptions } from '../utils/Auth';
 import { DaoService, USER_TYPE } from '../utils/DaoService';
 import { getChainData } from '../utils/chains';
@@ -148,7 +148,7 @@ const Store = ({ children, daoParam }) => {
   }, [daoParam]);
 
   // global polling service
-  useInterval(async () => {
+  useEffect(() => {
     if (!daoService) {
       console.log(`DaoService not initialized yet`);
       return;
@@ -159,64 +159,66 @@ const Store = ({ children, daoParam }) => {
       return;
     }
 
-    const accountDevices = null;
-    // get account address from aws
-    const acctAddr = currentUser.username;
-    // get delegate key from contract to see if it is different
-    const addrByDelegateKey = await daoService.mcDao.memberAddressByDelegateKey(
-      acctAddr,
-    );
+    const userSetup = async () => {
+      const accountDevices = null;
+      // get account address from aws
+      const acctAddr = currentUser.username;
+      // get delegate key from contract to see if it is different
+      const addrByDelegateKey = await daoService.mcDao.memberAddressByDelegateKey(
+        acctAddr,
+      );
 
-    // get weth balance and allowance of contract
-    // const wethWei = await tokenService.balanceOf(acctAddr);
-    const tokenBalanceWei = await daoService.token.balanceOf(acctAddr);
-    const allowanceWei = await daoService.token.allowance(
-      acctAddr,
-      daoService.daoAddress,
-    );
-    // convert from wei to eth
-    const tokenBalance = daoService.web3.utils.fromWei(tokenBalanceWei);
-    const allowance = daoService.web3.utils.fromWei(allowanceWei);
+      // get weth balance and allowance of contract
+      // const wethWei = await tokenService.balanceOf(acctAddr);
+      const tokenBalanceWei = await daoService.token.balanceOf(acctAddr);
+      const allowanceWei = await daoService.token.allowance(
+        acctAddr,
+        daoService.daoAddress,
+      );
+      // convert from wei to eth
+      const tokenBalance = daoService.web3.utils.fromWei(tokenBalanceWei);
+      const allowance = daoService.web3.utils.fromWei(allowanceWei);
 
-    // get member shares of dao contract
-    const member = await daoService.mcDao.members(addrByDelegateKey);
-    // shares will be 0 if not a member, could also be 0 if rage quit
-    const shares = parseInt(member.shares);
-    const loot = parseInt(member.loot);
-    const jailed = parseInt(member.jailed);
-    const highestIndexYesVote = member.highestIndexYesVote;
+      // get member shares of dao contract
+      const member = await daoService.mcDao.members(addrByDelegateKey);
+      // shares will be 0 if not a member, could also be 0 if rage quit
+      const shares = parseInt(member.shares);
+      const loot = parseInt(member.loot);
+      const jailed = parseInt(member.jailed);
+      const highestIndexYesVote = member.highestIndexYesVote;
 
-    let eth = 0;
-    eth = await daoService.getAccountEth();
-    setLoading(false);
+      let eth = 0;
+      eth = await daoService.getAccountEth();
+      setLoading(false);
 
-    // check transactions left over in bcprocessor storage
-    const _txList = daoService.bcProcessor.getTxList(acctAddr);
-    const pendingList = daoService.bcProcessor.getTxPendingList(acctAddr);
-
-    if (pendingList.length) {
-      for (let i = 0; i < pendingList.length; i++) {
-        await daoService.bcProcessor.checkTransaction(pendingList[i].tx);
+      // check transactions left over in bcprocessor storage
+      // const _txList = daoService.bcProcessor.getTxList(acctAddr);
+      const pendingList = daoService.bcProcessor.getTxPendingList(acctAddr);
+      if (pendingList.length) {
+        for (let i = 0; i < pendingList.length; i++) {
+          await daoService.bcProcessor.checkTransaction(pendingList[i].tx);
+        }
       }
-    }
 
-    // set state
-    setCurrentWallet({
-      ...currentWallet,
-      ...{
-        tokenBalance,
-        allowance,
-        eth,
-        loot,
-        highestIndexYesVote,
-        jailed,
-        shares,
-        accountDevices,
-        _txList,
-        addrByDelegateKey,
-      },
-    });
-  }, 60000);
+      // set state
+      setCurrentWallet({
+        ...currentWallet,
+        ...{
+          tokenBalance,
+          allowance,
+          eth,
+          loot,
+          highestIndexYesVote,
+          jailed,
+          shares,
+          accountDevices,
+          // _txList,
+          addrByDelegateKey,
+        },
+      });
+    };
+    userSetup();
+  }, [currentUser, currentWallet, daoService]);
 
   return (
     <LoaderContext.Provider value={[loading, setLoading]}>
