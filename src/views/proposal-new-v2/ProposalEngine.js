@@ -41,10 +41,9 @@ const ProposalEngine = () => {
         Guildkick
       </Link>
       <Link to={`/dao/${daoData.contractAddress}/proposal-trade`}>Trade</Link>
-
       {boosts.transmutation?.active ? (
         <Link to={`/dao/${daoData.contractAddress}/proposal-transmutation`}>
-          Transmutation Proposal
+          Transmutation
         </Link>
       ) : null}
     </ProposalEngineDiv>
