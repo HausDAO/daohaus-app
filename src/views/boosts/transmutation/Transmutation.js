@@ -18,8 +18,9 @@ import { useLocation } from 'react-router-dom';
 import TransmutationStats from '../../../components/stats/TransmutationStats';
 import supportedChains from '../../../utils/chains';
 
+const chainData = supportedChains[+process.env.REACT_APP_NETWORK_ID];
 const transClient = new ApolloClient({
-  uri: supportedChains[+process.env.REACT_APP_NETWORK_ID],
+  uri: chainData.transmutation_subgraph_url,
 });
 
 const Transmutation = () => {
