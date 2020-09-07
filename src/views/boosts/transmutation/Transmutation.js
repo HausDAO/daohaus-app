@@ -8,9 +8,9 @@ import Loading from '../../../components/shared/Loading';
 import TransmutationForm from '../../../components/proposal-v2/TransmutationForm';
 import {
   DaoDataContext,
-  Web3ConnectContext,
   CurrentUserContext,
   BoostContext,
+  DaoServiceContext,
 } from '../../../contexts/Store';
 import { BcProcessorService } from '../../../utils/BcProcessorService';
 import { TransmutationService } from '../../../utils/TransmutationService';
@@ -26,7 +26,7 @@ const transClient = new ApolloClient({
 const Transmutation = () => {
   const location = useLocation();
   const [daoData] = useContext(DaoDataContext);
-  const [web3Connect] = useContext(Web3ConnectContext);
+  const [daoService] = useContext(DaoServiceContext);
   const [currentUser] = useContext(CurrentUserContext);
   const [boosts] = useContext(BoostContext);
 
@@ -41,15 +41,15 @@ const Transmutation = () => {
 
   useEffect(() => {
     const setService = async () => {
-      const bcProcessor = new BcProcessorService(web3Connect.web3);
+      const bcProcessor = new BcProcessorService(daoService.web3);
 
       const setupValues = {
         ...boosts.transmutation.metadata,
         ...data.transmutations[0],
       };
       const service = new TransmutationService(
-        web3Connect.web3,
-        currentUser.username,
+        daoService.web3,
+        currentUser?.username,
         setupValues,
         bcProcessor,
       );

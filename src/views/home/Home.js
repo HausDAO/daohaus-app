@@ -144,8 +144,10 @@ const Home = () => {
         <IntroDiv>
           <h1>{daoData.name || 'PokéMol DAO'}</h1>
           <p>{daoData.description || 'Put a Moloch in Your Pocket'}</p>
-          {boosts.transmutation ? (
-            <Link to={`/dao/${daoData.contractAddress}/stats`}>stats</Link>
+          {boosts.transmutation?.active ? (
+            <Link to={`/dao/${daoData.contractAddress}/stats-transmutation`}>
+              Transmutation Stats
+            </Link>
           ) : null}
         </IntroDiv>
         <DataDiv>
