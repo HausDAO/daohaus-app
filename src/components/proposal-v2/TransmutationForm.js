@@ -1,9 +1,16 @@
 import React, { useContext, useState, useEffect } from 'react';
 import { withRouter } from 'react-router-dom';
 import styled from 'styled-components';
+import { SwapOutlined } from '@ant-design/icons';
 
 import { Formik, Form, Field, ErrorMessage } from 'formik';
-import { FormContainer, FieldContainer } from '../../App.styles';
+import {
+  FormContainer,
+  FieldContainer,
+  TinyP,
+  TinyPLink,
+  DataH2,
+} from '../../App.styles';
 
 import {
   LoaderContext,
@@ -18,9 +25,33 @@ import { TokenService } from '../../utils/TokenService';
 import { GET_MOLOCH } from '../../utils/Queries';
 import { useQuery } from 'react-apollo';
 
-const H2Arrow = styled.h2`
+const TransmutationRow = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  margin-top: 25px;
+  margin-bottom: 25px;
+  p {
+    font-size: 0.85em;
+  }
+`;
+
+const TransmutationIcon = styled.div`
+  text-align: left;
+  svg {
+    width: 36px;
+    height: 36px;
+    margin-right: 15px;
+    transform: rotate(-90deg);
+  }
+  color: ${(props) => props.theme.baseFontColor};
+`;
+
+const TransmutationReturn = styled.div`
+  border: 1px solid ${(props) => props.theme.baseFontColor};
+  padding: 5px 15px 15px 15px;
+  border-radius: 25px;
   text-align: center;
-  color: ${(props) => props.theme.primary};
 `;
 
 const TransmutationForm = (props) => {
@@ -29,6 +60,7 @@ const TransmutationForm = (props) => {
   const [gloading] = useContext(LoaderContext);
   const [formLoading, setFormLoading] = useState(false);
   const [balance, setBalance] = useState(0);
+  const [symbol, setSymbol] = useState(0);
   const [daoService] = useContext(DaoServiceContext);
   const [currentUser] = useContext(CurrentUserContext);
   const [web3Connect] = useContext(Web3ConnectContext);
@@ -69,6 +101,8 @@ const TransmutationForm = (props) => {
 
       console.log('balance', web3Connect.web3.utils.fromWei(balance));
       setBalance(web3Connect.web3.utils.fromWei(balance));
+      const symbol = await tokenService.getSymbol();
+      setSymbol(symbol);
     };
     getBalance();
 
@@ -172,7 +206,7 @@ const TransmutationForm = (props) => {
                       <FieldContainer
                         className={field.value ? 'Field HasValue' : 'Field '}
                       >
-                        <label>Applicant Address</label>
+                        <label>Recipient Address</label>
                         <input type="text" {...field} />
                       </FieldContainer>
                     )}
@@ -186,7 +220,7 @@ const TransmutationForm = (props) => {
                       <FieldContainer
                         className={field.value ? 'Field HasValue' : 'Field '}
                       >
-                        <label>Get Amount</label>
+                        <label>Amount</label>
                         <input type="text" {...field} />
                       </FieldContainer>
                     )}
@@ -198,32 +232,41 @@ const TransmutationForm = (props) => {
                   <ErrorMessage name="paymentRequested">
                     {(msg) => <div className="Error">{msg}</div>}
                   </ErrorMessage>
-                  <p>
-                    Max {tokenData[0] && tokenData[0].balance.substring(0, 6)}
-                  </p>
                   {tokenData[0] && (
-                    <p
+                    <TinyPLink
                       onClick={() => {
                         setFieldValue('paymentRequested', tokenData[0].balance);
                       }}
                     >
-                      use max
-                    </p>
+                      DAO Balance:{' '}
+                      {tokenData[0] && tokenData[0].balance.substring(0, 6)}{' '}
+                      {tokenData[0] && tokenData[0].label}
+                    </TinyPLink>
                   )}
-                  <H2Arrow>↓</H2Arrow>
 
-                  <h2>Balance in transmutation contract: {balance}</h2>
-                  <h2>
-                    Exchange Rate:{' '}
-                    {transmutationService.setupValues.exchangeRate}
-                  </h2>
-                  <h2>
-                    {displayTribute(
-                      transmutationService
-                        .calcTribute(props.values.paymentRequested)
-                        .toString(),
-                    )}
-                  </h2>
+                  <TransmutationRow>
+                    <TransmutationIcon>
+                      <SwapOutlined />
+                    </TransmutationIcon>
+                    <TinyP>
+                      Exchange Rate: 1 {tokenData[0] && tokenData[0].label} ={' '}
+                      {transmutationService.setupValues.exchangeRate} {symbol}
+                    </TinyP>
+                  </TransmutationRow>
+                  <TransmutationReturn>
+                    <h5>Will Return</h5>
+                    <DataH2>
+                      {displayTribute(
+                        transmutationService
+                          .calcTribute(props.values.paymentRequested)
+                          .toString(),
+                      )}{' '}
+                      {symbol}
+                    </DataH2>
+                    <TinyP>
+                      Balance: {balance} {symbol}
+                    </TinyP>
+                  </TransmutationReturn>
 
                   <button type="submit" disabled={isSubmitting}>
                     Submit
