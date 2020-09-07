@@ -19,13 +19,16 @@ const LootGrab = (props) => {
     ];
   };
 
+  const total =
+    getRequestToken(data, setupValues.giveToken).contractBabeBalance == null
+      ? 0
+      : getRequestToken(data, setupValues.giveToken).contractBabeBalance;
+
   useEffect(() => {
     const tokens = async () => {
       let tokenWei = 0;
       if (getRequestToken(data, setupValues.giveToken)) {
-        tokenWei = daoService.web3.utils.fromWei(
-          '' + getRequestToken(data, setupValues.giveToken).contractBabeBalance,
-        );
+        tokenWei = daoService.web3.utils.fromWei('' + total);
       }
 
       setChartData(
@@ -55,10 +58,7 @@ const LootGrab = (props) => {
       {getRequestToken(data, setupValues.giveToken) && (
         <p>
           Total Contributed:
-          {daoService.web3.utils.fromWei(
-            '' +
-              getRequestToken(data, setupValues.giveToken).contractBabeBalance,
-          )}{' '}
+          {daoService.web3.utils.fromWei('' + total)}{' '}
           {getRequestToken(data, setupValues.giveToken).symbol}
         </p>
       )}
