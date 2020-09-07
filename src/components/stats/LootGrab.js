@@ -19,7 +19,13 @@ const LootGrab = (props) => {
     ];
   };
 
+  console.log(
+    'getRequestToken(data, setupValues.giveToken)',
+    getRequestToken(data, setupValues.giveToken),
+  );
+
   const total =
+    !getRequestToken(data, setupValues.giveToken) ||
     getRequestToken(data, setupValues.giveToken).contractBabeBalance == null
       ? 0
       : getRequestToken(data, setupValues.giveToken).contractBabeBalance;

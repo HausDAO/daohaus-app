@@ -73,13 +73,15 @@ const Proposal = (props) => {
 
   return (
     <>
-      <p>{'' + txLoading}</p>
-      {txLoading && <Loading />}
-      <ProposalDetail
-        submitVote={submitVote}
-        processProposal={processProposal}
-        proposal={data.proposal}
-      />
+      {txLoading ? (
+        <Loading />
+      ) : (
+        <ProposalDetail
+          submitVote={submitVote}
+          processProposal={processProposal}
+          proposal={data.proposal}
+        />
+      )}
     </>
   );
 };
