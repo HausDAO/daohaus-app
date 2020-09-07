@@ -16,10 +16,11 @@ import { BcProcessorService } from '../../../utils/BcProcessorService';
 import { TransmutationService } from '../../../utils/TransmutationService';
 import { useLocation } from 'react-router-dom';
 import TransmutationStats from '../../../components/stats/TransmutationStats';
+import supportedChains from '../../../utils/chains';
 
+const chainData = supportedChains[+process.env.REACT_APP_NETWORK_ID];
 const transClient = new ApolloClient({
-  uri:
-    'https://api.thegraph.com/subgraphs/name/odyssy-automaton/daohaus-transmutation-xdai',
+  uri: chainData.transmutation_subgraph_url,
 });
 
 const Transmutation = () => {
