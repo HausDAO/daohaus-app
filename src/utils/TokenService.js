@@ -7,13 +7,12 @@ export class TokenService {
   daoAddress;
   accountAddress;
 
-  constructor(web3, daoToken, daoAddress, accountAddress, bcProcessor) {
+  constructor(web3, daoToken, daoAddress, accountAddress) {
     this.web3 = web3;
     this.contract = new web3.eth.Contract(Erc20Abi, daoToken);
     this.contract32 = new web3.eth.Contract(Erc20Bytes32Abi, daoToken);
     this.daoAddress = daoAddress;
     this.accountAddress = accountAddress;
-    this.bcProcessor = bcProcessor;
   }
 
   async getSymbol(override) {
@@ -104,12 +103,7 @@ export class Web3TokenService extends TokenService {
     const txReceipt = await this.contract.methods
       .approve(this.daoAddress, wad)
       .send({ from: this.accountAddress });
-    this.bcProcessor.setTx(
-      txReceipt.transactionHash,
-      this.accountAddress,
-      `Update Token Allowance to ${wad}`,
-      true,
-    );
+
     return txReceipt.transactionHash;
   }
 
@@ -117,12 +111,7 @@ export class Web3TokenService extends TokenService {
     const txReceipt = await this.contract.methods
       .deposit()
       .send({ from: this.accountAddress, value: amount });
-    this.bcProcessor.setTx(
-      txReceipt.transactionHash,
-      this.accountAddress,
-      `Deposit ${amount} Tokens`,
-      true,
-    );
+
     return txReceipt.transactionHash;
   }
 
@@ -130,12 +119,7 @@ export class Web3TokenService extends TokenService {
     const txReceipt = await this.contract.methods
       .transfer(dest, wad)
       .send({ from: this.accountAddress });
-    this.bcProcessor.setTx(
-      txReceipt.transactionHash,
-      this.accountAddress,
-      `Transfer ${wad} Tokens to ${dest}`,
-      true,
-    );
+
     return txReceipt.transactionHash;
   }
 
@@ -148,12 +132,7 @@ export class Web3TokenService extends TokenService {
     const txReceipt = await contract.methods
       .approve(this.daoAddress, max.toString())
       .send({ from: this.accountAddress });
-    this.bcProcessor.setTx(
-      txReceipt.transactionHash,
-      this.accountAddress,
-      `Unulock Token ${token}`,
-      true,
-    );
+
     return txReceipt.transactionHash;
   }
 

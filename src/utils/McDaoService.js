@@ -5,7 +5,6 @@ export class McDaoService {
   web3;
   daoContract;
   accountAddr;
-  bcProcessor;
   contractAddr;
   version;
 
@@ -181,9 +180,7 @@ export class McDaoService {
     return loot;
   }
 
-  async getUserTokenBalances(userAddress) {
-    // TODO: does this only work on the guild address?
-  }
+  async getUserTokenBalances(userAddress) {}
 }
 
 export class ReadonlyMcDaoService extends McDaoService {
@@ -193,25 +190,11 @@ export class ReadonlyMcDaoService extends McDaoService {
 }
 
 export class Web3McDaoService extends McDaoService {
-  bcProcessor;
-
-  constructor(web3, daoAddress, accountAddr, bcProcessor, version) {
-    super(web3, daoAddress, accountAddr, version);
-    this.bcProcessor = bcProcessor;
-  }
-
   async submitVote(proposalIndex, uintVote) {
     const txReceipt = await this.daoContract.methods
       .submitVote(proposalIndex, uintVote)
       .send({ from: this.accountAddr });
-    this.bcProcessor.setTx(
-      txReceipt.transactionHash,
-      this.accountAddr,
-      `Submit ${
-        uintVote === 1 ? 'yes' : 'no'
-      } vote on proposal ${proposalIndex}`,
-      true,
-    );
+
     return txReceipt.transactionHash;
   }
 
@@ -219,12 +202,7 @@ export class Web3McDaoService extends McDaoService {
     const txReceipt = await this.daoContract.methods
       .ragequit(amount)
       .send({ from: this.accountAddr });
-    this.bcProcessor.setTx(
-      txReceipt.transactionHash,
-      this.accountAddr,
-      `Rage quit amount: ${amount}`,
-      true,
-    );
+
     return txReceipt.transactionHash;
   }
 
@@ -232,12 +210,7 @@ export class Web3McDaoService extends McDaoService {
     const txReceipt = await this.daoContract.methods
       .processProposal(id)
       .send({ from: this.accountAddr });
-    this.bcProcessor.setTx(
-      txReceipt.transactionHash,
-      this.accountAddr,
-      `Process proposal. id: ${id}`,
-      true,
-    );
+
     return txReceipt.transactionHash;
   }
 
@@ -245,12 +218,7 @@ export class Web3McDaoService extends McDaoService {
     const txReceipt = await this.daoContract.methods
       .updateDelegateKey(newDelegateKey)
       .send({ from: this.accountAddr });
-    this.bcProcessor.setTx(
-      txReceipt.transactionHash,
-      this.accountAddr,
-      `Update delegate key. newDelegateKey: ${newDelegateKey}`,
-      true,
-    );
+
     return txReceipt.transactionHash;
   }
 
@@ -259,14 +227,6 @@ export class Web3McDaoService extends McDaoService {
       .submitProposal(applicant, tokenTribute, sharesRequested, details)
       .send({ from: this.accountAddr });
 
-    const parseDetails = JSON.parse(details);
-
-    this.bcProcessor.setTx(
-      txReceipt.transactionHash,
-      this.accountAddr,
-      `Submit proposal (${parseDetails.title})`,
-      true,
-    );
     return txReceipt.transactionHash;
   }
 
@@ -276,23 +236,11 @@ export class Web3McDaoService extends McDaoService {
 }
 
 export class Web3McDaoServiceV2 extends Web3McDaoService {
-  bcProcessor;
-
-  // constructor(web3, daoAddress, accountAddr, bcProcessor) {
-  //   super(web3, daoAddress, accountAddr, bcProcessor);
-  //   this.bcProcessor = bcProcessor;
-  // }
-
   async rageQuit(amountShares = 0, amountLoot = 0) {
     const txReceipt = await this.daoContract.methods
       .ragequit(amountShares, amountLoot)
       .send({ from: this.accountAddr });
-    this.bcProcessor.setTx(
-      txReceipt.transactionHash,
-      this.accountAddr,
-      `Rage quit burn shares: ${amountShares} loot: ${amountLoot}`,
-      true,
-    );
+
     return txReceipt.transactionHash;
   }
 
@@ -300,12 +248,7 @@ export class Web3McDaoServiceV2 extends Web3McDaoService {
     const txReceipt = await this.daoContract.methods
       .cancelProposal(id)
       .send({ from: this.accountAddr });
-    this.bcProcessor.setTx(
-      txReceipt.transactionHash,
-      this.accountAddr,
-      `Cancel proposal. id: ${id}`,
-      true,
-    );
+
     return txReceipt.transactionHash;
   }
 
@@ -313,12 +256,7 @@ export class Web3McDaoServiceV2 extends Web3McDaoService {
     const txReceipt = await this.daoContract.methods
       .processGuildKickProposal(id)
       .send({ from: this.accountAddr });
-    this.bcProcessor.setTx(
-      txReceipt.transactionHash,
-      this.accountAddr,
-      `Process Guild Kick Proposal. id: ${id}`,
-      true,
-    );
+
     return txReceipt.transactionHash;
   }
 
@@ -326,12 +264,7 @@ export class Web3McDaoServiceV2 extends Web3McDaoService {
     const txReceipt = await this.daoContract.methods
       .processWhitelistProposal(id)
       .send({ from: this.accountAddr });
-    this.bcProcessor.setTx(
-      txReceipt.transactionHash,
-      this.accountAddr,
-      `Process Whitelist Proposal. id: ${id}`,
-      true,
-    );
+
     return txReceipt.transactionHash;
   }
 
@@ -339,12 +272,7 @@ export class Web3McDaoServiceV2 extends Web3McDaoService {
     const txReceipt = await this.daoContract.methods
       .ragekick(address)
       .send({ from: this.accountAddr });
-    this.bcProcessor.setTx(
-      txReceipt.transactionHash,
-      this.accountAddr,
-      `Rage Kick. address: ${address}`,
-      true,
-    );
+
     return txReceipt.transactionHash;
   }
 
@@ -352,12 +280,7 @@ export class Web3McDaoServiceV2 extends Web3McDaoService {
     const txReceipt = await this.daoContract.methods
       .sponsorProposal(id)
       .send({ from: this.accountAddr });
-    this.bcProcessor.setTx(
-      txReceipt.transactionHash,
-      this.accountAddr,
-      `Sponsor Proposal. id: ${id}`,
-      true,
-    );
+
     return txReceipt.transactionHash;
   }
 
@@ -384,14 +307,6 @@ export class Web3McDaoServiceV2 extends Web3McDaoService {
       )
       .send({ from: this.accountAddr });
 
-    const parseDetails = JSON.parse(details);
-
-    this.bcProcessor.setTx(
-      txReceipt.transactionHash,
-      this.accountAddr,
-      `Submit proposal (${parseDetails.title})`,
-      true,
-    );
     return txReceipt.transactionHash;
   }
 
@@ -400,19 +315,10 @@ export class Web3McDaoServiceV2 extends Web3McDaoService {
       .submitGuildKickProposal(memberToKick, details)
       .send({ from: this.accountAddr });
 
-    const parseDetails = JSON.parse(details);
-
-    this.bcProcessor.setTx(
-      txReceipt.transactionHash,
-      this.accountAddr,
-      `Submit guild kick proposal (${parseDetails.title})`,
-      true,
-    );
     return txReceipt.transactionHash;
   }
 
   async submitWhiteListProposal(address, details) {
-    console.log(address, details);
     let txReceipt = '';
 
     try {
@@ -423,14 +329,6 @@ export class Web3McDaoServiceV2 extends Web3McDaoService {
       console.log(err);
     }
 
-    const parseDetails = JSON.parse(details);
-
-    this.bcProcessor.setTx(
-      txReceipt.transactionHash,
-      this.accountAddr,
-      `Submit whitelist proposal (${parseDetails.title})`,
-      true,
-    );
     return txReceipt.transactionHash;
   }
 
@@ -438,12 +336,7 @@ export class Web3McDaoServiceV2 extends Web3McDaoService {
     const txReceipt = await this.daoContract.methods
       .withdrawBalance(token, amount)
       .send({ from: this.accountAddr });
-    this.bcProcessor.setTx(
-      txReceipt.transactionHash,
-      this.accountAddr,
-      `Withdraw Token. address: ${token}, amount ${amount}`,
-      true,
-    );
+
     return txReceipt.transactionHash;
   }
 
@@ -451,27 +344,15 @@ export class Web3McDaoServiceV2 extends Web3McDaoService {
     const txReceipt = await this.daoContract.methods
       .withdrawBalances(tokens, amounts, max)
       .send({ from: this.accountAddr });
-    this.bcProcessor.setTx(
-      txReceipt.transactionHash,
-      this.accountAddr,
-      `Withdraw Token. tokens..., amounts...`,
-      true,
-    );
+
     return txReceipt.transactionHash;
   }
 
   async collectTokens(token) {
-    console.log('token in service', token);
-    console.log('daoContract.methods', this.daoContract.methods);
     const txReceipt = await this.daoContract.methods
       .collectTokens(token)
       .send({ from: this.accountAddr });
-    this.bcProcessor.setTx(
-      txReceipt.transactionHash,
-      this.accountAddr,
-      `Collect Token. token...`,
-      true,
-    );
+
     return txReceipt.transactionHash;
   }
 }

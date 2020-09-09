@@ -27,7 +27,6 @@ const Store = ({ children, daoParam }) => {
     allowance: 0,
     shares: 0,
     devices: null,
-    _txList: [],
     addrByBelegateKey: null,
   });
 
@@ -126,8 +125,6 @@ const Store = ({ children, daoParam }) => {
     const fetchBoosts = async () => {
       const boostRes = await get(`boosts/${daoParam}`);
 
-      console.log('boostRes', boostRes);
-
       setBoosts(
         boostRes.data.reduce((boosts, boostData) => {
           const metadata = boostData.metadata
@@ -160,7 +157,6 @@ const Store = ({ children, daoParam }) => {
     }
 
     const userSetup = async () => {
-      console.log('user setup');
       const accountDevices = null;
       // get account address from aws
       const acctAddr = currentUser.username;
@@ -170,7 +166,6 @@ const Store = ({ children, daoParam }) => {
       );
 
       // get weth balance and allowance of contract
-      // const wethWei = await tokenService.balanceOf(acctAddr);
       const tokenBalanceWei = await daoService.token.balanceOf(acctAddr);
       const allowanceWei = await daoService.token.allowance(
         acctAddr,
@@ -192,15 +187,6 @@ const Store = ({ children, daoParam }) => {
       eth = await daoService.getAccountEth();
       setLoading(false);
 
-      // check transactions left over in bcprocessor storage
-      // const _txList = daoService.bcProcessor.getTxList(acctAddr);
-      const pendingList = daoService.bcProcessor.getTxPendingList(acctAddr);
-      if (pendingList.length) {
-        for (let i = 0; i < pendingList.length; i++) {
-          await daoService.bcProcessor.checkTransaction(pendingList[i].tx);
-        }
-      }
-
       // set state
       setCurrentWallet({
         ...currentWallet,
@@ -213,7 +199,6 @@ const Store = ({ children, daoParam }) => {
           jailed,
           shares,
           accountDevices,
-          // _txList,
           addrByDelegateKey,
         },
       });

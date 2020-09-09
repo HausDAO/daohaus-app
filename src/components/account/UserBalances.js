@@ -12,7 +12,6 @@ import {
 import { truncateAddr } from '../../utils/Helpers';
 import Arrow from '../../assets/DropArrow.svg';
 import { useInterval } from '../../utils/PollingUtil';
-import UserTransactions from './UserTransactions';
 import { USER_TYPE } from '../../utils/DaoService';
 import { GET_MEMBER } from '../../utils/Queries';
 
@@ -267,13 +266,6 @@ const UserBalance = ({ toggle }) => {
             Internal Balances
           </SelectedElementButton>
         )}
-
-        <SelectedElementButton
-          selected={headerSwitch === 'Transactions'}
-          onClick={() => setHeaderSwitch('Transactions')}
-        >
-          Transactions
-        </SelectedElementButton>
       </SwitchHeaderDiv>
       <WalletContents>
         {headerSwitch === 'Balances' && (
@@ -309,7 +301,7 @@ const UserBalance = ({ toggle }) => {
                 ) : (
                   <>
                     {data && data.member && (
-                      <p>{data.member.moloch.tokenSymbol}</p>
+                      <p>{data.member.moloch.depositToken.symbol}</p>
                     )}
                   </>
                 )}
@@ -339,7 +331,6 @@ const UserBalance = ({ toggle }) => {
             )}
           </BalancesDiv>
         )}
-        {headerSwitch === 'Transactions' && <UserTransactions />}
       </WalletContents>
     </WalletDiv>
   );
