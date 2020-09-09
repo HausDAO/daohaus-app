@@ -12,7 +12,6 @@ import {
   BoostContext,
   DaoServiceContext,
 } from '../../../contexts/Store';
-import { BcProcessorService } from '../../../utils/BcProcessorService';
 import { TransmutationService } from '../../../utils/TransmutationService';
 import { useLocation } from 'react-router-dom';
 import TransmutationStats from '../../../components/stats/TransmutationStats';
@@ -41,8 +40,6 @@ const Transmutation = () => {
 
   useEffect(() => {
     const setService = async () => {
-      const bcProcessor = new BcProcessorService(daoService.web3);
-
       const setupValues = {
         ...boosts.transmutation.metadata,
         ...data.transmutations[0],
@@ -51,7 +48,6 @@ const Transmutation = () => {
         daoService.web3,
         currentUser?.username,
         setupValues,
-        bcProcessor,
       );
 
       setTransmutationService(service);

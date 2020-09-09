@@ -6,7 +6,6 @@ import {
   DaoServiceContext,
   DaoDataContext,
 } from '../../contexts/Store';
-import BcToast from './BcToast';
 
 import useModal from './useModal';
 import Modal from './Modal';
@@ -141,7 +140,6 @@ const TopNav = (props) => {
           ) : (
             <BackdropDiv onClick={toggleElement} />
           )}
-          {currentUser && <BcToast />}
 
           {pathname === `/dao/${daoService.daoAddress}/sign-in` ? (
             <ButtonBackDiv>
