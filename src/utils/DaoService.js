@@ -5,10 +5,6 @@ import {
   Web3McDaoServiceV2,
   ReadonlyMcDaoService,
 } from './McDaoService';
-import {
-  BcProcessorService,
-  ReadOnlyBcProcessorService,
-} from './BcProcessorService';
 import { Web3TokenService, TokenService } from './TokenService';
 
 let singleton;
@@ -19,26 +15,17 @@ export const USER_TYPE = {
 };
 
 export class DaoService {
-  bcProcessor;
   accountAddr;
   web3;
   mcDao;
   token;
   daoAddress;
 
-  constructor(
-    accountAddr,
-    web3,
-    mcDaoService,
-    token,
-    bcProcessor,
-    contractAddr,
-  ) {
+  constructor(accountAddr, web3, mcDaoService, token, contractAddr) {
     this.accountAddr = accountAddr;
     this.web3 = web3;
     this.mcDao = mcDaoService;
     this.token = token;
-    this.bcProcessor = bcProcessor;
     this.daoAddress = contractAddr;
   }
 
@@ -53,27 +40,14 @@ export class DaoService {
     version,
   ) {
     const web3 = new Web3(injected);
-    const bcProcessor = new BcProcessorService(web3);
 
     let mcDao;
     let approvedToken;
     if (version === 2) {
-      mcDao = new Web3McDaoServiceV2(
-        web3,
-        contractAddr,
-        accountAddr,
-        bcProcessor,
-        version,
-      );
+      mcDao = new Web3McDaoServiceV2(web3, contractAddr, accountAddr, version);
       approvedToken = await mcDao.getDepositToken();
     } else {
-      mcDao = new Web3McDaoService(
-        web3,
-        contractAddr,
-        accountAddr,
-        bcProcessor,
-        version,
-      );
+      mcDao = new Web3McDaoService(web3, contractAddr, accountAddr, version);
       approvedToken = await mcDao.approvedToken();
     }
 
@@ -82,16 +56,9 @@ export class DaoService {
       approvedToken,
       contractAddr,
       accountAddr,
-      bcProcessor,
     );
 
-    singleton = new Web3DaoService(
-      accountAddr,
-      web3,
-      mcDao,
-      token,
-      bcProcessor,
-    );
+    singleton = new Web3DaoService(accountAddr, web3, mcDao, token);
     return singleton;
   }
 
@@ -100,7 +67,6 @@ export class DaoService {
       new Web3.providers.HttpProvider(process.env.REACT_APP_INFURA_URI),
     );
 
-    const bcProcessor = new ReadOnlyBcProcessorService(web3);
     const mcDao = new ReadonlyMcDaoService(web3, contractAddr, '', version);
 
     let approvedToken;
@@ -110,14 +76,7 @@ export class DaoService {
       approvedToken = await mcDao.approvedToken();
     }
     const token = new TokenService(web3, approvedToken);
-    singleton = new ReadonlyDaoService(
-      '',
-      web3,
-      mcDao,
-      token,
-      bcProcessor,
-      contractAddr,
-    );
+    singleton = new ReadonlyDaoService('', web3, mcDao, token, contractAddr);
     return singleton;
   }
 
