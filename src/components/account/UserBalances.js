@@ -55,9 +55,29 @@ const UserBalance = ({ toggle }) => {
     },
   };
 
-  const { loading, error, data } = useQuery(GET_MEMBER, options);
+  const { loading, error, data, refetch } = useQuery(GET_MEMBER, options);
 
   useEffect(() => {
+    const checkBalance = async (data) => {
+      const proms = [];
+
+      data.member.tokenBalances.forEach((token, idx) => {
+        proms.push(
+          daoService.mcDao.getUserTokenBalance(
+            memberAddr,
+            token.token.tokenAddress,
+          ),
+        );
+      });
+
+      const rez = await Promise.all(proms);
+
+      data.member.tokenBalances.forEach((token, idx) => {
+        token.tokenBalance = rez[idx];
+        return token;
+      });
+      setTokenBalances(data.member.tokenBalances);
+    };
     if (loading) {
       return;
     }
@@ -68,10 +88,10 @@ const UserBalance = ({ toggle }) => {
     if (!data || !data.member) {
       return;
     }
+    checkBalance(data);
 
-    setTokenBalances(data.member.tokenBalances);
     // eslint-disable-next-line
-  }, [data]);
+  }, [data, daoService]);
 
   useEffect(() => {
     (async () => {
@@ -111,7 +131,10 @@ const UserBalance = ({ toggle }) => {
   };
 
   const renderBalances = (tokens) => {
-    return tokens.map((token) => {
+    const nonZeroBalanceTokens = tokens.filter(
+      (token) => +token.tokenBalance > 0,
+    );
+    return nonZeroBalanceTokens.map((token) => {
       return (
         <BalanceItemDiv key={token.token.tokenAddress}>
           <EtherscanLink
@@ -126,12 +149,22 @@ const UserBalance = ({ toggle }) => {
   };
 
   const withdrawBalances = (tokens) => {
-    const tokensArr = tokens.map((token) => token.token.tokenAddress);
-    const balancesArr = tokens.map((balance) => balance.tokenBalance);
+    const nonZeroBalanceTokens = tokens.filter(
+      (token) => +token.tokenBalance > 0,
+    );
+    const tokensArr = nonZeroBalanceTokens.map(
+      (token) => token.token.tokenAddress,
+    );
+    const balancesArr = nonZeroBalanceTokens.map(
+      (balance) => balance.tokenBalance,
+    );
     try {
       daoService.mcDao.withdrawBalances(tokensArr, balancesArr, true);
+      tokens.forEach((token) => (token.tokenBalance = 0));
     } catch (err) {
       console.log(err);
+    } finally {
+      refetch();
     }
   };
 
@@ -295,12 +328,14 @@ const UserBalance = ({ toggle }) => {
         {headerSwitch === 'InternalBalances' && daoData.version === 2 && (
           <BalancesDiv>
             {renderBalances(tokenBalances)}
-            {tokenBalances.length && (
+            {tokenBalances.length ? (
               <BalanceItemDiv>
                 <button onClick={() => withdrawBalances(tokenBalances)}>
                   Withdraw Tokens
                 </button>
               </BalanceItemDiv>
+            ) : (
+              <BalanceItemDiv>None</BalanceItemDiv>
             )}
           </BalancesDiv>
         )}

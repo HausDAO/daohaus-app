@@ -12,7 +12,7 @@ import Loading from '../shared/Loading';
 
 const RagequitForm = ({ hide }) => {
   const [daoService] = useContext(DaoServiceContext);
-  const [currentWallet] = useContext(CurrentWalletContext);
+  const [currentWallet, setCurrentWallet] = useContext(CurrentWalletContext);
   const [loading, setLoading] = useContext(LoaderContext);
   const [formSuccess, setFormSuccess] = useState(false);
   const [canRage, setCanRage] = useState(true);
@@ -71,6 +71,10 @@ const RagequitForm = ({ hide }) => {
             setFormSuccess(false);
           } finally {
             resetForm();
+            currentWallet.shares =
+              currentWallet.shares - (values.numShares || 0);
+            currentWallet.loot = currentWallet.loot - (values.numLoot || 0);
+            setCurrentWallet(currentWallet);
             setLoading(false);
             setSubmitting(false);
             hide('ragequit');

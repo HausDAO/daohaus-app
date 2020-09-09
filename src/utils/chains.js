@@ -11,6 +11,8 @@ export const supportedChains = {
     daohaus_url: 'https://daohaus.club',
     subgraph_url:
       'https://api.thegraph.com/subgraphs/name/odyssy-automaton/daohaus',
+    transmutation_subgraph_url:
+      'https://api.thegraph.com/subgraphs/name/odyssy-automaton/daohaus-transmutation',
   },
   4: {
     name: 'Ethereum Rinkeby',
@@ -24,6 +26,8 @@ export const supportedChains = {
     daohaus_url: 'https://rinkeby.daohaus.club',
     subgraph_url:
       'https://api.thegraph.com/subgraphs/name/odyssy-automaton/daohaus-rinkeby',
+    transmutation_subgraph_url:
+      'https://api.thegraph.com/subgraphs/name/odyssy-automaton/daohaus-transmutation',
   },
   42: {
     name: 'Ethereum Kovan',
@@ -37,6 +41,8 @@ export const supportedChains = {
     daohaus_url: 'https://kovan.daohaus.club',
     subgraph_url:
       'https://api.thegraph.com/subgraphs/name/odyssy-automaton/daohaus-kovan',
+    transmutation_subgraph_url:
+      'https://api.thegraph.com/subgraphs/name/odyssy-automaton/daohaus-transmutation',
   },
   100: {
     name: 'xDAI Chain',
@@ -50,6 +56,8 @@ export const supportedChains = {
     daohaus_url: 'https://kovanxdai.daohaus.club',
     subgraph_url:
       'https://api.thegraph.com/subgraphs/name/odyssy-automaton/daohaus-xdai',
+    transmutation_subgraph_url:
+      'https://api.thegraph.com/subgraphs/name/odyssy-automaton/daohaus-transmutation-xdai',
   },
 };
 

@@ -8,24 +8,25 @@ import Loading from '../../../components/shared/Loading';
 import TransmutationForm from '../../../components/proposal-v2/TransmutationForm';
 import {
   DaoDataContext,
-  Web3ConnectContext,
   CurrentUserContext,
   BoostContext,
+  DaoServiceContext,
 } from '../../../contexts/Store';
 import { BcProcessorService } from '../../../utils/BcProcessorService';
 import { TransmutationService } from '../../../utils/TransmutationService';
 import { useLocation } from 'react-router-dom';
 import TransmutationStats from '../../../components/stats/TransmutationStats';
+import supportedChains from '../../../utils/chains';
 
+const chainData = supportedChains[+process.env.REACT_APP_NETWORK_ID];
 const transClient = new ApolloClient({
-  uri:
-    'https://api.thegraph.com/subgraphs/name/odyssy-automaton/daohaus-transmutation-xdai',
+  uri: chainData.transmutation_subgraph_url,
 });
 
 const Transmutation = () => {
   const location = useLocation();
   const [daoData] = useContext(DaoDataContext);
-  const [web3Connect] = useContext(Web3ConnectContext);
+  const [daoService] = useContext(DaoServiceContext);
   const [currentUser] = useContext(CurrentUserContext);
   const [boosts] = useContext(BoostContext);
 
@@ -40,15 +41,15 @@ const Transmutation = () => {
 
   useEffect(() => {
     const setService = async () => {
-      const bcProcessor = new BcProcessorService(web3Connect.web3);
+      const bcProcessor = new BcProcessorService(daoService.web3);
 
       const setupValues = {
         ...boosts.transmutation.metadata,
         ...data.transmutations[0],
       };
       const service = new TransmutationService(
-        web3Connect.web3,
-        currentUser.username,
+        daoService.web3,
+        currentUser?.username,
         setupValues,
         bcProcessor,
       );

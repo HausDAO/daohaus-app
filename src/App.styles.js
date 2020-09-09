@@ -2,8 +2,6 @@ import styled from 'styled-components';
 import { lighten } from 'polished';
 
 import {
-  phone,
-  getDangerHover,
   getSecondaryHover,
   getPrimaryHover,
   getTertiaryHover,
@@ -159,6 +157,26 @@ export const DataP = styled.p`
   font-weight: 400;
   word-break: break-all;
   margin: 0px 0px 20px 0px;
+`;
+
+export const TinyP = styled.p`
+  font-size: 0.85em;
+  font-family: ${(props) => props.theme.dataFont};
+  font-weight: 400;
+  word-break: break-all;
+`;
+
+export const TinyPLink = styled.p`
+  font-size: 0.85em;
+  font-family: ${(props) => props.theme.dataFont};
+  font-weight: 400;
+  word-break: break-all;
+  color: ${(props) => props.theme.primary};
+  cursor: pointer;
+  transition: all 0.15s linear;
+  :hover {
+    color: ${(props) => getPrimaryHover(props.theme)};
+  }
 `;
 
 export const DataDiv = styled.div`
