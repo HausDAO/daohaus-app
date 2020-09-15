@@ -18,22 +18,17 @@ const LootGrab = (props) => {
       },
     ];
   };
-
-  console.log(
-    'getRequestToken(data, setupValues.giveToken)',
-    getRequestToken(data, setupValues.giveToken),
-  );
-
   const total =
-    !getRequestToken(data, setupValues.giveToken) ||
-    getRequestToken(data, setupValues.giveToken).contractBabeBalance == null
+    !getRequestToken(data, setupValues.getToken) ||
+    getRequestToken(data, setupValues.getToken).tokenBalance == null
       ? 0
-      : getRequestToken(data, setupValues.giveToken).contractBabeBalance;
+      : getRequestToken(data, setupValues.getToken).tokenBalance;
 
   useEffect(() => {
     const tokens = async () => {
       let tokenWei = 0;
-      if (getRequestToken(data, setupValues.giveToken)) {
+
+      if (getRequestToken(data, setupValues.getToken)) {
         tokenWei = daoService.web3.utils.fromWei('' + total);
       }
 

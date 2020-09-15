@@ -10,7 +10,10 @@ const TransmutationStatus = (props) => {
   const [transDistroInfo, setTransDistroInfo] = useState();
 
   const pieTransmutationData = (info) => {
-    const round = info.totalSupply * setupValues.contributionRoundPerc;
+    const round =
+      daoService.web3.utils.fromWei(info.totalSupply) *
+      setupValues.contributionRoundPerc;
+
     const data = [
       {
         name: 'availible',
@@ -18,7 +21,7 @@ const TransmutationStatus = (props) => {
       },
       {
         name: 'transmuted',
-        value: +daoService.web3.utils.fromWei('' + (round - info.transSupply)),
+        value: +'' + (round - daoService.web3.utils.fromWei(info.transSupply)),
       },
     ];
     return data;
