@@ -24,18 +24,21 @@ const TokenInfo = (props) => {
         value: +daoService.web3.utils.fromWei(info.minionSupply),
       },
       { name: 'dao', value: +daoService.web3.utils.fromWei(info.daoSupply) },
-      {
-        name: 'other',
-        value: daoService.web3.utils.fromWei(
-          '' +
-            (info.totalSupply -
-              info.transSupply -
-              info.trustSupply -
-              info.minionSupply -
-              info.daoSupply),
-        ),
-      },
     ];
+    const other = daoService.web3.utils.fromWei(
+      '' +
+        (info.totalSupply -
+          info.transSupply -
+          info.trustSupply -
+          info.minionSupply -
+          info.daoSupply),
+    );
+    if (parseInt(other) > 0) {
+      data.other = {
+        name: 'other',
+        value: other,
+      };
+    }
     return data;
   };
 
