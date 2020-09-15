@@ -58,10 +58,14 @@ const TransmutationStats = (props) => {
   };
 
   const getRequestToken = (data, tokenAddress) => {
-    const token = data.moloch.tokenBalances.find(
-      (token) => token.token.tokenAddress === tokenAddress,
-    );
-    console.log('data, tokenAddress', data, tokenAddress);
+    const token = data.moloch.tokenBalances
+      .sort((a, b) => {
+        return +b.tokenBalance - a.tokenBalance;
+      })
+      .find(
+        (token) =>
+          token.token.tokenAddress.toLowerCase() === tokenAddress.toLowerCase(),
+      );
     return token;
   };
 
