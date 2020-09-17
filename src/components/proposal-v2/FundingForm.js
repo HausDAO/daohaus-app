@@ -49,7 +49,8 @@ const FundingForm = (props) => {
     if (data && data.moloch) {
       const depositTokenAddress = data.moloch.depositToken.tokenAddress;
       const depositToken = data.moloch.tokenBalances.find(
-        (token) => token.token.tokenAddress === depositTokenAddress,
+        (token) =>
+          token.guildBank && token.token.tokenAddress === depositTokenAddress,
       );
       const tokenArray = data.moloch.tokenBalances.filter(
         (token) =>
