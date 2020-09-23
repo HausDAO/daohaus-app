@@ -141,7 +141,12 @@ const UserBalance = ({ toggle }) => {
             hash={token.token.tokenAddress}
             linkText={token.token.symbol}
           />
-          <DataP>{token.tokenBalance / 10 ** token.token.decimals}</DataP>
+          <DataP>
+            {token.tokenBalance / 10 ** token.token.decimals}
+            <TinyButton onClick={() => withdrawBalance(token)}>
+              withdraw
+            </TinyButton>{' '}
+          </DataP>
         </BalanceItemDiv>
       );
     });
@@ -163,6 +168,21 @@ const UserBalance = ({ toggle }) => {
     } catch (err) {
       console.log(err);
     } finally {
+      // TODO: refetch tokens
+      setTokenBalances(tokens);
+    }
+  };
+
+  const withdrawBalance = (token) => {
+    try {
+      daoService.mcDao.withdrawBalance(
+        token.token.tokenAddress,
+        token.tokenBalance,
+      );
+    } catch (err) {
+      console.log(err);
+    } finally {
+      // TODO: refetch tokens
       refetch();
     }
   };
@@ -320,10 +340,11 @@ const UserBalance = ({ toggle }) => {
         {headerSwitch === 'InternalBalances' && daoData.version === 2 && (
           <BalancesDiv>
             {renderBalances(tokenBalances)}
-            {tokenBalances.length ? (
+            {tokenBalances.length &&
+            tokenBalances.some((token) => token.tokenBalance > 0) ? (
               <BalanceItemDiv>
                 <button onClick={() => withdrawBalances(tokenBalances)}>
-                  Withdraw Tokens
+                  Withdraw All Tokens
                 </button>
               </BalanceItemDiv>
             ) : (
