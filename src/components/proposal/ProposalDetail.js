@@ -57,6 +57,17 @@ const VideoDiv = styled.div`
   }
 `;
 
+const urlify = (text) => {
+  var urlRegex = /(https?:\/\/[^\s]+)/g;
+  return text.replace(urlRegex, function(url) {
+    return (
+      '<a rel="noopener noreferrer" target="_blank" href="' +
+      url +
+      '"> link </a>'
+    );
+  });
+};
+
 const ProposalDetail = ({ proposal, processProposal, submitVote, canVote }) => {
   const [currentUser] = useContext(CurrentUserContext);
   const [daoData] = useContext(DaoDataContext);
@@ -93,9 +104,7 @@ const ProposalDetail = ({ proposal, processProposal, submitVote, canVote }) => {
         <div>
           <LabelH5>Description</LabelH5>
           {description.indexOf('http') > -1 ? (
-            <a href={description} rel="noopener noreferrer" target="_blank">
-              {description}
-            </a>
+            <p dangerouslySetInnerHTML={{ __html: urlify(description) }} />
           ) : (
             <p>{description}</p>
           )}

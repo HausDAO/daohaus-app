@@ -194,7 +194,6 @@ export const titleMaker = (proposal) => {
   // if (containsNonLatinCodepoints(proposal.details)) {
   //   return `Proposal ${proposal.proposalId}`;
   // }
-
   const details = proposal.details.split('~');
 
   if (details[0] === 'id') {
@@ -203,9 +202,12 @@ export const titleMaker = (proposal) => {
     let parsedDetails;
 
     try {
-      parsedDetails = JSON.parse(proposal.details);
+      parsedDetails = JSON.parse(
+        proposal.details.replace(/(\r\n|\n|\r)/gm, ''),
+      );
       return parsedDetails.title;
     } catch {
+      // one off fix for a bad proposal
       if (proposal.details && proposal.details.indexOf('link:') > -1) {
         const fixedDetail = proposal.details.replace('link:', '"link":');
         const fixedParsed = JSON.parse(fixedDetail);
@@ -224,7 +226,7 @@ export const titleMaker = (proposal) => {
 
 export const descriptionMaker = (proposal) => {
   try {
-    const parsed = JSON.parse(proposal.details);
+    const parsed = JSON.parse(proposal.details.replace(/(\r\n|\n|\r)/gm, ''));
     return parsed.description;
   } catch (e) {
     if (proposal.details && proposal.details.indexOf('link:') > -1) {
@@ -240,7 +242,7 @@ export const descriptionMaker = (proposal) => {
 
 export const linkMaker = (proposal) => {
   try {
-    const parsed = JSON.parse(proposal.details);
+    const parsed = JSON.parse(proposal.details.replace(/(\r\n|\n|\r)/gm, ''));
     return typeof parsed.link === 'function' ? null : parsed.link;
   } catch (e) {
     if (proposal.details && proposal.details.indexOf('link:') > -1) {
