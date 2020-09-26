@@ -80,7 +80,7 @@ const InvalidRoute = () => (
         <img src={DaohausLogo} alt="Daohaus" />
         <h2>Looking for a Dao?</h2>
         <p>Discover and pledge to existing Moloch daos, or Summon your own.</p>
-        <a className="BigLink" href="https://daohaus.club/">
+        <a className="BigLink" href="https://idchain.daohaus.club/">
           Go to Daohaus ->
         </a>
         <p>

@@ -12,6 +12,9 @@ const EtherscanLink = ({ type, hash, linkText }) => {
       case '4': {
         return `https://rinkeby.etherscan.io/${type}/`;
       }
+      case '74': {
+        return `https://explorer.idchain.one/${type}/`;
+      }
       case '100': {
         return `https://blockscout.com/poa/xdai/${type}/`;
       }

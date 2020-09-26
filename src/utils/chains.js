@@ -44,6 +44,21 @@ export const supportedChains = {
     transmutation_subgraph_url:
       'https://api.thegraph.com/subgraphs/name/odyssy-automaton/daohaus-transmutation',
   },
+  74: {
+    name: 'IDChain',
+    short_name: 'idchain',
+    chain: 'EIDI',
+    network: 'idchain',
+    chain_id: 74,
+    network_id: 74,
+    rpc_url: 'https://explorer.idchain.one/rpcgraph',
+    api_url: 'https://vncmvrainc.execute-api.us-east-1.amazonaws.com/idchain',
+    daohaus_url: 'https://idchain.daohaus.club',
+    subgraph_url:
+      'https://subgraph.idchain.daohaus.club/subgraphs/name/odyssy-automaton/daohaus-idchain',
+    transmutation_subgraph_url:
+      'https://api.thegraph.com/subgraphs/name/odyssy-automaton/daohaus-transmutation',
+  },
   100: {
     name: 'xDAI Chain',
     short_name: 'xdai',

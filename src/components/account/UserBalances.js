@@ -302,14 +302,22 @@ const UserBalance = ({ toggle }) => {
             ) : null}
             <BalanceItemDiv>
               <p>
-                {+process.env.REACT_APP_NETWORK_ID === 100 ? 'XDAI' : 'ETH'}
+                {+process.env.REACT_APP_NETWORK_ID === 100
+                  ? 'XDAI'
+                  : +process.env.REACT_APP_NETWORK_ID === 74
+                  ? 'EIDI'
+                  : 'ETH'}
               </p>
               <DataDiv>
                 {currentWallet.eth}
                 {currentWallet.eth < 0.01 ? (
                   <TinyButton onClick={() => toggle('depositForm')}>
                     <span>!</span> Low{' '}
-                    {+process.env.REACT_APP_NETWORK_ID === 100 ? 'XDAI' : 'ETH'}
+                    {+process.env.REACT_APP_NETWORK_ID === 100
+                      ? 'XDAI'
+                      : +process.env.REACT_APP_NETWORK_ID === 74
+                      ? 'EIDI'
+                      : 'ETH'}
                   </TinyButton>
                 ) : null}
               </DataDiv>
