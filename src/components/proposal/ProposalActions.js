@@ -7,6 +7,7 @@ import {
   CurrentWalletContext,
   DaoServiceContext,
 } from '../../contexts/Store';
+import { isMinion } from '../../utils/ProposalHelper';
 import TinyLoader from '../shared/TinyLoader';
 
 const ProposalActions = ({ client, proposal, history }) => {
@@ -64,6 +65,10 @@ const ProposalActions = ({ client, proposal, history }) => {
     }
   };
 
+  const minionDetails = isMinion(proposal);
+  const isMinionProposal =
+    minionDetails.isMinion || minionDetails.isTransmutation;
+
   return (
     <>
       {loading ? (
@@ -72,7 +77,8 @@ const ProposalActions = ({ client, proposal, history }) => {
         </button>
       ) : (
         <>
-          {!proposal.sponsored &&
+          {!isMinionProposal &&
+            !proposal.sponsored &&
             !proposal.cancelled &&
             proposal.proposer.toLowerCase() ===
               currentUser.username.toLowerCase() && (
