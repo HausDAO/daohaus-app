@@ -93,6 +93,22 @@ const Store = ({ children, daoParam }) => {
                 version,
               );
               dao.daoAddress = daoParam;
+
+              console.log('test subscribe');
+              const blockNumbers = [];
+              web3.eth.subscribe('newBlockHeaders', async (error, result) => {
+                if (!error) {
+                  const currentBlock = await web3.eth.getBlock(
+                    result.hash,
+                    true,
+                  );
+
+                  if (!blockNumbers.includes(currentBlock.number)) {
+                    console.log(currentBlock.number);
+                    blockNumbers.push(currentBlock.number);
+                  }
+                }
+              });
             } else {
               dao = await DaoService.instantiateWithReadOnly(daoParam, version);
             }
@@ -119,7 +135,8 @@ const Store = ({ children, daoParam }) => {
     };
 
     initCurrentUser();
-  }, [currentUser, setDaoService, daoParam, web3Connect]);
+    // eslint-disable-next-line
+  }, [currentUser, setDaoService, daoParam]);
 
   useEffect(() => {
     const fetchBoosts = async () => {
@@ -144,7 +161,6 @@ const Store = ({ children, daoParam }) => {
     }
   }, [daoParam]);
 
-  // global polling service
   useEffect(() => {
     if (!daoService) {
       console.log(`DaoService not initialized yet`);
