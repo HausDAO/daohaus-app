@@ -9,8 +9,9 @@ import {
   ProfileImgCard,
 } from '../member/Member.styles';
 import { DataP } from '../../App.styles';
+import CopyAddressButton from './CopyAddressButton';
 
-const AddressProfileDisplay = ({ address }) => {
+const AddressProfileDisplay = ({ address, noCopy }) => {
   const [profile, setProfile] = useState({});
 
   useEffect(() => {
@@ -55,7 +56,10 @@ const AddressProfileDisplay = ({ address }) => {
           {profile.name || 'unknown'}{' '}
           {profile.emoji ? <span>{profile.emoji} </span> : null}
         </h3>
-        <DataP>{truncateAddr(address)}</DataP>
+        <DataP>
+          {truncateAddr(address)}
+          {!noCopy && <CopyAddressButton address={address} />}
+        </DataP>
       </div>
     </MemberCardIdentityDiv>
   );

@@ -1,17 +1,16 @@
 import React, { useState } from 'react';
 import CopyToClipboard from 'react-copy-to-clipboard';
 
-// import { AddressButton } from './UserBalances.styles';
 import { DataButton } from '../../App.styles';
 import { useInterval } from '../../utils/PollingUtil';
 import styled from 'styled-components';
 
 export const AddressButton = styled(DataButton)`
-  margin: 0;
+  margin: 0px;
   padding: 0px;
   border: none;
   background: transparent;
-  color: black;
+  color: ${(props) => props.theme.primary};
   width: auto;
   display: inline-block;
   &:hover {
@@ -19,11 +18,14 @@ export const AddressButton = styled(DataButton)`
     fill: ${(props) => props.theme.secondary};
   }
   p {
-    color: black;
+    color: ${(props) => props.theme.primary};
+    display: inline-block;
+    margin: 0;
+    padding: 0px;
   }
   svg {
     display: inline-block;
-    fill: black;
+    fill: ${(props) => props.theme.primary};
     width: 18px;
     height: 18px;
     margin-left: 5px;
