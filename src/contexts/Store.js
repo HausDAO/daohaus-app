@@ -93,22 +93,6 @@ const Store = ({ children, daoParam }) => {
                 version,
               );
               dao.daoAddress = daoParam;
-
-              console.log('test subscribe');
-              const blockNumbers = [];
-              web3.eth.subscribe('newBlockHeaders', async (error, result) => {
-                if (!error) {
-                  const currentBlock = await web3.eth.getBlock(
-                    result.hash,
-                    true,
-                  );
-
-                  if (!blockNumbers.includes(currentBlock.number)) {
-                    console.log(currentBlock.number);
-                    blockNumbers.push(currentBlock.number);
-                  }
-                }
-              });
             } else {
               dao = await DaoService.instantiateWithReadOnly(daoParam, version);
             }
@@ -222,6 +206,28 @@ const Store = ({ children, daoParam }) => {
     userSetup();
     // eslint-disable-next-line
   }, [currentUser, daoService]);
+
+  useEffect(() => {
+    console.log('use it');
+    const setupSubscriptions = (web3) => {
+      console.log('test subscribe');
+      const blockNumbers = [];
+      web3.eth.subscribe('newBlockHeaders', async (error, result) => {
+        if (!error) {
+          const currentBlock = await web3.eth.getBlock(result.hash, true);
+
+          if (!blockNumbers.includes(currentBlock.number)) {
+            console.log(currentBlock.number);
+            blockNumbers.push(currentBlock.number);
+          }
+        }
+      });
+    };
+
+    if (web3Connect.web3) {
+      setupSubscriptions(web3Connect.web3);
+    }
+  }, [web3Connect]);
 
   return (
     <LoaderContext.Provider value={[loading, setLoading]}>
