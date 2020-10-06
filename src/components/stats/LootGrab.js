@@ -8,13 +8,13 @@ const LootGrab = (props) => {
   const [daoService] = useContext(DaoServiceContext);
   const [chartData, setChartData] = useState();
 
-  const barLootGrabData = (min, max, contrib) => {
+  const barLootGrabData = (min, max, bank) => {
     return [
       {
         name: 'Loot Grab',
         max: max - min,
         min: min,
-        contrib,
+        bank,
       },
     ];
   };
@@ -52,15 +52,15 @@ const LootGrab = (props) => {
         <Legend />
         <Bar dataKey="min" stackId="a" fill="#8884d8" />
         <Bar dataKey="max" stackId="a" fill="#82ca9d" />
-        <Bar dataKey="contrib" fill="#ffc658" />
+        <Bar dataKey="bank" fill="#ffc658" />
       </BarChart>
       <p>Min Cap: {setupValues.minCap}</p>
       <p>Max Cap: {setupValues.maxCap}</p>
       {getRequestToken(data, setupValues.giveToken) && (
         <p>
-          Total Contributed:
+          Bank Funds:
           {daoService.web3.utils.fromWei('' + total)}{' '}
-          {getRequestToken(data, setupValues.giveToken).symbol}
+          {getRequestToken(data, setupValues.getToken).symbol}
         </p>
       )}
     </div>

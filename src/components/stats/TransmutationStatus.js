@@ -2,9 +2,10 @@ import React, { useEffect, useState, useContext } from 'react';
 
 import { Legend, PieChart, Pie, Cell } from 'recharts';
 import { DaoServiceContext } from '../../contexts/Store';
+import { formatCreatedAt } from '../../utils/Helpers';
 
 const TransmutationStatus = (props) => {
-  const { setupValues, PIECOLORS, getTokenInfo } = props;
+  const { setupValues, PIECOLORS, getTokenInfo, data, getRequestToken } = props;
   const [daoService] = useContext(DaoServiceContext);
 
   const [transDistroInfo, setTransDistroInfo] = useState();
@@ -39,6 +40,12 @@ const TransmutationStatus = (props) => {
     // eslint-disable-next-line
   }, []);
 
+  const total =
+    !getRequestToken(data, setupValues.getToken) ||
+    getRequestToken(data, setupValues.getToken).tokenBalance == null
+      ? 0
+      : getRequestToken(data, setupValues.getToken).tokenBalance;
+
   return (
     <div>
       <h4>Transmutation Status</h4>
@@ -67,11 +74,18 @@ const TransmutationStatus = (props) => {
           <Legend />
         </PieChart>
       ) : null}
-      <p>start date</p>
-      <p>max monthly burn rate: {setupValues.maxBurnRatePerMo}</p>
-      <p>current avg burn rate</p>
-      <p>number proposals made</p>
-      <p>amount transmuted/remaining</p>
+      <p>
+        Start date:{' '}
+        {setupValues.startDate ? formatCreatedAt(setupValues.startDate) : 'NA'}
+      </p>
+      <p>Max monthly burn rate: {setupValues.burnRate * 100}%</p>
+      <p>
+        Funds Spent:{' '}
+        {(
+          setupValues.maxCap - daoService.web3.utils.fromWei(total)
+        ).toLocaleString('en-US', { maximumFractionDigits: 2 })}
+      </p>
+      {/* <p>Current avg burn rate: </p> */}
     </div>
   );
 };
