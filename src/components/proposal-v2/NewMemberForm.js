@@ -58,7 +58,7 @@ const NewMemberForm = (props) => {
       tokenArray.unshift(depositToken);
       setTokenData(
         tokenArray.map((token) => ({
-          label: token.token.symbol || token.tokenAddress,
+          label: token.token.symbol || token.token.tokenAddress,
           value: token.token.tokenAddress,
           decimals: token.token.decimals,
           balance: token.tokenBalance,

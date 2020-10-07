@@ -254,6 +254,31 @@ export const linkMaker = (proposal) => {
   return null;
 };
 
+export const isMinion = (proposal) => {
+  try {
+    const parsed = JSON.parse(proposal.details.replace(/(\r\n|\n|\r)/gm, ''));
+    return {
+      isMinion: parsed.isMinion,
+      isTransmutation: parsed.isTransmutation,
+    };
+  } catch (e) {
+    if (proposal.details && proposal.details.indexOf('link:') > -1) {
+      const fixedDetail = proposal.details.replace('link:', '"link":');
+      const fixedParsed = JSON.parse(fixedDetail);
+      return {
+        isMinion: fixedParsed.isMinion,
+        isTransmutation: fixedParsed.isTransmutation,
+      };
+    } else {
+      console.log(`Couldn't parse JSON from metadata`);
+      return {
+        isMinion: false,
+        isTransmutation: false,
+      };
+    }
+  }
+};
+
 export const determineProposalType = (proposal) => {
   if (proposal.newMember) {
     return 'Member Proposal';

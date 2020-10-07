@@ -46,6 +46,7 @@ const TransmutationStats = (props) => {
       'latest',
       tokenAddress,
     );
+
     return {
       tokenAddress: tokenAddress,
       totalSupply,
@@ -93,6 +94,8 @@ const TransmutationStats = (props) => {
             setupValues={transmutationService.setupValues}
             PIECOLORS={PIECOLORS}
             getTokenInfo={getTokenInfo}
+            tdata={data}
+            getRequestToken={getRequestToken}
           />
         </Box>
         <Box p={3} width={1 / 2}>
@@ -100,6 +103,8 @@ const TransmutationStats = (props) => {
             setupValues={transmutationService.setupValues}
             PIECOLORS={PIECOLORS}
             getTokenInfo={getTokenInfo}
+            data={data}
+            getRequestToken={getRequestToken}
           />
         </Box>
       </Flex>

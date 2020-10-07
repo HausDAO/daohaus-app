@@ -64,7 +64,7 @@ const MemberCard = ({ member }) => {
       }}
     >
       <MemberCardDiv>
-        <AddressProfileDisplay address={member.memberAddress} />
+        <AddressProfileDisplay address={member.memberAddress} noCopy={true} />
         <OfferDivMemberCard>
           <div>
             <h5>Shares</h5>

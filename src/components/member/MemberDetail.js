@@ -6,6 +6,7 @@ import styled from 'styled-components';
 import Web3Service from '../../utils/Web3Service';
 import ValueDisplay from '../shared/ValueDisplay';
 import { DaoDataContext } from '../../contexts/Store';
+import CopyAddressButton from '../shared/CopyAddressButton';
 
 import { DataP, DataH2 } from '../../App.styles';
 import {
@@ -73,7 +74,11 @@ const MemberDetail = ({ member, client }) => {
         </div>
       </MemberCardIdentityDiv>
       <h5>Member Address</h5>
-      <DataP>{member.memberAddress}</DataP>
+      <DataP>
+        {member.memberAddress}
+        <CopyAddressButton address={member.memberAddress} />
+      </DataP>
+
       {member.delegateKey !== member.memberAddress && (
         <>
           <h5>Delegate Key</h5>

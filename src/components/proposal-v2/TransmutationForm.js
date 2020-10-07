@@ -127,7 +127,7 @@ const TransmutationForm = (props) => {
       console.log('tokenArray', tokenArray);
       setTokenData(
         tokenArray.map((token) => ({
-          label: token.token.symbol || token.tokenAddress,
+          label: token.token.symbol || token.token.tokenAddress,
           value: token.token.tokenAddress,
           decimals: token.token.decimals,
           balanceWei: token.tokenBalance,

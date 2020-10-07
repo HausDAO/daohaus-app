@@ -4,10 +4,18 @@ import { Legend, PieChart, Pie, Cell } from 'recharts';
 import { DaoServiceContext } from '../../contexts/Store';
 
 const TokenInfo = (props) => {
-  const { setupValues, PIECOLORS, getTokenInfo } = props;
+  const {
+    setupValues,
+    PIECOLORS,
+    getTokenInfo,
+    getRequestToken,
+    tdata,
+  } = props;
   const [tokenInfo, setTokenInfo] = useState();
   const [tokenDistroInfo, setTokenDistroInfo] = useState();
   const [daoService] = useContext(DaoServiceContext);
+
+  const symbol = getRequestToken(tdata, setupValues.giveToken).symbol;
 
   const pieDistroData = (info) => {
     const data = [
@@ -82,12 +90,21 @@ const TokenInfo = (props) => {
           <Legend />
         </PieChart>
       ) : null}
-      <p>token address: {setupValues.giveToken}</p>
+      <p>Token address: {setupValues.giveToken}</p>
+      <p>Token Symbol: {symbol && symbol}</p>
       <p>
         Total tokens:{' '}
         {tokenInfo && daoService.web3.utils.fromWei(tokenInfo.totalSupply)}
       </p>
-      <p>link to token distro</p>
+      <p>
+        <a
+          href={`https://blockscout.com/poa/xdai/tokens/${setupValues.giveToken}/token-holders`}
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          Token holders
+        </a>
+      </p>
     </div>
   );
 };
