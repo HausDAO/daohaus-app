@@ -126,13 +126,15 @@ const TransmutationForm = (props) => {
       }
       console.log('tokenArray', tokenArray);
       setTokenData(
-        tokenArray.map((token) => ({
-          label: token.token.symbol || token.token.tokenAddress,
-          value: token.token.tokenAddress,
-          decimals: token.token.decimals,
-          balanceWei: token.tokenBalance,
-          balance: web3Connect.web3.utils.fromWei(token.tokenBalance),
-        })),
+        tokenArray
+          .filter((token) => token)
+          .map((token) => ({
+            label: token.token.symbol || token.token.tokenAddress,
+            value: token.token.tokenAddress,
+            decimals: token.token.decimals,
+            balanceWei: token.tokenBalance,
+            balance: web3Connect.web3.utils.fromWei(token.tokenBalance),
+          })),
       );
     };
     if (data && data.moloch) {

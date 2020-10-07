@@ -57,13 +57,16 @@ const FundingForm = (props) => {
           token.guildBank && token.token.tokenAddress !== depositTokenAddress,
       );
       tokenArray.unshift(depositToken);
+      console.log('tokenArray', tokenArray);
       setTokenData(
-        tokenArray.map((token) => ({
-          label: token.token.symbol || token.token.tokenAddress,
-          value: token.token.tokenAddress,
-          decimals: token.token.decimals,
-          balance: token.tokenBalance,
-        })),
+        tokenArray
+          .filter((token) => token)
+          .map((token) => ({
+            label: token.token.symbol || token.tokenAddress,
+            value: token.token.tokenAddress,
+            decimals: token.token.decimals,
+            balance: token.tokenBalance,
+          })),
       );
     }
   }, [data]);
