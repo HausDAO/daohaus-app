@@ -4,6 +4,7 @@ import styled from 'styled-components';
 
 import { phone, getAppDark } from '../../variables.styles';
 import SyncToken from './SyncToken';
+import CopyAddressButton from '../shared/CopyAddressButton';
 
 const WhitelistTokenBalancesDiv = styled.div`
   max-width: 600px;
@@ -70,6 +71,7 @@ const WhitelistTokenBalances = (tokens) => {
               ).toFixed(4)}
               symbolOverride={token.token.symbol}
             />
+            <CopyAddressButton address={token.token.tokenAddress} />
             {needSync ? <SyncToken token={token} /> : null}
           </div>
         );
