@@ -16,7 +16,7 @@ import ProposalTypeToggle from '../../components/proposal-v2/ProposalTypeToggle'
 
 import styled from 'styled-components';
 import { RowDiv, ButtonLink } from '../../App.styles';
-import { GET_PROPOSALS } from '../../utils/Queries';
+import { GET_PROPOSALS_LIST } from '../../utils/Queries';
 
 const ProposalsHeaderRow = styled(RowDiv)`
   padding-left: 25px;
@@ -41,7 +41,10 @@ const Proposals = ({ match, history }) => {
     // fetchPolicy: 'cache-only',
   };
 
-  const { loading, error, data, fetchMore } = useQuery(GET_PROPOSALS, options);
+  const { loading, error, data, fetchMore } = useQuery(
+    GET_PROPOSALS_LIST,
+    options,
+  );
 
   useEffect(() => {
     if (data && data.proposals && fetched) {
