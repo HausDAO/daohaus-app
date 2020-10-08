@@ -1,5 +1,7 @@
 import React, { Fragment } from 'react';
 
+import { timeToNow } from '../utils/Helpers';
+
 export const ProposalStatus = {
   Unknown: 'Unknown',
   InQueue: 'InQueue',
@@ -34,9 +36,11 @@ export function getProposalCountdownText(proposal, periodDuration) {
         <Fragment>
           <span className="subtext">Voting Begins: </span>
           <span>
-            {proposal.votingStarts
+            {/* {proposal.votingStarts
               ? periodsToTime(proposal.votingStarts, periodDuration)
-              : '-'}
+              : '-'} */}
+
+            {timeToNow(proposal.votingPeriodStarts)}
           </span>
         </Fragment>
       );
@@ -45,9 +49,11 @@ export function getProposalCountdownText(proposal, periodDuration) {
         <Fragment>
           <span className="subtext">Voting Ends: </span>
           <span>
-            {proposal.votingEnds
+            {/* {proposal.votingEnds
               ? periodsToTime(proposal.votingEnds, periodDuration)
-              : '-'}
+              : '-'} */}
+
+            {timeToNow(proposal.votingPeriodEnds)}
           </span>
         </Fragment>
       );
@@ -56,9 +62,11 @@ export function getProposalCountdownText(proposal, periodDuration) {
         <Fragment>
           <span className="subtext">Grace Period Ends: </span>
           <span>
-            {proposal.gracePeriod
+            {/* {proposal.gracePeriod
               ? periodsToTime(proposal.gracePeriod, periodDuration)
-              : '-'}
+              : '-'} */}
+
+            {timeToNow(proposal.gracePeriodEnds)}
           </span>
         </Fragment>
       );
@@ -87,7 +95,7 @@ export const inGracePeriod = (
   gracePeriodLength,
 ) =>
   currentPeriod >= proposal.startingPeriod + votingPeriodLength &&
-  currentPeriod <=
+  currentPeriod <
     proposal.startingPeriod + votingPeriodLength + gracePeriodLength;
 
 export const inVotingPeriod = (proposal, currentPeriod, votingPeriodLength) =>

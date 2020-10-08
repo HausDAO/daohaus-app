@@ -76,6 +76,7 @@ const ProposalDetail = ({ proposal, processProposal, submitVote, canVote }) => {
     proposal,
     proposal.moloch.periodDuration,
   );
+
   const title = titleMaker(proposal);
   const description = descriptionMaker(proposal);
   const link = linkMaker(proposal);
