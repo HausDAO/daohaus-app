@@ -170,11 +170,10 @@ const baseProposalFields = `
       memberAddress
     }
   }
-  
-  tributeTokenSymbol @client
-  tributeTokenDecimals @client
-  paymentTokenSymbol @client
-  paymentTokenDecimals @client
+  tributeTokenSymbol
+  tributeTokenDecimals
+  paymentTokenSymbol
+  paymentTokenDecimals
   status @client
   gracePeriod @client
   votingEnds @client
