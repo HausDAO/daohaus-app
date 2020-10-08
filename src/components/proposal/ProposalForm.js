@@ -85,12 +85,6 @@ const ProposalForm = ({ history }) => {
               if (!values.title) {
                 errors.title = 'Required';
               }
-              if (!values.description) {
-                errors.description = 'Required';
-              }
-              if (!values.link) {
-                errors.link = 'Required';
-              }
               if (!values.applicant) {
                 errors.applicant = 'Required';
               }

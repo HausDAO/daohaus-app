@@ -7,11 +7,8 @@ export const ProposalSchema = Yup.object().shape({
     .required('Required'),
   description: Yup.string()
     .min(2, 'Too Short!')
-    .max(2000, 'Too Long!')
-    .required('Required'),
-  link: Yup.string()
-    .url('Invalid url')
-    .required('Required'),
+    .max(2000, 'Too Long!'),
+  link: Yup.string().url('Invalid url'),
   applicant: Yup.string().matches(
     /\b0x[0-9a-fA-F]{10,40}\b/,
     'Invalid Address',
@@ -36,13 +33,9 @@ export const WhiteListGuildKickSchema = Yup.object().shape({
     .required('Required'),
   description: Yup.string()
     .min(2, 'Too Short!')
-    .max(2000, 'Too Long!')
-    .required('Required'),
-  link: Yup.string()
-    .url('Invalid url')
-    .required('Required'),
+    .max(2000, 'Too Long!'),
+  link: Yup.string().url('Invalid url'),
   applicant: Yup.string()
     .matches(/\b0x[0-9a-fA-F]{10,40}\b/, 'Invalid Address')
     .required('Required'),
 });
-
