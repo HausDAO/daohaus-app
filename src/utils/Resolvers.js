@@ -97,40 +97,6 @@ export const resolvers = {
       }
       return false;
     },
-    tributeTokenSymbol: async (proposal, _args, { cache }) => {
-      const symbol = proposal.moloch.tokenBalances.find(
-        (token) => token.token.tokenAddress === proposal.tributeToken,
-      );
-      return symbol ? symbol.token.symbol : null;
-    },
-    tributeTokenDecimals: async (proposal, _args, { cache }) => {
-      const decimals = proposal.moloch.tokenBalances.find(
-        (token) => token.token.tokenAddress === proposal.tributeToken,
-      );
-
-      return decimals ? decimals.token.decimals : null;
-    },
-    paymentTokenSymbol: async (proposal, _args, { cache }) => {
-      if (proposal.paymentRequested > 0) {
-        const symbol = proposal.moloch.tokenBalances.find(
-          (token) => token.token.tokenAddress === proposal.paymentToken,
-        );
-        return symbol ? symbol.token.symbol : null;
-      } else {
-        return null;
-      }
-    },
-    paymentTokenDecimals: async (proposal, _args, { cache }) => {
-      if (proposal.paymentRequested > 0) {
-        const decimals = proposal.moloch.tokenBalances.find(
-          (token) => token.token.tokenAddress === proposal.paymentToken,
-        );
-
-        return decimals ? decimals.token.decimals : null;
-      } else {
-        return null;
-      }
-    },
     proposalType: (proposal, _args, { cache }) => {
       return determineProposalType(proposal);
     },
