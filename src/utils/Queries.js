@@ -153,14 +153,6 @@ const baseProposalFields = `
       symbol
       decimals
     }
-    tokenBalances {
-      token {
-        tokenAddress
-        symbol
-        decimals
-      }
-    }
-    
   }
   votes {
     id
@@ -174,6 +166,8 @@ const baseProposalFields = `
   tributeTokenDecimals
   paymentTokenSymbol
   paymentTokenDecimals
+
+
   status @client
   gracePeriod @client
   votingEnds @client
@@ -182,7 +176,7 @@ const baseProposalFields = `
   proposalType @client
 `;
 
-export const GET_PROPOSALS = gql`
+export const GET_PROPOSALS_LIST = gql`
   query proposals($contractAddr: String!, $skip: Int) {
     proposals(
       where: { molochAddress: $contractAddr }
@@ -191,7 +185,41 @@ export const GET_PROPOSALS = gql`
       first: 100
       skip: $skip
     ) {
-      ${baseProposalFields}
+      id
+      aborted
+      cancelled
+      details
+      didPass
+      guildkick
+      lootRequested
+      newMember
+      paymentRequested
+      paymentTokenDecimals
+      paymentTokenSymbol
+      processed
+      proposalId
+      proposalIndex
+      sharesRequested
+      sponsored
+      startingPeriod
+      trade
+      tributeOffered
+      tributeTokenDecimals
+      tributeTokenSymbol
+      whitelist
+
+      moloch {
+        gracePeriodLength
+        periodDuration
+        version
+        votingPeriodLength
+      }
+
+      status @client
+      proposalType @client
+      gracePeriod @client
+      votingEnds @client
+      votingStarts @client
     }
   }
 `;
