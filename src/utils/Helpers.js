@@ -25,3 +25,7 @@ export const valToDecimalString = (value, tokenAddress, tokens) => {
 export const formatCreatedAt = (createdAt) => {
   return moment.unix(createdAt).format('MMM Do');
 };
+
+export const timeToNow = (time) => {
+  return moment.unix(time).fromNow();
+};

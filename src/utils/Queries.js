@@ -167,6 +167,10 @@ const baseProposalFields = `
   paymentTokenSymbol
   paymentTokenDecimals
 
+  gracePeriodEnds
+  votingPeriodStarts
+  votingPeriodEnds
+
 
   status @client
   gracePeriod @client
@@ -190,6 +194,7 @@ export const GET_PROPOSALS_LIST = gql`
       cancelled
       details
       didPass
+      gracePeriodEnds
       guildkick
       lootRequested
       newMember
@@ -206,6 +211,8 @@ export const GET_PROPOSALS_LIST = gql`
       tributeOffered
       tributeTokenDecimals
       tributeTokenSymbol
+      votingPeriodStarts
+      votingPeriodEnds
       whitelist
 
       moloch {
