@@ -14,60 +14,27 @@ export const ProposalStatus = {
   Unsponsored: 'Unsponsored',
 };
 
-const periodsToTime = (periods, periodDuration) => {
-  const seconds = periodDuration * periods;
-
-  const days = Math.floor((seconds % 31536000) / 86400);
-  const hours = Math.floor(((seconds % 31536000) % 86400) / 3600);
-  const minutes = Math.floor((((seconds % 31536000) % 86400) % 3600) / 60);
-
-  let string = '';
-  string = days ? `${days} days` : string;
-  string = hours ? `${string} ${hours} hours` : string;
-  string = minutes ? `${string} ${minutes} minutes` : string;
-
-  return string;
-};
-
 export function getProposalCountdownText(proposal, periodDuration) {
   switch (proposal.status) {
     case ProposalStatus.InQueue:
       return (
         <Fragment>
           <span className="subtext">Voting Begins: </span>
-          <span>
-            {/* {proposal.votingStarts
-              ? periodsToTime(proposal.votingStarts, periodDuration)
-              : '-'} */}
-
-            {timeToNow(proposal.votingPeriodStarts)}
-          </span>
+          <span>{timeToNow(proposal.votingPeriodStarts)}</span>
         </Fragment>
       );
     case ProposalStatus.VotingPeriod:
       return (
         <Fragment>
           <span className="subtext">Voting Ends: </span>
-          <span>
-            {/* {proposal.votingEnds
-              ? periodsToTime(proposal.votingEnds, periodDuration)
-              : '-'} */}
-
-            {timeToNow(proposal.votingPeriodEnds)}
-          </span>
+          <span>{timeToNow(proposal.votingPeriodEnds)}</span>
         </Fragment>
       );
     case ProposalStatus.GracePeriod:
       return (
         <Fragment>
           <span className="subtext">Grace Period Ends: </span>
-          <span>
-            {/* {proposal.gracePeriod
-              ? periodsToTime(proposal.gracePeriod, periodDuration)
-              : '-'} */}
-
-            {timeToNow(proposal.gracePeriodEnds)}
-          </span>
+          <span>{timeToNow(proposal.gracePeriodEnds)}</span>
         </Fragment>
       );
     case ProposalStatus.Passed:
