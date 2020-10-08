@@ -27,7 +27,7 @@ export const GET_MOLOCH = gql`
         symbol
         decimals
       }
-      tokenBalances {
+      tokenBalances(where: { guildBank: true }) {
         id
         token {
           tokenAddress
