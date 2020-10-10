@@ -31,7 +31,7 @@ const ProposalActions = ({ client, proposal, history }) => {
   const cancelProposal = async (id) => {
     setLoading(true);
     try {
-      await daoService.mcDao.cancelProposal(id);
+      await daoService.mcDao.cancelProposal(id, currentUser);
     } catch (err) {
       console.log('user rejected or transaction failed');
     } finally {
@@ -44,12 +44,12 @@ const ProposalActions = ({ client, proposal, history }) => {
     console.log('sponsor ', id);
     setLoading(true);
     try {
-      await daoService.mcDao.sponsorProposal(id);
+      await daoService.mcDao.sponsorProposal(id, currentUser);
     } catch (err) {
       console.log('user rejected or transaction failed');
     } finally {
       setLoading(false);
-      history.push(`/dao/${daoService.daoAddress}/success?action=sponsored`);
+      // history.push(`/dao/${daoService.daoAddress}/success?action=sponsored`);
     }
   };
 

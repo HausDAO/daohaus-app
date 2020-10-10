@@ -144,6 +144,8 @@ const TradeForm = (props) => {
                     ),
                     values.paymentToken,
                     detailsObj,
+                    currentUser.username,
+                    currentUser,
                   );
                   setSubmitting(false);
                   setFormLoading(false);

@@ -163,7 +163,12 @@ const UserBalance = ({ toggle }) => {
       (balance) => balance.tokenBalance,
     );
     try {
-      daoService.mcDao.withdrawBalances(tokensArr, balancesArr, true);
+      daoService.mcDao.withdrawBalances(
+        tokensArr,
+        balancesArr,
+        true,
+        currentUser,
+      );
       tokens.forEach((token) => (token.tokenBalance = 0));
     } catch (err) {
       console.log(err);
@@ -178,6 +183,7 @@ const UserBalance = ({ toggle }) => {
       daoService.mcDao.withdrawBalance(
         token.token.tokenAddress,
         token.tokenBalance,
+        currentUser,
       );
     } catch (err) {
       console.log(err);

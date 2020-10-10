@@ -7,12 +7,14 @@ import {
   DaoServiceContext,
   CurrentWalletContext,
   DaoDataContext,
+  CurrentUserContext,
 } from '../../contexts/Store';
 import Loading from '../shared/Loading';
 
 const RagequitForm = ({ hide }) => {
   const [daoService] = useContext(DaoServiceContext);
   const [currentWallet, setCurrentWallet] = useContext(CurrentWalletContext);
+  const [currentUser] = useContext(CurrentUserContext);
   const [loading, setLoading] = useContext(LoaderContext);
   const [formSuccess, setFormSuccess] = useState(false);
   const [canRage, setCanRage] = useState(true);
@@ -59,6 +61,7 @@ const RagequitForm = ({ hide }) => {
               await daoService.mcDao.rageQuit(
                 values.numShares || 0,
                 values.numLoot || 0,
+                currentUser,
               );
             } else {
               await daoService.mcDao.rageQuit(values.numShares || 0);

@@ -141,10 +141,11 @@ const FundingForm = (props) => {
                     values.paymentToken,
                     detailsObj,
                     values.applicant,
+                    currentUser,
                   );
                   setSubmitting(false);
                   setFormLoading(false);
-                  history.push(`/dao/${daoService.daoAddress}/success`);
+                  //history.push(`/dao/${daoService.daoAddress}/success`);
                 } catch (err) {
                   setSubmitting(false);
                   setFormLoading(false);

@@ -133,6 +133,7 @@ const NewMemberForm = (props) => {
                     0,
                     tokenData[0].value,
                     detailsObj,
+                    currentUser.username,
                     currentUser,
                   );
                   setSubmitting(false);

@@ -1,7 +1,7 @@
 import React, { useContext, useState } from 'react';
 import styled from 'styled-components';
 
-import { DaoServiceContext, CurrentWalletContext } from '../../contexts/Store';
+import { DaoServiceContext, CurrentWalletContext, CurrentUserContext } from '../../contexts/Store';
 import Loading from '../shared/Loading';
 
 import useModal from '../shared/useModal';
@@ -21,6 +21,7 @@ const SyncTokenDiv = styled.div`
 const SyncToken = ({ token }) => {
   const [daoService] = useContext(DaoServiceContext);
   const [currentWallet] = useContext(CurrentWalletContext);
+  const [currentUser] = useContext(CurrentUserContext);
   const [loading, setLoading] = useState(false);
 
   const { isShowing, toggle } = useModal();
@@ -30,7 +31,10 @@ const SyncToken = ({ token }) => {
     try {
       console.log('token address', token.token.tokenAddress);
 
-      await daoService.mcDao.collectTokens(token.token.tokenAddress);
+      await daoService.mcDao.collectTokens(
+        token.token.tokenAddress,
+        currentUser,
+      );
       setLoading(false);
     } catch (err) {
       console.log(err);
