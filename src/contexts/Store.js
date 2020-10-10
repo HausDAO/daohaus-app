@@ -4,6 +4,7 @@ import Web3Modal from 'web3modal';
 // import { useInterval } from '../utils/PollingUtil';
 import { createWeb3User, w3connect, providerOptions } from '../utils/Auth';
 import { DaoService, USER_TYPE } from '../utils/DaoService';
+import { TxProcessorService } from '../utils/TxProcessorService';
 import { getChainData } from '../utils/chains';
 import { get } from '../utils/Requests';
 
@@ -74,6 +75,7 @@ const Store = ({ children, daoParam }) => {
 
       let user;
       let dao;
+      let txProcessor;
       try {
         console.log(`Initializing user type: ${loginType || 'read-only'}`);
 
@@ -93,6 +95,13 @@ const Store = ({ children, daoParam }) => {
                 version,
               );
               dao.daoAddress = daoParam;
+              txProcessor = new TxProcessorService(web3);
+              txProcessor.update(user.username);
+              web3.eth.subscribe('newBlockHeaders', (error, result) => {
+                if (!error) {
+                  txProcessor.update(user.username);
+                }
+              });
             } else {
               dao = await DaoService.instantiateWithReadOnly(daoParam, version);
             }
@@ -103,7 +112,7 @@ const Store = ({ children, daoParam }) => {
             dao = await DaoService.instantiateWithReadOnly(daoParam, version);
             break;
         }
-        setCurrentUser(user);
+        setCurrentUser({ ...{ txProcessor }, ...user });
         localStorage.setItem('loginType', loginType);
       } catch (e) {
         console.error(
@@ -206,28 +215,6 @@ const Store = ({ children, daoParam }) => {
     userSetup();
     // eslint-disable-next-line
   }, [currentUser, daoService]);
-
-  useEffect(() => {
-    console.log('use it');
-    const setupSubscriptions = (web3) => {
-      console.log('test subscribe');
-      const blockNumbers = [];
-      web3.eth.subscribe('newBlockHeaders', async (error, result) => {
-        if (!error) {
-          const currentBlock = await web3.eth.getBlock(result.hash, true);
-
-          if (!blockNumbers.includes(currentBlock.number)) {
-            console.log(currentBlock.number);
-            blockNumbers.push(currentBlock.number);
-          }
-        }
-      });
-    };
-
-    if (web3Connect.web3) {
-      setupSubscriptions(web3Connect.web3);
-    }
-  }, [web3Connect]);
 
   return (
     <LoaderContext.Provider value={[loading, setLoading]}>

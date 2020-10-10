@@ -133,10 +133,11 @@ const NewMemberForm = (props) => {
                     0,
                     tokenData[0].value,
                     detailsObj,
+                    currentUser,
                   );
                   setSubmitting(false);
                   setFormLoading(false);
-                  history.push(`/dao/${daoService.daoAddress}/success`);
+                  // history.push(`/dao/${daoService.daoAddress}/success`);
                 } catch (err) {
                   console.log('Error: ', err);
                   setSubmitting(false);

@@ -17,6 +17,24 @@ export class McDaoService {
     this.version = version;
   }
 
+  // internal
+  sendTx(name, tx, currentUserContext) {
+    return tx
+      .send({ from: this.accountAddr })
+      .on('transactionHash', (txHash) => {
+        console.log('txHash', txHash);
+        if (currentUserContext?.txProcessor) {
+          currentUserContext.txProcessor.setTx(
+            txHash,
+            currentUserContext.username,
+            name,
+            true,
+            false,
+          );
+        }
+      });
+  }
+
   async getAllEvents() {
     const events = await this.daoContract.getPastEvents('allEvents', {
       fromBlock: 0,
@@ -292,20 +310,20 @@ export class Web3McDaoServiceV2 extends Web3McDaoService {
     paymentRequested,
     PaymentToken,
     details,
-    applicant = this.accountAddr,
+    currentUserContext = null,
   ) {
-    const txReceipt = await this.daoContract.methods
-      .submitProposal(
-        applicant,
-        sharesRequested,
-        lootRequested,
-        tributeOffered,
-        tributeToken,
-        paymentRequested,
-        PaymentToken,
-        details,
-      )
-      .send({ from: this.accountAddr });
+    const newTx = this.daoContract.methods.submitProposal(
+      currentUserContext.username,
+      sharesRequested,
+      lootRequested,
+      tributeOffered,
+      tributeToken,
+      paymentRequested,
+      PaymentToken,
+      details,
+    );
+
+    const txReceipt = await this.sendTx('newMember', newTx, currentUserContext);
 
     return txReceipt.transactionHash;
   }
