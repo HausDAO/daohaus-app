@@ -87,7 +87,8 @@ const ProposalActions = ({ client, proposal, history }) => {
               </button>
             )}
           {currentWallet.allowance > 0 &&
-          currentWallet.tokenBalance * 10 ** 18 >
+          currentWallet.tokenBalance *
+            10 ** (proposal.moloch.depositToken.decimals || 18) >
             proposal.moloch.proposalDeposit ? (
             <>
               {!proposal.sponsored &&
@@ -98,7 +99,8 @@ const ProposalActions = ({ client, proposal, history }) => {
                   </button>
                 )}
             </>
-          ) : currentWallet.tokenBalance * 10 ** 18 >
+          ) : currentWallet.tokenBalance *
+              10 ** (proposal.moloch.depositToken.decimals || 18) >
             proposal.moloch.proposalDeposit ? (
             <button
               className="UnlockButton"
@@ -111,7 +113,7 @@ const ProposalActions = ({ client, proposal, history }) => {
               className="UnlockButton"
               onClick={() => alert('wrapeth.com')}
             >
-              <span>Get some WETH!</span>
+              <span>Get some {proposal.moloch.depositToken.symbol}!</span>
             </button>
           )}
         </>
