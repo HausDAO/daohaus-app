@@ -86,7 +86,9 @@ const ProposalActions = ({ client, proposal, history }) => {
                 <span>Cancel My Proposal</span>
               </button>
             )}
-          {currentWallet.allowance > 0 ? (
+          {currentWallet.allowance > 0 &&
+          currentWallet.tokenBalance * 10 ** 18 >
+            proposal.moloch.proposalDeposit ? (
             <>
               {!proposal.sponsored &&
                 !proposal.cancelled &&
@@ -96,12 +98,20 @@ const ProposalActions = ({ client, proposal, history }) => {
                   </button>
                 )}
             </>
-          ) : (
+          ) : currentWallet.tokenBalance * 10 ** 18 >
+            proposal.moloch.proposalDeposit ? (
             <button
               className="UnlockButton"
               onClick={() => unlock(proposal.moloch.depositToken.tokenAddress)}
             >
               <span>Unlock Token To Sponsor</span>
+            </button>
+          ) : (
+            <button
+              className="UnlockButton"
+              onClick={() => alert('wrapeth.com')}
+            >
+              <span>Get some WETH!</span>
             </button>
           )}
         </>
