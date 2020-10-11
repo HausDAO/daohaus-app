@@ -64,7 +64,10 @@ const RagequitForm = ({ hide }) => {
                 currentUser,
               );
             } else {
-              await daoService.mcDao.rageQuit(values.numShares || 0);
+              await daoService.mcDao.rageQuit(
+                values.numShares || 0,
+                currentUser,
+              );
             }
 
             setFormSuccess(true);

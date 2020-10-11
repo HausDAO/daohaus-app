@@ -3,13 +3,18 @@ import { Formik, Form, Field, ErrorMessage } from 'formik';
 
 import { FormContainer, FieldContainer } from '../../App.styles';
 
-import { LoaderContext, DaoServiceContext } from '../../contexts/Store';
+import {
+  LoaderContext,
+  DaoServiceContext,
+  CurrentUserContext,
+} from '../../contexts/Store';
 import Loading from '../shared/Loading';
 import Web3 from 'web3';
 
 const ChangeDelegateKeyForm = ({ hide }) => {
   const [daoService] = useContext(DaoServiceContext);
   const [loading, setLoading] = useContext(LoaderContext);
+  const [currentUser] = useContext(CurrentUserContext);
   const [formSuccess, setFormSuccess] = useState(false);
 
   return (
@@ -35,7 +40,10 @@ const ChangeDelegateKeyForm = ({ hide }) => {
         onSubmit={async (values, { setSubmitting, resetForm }) => {
           setLoading(true);
           try {
-            await daoService.mcDao.updateDelegateKey(values.newDelegateKey);
+            await daoService.mcDao.updateDelegateKey(
+              values.newDelegateKey,
+              currentUser,
+            );
             setFormSuccess(true);
             hide('changeDelegateKey');
           } catch (e) {

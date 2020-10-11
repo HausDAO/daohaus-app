@@ -8,6 +8,7 @@ import {
   LoaderContext,
   CurrentWalletContext,
   DaoServiceContext,
+  CurrentUserContext,
 } from '../../contexts/Store';
 import Loading from '../shared/Loading';
 import { GET_ACTIVE_PROPOSALS } from '../../utils/Queries';
@@ -19,6 +20,7 @@ const ProposalForm = ({ history }) => {
   const [gloading] = useContext(LoaderContext);
   const [loading, setLoading] = useState(false);
   const [currentWallet] = useContext(CurrentWalletContext);
+  const [currentUser] = useContext(CurrentUserContext);
   const [daoService] = useContext(DaoServiceContext);
   const [estimatedProposalValue, setEstimatedProposalValue] = useState(0);
 
@@ -115,6 +117,7 @@ const ProposalForm = ({ history }) => {
                     description: values.description,
                     link: values.link,
                   }),
+                  currentUser,
                 );
               } catch (e) {
                 console.error(`Error processing proposal: ${e.toString()}`);

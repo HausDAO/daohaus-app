@@ -1,7 +1,6 @@
 import React, { useContext } from 'react';
 import { withRouter } from 'react-router-dom';
 import { useQuery } from '@apollo/react-hooks';
-import { ethToWei } from '@netgum/utils'; // returns BN
 
 import { GET_PROPOSAL } from '../../utils/Queries';
 import ProposalDetail from '../../components/proposal/ProposalDetail';
@@ -42,7 +41,10 @@ const Proposal = (props) => {
           currentUser,
         );
       } else {
-        await daoService.mcDao.processProposal(proposal.proposalIndex);
+        await daoService.mcDao.processProposal(
+          proposal.proposalIndex,
+          currentUser,
+        );
       }
     } catch (e) {
       console.error(`Error processing proposal: ${e.toString()}`);
@@ -66,7 +68,7 @@ const Proposal = (props) => {
       await daoService.mcDao.submitVote(
         proposal.proposalIndex,
         vote,
-        ethToWei(currentWallet.eth),
+        currentUser,
       );
     } catch (e) {
       console.error(`Error processing proposal: ${e.toString()}`);

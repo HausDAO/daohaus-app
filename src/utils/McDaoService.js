@@ -208,43 +208,60 @@ export class ReadonlyMcDaoService extends McDaoService {
 }
 
 export class Web3McDaoService extends McDaoService {
-  async submitVote(proposalIndex, uintVote) {
-    const txReceipt = await this.daoContract.methods
-      .submitVote(proposalIndex, uintVote)
-      .send({ from: this.accountAddr });
-
+  async submitVote(proposalIndex, uintVote, currentUserContext) {
+    const newTx = this.daoContract.methods.submitVote(proposalIndex, uintVote);
+    const txReceipt = await this.sendTx(
+      'submitVote',
+      newTx,
+      currentUserContext,
+    );
     return txReceipt.transactionHash;
   }
 
-  async rageQuit(amount) {
-    const txReceipt = await this.daoContract.methods
-      .ragequit(amount)
-      .send({ from: this.accountAddr });
-
+  async rageQuit(amount, currentUserContext) {
+    const newTx = this.daoContract.methods.ragequit(amount);
+    const txReceipt = await this.sendTx('ragequit', newTx, currentUserContext);
     return txReceipt.transactionHash;
   }
 
-  async processProposal(id) {
-    const txReceipt = await this.daoContract.methods
-      .processProposal(id)
-      .send({ from: this.accountAddr });
-
+  async processProposal(id, currentUserContext) {
+    const newTx = this.daoContract.methods.processProposal(id);
+    const txReceipt = await this.sendTx(
+      'processProposal',
+      newTx,
+      currentUserContext,
+    );
     return txReceipt.transactionHash;
   }
 
-  async updateDelegateKey(newDelegateKey) {
-    const txReceipt = await this.daoContract.methods
-      .updateDelegateKey(newDelegateKey)
-      .send({ from: this.accountAddr });
-
+  async updateDelegateKey(newDelegateKey, currentUserContext) {
+    const newTx = this.daoContract.methods.updateDelegateKey(newDelegateKey);
+    const txReceipt = await this.sendTx(
+      'newDelegateKey',
+      newTx,
+      currentUserContext,
+    );
     return txReceipt.transactionHash;
   }
 
-  async submitProposal(applicant, tokenTribute, sharesRequested, details) {
-    const txReceipt = await this.daoContract.methods
-      .submitProposal(applicant, tokenTribute, sharesRequested, details)
-      .send({ from: this.accountAddr });
-
+  async submitProposal(
+    applicant,
+    tokenTribute,
+    sharesRequested,
+    details,
+    currentUserContext,
+  ) {
+    const newTx = this.daoContract.methods.submitProposal(
+      applicant,
+      tokenTribute,
+      sharesRequested,
+      details,
+    );
+    const txReceipt = await this.sendTx(
+      'submitProposalV1',
+      newTx,
+      currentUserContext,
+    );
     return txReceipt.transactionHash;
   }
 
