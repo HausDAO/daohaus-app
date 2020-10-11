@@ -19,8 +19,22 @@ const GuildKickForm = (props) => {
 
   const [gloading] = useContext(LoaderContext);
   const [formLoading, setFormLoading] = useState(false);
-  const [currentUser] = useContext(CurrentUserContext);
+  const [currentUser, setCurrentUser] = useContext(CurrentUserContext);
   const [daoService] = useContext(DaoServiceContext);
+
+  const txCallBack = (txHash, name) => {
+    if (currentUser?.txProcessor) {
+      currentUser.txProcessor.setTx(
+        txHash,
+        currentUser.username,
+        name,
+        true,
+        false,
+      );
+      currentUser.txProcessor.pendingCount += 1;
+      setCurrentUser(currentUser);
+    }
+  };
 
   return (
     <FormContainer>
@@ -52,7 +66,7 @@ const GuildKickForm = (props) => {
                   await daoService.mcDao.submitGuildKickProposal(
                     values.applicant,
                     detailsObj,
-                    currentUser,
+                    txCallBack,
                   );
                   setSubmitting(false);
                   setFormLoading(false);

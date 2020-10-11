@@ -1,7 +1,11 @@
 import React, { useContext, useState } from 'react';
 import styled from 'styled-components';
 
-import { DaoServiceContext, CurrentWalletContext, CurrentUserContext } from '../../contexts/Store';
+import {
+  DaoServiceContext,
+  CurrentWalletContext,
+  CurrentUserContext,
+} from '../../contexts/Store';
 import Loading from '../shared/Loading';
 
 import useModal from '../shared/useModal';
@@ -21,10 +25,24 @@ const SyncTokenDiv = styled.div`
 const SyncToken = ({ token }) => {
   const [daoService] = useContext(DaoServiceContext);
   const [currentWallet] = useContext(CurrentWalletContext);
-  const [currentUser] = useContext(CurrentUserContext);
+  const [currentUser, setCurrentUser] = useContext(CurrentUserContext);
   const [loading, setLoading] = useState(false);
 
   const { isShowing, toggle } = useModal();
+
+  const txCallBack = (txHash, name) => {
+    if (currentUser?.txProcessor) {
+      currentUser.txProcessor.setTx(
+        txHash,
+        currentUser.username,
+        name,
+        true,
+        false,
+      );
+      currentUser.txProcessor.pendingCount += 1;
+      setCurrentUser(currentUser);
+    }
+  };
 
   const syncToken = async () => {
     setLoading(true);
@@ -33,7 +51,7 @@ const SyncToken = ({ token }) => {
 
       await daoService.mcDao.collectTokens(
         token.token.tokenAddress,
-        currentUser,
+        txCallBack,
       );
       setLoading(false);
     } catch (err) {

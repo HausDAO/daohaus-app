@@ -15,6 +15,7 @@ const useModal = () => {
     changePassword: false,
     daohaus: false,
     changeDelegateKey: false,
+    txProcessorMsg: false,
   });
 
   function toggle(modalName) {

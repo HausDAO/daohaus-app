@@ -20,9 +20,23 @@ const ProposalForm = ({ history }) => {
   const [gloading] = useContext(LoaderContext);
   const [loading, setLoading] = useState(false);
   const [currentWallet] = useContext(CurrentWalletContext);
-  const [currentUser] = useContext(CurrentUserContext);
+  const [currentUser, setCurrentUser] = useContext(CurrentUserContext);
   const [daoService] = useContext(DaoServiceContext);
   const [estimatedProposalValue, setEstimatedProposalValue] = useState(0);
+
+  const txCallBack = (txHash, name) => {
+    if (currentUser?.txProcessor) {
+      currentUser.txProcessor.setTx(
+        txHash,
+        currentUser.username,
+        name,
+        true,
+        false,
+      );
+      currentUser.txProcessor.pendingCount += 1;
+      setCurrentUser(currentUser);
+    }
+  };
 
   const { loading: activeProposalsLoading, error, data } = useQuery(
     GET_ACTIVE_PROPOSALS,
@@ -117,7 +131,7 @@ const ProposalForm = ({ history }) => {
                     description: values.description,
                     link: values.link,
                   }),
-                  currentUser,
+                  txCallBack,
                 );
               } catch (e) {
                 console.error(`Error processing proposal: ${e.toString()}`);

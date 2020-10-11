@@ -34,7 +34,7 @@ const FundingForm = (props) => {
   const [tokenData, setTokenData] = useState([]);
   const [daoService] = useContext(DaoServiceContext);
   const [daoData] = useContext(DaoDataContext);
-  const [currentUser] = useContext(CurrentUserContext);
+  const [currentUser, setCurrentUser] = useContext(CurrentUserContext);
 
   const options = {
     variables: { contractAddr: daoData.contractAddress },
@@ -43,6 +43,20 @@ const FundingForm = (props) => {
   const query = GET_MOLOCH;
 
   const { loading, error, data } = useQuery(query, options);
+
+  const txCallBack = (txHash, name) => {
+    if (currentUser?.txProcessor) {
+      currentUser.txProcessor.setTx(
+        txHash,
+        currentUser.username,
+        name,
+        true,
+        false,
+      );
+      currentUser.txProcessor.pendingCount += 1;
+      setCurrentUser(currentUser);
+    }
+  };
 
   // get whitelist
   useEffect(() => {
@@ -141,7 +155,7 @@ const FundingForm = (props) => {
                     values.paymentToken,
                     detailsObj,
                     values.applicant,
-                    currentUser,
+                    txCallBack,
                   );
                   setSubmitting(false);
                   setFormLoading(false);

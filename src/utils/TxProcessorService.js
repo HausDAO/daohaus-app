@@ -1,29 +1,28 @@
 export class TxProcessorService {
   web3;
   debounce = false;
+  pendingCount = 0;
   constructor(web3) {
     this.web3 = web3;
   }
 
   async update(account) {
     const _txList = this.getTxPendingList(account);
-    const pending = [];
+    const _pending = [];
+    this.pendingCount = _txList.length;
 
-    if (_txList.length && !this.debounce) {
-      this.debounce = true;
-      console.log('pending');
+    if (_txList.length) {
       _txList.forEach((tx) => {
-        pending.push(this.checkTransaction(tx.tx, account));
+        _pending.push(this.checkTransaction(tx.tx, account));
       });
+      await Promise.all(_pending);
     }
-    await Promise.all(pending);
-    this.debounce = false;
   }
 
   async checkTransaction(transactionHash, account) {
     const status = await this.web3.eth.getTransaction(transactionHash);
     if (status && status.blockNumber) {
-      this.setTx(transactionHash, account, 'completed', false);
+      this.setTx(transactionHash, account, 'completed', false, true);
     }
   }
 

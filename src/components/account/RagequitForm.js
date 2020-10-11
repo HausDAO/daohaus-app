@@ -14,11 +14,25 @@ import Loading from '../shared/Loading';
 const RagequitForm = ({ hide }) => {
   const [daoService] = useContext(DaoServiceContext);
   const [currentWallet, setCurrentWallet] = useContext(CurrentWalletContext);
-  const [currentUser] = useContext(CurrentUserContext);
+  const [currentUser, setCurrentUser] = useContext(CurrentUserContext);
   const [loading, setLoading] = useContext(LoaderContext);
   const [formSuccess, setFormSuccess] = useState(false);
   const [canRage, setCanRage] = useState(true);
   const [daoData] = useContext(DaoDataContext);
+
+  const txCallBack = (txHash, name) => {
+    if (currentUser?.txProcessor) {
+      currentUser.txProcessor.setTx(
+        txHash,
+        currentUser.username,
+        name,
+        true,
+        false,
+      );
+      currentUser.txProcessor.pendingCount += 1;
+      setCurrentUser(currentUser);
+    }
+  };
 
   useEffect(() => {
     const checkCanRage = async () => {
@@ -61,12 +75,12 @@ const RagequitForm = ({ hide }) => {
               await daoService.mcDao.rageQuit(
                 values.numShares || 0,
                 values.numLoot || 0,
-                currentUser,
+                txCallBack,
               );
             } else {
               await daoService.mcDao.rageQuit(
                 values.numShares || 0,
-                currentUser,
+                txCallBack,
               );
             }
 

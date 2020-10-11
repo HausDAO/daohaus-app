@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React, { useContext, useEffect } from 'react';
 import { withRouter, Link } from 'react-router-dom';
 
 import {
@@ -125,11 +125,42 @@ const TopNav = (props) => {
   const [daoService] = useContext(DaoServiceContext);
   const [daoData] = useContext(DaoDataContext);
   const [isElementOpen, setElementOpen] = React.useState(false);
+  const [txHash, setTxHash] = React.useState();
   const toggleElement = () => setElementOpen(!isElementOpen);
-  const { isShowing, toggle } = useModal();
+  const { isShowing, toggle, open } = useModal();
   const {
     location: { pathname },
   } = props;
+
+  const seeTx = (tx, account) => {
+    currentUser.txProcessor.seeTransaction(tx, account);
+  };
+
+  useEffect(() => {
+    if (!currentUser && !currentUser?.txProcessor) {
+      // early return
+      return;
+    }
+    if (!currentUser.txProcessor) {
+      // early return
+      return;
+    }
+
+    if (
+      currentUser?.username &&
+      currentUser.txProcessor.getTxUnseenList(currentUser.username).length
+    ) {
+      console.log(
+        'unseen effect',
+        currentUser.txProcessor.getTxUnseenList(currentUser.username)[0],
+      );
+      setTxHash(
+        currentUser.txProcessor.getTxUnseenList(currentUser.username)[0].tx,
+      );
+
+      open('txProcessorMsg');
+    }
+  }, [currentUser]);
 
   return (
     <TopNavDiv>
@@ -236,6 +267,30 @@ const TopNav = (props) => {
                     Yes, sign me out.
                   </Link>
                 </Modal>
+                {currentUser && (
+                  <Modal
+                    isShowing={isShowing.txProcessorMsg}
+                    hide={() => {
+                      toggle('txProcessorMsg');
+                      seeTx(txHash, currentUser.username);
+                    }}
+                  >
+                    <h2>Tx started</h2>
+                    <div className="IconWarning">
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        width="24"
+                        height="24"
+                        viewBox="0 0 24 24"
+                      >
+                        <path d="M0 0h24v24H0z" fill="none" />
+                        <path d="M1 21h22L12 2 1 21zm12-3h-2v-2h2v2zm0-4h-2v-4h2v4z" />
+                      </svg>
+                    </div>
+                    <p>TX started {txHash}</p>
+                    {}
+                  </Modal>
+                )}
               </DropdownDiv>
             </AuthDiv>
           ) : (

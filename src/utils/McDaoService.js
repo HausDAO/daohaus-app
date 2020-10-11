@@ -18,20 +18,12 @@ export class McDaoService {
   }
 
   // internal
-  sendTx(name, tx, currentUserContext) {
+  sendTx(name, tx, callback) {
     return tx
       .send({ from: this.accountAddr })
       .on('transactionHash', (txHash) => {
         console.log('txHash', txHash);
-        if (currentUserContext?.txProcessor) {
-          currentUserContext.txProcessor.setTx(
-            txHash,
-            currentUserContext.username,
-            name,
-            true,
-            false,
-          );
-        }
+        callback(txHash, name);
       });
   }
 
@@ -208,39 +200,27 @@ export class ReadonlyMcDaoService extends McDaoService {
 }
 
 export class Web3McDaoService extends McDaoService {
-  async submitVote(proposalIndex, uintVote, currentUserContext) {
+  async submitVote(proposalIndex, uintVote, callback) {
     const newTx = this.daoContract.methods.submitVote(proposalIndex, uintVote);
-    const txReceipt = await this.sendTx(
-      'submitVote',
-      newTx,
-      currentUserContext,
-    );
+    const txReceipt = await this.sendTx('submitVote', newTx, callback);
     return txReceipt.transactionHash;
   }
 
-  async rageQuit(amount, currentUserContext) {
+  async rageQuit(amount, callback) {
     const newTx = this.daoContract.methods.ragequit(amount);
-    const txReceipt = await this.sendTx('ragequit', newTx, currentUserContext);
+    const txReceipt = await this.sendTx('ragequit', newTx, callback);
     return txReceipt.transactionHash;
   }
 
-  async processProposal(id, currentUserContext) {
+  async processProposal(id, callback) {
     const newTx = this.daoContract.methods.processProposal(id);
-    const txReceipt = await this.sendTx(
-      'processProposal',
-      newTx,
-      currentUserContext,
-    );
+    const txReceipt = await this.sendTx('processProposal', newTx, callback);
     return txReceipt.transactionHash;
   }
 
-  async updateDelegateKey(newDelegateKey, currentUserContext) {
+  async updateDelegateKey(newDelegateKey, callback) {
     const newTx = this.daoContract.methods.updateDelegateKey(newDelegateKey);
-    const txReceipt = await this.sendTx(
-      'newDelegateKey',
-      newTx,
-      currentUserContext,
-    );
+    const txReceipt = await this.sendTx('newDelegateKey', newTx, callback);
     return txReceipt.transactionHash;
   }
 
@@ -249,7 +229,7 @@ export class Web3McDaoService extends McDaoService {
     tokenTribute,
     sharesRequested,
     details,
-    currentUserContext,
+    callback,
   ) {
     const newTx = this.daoContract.methods.submitProposal(
       applicant,
@@ -257,11 +237,7 @@ export class Web3McDaoService extends McDaoService {
       sharesRequested,
       details,
     );
-    const txReceipt = await this.sendTx(
-      'submitProposalV1',
-      newTx,
-      currentUserContext,
-    );
+    const txReceipt = await this.sendTx('submitProposalV1', newTx, callback);
     return txReceipt.transactionHash;
   }
 
@@ -271,55 +247,47 @@ export class Web3McDaoService extends McDaoService {
 }
 
 export class Web3McDaoServiceV2 extends Web3McDaoService {
-  async rageQuit(amountShares = 0, amountLoot = 0, currentUserContext) {
+  async rageQuit(amountShares = 0, amountLoot = 0, callback) {
     const newTx = this.daoContract.methods.ragequit(amountShares, amountLoot);
-    const txReceipt = await this.sendTx('rageQuit', newTx, currentUserContext);
+    const txReceipt = await this.sendTx('rageQuit', newTx, callback);
     return txReceipt.transactionHash;
   }
 
-  async cancelProposal(id, currentUserContext) {
+  async cancelProposal(id, callback) {
     const newTx = this.daoContract.methods.cancelProposal(id);
-    const txReceipt = await this.sendTx(
-      'cancelProposal',
-      newTx,
-      currentUserContext,
-    );
+    const txReceipt = await this.sendTx('cancelProposal', newTx, callback);
     return txReceipt.transactionHash;
   }
 
-  async processGuildKickProposal(id, currentUserContext) {
+  async processGuildKickProposal(id, callback) {
     const newTx = this.daoContract.methods.processGuildKickProposal(id);
     const txReceipt = await this.sendTx(
       'processGuildKickProposal',
       newTx,
-      currentUserContext,
+      callback,
     );
     return txReceipt.transactionHash;
   }
 
-  async processWhitelistProposal(id, currentUserContext) {
+  async processWhitelistProposal(id, callback) {
     const newTx = this.daoContract.methods.processWhitelistProposal(id);
     const txReceipt = await this.sendTx(
       'processWhitelistProposal',
       newTx,
-      currentUserContext,
+      callback,
     );
     return txReceipt.transactionHash;
   }
 
-  async ragekick(address, currentUserContext) {
+  async ragekick(address, callback) {
     const newTx = this.daoContract.methods.ragekick(address);
-    const txReceipt = await this.sendTx('ragekick', newTx, currentUserContext);
+    const txReceipt = await this.sendTx('ragekick', newTx, callback);
     return txReceipt.transactionHash;
   }
 
-  async sponsorProposal(id, currentUserContext = null) {
+  async sponsorProposal(id, callback = null) {
     const newTx = this.daoContract.methods.sponsorProposal(id);
-    const txReceipt = await this.sendTx(
-      'sponsorProposal',
-      newTx,
-      currentUserContext,
-    );
+    const txReceipt = await this.sendTx('sponsorProposal', newTx, callback);
     return txReceipt.transactionHash;
   }
 
@@ -332,7 +300,7 @@ export class Web3McDaoServiceV2 extends Web3McDaoService {
     PaymentToken,
     details,
     applicant,
-    currentUserContext = null,
+    callback = null,
   ) {
     const newTx = this.daoContract.methods.submitProposal(
       applicant,
@@ -345,12 +313,12 @@ export class Web3McDaoServiceV2 extends Web3McDaoService {
       details,
     );
 
-    const txReceipt = await this.sendTx('newMember', newTx, currentUserContext);
+    const txReceipt = await this.sendTx('newMember', newTx, callback);
 
     return txReceipt.transactionHash;
   }
 
-  async submitGuildKickProposal(memberToKick, details, currentUserContext) {
+  async submitGuildKickProposal(memberToKick, details, callback) {
     const newTx = this.daoContract.methods.submitGuildKickProposal(
       memberToKick,
       details,
@@ -358,12 +326,12 @@ export class Web3McDaoServiceV2 extends Web3McDaoService {
     const txReceipt = await this.sendTx(
       'submitGuildKickProposal',
       newTx,
-      currentUserContext,
+      callback,
     );
     return txReceipt.transactionHash;
   }
 
-  async submitWhiteListProposal(address, details, currentUserContext) {
+  async submitWhiteListProposal(address, details, callback) {
     const newTx = this.daoContract.methods.submitWhitelistProposal(
       address,
       details,
@@ -371,42 +339,30 @@ export class Web3McDaoServiceV2 extends Web3McDaoService {
     const txReceipt = await this.sendTx(
       'submitWhitelistProposal',
       newTx,
-      currentUserContext,
+      callback,
     );
     return txReceipt.transactionHash;
   }
 
-  async withdrawBalance(token, amount, currentUserContext) {
+  async withdrawBalance(token, amount, callback) {
     const newTx = this.daoContract.methods.withdrawBalance(token, amount);
-    const txReceipt = await this.sendTx(
-      'withdrawBalance',
-      newTx,
-      currentUserContext,
-    );
+    const txReceipt = await this.sendTx('withdrawBalance', newTx, callback);
     return txReceipt.transactionHash;
   }
 
-  async withdrawBalances(tokens, amounts, max, currentUserContext) {
+  async withdrawBalances(tokens, amounts, max, callback) {
     const newTx = this.daoContract.methods.withdrawBalances(
       tokens,
       amounts,
       max,
     );
-    const txReceipt = await this.sendTx(
-      'withdrawBalances',
-      newTx,
-      currentUserContext,
-    );
+    const txReceipt = await this.sendTx('withdrawBalances', newTx, callback);
     return txReceipt.transactionHash;
   }
 
-  async collectTokens(token, currentUserContext) {
+  async collectTokens(token, callback) {
     const newTx = this.daoContract.methods.collectTokens(token);
-    const txReceipt = await this.sendTx(
-      'collectTokens',
-      newTx,
-      currentUserContext,
-    );
+    const txReceipt = await this.sendTx('collectTokens', newTx, callback);
     return txReceipt.transactionHash;
   }
 }

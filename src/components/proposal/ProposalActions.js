@@ -11,11 +11,25 @@ import { isMinion } from '../../utils/ProposalHelper';
 import TinyLoader from '../shared/TinyLoader';
 
 const ProposalActions = ({ client, proposal, history }) => {
-  const [currentUser] = useContext(CurrentUserContext);
+  const [currentUser, setCurrentUser] = useContext(CurrentUserContext);
   const [loading, setLoading] = useState(false);
   const [deposit, setDeposit] = useState(false);
   const [currentWallet] = useContext(CurrentWalletContext);
   const [daoService] = useContext(DaoServiceContext);
+
+  const txCallBack = (txHash, name) => {
+    if (currentUser?.txProcessor) {
+      currentUser.txProcessor.setTx(
+        txHash,
+        currentUser.username,
+        name,
+        true,
+        false,
+      );
+      currentUser.txProcessor.pendingCount += 1;
+      setCurrentUser(currentUser);
+    }
+  };
 
   useEffect(() => {
     const getDeposit = async () => {
@@ -31,24 +45,24 @@ const ProposalActions = ({ client, proposal, history }) => {
   const cancelProposal = async (id) => {
     setLoading(true);
     try {
-      await daoService.mcDao.cancelProposal(id, currentUser);
+      await daoService.mcDao.cancelProposal(id, txCallBack);
     } catch (err) {
       console.log('user rejected or transaction failed');
     } finally {
-      setLoading(false);
-      history.push(`/dao/${daoService.daoAddress}/success?action=cancelled`);
+      // setLoading(false);
+      // history.push(`/dao/${daoService.daoAddress}/success?action=cancelled`);
     }
   };
 
   const sponsorProposal = async (id) => {
     console.log('sponsor ', id);
-    setLoading(true);
+    // setLoading(true);
     try {
-      await daoService.mcDao.sponsorProposal(id, currentUser);
+      await daoService.mcDao.sponsorProposal(id, txCallBack);
     } catch (err) {
       console.log('user rejected or transaction failed');
     } finally {
-      setLoading(false);
+      // setLoading(false);
       // history.push(`/dao/${daoService.daoAddress}/success?action=sponsored`);
     }
   };

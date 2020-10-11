@@ -18,8 +18,22 @@ const Proposal = (props) => {
   const id = props.match.params.id;
   const [txLoading, setTxLoading] = useContext(LoaderContext);
   const [currentWallet] = useContext(CurrentWalletContext);
-  const [currentUser] = useContext(CurrentUserContext);
+  const [currentUser, setCurrentUser] = useContext(CurrentUserContext);
   const [daoService] = useContext(DaoServiceContext);
+
+  const txCallBack = (txHash, name) => {
+    if (currentUser?.txProcessor) {
+      currentUser.txProcessor.setTx(
+        txHash,
+        currentUser.username,
+        name,
+        true,
+        false,
+      );
+      currentUser.txProcessor.pendingCount += 1;
+      setCurrentUser(currentUser);
+    }
+  };
 
   const { loading, error, data, refetch } = useQuery(GET_PROPOSAL, {
     variables: { id: `${daoService.daoAddress.toLowerCase()}-proposal-${id}` },
@@ -31,19 +45,19 @@ const Proposal = (props) => {
       if (proposal.whitelist) {
         await daoService.mcDao.processWhitelistProposal(
           proposal.proposalIndex,
-          currentUser,
+          txCallBack,
         );
       } else if (proposal.guildkick) {
         console.log('guildkick process');
 
         await daoService.mcDao.processGuildKickProposal(
           proposal.proposalIndex,
-          currentUser,
+          txCallBack,
         );
       } else {
         await daoService.mcDao.processProposal(
           proposal.proposalIndex,
-          currentUser,
+          txCallBack,
         );
       }
     } catch (e) {
@@ -68,7 +82,7 @@ const Proposal = (props) => {
       await daoService.mcDao.submitVote(
         proposal.proposalIndex,
         vote,
-        currentUser,
+        txCallBack,
       );
     } catch (e) {
       console.error(`Error processing proposal: ${e.toString()}`);

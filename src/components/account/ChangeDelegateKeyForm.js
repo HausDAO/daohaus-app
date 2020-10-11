@@ -14,8 +14,22 @@ import Web3 from 'web3';
 const ChangeDelegateKeyForm = ({ hide }) => {
   const [daoService] = useContext(DaoServiceContext);
   const [loading, setLoading] = useContext(LoaderContext);
-  const [currentUser] = useContext(CurrentUserContext);
+  const [currentUser, setCurrentUser] = useContext(CurrentUserContext);
   const [formSuccess, setFormSuccess] = useState(false);
+
+  const txCallBack = (txHash, name) => {
+    if (currentUser?.txProcessor) {
+      currentUser.txProcessor.setTx(
+        txHash,
+        currentUser.username,
+        name,
+        true,
+        false,
+      );
+      currentUser.txProcessor.pendingCount += 1;
+      setCurrentUser(currentUser);
+    }
+  };
 
   return (
     <FormContainer>
@@ -42,7 +56,7 @@ const ChangeDelegateKeyForm = ({ hide }) => {
           try {
             await daoService.mcDao.updateDelegateKey(
               values.newDelegateKey,
-              currentUser,
+              txCallBack,
             );
             setFormSuccess(true);
             hide('changeDelegateKey');

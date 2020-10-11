@@ -97,9 +97,16 @@ const Store = ({ children, daoParam }) => {
               dao.daoAddress = daoParam;
               txProcessor = new TxProcessorService(web3);
               txProcessor.update(user.username);
+              if (txProcessor.getTxUnseenList(user.username).length) {
+                console.log(
+                  'store',
+                  txProcessor.getTxUnseenList(user.username)[0],
+                );
+              }
               web3.eth.subscribe('newBlockHeaders', (error, result) => {
                 if (!error) {
                   txProcessor.update(user.username);
+                  setCurrentUser({ ...{ txProcessor }, ...user });
                 }
               });
             } else {
@@ -109,10 +116,17 @@ const Store = ({ children, daoParam }) => {
           }
           case USER_TYPE.READ_ONLY:
           default:
+            console.log('READONLY????????????????');
             dao = await DaoService.instantiateWithReadOnly(daoParam, version);
             break;
         }
-        setCurrentUser({ ...{ txProcessor }, ...user });
+        // whay do i do this?
+        if (user === undefined) {
+          setCurrentUser(user);
+        } else {
+          setCurrentUser({ ...{ txProcessor }, ...user });
+        }
+
         localStorage.setItem('loginType', loginType);
       } catch (e) {
         console.error(
