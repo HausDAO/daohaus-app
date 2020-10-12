@@ -1,4 +1,4 @@
-import React, { useContext, useEffect } from 'react';
+import React, { useContext, useEffect, useCallback } from 'react';
 import { withRouter, Link } from 'react-router-dom';
 
 import {
@@ -125,7 +125,7 @@ const TopNav = (props) => {
   const [daoService] = useContext(DaoServiceContext);
   const [daoData] = useContext(DaoDataContext);
   const [isElementOpen, setElementOpen] = React.useState(false);
-  const [txHash, setTxHash] = React.useState();
+  const [latestTx, setLatestTx] = React.useState();
   const toggleElement = () => setElementOpen(!isElementOpen);
   const { isShowing, toggle, open } = useModal();
   const {
@@ -136,7 +136,18 @@ const TopNav = (props) => {
     currentUser.txProcessor.seeTransaction(tx, account);
   };
 
+  const pendingTx = useCallback(
+    (currentUser) => {
+      if (currentUser.username) {
+        return currentUser.txProcessor.getTxPendingList(currentUser.username);
+      }
+      return [];
+    },
+    [currentUser],
+  );
+
   useEffect(() => {
+    console.log('checking currentUser', currentUser);
     if (!currentUser && !currentUser?.txProcessor) {
       // early return
       return;
@@ -145,6 +156,7 @@ const TopNav = (props) => {
       // early return
       return;
     }
+    console.log('checking');
 
     if (
       currentUser?.username &&
@@ -154,13 +166,14 @@ const TopNav = (props) => {
         'unseen effect',
         currentUser.txProcessor.getTxUnseenList(currentUser.username)[0],
       );
-      setTxHash(
-        currentUser.txProcessor.getTxUnseenList(currentUser.username)[0].tx,
+      setLatestTx(
+        currentUser.txProcessor.getTxUnseenList(currentUser.username)[0],
       );
 
       open('txProcessorMsg');
+      currentUser.txProcessor.forceUpdate = false;
     }
-  }, [currentUser]);
+  }, [currentUser, pendingTx]);
 
   return (
     <TopNavDiv>
@@ -272,7 +285,7 @@ const TopNav = (props) => {
                     isShowing={isShowing.txProcessorMsg}
                     hide={() => {
                       toggle('txProcessorMsg');
-                      seeTx(txHash, currentUser.username);
+                      seeTx(latestTx.tx, currentUser.username);
                     }}
                   >
                     <h2>Tx started</h2>
@@ -287,7 +300,7 @@ const TopNav = (props) => {
                         <path d="M1 21h22L12 2 1 21zm12-3h-2v-2h2v2zm0-4h-2v-4h2v4z" />
                       </svg>
                     </div>
-                    <p>TX started {txHash}</p>
+                    <p>TX started {latestTx && latestTx.tx}</p>
                     {}
                   </Modal>
                 )}

@@ -30,7 +30,7 @@ const RagequitForm = ({ hide }) => {
         false,
       );
       currentUser.txProcessor.pendingCount += 1;
-      setCurrentUser(currentUser);
+      setCurrentUser({ ...currentUser });
     }
   };
 

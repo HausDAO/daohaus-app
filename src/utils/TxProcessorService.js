@@ -2,6 +2,7 @@ export class TxProcessorService {
   web3;
   debounce = false;
   pendingCount = 0;
+  forceUpdate;
   constructor(web3) {
     this.web3 = web3;
   }

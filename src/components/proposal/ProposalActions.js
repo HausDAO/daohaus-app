@@ -27,7 +27,8 @@ const ProposalActions = ({ client, proposal, history }) => {
         false,
       );
       currentUser.txProcessor.pendingCount += 1;
-      setCurrentUser(currentUser);
+      currentUser.txProcessor.forceUpdate = true;
+      setCurrentUser({ ...currentUser });
     }
   };
 
