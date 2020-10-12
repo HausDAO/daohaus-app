@@ -31,7 +31,7 @@ const GuildKickForm = (props) => {
         true,
         false,
       );
-      currentUser.txProcessor.pendingCount += 1;
+       
       setCurrentUser({ ...currentUser });
     }
   };

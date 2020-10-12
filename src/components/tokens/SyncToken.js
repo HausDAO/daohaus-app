@@ -39,7 +39,7 @@ const SyncToken = ({ token }) => {
         true,
         false,
       );
-      currentUser.txProcessor.pendingCount += 1;
+       
       setCurrentUser({ ...currentUser });
     }
   };

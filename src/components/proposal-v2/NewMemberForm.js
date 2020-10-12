@@ -53,7 +53,6 @@ const NewMemberForm = (props) => {
         true,
         false,
       );
-      currentUser.txProcessor.pendingCount += 1;
       currentUser.txProcessor.forceUpdate = true;
       setCurrentUser({ ...currentUser });
     }

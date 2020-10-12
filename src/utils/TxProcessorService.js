@@ -1,7 +1,5 @@
 export class TxProcessorService {
   web3;
-  debounce = false;
-  pendingCount = 0;
   forceUpdate;
   constructor(web3) {
     this.web3 = web3;
@@ -10,14 +8,15 @@ export class TxProcessorService {
   async update(account) {
     const _txList = this.getTxPendingList(account);
     const _pending = [];
-    this.pendingCount = _txList.length;
+    console.log('updating check tx from service', _txList.length, _txList);
 
     if (_txList.length) {
       _txList.forEach((tx) => {
         _pending.push(this.checkTransaction(tx.tx, account));
       });
-      await Promise.all(_pending);
     }
+
+    return await Promise.all(_pending);
   }
 
   async checkTransaction(transactionHash, account) {
@@ -76,7 +75,9 @@ export class TxProcessorService {
   getTxUnseenList(account) {
     const _txList = JSON.parse(localStorage.getItem('txList')) || [];
 
-    return _txList.filter((item) => item.account === account && !item.seen);
+    return _txList.filter(
+      (item) => item.account === account && !item.seen && item.open,
+    );
   }
 
   getTx(tx) {

@@ -30,7 +30,7 @@ const Proposal = (props) => {
         true,
         false,
       );
-      currentUser.txProcessor.pendingCount += 1;
+       
       setCurrentUser({ ...currentUser });
     }
   };

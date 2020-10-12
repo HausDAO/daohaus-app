@@ -33,7 +33,7 @@ const ProposalForm = ({ history }) => {
         true,
         false,
       );
-      currentUser.txProcessor.pendingCount += 1;
+       
       setCurrentUser({ ...currentUser });
     }
   };

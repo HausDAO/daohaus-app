@@ -26,7 +26,7 @@ const ChangeDelegateKeyForm = ({ hide }) => {
         true,
         false,
       );
-      currentUser.txProcessor.pendingCount += 1;
+       
       setCurrentUser({ ...currentUser });
     }
   };

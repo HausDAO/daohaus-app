@@ -97,13 +97,16 @@ const Store = ({ children, daoParam }) => {
               dao.daoAddress = daoParam;
               txProcessor = new TxProcessorService(web3);
               txProcessor.update(user.username);
-              // setCurrentUser({ ...{ txProcessor }, ...user });
-              web3.eth.subscribe('newBlockHeaders', (error, result) => {
+              setCurrentUser({ ...{ txProcessor }, ...{ ...user } });
+              web3.eth.subscribe('newBlockHeaders', async (error, result) => {
                 if (!error) {
-                  txProcessor.update(user.username);
-                  console.log('update', txProcessor.forceUpdate);
                   if (txProcessor.forceUpdate) {
-                    setCurrentUser({ ...{ txProcessor }, ...user });
+                    await txProcessor.update(user.username);
+
+                    if (!txProcessor.getTxPendingList(user.username).length){
+                      txProcessor.forceUpdate = false;
+                    }
+                    setCurrentUser({ ...{ txProcessor }, ...{ ...user } });
                   }
                 }
               });
@@ -114,7 +117,6 @@ const Store = ({ children, daoParam }) => {
           }
           case USER_TYPE.READ_ONLY:
           default:
-            console.log('READONLY????????????????');
             dao = await DaoService.instantiateWithReadOnly(daoParam, version);
             break;
         }

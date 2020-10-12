@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useCallback } from 'react';
+import React, { useContext, useEffect } from 'react';
 import { withRouter, Link } from 'react-router-dom';
 
 import {
@@ -136,18 +136,7 @@ const TopNav = (props) => {
     currentUser.txProcessor.seeTransaction(tx, account);
   };
 
-  const pendingTx = useCallback(
-    (currentUser) => {
-      if (currentUser.username) {
-        return currentUser.txProcessor.getTxPendingList(currentUser.username);
-      }
-      return [];
-    },
-    [currentUser],
-  );
-
   useEffect(() => {
-    console.log('checking currentUser', currentUser);
     if (!currentUser && !currentUser?.txProcessor) {
       // early return
       return;
@@ -156,24 +145,20 @@ const TopNav = (props) => {
       // early return
       return;
     }
-    console.log('checking');
+    // wont update after tx is done and set seen
+    const unseen = currentUser.txProcessor.getTxUnseenList(
+      currentUser.username,
+    );
 
-    if (
-      currentUser?.username &&
-      currentUser.txProcessor.getTxUnseenList(currentUser.username).length
-    ) {
-      console.log(
-        'unseen effect',
-        currentUser.txProcessor.getTxUnseenList(currentUser.username)[0],
-      );
-      setLatestTx(
-        currentUser.txProcessor.getTxUnseenList(currentUser.username)[0],
-      );
-
+    if (unseen.length) {
+      setLatestTx(unseen[0]);
       open('txProcessorMsg');
-      currentUser.txProcessor.forceUpdate = false;
+    } else if (latestTx) {
+      setLatestTx(
+        currentUser.txProcessor.getTx(latestTx.tx, currentUser.username),
+      );
     }
-  }, [currentUser, pendingTx]);
+  }, [currentUser]);
 
   return (
     <TopNavDiv>
@@ -301,7 +286,7 @@ const TopNav = (props) => {
                       </svg>
                     </div>
                     <p>TX started {latestTx && latestTx.tx}</p>
-                    {}
+                    {latestTx && latestTx.open ? <p>pending</p> : <p>fin</p>}
                   </Modal>
                 )}
               </DropdownDiv>
