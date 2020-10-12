@@ -1,5 +1,4 @@
 import React, { useContext, useEffect, useState } from 'react';
-import { withRouter } from 'react-router-dom';
 import { withApollo, useQuery } from 'react-apollo';
 import { Formik, Form, Field, ErrorMessage } from 'formik';
 
@@ -26,9 +25,7 @@ import TokenSelect from './TokenSelect';
 import { valToDecimalString } from '../../utils/Helpers';
 import { GET_MOLOCH } from '../../utils/Queries';
 
-const FundingForm = (props) => {
-  const { history } = props;
-
+const FundingForm = () => {
   const [gloading] = useContext(LoaderContext);
   const [formLoading, setFormLoading] = useState(false);
   const [tokenData, setTokenData] = useState([]);
@@ -53,7 +50,7 @@ const FundingForm = (props) => {
         true,
         false,
       );
-       
+      currentUser.txProcessor.forceUpdate = true;
       setCurrentUser({ ...currentUser });
     }
   };
@@ -125,7 +122,7 @@ const FundingForm = (props) => {
                 lootRequested: 0,
               }}
               validationSchema={ProposalSchema}
-              onSubmit={async (values, { setSubmitting }) => {
+              onSubmit={async (values, { setSubmitting, resetForm }) => {
                 console.log(values);
                 setFormLoading(true);
                 setSubmitting(true);
@@ -159,7 +156,7 @@ const FundingForm = (props) => {
                   );
                   setSubmitting(false);
                   setFormLoading(false);
-                  //history.push(`/dao/${daoService.daoAddress}/success`);
+                  resetForm();
                 } catch (err) {
                   setSubmitting(false);
                   setFormLoading(false);
@@ -324,4 +321,4 @@ const FundingForm = (props) => {
   );
 };
 
-export default withRouter(withApollo(FundingForm));
+export default withApollo(FundingForm);

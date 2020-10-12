@@ -1,6 +1,5 @@
 import React, { useState, useContext, useEffect } from 'react';
 import { withApollo } from 'react-apollo';
-import { withRouter } from 'react-router-dom';
 
 import {
   CurrentUserContext,
@@ -10,7 +9,7 @@ import {
 import { isMinion } from '../../utils/ProposalHelper';
 import TinyLoader from '../shared/TinyLoader';
 
-const ProposalActions = ({ client, proposal, history }) => {
+const ProposalActions = ({ client, proposal }) => {
   const [currentUser, setCurrentUser] = useContext(CurrentUserContext);
   const [loading, setLoading] = useState(false);
   const [deposit, setDeposit] = useState(false);
@@ -49,8 +48,7 @@ const ProposalActions = ({ client, proposal, history }) => {
     } catch (err) {
       console.log('user rejected or transaction failed');
     } finally {
-      // setLoading(false);
-      // history.push(`/dao/${daoService.daoAddress}/success?action=cancelled`);
+      setLoading(false);
     }
   };
 
@@ -62,8 +60,7 @@ const ProposalActions = ({ client, proposal, history }) => {
     } catch (err) {
       console.log('user rejected or transaction failed');
     } finally {
-      // setLoading(false);
-      // history.push(`/dao/${daoService.daoAddress}/success?action=sponsored`);
+      setLoading(false);
     }
   };
 
@@ -124,4 +121,4 @@ const ProposalActions = ({ client, proposal, history }) => {
   );
 };
 
-export default withRouter(withApollo(ProposalActions));
+export default withApollo(ProposalActions);

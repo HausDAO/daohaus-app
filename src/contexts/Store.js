@@ -97,13 +97,15 @@ const Store = ({ children, daoParam }) => {
               dao.daoAddress = daoParam;
               txProcessor = new TxProcessorService(web3);
               txProcessor.update(user.username);
+              txProcessor.forceUpdate =
+                txProcessor.getTxPendingList(user.username).length > 0;
               setCurrentUser({ ...{ txProcessor }, ...{ ...user } });
               web3.eth.subscribe('newBlockHeaders', async (error, result) => {
                 if (!error) {
                   if (txProcessor.forceUpdate) {
                     await txProcessor.update(user.username);
 
-                    if (!txProcessor.getTxPendingList(user.username).length){
+                    if (!txProcessor.getTxPendingList(user.username).length) {
                       txProcessor.forceUpdate = false;
                     }
                     setCurrentUser({ ...{ txProcessor }, ...{ ...user } });

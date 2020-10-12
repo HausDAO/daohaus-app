@@ -1,5 +1,4 @@
 import React, { useContext, useState, useEffect } from 'react';
-import { withRouter } from 'react-router-dom';
 
 import { Formik, Form, Field, ErrorMessage } from 'formik';
 
@@ -26,8 +25,7 @@ import TokenSelect from './TokenSelect';
 import { valToDecimalString } from '../../utils/Helpers';
 import { GET_MOLOCH } from '../../utils/Queries';
 
-const NewMemberForm = (props) => {
-  const { history } = props;
+const NewMemberForm = () => {
 
   const [gloading] = useContext(LoaderContext);
   const [formLoading, setFormLoading] = useState(false);
@@ -121,7 +119,7 @@ const NewMemberForm = (props) => {
                 lootRequested: 0,
               }}
               validationSchema={ProposalSchema}
-              onSubmit={async (values, { setSubmitting }) => {
+              onSubmit={async (values, { setSubmitting, resetForm }) => {
                 console.log(values);
                 setFormLoading(true);
                 setSubmitting(true);
@@ -152,7 +150,7 @@ const NewMemberForm = (props) => {
                   );
                   setSubmitting(false);
                   setFormLoading(false);
-                  // history.push(`/dao/${daoService.daoAddress}/success`);
+                  resetForm();
                 } catch (err) {
                   console.log('Error: ', err);
                   setSubmitting(false);
@@ -277,4 +275,4 @@ const NewMemberForm = (props) => {
   );
 };
 
-export default withRouter(withApollo(NewMemberForm));
+export default withApollo(NewMemberForm);

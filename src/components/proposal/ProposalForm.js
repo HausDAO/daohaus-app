@@ -1,5 +1,5 @@
 import React, { useContext, useState } from 'react';
-import { withRouter, Link } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { useQuery } from 'react-apollo';
 import { Formik, Form, Field, ErrorMessage } from 'formik';
 import { weiToEth, anyToBN, ethToWei } from '@netgum/utils';
@@ -16,7 +16,7 @@ import ValueDisplay from '../shared/ValueDisplay';
 
 import { FieldContainer } from '../../App.styles';
 
-const ProposalForm = ({ history }) => {
+const ProposalForm = () => {
   const [gloading] = useContext(LoaderContext);
   const [loading, setLoading] = useState(false);
   const [currentWallet] = useContext(CurrentWalletContext);
@@ -33,7 +33,7 @@ const ProposalForm = ({ history }) => {
         true,
         false,
       );
-       
+      currentUser.txProcessor.forceUpdate = true;
       setCurrentUser({ ...currentUser });
     }
   };
@@ -140,7 +140,6 @@ const ProposalForm = ({ history }) => {
 
                 setSubmitting(false);
                 setLoading(false);
-                history.push(`/dao/${daoService.daoAddress}/success`);
               }
             }}
           >
@@ -285,4 +284,4 @@ const ProposalForm = ({ history }) => {
   );
 };
 
-export default withRouter(ProposalForm);
+export default ProposalForm;

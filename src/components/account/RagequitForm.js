@@ -29,7 +29,7 @@ const RagequitForm = ({ hide }) => {
         true,
         false,
       );
-       
+      currentUser.txProcessor.forceUpdate = true;
       setCurrentUser({ ...currentUser });
     }
   };

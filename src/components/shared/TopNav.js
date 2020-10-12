@@ -158,6 +158,7 @@ const TopNav = (props) => {
         currentUser.txProcessor.getTx(latestTx.tx, currentUser.username),
       );
     }
+    // eslint-disable-next-line
   }, [currentUser]);
 
   return (
@@ -287,6 +288,9 @@ const TopNav = (props) => {
                     </div>
                     <p>TX started {latestTx && latestTx.tx}</p>
                     {latestTx && latestTx.open ? <p>pending</p> : <p>fin</p>}
+                    {latestTx && latestTx.description ? (
+                      <p>type: {latestTx.description}</p>
+                    ) : null}
                   </Modal>
                 )}
               </DropdownDiv>

@@ -30,7 +30,7 @@ const Proposal = (props) => {
         true,
         false,
       );
-       
+      currentUser.txProcessor.forceUpdate = true;
       setCurrentUser({ ...currentUser });
     }
   };
@@ -63,12 +63,8 @@ const Proposal = (props) => {
     } catch (e) {
       console.error(`Error processing proposal: ${e.toString()}`);
     } finally {
-      console.log('finally');
       refetch();
       setTxLoading(false);
-      props.history.push(
-        `/dao/${daoService.daoAddress}/success?action=processed`,
-      );
     }
   };
 

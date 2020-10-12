@@ -39,7 +39,7 @@ const SyncToken = ({ token }) => {
         true,
         false,
       );
-       
+      currentUser.txProcessor.forceUpdate = true;
       setCurrentUser({ ...currentUser });
     }
   };

@@ -65,7 +65,7 @@ const UserBalance = ({ toggle }) => {
         true,
         false,
       );
-       
+      currentUser.txProcessor.forceUpdate = true;
       setCurrentUser({ ...currentUser });
     }
   };
