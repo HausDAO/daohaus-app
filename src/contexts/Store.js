@@ -32,7 +32,7 @@ const Store = ({ children, daoParam }) => {
   });
 
   // modal state for open once
-  const [hasOpened, setHasOpened] = useState({});
+  const [hasAlert, setHasAlert] = useState({});
   const [loading, setLoading] = useState(false);
   const [daoService, setDaoService] = useState();
   const [daoData, setDaoData] = useState();
@@ -76,13 +76,24 @@ const Store = ({ children, daoParam }) => {
       let user;
       let dao;
       let txProcessor;
+      let providerConnect;
       try {
         console.log(`Initializing user type: ${loginType || 'read-only'}`);
 
         switch (loginType) {
           case USER_TYPE.WEB3: {
             if (web3Connect.w3c.cachedProvider) {
-              const { w3c, web3, provider } = await w3connect(web3Connect);
+              try {
+                providerConnect = await w3connect(web3Connect);
+              } catch (err) {
+                console.log(err);
+                setHasAlert({
+                  modal: 'alertMessage',
+                  title: 'Wrong Network',
+                  msg: err.msg,
+                });
+              }
+              const { w3c, web3, provider } = providerConnect;
               const [account] = await web3.eth.getAccounts();
 
               setWeb3Connect({ w3c, web3, provider });
@@ -235,7 +246,7 @@ const Store = ({ children, daoParam }) => {
   return (
     <LoaderContext.Provider value={[loading, setLoading]}>
       <DaoDataContext.Provider value={[daoData, setDaoData]}>
-        <ModalContext.Provider value={[hasOpened, setHasOpened]}>
+        <ModalContext.Provider value={[hasAlert, setHasAlert]}>
           <Web3ConnectContext.Provider value={[web3Connect, setWeb3Connect]}>
             <DaoServiceContext.Provider value={[daoService, setDaoService]}>
               <BoostContext.Provider value={[boosts, setBoosts]}>
