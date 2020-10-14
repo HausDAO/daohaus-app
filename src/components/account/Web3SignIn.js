@@ -1,7 +1,11 @@
 import React, { useContext } from 'react';
 import Web3Modal from 'web3modal';
 
-import { DaoServiceContext, Web3ConnectContext } from '../../contexts/Store';
+import {
+  DaoServiceContext,
+  ModalContext,
+  Web3ConnectContext,
+} from '../../contexts/Store';
 import { getChainData } from '../../utils/chains';
 import { w3connect, providerOptions } from '../../utils/Auth';
 
@@ -10,6 +14,7 @@ import { ButtonPrimary } from '../../App.styles.js';
 export const Web3SignIn = ({ history }) => {
   const [daoService] = useContext(DaoServiceContext);
   const [, setWeb3Connect] = useContext(Web3ConnectContext);
+  const [, setHasAlert] = useContext(ModalContext);
 
   return (
     <ButtonPrimary
@@ -31,6 +36,11 @@ export const Web3SignIn = ({ history }) => {
           window.location.reload();
         } catch (err) {
           console.log('web3Connect error', err);
+          setHasAlert({
+            modal: 'alertMessage',
+            title: 'Wrong Network',
+            msg: err.msg,
+          });
         }
       }}
     >
