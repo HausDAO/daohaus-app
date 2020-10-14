@@ -77,32 +77,52 @@ const ProposalActions = ({ client, proposal, history }) => {
         </button>
       ) : (
         <>
-          {!isMinionProposal &&
-            !proposal.sponsored &&
-            !proposal.cancelled &&
-            proposal.proposer.toLowerCase() ===
-              currentUser.username.toLowerCase() && (
-              <button onClick={() => cancelProposal(proposal.proposalId)}>
-                <span>Cancel My Proposal</span>
-              </button>
-            )}
-          {currentWallet.allowance > 0 ? (
+          {currentWallet.shares > 0 && (
             <>
-              {!proposal.sponsored &&
+              {!isMinionProposal &&
+                !proposal.sponsored &&
                 !proposal.cancelled &&
-                currentWallet.shares > 0 && (
-                  <button onClick={() => sponsorProposal(proposal.proposalId)}>
-                    <span>Sponsor Proposal ({deposit})</span>
+                proposal.proposer.toLowerCase() ===
+                  currentUser.username.toLowerCase() && (
+                  <button onClick={() => cancelProposal(proposal.proposalId)}>
+                    <span>Cancel My Proposal</span>
                   </button>
                 )}
+              {currentWallet.allowance > 0 &&
+              currentWallet.tokenBalance *
+                10 ** (proposal.moloch.depositToken.decimals || 18) >
+                proposal.moloch.proposalDeposit ? (
+                <>
+                  {!proposal.sponsored &&
+                    !proposal.cancelled &&
+                    currentWallet.shares > 0 && (
+                      <button
+                        onClick={() => sponsorProposal(proposal.proposalId)}
+                      >
+                        <span>Sponsor Proposal ({deposit})</span>
+                      </button>
+                    )}
+                </>
+              ) : currentWallet.tokenBalance *
+                  10 ** (proposal.moloch.depositToken.decimals || 18) >
+                proposal.moloch.proposalDeposit ? (
+                <button
+                  className="UnlockButton"
+                  onClick={() =>
+                    unlock(proposal.moloch.depositToken.tokenAddress)
+                  }
+                >
+                  <span>Unlock Token To Sponsor</span>
+                </button>
+              ) : (
+                <button
+                  className="UnlockButton"
+                  onClick={() => alert('wrapeth.com')}
+                >
+                  <span>Get some {proposal.moloch.depositToken.symbol}!</span>
+                </button>
+              )}
             </>
-          ) : (
-            <button
-              className="UnlockButton"
-              onClick={() => unlock(proposal.moloch.depositToken.tokenAddress)}
-            >
-              <span>Unlock Token To Sponsor</span>
-            </button>
           )}
         </>
       )}
