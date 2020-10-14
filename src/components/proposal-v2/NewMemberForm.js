@@ -110,7 +110,6 @@ const NewMemberForm = (props) => {
               }}
               validationSchema={ProposalSchema}
               onSubmit={async (values, { setSubmitting }) => {
-                console.log(values);
                 setFormLoading(true);
                 setSubmitting(true);
 
