@@ -68,7 +68,6 @@ const ProposalActions = ({ client, proposal, history }) => {
   const minionDetails = isMinion(proposal);
   const isMinionProposal =
     minionDetails.isMinion || minionDetails.isTransmutation;
-
   return (
     <>
       {loading ? (
@@ -90,7 +89,7 @@ const ProposalActions = ({ client, proposal, history }) => {
                 )}
               {currentWallet.allowance > 0 &&
               currentWallet.tokenBalance *
-                10 ** (proposal.moloch.depositToken.decimals || 18) >
+                10 ** (proposal.moloch.depositToken.decimals || 18) >=
                 proposal.moloch.proposalDeposit ? (
                 <>
                   {!proposal.sponsored &&
@@ -104,7 +103,7 @@ const ProposalActions = ({ client, proposal, history }) => {
                     )}
                 </>
               ) : currentWallet.tokenBalance *
-                  10 ** (proposal.moloch.depositToken.decimals || 18) >
+                  10 ** (proposal.moloch.depositToken.decimals || 18) >=
                 proposal.moloch.proposalDeposit ? (
                 <button
                   className="UnlockButton"
