@@ -1,34 +1,18 @@
 import React, { useEffect, useState, useContext } from 'react';
 import { BrowserRouter as Router } from 'react-router-dom';
-import styled, { ThemeProvider } from 'styled-components';
-import { useTranslation } from 'react-i18next';
+import { ThemeProvider, CSSReset } from '@chakra-ui/core';
 
 import { DaoDataContext, DaoServiceContext } from './contexts/Store';
 import { get } from './utils/Requests';
 import Routes from './Routes';
-import Header from './components/header/Header';
 import Loading from './components/shared/Loading';
-import {
-  defaultTheme,
-  getAppBackground,
-  GlobalStyle,
-} from './variables.styles';
-import { themeMap } from './themes/themes';
-
-const AppDiv = styled.div`
-  background-color: ${(props) => getAppBackground(props.theme)};
-  min-height: 100vh;
-  min-width: 100vw;
-`;
+import Layout from './components/layout/Layout';
 
 const App = ({ client }) => {
   const [loading, setloading] = useState(true);
   const [daoPath, setDaoPath] = useState('');
   const [daoData, setDaoData] = useContext(DaoDataContext);
-  const [theme, setTheme] = useState(defaultTheme);
   const [daoService] = useContext(DaoServiceContext);
-
-  const { i18n } = useTranslation();
 
   useEffect(() => {
     var pathname = window.location.pathname.split('/');
@@ -50,13 +34,6 @@ const App = ({ client }) => {
           setDaoData({
             ...apiData,
           });
-
-          if (themeMap[apiData.themeName]) {
-            setTheme(themeMap[apiData.themeName]);
-            if (themeMap[apiData.themeName].language) {
-              i18n.changeLanguage(themeMap[apiData.themeName].language);
-            }
-          }
         } else {
           setloading(false);
         }
@@ -100,10 +77,6 @@ const App = ({ client }) => {
         cacheData.guildBankValue = daoService.web3.utils.fromWei(
           guildBankValue,
         );
-        cacheData.tokenSymbol = await daoService.token.getSymbol(
-          theme.symbolOverride,
-        );
-
         cacheData.shareValue = parseFloat(
           daoService.web3.utils.fromWei(
             daoService.web3.utils
@@ -127,21 +100,18 @@ const App = ({ client }) => {
 
   return (
     <div className="App">
-      {loading ? (
-        <ThemeProvider theme={theme}>
+      <ThemeProvider>
+        <CSSReset />
+        {loading ? (
           <Loading />
-        </ThemeProvider>
-      ) : (
-        <Router>
-          <ThemeProvider theme={theme}>
-            <GlobalStyle />
-            <AppDiv>
-              <Header />
+        ) : (
+          <Router>
+            <Layout>
               <Routes isValid={!!daoPath} />
-            </AppDiv>
-          </ThemeProvider>
-        </Router>
-      )}
+            </Layout>
+          </Router>
+        )}
+      </ThemeProvider>
     </div>
   );
 };

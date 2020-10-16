@@ -9,7 +9,6 @@ import { resolvers } from './utils/Resolvers';
 import Store from './contexts/Store';
 import supportedChains from './utils/chains';
 
-import './themes/i18n';
 import './index.css';
 
 const chainData = supportedChains[+process.env.REACT_APP_NETWORK_ID];

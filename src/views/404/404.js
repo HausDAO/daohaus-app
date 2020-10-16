@@ -5,6 +5,7 @@ import { DaoServiceContext } from '../../contexts/Store';
 
 const FourOhFour = () => {
   const [daoService] = useContext(DaoServiceContext);
+
   return (
     <div className="View">
       You seem to be lost.
