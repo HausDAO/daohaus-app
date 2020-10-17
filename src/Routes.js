@@ -1,6 +1,5 @@
 import React from 'react';
 import { Switch, Route } from 'react-router-dom';
-import FourOhFour from './views/404/404';
 import Home from './views/home/Home';
 import Proposals from './views/proposals/Proposals';
 import Proposal from './views/proposal/Proposal';
@@ -10,7 +9,6 @@ import Member from './views/member/Member';
 import Account from './views/account/Account';
 import SignIn from './views/auth/SignIn';
 import SignOut from './views/auth/SignOut';
-import InvalidRoute from './views/invalidRoute/InvalidRoute';
 import ProposalEngine from './views/proposal-new-v2/ProposalEngine';
 import NewMemberForm from './components/proposal-v2/NewMemberForm';
 import FundingForm from './components/proposal-v2/FundingForm';
@@ -20,6 +18,7 @@ import TradeForm from './components/proposal-v2/TradeForm';
 import Success from './views/success/Success';
 import Transmutation from './views/boosts/transmutation/Transmutation';
 import Rage from './views/rage/Rage';
+import Hub from './views/hub/Hub';
 
 const Routes = (props) => {
   const { isValid } = props;
@@ -128,11 +127,12 @@ const Routes = (props) => {
             exact
             component={Rage}
           />
-          <Route path="*" component={FourOhFour} />
+          <Route path="*" component={Hub} />
         </Switch>
       ) : (
         <Switch>
-          <Route path="*" component={InvalidRoute} />
+          <Route path="/" component={Hub} />
+          <Route path="*" component={Hub} />
         </Switch>
       )}
     </>
