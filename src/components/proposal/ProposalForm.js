@@ -1,5 +1,5 @@
 import React, { useContext, useState } from 'react';
-import { withRouter, Link } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { useQuery } from 'react-apollo';
 import { Formik, Form, Field, ErrorMessage } from 'formik';
 import { weiToEth, anyToBN, ethToWei } from '@netgum/utils';
@@ -8,6 +8,7 @@ import {
   LoaderContext,
   CurrentWalletContext,
   DaoServiceContext,
+  CurrentUserContext,
 } from '../../contexts/Store';
 import Loading from '../shared/Loading';
 import { GET_ACTIVE_PROPOSALS } from '../../utils/Queries';
@@ -15,12 +16,27 @@ import ValueDisplay from '../shared/ValueDisplay';
 
 import { FieldContainer } from '../../App.styles';
 
-const ProposalForm = ({ history }) => {
+const ProposalForm = () => {
   const [gloading] = useContext(LoaderContext);
   const [loading, setLoading] = useState(false);
   const [currentWallet] = useContext(CurrentWalletContext);
+  const [currentUser, setCurrentUser] = useContext(CurrentUserContext);
   const [daoService] = useContext(DaoServiceContext);
   const [estimatedProposalValue, setEstimatedProposalValue] = useState(0);
+
+  const txCallBack = (txHash, name) => {
+    if (currentUser?.txProcessor) {
+      currentUser.txProcessor.setTx(
+        txHash,
+        currentUser.username,
+        name,
+        true,
+        false,
+      );
+      currentUser.txProcessor.forceUpdate = true;
+      setCurrentUser({ ...currentUser });
+    }
+  };
 
   const { loading: activeProposalsLoading, error, data } = useQuery(
     GET_ACTIVE_PROPOSALS,
@@ -109,6 +125,7 @@ const ProposalForm = ({ history }) => {
                     description: values.description,
                     link: values.link,
                   }),
+                  txCallBack,
                 );
               } catch (e) {
                 console.error(`Error processing proposal: ${e.toString()}`);
@@ -117,7 +134,6 @@ const ProposalForm = ({ history }) => {
 
                 setSubmitting(false);
                 setLoading(false);
-                history.push(`/dao/${daoService.daoAddress}/success`);
               }
             }}
           >
@@ -262,4 +278,4 @@ const ProposalForm = ({ history }) => {
   );
 };
 
-export default withRouter(ProposalForm);
+export default ProposalForm;

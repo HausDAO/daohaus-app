@@ -1,5 +1,4 @@
 import React, { useContext, useState } from 'react';
-import { withRouter } from 'react-router-dom';
 
 import { Formik, Form, Field, ErrorMessage } from 'formik';
 import { FormContainer, FieldContainer } from '../../App.styles';
@@ -15,13 +14,25 @@ import { withApollo } from 'react-apollo';
 import { WhiteListGuildKickSchema } from './Validation';
 import shortid from 'shortid';
 
-const WhitelistForm = (props) => {
-  const { history } = props;
-
+const WhitelistForm = () => {
   const [gloading] = useContext(LoaderContext);
   const [formLoading, setFormLoading] = useState(false);
-  const [currentUser] = useContext(CurrentUserContext);
+  const [currentUser, setCurrentUser] = useContext(CurrentUserContext);
   const [daoService] = useContext(DaoServiceContext);
+
+  const txCallBack = (txHash, name) => {
+    if (currentUser?.txProcessor) {
+      currentUser.txProcessor.setTx(
+        txHash,
+        currentUser.username,
+        name,
+        true,
+        false,
+      );
+      currentUser.txProcessor.forceUpdate = true;
+      setCurrentUser({ ...currentUser });
+    }
+  };
 
   return (
     <FormContainer>
@@ -40,7 +51,7 @@ const WhitelistForm = (props) => {
                 applicant: '',
               }}
               validationSchema={WhiteListGuildKickSchema}
-              onSubmit={async (values, { setSubmitting }) => {
+              onSubmit={async (values, { setSubmitting, resetForm }) => {
                 console.log(values);
                 setFormLoading(true);
 
@@ -56,10 +67,11 @@ const WhitelistForm = (props) => {
                   await daoService.mcDao.submitWhiteListProposal(
                     values.applicant,
                     detailsObj,
+                    txCallBack,
                   );
                   setSubmitting(false);
                   setFormLoading(false);
-                  history.push(`/dao/${daoService.daoAddress}/success`);
+                  resetForm();
                 } catch (err) {
                   console.log('cancelled');
                   setSubmitting(false);
@@ -136,4 +148,4 @@ const WhitelistForm = (props) => {
   );
 };
 
-export default withRouter(withApollo(WhitelistForm));
+export default withApollo(WhitelistForm);

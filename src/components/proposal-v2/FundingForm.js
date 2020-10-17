@@ -1,5 +1,4 @@
 import React, { useContext, useEffect, useState } from 'react';
-import { withRouter } from 'react-router-dom';
 import { withApollo, useQuery } from 'react-apollo';
 import { Formik, Form, Field, ErrorMessage } from 'formik';
 
@@ -26,15 +25,13 @@ import TokenSelect from './TokenSelect';
 import { valToDecimalString } from '../../utils/Helpers';
 import { GET_MOLOCH } from '../../utils/Queries';
 
-const FundingForm = (props) => {
-  const { history } = props;
-
+const FundingForm = () => {
   const [gloading] = useContext(LoaderContext);
   const [formLoading, setFormLoading] = useState(false);
   const [tokenData, setTokenData] = useState([]);
   const [daoService] = useContext(DaoServiceContext);
   const [daoData] = useContext(DaoDataContext);
-  const [currentUser] = useContext(CurrentUserContext);
+  const [currentUser, setCurrentUser] = useContext(CurrentUserContext);
 
   const options = {
     variables: { contractAddr: daoData.contractAddress },
@@ -43,6 +40,20 @@ const FundingForm = (props) => {
   const query = GET_MOLOCH;
 
   const { loading, error, data } = useQuery(query, options);
+
+  const txCallBack = (txHash, name) => {
+    if (currentUser?.txProcessor) {
+      currentUser.txProcessor.setTx(
+        txHash,
+        currentUser.username,
+        name,
+        true,
+        false,
+      );
+      currentUser.txProcessor.forceUpdate = true;
+      setCurrentUser({ ...currentUser });
+    }
+  };
 
   // get whitelist
   useEffect(() => {
@@ -113,7 +124,7 @@ const FundingForm = (props) => {
                 lootRequested: 0,
               }}
               validationSchema={ProposalSchema}
-              onSubmit={async (values, { setSubmitting }) => {
+              onSubmit={async (values, { setSubmitting, resetForm }) => {
                 console.log(values);
                 setFormLoading(true);
                 setSubmitting(true);
@@ -143,10 +154,11 @@ const FundingForm = (props) => {
                     values.paymentToken,
                     detailsObj,
                     values.applicant,
+                    txCallBack,
                   );
                   setSubmitting(false);
                   setFormLoading(false);
-                  history.push(`/dao/${daoService.daoAddress}/success`);
+                  resetForm();
                 } catch (err) {
                   setSubmitting(false);
                   setFormLoading(false);
@@ -311,4 +323,4 @@ const FundingForm = (props) => {
   );
 };
 
-export default withRouter(withApollo(FundingForm));
+export default withApollo(FundingForm);

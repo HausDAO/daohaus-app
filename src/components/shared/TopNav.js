@@ -1,10 +1,11 @@
-import React, { useContext } from 'react';
+import React, { useContext, useEffect } from 'react';
 import { withRouter, Link } from 'react-router-dom';
 
 import {
   CurrentUserContext,
   DaoServiceContext,
   DaoDataContext,
+  ModalContext,
 } from '../../contexts/Store';
 
 import useModal from './useModal';
@@ -124,12 +125,51 @@ const TopNav = (props) => {
   const [currentUser] = useContext(CurrentUserContext);
   const [daoService] = useContext(DaoServiceContext);
   const [daoData] = useContext(DaoDataContext);
+  const [hasOpened] = useContext(ModalContext);
   const [isElementOpen, setElementOpen] = React.useState(false);
+  const [latestTx, setLatestTx] = React.useState();
   const toggleElement = () => setElementOpen(!isElementOpen);
-  const { isShowing, toggle } = useModal();
+  const { isShowing, toggle, open } = useModal();
   const {
     location: { pathname },
   } = props;
+
+  const seeTx = (tx, account) => {
+    currentUser.txProcessor.seeTransaction(tx, account);
+  };
+
+  useEffect(() => {
+    if (!currentUser && !currentUser?.txProcessor) {
+      // early return
+      return;
+    }
+    if (!currentUser.txProcessor) {
+      // early return
+      return;
+    }
+    // wont update after tx is done and set seen
+    const unseen = currentUser.txProcessor.getTxUnseenList(
+      currentUser.username,
+    );
+
+    if (unseen.length) {
+      setLatestTx(unseen[0]);
+      open('txProcessorMsg');
+    } else if (latestTx) {
+      setLatestTx(
+        currentUser.txProcessor.getTx(latestTx.tx, currentUser.username),
+      );
+    }
+    // eslint-disable-next-line
+  }, [currentUser]);
+
+  useEffect(() => {
+    if (hasOpened.modal === 'alertMessage') {
+      open('alertMessage');
+    }
+    console.log(hasOpened, isShowing);
+    // eslint-disable-next-line
+  }, [hasOpened]);
 
   return (
     <TopNavDiv>
@@ -236,6 +276,33 @@ const TopNav = (props) => {
                     Yes, sign me out.
                   </Link>
                 </Modal>
+                {currentUser && (
+                  <Modal
+                    isShowing={isShowing.txProcessorMsg}
+                    hide={() => {
+                      toggle('txProcessorMsg');
+                      seeTx(latestTx.tx, currentUser.username);
+                    }}
+                  >
+                    <h2>Tx started</h2>
+                    <div className="IconWarning">
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        width="24"
+                        height="24"
+                        viewBox="0 0 24 24"
+                      >
+                        <path d="M0 0h24v24H0z" fill="none" />
+                        <path d="M1 21h22L12 2 1 21zm12-3h-2v-2h2v2zm0-4h-2v-4h2v4z" />
+                      </svg>
+                    </div>
+                    <p>TX started {latestTx && latestTx.tx}</p>
+                    {latestTx && latestTx.open ? <p>pending</p> : <p>fin</p>}
+                    {latestTx && latestTx.description ? (
+                      <p>type: {latestTx.description}</p>
+                    ) : null}
+                  </Modal>
+                )}
               </DropdownDiv>
             </AuthDiv>
           ) : (
@@ -248,6 +315,26 @@ const TopNav = (props) => {
               </Link>
             </AuthDiv>
           )}
+          <Modal
+            isShowing={isShowing.alertMessage}
+            hide={() => {
+              toggle('alertMessage');
+            }}
+          >
+            <h2>{hasOpened.title}</h2>
+            <div className="IconWarning">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="24"
+                height="24"
+                viewBox="0 0 24 24"
+              >
+                <path d="M0 0h24v24H0z" fill="none" />
+                <path d="M1 21h22L12 2 1 21zm12-3h-2v-2h2v2zm0-4h-2v-4h2v4z" />
+              </svg>
+            </div>
+            <p>{hasOpened.msg}</p>
+          </Modal>
         </>
       )}
     </TopNavDiv>

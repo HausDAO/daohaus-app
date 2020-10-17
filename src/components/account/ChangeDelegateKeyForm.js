@@ -3,14 +3,33 @@ import { Formik, Form, Field, ErrorMessage } from 'formik';
 
 import { FormContainer, FieldContainer } from '../../App.styles';
 
-import { LoaderContext, DaoServiceContext } from '../../contexts/Store';
+import {
+  LoaderContext,
+  DaoServiceContext,
+  CurrentUserContext,
+} from '../../contexts/Store';
 import Loading from '../shared/Loading';
 import Web3 from 'web3';
 
 const ChangeDelegateKeyForm = ({ hide }) => {
   const [daoService] = useContext(DaoServiceContext);
   const [loading, setLoading] = useContext(LoaderContext);
+  const [currentUser, setCurrentUser] = useContext(CurrentUserContext);
   const [formSuccess, setFormSuccess] = useState(false);
+
+  const txCallBack = (txHash, name) => {
+    if (currentUser?.txProcessor) {
+      currentUser.txProcessor.setTx(
+        txHash,
+        currentUser.username,
+        name,
+        true,
+        false,
+      );
+      currentUser.txProcessor.forceUpdate = true;
+      setCurrentUser({ ...currentUser });
+    }
+  };
 
   return (
     <FormContainer>
@@ -35,7 +54,10 @@ const ChangeDelegateKeyForm = ({ hide }) => {
         onSubmit={async (values, { setSubmitting, resetForm }) => {
           setLoading(true);
           try {
-            await daoService.mcDao.updateDelegateKey(values.newDelegateKey);
+            await daoService.mcDao.updateDelegateKey(
+              values.newDelegateKey,
+              txCallBack,
+            );
             setFormSuccess(true);
             hide('changeDelegateKey');
           } catch (e) {

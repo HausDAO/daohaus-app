@@ -36,7 +36,7 @@ import EtherscanLink from '../shared/EtherscanLink';
 const UserBalance = ({ toggle }) => {
   const [daoData] = useContext(DaoDataContext);
   const [daoService] = useContext(DaoServiceContext);
-  const [currentUser] = useContext(CurrentUserContext);
+  const [currentUser, setCurrentUser] = useContext(CurrentUserContext);
   const [currentWallet] = useContext(CurrentWalletContext);
   const [delay, setDelay] = useState(null);
   const [copied, setCopied] = useState(false);
@@ -55,6 +55,20 @@ const UserBalance = ({ toggle }) => {
   };
 
   const { loading, error, data, refetch } = useQuery(GET_MEMBER, options);
+
+  const txCallBack = (txHash, name) => {
+    if (currentUser?.txProcessor) {
+      currentUser.txProcessor.setTx(
+        txHash,
+        currentUser.username,
+        name,
+        true,
+        false,
+      );
+      currentUser.txProcessor.forceUpdate = true;
+      setCurrentUser({ ...currentUser });
+    }
+  };
 
   useEffect(() => {
     const checkBalance = async (data) => {
@@ -163,7 +177,12 @@ const UserBalance = ({ toggle }) => {
       (balance) => balance.tokenBalance,
     );
     try {
-      daoService.mcDao.withdrawBalances(tokensArr, balancesArr, true);
+      daoService.mcDao.withdrawBalances(
+        tokensArr,
+        balancesArr,
+        true,
+        txCallBack,
+      );
       tokens.forEach((token) => (token.tokenBalance = 0));
     } catch (err) {
       console.log(err);
@@ -178,6 +197,7 @@ const UserBalance = ({ toggle }) => {
       daoService.mcDao.withdrawBalance(
         token.token.tokenAddress,
         token.tokenBalance,
+        txCallBack,
       );
     } catch (err) {
       console.log(err);

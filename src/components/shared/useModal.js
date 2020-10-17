@@ -1,8 +1,6 @@
-import { useState, useContext } from 'react';
-import { ModalContext } from '../../contexts/Store';
+import { useState } from 'react';
 
 const useModal = () => {
-  const [hasOpened, setHasOpened] = useContext(ModalContext);
 
   const [isShowing, setIsShowing] = useState({
     depositForm: false,
@@ -15,6 +13,8 @@ const useModal = () => {
     changePassword: false,
     daohaus: false,
     changeDelegateKey: false,
+    txProcessorMsg: false,
+    alertMessage: false,
   });
 
   function toggle(modalName) {
@@ -29,6 +29,7 @@ const useModal = () => {
     for (const modal in isShowing) {
       closeModals[modal] = false;
     }
+    console.log('????', modalName);
 
     setIsShowing({
       ...closeModals,
@@ -36,29 +37,10 @@ const useModal = () => {
     });
   }
 
-  function openOnce(modalName) {
-    const closeModals = {};
-
-    if (!hasOpened[modalName]) {
-      setHasOpened({
-        ...hasOpened,
-        ...{ [modalName]: true },
-      });
-      for (const modal in isShowing) {
-        closeModals[modal] = false;
-      }
-      setIsShowing({
-        ...closeModals,
-        ...{ [modalName]: true },
-      });
-    }
-  }
-
   return {
     isShowing,
     toggle,
     open,
-    openOnce,
   };
 };
 

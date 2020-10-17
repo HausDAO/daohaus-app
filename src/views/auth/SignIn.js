@@ -1,14 +1,11 @@
-import React, { useContext } from 'react';
+import React from 'react';
 import { withRouter } from 'react-router-dom';
 
-import { CurrentUserContext } from '../../contexts/Store';
 
 import { FormContainer } from '../../App.styles.js';
 import { Web3SignIn } from '../../components/account/Web3SignIn';
 
 const SignIn = ({ history }) => {
-  const [, setCurrentUser] = useContext(CurrentUserContext);
-
   const historyState = history.location.state;
 
   return (
@@ -29,7 +26,7 @@ const SignIn = ({ history }) => {
       )}
 
       <h2>Sign in</h2>
-      <Web3SignIn history={history} setCurrentUser={setCurrentUser} />
+      <Web3SignIn history={history} />
     </FormContainer>
   );
 };

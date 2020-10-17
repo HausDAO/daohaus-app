@@ -1,7 +1,6 @@
 import React, { useContext } from 'react';
 import { withRouter } from 'react-router-dom';
 import { useQuery } from '@apollo/react-hooks';
-import { ethToWei } from '@netgum/utils'; // returns BN
 
 import { GET_PROPOSAL } from '../../utils/Queries';
 import ProposalDetail from '../../components/proposal/ProposalDetail';
@@ -12,13 +11,29 @@ import {
   LoaderContext,
   CurrentWalletContext,
   DaoServiceContext,
+  CurrentUserContext,
 } from '../../contexts/Store';
 
 const Proposal = (props) => {
   const id = props.match.params.id;
   const [txLoading, setTxLoading] = useContext(LoaderContext);
   const [currentWallet] = useContext(CurrentWalletContext);
+  const [currentUser, setCurrentUser] = useContext(CurrentUserContext);
   const [daoService] = useContext(DaoServiceContext);
+
+  const txCallBack = (txHash, name) => {
+    if (currentUser?.txProcessor) {
+      currentUser.txProcessor.setTx(
+        txHash,
+        currentUser.username,
+        name,
+        true,
+        false,
+      );
+      currentUser.txProcessor.forceUpdate = true;
+      setCurrentUser({ ...currentUser });
+    }
+  };
 
   const { loading, error, data, refetch } = useQuery(GET_PROPOSAL, {
     variables: { id: `${daoService.daoAddress.toLowerCase()}-proposal-${id}` },
@@ -28,23 +43,28 @@ const Proposal = (props) => {
     setTxLoading(true);
     try {
       if (proposal.whitelist) {
-        await daoService.mcDao.processWhitelistProposal(proposal.proposalIndex);
+        await daoService.mcDao.processWhitelistProposal(
+          proposal.proposalIndex,
+          txCallBack,
+        );
       } else if (proposal.guildkick) {
         console.log('guildkick process');
 
-        await daoService.mcDao.processGuildKickProposal(proposal.proposalIndex);
+        await daoService.mcDao.processGuildKickProposal(
+          proposal.proposalIndex,
+          txCallBack,
+        );
       } else {
-        await daoService.mcDao.processProposal(proposal.proposalIndex);
+        await daoService.mcDao.processProposal(
+          proposal.proposalIndex,
+          txCallBack,
+        );
       }
     } catch (e) {
       console.error(`Error processing proposal: ${e.toString()}`);
     } finally {
-      console.log('finally');
       refetch();
       setTxLoading(false);
-      props.history.push(
-        `/dao/${daoService.daoAddress}/success?action=processed`,
-      );
     }
   };
 
@@ -58,7 +78,7 @@ const Proposal = (props) => {
       await daoService.mcDao.submitVote(
         proposal.proposalIndex,
         vote,
-        ethToWei(currentWallet.eth),
+        txCallBack,
       );
     } catch (e) {
       console.error(`Error processing proposal: ${e.toString()}`);

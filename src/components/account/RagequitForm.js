@@ -7,16 +7,32 @@ import {
   DaoServiceContext,
   CurrentWalletContext,
   DaoDataContext,
+  CurrentUserContext,
 } from '../../contexts/Store';
 import Loading from '../shared/Loading';
 
 const RagequitForm = ({ hide }) => {
   const [daoService] = useContext(DaoServiceContext);
   const [currentWallet, setCurrentWallet] = useContext(CurrentWalletContext);
+  const [currentUser, setCurrentUser] = useContext(CurrentUserContext);
   const [loading, setLoading] = useContext(LoaderContext);
   const [formSuccess, setFormSuccess] = useState(false);
   const [canRage, setCanRage] = useState(true);
   const [daoData] = useContext(DaoDataContext);
+
+  const txCallBack = (txHash, name) => {
+    if (currentUser?.txProcessor) {
+      currentUser.txProcessor.setTx(
+        txHash,
+        currentUser.username,
+        name,
+        true,
+        false,
+      );
+      currentUser.txProcessor.forceUpdate = true;
+      setCurrentUser({ ...currentUser });
+    }
+  };
 
   useEffect(() => {
     const checkCanRage = async () => {
@@ -59,9 +75,13 @@ const RagequitForm = ({ hide }) => {
               await daoService.mcDao.rageQuit(
                 values.numShares || 0,
                 values.numLoot || 0,
+                txCallBack,
               );
             } else {
-              await daoService.mcDao.rageQuit(values.numShares || 0);
+              await daoService.mcDao.rageQuit(
+                values.numShares || 0,
+                txCallBack,
+              );
             }
 
             setFormSuccess(true);

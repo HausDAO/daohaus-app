@@ -48,7 +48,7 @@ export const supportedChains = {
     name: 'xDAI Chain',
     short_name: 'xdai',
     chain: 'xDAI',
-    network: 'mainnet',
+    network: 'xDai',
     chain_id: 100,
     network_id: 1,
     rpc_url: 'https://dai.poa.network',

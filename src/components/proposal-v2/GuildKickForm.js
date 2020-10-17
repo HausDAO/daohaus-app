@@ -1,5 +1,4 @@
 import React, { useContext, useState } from 'react';
-import { withRouter } from 'react-router-dom';
 import shortid from 'shortid';
 import { withApollo } from 'react-apollo';
 import { Formik, Form, Field, ErrorMessage } from 'formik';
@@ -14,13 +13,26 @@ import Loading from '../shared/Loading';
 
 import { WhiteListGuildKickSchema } from './Validation';
 
-const GuildKickForm = (props) => {
-  const { history } = props;
+const GuildKickForm = () => {
 
   const [gloading] = useContext(LoaderContext);
   const [formLoading, setFormLoading] = useState(false);
-  const [currentUser] = useContext(CurrentUserContext);
+  const [currentUser, setCurrentUser] = useContext(CurrentUserContext);
   const [daoService] = useContext(DaoServiceContext);
+
+  const txCallBack = (txHash, name) => {
+    if (currentUser?.txProcessor) {
+      currentUser.txProcessor.setTx(
+        txHash,
+        currentUser.username,
+        name,
+        true,
+        false,
+      );
+      currentUser.txProcessor.forceUpdate = true;
+      setCurrentUser({ ...currentUser });
+    }
+  };
 
   return (
     <FormContainer>
@@ -39,7 +51,7 @@ const GuildKickForm = (props) => {
                 applicant: '',
               }}
               validationSchema={WhiteListGuildKickSchema}
-              onSubmit={async (values, { setSubmitting }) => {
+              onSubmit={async (values, { setSubmitting, resetForm }) => {
                 const uuid = shortid.generate();
                 const detailsObj = JSON.stringify({
                   id: uuid,
@@ -52,10 +64,11 @@ const GuildKickForm = (props) => {
                   await daoService.mcDao.submitGuildKickProposal(
                     values.applicant,
                     detailsObj,
+                    txCallBack,
                   );
                   setSubmitting(false);
                   setFormLoading(false);
-                  history.push(`/dao/${daoService.daoAddress}/success`);
+                  resetForm();
                 } catch (err) {
                   setSubmitting(false);
                   setFormLoading(false);
@@ -131,4 +144,4 @@ const GuildKickForm = (props) => {
   );
 };
 
-export default withRouter(withApollo(GuildKickForm));
+export default withApollo(GuildKickForm);

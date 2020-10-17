@@ -1,5 +1,4 @@
 import React, { useContext, useState, useEffect } from 'react';
-import { withRouter } from 'react-router-dom';
 
 import { Formik, Form, Field, ErrorMessage } from 'formik';
 
@@ -26,15 +25,13 @@ import TokenSelect from './TokenSelect';
 import { valToDecimalString } from '../../utils/Helpers';
 import { GET_MOLOCH } from '../../utils/Queries';
 
-const NewMemberForm = (props) => {
-  const { history } = props;
-
+const NewMemberForm = () => {
   const [gloading] = useContext(LoaderContext);
   const [formLoading, setFormLoading] = useState(false);
   const [tokenData, setTokenData] = useState([]);
   const [daoService] = useContext(DaoServiceContext);
   const [daoData] = useContext(DaoDataContext);
-  const [currentUser] = useContext(CurrentUserContext);
+  const [currentUser, setCurrentUser] = useContext(CurrentUserContext);
 
   const options = {
     variables: { contractAddr: daoData.contractAddress },
@@ -43,6 +40,20 @@ const NewMemberForm = (props) => {
   const query = GET_MOLOCH;
 
   const { loading, error, data } = useQuery(query, options);
+
+  const txCallBack = (txHash, name) => {
+    if (currentUser?.txProcessor) {
+      currentUser.txProcessor.setTx(
+        txHash,
+        currentUser.username,
+        name,
+        true,
+        false,
+      );
+      currentUser.txProcessor.forceUpdate = true;
+      setCurrentUser({ ...currentUser });
+    }
+  };
 
   // get whitelist
   useEffect(() => {
@@ -109,7 +120,8 @@ const NewMemberForm = (props) => {
                 lootRequested: 0,
               }}
               validationSchema={ProposalSchema}
-              onSubmit={async (values, { setSubmitting }) => {
+              onSubmit={async (values, { setSubmitting, resetForm }) => {
+                console.log(values);
                 setFormLoading(true);
                 setSubmitting(true);
 
@@ -134,10 +146,12 @@ const NewMemberForm = (props) => {
                     0,
                     tokenData[0].value,
                     detailsObj,
+                    currentUser.username,
+                    txCallBack,
                   );
                   setSubmitting(false);
                   setFormLoading(false);
-                  history.push(`/dao/${daoService.daoAddress}/success`);
+                  resetForm();
                 } catch (err) {
                   console.log('Error: ', err);
                   setSubmitting(false);
@@ -262,4 +276,4 @@ const NewMemberForm = (props) => {
   );
 };
 
-export default withRouter(withApollo(NewMemberForm));
+export default withApollo(NewMemberForm);
