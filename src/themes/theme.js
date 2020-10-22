@@ -18,5 +18,8 @@ export const customTheme = (daoTheme) => {
         200: themeOverrides.brand200,
       },
     },
+    images: {
+      brandImg: defaultTheme.brandImg,
+    },
   };
 };

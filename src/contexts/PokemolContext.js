@@ -9,6 +9,7 @@ const initialState = {
   dao: null,
   theme: customTheme(),
   network: 'mainnet',
+  web3: null,
 };
 
 const reducer = (state, action) => {
@@ -24,6 +25,9 @@ const reducer = (state, action) => {
     }
     case 'clearTheme': {
       return { ...state, theme: customTheme() };
+    }
+    case 'setWeb3': {
+      return { ...state, web3: action.payload };
     }
     default: {
       return initialState;

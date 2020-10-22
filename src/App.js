@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext } from 'react';
 import { BrowserRouter as Router } from 'react-router-dom';
 import { ThemeProvider, CSSReset } from '@chakra-ui/core';
 import ApolloClient from 'apollo-boost';
@@ -7,7 +7,6 @@ import { ApolloProvider } from 'react-apollo';
 import { PokemolContext } from './contexts/PokemolContext';
 import { resolvers } from './utils/Resolvers';
 import Routes from './Routes';
-import Loading from './components/shared/Loading';
 import Layout from './components/layout/Layout';
 import supportedChains from './utils/chains';
 
@@ -23,21 +22,16 @@ const client = new ApolloClient({
 
 const App = () => {
   const { state } = useContext(PokemolContext);
-  const [loading, setloading] = useState(false);
 
   return (
     <ApolloProvider client={client}>
       <ThemeProvider theme={state.theme}>
         <CSSReset />
-        {loading ? (
-          <Loading />
-        ) : (
-          <Router>
-            <Layout>
-              <Routes />
-            </Layout>
-          </Router>
-        )}
+        <Router>
+          <Layout>
+            <Routes />
+          </Layout>
+        </Router>
       </ThemeProvider>
     </ApolloProvider>
   );

@@ -27,7 +27,7 @@ const Header = () => {
 
       <Text fontSize="m">{state.network}</Text>
 
-      {/* <Web3SignIn /> */}
+      <Web3SignIn />
     </Flex>
   );
 };
