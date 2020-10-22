@@ -21,16 +21,17 @@ export const w3connect = async (web3Connect) => {
   const injectedChainId = await web3.eth.getChainId();
 
   if (+injectedChainId !== +process.env.REACT_APP_NETWORK_ID) {
-    alert(
-      `Please switch Web3 to the correct network and try signing in again. Detected network: ${
+    // eslint-disable-next-line no-throw-literal
+    throw {
+      msg: `Please switch Web3 to the correct network and try signing in again. Detected network: ${
         getChainData(injectedChainId).network
       }, Required network: ${
         getChainData(process.env.REACT_APP_NETWORK_ID).network
       }`,
-    );
-    throw new Error(
-      `Injected web3 chainId: ${injectedChainId}, config: ${process.env.REACT_APP_NETWORK_ID}`,
-    );
+      error: new Error(
+        `Injected web3 chainId: ${injectedChainId}, config: ${process.env.REACT_APP_NETWORK_ID}`,
+      ),
+    };
   }
   // console.log('w3connect', web3Connect);
   const w3c = web3Connect.w3c;
