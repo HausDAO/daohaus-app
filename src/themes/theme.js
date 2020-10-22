@@ -49,5 +49,9 @@ export const customTheme = (daoTheme) => {
         900: themeOverrides.bg900,
       },
     },
+    images: {
+      ...theme.images,
+      brandImg: themeOverrides.brandImg,
+    },
   };
 };
