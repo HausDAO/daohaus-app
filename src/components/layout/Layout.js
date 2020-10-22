@@ -14,21 +14,29 @@ const Layout = ({ children }) => {
   console.log('state', state.theme);
 
   return (
-    <Flex direction="row" h="100vh" bg="brand.100" color="white">
-      <Box h="100vh" w="50px">
-        <Icon name="star" onClick={handleToggle} />
-
-        <img src={state.theme.brandImg} />
+    <Flex direction="row" h="100vh" bg="brand.400" color="white" w="100vw">
+      <Box
+        h="100vh"
+        w="100px"
+        d="flex"
+        p="5"
+        direction="column"
+        alignItems="start"
+        justifyContent="start"
+      >
+        <img
+          src={state.theme.images.brandImg}
+          onClick={handleToggle}
+          w="80px"
+        />
       </Box>
       {show ? (
-        <Box mt={200} padding="2em">
-          <Box>
-            <SideNav />
-          </Box>
+        <Box>
+          <SideNav />
         </Box>
       ) : null}
 
-      <Flex direction="column" bg="brand.200" w="100vw">
+      <Flex direction="column" bg="background.400" w="100vw">
         <Header></Header>
         {children}
       </Flex>
