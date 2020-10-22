@@ -4,6 +4,7 @@ import Web3Modal from 'web3modal';
 // import { useInterval } from '../utils/PollingUtil';
 import { createWeb3User, w3connect, providerOptions } from '../utils/Auth';
 import { DaoService, USER_TYPE } from '../utils/DaoService';
+import { TxProcessorService } from '../utils/TxProcessorService';
 import { getChainData } from '../utils/chains';
 import { get } from '../utils/Requests';
 
@@ -31,7 +32,7 @@ const Store = ({ children, daoParam }) => {
   });
 
   // modal state for open once
-  const [hasOpened, setHasOpened] = useState({});
+  const [hasAlert, setHasAlert] = useState({});
   const [loading, setLoading] = useState(false);
   const [daoService, setDaoService] = useState();
   const [daoData, setDaoData] = useState();
@@ -74,13 +75,25 @@ const Store = ({ children, daoParam }) => {
 
       let user;
       let dao;
+      let txProcessor;
+      let providerConnect;
       try {
         console.log(`Initializing user type: ${loginType || 'read-only'}`);
 
         switch (loginType) {
           case USER_TYPE.WEB3: {
             if (web3Connect.w3c.cachedProvider) {
-              const { w3c, web3, provider } = await w3connect(web3Connect);
+              try {
+                providerConnect = await w3connect(web3Connect);
+              } catch (err) {
+                console.log(err);
+                setHasAlert({
+                  modal: 'alertMessage',
+                  title: 'Wrong Network',
+                  msg: err.msg,
+                });
+              }
+              const { w3c, web3, provider } = providerConnect;
               const [account] = await web3.eth.getAccounts();
 
               setWeb3Connect({ w3c, web3, provider });
@@ -93,6 +106,23 @@ const Store = ({ children, daoParam }) => {
                 version,
               );
               dao.daoAddress = daoParam;
+              txProcessor = new TxProcessorService(web3);
+              txProcessor.update(user.username);
+              txProcessor.forceUpdate =
+                txProcessor.getTxPendingList(user.username).length > 0;
+              setCurrentUser({ ...{ txProcessor }, ...{ ...user } });
+              web3.eth.subscribe('newBlockHeaders', async (error, result) => {
+                if (!error) {
+                  if (txProcessor.forceUpdate) {
+                    await txProcessor.update(user.username);
+
+                    if (!txProcessor.getTxPendingList(user.username).length) {
+                      txProcessor.forceUpdate = false;
+                    }
+                    setCurrentUser({ ...{ txProcessor }, ...{ ...user } });
+                  }
+                }
+              });
             } else {
               dao = await DaoService.instantiateWithReadOnly(daoParam, version);
             }
@@ -103,7 +133,13 @@ const Store = ({ children, daoParam }) => {
             dao = await DaoService.instantiateWithReadOnly(daoParam, version);
             break;
         }
-        setCurrentUser(user);
+        // whay do i do this?
+        if (user === undefined) {
+          setCurrentUser(user);
+        } else {
+          setCurrentUser({ ...{ txProcessor }, ...user });
+        }
+
         localStorage.setItem('loginType', loginType);
       } catch (e) {
         console.error(
@@ -119,7 +155,8 @@ const Store = ({ children, daoParam }) => {
     };
 
     initCurrentUser();
-  }, [currentUser, setDaoService, daoParam, web3Connect]);
+    // eslint-disable-next-line
+  }, [currentUser, setDaoService, daoParam]);
 
   useEffect(() => {
     const fetchBoosts = async () => {
@@ -144,7 +181,6 @@ const Store = ({ children, daoParam }) => {
     }
   }, [daoParam]);
 
-  // global polling service
   useEffect(() => {
     if (!daoService) {
       console.log(`DaoService not initialized yet`);
@@ -210,7 +246,7 @@ const Store = ({ children, daoParam }) => {
   return (
     <LoaderContext.Provider value={[loading, setLoading]}>
       <DaoDataContext.Provider value={[daoData, setDaoData]}>
-        <ModalContext.Provider value={[hasOpened, setHasOpened]}>
+        <ModalContext.Provider value={[hasAlert, setHasAlert]}>
           <Web3ConnectContext.Provider value={[web3Connect, setWeb3Connect]}>
             <DaoServiceContext.Provider value={[daoService, setDaoService]}>
               <BoostContext.Provider value={[boosts, setBoosts]}>

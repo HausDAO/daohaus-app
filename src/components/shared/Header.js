@@ -2,6 +2,7 @@ import React, { useContext, useEffect, useState } from 'react';
 import { Text, Flex } from '@chakra-ui/core';
 import { useLocation } from 'react-router-dom';
 import { PokemolContext } from '../../contexts/PokemolContext';
+import { Web3SignIn } from './Web3SignIn';
 
 const Header = () => {
   const location = useLocation();
@@ -25,6 +26,8 @@ const Header = () => {
       <Text fontSize="l">{pageTitle}</Text>
 
       <Text fontSize="m">{state.network}</Text>
+
+      {/* <Web3SignIn /> */}
     </Flex>
   );
 };
