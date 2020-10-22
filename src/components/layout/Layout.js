@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Collapse, Button, Flex } from '@chakra-ui/core';
+import { Collapse, Button, Flex, Box } from '@chakra-ui/core';
 
 import Header from '../header/Header';
 
@@ -9,14 +9,18 @@ const Layout = ({ children }) => {
   const handleToggle = () => setShow(!show);
 
   return (
-    <Flex direction="row">
-      <Button variantColor="blue" onClick={handleToggle}>
-        ICON
-      </Button>
+    <Flex direction="row" h="100vh" bg="brand.100" color="white">
+      <Box h="100vh">
+        <Button variantColor="blue" onClick={handleToggle}>
+          ICON
+        </Button>
+      </Box>
       <Collapse mt={200} isOpen={show}>
-        <div>side nav</div>
+        <Box>
+          <div>side nav</div>
+        </Box>
       </Collapse>
-      <Flex direction="column">
+      <Flex direction="column" bg="brand.200" w="100vw">
         <Header></Header>
         {children}
       </Flex>
