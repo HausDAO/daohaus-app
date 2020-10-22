@@ -1,10 +1,14 @@
 import React from 'react';
 
+import { customTheme } from '../themes/theme';
+
 const PokemolContext = React.createContext();
 
 const initialState = {
   user: null,
   dao: null,
+  theme: customTheme(),
+  network: 'mainnet',
 };
 
 const reducer = (state, action) => {
@@ -14,6 +18,12 @@ const reducer = (state, action) => {
     }
     case 'clearUser': {
       return { ...state, user: initialState.user };
+    }
+    case 'setTheme': {
+      return { ...state, theme: customTheme(action.payload) };
+    }
+    case 'clearTheme': {
+      return { ...state, theme: customTheme() };
     }
     default: {
       return initialState;

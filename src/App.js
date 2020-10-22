@@ -1,21 +1,33 @@
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import { BrowserRouter as Router } from 'react-router-dom';
 import { ThemeProvider, CSSReset } from '@chakra-ui/core';
+import ApolloClient from 'apollo-boost';
 
+import { ApolloProvider } from 'react-apollo';
+import { PokemolContext } from './contexts/PokemolContext';
+import { resolvers } from './utils/Resolvers';
 import Routes from './Routes';
 import Loading from './components/shared/Loading';
-
-import { customTheme } from './themes/theme';
-
 import Layout from './components/layout/Layout';
+import supportedChains from './utils/chains';
+
+// how would we toggle this? or just reload client in fetch components?
+const chainData = supportedChains[+process.env.REACT_APP_NETWORK_ID];
+
+const client = new ApolloClient({
+  uri: chainData.subgraph_url,
+  clientState: {
+    resolvers,
+  },
+});
 
 const App = () => {
+  const { state } = useContext(PokemolContext);
   const [loading, setloading] = useState(false);
-  //if dao - pass a theme
 
   return (
-    <div className="App">
-      <ThemeProvider theme={customTheme()}>
+    <ApolloProvider client={client}>
+      <ThemeProvider theme={state.theme}>
         <CSSReset />
         {loading ? (
           <Loading />
@@ -27,7 +39,7 @@ const App = () => {
           </Router>
         )}
       </ThemeProvider>
-    </div>
+    </ApolloProvider>
   );
 };
 

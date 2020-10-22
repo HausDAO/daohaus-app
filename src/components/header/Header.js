@@ -1,6 +1,31 @@
-import React from 'react';
+import React, { useContext, useEffect, useState } from 'react';
+import { Text, Flex } from '@chakra-ui/core';
+import { useLocation } from 'react-router-dom';
+import { PokemolContext } from '../../contexts/PokemolContext';
 
 const Header = () => {
-  return <div>I am header</div>;
+  const location = useLocation();
+  const { state } = useContext(PokemolContext);
+  const [pageTitle, setPageTitle] = useState();
+
+  useEffect(() => {
+    console.log('location', location);
+
+    // move to helper
+    switch (location.pathname) {
+      case '/': {
+        setPageTitle('Hub');
+      }
+    }
+    // eslint-disable-next-line
+  }, [location]);
+
+  return (
+    <Flex direction="row" justify="space-between">
+      <Text fontSize="l">{pageTitle}</Text>
+
+      <Text fontSize="m">{state.network}</Text>
+    </Flex>
+  );
 };
 export default Header;

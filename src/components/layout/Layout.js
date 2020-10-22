@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
-import { Collapse, Button, Flex, Box } from '@chakra-ui/core';
+import { Collapse, Icon, Flex, Box } from '@chakra-ui/core';
 
 import Header from '../header/Header';
+import SideNav from '../navigation/SideNav';
 
 const Layout = ({ children }) => {
   const [show, setShow] = useState(false);
@@ -10,16 +11,17 @@ const Layout = ({ children }) => {
 
   return (
     <Flex direction="row" h="100vh" bg="brand.100" color="white">
-      <Box h="100vh">
-        <Button variantColor="blue" onClick={handleToggle}>
-          ICON
-        </Button>
+      <Box h="100vh" w="50px">
+        <Icon name="star" onClick={handleToggle} />
       </Box>
-      <Collapse mt={200} isOpen={show}>
-        <Box>
-          <div>side nav</div>
+      {show ? (
+        <Box mt={200} padding="2em">
+          <Box>
+            <SideNav />
+          </Box>
         </Box>
-      </Collapse>
+      ) : null}
+
       <Flex direction="column" bg="brand.200" w="100vw">
         <Header></Header>
         {children}
