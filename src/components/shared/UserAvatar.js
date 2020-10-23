@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import makeBlockie from 'ethereum-blockies-base64';
 import { getProfile } from '3box/lib/api';
-import { Flex } from '@chakra-ui/core';
+import { Flex, Box } from '@chakra-ui/core';
 
 import { truncateAddr } from '../../utils/Helpers';
 
@@ -27,31 +27,36 @@ const UserAvatar = ({ address }) => {
   console.log('profile', profile);
   return (
     <Flex direction="row" alignItems="center">
-      <h3>
-        {profile.name || truncateAddr(address)}{' '}
-        {profile.emoji ? <span>{profile.emoji} </span> : null}
-      </h3>
       {profile && profile.image && profile.image[0] ? (
-        <div
+        <Box
+          w="48px"
+          h="48px"
+          mr={3}
+          rounded="full"
           style={{
             backgroundImage: `url(${'https://ipfs.infura.io/ipfs/' +
               profile.image[0].contentUrl['/']})`,
-            width: '50px',
-            height: '50px',
-            borderRadius: '50%',
           }}
         >
           {''}
-        </div>
+        </Box>
       ) : (
-        <div
+        <Box
+          w="48px"
+          h="48px"
+          mr={3}
+          rounded="full"
           style={{
             backgroundImage: `url("${makeBlockie(address)}")`,
           }}
         >
           {''}
-        </div>
+        </Box>
       )}
+      <h3>
+        {profile.name || truncateAddr(address)}{' '}
+        {profile.emoji ? <span>{profile.emoji} </span> : null}
+      </h3>
     </Flex>
   );
 };

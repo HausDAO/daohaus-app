@@ -17,10 +17,11 @@ const Layout = ({ children }) => {
         h="100vh"
         w="100px"
         d="flex"
-        p="5"
+        p={6}
         direction="column"
         alignItems="start"
-        justifyContent="start"
+        justifyContent="center"
+        _hover={{ bg: 'brand.700' }}
       >
         <img
           src={state.theme.images.brandImg}

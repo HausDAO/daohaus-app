@@ -25,7 +25,7 @@ const Header = () => {
   }, [location]);
 
   return (
-    <Flex direction="row" justify="space-between" p="5">
+    <Flex direction="row" justify="space-between" p={6}>
       <Text fontSize="3xl">{pageTitle}</Text>
 
       <Text fontSize="m">{state.network}</Text>
