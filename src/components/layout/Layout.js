@@ -11,8 +11,6 @@ const Layout = ({ children }) => {
 
   const handleToggle = () => setShow(!show);
 
-  console.log('state', state.theme);
-
   return (
     <Flex direction="row" h="100vh" bg="brand.400" color="white" w="100vw">
       <Box

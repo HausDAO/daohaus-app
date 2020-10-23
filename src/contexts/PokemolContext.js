@@ -1,6 +1,9 @@
 import React from 'react';
+import Web3Modal from 'web3modal';
 
+import { providerOptions } from '../utils/Auth';
 import { customTheme } from '../themes/theme';
+import { getChainData } from '../utils/chains';
 
 const PokemolContext = React.createContext();
 
@@ -9,7 +12,14 @@ const initialState = {
   dao: null,
   theme: customTheme(),
   network: 'mainnet',
-  web3: null,
+  txProcessor: null,
+  web3: {
+    w3c: new Web3Modal({
+      network: getChainData(+process.env.REACT_APP_NETWORK_ID).network, // optional
+      providerOptions, // required
+      cacheProvider: true,
+    }),
+  },
 };
 
 const reducer = (state, action) => {
@@ -28,6 +38,9 @@ const reducer = (state, action) => {
     }
     case 'setWeb3': {
       return { ...state, web3: action.payload };
+    }
+    case 'setTxProcessor': {
+      return { ...state, txProcessor: action.payload };
     }
     default: {
       return initialState;

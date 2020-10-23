@@ -9,6 +9,7 @@ import { resolvers } from './utils/Resolvers';
 import Routes from './Routes';
 import Layout from './components/layout/Layout';
 import supportedChains from './utils/chains';
+import StoreInit from './contexts/StoreInit';
 
 // how would we toggle this? or just reload client in fetch components?
 const chainData = supportedChains[+process.env.REACT_APP_NETWORK_ID];
@@ -26,12 +27,14 @@ const App = () => {
   return (
     <ApolloProvider client={client}>
       <ThemeProvider theme={state.theme}>
-        <CSSReset />
-        <Router>
-          <Layout>
-            <Routes />
-          </Layout>
-        </Router>
+        <StoreInit>
+          <CSSReset />
+          <Router>
+            <Layout>
+              <Routes />
+            </Layout>
+          </Router>
+        </StoreInit>
       </ThemeProvider>
     </ApolloProvider>
   );

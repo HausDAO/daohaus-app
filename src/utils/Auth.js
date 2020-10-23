@@ -1,5 +1,6 @@
 import Web3 from 'web3';
 import WalletConnectProvider from '@walletconnect/web3-provider';
+import Web3Modal from 'web3modal';
 
 import { USER_TYPE } from './DaoService';
 import { getChainData } from './chains';
