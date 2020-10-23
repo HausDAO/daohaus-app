@@ -7,10 +7,10 @@ import {
   inQueue,
   passedVotingAndGrace,
   determineProposalType,
-} from './ProposalHelper';
-import { TokenService } from './TokenService';
-import { McDaoService } from './McDaoService';
-import { GET_METADATA } from './Queries';
+} from '../ProposalHelper';
+import { TokenService } from '../TokenService';
+import { McDaoService } from '../McDaoService';
+import { GET_METADATA } from '../Queries';
 
 const _web3 = new Web3(
   new Web3.providers.HttpProvider(process.env.REACT_APP_INFURA_URI),

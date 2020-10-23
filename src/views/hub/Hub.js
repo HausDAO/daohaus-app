@@ -3,7 +3,7 @@ import { Button, Box, Flex, Text, Grid } from '@chakra-ui/core';
 
 import { PokemolContext } from '../../contexts/PokemolContext';
 import BrandOverride from '../../assets/themes/raidTheme/raidguild__avatar--pink.jpg';
-import { HUB_MEMBERSHIPS } from '../../utils/queries/hub-queries';
+import { HUB_MEMBERSHIPS } from '../../utils/apollo/hub-queries';
 import GraphFetch from '../../components/shared/GraphFetch';
 import MemberDaoList from '../../components/hub/MemberDaoList';
 

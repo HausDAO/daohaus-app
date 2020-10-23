@@ -24,7 +24,7 @@ const Header = () => {
     <Flex direction="row" justify="space-between" p={6}>
       <Text fontSize="3xl">{pageTitle}</Text>
 
-      <Text fontSize="m">{state.network}</Text>
+      <Text fontSize="m">{state.network.network}</Text>
 
       {state.user ? (
         <UserAvatar address={state.user.username} />

@@ -1,66 +1,18 @@
 import React, { useContext, useEffect } from 'react';
-import ApolloClient from 'apollo-boost';
 import { useQuery } from '@apollo/react-hooks';
 
-import supportedChains from '../../utils/chains';
-import { resolvers } from '../../utils/Resolvers';
 import { PokemolContext } from '../../contexts/PokemolContext';
 import Loading from '../shared/Loading';
+import { networkClients } from '../../utils/apollo/clients';
 
-// CAN UPDATE CLIENT HERE BASED ON NETWORK?
-// needs to live outside the component so maybe just in it's own file?
-const client = new ApolloClient({
-  uri: supportedChains[42].subgraph_url,
-  clientState: {
-    resolvers,
-  },
-});
-
-//paginated version
-
-const GraphFetch = ({
-  query,
-  setRecords,
-  variables,
-  suppressLoading,
-  // entity,
-}) => {
+const GraphFetch = ({ query, setRecords, variables, suppressLoading }) => {
   const { state } = useContext(PokemolContext);
 
-  // const { loading, error, data, fetchMore, refetch } = useQuery(query, {
-  const { loading, error, data } = useQuery(query, {
-    // client: state.network === 'kovan' ? client : client,
-    client,
+  const { loading, error, data, refetch } = useQuery(query, {
+    client: networkClients[state.network.network_id],
     variables,
-    // fetchPolicy: 'network-only',
-    // pollInterval: 60000,
+    fetchPolicy: 'network-only',
   });
-
-  // useEffect(() => {
-  //   const fetch = async () => {
-  //     try {
-  //       fetchMore({
-  //         variables: { skip: data[entity].length },
-  //         updateQuery: (prev, { fetchMoreResult }) => {
-  //           if (!fetchMoreResult[entity].length) {
-  //             return;
-  //           }
-
-  //           return Object.assign({}, prev, {
-  //             members: [...prev[entity], ...fetchMoreResult[entity]],
-  //           });
-  //         },
-  //       });
-  //     } catch (err) {
-  //       console.log('err', err);
-  //     }
-  //   };
-
-  //   if (data) {
-  //     fetch();
-  //   }
-  //   // eslint-disable-next-line react-hooks/exhaustive-deps
-  // }, [data]);
 
   useEffect(() => {
     if (data) {
@@ -69,9 +21,10 @@ const GraphFetch = ({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [data]);
 
+  // TODO: how do we identify if this query needs refetch from state?
   // useEffect(() => {
-  //   if (state[entity].refetch) {
-  //     refetch;
+  //   if (state.refetch) {
+  //     refetch();
   //   }
   //   // eslint-disable-next-line react-hooks/exhaustive-deps
   // }, [state]);

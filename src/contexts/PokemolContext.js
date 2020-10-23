@@ -3,7 +3,7 @@ import Web3Modal from 'web3modal';
 
 import { providerOptions } from '../utils/Auth';
 import { customTheme } from '../themes/theme';
-import { getChainData } from '../utils/chains';
+import supportedChains, { getChainData } from '../utils/chains';
 
 const PokemolContext = React.createContext();
 
@@ -16,7 +16,7 @@ const initialState = {
   user: null,
   dao: null,
   theme: customTheme(),
-  network: getChainData(+process.env.REACT_APP_NETWORK_ID).network,
+  network: supportedChains[42],
   txProcessor: null,
   web3: {
     w3c: new Web3Modal({

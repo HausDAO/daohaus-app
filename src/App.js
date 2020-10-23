@@ -5,7 +5,7 @@ import ApolloClient from 'apollo-boost';
 import { ApolloProvider } from 'react-apollo';
 
 import { PokemolContext } from './contexts/PokemolContext';
-import { resolvers } from './utils/Resolvers';
+import { resolvers } from './utils/apollo/resolvers';
 import Routes from './Routes';
 import Layout from './components/layout/Layout';
 import supportedChains from './utils/chains';
