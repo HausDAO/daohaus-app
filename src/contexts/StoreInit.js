@@ -1,5 +1,6 @@
 import React, { useState, useEffect, createContext, useContext } from 'react';
 import { useToast } from '@chakra-ui/core';
+import { getProfile } from '3box/lib/api';
 
 import { createWeb3User, w3connect } from '../utils/Auth';
 import { USER_TYPE } from '../utils/DaoService';
@@ -63,7 +64,9 @@ const StoreInit = ({ children }) => {
               txProcessor.forceUpdate =
                 txProcessor.getTxPendingList(user.username).length > 0;
 
-              dispatch({ type: 'setUser', payload: user });
+              const profile = await getProfile(user.username);
+              dispatch({ type: 'setUser', payload: { ...user, ...profile } });
+
               dispatch({ type: 'setTxProcessor', paylod: txProcessor });
 
               web3.eth.subscribe('newBlockHeaders', async (error, result) => {
@@ -98,8 +101,10 @@ const StoreInit = ({ children }) => {
     };
 
     initCurrentUser();
+    // needs more testing to see when/what else needs to trigger initCurrentUser
+    // }, [state.web3, state.user]);
     // eslint-disable-next-line
-  }, [state.web3, state.user]);
+  }, []);
 
   return (
     <LoaderContext.Provider value={[loading, setLoading]}>

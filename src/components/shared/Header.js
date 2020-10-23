@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from 'react';
-import { Text, Flex } from '@chakra-ui/core';
+import { Text, Flex, Button, Link, Spinner } from '@chakra-ui/core';
 import { useLocation } from 'react-router-dom';
 import { PokemolContext } from '../../contexts/PokemolContext';
 import { Web3SignIn } from './Web3SignIn';
@@ -22,15 +22,22 @@ const Header = () => {
 
   return (
     <Flex direction="row" justify="space-between" p={6}>
-      <Text fontSize="3xl">{pageTitle}</Text>
+      <Flex direction="row" justify="flex-start">
+        <Text fontSize="3xl">{pageTitle}</Text>
 
-      <Text fontSize="m">{state.network.network}</Text>
+        {state.user ? (
+          <Link href="https://3box.io/hub" isExternal>
+            Edit Profile on 3Box
+          </Link>
+        ) : null}
+      </Flex>
 
-      {state.user ? (
-        <UserAvatar address={state.user.username} />
-      ) : (
-        <Web3SignIn />
-      )}
+      <Flex direction="row" justify="flex-end">
+        <Spinner />
+        <Text fontSize="m">{state.network.network}</Text>
+
+        {state.user ? <UserAvatar user={state.user} /> : <Web3SignIn />}
+      </Flex>
     </Flex>
   );
 };
