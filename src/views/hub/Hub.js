@@ -1,10 +1,14 @@
-import React, { useContext } from 'react';
+import React, { useContext, useState } from 'react';
 import { Button, Box } from '@chakra-ui/core';
 import { PokemolContext } from '../../contexts/PokemolContext';
 import BrandOverride from '../../assets/themes/raidTheme/raidguild__avatar--pink.jpg';
+import { HUB_MEMBERSHIPS } from '../../utils/queries/hub-queries';
+import GraphFetch from '../../components/shared/GraphFetch';
+import MemberDaoList from '../../components/hub/MemberDaoList';
 
 const Hub = () => {
-  const { dispatch } = useContext(PokemolContext);
+  const { state, dispatch } = useContext(PokemolContext);
+  const [memberDaos, setMemberDaos] = useState();
 
   const setTheme = () => {
     dispatch({
@@ -37,6 +41,21 @@ const Hub = () => {
       <p>i am HUB content</p>
       <Button onClick={setTheme}> PRETEND DAO BUTTON</Button>
       <Button onClick={setDefault}> DEFAULT</Button>
+
+      {state.user && state.user.username ? (
+        <GraphFetch
+          query={HUB_MEMBERSHIPS}
+          setRecords={setMemberDaos}
+          entity="members"
+          variables={{ memberAddress: state.user.username }}
+        />
+      ) : null}
+
+      {memberDaos ? (
+        <MemberDaoList
+          daos={memberDaos.members.map((member) => member.moloch)}
+        />
+      ) : null}
     </Box>
   );
 };

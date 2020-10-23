@@ -10,11 +10,7 @@ const Header = () => {
   const { state } = useContext(PokemolContext);
   const [pageTitle, setPageTitle] = useState();
 
-  console.log('state.user', state.user);
-
   useEffect(() => {
-    console.log('location', location);
-
     // move to helper
     switch (location.pathname) {
       case '/': {

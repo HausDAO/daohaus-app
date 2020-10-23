@@ -24,7 +24,6 @@ const UserAvatar = ({ address }) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  console.log('profile', profile);
   return (
     <Flex direction="row" alignItems="center">
       <h3>

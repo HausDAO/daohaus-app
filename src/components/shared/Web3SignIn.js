@@ -7,10 +7,8 @@ import { w3connect, providerOptions } from '../../utils/Auth';
 import { PokemolContext } from '../../contexts/PokemolContext';
 
 export const Web3SignIn = () => {
-  const { state, dispatch } = useContext(PokemolContext);
+  const { dispatch } = useContext(PokemolContext);
   const toast = useToast();
-
-  console.log('state', state);
 
   return (
     <>

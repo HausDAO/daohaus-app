@@ -2,8 +2,8 @@ import React, { useContext } from 'react';
 import { BrowserRouter as Router } from 'react-router-dom';
 import { ThemeProvider, CSSReset } from '@chakra-ui/core';
 import ApolloClient from 'apollo-boost';
-
 import { ApolloProvider } from 'react-apollo';
+
 import { PokemolContext } from './contexts/PokemolContext';
 import { resolvers } from './utils/Resolvers';
 import Routes from './Routes';

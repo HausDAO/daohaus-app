@@ -7,16 +7,21 @@ import { getChainData } from '../utils/chains';
 
 const PokemolContext = React.createContext();
 
+// daodata, dao service, boosts
+// global loading needed?
+// more network info here and the other need to react off that
+// now do we double up data from the graph here
+
 const initialState = {
   user: null,
   dao: null,
   theme: customTheme(),
-  network: 'mainnet',
+  network: getChainData(+process.env.REACT_APP_NETWORK_ID).network,
   txProcessor: null,
   web3: {
     w3c: new Web3Modal({
-      network: getChainData(+process.env.REACT_APP_NETWORK_ID).network, // optional
-      providerOptions, // required
+      network: getChainData(+process.env.REACT_APP_NETWORK_ID).network,
+      providerOptions,
       cacheProvider: true,
     }),
   },
@@ -26,9 +31,6 @@ const reducer = (state, action) => {
   switch (action.type) {
     case 'setUser': {
       return { ...state, user: action.payload };
-    }
-    case 'clearUser': {
-      return { ...state, user: initialState.user };
     }
     case 'setTheme': {
       return { ...state, theme: customTheme(action.payload) };
@@ -41,6 +43,9 @@ const reducer = (state, action) => {
     }
     case 'setTxProcessor': {
       return { ...state, txProcessor: action.payload };
+    }
+    case 'setDao': {
+      return { ...state, dao: action.payload };
     }
     default: {
       return initialState;
