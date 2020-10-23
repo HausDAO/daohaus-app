@@ -6,6 +6,7 @@ import BrandOverride from '../../assets/themes/raidTheme/raidguild__avatar--pink
 import { HUB_MEMBERSHIPS } from '../../utils/apollo/hub-queries';
 import GraphFetch from '../../components/shared/GraphFetch';
 import MemberDaoList from '../../components/hub/MemberDaoList';
+import HubSignedOut from '../../components/hub/HubSignedOut';
 
 const Hub = () => {
   const { state, dispatch } = useContext(PokemolContext);
@@ -43,45 +44,52 @@ const Hub = () => {
         <Button onClick={setTheme}> PRETEND DAO BUTTON</Button>
         <Button onClick={setDefault}> DEFAULT</Button>
       </Flex>
-      <Grid gap={6} templateColumns="repeat(2, 1fr)">
-        <Box
-          rounded="lg"
-          bg="blackAlpha.600"
-          borderWidth="1px"
-          borderColor="whiteAlpha.200"
-          p={6}
-          mt={6}
-          w="100%"
-        >
-          <Text fontSize="xl">Username.eth</Text>
-        </Box>
-        <Box
-          rounded="lg"
-          bg="blackAlpha.600"
-          borderWidth="1px"
-          borderColor="whiteAlpha.200"
-          p={6}
-          mt={6}
-          w="100%"
-        >
-          <Text fontSize="xl">Recent Activity</Text>
-        </Box>
-      </Grid>
 
-      {state.user && state.user.username ? (
-        <GraphFetch
-          query={HUB_MEMBERSHIPS}
-          setRecords={setMemberDaos}
-          entity="members"
-          variables={{ memberAddress: state.user.username }}
-        />
-      ) : null}
+      {state.user ? (
+        <>
+          <Grid gap={6} templateColumns="repeat(2, 1fr)">
+            <Box
+              rounded="lg"
+              bg="blackAlpha.600"
+              borderWidth="1px"
+              borderColor="whiteAlpha.200"
+              p={6}
+              mt={6}
+              w="100%"
+            >
+              <Text fontSize="xl">Username.eth</Text>
+            </Box>
+            <Box
+              rounded="lg"
+              bg="blackAlpha.600"
+              borderWidth="1px"
+              borderColor="whiteAlpha.200"
+              p={6}
+              mt={6}
+              w="100%"
+            >
+              <Text fontSize="xl">Recent Activity</Text>
+            </Box>
+          </Grid>
 
-      {memberDaos ? (
-        <MemberDaoList
-          daos={memberDaos.members.map((member) => member.moloch)}
-        />
-      ) : null}
+          {state.user && state.user.username ? (
+            <GraphFetch
+              query={HUB_MEMBERSHIPS}
+              setRecords={setMemberDaos}
+              entity="members"
+              variables={{ memberAddress: state.user.username }}
+            />
+          ) : null}
+
+          {memberDaos ? (
+            <MemberDaoList
+              daos={memberDaos.members.map((member) => member.moloch)}
+            />
+          ) : null}
+        </>
+      ) : (
+        <HubSignedOut />
+      )}
     </Box>
   );
 };

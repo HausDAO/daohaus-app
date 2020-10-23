@@ -41,7 +41,7 @@ export const Web3SignIn = () => {
         }}
       >
         {' '}
-        Sign In With Web3
+        Connect
       </Button>
     </>
   );
