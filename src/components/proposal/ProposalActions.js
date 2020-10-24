@@ -118,7 +118,7 @@ const ProposalActions = ({ client, proposal, history }) => {
                   className="UnlockButton"
                   onClick={() => alert('wrapeth.com')}
                 >
-                  <span>Get some {proposal.moloch.depositToken.symbol}!</span>
+                  <span>Get {proposal.moloch.proposalDeposit / 10 ** 18} {proposal.moloch.depositToken.symbol}!</span>
                 </button>
               )}
             </>
