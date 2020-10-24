@@ -7,6 +7,7 @@ import { HUB_MEMBERSHIPS } from '../../utils/apollo/hub-queries';
 import GraphFetch from '../../components/shared/GraphFetch';
 import MemberDaoList from '../../components/hub/MemberDaoList';
 import HubSignedOut from '../../components/hub/HubSignedOut';
+import HubProfileCard from '../../components/hub/HubProfileCard';
 
 const Hub = () => {
   const { state, dispatch } = useContext(PokemolContext);
@@ -48,7 +49,8 @@ const Hub = () => {
       {state.user ? (
         <>
           <Grid gap={6} templateColumns="repeat(2, 1fr)">
-            <Box
+            <HubProfileCard />
+            {/* <Box
               rounded="lg"
               bg="blackAlpha.600"
               borderWidth="1px"
@@ -58,7 +60,7 @@ const Hub = () => {
               w="100%"
             >
               <Text fontSize="xl">Username.eth</Text>
-            </Box>
+            </Box> */}
             <Box
               rounded="lg"
               bg="blackAlpha.600"
