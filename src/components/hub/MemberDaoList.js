@@ -1,9 +1,7 @@
 import React, { useEffect, useState } from 'react';
+import { Link } from 'react-router-dom';
 import makeBlockie from 'ethereum-blockies-base64';
-
-// import supportedChains from '../../util/chains';
-
-// const chainData = supportedChains[+process.env.REACT_APP_NETWORK_ID];
+import { Avatar, Flex } from '@chakra-ui/core';
 
 const MemberDaoList = ({ daos }) => {
   const [visibleDaos, setVisibleDaos] = useState([]);
@@ -29,21 +27,12 @@ const MemberDaoList = ({ daos }) => {
 
     return (
       <div key={dao.id}>
-        <a
-          // href={`${chainData.pokemol_url}/dao/${dao.id}`}
-          target="_blank"
-          rel="noreferrer noopener"
-        >
-          <div
-            style={{
-              backgroundImage: `url("${makeBlockie(dao.id)}")`,
-            }}
-          >
-            {healthCount ? <span>{healthCount}</span> : null}
-            <p>{dao.title.substr(0, 1)}</p>
-          </div>
+        <Link to={`/dao/${dao.id}`}>
+          <Avatar name={dao.title} src={makeBlockie(dao.id)} />
+          {healthCount ? <span>{healthCount}</span> : null}
+          <p>{dao.title.substr(0, 1)}</p>
           <p>{dao.title}</p>
-        </a>
+        </Link>
       </div>
     );
   };
@@ -80,7 +69,9 @@ const MemberDaoList = ({ daos }) => {
         ) : null}
       </div>
 
-      <div>{visibleDaos.map((dao) => renderDaoAvatar(dao))}</div>
+      <Flex direction="row">
+        {visibleDaos.map((dao) => renderDaoAvatar(dao))}
+      </Flex>
     </div>
   );
 };

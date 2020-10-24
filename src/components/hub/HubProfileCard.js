@@ -8,8 +8,6 @@ import { truncateAddr } from '../../utils/Helpers';
 const HubProfileCard = () => {
   const { state } = useContext(PokemolContext);
 
-  console.log('state', state);
-
   return (
     <Box
       rounded="lg"
