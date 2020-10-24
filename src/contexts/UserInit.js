@@ -1,4 +1,4 @@
-import React, { useState, useEffect, createContext, useContext } from 'react';
+import React, { useEffect, useContext } from 'react';
 import { useToast } from '@chakra-ui/core';
 import { getProfile } from '3box/lib/api';
 
@@ -7,11 +7,9 @@ import { USER_TYPE } from '../utils/DaoService';
 import { TxProcessorService } from '../utils/TxProcessorService';
 import { PokemolContext } from './PokemolContext';
 
-export const LoaderContext = createContext(false);
-const StoreInit = ({ children }) => {
+const UserInit = () => {
   const toast = useToast();
   const { state, dispatch } = useContext(PokemolContext);
-  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     const initCurrentUser = async () => {
@@ -106,11 +104,7 @@ const StoreInit = ({ children }) => {
     // eslint-disable-next-line
   }, []);
 
-  return (
-    <LoaderContext.Provider value={[loading, setLoading]}>
-      {children}
-    </LoaderContext.Provider>
-  );
+  return <></>;
 };
 
-export default StoreInit;
+export default UserInit;

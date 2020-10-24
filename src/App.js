@@ -9,7 +9,8 @@ import { resolvers } from './utils/apollo/resolvers';
 import Routes from './Routes';
 import Layout from './components/layout/Layout';
 import supportedChains from './utils/chains';
-import StoreInit from './contexts/StoreInit';
+import UserInit from './contexts/UserInit';
+import DaoInit from './contexts/DaoInit';
 
 // how would we toggle this? or just reload client in fetch components?
 const chainData = supportedChains[+process.env.REACT_APP_NETWORK_ID];
@@ -27,14 +28,14 @@ const App = () => {
   return (
     <ApolloProvider client={client}>
       <ThemeProvider theme={state.theme}>
-        <StoreInit>
-          <CSSReset />
-          <Router>
-            <Layout>
-              <Routes />
-            </Layout>
-          </Router>
-        </StoreInit>
+        <CSSReset />
+        <Router>
+          <UserInit />
+          <DaoInit />
+          <Layout>
+            <Routes />
+          </Layout>
+        </Router>
       </ThemeProvider>
     </ApolloProvider>
   );
