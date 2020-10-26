@@ -1,7 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import makeBlockie from 'ethereum-blockies-base64';
-import { Avatar, Box, Flex, Link as ChLink } from '@chakra-ui/core';
+import {
+  Avatar,
+  AvatarBadge,
+  Box,
+  Flex,
+  Link as ChLink,
+} from '@chakra-ui/core';
 
 const MemberDaoList = ({ daos }) => {
   const [visibleDaos, setVisibleDaos] = useState([]);
@@ -15,7 +21,7 @@ const MemberDaoList = ({ daos }) => {
 
   const renderDaoAvatar = (dao) => {
     const recentRages = dao.rageQuits.filter((rage) => {
-      // 1209600000 === 2 weeks
+      // 1209600 === 2 weeks in seconds
       const now = (new Date() / 1000) | 0;
       return +rage.createdAt >= now - 1209600;
     });
@@ -27,9 +33,14 @@ const MemberDaoList = ({ daos }) => {
     return (
       <div key={dao.id}>
         <Link to={`/dao/${dao.id}`}>
-          <Avatar name={dao.title} src={makeBlockie(dao.id)} />
-          {healthCount ? <span>{healthCount}</span> : null}
-          <p>{dao.title.substr(0, 1)}</p>
+          <Avatar name={dao.title.substr(0, 1)} src={makeBlockie(dao.id)}>
+            {healthCount ? (
+              <AvatarBadge size="1.25em" bg="red.500">
+                {healthCount}
+              </AvatarBadge>
+            ) : null}
+          </Avatar>
+
           <p>{dao.title}</p>
         </Link>
       </div>
@@ -55,20 +66,20 @@ const MemberDaoList = ({ daos }) => {
     <Box maxW="500px">
       <h4>Member of {daos.length} DAOs</h4>
 
+      <Flex direction="row" overflowX="scroll">
+        {visibleDaos.map((dao) => renderDaoAvatar(dao))}
+      </Flex>
+
       {canSearch ? (
         <div>
           <input
             type="search"
             className="input"
-            placeholder="Search Daos"
+            placeholder="Search My Daos"
             onChange={(e) => handleChange(e)}
           />
         </div>
       ) : null}
-
-      <Flex direction="row" overflow="scroll">
-        {visibleDaos.map((dao) => renderDaoAvatar(dao))}
-      </Flex>
 
       <ChLink href="https://daohaus.club" isExternal>
         Explore more daos on daohaus

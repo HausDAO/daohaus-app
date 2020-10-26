@@ -154,8 +154,8 @@ export function useWeb3() {
 }
 
 export function useTxProcessor() {
-  const [state, { updateTxProcssor }] = usePokemolContext();
-  return [state.txProcessor, updateTxProcssor];
+  const [state, { updateTxProcessor }] = usePokemolContext();
+  return [state.txProcessor, updateTxProcessor];
 }
 
 export function useUserWallet() {

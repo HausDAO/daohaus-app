@@ -5,6 +5,9 @@ import { get } from '../utils/Requests';
 
 import { useWeb3, useLoading, useUser, useDao } from './PokemolContext';
 
+// TODO - need to get the metadata query in here = but mahybe store in the context
+// proposal status field in apollo resolvers use this - rework that
+
 const DaoInit = () => {
   const location = useLocation();
   const [, updateDao] = useDao();
