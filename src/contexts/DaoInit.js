@@ -1,13 +1,25 @@
-import React, { useContext, useEffect } from 'react';
+import { sortedLastIndexOf } from 'lodash';
+import React, { useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
 import { DaoService } from '../utils/DaoService';
 import { get } from '../utils/Requests';
 
-import { PokemolContext } from './PokemolContext';
+import {
+  useClearDao,
+  useWeb3,
+  useLoading,
+  useUser,
+  useDaoData,
+} from './PokemolContext';
 
 const DaoInit = () => {
   const location = useLocation();
-  const { state, dispatch } = useContext(PokemolContext);
+  // const { state, dispatch } = useContext(PokemolContext);
+  const [, updateDao] = useDaoData();
+  const clearDao = useClearDao();
+  const [web3] = useWeb3();
+  const [, updateLoading] = useLoading();
+  const [user] = useUser();
 
   useEffect(() => {
     var pathname = location.pathname.split('/');
@@ -19,14 +31,14 @@ const DaoInit = () => {
     if (validParam) {
       initDao(daoParam);
     } else {
-      dispatch({ type: 'clearDao' });
+      clearDao();
     }
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [location, state.web3]);
+  }, [location, web3]);
 
   const initDao = async (daoParam) => {
-    dispatch({ type: 'setLoading', payload: true });
+    updateLoading(true);
     console.log('INIT ', daoParam);
 
     let daoRes;
@@ -36,16 +48,16 @@ const DaoInit = () => {
       console.log('api fetch error', daoParam);
     }
 
-    console.log('state.web3', state.web3);
+    console.log('web3', web3);
 
     const version = daoRes ? daoRes.data.version : '1';
 
-    // TODO: test does useeffect need state.user too?
+    // TODO: test does useeffect need user too?
     const daoService =
-      state.user && state.web3.provider
+      user && web3.provider
         ? await DaoService.instantiateWithWeb3(
-            state.user.username,
-            state.web3.provider,
+            user.username,
+            web3.provider,
             daoParam,
             version,
           )
@@ -67,16 +79,13 @@ const DaoInit = () => {
 
     // TODO: what all do we want on this and where else will we set it?
 
-    dispatch({
-      type: 'setDao',
-      payload: {
-        address: daoParam,
-        apiMeta: daoRes ? daoRes.data : null,
-        daoService: daoService,
-        boosts,
-      },
+    updateDao({
+      address: daoParam,
+      apiMeta: daoRes ? daoRes.data : null,
+      daoService: daoService,
+      boosts,
     });
-    dispatch({ type: 'setLoading', payload: false });
+    updateLoading(false);
   };
 
   return <></>;
