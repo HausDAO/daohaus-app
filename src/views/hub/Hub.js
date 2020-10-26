@@ -4,10 +4,11 @@ import { Button, Box, Flex, Text, Grid } from '@chakra-ui/core';
 import { PokemolContext } from '../../contexts/PokemolContext';
 import BrandOverride from '../../assets/themes/raidTheme/raidguild__avatar--pink.jpg';
 import { HUB_MEMBERSHIPS } from '../../utils/apollo/hub-queries';
-import GraphFetch from '../../components/shared/GraphFetch';
-import MemberDaoList from '../../components/hub/MemberDaoList';
-import HubSignedOut from '../../components/hub/HubSignedOut';
-import HubProfileCard from '../../components/hub/HubProfileCard';
+import GraphFetch from '../../components/Shared/GraphFetch';
+import MemberDaoList from '../../components/Hub/MemberDaoList';
+import HubSignedOut from '../../components/Hub/HubSignedOut';
+import HubProfileCard from '../../components/Hub/HubProfileCard';
+import HubActivityFeed from '../../components/Hub/HubActivityFeed';
 
 const Hub = () => {
   const { state, dispatch } = useContext(PokemolContext);
@@ -49,8 +50,7 @@ const Hub = () => {
       {state.user ? (
         <>
           <Grid gap={6} templateColumns="repeat(2, 1fr)">
-            <HubProfileCard />
-            {/* <Box
+            <Box
               rounded="lg"
               bg="blackAlpha.600"
               borderWidth="1px"
@@ -59,8 +59,15 @@ const Hub = () => {
               mt={6}
               w="100%"
             >
-              <Text fontSize="xl">Username.eth</Text>
-            </Box> */}
+              <HubProfileCard />
+
+              {memberDaos ? (
+                <MemberDaoList
+                  daos={memberDaos.members.map((member) => member.moloch)}
+                />
+              ) : null}
+            </Box>
+
             <Box
               rounded="lg"
               bg="blackAlpha.600"
@@ -71,23 +78,20 @@ const Hub = () => {
               w="100%"
             >
               <Text fontSize="xl">Recent Activity</Text>
+              {memberDaos ? (
+                <HubActivityFeed
+                  daos={memberDaos.members.map((member) => member.moloch)}
+                />
+              ) : null}
             </Box>
           </Grid>
 
-          {state.user && state.user.username ? (
-            <GraphFetch
-              query={HUB_MEMBERSHIPS}
-              setRecords={setMemberDaos}
-              entity="members"
-              variables={{ memberAddress: state.user.username }}
-            />
-          ) : null}
-
-          {memberDaos ? (
-            <MemberDaoList
-              daos={memberDaos.members.map((member) => member.moloch)}
-            />
-          ) : null}
+          <GraphFetch
+            query={HUB_MEMBERSHIPS}
+            setRecords={setMemberDaos}
+            entity="members"
+            variables={{ memberAddress: state.user.username }}
+          />
         </>
       ) : (
         <HubSignedOut />

@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import makeBlockie from 'ethereum-blockies-base64';
-import { Avatar, Flex } from '@chakra-ui/core';
+import { Avatar, Box, Flex, Link as ChLink } from '@chakra-ui/core';
 
 const MemberDaoList = ({ daos }) => {
   const [visibleDaos, setVisibleDaos] = useState([]);
@@ -20,8 +20,7 @@ const MemberDaoList = ({ daos }) => {
       return +rage.createdAt >= now - 1209600;
     });
     const recentProposals = dao.proposals.filter((prop) => {
-      // return prop.activityFeed.unread;
-      return true;
+      return prop.activityFeed.unread;
     });
     const healthCount = recentRages.length + recentProposals.length;
 
@@ -53,26 +52,28 @@ const MemberDaoList = ({ daos }) => {
   const canSearch = daos.length > 5;
 
   return (
-    <div>
-      <div>
-        <h4>Member of {daos.length} DAOs</h4>
+    <Box maxW="500px">
+      <h4>Member of {daos.length} DAOs</h4>
 
-        {canSearch ? (
-          <div>
-            <input
-              type="search"
-              className="input"
-              placeholder="Search Daos"
-              onChange={(e) => handleChange(e)}
-            />
-          </div>
-        ) : null}
-      </div>
+      {canSearch ? (
+        <div>
+          <input
+            type="search"
+            className="input"
+            placeholder="Search Daos"
+            onChange={(e) => handleChange(e)}
+          />
+        </div>
+      ) : null}
 
-      <Flex direction="row">
+      <Flex direction="row" overflow="scroll">
         {visibleDaos.map((dao) => renderDaoAvatar(dao))}
       </Flex>
-    </div>
+
+      <ChLink href="https://daohaus.club" isExternal>
+        Explore more daos on daohaus
+      </ChLink>
+    </Box>
   );
 };
 

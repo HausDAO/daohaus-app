@@ -2,7 +2,7 @@ import React, { useContext, useEffect } from 'react';
 import { useQuery } from '@apollo/react-hooks';
 
 import { PokemolContext } from '../../contexts/PokemolContext';
-import Loading from '../shared/Loading';
+import Loading from '../Shared/Loading';
 import { networkClients } from '../../utils/apollo/clients';
 
 const GraphFetchMore = ({

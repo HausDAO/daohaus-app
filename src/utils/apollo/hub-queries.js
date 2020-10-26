@@ -28,7 +28,10 @@ export const HUB_MEMBERSHIPS = gql`
           gracePeriodEnds
           molochAddress
           molochVersion
-
+          proposalType @client
+          description @client
+          title @client
+          activityFeed @client
           votes(where: { memberAddress: $memberAddress }) {
             id
             memberAddress
@@ -46,7 +49,3 @@ export const HUB_MEMBERSHIPS = gql`
     }
   }
 `;
-// proposalType @client
-// description @client
-// title @client
-// activityFeed @client

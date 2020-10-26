@@ -9,15 +9,7 @@ const HubProfileCard = () => {
   const { state } = useContext(PokemolContext);
 
   return (
-    <Box
-      rounded="lg"
-      bg="blackAlpha.600"
-      borderWidth="1px"
-      borderColor="whiteAlpha.200"
-      p={6}
-      mt={6}
-      w="100%"
-    >
+    <>
       <Flex direction="row" alignItems="center">
         {state.user.image && state.user.image[0] ? (
           <Box
@@ -57,7 +49,7 @@ const HubProfileCard = () => {
         </Flex>
       </Flex>
       <Text fontSize="m">{state.user.description}</Text>
-    </Box>
+    </>
   );
 };
 

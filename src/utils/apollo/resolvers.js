@@ -7,6 +7,8 @@ import {
   inQueue,
   passedVotingAndGrace,
   determineProposalType,
+  descriptionMaker,
+  titleMaker,
 } from '../ProposalHelper';
 import { TokenService } from '../TokenService';
 import { McDaoService } from '../McDaoService';
@@ -99,6 +101,39 @@ export const resolvers = {
     },
     proposalType: (proposal, _args, { cache }) => {
       return determineProposalType(proposal);
+    },
+    title: (proposal) => {
+      return titleMaker(proposal);
+    },
+    description: (proposal) => {
+      return descriptionMaker(proposal);
+    },
+    activityFeed: (proposal) => {
+      const abortedOrCancelled = proposal.aborted || proposal.cancelled;
+      const now = (new Date() / 1000) | 0;
+      const inVotingPeriod =
+        now >= +proposal.votingPeriodStart && now <= +proposal.votingPeriodEnds;
+      const needsMemberVote = inVotingPeriod && !proposal.votes.length;
+      const needsProcessing =
+        now >= +proposal.gracePeriodEnds && !proposal.processed;
+
+      let message;
+      if (!proposal.sponsored) {
+        message = 'New and unsponsored';
+      }
+      if (needsProcessing) {
+        message = 'Unprocessed';
+      }
+      if (needsMemberVote) {
+        message = "You haven't voted on this";
+      }
+
+      return {
+        unread:
+          !abortedOrCancelled &&
+          (needsMemberVote || needsProcessing || !proposal.sponsored),
+        message,
+      };
     },
   },
 

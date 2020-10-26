@@ -12,96 +12,6 @@ const UserInit = () => {
   const { state, dispatch } = useContext(PokemolContext);
 
   useEffect(() => {
-    const initCurrentUser = async () => {
-      dispatch({ type: 'setLoading', payload: true });
-      let loginType = localStorage.getItem('loginType') || USER_TYPE.READ_ONLY;
-      if (state.user && state.user.type === loginType) {
-        return;
-      }
-
-      if (state.web3.w3c.cachedProvider) {
-        loginType = USER_TYPE.WEB3;
-      }
-
-      let user;
-      let txProcessor;
-      let providerConnect;
-      try {
-        console.log(`Initializing user type: ${loginType || 'read-only'}`);
-
-        switch (loginType) {
-          case USER_TYPE.WEB3: {
-            if (state.web3.w3c.cachedProvider) {
-              try {
-                providerConnect = await w3connect(state.web3);
-              } catch (err) {
-                console.log(err);
-
-                toast({
-                  title: 'Wrong Network',
-                  position: 'top-right',
-                  description: err.msg,
-                  status: 'warning',
-                  duration: 9000,
-                  isClosable: true,
-                });
-              }
-
-              // error here - is it expected?
-              const { w3c, web3, provider } = providerConnect;
-              const [account] = await web3.eth.getAccounts();
-
-              dispatch({
-                type: 'setWeb3',
-                payload: { w3c, web3, provider },
-              });
-
-              user = createWeb3User(account);
-
-              // TODO: do we want this in it's own INIT?
-              txProcessor = new TxProcessorService(web3);
-              txProcessor.update(user.username);
-              txProcessor.forceUpdate =
-                txProcessor.getTxPendingList(user.username).length > 0;
-
-              const profile = await getProfile(user.username);
-              dispatch({ type: 'setUser', payload: { ...user, ...profile } });
-
-              dispatch({ type: 'setTxProcessor', paylod: txProcessor });
-
-              web3.eth.subscribe('newBlockHeaders', async (error, result) => {
-                if (!error) {
-                  if (txProcessor.forceUpdate) {
-                    await txProcessor.update(user.username);
-
-                    if (!txProcessor.getTxPendingList(user.username).length) {
-                      txProcessor.forceUpdate = false;
-                    }
-
-                    dispatch({ type: 'setTxProcessor', paylod: txProcessor });
-                  }
-                }
-              });
-            }
-            break;
-          }
-          case USER_TYPE.READ_ONLY:
-          default:
-            break;
-        }
-
-        localStorage.setItem('loginType', loginType);
-      } catch (e) {
-        console.error(
-          `Could not log in with loginType ${loginType}: ${e.toString()}`,
-        );
-
-        localStorage.setItem('loginType', '');
-      }
-
-      dispatch({ type: 'setLoading', payload: false });
-    };
-
     initCurrentUser();
     // TODO: needs more testing to see when/what else needs to trigger initCurrentUser
     // }, [state.web3, state.user]);
@@ -109,21 +19,103 @@ const UserInit = () => {
   }, []);
 
   useEffect(() => {
-    if (!state.dao || !state.dao.daoService) {
-      console.log(`DaoService not initialized yet`);
-      return;
-    }
-
-    if (!state.user || state.user.type === USER_TYPE.READ_ONLY) {
-      console.log(`read only user`);
+    const noDaoService = !state.dao || !state.dao.daoService;
+    const notSignedIn = !state.user || state.user.type === USER_TYPE.READ_ONLY;
+    if (noDaoService || notSignedIn) {
       return;
     }
 
     userSetup();
   }, [state.dao, state.user]);
 
+  const initCurrentUser = async () => {
+    let loginType = localStorage.getItem('loginType') || USER_TYPE.READ_ONLY;
+    if (state.user && state.user.type === loginType) {
+      return;
+    }
+
+    if (state.web3.w3c.cachedProvider) {
+      loginType = USER_TYPE.WEB3;
+    }
+
+    let user;
+    let txProcessor;
+    let providerConnect;
+    try {
+      console.log(`Initializing user type: ${loginType || 'read-only'}`);
+
+      switch (loginType) {
+        case USER_TYPE.WEB3: {
+          if (state.web3.w3c.cachedProvider) {
+            try {
+              providerConnect = await w3connect(state.web3);
+            } catch (err) {
+              console.log(err);
+
+              toast({
+                title: 'Wrong Network',
+                position: 'top-right',
+                description: err.msg,
+                status: 'warning',
+                duration: 9000,
+                isClosable: true,
+              });
+            }
+
+            // error here - is it expected?
+            const { w3c, web3, provider } = providerConnect;
+            const [account] = await web3.eth.getAccounts();
+
+            dispatch({
+              type: 'setWeb3',
+              payload: { w3c, web3, provider },
+            });
+
+            user = createWeb3User(account);
+
+            // TODO: do we want this in it's own INIT?
+            txProcessor = new TxProcessorService(web3);
+            txProcessor.update(user.username);
+            txProcessor.forceUpdate =
+              txProcessor.getTxPendingList(user.username).length > 0;
+
+            const profile = await getProfile(user.username);
+            dispatch({ type: 'setUser', payload: { ...user, ...profile } });
+
+            dispatch({ type: 'setTxProcessor', paylod: txProcessor });
+
+            web3.eth.subscribe('newBlockHeaders', async (error, result) => {
+              if (!error) {
+                if (txProcessor.forceUpdate) {
+                  await txProcessor.update(user.username);
+
+                  if (!txProcessor.getTxPendingList(user.username).length) {
+                    txProcessor.forceUpdate = false;
+                  }
+
+                  dispatch({ type: 'setTxProcessor', paylod: txProcessor });
+                }
+              }
+            });
+          }
+          break;
+        }
+        case USER_TYPE.READ_ONLY:
+        default:
+          break;
+      }
+
+      localStorage.setItem('loginType', loginType);
+    } catch (e) {
+      console.error(
+        `Could not log in with loginType ${loginType}: ${e.toString()}`,
+      );
+
+      localStorage.setItem('loginType', '');
+    }
+  };
+
   const userSetup = async () => {
-    dispatch({ type: 'setLoading', payload: true });
     const addrByDelegateKey = await state.dao.daoService.mcDao.memberAddressByDelegateKey(
       state.user.username,
     );
@@ -159,7 +151,6 @@ const UserInit = () => {
 
     // TODO: Do we still need all these - see if we can get elsewhere and store on user entity in state
     dispatch({ type: 'setUserWallet', payload: wallet });
-    dispatch({ type: 'setLoading', payload: false });
   };
 
   return <></>;

@@ -49,6 +49,9 @@ const reducer = (state, action) => {
     case 'setDao': {
       return { ...state, dao: action.payload };
     }
+    case 'clearDao': {
+      return { ...state, dao: initialState.dao, theme: customTheme() };
+    }
     case 'setUserWallet': {
       return { ...state, userWallet: action.payload };
     }

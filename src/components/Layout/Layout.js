@@ -1,8 +1,8 @@
 import React, { useContext, useState } from 'react';
 import { Flex, Box, Image } from '@chakra-ui/core';
 
-import Header from '../shared/Header';
-import SideNav from '../shared/SideNav';
+import Header from '../Shared/Header';
+import SideNav from '../Shared/SideNav';
 import { PokemolContext } from '../../contexts/PokemolContext';
 
 const Layout = ({ children }) => {

@@ -4,8 +4,8 @@ import { useQuery } from '@apollo/react-hooks';
 
 import { GET_PROPOSAL } from '../../utils/Queries';
 import ProposalDetail from '../../components/proposal/ProposalDetail';
-import ErrorMessage from '../../components/shared/ErrorMessage';
-import Loading from '../../components/shared/Loading';
+import ErrorMessage from '../../components/Shared/ErrorMessage';
+import Loading from '../../components/Shared/Loading';
 
 import {
   LoaderContext,

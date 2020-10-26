@@ -18,6 +18,8 @@ const DaoInit = () => {
 
     if (validParam) {
       initDao(daoParam);
+    } else {
+      dispatch({ type: 'clearDao' });
     }
 
     // eslint-disable-next-line react-hooks/exhaustive-deps

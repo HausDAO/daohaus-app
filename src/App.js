@@ -7,7 +7,7 @@ import { ApolloProvider } from 'react-apollo';
 import { PokemolContext } from './contexts/PokemolContext';
 import { resolvers } from './utils/apollo/resolvers';
 import Routes from './Routes';
-import Layout from './components/layout/Layout';
+import Layout from './components/Layout/Layout';
 import supportedChains from './utils/chains';
 import UserInit from './contexts/UserInit';
 import DaoInit from './contexts/DaoInit';

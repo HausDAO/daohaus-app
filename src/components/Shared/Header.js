@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from 'react';
-import { Text, Flex, Button, Link, Spinner } from '@chakra-ui/core';
+import { Text, Flex, Link, Spinner } from '@chakra-ui/core';
 import { useLocation } from 'react-router-dom';
 import { PokemolContext } from '../../contexts/PokemolContext';
 import { Web3SignIn } from './Web3SignIn';
@@ -11,14 +11,14 @@ const Header = () => {
   const [pageTitle, setPageTitle] = useState();
 
   useEffect(() => {
-    // move to helper
-    switch (location.pathname) {
-      case '/': {
-        setPageTitle('Hub');
-      }
+    if (location.pathname === '/') {
+      setPageTitle('Hub');
+    } else {
+      // TODO pull from graph data
+      setPageTitle(state.dao?.apiMeta.name);
     }
     // eslint-disable-next-line
-  }, [location]);
+  }, [location, state.dao]);
 
   return (
     <Flex direction="row" justify="space-between" p={6}>
