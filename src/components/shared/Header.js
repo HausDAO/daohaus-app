@@ -7,8 +7,8 @@ import UserAvatar from './UserAvatar';
 
 const Header = () => {
   const location = useLocation();
-  const user = useUser();
-  const network = useNetwork()
+  const [user] = useUser();
+  const [network] = useNetwork();
   const [pageTitle, setPageTitle] = useState();
 
   useEffect(() => {

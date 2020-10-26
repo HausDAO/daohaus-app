@@ -4,7 +4,7 @@ import { useDaoData } from '../../contexts/PokemolContext';
 
 const Dao = () => {
   const location = useLocation();
-  const dao = useDaoData();
+  const [dao] = useDaoData();
   console.log('location', location);
   console.log('dao', dao);
   return <div>Dao</div>;

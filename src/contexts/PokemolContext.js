@@ -1,7 +1,12 @@
-import React, { useContext, useMemo, useCallback } from 'react';
+import React, { useEffect, useContext, useMemo, useCallback } from 'react';
 import Web3Modal from 'web3modal';
 
-import { providerOptions } from '../utils/Auth';
+import { useToast } from '@chakra-ui/core';
+import { getProfile } from '3box/lib/api';
+
+import { createWeb3User, w3connect, providerOptions } from '../utils/Auth';
+import { USER_TYPE } from '../utils/DaoService';
+import { TxProcessorService } from '../utils/TxProcessorService';
 import { customTheme } from '../themes/theme';
 import supportedChains, { getChainData } from '../utils/chains';
 
@@ -84,7 +89,7 @@ function PokemolContextProvider({ children }) {
     dispatch({ type: 'setNetwork', payload: network });
   }, []);
 
-  const updateTxProcssor = useCallback((tx) => {
+  const updateTxProcessor = useCallback((tx) => {
     dispatch({ type: 'setTxProcessor', payload: tx });
   }, []);
 
@@ -99,7 +104,7 @@ function PokemolContextProvider({ children }) {
             updateTheme,
             updateWeb3,
             updateNetwork,
-            updateTxProcssor,
+            updateTxProcessor,
           },
         ],
         [
@@ -109,13 +114,113 @@ function PokemolContextProvider({ children }) {
           updateTheme,
           updateWeb3,
           updateNetwork,
-          updateTxProcssor,
+          updateTxProcessor,
         ],
       )}
     >
       {children}
     </PokemolContext.Provider>
   );
+}
+
+export function Updater() {
+  const toast = useToast();
+  const [
+    { user, web3 },
+    { updateTxProcessor, updateWeb3, updateUser },
+  ] = usePokemolContext();
+
+  // on account change, fetch all quests from firebase and save them in context
+  useEffect(() => {
+    async function getAccount(_user, _web3) {
+      let loginType = localStorage.getItem('loginType') || USER_TYPE.READ_ONLY;
+      if (_user && _user.type === loginType) {
+        return;
+      }
+
+      if (web3.w3c.cachedProvider) {
+        loginType = USER_TYPE.WEB3;
+      }
+
+      let user;
+      let txProcessor;
+      let providerConnect;
+      try {
+        console.log(`Initializing user type: ${loginType || 'read-only'}`);
+
+        switch (loginType) {
+          case USER_TYPE.WEB3: {
+            if (web3.w3c.cachedProvider) {
+              try {
+                providerConnect = await w3connect(_web3);
+              } catch (err) {
+                console.log(err);
+
+                toast({
+                  title: 'Wrong Network',
+                  position: 'top-right',
+                  description: err.msg,
+                  status: 'warning',
+                  duration: 9000,
+                  isClosable: true,
+                });
+              }
+
+              // error here - is it expected?
+              const { w3c, web3, provider } = providerConnect;
+              const [account] = await web3.eth.getAccounts();
+
+              updateWeb3({ w3c, web3, provider });
+
+              user = createWeb3User(account);
+
+              txProcessor = new TxProcessorService(web3);
+              txProcessor.update(user.username);
+              txProcessor.forceUpdate =
+                txProcessor.getTxPendingList(user.username).length > 0;
+
+              const profile = await getProfile(user.username);
+              updateUser({ ...user, ...profile });
+
+              updateTxProcessor(txProcessor);
+
+              web3.eth.subscribe('newBlockHeaders', async (error, result) => {
+                if (!error) {
+                  if (txProcessor.forceUpdate) {
+                    await txProcessor.update(user.username);
+
+                    if (!txProcessor.getTxPendingList(user.username).length) {
+                      txProcessor.forceUpdate = false;
+                    }
+
+                    updateTxProcessor(txProcessor);
+                  }
+                }
+              });
+            }
+            break;
+          }
+          case USER_TYPE.READ_ONLY:
+          default:
+            break;
+        }
+
+        localStorage.setItem('loginType', loginType);
+      } catch (e) {
+        console.error(
+          `Could not log in with loginType ${loginType}: ${e.toString()}`,
+        );
+
+        localStorage.setItem('loginType', '');
+      }
+    }
+    // console.log(account);
+    if (user) {
+      getAccount(user);
+    }
+  }, [user]);
+
+  return null;
 }
 
 export function useUser() {

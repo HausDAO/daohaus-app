@@ -7,7 +7,7 @@ import { useTheme } from '../../contexts/PokemolContext';
 
 const Layout = ({ children }) => {
   const [show, setShow] = useState(false);
-  const theme = useTheme();
+  const [theme] = useTheme();
 
   const handleToggle = () => setShow(!show);
 

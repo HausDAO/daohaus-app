@@ -11,7 +11,7 @@ export const LoaderContext = createContext(false);
 const StoreInit = ({ children }) => {
   const toast = useToast();
   const [web3, updateWeb3] = useWeb3();
-  const [, updateUser] = useUser();
+  const [user, updateUser] = useUser();
   const [, updateTxProcessor] = useTxProcessor();
   const [loading, setLoading] = useState(false);
 
