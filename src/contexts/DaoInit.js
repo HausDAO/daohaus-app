@@ -24,6 +24,7 @@ const DaoInit = () => {
   }, [location, state.web3]);
 
   const initDao = async (daoParam) => {
+    dispatch({ type: 'setLoading', payload: true });
     console.log('INIT ', daoParam);
 
     let daoRes;
@@ -73,6 +74,7 @@ const DaoInit = () => {
         boosts,
       },
     });
+    dispatch({ type: 'setLoading', payload: false });
   };
 
   return <></>;

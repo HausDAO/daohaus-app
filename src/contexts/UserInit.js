@@ -13,6 +13,7 @@ const UserInit = () => {
 
   useEffect(() => {
     const initCurrentUser = async () => {
+      dispatch({ type: 'setLoading', payload: true });
       let loginType = localStorage.getItem('loginType') || USER_TYPE.READ_ONLY;
       if (state.user && state.user.type === loginType) {
         return;
@@ -97,6 +98,8 @@ const UserInit = () => {
 
         localStorage.setItem('loginType', '');
       }
+
+      dispatch({ type: 'setLoading', payload: false });
     };
 
     initCurrentUser();
@@ -120,6 +123,7 @@ const UserInit = () => {
   }, [state.dao, state.user]);
 
   const userSetup = async () => {
+    dispatch({ type: 'setLoading', payload: true });
     const addrByDelegateKey = await state.dao.daoService.mcDao.memberAddressByDelegateKey(
       state.user.username,
     );
@@ -155,6 +159,7 @@ const UserInit = () => {
 
     // TODO: Do we still need all these - see if we can get elsewhere and store on user entity in state
     dispatch({ type: 'setUserWallet', payload: wallet });
+    dispatch({ type: 'setLoading', payload: false });
   };
 
   return <></>;

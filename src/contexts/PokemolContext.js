@@ -10,6 +10,7 @@ const PokemolContext = React.createContext();
 // global loading needed?
 
 const initialState = {
+  loading: false,
   user: null,
   dao: null,
   theme: customTheme(),
@@ -27,6 +28,9 @@ const initialState = {
 
 const reducer = (state, action) => {
   switch (action.type) {
+    case 'setLoading': {
+      return { ...state, loading: action.payload };
+    }
     case 'setUser': {
       return { ...state, user: action.payload };
     }
