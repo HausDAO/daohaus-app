@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useContext, useMemo, useCallback } from 'react';
 import Web3Modal from 'web3modal';
 
 import { providerOptions } from '../utils/Auth';
@@ -6,6 +6,10 @@ import { customTheme } from '../themes/theme';
 import supportedChains, { getChainData } from '../utils/chains';
 
 const PokemolContext = React.createContext();
+
+function usePokemolContext() {
+  return useContext(PokemolContext);
+}
 
 // daodata, dao service, boosts
 // global loading needed?
@@ -47,21 +51,101 @@ const reducer = (state, action) => {
     case 'setDao': {
       return { ...state, dao: action.payload };
     }
+    case 'setNetwork': {
+      return { ...state, network: action.payload };
+    }
     default: {
       return initialState;
     }
   }
 };
 
-function PokemolContextProvider(props) {
+function PokemolContextProvider({ children }) {
   const [state, dispatch] = React.useReducer(reducer, initialState);
-  const value = { state, dispatch };
+  // const value = { state, dispatch };
+
+  const updateUser = useCallback((user) => {
+    dispatch({ type: 'setUser', payload: user });
+  }, []);
+
+  const updateDaoData = useCallback((dao) => {
+    dispatch({ type: 'setDao', payload: dao });
+  }, []);
+
+  const updateTheme = useCallback((theme) => {
+    dispatch({ type: 'setTheme', payload: theme });
+  }, []);
+
+  const updateWeb3 = useCallback((data) => {
+    dispatch({ type: 'setWeb3', payload: data });
+  }, []);
+
+  const updateNetwork = useCallback((network) => {
+    dispatch({ type: 'setNetwork', payload: network });
+  }, []);
+
+  const updateTxProcssor = useCallback((tx) => {
+    dispatch({ type: 'setTxProcessor', payload: tx });
+  }, []);
 
   return (
-    <PokemolContext.Provider value={value}>
-      {props.children}
+    <PokemolContext.Provider
+      value={useMemo(
+        () => [
+          state,
+          {
+            updateUser,
+            updateDaoData,
+            updateTheme,
+            updateWeb3,
+            updateNetwork,
+            updateTxProcssor,
+          },
+        ],
+        [
+          state,
+          updateUser,
+          updateDaoData,
+          updateTheme,
+          updateWeb3,
+          updateNetwork,
+          updateTxProcssor,
+        ],
+      )}
+    >
+      {children}
     </PokemolContext.Provider>
   );
+}
+
+export function useUser() {
+  const [state, { updateUser }] = usePokemolContext();
+  return [state.user, updateUser];
+}
+
+export function useDaoData() {
+  const [state, { updateDaoData }] = usePokemolContext();
+  return [state.dao, updateDaoData];
+}
+
+export function useTheme() {
+  const [state, { updateTheme }] = usePokemolContext();
+  return [state.theme, updateTheme];
+}
+
+export function useNetwork() {
+  const [state, { updateNetwork }] = usePokemolContext();
+  return [state.network, updateNetwork];
+}
+
+export function useWeb3() {
+  const [state, { updateWeb3 }] = usePokemolContext();
+  return [state.web3, updateWeb3];
+}
+
+export function useTxProcessor() {
+  const [state, { updateTxProcssor }] = usePokemolContext();
+  return [state.txProcessor, updateTxProcssor];
 }
 
 const PokemolContextConsumer = PokemolContext.Consumer;

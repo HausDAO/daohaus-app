@@ -4,7 +4,7 @@ import { ThemeProvider, CSSReset } from '@chakra-ui/core';
 import ApolloClient from 'apollo-boost';
 import { ApolloProvider } from 'react-apollo';
 
-import { PokemolContext } from './contexts/PokemolContext';
+import { useTheme } from './contexts/PokemolContext';
 import { resolvers } from './utils/apollo/resolvers';
 import Routes from './Routes';
 import Layout from './components/layout/Layout';
@@ -22,11 +22,12 @@ const client = new ApolloClient({
 });
 
 const App = () => {
-  const { state } = useContext(PokemolContext);
+  const [theme] = useTheme();
+  console.log(theme);
 
   return (
     <ApolloProvider client={client}>
-      <ThemeProvider theme={state.theme}>
+      <ThemeProvider theme={theme}>
         <StoreInit>
           <CSSReset />
           <Router>

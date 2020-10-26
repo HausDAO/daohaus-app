@@ -3,11 +3,11 @@ import { Collapse, Icon, Flex, Box } from '@chakra-ui/core';
 
 import Header from '../shared/Header';
 import SideNav from '../shared/SideNav';
-import { PokemolContext } from '../../contexts/PokemolContext';
+import { useTheme } from '../../contexts/PokemolContext';
 
 const Layout = ({ children }) => {
   const [show, setShow] = useState(false);
-  const { state } = useContext(PokemolContext);
+  const theme = useTheme();
 
   const handleToggle = () => setShow(!show);
 
@@ -24,7 +24,7 @@ const Layout = ({ children }) => {
         _hover={{ bg: 'brand.700' }}
       >
         <img
-          src={state.theme.images.brandImg}
+          src={theme.images.brandImg}
           onClick={handleToggle}
           w="80px"
         />

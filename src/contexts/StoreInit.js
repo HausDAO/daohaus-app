@@ -1,26 +1,28 @@
-import React, { useState, useEffect, createContext, useContext } from 'react';
+import React, { useState, useEffect, createContext } from 'react';
 import { useToast } from '@chakra-ui/core';
 import { getProfile } from '3box/lib/api';
 
 import { createWeb3User, w3connect } from '../utils/Auth';
 import { USER_TYPE } from '../utils/DaoService';
 import { TxProcessorService } from '../utils/TxProcessorService';
-import { PokemolContext } from './PokemolContext';
+import { useUser, useWeb3, useTxProcessor } from './PokemolContext';
 
 export const LoaderContext = createContext(false);
 const StoreInit = ({ children }) => {
   const toast = useToast();
-  const { state, dispatch } = useContext(PokemolContext);
+  const [web3, updateWeb3] = useWeb3();
+  const [, updateUser] = useUser();
+  const [, updateTxProcessor] = useTxProcessor();
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     const initCurrentUser = async () => {
       let loginType = localStorage.getItem('loginType') || USER_TYPE.READ_ONLY;
-      if (state.user && state.user.type === loginType) {
+      if (user && user.type === loginType) {
         return;
       }
 
-      if (state.web3.w3c.cachedProvider) {
+      if (web3.w3c.cachedProvider) {
         loginType = USER_TYPE.WEB3;
       }
 
@@ -32,9 +34,9 @@ const StoreInit = ({ children }) => {
 
         switch (loginType) {
           case USER_TYPE.WEB3: {
-            if (state.web3.w3c.cachedProvider) {
+            if (web3.w3c.cachedProvider) {
               try {
-                providerConnect = await w3connect(state.web3);
+                providerConnect = await w3connect(web3);
               } catch (err) {
                 console.log(err);
 
@@ -52,10 +54,7 @@ const StoreInit = ({ children }) => {
               const { w3c, web3, provider } = providerConnect;
               const [account] = await web3.eth.getAccounts();
 
-              dispatch({
-                type: 'setWeb3',
-                payload: { w3c, web3, provider },
-              });
+              updateWeb3({ w3c, web3, provider });
 
               user = createWeb3User(account);
 
@@ -65,9 +64,9 @@ const StoreInit = ({ children }) => {
                 txProcessor.getTxPendingList(user.username).length > 0;
 
               const profile = await getProfile(user.username);
-              dispatch({ type: 'setUser', payload: { ...user, ...profile } });
+              updateUser({ ...user, ...profile });
 
-              dispatch({ type: 'setTxProcessor', paylod: txProcessor });
+              updateTxProcessor(txProcessor);
 
               web3.eth.subscribe('newBlockHeaders', async (error, result) => {
                 if (!error) {
@@ -78,7 +77,7 @@ const StoreInit = ({ children }) => {
                       txProcessor.forceUpdate = false;
                     }
 
-                    dispatch({ type: 'setTxProcessor', paylod: txProcessor });
+                    updateTxProcessor(txProcessor);
                   }
                 }
               });
