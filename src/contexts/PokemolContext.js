@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useContext, useCallback, useMemo } from 'react';
 import Web3Modal from 'web3modal';
 
 import { providerOptions } from '../utils/Auth';
@@ -6,6 +6,10 @@ import { customTheme } from '../themes/theme';
 import supportedChains, { getChainData } from '../utils/chains';
 
 const PokemolContext = React.createContext();
+
+function usePokemolContext() {
+  return useContext(PokemolContext);
+}
 
 // global loading needed?
 
@@ -63,13 +67,133 @@ const reducer = (state, action) => {
 
 function PokemolContextProvider(props) {
   const [state, dispatch] = React.useReducer(reducer, initialState);
-  const value = { state, dispatch };
+
+  const updateLoading = useCallback((loading) => {
+    dispatch({ type: 'setLoading', payload: loading });
+  }, []);
+  
+  const updateUser = useCallback((user) => {
+    dispatch({ type: 'setUser', payload: user });
+  }, []);
+
+  const updateDaoData = useCallback((dao) => {
+    dispatch({ type: 'setDao', payload: dao });
+  }, []);
+
+  const updateTheme = useCallback((theme) => {
+    dispatch({ type: 'setTheme', payload: theme });
+  }, []);
+
+  const updateWeb3 = useCallback((data) => {
+    dispatch({ type: 'setWeb3', payload: data });
+  }, []);
+
+  const updateNetwork = useCallback((network) => {
+    dispatch({ type: 'setNetwork', payload: network });
+  }, []);
+
+  const updateTxProcessor = useCallback((tx) => {
+    dispatch({ type: 'setTxProcessor', payload: tx });
+  }, []);
+
+  const updateUserWallet = useCallback((wallet) => {
+    dispatch({ type: 'setUserWallet', payload: wallet });
+  }, []);
+
+  const clearTheme = useCallback(() => {
+    dispatch({ type: 'clearTheme' });
+  }, []);
+
+  const clearDao = useCallback(() => {
+    dispatch({ type: 'clearDao' });
+  }, []);
 
   return (
-    <PokemolContext.Provider value={value}>
+    <PokemolContext.Provider
+      value={useMemo(
+        () => [
+          state,
+          {
+            updateLoading,
+            updateUser,
+            updateDaoData,
+            updateTheme,
+            updateWeb3,
+            updateNetwork,
+            updateTxProcessor,
+            updateUserWallet,
+            clearTheme,
+            clearDao,
+          },
+        ],
+        [
+          state,
+          updateLoading,
+          updateUser,
+          updateDaoData,
+          updateTheme,
+          updateWeb3,
+          updateNetwork,
+          updateTxProcessor,
+          updateUserWallet,
+          clearTheme,
+          clearDao,
+        ],
+      )}
+    >
       {props.children}
     </PokemolContext.Provider>
   );
+}
+
+export function useUser() {
+  const [state, { updateUser }] = usePokemolContext();
+  return [state.user, updateUser];
+}
+
+export function useDaoData() {
+  const [state, { updateDaoData }] = usePokemolContext();
+  return [state.dao, updateDaoData];
+}
+
+export function useTheme() {
+  const [state, { updateTheme }] = usePokemolContext();
+  return [state.theme, updateTheme];
+}
+
+export function useNetwork() {
+  const [state, { updateNetwork }] = usePokemolContext();
+  return [state.network, updateNetwork];
+}
+
+export function useWeb3() {
+  const [state, { updateWeb3 }] = usePokemolContext();
+  return [state.web3, updateWeb3];
+}
+
+export function useTxProcessor() {
+  const [state, { updateTxProcssor }] = usePokemolContext();
+  return [state.txProcessor, updateTxProcssor];
+}
+
+export function useUserWallet() {
+  const [state, { updateUserWallet }] = usePokemolContext();
+  return [state.txProcessor, updateUserWallet];
+}
+
+export function useClearTheme() {
+  const [, { clearTheme }] = usePokemolContext();
+  return clearTheme;
+}
+
+export function useClearDao() {
+  const [, { clearDao }] = usePokemolContext();
+  return clearDao;
+}
+
+export function useLoading() {
+  const [state, { updateLoading }] = usePokemolContext();
+  return [state.loading, updateLoading];
 }
 
 const PokemolContextConsumer = PokemolContext.Consumer;

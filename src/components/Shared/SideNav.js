@@ -1,21 +1,22 @@
-import React, { useContext } from 'react';
+import React from 'react';
 import { Text, Flex, Stack, Icon, Spinner } from '@chakra-ui/core';
 
-import { PokemolContext } from '../../contexts/PokemolContext';
+import { useDaoData, useLoading } from '../../contexts/PokemolContext';
 
 const SideNav = () => {
-  const { state } = useContext(PokemolContext);
+  const [loading] = useLoading();
+  const [dao] = useDaoData();
 
   return (
     <Flex direction="column">
       <Text fontSize="l" mt="30px">
         DAOhaus
       </Text>
-      {state.loading ? (
+      {loading ? (
         <Spinner />
       ) : (
         <>
-          {state.dao ? (
+          {dao ? (
             <>
               <Text fontSize="xs">Change Dao</Text>
               <Stack spacing={5} mt="200px" pr="20">
