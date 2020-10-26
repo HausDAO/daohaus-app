@@ -7,10 +7,7 @@ import supportedChains, { getChainData } from '../utils/chains';
 
 const PokemolContext = React.createContext();
 
-// daodata, dao service, boosts
 // global loading needed?
-// more network info here and the other need to react off that
-// now do we double up data from the graph here
 
 const initialState = {
   user: null,
@@ -18,6 +15,7 @@ const initialState = {
   theme: customTheme(),
   network: supportedChains[42],
   txProcessor: null,
+  userWallet: null,
   web3: {
     w3c: new Web3Modal({
       network: getChainData(+process.env.REACT_APP_NETWORK_ID).network,
@@ -46,6 +44,9 @@ const reducer = (state, action) => {
     }
     case 'setDao': {
       return { ...state, dao: action.payload };
+    }
+    case 'setUserWallet': {
+      return { ...state, userWallet: action.payload };
     }
     default: {
       return initialState;

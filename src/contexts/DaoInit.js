@@ -20,8 +20,6 @@ const DaoInit = () => {
       initDao(daoParam);
     }
 
-    // TODO: Does this also need to fire on web3 or user change to reinit daoservice?
-
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [location, state.web3]);
 
@@ -38,6 +36,8 @@ const DaoInit = () => {
     console.log('state.web3', state.web3);
 
     const version = daoRes ? daoRes.data.version : '1';
+
+    // TODO: test does useeffect need state.user too?
     const daoService =
       state.user && state.web3.provider
         ? await DaoService.instantiateWithWeb3(
@@ -48,14 +48,29 @@ const DaoInit = () => {
           )
         : await DaoService.instantiateWithReadOnly(daoParam, version);
 
+    const boostRes = await get(`boosts/${daoParam}`);
+    const boosts = boostRes.data.reduce((boosts, boostData) => {
+      const metadata = boostData.metadata
+        ? JSON.parse(boostData.metadata[0])
+        : null;
+      boosts[boostData.boostKey] = {
+        active: boostData.active,
+        metadata,
+      };
+      return boosts;
+    }, {});
+
+    console.log('boosts', boosts);
+
     // TODO: what all do we want on this and where else will we set it?
-    // get boost res here too
+
     dispatch({
       type: 'setDao',
       payload: {
         address: daoParam,
         apiMeta: daoRes ? daoRes.data : null,
         daoService: daoService,
+        boosts,
       },
     });
   };

@@ -57,6 +57,7 @@ const UserInit = () => {
 
               user = createWeb3User(account);
 
+              // TODO: do we want this in it's own INIT?
               txProcessor = new TxProcessorService(web3);
               txProcessor.update(user.username);
               txProcessor.forceUpdate =
@@ -99,10 +100,62 @@ const UserInit = () => {
     };
 
     initCurrentUser();
-    // needs more testing to see when/what else needs to trigger initCurrentUser
+    // TODO: needs more testing to see when/what else needs to trigger initCurrentUser
     // }, [state.web3, state.user]);
     // eslint-disable-next-line
   }, []);
+
+  useEffect(() => {
+    if (!state.dao || !state.dao.daoService) {
+      console.log(`DaoService not initialized yet`);
+      return;
+    }
+
+    if (!state.user || state.user.type === USER_TYPE.READ_ONLY) {
+      console.log(`read only user`);
+      return;
+    }
+
+    userSetup();
+  }, [state.dao, state.user]);
+
+  const userSetup = async () => {
+    const addrByDelegateKey = await state.dao.daoService.mcDao.memberAddressByDelegateKey(
+      state.user.username,
+    );
+    const tokenBalanceWei = await state.dao.daoService.token.balanceOf(
+      state.user.username,
+    );
+    const allowanceWei = await state.dao.daoService.token.allowance(
+      state.user.username,
+      state.dao.daoService.daoAddress,
+    );
+    const tokenBalance = state.dao.daoService.web3.utils.fromWei(
+      tokenBalanceWei,
+    );
+    const allowance = state.dao.daoService.web3.utils.fromWei(allowanceWei);
+    const member = await state.dao.daoService.mcDao.members(addrByDelegateKey);
+    const shares = parseInt(member.shares);
+    const loot = parseInt(member.loot);
+    const jailed = parseInt(member.jailed);
+    const highestIndexYesVote = member.highestIndexYesVote;
+    let eth = 0;
+    eth = await state.dao.daoService.getAccountEth();
+    const wallet = {
+      tokenBalance,
+      allowance,
+      eth,
+      loot,
+      highestIndexYesVote,
+      jailed,
+      shares,
+      addrByDelegateKey,
+    };
+    console.log('setting wallet', wallet);
+
+    // TODO: Do we still need all these - see if we can get elsewhere and store on user entity in state
+    dispatch({ type: 'setUserWallet', payload: wallet });
+  };
 
   return <></>;
 };
