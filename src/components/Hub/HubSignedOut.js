@@ -1,5 +1,5 @@
 import React from 'react';
-import { Box, Button, Link, List, ListItem, Text } from '@chakra-ui/core';
+import { Box, Link, List, ListItem, Text } from '@chakra-ui/core';
 import { Web3SignIn } from '../Shared/Web3SignIn';
 
 const HubSignedOut = () => {

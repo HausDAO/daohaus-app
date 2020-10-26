@@ -1,4 +1,4 @@
-import React, { useEffect, useContext } from 'react';
+import React, { useEffect } from 'react';
 import { useToast } from '@chakra-ui/core';
 import { getProfile } from '3box/lib/api';
 
@@ -10,13 +10,12 @@ import {
   useUserWallet,
   useUser,
   useWeb3,
-  useDaoData,
+  useDao,
 } from './PokemolContext';
 
 const UserInit = () => {
   const toast = useToast();
-  // const { state, dispatch } = useContext(PokemolContext);
-  const [dao] = useDaoData();
+  const [dao] = useDao();
   const [web3, updateWeb3] = useWeb3();
   const [user, updateUser] = useUser();
   const [, updateTxProcessor] = useTxProcessor();
@@ -25,7 +24,6 @@ const UserInit = () => {
   useEffect(() => {
     initCurrentUser();
     // TODO: needs more testing to see when/what else needs to trigger initCurrentUser
-    // }, [state.web3, state.user]);
     // eslint-disable-next-line
   }, []);
 
@@ -36,7 +34,8 @@ const UserInit = () => {
       return;
     }
 
-    userSetup();
+    initUserWallet();
+    // eslint-disable-next-line
   }, [dao, user]);
 
   const initCurrentUser = async () => {
@@ -126,7 +125,7 @@ const UserInit = () => {
     getUser(user, web3);
   };
 
-  const userSetup = async () => {
+  const initUserWallet = async () => {
     const addrByDelegateKey = await dao.daoService.mcDao.memberAddressByDelegateKey(
       user.username,
     );

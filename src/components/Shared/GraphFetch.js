@@ -8,7 +8,8 @@ import { networkClients } from '../../utils/apollo/clients';
 const GraphFetch = ({ query, setRecords, variables, suppressLoading }) => {
   const [network] = useNetwork();
 
-  const { loading, error, data, refetch } = useQuery(query, {
+  // const { loading, error, data, refetch } = useQuery(query, {
+  const { loading, error, data } = useQuery(query, {
     client: networkClients[network.network_id],
     variables,
     fetchPolicy: 'network-only',

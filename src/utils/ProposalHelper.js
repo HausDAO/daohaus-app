@@ -14,7 +14,7 @@ export const ProposalStatus = {
   Unsponsored: 'Unsponsored',
 };
 
-export function getProposalCountdownText(proposal, periodDuration) {
+export function getProposalCountdownText(proposal) {
   switch (proposal.status) {
     case ProposalStatus.InQueue:
       return (
@@ -253,7 +253,9 @@ export const isMinion = (proposal) => {
 };
 
 export const determineProposalType = (proposal) => {
-  if (proposal.newMember) {
+  if (proposal.molochVersion === '1') {
+    return 'V1 Proposal';
+  } else if (proposal.newMember) {
     return 'Member Proposal';
   } else if (proposal.whitelist) {
     return 'Whitelist Token Proposal';

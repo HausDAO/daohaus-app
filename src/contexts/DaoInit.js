@@ -1,22 +1,16 @@
-import { sortedLastIndexOf } from 'lodash';
 import React, { useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
 import { DaoService } from '../utils/DaoService';
 import { get } from '../utils/Requests';
 
-import {
-  useClearDao,
-  useWeb3,
-  useLoading,
-  useUser,
-  useDaoData,
-} from './PokemolContext';
+import { useWeb3, useLoading, useUser, useDao } from './PokemolContext';
+
+// TODO - need to get the metadata query in here = but mahybe store in the context
+// proposal status field in apollo resolvers use this - rework that
 
 const DaoInit = () => {
   const location = useLocation();
-  // const { state, dispatch } = useContext(PokemolContext);
-  const [, updateDao] = useDaoData();
-  const clearDao = useClearDao();
+  const [, updateDao] = useDao();
   const [web3] = useWeb3();
   const [, updateLoading] = useLoading();
   const [user] = useUser();
@@ -31,7 +25,7 @@ const DaoInit = () => {
     if (validParam) {
       initDao(daoParam);
     } else {
-      clearDao();
+      updateDao(null);
     }
 
     // eslint-disable-next-line react-hooks/exhaustive-deps

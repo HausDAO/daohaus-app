@@ -1,40 +1,41 @@
 import React from 'react';
-import makeBlockie from 'ethereum-blockies-base64';
 import { Link } from 'react-router-dom';
 
 import { formatCreatedAt } from '../../utils/Helpers';
+import { Badge, Box, Heading, Stack, Text } from '@chakra-ui/core';
+// import { getProposalCountdownText } from '../../utils/ProposalHelper';
+
+// TODO: get getProposalCountdownText(activity) outside of dao context?
 
 const ActivityCard = ({ activity }) => {
+  console.log('activity', activity);
   return (
-    <div>
+    <Box>
       <Link to={`/dao/${activity.molochAddress}`}>
-        <div>
-          <div
-            style={{
-              backgroundImage: `url("${makeBlockie(activity.molochAddress)}")`,
-            }}
-          >
-            <p>{activity.daoTitle.substr(0, 1)}</p>
-          </div>
-          <p>{activity.daoTitle}</p>
-        </div>
-
         {activity.proposalId ? (
           <>
-            <h6>{`${activity.activityFeed.message} ${activity.proposalType}`}</h6>
-            <h3>{activity.title}</h3>
-            <p>{activity.description}</p>
+            <Heading as="h4" size="md">
+              {activity.proposalType}: {activity.daoTitle}
+            </Heading>
+            {/* <Text>{getProposalCountdownText(activity)}</Text> */}
+            <Stack isInline>
+              <Badge variantColor="green">{activity.yesVotes} Yes</Badge>
+              <Badge variantColor="red">{activity.noVotes} No</Badge>
+            </Stack>
+            <Badge>{activity.activityFeed.message}</Badge>
           </>
         ) : (
           <>
-            <h6>Rage Quit on {formatCreatedAt(activity.createdAt)}</h6>
-            <p>Shares: {activity.shares}</p>
-            <p>Loot: {activity.loot}</p>
-            <p>memberAddress: {activity.memberAddress}</p>
+            <Heading as="h4" size="md">
+              Rage Quit on {formatCreatedAt(activity.createdAt)}
+            </Heading>
+            <Text>Shares: {activity.shares}</Text>
+            <Text>Loot: {activity.loot}</Text>
+            <Text>memberAddress: {activity.memberAddress}</Text>
           </>
         )}
       </Link>
-    </div>
+    </Box>
   );
 };
 

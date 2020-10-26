@@ -28,6 +28,8 @@ export const HUB_MEMBERSHIPS = gql`
           gracePeriodEnds
           molochAddress
           molochVersion
+          yesVotes
+          noVotes
           proposalType @client
           description @client
           title @client

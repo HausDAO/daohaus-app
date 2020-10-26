@@ -41,9 +41,6 @@ const reducer = (state, action) => {
     case 'setTheme': {
       return { ...state, theme: customTheme(action.payload) };
     }
-    case 'clearTheme': {
-      return { ...state, theme: customTheme() };
-    }
     case 'setWeb3': {
       return { ...state, web3: action.payload };
     }
@@ -52,9 +49,6 @@ const reducer = (state, action) => {
     }
     case 'setDao': {
       return { ...state, dao: action.payload };
-    }
-    case 'clearDao': {
-      return { ...state, dao: initialState.dao, theme: customTheme() };
     }
     case 'setUserWallet': {
       return { ...state, userWallet: action.payload };
@@ -76,7 +70,7 @@ function PokemolContextProvider(props) {
     dispatch({ type: 'setUser', payload: user });
   }, []);
 
-  const updateDaoData = useCallback((dao) => {
+  const updateDao = useCallback((dao) => {
     dispatch({ type: 'setDao', payload: dao });
   }, []);
 
@@ -100,14 +94,6 @@ function PokemolContextProvider(props) {
     dispatch({ type: 'setUserWallet', payload: wallet });
   }, []);
 
-  const clearTheme = useCallback(() => {
-    dispatch({ type: 'clearTheme' });
-  }, []);
-
-  const clearDao = useCallback(() => {
-    dispatch({ type: 'clearDao' });
-  }, []);
-
   return (
     <PokemolContext.Provider
       value={useMemo(
@@ -116,28 +102,24 @@ function PokemolContextProvider(props) {
           {
             updateLoading,
             updateUser,
-            updateDaoData,
+            updateDao,
             updateTheme,
             updateWeb3,
             updateNetwork,
             updateTxProcessor,
             updateUserWallet,
-            clearTheme,
-            clearDao,
           },
         ],
         [
           state,
           updateLoading,
           updateUser,
-          updateDaoData,
+          updateDao,
           updateTheme,
           updateWeb3,
           updateNetwork,
           updateTxProcessor,
           updateUserWallet,
-          clearTheme,
-          clearDao,
         ],
       )}
     >
@@ -151,9 +133,9 @@ export function useUser() {
   return [state.user, updateUser];
 }
 
-export function useDaoData() {
-  const [state, { updateDaoData }] = usePokemolContext();
-  return [state.dao, updateDaoData];
+export function useDao() {
+  const [state, { updateDao }] = usePokemolContext();
+  return [state.dao, updateDao];
 }
 
 export function useTheme() {
@@ -172,23 +154,13 @@ export function useWeb3() {
 }
 
 export function useTxProcessor() {
-  const [state, { updateTxProcssor }] = usePokemolContext();
-  return [state.txProcessor, updateTxProcssor];
+  const [state, { updateTxProcessor }] = usePokemolContext();
+  return [state.txProcessor, updateTxProcessor];
 }
 
 export function useUserWallet() {
   const [state, { updateUserWallet }] = usePokemolContext();
   return [state.txProcessor, updateUserWallet];
-}
-
-export function useClearTheme() {
-  const [, { clearTheme }] = usePokemolContext();
-  return clearTheme;
-}
-
-export function useClearDao() {
-  const [, { clearDao }] = usePokemolContext();
-  return clearDao;
 }
 
 export function useLoading() {

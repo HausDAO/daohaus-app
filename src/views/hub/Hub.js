@@ -1,11 +1,7 @@
 import React, { useState } from 'react';
 import { Button, Box, Flex, Text, Grid } from '@chakra-ui/core';
 
-import {
-  useTheme,
-  useUser,
-  useClearTheme,
-} from '../../contexts/PokemolContext';
+import { useTheme, useUser } from '../../contexts/PokemolContext';
 import BrandOverride from '../../assets/themes/raidTheme/raidguild__avatar--pink.jpg';
 import { HUB_MEMBERSHIPS } from '../../utils/apollo/hub-queries';
 import GraphFetch from '../../components/Shared/GraphFetch';
@@ -17,7 +13,6 @@ import HubActivityFeed from '../../components/Hub/HubActivityFeed';
 const Hub = () => {
   const [, setTheme] = useTheme();
   const [user] = useUser();
-  const clearTheme = useClearTheme();
   const [memberDaos, setMemberDaos] = useState();
 
   const setLocalTheme = () => {
@@ -38,7 +33,8 @@ const Hub = () => {
   };
 
   const setDefault = () => {
-    clearTheme();
+    // clearTheme();
+    setTheme();
   };
 
   return (

@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react';
 import ActivityFeedList from '../ActivityFeed/ActivityFeedList';
 
 const HubActivityFeed = ({ daos }) => {
-  const [unread, setUnread] = useState();
   const [activities, setActivities] = useState([]);
 
   useEffect(() => {
@@ -42,20 +41,10 @@ const HubActivityFeed = ({ daos }) => {
         (a, b) => +b.createdAt - +a.createdAt,
       ),
     );
-    setUnread(unreadProposals.length + rageActivities.length);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  return (
-    <div className="ProfileActivityFeed">
-      <div className="ProfileActivityFeed__header">
-        <h4>Activity Feed</h4>
-
-        <p>{unread} Unread</p>
-      </div>
-      <ActivityFeedList activities={activities} />
-    </div>
-  );
+  return <ActivityFeedList activities={activities} />;
 };
 
 export default HubActivityFeed;
