@@ -93,6 +93,10 @@ function PokemolContextProvider({ children }) {
     dispatch({ type: 'setTxProcessor', payload: tx });
   }, []);
 
+  const clearTheme = useCallback(() => {
+    dispatch({ type: 'clearTheme' });
+  }, []);
+
   return (
     <PokemolContext.Provider
       value={useMemo(
@@ -105,6 +109,7 @@ function PokemolContextProvider({ children }) {
             updateWeb3,
             updateNetwork,
             updateTxProcessor,
+            clearTheme,
           },
         ],
         [
@@ -115,6 +120,7 @@ function PokemolContextProvider({ children }) {
           updateWeb3,
           updateNetwork,
           updateTxProcessor,
+          clearTheme,
         ],
       )}
     >
@@ -251,6 +257,11 @@ export function useWeb3() {
 export function useTxProcessor() {
   const [state, { updateTxProcssor }] = usePokemolContext();
   return [state.txProcessor, updateTxProcssor];
+}
+
+export function useClearTheme() {
+  const [, { clearTheme }] = usePokemolContext();
+  return clearTheme;
 }
 
 const PokemolContextConsumer = PokemolContext.Consumer;
