@@ -1,17 +1,17 @@
-import React, { useContext } from 'react';
+import React from 'react';
 import { Box, Flex, Text } from '@chakra-ui/core';
 
-import { PokemolContext } from '../../contexts/PokemolContext';
+import { useUser } from '../../contexts/PokemolContext';
 import makeBlockie from 'ethereum-blockies-base64';
 import { truncateAddr } from '../../utils/Helpers';
 
 const HubProfileCard = () => {
-  const { state } = useContext(PokemolContext);
+  const [user] = useUser();
 
   return (
     <>
       <Flex direction="row" alignItems="center">
-        {state.user.image && state.user.image[0] ? (
+        {user.image && user.image[0] ? (
           <Box
             w="100px"
             h="100px"
@@ -19,7 +19,7 @@ const HubProfileCard = () => {
             rounded="full"
             style={{
               backgroundImage: `url(${'https://ipfs.infura.io/ipfs/' +
-                state.user.image[0].contentUrl['/']})`,
+                user.image[0].contentUrl['/']})`,
             }}
           >
             {''}
@@ -31,7 +31,7 @@ const HubProfileCard = () => {
             mr={3}
             rounded="full"
             style={{
-              backgroundImage: `url("${makeBlockie(state.user.username)}")`,
+              backgroundImage: `url("${makeBlockie(user.username)}")`,
             }}
           >
             {''}
@@ -40,15 +40,15 @@ const HubProfileCard = () => {
 
         <Flex direction="column">
           <Text fontSize="xl">
-            {state.user.name || truncateAddr(state.user.username)}{' '}
-            <span>{state.user.emoji || ''} </span>
+            {user.name || truncateAddr(user.username)}{' '}
+            <span>{user.emoji || ''} </span>
           </Text>
-          {state.user.name ? (
-            <Text fontSize="m">{truncateAddr(state.user.username)}</Text>
+          {user.name ? (
+            <Text fontSize="m">{truncateAddr(user.username)}</Text>
           ) : null}
         </Flex>
       </Flex>
-      <Text fontSize="m">{state.user.description}</Text>
+      <Text fontSize="m">{user.description}</Text>
     </>
   );
 };

@@ -71,7 +71,7 @@ function PokemolContextProvider(props) {
   const updateLoading = useCallback((loading) => {
     dispatch({ type: 'setLoading', payload: loading });
   }, []);
-  
+
   const updateUser = useCallback((user) => {
     dispatch({ type: 'setUser', payload: user });
   }, []);
