@@ -1,11 +1,11 @@
 import React from 'react';
-import { Text, Flex, Stack, Icon, Spinner } from '@chakra-ui/core';
+import { Text, Flex, Stack, Spinner } from '@chakra-ui/core';
 
-import { useDaoData, useLoading } from '../../contexts/PokemolContext';
+import { useDao, useLoading } from '../../contexts/PokemolContext';
 
 const SideNav = () => {
   const [loading] = useLoading();
-  const [dao] = useDaoData();
+  const [dao] = useDao();
 
   return (
     <Flex direction="column">
