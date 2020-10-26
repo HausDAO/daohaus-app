@@ -1,13 +1,13 @@
-import React, { useContext, useState } from 'react';
+import React, { useState } from 'react';
 import { Flex, Box, Image } from '@chakra-ui/core';
 
 import Header from '../Shared/Header';
 import SideNav from '../Shared/SideNav';
-import { PokemolContext } from '../../contexts/PokemolContext';
+import { useTheme } from '../../contexts/PokemolContext';
 
 const Layout = ({ children }) => {
   const [show, setShow] = useState(false);
-  const { state } = useContext(PokemolContext);
+  const [theme] = useTheme();
 
   const handleToggle = () => setShow(!show);
 
@@ -23,11 +23,7 @@ const Layout = ({ children }) => {
         justifyContent="center"
         _hover={{ bg: 'brand.700' }}
       >
-        <Image
-          src={state.theme.images.brandImg}
-          onClick={handleToggle}
-          size="80px"
-        />
+        <Image src={theme.images.brandImg} onClick={handleToggle} size="80px" />
       </Box>
       {show ? (
         <Box>
