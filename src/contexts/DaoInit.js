@@ -44,19 +44,6 @@ const DaoInit = () => {
 
     console.log('web3', web3);
 
-    const version = daoRes ? daoRes.data.version : '1';
-
-    // TODO: test does useeffect need user too?
-    const daoService =
-      user && web3.provider
-        ? await DaoService.instantiateWithWeb3(
-            user.username,
-            web3.provider,
-            daoParam,
-            version,
-          )
-        : await DaoService.instantiateWithReadOnly(daoParam, version);
-
     const boostRes = await get(`boosts/${daoParam}`);
     const boosts = boostRes.data.reduce((boosts, boostData) => {
       const metadata = boostData.metadata
@@ -68,16 +55,57 @@ const DaoInit = () => {
       };
       return boosts;
     }, {});
-
     console.log('boosts', boosts);
 
-    // TODO: what all do we want on this and where else will we set it?
+    const version = daoRes ? daoRes.data.version : '1';
+    // TODO: test does useeffect need user too?
+    const daoService =
+      user && web3.provider
+        ? await DaoService.instantiateWithWeb3(
+            user.username,
+            web3.provider,
+            daoParam,
+            version,
+          )
+        : await DaoService.instantiateWithReadOnly(daoParam, version);
+
+    // TODO: What can we get rid of and replace with graph data
+    const extraMeta = {
+      currentPeriod: 0,
+      tokenSymbol: 'DAO',
+      guildBankValue: 0,
+      shareValue: 0,
+    };
+
+    const currentPeriod = await daoService.mcDao.getCurrentPeriod();
+    const totalShares = await daoService.mcDao.getTotalShares();
+
+    if (+version !== 2) {
+      const guildBankAddr = await daoService.mcDao.getGuildBankAddr();
+      const guildBankValueWei = await daoService.token.balanceOf(guildBankAddr);
+      const guildBankValue = daoService.web3.utils.fromWei(guildBankValueWei);
+      const tokenSymbol = await daoService.token.getSymbol();
+
+      const shareValue = parseFloat(
+        daoService.web3.utils.fromWei(
+          daoService.web3.utils
+            .toBN(guildBankValueWei)
+            .div(daoService.web3.utils.toBN(totalShares)),
+        ),
+      );
+
+      extraMeta.guildBankValue = guildBankValue;
+      extraMeta.tokenSymbol = tokenSymbol;
+      extraMeta.shareValue = shareValue;
+    }
+    extraMeta.currentPeriod = parseInt(currentPeriod);
 
     updateDao({
       address: daoParam,
       apiMeta: daoRes ? daoRes.data : null,
       daoService: daoService,
       boosts,
+      ...extraMeta,
     });
     updateLoading(false);
   };
