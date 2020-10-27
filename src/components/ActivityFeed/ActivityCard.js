@@ -8,7 +8,6 @@ import { Badge, Box, Heading, Stack, Text } from '@chakra-ui/core';
 // TODO: get getProposalCountdownText(activity) outside of dao context?
 
 const ActivityCard = ({ activity }) => {
-  console.log('activity', activity);
   return (
     <Box>
       <Link to={`/dao/${activity.molochAddress}`}>

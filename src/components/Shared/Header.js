@@ -17,7 +17,7 @@ const Header = () => {
       setPageTitle('Hub');
     } else {
       // TODO pull from graph data
-      setPageTitle(dao?.apiMeta.name);
+      setPageTitle(dao?.graphData?.title);
     }
     // eslint-disable-next-line
   }, [location, dao]);

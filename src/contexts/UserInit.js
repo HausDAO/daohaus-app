@@ -137,9 +137,9 @@ const UserInit = () => {
     const tokenBalance = dao.daoService.web3.utils.fromWei(tokenBalanceWei);
     const allowance = dao.daoService.web3.utils.fromWei(allowanceWei);
     const member = await dao.daoService.mcDao.members(addrByDelegateKey);
-    const shares = parseInt(member.shares);
-    const loot = parseInt(member.loot);
-    const jailed = parseInt(member.jailed);
+    const shares = parseInt(member.shares) || 0;
+    const loot = parseInt(member.loot) || 0;
+    const jailed = parseInt(member.jailed) || 0;
     const highestIndexYesVote = member.highestIndexYesVote;
     let eth = 0;
     eth = await dao.daoService.getAccountEth();
