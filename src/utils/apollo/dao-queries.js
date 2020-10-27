@@ -32,6 +32,7 @@ export const HOME_DAO = gql`
         contractBabeBalance @client
         moloch {
           id
+          version
         }
       }
     }

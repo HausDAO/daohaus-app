@@ -137,13 +137,6 @@ export const resolvers = {
     },
   },
 
-  Moloch: {
-    meta: (_, _args, { cache }) => {
-      return cache.readQuery({
-        query: GET_METADATA,
-      });
-    },
-  },
   TokenBalance: {
     symbol: async (tokenBalance, _args, { cache }) => {
       if (tokenBalance.guildBank) {

@@ -9,23 +9,22 @@ import {
   useTxProcessor,
   useUserWallet,
   useUser,
-  useWeb3,
   useDao,
+  useWeb3Connect,
 } from './PokemolContext';
 
 const UserInit = () => {
   const toast = useToast();
   const [dao] = useDao();
-  const [web3, updateWeb3] = useWeb3();
+  const [web3Connect, updateWeb3Connect] = useWeb3Connect();
   const [user, updateUser] = useUser();
   const [, updateTxProcessor] = useTxProcessor();
   const [, updateUserWallet] = useUserWallet();
 
   useEffect(() => {
     initCurrentUser();
-    // TODO: needs more testing to see when/what else needs to trigger initCurrentUser
     // eslint-disable-next-line
-  }, []);
+  }, [web3Connect]);
 
   useEffect(() => {
     const noDaoService = !dao || !dao.daoService;
@@ -39,90 +38,91 @@ const UserInit = () => {
   }, [dao, user]);
 
   const initCurrentUser = async () => {
-    async function getUser(_user, _web3) {
-      let loginType = localStorage.getItem('loginType') || USER_TYPE.READ_ONLY;
-      if (_user && _user.type === loginType) {
-        return;
-      }
+    // async function getUser(_user, _web3) {
 
-      if (web3.w3c.cachedProvider) {
-        loginType = USER_TYPE.WEB3;
-      }
+    let loginType = localStorage.getItem('loginType') || USER_TYPE.READ_ONLY;
+    if (user && user.type === loginType) {
+      // if (_user && _user.type === loginType) {
 
-      let user;
-      let txProcessor;
-      let providerConnect;
-      try {
-        console.log(`Initializing user type: ${loginType || 'read-only'}`);
+      return;
+    }
 
-        switch (loginType) {
-          case USER_TYPE.WEB3: {
-            if (web3.w3c.cachedProvider) {
-              try {
-                providerConnect = await w3connect(_web3);
-              } catch (err) {
-                console.log(err);
+    if (web3Connect.w3c.cachedProvider) {
+      loginType = USER_TYPE.WEB3;
+    }
 
-                toast({
-                  title: 'Wrong Network',
-                  position: 'top-right',
-                  description: err.msg,
-                  status: 'warning',
-                  duration: 9000,
-                  isClosable: true,
-                });
-              }
+    // let userUpdate;
+    // let txProcessor;
+    let providerConnect;
+    try {
+      console.log(`Initializing user type: ${loginType || 'read-only'}`);
 
-              // error here - is it expected?
-              const { w3c, web3, provider } = providerConnect;
-              const [account] = await web3.eth.getAccounts();
+      switch (loginType) {
+        case USER_TYPE.WEB3: {
+          if (web3Connect.w3c.cachedProvider) {
+            try {
+              // providerConnect = await w3connect(_web3);
+              providerConnect = await w3connect(web3Connect);
+            } catch (err) {
+              console.log(err);
 
-              updateWeb3({ w3c, web3, provider });
-
-              user = createWeb3User(account);
-
-              // TODO: do we want this in it's own INIT?
-              txProcessor = new TxProcessorService(web3);
-              txProcessor.update(user.username);
-              txProcessor.forceUpdate =
-                txProcessor.getTxPendingList(user.username).length > 0;
-
-              const profile = await getProfile(user.username);
-              updateUser({ ...user, ...profile });
-
-              updateTxProcessor(txProcessor);
-
-              web3.eth.subscribe('newBlockHeaders', async (error, result) => {
-                if (!error) {
-                  if (txProcessor.forceUpdate) {
-                    await txProcessor.update(user.username);
-
-                    if (!txProcessor.getTxPendingList(user.username).length) {
-                      txProcessor.forceUpdate = false;
-                    }
-
-                    updateTxProcessor(txProcessor);
-                  }
-                }
+              toast({
+                title: 'Wrong Network',
+                position: 'top-right',
+                description: err.msg,
+                status: 'warning',
+                duration: 9000,
+                isClosable: true,
               });
             }
-            break;
+
+            const { w3c, web3, provider } = providerConnect;
+            const [account] = await web3.eth.getAccounts();
+            const web3User = createWeb3User(account);
+            const profile = await getProfile(web3User.username);
+
+            updateWeb3Connect({ w3c, web3, provider });
+
+            updateUser({ ...web3User, ...profile });
+
+            // TODO: do we want this in it's own INIT?
+            // txProcessor = new TxProcessorService(web3);
+            // txProcessor.update(userUpdate.username);
+            // txProcessor.forceUpdate =
+            //   txProcessor.getTxPendingList(user.username).length > 0;
+
+            // updateTxProcessor(txProcessor);
+
+            // web3.eth.subscribe('newBlockHeaders', async (error, result) => {
+            //   if (!error) {
+            //     if (txProcessor.forceUpdate) {
+            //       await txProcessor.update(user.username);
+
+            //       if (!txProcessor.getTxPendingList(user.username).length) {
+            //         txProcessor.forceUpdate = false;
+            //       }
+
+            //       updateTxProcessor(txProcessor);
+            //     }
+            //   }
+            // });
           }
-          case USER_TYPE.READ_ONLY:
-          default:
-            break;
+          break;
         }
-
-        localStorage.setItem('loginType', loginType);
-      } catch (e) {
-        console.error(
-          `Could not log in with loginType ${loginType}: ${e.toString()}`,
-        );
-
-        localStorage.setItem('loginType', '');
+        case USER_TYPE.READ_ONLY:
+        default:
+          break;
       }
+
+      localStorage.setItem('loginType', loginType);
+    } catch (e) {
+      console.error(
+        `Could not log in with loginType ${loginType}: ${e.toString()}`,
+      );
+      localStorage.setItem('loginType', '');
     }
-    getUser(user, web3);
+    // }
+    // getUser(user, web3);
   };
 
   const initUserWallet = async () => {
@@ -153,7 +153,6 @@ const UserInit = () => {
       shares,
       addrByDelegateKey,
     };
-    console.log('setting wallet', wallet);
 
     // TODO: Do we still need all these - see if we can get elsewhere and store on user entity in state
     updateUserWallet(wallet);

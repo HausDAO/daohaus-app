@@ -21,7 +21,7 @@ const initialState = {
   network: supportedChains[42],
   txProcessor: null,
   userWallet: null,
-  web3: {
+  web3Connect: {
     w3c: new Web3Modal({
       network: getChainData(+process.env.REACT_APP_NETWORK_ID).network,
       providerOptions,
@@ -41,8 +41,8 @@ const reducer = (state, action) => {
     case 'setTheme': {
       return { ...state, theme: customTheme(action.payload) };
     }
-    case 'setWeb3': {
-      return { ...state, web3: action.payload };
+    case 'setWeb3Connect': {
+      return { ...state, web3Connect: action.payload };
     }
     case 'setTxProcessor': {
       return { ...state, txProcessor: action.payload };
@@ -78,8 +78,8 @@ function PokemolContextProvider(props) {
     dispatch({ type: 'setTheme', payload: theme });
   }, []);
 
-  const updateWeb3 = useCallback((data) => {
-    dispatch({ type: 'setWeb3', payload: data });
+  const updateWeb3Connect = useCallback((data) => {
+    dispatch({ type: 'setWeb3Connect', payload: data });
   }, []);
 
   const updateNetwork = useCallback((network) => {
@@ -104,7 +104,7 @@ function PokemolContextProvider(props) {
             updateUser,
             updateDao,
             updateTheme,
-            updateWeb3,
+            updateWeb3Connect,
             updateNetwork,
             updateTxProcessor,
             updateUserWallet,
@@ -116,7 +116,7 @@ function PokemolContextProvider(props) {
           updateUser,
           updateDao,
           updateTheme,
-          updateWeb3,
+          updateWeb3Connect,
           updateNetwork,
           updateTxProcessor,
           updateUserWallet,
@@ -148,9 +148,9 @@ export function useNetwork() {
   return [state.network, updateNetwork];
 }
 
-export function useWeb3() {
-  const [state, { updateWeb3 }] = usePokemolContext();
-  return [state.web3, updateWeb3];
+export function useWeb3Connect() {
+  const [state, { updateWeb3Connect }] = usePokemolContext();
+  return [state.web3Connect, updateWeb3Connect];
 }
 
 export function useTxProcessor() {

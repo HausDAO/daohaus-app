@@ -1,13 +1,13 @@
-import React, { useContext } from 'react';
+import React from 'react';
 import Web3Modal from 'web3modal';
 import { Button, useToast } from '@chakra-ui/core';
 
 import { getChainData } from '../../utils/chains';
 import { w3connect, providerOptions } from '../../utils/Auth';
-import { PokemolContext } from '../../contexts/PokemolContext';
+import { useWeb3Connect } from '../../contexts/PokemolContext';
 
 export const Web3SignIn = () => {
-  const { dispatch } = useContext(PokemolContext);
+  const [, updateWeb3Connect] = useWeb3Connect();
   const toast = useToast();
 
   return (
@@ -24,7 +24,8 @@ export const Web3SignIn = () => {
 
           try {
             const { w3c, web3, provider } = await w3connect(_web3Connect);
-            dispatch({ type: 'setWeb3', payload: { w3c, web3, provider } });
+            updateWeb3Connect({ w3c, web3, provider });
+
             // window.location.reload();
           } catch (err) {
             console.log('web3Connect error', err);

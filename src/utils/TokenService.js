@@ -66,6 +66,7 @@ export class TokenService {
     const contract = token
       ? new this.web3.eth.Contract(Erc20Abi, token)
       : this.contract;
+
     const balanceOf = await contract.methods
       .balanceOf(account)
       .call({}, atBlock);

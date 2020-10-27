@@ -3,15 +3,12 @@ import { useLocation } from 'react-router-dom';
 import { DaoService } from '../utils/DaoService';
 import { get } from '../utils/Requests';
 
-import { useWeb3, useLoading, useUser, useDao } from './PokemolContext';
-
-// TODO - need to get the metadata query in here = but mahybe store in the context
-// proposal status field in apollo resolvers use this - rework that
+import { useLoading, useUser, useDao, useWeb3Connect } from './PokemolContext';
 
 const DaoInit = () => {
   const location = useLocation();
   const [, updateDao] = useDao();
-  const [web3] = useWeb3();
+  const [web3Connect] = useWeb3Connect();
   const [, updateLoading] = useLoading();
   const [user] = useUser();
 
@@ -27,13 +24,10 @@ const DaoInit = () => {
     } else {
       updateDao(null);
     }
-
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [location, web3]);
+  }, [location, user]);
 
   const initDao = async (daoParam) => {
     updateLoading(true);
-    console.log('INIT ', daoParam);
 
     let daoRes;
     try {
@@ -41,8 +35,6 @@ const DaoInit = () => {
     } catch (err) {
       console.log('api fetch error', daoParam);
     }
-
-    console.log('web3', web3);
 
     const boostRes = await get(`boosts/${daoParam}`);
     const boosts = boostRes.data.reduce((boosts, boostData) => {
@@ -55,57 +47,26 @@ const DaoInit = () => {
       };
       return boosts;
     }, {});
-    console.log('boosts', boosts);
 
-    const version = daoRes ? daoRes.data.version : '1';
-    // TODO: test does useeffect need user too?
+    const version = daoRes && daoRes.data.version ? daoRes.data.version : '1';
     const daoService =
-      user && web3.provider
+      user && web3Connect.provider
         ? await DaoService.instantiateWithWeb3(
             user.username,
-            web3.provider,
+            web3Connect.provider,
             daoParam,
             version,
           )
         : await DaoService.instantiateWithReadOnly(daoParam, version);
 
-    // TODO: What can we get rid of and replace with graph data
-    const extraMeta = {
-      currentPeriod: 0,
-      tokenSymbol: 'DAO',
-      guildBankValue: 0,
-      shareValue: 0,
-    };
-
     const currentPeriod = await daoService.mcDao.getCurrentPeriod();
-    const totalShares = await daoService.mcDao.getTotalShares();
-
-    if (+version !== 2) {
-      const guildBankAddr = await daoService.mcDao.getGuildBankAddr();
-      const guildBankValueWei = await daoService.token.balanceOf(guildBankAddr);
-      const guildBankValue = daoService.web3.utils.fromWei(guildBankValueWei);
-      const tokenSymbol = await daoService.token.getSymbol();
-
-      const shareValue = parseFloat(
-        daoService.web3.utils.fromWei(
-          daoService.web3.utils
-            .toBN(guildBankValueWei)
-            .div(daoService.web3.utils.toBN(totalShares)),
-        ),
-      );
-
-      extraMeta.guildBankValue = guildBankValue;
-      extraMeta.tokenSymbol = tokenSymbol;
-      extraMeta.shareValue = shareValue;
-    }
-    extraMeta.currentPeriod = parseInt(currentPeriod);
 
     updateDao({
       address: daoParam,
       apiMeta: daoRes ? daoRes.data : null,
       daoService: daoService,
       boosts,
-      ...extraMeta,
+      currentPeriod: parseInt(currentPeriod),
     });
     updateLoading(false);
   };
