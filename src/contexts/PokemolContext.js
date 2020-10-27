@@ -11,8 +11,6 @@ function usePokemolContext() {
   return useContext(PokemolContext);
 }
 
-// global loading needed?
-
 const initialState = {
   loading: false,
   user: null,

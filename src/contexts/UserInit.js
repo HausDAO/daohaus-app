@@ -4,9 +4,7 @@ import { getProfile } from '3box/lib/api';
 
 import { createWeb3User, w3connect } from '../utils/Auth';
 import { USER_TYPE } from '../utils/DaoService';
-import { TxProcessorService } from '../utils/TxProcessorService';
 import {
-  useTxProcessor,
   useUserWallet,
   useUser,
   useDao,
@@ -18,12 +16,10 @@ const UserInit = () => {
   const [dao] = useDao();
   const [web3Connect, updateWeb3Connect] = useWeb3Connect();
   const [user, updateUser] = useUser();
-  const [, updateTxProcessor] = useTxProcessor();
   const [, updateUserWallet] = useUserWallet();
 
   useEffect(() => {
     initCurrentUser();
-    // eslint-disable-next-line
   }, [web3Connect]);
 
   useEffect(() => {
@@ -34,16 +30,11 @@ const UserInit = () => {
     }
 
     initUserWallet();
-    // eslint-disable-next-line
   }, [dao, user]);
 
   const initCurrentUser = async () => {
-    // async function getUser(_user, _web3) {
-
     let loginType = localStorage.getItem('loginType') || USER_TYPE.READ_ONLY;
     if (user && user.type === loginType) {
-      // if (_user && _user.type === loginType) {
-
       return;
     }
 
@@ -51,8 +42,6 @@ const UserInit = () => {
       loginType = USER_TYPE.WEB3;
     }
 
-    // let userUpdate;
-    // let txProcessor;
     let providerConnect;
     try {
       console.log(`Initializing user type: ${loginType || 'read-only'}`);
@@ -84,28 +73,6 @@ const UserInit = () => {
             updateWeb3Connect({ w3c, web3, provider });
 
             updateUser({ ...web3User, ...profile });
-
-            // TODO: do we want this in it's own INIT?
-            // txProcessor = new TxProcessorService(web3);
-            // txProcessor.update(userUpdate.username);
-            // txProcessor.forceUpdate =
-            //   txProcessor.getTxPendingList(user.username).length > 0;
-
-            // updateTxProcessor(txProcessor);
-
-            // web3.eth.subscribe('newBlockHeaders', async (error, result) => {
-            //   if (!error) {
-            //     if (txProcessor.forceUpdate) {
-            //       await txProcessor.update(user.username);
-
-            //       if (!txProcessor.getTxPendingList(user.username).length) {
-            //         txProcessor.forceUpdate = false;
-            //       }
-
-            //       updateTxProcessor(txProcessor);
-            //     }
-            //   }
-            // });
           }
           break;
         }
@@ -121,8 +88,6 @@ const UserInit = () => {
       );
       localStorage.setItem('loginType', '');
     }
-    // }
-    // getUser(user, web3);
   };
 
   const initUserWallet = async () => {
