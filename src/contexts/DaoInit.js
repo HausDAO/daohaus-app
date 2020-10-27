@@ -7,7 +7,7 @@ import { useLoading, useUser, useDao, useWeb3Connect } from './PokemolContext';
 
 const DaoInit = () => {
   const location = useLocation();
-  const [, updateDao] = useDao();
+  const [dao, updateDao] = useDao();
   const [web3Connect] = useWeb3Connect();
   const [, updateLoading] = useLoading();
   const [user] = useUser();
@@ -19,14 +19,18 @@ const DaoInit = () => {
     const validParam =
       pathname[1] === 'dao' && regex.test(daoParam) ? daoParam : false;
 
-    if (validParam) {
-      initDao(daoParam);
-    } else {
+    if (!validParam) {
       updateDao(null);
+      return;
+    }
+
+    if (!dao || dao.address !== daoParam) {
+      initDao(daoParam);
     }
   }, [location, user]);
 
   const initDao = async (daoParam) => {
+    console.log('init dao');
     updateLoading(true);
 
     let daoRes;
