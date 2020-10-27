@@ -1,9 +1,8 @@
 import { gql } from 'apollo-boost';
 
-export const GET_MOLOCH = gql`
+export const HOME_DAO = gql`
   query moloch($contractAddr: String!) {
     moloch(id: $contractAddr) {
-      meta @client
       id
       title
       summoner
