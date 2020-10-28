@@ -71,6 +71,7 @@ const DaoInit = () => {
       daoService: daoService,
       boosts,
       currentPeriod: parseInt(currentPeriod),
+      graphData: dao ? dao.graphData : null,
     });
     updateLoading(false);
   };

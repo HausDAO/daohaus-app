@@ -1,6 +1,8 @@
 import { theme } from '@chakra-ui/core';
 import Brand from '../assets/themes/hausdao/Daohaus__Castle--Dark.svg';
 
+export * from './components';
+
 const defaultTheme = {
   brand50: '#1c2363',
   brand100: '#1c2363',
