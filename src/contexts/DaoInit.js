@@ -32,29 +32,13 @@ const DaoInit = () => {
 
   useEffect(() => {
     const needsUserDaoService =
-      dao && user && user.username === dao.daoService.accountAddr;
+      dao && user && user.username !== dao.daoService.accountAddr;
     if (needsUserDaoService) {
       initWeb3DaoService();
     }
 
     // eslint-disable-next-line
   }, [user, dao]);
-
-  const initWeb3DaoService = async () => {
-    console.log('@@@@@@@@@@@@init dao service');
-
-    const daoService = await DaoService.instantiateWithWeb3(
-      user.username,
-      web3Connect.provider,
-      dao.address,
-      dao.version,
-    );
-
-    updateDao({
-      ...dao,
-      daoService,
-    });
-  };
 
   const initDao = async (daoParam) => {
     console.log('###############init dao');
@@ -99,9 +83,22 @@ const DaoInit = () => {
       daoService: daoService,
       boosts,
       currentPeriod: parseInt(currentPeriod),
-      // graphData: dao ? dao.graphData : null,
     });
     updateLoading(false);
+  };
+
+  const initWeb3DaoService = async () => {
+    const daoService = await DaoService.instantiateWithWeb3(
+      user.username,
+      web3Connect.provider,
+      dao.address,
+      dao.version,
+    );
+
+    updateDao({
+      ...dao,
+      daoService,
+    });
   };
 
   return <></>;

@@ -95,6 +95,7 @@ const UserInit = () => {
 
   const initUserWallet = async () => {
     console.log('^^^^^^^^^^^^^^initUserWallet');
+    // TODO: Do we still need all these - see if we can get elsewhere and store on user entity in state
     const addrByDelegateKey = await dao.daoService.mcDao.memberAddressByDelegateKey(
       user.username,
     );
@@ -123,7 +124,6 @@ const UserInit = () => {
       addrByDelegateKey,
     };
 
-    // TODO: Do we still need all these - see if we can get elsewhere and store on user entity in state
     updateUserWallet(wallet);
   };
 
