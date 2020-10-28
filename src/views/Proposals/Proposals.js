@@ -24,7 +24,13 @@ const Proposals = () => {
         <Spinner />
       ) : (
         <div>
-          {proposals ? <p>hot dog</p> : null}
+          {proposals ? (
+            <>
+              {proposals.map((prop) => {
+                return <p key={prop.id}>{prop.status}</p>;
+              })}
+            </>
+          ) : null}
 
           {dao ? (
             <GraphFetchMore
