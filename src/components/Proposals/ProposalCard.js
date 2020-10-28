@@ -31,9 +31,9 @@ const ProposalCard = ({ proposal }) => {
           <Flex align='center'>
             <Flex h='20px'>
               <Badge variantColor='green' mr={3}>
-                2 Yes
+                {proposal.yesVotes} Yes
               </Badge>
-              <Badge variantColor='red'>1 No</Badge>
+              <Badge variantColor='red'>{proposal.noVotes} No</Badge>
             </Flex>
           </Flex>
         </Flex>

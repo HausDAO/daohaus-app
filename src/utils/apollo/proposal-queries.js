@@ -11,6 +11,7 @@ export const PROPOSALS_LIST = gql`
     ) {
       id
       aborted
+      applicant
       cancelled
       details
       didPass
@@ -18,6 +19,7 @@ export const PROPOSALS_LIST = gql`
       guildkick
       lootRequested
       newMember
+      noVotes
       paymentRequested
       paymentTokenDecimals
       paymentTokenSymbol
@@ -34,6 +36,7 @@ export const PROPOSALS_LIST = gql`
       votingPeriodStarts
       votingPeriodEnds
       whitelist
+      yesVotes
 
       moloch {
         gracePeriodLength

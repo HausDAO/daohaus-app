@@ -1,5 +1,6 @@
 import { theme } from '@chakra-ui/core';
 import Brand from '../assets/themes/hausdao/Daohaus__Castle--Dark.svg';
+import { customIcons } from './icons';
 
 export * from './components';
 
@@ -54,6 +55,10 @@ export const customTheme = (daoTheme) => {
     images: {
       ...theme.images,
       brandImg: themeOverrides.brandImg,
+    },
+    icons: {
+      ...theme.icons,
+      ...customIcons,
     },
   };
 };
