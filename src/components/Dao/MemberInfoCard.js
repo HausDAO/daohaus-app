@@ -3,6 +3,7 @@ import { Flex, Text, Box } from '@chakra-ui/core';
 import UserAvatar from '../Shared/UserAvatar';
 
 const MemberInfoCard = ({ user }) => {
+  console.log(user);
   return (
     <>
       <Flex justify='space-between' ml={6}>
@@ -23,8 +24,23 @@ const MemberInfoCard = ({ user }) => {
         mt={2}
         w='97%'
       >
-        <Flex>
+        <Flex justify='space-between'>
           <UserAvatar user={user} />
+          <div></div>
+        </Flex>
+        <Flex w='60%' justify='space-between' mt={6}>
+          <Box>
+            <Text textTransform='uppercase'>Shares</Text>
+            <Text>10</Text>
+          </Box>
+          <Box>
+            <Text textTransform='uppercase'>Loot</Text>
+            <Text>5</Text>
+          </Box>
+          <Box>
+            <Text textTransform='uppercase'>Anniversary</Text>
+            <Text>Jan 1</Text>
+          </Box>
         </Flex>
       </Box>
     </>

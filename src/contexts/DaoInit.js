@@ -27,6 +27,7 @@ const DaoInit = () => {
     if (!dao || dao.address !== daoParam) {
       initDao(daoParam);
     }
+    // eslint-disable-next-line
   }, [location, user]);
 
   const initDao = async (daoParam) => {

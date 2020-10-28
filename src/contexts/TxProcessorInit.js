@@ -12,6 +12,7 @@ const TxProcessorInit = () => {
     if (user && web3Connect.web3) {
       initTxProcessor();
     }
+    // eslint-disable-next-line
   }, [user, web3Connect]);
 
   const initTxProcessor = async () => {

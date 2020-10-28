@@ -1,5 +1,6 @@
 import { Flex, Spinner, Box } from '@chakra-ui/core';
 import React, { useEffect, useState } from 'react';
+import DaoActivityFeed from '../../components/Dao/DaoActivityFeed';
 import DaoOverviewDetails from '../../components/Dao/DaoOverviewDetails';
 import MemberInfoCard from '../../components/Dao/MemberInfoCard';
 
@@ -11,7 +12,7 @@ const Dao = () => {
   const [daoGraphData, setDaoGraphData] = useState();
   const [dao, updateDao] = useDao();
   const [user] = useUser();
-  const [loading, updateLoading] = useLoading();
+  const [, updateLoading] = useLoading();
   console.log(dao);
 
   useEffect(() => {
@@ -23,6 +24,7 @@ const Dao = () => {
       });
       updateLoading(false);
     }
+    // eslint-disable-next-line
   }, [daoGraphData]);
 
   return (
@@ -38,6 +40,7 @@ const Dao = () => {
               </Box>
               <Box w='40%'>
                 <MemberInfoCard user={user} />
+                <DaoActivityFeed dao={dao} />
               </Box>
             </Flex>
           ) : null}

@@ -4,6 +4,7 @@ import React, { useEffect, useState } from 'react';
 import GraphFetchMore from '../../components/Shared/GraphFetchMore';
 import { useDao, useProposals } from '../../contexts/PokemolContext';
 import { PROPOSALS_LIST } from '../../utils/apollo/proposal-queries';
+import ProposalsList from '../../components/Proposals/ProposalsList';
 
 const Proposals = () => {
   const [proposalGraphData, setProposalGraphData] = useState();
@@ -26,9 +27,7 @@ const Proposals = () => {
         <div>
           {proposals ? (
             <>
-              {proposals.map((prop) => {
-                return <p key={prop.id}>{prop.status}</p>;
-              })}
+              <ProposalsList proposals={proposals} />
             </>
           ) : null}
 
@@ -36,7 +35,7 @@ const Proposals = () => {
             <GraphFetchMore
               query={PROPOSALS_LIST}
               setRecords={setProposalGraphData}
-              entity="proposals"
+              entity='proposals'
               variables={{ contractAddr: dao.address }}
               context={{ currentPeriod: dao.currentPeriod }}
             />
