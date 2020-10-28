@@ -12,6 +12,7 @@ import supportedChains from './utils/chains';
 import UserInit from './contexts/UserInit';
 import DaoInit from './contexts/DaoInit';
 import TxProcessorInit from './contexts/TxProcessorInit';
+import GraphInit from './contexts/GraphInit';
 
 // how would we toggle this? or just reload client in fetch components?
 const chainData = supportedChains[+process.env.REACT_APP_NETWORK_ID];
@@ -28,6 +29,7 @@ function Init() {
     <>
       <UserInit />
       <DaoInit />
+      <GraphInit />
       <TxProcessorInit />
     </>
   );

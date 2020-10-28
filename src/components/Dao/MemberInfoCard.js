@@ -3,7 +3,6 @@ import { Flex, Text, Box } from '@chakra-ui/core';
 import UserAvatar from '../Shared/UserAvatar';
 
 const MemberInfoCard = ({ user }) => {
-  console.log(user);
   return (
     <>
       <Flex justify='space-between' ml={6}>

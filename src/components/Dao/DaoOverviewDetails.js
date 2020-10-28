@@ -8,7 +8,6 @@ import { PrimaryButton, SecondaryButton } from '../../themes/theme';
 const DaoOverviewDetails = ({ dao }) => {
   const [theme] = useTheme();
   const history = useHistory();
-  console.log(theme);
 
   return (
     <>

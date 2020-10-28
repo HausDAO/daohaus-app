@@ -8,7 +8,7 @@ export class TxProcessorService {
   async update(account) {
     const _txList = this.getTxPendingList(account);
     const _pending = [];
-    console.log('updating check tx from service', _txList.length, _txList);
+    // console.log('updating check tx from service', _txList.length, _txList);
 
     if (_txList.length) {
       _txList.forEach((tx) => {
