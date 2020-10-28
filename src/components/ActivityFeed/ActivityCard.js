@@ -9,23 +9,31 @@ import { Badge, Box, Heading, Stack, Text } from '@chakra-ui/core';
 
 const ActivityCard = ({ activity }) => {
   return (
-    <Box>
+    <Box
+      rounded='lg'
+      bg='blackAlpha.600'
+      borderWidth='1px'
+      borderColor='whiteAlpha.200'
+      p={6}
+      m={6}
+      mt={2}
+    >
       <Link to={`/dao/${activity.molochAddress}`}>
         {activity.proposalId ? (
           <>
-            <Heading as="h4" size="md">
+            <Heading as='h4' size='md'>
               {activity.proposalType}: {activity.daoTitle}
             </Heading>
             {/* <Text>{getProposalCountdownText(activity)}</Text> */}
             <Stack isInline>
-              <Badge variantColor="green">{activity.yesVotes} Yes</Badge>
-              <Badge variantColor="red">{activity.noVotes} No</Badge>
+              <Badge variantColor='green'>{activity.yesVotes} Yes</Badge>
+              <Badge variantColor='red'>{activity.noVotes} No</Badge>
             </Stack>
             <Badge>{activity.activityFeed.message}</Badge>
           </>
         ) : (
           <>
-            <Heading as="h4" size="md">
+            <Heading as='h4' size='md'>
               Rage Quit on {formatCreatedAt(activity.createdAt)}
             </Heading>
             <Text>Shares: {activity.shares}</Text>

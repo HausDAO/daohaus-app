@@ -39,22 +39,22 @@ const Hub = () => {
 
   return (
     <Box p={6}>
-      <Flex w="100%">
+      <Flex w='100%'>
         <Button onClick={setLocalTheme}> PRETEND DAO BUTTON</Button>
         <Button onClick={setDefault}> DEFAULT</Button>
       </Flex>
 
       {user ? (
         <>
-          <Grid gap={6} templateColumns="repeat(2, 1fr)">
+          <Grid gap={6} templateColumns='repeat(2, 1fr)'>
             <Box
-              rounded="lg"
-              bg="blackAlpha.600"
-              borderWidth="1px"
-              borderColor="whiteAlpha.200"
+              rounded='lg'
+              bg='blackAlpha.600'
+              borderWidth='1px'
+              borderColor='whiteAlpha.200'
               p={6}
               mt={6}
-              w="100%"
+              w='100%'
             >
               <HubProfileCard />
 
@@ -65,16 +65,10 @@ const Hub = () => {
               ) : null}
             </Box>
 
-            <Box
-              rounded="lg"
-              bg="blackAlpha.600"
-              borderWidth="1px"
-              borderColor="whiteAlpha.200"
-              p={6}
-              mt={6}
-              w="100%"
-            >
-              <Text fontSize="xl">Recent Activity</Text>
+            <Box>
+              <Text fontSize='xl' ml={6}>
+                Recent Activity
+              </Text>
               {memberDaos ? (
                 <HubActivityFeed
                   daos={memberDaos.members.map((member) => member.moloch)}
@@ -86,7 +80,7 @@ const Hub = () => {
           <GraphFetch
             query={HUB_MEMBERSHIPS}
             setRecords={setMemberDaos}
-            entity="members"
+            entity='members'
             variables={{ memberAddress: user.username }}
           />
         </>
