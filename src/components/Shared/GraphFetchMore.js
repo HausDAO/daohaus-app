@@ -1,7 +1,7 @@
-import React, { useContext, useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useQuery } from '@apollo/react-hooks';
 
-import { PokemolContext } from '../../contexts/PokemolContext';
+import { useNetwork } from '../../contexts/PokemolContext';
 import Loading from '../Shared/Loading';
 import { networkClients } from '../../utils/apollo/clients';
 
@@ -11,13 +11,16 @@ const GraphFetchMore = ({
   variables,
   suppressLoading,
   entity,
+  context,
 }) => {
-  const { state } = useContext(PokemolContext);
+  const [network] = useNetwork();
+  const [fetched, setFetched] = useState();
 
   const { loading, error, data, fetchMore, refetch } = useQuery(query, {
-    client: networkClients[state.network.network_id],
+    client: networkClients[network.network_id],
     variables,
     fetchPolicy: 'network-only',
+    context,
   });
 
   useEffect(() => {
@@ -27,11 +30,12 @@ const GraphFetchMore = ({
           variables: { skip: data[entity].length },
           updateQuery: (prev, { fetchMoreResult }) => {
             if (!fetchMoreResult[entity].length) {
+              setFetched(true);
               return;
             }
 
             return Object.assign({}, prev, {
-              members: [...prev[entity], ...fetchMoreResult[entity]],
+              [entity]: [...prev[entity], ...fetchMoreResult[entity]],
             });
           },
         });
@@ -46,12 +50,15 @@ const GraphFetchMore = ({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [data]);
 
+  console.log('error', error);
+
   useEffect(() => {
-    if (data) {
-      setRecords(data);
+    console.log('data', data);
+    if (data && fetched) {
+      setRecords(data[entity]);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [data]);
+  }, [fetched, data]);
 
   // useEffect(() => {
   //   if (state[entity].refetch) {

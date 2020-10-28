@@ -20,10 +20,11 @@ const _web3 = new Web3(
 
 export const resolvers = {
   Proposal: {
-    status: (proposal, _args, { cache }) => {
-      const { currentPeriod } = cache.readQuery({
-        query: GET_METADATA,
-      });
+    status: (proposal, _args, _context) => {
+      // const { currentPeriod } = cache.readQuery({
+      //   query: GET_METADATA,
+      // });
+      const currentPeriod = _context.currentPeriod;
 
       return determineProposalStatus(
         proposal,
@@ -33,10 +34,8 @@ export const resolvers = {
         +proposal.moloch.version,
       );
     },
-    gracePeriod: (proposal, _args, { cache }) => {
-      const { currentPeriod } = cache.readQuery({
-        query: GET_METADATA,
-      });
+    gracePeriod: (proposal, _args, _context) => {
+      const currentPeriod = _context.currentPeriod;
 
       if (
         inGracePeriod(
@@ -56,10 +55,8 @@ export const resolvers = {
       }
       return 0;
     },
-    votingEnds: (proposal, _args, { cache }) => {
-      const { currentPeriod } = cache.readQuery({
-        query: GET_METADATA,
-      });
+    votingEnds: (proposal, _args, _context) => {
+      const currentPeriod = _context.currentPeriod;
 
       if (
         inVotingPeriod(
@@ -76,15 +73,15 @@ export const resolvers = {
       }
       return 0;
     },
-    votingStarts: (proposal, _args, { cache }) => {
-      const { currentPeriod } = cache.readQuery({ query: GET_METADATA });
+    votingStarts: (proposal, _args, _context) => {
+      const currentPeriod = _context.currentPeriod;
       if (inQueue(proposal, currentPeriod)) {
         return proposal.startingPeriod - currentPeriod;
       }
       return 0;
     },
-    readyForProcessing: (proposal, _args, { cache }) => {
-      const { currentPeriod } = cache.readQuery({ query: GET_METADATA });
+    readyForProcessing: (proposal, _args, _context) => {
+      const currentPeriod = _context.currentPeriod;
       if (
         passedVotingAndGrace(
           proposal,
@@ -99,7 +96,7 @@ export const resolvers = {
       }
       return false;
     },
-    proposalType: (proposal, _args, { cache }) => {
+    proposalType: (proposal, _args, _context) => {
       return determineProposalType(proposal);
     },
     title: (proposal) => {

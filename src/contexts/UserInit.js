@@ -33,6 +33,7 @@ const UserInit = () => {
   }, [dao, user]);
 
   const initCurrentUser = async () => {
+    console.log('************initCurrentUser();');
     let loginType = localStorage.getItem('loginType') || USER_TYPE.READ_ONLY;
     if (user && user.type === loginType) {
       return;
@@ -91,6 +92,7 @@ const UserInit = () => {
   };
 
   const initUserWallet = async () => {
+    console.log('^^^^^^^^^^^^^^initUserWallet');
     const addrByDelegateKey = await dao.daoService.mcDao.memberAddressByDelegateKey(
       user.username,
     );

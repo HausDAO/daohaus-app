@@ -30,7 +30,7 @@ const DaoInit = () => {
   }, [location, user]);
 
   const initDao = async (daoParam) => {
-    console.log('init dao');
+    console.log('###############init dao');
     updateLoading(true);
 
     let daoRes;

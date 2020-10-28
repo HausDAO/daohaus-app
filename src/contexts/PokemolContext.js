@@ -26,6 +26,7 @@ const initialState = {
       cacheProvider: true,
     }),
   },
+  proposals: [],
 };
 
 const reducer = (state, action) => {
@@ -50,6 +51,9 @@ const reducer = (state, action) => {
     }
     case 'setUserWallet': {
       return { ...state, userWallet: action.payload };
+    }
+    case 'setProposals': {
+      return { ...state, proposals: action.payload };
     }
     default: {
       return initialState;
@@ -92,6 +96,10 @@ function PokemolContextProvider(props) {
     dispatch({ type: 'setUserWallet', payload: wallet });
   }, []);
 
+  const updateProposals = useCallback((data) => {
+    dispatch({ type: 'setProposals', payload: data });
+  }, []);
+
   return (
     <PokemolContext.Provider
       value={useMemo(
@@ -106,6 +114,7 @@ function PokemolContextProvider(props) {
             updateNetwork,
             updateTxProcessor,
             updateUserWallet,
+            updateProposals,
           },
         ],
         [
@@ -118,6 +127,7 @@ function PokemolContextProvider(props) {
           updateNetwork,
           updateTxProcessor,
           updateUserWallet,
+          updateProposals,
         ],
       )}
     >
@@ -164,6 +174,11 @@ export function useUserWallet() {
 export function useLoading() {
   const [state, { updateLoading }] = usePokemolContext();
   return [state.loading, updateLoading];
+}
+
+export function useProposals() {
+  const [state, { updateProposals }] = usePokemolContext();
+  return [state.proposals, updateProposals];
 }
 
 const PokemolContextConsumer = PokemolContext.Consumer;
