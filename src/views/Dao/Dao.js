@@ -1,4 +1,4 @@
-import { Flex, Spinner, Box, Text } from '@chakra-ui/core';
+import { Flex, Spinner, Box } from '@chakra-ui/core';
 import React, { useEffect, useState } from 'react';
 import DaoActivityFeed from '../../components/Dao/DaoActivityFeed';
 import DaoOverviewDetails from '../../components/Dao/DaoOverviewDetails';

@@ -8,6 +8,7 @@ const DaoActivityFeed = ({ dao }) => {
   // const [activities, setActivities] = useState([]);
   const proposalActivities = [
     {
+      id: 1,
       moloch: dao.address,
       proposalId: 1,
       proposalType: 'funding',
