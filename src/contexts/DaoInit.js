@@ -28,7 +28,33 @@ const DaoInit = () => {
       initDao(daoParam);
     }
     // eslint-disable-next-line
-  }, [location, user]);
+  }, [location]);
+
+  useEffect(() => {
+    const needsUserDaoService =
+      dao && user && user.username === dao.daoService.accountAddr;
+    if (needsUserDaoService) {
+      initWeb3DaoService();
+    }
+
+    // eslint-disable-next-line
+  }, [user, dao]);
+
+  const initWeb3DaoService = async () => {
+    console.log('@@@@@@@@@@@@init dao service');
+
+    const daoService = await DaoService.instantiateWithWeb3(
+      user.username,
+      web3Connect.provider,
+      dao.address,
+      dao.version,
+    );
+
+    updateDao({
+      ...dao,
+      daoService,
+    });
+  };
 
   const initDao = async (daoParam) => {
     console.log('###############init dao');
@@ -67,12 +93,13 @@ const DaoInit = () => {
     const currentPeriod = await daoService.mcDao.getCurrentPeriod();
 
     updateDao({
+      ...dao,
       address: daoParam,
       apiMeta: daoRes ? daoRes.data : null,
       daoService: daoService,
       boosts,
       currentPeriod: parseInt(currentPeriod),
-      graphData: dao ? dao.graphData : null,
+      // graphData: dao ? dao.graphData : null,
     });
     updateLoading(false);
   };

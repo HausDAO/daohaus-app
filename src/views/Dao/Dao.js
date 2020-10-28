@@ -13,7 +13,6 @@ const Dao = () => {
   const [dao, updateDao] = useDao();
   const [user] = useUser();
   const [, updateLoading] = useLoading();
-  console.log(dao);
 
   useEffect(() => {
     if (daoGraphData) {
@@ -38,10 +37,12 @@ const Dao = () => {
               <Box w='50%' mr={6}>
                 <DaoOverviewDetails dao={dao} />
               </Box>
-              <Box w='40%'>
-                <MemberInfoCard user={user} />
-                <DaoActivityFeed dao={dao} />
-              </Box>
+              {user ? (
+                <Box w='40%'>
+                  <MemberInfoCard user={user} />
+                  <DaoActivityFeed dao={dao} />
+                </Box>
+              ) : null}
             </Flex>
           ) : null}
 
