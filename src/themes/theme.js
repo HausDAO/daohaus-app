@@ -74,7 +74,7 @@ export const customTheme = (daoTheme) => {
       heading: themeOverrides.primaryFont,
       body: themeOverrides.bodyFont,
       hub: 'Mirza',
-      accessory: 'Roboto',
+      accessory: 'Roboto Mono',
       space: 'Space Mono',
     },
     daoMeta: {

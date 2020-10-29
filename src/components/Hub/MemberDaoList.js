@@ -1,15 +1,12 @@
 import React, { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link as RouterLink } from 'react-router-dom';
 import makeBlockie from 'ethereum-blockies-base64';
-import {
-  Avatar,
-  AvatarBadge,
-  Box,
-  Flex,
-  Link as ChLink,
-} from '@chakra-ui/core';
+import { Avatar, AvatarBadge, Box, Flex, Link, Text } from '@chakra-ui/core';
+
+import { useTheme } from '../../contexts/PokemolContext';
 
 const MemberDaoList = ({ daos }) => {
+  const [theme] = useTheme();
   const [visibleDaos, setVisibleDaos] = useState([]);
 
   useEffect(() => {
@@ -32,16 +29,28 @@ const MemberDaoList = ({ daos }) => {
 
     return (
       <div key={dao.id}>
-        <Link to={`/dao/${dao.id}`}>
-          <Avatar name={dao.title.substr(0, 1)} src={makeBlockie(dao.id)}>
+        <Link
+          as={RouterLink}
+          to={`/dao/${dao.id}`}
+          display='flex'
+          flexDirection='column'
+          alignItems='center'
+        >
+          <Avatar
+            name={dao.title.substr(0, 1)}
+            src={makeBlockie(dao.id)}
+            mb={4}
+          >
             {healthCount ? (
-              <AvatarBadge size="1.25em" bg="red.500">
+              <AvatarBadge size='1.25em' bg='red.500'>
                 {healthCount}
               </AvatarBadge>
             ) : null}
           </Avatar>
 
-          <p>{dao.title}</p>
+          <Text fontFamily={theme.fonts.mono} fontSize='sm'>
+            {dao.title}
+          </Text>
         </Link>
       </div>
     );
@@ -63,27 +72,39 @@ const MemberDaoList = ({ daos }) => {
   const canSearch = daos.length > 5;
 
   return (
-    <Box maxW="500px">
-      <h4>Member of {daos.length} DAOs</h4>
+    <Box maxW='500px'>
+      <Text
+        fontFamily={theme.fonts.heading}
+        fontSize='lg'
+        fontWeight={700}
+        mb={6}
+      >
+        Member of {daos.length} DAO{daos.length > 1 && 's'}
+      </Text>
 
-      <Flex direction="row" overflowX="scroll">
+      <Flex direction='row' overflowX='scroll' mb={6}>
         {visibleDaos.map((dao) => renderDaoAvatar(dao))}
       </Flex>
 
       {canSearch ? (
         <div>
           <input
-            type="search"
-            className="input"
-            placeholder="Search My Daos"
+            type='search'
+            className='input'
+            placeholder='Search My Daos'
             onChange={(e) => handleChange(e)}
           />
         </div>
       ) : null}
 
-      <ChLink href="https://daohaus.club" isExternal>
+      <Link
+        href='https://daohaus.club'
+        isExternal
+        fontSize='md'
+        textTransform='uppercase'
+      >
         Explore more daos on daohaus
-      </ChLink>
+      </Link>
     </Box>
   );
 };
