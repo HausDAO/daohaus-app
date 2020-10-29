@@ -32,7 +32,7 @@ const HubProfileCard = () => {
         )}
 
         <Flex direction='column'>
-          <Text fontSize='xl'>
+          <Text fontSize='xl' fontFamily={theme.fonts.heading}>
             {user.name || truncateAddr(user.username)}{' '}
             <span>{user.emoji || ''} </span>
           </Text>
