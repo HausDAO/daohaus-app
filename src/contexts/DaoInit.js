@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
-import { DaoService } from '../utils/DaoService';
-import { get } from '../utils/Requests';
+import { DaoService } from '../utils/dao-service';
+import { get } from '../utils/requests';
 
 import { useLoading, useUser, useDao, useWeb3Connect } from './PokemolContext';
 
@@ -41,7 +41,7 @@ const DaoInit = () => {
   }, [user, dao]);
 
   const initDao = async (daoParam) => {
-    console.log('###############init dao');
+    // console.log('###############init dao');
     updateLoading(true);
 
     let daoRes;
@@ -74,7 +74,7 @@ const DaoInit = () => {
           )
         : await DaoService.instantiateWithReadOnly(daoParam, version);
 
-    const currentPeriod = await daoService.mcDao.getCurrentPeriod();
+    const currentPeriod = await daoService.moloch.getCurrentPeriod();
 
     updateDao({
       ...dao,

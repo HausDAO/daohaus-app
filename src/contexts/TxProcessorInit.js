@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 
-import { TxProcessorService } from '../utils/TxProcessorService';
+import { TxProcessorService } from '../utils/tx-processor-service';
 import { useTxProcessor, useUser, useWeb3Connect } from './PokemolContext';
 
 const TxProcessorInit = () => {

@@ -3,7 +3,7 @@ import { Box, Flex, Text, Image } from '@chakra-ui/core';
 
 import { useUser, useTheme } from '../../contexts/PokemolContext';
 import makeBlockie from 'ethereum-blockies-base64';
-import { truncateAddr } from '../../utils/Helpers';
+import { truncateAddr } from '../../utils/helpers';
 
 const HubProfileCard = () => {
   const [user] = useUser();

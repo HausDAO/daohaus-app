@@ -3,7 +3,7 @@ import Web3Modal from 'web3modal';
 import { Button, useToast } from '@chakra-ui/core';
 
 import { getChainData } from '../../utils/chains';
-import { w3connect, providerOptions } from '../../utils/Auth';
+import { w3connect, providerOptions } from '../../utils/auth';
 import { useWeb3Connect } from '../../contexts/PokemolContext';
 
 export const Web3SignIn = () => {

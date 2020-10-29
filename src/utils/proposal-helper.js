@@ -1,6 +1,6 @@
 import React, { Fragment } from 'react';
 
-import { timeToNow } from '../utils/Helpers';
+import { timeToNow } from './helpers';
 
 export const ProposalStatus = {
   Unknown: 'Unknown',
@@ -19,34 +19,34 @@ export function getProposalCountdownText(proposal) {
     case ProposalStatus.InQueue:
       return (
         <Fragment>
-          <span className="subtext">Voting Begins: </span>
+          <span className='subtext'>Voting Begins: </span>
           <span>{timeToNow(proposal.votingPeriodStarts)}</span>
         </Fragment>
       );
     case ProposalStatus.VotingPeriod:
       return (
         <Fragment>
-          <span className="subtext">Voting Ends: </span>
+          <span className='subtext'>Voting Ends: </span>
           <span>{timeToNow(proposal.votingPeriodEnds)}</span>
         </Fragment>
       );
     case ProposalStatus.GracePeriod:
       return (
         <Fragment>
-          <span className="subtext">Grace Period Ends: </span>
+          <span className='subtext'>Grace Period Ends: </span>
           <span>{timeToNow(proposal.gracePeriodEnds)}</span>
         </Fragment>
       );
     case ProposalStatus.Passed:
-      return <span className="subtext">Passed</span>;
+      return <span className='subtext'>Passed</span>;
     case ProposalStatus.Failed:
-      return <span className="subtext">Failed</span>;
+      return <span className='subtext'>Failed</span>;
     case ProposalStatus.Aborted:
-      return <span className="subtext">Aborted</span>;
+      return <span className='subtext'>Aborted</span>;
     case ProposalStatus.ReadyForProcessing:
-      return <span className="subtext">Ready For Processing</span>;
+      return <span className='subtext'>Ready For Processing</span>;
     case ProposalStatus.Unsponsored:
-      return <span className="subtext">Unsponsored</span>;
+      return <span className='subtext'>Unsponsored</span>;
     default:
       return <Fragment />;
   }
