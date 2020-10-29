@@ -1,54 +1,51 @@
 import React from 'react';
-import { Box, Flex, Text } from '@chakra-ui/core';
+import { Box, Flex, Text, Image } from '@chakra-ui/core';
 
-import { useUser } from '../../contexts/PokemolContext';
+import { useUser, useTheme } from '../../contexts/PokemolContext';
 import makeBlockie from 'ethereum-blockies-base64';
 import { truncateAddr } from '../../utils/Helpers';
 
 const HubProfileCard = () => {
   const [user] = useUser();
+  const [theme] = useTheme();
+  console.log(user);
 
   return (
     <>
-      <Flex direction="row" alignItems="center">
+      <Flex direction='row' alignItems='center' pl={12} pt={2}>
         {user.image && user.image[0] ? (
-          <Box
-            w="100px"
-            h="100px"
-            mr={3}
-            rounded="full"
-            style={{
-              backgroundImage: `url(${'https://ipfs.infura.io/ipfs/' +
-                user.image[0].contentUrl['/']})`,
-            }}
-          >
-            {''}
-          </Box>
+          <Image
+            w='100px'
+            h='100px'
+            mr={10}
+            rounded='full'
+            src={`https://ipfs.infura.io/ipfs/${user.image[0].contentUrl['/']}`}
+          />
         ) : (
-          <Box
-            w="100px"
-            h="100px"
-            mr={3}
-            rounded="full"
-            style={{
-              backgroundImage: `url("${makeBlockie(user.username)}")`,
-            }}
-          >
-            {''}
-          </Box>
+          <Image
+            w='100px'
+            h='100px'
+            mr={10}
+            rounded='full'
+            src={makeBlockie(user.username)}
+          />
         )}
 
-        <Flex direction="column">
-          <Text fontSize="xl">
+        <Flex direction='column'>
+          <Text fontSize='xl'>
             {user.name || truncateAddr(user.username)}{' '}
             <span>{user.emoji || ''} </span>
           </Text>
           {user.name ? (
-            <Text fontSize="m">{truncateAddr(user.username)}</Text>
+            <Text fontSize='sm' fontFamily={theme.fonts.mono}>
+              {truncateAddr(user.username)}
+            </Text>
           ) : null}
         </Flex>
       </Flex>
-      <Text fontSize="m">{user.description}</Text>
+      <Text fontSize='sm' ml={12} mt={4} fontFamily={theme.fonts.mono}>
+        {user.description}
+      </Text>
     </>
   );
 };

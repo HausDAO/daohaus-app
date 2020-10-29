@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Text, Flex, Link, Spinner } from '@chakra-ui/core';
+import { Text, Flex, Icon, Spinner } from '@chakra-ui/core';
 import { useLocation } from 'react-router-dom';
 import {
   useUser,
@@ -10,6 +10,7 @@ import {
 } from '../../contexts/PokemolContext';
 import { Web3SignIn } from './Web3SignIn';
 import UserAvatar from './UserAvatar';
+import { PrimaryButton } from '../../themes/theme';
 
 const Header = () => {
   const location = useLocation();
@@ -40,16 +41,28 @@ const Header = () => {
 
   return (
     <Flex direction='row' justify='space-between' p={6}>
-      <Flex direction='row' justify='flex-start'>
-        <Text fontSize='3xl' fontFamily={theme.fonts.heading} fontWeight={700}>
+      <Flex direction='row' justify='flex-start' align='center'>
+        <Text
+          fontSize='3xl'
+          fontFamily={theme.fonts.heading}
+          fontWeight={700}
+          mr={10}
+        >
           {pageTitle}
         </Text>
-
-        {user ? (
-          <Link href='https://3box.io/hub' isExternal>
-            Edit Profile on 3Box
-          </Link>
-        ) : null}
+        {location.pathname === `/` && user && (
+          <PrimaryButton as='a' href='https://3box.io/hub' target='_blank'>
+            Edit 3Box Profile
+          </PrimaryButton>
+        )}
+        {location.pathname === `/dao/${dao?.address}/proposals` && (
+          <PrimaryButton>
+            New {theme.daoMeta.proposal} <Icon name='small-add' />
+          </PrimaryButton>
+        )}
+        {location.pathname === `/dao/${dao?.address}/members` && (
+          <PrimaryButton>Apply</PrimaryButton>
+        )}
       </Flex>
 
       <Flex direction='row' justify='flex-end' align='center'>
