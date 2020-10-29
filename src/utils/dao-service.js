@@ -1,11 +1,11 @@
 import Web3 from 'web3';
 
 import {
-  Web3McDaoService,
-  Web3McDaoServiceV2,
-  ReadonlyMcDaoService,
-} from './McDaoService';
-import { Web3TokenService, TokenService } from './TokenService';
+  Web3MolochService,
+  Web3MolochServiceV2,
+  ReadonlyMolochService,
+} from './moloch-service';
+import { Web3TokenService, TokenService } from './token-service';
 
 let singleton;
 
@@ -21,10 +21,10 @@ export class DaoService {
   token;
   daoAddress;
 
-  constructor(accountAddr, web3, mcDaoService, token, contractAddr) {
+  constructor(accountAddr, web3, molochService, token, contractAddr) {
     this.accountAddr = accountAddr;
     this.web3 = web3;
-    this.mcDao = mcDaoService;
+    this.moloch = molochService;
     this.token = token;
     this.daoAddress = contractAddr;
   }
@@ -41,14 +41,19 @@ export class DaoService {
   ) {
     const web3 = new Web3(injected);
 
-    let mcDao;
+    let moloch;
     let approvedToken;
     if (version === 2) {
-      mcDao = new Web3McDaoServiceV2(web3, contractAddr, accountAddr, version);
-      approvedToken = await mcDao.getDepositToken();
+      moloch = new Web3MolochServiceV2(
+        web3,
+        contractAddr,
+        accountAddr,
+        version,
+      );
+      approvedToken = await moloch.getDepositToken();
     } else {
-      mcDao = new Web3McDaoService(web3, contractAddr, accountAddr, version);
-      approvedToken = await mcDao.approvedToken();
+      moloch = new Web3MolochService(web3, contractAddr, accountAddr, version);
+      approvedToken = await moloch.approvedToken();
     }
 
     const token = new Web3TokenService(
@@ -58,7 +63,7 @@ export class DaoService {
       accountAddr,
     );
 
-    singleton = new Web3DaoService(accountAddr, web3, mcDao, token);
+    singleton = new Web3DaoService(accountAddr, web3, moloch, token);
     return singleton;
   }
 
@@ -67,16 +72,16 @@ export class DaoService {
       new Web3.providers.HttpProvider(process.env.REACT_APP_INFURA_URI),
     );
 
-    const mcDao = new ReadonlyMcDaoService(web3, contractAddr, '', version);
+    const moloch = new ReadonlyMolochService(web3, contractAddr, '', version);
 
     let approvedToken;
     if (version === 2) {
-      approvedToken = await mcDao.getDepositToken();
+      approvedToken = await moloch.getDepositToken();
     } else {
-      approvedToken = await mcDao.approvedToken();
+      approvedToken = await moloch.approvedToken();
     }
     const token = new TokenService(web3, approvedToken);
-    singleton = new ReadonlyDaoService('', web3, mcDao, token, contractAddr);
+    singleton = new ReadonlyDaoService('', web3, moloch, token, contractAddr);
     return singleton;
   }
 

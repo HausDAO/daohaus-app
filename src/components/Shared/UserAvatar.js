@@ -3,7 +3,7 @@ import makeBlockie from 'ethereum-blockies-base64';
 import { Flex, Avatar, Text } from '@chakra-ui/core';
 
 import { useTheme } from '../../contexts/PokemolContext';
-import { truncateAddr } from '../../utils/Helpers';
+import { truncateAddr } from '../../utils/helpers';
 
 const UserAvatar = ({ user }) => {
   const [theme] = useTheme();

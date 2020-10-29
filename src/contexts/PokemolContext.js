@@ -1,7 +1,7 @@
 import React, { useContext, useCallback, useMemo } from 'react';
 import Web3Modal from 'web3modal';
 
-import { providerOptions } from '../utils/Auth';
+import { providerOptions } from '../utils/auth';
 import { customTheme } from '../themes/theme';
 import supportedChains, { getChainData } from '../utils/chains';
 
@@ -27,6 +27,7 @@ const initialState = {
     }),
   },
   proposals: [],
+  members: [],
 };
 
 const reducer = (state, action) => {
@@ -54,6 +55,9 @@ const reducer = (state, action) => {
     }
     case 'setProposals': {
       return { ...state, proposals: action.payload };
+    }
+    case 'setMembers': {
+      return { ...state, members: action.payload };
     }
     default: {
       return initialState;
@@ -100,6 +104,10 @@ function PokemolContextProvider(props) {
     dispatch({ type: 'setProposals', payload: data });
   }, []);
 
+  const updateMembers = useCallback((data) => {
+    dispatch({ type: 'setMembers', payload: data });
+  }, []);
+
   return (
     <PokemolContext.Provider
       value={useMemo(
@@ -115,6 +123,7 @@ function PokemolContextProvider(props) {
             updateTxProcessor,
             updateUserWallet,
             updateProposals,
+            updateMembers,
           },
         ],
         [
@@ -128,6 +137,7 @@ function PokemolContextProvider(props) {
           updateTxProcessor,
           updateUserWallet,
           updateProposals,
+          updateMembers,
         ],
       )}
     >
@@ -179,6 +189,11 @@ export function useLoading() {
 export function useProposals() {
   const [state, { updateProposals }] = usePokemolContext();
   return [state.proposals, updateProposals];
+}
+
+export function useMembers() {
+  const [state, { updateMembers }] = usePokemolContext();
+  return [state.members, updateMembers];
 }
 
 const PokemolContextConsumer = PokemolContext.Consumer;

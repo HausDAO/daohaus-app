@@ -1,4 +1,5 @@
 import Web3 from 'web3';
+import { getProfile } from '3box/lib/api';
 
 import {
   determineProposalStatus,
@@ -9,10 +10,9 @@ import {
   determineProposalType,
   descriptionMaker,
   titleMaker,
-} from '../ProposalHelper';
-import { TokenService } from '../TokenService';
-import { McDaoService } from '../McDaoService';
-import { GET_METADATA } from '../Queries';
+} from '../proposal-helper';
+import { TokenService } from '../token-service';
+import { MolochService } from '../moloch-service';
 
 const _web3 = new Web3(
   new Web3.providers.HttpProvider(process.env.REACT_APP_INFURA_URI),
@@ -185,14 +185,14 @@ export const resolvers = {
     },
     contractBabeBalance: async (tokenBalance, _args, { cache }) => {
       if (tokenBalance.guildBank) {
-        const mcDaoService = new McDaoService(
+        const molochService = new MolochService(
           _web3,
           tokenBalance.moloch.id,
           null,
           2,
         );
 
-        const balance = await mcDaoService.getUserTokenBalance(
+        const balance = await molochService.getUserTokenBalance(
           '0x000000000000000000000000000000000000baBe',
           tokenBalance.token.tokenAddress,
         );
@@ -212,6 +212,16 @@ export const resolvers = {
       const decimals = approvedToken.decimals;
 
       return +decimals;
+    },
+  },
+  Member: {
+    profile: async (member) => {
+      let profile;
+      try {
+        profile = await getProfile(member.memberAddress);
+      } catch (err) {}
+
+      return profile;
     },
   },
 };

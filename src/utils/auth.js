@@ -1,7 +1,7 @@
 import Web3 from 'web3';
 import WalletConnectProvider from '@walletconnect/web3-provider';
 
-import { USER_TYPE } from './DaoService';
+import { USER_TYPE } from './dao-service';
 import { getChainData } from './chains';
 
 export const providerOptions = {

@@ -1,32 +1,13 @@
 import React, { useState } from 'react';
 import { Box, Flex, Text } from '@chakra-ui/core';
 
-import { useTheme } from '../../contexts/PokemolContext';
-
-const members = [
-  {
-    name: 'Vitalik1',
-    shares: '1337',
-    loot: '100',
-    join: 'July 30, 2020',
-  },
-  {
-    name: 'Vitalik2',
-    shares: '1337',
-    loot: '100',
-    join: 'July 30, 2020',
-  },
-  {
-    name: 'Vitalik3',
-    shares: '1337',
-    loot: '100',
-    join: 'July 30, 2020',
-  },
-];
+import { useMembers, useTheme } from '../../contexts/PokemolContext';
+import { truncateAddr } from '../../utils/helpers';
 
 const MembersList = () => {
   const [theme] = useTheme();
   const filter = useState(null);
+  const [members] = useMembers();
 
   return (
     <Box w='60%'>
@@ -109,34 +90,39 @@ const MembersList = () => {
             Join Date
           </Box>
         </Flex>
-        {members.map((member) => {
-          return (
-            <Flex h='60px' key={member.name} align='center'>
-              <Flex w='10%' ml='5%'>
-                <Text>hello</Text>
-              </Flex>
-              <Flex w='30%' direction='column' justify='space-between'>
-                <Text fontSize='md' fontFamily={theme.fonts.heading}>
-                  {member.name}
-                </Text>
-                <Text
-                  fontSize='xs'
-                  fontFamily={theme.fonts.mono}
-                  fontWeight={300}
-                >
-                  {member.name}
-                </Text>
-              </Flex>
-              <Box w='15%' fontFamily={theme.fonts.heading}>
-                {member.shares}
-              </Box>
-              <Box w='15%' fontFamily={theme.fonts.heading}>
-                {member.loot}
-              </Box>
-              <Box fontFamily={theme.fonts.heading}>{member.join}</Box>
-            </Flex>
-          );
-        })}
+        {members
+          ? members.map((member) => {
+              return (
+                <Flex h='60px' key={member.id} align='center'>
+                  <Flex w='10%' ml='5%'>
+                    <Text>
+                      {member.profile?.name ||
+                        truncateAddr(member.memberAddress)}
+                    </Text>
+                  </Flex>
+                  <Flex w='30%' direction='column' justify='space-between'>
+                    <Text fontSize='md' fontFamily={theme.fonts.heading}>
+                      {member.name}
+                    </Text>
+                    <Text
+                      fontSize='xs'
+                      fontFamily={theme.fonts.mono}
+                      fontWeight={300}
+                    >
+                      {member.name}
+                    </Text>
+                  </Flex>
+                  <Box w='15%' fontFamily={theme.fonts.heading}>
+                    {member.shares}
+                  </Box>
+                  <Box w='15%' fontFamily={theme.fonts.heading}>
+                    {member.loot}
+                  </Box>
+                  <Box fontFamily={theme.fonts.heading}>{member.join}</Box>
+                </Flex>
+              );
+            })
+          : null}
       </Box>
     </Box>
   );

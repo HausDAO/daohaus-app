@@ -16,7 +16,8 @@ const GraphFetchMore = ({
   const [network] = useNetwork();
   const [fetched, setFetched] = useState();
 
-  const { loading, error, data, fetchMore, refetch } = useQuery(query, {
+  // const { loading, error, data, fetchMore, refetch } = useQuery(query, {
+  const { loading, error, data, fetchMore } = useQuery(query, {
     client: networkClients[network.network_id],
     variables,
     fetchPolicy: 'network-only',
@@ -50,10 +51,9 @@ const GraphFetchMore = ({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [data]);
 
-  console.log('error', error);
+  // console.log('error', error);
 
   useEffect(() => {
-    console.log('data', data);
     if (data && fetched) {
       setRecords(data[entity]);
     }

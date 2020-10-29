@@ -2,8 +2,8 @@ import React, { useEffect } from 'react';
 import { useToast } from '@chakra-ui/core';
 import { getProfile } from '3box/lib/api';
 
-import { createWeb3User, w3connect } from '../utils/Auth';
-import { USER_TYPE } from '../utils/DaoService';
+import { createWeb3User, w3connect } from '../utils/auth';
+import { USER_TYPE } from '../utils/dao-service';
 import {
   useUserWallet,
   useUser,
@@ -35,7 +35,7 @@ const UserInit = () => {
   }, [dao, user]);
 
   const initCurrentUser = async () => {
-    console.log('************initCurrentUser();');
+    // console.log('************initCurrentUser();');
     let loginType = localStorage.getItem('loginType') || USER_TYPE.READ_ONLY;
     if (user && user.type === loginType) {
       return;
@@ -94,9 +94,9 @@ const UserInit = () => {
   };
 
   const initUserWallet = async () => {
-    console.log('^^^^^^^^^^^^^^initUserWallet');
+    // console.log('^^^^^^^^^^^^^^initUserWallet');
     // TODO: Do we still need all these - see if we can get elsewhere and store on user entity in state
-    const addrByDelegateKey = await dao.daoService.mcDao.memberAddressByDelegateKey(
+    const addrByDelegateKey = await dao.daoService.moloch.memberAddressByDelegateKey(
       user.username,
     );
     const tokenBalanceWei = await dao.daoService.token.balanceOf(user.username);
@@ -106,7 +106,7 @@ const UserInit = () => {
     );
     const tokenBalance = dao.daoService.web3.utils.fromWei(tokenBalanceWei);
     const allowance = dao.daoService.web3.utils.fromWei(allowanceWei);
-    const member = await dao.daoService.mcDao.members(addrByDelegateKey);
+    const member = await dao.daoService.moloch.members(addrByDelegateKey);
     const shares = parseInt(member.shares) || 0;
     const loot = parseInt(member.loot) || 0;
     const jailed = parseInt(member.jailed) || 0;

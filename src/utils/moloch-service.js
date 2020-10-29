@@ -1,7 +1,7 @@
 import DaoAbi from '../contracts/mcdao.json';
 import DaoAbiV2 from '../contracts/molochv2.json';
 
-export class McDaoService {
+export class MolochService {
   web3;
   daoContract;
   accountAddr;
@@ -193,13 +193,13 @@ export class McDaoService {
   async getUserTokenBalances(userAddress) {}
 }
 
-export class ReadonlyMcDaoService extends McDaoService {
+export class ReadonlyMolochService extends MolochService {
   async deployAccount() {
     throw new Error(`This account type cannot call deployAccount`);
   }
 }
 
-export class Web3McDaoService extends McDaoService {
+export class Web3MolochService extends MolochService {
   async submitVote(proposalIndex, uintVote, callback) {
     const newTx = this.daoContract.methods.submitVote(proposalIndex, uintVote);
     const txReceipt = await this.sendTx('submitVote', newTx, callback);
@@ -246,7 +246,7 @@ export class Web3McDaoService extends McDaoService {
   }
 }
 
-export class Web3McDaoServiceV2 extends Web3McDaoService {
+export class Web3MolochServiceV2 extends Web3MolochService {
   async rageQuit(amountShares = 0, amountLoot = 0, callback) {
     const newTx = this.daoContract.methods.ragequit(amountShares, amountLoot);
     const txReceipt = await this.sendTx('rageQuit', newTx, callback);
