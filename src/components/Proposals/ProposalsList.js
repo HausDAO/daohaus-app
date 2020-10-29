@@ -5,7 +5,7 @@ import { useTheme } from '../../contexts/PokemolContext';
 import ProposalCard from './ProposalCard';
 
 const ProposalsList = ({ proposals }) => {
-  const [filter,] = useState(null);
+  const [filter] = useState(null);
   const [theme] = useTheme();
   //! remove the slice and deal with pagination
   return (
@@ -13,7 +13,12 @@ const ProposalsList = ({ proposals }) => {
       <Box w='60%'>
         <Flex>
           {filter ? (
-            <Text ml={8} textTransform='uppercase'>
+            <Text
+              ml={8}
+              textTransform='uppercase'
+              fontSize='sm'
+              fontFamily={theme.fonts.heading}
+            >
               Filtered by:
               <span style={{ color: theme.colors.brand[50] }}>
                 Action Needed
@@ -23,12 +28,25 @@ const ProposalsList = ({ proposals }) => {
             <Text
               ml={8}
               textTransform='uppercase'
-              color={theme.colors.brand[50]}
+              fontFamily={theme.fonts.heading}
               cursor='pointer'
             >
-              Apply a filter
+              Apply a
+              <span style={{ color: theme.colors.brand[50] }}> filter</span>
             </Text>
           )}
+          <Text
+            ml={8}
+            textTransform='uppercase'
+            fontSize='sm'
+            fontFamily={theme.fonts.heading}
+          >
+            Sort by:
+            <span style={{ color: theme.colors.brand[50] }}>
+              {' '}
+              Voting Period
+            </span>
+          </Text>
         </Flex>
         {proposals.slice(0, 5).map((proposal) => {
           return <ProposalCard proposal={proposal} key={proposal.id} />;

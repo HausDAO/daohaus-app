@@ -1,13 +1,44 @@
 body {
   margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen",
-    "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue",
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
 code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
+  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
+}
+
+@font-face {
+  font-family: 'Inknut Antiqua';
+  src: local('Inknut Antiqua'),
+    url('./assets/fonts/Inknut_Antiqua/InknutAntiqua-Regular.ttf')
+      format('truetype');
+}
+
+@font-face {
+  font-family: 'Syne Mono';
+  src: local('Syne Mono'),
+    url('./assets/fonts/Syne_Mono/SyneMono-Regular.ttf') format('truetype');
+}
+
+@font-face {
+  font-family: 'Mirza';
+  src: local('Mirza'),
+    url('./assets/fonts/Mirza/Mirza-Regular.ttf') format('truetype');
+}
+
+@font-face {
+  font-family: 'Rubik';
+  src: local('Rubik'),
+    url('./assets/fonts/Rubik/Rubik-Regular.ttf') format('truetype');
+}
+
+@font-face {
+  font-family: 'Space Mono';
+  src: local('Space Mono'),
+    url('./assets/fonts/Space_Mono/SpaceMono-Regular.ttf') format('truetype');
 }

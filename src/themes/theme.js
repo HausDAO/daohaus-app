@@ -17,6 +17,15 @@ const defaultTheme = {
   brand900: '#03061B',
   brandImg: Brand,
   bg400: '#03061B',
+  primaryFont: 'Inknut Antiqua',
+  bodyFont: 'Rubik',
+  daoMeta: {
+    proposals: 'Proposals',
+    proposal: 'Proposal',
+    bank: 'Bank',
+    members: 'Members',
+    member: 'Member',
+  },
 };
 
 export const customTheme = (daoTheme) => {
@@ -59,6 +68,21 @@ export const customTheme = (daoTheme) => {
     icons: {
       ...theme.icons,
       ...customIcons,
+    },
+    fonts: {
+      ...theme.fonts,
+      heading: themeOverrides.primaryFont,
+      body: themeOverrides.bodyFont,
+      hub: 'Mirza',
+      accessory: 'Roboto',
+      space: 'Space Mono',
+    },
+    daoMeta: {
+      proposals: themeOverrides.daoMeta.proposals,
+      proposal: themeOverrides.daoMeta.proposal,
+      bank: themeOverrides.daoMeta.bank,
+      members: themeOverrides.daoMeta.members,
+      member: themeOverrides.daoMeta.member,
     },
   };
 };

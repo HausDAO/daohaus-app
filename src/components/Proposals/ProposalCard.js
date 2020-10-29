@@ -1,12 +1,16 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { Box, Flex, Text, Badge } from '@chakra-ui/core';
+import { utils } from 'web3';
+import { formatDistanceToNow, isBefore } from 'date-fns';
 
-import { useDao } from '../../contexts/PokemolContext';
+import { useDao, useTheme } from '../../contexts/PokemolContext';
 
 const ProposalCard = ({ proposal }) => {
   const [dao] = useDao();
+  const [theme] = useTheme();
   const details = JSON.parse(proposal.details);
+  const votePeriodEnds = new Date(+proposal.votingPeriodEnds * 1000);
 
   return (
     <Link to={`/dao/${dao.address}/proposals/${proposal.proposalId}`}>
@@ -21,10 +25,18 @@ const ProposalCard = ({ proposal }) => {
       >
         <Flex>
           <Box minWidth='30%' mr={5}>
-            <Text fontSize='0.8em' textTransform='uppercase'>
+            <Text
+              fontSize='sm'
+              textTransform='uppercase'
+              fontFamily={theme.fonts.heading}
+            >
               {proposal.proposalType}
             </Text>
-            <Text fontWeight={700} fontSize='1.5em'>
+            <Text
+              fontWeight={700}
+              fontSize='lg'
+              fontFamily={theme.fonts.heading}
+            >
               {details.title}
             </Text>
           </Box>
@@ -39,28 +51,59 @@ const ProposalCard = ({ proposal }) => {
         </Flex>
         <Flex w='80%' justify='space-between' mt={10}>
           <Box>
-            <Text textTransform='uppercase' fontSize='0.8em'>
+            <Text
+              textTransform='uppercase'
+              fontSize='sm'
+              fontFamily={theme.fonts.heading}
+              fontWeight={700}
+            >
               Tribute
             </Text>
-            <Text>25,000 Dai</Text>
+            <Text fontSize='lg' fontFamily={theme.fonts.space} fontWeight={700}>
+              {utils.fromWei(proposal.tributeOffered)}{' '}
+              {proposal.tributeToken || 'WETH'}
+            </Text>
           </Box>
           <Box>
-            <Text textTransform='uppercase' fontSize='0.8em'>
+            <Text
+              textTransform='uppercase'
+              fontSize='sm'
+              fontFamily={theme.fonts.heading}
+              fontWeight={700}
+            >
               Shares
             </Text>
-            <Text>25</Text>
+            <Text fontSize='lg' fontFamily={theme.fonts.space} fontWeight={700}>
+              {proposal.sharesRequested}
+            </Text>
           </Box>
           <Box>
-            <Text textTransform='uppercase' fontSize='0.8em'>
+            <Text
+              textTransform='uppercase'
+              fontSize='sm'
+              fontFamily={theme.fonts.heading}
+              fontWeight={700}
+            >
               Loot
             </Text>
-            <Text>50</Text>
+            <Text fontSize='lg' fontFamily={theme.fonts.space} fontWeight={700}>
+              {proposal.lootRequested}
+            </Text>
           </Box>
           <Box>
-            <Text textTransform='uppercase' fontSize='0.8em'>
-              Voting Period Ends
+            <Text
+              textTransform='uppercase'
+              fontSize='0.8em'
+              fontFamily={theme.fonts.heading}
+              fontWeight={700}
+            >
+              {isBefore(Date.now(), votePeriodEnds)
+                ? 'Voting Period Ends'
+                : 'Voting Ended'}
             </Text>
-            <Text>4 days from now</Text>
+            <Text fontSize='lg' fontFamily={theme.fonts.space} fontWeight={700}>
+              {formatDistanceToNow(votePeriodEnds, { addSuffix: true })}
+            </Text>
           </Box>
         </Flex>
       </Box>

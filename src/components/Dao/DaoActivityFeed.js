@@ -1,15 +1,16 @@
 import React from 'react';
 import { Text } from '@chakra-ui/core';
 
-// import { useProposals } from '../../contexts/PokemolContext';
+import { useTheme } from '../../contexts/PokemolContext';
 import ActivityFeedList from '../ActivityFeed/ActivityFeedList';
 
 const DaoActivityFeed = ({ dao }) => {
+  const [theme] = useTheme();
   // const [activities, setActivities] = useState([]);
   const proposalActivities = [
     {
       id: 1,
-      moloch: dao.address,
+      molochAddress: dao.address,
       proposalId: 1,
       proposalType: 'funding',
       daoTitle: 'QuickDao',
@@ -35,7 +36,13 @@ const DaoActivityFeed = ({ dao }) => {
 
   return (
     <>
-      <Text mt={6} ml={6} textTransform='uppercase' fontSize='0.9em'>
+      <Text
+        mt={6}
+        ml={6}
+        textTransform='uppercase'
+        fontSize='sm'
+        fontFamily={theme.fonts.heading}
+      >
         Activity Feed
       </Text>
       <ActivityFeedList activities={proposalActivities} />

@@ -12,18 +12,18 @@ const Layout = ({ children }) => {
   const handleToggle = () => setShow(!show);
 
   return (
-    <Flex direction="row" h="100vh" bg="brand.400" color="white" w="100vw">
+    <Flex direction='row' h='100vh' bg='brand.400' color='white' w='100vw'>
       <Box
-        h="100vh"
-        minW="100px"
-        d="flex"
+        h='100vh'
+        minW='100px'
+        d='flex'
         p={6}
-        direction="column"
-        alignItems="start"
-        justifyContent="center"
+        direction='column'
+        alignItems='start'
+        justifyContent='center'
         _hover={{ bg: 'brand.700' }}
       >
-        <Image src={theme.images.brandImg} onClick={handleToggle} size="80px" />
+        <Image src={theme.images.brandImg} onClick={handleToggle} size='80px' />
       </Box>
       {show ? (
         <Box>
@@ -31,7 +31,7 @@ const Layout = ({ children }) => {
         </Box>
       ) : null}
 
-      <Flex direction="column" bg="background.400" w="100vw">
+      <Flex direction='column' bg='background.400' w='100vw'>
         <Header></Header>
         {children}
       </Flex>

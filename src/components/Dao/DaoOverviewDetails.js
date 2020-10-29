@@ -11,7 +11,12 @@ const DaoOverviewDetails = ({ dao }) => {
 
   return (
     <>
-      <Text ml={6} textTransform='uppercase' fontSize='0.9em'>
+      <Text
+        ml={6}
+        textTransform='uppercase'
+        fontSize='sm'
+        fontFamily={theme.fonts.heading}
+      >
         Details
       </Text>
       <Box
@@ -31,28 +36,87 @@ const DaoOverviewDetails = ({ dao }) => {
             h={50}
             w={50}
           />
-          <Text ml={6} fontSize='2xl' fontWeight={700}>
+          <Text
+            ml={6}
+            fontSize='2xl'
+            fontWeight={700}
+            fontFamily={theme.fonts.heading}
+          >
             {dao.apiMeta.name}
           </Text>
         </Flex>
         <Flex direction='row' w='60%' justify='space-between' mt={6}>
           <Box>
-            <Text textTransform='uppercase'>Members</Text>
-            <Text>{5}</Text>
+            <Text
+              textTransform='uppercase'
+              fontFamily={theme.fonts.heading}
+              fontSize='sm'
+              fontWeight={700}
+            >
+              {theme.daoMeta.members}
+            </Text>
+            <Text
+              fontSize='2xl'
+              fontFamily={theme.fonts.heading}
+              fontWeight={700}
+            >
+              {5}
+            </Text>
           </Box>
           <Box>
-            <Text textTransform='uppercase'>Shares</Text>
-            <Text>{dao.graphData.totalShares || 0}</Text>
+            <Text
+              textTransform='uppercase'
+              fontFamily={theme.fonts.heading}
+              fontSize='sm'
+              fontWeight={700}
+            >
+              Shares
+            </Text>
+            <Text
+              fontSize='2xl'
+              fontFamily={theme.fonts.heading}
+              fontWeight={700}
+            >
+              {dao.graphData.totalShares || 0}
+            </Text>
           </Box>
           <Box>
-            <Text textTransform='uppercase'>Loot</Text>
-            <Text>{dao.graphData.totalLoot || 0}</Text>
+            <Text
+              textTransform='uppercase'
+              fontFamily={theme.fonts.heading}
+              fontSize='sm'
+              fontWeight={700}
+            >
+              Loot
+            </Text>
+            <Text
+              fontSize='2xl'
+              fontFamily={theme.fonts.heading}
+              fontWeight={700}
+            >
+              {dao.graphData.totalLoot || 0}
+            </Text>
           </Box>
         </Flex>
         <Box mt={6}>
-          <Text>Bank</Text>
-          <Text>$25,432</Text>
-          <Text>{dao.graphData.tokenBalances.length} Tokens</Text>
+          <Text
+            fontFamily={theme.fonts.heading}
+            textTransform='uppercase'
+            fontSize='sm'
+            fontWeight={700}
+          >
+            {theme.daoMeta.bank}
+          </Text>
+          <Text
+            fontSize='3xl'
+            fontFamily={theme.fonts.heading}
+            fontWeight={700}
+          >
+            $25,432
+          </Text>
+          <Text fontSize='sm' as='i' fontWeight={200}>
+            {dao.graphData.tokenBalances.length} Tokens
+          </Text>
         </Box>
         <Box mt={6}>{dao.apiMeta.description}</Box>
         <Flex mt={6}>
@@ -60,12 +124,12 @@ const DaoOverviewDetails = ({ dao }) => {
             mr={6}
             onClick={() => history.push(`/dao/${dao.address}/proposals`)}
           >
-            View Quests
+            View {theme.daoMeta.proposals}
           </PrimaryButton>
           <SecondaryButton
             onClick={() => history.push(`/dao/${dao.address}/bank`)}
           >
-            View Inventory
+            View {theme.daoMeta.bank}
           </SecondaryButton>
         </Flex>
       </Box>
