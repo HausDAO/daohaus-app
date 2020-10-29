@@ -109,6 +109,12 @@ const SideNav = () => {
                   </Text>
                 </Link>
               </Stack>
+              <Flex mt={10} direction='column' w='60%'>
+                <PrimaryButton onClick={setDefault} mb={3}>
+                  Default
+                </PrimaryButton>
+                <SecondaryButton onClick={setLocalTheme}>Other</SecondaryButton>
+              </Flex>
             </>
           ) : (
             <>
