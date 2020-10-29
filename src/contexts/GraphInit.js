@@ -53,7 +53,7 @@ const GraphInit = () => {
             setRecords={setLocalProposals}
             entity='proposals'
             variables={{ contractAddr: address }}
-            context={{ currentPeriod: dao.currentPeriod }}
+            context={{ currentPeriod: dao?.currentPeriod }}
           />
         </>
       ) : null}

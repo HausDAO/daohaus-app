@@ -1,80 +1,119 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
-import { Text, Flex, Stack, Spinner, Link as ChLink } from '@chakra-ui/core';
+import { Link as RouterLink, useHistory } from 'react-router-dom';
+import { Text, Stack, Spinner, Link, Box, Icon } from '@chakra-ui/core';
 
-import { useDao, useLoading } from '../../contexts/PokemolContext';
+import { useDao, useLoading, useTheme } from '../../contexts/PokemolContext';
 
 const SideNav = () => {
   const [loading] = useLoading();
+  const [theme] = useTheme();
   const [dao] = useDao();
+  const history = useHistory();
 
   return (
-    <Flex direction='column'>
+    <Box>
       {loading ? (
         <Spinner />
       ) : (
         <>
           {dao ? (
             <>
-              <Link to={`/dao/${dao.address}`}>
-                <Text fontSize='l' mt='30px'>
-                  {dao.apiMeta.name}
+              <Box>
+                <Link as={RouterLink} to={`/dao/${dao.address}`}>
+                  <Text
+                    fontSize='2xl'
+                    mt='45px'
+                    fontFamily={theme.fonts.hub}
+                    fontWeight={700}
+                  >
+                    {dao.apiMeta.name}
+                  </Text>
+                </Link>
+                <Text fontSize='xs'>
+                  Change Dao
+                  <Icon name='chevron-down' />
                 </Text>
-              </Link>
-              <Text fontSize='xs'>Change Dao</Text>
-              <Stack spacing={5} mt='200px' pr='20'>
-                <Text fontSize='xs'>Main Menu</Text>
-                <Link to={`/dao/${dao.address}/proposals`}>
-                  <Text fontSize='3xl'>Quests</Text>
+              </Box>
+              <Stack spacing={3} mt='125px' w='200px' pr={1}>
+                <Text
+                  fontSize='xs'
+                  fontFamily={theme.fonts.heading}
+                  cursor='pointer'
+                  onClick={() => history.push('/')}
+                >
+                  Main Menu
+                </Text>
+                <Link to={`/dao/${dao.address}/proposals`} as={RouterLink}>
+                  <Text fontSize='3xl' fontFamily={theme.fonts.heading}>
+                    {theme.daoMeta.proposals}
+                  </Text>
                 </Link>
-                <Link to={`/dao/${dao.address}/bank`}>
-                  <Text fontSize='3xl'>Inventory</Text>
+                <Link to={`/dao/${dao.address}/bank`} as={RouterLink}>
+                  <Text fontSize='3xl' fontFamily={theme.fonts.heading}>
+                    {theme.daoMeta.bank}
+                  </Text>
                 </Link>
-                <Link to={`/dao/${dao.address}/members`}>
-                  <Text fontSize='3xl'>Players</Text>
+                <Link to={`/dao/${dao.address}/members`} as={RouterLink}>
+                  <Text fontSize='3xl' fontFamily={theme.fonts.heading}>
+                    {theme.daoMeta.members}
+                  </Text>
                 </Link>
-                <Link to={`/dao/${dao.address}/settings/boosts`}>
-                  <Text fontSize='m'>Boost</Text>
+                <Link
+                  to={`/dao/${dao.address}/settings/boosts`}
+                  as={RouterLink}
+                >
+                  <Text fontSize='md' fontFamily={theme.fonts.heading}>
+                    Boost
+                  </Text>
                 </Link>
-                <Link to={`/dao/${dao.address}/settings`}>
-                  <Text fontSize='m'>Settings</Text>
+                <Link to={`/dao/${dao.address}/settings`} as={RouterLink}>
+                  <Text fontSize='md' fontFamily={theme.fonts.heading}>
+                    Settings
+                  </Text>
                 </Link>
-                <Link to={`/dao/${dao.address}/profile`}>
-                  <Text fontSize='m'>Stats</Text>
+                <Link to={`/dao/${dao.address}/profile`} as={RouterLink}>
+                  <Text fontSize='md' fontFamily={theme.fonts.heading}>
+                    Stats
+                  </Text>
                 </Link>
               </Stack>
             </>
           ) : (
             <>
-              <Text fontSize='l' mt='30px'>
+              <Text
+                fontSize='4xl'
+                mt='45px'
+                fontFamily={theme.fonts.hub}
+                fontWeight={700}
+              >
                 DAOhaus
               </Text>
-              <Stack spacing={5} mt='200px' pr='20'>
+              <Stack spacing={4} mt='125px' w='200px' pr={1}>
                 <Text fontSize='xs'>Main Menu</Text>
-                <ChLink href='https://daohaus.club' isExternal>
-                  <Text fontSize='3xl'>Explore DAOs</Text>
-                </ChLink>
-                <ChLink href='https://daohaus.club/summon' isExternal>
-                  <Text fontSize='3xl'>Summon a DAO</Text>
-                </ChLink>
-                <ChLink
+                <Link href='https://daohaus.club' isExternal>
+                  <Text fontSize='2xl'>Explore DAOs</Text>
+                </Link>
+                <Link href='https://daohaus.club/summon' isExternal>
+                  <Text fontSize='2xl'>Summon a DAO</Text>
+                </Link>
+                <Link
                   href='https://xdai.daohaus.club/dao/v2/0x283bdc900b6ec9397abb721c5bbff5ace46e0f50'
                   isExternal
                 >
-                  <Text fontSize='3xl'>HausDAO</Text>
-                </ChLink>
-                <ChLink href='https://daohaus.club/about' isExternal>
-                  <Text fontSize='m'>About</Text>
-                </ChLink>
-                <ChLink href='https://daohaus.club/help' isExternal>
-                  <Text fontSize='m'>Help</Text>
-                </ChLink>
+                  <Text fontSize='2xl'>HausDAO</Text>
+                </Link>
+                <Link href='https://daohaus.club/about' isExternal>
+                  <Text fontSize='md'>About</Text>
+                </Link>
+                <Link href='https://daohaus.club/help' isExternal>
+                  <Text fontSize='md'>Help</Text>
+                </Link>
               </Stack>
             </>
           )}
         </>
       )}
-    </Flex>
+    </Box>
   );
 };
 

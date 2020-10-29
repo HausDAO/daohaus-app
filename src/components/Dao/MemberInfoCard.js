@@ -1,15 +1,26 @@
 import React from 'react';
 import { Flex, Text, Box } from '@chakra-ui/core';
+import { useTheme } from '../../contexts/PokemolContext';
 import UserAvatar from '../Shared/UserAvatar';
 
 const MemberInfoCard = ({ user }) => {
+  const [theme] = useTheme();
+
   return (
     <>
       <Flex justify='space-between' ml={6}>
-        <Text textTransform='uppercase' fontSize='0.9em'>
-          Member Info
+        <Text
+          textTransform='uppercase'
+          fontSize='sm'
+          fontFamily={theme.fonts.heading}
+        >
+          {theme.daoMeta.member} Info
         </Text>
-        <Text textTransform='uppercase' fontSize='0.9em'>
+        <Text
+          textTransform='uppercase'
+          fontSize='sm'
+          fontFamily={theme.fonts.heading}
+        >
           View my profile
         </Text>
       </Flex>
@@ -27,18 +38,48 @@ const MemberInfoCard = ({ user }) => {
           <UserAvatar user={user} />
           <div></div>
         </Flex>
-        <Flex w='60%' justify='space-between' mt={6}>
+        <Flex w='75%' justify='space-between' mt={6}>
           <Box>
-            <Text textTransform='uppercase'>Shares</Text>
-            <Text>10</Text>
+            <Text
+              textTransform='uppercase'
+              fontSize='sm'
+              fontFamily={theme.fonts.heading}
+              fontWeight={700}
+              mb={2}
+            >
+              Shares
+            </Text>
+            <Text fontSize='lg' fontFamily={theme.fonts.space} fontWeight={700}>
+              10
+            </Text>
           </Box>
           <Box>
-            <Text textTransform='uppercase'>Loot</Text>
-            <Text>5</Text>
+            <Text
+              textTransform='uppercase'
+              fontSize='sm'
+              fontFamily={theme.fonts.heading}
+              fontWeight={700}
+              mb={2}
+            >
+              Loot
+            </Text>
+            <Text fontSize='lg' fontFamily={theme.fonts.space} fontWeight={700}>
+              5
+            </Text>
           </Box>
           <Box>
-            <Text textTransform='uppercase'>Anniversary</Text>
-            <Text>Jan 1</Text>
+            <Text
+              textTransform='uppercase'
+              fontSize='sm'
+              fontFamily={theme.fonts.heading}
+              fontWeight={700}
+              mb={2}
+            >
+              Anniversary
+            </Text>
+            <Text fontSize='lg' fontFamily={theme.fonts.space} fontWeight={700}>
+              Jan 1
+            </Text>
           </Box>
         </Flex>
       </Box>

@@ -18,65 +18,65 @@ const Routes = () => {
   return (
     <>
       <Switch>
-        <Route path="/dao/:dao(\b0x[0-9a-f]{10,40}\b)/" exact component={Dao} />
+        <Route path='/dao/:dao(\b0x[0-9a-f]{10,40}\b)/' exact component={Dao} />
 
         <Route
-          path="/dao/:dao(\b0x[0-9a-f]{10,40}\b)/proposals"
+          path='/dao/:dao(\b0x[0-9a-f]{10,40}\b)/proposals'
           exact
           component={Proposals}
         />
         <Route
-          path="/dao/:dao(\b0x[0-9a-f]{10,40}\b)/proposals/new"
+          path='/dao/:dao(\b0x[0-9a-f]{10,40}\b)/proposals/new'
           exact
           component={Proposals}
         />
         <Route
-          path="/dao/:dao(\b0x[0-9a-f]{10,40}\b)/proposal/:id"
+          path='/dao/:dao(\b0x[0-9a-f]{10,40}\b)/proposals/:id'
           exact
           component={Proposal}
         />
 
         <Route
-          path="/dao/:dao(\b0x[0-9a-f]{10,40}\b)/members"
+          path='/dao/:dao(\b0x[0-9a-f]{10,40}\b)/members'
           exact
           component={Members}
         />
 
         <Route
-          path="/dao/:dao(\b0x[0-9a-f]{10,40}\b)/profile"
+          path='/dao/:dao(\b0x[0-9a-f]{10,40}\b)/profile'
           exact
           component={Profile}
         />
 
         <Route
-          path="/dao/:dao(\b0x[0-9a-f]{10,40}\b)/bank"
+          path='/dao/:dao(\b0x[0-9a-f]{10,40}\b)/bank'
           exact
           component={Bank}
         />
 
         <Route
-          path="/dao/:dao(\b0x[0-9a-f]{10,40}\b)/settings"
+          path='/dao/:dao(\b0x[0-9a-f]{10,40}\b)/settings'
           exact
           component={Settings}
         />
         <Route
-          path="/dao/:dao(\b0x[0-9a-f]{10,40}\b)/settings/boosts"
+          path='/dao/:dao(\b0x[0-9a-f]{10,40}\b)/settings/boosts'
           exact
           component={Boosts}
         />
         <Route
-          path="/dao/:dao(\b0x[0-9a-f]{10,40}\b)/settings/theme"
+          path='/dao/:dao(\b0x[0-9a-f]{10,40}\b)/settings/theme'
           exact
           component={CustomTheme}
         />
         <Route
-          path="/dao/:dao(\b0x[0-9a-f]{10,40}\b)/settings/notifications"
+          path='/dao/:dao(\b0x[0-9a-f]{10,40}\b)/settings/notifications'
           exact
           component={Notifications}
         />
 
-        <Route path="/" component={Hub} />
-        <Route path="*" component={FourOhFour} />
+        <Route path='/' component={Hub} />
+        <Route path='*' component={FourOhFour} />
       </Switch>
     </>
   );
