@@ -71,7 +71,11 @@ const Header = () => {
           {network.network}
         </Text>
 
-        {user ? <UserAvatar user={user} /> : <Web3SignIn />}
+        {user ? (
+          <UserAvatar user={user.profile ? user.profile : user} />
+        ) : (
+          <Web3SignIn />
+        )}
       </Flex>
     </Flex>
   );

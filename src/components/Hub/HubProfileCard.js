@@ -13,13 +13,13 @@ const HubProfileCard = () => {
   return (
     <>
       <Flex direction='row' alignItems='center' pl={12} pt={2}>
-        {user.image && user.image[0] ? (
+        {user.profile.image && user.profile.image[0] ? (
           <Image
             w='100px'
             h='100px'
             mr={10}
             rounded='full'
-            src={`https://ipfs.infura.io/ipfs/${user.image[0].contentUrl['/']}`}
+            src={`https://ipfs.infura.io/ipfs/${user.profile.image[0].contentUrl['/']}`}
           />
         ) : (
           <Image
@@ -33,8 +33,8 @@ const HubProfileCard = () => {
 
         <Flex direction='column'>
           <Text fontSize='xl' fontFamily={theme.fonts.heading}>
-            {user.name || truncateAddr(user.username)}{' '}
-            <span>{user.emoji || ''} </span>
+            {user.profile.name || truncateAddr(user.username)}{' '}
+            <span>{user.profile.emoji || ''} </span>
           </Text>
           {user.name ? (
             <Text fontSize='sm' fontFamily={theme.fonts.mono}>
@@ -44,7 +44,7 @@ const HubProfileCard = () => {
         </Flex>
       </Flex>
       <Text fontSize='sm' ml={12} mt={4} fontFamily={theme.fonts.mono}>
-        {user.description}
+        {user.profile.description}
       </Text>
     </>
   );

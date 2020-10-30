@@ -75,7 +75,7 @@ const UserInit = () => {
 
             updateWeb3Connect({ w3c, web3, provider });
 
-            updateUser({ ...web3User, ...profile });
+            updateUser({ ...web3User, profile });
           }
           break;
         }

@@ -29,3 +29,13 @@ export const formatCreatedAt = (createdAt) => {
 export const timeToNow = (time) => {
   // return moment.unix(time).fromNow();
 };
+
+export const memberProfile = (members, address) => {
+  const member = members.filter((m) => {
+    return m.memberAddress === address.toLowerCase();
+  });
+  if (member.length > 0 && Object.keys(member[0].profile).length > 0) {
+    return member[0];
+  }
+  return { profile: { username: address } };
+};

@@ -24,6 +24,7 @@ export const PROPOSALS_LIST = gql`
       paymentTokenDecimals
       paymentTokenSymbol
       processed
+      proposer
       proposalId
       proposalIndex
       sharesRequested

@@ -1,12 +1,35 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Box, Text, Flex } from '@chakra-ui/core';
 
 import { useTheme } from '../../contexts/PokemolContext';
 import ProposalCard from './ProposalCard';
 
+const defaultProposals = [
+  {
+    id: '1',
+    proposalId: '1',
+    title: 'Get to the chopper!',
+  },
+  {
+    id: '2',
+    proposalId: '2',
+    title: 'DAO-ifying the common goods',
+  },
+];
+
 const ProposalsList = ({ proposals }) => {
   const [filter] = useState(null);
   const [theme] = useTheme();
+  const [_proposals, setProposals] = useState(null);
+
+  useEffect(() => {
+    if (proposals.length > 0) {
+      setProposals(proposals);
+    } else {
+      setProposals(defaultProposals);
+    }
+  }, [proposals]);
+  console.log(_proposals);
   //! remove the slice and deal with pagination
   return (
     <>
@@ -48,9 +71,10 @@ const ProposalsList = ({ proposals }) => {
             </span>
           </Text>
         </Flex>
-        {proposals.slice(0, 5).map((proposal) => {
-          return <ProposalCard proposal={proposal} key={proposal.id} />;
-        })}
+        {_proposals &&
+          _proposals.slice(0, 5).map((proposal) => {
+            return <ProposalCard proposal={proposal} key={proposal.id} />;
+          })}
       </Box>
     </>
   );
