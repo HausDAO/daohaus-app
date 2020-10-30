@@ -22,6 +22,7 @@ const GraphFetchMore = ({ query, setRecords, variables, entity, context }) => {
       refetch();
       updateRefetchQuery(null);
     }
+    // eslint-disable-next-line
   }, [refetchQuery]);
 
   useEffect(() => {
@@ -48,6 +49,7 @@ const GraphFetchMore = ({ query, setRecords, variables, entity, context }) => {
     if (data) {
       fetch();
     }
+    // eslint-disable-next-line
   }, [data, fetched]);
 
   useEffect(() => {
@@ -56,6 +58,7 @@ const GraphFetchMore = ({ query, setRecords, variables, entity, context }) => {
       console.log('setting entity', entity);
       setRecords(data[entity]);
     }
+    // eslint-disable-next-line
   }, [fetched, data]);
 
   if (loading) return <></>;

@@ -19,6 +19,7 @@ const GraphFetch = ({ query, setRecords, variables, entity }) => {
       refetch();
       updateRefetchQuery(null);
     }
+    // eslint-disable-next-line
   }, [refetchQuery]);
 
   useEffect(() => {
@@ -26,6 +27,7 @@ const GraphFetch = ({ query, setRecords, variables, entity }) => {
       console.log('setting single fetch entity', entity);
       setRecords(data[entity]);
     }
+    // eslint-disable-next-line
   }, [data]);
 
   if (loading) return <></>;
