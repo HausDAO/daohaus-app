@@ -32,7 +32,7 @@ const Hub = () => {
               >
                 {memberDaos ? (
                   <MemberDaoList
-                    daos={memberDaos.members.map((member) => member.moloch)}
+                    daos={memberDaos.map((member) => member.moloch)}
                   />
                 ) : null}
               </Box>
@@ -50,7 +50,7 @@ const Hub = () => {
               </Text>
               {memberDaos ? (
                 <HubActivityFeed
-                  daos={memberDaos.members.map((member) => member.moloch)}
+                  daos={memberDaos.map((member) => member.moloch)}
                 />
               ) : null}
             </Box>

@@ -3,7 +3,6 @@ import ActivityFeedList from '../ActivityFeed/ActivityFeedList';
 
 const HubActivityFeed = ({ daos }) => {
   const [activities, setActivities] = useState([]);
-  console.log(activities);
 
   useEffect(() => {
     let proposalActivities = [];

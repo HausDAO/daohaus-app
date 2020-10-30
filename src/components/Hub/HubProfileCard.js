@@ -8,7 +8,6 @@ import { truncateAddr } from '../../utils/helpers';
 const HubProfileCard = () => {
   const [user] = useUser();
   const [theme] = useTheme();
-  console.log(user);
 
   return (
     <>

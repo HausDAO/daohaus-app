@@ -19,6 +19,7 @@ const initialState = {
   network: supportedChains[42],
   txProcessor: null,
   userWallet: null,
+  refetchQuery: null,
   web3Connect: {
     w3c: new Web3Modal({
       network: getChainData(+process.env.REACT_APP_NETWORK_ID).network,
@@ -58,6 +59,9 @@ const reducer = (state, action) => {
     }
     case 'setMembers': {
       return { ...state, members: action.payload };
+    }
+    case 'refetchQuery': {
+      return { ...state, refetchQuery: action.payload };
     }
     default: {
       return initialState;
@@ -108,6 +112,10 @@ function PokemolContextProvider(props) {
     dispatch({ type: 'setMembers', payload: data });
   }, []);
 
+  const updateRefetchQuery = useCallback((data) => {
+    dispatch({ type: 'refetchQuery', payload: data });
+  }, []);
+
   return (
     <PokemolContext.Provider
       value={useMemo(
@@ -124,6 +132,7 @@ function PokemolContextProvider(props) {
             updateUserWallet,
             updateProposals,
             updateMembers,
+            updateRefetchQuery,
           },
         ],
         [
@@ -138,6 +147,7 @@ function PokemolContextProvider(props) {
           updateUserWallet,
           updateProposals,
           updateMembers,
+          updateRefetchQuery,
         ],
       )}
     >
@@ -194,6 +204,11 @@ export function useProposals() {
 export function useMembers() {
   const [state, { updateMembers }] = usePokemolContext();
   return [state.members, updateMembers];
+}
+
+export function useRefetchQuery() {
+  const [state, { updateRefetchQuery }] = usePokemolContext();
+  return [state.refetchQuery, updateRefetchQuery];
 }
 
 const PokemolContextConsumer = PokemolContext.Consumer;

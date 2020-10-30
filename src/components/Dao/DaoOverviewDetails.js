@@ -14,7 +14,7 @@ const DaoOverviewDetails = ({ dao }) => {
   // console.log(members);
   const wethBalance = dao?.graphData?.tokenBalances?.filter((t) => {
     return t.symbol === 'WETH';
-  })[0].tokenBalance;
+  })[0]?.tokenBalance;
 
   return (
     <>
