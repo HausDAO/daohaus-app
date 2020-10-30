@@ -1,5 +1,5 @@
 import React from 'react';
-import { Text, Box, Flex, Icon } from '@chakra-ui/core';
+import { Box, Flex, Icon } from '@chakra-ui/core';
 
 const ProposalVote = () => {
   return (
@@ -23,9 +23,7 @@ const ProposalVote = () => {
             Currently Passing
           </Flex>
         </Flex>
-        <Box>
-          box
-        </Box>
+        <Box>box</Box>
       </Box>
     </>
   );

@@ -3,11 +3,12 @@ import { formatDistanceToNow, isBefore } from 'date-fns';
 import { Flex, Box, Text, Icon, Link } from '@chakra-ui/core';
 import { utils } from 'web3';
 
-import { useUser, useTheme } from '../../contexts/PokemolContext';
+import { useTheme, useMembers } from '../../contexts/PokemolContext';
 import UserAvatar from '../../components/Shared/UserAvatar';
+import { memberProfile } from '../../utils/helpers';
 
 const ProposalDetail = ({ proposal }) => {
-  const [user] = useUser();
+  const [members] = useMembers();
   const [theme] = useTheme();
   const details = proposal.details && JSON.parse(proposal.details);
   const votePeriodEnds = new Date(+proposal.votingPeriodEnds * 1000);
@@ -28,14 +29,14 @@ const ProposalDetail = ({ proposal }) => {
             fontFamily={theme.fonts.heading}
             fontWeight={700}
           >
-            {proposal.proposalType}
+            {proposal ? proposal.proposalType : theme.daoMeta.proposal}
           </Text>
           <Text
             fontSize='3xl'
             fontFamily={theme.fonts.heading}
             fontWeight={700}
           >
-            {details?.title}
+            {details?.title ? details?.title : '-'}
           </Text>
           <Flex w='100%' justify='space-between' mt={6}>
             <Box>
@@ -47,14 +48,24 @@ const ProposalDetail = ({ proposal }) => {
               >
                 Tribute
               </Text>
-              <Text
-                fontSize='lg'
-                fontFamily={theme.fonts.space}
-                fontWeight={700}
-              >
-                {utils.fromWei(proposal.tributeOffered.toString())}{' '}
-                {proposal.tributeTokenSymbol || 'WETH'}
-              </Text>
+              {proposal?.tributeOffered ? (
+                <Text
+                  fontSize='lg'
+                  fontFamily={theme.fonts.space}
+                  fontWeight={700}
+                >
+                  {utils.fromWei(proposal.tributeOffered.toString())}{' '}
+                  {proposal.tributeTokenSymbol || 'WETH'}
+                </Text>
+              ) : (
+                <Text
+                  fontSize='lg'
+                  fontFamily={theme.fonts.space}
+                  fontWeight={700}
+                >
+                  -
+                </Text>
+              )}
             </Box>
             <Box>
               <Text
@@ -70,7 +81,7 @@ const ProposalDetail = ({ proposal }) => {
                 fontFamily={theme.fonts.space}
                 fontWeight={700}
               >
-                {proposal.sharesRequested}
+                {proposal?.sharesRequested ? proposal.sharesRequested : '-'}
               </Text>
             </Box>
             <Box>
@@ -87,27 +98,51 @@ const ProposalDetail = ({ proposal }) => {
                 fontFamily={theme.fonts.space}
                 fontWeight={700}
               >
-                {proposal.lootRequested}
+                {proposal.lootRequested ? proposal.lootRequested : '-'}
               </Text>
             </Box>
             <Box>
-              <Text
-                textTransform='uppercase'
-                fontSize='sm'
-                fontFamily={theme.fonts.heading}
-                fontWeight={700}
-              >
-                {isBefore(Date.now(), votePeriodEnds)
-                  ? 'Voting Period Ends'
-                  : 'Voting Ended'}
-              </Text>
-              <Text
-                fontSize='lg'
-                fontFamily={theme.fonts.space}
-                fontWeight={700}
-              >
-                {formatDistanceToNow(votePeriodEnds, { addSuffix: true })}
-              </Text>
+              {proposal.proposalIndex ? (
+                <>
+                  <Text
+                    textTransform='uppercase'
+                    fontSize='sm'
+                    fontFamily={theme.fonts.heading}
+                    fontWeight={700}
+                  >
+                    {isBefore(Date.now(), votePeriodEnds)
+                      ? 'Voting Period Ends'
+                      : 'Voting Ended'}
+                  </Text>
+                  <Text
+                    fontSize='lg'
+                    fontFamily={theme.fonts.space}
+                    fontWeight={700}
+                  >
+                    {formatDistanceToNow(votePeriodEnds, {
+                      addSuffix: true,
+                    })}
+                  </Text>
+                </>
+              ) : (
+                <>
+                  <Text
+                    textTransform='uppercase'
+                    fontSize='sm'
+                    fontFamily={theme.fonts.heading}
+                    fontWeight={700}
+                  >
+                    Proposal Status
+                  </Text>
+                  <Text
+                    fontSize='lg'
+                    fontFamily={theme.fonts.space}
+                    fontWeight={700}
+                  >
+                    Awaiting Sponsor
+                  </Text>
+                </>
+              )}
             </Box>
           </Flex>
           <Box mt={6}>
@@ -119,8 +154,8 @@ const ProposalDetail = ({ proposal }) => {
             >
               Link
             </Text>
-            <Link href={details.link} target='_blank'>
-              {details.link} <Icon name='external-link' />
+            <Link href={details?.link} target='_blank'>
+              {details?.link ? details.link : '-'} <Icon name='external-link' />
             </Link>
           </Box>
         </Box>
@@ -131,7 +166,7 @@ const ProposalDetail = ({ proposal }) => {
       <Box w='100%' mt={8}>
         {details.description}
       </Box>
-      <Flex w='100%' mt={6} justify='space-between'>
+      <Flex w='80%' mt={6} justify='space-between'>
         <Box mr={5}>
           <Text
             textTransform='uppercase'
@@ -142,7 +177,11 @@ const ProposalDetail = ({ proposal }) => {
           >
             Submitted By
           </Text>
-          <UserAvatar user={user} />
+          {members && (
+            <UserAvatar
+              user={memberProfile(members, proposal.proposer).profile}
+            />
+          )}
         </Box>
         <Box>
           <Text
@@ -150,13 +189,15 @@ const ProposalDetail = ({ proposal }) => {
             fontSize='sm'
             fontFamily={theme.fonts.heading}
             fontWeight={700}
-            mb={6}
+            mb={4}
           >
             Recipient
           </Text>
-          <Text fontFamily={theme.fonts.space} fontWeight={700}>
-            {proposal.applicant}
-          </Text>
+          {members && (
+            <UserAvatar
+              user={memberProfile(members, proposal.applicant).profile}
+            />
+          )}
         </Box>
       </Flex>
     </Box>

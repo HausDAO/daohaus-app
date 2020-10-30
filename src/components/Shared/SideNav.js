@@ -30,7 +30,7 @@ const SideNav = () => {
       bodyFont: 'Rubik',
       daoMeta: {
         proposals: 'Quests',
-        proposal: 'Proposal',
+        proposal: 'Quest',
         bank: 'Inventory',
         members: 'Players',
         member: 'Player',

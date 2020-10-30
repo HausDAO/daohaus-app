@@ -1,10 +1,18 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Flex, Text, Box } from '@chakra-ui/core';
-import { useTheme } from '../../contexts/PokemolContext';
+import { format } from 'date-fns';
+import { useTheme, useMembers } from '../../contexts/PokemolContext';
 import UserAvatar from '../Shared/UserAvatar';
+import { memberProfile } from '../../utils/helpers';
 
 const MemberInfoCard = ({ user }) => {
+  const [members] = useMembers();
+  const [member, setMember] = useState(null);
   const [theme] = useTheme();
+
+  useEffect(() => {
+    setMember(memberProfile(members, user.username));
+  }, [members, user.username]);
 
   return (
     <>
@@ -35,8 +43,7 @@ const MemberInfoCard = ({ user }) => {
         w='97%'
       >
         <Flex justify='space-between'>
-          <UserAvatar user={user} />
-          <div></div>
+          <UserAvatar user={user.profile} />
         </Flex>
         <Flex w='75%' justify='space-between' mt={6}>
           <Box>
@@ -50,7 +57,7 @@ const MemberInfoCard = ({ user }) => {
               Shares
             </Text>
             <Text fontSize='lg' fontFamily={theme.fonts.space} fontWeight={700}>
-              10
+              {member?.shares ? member.shares : '-'}
             </Text>
           </Box>
           <Box>
@@ -64,7 +71,7 @@ const MemberInfoCard = ({ user }) => {
               Loot
             </Text>
             <Text fontSize='lg' fontFamily={theme.fonts.space} fontWeight={700}>
-              5
+              {member?.loot ? member.loot : '-'}
             </Text>
           </Box>
           <Box>
@@ -78,7 +85,9 @@ const MemberInfoCard = ({ user }) => {
               Anniversary
             </Text>
             <Text fontSize='lg' fontFamily={theme.fonts.space} fontWeight={700}>
-              Jan 1
+              {member?.createdAt
+                ? format(new Date(member.createdAt * 1000), 'MMMM dd')
+                : '-'}
             </Text>
           </Box>
         </Flex>

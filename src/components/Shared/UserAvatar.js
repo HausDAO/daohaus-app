@@ -11,19 +11,30 @@ const UserAvatar = ({ user }) => {
   return (
     <Flex direction='row' alignItems='center'>
       {user && user.image && user.image[0] ? (
-        <Avatar
-          name={user.username}
-          src={`${'https://ipfs.infura.io/ipfs/' +
-            user.image[0].contentUrl['/']}`}
-          mr={3}
-        />
+        <>
+          <Avatar
+            name={user.username}
+            src={`${'https://ipfs.infura.io/ipfs/' +
+              user.image[0].contentUrl['/']}`}
+            mr={3}
+          />
+          <Text fontSize='md' fontFamily={theme.fonts.heading}>
+            {user.name || truncateAddr(user.username)}{' '}
+            <span>{user.emoji || ''} </span>
+          </Text>
+        </>
       ) : (
-        <Avatar name={user.username} src={makeBlockie(user.username)} mr={3} />
+        <>
+          <Avatar
+            name={user.username}
+            src={makeBlockie(user.username)}
+            mr={3}
+          />
+          <Text fontSize='md' fontFamily={theme.fonts.heading}>
+            {truncateAddr(user.username)}
+          </Text>
+        </>
       )}
-      <Text fontSize='md' fontFamily={theme.fonts.heading}>
-        {user.name || truncateAddr(user.username)}{' '}
-        <span>{user.emoji || ''} </span>
-      </Text>
     </Flex>
   );
 };

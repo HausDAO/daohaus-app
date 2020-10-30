@@ -15,21 +15,25 @@ const Dao = () => {
       {!dao ? (
         <Spinner />
       ) : (
-        <div>
-          {dao.graphData ? (
+        <>
+          {user ? (
             <Flex>
               <Box w='50%' mr={6}>
                 <DaoOverviewDetails dao={dao} />
               </Box>
-              {user ? (
-                <Box w='40%'>
-                  <MemberInfoCard user={user} />
-                  <DaoActivityFeed dao={dao} />
-                </Box>
-              ) : null}
+              <Box w='40%'>
+                <MemberInfoCard user={user} />
+                {dao.graphData && <DaoActivityFeed dao={dao} />}
+              </Box>
             </Flex>
-          ) : null}
-        </div>
+          ) : (
+            <Flex h='100%' justify='center' align='center'>
+              <Box w='50%'>
+                <DaoOverviewDetails dao={dao} />
+              </Box>
+            </Flex>
+          )}
+        </>
       )}
     </>
   );

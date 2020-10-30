@@ -17,6 +17,7 @@ export const MEMBERS_LIST = gql`
       tokenTribute
       didRagequit
       memberAddress
+      createdAt
       profile @client
       moloch {
         totalShares

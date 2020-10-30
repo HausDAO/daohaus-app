@@ -22,6 +22,7 @@ const Proposal = () => {
 
       setProposal(p);
     }
+    // eslint-disable-next-line
   }, [proposals]);
 
   return (
