@@ -38,7 +38,7 @@ const MembersList = () => {
   const filter = useState(null);
   const [members] = useMembers();
   const [_members, setMembers] = useState(null);
-  console.log(members);
+  // console.log(members);
 
   useEffect(() => {
     if (members?.length > 0) {
