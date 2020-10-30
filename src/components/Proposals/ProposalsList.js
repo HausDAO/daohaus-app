@@ -29,7 +29,6 @@ const ProposalsList = ({ proposals }) => {
       setProposals(defaultProposals);
     }
   }, [proposals]);
-  console.log(_proposals);
   //! remove the slice and deal with pagination
   return (
     <>

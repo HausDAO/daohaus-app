@@ -3,7 +3,7 @@ import { Box, Flex, Text } from '@chakra-ui/core';
 import { format } from 'date-fns';
 
 import { useMembers, useTheme } from '../../contexts/PokemolContext';
-import UserAvatar from '../Shared/UserAvatar';
+// import UserAvatar from '../Shared/UserAvatar';
 import { truncateAddr } from '../../utils/helpers';
 
 const defaultMembers = [

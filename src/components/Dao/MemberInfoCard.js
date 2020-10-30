@@ -12,7 +12,7 @@ const MemberInfoCard = ({ user }) => {
 
   useEffect(() => {
     setMember(memberProfile(members, user.username));
-  }, [members]);
+  }, [members, user.username]);
 
   return (
     <>

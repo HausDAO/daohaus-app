@@ -36,8 +36,7 @@ const Header = () => {
       // TODO pull from graph data
       setPageTitle(dao?.apiMeta?.name);
     }
-    // eslint-disable-next-line
-  }, [location, dao]);
+  }, [location, dao, theme.daoMeta, setPageTitle]);
 
   return (
     <Flex direction='row' justify='space-between' p={6}>

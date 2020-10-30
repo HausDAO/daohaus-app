@@ -1,5 +1,5 @@
 import React from 'react';
-import { Box, Flex, Text, Image } from '@chakra-ui/core';
+import { Flex, Text, Image } from '@chakra-ui/core';
 
 import { useUser, useTheme } from '../../contexts/PokemolContext';
 import makeBlockie from 'ethereum-blockies-base64';

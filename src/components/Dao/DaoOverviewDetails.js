@@ -11,12 +11,10 @@ const DaoOverviewDetails = ({ dao }) => {
   const [user] = useUser();
   const [members] = useMembers();
   const history = useHistory();
-  console.log(dao?.graphData?.tokenBalances);
   // console.log(members);
   const wethBalance = dao?.graphData?.tokenBalances?.filter((t) => {
     return t.symbol === 'WETH';
   })[0].tokenBalance;
-  console.log(wethBalance);
 
   return (
     <>

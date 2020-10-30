@@ -21,169 +21,50 @@ const ProposalDetail = ({ proposal }) => {
       p={6}
       m={6}
     >
-      {members && (
-        <>
-          <Flex>
-            <Box w='90%'>
+      <Flex>
+        <Box w='90%'>
+          <Text
+            textTransform='uppercase'
+            fontSize='sm'
+            fontFamily={theme.fonts.heading}
+            fontWeight={700}
+          >
+            {proposal ? proposal.proposalType : theme.daoMeta.proposal}
+          </Text>
+          <Text
+            fontSize='3xl'
+            fontFamily={theme.fonts.heading}
+            fontWeight={700}
+          >
+            {details?.title ? details?.title : '-'}
+          </Text>
+          <Flex w='100%' justify='space-between' mt={6}>
+            <Box>
               <Text
                 textTransform='uppercase'
                 fontSize='sm'
                 fontFamily={theme.fonts.heading}
                 fontWeight={700}
               >
-                {proposal ? proposal.proposalType : theme.daoMeta.proposal}
+                Tribute
               </Text>
-              <Text
-                fontSize='3xl'
-                fontFamily={theme.fonts.heading}
-                fontWeight={700}
-              >
-                {details?.title ? details?.title : '-'}
-              </Text>
-              <Flex w='100%' justify='space-between' mt={6}>
-                <Box>
-                  <Text
-                    textTransform='uppercase'
-                    fontSize='sm'
-                    fontFamily={theme.fonts.heading}
-                    fontWeight={700}
-                  >
-                    Tribute
-                  </Text>
-                  {proposal?.tributeOffered ? (
-                    <Text
-                      fontSize='lg'
-                      fontFamily={theme.fonts.space}
-                      fontWeight={700}
-                    >
-                      {utils.fromWei(proposal.tributeOffered.toString())}{' '}
-                      {proposal.tributeTokenSymbol || 'WETH'}
-                    </Text>
-                  ) : (
-                    <Text
-                      fontSize='lg'
-                      fontFamily={theme.fonts.space}
-                      fontWeight={700}
-                    >
-                      -
-                    </Text>
-                  )}
-                </Box>
-                <Box>
-                  <Text
-                    textTransform='uppercase'
-                    fontSize='sm'
-                    fontFamily={theme.fonts.heading}
-                    fontWeight={700}
-                  >
-                    Shares
-                  </Text>
-                  <Text
-                    fontSize='lg'
-                    fontFamily={theme.fonts.space}
-                    fontWeight={700}
-                  >
-                    {proposal?.sharesRequested ? proposal.sharesRequested : '-'}
-                  </Text>
-                </Box>
-                <Box>
-                  <Text
-                    textTransform='uppercase'
-                    fontSize='sm'
-                    fontFamily={theme.fonts.heading}
-                    fontWeight={700}
-                  >
-                    Loot
-                  </Text>
-                  <Text
-                    fontSize='lg'
-                    fontFamily={theme.fonts.space}
-                    fontWeight={700}
-                  >
-                    {proposal.lootRequested ? proposal.lootRequested : '-'}
-                  </Text>
-                </Box>
-                <Box>
-                  {proposal.proposalIndex ? (
-                    <>
-                      <Text
-                        textTransform='uppercase'
-                        fontSize='sm'
-                        fontFamily={theme.fonts.heading}
-                        fontWeight={700}
-                      >
-                        {isBefore(Date.now(), votePeriodEnds)
-                          ? 'Voting Period Ends'
-                          : 'Voting Ended'}
-                      </Text>
-                      <Text
-                        fontSize='lg'
-                        fontFamily={theme.fonts.space}
-                        fontWeight={700}
-                      >
-                        {formatDistanceToNow(votePeriodEnds, {
-                          addSuffix: true,
-                        })}
-                      </Text>
-                    </>
-                  ) : (
-                    <>
-                      <Text
-                        textTransform='uppercase'
-                        fontSize='sm'
-                        fontFamily={theme.fonts.heading}
-                        fontWeight={700}
-                      >
-                        Proposal Status
-                      </Text>
-                      <Text
-                        fontSize='lg'
-                        fontFamily={theme.fonts.space}
-                        fontWeight={700}
-                      >
-                        Awaiting Sponsor
-                      </Text>
-                    </>
-                  )}
-                </Box>
-              </Flex>
-              <Box mt={6}>
+              {proposal?.tributeOffered ? (
                 <Text
-                  textTransform='uppercase'
-                  fontSize='sm'
-                  fontFamily={theme.fonts.heading}
+                  fontSize='lg'
+                  fontFamily={theme.fonts.space}
                   fontWeight={700}
                 >
-                  Link
+                  {utils.fromWei(proposal.tributeOffered.toString())}{' '}
+                  {proposal.tributeTokenSymbol || 'WETH'}
                 </Text>
-                <Link href={details?.link} target='_blank'>
-                  {details?.link ? details.link : '-'}{' '}
-                  <Icon name='external-link' />
-                </Link>
-              </Box>
-            </Box>
-            <Box pl={6}>
-              <Icon name='votedYes' size='45px' />
-            </Box>
-          </Flex>
-          <Box w='100%' mt={8}>
-            {details.description}
-          </Box>
-          <Flex w='80%' mt={6} justify='space-between'>
-            <Box mr={5}>
-              <Text
-                textTransform='uppercase'
-                fontSize='sm'
-                mb={4}
-                fontFamily={theme.fonts.heading}
-                fontWeight={700}
-              >
-                Submitted By
-              </Text>
-              {members && (
-                <UserAvatar
-                  user={memberProfile(members, proposal.proposer).profile}
-                />
+              ) : (
+                <Text
+                  fontSize='lg'
+                  fontFamily={theme.fonts.space}
+                  fontWeight={700}
+                >
+                  -
+                </Text>
               )}
             </Box>
             <Box>
@@ -192,19 +73,133 @@ const ProposalDetail = ({ proposal }) => {
                 fontSize='sm'
                 fontFamily={theme.fonts.heading}
                 fontWeight={700}
-                mb={4}
               >
-                Recipient
+                Shares
               </Text>
-              {members && (
-                <UserAvatar
-                  user={memberProfile(members, proposal.applicant).profile}
-                />
+              <Text
+                fontSize='lg'
+                fontFamily={theme.fonts.space}
+                fontWeight={700}
+              >
+                {proposal?.sharesRequested ? proposal.sharesRequested : '-'}
+              </Text>
+            </Box>
+            <Box>
+              <Text
+                textTransform='uppercase'
+                fontSize='sm'
+                fontFamily={theme.fonts.heading}
+                fontWeight={700}
+              >
+                Loot
+              </Text>
+              <Text
+                fontSize='lg'
+                fontFamily={theme.fonts.space}
+                fontWeight={700}
+              >
+                {proposal.lootRequested ? proposal.lootRequested : '-'}
+              </Text>
+            </Box>
+            <Box>
+              {proposal.proposalIndex ? (
+                <>
+                  <Text
+                    textTransform='uppercase'
+                    fontSize='sm'
+                    fontFamily={theme.fonts.heading}
+                    fontWeight={700}
+                  >
+                    {isBefore(Date.now(), votePeriodEnds)
+                      ? 'Voting Period Ends'
+                      : 'Voting Ended'}
+                  </Text>
+                  <Text
+                    fontSize='lg'
+                    fontFamily={theme.fonts.space}
+                    fontWeight={700}
+                  >
+                    {formatDistanceToNow(votePeriodEnds, {
+                      addSuffix: true,
+                    })}
+                  </Text>
+                </>
+              ) : (
+                <>
+                  <Text
+                    textTransform='uppercase'
+                    fontSize='sm'
+                    fontFamily={theme.fonts.heading}
+                    fontWeight={700}
+                  >
+                    Proposal Status
+                  </Text>
+                  <Text
+                    fontSize='lg'
+                    fontFamily={theme.fonts.space}
+                    fontWeight={700}
+                  >
+                    Awaiting Sponsor
+                  </Text>
+                </>
               )}
             </Box>
           </Flex>
-        </>
-      )}
+          <Box mt={6}>
+            <Text
+              textTransform='uppercase'
+              fontSize='sm'
+              fontFamily={theme.fonts.heading}
+              fontWeight={700}
+            >
+              Link
+            </Text>
+            <Link href={details?.link} target='_blank'>
+              {details?.link ? details.link : '-'} <Icon name='external-link' />
+            </Link>
+          </Box>
+        </Box>
+        <Box pl={6}>
+          <Icon name='votedYes' size='45px' />
+        </Box>
+      </Flex>
+      <Box w='100%' mt={8}>
+        {details.description}
+      </Box>
+      <Flex w='80%' mt={6} justify='space-between'>
+        <Box mr={5}>
+          <Text
+            textTransform='uppercase'
+            fontSize='sm'
+            mb={4}
+            fontFamily={theme.fonts.heading}
+            fontWeight={700}
+          >
+            Submitted By
+          </Text>
+          {members && (
+            <UserAvatar
+              user={memberProfile(members, proposal.proposer).profile}
+            />
+          )}
+        </Box>
+        <Box>
+          <Text
+            textTransform='uppercase'
+            fontSize='sm'
+            fontFamily={theme.fonts.heading}
+            fontWeight={700}
+            mb={4}
+          >
+            Recipient
+          </Text>
+          {members && (
+            <UserAvatar
+              user={memberProfile(members, proposal.applicant).profile}
+            />
+          )}
+        </Box>
+      </Flex>
     </Box>
   );
 };
