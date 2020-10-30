@@ -46,6 +46,9 @@
     "test": "react-scripts test",
     "eject": "react-scripts eject"
   },
+  "resolutions": {
+    "body-scroll-lock": "3.0.3"
+  },
   "eslintConfig": {
     "extends": "react-app"
   },

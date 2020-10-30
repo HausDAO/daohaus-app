@@ -1,47 +1,23 @@
 import React, { useEffect, useState } from 'react';
-import { Box, Flex, Text } from '@chakra-ui/core';
+import { Box, Flex, Skeleton, Text } from '@chakra-ui/core';
 import { format } from 'date-fns';
 
 import { useMembers, useTheme } from '../../contexts/PokemolContext';
 // import UserAvatar from '../Shared/UserAvatar';
 import { truncateAddr } from '../../utils/helpers';
-
-const defaultMembers = [
-  {
-    id: 1,
-    memberAddress: '0x501f352e32ec0c981268dc5b5ba1d3661b1acbc6',
-    profile: {
-      name: 'Vitalik',
-    },
-    username: '0x501f352e32ec0c981268dc5b5ba1d3661b1acbc6',
-  },
-  {
-    id: 2,
-    memberAddress: '0x501f352e32ec0c981268dc5b5ba1d3661b1acbc6',
-    profile: {
-      name: 'Hal Finney',
-    },
-    username: '0x501f352e32ec0c981268dc5b5ba1d3661b1acbc6',
-  },
-  {
-    id: 3,
-    memberAddress: '0x501f352e32ec0c981268dc5b5ba1d3661b1acbc6',
-    profile: {
-      name: 'Satoshi',
-    },
-    username: '0x501f352e32ec0c981268dc5b5ba1d3661b1acbc6',
-  },
-];
+import { defaultMembers } from '../../utils/constants';
 
 const MembersList = () => {
   const [theme] = useTheme();
   const filter = useState(null);
   const [members] = useMembers();
   const [_members, setMembers] = useState(null);
+  const [isLoaded, setIsLoaded] = useState(false);
 
   useEffect(() => {
     if (members?.length > 0) {
       setMembers(members);
+      setIsLoaded(true);
     } else {
       setMembers(defaultMembers);
     }
@@ -134,27 +110,44 @@ const MembersList = () => {
               <Flex h='60px' key={member.id} align='center'>
                 <Flex w='8%' ml='2%'></Flex>
                 <Flex w='35%' direction='column' justify='space-between'>
-                  <Text fontSize='md' fontFamily={theme.fonts.heading}>
-                    {member?.profile?.name ? member.profile.name : '-'}
-                  </Text>
-                  <Text
-                    fontSize='xs'
-                    fontFamily={theme.fonts.mono}
-                    fontWeight={300}
-                  >
-                    {truncateAddr(member.memberAddress)}
-                  </Text>
+                  <Skeleton isLoaded={isLoaded}>
+                    <Text fontSize='md' fontFamily={theme.fonts.heading}>
+                      {member?.profile?.name ? member.profile.name : '--'}
+                    </Text>
+                    <Text
+                      fontSize='xs'
+                      fontFamily={theme.fonts.mono}
+                      fontWeight={300}
+                    >
+                      {truncateAddr(member.memberAddress)}
+                    </Text>
+                  </Skeleton>
                 </Flex>
-                <Box w='15%' fontFamily={theme.fonts.heading}>
-                  {member?.shares ? member.shares : '-'}
+                <Box w='15%'>
+                  <Skeleton isLoaded={isLoaded}>
+                    <Text fontFamily={theme.fonts.heading}>
+                      {member?.shares ? member.shares : '--'}
+                    </Text>
+                  </Skeleton>
                 </Box>
-                <Box w='15%' fontFamily={theme.fonts.heading}>
-                  {member?.loot ? member.loot : '-'}
+                <Box w='15%'>
+                  <Skeleton isLoaded={isLoaded}>
+                    <Text fontFamily={theme.fonts.heading}>
+                      {member?.loot ? member.loot : '--'}
+                    </Text>
+                  </Skeleton>
                 </Box>
-                <Box fontFamily={theme.fonts.heading}>
-                  {member?.createdAt
-                    ? format(new Date(+member.createdAt * 1000), 'MMM. d, yyyy')
-                    : '-'}
+                <Box>
+                  <Skeleton isLoaded={isLoaded}>
+                    <Text fontFamily={theme.fonts.heading}>
+                      {member?.createdAt
+                        ? format(
+                            new Date(+member.createdAt * 1000),
+                            'MMM. d, yyyy',
+                          )
+                        : '--'}
+                    </Text>
+                  </Skeleton>
                 </Box>
               </Flex>
             );

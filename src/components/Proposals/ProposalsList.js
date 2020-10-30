@@ -3,17 +3,20 @@ import { Box, Text, Flex } from '@chakra-ui/core';
 
 import { useTheme } from '../../contexts/PokemolContext';
 import ProposalCard from './ProposalCard';
+import { defaultProposals } from '../../utils/constants';
 
 const ProposalsList = ({ proposals }) => {
   const [filter] = useState(null);
   const [theme] = useTheme();
   const [_proposals, setProposals] = useState(null);
+  const [isLoaded, setIsLoaded] = useState(false);
 
   useEffect(() => {
     if (proposals.length > 0) {
       setProposals(proposals);
+      setIsLoaded(true);
     } else {
-      setProposals([]);
+      setProposals(defaultProposals);
     }
   }, [proposals]);
   //! remove the slice and deal with pagination
@@ -59,7 +62,13 @@ const ProposalsList = ({ proposals }) => {
         </Flex>
         {_proposals &&
           _proposals.slice(0, 5).map((proposal) => {
-            return <ProposalCard proposal={proposal} key={proposal.id} />;
+            return (
+              <ProposalCard
+                proposal={proposal}
+                key={proposal.id}
+                isLoaded={isLoaded}
+              />
+            );
           })}
       </Box>
     </>

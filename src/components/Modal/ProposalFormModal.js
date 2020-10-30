@@ -7,7 +7,7 @@ import {
   ModalCloseButton,
   ModalBody,
   ModalFooter,
-  FormErrorMessage,
+  // FormErrorMessage,
   FormLabel,
   FormControl,
   Flex,
@@ -15,7 +15,7 @@ import {
   InputGroup,
   InputLeftAddon,
   InputRightAddon,
-  Button,
+  // Button,
   Icon,
   Stack,
   Select,
@@ -29,7 +29,12 @@ import { PrimaryButton } from '../../themes/theme';
 
 const ProposalFormModal = ({ isOpen, setShowModal }) => {
   const [theme] = useTheme();
-  const { handleSubmit, errors, register, formState } = useForm();
+  const {
+    // handleSubmit,
+    errors,
+    // register,
+    // formState
+  } = useForm();
 
   return (
     <Modal
