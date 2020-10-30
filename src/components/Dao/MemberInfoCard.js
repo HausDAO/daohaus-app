@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Flex, Text, Box } from '@chakra-ui/core';
+import { Flex, Text, Box, Skeleton } from '@chakra-ui/core';
 import { format } from 'date-fns';
 import { useTheme, useMembers } from '../../contexts/PokemolContext';
 import UserAvatar from '../Shared/UserAvatar';
@@ -56,9 +56,15 @@ const MemberInfoCard = ({ user }) => {
             >
               Shares
             </Text>
-            <Text fontSize='lg' fontFamily={theme.fonts.space} fontWeight={700}>
-              {member?.shares ? member.shares : '-'}
-            </Text>
+            <Skeleton isLoaded={member?.shares}>
+              <Text
+                fontSize='lg'
+                fontFamily={theme.fonts.space}
+                fontWeight={700}
+              >
+                {member?.shares ? member.shares : '--'}
+              </Text>
+            </Skeleton>
           </Box>
           <Box>
             <Text
@@ -70,9 +76,15 @@ const MemberInfoCard = ({ user }) => {
             >
               Loot
             </Text>
-            <Text fontSize='lg' fontFamily={theme.fonts.space} fontWeight={700}>
-              {member?.loot ? member.loot : '-'}
-            </Text>
+            <Skeleton isLoaded={member?.loot}>
+              <Text
+                fontSize='lg'
+                fontFamily={theme.fonts.space}
+                fontWeight={700}
+              >
+                {member?.loot ? member.loot : '-'}
+              </Text>
+            </Skeleton>
           </Box>
           <Box>
             <Text
@@ -84,11 +96,17 @@ const MemberInfoCard = ({ user }) => {
             >
               Anniversary
             </Text>
-            <Text fontSize='lg' fontFamily={theme.fonts.space} fontWeight={700}>
-              {member?.createdAt
-                ? format(new Date(member.createdAt * 1000), 'MMMM d')
-                : '-'}
-            </Text>
+            <Skeleton isLoaded={member?.createdAt}>
+              <Text
+                fontSize='lg'
+                fontFamily={theme.fonts.space}
+                fontWeight={700}
+              >
+                {member?.createdAt
+                  ? format(new Date(member.createdAt * 1000), 'MMMM d')
+                  : '--'}
+              </Text>
+            </Skeleton>
           </Box>
         </Flex>
       </Box>

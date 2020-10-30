@@ -1,6 +1,6 @@
 import React from 'react';
 import { useHistory } from 'react-router-dom';
-import { Text, Box, Flex, Image } from '@chakra-ui/core';
+import { Text, Box, Flex, Image, Skeleton } from '@chakra-ui/core';
 import { utils } from 'web3';
 
 import { useTheme, useUser, useMembers } from '../../contexts/PokemolContext';
@@ -15,6 +15,7 @@ const DaoOverviewDetails = ({ dao }) => {
   const wethBalance = dao?.graphData?.tokenBalances?.filter((t) => {
     return t.symbol === 'WETH';
   })[0]?.tokenBalance;
+  console.log(dao);
 
   return (
     <>
@@ -45,14 +46,15 @@ const DaoOverviewDetails = ({ dao }) => {
             h={50}
             w={50}
           />
-          <Text
-            ml={6}
-            fontSize='2xl'
-            fontWeight={700}
-            fontFamily={theme.fonts.heading}
-          >
-            {dao?.apiMeta?.name ? dao.apiMeta.name : 'Braid Guild'}
-          </Text>
+          <Skeleton isLoaded={dao?.apiMeta?.name} ml={6}>
+            <Text
+              fontSize='2xl'
+              fontWeight={700}
+              fontFamily={theme.fonts.heading}
+            >
+              {dao?.apiMeta?.name ? dao?.apiMeta?.name : '--'}
+            </Text>
+          </Skeleton>
         </Flex>
         <Flex direction='row' w='60%' justify='space-between' mt={6}>
           <Box>
@@ -64,13 +66,15 @@ const DaoOverviewDetails = ({ dao }) => {
             >
               {theme.daoMeta.members}
             </Text>
-            <Text
-              fontSize='2xl'
-              fontFamily={theme.fonts.heading}
-              fontWeight={700}
-            >
-              {members?.length > 0 ? members.length : '-'}
-            </Text>
+            <Skeleton isLoaded={members?.length > 0}>
+              <Text
+                fontSize='2xl'
+                fontFamily={theme.fonts.heading}
+                fontWeight={700}
+              >
+                {members?.length ? members.length : '--'}
+              </Text>
+            </Skeleton>
           </Box>
           <Box>
             <Text
@@ -81,13 +85,15 @@ const DaoOverviewDetails = ({ dao }) => {
             >
               Shares
             </Text>
-            <Text
-              fontSize='2xl'
-              fontFamily={theme.fonts.heading}
-              fontWeight={700}
-            >
-              {dao?.graphData?.totalShares ? dao.graphData.totalShares : 0}
-            </Text>
+            <Skeleton isLoaded={dao?.graphData?.totalShares}>
+              <Text
+                fontSize='2xl'
+                fontFamily={theme.fonts.heading}
+                fontWeight={700}
+              >
+                {dao?.graphData?.totalShares ? dao.graphData.totalShares : '--'}
+              </Text>
+            </Skeleton>
           </Box>
           <Box>
             <Text
@@ -98,13 +104,15 @@ const DaoOverviewDetails = ({ dao }) => {
             >
               Loot
             </Text>
-            <Text
-              fontSize='2xl'
-              fontFamily={theme.fonts.heading}
-              fontWeight={700}
-            >
-              {dao?.graphData?.totalLoot ? dao.graphData.totalLoot : 0}
-            </Text>
+            <Skeleton isLoaded={dao?.graphData?.totalLoot}>
+              <Text
+                fontSize='2xl'
+                fontFamily={theme.fonts.heading}
+                fontWeight={700}
+              >
+                {dao?.graphData?.totalLoot ? dao?.graphData?.totalLoot : '--'}
+              </Text>
+            </Skeleton>
           </Box>
         </Flex>
         <Box mt={6}>
@@ -116,28 +124,29 @@ const DaoOverviewDetails = ({ dao }) => {
           >
             {theme.daoMeta.bank}
           </Text>
-          <Text
-            fontSize='3xl'
-            fontFamily={theme.fonts.heading}
-            fontWeight={700}
-          >
-            {wethBalance
-              ? parseFloat(utils.fromWei(wethBalance)).toFixed(3)
-              : '-'}{' '}
-            WETH
-          </Text>
-          <Text fontSize='sm' as='i' fontWeight={200}>
-            {dao?.graphData?.tokenBalances
-              ? dao.graphData.tokenBalances.length
-              : '-'}{' '}
-            Tokens
-          </Text>
+          <Skeleton isLoaded={wethBalance}>
+            <Text
+              fontSize='3xl'
+              fontFamily={theme.fonts.heading}
+              fontWeight={700}
+            >
+              {wethBalance && parseFloat(utils.fromWei(wethBalance)).toFixed(3)}{' '}
+              WETH
+            </Text>
+          </Skeleton>
+          <Box>
+            <Skeleton isLoaded={dao?.graphData?.tokenBalances?.length > 0}>
+              <Text fontSize='sm' as='i' fontWeight={200}>
+                {dao?.graphData?.tokenBalances?.length} Tokens
+              </Text>
+            </Skeleton>
+          </Box>
         </Box>
-        <Box mt={6}>
-          {dao?.apiMeta?.description
-            ? dao.apiMeta.description
-            : 'A sing-a-long guild'}
-        </Box>
+        <Skeleton isLoaded={dao?.apiMeta?.description}>
+          <Box mt={6}>
+            {dao?.apiMeta?.description ? dao.apiMeta.description : '--'}
+          </Box>
+        </Skeleton>
         <Flex mt={6}>
           <PrimaryButton
             mr={6}
