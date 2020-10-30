@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Text, Flex, Icon, Spinner } from '@chakra-ui/core';
-import { useLocation } from 'react-router-dom';
+import { useLocation, Link as RouterLink } from 'react-router-dom';
 import {
   useUser,
   useNetwork,
@@ -28,6 +28,14 @@ const Header = () => {
       setPageTitle('Overview');
     } else if (location.pathname === `/dao/${dao?.address}/proposals`) {
       setPageTitle(theme.daoMeta.proposals);
+    } else if (
+      location.pathname === `/dao/${dao?.address}/proposals/new/member`
+    ) {
+      setPageTitle(
+        'New ' + theme.daoMeta.member + ' ' + theme.daoMeta.proposal,
+      );
+    } else if (location.pathname === `/dao/${dao?.address}/proposals/new`) {
+      setPageTitle('New ' + theme.daoMeta.proposal);
     } else if (location.pathname === `/dao/${dao?.address}/members`) {
       setPageTitle(theme.daoMeta.members);
     } else if (location.pathname === `/dao/${dao?.address}/bank`) {
@@ -55,12 +63,20 @@ const Header = () => {
           </PrimaryButton>
         )}
         {location.pathname === `/dao/${dao?.address}/proposals` && (
-          <PrimaryButton>
+          <PrimaryButton
+            as={RouterLink}
+            to={`/dao/${dao?.address}/proposals/new`}
+          >
             New {theme.daoMeta.proposal} <Icon name='small-add' />
           </PrimaryButton>
         )}
         {location.pathname === `/dao/${dao?.address}/members` && (
-          <PrimaryButton>Apply</PrimaryButton>
+          <PrimaryButton
+            as={RouterLink}
+            to={`/dao/${dao?.address}/proposals/new/member`}
+          >
+            Apply
+          </PrimaryButton>
         )}
       </Flex>
 

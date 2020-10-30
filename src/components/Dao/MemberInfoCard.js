@@ -86,7 +86,7 @@ const MemberInfoCard = ({ user }) => {
             </Text>
             <Text fontSize='lg' fontFamily={theme.fonts.space} fontWeight={700}>
               {member?.createdAt
-                ? format(new Date(member.createdAt * 1000), 'MMMM dd')
+                ? format(new Date(member.createdAt * 1000), 'MMMM d')
                 : '-'}
             </Text>
           </Box>

@@ -6,6 +6,7 @@ import Hub from './views/Hub/Hub';
 import Dao from './views/Dao/Dao';
 import Proposals from './views/Proposals/Proposals';
 import Proposal from './views/Proposals/Proposal';
+import NewProposal from './views/Proposals/NewProposal';
 import Members from './views/Members/Members';
 import Profile from './views/Profile/Profile';
 import Bank from './views/Bank/Bank';
@@ -26,9 +27,14 @@ const Routes = () => {
           component={Proposals}
         />
         <Route
+          path='/dao/:dao(\b0x[0-9a-f]{10,40}\b)/proposals/new/:type'
+          exact
+          component={NewProposal}
+        />
+        <Route
           path='/dao/:dao(\b0x[0-9a-f]{10,40}\b)/proposals/new'
           exact
-          component={Proposals}
+          component={NewProposal}
         />
         <Route
           path='/dao/:dao(\b0x[0-9a-f]{10,40}\b)/proposals/:id'
