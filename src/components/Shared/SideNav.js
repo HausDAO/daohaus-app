@@ -2,7 +2,12 @@ import React from 'react';
 import { Link as RouterLink, useHistory } from 'react-router-dom';
 import { Text, Stack, Spinner, Link, Box, Icon, Flex } from '@chakra-ui/core';
 
-import { useDao, useLoading, useTheme } from '../../contexts/PokemolContext';
+import {
+  useDao,
+  useLoading,
+  useRefetchQuery,
+  useTheme,
+} from '../../contexts/PokemolContext';
 import BrandOverride from '../../assets/themes/raidTheme/raidguild__swords.svg';
 import { PrimaryButton, SecondaryButton } from '../../themes/theme';
 
@@ -11,6 +16,7 @@ const SideNav = () => {
   const [theme, setTheme] = useTheme();
   const [dao] = useDao();
   const history = useHistory();
+  const [, updateRefetchQuery] = useRefetchQuery();
 
   const setLocalTheme = () => {
     setTheme({
@@ -167,6 +173,10 @@ const SideNav = () => {
           )}
         </>
       )}
+
+      <SecondaryButton onClick={() => updateRefetchQuery('proposals')}>
+        Refetch Proposals Test
+      </SecondaryButton>
     </Box>
   );
 };

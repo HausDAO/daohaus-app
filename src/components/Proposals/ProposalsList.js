@@ -4,19 +4,6 @@ import { Box, Text, Flex } from '@chakra-ui/core';
 import { useTheme } from '../../contexts/PokemolContext';
 import ProposalCard from './ProposalCard';
 
-const defaultProposals = [
-  {
-    id: '1',
-    proposalId: '1',
-    title: 'Get to the chopper!',
-  },
-  {
-    id: '2',
-    proposalId: '2',
-    title: 'DAO-ifying the common goods',
-  },
-];
-
 const ProposalsList = ({ proposals }) => {
   const [filter] = useState(null);
   const [theme] = useTheme();
@@ -26,7 +13,7 @@ const ProposalsList = ({ proposals }) => {
     if (proposals.length > 0) {
       setProposals(proposals);
     } else {
-      setProposals(defaultProposals);
+      setProposals([]);
     }
   }, [proposals]);
   //! remove the slice and deal with pagination

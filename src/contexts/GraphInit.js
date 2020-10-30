@@ -54,7 +54,6 @@ const GraphInit = () => {
             entity='moloches'
             variables={{ contractAddr: address }}
           />
-
           <GraphFetchMore
             query={PROPOSALS_LIST}
             setRecords={setLocalProposals}
@@ -62,7 +61,6 @@ const GraphInit = () => {
             variables={{ contractAddr: address }}
             context={{ currentPeriod: dao?.currentPeriod }}
           />
-
           <GraphFetchMore
             query={MEMBERS_LIST}
             setRecords={setLocalMembers}

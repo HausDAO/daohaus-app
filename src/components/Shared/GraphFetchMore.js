@@ -1,28 +1,28 @@
 import React, { useEffect, useState } from 'react';
 import { useQuery } from '@apollo/react-hooks';
 
-import { useNetwork } from '../../contexts/PokemolContext';
-import Loading from '../Shared/Loading';
+import { useNetwork, useRefetchQuery } from '../../contexts/PokemolContext';
 import { networkClients } from '../../utils/apollo/clients';
 
-const GraphFetchMore = ({
-  query,
-  setRecords,
-  variables,
-  suppressLoading,
-  entity,
-  context,
-}) => {
+const GraphFetchMore = ({ query, setRecords, variables, entity, context }) => {
   const [network] = useNetwork();
   const [fetched, setFetched] = useState();
+  const [refetchQuery, updateRefetchQuery] = useRefetchQuery();
 
-  // const { loading, error, data, fetchMore, refetch } = useQuery(query, {
-  const { loading, error, data, fetchMore } = useQuery(query, {
+  const { loading, error, data, fetchMore, refetch } = useQuery(query, {
     client: networkClients[network.network_id],
     variables,
     fetchPolicy: 'network-only',
     context,
   });
+
+  useEffect(() => {
+    if (refetchQuery === entity) {
+      setFetched(false);
+      refetch();
+      updateRefetchQuery(null);
+    }
+  }, [refetchQuery]);
 
   useEffect(() => {
     const fetch = async () => {
@@ -48,26 +48,17 @@ const GraphFetchMore = ({
     if (data) {
       fetch();
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [data]);
-
-  // console.log('error', error);
+  }, [data, fetched]);
 
   useEffect(() => {
+    console.log('data', data);
     if (data && fetched) {
+      console.log('setting entity', entity);
       setRecords(data[entity]);
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [fetched, data]);
 
-  // useEffect(() => {
-  //   if (state[entity].refetch) {
-  //     refetch();
-  //   }
-  //   // eslint-disable-next-line react-hooks/exhaustive-deps
-  // }, [state]);
-
-  if (loading) return <>{!suppressLoading ? <Loading /> : null}</>;
+  if (loading) return <></>;
   if (error) return <></>;
 
   return <></>;
