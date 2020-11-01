@@ -11,6 +11,7 @@ import {
 import { Web3SignIn } from './Web3SignIn';
 import UserAvatar from './UserAvatar';
 import { PrimaryButton } from '../../themes/theme';
+import DaoSwitcherModal from '../Modal/DaoSwitcherModal';
 
 const Header = () => {
   const location = useLocation();
@@ -20,6 +21,7 @@ const Header = () => {
   const [theme] = useTheme();
   const [loading] = useLoading();
   const [pageTitle, setPageTitle] = useState();
+  const [showDaoSwitcher, setShowDaoSwitcher] = useState(false);
 
   useEffect(() => {
     if (location.pathname === '/') {
@@ -47,52 +49,63 @@ const Header = () => {
   }, [location, dao, theme.daoMeta, setPageTitle]);
 
   return (
-    <Flex direction='row' justify='space-between' p={6}>
-      <Flex direction='row' justify='flex-start' align='center'>
-        <Text
-          fontSize='3xl'
-          fontFamily={theme.fonts.heading}
-          fontWeight={700}
-          mr={10}
-        >
-          {pageTitle}
-        </Text>
-        {location.pathname === `/` && user && (
-          <PrimaryButton as='a' href='https://3box.io/hub' target='_blank'>
-            Edit 3Box Profile
-          </PrimaryButton>
-        )}
-        {location.pathname === `/dao/${dao?.address}/proposals` && (
-          <PrimaryButton
-            as={RouterLink}
-            to={`/dao/${dao?.address}/proposals/new`}
+    <>
+      <Flex direction='row' justify='space-between' p={6}>
+        <Flex direction='row' justify='flex-start' align='center'>
+          <Text
+            fontSize='3xl'
+            fontFamily={theme.fonts.heading}
+            fontWeight={700}
+            mr={10}
           >
-            New {theme.daoMeta.proposal} <Icon name='small-add' />
-          </PrimaryButton>
-        )}
-        {location.pathname === `/dao/${dao?.address}/members` && (
-          <PrimaryButton
-            as={RouterLink}
-            to={`/dao/${dao?.address}/proposals/new/member`}
-          >
-            Apply
-          </PrimaryButton>
-        )}
-      </Flex>
+            {pageTitle}
+          </Text>
+          {location.pathname === `/` && user && (
+            <PrimaryButton as='a' href='https://3box.io/hub' target='_blank'>
+              Edit 3Box Profile
+            </PrimaryButton>
+          )}
+          {location.pathname === `/dao/${dao?.address}/proposals` && (
+            <PrimaryButton
+              as={RouterLink}
+              to={`/dao/${dao?.address}/proposals/new`}
+            >
+              New {theme.daoMeta.proposal} <Icon name='small-add' />
+            </PrimaryButton>
+          )}
+          {location.pathname === `/dao/${dao?.address}/members` && (
+            <PrimaryButton
+              as={RouterLink}
+              to={`/dao/${dao?.address}/proposals/new/member`}
+            >
+              Apply
+            </PrimaryButton>
+          )}
+        </Flex>
 
-      <Flex direction='row' justify='flex-end' align='center'>
-        {loading && <Spinner mr={5} />}
-        <Text fontSize='md' mr={5} as='i' fontWeight={200}>
-          {network.network}
-        </Text>
+        <Flex direction='row' justify='flex-end' align='center'>
+          {loading && <Spinner mr={5} />}
+          <Text fontSize='md' mr={5} as='i' fontWeight={200}>
+            {network.network}
+          </Text>
 
-        {user ? (
-          <UserAvatar user={user.profile ? user.profile : user} />
-        ) : (
-          <Web3SignIn />
-        )}
+          {user ? (
+            <>
+              <div onClick={() => setShowDaoSwitcher(true)}>
+                <UserAvatar user={user.profile ? user.profile : user} />
+              </div>
+
+              <DaoSwitcherModal
+                isOpen={showDaoSwitcher}
+                setShowModal={setShowDaoSwitcher}
+              />
+            </>
+          ) : (
+            <Web3SignIn />
+          )}
+        </Flex>
       </Flex>
-    </Flex>
+    </>
   );
 };
 export default Header;

@@ -27,6 +27,7 @@ const initialState = {
       cacheProvider: true,
     }),
   },
+  userDaos: [],
   proposals: [],
   members: [],
 };
@@ -53,6 +54,9 @@ const reducer = (state, action) => {
     }
     case 'setUserWallet': {
       return { ...state, userWallet: action.payload };
+    }
+    case 'setUserDaos': {
+      return { ...state, userDaos: action.payload };
     }
     case 'setProposals': {
       return { ...state, proposals: action.payload };
@@ -104,6 +108,10 @@ function PokemolContextProvider(props) {
     dispatch({ type: 'setUserWallet', payload: wallet });
   }, []);
 
+  const updateUserDaos = useCallback((data) => {
+    dispatch({ type: 'setUserDaos', payload: data });
+  }, []);
+
   const updateProposals = useCallback((data) => {
     dispatch({ type: 'setProposals', payload: data });
   }, []);
@@ -130,6 +138,7 @@ function PokemolContextProvider(props) {
             updateNetwork,
             updateTxProcessor,
             updateUserWallet,
+            updateUserDaos,
             updateProposals,
             updateMembers,
             updateRefetchQuery,
@@ -145,6 +154,7 @@ function PokemolContextProvider(props) {
           updateNetwork,
           updateTxProcessor,
           updateUserWallet,
+          updateUserDaos,
           updateProposals,
           updateMembers,
           updateRefetchQuery,
@@ -188,7 +198,12 @@ export function useTxProcessor() {
 
 export function useUserWallet() {
   const [state, { updateUserWallet }] = usePokemolContext();
-  return [state.txProcessor, updateUserWallet];
+  return [state.userWaller, updateUserWallet];
+}
+
+export function useUserDaos() {
+  const [state, { updateUserDaos }] = usePokemolContext();
+  return [state.userDaos, updateUserDaos];
 }
 
 export function useLoading() {
