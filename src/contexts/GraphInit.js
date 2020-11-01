@@ -19,7 +19,6 @@ const GraphInit = () => {
 
   useEffect(() => {
     setFetch(address);
-
     // eslint-disable-next-line
   }, [address]);
 

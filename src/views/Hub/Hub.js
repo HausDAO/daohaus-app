@@ -2,12 +2,12 @@ import React, { useState } from 'react';
 import { Box, Text, Grid } from '@chakra-ui/core';
 
 import { useUser, useTheme } from '../../contexts/PokemolContext';
-import { HUB_MEMBERSHIPS } from '../../utils/apollo/hub-queries';
 import GraphFetch from '../../components/Shared/GraphFetch';
 import MemberDaoList from '../../components/Hub/MemberDaoList';
 import HubSignedOut from '../../components/Hub/HubSignedOut';
 import HubProfileCard from '../../components/Hub/HubProfileCard';
 import HubActivityFeed from '../../components/Hub/HubActivityFeed';
+import { HUB_MEMBERSHIPS } from '../../utils/apollo/member-queries';
 
 const Hub = () => {
   const [user] = useUser();

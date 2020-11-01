@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useToast } from '@chakra-ui/core';
 import { getProfile } from '3box/lib/api';
 
@@ -9,7 +9,10 @@ import {
   useUser,
   useDao,
   useWeb3Connect,
+  useUserDaos,
 } from './PokemolContext';
+import GraphFetch from '../components/Shared/GraphFetch';
+import { USER_MEMBERSHIPS } from '../utils/apollo/member-queries';
 
 const UserInit = () => {
   const toast = useToast();
@@ -17,6 +20,8 @@ const UserInit = () => {
   const [web3Connect, updateWeb3Connect] = useWeb3Connect();
   const [user, updateUser] = useUser();
   const [, updateUserWallet] = useUserWallet();
+  const [, updateUserDaos] = useUserDaos();
+  const [localUserDaos, setLocalUserDaos] = useState();
 
   useEffect(() => {
     initCurrentUser();
@@ -33,6 +38,13 @@ const UserInit = () => {
     initUserWallet();
     // eslint-disable-next-line
   }, [dao, user]);
+
+  useEffect(() => {
+    if (localUserDaos) {
+      updateUserDaos(localUserDaos.map((membership) => membership.moloch));
+    }
+    // eslint-disable-next-line
+  }, [localUserDaos]);
 
   const initCurrentUser = async () => {
     // console.log('************initCurrentUser();');
@@ -75,7 +87,7 @@ const UserInit = () => {
 
             updateWeb3Connect({ w3c, web3, provider });
 
-            updateUser({ ...web3User, profile });
+            updateUser({ ...user, ...web3User, profile });
           }
           break;
         }
@@ -127,7 +139,18 @@ const UserInit = () => {
     updateUserWallet(wallet);
   };
 
-  return <></>;
+  return (
+    <>
+      {user && user.username ? (
+        <GraphFetch
+          query={USER_MEMBERSHIPS}
+          setRecords={setLocalUserDaos}
+          entity='members'
+          variables={{ memberAddress: user.username }}
+        />
+      ) : null}
+    </>
+  );
 };
 
 export default UserInit;

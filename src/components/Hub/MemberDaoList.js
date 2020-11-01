@@ -82,7 +82,7 @@ const MemberDaoList = ({ daos }) => {
         Member of {daos.length} DAO{daos.length > 1 && 's'}
       </Text>
 
-      <Flex direction='row' overflowX='scroll' mb={6}>
+      <Flex direction='row' overflowX='scroll' mb={6} w='100%'>
         {visibleDaos.map((dao) => renderDaoAvatar(dao))}
       </Flex>
 
