@@ -1,5 +1,5 @@
 import React, { useContext, useState } from 'react';
-import { Collapse, Icon, Flex, Box } from '@chakra-ui/core';
+import { Collapse, Icon, Flex, Box, PseudoBox } from '@chakra-ui/core';
 
 import Header from '../shared/Header';
 import SideNav from '../shared/SideNav';
@@ -13,7 +13,7 @@ const Layout = ({ children }) => {
 
   return (
     <Flex direction="row" h="100vh" bg="brand.400" color="white" w="100vw">
-      <Box
+      <PseudoBox
         h="100vh"
         w="100px"
         d="flex"
@@ -21,21 +21,23 @@ const Layout = ({ children }) => {
         direction="column"
         alignItems="start"
         justifyContent="center"
-        _hover={{ bg: 'brand.700' }}
+        pointer="cursor"
+        role="group"
+        _hover={{ bg: 'brand.300' }}
       >
         <img
           src={state.theme.images.brandImg}
           onClick={handleToggle}
           w="80px"
         />
-      </Box>
+      </PseudoBox>
       {show ? (
-        <Box>
+        <PseudoBox>
           <SideNav />
-        </Box>
+        </PseudoBox>
       ) : null}
 
-      <Flex direction="column" bg="background.400" w="100vw">
+      <Flex direction="column" bg="background.400" w="100%">
         <Header></Header>
         {children}
       </Flex>
