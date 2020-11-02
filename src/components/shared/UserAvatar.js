@@ -33,9 +33,11 @@ const UserAvatar = ({ address }) => {
           h="48px"
           mr={3}
           rounded="full"
+          bg="transparent"
           style={{
             backgroundImage: `url(${'https://ipfs.infura.io/ipfs/' +
               profile.image[0].contentUrl['/']})`,
+            backgroundSize: 'cover',
           }}
         >
           {''}

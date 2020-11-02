@@ -1,5 +1,15 @@
 import React, { useContext, useState } from 'react';
-import { Collapse, Icon, Flex, Box, PseudoBox } from '@chakra-ui/core';
+import {
+  Collapse,
+  Icon,
+  Flex,
+  Box,
+  PseudoBox,
+  Drawer,
+  DrawerOverlay,
+  DrawerContent,
+  useDisclosure,
+} from '@chakra-ui/core';
 
 import Header from '../shared/Header';
 import SideNav from '../shared/SideNav';
@@ -11,31 +21,38 @@ const Layout = ({ children }) => {
 
   const handleToggle = () => setShow(!show);
 
+  const { isOpen, onOpen, onClose } = useDisclosure();
+
   return (
     <Flex direction="row" h="100vh" bg="brand.400" color="white" w="100vw">
       <PseudoBox
         h="100vh"
-        w="100px"
         d="flex"
-        p={6}
+        w="auto"
+        minW="100px"
+        p={5}
         direction="column"
         alignItems="start"
-        justifyContent="center"
-        pointer="cursor"
+        justifyContent="start"
         role="group"
-        _hover={{ bg: 'brand.300' }}
       >
-        <img
-          src={state.theme.images.brandImg}
-          onClick={handleToggle}
-          w="80px"
-        />
+        <Box w="60px">
+          <img
+            src={state.theme.images.brandImg}
+            onClick={onOpen}
+            width="60px"
+            height="60px"
+            style={{ cursor: 'pointer' }}
+          />
+        </Box>
       </PseudoBox>
-      {show ? (
-        <PseudoBox>
+
+      <Drawer isOpen={isOpen} placement="left" onClose={onClose}>
+        <DrawerOverlay />
+        <DrawerContent bg="brand.400" color="white">
           <SideNav />
-        </PseudoBox>
-      ) : null}
+        </DrawerContent>
+      </Drawer>
 
       <Flex direction="column" bg="background.400" w="100%">
         <Header></Header>
