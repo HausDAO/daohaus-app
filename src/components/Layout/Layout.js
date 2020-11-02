@@ -18,7 +18,7 @@ const Layout = ({ children }) => {
   const [theme] = useTheme();
 
   return (
-    <Flex direction='row' h='100vh' bg='brand.400' color='white' w='100vw'>
+    <Flex direction='row' minH='100vh' bg='brand.400' color='white' w='100vw'>
       <Box
         h='100vh'
         minW='100px'
