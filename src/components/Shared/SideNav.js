@@ -1,6 +1,15 @@
 import React from 'react';
 import { Link as RouterLink, useHistory } from 'react-router-dom';
-import { Text, Stack, Spinner, Link, Box, Icon, Flex } from '@chakra-ui/core';
+import {
+  Text,
+  Stack,
+  Spinner,
+  Link,
+  Box,
+  Icon,
+  Flex,
+  Image,
+} from '@chakra-ui/core';
 
 import {
   useDao,
@@ -56,22 +65,26 @@ const SideNav = () => {
         <>
           {dao ? (
             <>
-              <Box>
-                <Link as={RouterLink} to={`/dao/${dao.address}`}>
-                  <Text
-                    fontSize='2xl'
-                    mt='45px'
-                    fontFamily={theme.fonts.hub}
-                    fontWeight={700}
+              <Flex direction='row' justify='start' align='start'>
+                <Flex direction='column' align='center' justify='start' mr={6}>
+                  <Link as={RouterLink} to={`/dao/${dao.address}`}>
+                    <Image src={theme.images.brandImg} size='60px' />
+                  </Link>
+                </Flex>
+                <Flex direction='column' align='start' justify='start'>
+                  <Link
+                    as={RouterLink}
+                    to={`/dao/${dao.address}`}
+                    fontSize='xl'
                   >
                     {dao.apiMeta.name}
-                  </Text>
-                </Link>
-                <Text fontSize='xs'>
-                  Change Dao
-                  <Icon name='chevron-down' />
-                </Text>
-              </Box>
+                  </Link>
+                  <Link fontSize='xs'>
+                    Change Dao
+                    <Icon name='chevron-down' />
+                  </Link>
+                </Flex>
+              </Flex>
               <Stack spacing={3} mt='125px' w='200px' pr={1}>
                 <Text
                   fontSize='xs'
@@ -124,14 +137,22 @@ const SideNav = () => {
             </>
           ) : (
             <>
-              <Text
-                fontSize='4xl'
-                mt='45px'
-                fontFamily={theme.fonts.hub}
-                fontWeight={700}
-              >
-                DAOhaus
-              </Text>
+              <Flex direction='row' justify='start' align='start'>
+                <Flex direction='column' align='center' justify='start' mr={6}>
+                  <Link as={RouterLink} to={`/`}>
+                    <Image src={theme.images.brandImg} size='60px' />
+                  </Link>
+                </Flex>
+                <Flex direction='column' align='start' justify='start'>
+                  <Link as={RouterLink} to={`/`} fontSize='xl'>
+                    DAOhaus
+                  </Link>
+                  <Link fontSize='xs'>
+                    Change Dao
+                    <Icon name='chevron-down' />
+                  </Link>
+                </Flex>
+              </Flex>
               <Stack spacing={4} mt='125px' w='200px' pr={1}>
                 <Text fontSize='xs'>Main Menu</Text>
                 <Link href='https://daohaus.club' isExternal>
