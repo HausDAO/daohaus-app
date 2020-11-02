@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Link as RouterLink, useHistory } from 'react-router-dom';
 import {
   Text,
@@ -9,6 +9,7 @@ import {
   Icon,
   Flex,
   Image,
+  Button,
 } from '@chakra-ui/core';
 
 import {
@@ -17,6 +18,7 @@ import {
   useRefetchQuery,
   useTheme,
 } from '../../contexts/PokemolContext';
+import DaoSwitcherModal from '../Modal/DaoSwitcherModal';
 import BrandOverride from '../../assets/themes/raidTheme/raidguild__swords.svg';
 import { PrimaryButton, SecondaryButton } from '../../themes/theme';
 
@@ -26,6 +28,7 @@ const SideNav = () => {
   const [dao] = useDao();
   const history = useHistory();
   const [, updateRefetchQuery] = useRefetchQuery();
+  const [showDaoSwitcher, setShowDaoSwitcher] = useState(false);
 
   const setLocalTheme = () => {
     setTheme({
@@ -79,10 +82,17 @@ const SideNav = () => {
                   >
                     {dao.apiMeta.name}
                   </Link>
-                  <Link fontSize='xs'>
+                  <Button
+                    fontSize='xs'
+                    onClick={() => setShowDaoSwitcher(true)}
+                  >
                     Change Dao
                     <Icon name='chevron-down' />
-                  </Link>
+                  </Button>
+                  <DaoSwitcherModal
+                    isOpen={showDaoSwitcher}
+                    setShowModal={setShowDaoSwitcher}
+                  />
                 </Flex>
               </Flex>
               <Stack spacing={3} mt='125px' w='200px' pr={1}>
@@ -147,10 +157,17 @@ const SideNav = () => {
                   <Link as={RouterLink} to={`/`} fontSize='xl'>
                     DAOhaus
                   </Link>
-                  <Link fontSize='xs'>
+                  <Button
+                    fontSize='xs'
+                    onClick={() => setShowDaoSwitcher(true)}
+                  >
                     Change Dao
                     <Icon name='chevron-down' />
-                  </Link>
+                  </Button>
+                  <DaoSwitcherModal
+                    isOpen={showDaoSwitcher}
+                    setShowModal={setShowDaoSwitcher}
+                  />
                 </Flex>
               </Flex>
               <Stack spacing={4} mt='125px' w='200px' pr={1}>

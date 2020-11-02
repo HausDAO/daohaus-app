@@ -33,7 +33,7 @@ const Layout = ({ children }) => {
       </Box>
       <Drawer placement='left' isOpen={isOpen} onClose={onClose}>
         <DrawerOverlay />
-        <DrawerContent bg='brand.400' color='white' p={6}>
+        <DrawerContent bg='brand.400' color='white' p={6} onClick={onClose}>
           <SideNav />
         </DrawerContent>
       </Drawer>
