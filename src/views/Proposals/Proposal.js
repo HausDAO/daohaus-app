@@ -39,7 +39,8 @@ const Proposal = () => {
               <Icon
                 name='arrow-back'
                 color={theme.colors.brand[50]}
-                size='20px'
+                h='20px'
+                w='20px'
               />{' '}
               All Quests
             </Text>

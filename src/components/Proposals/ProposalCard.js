@@ -62,10 +62,10 @@ const ProposalCard = ({ proposal, isLoaded }) => {
           <Flex align='center'>
             <Flex h='20px'>
               <Skeleton isLoaded={isLoaded}>
-                <Badge variantColor='green' mr={3}>
+                <Badge colorScheme='green' mr={3}>
                   {proposal?.yesVotes ? proposal.yesVotes : '--'} Yes
                 </Badge>
-                <Badge variantColor='red'>
+                <Badge colorScheme='red'>
                   {proposal?.noVotes ? proposal.noVotes : '--'} No
                 </Badge>
               </Skeleton>

@@ -1,6 +1,6 @@
 import React from 'react';
 import { BrowserRouter as Router } from 'react-router-dom';
-import { ThemeProvider, CSSReset } from '@chakra-ui/core';
+import { ChakraProvider } from '@chakra-ui/core';
 import ApolloClient from 'apollo-boost';
 import { ApolloProvider } from 'react-apollo';
 
@@ -42,15 +42,14 @@ const App = () => {
 
   return (
     <ApolloProvider client={client}>
-      <ThemeProvider theme={theme}>
-        <CSSReset />
+      <ChakraProvider theme={theme}>
         <Router>
           <Init />
           <Layout>
             <Routes />
           </Layout>
         </Router>
-      </ThemeProvider>
+      </ChakraProvider>
     </ApolloProvider>
   );
 };
