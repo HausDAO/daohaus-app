@@ -29,7 +29,7 @@ const Proposal = () => {
     <Box>
       <Flex>
         <Box w='60%'>
-          <Link as={RouterLink} to={`/dao/${dao?.address}/proposals`}>
+          <Link as={RouterLink} to={`/dao/${dao.address}/proposals`}>
             <Text
               textTransform='uppercase'
               ml={6}
