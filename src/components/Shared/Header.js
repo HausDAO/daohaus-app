@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Text, Flex, Icon, Spinner } from '@chakra-ui/core';
+import { Text, Flex, Icon, Spinner, Button } from '@chakra-ui/core';
 import { useLocation, Link as RouterLink } from 'react-router-dom';
 import {
   useUser,
@@ -91,9 +91,12 @@ const Header = () => {
 
           {user ? (
             <>
-              <div onClick={() => setShowDaoSwitcher(true)}>
+              <Button
+                variant='outline'
+                onClick={() => setShowDaoSwitcher(true)}
+              >
                 <UserAvatar user={user.profile ? user.profile : user} />
-              </div>
+              </Button>
 
               <DaoSwitcherModal
                 isOpen={showDaoSwitcher}
