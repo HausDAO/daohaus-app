@@ -26,8 +26,8 @@ const ActivityCard = ({ activity }) => {
             </Heading>
             {/* <Text>{getProposalCountdownText(activity)}</Text> */}
             <Stack isInline>
-              <Badge variantColor='green'>{activity.yesVotes} Yes</Badge>
-              <Badge variantColor='red'>{activity.noVotes} No</Badge>
+              <Badge colorScheme='green'>{activity.yesVotes} Yes</Badge>
+              <Badge colorScheme='red'>{activity.noVotes} No</Badge>
             </Stack>
             <Badge>{activity.activityFeed.message}</Badge>
           </>

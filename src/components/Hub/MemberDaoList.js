@@ -42,7 +42,7 @@ const MemberDaoList = ({ daos }) => {
             mb={4}
           >
             {healthCount ? (
-              <AvatarBadge size='1.25em' bg='red.500'>
+              <AvatarBadge w='1.25em' h='1.25em' bg='red.500'>
                 {healthCount}
               </AvatarBadge>
             ) : null}

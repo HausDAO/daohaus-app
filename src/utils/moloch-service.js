@@ -19,6 +19,7 @@ export class MolochService {
 
   // internal
   sendTx(name, tx, callback) {
+    console.log('this.accountAddr', this.accountAddr);
     return tx
       .send({ from: this.accountAddr })
       .on('transactionHash', (txHash) => {

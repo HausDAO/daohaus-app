@@ -26,7 +26,7 @@ const initialState = {
     }),
   },
   contracts: {},
-  txProcessor: null,
+  txProcessor: {},
 
   memberWallet: null,
   daoMetadata: null,
