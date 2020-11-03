@@ -19,8 +19,6 @@ const SideNav = () => {
   const history = useHistory();
   const [, updateRefetchQuery] = useRefetchQuery();
 
-  console.log('dao', dao);
-
   const setLocalTheme = () => {
     setTheme({
       brand50: '#ff4d74',
@@ -35,7 +33,7 @@ const SideNav = () => {
       brand900: '#e50651',
       brandImg: BrandOverride,
       bg400: '#000',
-      primaryFont: 'Syne Mono', // only temporary
+      primaryFont: 'Space Mono', // only temporary
       bodyFont: 'Rubik',
       daoMeta: {
         proposals: 'Quests',
