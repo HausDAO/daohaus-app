@@ -92,7 +92,7 @@ const Header = () => {
           {user ? (
             <>
               <div onClick={() => setShowDaoSwitcher(true)}>
-                <UserAvatar user={user.profile ? user.profile : user} />
+                <UserAvatar user={user?.profile?.image ? user.profile : user} />
               </div>
 
               <DaoSwitcherModal

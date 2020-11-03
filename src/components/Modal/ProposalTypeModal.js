@@ -6,12 +6,11 @@ import {
   ModalCloseButton,
   ModalBody,
   ModalFooter,
-  Button,
   ModalOverlay,
   Text,
   Flex,
   Image,
-  PseudoBox,
+  Box,
 } from '@chakra-ui/core';
 import { useTheme } from '../../contexts/PokemolContext';
 
@@ -88,7 +87,7 @@ const ProposalFormModal = ({ isOpen, setShowModal, setProposalType }) => {
         <ModalBody flexDirection='row' display='flex' justify='space-around'>
           {proposalTypes.map((p) => {
             return (
-              <PseudoBox
+              <Box
                 as={Flex}
                 key={p.name}
                 display='flex'
@@ -125,7 +124,7 @@ const ProposalFormModal = ({ isOpen, setShowModal, setProposalType }) => {
                 >
                   {p.subhead}
                 </Text>
-              </PseudoBox>
+              </Box>
             );
           })}
         </ModalBody>

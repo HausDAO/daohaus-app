@@ -29,7 +29,7 @@ const Proposal = () => {
     <Box>
       <Flex>
         <Box w='60%'>
-          <Link as={RouterLink} to={`/dao/${dao?.address}/proposals`}>
+          <Link as={RouterLink} to={`/dao/${dao.address}/proposals`}>
             <Text
               textTransform='uppercase'
               ml={6}
@@ -39,7 +39,8 @@ const Proposal = () => {
               <Icon
                 name='arrow-back'
                 color={theme.colors.brand[50]}
-                size='20px'
+                h='20px'
+                w='20px'
               />{' '}
               All Quests
             </Text>
