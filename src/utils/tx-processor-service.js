@@ -8,7 +8,6 @@ export class TxProcessorService {
   async update(account) {
     const _txList = this.getTxPendingList(account);
     const _pending = [];
-    // console.log('updating check tx from service', _txList.length, _txList);
 
     if (_txList.length) {
       _txList.forEach((tx) => {
@@ -68,7 +67,6 @@ export class TxProcessorService {
 
   getTxPendingList(account) {
     const _txList = JSON.parse(localStorage.getItem('txList')) || [];
-
     return _txList.filter((item) => item.account === account && item.open);
   }
 
@@ -91,11 +89,5 @@ export class TxProcessorService {
     // needs to clear for account
     // setTxList({ txList: [] });
     return { txList: [] };
-  }
-}
-
-export class ReadOnlyTxProcessorService extends TxProcessorService {
-  getTxList() {
-    return [];
   }
 }

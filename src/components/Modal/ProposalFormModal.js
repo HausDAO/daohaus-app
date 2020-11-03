@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import {
   Modal,
@@ -24,22 +24,77 @@ import {
   Text,
   Textarea,
 } from '@chakra-ui/core';
-import { useTheme } from '../../contexts/PokemolContext';
+import {
+  useDao,
+  useTheme,
+  useTxProcessor,
+  useUser,
+  useWeb3Connect,
+} from '../../contexts/PokemolContext';
 import { PrimaryButton } from '../../themes/theme';
+import { Web3MolochServiceV2 } from '../../utils/moloch-service';
 
 const ProposalFormModal = ({ isOpen, setShowModal }) => {
+  const [loading, setLoading] = useState(false);
+
   const [theme] = useTheme();
+  const [user] = useUser();
+  const [dao] = useDao();
+  const [txProcessor, updateTxProcessor] = useTxProcessor();
+  const [web3Connect] = useWeb3Connect();
+
   const {
-    // handleSubmit,
+    handleSubmit,
     errors,
     // register,
     // formState
   } = useForm();
 
+  const txCallBack = (txHash, details) => {
+    if (txProcessor && txHash) {
+      txProcessor.setTx(txHash, user.username, details, true, false);
+      txProcessor.forceUpdate = true;
+
+      updateTxProcessor(txProcessor);
+      // close model here
+      // onClose();
+      setShowModal(null);
+    }
+    if (!txHash) {
+      console.log('error: ', details);
+      setLoading(false);
+    }
+  };
+
+  const onSubmit = async (data) => {
+    setLoading(true);
+    try {
+      const moloch = new Web3MolochServiceV2(
+        web3Connect.web3,
+        dao.contractAddr,
+        user.username,
+        '2',
+      );
+      moloch.submitProposal(
+        data.applicant,
+        data.tokenTribute,
+        data.sharesRequested,
+        data.details,
+        txCallBack,
+      )
+    } catch (err) {
+      setLoading(false);
+      console.log('error: ', err);
+    }
+  };
+
   return (
     <Modal
       isOpen={isOpen}
-      onClose={() => setShowModal(null)}
+      onClose={() => {
+        setLoading(false);
+        setShowModal(null);
+      }}
       size={1000}
       isCentered
     >
@@ -75,7 +130,7 @@ const ProposalFormModal = ({ isOpen, setShowModal }) => {
           <Text color='#C4C4C4' mb={6}>
             Submit your membership proposal here.
           </Text>
-          <form>
+          <form onSubmit={handleSubmit(onSubmit)}>
             <FormControl
               isInvalid={errors.name}
               display='flex'
@@ -172,7 +227,15 @@ const ProposalFormModal = ({ isOpen, setShowModal }) => {
             </FormControl>
             <Flex justify='flex-end' align='center' h='60px'>
               <Box>
-                <PrimaryButton color='white'>Submit</PrimaryButton>
+                <PrimaryButton
+                  color='white'
+                  type='submit'
+                  loadingText='Submitting'
+                  isLoading={loading}
+                  disabled={loading}
+                >
+                  Submit
+                </PrimaryButton>
               </Box>
             </Flex>
           </form>
