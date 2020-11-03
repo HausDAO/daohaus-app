@@ -36,6 +36,10 @@ const ProposalFormModal = ({ isOpen, setShowModal }) => {
     // formState
   } = useForm();
 
+  const handleSubmit = () => {
+    console.log('poopin');
+  };
+
   return (
     <Modal
       isOpen={isOpen}
@@ -75,7 +79,7 @@ const ProposalFormModal = ({ isOpen, setShowModal }) => {
           <Text color='#C4C4C4' mb={6}>
             Submit your membership proposal here.
           </Text>
-          <form>
+          <form onSubmit={handleSubmit}>
             <FormControl
               isInvalid={errors.name}
               display='flex'

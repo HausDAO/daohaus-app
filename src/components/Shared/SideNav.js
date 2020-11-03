@@ -1,15 +1,6 @@
 import React from 'react';
 import { Link as RouterLink, useHistory } from 'react-router-dom';
-import {
-  Text,
-  Stack,
-  Spinner,
-  Link,
-  Box,
-  Icon,
-  Flex,
-  Image,
-} from '@chakra-ui/core';
+import { Text, Stack, Spinner, Link, Box, Flex, Image } from '@chakra-ui/core';
 
 import {
   useDao,
@@ -19,6 +10,7 @@ import {
 } from '../../contexts/PokemolContext';
 import BrandOverride from '../../assets/themes/raidTheme/raidguild__swords.svg';
 import { PrimaryButton, SecondaryButton } from '../../themes/theme';
+import ChangeDao from './ChangeDao';
 
 const SideNav = () => {
   const [loading] = useLoading();
@@ -26,6 +18,8 @@ const SideNav = () => {
   const [dao] = useDao();
   const history = useHistory();
   const [, updateRefetchQuery] = useRefetchQuery();
+
+  console.log('dao', dao);
 
   const setLocalTheme = () => {
     setTheme({
@@ -77,12 +71,9 @@ const SideNav = () => {
                     to={`/dao/${dao.address}`}
                     fontSize='xl'
                   >
-                    {dao.apiMeta.name}
+                    {dao.name}
                   </Link>
-                  <Link fontSize='xs'>
-                    Change Dao
-                    <Icon name='chevron-down' />
-                  </Link>
+                  <ChangeDao />
                 </Flex>
               </Flex>
               <Stack spacing={3} mt='125px' w='200px' pr={1}>
@@ -147,10 +138,7 @@ const SideNav = () => {
                   <Link as={RouterLink} to={`/`} fontSize='xl'>
                     DAOhaus
                   </Link>
-                  <Link fontSize='xs'>
-                    Change Dao
-                    <Icon name='chevron-down' />
-                  </Link>
+                  <ChangeDao />
                 </Flex>
               </Flex>
               <Stack spacing={4} mt='125px' w='200px' pr={1}>

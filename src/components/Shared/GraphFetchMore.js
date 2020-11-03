@@ -53,7 +53,6 @@ const GraphFetchMore = ({ query, setRecords, variables, entity, context }) => {
   }, [data, fetched]);
 
   useEffect(() => {
-    console.log('data', data);
     if (data && fetched) {
       console.log('setting entity', entity);
       setRecords(data[entity]);

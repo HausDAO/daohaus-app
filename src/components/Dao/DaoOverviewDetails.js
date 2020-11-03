@@ -11,11 +11,9 @@ const DaoOverviewDetails = ({ dao }) => {
   const [user] = useUser();
   const [members] = useMembers();
   const history = useHistory();
-  // console.log(members);
   const wethBalance = dao?.graphData?.tokenBalances?.filter((t) => {
     return t.symbol === 'WETH';
   })[0]?.tokenBalance;
-  console.log(dao);
 
   return (
     <>
@@ -46,13 +44,13 @@ const DaoOverviewDetails = ({ dao }) => {
             h={50}
             w={50}
           />
-          <Skeleton isLoaded={dao?.apiMeta?.name} ml={6}>
+          <Skeleton isLoaded={dao.name} ml={6}>
             <Text
               fontSize='2xl'
               fontWeight={700}
               fontFamily={theme.fonts.heading}
             >
-              {dao?.apiMeta?.name ? dao?.apiMeta?.name : '--'}
+              {dao.name ? dao.name : '--'}
             </Text>
           </Skeleton>
         </Flex>
@@ -142,10 +140,8 @@ const DaoOverviewDetails = ({ dao }) => {
             </Skeleton>
           </Box>
         </Box>
-        <Skeleton isLoaded={dao?.apiMeta?.description}>
-          <Box mt={6}>
-            {dao?.apiMeta?.description ? dao.apiMeta.description : '--'}
-          </Box>
+        <Skeleton isLoaded={dao?.description}>
+          <Box mt={6}>{dao?.description ? dao.description : '--'}</Box>
         </Skeleton>
         <Flex mt={6}>
           <PrimaryButton
