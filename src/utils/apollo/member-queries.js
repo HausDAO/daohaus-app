@@ -1,8 +1,8 @@
 import { gql } from 'apollo-boost';
 
 export const MEMBERS_LIST = gql`
-  query members($contractAddr: String!, $skip: Int) {
-    members(
+  query membersList($contractAddr: String!, $skip: Int) {
+    daoMembers: members(
       where: { molochAddress: $contractAddr, exists: true }
       orderBy: shares
       orderDirection: desc
@@ -20,6 +20,7 @@ export const MEMBERS_LIST = gql`
       createdAt
       profile @client
       moloch {
+        id
         totalShares
         depositToken {
           tokenAddress
@@ -28,14 +29,17 @@ export const MEMBERS_LIST = gql`
         }
       }
       tokenBalances {
+        id
         tokenBalance
         token {
+          id
           tokenAddress
           symbol
           decimals
         }
       }
       submissions {
+        id
         proposalIndex
         yesVotes
         noVotes
@@ -48,7 +52,7 @@ export const MEMBERS_LIST = gql`
 `;
 
 export const HUB_MEMBERSHIPS = gql`
-  query members($memberAddress: String!) {
+  query membersHub($memberAddress: String!) {
     members(where: { memberAddress: $memberAddress, exists: true }) {
       id
       memberAddress
@@ -100,7 +104,7 @@ export const HUB_MEMBERSHIPS = gql`
 `;
 
 export const USER_MEMBERSHIPS = gql`
-  query members($memberAddress: String!) {
+  query membersUser($memberAddress: String!) {
     members(where: { memberAddress: $memberAddress, exists: true }) {
       id
       memberAddress

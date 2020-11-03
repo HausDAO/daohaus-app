@@ -36,6 +36,8 @@ export class TxProcessorService {
       console.log('tx hash is null, something went wrong');
       return;
     }
+
+    console.log('setTx', tx, account, description);
     const _txList = JSON.parse(localStorage.getItem('txList')) || [];
     const txItem = {};
     const exists = _txList.findIndex((item) => item.tx === tx);

@@ -22,7 +22,9 @@ const ProposalCard = ({ proposal, isLoaded }) => {
   const votePeriodEnds = new Date(+proposal?.votingPeriodEnds * 1000);
 
   return (
-    <Link to={`/dao/${dao?.address}/proposals/${proposal?.proposalId}`}>
+    <Link to={`/dao/${dao.address}/proposals/${proposal.proposalId}`}>
+      {/* <Link to={`/dao/${dao?.address}/proposals/${proposal?.proposalId}`}> */}
+
       <Box
         rounded='lg'
         bg='blackAlpha.600'

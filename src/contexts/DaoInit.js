@@ -1,15 +1,25 @@
 import React, { useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
-import { DaoService } from '../utils/dao-service';
+
+import { DaoService, USER_TYPE } from '../utils/dao-service';
 import { get } from '../utils/requests';
 
-import { useLoading, useUser, useDao, useWeb3Connect } from './PokemolContext';
+import {
+  useLoading,
+  useUser,
+  useWeb3Connect,
+  useMemberWallet,
+  useContracts,
+  useDaoMetadata,
+} from './PokemolContext';
 
 const DaoInit = () => {
   const location = useLocation();
-  const [dao, updateDao] = useDao();
-  const [web3Connect] = useWeb3Connect();
   const [, updateLoading] = useLoading();
+  const [contracts, updateContracts] = useContracts();
+  const [daoMetadata, updateDaoMetadata] = useDaoMetadata();
+  const [web3Connect] = useWeb3Connect();
+  const [, updateMemberWallet] = useMemberWallet();
   const [user] = useUser();
 
   useEffect(() => {
@@ -20,11 +30,11 @@ const DaoInit = () => {
       pathname[1] === 'dao' && regex.test(daoParam) ? daoParam : false;
 
     if (!validParam) {
-      updateDao(null);
+      updateDaoMetadata(null);
       return;
     }
 
-    if (!dao || dao.address !== daoParam) {
+    if (!daoMetadata || daoMetadata.address !== daoParam) {
       initDao(daoParam);
     }
     // eslint-disable-next-line
@@ -32,13 +42,27 @@ const DaoInit = () => {
 
   useEffect(() => {
     const needsUserDaoService =
-      dao && user && user.username !== dao.daoService.accountAddr;
+      daoMetadata &&
+      user &&
+      contracts.daoService &&
+      user.username !== contracts.daoService.accountAddr;
     if (needsUserDaoService) {
       initWeb3DaoService();
     }
 
     // eslint-disable-next-line
-  }, [user, dao]);
+  }, [user, daoMetadata]);
+
+  useEffect(() => {
+    const noDaoService = !daoMetadata || !contracts.daoService;
+    const notSignedIn = !user || user.type === USER_TYPE.READ_ONLY;
+    if (noDaoService || notSignedIn) {
+      return;
+    }
+
+    initMemberWallet();
+    // eslint-disable-next-line
+  }, [daoMetadata, user]);
 
   const initDao = async (daoParam) => {
     // console.log('###############init dao');
@@ -76,14 +100,17 @@ const DaoInit = () => {
 
     const currentPeriod = await daoService.moloch.getCurrentPeriod();
 
-    updateDao({
-      ...dao,
+    const apiData = daoRes ? daoRes.data : {};
+    updateDaoMetadata({
       address: daoParam,
-      apiMeta: daoRes ? daoRes.data : null,
-      daoService: daoService,
+      version,
+      ...apiData,
       boosts,
       currentPeriod: parseInt(currentPeriod),
     });
+
+    updateContracts({ daoService });
+
     updateLoading(false);
   };
 
@@ -91,14 +118,48 @@ const DaoInit = () => {
     const daoService = await DaoService.instantiateWithWeb3(
       user.username,
       web3Connect.provider,
-      dao.address,
-      dao.version,
+      daoMetadata.address,
+      daoMetadata.version,
     );
 
-    updateDao({
-      ...dao,
-      daoService,
-    });
+    updateContracts({ daoService });
+  };
+
+  const initMemberWallet = async () => {
+    // TODO: Do we still need all these?
+    const addrByDelegateKey = await contracts.daoService.moloch.memberAddressByDelegateKey(
+      user.username,
+    );
+    const tokenBalanceWei = await contracts.daoService.token.balanceOf(
+      user.username,
+    );
+    const allowanceWei = await contracts.daoService.token.allowance(
+      user.username,
+      contracts.daoService.daoAddress,
+    );
+    const tokenBalance = contracts.daoService.web3.utils.fromWei(
+      tokenBalanceWei,
+    );
+    const allowance = contracts.daoService.web3.utils.fromWei(allowanceWei);
+    const member = await contracts.daoService.moloch.members(addrByDelegateKey);
+    const shares = parseInt(member.shares) || 0;
+    const loot = parseInt(member.loot) || 0;
+    const jailed = parseInt(member.jailed) || 0;
+    const highestIndexYesVote = member.highestIndexYesVote;
+    let eth = 0;
+    eth = await contracts.daoService.getAccountEth();
+    const wallet = {
+      tokenBalance,
+      allowance,
+      eth,
+      loot,
+      highestIndexYesVote,
+      jailed,
+      shares,
+      addrByDelegateKey,
+    };
+
+    updateMemberWallet(wallet);
   };
 
   return <></>;

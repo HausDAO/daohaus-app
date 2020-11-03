@@ -51,6 +51,7 @@ const ProposalFormModal = ({ isOpen, setShowModal }) => {
   } = useForm();
 
   const txCallBack = (txHash, details) => {
+    console.log('txCallBack', txProcessor);
     if (txProcessor && txHash) {
       txProcessor.setTx(txHash, user.username, details, true, false);
       txProcessor.forceUpdate = true;
@@ -58,7 +59,7 @@ const ProposalFormModal = ({ isOpen, setShowModal }) => {
       updateTxProcessor(txProcessor);
       // close model here
       // onClose();
-      setShowModal(null);
+      // setShowModal(null);
     }
     if (!txHash) {
       console.log('error: ', details);
@@ -68,20 +69,42 @@ const ProposalFormModal = ({ isOpen, setShowModal }) => {
 
   const onSubmit = async (data) => {
     setLoading(true);
+
+    console.log('SUBMIT', dao.daoService);
+    // console.log('SUBMIT', dao.daoService);
+
     try {
-      const moloch = new Web3MolochServiceV2(
-        web3Connect.web3,
-        dao.contractAddr,
-        user.username,
-        '2',
-      );
-      moloch.submitProposal(
-        data.applicant,
-        data.tokenTribute,
+      // const moloch = new Web3MolochServiceV2(
+      //   web3Connect.web3,
+      //   dao.contractAddr,
+      //   user.username,
+      //   '2',
+      // );
+      const data = {
+        applicant: '',
+        tributeOffered: '10000000000000000',
+        tributeToken: '0xd0a1e359811322d97991e03f863a0c30c2cf029c',
+        sharesRequested: '10',
+        lootRequested: '0',
+        details: JSON.stringify({
+          title: 'prop 1 test',
+          description: 'new member',
+          link: 'https://github.com/',
+        }),
+      };
+      dao.daoService.moloch.submitProposal(
         data.sharesRequested,
+        data.lootRequested,
+        data.tributeOffered,
+        data.tributeToken,
+        0,
+        data.tributeToken,
         data.details,
+        // data.applicant,
+        // user.username,
+        '0x68d36DcBDD7Bbf206e27134F28103abE7cf972df',
         txCallBack,
-      )
+      );
     } catch (err) {
       setLoading(false);
       console.log('error: ', err);

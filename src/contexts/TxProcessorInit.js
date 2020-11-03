@@ -12,10 +12,10 @@ import {
   useToast,
 } from '@chakra-ui/core';
 
-import { TxProcessorService } from '../utils/TxProcessorService';
-import { useTxProcessor, useUser, useWeb3Connect } from './DappContext';
-import { truncateAddr } from '../utils/Helpers';
-import { ExplorerLink } from '../components';
+import { TxProcessorService } from '../utils/tx-processor-service';
+import { useTxProcessor, useUser, useWeb3Connect } from './PokemolContext';
+import ExplorerLink from '../components/Shared/ExplorerLink';
+import { truncateAddr } from '../utils/helpers';
 
 const TxProcessorInit = () => {
   const [user] = useUser();
@@ -27,11 +27,17 @@ const TxProcessorInit = () => {
   const toast = useToast();
 
   useEffect(() => {
+    if (!txProcessor) {
+      return;
+    }
     if (!user || Object.keys(txProcessor).length === 0) {
       return;
     }
 
     const unseen = txProcessor.getTxUnseenList(user.username);
+
+    console.log('unseen', unseen);
+
     if (unseen.length) {
       setLatestTx(unseen[0]);
       setLoading(true);

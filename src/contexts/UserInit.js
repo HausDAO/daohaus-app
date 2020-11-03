@@ -1,50 +1,20 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import { useToast } from '@chakra-ui/core';
 import { getProfile } from '3box/lib/api';
 
 import { createWeb3User, w3connect } from '../utils/auth';
 import { USER_TYPE } from '../utils/dao-service';
-import {
-  useUserWallet,
-  useUser,
-  useDao,
-  useWeb3Connect,
-  useUserDaos,
-} from './PokemolContext';
-import GraphFetch from '../components/Shared/GraphFetch';
-import { USER_MEMBERSHIPS } from '../utils/apollo/member-queries';
+import { useUser, useWeb3Connect } from './PokemolContext';
 
 const UserInit = () => {
   const toast = useToast();
-  const [dao] = useDao();
   const [web3Connect, updateWeb3Connect] = useWeb3Connect();
   const [user, updateUser] = useUser();
-  const [, updateUserWallet] = useUserWallet();
-  const [, updateUserDaos] = useUserDaos();
-  const [localUserDaos, setLocalUserDaos] = useState();
 
   useEffect(() => {
     initCurrentUser();
     // eslint-disable-next-line
   }, [web3Connect]);
-
-  useEffect(() => {
-    const noDaoService = !dao || !dao.daoService;
-    const notSignedIn = !user || user.type === USER_TYPE.READ_ONLY;
-    if (noDaoService || notSignedIn) {
-      return;
-    }
-
-    initUserWallet();
-    // eslint-disable-next-line
-  }, [dao, user]);
-
-  useEffect(() => {
-    if (localUserDaos) {
-      updateUserDaos(localUserDaos.map((membership) => membership.moloch));
-    }
-    // eslint-disable-next-line
-  }, [localUserDaos]);
 
   const initCurrentUser = async () => {
     // console.log('************initCurrentUser();');
@@ -105,52 +75,7 @@ const UserInit = () => {
     }
   };
 
-  const initUserWallet = async () => {
-    // console.log('^^^^^^^^^^^^^^initUserWallet');
-    // TODO: Do we still need all these - see if we can get elsewhere and store on user entity in state
-    const addrByDelegateKey = await dao.daoService.moloch.memberAddressByDelegateKey(
-      user.username,
-    );
-    const tokenBalanceWei = await dao.daoService.token.balanceOf(user.username);
-    const allowanceWei = await dao.daoService.token.allowance(
-      user.username,
-      dao.daoService.daoAddress,
-    );
-    const tokenBalance = dao.daoService.web3.utils.fromWei(tokenBalanceWei);
-    const allowance = dao.daoService.web3.utils.fromWei(allowanceWei);
-    const member = await dao.daoService.moloch.members(addrByDelegateKey);
-    const shares = parseInt(member.shares) || 0;
-    const loot = parseInt(member.loot) || 0;
-    const jailed = parseInt(member.jailed) || 0;
-    const highestIndexYesVote = member.highestIndexYesVote;
-    let eth = 0;
-    eth = await dao.daoService.getAccountEth();
-    const wallet = {
-      tokenBalance,
-      allowance,
-      eth,
-      loot,
-      highestIndexYesVote,
-      jailed,
-      shares,
-      addrByDelegateKey,
-    };
-
-    updateUserWallet(wallet);
-  };
-
-  return (
-    <>
-      {user && user.username ? (
-        <GraphFetch
-          query={USER_MEMBERSHIPS}
-          setRecords={setLocalUserDaos}
-          entity='members'
-          variables={{ memberAddress: user.username }}
-        />
-      ) : null}
-    </>
-  );
+  return <></>;
 };
 
 export default UserInit;
