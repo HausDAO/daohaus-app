@@ -27,6 +27,7 @@ const SideNav = () => {
       bg500: '#121212',
       brandImg: BrandOverride,
       bgImg: BgOverride,
+      bgOverlayOpacity: '0.5',
       primaryFont: 'Space Mono', // only temporary
       bodyFont: 'Rubik',
       daoMeta: {
