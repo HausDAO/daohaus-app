@@ -176,7 +176,7 @@ const SideNav = () => {
       )}
 
       <SecondaryButton
-        variantColor={theme.colors.secondary[500]}
+        colorScheme={theme.colors.secondary[500]}
         onClick={() => updateRefetchQuery('proposals')}
       >
         Refetch Proposals Test

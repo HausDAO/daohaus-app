@@ -27,6 +27,10 @@ export const filterOptions = [
 
 export const sortOptions = [
   {
+    name: 'Date Submitted',
+    value: 'submissionDate',
+  },
+  {
     name: 'Unsponsored',
     value: 'unsponsored',
   },
