@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useLocation, Link as RouterLink } from 'react-router-dom';
 import { Box, Flex, Text, Link, Icon } from '@chakra-ui/core';
+import { RiArrowLeftLine } from 'react-icons/ri';
 
 import { useProposals, useDao, useTheme } from '../../contexts/PokemolContext';
 import ProposalDetail from '../../components/Proposals/ProposalDetail';
@@ -24,6 +25,7 @@ const Proposal = () => {
     }
     // eslint-disable-next-line
   }, [proposals]);
+  console.log(theme);
 
   return (
     <Box>
@@ -37,8 +39,8 @@ const Proposal = () => {
               fontFamily={theme.fonts.heading}
             >
               <Icon
-                name='arrow-back'
-                color={theme.colors.brand[50]}
+                as={RiArrowLeftLine}
+                color={theme.colors.primary[50]}
                 h='20px'
                 w='20px'
               />{' '}
