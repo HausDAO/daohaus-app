@@ -34,8 +34,8 @@ const Layout = ({ children }) => {
         direction='column'
         align='center'
         justifyContent='space-between'
-        bg='brand.500'
-        _hover={{ bg: 'brand.400' }}
+        bg='primary.500'
+        _hover={{ bg: 'primary.400' }}
       >
         <Image src={theme.images.brandImg} onClick={onOpen} w='60px' h='60px' />
         <Flex direction='column' align='center'>
@@ -45,12 +45,21 @@ const Layout = ({ children }) => {
       </Flex>
       <Drawer placement='left' isOpen={isOpen} onClose={onClose}>
         <DrawerOverlay />
-        <DrawerContent bg='brand.500' color='white' p={6}>
+        <DrawerContent bg='primary.500' color='white' p={6}>
           <SideNav />
         </DrawerContent>
       </Drawer>
 
-      <Flex direction='column' bg='background.500' w='100vw' ml='100px'>
+      <Flex
+        direction='column'
+        // bg={theme.colors.background[500]}
+        bgImage={'url(' + theme.images.bgImg + ')'}
+        bgSize='cover'
+        bgPosition='center'
+        //bg='background.500'
+        w='100vw'
+        ml='100px'
+      >
         <Header></Header>
         {children}
       </Flex>

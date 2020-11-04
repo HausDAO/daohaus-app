@@ -9,6 +9,7 @@ import {
   useTheme,
 } from '../../contexts/PokemolContext';
 import BrandOverride from '../../assets/themes/raidTheme/raidguild__swords.svg';
+import BgOverride from '../../assets/themes/raidTheme/raid__fantasy--bg.jpg';
 import { PrimaryButton, SecondaryButton } from '../../themes/theme';
 import ChangeDao from './ChangeDao';
 
@@ -21,10 +22,11 @@ const SideNav = () => {
 
   const setLocalTheme = () => {
     setTheme({
-      brand500: '#e50651',
+      primary500: '#e50651',
       secondary500: '#6153ff',
       bg500: '#121212',
       brandImg: BrandOverride,
+      bgImg: BgOverride,
       primaryFont: 'Space Mono', // only temporary
       bodyFont: 'Rubik',
       daoMeta: {

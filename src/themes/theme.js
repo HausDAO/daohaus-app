@@ -1,14 +1,15 @@
 import { theme, extendTheme } from '@chakra-ui/core';
-import Brand from '../assets/themes/hausdao/Daohaus__Castle--Dark.svg';
-import { customIcons } from './icons';
+import BrandImg from '../assets/themes/hausdao/Daohaus__Castle--Dark.svg';
+import BgImg from '../assets/themes/hausdao/daohaus__hero--falling.png';
 import { lighten, darken } from 'polished';
 
 export * from './components';
 
 const defaultTheme = {
-  brand500: '#10153d',
+  primary500: '#10153d',
   secondary500: '#EB8A23',
-  brandImg: Brand,
+  brandImg: BrandImg,
+  bgImg: BgImg,
   bg500: '#03061B',
   primaryFont: 'Inknut Antiqua',
   bodyFont: 'Rubik',
@@ -27,18 +28,18 @@ export const customTheme = (daoTheme) => {
     ...theme,
     colors: {
       ...theme.colors,
-      brand: {
-        ...theme.colors.brand,
-        50: lighten(0.4, themeOverrides.brand500),
-        100: lighten(0.3, themeOverrides.brand500),
-        200: lighten(0.2, themeOverrides.brand500),
-        300: lighten(0.1, themeOverrides.brand500),
-        400: lighten(0.05, themeOverrides.brand500),
-        500: themeOverrides.brand500,
-        600: darken(0.05, themeOverrides.brand500),
-        700: darken(0.1, themeOverrides.brand500),
-        800: darken(0.15, themeOverrides.brand500),
-        900: darken(0.2, themeOverrides.brand500),
+      primary: {
+        ...theme.colors.primary,
+        50: lighten(0.4, themeOverrides.primary500),
+        100: lighten(0.3, themeOverrides.primary500),
+        200: lighten(0.2, themeOverrides.primary500),
+        300: lighten(0.1, themeOverrides.primary500),
+        400: lighten(0.05, themeOverrides.primary500),
+        500: themeOverrides.primary500,
+        600: darken(0.05, themeOverrides.primary500),
+        700: darken(0.1, themeOverrides.primary500),
+        800: darken(0.15, themeOverrides.primary500),
+        900: darken(0.2, themeOverrides.primary500),
       },
       background: {
         ...theme.colors.background,
@@ -70,6 +71,7 @@ export const customTheme = (daoTheme) => {
     images: {
       ...theme.images,
       brandImg: themeOverrides.brandImg,
+      bgImg: themeOverrides.bgImg,
     },
     icons: {
       ...theme.icons,

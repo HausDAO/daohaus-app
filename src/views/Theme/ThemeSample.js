@@ -10,35 +10,35 @@ const ThemeSample = () => {
     <Flex>
       <Flex direction='column' p={6}>
         <h3 fontSize='l'>Primary</h3>
-        <Box w='200px' bg={theme.colors.brand[50]} p={6}>
-          <Text>Brand[50]</Text>
+        <Box w='200px' bg={theme.colors.primary[50]} p={6}>
+          <Text>primary[50]</Text>
         </Box>
-        <Box w='200px' bg={theme.colors.brand[100]} p={6}>
-          <Text>Brand[100]</Text>
+        <Box w='200px' bg={theme.colors.primary[100]} p={6}>
+          <Text>primary[100]</Text>
         </Box>
-        <Box w='200px' bg={theme.colors.brand[200]} p={6}>
-          <Text>Brand[200]</Text>
+        <Box w='200px' bg={theme.colors.primary[200]} p={6}>
+          <Text>primary[200]</Text>
         </Box>
-        <Box w='200px' bg={theme.colors.brand[300]} p={6}>
-          <Text>Brand[300]</Text>
+        <Box w='200px' bg={theme.colors.primary[300]} p={6}>
+          <Text>primary[300]</Text>
         </Box>
-        <Box w='200px' bg={theme.colors.brand[400]} p={6}>
-          <Text>Brand[400]</Text>
+        <Box w='200px' bg={theme.colors.primary[400]} p={6}>
+          <Text>primary[400]</Text>
         </Box>
-        <Box w='200px' bg={theme.colors.brand[500]} p={6}>
-          <Text>Brand[500]</Text>
+        <Box w='200px' bg={theme.colors.primary[500]} p={6}>
+          <Text>primary[500]</Text>
         </Box>
-        <Box w='200px' bg={theme.colors.brand[600]} p={6}>
-          <Text>Brand[600]</Text>
+        <Box w='200px' bg={theme.colors.primary[600]} p={6}>
+          <Text>primary[600]</Text>
         </Box>
-        <Box w='200px' bg={theme.colors.brand[700]} p={6}>
-          <Text>Brand[700]</Text>
+        <Box w='200px' bg={theme.colors.primary[700]} p={6}>
+          <Text>primary[700]</Text>
         </Box>
-        <Box w='200px' bg={theme.colors.brand[800]} p={6}>
-          <Text>Brand[800]</Text>
+        <Box w='200px' bg={theme.colors.primary[800]} p={6}>
+          <Text>primary[800]</Text>
         </Box>
-        <Box w='200px' bg={theme.colors.brand[900]} p={6}>
-          <Text>Brand[900]</Text>
+        <Box w='200px' bg={theme.colors.primary[900]} p={6}>
+          <Text>primary[900]</Text>
         </Box>
       </Flex>
       <Flex direction='column' p={6}>
