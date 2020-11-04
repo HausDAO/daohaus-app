@@ -1,5 +1,5 @@
 import React from 'react';
-import { HashRouter as Router } from 'react-router-dom';
+import { BrowserRouter as Router } from 'react-router-dom';
 import { ChakraProvider } from '@chakra-ui/core';
 import ApolloClient from 'apollo-boost';
 import { ApolloProvider } from 'react-apollo';
