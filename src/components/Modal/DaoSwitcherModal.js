@@ -33,11 +33,10 @@ const DaoSwitcherModal = ({ isOpen, setShowModal }) => {
             justifyContent='space-between'
             alignItems='center'
           >
-            <Flex direction='row' justify='flex-start' alignItems='center'>
+            <Flex direction='row' justify='start' alignItems='center' mb={4}>
               <Avatar
                 name={dao.title.substr(0, 1)}
                 src={makeBlockie(dao.id)}
-                mb={4}
                 mr='10px'
               ></Avatar>
               <Text color='white'>{dao.title}</Text>
@@ -50,12 +49,7 @@ const DaoSwitcherModal = ({ isOpen, setShowModal }) => {
   };
 
   return (
-    <Modal
-      isOpen={isOpen}
-      onClose={() => setShowModal(null)}
-      size={500}
-      isCentered
-    >
+    <Modal isOpen={isOpen} onClose={() => setShowModal(null)} isCentered>
       <ModalOverlay />
       <ModalContent
         rounded='lg'
@@ -86,6 +80,7 @@ const DaoSwitcherModal = ({ isOpen, setShowModal }) => {
               direction='row'
               justifyContent='space-between'
               alignItems='center'
+              mb={4}
             >
               <Flex direction='row' justify='flex-start' alignItems='center'>
                 <Image src={BrandImg} w='50px' mr='10px' />

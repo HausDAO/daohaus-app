@@ -1,6 +1,5 @@
 import React from 'react';
 import { Button } from '@chakra-ui/core';
-
 import { useTheme } from '../contexts/PokemolContext';
 
 export const PrimaryButton = ({ onClick, children, ...others }) => {
@@ -9,8 +8,18 @@ export const PrimaryButton = ({ onClick, children, ...others }) => {
   return (
     <Button
       onClick={onClick}
-      background={theme.colors.brand[50]}
+      bg={theme.colors.primary[500]}
       textTransform='uppercase'
+      fontWeight='400'
+      px={25}
+      _hover={{ bg: theme.colors.primary[400] }}
+      _active={{
+        bg: theme.colors.primary[400],
+      }}
+      _focus={{
+        boxShadow: '0 0 1px 2px' + theme.colors.background[500],
+        outline: 'none',
+      }}
       {...others}
     >
       {children}
@@ -24,10 +33,22 @@ export const SecondaryButton = ({ onClick, children, ...others }) => {
   return (
     <Button
       onClick={onClick}
-      background='transparent'
-      border={`1px solid ${theme.colors.brand[50]}`}
-      color={theme.colors.brand[50]}
+      bg='transparent'
+      border={`1px solid ${theme.colors.primary[500]}`}
+      color={theme.colors.primary[500]}
       textTransform='uppercase'
+      px={15}
+      _hover={{
+        bg: 'transparent',
+        color: theme.colors.primary[400],
+        borderColor: theme.colors.primary[400],
+      }}
+      _active={{
+        bg: theme.colors.primary[400],
+      }}
+      _focus={{
+        boxShadow: '0 0 1px 2px' + theme.colors.background[500],
+      }}
       {...others}
     >
       {children}
