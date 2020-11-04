@@ -47,6 +47,7 @@ const DaoInit = () => {
       contracts.daoService &&
       user.username !== contracts.daoService.accountAddr;
     if (needsUserDaoService) {
+      console.log('*** needs dao service update');
       initWeb3DaoService();
     }
 

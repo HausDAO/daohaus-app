@@ -4,9 +4,10 @@ import { Box, Text, Flex } from '@chakra-ui/core';
 import { useTheme } from '../../contexts/PokemolContext';
 import ProposalCard from './ProposalCard';
 import { defaultProposals } from '../../utils/constants';
+import ProposalFilter from './ProposalFilter';
+import ProposalSort from './ProposalSort';
 
 const ProposalsList = ({ proposals }) => {
-  const [filter] = useState(null);
   const [theme] = useTheme();
   const [_proposals, setProposals] = useState(null);
   const [isLoaded, setIsLoaded] = useState(false);
@@ -20,45 +21,15 @@ const ProposalsList = ({ proposals }) => {
     }
   }, [proposals]);
   //! remove the slice and deal with pagination
+
+  // sort+filter here?
+
   return (
     <>
       <Box w='60%'>
         <Flex>
-          {filter ? (
-            <Text
-              ml={8}
-              textTransform='uppercase'
-              fontSize='sm'
-              fontFamily={theme.fonts.heading}
-            >
-              Filtered by:
-              <span style={{ color: theme.colors.primary[50] }}>
-                Action Needed
-              </span>
-            </Text>
-          ) : (
-            <Text
-              ml={8}
-              textTransform='uppercase'
-              fontFamily={theme.fonts.heading}
-              cursor='pointer'
-            >
-              Apply a
-              <span style={{ color: theme.colors.primary[50] }}> filter</span>
-            </Text>
-          )}
-          <Text
-            ml={8}
-            textTransform='uppercase'
-            fontSize='sm'
-            fontFamily={theme.fonts.heading}
-          >
-            Sort by:
-            <span style={{ color: theme.colors.primary[50] }}>
-              {' '}
-              Voting Period
-            </span>
-          </Text>
+          <ProposalFilter setFilteredProposals={setProposals} />
+          <ProposalSort setSortedProposals={setProposals} />
         </Flex>
         {_proposals &&
           _proposals.slice(0, 5).map((proposal) => {
