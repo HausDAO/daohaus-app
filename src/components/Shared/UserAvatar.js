@@ -17,6 +17,7 @@ const UserAvatar = ({ user }) => {
             src={`${'https://ipfs.infura.io/ipfs/' +
               user.image[0].contentUrl['/']}`}
             mr={3}
+            size='sm'
           />
           <Text fontSize='md' fontFamily={theme.fonts.heading}>
             {user.name || truncateAddr(user.username)}{' '}
