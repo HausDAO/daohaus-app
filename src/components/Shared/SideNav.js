@@ -21,18 +21,10 @@ const SideNav = () => {
 
   const setLocalTheme = () => {
     setTheme({
-      brand50: '#ff4d74',
-      brand100: '#ff4d74',
-      brand200: '#ff4d74',
-      brand300: '#ff4d74',
-      brand400: '#fe1d5b',
       brand500: '#e50651',
-      brand600: '#e50651',
-      brand700: '#e50651',
-      brand800: '#e50651',
-      brand900: '#e50651',
+      secondary500: '#6153ff',
+      bg500: '#121212',
       brandImg: BrandOverride,
-      bg400: '#000',
       primaryFont: 'Space Mono', // only temporary
       bodyFont: 'Rubik',
       daoMeta: {
@@ -181,7 +173,10 @@ const SideNav = () => {
         </>
       )}
 
-      <SecondaryButton onClick={() => updateRefetchQuery('proposals')}>
+      <SecondaryButton
+        variantColor={theme.colors.secondary[500]}
+        onClick={() => updateRefetchQuery('proposals')}
+      >
         Refetch Proposals Test
       </SecondaryButton>
     </Box>
