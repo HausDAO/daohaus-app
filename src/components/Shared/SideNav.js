@@ -38,6 +38,9 @@ const SideNav = () => {
         member: 'Player',
         discord: 'https://discord.gg/WqwQGgeeFd',
         medium: '',
+        telegram: '',
+        website: '',
+        other: '',
       },
     });
   };

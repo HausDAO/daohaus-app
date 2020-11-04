@@ -22,6 +22,9 @@ const defaultTheme = {
     member: 'Member',
     discord: 'https://discord.gg/NPEJysW',
     medium: 'https://medium.com/daohaus-club',
+    telegram: '',
+    website: '',
+    other: '',
   },
 };
 
@@ -95,6 +98,9 @@ export const customTheme = (daoTheme) => {
       member: themeOverrides.daoMeta.member,
       discord: themeOverrides.daoMeta.discord,
       medium: themeOverrides.daoMeta.medium,
+      medium: themeOverrides.daoMeta.telegram,
+      medium: themeOverrides.daoMeta.website,
+      medium: themeOverrides.daoMeta.other,
     },
     styles: {
       ...theme.styles,
