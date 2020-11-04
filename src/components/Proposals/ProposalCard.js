@@ -27,7 +27,7 @@ const ProposalCard = ({ proposal, isLoaded }) => {
 
       <Box
         rounded='lg'
-        bg='blackAlpha.600'
+        bg='blackAlpha.800'
         borderWidth='1px'
         borderColor='whiteAlpha.200'
         p={6}

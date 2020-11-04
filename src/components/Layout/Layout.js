@@ -50,7 +50,16 @@ const Layout = ({ children }) => {
         </DrawerContent>
       </Drawer>
 
-      <Flex direction='column' bg='background.500' w='100vw' ml='100px'>
+      <Flex
+        direction='column'
+        // bg={theme.colors.background[500]}
+        bgImage={'url(' + theme.images.bgImg + ')'}
+        bgSize='cover'
+        bgPosition='center'
+        //bg='background.500'
+        w='100vw'
+        ml='100px'
+      >
         <Header></Header>
         {children}
       </Flex>
