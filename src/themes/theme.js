@@ -20,6 +20,8 @@ const defaultTheme = {
     bank: 'Bank',
     members: 'Members',
     member: 'Member',
+    discord: 'https://discord.gg/NPEJysW',
+    medium: 'https://medium.com/daohaus-club',
   },
 };
 
@@ -91,10 +93,24 @@ export const customTheme = (daoTheme) => {
       bank: themeOverrides.daoMeta.bank,
       members: themeOverrides.daoMeta.members,
       member: themeOverrides.daoMeta.member,
+      discord: themeOverrides.daoMeta.discord,
+      medium: themeOverrides.daoMeta.medium,
     },
     styles: {
       ...theme.styles,
       bgOverlayOpacity: themeOverrides.bgOverlayOpacity,
+      global: {
+        'html, body': {
+          fontSize: 'm',
+          color: 'whiteAlpha.600',
+          lineHeight: 'tall',
+        },
+        a: {
+          color: 'inherit',
+          textDecoration: 'none',
+          _hover: { textDecoration: 'none' },
+        },
+      },
     },
   };
 };

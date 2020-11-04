@@ -51,12 +51,23 @@ const Layout = ({ children }) => {
         align='center'
         justifyContent='space-between'
         bg='primary.500'
+        cursor='pointer'
         _hover={{ bg: 'primary.400' }}
       >
-        <Image src={theme.images.brandImg} onClick={onOpen} w='60px' h='60px' />
+        <Flex direction='column' h='100vh' onClick={onOpen}>
+          <Image src={theme.images.brandImg} w='60px' h='60px' />
+        </Flex>
         <Flex direction='column' align='center'>
-          <Link mb={3}>M</Link>
-          <Link mb={3}>T</Link>
+          {theme.daoMeta.discord !== '' ? (
+            <Link mb={3} href={theme.daoMeta.discord} isExternal>
+              D
+            </Link>
+          ) : null}
+          {theme.daoMeta.medium !== '' ? (
+            <Link mb={3} href={theme.daoMeta.medium} isExternal>
+              M
+            </Link>
+          ) : null}
         </Flex>
       </Flex>
       <Drawer placement='left' isOpen={isOpen} onClose={onClose}>

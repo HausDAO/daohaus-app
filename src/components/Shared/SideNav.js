@@ -36,6 +36,8 @@ const SideNav = () => {
         bank: 'Inventory',
         members: 'Players',
         member: 'Player',
+        discord: 'https://discord.gg/WqwQGgeeFd',
+        medium: '',
       },
     });
   };
@@ -177,7 +179,7 @@ const SideNav = () => {
       )}
 
       <SecondaryButton
-        variantColor={theme.colors.secondary[500]}
+        colorScheme={theme.colors.background[500]}
         onClick={() => updateRefetchQuery('proposals')}
       >
         Refetch Proposals Test
