@@ -50,12 +50,7 @@ const DaoSwitcherModal = ({ isOpen, setShowModal }) => {
   };
 
   return (
-    <Modal
-      isOpen={isOpen}
-      onClose={() => setShowModal(null)}
-      size={500}
-      isCentered
-    >
+    <Modal isOpen={isOpen} onClose={() => setShowModal(null)} isCentered>
       <ModalOverlay />
       <ModalContent
         rounded='lg'

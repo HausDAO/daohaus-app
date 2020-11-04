@@ -103,6 +103,7 @@ const ProposalFormModal = ({ isOpen, setShowModal }) => {
         setShowModal(null);
       }}
       isCentered
+      size='xl'
     >
       <ModalOverlay />
       <ModalContent

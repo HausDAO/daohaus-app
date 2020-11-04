@@ -55,7 +55,7 @@ const ProposalFormModal = ({ isOpen, setShowModal, setProposalType }) => {
       isOpen={isOpen}
       onClose={() => setShowModal(null)}
       isCentered
-      maxW={700}
+      size='xl'
     >
       <ModalOverlay />
       <ModalContent
@@ -63,7 +63,6 @@ const ProposalFormModal = ({ isOpen, setShowModal, setProposalType }) => {
         bg='blackAlpha.600'
         borderWidth='1px'
         borderColor='whiteAlpha.200'
-        width={700}
       >
         <ModalHeader>
           <Text
@@ -85,7 +84,12 @@ const ProposalFormModal = ({ isOpen, setShowModal, setProposalType }) => {
           </Text>
         </ModalHeader>
         <ModalCloseButton />
-        <ModalBody flexDirection='row' display='flex' justify='space-around' width='700px'>
+        <ModalBody
+          flexDirection='row'
+          display='flex'
+          justify='space-around'
+          width='auto'
+        >
           {proposalTypes.map((p) => {
             return (
               <Box
