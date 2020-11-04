@@ -52,7 +52,7 @@ const SideNav = () => {
               <Flex direction='row' justify='start' align='start'>
                 <Flex direction='column' align='center' justify='start' mr={6}>
                   <Link as={RouterLink} to={`/dao/${dao.address}`}>
-                    <Image src={theme.images.brandImg} size='60px' />
+                    <Image src={theme.images.brandImg} w='60px' h='60px' />
                   </Link>
                 </Flex>
                 <Flex direction='column' align='start' justify='start'>

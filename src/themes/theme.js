@@ -73,7 +73,6 @@ export const customTheme = (daoTheme) => {
     },
     icons: {
       ...theme.icons,
-      ...customIcons,
     },
     fonts: {
       ...theme.fonts,

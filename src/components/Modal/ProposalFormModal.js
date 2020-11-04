@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import {
   Modal,
@@ -24,26 +24,84 @@ import {
   Text,
   Textarea,
 } from '@chakra-ui/core';
-import { useTheme } from '../../contexts/PokemolContext';
+import {
+  useDao,
+  useTheme,
+  useTxProcessor,
+  useUser,
+  useWeb3Connect,
+} from '../../contexts/PokemolContext';
 import { PrimaryButton } from '../../themes/theme';
+import { utils } from 'web3';
 
 const ProposalFormModal = ({ isOpen, setShowModal }) => {
+  const [loading, setLoading] = useState(false);
+
   const [theme] = useTheme();
+  const [user] = useUser();
+  const [dao] = useDao();
+  const [txProcessor, updateTxProcessor] = useTxProcessor();
+
   const {
-    // handleSubmit,
+    handleSubmit,
     errors,
-    // register,
+    register,
     // formState
   } = useForm();
 
-  const handleSubmit = () => {
-    console.log('poopin');
+  const txCallBack = (txHash, details) => {
+    console.log('txCallBack', txProcessor);
+    if (txProcessor && txHash) {
+      txProcessor.setTx(txHash, user.username, details, true, false);
+      txProcessor.forceUpdate = true;
+
+      updateTxProcessor(txProcessor);
+      // close model here
+      // onClose();
+      // setShowModal(null);
+    }
+    if (!txHash) {
+      console.log('error: ', details);
+      setLoading(false);
+    }
+  };
+
+  const onSubmit = async (values) => {
+    setLoading(true);
+
+    console.log(values);
+
+    const details = JSON.stringify({
+      title: values.title,
+      description: values.description,
+      link: values.link,
+    });
+
+    try {
+      dao.daoService.moloch.submitProposal(
+        values.sharesRequested,
+        0,
+        utils.toWei(values.tributeOffered.toString()),
+        values.tributeToken || '0xd0a1e359811322d97991e03f863a0c30c2cf029c',
+        0,
+        values.tributeToken || '0xd0a1e359811322d97991e03f863a0c30c2cf029c',
+        details,
+        user.username,
+        txCallBack,
+      );
+    } catch (err) {
+      setLoading(false);
+      console.log('error: ', err);
+    }
   };
 
   return (
     <Modal
       isOpen={isOpen}
-      onClose={() => setShowModal(null)}
+      onClose={() => {
+        setLoading(false);
+        setShowModal(null);
+      }}
       size={1000}
       isCentered
     >
@@ -79,7 +137,7 @@ const ProposalFormModal = ({ isOpen, setShowModal }) => {
           <Text color='#C4C4C4' mb={6}>
             Submit your membership proposal here.
           </Text>
-          <form onSubmit={handleSubmit}>
+          <form onSubmit={handleSubmit(onSubmit)}>
             <FormControl
               isInvalid={errors.name}
               display='flex'
@@ -103,7 +161,7 @@ const ProposalFormModal = ({ isOpen, setShowModal }) => {
                     name='title'
                     placeholder='Proposal Title'
                     mb={5}
-                    // ref={register({ validate: validateName })}
+                    ref={register()}
                   />
                   <Textarea
                     name='description'
@@ -111,7 +169,7 @@ const ProposalFormModal = ({ isOpen, setShowModal }) => {
                     type='textarea'
                     mb={5}
                     h={10}
-                    // ref={register({ validate: validateName })}
+                    ref={register()}
                   />
                   <InputGroup>
                     <InputLeftAddon>https://</InputLeftAddon>
@@ -131,10 +189,10 @@ const ProposalFormModal = ({ isOpen, setShowModal }) => {
                   Shares Requested
                 </FormLabel>
                 <Input
-                  name='title'
+                  name='sharesRequested'
                   placeholder='0'
                   mb={5}
-                  // ref={register({ validate: validateName })}
+                  ref={register()}
                 />
                 <FormLabel
                   htmlFor='tributeOffered'
@@ -151,11 +209,17 @@ const ProposalFormModal = ({ isOpen, setShowModal }) => {
                     name='tributeOffered'
                     placeholder='0'
                     mb={5}
-                    // ref={register({ validate: validateName })}
+                    ref={register()}
                   />
                   <InputRightAddon>
-                    <Select>
-                      <option default value='weth'>
+                    <Select
+                      name='tributeToken'
+                      defaultValue='0xd0a1e359811322d97991e03f863a0c30c2cf029c'
+                    >
+                      <option
+                        default
+                        value='0xd0a1e359811322d97991e03f863a0c30c2cf029c'
+                      >
                         WETH
                       </option>
                       <option value='dai'>Dai</option>
@@ -176,7 +240,15 @@ const ProposalFormModal = ({ isOpen, setShowModal }) => {
             </FormControl>
             <Flex justify='flex-end' align='center' h='60px'>
               <Box>
-                <PrimaryButton color='white'>Submit</PrimaryButton>
+                <PrimaryButton
+                  color='white'
+                  type='submit'
+                  loadingText='Submitting'
+                  isLoading={loading}
+                  disabled={loading}
+                >
+                  Submit
+                </PrimaryButton>
               </Box>
             </Flex>
           </form>
