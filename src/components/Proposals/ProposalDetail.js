@@ -1,6 +1,8 @@
 import React from 'react';
 import { formatDistanceToNow, isBefore } from 'date-fns';
 import { Flex, Box, Text, Icon, Link } from '@chakra-ui/core';
+import { RiExternalLinkLine } from 'react-icons/ri';
+import { FaThumbsUp } from 'react-icons/fa';
 import { utils } from 'web3';
 
 import { useTheme, useMembers } from '../../contexts/PokemolContext';
@@ -155,12 +157,12 @@ const ProposalDetail = ({ proposal }) => {
               Link
             </Text>
             <Link href={details?.link} target='_blank'>
-              {details?.link ? details.link : '-'} <Icon name='external-link' />
+              {details?.link ? details.link : '-'} <Icon as={RiExternalLinkLine} color={theme.colors.primary[50]}/>
             </Link>
           </Box>
         </Box>
         <Box pl={6}>
-          <Icon name='votedYes' size='45px' />
+          <Icon as={FaThumbsUp} color={theme.colors.primary[50]} />
         </Box>
       </Flex>
       <Box w='100%' mt={8}>
