@@ -8,13 +8,13 @@ export const PrimaryButton = ({ onClick, children, ...others }) => {
   return (
     <Button
       onClick={onClick}
-      bg={theme.colors.brand[500]}
+      bg={theme.colors.primary[500]}
       textTransform='uppercase'
       fontWeight='400'
       px={25}
-      _hover={{ bg: theme.colors.brand[400] }}
+      _hover={{ bg: theme.colors.primary[400] }}
       _active={{
-        bg: theme.colors.brand[400],
+        bg: theme.colors.primary[400],
       }}
       _focus={{
         boxShadow: '0 0 1px 2px' + theme.colors.background[500],
@@ -34,17 +34,17 @@ export const SecondaryButton = ({ onClick, children, ...others }) => {
     <Button
       onClick={onClick}
       bg='transparent'
-      border={`1px solid ${theme.colors.brand[500]}`}
-      color={theme.colors.brand[500]}
+      border={`1px solid ${theme.colors.primary[500]}`}
+      color={theme.colors.primary[500]}
       textTransform='uppercase'
       px={15}
       _hover={{
         bg: 'transparent',
-        color: theme.colors.brand[400],
-        borderColor: theme.colors.brand[400],
+        color: theme.colors.primary[400],
+        borderColor: theme.colors.primary[400],
       }}
       _active={{
-        bg: theme.colors.brand[400],
+        bg: theme.colors.primary[400],
       }}
       _focus={{
         boxShadow: '0 0 1px 2px' + theme.colors.background[500],

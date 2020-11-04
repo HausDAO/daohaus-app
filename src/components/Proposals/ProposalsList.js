@@ -32,7 +32,7 @@ const ProposalsList = ({ proposals }) => {
               fontFamily={theme.fonts.heading}
             >
               Filtered by:
-              <span style={{ color: theme.colors.brand[50] }}>
+              <span style={{ color: theme.colors.primary[50] }}>
                 Action Needed
               </span>
             </Text>
@@ -44,7 +44,7 @@ const ProposalsList = ({ proposals }) => {
               cursor='pointer'
             >
               Apply a
-              <span style={{ color: theme.colors.brand[50] }}> filter</span>
+              <span style={{ color: theme.colors.primary[50] }}> filter</span>
             </Text>
           )}
           <Text
@@ -54,7 +54,7 @@ const ProposalsList = ({ proposals }) => {
             fontFamily={theme.fonts.heading}
           >
             Sort by:
-            <span style={{ color: theme.colors.brand[50] }}>
+            <span style={{ color: theme.colors.primary[50] }}>
               {' '}
               Voting Period
             </span>

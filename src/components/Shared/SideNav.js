@@ -21,7 +21,7 @@ const SideNav = () => {
 
   const setLocalTheme = () => {
     setTheme({
-      brand500: '#e50651',
+      primary500: '#e50651',
       secondary500: '#6153ff',
       bg500: '#121212',
       brandImg: BrandOverride,

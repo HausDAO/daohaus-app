@@ -35,7 +35,9 @@ const MembersList = () => {
             cursor='pointer'
           >
             Filtered by:{' '}
-            <span style={{ color: theme.colors.brand[50] }}>Action Needed</span>
+            <span style={{ color: theme.colors.primary[50] }}>
+              Action Needed
+            </span>
           </Text>
         ) : (
           <Text
@@ -45,7 +47,7 @@ const MembersList = () => {
             cursor='pointer'
           >
             Apply a{' '}
-            <span style={{ color: theme.colors.brand[50] }}> filter</span>
+            <span style={{ color: theme.colors.primary[50] }}> filter</span>
           </Text>
         )}
         <Text
@@ -56,7 +58,10 @@ const MembersList = () => {
           cursor='pointer'
         >
           Sort by:{' '}
-          <span style={{ color: theme.colors.brand[50] }}> Voting Period</span>
+          <span style={{ color: theme.colors.primary[50] }}>
+            {' '}
+            Voting Period
+          </span>
         </Text>
       </Flex>
       <Box
