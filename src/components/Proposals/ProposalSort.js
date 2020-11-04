@@ -8,19 +8,19 @@ import {
   Flex,
 } from '@chakra-ui/core';
 import { useProposals, useTheme } from '../../contexts/PokemolContext';
-import { filterOptions } from '../../content/proposal-filters';
+import { sortOptions } from '../../content/proposal-filters';
 
-const ProposalFilter = ({ setFilteredProposals }) => {
+const ProposalSort = ({ setSortedRecords }) => {
   const [theme] = useTheme();
   const [proposals] = useProposals();
-  const [selectedFilter, setSelectedFilter] = useState(filterOptions[0]);
+  const [selectedSort, setSelectedSort] = useState(sortOptions[0]);
 
   console.log('proposals', proposals);
 
-  const handleSelect = (filter) => {
-    console.log('hi', filter);
-    setSelectedFilter(filter);
-    // setFilteredProposals(do some filtering)
+  const handleSelect = (sort) => {
+    console.log('hi', sort);
+    setSelectedSort(sort);
+    // setSortedRecords
   };
 
   return (
@@ -31,15 +31,15 @@ const ProposalFilter = ({ setFilteredProposals }) => {
         textTransform='uppercase'
         fontFamily={theme.fonts.heading}
       >
-        Filter By
+        Sort By
       </Text>
 
       <Menu>
         <MenuButton textTransform='uppercase' fontFamily={theme.fonts.heading}>
-          {selectedFilter.name}
+          {selectedSort.name}
         </MenuButton>
         <MenuList bg='black'>
-          {filterOptions.map((option) => (
+          {sortOptions.map((option) => (
             <MenuItem
               key={option.value}
               onClick={() => handleSelect(option)}
@@ -54,8 +54,4 @@ const ProposalFilter = ({ setFilteredProposals }) => {
   );
 };
 
-export default ProposalFilter;
-
-{
-  /* <span style={{ color: theme.colors.primary[50] }}> filter</span> */
-}
+export default ProposalSort;
