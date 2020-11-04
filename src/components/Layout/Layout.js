@@ -7,6 +7,7 @@ import {
   DrawerContent,
   useDisclosure,
   Link,
+  Box,
 } from '@chakra-ui/core';
 
 import Header from '../Shared/Header';
@@ -18,13 +19,28 @@ const Layout = ({ children }) => {
   const [theme] = useTheme();
 
   return (
-    <Flex
-      direction='row'
-      minH='100vh'
-      bg='background.500'
-      color='white'
-      w='100vw'
-    >
+    <Flex direction='row' minH='100vh' color='white' w='100vw'>
+      <Box
+        position='fixed'
+        w='100%'
+        h='100%'
+        bgImage={'url(' + theme.images.bgImg + ')'}
+        bgSize='cover'
+        bgPosition='center'
+        zIndex='-1'
+        _before={{
+          display: 'block',
+          content: '""',
+          position: 'absolute',
+          w: '100%',
+          h: '100%',
+          bgColor: 'background.500',
+          opacity: theme.styles.bgOverlayOpacity,
+          pointerEvents: 'none',
+          top: '0',
+          zIndex: '-1',
+        }}
+      />
       <Flex
         h='100vh'
         minW='100px'
@@ -50,16 +66,7 @@ const Layout = ({ children }) => {
         </DrawerContent>
       </Drawer>
 
-      <Flex
-        direction='column'
-        // bg={theme.colors.background[500]}
-        bgImage={'url(' + theme.images.bgImg + ')'}
-        bgSize='cover'
-        bgPosition='center'
-        //bg='background.500'
-        w='100vw'
-        ml='100px'
-      >
+      <Flex w='100vw' ml='100px' flexDirection='column'>
         <Header></Header>
         {children}
       </Flex>
