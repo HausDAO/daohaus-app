@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   Text,
   Menu,
@@ -7,16 +7,27 @@ import {
   MenuItem,
   Flex,
 } from '@chakra-ui/core';
-import { useTheme } from '../../contexts/PokemolContext';
-import { filterOptions } from '../../content/proposal-filters';
+
+import { useMemberWallet, useTheme } from '../../contexts/PokemolContext';
+import { getFilterOptions } from '../../content/proposal-filters';
 
 const ProposalFilter = ({ filter, setFilter }) => {
   const [theme] = useTheme();
+  const [memberWallet] = useMemberWallet();
+  const [filterOptions, setFilterOptions] = useState();
 
   useEffect(() => {
-    setFilter(filterOptions[0]);
+    let options;
+    if (memberWallet && memberWallet.activeMember) {
+      console.log('memberWallet.activeMember', memberWallet.activeMember);
+      options = getFilterOptions(memberWallet.activeMember);
+    } else {
+      options = getFilterOptions(false);
+    }
+    setFilterOptions(options);
+    setFilter(options[0]);
     // eslint-disable-next-line
-  }, []);
+  }, [memberWallet]);
 
   return (
     <Flex direction='row'>
@@ -29,22 +40,27 @@ const ProposalFilter = ({ filter, setFilter }) => {
         Filter By
       </Text>
 
-      <Menu>
-        <MenuButton textTransform='uppercase' fontFamily={theme.fonts.heading}>
-          {filter?.name}
-        </MenuButton>
-        <MenuList bg='black'>
-          {filterOptions.map((option) => (
-            <MenuItem
-              key={option.value}
-              onClick={() => setFilter(option)}
-              value={option.value}
-            >
-              {option.name}
-            </MenuItem>
-          ))}
-        </MenuList>
-      </Menu>
+      {filterOptions ? (
+        <Menu>
+          <MenuButton
+            textTransform='uppercase'
+            fontFamily={theme.fonts.heading}
+          >
+            {filter?.name}
+          </MenuButton>
+          <MenuList bg='black'>
+            {filterOptions.map((option) => (
+              <MenuItem
+                key={option.value}
+                onClick={() => setFilter(option)}
+                value={option.value}
+              >
+                {option.name}
+              </MenuItem>
+            ))}
+          </MenuList>
+        </Menu>
+      ) : null}
     </Flex>
   );
 };

@@ -36,8 +36,6 @@ const TxProcessorInit = () => {
 
     const unseen = txProcessor.getTxUnseenList(user.username);
 
-    console.log('unseen', unseen);
-
     if (unseen.length) {
       setLatestTx(unseen[0]);
       setLoading(true);
@@ -55,12 +53,14 @@ const TxProcessorInit = () => {
         isClosable: true,
       });
     }
+    // eslint-disable-next-line
   }, [user, txProcessor.forceUpdate]);
 
   useEffect(() => {
     if (user && web3Connect.web3) {
       initTxProcessor();
     }
+    // eslint-disable-next-line
   }, [user, web3Connect]);
 
   const initTxProcessor = async () => {
@@ -106,7 +106,17 @@ const TxProcessorInit = () => {
                 linkText={`${truncateAddr(latestTx.tx)} view`}
               />
             )}
-            {!loading && <Text>🎉 Success 🎉</Text>}
+            {!loading && (
+              <Text>
+                <span role='img' aria-label='confetti'>
+                  🎉
+                </span>{' '}
+                Success{' '}
+                <span role='img' aria-label='confetti'>
+                  🎉
+                </span>
+              </Text>
+            )}
           </ModalBody>
         </ModalContent>
       </Modal>

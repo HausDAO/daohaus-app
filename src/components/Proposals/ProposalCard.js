@@ -9,16 +9,6 @@ import { useDao, useTheme } from '../../contexts/PokemolContext';
 const ProposalCard = ({ proposal, isLoaded }) => {
   const [dao] = useDao();
   const [theme] = useTheme();
-  let details = null;
-  try {
-    details =
-      proposal?.details?.slice(0, 1) === '{'
-        ? JSON.parse(proposal.details)
-        : null;
-  } catch (err) {
-    console.log('json parse error:', err);
-  }
-
   const votePeriodEnds = new Date(+proposal?.votingPeriodEnds * 1000);
 
   return (
@@ -51,13 +41,8 @@ const ProposalCard = ({ proposal, isLoaded }) => {
                 fontSize='lg'
                 fontFamily={theme.fonts.heading}
               >
-                {details?.title
-                  ? details.title
-                  : proposal?.title
-                  ? proposal.title
-                  : '--'}
+                {proposal.title || '--'}
               </Text>
-
               <Text
                 fontWeight={700}
                 fontSize='lg'

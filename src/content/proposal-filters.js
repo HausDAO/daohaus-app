@@ -1,29 +1,36 @@
-export const filterOptions = [
-  // {
-  //   name: 'Action Needed',
-  //   value: 'Action Needed',
-  // },
-  {
-    name: 'All',
-    value: 'All',
-  },
-  {
-    name: 'Funding Proposals',
-    value: 'Funding Proposal',
-  },
-  {
-    name: 'Member Proposals',
-    value: 'Member Proposal',
-  },
-  {
-    name: 'Whitelist Token Proposals',
-    value: 'Whitelist Token Proposal',
-  },
-  {
-    name: 'Trade Proposals',
-    value: 'Trade Proposal',
-  },
-];
+export const getFilterOptions = (isMember) => {
+  const options = [
+    {
+      name: 'All',
+      value: 'All',
+    },
+    {
+      name: 'Funding Proposals',
+      value: 'Funding Proposal',
+    },
+    {
+      name: 'Member Proposals',
+      value: 'Member Proposal',
+    },
+    {
+      name: 'Whitelist Token Proposals',
+      value: 'Whitelist Token Proposal',
+    },
+    {
+      name: 'Trade Proposals',
+      value: 'Trade Proposal',
+    },
+  ];
+
+  if (isMember) {
+    options.unshift({
+      name: 'Action Needed',
+      value: 'Action Needed',
+    });
+  }
+
+  return options;
+};
 
 export const sortOptions = [
   {

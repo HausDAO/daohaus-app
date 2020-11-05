@@ -38,7 +38,13 @@ const baseListFields = `
     version
     votingPeriodLength
   }
+  votes {
+    id
+    memberAddress
+  }
   status @client
+  title @client
+  description @client
   proposalType @client
   gracePeriod @client
   votingEnds @client

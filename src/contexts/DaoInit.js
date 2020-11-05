@@ -47,7 +47,6 @@ const DaoInit = () => {
       contracts.daoService &&
       user.username !== contracts.daoService.accountAddr;
     if (needsUserDaoService) {
-      console.log('*** needs dao service update');
       initWeb3DaoService();
     }
 
@@ -61,12 +60,15 @@ const DaoInit = () => {
       return;
     }
 
-    initMemberWallet();
+    const walletExists =
+      useMemberWallet.daoAddress === contracts.daoService.daoAddress;
+    if (!walletExists) {
+      initMemberWallet();
+    }
     // eslint-disable-next-line
-  }, [daoMetadata, user]);
+  }, [daoMetadata, user, contracts]);
 
   const initDao = async (daoParam) => {
-    // console.log('###############init dao');
     updateLoading(true);
 
     let daoRes;
@@ -143,6 +145,7 @@ const DaoInit = () => {
     );
     const allowance = contracts.daoService.web3.utils.fromWei(allowanceWei);
     const member = await contracts.daoService.moloch.members(addrByDelegateKey);
+
     const shares = parseInt(member.shares) || 0;
     const loot = parseInt(member.loot) || 0;
     const jailed = parseInt(member.jailed) || 0;
@@ -150,6 +153,8 @@ const DaoInit = () => {
     let eth = 0;
     eth = await contracts.daoService.getAccountEth();
     const wallet = {
+      daoAddress: contracts.daoService.daoAddress,
+      activeMember: member.exists && +member.jailed === 0,
       tokenBalance,
       allowance,
       eth,

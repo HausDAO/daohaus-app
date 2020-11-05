@@ -1,15 +1,24 @@
 import React, { useEffect, useState } from 'react';
 import { Box, Flex } from '@chakra-ui/core';
 
-import { useDao, useProposals } from '../../contexts/PokemolContext';
+import {
+  useDao,
+  useMemberWallet,
+  useProposals,
+  useUser,
+} from '../../contexts/PokemolContext';
 import ProposalCard from './ProposalCard';
 import { defaultProposals } from '../../utils/constants';
 import ProposalFilter from './ProposalFilter';
 import ProposalSort from './ProposalSort';
+import { determineUnreadProposalList } from '../../utils/proposal-helper';
 
 const ProposalsList = () => {
   const [dao] = useDao();
   const [proposals] = useProposals();
+  const [user] = useUser();
+
+  const [memberWallet] = useMemberWallet();
   const [listProposals, setListProposals] = useState(defaultProposals);
   const [isLoaded, setIsLoaded] = useState(false);
   const [filter, setFilter] = useState();
@@ -26,6 +35,7 @@ const ProposalsList = () => {
   const filterAndSortProposals = () => {
     console.log('new sort filter', sort, filter);
     console.log('proposals', proposals);
+
     let filteredProposals = proposals;
 
     if (sort && filter) {
@@ -34,8 +44,14 @@ const ProposalsList = () => {
           if (dao.version === '1' || filter.value === 'All') {
             return true;
           }
-          if (filter.value === 'Action Needed') {
-            return prop.activityFeed.unread;
+          if (user && filter.value === 'Action Needed') {
+            // return prop.activityFeed.unread;
+            return determineUnreadProposalList(
+              prop,
+              memberWallet.activeMember,
+              user.username,
+            );
+            // return true;
           } else {
             return prop.proposalType === filter.value;
           }
