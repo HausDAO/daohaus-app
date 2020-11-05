@@ -1,16 +1,33 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Box, Flex, Text, Badge, Skeleton } from '@chakra-ui/core';
 import { utils } from 'web3';
-import { formatDistanceToNow } from 'date-fns';
+import { format } from 'date-fns';
 
-import { useDao, useTheme } from '../../contexts/PokemolContext';
+import {
+  useDao,
+  useMemberWallet,
+  useTheme,
+} from '../../contexts/PokemolContext';
 import { getProposalCountdownText } from '../../utils/proposal-helper';
 
 const ProposalCard = ({ proposal, isLoaded }) => {
   const [dao] = useDao();
   const [theme] = useTheme();
-  const votePeriodEnds = new Date(+proposal?.votingPeriodEnds * 1000);
+  const [memberWallet] = useMemberWallet();
+  const [memberVote, setMemberVote] = useState();
+
+  useEffect(() => {
+    if (proposal.votes && memberWallet && memberWallet.activeMember) {
+      setMemberVote(
+        proposal.votes.find(
+          (vote) =>
+            vote.memberAddress === memberWallet.memberAddress.toLowerCase(),
+        ),
+      );
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [memberWallet, proposal]);
 
   return (
     <Link to={`/dao/${dao.address}/proposals/${proposal.proposalId}`}>
@@ -44,13 +61,6 @@ const ProposalCard = ({ proposal, isLoaded }) => {
               >
                 {proposal.title || '--'}
               </Text>
-              <Text
-                fontWeight={700}
-                fontSize='lg'
-                fontFamily={theme.fonts.heading}
-              >
-                {proposal.createdAt}
-              </Text>
             </Skeleton>
           </Box>
           <Flex align='center'>
@@ -62,6 +72,11 @@ const ProposalCard = ({ proposal, isLoaded }) => {
                 <Badge colorScheme='red'>
                   {proposal?.noVotes ? proposal.noVotes : '--'} No
                 </Badge>
+                {memberVote ? (
+                  <Text fontSize='sm'>
+                    {+memberVote.uintVote ? 'You voted yes' : 'You voted no'}
+                  </Text>
+                ) : null}
               </Skeleton>
             </Flex>
           </Flex>
@@ -127,28 +142,16 @@ const ProposalCard = ({ proposal, isLoaded }) => {
               </Text>
             </Skeleton>
           </Box>
-          <Box>
-            <Text
-              textTransform='uppercase'
-              fontSize='0.8em'
-              fontFamily={theme.fonts.heading}
-              fontWeight={700}
-            >
-              {getProposalCountdownText(proposal)}
-            </Text>
-            <Skeleton isLoaded={isLoaded}>
-              <Text
-                fontSize='lg'
-                fontFamily={theme.fonts.space}
-                fontWeight={700}
-              >
-                {votePeriodEnds > 0
-                  ? formatDistanceToNow(votePeriodEnds, { addSuffix: true })
-                  : '-'}
-              </Text>
-            </Skeleton>
+          <Box fontFamily={theme.fonts.heading}>
+            {getProposalCountdownText(proposal)}
           </Box>
         </Flex>
+        {proposal.createdAt ? (
+          <Text fontWeight={700} fontSize='xs' fontFamily={theme.fonts.heading}>
+            Created on:{' '}
+            {format(new Date(proposal.createdAt * 1000), 'MMMM d y')}
+          </Text>
+        ) : null}
       </Box>
     </Link>
   );

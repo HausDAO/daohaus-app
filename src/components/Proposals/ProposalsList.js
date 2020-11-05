@@ -5,7 +5,6 @@ import {
   useDao,
   useMemberWallet,
   useProposals,
-  useUser,
 } from '../../contexts/PokemolContext';
 import ProposalCard from './ProposalCard';
 import { defaultProposals } from '../../utils/constants';
@@ -16,7 +15,6 @@ import { determineUnreadProposalList } from '../../utils/proposal-helper';
 const ProposalsList = () => {
   const [dao] = useDao();
   const [proposals] = useProposals();
-  const [user] = useUser();
 
   const [memberWallet] = useMemberWallet();
   const [listProposals, setListProposals] = useState(defaultProposals);
@@ -41,11 +39,11 @@ const ProposalsList = () => {
           if (dao.version === '1' || filter.value === 'All') {
             return true;
           }
-          if (user && filter.value === 'Action Needed') {
+          if (filter.value === 'Action Needed') {
             const unread = determineUnreadProposalList(
               prop,
               memberWallet.activeMember,
-              user.username,
+              memberWallet.memberAddress,
             );
             return unread.unread;
           } else {

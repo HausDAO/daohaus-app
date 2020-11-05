@@ -19,7 +19,6 @@ const ProposalFilter = ({ filter, setFilter, listLength }) => {
   useEffect(() => {
     let options;
     if (memberWallet && memberWallet.activeMember) {
-      console.log('memberWallet.activeMember', memberWallet.activeMember);
       options = getFilterOptions(memberWallet.activeMember);
     } else {
       options = getFilterOptions(false);

@@ -155,6 +155,7 @@ const DaoInit = () => {
     const wallet = {
       daoAddress: contracts.daoService.daoAddress,
       activeMember: member.exists && +member.jailed === 0,
+      memberAddress: user.username,
       tokenBalance,
       allowance,
       eth,

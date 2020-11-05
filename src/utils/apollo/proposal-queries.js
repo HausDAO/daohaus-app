@@ -41,6 +41,7 @@ const baseListFields = `
   votes {
     id
     memberAddress
+    uintVote
   }
   status @client
   title @client

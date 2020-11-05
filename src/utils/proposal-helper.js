@@ -1,4 +1,5 @@
 import React, { Fragment } from 'react';
+import { Text } from '@chakra-ui/core';
 
 import { timeToNow } from './helpers';
 
@@ -151,7 +152,7 @@ export const determineUnreadProposalList = (
     now >= +proposal.votingPeriodStart && now <= +proposal.votingPeriodEnds;
 
   const memberVoted = proposal.votes.some(
-    (vote) => vote.memberAddress === memberAddress,
+    (vote) => vote.memberAddress.toLowerCase() === memberAddress.toLowerCase(),
   );
   const needsMemberVote = activeMember && inVotingPeriod && !memberVoted;
 
@@ -168,13 +169,6 @@ export const determineUnreadProposalList = (
   if (needsMemberVote) {
     message = "You haven't voted on this";
   }
-
-  console.log({
-    unread:
-      !abortedOrCancelled &&
-      (needsMemberVote || needsProcessing || !proposal.sponsored),
-    message,
-  });
 
   return {
     unread:
@@ -275,34 +269,66 @@ export function getProposalCountdownText(proposal) {
     case ProposalStatus.InQueue:
       return (
         <Fragment>
-          <span className='subtext'>Voting Begins: </span>
-          <span>{timeToNow(proposal.votingPeriodStarts)}</span>
+          <Text textTransform='uppercase' fontSize='0.8em' fontWeight={700}>
+            Voting Begins:{' '}
+          </Text>
+          <Text textTransform='uppercase' fontSize='0.8em' fontWeight={700}>
+            {timeToNow(proposal.votingPeriodStarts)}
+          </Text>
         </Fragment>
       );
     case ProposalStatus.VotingPeriod:
       return (
         <Fragment>
-          <span className='subtext'>Voting Ends: </span>
-          <span>{timeToNow(proposal.votingPeriodEnds)}</span>
+          <Text textTransform='uppercase' fontSize='0.8em' fontWeight={700}>
+            Voting Ends:{' '}
+          </Text>
+          <Text textTransform='uppercase' fontSize='0.8em' fontWeight={700}>
+            {timeToNow(proposal.votingPeriodEnds)}
+          </Text>
         </Fragment>
       );
     case ProposalStatus.GracePeriod:
       return (
         <Fragment>
-          <span className='subtext'>Grace Period Ends: </span>
-          <span>{timeToNow(proposal.gracePeriodEnds)}</span>
+          <Text textTransform='uppercase' fontSize='0.8em' fontWeight={700}>
+            Grace Period Ends:{' '}
+          </Text>
+          <Text textTransform='uppercase' fontSize='0.8em' fontWeight={700}>
+            {timeToNow(proposal.gracePeriodEnds)}
+          </Text>
         </Fragment>
       );
     case ProposalStatus.Passed:
-      return <span className='subtext'>Passed</span>;
+      return (
+        <Text textTransform='uppercase' fontSize='0.8em' fontWeight={700}>
+          Passed
+        </Text>
+      );
     case ProposalStatus.Failed:
-      return <span className='subtext'>Failed</span>;
+      return (
+        <Text textTransform='uppercase' fontSize='0.8em' fontWeight={700}>
+          Failed
+        </Text>
+      );
     case ProposalStatus.Cancelled:
-      return <span className='subtext'>Cancelled</span>;
+      return (
+        <Text textTransform='uppercase' fontSize='0.8em' fontWeight={700}>
+          Cancelled
+        </Text>
+      );
     case ProposalStatus.ReadyForProcessing:
-      return <span className='subtext'>Ready For Processing</span>;
+      return (
+        <Text textTransform='uppercase' fontSize='0.8em' fontWeight={700}>
+          Ready For Processing
+        </Text>
+      );
     case ProposalStatus.Unsponsored:
-      return <span className='subtext'>Unsponsored</span>;
+      return (
+        <Text textTransform='uppercase' fontSize='0.8em' fontWeight={700}>
+          Unsponsored
+        </Text>
+      );
     default:
       return <Fragment />;
   }
