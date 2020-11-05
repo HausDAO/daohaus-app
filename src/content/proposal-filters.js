@@ -1,29 +1,37 @@
-export const filterOptions = [
-  // {
-  //   name: 'Action Needed',
-  //   value: 'Action Needed',
-  // },
-  {
-    name: 'All',
-    value: 'All',
-  },
-  {
-    name: 'Funding Proposals',
-    value: 'Funding Proposal',
-  },
-  {
-    name: 'Member Proposals',
-    value: 'Member Proposal',
-  },
-  {
-    name: 'Whitelist Token Proposals',
-    value: 'Whitelist Token Proposal',
-  },
-  {
-    name: 'Trade Proposals',
-    value: 'Trade Proposal',
-  },
-];
+export const getFilterOptions = (isMember) => {
+  const options = [
+    {
+      name: 'All',
+      value: 'All',
+    },
+    {
+      name: 'Action Needed',
+      value: 'Action Needed',
+    },
+    {
+      name: 'Funding Proposals',
+      value: 'Funding Proposal',
+    },
+    {
+      name: 'Member Proposals',
+      value: 'Member Proposal',
+    },
+    {
+      name: 'Whitelist Token Proposals',
+      value: 'Whitelist Token Proposal',
+    },
+    {
+      name: 'Trade Proposals',
+      value: 'Trade Proposal',
+    },
+  ];
+
+  if (!isMember) {
+    options.splice(1, 1);
+  }
+
+  return options;
+};
 
 export const sortOptions = [
   {
@@ -44,11 +52,11 @@ export const sortOptions = [
   },
   {
     name: 'Voting Period',
-    value: 'GracePeriod',
+    value: 'VotingPeriod',
   },
   {
     name: 'Grace Period',
-    value: 'gracePeriod',
+    value: 'GracePeriod',
   },
   {
     name: 'Ready For Processing',

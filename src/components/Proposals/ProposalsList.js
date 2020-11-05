@@ -1,15 +1,22 @@
 import React, { useEffect, useState } from 'react';
 import { Box, Flex } from '@chakra-ui/core';
 
-import { useDao, useProposals } from '../../contexts/PokemolContext';
+import {
+  useDao,
+  useMemberWallet,
+  useProposals,
+} from '../../contexts/PokemolContext';
 import ProposalCard from './ProposalCard';
 import { defaultProposals } from '../../utils/constants';
 import ProposalFilter from './ProposalFilter';
 import ProposalSort from './ProposalSort';
+import { determineUnreadProposalList } from '../../utils/proposal-helper';
 
 const ProposalsList = () => {
   const [dao] = useDao();
   const [proposals] = useProposals();
+
+  const [memberWallet] = useMemberWallet();
   const [listProposals, setListProposals] = useState(defaultProposals);
   const [isLoaded, setIsLoaded] = useState(false);
   const [filter, setFilter] = useState();
@@ -24,8 +31,6 @@ const ProposalsList = () => {
   }, [proposals, sort, filter]);
 
   const filterAndSortProposals = () => {
-    console.log('new sort filter', sort, filter);
-    console.log('proposals', proposals);
     let filteredProposals = proposals;
 
     if (sort && filter) {
@@ -35,7 +40,12 @@ const ProposalsList = () => {
             return true;
           }
           if (filter.value === 'Action Needed') {
-            return prop.activityFeed.unread;
+            const unread = determineUnreadProposalList(
+              prop,
+              memberWallet.activeMember,
+              memberWallet.memberAddress,
+            );
+            return unread.unread;
           } else {
             return prop.proposalType === filter.value;
           }
@@ -66,7 +76,11 @@ const ProposalsList = () => {
       <Box w='60%'>
         <Flex>
           {dao.version !== '1' ? (
-            <ProposalFilter filter={filter} setFilter={setFilter} />
+            <ProposalFilter
+              filter={filter}
+              setFilter={setFilter}
+              listLength={listProposals.length}
+            />
           ) : null}
           <ProposalSort sort={sort} setSort={setSort} />
         </Flex>
