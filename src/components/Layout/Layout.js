@@ -15,7 +15,7 @@ const Layout = ({ children }) => {
 
   const bar = {
     open: { width: 450 },
-    closed: { width: 100 },
+    closed: { width: 120 },
   };
 
   const nav = {
@@ -41,7 +41,7 @@ const Layout = ({ children }) => {
         initial='closed'
         zIndex='1'
       >
-        <Flex direction='column' h='100vh'>
+        <Flex direction='column' h='400px'>
           <Image src={theme.images.brandImg} w='60px' h='60px' />
         </Flex>
         <MotionBox
