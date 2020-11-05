@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect } from 'react';
 import {
   Text,
   Menu,
@@ -7,21 +7,16 @@ import {
   MenuItem,
   Flex,
 } from '@chakra-ui/core';
-import { useProposals, useTheme } from '../../contexts/PokemolContext';
+import { useTheme } from '../../contexts/PokemolContext';
 import { filterOptions } from '../../content/proposal-filters';
 
-const ProposalFilter = ({ setFilteredProposals }) => {
+const ProposalFilter = ({ filter, setFilter }) => {
   const [theme] = useTheme();
-  const [proposals] = useProposals();
-  const [selectedFilter, setSelectedFilter] = useState(filterOptions[0]);
 
-  console.log('proposals', proposals);
-
-  const handleSelect = (filter) => {
-    console.log('hi', filter);
-    setSelectedFilter(filter);
-    // setFilteredProposals(do some filtering)
-  };
+  useEffect(() => {
+    setFilter(filterOptions[0]);
+    // eslint-disable-next-line
+  }, []);
 
   return (
     <Flex direction='row'>
@@ -36,13 +31,13 @@ const ProposalFilter = ({ setFilteredProposals }) => {
 
       <Menu>
         <MenuButton textTransform='uppercase' fontFamily={theme.fonts.heading}>
-          {selectedFilter.name}
+          {filter?.name}
         </MenuButton>
         <MenuList bg='black'>
           {filterOptions.map((option) => (
             <MenuItem
               key={option.value}
-              onClick={() => handleSelect(option)}
+              onClick={() => setFilter(option)}
               value={option.value}
             >
               {option.name}
@@ -55,7 +50,3 @@ const ProposalFilter = ({ setFilteredProposals }) => {
 };
 
 export default ProposalFilter;
-
-{
-  /* <span style={{ color: theme.colors.primary[50] }}> filter</span> */
-}

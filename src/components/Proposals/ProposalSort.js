@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect } from 'react';
 import {
   Text,
   Menu,
@@ -7,21 +7,16 @@ import {
   MenuItem,
   Flex,
 } from '@chakra-ui/core';
-import { useProposals, useTheme } from '../../contexts/PokemolContext';
+import { useTheme } from '../../contexts/PokemolContext';
 import { sortOptions } from '../../content/proposal-filters';
 
-const ProposalSort = ({ setSortedRecords }) => {
+const ProposalSort = ({ sort, setSort }) => {
   const [theme] = useTheme();
-  const [proposals] = useProposals();
-  const [selectedSort, setSelectedSort] = useState(sortOptions[0]);
 
-  console.log('proposals', proposals);
-
-  const handleSelect = (sort) => {
-    console.log('hi', sort);
-    setSelectedSort(sort);
-    // setSortedRecords
-  };
+  useEffect(() => {
+    setSort(sortOptions[0]);
+    // eslint-disable-next-line
+  }, []);
 
   return (
     <Flex direction='row'>
@@ -36,13 +31,13 @@ const ProposalSort = ({ setSortedRecords }) => {
 
       <Menu>
         <MenuButton textTransform='uppercase' fontFamily={theme.fonts.heading}>
-          {selectedSort.name}
+          {sort?.name}
         </MenuButton>
         <MenuList bg='black'>
           {sortOptions.map((option) => (
             <MenuItem
               key={option.value}
-              onClick={() => handleSelect(option)}
+              onClick={() => setSort(option)}
               value={option.value}
             >
               {option.name}

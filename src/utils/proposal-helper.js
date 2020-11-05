@@ -7,7 +7,7 @@ export const ProposalStatus = {
   InQueue: 'InQueue',
   VotingPeriod: 'VotingPeriod',
   GracePeriod: 'GracePeriod',
-  Aborted: 'Aborted',
+  Cancelled: 'Cancelled',
   Passed: 'Passed',
   Failed: 'Failed',
   ReadyForProcessing: 'ReadyForProcessing',
@@ -41,8 +41,8 @@ export function getProposalCountdownText(proposal) {
       return <span className='subtext'>Passed</span>;
     case ProposalStatus.Failed:
       return <span className='subtext'>Failed</span>;
-    case ProposalStatus.Aborted:
-      return <span className='subtext'>Aborted</span>;
+    case ProposalStatus.Cancelled:
+      return <span className='subtext'>Cancelled</span>;
     case ProposalStatus.ReadyForProcessing:
       return <span className='subtext'>Ready For Processing</span>;
     case ProposalStatus.Unsponsored:
@@ -98,7 +98,7 @@ export function determineProposalStatus(
   let status;
   const abortedOrCancelled = proposal.aborted || proposal.cancelled;
   if (proposal.processed && abortedOrCancelled) {
-    status = ProposalStatus.Aborted;
+    status = ProposalStatus.Cancelled;
   } else if (version === 2 && !proposal.sponsored) {
     status = ProposalStatus.Unsponsored;
   } else if (proposal.processed && proposal.didPass) {
@@ -164,9 +164,6 @@ export const groupByStatus = (proposals, unsponsoredView) => {
 };
 
 export const titleMaker = (proposal) => {
-  // if (containsNonLatinCodepoints(proposal.details)) {
-  //   return `Proposal ${proposal.proposalId}`;
-  // }
   const details = proposal.details.split('~');
 
   if (details[0] === 'id') {
@@ -252,6 +249,22 @@ export const isMinion = (proposal) => {
   }
 };
 
+// export const determineProposalType = (proposal) => {
+//   if (proposal.molochVersion === '1') {
+//     return { name: 'V1 Proposal', value: 'v1proposal' };
+//   } else if (proposal.newMember) {
+//     return name{ 'Member Proposal';
+//   } else if (proposal.whitelist) {
+//     return 'Whitelist Token Proposal';
+//   } else if (proposal.guildkick) {
+//     return 'Guildkick Proposal';
+//   } else if (proposal.trade) {
+//     return 'Trade Proposal';
+//   } else {
+//     return 'Funding Proposal';
+//   }
+// };
+
 export const determineProposalType = (proposal) => {
   if (proposal.molochVersion === '1') {
     return 'V1 Proposal';
@@ -267,8 +280,3 @@ export const determineProposalType = (proposal) => {
     return 'Funding Proposal';
   }
 };
-
-// export const containsNonLatinCodepoints = (s) => {
-//   // eslint-disable-next-line
-//   return /[^\u0000-\u00ff]/.test(s);
-// };

@@ -1,46 +1,50 @@
 export const filterOptions = [
-  {
-    name: 'Action Needed',
-    value: 'actionNeeded',
-  },
-  {
-    name: 'Funding Propsals',
-    value: 'funding',
-  },
-  {
-    name: 'Member Proposal',
-    value: 'member',
-  },
-  {
-    name: 'Whitelist Token Proposal',
-    value: 'whitelist',
-  },
-  {
-    name: 'Trade Proposal',
-    value: 'trade',
-  },
+  // {
+  //   name: 'Action Needed',
+  //   value: 'Action Needed',
+  // },
   {
     name: 'All',
-    value: 'all',
+    value: 'All',
+  },
+  {
+    name: 'Funding Proposals',
+    value: 'Funding Proposal',
+  },
+  {
+    name: 'Member Proposals',
+    value: 'Member Proposal',
+  },
+  {
+    name: 'Whitelist Token Proposals',
+    value: 'Whitelist Token Proposal',
+  },
+  {
+    name: 'Trade Proposals',
+    value: 'Trade Proposal',
   },
 ];
 
 export const sortOptions = [
   {
-    name: 'Date Submitted',
-    value: 'submissionDate',
+    name: 'Newest',
+    value: 'submissionDateDesc',
+  },
+  {
+    name: 'Oldest',
+    value: 'submissionDateAsc',
   },
   {
     name: 'Unsponsored',
-    value: 'unsponsored',
+    value: 'Unsponsored',
   },
   {
     name: 'In Queue',
-    value: 'inQueue',
+    value: 'InQueue',
   },
   {
     name: 'Voting Period',
-    value: 'votingPeriod',
+    value: 'GracePeriod',
   },
   {
     name: 'Grace Period',
@@ -48,14 +52,18 @@ export const sortOptions = [
   },
   {
     name: 'Ready For Processing',
-    value: 'readyForProcessing',
+    value: 'ReadyForProcessing',
   },
   {
-    name: 'Completed',
-    value: 'completed',
+    name: 'Passed',
+    value: 'Passed',
+  },
+  {
+    name: 'Failed',
+    value: 'Failed',
   },
   {
     name: 'Cancelled',
-    value: 'cancelled',
+    value: 'Cancelled',
   },
 ];

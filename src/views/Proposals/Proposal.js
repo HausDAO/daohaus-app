@@ -39,8 +39,9 @@ const Proposal = () => {
               fontFamily={theme.fonts.heading}
             >
               <Icon
+                name='arrow-back'
+                color={theme.colors.brand}
                 as={RiArrowLeftLine}
-                color={theme.colors.primary[50]}
                 h='20px'
                 w='20px'
               />{' '}

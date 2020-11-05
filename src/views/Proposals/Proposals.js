@@ -7,21 +7,9 @@ import ProposalsList from '../../components/Proposals/ProposalsList';
 const Proposals = () => {
   const [proposals] = useProposals();
 
-  return (
-    <div>
-      {!proposals ? (
-        <Spinner />
-      ) : (
-        <div>
-          {proposals ? (
-            <>
-              <ProposalsList proposals={proposals} />
-            </>
-          ) : null}
-        </div>
-      )}
-    </div>
-  );
+  // return <div>{!proposals.length ? <Spinner /> : <ProposalsList />}</div>;
+
+  return <ProposalsList />;
 };
 
 export default Proposals;
