@@ -1,6 +1,6 @@
 import { theme, extendTheme } from '@chakra-ui/core';
 import BrandImg from '../assets/themes/hausdao/Daohaus__Castle--Dark.svg';
-import BgImg from '../assets/themes/hausdao/daohaus__hero--falling.png';
+import BgImg from '../assets/themes/hausdao/daohaus__hero--falling.jpg';
 import { lighten, darken } from 'polished';
 
 export * from './components';
@@ -11,6 +11,7 @@ const defaultTheme = {
   brandImg: BrandImg,
   bgImg: BgImg,
   bg500: '#03061B',
+  bgOverlayOpacity: '0.75',
   primaryFont: 'Inknut Antiqua',
   bodyFont: 'Rubik',
   daoMeta: {
@@ -90,6 +91,10 @@ export const customTheme = (daoTheme) => {
       bank: themeOverrides.daoMeta.bank,
       members: themeOverrides.daoMeta.members,
       member: themeOverrides.daoMeta.member,
+    },
+    styles: {
+      ...theme.styles,
+      bgOverlayOpacity: themeOverrides.bgOverlayOpacity,
     },
   };
 };
