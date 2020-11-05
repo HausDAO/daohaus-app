@@ -57,12 +57,7 @@ const SideNav = () => {
         <>
           {dao ? (
             <>
-              <Flex direction='row' justify='start' align='start'>
-                <Flex direction='column' align='center' justify='start' mr={6}>
-                  <Link as={RouterLink} to={`/dao/${dao.address}`}>
-                    <Image src={theme.images.brandImg} w='60px' h='60px' />
-                  </Link>
-                </Flex>
+              <Flex direction='row' justify='start' align='start' w='250'>
                 <Flex direction='column' align='start' justify='start'>
                   <Link
                     as={RouterLink}
@@ -74,7 +69,7 @@ const SideNav = () => {
                   <ChangeDao />
                 </Flex>
               </Flex>
-              <Stack spacing={3} mt='125px' w='200px' pr={1}>
+              <Stack spacing={3} mt='125px' w='auto'>
                 <Text
                   fontSize='xs'
                   fontFamily={theme.fonts.heading}
@@ -126,7 +121,7 @@ const SideNav = () => {
             </>
           ) : (
             <>
-              <Flex direction='row' justify='start' align='start'>
+              <Flex direction='row' justify='start' align='start' w='250'>
                 <Flex direction='column' align='center' justify='start' mr={6}>
                   <Link as={RouterLink} to={`/`}>
                     <Image src={theme.images.brandImg} size='60px' />
@@ -139,7 +134,7 @@ const SideNav = () => {
                   <ChangeDao />
                 </Flex>
               </Flex>
-              <Stack spacing={4} mt='125px' w='200px' pr={1}>
+              <Stack spacing={4} mt='125px' w='auto'>
                 <Text fontSize='xs'>Main Menu</Text>
                 <Link href='https://daohaus.club' isExternal>
                   <Text fontSize='xl' fontFamily={theme.fonts.heading}>
@@ -185,7 +180,7 @@ const SideNav = () => {
         colorScheme={theme.colors.background[500]}
         onClick={() => updateRefetchQuery('proposals')}
       >
-        Refetch Proposals Test
+        Refetch
       </SecondaryButton>
     </Box>
   );

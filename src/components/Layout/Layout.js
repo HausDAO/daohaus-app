@@ -1,25 +1,73 @@
 import React from 'react';
-import {
-  Flex,
-  Image,
-  Drawer,
-  DrawerOverlay,
-  DrawerContent,
-  useDisclosure,
-  Link,
-  Box,
-} from '@chakra-ui/core';
+import { Flex, Image, useDisclosure, Link, Box } from '@chakra-ui/core';
+import { motion } from 'framer-motion';
 
 import Header from '../Shared/Header';
 import SideNav from '../Shared/SideNav';
 import { useTheme } from '../../contexts/PokemolContext';
 
 const Layout = ({ children }) => {
-  const { isOpen, onOpen, onClose } = useDisclosure();
+  const { isOpen, onToggle } = useDisclosure(false);
   const [theme] = useTheme();
+
+  const MotionBox = motion.custom(Box);
+  const MotionFlex = motion.custom(Flex);
+
+  const bar = {
+    open: { width: 450 },
+    closed: { width: 100 },
+  };
+
+  const nav = {
+    open: { opacity: 1 },
+    closed: { opacity: 0 },
+  };
 
   return (
     <Flex direction='row' minH='100vh' color='white' w='100vw'>
+      <MotionFlex
+        h='100vh'
+        p={6}
+        position='relative'
+        direction='column'
+        align='start'
+        justifyContent='space-between'
+        cursor='pointer'
+        bg='primary.500'
+        _hover={{ bg: 'primary.400' }}
+        onClick={onToggle}
+        variants={bar}
+        animate={isOpen ? 'open' : 'closed'}
+        initial='closed'
+        zIndex='1'
+      >
+        <Flex direction='column' h='100vh'>
+          <Image src={theme.images.brandImg} w='60px' h='60px' />
+        </Flex>
+        <MotionBox
+          initial='closed'
+          variants={nav}
+          animate={isOpen ? 'open' : 'closed'}
+          position='absolute'
+          ml={100}
+        >
+          <SideNav />
+        </MotionBox>
+
+        <Flex direction='column' align='center'>
+          {theme.daoMeta.discord !== '' ? (
+            <Link mb={3} href={theme.daoMeta.discord} isExternal>
+              D
+            </Link>
+          ) : null}
+          {theme.daoMeta.medium !== '' ? (
+            <Link mb={3} href={theme.daoMeta.medium} isExternal>
+              M
+            </Link>
+          ) : null}
+        </Flex>
+      </MotionFlex>
+
       <Box
         position='fixed'
         w='100%'
@@ -41,43 +89,7 @@ const Layout = ({ children }) => {
           zIndex: '-1',
         }}
       />
-      <Flex
-        h='100vh'
-        minW='100px'
-        w='100px'
-        p={6}
-        position='fixed'
-        direction='column'
-        align='center'
-        justifyContent='space-between'
-        bg='primary.500'
-        cursor='pointer'
-        _hover={{ bg: 'primary.400' }}
-      >
-        <Flex direction='column' h='100vh' onClick={onOpen}>
-          <Image src={theme.images.brandImg} w='60px' h='60px' />
-        </Flex>
-        <Flex direction='column' align='center'>
-          {theme.daoMeta.discord !== '' ? (
-            <Link mb={3} href={theme.daoMeta.discord} isExternal>
-              D
-            </Link>
-          ) : null}
-          {theme.daoMeta.medium !== '' ? (
-            <Link mb={3} href={theme.daoMeta.medium} isExternal>
-              M
-            </Link>
-          ) : null}
-        </Flex>
-      </Flex>
-      <Drawer placement='left' isOpen={isOpen} onClose={onClose}>
-        <DrawerOverlay />
-        <DrawerContent bg='primary.500' color='white' p={6}>
-          <SideNav />
-        </DrawerContent>
-      </Drawer>
-
-      <Flex w='100vw' ml='100px' flexDirection='column'>
+      <Flex w='100%' flexDirection='column'>
         <Header></Header>
         {children}
       </Flex>
