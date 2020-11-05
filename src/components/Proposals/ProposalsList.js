@@ -33,9 +33,6 @@ const ProposalsList = () => {
   }, [proposals, sort, filter]);
 
   const filterAndSortProposals = () => {
-    console.log('new sort filter', sort, filter);
-    console.log('proposals', proposals);
-
     let filteredProposals = proposals;
 
     if (sort && filter) {
@@ -45,13 +42,12 @@ const ProposalsList = () => {
             return true;
           }
           if (user && filter.value === 'Action Needed') {
-            // return prop.activityFeed.unread;
-            return determineUnreadProposalList(
+            const unread = determineUnreadProposalList(
               prop,
               memberWallet.activeMember,
               user.username,
             );
-            // return true;
+            return unread.unread;
           } else {
             return prop.proposalType === filter.value;
           }
@@ -82,7 +78,11 @@ const ProposalsList = () => {
       <Box w='60%'>
         <Flex>
           {dao.version !== '1' ? (
-            <ProposalFilter filter={filter} setFilter={setFilter} />
+            <ProposalFilter
+              filter={filter}
+              setFilter={setFilter}
+              listLength={listProposals.length}
+            />
           ) : null}
           <ProposalSort sort={sort} setSort={setSort} />
         </Flex>

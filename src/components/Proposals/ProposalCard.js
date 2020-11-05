@@ -2,9 +2,10 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { Box, Flex, Text, Badge, Skeleton } from '@chakra-ui/core';
 import { utils } from 'web3';
-import { formatDistanceToNow, isBefore } from 'date-fns';
+import { formatDistanceToNow } from 'date-fns';
 
 import { useDao, useTheme } from '../../contexts/PokemolContext';
+import { getProposalCountdownText } from '../../utils/proposal-helper';
 
 const ProposalCard = ({ proposal, isLoaded }) => {
   const [dao] = useDao();
@@ -133,11 +134,7 @@ const ProposalCard = ({ proposal, isLoaded }) => {
               fontFamily={theme.fonts.heading}
               fontWeight={700}
             >
-              {votePeriodEnds
-                ? isBefore(Date.now(), votePeriodEnds)
-                  ? 'Voting Period Ends'
-                  : 'Voting Ended'
-                : 'Proposal Status'}
+              {getProposalCountdownText(proposal)}
             </Text>
             <Skeleton isLoaded={isLoaded}>
               <Text

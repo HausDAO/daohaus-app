@@ -42,7 +42,7 @@ export const passedVotingAndGrace = (
     return false;
   } else {
     return (
-      currentPeriod >
+      currentPeriod >=
       proposal.startingPeriod + votingPeriodLength + gracePeriodLength
     );
   }
@@ -168,6 +168,13 @@ export const determineUnreadProposalList = (
   if (needsMemberVote) {
     message = "You haven't voted on this";
   }
+
+  console.log({
+    unread:
+      !abortedOrCancelled &&
+      (needsMemberVote || needsProcessing || !proposal.sponsored),
+    message,
+  });
 
   return {
     unread:

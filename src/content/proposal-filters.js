@@ -5,6 +5,10 @@ export const getFilterOptions = (isMember) => {
       value: 'All',
     },
     {
+      name: 'Action Needed',
+      value: 'Action Needed',
+    },
+    {
       name: 'Funding Proposals',
       value: 'Funding Proposal',
     },
@@ -22,11 +26,8 @@ export const getFilterOptions = (isMember) => {
     },
   ];
 
-  if (isMember) {
-    options.unshift({
-      name: 'Action Needed',
-      value: 'Action Needed',
-    });
+  if (!isMember) {
+    options.splice(1, 1);
   }
 
   return options;
@@ -51,11 +52,11 @@ export const sortOptions = [
   },
   {
     name: 'Voting Period',
-    value: 'GracePeriod',
+    value: 'VotingPeriod',
   },
   {
     name: 'Grace Period',
-    value: 'gracePeriod',
+    value: 'GracePeriod',
   },
   {
     name: 'Ready For Processing',

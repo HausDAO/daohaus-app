@@ -11,7 +11,7 @@ import {
 import { useMemberWallet, useTheme } from '../../contexts/PokemolContext';
 import { getFilterOptions } from '../../content/proposal-filters';
 
-const ProposalFilter = ({ filter, setFilter }) => {
+const ProposalFilter = ({ filter, setFilter, listLength }) => {
   const [theme] = useTheme();
   const [memberWallet] = useMemberWallet();
   const [filterOptions, setFilterOptions] = useState();
@@ -28,6 +28,14 @@ const ProposalFilter = ({ filter, setFilter }) => {
     setFilter(options[0]);
     // eslint-disable-next-line
   }, [memberWallet]);
+
+  const buildFilterName = () => {
+    if (!filter) return '';
+
+    return filter.value === 'Action Needed'
+      ? `${filter.name} (${listLength})`
+      : filter.name;
+  };
 
   return (
     <Flex direction='row'>
@@ -46,7 +54,7 @@ const ProposalFilter = ({ filter, setFilter }) => {
             textTransform='uppercase'
             fontFamily={theme.fonts.heading}
           >
-            {filter?.name}
+            {buildFilterName()}
           </MenuButton>
           <MenuList bg='black'>
             {filterOptions.map((option) => (
