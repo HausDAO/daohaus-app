@@ -1,46 +1,49 @@
 import React, { useEffect, useState } from 'react';
-import { Box, Text, Flex } from '@chakra-ui/core';
+import { Box, Flex } from '@chakra-ui/core';
 
-import { useTheme } from '../../contexts/PokemolContext';
+import { useProposals } from '../../contexts/PokemolContext';
 import ProposalCard from './ProposalCard';
 import { defaultProposals } from '../../utils/constants';
 import ProposalFilter from './ProposalFilter';
 import ProposalSort from './ProposalSort';
 
-const ProposalsList = ({ proposals }) => {
-  const [theme] = useTheme();
-  const [_proposals, setProposals] = useState(null);
+const ProposalsList = () => {
+  const [proposals] = useProposals();
+  const [listProposals, setListProposals] = useState(defaultProposals);
   const [isLoaded, setIsLoaded] = useState(false);
+  const [filter, setFilter] = useState();
+  const [sort, setSort] = useState();
 
   useEffect(() => {
     if (proposals.length > 0) {
-      setProposals(proposals);
+      filterAndSortProposals();
       setIsLoaded(true);
-    } else {
-      setProposals(defaultProposals);
     }
-  }, [proposals]);
-  //! remove the slice and deal with pagination
+    // eslint-disable-next-line
+  }, [proposals, sort, filter]);
 
-  // sort+filter here?
+  const filterAndSortProposals = () => {
+    console.log('new sort filter', sort, filter);
+    setListProposals(proposals);
+  };
 
   return (
     <>
       <Box w='60%'>
         <Flex>
-          <ProposalFilter setFilteredProposals={setProposals} />
-          <ProposalSort setSortedProposals={setProposals} />
+          {}
+          <ProposalFilter filter={filter} setFilter={setFilter} />
+          <ProposalSort sort={sort} setSort={setSort} />
         </Flex>
-        {_proposals &&
-          _proposals.slice(0, 5).map((proposal) => {
-            return (
-              <ProposalCard
-                proposal={proposal}
-                key={proposal.id}
-                isLoaded={isLoaded}
-              />
-            );
-          })}
+        {listProposals.map((proposal) => {
+          return (
+            <ProposalCard
+              proposal={proposal}
+              key={proposal.id}
+              isLoaded={isLoaded}
+            />
+          );
+        })}
       </Box>
     </>
   );
