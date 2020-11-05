@@ -1,4 +1,5 @@
 import React, { Fragment } from 'react';
+import { Text } from '@chakra-ui/core';
 
 import { timeToNow } from './helpers';
 
@@ -7,50 +8,12 @@ export const ProposalStatus = {
   InQueue: 'InQueue',
   VotingPeriod: 'VotingPeriod',
   GracePeriod: 'GracePeriod',
-  Aborted: 'Aborted',
+  Cancelled: 'Cancelled',
   Passed: 'Passed',
   Failed: 'Failed',
   ReadyForProcessing: 'ReadyForProcessing',
   Unsponsored: 'Unsponsored',
 };
-
-export function getProposalCountdownText(proposal) {
-  switch (proposal.status) {
-    case ProposalStatus.InQueue:
-      return (
-        <Fragment>
-          <span className='subtext'>Voting Begins: </span>
-          <span>{timeToNow(proposal.votingPeriodStarts)}</span>
-        </Fragment>
-      );
-    case ProposalStatus.VotingPeriod:
-      return (
-        <Fragment>
-          <span className='subtext'>Voting Ends: </span>
-          <span>{timeToNow(proposal.votingPeriodEnds)}</span>
-        </Fragment>
-      );
-    case ProposalStatus.GracePeriod:
-      return (
-        <Fragment>
-          <span className='subtext'>Grace Period Ends: </span>
-          <span>{timeToNow(proposal.gracePeriodEnds)}</span>
-        </Fragment>
-      );
-    case ProposalStatus.Passed:
-      return <span className='subtext'>Passed</span>;
-    case ProposalStatus.Failed:
-      return <span className='subtext'>Failed</span>;
-    case ProposalStatus.Aborted:
-      return <span className='subtext'>Aborted</span>;
-    case ProposalStatus.ReadyForProcessing:
-      return <span className='subtext'>Ready For Processing</span>;
-    case ProposalStatus.Unsponsored:
-      return <span className='subtext'>Unsponsored</span>;
-    default:
-      return <Fragment />;
-  }
-}
 
 export const inQueue = (proposal, currentPeriod) =>
   currentPeriod < proposal.startingPeriod;
@@ -80,7 +43,7 @@ export const passedVotingAndGrace = (
     return false;
   } else {
     return (
-      currentPeriod >
+      currentPeriod >=
       proposal.startingPeriod + votingPeriodLength + gracePeriodLength
     );
   }
@@ -98,7 +61,7 @@ export function determineProposalStatus(
   let status;
   const abortedOrCancelled = proposal.aborted || proposal.cancelled;
   if (proposal.processed && abortedOrCancelled) {
-    status = ProposalStatus.Aborted;
+    status = ProposalStatus.Cancelled;
   } else if (version === 2 && !proposal.sponsored) {
     status = ProposalStatus.Unsponsored;
   } else if (proposal.processed && proposal.didPass) {
@@ -134,39 +97,88 @@ export function determineProposalStatus(
   return status;
 }
 
-export const groupByStatus = (proposals, unsponsoredView) => {
+export const determineProposalType = (proposal) => {
+  if (proposal.molochVersion === '1') {
+    return 'V1 Proposal';
+  } else if (proposal.newMember) {
+    return 'Member Proposal';
+  } else if (proposal.whitelist) {
+    return 'Whitelist Token Proposal';
+  } else if (proposal.guildkick) {
+    return 'Guildkick Proposal';
+  } else if (proposal.trade) {
+    return 'Trade Proposal';
+  } else {
+    return 'Funding Proposal';
+  }
+};
+
+export const determineUnreadActivityFeed = (proposal) => {
+  const abortedOrCancelled = proposal.aborted || proposal.cancelled;
+  const now = (new Date() / 1000) | 0;
+  const inVotingPeriod =
+    now >= +proposal.votingPeriodStart && now <= +proposal.votingPeriodEnds;
+  const needsMemberVote = inVotingPeriod && !proposal.votes.length;
+  const needsProcessing =
+    now >= +proposal.gracePeriodEnds && !proposal.processed;
+
+  let message;
+  if (!proposal.sponsored) {
+    message = 'New and unsponsored';
+  }
+  if (needsProcessing) {
+    message = 'Unprocessed';
+  }
+  if (needsMemberVote) {
+    message = "You haven't voted on this";
+  }
+
   return {
-    Unsponsored: {
-      Cancelled: proposals.filter((p) => p.cancelled),
-      Unsponsored: proposals.filter((p) => {
-        return unsponsoredView && !p.cancelled && !p.processed;
-      }),
-    },
-    Base: {
-      VotingPeriod: proposals.filter((p) => p.status === 'VotingPeriod'),
-      GracePeriod: proposals.filter((p) => p.status === 'GracePeriod'),
-      ReadyForProcessing: proposals
-        .filter((p) => p.status === 'ReadyForProcessing')
-        .sort((a, b) => a.proposalIndex - b.proposalIndex),
-      InQueue: proposals.filter((p) => p.status === 'InQueue'),
-      Completed: proposals.filter((p) => {
-        return (
-          // 'Aborted', 'Passed', 'Failed', 'Unknown'
-          !unsponsoredView &&
-          p.status !== 'VotingPeriod' &&
-          p.status !== 'GracePeriod' &&
-          p.status !== 'ReadyForProcessing' &&
-          p.status !== 'InQueue'
-        );
-      }),
-    },
+    unread:
+      !abortedOrCancelled &&
+      (needsMemberVote || needsProcessing || !proposal.sponsored),
+    message,
+  };
+};
+
+export const determineUnreadProposalList = (
+  proposal,
+  activeMember,
+  memberAddress,
+) => {
+  const abortedOrCancelled = proposal.aborted || proposal.cancelled;
+  const now = (new Date() / 1000) | 0;
+  const inVotingPeriod =
+    now >= +proposal.votingPeriodStart && now <= +proposal.votingPeriodEnds;
+
+  const memberVoted = proposal.votes.some(
+    (vote) => vote.memberAddress.toLowerCase() === memberAddress.toLowerCase(),
+  );
+  const needsMemberVote = activeMember && inVotingPeriod && !memberVoted;
+
+  const needsProcessing =
+    now >= +proposal.gracePeriodEnds && !proposal.processed;
+
+  let message;
+  if (!proposal.sponsored) {
+    message = 'New and unsponsored';
+  }
+  if (needsProcessing) {
+    message = 'Unprocessed';
+  }
+  if (needsMemberVote) {
+    message = "You haven't voted on this";
+  }
+
+  return {
+    unread:
+      !abortedOrCancelled &&
+      (needsMemberVote || needsProcessing || !proposal.sponsored),
+    message,
   };
 };
 
 export const titleMaker = (proposal) => {
-  // if (containsNonLatinCodepoints(proposal.details)) {
-  //   return `Proposal ${proposal.proposalId}`;
-  // }
   const details = proposal.details.split('~');
 
   if (details[0] === 'id') {
@@ -252,23 +264,72 @@ export const isMinion = (proposal) => {
   }
 };
 
-export const determineProposalType = (proposal) => {
-  if (proposal.molochVersion === '1') {
-    return 'V1 Proposal';
-  } else if (proposal.newMember) {
-    return 'Member Proposal';
-  } else if (proposal.whitelist) {
-    return 'Whitelist Token Proposal';
-  } else if (proposal.guildkick) {
-    return 'Guildkick Proposal';
-  } else if (proposal.trade) {
-    return 'Trade Proposal';
-  } else {
-    return 'Funding Proposal';
+export function getProposalCountdownText(proposal) {
+  switch (proposal.status) {
+    case ProposalStatus.InQueue:
+      return (
+        <Fragment>
+          <Text textTransform='uppercase' fontSize='0.8em' fontWeight={700}>
+            Voting Begins:{' '}
+          </Text>
+          <Text textTransform='uppercase' fontSize='0.8em' fontWeight={700}>
+            {timeToNow(proposal.votingPeriodStarts)}
+          </Text>
+        </Fragment>
+      );
+    case ProposalStatus.VotingPeriod:
+      return (
+        <Fragment>
+          <Text textTransform='uppercase' fontSize='0.8em' fontWeight={700}>
+            Voting Ends:{' '}
+          </Text>
+          <Text textTransform='uppercase' fontSize='0.8em' fontWeight={700}>
+            {timeToNow(proposal.votingPeriodEnds)}
+          </Text>
+        </Fragment>
+      );
+    case ProposalStatus.GracePeriod:
+      return (
+        <Fragment>
+          <Text textTransform='uppercase' fontSize='0.8em' fontWeight={700}>
+            Grace Period Ends:{' '}
+          </Text>
+          <Text textTransform='uppercase' fontSize='0.8em' fontWeight={700}>
+            {timeToNow(proposal.gracePeriodEnds)}
+          </Text>
+        </Fragment>
+      );
+    case ProposalStatus.Passed:
+      return (
+        <Text textTransform='uppercase' fontSize='0.8em' fontWeight={700}>
+          Passed
+        </Text>
+      );
+    case ProposalStatus.Failed:
+      return (
+        <Text textTransform='uppercase' fontSize='0.8em' fontWeight={700}>
+          Failed
+        </Text>
+      );
+    case ProposalStatus.Cancelled:
+      return (
+        <Text textTransform='uppercase' fontSize='0.8em' fontWeight={700}>
+          Cancelled
+        </Text>
+      );
+    case ProposalStatus.ReadyForProcessing:
+      return (
+        <Text textTransform='uppercase' fontSize='0.8em' fontWeight={700}>
+          Ready For Processing
+        </Text>
+      );
+    case ProposalStatus.Unsponsored:
+      return (
+        <Text textTransform='uppercase' fontSize='0.8em' fontWeight={700}>
+          Unsponsored
+        </Text>
+      );
+    default:
+      return <Fragment />;
   }
-};
-
-// export const containsNonLatinCodepoints = (s) => {
-//   // eslint-disable-next-line
-//   return /[^\u0000-\u00ff]/.test(s);
-// };
+}

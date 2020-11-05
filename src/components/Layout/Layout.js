@@ -19,8 +19,8 @@ const Layout = ({ children }) => {
   };
 
   const nav = {
-    open: { opacity: 1 },
-    closed: { opacity: 0 },
+    open: { opacity: 1, pointerEvents: 'all' },
+    closed: { opacity: 0, pointerEvents: 'none' },
   };
 
   return (

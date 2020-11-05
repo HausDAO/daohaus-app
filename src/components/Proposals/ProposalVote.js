@@ -1,5 +1,6 @@
 import React from 'react';
 import { Box, Flex, Icon } from '@chakra-ui/core';
+import { FaThumbsUp, FaThumbsDown } from 'react-icons/fa';
 
 const ProposalVote = () => {
   return (
@@ -16,8 +17,8 @@ const ProposalVote = () => {
       >
         <Flex>
           <Flex w='40%' justify='space-around'>
-            <Icon name='voteYes' size='45px' />
-            <Icon name='voteNo' size='45px' />
+            <Icon as={FaThumbsUp} />
+            <Icon as={FaThumbsDown} />
           </Flex>
           <Flex justify='center' align='center' w='50%'>
             Currently Passing
