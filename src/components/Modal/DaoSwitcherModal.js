@@ -90,8 +90,6 @@ const DaoSwitcherModal = ({ isOpen, setShowModal }) => {
             </Flex>
           </Link>
           {userDaos ? <>{renderDaoSelect()}</> : <Spinner />}
-
-          <h1>THE HELL</h1>
         </ModalBody>
 
         <ModalFooter></ModalFooter>

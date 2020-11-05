@@ -38,7 +38,7 @@ const Proposal = () => {
             >
               <Icon
                 name='arrow-back'
-                color={theme.colors.brand[50]}
+                color={theme.colors.brand}
                 h='20px'
                 w='20px'
               />{' '}

@@ -57,6 +57,14 @@ const ProposalCard = ({ proposal, isLoaded }) => {
                   ? proposal.title
                   : '--'}
               </Text>
+
+              <Text
+                fontWeight={700}
+                fontSize='lg'
+                fontFamily={theme.fonts.heading}
+              >
+                {proposal.createdAt}
+              </Text>
             </Skeleton>
           </Box>
           <Flex align='center'>

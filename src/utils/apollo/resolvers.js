@@ -21,11 +21,7 @@ const _web3 = new Web3(
 export const resolvers = {
   Proposal: {
     status: (proposal, _args, _context) => {
-      // const { currentPeriod } = cache.readQuery({
-      //   query: GET_METADATA,
-      // });
       const currentPeriod = _context.currentPeriod;
-
       return determineProposalStatus(
         proposal,
         +currentPeriod,
@@ -36,7 +32,6 @@ export const resolvers = {
     },
     gracePeriod: (proposal, _args, _context) => {
       const currentPeriod = _context.currentPeriod;
-
       if (
         inGracePeriod(
           proposal,
