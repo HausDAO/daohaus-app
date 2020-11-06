@@ -3,7 +3,7 @@ import { Flex, Text, Image } from '@chakra-ui/core';
 
 import { useUser, useTheme } from '../../contexts/PokemolContext';
 import makeBlockie from 'ethereum-blockies-base64';
-import EthAddressDisplay from '../Shared/EthAddressDisplay';
+import { truncateAddr } from '../../utils/helpers';
 
 const HubProfileCard = () => {
   const [user] = useUser();
@@ -32,12 +32,12 @@ const HubProfileCard = () => {
 
         <Flex direction='column'>
           <Text fontSize='xl' fontFamily={theme.fonts.heading}>
-            {user.profile.name || <EthAddressDisplay address={user.username} />}{' '}
+            {user.profile.name || truncateAddr(user.username)}{' '}
             <span>{user.profile.emoji || ''} </span>
           </Text>
           {user.name ? (
             <Text fontSize='sm' fontFamily={theme.fonts.mono}>
-              {<EthAddressDisplay address={user.username} />}
+              {truncateAddr(user.username)}
             </Text>
           ) : null}
         </Flex>
