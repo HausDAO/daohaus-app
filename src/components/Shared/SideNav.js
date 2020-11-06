@@ -34,6 +34,11 @@ const SideNav = () => {
         bank: 'Inventory',
         members: 'Players',
         member: 'Player',
+        discord: 'https://discord.gg/WqwQGgeeFd',
+        medium: '',
+        telegram: '',
+        website: '',
+        other: '',
       },
     });
   };
@@ -48,11 +53,6 @@ const SideNav = () => {
         {dao ? (
           <>
             <Flex direction='row' justify='start' align='start'>
-              <Flex direction='column' align='center' justify='start' mr={6}>
-                <Link as={RouterLink} to={`/dao/${dao.address}`}>
-                  <Image src={theme.images.brandImg} w='60px' h='60px' />
-                </Link>
-              </Flex>
               <Flex direction='column' align='start' justify='start'>
                 <Link as={RouterLink} to={`/dao/${dao.address}`} fontSize='xl'>
                   {dao.name}
@@ -110,11 +110,6 @@ const SideNav = () => {
         ) : (
           <>
             <Flex direction='row' justify='start' align='start'>
-              <Flex direction='column' align='center' justify='start' mr={6}>
-                <Link as={RouterLink} to={`/`}>
-                  <Image src={theme.images.brandImg} size='60px' />
-                </Link>
-              </Flex>
               <Flex direction='column' align='start' justify='start'>
                 <Link as={RouterLink} to={`/`} fontSize='xl'>
                   DAOhaus
@@ -167,7 +162,7 @@ const SideNav = () => {
         colorScheme={theme.colors.secondary[500]}
         onClick={() => updateRefetchQuery('proposals')}
       >
-        Refetch Proposals Test
+        Refetch
       </SecondaryButton>
     </Box>
   );
