@@ -13,7 +13,9 @@ function usePokemolContext() {
 
 const initialState = {
   loading: false,
-  network: supportedChains[42],
+  // network: supportedChains[42],
+  network: supportedChains[1],
+
   refetchQuery: null,
   theme: customTheme(),
 
