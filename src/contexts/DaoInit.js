@@ -15,7 +15,7 @@ import {
 
 const DaoInit = () => {
   const location = useLocation();
-  const [, updateLoading] = useLoading();
+  // const [, updateLoading] = useLoading();
   const [contracts, updateContracts] = useContracts();
   const [daoMetadata, updateDaoMetadata] = useDaoMetadata();
   const [web3Connect] = useWeb3Connect();
@@ -69,7 +69,7 @@ const DaoInit = () => {
   }, [daoMetadata, user, contracts]);
 
   const initDao = async (daoParam) => {
-    updateLoading(true);
+    // updateLoading(true);
 
     let daoRes;
     try {
@@ -114,7 +114,7 @@ const DaoInit = () => {
 
     updateContracts({ daoService });
 
-    updateLoading(false);
+    // updateLoading(false);
   };
 
   const initWeb3DaoService = async () => {

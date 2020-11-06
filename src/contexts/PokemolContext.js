@@ -12,10 +12,7 @@ function usePokemolContext() {
 }
 
 const initialState = {
-  loading: false,
   network: supportedChains[42],
-  // network: supportedChains[1],
-
   refetchQuery: null,
   theme: customTheme(),
 
@@ -41,9 +38,6 @@ const initialState = {
 
 const reducer = (state, action) => {
   switch (action.type) {
-    case 'setLoading': {
-      return { ...state, loading: action.payload };
-    }
     case 'setNetwork': {
       return { ...state, network: action.payload };
     }
@@ -101,10 +95,6 @@ const reducer = (state, action) => {
 
 function PokemolContextProvider(props) {
   const [state, dispatch] = React.useReducer(reducer, initialState);
-
-  const updateLoading = useCallback((loading) => {
-    dispatch({ type: 'setLoading', payload: loading });
-  }, []);
 
   const updateNetwork = useCallback((network) => {
     dispatch({ type: 'setNetwork', payload: network });
@@ -172,7 +162,6 @@ function PokemolContextProvider(props) {
         () => [
           state,
           {
-            updateLoading,
             updateNetwork,
             updateRefetchQuery,
             updateTheme,
@@ -192,7 +181,6 @@ function PokemolContextProvider(props) {
         ],
         [
           state,
-          updateLoading,
           updateNetwork,
           updateRefetchQuery,
           updateTheme,
@@ -225,11 +213,6 @@ export function useDao() {
       daoService: state.contracts.daoService,
     },
   ];
-}
-
-export function useLoading() {
-  const [state, { updateLoading }] = usePokemolContext();
-  return [state.loading, updateLoading];
 }
 
 export function useNetwork() {
