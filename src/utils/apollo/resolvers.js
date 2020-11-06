@@ -16,7 +16,7 @@ import { TokenService } from '../token-service';
 import { MolochService } from '../moloch-service';
 
 const _web3 = new Web3(
-  new Web3.providers.HttpProvider(process.env.REACT_APP_INFURA_URI),
+  new Web3.providers.HttpProvider(process.env.REACT_APP_RPC_URI),
 );
 
 export const resolvers = {
