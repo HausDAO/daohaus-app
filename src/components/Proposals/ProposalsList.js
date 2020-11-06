@@ -21,6 +21,7 @@ const ProposalsList = () => {
   const [isLoaded, setIsLoaded] = useState(false);
   const [filter, setFilter] = useState();
   const [sort, setSort] = useState();
+  console.log(proposals);
 
   useEffect(() => {
     if (proposals.length > 0) {

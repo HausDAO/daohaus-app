@@ -2,7 +2,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 
 import { formatCreatedAt } from '../../utils/helpers';
-import { Badge, Box, Heading, Stack, Text } from '@chakra-ui/core';
+import { Badge, Box, Heading, Stack, Text, Skeleton } from '@chakra-ui/core';
 // import { getProposalCountdownText } from '../../utils/proposal-helper';
 
 // TODO: get getProposalCountdownText(activity) outside of dao context?
@@ -19,7 +19,7 @@ const ActivityCard = ({ activity }) => {
       mt={2}
     >
       <Link to={`/dao/${activity.molochAddress}`}>
-        {activity.proposalId ? (
+        {activity.proposalId && (
           <>
             <Heading as='h4' size='md'>
               {activity.proposalType}: {activity.daoTitle}
@@ -31,14 +31,24 @@ const ActivityCard = ({ activity }) => {
             </Stack>
             <Badge>{activity.activityFeed.message}</Badge>
           </>
-        ) : (
+        )}
+        {!activity.proposalId && (
           <>
-            <Heading as='h4' size='md'>
-              Rage Quit on {formatCreatedAt(activity.createdAt)}
-            </Heading>
-            <Text>Shares: {activity.shares}</Text>
-            <Text>Loot: {activity.loot}</Text>
-            <Text>memberAddress: {activity.memberAddress}</Text>
+            <Skeleton>
+              <Heading as='h4' size='md'>
+                {activity?.createdAt
+                  ? `Rage Quit on ${formatCreatedAt(activity.createdAt)}`
+                  : '--'}
+              </Heading>
+            </Skeleton>
+            <Skeleton>
+              <Text>Shares: {activity?.shares ? activity.shares : '--'}</Text>
+              <Text>Loot: {activity?.loot ? activity.loot : '--'}</Text>
+              <Text>
+                memberAddress:{' '}
+                {activity?.memberAddress ? activity.memberAddress : '--'}
+              </Text>
+            </Skeleton>
           </>
         )}
       </Link>
