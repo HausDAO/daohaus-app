@@ -1,12 +1,11 @@
 import React, { useEffect, useState } from 'react';
-import { Text, Flex, Icon, Spinner, Button } from '@chakra-ui/core';
+import { Text, Flex, Icon, Button } from '@chakra-ui/core';
 import { useLocation, Link as RouterLink } from 'react-router-dom';
 import { RiAddFill } from 'react-icons/ri';
 import {
   useUser,
   useNetwork,
   useDao,
-  useLoading,
   useTheme,
 } from '../../contexts/PokemolContext';
 import { Web3SignIn } from './Web3SignIn';
@@ -20,7 +19,6 @@ const Header = () => {
   const [network] = useNetwork();
   const [dao] = useDao();
   const [theme] = useTheme();
-  const [loading] = useLoading();
   const [pageTitle, setPageTitle] = useState();
   const [showDaoSwitcher, setShowDaoSwitcher] = useState(false);
 
@@ -85,7 +83,6 @@ const Header = () => {
         </Flex>
 
         <Flex direction='row' justify='flex-end' align='center'>
-          {loading && <Spinner mr={5} />}
           <Text fontSize='md' mr={5} as='i' fontWeight={200}>
             {network.network}
           </Text>

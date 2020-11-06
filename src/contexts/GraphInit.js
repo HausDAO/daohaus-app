@@ -6,6 +6,7 @@ import GraphFetchMore from '../components/Shared/GraphFetchMore';
 import { HOME_DAO } from '../utils/apollo/dao-queries';
 import { MEMBERS_LIST, USER_MEMBERSHIPS } from '../utils/apollo/member-queries';
 import { PROPOSALS_LIST } from '../utils/apollo/proposal-queries';
+import { validDaoParams } from '../utils/helpers';
 import {
   useMembers,
   useProposals,
@@ -17,27 +18,23 @@ import {
 
 const GraphInit = () => {
   const location = useLocation();
-  const [fetch, setFetch] = useState();
-  const [localDao, setLocalDao] = useState();
-  const [localProposals, setLocalProposals] = useState();
-  const [localMembers, setLocalMembers] = useState();
-  const [localUserDaos, setLocalUserDaos] = useState();
-  const [, updateDaoGraphData] = useDaoGraphData();
+  const [user] = useUser();
   const [daoMetadata] = useDaoMetadata();
   const [, updateUserDaos] = useUserDaos();
-  const [user] = useUser();
+  const [localUserDaos, setLocalUserDaos] = useState();
   const [, updateProposals] = useProposals();
+  const [localProposals, setLocalProposals] = useState();
   const [, updateMembers] = useMembers();
+  const [localMembers, setLocalMembers] = useState();
+  const [, updateDaoGraphData] = useDaoGraphData();
+  const [localDao, setLocalDao] = useState();
+  const [daoFetch, setDaoFetch] = useState();
+
   const { address } = daoMetadata || { address: null };
 
   useEffect(() => {
-    var pathname = location.pathname.split('/');
-    const daoParam = pathname[2];
-    const regex = RegExp('0x[0-9a-f]{10,40}');
-    const validParam =
-      pathname[1] === 'dao' && regex.test(daoParam) ? daoParam : false;
-
-    setFetch(validParam && address);
+    const validParam = validDaoParams(location);
+    setDaoFetch(validParam && address);
     // eslint-disable-next-line
   }, [address, location]);
 
@@ -71,7 +68,7 @@ const GraphInit = () => {
 
   return (
     <>
-      {fetch ? (
+      {daoFetch ? (
         <>
           <GraphFetch
             query={HOME_DAO}

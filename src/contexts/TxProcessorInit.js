@@ -33,9 +33,7 @@ const TxProcessorInit = () => {
     if (!user || Object.keys(txProcessor).length === 0) {
       return;
     }
-
     const unseen = txProcessor.getTxUnseenList(user.username);
-
     if (unseen.length) {
       setLatestTx(unseen[0]);
       setLoading(true);
@@ -57,7 +55,7 @@ const TxProcessorInit = () => {
   }, [user, txProcessor.forceUpdate]);
 
   useEffect(() => {
-    if (user && web3Connect.web3) {
+    if (user && web3Connect.web3 && !txProcessor.web3) {
       initTxProcessor();
     }
     // eslint-disable-next-line
@@ -74,11 +72,9 @@ const TxProcessorInit = () => {
       if (!error) {
         if (txProcessorService.forceUpdate) {
           await txProcessorService.update(user.username);
-
           if (!txProcessorService.getTxPendingList(user.username).length) {
             txProcessorService.forceUpdate = false;
           }
-
           updateTxProcessor(txProcessorService);
         }
       }
