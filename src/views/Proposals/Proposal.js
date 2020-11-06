@@ -25,7 +25,6 @@ const Proposal = () => {
     }
     // eslint-disable-next-line
   }, [proposals]);
-  console.log(theme);
 
   return (
     <Box>
