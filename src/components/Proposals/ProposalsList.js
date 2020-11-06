@@ -1,75 +1,98 @@
 import React, { useEffect, useState } from 'react';
-import { Box, Text, Flex } from '@chakra-ui/core';
+import { Box, Flex } from '@chakra-ui/core';
 
-import { useTheme } from '../../contexts/PokemolContext';
+import {
+  useDao,
+  useMemberWallet,
+  useProposals,
+} from '../../contexts/PokemolContext';
 import ProposalCard from './ProposalCard';
 import { defaultProposals } from '../../utils/constants';
+import ProposalFilter from './ProposalFilter';
+import ProposalSort from './ProposalSort';
+import { determineUnreadProposalList } from '../../utils/proposal-helper';
 
-const ProposalsList = ({ proposals }) => {
-  const [filter] = useState(null);
-  const [theme] = useTheme();
-  const [_proposals, setProposals] = useState(null);
+const ProposalsList = () => {
+  const [dao] = useDao();
+  const [proposals] = useProposals();
+
+  const [memberWallet] = useMemberWallet();
+  const [listProposals, setListProposals] = useState(defaultProposals);
   const [isLoaded, setIsLoaded] = useState(false);
+  const [filter, setFilter] = useState();
+  const [sort, setSort] = useState();
 
   useEffect(() => {
     if (proposals.length > 0) {
-      setProposals(proposals);
+      filterAndSortProposals();
       setIsLoaded(true);
-    } else {
-      setProposals(defaultProposals);
     }
-  }, [proposals]);
-  //! remove the slice and deal with pagination
+    // eslint-disable-next-line
+  }, [proposals, sort, filter]);
+
+  const filterAndSortProposals = () => {
+    let filteredProposals = proposals;
+
+    if (sort && filter) {
+      filteredProposals = proposals
+        .filter((prop) => {
+          if (dao.version === '1' || filter.value === 'All') {
+            return true;
+          }
+          if (filter.value === 'Action Needed') {
+            const unread = determineUnreadProposalList(
+              prop,
+              memberWallet.activeMember,
+              memberWallet.memberAddress,
+            );
+            return unread.unread;
+          } else {
+            return prop.proposalType === filter.value;
+          }
+        })
+        .sort((a, b) => {
+          if (sort.value === 'submissionDateAsc') {
+            return +a.createdAt - +b.createdAt;
+          } else {
+            return +b.createdAt - +a.createdAt;
+          }
+        });
+
+      if (
+        sort.value !== 'submissionDateAsc' &&
+        sort.value !== 'submissionDateDesc'
+      ) {
+        filteredProposals = filteredProposals.sort((a, b) => {
+          return a.status === sort.value ? -1 : 1;
+        });
+      }
+    }
+
+    setListProposals(filteredProposals);
+  };
+
   return (
     <>
       <Box w='60%'>
         <Flex>
-          {filter ? (
-            <Text
-              ml={8}
-              textTransform='uppercase'
-              fontSize='sm'
-              fontFamily={theme.fonts.heading}
-            >
-              Filtered by:
-              <span style={{ color: theme.colors.primary[50] }}>
-                Action Needed
-              </span>
-            </Text>
-          ) : (
-            <Text
-              ml={8}
-              textTransform='uppercase'
-              fontFamily={theme.fonts.heading}
-              cursor='pointer'
-            >
-              Apply a
-              <span style={{ color: theme.colors.primary[50] }}> filter</span>
-            </Text>
-          )}
-          <Text
-            ml={8}
-            textTransform='uppercase'
-            fontSize='sm'
-            fontFamily={theme.fonts.heading}
-          >
-            Sort by:
-            <span style={{ color: theme.colors.primary[50] }}>
-              {' '}
-              Voting Period
-            </span>
-          </Text>
+          {dao.version !== '1' ? (
+            <ProposalFilter
+              filter={filter}
+              setFilter={setFilter}
+              listLength={listProposals.length}
+            />
+          ) : null}
+          <ProposalSort sort={sort} setSort={setSort} />
         </Flex>
-        {_proposals &&
-          _proposals.slice(0, 5).map((proposal) => {
-            return (
-              <ProposalCard
-                proposal={proposal}
-                key={proposal.id}
-                isLoaded={isLoaded}
-              />
-            );
-          })}
+        {listProposals.map((proposal) => {
+          return (
+            <ProposalCard
+              proposal={proposal}
+              key={proposal.id}
+              isLoaded={isLoaded}
+            />
+          );
+        })}
       </Box>
     </>
   );

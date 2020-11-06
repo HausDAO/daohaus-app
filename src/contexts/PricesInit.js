@@ -1,36 +1,26 @@
 import React, { useEffect } from 'react';
-import { useLocation } from 'react-router-dom';
-import { get } from '../utils/requests';
 
-import { useDao, usePrices } from './PokemolContext';
+import { getUsd } from '../utils/price-api';
+import { useDaoGraphData, usePrices } from './PokemolContext';
 
 const PriceInit = () => {
-  const location = useLocation();
-  const [dao] = useDao();
-  const [prices, updatePrices] = usePrices();
+  const [, updatePrices] = usePrices();
+  const [daoGraphData] = useDaoGraphData();
 
-  // useEffect(() => {
-  //   var pathname = location.pathname.split('/');
-  //   const daoParam = pathname[2];
-  //   const regex = RegExp('0x[0-9a-f]{10,40}');
-  //   const validParam =
-  //     pathname[1] === 'dao' && regex.test(daoParam) ? daoParam : false;
-
-  //   if (!validParam) {
-  //     updatePrices({});
-  //     return;
-  //   }
-
-  //   console.log();
-
-  //   // if (dao && prices.daoAddress !== daoParam) {
-  //   //   initPrices(daoParam);
-  //   // }
-  //   // eslint-disable-next-line
-  // }, [location, dao]);
+  useEffect(() => {
+    if (daoGraphData) {
+      initPrices();
+    }
+    // eslint-disable-next-line
+  }, [daoGraphData]);
 
   const initPrices = async () => {
-    console.log('^^^^^^^^^^^^^^^initPrices', dao);
+    const tokens = daoGraphData.tokenBalances.map(
+      (token) => token.token.tokenAddress,
+    );
+    const res = await getUsd(tokens.join(','));
+
+    updatePrices(res.data);
   };
 
   return <></>;

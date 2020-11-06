@@ -21,31 +21,31 @@ const ProposalFormModal = ({ isOpen, setShowModal, setProposalType }) => {
     {
       name: 'Apply',
       subhead: 'Join the guild!',
-      proposalType: 'member-proposal',
+      proposalType: 'member',
       image: 'themes/raidTheme/raidguild__swords-white.svg',
     },
     {
       name: 'Funding',
       subhead: 'Request funds',
-      proposalType: 'funding-proposal',
+      proposalType: 'funding',
       image: 'themes/raidTheme/raidguild__swords-white.svg',
     },
     {
       name: 'Token',
       subhead: 'Whitelist a token',
-      proposalType: 'token-proposal',
+      proposalType: 'whitelist',
       image: 'themes/raidTheme/raidguild__swords-white.svg',
     },
     {
       name: 'Guild Kick',
       subhead: `Remove a ${theme.daoMeta.member}`,
-      proposalType: 'kick-proposal',
+      proposalType: 'guildkick',
       image: 'themes/raidTheme/raidguild__swords-white.svg',
     },
     {
       name: 'Trade',
       subhead: 'Trade funds',
-      proposalType: 'trade-proposal',
+      proposalType: 'trade',
       image: 'themes/raidTheme/raidguild__swords-white.svg',
     },
   ];
@@ -87,8 +87,9 @@ const ProposalFormModal = ({ isOpen, setShowModal, setProposalType }) => {
         <ModalBody
           flexDirection='row'
           display='flex'
+          flexWrap='wrap'
           justify='space-around'
-          width='auto'
+          align='center'
         >
           {proposalTypes.map((p) => {
             return (
@@ -100,9 +101,10 @@ const ProposalFormModal = ({ isOpen, setShowModal, setProposalType }) => {
                 alignItems='center'
                 justifyContent='space-evenly'
                 _hover={{ border: '1px solid #7579C5', cursor: 'pointer' }}
-                w='170px'
+                w='160px'
                 h='200px'
-                m={2}
+                p={2}
+                m={1}
                 onClick={() => {
                   setProposalType(p.proposalType);
                   setShowModal('proposal');
@@ -123,7 +125,7 @@ const ProposalFormModal = ({ isOpen, setShowModal, setProposalType }) => {
                   {p.name}
                 </Text>
                 <Text
-                  fontSize='sm'
+                  fontSize='xs'
                   fontFamily={theme.fonts.heading}
                   color='white'
                 >

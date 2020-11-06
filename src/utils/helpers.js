@@ -1,4 +1,5 @@
 import { anyToBN } from '@netgum/utils';
+import { formatDistanceToNow } from 'date-fns';
 // import moment from 'moment';
 
 export const truncateAddr = (addr) => {
@@ -27,7 +28,7 @@ export const formatCreatedAt = (createdAt) => {
 };
 
 export const timeToNow = (time) => {
-  // return moment.unix(time).fromNow();
+  return formatDistanceToNow(new Date(time * 1000), { addSuffix: true });
 };
 
 export const memberProfile = (members, address) => {

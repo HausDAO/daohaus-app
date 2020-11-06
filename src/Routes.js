@@ -50,7 +50,7 @@ const Routes = () => {
         />
 
         <Route
-          path='/dao/:dao(\b0x[0-9a-f]{10,40}\b)/profile'
+          path='/dao/:dao(\b0x[0-9a-f]{10,40}\b)/profile/:id'
           exact
           component={Profile}
         />

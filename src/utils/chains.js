@@ -8,6 +8,7 @@ export const supportedChains = {
     network_id: 1,
     rpc_url: 'https://mainnet.infura.io/',
     api_url: 'https://luizh7qidl.execute-api.us-east-1.amazonaws.com/prod',
+    // api_url: process.env.REACT_APP_PROD_API,
     daohaus_url: 'https://daohaus.club',
     subgraph_url:
       'https://api.thegraph.com/subgraphs/name/odyssy-automaton/daohaus',
