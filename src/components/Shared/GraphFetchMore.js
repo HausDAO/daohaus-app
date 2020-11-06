@@ -54,7 +54,7 @@ const GraphFetchMore = ({ query, setRecords, variables, entity, context }) => {
 
   useEffect(() => {
     if (data && fetched) {
-      console.log('setting entity', entity);
+      // console.log('setting entity', entity);
       setRecords(data[entity]);
     }
     // eslint-disable-next-line

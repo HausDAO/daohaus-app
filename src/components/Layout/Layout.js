@@ -18,6 +18,8 @@ const Layout = ({ children }) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [theme] = useTheme();
 
+  console.log('render Layout');
+
   return (
     <Flex direction='row' minH='100vh' color='white' w='100vw'>
       <Box

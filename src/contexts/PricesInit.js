@@ -15,7 +15,6 @@ const PriceInit = () => {
   }, [daoGraphData]);
 
   const initPrices = async () => {
-    console.log('$$$$$$$$$ INIT PRICES');
     const tokens = daoGraphData.tokenBalances.map(
       (token) => token.token.tokenAddress,
     );

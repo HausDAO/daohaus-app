@@ -17,10 +17,8 @@ const UserInit = () => {
   }, [web3Connect]);
 
   const initCurrentUser = async () => {
-    console.log('@@@@@@@@@@@ INIT USER');
     let loginType = localStorage.getItem('loginType') || USER_TYPE.READ_ONLY;
     if (user && user.type === loginType) {
-      console.log('early');
       return;
     }
 

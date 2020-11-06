@@ -47,7 +47,10 @@ const DaoInit = () => {
   }, [user, daoMetadata, contracts]);
 
   useEffect(() => {
-    const noDaoService = !daoMetadata || !contracts.daoService;
+    const noDaoService =
+      !daoMetadata ||
+      !contracts.daoService ||
+      !contracts.daoService.accountAddr;
     const notSignedIn = !user || user.type === USER_TYPE.READ_ONLY;
     if (noDaoService || notSignedIn) {
       return;
@@ -62,7 +65,6 @@ const DaoInit = () => {
   }, [daoMetadata, user, contracts]);
 
   const initDao = async (daoParam) => {
-    console.log('******** INIT dao');
     let daoRes;
     try {
       daoRes = await get(`moloch/${daoParam}`);
@@ -107,7 +109,6 @@ const DaoInit = () => {
   };
 
   const initWeb3DaoService = async () => {
-    console.log('############ INIT initWeb3DaoService');
     const daoService = await DaoService.instantiateWithWeb3(
       user.username,
       web3Connect.provider,
@@ -119,7 +120,6 @@ const DaoInit = () => {
   };
 
   const initMemberWallet = async () => {
-    console.log('%%%%%%%%%%%%%%%% INIT initMemberWallet');
     const addrByDelegateKey = await contracts.daoService.moloch.memberAddressByDelegateKey(
       user.username,
     );
