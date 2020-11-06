@@ -4,7 +4,7 @@ import { getUsd } from '../utils/price-api';
 import { useDaoGraphData, usePrices } from './PokemolContext';
 
 const PriceInit = () => {
-  const [updatePrices] = usePrices();
+  const [, updatePrices] = usePrices();
   const [daoGraphData] = useDaoGraphData();
 
   useEffect(() => {
