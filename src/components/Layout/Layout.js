@@ -1,10 +1,18 @@
 import React from 'react';
-import { Flex, Image, useDisclosure, Link, Box } from '@chakra-ui/core';
+import {
+  Flex,
+  Image,
+  useDisclosure,
+  Link,
+  Box,
+  IconButton,
+} from '@chakra-ui/core';
 import { motion } from 'framer-motion';
 
 import Header from '../Shared/Header';
 import SideNav from '../Shared/SideNav';
 import { useTheme } from '../../contexts/PokemolContext';
+import { RiArrowLeftSLine } from 'react-icons/ri';
 
 const Layout = ({ children }) => {
   const { isOpen, onToggle } = useDisclosure(false);
@@ -15,12 +23,34 @@ const Layout = ({ children }) => {
 
   const bar = {
     open: { width: 420 },
-    closed: { width: 120 },
+    closed: { width: 100 },
   };
 
   const nav = {
     open: { opacity: 1, pointerEvents: 'all' },
     closed: { opacity: 0, pointerEvents: 'none' },
+  };
+
+  const background = {
+    open: {
+      width: 'calc(100% - ' + bar.open.width + 'px)',
+      marginLeft: bar.open.width + 'px',
+    },
+    closed: {
+      width: 'calc(100% - ' + bar.closed.width + 'px)',
+      marginLeft: bar.closed.width + 'px',
+    },
+  };
+
+  const layout = {
+    open: {
+      width: 'calc(100% - ' + bar.open.width + 'px)',
+      marginLeft: bar.open.width + 'px',
+    },
+    closed: {
+      width: 'calc(100% - ' + bar.closed.width + 'px)',
+      marginLeft: bar.closed.width + 'px',
+    },
   };
 
   return (
@@ -33,13 +63,12 @@ const Layout = ({ children }) => {
         direction='column'
         align='start'
         justifyContent='space-between'
-        cursor='pointer'
         bg='primary.500'
-        _hover={{ bg: 'primary.400' }}
         variants={bar}
         animate={isOpen ? 'closed' : 'open'}
         initial='open'
         zIndex='1'
+        transition={{ ease: 'easeInOut', duration: 0.15 }}
       >
         <Flex direction='column' h='400px'>
           <Image
@@ -47,6 +76,7 @@ const Layout = ({ children }) => {
             w='60px'
             h='60px'
             onClick={onToggle}
+            cursor='pointer'
           />
         </Flex>
         <MotionBox
@@ -55,7 +85,24 @@ const Layout = ({ children }) => {
           animate={isOpen ? 'closed' : 'open'}
           position='absolute'
           ml='80px'
+          transition={{ ease: 'easeInOut', duration: 0.15 }}
         >
+          <MotionBox
+            animate={isOpen ? 'closed' : 'open'}
+            variants={nav}
+            position='absolute'
+            top='6px'
+            right='-55px'
+          >
+            <IconButton
+              onClick={onToggle}
+              aria-label='Close Menu'
+              colorScheme='secondary'
+              variant='outline'
+              size='xs'
+              icon={<RiArrowLeftSLine />}
+            />
+          </MotionBox>
           <SideNav />
         </MotionBox>
 
@@ -75,11 +122,9 @@ const Layout = ({ children }) => {
 
       <MotionBox
         position='fixed'
-        w={
-          isOpen
-            ? 'calc(100% - ' + bar.closed.width + 'px)'
-            : 'calc(100% - ' + bar.open.width + 'px)'
-        }
+        initial='open'
+        variants={background}
+        animate={isOpen ? 'closed' : 'open'}
         h='100vh'
         bgImage={'url(' + theme.images.bgImg + ')'}
         bgSize='cover'
@@ -87,6 +132,7 @@ const Layout = ({ children }) => {
         zIndex='-1'
         top='0'
         right='0'
+        transition={{ ease: 'easeInOut', duration: 0.15 }}
         _before={{
           display: 'block',
           content: '""',
@@ -101,18 +147,17 @@ const Layout = ({ children }) => {
           zIndex: '-1',
         }}
       />
-      <Flex
-        w={
-          isOpen
-            ? 'calc(100% - ' + bar.closed.width + 'px)'
-            : 'calc(100% - ' + bar.open.width + 'px)'
-        }
-        ml={isOpen ? bar.closed.width + 'px' : bar.open.width + 'px'}
+      <MotionFlex
+        width='100%'
+        initial='open'
+        variants={layout}
+        animate={isOpen ? 'closed' : 'open'}
         flexDirection='column'
+        transition={{ ease: 'easeInOut', duration: 0.15 }}
       >
         <Header></Header>
         {children}
-      </Flex>
+      </MotionFlex>
     </Flex>
   );
 };
