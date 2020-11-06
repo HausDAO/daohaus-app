@@ -19,6 +19,7 @@ import {
   MenuButton,
   MenuList,
   MenuItem,
+  FormHelperText,
 } from '@chakra-ui/core';
 import { utils } from 'web3';
 import { RiAddFill, RiErrorWarningLine } from 'react-icons/ri';
@@ -28,6 +29,7 @@ import {
   useTheme,
   useTxProcessor,
   useUser,
+  useEns,
 } from '../../contexts/PokemolContext';
 import { PrimaryButton } from '../../themes/components';
 import { set } from 'date-fns';
@@ -38,9 +40,11 @@ const FundingProposalForm = () => {
   const [showLoot, setShowLoot] = useState(false);
   const [showTribute, setShowTribute] = useState(false);
   const [showApplicant, setShowApplicant] = useState(false);
+  const [ensAddr, setEnsAddr] = useState('');
   const [theme] = useTheme();
   const [user] = useUser();
   const [dao] = useDao();
+  const [ens] = useEns();
   const [txProcessor, updateTxProcessor] = useTxProcessor();
   const [currentError, setCurrentError] = useState(null);
   console.log(dao);
@@ -62,7 +66,7 @@ const FundingProposalForm = () => {
     } else {
       setCurrentError(null);
     }
-  }, [errors])
+  }, [errors]);
 
   // TODO check tribute token < currentWallet.token.balance & unlock
   // TODO check payment token < dao.token.balance
@@ -98,19 +102,42 @@ const FundingProposalForm = () => {
 
     try {
       dao.daoService.moloch.submitProposal(
-        values.sharesRequested ? utils.toWei(values.sharesRequested?.toString()) : '0',
-        values.lootRequested ? utils.toWei(values.lootRequested?.toString()) : '0',
-        values.tributeOffered ? utils.toWei(values.tributeOffered?.toString()) : '0',
+        values.sharesRequested
+          ? utils.toWei(values.sharesRequested?.toString())
+          : '0',
+        values.lootRequested
+          ? utils.toWei(values.lootRequested?.toString())
+          : '0',
+        values.tributeOffered
+          ? utils.toWei(values.tributeOffered?.toString())
+          : '0',
         values.tributeToken || '0xd0a1e359811322d97991e03f863a0c30c2cf029c',
-        values.paymentRequested ? utils.toWei(values.paymentRequested?.toString()) : '0',
-        values.paymentToken || values.tributeToken || '0xd0a1e359811322d97991e03f863a0c30c2cf029c',
+        values.paymentRequested
+          ? utils.toWei(values.paymentRequested?.toString())
+          : '0',
+        values.paymentToken ||
+          values.tributeToken ||
+          '0xd0a1e359811322d97991e03f863a0c30c2cf029c',
         details,
-        values.applicant,
+        ensAddr.startsWith('0x') ? ensAddr : values.applicant,
         txCallBack,
       );
     } catch (err) {
       setLoading(false);
       console.log('error: ', err);
+    }
+  };
+
+  const handleChange = async (e) => {
+    if (e.target.value.endsWith('.eth')) {
+      const address = await ens.provider.resolveName(e.target.value);
+      if (address) {
+        setEnsAddr(address);
+      } else {
+        setEnsAddr('No ENS set');
+      }
+    } else {
+      setEnsAddr(null);
     }
   };
 
@@ -139,11 +166,11 @@ const FundingProposalForm = () => {
               name='title'
               placeholder='Proposal Title'
               mb={5}
-              ref={register({ 
+              ref={register({
                 required: {
                   value: true,
-                  message: 'Title is required'
-                }
+                  message: 'Title is required',
+                },
               })}
               color='white'
               focusBorderColor='secondary.500'
@@ -154,56 +181,62 @@ const FundingProposalForm = () => {
               type='textarea'
               mb={5}
               h={10}
-              ref={register({ 
-                required: { 
-                  value: true, 
-                  message: 'Description is required' 
-                }
-              })} 
+              ref={register({
+                required: {
+                  value: true,
+                  message: 'Description is required',
+                },
+              })}
               color='white'
               focusBorderColor='secondary.500'
             />
             <InputGroup>
               <InputLeftAddon>https://</InputLeftAddon>
-              <Input 
-                name='link' 
-                placeholder='daolink.club' 
-                color='white' 
-                focusBorderColor='secondary.500' 
-                ref={register({ 
-                  required: { 
-                    value: true, 
-                    message: 'Reference Link is required' 
-                  }
-                })} 
+              <Input
+                name='link'
+                placeholder='daolink.club'
+                color='white'
+                focusBorderColor='secondary.500'
+                ref={register({
+                  required: {
+                    value: true,
+                    message: 'Reference Link is required',
+                  },
+                })}
               />
             </InputGroup>
           </Stack>
         </Box>
         <Box w='48%'>
-          <FormLabel
-            htmlFor='applicant'
-            color='white'
-            fontFamily={theme.fonts.heading}
-            textTransform='uppercase'
-            fontSize='xs'
-            fontWeight={700}
-          >
-            Applicant
-          </FormLabel>
-          <Input
-            name='applicant'
-            placeholder='0x'
-            mb={5}
-            ref={register({
-              required: {
-                value: true,
-                message: 'Applicant is required'
-              }
-            })}
-            color='white'
-            focusBorderColor='secondary.500'
-          />
+          <FormControl>
+            <FormLabel
+              htmlFor='applicant'
+              color='white'
+              fontFamily={theme.fonts.heading}
+              textTransform='uppercase'
+              fontSize='xs'
+              fontWeight={700}
+            >
+              Applicant
+            </FormLabel>
+            <FormHelperText fontSize='xs' id='applicant-helper-text'>
+              {ensAddr ? `${ensAddr}` : 'Use ETH address or ENS'}
+            </FormHelperText>
+            <Input
+              name='applicant'
+              placeholder='0x'
+              mb={5}
+              ref={register({
+                required: {
+                  value: true,
+                  message: 'Applicant is required',
+                },
+              })}
+              color='white'
+              focusBorderColor='secondary.500'
+              onChange={handleChange}
+            />
+          </FormControl>
           <FormLabel
             htmlFor='paymentRequested'
             color='white'
@@ -219,11 +252,11 @@ const FundingProposalForm = () => {
               name='paymentRequested'
               placeholder='0'
               mb={5}
-              ref={register({ 
-                pattern: { 
-                  value: /[0-9]/, 
-                  message: 'Payment must be a number' 
-                }
+              ref={register({
+                pattern: {
+                  value: /[0-9]/,
+                  message: 'Payment must be a number',
+                },
               })}
               color='white'
               focusBorderColor='secondary.500'
@@ -261,15 +294,16 @@ const FundingProposalForm = () => {
                 name='sharesRequested'
                 placeholder='0'
                 mb={5}
-                ref={register({ 
+                ref={register({
                   required: {
                     value: true,
-                    message: 'Requested shares are required for Member Proposals'
-                  }, 
-                  pattern: { 
-                    value: /[0-9]/, 
-                    message: 'Requested shares must be a number' 
-                  }
+                    message:
+                      'Requested shares are required for Member Proposals',
+                  },
+                  pattern: {
+                    value: /[0-9]/,
+                    message: 'Requested shares must be a number',
+                  },
                 })}
                 color='white'
                 focusBorderColor='secondary.500'
@@ -292,11 +326,11 @@ const FundingProposalForm = () => {
                 name='lootRequested'
                 placeholder='0'
                 mb={5}
-                ref={register({ 
-                  pattern: { 
-                    value: /[0-9]/, 
-                    message: 'Loot must be a number' 
-                  }
+                ref={register({
+                  pattern: {
+                    value: /[0-9]/,
+                    message: 'Loot must be a number',
+                  },
                 })}
                 color='white'
                 focusBorderColor='secondary.500'
@@ -323,8 +357,8 @@ const FundingProposalForm = () => {
                   ref={register({
                     pattern: {
                       value: /[0-9]/,
-                      message: 'Tribute must be a number'
-                    }
+                      message: 'Tribute must be a number',
+                    },
                   })}
                   color='white'
                   focusBorderColor='secondary.500'
@@ -349,21 +383,32 @@ const FundingProposalForm = () => {
             </>
           )}
           {(!showShares || !showLoot || !showTribute) && (
-            <Menu
-              color='white'
-              textTransform='uppercase'
-            >
-              <MenuButton as={Button} rightIcon={<Icon as={RiAddFill} color='primary.500' />}>
+            <Menu color='white' textTransform='uppercase'>
+              <MenuButton
+                as={Button}
+                rightIcon={<Icon as={RiAddFill} color='primary.500' />}
+              >
                 Additional Options
               </MenuButton>
               <MenuList>
-                {!showShares && <MenuItem onClick={() => setShowShares(true)}>Applicant</MenuItem>}
-                {!showLoot && <MenuItem onClick={() => setShowLoot(true)}>Request Loot</MenuItem>}
-                {!showTribute && <MenuItem onClick={() => setShowTribute(true)}>Request Payment</MenuItem>}
+                {!showShares && (
+                  <MenuItem onClick={() => setShowShares(true)}>
+                    Request Shares
+                  </MenuItem>
+                )}
+                {!showLoot && (
+                  <MenuItem onClick={() => setShowLoot(true)}>
+                    Request Loot
+                  </MenuItem>
+                )}
+                {!showTribute && (
+                  <MenuItem onClick={() => setShowTribute(true)}>
+                    Request Payment
+                  </MenuItem>
+                )}
               </MenuList>
             </Menu>
           )}
-         
         </Box>
       </FormControl>
       <Flex justify='flex-end' align='center' h='60px'>
@@ -387,6 +432,6 @@ const FundingProposalForm = () => {
       </Flex>
     </form>
   );
-}
+};
 
 export default FundingProposalForm;
