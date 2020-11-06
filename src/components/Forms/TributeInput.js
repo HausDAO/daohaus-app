@@ -14,20 +14,17 @@ const TributeInput = () => {
   const [unlocked, setUnlocked] = useState(true);
   const [balance, setBalance] = useState(0);
   const [loading, setLoading] = useState(false);
-  // const [token, setToken] = useState();
   const [tokenData, setTokenData] = useState([]);
   const [dao] = useDao();
   const [theme] = useTheme();
 
   const {
     register,
-    watch,
     setValue,
+    getValues,
     // formState
   } = useForm();
 
-  const watchToken = watch('tributeToken', '');
-  const watchTokenValue = watch('tributeOffered', 0);
 
   useEffect(() => {
     if (dao?.graphData && !tokenData.length) {
@@ -53,18 +50,24 @@ const TributeInput = () => {
   }, [dao]);
 
   useEffect(() => {
-    const runCheck = async () => {
-      console.log('RUNCHECK');
-      await checkUnlocked(watchToken, watchTokenValue);
-      await getMax(watchToken);
-      return true;
-    };
-    runCheck();
-    // eslint-disable-next-line
-  }, [watchToken, watchTokenValue]);
+    if (tokenData.length) {
+      const depositToken = tokenData[0];
+      getMax(depositToken.value);
+      setMax();
+    }
+  }, [tokenData]);
 
-  const unlock = async (token) => {
+  const handleChange = async () => {
+    const tributeToken = getValues('tributeToken');
+    const tributeOffered = getValues('tributeOffered');
+    await checkUnlocked(tributeToken, tributeOffered);
+    await getMax(tributeToken);
+    return true;
+  };
+
+  const unlock = async () => {
     setLoading(true);
+    const token = getValues('tributeOffered');
     try {
       await dao.daoService.token.unlock(token);
       setUnlocked(true);
@@ -81,7 +84,6 @@ const TributeInput = () => {
     }
     const amountApproved = await dao.daoService.token.unlocked(token);
     const isUnlocked = amountApproved > amount;
-    console.log('isUnlocked', isUnlocked);
     setUnlocked(isUnlocked);
   };
 
@@ -119,12 +121,14 @@ const TributeInput = () => {
           })}
           color='white'
           focusBorderColor='secondary.500'
+          onChange={handleChange}
         />
         <InputRightAddon>
           <Select
             name='tributeToken'
             defaultValue='0xd0a1e359811322d97991e03f863a0c30c2cf029c'
             ref={register}
+            onChange={handleChange}
           >
             {' '}
             {tokenData.map((token, idx) => (
@@ -136,7 +140,7 @@ const TributeInput = () => {
         </InputRightAddon>
       </InputGroup>
       {!unlocked && (
-        <Button onClick={() => unlock(watchToken)} isLoading={loading}>
+        <Button onClick={() => unlock()} isLoading={loading}>
           Unlock
         </Button>
       )}

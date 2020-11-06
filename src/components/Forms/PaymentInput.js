@@ -17,14 +17,9 @@ const PaymentInput = () => {
   const [dao] = useDao();
   const [theme] = useTheme();
 
-  const {
-    register,
-    watch,
-    setValue,
-    // formState
-  } = useForm();
+  const { register, setValue, getValues } = useForm();
 
-  const watchToken = watch('paymentToken', '');
+  // const watchToken = watch('paymentToken', '');
 
   useEffect(() => {
     if (dao?.graphData && !tokenData.length) {
@@ -37,6 +32,7 @@ const PaymentInput = () => {
         (token) =>
           token.guildBank && token.token.tokenAddress !== depositTokenAddress,
       );
+
       tokenArray.unshift(depositToken);
       setTokenData(
         tokenArray.map((token) => ({
@@ -51,18 +47,26 @@ const PaymentInput = () => {
   }, [dao]);
 
   useEffect(() => {
-    const getMax = async (token) => {
-      const selected = tokenData.find((item) => item.value === token);
-      if (selected) {
-        setBalance(selected.balance / 10 ** selected.decimals);
-      }
-    };
-
-    if (tokenData.length && watchToken) {
-      getMax(watchToken);
+    if (tokenData.length) {
+      const depositToken = tokenData[0];
+      getMax(depositToken.value);
+      setMax();
     }
-    // eslint-disable-next-line
-  }, [watchToken, tokenData]);
+  }, [tokenData]);
+
+  const handleChange = async () => {
+    const paymentToken = getValues('paymentToken');
+    if (tokenData.length && paymentToken) {
+      getMax(paymentToken);
+    }
+  };
+
+  const getMax = async (token) => {
+    const selected = tokenData.find((item) => item.value === token);
+    if (selected) {
+      setBalance(selected.balance / 10 ** selected.decimals);
+    }
+  };
 
   const setMax = async () => {
     setValue('paymentRequested', balance);
@@ -95,7 +99,7 @@ const PaymentInput = () => {
           focusBorderColor='secondary.500'
         />
         <InputRightAddon>
-          <Select name='paymentToken' ref={register}>
+          <Select name='paymentToken' ref={register} onChange={handleChange}>
             {' '}
             {tokenData.map((token, idx) => (
               <option key={idx} default={!idx} value={token.value}>
