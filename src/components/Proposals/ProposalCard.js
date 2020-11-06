@@ -82,76 +82,115 @@ const ProposalCard = ({ proposal, isLoaded }) => {
           </Flex>
         </Flex>
         <Flex w='80%' justify='space-between' mt={10}>
-          <Box>
-            <Text
-              textTransform='uppercase'
-              fontSize='sm'
-              fontFamily={theme.fonts.heading}
-              fontWeight={700}
-            >
-              Tribute
-            </Text>
-            <Skeleton isLoaded={isLoaded}>
+          {(proposal?.tributeOffered > 0 || !proposal?.tributeOffered) && (
+            <Box>
               <Text
-                fontSize='lg'
-                fontFamily={theme.fonts.space}
+                textTransform='uppercase'
+                fontSize='sm'
+                fontFamily={theme.fonts.heading}
                 fontWeight={700}
               >
-                {proposal?.tributeOffered
-                  ? utils.fromWei(proposal.tributeOffered)
-                  : '--'}{' '}
-                {proposal.tributeToken || 'WETH'}
+                Tribute
               </Text>
-            </Skeleton>
-          </Box>
-          <Box>
-            <Text
-              textTransform='uppercase'
-              fontSize='sm'
-              fontFamily={theme.fonts.heading}
-              fontWeight={700}
-            >
-              Shares
-            </Text>
-            <Skeleton isLoaded={isLoaded}>
+              <Skeleton isLoaded={isLoaded}>
+                <Text
+                  fontSize='lg'
+                  fontFamily={theme.fonts.space}
+                  fontWeight={700}
+                >
+                  {proposal?.tributeOffered
+                    ? utils.fromWei(proposal.tributeOffered)
+                    : '--'}{' '}
+                  {proposal.tributeToken || 'WETH'}
+                </Text>
+              </Skeleton>
+            </Box>
+          )}
+          {(proposal?.paymentRequested > 0 || !proposal?.paymentRequested) && (
+            <Box>
               <Text
-                fontSize='lg'
-                fontFamily={theme.fonts.space}
+                textTransform='uppercase'
+                fontSize='sm'
+                fontFamily={theme.fonts.heading}
                 fontWeight={700}
               >
-                {proposal?.sharesRequested ? proposal.sharesRequested : '--'}
+                Payment Requested
               </Text>
-            </Skeleton>
-          </Box>
-          <Box>
-            <Text
-              textTransform='uppercase'
-              fontSize='sm'
-              fontFamily={theme.fonts.heading}
-              fontWeight={700}
-            >
-              Loot
-            </Text>
-            <Skeleton isLoaded={isLoaded}>
+              <Skeleton isLoaded={isLoaded}>
+                <Text
+                  fontSize='lg'
+                  fontFamily={theme.fonts.space}
+                  fontWeight={700}
+                >
+                  {proposal?.paymentRequested
+                    ? utils.fromWei(proposal.paymentRequested)
+                    : '--'}{' '}
+                  {proposal.paymentToken || 'WETH'}
+                </Text>
+              </Skeleton>
+            </Box>
+          )}
+          {(proposal?.sharesRequested > 0 || !proposal?.sharesRequested) && (
+            <Box>
               <Text
-                fontSize='lg'
-                fontFamily={theme.fonts.space}
+                textTransform='uppercase'
+                fontSize='sm'
+                fontFamily={theme.fonts.heading}
                 fontWeight={700}
               >
-                {proposal?.lootRequested ? proposal.lootRequested : '--'}
+                Shares
               </Text>
-            </Skeleton>
-          </Box>
+              <Skeleton isLoaded={isLoaded}>
+                <Text
+                  fontSize='lg'
+                  fontFamily={theme.fonts.space}
+                  fontWeight={700}
+                >
+                  {proposal?.sharesRequested ? proposal.sharesRequested : '--'}
+                </Text>
+              </Skeleton>
+            </Box>
+          )}
+          {(proposal?.lootRequested > 0 || !proposal?.lootRequested) && (
+            <Box>
+              <Text
+                textTransform='uppercase'
+                fontSize='sm'
+                fontFamily={theme.fonts.heading}
+                fontWeight={700}
+              >
+                Loot
+              </Text>
+              <Skeleton isLoaded={isLoaded}>
+                <Text
+                  fontSize='lg'
+                  fontFamily={theme.fonts.space}
+                  fontWeight={700}
+                >
+                  {proposal?.lootRequested ? proposal.lootRequested : '--'}
+                </Text>
+              </Skeleton>
+            </Box>
+          )}
           <Box fontFamily={theme.fonts.heading}>
             {getProposalCountdownText(proposal)}
           </Box>
         </Flex>
-        {proposal.createdAt ? (
-          <Text fontWeight={700} fontSize='xs' fontFamily={theme.fonts.heading}>
-            Created on:{' '}
-            {format(new Date(proposal.createdAt * 1000), 'MMMM d y')}
+        <Skeleton isLoaded={isLoaded}>
+          <Text
+            fontWeight={700}
+            fontSize='xs'
+            fontFamily={theme.fonts.heading}
+            mt={2}
+          >
+            {proposal.createdAt
+              ? `Created on: ${format(
+                  new Date(proposal.createdAt * 1000),
+                  'MMMM d y',
+                )}`
+              : '--'}
           </Text>
-        ) : null}
+        </Skeleton>
       </Box>
     </Link>
   );

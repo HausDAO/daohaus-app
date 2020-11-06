@@ -1,27 +1,20 @@
 import React, { useState, useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import {
-  Button,
   FormLabel,
   FormControl,
   Flex,
   Input,
   InputGroup,
   InputLeftAddon,
-  InputRightAddon,
   Icon,
   Stack,
-  Select,
   Box,
   Text,
   Textarea,
-  Menu,
-  MenuButton,
-  MenuList,
-  MenuItem,
 } from '@chakra-ui/core';
 import { utils } from 'web3';
-import { RiAddFill, RiErrorWarningLine } from 'react-icons/ri';
+import { RiErrorWarningLine } from 'react-icons/ri';
 
 import {
   useDao,
@@ -30,13 +23,9 @@ import {
   useUser,
 } from '../../contexts/PokemolContext';
 import { PrimaryButton } from '../../themes/components';
-import { set } from 'date-fns';
 
 const WhitelistProposalForm = () => {
   const [loading, setLoading] = useState(false);
-  const [showLoot, setShowLoot] = useState(false);
-  const [showPaymentRequest, setShowPaymentRequest] = useState(false);
-  const [showApplicant, setShowApplicant] = useState(false);
   const [theme] = useTheme();
   const [user] = useUser();
   const [dao] = useDao();
@@ -61,7 +50,7 @@ const WhitelistProposalForm = () => {
     } else {
       setCurrentError(null);
     }
-  }, [errors])
+  }, [errors]);
 
   // TODO check tribute token < currentWallet.token.balance & unlock
   // TODO check payment token < dao.token.balance
@@ -97,11 +86,19 @@ const WhitelistProposalForm = () => {
 
     try {
       dao.daoService.moloch.submitProposal(
-        values.sharesRequested ? utils.toWei(values.sharesRequested?.toString()) : '0',
-        values.lootRequested ? utils.toWei(values.lootRequested?.toString()) : '0',
-        values.tributeOffered ? utils.toWei(values.tributeOffered?.toString()) : '0',
+        values.sharesRequested
+          ? utils.toWei(values.sharesRequested?.toString())
+          : '0',
+        values.lootRequested
+          ? utils.toWei(values.lootRequested?.toString())
+          : '0',
+        values.tributeOffered
+          ? utils.toWei(values.tributeOffered?.toString())
+          : '0',
         values.tributeToken,
-        values.paymentRequested ? utils.toWei(values.paymentRequested?.toString()) : '0',
+        values.paymentRequested
+          ? utils.toWei(values.paymentRequested?.toString())
+          : '0',
         values.paymentToken || values.tributeToken,
         details,
         user.username,
@@ -138,11 +135,11 @@ const WhitelistProposalForm = () => {
               name='ticker'
               placeholder='Token Ticker'
               mb={5}
-              ref={register({ 
+              ref={register({
                 required: {
                   value: true,
-                  message: 'Ticker is required'
-                }
+                  message: 'Ticker is required',
+                },
               })}
               color='white'
               focusBorderColor='secondary.500'
@@ -153,16 +150,15 @@ const WhitelistProposalForm = () => {
               type='textarea'
               mb={5}
               h={10}
-              ref={register({ 
-                required: { 
-                  value: true, 
-                  message: 'Description is required' 
-                }
-              })} 
+              ref={register({
+                required: {
+                  value: true,
+                  message: 'Description is required',
+                },
+              })}
               color='white'
               focusBorderColor='secondary.500'
             />
-            
           </Stack>
         </Box>
         <Box w='48%'>
@@ -186,20 +182,19 @@ const WhitelistProposalForm = () => {
           />
           <InputGroup>
             <InputLeftAddon>https://</InputLeftAddon>
-            <Input 
-              name='link' 
-              placeholder='daolink.club' 
-              color='white' 
-              focusBorderColor='secondary.500' 
-              ref={register({ 
-                required: { 
-                  value: true, 
-                  message: 'Reference Link is required' 
-                }
-              })} 
+            <Input
+              name='link'
+              placeholder='daolink.club'
+              color='white'
+              focusBorderColor='secondary.500'
+              ref={register({
+                required: {
+                  value: true,
+                  message: 'Reference Link is required',
+                },
+              })}
             />
           </InputGroup>
-         
         </Box>
       </FormControl>
       <Flex justify='flex-end' align='center' h='60px'>
@@ -223,6 +218,6 @@ const WhitelistProposalForm = () => {
       </Flex>
     </form>
   );
-}
+};
 
 export default WhitelistProposalForm;
