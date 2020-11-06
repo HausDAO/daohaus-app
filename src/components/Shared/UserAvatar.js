@@ -3,7 +3,7 @@ import makeBlockie from 'ethereum-blockies-base64';
 import { Flex, Avatar, Text } from '@chakra-ui/core';
 
 import { useTheme } from '../../contexts/PokemolContext';
-import { truncateAddr } from '../../utils/helpers';
+import EthAddressDisplay from './EthAddressDisplay';
 
 const UserAvatar = ({ user }) => {
   const [theme] = useTheme();
@@ -20,7 +20,7 @@ const UserAvatar = ({ user }) => {
             size='sm'
           />
           <Text fontSize='md' fontFamily={theme.fonts.heading}>
-            {user.name || truncateAddr(user.username)}{' '}
+            {user.name || <EthAddressDisplay address={user.username} /> }{' '}
             <span>{user.emoji || ''} </span>
           </Text>
         </>
@@ -32,7 +32,7 @@ const UserAvatar = ({ user }) => {
             mr={3}
           />
           <Text fontSize='md' fontFamily={theme.fonts.heading}>
-            {truncateAddr(user.username)}
+            {<EthAddressDisplay address={user.username} />}
           </Text>
         </>
       )}
