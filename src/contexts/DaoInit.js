@@ -2,10 +2,10 @@ import React, { useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
 
 import { DaoService, USER_TYPE } from '../utils/dao-service';
+import { validDaoParams } from '../utils/helpers';
 import { get } from '../utils/requests';
 
 import {
-  useLoading,
   useUser,
   useWeb3Connect,
   useMemberWallet,
@@ -15,7 +15,6 @@ import {
 
 const DaoInit = () => {
   const location = useLocation();
-  const [, updateLoading] = useLoading();
   const [contracts, updateContracts] = useContracts();
   const [daoMetadata, updateDaoMetadata] = useDaoMetadata();
   const [web3Connect] = useWeb3Connect();
@@ -23,35 +22,29 @@ const DaoInit = () => {
   const [user] = useUser();
 
   useEffect(() => {
-    var pathname = location.pathname.split('/');
-    const daoParam = pathname[2];
-    const regex = RegExp('0x[0-9a-f]{10,40}');
-    const validParam =
-      pathname[1] === 'dao' && regex.test(daoParam) ? daoParam : false;
-
+    const validParam = validDaoParams(location);
     if (!validParam) {
       updateDaoMetadata(null);
       return;
     }
 
-    if (!daoMetadata || daoMetadata.address !== daoParam) {
-      initDao(daoParam);
+    if (!daoMetadata || daoMetadata.address !== validParam) {
+      initDao(validParam);
     }
     // eslint-disable-next-line
   }, [location]);
 
   useEffect(() => {
-    const needsUserDaoService =
-      daoMetadata &&
-      user &&
-      contracts.daoService &&
-      user.username !== contracts.daoService.accountAddr;
-    if (needsUserDaoService) {
+    const hasUserAndDao = user && daoMetadata;
+    const hasReadOnlyService =
+      contracts.daoService && !contracts.daoService.accountAddr;
+
+    if (hasUserAndDao && hasReadOnlyService) {
       initWeb3DaoService();
     }
 
     // eslint-disable-next-line
-  }, [user, daoMetadata]);
+  }, [user, daoMetadata, contracts]);
 
   useEffect(() => {
     const noDaoService = !daoMetadata || !contracts.daoService;
@@ -69,14 +62,14 @@ const DaoInit = () => {
   }, [daoMetadata, user, contracts]);
 
   const initDao = async (daoParam) => {
-    updateLoading(true);
-
+    console.log('******** INIT dao');
     let daoRes;
     try {
       daoRes = await get(`moloch/${daoParam}`);
     } catch (err) {
       console.log('api fetch error', daoParam);
     }
+    const apiData = daoRes ? daoRes.data : {};
 
     const boostRes = await get(`boosts/${daoParam}`);
     const boosts = boostRes.data.reduce((boosts, boostData) => {
@@ -100,10 +93,8 @@ const DaoInit = () => {
             version,
           )
         : await DaoService.instantiateWithReadOnly(daoParam, version);
-
     const currentPeriod = await daoService.moloch.getCurrentPeriod();
 
-    const apiData = daoRes ? daoRes.data : {};
     updateDaoMetadata({
       address: daoParam,
       version,
@@ -113,11 +104,10 @@ const DaoInit = () => {
     });
 
     updateContracts({ daoService });
-
-    updateLoading(false);
   };
 
   const initWeb3DaoService = async () => {
+    console.log('############ INIT initWeb3DaoService');
     const daoService = await DaoService.instantiateWithWeb3(
       user.username,
       web3Connect.provider,
@@ -129,7 +119,7 @@ const DaoInit = () => {
   };
 
   const initMemberWallet = async () => {
-    // TODO: Do we still need all these?
+    console.log('%%%%%%%%%%%%%%%% INIT initMemberWallet');
     const addrByDelegateKey = await contracts.daoService.moloch.memberAddressByDelegateKey(
       user.username,
     );
@@ -145,7 +135,6 @@ const DaoInit = () => {
     );
     const allowance = contracts.daoService.web3.utils.fromWei(allowanceWei);
     const member = await contracts.daoService.moloch.members(addrByDelegateKey);
-
     const shares = parseInt(member.shares) || 0;
     const loot = parseInt(member.loot) || 0;
     const jailed = parseInt(member.jailed) || 0;

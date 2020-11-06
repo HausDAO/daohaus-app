@@ -30,8 +30,8 @@ function Init() {
     <>
       <UserInit />
       <TxProcessorInit />
-      <DaoInit />
       <GraphInit />
+      <DaoInit />
       <PriceInit />
     </>
   );
