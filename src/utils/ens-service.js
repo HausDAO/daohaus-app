@@ -6,7 +6,7 @@ export class EnsService {
 
   constructor() {
     const web3 = new Web3(
-      new Web3.providers.HttpProvider(process.env.REACT_APP_INFURA_URI),
+      new Web3.providers.HttpProvider(process.env.REACT_APP_MAINNET_RPC_URI),
     );
 
     const provider = new ethers.providers.Web3Provider(web3.currentProvider);
