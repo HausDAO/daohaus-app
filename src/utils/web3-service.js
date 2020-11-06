@@ -17,7 +17,7 @@ export default class Web3Service {
       console.log('web3service injected');
     } else {
       this.web3 = new Web3(
-        new Web3.providers.HttpProvider(process.env.REACT_APP_INFURA_URI),
+        new Web3.providers.HttpProvider(process.env.REACT_APP_RPC_URI),
       );
     }
   }

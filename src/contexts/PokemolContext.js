@@ -14,6 +14,8 @@ function usePokemolContext() {
 const initialState = {
   loading: false,
   network: supportedChains[42],
+  // network: supportedChains[1],
+
   refetchQuery: null,
   theme: customTheme(),
 
@@ -27,7 +29,7 @@ const initialState = {
   },
   contracts: {},
   txProcessor: {},
-
+  ens: {},
   memberWallet: null,
   daoMetadata: null,
   daoGraphData: null,
@@ -63,6 +65,9 @@ const reducer = (state, action) => {
     }
     case 'setTxProcessor': {
       return { ...state, txProcessor: action.payload };
+    }
+    case 'setEns': {
+      return { ...state, ens: action.payload };
     }
 
     case 'setDaoMetadata': {
@@ -129,6 +134,10 @@ function PokemolContextProvider(props) {
     dispatch({ type: 'setTxProcessor', payload: tx });
   }, []);
 
+  const updateEns = useCallback((_ens) => {
+    dispatch({ type: 'setEns', payload: _ens });
+  }, []);
+
   const updateDaoMetadata = useCallback((data) => {
     dispatch({ type: 'setDaoMetadata', payload: data });
   }, []);
@@ -171,6 +180,7 @@ function PokemolContextProvider(props) {
             updateWeb3Connect,
             updateContracts,
             updateTxProcessor,
+            updateEns,
             updateDaoMetadata,
             updateDaoGraphData,
             updateMemberWallet,
@@ -190,6 +200,7 @@ function PokemolContextProvider(props) {
           updateWeb3Connect,
           updateContracts,
           updateTxProcessor,
+          updateEns,
           updateDaoMetadata,
           updateDaoGraphData,
           updateMemberWallet,
@@ -249,6 +260,11 @@ export function useWeb3Connect() {
 export function useTxProcessor() {
   const [state, { updateTxProcessor }] = usePokemolContext();
   return [state.txProcessor, updateTxProcessor];
+}
+
+export function useEns() {
+  const [state, { updateEns }] = usePokemolContext();
+  return [state.ens, updateEns];
 }
 
 export function useContracts() {

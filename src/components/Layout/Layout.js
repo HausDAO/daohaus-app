@@ -14,7 +14,7 @@ const Layout = ({ children }) => {
   const MotionFlex = motion.custom(Flex);
 
   const bar = {
-    open: { width: 450 },
+    open: { width: 420 },
     closed: { width: 120 },
   };
 
@@ -27,29 +27,34 @@ const Layout = ({ children }) => {
     <Flex direction='row' minH='100vh' color='white' w='100vw'>
       <MotionFlex
         h='100vh'
+        w='100%'
         p={6}
-        position='relative'
+        position='fixed'
         direction='column'
         align='start'
         justifyContent='space-between'
         cursor='pointer'
         bg='primary.500'
         _hover={{ bg: 'primary.400' }}
-        onClick={onToggle}
         variants={bar}
-        animate={isOpen ? 'open' : 'closed'}
-        initial='closed'
+        animate={isOpen ? 'closed' : 'open'}
+        initial='open'
         zIndex='1'
       >
         <Flex direction='column' h='400px'>
-          <Image src={theme.images.brandImg} w='60px' h='60px' />
+          <Image
+            src={theme.images.brandImg}
+            w='60px'
+            h='60px'
+            onClick={onToggle}
+          />
         </Flex>
         <MotionBox
-          initial='closed'
+          initial='open'
           variants={nav}
-          animate={isOpen ? 'open' : 'closed'}
+          animate={isOpen ? 'closed' : 'open'}
           position='absolute'
-          ml={100}
+          ml='80px'
         >
           <SideNav />
         </MotionBox>
@@ -68,14 +73,20 @@ const Layout = ({ children }) => {
         </Flex>
       </MotionFlex>
 
-      <Box
+      <MotionBox
         position='fixed'
-        w='100%'
-        h='100%'
+        w={
+          isOpen
+            ? 'calc(100% - ' + bar.closed.width + 'px)'
+            : 'calc(100% - ' + bar.open.width + 'px)'
+        }
+        h='100vh'
         bgImage={'url(' + theme.images.bgImg + ')'}
         bgSize='cover'
         bgPosition='center'
         zIndex='-1'
+        top='0'
+        right='0'
         _before={{
           display: 'block',
           content: '""',
@@ -86,10 +97,19 @@ const Layout = ({ children }) => {
           opacity: theme.styles.bgOverlayOpacity,
           pointerEvents: 'none',
           top: '0',
+          right: '0',
           zIndex: '-1',
         }}
       />
-      <Flex w='100%' flexDirection='column'>
+      <Flex
+        w={
+          isOpen
+            ? 'calc(100% - ' + bar.closed.width + 'px)'
+            : 'calc(100% - ' + bar.open.width + 'px)'
+        }
+        ml={isOpen ? bar.closed.width + 'px' : bar.open.width + 'px'}
+        flexDirection='column'
+      >
         <Header></Header>
         {children}
       </Flex>
