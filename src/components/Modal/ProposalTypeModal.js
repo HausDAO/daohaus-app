@@ -21,31 +21,31 @@ const ProposalFormModal = ({ isOpen, setShowModal, setProposalType }) => {
     {
       name: 'Apply',
       subhead: 'Join the guild!',
-      proposalType: 'member-proposal',
+      proposalType: 'member',
       image: 'themes/raidTheme/raidguild__swords-white.svg',
     },
     {
       name: 'Funding',
       subhead: 'Request funds',
-      proposalType: 'funding-proposal',
+      proposalType: 'funding',
       image: 'themes/raidTheme/raidguild__swords-white.svg',
     },
     {
       name: 'Token',
       subhead: 'Whitelist a token',
-      proposalType: 'token-proposal',
+      proposalType: 'whitelist',
       image: 'themes/raidTheme/raidguild__swords-white.svg',
     },
     {
       name: 'Guild Kick',
       subhead: `Remove a ${theme.daoMeta.member}`,
-      proposalType: 'kick-proposal',
+      proposalType: 'guildkick',
       image: 'themes/raidTheme/raidguild__swords-white.svg',
     },
     {
       name: 'Trade',
       subhead: 'Trade funds',
-      proposalType: 'trade-proposal',
+      proposalType: 'trade',
       image: 'themes/raidTheme/raidguild__swords-white.svg',
     },
   ];

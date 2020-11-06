@@ -32,11 +32,10 @@ import {
 import { PrimaryButton } from '../../themes/components';
 import { set } from 'date-fns';
 
-const FundingProposalForm = () => {
+const GuildKickProposalForm = () => {
   const [loading, setLoading] = useState(false);
-  const [showShares, setShowShares] = useState(false);
   const [showLoot, setShowLoot] = useState(false);
-  const [showTribute, setShowTribute] = useState(false);
+  const [showPaymentRequest, setShowPaymentRequest] = useState(false);
   const [showApplicant, setShowApplicant] = useState(false);
   const [theme] = useTheme();
   const [user] = useUser();
@@ -101,11 +100,11 @@ const FundingProposalForm = () => {
         values.sharesRequested ? utils.toWei(values.sharesRequested?.toString()) : '0',
         values.lootRequested ? utils.toWei(values.lootRequested?.toString()) : '0',
         values.tributeOffered ? utils.toWei(values.tributeOffered?.toString()) : '0',
-        values.tributeToken || '0xd0a1e359811322d97991e03f863a0c30c2cf029c',
+        values.tributeToken,
         values.paymentRequested ? utils.toWei(values.paymentRequested?.toString()) : '0',
-        values.paymentToken || values.tributeToken || '0xd0a1e359811322d97991e03f863a0c30c2cf029c',
+        values.paymentToken || values.tributeToken,
         details,
-        values.applicant,
+        user.username,
         txCallBack,
       );
     } catch (err) {
@@ -182,47 +181,51 @@ const FundingProposalForm = () => {
         </Box>
         <Box w='48%'>
           <FormLabel
-            htmlFor='applicant'
+            htmlFor='name'
             color='white'
             fontFamily={theme.fonts.heading}
             textTransform='uppercase'
             fontSize='xs'
             fontWeight={700}
           >
-            Applicant
+            Shares Requested
           </FormLabel>
           <Input
-            name='applicant'
-            placeholder='0x'
+            name='sharesRequested'
+            placeholder='0'
             mb={5}
-            ref={register({
+            ref={register({ 
               required: {
                 value: true,
-                message: 'Applicant is required'
+                message: 'Requested shares are required for Member Proposals'
+              }, 
+              pattern: { 
+                value: /[0-9]/, 
+                message: 'Requested shares must be a number' 
               }
             })}
             color='white'
             focusBorderColor='secondary.500'
           />
           <FormLabel
-            htmlFor='paymentRequested'
+            htmlFor='tributeOffered'
             color='white'
             fontFamily={theme.fonts.heading}
             textTransform='uppercase'
             fontSize='xs'
             fontWeight={700}
           >
-            Payment Requested
+            Token Tributed
           </FormLabel>
           <InputGroup>
             <Input
-              name='paymentRequested'
+              name='tributeOffered'
               placeholder='0'
               mb={5}
-              ref={register({ 
-                pattern: { 
-                  value: /[0-9]/, 
-                  message: 'Payment must be a number' 
+              ref={register({
+                pattern: {
+                  value: /[0-9]/,
+                  message: 'Tribute must be a number'
                 }
               })}
               color='white'
@@ -230,7 +233,7 @@ const FundingProposalForm = () => {
             />
             <InputRightAddon>
               <Select
-                name='paymentToken'
+                name='tributeToken'
                 defaultValue='0xd0a1e359811322d97991e03f863a0c30c2cf029c'
                 ref={register}
               >
@@ -245,37 +248,6 @@ const FundingProposalForm = () => {
               </Select>
             </InputRightAddon>
           </InputGroup>
-          {showShares && (
-            <>
-              <FormLabel
-                htmlFor='name'
-                color='white'
-                fontFamily={theme.fonts.heading}
-                textTransform='uppercase'
-                fontSize='xs'
-                fontWeight={700}
-              >
-                Shares Requested
-              </FormLabel>
-              <Input
-                name='sharesRequested'
-                placeholder='0'
-                mb={5}
-                ref={register({ 
-                  required: {
-                    value: true,
-                    message: 'Requested shares are required for Member Proposals'
-                  }, 
-                  pattern: { 
-                    value: /[0-9]/, 
-                    message: 'Requested shares must be a number' 
-                  }
-                })}
-                color='white'
-                focusBorderColor='secondary.500'
-              />
-            </>
-          )}
           {showLoot && (
             <>
               <FormLabel
@@ -303,27 +275,27 @@ const FundingProposalForm = () => {
               />
             </>
           )}
-          {showTribute && (
+          {showPaymentRequest && (
             <>
               <FormLabel
-                htmlFor='tributeOffered'
+                htmlFor='paymentRequested'
                 color='white'
                 fontFamily={theme.fonts.heading}
                 textTransform='uppercase'
                 fontSize='xs'
                 fontWeight={700}
               >
-                Token Tribute
+                Payment Requested
               </FormLabel>
               <InputGroup>
                 <Input
-                  name='tributeOffered'
+                  name='paymentRequested'
                   placeholder='0'
                   mb={5}
-                  ref={register({
-                    pattern: {
-                      value: /[0-9]/,
-                      message: 'Tribute must be a number'
+                  ref={register({ 
+                    pattern: { 
+                      value: /[0-9]/, 
+                      message: 'Payment must be a number' 
                     }
                   })}
                   color='white'
@@ -331,7 +303,7 @@ const FundingProposalForm = () => {
                 />
                 <InputRightAddon>
                   <Select
-                    name='tributeToken'
+                    name='paymentToken'
                     defaultValue='0xd0a1e359811322d97991e03f863a0c30c2cf029c'
                     ref={register}
                   >
@@ -348,7 +320,29 @@ const FundingProposalForm = () => {
               </InputGroup>
             </>
           )}
-          {(!showShares || !showLoot || !showTribute) && (
+          {showApplicant && (
+            <>
+              <FormLabel
+                htmlFor='applicant'
+                color='white'
+                fontFamily={theme.fonts.heading}
+                textTransform='uppercase'
+                fontSize='xs'
+                fontWeight={700}
+              >
+                Applicant
+              </FormLabel>
+              <Input
+                name='applicant'
+                placeholder='0'
+                mb={5}
+                ref={register}
+                color='white'
+                focusBorderColor='secondary.500'
+              />
+            </>
+          )}
+          {(!showApplicant || !showLoot || !showPaymentRequest) && (
             <Menu
               color='white'
               textTransform='uppercase'
@@ -357,9 +351,9 @@ const FundingProposalForm = () => {
                 Additional Options
               </MenuButton>
               <MenuList>
-                {!showShares && <MenuItem onClick={() => setShowShares(true)}>Applicant</MenuItem>}
+                {!showApplicant && <MenuItem onClick={() => setShowApplicant(true)}>Applicant</MenuItem>}
                 {!showLoot && <MenuItem onClick={() => setShowLoot(true)}>Request Loot</MenuItem>}
-                {!showTribute && <MenuItem onClick={() => setShowTribute(true)}>Request Payment</MenuItem>}
+                {!showPaymentRequest && <MenuItem onClick={() => setShowPaymentRequest(true)}>Request Payment</MenuItem>}
               </MenuList>
             </Menu>
           )}
@@ -389,4 +383,4 @@ const FundingProposalForm = () => {
   );
 }
 
-export default FundingProposalForm;
+export default GuildKickProposalForm;
