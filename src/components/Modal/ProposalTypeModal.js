@@ -54,8 +54,8 @@ const ProposalFormModal = ({ isOpen, setShowModal, setProposalType }) => {
     <Modal
       isOpen={isOpen}
       onClose={() => setShowModal(null)}
-      size={1000}
       isCentered
+      size='xl'
     >
       <ModalOverlay />
       <ModalContent
@@ -84,7 +84,13 @@ const ProposalFormModal = ({ isOpen, setShowModal, setProposalType }) => {
           </Text>
         </ModalHeader>
         <ModalCloseButton />
-        <ModalBody flexDirection='row' display='flex' justify='space-around'>
+        <ModalBody
+          flexDirection='row'
+          display='flex'
+          flexWrap='wrap'
+          justify='space-around'
+          align='center'
+        >
           {proposalTypes.map((p) => {
             return (
               <Box
@@ -95,9 +101,10 @@ const ProposalFormModal = ({ isOpen, setShowModal, setProposalType }) => {
                 alignItems='center'
                 justifyContent='space-evenly'
                 _hover={{ border: '1px solid #7579C5', cursor: 'pointer' }}
-                w={170}
-                h={200}
-                m={2}
+                w='160px'
+                h='200px'
+                p={2}
+                m={1}
                 onClick={() => {
                   setProposalType(p.proposalType);
                   setShowModal('proposal');
@@ -105,7 +112,7 @@ const ProposalFormModal = ({ isOpen, setShowModal, setProposalType }) => {
               >
                 <Image
                   src={require('../../assets/' + p.image)}
-                  size={50}
+                  width='50px'
                   mb={15}
                 />
                 <Text
@@ -118,7 +125,7 @@ const ProposalFormModal = ({ isOpen, setShowModal, setProposalType }) => {
                   {p.name}
                 </Text>
                 <Text
-                  fontSize='sm'
+                  fontSize='xs'
                   fontFamily={theme.fonts.heading}
                   color='white'
                 >

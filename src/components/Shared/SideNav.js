@@ -9,6 +9,7 @@ import {
   useTheme,
 } from '../../contexts/PokemolContext';
 import BrandOverride from '../../assets/themes/raidTheme/raidguild__swords.svg';
+import BgOverride from '../../assets/themes/raidTheme/raid__fantasy--bg.jpg';
 import { PrimaryButton, SecondaryButton } from '../../themes/theme';
 import ChangeDao from './ChangeDao';
 
@@ -21,18 +22,12 @@ const SideNav = () => {
 
   const setLocalTheme = () => {
     setTheme({
-      brand50: '#ff4d74',
-      brand100: '#ff4d74',
-      brand200: '#ff4d74',
-      brand300: '#ff4d74',
-      brand400: '#fe1d5b',
-      brand500: '#e50651',
-      brand600: '#e50651',
-      brand700: '#e50651',
-      brand800: '#e50651',
-      brand900: '#e50651',
+      primary500: '#e50651',
+      secondary500: '#6153ff',
+      bg500: '#121212',
       brandImg: BrandOverride,
-      bg400: '#000',
+      bgImg: BgOverride,
+      bgOverlayOpacity: '0.5',
       primaryFont: 'Space Mono', // only temporary
       bodyFont: 'Rubik',
       daoMeta: {
@@ -60,7 +55,7 @@ const SideNav = () => {
               <Flex direction='row' justify='start' align='start'>
                 <Flex direction='column' align='center' justify='start' mr={6}>
                   <Link as={RouterLink} to={`/dao/${dao.address}`}>
-                    <Image src={theme.images.brandImg} size='60px' />
+                    <Image src={theme.images.brandImg} w='60px' h='60px' />
                   </Link>
                 </Flex>
                 <Flex direction='column' align='start' justify='start'>
@@ -181,7 +176,10 @@ const SideNav = () => {
         </>
       )}
 
-      <SecondaryButton onClick={() => updateRefetchQuery('proposals')}>
+      <SecondaryButton
+        colorScheme={theme.colors.secondary[500]}
+        onClick={() => updateRefetchQuery('proposals')}
+      >
         Refetch Proposals Test
       </SecondaryButton>
     </Box>

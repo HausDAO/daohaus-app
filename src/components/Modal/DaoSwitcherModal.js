@@ -13,9 +13,9 @@ import {
   Avatar,
   Spinner,
   Image,
-  Icon,
 } from '@chakra-ui/core';
 import makeBlockie from 'ethereum-blockies-base64';
+import { RiArrowRightSLine } from 'react-icons/ri';
 
 import { useTheme, useUserDaos } from '../../contexts/PokemolContext';
 import BrandImg from '../../assets/Daohaus__Castle--Dark.svg';
@@ -33,16 +33,15 @@ const DaoSwitcherModal = ({ isOpen, setShowModal }) => {
             justifyContent='space-between'
             alignItems='center'
           >
-            <Flex direction='row' justify='flex-start' alignItems='center'>
+            <Flex direction='row' justify='start' alignItems='center' mb={4}>
               <Avatar
                 name={dao.title.substr(0, 1)}
                 src={makeBlockie(dao.id)}
-                mb={4}
                 mr='10px'
               ></Avatar>
               <Text color='white'>{dao.title}</Text>
             </Flex>
-            <Icon name='chevron-right' color='white' />
+            <RiArrowRightSLine color='white' />
           </Flex>
         </Link>
       );
@@ -50,12 +49,7 @@ const DaoSwitcherModal = ({ isOpen, setShowModal }) => {
   };
 
   return (
-    <Modal
-      isOpen={isOpen}
-      onClose={() => setShowModal(null)}
-      size={500}
-      isCentered
-    >
+    <Modal isOpen={isOpen} onClose={() => setShowModal(null)} isCentered>
       <ModalOverlay />
       <ModalContent
         rounded='lg'
@@ -74,7 +68,7 @@ const DaoSwitcherModal = ({ isOpen, setShowModal }) => {
             Go to DAO
           </Text>
         </ModalHeader>
-        <ModalCloseButton />
+        <ModalCloseButton color='white' />
         <ModalBody
           flexDirection='column'
           display='flex'
@@ -86,17 +80,16 @@ const DaoSwitcherModal = ({ isOpen, setShowModal }) => {
               direction='row'
               justifyContent='space-between'
               alignItems='center'
+              mb={4}
             >
               <Flex direction='row' justify='flex-start' alignItems='center'>
                 <Image src={BrandImg} w='50px' mr='10px' />
                 <Text color='white'>Hub</Text>
               </Flex>
-              <Icon name='chevron-right' color='white' />
+              <RiArrowRightSLine color='white' />
             </Flex>
           </Link>
           {userDaos ? <>{renderDaoSelect()}</> : <Spinner />}
-
-          <h1>THE HELL</h1>
         </ModalBody>
 
         <ModalFooter></ModalFooter>

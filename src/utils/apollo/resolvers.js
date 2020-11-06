@@ -10,6 +10,7 @@ import {
   determineProposalType,
   descriptionMaker,
   titleMaker,
+  determineUnreadActivityFeed,
 } from '../proposal-helper';
 import { TokenService } from '../token-service';
 import { MolochService } from '../moloch-service';
@@ -21,11 +22,7 @@ const _web3 = new Web3(
 export const resolvers = {
   Proposal: {
     status: (proposal, _args, _context) => {
-      // const { currentPeriod } = cache.readQuery({
-      //   query: GET_METADATA,
-      // });
       const currentPeriod = _context.currentPeriod;
-
       return determineProposalStatus(
         proposal,
         +currentPeriod,
@@ -36,7 +33,6 @@ export const resolvers = {
     },
     gracePeriod: (proposal, _args, _context) => {
       const currentPeriod = _context.currentPeriod;
-
       if (
         inGracePeriod(
           proposal,
@@ -106,31 +102,7 @@ export const resolvers = {
       return descriptionMaker(proposal);
     },
     activityFeed: (proposal) => {
-      const abortedOrCancelled = proposal.aborted || proposal.cancelled;
-      const now = (new Date() / 1000) | 0;
-      const inVotingPeriod =
-        now >= +proposal.votingPeriodStart && now <= +proposal.votingPeriodEnds;
-      const needsMemberVote = inVotingPeriod && !proposal.votes.length;
-      const needsProcessing =
-        now >= +proposal.gracePeriodEnds && !proposal.processed;
-
-      let message;
-      if (!proposal.sponsored) {
-        message = 'New and unsponsored';
-      }
-      if (needsProcessing) {
-        message = 'Unprocessed';
-      }
-      if (needsMemberVote) {
-        message = "You haven't voted on this";
-      }
-
-      return {
-        unread:
-          !abortedOrCancelled &&
-          (needsMemberVote || needsProcessing || !proposal.sponsored),
-        message,
-      };
+      return determineUnreadActivityFeed(proposal);
     },
   },
 
@@ -143,8 +115,6 @@ export const resolvers = {
       } else {
         return null;
       }
-
-      // return null;
     },
     decimals: async (tokenBalance, _args, { cache }) => {
       if (tokenBalance.guildBank) {

@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
-import { Text, Flex, Icon, Spinner } from '@chakra-ui/core';
+import { Text, Flex, Icon, Spinner, Button } from '@chakra-ui/core';
 import { useLocation, Link as RouterLink } from 'react-router-dom';
+import { RiAddFill } from 'react-icons/ri';
 import {
   useUser,
   useNetwork,
@@ -71,7 +72,7 @@ const Header = () => {
               as={RouterLink}
               to={`/dao/${dao?.address}/proposals/new`}
             >
-              New {theme.daoMeta.proposal} <Icon name='small-add' />
+              New {theme.daoMeta.proposal} <Icon as={RiAddFill} />
             </PrimaryButton>
           )}
           {location.pathname === `/dao/${dao?.address}/members` && (
@@ -92,9 +93,12 @@ const Header = () => {
 
           {user ? (
             <>
-              <div onClick={() => setShowDaoSwitcher(true)}>
-                <UserAvatar user={user?.profile?.image ? user.profile : user} />
-              </div>
+              <Button
+                variant='outline'
+                onClick={() => setShowDaoSwitcher(true)}
+              >
+                <UserAvatar user={user.profile ? user.profile : user} />
+              </Button>
 
               <AccountModal
                 isOpen={showDaoSwitcher}

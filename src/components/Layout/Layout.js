@@ -7,6 +7,7 @@ import {
   DrawerContent,
   useDisclosure,
   Link,
+  Box,
 } from '@chakra-ui/core';
 
 import Header from '../Shared/Header';
@@ -18,7 +19,28 @@ const Layout = ({ children }) => {
   const [theme] = useTheme();
 
   return (
-    <Flex direction='row' minH='100vh' bg='brand.400' color='white' w='100vw'>
+    <Flex direction='row' minH='100vh' color='white' w='100vw'>
+      <Box
+        position='fixed'
+        w='100%'
+        h='100%'
+        bgImage={'url(' + theme.images.bgImg + ')'}
+        bgSize='cover'
+        bgPosition='center'
+        zIndex='-1'
+        _before={{
+          display: 'block',
+          content: '""',
+          position: 'absolute',
+          w: '100%',
+          h: '100%',
+          bgColor: 'background.500',
+          opacity: theme.styles.bgOverlayOpacity,
+          pointerEvents: 'none',
+          top: '0',
+          zIndex: '-1',
+        }}
+      />
       <Flex
         h='100vh'
         minW='100px'
@@ -28,8 +50,8 @@ const Layout = ({ children }) => {
         direction='column'
         align='center'
         justifyContent='space-between'
-        bg='brand.400'
-        _hover={{ bg: 'brand.700' }}
+        bg='primary.500'
+        _hover={{ bg: 'primary.400' }}
       >
         <Image src={theme.images.brandImg} onClick={onOpen} w='60px' h='60px' />
         <Flex direction='column' align='center'>
@@ -39,12 +61,12 @@ const Layout = ({ children }) => {
       </Flex>
       <Drawer placement='left' isOpen={isOpen} onClose={onClose}>
         <DrawerOverlay />
-        <DrawerContent bg='brand.400' color='white' p={6}>
+        <DrawerContent bg='primary.500' color='white' p={6}>
           <SideNav />
         </DrawerContent>
       </Drawer>
 
-      <Flex direction='column' bg='background.400' w='100vw' ml='100px'>
+      <Flex w='100vw' ml='100px' flexDirection='column'>
         <Header></Header>
         {children}
       </Flex>

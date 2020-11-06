@@ -17,15 +17,13 @@ const PriceInit = () => {
   //     pathname[1] === 'dao' && regex.test(daoParam) ? daoParam : false;
 
   //   if (!validParam) {
-  //     updatePrices({});
+  //     // updatePrices({});
   //     return;
   //   }
 
-  //   console.log();
-
-  //   // if (dao && prices.daoAddress !== daoParam) {
-  //   //   initPrices(daoParam);
-  //   // }
+  //   if (dao && prices.daoAddress !== daoParam) {
+  //     initPrices(daoParam);
+  //   }
   //   // eslint-disable-next-line
   // }, [location, dao]);
 

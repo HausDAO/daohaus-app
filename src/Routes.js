@@ -9,6 +9,7 @@ import Proposal from './views/Proposals/Proposal';
 import NewProposal from './views/Proposals/NewProposal';
 import Members from './views/Members/Members';
 import Profile from './views/Profile/Profile';
+import ThemeSample from './views/Theme/ThemeSample';
 import Bank from './views/Bank/Bank';
 import Settings from './views/Settings/Settings';
 import Boosts from './views/Settings/Boosts';
@@ -49,7 +50,7 @@ const Routes = () => {
         />
 
         <Route
-          path='/dao/:dao(\b0x[0-9a-f]{10,40}\b)/profile'
+          path='/dao/:dao(\b0x[0-9a-f]{10,40}\b)/profile/:id'
           exact
           component={Profile}
         />
@@ -80,6 +81,7 @@ const Routes = () => {
           exact
           component={Notifications}
         />
+        <Route path='/themeSample' exact component={ThemeSample} />
 
         <Route path='/' component={Hub} />
         <Route path='*' component={FourOhFour} />
