@@ -3,39 +3,42 @@ import { Link } from 'react-router-dom';
 import {
   Modal,
   ModalContent,
-  ModalHeader,
   ModalCloseButton,
   ModalBody,
   ModalFooter,
   ModalOverlay,
   Text,
   Flex,
-  Avatar,
-  Spinner,
-  Image,
   Icon,
   Box,
+  Spinner,
 } from '@chakra-ui/core';
+
+import { FaExternalLinkAlt, FaRegCheckCircle } from 'react-icons/fa';
 
 import {
   useTheme,
   useTxProcessor,
   useUser,
+  useDao,
 } from '../../contexts/PokemolContext';
-import BrandImg from '../../assets/Daohaus__Castle--Dark.svg';
-import UserAvatar from '../Shared/UserAvatar';
+
 import MemberInfoCard from '../Dao/MemberInfoCard';
+import HubProfileCard from '../Hub/HubProfileCard';
 
 const AccountModal = ({ isOpen, setShowModal }) => {
   const [theme] = useTheme();
   const [user] = useUser();
+  const [dao] = useDao();
   const [txProcessor] = useTxProcessor();
+
+  console.log('DAODAODAODAODA', dao);
 
   const RenderTxList = () => {
     const txList = txProcessor.getTxUnseenList(user.username);
     // dummy data
-    txList.push({ id: 1, description: 'test1' });
-    txList.push({ id: 2, description: 'test2' });
+    txList.push({ id: 1, description: 'test tx 1' });
+    txList.push({ id: 2, description: 'test tx 2' });
     return txList.map((tx) => {
       return (
         <Box id={tx.id} key={tx.id}>
@@ -48,8 +51,12 @@ const AccountModal = ({ isOpen, setShowModal }) => {
               <Text color='white'>{tx.description}</Text>
             </Flex>
             <Box>
-              <Icon name='check' color='white' />
-              <Icon name='arrow-forward' color='white' />
+              {tx.open ? (
+                <Icon as={Spinner} name='check' color='white' />
+              ) : (
+                <Icon as={FaRegCheckCircle} name='check' color='white' />
+              )}
+              <Icon as={FaExternalLinkAlt} name='arrow-forward' color='white' />
             </Box>
           </Flex>
         </Box>
@@ -65,16 +72,21 @@ const AccountModal = ({ isOpen, setShowModal }) => {
         bg='black'
         borderWidth='1px'
         borderColor='whiteAlpha.200'
+        color='white'
         p={6}
       >
         <ModalCloseButton />
         <ModalBody
           flexDirection='column'
           display='flex'
-          maxH='300px'
+          maxH='600px'
           overflowY='scroll'
         >
-          <MemberInfoCard user={user} />
+          {!dao.address ? (
+            <HubProfileCard user={user} />
+          ) : (
+            <MemberInfoCard user={user} />
+          )}
           <Box p={6}>
             <Flex
               direction='row'
