@@ -8,10 +8,8 @@ import {
   Input,
   InputGroup,
   InputLeftAddon,
-  InputRightAddon,
   Icon,
   Stack,
-  Select,
   Box,
   Text,
   Textarea,
@@ -34,6 +32,7 @@ import {
 import { PrimaryButton } from '../../themes/components';
 import { set } from 'date-fns';
 import TributeInput from './TributeInput';
+import PaymentInput from './PaymentInput';
 
 const FundingProposalForm = () => {
   const [loading, setLoading] = useState(false);
@@ -48,12 +47,12 @@ const FundingProposalForm = () => {
   const [ens] = useEns();
   const [txProcessor, updateTxProcessor] = useTxProcessor();
   const [currentError, setCurrentError] = useState(null);
-  console.log('dao', dao);
 
   const {
     handleSubmit,
     errors,
     register,
+    reset,
     // formState
   } = useForm();
 
@@ -83,6 +82,8 @@ const FundingProposalForm = () => {
       // close model here
       // onClose();
       // setShowModal(null);
+      setLoading(false);
+      reset();
     }
     if (!txHash) {
       console.log('error: ', details);
@@ -120,7 +121,7 @@ const FundingProposalForm = () => {
           values.tributeToken ||
           '0xd0a1e359811322d97991e03f863a0c30c2cf029c',
         details,
-        ensAddr.startsWith('0x') ? ensAddr : values.applicant,
+        ensAddr?.startsWith('0x') ? ensAddr : values.applicant,
         txCallBack,
       );
     } catch (err) {
@@ -238,48 +239,7 @@ const FundingProposalForm = () => {
               onChange={handleChange}
             />
           </FormControl>
-          <FormLabel
-            htmlFor='paymentRequested'
-            color='white'
-            fontFamily={theme.fonts.heading}
-            textTransform='uppercase'
-            fontSize='xs'
-            fontWeight={700}
-          >
-            Payment Requested
-          </FormLabel>
-          <InputGroup>
-            <Input
-              name='paymentRequested'
-              placeholder='0'
-              mb={5}
-              ref={register({
-                pattern: {
-                  value: /[0-9]/,
-                  message: 'Payment must be a number',
-                },
-              })}
-              color='white'
-              focusBorderColor='secondary.500'
-            />
-            <InputRightAddon>
-              <Select
-                name='paymentToken'
-                defaultValue='0xd0a1e359811322d97991e03f863a0c30c2cf029c'
-                ref={register}
-              >
-                <option
-                  default
-                  value='0xd0a1e359811322d97991e03f863a0c30c2cf029c'
-                >
-                  WETH
-                </option>
-                <option value='dai'>Dai</option>
-                <option value='usdc'>USDC</option>
-              </Select>
-            </InputRightAddon>
-
-          </InputGroup>
+          <PaymentInput />
           {showShares && (
             <>
               <FormLabel
@@ -339,9 +299,7 @@ const FundingProposalForm = () => {
               />
             </>
           )}
-          {showTribute && (
-            <TributeInput />
-          )}
+          {showTribute && <TributeInput />}
           {(!showShares || !showLoot || !showTribute) && (
             <Menu color='white' textTransform='uppercase'>
               <MenuButton
@@ -363,7 +321,7 @@ const FundingProposalForm = () => {
                 )}
                 {!showTribute && (
                   <MenuItem onClick={() => setShowTribute(true)}>
-                    Request Payment
+                    Give Tribute
                   </MenuItem>
                 )}
               </MenuList>

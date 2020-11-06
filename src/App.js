@@ -31,9 +31,9 @@ function Init() {
     <>
       <UserInit />
       <TxProcessorInit />
+      <GraphInit />
       <EnsInit />
       <DaoInit />
-      <GraphInit />
       <PriceInit />
     </>
   );
