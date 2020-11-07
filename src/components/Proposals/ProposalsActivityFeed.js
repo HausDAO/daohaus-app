@@ -1,5 +1,5 @@
 import React from 'react';
-import { Text } from '@chakra-ui/core';
+import { Box } from '@chakra-ui/core';
 
 import { useTheme, useDao } from '../../contexts/PokemolContext';
 import ActivityFeedList from '../ActivityFeed/ActivityFeedList';
@@ -37,7 +37,7 @@ const ProposalsActivityFeed = () => {
 
   return (
     <>
-      <Text
+      <Box
         mt={1}
         ml={6}
         textTransform='uppercase'
@@ -45,7 +45,7 @@ const ProposalsActivityFeed = () => {
         fontFamily={theme.fonts.heading}
       >
         Recent Activities
-      </Text>
+      </Box>
       <ActivityFeedList activities={proposalActivities} />
     </>
   );

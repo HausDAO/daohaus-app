@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useLocation, Link as RouterLink } from 'react-router-dom';
-import { Box, Flex, Text, Link, Icon } from '@chakra-ui/core';
+import { Box, Flex, Link, Icon } from '@chakra-ui/core';
 import { RiArrowLeftLine } from 'react-icons/ri';
 
 import { useProposals, useDao, useTheme } from '../../contexts/PokemolContext';
@@ -32,7 +32,7 @@ const Proposal = () => {
       <Flex>
         <Box w='60%'>
           <Link as={RouterLink} to={`/dao/${dao.address}/proposals`}>
-            <Text
+            <Box
               textTransform='uppercase'
               ml={6}
               fontSize='lg'
@@ -40,24 +40,24 @@ const Proposal = () => {
             >
               <Icon
                 name='arrow-back'
-                color={theme.colors.brand}
+                color={theme.colors.primary[50]}
                 as={RiArrowLeftLine}
                 h='20px'
                 w='20px'
               />{' '}
               All {theme.daoMeta.proposals}
-            </Text>
+            </Box>
           </Link>
         </Box>
         <Box w='40%'>
-          <Text
+          <Box
             textTransform='uppercase'
             fontSize='lg'
             fontFamily={theme.fonts.heading}
             fontWeight={700}
           >
             Vote
-          </Text>
+          </Box>
         </Box>
       </Flex>
       <Flex>

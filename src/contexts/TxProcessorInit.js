@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 
 import {
-  Text,
+  Box,
   Modal,
   ModalOverlay,
   ModalContent,
@@ -103,7 +103,7 @@ const TxProcessorInit = () => {
               />
             )}
             {!loading && (
-              <Text>
+              <Box>
                 <span role='img' aria-label='confetti'>
                   🎉
                 </span>{' '}
@@ -111,7 +111,7 @@ const TxProcessorInit = () => {
                 <span role='img' aria-label='confetti'>
                   🎉
                 </span>
-              </Text>
+              </Box>
             )}
           </ModalBody>
         </ModalContent>

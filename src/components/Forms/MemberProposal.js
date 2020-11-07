@@ -13,7 +13,6 @@ import {
   Stack,
   Select,
   Box,
-  Text,
   Textarea,
   Menu,
   MenuButton,
@@ -381,10 +380,10 @@ const MemberProposalForm = () => {
       </FormControl>
       <Flex justify='flex-end' align='center' h='60px'>
         {currentError && (
-          <Text color='secondary.300' fontSize='m' mr={5}>
+          <Box color='secondary.300' fontSize='m' mr={5}>
             <Icon as={RiErrorWarningLine} color='secondary.300' mr={2} />
             {currentError.message}
-          </Text>
+          </Box>
         )}
         <Box>
           <PrimaryButton

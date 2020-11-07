@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import {
-  Text,
+  Box,
   Menu,
   MenuButton,
   MenuList,
@@ -40,14 +40,14 @@ const ProposalFilter = ({ filter, setFilter, listLength }) => {
 
   return (
     <Flex direction='row'>
-      <Text
+      <Box
         ml={8}
         mr={3}
         textTransform='uppercase'
         fontFamily={theme.fonts.heading}
       >
         Filter By
-      </Text>
+      </Box>
 
       {filterOptions ? (
         <Menu>

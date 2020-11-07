@@ -1,6 +1,6 @@
 import React from 'react';
 import { formatDistanceToNow, isBefore } from 'date-fns';
-import { Flex, Box, Text, Icon, Link, Skeleton } from '@chakra-ui/core';
+import { Flex, Box, Icon, Link, Skeleton } from '@chakra-ui/core';
 import { RiExternalLinkLine } from 'react-icons/ri';
 import { FaThumbsUp } from 'react-icons/fa';
 import { utils } from 'web3';
@@ -14,7 +14,6 @@ const ProposalDetail = ({ proposal }) => {
   const [members] = useMembers();
   const [theme] = useTheme();
   const details = proposal?.details && JSON.parse(proposal?.details);
-  const votePeriodEnds = new Date(+proposal?.votingPeriodEnds * 1000);
   return (
     <Box
       rounded='lg'
@@ -26,36 +25,36 @@ const ProposalDetail = ({ proposal }) => {
     >
       <Flex>
         <Box w='90%'>
-          <Text
+          <Box
             textTransform='uppercase'
             fontSize='sm'
             fontFamily={theme.fonts.heading}
             fontWeight={700}
           >
             {proposal ? proposal.proposalType : theme.daoMeta.proposal}
-          </Text>
+          </Box>
           <Skeleton isLoaded={details?.title}>
-            <Text
+            <Box
               fontSize='3xl'
               fontFamily={theme.fonts.heading}
               fontWeight={700}
             >
               {details?.title ? details?.title : '-'}
-            </Text>
+            </Box>
           </Skeleton>
           <Flex w='100%' justify='space-between' mt={6}>
             {(proposal?.tributeOffered > 0 || !proposal?.tributeOffered) && (
               <Box>
-                <Text
+                <Box
                   textTransform='uppercase'
                   fontSize='sm'
                   fontFamily={theme.fonts.heading}
                   fontWeight={700}
                 >
                   Tribute
-                </Text>
+                </Box>
                 <Skeleton isLoaded={proposal?.tributeOffered}>
-                  <Text
+                  <Box
                     fontSize='lg'
                     fontFamily={theme.fonts.space}
                     fontWeight={700}
@@ -65,22 +64,22 @@ const ProposalDetail = ({ proposal }) => {
                           proposal.tributeOffered.toString(),
                         )} ${proposal.tributeTokenSymbol || 'WETH'}`
                       : '--'}
-                  </Text>
+                  </Box>
                 </Skeleton>
               </Box>
             )}
             {proposal?.paymentRequested > 0 && ( // don't show during loading
               <Box>
-                <Text
+                <Box
                   textTransform='uppercase'
                   fontSize='sm'
                   fontFamily={theme.fonts.heading}
                   fontWeight={700}
                 >
                   Payment Requested
-                </Text>
+                </Box>
                 <Skeleton isLoaded={proposal?.paymentRequested}>
-                  <Text
+                  <Box
                     fontSize='lg'
                     fontFamily={theme.fonts.space}
                     fontWeight={700}
@@ -90,22 +89,22 @@ const ProposalDetail = ({ proposal }) => {
                           proposal.paymentRequested.toString(),
                         )} ${proposal.paymentTokenSymbol || 'WETH'}`
                       : '--'}
-                  </Text>
+                  </Box>
                 </Skeleton>
               </Box>
             )}
             {(proposal?.sharesRequested > 0 || !proposal?.sharesRequested) && (
               <Box>
-                <Text
+                <Box
                   textTransform='uppercase'
                   fontSize='sm'
                   fontFamily={theme.fonts.heading}
                   fontWeight={700}
                 >
                   Shares
-                </Text>
+                </Box>
                 <Skeleton isLoaded={proposal?.sharesRequested}>
-                  <Text
+                  <Box
                     fontSize='lg'
                     fontFamily={theme.fonts.space}
                     fontWeight={700}
@@ -113,66 +112,72 @@ const ProposalDetail = ({ proposal }) => {
                     {proposal?.sharesRequested
                       ? proposal.sharesRequested
                       : '--'}
-                  </Text>
+                  </Box>
                 </Skeleton>
               </Box>
             )}
             {proposal?.lootRequested > 0 && ( // don't show during loading
               <Box>
-                <Text
+                <Box
                   textTransform='uppercase'
                   fontSize='sm'
                   fontFamily={theme.fonts.heading}
                   fontWeight={700}
                 >
                   Loot
-                </Text>
+                </Box>
                 <Skeleton isLoaded={proposal?.lootRequested}>
-                  <Text
+                  <Box
                     fontSize='lg'
                     fontFamily={theme.fonts.space}
                     fontWeight={700}
                   >
                     {proposal?.lootRequested ? proposal.lootRequested : '--'}
-                  </Text>
+                  </Box>
                 </Skeleton>
               </Box>
             )}
             <Box>
               {proposal?.proposalIndex ? (
                 <>
-                  <Text
+                  <Box
                     textTransform='uppercase'
                     fontSize='sm'
                     fontFamily={theme.fonts.heading}
                     fontWeight={700}
                   >
-                    {isBefore(Date.now(), votePeriodEnds)
+                    {isBefore(
+                      Date.now(),
+                      new Date(+proposal?.votingPeriodEnds * 1000),
+                    )
                       ? 'Voting Period Ends'
                       : 'Voting Ended'}
-                  </Text>
-                  <Text
+                  </Box>
+                  <Box
                     fontSize='lg'
                     fontFamily={theme.fonts.space}
                     fontWeight={700}
                   >
-                    {formatDistanceToNow(votePeriodEnds, {
-                      addSuffix: true,
-                    })}
-                  </Text>
+                    {formatDistanceToNow(
+                      new Date(+proposal?.votingPeriodEnds * 1000),
+                      {
+                        addSuffix: true,
+                      },
+                    )}
+                  </Box>
                 </>
               ) : (
                 <>
-                  <Text
+                  <Box
                     textTransform='uppercase'
                     fontSize='sm'
                     fontFamily={theme.fonts.heading}
                     fontWeight={700}
                   >
                     Proposal Status
-                  </Text>
+                  </Box>
                   <Skeleton isLoaded={proposal?.status}>
-                    <Text
+                    <Box
                       fontSize='lg'
                       fontFamily={theme.fonts.space}
                       fontWeight={700}
@@ -180,21 +185,21 @@ const ProposalDetail = ({ proposal }) => {
                       {proposal?.status
                         ? getProposalCountdownText(proposal)
                         : '--'}
-                    </Text>
+                    </Box>
                   </Skeleton>
                 </>
               )}
             </Box>
           </Flex>
           <Box mt={6}>
-            <Text
+            <Box
               textTransform='uppercase'
               fontSize='sm'
               fontFamily={theme.fonts.heading}
               fontWeight={700}
             >
               Link
-            </Text>
+            </Box>
             <Skeleton isLoaded={details?.link}>
               <Link href={details?.link} target='_blank'>
                 {details?.link ? details.link : '-'}{' '}
@@ -230,7 +235,7 @@ const ProposalDetail = ({ proposal }) => {
 
       <Flex w='80%' mt={6} justify='space-between'>
         <Box mr={5}>
-          <Text
+          <Box
             textTransform='uppercase'
             fontSize='sm'
             mb={4}
@@ -238,7 +243,7 @@ const ProposalDetail = ({ proposal }) => {
             fontWeight={700}
           >
             Submitted By
-          </Text>
+          </Box>
           <Skeleton isLoaded={members && proposal?.proposer}>
             {members && proposal?.proposer ? (
               <UserAvatar
@@ -250,7 +255,7 @@ const ProposalDetail = ({ proposal }) => {
           </Skeleton>
         </Box>
         <Box>
-          <Text
+          <Box
             textTransform='uppercase'
             fontSize='sm'
             fontFamily={theme.fonts.heading}
@@ -258,7 +263,7 @@ const ProposalDetail = ({ proposal }) => {
             mb={4}
           >
             Recipient
-          </Text>
+          </Box>
           <Skeleton isLoaded={members && proposal?.applicant}>
             {members && proposal?.applicant ? (
               <UserAvatar

@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import {
-  Text,
+  Box,
   Menu,
   MenuButton,
   MenuList,
@@ -22,14 +22,14 @@ const ProposalSort = ({ sort, setSort }) => {
 
   return (
     <Flex direction='row'>
-      <Text
+      <Box
         ml={8}
         mr={3}
         textTransform='uppercase'
         fontFamily={theme.fonts.heading}
       >
         Sort By
-      </Text>
+      </Box>
 
       <Menu>
         <MenuButton
