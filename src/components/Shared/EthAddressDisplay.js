@@ -1,4 +1,4 @@
-import { Text } from '@chakra-ui/core';
+import { Box } from '@chakra-ui/core';
 import React, { useEffect, useState } from 'react';
 import { useEns } from '../../contexts/PokemolContext';
 import { truncateAddr } from '../../utils/helpers';
@@ -21,7 +21,7 @@ const EthAddressDisplay = ({ address }) => {
     getDisplayAddress(address);
   }, [ens, address]);
 
-  return <Text>{currentAddress}</Text>;
+  return <Box>{currentAddress}</Box>;
 };
 
 export default EthAddressDisplay;

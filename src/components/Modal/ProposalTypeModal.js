@@ -7,7 +7,6 @@ import {
   ModalBody,
   ModalFooter,
   ModalOverlay,
-  Text,
   Flex,
   Image,
   Box,
@@ -65,7 +64,7 @@ const ProposalFormModal = ({ isOpen, setShowModal, setProposalType }) => {
         borderColor='whiteAlpha.200'
       >
         <ModalHeader>
-          <Text
+          <Box
             fontFamily={theme.fonts.heading}
             textTransform='uppercase'
             fontSize='sm'
@@ -73,15 +72,15 @@ const ProposalFormModal = ({ isOpen, setShowModal, setProposalType }) => {
             color='white'
           >
             New {theme.daoMeta.proposal}
-          </Text>
-          <Text
+          </Box>
+          <Box
             fontFamily={theme.fonts.heading}
             fontSize='2xl'
             fontWeight={700}
             color='white'
           >
             Select Proposal Type
-          </Text>
+          </Box>
         </ModalHeader>
         <ModalCloseButton />
         <ModalBody
@@ -115,7 +114,7 @@ const ProposalFormModal = ({ isOpen, setShowModal, setProposalType }) => {
                   width='50px'
                   mb={15}
                 />
-                <Text
+                <Box
                   mb={2}
                   fontSize='md'
                   fontFamily={theme.fonts.heading}
@@ -123,14 +122,14 @@ const ProposalFormModal = ({ isOpen, setShowModal, setProposalType }) => {
                   color='white'
                 >
                   {p.name}
-                </Text>
-                <Text
+                </Box>
+                <Box
                   fontSize='xs'
                   fontFamily={theme.fonts.heading}
                   color='white'
                 >
                   {p.subhead}
-                </Text>
+                </Box>
               </Box>
             );
           })}

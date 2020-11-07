@@ -1,11 +1,12 @@
 import React from 'react';
 import { Box } from '@chakra-ui/core';
 
-import { useTheme } from '../../contexts/PokemolContext';
+import { useTheme, useDao } from '../../contexts/PokemolContext';
 import ActivityFeedList from '../ActivityFeed/ActivityFeedList';
 
-const DaoActivityFeed = ({ dao }) => {
+const MembersActivityFeed = () => {
   const [theme] = useTheme();
+  const [dao] = useDao();
   // const [activities, setActivities] = useState([]);
   const proposalActivities = [
     {
@@ -50,4 +51,4 @@ const DaoActivityFeed = ({ dao }) => {
   );
 };
 
-export default DaoActivityFeed;
+export default MembersActivityFeed;

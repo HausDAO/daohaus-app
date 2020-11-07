@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Box, Text, Grid } from '@chakra-ui/core';
+import { Box, Grid } from '@chakra-ui/core';
 
 import { useUser, useTheme } from '../../contexts/PokemolContext';
 import GraphFetch from '../../components/Shared/GraphFetch';
@@ -39,7 +39,7 @@ const Hub = () => {
             </Box>
 
             <Box>
-              <Text
+              <Box
                 fontSize='md'
                 ml={6}
                 fontFamily={theme.fonts.heading}
@@ -47,7 +47,7 @@ const Hub = () => {
                 fontWeight={700}
               >
                 Recent Activity
-              </Text>
+              </Box>
               {memberDaos ? (
                 <HubActivityFeed
                   daos={memberDaos.map((member) => member.moloch)}
