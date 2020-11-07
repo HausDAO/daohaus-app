@@ -6,7 +6,9 @@ import {
   MenuList,
   MenuItem,
   Flex,
+  Icon,
 } from '@chakra-ui/core';
+import { RiArrowDropDownFill } from 'react-icons/ri';
 import { useTheme } from '../../contexts/PokemolContext';
 import { sortOptions } from '../../content/proposal-filters';
 
@@ -30,8 +32,12 @@ const ProposalSort = ({ sort, setSort }) => {
       </Text>
 
       <Menu>
-        <MenuButton textTransform='uppercase' fontFamily={theme.fonts.heading}>
-          {sort?.name}
+        <MenuButton
+          textTransform='uppercase'
+          fontFamily={theme.fonts.heading}
+          color='primary.50'
+        >
+          {sort?.name} <Icon as={RiArrowDropDownFill} color='primary.50' />
         </MenuButton>
         <MenuList bg='black'>
           {sortOptions.map((option) => (
@@ -39,6 +45,8 @@ const ProposalSort = ({ sort, setSort }) => {
               key={option.value}
               onClick={() => setSort(option)}
               value={option.value}
+              _active={{ color: 'primary.300' }}
+              _hover={{ color: 'primary.300' }}
             >
               {option.name}
             </MenuItem>

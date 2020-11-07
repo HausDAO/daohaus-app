@@ -6,6 +6,7 @@ import { RiArrowLeftLine } from 'react-icons/ri';
 import { useProposals, useDao, useTheme } from '../../contexts/PokemolContext';
 import ProposalDetail from '../../components/Proposals/ProposalDetail';
 import ProposalVote from '../../components/Proposals/ProposalVote';
+import ProposalActivityFeed from '../../components/Proposals/ProposalActivityFeed';
 
 const Proposal = () => {
   const [dao] = useDao();
@@ -44,7 +45,7 @@ const Proposal = () => {
                 h='20px'
                 w='20px'
               />{' '}
-              All Quests
+              All {theme.daoMeta.proposals}
             </Text>
           </Link>
         </Box>
@@ -59,16 +60,20 @@ const Proposal = () => {
           </Text>
         </Box>
       </Flex>
-      {proposal && (
-        <Flex>
-          <Box w='60%'>
-            <ProposalDetail proposal={proposal} />
-          </Box>
-          <Box w='40%'>
-            <ProposalVote proposal={proposal} />
-          </Box>
-        </Flex>
-      )}
+      <Flex>
+        <Box w='60%'>
+          <ProposalDetail proposal={proposal} />
+          <Flex w='100%' justify='center' align='center' h='40%'>
+            <Box maxW='300px' textAlign='center'>
+              There’s 6 more quests that need your attention. View all?
+            </Box>
+          </Flex>
+        </Box>
+        <Box w='40%'>
+          <ProposalVote proposal={proposal} />
+          <ProposalActivityFeed />
+        </Box>
+      </Flex>
     </Box>
   );
 };

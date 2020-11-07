@@ -50,7 +50,7 @@ const SideNav = () => {
   return (
     <Box>
       <>
-        {dao ? (
+        {dao?.graphData ? (
           <>
             <Flex direction='row' justify='start' align='start'>
               <Flex direction='column' align='start' justify='start'>
@@ -111,7 +111,13 @@ const SideNav = () => {
           <>
             <Flex direction='row' justify='start' align='start'>
               <Flex direction='column' align='start' justify='start'>
-                <Link as={RouterLink} to={`/`} fontSize='xl'>
+                <Link
+                  as={RouterLink}
+                  to={`/`}
+                  fontSize='xl'
+                  fontFamily={theme.fonts.heading}
+                  fontWeight={700}
+                >
                   DAOhaus
                 </Link>
                 <ChangeDao />

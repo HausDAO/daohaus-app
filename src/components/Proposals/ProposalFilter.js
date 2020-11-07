@@ -6,7 +6,9 @@ import {
   MenuList,
   MenuItem,
   Flex,
+  Icon,
 } from '@chakra-ui/core';
+import { RiArrowDropDownFill } from 'react-icons/ri';
 
 import { useMemberWallet, useTheme } from '../../contexts/PokemolContext';
 import { getFilterOptions } from '../../content/proposal-filters';
@@ -52,8 +54,11 @@ const ProposalFilter = ({ filter, setFilter, listLength }) => {
           <MenuButton
             textTransform='uppercase'
             fontFamily={theme.fonts.heading}
+            color='primary.50'
+            _hover={{ textDecoration: 'underline' }}
           >
-            {buildFilterName()}
+            {buildFilterName()}{' '}
+            <Icon as={RiArrowDropDownFill} color='primary.50' />
           </MenuButton>
           <MenuList bg='black'>
             {filterOptions.map((option) => (
@@ -61,6 +66,7 @@ const ProposalFilter = ({ filter, setFilter, listLength }) => {
                 key={option.value}
                 onClick={() => setFilter(option)}
                 value={option.value}
+                _hover={{ color: 'primary.300' }}
               >
                 {option.name}
               </MenuItem>

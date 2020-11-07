@@ -28,6 +28,7 @@ const ProposalCard = ({ proposal, isLoaded }) => {
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [memberWallet, proposal]);
+  console.log(proposal);
 
   return (
     <Link to={`/dao/${dao.address}/proposals/${proposal.proposalId}`}>
@@ -66,12 +67,17 @@ const ProposalCard = ({ proposal, isLoaded }) => {
           <Flex align='center'>
             <Flex h='20px'>
               <Skeleton isLoaded={isLoaded}>
-                <Badge colorScheme='green' mr={3}>
-                  {proposal?.yesVotes ? proposal.yesVotes : '--'} Yes
-                </Badge>
-                <Badge colorScheme='red'>
-                  {proposal?.noVotes ? proposal.noVotes : '--'} No
-                </Badge>
+                {(+proposal?.yesVotes > 0 || +proposal?.noVotes > 0) && (
+                  <>
+                    <Badge colorScheme='green' mr={3}>
+                      {proposal?.yesVotes ? proposal.yesVotes : '--'} Yes
+                    </Badge>
+                    <Badge colorScheme='red'>
+                      {proposal?.noVotes ? proposal.noVotes : '--'} No
+                    </Badge>
+                  </>
+                )}
+
                 {memberVote ? (
                   <Text fontSize='sm'>
                     {+memberVote.uintVote ? 'You voted yes' : 'You voted no'}
@@ -106,7 +112,7 @@ const ProposalCard = ({ proposal, isLoaded }) => {
               </Skeleton>
             </Box>
           )}
-          {(proposal?.paymentRequested > 0 || !proposal?.paymentRequested) && (
+          {proposal?.paymentRequested > 0 && (
             <Box>
               <Text
                 textTransform='uppercase'
@@ -151,7 +157,7 @@ const ProposalCard = ({ proposal, isLoaded }) => {
               </Skeleton>
             </Box>
           )}
-          {(proposal?.lootRequested > 0 || !proposal?.lootRequested) && (
+          {proposal?.lootRequested > 0 && (
             <Box>
               <Text
                 textTransform='uppercase'
@@ -173,7 +179,24 @@ const ProposalCard = ({ proposal, isLoaded }) => {
             </Box>
           )}
           <Box fontFamily={theme.fonts.heading}>
-            {getProposalCountdownText(proposal)}
+            <Text
+              textTransform='uppercase'
+              fontSize='sm'
+              fontFamily={theme.fonts.heading}
+              fontWeight={700}
+            >
+              Proposal Status
+            </Text>
+            <Skeleton isLoaded={isLoaded}>
+              <Text
+                fontSize='lg'
+                fontFamily={theme.fonts.space}
+                fontWeight={700}
+                textTransform='uppercase'
+              >
+                {proposal?.status ? getProposalCountdownText(proposal) : '--'}
+              </Text>
+            </Skeleton>
           </Box>
         </Flex>
         <Skeleton isLoaded={isLoaded}>
