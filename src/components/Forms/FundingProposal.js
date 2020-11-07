@@ -33,6 +33,7 @@ import { PrimaryButton } from '../../themes/components';
 import { set } from 'date-fns';
 import TributeInput from './TributeInput';
 import PaymentInput from './PaymentInput';
+import AddressInput from './AddressInput';
 
 const FundingProposalForm = () => {
   const [loading, setLoading] = useState(false);
@@ -40,11 +41,9 @@ const FundingProposalForm = () => {
   const [showLoot, setShowLoot] = useState(false);
   const [showTribute, setShowTribute] = useState(false);
   const [showApplicant, setShowApplicant] = useState(false);
-  const [ensAddr, setEnsAddr] = useState('');
   const [theme] = useTheme();
   const [user] = useUser();
   const [dao] = useDao();
-  const [ens] = useEns();
   const [txProcessor, updateTxProcessor] = useTxProcessor();
   const [currentError, setCurrentError] = useState(null);
 
@@ -53,6 +52,9 @@ const FundingProposalForm = () => {
     errors,
     register,
     reset,
+    setValue,
+    getValues,
+    watch,
     // formState
   } = useForm();
 
@@ -94,13 +96,13 @@ const FundingProposalForm = () => {
   const onSubmit = async (values) => {
     setLoading(true);
 
-    console.log(values);
-
     const details = JSON.stringify({
       title: values.title,
       description: values.description,
       link: 'https://' + values.link,
     });
+
+    console.log('values?.applicantHidden', values);
 
     try {
       dao.daoService.moloch.submitProposal(
@@ -121,25 +123,14 @@ const FundingProposalForm = () => {
           values.tributeToken ||
           '0xd0a1e359811322d97991e03f863a0c30c2cf029c',
         details,
-        ensAddr?.startsWith('0x') ? ensAddr : values.applicant,
+        values?.applicantHidden.startsWith('0x')
+          ? values.applicantHidden
+          : values.applicant,
         txCallBack,
       );
     } catch (err) {
       setLoading(false);
       console.log('error: ', err);
-    }
-  };
-
-  const handleChange = async (e) => {
-    if (e.target.value.endsWith('.eth')) {
-      const address = await ens.provider.resolveName(e.target.value);
-      if (address) {
-        setEnsAddr(address);
-      } else {
-        setEnsAddr('No ENS set');
-      }
-    } else {
-      setEnsAddr(null);
     }
   };
 
@@ -210,36 +201,12 @@ const FundingProposalForm = () => {
           </Stack>
         </Box>
         <Box w='48%'>
-          <FormControl>
-            <FormLabel
-              htmlFor='applicant'
-              color='white'
-              fontFamily={theme.fonts.heading}
-              textTransform='uppercase'
-              fontSize='xs'
-              fontWeight={700}
-            >
-              Applicant
-            </FormLabel>
-            <FormHelperText fontSize='xs' id='applicant-helper-text'>
-              {ensAddr ? `${ensAddr}` : 'Use ETH address or ENS'}
-            </FormHelperText>
-            <Input
-              name='applicant'
-              placeholder='0x'
-              mb={5}
-              ref={register({
-                required: {
-                  value: true,
-                  message: 'Applicant is required',
-                },
-              })}
-              color='white'
-              focusBorderColor='secondary.500'
-              onChange={handleChange}
-            />
-          </FormControl>
-          <PaymentInput />
+          <AddressInput register={register} setValue={setValue} watch={watch} />
+          <PaymentInput
+            register={register}
+            setValue={setValue}
+            getValues={getValues}
+          />
           {showShares && (
             <>
               <FormLabel
@@ -299,7 +266,13 @@ const FundingProposalForm = () => {
               />
             </>
           )}
-          {showTribute && <TributeInput />}
+          {showTribute && (
+            <TributeInput
+              register={register}
+              setValue={setValue}
+              getValues={getValues}
+            />
+          )}
           {(!showShares || !showLoot || !showTribute) && (
             <Menu color='white' textTransform='uppercase'>
               <MenuButton

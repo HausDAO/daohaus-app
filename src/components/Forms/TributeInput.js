@@ -10,21 +10,13 @@ import React, { useState, useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { useDao, useTheme } from '../../contexts/PokemolContext';
 
-const TributeInput = () => {
+const TributeInput = ({ register, setValue, getValues }) => {
   const [unlocked, setUnlocked] = useState(true);
   const [balance, setBalance] = useState(0);
   const [loading, setLoading] = useState(false);
   const [tokenData, setTokenData] = useState([]);
   const [dao] = useDao();
   const [theme] = useTheme();
-
-  const {
-    register,
-    setValue,
-    getValues,
-    // formState
-  } = useForm();
-
 
   useEffect(() => {
     if (dao?.graphData && !tokenData.length) {

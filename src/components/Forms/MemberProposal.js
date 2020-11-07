@@ -33,6 +33,7 @@ import { PrimaryButton } from '../../themes/components';
 import { set } from 'date-fns';
 import PaymentInput from './PaymentInput';
 import TributeInput from './TributeInput';
+import AddressInput from './AddressInput';
 
 const MemberProposalForm = () => {
   const [loading, setLoading] = useState(false);
@@ -50,6 +51,9 @@ const MemberProposalForm = () => {
     handleSubmit,
     errors,
     register,
+    setValue,
+    getValues,
+    watch,
     // formState
   } = useForm();
 
@@ -217,7 +221,11 @@ const MemberProposalForm = () => {
             color='white'
             focusBorderColor='secondary.500'
           />
-          <TributeInput />
+          <TributeInput
+            register={register}
+            setValue={setValue}
+            getValues={getValues}
+          />
           {showLoot && (
             <>
               <FormLabel
@@ -245,28 +253,19 @@ const MemberProposalForm = () => {
               />
             </>
           )}
-          {showPaymentRequest && <PaymentInput />}
+          {showPaymentRequest && (
+            <PaymentInput
+              register={register}
+              setValue={setValue}
+              getValues={getValues}
+            />
+          )}
           {showApplicant && (
-            <>
-              <FormLabel
-                htmlFor='applicant'
-                color='white'
-                fontFamily={theme.fonts.heading}
-                textTransform='uppercase'
-                fontSize='xs'
-                fontWeight={700}
-              >
-                Applicant
-              </FormLabel>
-              <Input
-                name='applicant'
-                placeholder='0x'
-                mb={5}
-                ref={register}
-                color='white'
-                focusBorderColor='secondary.500'
-              />
-            </>
+            <AddressInput
+              register={register}
+              setValue={setValue}
+              watch={watch}
+            />
           )}
           {(!showApplicant || !showLoot || !showPaymentRequest) && (
             <Menu color='white' textTransform='uppercase'>

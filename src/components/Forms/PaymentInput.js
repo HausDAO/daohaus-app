@@ -10,14 +10,12 @@ import React, { useState, useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { useDao, useTheme } from '../../contexts/PokemolContext';
 
-const PaymentInput = () => {
+const PaymentInput = ({ register, setValue, getValues }) => {
   const [balance, setBalance] = useState(0);
 
   const [tokenData, setTokenData] = useState([]);
   const [dao] = useDao();
   const [theme] = useTheme();
-
-  const { register, setValue, getValues } = useForm();
 
   // const watchToken = watch('paymentToken', '');
 
