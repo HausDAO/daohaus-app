@@ -13,7 +13,7 @@ const UserInit = () => {
 
   useEffect(() => {
     initCurrentUser();
-    // eslint-disable-next-line
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [web3Connect]);
 
   const initCurrentUser = async () => {

@@ -25,6 +25,7 @@ const ProposalVote = ({ proposal }) => {
   };
 
   const txCallBack = (txHash, details) => {
+    console.log('txCallBack', txProcessor);
     if (txProcessor && txHash) {
       txProcessor.setTx(txHash, user.username, details, true, false);
       txProcessor.forceUpdate = true;
@@ -39,13 +40,13 @@ const ProposalVote = ({ proposal }) => {
     }
   };
 
-  // const cancelProposal = async (id) => {
-  //   try {
-  //     await dao.daoService.moloch.cancelProposal(id);
-  //   } catch (err) {
-  //     console.log('user rejected or transaction failed', err);
-  //   }
-  // };
+  const cancelProposal = async (id) => {
+    try {
+      await dao.daoService.moloch.cancelProposal(id);
+    } catch (err) {
+      console.log('user rejected or transaction failed', err);
+    }
+  };
 
   const unlock = async (token) => {
     console.log('unlock ', token);
@@ -143,17 +144,6 @@ const ProposalVote = ({ proposal }) => {
             </Flex>
           </Flex>
         )}
-        {proposal?.status === 'Unsponsored' &&
-          !proposal?.proposalIndex &&
-          proposal?.proposer === user.username && (
-            <Flex justify='center'>
-              <Flex direction='column'>
-                <Button onClick={() => sponsorProposal(proposal.proposalId)}>
-                  Sponsor
-                </Button>
-              </Flex>
-            </Flex>
-          )}
         {(proposal?.status !== 'Unsponsored' || proposal?.proposalIndex) &&
           proposal?.status !== 'Cancelled' && (
             <>
@@ -194,7 +184,7 @@ const ProposalVote = ({ proposal }) => {
                           w='25px'
                           h='25px'
                           transform='rotateY(180deg)'
-                          _hover={{ cursor: 'ponter' }}
+                          _hover={{ cursor: 'pointer' }}
                           onClick={() => submitVote(proposal, 2)}
                         />
                       </Flex>
