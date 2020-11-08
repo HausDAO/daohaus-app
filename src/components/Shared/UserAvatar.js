@@ -1,6 +1,6 @@
 import React from 'react';
 import makeBlockie from 'ethereum-blockies-base64';
-import { Flex, Avatar, Text } from '@chakra-ui/core';
+import { Flex, Avatar, Box, Skeleton } from '@chakra-ui/core';
 
 import { useTheme } from '../../contexts/PokemolContext';
 import { truncateAddr } from '../../utils/helpers';
@@ -19,21 +19,27 @@ const UserAvatar = ({ user }) => {
             mr={3}
             size='sm'
           />
-          <Text fontSize='md' fontFamily={theme.fonts.heading}>
-            {user.name || truncateAddr(user.username)}{' '}
+          <Box fontSize='md' fontFamily={theme.fonts.heading}>
+            {user.name || truncateAddr(user.username || user.memberAddress)}{' '}
             <span>{user.emoji || ''} </span>
-          </Text>
+          </Box>
         </>
       ) : (
         <>
-          <Avatar
-            name={user.username}
-            src={makeBlockie(user.username)}
-            mr={3}
-          />
-          <Text fontSize='md' fontFamily={theme.fonts.heading}>
-            {truncateAddr(user.username)}
-          </Text>
+          <Skeleton isLoaded={user?.username} m='0 auto'>
+            {user.username && (
+              <>
+                <Avatar
+                  name={user.username || user.memberAddress}
+                  src={makeBlockie(user.username || user.memberAddress)}
+                  mr={3}
+                />
+                <Box fontSize='md' fontFamily={theme.fonts.heading}>
+                  {truncateAddr(user.username || user.memberAddress)}
+                </Box>
+              </>
+            )}
+          </Skeleton>
         </>
       )}
     </Flex>

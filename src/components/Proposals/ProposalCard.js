@@ -28,6 +28,7 @@ const ProposalCard = ({ proposal, isLoaded }) => {
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [memberWallet, proposal]);
+  console.log(proposal);
 
   return (
     <Link to={`/dao/${dao.address}/proposals/${proposal.proposalId}`}>
@@ -44,7 +45,7 @@ const ProposalCard = ({ proposal, isLoaded }) => {
       >
         <Flex>
           <Box minWidth='30%' mr={5}>
-            <Text
+            <Box
               fontSize='sm'
               textTransform='uppercase'
               fontFamily={theme.fonts.heading}
@@ -52,106 +53,167 @@ const ProposalCard = ({ proposal, isLoaded }) => {
               {proposal?.proposalType
                 ? proposal.proposalType
                 : theme.daoMeta.proposal}
-            </Text>
+            </Box>
             <Skeleton isLoaded={isLoaded}>
-              <Text
+              <Box
                 fontWeight={700}
                 fontSize='lg'
                 fontFamily={theme.fonts.heading}
               >
                 {proposal.title || '--'}
-              </Text>
+              </Box>
             </Skeleton>
           </Box>
           <Flex align='center'>
             <Flex h='20px'>
               <Skeleton isLoaded={isLoaded}>
-                <Badge colorScheme='green' mr={3}>
-                  {proposal?.yesVotes ? proposal.yesVotes : '--'} Yes
-                </Badge>
-                <Badge colorScheme='red'>
-                  {proposal?.noVotes ? proposal.noVotes : '--'} No
-                </Badge>
+                {(+proposal?.yesVotes > 0 || +proposal?.noVotes > 0) && (
+                  <>
+                    <Badge colorScheme='green' mr={3}>
+                      {proposal?.yesVotes ? proposal.yesVotes : '--'} Yes
+                    </Badge>
+                    <Badge colorScheme='red'>
+                      {proposal?.noVotes ? proposal.noVotes : '--'} No
+                    </Badge>
+                  </>
+                )}
+
                 {memberVote ? (
-                  <Text fontSize='sm'>
+                  <Box fontSize='sm'>
                     {+memberVote.uintVote ? 'You voted yes' : 'You voted no'}
-                  </Text>
+                  </Box>
                 ) : null}
               </Skeleton>
             </Flex>
           </Flex>
         </Flex>
         <Flex w='80%' justify='space-between' mt={10}>
-          <Box>
-            <Text
-              textTransform='uppercase'
-              fontSize='sm'
-              fontFamily={theme.fonts.heading}
-              fontWeight={700}
-            >
-              Tribute
-            </Text>
-            <Skeleton isLoaded={isLoaded}>
-              <Text
-                fontSize='lg'
-                fontFamily={theme.fonts.space}
+          {(proposal?.tributeOffered > 0 || !proposal?.tributeOffered) && (
+            <Box>
+              <Box
+                textTransform='uppercase'
+                fontSize='sm'
+                fontFamily={theme.fonts.heading}
                 fontWeight={700}
               >
-                {proposal?.tributeOffered
-                  ? utils.fromWei(proposal.tributeOffered)
-                  : '--'}{' '}
-                {proposal.tributeToken || 'WETH'}
-              </Text>
-            </Skeleton>
-          </Box>
-          <Box>
-            <Text
-              textTransform='uppercase'
-              fontSize='sm'
-              fontFamily={theme.fonts.heading}
-              fontWeight={700}
-            >
-              Shares
-            </Text>
-            <Skeleton isLoaded={isLoaded}>
-              <Text
-                fontSize='lg'
-                fontFamily={theme.fonts.space}
+                Tribute
+              </Box>
+              <Skeleton isLoaded={isLoaded}>
+                <Box
+                  fontSize='lg'
+                  fontFamily={theme.fonts.space}
+                  fontWeight={700}
+                >
+                  {proposal?.tributeOffered
+                    ? utils.fromWei(proposal.tributeOffered)
+                    : '--'}{' '}
+                  {proposal.tributeToken || 'WETH'}
+                </Box>
+              </Skeleton>
+            </Box>
+          )}
+          {proposal?.paymentRequested > 0 && (
+            <Box>
+              <Box
+                textTransform='uppercase'
+                fontSize='sm'
+                fontFamily={theme.fonts.heading}
                 fontWeight={700}
               >
-                {proposal?.sharesRequested ? proposal.sharesRequested : '--'}
-              </Text>
-            </Skeleton>
-          </Box>
-          <Box>
-            <Text
-              textTransform='uppercase'
-              fontSize='sm'
-              fontFamily={theme.fonts.heading}
-              fontWeight={700}
-            >
-              Loot
-            </Text>
-            <Skeleton isLoaded={isLoaded}>
-              <Text
-                fontSize='lg'
-                fontFamily={theme.fonts.space}
+                Payment Requested
+              </Box>
+              <Skeleton isLoaded={isLoaded}>
+                <Box
+                  fontSize='lg'
+                  fontFamily={theme.fonts.space}
+                  fontWeight={700}
+                >
+                  {proposal?.paymentRequested
+                    ? utils.fromWei(proposal.paymentRequested)
+                    : '--'}{' '}
+                  {proposal.paymentToken || 'WETH'}
+                </Box>
+              </Skeleton>
+            </Box>
+          )}
+          {(proposal?.sharesRequested > 0 || !proposal?.sharesRequested) && (
+            <Box>
+              <Box
+                textTransform='uppercase'
+                fontSize='sm'
+                fontFamily={theme.fonts.heading}
                 fontWeight={700}
               >
-                {proposal?.lootRequested ? proposal.lootRequested : '--'}
-              </Text>
-            </Skeleton>
-          </Box>
+                Shares
+              </Box>
+              <Skeleton isLoaded={isLoaded}>
+                <Box
+                  fontSize='lg'
+                  fontFamily={theme.fonts.space}
+                  fontWeight={700}
+                >
+                  {proposal?.sharesRequested ? proposal.sharesRequested : '--'}
+                </Box>
+              </Skeleton>
+            </Box>
+          )}
+          {proposal?.lootRequested > 0 && (
+            <Box>
+              <Box
+                textTransform='uppercase'
+                fontSize='sm'
+                fontFamily={theme.fonts.heading}
+                fontWeight={700}
+              >
+                Loot
+              </Box>
+              <Skeleton isLoaded={isLoaded}>
+                <Box
+                  fontSize='lg'
+                  fontFamily={theme.fonts.space}
+                  fontWeight={700}
+                >
+                  {proposal?.lootRequested ? proposal.lootRequested : '--'}
+                </Box>
+              </Skeleton>
+            </Box>
+          )}
           <Box fontFamily={theme.fonts.heading}>
-            {getProposalCountdownText(proposal)}
+            <Box
+              textTransform='uppercase'
+              fontSize='sm'
+              fontFamily={theme.fonts.heading}
+              fontWeight={700}
+            >
+              Proposal Status
+            </Box>
+            <Skeleton isLoaded={isLoaded}>
+              <Box
+                fontSize='lg'
+                fontFamily={theme.fonts.space}
+                fontWeight={700}
+                textTransform='uppercase'
+              >
+                {proposal?.status ? getProposalCountdownText(proposal) : '--'}
+              </Box>
+            </Skeleton>
           </Box>
         </Flex>
-        {proposal.createdAt ? (
-          <Text fontWeight={700} fontSize='xs' fontFamily={theme.fonts.heading}>
-            Created on:{' '}
-            {format(new Date(proposal.createdAt * 1000), 'MMMM d y')}
-          </Text>
-        ) : null}
+        <Skeleton isLoaded={isLoaded}>
+          <Box
+            fontWeight={700}
+            fontSize='xs'
+            fontFamily={theme.fonts.heading}
+            mt={2}
+          >
+            {proposal.createdAt
+              ? `Created on: ${format(
+                  new Date(proposal.createdAt * 1000),
+                  'MMMM d y',
+                )}`
+              : '--'}
+          </Box>
+        </Skeleton>
       </Box>
     </Link>
   );

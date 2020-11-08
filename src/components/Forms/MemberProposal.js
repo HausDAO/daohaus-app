@@ -13,7 +13,6 @@ import {
   Stack,
   Select,
   Box,
-  Text,
   Textarea,
   Menu,
   MenuButton,
@@ -30,7 +29,7 @@ import {
   useUser,
 } from '../../contexts/PokemolContext';
 import { PrimaryButton } from '../../themes/components';
-import { set } from 'date-fns';
+
 import PaymentInput from './PaymentInput';
 import TributeInput from './TributeInput';
 import AddressInput from './AddressInput';
@@ -221,11 +220,13 @@ const MemberProposalForm = () => {
             color='white'
             focusBorderColor='secondary.500'
           />
+
           <TributeInput
             register={register}
             setValue={setValue}
             getValues={getValues}
           />
+
           {showLoot && (
             <>
               <FormLabel
@@ -254,11 +255,13 @@ const MemberProposalForm = () => {
             </>
           )}
           {showPaymentRequest && (
+
             <PaymentInput
               register={register}
               setValue={setValue}
               getValues={getValues}
             />
+
           )}
           {showApplicant && (
             <AddressInput
@@ -298,10 +301,10 @@ const MemberProposalForm = () => {
       </FormControl>
       <Flex justify='flex-end' align='center' h='60px'>
         {currentError && (
-          <Text color='secondary.300' fontSize='m' mr={5}>
+          <Box color='secondary.300' fontSize='m' mr={5}>
             <Icon as={RiErrorWarningLine} color='secondary.300' mr={2} />
             {currentError.message}
-          </Text>
+          </Box>
         )}
         <Box>
           <PrimaryButton

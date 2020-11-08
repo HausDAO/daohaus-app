@@ -11,7 +11,6 @@ import {
   Icon,
   Stack,
   Box,
-  Text,
   Textarea,
   Menu,
   MenuButton,
@@ -30,17 +29,17 @@ import {
   useEns,
 } from '../../contexts/PokemolContext';
 import { PrimaryButton } from '../../themes/components';
-import { set } from 'date-fns';
+
 import TributeInput from './TributeInput';
 import PaymentInput from './PaymentInput';
 import AddressInput from './AddressInput';
+
 
 const FundingProposalForm = () => {
   const [loading, setLoading] = useState(false);
   const [showShares, setShowShares] = useState(false);
   const [showLoot, setShowLoot] = useState(false);
   const [showTribute, setShowTribute] = useState(false);
-  const [showApplicant, setShowApplicant] = useState(false);
   const [theme] = useTheme();
   const [user] = useUser();
   const [dao] = useDao();
@@ -201,12 +200,14 @@ const FundingProposalForm = () => {
           </Stack>
         </Box>
         <Box w='48%'>
+
           <AddressInput register={register} setValue={setValue} watch={watch} />
           <PaymentInput
             register={register}
             setValue={setValue}
             getValues={getValues}
           />
+
           {showShares && (
             <>
               <FormLabel
@@ -267,11 +268,13 @@ const FundingProposalForm = () => {
             </>
           )}
           {showTribute && (
+
             <TributeInput
               register={register}
               setValue={setValue}
               getValues={getValues}
             />
+
           )}
           {(!showShares || !showLoot || !showTribute) && (
             <Menu color='white' textTransform='uppercase'>
@@ -304,10 +307,10 @@ const FundingProposalForm = () => {
       </FormControl>
       <Flex justify='flex-end' align='center' h='60px'>
         {currentError && (
-          <Text color='secondary.300' fontSize='m' mr={5}>
+          <Box color='secondary.300' fontSize='m' mr={5}>
             <Icon as={RiErrorWarningLine} color='secondary.300' mr={2} />
             {currentError.message}
-          </Text>
+          </Box>
         )}
         <Box>
           <PrimaryButton

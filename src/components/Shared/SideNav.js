@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link as RouterLink, useHistory } from 'react-router-dom';
-import { Text, Stack, Link, Box, Flex, Image } from '@chakra-ui/core';
+import { Stack, Link, Box, Flex } from '@chakra-ui/core';
 
 import {
   useDao,
@@ -34,6 +34,11 @@ const SideNav = () => {
         bank: 'Inventory',
         members: 'Players',
         member: 'Player',
+        discord: 'https://discord.gg/WqwQGgeeFd',
+        medium: '',
+        telegram: '',
+        website: '',
+        other: '',
       },
     });
   };
@@ -45,14 +50,9 @@ const SideNav = () => {
   return (
     <Box>
       <>
-        {dao ? (
+        {dao?.graphData ? (
           <>
             <Flex direction='row' justify='start' align='start'>
-              <Flex direction='column' align='center' justify='start' mr={6}>
-                <Link as={RouterLink} to={`/dao/${dao.address}`}>
-                  <Image src={theme.images.brandImg} w='60px' h='60px' />
-                </Link>
-              </Flex>
               <Flex direction='column' align='start' justify='start'>
                 <Link as={RouterLink} to={`/dao/${dao.address}`} fontSize='xl'>
                   {dao.name}
@@ -61,43 +61,43 @@ const SideNav = () => {
               </Flex>
             </Flex>
             <Stack spacing={3} mt='125px' w='200px' pr={1}>
-              <Text
+              <Box
                 fontSize='xs'
                 fontFamily={theme.fonts.heading}
                 cursor='pointer'
                 onClick={() => history.push('/')}
               >
                 Main Menu
-              </Text>
+              </Box>
               <Link to={`/dao/${dao.address}/proposals`} as={RouterLink}>
-                <Text fontSize='2xl' fontFamily={theme.fonts.heading}>
+                <Box fontSize='2xl' fontFamily={theme.fonts.heading}>
                   {theme.daoMeta.proposals}
-                </Text>
+                </Box>
               </Link>
               <Link to={`/dao/${dao.address}/bank`} as={RouterLink}>
-                <Text fontSize='2xl' fontFamily={theme.fonts.heading}>
+                <Box fontSize='2xl' fontFamily={theme.fonts.heading}>
                   {theme.daoMeta.bank}
-                </Text>
+                </Box>
               </Link>
               <Link to={`/dao/${dao.address}/members`} as={RouterLink}>
-                <Text fontSize='2xl' fontFamily={theme.fonts.heading}>
+                <Box fontSize='2xl' fontFamily={theme.fonts.heading}>
                   {theme.daoMeta.members}
-                </Text>
+                </Box>
               </Link>
               <Link to={`/dao/${dao.address}/settings/boosts`} as={RouterLink}>
-                <Text fontSize='md' fontFamily={theme.fonts.heading}>
+                <Box fontSize='md' fontFamily={theme.fonts.heading}>
                   Boost
-                </Text>
+                </Box>
               </Link>
               <Link to={`/dao/${dao.address}/settings`} as={RouterLink}>
-                <Text fontSize='md' fontFamily={theme.fonts.heading}>
+                <Box fontSize='md' fontFamily={theme.fonts.heading}>
                   Settings
-                </Text>
+                </Box>
               </Link>
               <Link to={`/dao/${dao.address}/profile`} as={RouterLink}>
-                <Text fontSize='md' fontFamily={theme.fonts.heading}>
+                <Box fontSize='md' fontFamily={theme.fonts.heading}>
                   Stats
-                </Text>
+                </Box>
               </Link>
             </Stack>
             <Flex mt={10} direction='column' w='60%'>
@@ -110,47 +110,48 @@ const SideNav = () => {
         ) : (
           <>
             <Flex direction='row' justify='start' align='start'>
-              <Flex direction='column' align='center' justify='start' mr={6}>
-                <Link as={RouterLink} to={`/`}>
-                  <Image src={theme.images.brandImg} size='60px' />
-                </Link>
-              </Flex>
               <Flex direction='column' align='start' justify='start'>
-                <Link as={RouterLink} to={`/`} fontSize='xl'>
+                <Link
+                  as={RouterLink}
+                  to={`/`}
+                  fontSize='xl'
+                  fontFamily={theme.fonts.heading}
+                  fontWeight={700}
+                >
                   DAOhaus
                 </Link>
                 <ChangeDao />
               </Flex>
             </Flex>
             <Stack spacing={4} mt='125px' w='200px' pr={1}>
-              <Text fontSize='xs'>Main Menu</Text>
+              <Box fontSize='xs'>Main Menu</Box>
               <Link href='https://daohaus.club' isExternal>
-                <Text fontSize='xl' fontFamily={theme.fonts.heading}>
+                <Box fontSize='xl' fontFamily={theme.fonts.heading}>
                   Explore DAOs
-                </Text>
+                </Box>
               </Link>
               <Link href='https://daohaus.club/summon' isExternal>
-                <Text fontSize='xl' fontFamily={theme.fonts.heading}>
+                <Box fontSize='xl' fontFamily={theme.fonts.heading}>
                   Summon a DAO
-                </Text>
+                </Box>
               </Link>
               <Link
                 href='https://xdai.daohaus.club/dao/v2/0x283bdc900b6ec9397abb721c5bbff5ace46e0f50'
                 isExternal
               >
-                <Text fontSize='xl' fontFamily={theme.fonts.heading}>
+                <Box fontSize='xl' fontFamily={theme.fonts.heading}>
                   HausDAO
-                </Text>
+                </Box>
               </Link>
               <Link href='https://daohaus.club/about' isExternal>
-                <Text fontSize='md' fontFamily={theme.fonts.heading}>
+                <Box fontSize='md' fontFamily={theme.fonts.heading}>
                   About
-                </Text>
+                </Box>
               </Link>
               <Link href='https://daohaus.club/help' isExternal>
-                <Text fontSize='md' fontFamily={theme.fonts.heading}>
+                <Box fontSize='md' fontFamily={theme.fonts.heading}>
                   Help
-                </Text>
+                </Box>
               </Link>
             </Stack>
             <Flex mt={10} direction='column' w='60%'>
@@ -167,7 +168,7 @@ const SideNav = () => {
         colorScheme={theme.colors.secondary[500]}
         onClick={() => updateRefetchQuery('proposals')}
       >
-        Refetch Proposals Test
+        Refetch
       </SecondaryButton>
     </Box>
   );

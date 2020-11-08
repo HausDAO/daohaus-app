@@ -1,5 +1,5 @@
 import React, { Fragment } from 'react';
-import { Text } from '@chakra-ui/core';
+import { Box } from '@chakra-ui/core';
 
 import { timeToNow } from './helpers';
 
@@ -269,65 +269,65 @@ export function getProposalCountdownText(proposal) {
     case ProposalStatus.InQueue:
       return (
         <Fragment>
-          <Text textTransform='uppercase' fontSize='0.8em' fontWeight={700}>
+          <Box textTransform='uppercase' fontSize='0.8em' fontWeight={700}>
             Voting Begins:{' '}
-          </Text>
-          <Text textTransform='uppercase' fontSize='0.8em' fontWeight={700}>
+          </Box>
+          <Box textTransform='uppercase' fontSize='0.8em' fontWeight={700}>
             {timeToNow(proposal.votingPeriodStarts)}
-          </Text>
+          </Box>
         </Fragment>
       );
     case ProposalStatus.VotingPeriod:
       return (
         <Fragment>
-          <Text textTransform='uppercase' fontSize='0.8em' fontWeight={700}>
+          <Box textTransform='uppercase' fontSize='0.8em' fontWeight={700}>
             Voting Ends:{' '}
-          </Text>
-          <Text textTransform='uppercase' fontSize='0.8em' fontWeight={700}>
+          </Box>
+          <Box textTransform='uppercase' fontSize='0.8em' fontWeight={700}>
             {timeToNow(proposal.votingPeriodEnds)}
-          </Text>
+          </Box>
         </Fragment>
       );
     case ProposalStatus.GracePeriod:
       return (
         <Fragment>
-          <Text textTransform='uppercase' fontSize='0.8em' fontWeight={700}>
+          <Box textTransform='uppercase' fontSize='0.8em' fontWeight={700}>
             Grace Period Ends:{' '}
-          </Text>
-          <Text textTransform='uppercase' fontSize='0.8em' fontWeight={700}>
+          </Box>
+          <Box textTransform='uppercase' fontSize='0.8em' fontWeight={700}>
             {timeToNow(proposal.gracePeriodEnds)}
-          </Text>
+          </Box>
         </Fragment>
       );
     case ProposalStatus.Passed:
       return (
-        <Text textTransform='uppercase' fontSize='0.8em' fontWeight={700}>
+        <Box textTransform='uppercase' fontSize='0.8em' fontWeight={700}>
           Passed
-        </Text>
+        </Box>
       );
     case ProposalStatus.Failed:
       return (
-        <Text textTransform='uppercase' fontSize='0.8em' fontWeight={700}>
+        <Box textTransform='uppercase' fontSize='0.8em' fontWeight={700}>
           Failed
-        </Text>
+        </Box>
       );
     case ProposalStatus.Cancelled:
       return (
-        <Text textTransform='uppercase' fontSize='0.8em' fontWeight={700}>
+        <Box textTransform='uppercase' fontSize='0.8em' fontWeight={700}>
           Cancelled
-        </Text>
+        </Box>
       );
     case ProposalStatus.ReadyForProcessing:
       return (
-        <Text textTransform='uppercase' fontSize='0.8em' fontWeight={700}>
+        <Box textTransform='uppercase' fontSize='0.8em' fontWeight={700}>
           Ready For Processing
-        </Text>
+        </Box>
       );
     case ProposalStatus.Unsponsored:
       return (
-        <Text textTransform='uppercase' fontSize='0.8em' fontWeight={700}>
+        <Box textTransform='uppercase' fontSize='0.8em' fontWeight={700}>
           Unsponsored
-        </Text>
+        </Box>
       );
     default:
       return <Fragment />;

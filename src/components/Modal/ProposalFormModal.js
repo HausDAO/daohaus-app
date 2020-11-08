@@ -7,11 +7,9 @@ import {
   ModalBody,
   ModalFooter,
   ModalOverlay,
-  Text,
+  Box,
 } from '@chakra-ui/core';
-import {
-  useTheme,
-} from '../../contexts/PokemolContext';
+import { useTheme } from '../../contexts/PokemolContext';
 import MemberProposalForm from '../Forms/MemberProposal';
 import FundingProposalForm from '../Forms/FundingProposal';
 import WhitelistProposalForm from '../Forms/WhitelistProposal';
@@ -54,13 +52,13 @@ const ProposalFormModal = ({ proposalType, isOpen, setShowModal }) => {
       subline: `Submit a trade proposal here.`,
       form: <TradeProposalForm />,
     },
-  }
+  };
 
   useEffect(() => {
     if (proposalType) {
-      setProposalForm(proposalForms[proposalType])
+      setProposalForm(proposalForms[proposalType]);
     }
-  }, [proposalType])
+  }, [proposalType]);
   console.log(proposalForm);
 
   return (
@@ -82,7 +80,7 @@ const ProposalFormModal = ({ proposalType, isOpen, setShowModal }) => {
           maxWidth='700px'
         >
           <ModalHeader>
-            <Text
+            <Box
               fontFamily={theme.fonts.heading}
               textTransform='uppercase'
               fontSize='xs'
@@ -91,21 +89,21 @@ const ProposalFormModal = ({ proposalType, isOpen, setShowModal }) => {
               mb={4}
             >
               {proposalForm.type}
-            </Text>
-            <Text
+            </Box>
+            <Box
               fontFamily={theme.fonts.heading}
               fontSize='xl'
               fontWeight={700}
               color='white'
             >
               {proposalForm.heading}
-            </Text>
+            </Box>
           </ModalHeader>
           <ModalCloseButton />
           <ModalBody>
-            <Text color='#C4C4C4' mb={6}>
+            <Box color='#C4C4C4' mb={6}>
               {proposalForm.subline}
-            </Text>
+            </Box>
             {proposalForm.form}
           </ModalBody>
 

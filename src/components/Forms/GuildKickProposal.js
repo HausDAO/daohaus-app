@@ -13,7 +13,6 @@ import {
   Stack,
   Select,
   Box,
-  Text,
   Textarea,
   Menu,
   MenuButton,
@@ -30,7 +29,6 @@ import {
   useUser,
 } from '../../contexts/PokemolContext';
 import { PrimaryButton } from '../../themes/components';
-import { set } from 'date-fns';
 
 const GuildKickProposalForm = () => {
   const [loading, setLoading] = useState(false);
@@ -61,7 +59,7 @@ const GuildKickProposalForm = () => {
     } else {
       setCurrentError(null);
     }
-  }, [errors])
+  }, [errors]);
 
   // TODO check tribute token < currentWallet.token.balance & unlock
   // TODO check payment token < dao.token.balance
@@ -97,11 +95,19 @@ const GuildKickProposalForm = () => {
 
     try {
       dao.daoService.moloch.submitProposal(
-        values.sharesRequested ? utils.toWei(values.sharesRequested?.toString()) : '0',
-        values.lootRequested ? utils.toWei(values.lootRequested?.toString()) : '0',
-        values.tributeOffered ? utils.toWei(values.tributeOffered?.toString()) : '0',
+        values.sharesRequested
+          ? utils.toWei(values.sharesRequested?.toString())
+          : '0',
+        values.lootRequested
+          ? utils.toWei(values.lootRequested?.toString())
+          : '0',
+        values.tributeOffered
+          ? utils.toWei(values.tributeOffered?.toString())
+          : '0',
         values.tributeToken,
-        values.paymentRequested ? utils.toWei(values.paymentRequested?.toString()) : '0',
+        values.paymentRequested
+          ? utils.toWei(values.paymentRequested?.toString())
+          : '0',
         values.paymentToken || values.tributeToken,
         details,
         user.username,
@@ -138,11 +144,11 @@ const GuildKickProposalForm = () => {
               name='title'
               placeholder='Proposal Title'
               mb={5}
-              ref={register({ 
+              ref={register({
                 required: {
                   value: true,
-                  message: 'Title is required'
-                }
+                  message: 'Title is required',
+                },
               })}
               color='white'
               focusBorderColor='secondary.500'
@@ -153,28 +159,28 @@ const GuildKickProposalForm = () => {
               type='textarea'
               mb={5}
               h={10}
-              ref={register({ 
-                required: { 
-                  value: true, 
-                  message: 'Description is required' 
-                }
-              })} 
+              ref={register({
+                required: {
+                  value: true,
+                  message: 'Description is required',
+                },
+              })}
               color='white'
               focusBorderColor='secondary.500'
             />
             <InputGroup>
               <InputLeftAddon>https://</InputLeftAddon>
-              <Input 
-                name='link' 
-                placeholder='daolink.club' 
-                color='white' 
-                focusBorderColor='secondary.500' 
-                ref={register({ 
-                  required: { 
-                    value: true, 
-                    message: 'Reference Link is required' 
-                  }
-                })} 
+              <Input
+                name='link'
+                placeholder='daolink.club'
+                color='white'
+                focusBorderColor='secondary.500'
+                ref={register({
+                  required: {
+                    value: true,
+                    message: 'Reference Link is required',
+                  },
+                })}
               />
             </InputGroup>
           </Stack>
@@ -194,15 +200,15 @@ const GuildKickProposalForm = () => {
             name='sharesRequested'
             placeholder='0'
             mb={5}
-            ref={register({ 
+            ref={register({
               required: {
                 value: true,
-                message: 'Requested shares are required for Member Proposals'
-              }, 
-              pattern: { 
-                value: /[0-9]/, 
-                message: 'Requested shares must be a number' 
-              }
+                message: 'Requested shares are required for Member Proposals',
+              },
+              pattern: {
+                value: /[0-9]/,
+                message: 'Requested shares must be a number',
+              },
             })}
             color='white'
             focusBorderColor='secondary.500'
@@ -225,8 +231,8 @@ const GuildKickProposalForm = () => {
               ref={register({
                 pattern: {
                   value: /[0-9]/,
-                  message: 'Tribute must be a number'
-                }
+                  message: 'Tribute must be a number',
+                },
               })}
               color='white'
               focusBorderColor='secondary.500'
@@ -264,11 +270,11 @@ const GuildKickProposalForm = () => {
                 name='lootRequested'
                 placeholder='0'
                 mb={5}
-                ref={register({ 
-                  pattern: { 
-                    value: /[0-9]/, 
-                    message: 'Loot must be a number' 
-                  }
+                ref={register({
+                  pattern: {
+                    value: /[0-9]/,
+                    message: 'Loot must be a number',
+                  },
                 })}
                 color='white'
                 focusBorderColor='secondary.500'
@@ -292,11 +298,11 @@ const GuildKickProposalForm = () => {
                   name='paymentRequested'
                   placeholder='0'
                   mb={5}
-                  ref={register({ 
-                    pattern: { 
-                      value: /[0-9]/, 
-                      message: 'Payment must be a number' 
-                    }
+                  ref={register({
+                    pattern: {
+                      value: /[0-9]/,
+                      message: 'Payment must be a number',
+                    },
                   })}
                   color='white'
                   focusBorderColor='secondary.500'
@@ -343,29 +349,40 @@ const GuildKickProposalForm = () => {
             </>
           )}
           {(!showApplicant || !showLoot || !showPaymentRequest) && (
-            <Menu
-              color='white'
-              textTransform='uppercase'
-            >
-              <MenuButton as={Button} rightIcon={<Icon as={RiAddFill} color='primary.500' />}>
+            <Menu color='white' textTransform='uppercase'>
+              <MenuButton
+                as={Button}
+                rightIcon={<Icon as={RiAddFill} color='primary.500' />}
+              >
                 Additional Options
               </MenuButton>
               <MenuList>
-                {!showApplicant && <MenuItem onClick={() => setShowApplicant(true)}>Applicant</MenuItem>}
-                {!showLoot && <MenuItem onClick={() => setShowLoot(true)}>Request Loot</MenuItem>}
-                {!showPaymentRequest && <MenuItem onClick={() => setShowPaymentRequest(true)}>Request Payment</MenuItem>}
+                {!showApplicant && (
+                  <MenuItem onClick={() => setShowApplicant(true)}>
+                    Applicant
+                  </MenuItem>
+                )}
+                {!showLoot && (
+                  <MenuItem onClick={() => setShowLoot(true)}>
+                    Request Loot
+                  </MenuItem>
+                )}
+                {!showPaymentRequest && (
+                  <MenuItem onClick={() => setShowPaymentRequest(true)}>
+                    Request Payment
+                  </MenuItem>
+                )}
               </MenuList>
             </Menu>
           )}
-         
         </Box>
       </FormControl>
       <Flex justify='flex-end' align='center' h='60px'>
         {currentError && (
-          <Text color='secondary.300' fontSize='m' mr={5}>
+          <Box color='secondary.300' fontSize='m' mr={5}>
             <Icon as={RiErrorWarningLine} color='secondary.300' mr={2} />
             {currentError.message}
-          </Text>
+          </Box>
         )}
         <Box>
           <PrimaryButton
@@ -381,6 +398,6 @@ const GuildKickProposalForm = () => {
       </Flex>
     </form>
   );
-}
+};
 
 export default GuildKickProposalForm;

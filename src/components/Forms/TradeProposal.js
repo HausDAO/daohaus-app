@@ -13,7 +13,6 @@ import {
   Stack,
   Select,
   Box,
-  Text,
   Textarea,
   Menu,
   MenuButton,
@@ -30,9 +29,10 @@ import {
   useUser,
 } from '../../contexts/PokemolContext';
 import { PrimaryButton } from '../../themes/components';
-import { set } from 'date-fns';
+
 import PaymentInput from './PaymentInput';
 import TributeInput from './TributeInput';
+
 
 const TradeProposalForm = () => {
   const [loading, setLoading] = useState(false);
@@ -63,6 +63,7 @@ const TradeProposalForm = () => {
     } else {
       setCurrentError(null);
     }
+
     // eslint-disable-next-line
   }, [errors]);
 
@@ -219,6 +220,7 @@ const TradeProposalForm = () => {
             focusBorderColor='secondary.500'
           />
           <TributeInput />
+
           {showLoot && (
             <>
               <FormLabel
@@ -246,7 +248,9 @@ const TradeProposalForm = () => {
               />
             </>
           )}
+
           {showPaymentRequest && <PaymentInput />}
+
           {showApplicant && (
             <>
               <FormLabel
@@ -300,10 +304,10 @@ const TradeProposalForm = () => {
       </FormControl>
       <Flex justify='flex-end' align='center' h='60px'>
         {currentError && (
-          <Text color='secondary.300' fontSize='m' mr={5}>
+          <Box color='secondary.300' fontSize='m' mr={5}>
             <Icon as={RiErrorWarningLine} color='secondary.300' mr={2} />
             {currentError.message}
-          </Text>
+          </Box>
         )}
         <Box>
           <PrimaryButton
