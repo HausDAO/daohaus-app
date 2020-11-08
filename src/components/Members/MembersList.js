@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { Box, Flex } from '@chakra-ui/core';
 
-import { useMembers, useTheme } from '../../contexts/PokemolContext';
+import { useMembers } from '../../contexts/PokemolContext';
+import { useTheme } from '../../contexts/CustomThemeContext';
 import { defaultMembers } from '../../utils/constants';
 import MemberListCard from './MemberListCard';
 
@@ -29,7 +30,7 @@ const MembersList = () => {
             ml={8}
             textTransform='uppercase'
             fontSize='sm'
-            fontFamily={theme.fonts.heading}
+            fontFamily='heading'
             cursor='pointer'
           >
             Filtered by:{' '}
@@ -41,7 +42,7 @@ const MembersList = () => {
           <Box
             ml={8}
             textTransform='uppercase'
-            fontFamily={theme.fonts.heading}
+            fontFamily='heading'
             cursor='pointer'
           >
             Apply a{' '}
@@ -52,7 +53,7 @@ const MembersList = () => {
           ml={8}
           textTransform='uppercase'
           fontSize='sm'
-          fontFamily={theme.fonts.heading}
+          fontFamily='heading'
           cursor='pointer'
         >
           Sort by:{' '}
@@ -74,7 +75,7 @@ const MembersList = () => {
           <Box
             w='45%'
             textTransform='uppercase'
-            fontFamily={theme.fonts.heading}
+            fontFamily='heading'
             fontSize='sm'
             fontWeight={700}
           >
@@ -83,7 +84,7 @@ const MembersList = () => {
           <Box
             w='15%'
             textTransform='uppercase'
-            fontFamily={theme.fonts.heading}
+            fontFamily='heading'
             fontSize='sm'
             fontWeight={700}
           >
@@ -92,7 +93,7 @@ const MembersList = () => {
           <Box
             w='15%'
             textTransform='uppercase'
-            fontFamily={theme.fonts.heading}
+            fontFamily='heading'
             fontSize='sm'
             fontWeight={700}
           >
@@ -100,7 +101,7 @@ const MembersList = () => {
           </Box>
           <Box
             textTransform='uppercase'
-            fontFamily={theme.fonts.heading}
+            fontFamily='heading'
             fontSize='sm'
             fontWeight={700}
           >

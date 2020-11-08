@@ -20,12 +20,7 @@ import {
 import { utils } from 'web3';
 import { RiAddFill, RiErrorWarningLine } from 'react-icons/ri';
 
-import {
-  useDao,
-  useTheme,
-  useTxProcessor,
-  useUser,
-} from '../../contexts/PokemolContext';
+import { useDao, useTxProcessor, useUser } from '../../contexts/PokemolContext';
 import { PrimaryButton } from '../../themes/components';
 
 import TributeInput from './TributeInput';
@@ -37,7 +32,6 @@ const FundingProposalForm = () => {
   const [showShares, setShowShares] = useState(false);
   const [showLoot, setShowLoot] = useState(false);
   const [showTribute, setShowTribute] = useState(false);
-  const [theme] = useTheme();
   const [user] = useUser();
   const [dao] = useDao();
   const [txProcessor, updateTxProcessor] = useTxProcessor();
@@ -140,7 +134,7 @@ const FundingProposalForm = () => {
           <FormLabel
             htmlFor='title'
             color='white'
-            fontFamily={theme.fonts.heading}
+            fontFamily='heading'
             textTransform='uppercase'
             fontSize='xs'
             fontWeight={700}
@@ -207,7 +201,7 @@ const FundingProposalForm = () => {
               <FormLabel
                 htmlFor='name'
                 color='white'
-                fontFamily={theme.fonts.heading}
+                fontFamily='heading'
                 textTransform='uppercase'
                 fontSize='xs'
                 fontWeight={700}
@@ -239,7 +233,7 @@ const FundingProposalForm = () => {
               <FormLabel
                 htmlFor='lootRequested'
                 color='white'
-                fontFamily={theme.fonts.heading}
+                fontFamily='heading'
                 textTransform='uppercase'
                 fontSize='xs'
                 fontWeight={700}

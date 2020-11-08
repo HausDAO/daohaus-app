@@ -8,7 +8,8 @@ import {
   Select,
 } from '@chakra-ui/core';
 import React, { useState, useEffect } from 'react';
-import { useDao, useTheme } from '../../contexts/PokemolContext';
+import { useDao } from '../../contexts/PokemolContext';
+import { useTheme } from '../../contexts/CustomThemeContext';
 
 const PaymentInput = ({ register, setValue, getValues, errors }) => {
   const [balance, setBalance] = useState(0);
@@ -83,7 +84,7 @@ const PaymentInput = ({ register, setValue, getValues, errors }) => {
       <FormLabel
         htmlFor='paymentRequested'
         color='white'
-        fontFamily={theme.fonts.heading}
+        fontFamily='heading'
         textTransform='uppercase'
         fontSize='xs'
         fontWeight={700}

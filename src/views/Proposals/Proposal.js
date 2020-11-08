@@ -3,7 +3,8 @@ import { useLocation, Link as RouterLink } from 'react-router-dom';
 import { Box, Flex, Link, Icon } from '@chakra-ui/core';
 import { RiArrowLeftLine } from 'react-icons/ri';
 
-import { useProposals, useDao, useTheme } from '../../contexts/PokemolContext';
+import { useProposals, useDao } from '../../contexts/PokemolContext';
+import { useTheme } from '../../contexts/CustomThemeContext';
 import ProposalDetail from '../../components/Proposals/ProposalDetail';
 import ProposalVote from '../../components/Proposals/ProposalVote';
 import ProposalActivityFeed from '../../components/Proposals/ProposalActivityFeed';
@@ -36,11 +37,11 @@ const Proposal = () => {
               textTransform='uppercase'
               ml={6}
               fontSize='lg'
-              fontFamily={theme.fonts.heading}
+              fontFamily='heading'
             >
               <Icon
                 name='arrow-back'
-                color={theme.colors.primary[50]}
+                color='primary.50'
                 as={RiArrowLeftLine}
                 h='20px'
                 w='20px'
@@ -53,7 +54,7 @@ const Proposal = () => {
           <Box
             textTransform='uppercase'
             fontSize='lg'
-            fontFamily={theme.fonts.heading}
+            fontFamily='heading'
             fontWeight={700}
           >
             Vote

@@ -8,7 +8,8 @@ import {
 } from '@chakra-ui/core';
 import React, { useState, useEffect } from 'react';
 import { useForm } from 'react-hook-form';
-import { useDao, useTheme } from '../../contexts/PokemolContext';
+import { useDao } from '../../contexts/PokemolContext';
+import { useTheme } from '../../contexts/CustomThemeContext';
 
 const TributeInput = ({ register, setValue, getValues }) => {
   const [unlocked, setUnlocked] = useState(true);
@@ -93,7 +94,7 @@ const TributeInput = ({ register, setValue, getValues }) => {
       <FormLabel
         htmlFor='tributeOffered'
         color='white'
-        fontFamily={theme.fonts.heading}
+        fontFamily='heading'
         textTransform='uppercase'
         fontSize='xs'
         fontWeight={700}

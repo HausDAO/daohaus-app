@@ -1,30 +1,22 @@
 import React from 'react';
 import { Box, Flex, Skeleton } from '@chakra-ui/core';
 
-import { useTheme, useMembers, useDao } from '../../contexts/PokemolContext';
+import { useMembers, useDao } from '../../contexts/PokemolContext';
+import { useTheme } from '../../contexts/CustomThemeContext';
 import MemberSnapshotChart from './MemberSnapshotChart';
 
 const MemberSnapshot = () => {
   const [theme] = useTheme();
   const [dao] = useDao();
   const [members] = useMembers();
-  console.log(dao);
 
   return (
     <Box>
       <Flex justify='space-between' fontSize='xs' mt={2}>
-        <Box
-          textTransform='uppercase'
-          fontFamily={theme.fonts.heading}
-          fontWeight={700}
-        >
+        <Box textTransform='uppercase' fontFamily='heading' fontWeight={700}>
           Snapshot
         </Box>
-        <Box
-          textTransform='uppercase'
-          fontFamily={theme.fonts.heading}
-          fontWeight={700}
-        >
+        <Box textTransform='uppercase' fontFamily='heading' fontWeight={700}>
           View my profile
         </Box>
       </Flex>
@@ -42,17 +34,13 @@ const MemberSnapshot = () => {
             <Box
               textTransform='uppercase'
               fontSize='xs'
-              fontFamily={theme.fonts.heading}
+              fontFamily='heading'
               fontWeight={700}
             >
               {theme.daoMeta.members}
             </Box>
             <Skeleton isLoaded={members.length > 0}>
-              <Box
-                fontSize='md'
-                fontFamily={theme.fonts.space}
-                fontWeight={700}
-              >
+              <Box fontSize='md' fontFamily='space' fontWeight={700}>
                 {members?.length}
               </Box>
             </Skeleton>
@@ -61,17 +49,13 @@ const MemberSnapshot = () => {
             <Box
               textTransform='uppercase'
               fontSize='xs'
-              fontFamily={theme.fonts.heading}
+              fontFamily='heading'
               fontWeight={700}
             >
               Shares
             </Box>
             <Skeleton isLoaded={dao?.graphData?.totalShares}>
-              <Box
-                fontSize='md'
-                fontFamily={theme.fonts.space}
-                fontWeight={700}
-              >
+              <Box fontSize='md' fontFamily='space' fontWeight={700}>
                 {dao?.graphData?.totalShares
                   ? dao?.graphData?.totalShares
                   : '--'}
@@ -83,17 +67,13 @@ const MemberSnapshot = () => {
               <Box
                 textTransform='uppercase'
                 fontSize='xs'
-                fontFamily={theme.fonts.heading}
+                fontFamily='heading'
                 fontWeight={700}
               >
                 >Loot
               </Box>
               <Skeleton isLoaded={dao?.graphData?.totalLoot}>
-                <Box
-                  fontSize='md'
-                  fontFamily={theme.fonts.space}
-                  fontWeight={700}
-                >
+                <Box fontSize='md' fontFamily='space' fontWeight={700}>
                   >
                   {dao?.graphData?.totalLoot ? dao?.graphData?.totalLoot : '--'}
                 </Box>

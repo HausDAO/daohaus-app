@@ -9,7 +9,8 @@ import {
   ModalOverlay,
   Box,
 } from '@chakra-ui/core';
-import { useTheme } from '../../contexts/PokemolContext';
+
+import { useTheme } from '../../contexts/CustomThemeContext';
 import MemberProposalForm from '../Forms/MemberProposal';
 import FundingProposalForm from '../Forms/FundingProposal';
 import WhitelistProposalForm from '../Forms/WhitelistProposal';
@@ -81,7 +82,7 @@ const ProposalFormModal = ({ proposalType, isOpen, setShowModal }) => {
         >
           <ModalHeader>
             <Box
-              fontFamily={theme.fonts.heading}
+              fontFamily='heading'
               textTransform='uppercase'
               fontSize='xs'
               fontWeight={700}
@@ -91,7 +92,7 @@ const ProposalFormModal = ({ proposalType, isOpen, setShowModal }) => {
               {proposalForm.type}
             </Box>
             <Box
-              fontFamily={theme.fonts.heading}
+              fontFamily='heading'
               fontSize='xl'
               fontWeight={700}
               color='white'

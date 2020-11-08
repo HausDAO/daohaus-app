@@ -2,12 +2,8 @@ import React, { useEffect, useState } from 'react';
 import { Box, Flex, Icon, Button } from '@chakra-ui/core';
 import { useLocation, Link as RouterLink } from 'react-router-dom';
 import { RiAddFill } from 'react-icons/ri';
-import {
-  useUser,
-  useNetwork,
-  useDao,
-  useTheme,
-} from '../../contexts/PokemolContext';
+import { useUser, useNetwork, useDao } from '../../contexts/PokemolContext';
+import { useTheme } from '../../contexts/CustomThemeContext';
 import { Web3SignIn } from './Web3SignIn';
 import UserAvatar from './UserAvatar';
 import { PrimaryButton } from '../../themes/theme';
@@ -54,12 +50,7 @@ const Header = () => {
     <>
       <Flex direction='row' justify='space-between' p={6}>
         <Flex direction='row' justify='flex-start' align='center'>
-          <Box
-            fontSize='3xl'
-            fontFamily={theme.fonts.heading}
-            fontWeight={700}
-            mr={10}
-          >
+          <Box fontSize='3xl' fontFamily='heading' fontWeight={700} mr={10}>
             {pageTitle}
           </Box>
           {location.pathname === `/` && user && (

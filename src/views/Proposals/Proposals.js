@@ -10,6 +10,7 @@ const Proposals = () => {
       <Box w='60%'>
         <ProposalsList />
       </Box>
+
       <Box w='38%'>
         <ProposalsActivityFeed />
       </Box>

@@ -1,14 +1,11 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Box, Flex, Text, Badge, Skeleton } from '@chakra-ui/core';
 import { utils } from 'web3';
 import { format } from 'date-fns';
 
-import {
-  useDao,
-  useMemberWallet,
-  useTheme,
-} from '../../contexts/PokemolContext';
+import { useDao, useMemberWallet } from '../../contexts/PokemolContext';
+import { useTheme } from '../../contexts/CustomThemeContext';
 import { getProposalCountdownText } from '../../utils/proposal-helper';
 
 const ProposalCard = ({ proposal, isLoaded }) => {
@@ -28,7 +25,6 @@ const ProposalCard = ({ proposal, isLoaded }) => {
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [memberWallet, proposal]);
-  console.log(proposal);
 
   return (
     <Link to={`/dao/${dao.address}/proposals/${proposal.proposalId}`}>
@@ -45,21 +41,13 @@ const ProposalCard = ({ proposal, isLoaded }) => {
       >
         <Flex>
           <Box minWidth='30%' mr={5}>
-            <Box
-              fontSize='sm'
-              textTransform='uppercase'
-              fontFamily={theme.fonts.heading}
-            >
+            <Box fontSize='sm' textTransform='uppercase' fontFamily='heading'>
               {proposal?.proposalType
                 ? proposal.proposalType
                 : theme.daoMeta.proposal}
             </Box>
             <Skeleton isLoaded={isLoaded}>
-              <Box
-                fontWeight={700}
-                fontSize='lg'
-                fontFamily={theme.fonts.heading}
-              >
+              <Box fontWeight={700} fontSize='lg' fontFamily='heading'>
                 {proposal.title || '--'}
               </Box>
             </Skeleton>
@@ -93,17 +81,13 @@ const ProposalCard = ({ proposal, isLoaded }) => {
               <Box
                 textTransform='uppercase'
                 fontSize='sm'
-                fontFamily={theme.fonts.heading}
+                fontFamily='heading'
                 fontWeight={700}
               >
                 Tribute
               </Box>
               <Skeleton isLoaded={isLoaded}>
-                <Box
-                  fontSize='lg'
-                  fontFamily={theme.fonts.space}
-                  fontWeight={700}
-                >
+                <Box fontSize='lg' fontFamily='space' fontWeight={700}>
                   {proposal?.tributeOffered
                     ? utils.fromWei(proposal.tributeOffered)
                     : '--'}{' '}
@@ -117,17 +101,13 @@ const ProposalCard = ({ proposal, isLoaded }) => {
               <Box
                 textTransform='uppercase'
                 fontSize='sm'
-                fontFamily={theme.fonts.heading}
+                fontFamily='heading'
                 fontWeight={700}
               >
                 Payment Requested
               </Box>
               <Skeleton isLoaded={isLoaded}>
-                <Box
-                  fontSize='lg'
-                  fontFamily={theme.fonts.space}
-                  fontWeight={700}
-                >
+                <Box fontSize='lg' fontFamily='space' fontWeight={700}>
                   {proposal?.paymentRequested
                     ? utils.fromWei(proposal.paymentRequested)
                     : '--'}{' '}
@@ -141,17 +121,13 @@ const ProposalCard = ({ proposal, isLoaded }) => {
               <Box
                 textTransform='uppercase'
                 fontSize='sm'
-                fontFamily={theme.fonts.heading}
+                fontFamily='heading'
                 fontWeight={700}
               >
                 Shares
               </Box>
               <Skeleton isLoaded={isLoaded}>
-                <Box
-                  fontSize='lg'
-                  fontFamily={theme.fonts.space}
-                  fontWeight={700}
-                >
+                <Box fontSize='lg' fontFamily='space' fontWeight={700}>
                   {proposal?.sharesRequested ? proposal.sharesRequested : '--'}
                 </Box>
               </Skeleton>
@@ -162,27 +138,23 @@ const ProposalCard = ({ proposal, isLoaded }) => {
               <Box
                 textTransform='uppercase'
                 fontSize='sm'
-                fontFamily={theme.fonts.heading}
+                fontFamily='heading'
                 fontWeight={700}
               >
                 Loot
               </Box>
               <Skeleton isLoaded={isLoaded}>
-                <Box
-                  fontSize='lg'
-                  fontFamily={theme.fonts.space}
-                  fontWeight={700}
-                >
+                <Box fontSize='lg' fontFamily='space' fontWeight={700}>
                   {proposal?.lootRequested ? proposal.lootRequested : '--'}
                 </Box>
               </Skeleton>
             </Box>
           )}
-          <Box fontFamily={theme.fonts.heading}>
+          <Box fontFamily='heading'>
             <Box
               textTransform='uppercase'
               fontSize='sm'
-              fontFamily={theme.fonts.heading}
+              fontFamily='heading'
               fontWeight={700}
             >
               Proposal Status
@@ -190,7 +162,7 @@ const ProposalCard = ({ proposal, isLoaded }) => {
             <Skeleton isLoaded={isLoaded}>
               <Box
                 fontSize='lg'
-                fontFamily={theme.fonts.space}
+                fontFamily='space'
                 fontWeight={700}
                 textTransform='uppercase'
               >
@@ -200,12 +172,7 @@ const ProposalCard = ({ proposal, isLoaded }) => {
           </Box>
         </Flex>
         <Skeleton isLoaded={isLoaded}>
-          <Box
-            fontWeight={700}
-            fontSize='xs'
-            fontFamily={theme.fonts.heading}
-            mt={2}
-          >
+          <Box fontWeight={700} fontSize='xs' fontFamily='heading' mt={2}>
             {proposal.createdAt
               ? `Created on: ${format(
                   new Date(proposal.createdAt * 1000),

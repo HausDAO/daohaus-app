@@ -7,7 +7,7 @@ import {
   HorizontalGridLines,
   AreaSeries,
 } from 'react-vis';
-import { useTheme } from '../../contexts/PokemolContext';
+import { useTheme } from '../../contexts/CustomThemeContext';
 
 const MemberSnapshotChart = () => {
   const [theme] = useTheme();

@@ -11,11 +11,11 @@ import { motion } from 'framer-motion';
 
 import Header from '../Shared/Header';
 import SideNav from '../Shared/SideNav';
-import { useTheme } from '../../contexts/PokemolContext';
+import { useTheme } from '../../contexts/CustomThemeContext';
 import { RiArrowLeftSLine } from 'react-icons/ri';
 
 const Layout = ({ children }) => {
-  const { isOpen, onToggle } = useDisclosure(false);
+  const { isOpen, onToggle } = useDisclosure();
   const [theme] = useTheme();
 
   const MotionBox = motion.custom(Box);
@@ -77,6 +77,7 @@ const Layout = ({ children }) => {
             h='60px'
             onClick={onToggle}
             cursor='pointer'
+            border='none'
           />
         </Flex>
         <MotionBox

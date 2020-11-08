@@ -4,7 +4,8 @@ import { ChakraProvider } from '@chakra-ui/core';
 import ApolloClient from 'apollo-boost';
 import { ApolloProvider } from 'react-apollo';
 
-import { useTheme } from './contexts/PokemolContext';
+import { PokemolContextProvider } from './contexts/PokemolContext';
+import { useTheme } from './contexts/CustomThemeContext';
 import { resolvers } from './utils/apollo/resolvers';
 import Routes from './Routes';
 import Layout from './components/Layout/Layout';
@@ -42,14 +43,18 @@ function Init() {
 const App = () => {
   const [theme] = useTheme();
 
+  console.log('render App');
+
   return (
     <ApolloProvider client={client}>
       <ChakraProvider theme={theme}>
         <Router>
-          <Init />
-          <Layout>
-            <Routes />
-          </Layout>
+          <PokemolContextProvider>
+            <Init />
+            <Layout>
+              <Routes />
+            </Layout>
+          </PokemolContextProvider>
         </Router>
       </ChakraProvider>
     </ApolloProvider>

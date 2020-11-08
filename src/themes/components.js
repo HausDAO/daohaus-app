@@ -1,6 +1,6 @@
 import React from 'react';
 import { Button } from '@chakra-ui/core';
-import { useTheme } from '../contexts/PokemolContext';
+import { useTheme } from '../contexts/CustomThemeContext';
 
 export const PrimaryButton = ({ onClick, children, ...others }) => {
   const [theme] = useTheme();

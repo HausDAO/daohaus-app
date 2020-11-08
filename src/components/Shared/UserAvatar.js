@@ -2,12 +2,9 @@ import React from 'react';
 import makeBlockie from 'ethereum-blockies-base64';
 import { Flex, Avatar, Box, Skeleton } from '@chakra-ui/core';
 
-import { useTheme } from '../../contexts/PokemolContext';
 import { truncateAddr } from '../../utils/helpers';
 
 const UserAvatar = ({ user }) => {
-  const [theme] = useTheme();
-
   return (
     <Flex direction='row' alignItems='center'>
       {user && user.image && user.image[0] ? (
@@ -19,7 +16,7 @@ const UserAvatar = ({ user }) => {
             mr={3}
             size='sm'
           />
-          <Box fontSize='md' fontFamily={theme.fonts.heading}>
+          <Box fontSize='md' fontFamily='heading'>
             {user.name || truncateAddr(user.username || user.memberAddress)}{' '}
             <span>{user.emoji || ''} </span>
           </Box>
@@ -34,7 +31,7 @@ const UserAvatar = ({ user }) => {
                   src={makeBlockie(user.username || user.memberAddress)}
                   mr={3}
                 />
-                <Box fontSize='md' fontFamily={theme.fonts.heading}>
+                <Box fontSize='md' fontFamily='heading'>
                   {truncateAddr(user.username || user.memberAddress)}
                 </Box>
               </>

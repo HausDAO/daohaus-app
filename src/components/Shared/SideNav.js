@@ -2,50 +2,16 @@ import React from 'react';
 import { Link as RouterLink, useHistory } from 'react-router-dom';
 import { Stack, Link, Box, Flex } from '@chakra-ui/core';
 
-import {
-  useDao,
-  useRefetchQuery,
-  useTheme,
-} from '../../contexts/PokemolContext';
-import BrandOverride from '../../assets/themes/raidTheme/raidguild__swords.svg';
-import BgOverride from '../../assets/themes/raidTheme/raid__fantasy--bg.jpg';
-import { PrimaryButton, SecondaryButton } from '../../themes/theme';
+import { useDao, useRefetchQuery } from '../../contexts/PokemolContext';
+import { useTheme } from '../../contexts/CustomThemeContext';
+import { SecondaryButton } from '../../themes/theme';
 import ChangeDao from './ChangeDao';
 
 const SideNav = () => {
-  const [theme, setTheme] = useTheme();
+  const [theme] = useTheme();
   const [dao] = useDao();
   const history = useHistory();
   const [, updateRefetchQuery] = useRefetchQuery();
-
-  const setLocalTheme = () => {
-    setTheme({
-      primary500: '#e50651',
-      secondary500: '#6153ff',
-      bg500: '#121212',
-      brandImg: BrandOverride,
-      bgImg: BgOverride,
-      bgOverlayOpacity: '0.5',
-      primaryFont: 'Space Mono', // only temporary
-      bodyFont: 'Rubik',
-      daoMeta: {
-        proposals: 'Quests',
-        proposal: 'Quest',
-        bank: 'Inventory',
-        members: 'Players',
-        member: 'Player',
-        discord: 'https://discord.gg/WqwQGgeeFd',
-        medium: '',
-        telegram: '',
-        website: '',
-        other: '',
-      },
-    });
-  };
-
-  const setDefault = () => {
-    setTheme();
-  };
 
   return (
     <Box>
@@ -63,49 +29,43 @@ const SideNav = () => {
             <Stack spacing={3} mt='125px' w='200px' pr={1}>
               <Box
                 fontSize='xs'
-                fontFamily={theme.fonts.heading}
+                fontFamily='heading'
                 cursor='pointer'
                 onClick={() => history.push('/')}
               >
                 Main Menu
               </Box>
               <Link to={`/dao/${dao.address}/proposals`} as={RouterLink}>
-                <Box fontSize='2xl' fontFamily={theme.fonts.heading}>
+                <Box fontSize='2xl' fontFamily='heading'>
                   {theme.daoMeta.proposals}
                 </Box>
               </Link>
               <Link to={`/dao/${dao.address}/bank`} as={RouterLink}>
-                <Box fontSize='2xl' fontFamily={theme.fonts.heading}>
+                <Box fontSize='2xl' fontFamily='heading'>
                   {theme.daoMeta.bank}
                 </Box>
               </Link>
               <Link to={`/dao/${dao.address}/members`} as={RouterLink}>
-                <Box fontSize='2xl' fontFamily={theme.fonts.heading}>
+                <Box fontSize='2xl' fontFamily='heading'>
                   {theme.daoMeta.members}
                 </Box>
               </Link>
               <Link to={`/dao/${dao.address}/settings/boosts`} as={RouterLink}>
-                <Box fontSize='md' fontFamily={theme.fonts.heading}>
+                <Box fontSize='md' fontFamily='heading'>
                   Boost
                 </Box>
               </Link>
               <Link to={`/dao/${dao.address}/settings`} as={RouterLink}>
-                <Box fontSize='md' fontFamily={theme.fonts.heading}>
+                <Box fontSize='md' fontFamily='heading'>
                   Settings
                 </Box>
               </Link>
               <Link to={`/dao/${dao.address}/profile`} as={RouterLink}>
-                <Box fontSize='md' fontFamily={theme.fonts.heading}>
+                <Box fontSize='md' fontFamily='heading'>
                   Stats
                 </Box>
               </Link>
             </Stack>
-            <Flex mt={10} direction='column' w='60%'>
-              <PrimaryButton onClick={setDefault} mb={3}>
-                Default
-              </PrimaryButton>
-              <SecondaryButton onClick={setLocalTheme}>Other</SecondaryButton>
-            </Flex>
           </>
         ) : (
           <>
@@ -115,7 +75,7 @@ const SideNav = () => {
                   as={RouterLink}
                   to={`/`}
                   fontSize='xl'
-                  fontFamily={theme.fonts.heading}
+                  fontFamily='heading'
                   fontWeight={700}
                 >
                   DAOhaus
@@ -126,12 +86,12 @@ const SideNav = () => {
             <Stack spacing={4} mt='125px' w='200px' pr={1}>
               <Box fontSize='xs'>Main Menu</Box>
               <Link href='https://daohaus.club' isExternal>
-                <Box fontSize='xl' fontFamily={theme.fonts.heading}>
+                <Box fontSize='xl' fontFamily='heading'>
                   Explore DAOs
                 </Box>
               </Link>
               <Link href='https://daohaus.club/summon' isExternal>
-                <Box fontSize='xl' fontFamily={theme.fonts.heading}>
+                <Box fontSize='xl' fontFamily='heading'>
                   Summon a DAO
                 </Box>
               </Link>
@@ -139,35 +99,26 @@ const SideNav = () => {
                 href='https://xdai.daohaus.club/dao/v2/0x283bdc900b6ec9397abb721c5bbff5ace46e0f50'
                 isExternal
               >
-                <Box fontSize='xl' fontFamily={theme.fonts.heading}>
+                <Box fontSize='xl' fontFamily='heading'>
                   HausDAO
                 </Box>
               </Link>
               <Link href='https://daohaus.club/about' isExternal>
-                <Box fontSize='md' fontFamily={theme.fonts.heading}>
+                <Box fontSize='md' fontFamily='heading'>
                   About
                 </Box>
               </Link>
               <Link href='https://daohaus.club/help' isExternal>
-                <Box fontSize='md' fontFamily={theme.fonts.heading}>
+                <Box fontSize='md' fontFamily='heading'>
                   Help
                 </Box>
               </Link>
             </Stack>
-            <Flex mt={10} direction='column' w='60%'>
-              <PrimaryButton onClick={setDefault} mb={3}>
-                Default
-              </PrimaryButton>
-              <SecondaryButton onClick={setLocalTheme}>Other</SecondaryButton>
-            </Flex>
           </>
         )}
       </>
 
-      <SecondaryButton
-        colorScheme={theme.colors.secondary[500]}
-        onClick={() => updateRefetchQuery('proposals')}
-      >
+      <SecondaryButton onClick={() => updateRefetchQuery('proposals')}>
         Refetch
       </SecondaryButton>
     </Box>

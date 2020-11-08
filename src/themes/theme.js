@@ -1,19 +1,19 @@
-import { theme, extendTheme } from '@chakra-ui/core';
+import { extendTheme } from '@chakra-ui/core';
 import BrandImg from '../assets/themes/hausdao/Daohaus__Castle--Dark.svg';
 import BgImg from '../assets/themes/hausdao/daohaus__hero--falling.jpg';
 import { lighten, darken } from 'polished';
 
 export * from './components';
 
-const defaultTheme = {
+export const defaultTheme = {
   primary500: '#10153d',
   secondary500: '#EB8A23',
-  brandImg: BrandImg,
-  bgImg: BgImg,
   bg500: '#03061B',
   bgOverlayOpacity: '0.75',
   primaryFont: 'Inknut Antiqua',
   bodyFont: 'Rubik',
+  brandImg: BrandImg,
+  bgImg: BgImg,
   daoMeta: {
     proposals: 'Proposals',
     proposal: 'Proposal',
@@ -28,15 +28,11 @@ const defaultTheme = {
   },
 };
 
-export const customTheme = (daoTheme) => {
-  console.log('returing customTheme');
+export const setTheme = (daoTheme) => {
   const themeOverrides = daoTheme || defaultTheme;
-  return {
-    ...theme,
+  return extendTheme({
     colors: {
-      ...theme.colors,
       primary: {
-        ...theme.colors.primary,
         50: lighten(0.4, themeOverrides.primary500),
         100: lighten(0.3, themeOverrides.primary500),
         200: lighten(0.2, themeOverrides.primary500),
@@ -49,7 +45,6 @@ export const customTheme = (daoTheme) => {
         900: darken(0.2, themeOverrides.primary500),
       },
       background: {
-        ...theme.colors.background,
         50: lighten(0.4, themeOverrides.bg500),
         100: lighten(0.3, themeOverrides.bg500),
         200: lighten(0.2, themeOverrides.bg500),
@@ -62,7 +57,6 @@ export const customTheme = (daoTheme) => {
         900: darken(0.2, themeOverrides.bg500),
       },
       secondary: {
-        ...theme.colors.secondary,
         50: lighten(0.4, themeOverrides.secondary500),
         100: lighten(0.3, themeOverrides.secondary500),
         200: lighten(0.2, themeOverrides.secondary500),
@@ -76,15 +70,10 @@ export const customTheme = (daoTheme) => {
       },
     },
     images: {
-      ...theme.images,
       brandImg: themeOverrides.brandImg,
       bgImg: themeOverrides.bgImg,
     },
-    icons: {
-      ...theme.icons,
-    },
     fonts: {
-      ...theme.fonts,
       heading: themeOverrides.primaryFont,
       body: themeOverrides.bodyFont,
       hub: 'Mirza',
@@ -99,12 +88,11 @@ export const customTheme = (daoTheme) => {
       member: themeOverrides.daoMeta.member,
       discord: themeOverrides.daoMeta.discord,
       medium: themeOverrides.daoMeta.medium,
-      medium: themeOverrides.daoMeta.telegram,
-      medium: themeOverrides.daoMeta.website,
-      medium: themeOverrides.daoMeta.other,
+      telegram: themeOverrides.daoMeta.telegram,
+      website: themeOverrides.daoMeta.website,
+      other: themeOverrides.daoMeta.other,
     },
     styles: {
-      ...theme.styles,
       bgOverlayOpacity: themeOverrides.bgOverlayOpacity,
       global: {
         'html, body': {
@@ -119,5 +107,5 @@ export const customTheme = (daoTheme) => {
         },
       },
     },
-  };
+  });
 };
