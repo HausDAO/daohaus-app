@@ -60,7 +60,8 @@ export function determineProposalStatus(
 
   let status;
   const abortedOrCancelled = proposal.aborted || proposal.cancelled;
-  if (proposal.processed && abortedOrCancelled) {
+  // if (proposal.processed && abortedOrCancelled) {
+  if (abortedOrCancelled) {
     status = ProposalStatus.Cancelled;
   } else if (version === 2 && !proposal.sponsored) {
     status = ProposalStatus.Unsponsored;

@@ -40,12 +40,12 @@ const DaoInit = () => {
     const hasReadOnlyService =
       contracts.daoService && !contracts.daoService.accountAddr;
 
-    if (hasUserAndDao && hasReadOnlyService) {
+    if (hasUserAndDao && hasReadOnlyService && web3Connect.provider) {
       initWeb3DaoService();
     }
 
     // eslint-disable-next-line
-  }, [user, daoMetadata, contracts]);
+  }, [user, daoMetadata, contracts, web3Connect]);
 
   useEffect(() => {
     const noDaoService =

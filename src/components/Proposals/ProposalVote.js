@@ -13,14 +13,11 @@ import { isAfter, isBefore } from 'date-fns';
 import { ethToWei } from '@netgum/utils'; // returns BN
 
 const ProposalVote = ({ proposal }) => {
-  console.log(proposal);
   const [user] = useUser();
   const [dao] = useDao();
   const [wallet] = useMemberWallet();
   const [daoData] = useDaoGraphData();
   const [txProcessor, updateTxProcessor] = useTxProcessor();
-  console.log(wallet);
-  console.log(daoData);
   const currentlyVoting = (proposal) => {
     return (
       isBefore(Date.now(), new Date(+proposal?.votingPeriodEnds * 1000)) &&

@@ -15,7 +15,7 @@ import { useTheme } from '../../contexts/CustomThemeContext';
 import { RiArrowLeftSLine } from 'react-icons/ri';
 
 const Layout = ({ children }) => {
-  const { isOpen, onToggle } = useDisclosure(false);
+  const { isOpen, onToggle } = useDisclosure();
   const [theme] = useTheme();
 
   const MotionBox = motion.custom(Box);
@@ -52,8 +52,6 @@ const Layout = ({ children }) => {
       marginLeft: bar.closed.width + 'px',
     },
   };
-
-  console.log('theme.images.brandImg', theme.images.brandImg);
 
   return (
     <Flex direction='row' minH='100vh' color='white' w='100vw'>
