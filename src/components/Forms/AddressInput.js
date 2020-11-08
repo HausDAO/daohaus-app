@@ -3,7 +3,8 @@ import React from 'react';
 // import { useForm } from 'react-hook-form';
 import { useEns, useTheme } from '../../contexts/PokemolContext';
 
-const AddressInput = ({ register, setValue, watch }) => {
+const AddressInput = ({ register, setValue, watch, formLabel }) => {
+  formLabel = formLabel || 'applicant';
   const [theme] = useTheme();
   const [ens] = useEns();
 
@@ -32,7 +33,7 @@ const AddressInput = ({ register, setValue, watch }) => {
         fontSize='xs'
         fontWeight={700}
       >
-        Applicant
+        {formLabel}
       </FormLabel>
       <FormHelperText fontSize='xs' id='applicant-helper-text'>
         {ensAddr || 'Use ETH address or ENS'}
@@ -44,7 +45,7 @@ const AddressInput = ({ register, setValue, watch }) => {
         ref={register({
           required: {
             value: true,
-            message: 'Applicant is required',
+            message: `${formLabel} is required`,
           },
         })}
         color='white'

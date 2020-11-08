@@ -1,5 +1,6 @@
 import {
   Button,
+  FormErrorMessage,
   FormLabel,
   Input,
   InputGroup,
@@ -7,10 +8,9 @@ import {
   Select,
 } from '@chakra-ui/core';
 import React, { useState, useEffect } from 'react';
-import { useForm } from 'react-hook-form';
 import { useDao, useTheme } from '../../contexts/PokemolContext';
 
-const PaymentInput = ({ register, setValue, getValues }) => {
+const PaymentInput = ({ register, setValue, getValues, errors }) => {
   const [balance, setBalance] = useState(0);
 
   const [tokenData, setTokenData] = useState([]);
@@ -70,6 +70,14 @@ const PaymentInput = ({ register, setValue, getValues }) => {
     setValue('paymentRequested', balance);
   };
 
+  const validateBalance = (value) => {
+    let error;
+    if (value > balance) {
+      error = 'Payment Requested is more than the dao has';
+    }
+    return error || true;
+  };
+
   return (
     <>
       <FormLabel
@@ -92,12 +100,18 @@ const PaymentInput = ({ register, setValue, getValues }) => {
               value: /[0-9]/,
               message: 'Payment must be a number',
             },
+            validate: validateBalance,
           })}
           color='white'
           focusBorderColor='secondary.500'
         />
         <InputRightAddon>
-          <Select name='paymentToken' ref={register} onChange={handleChange}>
+          <Select
+            name='paymentToken'
+            ref={register}
+            onChange={handleChange}
+            color='black'
+          >
             {' '}
             {tokenData.map((token, idx) => (
               <option key={idx} default={!idx} value={token.value}>
@@ -107,9 +121,12 @@ const PaymentInput = ({ register, setValue, getValues }) => {
           </Select>
         </InputRightAddon>
       </InputGroup>
-      <Button onClick={() => setMax()}>
+      <Button onClick={() => setMax()} color='black'>
         Max: {balance && balance.toFixed(4)}
       </Button>
+      <FormErrorMessage>
+        {errors.paymentToken && errors.paymentToken.message}
+      </FormErrorMessage>
     </>
   );
 };

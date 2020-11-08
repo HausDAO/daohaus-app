@@ -8,16 +8,15 @@ import {
   Input,
   InputGroup,
   InputLeftAddon,
-  InputRightAddon,
   Icon,
   Stack,
-  Select,
   Box,
   Textarea,
   Menu,
   MenuButton,
   MenuList,
   MenuItem,
+  Text,
 } from '@chakra-ui/core';
 import { utils } from 'web3';
 import { RiAddFill, RiErrorWarningLine } from 'react-icons/ri';
@@ -33,11 +32,10 @@ import { PrimaryButton } from '../../themes/components';
 import PaymentInput from './PaymentInput';
 import TributeInput from './TributeInput';
 
-
 const TradeProposalForm = () => {
   const [loading, setLoading] = useState(false);
   const [showLoot, setShowLoot] = useState(false);
-  const [showPaymentRequest, setShowPaymentRequest] = useState(false);
+  const [showShares, setShowShares] = useState(false);
   const [showApplicant, setShowApplicant] = useState(false);
   const [theme] = useTheme();
   const [user] = useUser();
@@ -50,6 +48,8 @@ const TradeProposalForm = () => {
     handleSubmit,
     errors,
     register,
+    setValue,
+    getValues,
     // formState
   } = useForm();
 
@@ -192,34 +192,38 @@ const TradeProposalForm = () => {
           </Stack>
         </Box>
         <Box w='48%'>
-          <FormLabel
-            htmlFor='name'
-            color='white'
-            fontFamily={theme.fonts.heading}
-            textTransform='uppercase'
-            fontSize='xs'
-            fontWeight={700}
-          >
-            Shares Requested
-          </FormLabel>
-          <Input
-            name='sharesRequested'
-            placeholder='0'
-            mb={5}
-            ref={register({
-              required: {
-                value: true,
-                message: 'Requested shares are required for Member Proposals',
-              },
-              pattern: {
-                value: /[0-9]/,
-                message: 'Requested shares must be a number',
-              },
-            })}
-            color='white'
-            focusBorderColor='secondary.500'
+          <TributeInput
+            register={register}
+            setValue={setValue}
+            getValues={getValues}
           />
-          <TributeInput />
+          <Text>Trade For</Text>
+          <PaymentInput
+            register={register}
+            setValue={setValue}
+            getValues={getValues}
+            errors={errors}
+          />
+
+          {showShares && (
+            <Input
+              name='sharesRequested'
+              placeholder='0'
+              mb={5}
+              ref={register({
+                required: {
+                  value: true,
+                  message: 'Requested shares are required for Member Proposals',
+                },
+                pattern: {
+                  value: /[0-9]/,
+                  message: 'Requested shares must be a number',
+                },
+              })}
+              color='white'
+              focusBorderColor='secondary.500'
+            />
+          )}
 
           {showLoot && (
             <>
@@ -249,8 +253,6 @@ const TradeProposalForm = () => {
             </>
           )}
 
-          {showPaymentRequest && <PaymentInput />}
-
           {showApplicant && (
             <>
               <FormLabel
@@ -273,7 +275,7 @@ const TradeProposalForm = () => {
               />
             </>
           )}
-          {(!showApplicant || !showLoot || !showPaymentRequest) && (
+          {(!showApplicant || !showLoot || !showShares) && (
             <Menu color='white' textTransform='uppercase'>
               <MenuButton
                 as={Button}
@@ -292,9 +294,9 @@ const TradeProposalForm = () => {
                     Request Loot
                   </MenuItem>
                 )}
-                {!showPaymentRequest && (
-                  <MenuItem onClick={() => setShowPaymentRequest(true)}>
-                    Request Payment
+                {!showShares && (
+                  <MenuItem onClick={() => setShowShares(true)}>
+                    SHoe Shares
                   </MenuItem>
                 )}
               </MenuList>
