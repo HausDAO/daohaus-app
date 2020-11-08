@@ -17,7 +17,6 @@ import { RiArrowLeftSLine } from 'react-icons/ri';
 const Layout = ({ children }) => {
   const { isOpen, onToggle } = useDisclosure(false);
   const [theme] = useTheme();
-  // const [dao]
 
   const MotionBox = motion.custom(Box);
   const MotionFlex = motion.custom(Flex);
@@ -54,6 +53,8 @@ const Layout = ({ children }) => {
     },
   };
 
+  console.log('theme.images.brandImg', theme.images.brandImg);
+
   return (
     <Flex direction='row' minH='100vh' color='white' w='100vw'>
       <MotionFlex
@@ -78,6 +79,7 @@ const Layout = ({ children }) => {
             h='60px'
             onClick={onToggle}
             cursor='pointer'
+            border='none'
           />
         </Flex>
         <MotionBox

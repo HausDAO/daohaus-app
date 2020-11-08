@@ -1,6 +1,6 @@
 import React, { useContext, useCallback, useMemo } from 'react';
 
-import { customTheme, theme } from '../themes/theme';
+import { setTheme } from '../themes/theme';
 
 const CustomThemeContext = React.createContext();
 
@@ -9,14 +9,13 @@ function useCustomThemeContext() {
 }
 
 const initialState = {
-  // theme: theme,
-  theme: customTheme(),
+  theme: setTheme(),
 };
 
 const reducer = (state, action) => {
   switch (action.type) {
     case 'setTheme': {
-      return { ...state, theme: customTheme(action.payload) };
+      return { ...state, theme: setTheme(action.payload) };
     }
     default: {
       return initialState;

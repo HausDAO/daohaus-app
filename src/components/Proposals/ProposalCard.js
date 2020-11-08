@@ -25,7 +25,6 @@ const ProposalCard = ({ proposal, isLoaded }) => {
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [memberWallet, proposal]);
-  console.log('render proposalCard');
 
   return (
     <Link to={`/dao/${dao.address}/proposals/${proposal.proposalId}`}>

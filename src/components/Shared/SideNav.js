@@ -4,45 +4,14 @@ import { Stack, Link, Box, Flex } from '@chakra-ui/core';
 
 import { useDao, useRefetchQuery } from '../../contexts/PokemolContext';
 import { useTheme } from '../../contexts/CustomThemeContext';
-import BrandOverride from '../../assets/themes/raidTheme/raidguild__swords.svg';
-import BgOverride from '../../assets/themes/raidTheme/raid__fantasy--bg.jpg';
-import { PrimaryButton, SecondaryButton } from '../../themes/theme';
+import { SecondaryButton } from '../../themes/theme';
 import ChangeDao from './ChangeDao';
 
 const SideNav = () => {
-  const [theme, setTheme] = useTheme();
+  const [theme] = useTheme();
   const [dao] = useDao();
   const history = useHistory();
   const [, updateRefetchQuery] = useRefetchQuery();
-
-  const setLocalTheme = () => {
-    setTheme({
-      primary500: '#e50651',
-      secondary500: '#6153ff',
-      bg500: '#121212',
-      brandImg: BrandOverride,
-      bgImg: BgOverride,
-      bgOverlayOpacity: '0.5',
-      primaryFont: 'Space Mono', // only temporary
-      bodyFont: 'Rubik',
-      daoMeta: {
-        proposals: 'Quests',
-        proposal: 'Quest',
-        bank: 'Inventory',
-        members: 'Players',
-        member: 'Player',
-        discord: 'https://discord.gg/WqwQGgeeFd',
-        medium: '',
-        telegram: '',
-        website: '',
-        other: '',
-      },
-    });
-  };
-
-  const setDefault = () => {
-    setTheme();
-  };
 
   return (
     <Box>
@@ -97,12 +66,6 @@ const SideNav = () => {
                 </Box>
               </Link>
             </Stack>
-            <Flex mt={10} direction='column' w='60%'>
-              <PrimaryButton onClick={setDefault} mb={3}>
-                Default
-              </PrimaryButton>
-              <SecondaryButton onClick={setLocalTheme}>Other</SecondaryButton>
-            </Flex>
           </>
         ) : (
           <>
@@ -151,12 +114,6 @@ const SideNav = () => {
                 </Box>
               </Link>
             </Stack>
-            <Flex mt={10} direction='column' w='60%'>
-              <PrimaryButton onClick={setDefault} mb={3}>
-                Default
-              </PrimaryButton>
-              <SecondaryButton onClick={setLocalTheme}>Other</SecondaryButton>
-            </Flex>
           </>
         )}
       </>
