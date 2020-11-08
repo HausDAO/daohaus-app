@@ -21,7 +21,6 @@ const ProposalsList = () => {
   const [isLoaded, setIsLoaded] = useState(false);
   const [filter, setFilter] = useState();
   const [sort, setSort] = useState();
-  console.log(proposals);
 
   useEffect(() => {
     if (proposals.length > 0) {
@@ -74,27 +73,25 @@ const ProposalsList = () => {
 
   return (
     <>
-      <Box w='60%'>
-        <Flex>
-          {dao.version !== '1' ? (
-            <ProposalFilter
-              filter={filter}
-              setFilter={setFilter}
-              listLength={listProposals.length}
-            />
-          ) : null}
-          <ProposalSort sort={sort} setSort={setSort} />
-        </Flex>
-        {listProposals.map((proposal) => {
-          return (
-            <ProposalCard
-              proposal={proposal}
-              key={proposal.id}
-              isLoaded={isLoaded}
-            />
-          );
-        })}
-      </Box>
+      <Flex>
+        {dao.version !== '1' ? (
+          <ProposalFilter
+            filter={filter}
+            setFilter={setFilter}
+            listLength={listProposals.length}
+          />
+        ) : null}
+        <ProposalSort sort={sort} setSort={setSort} />
+      </Flex>
+      {listProposals.map((proposal) => {
+        return (
+          <ProposalCard
+            proposal={proposal}
+            key={proposal.id}
+            isLoaded={isLoaded}
+          />
+        );
+      })}
     </>
   );
 };

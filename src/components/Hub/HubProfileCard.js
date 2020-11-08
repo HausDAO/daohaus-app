@@ -1,7 +1,8 @@
 import React from 'react';
-import { Flex, Text, Image } from '@chakra-ui/core';
+import { Flex, Box, Image } from '@chakra-ui/core';
 
-import { useUser, useTheme } from '../../contexts/PokemolContext';
+import { useUser } from '../../contexts/PokemolContext';
+import { useTheme } from '../../contexts/CustomThemeContext';
 import makeBlockie from 'ethereum-blockies-base64';
 import { truncateAddr } from '../../utils/helpers';
 
@@ -31,20 +32,20 @@ const HubProfileCard = () => {
         )}
 
         <Flex direction='column'>
-          <Text fontSize='xl' fontFamily={theme.fonts.heading}>
+          <Box fontSize='xl' fontFamily={theme.fonts.heading}>
             {user.profile.name || truncateAddr(user.username)}{' '}
             <span>{user.profile.emoji || ''} </span>
-          </Text>
+          </Box>
           {user.name ? (
-            <Text fontSize='sm' fontFamily={theme.fonts.mono}>
+            <Box fontSize='sm' fontFamily={theme.fonts.mono}>
               {truncateAddr(user.username)}
-            </Text>
+            </Box>
           ) : null}
         </Flex>
       </Flex>
-      <Text fontSize='sm' ml={12} mt={4} fontFamily={theme.fonts.mono}>
+      <Box fontSize='sm' ml={12} mt={4} fontFamily={theme.fonts.mono}>
         {user.profile.description}
-      </Text>
+      </Box>
     </>
   );
 };

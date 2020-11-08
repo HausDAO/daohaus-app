@@ -4,11 +4,8 @@ import { Box, Flex, Text, Badge, Skeleton } from '@chakra-ui/core';
 import { utils } from 'web3';
 import { format } from 'date-fns';
 
-import {
-  useDao,
-  useMemberWallet,
-  useTheme,
-} from '../../contexts/PokemolContext';
+import { useDao, useMemberWallet } from '../../contexts/PokemolContext';
+import { useTheme } from '../../contexts/CustomThemeContext';
 import { getProposalCountdownText } from '../../utils/proposal-helper';
 
 const ProposalCard = ({ proposal, isLoaded }) => {
@@ -28,7 +25,6 @@ const ProposalCard = ({ proposal, isLoaded }) => {
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [memberWallet, proposal]);
-
   console.log('render proposalCard');
 
   return (
@@ -46,7 +42,7 @@ const ProposalCard = ({ proposal, isLoaded }) => {
       >
         <Flex>
           <Box minWidth='30%' mr={5}>
-            <Text
+            <Box
               fontSize='sm'
               textTransform='uppercase'
               fontFamily={theme.fonts.heading}
@@ -54,30 +50,35 @@ const ProposalCard = ({ proposal, isLoaded }) => {
               {proposal?.proposalType
                 ? proposal.proposalType
                 : theme.daoMeta.proposal}
-            </Text>
+            </Box>
             <Skeleton isLoaded={isLoaded}>
-              <Text
+              <Box
                 fontWeight={700}
                 fontSize='lg'
                 fontFamily={theme.fonts.heading}
               >
                 {proposal.title || '--'}
-              </Text>
+              </Box>
             </Skeleton>
           </Box>
           <Flex align='center'>
             <Flex h='20px'>
               <Skeleton isLoaded={isLoaded}>
-                <Badge colorScheme='green' mr={3}>
-                  {proposal?.yesVotes ? proposal.yesVotes : '--'} Yes
-                </Badge>
-                <Badge colorScheme='red'>
-                  {proposal?.noVotes ? proposal.noVotes : '--'} No
-                </Badge>
+                {(+proposal?.yesVotes > 0 || +proposal?.noVotes > 0) && (
+                  <>
+                    <Badge colorScheme='green' mr={3}>
+                      {proposal?.yesVotes ? proposal.yesVotes : '--'} Yes
+                    </Badge>
+                    <Badge colorScheme='red'>
+                      {proposal?.noVotes ? proposal.noVotes : '--'} No
+                    </Badge>
+                  </>
+                )}
+
                 {memberVote ? (
-                  <Text fontSize='sm'>
+                  <Box fontSize='sm'>
                     {+memberVote.uintVote ? 'You voted yes' : 'You voted no'}
-                  </Text>
+                  </Box>
                 ) : null}
               </Skeleton>
             </Flex>
@@ -86,16 +87,16 @@ const ProposalCard = ({ proposal, isLoaded }) => {
         <Flex w='80%' justify='space-between' mt={10}>
           {(proposal?.tributeOffered > 0 || !proposal?.tributeOffered) && (
             <Box>
-              <Text
+              <Box
                 textTransform='uppercase'
                 fontSize='sm'
                 fontFamily={theme.fonts.heading}
                 fontWeight={700}
               >
                 Tribute
-              </Text>
+              </Box>
               <Skeleton isLoaded={isLoaded}>
-                <Text
+                <Box
                   fontSize='lg'
                   fontFamily={theme.fonts.space}
                   fontWeight={700}
@@ -104,22 +105,22 @@ const ProposalCard = ({ proposal, isLoaded }) => {
                     ? utils.fromWei(proposal.tributeOffered)
                     : '--'}{' '}
                   {proposal.tributeToken || 'WETH'}
-                </Text>
+                </Box>
               </Skeleton>
             </Box>
           )}
-          {(proposal?.paymentRequested > 0 || !proposal?.paymentRequested) && (
+          {proposal?.paymentRequested > 0 && (
             <Box>
-              <Text
+              <Box
                 textTransform='uppercase'
                 fontSize='sm'
                 fontFamily={theme.fonts.heading}
                 fontWeight={700}
               >
                 Payment Requested
-              </Text>
+              </Box>
               <Skeleton isLoaded={isLoaded}>
-                <Text
+                <Box
                   fontSize='lg'
                   fontFamily={theme.fonts.space}
                   fontWeight={700}
@@ -128,58 +129,75 @@ const ProposalCard = ({ proposal, isLoaded }) => {
                     ? utils.fromWei(proposal.paymentRequested)
                     : '--'}{' '}
                   {proposal.paymentToken || 'WETH'}
-                </Text>
+                </Box>
               </Skeleton>
             </Box>
           )}
           {(proposal?.sharesRequested > 0 || !proposal?.sharesRequested) && (
             <Box>
-              <Text
+              <Box
                 textTransform='uppercase'
                 fontSize='sm'
                 fontFamily={theme.fonts.heading}
                 fontWeight={700}
               >
                 Shares
-              </Text>
+              </Box>
               <Skeleton isLoaded={isLoaded}>
-                <Text
+                <Box
                   fontSize='lg'
                   fontFamily={theme.fonts.space}
                   fontWeight={700}
                 >
                   {proposal?.sharesRequested ? proposal.sharesRequested : '--'}
-                </Text>
+                </Box>
               </Skeleton>
             </Box>
           )}
-          {(proposal?.lootRequested > 0 || !proposal?.lootRequested) && (
+          {proposal?.lootRequested > 0 && (
             <Box>
-              <Text
+              <Box
                 textTransform='uppercase'
                 fontSize='sm'
                 fontFamily={theme.fonts.heading}
                 fontWeight={700}
               >
                 Loot
-              </Text>
+              </Box>
               <Skeleton isLoaded={isLoaded}>
-                <Text
+                <Box
                   fontSize='lg'
                   fontFamily={theme.fonts.space}
                   fontWeight={700}
                 >
                   {proposal?.lootRequested ? proposal.lootRequested : '--'}
-                </Text>
+                </Box>
               </Skeleton>
             </Box>
           )}
           <Box fontFamily={theme.fonts.heading}>
-            {getProposalCountdownText(proposal)}
+            <Box
+              textTransform='uppercase'
+              fontSize='sm'
+              fontFamily={theme.fonts.heading}
+              fontWeight={700}
+            >
+              Proposal Status
+            </Box>
+            <Skeleton isLoaded={isLoaded}>
+              <Box
+                fontSize='lg'
+                fontFamily={theme.fonts.space}
+                fontWeight={700}
+                textTransform='uppercase'
+              >
+                {proposal?.status ? getProposalCountdownText(proposal) : '--'}
+              </Box>
+            </Skeleton>
           </Box>
         </Flex>
         <Skeleton isLoaded={isLoaded}>
-          <Text
+          <Box
             fontWeight={700}
             fontSize='xs'
             fontFamily={theme.fonts.heading}
@@ -191,7 +209,7 @@ const ProposalCard = ({ proposal, isLoaded }) => {
                   'MMMM d y',
                 )}`
               : '--'}
-          </Text>
+          </Box>
         </Skeleton>
       </Box>
     </Link>

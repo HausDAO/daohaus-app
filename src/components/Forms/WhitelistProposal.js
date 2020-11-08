@@ -10,18 +10,13 @@ import {
   Icon,
   Stack,
   Box,
-  Text,
   Textarea,
 } from '@chakra-ui/core';
 import { utils } from 'web3';
 import { RiErrorWarningLine } from 'react-icons/ri';
 
-import {
-  useDao,
-  useTheme,
-  useTxProcessor,
-  useUser,
-} from '../../contexts/PokemolContext';
+import { useDao, useTxProcessor, useUser } from '../../contexts/PokemolContext';
+import { useTheme } from '../../contexts/CustomThemeContext';
 import { PrimaryButton } from '../../themes/components';
 
 const WhitelistProposalForm = () => {
@@ -52,8 +47,6 @@ const WhitelistProposalForm = () => {
     }
   }, [errors]);
 
-  // TODO check tribute token < currentWallet.token.balance & unlock
-  // TODO check payment token < dao.token.balance
   // TODO check link is a valid link
 
   const txCallBack = (txHash, details) => {
@@ -85,23 +78,9 @@ const WhitelistProposalForm = () => {
     });
 
     try {
-      dao.daoService.moloch.submitProposal(
-        values.sharesRequested
-          ? utils.toWei(values.sharesRequested?.toString())
-          : '0',
-        values.lootRequested
-          ? utils.toWei(values.lootRequested?.toString())
-          : '0',
-        values.tributeOffered
-          ? utils.toWei(values.tributeOffered?.toString())
-          : '0',
-        values.tributeToken,
-        values.paymentRequested
-          ? utils.toWei(values.paymentRequested?.toString())
-          : '0',
-        values.paymentToken || values.tributeToken,
+      dao.daoService.moloch.submitWhiteListProposal(
+        values.tokenAddress,
         details,
-        user.username,
         txCallBack,
       );
     } catch (err) {
@@ -159,6 +138,21 @@ const WhitelistProposalForm = () => {
               color='white'
               focusBorderColor='secondary.500'
             />
+            <InputGroup>
+              <InputLeftAddon>https://</InputLeftAddon>
+              <Input
+                name='link'
+                placeholder='daolink.club'
+                color='white'
+                focusBorderColor='secondary.500'
+                ref={register({
+                  required: {
+                    value: true,
+                    message: 'Reference Link is required',
+                  },
+                })}
+              />
+            </InputGroup>
           </Stack>
         </Box>
         <Box w='48%'>
@@ -180,29 +174,14 @@ const WhitelistProposalForm = () => {
             color='white'
             focusBorderColor='secondary.500'
           />
-          <InputGroup>
-            <InputLeftAddon>https://</InputLeftAddon>
-            <Input
-              name='link'
-              placeholder='daolink.club'
-              color='white'
-              focusBorderColor='secondary.500'
-              ref={register({
-                required: {
-                  value: true,
-                  message: 'Reference Link is required',
-                },
-              })}
-            />
-          </InputGroup>
         </Box>
       </FormControl>
       <Flex justify='flex-end' align='center' h='60px'>
         {currentError && (
-          <Text color='secondary.300' fontSize='m' mr={5}>
+          <Box color='secondary.300' fontSize='m' mr={5}>
             <Icon as={RiErrorWarningLine} color='secondary.300' mr={2} />
             {currentError.message}
-          </Text>
+          </Box>
         )}
         <Box>
           <PrimaryButton

@@ -8,12 +8,9 @@ import {
   Input,
   InputGroup,
   InputLeftAddon,
-  InputRightAddon,
   Icon,
   Stack,
-  Select,
   Box,
-  Text,
   Textarea,
   Menu,
   MenuButton,
@@ -23,14 +20,13 @@ import {
 import { utils } from 'web3';
 import { RiAddFill, RiErrorWarningLine } from 'react-icons/ri';
 
-import {
-  useDao,
-  useTheme,
-  useTxProcessor,
-  useUser,
-} from '../../contexts/PokemolContext';
+import { useDao, useTxProcessor, useUser } from '../../contexts/PokemolContext';
+import { useTheme } from '../../contexts/CustomThemeContext';
 import { PrimaryButton } from '../../themes/components';
-// import { set } from 'date-fns';
+
+import PaymentInput from './PaymentInput';
+import TributeInput from './TributeInput';
+import AddressInput from './AddressInput';
 
 const MemberProposalForm = () => {
   const [loading, setLoading] = useState(false);
@@ -48,6 +44,9 @@ const MemberProposalForm = () => {
     handleSubmit,
     errors,
     register,
+    setValue,
+    getValues,
+    watch,
     // formState
   } = useForm();
 
@@ -64,7 +63,6 @@ const MemberProposalForm = () => {
   }, [errors]);
 
   // TODO check tribute token < currentWallet.token.balance & unlock
-  // TODO check payment token < dao.token.balance
   // TODO check link is a valid link
 
   const txCallBack = (txHash, details) => {
@@ -215,47 +213,11 @@ const MemberProposalForm = () => {
             color='white'
             focusBorderColor='secondary.500'
           />
-          <FormLabel
-            htmlFor='tributeOffered'
-            color='white'
-            fontFamily={theme.fonts.heading}
-            textTransform='uppercase'
-            fontSize='xs'
-            fontWeight={700}
-          >
-            Token Tribute
-          </FormLabel>
-          <InputGroup>
-            <Input
-              name='tributeOffered'
-              placeholder='0'
-              mb={5}
-              ref={register({
-                pattern: {
-                  value: /[0-9]/,
-                  message: 'Tribute must be a number',
-                },
-              })}
-              color='white'
-              focusBorderColor='secondary.500'
-            />
-            <InputRightAddon>
-              <Select
-                name='tributeToken'
-                defaultValue='0xd0a1e359811322d97991e03f863a0c30c2cf029c'
-                ref={register}
-              >
-                <option
-                  default
-                  value='0xd0a1e359811322d97991e03f863a0c30c2cf029c'
-                >
-                  WETH
-                </option>
-                <option value='dai'>Dai</option>
-                <option value='usdc'>USDC</option>
-              </Select>
-            </InputRightAddon>
-          </InputGroup>
+          <TributeInput
+            register={register}
+            setValue={setValue}
+            getValues={getValues}
+          />
           {showLoot && (
             <>
               <FormLabel
@@ -284,71 +246,19 @@ const MemberProposalForm = () => {
             </>
           )}
           {showPaymentRequest && (
-            <>
-              <FormLabel
-                htmlFor='paymentRequested'
-                color='white'
-                fontFamily={theme.fonts.heading}
-                textTransform='uppercase'
-                fontSize='xs'
-                fontWeight={700}
-              >
-                Payment Requested
-              </FormLabel>
-              <InputGroup>
-                <Input
-                  name='paymentRequested'
-                  placeholder='0'
-                  mb={5}
-                  ref={register({
-                    pattern: {
-                      value: /[0-9]/,
-                      message: 'Payment must be a number',
-                    },
-                  })}
-                  color='white'
-                  focusBorderColor='secondary.500'
-                />
-                <InputRightAddon>
-                  <Select
-                    name='paymentToken'
-                    defaultValue='0xd0a1e359811322d97991e03f863a0c30c2cf029c'
-                    ref={register}
-                  >
-                    <option
-                      default
-                      value='0xd0a1e359811322d97991e03f863a0c30c2cf029c'
-                    >
-                      WETH
-                    </option>
-                    <option value='dai'>Dai</option>
-                    <option value='usdc'>USDC</option>
-                  </Select>
-                </InputRightAddon>
-              </InputGroup>
-            </>
+            <PaymentInput
+              register={register}
+              setValue={setValue}
+              getValues={getValues}
+              errors={errors}
+            />
           )}
           {showApplicant && (
-            <>
-              <FormLabel
-                htmlFor='applicant'
-                color='white'
-                fontFamily={theme.fonts.heading}
-                textTransform='uppercase'
-                fontSize='xs'
-                fontWeight={700}
-              >
-                Applicant
-              </FormLabel>
-              <Input
-                name='applicant'
-                placeholder='0x'
-                mb={5}
-                ref={register}
-                color='white'
-                focusBorderColor='secondary.500'
-              />
-            </>
+            <AddressInput
+              register={register}
+              setValue={setValue}
+              watch={watch}
+            />
           )}
           {(!showApplicant || !showLoot || !showPaymentRequest) && (
             <Menu color='white' textTransform='uppercase'>
@@ -381,10 +291,10 @@ const MemberProposalForm = () => {
       </FormControl>
       <Flex justify='flex-end' align='center' h='60px'>
         {currentError && (
-          <Text color='secondary.300' fontSize='m' mr={5}>
+          <Box color='secondary.300' fontSize='m' mr={5}>
             <Icon as={RiErrorWarningLine} color='secondary.300' mr={2} />
             {currentError.message}
-          </Text>
+          </Box>
         )}
         <Box>
           <PrimaryButton

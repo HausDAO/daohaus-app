@@ -1,11 +1,13 @@
 import React from 'react';
 import { Box } from '@chakra-ui/core';
 
+import { useDao } from '../../contexts/PokemolContext';
 import { useTheme } from '../../contexts/CustomThemeContext';
 import ActivityFeedList from '../ActivityFeed/ActivityFeedList';
 
-const DaoActivityFeed = ({ dao }) => {
+const ProposalActivityFeed = () => {
   const [theme] = useTheme();
+  const [dao] = useDao();
   // const [activities, setActivities] = useState([]);
   const proposalActivities = [
     {
@@ -37,17 +39,17 @@ const DaoActivityFeed = ({ dao }) => {
   return (
     <>
       <Box
-        mt={6}
+        mt={1}
         ml={6}
         textTransform='uppercase'
         fontSize='sm'
         fontFamily={theme.fonts.heading}
       >
-        Activity Feed
+        {theme.daoMeta.proposal} History
       </Box>
       <ActivityFeedList activities={proposalActivities} />
     </>
   );
 };
 
-export default DaoActivityFeed;
+export default ProposalActivityFeed;

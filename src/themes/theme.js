@@ -5,6 +5,16 @@ import { lighten, darken } from 'polished';
 
 export * from './components';
 
+// export const theme = extendTheme({
+//   colors: {
+//     brand: {
+//       100: '#f7fafc',
+//       // ...
+//       900: '#1a202c',
+//     },
+//   },
+// });
+
 const defaultTheme = {
   primary500: '#10153d',
   secondary500: '#EB8A23',
@@ -20,6 +30,11 @@ const defaultTheme = {
     bank: 'Bank',
     members: 'Members',
     member: 'Member',
+    discord: 'https://discord.gg/NPEJysW',
+    medium: 'https://medium.com/daohaus-club',
+    telegram: '',
+    website: '',
+    other: '',
   },
 };
 
@@ -91,10 +106,27 @@ export const customTheme = (daoTheme) => {
       bank: themeOverrides.daoMeta.bank,
       members: themeOverrides.daoMeta.members,
       member: themeOverrides.daoMeta.member,
+      discord: themeOverrides.daoMeta.discord,
+      medium: themeOverrides.daoMeta.medium,
+      medium: themeOverrides.daoMeta.telegram,
+      medium: themeOverrides.daoMeta.website,
+      medium: themeOverrides.daoMeta.other,
     },
     styles: {
       ...theme.styles,
       bgOverlayOpacity: themeOverrides.bgOverlayOpacity,
+      global: {
+        'html, body': {
+          fontSize: 'm',
+          color: 'whiteAlpha.600',
+          lineHeight: 'tall',
+        },
+        a: {
+          color: 'inherit',
+          textDecoration: 'none',
+          _hover: { textDecoration: 'none' },
+        },
+      },
     },
   };
 };

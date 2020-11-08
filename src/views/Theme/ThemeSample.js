@@ -1,7 +1,7 @@
 import React from 'react';
 import { Box, Flex, Text } from '@chakra-ui/core';
 
-import { useTheme } from '../../contexts/PokemolContext';
+import { useTheme } from '../../contexts/CustomThemeContext';
 
 const ThemeSample = () => {
   const [theme] = useTheme();

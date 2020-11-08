@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { Link as RouterLink } from 'react-router-dom';
 import makeBlockie from 'ethereum-blockies-base64';
-import { Avatar, AvatarBadge, Box, Flex, Link, Text } from '@chakra-ui/core';
+import { Avatar, AvatarBadge, Box, Flex, Link } from '@chakra-ui/core';
 
-import { useTheme } from '../../contexts/PokemolContext';
+import { useTheme } from '../../contexts/CustomThemeContext';
 
 const MemberDaoList = ({ daos }) => {
   const [theme] = useTheme();
@@ -48,9 +48,9 @@ const MemberDaoList = ({ daos }) => {
             ) : null}
           </Avatar>
 
-          <Text fontFamily={theme.fonts.mono} fontSize='sm'>
+          <Box fontFamily={theme.fonts.mono} fontSize='sm'>
             {dao.title}
-          </Text>
+          </Box>
         </Link>
       </div>
     );
@@ -73,14 +73,14 @@ const MemberDaoList = ({ daos }) => {
 
   return (
     <Box maxW='500px'>
-      <Text
+      <Box
         fontFamily={theme.fonts.heading}
         fontSize='lg'
         fontWeight={700}
         mb={6}
       >
         Member of {daos.length} DAO{daos.length > 1 && 's'}
-      </Text>
+      </Box>
 
       <Flex direction='row' overflowX='scroll' mb={6} w='100%'>
         {visibleDaos.map((dao) => renderDaoAvatar(dao))}

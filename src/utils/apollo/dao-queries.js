@@ -11,6 +11,7 @@ export const HOME_DAO = gql`
       totalShares
       totalLoot
       version
+      proposalDeposit
       guildBankAddress
       depositToken {
         tokenAddress

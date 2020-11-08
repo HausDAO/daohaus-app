@@ -145,7 +145,9 @@ export class Web3TokenService extends TokenService {
     if (token === '0x000000000000000') {
       return 0;
     }
+    console.log('token', token);
     const contract = new this.web3.eth.Contract(Erc20Abi, token);
+    console.log('contract', contract);
     const allowance = await contract.methods
       .allowance(accountAddr, contractAddr)
       .call();

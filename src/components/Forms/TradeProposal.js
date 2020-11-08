@@ -8,33 +8,30 @@ import {
   Input,
   InputGroup,
   InputLeftAddon,
-  InputRightAddon,
   Icon,
   Stack,
-  Select,
   Box,
-  Text,
   Textarea,
   Menu,
   MenuButton,
   MenuList,
   MenuItem,
+  Text,
 } from '@chakra-ui/core';
 import { utils } from 'web3';
 import { RiAddFill, RiErrorWarningLine } from 'react-icons/ri';
 
-import {
-  useDao,
-  useTheme,
-  useTxProcessor,
-  useUser,
-} from '../../contexts/PokemolContext';
+import { useDao, useTxProcessor, useUser } from '../../contexts/PokemolContext';
+import { useTheme } from '../../contexts/CustomThemeContext';
 import { PrimaryButton } from '../../themes/components';
+
+import PaymentInput from './PaymentInput';
+import TributeInput from './TributeInput';
 
 const TradeProposalForm = () => {
   const [loading, setLoading] = useState(false);
   const [showLoot, setShowLoot] = useState(false);
-  const [showPaymentRequest, setShowPaymentRequest] = useState(false);
+  const [showShares, setShowShares] = useState(false);
   const [showApplicant, setShowApplicant] = useState(false);
   const [theme] = useTheme();
   const [user] = useUser();
@@ -47,6 +44,8 @@ const TradeProposalForm = () => {
     handleSubmit,
     errors,
     register,
+    setValue,
+    getValues,
     // formState
   } = useForm();
 
@@ -60,6 +59,8 @@ const TradeProposalForm = () => {
     } else {
       setCurrentError(null);
     }
+
+    // eslint-disable-next-line
   }, [errors]);
 
   // TODO check tribute token < currentWallet.token.balance & unlock
@@ -187,74 +188,39 @@ const TradeProposalForm = () => {
           </Stack>
         </Box>
         <Box w='48%'>
-          <FormLabel
-            htmlFor='name'
-            color='white'
-            fontFamily={theme.fonts.heading}
-            textTransform='uppercase'
-            fontSize='xs'
-            fontWeight={700}
-          >
-            Shares Requested
-          </FormLabel>
-          <Input
-            name='sharesRequested'
-            placeholder='0'
-            mb={5}
-            ref={register({
-              required: {
-                value: true,
-                message: 'Requested shares are required for Member Proposals',
-              },
-              pattern: {
-                value: /[0-9]/,
-                message: 'Requested shares must be a number',
-              },
-            })}
-            color='white'
-            focusBorderColor='secondary.500'
+          <TributeInput
+            register={register}
+            setValue={setValue}
+            getValues={getValues}
           />
-          <FormLabel
-            htmlFor='tributeOffered'
-            color='white'
-            fontFamily={theme.fonts.heading}
-            textTransform='uppercase'
-            fontSize='xs'
-            fontWeight={700}
-          >
-            Token Tributed
-          </FormLabel>
-          <InputGroup>
+          <Text>Trade For</Text>
+          <PaymentInput
+            register={register}
+            setValue={setValue}
+            getValues={getValues}
+            errors={errors}
+          />
+
+          {showShares && (
             <Input
-              name='tributeOffered'
+              name='sharesRequested'
               placeholder='0'
               mb={5}
               ref={register({
+                required: {
+                  value: true,
+                  message: 'Requested shares are required for Member Proposals',
+                },
                 pattern: {
                   value: /[0-9]/,
-                  message: 'Tribute must be a number',
+                  message: 'Requested shares must be a number',
                 },
               })}
               color='white'
               focusBorderColor='secondary.500'
             />
-            <InputRightAddon>
-              <Select
-                name='tributeToken'
-                defaultValue='0xd0a1e359811322d97991e03f863a0c30c2cf029c'
-                ref={register}
-              >
-                <option
-                  default
-                  value='0xd0a1e359811322d97991e03f863a0c30c2cf029c'
-                >
-                  WETH
-                </option>
-                <option value='dai'>Dai</option>
-                <option value='usdc'>USDC</option>
-              </Select>
-            </InputRightAddon>
-          </InputGroup>
+          )}
+
           {showLoot && (
             <>
               <FormLabel
@@ -282,51 +248,7 @@ const TradeProposalForm = () => {
               />
             </>
           )}
-          {showPaymentRequest && (
-            <>
-              <FormLabel
-                htmlFor='paymentRequested'
-                color='white'
-                fontFamily={theme.fonts.heading}
-                textTransform='uppercase'
-                fontSize='xs'
-                fontWeight={700}
-              >
-                Payment Requested
-              </FormLabel>
-              <InputGroup>
-                <Input
-                  name='paymentRequested'
-                  placeholder='0'
-                  mb={5}
-                  ref={register({
-                    pattern: {
-                      value: /[0-9]/,
-                      message: 'Payment must be a number',
-                    },
-                  })}
-                  color='white'
-                  focusBorderColor='secondary.500'
-                />
-                <InputRightAddon>
-                  <Select
-                    name='paymentToken'
-                    defaultValue='0xd0a1e359811322d97991e03f863a0c30c2cf029c'
-                    ref={register}
-                  >
-                    <option
-                      default
-                      value='0xd0a1e359811322d97991e03f863a0c30c2cf029c'
-                    >
-                      WETH
-                    </option>
-                    <option value='dai'>Dai</option>
-                    <option value='usdc'>USDC</option>
-                  </Select>
-                </InputRightAddon>
-              </InputGroup>
-            </>
-          )}
+
           {showApplicant && (
             <>
               <FormLabel
@@ -349,7 +271,7 @@ const TradeProposalForm = () => {
               />
             </>
           )}
-          {(!showApplicant || !showLoot || !showPaymentRequest) && (
+          {(!showApplicant || !showLoot || !showShares) && (
             <Menu color='white' textTransform='uppercase'>
               <MenuButton
                 as={Button}
@@ -368,9 +290,9 @@ const TradeProposalForm = () => {
                     Request Loot
                   </MenuItem>
                 )}
-                {!showPaymentRequest && (
-                  <MenuItem onClick={() => setShowPaymentRequest(true)}>
-                    Request Payment
+                {!showShares && (
+                  <MenuItem onClick={() => setShowShares(true)}>
+                    SHoe Shares
                   </MenuItem>
                 )}
               </MenuList>
@@ -380,10 +302,10 @@ const TradeProposalForm = () => {
       </FormControl>
       <Flex justify='flex-end' align='center' h='60px'>
         {currentError && (
-          <Text color='secondary.300' fontSize='m' mr={5}>
+          <Box color='secondary.300' fontSize='m' mr={5}>
             <Icon as={RiErrorWarningLine} color='secondary.300' mr={2} />
             {currentError.message}
-          </Text>
+          </Box>
         )}
         <Box>
           <PrimaryButton

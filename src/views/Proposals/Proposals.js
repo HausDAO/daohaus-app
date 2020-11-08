@@ -1,13 +1,21 @@
 import React from 'react';
+import { Box, Flex } from '@chakra-ui/core';
 
 import ProposalsList from '../../components/Proposals/ProposalsList';
-import { useProposals } from '../../contexts/PokemolContext';
+import ProposalsActivityFeed from '../../components/Proposals/ProposalsActivityFeed';
 
 const Proposals = () => {
-  console.log('render Proposals');
-  const [proposals] = useProposals();
+  return (
+    <Flex>
+      <Box w='60%'>
+        <ProposalsList />
+      </Box>
 
-  return <>{proposals.length ? <ProposalsList /> : null}</>;
+      <Box w='38%'>
+        <ProposalsActivityFeed />
+      </Box>
+    </Flex>
+  );
 };
 
 export default Proposals;

@@ -8,7 +8,7 @@ import {
   ModalBody,
   ModalFooter,
   ModalOverlay,
-  Text,
+  Box,
   Flex,
   Avatar,
   Spinner,
@@ -17,7 +17,8 @@ import {
 import makeBlockie from 'ethereum-blockies-base64';
 import { RiArrowRightSLine } from 'react-icons/ri';
 
-import { useTheme, useUserDaos } from '../../contexts/PokemolContext';
+import { useUserDaos } from '../../contexts/PokemolContext';
+import { useTheme } from '../../contexts/CustomThemeContext';
 import BrandImg from '../../assets/Daohaus__Castle--Dark.svg';
 
 const DaoSwitcherModal = ({ isOpen, setShowModal }) => {
@@ -39,7 +40,7 @@ const DaoSwitcherModal = ({ isOpen, setShowModal }) => {
                 src={makeBlockie(dao.id)}
                 mr='10px'
               ></Avatar>
-              <Text color='white'>{dao.title}</Text>
+              <Box color='white'>{dao.title}</Box>
             </Flex>
             <RiArrowRightSLine color='white' />
           </Flex>
@@ -58,7 +59,7 @@ const DaoSwitcherModal = ({ isOpen, setShowModal }) => {
         borderColor='whiteAlpha.200'
       >
         <ModalHeader>
-          <Text
+          <Box
             fontFamily={theme.fonts.heading}
             textTransform='uppercase'
             fontSize='sm'
@@ -66,7 +67,7 @@ const DaoSwitcherModal = ({ isOpen, setShowModal }) => {
             color='white'
           >
             Go to DAO
-          </Text>
+          </Box>
         </ModalHeader>
         <ModalCloseButton color='white' />
         <ModalBody
@@ -84,7 +85,7 @@ const DaoSwitcherModal = ({ isOpen, setShowModal }) => {
             >
               <Flex direction='row' justify='flex-start' alignItems='center'>
                 <Image src={BrandImg} w='50px' mr='10px' />
-                <Text color='white'>Hub</Text>
+                <Box color='white'>Hub</Box>
               </Flex>
               <RiArrowRightSLine color='white' />
             </Flex>

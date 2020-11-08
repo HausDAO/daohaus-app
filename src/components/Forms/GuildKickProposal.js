@@ -1,52 +1,38 @@
 import React, { useState, useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import {
-  Button,
   FormLabel,
   FormControl,
   Flex,
   Input,
   InputGroup,
   InputLeftAddon,
-  InputRightAddon,
   Icon,
   Stack,
-  Select,
   Box,
-  Text,
   Textarea,
-  Menu,
-  MenuButton,
-  MenuList,
-  MenuItem,
 } from '@chakra-ui/core';
-import { utils } from 'web3';
-import { RiAddFill, RiErrorWarningLine } from 'react-icons/ri';
+import { RiErrorWarningLine } from 'react-icons/ri';
 
-import {
-  useDao,
-  useTheme,
-  useTxProcessor,
-  useUser,
-} from '../../contexts/PokemolContext';
+import { useDao, useTxProcessor, useUser } from '../../contexts/PokemolContext';
+import { useTheme } from '../../contexts/CustomThemeContext';
 import { PrimaryButton } from '../../themes/components';
+import AddressInput from './AddressInput';
 
 const GuildKickProposalForm = () => {
   const [loading, setLoading] = useState(false);
-  const [showLoot, setShowLoot] = useState(false);
-  const [showPaymentRequest, setShowPaymentRequest] = useState(false);
-  const [showApplicant, setShowApplicant] = useState(false);
   const [theme] = useTheme();
   const [user] = useUser();
   const [dao] = useDao();
   const [txProcessor, updateTxProcessor] = useTxProcessor();
   const [currentError, setCurrentError] = useState(null);
-  console.log(dao);
 
   const {
     handleSubmit,
     errors,
     register,
+    setValue,
+    watch,
     // formState
   } = useForm();
 
@@ -62,8 +48,6 @@ const GuildKickProposalForm = () => {
     }
   }, [errors]);
 
-  // TODO check tribute token < currentWallet.token.balance & unlock
-  // TODO check payment token < dao.token.balance
   // TODO check link is a valid link
 
   const txCallBack = (txHash, details) => {
@@ -95,23 +79,11 @@ const GuildKickProposalForm = () => {
     });
 
     try {
-      dao.daoService.moloch.submitProposal(
-        values.sharesRequested
-          ? utils.toWei(values.sharesRequested?.toString())
-          : '0',
-        values.lootRequested
-          ? utils.toWei(values.lootRequested?.toString())
-          : '0',
-        values.tributeOffered
-          ? utils.toWei(values.tributeOffered?.toString())
-          : '0',
-        values.tributeToken,
-        values.paymentRequested
-          ? utils.toWei(values.paymentRequested?.toString())
-          : '0',
-        values.paymentToken || values.tributeToken,
+      dao.daoService.molochsubmitGuildKickProposal(
+        values?.applicantHidden.startsWith('0x')
+          ? values.applicantHidden
+          : values.applicant,
         details,
-        user.username,
         txCallBack,
       );
     } catch (err) {
@@ -187,203 +159,20 @@ const GuildKickProposalForm = () => {
           </Stack>
         </Box>
         <Box w='48%'>
-          <FormLabel
-            htmlFor='name'
-            color='white'
-            fontFamily={theme.fonts.heading}
-            textTransform='uppercase'
-            fontSize='xs'
-            fontWeight={700}
-          >
-            Shares Requested
-          </FormLabel>
-          <Input
-            name='sharesRequested'
-            placeholder='0'
-            mb={5}
-            ref={register({
-              required: {
-                value: true,
-                message: 'Requested shares are required for Member Proposals',
-              },
-              pattern: {
-                value: /[0-9]/,
-                message: 'Requested shares must be a number',
-              },
-            })}
-            color='white'
-            focusBorderColor='secondary.500'
+          <AddressInput
+            register={register}
+            setValue={setValue}
+            watch={watch}
+            formLabel={'Member To Kick'}
           />
-          <FormLabel
-            htmlFor='tributeOffered'
-            color='white'
-            fontFamily={theme.fonts.heading}
-            textTransform='uppercase'
-            fontSize='xs'
-            fontWeight={700}
-          >
-            Token Tributed
-          </FormLabel>
-          <InputGroup>
-            <Input
-              name='tributeOffered'
-              placeholder='0'
-              mb={5}
-              ref={register({
-                pattern: {
-                  value: /[0-9]/,
-                  message: 'Tribute must be a number',
-                },
-              })}
-              color='white'
-              focusBorderColor='secondary.500'
-            />
-            <InputRightAddon>
-              <Select
-                name='tributeToken'
-                defaultValue='0xd0a1e359811322d97991e03f863a0c30c2cf029c'
-                ref={register}
-              >
-                <option
-                  default
-                  value='0xd0a1e359811322d97991e03f863a0c30c2cf029c'
-                >
-                  WETH
-                </option>
-                <option value='dai'>Dai</option>
-                <option value='usdc'>USDC</option>
-              </Select>
-            </InputRightAddon>
-          </InputGroup>
-          {showLoot && (
-            <>
-              <FormLabel
-                htmlFor='lootRequested'
-                color='white'
-                fontFamily={theme.fonts.heading}
-                textTransform='uppercase'
-                fontSize='xs'
-                fontWeight={700}
-              >
-                Loot Requested
-              </FormLabel>
-              <Input
-                name='lootRequested'
-                placeholder='0'
-                mb={5}
-                ref={register({
-                  pattern: {
-                    value: /[0-9]/,
-                    message: 'Loot must be a number',
-                  },
-                })}
-                color='white'
-                focusBorderColor='secondary.500'
-              />
-            </>
-          )}
-          {showPaymentRequest && (
-            <>
-              <FormLabel
-                htmlFor='paymentRequested'
-                color='white'
-                fontFamily={theme.fonts.heading}
-                textTransform='uppercase'
-                fontSize='xs'
-                fontWeight={700}
-              >
-                Payment Requested
-              </FormLabel>
-              <InputGroup>
-                <Input
-                  name='paymentRequested'
-                  placeholder='0'
-                  mb={5}
-                  ref={register({
-                    pattern: {
-                      value: /[0-9]/,
-                      message: 'Payment must be a number',
-                    },
-                  })}
-                  color='white'
-                  focusBorderColor='secondary.500'
-                />
-                <InputRightAddon>
-                  <Select
-                    name='paymentToken'
-                    defaultValue='0xd0a1e359811322d97991e03f863a0c30c2cf029c'
-                    ref={register}
-                  >
-                    <option
-                      default
-                      value='0xd0a1e359811322d97991e03f863a0c30c2cf029c'
-                    >
-                      WETH
-                    </option>
-                    <option value='dai'>Dai</option>
-                    <option value='usdc'>USDC</option>
-                  </Select>
-                </InputRightAddon>
-              </InputGroup>
-            </>
-          )}
-          {showApplicant && (
-            <>
-              <FormLabel
-                htmlFor='applicant'
-                color='white'
-                fontFamily={theme.fonts.heading}
-                textTransform='uppercase'
-                fontSize='xs'
-                fontWeight={700}
-              >
-                Applicant
-              </FormLabel>
-              <Input
-                name='applicant'
-                placeholder='0'
-                mb={5}
-                ref={register}
-                color='white'
-                focusBorderColor='secondary.500'
-              />
-            </>
-          )}
-          {(!showApplicant || !showLoot || !showPaymentRequest) && (
-            <Menu color='white' textTransform='uppercase'>
-              <MenuButton
-                as={Button}
-                rightIcon={<Icon as={RiAddFill} color='primary.500' />}
-              >
-                Additional Options
-              </MenuButton>
-              <MenuList>
-                {!showApplicant && (
-                  <MenuItem onClick={() => setShowApplicant(true)}>
-                    Applicant
-                  </MenuItem>
-                )}
-                {!showLoot && (
-                  <MenuItem onClick={() => setShowLoot(true)}>
-                    Request Loot
-                  </MenuItem>
-                )}
-                {!showPaymentRequest && (
-                  <MenuItem onClick={() => setShowPaymentRequest(true)}>
-                    Request Payment
-                  </MenuItem>
-                )}
-              </MenuList>
-            </Menu>
-          )}
         </Box>
       </FormControl>
       <Flex justify='flex-end' align='center' h='60px'>
         {currentError && (
-          <Text color='secondary.300' fontSize='m' mr={5}>
+          <Box color='secondary.300' fontSize='m' mr={5}>
             <Icon as={RiErrorWarningLine} color='secondary.300' mr={2} />
             {currentError.message}
-          </Text>
+          </Box>
         )}
         <Box>
           <PrimaryButton

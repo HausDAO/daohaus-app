@@ -2,7 +2,6 @@ import React, { useContext, useCallback, useMemo } from 'react';
 import Web3Modal from 'web3modal';
 
 import { providerOptions } from '../utils/auth';
-import { customTheme } from '../themes/theme';
 import supportedChains, { getChainData } from '../utils/chains';
 
 const PokemolContext = React.createContext();
@@ -14,7 +13,6 @@ function usePokemolContext() {
 const initialState = {
   network: supportedChains[42],
   refetchQuery: null,
-  theme: customTheme(),
 
   user: null,
   web3Connect: {
@@ -43,9 +41,6 @@ const reducer = (state, action) => {
     }
     case 'refetchQuery': {
       return { ...state, refetchQuery: action.payload };
-    }
-    case 'setTheme': {
-      return { ...state, theme: customTheme(action.payload) };
     }
 
     case 'setUser': {
@@ -104,10 +99,6 @@ function PokemolContextProvider(props) {
     dispatch({ type: 'refetchQuery', payload: data });
   }, []);
 
-  const updateTheme = useCallback((theme) => {
-    dispatch({ type: 'setTheme', payload: theme });
-  }, []);
-
   const updateUser = useCallback((user) => {
     dispatch({ type: 'setUser', payload: user });
   }, []);
@@ -164,7 +155,6 @@ function PokemolContextProvider(props) {
           {
             updateNetwork,
             updateRefetchQuery,
-            updateTheme,
             updateUser,
             updateWeb3Connect,
             updateContracts,
@@ -183,7 +173,6 @@ function PokemolContextProvider(props) {
           state,
           updateNetwork,
           updateRefetchQuery,
-          updateTheme,
           updateUser,
           updateWeb3Connect,
           updateContracts,
@@ -223,11 +212,6 @@ export function useNetwork() {
 export function useRefetchQuery() {
   const [state, { updateRefetchQuery }] = usePokemolContext();
   return [state.refetchQuery, updateRefetchQuery];
-}
-
-export function useTheme() {
-  const [state, { updateTheme }] = usePokemolContext();
-  return [state.theme, updateTheme];
 }
 
 export function useUser() {

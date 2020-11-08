@@ -1,13 +1,9 @@
 import React, { useEffect, useState } from 'react';
-import { Text, Flex, Icon, Button } from '@chakra-ui/core';
+import { Box, Flex, Icon, Button } from '@chakra-ui/core';
 import { useLocation, Link as RouterLink } from 'react-router-dom';
 import { RiAddFill } from 'react-icons/ri';
-import {
-  useUser,
-  useNetwork,
-  useDao,
-  useTheme,
-} from '../../contexts/PokemolContext';
+import { useUser, useNetwork, useDao } from '../../contexts/PokemolContext';
+import { useTheme } from '../../contexts/CustomThemeContext';
 import { Web3SignIn } from './Web3SignIn';
 import UserAvatar from './UserAvatar';
 import { PrimaryButton } from '../../themes/theme';
@@ -27,6 +23,9 @@ const Header = () => {
       setPageTitle('Hub');
     } else if (location.pathname === `/dao/${dao?.address}`) {
       setPageTitle('Overview');
+    } else if (location.pathname === `/dao/${dao?.address}/proposals`) {
+      setPageTitle(theme.daoMeta.proposals);
+      // TODO proposals id regex
     } else if (location.pathname === `/dao/${dao?.address}/proposals`) {
       setPageTitle(theme.daoMeta.proposals);
     } else if (
@@ -51,14 +50,14 @@ const Header = () => {
     <>
       <Flex direction='row' justify='space-between' p={6}>
         <Flex direction='row' justify='flex-start' align='center'>
-          <Text
+          <Box
             fontSize='3xl'
             fontFamily={theme.fonts.heading}
             fontWeight={700}
             mr={10}
           >
             {pageTitle}
-          </Text>
+          </Box>
           {location.pathname === `/` && user && (
             <PrimaryButton as='a' href='https://3box.io/hub' target='_blank'>
               Edit 3Box Profile
@@ -83,9 +82,9 @@ const Header = () => {
         </Flex>
 
         <Flex direction='row' justify='flex-end' align='center'>
-          <Text fontSize='md' mr={5} as='i' fontWeight={200}>
+          <Box fontSize='md' mr={5} as='i' fontWeight={200}>
             {network.network}
-          </Text>
+          </Box>
 
           {user ? (
             <>
