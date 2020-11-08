@@ -30,6 +30,10 @@ import {
 } from '../../contexts/PokemolContext';
 import { PrimaryButton } from '../../themes/components';
 
+import PaymentInput from './PaymentInput';
+import TributeInput from './TributeInput';
+
+
 const TradeProposalForm = () => {
   const [loading, setLoading] = useState(false);
   const [showLoot, setShowLoot] = useState(false);
@@ -59,6 +63,8 @@ const TradeProposalForm = () => {
     } else {
       setCurrentError(null);
     }
+
+    // eslint-disable-next-line
   }, [errors]);
 
   // TODO check tribute token < currentWallet.token.balance & unlock
@@ -213,47 +219,8 @@ const TradeProposalForm = () => {
             color='white'
             focusBorderColor='secondary.500'
           />
-          <FormLabel
-            htmlFor='tributeOffered'
-            color='white'
-            fontFamily={theme.fonts.heading}
-            textTransform='uppercase'
-            fontSize='xs'
-            fontWeight={700}
-          >
-            Token Tributed
-          </FormLabel>
-          <InputGroup>
-            <Input
-              name='tributeOffered'
-              placeholder='0'
-              mb={5}
-              ref={register({
-                pattern: {
-                  value: /[0-9]/,
-                  message: 'Tribute must be a number',
-                },
-              })}
-              color='white'
-              focusBorderColor='secondary.500'
-            />
-            <InputRightAddon>
-              <Select
-                name='tributeToken'
-                defaultValue='0xd0a1e359811322d97991e03f863a0c30c2cf029c'
-                ref={register}
-              >
-                <option
-                  default
-                  value='0xd0a1e359811322d97991e03f863a0c30c2cf029c'
-                >
-                  WETH
-                </option>
-                <option value='dai'>Dai</option>
-                <option value='usdc'>USDC</option>
-              </Select>
-            </InputRightAddon>
-          </InputGroup>
+          <TributeInput />
+
           {showLoot && (
             <>
               <FormLabel
@@ -281,51 +248,9 @@ const TradeProposalForm = () => {
               />
             </>
           )}
-          {showPaymentRequest && (
-            <>
-              <FormLabel
-                htmlFor='paymentRequested'
-                color='white'
-                fontFamily={theme.fonts.heading}
-                textTransform='uppercase'
-                fontSize='xs'
-                fontWeight={700}
-              >
-                Payment Requested
-              </FormLabel>
-              <InputGroup>
-                <Input
-                  name='paymentRequested'
-                  placeholder='0'
-                  mb={5}
-                  ref={register({
-                    pattern: {
-                      value: /[0-9]/,
-                      message: 'Payment must be a number',
-                    },
-                  })}
-                  color='white'
-                  focusBorderColor='secondary.500'
-                />
-                <InputRightAddon>
-                  <Select
-                    name='paymentToken'
-                    defaultValue='0xd0a1e359811322d97991e03f863a0c30c2cf029c'
-                    ref={register}
-                  >
-                    <option
-                      default
-                      value='0xd0a1e359811322d97991e03f863a0c30c2cf029c'
-                    >
-                      WETH
-                    </option>
-                    <option value='dai'>Dai</option>
-                    <option value='usdc'>USDC</option>
-                  </Select>
-                </InputRightAddon>
-              </InputGroup>
-            </>
-          )}
+
+          {showPaymentRequest && <PaymentInput />}
+
           {showApplicant && (
             <>
               <FormLabel

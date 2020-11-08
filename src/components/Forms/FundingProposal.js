@@ -8,16 +8,15 @@ import {
   Input,
   InputGroup,
   InputLeftAddon,
-  InputRightAddon,
   Icon,
   Stack,
-  Select,
   Box,
   Textarea,
   Menu,
   MenuButton,
   MenuList,
   MenuItem,
+  FormHelperText,
 } from '@chakra-ui/core';
 import { utils } from 'web3';
 import { RiAddFill, RiErrorWarningLine } from 'react-icons/ri';
@@ -27,8 +26,14 @@ import {
   useTheme,
   useTxProcessor,
   useUser,
+  useEns,
 } from '../../contexts/PokemolContext';
 import { PrimaryButton } from '../../themes/components';
+
+import TributeInput from './TributeInput';
+import PaymentInput from './PaymentInput';
+import AddressInput from './AddressInput';
+
 
 const FundingProposalForm = () => {
   const [loading, setLoading] = useState(false);
@@ -40,12 +45,15 @@ const FundingProposalForm = () => {
   const [dao] = useDao();
   const [txProcessor, updateTxProcessor] = useTxProcessor();
   const [currentError, setCurrentError] = useState(null);
-  console.log(dao);
 
   const {
     handleSubmit,
     errors,
     register,
+    reset,
+    setValue,
+    getValues,
+    watch,
     // formState
   } = useForm();
 
@@ -75,6 +83,8 @@ const FundingProposalForm = () => {
       // close model here
       // onClose();
       // setShowModal(null);
+      setLoading(false);
+      reset();
     }
     if (!txHash) {
       console.log('error: ', details);
@@ -85,13 +95,13 @@ const FundingProposalForm = () => {
   const onSubmit = async (values) => {
     setLoading(true);
 
-    console.log(values);
-
     const details = JSON.stringify({
       title: values.title,
       description: values.description,
       link: 'https://' + values.link,
     });
+
+    console.log('values?.applicantHidden', values);
 
     try {
       dao.daoService.moloch.submitProposal(
@@ -112,7 +122,9 @@ const FundingProposalForm = () => {
           values.tributeToken ||
           '0xd0a1e359811322d97991e03f863a0c30c2cf029c',
         details,
-        values.applicant,
+        values?.applicantHidden.startsWith('0x')
+          ? values.applicantHidden
+          : values.applicant,
         txCallBack,
       );
     } catch (err) {
@@ -188,70 +200,14 @@ const FundingProposalForm = () => {
           </Stack>
         </Box>
         <Box w='48%'>
-          <FormLabel
-            htmlFor='applicant'
-            color='white'
-            fontFamily={theme.fonts.heading}
-            textTransform='uppercase'
-            fontSize='xs'
-            fontWeight={700}
-          >
-            Applicant
-          </FormLabel>
-          <Input
-            name='applicant'
-            placeholder='0x'
-            mb={5}
-            ref={register({
-              required: {
-                value: true,
-                message: 'Applicant is required',
-              },
-            })}
-            color='white'
-            focusBorderColor='secondary.500'
+
+          <AddressInput register={register} setValue={setValue} watch={watch} />
+          <PaymentInput
+            register={register}
+            setValue={setValue}
+            getValues={getValues}
           />
-          <FormLabel
-            htmlFor='paymentRequested'
-            color='white'
-            fontFamily={theme.fonts.heading}
-            textTransform='uppercase'
-            fontSize='xs'
-            fontWeight={700}
-          >
-            Payment Requested
-          </FormLabel>
-          <InputGroup>
-            <Input
-              name='paymentRequested'
-              placeholder='0'
-              mb={5}
-              ref={register({
-                pattern: {
-                  value: /[0-9]/,
-                  message: 'Payment must be a number',
-                },
-              })}
-              color='white'
-              focusBorderColor='secondary.500'
-            />
-            <InputRightAddon>
-              <Select
-                name='paymentToken'
-                defaultValue='0xd0a1e359811322d97991e03f863a0c30c2cf029c'
-                ref={register}
-              >
-                <option
-                  default
-                  value='0xd0a1e359811322d97991e03f863a0c30c2cf029c'
-                >
-                  WETH
-                </option>
-                <option value='dai'>Dai</option>
-                <option value='usdc'>USDC</option>
-              </Select>
-            </InputRightAddon>
-          </InputGroup>
+
           {showShares && (
             <>
               <FormLabel
@@ -312,49 +268,13 @@ const FundingProposalForm = () => {
             </>
           )}
           {showTribute && (
-            <>
-              <FormLabel
-                htmlFor='tributeOffered'
-                color='white'
-                fontFamily={theme.fonts.heading}
-                textTransform='uppercase'
-                fontSize='xs'
-                fontWeight={700}
-              >
-                Token Tribute
-              </FormLabel>
-              <InputGroup>
-                <Input
-                  name='tributeOffered'
-                  placeholder='0'
-                  mb={5}
-                  ref={register({
-                    pattern: {
-                      value: /[0-9]/,
-                      message: 'Tribute must be a number',
-                    },
-                  })}
-                  color='white'
-                  focusBorderColor='secondary.500'
-                />
-                <InputRightAddon>
-                  <Select
-                    name='tributeToken'
-                    defaultValue='0xd0a1e359811322d97991e03f863a0c30c2cf029c'
-                    ref={register}
-                  >
-                    <option
-                      default
-                      value='0xd0a1e359811322d97991e03f863a0c30c2cf029c'
-                    >
-                      WETH
-                    </option>
-                    <option value='dai'>Dai</option>
-                    <option value='usdc'>USDC</option>
-                  </Select>
-                </InputRightAddon>
-              </InputGroup>
-            </>
+
+            <TributeInput
+              register={register}
+              setValue={setValue}
+              getValues={getValues}
+            />
+
           )}
           {(!showShares || !showLoot || !showTribute) && (
             <Menu color='white' textTransform='uppercase'>
@@ -367,7 +287,7 @@ const FundingProposalForm = () => {
               <MenuList>
                 {!showShares && (
                   <MenuItem onClick={() => setShowShares(true)}>
-                    Applicant
+                    Request Shares
                   </MenuItem>
                 )}
                 {!showLoot && (
@@ -377,7 +297,7 @@ const FundingProposalForm = () => {
                 )}
                 {!showTribute && (
                   <MenuItem onClick={() => setShowTribute(true)}>
-                    Request Payment
+                    Give Tribute
                   </MenuItem>
                 )}
               </MenuList>
