@@ -19,18 +19,10 @@ const MemberInfoCard = ({ user }) => {
   return (
     <>
       <Flex justify='space-between' ml={6}>
-        <Box
-          textTransform='uppercase'
-          fontSize='sm'
-          fontFamily={theme.fonts.heading}
-        >
+        <Box textTransform='uppercase' fontSize='sm' fontFamily='heading'>
           {theme.daoMeta.member} Info
         </Box>
-        <Box
-          textTransform='uppercase'
-          fontSize='sm'
-          fontFamily={theme.fonts.heading}
-        >
+        <Box textTransform='uppercase' fontSize='sm' fontFamily='heading'>
           View my profile
         </Box>
       </Flex>
@@ -52,18 +44,14 @@ const MemberInfoCard = ({ user }) => {
             <Box
               textTransform='uppercase'
               fontSize='sm'
-              fontFamily={theme.fonts.heading}
+              fontFamily='heading'
               fontWeight={700}
               mb={2}
             >
               Shares
             </Box>
             <Skeleton isLoaded={member?.shares}>
-              <Box
-                fontSize='lg'
-                fontFamily={theme.fonts.space}
-                fontWeight={700}
-              >
+              <Box fontSize='lg' fontFamily='space' fontWeight={700}>
                 {member?.shares ? member.shares : '--'}
               </Box>
             </Skeleton>
@@ -72,18 +60,14 @@ const MemberInfoCard = ({ user }) => {
             <Box
               textTransform='uppercase'
               fontSize='sm'
-              fontFamily={theme.fonts.heading}
+              fontFamily='heading'
               fontWeight={700}
               mb={2}
             >
               Loot
             </Box>
             <Skeleton isLoaded={member?.loot}>
-              <Box
-                fontSize='lg'
-                fontFamily={theme.fonts.space}
-                fontWeight={700}
-              >
+              <Box fontSize='lg' fontFamily='space' fontWeight={700}>
                 {member?.loot ? member.loot : '-'}
               </Box>
             </Skeleton>
@@ -92,18 +76,14 @@ const MemberInfoCard = ({ user }) => {
             <Box
               textTransform='uppercase'
               fontSize='sm'
-              fontFamily={theme.fonts.heading}
+              fontFamily='heading'
               fontWeight={700}
               mb={2}
             >
               Anniversary
             </Box>
             <Skeleton isLoaded={member?.createdAt}>
-              <Box
-                fontSize='lg'
-                fontFamily={theme.fonts.space}
-                fontWeight={700}
-              >
+              <Box fontSize='lg' fontFamily='space' fontWeight={700}>
                 {member?.createdAt
                   ? format(new Date(member.createdAt * 1000), 'MMMM d')
                   : '--'}

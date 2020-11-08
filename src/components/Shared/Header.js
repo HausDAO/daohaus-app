@@ -50,12 +50,7 @@ const Header = () => {
     <>
       <Flex direction='row' justify='space-between' p={6}>
         <Flex direction='row' justify='flex-start' align='center'>
-          <Box
-            fontSize='3xl'
-            fontFamily={theme.fonts.heading}
-            fontWeight={700}
-            mr={10}
-          >
+          <Box fontSize='3xl' fontFamily='heading' fontWeight={700} mr={10}>
             {pageTitle}
           </Box>
           {location.pathname === `/` && user && (

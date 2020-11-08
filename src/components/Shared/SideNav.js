@@ -60,39 +60,39 @@ const SideNav = () => {
             <Stack spacing={3} mt='125px' w='200px' pr={1}>
               <Box
                 fontSize='xs'
-                fontFamily={theme.fonts.heading}
+                fontFamily='heading'
                 cursor='pointer'
                 onClick={() => history.push('/')}
               >
                 Main Menu
               </Box>
               <Link to={`/dao/${dao.address}/proposals`} as={RouterLink}>
-                <Box fontSize='2xl' fontFamily={theme.fonts.heading}>
+                <Box fontSize='2xl' fontFamily='heading'>
                   {theme.daoMeta.proposals}
                 </Box>
               </Link>
               <Link to={`/dao/${dao.address}/bank`} as={RouterLink}>
-                <Box fontSize='2xl' fontFamily={theme.fonts.heading}>
+                <Box fontSize='2xl' fontFamily='heading'>
                   {theme.daoMeta.bank}
                 </Box>
               </Link>
               <Link to={`/dao/${dao.address}/members`} as={RouterLink}>
-                <Box fontSize='2xl' fontFamily={theme.fonts.heading}>
+                <Box fontSize='2xl' fontFamily='heading'>
                   {theme.daoMeta.members}
                 </Box>
               </Link>
               <Link to={`/dao/${dao.address}/settings/boosts`} as={RouterLink}>
-                <Box fontSize='md' fontFamily={theme.fonts.heading}>
+                <Box fontSize='md' fontFamily='heading'>
                   Boost
                 </Box>
               </Link>
               <Link to={`/dao/${dao.address}/settings`} as={RouterLink}>
-                <Box fontSize='md' fontFamily={theme.fonts.heading}>
+                <Box fontSize='md' fontFamily='heading'>
                   Settings
                 </Box>
               </Link>
               <Link to={`/dao/${dao.address}/profile`} as={RouterLink}>
-                <Box fontSize='md' fontFamily={theme.fonts.heading}>
+                <Box fontSize='md' fontFamily='heading'>
                   Stats
                 </Box>
               </Link>
@@ -112,7 +112,7 @@ const SideNav = () => {
                   as={RouterLink}
                   to={`/`}
                   fontSize='xl'
-                  fontFamily={theme.fonts.heading}
+                  fontFamily='heading'
                   fontWeight={700}
                 >
                   DAOhaus
@@ -123,12 +123,12 @@ const SideNav = () => {
             <Stack spacing={4} mt='125px' w='200px' pr={1}>
               <Box fontSize='xs'>Main Menu</Box>
               <Link href='https://daohaus.club' isExternal>
-                <Box fontSize='xl' fontFamily={theme.fonts.heading}>
+                <Box fontSize='xl' fontFamily='heading'>
                   Explore DAOs
                 </Box>
               </Link>
               <Link href='https://daohaus.club/summon' isExternal>
-                <Box fontSize='xl' fontFamily={theme.fonts.heading}>
+                <Box fontSize='xl' fontFamily='heading'>
                   Summon a DAO
                 </Box>
               </Link>
@@ -136,17 +136,17 @@ const SideNav = () => {
                 href='https://xdai.daohaus.club/dao/v2/0x283bdc900b6ec9397abb721c5bbff5ace46e0f50'
                 isExternal
               >
-                <Box fontSize='xl' fontFamily={theme.fonts.heading}>
+                <Box fontSize='xl' fontFamily='heading'>
                   HausDAO
                 </Box>
               </Link>
               <Link href='https://daohaus.club/about' isExternal>
-                <Box fontSize='md' fontFamily={theme.fonts.heading}>
+                <Box fontSize='md' fontFamily='heading'>
                   About
                 </Box>
               </Link>
               <Link href='https://daohaus.club/help' isExternal>
-                <Box fontSize='md' fontFamily={theme.fonts.heading}>
+                <Box fontSize='md' fontFamily='heading'>
                   Help
                 </Box>
               </Link>
@@ -161,10 +161,7 @@ const SideNav = () => {
         )}
       </>
 
-      <SecondaryButton
-        colorScheme={theme.colors.secondary[500]}
-        onClick={() => updateRefetchQuery('proposals')}
-      >
+      <SecondaryButton onClick={() => updateRefetchQuery('proposals')}>
         Refetch
       </SecondaryButton>
     </Box>

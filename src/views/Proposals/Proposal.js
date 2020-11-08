@@ -37,11 +37,11 @@ const Proposal = () => {
               textTransform='uppercase'
               ml={6}
               fontSize='lg'
-              fontFamily={theme.fonts.heading}
+              fontFamily='heading'
             >
               <Icon
                 name='arrow-back'
-                color={theme.colors.primary[50]}
+                color='primary.50'
                 as={RiArrowLeftLine}
                 h='20px'
                 w='20px'
@@ -54,7 +54,7 @@ const Proposal = () => {
           <Box
             textTransform='uppercase'
             fontSize='lg'
-            fontFamily={theme.fonts.heading}
+            fontFamily='heading'
             fontWeight={700}
           >
             Vote

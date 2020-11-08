@@ -2,13 +2,11 @@ import React from 'react';
 import { Flex, Box, Image } from '@chakra-ui/core';
 
 import { useUser } from '../../contexts/PokemolContext';
-import { useTheme } from '../../contexts/CustomThemeContext';
 import makeBlockie from 'ethereum-blockies-base64';
 import { truncateAddr } from '../../utils/helpers';
 
 const HubProfileCard = () => {
   const [user] = useUser();
-  const [theme] = useTheme();
 
   return (
     <>
@@ -32,18 +30,18 @@ const HubProfileCard = () => {
         )}
 
         <Flex direction='column'>
-          <Box fontSize='xl' fontFamily={theme.fonts.heading}>
+          <Box fontSize='xl' fontFamily='heading'>
             {user.profile.name || truncateAddr(user.username)}{' '}
             <span>{user.profile.emoji || ''} </span>
           </Box>
           {user.name ? (
-            <Box fontSize='sm' fontFamily={theme.fonts.mono}>
+            <Box fontSize='sm' fontFamily='mono'>
               {truncateAddr(user.username)}
             </Box>
           ) : null}
         </Flex>
       </Flex>
-      <Box fontSize='sm' ml={12} mt={4} fontFamily={theme.fonts.mono}>
+      <Box fontSize='sm' ml={12} mt={4} fontFamily='mono'>
         {user.profile.description}
       </Box>
     </>

@@ -24,7 +24,7 @@ const DaoOverviewDetails = ({ dao }) => {
           ml={6}
           textTransform='uppercase'
           fontSize='sm'
-          fontFamily={theme.fonts.heading}
+          fontFamily='heading'
         >
           Details
         </Box>
@@ -47,11 +47,7 @@ const DaoOverviewDetails = ({ dao }) => {
             w={50}
           />
           <Skeleton isLoaded={dao.name} ml={6}>
-            <Box
-              fontSize='2xl'
-              fontWeight={700}
-              fontFamily={theme.fonts.heading}
-            >
+            <Box fontSize='2xl' fontWeight={700} fontFamily='heading'>
               {dao.name ? dao.name : '--'}
             </Box>
           </Skeleton>
@@ -60,18 +56,14 @@ const DaoOverviewDetails = ({ dao }) => {
           <Box>
             <Box
               textTransform='uppercase'
-              fontFamily={theme.fonts.heading}
+              fontFamily='heading'
               fontSize='sm'
               fontWeight={700}
             >
               {theme.daoMeta.members}
             </Box>
             <Skeleton isLoaded={members?.length > 0}>
-              <Box
-                fontSize='2xl'
-                fontFamily={theme.fonts.heading}
-                fontWeight={700}
-              >
+              <Box fontSize='2xl' fontFamily='heading' fontWeight={700}>
                 {members?.length ? members.length : '--'}
               </Box>
             </Skeleton>
@@ -79,18 +71,14 @@ const DaoOverviewDetails = ({ dao }) => {
           <Box>
             <Box
               textTransform='uppercase'
-              fontFamily={theme.fonts.heading}
+              fontFamily='heading'
               fontSize='sm'
               fontWeight={700}
             >
               Shares
             </Box>
             <Skeleton isLoaded={dao?.graphData?.totalShares}>
-              <Box
-                fontSize='2xl'
-                fontFamily={theme.fonts.heading}
-                fontWeight={700}
-              >
+              <Box fontSize='2xl' fontFamily='heading' fontWeight={700}>
                 {dao?.graphData?.totalShares ? dao.graphData.totalShares : '--'}
               </Box>
             </Skeleton>
@@ -98,18 +86,14 @@ const DaoOverviewDetails = ({ dao }) => {
           <Box>
             <Box
               textTransform='uppercase'
-              fontFamily={theme.fonts.heading}
+              fontFamily='heading'
               fontSize='sm'
               fontWeight={700}
             >
               Loot
             </Box>
             <Skeleton isLoaded={dao?.graphData?.totalLoot}>
-              <Box
-                fontSize='2xl'
-                fontFamily={theme.fonts.heading}
-                fontWeight={700}
-              >
+              <Box fontSize='2xl' fontFamily='heading' fontWeight={700}>
                 {dao?.graphData?.totalLoot ? dao?.graphData?.totalLoot : '--'}
               </Box>
             </Skeleton>
@@ -117,7 +101,7 @@ const DaoOverviewDetails = ({ dao }) => {
         </Flex>
         <Box mt={6}>
           <Box
-            fontFamily={theme.fonts.heading}
+            fontFamily='heading'
             textTransform='uppercase'
             fontSize='sm'
             fontWeight={700}
@@ -125,11 +109,7 @@ const DaoOverviewDetails = ({ dao }) => {
             {theme.daoMeta.bank}
           </Box>
           <Skeleton isLoaded={wethBalance}>
-            <Box
-              fontSize='3xl'
-              fontFamily={theme.fonts.heading}
-              fontWeight={700}
-            >
+            <Box fontSize='3xl' fontFamily='heading' fontWeight={700}>
               {wethBalance && parseFloat(utils.fromWei(wethBalance)).toFixed(3)}{' '}
               WETH
             </Box>

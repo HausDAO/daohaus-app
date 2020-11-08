@@ -12,16 +12,13 @@ import {
   Box,
   Textarea,
 } from '@chakra-ui/core';
-import { utils } from 'web3';
 import { RiErrorWarningLine } from 'react-icons/ri';
 
 import { useDao, useTxProcessor, useUser } from '../../contexts/PokemolContext';
-import { useTheme } from '../../contexts/CustomThemeContext';
 import { PrimaryButton } from '../../themes/components';
 
 const WhitelistProposalForm = () => {
   const [loading, setLoading] = useState(false);
-  const [theme] = useTheme();
   const [user] = useUser();
   const [dao] = useDao();
   const [txProcessor, updateTxProcessor] = useTxProcessor();
@@ -102,7 +99,7 @@ const WhitelistProposalForm = () => {
           <FormLabel
             htmlFor='title'
             color='white'
-            fontFamily={theme.fonts.heading}
+            fontFamily='heading'
             textTransform='uppercase'
             fontSize='xs'
             fontWeight={700}
@@ -159,7 +156,7 @@ const WhitelistProposalForm = () => {
           <FormLabel
             htmlFor='tokenAddress'
             color='white'
-            fontFamily={theme.fonts.heading}
+            fontFamily='heading'
             textTransform='uppercase'
             fontSize='xs'
             fontWeight={700}

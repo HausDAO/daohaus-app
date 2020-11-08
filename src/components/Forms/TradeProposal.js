@@ -22,7 +22,6 @@ import { utils } from 'web3';
 import { RiAddFill, RiErrorWarningLine } from 'react-icons/ri';
 
 import { useDao, useTxProcessor, useUser } from '../../contexts/PokemolContext';
-import { useTheme } from '../../contexts/CustomThemeContext';
 import { PrimaryButton } from '../../themes/components';
 
 import PaymentInput from './PaymentInput';
@@ -33,7 +32,6 @@ const TradeProposalForm = () => {
   const [showLoot, setShowLoot] = useState(false);
   const [showShares, setShowShares] = useState(false);
   const [showApplicant, setShowApplicant] = useState(false);
-  const [theme] = useTheme();
   const [user] = useUser();
   const [dao] = useDao();
   const [txProcessor, updateTxProcessor] = useTxProcessor();
@@ -134,7 +132,7 @@ const TradeProposalForm = () => {
           <FormLabel
             htmlFor='title'
             color='white'
-            fontFamily={theme.fonts.heading}
+            fontFamily='heading'
             textTransform='uppercase'
             fontSize='xs'
             fontWeight={700}
@@ -226,7 +224,7 @@ const TradeProposalForm = () => {
               <FormLabel
                 htmlFor='lootRequested'
                 color='white'
-                fontFamily={theme.fonts.heading}
+                fontFamily='heading'
                 textTransform='uppercase'
                 fontSize='xs'
                 fontWeight={700}
@@ -254,7 +252,7 @@ const TradeProposalForm = () => {
               <FormLabel
                 htmlFor='applicant'
                 color='white'
-                fontFamily={theme.fonts.heading}
+                fontFamily='heading'
                 textTransform='uppercase'
                 fontSize='xs'
                 fontWeight={700}

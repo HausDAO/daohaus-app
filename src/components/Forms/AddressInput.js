@@ -2,11 +2,9 @@ import { FormControl, FormHelperText, FormLabel, Input } from '@chakra-ui/core';
 import React from 'react';
 // import { useForm } from 'react-hook-form';
 import { useEns } from '../../contexts/PokemolContext';
-import { useTheme } from '../../contexts/CustomThemeContext';
 
 const AddressInput = ({ register, setValue, watch, formLabel }) => {
   formLabel = formLabel || 'applicant';
-  const [theme] = useTheme();
   const [ens] = useEns();
 
   const ensAddr = watch('applicantHidden', '');
@@ -29,7 +27,7 @@ const AddressInput = ({ register, setValue, watch, formLabel }) => {
       <FormLabel
         htmlFor='applicant'
         color='white'
-        fontFamily={theme.fonts.heading}
+        fontFamily='heading'
         textTransform='uppercase'
         fontSize='xs'
         fontWeight={700}

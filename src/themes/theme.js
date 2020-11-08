@@ -15,11 +15,9 @@ export * from './components';
 //   },
 // });
 
-const defaultTheme = {
+export const defaultTheme = {
   primary500: '#10153d',
   secondary500: '#EB8A23',
-  brandImg: BrandImg,
-  bgImg: BgImg,
   bg500: '#03061B',
   bgOverlayOpacity: '0.75',
   primaryFont: 'Inknut Antiqua',
@@ -35,6 +33,8 @@ const defaultTheme = {
     telegram: '',
     website: '',
     other: '',
+    brandImg: BrandImg,
+    bgImg: BgImg,
   },
 };
 
@@ -108,9 +108,9 @@ export const customTheme = (daoTheme) => {
       member: themeOverrides.daoMeta.member,
       discord: themeOverrides.daoMeta.discord,
       medium: themeOverrides.daoMeta.medium,
-      medium: themeOverrides.daoMeta.telegram,
-      medium: themeOverrides.daoMeta.website,
-      medium: themeOverrides.daoMeta.other,
+      telegram: themeOverrides.daoMeta.telegram,
+      website: themeOverrides.daoMeta.website,
+      other: themeOverrides.daoMeta.other,
     },
     styles: {
       ...theme.styles,

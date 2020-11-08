@@ -65,7 +65,7 @@ const ProposalFormModal = ({ isOpen, setShowModal, setProposalType }) => {
       >
         <ModalHeader>
           <Box
-            fontFamily={theme.fonts.heading}
+            fontFamily='heading'
             textTransform='uppercase'
             fontSize='sm'
             fontWeight={700}
@@ -74,7 +74,7 @@ const ProposalFormModal = ({ isOpen, setShowModal, setProposalType }) => {
             New {theme.daoMeta.proposal}
           </Box>
           <Box
-            fontFamily={theme.fonts.heading}
+            fontFamily='heading'
             fontSize='2xl'
             fontWeight={700}
             color='white'
@@ -117,17 +117,13 @@ const ProposalFormModal = ({ isOpen, setShowModal, setProposalType }) => {
                 <Box
                   mb={2}
                   fontSize='md'
-                  fontFamily={theme.fonts.heading}
+                  fontFamily='heading'
                   fontWeight={700}
                   color='white'
                 >
                   {p.name}
                 </Box>
-                <Box
-                  fontSize='xs'
-                  fontFamily={theme.fonts.heading}
-                  color='white'
-                >
+                <Box fontSize='xs' fontFamily='heading' color='white'>
                   {p.subhead}
                 </Box>
               </Box>

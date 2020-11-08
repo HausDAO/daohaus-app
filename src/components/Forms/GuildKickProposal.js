@@ -15,13 +15,11 @@ import {
 import { RiErrorWarningLine } from 'react-icons/ri';
 
 import { useDao, useTxProcessor, useUser } from '../../contexts/PokemolContext';
-import { useTheme } from '../../contexts/CustomThemeContext';
 import { PrimaryButton } from '../../themes/components';
 import AddressInput from './AddressInput';
 
 const GuildKickProposalForm = () => {
   const [loading, setLoading] = useState(false);
-  const [theme] = useTheme();
   const [user] = useUser();
   const [dao] = useDao();
   const [txProcessor, updateTxProcessor] = useTxProcessor();
@@ -105,7 +103,7 @@ const GuildKickProposalForm = () => {
           <FormLabel
             htmlFor='title'
             color='white'
-            fontFamily={theme.fonts.heading}
+            fontFamily='heading'
             textTransform='uppercase'
             fontSize='xs'
             fontWeight={700}

@@ -48,7 +48,7 @@ const MemberDaoList = ({ daos }) => {
             ) : null}
           </Avatar>
 
-          <Box fontFamily={theme.fonts.mono} fontSize='sm'>
+          <Box fontFamily='mono' fontSize='sm'>
             {dao.title}
           </Box>
         </Link>
@@ -73,12 +73,7 @@ const MemberDaoList = ({ daos }) => {
 
   return (
     <Box maxW='500px'>
-      <Box
-        fontFamily={theme.fonts.heading}
-        fontSize='lg'
-        fontWeight={700}
-        mb={6}
-      >
+      <Box fontFamily='heading' fontSize='lg' fontWeight={700} mb={6}>
         Member of {daos.length} DAO{daos.length > 1 && 's'}
       </Box>
 

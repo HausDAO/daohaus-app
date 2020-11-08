@@ -94,7 +94,7 @@ const TributeInput = ({ register, setValue, getValues }) => {
       <FormLabel
         htmlFor='tributeOffered'
         color='white'
-        fontFamily={theme.fonts.heading}
+        fontFamily='heading'
         textTransform='uppercase'
         fontSize='xs'
         fontWeight={700}

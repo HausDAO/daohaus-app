@@ -9,12 +9,9 @@ import {
   Icon,
 } from '@chakra-ui/core';
 import { RiArrowDropDownFill } from 'react-icons/ri';
-import { useTheme } from '../../contexts/CustomThemeContext';
 import { sortOptions } from '../../content/proposal-filters';
 
 const ProposalSort = ({ sort, setSort }) => {
-  const [theme] = useTheme();
-
   useEffect(() => {
     setSort(sortOptions[0]);
     // eslint-disable-next-line
@@ -22,19 +19,14 @@ const ProposalSort = ({ sort, setSort }) => {
 
   return (
     <Flex direction='row'>
-      <Box
-        ml={8}
-        mr={3}
-        textTransform='uppercase'
-        fontFamily={theme.fonts.heading}
-      >
+      <Box ml={8} mr={3} textTransform='uppercase' fontFamily='heading'>
         Sort By
       </Box>
 
       <Menu>
         <MenuButton
           textTransform='uppercase'
-          fontFamily={theme.fonts.heading}
+          fontFamily='heading'
           color='primary.50'
         >
           {sort?.name} <Icon as={RiArrowDropDownFill} color='primary.50' />

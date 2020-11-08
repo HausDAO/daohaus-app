@@ -43,7 +43,7 @@ const ProposalsActivityFeed = () => {
         ml={6}
         textTransform='uppercase'
         fontSize='sm'
-        fontFamily={theme.fonts.heading}
+        fontFamily='heading'
       >
         Recent Activities
       </Box>

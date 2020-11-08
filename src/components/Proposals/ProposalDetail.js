@@ -29,17 +29,13 @@ const ProposalDetail = ({ proposal }) => {
           <Box
             textTransform='uppercase'
             fontSize='sm'
-            fontFamily={theme.fonts.heading}
+            fontFamily='heading'
             fontWeight={700}
           >
             {proposal ? proposal.proposalType : theme.daoMeta.proposal}
           </Box>
           <Skeleton isLoaded={details?.title}>
-            <Box
-              fontSize='3xl'
-              fontFamily={theme.fonts.heading}
-              fontWeight={700}
-            >
+            <Box fontSize='3xl' fontFamily='heading' fontWeight={700}>
               {details?.title ? details?.title : '-'}
             </Box>
           </Skeleton>
@@ -49,17 +45,13 @@ const ProposalDetail = ({ proposal }) => {
                 <Box
                   textTransform='uppercase'
                   fontSize='sm'
-                  fontFamily={theme.fonts.heading}
+                  fontFamily='heading'
                   fontWeight={700}
                 >
                   Tribute
                 </Box>
                 <Skeleton isLoaded={proposal?.tributeOffered}>
-                  <Box
-                    fontSize='lg'
-                    fontFamily={theme.fonts.space}
-                    fontWeight={700}
-                  >
+                  <Box fontSize='lg' fontFamily='space' fontWeight={700}>
                     {proposal?.tributeOffered
                       ? `${utils.fromWei(
                           proposal.tributeOffered.toString(),
@@ -74,17 +66,13 @@ const ProposalDetail = ({ proposal }) => {
                 <Box
                   textTransform='uppercase'
                   fontSize='sm'
-                  fontFamily={theme.fonts.heading}
+                  fontFamily='heading'
                   fontWeight={700}
                 >
                   Payment Requested
                 </Box>
                 <Skeleton isLoaded={proposal?.paymentRequested}>
-                  <Box
-                    fontSize='lg'
-                    fontFamily={theme.fonts.space}
-                    fontWeight={700}
-                  >
+                  <Box fontSize='lg' fontFamily='space' fontWeight={700}>
                     {proposal?.paymentRequested
                       ? `${utils.fromWei(
                           proposal.paymentRequested.toString(),
@@ -99,17 +87,13 @@ const ProposalDetail = ({ proposal }) => {
                 <Box
                   textTransform='uppercase'
                   fontSize='sm'
-                  fontFamily={theme.fonts.heading}
+                  fontFamily='heading'
                   fontWeight={700}
                 >
                   Shares
                 </Box>
                 <Skeleton isLoaded={proposal?.sharesRequested}>
-                  <Box
-                    fontSize='lg'
-                    fontFamily={theme.fonts.space}
-                    fontWeight={700}
-                  >
+                  <Box fontSize='lg' fontFamily='space' fontWeight={700}>
                     {proposal?.sharesRequested
                       ? proposal.sharesRequested
                       : '--'}
@@ -122,17 +106,13 @@ const ProposalDetail = ({ proposal }) => {
                 <Box
                   textTransform='uppercase'
                   fontSize='sm'
-                  fontFamily={theme.fonts.heading}
+                  fontFamily='heading'
                   fontWeight={700}
                 >
                   Loot
                 </Box>
                 <Skeleton isLoaded={proposal?.lootRequested}>
-                  <Box
-                    fontSize='lg'
-                    fontFamily={theme.fonts.space}
-                    fontWeight={700}
-                  >
+                  <Box fontSize='lg' fontFamily='space' fontWeight={700}>
                     {proposal?.lootRequested ? proposal.lootRequested : '--'}
                   </Box>
                 </Skeleton>
@@ -144,7 +124,7 @@ const ProposalDetail = ({ proposal }) => {
                   <Box
                     textTransform='uppercase'
                     fontSize='sm'
-                    fontFamily={theme.fonts.heading}
+                    fontFamily='heading'
                     fontWeight={700}
                   >
                     {isBefore(
@@ -154,11 +134,7 @@ const ProposalDetail = ({ proposal }) => {
                       ? 'Voting Period Ends'
                       : 'Voting Ended'}
                   </Box>
-                  <Box
-                    fontSize='lg'
-                    fontFamily={theme.fonts.space}
-                    fontWeight={700}
-                  >
+                  <Box fontSize='lg' fontFamily='space' fontWeight={700}>
                     {formatDistanceToNow(
                       new Date(+proposal?.votingPeriodEnds * 1000),
                       {
@@ -172,17 +148,13 @@ const ProposalDetail = ({ proposal }) => {
                   <Box
                     textTransform='uppercase'
                     fontSize='sm'
-                    fontFamily={theme.fonts.heading}
+                    fontFamily='heading'
                     fontWeight={700}
                   >
                     Proposal Status
                   </Box>
                   <Skeleton isLoaded={proposal?.status}>
-                    <Box
-                      fontSize='lg'
-                      fontFamily={theme.fonts.space}
-                      fontWeight={700}
-                    >
+                    <Box fontSize='lg' fontFamily='space' fontWeight={700}>
                       {proposal?.status
                         ? getProposalCountdownText(proposal)
                         : '--'}
@@ -196,7 +168,7 @@ const ProposalDetail = ({ proposal }) => {
             <Box
               textTransform='uppercase'
               fontSize='sm'
-              fontFamily={theme.fonts.heading}
+              fontFamily='heading'
               fontWeight={700}
             >
               Link
@@ -204,10 +176,7 @@ const ProposalDetail = ({ proposal }) => {
             <Skeleton isLoaded={details?.link}>
               <Link href={details?.link} target='_blank'>
                 {details?.link ? details.link : '-'}{' '}
-                <Icon
-                  as={RiExternalLinkLine}
-                  color={theme.colors.primary[50]}
-                />
+                <Icon as={RiExternalLinkLine} color='primary.50' />
               </Link>
             </Skeleton>
           </Box>
@@ -240,7 +209,7 @@ const ProposalDetail = ({ proposal }) => {
             textTransform='uppercase'
             fontSize='sm'
             mb={4}
-            fontFamily={theme.fonts.heading}
+            fontFamily='heading'
             fontWeight={700}
           >
             Submitted By
@@ -259,7 +228,7 @@ const ProposalDetail = ({ proposal }) => {
           <Box
             textTransform='uppercase'
             fontSize='sm'
-            fontFamily={theme.fonts.heading}
+            fontFamily='heading'
             fontWeight={700}
             mb={4}
           >

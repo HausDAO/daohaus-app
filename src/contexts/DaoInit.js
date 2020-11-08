@@ -1,5 +1,6 @@
 import React, { useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
+import { defaultTheme } from '../themes/theme';
 
 import { DaoService, USER_TYPE } from '../utils/dao-service';
 import { validDaoParams } from '../utils/helpers';
@@ -85,6 +86,9 @@ const DaoInit = () => {
       return boosts;
     }, {});
 
+    //this will need to parse custom theme data
+    const uiMeta = defaultTheme.daoMeta;
+
     const version = daoRes && daoRes.data.version ? daoRes.data.version : '1';
     const daoService =
       user && web3Connect.provider
@@ -102,6 +106,7 @@ const DaoInit = () => {
       version,
       ...apiData,
       boosts,
+      uiMeta,
       currentPeriod: parseInt(currentPeriod),
     });
 

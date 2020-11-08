@@ -9,7 +9,6 @@ import {
   useUser,
   useTxProcessor,
 } from '../../contexts/PokemolContext';
-import { useTheme } from '../../contexts/CustomThemeContext';
 import { isAfter, isBefore } from 'date-fns';
 import { ethToWei } from '@netgum/utils'; // returns BN
 
@@ -20,7 +19,6 @@ const ProposalVote = ({ proposal }) => {
   const [wallet] = useMemberWallet();
   const [daoData] = useDaoGraphData();
   const [txProcessor, updateTxProcessor] = useTxProcessor();
-  const [theme] = useTheme();
   console.log(wallet);
   console.log(daoData);
   const currentlyVoting = (proposal) => {
@@ -222,7 +220,7 @@ const ProposalVote = ({ proposal }) => {
                   <>
                     <Flex justify='center' align='center' w='100%'>
                       <Skeleton isLoaded={proposal?.status}>
-                        <Box fontSize='lg' fontFamily={theme.fonts.heading}>
+                        <Box fontSize='lg' fontFamily='heading'>
                           {proposal?.status === 'Failed' && 'Failed'}
                           {proposal?.status === 'Passed' && 'Passed'}
                         </Box>
@@ -262,12 +260,12 @@ const ProposalVote = ({ proposal }) => {
               </Box>
               <Flex justify='space-between' mt={3}>
                 <Skeleton isLoaded={proposal?.yesVotes}>
-                  <Box fontFamily={theme.fonts.space} fontWeight={700}>
+                  <Box fontFamily='space' fontWeight={700}>
                     {proposal?.yesVotes || '0'} Yes
                   </Box>
                 </Skeleton>
                 <Skeleton isLoaded={proposal?.noVotes}>
-                  <Box fontFamily={theme.fonts.space} fontWeight={700}>
+                  <Box fontFamily='space' fontWeight={700}>
                     {proposal?.noVotes || '0'} No
                   </Box>
                 </Skeleton>

@@ -84,7 +84,7 @@ const PaymentInput = ({ register, setValue, getValues, errors }) => {
       <FormLabel
         htmlFor='paymentRequested'
         color='white'
-        fontFamily={theme.fonts.heading}
+        fontFamily='heading'
         textTransform='uppercase'
         fontSize='xs'
         fontWeight={700}

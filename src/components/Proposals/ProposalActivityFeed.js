@@ -43,7 +43,7 @@ const ProposalActivityFeed = () => {
         ml={6}
         textTransform='uppercase'
         fontSize='sm'
-        fontFamily={theme.fonts.heading}
+        fontFamily='heading'
       >
         {theme.daoMeta.proposal} History
       </Box>

@@ -1,10 +1,8 @@
 import React from 'react';
 import { Box, Flex, Link } from '@chakra-ui/core';
 import { Web3SignIn } from '../Shared/Web3SignIn';
-import { useTheme } from '../../contexts/CustomThemeContext';
 
 const HubSignedOut = () => {
-  const [theme] = useTheme();
   return (
     <Box
       rounded='lg'
@@ -16,12 +14,7 @@ const HubSignedOut = () => {
       w='50%'
       textAlign='center'
     >
-      <Box
-        fontSize='3xl'
-        fontFamily={theme.fonts.heading}
-        fontWeight={700}
-        mb={10}
-      >
+      <Box fontSize='3xl' fontFamily='heading' fontWeight={700} mb={10}>
         Hub
       </Box>
       <Box fontSize='md' mb={5}>
