@@ -16,7 +16,6 @@ import {
   MenuButton,
   MenuList,
   MenuItem,
-  FormHelperText,
 } from '@chakra-ui/core';
 import { utils } from 'web3';
 import { RiAddFill, RiErrorWarningLine } from 'react-icons/ri';
@@ -26,14 +25,12 @@ import {
   useTheme,
   useTxProcessor,
   useUser,
-  useEns,
 } from '../../contexts/PokemolContext';
 import { PrimaryButton } from '../../themes/components';
 
 import TributeInput from './TributeInput';
 import PaymentInput from './PaymentInput';
 import AddressInput from './AddressInput';
-
 
 const FundingProposalForm = () => {
   const [loading, setLoading] = useState(false);
@@ -70,7 +67,6 @@ const FundingProposalForm = () => {
   }, [errors]);
 
   // TODO check tribute token < currentWallet.token.balance & unlock
-  // TODO check payment token < dao.token.balance
   // TODO check link is a valid link
 
   const txCallBack = (txHash, details) => {
@@ -100,8 +96,6 @@ const FundingProposalForm = () => {
       description: values.description,
       link: 'https://' + values.link,
     });
-
-    console.log('values?.applicantHidden', values);
 
     try {
       dao.daoService.moloch.submitProposal(
@@ -200,12 +194,12 @@ const FundingProposalForm = () => {
           </Stack>
         </Box>
         <Box w='48%'>
-
           <AddressInput register={register} setValue={setValue} watch={watch} />
           <PaymentInput
             register={register}
             setValue={setValue}
             getValues={getValues}
+            errors={errors}
           />
 
           {showShares && (
@@ -268,13 +262,11 @@ const FundingProposalForm = () => {
             </>
           )}
           {showTribute && (
-
             <TributeInput
               register={register}
               setValue={setValue}
               getValues={getValues}
             />
-
           )}
           {(!showShares || !showLoot || !showTribute) && (
             <Menu color='white' textTransform='uppercase'>

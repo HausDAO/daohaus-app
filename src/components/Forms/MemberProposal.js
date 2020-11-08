@@ -8,10 +8,8 @@ import {
   Input,
   InputGroup,
   InputLeftAddon,
-  InputRightAddon,
   Icon,
   Stack,
-  Select,
   Box,
   Textarea,
   Menu,
@@ -69,7 +67,6 @@ const MemberProposalForm = () => {
   }, [errors]);
 
   // TODO check tribute token < currentWallet.token.balance & unlock
-  // TODO check payment token < dao.token.balance
   // TODO check link is a valid link
 
   const txCallBack = (txHash, details) => {
@@ -220,13 +217,11 @@ const MemberProposalForm = () => {
             color='white'
             focusBorderColor='secondary.500'
           />
-
           <TributeInput
             register={register}
             setValue={setValue}
             getValues={getValues}
           />
-
           {showLoot && (
             <>
               <FormLabel
@@ -255,13 +250,12 @@ const MemberProposalForm = () => {
             </>
           )}
           {showPaymentRequest && (
-
             <PaymentInput
               register={register}
               setValue={setValue}
               getValues={getValues}
+              errors={errors}
             />
-
           )}
           {showApplicant && (
             <AddressInput

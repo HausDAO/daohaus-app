@@ -121,6 +121,7 @@ const TributeInput = ({ register, setValue, getValues }) => {
             defaultValue='0xd0a1e359811322d97991e03f863a0c30c2cf029c'
             ref={register}
             onChange={handleChange}
+            color='black'
           >
             {' '}
             {tokenData.map((token, idx) => (
@@ -132,11 +133,11 @@ const TributeInput = ({ register, setValue, getValues }) => {
         </InputRightAddon>
       </InputGroup>
       {!unlocked && (
-        <Button onClick={() => unlock()} isLoading={loading}>
+        <Button onClick={() => unlock()} isLoading={loading} color='black'>
           Unlock
         </Button>
       )}
-      <Button onClick={() => setMax()}>
+      <Button onClick={() => setMax()} color='black'>
         Max: {balance && balance.toFixed(4)}
       </Button>
     </>

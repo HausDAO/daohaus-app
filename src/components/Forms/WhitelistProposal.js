@@ -51,8 +51,6 @@ const WhitelistProposalForm = () => {
     }
   }, [errors]);
 
-  // TODO check tribute token < currentWallet.token.balance & unlock
-  // TODO check payment token < dao.token.balance
   // TODO check link is a valid link
 
   const txCallBack = (txHash, details) => {
@@ -84,23 +82,9 @@ const WhitelistProposalForm = () => {
     });
 
     try {
-      dao.daoService.moloch.submitProposal(
-        values.sharesRequested
-          ? utils.toWei(values.sharesRequested?.toString())
-          : '0',
-        values.lootRequested
-          ? utils.toWei(values.lootRequested?.toString())
-          : '0',
-        values.tributeOffered
-          ? utils.toWei(values.tributeOffered?.toString())
-          : '0',
-        values.tributeToken,
-        values.paymentRequested
-          ? utils.toWei(values.paymentRequested?.toString())
-          : '0',
-        values.paymentToken || values.tributeToken,
+      dao.daoService.moloch.submitWhiteListProposal(
+        values.tokenAddress,
         details,
-        user.username,
         txCallBack,
       );
     } catch (err) {
@@ -158,6 +142,21 @@ const WhitelistProposalForm = () => {
               color='white'
               focusBorderColor='secondary.500'
             />
+            <InputGroup>
+              <InputLeftAddon>https://</InputLeftAddon>
+              <Input
+                name='link'
+                placeholder='daolink.club'
+                color='white'
+                focusBorderColor='secondary.500'
+                ref={register({
+                  required: {
+                    value: true,
+                    message: 'Reference Link is required',
+                  },
+                })}
+              />
+            </InputGroup>
           </Stack>
         </Box>
         <Box w='48%'>
@@ -179,21 +178,6 @@ const WhitelistProposalForm = () => {
             color='white'
             focusBorderColor='secondary.500'
           />
-          <InputGroup>
-            <InputLeftAddon>https://</InputLeftAddon>
-            <Input
-              name='link'
-              placeholder='daolink.club'
-              color='white'
-              focusBorderColor='secondary.500'
-              ref={register({
-                required: {
-                  value: true,
-                  message: 'Reference Link is required',
-                },
-              })}
-            />
-          </InputGroup>
         </Box>
       </FormControl>
       <Flex justify='flex-end' align='center' h='60px'>
