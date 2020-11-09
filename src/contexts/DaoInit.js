@@ -19,7 +19,7 @@ const DaoInit = () => {
   const [contracts, updateContracts] = useContracts();
   const [daoMetadata, updateDaoMetadata] = useDaoMetadata();
   const [web3Connect] = useWeb3Connect();
-  const [, updateMemberWallet] = useMemberWallet();
+  const [memberWallet, updateMemberWallet] = useMemberWallet();
   const [user] = useUser();
 
   useEffect(() => {
@@ -58,7 +58,8 @@ const DaoInit = () => {
     }
 
     const walletExists =
-      useMemberWallet.daoAddress === contracts.daoService.daoAddress;
+      memberWallet &&
+      memberWallet.daoAddress === contracts.daoService.daoAddress;
     if (!walletExists) {
       initMemberWallet();
     }
