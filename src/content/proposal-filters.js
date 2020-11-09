@@ -11,18 +11,67 @@ export const getFilterOptions = (isMember) => {
     {
       name: 'Funding Proposals',
       value: 'Funding Proposal',
+      key: 'proposalType',
     },
     {
       name: 'Member Proposals',
       value: 'Member Proposal',
+      key: 'proposalType',
     },
     {
       name: 'Whitelist Token Proposals',
       value: 'Whitelist Token Proposal',
+      key: 'proposalType',
     },
     {
       name: 'Trade Proposals',
       value: 'Trade Proposal',
+      key: 'proposalType',
+    },
+    {
+      name: 'Guildkick Proposals',
+      value: 'Guildkick Proposal',
+      key: 'proposalType',
+    },
+    {
+      name: 'Unsponsored',
+      value: 'Unsponsored',
+      key: 'status',
+    },
+    {
+      name: 'In Queue',
+      value: 'InQueue',
+      key: 'status',
+    },
+    {
+      name: 'Voting Period',
+      value: 'VotingPeriod',
+      key: 'status',
+    },
+    {
+      name: 'Grace Period',
+      value: 'GracePeriod',
+      key: 'status',
+    },
+    {
+      name: 'Ready For Processing',
+      value: 'ReadyForProcessing',
+      key: 'status',
+    },
+    {
+      name: 'Passed',
+      value: 'Passed',
+      key: 'status',
+    },
+    {
+      name: 'Failed',
+      value: 'Failed',
+      key: 'status',
+    },
+    {
+      name: 'Cancelled',
+      value: 'Cancelled',
+      key: 'status',
     },
   ];
 
@@ -43,35 +92,7 @@ export const sortOptions = [
     value: 'submissionDateAsc',
   },
   {
-    name: 'Unsponsored',
-    value: 'Unsponsored',
-  },
-  {
-    name: 'In Queue',
-    value: 'InQueue',
-  },
-  {
-    name: 'Voting Period',
-    value: 'VotingPeriod',
-  },
-  {
-    name: 'Grace Period',
-    value: 'GracePeriod',
-  },
-  {
-    name: 'Ready For Processing',
-    value: 'ReadyForProcessing',
-  },
-  {
-    name: 'Passed',
-    value: 'Passed',
-  },
-  {
-    name: 'Failed',
-    value: 'Failed',
-  },
-  {
-    name: 'Cancelled',
-    value: 'Cancelled',
+    name: 'Most Votes',
+    value: 'voteCountDesc',
   },
 ];

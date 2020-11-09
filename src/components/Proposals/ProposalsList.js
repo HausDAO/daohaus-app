@@ -47,12 +47,14 @@ const ProposalsList = () => {
             );
             return unread.unread;
           } else {
-            return prop.proposalType === filter.value;
+            return prop[filter.key] === filter.value;
           }
         })
         .sort((a, b) => {
           if (sort.value === 'submissionDateAsc') {
             return +a.createdAt - +b.createdAt;
+          } else if (sort.value === 'voteCountDesc') {
+            return b.votes.length - a.votes.length;
           } else {
             return +b.createdAt - +a.createdAt;
           }
