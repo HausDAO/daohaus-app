@@ -1,7 +1,6 @@
 import React from 'react';
-import { Box, Flex, Icon, Skeleton } from '@chakra-ui/core';
+import { Box, Button, Flex, Icon, Skeleton } from '@chakra-ui/core';
 import { FaThumbsUp, FaThumbsDown } from 'react-icons/fa';
-import { PrimaryButton } from '../../themes/theme';
 import {
   useMemberWallet,
   useDaoGraphData,
@@ -125,26 +124,22 @@ const ProposalVote = ({ proposal }) => {
               Balance: {wallet?.tokenBalance} {daoData?.depositToken?.symbol}
               {+wallet?.allowance * 10 ** daoData?.depositToken?.decimals >
               +daoData?.proposalDeposit ? (
-                <PrimaryButton
-                  onClick={() => sponsorProposal(proposal.proposalId)}
-                >
+                <Button onClick={() => sponsorProposal(proposal.proposalId)}>
                   Sponsor
-                </PrimaryButton>
+                </Button>
               ) : (
-                <PrimaryButton
+                <Button
                   onClick={() => unlock(daoData.depositToken.tokenAddress)}
                 >
                   Unlock
-                </PrimaryButton>
+                </Button>
               )}
             </Flex>
             <Flex>
               {proposal?.proposer === user.username && (
-                <PrimaryButton
-                  onClick={() => sponsorProposal(proposal.proposalId)}
-                >
+                <Button onClick={() => sponsorProposal(proposal.proposalId)}>
                   Cancel
-                </PrimaryButton>
+                </Button>
               )}
             </Flex>
           </Flex>
@@ -154,11 +149,9 @@ const ProposalVote = ({ proposal }) => {
           proposal?.proposer === user.username && (
             <Flex justify='center'>
               <Flex direction='column'>
-                <PrimaryButton
-                  onClick={() => sponsorProposal(proposal.proposalId)}
-                >
+                <Button onClick={() => sponsorProposal(proposal.proposalId)}>
                   Sponsor
-                </PrimaryButton>
+                </Button>
               </Flex>
             </Flex>
           )}
@@ -272,9 +265,7 @@ const ProposalVote = ({ proposal }) => {
         {proposal?.status === 'ReadyForProcessing' && (
           <Flex justify='center' pt='10px'>
             <Flex direction='column'>
-              <PrimaryButton onClick={() => processProposal(proposal)}>
-                Process
-              </PrimaryButton>
+              <Button onClick={() => processProposal(proposal)}>Process</Button>
             </Flex>
           </Flex>
         )}

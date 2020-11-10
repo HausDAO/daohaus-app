@@ -10,7 +10,6 @@ import {
 } from '@chakra-ui/core';
 
 import { useTheme } from '../../contexts/CustomThemeContext';
-import { PrimaryButton } from '../../themes/theme';
 import BrandOverride from '../../assets/themes/raidTheme/raidguild__swords.svg';
 import BgOverride from '../../assets/themes/raidTheme/raid__fantasy--bg.jpg';
 
