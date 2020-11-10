@@ -14,9 +14,9 @@ const UserAvatar = ({ user }) => {
             src={`${'https://ipfs.infura.io/ipfs/' +
               user.image[0].contentUrl['/']}`}
             mr={3}
-            size='sm'
+            size='xs'
           />
-          <Box fontSize='md' fontFamily='heading'>
+          <Box fontSize='sm' fontFamily='heading'>
             {user.name || truncateAddr(user.username || user.memberAddress)}{' '}
             <span>{user.emoji || ''} </span>
           </Box>
@@ -30,8 +30,9 @@ const UserAvatar = ({ user }) => {
                   name={user.username || user.memberAddress}
                   src={makeBlockie(user.username || user.memberAddress)}
                   mr={3}
+                  size='xs'
                 />
-                <Box fontSize='md' fontFamily='heading'>
+                <Box fontSize='sm' fontFamily='heading'>
                   {truncateAddr(user.username || user.memberAddress)}
                 </Box>
               </>

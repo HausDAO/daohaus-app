@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import {
+  Button,
   FormLabel,
   FormControl,
   Flex,
@@ -11,11 +12,11 @@ import {
   Stack,
   Box,
   Textarea,
+  AccordionButton,
 } from '@chakra-ui/core';
 import { RiErrorWarningLine } from 'react-icons/ri';
 
 import { useDao, useTxProcessor, useUser } from '../../contexts/PokemolContext';
-import { PrimaryButton } from '../../themes/components';
 import AddressInput from './AddressInput';
 
 const GuildKickProposalForm = () => {
@@ -173,15 +174,14 @@ const GuildKickProposalForm = () => {
           </Box>
         )}
         <Box>
-          <PrimaryButton
-            color='white'
+          <Button
             type='submit'
             loadingText='Submitting'
             isLoading={loading}
             disabled={loading}
           >
             Submit
-          </PrimaryButton>
+          </Button>
         </Box>
       </Flex>
     </form>

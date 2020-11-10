@@ -6,10 +6,10 @@ import {
   InputGroup,
   InputLeftAddon,
   Text,
+  Button,
 } from '@chakra-ui/core';
 
 import { useTheme } from '../../contexts/CustomThemeContext';
-import { PrimaryButton } from '../../themes/theme';
 import BrandOverride from '../../assets/themes/raidTheme/raidguild__swords.svg';
 import BgOverride from '../../assets/themes/raidTheme/raid__fantasy--bg.jpg';
 
@@ -69,7 +69,8 @@ const ThemeSample = () => {
   return (
     <>
       <Flex direction='column'>
-        <Flex direction='row' w='60%'>
+        <Flex direction='row' w='50%'>
+          <Text>Inputs</Text>
           <InputGroup>
             <InputLeftAddon bg='primary.500'>primary.500</InputLeftAddon>
             <Input
@@ -95,11 +96,15 @@ const ThemeSample = () => {
             />
           </InputGroup>
         </Flex>
-        <Flex direction='row' w='60%'>
-          <PrimaryButton onClick={handleSet}>Change</PrimaryButton>
-          <PrimaryButton onClick={handleReset} mb={3}>
-            Reset
-          </PrimaryButton>
+        <Flex direction='row' w='50%'>
+          <Text>Buttons</Text>
+          <Button onClick={handleSet}>Change (Base)</Button>
+          <Button onClick={handleReset} mb={3} variant='outline'>
+            Reset (Outline)
+          </Button>
+          <Button onClick={handleReset} mb={3} variant='primary'>
+            Reset (Primary)
+          </Button>
         </Flex>
       </Flex>
       <Flex>

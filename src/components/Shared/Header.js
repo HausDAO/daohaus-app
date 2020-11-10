@@ -1,12 +1,11 @@
 import React, { useEffect, useState } from 'react';
-import { Box, Flex, Icon, Button } from '@chakra-ui/core';
+import { Box, Flex, Icon, Button, IconButton } from '@chakra-ui/core';
 import { useLocation, Link as RouterLink } from 'react-router-dom';
 import { RiAddFill } from 'react-icons/ri';
 import { useUser, useNetwork, useDao } from '../../contexts/PokemolContext';
 import { useTheme } from '../../contexts/CustomThemeContext';
 import { Web3SignIn } from './Web3SignIn';
 import UserAvatar from './UserAvatar';
-import { PrimaryButton } from '../../themes/theme';
 import DaoSwitcherModal from '../Modal/DaoSwitcherModal';
 
 const Header = () => {
@@ -54,25 +53,26 @@ const Header = () => {
             {pageTitle}
           </Box>
           {location.pathname === `/` && user && (
-            <PrimaryButton as='a' href='https://3box.io/hub' target='_blank'>
+            <Button as='a' href='https://3box.io/hub' target='_blank'>
               Edit 3Box Profile
-            </PrimaryButton>
+            </Button>
           )}
           {location.pathname === `/dao/${dao?.address}/proposals` && (
-            <PrimaryButton
+            <Button
               as={RouterLink}
               to={`/dao/${dao?.address}/proposals/new`}
+              rightIcon={<RiAddFill />}
             >
-              New {theme.daoMeta.proposal} <Icon as={RiAddFill} />
-            </PrimaryButton>
+              New {theme.daoMeta.proposal}
+            </Button>
           )}
           {location.pathname === `/dao/${dao?.address}/members` && (
-            <PrimaryButton
+            <Button
               as={RouterLink}
               to={`/dao/${dao?.address}/proposals/new/member`}
             >
               Apply
-            </PrimaryButton>
+            </Button>
           )}
         </Flex>
 

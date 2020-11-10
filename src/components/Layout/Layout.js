@@ -98,7 +98,6 @@ const Layout = ({ children }) => {
             <IconButton
               onClick={onToggle}
               aria-label='Close Menu'
-              colorScheme='secondary'
               variant='outline'
               size='xs'
               icon={<RiArrowLeftSLine />}
