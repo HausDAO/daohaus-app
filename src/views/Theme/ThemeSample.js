@@ -6,6 +6,7 @@ import {
   InputGroup,
   InputLeftAddon,
   Text,
+  Button,
 } from '@chakra-ui/core';
 
 import { useTheme } from '../../contexts/CustomThemeContext';
@@ -96,10 +97,13 @@ const ThemeSample = () => {
           </InputGroup>
         </Flex>
         <Flex direction='row' w='60%'>
-          <PrimaryButton onClick={handleSet}>Change</PrimaryButton>
-          <PrimaryButton onClick={handleReset} mb={3}>
-            Reset
-          </PrimaryButton>
+          <Button onClick={handleSet}>Change (Base)</Button>
+          <Button onClick={handleReset} mb={3} variant='outline'>
+            Reset (Outline)
+          </Button>
+          <Button onClick={handleReset} mb={3} variant='primary'>
+            Reset (Primary)
+          </Button>
         </Flex>
       </Flex>
       <Flex>

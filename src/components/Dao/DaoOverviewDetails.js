@@ -1,12 +1,10 @@
 import React from 'react';
 import { useHistory } from 'react-router-dom';
-import { Box, Flex, Image, Skeleton } from '@chakra-ui/core';
+import { Box, Flex, Image, Skeleton, Button } from '@chakra-ui/core';
 import { utils } from 'web3';
 
 import { useUser, useMembers } from '../../contexts/PokemolContext';
 import { useTheme } from '../../contexts/CustomThemeContext';
-
-import { PrimaryButton, SecondaryButton } from '../../themes/theme';
 
 const DaoOverviewDetails = ({ dao }) => {
   const [theme] = useTheme();
@@ -126,17 +124,18 @@ const DaoOverviewDetails = ({ dao }) => {
           <Box mt={6}>{dao?.description ? dao.description : '--'}</Box>
         </Skeleton>
         <Flex mt={6}>
-          <PrimaryButton
+          <Button
             mr={6}
             onClick={() => history.push(`/dao/${dao.address}/proposals`)}
           >
             View {theme.daoMeta.proposals}
-          </PrimaryButton>
-          <SecondaryButton
+          </Button>
+          <Button
+            variant='outline'
             onClick={() => history.push(`/dao/${dao.address}/bank`)}
           >
             View {theme.daoMeta.bank}
-          </SecondaryButton>
+          </Button>
         </Flex>
       </Box>
     </>
