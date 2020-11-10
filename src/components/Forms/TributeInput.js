@@ -7,9 +7,7 @@ import {
   Select,
 } from '@chakra-ui/core';
 import React, { useState, useEffect } from 'react';
-import { useForm } from 'react-hook-form';
 import { useDao } from '../../contexts/PokemolContext';
-import { useTheme } from '../../contexts/CustomThemeContext';
 
 const TributeInput = ({ register, setValue, getValues }) => {
   const [unlocked, setUnlocked] = useState(true);
@@ -17,7 +15,6 @@ const TributeInput = ({ register, setValue, getValues }) => {
   const [loading, setLoading] = useState(false);
   const [tokenData, setTokenData] = useState([]);
   const [dao] = useDao();
-  const [theme] = useTheme();
 
   useEffect(() => {
     if (dao?.graphData && !tokenData.length) {
@@ -40,6 +37,7 @@ const TributeInput = ({ register, setValue, getValues }) => {
         })),
       );
     }
+    // eslint-disable-next-line
   }, [dao]);
 
   useEffect(() => {
@@ -48,6 +46,7 @@ const TributeInput = ({ register, setValue, getValues }) => {
       getMax(depositToken.value);
       setMax();
     }
+    // eslint-disable-next-line
   }, [tokenData]);
 
   const handleChange = async () => {
