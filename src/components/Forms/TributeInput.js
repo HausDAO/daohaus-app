@@ -1,5 +1,6 @@
 import {
   Button,
+  ButtonGroup,
   FormLabel,
   Input,
   InputGroup,
@@ -96,12 +97,35 @@ const TributeInput = ({ register, setValue, getValues }) => {
         color='white'
         fontFamily='heading'
         textTransform='uppercase'
+        letterSpacing='0.15em'
         fontSize='xs'
         fontWeight={700}
       >
         Token Tribute
       </FormLabel>
       <InputGroup>
+        {!unlocked && (
+          <Button
+            onClick={() => unlock()}
+            isLoading={loading}
+            size='xs'
+            position='absolute'
+            right='0'
+            bottom='-10px'
+          >
+            Unlock
+          </Button>
+        )}
+        <Button
+          onClick={() => setMax()}
+          size='xs'
+          variant='outline'
+          position='absolute'
+          right='0'
+          top='-30px'
+        >
+          Max: {balance && balance.toFixed(4)}
+        </Button>
         <Input
           name='tributeOffered'
           placeholder='0'
@@ -133,14 +157,6 @@ const TributeInput = ({ register, setValue, getValues }) => {
           </Select>
         </InputRightAddon>
       </InputGroup>
-      {!unlocked && (
-        <Button onClick={() => unlock()} isLoading={loading} color='black'>
-          Unlock
-        </Button>
-      )}
-      <Button onClick={() => setMax()} color='black'>
-        Max: {balance && balance.toFixed(4)}
-      </Button>
     </>
   );
 };

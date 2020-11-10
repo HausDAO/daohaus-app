@@ -130,8 +130,35 @@ export const setTheme = (daoTheme) => {
           }),
         },
       },
+      Menu: {
+        parts: ['menu', 'button', 'item', 'list'],
+        baseStyle: {
+          menu: {
+            boxShadow: 'lg',
+            rounded: 'lg',
+            flexDirection: 'column',
+            py: '2',
+            color: 'white',
+            borderColor: 'whiteAlpha.50',
+          },
+          list: {
+            bg: 'blackAlpha.800',
+          },
+          item: {
+            fontWeight: 'medium',
+            lineHeight: 'tall',
+            color: 'white',
+            _hover: { bg: 'secondary.500' },
+            _active: { bg: 'secondary.500' },
+            _focus: { bg: 'secondary.500' },
+          },
+        },
+        sizes: {},
+        defaultProps: {
+          size: 'md',
+        },
+      },
       Link: {
-        // 1. We can update the base styles
         baseStyle: {
           _hover: { textDecoration: 'none', color: 'secondary.500' },
         },
