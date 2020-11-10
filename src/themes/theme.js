@@ -92,6 +92,50 @@ export const setTheme = (daoTheme) => {
       website: themeOverrides.daoMeta.website,
       other: themeOverrides.daoMeta.other,
     },
+    components: {
+      Button: {
+        // 1. We can update the base styles
+        baseStyle: {
+          fontWeight: 'medium', // Normally, it's "semibold"
+        },
+        // 2. We can add a new button size or extend existing
+        sizes: {},
+        // 3. We can add a new visual variant
+        variants: {
+          primary: {
+            bg: 'primary.400',
+            _hover: { bg: 'primary.500' },
+          },
+          // 4. We can override existing variants
+          solid: (props) => ({
+            bg: 'secondary.400',
+            _hover: { bg: 'secondary.500' },
+            _focus: {
+              bg: 'secondary.500',
+              boxShadow: '0 0 0 3px blackAlpha.600',
+            },
+            _active: { bg: 'inherit' },
+          }),
+          outline: (props) => ({
+            borderColor: 'secondary.400',
+            bg: 'transparent',
+            color: 'secondary.400',
+            _hover: {
+              borderColor: 'secondary.500',
+              color: 'secondary.500',
+              bg: 'transparent',
+            },
+            _active: { bg: 'inherit' },
+          }),
+        },
+      },
+      Link: {
+        // 1. We can update the base styles
+        baseStyle: {
+          _hover: { textDecoration: 'none', color: 'secondary.500' },
+        },
+      },
+    },
     styles: {
       bgOverlayOpacity: themeOverrides.bgOverlayOpacity,
       global: {
@@ -102,7 +146,6 @@ export const setTheme = (daoTheme) => {
         },
         a: {
           color: 'inherit',
-          textDecoration: 'none',
           _hover: { textDecoration: 'none' },
         },
       },

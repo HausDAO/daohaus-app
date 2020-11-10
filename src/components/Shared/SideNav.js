@@ -1,10 +1,9 @@
 import React from 'react';
 import { Link as RouterLink, useHistory } from 'react-router-dom';
-import { Stack, Link, Box, Flex } from '@chakra-ui/core';
+import { Stack, Link, Box, Flex, Button } from '@chakra-ui/core';
 
 import { useDao, useRefetchQuery } from '../../contexts/PokemolContext';
 import { useTheme } from '../../contexts/CustomThemeContext';
-import { SecondaryButton } from '../../themes/theme';
 import ChangeDao from './ChangeDao';
 
 const SideNav = () => {
@@ -118,9 +117,9 @@ const SideNav = () => {
         )}
       </>
 
-      <SecondaryButton onClick={() => updateRefetchQuery('proposals')}>
+      <Button variant='outline' onClick={() => updateRefetchQuery('proposals')}>
         Refetch
-      </SecondaryButton>
+      </Button>
     </Box>
   );
 };
