@@ -21,7 +21,6 @@ import { utils } from 'web3';
 import { RiAddFill, RiErrorWarningLine } from 'react-icons/ri';
 
 import { useDao, useTxProcessor, useUser } from '../../contexts/PokemolContext';
-import { PrimaryButton } from '../../themes/components';
 
 import PaymentInput from './PaymentInput';
 import TributeInput from './TributeInput';
@@ -294,15 +293,14 @@ const MemberProposalForm = () => {
           </Box>
         )}
         <Box>
-          <PrimaryButton
-            color='white'
+          <Button
             type='submit'
             loadingText='Submitting'
             isLoading={loading}
             disabled={loading}
           >
             Submit
-          </PrimaryButton>
+          </Button>
         </Box>
       </Flex>
     </form>

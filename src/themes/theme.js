@@ -97,6 +97,7 @@ export const setTheme = (daoTheme) => {
         // 1. We can update the base styles
         baseStyle: {
           fontWeight: 'medium', // Normally, it's "semibold"
+          _hover: { scale: '1.05' },
         },
         // 2. We can add a new button size or extend existing
         sizes: {},

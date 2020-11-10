@@ -1,11 +1,10 @@
 import React from 'react';
 import Web3Modal from 'web3modal';
-import { useToast } from '@chakra-ui/core';
+import { useToast, Button } from '@chakra-ui/core';
 
 import { getChainData } from '../../utils/chains';
 import { w3connect, providerOptions } from '../../utils/auth';
 import { useWeb3Connect } from '../../contexts/PokemolContext';
-import { PrimaryButton } from '../../themes/components';
 
 export const Web3SignIn = () => {
   const [, updateWeb3Connect] = useWeb3Connect();
@@ -13,7 +12,7 @@ export const Web3SignIn = () => {
 
   return (
     <>
-      <PrimaryButton
+      <Button
         onClick={async () => {
           const _web3Connect = {
             w3c: new Web3Modal({
@@ -44,7 +43,7 @@ export const Web3SignIn = () => {
       >
         {' '}
         Connect
-      </PrimaryButton>
+      </Button>
     </>
   );
 };
