@@ -11,7 +11,7 @@ function usePokemolContext() {
 }
 
 const initialState = {
-  network: supportedChains[42],
+  network: supportedChains[process.env.REACT_APP_NETWORK_ID],
   refetchQuery: null,
 
   user: null,

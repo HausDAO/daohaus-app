@@ -26,7 +26,6 @@ const ProposalVote = ({ proposal }) => {
   };
 
   const txCallBack = (txHash, details) => {
-    console.log('txCallBack', txProcessor);
     if (txProcessor && txHash) {
       txProcessor.setTx(txHash, user.username, details, true, false);
       txProcessor.forceUpdate = true;
@@ -41,18 +40,18 @@ const ProposalVote = ({ proposal }) => {
     }
   };
 
-  const cancelProposal = async (id) => {
-    try {
-      const tx = await dao.daoService.moloch.cancelProposal(id);
-    } catch (err) {
-      console.log('user rejected or transaction failed', err);
-    }
-  };
+  // const cancelProposal = async (id) => {
+  //   try {
+  //     await dao.daoService.moloch.cancelProposal(id);
+  //   } catch (err) {
+  //     console.log('user rejected or transaction failed', err);
+  //   }
+  // };
 
   const unlock = async (token) => {
     console.log('unlock ', token);
     try {
-      const tx = await dao.daoService.token.unlock(token, txCallBack);
+      await dao.daoService.token.unlock(token, txCallBack);
     } catch (err) {
       console.log(err);
     }
@@ -61,7 +60,7 @@ const ProposalVote = ({ proposal }) => {
   const sponsorProposal = async (id) => {
     console.log('sponsor ', id);
     try {
-      const tx = await dao.daoService.moloch.sponsorProposal(id, txCallBack);
+      await dao.daoService.moloch.sponsorProposal(id, txCallBack);
     } catch (err) {
       console.log('user rejected or transaction failed', err);
     }
@@ -69,7 +68,7 @@ const ProposalVote = ({ proposal }) => {
 
   const submitVote = async (proposal, vote) => {
     try {
-      const tx = await dao.daoService.moloch.submitVote(
+      await dao.daoService.moloch.submitVote(
         proposal.proposalIndex,
         vote,
         ethToWei(wallet.eth),

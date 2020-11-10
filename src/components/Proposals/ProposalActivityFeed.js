@@ -3,7 +3,7 @@ import { Box } from '@chakra-ui/core';
 
 import { useDao } from '../../contexts/PokemolContext';
 import { useTheme } from '../../contexts/CustomThemeContext';
-import ActivityFeedList from '../ActivityFeed/ActivityFeedList';
+// import ActivityFeedList from '../ActivityFeed/ActivityFeedList';
 
 const ProposalActivityFeed = () => {
   const [theme] = useTheme();
@@ -47,7 +47,7 @@ const ProposalActivityFeed = () => {
       >
         {theme.daoMeta.proposal} History
       </Box>
-      <ActivityFeedList activities={proposalActivities} />
+      {/* <ActivityFeedList activities={proposalActivities} /> */}
     </>
   );
 };

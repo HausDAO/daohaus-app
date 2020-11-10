@@ -59,8 +59,8 @@ const ProposalFormModal = ({ proposalType, isOpen, setShowModal }) => {
     if (proposalType) {
       setProposalForm(proposalForms[proposalType]);
     }
+    // eslint-disable-next-line
   }, [proposalType]);
-  console.log(proposalForm);
 
   return (
     <Modal

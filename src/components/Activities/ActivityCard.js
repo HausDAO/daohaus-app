@@ -7,7 +7,7 @@ import { Badge, Box, Heading, Stack, Skeleton } from '@chakra-ui/core';
 
 // TODO: get getProposalCountdownText(activity) outside of dao context?
 
-const ActivityCard = ({ activity }) => {
+const ActivityCard = ({ activity, isLoaded }) => {
   return (
     <Box
       rounded='lg'
@@ -21,27 +21,28 @@ const ActivityCard = ({ activity }) => {
       <Link to={`/dao/${activity.molochAddress}`}>
         {activity.proposalId && (
           <>
-            <Heading as='h4' size='md'>
-              {activity.proposalType}: {activity.daoTitle}
-            </Heading>
-            {/* <Box>{getProposalCountdownText(activity)}</Box> */}
-            <Stack isInline>
-              <Badge colorScheme='green'>{activity.yesVotes} Yes</Badge>
-              <Badge colorScheme='red'>{activity.noVotes} No</Badge>
-            </Stack>
-            <Badge>{activity.activityFeed.message}</Badge>
+            <Skeleton isLoaded={isLoaded}>
+              <Heading as='h4' size='md'>
+                {activity.proposalType}: {activity.daoTitle}
+              </Heading>
+              {/* <Box>{getProposalCountdownText(activity)}</Box> */}
+
+              <Stack isInline>
+                <Badge colorScheme='green'>{activity.yesVotes} Yes</Badge>
+                <Badge colorScheme='red'>{activity.noVotes} No</Badge>
+              </Stack>
+              <Badge>{activity.activityFeed.message}</Badge>
+            </Skeleton>
           </>
         )}
         {!activity.proposalId && (
           <>
-            <Skeleton>
+            <Skeleton isLoaded={isLoaded}>
               <Heading as='h4' size='md'>
                 {activity?.createdAt
                   ? `Rage Quit on ${formatCreatedAt(activity.createdAt)}`
                   : '--'}
               </Heading>
-            </Skeleton>
-            <Skeleton>
               <Box>Shares: {activity?.shares ? activity.shares : '--'}</Box>
               <Box>Loot: {activity?.loot ? activity.loot : '--'}</Box>
               <Box>

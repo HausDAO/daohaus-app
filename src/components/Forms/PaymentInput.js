@@ -9,14 +9,12 @@ import {
 } from '@chakra-ui/core';
 import React, { useState, useEffect } from 'react';
 import { useDao } from '../../contexts/PokemolContext';
-import { useTheme } from '../../contexts/CustomThemeContext';
 
 const PaymentInput = ({ register, setValue, getValues, errors }) => {
   const [balance, setBalance] = useState(0);
 
   const [tokenData, setTokenData] = useState([]);
   const [dao] = useDao();
-  const [theme] = useTheme();
 
   // const watchToken = watch('paymentToken', '');
 
@@ -51,6 +49,7 @@ const PaymentInput = ({ register, setValue, getValues, errors }) => {
       getMax(depositToken.value);
       setMax();
     }
+    // eslint-disable-next-line
   }, [tokenData]);
 
   const handleChange = async () => {

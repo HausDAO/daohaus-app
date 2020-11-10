@@ -2,7 +2,6 @@ import React from 'react';
 import { Box } from '@chakra-ui/core';
 
 import { useDao } from '../../contexts/PokemolContext';
-import ActivityFeedList from '../ActivityFeed/ActivityFeedList';
 
 const MembersActivityFeed = () => {
   const [dao] = useDao();
@@ -45,7 +44,7 @@ const MembersActivityFeed = () => {
       >
         Activity Feed
       </Box>
-      <ActivityFeedList activities={proposalActivities} />
+      {/* <ActivityFeedList activities={proposalActivities} /> */}
     </>
   );
 };

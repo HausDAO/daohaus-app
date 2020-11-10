@@ -3,10 +3,7 @@ import { Link as RouterLink } from 'react-router-dom';
 import makeBlockie from 'ethereum-blockies-base64';
 import { Avatar, AvatarBadge, Box, Flex, Link } from '@chakra-ui/core';
 
-import { useTheme } from '../../contexts/CustomThemeContext';
-
 const MemberDaoList = ({ daos }) => {
-  const [theme] = useTheme();
   const [visibleDaos, setVisibleDaos] = useState([]);
 
   useEffect(() => {
