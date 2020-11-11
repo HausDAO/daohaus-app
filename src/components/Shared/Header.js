@@ -39,6 +39,10 @@ const Header = () => {
       setPageTitle(theme.daoMeta.members);
     } else if (location.pathname === `/dao/${dao?.address}/bank`) {
       setPageTitle(theme.daoMeta.bank);
+    } else if (
+      location.pathname === `/dao/${dao?.address}/profile/${user?.username}`
+    ) {
+      setPageTitle(`${theme.daoMeta.member} Profile`);
     } else {
       // TODO pull from graph data
       setPageTitle(dao?.apiMeta?.name);
@@ -72,6 +76,15 @@ const Header = () => {
               to={`/dao/${dao?.address}/proposals/new/member`}
             >
               Apply
+            </Button>
+          )}
+          {location.pathname === `/dao/${dao?.address}/bank` && (
+            <Button
+              as={RouterLink}
+              to={`/dao/${dao?.address}/proposals/new`}
+              rightIcon={<RiAddFill />}
+            >
+              Add Asset
             </Button>
           )}
         </Flex>

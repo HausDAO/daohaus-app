@@ -1,7 +1,8 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import { Box, Flex, Skeleton } from '@chakra-ui/core';
 
-import { useMembers, useDao } from '../../contexts/PokemolContext';
+import { useMembers, useDao, useUser } from '../../contexts/PokemolContext';
 import { useTheme } from '../../contexts/CustomThemeContext';
 import MemberSnapshotChart from './MemberSnapshotChart';
 
@@ -9,6 +10,8 @@ const MemberSnapshot = () => {
   const [theme] = useTheme();
   const [dao] = useDao();
   const [members] = useMembers();
+  const [user] = useUser();
+  console.log(dao);
 
   return (
     <Box>
@@ -16,7 +19,14 @@ const MemberSnapshot = () => {
         <Box textTransform='uppercase' fontFamily='heading' fontWeight={700}>
           Snapshot
         </Box>
-        <Box textTransform='uppercase' fontFamily='heading' fontWeight={700}>
+        <Box
+          as={Link}
+          to={`/dao/${dao?.address}/profile/${user?.username}`}
+          textTransform='uppercase'
+          fontFamily='heading'
+          fontWeight={700}
+          color='secondary.300'
+        >
           View my profile
         </Box>
       </Flex>
@@ -70,11 +80,10 @@ const MemberSnapshot = () => {
                 fontFamily='heading'
                 fontWeight={700}
               >
-                >Loot
+                Loot
               </Box>
               <Skeleton isLoaded={dao?.graphData?.totalLoot}>
                 <Box fontSize='md' fontFamily='space' fontWeight={700}>
-                  >
                   {dao?.graphData?.totalLoot ? dao?.graphData?.totalLoot : '--'}
                 </Box>
               </Skeleton>

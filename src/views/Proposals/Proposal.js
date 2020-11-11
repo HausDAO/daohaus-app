@@ -51,14 +51,16 @@ const Proposal = () => {
           </Link>
         </Box>
         <Box w='40%'>
-          <Box
-            textTransform='uppercase'
-            fontSize='lg'
-            fontFamily='heading'
-            fontWeight={700}
-          >
-            Vote
-          </Box>
+          {!proposal?.cancelled && (
+            <Box
+              textTransform='uppercase'
+              fontSize='lg'
+              fontFamily='heading'
+              fontWeight={700}
+            >
+              Vote
+            </Box>
+          )}
         </Box>
       </Flex>
       <Flex>
@@ -71,7 +73,7 @@ const Proposal = () => {
           </Flex>
         </Box>
         <Box w='40%'>
-          <ProposalVote proposal={proposal} />
+          {!proposal?.cancelled && <ProposalVote proposal={proposal} />}
           <ProposalActivityFeed />
         </Box>
       </Flex>

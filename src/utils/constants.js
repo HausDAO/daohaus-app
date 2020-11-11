@@ -16,6 +16,21 @@ export const defaultProposals = [
   },
 ];
 
+export const defaultTokens = [
+  {
+    id: '1',
+    symbol: '1',
+    name: '234',
+    address: '0x',
+  },
+  {
+    id: '2',
+    symbol: '2',
+    name: '234',
+    address: '0x',
+  },
+];
+
 export const defaultMembers = [
   {
     id: 1,
