@@ -1,6 +1,6 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
 import {
+  Link,
   Modal,
   ModalContent,
   ModalCloseButton,
@@ -14,7 +14,7 @@ import {
   Spinner,
 } from '@chakra-ui/core';
 
-import { FaExternalLinkAlt, FaRegCheckCircle } from 'react-icons/fa';
+import { RiExternalLinkLine, RiCheckboxCircleLine } from 'react-icons/ri';
 
 import {
   useTheme,
@@ -37,26 +37,30 @@ const AccountModal = ({ isOpen, setShowModal }) => {
   const RenderTxList = () => {
     const txList = txProcessor.getTxUnseenList(user.username);
     // dummy data
-    txList.push({ id: 1, description: 'test tx 1' });
-    txList.push({ id: 2, description: 'test tx 2' });
+    txList.push({ id: 1, description: 'Sponsor Proposal' });
+    txList.push({ id: 2, description: 'Submit Proposal' });
     return txList.map((tx) => {
       return (
-        <Box id={tx.id} key={tx.id}>
+        <Box id={tx.id} key={tx.id} mb={6} _last={{ mb: 0 }}>
           <Flex
             direction='row'
             justifyContent='space-between'
             alignItems='center'
           >
-            <Flex direction='row' justify='flex-start' alignItems='center'>
-              <Text color='white'>{tx.description}</Text>
-            </Flex>
+            <Text color='white'>{tx.description}</Text>
             <Box>
               {tx.open ? (
                 <Icon as={Spinner} name='check' color='white' />
               ) : (
-                <Icon as={FaRegCheckCircle} name='check' color='white' />
+                <Icon as={RiCheckboxCircleLine} name='check' color='white' />
               )}
-              <Icon as={FaExternalLinkAlt} name='arrow-forward' color='white' />
+              <Link
+                href={'https://etherscan.io/tx/' + tx.id}
+                target='_blank'
+                ml={6}
+              >
+                <Icon as={RiExternalLinkLine} name='transaction link' />
+              </Link>
             </Box>
           </Flex>
         </Box>
@@ -69,11 +73,11 @@ const AccountModal = ({ isOpen, setShowModal }) => {
       <ModalOverlay />
       <ModalContent
         rounded='lg'
-        bg='black'
+        bg='blackAlpha.800'
         borderWidth='1px'
         borderColor='whiteAlpha.200'
+        py={6}
         color='white'
-        p={6}
       >
         <ModalCloseButton />
         <ModalBody
@@ -87,27 +91,28 @@ const AccountModal = ({ isOpen, setShowModal }) => {
           ) : (
             <MemberInfoCard user={user} />
           )}
-          <Box p={6}>
-            <Flex
-              direction='row'
-              justifyContent='space-between'
-              alignItems='center'
-            >
-              <Flex direction='row' justify='flex-start' alignItems='center'>
-                <Link to='/profile'>
-                  <Text color='white'>Profile</Text>
-                </Link>
+          <Box py={6}>
+            <Flex direction='row' justify='space-evenly' align='center'>
+              <Flex direction='row' justify='flex-start' align='center'>
+                <Link to='/profile'>Profile</Link>
               </Flex>
 
-              <Link to='/'>
-                <Text color='white'>Hub</Text>
-              </Link>
+              <Link to='/'>Hub</Link>
             </Flex>
+          </Box>
+          <Box
+            mx={-12}
+            mb={6}
+            borderTopWidth='1px'
+            borderTopColor='whiteAlpha.200'
+          />
+          <Box mb={6}>
+            <Text fontSize='l' fontFamily='heading'>
+              Transactions <span>will show here</span>
+            </Text>
           </Box>
           <RenderTxList />
         </ModalBody>
-
-        <ModalFooter></ModalFooter>
       </ModalContent>
     </Modal>
   );
