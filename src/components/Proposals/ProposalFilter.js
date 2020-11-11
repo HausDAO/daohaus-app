@@ -1,18 +1,19 @@
 import React, { useEffect, useState } from 'react';
 import {
-  Text,
+  Box,
   Menu,
   MenuButton,
   MenuList,
   MenuItem,
   Flex,
+  Icon,
 } from '@chakra-ui/core';
+import { RiArrowDropDownFill } from 'react-icons/ri';
 
-import { useMemberWallet, useTheme } from '../../contexts/PokemolContext';
+import { useMemberWallet } from '../../contexts/PokemolContext';
 import { getFilterOptions } from '../../content/proposal-filters';
 
 const ProposalFilter = ({ filter, setFilter, listLength }) => {
-  const [theme] = useTheme();
   const [memberWallet] = useMemberWallet();
   const [filterOptions, setFilterOptions] = useState();
 
@@ -25,7 +26,7 @@ const ProposalFilter = ({ filter, setFilter, listLength }) => {
     }
     setFilterOptions(options);
     setFilter(options[0]);
-    // eslint-disable-next-line
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [memberWallet]);
 
   const buildFilterName = () => {
@@ -38,22 +39,20 @@ const ProposalFilter = ({ filter, setFilter, listLength }) => {
 
   return (
     <Flex direction='row'>
-      <Text
-        ml={8}
-        mr={3}
-        textTransform='uppercase'
-        fontFamily={theme.fonts.heading}
-      >
+      <Box ml={8} mr={3} textTransform='uppercase' fontFamily='heading'>
         Filter By
-      </Text>
+      </Box>
 
       {filterOptions ? (
         <Menu>
           <MenuButton
             textTransform='uppercase'
-            fontFamily={theme.fonts.heading}
+            fontFamily='heading'
+            color='primary.50'
+            _hover={{ textDecoration: 'underline' }}
           >
-            {buildFilterName()}
+            {buildFilterName()}{' '}
+            <Icon as={RiArrowDropDownFill} color='primary.50' />
           </MenuButton>
           <MenuList bg='black'>
             {filterOptions.map((option) => (
@@ -61,6 +60,7 @@ const ProposalFilter = ({ filter, setFilter, listLength }) => {
                 key={option.value}
                 onClick={() => setFilter(option)}
                 value={option.value}
+                _hover={{ color: 'primary.300' }}
               >
                 {option.name}
               </MenuItem>

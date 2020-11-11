@@ -4,13 +4,15 @@ import { ChakraProvider } from '@chakra-ui/core';
 import ApolloClient from 'apollo-boost';
 import { ApolloProvider } from 'react-apollo';
 
-import { useTheme } from './contexts/PokemolContext';
+import { PokemolContextProvider } from './contexts/PokemolContext';
+import { useTheme } from './contexts/CustomThemeContext';
 import { resolvers } from './utils/apollo/resolvers';
 import Routes from './Routes';
 import Layout from './components/Layout/Layout';
 import supportedChains from './utils/chains';
 import UserInit from './contexts/UserInit';
 import DaoInit from './contexts/DaoInit';
+import EnsInit from './contexts/EnsInit';
 import TxProcessorInit from './contexts/TxProcessorInit';
 import GraphInit from './contexts/GraphInit';
 import PriceInit from './contexts/PricesInit';
@@ -30,8 +32,9 @@ function Init() {
     <>
       <UserInit />
       <TxProcessorInit />
-      <DaoInit />
       <GraphInit />
+      <EnsInit />
+      <DaoInit />
       <PriceInit />
     </>
   );
@@ -40,14 +43,18 @@ function Init() {
 const App = () => {
   const [theme] = useTheme();
 
+  console.log('render App');
+
   return (
     <ApolloProvider client={client}>
       <ChakraProvider theme={theme}>
         <Router>
-          <Init />
-          <Layout>
-            <Routes />
-          </Layout>
+          <PokemolContextProvider>
+            <Init />
+            <Layout>
+              <Routes />
+            </Layout>
+          </PokemolContextProvider>
         </Router>
       </ChakraProvider>
     </ApolloProvider>

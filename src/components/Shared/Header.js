@@ -1,17 +1,11 @@
 import React, { useEffect, useState } from 'react';
-import { Text, Flex, Icon, Spinner, Button } from '@chakra-ui/core';
+import { Box, Flex, Icon, Button, IconButton } from '@chakra-ui/core';
 import { useLocation, Link as RouterLink } from 'react-router-dom';
 import { RiAddFill } from 'react-icons/ri';
-import {
-  useUser,
-  useNetwork,
-  useDao,
-  useLoading,
-  useTheme,
-} from '../../contexts/PokemolContext';
+import { useUser, useNetwork, useDao } from '../../contexts/PokemolContext';
+import { useTheme } from '../../contexts/CustomThemeContext';
 import { Web3SignIn } from './Web3SignIn';
 import UserAvatar from './UserAvatar';
-import { PrimaryButton } from '../../themes/theme';
 import DaoSwitcherModal from '../Modal/DaoSwitcherModal';
 import AccountModal from '../Modal/AccountModal';
 
@@ -21,7 +15,6 @@ const Header = () => {
   const [network] = useNetwork();
   const [dao] = useDao();
   const [theme] = useTheme();
-  const [loading] = useLoading();
   const [pageTitle, setPageTitle] = useState();
   const [showDaoSwitcher, setShowDaoSwitcher] = useState(false);
 
@@ -30,6 +23,9 @@ const Header = () => {
       setPageTitle('Hub');
     } else if (location.pathname === `/dao/${dao?.address}`) {
       setPageTitle('Overview');
+    } else if (location.pathname === `/dao/${dao?.address}/proposals`) {
+      setPageTitle(theme.daoMeta.proposals);
+      // TODO proposals id regex
     } else if (location.pathname === `/dao/${dao?.address}/proposals`) {
       setPageTitle(theme.daoMeta.proposals);
     } else if (
@@ -44,6 +40,10 @@ const Header = () => {
       setPageTitle(theme.daoMeta.members);
     } else if (location.pathname === `/dao/${dao?.address}/bank`) {
       setPageTitle(theme.daoMeta.bank);
+    } else if (
+      location.pathname === `/dao/${dao?.address}/profile/${user?.username}`
+    ) {
+      setPageTitle(`${theme.daoMeta.member} Profile`);
     } else {
       // TODO pull from graph data
       setPageTitle(dao?.apiMeta?.name);
@@ -54,42 +54,46 @@ const Header = () => {
     <>
       <Flex direction='row' justify='space-between' p={6}>
         <Flex direction='row' justify='flex-start' align='center'>
-          <Text
-            fontSize='3xl'
-            fontFamily={theme.fonts.heading}
-            fontWeight={700}
-            mr={10}
-          >
+          <Box fontSize='3xl' fontFamily='heading' fontWeight={700} mr={10}>
             {pageTitle}
-          </Text>
+          </Box>
           {location.pathname === `/` && user && (
-            <PrimaryButton as='a' href='https://3box.io/hub' target='_blank'>
+            <Button as='a' href='https://3box.io/hub' target='_blank'>
               Edit 3Box Profile
-            </PrimaryButton>
+            </Button>
           )}
           {location.pathname === `/dao/${dao?.address}/proposals` && (
-            <PrimaryButton
+            <Button
               as={RouterLink}
               to={`/dao/${dao?.address}/proposals/new`}
+              rightIcon={<RiAddFill />}
             >
-              New {theme.daoMeta.proposal} <Icon as={RiAddFill} />
-            </PrimaryButton>
+              New {theme.daoMeta.proposal}
+            </Button>
           )}
           {location.pathname === `/dao/${dao?.address}/members` && (
-            <PrimaryButton
+            <Button
               as={RouterLink}
               to={`/dao/${dao?.address}/proposals/new/member`}
             >
               Apply
-            </PrimaryButton>
+            </Button>
+          )}
+          {location.pathname === `/dao/${dao?.address}/bank` && (
+            <Button
+              as={RouterLink}
+              to={`/dao/${dao?.address}/proposals/new`}
+              rightIcon={<RiAddFill />}
+            >
+              Add Asset
+            </Button>
           )}
         </Flex>
 
         <Flex direction='row' justify='flex-end' align='center'>
-          {loading && <Spinner mr={5} />}
-          <Text fontSize='md' mr={5} as='i' fontWeight={200}>
+          <Box fontSize='md' mr={5} as='i' fontWeight={200}>
             {network.network}
-          </Text>
+          </Box>
 
           {user ? (
             <>

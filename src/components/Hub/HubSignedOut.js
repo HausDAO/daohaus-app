@@ -1,30 +1,39 @@
 import React from 'react';
-import { Box, Link, List, ListItem, Text } from '@chakra-ui/core';
+import { Box, Flex, Link } from '@chakra-ui/core';
 import { Web3SignIn } from '../Shared/Web3SignIn';
 
 const HubSignedOut = () => {
   return (
     <Box
-      rounded="lg"
-      bg="blackAlpha.600"
-      borderWidth="1px"
-      borderColor="whiteAlpha.200"
+      rounded='lg'
+      bg='blackAlpha.600'
+      borderWidth='1px'
+      borderColor='whiteAlpha.200'
       p={6}
-      mt={6}
-      w="100%"
+      m={[10, 'auto', 0, 'auto']}
+      w='50%'
+      textAlign='center'
     >
-      <Text fontSize="xl">Pokemol Hub</Text>
-      <List styleType="disc">
-        <ListItem>Notifications for all your dAOs</ListItem>
-        <ListItem>Recent activity in your dAOs</ListItem>
-        <ListItem>switch between DAOs</ListItem>
-      </List>
+      <Box fontSize='3xl' fontFamily='heading' fontWeight={700} mb={10}>
+        Hub
+      </Box>
+      <Box fontSize='md' mb={5}>
+        - Notifications for all your DAOs
+      </Box>
+      <Box fontSize='md' mb={5}>
+        - Recent activity in your DAOs
+      </Box>
+      <Box fontSize='md' mb={5}>
+        - Switch between DAOs
+      </Box>
 
-      <Web3SignIn />
+      <Flex direction='column' align='center'>
+        <Web3SignIn />
 
-      <Link href="https://daohaus.club" isExternal>
-        Go to Daohaus
-      </Link>
+        <Link href='https://daohaus.club' isExternal>
+          <Box mt={5}>Go to Daohaus</Box>
+        </Link>
+      </Flex>
     </Box>
   );
 };

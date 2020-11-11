@@ -1,11 +1,10 @@
 import React, { useEffect, useState } from 'react';
-import { Box, Flex, Skeleton, Text } from '@chakra-ui/core';
-import { format } from 'date-fns';
+import { Box, Flex } from '@chakra-ui/core';
 
-import { useMembers, useTheme } from '../../contexts/PokemolContext';
-// import UserAvatar from '../Shared/UserAvatar';
-import { truncateAddr } from '../../utils/helpers';
+import { useMembers } from '../../contexts/PokemolContext';
+import { useTheme } from '../../contexts/CustomThemeContext';
 import { defaultMembers } from '../../utils/constants';
+import MemberListCard from './MemberListCard';
 
 const MembersList = () => {
   const [theme] = useTheme();
@@ -24,37 +23,37 @@ const MembersList = () => {
   }, [members]);
 
   return (
-    <Box w='60%'>
+    <>
       <Flex>
         {filter ? (
-          <Text
+          <Box
             ml={8}
             textTransform='uppercase'
             fontSize='sm'
-            fontFamily={theme.fonts.heading}
+            fontFamily='heading'
             cursor='pointer'
           >
             Filtered by:{' '}
             <span style={{ color: theme.colors.primary[50] }}>
               Action Needed
             </span>
-          </Text>
+          </Box>
         ) : (
-          <Text
+          <Box
             ml={8}
             textTransform='uppercase'
-            fontFamily={theme.fonts.heading}
+            fontFamily='heading'
             cursor='pointer'
           >
             Apply a{' '}
             <span style={{ color: theme.colors.primary[50] }}> filter</span>
-          </Text>
+          </Box>
         )}
-        <Text
+        <Box
           ml={8}
           textTransform='uppercase'
           fontSize='sm'
-          fontFamily={theme.fonts.heading}
+          fontFamily='heading'
           cursor='pointer'
         >
           Sort by:{' '}
@@ -62,7 +61,7 @@ const MembersList = () => {
             {' '}
             Voting Period
           </span>
-        </Text>
+        </Box>
       </Flex>
       <Box
         rounded='lg'
@@ -74,9 +73,9 @@ const MembersList = () => {
       >
         <Flex mb={5}>
           <Box
-            w='45%'
+            w='43%'
             textTransform='uppercase'
-            fontFamily={theme.fonts.heading}
+            fontFamily='heading'
             fontSize='sm'
             fontWeight={700}
           >
@@ -85,7 +84,7 @@ const MembersList = () => {
           <Box
             w='15%'
             textTransform='uppercase'
-            fontFamily={theme.fonts.heading}
+            fontFamily='heading'
             fontSize='sm'
             fontWeight={700}
           >
@@ -94,7 +93,7 @@ const MembersList = () => {
           <Box
             w='15%'
             textTransform='uppercase'
-            fontFamily={theme.fonts.heading}
+            fontFamily='heading'
             fontSize='sm'
             fontWeight={700}
           >
@@ -102,7 +101,7 @@ const MembersList = () => {
           </Box>
           <Box
             textTransform='uppercase'
-            fontFamily={theme.fonts.heading}
+            fontFamily='heading'
             fontSize='sm'
             fontWeight={700}
           >
@@ -112,53 +111,15 @@ const MembersList = () => {
         {_members?.length > 0 &&
           _members.map((member) => {
             return (
-              <Flex h='60px' key={member.id} align='center'>
-                <Flex w='8%' ml='2%'></Flex>
-                <Flex w='35%' direction='column' justify='space-between'>
-                  <Skeleton isLoaded={isLoaded}>
-                    <Text fontSize='md' fontFamily={theme.fonts.heading}>
-                      {member?.profile?.name ? member.profile.name : '--'}
-                    </Text>
-                    <Text
-                      fontSize='xs'
-                      fontFamily={theme.fonts.mono}
-                      fontWeight={300}
-                    >
-                      {truncateAddr(member.memberAddress)}
-                    </Text>
-                  </Skeleton>
-                </Flex>
-                <Box w='15%'>
-                  <Skeleton isLoaded={isLoaded}>
-                    <Text fontFamily={theme.fonts.heading}>
-                      {member?.shares ? member.shares : '--'}
-                    </Text>
-                  </Skeleton>
-                </Box>
-                <Box w='15%'>
-                  <Skeleton isLoaded={isLoaded}>
-                    <Text fontFamily={theme.fonts.heading}>
-                      {member?.loot ? member.loot : '--'}
-                    </Text>
-                  </Skeleton>
-                </Box>
-                <Box>
-                  <Skeleton isLoaded={isLoaded}>
-                    <Text fontFamily={theme.fonts.heading}>
-                      {member?.createdAt
-                        ? format(
-                            new Date(+member.createdAt * 1000),
-                            'MMM. d, yyyy',
-                          )
-                        : '--'}
-                    </Text>
-                  </Skeleton>
-                </Box>
-              </Flex>
+              <MemberListCard
+                key={member?.id}
+                member={member}
+                isLoaded={isLoaded}
+              />
             );
           })}
       </Box>
-    </Box>
+    </>
   );
 };
 

@@ -1,11 +1,12 @@
 import React, { useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
+import { defaultTheme } from '../themes/theme';
 
 import { DaoService, USER_TYPE } from '../utils/dao-service';
+import { validDaoParams } from '../utils/helpers';
 import { get } from '../utils/requests';
 
 import {
-  useLoading,
   useUser,
   useWeb3Connect,
   useMemberWallet,
@@ -15,68 +16,64 @@ import {
 
 const DaoInit = () => {
   const location = useLocation();
-  const [, updateLoading] = useLoading();
   const [contracts, updateContracts] = useContracts();
   const [daoMetadata, updateDaoMetadata] = useDaoMetadata();
   const [web3Connect] = useWeb3Connect();
-  const [, updateMemberWallet] = useMemberWallet();
+  const [memberWallet, updateMemberWallet] = useMemberWallet();
   const [user] = useUser();
 
   useEffect(() => {
-    var pathname = location.pathname.split('/');
-    const daoParam = pathname[2];
-    const regex = RegExp('0x[0-9a-f]{10,40}');
-    const validParam =
-      pathname[1] === 'dao' && regex.test(daoParam) ? daoParam : false;
-
+    const validParam = validDaoParams(location);
     if (!validParam) {
       updateDaoMetadata(null);
       return;
     }
 
-    if (!daoMetadata || daoMetadata.address !== daoParam) {
-      initDao(daoParam);
+    if (!daoMetadata || daoMetadata.address !== validParam) {
+      initDao(validParam);
     }
-    // eslint-disable-next-line
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [location]);
 
   useEffect(() => {
-    const needsUserDaoService =
-      daoMetadata &&
-      user &&
-      contracts.daoService &&
-      user.username !== contracts.daoService.accountAddr;
-    if (needsUserDaoService) {
+    const hasUserAndDao = user && daoMetadata;
+    const hasReadOnlyService =
+      contracts.daoService && !contracts.daoService.accountAddr;
+
+    if (hasUserAndDao && hasReadOnlyService && web3Connect.provider) {
       initWeb3DaoService();
     }
 
-    // eslint-disable-next-line
-  }, [user, daoMetadata]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [user, daoMetadata, contracts, web3Connect]);
 
   useEffect(() => {
-    const noDaoService = !daoMetadata || !contracts.daoService;
+    const noDaoService =
+      !daoMetadata ||
+      !contracts.daoService ||
+      !contracts.daoService.accountAddr;
     const notSignedIn = !user || user.type === USER_TYPE.READ_ONLY;
     if (noDaoService || notSignedIn) {
       return;
     }
 
     const walletExists =
-      useMemberWallet.daoAddress === contracts.daoService.daoAddress;
+      memberWallet &&
+      memberWallet.daoAddress === contracts.daoService.daoAddress;
     if (!walletExists) {
       initMemberWallet();
     }
-    // eslint-disable-next-line
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [daoMetadata, user, contracts]);
 
   const initDao = async (daoParam) => {
-    updateLoading(true);
-
     let daoRes;
     try {
       daoRes = await get(`moloch/${daoParam}`);
     } catch (err) {
       console.log('api fetch error', daoParam);
     }
+    const apiData = daoRes ? daoRes.data : {};
 
     const boostRes = await get(`boosts/${daoParam}`);
     const boosts = boostRes.data.reduce((boosts, boostData) => {
@@ -90,6 +87,9 @@ const DaoInit = () => {
       return boosts;
     }, {});
 
+    // this will need to parse custom theme data
+    const uiMeta = defaultTheme.daoMeta;
+
     const version = daoRes && daoRes.data.version ? daoRes.data.version : '1';
     const daoService =
       user && web3Connect.provider
@@ -100,21 +100,18 @@ const DaoInit = () => {
             version,
           )
         : await DaoService.instantiateWithReadOnly(daoParam, version);
-
     const currentPeriod = await daoService.moloch.getCurrentPeriod();
 
-    const apiData = daoRes ? daoRes.data : {};
     updateDaoMetadata({
       address: daoParam,
       version,
       ...apiData,
       boosts,
+      uiMeta,
       currentPeriod: parseInt(currentPeriod),
     });
 
     updateContracts({ daoService });
-
-    updateLoading(false);
   };
 
   const initWeb3DaoService = async () => {
@@ -129,7 +126,6 @@ const DaoInit = () => {
   };
 
   const initMemberWallet = async () => {
-    // TODO: Do we still need all these?
     const addrByDelegateKey = await contracts.daoService.moloch.memberAddressByDelegateKey(
       user.username,
     );
@@ -145,7 +141,6 @@ const DaoInit = () => {
     );
     const allowance = contracts.daoService.web3.utils.fromWei(allowanceWei);
     const member = await contracts.daoService.moloch.members(addrByDelegateKey);
-
     const shares = parseInt(member.shares) || 0;
     const loot = parseInt(member.loot) || 0;
     const jailed = parseInt(member.jailed) || 0;

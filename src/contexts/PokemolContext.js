@@ -2,7 +2,6 @@ import React, { useContext, useCallback, useMemo } from 'react';
 import Web3Modal from 'web3modal';
 
 import { providerOptions } from '../utils/auth';
-import { customTheme } from '../themes/theme';
 import supportedChains, { getChainData } from '../utils/chains';
 
 const PokemolContext = React.createContext();
@@ -12,10 +11,8 @@ function usePokemolContext() {
 }
 
 const initialState = {
-  loading: false,
-  network: supportedChains[42],
+  network: supportedChains[process.env.REACT_APP_NETWORK_ID],
   refetchQuery: null,
-  theme: customTheme(),
 
   user: null,
   web3Connect: {
@@ -27,7 +24,7 @@ const initialState = {
   },
   contracts: {},
   txProcessor: {},
-
+  ens: {},
   memberWallet: null,
   daoMetadata: null,
   daoGraphData: null,
@@ -39,17 +36,11 @@ const initialState = {
 
 const reducer = (state, action) => {
   switch (action.type) {
-    case 'setLoading': {
-      return { ...state, loading: action.payload };
-    }
     case 'setNetwork': {
       return { ...state, network: action.payload };
     }
     case 'refetchQuery': {
       return { ...state, refetchQuery: action.payload };
-    }
-    case 'setTheme': {
-      return { ...state, theme: customTheme(action.payload) };
     }
 
     case 'setUser': {
@@ -63,6 +54,9 @@ const reducer = (state, action) => {
     }
     case 'setTxProcessor': {
       return { ...state, txProcessor: action.payload };
+    }
+    case 'setEns': {
+      return { ...state, ens: action.payload };
     }
 
     case 'setDaoMetadata': {
@@ -97,20 +91,12 @@ const reducer = (state, action) => {
 function PokemolContextProvider(props) {
   const [state, dispatch] = React.useReducer(reducer, initialState);
 
-  const updateLoading = useCallback((loading) => {
-    dispatch({ type: 'setLoading', payload: loading });
-  }, []);
-
   const updateNetwork = useCallback((network) => {
     dispatch({ type: 'setNetwork', payload: network });
   }, []);
 
   const updateRefetchQuery = useCallback((data) => {
     dispatch({ type: 'refetchQuery', payload: data });
-  }, []);
-
-  const updateTheme = useCallback((theme) => {
-    dispatch({ type: 'setTheme', payload: theme });
   }, []);
 
   const updateUser = useCallback((user) => {
@@ -127,6 +113,10 @@ function PokemolContextProvider(props) {
 
   const updateTxProcessor = useCallback((tx) => {
     dispatch({ type: 'setTxProcessor', payload: tx });
+  }, []);
+
+  const updateEns = useCallback((_ens) => {
+    dispatch({ type: 'setEns', payload: _ens });
   }, []);
 
   const updateDaoMetadata = useCallback((data) => {
@@ -163,14 +153,13 @@ function PokemolContextProvider(props) {
         () => [
           state,
           {
-            updateLoading,
             updateNetwork,
             updateRefetchQuery,
-            updateTheme,
             updateUser,
             updateWeb3Connect,
             updateContracts,
             updateTxProcessor,
+            updateEns,
             updateDaoMetadata,
             updateDaoGraphData,
             updateMemberWallet,
@@ -182,14 +171,13 @@ function PokemolContextProvider(props) {
         ],
         [
           state,
-          updateLoading,
           updateNetwork,
           updateRefetchQuery,
-          updateTheme,
           updateUser,
           updateWeb3Connect,
           updateContracts,
           updateTxProcessor,
+          updateEns,
           updateDaoMetadata,
           updateDaoGraphData,
           updateMemberWallet,
@@ -216,11 +204,6 @@ export function useDao() {
   ];
 }
 
-export function useLoading() {
-  const [state, { updateLoading }] = usePokemolContext();
-  return [state.loading, updateLoading];
-}
-
 export function useNetwork() {
   const [state, { updateNetwork }] = usePokemolContext();
   return [state.network, updateNetwork];
@@ -229,11 +212,6 @@ export function useNetwork() {
 export function useRefetchQuery() {
   const [state, { updateRefetchQuery }] = usePokemolContext();
   return [state.refetchQuery, updateRefetchQuery];
-}
-
-export function useTheme() {
-  const [state, { updateTheme }] = usePokemolContext();
-  return [state.theme, updateTheme];
 }
 
 export function useUser() {
@@ -249,6 +227,11 @@ export function useWeb3Connect() {
 export function useTxProcessor() {
   const [state, { updateTxProcessor }] = usePokemolContext();
   return [state.txProcessor, updateTxProcessor];
+}
+
+export function useEns() {
+  const [state, { updateEns }] = usePokemolContext();
+  return [state.ens, updateEns];
 }
 
 export function useContracts() {

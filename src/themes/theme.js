@@ -1,36 +1,39 @@
-import { theme, extendTheme } from '@chakra-ui/core';
+import { extendTheme } from '@chakra-ui/core';
 import BrandImg from '../assets/themes/hausdao/Daohaus__Castle--Dark.svg';
 import BgImg from '../assets/themes/hausdao/daohaus__hero--falling.jpg';
 import { lighten, darken } from 'polished';
 
 export * from './components';
 
-const defaultTheme = {
+export const defaultTheme = {
   primary500: '#10153d',
   secondary500: '#EB8A23',
-  brandImg: BrandImg,
-  bgImg: BgImg,
   bg500: '#03061B',
   bgOverlayOpacity: '0.75',
   primaryFont: 'Inknut Antiqua',
   bodyFont: 'Rubik',
+  monoFont: 'Space Mono',
+  brandImg: BrandImg,
+  bgImg: BgImg,
   daoMeta: {
     proposals: 'Proposals',
     proposal: 'Proposal',
     bank: 'Bank',
     members: 'Members',
     member: 'Member',
+    discord: 'https://discord.gg/NPEJysW',
+    medium: 'https://medium.com/daohaus-club',
+    telegram: '',
+    website: '',
+    other: '',
   },
 };
 
-export const customTheme = (daoTheme) => {
+export const setTheme = (daoTheme) => {
   const themeOverrides = daoTheme || defaultTheme;
-  return {
-    ...theme,
+  return extendTheme({
     colors: {
-      ...theme.colors,
       primary: {
-        ...theme.colors.primary,
         50: lighten(0.4, themeOverrides.primary500),
         100: lighten(0.3, themeOverrides.primary500),
         200: lighten(0.2, themeOverrides.primary500),
@@ -43,7 +46,6 @@ export const customTheme = (daoTheme) => {
         900: darken(0.2, themeOverrides.primary500),
       },
       background: {
-        ...theme.colors.background,
         50: lighten(0.4, themeOverrides.bg500),
         100: lighten(0.3, themeOverrides.bg500),
         200: lighten(0.2, themeOverrides.bg500),
@@ -56,7 +58,6 @@ export const customTheme = (daoTheme) => {
         900: darken(0.2, themeOverrides.bg500),
       },
       secondary: {
-        ...theme.colors.secondary,
         50: lighten(0.4, themeOverrides.secondary500),
         100: lighten(0.3, themeOverrides.secondary500),
         200: lighten(0.2, themeOverrides.secondary500),
@@ -70,17 +71,13 @@ export const customTheme = (daoTheme) => {
       },
     },
     images: {
-      ...theme.images,
       brandImg: themeOverrides.brandImg,
       bgImg: themeOverrides.bgImg,
     },
-    icons: {
-      ...theme.icons,
-    },
     fonts: {
-      ...theme.fonts,
       heading: themeOverrides.primaryFont,
       body: themeOverrides.bodyFont,
+      mono: themeOverrides.monoFont,
       hub: 'Mirza',
       accessory: 'Roboto Mono',
       space: 'Space Mono',
@@ -91,10 +88,126 @@ export const customTheme = (daoTheme) => {
       bank: themeOverrides.daoMeta.bank,
       members: themeOverrides.daoMeta.members,
       member: themeOverrides.daoMeta.member,
+      discord: themeOverrides.daoMeta.discord,
+      medium: themeOverrides.daoMeta.medium,
+      telegram: themeOverrides.daoMeta.telegram,
+      website: themeOverrides.daoMeta.website,
+      other: themeOverrides.daoMeta.other,
+    },
+    components: {
+      Button: {
+        // 1. We can update the base styles
+        baseStyle: {
+          fontWeight: 'medium', // Normally, it's "semibold"
+          _hover: { scale: '1.05' },
+        },
+        // 2. We can add a new button size or extend existing
+        sizes: {},
+        // 3. We can add a new visual variant
+        variants: {
+          primary: {
+            bg: 'primary.400',
+            _hover: { bg: 'primary.500' },
+          },
+          // 4. We can override existing variants
+          solid: (props) => ({
+            bg: 'secondary.400',
+            _hover: { bg: 'secondary.500' },
+            _focus: {
+              bg: 'secondary.500',
+              boxShadow: '0 0 0 3px blackAlpha.600',
+            },
+            _active: { bg: 'inherit' },
+          }),
+          outline: (props) => ({
+            borderColor: 'secondary.400',
+            bg: 'transparent',
+            color: 'secondary.400',
+            _hover: {
+              borderColor: 'secondary.500',
+              color: 'secondary.500',
+              bg: 'transparent',
+            },
+            _active: { bg: 'inherit' },
+          }),
+        },
+      },
+      Menu: {
+        parts: ['menu', 'button', 'item', 'list'],
+        baseStyle: {
+          menu: {
+            boxShadow: 'lg',
+            rounded: 'lg',
+            flexDirection: 'column',
+            py: '2',
+            color: 'white',
+            borderColor: 'whiteAlpha.50',
+          },
+          list: {
+            bg: 'blackAlpha.800',
+          },
+          item: {
+            fontWeight: 'medium',
+            lineHeight: 'tall',
+            color: 'white',
+            _hover: { bg: 'secondary.500' },
+            _active: { bg: 'secondary.500' },
+            _focus: { bg: 'secondary.500' },
+          },
+        },
+        sizes: {},
+        defaultProps: {
+          size: 'md',
+        },
+      },
+      Input: {
+        parts: ['field', 'addon'],
+        baseStyle: {
+          field: {
+            borderColor: 'whiteAlpha.50',
+            color: 'whiteAlpha.900',
+            focusBorderColor: 'secondary.500',
+          },
+          addon: {
+            color: 'black',
+            bg: 'transparent',
+            focusBorderColor: 'secondary.500',
+          },
+        },
+        variants: {},
+        sizes: {},
+        defaultProps: {
+          size: 'md',
+          focusBorderColor: 'secondary.500',
+        },
+      },
+      Textarea: {
+        baseStyle: {
+          color: 'whiteAlpha.900',
+        },
+        defaultProps: {
+          focusBorderColor: 'secondary.500',
+        },
+      },
+      Link: {
+        baseStyle: {
+          _hover: { textDecoration: 'none', color: 'secondary.500' },
+        },
+      },
     },
     styles: {
-      ...theme.styles,
       bgOverlayOpacity: themeOverrides.bgOverlayOpacity,
+      global: {
+        'html, body': {
+          fontSize: 'm',
+          color: 'whiteAlpha.600',
+          lineHeight: 'tall',
+        },
+        a: {
+          color: 'inherit',
+          _hover: { textDecoration: 'none' },
+        },
+      },
     },
-  };
+  });
 };

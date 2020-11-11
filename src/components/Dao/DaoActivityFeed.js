@@ -1,51 +1,91 @@
-import React from 'react';
-import { Text } from '@chakra-ui/core';
+import React, { useEffect, useState } from 'react';
+import { Box } from '@chakra-ui/core';
+import Pagination from 'rc-pagination';
 
-import { useTheme } from '../../contexts/PokemolContext';
-import ActivityFeedList from '../ActivityFeed/ActivityFeedList';
+import GraphFetch from '../Shared/GraphFetch';
+import { DAO_ACTIVITIES } from '../../utils/apollo/dao-queries';
+import { activitiesData } from '../../content/skeleton-data';
+import DaoActivityCard from '../Activities/DaoActivityCard';
+import { getDaoActivites } from '../../utils/activities-helpers';
+
+const PER_PAGE = 3;
 
 const DaoActivityFeed = ({ dao }) => {
-  const [theme] = useTheme();
-  // const [activities, setActivities] = useState([]);
-  const proposalActivities = [
-    {
-      id: 1,
-      molochAddress: dao.address,
-      proposalId: 1,
-      proposalType: 'funding',
-      daoTitle: 'QuickDao',
-      yesVotes: 5,
-      noVotes: 3,
-      activityFeed: {
-        message: 'new proposal',
-      },
-    },
-  ];
+  const [fetchedData, setFetchedData] = useState();
+  const [isLoaded, setIsLoaded] = useState(false);
+  const [activities, setActivities] = useState(activitiesData);
+  const [allActivities, setAllActivities] = useState(activitiesData);
 
-  // useEffect(() => {
-  //   if (proposals) {
-  //     const proposalActivities = proposals.map((proposal) => {
-  //       return { ...proposal, daoTitle: dao.title };
-  //     });
+  const [currentPage, setCurrentPage] = useState(1);
 
-  //     setActivities(
-  //       proposalActivities.sort((a, b) => +b.createdAt - +a.createdAt),
-  //     );
-  //   }
-  // }, [proposals]);
+  useEffect(() => {
+    if (fetchedData) {
+      console.log('fetchedData', fetchedData);
+      const hydratedActivites = getDaoActivites(fetchedData);
+      console.log('hydratedActivites', hydratedActivites);
+
+      setAllActivities(hydratedActivites);
+      setActivities(filterVisibleActivites(hydratedActivites, currentPage));
+
+      setIsLoaded(true);
+    }
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [fetchedData]);
+
+  const handlePageChange = (page) => {
+    console.log('handlePageClick', page);
+    setCurrentPage(page);
+    setActivities(filterVisibleActivites(allActivities, page));
+  };
+
+  const filterVisibleActivites = (acts, page) => {
+    const start = (page - 1) * PER_PAGE;
+    const end = start + PER_PAGE;
+
+    console.log('start, end ', start, end);
+    return acts.slice(start, end);
+  };
 
   return (
     <>
-      <Text
+      <Box
         mt={6}
         ml={6}
         textTransform='uppercase'
         fontSize='sm'
-        fontFamily={theme.fonts.heading}
+        fontFamily='heading'
       >
         Activity Feed
-      </Text>
-      <ActivityFeedList activities={proposalActivities} />
+      </Box>
+
+      {activities.map((activity) => (
+        <DaoActivityCard
+          activity={activity}
+          key={activity.id}
+          isLoaded={isLoaded}
+        />
+      ))}
+
+      {isLoaded ? (
+        <Pagination
+          onChange={handlePageChange}
+          current={currentPage}
+          total={allActivities.length}
+          pageSize={PER_PAGE}
+          hideOnSinglePage={true}
+        />
+      ) : null}
+
+      {dao ? (
+        <GraphFetch
+          query={DAO_ACTIVITIES}
+          setRecords={setFetchedData}
+          entity='moloch'
+          variables={{ contractAddr: dao.address }}
+          context={{ currentPeriod: dao.currentPeriod }}
+        />
+      ) : null}
     </>
   );
 };

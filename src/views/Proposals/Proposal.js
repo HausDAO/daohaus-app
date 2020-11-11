@@ -1,11 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import { useLocation, Link as RouterLink } from 'react-router-dom';
-import { Box, Flex, Text, Link, Icon } from '@chakra-ui/core';
+import { Box, Flex, Link, Icon } from '@chakra-ui/core';
 import { RiArrowLeftLine } from 'react-icons/ri';
 
-import { useProposals, useDao, useTheme } from '../../contexts/PokemolContext';
+import { useProposals, useDao } from '../../contexts/PokemolContext';
+import { useTheme } from '../../contexts/CustomThemeContext';
 import ProposalDetail from '../../components/Proposals/ProposalDetail';
 import ProposalVote from '../../components/Proposals/ProposalVote';
+import ProposalActivityFeed from '../../components/Proposals/ProposalActivityFeed';
 
 const Proposal = () => {
   const [dao] = useDao();
@@ -23,53 +25,58 @@ const Proposal = () => {
 
       setProposal(p);
     }
-    // eslint-disable-next-line
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [proposals]);
-  console.log(theme);
 
   return (
     <Box>
       <Flex>
         <Box w='60%'>
           <Link as={RouterLink} to={`/dao/${dao.address}/proposals`}>
-            <Text
+            <Box
               textTransform='uppercase'
               ml={6}
               fontSize='lg'
-              fontFamily={theme.fonts.heading}
+              fontFamily='heading'
             >
               <Icon
                 name='arrow-back'
-                color={theme.colors.brand}
+                color='primary.50'
                 as={RiArrowLeftLine}
                 h='20px'
                 w='20px'
               />{' '}
-              All Quests
-            </Text>
+              All {theme.daoMeta.proposals}
+            </Box>
           </Link>
         </Box>
         <Box w='40%'>
-          <Text
-            textTransform='uppercase'
-            fontSize='lg'
-            fontFamily={theme.fonts.heading}
-            fontWeight={700}
-          >
-            Vote
-          </Text>
+          {!proposal?.cancelled && (
+            <Box
+              textTransform='uppercase'
+              fontSize='lg'
+              fontFamily='heading'
+              fontWeight={700}
+            >
+              Vote
+            </Box>
+          )}
         </Box>
       </Flex>
-      {proposal && (
-        <Flex>
-          <Box w='60%'>
-            <ProposalDetail proposal={proposal} />
-          </Box>
-          <Box w='40%'>
-            <ProposalVote proposal={proposal} />
-          </Box>
-        </Flex>
-      )}
+      <Flex>
+        <Box w='60%'>
+          <ProposalDetail proposal={proposal} />
+          <Flex w='100%' justify='center' align='center' h='40%'>
+            <Box maxW='300px' textAlign='center'>
+              There’s 6 more quests that need your attention. View all?
+            </Box>
+          </Flex>
+        </Box>
+        <Box w='40%'>
+          {!proposal?.cancelled && <ProposalVote proposal={proposal} />}
+          <ProposalActivityFeed />
+        </Box>
+      </Flex>
     </Box>
   );
 };

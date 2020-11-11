@@ -13,11 +13,10 @@ const UserInit = () => {
 
   useEffect(() => {
     initCurrentUser();
-    // eslint-disable-next-line
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [web3Connect]);
 
   const initCurrentUser = async () => {
-    // console.log('************initCurrentUser();');
     let loginType = localStorage.getItem('loginType') || USER_TYPE.READ_ONLY;
     if (user && user.type === loginType) {
       return;
@@ -29,13 +28,10 @@ const UserInit = () => {
 
     let providerConnect;
     try {
-      console.log(`Initializing user type: ${loginType || 'read-only'}`);
-
       switch (loginType) {
         case USER_TYPE.WEB3: {
           if (web3Connect.w3c.cachedProvider) {
             try {
-              // providerConnect = await w3connect(_web3);
               providerConnect = await w3connect(web3Connect);
             } catch (err) {
               console.log(err);
@@ -55,9 +51,9 @@ const UserInit = () => {
             const web3User = createWeb3User(account);
             const profile = await getProfile(web3User.username);
 
-            updateWeb3Connect({ w3c, web3, provider });
-
             updateUser({ ...user, ...web3User, profile });
+
+            updateWeb3Connect({ w3c, web3, provider });
           }
           break;
         }

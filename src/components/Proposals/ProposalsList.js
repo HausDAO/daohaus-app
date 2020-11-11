@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Box, Flex } from '@chakra-ui/core';
+import { Flex } from '@chakra-ui/core';
 
 import {
   useDao,
@@ -27,7 +27,7 @@ const ProposalsList = () => {
       filterAndSortProposals();
       setIsLoaded(true);
     }
-    // eslint-disable-next-line
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [proposals, sort, filter]);
 
   const filterAndSortProposals = () => {
@@ -47,12 +47,14 @@ const ProposalsList = () => {
             );
             return unread.unread;
           } else {
-            return prop.proposalType === filter.value;
+            return prop[filter.key] === filter.value;
           }
         })
         .sort((a, b) => {
           if (sort.value === 'submissionDateAsc') {
             return +a.createdAt - +b.createdAt;
+          } else if (sort.value === 'voteCountDesc') {
+            return b.votes.length - a.votes.length;
           } else {
             return +b.createdAt - +a.createdAt;
           }
@@ -73,27 +75,25 @@ const ProposalsList = () => {
 
   return (
     <>
-      <Box w='60%'>
-        <Flex>
-          {dao.version !== '1' ? (
-            <ProposalFilter
-              filter={filter}
-              setFilter={setFilter}
-              listLength={listProposals.length}
-            />
-          ) : null}
-          <ProposalSort sort={sort} setSort={setSort} />
-        </Flex>
-        {listProposals.map((proposal) => {
-          return (
-            <ProposalCard
-              proposal={proposal}
-              key={proposal.id}
-              isLoaded={isLoaded}
-            />
-          );
-        })}
-      </Box>
+      <Flex>
+        {dao.version !== '1' ? (
+          <ProposalFilter
+            filter={filter}
+            setFilter={setFilter}
+            listLength={listProposals.length}
+          />
+        ) : null}
+        <ProposalSort sort={sort} setSort={setSort} />
+      </Flex>
+      {listProposals.map((proposal) => {
+        return (
+          <ProposalCard
+            proposal={proposal}
+            key={proposal.id}
+            isLoaded={isLoaded}
+          />
+        );
+      })}
     </>
   );
 };

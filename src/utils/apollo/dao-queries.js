@@ -11,6 +11,7 @@ export const HOME_DAO = gql`
       totalShares
       totalLoot
       version
+      proposalDeposit
       guildBankAddress
       depositToken {
         tokenAddress
@@ -34,6 +35,58 @@ export const HOME_DAO = gql`
           id
           version
         }
+      }
+    }
+  }
+`;
+
+export const DAO_ACTIVITIES = gql`
+  query molochActivities($contractAddr: String!) {
+    moloch(id: $contractAddr) {
+      id
+      title
+      version
+      proposals {
+        id
+        createdAt
+        proposalId
+        proposalIndex
+        processed
+        sponsored
+        details
+        newMember
+        whitelist
+        guildkick
+        trade
+        cancelled
+        aborted
+        votingPeriodStarts
+        votingPeriodEnds
+        gracePeriodEnds
+        molochAddress
+        molochVersion
+        yesVotes
+        noVotes
+        processed
+        proposer
+        sponsoredAt
+        sponsor
+        proposalType @client
+        title @client
+        votes {
+          id
+          createdAt
+          uintVote
+          memberAddress
+          molochAddress
+        }
+      }
+      rageQuits {
+        id
+        createdAt
+        memberAddress
+        shares
+        loot
       }
     }
   }

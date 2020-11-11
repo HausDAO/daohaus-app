@@ -1,10 +1,10 @@
 import React from 'react';
 import { useHistory } from 'react-router-dom';
-import { Text, Box, Flex, Image, Skeleton } from '@chakra-ui/core';
+import { Box, Flex, Image, Skeleton, Button } from '@chakra-ui/core';
 import { utils } from 'web3';
 
-import { useTheme, useUser, useMembers } from '../../contexts/PokemolContext';
-import { PrimaryButton, SecondaryButton } from '../../themes/theme';
+import { useUser, useMembers } from '../../contexts/PokemolContext';
+import { useTheme } from '../../contexts/CustomThemeContext';
 
 const DaoOverviewDetails = ({ dao }) => {
   const [theme] = useTheme();
@@ -18,14 +18,14 @@ const DaoOverviewDetails = ({ dao }) => {
   return (
     <>
       {user && (
-        <Text
+        <Box
           ml={6}
           textTransform='uppercase'
           fontSize='sm'
-          fontFamily={theme.fonts.heading}
+          fontFamily='heading'
         >
           Details
-        </Text>
+        </Box>
       )}
       <Box
         rounded='lg'
@@ -45,98 +45,78 @@ const DaoOverviewDetails = ({ dao }) => {
             w={50}
           />
           <Skeleton isLoaded={dao.name} ml={6}>
-            <Text
-              fontSize='2xl'
-              fontWeight={700}
-              fontFamily={theme.fonts.heading}
-            >
+            <Box fontSize='2xl' fontWeight={700} fontFamily='heading'>
               {dao.name ? dao.name : '--'}
-            </Text>
+            </Box>
           </Skeleton>
         </Flex>
         <Flex direction='row' w='60%' justify='space-between' mt={6}>
           <Box>
-            <Text
+            <Box
               textTransform='uppercase'
-              fontFamily={theme.fonts.heading}
+              fontFamily='heading'
               fontSize='sm'
               fontWeight={700}
             >
               {theme.daoMeta.members}
-            </Text>
+            </Box>
             <Skeleton isLoaded={members?.length > 0}>
-              <Text
-                fontSize='2xl'
-                fontFamily={theme.fonts.heading}
-                fontWeight={700}
-              >
+              <Box fontSize='2xl' fontFamily='heading' fontWeight={700}>
                 {members?.length ? members.length : '--'}
-              </Text>
+              </Box>
             </Skeleton>
           </Box>
           <Box>
-            <Text
+            <Box
               textTransform='uppercase'
-              fontFamily={theme.fonts.heading}
+              fontFamily='heading'
               fontSize='sm'
               fontWeight={700}
             >
               Shares
-            </Text>
+            </Box>
             <Skeleton isLoaded={dao?.graphData?.totalShares}>
-              <Text
-                fontSize='2xl'
-                fontFamily={theme.fonts.heading}
-                fontWeight={700}
-              >
+              <Box fontSize='2xl' fontFamily='heading' fontWeight={700}>
                 {dao?.graphData?.totalShares ? dao.graphData.totalShares : '--'}
-              </Text>
+              </Box>
             </Skeleton>
           </Box>
           <Box>
-            <Text
+            <Box
               textTransform='uppercase'
-              fontFamily={theme.fonts.heading}
+              fontFamily='heading'
               fontSize='sm'
               fontWeight={700}
             >
               Loot
-            </Text>
+            </Box>
             <Skeleton isLoaded={dao?.graphData?.totalLoot}>
-              <Text
-                fontSize='2xl'
-                fontFamily={theme.fonts.heading}
-                fontWeight={700}
-              >
+              <Box fontSize='2xl' fontFamily='heading' fontWeight={700}>
                 {dao?.graphData?.totalLoot ? dao?.graphData?.totalLoot : '--'}
-              </Text>
+              </Box>
             </Skeleton>
           </Box>
         </Flex>
         <Box mt={6}>
-          <Text
-            fontFamily={theme.fonts.heading}
+          <Box
+            fontFamily='heading'
             textTransform='uppercase'
             fontSize='sm'
             fontWeight={700}
           >
             {theme.daoMeta.bank}
-          </Text>
+          </Box>
           <Skeleton isLoaded={wethBalance}>
-            <Text
-              fontSize='3xl'
-              fontFamily={theme.fonts.heading}
-              fontWeight={700}
-            >
+            <Box fontSize='3xl' fontFamily='heading' fontWeight={700}>
               {wethBalance && parseFloat(utils.fromWei(wethBalance)).toFixed(3)}{' '}
               WETH
-            </Text>
+            </Box>
           </Skeleton>
           <Box>
             <Skeleton isLoaded={dao?.graphData?.tokenBalances?.length > 0}>
-              <Text fontSize='sm' as='i' fontWeight={200}>
+              <Box fontSize='sm' as='i' fontWeight={200}>
                 {dao?.graphData?.tokenBalances?.length} Tokens
-              </Text>
+              </Box>
             </Skeleton>
           </Box>
         </Box>
@@ -144,17 +124,18 @@ const DaoOverviewDetails = ({ dao }) => {
           <Box mt={6}>{dao?.description ? dao.description : '--'}</Box>
         </Skeleton>
         <Flex mt={6}>
-          <PrimaryButton
+          <Button
             mr={6}
             onClick={() => history.push(`/dao/${dao.address}/proposals`)}
           >
             View {theme.daoMeta.proposals}
-          </PrimaryButton>
-          <SecondaryButton
+          </Button>
+          <Button
+            variant='outline'
             onClick={() => history.push(`/dao/${dao.address}/bank`)}
           >
             View {theme.daoMeta.bank}
-          </SecondaryButton>
+          </Button>
         </Flex>
       </Box>
     </>

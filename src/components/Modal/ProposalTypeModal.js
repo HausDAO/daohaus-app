@@ -7,12 +7,11 @@ import {
   ModalBody,
   ModalFooter,
   ModalOverlay,
-  Text,
   Flex,
   Image,
   Box,
 } from '@chakra-ui/core';
-import { useTheme } from '../../contexts/PokemolContext';
+import { useTheme } from '../../contexts/CustomThemeContext';
 
 const ProposalFormModal = ({ isOpen, setShowModal, setProposalType }) => {
   const [theme] = useTheme();
@@ -21,31 +20,31 @@ const ProposalFormModal = ({ isOpen, setShowModal, setProposalType }) => {
     {
       name: 'Apply',
       subhead: 'Join the guild!',
-      proposalType: 'member-proposal',
+      proposalType: 'member',
       image: 'themes/raidTheme/raidguild__swords-white.svg',
     },
     {
       name: 'Funding',
       subhead: 'Request funds',
-      proposalType: 'funding-proposal',
+      proposalType: 'funding',
       image: 'themes/raidTheme/raidguild__swords-white.svg',
     },
     {
       name: 'Token',
       subhead: 'Whitelist a token',
-      proposalType: 'token-proposal',
+      proposalType: 'whitelist',
       image: 'themes/raidTheme/raidguild__swords-white.svg',
     },
     {
       name: 'Guild Kick',
       subhead: `Remove a ${theme.daoMeta.member}`,
-      proposalType: 'kick-proposal',
+      proposalType: 'guildkick',
       image: 'themes/raidTheme/raidguild__swords-white.svg',
     },
     {
       name: 'Trade',
       subhead: 'Trade funds',
-      proposalType: 'trade-proposal',
+      proposalType: 'trade',
       image: 'themes/raidTheme/raidguild__swords-white.svg',
     },
   ];
@@ -65,23 +64,23 @@ const ProposalFormModal = ({ isOpen, setShowModal, setProposalType }) => {
         borderColor='whiteAlpha.200'
       >
         <ModalHeader>
-          <Text
-            fontFamily={theme.fonts.heading}
+          <Box
+            fontFamily='heading'
             textTransform='uppercase'
             fontSize='sm'
             fontWeight={700}
             color='white'
           >
             New {theme.daoMeta.proposal}
-          </Text>
-          <Text
-            fontFamily={theme.fonts.heading}
+          </Box>
+          <Box
+            fontFamily='heading'
             fontSize='2xl'
             fontWeight={700}
             color='white'
           >
             Select Proposal Type
-          </Text>
+          </Box>
         </ModalHeader>
         <ModalCloseButton />
         <ModalBody
@@ -115,22 +114,18 @@ const ProposalFormModal = ({ isOpen, setShowModal, setProposalType }) => {
                   width='50px'
                   mb={15}
                 />
-                <Text
+                <Box
                   mb={2}
                   fontSize='md'
-                  fontFamily={theme.fonts.heading}
+                  fontFamily='heading'
                   fontWeight={700}
                   color='white'
                 >
                   {p.name}
-                </Text>
-                <Text
-                  fontSize='xs'
-                  fontFamily={theme.fonts.heading}
-                  color='white'
-                >
+                </Box>
+                <Box fontSize='xs' fontFamily='heading' color='white'>
                   {p.subhead}
-                </Text>
+                </Box>
               </Box>
             );
           })}

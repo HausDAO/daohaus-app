@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 
 import {
-  Text,
+  Box,
   Modal,
   ModalOverlay,
   ModalContent,
@@ -33,9 +33,7 @@ const TxProcessorInit = () => {
     if (!user || Object.keys(txProcessor).length === 0) {
       return;
     }
-
     const unseen = txProcessor.getTxUnseenList(user.username);
-
     if (unseen.length) {
       setLatestTx(unseen[0]);
       setLoading(true);
@@ -53,14 +51,14 @@ const TxProcessorInit = () => {
         isClosable: true,
       });
     }
-    // eslint-disable-next-line
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [user, txProcessor.forceUpdate]);
 
   useEffect(() => {
-    if (user && web3Connect.web3) {
+    if (user && web3Connect.web3 && !txProcessor.web3) {
       initTxProcessor();
     }
-    // eslint-disable-next-line
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [user, web3Connect]);
 
   const initTxProcessor = async () => {
@@ -74,11 +72,9 @@ const TxProcessorInit = () => {
       if (!error) {
         if (txProcessorService.forceUpdate) {
           await txProcessorService.update(user.username);
-
           if (!txProcessorService.getTxPendingList(user.username).length) {
             txProcessorService.forceUpdate = false;
           }
-
           updateTxProcessor(txProcessorService);
         }
       }
@@ -107,7 +103,7 @@ const TxProcessorInit = () => {
               />
             )}
             {!loading && (
-              <Text>
+              <Box>
                 <span role='img' aria-label='confetti'>
                   🎉
                 </span>{' '}
@@ -115,7 +111,7 @@ const TxProcessorInit = () => {
                 <span role='img' aria-label='confetti'>
                   🎉
                 </span>
-              </Text>
+              </Box>
             )}
           </ModalBody>
         </ModalContent>

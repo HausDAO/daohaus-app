@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
-import { Box, Text, Grid } from '@chakra-ui/core';
+import { Box, Grid } from '@chakra-ui/core';
 
-import { useUser, useTheme } from '../../contexts/PokemolContext';
+import { useUser } from '../../contexts/PokemolContext';
 import GraphFetch from '../../components/Shared/GraphFetch';
 import MemberDaoList from '../../components/Hub/MemberDaoList';
 import HubSignedOut from '../../components/Hub/HubSignedOut';
@@ -11,7 +11,6 @@ import { HUB_MEMBERSHIPS } from '../../utils/apollo/member-queries';
 
 const Hub = () => {
   const [user] = useUser();
-  const [theme] = useTheme();
   const [memberDaos, setMemberDaos] = useState();
 
   return (
@@ -39,15 +38,15 @@ const Hub = () => {
             </Box>
 
             <Box>
-              <Text
+              <Box
                 fontSize='md'
                 ml={6}
-                fontFamily={theme.fonts.heading}
+                fontFamily='heading'
                 textTransform='uppercase'
                 fontWeight={700}
               >
                 Recent Activity
-              </Text>
+              </Box>
               {memberDaos ? (
                 <HubActivityFeed
                   daos={memberDaos.map((member) => member.moloch)}

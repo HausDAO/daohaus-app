@@ -1,187 +1,125 @@
 import React from 'react';
 import { Link as RouterLink, useHistory } from 'react-router-dom';
-import { Text, Stack, Spinner, Link, Box, Flex, Image } from '@chakra-ui/core';
+import { Stack, Link, Box, Flex, Button } from '@chakra-ui/core';
 
-import {
-  useDao,
-  useLoading,
-  useRefetchQuery,
-  useTheme,
-} from '../../contexts/PokemolContext';
-import BrandOverride from '../../assets/themes/raidTheme/raidguild__swords.svg';
-import BgOverride from '../../assets/themes/raidTheme/raid__fantasy--bg.jpg';
-import { PrimaryButton, SecondaryButton } from '../../themes/theme';
+import { useDao, useRefetchQuery } from '../../contexts/PokemolContext';
+import { useTheme } from '../../contexts/CustomThemeContext';
 import ChangeDao from './ChangeDao';
 
 const SideNav = () => {
-  const [loading] = useLoading();
-  const [theme, setTheme] = useTheme();
+  const [theme] = useTheme();
   const [dao] = useDao();
   const history = useHistory();
   const [, updateRefetchQuery] = useRefetchQuery();
 
-  const setLocalTheme = () => {
-    setTheme({
-      primary500: '#e50651',
-      secondary500: '#6153ff',
-      bg500: '#121212',
-      brandImg: BrandOverride,
-      bgImg: BgOverride,
-      bgOverlayOpacity: '0.5',
-      primaryFont: 'Space Mono', // only temporary
-      bodyFont: 'Rubik',
-      daoMeta: {
-        proposals: 'Quests',
-        proposal: 'Quest',
-        bank: 'Inventory',
-        members: 'Players',
-        member: 'Player',
-      },
-    });
-  };
-
-  const setDefault = () => {
-    setTheme();
-  };
-
   return (
     <Box>
-      {loading ? (
-        <Spinner />
-      ) : (
-        <>
-          {dao ? (
-            <>
-              <Flex direction='row' justify='start' align='start'>
-                <Flex direction='column' align='center' justify='start' mr={6}>
-                  <Link as={RouterLink} to={`/dao/${dao.address}`}>
-                    <Image src={theme.images.brandImg} w='60px' h='60px' />
-                  </Link>
-                </Flex>
-                <Flex direction='column' align='start' justify='start'>
-                  <Link
-                    as={RouterLink}
-                    to={`/dao/${dao.address}`}
-                    fontSize='xl'
-                  >
-                    {dao.name}
-                  </Link>
-                  <ChangeDao />
-                </Flex>
+      <>
+        {dao?.graphData ? (
+          <>
+            <Flex direction='row' justify='start' align='start'>
+              <Flex direction='column' align='start' justify='start'>
+                <Link as={RouterLink} to={`/dao/${dao.address}`} fontSize='xl'>
+                  {dao.name}
+                </Link>
+                <ChangeDao />
               </Flex>
-              <Stack spacing={3} mt='125px' w='200px' pr={1}>
-                <Text
-                  fontSize='xs'
-                  fontFamily={theme.fonts.heading}
-                  cursor='pointer'
-                  onClick={() => history.push('/')}
-                >
-                  Main Menu
-                </Text>
-                <Link to={`/dao/${dao.address}/proposals`} as={RouterLink}>
-                  <Text fontSize='2xl' fontFamily={theme.fonts.heading}>
-                    {theme.daoMeta.proposals}
-                  </Text>
-                </Link>
-                <Link to={`/dao/${dao.address}/bank`} as={RouterLink}>
-                  <Text fontSize='2xl' fontFamily={theme.fonts.heading}>
-                    {theme.daoMeta.bank}
-                  </Text>
-                </Link>
-                <Link to={`/dao/${dao.address}/members`} as={RouterLink}>
-                  <Text fontSize='2xl' fontFamily={theme.fonts.heading}>
-                    {theme.daoMeta.members}
-                  </Text>
-                </Link>
+            </Flex>
+            <Stack spacing={3} mt='125px' w='200px' pr={1}>
+              <Box
+                fontSize='xs'
+                fontFamily='heading'
+                cursor='pointer'
+                onClick={() => history.push('/')}
+              >
+                Main Menu
+              </Box>
+              <Link to={`/dao/${dao.address}/proposals`} as={RouterLink}>
+                <Box fontSize='2xl' fontFamily='heading'>
+                  {theme.daoMeta.proposals}
+                </Box>
+              </Link>
+              <Link to={`/dao/${dao.address}/bank`} as={RouterLink}>
+                <Box fontSize='2xl' fontFamily='heading'>
+                  {theme.daoMeta.bank}
+                </Box>
+              </Link>
+              <Link to={`/dao/${dao.address}/members`} as={RouterLink}>
+                <Box fontSize='2xl' fontFamily='heading'>
+                  {theme.daoMeta.members}
+                </Box>
+              </Link>
+              <Link to={`/dao/${dao.address}/settings/boosts`} as={RouterLink}>
+                <Box fontSize='md' fontFamily='heading'>
+                  Boost
+                </Box>
+              </Link>
+              <Link to={`/dao/${dao.address}/settings`} as={RouterLink}>
+                <Box fontSize='md' fontFamily='heading'>
+                  Settings
+                </Box>
+              </Link>
+              <Link to={`/dao/${dao.address}/profile`} as={RouterLink}>
+                <Box fontSize='md' fontFamily='heading'>
+                  Stats
+                </Box>
+              </Link>
+            </Stack>
+          </>
+        ) : (
+          <>
+            <Flex direction='row' justify='start' align='start'>
+              <Flex direction='column' align='start' justify='start'>
                 <Link
-                  to={`/dao/${dao.address}/settings/boosts`}
                   as={RouterLink}
+                  to={`/`}
+                  fontSize='xl'
+                  fontFamily='heading'
+                  fontWeight={700}
                 >
-                  <Text fontSize='md' fontFamily={theme.fonts.heading}>
-                    Boost
-                  </Text>
+                  DAOhaus
                 </Link>
-                <Link to={`/dao/${dao.address}/settings`} as={RouterLink}>
-                  <Text fontSize='md' fontFamily={theme.fonts.heading}>
-                    Settings
-                  </Text>
-                </Link>
-                <Link to={`/dao/${dao.address}/profile`} as={RouterLink}>
-                  <Text fontSize='md' fontFamily={theme.fonts.heading}>
-                    Stats
-                  </Text>
-                </Link>
-              </Stack>
-              <Flex mt={10} direction='column' w='60%'>
-                <PrimaryButton onClick={setDefault} mb={3}>
-                  Default
-                </PrimaryButton>
-                <SecondaryButton onClick={setLocalTheme}>Other</SecondaryButton>
+                <ChangeDao />
               </Flex>
-            </>
-          ) : (
-            <>
-              <Flex direction='row' justify='start' align='start'>
-                <Flex direction='column' align='center' justify='start' mr={6}>
-                  <Link as={RouterLink} to={`/`}>
-                    <Image src={theme.images.brandImg} size='60px' />
-                  </Link>
-                </Flex>
-                <Flex direction='column' align='start' justify='start'>
-                  <Link as={RouterLink} to={`/`} fontSize='xl'>
-                    DAOhaus
-                  </Link>
-                  <ChangeDao />
-                </Flex>
-              </Flex>
-              <Stack spacing={4} mt='125px' w='200px' pr={1}>
-                <Text fontSize='xs'>Main Menu</Text>
-                <Link href='https://daohaus.club' isExternal>
-                  <Text fontSize='xl' fontFamily={theme.fonts.heading}>
-                    Explore DAOs
-                  </Text>
-                </Link>
-                <Link href='https://daohaus.club/summon' isExternal>
-                  <Text fontSize='xl' fontFamily={theme.fonts.heading}>
-                    Summon a DAO
-                  </Text>
-                </Link>
-                <Link
-                  href='https://xdai.daohaus.club/dao/v2/0x283bdc900b6ec9397abb721c5bbff5ace46e0f50'
-                  isExternal
-                >
-                  <Text fontSize='xl' fontFamily={theme.fonts.heading}>
-                    HausDAO
-                  </Text>
-                </Link>
-                <Link href='https://daohaus.club/about' isExternal>
-                  <Text fontSize='md' fontFamily={theme.fonts.heading}>
-                    About
-                  </Text>
-                </Link>
-                <Link href='https://daohaus.club/help' isExternal>
-                  <Text fontSize='md' fontFamily={theme.fonts.heading}>
-                    Help
-                  </Text>
-                </Link>
-              </Stack>
-              <Flex mt={10} direction='column' w='60%'>
-                <PrimaryButton onClick={setDefault} mb={3}>
-                  Default
-                </PrimaryButton>
-                <SecondaryButton onClick={setLocalTheme}>Other</SecondaryButton>
-              </Flex>
-            </>
-          )}
-        </>
-      )}
+            </Flex>
+            <Stack spacing={4} mt='125px' w='200px' pr={1}>
+              <Box fontSize='xs'>Main Menu</Box>
+              <Link href='https://daohaus.club' isExternal>
+                <Box fontSize='xl' fontFamily='heading'>
+                  Explore DAOs
+                </Box>
+              </Link>
+              <Link href='https://daohaus.club/summon' isExternal>
+                <Box fontSize='xl' fontFamily='heading'>
+                  Summon a DAO
+                </Box>
+              </Link>
+              <Link
+                href='https://xdai.daohaus.club/dao/v2/0x283bdc900b6ec9397abb721c5bbff5ace46e0f50'
+                isExternal
+              >
+                <Box fontSize='xl' fontFamily='heading'>
+                  HausDAO
+                </Box>
+              </Link>
+              <Link href='https://daohaus.club/about' isExternal>
+                <Box fontSize='md' fontFamily='heading'>
+                  About
+                </Box>
+              </Link>
+              <Link href='https://daohaus.club/help' isExternal>
+                <Box fontSize='md' fontFamily='heading'>
+                  Help
+                </Box>
+              </Link>
+            </Stack>
+          </>
+        )}
+      </>
 
-      <SecondaryButton
-        colorScheme={theme.colors.secondary[500]}
-        onClick={() => updateRefetchQuery('proposals')}
-      >
-        Refetch Proposals Test
-      </SecondaryButton>
+      <Button variant='outline' onClick={() => updateRefetchQuery('proposals')}>
+        Refetch
+      </Button>
     </Box>
   );
 };

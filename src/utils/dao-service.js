@@ -69,7 +69,7 @@ export class DaoService {
 
   static async instantiateWithReadOnly(contractAddr, version) {
     const web3 = new Web3(
-      new Web3.providers.HttpProvider(process.env.REACT_APP_INFURA_URI),
+      new Web3.providers.HttpProvider(process.env.REACT_APP_RPC_URI),
     );
 
     const moloch = new ReadonlyMolochService(web3, contractAddr, '', version);

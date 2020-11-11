@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import ActivityFeedList from '../ActivityFeed/ActivityFeedList';
+import ActivityCard from '../Activities/ActivityCard';
 
 const HubActivityFeed = ({ daos }) => {
   const [activities, setActivities] = useState([]);
@@ -44,7 +44,13 @@ const HubActivityFeed = ({ daos }) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  return <ActivityFeedList activities={activities} />;
+  return (
+    <>
+      {activities.map((activity) => (
+        <ActivityCard activity={activity} key={activity.id} isLoaded={true} />
+      ))}
+    </>
+  );
 };
 
 export default HubActivityFeed;
