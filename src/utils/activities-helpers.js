@@ -17,9 +17,10 @@ export const getDaoActivites = (daoData) => {
     .map((activity) => {
       return {
         ...activity,
-        activityData: activity.proposalIndex
-          ? proposalActivityData(activity)
-          : voteRageActivityData(activity),
+        activityData:
+          activity.__typename === 'Proposal'
+            ? proposalActivityData(activity)
+            : voteRageActivityData(activity),
       };
     })
     .sort((a, b) => +b.activityData.createdAt - +a.activityData.createdAt);
@@ -34,7 +35,7 @@ const voteRageActivityData = (record) => {
     title = `voted ${record.uintVote ? 'yes' : 'no'} on ${record.proposalType}`;
     type = 'vote';
   } else {
-    title = `rage quit ${record.shares} shares and ${record.loot} loot 🖕`;
+    title = `rage quit ${record.shares} shares and ${record.loot} loot`;
     type = 'rage';
   }
   return {
