@@ -11,14 +11,14 @@ const TokenListCard = ({ token, isLoaded }) => {
 
   return (
     <Flex h='60px' align='center'>
-      <Box w='20%'>
+      <Box w='15%'>
         <Skeleton isLoaded={isLoaded}>
-          <Box>{token?.symbol}</Box>
+          <Box fontFamily='mono'>{token?.symbol}</Box>
         </Skeleton>
       </Box>
-      <Box w='20%'>
+      <Box w='45%'>
         <Skeleton isLoaded={isLoaded}>
-          <Box fontFamily='heading'>
+          <Box fontFamily='mono'>
             {token?.contractTokenBalance
               ? utils.fromWei(token.contractTokenBalance.toString())
               : '--'}
@@ -27,12 +27,12 @@ const TokenListCard = ({ token, isLoaded }) => {
       </Box>
       <Box w='20%'>
         <Skeleton isLoaded={isLoaded}>
-          <Box fontFamily='heading'>{token?.price ? token.price : '--'}</Box>
+          <Box fontFamily='mono'>{token?.price ? token.price : '--'}</Box>
         </Skeleton>
       </Box>
-      <Box>
+      <Box w='20%'>
         <Skeleton isLoaded={isLoaded}>
-          <Box fontFamily='heading'>{token?.value ? token?.value : '--'}</Box>
+          <Box fontFamily='mono'>{token?.value ? token?.value : '--'}</Box>
         </Skeleton>
       </Box>
     </Flex>

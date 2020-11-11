@@ -12,6 +12,7 @@ export const defaultTheme = {
   bgOverlayOpacity: '0.75',
   primaryFont: 'Inknut Antiqua',
   bodyFont: 'Rubik',
+  monoFont: 'Space Mono',
   brandImg: BrandImg,
   bgImg: BgImg,
   daoMeta: {
@@ -76,6 +77,7 @@ export const setTheme = (daoTheme) => {
     fonts: {
       heading: themeOverrides.primaryFont,
       body: themeOverrides.bodyFont,
+      mono: themeOverrides.monoFont,
       hub: 'Mirza',
       accessory: 'Roboto Mono',
       space: 'Space Mono',
@@ -181,7 +183,7 @@ export const setTheme = (daoTheme) => {
       },
       Textarea: {
         baseStyle: {
-          color: 'white',
+          color: 'whiteAlpha.900',
         },
         defaultProps: {
           focusBorderColor: 'secondary.500',
