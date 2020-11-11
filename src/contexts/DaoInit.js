@@ -32,7 +32,7 @@ const DaoInit = () => {
     if (!daoMetadata || daoMetadata.address !== validParam) {
       initDao(validParam);
     }
-    // eslint-disable-next-line
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [location]);
 
   useEffect(() => {
@@ -44,7 +44,7 @@ const DaoInit = () => {
       initWeb3DaoService();
     }
 
-    // eslint-disable-next-line
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [user, daoMetadata, contracts, web3Connect]);
 
   useEffect(() => {
@@ -63,7 +63,7 @@ const DaoInit = () => {
     if (!walletExists) {
       initMemberWallet();
     }
-    // eslint-disable-next-line
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [daoMetadata, user, contracts]);
 
   const initDao = async (daoParam) => {
@@ -87,7 +87,7 @@ const DaoInit = () => {
       return boosts;
     }, {});
 
-    //this will need to parse custom theme data
+    // this will need to parse custom theme data
     const uiMeta = defaultTheme.daoMeta;
 
     const version = daoRes && daoRes.data.version ? daoRes.data.version : '1';

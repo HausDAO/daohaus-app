@@ -11,7 +11,7 @@ const PriceInit = () => {
     if (daoGraphData) {
       initPrices();
     }
-    // eslint-disable-next-line
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [daoGraphData]);
 
   const initPrices = async () => {

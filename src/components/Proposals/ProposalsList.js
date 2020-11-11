@@ -27,7 +27,7 @@ const ProposalsList = () => {
       filterAndSortProposals();
       setIsLoaded(true);
     }
-    // eslint-disable-next-line
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [proposals, sort, filter]);
 
   const filterAndSortProposals = () => {

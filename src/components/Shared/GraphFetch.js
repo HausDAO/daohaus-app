@@ -19,7 +19,7 @@ const GraphFetch = ({ query, setRecords, variables, entity }) => {
       refetch();
       updateRefetchQuery(null);
     }
-    // eslint-disable-next-line
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [refetchQuery]);
 
   useEffect(() => {
@@ -27,7 +27,7 @@ const GraphFetch = ({ query, setRecords, variables, entity }) => {
       // console.log('setting single fetch entity', entity);
       setRecords(data[entity]);
     }
-    // eslint-disable-next-line
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [data]);
 
   if (loading) return <></>;

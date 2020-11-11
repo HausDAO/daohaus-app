@@ -73,7 +73,7 @@ const MembersList = () => {
       >
         <Flex mb={5}>
           <Box
-            w='45%'
+            w='43%'
             textTransform='uppercase'
             fontFamily='heading'
             fontSize='sm'
