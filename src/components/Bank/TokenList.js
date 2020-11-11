@@ -41,7 +41,7 @@ const TokenList = () => {
           Asset
         </Box>
         <Box
-          w='45%'
+          w='55%'
           textTransform='uppercase'
           fontFamily='heading'
           fontSize='sm'
@@ -50,7 +50,7 @@ const TokenList = () => {
           Balance
         </Box>
         <Box
-          w='20%'
+          w='15%'
           textTransform='uppercase'
           fontFamily='heading'
           fontSize='sm'
@@ -59,7 +59,7 @@ const TokenList = () => {
           Price
         </Box>
         <Box
-          w='20%'
+          w='15%'
           textTransform='uppercase'
           fontFamily='heading'
           fontSize='sm'

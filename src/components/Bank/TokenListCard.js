@@ -16,7 +16,7 @@ const TokenListCard = ({ token, isLoaded }) => {
           <Box fontFamily='mono'>{token?.symbol}</Box>
         </Skeleton>
       </Box>
-      <Box w='45%'>
+      <Box w='55%'>
         <Skeleton isLoaded={isLoaded}>
           <Box fontFamily='mono'>
             {token?.contractTokenBalance
@@ -25,12 +25,12 @@ const TokenListCard = ({ token, isLoaded }) => {
           </Box>
         </Skeleton>
       </Box>
-      <Box w='20%'>
+      <Box w='15%'>
         <Skeleton isLoaded={isLoaded}>
           <Box fontFamily='mono'>{token?.price ? token.price : '--'}</Box>
         </Skeleton>
       </Box>
-      <Box w='20%'>
+      <Box w='15%'>
         <Skeleton isLoaded={isLoaded}>
           <Box fontFamily='mono'>{token?.value ? token?.value : '--'}</Box>
         </Skeleton>
