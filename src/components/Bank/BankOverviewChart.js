@@ -54,10 +54,11 @@ const BankOverviewChart = () => {
       <Box
         minH='260px'
         w='100%'
-        background='rgba(0, 0, 0, 0.66)'
         p={4}
-        border='1px solid rgba(255, 255, 255, 0.2)'
-        borderRadius='4px'
+        bg='blackAlpha.600'
+        borderWidth='1px'
+        borderColor='whiteAlpha.200'
+        rounded='lg'
       >
         <FlexibleWidthXYPlot height={260}>
           <VerticalGridLines color='white' />
@@ -67,7 +68,12 @@ const BankOverviewChart = () => {
             style={{
               line: { stroke: 'white' },
               ticks: { stroke: 'white' },
-              text: { stroke: 'none', fill: 'white', fontWeight: 500 },
+              text: {
+                stroke: 'none',
+                fill: 'white',
+                fontSize: '9px',
+                fontFamily: theme.fonts.mono,
+              },
               title: { fill: 'white' },
             }}
           />
@@ -76,7 +82,12 @@ const BankOverviewChart = () => {
             style={{
               line: { stroke: 'white' },
               ticks: { stroke: 'white' },
-              text: { stroke: 'none', fill: 'white', fontWeight: 500 },
+              text: {
+                stroke: 'none',
+                fill: 'white',
+                fontSize: '9px',
+                fontFamily: theme.fonts.mono,
+              },
               title: { fill: 'white' },
             }}
           />

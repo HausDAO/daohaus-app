@@ -12,19 +12,17 @@ const MemberListCard = ({ member, isLoaded }) => {
       </Flex>
       <Box w='15%'>
         <Skeleton isLoaded={isLoaded}>
-          <Box fontFamily='heading'>
-            {member?.shares ? member.shares : '--'}
-          </Box>
+          <Box fontFamily='mono'>{member?.shares ? member.shares : '--'}</Box>
         </Skeleton>
       </Box>
       <Box w='15%'>
         <Skeleton isLoaded={isLoaded}>
-          <Box fontFamily='heading'>{member?.loot ? member.loot : '--'}</Box>
+          <Box fontFamily='mono'>{member?.loot ? member.loot : '--'}</Box>
         </Skeleton>
       </Box>
       <Box>
         <Skeleton isLoaded={isLoaded}>
-          <Box fontFamily='heading'>
+          <Box fontFamily='mono'>
             {member?.createdAt
               ? format(new Date(+member.createdAt * 1000), 'MMM. d, yyyy')
               : '--'}

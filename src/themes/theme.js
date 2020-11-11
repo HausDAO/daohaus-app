@@ -12,6 +12,7 @@ export const defaultTheme = {
   bgOverlayOpacity: '0.75',
   primaryFont: 'Inknut Antiqua',
   bodyFont: 'Rubik',
+  monoFont: 'Space Mono',
   brandImg: BrandImg,
   bgImg: BgImg,
   daoMeta: {
@@ -76,6 +77,7 @@ export const setTheme = (daoTheme) => {
     fonts: {
       heading: themeOverrides.primaryFont,
       body: themeOverrides.bodyFont,
+      mono: themeOverrides.monoFont,
       hub: 'Mirza',
       accessory: 'Roboto Mono',
       space: 'Space Mono',
@@ -130,8 +132,64 @@ export const setTheme = (daoTheme) => {
           }),
         },
       },
+      Menu: {
+        parts: ['menu', 'button', 'item', 'list'],
+        baseStyle: {
+          menu: {
+            boxShadow: 'lg',
+            rounded: 'lg',
+            flexDirection: 'column',
+            py: '2',
+            color: 'white',
+            borderColor: 'whiteAlpha.50',
+          },
+          list: {
+            bg: 'blackAlpha.800',
+          },
+          item: {
+            fontWeight: 'medium',
+            lineHeight: 'tall',
+            color: 'white',
+            _hover: { bg: 'secondary.500' },
+            _active: { bg: 'secondary.500' },
+            _focus: { bg: 'secondary.500' },
+          },
+        },
+        sizes: {},
+        defaultProps: {
+          size: 'md',
+        },
+      },
+      Input: {
+        parts: ['field', 'addon'],
+        baseStyle: {
+          field: {
+            borderColor: 'whiteAlpha.50',
+            color: 'whiteAlpha.900',
+            focusBorderColor: 'secondary.500',
+          },
+          addon: {
+            color: 'black',
+            bg: 'transparent',
+            focusBorderColor: 'secondary.500',
+          },
+        },
+        variants: {},
+        sizes: {},
+        defaultProps: {
+          size: 'md',
+          focusBorderColor: 'secondary.500',
+        },
+      },
+      Textarea: {
+        baseStyle: {
+          color: 'whiteAlpha.900',
+        },
+        defaultProps: {
+          focusBorderColor: 'secondary.500',
+        },
+      },
       Link: {
-        // 1. We can update the base styles
         baseStyle: {
           _hover: { textDecoration: 'none', color: 'secondary.500' },
         },

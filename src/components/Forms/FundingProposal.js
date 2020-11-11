@@ -151,8 +151,6 @@ const FundingProposalForm = () => {
                   message: 'Title is required',
                 },
               })}
-              color='white'
-              focusBorderColor='secondary.500'
             />
             <Textarea
               name='description'
@@ -166,16 +164,12 @@ const FundingProposalForm = () => {
                   message: 'Description is required',
                 },
               })}
-              color='white'
-              focusBorderColor='secondary.500'
             />
             <InputGroup>
               <InputLeftAddon>https://</InputLeftAddon>
               <Input
                 name='link'
                 placeholder='daolink.club'
-                color='white'
-                focusBorderColor='secondary.500'
                 ref={register({
                   required: {
                     value: true,
@@ -222,8 +216,6 @@ const FundingProposalForm = () => {
                     message: 'Requested shares must be a number',
                   },
                 })}
-                color='white'
-                focusBorderColor='secondary.500'
               />
             </>
           )}
@@ -249,8 +241,6 @@ const FundingProposalForm = () => {
                     message: 'Loot must be a number',
                   },
                 })}
-                color='white'
-                focusBorderColor='secondary.500'
               />
             </>
           )}
@@ -262,10 +252,11 @@ const FundingProposalForm = () => {
             />
           )}
           {(!showShares || !showLoot || !showTribute) && (
-            <Menu color='white' textTransform='uppercase'>
+            <Menu textTransform='uppercase'>
               <MenuButton
                 as={Button}
-                rightIcon={<Icon as={RiAddFill} color='primary.500' />}
+                variant='outline'
+                rightIcon={<Icon as={RiAddFill} />}
               >
                 Additional Options
               </MenuButton>
@@ -292,8 +283,8 @@ const FundingProposalForm = () => {
       </FormControl>
       <Flex justify='flex-end' align='center' h='60px'>
         {currentError && (
-          <Box color='secondary.300' fontSize='m' mr={5}>
-            <Icon as={RiErrorWarningLine} color='secondary.300' mr={2} />
+          <Box color='red.500' fontSize='m' mr={5}>
+            <Icon as={RiErrorWarningLine} color='red.500' mr={2} />
             {currentError.message}
           </Box>
         )}

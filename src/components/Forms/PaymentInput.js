@@ -91,6 +91,16 @@ const PaymentInput = ({ register, setValue, getValues, errors }) => {
         Payment Requested
       </FormLabel>
       <InputGroup>
+        <Button
+          onClick={() => setMax()}
+          size='xs'
+          position='absolute'
+          right='0'
+          top='-30px'
+          variant='outline'
+        >
+          Max: {balance && balance.toFixed(4)}
+        </Button>
         <Input
           name='paymentRequested'
           placeholder='0'
@@ -121,9 +131,7 @@ const PaymentInput = ({ register, setValue, getValues, errors }) => {
           </Select>
         </InputRightAddon>
       </InputGroup>
-      <Button onClick={() => setMax()} color='black'>
-        Max: {balance && balance.toFixed(4)}
-      </Button>
+
       <FormErrorMessage>
         {errors.paymentToken && errors.paymentToken.message}
       </FormErrorMessage>

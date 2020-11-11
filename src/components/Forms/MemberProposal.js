@@ -258,10 +258,7 @@ const MemberProposalForm = () => {
           )}
           {(!showApplicant || !showLoot || !showPaymentRequest) && (
             <Menu color='white' textTransform='uppercase'>
-              <MenuButton
-                as={Button}
-                rightIcon={<Icon as={RiAddFill} color='primary.500' />}
-              >
+              <MenuButton as={Button} rightIcon={<Icon as={RiAddFill} />}>
                 Additional Options
               </MenuButton>
               <MenuList>
