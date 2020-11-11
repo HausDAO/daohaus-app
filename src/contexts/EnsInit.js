@@ -48,6 +48,8 @@ const EnsInit = () => {
 
   useEffect(() => {
     initEns();
+
+    // eslint-disable-next-line
   }, [web3Connect]);
 
   const initEns = async () => {

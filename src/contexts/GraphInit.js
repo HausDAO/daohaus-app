@@ -35,35 +35,35 @@ const GraphInit = () => {
   useEffect(() => {
     const validParam = validDaoParams(location);
     setDaoFetch(validParam && address);
-    // eslint-disable-next-line
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [address, location]);
 
   useEffect(() => {
     if (localDao) {
       updateDaoGraphData(localDao);
     }
-    // eslint-disable-next-line
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [localDao]);
 
   useEffect(() => {
     if (localProposals) {
       updateProposals(localProposals);
     }
-    // eslint-disable-next-line
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [localProposals]);
 
   useEffect(() => {
     if (localMembers) {
       updateMembers(localMembers);
     }
-    // eslint-disable-next-line
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [localMembers]);
 
   useEffect(() => {
     if (localUserDaos) {
       updateUserDaos(localUserDaos.map((membership) => membership.moloch));
     }
-    // eslint-disable-next-line
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [localUserDaos]);
 
   return (

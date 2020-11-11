@@ -26,7 +26,7 @@ const ProposalFilter = ({ filter, setFilter, listLength }) => {
     }
     setFilterOptions(options);
     setFilter(options[0]);
-    // eslint-disable-next-line
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [memberWallet]);
 
   const buildFilterName = () => {

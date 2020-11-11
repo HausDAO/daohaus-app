@@ -1,12 +1,13 @@
 import React from 'react';
 import {
-  XYPlot,
+  FlexibleXYPlot,
   XAxis,
   YAxis,
   VerticalGridLines,
   HorizontalGridLines,
   AreaSeries,
 } from 'react-vis';
+import { Box } from '@chakra-ui/core';
 import { useTheme } from '../../contexts/CustomThemeContext';
 
 const MemberSnapshotChart = () => {
@@ -22,33 +23,35 @@ const MemberSnapshotChart = () => {
   ];
 
   return (
-    <XYPlot width={250} height={225}>
-      <VerticalGridLines color='white' />
-      <HorizontalGridLines color='white' />
-      <XAxis
-        title='Time'
-        style={{
-          line: { stroke: 'white' },
-          ticks: { stroke: 'white' },
-          text: { stroke: 'none', fill: 'white', fontWeight: 500 },
-          title: { fill: 'white' },
-        }}
-      />
-      <YAxis
-        title='Members'
-        style={{
-          line: { stroke: 'white' },
-          ticks: { stroke: 'white' },
-          text: { stroke: 'none', fill: 'white', fontWeight: 500 },
-          title: { fill: 'white' },
-        }}
-      />
-      <AreaSeries
-        curve='curveNatural'
-        data={data}
-        color={theme.colors.primary[50]}
-      />
-    </XYPlot>
+    <Box w='95%' minH='300px'>
+      <FlexibleXYPlot>
+        <VerticalGridLines color='white' />
+        <HorizontalGridLines color='white' />
+        <XAxis
+          title='Time'
+          style={{
+            line: { stroke: 'white' },
+            ticks: { stroke: 'white' },
+            text: { stroke: 'none', fill: 'white', fontWeight: 500 },
+            title: { fill: 'white' },
+          }}
+        />
+        <YAxis
+          title='Members'
+          style={{
+            line: { stroke: 'white' },
+            ticks: { stroke: 'white' },
+            text: { stroke: 'none', fill: 'white', fontWeight: 500 },
+            title: { fill: 'white' },
+          }}
+        />
+        <AreaSeries
+          curve='curveNatural'
+          data={data}
+          color={theme.colors.primary[50]}
+        />
+      </FlexibleXYPlot>
+    </Box>
   );
 };
 

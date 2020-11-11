@@ -51,14 +51,14 @@ const TxProcessorInit = () => {
         isClosable: true,
       });
     }
-    // eslint-disable-next-line
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [user, txProcessor.forceUpdate]);
 
   useEffect(() => {
     if (user && web3Connect.web3 && !txProcessor.web3) {
       initTxProcessor();
     }
-    // eslint-disable-next-line
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [user, web3Connect]);
 
   const initTxProcessor = async () => {

@@ -42,7 +42,7 @@ const ProposalVote = ({ proposal }) => {
 
   const cancelProposal = async (id) => {
     try {
-      const tx = await dao.daoService.moloch.cancelProposal(id);
+      await dao.daoService.moloch.cancelProposal(id);
     } catch (err) {
       console.log('user rejected or transaction failed', err);
     }
@@ -51,7 +51,7 @@ const ProposalVote = ({ proposal }) => {
   const unlock = async (token) => {
     console.log('unlock ', token);
     try {
-      const tx = await dao.daoService.token.unlock(token, txCallBack);
+      await dao.daoService.token.unlock(token, txCallBack);
     } catch (err) {
       console.log(err);
     }
@@ -60,7 +60,7 @@ const ProposalVote = ({ proposal }) => {
   const sponsorProposal = async (id) => {
     console.log('sponsor ', id);
     try {
-      const tx = await dao.daoService.moloch.sponsorProposal(id, txCallBack);
+      await dao.daoService.moloch.sponsorProposal(id, txCallBack);
     } catch (err) {
       console.log('user rejected or transaction failed', err);
     }
@@ -68,7 +68,7 @@ const ProposalVote = ({ proposal }) => {
 
   const submitVote = async (proposal, vote) => {
     try {
-      const tx = await dao.daoService.moloch.submitVote(
+      await dao.daoService.moloch.submitVote(
         proposal.proposalIndex,
         vote,
         ethToWei(wallet.eth),
@@ -144,17 +144,6 @@ const ProposalVote = ({ proposal }) => {
             </Flex>
           </Flex>
         )}
-        {proposal?.status === 'Unsponsored' &&
-          !proposal?.proposalIndex &&
-          proposal?.proposer === user.username && (
-            <Flex justify='center'>
-              <Flex direction='column'>
-                <Button onClick={() => sponsorProposal(proposal.proposalId)}>
-                  Sponsor
-                </Button>
-              </Flex>
-            </Flex>
-          )}
         {(proposal?.status !== 'Unsponsored' || proposal?.proposalIndex) &&
           proposal?.status !== 'Cancelled' && (
             <>
@@ -195,7 +184,7 @@ const ProposalVote = ({ proposal }) => {
                           w='25px'
                           h='25px'
                           transform='rotateY(180deg)'
-                          _hover={{ cursor: 'ponter' }}
+                          _hover={{ cursor: 'pointer' }}
                           onClick={() => submitVote(proposal, 2)}
                         />
                       </Flex>

@@ -1,6 +1,6 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { Box, Flex, Text, Badge, Skeleton } from '@chakra-ui/core';
+import { Box, Flex, Badge, Skeleton } from '@chakra-ui/core';
 import { utils } from 'web3';
 import { format } from 'date-fns';
 
@@ -172,11 +172,17 @@ const ProposalCard = ({ proposal, isLoaded }) => {
           </Box>
         </Flex>
         <Skeleton isLoaded={isLoaded}>
-          <Box fontWeight={700} fontSize='xs' fontFamily='heading' mt={2}>
+          <Box
+            fontWeight={500}
+            fontSize='xs'
+            fontFamily={theme.fonts.body}
+            mt={2}
+            textTransform='uppercase'
+          >
             {proposal.createdAt
               ? `Created on: ${format(
                   new Date(proposal.createdAt * 1000),
-                  'MMMM d y',
+                  'MMMM d, y',
                 )}`
               : '--'}
           </Box>
