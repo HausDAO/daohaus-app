@@ -117,7 +117,11 @@ const SideNav = () => {
         )}
       </>
 
-      <Button variant='outline' onClick={() => updateRefetchQuery('proposals')}>
+      <Button
+        variant='outline'
+        onClick={() => updateRefetchQuery('proposals')}
+        mt={6}
+      >
         Refetch
       </Button>
     </Box>

@@ -96,20 +96,20 @@ export const setTheme = (daoTheme) => {
     },
     components: {
       Button: {
-        // 1. We can update the base styles
+        // 1. Update the base styles
         baseStyle: {
           fontWeight: 'medium', // Normally, it's "semibold"
           _hover: { scale: '1.05' },
         },
-        // 2. We can add a new button size or extend existing
+        // 2. Add a new button size or extend existing
         sizes: {},
-        // 3. We can add a new visual variant
+        // 3. Add a new visual variant
         variants: {
           primary: {
             bg: 'primary.400',
             _hover: { bg: 'primary.500' },
           },
-          // 4. We can override existing variants
+          // 4. Override existing variants
           solid: (props) => ({
             bg: 'secondary.400',
             _hover: { bg: 'secondary.500' },
