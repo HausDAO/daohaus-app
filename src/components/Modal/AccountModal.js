@@ -27,7 +27,6 @@ import MemberInfoCard from '../Dao/MemberInfoCard';
 import HubProfileCard from '../Hub/HubProfileCard';
 
 const AccountModal = ({ isOpen, setShowModal }) => {
-  const [theme] = useTheme();
   const [user] = useUser();
   const [dao] = useDao();
   const [txProcessor] = useTxProcessor();
@@ -52,12 +51,16 @@ const AccountModal = ({ isOpen, setShowModal }) => {
               {tx.open ? (
                 <Icon as={Spinner} name='check' color='white' />
               ) : (
-                <Icon as={RiCheckboxCircleLine} name='check' color='white' />
+                <Icon
+                  as={RiCheckboxCircleLine}
+                  name='check'
+                  color='green.500'
+                />
               )}
               <Link
                 href={'https://etherscan.io/tx/' + tx.id}
                 target='_blank'
-                ml={6}
+                ml={2}
               >
                 <Icon as={RiExternalLinkLine} name='transaction link' />
               </Link>
@@ -77,7 +80,6 @@ const AccountModal = ({ isOpen, setShowModal }) => {
         borderWidth='1px'
         borderColor='whiteAlpha.200'
         py={6}
-        color='white'
       >
         <ModalCloseButton />
         <ModalBody
@@ -91,18 +93,17 @@ const AccountModal = ({ isOpen, setShowModal }) => {
           ) : (
             <MemberInfoCard user={user} />
           )}
-          <Box py={6}>
-            <Flex direction='row' justify='space-evenly' align='center'>
-              <Flex direction='row' justify='flex-start' align='center'>
+          {dao.address && (
+            <Box pt={6}>
+              <Flex direction='row' justify='space-evenly' align='center'>
                 <Link to='/profile'>Profile</Link>
+                <Link to='/'>Hub</Link>
               </Flex>
-
-              <Link to='/'>Hub</Link>
-            </Flex>
-          </Box>
+            </Box>
+          )}
           <Box
             mx={-12}
-            mb={6}
+            my={6}
             borderTopWidth='1px'
             borderTopColor='whiteAlpha.200'
           />
