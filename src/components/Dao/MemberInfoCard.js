@@ -25,7 +25,18 @@ const MemberInfoCard = ({ user }) => {
           View my profile
         </Box>
       </Flex>
-      <MemberInfoCardGuts user={user} />
+      <Box
+        rounded='lg'
+        bg='blackAlpha.600'
+        borderWidth='1px'
+        borderColor='whiteAlpha.200'
+        p={6}
+        m={6}
+        mt={2}
+        w='97%'
+      >
+        <MemberInfoCardGuts user={user} />
+      </Box>
     </>
   );
 };
