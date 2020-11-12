@@ -91,7 +91,16 @@ const TxProcessorInit = () => {
         }}
       >
         <ModalOverlay />
-        <ModalContent>
+        <ModalContent
+          rounded='lg'
+          bg='background.600'
+          borderWidth='1px'
+          borderColor='white'
+          fontFamily='heading'
+          p={6}
+          m={6}
+          mt={2}
+        >
           <ModalHeader>Transaction Submitted</ModalHeader>
           <ModalCloseButton />
           <ModalBody>
@@ -100,6 +109,8 @@ const TxProcessorInit = () => {
                 type='tx'
                 hash={latestTx.tx}
                 linkText={`${truncateAddr(latestTx.tx)} view`}
+                fontFamily='body'
+                mb={4}
               />
             )}
             {!loading && (
