@@ -187,11 +187,26 @@ export const getProfileActivites = (daoData, memberAddress) => {
   return allActivites;
 };
 
+export const getProposalHistories = (proposal) => {
+  const votes = proposal.votes.map((vote) => voteHistoryData(vote));
+  const proposalStates = buildProposalHistory(proposal);
+
+  console.log('votes', votes);
+
+  const allActivites = proposalStates
+    .concat(votes)
+    .sort((a, b) => +b.activityData.createdAt - +a.activityData.createdAt);
+
+  return allActivites;
+};
+
 const voteRageActivityData = (record) => {
   let title;
   let type;
   if (record.__typename === 'Vote') {
-    title = `voted ${record.uintVote ? 'yes' : 'no'} on ${record.proposalType}`;
+    title = `voted ${+record.uintVote === 1 ? 'yes' : 'no'} on ${
+      record.proposalType
+    }`;
     type = 'vote';
   } else {
     title = `rage quit ${record.shares} shares and ${record.loot} loot`;
@@ -232,4 +247,65 @@ const proposalActivityData = (proposal) => {
     title,
     type: 'proposal',
   };
+};
+
+const voteHistoryData = (record) => {
+  return {
+    ...record,
+    activityData: {
+      createdAt: record.createdAt,
+      memberAddress: record.memberAddress,
+    },
+  };
+};
+
+const buildProposalHistory = (proposal) => {
+  const histories = [
+    {
+      ...proposal,
+      historyStep: 'Submitted',
+      activityData: {
+        createdAt: proposal.createdAt,
+        memberAddress: proposal.memberAddress,
+      },
+    },
+  ];
+
+  if (proposal.cancelled || proposal.aborted) {
+    histories.push({
+      ...proposal,
+      historyStep: 'Cancelled',
+      activityData: {
+        //update with cancelledAt
+        createdAt: proposal.createdAt,
+        memberAddress: proposal.memberAddress,
+      },
+    });
+  }
+
+  if (proposal.sponsored) {
+    histories.push({
+      ...proposal,
+      historyStep: 'Sponsored',
+      activityData: {
+        createdAt: proposal.sponsoredAt,
+        // update with sponsoredBy
+        memberAddress: proposal.memberAddress,
+      },
+    });
+  }
+
+  if (proposal.processed) {
+    histories.push({
+      ...proposal,
+      historyStep: 'Processed',
+      activityData: {
+        createdAt: proposal.sponsoredAt,
+        // update with processedBy
+        memberAddress: proposal.memberAddress,
+      },
+    });
+  }
+
+  return histories;
 };

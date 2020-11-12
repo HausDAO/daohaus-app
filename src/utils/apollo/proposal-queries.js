@@ -11,6 +11,7 @@ const baseListFields = `
   gracePeriodEnds
   guildkick
   lootRequested
+  memberAddress
   newMember
   noVotes
   paymentRequested
@@ -22,6 +23,7 @@ const baseListFields = `
   proposalIndex
   sharesRequested
   sponsored
+  sponsoredAt
   startingPeriod
   trade
   tributeOffered
@@ -42,6 +44,7 @@ const baseListFields = `
     id
     memberAddress
     uintVote
+    createdAt
   }
   status @client
   title @client

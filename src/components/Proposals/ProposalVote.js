@@ -23,10 +23,8 @@ const ProposalVote = ({ proposal }) => {
       isAfter(Date.now(), new Date(+proposal?.votingPeriodStarts * 1000))
     );
   };
-  console.log(proposal);
 
   const txCallBack = (txHash, details) => {
-    console.log('txCallBack', txProcessor);
     if (txProcessor && txHash) {
       txProcessor.setTx(txHash, user.username, details, true, false);
       txProcessor.forceUpdate = true;
