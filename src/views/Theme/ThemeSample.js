@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import {
   Box,
+  ButtonGroup,
   Flex,
   Input,
   InputGroup,
@@ -68,8 +69,11 @@ const ThemeSample = () => {
 
   return (
     <>
+      <Flex>
+        <Box variant='standard'>Content</Box>
+      </Flex>
       <Flex direction='column'>
-        <Flex direction='row' w='50%'>
+        <Flex direction='row' w='100%' my={6} align='center'>
           <Text>Inputs</Text>
           <InputGroup>
             <InputLeftAddon bg='primary.500'>primary.500</InputLeftAddon>
@@ -96,15 +100,17 @@ const ThemeSample = () => {
             />
           </InputGroup>
         </Flex>
-        <Flex direction='row' w='50%'>
+        <Flex direction='row' w='100%' my={6} align='center'>
           <Text>Buttons</Text>
-          <Button onClick={handleSet}>Change (Base)</Button>
-          <Button onClick={handleReset} mb={3} variant='outline'>
-            Reset (Outline)
-          </Button>
-          <Button onClick={handleReset} mb={3} variant='primary'>
-            Reset (Primary)
-          </Button>
+          <ButtonGroup>
+            <Button onClick={handleSet}>Change (Base)</Button>
+            <Button onClick={handleReset} mb={3} variant='outline'>
+              Reset (Outline)
+            </Button>
+            <Button onClick={handleReset} mb={3} variant='primary'>
+              Reset (Primary)
+            </Button>
+          </ButtonGroup>
         </Flex>
       </Flex>
       <Flex>

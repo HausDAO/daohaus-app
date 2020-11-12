@@ -18,7 +18,12 @@ const PriceInit = () => {
     const tokens = daoGraphData.tokenBalances.map(
       (token) => token.token.tokenAddress,
     );
-    const res = await getUsd(tokens.join(','));
+    let res = { data: {} };
+    try {
+      res = await getUsd(tokens.join(','));
+    } catch (err) {
+      console.log('price fetch err', err);
+    }
 
     updatePrices(res.data);
   };

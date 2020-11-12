@@ -42,3 +42,14 @@ code {
   src: local('Space Mono'),
     url('./assets/fonts/Space_Mono/SpaceMono-Regular.ttf') format('truetype');
 }
+
+ul.rc-pagination {
+  list-style-type: none;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+}
+
+.rc-pagination-item-active {
+  border: 1px solid white;
+}

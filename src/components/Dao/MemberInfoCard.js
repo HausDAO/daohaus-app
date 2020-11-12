@@ -1,15 +1,14 @@
 import React, { useEffect, useState } from 'react';
-import { Flex, Box, Skeleton } from '@chakra-ui/core';
-import { format } from 'date-fns';
+import { Flex, Box } from '@chakra-ui/core';
 import { useMembers } from '../../contexts/PokemolContext';
 import { useTheme } from '../../contexts/CustomThemeContext';
 
-import UserAvatar from '../Shared/UserAvatar';
 import { memberProfile } from '../../utils/helpers';
+import MemberInfoCardGuts from './MemberInfoCardGuts';
 
 const MemberInfoCard = ({ user }) => {
   const [members] = useMembers();
-  const [member, setMember] = useState(null);
+  const [, setMember] = useState(null);
   const [theme] = useTheme();
 
   useEffect(() => {
@@ -36,61 +35,7 @@ const MemberInfoCard = ({ user }) => {
         mt={2}
         w='97%'
       >
-        <Flex justify='space-between'>
-          <UserAvatar user={user.profile} />
-        </Flex>
-        <Flex w='75%' justify='space-between' mt={6}>
-          <Box>
-            <Box
-              textTransform='uppercase'
-              fontSize='sm'
-              fontFamily='heading'
-              fontWeight={700}
-              mb={2}
-            >
-              Shares
-            </Box>
-            <Skeleton isLoaded={member?.shares}>
-              <Box fontSize='lg' fontFamily='space' fontWeight={700}>
-                {member?.shares ? member.shares : '--'}
-              </Box>
-            </Skeleton>
-          </Box>
-          <Box>
-            <Box
-              textTransform='uppercase'
-              fontSize='sm'
-              fontFamily='heading'
-              fontWeight={700}
-              mb={2}
-            >
-              Loot
-            </Box>
-            <Skeleton isLoaded={member?.loot}>
-              <Box fontSize='lg' fontFamily='space' fontWeight={700}>
-                {member?.loot ? member.loot : '-'}
-              </Box>
-            </Skeleton>
-          </Box>
-          <Box>
-            <Box
-              textTransform='uppercase'
-              fontSize='sm'
-              fontFamily='heading'
-              fontWeight={700}
-              mb={2}
-            >
-              Anniversary
-            </Box>
-            <Skeleton isLoaded={member?.createdAt}>
-              <Box fontSize='lg' fontFamily='space' fontWeight={700}>
-                {member?.createdAt
-                  ? format(new Date(member.createdAt * 1000), 'MMMM d')
-                  : '--'}
-              </Box>
-            </Skeleton>
-          </Box>
-        </Flex>
+        <MemberInfoCardGuts user={user} />
       </Box>
     </>
   );

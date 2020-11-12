@@ -14,7 +14,7 @@ const Hub = () => {
   const [memberDaos, setMemberDaos] = useState();
 
   return (
-    <Box>
+    <Box p={6}>
       {user ? (
         <>
           <Grid gap={6} templateColumns='repeat(2, 1fr)'>
@@ -26,7 +26,7 @@ const Hub = () => {
                 borderWidth='1px'
                 borderColor='whiteAlpha.200'
                 p={6}
-                m={6}
+                mt={6}
                 w='100%'
               >
                 {memberDaos ? (
@@ -40,7 +40,6 @@ const Hub = () => {
             <Box>
               <Box
                 fontSize='md'
-                ml={6}
                 fontFamily='heading'
                 textTransform='uppercase'
                 fontWeight={700}
