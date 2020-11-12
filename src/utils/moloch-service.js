@@ -250,7 +250,7 @@ export class Web3MolochService extends MolochService {
 export class Web3MolochServiceV2 extends Web3MolochService {
   async rageQuit(amountShares = 0, amountLoot = 0, callback) {
     const newTx = this.daoContract.methods.ragequit(amountShares, amountLoot);
-    const txReceipt = await this.sendTx('rageQuit', newTx, callback);
+    const txReceipt = await this.sendTx('ragequit', newTx, callback);
     return txReceipt.transactionHash;
   }
 
@@ -314,7 +314,7 @@ export class Web3MolochServiceV2 extends Web3MolochService {
       details,
     );
 
-    const txReceipt = await this.sendTx('newMember', newTx, callback);
+    const txReceipt = await this.sendTx('submitProposal', newTx, callback);
 
     return txReceipt.transactionHash;
   }
