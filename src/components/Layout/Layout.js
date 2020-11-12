@@ -19,6 +19,7 @@ import {
   RiTelegramFill,
   RiMediumFill,
   RiGlobeLine,
+  RiLinksLine,
 } from 'react-icons/ri';
 
 const Layout = ({ children }) => {
@@ -113,30 +114,30 @@ const Layout = ({ children }) => {
           <SideNav />
         </MotionBox>
 
-        <Flex direction='column' align='center'>
+        <Flex direction='column' align='start' justify='start' w='100%'>
           {theme.daoMeta.website !== '' && (
-            <Link href={theme.daoMeta.website} isExternal fontSize='3xl'>
+            <Link href={theme.daoMeta.website} isExternal fontSize='xl'>
               <Icon as={RiGlobeLine} />
             </Link>
           )}
           {theme.daoMeta.discord !== '' && (
-            <Link href={theme.daoMeta.discord} isExternal fontSize='3xl'>
+            <Link href={theme.daoMeta.discord} isExternal fontSize='xl'>
               <Icon as={RiDiscordFill} />
             </Link>
           )}
           {theme.daoMeta.telegram !== '' && (
-            <Link href={theme.daoMeta.telegram} isExternal fontSize='3xl'>
+            <Link href={theme.daoMeta.telegram} isExternal fontSize='xl'>
               <Icon as={RiTelegramFill} />
             </Link>
           )}
           {theme.daoMeta.medium !== '' && (
-            <Link href={theme.daoMeta.medium} isExternal fontSize='3xl'>
+            <Link href={theme.daoMeta.medium} isExternal fontSize='xl'>
               <Icon as={RiMediumFill} />
             </Link>
           )}
           {theme.daoMeta.other !== '' && (
-            <Link href={theme.daoMeta.other} isExternal fontSize='3xl'>
-              <Icon as={RiMediumFill} />
+            <Link href={theme.daoMeta.other} isExternal fontSize='xl'>
+              <Icon as={RiLinksLine} />
             </Link>
           )}
         </Flex>
