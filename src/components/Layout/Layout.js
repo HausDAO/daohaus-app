@@ -1,6 +1,7 @@
 import React from 'react';
 import {
   Flex,
+  Icon,
   Image,
   useDisclosure,
   Link,
@@ -12,7 +13,13 @@ import { motion } from 'framer-motion';
 import Header from '../Shared/Header';
 import SideNav from '../Shared/SideNav';
 import { useTheme } from '../../contexts/CustomThemeContext';
-import { RiArrowLeftSLine } from 'react-icons/ri';
+import {
+  RiArrowLeftSLine,
+  RiDiscordFill,
+  RiTelegramFill,
+  RiMediumFill,
+  RiGlobeLine,
+} from 'react-icons/ri';
 
 const Layout = ({ children }) => {
   const { isOpen, onToggle } = useDisclosure();
@@ -107,16 +114,31 @@ const Layout = ({ children }) => {
         </MotionBox>
 
         <Flex direction='column' align='center'>
-          {theme.daoMeta.discord !== '' ? (
-            <Link mb={3} href={theme.daoMeta.discord} isExternal>
-              D
+          {theme.daoMeta.website !== '' && (
+            <Link href={theme.daoMeta.website} isExternal fontSize='3xl'>
+              <Icon as={RiGlobeLine} />
             </Link>
-          ) : null}
-          {theme.daoMeta.medium !== '' ? (
-            <Link mb={3} href={theme.daoMeta.medium} isExternal>
-              M
+          )}
+          {theme.daoMeta.discord !== '' && (
+            <Link href={theme.daoMeta.discord} isExternal fontSize='3xl'>
+              <Icon as={RiDiscordFill} />
             </Link>
-          ) : null}
+          )}
+          {theme.daoMeta.telegram !== '' && (
+            <Link href={theme.daoMeta.telegram} isExternal fontSize='3xl'>
+              <Icon as={RiTelegramFill} />
+            </Link>
+          )}
+          {theme.daoMeta.medium !== '' && (
+            <Link href={theme.daoMeta.medium} isExternal fontSize='3xl'>
+              <Icon as={RiMediumFill} />
+            </Link>
+          )}
+          {theme.daoMeta.other !== '' && (
+            <Link href={theme.daoMeta.other} isExternal fontSize='3xl'>
+              <Icon as={RiMediumFill} />
+            </Link>
+          )}
         </Flex>
       </MotionFlex>
 

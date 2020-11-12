@@ -24,7 +24,7 @@ export const defaultTheme = {
     discord: 'https://discord.gg/NPEJysW',
     medium: 'https://medium.com/daohaus-club',
     telegram: '',
-    website: '',
+    website: 'https://daohaus.club',
     other: '',
   },
 };
