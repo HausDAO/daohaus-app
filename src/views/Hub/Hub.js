@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Box, Grid } from '@chakra-ui/core';
+import { Box, Flex } from '@chakra-ui/core';
 
 import { useUser } from '../../contexts/PokemolContext';
 import GraphFetch from '../../components/Shared/GraphFetch';
@@ -17,7 +17,7 @@ const Hub = () => {
     <Box p={6}>
       {user ? (
         <>
-          <Grid gap={6} templateColumns='repeat(2, 1fr)'>
+          <Flex>
             <Box>
               <HubProfileCard />
               <Box
@@ -27,7 +27,7 @@ const Hub = () => {
                 borderColor='whiteAlpha.200'
                 p={6}
                 mt={6}
-                w='100%'
+                maxW='600px'
               >
                 {memberDaos ? (
                   <MemberDaoList
@@ -52,7 +52,7 @@ const Hub = () => {
                 />
               ) : null}
             </Box>
-          </Grid>
+          </Flex>
 
           <GraphFetch
             query={HUB_MEMBERSHIPS}

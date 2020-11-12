@@ -112,9 +112,11 @@ export const setTheme = (daoTheme) => {
           // 4. Override existing variants
           solid: (props) => ({
             bg: 'secondary.400',
-            _hover: { bg: 'secondary.500' },
+            color: 'white',
+            _hover: { bg: 'secondary.500', color: 'white' },
             _focus: {
               bg: 'secondary.500',
+              color: 'white',
               boxShadow: '0 0 0 3px blackAlpha.600',
             },
             _active: { bg: 'inherit' },
@@ -191,7 +193,6 @@ export const setTheme = (daoTheme) => {
       },
       Link: {
         baseStyle: {
-          color: 'secondary.400',
           transition: 'all 0.15s linear',
           _hover: { textDecoration: 'none', color: 'secondary.500' },
         },
@@ -206,7 +207,6 @@ export const setTheme = (daoTheme) => {
           lineHeight: 'tall',
         },
         a: {
-          color: 'secondary.400',
           transition: 'all 0.15s linear',
           _hover: { textDecoration: 'none', color: 'secondary.500' },
         },
