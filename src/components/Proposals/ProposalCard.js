@@ -89,7 +89,7 @@ const ProposalCard = ({ proposal, isLoaded }) => {
           <Flex>
             {memberVote && (
               <Box fontSize='sm'>
-                {+memberVote.uintVote ? (
+                {+memberVote.uintVote === 1 ? (
                   <Flex
                     pl={6}
                     w='40px'

@@ -198,7 +198,7 @@ const ProposalDetail = ({ proposal }) => {
         </Box>
         <Flex>
           {memberVote &&
-            (+memberVote.uintVote ? (
+            (+memberVote.uintVote === 1 ? (
               <Flex
                 pl={6}
                 w='40px'

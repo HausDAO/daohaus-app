@@ -40,6 +40,8 @@ function CustomThemeContextProvider(props) {
 
   useEffect(() => {
     updateSideNavOpen(localStorage.getItem('sideNavOpen') === 'true');
+
+    // eslint-disable-next-line
   }, []);
 
   return (

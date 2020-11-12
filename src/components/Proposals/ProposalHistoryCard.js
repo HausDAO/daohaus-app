@@ -1,23 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { getProfile } from '3box/lib/api';
 
 import { timeToNow, truncateAddr } from '../../utils/helpers';
-import {
-  Avatar,
-  Badge,
-  Box,
-  Flex,
-  Heading,
-  Skeleton,
-  Text,
-} from '@chakra-ui/core';
+import { Box, Heading, Skeleton, Flex, Text, Avatar } from '@chakra-ui/core';
 import makeBlockie from 'ethereum-blockies-base64';
-// import { getProposalCountdownText } from '../../utils/proposal-helper';
+import { getProfile } from '3box';
 
-// TODO: get getProposalCountdownText(activity) outside of dao context?
-
-const DaoActivityCard = ({ activity, isLoaded }) => {
+const ProposalHistoryCard = ({ activity, isLoaded }) => {
   const [profile, setProfile] = useState();
 
   useEffect(() => {
@@ -38,35 +27,19 @@ const DaoActivityCard = ({ activity, isLoaded }) => {
 
   const renderTitle = () => {
     if (activity && activity.activityData) {
-      return `${profile?.name ||
-        truncateAddr(activity.activityData.memberAddress)} ${
-        activity.activityData.title
-      }`;
+      if (activity.__typename === 'Vote') {
+        return `${profile?.name ||
+          truncateAddr(activity.activityData.memberAddress)} voted ${
+          +activity.uintVote === 1 ? 'yes' : 'no'
+        }`;
+      } else {
+        return `${profile?.name ||
+          truncateAddr(activity.activityData.memberAddress)} ${
+          activity.historyStep
+        }`;
+      }
     } else {
       return '--';
-    }
-  };
-
-  const renderBadge = () => {
-    if (activity && activity.activityData) {
-      switch (activity.activityData.type) {
-        case 'proposal': {
-          return <Badge>{activity.activityData.lastActivity}</Badge>;
-        }
-        case 'rage': {
-          return <Badge colorScheme='red'>Rage</Badge>;
-        }
-        case 'vote': {
-          return (
-            <Badge colorScheme={+activity.uintVote === 1 ? 'green' : 'red'}>
-              {+activity.uintVote === 1 ? 'Yes' : 'No'}
-            </Badge>
-          );
-        }
-        default: {
-          return null;
-        }
-      }
     }
   };
 
@@ -94,14 +67,29 @@ const DaoActivityCard = ({ activity, isLoaded }) => {
                 {renderTitle()}
               </Heading>
 
-              <Flex direction='row' justifyContent='space-between'>
-                <Text>
-                  {activity?.activityData?.createdAt
-                    ? timeToNow(activity.activityData.createdAt)
-                    : '--'}
+              <Text>
+                {activity?.activityData?.createdAt
+                  ? timeToNow(activity.activityData.createdAt)
+                  : '--'}
+              </Text>
+
+              {activity.__typename === 'Vote' ? (
+                <Text
+                  color={+activity.uintVote === 1 ? 'green.500' : 'red.500'}
+                  fontSize='xs'
+                >
+                  253 Shares
                 </Text>
-                {renderBadge()}
-              </Flex>
+              ) : null}
+
+              {activity.historyStep === 'Processed' ? (
+                <Text
+                  color={activity.didPass ? 'green.500' : 'red.500'}
+                  fontSize='xs'
+                >
+                  {activity.didPass ? 'Passed' : 'Failed'}
+                </Text>
+              ) : null}
             </Flex>
 
             {profile && profile.image ? (
@@ -126,4 +114,4 @@ const DaoActivityCard = ({ activity, isLoaded }) => {
   );
 };
 
-export default DaoActivityCard;
+export default ProposalHistoryCard;
