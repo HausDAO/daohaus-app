@@ -1,22 +1,22 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
 import { Flex, Skeleton, Box } from '@chakra-ui/core';
 import { format } from 'date-fns';
 
 import UserAvatar from '../Shared/UserAvatar';
-import { useDao } from '../../contexts/PokemolContext';
 
-const MemberListCard = ({ member, isLoaded }) => {
-  const [dao] = useDao();
-
+const MemberListCard = ({ member, isLoaded, handleSelect, selectedMember }) => {
   return (
     <Flex
-      as={Link}
-      to={`/dao/${dao?.address}/profile/${member?.memberAddress}`}
       h='60px'
       align='center'
       pl={3}
+      bg={
+        selectedMember && selectedMember.memberAddress === member.memberAddress
+          ? 'primary.500'
+          : null
+      }
       _hover={{ background: 'primary.500', borderRadius: '4px' }}
+      onClick={() => handleSelect(member)}
     >
       <Flex w='43%' direction='column' justify='space-between'>
         {member?.profile && <UserAvatar user={member.profile} />}

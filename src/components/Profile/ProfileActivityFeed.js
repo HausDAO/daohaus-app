@@ -6,13 +6,10 @@ import GraphFetch from '../Shared/GraphFetch';
 import { DAO_ACTIVITIES } from '../../utils/apollo/dao-queries';
 import { activitiesData } from '../../content/skeleton-data';
 import DaoActivityCard from '../Activities/DaoActivityCard';
-import {
-  getMemberActivites,
-  getMembersActivites,
-} from '../../utils/activities-helpers';
+import { getProfileActivites } from '../../utils/activities-helpers';
 import ActivityPaginator from '../Activities/ActivityPaginator';
 
-const MembersActivityFeed = ({ selectedMember }) => {
+const ProfileActvityFeed = ({ profileAddress }) => {
   const [dao] = useDao();
   const [fetchedData, setFetchedData] = useState();
   const [isLoaded, setIsLoaded] = useState(false);
@@ -21,25 +18,16 @@ const MembersActivityFeed = ({ selectedMember }) => {
 
   useEffect(() => {
     if (fetchedData) {
-      const hydratedActivites = getMembersActivites(fetchedData);
+      const hydratedActivites = getProfileActivites(
+        fetchedData,
+        profileAddress,
+      );
       setAllActivities(hydratedActivites);
       setIsLoaded(true);
     }
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [fetchedData]);
-
-  useEffect(() => {
-    if (selectedMember && fetchedData) {
-      const hydratedActivites = getMemberActivites(
-        fetchedData,
-        selectedMember.memberAddress,
-      );
-      setAllActivities(hydratedActivites);
-    }
-
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [selectedMember, fetchedData]);
 
   return (
     <>
@@ -63,7 +51,7 @@ const MembersActivityFeed = ({ selectedMember }) => {
 
       {isLoaded ? (
         <ActivityPaginator
-          perPage={2}
+          perPage={5}
           setRecords={setActivities}
           allRecords={allActivities}
         />
@@ -82,4 +70,4 @@ const MembersActivityFeed = ({ selectedMember }) => {
   );
 };
 
-export default MembersActivityFeed;
+export default ProfileActvityFeed;
