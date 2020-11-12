@@ -23,6 +23,7 @@ const ProposalVote = ({ proposal }) => {
       isAfter(Date.now(), new Date(+proposal?.votingPeriodStarts * 1000))
     );
   };
+  console.log(proposal);
 
   const txCallBack = (txHash, details) => {
     console.log('txCallBack', txProcessor);
@@ -42,7 +43,7 @@ const ProposalVote = ({ proposal }) => {
 
   const cancelProposal = async (id) => {
     try {
-      await dao.daoService.moloch.cancelProposal(id);
+      await dao.daoService.moloch.cancelProposal(id, txCallBack);
     } catch (err) {
       console.log('user rejected or transaction failed', err);
     }
@@ -71,7 +72,6 @@ const ProposalVote = ({ proposal }) => {
       await dao.daoService.moloch.submitVote(
         proposal.proposalIndex,
         vote,
-        ethToWei(wallet.eth),
         txCallBack,
       );
     } catch (e) {
@@ -119,11 +119,13 @@ const ProposalVote = ({ proposal }) => {
         w='90%'
       >
         {proposal?.status === 'Unsponsored' && !proposal?.proposalIndex && (
-          <Flex justify='center'>
-            <Flex direction='column'>
+          <Flex justify='center' direction='column'>
+            <Flex justify='center' mb={4} fontFamily='heading'>
               Balance: {wallet?.tokenBalance} {daoData?.depositToken?.symbol}
+            </Flex>
+            <Flex justify='space-around'>
               {+wallet?.allowance * 10 ** daoData?.depositToken?.decimals >
-              +daoData?.proposalDeposit ? (
+                +daoData?.proposalDeposit || +daoData?.proposalDeposit === 0 ? (
                 <Button onClick={() => sponsorProposal(proposal.proposalId)}>
                   Sponsor
                 </Button>
@@ -134,10 +136,11 @@ const ProposalVote = ({ proposal }) => {
                   Unlock
                 </Button>
               )}
-            </Flex>
-            <Flex>
-              {proposal?.proposer === user.username && (
-                <Button onClick={() => sponsorProposal(proposal.proposalId)}>
+              {proposal?.proposer === user?.username.toLowerCase() && (
+                <Button
+                  variant='outline'
+                  onClick={() => cancelProposal(proposal.proposalId)}
+                >
                   Cancel
                 </Button>
               )}
@@ -165,7 +168,7 @@ const ProposalVote = ({ proposal }) => {
                           color='green.500'
                           w='25px'
                           h='25px'
-                          _hover={{ cursor: 'ponter' }}
+                          _hover={{ cursor: 'pointer' }}
                           onClick={() => submitVote(proposal, 1)}
                         />
                       </Flex>
@@ -191,7 +194,13 @@ const ProposalVote = ({ proposal }) => {
                     </Flex>
                     <Flex justify='flex-end' align='center' w='50%'>
                       <Box as='i' fontSize='xs'>
-                        Currently Passing
+                        {+proposal?.noVotes > +proposal?.yesVotes &&
+                          'Not Passing'}
+                        {+proposal?.yesVotes > +proposal?.noVotes &&
+                          'Currently Passing'}
+                        {+proposal?.yesVotes === 0 &&
+                          +proposal?.noVotes === 0 &&
+                          'Awaiting Votes'}
                       </Box>
                     </Flex>
                   </>
@@ -202,6 +211,14 @@ const ProposalVote = ({ proposal }) => {
                         <Box fontSize='lg' fontFamily='heading'>
                           {proposal?.status === 'Failed' && 'Failed'}
                           {proposal?.status === 'Passed' && 'Passed'}
+                          {(proposal?.status === 'GracePeriod' ||
+                            proposal?.status === 'ReadyForProcessing') &&
+                            proposal.yesVotes > proposal.noVotes &&
+                            'Passed'}
+                          {(proposal?.status === 'GracePeriod' ||
+                            proposal?.status === 'ReadyForProcessing') &&
+                            proposal.noVotes > proposal.yesVotes &&
+                            'Failed'}
                         </Box>
                       </Skeleton>
                     </Flex>

@@ -78,6 +78,7 @@ const MembersList = () => {
             fontFamily='heading'
             fontSize='sm'
             fontWeight={700}
+            pl={3}
           >
             {theme.daoMeta.member}
           </Box>
