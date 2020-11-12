@@ -1,15 +1,15 @@
 import React, { useEffect, useState } from 'react';
 import { Box } from '@chakra-ui/core';
 
+import { useDao } from '../../contexts/PokemolContext';
 import GraphFetch from '../Shared/GraphFetch';
 import { DAO_ACTIVITIES } from '../../utils/apollo/dao-queries';
 import { activitiesData } from '../../content/skeleton-data';
 import DaoActivityCard from '../Activities/DaoActivityCard';
-import { getDaoActivites } from '../../utils/activities-helpers';
+import { getProfileActivites } from '../../utils/activities-helpers';
 import ActivityPaginator from '../Activities/ActivityPaginator';
-import { useDao } from '../../contexts/PokemolContext';
 
-const DaoActivityFeed = () => {
+const ProfileActvityFeed = ({ profileAddress }) => {
   const [dao] = useDao();
   const [fetchedData, setFetchedData] = useState();
   const [isLoaded, setIsLoaded] = useState(false);
@@ -18,7 +18,10 @@ const DaoActivityFeed = () => {
 
   useEffect(() => {
     if (fetchedData) {
-      const hydratedActivites = getDaoActivites(fetchedData);
+      const hydratedActivites = getProfileActivites(
+        fetchedData,
+        profileAddress,
+      );
       setAllActivities(hydratedActivites);
       setIsLoaded(true);
     }
@@ -48,7 +51,7 @@ const DaoActivityFeed = () => {
 
       {isLoaded ? (
         <ActivityPaginator
-          perPage={3}
+          perPage={5}
           setRecords={setActivities}
           allRecords={allActivities}
         />
@@ -67,4 +70,4 @@ const DaoActivityFeed = () => {
   );
 };
 
-export default DaoActivityFeed;
+export default ProfileActvityFeed;

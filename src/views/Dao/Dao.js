@@ -4,26 +4,23 @@ import DaoActivityFeed from '../../components/Dao/DaoActivityFeed';
 import DaoOverviewDetails from '../../components/Dao/DaoOverviewDetails';
 import MemberInfoCard from '../../components/Dao/MemberInfoCard';
 
-import { useDao, useUser, useMembers } from '../../contexts/PokemolContext';
+import {
+  useDao,
+  useUser,
+  useMemberWallet,
+} from '../../contexts/PokemolContext';
 
 const Dao = () => {
   const [dao] = useDao();
   const [user] = useUser();
-  const [members] = useMembers();
+  const [memberWallet] = useMemberWallet();
   const [isMember, setIsMember] = useState(false);
 
   useEffect(() => {
-    if (user && members) {
-      // TODO can this be done as a utility accessible on user.isMember(?) or just a separate utility that takes isMember(user, members) ?
-      members.forEach((member) => {
-        if (
-          user.username.toLowerCase() === member.memberAddress.toLowerCase()
-        ) {
-          setIsMember(true);
-        }
-      });
+    if (memberWallet) {
+      setIsMember(memberWallet.activeMember);
     }
-  }, [user, members, setIsMember]);
+  }, [memberWallet]);
 
   return (
     <>
@@ -38,7 +35,7 @@ const Dao = () => {
               </Box>
               <Box w='40%'>
                 <MemberInfoCard user={user} />
-                {dao.graphData && <DaoActivityFeed dao={dao} />}
+                {dao.graphData && <DaoActivityFeed />}
               </Box>
             </Flex>
           ) : (

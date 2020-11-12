@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Flex, Box } from '@chakra-ui/core';
 
 import MembersList from '../../components/Members/MembersList';
@@ -6,14 +6,19 @@ import MemberSnapshot from '../../components/Members/MemberSnapshot';
 import MembersActivityFeed from '../../components/Members/MembersActivityFeed';
 
 const Members = () => {
+  const [selectedMember, setSelectedMember] = useState();
+
   return (
     <Flex>
       <Box w='70%'>
-        <MembersList />
+        <MembersList
+          handleSelect={setSelectedMember}
+          selectedMember={selectedMember}
+        />
       </Box>
       <Box w='28%'>
-        <MemberSnapshot />
-        <MembersActivityFeed />
+        <MemberSnapshot selectedMember={selectedMember} />
+        <MembersActivityFeed selectedMember={selectedMember} />
       </Box>
     </Flex>
   );

@@ -6,7 +6,7 @@ import { useTheme } from '../../contexts/CustomThemeContext';
 import { defaultMembers } from '../../utils/constants';
 import MemberListCard from './MemberListCard';
 
-const MembersList = () => {
+const MembersList = ({ handleSelect, selectedMember }) => {
   const [theme] = useTheme();
   const filter = useState(null);
   const [members] = useMembers();
@@ -116,6 +116,8 @@ const MembersList = () => {
                 key={member?.id}
                 member={member}
                 isLoaded={isLoaded}
+                handleSelect={handleSelect}
+                selectedMember={selectedMember}
               />
             );
           })}

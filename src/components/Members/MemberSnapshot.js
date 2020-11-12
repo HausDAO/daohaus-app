@@ -6,7 +6,7 @@ import { useMembers, useDao, useUser } from '../../contexts/PokemolContext';
 import { useTheme } from '../../contexts/CustomThemeContext';
 import MemberSnapshotChart from './MemberSnapshotChart';
 
-const MemberSnapshot = () => {
+const MemberSnapshot = ({ selectedMember }) => {
   const [theme] = useTheme();
   const [dao] = useDao();
   const [members] = useMembers();
@@ -21,13 +21,15 @@ const MemberSnapshot = () => {
         </Box>
         <Box
           as={Link}
-          to={`/dao/${dao?.address}/profile/${user?.username}`}
+          to={`/dao/${dao?.address}/profile/${
+            selectedMember ? selectedMember.memberAddress : user?.username
+          }`}
           textTransform='uppercase'
           fontFamily='heading'
           fontWeight={700}
           color='secondary.300'
         >
-          View my profile
+          View profile
         </Box>
       </Flex>
       <Box
