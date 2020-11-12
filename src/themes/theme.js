@@ -169,7 +169,7 @@ export const setTheme = (daoTheme) => {
             focusBorderColor: 'secondary.500',
           },
           addon: {
-            color: 'black',
+            color: 'whiteAlpha.900',
             bg: 'transparent',
             focusBorderColor: 'secondary.500',
           },
@@ -191,6 +191,8 @@ export const setTheme = (daoTheme) => {
       },
       Link: {
         baseStyle: {
+          color: 'secondary.400',
+          transition: 'all 0.15s linear',
           _hover: { textDecoration: 'none', color: 'secondary.500' },
         },
       },
@@ -200,12 +202,13 @@ export const setTheme = (daoTheme) => {
       global: {
         'html, body': {
           fontSize: 'm',
-          color: 'whiteAlpha.600',
+          color: 'whiteAlpha.900',
           lineHeight: 'tall',
         },
         a: {
-          color: 'inherit',
-          _hover: { textDecoration: 'none' },
+          color: 'secondary.400',
+          transition: 'all 0.15s linear',
+          _hover: { textDecoration: 'none', color: 'secondary.500' },
         },
       },
     },

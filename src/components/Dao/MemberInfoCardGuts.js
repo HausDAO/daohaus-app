@@ -21,7 +21,7 @@ const MemberInfoCardGuts = ({ user, context }) => {
       <Flex justify='space-between'>
         <UserAvatar user={user.profile} />
       </Flex>
-      <Flex w='75%' justify='space-between' mt={6}>
+      <Flex w='100%' justify='space-between' mt={6}>
         <Box>
           <Box
             textTransform='uppercase'

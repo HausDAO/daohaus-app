@@ -114,8 +114,8 @@ const AccountModal = ({ isOpen, setShowModal }) => {
           {dao.address && (
             <Box pt={6}>
               <Flex direction='row' justify='space-evenly' align='center'>
-                <Link to='/profile'>Profile</Link>
-                <Link to='/'>Hub</Link>
+                <Link href='/profile'>Profile</Link>
+                <Link href='/'>Hub</Link>
               </Flex>
             </Box>
           )}
