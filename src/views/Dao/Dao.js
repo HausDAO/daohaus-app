@@ -2,7 +2,7 @@ import { Flex, Spinner, Box } from '@chakra-ui/core';
 import React, { useEffect, useState } from 'react';
 import DaoActivityFeed from '../../components/Dao/DaoActivityFeed';
 import DaoOverviewDetails from '../../components/Dao/DaoOverviewDetails';
-import MemberInfoCard from '../../components/Dao/MemberInfoCard';
+import MemberInfoCard from '../../components/Shared/MemberInfoCard/MemberInfoCard';
 
 import {
   useDao,

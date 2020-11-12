@@ -92,12 +92,8 @@ const FundingProposalForm = () => {
 
     try {
       dao.daoService.moloch.submitProposal(
-        values.sharesRequested
-          ? utils.toWei(values.sharesRequested?.toString())
-          : '0',
-        values.lootRequested
-          ? utils.toWei(values.lootRequested?.toString())
-          : '0',
+        values.sharesRequested ? values.sharesRequested?.toString() : '0',
+        values.lootRequested ? values.lootRequested?.toString() : '0',
         values.tributeOffered
           ? utils.toWei(values.tributeOffered?.toString())
           : '0',
