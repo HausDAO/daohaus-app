@@ -38,7 +38,7 @@ const ProfileActvityFeed = ({ profileAddress }) => {
         fontSize='sm'
         fontFamily='heading'
       >
-        Activity Feed
+        Recent Activity
       </Box>
 
       {activities.map((activity) => (

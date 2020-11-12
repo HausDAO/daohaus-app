@@ -1,14 +1,24 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Box } from '@chakra-ui/core';
 
+import { useDaoGraphData } from '../../contexts/PokemolContext';
 import BankOverviewChart from '../../components/Bank/BankOverviewChart';
-import TokenList from '../../components/Bank/TokenList';
+import TokenList from '../../components/Shared/TokenList/TokenList';
 
 const Bank = () => {
+  const [dao] = useDaoGraphData();
+  const [tokenList, setTokenList] = useState(null);
+
+  useEffect(() => {
+    if (dao?.tokenBalances) {
+      setTokenList(dao?.tokenBalances);
+    }
+  }, [dao]);
+
   return (
-    <Box w='70%'>
+    <Box w='60%'>
       <BankOverviewChart />
-      <TokenList />
+      <TokenList tokenList={tokenList} />
     </Box>
   );
 };

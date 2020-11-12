@@ -1,7 +1,15 @@
 import React, { useEffect, useState } from 'react';
 import { Link as RouterLink } from 'react-router-dom';
 import makeBlockie from 'ethereum-blockies-base64';
-import { Avatar, AvatarBadge, Box, Flex, Link } from '@chakra-ui/core';
+import {
+  Avatar,
+  AvatarBadge,
+  Input,
+  Box,
+  Flex,
+  Link,
+  Text,
+} from '@chakra-ui/core';
 
 const MemberDaoList = ({ daos }) => {
   const [visibleDaos, setVisibleDaos] = useState([]);
@@ -25,7 +33,7 @@ const MemberDaoList = ({ daos }) => {
     const healthCount = recentRages.length + recentProposals.length;
 
     return (
-      <div key={dao.id}>
+      <Box key={dao.id} mr={3} pb={3}>
         <Link
           as={RouterLink}
           to={`/dao/${dao.id}`}
@@ -36,20 +44,36 @@ const MemberDaoList = ({ daos }) => {
           <Avatar
             name={dao.title.substr(0, 1)}
             src={makeBlockie(dao.id)}
-            mb={4}
+            mb={3}
           >
             {healthCount ? (
-              <AvatarBadge w='1.25em' h='1.25em' bg='red.500'>
-                {healthCount}
+              <AvatarBadge
+                boxSize='1.25em'
+                bg='red.500'
+                borderColor='transparent'
+                transition='all 0.15s linear'
+                _hover={{ bg: 'secondary.500' }}
+              >
+                <Text fontSize='xs'>{healthCount}</Text>
               </AvatarBadge>
             ) : null}
           </Avatar>
 
-          <Box fontFamily='mono' fontSize='sm'>
+          <Box
+            fontFamily='mono'
+            fontSize='sm'
+            style={{
+              width: '120px',
+              overflow: 'hidden',
+              textOverflow: 'ellipsis',
+              textAlign: 'center',
+              whiteSpace: 'nowrap',
+            }}
+          >
             {dao.title}
           </Box>
         </Link>
-      </div>
+      </Box>
     );
   };
 
@@ -69,25 +93,26 @@ const MemberDaoList = ({ daos }) => {
   const canSearch = daos.length > 5;
 
   return (
-    <Box maxW='500px'>
-      <Box fontFamily='heading' fontSize='lg' fontWeight={700} mb={6}>
-        Member of {daos.length} DAO{daos.length > 1 && 's'}
-      </Box>
-
-      <Flex direction='row' overflowX='scroll' mb={6} w='100%'>
-        {visibleDaos.map((dao) => renderDaoAvatar(dao))}
+    <Box w='100%'>
+      <Flex justify='space-between' alignItems='center' mb={6}>
+        <Box fontFamily='heading' fontSize='lg' fontWeight={700}>
+          Member of {daos.length} DAO{daos.length > 1 && 's'}
+        </Box>
+        {canSearch ? (
+          <div>
+            <Input
+              type='search'
+              className='input'
+              placeholder='Search My Daos'
+              onChange={(e) => handleChange(e)}
+            />
+          </div>
+        ) : null}
       </Flex>
 
-      {canSearch ? (
-        <div>
-          <input
-            type='search'
-            className='input'
-            placeholder='Search My Daos'
-            onChange={(e) => handleChange(e)}
-          />
-        </div>
-      ) : null}
+      <Flex direction='row' overflowX='scroll' mb={6} maxW='100%'>
+        {visibleDaos.map((dao) => renderDaoAvatar(dao))}
+      </Flex>
 
       <Link
         href='https://daohaus.club'
@@ -95,7 +120,7 @@ const MemberDaoList = ({ daos }) => {
         fontSize='md'
         textTransform='uppercase'
       >
-        Explore more daos on daohaus
+        Explore more DAOs on DAOhaus
       </Link>
     </Box>
   );

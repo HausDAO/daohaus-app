@@ -19,7 +19,7 @@ import { useTxProcessor, useUser, useDao } from '../../contexts/PokemolContext';
 
 import HubProfileCard from '../Hub/HubProfileCard';
 import ExplorerLink from '../Shared/ExplorerLink';
-import MemberInfoCardGuts from '../Dao/MemberInfoCardGuts';
+import MemberInfoCardGuts from '../Shared/MemberInfoCard/MemberInfoCardGuts';
 
 const AccountModal = ({ isOpen, setShowModal }) => {
   const [user] = useUser();
@@ -114,7 +114,9 @@ const AccountModal = ({ isOpen, setShowModal }) => {
           {dao.address && (
             <Box pt={6}>
               <Flex direction='row' justify='space-evenly' align='center'>
-                <Link to='/profile'>Profile</Link>
+                <Link to={`/dao/${dao.address}/profile${user.username}`}>
+                  Profile
+                </Link>
                 <Link to='/'>Hub</Link>
               </Flex>
             </Box>

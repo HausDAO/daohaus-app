@@ -1,25 +1,25 @@
 import React, { useState, useEffect } from 'react';
 import { Box, Flex } from '@chakra-ui/core';
 
-import { useDaoGraphData } from '../../contexts/PokemolContext';
 import TokenListCard from './TokenListCard';
-import { defaultTokens } from '../../utils/constants';
+import { defaultTokens } from '../../../utils/constants';
 
-const TokenList = () => {
-  const [dao] = useDaoGraphData();
-  const [tokenList, setTokenList] = useState(null);
+const TokenList = ({ tokenList }) => {
+  const [localTokenList, setLocalTokenList] = useState(null);
   const [isLoaded, setIsLoaded] = useState(false);
-  console.log(dao);
+  console.log(tokenList);
 
   useEffect(() => {
-    if (dao?.tokenBalances) {
-      console.log(dao?.tokenBalances);
-      setTokenList(dao?.tokenBalances);
+    if (tokenList) {
+      console.log(tokenList);
+      setLocalTokenList(tokenList);
       setIsLoaded(true);
     } else {
-      setTokenList(defaultTokens);
+      setLocalTokenList(defaultTokens);
     }
-  }, [dao]);
+  }, [tokenList]);
+
+  console.log(localTokenList);
 
   return (
     <Box
@@ -27,6 +27,7 @@ const TokenList = () => {
       bg='blackAlpha.600'
       borderWidth='1px'
       borderColor='whiteAlpha.200'
+      w='100%'
       p={6}
       m={6}
     >
@@ -68,8 +69,8 @@ const TokenList = () => {
           Value
         </Box>
       </Flex>
-      {tokenList?.length > 0 &&
-        tokenList.map((token) => {
+      {localTokenList?.length > 0 &&
+        localTokenList.map((token) => {
           return (
             <TokenListCard key={token?.id} token={token} isLoaded={isLoaded} />
           );

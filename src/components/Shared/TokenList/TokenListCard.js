@@ -19,9 +19,14 @@ const TokenListCard = ({ token, isLoaded }) => {
       <Box w='55%'>
         <Skeleton isLoaded={isLoaded}>
           <Box fontFamily='mono'>
-            {token?.contractTokenBalance
-              ? utils.fromWei(token.contractTokenBalance.toString())
+            {token?.memberBalance
+              ? parseFloat(
+                  utils.fromWei(token.memberBalance.toString()),
+                ).toFixed(3)
               : '--'}
+            {token && !token.memberBalance && token?.contractTokenBalance
+              ? utils.fromWei(token.contractTokenBalance.toString())
+              : null}
           </Box>
         </Skeleton>
       </Box>

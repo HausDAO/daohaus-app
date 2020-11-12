@@ -10,12 +10,12 @@ const HubProfileCard = () => {
 
   return (
     <>
-      <Flex direction='row' alignItems='center' pl={12} pt={2}>
+      <Flex direction='row' alignItems='center' pt={2}>
         {user.profile.image && user.profile.image[0] ? (
           <Image
             w='100px'
             h='100px'
-            mr={10}
+            mr={6}
             rounded='full'
             src={`https://ipfs.infura.io/ipfs/${user.profile.image[0].contentUrl['/']}`}
           />
@@ -23,7 +23,7 @@ const HubProfileCard = () => {
           <Image
             w='100px'
             h='100px'
-            mr={10}
+            mr={6}
             rounded='full'
             src={makeBlockie(user.username)}
           />
@@ -41,7 +41,7 @@ const HubProfileCard = () => {
           ) : null}
         </Flex>
       </Flex>
-      <Box fontSize='sm' ml={12} mt={4} fontFamily='mono'>
+      <Box fontSize='sm' mt={4} fontFamily='mono'>
         {user.profile.description}
       </Box>
     </>

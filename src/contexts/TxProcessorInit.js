@@ -110,11 +110,10 @@ const TxProcessorInit = () => {
                 hash={latestTx.tx}
                 linkText={`${truncateAddr(latestTx.tx)} view`}
                 fontFamily='body'
-                mb={4}
               />
             )}
             {!loading && (
-              <Box>
+              <Box mt={4}>
                 <span role='img' aria-label='confetti'>
                   🎉
                 </span>{' '}
