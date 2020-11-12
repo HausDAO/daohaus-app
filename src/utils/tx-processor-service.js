@@ -48,6 +48,7 @@ export class TxProcessorService {
       txItem.open = open;
       txItem.description = description;
       txItem.seen = seen;
+      txItem.dateAdded = Date.now();
       _txList.push(txItem);
       localStorage.setItem('txList', JSON.stringify(_txList));
     } else if (_txList[exists].open !== open) {
