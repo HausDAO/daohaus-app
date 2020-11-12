@@ -7,6 +7,7 @@ import { useTheme } from '../../contexts/CustomThemeContext';
 import { Web3SignIn } from './Web3SignIn';
 import UserAvatar from './UserAvatar';
 import DaoSwitcherModal from '../Modal/DaoSwitcherModal';
+import AccountModal from '../Modal/AccountModal';
 
 const Header = () => {
   const location = useLocation();
@@ -103,7 +104,7 @@ const Header = () => {
                 <UserAvatar user={user.profile ? user.profile : user} />
               </Button>
 
-              <DaoSwitcherModal
+              <AccountModal
                 isOpen={showDaoSwitcher}
                 setShowModal={setShowDaoSwitcher}
               />
