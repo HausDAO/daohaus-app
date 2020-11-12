@@ -28,10 +28,72 @@ export const getDaoActivites = (daoData) => {
   return allActivites;
 };
 
+export const getProposalsActivites = (daoData) => {
+  const proposals = daoData.proposals.filter((prop) => !prop.cancelled);
+  const votes = daoData.proposals.flatMap((prop) => {
+    const votes = prop.votes.map((vote) => {
+      return {
+        ...vote,
+        proposalType: prop.proposalType,
+        proposalId: prop.proposalId,
+      };
+    });
+    return votes;
+  });
+  const allActivites = proposals
+    .concat(votes)
+    .map((activity) => {
+      return {
+        ...activity,
+        activityData:
+          activity.__typename === 'Proposal'
+            ? proposalActivityData(activity)
+            : voteRageActivityData(activity),
+      };
+    })
+    .sort((a, b) => +b.activityData.createdAt - +a.activityData.createdAt);
+
+  return allActivites;
+};
+
+export const getMembersActivites = (daoData) => {
+  const proposals = daoData.proposals.filter((prop) => {
+    return !prop.cancelled && prop.proposalType === 'Member Proposal';
+  });
+  const votes = daoData.proposals
+    .flatMap((prop) => {
+      const votes = prop.votes.map((vote) => {
+        return {
+          ...vote,
+          proposalType: prop.proposalType,
+          proposalId: prop.proposalId,
+        };
+      });
+      return votes;
+    })
+    .filter((vote) => vote.proposalType === 'Member Proposal');
+  const rageActivities = daoData.rageQuits;
+  const allActivites = proposals
+    .concat(votes)
+    .concat(rageActivities)
+    .map((activity) => {
+      return {
+        ...activity,
+        activityData:
+          activity.__typename === 'Proposal'
+            ? proposalActivityData(activity)
+            : voteRageActivityData(activity),
+      };
+    })
+    .sort((a, b) => +b.activityData.createdAt - +a.activityData.createdAt);
+
+  return allActivites;
+};
+
 const voteRageActivityData = (record) => {
   let title;
   let type;
-  if (record.uintVote === 1 || record.uintVote === 0) {
+  if (record.__typename === 'Vote') {
     title = `voted ${record.uintVote ? 'yes' : 'no'} on ${record.proposalType}`;
     type = 'vote';
   } else {

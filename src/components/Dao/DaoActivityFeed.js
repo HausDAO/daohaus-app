@@ -7,8 +7,10 @@ import { activitiesData } from '../../content/skeleton-data';
 import DaoActivityCard from '../Activities/DaoActivityCard';
 import { getDaoActivites } from '../../utils/activities-helpers';
 import ActivityPaginator from '../Activities/ActivityPaginator';
+import { useDao } from '../../contexts/PokemolContext';
 
-const DaoActivityFeed = ({ dao }) => {
+const DaoActivityFeed = () => {
+  const [dao] = useDao();
   const [fetchedData, setFetchedData] = useState();
   const [isLoaded, setIsLoaded] = useState(false);
   const [activities, setActivities] = useState(activitiesData);
