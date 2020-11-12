@@ -7,19 +7,15 @@ import { defaultTokens } from '../../../utils/constants';
 const TokenList = ({ tokenList }) => {
   const [localTokenList, setLocalTokenList] = useState(null);
   const [isLoaded, setIsLoaded] = useState(false);
-  console.log(tokenList);
 
   useEffect(() => {
     if (tokenList) {
-      console.log(tokenList);
       setLocalTokenList(tokenList);
       setIsLoaded(true);
     } else {
       setLocalTokenList(defaultTokens);
     }
   }, [tokenList]);
-
-  console.log(localTokenList);
 
   return (
     <Box
