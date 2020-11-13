@@ -2,8 +2,7 @@ import { extendTheme } from '@chakra-ui/core';
 import BrandImg from '../assets/themes/hausdao/Daohaus__Castle--Dark.svg';
 import BgImg from '../assets/themes/hausdao/daohaus__hero--falling.jpg';
 import { lighten, darken, rgba } from 'polished';
-
-import { BigTextComponent } from './big-text-componet';
+//Custom Chakra Components
 import { ContentBoxComponent } from './content-box-component';
 import { TextBoxComponent } from './text-box-component';
 

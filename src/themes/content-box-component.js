@@ -1,7 +1,7 @@
 export const ContentBoxComponent = {
   baseStyle: {
     rounded: 'lg',
-    bg: 'blackAlpha.600',
+    bg: 'blackAlpha.700',
     borderWidth: '1px',
     borderColor: 'whiteAlpha.200',
     p: 6,
