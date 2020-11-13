@@ -16,6 +16,7 @@ import FundingProposalForm from '../Forms/FundingProposal';
 import WhitelistProposalForm from '../Forms/WhitelistProposal';
 import GuildKickProposalForm from '../Forms/GuildKickProposal';
 import TradeProposalForm from '../Forms/TradeProposal';
+import MinionSimpleProposalForm from '../Forms/MinionSimpleProposal';
 
 const ProposalFormModal = ({ proposalType, isOpen, setShowModal }) => {
   const [, setLoading] = useState(false);
@@ -52,6 +53,12 @@ const ProposalFormModal = ({ proposalType, isOpen, setShowModal }) => {
       heading: `New Trade ${theme.daoMeta.proposal}`,
       subline: `Submit a trade proposal here.`,
       form: <TradeProposalForm />,
+    },
+    minion: {
+      type: `New ${theme.daoMeta.proposal}`,
+      heading: `New Minion ${theme.daoMeta.proposal}`,
+      subline: `Submit a Minion proposal here.`,
+      form: <MinionSimpleProposalForm />,
     },
   };
 

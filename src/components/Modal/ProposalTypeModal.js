@@ -47,6 +47,12 @@ const ProposalFormModal = ({ isOpen, setShowModal, setProposalType }) => {
       proposalType: 'trade',
       image: 'themes/raidTheme/raidguild__swords-white.svg',
     },
+    {
+      name: 'Minion',
+      subhead: 'Minion Simple',
+      proposalType: 'minion',
+      image: 'themes/raidTheme/raidguild__swords-white.svg',
+    },
   ];
 
   return (
