@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useHistory } from 'react-router-dom';
-import { Flex, Box, Skeleton } from '@chakra-ui/core';
-import { format } from 'date-fns';
+import { Flex, Box } from '@chakra-ui/core';
 import { useMembers, useDao } from '../../../contexts/PokemolContext';
 import { useTheme } from '../../../contexts/CustomThemeContext';
 
@@ -29,7 +28,6 @@ const MemberInfoCard = ({ user }) => {
           textTransform='uppercase'
           fontSize='sm'
           fontFamily='heading'
-          color='secondary.400'
           _hover={{ cursor: 'pointer' }}
           onClick={() =>
             history.push(`/dao/${dao.address}/profile/${user.username}`)

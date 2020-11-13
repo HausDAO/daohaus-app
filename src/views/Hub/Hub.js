@@ -18,7 +18,7 @@ const Hub = () => {
       {user ? (
         <>
           <Flex>
-            <Box>
+            <Box w='50%'>
               <HubProfileCard />
               <Box
                 rounded='lg'
@@ -43,6 +43,7 @@ const Hub = () => {
                 fontFamily='heading'
                 textTransform='uppercase'
                 fontWeight={700}
+                ml={8}
               >
                 Recent Activity
               </Box>
