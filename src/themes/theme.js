@@ -3,6 +3,8 @@ import BrandImg from '../assets/themes/hausdao/Daohaus__Castle--Dark.svg';
 import BgImg from '../assets/themes/hausdao/daohaus__hero--falling.jpg';
 import { lighten, darken } from 'polished';
 
+import { BigText } from './BigText';
+
 export * from './components';
 
 export const defaultTheme = {
@@ -95,6 +97,7 @@ export const setTheme = (daoTheme) => {
       other: themeOverrides.daoMeta.other,
     },
     components: {
+      BigText,
       Button: {
         // 1. Update the base styles
         baseStyle: {
