@@ -1,18 +1,11 @@
 import React from 'react';
-import {
-  Flex,
-  Icon,
-  Image,
-  useDisclosure,
-  Link,
-  Box,
-  IconButton,
-} from '@chakra-ui/core';
+import { Flex, Icon, Image, Link, Box, IconButton } from '@chakra-ui/core';
+
 import { motion } from 'framer-motion';
 
 import Header from '../Shared/Header';
 import SideNav from '../Shared/SideNav';
-import { useTheme } from '../../contexts/CustomThemeContext';
+
 import {
   RiArrowLeftSLine,
   RiDiscordFill,
@@ -21,9 +14,10 @@ import {
   RiGlobeLine,
   RiLinksLine,
 } from 'react-icons/ri';
+import { useTheme, useSideNavToggle } from '../../contexts/CustomThemeContext';
 
 const Layout = ({ children }) => {
-  const { isOpen, onToggle } = useDisclosure();
+  const [sideNavOpen, toggleSideNav] = useSideNavToggle();
   const [theme] = useTheme();
 
   const MotionBox = motion.custom(Box);
@@ -73,7 +67,7 @@ const Layout = ({ children }) => {
         justifyContent='space-between'
         bg='primary.500'
         variants={bar}
-        animate={isOpen ? 'closed' : 'open'}
+        animate={sideNavOpen ? 'closed' : 'open'}
         initial='open'
         zIndex='1'
         transition={{ ease: 'easeInOut', duration: 0.15 }}
@@ -83,7 +77,7 @@ const Layout = ({ children }) => {
             src={theme.images.brandImg}
             w='60px'
             h='60px'
-            onClick={onToggle}
+            onClick={toggleSideNav}
             cursor='pointer'
             border='none'
           />
@@ -91,20 +85,20 @@ const Layout = ({ children }) => {
         <MotionBox
           initial='open'
           variants={nav}
-          animate={isOpen ? 'closed' : 'open'}
+          animate={sideNavOpen ? 'closed' : 'open'}
           position='absolute'
           ml='80px'
           transition={{ ease: 'easeInOut', duration: 0.15 }}
         >
           <MotionBox
-            animate={isOpen ? 'closed' : 'open'}
+            animate={sideNavOpen ? 'closed' : 'open'}
             variants={nav}
             position='absolute'
             top='6px'
             right='-55px'
           >
             <IconButton
-              onClick={onToggle}
+              onClick={toggleSideNav}
               aria-label='Close Menu'
               variant='outline'
               size='xs'
@@ -147,7 +141,7 @@ const Layout = ({ children }) => {
         position='fixed'
         initial='open'
         variants={background}
-        animate={isOpen ? 'closed' : 'open'}
+        animate={sideNavOpen ? 'closed' : 'open'}
         h='100vh'
         bgImage={'url(' + theme.images.bgImg + ')'}
         bgSize='cover'
@@ -174,7 +168,7 @@ const Layout = ({ children }) => {
         width='100%'
         initial='open'
         variants={layout}
-        animate={isOpen ? 'closed' : 'open'}
+        animate={sideNavOpen ? 'closed' : 'open'}
         flexDirection='column'
         transition={{ ease: 'easeInOut', duration: 0.15 }}
       >

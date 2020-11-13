@@ -7,7 +7,7 @@ import { useProposals, useDao } from '../../contexts/PokemolContext';
 import { useTheme } from '../../contexts/CustomThemeContext';
 import ProposalDetail from '../../components/Proposals/ProposalDetail';
 import ProposalVote from '../../components/Proposals/ProposalVote';
-import ProposalActivityFeed from '../../components/Proposals/ProposalActivityFeed';
+import ProposalHistory from '../../components/Proposals/ProposalHistory';
 
 const Proposal = () => {
   const [dao] = useDao();
@@ -74,7 +74,8 @@ const Proposal = () => {
         </Box>
         <Box w='40%'>
           {!proposal?.cancelled && <ProposalVote proposal={proposal} />}
-          <ProposalActivityFeed />
+
+          <ProposalHistory proposal={proposal} />
         </Box>
       </Flex>
     </Box>

@@ -1,12 +1,13 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { Box, Flex, Badge, Skeleton } from '@chakra-ui/core';
+import { Box, Flex, Badge, Skeleton, Icon } from '@chakra-ui/core';
 import { utils } from 'web3';
 import { format } from 'date-fns';
 
 import { useDao, useMemberWallet } from '../../contexts/PokemolContext';
 import { useTheme } from '../../contexts/CustomThemeContext';
 import { getProposalCountdownText } from '../../utils/proposal-helper';
+import { FaThumbsDown, FaThumbsUp } from 'react-icons/fa';
 
 const ProposalCard = ({ proposal, isLoaded }) => {
   const [dao] = useDao();
@@ -35,13 +36,14 @@ const ProposalCard = ({ proposal, isLoaded }) => {
         bg='blackAlpha.800'
         borderWidth='1px'
         borderColor='whiteAlpha.200'
+        _hover={{ background: 'primary.500' }}
         p={6}
         m={6}
         mt={2}
         transition='all 0.15s linear'
         _hover={{ bg: 'secondaryAlpha', color: 'white' }}
       >
-        <Flex>
+        <Flex justify='space-between'>
           <Box minWidth='30%' mr={5}>
             <Box
               fontSize='xs'
@@ -65,22 +67,71 @@ const ProposalCard = ({ proposal, isLoaded }) => {
               <Skeleton isLoaded={isLoaded}>
                 {(+proposal?.yesVotes > 0 || +proposal?.noVotes > 0) && (
                   <>
-                    <Badge colorScheme='green' mr={3}>
+                    <Badge
+                      colorScheme='green'
+                      variant={
+                        +proposal.yesVotes > +proposal.noVotes &&
+                        proposal.status !== 'Failed'
+                          ? 'solid'
+                          : 'outline'
+                      }
+                      mr={3}
+                    >
                       {proposal?.yesVotes ? proposal.yesVotes : '--'} Yes
                     </Badge>
-                    <Badge colorScheme='red'>
+                    <Badge
+                      colorScheme='red'
+                      variant={
+                        +proposal.noVotes > +proposal.yesVotes
+                          ? 'solid'
+                          : 'outline'
+                      }
+                    >
                       {proposal?.noVotes ? proposal.noVotes : '--'} No
                     </Badge>
                   </>
                 )}
-
-                {memberVote ? (
-                  <Box fontSize='sm'>
-                    {+memberVote.uintVote ? 'You voted yes' : 'You voted no'}
-                  </Box>
-                ) : null}
               </Skeleton>
             </Flex>
+          </Flex>
+          <Flex>
+            {memberVote && (
+              <Box fontSize='sm'>
+                {+memberVote.uintVote === 1 ? (
+                  <Flex
+                    pl={6}
+                    w='40px'
+                    borderColor='secondary.500'
+                    borderWidth='2px'
+                    borderStyle='solid'
+                    borderRadius='40px'
+                    p={1}
+                    h='40px'
+                    justify='center'
+                    align='center'
+                    m='0 auto'
+                  >
+                    <Icon as={FaThumbsUp} color='secondary.500' />
+                  </Flex>
+                ) : (
+                  <Flex
+                    pl={6}
+                    w='40px'
+                    borderColor='secondary.500'
+                    borderWidth='2px'
+                    borderStyle='solid'
+                    borderRadius='40px'
+                    p={1}
+                    h='40px'
+                    justify='center'
+                    align='center'
+                    m='0 auto'
+                  >
+                    <Icon as={FaThumbsDown} color='secondary.500' />
+                  </Flex>
+                )}
+              </Box>
+            )}
           </Flex>
         </Flex>
         <Flex w='80%' justify='space-between' mt={10}>

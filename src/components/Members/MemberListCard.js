@@ -4,9 +4,24 @@ import { format } from 'date-fns';
 
 import UserAvatar from '../Shared/UserAvatar';
 
-const MemberListCard = ({ member, isLoaded }) => {
+const MemberListCard = ({ member, isLoaded, handleSelect, selectedMember }) => {
   return (
-    <Flex h='60px' align='center'>
+    <Flex
+      h='60px'
+      align='center'
+      pl={3}
+      bg={
+        selectedMember && selectedMember.memberAddress === member.memberAddress
+          ? 'primary.500'
+          : null
+      }
+      _hover={{
+        cursor: 'pointer',
+        background: 'primary.500',
+        borderRadius: '4px',
+      }}
+      onClick={() => handleSelect(member)}
+    >
       <Flex w='43%' direction='column' justify='space-between'>
         {member?.profile && <UserAvatar user={member.profile} />}
       </Flex>

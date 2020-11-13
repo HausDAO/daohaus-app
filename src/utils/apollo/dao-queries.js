@@ -54,6 +54,8 @@ export const DAO_ACTIVITIES = gql`
         processed
         sponsored
         details
+        memberAddress
+        applicant
         newMember
         whitelist
         guildkick

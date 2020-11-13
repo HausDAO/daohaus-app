@@ -14,8 +14,9 @@ import {
   MenuButton,
   MenuList,
   MenuItem,
-  ChevronDownIcon,
+  Icon,
 } from '@chakra-ui/core';
+import { FaChevronDown } from 'react-icons/fa';
 import { useTheme } from '../../contexts/CustomThemeContext';
 
 const BankOverviewChart = () => {
@@ -31,18 +32,20 @@ const BankOverviewChart = () => {
   ];
 
   return (
-    <Box m={6}>
+    <Box m={6} w='100%'>
       <Flex justify='space-between'>
         <Menu>
-          <MenuButton rightIcon={<ChevronDownIcon />}>Showing: All</MenuButton>
+          <MenuButton>
+            Showing: All <Icon as={FaChevronDown} h='12px' w='12px' />
+          </MenuButton>
           <MenuList>
             <MenuItem>All</MenuItem>
             <MenuItem>Your Share</MenuItem>
           </MenuList>
         </Menu>
         <Menu>
-          <MenuButton rightIcon={<ChevronDownIcon />}>
-            Time Frame: 7 days
+          <MenuButton>
+            Time Frame: 7 days <Icon as={FaChevronDown} h='12px' w='12px' />
           </MenuButton>
           <MenuList>
             <MenuItem>7 day</MenuItem>

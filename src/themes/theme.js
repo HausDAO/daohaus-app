@@ -3,8 +3,6 @@ import BrandImg from '../assets/themes/hausdao/Daohaus__Castle--Dark.svg';
 import BgImg from '../assets/themes/hausdao/daohaus__hero--falling.jpg';
 import { lighten, darken, rgba } from 'polished';
 
-export * from './components';
-
 export const defaultTheme = {
   primary500: '#10153d',
   secondary500: '#EB8A23',
@@ -22,11 +20,17 @@ export const defaultTheme = {
     bank: 'Bank',
     members: 'Members',
     member: 'Member',
+    boosts: 'Apps',
+    boost: 'App',
     discord: 'https://discord.gg/NPEJysW',
     medium: 'https://medium.com/daohaus-club',
     telegram: 'https://t.me/joinchat/IJqu9xPa0xzYLN1mmFKo8g',
     website: 'https://daohaus.club',
     other: 'https://wikipedia.com',
+    f04title: "404 What's Lost Can Be Found",
+    f04heading: 'You have been slain',
+    f04subhead: 'Please reload from the most recent save point.',
+    f04cta: 'Start Over',
   },
 };
 
@@ -90,11 +94,17 @@ export const setTheme = (daoTheme) => {
       bank: themeOverrides.daoMeta.bank,
       members: themeOverrides.daoMeta.members,
       member: themeOverrides.daoMeta.member,
+      boosts: themeOverrides.daoMeta.boosts,
+      boost: themeOverrides.daoMeta.boost,
       discord: themeOverrides.daoMeta.discord,
       medium: themeOverrides.daoMeta.medium,
       telegram: themeOverrides.daoMeta.telegram,
       website: themeOverrides.daoMeta.website,
       other: themeOverrides.daoMeta.other,
+      f04title: themeOverrides.daoMeta.f04title,
+      f04heading: themeOverrides.daoMeta.f04heading,
+      f04subhead: themeOverrides.daoMeta.f04subhead,
+      f04cta: themeOverrides.daoMeta.f04cta,
     },
     components: {
       Button: {
