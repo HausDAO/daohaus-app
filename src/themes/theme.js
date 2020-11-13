@@ -9,7 +9,7 @@ import { TextBoxComponent } from './text-box-component';
 export const defaultTheme = {
   primary500: '#10153d',
   secondary500: '#EB8A23',
-  secondaryAlpha: rgba('#EB8A23', 0.5),
+  secondaryAlpha: rgba('#EB8A23', 0.75),
   bg500: '#03061B',
   bgOverlayOpacity: '0.75',
   primaryFont: 'Inknut Antiqua',
@@ -110,7 +110,6 @@ export const setTheme = (daoTheme) => {
       f04cta: themeOverrides.daoMeta.f04cta,
     },
     components: {
-      BigTextComponent,
       ContentBoxComponent,
       TextBoxComponent,
       Button: {

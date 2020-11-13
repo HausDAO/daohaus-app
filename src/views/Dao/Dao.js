@@ -27,7 +27,7 @@ const Dao = () => {
       {!dao ? (
         <Spinner />
       ) : (
-        <>
+        <Box p={6}>
           {user && isMember ? (
             <Flex>
               <Box w='50%' mr={6}>
@@ -36,7 +36,11 @@ const Dao = () => {
 
               <Box w='50%'>
                 <MemberInfoCard user={user} />
-                {dao.graphData && <DaoActivityFeed />}
+                {dao.graphData && (
+                  <Box mt={6}>
+                    <DaoActivityFeed />
+                  </Box>
+                )}
               </Box>
             </Flex>
           ) : (
@@ -46,7 +50,7 @@ const Dao = () => {
               </Box>
             </Flex>
           )}
-        </>
+        </Box>
       )}
     </>
   );

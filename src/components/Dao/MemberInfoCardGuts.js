@@ -25,7 +25,7 @@ const MemberInfoCardGuts = ({ user, context }) => {
       </Flex>
       <Flex w='100%' justify='space-between' mt={6}>
         <Box>
-          <TextBox>Shares</TetBox>
+          <TextBox>Shares</TextBox>
           <Skeleton isLoaded={member?.shares}>
             <TextBox variant='value'>
               {member?.shares ? member.shares : '--'}

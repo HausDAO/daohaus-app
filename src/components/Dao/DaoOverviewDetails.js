@@ -19,7 +19,7 @@ const DaoOverviewDetails = ({ dao }) => {
   })[0]?.tokenBalance;
 
   return (
-    <Box ml={6}>
+    <Box>
       {user && (
         <TextBox size='sm' color='whiteAlpha.900'>
           Details
@@ -41,65 +41,37 @@ const DaoOverviewDetails = ({ dao }) => {
         </Flex>
         <Flex direction='row' w='60%' justify='space-between' mt={6}>
           <Box>
-            <Box
-              textTransform='uppercase'
-              fontFamily='heading'
-              fontSize='sm'
-              fontWeight={700}
-            >
-              {theme.daoMeta.members}
-            </Box>
+            <TextBox>{theme.daoMeta.members}</TextBox>
             <Skeleton isLoaded={members?.length > 0}>
-              <Box fontSize='2xl' fontFamily='heading' fontWeight={700}>
+              <TextBox size='lg' variant='value'>
                 {members?.length ? members.length : '--'}
-              </Box>
+              </TextBox>
             </Skeleton>
           </Box>
           <Box>
-            <Box
-              textTransform='uppercase'
-              fontFamily='heading'
-              fontSize='sm'
-              fontWeight={700}
-            >
-              Shares
-            </Box>
+            <TextBox>Shares</TextBox>
             <Skeleton isLoaded={dao?.graphData?.totalShares}>
-              <Box fontSize='2xl' fontFamily='heading' fontWeight={700}>
+              <TextBox size='lg' variant='value'>
                 {dao?.graphData?.totalShares ? dao.graphData.totalShares : '--'}
-              </Box>
+              </TextBox>
             </Skeleton>
           </Box>
           <Box>
-            <Box
-              textTransform='uppercase'
-              fontFamily='heading'
-              fontSize='sm'
-              fontWeight={700}
-            >
-              Loot
-            </Box>
+            <TextBox>Loot</TextBox>
             <Skeleton isLoaded={dao?.graphData?.totalLoot}>
-              <Box fontSize='2xl' fontFamily='heading' fontWeight={700}>
+              <TextBox size='lg' variant='value'>
                 {dao?.graphData?.totalLoot ? dao?.graphData?.totalLoot : '--'}
-              </Box>
+              </TextBox>
             </Skeleton>
           </Box>
         </Flex>
         <Box mt={6}>
-          <Box
-            fontFamily='heading'
-            textTransform='uppercase'
-            fontSize='sm'
-            fontWeight={700}
-          >
-            {theme.daoMeta.bank}
-          </Box>
+          <TextBox size='md'>{theme.daoMeta.bank}</TextBox>
           <Skeleton isLoaded={wethBalance}>
-            <Box fontSize='3xl' fontFamily='heading' fontWeight={700}>
+            <TextBox size='xl' variant='value'>
               {wethBalance && parseFloat(utils.fromWei(wethBalance)).toFixed(3)}{' '}
               WETH
-            </Box>
+            </TextBox>
           </Skeleton>
           <Box>
             <Skeleton isLoaded={dao?.graphData?.tokenBalances?.length > 0}>

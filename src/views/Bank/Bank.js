@@ -16,7 +16,7 @@ const Bank = () => {
   }, [dao]);
 
   return (
-    <Box w='60%'>
+    <Box w='100%' p={6}>
       <BankOverviewChart />
       <TokenList tokenList={tokenList} />
     </Box>

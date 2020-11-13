@@ -8,6 +8,9 @@ export const TextBoxComponent = {
   },
 
   sizes: {
+    xs: {
+      fontSize: 'xs',
+    },
     sm: {
       fontSize: 'sm',
     },
@@ -17,20 +20,22 @@ export const TextBoxComponent = {
     lg: {
       fontSize: 'lg',
     },
+    xl: {
+      fontSize: 'xl',
+    },
   },
   variants: {
     label: {
       color: 'whiteAlpha.700',
       fontFamily: 'heading',
-      fontSize: 'xs',
       textTransform: 'uppercase',
       letterSpacing: '0.15em',
     },
     value: {
       color: 'whiteAlpha.900',
-      fontSize: 'lg',
       fontFamily: 'mono',
       mt: '9px',
+      fontSize: 'xl',
     },
   },
 };

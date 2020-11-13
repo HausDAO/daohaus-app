@@ -3,16 +3,10 @@ import { Link } from 'react-router-dom';
 import { getProfile } from '3box/lib/api';
 
 import { timeToNow, truncateAddr } from '../../utils/helpers';
-import {
-  Avatar,
-  Badge,
-  Box,
-  Flex,
-  Heading,
-  Skeleton,
-  Text,
-} from '@chakra-ui/core';
+import { Avatar, Badge, Heading, Flex, Skeleton, Text } from '@chakra-ui/core';
 import makeBlockie from 'ethereum-blockies-base64';
+
+import ContentBox from '../Shared/ContentBox';
 // import { getProposalCountdownText } from '../../utils/proposal-helper';
 
 // TODO: get getProposalCountdownText(activity) outside of dao context?
@@ -71,15 +65,7 @@ const DaoActivityCard = ({ activity, isLoaded }) => {
   };
 
   return (
-    <Box
-      rounded='lg'
-      bg='blackAlpha.600'
-      borderWidth='1px'
-      borderColor='whiteAlpha.200'
-      p={6}
-      m={6}
-      mt={2}
-    >
+    <ContentBox mt={3}>
       <Link
         to={
           activity?.activityData?.type !== 'rage'
@@ -122,7 +108,7 @@ const DaoActivityCard = ({ activity, isLoaded }) => {
           </Flex>
         </Skeleton>
       </Link>
-    </Box>
+    </ContentBox>
   );
 };
 

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Box, Heading } from '@chakra-ui/core';
+import { Box } from '@chakra-ui/core';
 
 import GraphFetch from '../Shared/GraphFetch';
 import TextBox from '../Shared/TextBox';
@@ -29,9 +29,7 @@ const DaoActivityFeed = () => {
 
   return (
     <Box>
-      <Heading variant='label' size='lg'>
-        Activity Feed
-      </Heading>
+      <TextBox size='sm'>Activity Feed</TextBox>
 
       {activities.map((activity) => (
         <DaoActivityCard

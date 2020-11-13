@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { useHistory } from 'react-router-dom';
-import { Flex, Box } from '@chakra-ui/core';
+import { Flex, Link } from '@chakra-ui/core';
+import ContentBox from '../ContentBox';
+import TextBox from '../TextBox';
 import { useMembers, useDao } from '../../../contexts/PokemolContext';
 import { useTheme } from '../../../contexts/CustomThemeContext';
 
@@ -20,23 +22,19 @@ const MemberInfoCard = ({ user }) => {
 
   return (
     <>
-      <Flex justify='space-between' ml={6}>
-        <Box textTransform='uppercase' fontSize='sm' fontFamily='heading'>
-          {theme.daoMeta.member} Info
-        </Box>
-        <Box
-          textTransform='uppercase'
-          fontSize='sm'
-          fontFamily='heading'
-          _hover={{ cursor: 'pointer' }}
-          onClick={() =>
-            history.push(`/dao/${dao.address}/profile/${user.username}`)
-          }
+      <Flex justify='space-between'>
+        <TextBox size='sm'>{theme.daoMeta.member} Info</TextBox>
+        <TextBox
+          as={Link}
+          href={'/dao/' + dao.address + '/profile/' + user.username}
+          color='inherit'
         >
           View my profile
-        </Box>
+        </TextBox>
       </Flex>
-      <MemberInfoCardGuts user={user} />
+      <ContentBox mt={3}>
+        <MemberInfoCardGuts user={user} />
+      </ContentBox>
     </>
   );
 };

@@ -253,16 +253,16 @@ const ThemeSample = () => {
           </Heading>
           <Flex justify='space-evenly' w='100%'>
             <Box>
-              <Heading variant='label'>Label</Heading>
-              <Heading variant='value'>$420.69</Heading>
+              <TextBox>Label</TextBox>
+              <TextBox variant='value'>$420.69</TextBox>
             </Box>
             <Box>
-              <Heading variant='label'>Label</Heading>
-              <Heading variant='value'>$420.69</Heading>
+              <TextBox>Label</TextBox>
+              <TextBox variant='value'>$420.69</TextBox>
             </Box>
             <Box>
-              <Heading variant='label'>Label</Heading>
-              <Heading variant='value'>$420.69</Heading>
+              <TextBox>Label</TextBox>
+              <TextBox variant='value'>$420.69</TextBox>
             </Box>
           </Flex>
         </ContentBox>

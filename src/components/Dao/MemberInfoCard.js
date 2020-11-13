@@ -18,7 +18,7 @@ const MemberInfoCard = ({ user }) => {
   }, [members, user.username]);
 
   return (
-    <Box ml={6}>
+    <Box>
       <Flex justify='space-between'>
         <TextBox size='sm' color='white'>
           {theme.daoMeta.member} Info
@@ -27,7 +27,7 @@ const MemberInfoCard = ({ user }) => {
           View my profile
         </TextBox>
       </Flex>
-      <ContentBox mt={2} w='97%'>
+      <ContentBox mt={2} w='100%'>
         <MemberInfoCardGuts user={user} />
       </ContentBox>
     </Box>
