@@ -1,12 +1,11 @@
 import React, { useEffect, useState } from 'react';
-import { Box, Flex, Icon, Button, IconButton } from '@chakra-ui/core';
+import { Box, Flex, Button } from '@chakra-ui/core';
 import { useLocation, Link as RouterLink } from 'react-router-dom';
 import { RiAddFill } from 'react-icons/ri';
 import { useUser, useNetwork, useDao } from '../../contexts/PokemolContext';
 import { useTheme } from '../../contexts/CustomThemeContext';
 import { Web3SignIn } from './Web3SignIn';
 import UserAvatar from './UserAvatar';
-import DaoSwitcherModal from '../Modal/DaoSwitcherModal';
 import AccountModal from '../Modal/AccountModal';
 
 const Header = () => {
@@ -40,6 +39,16 @@ const Header = () => {
       setPageTitle(theme.daoMeta.members);
     } else if (location.pathname === `/dao/${dao?.address}/bank`) {
       setPageTitle(theme.daoMeta.bank);
+    } else if (location.pathname === `/dao/${dao?.address}/settings`) {
+      setPageTitle('Settings');
+    } else if (location.pathname === `/dao/${dao?.address}/settings/boosts`) {
+      setPageTitle(theme.daoMeta.boosts);
+    } else if (
+      location.pathname === `/dao/${dao?.address}/settings/boosts/new`
+    ) {
+      setPageTitle('New ' + theme.daoMeta.boost);
+    } else if (location.pathname === `/themeSample`) {
+      setPageTitle('Theme Samples');
     } else if (
       location.pathname === `/dao/${dao?.address}/profile/${user?.username}`
     ) {
@@ -48,6 +57,7 @@ const Header = () => {
       // TODO pull from graph data
       setPageTitle(dao?.apiMeta?.name);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [location, dao, theme.daoMeta, setPageTitle]);
 
   return (
@@ -86,6 +96,16 @@ const Header = () => {
               rightIcon={<RiAddFill />}
             >
               Add Asset
+            </Button>
+          )}
+          {(location.pathname === `/dao/${dao?.address}/settings` ||
+            location.pathname === `/dao/${dao?.address}/settings/boosts`) && (
+            <Button
+              as={RouterLink}
+              to={`/dao/${dao?.address}/settings/boosts/new`}
+              rightIcon={<RiAddFill />}
+            >
+              Add {theme.daoMeta.boost}
             </Button>
           )}
         </Flex>

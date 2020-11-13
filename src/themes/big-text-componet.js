@@ -1,4 +1,4 @@
-export const BigText = {
+export const BigTextComponent = {
   baseStyle: {
     fontWeight: 'bold',
     textTransform: 'uppercase',

@@ -9,7 +9,6 @@ import {
   useTxProcessor,
 } from '../../contexts/PokemolContext';
 import { isAfter, isBefore } from 'date-fns';
-import { ethToWei } from '@netgum/utils'; // returns BN
 
 const ProposalVote = ({ proposal }) => {
   const [user] = useUser();
