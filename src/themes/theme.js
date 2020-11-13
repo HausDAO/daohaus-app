@@ -3,7 +3,7 @@ import BrandImg from '../assets/themes/hausdao/Daohaus__Castle--Dark.svg';
 import BgImg from '../assets/themes/hausdao/daohaus__hero--falling.jpg';
 import { lighten, darken } from 'polished';
 
-import { BigText } from './BigText';
+import { BigText } from './big-text-componet';
 
 export * from './components';
 
