@@ -116,14 +116,18 @@ const SideNav = () => {
           </>
         )}
       </>
-
-      <Button
-        variant='outline'
-        onClick={() => updateRefetchQuery('proposals')}
-        mt={6}
-      >
-        Refetch
-      </Button>
+      <Flex direction='column' w='75px' pt='25px'>
+        <Button
+          variant='outline'
+          onClick={() => updateRefetchQuery('proposals')}
+          my={2}
+        >
+          Refetch
+        </Button>
+        <Button as={RouterLink} variant='outline' to='/themeSample' my={2}>
+          Theme
+        </Button>
+      </Flex>
     </Box>
   );
 };

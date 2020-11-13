@@ -26,7 +26,7 @@ const Profile = () => {
         }
       });
     }
-  }, [members, params]);
+  }, [members, params, dao]);
 
   useEffect(() => {
     if (dao?.tokenBalances && memberPercent) {

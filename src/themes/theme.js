@@ -3,8 +3,6 @@ import BrandImg from '../assets/themes/hausdao/Daohaus__Castle--Dark.svg';
 import BgImg from '../assets/themes/hausdao/daohaus__hero--falling.jpg';
 import { lighten, darken } from 'polished';
 
-export * from './components';
-
 export const defaultTheme = {
   primary500: '#10153d',
   secondary500: '#EB8A23',

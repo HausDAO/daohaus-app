@@ -29,7 +29,7 @@ const OverviewCard = ({ user }) => {
       }
     };
     lookupEns();
-  }, [user]);
+  }, [user, ens.provider]);
 
   return (
     <Flex
@@ -42,8 +42,8 @@ const OverviewCard = ({ user }) => {
       w='100%'
       justify='space-between'
     >
-      <Flex direction='row' p={4} width='48%'>
-        <Flex direction='column' align='center' pr={5}>
+      <Flex direction='row' width='50%'>
+        <Flex direction='column' align='center' pr={5} minW='40%'>
           {user.profile.image && user.profile.image[0] ? (
             <Image
               w='100px'
@@ -60,7 +60,7 @@ const OverviewCard = ({ user }) => {
             />
           )}
           <Skeleton isLoaded={user?.createdAt}>
-            <Box fontFamily='heading' fontSize='xs' textAlign='center' mt={2}>
+            <Box fontFamily='heading' fontSize='xs' textAlign='center' mt={5}>
               Joined{' '}
               {user?.createdAt
                 ? format(new Date(+user.createdAt * 1000), 'MMM. d, yyyy')
@@ -85,7 +85,7 @@ const OverviewCard = ({ user }) => {
             </Box>
           )}
           {user.profile.description && (
-            <Box fontSize='sm' fontFamily='mono' maxW='200px'>
+            <Box fontSize='sm' fontFamily='mono'>
               {user.profile.description}
             </Box>
           )}

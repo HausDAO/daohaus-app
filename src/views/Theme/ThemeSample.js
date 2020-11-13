@@ -1,52 +1,28 @@
-import React, { useEffect, useState } from 'react';
-import {
-  Box,
-  ButtonGroup,
-  Flex,
-  Input,
-  InputGroup,
-  InputLeftAddon,
-  Text,
-  Button,
-} from '@chakra-ui/core';
+import React from 'react';
+import { Box, ButtonGroup, Flex, Button } from '@chakra-ui/core';
 
 import { useTheme } from '../../contexts/CustomThemeContext';
-import BrandOverride from '../../assets/themes/raidTheme/raidguild__swords.svg';
-import BgOverride from '../../assets/themes/raidTheme/raid__fantasy--bg.jpg';
+import ThemeInputsForm from './ThemeInputsForm';
+import raidBg from '../../assets/themes/raidTheme/raid__fantasy--bg.jpg';
+import raidBrand from '../../assets/themes/raidTheme/raidguild__swords.svg';
+import yearnBg from '../../assets/themes/yearn/yearn__bg--pattern--blueonwhite--light.png';
+import yearnBrand from '../../assets/themes/yearn/yearn__brand__square.png';
+import mcvBg from '../../assets/themes/mcv/mcv__bg.jpg';
+import mcvBrand from '../../assets/themes/mcv/mcv__brand__square.png';
+import DaoMetaForm from './DaoMetaForm';
+
+const gradientValues = [50, 100, 200, 300, 400, 500, 600, 700, 800, 900];
 
 const ThemeSample = () => {
-  const [theme, setTheme] = useTheme();
-  const [themeValues, setThemeValues] = useState({
-    primary500: theme.colors.primary[500],
-    secondary500: theme.colors.secondary[500],
-    bg500: theme.colors.background[500],
-  });
+  const [, setTheme] = useTheme();
 
-  useEffect(() => {
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
-  const handleChange = (e) => {
-    e.persist();
-    setThemeValues((prevState) => {
-      return {
-        ...prevState,
-        [e.target.name]: e.target.value,
-      };
-    });
-  };
-
-  const handleReset = () => {
-    setTheme();
-  };
-
-  const handleSet = () => {
+  const setRaidGuildTheme = () => {
     setTheme({
-      primary500: themeValues.primary500 || '#e50651',
-      secondary500: themeValues.secondary500 || '#6153ff',
-      bg500: themeValues.bg500 || '#121212',
-      brandImg: BrandOverride,
-      bgImg: BgOverride,
+      primary500: '#ff3864',
+      secondary500: '#6F3EFC',
+      bg500: '#121212',
+      brandImg: raidBrand,
+      bgImg: raidBg,
       bgOverlayOpacity: '0.5',
       primaryFont: 'Space Mono', // only temporary
       bodyFont: 'Rubik',
@@ -65,156 +41,213 @@ const ThemeSample = () => {
     });
   };
 
-  console.log('themeValue', themeValues);
+  const setMcvTheme = () => {
+    setTheme({
+      primary500: '#C93C4F',
+      secondary500: '#FFA229',
+      bg500: '#121212',
+      brandImg: mcvBrand,
+      bgImg: mcvBg,
+      bgOverlayOpacity: '0.5',
+      primaryFont: 'Space Mono', // only temporary
+      bodyFont: 'Rubik',
+      daoMeta: {
+        proposals: 'Quests',
+        proposal: 'Quest',
+        bank: 'Inventory',
+        members: 'Players',
+        member: 'Player',
+        discord: 'https://discord.gg/WqwQGgeeFd',
+        medium: '',
+        telegram: '',
+        website: '',
+        other: '',
+      },
+    });
+  };
+
+  const setYearnTheme = () => {
+    setTheme({
+      primary500: '#007bff',
+      secondary500: '#DC6BE5',
+      bg500: '#03061B',
+      brandImg: yearnBrand,
+      bgImg: yearnBg,
+      bgOverlayOpacity: '0.5',
+      primaryFont: 'Space Mono', // only temporary
+      bodyFont: 'Rubik',
+      daoMeta: {
+        proposals: 'Quests',
+        proposal: 'Quest',
+        bank: 'Inventory',
+        members: 'Waifus',
+        member: 'Waifu',
+        discord: 'https://discord.gg/WqwQGgeeFd',
+        medium: '',
+        telegram: '',
+        website: '',
+        other: '',
+      },
+    });
+  };
 
   return (
-    <>
-      <Flex>
-        <Box variant='standard'>Content</Box>
-      </Flex>
-      <Flex direction='column'>
-        <Flex direction='row' w='100%' my={6} align='center'>
-          <Text>Inputs</Text>
-          <InputGroup>
-            <InputLeftAddon bg='primary.500'>primary.500</InputLeftAddon>
-            <Input
-              name='primary500'
-              defaultValue={theme.colors.primary[500]}
-              onChange={handleChange}
-            />
-          </InputGroup>
-          <InputGroup>
-            <InputLeftAddon bg='secondary.500'>secondary.500</InputLeftAddon>
-            <Input
-              name='secondary500'
-              defaultValue={theme.colors.secondary[500]}
-              onChange={handleChange}
-            />
-          </InputGroup>
-          <InputGroup>
-            <InputLeftAddon bg='bg.500'>background.500</InputLeftAddon>
-            <Input
-              name='bg500'
-              defaultValue={theme.colors.background[500]}
-              onChange={handleChange}
-            />
-          </InputGroup>
+    <Box>
+      <Flex direction='row'>
+        <Flex
+          direction='column'
+          w='40%'
+          align='center'
+          rounded='lg'
+          bg='blackAlpha.600'
+          borderWidth='1px'
+          borderColor='whiteAlpha.200'
+          p={4}
+          m={6}
+        >
+          <ThemeInputsForm />
+
+          <Flex mb={3} justify='center' direction='column'>
+            <Box fontSize='xl' fontFamily='heading' textAlign='center' mb={2}>
+              Pre-built
+            </Box>
+            <ButtonGroup>
+              <Button
+                onClick={setRaidGuildTheme}
+                bg='#ff3864'
+                border='1px solid #ff3864'
+                _hover={{
+                  color: '#ff3864',
+                  bg: 'black',
+                  border: '1px solid #ff3864',
+                }}
+              >
+                RaidGuild
+              </Button>
+              <Button
+                onClick={setMcvTheme}
+                bg='black'
+                border='1px solid #C93C4F'
+                _hover={{ bg: '#C93C4F', border: '1px solid black' }}
+              >
+                MCV
+              </Button>
+              <Button
+                onClick={setYearnTheme}
+                bg='#007bff'
+                border='1px solid white'
+                _hover={{
+                  color: '#007bff',
+                  bg: 'white',
+                  border: '1px solid #007bff',
+                }}
+              >
+                Yearn
+              </Button>
+            </ButtonGroup>
+          </Flex>
         </Flex>
-        <Flex direction='row' w='100%' my={6} align='center'>
-          <Text>Buttons</Text>
-          <ButtonGroup>
-            <Button onClick={handleSet}>Change (Base)</Button>
-            <Button onClick={handleReset} mb={3} variant='outline'>
-              Reset (Outline)
-            </Button>
-            <Button onClick={handleReset} mb={3} variant='primary'>
-              Reset (Primary)
-            </Button>
-          </ButtonGroup>
-        </Flex>
-      </Flex>
-      <Flex>
-        <Flex direction='column' p={6}>
-          <h3 fontSize='l'>Primary</h3>
-          <Box w='200px' bg='primary.50' p={6}>
-            <Text>primary[50]</Text>
-          </Box>
-          <Box w='200px' bg='primary.100' p={6}>
-            <Text>primary[100]</Text>
-          </Box>
-          <Box w='200px' bg='primary.200' p={6}>
-            <Text>primary[200]</Text>
-          </Box>
-          <Box w='200px' bg='primary.300' p={6}>
-            <Text>primary[300]</Text>
-          </Box>
-          <Box w='200px' bg='primary.400' p={6}>
-            <Text>primary[400]</Text>
-          </Box>
-          <Box w='200px' bg='primary.500' p={6}>
-            <Text>primary[500]</Text>
-          </Box>
-          <Box w='200px' bg='primary.600' p={6}>
-            <Text>primary[600]</Text>
-          </Box>
-          <Box w='200px' bg='primary.700' p={6}>
-            <Text>primary[700]</Text>
-          </Box>
-          <Box w='200px' bg='primary.800' p={6}>
-            <Text>primary[800]</Text>
-          </Box>
-          <Box w='200px' bg='primary.900' p={6}>
-            <Text>primary[900]</Text>
-          </Box>
-        </Flex>
-        <Flex direction='column' p={6}>
-          <h3 fontSize='l'>Secondary</h3>
-          <Box w='200px' bg='secondary.50' p={6}>
-            <Text>secondary[50]</Text>
-          </Box>
-          <Box w='200px' bg='secondary.100' p={6}>
-            <Text>secondary[100]</Text>
-          </Box>
-          <Box w='200px' bg='secondary.200' p={6}>
-            <Text>secondary[200]</Text>
-          </Box>
-          <Box w='200px' bg='secondary.300' p={6}>
-            <Text>secondary[300]</Text>
-          </Box>
-          <Box w='200px' bg='secondary.400' p={6}>
-            <Text>secondary[400]</Text>
-          </Box>
-          <Box w='200px' bg='secondary.500' p={6}>
-            <Text>secondary[500]</Text>
-          </Box>
-          <Box w='200px' bg='secondary.600' p={6}>
-            <Text>secondary[600]</Text>
-          </Box>
-          <Box w='200px' bg='secondary.700' p={6}>
-            <Text>secondary[700]</Text>
-          </Box>
-          <Box w='200px' bg='secondary.800' p={6}>
-            <Text>secondary[800]</Text>
-          </Box>
-          <Box w='200px' bg='secondary.900' p={6}>
-            <Text>secondary[900]</Text>
-          </Box>
-        </Flex>
-        <Flex direction='column' p={6}>
-          <h3 fontSize='l'>Background</h3>
-          <Box w='200px' bg='background.50' p={6}>
-            <Text>background[50]</Text>
-          </Box>
-          <Box w='200px' bg='background.100' p={6}>
-            <Text>background[100]</Text>
-          </Box>
-          <Box w='200px' bg='background.200' p={6}>
-            <Text>background[200]</Text>
-          </Box>
-          <Box w='200px' bg='background.300' p={6}>
-            <Text>background[300]</Text>
-          </Box>
-          <Box w='200px' bg='background.400' p={6}>
-            <Text>background[400]</Text>
-          </Box>
-          <Box w='200px' bg='background.500' p={6}>
-            <Text>background[500]</Text>
-          </Box>
-          <Box w='200px' bg='background.600' p={6}>
-            <Text>background[600]</Text>
-          </Box>
-          <Box w='200px' bg='background.700' p={6}>
-            <Text>background[700]</Text>
-          </Box>
-          <Box w='200px' bg='background.800' p={6}>
-            <Text>background[800]</Text>
-          </Box>
-          <Box w='200px' bg='background.900' p={6}>
-            <Text>background[900]</Text>
-          </Box>
+        <Flex
+          direction='column'
+          w='40%'
+          align='center'
+          rounded='lg'
+          bg='blackAlpha.600'
+          borderWidth='1px'
+          borderColor='whiteAlpha.200'
+          p={6}
+          m={6}
+        >
+          <DaoMetaForm />
         </Flex>
       </Flex>
-    </>
+      <Flex
+        w='60%'
+        justify='center'
+        rounded='lg'
+        bg='blackAlpha.600'
+        borderWidth='1px'
+        borderColor='whiteAlpha.200'
+        p={6}
+        m={6}
+      >
+        <Flex direction='column' p={2} w='33%'>
+          <Box
+            fontSize='lg'
+            fontFamily='heading'
+            textTransform='uppercase'
+            textAlign='center'
+          >
+            Primary
+          </Box>
+          {gradientValues.map((gradient) => {
+            return (
+              <Flex
+                key={`p${gradient}`}
+                w='100%'
+                bg={`primary.${gradient}`}
+                p={4}
+                justify='center'
+              >
+                <Box fontFamily='mono' fontSize='lg' fontWeight={700}>
+                  primary[{gradient}]
+                </Box>
+              </Flex>
+            );
+          })}
+        </Flex>
+        <Flex direction='column' p={2} w='33%'>
+          <Box
+            fontSize='lg'
+            fontFamily='heading'
+            textTransform='uppercase'
+            textAlign='center'
+          >
+            Secondary
+          </Box>
+          {gradientValues.map((gradient) => {
+            return (
+              <Flex
+                key={`s${gradient}`}
+                w='100%'
+                bg={`secondary.${gradient}`}
+                p={4}
+                justify='center'
+              >
+                <Box fontFamily='mono' fontSize='lg' fontWeight={700}>
+                  secondary[{gradient}]
+                </Box>
+              </Flex>
+            );
+          })}
+        </Flex>
+        <Flex direction='column' p={2} w='33%'>
+          <Box
+            fontSize='lg'
+            fontFamily='heading'
+            textTransform='uppercase'
+            textAlign='center'
+          >
+            Background
+          </Box>
+          {gradientValues.map((gradient) => {
+            return (
+              <Flex
+                key={`s${gradient}`}
+                w='100%'
+                bg={`background.${gradient}`}
+                p={4}
+                justify='center'
+              >
+                <Box fontFamily='mono' fontSize='lg' fontWeight={700}>
+                  background[{gradient}]
+                </Box>
+              </Flex>
+            );
+          })}
+        </Flex>
+      </Flex>
+    </Box>
   );
 };
 
