@@ -1,12 +1,12 @@
 import React from 'react';
 import { Box, useStyleConfig } from '@chakra-ui/core';
 
-const BigText = (props) => {
+const ContentBox = (props) => {
   const { size, variant, ...rest } = props;
 
-  const styles = useStyleConfig('BigTextComponent', { size, variant });
+  const styles = useStyleConfig('ContentBoxComponent', { size, variant });
 
   return <Box sx={styles} {...rest} />;
 };
 
-export default BigText;
+export default ContentBox;

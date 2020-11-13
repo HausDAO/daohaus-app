@@ -2,7 +2,6 @@ import { Flex, Spinner, Box } from '@chakra-ui/core';
 import React, { useEffect, useState } from 'react';
 import DaoActivityFeed from '../../components/Dao/DaoActivityFeed';
 import DaoOverviewDetails from '../../components/Dao/DaoOverviewDetails';
-import BigText from '../../components/Shared/BigText';
 import MemberInfoCard from '../../components/Shared/MemberInfoCard/MemberInfoCard';
 
 import {
@@ -35,7 +34,7 @@ const Dao = () => {
                 <DaoOverviewDetails dao={dao} />
               </Box>
 
-              <Box w='40%'>
+              <Box w='50%'>
                 <MemberInfoCard user={user} />
                 {dao.graphData && <DaoActivityFeed />}
               </Box>

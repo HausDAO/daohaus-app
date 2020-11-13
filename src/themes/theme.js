@@ -4,6 +4,8 @@ import BgImg from '../assets/themes/hausdao/daohaus__hero--falling.jpg';
 import { lighten, darken, rgba } from 'polished';
 
 import { BigTextComponent } from './big-text-componet';
+import { ContentBoxComponent } from './content-box-component';
+import { TextBoxComponent } from './text-box-component';
 
 export const defaultTheme = {
   primary500: '#10153d',
@@ -110,6 +112,8 @@ export const setTheme = (daoTheme) => {
     },
     components: {
       BigTextComponent,
+      ContentBoxComponent,
+      TextBoxComponent,
       Button: {
         // 1. Update the base styles
         baseStyle: {
@@ -197,6 +201,27 @@ export const setTheme = (daoTheme) => {
           size: 'md',
           focusBorderColor: 'secondary.500',
         },
+      },
+      Heading: {
+        baseStyle: {},
+        variants: {
+          label: {
+            color: 'whiteAlpha.700',
+            fontSize: 'xs',
+            textTransform: 'uppercase',
+            letterSpacing: '0.15em',
+            marginTop: 0,
+            lineHeight: 'xs',
+          },
+          value: {
+            color: 'whiteAlpha.900',
+            fontWeight: '400',
+            fontFamily: 'mono',
+            fontSize: 'xl',
+          },
+        },
+        sizes: {},
+        defaultProps: {},
       },
       Textarea: {
         baseStyle: {

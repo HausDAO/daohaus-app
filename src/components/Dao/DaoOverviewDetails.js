@@ -6,6 +6,9 @@ import { utils } from 'web3';
 import { useUser, useMembers } from '../../contexts/PokemolContext';
 import { useTheme } from '../../contexts/CustomThemeContext';
 
+import ContentBox from '../Shared/ContentBox';
+import TextBox from '../Shared/TextBox';
+
 const DaoOverviewDetails = ({ dao }) => {
   const [theme] = useTheme();
   const [user] = useUser();
@@ -16,27 +19,13 @@ const DaoOverviewDetails = ({ dao }) => {
   })[0]?.tokenBalance;
 
   return (
-    <>
+    <Box ml={6}>
       {user && (
-        <Box
-          ml={6}
-          textTransform='uppercase'
-          fontSize='sm'
-          fontFamily='heading'
-        >
+        <TextBox size='sm' color='whiteAlpha.900'>
           Details
-        </Box>
+        </TextBox>
       )}
-      <Box
-        rounded='lg'
-        bg='blackAlpha.600'
-        borderWidth='1px'
-        borderColor='whiteAlpha.200'
-        p={6}
-        m={6}
-        mt={2}
-        w='100%'
-      >
+      <ContentBox mt={2} w='100%'>
         <Flex direction='row' align='center'>
           <Image
             src={require('../../assets/Daohaus__Castle--Dark.svg')}
@@ -137,8 +126,8 @@ const DaoOverviewDetails = ({ dao }) => {
             View {theme.daoMeta.bank}
           </Button>
         </Flex>
-      </Box>
-    </>
+      </ContentBox>
+    </Box>
   );
 };
 

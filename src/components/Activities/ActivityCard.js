@@ -3,21 +3,15 @@ import { Link } from 'react-router-dom';
 
 import { formatCreatedAt } from '../../utils/helpers';
 import { Badge, Box, Heading, Stack, Skeleton } from '@chakra-ui/core';
+
+import ContentBox from '../Shared/ContentBox';
 // import { getProposalCountdownText } from '../../utils/proposal-helper';
 
 // TODO: get getProposalCountdownText(activity) outside of dao context?
 
 const ActivityCard = ({ activity, isLoaded }) => {
   return (
-    <Box
-      rounded='lg'
-      bg='blackAlpha.600'
-      borderWidth='1px'
-      borderColor='whiteAlpha.200'
-      p={6}
-      m={6}
-      mt={2}
-    >
+    <ContentBox mt={2}>
       <Link to={`/dao/${activity.molochAddress}`}>
         {activity.proposalId && (
           <>
@@ -53,7 +47,7 @@ const ActivityCard = ({ activity, isLoaded }) => {
           </>
         )}
       </Link>
-    </Box>
+    </ContentBox>
   );
 };
 

@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from 'react';
-import { Box } from '@chakra-ui/core';
+import { Box, Heading } from '@chakra-ui/core';
 
 import GraphFetch from '../Shared/GraphFetch';
+import TextBox from '../Shared/TextBox';
 import { DAO_ACTIVITIES } from '../../utils/apollo/dao-queries';
 import { activitiesData } from '../../content/skeleton-data';
 import DaoActivityCard from '../Activities/DaoActivityCard';
@@ -27,16 +28,10 @@ const DaoActivityFeed = () => {
   }, [fetchedData]);
 
   return (
-    <>
-      <Box
-        mt={6}
-        ml={6}
-        textTransform='uppercase'
-        fontSize='sm'
-        fontFamily='heading'
-      >
+    <Box>
+      <Heading variant='label' size='lg'>
         Activity Feed
-      </Box>
+      </Heading>
 
       {activities.map((activity) => (
         <DaoActivityCard
@@ -63,7 +58,7 @@ const DaoActivityFeed = () => {
           context={{ currentPeriod: dao.currentPeriod }}
         />
       ) : null}
-    </>
+    </Box>
   );
 };
 
