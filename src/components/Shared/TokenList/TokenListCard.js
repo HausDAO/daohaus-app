@@ -8,6 +8,7 @@ const TokenListCard = ({ token, isLoaded }) => {
   // TODO deal with prices
   // TODO handle different token decimals
   // TODO token images? trust-wallet?
+  console.log(token);
 
   return (
     <Flex h='60px' align='center'>
@@ -23,10 +24,11 @@ const TokenListCard = ({ token, isLoaded }) => {
               ? parseFloat(
                   utils.fromWei(token.memberBalance.toString()),
                 ).toFixed(3)
-              : '--'}
+              : null}
             {token && !token.memberBalance && token?.contractTokenBalance
               ? utils.fromWei(token.contractTokenBalance.toString())
               : null}
+            {!token?.memberBalance && !token?.contractTokenBalance && '--'}
           </Box>
         </Skeleton>
       </Box>

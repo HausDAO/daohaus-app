@@ -51,7 +51,7 @@ const SideNav = () => {
               </Link>
               <Link to={`/dao/${dao.address}/settings/boosts`} as={RouterLink}>
                 <Box fontSize='md' fontFamily='heading'>
-                  Boost
+                  Boosts
                 </Box>
               </Link>
               <Link to={`/dao/${dao.address}/settings`} as={RouterLink}>

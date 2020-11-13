@@ -26,7 +26,11 @@ const DaoSwitcherModal = ({ isOpen, setShowModal }) => {
   const renderDaoSelect = () => {
     return userDaos.map((dao) => {
       return (
-        <Link key={dao.id} to={`/dao/${dao.id}`}>
+        <Link
+          key={dao.id}
+          to={`/dao/${dao.id}`}
+          onClick={() => setShowModal(false)}
+        >
           <Flex
             direction='row'
             justifyContent='space-between'

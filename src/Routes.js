@@ -13,6 +13,7 @@ import ThemeSample from './views/Theme/ThemeSample';
 import Bank from './views/Bank/Bank';
 import Settings from './views/Settings/Settings';
 import Boosts from './views/Settings/Boosts';
+import NewBoost from './views/Settings/NewBoost';
 import CustomTheme from './views/Settings/CustomTheme';
 import Notifications from './views/Settings/Notifications';
 
@@ -72,6 +73,11 @@ const Routes = () => {
           component={Boosts}
         />
         <Route
+          path='/dao/:dao(\b0x[0-9a-f]{10,40}\b)/settings/boosts/new'
+          exact
+          component={NewBoost}
+        />
+        <Route
           path='/dao/:dao(\b0x[0-9a-f]{10,40}\b)/settings/theme'
           exact
           component={CustomTheme}
@@ -83,7 +89,7 @@ const Routes = () => {
         />
         <Route path='/themeSample' exact component={ThemeSample} />
 
-        <Route path='/' component={Hub} />
+        <Route exact path='/' component={Hub} />
         <Route path='*' component={FourOhFour} />
       </Switch>
     </>

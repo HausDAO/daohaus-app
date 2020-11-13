@@ -15,7 +15,11 @@ const MemberListCard = ({ member, isLoaded, handleSelect, selectedMember }) => {
           ? 'primary.500'
           : null
       }
-      _hover={{ background: 'primary.500', borderRadius: '4px' }}
+      _hover={{
+        cursor: 'pointer',
+        background: 'primary.500',
+        borderRadius: '4px',
+      }}
       onClick={() => handleSelect(member)}
     >
       <Flex w='43%' direction='column' justify='space-between'>

@@ -2,7 +2,7 @@ import React from 'react';
 import { Box, ButtonGroup, Flex, Button } from '@chakra-ui/core';
 
 import { useTheme } from '../../contexts/CustomThemeContext';
-import ThemeInputsForm from './ThemeInputsForm';
+import ThemeInputsForm from './ThemeBuilderForm';
 import raidBg from '../../assets/themes/raidTheme/raid__fantasy--bg.jpg';
 import raidBrand from '../../assets/themes/raidTheme/raidguild__swords.svg';
 import yearnBg from '../../assets/themes/yearn/yearn__bg--pattern--blueonwhite--light.png';
@@ -32,11 +32,17 @@ const ThemeSample = () => {
         bank: 'Inventory',
         members: 'Players',
         member: 'Player',
+        boosts: 'Boosts',
+        boost: 'Boost',
         discord: 'https://discord.gg/WqwQGgeeFd',
         medium: '',
         telegram: '',
         website: '',
         other: '',
+        f04title: '404 Game Over',
+        f04heading: 'You have been slain',
+        f04subhead: 'Please reload from the most recent save point.',
+        f04cta: 'Start Over',
       },
     });
   };
@@ -57,11 +63,17 @@ const ThemeSample = () => {
         bank: 'Inventory',
         members: 'Players',
         member: 'Player',
+        boosts: 'Apps',
+        boost: 'App',
         discord: 'https://discord.gg/WqwQGgeeFd',
         medium: '',
         telegram: '',
         website: '',
         other: '',
+        f04title: '404 Game Over',
+        f04heading: 'You have been slain',
+        f04subhead: 'Please reload from the most recent save point.',
+        f04cta: 'Start Over',
       },
     });
   };
@@ -82,11 +94,17 @@ const ThemeSample = () => {
         bank: 'Inventory',
         members: 'Waifus',
         member: 'Waifu',
+        boosts: 'Apps',
+        boost: 'App',
         discord: 'https://discord.gg/WqwQGgeeFd',
         medium: '',
         telegram: '',
         website: '',
         other: '',
+        f04title: '404 Game Over',
+        f04heading: 'You have been slain',
+        f04subhead: 'Please reload from the most recent save point.',
+        f04cta: 'Start Over',
       },
     });
   };

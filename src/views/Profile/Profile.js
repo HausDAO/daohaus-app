@@ -14,6 +14,8 @@ const Profile = () => {
   const [memberProfile, setMemberProfile] = useState(null);
   const [memberPercent, setMemberPercent] = useState(null);
 
+  // TODO prices
+
   useEffect(() => {
     if (members.length > 0) {
       members.forEach((member) => {

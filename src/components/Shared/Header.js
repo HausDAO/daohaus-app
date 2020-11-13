@@ -41,6 +41,12 @@ const Header = () => {
       setPageTitle(theme.daoMeta.bank);
     } else if (location.pathname === `/dao/${dao?.address}/settings`) {
       setPageTitle('Settings');
+    } else if (location.pathname === `/dao/${dao?.address}/settings/boosts`) {
+      setPageTitle(theme.daoMeta.boosts);
+    } else if (
+      location.pathname === `/dao/${dao?.address}/settings/boosts/new`
+    ) {
+      setPageTitle('New ' + theme.daoMeta.boost);
     } else if (location.pathname === `/themeSample`) {
       setPageTitle('Theme Samples');
     } else if (
@@ -90,6 +96,16 @@ const Header = () => {
               rightIcon={<RiAddFill />}
             >
               Add Asset
+            </Button>
+          )}
+          {(location.pathname === `/dao/${dao?.address}/settings` ||
+            location.pathname === `/dao/${dao?.address}/settings/boosts`) && (
+            <Button
+              as={RouterLink}
+              to={`/dao/${dao?.address}/settings/boosts/new`}
+              rightIcon={<RiAddFill />}
+            >
+              Add {theme.daoMeta.boost}
             </Button>
           )}
         </Flex>

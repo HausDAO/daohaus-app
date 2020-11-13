@@ -13,7 +13,7 @@ import { useTheme } from '../../contexts/CustomThemeContext';
 import raidBg from '../../assets/themes/raidTheme/raid__fantasy--bg.jpg';
 import raidBrand from '../../assets/themes/raidTheme/raidguild__swords.svg';
 
-const ThemeInputsForm = () => {
+const ThemeBuilderForm = () => {
   const [theme, setTheme] = useTheme();
   const { register, handleSubmit } = useForm();
 
@@ -33,11 +33,17 @@ const ThemeInputsForm = () => {
         bank: 'Inventory',
         members: 'Players',
         member: 'Player',
+        boosts: 'Boosts',
+        boost: 'Boost',
         discord: 'https://discord.gg/WqwQGgeeFd',
         medium: '',
         telegram: '',
         website: '',
         other: '',
+        f04title: '404 Game Over',
+        f04heading: 'You have been slain',
+        f04subhead: 'Please reload from the most recent save point.',
+        f04cta: 'Start Over',
       },
     });
   };
@@ -49,7 +55,7 @@ const ThemeInputsForm = () => {
   return (
     <>
       <Box fontSize='xl' fontFamily='heading'>
-        Theme Inputs
+        Theme Buidler
       </Box>
       <form onSubmit={handleSubmit(onSubmit)}>
         <Flex direction='column'>
@@ -101,4 +107,4 @@ const ThemeInputsForm = () => {
   );
 };
 
-export default ThemeInputsForm;
+export default ThemeBuilderForm;
