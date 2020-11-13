@@ -25,7 +25,7 @@ const SideNav = () => {
                 <ChangeDao />
               </Flex>
             </Flex>
-            <Stack spacing={3} mt='125px' w='200px' pr={1}>
+            <Stack spacing={3} mt='60px' w='200px' pr={1}>
               <Box
                 fontSize='xs'
                 fontFamily='heading'
@@ -82,7 +82,7 @@ const SideNav = () => {
                 <ChangeDao />
               </Flex>
             </Flex>
-            <Stack spacing={4} mt='125px' w='200px' pr={1}>
+            <Stack spacing={4} mt='60px' w='200px' pr={1}>
               <Box fontSize='xs'>Main Menu</Box>
               <Link href='https://daohaus.club' isExternal>
                 <Box fontSize='xl' fontFamily='heading'>

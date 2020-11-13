@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Box } from '@chakra-ui/core';
-
+import TextBox from '../Shared/TextBox';
 import { useDao } from '../../contexts/PokemolContext';
 import GraphFetch from '../Shared/GraphFetch';
 import { DAO_ACTIVITIES } from '../../utils/apollo/dao-queries';
@@ -42,16 +42,8 @@ const MembersActivityFeed = ({ selectedMember }) => {
   }, [selectedMember, fetchedData]);
 
   return (
-    <>
-      <Box
-        mt={6}
-        ml={6}
-        textTransform='uppercase'
-        fontSize='sm'
-        fontFamily='heading'
-      >
-        Activity Feed
-      </Box>
+    <Box mt={6}>
+      <TextBox>Activity Feed</TextBox>
 
       {activities.map((activity) => (
         <DaoActivityCard
@@ -78,7 +70,7 @@ const MembersActivityFeed = ({ selectedMember }) => {
           context={{ currentPeriod: dao.currentPeriod }}
         />
       ) : null}
-    </>
+    </Box>
   );
 };
 

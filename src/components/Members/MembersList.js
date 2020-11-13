@@ -1,10 +1,12 @@
 import React, { useEffect, useState } from 'react';
-import { Box, Flex } from '@chakra-ui/core';
+import { Flex } from '@chakra-ui/core';
 
 import { useMembers } from '../../contexts/PokemolContext';
 import { useTheme } from '../../contexts/CustomThemeContext';
 import { defaultMembers } from '../../utils/constants';
 import MemberListCard from './MemberListCard';
+import TextBox from '../Shared/TextBox';
+import ContentBox from '../Shared/ContentBox';
 
 const MembersList = ({ handleSelect, selectedMember }) => {
   const [theme] = useTheme();
@@ -26,88 +28,32 @@ const MembersList = ({ handleSelect, selectedMember }) => {
     <>
       <Flex>
         {filter ? (
-          <Box
-            ml={8}
-            textTransform='uppercase'
-            fontSize='sm'
-            fontFamily='heading'
-            cursor='pointer'
-          >
+          <TextBox>
             Filtered by:{' '}
             <span style={{ color: theme.colors.primary[50] }}>
               Action Needed
             </span>
-          </Box>
+          </TextBox>
         ) : (
-          <Box
-            ml={8}
-            textTransform='uppercase'
-            fontFamily='heading'
-            cursor='pointer'
-          >
+          <TextBox>
             Apply a{' '}
             <span style={{ color: theme.colors.primary[50] }}> filter</span>
-          </Box>
+          </TextBox>
         )}
-        <Box
-          ml={8}
-          textTransform='uppercase'
-          fontSize='sm'
-          fontFamily='heading'
-          cursor='pointer'
-        >
+        <TextBox ml={9}>
           Sort by:{' '}
           <span style={{ color: theme.colors.primary[50] }}>
             {' '}
             Voting Period
           </span>
-        </Box>
+        </TextBox>
       </Flex>
-      <Box
-        rounded='lg'
-        bg='blackAlpha.600'
-        borderWidth='1px'
-        borderColor='whiteAlpha.200'
-        p={6}
-        m={6}
-      >
-        <Flex mb={5}>
-          <Box
-            w='43%'
-            textTransform='uppercase'
-            fontFamily='heading'
-            fontSize='sm'
-            fontWeight={700}
-            pl={3}
-          >
-            {theme.daoMeta.member}
-          </Box>
-          <Box
-            w='15%'
-            textTransform='uppercase'
-            fontFamily='heading'
-            fontSize='sm'
-            fontWeight={700}
-          >
-            Shares
-          </Box>
-          <Box
-            w='15%'
-            textTransform='uppercase'
-            fontFamily='heading'
-            fontSize='sm'
-            fontWeight={700}
-          >
-            Loot
-          </Box>
-          <Box
-            textTransform='uppercase'
-            fontFamily='heading'
-            fontSize='sm'
-            fontWeight={700}
-          >
-            Join Date
-          </Box>
+      <ContentBox mt={6} mr={6}>
+        <Flex>
+          <TextBox w='43%'>{theme.daoMeta.member}</TextBox>
+          <TextBox w='15%'>Shares</TextBox>
+          <TextBox w='15%'>Loot</TextBox>
+          <TextBox>Join Date</TextBox>
         </Flex>
         {_members?.length > 0 &&
           _members.map((member) => {
@@ -121,7 +67,7 @@ const MembersList = ({ handleSelect, selectedMember }) => {
               />
             );
           })}
-      </Box>
+      </ContentBox>
     </>
   );
 };

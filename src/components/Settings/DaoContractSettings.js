@@ -6,6 +6,9 @@ import { utils } from 'web3';
 import { format } from 'date-fns';
 import { RiExternalLinkLine } from 'react-icons/ri';
 
+import ContentBox from '../Shared/ContentBox';
+import TextBox from '../Shared/TextBox';
+
 const DaoContractSettings = () => {
   const [dao] = useDao();
   const [theme] = useTheme();
@@ -32,28 +35,9 @@ const DaoContractSettings = () => {
   };
 
   return (
-    <Flex
-      rounded='lg'
-      bg='blackAlpha.600'
-      borderWidth='1px'
-      borderColor='whiteAlpha.200'
-      p={6}
-      m={6}
-      mt={2}
-      w='100%'
-      direction='column'
-    >
+    <ContentBox d='flex' w='100%' flexDirection='column'>
       <Box>
-        <Box
-          textTransform='uppercase'
-          fontFamily='heading'
-          fontSize='sm'
-          fontWeight={700}
-          mb={2}
-          color='primary.50'
-        >
-          Dao Contract
-        </Box>
+        <TextBox>Dao Contract</TextBox>
         <Skeleton isLoaded={dao?.address}>
           <Link
             href={`${uri()}${dao.address}`}
@@ -158,7 +142,7 @@ const DaoContractSettings = () => {
           </Skeleton>
         </Box>
       </Flex>
-    </Flex>
+    </ContentBox>
   );
 };
 

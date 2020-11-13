@@ -59,9 +59,11 @@ const ProposalDetail = ({ proposal }) => {
               <Box>
                 <Box
                   textTransform='uppercase'
-                  fontSize='sm'
+                  fontSize='xs'
                   fontFamily='heading'
-                  fontWeight={700}
+                  fontWeight={400}
+                  letterSpacing='0.1em'
+                  color='whiteAlpha.600'
                 >
                   Tribute
                 </Box>
@@ -80,9 +82,11 @@ const ProposalDetail = ({ proposal }) => {
               <Box>
                 <Box
                   textTransform='uppercase'
-                  fontSize='sm'
+                  fontSize='xs'
                   fontFamily='heading'
-                  fontWeight={700}
+                  fontWeight={400}
+                  letterSpacing='0.1em'
+                  color='whiteAlpha.600'
                 >
                   Payment Requested
                 </Box>
@@ -101,9 +105,11 @@ const ProposalDetail = ({ proposal }) => {
               <Box>
                 <Box
                   textTransform='uppercase'
-                  fontSize='sm'
+                  fontSize='xs'
                   fontFamily='heading'
-                  fontWeight={700}
+                  fontWeight={400}
+                  letterSpacing='0.1em'
+                  color='whiteAlpha.600'
                 >
                   Shares
                 </Box>
@@ -120,9 +126,11 @@ const ProposalDetail = ({ proposal }) => {
               <Box>
                 <Box
                   textTransform='uppercase'
-                  fontSize='sm'
+                  fontSize='xs'
                   fontFamily='heading'
-                  fontWeight={700}
+                  fontWeight={400}
+                  letterSpacing='0.1em'
+                  color='whiteAlpha.600'
                 >
                   Loot
                 </Box>
@@ -162,9 +170,11 @@ const ProposalDetail = ({ proposal }) => {
                 <>
                   <Box
                     textTransform='uppercase'
-                    fontSize='sm'
+                    fontSize='xs'
                     fontFamily='heading'
-                    fontWeight={700}
+                    fontWeight={400}
+                    letterSpacing='0.1em'
+                    color='whiteAlpha.600'
                   >
                     Proposal Status
                   </Box>
@@ -182,9 +192,11 @@ const ProposalDetail = ({ proposal }) => {
           <Box mt={6}>
             <Box
               textTransform='uppercase'
-              fontSize='sm'
+              fontSize='xs'
               fontFamily='heading'
-              fontWeight={700}
+              fontWeight={400}
+              letterSpacing='0.1em'
+              color='whiteAlpha.600'
             >
               Link
             </Box>
@@ -243,10 +255,11 @@ const ProposalDetail = ({ proposal }) => {
         <Box mr={5}>
           <Box
             textTransform='uppercase'
-            fontSize='sm'
-            mb={4}
+            fontSize='xs'
             fontFamily='heading'
-            fontWeight={700}
+            fontWeight={400}
+            letterSpacing='0.1em'
+            color='whiteAlpha.600'
           >
             Submitted By
           </Box>
@@ -263,10 +276,11 @@ const ProposalDetail = ({ proposal }) => {
         <Box>
           <Box
             textTransform='uppercase'
-            fontSize='sm'
+            fontSize='xs'
             fontFamily='heading'
-            fontWeight={700}
-            mb={4}
+            fontWeight={400}
+            letterSpacing='0.1em'
+            color='whiteAlpha.600'
           >
             Recipient
           </Box>

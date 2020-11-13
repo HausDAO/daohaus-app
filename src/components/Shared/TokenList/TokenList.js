@@ -1,8 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import { Box, Flex } from '@chakra-ui/core';
+import { Flex } from '@chakra-ui/core';
 
 import TokenListCard from './TokenListCard';
 import { defaultTokens } from '../../../utils/constants';
+import ContentBox from '../../Shared/ContentBox';
+import TextBox from '../../Shared/TextBox';
 
 const TokenList = ({ tokenList }) => {
   const [localTokenList, setLocalTokenList] = useState(null);
@@ -18,52 +20,12 @@ const TokenList = ({ tokenList }) => {
   }, [tokenList]);
 
   return (
-    <Box
-      rounded='lg'
-      bg='blackAlpha.600'
-      borderWidth='1px'
-      borderColor='whiteAlpha.200'
-      w='100%'
-      p={6}
-      m={6}
-    >
-      <Flex mb={5}>
-        <Box
-          w='15%'
-          textTransform='uppercase'
-          fontFamily='heading'
-          fontSize='sm'
-          fontWeight={700}
-        >
-          Asset
-        </Box>
-        <Box
-          w='55%'
-          textTransform='uppercase'
-          fontFamily='heading'
-          fontSize='sm'
-          fontWeight={700}
-        >
-          Balance
-        </Box>
-        <Box
-          w='15%'
-          textTransform='uppercase'
-          fontFamily='heading'
-          fontSize='sm'
-          fontWeight={700}
-        >
-          Price
-        </Box>
-        <Box
-          w='15%'
-          textTransform='uppercase'
-          fontFamily='heading'
-          fontSize='sm'
-          fontWeight={700}
-        >
-          Value
-        </Box>
+    <ContentBox mt={6}>
+      <Flex>
+        <TextBox w='15%'>Asset</TextBox>
+        <TextBox w='55%'>Balance</TextBox>
+        <TextBox w='15%'>Price</TextBox>
+        <TextBox w='15%'>Value</TextBox>
       </Flex>
       {localTokenList?.length > 0 &&
         localTokenList.map((token) => {
@@ -71,7 +33,7 @@ const TokenList = ({ tokenList }) => {
             <TokenListCard key={token?.id} token={token} isLoaded={isLoaded} />
           );
         })}
-    </Box>
+    </ContentBox>
   );
 };
 

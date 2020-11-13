@@ -1,11 +1,15 @@
 import { extendTheme } from '@chakra-ui/core';
 import BrandImg from '../assets/themes/hausdao/Daohaus__Castle--Dark.svg';
 import BgImg from '../assets/themes/hausdao/daohaus__hero--falling.jpg';
-import { lighten, darken } from 'polished';
+import { lighten, darken, rgba } from 'polished';
+//Custom Chakra Components
+import { ContentBoxComponent } from './content-box-component';
+import { TextBoxComponent } from './text-box-component';
 
 export const defaultTheme = {
   primary500: '#10153d',
   secondary500: '#EB8A23',
+  secondaryAlpha: rgba('#EB8A23', 0.75),
   bg500: '#03061B',
   bgOverlayOpacity: '0.75',
   primaryFont: 'Inknut Antiqua',
@@ -23,9 +27,9 @@ export const defaultTheme = {
     boost: 'App',
     discord: 'https://discord.gg/NPEJysW',
     medium: 'https://medium.com/daohaus-club',
-    telegram: '',
-    website: '',
-    other: '',
+    telegram: 'https://t.me/joinchat/IJqu9xPa0xzYLN1mmFKo8g',
+    website: 'https://daohaus.club',
+    other: 'https://wikipedia.com',
     f04title: "404 What's Lost Can Be Found",
     f04heading: 'You have been slain',
     f04subhead: 'Please reload from the most recent save point.',
@@ -37,6 +41,7 @@ export const setTheme = (daoTheme) => {
   const themeOverrides = daoTheme || defaultTheme;
   return extendTheme({
     colors: {
+      secondaryAlpha: themeOverrides.secondaryAlpha,
       primary: {
         50: lighten(0.4, themeOverrides.primary500),
         100: lighten(0.3, themeOverrides.primary500),
@@ -105,6 +110,8 @@ export const setTheme = (daoTheme) => {
       f04cta: themeOverrides.daoMeta.f04cta,
     },
     components: {
+      ContentBoxComponent,
+      TextBoxComponent,
       Button: {
         // 1. Update the base styles
         baseStyle: {
@@ -192,6 +199,27 @@ export const setTheme = (daoTheme) => {
           size: 'md',
           focusBorderColor: 'secondary.500',
         },
+      },
+      Heading: {
+        baseStyle: {},
+        variants: {
+          label: {
+            color: 'whiteAlpha.700',
+            fontSize: 'xs',
+            textTransform: 'uppercase',
+            letterSpacing: '0.15em',
+            marginTop: 0,
+            lineHeight: 'xs',
+          },
+          value: {
+            color: 'whiteAlpha.900',
+            fontWeight: '400',
+            fontFamily: 'mono',
+            fontSize: 'xl',
+          },
+        },
+        sizes: {},
+        defaultProps: {},
       },
       Textarea: {
         baseStyle: {

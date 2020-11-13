@@ -9,7 +9,7 @@ const Members = () => {
   const [selectedMember, setSelectedMember] = useState();
 
   return (
-    <Flex>
+    <Flex p={6}>
       <Box w='70%'>
         <MembersList
           handleSelect={setSelectedMember}

@@ -1,10 +1,11 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
-import { Box, Flex, Skeleton } from '@chakra-ui/core';
+import { Box, Flex, Skeleton, Link } from '@chakra-ui/core';
 
 import { useMembers, useDao, useUser } from '../../contexts/PokemolContext';
 import { useTheme } from '../../contexts/CustomThemeContext';
 import MemberSnapshotChart from './MemberSnapshotChart';
+import TextBox from '../Shared/TextBox';
+import ContentBox from '../Shared/ContentBox';
 
 const MemberSnapshot = ({ selectedMember }) => {
   const [theme] = useTheme();
@@ -15,79 +16,42 @@ const MemberSnapshot = ({ selectedMember }) => {
 
   return (
     <Box>
-      <Flex justify='space-between' fontSize='xs' mt={2}>
-        <Box textTransform='uppercase' fontFamily='heading' fontWeight={700}>
-          Snapshot
-        </Box>
-        <Box
+      <Flex justify='space-between'>
+        <TextBox>Snapshot</TextBox>
+        <TextBox
           as={Link}
-          to={`/dao/${dao?.address}/profile/${
+          href={`/dao/${dao?.address}/profile/${
             selectedMember ? selectedMember.memberAddress : user?.username
           }`}
-          textTransform='uppercase'
-          fontFamily='heading'
-          fontWeight={700}
-          color='secondary.300'
         >
           View profile
-        </Box>
+        </TextBox>
       </Flex>
-      <Box
-        rounded='lg'
-        bg='blackAlpha.600'
-        borderWidth='1px'
-        borderColor='whiteAlpha.200'
-        p={3}
-        mt={4}
-        w='100%'
-      >
-        <Flex maxW='70%' justify='space-between' mt={4}>
-          <Box m='0 5px'>
-            <Box
-              textTransform='uppercase'
-              fontSize='xs'
-              fontFamily='heading'
-              fontWeight={700}
-            >
-              {theme.daoMeta.members}
-            </Box>
+      <ContentBox mt={3}>
+        <Flex justify='space-between'>
+          <Box>
+            <TextBox>{theme.daoMeta.members}</TextBox>
             <Skeleton isLoaded={members.length > 0}>
-              <Box fontSize='md' fontFamily='space' fontWeight={700}>
-                {members?.length}
-              </Box>
+              <TextBox variant='value'>{members?.length}</TextBox>
             </Skeleton>
           </Box>
-          <Box m='0 5px'>
-            <Box
-              textTransform='uppercase'
-              fontSize='xs'
-              fontFamily='heading'
-              fontWeight={700}
-            >
-              Shares
-            </Box>
+          <Box>
+            <TextBox>Shares</TextBox>
             <Skeleton isLoaded={dao?.graphData?.totalShares}>
-              <Box fontSize='md' fontFamily='space' fontWeight={700}>
+              <TextBox variant='value'>
                 {dao?.graphData?.totalShares
                   ? dao?.graphData?.totalShares
                   : '--'}
-              </Box>
+              </TextBox>
             </Skeleton>
           </Box>
           {(dao?.graphData?.totalLoot > 0 || !dao?.graphData?.totalLoot) && (
-            <Box m='0 5px'>
-              <Box
-                textTransform='uppercase'
-                fontSize='xs'
-                fontFamily='heading'
-                fontWeight={700}
-              >
-                Loot
-              </Box>
+            <Box>
+              <TextBox>Loot</TextBox>
               <Skeleton isLoaded={dao?.graphData?.totalLoot}>
-                <Box fontSize='md' fontFamily='space' fontWeight={700}>
+                <TextBox variant='value'>
                   {dao?.graphData?.totalLoot ? dao?.graphData?.totalLoot : '--'}
-                </Box>
+                </TextBox>
               </Skeleton>
             </Box>
           )}
@@ -95,7 +59,7 @@ const MemberSnapshot = ({ selectedMember }) => {
         <Flex justify='center' mt={4}>
           <MemberSnapshotChart />
         </Flex>
-      </Box>
+      </ContentBox>
     </Box>
   );
 };

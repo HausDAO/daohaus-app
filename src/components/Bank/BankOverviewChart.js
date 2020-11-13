@@ -19,6 +19,8 @@ import {
 import { FaChevronDown } from 'react-icons/fa';
 import { useTheme } from '../../contexts/CustomThemeContext';
 
+import ContentBox from '../Shared/ContentBox';
+
 const BankOverviewChart = () => {
   const [theme] = useTheme();
 
@@ -32,7 +34,7 @@ const BankOverviewChart = () => {
   ];
 
   return (
-    <Box m={6} w='100%'>
+    <Box>
       <Flex justify='space-between'>
         <Menu>
           <MenuButton>
@@ -54,15 +56,7 @@ const BankOverviewChart = () => {
           </MenuList>
         </Menu>
       </Flex>
-      <Box
-        minH='260px'
-        w='100%'
-        p={4}
-        bg='blackAlpha.600'
-        borderWidth='1px'
-        borderColor='whiteAlpha.200'
-        rounded='lg'
-      >
+      <ContentBox minH='260px' w='100%'>
         <FlexibleWidthXYPlot height={260}>
           <VerticalGridLines color='white' />
           <HorizontalGridLines color='white' />
@@ -100,7 +94,7 @@ const BankOverviewChart = () => {
             color={theme.colors.primary[50]}
           />
         </FlexibleWidthXYPlot>
-      </Box>
+      </ContentBox>
     </Box>
   );
 };

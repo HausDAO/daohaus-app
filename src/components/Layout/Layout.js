@@ -1,11 +1,20 @@
 import React from 'react';
-import { Flex, Image, Link, Box, IconButton } from '@chakra-ui/core';
+import { Flex, Icon, Image, Link, Box, IconButton } from '@chakra-ui/core';
+
 import { motion } from 'framer-motion';
 
 import Header from '../Shared/Header';
 import SideNav from '../Shared/SideNav';
+
+import {
+  RiArrowLeftSLine,
+  RiDiscordFill,
+  RiTelegramFill,
+  RiMediumFill,
+  RiGlobeLine,
+  RiLinksLine,
+} from 'react-icons/ri';
 import { useTheme, useSideNavToggle } from '../../contexts/CustomThemeContext';
-import { RiArrowLeftSLine } from 'react-icons/ri';
 
 const Layout = ({ children }) => {
   const [sideNavOpen, toggleSideNav] = useSideNavToggle();
@@ -99,17 +108,32 @@ const Layout = ({ children }) => {
           <SideNav />
         </MotionBox>
 
-        <Flex direction='column' align='center'>
-          {theme.daoMeta.discord !== '' ? (
-            <Link mb={3} href={theme.daoMeta.discord} isExternal>
-              D
+        <Flex direction='column' align='start' justify='start' w='100%'>
+          {theme.daoMeta.website !== '' && (
+            <Link href={theme.daoMeta.website} isExternal fontSize='xl'>
+              <Icon as={RiGlobeLine} />
             </Link>
-          ) : null}
-          {theme.daoMeta.medium !== '' ? (
-            <Link mb={3} href={theme.daoMeta.medium} isExternal>
-              M
+          )}
+          {theme.daoMeta.discord !== '' && (
+            <Link href={theme.daoMeta.discord} isExternal fontSize='xl'>
+              <Icon as={RiDiscordFill} />
             </Link>
-          ) : null}
+          )}
+          {theme.daoMeta.telegram !== '' && (
+            <Link href={theme.daoMeta.telegram} isExternal fontSize='xl'>
+              <Icon as={RiTelegramFill} />
+            </Link>
+          )}
+          {theme.daoMeta.medium !== '' && (
+            <Link href={theme.daoMeta.medium} isExternal fontSize='xl'>
+              <Icon as={RiMediumFill} />
+            </Link>
+          )}
+          {theme.daoMeta.other !== '' && (
+            <Link href={theme.daoMeta.other} isExternal fontSize='xl'>
+              <Icon as={RiLinksLine} />
+            </Link>
+          )}
         </Flex>
       </MotionFlex>
 

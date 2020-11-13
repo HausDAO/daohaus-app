@@ -5,6 +5,8 @@ import { useTheme } from '../../contexts/CustomThemeContext';
 
 import { memberProfile } from '../../utils/helpers';
 import MemberInfoCardGuts from './MemberInfoCardGuts';
+import TextBox from '../Shared/TextBox';
+import ContentBox from '../Shared/ContentBox';
 
 const MemberInfoCard = ({ user }) => {
   const [members] = useMembers();
@@ -16,28 +18,19 @@ const MemberInfoCard = ({ user }) => {
   }, [members, user.username]);
 
   return (
-    <>
-      <Flex justify='space-between' ml={6}>
-        <Box textTransform='uppercase' fontSize='sm' fontFamily='heading'>
+    <Box>
+      <Flex justify='space-between'>
+        <TextBox size='sm' color='white'>
           {theme.daoMeta.member} Info
-        </Box>
-        <Box textTransform='uppercase' fontSize='sm' fontFamily='heading'>
+        </TextBox>
+        <TextBox size='sm' color='white'>
           View my profile
-        </Box>
+        </TextBox>
       </Flex>
-      <Box
-        rounded='lg'
-        bg='blackAlpha.600'
-        borderWidth='1px'
-        borderColor='whiteAlpha.200'
-        p={6}
-        m={6}
-        mt={2}
-        w='97%'
-      >
+      <ContentBox mt={2} w='100%'>
         <MemberInfoCardGuts user={user} />
-      </Box>
-    </>
+      </ContentBox>
+    </Box>
   );
 };
 

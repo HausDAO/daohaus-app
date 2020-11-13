@@ -40,10 +40,18 @@ const ProposalCard = ({ proposal, isLoaded }) => {
         p={6}
         m={6}
         mt={2}
+        transition='all 0.15s linear'
+        _hover={{ bg: 'secondaryAlpha', color: 'white' }}
       >
         <Flex justify='space-between'>
           <Box minWidth='30%' mr={5}>
-            <Box fontSize='sm' textTransform='uppercase' fontFamily='heading'>
+            <Box
+              fontSize='xs'
+              textTransform='uppercase'
+              fontFamily='heading'
+              letterSpacing='0.1em'
+              mb={3}
+            >
               {proposal?.proposalType
                 ? proposal.proposalType
                 : theme.daoMeta.proposal}
@@ -131,9 +139,11 @@ const ProposalCard = ({ proposal, isLoaded }) => {
             <Box>
               <Box
                 textTransform='uppercase'
-                fontSize='sm'
+                fontSize='xs'
                 fontFamily='heading'
-                fontWeight={700}
+                fontWeight={400}
+                letterSpacing='0.1em'
+                color='whiteAlpha.600'
               >
                 Tribute
               </Box>
@@ -151,9 +161,11 @@ const ProposalCard = ({ proposal, isLoaded }) => {
             <Box>
               <Box
                 textTransform='uppercase'
-                fontSize='sm'
+                fontSize='xs'
                 fontFamily='heading'
-                fontWeight={700}
+                fontWeight={400}
+                letterSpacing='0.1em'
+                color='whiteAlpha.600'
               >
                 Payment Requested
               </Box>
@@ -171,9 +183,11 @@ const ProposalCard = ({ proposal, isLoaded }) => {
             <Box>
               <Box
                 textTransform='uppercase'
-                fontSize='sm'
+                fontSize='xs'
                 fontFamily='heading'
-                fontWeight={700}
+                fontWeight={400}
+                letterSpacing='0.1em'
+                color='whiteAlpha.600'
               >
                 Shares
               </Box>
@@ -188,9 +202,11 @@ const ProposalCard = ({ proposal, isLoaded }) => {
             <Box>
               <Box
                 textTransform='uppercase'
-                fontSize='sm'
+                fontSize='xs'
                 fontFamily='heading'
-                fontWeight={700}
+                fontWeight={400}
+                letterSpacing='0.1em'
+                color='whiteAlpha.600'
               >
                 Loot
               </Box>
@@ -204,9 +220,11 @@ const ProposalCard = ({ proposal, isLoaded }) => {
           <Box fontFamily='heading'>
             <Box
               textTransform='uppercase'
-              fontSize='sm'
+              fontSize='xs'
               fontFamily='heading'
-              fontWeight={700}
+              fontWeight={400}
+              letterSpacing='0.1em'
+              color='whiteAlpha.600'
             >
               Proposal Status
             </Box>

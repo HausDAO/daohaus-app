@@ -3,6 +3,8 @@ import { Flex, Box, Skeleton } from '@chakra-ui/core';
 import { format } from 'date-fns';
 import { useMembers } from '../../contexts/PokemolContext';
 
+import TextBox from '../Shared/TextBox';
+
 import UserAvatar from '../Shared/UserAvatar';
 import { memberProfile } from '../../utils/helpers';
 
@@ -23,31 +25,15 @@ const MemberInfoCardGuts = ({ user, context }) => {
       </Flex>
       <Flex w='100%' justify='space-between' mt={6}>
         <Box>
-          <Box
-            textTransform='uppercase'
-            fontSize='sm'
-            fontFamily='heading'
-            fontWeight={700}
-            mb={2}
-          >
-            Shares
-          </Box>
+          <TextBox>Shares</TextBox>
           <Skeleton isLoaded={member?.shares}>
-            <Box fontSize='lg' fontFamily='space' fontWeight={700}>
+            <TextBox variant='value'>
               {member?.shares ? member.shares : '--'}
-            </Box>
+            </TextBox>
           </Skeleton>
         </Box>
         <Box>
-          <Box
-            textTransform='uppercase'
-            fontSize='sm'
-            fontFamily='heading'
-            fontWeight={700}
-            mb={2}
-          >
-            Loot
-          </Box>
+          <TextBox>Loot</TextBox>
           <Skeleton isLoaded={member?.loot}>
             <Box fontSize='lg' fontFamily='space' fontWeight={700}>
               {member?.loot ? member.loot : '-'}
