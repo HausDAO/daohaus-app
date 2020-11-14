@@ -117,7 +117,7 @@ const MinionProposalForm = () => {
           </FormLabel>
           <Input
             name='minionContract'
-            placeholder='0x'
+            placeholder='0x36473d5bbfa176733898019245a603d915171b7c'
             mb={5}
             ref={register({
               required: {

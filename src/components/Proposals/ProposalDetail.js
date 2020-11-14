@@ -8,15 +8,22 @@ import { utils } from 'web3';
 import { useMembers, useMemberWallet } from '../../contexts/PokemolContext';
 import { useTheme } from '../../contexts/CustomThemeContext';
 import UserAvatar from '../../components/Shared/UserAvatar';
-import { memberProfile } from '../../utils/helpers';
+import { IsJsonString, memberProfile } from '../../utils/helpers';
 import { getProposalCountdownText } from '../../utils/proposal-helper';
+import ProposalMinionCard from './ProposalMinionCard';
 
 const ProposalDetail = ({ proposal }) => {
   const [members] = useMembers();
   const [theme] = useTheme();
-  const details = proposal?.details && JSON.parse(proposal?.details);
+
+  const details =
+    proposal?.details && IsJsonString(proposal?.details)
+      ? JSON.parse(proposal.details)
+      : null;
   const [memberWallet] = useMemberWallet();
   const [memberVote, setMemberVote] = useState();
+
+  const minionProposalType = true;
 
   useEffect(() => {
     if (proposal?.votes && memberWallet && memberWallet?.activeMember) {
@@ -233,11 +240,16 @@ const ProposalDetail = ({ proposal }) => {
             ))}
         </Flex>
       </Flex>
-      <Skeleton isLoaded={details?.description}>
-        <Box w='100%' mt={8}>
-          {details?.description}
-        </Box>
-      </Skeleton>
+
+      {minionProposalType ? (
+        <ProposalMinionCard proposal={proposal} />
+      ) : (
+        <Skeleton isLoaded={details?.description}>
+          <Box w='100%' mt={8}>
+            {details?.description}
+          </Box>
+        </Skeleton>
+      )}
 
       <Flex w='80%' mt={6} justify='space-between'>
         <Box mr={5}>

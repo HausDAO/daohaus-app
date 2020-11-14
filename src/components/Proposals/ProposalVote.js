@@ -7,9 +7,11 @@ import {
   useDao,
   useUser,
   useTxProcessor,
+  useWeb3Connect,
 } from '../../contexts/PokemolContext';
 import { isAfter, isBefore } from 'date-fns';
 import { ethToWei } from '@netgum/utils'; // returns BN
+import { MinionService } from '../../utils/minion-service';
 
 const ProposalVote = ({ proposal }) => {
   const [user] = useUser();
@@ -17,6 +19,7 @@ const ProposalVote = ({ proposal }) => {
   const [wallet] = useMemberWallet();
   const [daoData] = useDaoGraphData();
   const [txProcessor, updateTxProcessor] = useTxProcessor();
+  const [web3Connect] = useWeb3Connect();
   const currentlyVoting = (proposal) => {
     return (
       isBefore(Date.now(), new Date(+proposal?.votingPeriodEnds * 1000)) &&
@@ -99,6 +102,23 @@ const ProposalVote = ({ proposal }) => {
       }
     } catch (e) {
       console.error(`Error processing proposal: ${e.toString()}`);
+    }
+  };
+
+  const executeMinion = async (proposal) => {
+    const setupValues = {
+      minion: '0x36473d5bbfa176733898019245a603d915171b7', // quickdao 9000 minion
+    };
+    const minionService = new MinionService(
+      web3Connect.web3,
+      user.username,
+      setupValues,
+    );
+
+    try {
+      minionService.executeAction(proposal.proposalId, txCallBack);
+    } catch (err) {
+      console.log('error: ', err);
     }
   };
 
@@ -270,6 +290,15 @@ const ProposalVote = ({ proposal }) => {
           <Flex justify='center' pt='10px'>
             <Flex direction='column'>
               <Button onClick={() => processProposal(proposal)}>Process</Button>
+            </Flex>
+          </Flex>
+        )}
+        {proposal?.status === 'Passed' && (
+          <Flex justify='center' pt='10px'>
+            <Flex direction='column'>
+              <Button onClick={() => executeMinion(proposal)}>
+                Execute Minion
+              </Button>
             </Flex>
           </Flex>
         )}

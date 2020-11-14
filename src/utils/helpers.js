@@ -6,6 +6,15 @@ export const truncateAddr = (addr) => {
   return addr.slice(0, 6) + '...' + addr.slice(-4);
 };
 
+export const IsJsonString = (str) => {
+  try {
+    JSON.parse(str);
+  } catch (e) {
+    return false;
+  }
+  return true;
+};
+
 export const valToDecimalString = (value, tokenAddress, tokens) => {
   // get correct value of token with decimal places
   // returns a string
