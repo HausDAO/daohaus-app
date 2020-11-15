@@ -8,7 +8,11 @@ import { utils } from 'web3';
 import { useMembers, useMemberWallet } from '../../contexts/PokemolContext';
 import { useTheme } from '../../contexts/CustomThemeContext';
 import UserAvatar from '../../components/Shared/UserAvatar';
-import { IsJsonString, memberProfile } from '../../utils/helpers';
+import {
+  IsJsonString,
+  memberProfile,
+  proposalDetails,
+} from '../../utils/helpers';
 import { getProposalCountdownText } from '../../utils/proposal-helper';
 import ProposalMinionCard from './ProposalMinionCard';
 
@@ -16,10 +20,8 @@ const ProposalDetail = ({ proposal }) => {
   const [members] = useMembers();
   const [theme] = useTheme();
 
-  const details =
-    proposal?.details && IsJsonString(proposal?.details)
-      ? JSON.parse(proposal.details)
-      : null;
+  const details = proposalDetails(proposal?.details);
+
   const [memberWallet] = useMemberWallet();
   const [memberVote, setMemberVote] = useState();
 
