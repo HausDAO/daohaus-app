@@ -34,6 +34,7 @@ const baseListFields = `
   whitelist
   yesVotes
   molochVersion
+  minionAddress
   moloch {
     gracePeriodLength
     periodDuration

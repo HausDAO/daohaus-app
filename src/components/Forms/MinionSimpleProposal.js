@@ -10,6 +10,8 @@ import {
   Stack,
   Box,
   Textarea,
+  Select,
+  Text,
 } from '@chakra-ui/core';
 import { RiErrorWarningLine } from 'react-icons/ri';
 
@@ -29,7 +31,7 @@ const MinionProposalForm = () => {
 
   const [txProcessor, updateTxProcessor] = useTxProcessor();
   const [currentError, setCurrentError] = useState(null);
-  console.log(dao);
+  const [minions, setMinions] = useState([]);
 
   const {
     handleSubmit,
@@ -37,6 +39,16 @@ const MinionProposalForm = () => {
     register,
     // formState
   } = useForm();
+
+  useEffect(() => {
+    if (dao?.graphData?.minions) {
+      const _minions = dao.graphData.minions.map(
+        (minion) => minion.minionAddress,
+      );
+      setMinions(_minions);
+      console.log('minis', _minions);
+    }
+  }, [dao?.graphData?.minions]);
 
   useEffect(() => {
     if (Object.keys(errors).length > 0) {
@@ -95,7 +107,7 @@ const MinionProposalForm = () => {
     }
   };
 
-  return (
+  return minions.length ? (
     <form onSubmit={handleSubmit(onSubmit)}>
       <FormControl
         isInvalid={errors.name}
@@ -115,19 +127,29 @@ const MinionProposalForm = () => {
           >
             Minion Contract
           </FormLabel>
-          <Input
+          <Select
             name='minionContract'
-            placeholder='0x36473d5bbfa176733898019245a603d915171b7c'
             mb={5}
+            focusBorderColor='secondary.500'
             ref={register({
               required: {
                 value: true,
                 message: 'Minion contract is required',
               },
             })}
-            color='white'
-            focusBorderColor='secondary.500'
-          />
+            color='black'
+            backgroundColor='white'
+            placeholder='Select Minion'
+            variant='flushed'
+          >
+            {' '}
+            {minions.map((minion, idx) => (
+              <option key={idx} value={minion}>
+                {minion}
+              </option>
+            ))}
+            <option value={null}>Create a new minion</option>
+          </Select>
           <FormLabel
             htmlFor='targetContract'
             color='white'
@@ -216,6 +238,11 @@ const MinionProposalForm = () => {
         </Box>
       </Flex>
     </form>
+  ) : (
+    <>
+      <Text>You do not have a minion yet</Text>
+      <Text>In beta add a free Minion Boost for your DAO here</Text>
+    </>
   );
 };
 

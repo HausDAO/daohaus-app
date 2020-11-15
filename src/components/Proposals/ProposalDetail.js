@@ -8,11 +8,7 @@ import { utils } from 'web3';
 import { useMembers, useMemberWallet } from '../../contexts/PokemolContext';
 import { useTheme } from '../../contexts/CustomThemeContext';
 import UserAvatar from '../../components/Shared/UserAvatar';
-import {
-  IsJsonString,
-  memberProfile,
-  proposalDetails,
-} from '../../utils/helpers';
+import { memberProfile, proposalDetails } from '../../utils/helpers';
 import { getProposalCountdownText } from '../../utils/proposal-helper';
 import ProposalMinionCard from './ProposalMinionCard';
 
@@ -25,7 +21,7 @@ const ProposalDetail = ({ proposal }) => {
   const [memberWallet] = useMemberWallet();
   const [memberVote, setMemberVote] = useState();
 
-  const minionProposalType = true;
+  console.log('proposal>>>>', proposal);
 
   useEffect(() => {
     if (proposal?.votes && memberWallet && memberWallet?.activeMember) {
@@ -243,7 +239,7 @@ const ProposalDetail = ({ proposal }) => {
         </Flex>
       </Flex>
 
-      {minionProposalType ? (
+      {proposal?.minionAddress ? (
         <ProposalMinionCard proposal={proposal} />
       ) : (
         <Skeleton isLoaded={details?.description}>

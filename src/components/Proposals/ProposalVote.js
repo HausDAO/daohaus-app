@@ -107,7 +107,7 @@ const ProposalVote = ({ proposal }) => {
 
   const executeMinion = async (proposal) => {
     const setupValues = {
-      minion: '0x36473d5bbfa176733898019245a603d915171b7', // quickdao 9000 minion
+      minion: proposal.minionAddress, 
     };
     const minionService = new MinionService(
       web3Connect.web3,
@@ -293,7 +293,7 @@ const ProposalVote = ({ proposal }) => {
             </Flex>
           </Flex>
         )}
-        {proposal?.status === 'Passed' && (
+        {proposal?.status === 'Passed' && proposal?.minionAddress && (
           <Flex justify='center' pt='10px'>
             <Flex direction='column'>
               <Button onClick={() => executeMinion(proposal)}>
