@@ -10,7 +10,6 @@ import {
   useWeb3Connect,
 } from '../../contexts/PokemolContext';
 import { isAfter, isBefore } from 'date-fns';
-import { ethToWei } from '@netgum/utils'; // returns BN
 import { MinionService } from '../../utils/minion-service';
 
 const ProposalVote = ({ proposal }) => {
@@ -106,8 +105,9 @@ const ProposalVote = ({ proposal }) => {
   };
 
   const executeMinion = async (proposal) => {
+    // TODO: will nedd to check if it has been executed yet
     const setupValues = {
-      minion: proposal.minionAddress, 
+      minion: proposal.minionAddress,
     };
     const minionService = new MinionService(
       web3Connect.web3,
