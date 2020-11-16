@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { formatDistanceToNow, isBefore } from 'date-fns';
 import { Flex, Box, Icon, Link, Skeleton } from '@chakra-ui/core';
+import ContentBox from '../Shared/ContentBox';
 import { RiExternalLinkLine } from 'react-icons/ri';
 import { FaThumbsUp, FaThumbsDown } from 'react-icons/fa';
 import { utils } from 'web3';
@@ -31,14 +32,7 @@ const ProposalDetail = ({ proposal }) => {
   }, [memberWallet, proposal]);
 
   return (
-    <Box
-      rounded='lg'
-      bg='blackAlpha.600'
-      borderWidth='1px'
-      borderColor='whiteAlpha.200'
-      p={6}
-      m={6}
-    >
+    <ContentBox>
       <Flex>
         <Box w='90%'>
           <Box
@@ -52,6 +46,11 @@ const ProposalDetail = ({ proposal }) => {
           <Skeleton isLoaded={details?.title}>
             <Box fontSize='3xl' fontFamily='heading' fontWeight={700}>
               {details?.title ? details?.title : '-'}
+            </Box>
+          </Skeleton>
+          <Skeleton isLoaded={details?.description}>
+            <Box w='100%' mt={8}>
+              {details?.description}
             </Box>
           </Skeleton>
           <Flex w='100%' justify='space-between' mt={6}>
@@ -245,11 +244,6 @@ const ProposalDetail = ({ proposal }) => {
             ))}
         </Flex>
       </Flex>
-      <Skeleton isLoaded={details?.description}>
-        <Box w='100%' mt={8}>
-          {details?.description}
-        </Box>
-      </Skeleton>
 
       <Flex w='80%' mt={6} justify='space-between'>
         <Box mr={5}>
@@ -295,7 +289,7 @@ const ProposalDetail = ({ proposal }) => {
           </Skeleton>
         </Box>
       </Flex>
-    </Box>
+    </ContentBox>
   );
 };
 

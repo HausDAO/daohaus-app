@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Box, Flex, Badge, Skeleton, Icon } from '@chakra-ui/core';
+import ContentBox from '../Shared/ContentBox';
 import { utils } from 'web3';
 import { format } from 'date-fns';
 
@@ -31,13 +32,7 @@ const ProposalCard = ({ proposal, isLoaded }) => {
     <Link to={`/dao/${dao.address}/proposals/${proposal.proposalId}`}>
       {/* <Link to={`/dao/${dao?.address}/proposals/${proposal?.proposalId}`}> */}
 
-      <Box
-        rounded='lg'
-        bg='blackAlpha.800'
-        borderWidth='1px'
-        borderColor='whiteAlpha.200'
-        p={6}
-        m={6}
+      <ContentBox
         mt={2}
         transition='all 0.15s linear'
         _hover={{ bg: 'secondaryAlpha', color: 'white' }}
@@ -255,7 +250,7 @@ const ProposalCard = ({ proposal, isLoaded }) => {
               : '--'}
           </Box>
         </Skeleton>
-      </Box>
+      </ContentBox>
     </Link>
   );
 };
