@@ -17,6 +17,7 @@ import {
   MenuList,
   MenuItem,
 } from '@chakra-ui/core';
+import TextBox from '../Shared/TextBox';
 import { utils } from 'web3';
 import { RiAddFill, RiErrorWarningLine } from 'react-icons/ri';
 
@@ -126,16 +127,9 @@ const FundingProposalForm = () => {
         mb={5}
       >
         <Box w='48%'>
-          <FormLabel
-            htmlFor='title'
-            color='white'
-            fontFamily='heading'
-            textTransform='uppercase'
-            fontSize='xs'
-            fontWeight={700}
-          >
+          <TextBox as={FormLabel} htmlFor='title'>
             Details
-          </FormLabel>
+          </TextBox>
           <Stack spacing={4}>
             <Input
               name='title'
@@ -187,16 +181,9 @@ const FundingProposalForm = () => {
 
           {showShares && (
             <>
-              <FormLabel
-                htmlFor='name'
-                color='white'
-                fontFamily='heading'
-                textTransform='uppercase'
-                fontSize='xs'
-                fontWeight={700}
-              >
+              <TextBox as={FormLabel} htmlFor='name'>
                 Shares Requested
-              </FormLabel>
+              </TextBox>
               <Input
                 name='sharesRequested'
                 placeholder='0'
@@ -217,16 +204,9 @@ const FundingProposalForm = () => {
           )}
           {showLoot && (
             <>
-              <FormLabel
-                htmlFor='lootRequested'
-                color='white'
-                fontFamily='heading'
-                textTransform='uppercase'
-                fontSize='xs'
-                fontWeight={700}
-              >
+              <TextBox as={FormLabel} htmlFor='lootRequested'>
                 Loot Requested
-              </FormLabel>
+              </TextBox>
               <Input
                 name='lootRequested'
                 placeholder='0'
@@ -253,6 +233,7 @@ const FundingProposalForm = () => {
                 as={Button}
                 variant='outline'
                 rightIcon={<Icon as={RiAddFill} />}
+                position='relative'
               >
                 Additional Options
               </MenuButton>
