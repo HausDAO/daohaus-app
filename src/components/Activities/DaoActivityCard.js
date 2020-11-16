@@ -1,9 +1,17 @@
 import React, { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
 import { getProfile } from '3box/lib/api';
 
 import { timeToNow, truncateAddr } from '../../utils/helpers';
-import { Avatar, Badge, Heading, Flex, Skeleton, Text } from '@chakra-ui/core';
+import {
+  Avatar,
+  Box,
+  Link,
+  Badge,
+  Heading,
+  Flex,
+  Skeleton,
+  Text,
+} from '@chakra-ui/core';
 import makeBlockie from 'ethereum-blockies-base64';
 
 import ContentBox from '../Shared/ContentBox';
@@ -45,14 +53,23 @@ const DaoActivityCard = ({ activity, isLoaded }) => {
     if (activity && activity.activityData) {
       switch (activity.activityData.type) {
         case 'proposal': {
-          return <Badge>{activity.activityData.lastActivity}</Badge>;
+          return (
+            <Badge variant='solid'>{activity.activityData.lastActivity}</Badge>
+          );
         }
         case 'rage': {
-          return <Badge colorScheme='red'>Rage</Badge>;
+          return (
+            <Badge variant='solid' colorScheme='red'>
+              Rage
+            </Badge>
+          );
         }
         case 'vote': {
           return (
-            <Badge colorScheme={+activity.uintVote === 1 ? 'green' : 'red'}>
+            <Badge
+              colorScheme={+activity.uintVote === 1 ? 'green' : 'red'}
+              variant='solid'
+            >
               {+activity.uintVote === 1 ? 'Yes' : 'No'}
             </Badge>
           );
@@ -67,7 +84,7 @@ const DaoActivityCard = ({ activity, isLoaded }) => {
   return (
     <ContentBox mt={3}>
       <Link
-        to={
+        href={
           activity?.activityData?.type !== 'rage'
             ? `/dao/${activity.molochAddress}/proposals/${activity.proposalId}`
             : '#'
@@ -80,13 +97,13 @@ const DaoActivityCard = ({ activity, isLoaded }) => {
                 {renderTitle()}
               </Heading>
 
-              <Flex direction='row' justifyContent='space-between'>
-                <Text>
+              <Flex direction='row' align='center'>
+                <Box mr={2}>{renderBadge()}</Box>
+                <Text as='i' fontSize='xs'>
                   {activity?.activityData?.createdAt
                     ? timeToNow(activity.activityData.createdAt)
                     : '--'}
                 </Text>
-                {renderBadge()}
               </Flex>
             </Flex>
 
