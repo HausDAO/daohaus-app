@@ -36,7 +36,6 @@ const ProposalCard = ({ proposal, isLoaded }) => {
         bg='blackAlpha.800'
         borderWidth='1px'
         borderColor='whiteAlpha.200'
-        _hover={{ background: 'primary.500' }}
         p={6}
         m={6}
         mt={2}
