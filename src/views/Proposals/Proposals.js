@@ -6,7 +6,7 @@ import ProposalsActivityFeed from '../../components/Proposals/ProposalsActivityF
 
 const Proposals = () => {
   return (
-    <Flex>
+    <Flex p={6}>
       <Box w='60%'>
         <ProposalsList />
       </Box>

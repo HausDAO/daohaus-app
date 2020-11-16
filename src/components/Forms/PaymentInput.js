@@ -7,6 +7,7 @@ import {
   InputRightAddon,
   Select,
 } from '@chakra-ui/core';
+import TextBox from '../Shared/TextBox';
 import React, { useState, useEffect } from 'react';
 import { useDao } from '../../contexts/PokemolContext';
 
@@ -80,16 +81,7 @@ const PaymentInput = ({ register, setValue, getValues, errors }) => {
 
   return (
     <>
-      <FormLabel
-        htmlFor='paymentRequested'
-        color='white'
-        fontFamily='heading'
-        textTransform='uppercase'
-        fontSize='xs'
-        fontWeight={700}
-      >
-        Payment Requested
-      </FormLabel>
+      <TextBox as={FormLabel}>Payment Requested</TextBox>
       <InputGroup>
         <Button
           onClick={() => setMax()}

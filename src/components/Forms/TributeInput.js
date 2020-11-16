@@ -6,6 +6,7 @@ import {
   InputRightAddon,
   Select,
 } from '@chakra-ui/core';
+import TextBox from '../Shared/TextBox';
 import React, { useState, useEffect } from 'react';
 import { useDao } from '../../contexts/PokemolContext';
 
@@ -90,17 +91,7 @@ const TributeInput = ({ register, setValue, getValues }) => {
 
   return (
     <>
-      <FormLabel
-        htmlFor='tributeOffered'
-        color='white'
-        fontFamily='heading'
-        textTransform='uppercase'
-        letterSpacing='0.15em'
-        fontSize='xs'
-        fontWeight={700}
-      >
-        Token Tribute
-      </FormLabel>
+      <TextBox as={FormLabel}>Token Tribute</TextBox>
       <InputGroup>
         {!unlocked && (
           <Button
