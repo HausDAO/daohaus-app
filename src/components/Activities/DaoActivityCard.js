@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import { getProfile } from '3box/lib/api';
+import { Link } from 'react-router-dom';
 
 import { timeToNow, truncateAddr } from '../../utils/helpers';
 import {
   Avatar,
   Box,
-  Link,
   Badge,
   Heading,
   Flex,
@@ -84,7 +84,7 @@ const DaoActivityCard = ({ activity, isLoaded }) => {
   return (
     <ContentBox mt={3}>
       <Link
-        href={
+        to={
           activity?.activityData?.type !== 'rage'
             ? `/dao/${activity.molochAddress}/proposals/${activity.proposalId}`
             : '#'

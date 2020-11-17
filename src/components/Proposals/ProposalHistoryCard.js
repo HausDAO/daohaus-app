@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
 
 import { timeToNow, truncateAddr } from '../../utils/helpers';
 import { Box, Heading, Skeleton, Flex, Text, Avatar } from '@chakra-ui/core';
@@ -53,63 +52,53 @@ const ProposalHistoryCard = ({ activity, isLoaded }) => {
       m={6}
       mt={2}
     >
-      <Link
-        to={
-          activity?.activityData?.type !== 'rage'
-            ? `/dao/${activity.molochAddress}/proposals/${activity.proposalId}`
-            : '#'
-        }
-      >
-        <Skeleton isLoaded={isLoaded}>
-          <Flex direction='row' justifyContent='space-between'>
-            <Flex direction='column'>
-              <Heading as='h4' size='sm'>
-                {renderTitle()}
-              </Heading>
+      <Skeleton isLoaded={isLoaded}>
+        <Flex direction='row' justifyContent='space-between'>
+          <Flex direction='column'>
+            <Heading as='h4' size='sm'>
+              {renderTitle()}
+            </Heading>
 
-              <Text>
-                {activity?.activityData?.createdAt
-                  ? timeToNow(activity.activityData.createdAt)
-                  : '--'}
+            <Text>
+              {activity?.activityData?.createdAt
+                ? timeToNow(activity.activityData.createdAt)
+                : '--'}
+            </Text>
+
+            {activity.__typename === 'Vote' ? (
+              <Text
+                color={+activity.uintVote === 1 ? 'green.500' : 'red.500'}
+                fontSize='xs'
+              >
+                253 Shares
               </Text>
+            ) : null}
 
-              {activity.__typename === 'Vote' ? (
-                <Text
-                  color={+activity.uintVote === 1 ? 'green.500' : 'red.500'}
-                  fontSize='xs'
-                >
-                  253 Shares
-                </Text>
-              ) : null}
-
-              {activity.historyStep === 'Processed' ? (
-                <Text
-                  color={activity.didPass ? 'green.500' : 'red.500'}
-                  fontSize='xs'
-                >
-                  {activity.didPass ? 'Passed' : 'Failed'}
-                </Text>
-              ) : null}
-            </Flex>
-
-            {profile && profile.image ? (
-              <Avatar
-                src={`${'https://ipfs.infura.io/ipfs/' +
-                  profile.image[0].contentUrl['/']}`}
-                mr={3}
-                size='sm'
-              ></Avatar>
-            ) : (
-              <Avatar
-                src={makeBlockie(
-                  activity?.activityData?.memberAddress || '0x0',
-                )}
-                mr={3}
-              />
-            )}
+            {activity.historyStep === 'Processed' ? (
+              <Text
+                color={activity.didPass ? 'green.500' : 'red.500'}
+                fontSize='xs'
+              >
+                {activity.didPass ? 'Passed' : 'Failed'}
+              </Text>
+            ) : null}
           </Flex>
-        </Skeleton>
-      </Link>
+
+          {profile && profile.image ? (
+            <Avatar
+              src={`${'https://ipfs.infura.io/ipfs/' +
+                profile.image[0].contentUrl['/']}`}
+              mr={3}
+              size='sm'
+            ></Avatar>
+          ) : (
+            <Avatar
+              src={makeBlockie(activity?.activityData?.memberAddress || '0x0')}
+              mr={3}
+            />
+          )}
+        </Flex>
+      </Skeleton>
     </Box>
   );
 };

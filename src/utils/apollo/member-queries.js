@@ -53,7 +53,9 @@ export const MEMBERS_LIST = gql`
 
 export const HUB_MEMBERSHIPS = gql`
   query membersHub($memberAddress: String!) {
-    members(where: { memberAddress: $memberAddress, exists: true }) {
+    membersHub: members(
+      where: { memberAddress: $memberAddress, exists: true }
+    ) {
       id
       memberAddress
       moloch {
