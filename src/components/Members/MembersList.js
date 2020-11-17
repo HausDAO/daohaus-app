@@ -7,46 +7,47 @@ import { defaultMembers } from '../../utils/constants';
 import MemberListCard from './MemberListCard';
 import TextBox from '../Shared/TextBox';
 import ContentBox from '../Shared/ContentBox';
+import MemberSort from './MembersSort';
 
 const MembersList = ({ handleSelect, selectedMember }) => {
   const [theme] = useTheme();
-  const filter = useState(null);
   const [members] = useMembers();
-  const [_members, setMembers] = useState(null);
+  const [listMembers, setListMembers] = useState(defaultMembers);
   const [isLoaded, setIsLoaded] = useState(false);
+  const [sort, setSort] = useState();
 
   useEffect(() => {
-    if (members?.length > 0) {
-      setMembers(members);
+    if (members.length > 0) {
+      sortMembers();
       setIsLoaded(true);
-    } else {
-      setMembers(defaultMembers);
     }
-  }, [members]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [members, sort]);
+
+  const sortMembers = () => {
+    const sortedMembers = members;
+
+    console.log('sort on', sort);
+
+    if (sort) {
+      sortedMembers.sort((a, b) => {
+        if (sort.value === 'joinDateAsc') {
+          return +a.createdAt - +b.createdAt;
+        } else if (sort.value === 'joinDateDesc') {
+          return +b.createdAt - +a.createdAt;
+        } else {
+          return +b[sort.value] - +a[sort.value];
+        }
+      });
+    }
+
+    setListMembers([...sortedMembers]);
+  };
 
   return (
     <>
       <Flex>
-        {filter ? (
-          <TextBox>
-            Filtered by:{' '}
-            <span style={{ color: theme.colors.primary[50] }}>
-              Action Needed
-            </span>
-          </TextBox>
-        ) : (
-          <TextBox>
-            Apply a{' '}
-            <span style={{ color: theme.colors.primary[50] }}> filter</span>
-          </TextBox>
-        )}
-        <TextBox ml={9}>
-          Sort by:{' '}
-          <span style={{ color: theme.colors.primary[50] }}>
-            {' '}
-            Voting Period
-          </span>
-        </TextBox>
+        <MemberSort sort={sort} setSort={setSort} />
       </Flex>
       <ContentBox mt={6} mr={6}>
         <Flex>
@@ -55,18 +56,17 @@ const MembersList = ({ handleSelect, selectedMember }) => {
           <TextBox w='15%'>Loot</TextBox>
           <TextBox>Join Date</TextBox>
         </Flex>
-        {_members?.length > 0 &&
-          _members.map((member) => {
-            return (
-              <MemberListCard
-                key={member?.id}
-                member={member}
-                isLoaded={isLoaded}
-                handleSelect={handleSelect}
-                selectedMember={selectedMember}
-              />
-            );
-          })}
+        {listMembers.map((member) => {
+          return (
+            <MemberListCard
+              key={member.id}
+              member={member}
+              isLoaded={isLoaded}
+              handleSelect={handleSelect}
+              selectedMember={selectedMember}
+            />
+          );
+        })}
       </ContentBox>
     </>
   );
