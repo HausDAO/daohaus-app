@@ -271,9 +271,7 @@ export function getProposalCountdownText(proposal) {
       return (
         <Fragment>
           <Box textTransform='uppercase' fontSize='0.8em' fontWeight={700}>
-            Voting Begins:{' '}
-          </Box>
-          <Box textTransform='uppercase' fontSize='0.8em' fontWeight={700}>
+            <span fontWeight='700'>Voting Begins</span>
             {timeToNow(proposal.votingPeriodStarts)}
           </Box>
         </Fragment>
@@ -282,10 +280,7 @@ export function getProposalCountdownText(proposal) {
       return (
         <Fragment>
           <Box textTransform='uppercase' fontSize='0.8em' fontWeight={700}>
-            Voting Ends:{' '}
-          </Box>
-          <Box textTransform='uppercase' fontSize='0.8em' fontWeight={700}>
-            {timeToNow(proposal.votingPeriodEnds)}
+            Voting Ends: {timeToNow(proposal.votingPeriodEnds)}
           </Box>
         </Fragment>
       );
@@ -293,9 +288,9 @@ export function getProposalCountdownText(proposal) {
       return (
         <Fragment>
           <Box textTransform='uppercase' fontSize='0.8em' fontWeight={700}>
-            Grace Period Ends:{' '}
-          </Box>
-          <Box textTransform='uppercase' fontSize='0.8em' fontWeight={700}>
+            <Box as='span' fontWeight={900}>
+              Grace Period Ends
+            </Box>{' '}
             {timeToNow(proposal.gracePeriodEnds)}
           </Box>
         </Fragment>
