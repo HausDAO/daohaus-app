@@ -12,7 +12,6 @@ const MemberSnapshot = ({ selectedMember }) => {
   const [dao] = useDao();
   const [members] = useMembers();
   const [user] = useUser();
-  console.log(dao);
 
   return (
     <Box>

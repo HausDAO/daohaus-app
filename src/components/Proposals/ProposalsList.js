@@ -15,7 +15,6 @@ import { determineUnreadProposalList } from '../../utils/proposal-helper';
 const ProposalsList = () => {
   const [dao] = useDao();
   const [proposals] = useProposals();
-
   const [memberWallet] = useMemberWallet();
   const [listProposals, setListProposals] = useState(defaultProposals);
   const [isLoaded, setIsLoaded] = useState(false);

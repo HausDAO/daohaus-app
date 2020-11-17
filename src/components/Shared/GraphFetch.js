@@ -24,7 +24,6 @@ const GraphFetch = ({ query, setRecords, variables, entity }) => {
 
   useEffect(() => {
     if (data) {
-      // console.log('setting single fetch entity', entity);
       setRecords(data[entity]);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps

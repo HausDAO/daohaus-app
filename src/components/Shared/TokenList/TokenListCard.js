@@ -1,15 +1,10 @@
 import React from 'react';
 import { Flex, Box, Skeleton } from '@chakra-ui/core';
-import { utils } from 'web3';
-
-// import { usePrices } from '../../contexts/PokemolContext';
+import UsdPrice from '../UsdPrice';
+import UsdValue from '../UsdValue';
 
 const TokenListCard = ({ token, isLoaded }) => {
-  // TODO deal with prices
-  // TODO handle different token decimals
   // TODO token images? trust-wallet?
-  console.log(token);
-
   return (
     <Flex h='60px' align='center'>
       <Box w='15%'>
@@ -20,26 +15,29 @@ const TokenListCard = ({ token, isLoaded }) => {
       <Box w='55%'>
         <Skeleton isLoaded={isLoaded}>
           <Box fontFamily='mono'>
-            {token?.memberBalance
-              ? parseFloat(
-                  utils.fromWei(token.memberBalance.toString()),
-                ).toFixed(3)
-              : null}
-            {token && !token.memberBalance && token?.contractTokenBalance
-              ? utils.fromWei(token.contractTokenBalance.toString())
-              : null}
-            {!token?.memberBalance && !token?.contractTokenBalance && '--'}
+            {token.guildBank ? (
+              <>
+                {parseFloat(
+                  token.tokenBalance / 10 ** +token.token.decimals,
+                ).toFixed(4)}{' '}
+                {token.token.symbol}
+              </>
+            ) : null}
           </Box>
         </Skeleton>
       </Box>
       <Box w='15%'>
         <Skeleton isLoaded={isLoaded}>
-          <Box fontFamily='mono'>{token?.price ? token.price : '--'}</Box>
+          <Box fontFamily='mono'>
+            {token.guildBank ? <UsdPrice tokenBalance={token} /> : '--'}
+          </Box>
         </Skeleton>
       </Box>
       <Box w='15%'>
         <Skeleton isLoaded={isLoaded}>
-          <Box fontFamily='mono'>{token?.value ? token?.value : '--'}</Box>
+          <Box fontFamily='mono'>
+            {token.guildBank ? <UsdValue tokenBalance={token} /> : '--'}
+          </Box>
         </Skeleton>
       </Box>
     </Flex>

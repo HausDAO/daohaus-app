@@ -30,9 +30,11 @@ const Hub = () => {
                 maxW='600px'
               >
                 {memberDaos ? (
-                  <MemberDaoList
-                    daos={memberDaos.map((member) => member.moloch)}
-                  />
+                  <>
+                    <MemberDaoList
+                      daos={memberDaos.map((member) => member.moloch)}
+                    />
+                  </>
                 ) : null}
               </Box>
             </Box>
@@ -58,7 +60,7 @@ const Hub = () => {
           <GraphFetch
             query={HUB_MEMBERSHIPS}
             setRecords={setMemberDaos}
-            entity='members'
+            entity='membersHub'
             variables={{ memberAddress: user.username }}
           />
         </>

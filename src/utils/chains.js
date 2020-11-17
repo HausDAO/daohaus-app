@@ -14,6 +14,8 @@ export const supportedChains = {
       'https://api.thegraph.com/subgraphs/name/odyssy-automaton/daohaus',
     transmutation_subgraph_url:
       'https://api.thegraph.com/subgraphs/name/odyssy-automaton/daohaus-transmutation',
+    token_list:
+      'https://raw.githubusercontent.com/Uniswap/default-token-list/master/src/tokens/mainnet.json',
   },
   4: {
     name: 'Ethereum Rinkeby',
@@ -59,6 +61,7 @@ export const supportedChains = {
       'https://api.thegraph.com/subgraphs/name/odyssy-automaton/daohaus-xdai',
     transmutation_subgraph_url:
       'https://api.thegraph.com/subgraphs/name/odyssy-automaton/daohaus-transmutation-xdai',
+    token_list: 'http://tokens.honeyswap.org/',
   },
 };
 
