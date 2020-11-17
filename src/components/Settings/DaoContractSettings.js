@@ -35,7 +35,7 @@ const DaoContractSettings = () => {
   };
 
   return (
-    <ContentBox d='flex' w='100%' flexDirection='column'>
+    <ContentBox d='flex' w='100%' mt={2} flexDirection='column'>
       <Box>
         <TextBox>Dao Contract</TextBox>
         <Skeleton isLoaded={dao?.address}>

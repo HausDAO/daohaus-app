@@ -28,13 +28,7 @@ const ProposalsActivityFeed = () => {
 
   return (
     <>
-      <Box
-        mt={6}
-        ml={6}
-        textTransform='uppercase'
-        fontSize='sm'
-        fontFamily='heading'
-      >
+      <Box mt={6} textTransform='uppercase' fontSize='sm' fontFamily='heading'>
         Activity Feed
       </Box>
 

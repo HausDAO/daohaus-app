@@ -1,5 +1,7 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import { Box, Flex, Button } from '@chakra-ui/core';
+import { useDao } from '../../contexts/PokemolContext';
 
 const boostList = [
   {
@@ -14,6 +16,8 @@ const boostList = [
 ];
 
 const Boosts = () => {
+  const [dao] = useDao();
+
   return (
     <Box>
       <Box
@@ -48,7 +52,13 @@ const Boosts = () => {
               <Box maxW='80%' textAlign='center'>
                 {boost.description}
               </Box>
-              <Button textTransform='uppercase'>Add This App</Button>
+              <Button
+                as={Link}
+                textTransform='uppercase'
+                to={`/dao/${dao.address}/settings/boosts/new`}
+              >
+                Add This App
+              </Button>
             </Flex>
           );
         })}

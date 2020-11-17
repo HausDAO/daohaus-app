@@ -39,13 +39,12 @@ const Hub = () => {
               </Box>
             </Box>
 
-            <Box>
+            <Box pl={8}>
               <Box
                 fontSize='md'
                 fontFamily='heading'
                 textTransform='uppercase'
                 fontWeight={700}
-                ml={8}
               >
                 Recent Activity
               </Box>

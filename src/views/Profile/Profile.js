@@ -47,7 +47,7 @@ const Profile = () => {
 
   return (
     <Flex>
-      <Box w='60%'>
+      <Box w='60%' pl={6}>
         {memberProfile && <ProfileOverviewCard user={memberProfile} />}
         <TokenList tokenList={tokenList} />
       </Box>
