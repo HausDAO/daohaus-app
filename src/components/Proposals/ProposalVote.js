@@ -1,7 +1,8 @@
 import React from 'react';
 import { Box, Button, Flex, Icon, Skeleton } from '@chakra-ui/core';
-import ContentBox from '../Shared/ContentBox';
 import { FaThumbsUp, FaThumbsDown } from 'react-icons/fa';
+import { isAfter, isBefore } from 'date-fns';
+
 import {
   useMemberWallet,
   useDaoGraphData,
@@ -9,7 +10,8 @@ import {
   useUser,
   useTxProcessor,
 } from '../../contexts/PokemolContext';
-import { isAfter, isBefore } from 'date-fns';
+import ContentBox from '../Shared/ContentBox';
+import TextBox from '../Shared/TextBox';
 
 const ProposalVote = ({ proposal }) => {
   const [user] = useUser();
@@ -197,7 +199,7 @@ const ProposalVote = ({ proposal }) => {
                   <>
                     <Flex justify='center' align='center' w='100%'>
                       <Skeleton isLoaded={proposal?.status}>
-                        <Box fontSize='lg' fontFamily='heading'>
+                        <TextBox fontSize='xl' variant='value'>
                           {proposal?.status === 'Failed' && 'Failed'}
                           {proposal?.status === 'Passed' && 'Passed'}
                           {(proposal?.status === 'GracePeriod' ||
@@ -208,7 +210,7 @@ const ProposalVote = ({ proposal }) => {
                             proposal?.status === 'ReadyForProcessing') &&
                             proposal.noVotes > proposal.yesVotes &&
                             'Failed'}
-                        </Box>
+                        </TextBox>
                       </Skeleton>
                     </Flex>
                   </>
@@ -245,14 +247,14 @@ const ProposalVote = ({ proposal }) => {
               </Box>
               <Flex justify='space-between' mt={3}>
                 <Skeleton isLoaded={proposal?.yesVotes}>
-                  <Box fontFamily='space' fontWeight={700}>
+                  <TextBox variant='value'>
                     {proposal?.yesVotes || '0'} Yes
-                  </Box>
+                  </TextBox>
                 </Skeleton>
                 <Skeleton isLoaded={proposal?.noVotes}>
-                  <Box fontFamily='space' fontWeight={700}>
+                  <TextBox variant='value'>
                     {proposal?.noVotes || '0'} No
-                  </Box>
+                  </TextBox>
                 </Skeleton>
               </Flex>
             </>

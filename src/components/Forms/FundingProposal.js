@@ -6,12 +6,8 @@ import {
   FormControl,
   Flex,
   Input,
-  InputGroup,
-  InputLeftAddon,
   Icon,
-  Stack,
   Box,
-  Textarea,
   Menu,
   MenuButton,
   MenuList,
@@ -26,6 +22,7 @@ import { useDao, useTxProcessor, useUser } from '../../contexts/PokemolContext';
 import TributeInput from './TributeInput';
 import PaymentInput from './PaymentInput';
 import AddressInput from './AddressInput';
+import DetailsFields from './DetailFields';
 
 const FundingProposalForm = () => {
   const [loading, setLoading] = useState(false);
@@ -127,48 +124,7 @@ const FundingProposalForm = () => {
         mb={5}
       >
         <Box w='48%'>
-          <TextBox as={FormLabel} htmlFor='title'>
-            Details
-          </TextBox>
-          <Stack spacing={4}>
-            <Input
-              name='title'
-              placeholder='Proposal Title'
-              mb={5}
-              ref={register({
-                required: {
-                  value: true,
-                  message: 'Title is required',
-                },
-              })}
-            />
-            <Textarea
-              name='description'
-              placeholder='Short Description'
-              type='textarea'
-              mb={5}
-              h={10}
-              ref={register({
-                required: {
-                  value: true,
-                  message: 'Description is required',
-                },
-              })}
-            />
-            <InputGroup>
-              <InputLeftAddon>https://</InputLeftAddon>
-              <Input
-                name='link'
-                placeholder='daolink.club'
-                ref={register({
-                  required: {
-                    value: true,
-                    message: 'Reference Link is required',
-                  },
-                })}
-              />
-            </InputGroup>
-          </Stack>
+          <DetailsFields register={register} />
         </Box>
         <Box w='48%'>
           <AddressInput register={register} setValue={setValue} watch={watch} />
@@ -181,7 +137,7 @@ const FundingProposalForm = () => {
 
           {showShares && (
             <>
-              <TextBox as={FormLabel} htmlFor='name'>
+              <TextBox as={FormLabel} htmlFor='name' mb={2}>
                 Shares Requested
               </TextBox>
               <Input
@@ -204,7 +160,7 @@ const FundingProposalForm = () => {
           )}
           {showLoot && (
             <>
-              <TextBox as={FormLabel} htmlFor='lootRequested'>
+              <TextBox as={FormLabel} htmlFor='lootRequested' mb={2}>
                 Loot Requested
               </TextBox>
               <Input

@@ -11,6 +11,7 @@ import { useTheme } from '../../contexts/CustomThemeContext';
 import UserAvatar from '../../components/Shared/UserAvatar';
 import { memberProfile } from '../../utils/helpers';
 import { getProposalCountdownText } from '../../utils/proposal-helper';
+import TextBox from '../Shared/TextBox';
 
 const ProposalDetail = ({ proposal }) => {
   const [members] = useMembers();
@@ -32,21 +33,16 @@ const ProposalDetail = ({ proposal }) => {
   }, [memberWallet, proposal]);
 
   return (
-    <ContentBox>
+    <ContentBox m={6}>
       <Flex>
         <Box w='90%'>
-          <Box
-            textTransform='uppercase'
-            fontSize='sm'
-            fontFamily='heading'
-            fontWeight={700}
-          >
+          <TextBox>
             {proposal ? proposal.proposalType : theme.daoMeta.proposal}
-          </Box>
+          </TextBox>
           <Skeleton isLoaded={details?.title}>
-            <Box fontSize='3xl' fontFamily='heading' fontWeight={700}>
+            <TextBox fontSize='3xl' variant='value'>
               {details?.title ? details?.title : '-'}
-            </Box>
+            </TextBox>
           </Skeleton>
           <Skeleton isLoaded={details?.description}>
             <Box w='100%' mt={8}>
@@ -56,149 +52,90 @@ const ProposalDetail = ({ proposal }) => {
           <Flex w='100%' justify='space-between' mt={6}>
             {(proposal?.tributeOffered > 0 || !proposal?.tributeOffered) && (
               <Box>
-                <Box
-                  textTransform='uppercase'
-                  fontSize='xs'
-                  fontFamily='heading'
-                  fontWeight={400}
-                  letterSpacing='0.1em'
-                  color='whiteAlpha.600'
-                >
-                  Tribute
-                </Box>
+                <TextBox>Tribute</TextBox>
                 <Skeleton isLoaded={proposal?.tributeOffered}>
-                  <Box fontSize='lg' fontFamily='space' fontWeight={700}>
+                  <TextBox fontSize='lg' variant='value'>
                     {proposal?.tributeOffered
                       ? `${utils.fromWei(
                           proposal.tributeOffered.toString(),
                         )} ${proposal.tributeTokenSymbol || 'WETH'}`
                       : '--'}
-                  </Box>
+                  </TextBox>
                 </Skeleton>
               </Box>
             )}
             {proposal?.paymentRequested > 0 && ( // don't show during loading
               <Box>
-                <Box
-                  textTransform='uppercase'
-                  fontSize='xs'
-                  fontFamily='heading'
-                  fontWeight={400}
-                  letterSpacing='0.1em'
-                  color='whiteAlpha.600'
-                >
-                  Payment Requested
-                </Box>
+                <TextBox>Payment Requested</TextBox>
                 <Skeleton isLoaded={proposal?.paymentRequested}>
-                  <Box fontSize='lg' fontFamily='space' fontWeight={700}>
+                  <TextBox fontSize='lg' variant='value'>
                     {proposal?.paymentRequested
                       ? `${utils.fromWei(
                           proposal.paymentRequested.toString(),
                         )} ${proposal.paymentTokenSymbol || 'WETH'}`
                       : '--'}
-                  </Box>
+                  </TextBox>
                 </Skeleton>
               </Box>
             )}
             {(proposal?.sharesRequested > 0 || !proposal?.sharesRequested) && (
               <Box>
-                <Box
-                  textTransform='uppercase'
-                  fontSize='xs'
-                  fontFamily='heading'
-                  fontWeight={400}
-                  letterSpacing='0.1em'
-                  color='whiteAlpha.600'
-                >
-                  Shares
-                </Box>
+                <TextBox>Shares</TextBox>
                 <Skeleton isLoaded={proposal?.sharesRequested}>
-                  <Box fontSize='lg' fontFamily='space' fontWeight={700}>
+                  <TextBox fontSize='lg' variant='value'>
                     {proposal?.sharesRequested
                       ? proposal.sharesRequested
                       : '--'}
-                  </Box>
+                  </TextBox>
                 </Skeleton>
               </Box>
             )}
             {proposal?.lootRequested > 0 && ( // don't show during loading
               <Box>
-                <Box
-                  textTransform='uppercase'
-                  fontSize='xs'
-                  fontFamily='heading'
-                  fontWeight={400}
-                  letterSpacing='0.1em'
-                  color='whiteAlpha.600'
-                >
-                  Loot
-                </Box>
+                <TextBox>Loot</TextBox>
                 <Skeleton isLoaded={proposal?.lootRequested}>
-                  <Box fontSize='lg' fontFamily='space' fontWeight={700}>
+                  <TextBox size='lg' variant='value'>
                     {proposal?.lootRequested ? proposal.lootRequested : '--'}
-                  </Box>
+                  </TextBox>
                 </Skeleton>
               </Box>
             )}
             <Box>
               {proposal?.proposalIndex ? (
                 <>
-                  <Box
-                    textTransform='uppercase'
-                    fontSize='sm'
-                    fontFamily='heading'
-                    fontWeight={700}
-                  >
+                  <TextBox>
                     {isBefore(
                       Date.now(),
                       new Date(+proposal?.votingPeriodEnds * 1000),
                     )
                       ? 'Voting Period Ends'
                       : 'Voting Ended'}
-                  </Box>
-                  <Box fontSize='lg' fontFamily='space' fontWeight={700}>
+                  </TextBox>
+                  <TextBox fontSize='lg' variant='value'>
                     {formatDistanceToNow(
                       new Date(+proposal?.votingPeriodEnds * 1000),
                       {
                         addSuffix: true,
                       },
                     )}
-                  </Box>
+                  </TextBox>
                 </>
               ) : (
                 <>
-                  <Box
-                    textTransform='uppercase'
-                    fontSize='xs'
-                    fontFamily='heading'
-                    fontWeight={400}
-                    letterSpacing='0.1em'
-                    color='whiteAlpha.600'
-                  >
-                    Proposal Status
-                  </Box>
+                  <TextBox>Proposal Status</TextBox>
                   <Skeleton isLoaded={proposal?.status}>
-                    <Box fontSize='lg' fontFamily='space' fontWeight={700}>
+                    <TextBox fontSize='lg' variant='value'>
                       {proposal?.status
                         ? getProposalCountdownText(proposal)
                         : '--'}
-                    </Box>
+                    </TextBox>
                   </Skeleton>
                 </>
               )}
             </Box>
           </Flex>
           <Box mt={6}>
-            <Box
-              textTransform='uppercase'
-              fontSize='xs'
-              fontFamily='heading'
-              fontWeight={400}
-              letterSpacing='0.1em'
-              color='whiteAlpha.600'
-            >
-              Link
-            </Box>
+            <TextBox>Link</TextBox>
             <Skeleton isLoaded={details?.link}>
               <Link href={details?.link} target='_blank'>
                 {details?.link ? details.link : '-'}{' '}
@@ -244,19 +181,15 @@ const ProposalDetail = ({ proposal }) => {
             ))}
         </Flex>
       </Flex>
+      <Skeleton isLoaded={details?.description}>
+        <TextBox w='100%' mt={8} variant='value'>
+          {details?.description}
+        </TextBox>
+      </Skeleton>
 
       <Flex w='80%' mt={6} justify='space-between'>
         <Box mr={5}>
-          <Box
-            textTransform='uppercase'
-            fontSize='xs'
-            fontFamily='heading'
-            fontWeight={400}
-            letterSpacing='0.1em'
-            color='whiteAlpha.600'
-          >
-            Submitted By
-          </Box>
+          <TextBox>Submitted By</TextBox>
           <Skeleton isLoaded={members && proposal?.proposer}>
             {members && proposal?.proposer ? (
               <UserAvatar
@@ -268,16 +201,7 @@ const ProposalDetail = ({ proposal }) => {
           </Skeleton>
         </Box>
         <Box>
-          <Box
-            textTransform='uppercase'
-            fontSize='xs'
-            fontFamily='heading'
-            fontWeight={400}
-            letterSpacing='0.1em'
-            color='whiteAlpha.600'
-          >
-            Recipient
-          </Box>
+          <TextBox>Recipient</TextBox>
           <Skeleton isLoaded={members && proposal?.applicant}>
             {members && proposal?.applicant ? (
               <UserAvatar

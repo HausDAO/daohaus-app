@@ -1,5 +1,6 @@
 import React from 'react';
-import { Box, Flex, Skeleton, Link } from '@chakra-ui/core';
+import { Link } from 'react-router-dom';
+import { Box, Flex, Skeleton } from '@chakra-ui/core';
 
 import { useMembers, useDao, useUser } from '../../contexts/PokemolContext';
 import { useTheme } from '../../contexts/CustomThemeContext';
@@ -19,7 +20,7 @@ const MemberSnapshot = ({ selectedMember }) => {
         <TextBox>Snapshot</TextBox>
         <TextBox
           as={Link}
-          href={`/dao/${dao?.address}/profile/${
+          to={`/dao/${dao?.address}/profile/${
             selectedMember ? selectedMember.memberAddress : user?.username
           }`}
         >

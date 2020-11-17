@@ -129,13 +129,14 @@ const TributeInput = ({ register, setValue, getValues }) => {
           focusBorderColor='secondary.500'
           onChange={handleChange}
         />
-        <InputRightAddon>
+        <InputRightAddon background='primary.500' p={0}>
           <Select
             name='tributeToken'
             defaultValue='0xd0a1e359811322d97991e03f863a0c30c2cf029c'
             ref={register}
             onChange={handleChange}
-            color='black'
+            color='white'
+            background='primary.500'
           >
             {' '}
             {tokenData.map((token, idx) => (

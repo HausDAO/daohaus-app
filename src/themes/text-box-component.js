@@ -34,6 +34,7 @@ export const TextBoxComponent = {
     value: {
       color: 'whiteAlpha.900',
       fontFamily: 'mono',
+      textTransform: 'none',
       mt: '9px',
       fontSize: 'xl',
     },

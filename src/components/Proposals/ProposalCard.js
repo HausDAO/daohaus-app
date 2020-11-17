@@ -28,6 +28,10 @@ const ProposalCard = ({ proposal, isLoaded }) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [memberWallet, proposal]);
 
+  // TODO add whitelist proposal token symbol
+  // TODO handle guild kick
+  // TODO trade?
+
   return (
     <Link to={`/dao/${dao.address}/proposals/${proposal.proposalId}`}>
       {/* <Link to={`/dao/${dao?.address}/proposals/${proposal?.proposalId}`}> */}

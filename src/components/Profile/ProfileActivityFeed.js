@@ -31,13 +31,7 @@ const ProfileActvityFeed = ({ profileAddress }) => {
 
   return (
     <>
-      <Box
-        mt={6}
-        ml={6}
-        textTransform='uppercase'
-        fontSize='sm'
-        fontFamily='heading'
-      >
+      <Box mt={6} textTransform='uppercase' fontSize='sm' fontFamily='heading'>
         Recent Activity
       </Box>
 

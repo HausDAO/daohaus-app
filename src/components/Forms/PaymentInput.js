@@ -107,12 +107,14 @@ const PaymentInput = ({ register, setValue, getValues, errors }) => {
           color='white'
           focusBorderColor='secondary.500'
         />
-        <InputRightAddon>
+        <InputRightAddon background='primary.500' p={0}>
           <Select
             name='paymentToken'
             ref={register}
             onChange={handleChange}
-            color='black'
+            color='white'
+            background='primary.500'
+            w='100%'
           >
             {' '}
             {tokenData.map((token, idx) => (
