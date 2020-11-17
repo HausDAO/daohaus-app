@@ -11,7 +11,7 @@ const Proposals = () => {
         <ProposalsList />
       </Box>
 
-      <Box w='38%'>
+      <Box w='38%' ml={6}>
         <ProposalsActivityFeed />
       </Box>
     </Flex>

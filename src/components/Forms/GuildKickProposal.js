@@ -1,22 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { useForm } from 'react-hook-form';
-import {
-  Button,
-  FormLabel,
-  FormControl,
-  Flex,
-  Input,
-  InputGroup,
-  InputLeftAddon,
-  Icon,
-  Stack,
-  Box,
-  Textarea,
-} from '@chakra-ui/core';
+import { Button, FormControl, Flex, Icon, Box } from '@chakra-ui/core';
 import { RiErrorWarningLine } from 'react-icons/ri';
 
 import { useDao, useTxProcessor, useUser } from '../../contexts/PokemolContext';
+import TextBox from '../Shared/TextBox';
 import AddressInput from './AddressInput';
+import DetailsFields from './DetailFields';
 
 const GuildKickProposalForm = () => {
   const [loading, setLoading] = useState(false);
@@ -100,61 +90,7 @@ const GuildKickProposalForm = () => {
         mb={5}
       >
         <Box w='48%'>
-          <FormLabel
-            htmlFor='title'
-            color='white'
-            fontFamily='heading'
-            textTransform='uppercase'
-            fontSize='xs'
-            fontWeight={700}
-          >
-            Details
-          </FormLabel>
-          <Stack spacing={4}>
-            <Input
-              name='title'
-              placeholder='Proposal Title'
-              mb={5}
-              ref={register({
-                required: {
-                  value: true,
-                  message: 'Title is required',
-                },
-              })}
-              color='white'
-              focusBorderColor='secondary.500'
-            />
-            <Textarea
-              name='description'
-              placeholder='Short Description'
-              type='textarea'
-              mb={5}
-              h={10}
-              ref={register({
-                required: {
-                  value: true,
-                  message: 'Description is required',
-                },
-              })}
-              color='white'
-              focusBorderColor='secondary.500'
-            />
-            <InputGroup>
-              <InputLeftAddon>https://</InputLeftAddon>
-              <Input
-                name='link'
-                placeholder='daolink.club'
-                color='white'
-                focusBorderColor='secondary.500'
-                ref={register({
-                  required: {
-                    value: true,
-                    message: 'Reference Link is required',
-                  },
-                })}
-              />
-            </InputGroup>
-          </Stack>
+          <DetailsFields register={register} />
         </Box>
         <Box w='48%'>
           <AddressInput

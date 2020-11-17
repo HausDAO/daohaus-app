@@ -28,7 +28,7 @@ const AddressInput = ({ register, setValue, watch, formLabel }) => {
       <TextBox as={FormLabel} htmlFor='applicant'>
         {formLabel}
       </TextBox>
-      <FormHelperText fontSize='xs' id='applicant-helper-text'>
+      <FormHelperText fontSize='xs' id='applicant-helper-text' mb={1}>
         {ensAddr || 'Use ETH address or ENS'}
       </FormHelperText>
       <Input

@@ -39,7 +39,7 @@ const ProposalFilter = ({ filter, setFilter, listLength }) => {
 
   return (
     <Flex direction='row'>
-      <Box ml={8} mr={3} textTransform='uppercase' fontFamily='heading'>
+      <Box mr={3} textTransform='uppercase' fontFamily='heading'>
         Filter By
       </Box>
 

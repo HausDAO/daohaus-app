@@ -10,6 +10,8 @@ import {
   useDaoGraphData,
   useMemberWallet,
 } from '../../contexts/PokemolContext';
+import ContentBox from '../Shared/ContentBox';
+import TextBox from '../Shared/TextBox';
 
 const OverviewCard = ({ user }) => {
   const [ens] = useEns();
@@ -32,16 +34,7 @@ const OverviewCard = ({ user }) => {
   }, [user, ens.provider]);
 
   return (
-    <Flex
-      rounded='lg'
-      bg='blackAlpha.600'
-      borderWidth='1px'
-      borderColor='whiteAlpha.200'
-      p={6}
-      m={6}
-      w='100%'
-      justify='space-between'
-    >
+    <ContentBox as={Flex} p={6} w='100%' justify='space-between'>
       <Flex direction='row' width='50%'>
         <Flex direction='column' align='center' pr={5} minW='40%'>
           {user.profile.image && user.profile.image[0] ? (
@@ -94,17 +87,10 @@ const OverviewCard = ({ user }) => {
       <Flex w='48%' direction='column'>
         <Flex justify='space-between'>
           <Box>
-            <Box
-              textTransform='uppercase'
-              fontFamily='heading'
-              fontSize='sm'
-              fontWeight={700}
-            >
-              Total Stake
-            </Box>
-            <Box fontSize='4xl' fontFamily='mono' fontWeight={700}>
+            <TextBox fontSize='sm'>Total Stake</TextBox>
+            <TextBox fontSize='4xl' variant='value'>
               $4,802.20
-            </Box>
+            </TextBox>
           </Box>
           <Box>
             <Icon
@@ -118,56 +104,35 @@ const OverviewCard = ({ user }) => {
         </Flex>
         <Flex justify='space-between' align='flex-end' mt={4}>
           <Box w='30%'>
-            <Box
-              textTransform='uppercase'
-              fontFamily='heading'
-              fontSize='xs'
-              fontWeight={700}
-            >
-              Power
-            </Box>
+            <TextBox fontSize='xs'>Power</TextBox>
             <Skeleton isLoaded={memberWallet?.shares && dao?.totalShares}>
-              <Box fontSize='xl' fontFamily='mono' fontWeight={700}>
+              <TextBox fontSize='xl' variant='value'>
                 {memberWallet?.shares &&
                   dao?.totalShares &&
                   ((memberWallet?.shares / dao?.totalShares) * 100).toFixed(1)}
                 %
-              </Box>
+              </TextBox>
             </Skeleton>
           </Box>
           <Box w='30%'>
-            <Box
-              textTransform='uppercase'
-              fontFamily='heading'
-              fontSize='xs'
-              fontWeight={700}
-            >
-              Shares
-            </Box>
+            <TextBox fontSize='xs'>Shares</TextBox>
             <Skeleton isLoaded={memberWallet?.shares >= 0}>
-              <Box fontSize='xl' fontFamily='mono' fontWeight={700}>
+              <TextBox fontSize='xl' variant='value'>
                 {memberWallet?.shares}
-              </Box>
+              </TextBox>
             </Skeleton>
           </Box>
           <Box w='30%'>
-            <Box
-              textTransform='uppercase'
-              fontFamily='heading'
-              fontSize='xs'
-              fontWeight={700}
-            >
-              Loot
-            </Box>
+            <TextBox fontSize='xs'>Loot</TextBox>
             <Skeleton isLoaded={memberWallet?.loot >= 0}>
-              <Box fontSize='xl' fontFamily='mono' fontWeight={700}>
+              <TextBox fontSize='xl' variant='value'>
                 {memberWallet?.loot}
-              </Box>
+              </TextBox>
             </Skeleton>
           </Box>
         </Flex>
       </Flex>
-    </Flex>
+    </ContentBox>
   );
 };
 

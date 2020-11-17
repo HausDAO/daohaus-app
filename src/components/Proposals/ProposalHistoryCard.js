@@ -49,8 +49,8 @@ const ProposalHistoryCard = ({ activity, isLoaded }) => {
       borderWidth='1px'
       borderColor='whiteAlpha.200'
       p={6}
-      m={6}
       mt={2}
+      mr={8}
     >
       <Skeleton isLoaded={isLoaded}>
         <Flex direction='row' justifyContent='space-between'>

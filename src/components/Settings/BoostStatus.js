@@ -1,17 +1,16 @@
 import React from 'react';
 import { Box, Flex, Button } from '@chakra-ui/core';
 import ComingSoonOverlay from '../Shared/ComingSoonOverlay';
+import TextBox from '../Shared/TextBox';
+import ContentBox from '../Shared/ContentBox';
 
 const BoostStatus = () => {
   return (
-    <Flex
-      rounded='lg'
-      bg='blackAlpha.600'
-      borderWidth='1px'
-      borderColor='whiteAlpha.200'
+    <ContentBox
+      as={Flex}
       p={6}
-      m={6}
       mt={2}
+      mb={6}
       w='100%'
       h='175px'
       direction='column'
@@ -36,34 +35,20 @@ const BoostStatus = () => {
       </Flex>
       <Flex justify='space-between'>
         <Box>
-          <Box
-            fontWeight={700}
-            fontFamily='heading'
-            fontSize='xs'
-            textTransform='uppercase'
-          >
-            Boosts
-          </Box>
-          <Box fontWeight={700} fontFamily='mono' fontSize='md'>
+          <TextBox>Boosts</TextBox>
+          <TextBox variant='value' fontSize='md'>
             0 Boosts
-          </Box>
+          </TextBox>
         </Box>
         <Box>
-          <Box
-            fontWeight={700}
-            fontFamily='heading'
-            fontSize='xs'
-            textTransform='uppercase'
-          >
-            Monthly Cost
-          </Box>
-          <Box fontWeight={700} fontFamily='mono' fontSize='md'>
+          <TextBox fontSize='xs'>Monthly Cost</TextBox>
+          <TextBox variant='value' fontSize='md'>
             0 Boosts
-          </Box>
+          </TextBox>
         </Box>
         <Button>Get Boosts </Button>
       </Flex>
-    </Flex>
+    </ContentBox>
   );
 };
 
