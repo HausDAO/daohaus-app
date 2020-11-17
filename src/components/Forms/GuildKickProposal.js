@@ -4,7 +4,6 @@ import { Button, FormControl, Flex, Icon, Box } from '@chakra-ui/core';
 import { RiErrorWarningLine } from 'react-icons/ri';
 
 import { useDao, useTxProcessor, useUser } from '../../contexts/PokemolContext';
-import TextBox from '../Shared/TextBox';
 import AddressInput from './AddressInput';
 import DetailsFields from './DetailFields';
 

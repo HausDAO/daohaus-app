@@ -36,7 +36,11 @@ const ProposalCard = ({ proposal, isLoaded }) => {
     <Link to={`/dao/${dao.address}/proposals/${proposal.proposalId}`}>
       {/* <Link to={`/dao/${dao?.address}/proposals/${proposal?.proposalId}`}> */}
 
-      <ContentBox mt={2} transition='all 0.15s linear'>
+      <ContentBox
+        mt={3}
+        transition='all 0.15s linear'
+        _hover={{ bg: 'secondaryAlpha', color: 'white' }}
+      >
         <Flex justify='space-between'>
           <Box minWidth='30%' mr={5}>
             <Box

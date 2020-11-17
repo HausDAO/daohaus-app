@@ -19,7 +19,7 @@ const MemberSort = ({ sort, setSort }) => {
 
   return (
     <Flex direction='row'>
-      <Box ml={8} mr={3} textTransform='uppercase' fontFamily='heading'>
+      <Box mr={3} textTransform='uppercase' fontFamily='heading'>
         Sort By
       </Box>
 

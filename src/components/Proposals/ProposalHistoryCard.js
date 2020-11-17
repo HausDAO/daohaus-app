@@ -1,9 +1,11 @@
 import React, { useEffect, useState } from 'react';
 
 import { timeToNow, truncateAddr } from '../../utils/helpers';
-import { Box, Heading, Skeleton, Flex, Text, Avatar } from '@chakra-ui/core';
+import { Heading, Skeleton, Flex, Text, Avatar } from '@chakra-ui/core';
 import makeBlockie from 'ethereum-blockies-base64';
 import { getProfile } from '3box';
+
+import ContentBox from '../Shared/ContentBox';
 
 const ProposalHistoryCard = ({ activity, isLoaded }) => {
   const [profile, setProfile] = useState();
@@ -43,15 +45,7 @@ const ProposalHistoryCard = ({ activity, isLoaded }) => {
   };
 
   return (
-    <Box
-      rounded='lg'
-      bg='blackAlpha.600'
-      borderWidth='1px'
-      borderColor='whiteAlpha.200'
-      p={6}
-      mt={2}
-      mr={8}
-    >
+    <ContentBox mt={3}>
       <Skeleton isLoaded={isLoaded}>
         <Flex direction='row' justifyContent='space-between'>
           <Flex direction='column'>
@@ -99,7 +93,7 @@ const ProposalHistoryCard = ({ activity, isLoaded }) => {
           )}
         </Flex>
       </Skeleton>
-    </Box>
+    </ContentBox>
   );
 };
 

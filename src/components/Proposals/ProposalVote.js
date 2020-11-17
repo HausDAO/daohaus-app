@@ -108,7 +108,7 @@ const ProposalVote = ({ proposal }) => {
 
   return (
     <>
-      <ContentBox p={10} m={6} ml={0} w='90%'>
+      <ContentBox>
         {proposal?.status === 'Unsponsored' && !proposal?.proposalIndex && (
           <Flex justify='center' direction='column'>
             <Flex justify='center' mb={4} fontFamily='heading'>
