@@ -1,5 +1,6 @@
 import React from 'react';
 import { Box, Button, Flex, Icon, Skeleton } from '@chakra-ui/core';
+import ContentBox from '../Shared/ContentBox';
 import { FaThumbsUp, FaThumbsDown } from 'react-icons/fa';
 import {
   useMemberWallet,
@@ -105,16 +106,7 @@ const ProposalVote = ({ proposal }) => {
 
   return (
     <>
-      <Box
-        rounded='lg'
-        bg='blackAlpha.600'
-        borderWidth='1px'
-        borderColor='whiteAlpha.200'
-        p={10}
-        m={6}
-        ml={0}
-        w='90%'
-      >
+      <ContentBox>
         {proposal?.status === 'Unsponsored' && !proposal?.proposalIndex && (
           <Flex justify='center' direction='column'>
             <Flex justify='center' mb={4} fontFamily='heading'>
@@ -272,7 +264,7 @@ const ProposalVote = ({ proposal }) => {
             </Flex>
           </Flex>
         )}
-      </Box>
+      </ContentBox>
     </>
   );
 };

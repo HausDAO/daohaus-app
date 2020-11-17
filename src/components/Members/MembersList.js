@@ -49,7 +49,7 @@ const MembersList = ({ handleSelect, selectedMember }) => {
       <Flex>
         <MemberSort sort={sort} setSort={setSort} />
       </Flex>
-      <ContentBox mt={6} mr={6}>
+      <ContentBox mt={6}>
         <Flex>
           <TextBox w='43%'>{theme.daoMeta.member}</TextBox>
           <TextBox w='15%'>Shares</TextBox>

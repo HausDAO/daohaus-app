@@ -23,13 +23,7 @@ const ProposalHistory = ({ proposal }) => {
 
   return (
     <>
-      <Box
-        mt={6}
-        ml={6}
-        textTransform='uppercase'
-        fontSize='sm'
-        fontFamily='heading'
-      >
+      <Box mt={6} textTransform='uppercase' fontSize='sm' fontFamily='heading'>
         Proposal History
       </Box>
 

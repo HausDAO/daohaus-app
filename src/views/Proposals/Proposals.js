@@ -6,12 +6,12 @@ import ProposalsActivityFeed from '../../components/Proposals/ProposalsActivityF
 
 const Proposals = () => {
   return (
-    <Flex p={6}>
-      <Box w='60%'>
+    <Flex p={6} wrap='wrap'>
+      <Box w={['100%', null, null, null, '60%']} pr={[0, null, null, null, 6]}>
         <ProposalsList />
       </Box>
 
-      <Box w='38%'>
+      <Box w={['100%', null, null, null, '40%']} pt={[6, 0]}>
         <ProposalsActivityFeed />
       </Box>
     </Flex>

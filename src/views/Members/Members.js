@@ -9,14 +9,14 @@ const Members = () => {
   const [selectedMember, setSelectedMember] = useState();
 
   return (
-    <Flex p={6}>
-      <Box w='70%'>
+    <Flex p={6} wrap='wrap'>
+      <Box w={['100%', null, null, null, '60%']} pr={[0, null, null, null, 6]}>
         <MembersList
           handleSelect={setSelectedMember}
           selectedMember={selectedMember}
         />
       </Box>
-      <Box w='28%'>
+      <Box w={['100%', null, null, null, '40%']} pt={[6, 0]}>
         <MemberSnapshot selectedMember={selectedMember} />
         <MembersActivityFeed selectedMember={selectedMember} />
       </Box>

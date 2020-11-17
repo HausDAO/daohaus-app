@@ -28,7 +28,7 @@ const ProposalsActivityFeed = () => {
   }, [fetchedData]);
 
   return (
-    <Box ml={6} mt={6}>
+    <Box>
       <TextBox size='sm'>Activity Feed</TextBox>
 
       {activities.map((activity) => (
