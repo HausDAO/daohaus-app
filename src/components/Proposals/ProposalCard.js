@@ -33,7 +33,7 @@ const ProposalCard = ({ proposal, isLoaded }) => {
       {/* <Link to={`/dao/${dao?.address}/proposals/${proposal?.proposalId}`}> */}
 
       <ContentBox
-        mt={2}
+        mt={3}
         transition='all 0.15s linear'
         _hover={{ bg: 'secondaryAlpha', color: 'white' }}
       >

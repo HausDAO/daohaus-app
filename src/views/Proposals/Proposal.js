@@ -29,7 +29,7 @@ const Proposal = () => {
   }, [proposals]);
 
   return (
-    <Box>
+    <Box p={6}>
       <Flex>
         <Box w='60%'>
           <Link as={RouterLink} to={`/dao/${dao.address}/proposals`}>
