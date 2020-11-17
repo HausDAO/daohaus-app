@@ -200,6 +200,21 @@ export const setTheme = (daoTheme) => {
           focusBorderColor: 'secondary.500',
         },
       },
+      Badge: {
+        baseStyle: {
+          fontSize: 'xs',
+        },
+        variants: {
+          solid: (props) => ({}),
+          outline: (props) => ({
+            color: 'whiteAlpha.800',
+          }),
+        },
+        sizes: {},
+        defaultProps: {
+          variant: 'outline',
+        },
+      },
       Heading: {
         baseStyle: {},
         variants: {

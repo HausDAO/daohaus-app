@@ -39,6 +39,9 @@ const DaoOverviewDetails = ({ dao }) => {
             </Box>
           </Skeleton>
         </Flex>
+        <Skeleton isLoaded={dao?.description}>
+          <Box mt={6}>{dao?.description ? dao.description : '--'}</Box>
+        </Skeleton>
         <Flex direction='row' w='60%' justify='space-between' mt={6}>
           <Box>
             <TextBox>{theme.daoMeta.members}</TextBox>
@@ -81,9 +84,6 @@ const DaoOverviewDetails = ({ dao }) => {
             </Skeleton>
           </Box>
         </Box>
-        <Skeleton isLoaded={dao?.description}>
-          <Box mt={6}>{dao?.description ? dao.description : '--'}</Box>
-        </Skeleton>
         <Flex mt={6}>
           <Button
             mr={6}

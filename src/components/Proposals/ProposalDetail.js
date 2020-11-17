@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { formatDistanceToNow, isBefore } from 'date-fns';
-import { Flex, Box, Icon, Link, Skeleton } from '@chakra-ui/core';
+import { Badge, Flex, Box, Icon, Link, Skeleton, Text } from '@chakra-ui/core';
 import ContentBox from '../Shared/ContentBox';
 import { RiExternalLinkLine } from 'react-icons/ri';
 import { FaThumbsUp, FaThumbsDown } from 'react-icons/fa';
@@ -33,22 +33,61 @@ const ProposalDetail = ({ proposal }) => {
   }, [memberWallet, proposal]);
 
   return (
-    <ContentBox m={6}>
-      <Flex>
-        <Box w='90%'>
-          <TextBox>
-            {proposal ? proposal.proposalType : theme.daoMeta.proposal}
-          </TextBox>
-          <Skeleton isLoaded={details?.title}>
-            <TextBox fontSize='3xl' variant='value'>
-              {details?.title ? details?.title : '-'}
+    <ContentBox>
+      <Box>
+        <Box>
+          <Flex justify='space-between'>
+            <TextBox>
+              {proposal ? proposal.proposalType : theme.daoMeta.proposal}
             </TextBox>
+            <Box>
+              {proposal?.proposalIndex ? (
+                <>
+                  <TextBox>
+                    {isBefore(
+                      Date.now(),
+                      new Date(+proposal?.votingPeriodEnds * 1000),
+                    )
+                      ? 'Voting Period Ends'
+                      : 'Voting Ended'}
+                  </TextBox>
+                  <TextBox fontSize='lg' variant='value'>
+                    {formatDistanceToNow(
+                      new Date(+proposal?.votingPeriodEnds * 1000),
+                      {
+                        addSuffix: true,
+                      },
+                    )}
+                  </TextBox>
+                </>
+              ) : (
+                <>
+                  <Skeleton isLoaded={proposal?.status}>
+                    <Badge>
+                      {proposal?.status
+                        ? getProposalCountdownText(proposal)
+                        : '--'}
+                    </Badge>
+                  </Skeleton>
+                </>
+              )}
+            </Box>
+          </Flex>
+          <Skeleton isLoaded={details?.title}>
+            <Text fontSize='3xl'>{details?.title ? details?.title : '-'}</Text>
           </Skeleton>
           <Skeleton isLoaded={details?.description}>
-            <Box w='100%' mt={8}>
-              {details?.description}
-            </Box>
+            <Text>{details?.description}</Text>
           </Skeleton>
+          <Box mt={6}>
+            <TextBox>Link</TextBox>
+            <Skeleton isLoaded={details?.link}>
+              <Link href={details?.link} target='_blank'>
+                {details?.link ? details.link : '-'}{' '}
+                <Icon as={RiExternalLinkLine} color='primary.50' />
+              </Link>
+            </Skeleton>
+          </Box>
           <Flex w='100%' justify='space-between' mt={6}>
             {(proposal?.tributeOffered > 0 || !proposal?.tributeOffered) && (
               <Box>
@@ -100,50 +139,9 @@ const ProposalDetail = ({ proposal }) => {
                 </Skeleton>
               </Box>
             )}
-            <Box>
-              {proposal?.proposalIndex ? (
-                <>
-                  <TextBox>
-                    {isBefore(
-                      Date.now(),
-                      new Date(+proposal?.votingPeriodEnds * 1000),
-                    )
-                      ? 'Voting Period Ends'
-                      : 'Voting Ended'}
-                  </TextBox>
-                  <TextBox fontSize='lg' variant='value'>
-                    {formatDistanceToNow(
-                      new Date(+proposal?.votingPeriodEnds * 1000),
-                      {
-                        addSuffix: true,
-                      },
-                    )}
-                  </TextBox>
-                </>
-              ) : (
-                <>
-                  <TextBox>Proposal Status</TextBox>
-                  <Skeleton isLoaded={proposal?.status}>
-                    <TextBox fontSize='lg' variant='value'>
-                      {proposal?.status
-                        ? getProposalCountdownText(proposal)
-                        : '--'}
-                    </TextBox>
-                  </Skeleton>
-                </>
-              )}
-            </Box>
           </Flex>
-          <Box mt={6}>
-            <TextBox>Link</TextBox>
-            <Skeleton isLoaded={details?.link}>
-              <Link href={details?.link} target='_blank'>
-                {details?.link ? details.link : '-'}{' '}
-                <Icon as={RiExternalLinkLine} color='primary.50' />
-              </Link>
-            </Skeleton>
-          </Box>
         </Box>
+
         <Flex>
           {memberVote &&
             (+memberVote.uintVote === 1 ? (
@@ -180,12 +178,7 @@ const ProposalDetail = ({ proposal }) => {
               </Flex>
             ))}
         </Flex>
-      </Flex>
-      <Skeleton isLoaded={details?.description}>
-        <TextBox w='100%' mt={8} variant='value'>
-          {details?.description}
-        </TextBox>
-      </Skeleton>
+      </Box>
 
       <Flex w='80%' mt={6} justify='space-between'>
         <Box mr={5}>
