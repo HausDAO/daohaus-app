@@ -191,11 +191,6 @@ export const titleMaker = (proposal) => {
       parsedDetails = JSON.parse(
         proposal.details.replace(/(\r\n|\n|\r)/gm, ''),
       );
-
-      if (proposal.proposalId === '15') {
-        console.log('parsedDetails', parsedDetails);
-      }
-
       return parsedDetails.title || '';
     } catch {
       // one off fix for a bad proposal
