@@ -31,6 +31,7 @@ const TributeInput = ({
     }
     const amountApproved = await daoService.token.unlocked(token);
     console.log(amountApproved, amount);
+    // this needs to check token decimals
     const isUnlocked = amountApproved > amount;
     setUnlocked(isUnlocked);
   };
