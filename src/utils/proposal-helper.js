@@ -109,6 +109,8 @@ export const determineProposalType = (proposal) => {
     return 'Guildkick Proposal';
   } else if (proposal.trade) {
     return 'Trade Proposal';
+  } else if (proposal.isMinion) {
+    return 'Minion Proposal';
   } else {
     return 'Funding Proposal';
   }

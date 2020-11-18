@@ -34,6 +34,11 @@ export const getFilterOptions = (isMember) => {
       key: 'proposalType',
     },
     {
+      name: 'Minion Proposals',
+      value: 'Minion Proposal',
+      key: 'proposalType',
+    },
+    {
       name: 'Unsponsored',
       value: 'Unsponsored',
       key: 'status',

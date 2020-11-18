@@ -10,6 +10,7 @@ const baseListFields = `
   didPass
   gracePeriodEnds
   guildkick
+  isMinion
   lootRequested
   memberAddress
   newMember
@@ -54,8 +55,6 @@ const baseListFields = `
   votingEnds @client
   votingStarts @client
   `;
-
-// activityFeed @client
 
 export const PROPOSALS_LIST = gql`
   query proposals($contractAddr: String!, $skip: Int) {

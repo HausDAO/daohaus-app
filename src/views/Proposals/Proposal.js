@@ -5,7 +5,11 @@ import { RiArrowLeftLine } from 'react-icons/ri';
 
 import TextBox from '../../components/Shared/TextBox';
 
-import { useProposals, useDao } from '../../contexts/PokemolContext';
+import {
+  useProposals,
+  useDao,
+  useRefetchQuery,
+} from '../../contexts/PokemolContext';
 import { useTheme } from '../../contexts/CustomThemeContext';
 import ProposalDetail from '../../components/Proposals/ProposalDetail';
 import ProposalVote from '../../components/Proposals/ProposalVote';
@@ -13,6 +17,7 @@ import ProposalHistory from '../../components/Proposals/ProposalHistory';
 
 const Proposal = () => {
   const [dao] = useDao();
+  const [, updateRefetchQuery] = useRefetchQuery();
   const location = useLocation();
   const id = location.pathname.split('/proposals/')[1];
   const [proposals] = useProposals();
@@ -29,6 +34,13 @@ const Proposal = () => {
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [proposals]);
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      updateRefetchQuery('proposals');
+    }, 60000);
+    return () => clearInterval(interval);
+  }, []);
 
   return (
     <Box p={6}>
