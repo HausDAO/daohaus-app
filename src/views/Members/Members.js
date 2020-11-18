@@ -19,7 +19,7 @@ const Members = () => {
       </Box>
       <Box w={['100%', null, null, null, '40%']} pt={[6, 0]}>
         {selectedMember ? (
-          <MemberInfoCard user={selectedMember} />
+          <MemberInfoCard user={selectedMember} showMenu={true} />
         ) : (
           <MemberSnapshot selectedMember={selectedMember} />
         )}

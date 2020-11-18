@@ -4,6 +4,7 @@ import UsdPrice from '../UsdPrice';
 import UsdValue from '../UsdValue';
 
 const TokenListCard = ({ token, isLoaded }) => {
+  console.log(token);
   // TODO token images? trust-wallet?
   return (
     <Flex h='60px' align='center'>

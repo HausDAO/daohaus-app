@@ -1,26 +1,33 @@
 import React, { useState, useEffect } from 'react';
-import { Box, Flex, Image, Icon, Skeleton } from '@chakra-ui/core';
+import { Box, Flex, Image, Skeleton } from '@chakra-ui/core';
 import { format } from 'date-fns';
 import makeBlockie from 'ethereum-blockies-base64';
-import { BsThreeDotsVertical } from 'react-icons/bs';
 
-import { truncateAddr } from '../../utils/helpers';
+import { truncateAddr, memberProfile } from '../../utils/helpers';
 import {
   useEns,
   useDaoGraphData,
-  useMemberWallet,
+  useMembers,
 } from '../../contexts/PokemolContext';
 import ContentBox from '../Shared/ContentBox';
 import TextBox from '../Shared/TextBox';
+import ProfileMenu from '../Shared/ProfileMenu';
 
 const OverviewCard = ({ user }) => {
   const [ens] = useEns();
   const [dao] = useDaoGraphData();
-  const [memberWallet] = useMemberWallet();
-  console.log(dao);
-  console.log(memberWallet);
+  const [members] = useMembers();
+  const [member, setMember] = useState();
 
   const [ensName, setEnsName] = useState(null);
+
+  useEffect(() => {
+    if (user?.memberAddress) {
+      setMember(user);
+    } else {
+      setMember(memberProfile(members, user.username));
+    }
+  }, [members, user]);
 
   useEffect(() => {
     const lookupEns = async () => {
@@ -93,40 +100,34 @@ const OverviewCard = ({ user }) => {
             </TextBox>
           </Box>
           <Box>
-            <Icon
-              as={BsThreeDotsVertical}
-              color='secondary.400'
-              h='30px'
-              w='30px'
-              _hover={{ cursor: 'pointer' }}
-            />
+            <ProfileMenu member={user} />
           </Box>
         </Flex>
         <Flex justify='space-between' align='flex-end' mt={4}>
           <Box w='30%'>
             <TextBox fontSize='xs'>Power</TextBox>
-            <Skeleton isLoaded={memberWallet?.shares && dao?.totalShares}>
+            <Skeleton isLoaded={member?.shares && dao?.totalShares}>
               <TextBox fontSize='xl' variant='value'>
-                {memberWallet?.shares &&
+                {member?.shares &&
                   dao?.totalShares &&
-                  ((memberWallet?.shares / dao?.totalShares) * 100).toFixed(1)}
+                  ((member?.shares / dao?.totalShares) * 100).toFixed(1)}
                 %
               </TextBox>
             </Skeleton>
           </Box>
           <Box w='30%'>
             <TextBox fontSize='xs'>Shares</TextBox>
-            <Skeleton isLoaded={memberWallet?.shares >= 0}>
+            <Skeleton isLoaded={member?.shares >= 0}>
               <TextBox fontSize='xl' variant='value'>
-                {memberWallet?.shares}
+                {member?.shares}
               </TextBox>
             </Skeleton>
           </Box>
           <Box w='30%'>
             <TextBox fontSize='xs'>Loot</TextBox>
-            <Skeleton isLoaded={memberWallet?.loot >= 0}>
+            <Skeleton isLoaded={member?.loot >= 0}>
               <TextBox fontSize='xl' variant='value'>
-                {memberWallet?.loot}
+                {member?.loot}
               </TextBox>
             </Skeleton>
           </Box>

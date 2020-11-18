@@ -6,7 +6,6 @@ import TextBox from '../TextBox';
 import {
   useMembers,
   useDao,
-  useUser,
   useMemberWallet,
 } from '../../../contexts/PokemolContext';
 import { useTheme } from '../../../contexts/CustomThemeContext';
@@ -14,7 +13,7 @@ import { useTheme } from '../../../contexts/CustomThemeContext';
 import { memberProfile } from '../../../utils/helpers';
 import MemberInfoCardGuts from './MemberInfoCardGuts';
 
-const MemberInfoCard = ({ user, selectedMember }) => {
+const MemberInfoCard = ({ user, selectedMember, showMenu }) => {
   const [memberWallet] = useMemberWallet();
   const [dao] = useDao();
   const [members] = useMembers();
@@ -49,7 +48,7 @@ const MemberInfoCard = ({ user, selectedMember }) => {
         )}
       </Flex>
       <ContentBox mt={3}>
-        <MemberInfoCardGuts user={user} member={member} />
+        <MemberInfoCardGuts user={user} member={member} showMenu={showMenu} />
       </ContentBox>
     </>
   );

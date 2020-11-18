@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { Link as RouterLink } from 'react-router-dom';
 import {
   Link,
   Modal,
@@ -43,7 +44,7 @@ const AccountModal = ({ isOpen, setShowModal }) => {
     } else {
       setMember(memberProfile(members, user.username));
     }
-  }, [members, user.username]);
+  }, [members, user]);
 
   // TODO: where should we put this?
   const DISPLAY_NAMES = {
@@ -132,15 +133,26 @@ const AccountModal = ({ isOpen, setShowModal }) => {
               user={user}
               member={member}
               context={'accountModal'}
+              showMenu={false}
             />
           )}
           {dao.address && (
             <Box pt={6}>
               <Flex direction='row' justify='space-evenly' align='center'>
-                <Link to={`/dao/${dao.address}/profile${user.username}`}>
+                <Link
+                  as={RouterLink}
+                  to={`/dao/${dao.address}/profile/${user.username}`}
+                  onClick={() => setShowModal(false)}
+                >
                   Profile
                 </Link>
-                <Link to='/'>Hub</Link>
+                <Link
+                  as={RouterLink}
+                  to='/'
+                  onClick={() => setShowModal(false)}
+                >
+                  Hub
+                </Link>
               </Flex>
             </Box>
           )}
