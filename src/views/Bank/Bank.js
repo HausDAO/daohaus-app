@@ -1,24 +1,40 @@
 import React, { useState, useEffect } from 'react';
 import { Box } from '@chakra-ui/core';
 
-import { useDaoGraphData } from '../../contexts/PokemolContext';
+import { useDao } from '../../contexts/PokemolContext';
 import BankOverviewChart from '../../components/Bank/BankOverviewChart';
 import TokenList from '../../components/Shared/TokenList/TokenList';
+import GraphFetch from '../../components/Shared/GraphFetch';
+import { BANK_BALANCES } from '../../utils/apollo/bank-queries';
 
 const Bank = () => {
-  const [dao] = useDaoGraphData();
+  const [dao] = useDao();
   const [tokenList, setTokenList] = useState(null);
+  const [balances, setBalances] = useState();
 
   useEffect(() => {
-    if (dao?.tokenBalances) {
-      setTokenList(dao?.tokenBalances);
+    if (dao?.graphData?.tokenBalances) {
+      setTokenList(dao.graphData.tokenBalances);
     }
   }, [dao]);
 
   return (
     <Box w='100%' p={6}>
-      <BankOverviewChart />
+      <BankOverviewChart balances={balances} />
       <TokenList tokenList={tokenList} />
+
+      {dao?.address && dao?.graphData ? (
+        <GraphFetch
+          query={BANK_BALANCES}
+          setRecords={setBalances}
+          entity='balances'
+          variables={{
+            molochAddress: dao.address,
+            tokenAddress: dao.graphData.depositToken.tokenAddress,
+          }}
+          isStats={true}
+        />
+      ) : null}
     </Box>
   );
 };

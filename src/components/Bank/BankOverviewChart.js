@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   FlexibleWidthXYPlot,
   XAxis,
@@ -21,17 +21,40 @@ import { useTheme } from '../../contexts/CustomThemeContext';
 
 import ContentBox from '../Shared/ContentBox';
 
-const BankOverviewChart = () => {
-  const [theme] = useTheme();
+const defaultData = [
+  { x: 1, y: 1 },
+  { x: 2, y: 2 },
+  { x: 3, y: 4 },
+  { x: 4, y: 3 },
+  { x: 5, y: 5 },
+  { x: 6, y: 8 },
+];
 
-  const data = [
-    { x: 1, y: 1 },
-    { x: 2, y: 2 },
-    { x: 3, y: 4 },
-    { x: 4, y: 3 },
-    { x: 5, y: 5 },
-    { x: 6, y: 8 },
-  ];
+const BankOverviewChart = ({ balances }) => {
+  const [theme] = useTheme();
+  const [chartData, setChartData] = useState([]);
+
+  //x = date
+  //y = balance count
+
+  useEffect(() => {
+    if (balances) {
+      console.log('balances', balances);
+      const data = balances.map((balance) => {
+        return {
+          x: new Date(balance.timestamp * 1000),
+          y: +balance.balance / 1e18,
+
+          // tokenBalance.tokenBalance / 10 ** +tokenBalance.token.decimals
+        };
+      });
+
+      console.log('data', data);
+      setChartData(data);
+    } else {
+      setChartData(defaultData);
+    }
+  }, [balances]);
 
   return (
     <Box>
@@ -57,7 +80,7 @@ const BankOverviewChart = () => {
         </Menu>
       </Flex>
       <ContentBox minH='260px' w='100%'>
-        <FlexibleWidthXYPlot height={260}>
+        <FlexibleWidthXYPlot height={260} xType='time'>
           <VerticalGridLines color='white' />
           <HorizontalGridLines color='white' />
           <XAxis
@@ -90,7 +113,7 @@ const BankOverviewChart = () => {
           />
           <AreaSeries
             curve='curveNatural'
-            data={data}
+            data={chartData}
             color={theme.colors.primary[50]}
           />
         </FlexibleWidthXYPlot>

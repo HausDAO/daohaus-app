@@ -2,15 +2,27 @@ import React, { useEffect, useState } from 'react';
 import { useQuery } from '@apollo/react-hooks';
 
 import { useNetwork, useRefetchQuery } from '../../contexts/PokemolContext';
-import { networkClients } from '../../utils/apollo/clients';
+import {
+  supergraphClients,
+  statsgraphClients,
+} from '../../utils/apollo/clients';
 
-const GraphFetchMore = ({ query, setRecords, variables, entity, context }) => {
+const GraphFetchMore = ({
+  query,
+  setRecords,
+  variables,
+  entity,
+  context,
+  isStats,
+}) => {
   const [network] = useNetwork();
   const [fetched, setFetched] = useState();
   const [refetchQuery, updateRefetchQuery] = useRefetchQuery();
 
   const { loading, error, data, fetchMore, refetch } = useQuery(query, {
-    client: networkClients[network.network_id],
+    client: isStats
+      ? statsgraphClients[network.network_id]
+      : supergraphClients[network.network_id],
     variables,
     fetchPolicy: 'network-only',
     context,
