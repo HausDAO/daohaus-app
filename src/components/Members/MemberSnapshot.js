@@ -24,7 +24,7 @@ const MemberSnapshot = ({ selectedMember }) => {
             selectedMember ? selectedMember.memberAddress : user?.username
           }`}
         >
-          View profile
+          View my profile
         </TextBox>
       </Flex>
       <ContentBox mt={3}>

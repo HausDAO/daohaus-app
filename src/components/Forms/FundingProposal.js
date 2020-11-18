@@ -185,13 +185,10 @@ const FundingProposalForm = () => {
           )}
           {(!showShares || !showLoot || !showTribute) && (
             <Menu textTransform='uppercase'>
-              <MenuButton
-                as={Button}
-                variant='outline'
-                rightIcon={<Icon as={RiAddFill} />}
-                position='relative'
-              >
-                Additional Options
+              <MenuButton>
+                <Button variant='outline' rightIcon={<Icon as={RiAddFill} />}>
+                  Additional Options
+                </Button>
               </MenuButton>
               <MenuList>
                 {!showShares && (

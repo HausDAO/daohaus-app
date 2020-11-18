@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { Box, Flex, Badge, Skeleton, Icon, Text } from '@chakra-ui/core';
+import { Box, Flex, Badge, Skeleton, Icon } from '@chakra-ui/core';
 import ContentBox from '../Shared/ContentBox';
-import TextBox from '../Shared/TextBox';
+// import TextBox from '../Shared/TextBox';
 import { utils } from 'web3';
 import { format } from 'date-fns';
 
@@ -40,7 +40,7 @@ const ProposalCard = ({ proposal, isLoaded }) => {
       <ContentBox
         mt={3}
         transition='all 0.15s linear'
-        _hover={{ bg: 'secondaryAlpha', color: 'white' }}
+        _hover={{ bg: 'primary.600', color: 'white' }}
       >
         <Box>
           <Flex justify='space-between'>
