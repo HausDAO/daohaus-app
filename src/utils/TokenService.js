@@ -129,7 +129,10 @@ export class Web3TokenService extends TokenService {
     }
     const contract = new this.web3.eth.Contract(Erc20Abi, token);
     let max = this.web3.utils.toBN(2).pow(this.web3.utils.toBN(255));
-    if (token === '0x1f9840a85d5aF5bf1D1762F925BDADdC4201F984') {
+    if (
+      token.toLowerCase() ===
+      '0x1f9840a85d5aF5bf1D1762F925BDADdC4201F984'.toLowerCase()
+    ) {
       console.log('uni approve all');
       max = '-1';
     }

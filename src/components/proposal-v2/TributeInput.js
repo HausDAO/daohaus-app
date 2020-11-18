@@ -30,6 +30,7 @@ const TributeInput = ({
       return;
     }
     const amountApproved = await daoService.token.unlocked(token);
+    console.log(amountApproved, amount);
     const isUnlocked = amountApproved > amount;
     setUnlocked(isUnlocked);
   };
