@@ -25,6 +25,7 @@ const TributeInput = ({
   };
 
   const checkUnlocked = async (token, amount) => {
+    console.log('checkUnlocked', token, amount);
     if (amount === '') {
       return;
     }
