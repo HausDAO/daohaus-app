@@ -4,12 +4,13 @@ import { gql } from 'apollo-boost';
 // chop it up
 
 export const BANK_BALANCES = gql`
-  query balances($molochAddress: String!) {
+  query balances($molochAddress: String!, $skip: Int) {
     balances(
       where: { molochAddress: $molochAddress }
       first: 100
       orderBy: timestamp
       orderDirection: asc
+      skip: $skip
     ) {
       id
       timestamp

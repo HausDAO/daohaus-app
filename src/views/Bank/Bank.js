@@ -4,7 +4,7 @@ import { Box } from '@chakra-ui/core';
 import { useDao } from '../../contexts/PokemolContext';
 import BankOverviewChart from '../../components/Bank/BankOverviewChart';
 import TokenList from '../../components/Shared/TokenList/TokenList';
-import GraphFetch from '../../components/Shared/GraphFetch';
+import GraphFetchMore from '../../components/Shared/GraphFetchMore';
 import { BANK_BALANCES } from '../../utils/apollo/bank-queries';
 
 const Bank = () => {
@@ -24,7 +24,7 @@ const Bank = () => {
       <TokenList tokenList={tokenList} />
 
       {dao?.address && dao?.graphData ? (
-        <GraphFetch
+        <GraphFetchMore
           query={BANK_BALANCES}
           setRecords={setBalances}
           entity='balances'

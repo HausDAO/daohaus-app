@@ -29,39 +29,24 @@ const BankOverviewChart = ({ balances }) => {
   const [chartData, setChartData] = useState([]);
   const [timeframe, setTimeframe] = useState(bankChartTimeframes[0]);
 
-  // change time frame somehow
-  // your share if member to
-
   useEffect(() => {
     if (balances && prices) {
-      console.log('balances', balances);
-
       const filteredBalances = balancesWithValue(balances, prices);
-
-      console.log('filteredBalances', filteredBalances);
-
       if (filteredBalances[0]) {
         const dateRange = getDateRange(timeframe, filteredBalances);
-
-        console.log('dataRange', dateRange);
-
         const dates = getDatesArray(dateRange.start, dateRange.end);
-
         const groupedBalances = groupBalancesToDateRange(
           filteredBalances,
           dates,
         );
-        console.log('groupedBalances', groupedBalances);
 
         const data = groupedBalances.map((balance, i) => {
           return {
             x: balance.date,
-            y: balance.balance.value,
+            y: balance.value,
             y0: 0,
           };
         });
-
-        console.log('data', data);
 
         setChartData(data);
       } else {
