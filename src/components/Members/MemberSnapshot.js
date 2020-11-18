@@ -2,12 +2,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { Box, Flex, Skeleton } from '@chakra-ui/core';
 
-import {
-  useMembers,
-  useDao,
-  useUser,
-  useMemberWallet,
-} from '../../contexts/PokemolContext';
+import { useMembers, useDao, useUser } from '../../contexts/PokemolContext';
 import { useTheme } from '../../contexts/CustomThemeContext';
 import MemberSnapshotChart from './MemberSnapshotChart';
 import TextBox from '../Shared/TextBox';

@@ -4,12 +4,14 @@ import TextBox from '../TextBox';
 import { format } from 'date-fns';
 
 import UserAvatar from '../UserAvatar';
+import ProfileMenu from '../ProfileMenu';
 
-const MemberInfoCardGuts = ({ user, member }) => {
+const MemberInfoCardGuts = ({ user, member, showMenu }) => {
   return (
     <>
       <Flex justify='space-between'>
         <UserAvatar user={user.profile} />
+        {showMenu && <ProfileMenu member={member} />}
       </Flex>
       <Flex w='75%' justify='space-between' mt={6}>
         <Box>

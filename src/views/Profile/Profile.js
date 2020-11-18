@@ -35,9 +35,7 @@ const Profile = () => {
       const memberTokenShares = dao.tokenBalances.map((token) => {
         return {
           ...token,
-          memberBalance:
-            (token.contractBabeBalance + token.contractTokenBalance) *
-            memberPercent,
+          tokenBalance: +token.tokenBalance * memberPercent,
         };
       });
 
