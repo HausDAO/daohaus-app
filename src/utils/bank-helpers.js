@@ -12,11 +12,11 @@ export const getDateRange = (timeframe, balances) => {
     };
   } else {
     const today = new Date();
-    const startDate = new Date();
+    const startDate = new Date(balances[balances.length - 1].timestamp * 1000);
     startDate.setMonth(today.getMonth() - timeframe.value);
     return {
       start: startDate,
-      end: today,
+      end: new Date(balances[balances.length - 1].timestamp * 1000),
     };
   }
 };
@@ -43,35 +43,21 @@ export const balancesWithValue = (balances, prices) => {
     return list;
   }, []);
 };
-// where to get total?
-// maybe groupBalancesToDateRange on each token with a price
-// then add
 
 export const groupBalancesToDateRange = (balances, dates) => {
   const groupedByToken = groupBy(balances, 'tokenAddress');
-
-  console.log('groupedByToken', groupedByToken);
-
   return dates.map((date, i) => {
-    // for each Object.keys(groupedByToken)
-    // const dateObj = {
-    //   date,
-    // };
-    // Object.keys(groupedByToken).reduce((tokenAddress) => {
-    //   const nextBal = balances.find(
-    //     (bal) => +bal.timestamp >= date.getTime() / 1000,
-    //   );
+    const value = Object.keys(groupedByToken).reduce((sum, tokenAddress) => {
+      const nextBal = groupedByToken[tokenAddress].find(
+        (bal) => +bal.timestamp >= date.getTime() / 1000,
+      );
+      sum += nextBal ? nextBal.value : 0;
+      return sum;
+    }, 0);
 
-    // }, 0);
-
-    // get match for each token and reduce a total price
-
-    const nextBal = balances.find(
-      (bal) => +bal.timestamp >= date.getTime() / 1000,
-    );
     return {
       date,
-      balance: nextBal || balances[balances.length - 1],
+      value,
     };
   });
 };
