@@ -15,109 +15,137 @@ import {
   MenuList,
   MenuItem,
   Icon,
+  Skeleton,
 } from '@chakra-ui/core';
 import { FaChevronDown } from 'react-icons/fa';
 import { useTheme } from '../../contexts/CustomThemeContext';
 
 import ContentBox from '../Shared/ContentBox';
-
-const defaultData = [
-  { x: 1, y: 1 },
-  { x: 2, y: 2 },
-  { x: 3, y: 4 },
-  { x: 4, y: 3 },
-  { x: 5, y: 5 },
-  { x: 6, y: 8 },
-];
+import {
+  balancesWithValue,
+  getDateRange,
+  getDatesArray,
+  groupBalancesToDateRange,
+} from '../../utils/bank-helpers';
+import { usePrices } from '../../contexts/PokemolContext';
+import { bankChartTimeframes } from '../../content/chart-content';
 
 const BankOverviewChart = ({ balances }) => {
   const [theme] = useTheme();
+  const [prices] = usePrices();
   const [chartData, setChartData] = useState([]);
+  const [timeframe, setTimeframe] = useState(bankChartTimeframes[0]);
 
-  //x = date
-  //y = balance count
+  // change time frame somehow
+  // your share if member to
 
   useEffect(() => {
-    if (balances) {
+    if (balances && prices) {
       console.log('balances', balances);
-      const data = balances.map((balance) => {
-        return {
-          x: new Date(balance.timestamp * 1000),
-          y: +balance.balance / 1e18,
 
-          // tokenBalance.tokenBalance / 10 ** +tokenBalance.token.decimals
-        };
-      });
+      const filteredBalances = balancesWithValue(balances, prices);
 
-      console.log('data', data);
-      setChartData(data);
-    } else {
-      setChartData(defaultData);
+      console.log('filteredBalances', filteredBalances);
+
+      if (filteredBalances[0]) {
+        const dateRange = getDateRange(timeframe, filteredBalances);
+
+        console.log('dataRange', dateRange);
+
+        const dates = getDatesArray(dateRange.start, dateRange.end);
+
+        const groupedBalances = groupBalancesToDateRange(
+          filteredBalances,
+          dates,
+        );
+        console.log('groupedBalances', groupedBalances);
+
+        const data = groupedBalances.map((balance, i) => {
+          return {
+            x: balance.date,
+            y: balance.balance.value,
+          };
+        });
+
+        console.log('data', data);
+
+        setChartData(data);
+      } else {
+        setChartData([]);
+      }
     }
-  }, [balances]);
+  }, [balances, prices, timeframe]);
+
+  const handleTimeChange = (time) => {
+    setTimeframe({
+      ...time,
+    });
+  };
 
   return (
     <Box>
-      <Flex justify='space-between'>
-        <Menu>
-          <MenuButton>
-            Showing: All <Icon as={FaChevronDown} h='12px' w='12px' />
-          </MenuButton>
-          <MenuList>
-            <MenuItem>All</MenuItem>
-            <MenuItem>Your Share</MenuItem>
-          </MenuList>
-        </Menu>
-        <Menu>
-          <MenuButton>
-            Time Frame: 7 days <Icon as={FaChevronDown} h='12px' w='12px' />
-          </MenuButton>
-          <MenuList>
-            <MenuItem>7 day</MenuItem>
-            <MenuItem>30 day</MenuItem>
-            <MenuItem>90 day</MenuItem>
-          </MenuList>
-        </Menu>
-      </Flex>
-      <ContentBox minH='260px' w='100%'>
-        <FlexibleWidthXYPlot height={260} xType='time'>
-          <VerticalGridLines color='white' />
-          <HorizontalGridLines color='white' />
-          <XAxis
-            title='Time'
-            style={{
-              line: { stroke: 'white' },
-              ticks: { stroke: 'white' },
-              text: {
-                stroke: 'none',
-                fill: 'white',
-                fontSize: '9px',
-                fontFamily: theme.fonts.mono,
-              },
-              title: { fill: 'white' },
-            }}
-          />
-          <YAxis
-            title='Tokens'
-            style={{
-              line: { stroke: 'white' },
-              ticks: { stroke: 'white' },
-              text: {
-                stroke: 'none',
-                fill: 'white',
-                fontSize: '9px',
-                fontFamily: theme.fonts.mono,
-              },
-              title: { fill: 'white' },
-            }}
-          />
-          <AreaSeries
-            curve='curveNatural'
-            data={chartData}
-            color={theme.colors.primary[50]}
-          />
-        </FlexibleWidthXYPlot>
-      </ContentBox>
+      <Skeleton isLoaded={chartData.length > 0}>
+        <Flex justify='flex-end'>
+          <Menu>
+            <MenuButton>
+              Time Frame: {timeframe.name}{' '}
+              <Icon as={FaChevronDown} h='12px' w='12px' />
+            </MenuButton>
+            <MenuList>
+              {bankChartTimeframes.map((time) => {
+                return (
+                  <MenuItem
+                    key={time.value}
+                    onClick={() => handleTimeChange(time)}
+                  >
+                    {time.name}
+                  </MenuItem>
+                );
+              })}
+            </MenuList>
+          </Menu>
+        </Flex>
+        <ContentBox minH='260px' w='100%'>
+          <FlexibleWidthXYPlot height={260}>
+            <VerticalGridLines color='white' />
+            <HorizontalGridLines color='white' />
+            <XAxis
+              title='Time'
+              xType='time'
+              style={{
+                line: { stroke: 'white' },
+                ticks: { stroke: 'white' },
+                text: {
+                  stroke: 'none',
+                  fill: 'white',
+                  fontSize: '9px',
+                  fontFamily: theme.fonts.mono,
+                },
+                title: { fill: 'white' },
+              }}
+            />
+            <YAxis
+              title='Value (USD)'
+              style={{
+                line: { stroke: 'white' },
+                ticks: { stroke: 'white' },
+                text: {
+                  stroke: 'none',
+                  fill: 'white',
+                  fontSize: '9px',
+                  fontFamily: theme.fonts.mono,
+                },
+                title: { fill: 'white' },
+              }}
+            />
+            <AreaSeries
+              curve='curveNatural'
+              data={chartData}
+              color={theme.colors.primary[50]}
+            />
+          </FlexibleWidthXYPlot>
+        </ContentBox>
+      </Skeleton>
     </Box>
   );
 };

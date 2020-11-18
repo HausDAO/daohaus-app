@@ -4,17 +4,18 @@ import { gql } from 'apollo-boost';
 // chop it up
 
 export const BANK_BALANCES = gql`
-  query balances($molochAddress: String!, $tokenAddress: String!) {
+  query balances($molochAddress: String!) {
     balances(
-      where: { molochAddress: $molochAddress, tokenAddress: $tokenAddress }
+      where: { molochAddress: $molochAddress }
       first: 100
       orderBy: timestamp
-      orderDirection: desc
+      orderDirection: asc
     ) {
       id
       timestamp
       balance
       tokenAddress
+      tokenDecimals
     }
   }
 `;

@@ -30,7 +30,6 @@ const Bank = () => {
           entity='balances'
           variables={{
             molochAddress: dao.address,
-            tokenAddress: dao.graphData.depositToken.tokenAddress,
           }}
           isStats={true}
         />
