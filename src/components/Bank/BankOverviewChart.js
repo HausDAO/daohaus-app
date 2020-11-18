@@ -1,12 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import {
-  FlexibleWidthXYPlot,
-  XAxis,
-  YAxis,
-  VerticalGridLines,
-  HorizontalGridLines,
-  AreaSeries,
-} from 'react-vis';
+import { FlexibleWidthXYPlot, XAxis, YAxis, AreaSeries } from 'react-vis';
 import {
   Box,
   Flex,
@@ -64,6 +57,7 @@ const BankOverviewChart = ({ balances }) => {
           return {
             x: balance.date,
             y: balance.balance.value,
+            y0: 0,
           };
         });
 
@@ -106,43 +100,14 @@ const BankOverviewChart = ({ balances }) => {
           </Menu>
         </Flex>
         <ContentBox minH='260px' w='100%'>
-          <FlexibleWidthXYPlot height={260}>
-            <VerticalGridLines color='white' />
-            <HorizontalGridLines color='white' />
-            <XAxis
-              title='Time'
-              xType='time'
-              style={{
-                line: { stroke: 'white' },
-                ticks: { stroke: 'white' },
-                text: {
-                  stroke: 'none',
-                  fill: 'white',
-                  fontSize: '9px',
-                  fontFamily: theme.fonts.mono,
-                },
-                title: { fill: 'white' },
-              }}
-            />
-            <YAxis
-              title='Value (USD)'
-              style={{
-                line: { stroke: 'white' },
-                ticks: { stroke: 'white' },
-                text: {
-                  stroke: 'none',
-                  fill: 'white',
-                  fontSize: '9px',
-                  fontFamily: theme.fonts.mono,
-                },
-                title: { fill: 'white' },
-              }}
-            />
+          <FlexibleWidthXYPlot height={300}>
             <AreaSeries
               curve='curveNatural'
               data={chartData}
               color={theme.colors.primary[50]}
             />
+            <XAxis xType='time' tickTotal={0} />
+            <YAxis tickTotal={0} />
           </FlexibleWidthXYPlot>
         </ContentBox>
       </Skeleton>

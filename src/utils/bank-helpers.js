@@ -64,6 +64,8 @@ export const groupBalancesToDateRange = (balances, dates) => {
 
     // }, 0);
 
+    // get match for each token and reduce a total price
+
     const nextBal = balances.find(
       (bal) => +bal.timestamp >= date.getTime() / 1000,
     );
