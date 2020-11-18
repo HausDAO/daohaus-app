@@ -1,22 +1,11 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { Flex, Box, Skeleton } from '@chakra-ui/core';
 import TextBox from '../TextBox';
 import { format } from 'date-fns';
-import { useMembers } from '../../../contexts/PokemolContext';
 
 import UserAvatar from '../UserAvatar';
-import { memberProfile } from '../../../utils/helpers';
 
-const MemberInfoCardGuts = ({ user, context }) => {
-  const [members] = useMembers();
-  const [member, setMember] = useState(null);
-
-  console.log(`Member info opened in ${context}`);
-
-  useEffect(() => {
-    setMember(memberProfile(members, user.username));
-  }, [members, user.username]);
-
+const MemberInfoCardGuts = ({ user, member }) => {
   return (
     <>
       <Flex justify='space-between'>

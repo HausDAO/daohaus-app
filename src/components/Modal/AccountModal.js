@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   Link,
   Modal,
@@ -15,7 +15,13 @@ import {
 
 import { RiCheckboxCircleLine } from 'react-icons/ri';
 
-import { useTxProcessor, useUser, useDao } from '../../contexts/PokemolContext';
+import {
+  useTxProcessor,
+  useUser,
+  useDao,
+  useMembers,
+} from '../../contexts/PokemolContext';
+import { memberProfile } from '../../utils/helpers';
 
 import HubProfileCard from '../Hub/HubProfileCard';
 import ExplorerLink from '../Shared/ExplorerLink';
@@ -25,6 +31,19 @@ const AccountModal = ({ isOpen, setShowModal }) => {
   const [user] = useUser();
   const [dao] = useDao();
   const [txProcessor] = useTxProcessor();
+
+  const [members] = useMembers();
+  const [member, setMember] = useState(null);
+
+  // console.log(`Member info opened in ${context}`);
+
+  useEffect(() => {
+    if (user?.memberAddress) {
+      setMember(user);
+    } else {
+      setMember(memberProfile(members, user.username));
+    }
+  }, [members, user.username]);
 
   // TODO: where should we put this?
   const DISPLAY_NAMES = {
@@ -109,7 +128,11 @@ const AccountModal = ({ isOpen, setShowModal }) => {
           {!dao.address ? (
             <HubProfileCard user={user} />
           ) : (
-            <MemberInfoCardGuts user={user} context={'accountModal'} />
+            <MemberInfoCardGuts
+              user={user}
+              member={member}
+              context={'accountModal'}
+            />
           )}
           {dao.address && (
             <Box pt={6}>

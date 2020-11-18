@@ -4,6 +4,7 @@ import { Flex, Box } from '@chakra-ui/core';
 import MembersList from '../../components/Members/MembersList';
 import MemberSnapshot from '../../components/Members/MemberSnapshot';
 import MembersActivityFeed from '../../components/Members/MembersActivityFeed';
+import MemberInfoCard from '../../components/Shared/MemberInfoCard/MemberInfoCard';
 
 const Members = () => {
   const [selectedMember, setSelectedMember] = useState();
@@ -17,7 +18,12 @@ const Members = () => {
         />
       </Box>
       <Box w={['100%', null, null, null, '40%']} pt={[6, 0]}>
-        <MemberSnapshot selectedMember={selectedMember} />
+        {selectedMember ? (
+          <MemberInfoCard user={selectedMember} />
+        ) : (
+          <MemberSnapshot selectedMember={selectedMember} />
+        )}
+
         <MembersActivityFeed selectedMember={selectedMember} />
       </Box>
     </Flex>
