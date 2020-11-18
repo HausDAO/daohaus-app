@@ -109,7 +109,6 @@ const TxProcessorInit = () => {
                 type='tx'
                 hash={latestTx.tx}
                 linkText={`${truncateAddr(latestTx.tx)} view`}
-                fontFamily='body'
               />
             )}
             {!loading && (

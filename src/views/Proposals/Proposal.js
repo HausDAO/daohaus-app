@@ -66,7 +66,9 @@ const Proposal = () => {
         >
           <Box>{!proposal?.cancelled && <TextBox size='md'>Vote</TextBox>}</Box>
           <Box pt={6}>
-            {!proposal?.cancelled && <ProposalVote proposal={proposal} />}
+            {!proposal?.cancelled && (
+              <ProposalVote proposal={proposal} setProposal={setProposal} />
+            )}
             <ProposalHistory proposal={proposal} />
           </Box>
         </Flex>

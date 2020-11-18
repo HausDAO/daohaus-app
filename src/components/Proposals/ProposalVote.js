@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Box, Button, Flex, Icon, Skeleton } from '@chakra-ui/core';
 import { FaThumbsUp, FaThumbsDown } from 'react-icons/fa';
 import { isAfter, isBefore } from 'date-fns';
@@ -9,22 +9,26 @@ import {
   useDao,
   useUser,
   useTxProcessor,
+  useProposals,
 } from '../../contexts/PokemolContext';
 import ContentBox from '../Shared/ContentBox';
 import TextBox from '../Shared/TextBox';
 
-const ProposalVote = ({ proposal }) => {
+const ProposalVote = ({ proposal, setProposal }) => {
   const [user] = useUser();
   const [dao] = useDao();
   const [wallet] = useMemberWallet();
   const [daoData] = useDaoGraphData();
+  const [proposals] = useProposals();
   const [txProcessor, updateTxProcessor] = useTxProcessor();
+  const [nextProposalToProcess, setNextProposal] = useState(null);
   const currentlyVoting = (proposal) => {
     return (
       isBefore(Date.now(), new Date(+proposal?.votingPeriodEnds * 1000)) &&
       isAfter(Date.now(), new Date(+proposal?.votingPeriodStarts * 1000))
     );
   };
+  console.log(proposals);
 
   const txCallBack = (txHash, details) => {
     if (txProcessor && txHash) {
@@ -103,6 +107,17 @@ const ProposalVote = ({ proposal }) => {
       console.error(`Error processing proposal: ${e.toString()}`);
     }
   };
+
+  useEffect(() => {
+    const proposalsToProcess = proposals
+      .filter((p) => p.status === 'ReadyForProcessing')
+      .sort((a, b) => a.gracePeriodEnds - b.gracePeriodEnds);
+
+    console.log(proposalsToProcess);
+    if (proposalsToProcess.length > 0) {
+      setNextProposal(proposalsToProcess[0]);
+    }
+  }, [proposals]);
 
   // TODO disable Process button if another proposal needs processing?
 
@@ -259,13 +274,28 @@ const ProposalVote = ({ proposal }) => {
               </Flex>
             </>
           )}
-        {proposal?.status === 'ReadyForProcessing' && (
-          <Flex justify='center' pt='10px'>
-            <Flex direction='column'>
-              <Button onClick={() => processProposal(proposal)}>Process</Button>
+        {proposal?.status === 'ReadyForProcessing' &&
+          (nextProposalToProcess.proposalId === proposal?.proposalId ? (
+            <Flex justify='center' pt='10px'>
+              <Flex direction='column'>
+                <Button onClick={() => processProposal(proposal)}>
+                  Process
+                </Button>
+              </Flex>
             </Flex>
-          </Flex>
-        )}
+          ) : (
+            <Flex justify='center' pt='10px'>
+              <Flex direction='column'>
+                <Button
+                  variant='outline'
+                  onClick={() => setProposal(nextProposalToProcess)}
+                >
+                  Proposal {nextProposalToProcess.proposalId} Needs Processing
+                  Next
+                </Button>
+              </Flex>
+            </Flex>
+          ))}
       </ContentBox>
     </>
   );

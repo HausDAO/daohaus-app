@@ -13,6 +13,8 @@ import { memberProfile } from '../../utils/helpers';
 import { getProposalCountdownText } from '../../utils/proposal-helper';
 import TextBox from '../Shared/TextBox';
 
+const ZERO_ADDRESS = '0x0000000000000000000000000000000000000000';
+
 const ProposalDetail = ({ proposal }) => {
   const [members] = useMembers();
   const [theme] = useTheme();
@@ -182,7 +184,7 @@ const ProposalDetail = ({ proposal }) => {
 
       <Flex w='80%' mt={6} justify='space-between'>
         <Box mr={5}>
-          <TextBox>Submitted By</TextBox>
+          <TextBox mb={2}>Submitted By</TextBox>
           <Skeleton isLoaded={members && proposal?.proposer}>
             {members && proposal?.proposer ? (
               <UserAvatar
@@ -194,11 +196,18 @@ const ProposalDetail = ({ proposal }) => {
           </Skeleton>
         </Box>
         <Box>
-          <TextBox>Recipient</TextBox>
+          <TextBox mb={2}>Recipient</TextBox>
           <Skeleton isLoaded={members && proposal?.applicant}>
             {members && proposal?.applicant ? (
               <UserAvatar
-                user={memberProfile(members, proposal?.applicant).profile}
+                user={
+                  memberProfile(
+                    members,
+                    proposal?.applicant !== ZERO_ADDRESS
+                      ? proposal?.applicant
+                      : proposal?.proposer,
+                  ).profile
+                }
               />
             ) : (
               '--'
