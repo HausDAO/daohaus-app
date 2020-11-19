@@ -34,7 +34,7 @@ const Header = () => {
         'New ' + theme.daoMeta.member + ' ' + theme.daoMeta.proposal,
       );
     } else if (location.pathname === `/dao/${dao?.address}/proposals/new`) {
-      setPageTitle('New ' + theme.daoMeta.proposal);
+      setPageTitle(theme.daoMeta.proposal);
     } else if (location.pathname === `/dao/${dao?.address}/members`) {
       setPageTitle(theme.daoMeta.members);
     } else if (location.pathname === `/dao/${dao?.address}/bank`) {
@@ -92,7 +92,7 @@ const Header = () => {
           {location.pathname === `/dao/${dao?.address}/bank` && (
             <Button
               as={RouterLink}
-              to={`/dao/${dao?.address}/proposals/new`}
+              to={`/dao/${dao?.address}/bank/token/new`}
               rightIcon={<RiAddFill />}
             >
               Add Asset
