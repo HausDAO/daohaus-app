@@ -1,5 +1,12 @@
 import React, { useEffect, useState } from 'react';
-import { FlexibleWidthXYPlot, XAxis, YAxis, AreaSeries } from 'react-vis';
+import {
+  FlexibleWidthXYPlot,
+  XAxis,
+  YAxis,
+  LineSeries,
+  AreaSeries,
+  GradientDefs,
+} from 'react-vis';
 import {
   Box,
   Flex,
@@ -61,6 +68,32 @@ const BankOverviewChart = ({ balances }) => {
     });
   };
 
+  const gradient = (
+    <GradientDefs>
+      <linearGradient id='gradient' x1='0' x2='0' y1='0' y2='100%'>
+        <stop offset='0%' stopColor={theme.colors.primary[50]} />
+        <stop
+          offset='100%'
+          stopColor={theme.colors.primary[50]}
+          stopOpacity={0}
+        />
+      </linearGradient>
+    </GradientDefs>
+  );
+
+  const strokeGradient = (
+    <GradientDefs>
+      <linearGradient id='strokeGradient' x1='0' x2='100%' y1='0' y2='0%'>
+        <stop
+          offset='0%'
+          stopColor={theme.colors.secondary[500]}
+          stopOpacity={0}
+        />
+        <stop offset='100%' stopColor={theme.colors.secondary[500]} />
+      </linearGradient>
+    </GradientDefs>
+  );
+
   return (
     <Box>
       <Skeleton isLoaded={chartData.length > 0}>
@@ -84,12 +117,24 @@ const BankOverviewChart = ({ balances }) => {
             </MenuList>
           </Menu>
         </Flex>
-        <ContentBox minH='260px' w='100%'>
-          <FlexibleWidthXYPlot height={300}>
-            <AreaSeries
+        <ContentBox minH='300px'>
+          <FlexibleWidthXYPlot
+            height={300}
+            margin={{ left: 40, right: 40, top: 40, bottom: 40 }}
+          >
+            {gradient}
+            <LineSeries
+              animate
               curve='curveNatural'
               data={chartData}
               color={theme.colors.primary[50]}
+            />
+            <AreaSeries
+              animate
+              curve='curveNatural'
+              data={chartData}
+              fill={'url(#gradient)'}
+              stroke='transparent'
             />
             <XAxis xType='time' tickTotal={0} />
             <YAxis tickTotal={0} />
