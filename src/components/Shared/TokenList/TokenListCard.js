@@ -9,16 +9,16 @@ const TokenListCard = ({ token, isLoaded }) => {
     <Flex h='60px' align='center'>
       <Box w='15%'>
         <Skeleton isLoaded={isLoaded}>
-          <Box fontFamily='mono'>{token?.symbol}</Box>
+          <Box fontFamily='mono'>{token?.token?.symbol}</Box>
         </Skeleton>
       </Box>
       <Box w='55%'>
         <Skeleton isLoaded={isLoaded}>
           <Box fontFamily='mono'>
-            {token.guildBank ? (
+            {token.tokenBalance ? (
               <>
                 {parseFloat(
-                  token.tokenBalance / 10 ** +token.token.decimals,
+                  +token.tokenBalance / 10 ** +token.token.decimals,
                 ).toFixed(4)}{' '}
                 {token.token.symbol}
               </>
@@ -29,14 +29,14 @@ const TokenListCard = ({ token, isLoaded }) => {
       <Box w='15%'>
         <Skeleton isLoaded={isLoaded}>
           <Box fontFamily='mono'>
-            {token.guildBank ? <UsdPrice tokenBalance={token} /> : '--'}
+            {token.tokenBalance ? <UsdPrice tokenBalance={token} /> : '--'}
           </Box>
         </Skeleton>
       </Box>
       <Box w='15%'>
         <Skeleton isLoaded={isLoaded}>
           <Box fontFamily='mono'>
-            {token.guildBank ? <UsdValue tokenBalance={token} /> : '--'}
+            {token.tokenBalance ? <UsdValue tokenBalance={token} /> : '--'}
           </Box>
         </Skeleton>
       </Box>

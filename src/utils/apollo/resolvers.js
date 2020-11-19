@@ -107,24 +107,6 @@ export const resolvers = {
   },
 
   TokenBalance: {
-    symbol: async (tokenBalance, _args, { cache }) => {
-      if (tokenBalance.guildBank) {
-        const symbol = tokenBalance.token.symbol;
-
-        return symbol;
-      } else {
-        return null;
-      }
-    },
-    decimals: async (tokenBalance, _args, { cache }) => {
-      if (tokenBalance.guildBank) {
-        const decimals = tokenBalance.token.decimals;
-
-        return +decimals;
-      } else {
-        return null;
-      }
-    },
     contractTokenBalance: async (tokenBalance, _args, { cache }) => {
       if (tokenBalance.guildBank) {
         const tokenService = new TokenService(

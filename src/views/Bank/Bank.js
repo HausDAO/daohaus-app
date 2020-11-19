@@ -18,6 +18,8 @@ const Bank = () => {
     }
   }, [dao]);
 
+  console.log('balances', balances);
+
   return (
     <Box w='100%' p={6}>
       <BankOverviewChart balances={balances} />

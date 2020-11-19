@@ -4,6 +4,8 @@ import { usePrices } from '../../contexts/PokemolContext';
 const UsdPrice = ({ tokenBalance }) => {
   const [prices] = usePrices();
 
+  console.log('prices', prices);
+
   return (
     <div>
       ${' '}
