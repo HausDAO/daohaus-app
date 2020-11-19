@@ -5,49 +5,30 @@ import ProfileOverviewCard from '../../components/Profile/OverviewCard';
 import { useMembers, useDaoGraphData } from '../../contexts/PokemolContext';
 import ProfileActvityFeed from '../../components/Profile/ProfileActivityFeed';
 import TokenList from '../../components/Shared/TokenList/TokenList';
+import GraphFetch from '../../components/Shared/GraphFetch';
 
 const Profile = () => {
   const params = useParams();
   const [members] = useMembers();
   const [dao] = useDaoGraphData();
-  const [tokenList, setTokenList] = useState(null);
   const [memberProfile, setMemberProfile] = useState(null);
-  const [memberPercent, setMemberPercent] = useState(null);
-
-  // TODO prices
 
   useEffect(() => {
     if (members.length > 0) {
-      members.forEach((member) => {
-        if (params.id.toLowerCase() === member?.memberAddress?.toLowerCase()) {
-          setMemberProfile(member);
-          setMemberPercent(
-            (+member?.shares + +member?.loot) /
-              (+dao?.totalShares + +dao?.totalLoot),
-          );
-        }
-      });
+      setMemberProfile(
+        members.find(
+          (member) =>
+            member.memberAddress.toLowerCase() === params.id.toLowerCase(),
+        ),
+      );
     }
   }, [members, params, dao]);
-
-  useEffect(() => {
-    if (dao?.tokenBalances && memberPercent) {
-      const memberTokenShares = dao.tokenBalances.map((token) => {
-        return {
-          ...token,
-          tokenBalance: +token.tokenBalance * memberPercent,
-        };
-      });
-
-      setTokenList(memberTokenShares);
-    }
-  }, [dao, memberPercent]);
 
   return (
     <Flex>
       <Box w='60%' pl={6}>
         {memberProfile && <ProfileOverviewCard user={memberProfile} />}
-        <TokenList tokenList={tokenList} />
+        <TokenList tokenList={memberProfile?.tokenBalances} />
       </Box>
       <Box pl={6}>
         <ProfileActvityFeed profileAddress={params.id} />

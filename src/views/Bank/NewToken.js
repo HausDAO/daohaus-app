@@ -27,7 +27,7 @@ const Bank = () => {
         submitProposal={setProposal}
         isOpen={showModal}
         setShowModal={setShowModal}
-        proposalType={'trade'}
+        proposalType={'token'}
         returnRoute={`/dao/${dao?.address}/bank`}
       />
 
