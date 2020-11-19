@@ -81,19 +81,6 @@ const BankOverviewChart = ({ balances }) => {
     </GradientDefs>
   );
 
-  const strokeGradient = (
-    <GradientDefs>
-      <linearGradient id='strokeGradient' x1='0' x2='100%' y1='0' y2='0%'>
-        <stop
-          offset='0%'
-          stopColor={theme.colors.secondary[500]}
-          stopOpacity={0}
-        />
-        <stop offset='100%' stopColor={theme.colors.secondary[500]} />
-      </linearGradient>
-    </GradientDefs>
-  );
-
   return (
     <Box>
       <Skeleton isLoaded={chartData.length > 0}>
