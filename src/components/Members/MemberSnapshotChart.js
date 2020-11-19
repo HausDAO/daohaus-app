@@ -1,10 +1,12 @@
 import React from 'react';
 import {
   FlexibleXYPlot,
+  GradientDefs,
   XAxis,
   YAxis,
   VerticalGridLines,
   HorizontalGridLines,
+  LineSeries,
   AreaSeries,
 } from 'react-vis';
 import { Box } from '@chakra-ui/core';
@@ -21,6 +23,19 @@ const MemberSnapshotChart = () => {
     { x: 5, y: 5 },
     { x: 6, y: 8 },
   ];
+
+  const gradient = (
+    <GradientDefs>
+      <linearGradient id='gradient' x1='0' x2='0' y1='0' y2='100%'>
+        <stop offset='0%' stopColor={theme.colors.primary[50]} />
+        <stop
+          offset='100%'
+          stopColor={theme.colors.primary[50]}
+          stopOpacity={0}
+        />
+      </linearGradient>
+    </GradientDefs>
+  );
 
   return (
     <Box w='95%' minH='300px'>
@@ -45,10 +60,18 @@ const MemberSnapshotChart = () => {
             title: { fill: 'white' },
           }}
         />
-        <AreaSeries
+        {gradient}
+        <LineSeries
+          animate
           curve='curveNatural'
           data={data}
           color={theme.colors.primary[50]}
+        />
+        <AreaSeries
+          curve='curveNatural'
+          data={data}
+          fill={'url(#gradient)'}
+          stroke='transparent'
         />
       </FlexibleXYPlot>
     </Box>
