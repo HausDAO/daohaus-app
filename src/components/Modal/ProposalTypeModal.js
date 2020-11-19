@@ -12,9 +12,16 @@ import {
   Box,
 } from '@chakra-ui/core';
 import { useTheme } from '../../contexts/CustomThemeContext';
+import { useHistory } from 'react-router-dom';
 
-const ProposalFormModal = ({ isOpen, setShowModal, setProposalType }) => {
+const ProposalFormModal = ({
+  isOpen,
+  setShowModal,
+  setProposalType,
+  returnRoute,
+}) => {
   const [theme] = useTheme();
+  const history = useHistory();
 
   const proposalTypes = [
     {
@@ -49,13 +56,15 @@ const ProposalFormModal = ({ isOpen, setShowModal, setProposalType }) => {
     },
   ];
 
+  const handleClose = () => {
+    setShowModal(null);
+    if (returnRoute) {
+      history.push(returnRoute);
+    }
+  };
+
   return (
-    <Modal
-      isOpen={isOpen}
-      onClose={() => setShowModal(null)}
-      isCentered
-      size='xl'
-    >
+    <Modal isOpen={isOpen} onClose={handleClose} isCentered size='xl'>
       <ModalOverlay />
       <ModalContent
         rounded='lg'
