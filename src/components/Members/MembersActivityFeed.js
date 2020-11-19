@@ -10,7 +10,7 @@ import {
   getMemberActivites,
   getMembersActivites,
 } from '../../utils/activities-helpers';
-import ActivityPaginator from '../Activities/ActivityPaginator';
+import Paginator from '../Shared/Paginator';
 
 const MembersActivityFeed = ({ selectedMember }) => {
   const [dao] = useDao();
@@ -54,7 +54,7 @@ const MembersActivityFeed = ({ selectedMember }) => {
       ))}
 
       {isLoaded ? (
-        <ActivityPaginator
+        <Paginator
           perPage={2}
           setRecords={setActivities}
           allRecords={allActivities}

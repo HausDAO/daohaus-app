@@ -7,8 +7,8 @@ import { DAO_ACTIVITIES } from '../../utils/apollo/dao-queries';
 import { activitiesData } from '../../content/skeleton-data';
 import DaoActivityCard from '../Activities/DaoActivityCard';
 import { getDaoActivites } from '../../utils/activities-helpers';
-import ActivityPaginator from '../Activities/ActivityPaginator';
 import { useDao } from '../../contexts/PokemolContext';
+import Paginator from '../Shared/Paginator';
 
 const DaoActivityFeed = () => {
   const [dao] = useDao();
@@ -40,7 +40,7 @@ const DaoActivityFeed = () => {
       ))}
 
       {isLoaded ? (
-        <ActivityPaginator
+        <Paginator
           perPage={3}
           setRecords={setActivities}
           allRecords={allActivities}
