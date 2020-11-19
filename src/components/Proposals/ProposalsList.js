@@ -11,12 +11,14 @@ import { defaultProposals } from '../../utils/constants';
 import ProposalFilter from './ProposalFilter';
 import ProposalSort from './ProposalSort';
 import { determineUnreadProposalList } from '../../utils/proposal-helper';
+import Paginator from '../Shared/Paginator';
 
 const ProposalsList = () => {
   const [dao] = useDao();
   const [proposals] = useProposals();
   const [memberWallet] = useMemberWallet();
   const [listProposals, setListProposals] = useState(defaultProposals);
+  const [pageProposals, setPageProposals] = useState(defaultProposals);
   const [isLoaded, setIsLoaded] = useState(false);
   const [filter, setFilter] = useState();
   const [sort, setSort] = useState();
@@ -84,7 +86,7 @@ const ProposalsList = () => {
         ) : null}
         <ProposalSort sort={sort} setSort={setSort} />
       </Flex>
-      {listProposals.map((proposal) => {
+      {pageProposals.map((proposal) => {
         return (
           <ProposalCard
             proposal={proposal}
@@ -93,6 +95,14 @@ const ProposalsList = () => {
           />
         );
       })}
+
+      {isLoaded ? (
+        <Paginator
+          perPage={3}
+          setRecords={setPageProposals}
+          allRecords={listProposals}
+        />
+      ) : null}
     </>
   );
 };
