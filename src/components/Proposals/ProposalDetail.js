@@ -8,10 +8,10 @@ import { utils } from 'web3';
 
 import { useMembers, useMemberWallet } from '../../contexts/PokemolContext';
 import { useTheme } from '../../contexts/CustomThemeContext';
-import UserAvatar from '../../components/Shared/UserAvatar';
 import { memberProfile } from '../../utils/helpers';
 import { getProposalCountdownText } from '../../utils/proposal-helper';
 import TextBox from '../Shared/TextBox';
+import MemberAvatar from '../Members/MemberAvatar';
 
 const ZERO_ADDRESS = '0x0000000000000000000000000000000000000000';
 
@@ -187,8 +187,8 @@ const ProposalDetail = ({ proposal }) => {
           <TextBox mb={2}>Submitted By</TextBox>
           <Skeleton isLoaded={members && proposal?.proposer}>
             {members && proposal?.proposer ? (
-              <UserAvatar
-                user={memberProfile(members, proposal?.proposer).profile}
+              <MemberAvatar
+                member={memberProfile(members, proposal?.proposer)}
               />
             ) : (
               '--'
@@ -199,15 +199,13 @@ const ProposalDetail = ({ proposal }) => {
           <TextBox mb={2}>Recipient</TextBox>
           <Skeleton isLoaded={members && proposal?.applicant}>
             {members && proposal?.applicant ? (
-              <UserAvatar
-                user={
-                  memberProfile(
-                    members,
-                    proposal?.applicant !== ZERO_ADDRESS
-                      ? proposal?.applicant
-                      : proposal?.proposer,
-                  ).profile
-                }
+              <MemberAvatar
+                member={memberProfile(
+                  members,
+                  proposal?.applicant !== ZERO_ADDRESS
+                    ? proposal?.applicant
+                    : proposal?.proposer,
+                )}
               />
             ) : (
               '--'

@@ -17,7 +17,7 @@ const UserAvatar = ({ user }) => {
             size='xs'
           />
           <Box fontSize='sm' fontFamily='heading'>
-            {user.name || truncateAddr(user.username || user.memberAddress)}{' '}
+            {user.name || truncateAddr(user.username)}{' '}
             <span>{user.emoji || ''} </span>
           </Box>
         </>
@@ -27,13 +27,13 @@ const UserAvatar = ({ user }) => {
             {user.username && (
               <>
                 <Avatar
-                  name={user.username || user.memberAddress}
-                  src={makeBlockie(user.username || user.memberAddress)}
+                  name={user.username}
+                  src={makeBlockie(user.username)}
                   mr={3}
                   size='xs'
                 />
                 <Box fontSize='sm' fontFamily='heading'>
-                  {truncateAddr(user.username || user.memberAddress)}
+                  {truncateAddr(user.username)}
                 </Box>
               </>
             )}

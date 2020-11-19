@@ -40,6 +40,7 @@ const Proposal = () => {
       updateRefetchQuery('proposals');
     }, 60000);
     return () => clearInterval(interval);
+    // eslint-disable-next-line
   }, []);
 
   return (
