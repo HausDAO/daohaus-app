@@ -13,14 +13,12 @@ import { useTheme } from '../../../contexts/CustomThemeContext';
 import { memberProfile } from '../../../utils/helpers';
 import MemberInfoCardGuts from './MemberInfoCardGuts';
 
-const MemberInfoCard = ({ user, selectedMember, showMenu }) => {
+const MemberInfoCard = ({ user, showMenu }) => {
   const [memberWallet] = useMemberWallet();
   const [dao] = useDao();
   const [members] = useMembers();
   const [member, setMember] = useState(null);
   const [theme] = useTheme();
-  console.log(memberWallet);
-  console.log(member);
 
   useEffect(() => {
     if (user?.memberAddress) {
