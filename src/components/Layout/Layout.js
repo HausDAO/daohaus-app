@@ -1,24 +1,43 @@
 import React from 'react';
-import { Flex, Icon, Image, Link, Box, IconButton } from '@chakra-ui/core';
+import { Link as RouterLink, useHistory } from 'react-router-dom';
+import {
+  Flex,
+  Icon,
+  Image,
+  Link,
+  Box,
+  Spacer,
+  Stack,
+  IconButton,
+} from '@chakra-ui/core';
 
 import { motion } from 'framer-motion';
+import { useDao, useRefetchQuery } from '../../contexts/PokemolContext';
 
 import Header from '../Shared/Header';
 import SideNav from '../Shared/SideNav';
 
 import {
-  RiArrowLeftSLine,
+  RiBookMarkLine,
   RiDiscordFill,
   RiTelegramFill,
   RiMediumFill,
   RiGlobeLine,
   RiLinksLine,
+  RiMenu3Line,
+  RiTeamLine,
+  RiSettings3Line,
+  RiBankLine,
+  RiTrophyLine,
 } from 'react-icons/ri';
 import { useTheme, useSideNavToggle } from '../../contexts/CustomThemeContext';
 
 const Layout = ({ children }) => {
   const [sideNavOpen, toggleSideNav] = useSideNavToggle();
+  const [dao] = useDao();
   const [theme] = useTheme();
+  const history = useHistory();
+  const [, updateRefetchQuery] = useRefetchQuery();
 
   const MotionBox = motion.custom(Box);
   const MotionFlex = motion.custom(Flex);
@@ -62,9 +81,9 @@ const Layout = ({ children }) => {
         w='100%'
         p={6}
         position='fixed'
-        direction='column'
+        direction='row'
         align='start'
-        justifyContent='space-between'
+        justifyContent='start'
         bg='primary.500'
         variants={bar}
         animate={sideNavOpen ? 'closed' : 'open'}
@@ -72,15 +91,115 @@ const Layout = ({ children }) => {
         zIndex='1'
         transition={{ ease: 'easeInOut', duration: 0.15 }}
       >
-        <Flex direction='column' h='400px'>
-          <Image
-            src={theme.images.brandImg}
-            w='60px'
-            h='60px'
+        <Flex
+          direction='column'
+          justify='space-between'
+          align='center'
+          w='60px'
+          h='100%'
+        >
+          <Box as={RouterLink} to={`/dao/${dao.address}`}>
+            <Image
+              src={theme.images.brandImg}
+              w='60px'
+              h='60px'
+              cursor='pointer'
+              border='none'
+            />
+          </Box>
+          <IconButton
+            isRound='true'
+            icon={<RiMenu3Line />}
             onClick={toggleSideNav}
-            cursor='pointer'
-            border='none'
+            size='lg'
+            variant='ghost'
           />
+          {dao?.graphData && (
+            <Stack
+              spacing={3}
+              d='flex'
+              flexDirection='column'
+              mt='55px'
+              grow='none'
+            >
+              <IconButton
+                as={RouterLink}
+                variant='ghost'
+                to={`/dao/${dao.address}/proposals`}
+                size='lg'
+                isRound='true'
+                icon={<RiBookMarkLine />}
+              />
+              <IconButton
+                as={RouterLink}
+                to={`/dao/${dao.address}/bank`}
+                variant='ghost'
+                size='lg'
+                isRound='true'
+                icon={<RiBankLine />}
+              />
+              <IconButton
+                as={RouterLink}
+                to={`/dao/${dao.address}/members`}
+                variant='ghost'
+                size='lg'
+                isRound='true'
+                icon={<RiTeamLine />}
+              />
+              <IconButton
+                as={RouterLink}
+                to={`/dao/${dao.address}/settings/boosts`}
+                variant='ghost'
+                size='sm'
+                isRound='true'
+                icon={<RiMenu3Line />}
+              />
+              <IconButton
+                as={RouterLink}
+                to={`/dao/${dao.address}/settings`}
+                variant='ghost'
+                size='sm'
+                isRound='true'
+                icon={<RiSettings3Line />}
+              />
+              <IconButton
+                as={RouterLink}
+                to={`/dao/${dao.address}/profile`}
+                variant='ghost'
+                size='sm'
+                isRound='true'
+                icon={<RiTrophyLine />}
+              />
+            </Stack>
+          )}
+          <Spacer />
+          <Flex direction='row' align='center' justify='start' w='100%'>
+            {theme.daoMeta.website !== '' && (
+              <Link href={theme.daoMeta.website} isExternal fontSize='xl'>
+                <Icon as={RiGlobeLine} />
+              </Link>
+            )}
+            {theme.daoMeta.discord !== '' && (
+              <Link href={theme.daoMeta.discord} isExternal fontSize='xl'>
+                <Icon as={RiDiscordFill} />
+              </Link>
+            )}
+            {theme.daoMeta.telegram !== '' && (
+              <Link href={theme.daoMeta.telegram} isExternal fontSize='xl'>
+                <Icon as={RiTelegramFill} />
+              </Link>
+            )}
+            {theme.daoMeta.medium !== '' && (
+              <Link href={theme.daoMeta.medium} isExternal fontSize='xl'>
+                <Icon as={RiMediumFill} />
+              </Link>
+            )}
+            {theme.daoMeta.other !== '' && (
+              <Link href={theme.daoMeta.other} isExternal fontSize='xl'>
+                <Icon as={RiLinksLine} />
+              </Link>
+            )}
+          </Flex>
         </Flex>
         <MotionBox
           initial='open'
@@ -90,51 +209,8 @@ const Layout = ({ children }) => {
           ml='80px'
           transition={{ ease: 'easeInOut', duration: 0.15 }}
         >
-          <MotionBox
-            animate={sideNavOpen ? 'closed' : 'open'}
-            variants={nav}
-            position='absolute'
-            top='6px'
-            right='-55px'
-          >
-            <IconButton
-              onClick={toggleSideNav}
-              aria-label='Close Menu'
-              variant='outline'
-              size='xs'
-              icon={<RiArrowLeftSLine />}
-            />
-          </MotionBox>
           <SideNav />
         </MotionBox>
-
-        <Flex direction='column' align='start' justify='start' w='100%'>
-          {theme.daoMeta.website !== '' && (
-            <Link href={theme.daoMeta.website} isExternal fontSize='xl'>
-              <Icon as={RiGlobeLine} />
-            </Link>
-          )}
-          {theme.daoMeta.discord !== '' && (
-            <Link href={theme.daoMeta.discord} isExternal fontSize='xl'>
-              <Icon as={RiDiscordFill} />
-            </Link>
-          )}
-          {theme.daoMeta.telegram !== '' && (
-            <Link href={theme.daoMeta.telegram} isExternal fontSize='xl'>
-              <Icon as={RiTelegramFill} />
-            </Link>
-          )}
-          {theme.daoMeta.medium !== '' && (
-            <Link href={theme.daoMeta.medium} isExternal fontSize='xl'>
-              <Icon as={RiMediumFill} />
-            </Link>
-          )}
-          {theme.daoMeta.other !== '' && (
-            <Link href={theme.daoMeta.other} isExternal fontSize='xl'>
-              <Icon as={RiLinksLine} />
-            </Link>
-          )}
-        </Flex>
       </MotionFlex>
 
       <MotionBox
