@@ -5,7 +5,6 @@ import ProfileOverviewCard from '../../components/Profile/OverviewCard';
 import { useMembers, useDaoGraphData } from '../../contexts/PokemolContext';
 import ProfileActvityFeed from '../../components/Profile/ProfileActivityFeed';
 import TokenList from '../../components/Shared/TokenList/TokenList';
-import GraphFetch from '../../components/Shared/GraphFetch';
 
 const Profile = () => {
   const params = useParams();

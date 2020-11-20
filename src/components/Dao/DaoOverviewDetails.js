@@ -1,22 +1,19 @@
 import React from 'react';
 import { useHistory } from 'react-router-dom';
 import { Box, Flex, Image, Skeleton, Button } from '@chakra-ui/core';
-import { utils } from 'web3';
 
 import { useUser, useMembers } from '../../contexts/PokemolContext';
 import { useTheme } from '../../contexts/CustomThemeContext';
 
 import ContentBox from '../Shared/ContentBox';
 import TextBox from '../Shared/TextBox';
+import BankTotal from '../Bank/BankTotal';
 
 const DaoOverviewDetails = ({ dao }) => {
   const [theme] = useTheme();
   const [user] = useUser();
   const [members] = useMembers();
   const history = useHistory();
-  const wethBalance = dao?.graphData?.tokenBalances?.filter((t) => {
-    return t.symbol === 'WETH';
-  })[0]?.tokenBalance;
 
   return (
     <Box>
@@ -70,19 +67,7 @@ const DaoOverviewDetails = ({ dao }) => {
         </Flex>
         <Box mt={6}>
           <TextBox size='md'>{theme.daoMeta.bank}</TextBox>
-          <Skeleton isLoaded={wethBalance}>
-            <TextBox size='xl' variant='value'>
-              {wethBalance && parseFloat(utils.fromWei(wethBalance)).toFixed(3)}{' '}
-              WETH
-            </TextBox>
-          </Skeleton>
-          <Box>
-            <Skeleton isLoaded={dao?.graphData?.tokenBalances?.length > 0}>
-              <Box fontSize='sm' as='i' fontWeight={200}>
-                {dao?.graphData?.tokenBalances?.length} Tokens
-              </Box>
-            </Skeleton>
-          </Box>
+          <BankTotal tokenBalances={dao?.graphData?.tokenBalances} dao={dao} />
         </Box>
         <Flex mt={6}>
           <Button
