@@ -21,23 +21,24 @@ export class TxProcessorService {
   async checkTransaction(transactionHash, account) {
     const status = await this.web3.eth.getTransaction(transactionHash);
     if (status && status.blockNumber) {
+      console.log('tx status', status);
       this.setTx(transactionHash, account, 'completed', false, true);
     }
   }
 
   seeTransaction(transactionHash, account) {
     const tx = this.getTx(transactionHash);
-    this.setTx(transactionHash, account, tx.description, tx.open, true);
+    this.setTx(transactionHash, account, tx.details, tx.open, true);
   }
 
-  setTx(tx, account, description = '', open = true, seen = false) {
+  setTx(tx, account, details = '', open = true, seen = false) {
     if (!tx) {
       // can not save to history if no tx hash
       console.log('tx hash is null, something went wrong');
       return;
     }
 
-    console.log('setTx', tx, account, description);
+    console.log('setTx', tx, account, details);
     const _txList = JSON.parse(localStorage.getItem('txList')) || [];
     const txItem = {};
     const exists = _txList.findIndex((item) => item.tx === tx);
@@ -46,7 +47,7 @@ export class TxProcessorService {
       txItem.tx = tx;
       txItem.account = account;
       txItem.open = open;
-      txItem.description = description;
+      txItem.details = details;
       txItem.seen = seen;
       txItem.dateAdded = Date.now();
       _txList.push(txItem);

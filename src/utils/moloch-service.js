@@ -18,13 +18,15 @@ export class MolochService {
   }
 
   // internal
-  sendTx(name, tx, callback) {
+  sendTx(options, callback) {
+    const { name, params } = options;
+    const tx = this.daoContract.methods[name](...params);
     console.log('this.accountAddr', this.accountAddr);
     return tx
       .send({ from: this.accountAddr })
       .on('transactionHash', (txHash) => {
         console.log('txHash', txHash);
-        callback(txHash, name);
+        callback(txHash, options);
       });
   }
 
@@ -202,26 +204,34 @@ export class ReadonlyMolochService extends MolochService {
 
 export class Web3MolochService extends MolochService {
   async submitVote(proposalIndex, uintVote, callback) {
-    const newTx = this.daoContract.methods.submitVote(proposalIndex, uintVote);
-    const txReceipt = await this.sendTx('submitVote', newTx, callback);
+    const txReceipt = await this.sendTx(
+      { name: 'submitVote', params: [proposalIndex, uintVote] },
+      callback,
+    );
     return txReceipt.transactionHash;
   }
 
   async rageQuit(amount, callback) {
-    const newTx = this.daoContract.methods.ragequit(amount);
-    const txReceipt = await this.sendTx('ragequit', newTx, callback);
+    const txReceipt = await this.sendTx(
+      { name: 'ragequit', params: [amount] },
+      callback,
+    );
     return txReceipt.transactionHash;
   }
 
   async processProposal(id, callback) {
-    const newTx = this.daoContract.methods.processProposal(id);
-    const txReceipt = await this.sendTx('processProposal', newTx, callback);
+    const txReceipt = await this.sendTx(
+      { name: 'processProposal', params: [id] },
+      callback,
+    );
     return txReceipt.transactionHash;
   }
 
   async updateDelegateKey(newDelegateKey, callback) {
-    const newTx = this.daoContract.methods.updateDelegateKey(newDelegateKey);
-    const txReceipt = await this.sendTx('newDelegateKey', newTx, callback);
+    const txReceipt = await this.sendTx(
+      { name: 'updateDelegateKey', params: [newDelegateKey] },
+      callback,
+    );
     return txReceipt.transactionHash;
   }
 
@@ -232,13 +242,13 @@ export class Web3MolochService extends MolochService {
     details,
     callback,
   ) {
-    const newTx = this.daoContract.methods.submitProposal(
-      applicant,
-      tokenTribute,
-      sharesRequested,
-      details,
+    const txReceipt = await this.sendTx(
+      {
+        name: 'submitProposal',
+        params: [applicant, tokenTribute, sharesRequested, details],
+      },
+      callback,
     );
-    const txReceipt = await this.sendTx('submitProposalV1', newTx, callback);
     return txReceipt.transactionHash;
   }
 
@@ -249,46 +259,68 @@ export class Web3MolochService extends MolochService {
 
 export class Web3MolochServiceV2 extends Web3MolochService {
   async rageQuit(amountShares = 0, amountLoot = 0, callback) {
-    const newTx = this.daoContract.methods.ragequit(amountShares, amountLoot);
-    const txReceipt = await this.sendTx('ragequit', newTx, callback);
+    const txReceipt = await this.sendTx(
+      {
+        name: 'ragequit',
+        params: [amountShares, amountLoot],
+      },
+      callback,
+    );
     return txReceipt.transactionHash;
   }
 
   async cancelProposal(id, callback) {
-    const newTx = this.daoContract.methods.cancelProposal(id);
-    const txReceipt = await this.sendTx('cancelProposal', newTx, callback);
+    const txReceipt = await this.sendTx(
+      {
+        name: 'cancelProposal',
+        params: [id],
+      },
+      callback,
+    );
     return txReceipt.transactionHash;
   }
 
   async processGuildKickProposal(id, callback) {
-    const newTx = this.daoContract.methods.processGuildKickProposal(id);
     const txReceipt = await this.sendTx(
-      'processGuildKickProposal',
-      newTx,
+      {
+        name: 'processGuildKickProposal',
+        params: [id],
+      },
       callback,
     );
     return txReceipt.transactionHash;
   }
 
   async processWhitelistProposal(id, callback) {
-    const newTx = this.daoContract.methods.processWhitelistProposal(id);
     const txReceipt = await this.sendTx(
-      'processWhitelistProposal',
-      newTx,
+      {
+        name: 'processWhitelistProposal',
+        params: [id],
+      },
       callback,
     );
     return txReceipt.transactionHash;
   }
 
   async ragekick(address, callback) {
-    const newTx = this.daoContract.methods.ragekick(address);
-    const txReceipt = await this.sendTx('ragekick', newTx, callback);
+    const txReceipt = await this.sendTx(
+      {
+        name: 'ragekick',
+        params: [address],
+      },
+      callback,
+    );
     return txReceipt.transactionHash;
   }
 
   async sponsorProposal(id, callback = null) {
-    const newTx = this.daoContract.methods.sponsorProposal(id);
-    const txReceipt = await this.sendTx('sponsorProposal', newTx, callback);
+    const txReceipt = await this.sendTx(
+      {
+        name: 'sponsorProposal',
+        params: [id],
+      },
+      callback,
+    );
     return txReceipt.transactionHash;
   }
 
@@ -303,67 +335,78 @@ export class Web3MolochServiceV2 extends Web3MolochService {
     applicant,
     callback = null,
   ) {
-    const newTx = this.daoContract.methods.submitProposal(
-      applicant,
-      sharesRequested,
-      lootRequested,
-      tributeOffered,
-      tributeToken,
-      paymentRequested,
-      PaymentToken,
-      details,
+    const txReceipt = await this.sendTx(
+      {
+        name: 'submitProposal',
+        params: [
+          applicant,
+          sharesRequested,
+          lootRequested,
+          tributeOffered,
+          tributeToken,
+          paymentRequested,
+          PaymentToken,
+          details,
+        ],
+      },
+      callback,
     );
-
-    const txReceipt = await this.sendTx('submitProposal', newTx, callback);
 
     return txReceipt.transactionHash;
   }
 
   async submitGuildKickProposal(memberToKick, details, callback) {
-    const newTx = this.daoContract.methods.submitGuildKickProposal(
-      memberToKick,
-      details,
-    );
     const txReceipt = await this.sendTx(
-      'submitGuildKickProposal',
-      newTx,
+      {
+        name: 'submitGuildKickProposal',
+        params: [memberToKick, details],
+      },
       callback,
     );
     return txReceipt.transactionHash;
   }
 
   async submitWhiteListProposal(address, details, callback) {
-    const newTx = this.daoContract.methods.submitWhitelistProposal(
-      address,
-      details,
-    );
     const txReceipt = await this.sendTx(
-      'submitWhitelistProposal',
-      newTx,
+      {
+        name: 'submitWhitelistProposal',
+        params: [address, details],
+      },
       callback,
     );
     return txReceipt.transactionHash;
   }
 
   async withdrawBalance(token, amount, callback) {
-    const newTx = this.daoContract.methods.withdrawBalance(token, amount);
-    const txReceipt = await this.sendTx('withdrawBalance', newTx, callback);
+    const txReceipt = await this.sendTx(
+      {
+        name: 'withdrawBalance',
+        params: [token, amount],
+      },
+      callback,
+    );
     return txReceipt.transactionHash;
   }
 
   async withdrawBalances(tokens, amounts, max, callback) {
-    const newTx = this.daoContract.methods.withdrawBalances(
-      tokens,
-      amounts,
-      max,
+    const txReceipt = await this.sendTx(
+      {
+        name: 'withdrawBalances',
+        params: [tokens, amounts, max],
+      },
+      callback,
     );
-    const txReceipt = await this.sendTx('withdrawBalances', newTx, callback);
     return txReceipt.transactionHash;
   }
 
   async collectTokens(token, callback) {
-    const newTx = this.daoContract.methods.collectTokens(token);
-    const txReceipt = await this.sendTx('collectTokens', newTx, callback);
+    const txReceipt = await this.sendTx(
+      {
+        name: 'collectTokens',
+        params: [token],
+      },
+      callback,
+    );
     return txReceipt.transactionHash;
   }
 }

@@ -27,6 +27,26 @@ const TxProcessorInit = () => {
   const toast = useToast();
 
   useEffect(() => {
+    // tx is added to txprocessor list, 
+    // force update is set to true from component callback
+    // checks if anything is unseen in txprocessor list
+    // condition 1
+    // if there are unseen transaction, set latest transaction to be tracked
+    // set loading
+    // open modal
+    // keep running as long as unseen list has some
+    // ***
+    // tocessor update is ran every block
+    // update loops through all pending txs and checks it's status
+    // if it has a block number and status it has completed and is set open: false, seen: true
+    //
+    // if there is no pending txs forceUpdate is set false and checks will not happen each block anymore
+    // when forceupdate is changed useEffect will run again, dropping into condition 2
+    // sets loading false and fires off toast
+
+    // tx description, set to name now
+    // probably need name and params
+
     if (!txProcessor) {
       return;
     }
@@ -35,15 +55,17 @@ const TxProcessorInit = () => {
     }
     const unseen = txProcessor.getTxUnseenList(user.username);
     if (unseen.length) {
+      // consdtion 1
       setLatestTx(unseen[0]);
       setLoading(true);
       onOpen();
     } else if (latestTx) {
-      // make sure there is a tx and not blank
+      // condition 2
+      // need to update state here
       setLatestTx(txProcessor.getTx(latestTx.tx, user.username));
       setLoading(false);
       toast({
-        title: 'Gift away',
+        title: 'Transaction away',
         position: 'top-right',
         description: 'transaction success',
         status: 'success',
