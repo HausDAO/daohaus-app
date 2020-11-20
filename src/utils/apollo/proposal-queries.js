@@ -5,6 +5,7 @@ const baseListFields = `
   aborted
   applicant
   cancelled
+  cancelledAt
   createdAt
   details
   didPass
@@ -14,16 +15,20 @@ const baseListFields = `
   lootRequested
   memberAddress
   newMember
+  noShares
   noVotes
   paymentRequested
   paymentTokenDecimals
   paymentTokenSymbol
   processed
+  processor
+  processedAt
   proposer
   proposalId
   proposalIndex
   sharesRequested
   sponsored
+  sponsor
   sponsoredAt
   startingPeriod
   trade
@@ -33,6 +38,7 @@ const baseListFields = `
   votingPeriodStarts
   votingPeriodEnds
   whitelist
+  yesShares
   yesVotes
   molochVersion
   moloch {
@@ -44,6 +50,7 @@ const baseListFields = `
   votes {
     id
     memberAddress
+    memberPower
     uintVote
     createdAt
   }
