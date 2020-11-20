@@ -32,6 +32,7 @@ const initialState = {
   proposals: [],
   members: [],
   prices: {},
+  modals: { changeDao: false, accountModal: false },
 };
 
 const reducer = (state, action) => {
@@ -81,6 +82,17 @@ const reducer = (state, action) => {
 
     case 'prices': {
       return { ...state, prices: action.payload };
+    }
+    case 'openModal': {
+      console.log('openmodal', action.payload);
+      return { ...state, modals: { ...state.modals, [action.payload]: true } };
+    }
+    case 'closeModals': {
+      const closeModals = {};
+      for (const modal in state.modals) {
+        closeModals[modal] = false;
+      }
+      return { ...state, modals: closeModals };
     }
     default: {
       return initialState;
@@ -147,6 +159,14 @@ function PokemolContextProvider(props) {
     dispatch({ type: 'prices', payload: data });
   }, []);
 
+  const openModal = useCallback((data) => {
+    dispatch({ type: 'openModal', payload: data });
+  }, []);
+
+  const closeModals = useCallback(() => {
+    dispatch({ type: 'closeModals' });
+  }, []);
+
   return (
     <PokemolContext.Provider
       value={useMemo(
@@ -167,6 +187,8 @@ function PokemolContextProvider(props) {
             updateProposals,
             updateMembers,
             updatePrices,
+            openModal,
+            closeModals,
           },
         ],
         [
@@ -185,6 +207,8 @@ function PokemolContextProvider(props) {
           updateProposals,
           updateMembers,
           updatePrices,
+          openModal,
+          closeModals,
         ],
       )}
     >
@@ -272,6 +296,11 @@ export function useMembers() {
 export function usePrices() {
   const [state, { updatePrices }] = usePokemolContext();
   return [state.prices, updatePrices];
+}
+
+export function useModals() {
+  const [state, { openModal, closeModals }] = usePokemolContext();
+  return { modals: state.modals, openModal, closeModals };
 }
 
 const PokemolContextConsumer = PokemolContext.Consumer;

@@ -1,21 +1,20 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { Icon, Link } from '@chakra-ui/core';
 import { RiArrowDownSLine } from 'react-icons/ri';
 import DaoSwitcherModal from '../Modal/DaoSwitcherModal';
+import { useModals } from '../../contexts/PokemolContext';
 
 const ChangeDao = () => {
-  const [showDaoSwitcher, setShowDaoSwitcher] = useState(false);
+  const { modals, openModal } = useModals();
+
   return (
     <>
-      <Link fontSize='xs' onClick={() => setShowDaoSwitcher(true)}>
+      <Link fontSize='xs' onClick={() => openModal('changeDao')}>
         Change Dao
         <Icon as={RiArrowDownSLine} />
       </Link>
 
-      <DaoSwitcherModal
-        isOpen={showDaoSwitcher}
-        setShowModal={setShowDaoSwitcher}
-      />
+      <DaoSwitcherModal isOpen={modals.changeDao} />
     </>
   );
 };
