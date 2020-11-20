@@ -21,6 +21,7 @@ import {
   useUser,
   useDao,
   useMembers,
+  useModals,
 } from '../../contexts/PokemolContext';
 import { memberProfile } from '../../utils/helpers';
 
@@ -28,9 +29,11 @@ import HubProfileCard from '../Hub/HubProfileCard';
 import ExplorerLink from '../Shared/ExplorerLink';
 import MemberInfoCardGuts from '../Shared/MemberInfoCard/MemberInfoCardGuts';
 
-const AccountModal = ({ isOpen, setShowModal }) => {
+const AccountModal = ({ isOpen }) => {
   const [user] = useUser();
   const [dao] = useDao();
+  const { closeModals } = useModals();
+
   const [txProcessor] = useTxProcessor();
 
   const [members] = useMembers();
@@ -110,7 +113,7 @@ const AccountModal = ({ isOpen, setShowModal }) => {
   };
 
   return (
-    <Modal isOpen={isOpen} onClose={() => setShowModal(null)} isCentered>
+    <Modal isOpen={isOpen} onClose={closeModals} isCentered>
       <ModalOverlay />
       <ModalContent
         rounded='lg'
@@ -142,15 +145,11 @@ const AccountModal = ({ isOpen, setShowModal }) => {
                 <Link
                   as={RouterLink}
                   to={`/dao/${dao.address}/profile/${user.username}`}
-                  onClick={() => setShowModal(false)}
+                  onClick={closeModals}
                 >
                   Profile
                 </Link>
-                <Link
-                  as={RouterLink}
-                  to='/'
-                  onClick={() => setShowModal(false)}
-                >
+                <Link as={RouterLink} to='/' onClick={closeModals}>
                   Hub
                 </Link>
               </Flex>
