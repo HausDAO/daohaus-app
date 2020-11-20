@@ -25,8 +25,6 @@ export const HOME_DAO = gql`
           symbol
           decimals
         }
-        symbol @client
-        decimals @client
         tokenBalance
         guildBank
         contractTokenBalance @client

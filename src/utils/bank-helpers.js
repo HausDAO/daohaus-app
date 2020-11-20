@@ -1,3 +1,19 @@
+export const getTotalBankValue = (tokenBalances, prices) => {
+  return tokenBalances.reduce((sum, balance) => {
+    if (balance.guildBank) {
+      const price = prices[balance.token.tokenAddress.toLowerCase()]
+        ? prices[balance.token.tokenAddress.toLowerCase()].usd
+        : 0;
+      const value =
+        (+balance.tokenBalance / 10 ** balance.token.decimals) * price;
+
+      return (sum += value);
+    } else {
+      return sum;
+    }
+  }, 0);
+};
+
 const addDays = (date, days = 1) => {
   const result = new Date(date);
   result.setDate(result.getDate() + days);

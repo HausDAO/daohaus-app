@@ -3,8 +3,8 @@ import { Box } from '@chakra-ui/core';
 
 import { activitiesData } from '../../content/skeleton-data';
 import { getProposalHistories } from '../../utils/activities-helpers';
-import ActivityPaginator from '../Activities/ActivityPaginator';
 import ProposalHistoryCard from './ProposalHistoryCard';
+import Paginator from '../Shared/Paginator';
 
 const ProposalHistory = ({ proposal }) => {
   const [isLoaded, setIsLoaded] = useState(false);
@@ -32,7 +32,7 @@ const ProposalHistory = ({ proposal }) => {
       ))}
 
       {isLoaded ? (
-        <ActivityPaginator
+        <Paginator
           perPage={5}
           setRecords={setActivities}
           allRecords={allActivities}

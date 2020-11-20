@@ -8,7 +8,7 @@ import { DAO_ACTIVITIES } from '../../utils/apollo/dao-queries';
 import { activitiesData } from '../../content/skeleton-data';
 import DaoActivityCard from '../Activities/DaoActivityCard';
 import { getProposalsActivites } from '../../utils/activities-helpers';
-import ActivityPaginator from '../Activities/ActivityPaginator';
+import Paginator from '../Shared/Paginator';
 
 const ProposalsActivityFeed = () => {
   const [dao] = useDao();
@@ -40,7 +40,7 @@ const ProposalsActivityFeed = () => {
       ))}
 
       {isLoaded ? (
-        <ActivityPaginator
+        <Paginator
           perPage={5}
           setRecords={setActivities}
           allRecords={allActivities}

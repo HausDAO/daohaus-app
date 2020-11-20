@@ -6,6 +6,7 @@ import BankOverviewChart from '../../components/Bank/BankOverviewChart';
 import TokenList from '../../components/Shared/TokenList/TokenList';
 import GraphFetchMore from '../../components/Shared/GraphFetchMore';
 import { BANK_BALANCES } from '../../utils/apollo/bank-queries';
+import BankTotal from '../../components/Bank/BankTotal';
 
 const Bank = () => {
   const [dao] = useDao();
@@ -20,6 +21,7 @@ const Bank = () => {
 
   return (
     <Box w='100%' p={6}>
+      <BankTotal tokenBalances={dao?.graphData?.tokenBalances} />
       <BankOverviewChart balances={balances} />
       <TokenList tokenList={tokenList} />
 

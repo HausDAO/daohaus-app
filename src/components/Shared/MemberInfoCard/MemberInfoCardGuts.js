@@ -3,14 +3,14 @@ import { Flex, Box, Skeleton } from '@chakra-ui/core';
 import TextBox from '../TextBox';
 import { format } from 'date-fns';
 
-import UserAvatar from '../UserAvatar';
 import ProfileMenu from '../ProfileMenu';
+import MemberAvatar from '../../Members/MemberAvatar';
 
 const MemberInfoCardGuts = ({ user, member, showMenu }) => {
   return (
     <>
       <Flex justify='space-between'>
-        <UserAvatar user={user.profile} />
+        <MemberAvatar member={member} />
         {showMenu && <ProfileMenu member={member} />}
       </Flex>
       <Flex w='75%' justify='space-between' mt={6}>
