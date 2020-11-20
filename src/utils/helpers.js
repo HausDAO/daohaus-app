@@ -1,6 +1,5 @@
 import { anyToBN } from '@netgum/utils';
-import { formatDistanceToNow } from 'date-fns';
-// import moment from 'moment';
+import { formatDistanceToNow, formatDuration } from 'date-fns';
 
 export const truncateAddr = (addr) => {
   return addr.slice(0, 6) + '...' + addr.slice(-4);
@@ -46,4 +45,11 @@ export const validDaoParams = (location) => {
   const daoParam = pathname[2];
   const regex = RegExp('0x[0-9a-f]{10,40}');
   return pathname[1] === 'dao' && regex.test(daoParam) ? daoParam : false;
+};
+
+export const formatPeriods = (period, duration) => {
+  if (period && duration) {
+    return formatDuration({ seconds: period * duration });
+  }
+  return 0;
 };
