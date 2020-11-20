@@ -8,6 +8,7 @@ import { TextBoxComponent } from './text-box-component';
 
 export const defaultTheme = {
   primary500: '#10153d',
+  primaryAlpha: rgba('#10153d', 0.9),
   secondary500: '#EB8A23',
   secondaryAlpha: rgba('#EB8A23', 0.75),
   bg500: '#03061B',
@@ -42,6 +43,7 @@ export const setTheme = (daoTheme) => {
   return extendTheme({
     colors: {
       secondaryAlpha: themeOverrides.secondaryAlpha,
+      primaryAlpha: themeOverrides.primaryAlpha,
       primary: {
         50: lighten(0.4, themeOverrides.primary500),
         100: lighten(0.3, themeOverrides.primary500),
@@ -126,6 +128,26 @@ export const setTheme = (daoTheme) => {
             bg: 'primary.400',
             _hover: { bg: 'primary.500' },
           },
+          sideNav: {
+            bg: 'transparent',
+            color: 'whiteAlpha.900',
+            borderRadius: '9999px',
+            height: '56px',
+            alignItems: 'center',
+            justifyContent: 'flex-start',
+            _hover: { bg: 'transparent', color: 'secondary.500', scale: '1' },
+            _active: {
+              boxShadow: 'none',
+              borderColor: 'transparent',
+              outline: 'none',
+              backgroundColor: 'white',
+            },
+            _focus: {
+              boxShadow: 'none',
+              borderColor: 'transparent',
+              outline: 'none',
+            },
+          },
           // 4. Override existing variants
           solid: (props) => ({
             bg: 'secondary.400',
@@ -189,6 +211,16 @@ export const setTheme = (daoTheme) => {
             },
             _active: { bg: 'inherit' },
           }),
+          ghost: (props) => ({
+            bg: 'transparent',
+            color: 'whiteAlpha.900',
+            _hover: {
+              borderColor: 'secondary.500',
+              color: 'secondary.500',
+              bg: 'whiteAlpha.900',
+            },
+            _active: { bg: 'inherit' },
+          }),
         },
       },
       Menu: {
@@ -218,6 +250,16 @@ export const setTheme = (daoTheme) => {
         defaultProps: {
           size: 'md',
         },
+      },
+      Modal: {
+        parts: ['overlay'],
+        baseStyle: {
+          overlay: {
+            bg: 'primaryAlpha',
+          },
+        },
+        sizes: {},
+        defaultProps: {},
       },
       Input: {
         parts: ['field', 'addon'],
