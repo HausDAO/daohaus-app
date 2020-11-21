@@ -13,13 +13,20 @@ import {
 } from '@chakra-ui/core';
 
 import { TxProcessorService } from '../utils/tx-processor-service';
-import { useTxProcessor, useUser, useWeb3Connect } from './PokemolContext';
+import {
+  useProposals,
+  useTxProcessor,
+  useUser,
+  useWeb3Connect,
+} from './PokemolContext';
 import ExplorerLink from '../components/Shared/ExplorerLink';
 import { truncateAddr } from '../utils/helpers';
+import { proposalMutation } from '../utils/proposal-mutations';
 
 const TxProcessorInit = () => {
   const [user] = useUser();
   const [web3Connect] = useWeb3Connect();
+  const [proposals, updateProposals] = useProposals();
   const [txProcessor, updateTxProcessor] = useTxProcessor();
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [latestTx, setLatestTx] = useState();
@@ -27,7 +34,7 @@ const TxProcessorInit = () => {
   const toast = useToast();
 
   useEffect(() => {
-    // tx is added to txprocessor list, 
+    // tx is added to txprocessor list,
     // force update is set to true from component callback
     // checks if anything is unseen in txprocessor list
     // condition 1
@@ -36,7 +43,7 @@ const TxProcessorInit = () => {
     // open modal
     // keep running as long as unseen list has some
     // ***
-    // tocessor update is ran every block
+    // update is ran every block
     // update loops through all pending txs and checks it's status
     // if it has a block number and status it has completed and is set open: false, seen: true
     //
@@ -62,7 +69,11 @@ const TxProcessorInit = () => {
     } else if (latestTx) {
       // condition 2
       // need to update state here
-      setLatestTx(txProcessor.getTx(latestTx.tx, user.username));
+      console.log('tx processor latest tx done');
+      const tx = txProcessor.getTx(latestTx.tx, user.username);
+      const newProposals = proposalMutation(proposals, tx.details);
+      updateProposals([...proposals, ...newProposals]);
+      setLatestTx(tx);
       setLoading(false);
       toast({
         title: 'Transaction away',

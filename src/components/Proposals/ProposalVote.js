@@ -28,7 +28,6 @@ const ProposalVote = ({ proposal, setProposal }) => {
       isAfter(Date.now(), new Date(+proposal?.votingPeriodStarts * 1000))
     );
   };
-  console.log(proposals);
 
   const txCallBack = (txHash, details) => {
     if (txProcessor && txHash) {
@@ -113,7 +112,7 @@ const ProposalVote = ({ proposal, setProposal }) => {
       .filter((p) => p.status === 'ReadyForProcessing')
       .sort((a, b) => a.gracePeriodEnds - b.gracePeriodEnds);
 
-    console.log(proposalsToProcess);
+    // console.log(proposalsToProcess);
     if (proposalsToProcess.length > 0) {
       setNextProposal(proposalsToProcess[0]);
     }
