@@ -19,15 +19,13 @@ export class MolochService {
 
   // internal
   sendTx(options, callback) {
-    const { name, params } = options;
+    const { from, name, params } = options;
     const tx = this.daoContract.methods[name](...params);
-    console.log('this.accountAddr', this.accountAddr);
-    return tx
-      .send({ from: this.accountAddr })
-      .on('transactionHash', (txHash) => {
-        console.log('txHash', txHash);
-        callback(txHash, options);
-      });
+    console.log('this.accountAddr', from);
+    return tx.send({ from: from }).on('transactionHash', (txHash) => {
+      console.log('txHash', txHash);
+      callback(txHash, options);
+    });
   }
 
   async getAllEvents() {
@@ -205,7 +203,11 @@ export class ReadonlyMolochService extends MolochService {
 export class Web3MolochService extends MolochService {
   async submitVote(proposalIndex, uintVote, callback) {
     const txReceipt = await this.sendTx(
-      { name: 'submitVote', params: [proposalIndex, uintVote] },
+      {
+        from: this.contractAddr,
+        name: 'submitVote',
+        params: [proposalIndex, uintVote],
+      },
       callback,
     );
     return txReceipt.transactionHash;
@@ -213,7 +215,7 @@ export class Web3MolochService extends MolochService {
 
   async rageQuit(amount, callback) {
     const txReceipt = await this.sendTx(
-      { name: 'ragequit', params: [amount] },
+      { from: this.contractAddr, name: 'ragequit', params: [amount] },
       callback,
     );
     return txReceipt.transactionHash;
@@ -221,7 +223,7 @@ export class Web3MolochService extends MolochService {
 
   async processProposal(id, callback) {
     const txReceipt = await this.sendTx(
-      { name: 'processProposal', params: [id] },
+      { from: this.contractAddr, name: 'processProposal', params: [id] },
       callback,
     );
     return txReceipt.transactionHash;
@@ -229,7 +231,11 @@ export class Web3MolochService extends MolochService {
 
   async updateDelegateKey(newDelegateKey, callback) {
     const txReceipt = await this.sendTx(
-      { name: 'updateDelegateKey', params: [newDelegateKey] },
+      {
+        from: this.contractAddr,
+        name: 'updateDelegateKey',
+        params: [newDelegateKey],
+      },
       callback,
     );
     return txReceipt.transactionHash;
@@ -244,6 +250,7 @@ export class Web3MolochService extends MolochService {
   ) {
     const txReceipt = await this.sendTx(
       {
+        from: this.contractAddr,
         name: 'submitProposal',
         params: [applicant, tokenTribute, sharesRequested, details],
       },
@@ -261,6 +268,7 @@ export class Web3MolochServiceV2 extends Web3MolochService {
   async rageQuit(amountShares = 0, amountLoot = 0, callback) {
     const txReceipt = await this.sendTx(
       {
+        from: this.contractAddr,
         name: 'ragequit',
         params: [amountShares, amountLoot],
       },
@@ -272,6 +280,7 @@ export class Web3MolochServiceV2 extends Web3MolochService {
   async cancelProposal(id, callback) {
     const txReceipt = await this.sendTx(
       {
+        from: this.contractAddr,
         name: 'cancelProposal',
         params: [id],
       },
@@ -283,6 +292,7 @@ export class Web3MolochServiceV2 extends Web3MolochService {
   async processGuildKickProposal(id, callback) {
     const txReceipt = await this.sendTx(
       {
+        from: this.contractAddr,
         name: 'processGuildKickProposal',
         params: [id],
       },
@@ -294,6 +304,7 @@ export class Web3MolochServiceV2 extends Web3MolochService {
   async processWhitelistProposal(id, callback) {
     const txReceipt = await this.sendTx(
       {
+        from: this.contractAddr,
         name: 'processWhitelistProposal',
         params: [id],
       },
@@ -305,6 +316,7 @@ export class Web3MolochServiceV2 extends Web3MolochService {
   async ragekick(address, callback) {
     const txReceipt = await this.sendTx(
       {
+        from: this.contractAddr,
         name: 'ragekick',
         params: [address],
       },
@@ -316,6 +328,7 @@ export class Web3MolochServiceV2 extends Web3MolochService {
   async sponsorProposal(id, callback = null) {
     const txReceipt = await this.sendTx(
       {
+        from: this.contractAddr,
         name: 'sponsorProposal',
         params: [id],
       },
@@ -337,6 +350,7 @@ export class Web3MolochServiceV2 extends Web3MolochService {
   ) {
     const txReceipt = await this.sendTx(
       {
+        from: this.contractAddr,
         name: 'submitProposal',
         params: [
           applicant,
@@ -358,6 +372,7 @@ export class Web3MolochServiceV2 extends Web3MolochService {
   async submitGuildKickProposal(memberToKick, details, callback) {
     const txReceipt = await this.sendTx(
       {
+        from: this.contractAddr,
         name: 'submitGuildKickProposal',
         params: [memberToKick, details],
       },
@@ -369,6 +384,7 @@ export class Web3MolochServiceV2 extends Web3MolochService {
   async submitWhiteListProposal(address, details, callback) {
     const txReceipt = await this.sendTx(
       {
+        from: this.contractAddr,
         name: 'submitWhitelistProposal',
         params: [address, details],
       },
@@ -380,6 +396,7 @@ export class Web3MolochServiceV2 extends Web3MolochService {
   async withdrawBalance(token, amount, callback) {
     const txReceipt = await this.sendTx(
       {
+        from: this.contractAddr,
         name: 'withdrawBalance',
         params: [token, amount],
       },
@@ -391,6 +408,7 @@ export class Web3MolochServiceV2 extends Web3MolochService {
   async withdrawBalances(tokens, amounts, max, callback) {
     const txReceipt = await this.sendTx(
       {
+        from: this.contractAddr,
         name: 'withdrawBalances',
         params: [tokens, amounts, max],
       },
@@ -402,6 +420,7 @@ export class Web3MolochServiceV2 extends Web3MolochService {
   async collectTokens(token, callback) {
     const txReceipt = await this.sendTx(
       {
+        from: this.contractAddr,
         name: 'collectTokens',
         params: [token],
       },

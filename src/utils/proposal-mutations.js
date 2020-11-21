@@ -14,7 +14,7 @@ export const proposalMutation = (proposals, options) => {
       const vote = {
         createdAt: Date.now(),
         id: 'temp',
-        memberaddress: '0xced608aa29bb92185d9b6340adcbfa263dae075b',
+        memberaddress: options.from,
         uintVote: options.params[1],
       };
       proposals[proposalIndex].votes.push(vote);
