@@ -72,7 +72,7 @@ const TxProcessorInit = () => {
       console.log('tx processor latest tx done');
       const tx = txProcessor.getTx(latestTx.tx, user.username);
       const newProposals = proposalMutation(proposals, tx.details);
-      updateProposals([...proposals, ...newProposals]);
+      updateProposals([...newProposals]);
       setLatestTx(tx);
       setLoading(false);
       toast({

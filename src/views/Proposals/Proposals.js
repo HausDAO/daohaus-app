@@ -11,7 +11,7 @@ const Proposals = () => {
   useEffect(() => {
     const interval = setInterval(() => {
       updateRefetchQuery('proposals');
-    }, 60000);
+    }, 600000);
     return () => clearInterval(interval);
     // eslint-disable-next-line
   }, []);
