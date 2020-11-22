@@ -29,6 +29,7 @@ const Proposal = () => {
       const p = proposals?.filter((p) => {
         return p.proposalId === id;
       })[0];
+      console.log('new prop in proposal', p);
 
       setProposal(p);
     }

@@ -34,6 +34,8 @@ const ProposalDetail = ({ proposal }) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [memberWallet, proposal]);
 
+  console.log('proposal detail', proposal);
+
   return (
     <ContentBox>
       <Box>
