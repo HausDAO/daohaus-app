@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react';
-
 import { timeToNow, truncateAddr } from '../../utils/helpers';
 import { Heading, Skeleton, Flex, Text, Avatar } from '@chakra-ui/core';
 import makeBlockie from 'ethereum-blockies-base64';
@@ -64,7 +63,9 @@ const ProposalHistoryCard = ({ activity, isLoaded }) => {
                 color={+activity.uintVote === 1 ? 'green.500' : 'red.500'}
                 fontSize='xs'
               >
-                253 Shares
+                {activity.memberPower} Shares (
+                {+activity.uintVote === 1 ? '+' : '-'}
+                {activity.memberPercentageOfVote}%)
               </Text>
             ) : null}
 

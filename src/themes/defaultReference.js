@@ -1,4 +1,4 @@
-export const defaultTheme = {
+const defaultTheme = {
   breakpoints: ['30em', '48em', '62em', '80em'],
   zIndices: {
     hide: -1,

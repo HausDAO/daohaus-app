@@ -1,6 +1,5 @@
 import React from 'react';
 import {
-  Box,
   Button,
   Flex,
   Input,
@@ -10,53 +9,17 @@ import {
 } from '@chakra-ui/core';
 import { useForm } from 'react-hook-form';
 import { useTheme } from '../../contexts/CustomThemeContext';
-import raidBg from '../../assets/themes/raidTheme/raid__fantasy--bg.jpg';
-import raidBrand from '../../assets/themes/raidTheme/raidguild__swords.svg';
 
-const ThemeBuilderForm = () => {
-  const [theme, setTheme] = useTheme();
+const ThemeColorsForm = ({ handleThemeUpdate, resetTheme }) => {
+  const [theme] = useTheme();
   const { register, handleSubmit } = useForm();
 
   const onSubmit = (values) => {
-    setTheme({
-      primary500: values.primary500 || '#e50651',
-      secondary500: values.secondary500 || '#6153ff',
-      bg500: values.bg500 || '#121212',
-      brandImg: raidBrand,
-      bgImg: raidBg,
-      bgOverlayOpacity: '0.5',
-      primaryFont: 'Space Mono', // only temporary
-      bodyFont: 'Rubik',
-      daoMeta: {
-        proposals: 'Quests',
-        proposal: 'Quest',
-        bank: 'Inventory',
-        members: 'Players',
-        member: 'Player',
-        boosts: 'Boosts',
-        boost: 'Boost',
-        discord: 'https://discord.gg/WqwQGgeeFd',
-        medium: '',
-        telegram: '',
-        website: '',
-        other: '',
-        f04title: '404 Game Over',
-        f04heading: 'You have been slain',
-        f04subhead: 'Please reload from the most recent save point.',
-        f04cta: 'Start Over',
-      },
-    });
-  };
-
-  const handleReset = () => {
-    setTheme();
+    handleThemeUpdate(values);
   };
 
   return (
     <>
-      <Box fontSize='xl' fontFamily='heading'>
-        Theme Buidler
-      </Box>
       <form onSubmit={handleSubmit(onSubmit)}>
         <Flex direction='column'>
           <InputGroup m={3} display='flex' justifyContent='center'>
@@ -97,7 +60,7 @@ const ThemeBuilderForm = () => {
         <Flex justify='center'>
           <ButtonGroup>
             <Button type='submit'>Set Theme</Button>
-            <Button onClick={handleReset} mb={3} variant='outline'>
+            <Button onClick={resetTheme} mb={3} variant='outline'>
               Reset Theme
             </Button>
           </ButtonGroup>
@@ -107,4 +70,4 @@ const ThemeBuilderForm = () => {
   );
 };
 
-export default ThemeBuilderForm;
+export default ThemeColorsForm;

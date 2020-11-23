@@ -10,6 +10,7 @@ function useCustomThemeContext() {
 
 const initialState = {
   theme: setTheme(),
+  tempTheme: null,
   sideNavOpen: localStorage.getItem('sideNavOpen') === 'true' || false,
 };
 
@@ -17,6 +18,9 @@ const reducer = (state, action) => {
   switch (action.type) {
     case 'setTheme': {
       return { ...state, theme: setTheme(action.payload) };
+    }
+    case 'setTempTheme': {
+      return { ...state, tempTheme: action.payload };
     }
     case 'toggleSideNav': {
       return { ...state, sideNavOpen: action.payload };
@@ -32,6 +36,10 @@ function CustomThemeContextProvider(props) {
 
   const updateTheme = useCallback((theme) => {
     dispatch({ type: 'setTheme', payload: theme });
+  }, []);
+
+  const updateTempTheme = useCallback((theme) => {
+    dispatch({ type: 'setTempTheme', payload: theme });
   }, []);
 
   const updateSideNavOpen = useCallback((data) => {
@@ -51,10 +59,11 @@ function CustomThemeContextProvider(props) {
           state,
           {
             updateTheme,
+            updateTempTheme,
             updateSideNavOpen,
           },
         ],
-        [state, updateTheme, updateSideNavOpen],
+        [state, updateTheme, updateTempTheme, updateSideNavOpen],
       )}
     >
       {props.children}
@@ -65,6 +74,11 @@ function CustomThemeContextProvider(props) {
 export function useTheme() {
   const [state, { updateTheme }] = useCustomThemeContext();
   return [state.theme, updateTheme];
+}
+
+export function useTempTheme() {
+  const [state, { updateTempTheme }] = useCustomThemeContext();
+  return [state.tempTheme, updateTempTheme];
 }
 
 export function useSideNavToggle() {

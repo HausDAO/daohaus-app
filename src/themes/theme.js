@@ -1,47 +1,44 @@
 import { extendTheme } from '@chakra-ui/core';
-import BrandImg from '../assets/themes/hausdao/Daohaus__Castle--Dark.svg';
-import BgImg from '../assets/themes/hausdao/daohaus__hero--falling.jpg';
-import { lighten, darken, rgba } from 'polished';
+import { lighten, darken } from 'polished';
 //Custom Chakra Components
 import { ContentBoxComponent } from './content-box-component';
 import { TextBoxComponent } from './text-box-component';
+import { defaultTheme } from './theme-defaults';
 
-export const defaultTheme = {
-  primary500: '#10153d',
-  secondary500: '#EB8A23',
-  secondaryAlpha: rgba('#EB8A23', 0.75),
-  bg500: '#03061B',
-  bgOverlayOpacity: '0.75',
-  primaryFont: 'Inknut Antiqua',
-  bodyFont: 'Rubik',
-  monoFont: 'Space Mono',
-  brandImg: BrandImg,
-  bgImg: BgImg,
-  daoMeta: {
-    proposals: 'Proposals',
-    proposal: 'Proposal',
-    bank: 'Bank',
-    members: 'Members',
-    member: 'Member',
-    boosts: 'Apps',
-    boost: 'App',
-    discord: 'https://discord.gg/NPEJysW',
-    medium: 'https://medium.com/daohaus-club',
-    telegram: 'https://t.me/joinchat/IJqu9xPa0xzYLN1mmFKo8g',
-    website: 'https://daohaus.club',
-    other: 'https://wikipedia.com',
-    f04title: "404 What's Lost Can Be Found",
-    f04heading: 'You have been slain',
-    f04subhead: 'Please reload from the most recent save point.',
-    f04cta: 'Start Over',
-  },
+export const getRandomTheme = async (images) => {
+  const theme = {
+    primary500: `#${((Math.random() * 0xffffff) << 0)
+      .toString(16)
+      .padStart(6, '0')}`,
+    secondary500: `#${((Math.random() * 0xffffff) << 0)
+      .toString(16)
+      .padStart(6, '0')}`,
+    bg500: `#${((Math.random() * 0xffffff) << 0)
+      .toString(16)
+      .padStart(6, '0')}`,
+  };
+
+  if (images) {
+    const request = new Request('https://source.unsplash.com/random/200x200');
+    const brandImg = await fetch(request);
+
+    const requestBg = new Request('https://source.unsplash.com/random/800x800');
+    const bgImg = await fetch(requestBg);
+
+    theme.brandImg = brandImg.url;
+    theme.bgImg = bgImg.url;
+  }
+
+  return theme;
 };
 
 export const setTheme = (daoTheme) => {
-  const themeOverrides = daoTheme || defaultTheme;
+  const themeOverrides = { ...defaultTheme, ...daoTheme };
+
   return extendTheme({
     colors: {
       secondaryAlpha: themeOverrides.secondaryAlpha,
+      primaryAlpha: themeOverrides.primaryAlpha,
       primary: {
         50: lighten(0.4, themeOverrides.primary500),
         100: lighten(0.3, themeOverrides.primary500),
@@ -126,6 +123,26 @@ export const setTheme = (daoTheme) => {
             bg: 'primary.400',
             _hover: { bg: 'primary.500' },
           },
+          sideNav: {
+            bg: 'transparent',
+            color: 'whiteAlpha.900',
+            borderRadius: '9999px',
+            height: '56px',
+            alignItems: 'center',
+            justifyContent: 'flex-start',
+            _hover: { bg: 'transparent', color: 'secondary.500', scale: '1' },
+            _active: {
+              boxShadow: 'none',
+              borderColor: 'transparent',
+              outline: 'none',
+              backgroundColor: 'white',
+            },
+            _focus: {
+              boxShadow: 'none',
+              borderColor: 'transparent',
+              outline: 'none',
+            },
+          },
           // 4. Override existing variants
           solid: (props) => ({
             bg: 'secondary.400',
@@ -146,6 +163,56 @@ export const setTheme = (daoTheme) => {
               borderColor: 'secondary.500',
               color: 'secondary.500',
               bg: 'transparent',
+            },
+            _active: { bg: 'inherit' },
+          }),
+        },
+      },
+      IconButton: {
+        // 1. Update the base styles
+        baseStyle: {
+          borderRadius: '9999px',
+          _hover: { scale: '5' },
+        },
+        // 2. Add a new button size or extend existing
+        sizes: {},
+        // 3. Add a new visual variant
+        defaultProps: { isRound: 'true' },
+        variants: {
+          primary: {
+            bg: 'primary.400',
+            _hover: { bg: 'primary.500' },
+          },
+          // 4. Override existing variants
+          solid: (props) => ({
+            bg: 'secondary.400',
+            color: 'white',
+            _hover: { bg: 'secondary.500', color: 'white' },
+            _focus: {
+              bg: 'secondary.500',
+              color: 'white',
+              boxShadow: '0 0 0 3px blackAlpha.600',
+            },
+            _active: { bg: 'inherit' },
+          }),
+          outline: (props) => ({
+            borderColor: 'secondary.400',
+            bg: 'transparent',
+            color: 'secondary.400',
+            _hover: {
+              borderColor: 'secondary.500',
+              color: 'secondary.500',
+              bg: 'transparent',
+            },
+            _active: { bg: 'inherit' },
+          }),
+          ghost: (props) => ({
+            bg: 'transparent',
+            color: 'whiteAlpha.900',
+            _hover: {
+              borderColor: 'secondary.500',
+              color: 'secondary.500',
+              bg: 'whiteAlpha.900',
             },
             _active: { bg: 'inherit' },
           }),
@@ -178,6 +245,16 @@ export const setTheme = (daoTheme) => {
         defaultProps: {
           size: 'md',
         },
+      },
+      Modal: {
+        parts: ['overlay'],
+        baseStyle: {
+          overlay: {
+            bg: 'primaryAlpha',
+          },
+        },
+        sizes: {},
+        defaultProps: {},
       },
       Input: {
         parts: ['field', 'addon'],
