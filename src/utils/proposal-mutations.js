@@ -58,6 +58,17 @@ export const proposalMutation = (proposals, options) => {
       console.log('new props', proposals);
       return proposals;
     }
+    case 'submitProposal': {
+      // proposalIndex, uintVote
+      console.log('proposals', proposals);
+      console.log('params ', options.params);
+      const proposal = {
+        title: 'TEST UPDATEzzz',
+      };
+      proposals.push(proposal);
+      console.log('new props', proposals);
+      return proposals;
+    }
     default: {
       return proposals;
     }

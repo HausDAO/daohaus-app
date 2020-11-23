@@ -1,3 +1,5 @@
+import supportedChains from './chains';
+
 export class TxProcessorService {
   web3;
   forceUpdate;
@@ -18,6 +20,34 @@ export class TxProcessorService {
     return await Promise.all(_pending);
   }
 
+  async updateGraph(account) {
+    const _txList = this.getTxPendingGraphList(account);
+    const _pending = [];
+
+    if (_txList.length) {
+      _txList.forEach((tx) => {
+        // struct with name and id
+        // tx.query
+        // {
+        //   query: {proposals(where: {proposalId: 28}) {id}}
+        //   }
+        //   {
+        //   query: {${txList.query.name}(where: {${txList.query.field}: ${txList.query.value}}) {id}}
+        //   }
+        const query = `{${tx.query.name}(where: {${tx.query.field}: ${tx.query.value}}) {id}}`;
+        const url =
+          supportedChains[process.env.REACT_APP_NETWORK_ID].subgraph_url;
+        const res = fetch(url, {
+          method: 'POST',
+          body: JSON.stringify({ query }),
+        });
+        _pending.push(res); // *** check the subgraph
+      });
+    }
+
+    return await Promise.all(_pending);
+  }
+
   async checkTransaction(transactionHash, account) {
     const status = await this.web3.eth.getTransaction(transactionHash);
     if (status && status.blockNumber) {
@@ -31,7 +61,14 @@ export class TxProcessorService {
     this.setTx(transactionHash, account, tx.details, tx.open, true);
   }
 
-  setTx(tx, account, details = '', open = true, seen = false) {
+  setTx(
+    tx,
+    account,
+    details = '',
+    open = true,
+    seen = false,
+    pendingGraph = true,
+  ) {
     if (!tx) {
       // can not save to history if no tx hash
       console.log('tx hash is null, something went wrong');
@@ -49,6 +86,7 @@ export class TxProcessorService {
       txItem.open = open;
       txItem.details = details;
       txItem.seen = seen;
+      txItem.pendingGraph = pendingGraph;
       txItem.dateAdded = Date.now();
       _txList.push(txItem);
       localStorage.setItem('txList', JSON.stringify(_txList));
@@ -72,6 +110,13 @@ export class TxProcessorService {
   getTxPendingList(account) {
     const _txList = JSON.parse(localStorage.getItem('txList')) || [];
     return _txList.filter((item) => item.account === account && item.open);
+  }
+
+  getTxPendingGraphList(account) {
+    const _txList = JSON.parse(localStorage.getItem('txList')) || [];
+    return _txList.filter(
+      (item) => item.account === account && item.pendingGraph,
+    );
   }
 
   getTxUnseenList(account) {
