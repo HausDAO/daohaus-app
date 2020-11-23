@@ -18,7 +18,6 @@ import { useDao, useRefetchQuery } from '../../contexts/PokemolContext';
 import ChangeDao from '../Shared/ChangeDao';
 
 import Header from '../Shared/Header';
-import SideNav from '../Shared/SideNav';
 
 import {
   RiBookMarkLine,
@@ -107,6 +106,9 @@ const Layout = ({ children }) => {
   return (
     <Flex direction='row' minH='100vh' color='white' w='100vw'>
       <MotionFlex
+        initial='closed'
+        animate={sideNavOpen ? 'closed' : 'open'}
+        variants={bar}
         h='100vh'
         w='100%'
         p={6}
@@ -115,11 +117,7 @@ const Layout = ({ children }) => {
         align='start'
         justifyContent='start'
         bg='primary.500'
-        variants={bar}
-        animate={sideNavOpen ? 'closed' : 'open'}
-        initial='open'
         zIndex='1'
-        transition={{ ease: 'easeInOut', duration: 0.15 }}
         overflow='hidden'
       >
         <Flex direction='column' justify='start' align='start' h='100%'>
@@ -134,14 +132,13 @@ const Layout = ({ children }) => {
               />
             </Box>
             <MotionFlex
+              w='100%'
               direction='column'
               align='start'
               justify='start'
-              variants={navLinks}
+              initial='closed'
               animate={sideNavOpen ? 'closed' : 'open'}
-              transition={{ ease: 'easeInOut', duration: 0.15 }}
-              inital='open'
-              w='100%'
+              variants={navLinks}
             >
               {dao?.graphData ? (
                 <Link as={RouterLink} to={`/dao/${dao.address}`} fontSize='xl'>
@@ -176,11 +173,10 @@ const Layout = ({ children }) => {
                 <Icon as={RiBookMarkLine} w={6} h={6} />
                 <MotionBox
                   initial='closed'
+                  animate={sideNavOpen ? 'closed' : 'open'}
+                  variants={nav}
                   fontSize='2xl'
                   fontFamily='heading'
-                  variants={nav}
-                  animate={sideNavOpen ? 'closed' : 'open'}
-                  transition={{ ease: 'easeInOut', duration: 0.15 }}
                 >
                   {theme.daoMeta.proposals}
                 </MotionBox>
@@ -195,11 +191,10 @@ const Layout = ({ children }) => {
                 <Icon as={RiBankLine} w={6} h={6} />
                 <MotionBox
                   initial='closed'
+                  animate={sideNavOpen ? 'closed' : 'open'}
+                  variants={nav}
                   fontSize='2xl'
                   fontFamily='heading'
-                  variants={nav}
-                  animate={sideNavOpen ? 'closed' : 'open'}
-                  transition={{ ease: 'easeInOut', duration: 0.15 }}
                 >
                   {theme.daoMeta.bank}
                 </MotionBox>
@@ -213,11 +208,10 @@ const Layout = ({ children }) => {
                 <Icon as={RiTeamLine} w={6} h={6} />
                 <MotionBox
                   initial='closed'
+                  animate={sideNavOpen ? 'closed' : 'open'}
+                  variants={nav}
                   fontSize='2xl'
                   fontFamily='heading'
-                  variants={nav}
-                  animate={sideNavOpen ? 'closed' : 'open'}
-                  transition={{ ease: 'easeInOut', duration: 0.15 }}
                 >
                   {theme.daoMeta.members}
                 </MotionBox>
@@ -231,11 +225,10 @@ const Layout = ({ children }) => {
                 <Icon as={RiSettings3Line} w={6} h={6} />
                 <MotionBox
                   initial='closed'
+                  animate={sideNavOpen ? 'closed' : 'open'}
+                  variants={nav}
                   fontSize='sm'
                   fontFamily='heading'
-                  variants={nav}
-                  animate={sideNavOpen ? 'closed' : 'open'}
-                  transition={{ ease: 'easeInOut', duration: 0.15 }}
                 >
                   Settings
                 </MotionBox>
@@ -249,11 +242,10 @@ const Layout = ({ children }) => {
                 <Icon as={RiRocket2Line} w={6} h={6} />
                 <MotionBox
                   initial='closed'
+                  animate={sideNavOpen ? 'closed' : 'open'}
+                  variants={nav}
                   fontSize='sm'
                   fontFamily='heading'
-                  variants={nav}
-                  animate={sideNavOpen ? 'closed' : 'open'}
-                  transition={{ ease: 'easeInOut', duration: 0.15 }}
                 >
                   Boosts
                 </MotionBox>
@@ -267,11 +259,10 @@ const Layout = ({ children }) => {
                 <Icon as={RiTrophyLine} w={6} h={6} />
                 <MotionBox
                   initial='closed'
+                  animate={sideNavOpen ? 'closed' : 'open'}
+                  variants={nav}
                   fontSize='sm'
                   fontFamily='heading'
-                  variants={nav}
-                  animate={sideNavOpen ? 'closed' : 'open'}
-                  transition={{ ease: 'easeInOut', duration: 0.15 }}
                 >
                   Stats
                 </MotionBox>
@@ -290,11 +281,10 @@ const Layout = ({ children }) => {
                 <Icon as={RiBookMarkLine} w={6} h={6} />
                 <MotionBox
                   initial='closed'
+                  animate={sideNavOpen ? 'closed' : 'open'}
+                  variants={nav}
                   fontSize='2xl'
                   fontFamily='heading'
-                  variants={nav}
-                  animate={sideNavOpen ? 'closed' : 'open'}
-                  transition={{ ease: 'easeInOut', duration: 0.15 }}
                 >
                   Explore DAOs
                 </MotionBox>
@@ -309,11 +299,10 @@ const Layout = ({ children }) => {
                 <Icon as={RiFireLine} w={6} h={6} />
                 <MotionBox
                   initial='closed'
+                  animate={sideNavOpen ? 'closed' : 'open'}
+                  variants={nav}
                   fontSize='2xl'
                   fontFamily='heading'
-                  variants={nav}
-                  animate={sideNavOpen ? 'closed' : 'open'}
-                  transition={{ ease: 'easeInOut', duration: 0.15 }}
                 >
                   Summon a DAO
                 </MotionBox>
@@ -328,11 +317,10 @@ const Layout = ({ children }) => {
                 <Icon as={RiTeamLine} w={6} h={6} />
                 <MotionBox
                   initial='closed'
+                  animate={sideNavOpen ? 'closed' : 'open'}
+                  variants={nav}
                   fontSize='2xl'
                   fontFamily='heading'
-                  variants={nav}
-                  animate={sideNavOpen ? 'closed' : 'open'}
-                  transition={{ ease: 'easeInOut', duration: 0.15 }}
                 >
                   HausDAO
                 </MotionBox>
@@ -347,11 +335,10 @@ const Layout = ({ children }) => {
                 <Icon as={RiQuestionLine} w={6} h={6} />
                 <MotionBox
                   initial='closed'
+                  animate={sideNavOpen ? 'closed' : 'open'}
+                  variants={nav}
                   fontSize='sm'
                   fontFamily='heading'
-                  variants={nav}
-                  animate={sideNavOpen ? 'closed' : 'open'}
-                  transition={{ ease: 'easeInOut', duration: 0.15 }}
                 >
                   Help
                 </MotionBox>
@@ -366,11 +353,10 @@ const Layout = ({ children }) => {
                 <Icon as={GiCastle} w={6} h={6} />
                 <MotionBox
                   initial='closed'
-                  fontSize='sm'
-                  fontFamily='heading'
                   variants={nav}
                   animate={sideNavOpen ? 'closed' : 'open'}
-                  transition={{ ease: 'easeInOut', duration: 0.15 }}
+                  fontSize='sm'
+                  fontFamily='heading'
                 >
                   About
                 </MotionBox>
@@ -391,8 +377,9 @@ const Layout = ({ children }) => {
               direction='row'
               align='center'
               justify='start'
-              variants={navLinks}
+              initial='closed'
               animate={sideNavOpen ? 'closed' : 'open'}
+              variants={navLinks}
               transition={{ ease: 'easeInOut', duration: 0.15 }}
               w='100%'
             >
@@ -460,7 +447,7 @@ const Layout = ({ children }) => {
 
       <MotionBox
         position='fixed'
-        initial='open'
+        initial='closed'
         variants={background}
         animate={sideNavOpen ? 'closed' : 'open'}
         h='100vh'
@@ -470,7 +457,6 @@ const Layout = ({ children }) => {
         zIndex='-1'
         top='0'
         right='0'
-        transition={{ ease: 'easeInOut', duration: 0.15 }}
         _before={{
           display: 'block',
           content: '""',
@@ -487,7 +473,7 @@ const Layout = ({ children }) => {
       />
       <MotionFlex
         width='100%'
-        initial='open'
+        initial='closed'
         variants={layout}
         animate={sideNavOpen ? 'closed' : 'open'}
         flexDirection='column'
