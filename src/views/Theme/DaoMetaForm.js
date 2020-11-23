@@ -9,8 +9,6 @@ import {
   InputLeftAddon,
 } from '@chakra-ui/core';
 import { useForm } from 'react-hook-form';
-import raidBg from '../../assets/themes/raidTheme/raid__fantasy--bg.jpg';
-import raidBrand from '../../assets/themes/raidTheme/raidguild__swords.svg';
 
 import { useTheme } from '../../contexts/CustomThemeContext';
 
@@ -61,41 +59,12 @@ const daoMetaFormFields = [
   },
 ];
 
-const DaoMetaForm = () => {
-  const [theme, setTheme] = useTheme();
+const DaoMetaForm = ({ handleThemeUpdate }) => {
   const { register, handleSubmit } = useForm();
+  const [theme] = useTheme();
 
   const onSubmit = (values) => {
-    console.log(values);
-    setTheme({
-      primary500: '#e50651',
-      secondary500: '#6153ff',
-      bg500: '#121212',
-      brandImg: raidBrand,
-      bgImg: raidBg,
-      bgOverlayOpacity: '0.5',
-      primaryFont: 'Space Mono', // only temporary
-      bodyFont: 'Rubik',
-      daoMeta: {
-        proposals: values.proposals || 'Proposals',
-        proposal: values.proposals || 'Proposal',
-        bank: values.bank || 'Bank',
-        members: values.members || 'Members',
-        member: values.member || 'Member',
-        boosts: values.boosts || 'Apps',
-        boost: values.boost || 'App',
-        discord: 'https://discord.gg/WqwQGgeeFd',
-        medium: '',
-        telegram: '',
-        website: '',
-        other: '',
-        f04title: '404 You are lost',
-        f04heading: 'GPS Signal Lost',
-        f04subhead:
-          'Please flag down your nearest carrier pigeon to send a message.',
-        f04cta: 'Reload',
-      },
-    });
+    handleThemeUpdate(values);
   };
 
   return (
@@ -117,7 +86,7 @@ const DaoMetaForm = () => {
                   {field.label}
                 </InputLeftAddon>
                 <Input
-                  name='proposal'
+                  name={theme.daoMeta[field.name]}
                   defaultValue={theme.daoMeta[field.name]}
                   ref={register({ required: true })}
                   w='45%'

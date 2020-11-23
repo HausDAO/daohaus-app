@@ -1,5 +1,5 @@
 import React from 'react';
-import { Link as RouterLink, useHistory } from 'react-router-dom';
+import { Link as RouterLink } from 'react-router-dom';
 import { Stack, Link, Box, Flex, Button } from '@chakra-ui/core';
 
 import { useDao, useRefetchQuery } from '../../contexts/PokemolContext';
@@ -9,7 +9,6 @@ import ChangeDao from './ChangeDao';
 const SideNav = () => {
   const [theme] = useTheme();
   const [dao] = useDao();
-  const history = useHistory();
   const [, updateRefetchQuery] = useRefetchQuery();
 
   return (

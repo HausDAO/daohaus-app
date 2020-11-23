@@ -1,45 +1,40 @@
 import { extendTheme } from '@chakra-ui/core';
-import BrandImg from '../assets/themes/hausdao/Daohaus__Castle--Dark.svg';
-import BgImg from '../assets/themes/hausdao/daohaus__hero--falling.jpg';
-import { lighten, darken, rgba } from 'polished';
+import { lighten, darken } from 'polished';
 //Custom Chakra Components
 import { ContentBoxComponent } from './content-box-component';
 import { TextBoxComponent } from './text-box-component';
+import { defaultTheme } from './theme-defaults';
 
-export const defaultTheme = {
-  primary500: '#10153d',
-  primaryAlpha: rgba('#10153d', 0.9),
-  secondary500: '#EB8A23',
-  secondaryAlpha: rgba('#EB8A23', 0.75),
-  bg500: '#03061B',
-  bgOverlayOpacity: '0.75',
-  primaryFont: 'Inknut Antiqua',
-  bodyFont: 'Rubik',
-  monoFont: 'Space Mono',
-  brandImg: BrandImg,
-  bgImg: BgImg,
-  daoMeta: {
-    proposals: 'Proposals',
-    proposal: 'Proposal',
-    bank: 'Bank',
-    members: 'Members',
-    member: 'Member',
-    boosts: 'Apps',
-    boost: 'App',
-    discord: 'https://discord.gg/NPEJysW',
-    medium: 'https://medium.com/daohaus-club',
-    telegram: 'https://t.me/joinchat/IJqu9xPa0xzYLN1mmFKo8g',
-    website: 'https://daohaus.club',
-    other: 'https://wikipedia.com',
-    f04title: "404 What's Lost Can Be Found",
-    f04heading: 'You have been slain',
-    f04subhead: 'Please reload from the most recent save point.',
-    f04cta: 'Start Over',
-  },
+export const getRandomTheme = async (images) => {
+  const theme = {
+    primary500: `#${((Math.random() * 0xffffff) << 0)
+      .toString(16)
+      .padStart(6, '0')}`,
+    secondary500: `#${((Math.random() * 0xffffff) << 0)
+      .toString(16)
+      .padStart(6, '0')}`,
+    bg500: `#${((Math.random() * 0xffffff) << 0)
+      .toString(16)
+      .padStart(6, '0')}`,
+  };
+
+  if (images) {
+    const request = new Request('https://source.unsplash.com/random/200x200');
+    const brandImg = await fetch(request);
+
+    const requestBg = new Request('https://source.unsplash.com/random/800x800');
+    const bgImg = await fetch(requestBg);
+
+    theme.brandImg = brandImg.url;
+    theme.bgImg = bgImg.url;
+  }
+
+  return theme;
 };
 
 export const setTheme = (daoTheme) => {
-  const themeOverrides = daoTheme || defaultTheme;
+  const themeOverrides = { ...defaultTheme, ...daoTheme };
+
   return extendTheme({
     colors: {
       secondaryAlpha: themeOverrides.secondaryAlpha,

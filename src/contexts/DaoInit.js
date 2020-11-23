@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
-import { defaultTheme } from '../themes/theme';
 
+import { defaultTheme } from '../themes/theme-defaults';
 import { DaoService, USER_TYPE } from '../utils/dao-service';
 import { validDaoParams } from '../utils/helpers';
 import { get } from '../utils/requests';

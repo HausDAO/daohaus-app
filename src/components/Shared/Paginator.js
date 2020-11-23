@@ -7,11 +7,6 @@ const Paginator = ({ perPage, setRecords, allRecords, reset }) => {
 
   useEffect(() => {
     if (allRecords) {
-      console.log(
-        'allRecords.length, totalPages',
-        allRecords.length,
-        totalPages,
-      );
       setTotalPages(allRecords.length);
       // TODO: Should we reset this on filtering? This only derives the action if the total count is different and doesn't account for sorting
       // const page = allRecords.length === totalPages ? currentPage : 1;
