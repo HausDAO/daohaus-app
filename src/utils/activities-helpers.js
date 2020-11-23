@@ -191,7 +191,7 @@ export const getProposalHistories = (proposal) => {
   const votes = proposal.votes.map((vote) => voteHistoryData(vote));
   const proposalStates = buildProposalHistory(proposal);
 
-  console.log('votes', votes);
+  // console.log('votes', votes);
 
   const allActivites = proposalStates
     .concat(votes)

@@ -6,7 +6,7 @@ export const proposalMutation = (proposals, options) => {
       const now = new Date();
       console.log('params 0', options.params[0]);
       const proposalIndex = proposals.findIndex(
-        (proposal) => +proposal.proposalId === +options.params[0],
+        (proposal) => +proposal.proposalIndex === +options.params[0],
       );
       console.log('index', proposalIndex);
       console.log('prop', proposals[proposalIndex]);
