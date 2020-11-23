@@ -52,7 +52,10 @@ const Header = () => {
       location.pathname === `/dao/${dao?.address}/settings/boosts/new`
     ) {
       setPageTitle('New ' + theme.daoMeta.boost);
-    } else if (location.pathname === `/themeSample`) {
+    } else if (
+      location.pathname === `/themeSample` ||
+      location.pathname === `/theme`
+    ) {
       setPageTitle('Theme Samples');
     } else if (
       location.pathname === `/dao/${dao?.address}/profile/${user?.username}`

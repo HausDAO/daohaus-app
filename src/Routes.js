@@ -9,7 +9,6 @@ import Proposal from './views/Proposals/Proposal';
 import NewProposal from './views/Proposals/NewProposal';
 import Members from './views/Members/Members';
 import Profile from './views/Profile/Profile';
-import ThemeSample from './views/Theme/ThemeSample';
 import Bank from './views/Bank/Bank';
 import NewToken from './views/Bank/NewToken';
 import Settings from './views/Settings/Settings';
@@ -17,6 +16,8 @@ import Boosts from './views/Settings/Boosts';
 import NewBoost from './views/Settings/NewBoost';
 import CustomTheme from './views/Settings/CustomTheme';
 import Notifications from './views/Settings/Notifications';
+import Theme from './views/Theme/Theme';
+import DaoTheme from './views/Theme/DaoTheme';
 
 const Routes = () => {
   return (
@@ -88,7 +89,12 @@ const Routes = () => {
           exact
           component={Notifications}
         />
-        <Route path='/themeSample' exact component={ThemeSample} />
+        <Route
+          path='/dao/:dao(\b0x[0-9a-f]{10,40}\b)/psych-out'
+          exact
+          component={DaoTheme}
+        />
+        <Route path='/themeSample' exact component={Theme} />
         <Route exact path='/' component={Hub} />
         <Route path='*' component={FourOhFour} />
       </Switch>
