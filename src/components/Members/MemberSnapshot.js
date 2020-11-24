@@ -64,7 +64,7 @@ const MemberSnapshot = ({ selectedMember }) => {
           </Stack>
         </RadioGroup>
         <Flex justify='center' mt={4}>
-          <MemberSnapshotChart chartDimension={chartDimension} />
+          <MemberSnapshotChart chartDimension={chartDimension} dao={dao} />
         </Flex>
       </ContentBox>
     </Box>

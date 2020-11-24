@@ -20,7 +20,7 @@ const Bank = () => {
   return (
     <Box w='100%' p={6}>
       <BankTotal tokenBalances={dao?.graphData?.tokenBalances} />
-      <BankOverviewChart balances={balances} />
+      <BankOverviewChart balances={balances} dao={dao} />
       <TokenList tokenList={tokenList} />
     </Box>
   );

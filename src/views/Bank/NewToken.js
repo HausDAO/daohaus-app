@@ -1,17 +1,11 @@
 import React, { useState, useEffect } from 'react';
-import { Box } from '@chakra-ui/core';
 
 import { useDao } from '../../contexts/PokemolContext';
-import BankOverviewChart from '../../components/Bank/BankOverviewChart';
-import TokenList from '../../components/Shared/TokenList/TokenList';
-import GraphFetchMore from '../../components/Shared/GraphFetchMore';
-import { BANK_BALANCES } from '../../utils/apollo/bank-queries';
 import ProposalFormModal from '../../components/Modal/ProposalFormModal';
 
 const Bank = () => {
   const [dao] = useDao();
-  const [tokenList, setTokenList] = useState(null);
-  const [balances, setBalances] = useState();
+  const [, setTokenList] = useState(null);
   const [, setProposal] = useState(null);
   const [showModal, setShowModal] = useState(true);
 
