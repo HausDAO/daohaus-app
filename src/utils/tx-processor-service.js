@@ -1,8 +1,7 @@
-import supportedChains from './chains';
-
 export class TxProcessorService {
   web3;
   forceUpdate;
+  forceUpdateGraphResolved;
   constructor(web3) {
     this.web3 = web3;
   }
@@ -13,52 +12,73 @@ export class TxProcessorService {
 
     if (_txList.length) {
       _txList.forEach((tx) => {
-        _pending.push(this.checkTransaction(tx.tx, account));
+        _pending.push(this.checkTransaction(tx, account));
       });
     }
 
     return await Promise.all(_pending);
   }
 
-  async updateGraph(account) {
+  async updateGraph(account, data) {
     const _txList = this.getTxPendingGraphList(account);
-    const _pending = [];
 
     if (_txList.length) {
       _txList.forEach((tx) => {
-        // struct with name and id
-        // tx.query
-        // {
-        //   query: {proposals(where: {proposalId: 28}) {id}}
-        //   }
-        //   {
-        //   query: {${txList.query.name}(where: {${txList.query.field}: ${txList.query.value}}) {id}}
-        //   }
-        const query = `{${tx.query.name}(where: {${tx.query.field}: ${tx.query.value}}) {id}}`;
-        const url =
-          supportedChains[process.env.REACT_APP_NETWORK_ID].subgraph_url;
-        const res = fetch(url, {
-          method: 'POST',
-          body: JSON.stringify({ query }),
-        });
-        _pending.push(res); // *** check the subgraph
+        console.log('banananananannananan', tx);
+        this.checkData(tx, account, data);
       });
     }
-
-    return await Promise.all(_pending);
   }
 
-  async checkTransaction(transactionHash, account) {
-    const status = await this.web3.eth.getTransaction(transactionHash);
+  async checkTransaction(tx, account) {
+    const status = await this.web3.eth.getTransaction(tx.tx);
     if (status && status.blockNumber) {
       console.log('tx status', status);
-      this.setTx(transactionHash, account, 'completed', false, true);
+      //open false
+      this.setTx(tx.tx, account, tx.description, false, true, tx.pendingGraph);
+    }
+  }
+
+  checkData(tx, account, entities) {
+    let status = '';
+    console.log('$$$$$$$$$$$$$$$$$$$$$$$$ tx', tx);
+    switch (tx.details.name) {
+      case 'sponsorProposal': {
+        const entity = entities.find(
+          (item) => +item.proposalId === +tx.details.params[0],
+        );
+        status = entity?.sponsored;
+      }
+    }
+
+    if (status) {
+      console.log('tx status blablbablalbalb', status);
+      //pendingGraph false
+      console.log(
+        'tx status',
+        tx.tx,
+        account,
+        'completed',
+        tx.open,
+        tx.seen,
+        false,
+      );
+
+      this.setTx(tx.tx, account, 'completed', tx.open, tx.seen, false);
+      this.forceUpdateGraphResolved = false;
     }
   }
 
   seeTransaction(transactionHash, account) {
     const tx = this.getTx(transactionHash);
-    this.setTx(transactionHash, account, tx.details, tx.open, true);
+    this.setTx(
+      transactionHash,
+      account,
+      tx.details,
+      tx.open,
+      true,
+      tx.pendingGraph,
+    );
   }
 
   setTx(
@@ -76,11 +96,13 @@ export class TxProcessorService {
     }
 
     console.log('setTx', tx, account, details);
+    console.log('setTx pendingGraph', pendingGraph);
     const _txList = JSON.parse(localStorage.getItem('txList')) || [];
     const txItem = {};
     const exists = _txList.findIndex((item) => item.tx === tx);
 
     if (exists === -1) {
+      console.log('exists', exists);
       txItem.tx = tx;
       txItem.account = account;
       txItem.open = open;
@@ -95,6 +117,9 @@ export class TxProcessorService {
       localStorage.setItem('txList', JSON.stringify(_txList));
     } else if (_txList[exists].seen !== seen) {
       _txList[exists].seen = seen;
+      localStorage.setItem('txList', JSON.stringify(_txList));
+    } else if (_txList[exists].pendingGraph !== pendingGraph) {
+      _txList[exists].pendingGraph = pendingGraph;
       localStorage.setItem('txList', JSON.stringify(_txList));
     }
     // setTxList(_txList);

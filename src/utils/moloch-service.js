@@ -326,9 +326,16 @@ export class Web3MolochServiceV2 extends Web3MolochService {
   }
 
   async sponsorProposal(id, callback = null) {
+    console.log('sponsor ........>>>>>>>>>>>', id);
     const txReceipt = await this.sendTx(
       {
         from: this.accountAddr,
+        query: {
+          name: 'proposal',
+          key: 'proposalId',
+          value: id,
+          dao: this.contractAddr,
+        },
         name: 'sponsorProposal',
         params: [id],
       },

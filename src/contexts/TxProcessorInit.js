@@ -34,6 +34,22 @@ const TxProcessorInit = () => {
   const toast = useToast();
 
   useEffect(() => {
+    if (!txProcessor) {
+      return;
+    }
+    if (!user || Object.keys(txProcessor).length === 0) {
+      return;
+    }
+    if (user && txProcessor.getTxPendingGraphList(user.username).length) {
+      console.log('********** update graph transactions *************');
+      txProcessor.updateGraph(user.username, proposals);
+      txProcessor.forceUpdateGraphResolved = true;
+
+      updateTxProcessor(txProcessor);
+    }
+  }, [proposals, user]);
+
+  useEffect(() => {
     /*
     tx is added to txprocessor list,
     force update is set to true from component callback
@@ -61,12 +77,14 @@ const TxProcessorInit = () => {
       return;
     }
     const unseen = txProcessor.getTxUnseenList(user.username);
+    const graphStatus = txProcessor.getTxPendingGraphList(user.username);
+    console.log('>>>>>>>>>>>>>>>>>>> graphStatus', graphStatus);
     if (unseen.length) {
       // consdtion 1
       setLatestTx(unseen[0]);
       setLoading(true);
       onOpen();
-    } else if (latestTx) {
+    } else if (latestTx && !graphStatus.length) {
       // condition 2
       // need to update state here
       console.log('tx processor latest tx done');
@@ -85,7 +103,7 @@ const TxProcessorInit = () => {
       });
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [user, txProcessor.forceUpdate]);
+  }, [user, txProcessor.forceUpdate, txProcessor.forceUpdateGraphResolved]);
 
   useEffect(() => {
     if (user && web3Connect.web3 && !txProcessor.web3) {
@@ -107,8 +125,8 @@ const TxProcessorInit = () => {
           await txProcessorService.update(user.username);
           if (!txProcessorService.getTxPendingList(user.username).length) {
             txProcessorService.forceUpdate = false;
+            updateTxProcessor(txProcessorService);
           }
-          updateTxProcessor(txProcessorService);
         }
       }
     });
