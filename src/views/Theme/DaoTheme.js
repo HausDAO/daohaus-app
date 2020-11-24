@@ -33,6 +33,8 @@ const DaoTheme = () => {
   const handleRandom = async () => {
     const theme = await getRandomTheme(true);
 
+    theme.bgOverlayOpacity = '0.50';
+
     console.log('theme', theme);
     setTheme(theme);
   };
@@ -40,6 +42,7 @@ const DaoTheme = () => {
   const handleShuffle = async (on) => {
     setInterval(async () => {
       const theme = await getRandomTheme(false);
+      theme.bgOverlayOpacity = '0.50';
 
       setTheme(theme);
     }, 300);
