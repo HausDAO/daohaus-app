@@ -78,6 +78,28 @@ export const groupBalancesToDateRange = (balances, dates) => {
   });
 };
 
+export const groupBalancesMemberToDateRange = (balances, dates) => {
+  return dates.map((date, i) => {
+    // const value = Object.keys(groupedByToken).reduce((sum, tokenAddress) => {
+    //   const nextBal = groupedByToken[tokenAddress].find(
+    //     (bal) => +bal.timestamp >= date.getTime() / 1000,
+    //   );
+    //   sum += nextBal ? nextBal.value : 0;
+    //   return sum;
+    // }, 0);
+
+    const balance = balances.find(
+      (bal) => +bal.timestamp >= date.getTime() / 1000,
+    );
+
+    return {
+      date,
+      currentShares: balance ? +balance.currentShares : 0,
+      currentLoot: balance ? +balance.currentLoot : 0,
+    };
+  });
+};
+
 const groupBy = (xs, key) => {
   return xs.reduce(function(rv, x) {
     (rv[x[key]] = rv[x[key]] || []).push(x);
