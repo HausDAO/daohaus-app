@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   FlexibleXYPlot,
   GradientDefs,
@@ -11,18 +11,47 @@ import {
 } from 'react-vis';
 import { Box } from '@chakra-ui/core';
 import { useTheme } from '../../contexts/CustomThemeContext';
+import { useBalances } from '../../contexts/PokemolContext';
+import {
+  getDateRange,
+  getDatesArray,
+  groupBalancesMemberToDateRange,
+} from '../../utils/bank-helpers';
 
-const MemberSnapshotChart = () => {
+const MemberSnapshotChart = ({ chartDimension }) => {
   const [theme] = useTheme();
+  const [balances] = useBalances();
+  const [chartData, setChartData] = useState([]);
+  const [preppedData, setPreppedData] = useState([]);
 
-  const data = [
-    { x: 1, y: 1 },
-    { x: 2, y: 2 },
-    { x: 3, y: 4 },
-    { x: 4, y: 3 },
-    { x: 5, y: 5 },
-    { x: 6, y: 8 },
-  ];
+  useEffect(() => {
+    if (balances.length > 0) {
+      const dateRange = getDateRange({ value: 'lifetime' }, balances);
+      const dates = getDatesArray(dateRange.start, dateRange.end);
+      const groupedBalances = groupBalancesMemberToDateRange(balances, dates);
+      setPreppedData(groupedBalances);
+    }
+  }, [balances]);
+
+  useEffect(() => {
+    console.log('chartDimension', chartDimension);
+    console.log('preppedData', preppedData);
+    if (preppedData.length > 0 && chartDimension) {
+      setTypeData(chartDimension, preppedData);
+    }
+  }, [chartDimension, preppedData]);
+
+  const setTypeData = (type, balances) => {
+    const data = balances.map((balance, i) => {
+      return {
+        x: balance.date,
+        y: balance[type],
+        y0: 0,
+      };
+    });
+
+    setChartData(data);
+  };
 
   const gradient = (
     <GradientDefs>
@@ -42,34 +71,18 @@ const MemberSnapshotChart = () => {
       <FlexibleXYPlot>
         <VerticalGridLines color='white' />
         <HorizontalGridLines color='white' />
-        <XAxis
-          title='Time'
-          style={{
-            line: { stroke: 'white' },
-            ticks: { stroke: 'white' },
-            text: { stroke: 'none', fill: 'white', fontWeight: 500 },
-            title: { fill: 'white' },
-          }}
-        />
-        <YAxis
-          title='Members'
-          style={{
-            line: { stroke: 'white' },
-            ticks: { stroke: 'white' },
-            text: { stroke: 'none', fill: 'white', fontWeight: 500 },
-            title: { fill: 'white' },
-          }}
-        />
+        <XAxis xType='time' tickTotal={0} />
+        <YAxis tickTotal={0} />
         {gradient}
         <LineSeries
           animate
           curve='curveNatural'
-          data={data}
+          data={chartData}
           color={theme.colors.primary[50]}
         />
         <AreaSeries
           curve='curveNatural'
-          data={data}
+          data={chartData}
           fill={'url(#gradient)'}
           stroke='transparent'
         />

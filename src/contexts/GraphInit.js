@@ -65,7 +65,6 @@ const GraphInit = () => {
 
   useEffect(() => {
     if (localBalances) {
-      console.log('localBalances', localBalances);
       updateBalances(localBalances);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
