@@ -20,7 +20,7 @@ const ProfileActvityFeed = ({ profileAddress }) => {
     if (fetchedData) {
       const hydratedActivites = getProfileActivites(
         fetchedData,
-        profileAddress,
+        profileAddress.toLowerCase(),
       );
       setAllActivities(hydratedActivites);
       setIsLoaded(true);

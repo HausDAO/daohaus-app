@@ -8,17 +8,20 @@ import {
   useEns,
   useDaoGraphData,
   useMembers,
+  usePrices,
 } from '../../contexts/PokemolContext';
 import ContentBox from '../Shared/ContentBox';
 import TextBox from '../Shared/TextBox';
 import ProfileMenu from '../Shared/ProfileMenu';
+import { getTotalBankValue } from '../../utils/bank-helpers';
 
 const OverviewCard = ({ user }) => {
   const [ens] = useEns();
   const [dao] = useDaoGraphData();
+  const [prices] = usePrices();
   const [members] = useMembers();
   const [member, setMember] = useState();
-
+  const [memberValue, setMemberValue] = useState(0);
   const [ensName, setEnsName] = useState(null);
 
   useEffect(() => {
@@ -39,6 +42,16 @@ const OverviewCard = ({ user }) => {
     };
     lookupEns();
   }, [user, ens.provider]);
+
+  useEffect(() => {
+    if (dao && dao.tokenBalances && prices && member) {
+      const total = getTotalBankValue(dao.tokenBalances, prices);
+      const memberProportion =
+        (+member.shares + +member.loot) / (+dao.totalShares + +dao.totalLoot);
+      setMemberValue(memberProportion * total);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [dao, prices, member]);
 
   return (
     <ContentBox as={Flex} p={6} w='100%' justify='space-between'>
@@ -96,7 +109,7 @@ const OverviewCard = ({ user }) => {
           <Box>
             <TextBox fontSize='sm'>Total Stake</TextBox>
             <TextBox fontSize='4xl' variant='value'>
-              $4,802.20
+              ${memberValue.toFixed(2)}
             </TextBox>
           </Box>
           <Box>
