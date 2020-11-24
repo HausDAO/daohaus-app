@@ -22,7 +22,7 @@ const ProposalFilter = ({ filter, setFilter, listLength }) => {
   useEffect(() => {
     let options;
     if (memberWallet && memberWallet.activeMember) {
-      options = getFilterOptions(memberWallet.activeMember);
+      options = getFilterOptions(memberWallet.activeMember, listLength);
     } else {
       options = getFilterOptions(false);
     }

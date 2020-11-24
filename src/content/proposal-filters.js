@@ -1,13 +1,13 @@
-export const getFilterOptions = (isMember) => {
+export const getFilterOptions = (isMember, actionNeededCount) => {
   const options = [
-    {
-      name: 'All',
-      value: 'All',
-      type: 'main',
-    },
     {
       name: 'Action Needed',
       value: 'Action Needed',
+      type: 'main',
+    },
+    {
+      name: 'All',
+      value: 'All',
       type: 'main',
     },
     {
@@ -82,8 +82,8 @@ export const getFilterOptions = (isMember) => {
     },
   ];
 
-  if (!isMember) {
-    options.splice(1, 1);
+  if (!isMember || !actionNeededCount) {
+    options.splice(0, 1);
   }
 
   return options;
