@@ -93,10 +93,10 @@ export const getMembersActivites = (daoData) => {
 export const getMemberActivites = (daoData, memberAddress) => {
   const proposals = daoData.proposals.filter((prop) => {
     const memberRelated =
-      memberAddress === prop.proposer ||
-      memberAddress === prop.sponser ||
-      memberAddress === prop.memberAddress ||
-      memberAddress === prop.applicant;
+      memberAddress?.toLowerCase() === prop.proposer?.toLowerCase() ||
+      memberAddress?.toLowerCase() === prop.sponser?.toLowerCase() ||
+      memberAddress?.toLowerCase() === prop.memberAddress?.toLowerCase() ||
+      memberAddress?.toLowerCase() === prop.applicant?.toLowerCase();
     return (
       !prop.cancelled &&
       prop.proposalType === 'Member Proposal' &&
@@ -145,10 +145,10 @@ export const getMemberActivites = (daoData, memberAddress) => {
 export const getProfileActivites = (daoData, memberAddress) => {
   const proposals = daoData.proposals.filter((prop) => {
     const memberRelated =
-      memberAddress === prop.proposer ||
-      memberAddress === prop.sponser ||
-      memberAddress === prop.memberAddress ||
-      memberAddress === prop.applicant;
+      memberAddress?.toLowerCase() === prop.proposer?.toLowerCase() ||
+      memberAddress?.toLowerCase() === prop.sponsor?.toLowerCase() ||
+      memberAddress?.toLowerCase() === prop.memberAddress?.toLowerCase() ||
+      memberAddress?.toLowerCase() === prop.applicant?.toLowerCase();
     return !prop.cancelled && memberRelated;
   });
 
@@ -168,7 +168,7 @@ export const getProfileActivites = (daoData, memberAddress) => {
     });
 
   const rageActivities = daoData.rageQuits.filter(
-    (rage) => rage.memberAddress === memberAddress,
+    (rage) => rage.memberAddress.toLowerCase() === memberAddress.toLowerCase(),
   );
   const allActivites = proposals
     .concat(votes)
