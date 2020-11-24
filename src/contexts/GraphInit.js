@@ -4,7 +4,7 @@ import { useLocation } from 'react-router-dom';
 import GraphFetch from '../components/Shared/GraphFetch';
 import GraphFetchMore from '../components/Shared/GraphFetchMore';
 import { BANK_BALANCES } from '../utils/apollo/bank-queries';
-import { HOME_DAO } from '../utils/apollo/dao-queries';
+import { DAO_ACTIVITIES, HOME_DAO } from '../utils/apollo/dao-queries';
 import { MEMBERS_LIST, USER_MEMBERSHIPS } from '../utils/apollo/member-queries';
 import { PROPOSALS_LIST } from '../utils/apollo/proposal-queries';
 import { validDaoParams } from '../utils/helpers';
@@ -16,6 +16,7 @@ import {
   useDaoMetadata,
   useDaoGraphData,
   useBalances,
+  useActivities,
 } from './PokemolContext';
 
 const GraphInit = () => {
@@ -30,6 +31,8 @@ const GraphInit = () => {
   const [localMembers, setLocalMembers] = useState();
   const [, updateBalances] = useBalances();
   const [localBalances, setLocalBalances] = useState();
+  const [, updateActivities] = useActivities();
+  const [localActivities, setLocalActivities] = useState();
   const [, updateDaoGraphData] = useDaoGraphData();
   const [localDao, setLocalDao] = useState();
   const [daoFetch, setDaoFetch] = useState();
@@ -71,6 +74,13 @@ const GraphInit = () => {
   }, [localBalances]);
 
   useEffect(() => {
+    if (localActivities) {
+      updateActivities(localActivities);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [localActivities]);
+
+  useEffect(() => {
     if (localUserDaos) {
       updateUserDaos(localUserDaos.map((membership) => membership.moloch));
     }
@@ -108,6 +118,13 @@ const GraphInit = () => {
               molochAddress: address,
             }}
             isStats={true}
+          />
+          <GraphFetch
+            query={DAO_ACTIVITIES}
+            setRecords={setLocalActivities}
+            entity='moloch'
+            variables={{ contractAddr: address }}
+            context={{ currentPeriod: daoMetadata.currentPeriod }}
           />
         </>
       ) : null}

@@ -4,8 +4,6 @@ import {
   GradientDefs,
   XAxis,
   YAxis,
-  VerticalGridLines,
-  HorizontalGridLines,
   LineSeries,
   AreaSeries,
 } from 'react-vis';

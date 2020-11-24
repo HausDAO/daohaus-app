@@ -1,5 +1,5 @@
 import React from 'react';
-import { Link as RouterLink, useHistory } from 'react-router-dom';
+import { Link as RouterLink } from 'react-router-dom';
 import {
   Flex,
   Icon,
@@ -14,7 +14,7 @@ import {
 } from '@chakra-ui/core';
 
 import { motion } from 'framer-motion';
-import { useDao, useRefetchQuery } from '../../contexts/PokemolContext';
+import { useDao } from '../../contexts/PokemolContext';
 import ChangeDao from '../Shared/ChangeDao';
 
 import Header from '../Shared/Header';
@@ -42,8 +42,6 @@ const Layout = ({ children }) => {
   const [sideNavOpen, toggleSideNav] = useSideNavToggle();
   const [dao] = useDao();
   const [theme] = useTheme();
-  const history = useHistory();
-  const [, updateRefetchQuery] = useRefetchQuery();
 
   const MotionBox = motion.custom(Box);
   const MotionFlex = motion.custom(Flex);
