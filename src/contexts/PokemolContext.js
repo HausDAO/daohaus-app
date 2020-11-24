@@ -31,6 +31,7 @@ const initialState = {
   userDaos: [],
   proposals: [],
   members: [],
+  balances: [],
   prices: {},
   modals: { changeDao: false, accountModal: false },
 };
@@ -78,6 +79,9 @@ const reducer = (state, action) => {
     }
     case 'setMembers': {
       return { ...state, members: action.payload };
+    }
+    case 'setBalances': {
+      return { ...state, balances: action.payload };
     }
 
     case 'prices': {
@@ -155,6 +159,10 @@ function PokemolContextProvider(props) {
     dispatch({ type: 'setMembers', payload: data });
   }, []);
 
+  const updateBalances = useCallback((data) => {
+    dispatch({ type: 'setBalances', payload: data });
+  }, []);
+
   const updatePrices = useCallback((data) => {
     dispatch({ type: 'prices', payload: data });
   }, []);
@@ -186,6 +194,7 @@ function PokemolContextProvider(props) {
             updateUserDaos,
             updateProposals,
             updateMembers,
+            updateBalances,
             updatePrices,
             openModal,
             closeModals,
@@ -206,6 +215,7 @@ function PokemolContextProvider(props) {
           updateUserDaos,
           updateProposals,
           updateMembers,
+          updateBalances,
           updatePrices,
           openModal,
           closeModals,
@@ -291,6 +301,11 @@ export function useProposals() {
 export function useMembers() {
   const [state, { updateMembers }] = usePokemolContext();
   return [state.members, updateMembers];
+}
+
+export function useBalances() {
+  const [state, { updateBalances }] = usePokemolContext();
+  return [state.balances, updateBalances];
 }
 
 export function usePrices() {

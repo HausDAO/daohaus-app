@@ -30,23 +30,6 @@ const Bank = () => {
         proposalType={'whitelist'}
         returnRoute={`/dao/${dao?.address}/bank`}
       />
-
-      <Box w='100%' p={6}>
-        <BankOverviewChart balances={balances} />
-        <TokenList tokenList={tokenList} />
-
-        {dao?.address && dao?.graphData ? (
-          <GraphFetchMore
-            query={BANK_BALANCES}
-            setRecords={setBalances}
-            entity='balances'
-            variables={{
-              molochAddress: dao.address,
-            }}
-            isStats={true}
-          />
-        ) : null}
-      </Box>
     </>
   );
 };

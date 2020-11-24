@@ -66,7 +66,7 @@ const GraphFetchMore = ({
 
   useEffect(() => {
     if (data && fetched) {
-      // console.log('setting entity', entity);
+      console.log('setting entity', entity);
       setRecords(data[entity]);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
