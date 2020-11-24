@@ -18,24 +18,26 @@ import {
   groupBalancesMemberToDateRange,
 } from '../../utils/bank-helpers';
 
-const MemberSnapshotChart = ({ chartDimension }) => {
+const MemberSnapshotChart = ({ chartDimension, dao }) => {
   const [theme] = useTheme();
   const [balances] = useBalances();
   const [chartData, setChartData] = useState([]);
   const [preppedData, setPreppedData] = useState([]);
 
   useEffect(() => {
-    if (balances.length > 0) {
-      const dateRange = getDateRange({ value: 'lifetime' }, balances);
+    if (balances.length > 0 && dao && dao.graphData) {
+      const dateRange = getDateRange(
+        { value: 'lifetime' },
+        balances,
+        dao.graphData.summoningTime,
+      );
       const dates = getDatesArray(dateRange.start, dateRange.end);
       const groupedBalances = groupBalancesMemberToDateRange(balances, dates);
       setPreppedData(groupedBalances);
     }
-  }, [balances]);
+  }, [balances, dao]);
 
   useEffect(() => {
-    console.log('chartDimension', chartDimension);
-    console.log('preppedData', preppedData);
     if (preppedData.length > 0 && chartDimension) {
       setTypeData(chartDimension, preppedData);
     }
@@ -49,7 +51,6 @@ const MemberSnapshotChart = ({ chartDimension }) => {
         y0: 0,
       };
     });
-
     setChartData(data);
   };
 
@@ -68,25 +69,25 @@ const MemberSnapshotChart = ({ chartDimension }) => {
 
   return (
     <Box w='95%' minH='300px'>
-      <FlexibleXYPlot>
-        <VerticalGridLines color='white' />
-        <HorizontalGridLines color='white' />
-        <XAxis xType='time' tickTotal={0} />
-        <YAxis tickTotal={0} />
-        {gradient}
-        <LineSeries
-          animate
-          curve='curveNatural'
-          data={chartData}
-          color={theme.colors.primary[50]}
-        />
-        <AreaSeries
-          curve='curveNatural'
-          data={chartData}
-          fill={'url(#gradient)'}
-          stroke='transparent'
-        />
-      </FlexibleXYPlot>
+      {chartData.length > 0 ? (
+        <FlexibleXYPlot yDomain={[0, chartData[chartData.length - 1].y || 10]}>
+          <XAxis xType='time' tickTotal={0} />
+          <YAxis tickTotal={0} />
+          {gradient}
+          <LineSeries
+            animate
+            curve='curveNatural'
+            data={chartData}
+            color={theme.colors.primary[50]}
+          />
+          <AreaSeries
+            curve='curveNatural'
+            data={chartData}
+            fill={'url(#gradient)'}
+            stroke='transparent'
+          />
+        </FlexibleXYPlot>
+      ) : null}
     </Box>
   );
 };

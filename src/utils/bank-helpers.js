@@ -20,10 +20,12 @@ const addDays = (date, days = 1) => {
   return result;
 };
 
-export const getDateRange = (timeframe, balances) => {
+export const getDateRange = (timeframe, balances, createdAt) => {
   if (timeframe.value === 'lifetime') {
     return {
-      start: new Date(balances[0].timestamp * 1000),
+      start: createdAt
+        ? new Date(createdAt * 1000)
+        : new Date(balances[0].timestamp * 1000),
       end: new Date(balances[balances.length - 1].timestamp * 1000),
     };
   } else {
@@ -80,17 +82,12 @@ export const groupBalancesToDateRange = (balances, dates) => {
 
 export const groupBalancesMemberToDateRange = (balances, dates) => {
   return dates.map((date, i) => {
-    // const value = Object.keys(groupedByToken).reduce((sum, tokenAddress) => {
-    //   const nextBal = groupedByToken[tokenAddress].find(
-    //     (bal) => +bal.timestamp >= date.getTime() / 1000,
-    //   );
-    //   sum += nextBal ? nextBal.value : 0;
-    //   return sum;
-    // }, 0);
-
-    const balance = balances.find(
-      (bal) => +bal.timestamp >= date.getTime() / 1000,
-    );
+    let balance;
+    if (i === 0) {
+      balance = { currentShares: 0, currentLoot: 0 };
+    } else {
+      balance = balances.find((bal) => +bal.timestamp >= date.getTime() / 1000);
+    }
 
     return {
       date,
