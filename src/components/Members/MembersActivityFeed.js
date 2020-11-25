@@ -30,7 +30,7 @@ const MembersActivityFeed = ({ selectedMember }) => {
   useEffect(() => {
     if (selectedMember && activities.proposals) {
       const hydratedActivites = getMemberActivites(
-        activities.proposals,
+        activities,
         selectedMember.memberAddress,
       );
       setAllActivities(hydratedActivites);
