@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
 import { Box, Button, Flex, Icon, Skeleton } from '@chakra-ui/core';
 import { FaThumbsUp, FaThumbsDown } from 'react-icons/fa';
 import { isAfter, isBefore } from 'date-fns';
@@ -286,6 +287,8 @@ const ProposalVote = ({ proposal, setProposal }) => {
             <Flex justify='center' pt='10px'>
               <Flex direction='column'>
                 <Button
+                  as={Link}
+                  to={`/dao/${dao?.address}/proposals/${nextProposalToProcess.proposalId}`}
                   variant='outline'
                   onClick={() => setProposal(nextProposalToProcess)}
                 >
