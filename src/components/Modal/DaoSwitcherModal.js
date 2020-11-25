@@ -82,7 +82,7 @@ const DaoSwitcherModal = ({ isOpen }) => {
           maxH='300px'
           overflowY='scroll'
         >
-          <Link to='/'>
+          <Link to='/' onClick={() => closeModals()}>
             <Flex
               direction='row'
               justifyContent='space-between'

@@ -8,6 +8,7 @@ import {
   useDao,
   useUser,
   useMemberWallet,
+  useLoading,
 } from '../../contexts/PokemolContext';
 
 const Dao = () => {
@@ -15,6 +16,7 @@ const Dao = () => {
   const [user] = useUser();
   const [memberWallet] = useMemberWallet();
   const [isMember, setIsMember] = useState(false);
+  const [loading] = useLoading();
 
   useEffect(() => {
     if (memberWallet) {
@@ -24,7 +26,7 @@ const Dao = () => {
 
   return (
     <>
-      {!dao ? (
+      {loading ? (
         <Spinner />
       ) : (
         <Box p={6}>

@@ -43,7 +43,7 @@ const GraphInit = () => {
     const validParam = validDaoParams(location);
     setDaoFetch(validParam && address);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [address, location]);
+  }, [daoMetadata, location]);
 
   useEffect(() => {
     if (localDao) {
@@ -95,27 +95,27 @@ const GraphInit = () => {
             query={HOME_DAO}
             setRecords={setLocalDao}
             entity='moloch'
-            variables={{ contractAddr: address }}
+            variables={{ contractAddr: daoMetadata.address }}
           />
           <GraphFetchMore
             query={PROPOSALS_LIST}
             setRecords={setLocalProposals}
             entity='proposals'
-            variables={{ contractAddr: address }}
+            variables={{ contractAddr: daoMetadata.address }}
             context={{ currentPeriod: daoMetadata.currentPeriod }}
           />
           <GraphFetchMore
             query={MEMBERS_LIST}
             setRecords={setLocalMembers}
             entity='daoMembers'
-            variables={{ contractAddr: address }}
+            variables={{ contractAddr: daoMetadata.address }}
           />
           <GraphFetchMore
             query={BANK_BALANCES}
             setRecords={setLocalBalances}
             entity='balances'
             variables={{
-              molochAddress: address,
+              molochAddress: daoMetadata.address,
             }}
             isStats={true}
           />
@@ -123,7 +123,7 @@ const GraphInit = () => {
             query={DAO_ACTIVITIES}
             setRecords={setLocalActivities}
             entity='moloch'
-            variables={{ contractAddr: address }}
+            variables={{ contractAddr: daoMetadata.address }}
             context={{ currentPeriod: daoMetadata.currentPeriod }}
           />
         </>
