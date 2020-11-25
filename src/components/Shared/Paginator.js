@@ -13,7 +13,6 @@ const Paginator = ({ perPage, setRecords, allRecords, reset }) => {
           href={`#${current}`}
           style={{ borderWidth: '0px' }}
           p={2}
-          mt={20}
           _focus={{ boxShadow: 'none' }}
         >
           {current}
