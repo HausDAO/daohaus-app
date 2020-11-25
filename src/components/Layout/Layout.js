@@ -34,6 +34,7 @@ import {
   RiQuestionLine,
   RiFireLine,
   RiRocket2Line,
+  RiArrowLeftSLine,
 } from 'react-icons/ri';
 import { GiCastle } from 'react-icons/gi';
 import { useTheme, useSideNavToggle } from '../../contexts/CustomThemeContext';
@@ -57,6 +58,21 @@ const Layout = ({ children }) => {
       pointerEvents: 'all',
       marginLeft: '25px',
       display: 'inline-block',
+    },
+    closed: {
+      opacity: 0,
+      pointerEvents: 'none',
+      marginLeft: '0px',
+      display: 'none',
+    },
+  };
+
+  const navFlex = {
+    open: {
+      opacity: 1,
+      pointerEvents: 'all',
+      marginLeft: '25px',
+      display: 'flex',
     },
     closed: {
       opacity: 0,
@@ -119,16 +135,20 @@ const Layout = ({ children }) => {
         overflow='hidden'
       >
         <Flex direction='column' justify='start' align='start' h='100%'>
-          <Flex align='center' justify='start' w='100%' direction='row'>
-            <Box as={RouterLink} to={`/dao/${dao.address}`}>
-              <Image
-                src={theme.images.brandImg}
-                w='60px'
-                h='60px'
-                cursor='pointer'
-                border='none'
-              />
-            </Box>
+          <Flex align='start' justify='start' w='100%' direction='row'>
+            <Box
+              as={RouterLink}
+              to={dao?.graphData ? `/dao/${dao.address}` : `/`}
+              w='60px'
+              h='60px'
+              cursor='pointer'
+              border='none'
+              bg={'url(' + theme.images.brandImg + ')'}
+              bgSize='contain'
+              bgPosition='center'
+              bgRepeat='no-repeat'
+              rounded='full'
+            />
             <MotionFlex
               w='100%'
               direction='column'
@@ -136,7 +156,7 @@ const Layout = ({ children }) => {
               justify='start'
               initial={sideNavOpen ? 'closed' : 'open'}
               animate={sideNavOpen ? 'closed' : 'open'}
-              variants={navLinks}
+              variants={navFlex}
             >
               {dao?.graphData ? (
                 <Link as={RouterLink} to={`/dao/${dao.address}`} fontSize='xl'>
@@ -152,7 +172,7 @@ const Layout = ({ children }) => {
           </Flex>
           <IconButton
             variant='ghost'
-            icon={<RiMenu3Line />}
+            icon={sideNavOpen ? <RiMenu3Line /> : <RiArrowLeftSLine />}
             onClick={toggleSideNav}
             size='lg'
             isRound='true'
@@ -364,10 +384,11 @@ const Layout = ({ children }) => {
           <Spacer />
           <Flex w='100%'>
             <IconButton
-              icon={<RiLinksLine />}
+              icon={sideNavOpen ? <RiLinksLine /> : <RiArrowLeftSLine />}
               size='lg'
               variant='ghost'
               isRound='true'
+              as={Link}
               onClick={toggleSideNav}
             />
 
