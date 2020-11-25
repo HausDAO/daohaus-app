@@ -12,6 +12,8 @@ import {
   useMemberWallet,
   useContracts,
   useDaoMetadata,
+  useLoading,
+  useDao,
 } from './PokemolContext';
 
 const DaoInit = () => {
@@ -21,11 +23,13 @@ const DaoInit = () => {
   const [web3Connect] = useWeb3Connect();
   const [memberWallet, updateMemberWallet] = useMemberWallet();
   const [user] = useUser();
+  const [, updateLoading] = useLoading();
+  const [, clearDaoData] = useDao();
 
   useEffect(() => {
     const validParam = validDaoParams(location);
     if (!validParam) {
-      updateDaoMetadata(null);
+      clearDaoData();
       return;
     }
 
@@ -67,6 +71,7 @@ const DaoInit = () => {
   }, [daoMetadata, user, contracts]);
 
   const initDao = async (daoParam) => {
+    updateLoading(true);
     let daoRes;
     try {
       daoRes = await get(`moloch/${daoParam}`);
@@ -112,6 +117,7 @@ const DaoInit = () => {
     });
 
     updateContracts({ daoService });
+    updateLoading(false);
   };
 
   const initWeb3DaoService = async () => {
