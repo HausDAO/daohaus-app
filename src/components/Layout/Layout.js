@@ -194,7 +194,7 @@ const Layout = ({ children }) => {
           </Flex>
           <IconButton
             variant='ghost'
-            icon={sideNavOpen ? <RiMenu3Line /> : <RiArrowLeftSLine />}
+            icon={sideNavOpen ? <RiArrowLeftSLine /> : <RiMenu3Line />}
             onClick={handleNavToggle}
             size='lg'
             isRound='true'
@@ -408,7 +408,7 @@ const Layout = ({ children }) => {
           <Spacer />
           <Flex w='100%'>
             <IconButton
-              icon={sideNavOpen ? <RiLinksLine /> : <RiArrowLeftSLine />}
+              icon={sideNavOpen ? <RiArrowLeftSLine /> : <RiLinksLine />}
               size='lg'
               variant='ghost'
               isRound='true'
