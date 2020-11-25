@@ -104,7 +104,7 @@ const Layout = ({ children }) => {
   return (
     <Flex direction='row' minH='100vh' color='white' w='100vw'>
       <MotionFlex
-        initial='closed'
+        initial={sideNavOpen ? 'closed' : 'open'}
         animate={sideNavOpen ? 'closed' : 'open'}
         variants={bar}
         h='100vh'
@@ -134,7 +134,7 @@ const Layout = ({ children }) => {
               direction='column'
               align='start'
               justify='start'
-              initial='closed'
+              initial={sideNavOpen ? 'closed' : 'open'}
               animate={sideNavOpen ? 'closed' : 'open'}
               variants={navLinks}
             >
@@ -170,7 +170,7 @@ const Layout = ({ children }) => {
               >
                 <Icon as={RiBookMarkLine} w={6} h={6} />
                 <MotionBox
-                  initial='closed'
+                  initial={sideNavOpen ? 'closed' : 'open'}
                   animate={sideNavOpen ? 'closed' : 'open'}
                   variants={nav}
                   fontSize='2xl'
@@ -188,7 +188,7 @@ const Layout = ({ children }) => {
               >
                 <Icon as={RiBankLine} w={6} h={6} />
                 <MotionBox
-                  initial='closed'
+                  initial={sideNavOpen ? 'closed' : 'open'}
                   animate={sideNavOpen ? 'closed' : 'open'}
                   variants={nav}
                   fontSize='2xl'
@@ -205,7 +205,7 @@ const Layout = ({ children }) => {
               >
                 <Icon as={RiTeamLine} w={6} h={6} />
                 <MotionBox
-                  initial='closed'
+                  initial={sideNavOpen ? 'closed' : 'open'}
                   animate={sideNavOpen ? 'closed' : 'open'}
                   variants={nav}
                   fontSize='2xl'
@@ -222,7 +222,7 @@ const Layout = ({ children }) => {
               >
                 <Icon as={RiSettings3Line} w={6} h={6} />
                 <MotionBox
-                  initial='closed'
+                  initial={sideNavOpen ? 'closed' : 'open'}
                   animate={sideNavOpen ? 'closed' : 'open'}
                   variants={nav}
                   fontSize='sm'
@@ -239,7 +239,7 @@ const Layout = ({ children }) => {
               >
                 <Icon as={RiRocket2Line} w={6} h={6} />
                 <MotionBox
-                  initial='closed'
+                  initial={sideNavOpen ? 'closed' : 'open'}
                   animate={sideNavOpen ? 'closed' : 'open'}
                   variants={nav}
                   fontSize='sm'
@@ -256,7 +256,7 @@ const Layout = ({ children }) => {
               >
                 <Icon as={RiTrophyLine} w={6} h={6} />
                 <MotionBox
-                  initial='closed'
+                  initial={sideNavOpen ? 'closed' : 'open'}
                   animate={sideNavOpen ? 'closed' : 'open'}
                   variants={nav}
                   fontSize='sm'
@@ -278,7 +278,7 @@ const Layout = ({ children }) => {
               >
                 <Icon as={RiBookMarkLine} w={6} h={6} />
                 <MotionBox
-                  initial='closed'
+                  initial={sideNavOpen ? 'closed' : 'open'}
                   animate={sideNavOpen ? 'closed' : 'open'}
                   variants={nav}
                   fontSize='2xl'
@@ -296,7 +296,7 @@ const Layout = ({ children }) => {
               >
                 <Icon as={RiFireLine} w={6} h={6} />
                 <MotionBox
-                  initial='closed'
+                  initial={sideNavOpen ? 'closed' : 'open'}
                   animate={sideNavOpen ? 'closed' : 'open'}
                   variants={nav}
                   fontSize='2xl'
@@ -314,7 +314,7 @@ const Layout = ({ children }) => {
               >
                 <Icon as={RiTeamLine} w={6} h={6} />
                 <MotionBox
-                  initial='closed'
+                  initial={sideNavOpen ? 'closed' : 'open'}
                   animate={sideNavOpen ? 'closed' : 'open'}
                   variants={nav}
                   fontSize='2xl'
@@ -332,7 +332,7 @@ const Layout = ({ children }) => {
               >
                 <Icon as={RiQuestionLine} w={6} h={6} />
                 <MotionBox
-                  initial='closed'
+                  initial={sideNavOpen ? 'closed' : 'open'}
                   animate={sideNavOpen ? 'closed' : 'open'}
                   variants={nav}
                   fontSize='sm'
@@ -350,9 +350,9 @@ const Layout = ({ children }) => {
               >
                 <Icon as={GiCastle} w={6} h={6} />
                 <MotionBox
-                  initial='closed'
-                  variants={nav}
+                  initial={sideNavOpen ? 'closed' : 'open'}
                   animate={sideNavOpen ? 'closed' : 'open'}
+                  variants={nav}
                   fontSize='sm'
                   fontFamily='heading'
                 >
@@ -375,10 +375,9 @@ const Layout = ({ children }) => {
               direction='row'
               align='center'
               justify='start'
-              initial='closed'
+              initial={sideNavOpen ? 'closed' : 'open'}
               animate={sideNavOpen ? 'closed' : 'open'}
               variants={navLinks}
-              transition={{ ease: 'easeInOut', duration: 0.15 }}
               w='100%'
             >
               <ButtonGroup>
@@ -445,9 +444,9 @@ const Layout = ({ children }) => {
 
       <MotionBox
         position='fixed'
-        initial='closed'
-        variants={background}
+        initial={sideNavOpen ? 'closed' : 'open'}
         animate={sideNavOpen ? 'closed' : 'open'}
+        variants={background}
         h='100vh'
         bgImage={'url(' + theme.images.bgImg + ')'}
         bgSize='cover'
@@ -471,11 +470,10 @@ const Layout = ({ children }) => {
       />
       <MotionFlex
         width='100%'
-        initial='closed'
-        variants={layout}
+        initial={sideNavOpen ? 'closed' : 'open'}
         animate={sideNavOpen ? 'closed' : 'open'}
+        variants={layout}
         flexDirection='column'
-        transition={{ ease: 'easeInOut', duration: 0.15 }}
       >
         <Header></Header>
         {children}
