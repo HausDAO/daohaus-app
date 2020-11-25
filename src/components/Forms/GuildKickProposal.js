@@ -26,14 +26,11 @@ const GuildKickProposalForm = () => {
   } = useForm();
 
   useEffect(() => {
+    // TODO: expand to work for any search param on all forms
     if (location.search && location.search.split('applicant=')[1]) {
-      console.log('location', location);
       const applicantAddress = location.search.split('applicant=')[1];
-      // setValue()
       setValue('applicantHidden', applicantAddress);
       setValue('applicant', applicantAddress);
-
-      // TODO: expand to work for any search param on all forms
     }
   }, [location]);
 
