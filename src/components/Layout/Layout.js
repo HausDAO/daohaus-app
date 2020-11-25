@@ -145,29 +145,40 @@ const Layout = ({ children }) => {
         zIndex='1'
         overflow='hidden'
       >
-        <Flex direction='column' justify='start' align='start' h='100%'>
-          <Flex align='start' justify='start' w='100%' direction='row'>
+        <Flex
+          direction='column'
+          justify='start'
+          align='start'
+          h='100%'
+          w='100%'
+        >
+          <Flex align='start' justify='start' direction='row'>
             <Box
+              d='block'
               as={RouterLink}
               to={dao?.graphData ? `/dao/${dao.address}` : `/`}
-              w='60px'
-              h='60px'
+              w='48px'
+              h='48px'
               cursor='pointer'
               border='none'
               bg={'url(' + theme.images.brandImg + ')'}
-              bgSize='contain'
+              bgSize='cover'
               bgPosition='center'
               bgRepeat='no-repeat'
               rounded='full'
+              borderWidth='2px'
+              borderStyle='solid'
+              borderColor='transparent'
+              _hover={{ border: '2px solid ' + theme.colors.whiteAlpha[500] }}
             />
             <MotionFlex
-              w='100%'
               direction='column'
               align='start'
               justify='start'
               initial={sideNavOpen ? 'open' : 'closed'}
               animate={sideNavOpen ? 'open' : 'closed'}
               variants={navFlex}
+              h='48px'
             >
               {dao?.graphData ? (
                 <Link as={RouterLink} to={`/dao/${dao.address}`} fontSize='xl'>
@@ -183,7 +194,7 @@ const Layout = ({ children }) => {
           </Flex>
           <IconButton
             variant='ghost'
-            icon={sideNavOpen ? <RiMenu3Line /> : <RiArrowLeftSLine />}
+            icon={sideNavOpen ? <RiArrowLeftSLine /> : <RiMenu3Line />}
             onClick={handleNavToggle}
             size='lg'
             isRound='true'
@@ -397,7 +408,7 @@ const Layout = ({ children }) => {
           <Spacer />
           <Flex w='100%'>
             <IconButton
-              icon={sideNavOpen ? <RiLinksLine /> : <RiArrowLeftSLine />}
+              icon={sideNavOpen ? <RiArrowLeftSLine /> : <RiLinksLine />}
               size='lg'
               variant='ghost'
               isRound='true'
