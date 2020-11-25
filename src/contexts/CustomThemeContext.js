@@ -1,4 +1,4 @@
-import React, { useContext, useCallback, useMemo, useEffect } from 'react';
+import React, { useContext, useCallback, useMemo } from 'react';
 
 import { setTheme } from '../themes/theme';
 
@@ -11,7 +11,6 @@ function useCustomThemeContext() {
 const initialState = {
   theme: setTheme(),
   tempTheme: null,
-  sideNavOpen: localStorage.getItem('sideNavOpen') === 'true' || false,
 };
 
 const reducer = (state, action) => {
@@ -21,9 +20,6 @@ const reducer = (state, action) => {
     }
     case 'setTempTheme': {
       return { ...state, tempTheme: action.payload };
-    }
-    case 'toggleSideNav': {
-      return { ...state, sideNavOpen: action.payload };
     }
     default: {
       return initialState;
@@ -42,16 +38,6 @@ function CustomThemeContextProvider(props) {
     dispatch({ type: 'setTempTheme', payload: theme });
   }, []);
 
-  const updateSideNavOpen = useCallback((data) => {
-    dispatch({ type: 'toggleSideNav', payload: data });
-  }, []);
-
-  useEffect(() => {
-    updateSideNavOpen(localStorage.getItem('sideNavOpen') === 'true');
-
-    // eslint-disable-next-line
-  }, []);
-
   return (
     <CustomThemeContext.Provider
       value={useMemo(
@@ -60,10 +46,9 @@ function CustomThemeContextProvider(props) {
           {
             updateTheme,
             updateTempTheme,
-            updateSideNavOpen,
           },
         ],
-        [state, updateTheme, updateTempTheme, updateSideNavOpen],
+        [state, updateTheme, updateTempTheme],
       )}
     >
       {props.children}
@@ -79,16 +64,6 @@ export function useTheme() {
 export function useTempTheme() {
   const [state, { updateTempTheme }] = useCustomThemeContext();
   return [state.tempTheme, updateTempTheme];
-}
-
-export function useSideNavToggle() {
-  const [state, { updateSideNavOpen }] = useCustomThemeContext();
-
-  function toggleSideNav() {
-    localStorage.setItem('sideNavOpen', `${!state.sideNavOpen}`);
-    updateSideNavOpen(!state.sideNavOpen);
-  }
-  return [state.sideNavOpen, toggleSideNav];
 }
 
 const CustomThemeContextConsumer = CustomThemeContext.Consumer;
