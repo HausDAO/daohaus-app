@@ -13,7 +13,7 @@ import {
 } from '@chakra-ui/core';
 
 import { motion } from 'framer-motion';
-import { useDao } from '../../contexts/PokemolContext';
+import { useDao, useUser } from '../../contexts/PokemolContext';
 import ChangeDao from '../Shared/ChangeDao';
 
 import Header from '../Shared/Header';
@@ -115,6 +115,7 @@ const Layout = ({ children }) => {
   const [sideNavOpen, toggleSideNav] = useState();
   const [dao] = useDao();
   const [theme] = useTheme();
+  const [user] = useUser();
 
   useEffect(() => {
     toggleSideNav(JSON.parse(localStorage.getItem('sideNavOpen')));
@@ -278,23 +279,25 @@ const Layout = ({ children }) => {
                   Boosts
                 </MotionBox>
               </Button>
-              <Button
-                variant='sideNav'
-                as={RouterLink}
-                to={`/dao/${dao.address}/profile`}
-                _hover={{ backgroundColor: 'white' }}
-              >
-                <Icon as={RiTrophyLine} w={6} h={6} />
-                <MotionBox
-                  initial={sideNavOpen ? 'open' : 'closed'}
-                  animate={sideNavOpen ? 'open' : 'closed'}
-                  variants={nav}
-                  fontSize='sm'
-                  fontFamily='heading'
+              {user ? (
+                <Button
+                  variant='sideNav'
+                  as={RouterLink}
+                  to={`/dao/${dao.address}/profile/${user.username}`}
+                  _hover={{ backgroundColor: 'white' }}
                 >
-                  Stats
-                </MotionBox>
-              </Button>
+                  <Icon as={RiTrophyLine} w={6} h={6} />
+                  <MotionBox
+                    initial={sideNavOpen ? 'open' : 'closed'}
+                    animate={sideNavOpen ? 'open' : 'closed'}
+                    variants={nav}
+                    fontSize='sm'
+                    fontFamily='heading'
+                  >
+                    Stats
+                  </MotionBox>
+                </Button>
+              ) : null}
             </Stack>
           ) : (
             <Stack spacing={3} d='flex' flexDirection='column' mt='55px'>
