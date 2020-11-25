@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Flex, Skeleton, Box, Image } from '@chakra-ui/core';
+import { Flex, Skeleton, Box, Image, Icon } from '@chakra-ui/core';
 import { FaStar } from 'react-icons/fa';
 import { format } from 'date-fns';
 import makeBlockie from 'ethereum-blockies-base64';
@@ -146,9 +146,9 @@ const OverviewCard = ({ user }) => {
               {showAlert ? (
                 <TextBox fontSize='xl' variant='value'>
                   <Flex direction='row' align='center' justify='space-around'>
-                    <FaStar color='yellow' />
+                    <Icon as={FaStar} color='yellow.500' />
                     100%
-                    <FaStar color='yellow' />
+                    <Icon as={FaStar} color='yellow.500' />
                   </Flex>
                 </TextBox>
               ) : (

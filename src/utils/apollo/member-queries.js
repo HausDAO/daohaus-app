@@ -113,6 +113,7 @@ export const USER_MEMBERSHIPS = gql`
       moloch {
         id
         title
+        version
       }
     }
   }
