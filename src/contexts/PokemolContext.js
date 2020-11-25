@@ -14,7 +14,6 @@ const initialState = {
   network: supportedChains[process.env.REACT_APP_NETWORK_ID],
   refetchQuery: null,
   modals: { changeDao: false, accountModal: false },
-  loading: false,
 
   user: null,
   web3Connect: {
@@ -46,9 +45,6 @@ const reducer = (state, action) => {
     }
     case 'refetchQuery': {
       return { ...state, refetchQuery: action.payload };
-    }
-    case 'setLoading': {
-      return { ...state, loading: action.payload };
     }
 
     case 'setUser': {
@@ -135,10 +131,6 @@ function PokemolContextProvider(props) {
     dispatch({ type: 'refetchQuery', payload: data });
   }, []);
 
-  const updateLoading = useCallback((data) => {
-    dispatch({ type: 'setLoading', payload: data });
-  }, []);
-
   const updateUser = useCallback((user) => {
     dispatch({ type: 'setUser', payload: user });
   }, []);
@@ -215,7 +207,6 @@ function PokemolContextProvider(props) {
           {
             updateNetwork,
             updateRefetchQuery,
-            updateLoading,
             updateUser,
             updateWeb3Connect,
             updateContracts,
@@ -239,7 +230,6 @@ function PokemolContextProvider(props) {
           state,
           updateNetwork,
           updateRefetchQuery,
-          updateLoading,
           updateUser,
           updateWeb3Connect,
           updateContracts,
@@ -285,11 +275,6 @@ export function useNetwork() {
 export function useRefetchQuery() {
   const [state, { updateRefetchQuery }] = usePokemolContext();
   return [state.refetchQuery, updateRefetchQuery];
-}
-
-export function useLoading() {
-  const [state, { updateLoading }] = usePokemolContext();
-  return [state.loading, updateLoading];
 }
 
 export function useUser() {
