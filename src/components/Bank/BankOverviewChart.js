@@ -58,6 +58,10 @@ const BankOverviewChart = ({ balances, dao }) => {
           };
         });
 
+        if (timeframe.value === 'lifetime') {
+          data[0].y = 0;
+        }
+
         setChartData(data);
       } else {
         setChartData([]);
@@ -66,6 +70,7 @@ const BankOverviewChart = ({ balances, dao }) => {
   }, [balances, prices, timeframe, dao]);
 
   const handleTimeChange = (time) => {
+    setChartData([]);
     setTimeframe({
       ...time,
     });
