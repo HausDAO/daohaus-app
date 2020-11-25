@@ -30,23 +30,26 @@ import {
 import { usePrices } from '../../contexts/PokemolContext';
 import { bankChartTimeframes } from '../../content/chart-content';
 
-const BankOverviewChart = ({ balances }) => {
+const BankOverviewChart = ({ balances, dao }) => {
   const [theme] = useTheme();
   const [prices] = usePrices();
   const [chartData, setChartData] = useState([]);
   const [timeframe, setTimeframe] = useState(bankChartTimeframes[0]);
 
   useEffect(() => {
-    if (balances && prices) {
+    if (balances && prices && dao) {
       const filteredBalances = balancesWithValue(balances, prices);
       if (filteredBalances[0]) {
-        const dateRange = getDateRange(timeframe, filteredBalances);
+        const dateRange = getDateRange(
+          timeframe,
+          filteredBalances,
+          dao.graphData.summoningTime,
+        );
         const dates = getDatesArray(dateRange.start, dateRange.end);
         const groupedBalances = groupBalancesToDateRange(
           filteredBalances,
           dates,
         );
-
         const data = groupedBalances.map((balance, i) => {
           return {
             x: balance.date,
@@ -60,7 +63,7 @@ const BankOverviewChart = ({ balances }) => {
         setChartData([]);
       }
     }
-  }, [balances, prices, timeframe]);
+  }, [balances, prices, timeframe, dao]);
 
   const handleTimeChange = (time) => {
     setTimeframe({
@@ -105,27 +108,30 @@ const BankOverviewChart = ({ balances }) => {
           </Menu>
         </Flex>
         <ContentBox minH='300px'>
-          <FlexibleWidthXYPlot
-            height={300}
-            margin={{ left: 40, right: 40, top: 40, bottom: 40 }}
-          >
-            {gradient}
-            <LineSeries
-              animate
-              curve='curveNatural'
-              data={chartData}
-              color={theme.colors.primary[50]}
-            />
-            <AreaSeries
-              animate
-              curve='curveNatural'
-              data={chartData}
-              fill={'url(#gradient)'}
-              stroke='transparent'
-            />
-            <XAxis xType='time' tickTotal={0} />
-            <YAxis tickTotal={0} />
-          </FlexibleWidthXYPlot>
+          {chartData.length > 0 ? (
+            <FlexibleWidthXYPlot
+              height={300}
+              margin={{ left: 40, right: 40, top: 40, bottom: 40 }}
+              yDomain={[0, chartData[chartData.length - 1].y || 10]}
+            >
+              {gradient}
+              <LineSeries
+                animate
+                curve='curveNatural'
+                data={chartData}
+                color={theme.colors.primary[50]}
+              />
+              <AreaSeries
+                animate
+                curve='curveNatural'
+                data={chartData}
+                fill={'url(#gradient)'}
+                stroke='transparent'
+              />
+              <XAxis xType='time' tickTotal={0} />
+              <YAxis tickTotal={0} />
+            </FlexibleWidthXYPlot>
+          ) : null}
         </ContentBox>
       </Skeleton>
     </Box>

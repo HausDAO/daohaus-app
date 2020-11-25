@@ -12,6 +12,7 @@ import {
   useMemberWallet,
   useContracts,
   useDaoMetadata,
+  useDao,
 } from './PokemolContext';
 
 const DaoInit = () => {
@@ -21,11 +22,12 @@ const DaoInit = () => {
   const [web3Connect] = useWeb3Connect();
   const [memberWallet, updateMemberWallet] = useMemberWallet();
   const [user] = useUser();
+  const [, clearDaoData] = useDao();
 
   useEffect(() => {
     const validParam = validDaoParams(location);
     if (!validParam) {
-      updateDaoMetadata(null);
+      clearDaoData();
       return;
     }
 

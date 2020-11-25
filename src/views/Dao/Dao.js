@@ -24,37 +24,33 @@ const Dao = () => {
 
   return (
     <>
-      {!dao ? (
-        <Spinner />
-      ) : (
-        <Box p={6}>
-          {user && isMember ? (
-            <Flex wrap='wrap'>
-              <Box
-                pr={[0, null, null, null, 6]}
-                w={['100%', null, null, null, '50%']}
-              >
-                <DaoOverviewDetails dao={dao} />
-              </Box>
+      <Box p={6}>
+        {user && isMember ? (
+          <Flex wrap='wrap'>
+            <Box
+              pr={[0, null, null, null, 6]}
+              w={['100%', null, null, null, '50%']}
+            >
+              <DaoOverviewDetails dao={dao} />
+            </Box>
 
-              <Box w={['100%', null, null, null, '50%']} pt={[6, 0]}>
-                <MemberInfoCard user={user} />
-                {dao.graphData && (
-                  <Box mt={6}>
-                    <DaoActivityFeed />
-                  </Box>
-                )}
-              </Box>
-            </Flex>
-          ) : (
-            <Flex h='100%' justify='center' align='center'>
-              <Box w='50%'>
-                <DaoOverviewDetails dao={dao} />
-              </Box>
-            </Flex>
-          )}
-        </Box>
-      )}
+            <Box w={['100%', null, null, null, '50%']} pt={[6, 0]}>
+              <MemberInfoCard user={user} />
+              {dao.graphData && (
+                <Box mt={6}>
+                  <DaoActivityFeed />
+                </Box>
+              )}
+            </Box>
+          </Flex>
+        ) : (
+          <Flex h='100%' justify='center' align='center'>
+            <Box w='50%'>
+              <DaoOverviewDetails dao={dao} />
+            </Box>
+          </Flex>
+        )}
+      </Box>
     </>
   );
 };

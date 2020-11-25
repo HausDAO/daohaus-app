@@ -1,6 +1,6 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { Box, Flex, Skeleton } from '@chakra-ui/core';
+import { Box, Flex, Radio, RadioGroup, Skeleton, Stack } from '@chakra-ui/core';
 
 import { useMembers, useDao, useUser } from '../../contexts/PokemolContext';
 import { useTheme } from '../../contexts/CustomThemeContext';
@@ -13,6 +13,7 @@ const MemberSnapshot = ({ selectedMember }) => {
   const [dao] = useDao();
   const [members] = useMembers();
   const [user] = useUser();
+  const [chartDimension, setChartDimension] = useState('currentShares');
 
   return (
     <Box>
@@ -56,8 +57,14 @@ const MemberSnapshot = ({ selectedMember }) => {
             </Box>
           )}
         </Flex>
+        <RadioGroup defaultValue={chartDimension} onChange={setChartDimension}>
+          <Stack spacing={4} direction='row'>
+            <Radio value='currentShares'>Shares</Radio>
+            <Radio value='currentLoot'>Loot</Radio>
+          </Stack>
+        </RadioGroup>
         <Flex justify='center' mt={4}>
-          <MemberSnapshotChart />
+          <MemberSnapshotChart chartDimension={chartDimension} dao={dao} />
         </Flex>
       </ContentBox>
     </Box>
