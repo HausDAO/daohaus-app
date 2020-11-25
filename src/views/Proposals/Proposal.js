@@ -77,7 +77,9 @@ const Proposal = () => {
           w={['100%', null, null, null, '40%']}
           pt={[6, 0]}
         >
-          <Box>{!proposal?.cancelled && <TextBox size='md'>Vote</TextBox>}</Box>
+          <Box>
+            {!proposal?.cancelled && <TextBox size='md'>Actions</TextBox>}
+          </Box>
           <Box pt={6}>
             {!proposal?.cancelled && (
               <ProposalVote proposal={proposal} setProposal={setProposal} />

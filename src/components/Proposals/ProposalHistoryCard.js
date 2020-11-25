@@ -52,7 +52,7 @@ const ProposalHistoryCard = ({ activity, isLoaded }) => {
               {renderTitle()}
             </Heading>
 
-            <Text>
+            <Text as='i' fontSize='xs'>
               {activity?.activityData?.createdAt
                 ? timeToNow(activity.activityData.createdAt)
                 : '--'}
