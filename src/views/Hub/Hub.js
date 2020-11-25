@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Box, Flex } from '@chakra-ui/core';
 
 import { useUser } from '../../contexts/PokemolContext';
@@ -14,6 +14,18 @@ import { HUB_MEMBERSHIPS } from '../../utils/apollo/member-queries';
 const Hub = () => {
   const [user] = useUser();
   const [memberDaos, setMemberDaos] = useState();
+  const [v2Daos, setV2Daos] = useState([]);
+
+  useEffect(() => {
+    if (memberDaos) {
+      // TODO: Remove when v2 is ready
+      setV2Daos(
+        memberDaos
+          .filter((member) => member.moloch.version === '2')
+          .map((member) => member.moloch),
+      );
+    }
+  }, [memberDaos]);
 
   return (
     <Box p={6}>
@@ -23,11 +35,9 @@ const Hub = () => {
             <Box w='50%'>
               <HubProfileCard />
               <ContentBox p={6} mt={6} maxW='600px'>
-                {memberDaos ? (
+                {v2Daos.length > 0 ? (
                   <>
-                    <MemberDaoList
-                      daos={memberDaos.map((member) => member.moloch)}
-                    />
+                    <MemberDaoList daos={v2Daos} />
                   </>
                 ) : null}
               </ContentBox>
@@ -42,10 +52,8 @@ const Hub = () => {
               >
                 Recent Activity
               </Box>
-              {memberDaos && memberDaos.length > 0 ? (
-                <HubActivityFeed
-                  daos={memberDaos.map((member) => member.moloch)}
-                />
+              {v2Daos.length > 0 ? (
+                <HubActivityFeed daos={v2Daos} />
               ) : (
                 <TextBox my={35}>
                   Recent Activity from your daos will show here
