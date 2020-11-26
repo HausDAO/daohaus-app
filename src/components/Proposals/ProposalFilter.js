@@ -4,9 +4,11 @@ import {
   Menu,
   MenuButton,
   MenuList,
+  MenuGroup,
   MenuItem,
   Flex,
   Icon,
+  MenuDivider,
 } from '@chakra-ui/core';
 import { RiArrowDropDownFill } from 'react-icons/ri';
 
@@ -20,7 +22,7 @@ const ProposalFilter = ({ filter, setFilter, listLength }) => {
   useEffect(() => {
     let options;
     if (memberWallet && memberWallet.activeMember) {
-      options = getFilterOptions(memberWallet.activeMember);
+      options = getFilterOptions(memberWallet.activeMember, listLength);
     } else {
       options = getFilterOptions(false);
     }
@@ -55,16 +57,59 @@ const ProposalFilter = ({ filter, setFilter, listLength }) => {
             <Icon as={RiArrowDropDownFill} color='primary.50' />
           </MenuButton>
           <MenuList bg='black'>
-            {filterOptions.map((option) => (
-              <MenuItem
-                key={option.value}
-                onClick={() => setFilter(option)}
-                value={option.value}
-                _hover={{ color: 'primary.300' }}
-              >
-                {option.name}
-              </MenuItem>
-            ))}
+            <MenuGroup>
+              {filterOptions.map((option) => {
+                if (option.type === 'main') {
+                  return (
+                    <MenuItem
+                      key={option.value}
+                      onClick={() => setFilter(option)}
+                      value={option.value}
+                      _hover={{ color: 'primary.300' }}
+                    >
+                      {option.name}
+                    </MenuItem>
+                  );
+                }
+                return null;
+              })}
+            </MenuGroup>
+            <MenuDivider />
+            <MenuGroup title='Proposal Type'>
+              {filterOptions.map((option) => {
+                if (option.type === 'proposalType') {
+                  return (
+                    <MenuItem
+                      key={option.value}
+                      onClick={() => setFilter(option)}
+                      value={option.value}
+                      _hover={{ color: 'primary.300' }}
+                    >
+                      {option.name}
+                    </MenuItem>
+                  );
+                }
+                return null;
+              })}
+            </MenuGroup>
+            <MenuDivider />
+            <MenuGroup title='Proposal Status'>
+              {filterOptions.map((option) => {
+                if (option.type === 'status') {
+                  return (
+                    <MenuItem
+                      key={option.value}
+                      onClick={() => setFilter(option)}
+                      value={option.value}
+                      _hover={{ color: 'primary.300' }}
+                    >
+                      {option.name}
+                    </MenuItem>
+                  );
+                }
+                return null;
+              })}
+            </MenuGroup>
           </MenuList>
         </Menu>
       ) : null}

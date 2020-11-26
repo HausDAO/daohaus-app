@@ -8,11 +8,11 @@ import { RiExternalLinkLine } from 'react-icons/ri';
 
 import ContentBox from '../Shared/ContentBox';
 import TextBox from '../Shared/TextBox';
+import { formatPeriods } from '../../utils/helpers';
 
 const DaoContractSettings = () => {
   const [dao] = useDao();
   const [theme] = useTheme();
-  console.log(dao);
 
   const uri = () => {
     switch (process.env.REACT_APP_NETWORK_ID) {
@@ -58,87 +58,65 @@ const DaoContractSettings = () => {
       </Box>
       <Flex mt={3}>
         <Box w='50%'>
-          <Box
-            textTransform='uppercase'
-            fontFamily='heading'
-            fontSize='sm'
-            fontWeight={700}
-            color='primary.50'
-          >
-            {theme.daoMeta.proposal} Deposit
-          </Box>
+          <TextBox>{theme.daoMeta.proposal} Deposit</TextBox>
           <Skeleton isLoaded={dao?.graphData?.proposalDeposit}>
-            <Box fontFamily='mono' fontSize='md' fontWeight={700} my={2}>
+            <TextBox variant='value' my={2}>
               {dao?.graphData?.proposalDeposit
                 ? utils.fromWei(dao.graphData.proposalDeposit) +
                   ' ' +
                   dao.graphData.depositToken.symbol
                 : '--'}
-            </Box>
+            </TextBox>
           </Skeleton>
         </Box>
         <Box>
-          <Box
-            textTransform='uppercase'
-            fontFamily='heading'
-            fontSize='sm'
-            fontWeight={700}
-            color='primary.50'
-          >
-            Period Length
-          </Box>
-          <Box fontFamily='mono' fontSize='md' fontWeight={700} my={2}>
-            20 Quests per Day
-          </Box>
+          <TextBox>Period Length</TextBox>
+          <Skeleton isLoaded={dao?.graphData?.periodDuration}>
+            <TextBox variant='value' my={2}>
+              {dao?.graphData?.periodDuration
+                ? `${86400 / +dao?.graphData?.periodDuration} per day`
+                : '--'}
+            </TextBox>
+          </Skeleton>
         </Box>
       </Flex>
       <Flex>
         <Box w='50%'>
-          <Box
-            textTransform='uppercase'
-            fontFamily='heading'
-            fontSize='sm'
-            fontWeight={700}
-            color='primary.50'
-          >
-            Voting Period
-          </Box>
-          <Box fontFamily='mono' fontSize='md' fontWeight={700} my={2}>
-            3 days
-          </Box>
+          <TextBox>Voting Period</TextBox>
+          <Skeleton isLoaded={dao?.graphData}>
+            <TextBox variant='value' my={2}>
+              {dao?.graphData
+                ? `${formatPeriods(
+                    +dao?.graphData?.votingPeriodLength,
+                    +dao?.graphData?.periodDuration,
+                  )}`
+                : '--'}
+            </TextBox>
+          </Skeleton>
         </Box>
         <Box>
-          <Box
-            textTransform='uppercase'
-            fontFamily='heading'
-            fontSize='sm'
-            fontWeight={700}
-            color='primary.50'
-          >
-            Grace Period
-          </Box>
-          <Box fontFamily='mono' fontSize='md' fontWeight={700} my={2}>
-            2 days
-          </Box>
+          <TextBox>Grace Period</TextBox>
+          <Skeleton isLoaded={dao?.graphData}>
+            <TextBox variant='value' my={2}>
+              {dao?.graphData
+                ? `${formatPeriods(
+                    +dao?.graphData?.gracePeriodLength,
+                    +dao?.graphData?.periodDuration,
+                  )}`
+                : '--'}
+            </TextBox>
+          </Skeleton>
         </Box>
       </Flex>
       <Flex>
         <Box>
-          <Box
-            textTransform='uppercase'
-            fontFamily='heading'
-            fontSize='sm'
-            fontWeight={700}
-            color='primary.50'
-          >
-            Summoned
-          </Box>
+          <TextBox>Summoned</TextBox>
           <Skeleton isLoaded={dao?.createdAt}>
-            <Box fontFamily='mono' fontSize='md' fontWeight={700} my={2}>
+            <TextBox variant='value' my={2}>
               {dao?.createdAt
                 ? format(new Date(+dao?.createdAt), 'MMMM d, yyyy')
                 : '--'}
-            </Box>
+            </TextBox>
           </Skeleton>
         </Box>
       </Flex>

@@ -58,18 +58,20 @@ const Proposal = () => {
           <Box pt={6}>
             <ProposalDetail proposal={proposal} />
           </Box>
-          <Flex w='100%' justify='center' align='center' pt={6}>
+          {/* <Flex w='100%' justify='center' align='center' pt={6}>
             <Box maxW='300px' textAlign='center'>
               There’s 6 more quests that need your attention. View all?
             </Box>
-          </Flex>
+          </Flex> */}
         </Flex>
         <Flex
           direction='column'
           w={['100%', null, null, null, '40%']}
           pt={[6, 0]}
         >
-          <Box>{!proposal?.cancelled && <TextBox size='md'>Vote</TextBox>}</Box>
+          <Box>
+            {!proposal?.cancelled && <TextBox size='md'>Actions</TextBox>}
+          </Box>
           <Box pt={6}>
             {!proposal?.cancelled && (
               <ProposalVote proposal={proposal} setProposal={setProposal} />

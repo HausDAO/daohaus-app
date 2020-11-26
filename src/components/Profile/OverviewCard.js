@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { Box, Flex, Image, Skeleton } from '@chakra-ui/core';
+import { Flex, Skeleton, Box, Image, Icon } from '@chakra-ui/core';
+import { FaStar } from 'react-icons/fa';
 import { format } from 'date-fns';
 import makeBlockie from 'ethereum-blockies-base64';
 
@@ -8,18 +9,28 @@ import {
   useEns,
   useDaoGraphData,
   useMembers,
+  usePrices,
+  useMemberWallet,
 } from '../../contexts/PokemolContext';
 import ContentBox from '../Shared/ContentBox';
 import TextBox from '../Shared/TextBox';
 import ProfileMenu from '../Shared/ProfileMenu';
+import { getTotalBankValue } from '../../utils/bank-helpers';
+import { useParams } from 'react-router-dom';
+import { contra } from '../../utils/blood-and-guts';
 
 const OverviewCard = ({ user }) => {
   const [ens] = useEns();
   const [dao] = useDaoGraphData();
+  const [prices] = usePrices();
   const [members] = useMembers();
+  const [memberWallet] = useMemberWallet();
   const [member, setMember] = useState();
-
+  const [memberValue, setMemberValue] = useState(0);
   const [ensName, setEnsName] = useState(null);
+  const params = useParams();
+  const [, setIsUser] = useState();
+  const [showAlert, setShowAlert] = useState();
 
   useEffect(() => {
     if (user?.memberAddress) {
@@ -33,12 +44,37 @@ const OverviewCard = ({ user }) => {
     const lookupEns = async () => {
       if (user?.memberAddress) {
         const result = await ens.provider.lookupAddress(user.memberAddress);
-        console.log(result);
         setEnsName(result);
       }
     };
     lookupEns();
   }, [user, ens.provider]);
+
+  useEffect(() => {
+    if (dao && dao.tokenBalances && prices && member) {
+      const total = getTotalBankValue(dao.tokenBalances, prices);
+      const memberProportion =
+        (+member.shares + +member.loot) / (+dao.totalShares + +dao.totalLoot);
+      setMemberValue(memberProportion * total);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [dao, prices, member]);
+
+  useEffect(() => {
+    if (memberWallet) {
+      const userCheck =
+        memberWallet.memberAddress.toLowerCase() === params.id.toLowerCase();
+      setIsUser(userCheck);
+
+      if (userCheck) {
+        contra(powerUp);
+      }
+    }
+  }, [memberWallet, params]);
+
+  const powerUp = () => {
+    setShowAlert(true);
+  };
 
   return (
     <ContentBox as={Flex} p={6} w='100%' justify='space-between'>
@@ -96,7 +132,7 @@ const OverviewCard = ({ user }) => {
           <Box>
             <TextBox fontSize='sm'>Total Stake</TextBox>
             <TextBox fontSize='4xl' variant='value'>
-              $4,802.20
+              ${memberValue.toFixed(2)}
             </TextBox>
           </Box>
           <Box>
@@ -107,12 +143,22 @@ const OverviewCard = ({ user }) => {
           <Box w='30%'>
             <TextBox fontSize='xs'>Power</TextBox>
             <Skeleton isLoaded={member?.shares && dao?.totalShares}>
-              <TextBox fontSize='xl' variant='value'>
-                {member?.shares &&
-                  dao?.totalShares &&
-                  ((member?.shares / dao?.totalShares) * 100).toFixed(1)}
-                %
-              </TextBox>
+              {showAlert ? (
+                <TextBox fontSize='xl' variant='value'>
+                  <Flex direction='row' align='center' justify='space-around'>
+                    <Icon as={FaStar} color='yellow.500' />
+                    100%
+                    <Icon as={FaStar} color='yellow.500' />
+                  </Flex>
+                </TextBox>
+              ) : (
+                <TextBox fontSize='xl' variant='value'>
+                  {member?.shares &&
+                    dao?.totalShares &&
+                    ((member?.shares / dao?.totalShares) * 100).toFixed(1)}
+                  %
+                </TextBox>
+              )}
             </Skeleton>
           </Box>
           <Box w='30%'>

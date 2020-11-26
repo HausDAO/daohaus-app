@@ -1,4 +1,4 @@
-import React, { useContext, useCallback, useMemo, useEffect } from 'react';
+import React, { useContext, useCallback, useMemo } from 'react';
 
 import { setTheme } from '../themes/theme';
 
@@ -10,7 +10,7 @@ function useCustomThemeContext() {
 
 const initialState = {
   theme: setTheme(),
-  sideNavOpen: localStorage.getItem('sideNavOpen') === 'true' || false,
+  tempTheme: null,
 };
 
 const reducer = (state, action) => {
@@ -18,8 +18,8 @@ const reducer = (state, action) => {
     case 'setTheme': {
       return { ...state, theme: setTheme(action.payload) };
     }
-    case 'toggleSideNav': {
-      return { ...state, sideNavOpen: action.payload };
+    case 'setTempTheme': {
+      return { ...state, tempTheme: action.payload };
     }
     default: {
       return initialState;
@@ -34,14 +34,8 @@ function CustomThemeContextProvider(props) {
     dispatch({ type: 'setTheme', payload: theme });
   }, []);
 
-  const updateSideNavOpen = useCallback((data) => {
-    dispatch({ type: 'toggleSideNav', payload: data });
-  }, []);
-
-  useEffect(() => {
-    updateSideNavOpen(localStorage.getItem('sideNavOpen') === 'true');
-
-    // eslint-disable-next-line
+  const updateTempTheme = useCallback((theme) => {
+    dispatch({ type: 'setTempTheme', payload: theme });
   }, []);
 
   return (
@@ -51,10 +45,10 @@ function CustomThemeContextProvider(props) {
           state,
           {
             updateTheme,
-            updateSideNavOpen,
+            updateTempTheme,
           },
         ],
-        [state, updateTheme, updateSideNavOpen],
+        [state, updateTheme, updateTempTheme],
       )}
     >
       {props.children}
@@ -67,14 +61,9 @@ export function useTheme() {
   return [state.theme, updateTheme];
 }
 
-export function useSideNavToggle() {
-  const [state, { updateSideNavOpen }] = useCustomThemeContext();
-
-  function toggleSideNav() {
-    localStorage.setItem('sideNavOpen', `${!state.sideNavOpen}`);
-    updateSideNavOpen(!state.sideNavOpen);
-  }
-  return [state.sideNavOpen, toggleSideNav];
+export function useTempTheme() {
+  const [state, { updateTempTheme }] = useCustomThemeContext();
+  return [state.tempTheme, updateTempTheme];
 }
 
 const CustomThemeContextConsumer = CustomThemeContext.Consumer;

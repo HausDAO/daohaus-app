@@ -2,7 +2,12 @@ import React, { useEffect, useState } from 'react';
 import { Box, Flex, Button } from '@chakra-ui/core';
 import { useLocation, Link as RouterLink } from 'react-router-dom';
 import { RiAddFill } from 'react-icons/ri';
-import { useUser, useNetwork, useDao } from '../../contexts/PokemolContext';
+import {
+  useUser,
+  useNetwork,
+  useDao,
+  useModals,
+} from '../../contexts/PokemolContext';
 import { useTheme } from '../../contexts/CustomThemeContext';
 import { Web3SignIn } from './Web3SignIn';
 import UserAvatar from './UserAvatar';
@@ -15,7 +20,7 @@ const Header = () => {
   const [dao] = useDao();
   const [theme] = useTheme();
   const [pageTitle, setPageTitle] = useState();
-  const [showDaoSwitcher, setShowDaoSwitcher] = useState(false);
+  const { modals, openModal } = useModals();
 
   useEffect(() => {
     if (location.pathname === '/') {
@@ -47,7 +52,10 @@ const Header = () => {
       location.pathname === `/dao/${dao?.address}/settings/boosts/new`
     ) {
       setPageTitle('New ' + theme.daoMeta.boost);
-    } else if (location.pathname === `/themeSample`) {
+    } else if (
+      location.pathname === `/themeSample` ||
+      location.pathname === `/theme`
+    ) {
       setPageTitle('Theme Samples');
     } else if (
       location.pathname === `/dao/${dao?.address}/profile/${user?.username}`
@@ -119,15 +127,12 @@ const Header = () => {
             <>
               <Button
                 variant='outline'
-                onClick={() => setShowDaoSwitcher(true)}
+                onClick={() => openModal('accountModal')}
               >
                 <UserAvatar user={user.profile ? user.profile : user} />
               </Button>
 
-              <AccountModal
-                isOpen={showDaoSwitcher}
-                setShowModal={setShowDaoSwitcher}
-              />
+              <AccountModal isOpen={modals.accountModal} />
             </>
           ) : (
             <Web3SignIn />

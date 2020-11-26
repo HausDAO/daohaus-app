@@ -27,8 +27,6 @@ const MembersList = ({ handleSelect, selectedMember }) => {
   const sortMembers = () => {
     const sortedMembers = members;
 
-    console.log('sort on', sort);
-
     if (sort) {
       sortedMembers.sort((a, b) => {
         if (sort.value === 'joinDateAsc') {
