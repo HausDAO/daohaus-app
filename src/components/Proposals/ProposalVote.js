@@ -125,14 +125,28 @@ const ProposalVote = ({ proposal, setProposal }) => {
       <ContentBox>
         {proposal?.status === 'Unsponsored' && !proposal?.proposalIndex && (
           <Flex justify='center' direction='column'>
-            <Flex justify='center' mb={4} fontFamily='heading'>
-              Balance: {wallet?.tokenBalance} {daoData?.depositToken?.symbol}
+            <Flex justify='center' mb={4}>
+              <Box>
+                You need to submit a deposit of{' '}
+                {daoData?.proposalDeposit /
+                  10 ** daoData?.depositToken.decimals}{' '}
+                {daoData?.depositToken?.symbol} to sponsor the proposal. Your
+                deposit is returned to your internal balance after proposal is
+                processed.
+              </Box>
+              <Box>
+                <TextBox>Balance</TextBox>
+                <TextBox variant='value'>
+                  {wallet?.tokenBalance} {daoData?.depositToken?.symbol}
+                </TextBox>
+              </Box>
             </Flex>
             <Flex justify='space-around'>
               {+wallet?.allowance * 10 ** daoData?.depositToken?.decimals >
                 +daoData?.proposalDeposit || +daoData?.proposalDeposit === 0 ? (
                 <Button onClick={() => sponsorProposal(proposal.proposalId)}>
-                  Sponsor
+                  Sponsor ({daoData?.proposalDeposit}{' '}
+                  {daoData?.depositToken?.symbol})
                 </Button>
               ) : (
                 <Button
