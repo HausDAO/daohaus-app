@@ -29,20 +29,11 @@ const Proposal = () => {
       const p = proposals?.filter((p) => {
         return p.proposalId === id;
       })[0];
-      console.log('new prop in proposal', p);
 
       setProposal(p);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [proposals]);
-
-  useEffect(() => {
-    const interval = setInterval(() => {
-      updateRefetchQuery('proposals');
-    }, 6000);
-    return () => clearInterval(interval);
-    // eslint-disable-next-line
-  }, []);
 
   return (
     <Box p={6}>

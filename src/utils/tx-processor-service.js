@@ -1,71 +1,95 @@
 export class TxProcessorService {
   web3;
   forceUpdate;
-  forceUpdateGraphResolved;
   constructor(web3) {
     this.web3 = web3;
   }
 
-  async update(account) {
-    const _txList = this.getTxPendingList(account);
-    const _pending = [];
+  // async update(account) {
+  //   const _txList = this.getTxPendingList(account);
+  //   const _pending = [];
 
-    if (_txList.length) {
-      _txList.forEach((tx) => {
-        _pending.push(this.checkTransaction(tx, account));
-      });
-    }
+  //   if (_txList.length) {
+  //     _txList.forEach((tx) => {
+  //       _pending.push(this.checkTransaction(tx, account));
+  //     });
+  //   }
 
-    return await Promise.all(_pending);
-  }
+  //   return await Promise.all(_pending);
+  // }
 
-  async updateGraph(account, data) {
+  async updateGraphStatus(account, data) {
     const _txList = this.getTxPendingGraphList(account);
 
     if (_txList.length) {
       _txList.forEach((tx) => {
-        console.log('banananananannananan', tx);
         this.checkData(tx, account, data);
       });
     }
   }
 
-  async checkTransaction(tx, account) {
-    const status = await this.web3.eth.getTransaction(tx.tx);
-    if (status && status.blockNumber) {
-      console.log('tx status', status);
-      //open false
-      this.setTx(tx.tx, account, tx.description, false, true, tx.pendingGraph);
-    }
-  }
+  // async checkTransaction(tx, account) {
+  //   const status = await this.web3.eth.getTransaction(tx.tx);
+  //   if (status && status.blockNumber) {
+  //     console.log('tx status', status);
+  //     //open false
+  //     this.setTx(
+  //       tx.tx,
+  //       account,
+  //       tx.description,
+  //       tx.open,
+  //       true,
+  //       tx.pendingGraph,
+  //     );
+  //   }
+  // }
 
   checkData(tx, account, entities) {
     let status = '';
-    console.log('$$$$$$$$$$$$$$$$$$$$$$$$ tx', tx);
     switch (tx.details.name) {
       case 'sponsorProposal': {
         const entity = entities.find(
           (item) => +item.proposalId === +tx.details.params[0],
         );
         status = entity?.sponsored;
+        break;
+      }
+      case 'processProposal': {
+        console.log('processProposal');
+        const entity = entities.find(
+          (item) => +item.proposalIndex === +tx.details.params[0],
+        );
+        status = entity?.processed;
+        break;
+      }
+      case 'submitVote': {
+        console.log('submitProposal');
+        const entity = entities.find(
+          (item) => +item.detail === +tx.details.params[0],
+        );
+        console.log('entity?.votes', entity?.votes);
+        status = entity?.votes.find(
+          (vote) =>
+            vote.memberAddress.toLowerCase() === tx.details.from.toLowerCase(),
+        );
+        console.log(status);
+        break;
+      }
+      case 'submitProposal': {
+        console.log('submitProposal');
+        const entity = entities.find((item) =>
+          tx.details.params[7].indexOf(item.hash)
+        );
+        console.log('entity?.votes', entity?.votes);
+        status = entity || null;
+        console.log(status);
+        break;
       }
     }
 
     if (status) {
-      console.log('tx status blablbablalbalb', status);
-      //pendingGraph false
-      console.log(
-        'tx status',
-        tx.tx,
-        account,
-        'completed',
-        tx.open,
-        tx.seen,
-        false,
-      );
-
+      console.log('tx status', status);
       this.setTx(tx.tx, account, 'completed', tx.open, tx.seen, false);
-      this.forceUpdateGraphResolved = false;
     }
   }
 
@@ -74,7 +98,7 @@ export class TxProcessorService {
     this.setTx(
       transactionHash,
       account,
-      tx.details,
+      'Started',
       tx.open,
       true,
       tx.pendingGraph,
@@ -94,9 +118,6 @@ export class TxProcessorService {
       console.log('tx hash is null, something went wrong');
       return;
     }
-
-    console.log('setTx', tx, account, details);
-    console.log('setTx pendingGraph', pendingGraph);
     const _txList = JSON.parse(localStorage.getItem('txList')) || [];
     const txItem = {};
     const exists = _txList.findIndex((item) => item.tx === tx);

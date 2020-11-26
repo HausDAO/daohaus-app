@@ -6,15 +6,15 @@ import ProposalsActivityFeed from '../../components/Proposals/ProposalsActivityF
 import { useRefetchQuery } from '../../contexts/PokemolContext';
 
 const Proposals = () => {
-  const [, updateRefetchQuery] = useRefetchQuery();
+  // const [, updateRefetchQuery] = useRefetchQuery();
 
-  useEffect(() => {
-    const interval = setInterval(() => {
-      updateRefetchQuery('proposals');
-    }, 6000);
-    return () => clearInterval(interval);
-    // eslint-disable-next-line
-  }, []);
+  // useEffect(() => {
+  //   const interval = setInterval(() => {
+  //     updateRefetchQuery('proposals');
+  //   }, 6000);
+  //   return () => clearInterval(interval);
+  //   // eslint-disable-next-line
+  // }, []);
 
   return (
     <Flex p={6} wrap='wrap'>

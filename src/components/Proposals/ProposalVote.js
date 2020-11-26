@@ -33,7 +33,7 @@ const ProposalVote = ({ proposal, setProposal }) => {
     if (txProcessor && txHash) {
       txProcessor.setTx(txHash, user.username, details, true, false);
       txProcessor.forceUpdate = true;
-
+      console.log('force update changed');
       updateTxProcessor(txProcessor);
       // close model here
       // onClose();
