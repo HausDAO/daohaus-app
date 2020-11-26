@@ -6,6 +6,7 @@ import { RiErrorWarningLine } from 'react-icons/ri';
 import { useDao, useTxProcessor, useUser } from '../../contexts/PokemolContext';
 import AddressInput from './AddressInput';
 import DetailsFields from './DetailFields';
+import { useLocation, useParams } from 'react-router-dom';
 
 const GuildKickProposalForm = () => {
   const [loading, setLoading] = useState(false);
@@ -13,6 +14,7 @@ const GuildKickProposalForm = () => {
   const [dao] = useDao();
   const [txProcessor, updateTxProcessor] = useTxProcessor();
   const [currentError, setCurrentError] = useState(null);
+  const location = useLocation();
 
   const {
     handleSubmit,
@@ -22,6 +24,15 @@ const GuildKickProposalForm = () => {
     watch,
     // formState
   } = useForm();
+
+  useEffect(() => {
+    // TODO: expand to work for any search param on all forms
+    if (location.search && location.search.split('applicant=')[1]) {
+      const applicantAddress = location.search.split('applicant=')[1];
+      setValue('applicantHidden', applicantAddress);
+      setValue('applicant', applicantAddress);
+    }
+  }, [location]);
 
   useEffect(() => {
     if (Object.keys(errors).length > 0) {

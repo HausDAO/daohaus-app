@@ -126,8 +126,6 @@ const Layout = ({ children }) => {
     toggleSideNav(!sideNavOpen);
   };
 
-  console.log('sideNavOpen', sideNavOpen);
-
   return (
     <Flex direction='row' minH='100vh' color='white' w='100vw'>
       <MotionFlex

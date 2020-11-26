@@ -97,11 +97,7 @@ export const getMemberActivites = (daoData, memberAddress) => {
       memberAddress?.toLowerCase() === prop.sponser?.toLowerCase() ||
       memberAddress?.toLowerCase() === prop.memberAddress?.toLowerCase() ||
       memberAddress?.toLowerCase() === prop.applicant?.toLowerCase();
-    return (
-      !prop.cancelled &&
-      prop.proposalType === 'Member Proposal' &&
-      memberRelated
-    );
+    return !prop.cancelled && memberRelated;
   });
 
   const votes = daoData.proposals
