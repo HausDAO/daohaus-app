@@ -22,14 +22,13 @@ import {
 } from './PokemolContext';
 import ExplorerLink from '../components/Shared/ExplorerLink';
 import { truncateAddr } from '../utils/helpers';
-import { proposalMutation } from '../utils/proposal-mutations';
 
 const TxProcessorInit = () => {
   const [, updateRefetchQuery] = useRefetchQuery();
 
   const [user] = useUser();
   const [web3Connect] = useWeb3Connect();
-  const [proposals, updateProposals] = useProposals();
+  const [proposals] = useProposals();
   const [txProcessor, updateTxProcessor] = useTxProcessor();
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [latestTx, setLatestTx] = useState();
@@ -37,7 +36,11 @@ const TxProcessorInit = () => {
   const toast = useToast();
 
   useEffect(() => {
-    console.log('****************poopin');
+    /*
+    This runs after txProcessor.forupdate has been changed
+    is set after every web3 transaction is run and on initial load
+    will open the transaction submitted popup
+    */
     if (!txProcessor) {
       return;
     }
@@ -45,47 +48,36 @@ const TxProcessorInit = () => {
       return;
     }
     const unseen = txProcessor.getTxUnseenList(user.username);
-    console.log('unseen', unseen);
     // open popup for first unseen and mark as seen
     if (unseen.length) {
-      console.log('open');
-      console.log('see tx and set latest');
       // consdtion 1
       txProcessor.seeTransaction(unseen[0].tx, user.username);
       setLatestTx(unseen[0]);
       setLoading(true);
       onOpen();
     }
-  }, [txProcessor.forceUpdate]);
+    // eslint-disable-next-line
+  }, [txProcessor]);
+
   useEffect(() => {
-    console.log('****************poopin');
+    /*
+    after proposals is updated 
+    check for pending transactions in tx processor
+    propsals are refetched from graph by the interval set in initTxProcessor
+    */
     if (!txProcessor) {
       return;
     }
     if (!user || Object.keys(txProcessor).length === 0) {
       return;
-    }
-    const unseen = txProcessor.getTxUnseenList(user.username);
-    console.log('unseen', unseen);
-    // open popup for first unseen and mark as seen
-    if (unseen.length) {
-      console.log('open');
-      console.log('see tx and set latest');
-      // consdtion 1
-      txProcessor.seeTransaction(unseen[0].tx, user.username);
-      setLatestTx(unseen[0]);
-      setLoading(true);
-      onOpen();
     }
     const graphStatus = txProcessor.getTxPendingGraphList(user.username);
-    console.log(graphStatus);
     if (graphStatus.length) {
       txProcessor.updateGraphStatus(user.username, proposals);
       const newGraphStatus = txProcessor.getTxPendingGraphList(user.username);
       const tx = txProcessor.getTx(graphStatus[0].tx, user.username);
 
       if (graphStatus.length > newGraphStatus.length) {
-        console.log('i see a change');
         setLatestTx(tx);
         setLoading(false);
         toast({
@@ -113,16 +105,10 @@ const TxProcessorInit = () => {
     // txProcessorService.update(user.username);
     txProcessorService.forceUpdate =
       txProcessorService.getTxPendingGraphList(user.username).length > 0;
-    updateTxProcessor(txProcessorService);
+    updateTxProcessor({ ...txProcessorService });
 
     const interval = setInterval(async () => {
-      console.log('in interval');
-
       if (txProcessorService.getTxPendingGraphList(user.username).length) {
-        console.log(
-          'has pending',
-          txProcessorService.getTxPendingGraphList(user.username).length,
-        );
         updateRefetchQuery('proposals');
       }
     }, 3000);
@@ -161,7 +147,9 @@ const TxProcessorInit = () => {
           m={6}
           mt={2}
         >
-          <ModalHeader>Transaction Submitted</ModalHeader>
+          <ModalHeader>
+            Transaction {loading ? 'Submitted' : 'Completed'}
+          </ModalHeader>
           <ModalCloseButton />
           <ModalBody>
             {latestTx && (

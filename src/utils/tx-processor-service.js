@@ -1,8 +1,20 @@
+import { txIsUpdated } from './tx-processor-helper';
+
 export class TxProcessorService {
   web3;
   forceUpdate;
   constructor(web3) {
     this.web3 = web3;
+    this.updateGraphStatus = this.updateGraphStatus; // eslint-disable-line
+    this.checkData = this.checkData; // eslint-disable-line
+    this.seeTransaction = this.seeTransaction; // eslint-disable-line
+    this.setTx = this.setTx; // eslint-disable-line
+    this.getTxList = this.getTxList; // eslint-disable-line
+    this.getTxPendingList = this.getTxPendingList; // eslint-disable-line
+    this.getTxPendingGraphList = this.getTxPendingGraphList; // eslint-disable-line
+    this.getTxUnseenList = this.getTxUnseenList; // eslint-disable-line
+    this.getTx = this.getTx; // eslint-disable-line
+    this.clearHistory = this.clearHistory; // eslint-disable-line
   }
 
   // async update(account) {
@@ -28,6 +40,7 @@ export class TxProcessorService {
     }
   }
 
+  // use to check onchain transactions
   // async checkTransaction(tx, account) {
   //   const status = await this.web3.eth.getTransaction(tx.tx);
   //   if (status && status.blockNumber) {
@@ -45,47 +58,7 @@ export class TxProcessorService {
   // }
 
   checkData(tx, account, entities) {
-    let status = '';
-    switch (tx.details.name) {
-      case 'sponsorProposal': {
-        const entity = entities.find(
-          (item) => +item.proposalId === +tx.details.params[0],
-        );
-        status = entity?.sponsored;
-        break;
-      }
-      case 'processProposal': {
-        console.log('processProposal');
-        const entity = entities.find(
-          (item) => +item.proposalIndex === +tx.details.params[0],
-        );
-        status = entity?.processed;
-        break;
-      }
-      case 'submitVote': {
-        console.log('submitProposal');
-        const entity = entities.find(
-          (item) => +item.detail === +tx.details.params[0],
-        );
-        console.log('entity?.votes', entity?.votes);
-        status = entity?.votes.find(
-          (vote) =>
-            vote.memberAddress.toLowerCase() === tx.details.from.toLowerCase(),
-        );
-        console.log(status);
-        break;
-      }
-      case 'submitProposal': {
-        console.log('submitProposal');
-        const entity = entities.find((item) =>
-          tx.details.params[7].indexOf(item.hash)
-        );
-        console.log('entity?.votes', entity?.votes);
-        status = entity || null;
-        console.log(status);
-        break;
-      }
-    }
+    const status = txIsUpdated(tx, entities);
 
     if (status) {
       console.log('tx status', status);
@@ -126,7 +99,7 @@ export class TxProcessorService {
       console.log('exists', exists);
       txItem.tx = tx;
       txItem.account = account;
-      txItem.open = open;
+      txItem.open = open; // not being used
       txItem.details = details;
       txItem.seen = seen;
       txItem.pendingGraph = pendingGraph;

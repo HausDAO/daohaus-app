@@ -1,23 +1,50 @@
-export const proposalMutation = (proposals, options) => {
-  console.log('mutate proposals', options);
+export const setProposaltxLock = (proposals, options) => {
+  switch (options.name) {
+    case 'submitVote': {
+      // proposalIndex, uintVote
+      const proposalIndex = proposals.findIndex(
+        (proposal) => +proposal.proposalIndex === +options.params[0],
+      );
+      proposals[proposalIndex].txLock = true;
+      return proposals;
+    }
+    case 'sponsorProposal': {
+      // proposalId, uintVote;
+      const proposalIndex = proposals.findIndex(
+        (proposal) => +proposal.proposalId === +options.params[0],
+      );
+      proposals[proposalIndex].txLock = true;
+      return proposals;
+    }
+    case 'submitProposal': {
+      // proposalIndex, uintVote
+      const proposal = {
+        title: 'TEST UPDATEzzz',
+      };
+      proposals.push(proposal);
+      return proposals;
+    }
+    default: {
+      return proposals;
+    }
+  }
+};
+
+// Not used
+export const setProposaltxLock = (proposals, options) => {
   switch (options.name) {
     case 'submitVote': {
       // proposalIndex, uintVote
       const now = new Date();
-      console.log('params 0', options.params[0]);
       const proposalIndex = proposals.findIndex(
         (proposal) => +proposal.proposalIndex === +options.params[0],
       );
-      console.log('index', proposalIndex);
-      console.log('prop', proposals[proposalIndex]);
-
       const vote = {
         createdAt: Math.round(now.getTime() / 1000).toString(),
         id: 'temp',
         memberaddress: options.from.toLowerCase(),
         uintVote: options.params[1],
       };
-      console.log('update vote with', vote);
       if (options.params[1] === 1) {
         proposals[proposalIndex].yesVotes = (
           proposals[proposalIndex].yesVotes + 1
@@ -29,44 +56,34 @@ export const proposalMutation = (proposals, options) => {
       }
       proposals[proposalIndex].votes.push(vote);
       proposals[proposalIndex].title = 'UPdated';
-
-      console.log('new props', proposals);
       return proposals;
     }
     case 'sponsorProposal': {
-      // proposalIndex, uintVote
-      //   const now = new Date();
-      //   console.log('proposals', proposals);
-      //   console.log('params 0', options.params[0]);
-      //   const proposalIndex = proposals.findIndex(
-      //     (proposal) => +proposal.proposalId === +options.params[0],
-      //   );
-      //   console.log('index', proposalIndex);
-      //   console.log('prop', proposals[proposalIndex]);
-      //   proposals[proposalIndex].status = 'InQueue';
-      //   proposals[proposalIndex].sponsored = true;
-      //   proposals[proposalIndex].sponsoredAt = Math.round(
-      //     now.getTime() / 1000,
-      //   ).toString();
-      //   proposals[proposalIndex].title = 'UPdated';
-      //   //  sponsored: true
-      //   //  sponsoredAt: null
-      //   proposals[proposalIndex].votingPeriodStarts = Math.round(
-      //     now.getTime() / 1000,
-      //   ).toString();
-      //   proposals[proposalIndex].votingStarts = 1;
-      //   console.log('new props', proposals);
+      // proposalIndex, uintVote;
+      const now = new Date();
+      const proposalIndex = proposals.findIndex(
+        (proposal) => +proposal.proposalId === +options.params[0],
+      );
+      proposals[proposalIndex].status = 'InQueue';
+      proposals[proposalIndex].sponsored = true;
+      proposals[proposalIndex].sponsoredAt = Math.round(
+        now.getTime() / 1000,
+      ).toString();
+      proposals[proposalIndex].title = 'UPdated';
+      //  sponsored: true
+      //  sponsoredAt: null
+      proposals[proposalIndex].votingPeriodStarts = Math.round(
+        now.getTime() / 1000,
+      ).toString();
+      proposals[proposalIndex].votingStarts = 1;
       return proposals;
     }
     case 'submitProposal': {
       // proposalIndex, uintVote
-      console.log('proposals', proposals);
-      console.log('params ', options.params);
       const proposal = {
         title: 'TEST UPDATEzzz',
       };
       proposals.push(proposal);
-      console.log('new props', proposals);
       return proposals;
     }
     default: {
