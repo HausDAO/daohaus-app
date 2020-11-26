@@ -6,7 +6,7 @@ import { RiErrorWarningLine } from 'react-icons/ri';
 import { useDao, useTxProcessor, useUser } from '../../contexts/PokemolContext';
 import AddressInput from './AddressInput';
 import DetailsFields from './DetailFields';
-import { useLocation, useParams } from 'react-router-dom';
+import { useLocation } from 'react-router-dom';
 
 const GuildKickProposalForm = () => {
   const [loading, setLoading] = useState(false);
@@ -32,6 +32,7 @@ const GuildKickProposalForm = () => {
       setValue('applicantHidden', applicantAddress);
       setValue('applicant', applicantAddress);
     }
+    // eslint-disable-next-line
   }, [location]);
 
   useEffect(() => {

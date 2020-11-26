@@ -107,15 +107,15 @@ const Header = () => {
             </Button>
           )}
           {(location.pathname === `/dao/${dao?.address}/settings` ||
-            location.pathname === `/dao/${dao?.address}/settings/boosts`) && (
-            <Button
-              as={RouterLink}
-              to={`/dao/${dao?.address}/settings/boosts/new`}
-              rightIcon={<RiAddFill />}
-            >
-              Add {theme.daoMeta.boost}
-            </Button>
-          )}
+            location.pathname === `/dao/${dao?.address}/settings/boosts`) &&
+            // <Button
+            //   as={RouterLink}
+            //   to={`/dao/${dao?.address}/settings/boosts/new`}
+            //   rightIcon={<RiAddFill />}
+            // >
+            //   Add {theme.daoMeta.boost}
+            // </Button>
+            null}
         </Flex>
 
         <Flex direction='row' justify='flex-end' align='center'>

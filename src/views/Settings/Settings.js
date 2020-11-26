@@ -9,10 +9,10 @@ const Settings = () => {
   return (
     <Flex>
       <Box w='50%' pl={6}>
-        <TextBox fontSize='xs'>Boost Status</TextBox>
-        <BoostStatus />
         <TextBox fontSize='xs'>Dao Contract Settings</TextBox>
         <DaoContractSettings />
+        <TextBox fontSize='xs'>Boost Status</TextBox>
+        <BoostStatus />
       </Box>
       <Box w='30%' pl={6}>
         <TextBox>Superpowers</TextBox>

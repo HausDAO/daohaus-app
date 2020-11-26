@@ -15,6 +15,7 @@ export const HOME_DAO = gql`
       votingPeriodLength
       gracePeriodLength
       proposalDeposit
+      processingReward
       guildBankAddress
       depositToken {
         tokenAddress
