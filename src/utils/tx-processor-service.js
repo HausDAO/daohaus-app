@@ -3,6 +3,7 @@ import { txIsUpdated } from './tx-processor-helper';
 export class TxProcessorService {
   web3;
   forceUpdate;
+  forceCheckTx;
   constructor(web3) {
     this.web3 = web3;
     this.updateGraphStatus = this.updateGraphStatus; // eslint-disable-line
@@ -15,20 +16,22 @@ export class TxProcessorService {
     this.getTxUnseenList = this.getTxUnseenList; // eslint-disable-line
     this.getTx = this.getTx; // eslint-disable-line
     this.clearHistory = this.clearHistory; // eslint-disable-line
+    this.update = this.update; // eslint-disable-line
+    this.checkTransaction = this.checkTransaction; // eslint-disable-line
   }
 
-  // async update(account) {
-  //   const _txList = this.getTxPendingList(account);
-  //   const _pending = [];
+  async update(account) {
+    const _txList = this.getTxPendingList(account);
+    const _pending = [];
 
-  //   if (_txList.length) {
-  //     _txList.forEach((tx) => {
-  //       _pending.push(this.checkTransaction(tx, account));
-  //     });
-  //   }
+    if (_txList.length) {
+      _txList.forEach((tx) => {
+        _pending.push(this.checkTransaction(tx, account));
+      });
+    }
 
-  //   return await Promise.all(_pending);
-  // }
+    return await Promise.all(_pending);
+  }
 
   async updateGraphStatus(account, data) {
     const _txList = this.getTxPendingGraphList(account);
@@ -41,21 +44,21 @@ export class TxProcessorService {
   }
 
   // use to check onchain transactions
-  // async checkTransaction(tx, account) {
-  //   const status = await this.web3.eth.getTransaction(tx.tx);
-  //   if (status && status.blockNumber) {
-  //     console.log('tx status', status);
-  //     //open false
-  //     this.setTx(
-  //       tx.tx,
-  //       account,
-  //       tx.description,
-  //       tx.open,
-  //       true,
-  //       tx.pendingGraph,
-  //     );
-  //   }
-  // }
+  async checkTransaction(tx, account) {
+    const status = await this.web3.eth.getTransaction(tx.tx);
+    if (status && status.blockNumber) {
+      console.log('tx status', status);
+      // open false
+      this.setTx(
+        tx.tx,
+        account,
+        tx.description,
+        tx.open,
+        true,
+        tx.pendingGraph,
+      );
+    }
+  }
 
   checkData(tx, account, entities) {
     const status = txIsUpdated(tx, entities);
@@ -99,7 +102,7 @@ export class TxProcessorService {
       console.log('exists', exists);
       txItem.tx = tx;
       txItem.account = account;
-      txItem.open = open; // not being used
+      txItem.open = open;
       txItem.details = details;
       txItem.seen = seen;
       txItem.pendingGraph = pendingGraph;

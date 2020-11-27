@@ -6,7 +6,6 @@ import ProposalsActivityFeed from '../../components/Proposals/ProposalsActivityF
 import { useRefetchQuery } from '../../contexts/PokemolContext';
 
 const Proposals = () => {
-
   const [, updateRefetchQuery] = useRefetchQuery();
   useEffect(() => {
     const interval = setInterval(() => {
@@ -15,7 +14,6 @@ const Proposals = () => {
     return () => clearInterval(interval);
     // eslint-disable-next-line
   }, []);
-
 
   return (
     <Flex p={6} wrap='wrap'>

@@ -25,6 +25,14 @@ const Proposal = () => {
   const [theme] = useTheme();
 
   useEffect(() => {
+    const interval = setInterval(() => {
+      updateRefetchQuery('proposals');
+    }, 350000);
+    return () => clearInterval(interval);
+    // eslint-disable-next-line
+  }, []);
+
+  useEffect(() => {
     if (proposals) {
       const p = proposals?.filter((p) => {
         return p.proposalId === id;

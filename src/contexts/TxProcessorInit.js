@@ -13,6 +13,7 @@ import {
 } from '@chakra-ui/core';
 
 import { TxProcessorService } from '../utils/tx-processor-service';
+import { DISPLAY_NAMES } from '../utils/tx-processor-helper';
 import {
   useProposals,
   useRefetchQuery,
@@ -83,7 +84,8 @@ const TxProcessorInit = () => {
         toast({
           title: 'Transaction away',
           position: 'top-right',
-          description: 'transaction success',
+          description: `transaction success: ${DISPLAY_NAMES[tx.details.name] ||
+            ''}`,
           status: 'success',
           duration: 9000,
           isClosable: true,
@@ -102,7 +104,19 @@ const TxProcessorInit = () => {
 
   const initTxProcessor = async () => {
     const txProcessorService = new TxProcessorService(web3Connect.web3);
-    // txProcessorService.update(user.username);
+    // check for pending non proposal txs
+    web3Connect.web3.eth.subscribe('newBlockHeaders', async (error, result) => {
+      if (!error) {
+        if (txProcessorService.forceCheckTx) {
+          await txProcessorService.update(user.username);
+          if (!txProcessorService.getTxPendingList(user.username).length) {
+            txProcessorService.forceCheckTx = false;
+            updateTxProcessor(txProcessorService);
+          }
+        }
+      }
+    });
+    // check for pending proposal txs from the graph
     txProcessorService.forceUpdate =
       txProcessorService.getTxPendingGraphList(user.username).length > 0;
     updateTxProcessor({ ...txProcessorService });
@@ -113,18 +127,6 @@ const TxProcessorInit = () => {
       }
     }, 3000);
     return () => clearInterval(interval);
-
-    // web3Connect.web3.eth.subscribe('newBlockHeaders', async (error, result) => {
-    //   if (!error) {
-    //     if (txProcessorService.forceUpdate) {
-    //       await txProcessorService.update(user.username);
-    //       if (!txProcessorService.getTxPendingList(user.username).length) {
-    //         txProcessorService.forceUpdate = false;
-    //         updateTxProcessor(txProcessorService);
-    //       }
-    //     }
-    //   }
-    // });
   };
 
   return (
@@ -148,7 +150,9 @@ const TxProcessorInit = () => {
           mt={2}
         >
           <ModalHeader>
-            Transaction {loading ? 'Submitted' : 'Completed'}
+            {(latestTx && DISPLAY_NAMES[latestTx.details.name]) ||
+              'Transaction'}{' '}
+            {loading ? 'Submitted' : 'Completed'}
           </ModalHeader>
           <ModalCloseButton />
           <ModalBody>
@@ -165,6 +169,7 @@ const TxProcessorInit = () => {
                   🎉
                 </span>{' '}
                 Success{' '}
+                {(latestTx && DISPLAY_NAMES[latestTx.details.name]) || ''}{' '}
                 <span role='img' aria-label='confetti'>
                   🎉
                 </span>

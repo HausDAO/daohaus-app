@@ -76,8 +76,7 @@ const AccountModal = ({ isOpen }) => {
     // dummy data
     // txList.push({
     //   id: 1,
-    //   tx: '0x123',
-    //   description: 'sponsorProposal',
+    //   tx: '0x123',tails.name: 'sponsorProposal',
     //   open: true,
     //   dateAdded: 1605157095244,
     // });
@@ -93,9 +92,9 @@ const AccountModal = ({ isOpen }) => {
               justifyContent='space-between'
               alignItems='center'
             >
-              <Text color='white'>{DISPLAY_NAMES[tx.description]}</Text>
+              <Text color='white'>{DISPLAY_NAMES[tx.details.name]}</Text>
               <Box>
-                {tx.open ? (
+                {tx.pendingGraph ? (
                   <Icon as={Spinner} name='check' color='white' />
                 ) : (
                   <Icon

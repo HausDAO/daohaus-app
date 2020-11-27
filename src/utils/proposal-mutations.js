@@ -31,7 +31,7 @@ export const setProposaltxLock = (proposals, options) => {
 };
 
 // Not used
-export const setProposaltxLock = (proposals, options) => {
+export const mutateProposal = (proposals, options) => {
   switch (options.name) {
     case 'submitVote': {
       // proposalIndex, uintVote
