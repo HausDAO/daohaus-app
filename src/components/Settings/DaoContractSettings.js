@@ -1,5 +1,5 @@
 import React from 'react';
-import { Flex, Box, Skeleton, Link, Icon } from '@chakra-ui/core';
+import { Flex, Box, Skeleton, Link, Icon, Text } from '@chakra-ui/core';
 import { useDao } from '../../contexts/PokemolContext';
 import { useTheme } from '../../contexts/CustomThemeContext';
 import { utils } from 'web3';
@@ -39,21 +39,20 @@ const DaoContractSettings = () => {
       <Box>
         <TextBox>Dao Contract</TextBox>
         <Skeleton isLoaded={dao?.address}>
-          <Link
+          <Text
+            fontFamily='mono'
+            variant='value'
+            fontSize='sm'
+            as={Link}
             href={`${uri()}${dao.address}`}
             target='_blank'
             rel='noreferrer noopener'
           >
-            <Flex
-              fontFamily='body'
-              fontSize='sm'
-              color='secondary.400'
-              align='center'
-            >
+            <Flex color='secondary.400' align='center'>
               {dao?.address ? dao?.address : '--'}
               <Icon as={RiExternalLinkLine} color='secondary.400' ml={1} />
             </Flex>
-          </Link>
+          </Text>
         </Skeleton>
       </Box>
       <Flex mt={3}>

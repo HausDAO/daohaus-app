@@ -1,8 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { Box, Button, Flex, Icon, Skeleton } from '@chakra-ui/core';
+import { Box, Button, Flex, Icon, Skeleton, Tooltip } from '@chakra-ui/core';
+import ContentBox from '../Shared/ContentBox';
+import TextBox from '../Shared/TextBox';
 import { FaThumbsUp, FaThumbsDown } from 'react-icons/fa';
+import { RiErrorWarningLine, RiQuestionLine } from 'react-icons/ri';
 import { isAfter, isBefore } from 'date-fns';
+import { useTheme } from '../../contexts/CustomThemeContext';
+import { motion } from 'framer-motion';
 
 import {
   useMemberWallet,
@@ -12,10 +17,11 @@ import {
   useTxProcessor,
   useProposals,
 } from '../../contexts/PokemolContext';
-import ContentBox from '../Shared/ContentBox';
-import TextBox from '../Shared/TextBox';
+
+const MotionBox = motion.custom(Box);
 
 const ProposalVote = ({ proposal, setProposal }) => {
+  const [theme] = useTheme();
   const [user] = useUser();
   const [dao] = useDao();
   const [wallet] = useMemberWallet();
@@ -128,17 +134,33 @@ const ProposalVote = ({ proposal, setProposal }) => {
           <Flex justify='center' direction='column'>
             <Flex justify='center' mb={4}>
               <Box>
-                You need to submit a deposit of{' '}
-                {daoData?.proposalDeposit /
-                  10 ** daoData?.depositToken.decimals}{' '}
-                {daoData?.depositToken?.symbol} to sponsor the proposal. Your
-                deposit is returned to your internal balance after proposal is
-                processed.
-              </Box>
-              <Box>
-                <TextBox>Balance</TextBox>
+                <TextBox>
+                  Deposit to Sponsor{' '}
+                  <Tooltip
+                    hasArrow
+                    shouldWrapChildren
+                    placement='bottom'
+                    label='Deposits discourage spam, and are returned after a proposal is processed. Minus the reward for processing, if one has been selected'
+                  >
+                    <Icon as={RiQuestionLine} />
+                  </Tooltip>
+                </TextBox>
                 <TextBox variant='value'>
-                  {wallet?.tokenBalance} {daoData?.depositToken?.symbol}
+                  {daoData?.proposalDeposit /
+                    10 ** daoData?.depositToken.decimals}{' '}
+                  {daoData?.depositToken?.symbol}
+                  <Tooltip
+                    shouldWrapChildren
+                    placement='bottom'
+                    label={
+                      'Insufficient Funds: You only have ' +
+                      wallet?.tokenBalance +
+                      ' ' +
+                      daoData?.depositToken?.symbol
+                    }
+                  >
+                    <Icon color='red.500' as={RiErrorWarningLine} />
+                  </Tooltip>
                 </TextBox>
               </Box>
             </Flex>
@@ -146,8 +168,7 @@ const ProposalVote = ({ proposal, setProposal }) => {
               {+wallet?.allowance * 10 ** daoData?.depositToken?.decimals >
                 +daoData?.proposalDeposit || +daoData?.proposalDeposit === 0 ? (
                 <Button onClick={() => sponsorProposal(proposal.proposalId)}>
-                  Sponsor ({daoData?.proposalDeposit}{' '}
-                  {daoData?.depositToken?.symbol})
+                  Sponsor
                 </Button>
               ) : (
                 <Button
@@ -245,35 +266,50 @@ const ProposalVote = ({ proposal, setProposal }) => {
                   </>
                 )}
               </Flex>
-              <Box
+              <Flex
                 w='100%'
                 h='20px'
-                borderRadius='6px'
-                backgroundColor='white'
-                display='flex'
-                flexDirection='row'
+                borderRadius='999px'
+                backgroundColor='whiteAlpha.500'
+                overflow='hidden'
+                justify='space-between'
               >
                 {+proposal?.yesVotes > 0 && (
-                  <Box
-                    w={`${(+proposal?.yesVotes /
-                      (+proposal.yesVotes + +proposal.noVotes)) *
-                      100}%`}
+                  <MotionBox
                     h='100%'
                     backgroundColor='green.500'
-                    borderRadius='6px'
+                    borderRight={
+                      proposal?.noVotes > 0
+                        ? '1px solid white'
+                        : '0px solid transparent'
+                    }
+                    animate={{
+                      width: [
+                        '0%',
+                        `${(+proposal?.yesVotes /
+                          (+proposal.yesVotes + +proposal.noVotes)) *
+                          100}%`,
+                      ],
+                    }}
+                    transition={{ duration: 0.5 }}
                   />
                 )}
                 {+proposal?.noVotes > 0 && (
-                  <Box
-                    w={`${(+proposal?.noVotes /
-                      (+proposal.yesVotes + +proposal.noVotes)) *
-                      100}%`}
+                  <MotionBox
                     h='100%'
                     backgroundColor='red.500'
-                    borderRadius='6px'
+                    animate={{
+                      width: [
+                        '0%',
+                        `${(+proposal?.noVotes /
+                          (+proposal.yesVotes + +proposal.noVotes)) *
+                          100}%`,
+                      ],
+                    }}
+                    transition={{ duration: 0.5 }}
                   />
                 )}
-              </Box>
+              </Flex>
               <Flex justify='space-between' mt={3}>
                 <Skeleton isLoaded={proposal?.yesVotes}>
                   <TextBox variant='value'>
