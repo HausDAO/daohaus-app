@@ -51,7 +51,6 @@ const TxProcessorInit = () => {
     const unseen = txProcessor.getTxUnseenList(user.username);
     // open popup for first unseen and mark as seen
     if (unseen.length) {
-      // consdtion 1
       txProcessor.seeTransaction(unseen[0].tx, user.username);
       setLatestTx(unseen[0]);
       setLoading(true);
@@ -104,22 +103,55 @@ const TxProcessorInit = () => {
 
   const initTxProcessor = async () => {
     const txProcessorService = new TxProcessorService(web3Connect.web3);
+    // check for pending proposal txs from the graph
+    txProcessorService.forceUpdate =
+      txProcessorService.getTxPendingGraphList(user.username).length > 0;
+    txProcessorService.forceCheckTx =
+      txProcessorService.getTxPendingList(user.username).length > 0;
+    console.log(
+      'bla',
+      txProcessorService.getTxPendingList(user.username).length,
+    );
+    updateTxProcessor({ ...txProcessorService });
+
     // check for pending non proposal txs
     web3Connect.web3.eth.subscribe('newBlockHeaders', async (error, result) => {
       if (!error) {
-        if (txProcessorService.forceCheckTx) {
+        console.log(
+          'new block',
+          txProcessorService.getTxPendingList(user.username).length,
+          txProcessorService.forceCheckTx,
+        );
+
+        if (txProcessorService.getTxPendingList(user.username).length) {
+          console.log('doing update');
+          const penLen = txProcessorService.getTxPendingList(user.username)
+            .length;
+          const tx = txProcessorService.getTxPendingList(user.username)[0];
+          console.log('tx', tx);
+          setLatestTx(tx);
           await txProcessorService.update(user.username);
-          if (!txProcessorService.getTxPendingList(user.username).length) {
-            txProcessorService.forceCheckTx = false;
-            updateTxProcessor(txProcessorService);
+          txProcessorService.forceCheckTx = false;
+          updateTxProcessor({ ...txProcessorService });
+          const newPenLen = txProcessorService.getTxPendingList(user.username)
+            .length;
+
+          if (penLen > newPenLen) {
+            setLoading(false);
+            toast({
+              title: 'Transaction away',
+              position: 'top-right',
+              description: `transaction success: ${DISPLAY_NAMES[
+                tx.details.name
+              ] || ''}`,
+              status: 'success',
+              duration: 9000,
+              isClosable: true,
+            });
           }
         }
       }
     });
-    // check for pending proposal txs from the graph
-    txProcessorService.forceUpdate =
-      txProcessorService.getTxPendingGraphList(user.username).length > 0;
-    updateTxProcessor({ ...txProcessorService });
 
     const interval = setInterval(async () => {
       if (txProcessorService.getTxPendingGraphList(user.username).length) {

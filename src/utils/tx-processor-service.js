@@ -23,6 +23,7 @@ export class TxProcessorService {
   async update(account) {
     const _txList = this.getTxPendingList(account);
     const _pending = [];
+    console.log('pending???', this.getTxPendingList(account));
 
     if (_txList.length) {
       _txList.forEach((tx) => {
@@ -49,14 +50,7 @@ export class TxProcessorService {
     if (status && status.blockNumber) {
       console.log('tx status', status);
       // open false
-      this.setTx(
-        tx.tx,
-        account,
-        tx.description,
-        tx.open,
-        true,
-        tx.pendingGraph,
-      );
+      this.setTx(tx.tx, account, tx.description, false, true, tx.pendingGraph);
     }
   }
 
@@ -85,7 +79,7 @@ export class TxProcessorService {
     tx,
     account,
     details = '',
-    open = true,
+    open = false,
     seen = false,
     pendingGraph = true,
   ) {
@@ -144,9 +138,7 @@ export class TxProcessorService {
   getTxUnseenList(account) {
     const _txList = JSON.parse(localStorage.getItem('txList')) || [];
 
-    return _txList.filter(
-      (item) => item.account === account && !item.seen && item.open,
-    );
+    return _txList.filter((item) => item.account === account && !item.seen);
   }
 
   getTx(tx) {

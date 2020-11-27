@@ -266,6 +266,7 @@ export class Web3MolochService extends MolochService {
 
 export class Web3MolochServiceV2 extends Web3MolochService {
   async rageQuit(amountShares = 0, amountLoot = 0, callback) {
+    console.log('rq', amountShares, amountLoot);
     const txReceipt = await this.sendTx(
       {
         from: this.accountAddr,
