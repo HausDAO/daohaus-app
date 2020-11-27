@@ -186,6 +186,7 @@ export const getProfileActivites = (daoData, memberAddress) => {
 export const getProposalHistories = (proposal) => {
   const votes = proposal.votes.map((vote) => voteHistoryData(vote, proposal));
   const proposalStates = buildProposalHistory(proposal);
+
   const allActivites = proposalStates
     .concat(votes)
     .sort((a, b) => +b.activityData.createdAt - +a.activityData.createdAt);

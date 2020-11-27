@@ -57,6 +57,7 @@ const baseListFields = `
   status @client
   title @client
   description @client
+  hash @client
   proposalType @client
   gracePeriod @client
   votingEnds @client
