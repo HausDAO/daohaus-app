@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import {
   Modal,
   ModalContent,
@@ -7,20 +7,11 @@ import {
   ModalOverlay,
 } from '@chakra-ui/core';
 
-import {
-  useTxProcessor,
-  useUser,
-  useDao,
-  useModals,
-} from '../../contexts/PokemolContext';
+import { useModals } from '../../contexts/PokemolContext';
 import RageQuitForm from '../Forms/RageQuit';
 
 const RageQuitModal = ({ isOpen }) => {
-  const [user] = useUser();
-  const [dao] = useDao();
   const { closeModals } = useModals();
-
-  const [txProcessor] = useTxProcessor();
 
   return (
     <Modal isOpen={isOpen} onClose={closeModals} isCentered>

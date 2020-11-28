@@ -61,7 +61,7 @@ export const txIsUpdated = (tx, entities) => {
     }
     case 'submitVote': {
       const entity = entities.find(
-        (item) => +item.proposalId === +tx.details.params[0],
+        (item) => +item.proposalIndex === +tx.details.params[0],
       );
       status = entity?.votes.find(
         (vote) =>

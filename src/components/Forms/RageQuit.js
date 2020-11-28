@@ -10,7 +10,12 @@ import {
   Box,
 } from '@chakra-ui/core';
 
-import { useDao, useTxProcessor, useUser } from '../../contexts/PokemolContext';
+import {
+  useDao,
+  useModals,
+  useTxProcessor,
+  useUser,
+} from '../../contexts/PokemolContext';
 import TextBox from '../Shared/TextBox';
 import { RiErrorWarningLine } from 'react-icons/ri';
 
@@ -20,6 +25,7 @@ const RageQuitForm = () => {
   const [dao] = useDao();
   const [txProcessor, updateTxProcessor] = useTxProcessor();
   const [currentError, setCurrentError] = useState(null);
+  const { closeModals } = useModals();
 
   const {
     handleSubmit,
@@ -46,13 +52,11 @@ const RageQuitForm = () => {
   const txCallBack = (txHash, details) => {
     console.log('txCallBack', txProcessor);
     if (txProcessor && txHash) {
+      closeModals();
       txProcessor.setTx(txHash, user.username, details, true, false, false);
       txProcessor.forceCheckTx = true;
       console.log('CB');
       updateTxProcessor({ ...txProcessor });
-      // close model here
-      // onClose();
-      // setShowModal(null);
     }
     if (!txHash) {
       console.log('error: ', details);

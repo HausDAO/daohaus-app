@@ -13,7 +13,6 @@ import {
 } from '@chakra-ui/core';
 
 import { TxProcessorService } from '../utils/tx-processor-service';
-import { DISPLAY_NAMES } from '../utils/tx-processor-helper';
 import {
   useProposals,
   useRefetchQuery,
@@ -23,6 +22,7 @@ import {
 } from './PokemolContext';
 import ExplorerLink from '../components/Shared/ExplorerLink';
 import { truncateAddr } from '../utils/helpers';
+import { DISPLAY_NAMES } from '../utils/tx-processor-helper';
 
 const TxProcessorInit = () => {
   const [, updateRefetchQuery] = useRefetchQuery();
@@ -38,8 +38,9 @@ const TxProcessorInit = () => {
 
   useEffect(() => {
     /*
-    This runs after txProcessor.forupdate has been changed
-    is set after every web3 transaction is run and on initial load
+    This runs after txProcessor.forupdate 
+    or txProcessor.forceCheckTx has been changed
+    checks for unseen in the list
     will open the transaction submitted popup
     */
     if (!txProcessor) {
@@ -57,7 +58,38 @@ const TxProcessorInit = () => {
       onOpen();
     }
     // eslint-disable-next-line
-  }, [txProcessor]);
+  }, [txProcessor.forceUpdate, txProcessor.forceCheckTx]);
+
+  useEffect(() => {
+    /*
+    This runs after txProcessor.forceCheckTx has been changed
+    is set after every non proposal web3 transaction
+    will open the toast to show completion
+    */
+    if (!txProcessor) {
+      return;
+    }
+    if (!user || Object.keys(txProcessor).length === 0) {
+      return;
+    }
+
+    const pending = txProcessor.getTxPendingList(user.username);
+
+    if (!txProcessor.forceCheckTx && !pending.length && latestTx) {
+      toast({
+        title: 'Transaction away',
+        position: 'top-right',
+        description: `transaction success ${
+          DISPLAY_NAMES[latestTx.details.name]
+        }`,
+        status: 'success',
+        duration: 9000,
+        isClosable: true,
+      });
+    }
+
+    // eslint-disable-next-line
+  }, [txProcessor.forceCheckTx]);
 
   useEffect(() => {
     /*
@@ -77,14 +109,18 @@ const TxProcessorInit = () => {
       const newGraphStatus = txProcessor.getTxPendingGraphList(user.username);
       const tx = txProcessor.getTx(graphStatus[0].tx, user.username);
 
+      // if length is 0 then set forUpdate back to false
+      if (!newGraphStatus.length) {
+        txProcessor.forceUpdate = false;
+        updateTxProcessor({ ...txProcessor });
+      }
       if (graphStatus.length > newGraphStatus.length) {
         setLatestTx(tx);
         setLoading(false);
         toast({
           title: 'Transaction away',
           position: 'top-right',
-          description: `transaction success: ${DISPLAY_NAMES[tx.details.name] ||
-            ''}`,
+          description: `transaction success ${DISPLAY_NAMES[tx.details.name]}`,
           status: 'success',
           duration: 9000,
           isClosable: true,
@@ -95,6 +131,12 @@ const TxProcessorInit = () => {
   }, [user, proposals]);
 
   useEffect(() => {
+    /*
+    load new txProcessor and save to context
+
+    set a interval that runs and if any pending graph update on proposals
+    polls proposals from graph
+    */
     if (user && web3Connect.web3 && !txProcessor.web3) {
       initTxProcessor();
     }
@@ -103,55 +145,12 @@ const TxProcessorInit = () => {
 
   const initTxProcessor = async () => {
     const txProcessorService = new TxProcessorService(web3Connect.web3);
-    // check for pending proposal txs from the graph
+    // txProcessorService.update(user.username);
     txProcessorService.forceUpdate =
       txProcessorService.getTxPendingGraphList(user.username).length > 0;
     txProcessorService.forceCheckTx =
       txProcessorService.getTxPendingList(user.username).length > 0;
-    console.log(
-      'bla',
-      txProcessorService.getTxPendingList(user.username).length,
-    );
     updateTxProcessor({ ...txProcessorService });
-
-    // check for pending non proposal txs
-    web3Connect.web3.eth.subscribe('newBlockHeaders', async (error, result) => {
-      if (!error) {
-        console.log(
-          'new block',
-          txProcessorService.getTxPendingList(user.username).length,
-          txProcessorService.forceCheckTx,
-        );
-
-        if (txProcessorService.getTxPendingList(user.username).length) {
-          console.log('doing update');
-          const penLen = txProcessorService.getTxPendingList(user.username)
-            .length;
-          const tx = txProcessorService.getTxPendingList(user.username)[0];
-          console.log('tx', tx);
-          setLatestTx(tx);
-          await txProcessorService.update(user.username);
-          txProcessorService.forceCheckTx = false;
-          updateTxProcessor({ ...txProcessorService });
-          const newPenLen = txProcessorService.getTxPendingList(user.username)
-            .length;
-
-          if (penLen > newPenLen) {
-            setLoading(false);
-            toast({
-              title: 'Transaction away',
-              position: 'top-right',
-              description: `transaction success: ${DISPLAY_NAMES[
-                tx.details.name
-              ] || ''}`,
-              status: 'success',
-              duration: 9000,
-              isClosable: true,
-            });
-          }
-        }
-      }
-    });
 
     const interval = setInterval(async () => {
       if (txProcessorService.getTxPendingGraphList(user.username).length) {
@@ -160,6 +159,35 @@ const TxProcessorInit = () => {
     }, 3000);
     return () => clearInterval(interval);
   };
+
+  useEffect(() => {
+    /*
+    when txProcessor is loaded sub to blocks
+    forceCheckTx is set from component running tx
+    if forceCheckTx check the pending transaction in list
+    if all have mined set forceCheckTx to false triggering useEffect
+    */
+    if (!txProcessor) {
+      return;
+    }
+    if (!user || Object.keys(txProcessor).length === 0) {
+      return;
+    }
+    web3Connect.web3.eth.subscribe('newBlockHeaders', async (error, result) => {
+      if (!error) {
+        if (txProcessor.forceCheckTx) {
+          setLatestTx(txProcessor.getTxPendingList(user.username)[0]);
+          setLoading(true);
+          await txProcessor.update(user.username);
+          if (!txProcessor.getTxPendingList(user.username).length) {
+            txProcessor.forceCheckTx = false;
+            updateTxProcessor({ ...txProcessor });
+          }
+        }
+      }
+    });
+    // eslint-disable-next-line
+  }, [txProcessor.loaded]);
 
   return (
     <>

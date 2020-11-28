@@ -4,8 +4,12 @@ export class TxProcessorService {
   web3;
   forceUpdate;
   forceCheckTx;
+  loaded;
   constructor(web3) {
     this.web3 = web3;
+
+    this.forceUpdate = this.forceUpdate; // eslint-disable-line
+    this.forceCheckTx = this.forceCheckTx; // eslint-disable-line
     this.updateGraphStatus = this.updateGraphStatus; // eslint-disable-line
     this.checkData = this.checkData; // eslint-disable-line
     this.seeTransaction = this.seeTransaction; // eslint-disable-line
@@ -18,6 +22,7 @@ export class TxProcessorService {
     this.clearHistory = this.clearHistory; // eslint-disable-line
     this.update = this.update; // eslint-disable-line
     this.checkTransaction = this.checkTransaction; // eslint-disable-line
+    this.loaded = true;
   }
 
   async update(account) {
@@ -48,7 +53,6 @@ export class TxProcessorService {
   async checkTransaction(tx, account) {
     const status = await this.web3.eth.getTransaction(tx.tx);
     if (status && status.blockNumber) {
-      console.log('tx status', status);
       // open false
       this.setTx(tx.tx, account, tx.description, false, true, tx.pendingGraph);
     }
@@ -58,7 +62,6 @@ export class TxProcessorService {
     const status = txIsUpdated(tx, entities);
 
     if (status) {
-      console.log('tx status', status);
       this.setTx(tx.tx, account, 'completed', tx.open, tx.seen, false);
     }
   }
@@ -93,7 +96,6 @@ export class TxProcessorService {
     const exists = _txList.findIndex((item) => item.tx === tx);
 
     if (exists === -1) {
-      console.log('exists', exists);
       txItem.tx = tx;
       txItem.account = account;
       txItem.open = open;
