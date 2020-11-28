@@ -9,19 +9,23 @@ import {
   Icon,
   Box,
 } from '@chakra-ui/core';
+
+import {
+  useDao,
+  useModals,
+  useTxProcessor,
+  useUser,
+} from '../../contexts/PokemolContext';
+import TextBox from '../Shared/TextBox';
 import { RiErrorWarningLine } from 'react-icons/ri';
 
-import { useDao, useTxProcessor, useUser } from '../../contexts/PokemolContext';
-import DetailsFields from './DetailFields';
-import TextBox from '../Shared/TextBox';
-
-const WhitelistProposalForm = () => {
+const RageQuitForm = () => {
   const [loading, setLoading] = useState(false);
   const [user] = useUser();
   const [dao] = useDao();
   const [txProcessor, updateTxProcessor] = useTxProcessor();
   const [currentError, setCurrentError] = useState(null);
-  console.log(dao);
+  const { closeModals } = useModals();
 
   const {
     handleSubmit,
@@ -42,18 +46,17 @@ const WhitelistProposalForm = () => {
     }
   }, [errors]);
 
+  // TODO check tribute token < currentWallet.token.balance & unlock
   // TODO check link is a valid link
 
   const txCallBack = (txHash, details) => {
     console.log('txCallBack', txProcessor);
     if (txProcessor && txHash) {
-      txProcessor.setTx(txHash, user.username, details);
-      txProcessor.forceUpdate = true;
-
+      closeModals();
+      txProcessor.setTx(txHash, user.username, details, true, false, false);
+      txProcessor.forceCheckTx = true;
+      console.log('CB');
       updateTxProcessor({ ...txProcessor });
-      // close model here
-      // onClose();
-      // setShowModal(null);
     }
     if (!txHash) {
       console.log('error: ', details);
@@ -66,22 +69,15 @@ const WhitelistProposalForm = () => {
 
     console.log(values);
 
-    const details = JSON.stringify({
-      title: values.title,
-      description: values.description,
-      link: 'https://' + values.link,
-      hash: Math.random(0, 10000),
-    });
-
     try {
-      dao.daoService.moloch.submitWhiteListProposal(
-        values.tokenAddress,
-        details,
+      dao.daoService.moloch.rageQuit(
+        values.shares ? values.shares : 0,
+        values.loot ? values.loot : 0,
         txCallBack,
       );
     } catch (err) {
       setLoading(false);
-      console.log('error: ', err);
+      console.log('*******************error: ', err);
     }
   };
 
@@ -92,20 +88,38 @@ const WhitelistProposalForm = () => {
         display='flex'
         flexDirection='row'
         justifyContent='space-between'
-        mb={3}
+        mb={5}
       >
-        <Box w='48%'>
-          <DetailsFields register={register} />
-        </Box>
-        <Box w='48%'>
-          <TextBox as={FormLabel} htmlFor='tokenAddress' mb={2}>
-            Token Address
+        <Box>
+          <TextBox as={FormLabel} htmlFor='shares' mb={2}>
+            Shares To RAgE
           </TextBox>
           <Input
-            name='tokenAddress'
-            placeholder='0x'
-            mb={3}
-            ref={register}
+            name='shares'
+            placeholder='0'
+            mb={5}
+            ref={register({
+              pattern: {
+                value: /[0-9]/,
+                message: 'Shares must be a number',
+              },
+            })}
+            color='white'
+            focusBorderColor='secondary.500'
+          />
+          <TextBox as={FormLabel} htmlFor='loot' mb={2}>
+            Loot to rAGe
+          </TextBox>
+          <Input
+            name='loot'
+            placeholder='0'
+            mb={5}
+            ref={register({
+              pattern: {
+                value: /[0-9]/,
+                message: 'Loot must be a number',
+              },
+            })}
             color='white'
             focusBorderColor='secondary.500'
           />
@@ -125,7 +139,7 @@ const WhitelistProposalForm = () => {
             isLoading={loading}
             disabled={loading}
           >
-            Submit
+            RAGE
           </Button>
         </Box>
       </Flex>
@@ -133,4 +147,4 @@ const WhitelistProposalForm = () => {
   );
 };
 
-export default WhitelistProposalForm;
+export default RageQuitForm;

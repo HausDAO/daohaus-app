@@ -228,6 +228,15 @@ export const descriptionMaker = (proposal) => {
   return ``;
 };
 
+export const hashMaker = (proposal) => {
+  try {
+    const parsed = JSON.parse(proposal.details.replace(/(\r\n|\n|\r)/gm, ''));
+    return parsed.hash || '';
+  } catch (e) {
+    return '';
+  }
+};
+
 export const linkMaker = (proposal) => {
   try {
     const parsed = JSON.parse(proposal.details.replace(/(\r\n|\n|\r)/gm, ''));

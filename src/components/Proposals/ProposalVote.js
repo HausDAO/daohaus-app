@@ -32,10 +32,10 @@ const ProposalVote = ({ proposal, setProposal }) => {
 
   const txCallBack = (txHash, details) => {
     if (txProcessor && txHash) {
-      txProcessor.setTx(txHash, user.username, details, true, false);
+      txProcessor.setTx(txHash, user.username, details);
       txProcessor.forceUpdate = true;
-
-      updateTxProcessor(txProcessor);
+      console.log('force update changed');
+      updateTxProcessor({ ...txProcessor });
       // close model here
       // onClose();
       // setShowModal(null);
@@ -113,7 +113,7 @@ const ProposalVote = ({ proposal, setProposal }) => {
       .filter((p) => p.status === 'ReadyForProcessing')
       .sort((a, b) => a.gracePeriodEnds - b.gracePeriodEnds);
 
-    console.log(proposalsToProcess);
+    // console.log(proposalsToProcess);
     if (proposalsToProcess.length > 0) {
       setNextProposal(proposalsToProcess[0]);
     }
