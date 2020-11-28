@@ -52,7 +52,7 @@ const GuildKickProposalForm = () => {
   const txCallBack = (txHash, details) => {
     console.log('txCallBack', txProcessor);
     if (txProcessor && txHash) {
-      txProcessor.setTx(txHash, user.username, details, true, false);
+      txProcessor.setTx(txHash, user.username, details);
       txProcessor.forceUpdate = true;
 
       updateTxProcessor({ ...txProcessor });

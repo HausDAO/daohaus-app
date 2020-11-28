@@ -24,6 +24,7 @@ import {
   useModals,
 } from '../../contexts/PokemolContext';
 import { memberProfile } from '../../utils/helpers';
+import { DISPLAY_NAMES } from '../../utils/tx-processor-helper';
 
 import HubProfileCard from '../Hub/HubProfileCard';
 import ExplorerLink from '../Shared/ExplorerLink';
@@ -48,27 +49,6 @@ const AccountModal = ({ isOpen }) => {
       setMember(memberProfile(members, user.username));
     }
   }, [members, user]);
-
-  // TODO: where should we put this?
-  const DISPLAY_NAMES = {
-    submitVote: 'Submit Vote',
-    ragequit: 'ragequit',
-    processProposal: 'Process Proposal',
-    newDelegateKey: 'New Delegate Key',
-    submitProposalV1: 'Submit Proposal',
-    rageQuit: 'Rage Quit',
-    cancelProposal: 'Cancel Proposal',
-    processGuildKickProposal: 'Process GuildKick Proposal',
-    processWhitelistProposal: 'Process Whitelist Proposal',
-    ragekick: 'Rage Kick',
-    sponsorProposal: 'Sponsor Proposal',
-    submitProposal: 'Submit Proposal',
-    submitGuildKickProposal: 'Submit GuildKick Proposal',
-    submitWhitelistProposal: 'Submit Whitelist Proposal',
-    withdrawBalance: 'Withdraw Balance',
-    withdrawBalances: 'Withdraw Balances',
-    collectTokens: 'Collect Tokens',
-  };
 
   const RenderTxList = () => {
     const txList = txProcessor.getTxList(user.username);

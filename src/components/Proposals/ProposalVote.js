@@ -32,7 +32,7 @@ const ProposalVote = ({ proposal, setProposal }) => {
 
   const txCallBack = (txHash, details) => {
     if (txProcessor && txHash) {
-      txProcessor.setTx(txHash, user.username, details, true, false);
+      txProcessor.setTx(txHash, user.username, details);
       txProcessor.forceUpdate = true;
       console.log('force update changed');
       updateTxProcessor({ ...txProcessor });
