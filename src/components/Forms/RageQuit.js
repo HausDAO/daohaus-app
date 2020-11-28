@@ -8,21 +8,28 @@ import {
   Input,
   Icon,
   Box,
+  FormHelperText,
+  Text,
 } from '@chakra-ui/core';
 
 import {
   useDao,
+  useMembers,
   useModals,
   useTxProcessor,
   useUser,
 } from '../../contexts/PokemolContext';
 import TextBox from '../Shared/TextBox';
 import { RiErrorWarningLine } from 'react-icons/ri';
+import { memberProfile } from '../../utils/helpers';
 
 const RageQuitForm = () => {
   const [loading, setLoading] = useState(false);
+  const [canRage, setCanRage] = useState(false);
+  const [member, setMember] = useState();
   const [user] = useUser();
   const [dao] = useDao();
+  const [members] = useMembers();
   const [txProcessor, updateTxProcessor] = useTxProcessor();
   const [currentError, setCurrentError] = useState(null);
   const { closeModals } = useModals();
@@ -33,6 +40,27 @@ const RageQuitForm = () => {
     register,
     // formState
   } = useForm();
+
+  useEffect(() => {
+    if (user?.memberAddress) {
+      setMember(user);
+    } else {
+      setMember(memberProfile(members, user.username));
+    }
+  }, [members, user]);
+
+  useEffect(() => {
+    const getCanRage = async () => {
+      console.log('member', member);
+      const _canRage = await dao.daoService.moloch.canRagequit(
+        member.highestIndexYesVote.proposalIndex,
+      );
+      setCanRage(_canRage);
+    };
+    if (member) {
+      getCanRage();
+    }
+  }, [dao, member]);
 
   useEffect(() => {
     if (Object.keys(errors).length > 0) {
@@ -81,7 +109,7 @@ const RageQuitForm = () => {
     }
   };
 
-  return (
+  return canRage ? (
     <form onSubmit={handleSubmit(onSubmit)}>
       <FormControl
         isInvalid={errors.name}
@@ -91,38 +119,41 @@ const RageQuitForm = () => {
         mb={5}
       >
         <Box>
-          <TextBox as={FormLabel} htmlFor='shares' mb={2}>
-            Shares To RAgE
-          </TextBox>
-          <Input
-            name='shares'
-            placeholder='0'
-            mb={5}
-            ref={register({
-              pattern: {
-                value: /[0-9]/,
-                message: 'Shares must be a number',
-              },
-            })}
-            color='white'
-            focusBorderColor='secondary.500'
-          />
-          <TextBox as={FormLabel} htmlFor='loot' mb={2}>
-            Loot to rAGe
-          </TextBox>
-          <Input
-            name='loot'
-            placeholder='0'
-            mb={5}
-            ref={register({
-              pattern: {
-                value: /[0-9]/,
-                message: 'Loot must be a number',
-              },
-            })}
-            color='white'
-            focusBorderColor='secondary.500'
-          />
+          <FormControl>
+            <Input
+              name='shares'
+              placeholder='0'
+              mb={5}
+              ref={register({
+                pattern: {
+                  value: /[0-9]/,
+                  message: 'Shares must be a number',
+                },
+              })}
+              color='white'
+              focusBorderColor='secondary.500'
+            />
+            <FormHelperText>We&apos;ll never share your email.</FormHelperText>
+          </FormControl>
+          <FormControl>
+            <TextBox as={FormLabel} htmlFor='loot' mb={2}>
+              Loot to rAGe
+            </TextBox>
+            <Input
+              name='loot'
+              placeholder='0'
+              mb={5}
+              ref={register({
+                pattern: {
+                  value: /[0-9]/,
+                  message: 'Loot must be a number',
+                },
+              })}
+              color='white'
+              focusBorderColor='secondary.500'
+            />
+            <FormHelperText>We&apos;ll never share your email.</FormHelperText>
+          </FormControl>
         </Box>
       </FormControl>
       <Flex justify='flex-end' align='center' h='60px'>
@@ -144,6 +175,11 @@ const RageQuitForm = () => {
         </Box>
       </Flex>
     </form>
+  ) : (
+    <Text>
+      Sorry you can not rage at this time. You have a pending yes vote. All yes
+      votes must be completed and processed
+    </Text>
   );
 };
 
