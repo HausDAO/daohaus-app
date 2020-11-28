@@ -13,7 +13,7 @@ export const TX_CONTEXTS = [
       'cancelProposal',
     ],
   },
-  { name: 'members', methods: ['rageQuit', 'ragekick'] },
+  { name: 'members', methods: ['ragequit', 'ragekick'] },
   {
     name: 'dao',
     methods: ['withdrawBalance', 'withdrawBalances', 'collectTokens'],

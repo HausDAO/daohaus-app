@@ -83,7 +83,6 @@ const RageQuitForm = () => {
       closeModals();
       txProcessor.setTx(txHash, user.username, details, true, false, false);
       txProcessor.forceCheckTx = true;
-      console.log('CB');
       updateTxProcessor({ ...txProcessor });
     }
     if (!txHash) {
@@ -131,9 +130,12 @@ const RageQuitForm = () => {
                 },
               })}
               color='white'
+              type='number'
               focusBorderColor='secondary.500'
             />
-            <FormHelperText>We&apos;ll never share your email.</FormHelperText>
+            <FormHelperText>
+              You can Rage up to {member?.shares} shares.
+            </FormHelperText>
           </FormControl>
           <FormControl>
             <TextBox as={FormLabel} htmlFor='loot' mb={2}>
@@ -150,9 +152,12 @@ const RageQuitForm = () => {
                 },
               })}
               color='white'
+              type='number'
               focusBorderColor='secondary.500'
             />
-            <FormHelperText>We&apos;ll never share your email.</FormHelperText>
+            <FormHelperText>
+              You can Rage up to {member?.loot} loot.
+            </FormHelperText>
           </FormControl>
         </Box>
       </FormControl>
