@@ -14,6 +14,7 @@ import {
 
 import { TxProcessorService } from '../utils/tx-processor-service';
 import {
+  useMembers,
   useProposals,
   useRefetchQuery,
   useTxProcessor,
@@ -22,7 +23,8 @@ import {
 } from './PokemolContext';
 import ExplorerLink from '../components/Shared/ExplorerLink';
 import { truncateAddr } from '../utils/helpers';
-import { DISPLAY_NAMES } from '../utils/tx-processor-helper';
+import { DISPLAY_NAMES, TX_CONTEXTS } from '../utils/tx-processor-helper';
+import { mutateMember } from '../utils/proposal-mutations';
 
 const TxProcessorInit = () => {
   const [, updateRefetchQuery] = useRefetchQuery();
@@ -30,6 +32,7 @@ const TxProcessorInit = () => {
   const [user] = useUser();
   const [web3Connect] = useWeb3Connect();
   const [proposals] = useProposals();
+  const [members, updateMembers] = useMembers();
   const [txProcessor, updateTxProcessor] = useTxProcessor();
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [latestTx, setLatestTx] = useState();
@@ -76,6 +79,17 @@ const TxProcessorInit = () => {
     const pending = txProcessor.getTxPendingList(user.username);
 
     if (!txProcessor.forceCheckTx && !pending.length && latestTx) {
+      // optimistic mutation
+      const context = TX_CONTEXTS.find(
+        (item) => item.methods.indexOf(latestTx.details.name) > -1,
+      );
+      console.log('context', context);
+      console.log('latestTx', latestTx);
+      if (context?.name === 'members') {
+        const newMembers = mutateMember(members, latestTx.details);
+        console.log(newMembers);
+        updateMembers([...newMembers]);
+      }
       toast({
         title: 'Transaction away',
         position: 'top-right',
@@ -114,6 +128,9 @@ const TxProcessorInit = () => {
         txProcessor.forceUpdate = false;
         updateTxProcessor({ ...txProcessor });
       }
+      // if pending length is different after update it is finished
+      // TODO: for process proposal we should refetch members and dao too
+      // TODO: for yes vote we should refetch members for highestvotedindex
       if (graphStatus.length > newGraphStatus.length) {
         setLatestTx(tx);
         setLoading(false);
