@@ -221,12 +221,12 @@ const ProposalVote = ({ proposal, setProposal }) => {
                     </Flex>
                     <Flex justify='flex-end' align='center' w='50%'>
                       <Box as='i' fontSize='xs'>
-                        {+proposal?.noVotes > +proposal?.yesVotes &&
+                        {+proposal?.noShares > +proposal?.yesShares &&
                           'Not Passing'}
-                        {+proposal?.yesVotes > +proposal?.noVotes &&
+                        {+proposal?.yesShares > +proposal?.noShares &&
                           'Currently Passing'}
-                        {+proposal?.yesVotes === 0 &&
-                          +proposal?.noVotes === 0 &&
+                        {+proposal?.yesShares === 0 &&
+                          +proposal?.noShares === 0 &&
                           'Awaiting Votes'}
                       </Box>
                     </Flex>
@@ -240,11 +240,11 @@ const ProposalVote = ({ proposal, setProposal }) => {
                           {proposal?.status === 'Passed' && 'Passed'}
                           {(proposal?.status === 'GracePeriod' ||
                             proposal?.status === 'ReadyForProcessing') &&
-                            proposal.yesVotes > proposal.noVotes &&
+                            proposal.yesShares > proposal.noShares &&
                             'Passed'}
                           {(proposal?.status === 'GracePeriod' ||
                             proposal?.status === 'ReadyForProcessing') &&
-                            proposal.noVotes > proposal.yesVotes &&
+                            proposal.noShares > proposal.yesShares &&
                             'Failed'}
                         </TextBox>
                       </Skeleton>
@@ -260,20 +260,20 @@ const ProposalVote = ({ proposal, setProposal }) => {
                 display='flex'
                 flexDirection='row'
               >
-                {+proposal?.yesVotes > 0 && (
+                {+proposal?.yesShares > 0 && (
                   <Box
-                    w={`${(+proposal?.yesVotes /
-                      (+proposal.yesVotes + +proposal.noVotes)) *
+                    w={`${(+proposal?.yesShares /
+                      (+proposal.yesShares + +proposal.noShares)) *
                       100}%`}
                     h='100%'
                     backgroundColor='green.500'
                     borderRadius='6px'
                   />
                 )}
-                {+proposal?.noVotes > 0 && (
+                {+proposal?.noShares > 0 && (
                   <Box
-                    w={`${(+proposal?.noVotes /
-                      (+proposal.yesVotes + +proposal.noVotes)) *
+                    w={`${(+proposal?.noShares /
+                      (+proposal.yesShares + +proposal.noShares)) *
                       100}%`}
                     h='100%'
                     backgroundColor='red.500'
@@ -282,14 +282,14 @@ const ProposalVote = ({ proposal, setProposal }) => {
                 )}
               </Box>
               <Flex justify='space-between' mt={3}>
-                <Skeleton isLoaded={proposal?.yesVotes}>
+                <Skeleton isLoaded={proposal?.yesShares}>
                   <TextBox variant='value'>
-                    {proposal?.yesVotes || '0'} Yes
+                    {proposal?.yesShares || '0'} Yes
                   </TextBox>
                 </Skeleton>
-                <Skeleton isLoaded={proposal?.noVotes}>
+                <Skeleton isLoaded={proposal?.noShares}>
                   <TextBox variant='value'>
-                    {proposal?.noVotes || '0'} No
+                    {proposal?.noShares || '0'} No
                   </TextBox>
                 </Skeleton>
               </Flex>
