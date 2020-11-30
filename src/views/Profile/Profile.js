@@ -26,8 +26,8 @@ const Profile = () => {
 
   useEffect(() => {
     const interval = setInterval(() => {
-      updateRefetchQuery('proposals');
-    }, 350000);
+      updateRefetchQuery('daoMembers');
+    }, 60000);
     return () => clearInterval(interval);
     // eslint-disable-next-line
   }, []);
