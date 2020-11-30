@@ -24,7 +24,7 @@ const MotionBox = motion.custom(Box);
 const ProposalVote = ({ proposal, setProposal }) => {
   const [user] = useUser();
   const [dao] = useDao();
-  const [wallet] = useMemberWallet();
+  const [memberWallet] = useMemberWallet();
   const [daoData] = useDaoGraphData();
   const [proposals] = useProposals();
   const [web3Connect] = useWeb3Connect();
@@ -168,23 +168,28 @@ const ProposalVote = ({ proposal, setProposal }) => {
                   {daoData?.proposalDeposit /
                     10 ** daoData?.depositToken.decimals}{' '}
                   {daoData?.depositToken?.symbol}
-                  <Tooltip
-                    shouldWrapChildren
-                    placement='bottom'
-                    label={
-                      'Insufficient Funds: You only have ' +
-                      wallet?.tokenBalance +
-                      ' ' +
-                      daoData?.depositToken?.symbol
-                    }
-                  >
-                    <Icon color='red.500' as={RiErrorWarningLine} />
-                  </Tooltip>
+                  {+memberWallet?.tokenBalance <
+                  +daoData?.proposalDeposit /
+                    10 ** daoData?.depositToken.decimals ? (
+                    <Tooltip
+                      shouldWrapChildren
+                      placement='bottom'
+                      label={
+                        'Insufficient Funds: You only have ' +
+                        memberWallet?.tokenBalance +
+                        ' ' +
+                        daoData?.depositToken?.symbol
+                      }
+                    >
+                      <Icon color='red.500' as={RiErrorWarningLine} />
+                    </Tooltip>
+                  ) : null}
                 </TextBox>
               </Box>
             </Flex>
             <Flex justify='space-around'>
-              {+wallet?.allowance * 10 ** daoData?.depositToken?.decimals >
+              {+memberWallet?.allowance *
+                10 ** daoData?.depositToken?.decimals >
                 +daoData?.proposalDeposit || +daoData?.proposalDeposit === 0 ? (
                 <Button onClick={() => sponsorProposal(proposal.proposalId)}>
                   Sponsor
