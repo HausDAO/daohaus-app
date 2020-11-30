@@ -1,4 +1,5 @@
 import React from 'react';
+import { useHistory } from 'react-router-dom';
 import {
   Menu,
   MenuList,
@@ -10,9 +11,21 @@ import {
 } from '@chakra-ui/core';
 import { BsThreeDotsVertical } from 'react-icons/bs';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
+import { useDao, useModals, useUser } from '../../contexts/PokemolContext';
+import RageQuitModal from '../Modal/RageQuitModal';
 
 const ProfileMenu = ({ member }) => {
   const toast = useToast();
+  const [dao] = useDao();
+  const history = useHistory();
+  const user = useUser();
+  const { modals, openModal } = useModals();
+
+  const handleGuildkickClick = () => {
+    history.push(
+      `/dao/${dao.address}/proposals/new/guildkick?applicant=${member.memberAddress}`,
+    );
+  };
 
   return (
     <Menu>
@@ -26,7 +39,18 @@ const ProfileMenu = ({ member }) => {
         />
       </MenuButton>
       <MenuList>
-        <MenuItem>GuildKick</MenuItem>
+        {user[0].username.toLowerCase() !== member?.memberAddress && (
+          <MenuItem onClick={handleGuildkickClick}>GuildKick</MenuItem>
+        )}
+        {user[0].username.toLowerCase() === member?.memberAddress && (
+          <>
+            <MenuItem onClick={() => openModal('ragequitModal')}>
+              RageQuit
+            </MenuItem>
+
+            <RageQuitModal isOpen={modals.ragequitModal} />
+          </>
+        )}
         <Link
           href={`https://3box.io/${member?.memberAddress}`}
           target='_blank'

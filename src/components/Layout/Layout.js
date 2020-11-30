@@ -1,9 +1,8 @@
-import React from 'react';
-import { Link as RouterLink, useHistory } from 'react-router-dom';
+import React, { useEffect, useState } from 'react';
+import { Link as RouterLink } from 'react-router-dom';
 import {
   Flex,
   Icon,
-  Image,
   Link,
   Button,
   ButtonGroup,
@@ -14,7 +13,7 @@ import {
 } from '@chakra-ui/core';
 
 import { motion } from 'framer-motion';
-import { useDao, useRefetchQuery } from '../../contexts/PokemolContext';
+import { useDao, useUser } from '../../contexts/PokemolContext';
 import ChangeDao from '../Shared/ChangeDao';
 
 import Header from '../Shared/Header';
@@ -34,80 +33,104 @@ import {
   RiQuestionLine,
   RiFireLine,
   RiRocket2Line,
+  RiArrowLeftSLine,
 } from 'react-icons/ri';
 import { GiCastle } from 'react-icons/gi';
-import { useTheme, useSideNavToggle } from '../../contexts/CustomThemeContext';
+import { useTheme } from '../../contexts/CustomThemeContext';
+
+const MotionBox = motion.custom(Box);
+const MotionFlex = motion.custom(Flex);
+
+const bar = {
+  open: { width: 420 },
+  closed: { width: 100 },
+};
+
+const nav = {
+  open: {
+    opacity: 1,
+    pointerEvents: 'all',
+    marginLeft: '25px',
+    display: 'inline-block',
+  },
+  closed: {
+    opacity: 0,
+    pointerEvents: 'none',
+    marginLeft: '0px',
+    display: 'none',
+  },
+};
+
+const navFlex = {
+  open: {
+    opacity: 1,
+    pointerEvents: 'all',
+    marginLeft: '25px',
+    display: 'flex',
+  },
+  closed: {
+    opacity: 0,
+    pointerEvents: 'none',
+    marginLeft: '0px',
+    display: 'none',
+  },
+};
+
+const navLinks = {
+  open: {
+    opacity: 1,
+    pointerEvents: 'all',
+    marginLeft: '25px',
+  },
+  closed: {
+    opacity: 0,
+    pointerEvents: 'none',
+    marginLeft: '0px',
+  },
+};
+
+const background = {
+  open: {
+    width: 'calc(100% - ' + bar.open.width + 'px)',
+    marginLeft: bar.open.width + 'px',
+  },
+  closed: {
+    width: 'calc(100% - ' + bar.closed.width + 'px)',
+    marginLeft: bar.closed.width + 'px',
+  },
+};
+
+const layout = {
+  open: {
+    width: 'calc(100% - ' + bar.open.width + 'px)',
+    marginLeft: bar.open.width + 'px',
+  },
+  closed: {
+    width: 'calc(100% - ' + bar.closed.width + 'px)',
+    marginLeft: bar.closed.width + 'px',
+  },
+};
 
 const Layout = ({ children }) => {
-  const [sideNavOpen, toggleSideNav] = useSideNavToggle();
+  const [sideNavOpen, toggleSideNav] = useState();
   const [dao] = useDao();
   const [theme] = useTheme();
-  const history = useHistory();
-  const [, updateRefetchQuery] = useRefetchQuery();
+  const [user] = useUser();
 
-  const MotionBox = motion.custom(Box);
-  const MotionFlex = motion.custom(Flex);
+  useEffect(() => {
+    toggleSideNav(JSON.parse(localStorage.getItem('sideNavOpen')));
+  }, []);
 
-  const bar = {
-    open: { width: 420 },
-    closed: { width: 100 },
-  };
-
-  const nav = {
-    open: {
-      opacity: 1,
-      pointerEvents: 'all',
-      marginLeft: '25px',
-      display: 'inline-block',
-    },
-    closed: {
-      opacity: 0,
-      pointerEvents: 'none',
-      marginLeft: '0px',
-      display: 'none',
-    },
-  };
-
-  const navLinks = {
-    open: {
-      opacity: 1,
-      pointerEvents: 'all',
-      marginLeft: '25px',
-    },
-    closed: {
-      opacity: 0,
-      pointerEvents: 'none',
-      marginLeft: '0px',
-    },
-  };
-
-  const background = {
-    open: {
-      width: 'calc(100% - ' + bar.open.width + 'px)',
-      marginLeft: bar.open.width + 'px',
-    },
-    closed: {
-      width: 'calc(100% - ' + bar.closed.width + 'px)',
-      marginLeft: bar.closed.width + 'px',
-    },
-  };
-
-  const layout = {
-    open: {
-      width: 'calc(100% - ' + bar.open.width + 'px)',
-      marginLeft: bar.open.width + 'px',
-    },
-    closed: {
-      width: 'calc(100% - ' + bar.closed.width + 'px)',
-      marginLeft: bar.closed.width + 'px',
-    },
+  const handleNavToggle = () => {
+    localStorage.setItem('sideNavOpen', `${!sideNavOpen}`);
+    toggleSideNav(!sideNavOpen);
   };
 
   return (
     <Flex direction='row' minH='100vh' color='white' w='100vw'>
       <MotionFlex
-        initial='closed'
-        animate={sideNavOpen ? 'closed' : 'open'}
+        initial={sideNavOpen ? 'open' : 'closed'}
+        animate={sideNavOpen ? 'open' : 'closed'}
         variants={bar}
         h='100vh'
         w='100%'
@@ -120,25 +143,40 @@ const Layout = ({ children }) => {
         zIndex='1'
         overflow='hidden'
       >
-        <Flex direction='column' justify='start' align='start' h='100%'>
-          <Flex align='center' justify='start' w='100%' direction='row'>
-            <Box as={RouterLink} to={`/dao/${dao.address}`}>
-              <Image
-                src={theme.images.brandImg}
-                w='60px'
-                h='60px'
-                cursor='pointer'
-                border='none'
-              />
-            </Box>
+        <Flex
+          direction='column'
+          justify='start'
+          align='start'
+          h='100%'
+          w='100%'
+        >
+          <Flex align='start' justify='start' direction='row'>
+            <Box
+              d='block'
+              as={RouterLink}
+              to={dao?.graphData ? `/dao/${dao.address}` : `/`}
+              w='48px'
+              h='48px'
+              cursor='pointer'
+              border='none'
+              bg={'url(' + theme.images.brandImg + ')'}
+              bgSize='cover'
+              bgPosition='center'
+              bgRepeat='no-repeat'
+              rounded='full'
+              borderWidth='2px'
+              borderStyle='solid'
+              borderColor='transparent'
+              _hover={{ border: '2px solid ' + theme.colors.whiteAlpha[500] }}
+            />
             <MotionFlex
-              w='100%'
               direction='column'
               align='start'
               justify='start'
-              initial='closed'
-              animate={sideNavOpen ? 'closed' : 'open'}
-              variants={navLinks}
+              initial={sideNavOpen ? 'open' : 'closed'}
+              animate={sideNavOpen ? 'open' : 'closed'}
+              variants={navFlex}
+              h='48px'
             >
               {dao?.graphData ? (
                 <Link as={RouterLink} to={`/dao/${dao.address}`} fontSize='xl'>
@@ -154,8 +192,8 @@ const Layout = ({ children }) => {
           </Flex>
           <IconButton
             variant='ghost'
-            icon={<RiMenu3Line />}
-            onClick={toggleSideNav}
+            icon={sideNavOpen ? <RiArrowLeftSLine /> : <RiMenu3Line />}
+            onClick={handleNavToggle}
             size='lg'
             isRound='true'
             color='secondary.500'
@@ -172,8 +210,8 @@ const Layout = ({ children }) => {
               >
                 <Icon as={RiBookMarkLine} w={6} h={6} />
                 <MotionBox
-                  initial='closed'
-                  animate={sideNavOpen ? 'closed' : 'open'}
+                  initial={sideNavOpen ? 'open' : 'closed'}
+                  animate={sideNavOpen ? 'open' : 'closed'}
                   variants={nav}
                   fontSize='2xl'
                   fontFamily='heading'
@@ -190,8 +228,8 @@ const Layout = ({ children }) => {
               >
                 <Icon as={RiBankLine} w={6} h={6} />
                 <MotionBox
-                  initial='closed'
-                  animate={sideNavOpen ? 'closed' : 'open'}
+                  initial={sideNavOpen ? 'open' : 'closed'}
+                  animate={sideNavOpen ? 'open' : 'closed'}
                   variants={nav}
                   fontSize='2xl'
                   fontFamily='heading'
@@ -207,8 +245,8 @@ const Layout = ({ children }) => {
               >
                 <Icon as={RiTeamLine} w={6} h={6} />
                 <MotionBox
-                  initial='closed'
-                  animate={sideNavOpen ? 'closed' : 'open'}
+                  initial={sideNavOpen ? 'open' : 'closed'}
+                  animate={sideNavOpen ? 'open' : 'closed'}
                   variants={nav}
                   fontSize='2xl'
                   fontFamily='heading'
@@ -224,8 +262,8 @@ const Layout = ({ children }) => {
               >
                 <Icon as={RiSettings3Line} w={6} h={6} />
                 <MotionBox
-                  initial='closed'
-                  animate={sideNavOpen ? 'closed' : 'open'}
+                  initial={sideNavOpen ? 'open' : 'closed'}
+                  animate={sideNavOpen ? 'open' : 'closed'}
                   variants={nav}
                   fontSize='sm'
                   fontFamily='heading'
@@ -241,8 +279,8 @@ const Layout = ({ children }) => {
               >
                 <Icon as={RiRocket2Line} w={6} h={6} />
                 <MotionBox
-                  initial='closed'
-                  animate={sideNavOpen ? 'closed' : 'open'}
+                  initial={sideNavOpen ? 'open' : 'closed'}
+                  animate={sideNavOpen ? 'open' : 'closed'}
                   variants={nav}
                   fontSize='sm'
                   fontFamily='heading'
@@ -250,23 +288,25 @@ const Layout = ({ children }) => {
                   Boosts
                 </MotionBox>
               </Button>
-              <Button
-                variant='sideNav'
-                as={RouterLink}
-                to={`/dao/${dao.address}/profile`}
-                _hover={{ backgroundColor: 'white' }}
-              >
-                <Icon as={RiTrophyLine} w={6} h={6} />
-                <MotionBox
-                  initial='closed'
-                  animate={sideNavOpen ? 'closed' : 'open'}
-                  variants={nav}
-                  fontSize='sm'
-                  fontFamily='heading'
+              {user ? (
+                <Button
+                  variant='sideNav'
+                  as={RouterLink}
+                  to={`/dao/${dao.address}/profile/${user.username}`}
+                  _hover={{ backgroundColor: 'white' }}
                 >
-                  Stats
-                </MotionBox>
-              </Button>
+                  <Icon as={RiTrophyLine} w={6} h={6} />
+                  <MotionBox
+                    initial={sideNavOpen ? 'open' : 'closed'}
+                    animate={sideNavOpen ? 'open' : 'closed'}
+                    variants={nav}
+                    fontSize='sm'
+                    fontFamily='heading'
+                  >
+                    Stats
+                  </MotionBox>
+                </Button>
+              ) : null}
             </Stack>
           ) : (
             <Stack spacing={3} d='flex' flexDirection='column' mt='55px'>
@@ -280,8 +320,8 @@ const Layout = ({ children }) => {
               >
                 <Icon as={RiBookMarkLine} w={6} h={6} />
                 <MotionBox
-                  initial='closed'
-                  animate={sideNavOpen ? 'closed' : 'open'}
+                  initial={sideNavOpen ? 'open' : 'closed'}
+                  animate={sideNavOpen ? 'open' : 'closed'}
                   variants={nav}
                   fontSize='2xl'
                   fontFamily='heading'
@@ -298,8 +338,8 @@ const Layout = ({ children }) => {
               >
                 <Icon as={RiFireLine} w={6} h={6} />
                 <MotionBox
-                  initial='closed'
-                  animate={sideNavOpen ? 'closed' : 'open'}
+                  initial={sideNavOpen ? 'open' : 'closed'}
+                  animate={sideNavOpen ? 'open' : 'closed'}
                   variants={nav}
                   fontSize='2xl'
                   fontFamily='heading'
@@ -316,8 +356,8 @@ const Layout = ({ children }) => {
               >
                 <Icon as={RiTeamLine} w={6} h={6} />
                 <MotionBox
-                  initial='closed'
-                  animate={sideNavOpen ? 'closed' : 'open'}
+                  initial={sideNavOpen ? 'open' : 'closed'}
+                  animate={sideNavOpen ? 'open' : 'closed'}
                   variants={nav}
                   fontSize='2xl'
                   fontFamily='heading'
@@ -334,8 +374,8 @@ const Layout = ({ children }) => {
               >
                 <Icon as={RiQuestionLine} w={6} h={6} />
                 <MotionBox
-                  initial='closed'
-                  animate={sideNavOpen ? 'closed' : 'open'}
+                  initial={sideNavOpen ? 'open' : 'closed'}
+                  animate={sideNavOpen ? 'open' : 'closed'}
                   variants={nav}
                   fontSize='sm'
                   fontFamily='heading'
@@ -352,9 +392,9 @@ const Layout = ({ children }) => {
               >
                 <Icon as={GiCastle} w={6} h={6} />
                 <MotionBox
-                  initial='closed'
+                  initial={sideNavOpen ? 'open' : 'closed'}
+                  animate={sideNavOpen ? 'open' : 'closed'}
                   variants={nav}
-                  animate={sideNavOpen ? 'closed' : 'open'}
                   fontSize='sm'
                   fontFamily='heading'
                 >
@@ -366,21 +406,21 @@ const Layout = ({ children }) => {
           <Spacer />
           <Flex w='100%'>
             <IconButton
-              icon={<RiLinksLine />}
+              icon={sideNavOpen ? <RiArrowLeftSLine /> : <RiLinksLine />}
               size='lg'
               variant='ghost'
               isRound='true'
-              onClick={toggleSideNav}
+              as={Link}
+              onClick={handleNavToggle}
             />
 
             <MotionFlex
               direction='row'
               align='center'
               justify='start'
-              initial='closed'
-              animate={sideNavOpen ? 'closed' : 'open'}
+              initial={sideNavOpen ? 'open' : 'closed'}
+              animate={sideNavOpen ? 'open' : 'closed'}
               variants={navLinks}
-              transition={{ ease: 'easeInOut', duration: 0.15 }}
               w='100%'
             >
               <ButtonGroup>
@@ -447,9 +487,9 @@ const Layout = ({ children }) => {
 
       <MotionBox
         position='fixed'
-        initial='closed'
+        initial={sideNavOpen ? 'open' : 'closed'}
+        animate={sideNavOpen ? 'open' : 'closed'}
         variants={background}
-        animate={sideNavOpen ? 'closed' : 'open'}
         h='100vh'
         bgImage={'url(' + theme.images.bgImg + ')'}
         bgSize='cover'
@@ -473,11 +513,10 @@ const Layout = ({ children }) => {
       />
       <MotionFlex
         width='100%'
-        initial='closed'
+        initial={sideNavOpen ? 'open' : 'closed'}
+        animate={sideNavOpen ? 'open' : 'closed'}
         variants={layout}
-        animate={sideNavOpen ? 'closed' : 'open'}
         flexDirection='column'
-        transition={{ ease: 'easeInOut', duration: 0.15 }}
       >
         <Header></Header>
         {children}

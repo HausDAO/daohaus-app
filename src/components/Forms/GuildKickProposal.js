@@ -6,6 +6,7 @@ import { RiErrorWarningLine } from 'react-icons/ri';
 import { useDao, useTxProcessor, useUser } from '../../contexts/PokemolContext';
 import AddressInput from './AddressInput';
 import DetailsFields from './DetailFields';
+import { useLocation } from 'react-router-dom';
 
 const GuildKickProposalForm = () => {
   const [loading, setLoading] = useState(false);
@@ -13,6 +14,7 @@ const GuildKickProposalForm = () => {
   const [dao] = useDao();
   const [txProcessor, updateTxProcessor] = useTxProcessor();
   const [currentError, setCurrentError] = useState(null);
+  const location = useLocation();
 
   const {
     handleSubmit,
@@ -22,6 +24,16 @@ const GuildKickProposalForm = () => {
     watch,
     // formState
   } = useForm();
+
+  useEffect(() => {
+    // TODO: expand to work for any search param on all forms
+    if (location.search && location.search.split('applicant=')[1]) {
+      const applicantAddress = location.search.split('applicant=')[1];
+      setValue('applicantHidden', applicantAddress);
+      setValue('applicant', applicantAddress);
+    }
+    // eslint-disable-next-line
+  }, [location]);
 
   useEffect(() => {
     if (Object.keys(errors).length > 0) {
@@ -40,10 +52,10 @@ const GuildKickProposalForm = () => {
   const txCallBack = (txHash, details) => {
     console.log('txCallBack', txProcessor);
     if (txProcessor && txHash) {
-      txProcessor.setTx(txHash, user.username, details, true, false);
+      txProcessor.setTx(txHash, user.username, details);
       txProcessor.forceUpdate = true;
 
-      updateTxProcessor(txProcessor);
+      updateTxProcessor({ ...txProcessor });
       // close model here
       // onClose();
       // setShowModal(null);
@@ -63,6 +75,7 @@ const GuildKickProposalForm = () => {
       title: values.title,
       description: values.description,
       link: 'https://' + values.link,
+      hash: Math.random(0, 10000),
     });
 
     try {

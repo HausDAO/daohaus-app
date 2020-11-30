@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Box, Flex } from '@chakra-ui/core';
 
 import { useUser } from '../../contexts/PokemolContext';
@@ -7,11 +7,25 @@ import MemberDaoList from '../../components/Hub/MemberDaoList';
 import HubSignedOut from '../../components/Hub/HubSignedOut';
 import HubProfileCard from '../../components/Hub/HubProfileCard';
 import HubActivityFeed from '../../components/Hub/HubActivityFeed';
+import TextBox from '../../components/Shared/TextBox';
+import ContentBox from '../../components/Shared/ContentBox';
 import { HUB_MEMBERSHIPS } from '../../utils/apollo/member-queries';
 
 const Hub = () => {
   const [user] = useUser();
   const [memberDaos, setMemberDaos] = useState();
+  const [v2Daos, setV2Daos] = useState([]);
+
+  useEffect(() => {
+    if (memberDaos) {
+      // TODO: Remove when v2 is ready
+      setV2Daos(
+        memberDaos
+          .filter((member) => member.moloch.version === '2')
+          .map((member) => member.moloch),
+      );
+    }
+  }, [memberDaos]);
 
   return (
     <Box p={6}>
@@ -20,23 +34,13 @@ const Hub = () => {
           <Flex>
             <Box w='50%'>
               <HubProfileCard />
-              <Box
-                rounded='lg'
-                bg='blackAlpha.600'
-                borderWidth='1px'
-                borderColor='whiteAlpha.200'
-                p={6}
-                mt={6}
-                maxW='600px'
-              >
-                {memberDaos ? (
+              <ContentBox p={6} mt={6} maxW='600px'>
+                {v2Daos.length > 0 ? (
                   <>
-                    <MemberDaoList
-                      daos={memberDaos.map((member) => member.moloch)}
-                    />
+                    <MemberDaoList daos={v2Daos} />
                   </>
                 ) : null}
-              </Box>
+              </ContentBox>
             </Box>
 
             <Box pl={8}>
@@ -48,11 +52,13 @@ const Hub = () => {
               >
                 Recent Activity
               </Box>
-              {memberDaos ? (
-                <HubActivityFeed
-                  daos={memberDaos.map((member) => member.moloch)}
-                />
-              ) : null}
+              {v2Daos.length > 0 ? (
+                <HubActivityFeed daos={v2Daos} />
+              ) : (
+                <TextBox my={35}>
+                  Recent Activity from your daos will show here
+                </TextBox>
+              )}
             </Box>
           </Flex>
 

@@ -28,6 +28,10 @@ export const MEMBERS_LIST = gql`
           decimals
         }
       }
+      highestIndexYesVote {
+        proposalId
+        proposalIndex
+      }
       tokenBalances {
         id
         tokenBalance
@@ -113,6 +117,7 @@ export const USER_MEMBERSHIPS = gql`
       moloch {
         id
         title
+        version
       }
     }
   }

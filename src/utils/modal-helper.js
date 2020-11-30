@@ -1,3 +1,1 @@
-const MODALS = {
-  changeDao: 'Change Dao',
-};
+export const MODALS = {};

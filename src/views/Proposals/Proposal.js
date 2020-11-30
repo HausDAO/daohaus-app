@@ -25,6 +25,14 @@ const Proposal = () => {
   const [theme] = useTheme();
 
   useEffect(() => {
+    const interval = setInterval(() => {
+      updateRefetchQuery('proposals');
+    }, 350000);
+    return () => clearInterval(interval);
+    // eslint-disable-next-line
+  }, []);
+
+  useEffect(() => {
     if (proposals) {
       const p = proposals?.filter((p) => {
         return p.proposalId === id;
@@ -34,14 +42,6 @@ const Proposal = () => {
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [proposals]);
-
-  useEffect(() => {
-    const interval = setInterval(() => {
-      updateRefetchQuery('proposals');
-    }, 60000);
-    return () => clearInterval(interval);
-    // eslint-disable-next-line
-  }, []);
 
   return (
     <Box p={6}>
@@ -66,18 +66,20 @@ const Proposal = () => {
           <Box pt={6}>
             <ProposalDetail proposal={proposal} />
           </Box>
-          <Flex w='100%' justify='center' align='center' pt={6}>
+          {/* <Flex w='100%' justify='center' align='center' pt={6}>
             <Box maxW='300px' textAlign='center'>
               There’s 6 more quests that need your attention. View all?
             </Box>
-          </Flex>
+          </Flex> */}
         </Flex>
         <Flex
           direction='column'
           w={['100%', null, null, null, '40%']}
           pt={[6, 0]}
         >
-          <Box>{!proposal?.cancelled && <TextBox size='md'>Vote</TextBox>}</Box>
+          <Box>
+            {!proposal?.cancelled && <TextBox size='md'>Actions</TextBox>}
+          </Box>
           <Box pt={6}>
             {!proposal?.cancelled && (
               <ProposalVote proposal={proposal} setProposal={setProposal} />

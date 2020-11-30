@@ -48,7 +48,9 @@ const ProposalsList = () => {
             );
             return unread.unread;
           } else {
-            return prop[filter.key] === filter.value;
+            console.log(filter, 'filter');
+
+            return prop[filter.type] === filter.value;
           }
         })
         .sort((a, b) => {
@@ -70,6 +72,8 @@ const ProposalsList = () => {
         });
       }
     }
+
+    console.log('filteredProposals', filteredProposals);
 
     setListProposals(filteredProposals);
   };

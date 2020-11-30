@@ -13,6 +13,7 @@ function usePokemolContext() {
 const initialState = {
   network: supportedChains[process.env.REACT_APP_NETWORK_ID],
   refetchQuery: null,
+  modals: { changeDao: false, accountModal: false, ragequitModal: false },
 
   user: null,
   web3Connect: {
@@ -25,6 +26,7 @@ const initialState = {
   contracts: {},
   txProcessor: {},
   ens: {},
+
   memberWallet: null,
   daoMetadata: null,
   daoGraphData: null,
@@ -32,8 +34,8 @@ const initialState = {
   proposals: [],
   members: [],
   balances: [],
+  activities: {},
   prices: {},
-  modals: { changeDao: false, accountModal: false },
 };
 
 const reducer = (state, action) => {
@@ -83,12 +85,14 @@ const reducer = (state, action) => {
     case 'setBalances': {
       return { ...state, balances: action.payload };
     }
+    case 'setActivities': {
+      return { ...state, activities: action.payload };
+    }
 
     case 'prices': {
       return { ...state, prices: action.payload };
     }
     case 'openModal': {
-      console.log('openmodal', action.payload);
       return { ...state, modals: { ...state.modals, [action.payload]: true } };
     }
     case 'closeModals': {
@@ -97,6 +101,18 @@ const reducer = (state, action) => {
         closeModals[modal] = false;
       }
       return { ...state, modals: closeModals };
+    }
+    case 'clearDaoData': {
+      return {
+        ...state,
+        daoMetadata: initialState.daoMetadata,
+        daoGraphData: initialState.daoGraphData,
+        memberWallet: initialState.memberWallet,
+        proposals: initialState.proposals,
+        members: initialState.members,
+        balances: initialState.balances,
+        activities: initialState.activities,
+      };
     }
     default: {
       return initialState;
@@ -163,6 +179,10 @@ function PokemolContextProvider(props) {
     dispatch({ type: 'setBalances', payload: data });
   }, []);
 
+  const updateActivities = useCallback((data) => {
+    dispatch({ type: 'setActivities', payload: data });
+  }, []);
+
   const updatePrices = useCallback((data) => {
     dispatch({ type: 'prices', payload: data });
   }, []);
@@ -173,6 +193,10 @@ function PokemolContextProvider(props) {
 
   const closeModals = useCallback(() => {
     dispatch({ type: 'closeModals' });
+  }, []);
+
+  const clearDaoData = useCallback(() => {
+    dispatch({ type: 'clearDaoData' });
   }, []);
 
   return (
@@ -195,9 +219,11 @@ function PokemolContextProvider(props) {
             updateProposals,
             updateMembers,
             updateBalances,
+            updateActivities,
             updatePrices,
             openModal,
             closeModals,
+            clearDaoData,
           },
         ],
         [
@@ -216,9 +242,11 @@ function PokemolContextProvider(props) {
           updateProposals,
           updateMembers,
           updateBalances,
+          updateActivities,
           updatePrices,
           openModal,
           closeModals,
+          clearDaoData,
         ],
       )}
     >
@@ -228,13 +256,14 @@ function PokemolContextProvider(props) {
 }
 
 export function useDao() {
-  const [state] = usePokemolContext();
+  const [state, { clearDaoData }] = usePokemolContext();
   return [
     {
       ...state.daoMetadata,
       graphData: state.daoGraphData,
       daoService: state.contracts.daoService,
     },
+    clearDaoData,
   ];
 }
 
@@ -306,6 +335,11 @@ export function useMembers() {
 export function useBalances() {
   const [state, { updateBalances }] = usePokemolContext();
   return [state.balances, updateBalances];
+}
+
+export function useActivities() {
+  const [state, { updateActivities }] = usePokemolContext();
+  return [state.activities, updateActivities];
 }
 
 export function usePrices() {
