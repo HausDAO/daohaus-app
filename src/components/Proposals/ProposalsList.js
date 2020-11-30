@@ -73,8 +73,6 @@ const ProposalsList = () => {
       }
     }
 
-    console.log('filteredProposals', filteredProposals);
-
     setListProposals(filteredProposals);
   };
 
@@ -85,7 +83,7 @@ const ProposalsList = () => {
           <ProposalFilter
             filter={filter}
             setFilter={setFilter}
-            listLength={listProposals.length}
+            proposals={proposals}
           />
         ) : null}
         <ProposalSort sort={sort} setSort={setSort} />

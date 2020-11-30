@@ -14,15 +14,27 @@ import { RiArrowDropDownFill } from 'react-icons/ri';
 
 import { useMemberWallet } from '../../contexts/PokemolContext';
 import { getFilterOptions } from '../../content/proposal-filters';
+import { determineUnreadProposalList } from '../../utils/proposal-helper';
 
-const ProposalFilter = ({ filter, setFilter, listLength }) => {
+const ProposalFilter = ({ filter, setFilter, proposals }) => {
   const [memberWallet] = useMemberWallet();
   const [filterOptions, setFilterOptions] = useState();
+  const [actionNeeded, setActionNeeded] = useState([]);
 
   useEffect(() => {
     let options;
     if (memberWallet && memberWallet.activeMember) {
-      options = getFilterOptions(memberWallet.activeMember, listLength);
+      const action = proposals.filter((prop) => {
+        const unread = determineUnreadProposalList(
+          prop,
+          memberWallet.activeMember,
+          memberWallet.memberAddress,
+        );
+        return unread.unread;
+      });
+      setActionNeeded(action);
+
+      options = getFilterOptions(memberWallet.activeMember, action.length);
     } else {
       options = getFilterOptions(false);
     }
@@ -35,7 +47,7 @@ const ProposalFilter = ({ filter, setFilter, listLength }) => {
     if (!filter) return '';
 
     return filter.value === 'Action Needed'
-      ? `${filter.name} (${listLength})`
+      ? `${filter.name} (${actionNeeded.length})`
       : filter.name;
   };
 
@@ -67,7 +79,9 @@ const ProposalFilter = ({ filter, setFilter, listLength }) => {
                       value={option.value}
                       _hover={{ color: 'primary.300' }}
                     >
-                      {option.name}
+                      {option.value === 'Action Needed'
+                        ? `${option.name} (${actionNeeded.length})`
+                        : option.name}
                     </MenuItem>
                   );
                 }
