@@ -8,8 +8,9 @@ import { utils } from 'web3';
 
 import { useMembers, useMemberWallet } from '../../contexts/PokemolContext';
 import { useTheme } from '../../contexts/CustomThemeContext';
-import { memberProfile } from '../../utils/helpers';
+import { memberProfile, proposalDetails } from '../../utils/helpers';
 import { getProposalCountdownText } from '../../utils/proposal-helper';
+import ProposalMinionCard from './ProposalMinionCard';
 import TextBox from '../Shared/TextBox';
 import MemberAvatar from '../Members/MemberAvatar';
 
@@ -18,7 +19,9 @@ const ZERO_ADDRESS = '0x0000000000000000000000000000000000000000';
 const ProposalDetail = ({ proposal }) => {
   const [members] = useMembers();
   const [theme] = useTheme();
-  const details = proposal?.details && JSON.parse(proposal?.details);
+
+  const details = proposalDetails(proposal?.details);
+
   const [memberWallet] = useMemberWallet();
   const [memberVote, setMemberVote] = useState();
 
@@ -182,6 +185,15 @@ const ProposalDetail = ({ proposal }) => {
               </Flex>
             ))}
         </Flex>
+        {proposal?.minionAddress ? (
+          <ProposalMinionCard proposal={proposal} />
+        ) : (
+          <Skeleton isLoaded={details?.description}>
+            <Box w='100%' mt={8}>
+              {details?.description}
+            </Box>
+          </Skeleton>
+        )}
       </Box>
 
       <Flex w='80%' mt={6} justify='space-between'>
