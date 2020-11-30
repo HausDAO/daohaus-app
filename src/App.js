@@ -43,8 +43,6 @@ function Init() {
 const App = () => {
   const [theme] = useTheme();
 
-  console.log('render App');
-
   return (
     <ApolloProvider client={client}>
       <ChakraProvider theme={theme}>

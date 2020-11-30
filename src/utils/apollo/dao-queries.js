@@ -11,7 +11,11 @@ export const HOME_DAO = gql`
       totalShares
       totalLoot
       version
+      periodDuration
+      votingPeriodLength
+      gracePeriodLength
       proposalDeposit
+      processingReward
       guildBankAddress
       minions {
         minionAddress
@@ -28,8 +32,6 @@ export const HOME_DAO = gql`
           symbol
           decimals
         }
-        symbol @client
-        decimals @client
         tokenBalance
         guildBank
         contractTokenBalance @client
@@ -54,8 +56,6 @@ export const DAO_ACTIVITIES = gql`
         createdAt
         proposalId
         proposalIndex
-        processed
-        sponsored
         details
         memberAddress
         applicant
@@ -73,7 +73,10 @@ export const DAO_ACTIVITIES = gql`
         yesVotes
         noVotes
         processed
+        processedAt
+        processor
         proposer
+        sponsored
         sponsoredAt
         sponsor
         proposalType @client

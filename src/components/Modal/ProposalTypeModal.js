@@ -12,9 +12,17 @@ import {
   Box,
 } from '@chakra-ui/core';
 import { useTheme } from '../../contexts/CustomThemeContext';
+import { useHistory } from 'react-router-dom';
+import ComingSoonOverlay from '../Shared/ComingSoonOverlay';
 
-const ProposalFormModal = ({ isOpen, setShowModal, setProposalType }) => {
+const ProposalFormModal = ({
+  isOpen,
+  setShowModal,
+  setProposalType,
+  returnRoute,
+}) => {
   const [theme] = useTheme();
+  const history = useHistory();
 
   const proposalTypes = [
     {
@@ -52,16 +60,19 @@ const ProposalFormModal = ({ isOpen, setShowModal, setProposalType }) => {
       subhead: 'Minion Simple',
       proposalType: 'minion',
       image: 'themes/raidTheme/raidguild__swords-white.svg',
+      comingSoon: true,
     },
   ];
 
+  const handleClose = () => {
+    setShowModal(null);
+    if (returnRoute) {
+      history.push(returnRoute);
+    }
+  };
+
   return (
-    <Modal
-      isOpen={isOpen}
-      onClose={() => setShowModal(null)}
-      isCentered
-      size='xl'
-    >
+    <Modal isOpen={isOpen} onClose={handleClose} isCentered size='xl'>
       <ModalOverlay />
       <ModalContent
         rounded='lg'
@@ -99,6 +110,7 @@ const ProposalFormModal = ({ isOpen, setShowModal, setProposalType }) => {
           {proposalTypes.map((p) => {
             return (
               <Box
+                position='relative'
                 as={Flex}
                 key={p.name}
                 display='flex'
@@ -111,10 +123,14 @@ const ProposalFormModal = ({ isOpen, setShowModal, setProposalType }) => {
                 p={2}
                 m={1}
                 onClick={() => {
+                  if (p.comingSoon) {
+                    return;
+                  }
                   setProposalType(p.proposalType);
                   setShowModal('proposal');
                 }}
               >
+                {p.comingSoon && <ComingSoonOverlay />}
                 <Image
                   src={require('../../assets/' + p.image)}
                   width='50px'

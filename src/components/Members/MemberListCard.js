@@ -2,7 +2,7 @@ import React from 'react';
 import { Flex, Skeleton, Box } from '@chakra-ui/core';
 import { format } from 'date-fns';
 
-import UserAvatar from '../Shared/UserAvatar';
+import MemberAvatar from './MemberAvatar';
 
 const MemberListCard = ({ member, isLoaded, handleSelect, selectedMember }) => {
   return (
@@ -15,11 +15,15 @@ const MemberListCard = ({ member, isLoaded, handleSelect, selectedMember }) => {
           ? 'primary.500'
           : null
       }
-      _hover={{ background: 'primary.500', borderRadius: '4px' }}
+      _hover={{
+        cursor: 'pointer',
+        background: 'primary.500',
+        borderRadius: '4px',
+      }}
       onClick={() => handleSelect(member)}
     >
       <Flex w='43%' direction='column' justify='space-between'>
-        {member?.profile && <UserAvatar user={member.profile} />}
+        {member?.memberAddress ? <MemberAvatar member={member} /> : null}
       </Flex>
       <Box w='15%'>
         <Skeleton isLoaded={isLoaded}>

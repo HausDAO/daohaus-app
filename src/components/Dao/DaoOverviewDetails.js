@@ -1,42 +1,28 @@
 import React from 'react';
 import { useHistory } from 'react-router-dom';
 import { Box, Flex, Image, Skeleton, Button } from '@chakra-ui/core';
-import { utils } from 'web3';
 
 import { useUser, useMembers } from '../../contexts/PokemolContext';
 import { useTheme } from '../../contexts/CustomThemeContext';
+
+import ContentBox from '../Shared/ContentBox';
+import TextBox from '../Shared/TextBox';
+import BankTotal from '../Bank/BankTotal';
 
 const DaoOverviewDetails = ({ dao }) => {
   const [theme] = useTheme();
   const [user] = useUser();
   const [members] = useMembers();
   const history = useHistory();
-  const wethBalance = dao?.graphData?.tokenBalances?.filter((t) => {
-    return t.symbol === 'WETH';
-  })[0]?.tokenBalance;
 
   return (
-    <>
+    <Box>
       {user && (
-        <Box
-          ml={6}
-          textTransform='uppercase'
-          fontSize='sm'
-          fontFamily='heading'
-        >
+        <TextBox size='sm' color='whiteAlpha.900'>
           Details
-        </Box>
+        </TextBox>
       )}
-      <Box
-        rounded='lg'
-        bg='blackAlpha.600'
-        borderWidth='1px'
-        borderColor='whiteAlpha.200'
-        p={6}
-        m={6}
-        mt={2}
-        w='100%'
-      >
+      <ContentBox mt={2} w='100%'>
         <Flex direction='row' align='center'>
           <Image
             src={require('../../assets/Daohaus__Castle--Dark.svg')}
@@ -50,79 +36,39 @@ const DaoOverviewDetails = ({ dao }) => {
             </Box>
           </Skeleton>
         </Flex>
+        <Skeleton isLoaded={dao?.description}>
+          <Box mt={6}>{dao?.description ? dao.description : '--'}</Box>
+        </Skeleton>
         <Flex direction='row' w='60%' justify='space-between' mt={6}>
           <Box>
-            <Box
-              textTransform='uppercase'
-              fontFamily='heading'
-              fontSize='sm'
-              fontWeight={700}
-            >
-              {theme.daoMeta.members}
-            </Box>
+            <TextBox>{theme.daoMeta.members}</TextBox>
             <Skeleton isLoaded={members?.length > 0}>
-              <Box fontSize='2xl' fontFamily='heading' fontWeight={700}>
+              <TextBox size='lg' variant='value'>
                 {members?.length ? members.length : '--'}
-              </Box>
+              </TextBox>
             </Skeleton>
           </Box>
           <Box>
-            <Box
-              textTransform='uppercase'
-              fontFamily='heading'
-              fontSize='sm'
-              fontWeight={700}
-            >
-              Shares
-            </Box>
+            <TextBox>Shares</TextBox>
             <Skeleton isLoaded={dao?.graphData?.totalShares}>
-              <Box fontSize='2xl' fontFamily='heading' fontWeight={700}>
+              <TextBox size='lg' variant='value'>
                 {dao?.graphData?.totalShares ? dao.graphData.totalShares : '--'}
-              </Box>
+              </TextBox>
             </Skeleton>
           </Box>
           <Box>
-            <Box
-              textTransform='uppercase'
-              fontFamily='heading'
-              fontSize='sm'
-              fontWeight={700}
-            >
-              Loot
-            </Box>
+            <TextBox>Loot</TextBox>
             <Skeleton isLoaded={dao?.graphData?.totalLoot}>
-              <Box fontSize='2xl' fontFamily='heading' fontWeight={700}>
+              <TextBox size='lg' variant='value'>
                 {dao?.graphData?.totalLoot ? dao?.graphData?.totalLoot : '--'}
-              </Box>
+              </TextBox>
             </Skeleton>
           </Box>
         </Flex>
         <Box mt={6}>
-          <Box
-            fontFamily='heading'
-            textTransform='uppercase'
-            fontSize='sm'
-            fontWeight={700}
-          >
-            {theme.daoMeta.bank}
-          </Box>
-          <Skeleton isLoaded={wethBalance}>
-            <Box fontSize='3xl' fontFamily='heading' fontWeight={700}>
-              {wethBalance && parseFloat(utils.fromWei(wethBalance)).toFixed(3)}{' '}
-              WETH
-            </Box>
-          </Skeleton>
-          <Box>
-            <Skeleton isLoaded={dao?.graphData?.tokenBalances?.length > 0}>
-              <Box fontSize='sm' as='i' fontWeight={200}>
-                {dao?.graphData?.tokenBalances?.length} Tokens
-              </Box>
-            </Skeleton>
-          </Box>
+          <TextBox size='md'>{theme.daoMeta.bank}</TextBox>
+          <BankTotal tokenBalances={dao?.graphData?.tokenBalances} dao={dao} />
         </Box>
-        <Skeleton isLoaded={dao?.description}>
-          <Box mt={6}>{dao?.description ? dao.description : '--'}</Box>
-        </Skeleton>
         <Flex mt={6}>
           <Button
             mr={6}
@@ -137,8 +83,8 @@ const DaoOverviewDetails = ({ dao }) => {
             View {theme.daoMeta.bank}
           </Button>
         </Flex>
-      </Box>
-    </>
+      </ContentBox>
+    </Box>
   );
 };
 

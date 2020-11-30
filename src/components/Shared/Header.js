@@ -1,12 +1,16 @@
 import React, { useEffect, useState } from 'react';
-import { Box, Flex, Icon, Button, IconButton } from '@chakra-ui/core';
+import { Box, Flex, Button } from '@chakra-ui/core';
 import { useLocation, Link as RouterLink } from 'react-router-dom';
 import { RiAddFill } from 'react-icons/ri';
-import { useUser, useNetwork, useDao } from '../../contexts/PokemolContext';
+import {
+  useUser,
+  useNetwork,
+  useDao,
+  useModals,
+} from '../../contexts/PokemolContext';
 import { useTheme } from '../../contexts/CustomThemeContext';
 import { Web3SignIn } from './Web3SignIn';
 import UserAvatar from './UserAvatar';
-import DaoSwitcherModal from '../Modal/DaoSwitcherModal';
 import AccountModal from '../Modal/AccountModal';
 
 const Header = () => {
@@ -16,7 +20,7 @@ const Header = () => {
   const [dao] = useDao();
   const [theme] = useTheme();
   const [pageTitle, setPageTitle] = useState();
-  const [showDaoSwitcher, setShowDaoSwitcher] = useState(false);
+  const { modals, openModal } = useModals();
 
   useEffect(() => {
     if (location.pathname === '/') {
@@ -35,11 +39,24 @@ const Header = () => {
         'New ' + theme.daoMeta.member + ' ' + theme.daoMeta.proposal,
       );
     } else if (location.pathname === `/dao/${dao?.address}/proposals/new`) {
-      setPageTitle('New ' + theme.daoMeta.proposal);
+      setPageTitle(theme.daoMeta.proposal);
     } else if (location.pathname === `/dao/${dao?.address}/members`) {
       setPageTitle(theme.daoMeta.members);
     } else if (location.pathname === `/dao/${dao?.address}/bank`) {
       setPageTitle(theme.daoMeta.bank);
+    } else if (location.pathname === `/dao/${dao?.address}/settings`) {
+      setPageTitle('Settings');
+    } else if (location.pathname === `/dao/${dao?.address}/settings/boosts`) {
+      setPageTitle(theme.daoMeta.boosts);
+    } else if (
+      location.pathname === `/dao/${dao?.address}/settings/boosts/new`
+    ) {
+      setPageTitle('New ' + theme.daoMeta.boost);
+    } else if (
+      location.pathname === `/themeSample` ||
+      location.pathname === `/theme`
+    ) {
+      setPageTitle('Theme Samples');
     } else if (
       location.pathname === `/dao/${dao?.address}/profile/${user?.username}`
     ) {
@@ -48,6 +65,7 @@ const Header = () => {
       // TODO pull from graph data
       setPageTitle(dao?.apiMeta?.name);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [location, dao, theme.daoMeta, setPageTitle]);
 
   return (
@@ -82,12 +100,22 @@ const Header = () => {
           {location.pathname === `/dao/${dao?.address}/bank` && (
             <Button
               as={RouterLink}
-              to={`/dao/${dao?.address}/proposals/new`}
+              to={`/dao/${dao?.address}/bank/token/new`}
               rightIcon={<RiAddFill />}
             >
               Add Asset
             </Button>
           )}
+          {(location.pathname === `/dao/${dao?.address}/settings` ||
+            location.pathname === `/dao/${dao?.address}/settings/boosts`) &&
+            // <Button
+            //   as={RouterLink}
+            //   to={`/dao/${dao?.address}/settings/boosts/new`}
+            //   rightIcon={<RiAddFill />}
+            // >
+            //   Add {theme.daoMeta.boost}
+            // </Button>
+            null}
         </Flex>
 
         <Flex direction='row' justify='flex-end' align='center'>
@@ -99,15 +127,12 @@ const Header = () => {
             <>
               <Button
                 variant='outline'
-                onClick={() => setShowDaoSwitcher(true)}
+                onClick={() => openModal('accountModal')}
               >
                 <UserAvatar user={user.profile ? user.profile : user} />
               </Button>
 
-              <AccountModal
-                isOpen={showDaoSwitcher}
-                setShowModal={setShowDaoSwitcher}
-              />
+              <AccountModal isOpen={modals.accountModal} />
             </>
           ) : (
             <Web3SignIn />

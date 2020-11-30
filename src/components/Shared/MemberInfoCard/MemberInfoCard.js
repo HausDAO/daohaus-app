@@ -1,44 +1,53 @@
 import React, { useEffect, useState } from 'react';
-import { useHistory } from 'react-router-dom';
-import { Flex, Box, Skeleton } from '@chakra-ui/core';
-import { format } from 'date-fns';
-import { useMembers, useDao } from '../../../contexts/PokemolContext';
+import { Link } from 'react-router-dom';
+import { Flex } from '@chakra-ui/core';
+import ContentBox from '../ContentBox';
+import TextBox from '../TextBox';
+import {
+  useMembers,
+  useDao,
+  useMemberWallet,
+} from '../../../contexts/PokemolContext';
 import { useTheme } from '../../../contexts/CustomThemeContext';
 
 import { memberProfile } from '../../../utils/helpers';
 import MemberInfoCardGuts from './MemberInfoCardGuts';
 
-const MemberInfoCard = ({ user }) => {
+const MemberInfoCard = ({ user, showMenu }) => {
+  const [memberWallet] = useMemberWallet();
   const [dao] = useDao();
   const [members] = useMembers();
-  const [, setMember] = useState(null);
+  const [member, setMember] = useState(null);
   const [theme] = useTheme();
-  const history = useHistory();
 
   useEffect(() => {
-    setMember(memberProfile(members, user.username));
-  }, [members, user.username]);
+    if (user?.memberAddress) {
+      setMember(user);
+    } else {
+      setMember(memberProfile(members, user.username));
+    }
+  }, [members, user]);
 
   return (
     <>
-      <Flex justify='space-between' ml={6}>
-        <Box textTransform='uppercase' fontSize='sm' fontFamily='heading'>
-          {theme.daoMeta.member} Info
-        </Box>
-        <Box
-          textTransform='uppercase'
-          fontSize='sm'
-          fontFamily='heading'
-          color='secondary.400'
-          _hover={{ cursor: 'pointer' }}
-          onClick={() =>
-            history.push(`/dao/${dao.address}/profile/${user.username}`)
-          }
-        >
-          View my profile
-        </Box>
+      <Flex justify='space-between'>
+        <TextBox size='sm'>{theme.daoMeta.member} Info</TextBox>
+        {member && (
+          <TextBox
+            as={Link}
+            to={'/dao/' + dao.address + '/profile/' + member.memberAddress}
+            color='inherit'
+          >
+            View{' '}
+            {memberWallet?.memberAddress?.toLowerCase() ===
+              member?.memberAddress && 'my'}{' '}
+            profile
+          </TextBox>
+        )}
       </Flex>
-      <MemberInfoCardGuts user={user} />
+      <ContentBox mt={3}>
+        <MemberInfoCardGuts user={user} member={member} showMenu={showMenu} />
+      </ContentBox>
     </>
   );
 };

@@ -1,16 +1,20 @@
 import React, { useState, useEffect } from 'react';
 import { formatDistanceToNow, isBefore } from 'date-fns';
-import { Flex, Box, Icon, Link, Skeleton } from '@chakra-ui/core';
+import { Badge, Flex, Box, Icon, Link, Skeleton, Text } from '@chakra-ui/core';
+import ContentBox from '../Shared/ContentBox';
 import { RiExternalLinkLine } from 'react-icons/ri';
 import { FaThumbsUp, FaThumbsDown } from 'react-icons/fa';
 import { utils } from 'web3';
 
 import { useMembers, useMemberWallet } from '../../contexts/PokemolContext';
 import { useTheme } from '../../contexts/CustomThemeContext';
-import UserAvatar from '../../components/Shared/UserAvatar';
 import { memberProfile, proposalDetails } from '../../utils/helpers';
 import { getProposalCountdownText } from '../../utils/proposal-helper';
 import ProposalMinionCard from './ProposalMinionCard';
+import TextBox from '../Shared/TextBox';
+import MemberAvatar from '../Members/MemberAvatar';
+
+const ZERO_ADDRESS = '0x0000000000000000000000000000000000000000';
 
 const ProposalDetail = ({ proposal }) => {
   const [members] = useMembers();
@@ -35,164 +39,57 @@ const ProposalDetail = ({ proposal }) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [memberWallet, proposal]);
 
+  // console.log('proposalDetail js', proposal);
+
   return (
-    <Box
-      rounded='lg'
-      bg='blackAlpha.600'
-      borderWidth='1px'
-      borderColor='whiteAlpha.200'
-      p={6}
-      m={6}
-    >
-      <Flex>
-        <Box w='90%'>
-          <Box
-            textTransform='uppercase'
-            fontSize='sm'
-            fontFamily='heading'
-            fontWeight={700}
-          >
-            {proposal ? proposal.proposalType : theme.daoMeta.proposal}
-          </Box>
-          <Skeleton isLoaded={details?.title}>
-            <Box fontSize='3xl' fontFamily='heading' fontWeight={700}>
-              {details?.title ? details?.title : '-'}
-            </Box>
-          </Skeleton>
-          <Flex w='100%' justify='space-between' mt={6}>
-            {(proposal?.tributeOffered > 0 || !proposal?.tributeOffered) && (
-              <Box>
-                <Box
-                  textTransform='uppercase'
-                  fontSize='sm'
-                  fontFamily='heading'
-                  fontWeight={700}
-                >
-                  Tribute
-                </Box>
-                <Skeleton isLoaded={proposal?.tributeOffered}>
-                  <Box fontSize='lg' fontFamily='space' fontWeight={700}>
-                    {proposal?.tributeOffered
-                      ? `${utils.fromWei(
-                          proposal.tributeOffered.toString(),
-                        )} ${proposal.tributeTokenSymbol || 'WETH'}`
-                      : '--'}
-                  </Box>
-                </Skeleton>
-              </Box>
-            )}
-            {proposal?.paymentRequested > 0 && ( // don't show during loading
-              <Box>
-                <Box
-                  textTransform='uppercase'
-                  fontSize='sm'
-                  fontFamily='heading'
-                  fontWeight={700}
-                >
-                  Payment Requested
-                </Box>
-                <Skeleton isLoaded={proposal?.paymentRequested}>
-                  <Box fontSize='lg' fontFamily='space' fontWeight={700}>
-                    {proposal?.paymentRequested
-                      ? `${utils.fromWei(
-                          proposal.paymentRequested.toString(),
-                        )} ${proposal.paymentTokenSymbol || 'WETH'}`
-                      : '--'}
-                  </Box>
-                </Skeleton>
-              </Box>
-            )}
-            {(proposal?.sharesRequested > 0 || !proposal?.sharesRequested) && (
-              <Box>
-                <Box
-                  textTransform='uppercase'
-                  fontSize='sm'
-                  fontFamily='heading'
-                  fontWeight={700}
-                >
-                  Shares
-                </Box>
-                <Skeleton isLoaded={proposal?.sharesRequested}>
-                  <Box fontSize='lg' fontFamily='space' fontWeight={700}>
-                    {proposal?.sharesRequested
-                      ? proposal.sharesRequested
-                      : '--'}
-                  </Box>
-                </Skeleton>
-              </Box>
-            )}
-            {proposal?.lootRequested > 0 && ( // don't show during loading
-              <Box>
-                <Box
-                  textTransform='uppercase'
-                  fontSize='sm'
-                  fontFamily='heading'
-                  fontWeight={700}
-                >
-                  Loot
-                </Box>
-                <Skeleton isLoaded={proposal?.lootRequested}>
-                  <Box fontSize='lg' fontFamily='space' fontWeight={700}>
-                    {proposal?.lootRequested ? proposal.lootRequested : '--'}
-                  </Box>
-                </Skeleton>
-              </Box>
-            )}
+    <ContentBox>
+      <Box>
+        <Box>
+          <Flex justify='space-between'>
+            <TextBox>
+              {proposal ? proposal.proposalType : theme.daoMeta.proposal}
+            </TextBox>
             <Box>
               {proposal?.proposalIndex ? (
                 <>
-                  <Box
-                    textTransform='uppercase'
-                    fontSize='sm'
-                    fontFamily='heading'
-                    fontWeight={700}
-                  >
+                  <TextBox>
                     {isBefore(
                       Date.now(),
                       new Date(+proposal?.votingPeriodEnds * 1000),
                     )
                       ? 'Voting Period Ends'
                       : 'Voting Ended'}
-                  </Box>
-                  <Box fontSize='lg' fontFamily='space' fontWeight={700}>
+                  </TextBox>
+                  <TextBox fontSize='lg' variant='value'>
                     {formatDistanceToNow(
                       new Date(+proposal?.votingPeriodEnds * 1000),
                       {
                         addSuffix: true,
                       },
                     )}
-                  </Box>
+                  </TextBox>
                 </>
               ) : (
                 <>
-                  <Box
-                    textTransform='uppercase'
-                    fontSize='sm'
-                    fontFamily='heading'
-                    fontWeight={700}
-                  >
-                    Proposal Status
-                  </Box>
                   <Skeleton isLoaded={proposal?.status}>
-                    <Box fontSize='lg' fontFamily='space' fontWeight={700}>
+                    <Badge>
                       {proposal?.status
                         ? getProposalCountdownText(proposal)
                         : '--'}
-                    </Box>
+                    </Badge>
                   </Skeleton>
                 </>
               )}
             </Box>
           </Flex>
+          <Skeleton isLoaded={details?.title}>
+            <Text fontSize='3xl'>{details?.title ? details?.title : '-'}</Text>
+          </Skeleton>
+          <Skeleton isLoaded={details?.description}>
+            <Text>{details?.description}</Text>
+          </Skeleton>
           <Box mt={6}>
-            <Box
-              textTransform='uppercase'
-              fontSize='sm'
-              fontFamily='heading'
-              fontWeight={700}
-            >
-              Link
-            </Box>
+            <TextBox>Link</TextBox>
             <Skeleton isLoaded={details?.link}>
               <Link href={details?.link} target='_blank'>
                 {details?.link ? details.link : '-'}{' '}
@@ -200,7 +97,60 @@ const ProposalDetail = ({ proposal }) => {
               </Link>
             </Skeleton>
           </Box>
+          <Flex w='100%' justify='space-between' mt={6}>
+            {(proposal?.tributeOffered > 0 || !proposal?.tributeOffered) && (
+              <Box>
+                <TextBox>Tribute</TextBox>
+                <Skeleton isLoaded={proposal?.tributeOffered}>
+                  <TextBox fontSize='lg' variant='value'>
+                    {proposal?.tributeOffered
+                      ? `${utils.fromWei(
+                          proposal.tributeOffered.toString(),
+                        )} ${proposal.tributeTokenSymbol || 'WETH'}`
+                      : '--'}
+                  </TextBox>
+                </Skeleton>
+              </Box>
+            )}
+            {proposal?.paymentRequested > 0 && ( // don't show during loading
+              <Box>
+                <TextBox>Payment Requested</TextBox>
+                <Skeleton isLoaded={proposal?.paymentRequested}>
+                  <TextBox fontSize='lg' variant='value'>
+                    {proposal?.paymentRequested
+                      ? `${utils.fromWei(
+                          proposal.paymentRequested.toString(),
+                        )} ${proposal.paymentTokenSymbol || 'WETH'}`
+                      : '--'}
+                  </TextBox>
+                </Skeleton>
+              </Box>
+            )}
+            {(proposal?.sharesRequested > 0 || !proposal?.sharesRequested) && (
+              <Box>
+                <TextBox>Shares</TextBox>
+                <Skeleton isLoaded={proposal?.sharesRequested}>
+                  <TextBox fontSize='lg' variant='value'>
+                    {proposal?.sharesRequested
+                      ? proposal.sharesRequested
+                      : '--'}
+                  </TextBox>
+                </Skeleton>
+              </Box>
+            )}
+            {proposal?.lootRequested > 0 && ( // don't show during loading
+              <Box>
+                <TextBox>Loot</TextBox>
+                <Skeleton isLoaded={proposal?.lootRequested}>
+                  <TextBox size='lg' variant='value'>
+                    {proposal?.lootRequested ? proposal.lootRequested : '--'}
+                  </TextBox>
+                </Skeleton>
+              </Box>
+            )}
+          </Flex>
         </Box>
+
         <Flex>
           {memberVote &&
             (+memberVote.uintVote === 1 ? (
@@ -237,33 +187,24 @@ const ProposalDetail = ({ proposal }) => {
               </Flex>
             ))}
         </Flex>
-      </Flex>
-
-      {proposal?.minionAddress ? (
-        <ProposalMinionCard proposal={proposal} />
-      ) : (
-        <Skeleton isLoaded={details?.description}>
-          <Box w='100%' mt={8}>
-            {details?.description}
-          </Box>
-        </Skeleton>
-      )}
+        {proposal?.minionAddress ? (
+          <ProposalMinionCard proposal={proposal} />
+        ) : (
+          <Skeleton isLoaded={details?.description}>
+            <Box w='100%' mt={8}>
+              {details?.description}
+            </Box>
+          </Skeleton>
+        )}
+      </Box>
 
       <Flex w='80%' mt={6} justify='space-between'>
         <Box mr={5}>
-          <Box
-            textTransform='uppercase'
-            fontSize='sm'
-            mb={4}
-            fontFamily='heading'
-            fontWeight={700}
-          >
-            Submitted By
-          </Box>
+          <TextBox mb={2}>Submitted By</TextBox>
           <Skeleton isLoaded={members && proposal?.proposer}>
             {members && proposal?.proposer ? (
-              <UserAvatar
-                user={memberProfile(members, proposal?.proposer).profile}
+              <MemberAvatar
+                member={memberProfile(members, proposal?.proposer)}
               />
             ) : (
               '--'
@@ -271,19 +212,16 @@ const ProposalDetail = ({ proposal }) => {
           </Skeleton>
         </Box>
         <Box>
-          <Box
-            textTransform='uppercase'
-            fontSize='sm'
-            fontFamily='heading'
-            fontWeight={700}
-            mb={4}
-          >
-            Recipient
-          </Box>
+          <TextBox mb={2}>Recipient</TextBox>
           <Skeleton isLoaded={members && proposal?.applicant}>
             {members && proposal?.applicant ? (
-              <UserAvatar
-                user={memberProfile(members, proposal?.applicant).profile}
+              <MemberAvatar
+                member={memberProfile(
+                  members,
+                  proposal?.applicant !== ZERO_ADDRESS
+                    ? proposal?.applicant
+                    : proposal?.proposer,
+                )}
               />
             ) : (
               '--'
@@ -291,7 +229,7 @@ const ProposalDetail = ({ proposal }) => {
           </Skeleton>
         </Box>
       </Flex>
-    </Box>
+    </ContentBox>
   );
 };
 

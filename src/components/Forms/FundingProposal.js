@@ -6,17 +6,14 @@ import {
   FormControl,
   Flex,
   Input,
-  InputGroup,
-  InputLeftAddon,
   Icon,
-  Stack,
   Box,
-  Textarea,
   Menu,
   MenuButton,
   MenuList,
   MenuItem,
 } from '@chakra-ui/core';
+import TextBox from '../Shared/TextBox';
 import { utils } from 'web3';
 import { RiAddFill, RiErrorWarningLine } from 'react-icons/ri';
 
@@ -25,6 +22,7 @@ import { useDao, useTxProcessor, useUser } from '../../contexts/PokemolContext';
 import TributeInput from './TributeInput';
 import PaymentInput from './PaymentInput';
 import AddressInput from './AddressInput';
+import DetailsFields from './DetailFields';
 
 const FundingProposalForm = () => {
   const [loading, setLoading] = useState(false);
@@ -65,10 +63,10 @@ const FundingProposalForm = () => {
   const txCallBack = (txHash, details) => {
     console.log('txCallBack', txProcessor);
     if (txProcessor && txHash) {
-      txProcessor.setTx(txHash, user.username, details, true, false);
+      txProcessor.setTx(txHash, user.username, details);
       txProcessor.forceUpdate = true;
 
-      updateTxProcessor(txProcessor);
+      updateTxProcessor({ ...txProcessor });
       // close model here
       // onClose();
       // setShowModal(null);
@@ -88,6 +86,7 @@ const FundingProposalForm = () => {
       title: values.title,
       description: values.description,
       link: 'https://' + values.link,
+      hash: Math.random(0, 10000),
     });
 
     try {
@@ -126,55 +125,7 @@ const FundingProposalForm = () => {
         mb={5}
       >
         <Box w='48%'>
-          <FormLabel
-            htmlFor='title'
-            color='white'
-            fontFamily='heading'
-            textTransform='uppercase'
-            fontSize='xs'
-            fontWeight={700}
-          >
-            Details
-          </FormLabel>
-          <Stack spacing={4}>
-            <Input
-              name='title'
-              placeholder='Proposal Title'
-              mb={5}
-              ref={register({
-                required: {
-                  value: true,
-                  message: 'Title is required',
-                },
-              })}
-            />
-            <Textarea
-              name='description'
-              placeholder='Short Description'
-              type='textarea'
-              mb={5}
-              h={10}
-              ref={register({
-                required: {
-                  value: true,
-                  message: 'Description is required',
-                },
-              })}
-            />
-            <InputGroup>
-              <InputLeftAddon>https://</InputLeftAddon>
-              <Input
-                name='link'
-                placeholder='daolink.club'
-                ref={register({
-                  required: {
-                    value: true,
-                    message: 'Reference Link is required',
-                  },
-                })}
-              />
-            </InputGroup>
-          </Stack>
+          <DetailsFields register={register} />
         </Box>
         <Box w='48%'>
           <AddressInput register={register} setValue={setValue} watch={watch} />
@@ -187,16 +138,9 @@ const FundingProposalForm = () => {
 
           {showShares && (
             <>
-              <FormLabel
-                htmlFor='name'
-                color='white'
-                fontFamily='heading'
-                textTransform='uppercase'
-                fontSize='xs'
-                fontWeight={700}
-              >
+              <TextBox as={FormLabel} htmlFor='name' mb={2}>
                 Shares Requested
-              </FormLabel>
+              </TextBox>
               <Input
                 name='sharesRequested'
                 placeholder='0'
@@ -217,16 +161,9 @@ const FundingProposalForm = () => {
           )}
           {showLoot && (
             <>
-              <FormLabel
-                htmlFor='lootRequested'
-                color='white'
-                fontFamily='heading'
-                textTransform='uppercase'
-                fontSize='xs'
-                fontWeight={700}
-              >
+              <TextBox as={FormLabel} htmlFor='lootRequested' mb={2}>
                 Loot Requested
-              </FormLabel>
+              </TextBox>
               <Input
                 name='lootRequested'
                 placeholder='0'
@@ -249,12 +186,10 @@ const FundingProposalForm = () => {
           )}
           {(!showShares || !showLoot || !showTribute) && (
             <Menu textTransform='uppercase'>
-              <MenuButton
-                as={Button}
-                variant='outline'
-                rightIcon={<Icon as={RiAddFill} />}
-              >
-                Additional Options
+              <MenuButton>
+                <Button variant='outline' rightIcon={<Icon as={RiAddFill} />}>
+                  Additional Options
+                </Button>
               </MenuButton>
               <MenuList>
                 {!showShares && (

@@ -93,15 +93,11 @@ export const getMembersActivites = (daoData) => {
 export const getMemberActivites = (daoData, memberAddress) => {
   const proposals = daoData.proposals.filter((prop) => {
     const memberRelated =
-      memberAddress === prop.proposer ||
-      memberAddress === prop.sponser ||
-      memberAddress === prop.memberAddress ||
-      memberAddress === prop.applicant;
-    return (
-      !prop.cancelled &&
-      prop.proposalType === 'Member Proposal' &&
-      memberRelated
-    );
+      memberAddress?.toLowerCase() === prop.proposer?.toLowerCase() ||
+      memberAddress?.toLowerCase() === prop.sponser?.toLowerCase() ||
+      memberAddress?.toLowerCase() === prop.memberAddress?.toLowerCase() ||
+      memberAddress?.toLowerCase() === prop.applicant?.toLowerCase();
+    return !prop.cancelled && memberRelated;
   });
 
   const votes = daoData.proposals
@@ -145,10 +141,10 @@ export const getMemberActivites = (daoData, memberAddress) => {
 export const getProfileActivites = (daoData, memberAddress) => {
   const proposals = daoData.proposals.filter((prop) => {
     const memberRelated =
-      memberAddress === prop.proposer ||
-      memberAddress === prop.sponser ||
-      memberAddress === prop.memberAddress ||
-      memberAddress === prop.applicant;
+      memberAddress?.toLowerCase() === prop.proposer?.toLowerCase() ||
+      memberAddress?.toLowerCase() === prop.sponsor?.toLowerCase() ||
+      memberAddress?.toLowerCase() === prop.memberAddress?.toLowerCase() ||
+      memberAddress?.toLowerCase() === prop.applicant?.toLowerCase();
     return !prop.cancelled && memberRelated;
   });
 
@@ -168,7 +164,7 @@ export const getProfileActivites = (daoData, memberAddress) => {
     });
 
   const rageActivities = daoData.rageQuits.filter(
-    (rage) => rage.memberAddress === memberAddress,
+    (rage) => rage.memberAddress.toLowerCase() === memberAddress.toLowerCase(),
   );
   const allActivites = proposals
     .concat(votes)
@@ -188,10 +184,8 @@ export const getProfileActivites = (daoData, memberAddress) => {
 };
 
 export const getProposalHistories = (proposal) => {
-  const votes = proposal.votes.map((vote) => voteHistoryData(vote));
+  const votes = proposal.votes.map((vote) => voteHistoryData(vote, proposal));
   const proposalStates = buildProposalHistory(proposal);
-
-  console.log('votes', votes);
 
   const allActivites = proposalStates
     .concat(votes)
@@ -209,7 +203,7 @@ const voteRageActivityData = (record) => {
     }`;
     type = 'vote';
   } else {
-    title = `rage quit ${record.shares} shares and ${record.loot} loot`;
+    title = `rage quit ${record.shares} shares and ${record.loot} loot 🖕`;
     type = 'rage';
   }
   return {
@@ -232,13 +226,10 @@ const proposalActivityData = (proposal) => {
     title = `sponsored ${proposal.proposalType}`;
   }
   if (proposal.processed) {
-    //TODO: replace when data is available
-    // return proposal.processedTime
     lastActivityTime = proposal.sponsoredAt;
     lastActivity = 'processed';
     title = `processed ${proposal.proposalType}`;
-    // TODO: Add to graph
-    // activityMember = proposal.processedBy;
+    activityMember = proposal.processor;
   }
   return {
     createdAt: lastActivityTime,
@@ -249,9 +240,15 @@ const proposalActivityData = (proposal) => {
   };
 };
 
-const voteHistoryData = (record) => {
+const voteHistoryData = (record, proposal) => {
+  const totalVotesShares = +proposal.yesShares + +proposal.noShares;
   return {
     ...record,
+    totalVotesShares,
+    memberPercentageOfVote: (
+      (+record.memberPower / totalVotesShares) *
+      100
+    ).toFixed(2),
     activityData: {
       createdAt: record.createdAt,
       memberAddress: record.memberAddress,
@@ -276,9 +273,8 @@ const buildProposalHistory = (proposal) => {
       ...proposal,
       historyStep: 'Cancelled',
       activityData: {
-        //update with cancelledAt
-        createdAt: proposal.createdAt,
-        memberAddress: proposal.memberAddress,
+        createdAt: proposal.cancelledAt,
+        memberAddress: proposal.proposer,
       },
     });
   }
@@ -289,8 +285,7 @@ const buildProposalHistory = (proposal) => {
       historyStep: 'Sponsored',
       activityData: {
         createdAt: proposal.sponsoredAt,
-        // update with sponsoredBy
-        memberAddress: proposal.memberAddress,
+        memberAddress: proposal.sponsor,
       },
     });
   }
@@ -300,9 +295,8 @@ const buildProposalHistory = (proposal) => {
       ...proposal,
       historyStep: 'Processed',
       activityData: {
-        createdAt: proposal.sponsoredAt,
-        // update with processedBy
-        memberAddress: proposal.memberAddress,
+        createdAt: proposal.processedAt,
+        memberAddress: proposal.processor,
       },
     });
   }

@@ -9,6 +9,7 @@ import {
   passedVotingAndGrace,
   determineProposalType,
   descriptionMaker,
+  hashMaker,
   titleMaker,
   determineUnreadActivityFeed,
 } from '../proposal-helper';
@@ -101,30 +102,15 @@ export const resolvers = {
     description: (proposal) => {
       return descriptionMaker(proposal);
     },
+    hash: (proposal) => {
+      return hashMaker(proposal);
+    },
     activityFeed: (proposal) => {
       return determineUnreadActivityFeed(proposal);
     },
   },
 
   TokenBalance: {
-    symbol: async (tokenBalance, _args, { cache }) => {
-      if (tokenBalance.guildBank) {
-        const symbol = tokenBalance.token.symbol;
-
-        return symbol;
-      } else {
-        return null;
-      }
-    },
-    decimals: async (tokenBalance, _args, { cache }) => {
-      if (tokenBalance.guildBank) {
-        const decimals = tokenBalance.token.decimals;
-
-        return +decimals;
-      } else {
-        return null;
-      }
-    },
     contractTokenBalance: async (tokenBalance, _args, { cache }) => {
       if (tokenBalance.guildBank) {
         const tokenService = new TokenService(

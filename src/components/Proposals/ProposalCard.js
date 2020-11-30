@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Box, Flex, Badge, Skeleton, Icon } from '@chakra-ui/core';
+import ContentBox from '../Shared/ContentBox';
+// import TextBox from '../Shared/TextBox';
 import { utils } from 'web3';
 import { format } from 'date-fns';
 
@@ -27,64 +29,91 @@ const ProposalCard = ({ proposal, isLoaded }) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [memberWallet, proposal]);
 
+  // TODO add whitelist proposal token symbol
+  // TODO handle guild kick
+  // TODO trade?
+
   return (
     <Link to={`/dao/${dao.address}/proposals/${proposal.proposalId}`}>
       {/* <Link to={`/dao/${dao?.address}/proposals/${proposal?.proposalId}`}> */}
 
-      <Box
-        rounded='lg'
-        bg='blackAlpha.800'
-        borderWidth='1px'
-        borderColor='whiteAlpha.200'
-        _hover={{ background: 'primary.500' }}
-        p={6}
-        m={6}
-        mt={2}
+      <ContentBox
+        mt={3}
+        transition='all 0.15s linear'
+        _hover={{ bg: 'primary.600', color: 'white' }}
       >
-        <Flex justify='space-between'>
-          <Box minWidth='30%' mr={5}>
-            <Box fontSize='sm' textTransform='uppercase' fontFamily='heading'>
+        <Box>
+          <Flex justify='space-between'>
+            <Box
+              fontSize='xs'
+              textTransform='uppercase'
+              fontFamily='heading'
+              letterSpacing='0.1em'
+            >
               {proposal?.proposalType
                 ? proposal.proposalType
                 : theme.daoMeta.proposal}
             </Box>
-            <Skeleton isLoaded={isLoaded}>
-              <Box fontWeight={700} fontSize='lg' fontFamily='heading'>
-                {proposal.title || '--'}
-              </Box>
-            </Skeleton>
-          </Box>
-          <Flex align='center'>
-            <Flex h='20px'>
+            <Box>
               <Skeleton isLoaded={isLoaded}>
-                {(+proposal?.yesVotes > 0 || +proposal?.noVotes > 0) && (
-                  <>
-                    <Badge
-                      colorScheme='green'
-                      variant={
-                        +proposal.yesVotes > +proposal.noVotes &&
-                        proposal.status !== 'Failed'
-                          ? 'solid'
-                          : 'outline'
-                      }
-                      mr={3}
-                    >
-                      {proposal?.yesVotes ? proposal.yesVotes : '--'} Yes
-                    </Badge>
-                    <Badge
-                      colorScheme='red'
-                      variant={
-                        +proposal.noVotes > +proposal.yesVotes
-                          ? 'solid'
-                          : 'outline'
-                      }
-                    >
-                      {proposal?.noVotes ? proposal.noVotes : '--'} No
-                    </Badge>
-                  </>
-                )}
+                <Badge>
+                  {proposal?.status ? getProposalCountdownText(proposal) : '--'}
+                </Badge>
               </Skeleton>
-            </Flex>
+            </Box>
+          </Flex>
+          <Flex justify='space-between' mt={3}>
+            <Box>
+              <Skeleton isLoaded={isLoaded}>
+                <Box fontWeight={700} fontSize='lg' fontFamily='heading'>
+                  {proposal.title || '--'}
+                </Box>
+              </Skeleton>
+              <Skeleton isLoaded={isLoaded}>
+                <Box fontSize='xs' as='i'>
+                  {proposal.createdAt
+                    ? `Submitted ${format(
+                        new Date(proposal.createdAt * 1000),
+                        'MMM d, y',
+                      )}`
+                    : '--'}
+                </Box>
+              </Skeleton>
+            </Box>
+            <Box>
+              <Flex align='center'>
+                <Flex h='20px'>
+                  <Skeleton isLoaded={isLoaded}>
+                    {(+proposal?.yesVotes > 0 || +proposal?.noVotes > 0) && (
+                      <>
+                        <Badge
+                          colorScheme='green'
+                          variant={
+                            +proposal.yesVotes > +proposal.noVotes &&
+                            proposal.status !== 'Failed'
+                              ? 'solid'
+                              : 'outline'
+                          }
+                          mr={3}
+                        >
+                          {proposal?.yesVotes ? proposal.yesVotes : '--'} Yes
+                        </Badge>
+                        <Badge
+                          colorScheme='red'
+                          variant={
+                            +proposal.noVotes > +proposal.yesVotes
+                              ? 'solid'
+                              : 'outline'
+                          }
+                        >
+                          {proposal?.noVotes ? proposal.noVotes : '--'} No
+                        </Badge>
+                      </>
+                    )}
+                  </Skeleton>
+                </Flex>
+              </Flex>
+            </Box>
           </Flex>
           <Flex>
             {memberVote && (
@@ -125,15 +154,17 @@ const ProposalCard = ({ proposal, isLoaded }) => {
               </Box>
             )}
           </Flex>
-        </Flex>
-        <Flex w='80%' justify='space-between' mt={10}>
+        </Box>
+        <Flex justify='space-between' mt={10}>
           {(proposal?.tributeOffered > 0 || !proposal?.tributeOffered) && (
             <Box>
               <Box
                 textTransform='uppercase'
-                fontSize='sm'
+                fontSize='xs'
                 fontFamily='heading'
-                fontWeight={700}
+                fontWeight={400}
+                letterSpacing='0.1em'
+                color='whiteAlpha.600'
               >
                 Tribute
               </Box>
@@ -151,9 +182,11 @@ const ProposalCard = ({ proposal, isLoaded }) => {
             <Box>
               <Box
                 textTransform='uppercase'
-                fontSize='sm'
+                fontSize='xs'
                 fontFamily='heading'
-                fontWeight={700}
+                fontWeight={400}
+                letterSpacing='0.1em'
+                color='whiteAlpha.600'
               >
                 Payment Requested
               </Box>
@@ -171,9 +204,11 @@ const ProposalCard = ({ proposal, isLoaded }) => {
             <Box>
               <Box
                 textTransform='uppercase'
-                fontSize='sm'
+                fontSize='xs'
                 fontFamily='heading'
-                fontWeight={700}
+                fontWeight={400}
+                letterSpacing='0.1em'
+                color='whiteAlpha.600'
               >
                 Shares
               </Box>
@@ -188,9 +223,11 @@ const ProposalCard = ({ proposal, isLoaded }) => {
             <Box>
               <Box
                 textTransform='uppercase'
-                fontSize='sm'
+                fontSize='xs'
                 fontFamily='heading'
-                fontWeight={700}
+                fontWeight={400}
+                letterSpacing='0.1em'
+                color='whiteAlpha.600'
               >
                 Loot
               </Box>
@@ -201,44 +238,8 @@ const ProposalCard = ({ proposal, isLoaded }) => {
               </Skeleton>
             </Box>
           )}
-          <Box fontFamily='heading'>
-            <Box
-              textTransform='uppercase'
-              fontSize='sm'
-              fontFamily='heading'
-              fontWeight={700}
-            >
-              Proposal Status
-            </Box>
-            <Skeleton isLoaded={isLoaded}>
-              <Box
-                fontSize='lg'
-                fontFamily='space'
-                fontWeight={700}
-                textTransform='uppercase'
-              >
-                {proposal?.status ? getProposalCountdownText(proposal) : '--'}
-              </Box>
-            </Skeleton>
-          </Box>
         </Flex>
-        <Skeleton isLoaded={isLoaded}>
-          <Box
-            fontWeight={500}
-            fontSize='xs'
-            fontFamily={theme.fonts.body}
-            mt={2}
-            textTransform='uppercase'
-          >
-            {proposal.createdAt
-              ? `Created on: ${format(
-                  new Date(proposal.createdAt * 1000),
-                  'MMMM d, y',
-                )}`
-              : '--'}
-          </Box>
-        </Skeleton>
-      </Box>
+      </ContentBox>
     </Link>
   );
 };

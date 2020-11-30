@@ -9,19 +9,21 @@ import Proposal from './views/Proposals/Proposal';
 import NewProposal from './views/Proposals/NewProposal';
 import Members from './views/Members/Members';
 import Profile from './views/Profile/Profile';
-import ThemeSample from './views/Theme/ThemeSample';
 import Bank from './views/Bank/Bank';
+import NewToken from './views/Bank/NewToken';
 import Settings from './views/Settings/Settings';
 import Boosts from './views/Settings/Boosts';
+import NewBoost from './views/Settings/NewBoost';
 import CustomTheme from './views/Settings/CustomTheme';
 import Notifications from './views/Settings/Notifications';
+import Theme from './views/Theme/Theme';
+import DaoTheme from './views/Theme/DaoTheme';
 
 const Routes = () => {
   return (
     <>
       <Switch>
         <Route path='/dao/:dao(\b0x[0-9a-f]{10,40}\b)/' exact component={Dao} />
-
         <Route
           path='/dao/:dao(\b0x[0-9a-f]{10,40}\b)/proposals'
           exact
@@ -31,7 +33,7 @@ const Routes = () => {
           path='/dao/:dao(\b0x[0-9a-f]{10,40}\b)/proposals/new/:type'
           exact
           component={NewProposal}
-        />
+        />{' '}
         <Route
           path='/dao/:dao(\b0x[0-9a-f]{10,40}\b)/proposals/new'
           exact
@@ -42,25 +44,26 @@ const Routes = () => {
           exact
           component={Proposal}
         />
-
         <Route
           path='/dao/:dao(\b0x[0-9a-f]{10,40}\b)/members'
           exact
           component={Members}
         />
-
         <Route
           path='/dao/:dao(\b0x[0-9a-f]{10,40}\b)/profile/:id'
           exact
           component={Profile}
         />
-
         <Route
           path='/dao/:dao(\b0x[0-9a-f]{10,40}\b)/bank'
           exact
           component={Bank}
         />
-
+        <Route
+          path='/dao/:dao(\b0x[0-9a-f]{10,40}\b)/bank/token/new'
+          exact
+          component={NewToken}
+        />
         <Route
           path='/dao/:dao(\b0x[0-9a-f]{10,40}\b)/settings'
           exact
@@ -72,6 +75,11 @@ const Routes = () => {
           component={Boosts}
         />
         <Route
+          path='/dao/:dao(\b0x[0-9a-f]{10,40}\b)/settings/boosts/new'
+          exact
+          component={NewBoost}
+        />
+        <Route
           path='/dao/:dao(\b0x[0-9a-f]{10,40}\b)/settings/theme'
           exact
           component={CustomTheme}
@@ -81,9 +89,13 @@ const Routes = () => {
           exact
           component={Notifications}
         />
-        <Route path='/themeSample' exact component={ThemeSample} />
-
-        <Route path='/' component={Hub} />
+        <Route
+          path='/dao/:dao(\b0x[0-9a-f]{10,40}\b)/psych-out'
+          exact
+          component={DaoTheme}
+        />
+        <Route path='/themeSample' exact component={Theme} />
+        <Route exact path='/' component={Hub} />
         <Route path='*' component={FourOhFour} />
       </Switch>
     </>

@@ -109,6 +109,8 @@ export const determineProposalType = (proposal) => {
     return 'Guildkick Proposal';
   } else if (proposal.trade) {
     return 'Trade Proposal';
+  } else if (proposal.isMinion) {
+    return 'Minion Proposal';
   } else {
     return 'Funding Proposal';
   }
@@ -191,7 +193,7 @@ export const titleMaker = (proposal) => {
       parsedDetails = JSON.parse(
         proposal.details.replace(/(\r\n|\n|\r)/gm, ''),
       );
-      return parsedDetails.title;
+      return parsedDetails.title || '';
     } catch {
       // one off fix for a bad proposal
       if (proposal.details && proposal.details.indexOf('link:') > -1) {
@@ -224,6 +226,15 @@ export const descriptionMaker = (proposal) => {
     }
   }
   return ``;
+};
+
+export const hashMaker = (proposal) => {
+  try {
+    const parsed = JSON.parse(proposal.details.replace(/(\r\n|\n|\r)/gm, ''));
+    return parsed.hash || '';
+  } catch (e) {
+    return '';
+  }
 };
 
 export const linkMaker = (proposal) => {
@@ -271,9 +282,7 @@ export function getProposalCountdownText(proposal) {
       return (
         <Fragment>
           <Box textTransform='uppercase' fontSize='0.8em' fontWeight={700}>
-            Voting Begins:{' '}
-          </Box>
-          <Box textTransform='uppercase' fontSize='0.8em' fontWeight={700}>
+            <span fontWeight='700'>Voting Begins</span>
             {timeToNow(proposal.votingPeriodStarts)}
           </Box>
         </Fragment>
@@ -282,10 +291,7 @@ export function getProposalCountdownText(proposal) {
       return (
         <Fragment>
           <Box textTransform='uppercase' fontSize='0.8em' fontWeight={700}>
-            Voting Ends:{' '}
-          </Box>
-          <Box textTransform='uppercase' fontSize='0.8em' fontWeight={700}>
-            {timeToNow(proposal.votingPeriodEnds)}
+            Voting Ends: {timeToNow(proposal.votingPeriodEnds)}
           </Box>
         </Fragment>
       );
@@ -293,9 +299,9 @@ export function getProposalCountdownText(proposal) {
       return (
         <Fragment>
           <Box textTransform='uppercase' fontSize='0.8em' fontWeight={700}>
-            Grace Period Ends:{' '}
-          </Box>
-          <Box textTransform='uppercase' fontSize='0.8em' fontWeight={700}>
+            <Box as='span' fontWeight={900}>
+              Grace Period Ends
+            </Box>{' '}
             {timeToNow(proposal.gracePeriodEnds)}
           </Box>
         </Fragment>

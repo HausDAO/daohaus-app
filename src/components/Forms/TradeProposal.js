@@ -6,23 +6,20 @@ import {
   FormControl,
   Flex,
   Input,
-  InputGroup,
-  InputLeftAddon,
   Icon,
-  Stack,
   Box,
-  Textarea,
   Menu,
   MenuButton,
   MenuList,
   MenuItem,
-  Text,
 } from '@chakra-ui/core';
 import { utils } from 'web3';
 import { RiAddFill, RiErrorWarningLine } from 'react-icons/ri';
 
 import { useDao, useTxProcessor, useUser } from '../../contexts/PokemolContext';
+import TextBox from '../Shared/TextBox';
 
+import DetailsFields from './DetailFields';
 import PaymentInput from './PaymentInput';
 import TributeInput from './TributeInput';
 
@@ -67,10 +64,10 @@ const TradeProposalForm = () => {
   const txCallBack = (txHash, details) => {
     console.log('txCallBack', txProcessor);
     if (txProcessor && txHash) {
-      txProcessor.setTx(txHash, user.username, details, true, false);
+      txProcessor.setTx(txHash, user.username, details);
       txProcessor.forceUpdate = true;
 
-      updateTxProcessor(txProcessor);
+      updateTxProcessor({ ...txProcessor });
       // close model here
       // onClose();
       // setShowModal(null);
@@ -90,6 +87,7 @@ const TradeProposalForm = () => {
       title: values.title,
       description: values.description,
       link: 'https://' + values.link,
+      hash: Math.random(0, 10000),
     });
 
     try {
@@ -124,61 +122,7 @@ const TradeProposalForm = () => {
         mb={5}
       >
         <Box w='48%'>
-          <FormLabel
-            htmlFor='title'
-            color='white'
-            fontFamily='heading'
-            textTransform='uppercase'
-            fontSize='xs'
-            fontWeight={700}
-          >
-            Details
-          </FormLabel>
-          <Stack spacing={4}>
-            <Input
-              name='title'
-              placeholder='Proposal Title'
-              mb={5}
-              ref={register({
-                required: {
-                  value: true,
-                  message: 'Title is required',
-                },
-              })}
-              color='white'
-              focusBorderColor='secondary.500'
-            />
-            <Textarea
-              name='description'
-              placeholder='Short Description'
-              type='textarea'
-              mb={5}
-              h={10}
-              ref={register({
-                required: {
-                  value: true,
-                  message: 'Description is required',
-                },
-              })}
-              color='white'
-              focusBorderColor='secondary.500'
-            />
-            <InputGroup>
-              <InputLeftAddon>https://</InputLeftAddon>
-              <Input
-                name='link'
-                placeholder='daolink.club'
-                color='white'
-                focusBorderColor='secondary.500'
-                ref={register({
-                  required: {
-                    value: true,
-                    message: 'Reference Link is required',
-                  },
-                })}
-              />
-            </InputGroup>
-          </Stack>
+          <DetailsFields register={register} />
         </Box>
         <Box w='48%'>
           <TributeInput
@@ -186,7 +130,7 @@ const TradeProposalForm = () => {
             setValue={setValue}
             getValues={getValues}
           />
-          <Text>Trade For</Text>
+          <TextBox>Trade For</TextBox>
           <PaymentInput
             register={register}
             setValue={setValue}
@@ -195,37 +139,36 @@ const TradeProposalForm = () => {
           />
 
           {showShares && (
-            <Input
-              name='sharesRequested'
-              placeholder='0'
-              mb={5}
-              ref={register({
-                required: {
-                  value: true,
-                  message: 'Requested shares are required for Member Proposals',
-                },
-                pattern: {
-                  value: /[0-9]/,
-                  message: 'Requested shares must be a number',
-                },
-              })}
-              color='white'
-              focusBorderColor='secondary.500'
-            />
+            <>
+              <TextBox as={FormLabel} htmlFor='sharesRequested'>
+                Shares Requested
+              </TextBox>
+              <Input
+                name='sharesRequested'
+                placeholder='0'
+                mb={5}
+                ref={register({
+                  required: {
+                    value: true,
+                    message:
+                      'Requested shares are required for Member Proposals',
+                  },
+                  pattern: {
+                    value: /[0-9]/,
+                    message: 'Requested shares must be a number',
+                  },
+                })}
+                color='white'
+                focusBorderColor='secondary.500'
+              />
+            </>
           )}
 
           {showLoot && (
             <>
-              <FormLabel
-                htmlFor='lootRequested'
-                color='white'
-                fontFamily='heading'
-                textTransform='uppercase'
-                fontSize='xs'
-                fontWeight={700}
-              >
+              <TextBox as={FormLabel} htmlFor='lootRequested' mb={2}>
                 Loot Requested
-              </FormLabel>
+              </TextBox>
               <Input
                 name='lootRequested'
                 placeholder='0'
@@ -244,16 +187,9 @@ const TradeProposalForm = () => {
 
           {showApplicant && (
             <>
-              <FormLabel
-                htmlFor='applicant'
-                color='white'
-                fontFamily='heading'
-                textTransform='uppercase'
-                fontSize='xs'
-                fontWeight={700}
-              >
+              <TextBox as={FormLabel} htmlFor='applicant' mb={2}>
                 Applicant
-              </FormLabel>
+              </TextBox>
               <Input
                 name='applicant'
                 placeholder='0'

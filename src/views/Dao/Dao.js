@@ -1,4 +1,4 @@
-import { Flex, Spinner, Box } from '@chakra-ui/core';
+import { Flex, Box } from '@chakra-ui/core';
 import React, { useEffect, useState } from 'react';
 import DaoActivityFeed from '../../components/Dao/DaoActivityFeed';
 import DaoOverviewDetails from '../../components/Dao/DaoOverviewDetails';
@@ -24,29 +24,33 @@ const Dao = () => {
 
   return (
     <>
-      {!dao ? (
-        <Spinner />
-      ) : (
-        <>
-          {user && isMember ? (
-            <Flex>
-              <Box w='50%' mr={6}>
-                <DaoOverviewDetails dao={dao} />
-              </Box>
-              <Box w='40%'>
-                <MemberInfoCard user={user} />
-                {dao.graphData && <DaoActivityFeed />}
-              </Box>
-            </Flex>
-          ) : (
-            <Flex h='100%' justify='center' align='center'>
-              <Box w='50%'>
-                <DaoOverviewDetails dao={dao} />
-              </Box>
-            </Flex>
-          )}
-        </>
-      )}
+      <Box p={6}>
+        {user && isMember ? (
+          <Flex wrap='wrap'>
+            <Box
+              pr={[0, null, null, null, 6]}
+              w={['100%', null, null, null, '50%']}
+            >
+              <DaoOverviewDetails dao={dao} />
+            </Box>
+
+            <Box w={['100%', null, null, null, '50%']} pt={[6, 0]}>
+              <MemberInfoCard user={user} />
+              {dao.graphData && (
+                <Box mt={6}>
+                  <DaoActivityFeed />
+                </Box>
+              )}
+            </Box>
+          </Flex>
+        ) : (
+          <Flex h='100%' justify='center' align='center'>
+            <Box w='50%'>
+              <DaoOverviewDetails dao={dao} />
+            </Box>
+          </Flex>
+        )}
+      </Box>
     </>
   );
 };

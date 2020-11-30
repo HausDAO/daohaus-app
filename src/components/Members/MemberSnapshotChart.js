@@ -1,56 +1,91 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   FlexibleXYPlot,
+  GradientDefs,
   XAxis,
   YAxis,
-  VerticalGridLines,
-  HorizontalGridLines,
+  LineSeries,
   AreaSeries,
 } from 'react-vis';
 import { Box } from '@chakra-ui/core';
 import { useTheme } from '../../contexts/CustomThemeContext';
+import { useBalances } from '../../contexts/PokemolContext';
+import {
+  getDateRange,
+  getDatesArray,
+  groupBalancesMemberToDateRange,
+} from '../../utils/bank-helpers';
 
-const MemberSnapshotChart = () => {
+const MemberSnapshotChart = ({ chartDimension, dao }) => {
   const [theme] = useTheme();
+  const [balances] = useBalances();
+  const [chartData, setChartData] = useState([]);
+  const [preppedData, setPreppedData] = useState([]);
 
-  const data = [
-    { x: 1, y: 1 },
-    { x: 2, y: 2 },
-    { x: 3, y: 4 },
-    { x: 4, y: 3 },
-    { x: 5, y: 5 },
-    { x: 6, y: 8 },
-  ];
+  useEffect(() => {
+    if (balances.length > 0 && dao && dao.graphData) {
+      const dateRange = getDateRange(
+        { value: 'lifetime' },
+        balances,
+        dao.graphData.summoningTime,
+      );
+      const dates = getDatesArray(dateRange.start, dateRange.end);
+      const groupedBalances = groupBalancesMemberToDateRange(balances, dates);
+      setPreppedData(groupedBalances);
+    }
+  }, [balances, dao]);
+
+  useEffect(() => {
+    if (preppedData.length > 0 && chartDimension) {
+      setTypeData(chartDimension, preppedData);
+    }
+  }, [chartDimension, preppedData]);
+
+  const setTypeData = (type, balances) => {
+    const data = balances.map((balance, i) => {
+      return {
+        x: balance.date,
+        y: balance[type],
+        y0: 0,
+      };
+    });
+    setChartData(data);
+  };
+
+  const gradient = (
+    <GradientDefs>
+      <linearGradient id='gradient' x1='0' x2='0' y1='0' y2='100%'>
+        <stop offset='0%' stopColor={theme.colors.primary[50]} />
+        <stop
+          offset='100%'
+          stopColor={theme.colors.primary[50]}
+          stopOpacity={0}
+        />
+      </linearGradient>
+    </GradientDefs>
+  );
 
   return (
     <Box w='95%' minH='300px'>
-      <FlexibleXYPlot>
-        <VerticalGridLines color='white' />
-        <HorizontalGridLines color='white' />
-        <XAxis
-          title='Time'
-          style={{
-            line: { stroke: 'white' },
-            ticks: { stroke: 'white' },
-            text: { stroke: 'none', fill: 'white', fontWeight: 500 },
-            title: { fill: 'white' },
-          }}
-        />
-        <YAxis
-          title='Members'
-          style={{
-            line: { stroke: 'white' },
-            ticks: { stroke: 'white' },
-            text: { stroke: 'none', fill: 'white', fontWeight: 500 },
-            title: { fill: 'white' },
-          }}
-        />
-        <AreaSeries
-          curve='curveNatural'
-          data={data}
-          color={theme.colors.primary[50]}
-        />
-      </FlexibleXYPlot>
+      {chartData.length > 0 ? (
+        <FlexibleXYPlot yDomain={[0, chartData[chartData.length - 1].y || 10]}>
+          <XAxis xType='time' tickTotal={0} />
+          <YAxis tickTotal={0} />
+          {gradient}
+          <LineSeries
+            animate
+            curve='curveNatural'
+            data={chartData}
+            color={theme.colors.primary[50]}
+          />
+          <AreaSeries
+            curve='curveNatural'
+            data={chartData}
+            fill={'url(#gradient)'}
+            stroke='transparent'
+          />
+        </FlexibleXYPlot>
+      ) : null}
     </Box>
   );
 };

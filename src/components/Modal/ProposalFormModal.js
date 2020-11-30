@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { useHistory } from 'react-router-dom';
 import {
   Modal,
   ModalContent,
@@ -18,10 +19,16 @@ import GuildKickProposalForm from '../Forms/GuildKickProposal';
 import TradeProposalForm from '../Forms/TradeProposal';
 import MinionSimpleProposalForm from '../Forms/MinionSimpleProposal';
 
-const ProposalFormModal = ({ proposalType, isOpen, setShowModal }) => {
+const ProposalFormModal = ({
+  proposalType,
+  isOpen,
+  setShowModal,
+  returnRoute,
+}) => {
   const [, setLoading] = useState(false);
   const [proposalForm, setProposalForm] = useState(null);
   const [theme] = useTheme();
+  const history = useHistory();
 
   const proposalForms = {
     member: {
@@ -69,15 +76,16 @@ const ProposalFormModal = ({ proposalType, isOpen, setShowModal }) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [proposalType]);
 
+  const handleClose = () => {
+    setLoading(false);
+    setShowModal(null);
+    if (returnRoute) {
+      history.push(returnRoute);
+    }
+  };
+
   return (
-    <Modal
-      isOpen={isOpen}
-      onClose={() => {
-        setLoading(false);
-        setShowModal(null);
-      }}
-      isCentered
-    >
+    <Modal isOpen={isOpen} onClose={handleClose} isCentered>
       <ModalOverlay />
       {proposalForm && (
         <ModalContent

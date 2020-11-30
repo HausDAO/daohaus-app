@@ -6,16 +6,14 @@ import {
   FormControl,
   Flex,
   Input,
-  InputGroup,
-  InputLeftAddon,
   Icon,
-  Stack,
   Box,
-  Textarea,
 } from '@chakra-ui/core';
 import { RiErrorWarningLine } from 'react-icons/ri';
 
 import { useDao, useTxProcessor, useUser } from '../../contexts/PokemolContext';
+import DetailsFields from './DetailFields';
+import TextBox from '../Shared/TextBox';
 
 const WhitelistProposalForm = () => {
   const [loading, setLoading] = useState(false);
@@ -49,10 +47,10 @@ const WhitelistProposalForm = () => {
   const txCallBack = (txHash, details) => {
     console.log('txCallBack', txProcessor);
     if (txProcessor && txHash) {
-      txProcessor.setTx(txHash, user.username, details, true, false);
+      txProcessor.setTx(txHash, user.username, details);
       txProcessor.forceUpdate = true;
 
-      updateTxProcessor(txProcessor);
+      updateTxProcessor({ ...txProcessor });
       // close model here
       // onClose();
       // setShowModal(null);
@@ -72,6 +70,7 @@ const WhitelistProposalForm = () => {
       title: values.title,
       description: values.description,
       link: 'https://' + values.link,
+      hash: Math.random(0, 10000),
     });
 
     try {
@@ -93,80 +92,19 @@ const WhitelistProposalForm = () => {
         display='flex'
         flexDirection='row'
         justifyContent='space-between'
-        mb={5}
+        mb={3}
       >
         <Box w='48%'>
-          <FormLabel
-            htmlFor='title'
-            color='white'
-            fontFamily='heading'
-            textTransform='uppercase'
-            fontSize='xs'
-            fontWeight={700}
-          >
-            Details
-          </FormLabel>
-          <Stack spacing={4}>
-            <Input
-              name='ticker'
-              placeholder='Token Ticker'
-              mb={5}
-              ref={register({
-                required: {
-                  value: true,
-                  message: 'Ticker is required',
-                },
-              })}
-              color='white'
-              focusBorderColor='secondary.500'
-            />
-            <Textarea
-              name='description'
-              placeholder='Short Description'
-              type='textarea'
-              mb={5}
-              h={10}
-              ref={register({
-                required: {
-                  value: true,
-                  message: 'Description is required',
-                },
-              })}
-              color='white'
-              focusBorderColor='secondary.500'
-            />
-            <InputGroup>
-              <InputLeftAddon>https://</InputLeftAddon>
-              <Input
-                name='link'
-                placeholder='daolink.club'
-                color='white'
-                focusBorderColor='secondary.500'
-                ref={register({
-                  required: {
-                    value: true,
-                    message: 'Reference Link is required',
-                  },
-                })}
-              />
-            </InputGroup>
-          </Stack>
+          <DetailsFields register={register} />
         </Box>
         <Box w='48%'>
-          <FormLabel
-            htmlFor='tokenAddress'
-            color='white'
-            fontFamily='heading'
-            textTransform='uppercase'
-            fontSize='xs'
-            fontWeight={700}
-          >
+          <TextBox as={FormLabel} htmlFor='tokenAddress' mb={2}>
             Token Address
-          </FormLabel>
+          </TextBox>
           <Input
             name='tokenAddress'
             placeholder='0x'
-            mb={5}
+            mb={3}
             ref={register}
             color='white'
             focusBorderColor='secondary.500'

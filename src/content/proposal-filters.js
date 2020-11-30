@@ -1,82 +1,89 @@
-export const getFilterOptions = (isMember) => {
+export const getFilterOptions = (isMember, actionNeededCount) => {
   const options = [
-    {
-      name: 'All',
-      value: 'All',
-    },
     {
       name: 'Action Needed',
       value: 'Action Needed',
+      type: 'main',
+    },
+    {
+      name: 'All',
+      value: 'All',
+      type: 'main',
     },
     {
       name: 'Funding Proposals',
       value: 'Funding Proposal',
-      key: 'proposalType',
+      type: 'proposalType',
     },
     {
       name: 'Member Proposals',
       value: 'Member Proposal',
-      key: 'proposalType',
+      type: 'proposalType',
     },
     {
       name: 'Whitelist Token Proposals',
       value: 'Whitelist Token Proposal',
-      key: 'proposalType',
+      type: 'proposalType',
     },
     {
       name: 'Trade Proposals',
       value: 'Trade Proposal',
-      key: 'proposalType',
+      type: 'proposalType',
     },
     {
       name: 'Guildkick Proposals',
       value: 'Guildkick Proposal',
-      key: 'proposalType',
+      type: 'proposalType',
+    },
+    {
+      name: 'Minion Proposals',
+      value: 'Minion Proposal',
+      type: 'proposalType',
     },
     {
       name: 'Unsponsored',
       value: 'Unsponsored',
-      key: 'status',
+      type: 'status',
     },
     {
       name: 'In Queue',
       value: 'InQueue',
-      key: 'status',
+      type: 'status',
     },
     {
       name: 'Voting Period',
       value: 'VotingPeriod',
-      key: 'status',
+      type: 'status',
     },
     {
       name: 'Grace Period',
       value: 'GracePeriod',
-      key: 'status',
+      type: 'status',
     },
     {
       name: 'Ready For Processing',
       value: 'ReadyForProcessing',
-      key: 'status',
+      type: 'status',
     },
     {
       name: 'Passed',
       value: 'Passed',
-      key: 'status',
+      type: 'status',
     },
     {
       name: 'Failed',
       value: 'Failed',
-      key: 'status',
+      type: 'status',
     },
     {
       name: 'Cancelled',
       value: 'Cancelled',
-      key: 'status',
+      type: 'status',
     },
   ];
 
-  if (!isMember) {
-    options.splice(1, 1);
+  if (!isMember || !actionNeededCount) {
+    options.splice(0, 1);
   }
 
   return options;

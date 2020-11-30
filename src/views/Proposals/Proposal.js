@@ -3,7 +3,13 @@ import { useLocation, Link as RouterLink } from 'react-router-dom';
 import { Box, Flex, Link, Icon } from '@chakra-ui/core';
 import { RiArrowLeftLine } from 'react-icons/ri';
 
-import { useProposals, useDao } from '../../contexts/PokemolContext';
+import TextBox from '../../components/Shared/TextBox';
+
+import {
+  useProposals,
+  useDao,
+  useRefetchQuery,
+} from '../../contexts/PokemolContext';
 import { useTheme } from '../../contexts/CustomThemeContext';
 import ProposalDetail from '../../components/Proposals/ProposalDetail';
 import ProposalVote from '../../components/Proposals/ProposalVote';
@@ -11,11 +17,20 @@ import ProposalHistory from '../../components/Proposals/ProposalHistory';
 
 const Proposal = () => {
   const [dao] = useDao();
+  const [, updateRefetchQuery] = useRefetchQuery();
   const location = useLocation();
   const id = location.pathname.split('/proposals/')[1];
   const [proposals] = useProposals();
   const [proposal, setProposal] = useState(null);
   const [theme] = useTheme();
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      updateRefetchQuery('proposals');
+    }, 350000);
+    return () => clearInterval(interval);
+    // eslint-disable-next-line
+  }, []);
 
   useEffect(() => {
     if (proposals) {
@@ -29,16 +44,15 @@ const Proposal = () => {
   }, [proposals]);
 
   return (
-    <Box>
-      <Flex>
-        <Box w='60%'>
+    <Box p={6}>
+      <Flex wrap='wrap'>
+        <Flex
+          direction='column'
+          w={['100%', null, null, null, '60%']}
+          pr={[0, null, null, null, 6]}
+        >
           <Link as={RouterLink} to={`/dao/${dao.address}/proposals`}>
-            <Box
-              textTransform='uppercase'
-              ml={6}
-              fontSize='lg'
-              fontFamily='heading'
-            >
+            <TextBox size='md'>
               <Icon
                 name='arrow-back'
                 color='primary.50'
@@ -47,36 +61,32 @@ const Proposal = () => {
                 w='20px'
               />{' '}
               All {theme.daoMeta.proposals}
-            </Box>
+            </TextBox>
           </Link>
-        </Box>
-        <Box w='40%'>
-          {!proposal?.cancelled && (
-            <Box
-              textTransform='uppercase'
-              fontSize='lg'
-              fontFamily='heading'
-              fontWeight={700}
-            >
-              Vote
-            </Box>
-          )}
-        </Box>
-      </Flex>
-      <Flex>
-        <Box w='60%'>
-          <ProposalDetail proposal={proposal} />
-          <Flex w='100%' justify='center' align='center' h='40%'>
+          <Box pt={6}>
+            <ProposalDetail proposal={proposal} />
+          </Box>
+          {/* <Flex w='100%' justify='center' align='center' pt={6}>
             <Box maxW='300px' textAlign='center'>
               There’s 6 more quests that need your attention. View all?
             </Box>
-          </Flex>
-        </Box>
-        <Box w='40%'>
-          {!proposal?.cancelled && <ProposalVote proposal={proposal} />}
-
-          <ProposalHistory proposal={proposal} />
-        </Box>
+          </Flex> */}
+        </Flex>
+        <Flex
+          direction='column'
+          w={['100%', null, null, null, '40%']}
+          pt={[6, 0]}
+        >
+          <Box>
+            {!proposal?.cancelled && <TextBox size='md'>Actions</TextBox>}
+          </Box>
+          <Box pt={6}>
+            {!proposal?.cancelled && (
+              <ProposalVote proposal={proposal} setProposal={setProposal} />
+            )}
+            <ProposalHistory proposal={proposal} />
+          </Box>
+        </Flex>
       </Flex>
     </Box>
   );

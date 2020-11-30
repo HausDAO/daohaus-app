@@ -1,11 +1,11 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   FlexibleWidthXYPlot,
   XAxis,
   YAxis,
-  VerticalGridLines,
-  HorizontalGridLines,
+  LineSeries,
   AreaSeries,
+  GradientDefs,
 } from 'react-vis';
 import {
   Box,
@@ -15,92 +15,130 @@ import {
   MenuList,
   MenuItem,
   Icon,
+  Skeleton,
 } from '@chakra-ui/core';
 import { FaChevronDown } from 'react-icons/fa';
 import { useTheme } from '../../contexts/CustomThemeContext';
 
-const BankOverviewChart = () => {
-  const [theme] = useTheme();
+import ContentBox from '../Shared/ContentBox';
+import {
+  balancesWithValue,
+  getDateRange,
+  getDatesArray,
+  groupBalancesToDateRange,
+} from '../../utils/bank-helpers';
+import { usePrices } from '../../contexts/PokemolContext';
+import { bankChartTimeframes } from '../../content/chart-content';
 
-  const data = [
-    { x: 1, y: 1 },
-    { x: 2, y: 2 },
-    { x: 3, y: 4 },
-    { x: 4, y: 3 },
-    { x: 5, y: 5 },
-    { x: 6, y: 8 },
-  ];
+const BankOverviewChart = ({ balances, dao }) => {
+  const [theme] = useTheme();
+  const [prices] = usePrices();
+  const [chartData, setChartData] = useState([]);
+  const [timeframe, setTimeframe] = useState(bankChartTimeframes[0]);
+
+  useEffect(() => {
+    if (balances && prices && dao) {
+      const filteredBalances = balancesWithValue(balances, prices);
+      if (filteredBalances[0]) {
+        const dateRange = getDateRange(
+          timeframe,
+          filteredBalances,
+          dao.graphData.summoningTime,
+        );
+        const dates = getDatesArray(dateRange.start, dateRange.end);
+        const groupedBalances = groupBalancesToDateRange(
+          filteredBalances,
+          dates,
+        );
+        const data = groupedBalances.map((balance, i) => {
+          return {
+            x: balance.date,
+            y: balance.value,
+            y0: 0,
+          };
+        });
+
+        if (timeframe.value === 'lifetime') {
+          data[0].y = 0;
+        }
+
+        setChartData(data);
+      } else {
+        setChartData([]);
+      }
+    }
+  }, [balances, prices, timeframe, dao]);
+
+  const handleTimeChange = (time) => {
+    setChartData([]);
+    setTimeframe({
+      ...time,
+    });
+  };
+
+  const gradient = (
+    <GradientDefs>
+      <linearGradient id='gradient' x1='0' x2='0' y1='0' y2='100%'>
+        <stop offset='0%' stopColor={theme.colors.primary[50]} />
+        <stop
+          offset='100%'
+          stopColor={theme.colors.primary[50]}
+          stopOpacity={0}
+        />
+      </linearGradient>
+    </GradientDefs>
+  );
 
   return (
-    <Box m={6} w='100%'>
-      <Flex justify='space-between'>
-        <Menu>
-          <MenuButton>
-            Showing: All <Icon as={FaChevronDown} h='12px' w='12px' />
-          </MenuButton>
-          <MenuList>
-            <MenuItem>All</MenuItem>
-            <MenuItem>Your Share</MenuItem>
-          </MenuList>
-        </Menu>
-        <Menu>
-          <MenuButton>
-            Time Frame: 7 days <Icon as={FaChevronDown} h='12px' w='12px' />
-          </MenuButton>
-          <MenuList>
-            <MenuItem>7 day</MenuItem>
-            <MenuItem>30 day</MenuItem>
-            <MenuItem>90 day</MenuItem>
-          </MenuList>
-        </Menu>
-      </Flex>
-      <Box
-        minH='260px'
-        w='100%'
-        p={4}
-        bg='blackAlpha.600'
-        borderWidth='1px'
-        borderColor='whiteAlpha.200'
-        rounded='lg'
-      >
-        <FlexibleWidthXYPlot height={260}>
-          <VerticalGridLines color='white' />
-          <HorizontalGridLines color='white' />
-          <XAxis
-            title='Time'
-            style={{
-              line: { stroke: 'white' },
-              ticks: { stroke: 'white' },
-              text: {
-                stroke: 'none',
-                fill: 'white',
-                fontSize: '9px',
-                fontFamily: theme.fonts.mono,
-              },
-              title: { fill: 'white' },
-            }}
-          />
-          <YAxis
-            title='Tokens'
-            style={{
-              line: { stroke: 'white' },
-              ticks: { stroke: 'white' },
-              text: {
-                stroke: 'none',
-                fill: 'white',
-                fontSize: '9px',
-                fontFamily: theme.fonts.mono,
-              },
-              title: { fill: 'white' },
-            }}
-          />
-          <AreaSeries
-            curve='curveNatural'
-            data={data}
-            color={theme.colors.primary[50]}
-          />
-        </FlexibleWidthXYPlot>
-      </Box>
+    <Box>
+      <Skeleton isLoaded={chartData.length > 0}>
+        <Flex justify='flex-end'>
+          <Menu>
+            <MenuButton>
+              Time Frame: {timeframe.name}{' '}
+              <Icon as={FaChevronDown} h='12px' w='12px' />
+            </MenuButton>
+            <MenuList>
+              {bankChartTimeframes.map((time) => {
+                return (
+                  <MenuItem
+                    key={time.value}
+                    onClick={() => handleTimeChange(time)}
+                  >
+                    {time.name}
+                  </MenuItem>
+                );
+              })}
+            </MenuList>
+          </Menu>
+        </Flex>
+        <ContentBox minH='300px'>
+          {chartData.length > 0 ? (
+            <FlexibleWidthXYPlot
+              height={300}
+              margin={{ left: 40, right: 40, top: 40, bottom: 40 }}
+              yDomain={[0, chartData[chartData.length - 1].y || 10]}
+            >
+              {gradient}
+              <LineSeries
+                animate
+                curve='curveNatural'
+                data={chartData}
+                color={theme.colors.primary[50]}
+              />
+              <AreaSeries
+                animate
+                curve='curveNatural'
+                data={chartData}
+                fill={'url(#gradient)'}
+                stroke='transparent'
+              />
+              <XAxis xType='time' tickTotal={0} />
+              <YAxis tickTotal={0} />
+            </FlexibleWidthXYPlot>
+          ) : null}
+        </ContentBox>
+      </Skeleton>
     </Box>
   );
 };

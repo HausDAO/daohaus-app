@@ -1,24 +1,31 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
 import { Box, Button, Flex, Icon, Skeleton } from '@chakra-ui/core';
 import { FaThumbsUp, FaThumbsDown } from 'react-icons/fa';
+import { isAfter, isBefore } from 'date-fns';
+
 import {
   useMemberWallet,
   useDaoGraphData,
   useDao,
   useUser,
   useTxProcessor,
+  useProposals,
   useWeb3Connect,
 } from '../../contexts/PokemolContext';
-import { isAfter, isBefore } from 'date-fns';
+import ContentBox from '../Shared/ContentBox';
+import TextBox from '../Shared/TextBox';
 import { MinionService } from '../../utils/minion-service';
 
-const ProposalVote = ({ proposal }) => {
+const ProposalVote = ({ proposal, setProposal }) => {
   const [user] = useUser();
   const [dao] = useDao();
   const [wallet] = useMemberWallet();
   const [daoData] = useDaoGraphData();
-  const [txProcessor, updateTxProcessor] = useTxProcessor();
+  const [proposals] = useProposals();
   const [web3Connect] = useWeb3Connect();
+  const [txProcessor, updateTxProcessor] = useTxProcessor();
+  const [nextProposalToProcess, setNextProposal] = useState(null);
   const currentlyVoting = (proposal) => {
     return (
       isBefore(Date.now(), new Date(+proposal?.votingPeriodEnds * 1000)) &&
@@ -28,10 +35,10 @@ const ProposalVote = ({ proposal }) => {
 
   const txCallBack = (txHash, details) => {
     if (txProcessor && txHash) {
-      txProcessor.setTx(txHash, user.username, details, true, false);
+      txProcessor.setTx(txHash, user.username, details);
       txProcessor.forceUpdate = true;
-
-      updateTxProcessor(txProcessor);
+      console.log('force update changed');
+      updateTxProcessor({ ...txProcessor });
       // close model here
       // onClose();
       // setShowModal(null);
@@ -122,20 +129,22 @@ const ProposalVote = ({ proposal }) => {
     }
   };
 
+  useEffect(() => {
+    const proposalsToProcess = proposals
+      .filter((p) => p.status === 'ReadyForProcessing')
+      .sort((a, b) => a.gracePeriodEnds - b.gracePeriodEnds);
+
+    // console.log(proposalsToProcess);
+    if (proposalsToProcess.length > 0) {
+      setNextProposal(proposalsToProcess[0]);
+    }
+  }, [proposals]);
+
   // TODO disable Process button if another proposal needs processing?
 
   return (
     <>
-      <Box
-        rounded='lg'
-        bg='blackAlpha.600'
-        borderWidth='1px'
-        borderColor='whiteAlpha.200'
-        p={10}
-        m={6}
-        ml={0}
-        w='90%'
-      >
+      <ContentBox>
         {proposal?.status === 'Unsponsored' && !proposal?.proposalIndex && (
           <Flex justify='center' direction='column'>
             <Flex justify='center' mb={4} fontFamily='heading'>
@@ -226,7 +235,7 @@ const ProposalVote = ({ proposal }) => {
                   <>
                     <Flex justify='center' align='center' w='100%'>
                       <Skeleton isLoaded={proposal?.status}>
-                        <Box fontSize='lg' fontFamily='heading'>
+                        <TextBox fontSize='xl' variant='value'>
                           {proposal?.status === 'Failed' && 'Failed'}
                           {proposal?.status === 'Passed' && 'Passed'}
                           {(proposal?.status === 'GracePeriod' ||
@@ -237,7 +246,7 @@ const ProposalVote = ({ proposal }) => {
                             proposal?.status === 'ReadyForProcessing') &&
                             proposal.noVotes > proposal.yesVotes &&
                             'Failed'}
-                        </Box>
+                        </TextBox>
                       </Skeleton>
                     </Flex>
                   </>
@@ -274,25 +283,43 @@ const ProposalVote = ({ proposal }) => {
               </Box>
               <Flex justify='space-between' mt={3}>
                 <Skeleton isLoaded={proposal?.yesVotes}>
-                  <Box fontFamily='space' fontWeight={700}>
+                  <TextBox variant='value'>
                     {proposal?.yesVotes || '0'} Yes
-                  </Box>
+                  </TextBox>
                 </Skeleton>
                 <Skeleton isLoaded={proposal?.noVotes}>
-                  <Box fontFamily='space' fontWeight={700}>
+                  <TextBox variant='value'>
                     {proposal?.noVotes || '0'} No
-                  </Box>
+                  </TextBox>
                 </Skeleton>
               </Flex>
             </>
           )}
-        {proposal?.status === 'ReadyForProcessing' && (
-          <Flex justify='center' pt='10px'>
-            <Flex direction='column'>
-              <Button onClick={() => processProposal(proposal)}>Process</Button>
+
+        {proposal?.status === 'ReadyForProcessing' &&
+          (nextProposalToProcess.proposalId === proposal?.proposalId ? (
+            <Flex justify='center' pt='10px'>
+              <Flex direction='column'>
+                <Button onClick={() => processProposal(proposal)}>
+                  Process
+                </Button>
+              </Flex>
             </Flex>
-          </Flex>
-        )}
+          ) : (
+            <Flex justify='center' pt='10px'>
+              <Flex direction='column'>
+                <Button
+                  as={Link}
+                  to={`/dao/${dao?.address}/proposals/${nextProposalToProcess.proposalId}`}
+                  variant='outline'
+                  onClick={() => setProposal(nextProposalToProcess)}
+                >
+                  Proposal {nextProposalToProcess.proposalId} Needs Processing
+                  Next
+                </Button>
+              </Flex>
+            </Flex>
+          ))}
         {proposal?.status === 'Passed' && proposal?.minionAddress && (
           <Flex justify='center' pt='10px'>
             <Flex direction='column'>
@@ -302,7 +329,7 @@ const ProposalVote = ({ proposal }) => {
             </Flex>
           </Flex>
         )}
-      </Box>
+      </ContentBox>
     </>
   );
 };

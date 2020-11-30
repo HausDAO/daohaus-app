@@ -48,6 +48,7 @@ const MinionProposalForm = () => {
       setMinions(_minions);
       console.log('minis', _minions);
     }
+    // eslint-disable-next-line
   }, [dao?.graphData?.minions]);
 
   useEffect(() => {

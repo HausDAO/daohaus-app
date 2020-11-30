@@ -28,6 +28,10 @@ export const MEMBERS_LIST = gql`
           decimals
         }
       }
+      highestIndexYesVote {
+        proposalId
+        proposalIndex
+      }
       tokenBalances {
         id
         tokenBalance
@@ -53,7 +57,9 @@ export const MEMBERS_LIST = gql`
 
 export const HUB_MEMBERSHIPS = gql`
   query membersHub($memberAddress: String!) {
-    members(where: { memberAddress: $memberAddress, exists: true }) {
+    membersHub: members(
+      where: { memberAddress: $memberAddress, exists: true }
+    ) {
       id
       memberAddress
       moloch {
@@ -111,6 +117,7 @@ export const USER_MEMBERSHIPS = gql`
       moloch {
         id
         title
+        version
       }
     }
   }

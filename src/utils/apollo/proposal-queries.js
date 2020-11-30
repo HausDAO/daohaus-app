@@ -5,24 +5,30 @@ const baseListFields = `
   aborted
   applicant
   cancelled
+  cancelledAt
   createdAt
   details
   didPass
   gracePeriodEnds
   guildkick
+  isMinion
   lootRequested
   memberAddress
   newMember
+  noShares
   noVotes
   paymentRequested
   paymentTokenDecimals
   paymentTokenSymbol
   processed
+  processor
+  processedAt
   proposer
   proposalId
   proposalIndex
   sharesRequested
   sponsored
+  sponsor
   sponsoredAt
   startingPeriod
   trade
@@ -32,6 +38,7 @@ const baseListFields = `
   votingPeriodStarts
   votingPeriodEnds
   whitelist
+  yesShares
   yesVotes
   molochVersion
   minionAddress
@@ -44,19 +51,19 @@ const baseListFields = `
   votes {
     id
     memberAddress
+    memberPower
     uintVote
     createdAt
   }
   status @client
   title @client
   description @client
+  hash @client
   proposalType @client
   gracePeriod @client
   votingEnds @client
   votingStarts @client
   `;
-
-// activityFeed @client
 
 export const PROPOSALS_LIST = gql`
   query proposals($contractAddr: String!, $skip: Int) {

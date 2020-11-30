@@ -6,12 +6,8 @@ import {
   FormControl,
   Flex,
   Input,
-  InputGroup,
-  InputLeftAddon,
   Icon,
-  Stack,
   Box,
-  Textarea,
   Menu,
   MenuButton,
   MenuList,
@@ -21,10 +17,12 @@ import { utils } from 'web3';
 import { RiAddFill, RiErrorWarningLine } from 'react-icons/ri';
 
 import { useDao, useTxProcessor, useUser } from '../../contexts/PokemolContext';
+import TextBox from '../Shared/TextBox';
 
 import PaymentInput from './PaymentInput';
 import TributeInput from './TributeInput';
 import AddressInput from './AddressInput';
+import DetailsFields from './DetailFields';
 
 const MemberProposalForm = () => {
   const [loading, setLoading] = useState(false);
@@ -64,10 +62,10 @@ const MemberProposalForm = () => {
   const txCallBack = (txHash, details) => {
     console.log('txCallBack', txProcessor);
     if (txProcessor && txHash) {
-      txProcessor.setTx(txHash, user.username, details, true, false);
+      txProcessor.setTx(txHash, user.username, details);
       txProcessor.forceUpdate = true;
 
-      updateTxProcessor(txProcessor);
+      updateTxProcessor({ ...txProcessor });
       // close model here
       // onClose();
       // setShowModal(null);
@@ -87,6 +85,7 @@ const MemberProposalForm = () => {
       title: values.title,
       description: values.description,
       link: 'https://' + values.link,
+      hash: Math.random(0, 10000),
     });
 
     try {
@@ -121,73 +120,12 @@ const MemberProposalForm = () => {
         mb={5}
       >
         <Box w='48%'>
-          <FormLabel
-            htmlFor='title'
-            color='white'
-            fontFamily='heading'
-            textTransform='uppercase'
-            fontSize='xs'
-            fontWeight={700}
-          >
-            Details
-          </FormLabel>
-          <Stack spacing={4}>
-            <Input
-              name='title'
-              placeholder='Proposal Title'
-              mb={5}
-              ref={register({
-                required: {
-                  value: true,
-                  message: 'Title is required',
-                },
-              })}
-              color='white'
-              focusBorderColor='secondary.500'
-            />
-            <Textarea
-              name='description'
-              placeholder='Short Description'
-              type='textarea'
-              mb={5}
-              h={10}
-              ref={register({
-                required: {
-                  value: true,
-                  message: 'Description is required',
-                },
-              })}
-              color='white'
-              focusBorderColor='secondary.500'
-            />
-            <InputGroup>
-              <InputLeftAddon>https://</InputLeftAddon>
-              <Input
-                name='link'
-                placeholder='daolink.club'
-                color='white'
-                focusBorderColor='secondary.500'
-                ref={register({
-                  required: {
-                    value: true,
-                    message: 'Reference Link is required',
-                  },
-                })}
-              />
-            </InputGroup>
-          </Stack>
+          <DetailsFields register={register} />
         </Box>
         <Box w='48%'>
-          <FormLabel
-            htmlFor='name'
-            color='white'
-            fontFamily='heading'
-            textTransform='uppercase'
-            fontSize='xs'
-            fontWeight={700}
-          >
+          <TextBox as={FormLabel} htmlFor='name' mb={2}>
             Shares Requested
-          </FormLabel>
+          </TextBox>
           <Input
             name='sharesRequested'
             placeholder='0'
@@ -212,16 +150,9 @@ const MemberProposalForm = () => {
           />
           {showLoot && (
             <>
-              <FormLabel
-                htmlFor='lootRequested'
-                color='white'
-                fontFamily='heading'
-                textTransform='uppercase'
-                fontSize='xs'
-                fontWeight={700}
-              >
+              <TextBox as={FormLabel} htmlFor='lootRequested' mb={2}>
                 Loot Requested
-              </FormLabel>
+              </TextBox>
               <Input
                 name='lootRequested'
                 placeholder='0'
@@ -256,7 +187,11 @@ const MemberProposalForm = () => {
           )}
           {(!showApplicant || !showLoot || !showPaymentRequest) && (
             <Menu color='white' textTransform='uppercase'>
-              <MenuButton as={Button} rightIcon={<Icon as={RiAddFill} />}>
+              <MenuButton
+                as={Button}
+                variant='outline'
+                rightIcon={<Icon as={RiAddFill} />}
+              >
                 Additional Options
               </MenuButton>
               <MenuList>

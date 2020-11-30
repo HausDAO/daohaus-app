@@ -1,4 +1,5 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
+import { Link as RouterLink } from 'react-router-dom';
 import {
   Link,
   Modal,
@@ -15,37 +16,39 @@ import {
 
 import { RiCheckboxCircleLine } from 'react-icons/ri';
 
-import { useTxProcessor, useUser, useDao } from '../../contexts/PokemolContext';
+import {
+  useTxProcessor,
+  useUser,
+  useDao,
+  useMembers,
+  useModals,
+} from '../../contexts/PokemolContext';
+import { memberProfile } from '../../utils/helpers';
+import { DISPLAY_NAMES } from '../../utils/tx-processor-helper';
 
 import HubProfileCard from '../Hub/HubProfileCard';
 import ExplorerLink from '../Shared/ExplorerLink';
 import MemberInfoCardGuts from '../Shared/MemberInfoCard/MemberInfoCardGuts';
 
-const AccountModal = ({ isOpen, setShowModal }) => {
+const AccountModal = ({ isOpen }) => {
   const [user] = useUser();
   const [dao] = useDao();
+  const { closeModals } = useModals();
+
   const [txProcessor] = useTxProcessor();
 
-  // TODO: where should we put this?
-  const DISPLAY_NAMES = {
-    submitVote: 'Submit Vote',
-    ragequit: 'ragequit',
-    processProposal: 'Process Proposal',
-    newDelegateKey: 'New Delegate Key',
-    submitProposalV1: 'Submit Proposal',
-    rageQuit: 'Rage Quit',
-    cancelProposal: 'Cancel Proposal',
-    processGuildKickProposal: 'Process GuildKick Proposal',
-    processWhitelistProposal: 'Process Whitelist Proposal',
-    ragekick: 'Rage Kick',
-    sponsorProposal: 'Sponsor Proposal',
-    submitProposal: 'Submit Proposal',
-    submitGuildKickProposal: 'Submit GuildKick Proposal',
-    submitWhitelistProposal: 'Submit Whitelist Proposal',
-    withdrawBalance: 'Withdraw Balance',
-    withdrawBalances: 'Withdraw Balances',
-    collectTokens: 'Collect Tokens',
-  };
+  const [members] = useMembers();
+  const [member, setMember] = useState(null);
+
+  // console.log(`Member info opened in ${context}`);
+
+  useEffect(() => {
+    if (user?.memberAddress) {
+      setMember(user);
+    } else {
+      setMember(memberProfile(members, user.username));
+    }
+  }, [members, user]);
 
   const RenderTxList = () => {
     const txList = txProcessor.getTxList(user.username);
@@ -53,8 +56,7 @@ const AccountModal = ({ isOpen, setShowModal }) => {
     // dummy data
     // txList.push({
     //   id: 1,
-    //   tx: '0x123',
-    //   description: 'sponsorProposal',
+    //   tx: '0x123',tails.name: 'sponsorProposal',
     //   open: true,
     //   dateAdded: 1605157095244,
     // });
@@ -70,9 +72,9 @@ const AccountModal = ({ isOpen, setShowModal }) => {
               justifyContent='space-between'
               alignItems='center'
             >
-              <Text color='white'>{DISPLAY_NAMES[tx.description]}</Text>
+              <Text color='white'>{DISPLAY_NAMES[tx.details.name]}</Text>
               <Box>
-                {tx.open ? (
+                {tx.pendingGraph ? (
                   <Icon as={Spinner} name='check' color='white' />
                 ) : (
                   <Icon
@@ -90,7 +92,7 @@ const AccountModal = ({ isOpen, setShowModal }) => {
   };
 
   return (
-    <Modal isOpen={isOpen} onClose={() => setShowModal(null)} isCentered>
+    <Modal isOpen={isOpen} onClose={closeModals} isCentered>
       <ModalOverlay />
       <ModalContent
         rounded='lg'
@@ -109,15 +111,26 @@ const AccountModal = ({ isOpen, setShowModal }) => {
           {!dao.address ? (
             <HubProfileCard user={user} />
           ) : (
-            <MemberInfoCardGuts user={user} context={'accountModal'} />
+            <MemberInfoCardGuts
+              user={user}
+              member={member}
+              context={'accountModal'}
+              showMenu={false}
+            />
           )}
           {dao.address && (
             <Box pt={6}>
               <Flex direction='row' justify='space-evenly' align='center'>
-                <Link to={`/dao/${dao.address}/profile${user.username}`}>
+                <Link
+                  as={RouterLink}
+                  to={`/dao/${dao.address}/profile/${user.username}`}
+                  onClick={closeModals}
+                >
                   Profile
                 </Link>
-                <Link to='/'>Hub</Link>
+                <Link as={RouterLink} to='/' onClick={closeModals}>
+                  Hub
+                </Link>
               </Flex>
             </Box>
           )}

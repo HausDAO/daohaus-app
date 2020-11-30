@@ -1,18 +1,20 @@
 import React, { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
 import { getProfile } from '3box/lib/api';
+import { Link } from 'react-router-dom';
 
 import { timeToNow, truncateAddr } from '../../utils/helpers';
 import {
   Avatar,
-  Badge,
   Box,
-  Flex,
+  Badge,
   Heading,
+  Flex,
   Skeleton,
   Text,
 } from '@chakra-ui/core';
 import makeBlockie from 'ethereum-blockies-base64';
+
+import ContentBox from '../Shared/ContentBox';
 // import { getProposalCountdownText } from '../../utils/proposal-helper';
 
 // TODO: get getProposalCountdownText(activity) outside of dao context?
@@ -51,14 +53,23 @@ const DaoActivityCard = ({ activity, isLoaded }) => {
     if (activity && activity.activityData) {
       switch (activity.activityData.type) {
         case 'proposal': {
-          return <Badge>{activity.activityData.lastActivity}</Badge>;
+          return (
+            <Badge variant='solid'>{activity.activityData.lastActivity}</Badge>
+          );
         }
         case 'rage': {
-          return <Badge colorScheme='red'>Rage</Badge>;
+          return (
+            <Badge variant='solid' colorScheme='red'>
+              Rage
+            </Badge>
+          );
         }
         case 'vote': {
           return (
-            <Badge colorScheme={+activity.uintVote === 1 ? 'green' : 'red'}>
+            <Badge
+              colorScheme={+activity.uintVote === 1 ? 'green' : 'red'}
+              variant='solid'
+            >
               {+activity.uintVote === 1 ? 'Yes' : 'No'}
             </Badge>
           );
@@ -71,15 +82,7 @@ const DaoActivityCard = ({ activity, isLoaded }) => {
   };
 
   return (
-    <Box
-      rounded='lg'
-      bg='blackAlpha.600'
-      borderWidth='1px'
-      borderColor='whiteAlpha.200'
-      p={6}
-      m={6}
-      mt={2}
-    >
+    <ContentBox mt={3}>
       <Link
         to={
           activity?.activityData?.type !== 'rage'
@@ -94,13 +97,13 @@ const DaoActivityCard = ({ activity, isLoaded }) => {
                 {renderTitle()}
               </Heading>
 
-              <Flex direction='row' justifyContent='space-between'>
-                <Text>
+              <Flex direction='row' align='center'>
+                <Box mr={2}>{renderBadge()}</Box>
+                <Text as='i' fontSize='xs'>
                   {activity?.activityData?.createdAt
                     ? timeToNow(activity.activityData.createdAt)
                     : '--'}
                 </Text>
-                {renderBadge()}
               </Flex>
             </Flex>
 
@@ -122,7 +125,7 @@ const DaoActivityCard = ({ activity, isLoaded }) => {
           </Flex>
         </Skeleton>
       </Link>
-    </Box>
+    </ContentBox>
   );
 };
 

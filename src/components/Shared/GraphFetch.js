@@ -2,14 +2,19 @@ import React, { useEffect } from 'react';
 import { useQuery } from '@apollo/react-hooks';
 
 import { useNetwork, useRefetchQuery } from '../../contexts/PokemolContext';
-import { networkClients } from '../../utils/apollo/clients';
+import {
+  supergraphClients,
+  statsgraphClients,
+} from '../../utils/apollo/clients';
 
-const GraphFetch = ({ query, setRecords, variables, entity }) => {
+const GraphFetch = ({ query, setRecords, variables, entity, isStats }) => {
   const [network] = useNetwork();
   const [refetchQuery, updateRefetchQuery] = useRefetchQuery();
 
   const { loading, error, data, refetch } = useQuery(query, {
-    client: networkClients[network.network_id],
+    client: isStats
+      ? statsgraphClients[network.network_id]
+      : supergraphClients[network.network_id],
     variables,
     fetchPolicy: 'network-only',
   });
@@ -24,7 +29,6 @@ const GraphFetch = ({ query, setRecords, variables, entity }) => {
 
   useEffect(() => {
     if (data) {
-      // console.log('setting single fetch entity', entity);
       setRecords(data[entity]);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps

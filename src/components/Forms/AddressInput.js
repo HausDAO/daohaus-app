@@ -1,4 +1,5 @@
 import { FormControl, FormHelperText, FormLabel, Input } from '@chakra-ui/core';
+import TextBox from '../Shared/TextBox';
 import React from 'react';
 // import { useForm } from 'react-hook-form';
 import { useEns } from '../../contexts/PokemolContext';
@@ -24,17 +25,10 @@ const AddressInput = ({ register, setValue, watch, formLabel }) => {
 
   return (
     <FormControl>
-      <FormLabel
-        htmlFor='applicant'
-        color='white'
-        fontFamily='heading'
-        textTransform='uppercase'
-        fontSize='xs'
-        fontWeight={700}
-      >
+      <TextBox as={FormLabel} htmlFor='applicant'>
         {formLabel}
-      </FormLabel>
-      <FormHelperText fontSize='xs' id='applicant-helper-text'>
+      </TextBox>
+      <FormHelperText fontSize='xs' id='applicant-helper-text' mb={1}>
         {ensAddr || 'Use ETH address or ENS'}
       </FormHelperText>
       <Input
