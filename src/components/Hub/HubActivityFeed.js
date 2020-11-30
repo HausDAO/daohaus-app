@@ -1,8 +1,13 @@
 import React, { useEffect, useState } from 'react';
+
+import { activitiesData } from '../../content/skeleton-data';
 import ActivityCard from '../Activities/ActivityCard';
+import Paginator from '../Shared/Paginator';
 
 const HubActivityFeed = ({ daos }) => {
-  const [activities, setActivities] = useState([]);
+  const [isLoaded, setIsLoaded] = useState(false);
+  const [activityData, setActivityData] = useState(activitiesData);
+  const [allActivities, setAllActivities] = useState();
 
   useEffect(() => {
     let proposalActivities = [];
@@ -36,19 +41,28 @@ const HubActivityFeed = ({ daos }) => {
       ];
     });
 
-    setActivities(
+    setAllActivities(
       [...proposalActivities, ...rageActivities].sort(
         (a, b) => +b.createdAt - +a.createdAt,
       ),
     );
+    setIsLoaded(true);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (
     <>
-      {activities.map((activity) => (
+      {activityData.map((activity) => (
         <ActivityCard activity={activity} key={activity.id} isLoaded={true} />
       ))}
+
+      {isLoaded ? (
+        <Paginator
+          perPage={7}
+          setRecords={setActivityData}
+          allRecords={allActivities}
+        />
+      ) : null}
     </>
   );
 };
