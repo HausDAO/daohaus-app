@@ -12,14 +12,13 @@ import {
 import { BsThreeDotsVertical } from 'react-icons/bs';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
 import { useDao, useModals, useUser } from '../../contexts/PokemolContext';
-import RageQuitModal from '../Modal/RageQuitModal';
 
 const ProfileMenu = ({ member }) => {
   const toast = useToast();
   const [dao] = useDao();
   const history = useHistory();
   const user = useUser();
-  const { modals, openModal } = useModals();
+  const { openModal } = useModals();
 
   const handleGuildkickClick = () => {
     history.push(
@@ -47,8 +46,6 @@ const ProfileMenu = ({ member }) => {
             <MenuItem onClick={() => openModal('ragequitModal')}>
               RageQuit
             </MenuItem>
-
-            <RageQuitModal isOpen={modals.ragequitModal} />
           </>
         )}
         <Link
