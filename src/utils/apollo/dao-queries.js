@@ -17,6 +17,9 @@ export const HOME_DAO = gql`
       proposalDeposit
       processingReward
       guildBankAddress
+      minions {
+        minionAddress
+      }
       depositToken {
         tokenAddress
         symbol

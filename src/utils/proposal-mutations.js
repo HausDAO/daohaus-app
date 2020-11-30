@@ -30,6 +30,24 @@ export const setProposaltxLock = (proposals, options) => {
   }
 };
 
+export const mutateMember = (members, options) => {
+  console.log();
+  switch (options.name) {
+    case 'ragequit': {
+      const memberIndex = members.findIndex((m) => {
+        return m.memberAddress === options.from.toLowerCase();
+      });
+      members[memberIndex].shares =
+        members[memberIndex].shares - options.params[0];
+      members[memberIndex].loot = members[memberIndex].loot - options.params[1];
+      console.log('new member', members[memberIndex]);
+      return members;
+    }
+    default: {
+      return members;
+    }
+  }
+};
 // Not used
 export const mutateProposal = (proposals, options) => {
   switch (options.name) {

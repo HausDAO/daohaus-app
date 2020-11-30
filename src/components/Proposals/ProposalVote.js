@@ -11,9 +11,11 @@ import {
   useUser,
   useTxProcessor,
   useProposals,
+  useWeb3Connect,
 } from '../../contexts/PokemolContext';
 import ContentBox from '../Shared/ContentBox';
 import TextBox from '../Shared/TextBox';
+import { MinionService } from '../../utils/minion-service';
 
 const ProposalVote = ({ proposal, setProposal }) => {
   const [user] = useUser();
@@ -21,6 +23,7 @@ const ProposalVote = ({ proposal, setProposal }) => {
   const [wallet] = useMemberWallet();
   const [daoData] = useDaoGraphData();
   const [proposals] = useProposals();
+  const [web3Connect] = useWeb3Connect();
   const [txProcessor, updateTxProcessor] = useTxProcessor();
   const [nextProposalToProcess, setNextProposal] = useState(null);
   const currentlyVoting = (proposal) => {
@@ -105,6 +108,24 @@ const ProposalVote = ({ proposal, setProposal }) => {
       }
     } catch (e) {
       console.error(`Error processing proposal: ${e.toString()}`);
+    }
+  };
+
+  const executeMinion = async (proposal) => {
+    // TODO: will nedd to check if it has been executed yet
+    const setupValues = {
+      minion: proposal.minionAddress,
+    };
+    const minionService = new MinionService(
+      web3Connect.web3,
+      user.username,
+      setupValues,
+    );
+
+    try {
+      minionService.executeAction(proposal.proposalId, txCallBack);
+    } catch (err) {
+      console.log('error: ', err);
     }
   };
 
@@ -274,6 +295,7 @@ const ProposalVote = ({ proposal, setProposal }) => {
               </Flex>
             </>
           )}
+
         {proposal?.status === 'ReadyForProcessing' &&
           (nextProposalToProcess.proposalId === proposal?.proposalId ? (
             <Flex justify='center' pt='10px'>
@@ -298,6 +320,15 @@ const ProposalVote = ({ proposal, setProposal }) => {
               </Flex>
             </Flex>
           ))}
+        {proposal?.status === 'Passed' && proposal?.minionAddress && (
+          <Flex justify='center' pt='10px'>
+            <Flex direction='column'>
+              <Button onClick={() => executeMinion(proposal)}>
+                Execute Minion
+              </Button>
+            </Flex>
+          </Flex>
+        )}
       </ContentBox>
     </>
   );

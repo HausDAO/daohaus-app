@@ -22,10 +22,14 @@ export class MolochService {
     const { from, name, params } = options;
     const tx = this.daoContract.methods[name](...params);
     console.log('this.accountAddr', from);
-    return tx.send({ from: from }).on('transactionHash', (txHash) => {
-      console.log('txHash', txHash);
-      callback(txHash, options);
-    });
+    return tx
+      .send({ from: from })
+      .on('transactionHash', (txHash) => {
+        callback(txHash, options);
+      })
+      .on('error', (error) => {
+        callback(null, error);
+      });
   }
 
   async getAllEvents() {

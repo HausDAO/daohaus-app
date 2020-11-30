@@ -28,6 +28,10 @@ export const MEMBERS_LIST = gql`
           decimals
         }
       }
+      highestIndexYesVote {
+        proposalId
+        proposalIndex
+      }
       tokenBalances {
         id
         tokenBalance
