@@ -161,7 +161,7 @@ const ProposalVote = ({ proposal, setProposal }) => {
                     placement='bottom'
                     label='Deposits discourage spam, and are returned after a proposal is processed. Minus the reward for processing, if one has been selected'
                   >
-                    <Icon as={RiQuestionLine} />
+                    <Icon mt='-4px' as={RiQuestionLine} />
                   </Tooltip>
                 </TextBox>
                 <TextBox variant='value'>
@@ -181,7 +181,12 @@ const ProposalVote = ({ proposal, setProposal }) => {
                         daoData?.depositToken?.symbol
                       }
                     >
-                      <Icon color='red.500' as={RiErrorWarningLine} />
+                      <Icon
+                        color='red.500'
+                        as={RiErrorWarningLine}
+                        ml={2}
+                        mt='-4px'
+                      />
                     </Tooltip>
                   ) : null}
                 </TextBox>

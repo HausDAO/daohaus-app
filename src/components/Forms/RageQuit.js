@@ -110,80 +110,68 @@ const RageQuitForm = () => {
 
   return canRage ? (
     <form onSubmit={handleSubmit(onSubmit)}>
-      <FormControl
-        isInvalid={errors.name}
-        display='flex'
-        flexDirection='row'
-        justifyContent='space-between'
-        mb={5}
-      >
-        <Box>
-          <FormControl>
-            <Input
-              name='shares'
-              placeholder='0'
-              mb={5}
-              ref={register({
-                pattern: {
-                  value: /[0-9]/,
-                  message: 'Shares must be a number',
-                },
-              })}
-              color='white'
-              type='number'
-              focusBorderColor='secondary.500'
-            />
-            <FormHelperText>
-              You can Rage up to {member?.shares} shares.
-            </FormHelperText>
-          </FormControl>
-          <FormControl>
-            <TextBox as={FormLabel} htmlFor='loot' mb={2}>
-              Loot to rAGe
-            </TextBox>
-            <Input
-              name='loot'
-              placeholder='0'
-              mb={5}
-              ref={register({
-                pattern: {
-                  value: /[0-9]/,
-                  message: 'Loot must be a number',
-                },
-              })}
-              color='white'
-              type='number'
-              focusBorderColor='secondary.500'
-            />
-            <FormHelperText>
-              You can Rage up to {member?.loot} loot.
-            </FormHelperText>
-          </FormControl>
-        </Box>
-      </FormControl>
-      <Flex justify='flex-end' align='center' h='60px'>
-        {currentError && (
-          <Box color='secondary.300' fontSize='m' mr={5}>
-            <Icon as={RiErrorWarningLine} color='secondary.300' mr={2} />
-            {currentError.message}
+      <FormControl isInvalid={errors.name}>
+        <TextBox as={FormLabel} htmlFor='shares' mb={2}>
+          Shares to Rage
+        </TextBox>
+
+        <Input
+          name='shares'
+          placeholder='0'
+          ref={register({
+            pattern: {
+              value: /[0-9]/,
+              message: 'Shares must be a number',
+            },
+          })}
+          color='white'
+          focusBorderColor='secondary.500'
+        />
+        <FormHelperText>
+          You can Rage up to {member?.shares} shares.
+        </FormHelperText>
+        <TextBox as={FormLabel} htmlFor='loot' mt={6} mb={2}>
+          Loot to Rage
+        </TextBox>
+        <Input
+          name='loot'
+          placeholder='0'
+          ref={register({
+            pattern: {
+              value: /[0-9]/,
+              message: 'Loot must be a number',
+            },
+          })}
+          color='white'
+          focusBorderColor='secondary.500'
+        />
+        <FormHelperText>You can Rage up to {member?.loot} loot.</FormHelperText>
+
+        <Flex justify='flex-end' align='center'>
+          {currentError && (
+            <Box color='secondary.300' fontSize='m'>
+              <Icon as={RiErrorWarningLine} color='secondary.300' mr={2} />
+              {currentError.message}
+            </Box>
+          )}
+          <Box>
+            <Button
+              type='submit'
+              loadingText='Submitting'
+              isLoading={loading}
+              disabled={loading}
+            >
+              RAGE
+            </Button>
           </Box>
-        )}
-        <Box>
-          <Button
-            type='submit'
-            loadingText='Submitting'
-            isLoading={loading}
-            disabled={loading}
-          >
-            RAGE
-          </Button>
-        </Box>
-      </Flex>
+        </Flex>
+      </FormControl>
     </form>
   ) : (
     <Text>
-      Sorry you can not rage at this time. You have a pending yes vote. All yes
-      votes must be completed and processed
+      Sorry you can not rage at this time. You have a 'Yes' vote on a pending
+      proposal. All proposals with a 'Yes' vote must be completed and processed
+      before you can rage.
     </Text>
   );
 };
