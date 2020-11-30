@@ -13,6 +13,7 @@ import {
 } from '@chakra-ui/core';
 import { useTheme } from '../../contexts/CustomThemeContext';
 import { useHistory } from 'react-router-dom';
+import ComingSoonOverlay from '../Shared/ComingSoonOverlay';
 
 const ProposalFormModal = ({
   isOpen,
@@ -53,6 +54,13 @@ const ProposalFormModal = ({
       subhead: 'Trade funds',
       proposalType: 'trade',
       image: 'themes/raidTheme/raidguild__swords-white.svg',
+    },
+    {
+      name: 'Minion',
+      subhead: 'Minion Simple',
+      proposalType: 'minion',
+      image: 'themes/raidTheme/raidguild__swords-white.svg',
+      comingSoon: true,
     },
   ];
 
@@ -102,6 +110,7 @@ const ProposalFormModal = ({
           {proposalTypes.map((p) => {
             return (
               <Box
+                position='relative'
                 as={Flex}
                 key={p.name}
                 display='flex'
@@ -114,10 +123,14 @@ const ProposalFormModal = ({
                 p={2}
                 m={1}
                 onClick={() => {
+                  if (p.comingSoon) {
+                    return;
+                  }
                   setProposalType(p.proposalType);
                   setShowModal('proposal');
                 }}
               >
+                {p.comingSoon && <ComingSoonOverlay />}
                 <Image
                   src={require('../../assets/' + p.image)}
                   width='50px'

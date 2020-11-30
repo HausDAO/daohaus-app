@@ -41,6 +41,7 @@ const baseListFields = `
   yesShares
   yesVotes
   molochVersion
+  minionAddress
   moloch {
     gracePeriodLength
     periodDuration
