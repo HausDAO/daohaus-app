@@ -17,9 +17,7 @@ import TxProcessorInit from './contexts/TxProcessorInit';
 import GraphInit from './contexts/GraphInit';
 import PriceInit from './contexts/PricesInit';
 
-// how would we toggle this? or just reload client in fetch components?
 const chainData = supportedChains[+process.env.REACT_APP_NETWORK_ID];
-
 const client = new ApolloClient({
   uri: chainData.subgraph_url,
   clientState: {
