@@ -11,6 +11,7 @@ import {
   useMembers,
   usePrices,
   useMemberWallet,
+  useModals,
 } from '../../contexts/PokemolContext';
 import ContentBox from '../Shared/ContentBox';
 import TextBox from '../Shared/TextBox';
@@ -18,6 +19,7 @@ import ProfileMenu from '../Shared/ProfileMenu';
 import { getTotalBankValue } from '../../utils/bank-helpers';
 import { useParams } from 'react-router-dom';
 import { contra } from '../../utils/blood-and-guts';
+import RageQuitModal from '../Modal/RageQuitModal';
 
 const OverviewCard = ({ user }) => {
   const [ens] = useEns();
@@ -31,6 +33,8 @@ const OverviewCard = ({ user }) => {
   const params = useParams();
   const [, setIsUser] = useState();
   const [showAlert, setShowAlert] = useState();
+  const { modals } = useModals();
+
 
   useEffect(() => {
     if (user?.memberAddress) {
@@ -179,6 +183,7 @@ const OverviewCard = ({ user }) => {
           </Box>
         </Flex>
       </Flex>
+      <RageQuitModal isOpen={modals.ragequitModal} />
     </ContentBox>
   );
 };

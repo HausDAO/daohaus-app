@@ -11,10 +11,12 @@ const Settings = () => {
       <Box w='50%' pl={6}>
         <TextBox fontSize='xs'>Dao Contract Settings</TextBox>
         <DaoContractSettings />
-        <TextBox fontSize='xs'>Boost Status</TextBox>
+        <TextBox fontSize='xs' mt={6}>
+          Boost Status
+        </TextBox>
         <BoostStatus />
       </Box>
-      <Box w='30%' pl={6}>
+      <Box w='50%' pl={6}>
         <TextBox>Superpowers</TextBox>
         <Superpowers />
       </Box>
