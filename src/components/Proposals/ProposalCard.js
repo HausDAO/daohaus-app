@@ -173,7 +173,7 @@ const ProposalCard = ({ proposal, isLoaded }) => {
                   {proposal?.tributeOffered
                     ? utils.fromWei(proposal.tributeOffered)
                     : '--'}{' '}
-                  {proposal.tributeToken || 'WETH'}
+                  {proposal.tributeTokenSymbol || 'WETH'}
                 </Box>
               </Skeleton>
             </Box>
@@ -195,7 +195,7 @@ const ProposalCard = ({ proposal, isLoaded }) => {
                   {proposal?.paymentRequested
                     ? utils.fromWei(proposal.paymentRequested)
                     : '--'}{' '}
-                  {proposal.paymentToken || 'WETH'}
+                  {proposal.paymentTokenSymbol || 'WETH'}
                 </Box>
               </Skeleton>
             </Box>
