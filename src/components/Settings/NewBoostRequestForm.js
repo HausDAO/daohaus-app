@@ -13,6 +13,7 @@ import {
   HStack,
 } from '@chakra-ui/core';
 import { useDao } from '../../contexts/PokemolContext';
+// import ComingSoonOverlay from '../Shared/ComingSoonOverlay';
 
 const NewBoostRequestForm = () => {
   const [dao] = useDao();

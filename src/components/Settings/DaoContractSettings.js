@@ -1,8 +1,8 @@
 import React from 'react';
 import { Flex, Box, Skeleton, Link, Icon } from '@chakra-ui/core';
+
 import { useDao } from '../../contexts/PokemolContext';
 import { useTheme } from '../../contexts/CustomThemeContext';
-import { utils } from 'web3';
 import { format } from 'date-fns';
 import { RiExternalLinkLine } from 'react-icons/ri';
 
@@ -39,21 +39,23 @@ const DaoContractSettings = () => {
       <Box>
         <TextBox>Dao Contract</TextBox>
         <Skeleton isLoaded={dao?.address}>
-          <Link
-            href={`${uri()}${dao.address}`}
-            target='_blank'
-            rel='noreferrer noopener'
-          >
-            <Flex
-              fontFamily='body'
-              fontSize='sm'
-              color='secondary.400'
-              align='center'
+          <>
+            <Link
+              href={`${uri()}${dao.address}`}
+              target='_blank'
+              rel='noreferrer noopener'
             >
-              {dao?.address ? dao?.address : '--'}
-              <Icon as={RiExternalLinkLine} color='secondary.400' ml={1} />
-            </Flex>
-          </Link>
+              <Flex
+                fontFamily='body'
+                fontSize='sm'
+                color='secondary.400'
+                align='center'
+              >
+                {dao?.address ? dao?.address : '--'}
+                <Icon as={RiExternalLinkLine} color='secondary.400' ml={1} />
+              </Flex>
+            </Link>
+          </>
         </Skeleton>
       </Box>
       <Flex mt={3}>
@@ -62,7 +64,8 @@ const DaoContractSettings = () => {
           <Skeleton isLoaded={dao?.graphData?.proposalDeposit}>
             <TextBox variant='value' my={2}>
               {dao?.graphData?.proposalDeposit
-                ? utils.fromWei(dao.graphData.proposalDeposit) +
+                ? dao.graphData.proposalDeposit /
+                    10 ** dao.graphData.depositToken.decimals +
                   ' ' +
                   dao.graphData.depositToken.symbol
                 : '--'}
@@ -70,11 +73,14 @@ const DaoContractSettings = () => {
           </Skeleton>
         </Box>
         <Box>
-          <TextBox>Period Length</TextBox>
+          <TextBox>Processing Reward</TextBox>
           <Skeleton isLoaded={dao?.graphData?.periodDuration}>
             <TextBox variant='value' my={2}>
-              {dao?.graphData?.periodDuration
-                ? `${86400 / +dao?.graphData?.periodDuration} per day`
+              {dao?.graphData?.processingReward
+                ? dao.graphData.processingReward /
+                    10 ** dao.graphData.depositToken.decimals +
+                  ' ' +
+                  dao.graphData.depositToken.symbol
                 : '--'}
             </TextBox>
           </Skeleton>
@@ -109,12 +115,22 @@ const DaoContractSettings = () => {
         </Box>
       </Flex>
       <Flex>
-        <Box>
+        <Box w='50%'>
           <TextBox>Summoned</TextBox>
           <Skeleton isLoaded={dao?.createdAt}>
             <TextBox variant='value' my={2}>
               {dao?.createdAt
                 ? format(new Date(+dao?.createdAt), 'MMMM d, yyyy')
+                : '--'}
+            </TextBox>
+          </Skeleton>
+        </Box>
+        <Box>
+          <TextBox>Maximum Proposal Velocity</TextBox>
+          <Skeleton isLoaded={dao?.graphData?.periodDuration}>
+            <TextBox variant='value' my={2}>
+              {dao?.graphData?.periodDuration
+                ? `${86400 / +dao?.graphData?.periodDuration} per day`
                 : '--'}
             </TextBox>
           </Skeleton>
