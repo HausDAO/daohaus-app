@@ -25,6 +25,14 @@ const Proposal = () => {
   const [theme] = useTheme();
 
   useEffect(() => {
+    const interval = setInterval(() => {
+      updateRefetchQuery('proposals');
+    }, 350000);
+    return () => clearInterval(interval);
+    // eslint-disable-next-line
+  }, []);
+
+  useEffect(() => {
     if (proposals) {
       const p = proposals?.filter((p) => {
         return p.proposalId === id;
@@ -34,14 +42,6 @@ const Proposal = () => {
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [proposals]);
-
-  useEffect(() => {
-    const interval = setInterval(() => {
-      updateRefetchQuery('proposals');
-    }, 60000);
-    return () => clearInterval(interval);
-    // eslint-disable-next-line
-  }, []);
 
   return (
     <Box p={6}>

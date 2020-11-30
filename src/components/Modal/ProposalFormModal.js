@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { useHistory } from 'react-router-dom';
 import {
   Modal,
   ModalContent,
@@ -16,7 +17,7 @@ import FundingProposalForm from '../Forms/FundingProposal';
 import WhitelistProposalForm from '../Forms/WhitelistProposal';
 import GuildKickProposalForm from '../Forms/GuildKickProposal';
 import TradeProposalForm from '../Forms/TradeProposal';
-import { useHistory } from 'react-router-dom';
+import MinionSimpleProposalForm from '../Forms/MinionSimpleProposal';
 
 const ProposalFormModal = ({
   proposalType,
@@ -59,6 +60,12 @@ const ProposalFormModal = ({
       heading: `New Trade ${theme.daoMeta.proposal}`,
       subline: `Submit a trade proposal here.`,
       form: <TradeProposalForm />,
+    },
+    minion: {
+      type: `New ${theme.daoMeta.proposal}`,
+      heading: `New Minion ${theme.daoMeta.proposal}`,
+      subline: `Submit a Minion proposal here.`,
+      form: <MinionSimpleProposalForm />,
     },
   };
 

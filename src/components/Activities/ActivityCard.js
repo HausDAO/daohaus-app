@@ -5,10 +5,6 @@ import { formatCreatedAt } from '../../utils/helpers';
 import { Badge, Box, Heading, Stack, Skeleton } from '@chakra-ui/core';
 
 import ContentBox from '../Shared/ContentBox';
-// import { getProposalCountdownText } from '../../utils/proposal-helper';
-
-// TODO: get getProposalCountdownText(activity) outside of dao context?
-
 const ActivityCard = ({ activity, isLoaded }) => {
   return (
     <ContentBox mt={2}>

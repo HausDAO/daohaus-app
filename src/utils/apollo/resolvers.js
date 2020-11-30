@@ -9,6 +9,7 @@ import {
   passedVotingAndGrace,
   determineProposalType,
   descriptionMaker,
+  hashMaker,
   titleMaker,
   determineUnreadActivityFeed,
 } from '../proposal-helper';
@@ -100,6 +101,9 @@ export const resolvers = {
     },
     description: (proposal) => {
       return descriptionMaker(proposal);
+    },
+    hash: (proposal) => {
+      return hashMaker(proposal);
     },
     activityFeed: (proposal) => {
       return determineUnreadActivityFeed(proposal);

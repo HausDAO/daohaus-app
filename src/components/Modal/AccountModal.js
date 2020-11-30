@@ -24,6 +24,7 @@ import {
   useModals,
 } from '../../contexts/PokemolContext';
 import { memberProfile } from '../../utils/helpers';
+import { DISPLAY_NAMES } from '../../utils/tx-processor-helper';
 
 import HubProfileCard from '../Hub/HubProfileCard';
 import ExplorerLink from '../Shared/ExplorerLink';
@@ -49,35 +50,13 @@ const AccountModal = ({ isOpen }) => {
     }
   }, [members, user]);
 
-  // TODO: where should we put this?
-  const DISPLAY_NAMES = {
-    submitVote: 'Submit Vote',
-    ragequit: 'ragequit',
-    processProposal: 'Process Proposal',
-    newDelegateKey: 'New Delegate Key',
-    submitProposalV1: 'Submit Proposal',
-    rageQuit: 'Rage Quit',
-    cancelProposal: 'Cancel Proposal',
-    processGuildKickProposal: 'Process GuildKick Proposal',
-    processWhitelistProposal: 'Process Whitelist Proposal',
-    ragekick: 'Rage Kick',
-    sponsorProposal: 'Sponsor Proposal',
-    submitProposal: 'Submit Proposal',
-    submitGuildKickProposal: 'Submit GuildKick Proposal',
-    submitWhitelistProposal: 'Submit Whitelist Proposal',
-    withdrawBalance: 'Withdraw Balance',
-    withdrawBalances: 'Withdraw Balances',
-    collectTokens: 'Collect Tokens',
-  };
-
   const RenderTxList = () => {
     const txList = txProcessor.getTxList(user.username);
     const milisecondsAgo = 86400000; // 1 day
     // dummy data
     // txList.push({
     //   id: 1,
-    //   tx: '0x123',
-    //   description: 'sponsorProposal',
+    //   tx: '0x123',tails.name: 'sponsorProposal',
     //   open: true,
     //   dateAdded: 1605157095244,
     // });
@@ -93,9 +72,9 @@ const AccountModal = ({ isOpen }) => {
               justifyContent='space-between'
               alignItems='center'
             >
-              <Text color='white'>{DISPLAY_NAMES[tx.description]}</Text>
+              <Text color='white'>{DISPLAY_NAMES[tx.details.name]}</Text>
               <Box>
-                {tx.open ? (
+                {tx.pendingGraph ? (
                   <Icon as={Spinner} name='check' color='white' />
                 ) : (
                   <Icon

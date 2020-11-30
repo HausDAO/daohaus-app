@@ -1,9 +1,11 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Flex, Box, Skeleton } from '@chakra-ui/core';
 import UsdPrice from '../UsdPrice';
 import UsdValue from '../UsdValue';
+import Withdraw from '../../Forms/Withdraw';
 
-const TokenListCard = ({ token, isLoaded }) => {
+const TokenListCard = ({ token, isLoaded, hasBalance }) => {
+  const [optimisticWithdraw, setOptimisticWithdraw] = useState(false);
   // TODO token images? trust-wallet?
   return (
     <Flex h='60px' align='center'>
@@ -17,10 +19,16 @@ const TokenListCard = ({ token, isLoaded }) => {
           <Box fontFamily='mono'>
             {token.tokenBalance ? (
               <>
-                {parseFloat(
-                  +token.tokenBalance / 10 ** +token.token.decimals,
-                ).toFixed(4)}{' '}
-                {token.token.symbol}
+                {optimisticWithdraw ? (
+                  `0.0000 ${token.token.symbol}`
+                ) : (
+                  <>
+                    {parseFloat(
+                      +token.tokenBalance / 10 ** +token.token.decimals,
+                    ).toFixed(4)}{' '}
+                    {token.token.symbol}
+                  </>
+                )}
               </>
             ) : null}
           </Box>
@@ -36,10 +44,31 @@ const TokenListCard = ({ token, isLoaded }) => {
       <Box w='15%'>
         <Skeleton isLoaded={isLoaded}>
           <Box fontFamily='mono'>
-            {token.tokenBalance ? <UsdValue tokenBalance={token} /> : '--'}
+            {token.tokenBalance ? (
+              <>
+                {optimisticWithdraw ? (
+                  '$ 0.00'
+                ) : (
+                  <UsdValue tokenBalance={token} />
+                )}
+              </>
+            ) : (
+              '--'
+            )}
           </Box>
         </Skeleton>
       </Box>
+
+      {hasBalance && !optimisticWithdraw ? (
+        <Box w='15%'>
+          <Skeleton isLoaded={isLoaded}>
+            <Withdraw
+              tokenBalance={token}
+              setOptimisticWithdraw={setOptimisticWithdraw}
+            />
+          </Skeleton>
+        </Box>
+      ) : null}
     </Flex>
   );
 };

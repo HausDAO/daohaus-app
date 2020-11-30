@@ -1,8 +1,21 @@
 import { anyToBN } from '@netgum/utils';
-import { formatDistanceToNow, formatDuration } from 'date-fns';
+import { formatDistanceToNow, formatDuration, format } from 'date-fns';
 
 export const truncateAddr = (addr) => {
   return addr.slice(0, 6) + '...' + addr.slice(-4);
+};
+
+export const IsJsonString = (str) => {
+  try {
+    JSON.parse(str);
+  } catch (e) {
+    return false;
+  }
+  return true;
+};
+
+export const proposalDetails = (details) => {
+  return details && IsJsonString(details) ? JSON.parse(details) : null;
 };
 
 export const valToDecimalString = (value, tokenAddress, tokens) => {
@@ -23,7 +36,7 @@ export const valToDecimalString = (value, tokenAddress, tokens) => {
 };
 
 export const formatCreatedAt = (createdAt) => {
-  // return moment.unix(createdAt).format('MMM Do');
+  return format(new Date(createdAt * 1000), 'MMM dd, yyyy');
 };
 
 export const timeToNow = (time) => {

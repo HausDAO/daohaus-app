@@ -6,7 +6,7 @@ import { RiErrorWarningLine } from 'react-icons/ri';
 import { useDao, useTxProcessor, useUser } from '../../contexts/PokemolContext';
 import AddressInput from './AddressInput';
 import DetailsFields from './DetailFields';
-import { useLocation, useParams } from 'react-router-dom';
+import { useLocation } from 'react-router-dom';
 
 const GuildKickProposalForm = () => {
   const [loading, setLoading] = useState(false);
@@ -32,6 +32,7 @@ const GuildKickProposalForm = () => {
       setValue('applicantHidden', applicantAddress);
       setValue('applicant', applicantAddress);
     }
+    // eslint-disable-next-line
   }, [location]);
 
   useEffect(() => {
@@ -51,10 +52,10 @@ const GuildKickProposalForm = () => {
   const txCallBack = (txHash, details) => {
     console.log('txCallBack', txProcessor);
     if (txProcessor && txHash) {
-      txProcessor.setTx(txHash, user.username, details, true, false);
+      txProcessor.setTx(txHash, user.username, details);
       txProcessor.forceUpdate = true;
 
-      updateTxProcessor(txProcessor);
+      updateTxProcessor({ ...txProcessor });
       // close model here
       // onClose();
       // setShowModal(null);
@@ -74,6 +75,7 @@ const GuildKickProposalForm = () => {
       title: values.title,
       description: values.description,
       link: 'https://' + values.link,
+      hash: Math.random(0, 10000),
     });
 
     try {

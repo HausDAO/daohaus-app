@@ -15,7 +15,11 @@ export const HOME_DAO = gql`
       votingPeriodLength
       gracePeriodLength
       proposalDeposit
+      processingReward
       guildBankAddress
+      minions {
+        minionAddress
+      }
       depositToken {
         tokenAddress
         symbol
