@@ -227,7 +227,7 @@ const TxProcessorInit = () => {
           mt={2}
         >
           <ModalHeader>
-            {(latestTx && DISPLAY_NAMES[latestTx.details.name]) ||
+            {(latestTx && DISPLAY_NAMES[latestTx?.details?.name]) ||
               'Transaction'}{' '}
             {loading ? 'Submitted' : 'Completed'}
           </ModalHeader>
@@ -246,7 +246,7 @@ const TxProcessorInit = () => {
                   🎉
                 </span>{' '}
                 Success{' '}
-                {(latestTx && DISPLAY_NAMES[latestTx.details.name]) || ''}{' '}
+                {(latestTx && DISPLAY_NAMES[latestTx?.details?.name]) || ''}{' '}
                 <span role='img' aria-label='confetti'>
                   🎉
                 </span>

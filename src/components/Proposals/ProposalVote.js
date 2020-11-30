@@ -18,9 +18,6 @@ import {
   useProposals,
   useWeb3Connect,
 } from '../../contexts/PokemolContext';
-
-import ContentBox from '../Shared/ContentBox';
-import TextBox from '../Shared/TextBox';
 import { MinionService } from '../../utils/minion-service';
 
 const MotionBox = motion.custom(Box);
@@ -166,25 +163,34 @@ const ProposalVote = ({ proposal, setProposal }) => {
                     placement='bottom'
                     label='Deposits discourage spam, and are returned after a proposal is processed. Minus the reward for processing, if one has been selected'
                   >
-                    <Icon as={RiQuestionLine} />
+                    <Icon mt='-4px' as={RiQuestionLine} />
                   </Tooltip>
                 </TextBox>
                 <TextBox variant='value'>
                   {daoData?.proposalDeposit /
                     10 ** daoData?.depositToken.decimals}{' '}
                   {daoData?.depositToken?.symbol}
-                  <Tooltip
-                    shouldWrapChildren
-                    placement='bottom'
-                    label={
-                      'Insufficient Funds: You only have ' +
-                      wallet?.tokenBalance +
-                      ' ' +
-                      daoData?.depositToken?.symbol
-                    }
-                  >
-                    <Icon color='red.500' as={RiErrorWarningLine} />
-                  </Tooltip>
+                  {wallet?.tokenBalance >
+                    daoData?.proposalDeposit /
+                      10 ** daoData?.depositToken.decimals && (
+                    <Tooltip
+                      shouldWrapChildren
+                      placement='bottom'
+                      label={
+                        'Insufficient Funds: You only have ' +
+                        wallet?.tokenBalance +
+                        ' ' +
+                        daoData?.depositToken?.symbol
+                      }
+                    >
+                      <Icon
+                        ml={2}
+                        mt='-4px'
+                        color='red.500'
+                        as={RiErrorWarningLine}
+                      />
+                    </Tooltip>
+                  )}
                 </TextBox>
               </Box>
             </Flex>
