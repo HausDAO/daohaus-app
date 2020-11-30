@@ -7,6 +7,7 @@ import {
   useNetwork,
   useDao,
   useModals,
+  useMemberWallet,
 } from '../../contexts/PokemolContext';
 import { useTheme } from '../../contexts/CustomThemeContext';
 import { Web3SignIn } from './Web3SignIn';
@@ -16,6 +17,7 @@ import AccountModal from '../Modal/AccountModal';
 const Header = () => {
   const location = useLocation();
   const [user] = useUser();
+  const [memberWallet] = useMemberWallet();
   const [network] = useNetwork();
   const [dao] = useDao();
   const [theme] = useTheme();
@@ -90,12 +92,16 @@ const Header = () => {
             </Button>
           )}
           {location.pathname === `/dao/${dao?.address}/members` && (
-            <Button
-              as={RouterLink}
-              to={`/dao/${dao?.address}/proposals/new/member`}
-            >
-              Apply
-            </Button>
+            <>
+              {memberWallet && !memberWallet.activeMember ? (
+                <Button
+                  as={RouterLink}
+                  to={`/dao/${dao?.address}/proposals/new/member`}
+                >
+                  Apply
+                </Button>
+              ) : null}
+            </>
           )}
           {location.pathname === `/dao/${dao?.address}/bank` && (
             <Button
