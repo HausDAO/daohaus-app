@@ -59,10 +59,10 @@ export const supportedChains = {
     chain: 'xDAI',
     network: 'xDai',
     chain_id: 100,
-    network_id: 1,
+    network_id: 100,
     rpc_url: 'https://dai.poa.network',
     api_url: 'https://fbpzfkbqyi.execute-api.us-east-1.amazonaws.com/xdai',
-    daohaus_url: 'https://kovanxdai.daohaus.club',
+    daohaus_url: 'https://xdai.daohaus.club',
     subgraph_url:
       'https://api.thegraph.com/subgraphs/name/odyssy-automaton/daohaus-xdai',
     stats_graph_url:
