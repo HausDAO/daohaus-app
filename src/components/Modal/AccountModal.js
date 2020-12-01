@@ -12,7 +12,7 @@ import {
   Icon,
   Box,
   Spinner,
-} from '@chakra-ui/core';
+} from '@chakra-ui/react';
 
 import { RiCheckboxCircleLine } from 'react-icons/ri';
 

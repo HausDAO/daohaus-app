@@ -1,5 +1,5 @@
 import React from 'react';
-import { Flex, Box, Skeleton } from '@chakra-ui/core';
+import { Flex, Box, Skeleton } from '@chakra-ui/react';
 import TextBox from '../TextBox';
 import { format } from 'date-fns';
 

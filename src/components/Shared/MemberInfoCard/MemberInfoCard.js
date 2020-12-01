@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { Flex } from '@chakra-ui/core';
+import { Flex } from '@chakra-ui/react';
 import ContentBox from '../ContentBox';
 import TextBox from '../TextBox';
 import {

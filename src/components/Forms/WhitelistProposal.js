@@ -8,7 +8,7 @@ import {
   Input,
   Icon,
   Box,
-} from '@chakra-ui/core';
+} from '@chakra-ui/react';
 import { RiErrorWarningLine } from 'react-icons/ri';
 
 import { useDao, useTxProcessor, useUser } from '../../contexts/PokemolContext';

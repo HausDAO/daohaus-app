@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Flex } from '@chakra-ui/core';
+import { Flex } from '@chakra-ui/react';
 
 import TokenListCard from './TokenListCard';
 import { defaultTokens } from '../../../utils/constants';

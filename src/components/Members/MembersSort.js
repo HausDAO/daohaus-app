@@ -7,7 +7,7 @@ import {
   MenuItem,
   Flex,
   Icon,
-} from '@chakra-ui/core';
+} from '@chakra-ui/react';
 import { RiArrowDropDownFill } from 'react-icons/ri';
 import { membersSortOptions } from '../../content/members-filters';
 

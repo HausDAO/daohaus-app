@@ -9,7 +9,7 @@ import {
   Flex,
   Icon,
   MenuDivider,
-} from '@chakra-ui/core';
+} from '@chakra-ui/react';
 import { RiArrowDropDownFill } from 'react-icons/ri';
 
 import { useMemberWallet } from '../../contexts/PokemolContext';

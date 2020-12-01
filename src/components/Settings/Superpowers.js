@@ -1,5 +1,5 @@
 import React from 'react';
-import { Flex, Icon } from '@chakra-ui/core';
+import { Flex, Icon } from '@chakra-ui/react';
 import { BiToggleRight } from 'react-icons/bi';
 import { VscGear } from 'react-icons/vsc';
 import ComingSoonOverlay from '../Shared/ComingSoonOverlay';

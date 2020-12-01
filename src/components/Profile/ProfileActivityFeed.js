@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Box } from '@chakra-ui/core';
+import { Box } from '@chakra-ui/react';
 
 import { useActivities } from '../../contexts/PokemolContext';
 import { activitiesData } from '../../content/skeleton-data';

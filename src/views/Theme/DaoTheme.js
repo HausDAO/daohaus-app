@@ -1,4 +1,4 @@
-import { Flex, Box, Button, Link, Text } from '@chakra-ui/core';
+import { Flex, Box, Button, Link, Text } from '@chakra-ui/react';
 import React, { useEffect, useState } from 'react';
 
 import { useTheme } from '../../contexts/CustomThemeContext';

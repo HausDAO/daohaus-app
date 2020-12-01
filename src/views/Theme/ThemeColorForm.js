@@ -6,7 +6,7 @@ import {
   InputGroup,
   InputLeftAddon,
   ButtonGroup,
-} from '@chakra-ui/core';
+} from '@chakra-ui/react';
 import { useForm } from 'react-hook-form';
 import { useTheme } from '../../contexts/CustomThemeContext';
 
