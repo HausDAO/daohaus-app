@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Box, Flex } from '@chakra-ui/core';
+import { Box, Flex } from '@chakra-ui/react';
 
 import { useUser } from '../../contexts/PokemolContext';
 import GraphFetch from '../../components/Shared/GraphFetch';

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Button, Spinner } from '@chakra-ui/core';
+import { Button, Spinner } from '@chakra-ui/react';
 
 import { useDao, useTxProcessor, useUser } from '../../contexts/PokemolContext';
 

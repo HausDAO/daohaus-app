@@ -1,4 +1,4 @@
-import { Box } from '@chakra-ui/core';
+import { Box } from '@chakra-ui/react';
 import React, { useEffect, useState } from 'react';
 import { useEns } from '../../contexts/PokemolContext';
 import { truncateAddr } from '../../utils/helpers';

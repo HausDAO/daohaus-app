@@ -11,7 +11,7 @@ import {
   CheckboxGroup,
   Checkbox,
   HStack,
-} from '@chakra-ui/core';
+} from '@chakra-ui/react';
 import { useDao } from '../../contexts/PokemolContext';
 // import ComingSoonOverlay from '../Shared/ComingSoonOverlay';
 

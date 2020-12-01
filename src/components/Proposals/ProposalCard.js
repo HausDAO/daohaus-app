@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { Box, Flex, Badge, Skeleton, Icon } from '@chakra-ui/core';
+import { Box, Flex, Badge, Skeleton, Icon } from '@chakra-ui/react';
 import ContentBox from '../Shared/ContentBox';
 // import TextBox from '../Shared/TextBox';
 import { utils } from 'web3';

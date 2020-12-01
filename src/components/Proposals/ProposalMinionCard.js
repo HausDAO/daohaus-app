@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Box, Skeleton, Text } from '@chakra-ui/core';
+import { Box, Skeleton, Text } from '@chakra-ui/react';
 import { useUser, useWeb3Connect } from '../../contexts/PokemolContext';
 import { MinionService } from '../../utils/minion-service';
 

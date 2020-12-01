@@ -10,7 +10,7 @@ import {
   Box,
   FormHelperText,
   Text,
-} from '@chakra-ui/core';
+} from '@chakra-ui/react';
 
 import {
   useDao,

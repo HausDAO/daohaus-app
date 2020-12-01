@@ -9,7 +9,7 @@ import {
   Flex,
   Link,
   Text,
-} from '@chakra-ui/core';
+} from '@chakra-ui/react';
 import TextBox from '../Shared/TextBox';
 
 const MemberDaoList = ({ daos }) => {

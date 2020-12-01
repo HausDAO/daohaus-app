@@ -10,7 +10,7 @@ import {
   Flex,
   Image,
   Box,
-} from '@chakra-ui/core';
+} from '@chakra-ui/react';
 import { useTheme } from '../../contexts/CustomThemeContext';
 import { useHistory } from 'react-router-dom';
 import ComingSoonOverlay from '../Shared/ComingSoonOverlay';

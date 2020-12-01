@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { formatDistanceToNow, isBefore } from 'date-fns';
-import { Badge, Flex, Box, Icon, Link, Skeleton, Text } from '@chakra-ui/core';
+import { Badge, Flex, Box, Icon, Link, Skeleton, Text } from '@chakra-ui/react';
 import ContentBox from '../Shared/ContentBox';
 import { RiExternalLinkLine } from 'react-icons/ri';
 import { FaThumbsUp, FaThumbsDown } from 'react-icons/fa';

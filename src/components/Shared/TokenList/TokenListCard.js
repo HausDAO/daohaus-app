@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Flex, Box, Skeleton } from '@chakra-ui/core';
+import { Flex, Box, Skeleton } from '@chakra-ui/react';
 import UsdPrice from '../UsdPrice';
 import UsdValue from '../UsdValue';
 import Withdraw from '../../Forms/Withdraw';

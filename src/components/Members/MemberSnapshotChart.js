@@ -7,7 +7,7 @@ import {
   LineSeries,
   AreaSeries,
 } from 'react-vis';
-import { Box } from '@chakra-ui/core';
+import { Box } from '@chakra-ui/react';
 import { useTheme } from '../../contexts/CustomThemeContext';
 import { useBalances } from '../../contexts/PokemolContext';
 import {

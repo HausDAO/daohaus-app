@@ -6,7 +6,7 @@ import {
   Input,
   InputGroup,
   InputLeftAddon,
-} from '@chakra-ui/core';
+} from '@chakra-ui/react';
 import TextBox from '../Shared/TextBox';
 import React from 'react';
 
