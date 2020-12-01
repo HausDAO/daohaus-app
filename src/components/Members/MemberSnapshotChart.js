@@ -66,9 +66,12 @@ const MemberSnapshotChart = ({ chartDimension, dao }) => {
   );
 
   return (
-    <Box w='95%' minH='300px'>
+    <Box w='100%' minH='300px'>
       {chartData.length > 0 ? (
-        <FlexibleXYPlot yDomain={[0, chartData[chartData.length - 1].y || 10]}>
+        <FlexibleXYPlot
+          yDomain={[0, chartData[chartData.length - 1].y || 10]}
+          margin={{ left: 0, right: 0, top: 40, bottom: 40 }}
+        >
           <XAxis xType='time' tickTotal={0} />
           <YAxis tickTotal={0} />
           {gradient}
@@ -79,6 +82,7 @@ const MemberSnapshotChart = ({ chartDimension, dao }) => {
             color={theme.colors.primary[50]}
           />
           <AreaSeries
+            animate
             curve='curveNatural'
             data={chartData}
             fill={'url(#gradient)'}
