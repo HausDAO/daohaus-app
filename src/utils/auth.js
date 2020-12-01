@@ -6,9 +6,13 @@ import { getChainData } from './chains';
 
 export const providerOptions = {
   walletconnect: {
+    network: getChainData(process.env.REACT_APP_NETWORK_ID).network,
     package: WalletConnectProvider, // required
     options: {
       infuraId: process.env.REACT_APP_RPC_URI.split('/').pop(),
+      rpc: {
+        [process.env.REACT_APP_NETWORK_ID]: process.env.REACT_APP_RPC_URI,
+      },
     },
   },
 };
@@ -19,6 +23,7 @@ export const w3connect = async (web3Connect) => {
   const web3 = new Web3(provider);
 
   const injectedChainId = await web3.eth.getChainId();
+  console.log('injectedChainId', injectedChainId);
 
   if (+injectedChainId !== +process.env.REACT_APP_NETWORK_ID) {
     // eslint-disable-next-line no-throw-literal

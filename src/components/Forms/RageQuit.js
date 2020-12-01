@@ -51,7 +51,6 @@ const RageQuitForm = () => {
 
   useEffect(() => {
     const getCanRage = async () => {
-      console.log('member', member);
       const _canRage = await dao.daoService.moloch.canRagequit(
         member.highestIndexYesVote.proposalIndex,
       );

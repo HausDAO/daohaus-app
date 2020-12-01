@@ -48,8 +48,6 @@ const ProposalsList = () => {
             );
             return unread.unread;
           } else {
-            console.log(filter, 'filter');
-
             return prop[filter.type] === filter.value;
           }
         })
