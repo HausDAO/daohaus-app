@@ -6,18 +6,26 @@ import { defaultTokens } from '../../../utils/constants';
 import ContentBox from '../../Shared/ContentBox';
 import TextBox from '../../Shared/TextBox';
 
-const TokenList = ({ tokenList, isMember }) => {
+const TokenList = ({ tokenList, isMember, isBank }) => {
   const [localTokenList, setLocalTokenList] = useState(null);
   const [isLoaded, setIsLoaded] = useState(false);
-  const [hasBalance, setHasBalance] = useState();
+  const [hasAction, setHasAction] = useState();
 
   useEffect(() => {
     if (tokenList) {
-      console.log('tokenList', tokenList);
       setLocalTokenList(tokenList);
-      setHasBalance(
-        isMember && tokenList.some((token) => token.tokenBalance > 0),
-      );
+
+      const hasBalance =
+        isMember && tokenList.some((token) => token.tokenBalance > 0);
+
+      const needsSync =
+        isBank &&
+        tokenList.some(
+          (token) => token.contractTokenBalance !== token.contractBabeBalance,
+        );
+
+      setHasAction(hasBalance || needsSync);
+
       setIsLoaded(true);
     } else {
       setLocalTokenList(defaultTokens);
@@ -31,7 +39,7 @@ const TokenList = ({ tokenList, isMember }) => {
         <TextBox w='55%'>Balance</TextBox>
         <TextBox w='15%'>Price</TextBox>
         <TextBox w='15%'>Value</TextBox>
-        {hasBalance ? <TextBox w='15%'></TextBox> : null}
+        {hasAction ? <TextBox w='15%'></TextBox> : null}
       </Flex>
       {localTokenList?.length > 0 &&
         localTokenList.map((token) => {
@@ -40,7 +48,9 @@ const TokenList = ({ tokenList, isMember }) => {
               key={token?.id}
               token={token}
               isLoaded={isLoaded}
-              hasBalance={hasBalance}
+              isMember={isMember}
+              isBank={isBank}
+              hasAction={hasAction}
             />
           );
         })}
