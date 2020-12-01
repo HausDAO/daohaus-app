@@ -1,5 +1,5 @@
 import React from 'react';
-import { Box, ButtonGroup, Flex, Button } from '@chakra-ui/core';
+import { Box, ButtonGroup, Flex, Button } from '@chakra-ui/react';
 
 import {
   mcvTheme,

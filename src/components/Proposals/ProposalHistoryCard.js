@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { timeToNow, truncateAddr } from '../../utils/helpers';
-import { Heading, Skeleton, Flex, Text, Avatar } from '@chakra-ui/core';
+import { Heading, Skeleton, Flex, Text, Avatar } from '@chakra-ui/react';
 import makeBlockie from 'ethereum-blockies-base64';
 import { getProfile } from '3box';
 

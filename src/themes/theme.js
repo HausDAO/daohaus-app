@@ -1,4 +1,4 @@
-import { extendTheme } from '@chakra-ui/core';
+import { extendTheme } from '@chakra-ui/react';
 import { lighten, darken } from 'polished';
 //Custom Chakra Components
 import { ContentBoxComponent } from './content-box-component';

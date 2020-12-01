@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useLocation, Link as RouterLink } from 'react-router-dom';
-import { Box, Flex, Link, Icon } from '@chakra-ui/core';
+import { Box, Flex, Link, Icon } from '@chakra-ui/react';
 import { RiArrowLeftLine } from 'react-icons/ri';
 
 import TextBox from '../../components/Shared/TextBox';

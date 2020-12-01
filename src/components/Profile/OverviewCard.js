@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Flex, Skeleton, Box, Image, Icon } from '@chakra-ui/core';
+import { Flex, Skeleton, Box, Image, Icon } from '@chakra-ui/react';
 import { FaStar } from 'react-icons/fa';
 import { format } from 'date-fns';
 import makeBlockie from 'ethereum-blockies-base64';
@@ -34,7 +34,6 @@ const OverviewCard = ({ user }) => {
   const [, setIsUser] = useState();
   const [showAlert, setShowAlert] = useState();
   const { modals } = useModals();
-
 
   useEffect(() => {
     if (user?.memberAddress) {

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useForm } from 'react-hook-form';
-import { Button, FormControl, Flex, Icon, Box } from '@chakra-ui/core';
+import { Button, FormControl, Flex, Icon, Box } from '@chakra-ui/react';
 import { RiErrorWarningLine } from 'react-icons/ri';
 
 import { useDao, useTxProcessor, useUser } from '../../contexts/PokemolContext';

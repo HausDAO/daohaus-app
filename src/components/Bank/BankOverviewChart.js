@@ -16,7 +16,7 @@ import {
   MenuItem,
   Icon,
   Skeleton,
-} from '@chakra-ui/core';
+} from '@chakra-ui/react';
 import { FaChevronDown } from 'react-icons/fa';
 import { useTheme } from '../../contexts/CustomThemeContext';
 

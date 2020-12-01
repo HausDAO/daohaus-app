@@ -1,5 +1,5 @@
 import React from 'react';
-import { Flex, Box, Skeleton, Link, Icon, Text } from '@chakra-ui/core';
+import { Flex, Box, Skeleton, Link, Icon, Text } from '@chakra-ui/react';
 import { useDao } from '../../contexts/PokemolContext';
 import { useTheme } from '../../contexts/CustomThemeContext';
 import { format } from 'date-fns';

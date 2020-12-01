@@ -10,7 +10,7 @@ import {
   Spacer,
   Stack,
   IconButton,
-} from '@chakra-ui/core';
+} from '@chakra-ui/react';
 
 import { motion } from 'framer-motion';
 import { useDao, useUser } from '../../contexts/PokemolContext';

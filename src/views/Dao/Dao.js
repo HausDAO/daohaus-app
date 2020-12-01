@@ -1,4 +1,4 @@
-import { Flex, Box } from '@chakra-ui/core';
+import { Flex, Box } from '@chakra-ui/react';
 import React, { useEffect, useState } from 'react';
 import DaoActivityFeed from '../../components/Dao/DaoActivityFeed';
 import DaoOverviewDetails from '../../components/Dao/DaoOverviewDetails';

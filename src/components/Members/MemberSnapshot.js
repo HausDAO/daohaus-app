@@ -1,6 +1,13 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { Box, Flex, Radio, RadioGroup, Skeleton, Stack } from '@chakra-ui/core';
+import {
+  Box,
+  Flex,
+  Radio,
+  RadioGroup,
+  Skeleton,
+  Stack,
+} from '@chakra-ui/react';
 
 import { useMembers, useDao, useUser } from '../../contexts/PokemolContext';
 import { useTheme } from '../../contexts/CustomThemeContext';

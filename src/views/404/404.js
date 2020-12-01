@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { Flex, Box, Button } from '@chakra-ui/core';
+import { Flex, Box, Button } from '@chakra-ui/react';
 import { useTheme } from '../../contexts/CustomThemeContext';
 
 const FourOhFour = () => {
