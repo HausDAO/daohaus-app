@@ -116,7 +116,7 @@ const BankOverviewChart = ({ balances, dao }) => {
           {chartData.length > 0 ? (
             <FlexibleWidthXYPlot
               height={300}
-              margin={{ left: 40, right: 40, top: 40, bottom: 40 }}
+              margin={{ left: 0, right: 0, top: 40, bottom: 40 }}
               yDomain={[0, chartData[chartData.length - 1].y || 10]}
             >
               {gradient}

@@ -44,15 +44,16 @@ const SyncToken = ({ tokenBalance, setOptimisticSync }) => {
         <Spinner />
       ) : (
         <Flex>
-          <Button onClick={handleSync}>Sync Token Balance</Button>
           <Tooltip
             hasArrow
             shouldWrapChildren
-            placement='bottom'
+            placement='top'
             label='Looks like some funds were sent directly to the DAO. Sync to update
             the balance.'
           >
-            <Icon as={RiQuestionLine} />
+            <Button onClick={handleSync} rightIcon={<RiQuestionLine />}>
+              Sync
+            </Button>
           </Tooltip>
         </Flex>
       )}
