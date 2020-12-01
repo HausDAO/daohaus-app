@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Flex, Box, Skeleton } from '@chakra-ui/core';
+import { Flex, Box, Skeleton } from '@chakra-ui/react';
 
 import UsdPrice from '../UsdPrice';
 import UsdValue from '../UsdValue';
@@ -10,7 +10,7 @@ const TokenListCard = ({ token, isLoaded, isMember, isBank, hasAction }) => {
   const [hasBalance, setHasBalance] = useState();
   const [needsSync, setNeedsSync] = useState();
   const [optimisticWithdraw, setOptimisticWithdraw] = useState(false);
-  const [optimisticSync, setOptimisticSync] = useState(null);
+  const [optimisticSync, setOptimisticSync] = useState(false);
 
   useEffect(() => {
     setHasBalance(isMember && +token.tokenBalance > 0);
@@ -19,8 +19,13 @@ const TokenListCard = ({ token, isLoaded, isMember, isBank, hasAction }) => {
     );
   }, [token, isMember, isBank]);
 
-  const hasOptimisticBalance = () => {
-    return optimisticSync !== null;
+  const checkOptimisticBalance = () => {
+    const optimisticBalance =
+      token.contractTokenBalance -
+      token.contractBabeBalance +
+      +token.tokenBalance;
+
+    return optimisticSync ? optimisticBalance : +token.tokenBalance;
   };
 
   // TODO token images? trust-wallet?
@@ -41,7 +46,7 @@ const TokenListCard = ({ token, isLoaded, isMember, isBank, hasAction }) => {
                 ) : (
                   <>
                     {parseFloat(
-                      +token.tokenBalance / 10 ** +token.token.decimals,
+                      checkOptimisticBalance() / 10 ** +token.token.decimals,
                     ).toFixed(4)}{' '}
                     {token.token.symbol}
                   </>
@@ -54,11 +59,7 @@ const TokenListCard = ({ token, isLoaded, isMember, isBank, hasAction }) => {
       <Box w='15%'>
         <Skeleton isLoaded={isLoaded}>
           <Box fontFamily='mono'>
-            {token.tokenBalance ? (
-              <UsdPrice tokenBalance={token} optimisticSync={optimisticSync} />
-            ) : (
-              '--'
-            )}
+            {token.tokenBalance ? <UsdPrice tokenBalance={token} /> : '--'}
           </Box>
         </Skeleton>
       </Box>
@@ -70,7 +71,10 @@ const TokenListCard = ({ token, isLoaded, isMember, isBank, hasAction }) => {
                 {optimisticWithdraw ? (
                   '$ 0.00'
                 ) : (
-                  <UsdValue tokenBalance={token} />
+                  <UsdValue
+                    tokenBalance={token}
+                    optimisticSync={optimisticSync}
+                  />
                 )}
               </>
             ) : (

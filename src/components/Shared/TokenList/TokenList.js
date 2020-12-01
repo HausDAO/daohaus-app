@@ -30,7 +30,7 @@ const TokenList = ({ tokenList, isMember, isBank }) => {
     } else {
       setLocalTokenList(defaultTokens);
     }
-  }, [tokenList, isMember]);
+  }, [tokenList, isMember, isBank]);
 
   return (
     <ContentBox mt={6}>

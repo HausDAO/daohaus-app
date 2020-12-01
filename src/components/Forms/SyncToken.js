@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Button, Flex, Icon, Spinner, Tooltip } from '@chakra-ui/core';
+import { Button, Flex, Icon, Spinner, Tooltip } from '@chakra-ui/react';
 
 import { useDao, useTxProcessor, useUser } from '../../contexts/PokemolContext';
 import { RiQuestionLine } from 'react-icons/ri';
@@ -10,23 +10,13 @@ const SyncToken = ({ tokenBalance, setOptimisticSync }) => {
   const [dao] = useDao();
   const [txProcessor, updateTxProcessor] = useTxProcessor();
 
-  console.log('tokenBalance', tokenBalance);
-
   const txCallBack = (txHash, details) => {
     if (txProcessor && txHash) {
       txProcessor.setTx(txHash, user.username, details, true, false, false);
       txProcessor.forceCheckTx = true;
       updateTxProcessor({ ...txProcessor });
       setLoading(false);
-
-      console.log('tokenBalance', tokenBalance);
-      // use the rage quit pattern in tx handler.. but this needs to updat emultiple entities
-      const balanceUpdate =
-        tokenBalance.contractTokenBalance -
-        tokenBalance.contractBabeBalance +
-        +tokenBalance.tokenBalance;
-
-      setOptimisticSync(balanceUpdate);
+      setOptimisticSync(true);
     }
     if (!txHash) {
       console.log('error: ', details);
