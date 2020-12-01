@@ -13,7 +13,7 @@ const MemberInfoCardGuts = ({ user, member, showMenu }) => {
         <MemberAvatar member={member} />
         {showMenu && <ProfileMenu member={member} />}
       </Flex>
-      <Flex w='75%' justify='space-between' mt={6}>
+      <Flex w='100%' justify='space-between' mt={6}>
         <Box>
           <TextBox>Shares</TextBox>
           <Skeleton isLoaded={member?.shares}>

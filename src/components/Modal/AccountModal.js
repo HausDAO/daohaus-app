@@ -118,18 +118,33 @@ const AccountModal = ({ isOpen }) => {
               showMenu={false}
             />
           )}
+          <Box
+            mx={-12}
+            mt={6}
+            mb={0}
+            borderTopWidth='1px'
+            borderTopColor='whiteAlpha.200'
+          />
           {dao.address && (
             <Box pt={6}>
-              <Flex direction='row' justify='space-evenly' align='center'>
+              <Flex direction='row' justify='space-between' align='center'>
                 <Link
                   as={RouterLink}
                   to={`/dao/${dao.address}/profile/${user.username}`}
                   onClick={closeModals}
+                  color='secondary.400'
+                  _hover={{ color: 'secondary.600' }}
                 >
-                  Profile
+                  View Member Profile
                 </Link>
-                <Link as={RouterLink} to='/' onClick={closeModals}>
-                  Hub
+                <Link
+                  color='secondary.400'
+                  _hover={{ color: 'secondary.600' }}
+                  as={RouterLink}
+                  to='/'
+                  onClick={closeModals}
+                >
+                  Go to Hub
                 </Link>
               </Flex>
             </Box>
