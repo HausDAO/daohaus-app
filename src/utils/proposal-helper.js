@@ -120,7 +120,7 @@ export const determineUnreadActivityFeed = (proposal) => {
   const abortedOrCancelled = proposal.aborted || proposal.cancelled;
   const now = (new Date() / 1000) | 0;
   const inVotingPeriod =
-    now >= +proposal.votingPeriodStart && now <= +proposal.votingPeriodEnds;
+    now >= +proposal.votingPeriodStarts && now <= +proposal.votingPeriodEnds;
   const needsMemberVote = inVotingPeriod && !proposal.votes.length;
   const needsProcessing =
     now >= +proposal.gracePeriodEnds && !proposal.processed;
@@ -152,7 +152,7 @@ export const determineUnreadProposalList = (
   const abortedOrCancelled = proposal.aborted || proposal.cancelled;
   const now = (new Date() / 1000) | 0;
   const inVotingPeriod =
-    now >= +proposal.votingPeriodStart && now <= +proposal.votingPeriodEnds;
+    now >= +proposal.votingPeriodStarts && now <= +proposal.votingPeriodEnds;
 
   const memberVoted = proposal.votes.some(
     (vote) => vote.memberAddress.toLowerCase() === memberAddress.toLowerCase(),
