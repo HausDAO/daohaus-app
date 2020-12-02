@@ -181,6 +181,22 @@ export const determineUnreadProposalList = (
   };
 };
 
+export const detailsToJSON = (values) => {
+  const details = {};
+  details.title = values.title;
+  // random string
+  details.hash = Math.random()
+    .toString(36)
+    .slice(2);
+  if (values.description) {
+    details.description = values.description;
+  }
+  if (values.link) {
+    details.link = values.link;
+  }
+  return JSON.stringify(details);
+};
+
 export const titleMaker = (proposal) => {
   const details = proposal.details.split('~');
 
@@ -217,15 +233,9 @@ export const descriptionMaker = (proposal) => {
     const parsed = JSON.parse(proposal.details.replace(/(\r\n|\n|\r)/gm, ''));
     return parsed.description;
   } catch (e) {
-    if (proposal.details && proposal.details.indexOf('link:') > -1) {
-      const fixedDetail = proposal.details.replace('link:', '"link":');
-      const fixedParsed = JSON.parse(fixedDetail);
-      return fixedParsed.details;
-    } else {
-      console.log(`Couldn't parse JSON from metadata`);
-    }
+    console.log('error', e);
+    return ``;
   }
-  return ``;
 };
 
 export const hashMaker = (proposal) => {
@@ -242,13 +252,9 @@ export const linkMaker = (proposal) => {
     const parsed = JSON.parse(proposal.details.replace(/(\r\n|\n|\r)/gm, ''));
     return typeof parsed.link === 'function' ? null : parsed.link;
   } catch (e) {
-    if (proposal.details && proposal.details.indexOf('link:') > -1) {
-      return 'https://credits.raidguild.org/';
-    } else {
-      console.log(`Couldn't parse JSON from metadata`);
-    }
+    console.log('error', e);
+    return null;
   }
-  return null;
 };
 
 export const isMinion = (proposal) => {
