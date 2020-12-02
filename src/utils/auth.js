@@ -1,5 +1,7 @@
 import Web3 from 'web3';
 import WalletConnectProvider from '@walletconnect/web3-provider';
+import Fortmatic from 'fortmatic';
+import Portis from '@portis/web3';
 
 import { USER_TYPE } from './dao-service';
 import { getChainData } from './chains';
@@ -13,6 +15,18 @@ export const providerOptions = {
       rpc: {
         [process.env.REACT_APP_NETWORK_ID]: process.env.REACT_APP_RPC_URI,
       },
+    },
+  },
+  fortmatic: {
+    package: Fortmatic, // required
+    options: {
+      key: process.env.REACT_APP_FORTMATIC_KEY || '', // required
+    },
+  },
+  portis: {
+    package: Portis, // required
+    options: {
+      id: process.env.REACT_APP_PORTIS_ID || '', // required
     },
   },
 };
