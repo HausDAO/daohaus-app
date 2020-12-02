@@ -10,7 +10,7 @@ import {
   Box,
   FormHelperText,
   Text,
-} from '@chakra-ui/core';
+} from '@chakra-ui/react';
 
 import {
   useDao,
@@ -51,7 +51,6 @@ const RageQuitForm = () => {
 
   useEffect(() => {
     const getCanRage = async () => {
-      console.log('member', member);
       const _canRage = await dao.daoService.moloch.canRagequit(
         member.highestIndexYesVote.proposalIndex,
       );

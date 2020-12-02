@@ -9,7 +9,7 @@ import {
   ModalFooter,
   ModalOverlay,
   Box,
-} from '@chakra-ui/core';
+} from '@chakra-ui/react';
 
 import { useTheme } from '../../contexts/CustomThemeContext';
 import MemberProposalForm from '../Forms/MemberProposal';

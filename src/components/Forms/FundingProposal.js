@@ -12,7 +12,7 @@ import {
   MenuButton,
   MenuList,
   MenuItem,
-} from '@chakra-ui/core';
+} from '@chakra-ui/react';
 import TextBox from '../Shared/TextBox';
 import { utils } from 'web3';
 import { RiAddFill, RiErrorWarningLine } from 'react-icons/ri';

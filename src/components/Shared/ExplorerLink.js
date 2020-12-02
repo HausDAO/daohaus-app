@@ -1,5 +1,5 @@
 import React from 'react';
-import { Icon, Link } from '@chakra-ui/core';
+import { Icon, Link } from '@chakra-ui/react';
 import { RiExternalLinkLine } from 'react-icons/ri';
 
 const ExplorerLink = ({ type, hash, linkText, isIconLink }) => {

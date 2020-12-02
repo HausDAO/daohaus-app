@@ -1,5 +1,5 @@
 import React from 'react';
-import { Box, Flex } from '@chakra-ui/core';
+import { Box, Flex } from '@chakra-ui/react';
 import BoostStatus from '../../components/Settings/BoostStatus';
 import Superpowers from '../../components/Settings/Superpowers';
 import DaoContractSettings from '../../components/Settings/DaoContractSettings';

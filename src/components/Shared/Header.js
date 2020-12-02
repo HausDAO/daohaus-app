@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Box, Flex, Button } from '@chakra-ui/core';
+import { Box, Flex, Button } from '@chakra-ui/react';
 import { useLocation, Link as RouterLink } from 'react-router-dom';
 import { RiAddFill } from 'react-icons/ri';
 import {
@@ -41,7 +41,7 @@ const Header = () => {
         'New ' + theme.daoMeta.member + ' ' + theme.daoMeta.proposal,
       );
     } else if (location.pathname === `/dao/${dao?.address}/proposals/new`) {
-      setPageTitle(theme.daoMeta.proposal);
+      setPageTitle(`New ${theme.daoMeta.proposal}`);
     } else if (location.pathname === `/dao/${dao?.address}/members`) {
       setPageTitle(theme.daoMeta.members);
     } else if (location.pathname === `/dao/${dao?.address}/bank`) {
@@ -94,10 +94,7 @@ const Header = () => {
           {location.pathname === `/dao/${dao?.address}/members` && (
             <>
               {memberWallet && !memberWallet.activeMember ? (
-                <Button
-                  as={RouterLink}
-                  to={`/dao/${dao?.address}/proposals/new/member`}
-                >
+                <Button as={RouterLink} to={`/dao/${dao?.address}/members/new`}>
                   Apply
                 </Button>
               ) : null}

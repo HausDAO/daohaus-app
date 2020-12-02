@@ -11,7 +11,7 @@ import {
   Flex,
   Skeleton,
   Text,
-} from '@chakra-ui/core';
+} from '@chakra-ui/react';
 import makeBlockie from 'ethereum-blockies-base64';
 
 import ContentBox from '../Shared/ContentBox';

@@ -1,6 +1,6 @@
 import React from 'react';
 import { useHistory } from 'react-router-dom';
-import { Box, Flex, Image, Skeleton, Button } from '@chakra-ui/core';
+import { Box, Flex, Image, Skeleton, Button } from '@chakra-ui/react';
 
 import { useUser, useMembers } from '../../contexts/PokemolContext';
 import { useTheme } from '../../contexts/CustomThemeContext';

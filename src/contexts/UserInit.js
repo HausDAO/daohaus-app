@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { useToast } from '@chakra-ui/core';
+import { useToast } from '@chakra-ui/react';
 import { getProfile } from '3box/lib/api';
 
 import { createWeb3User, w3connect } from '../utils/auth';

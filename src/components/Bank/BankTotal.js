@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Skeleton, Box } from '@chakra-ui/core';
+import { Skeleton, Box } from '@chakra-ui/react';
 
 import { usePrices } from '../../contexts/PokemolContext';
 import { getTotalBankValue } from '../../utils/bank-helpers';

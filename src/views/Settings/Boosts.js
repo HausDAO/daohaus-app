@@ -1,6 +1,6 @@
 import React from 'react';
 // import { Link } from 'react-router-dom';
-import { Box, Flex, Button } from '@chakra-ui/core';
+import { Box, Flex, Button } from '@chakra-ui/react';
 // import { useDao } from '../../contexts/PokemolContext';
 
 const boostList = [

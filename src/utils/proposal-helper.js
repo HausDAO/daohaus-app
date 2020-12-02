@@ -1,5 +1,5 @@
 import React, { Fragment } from 'react';
-import { Box } from '@chakra-ui/core';
+import { Box } from '@chakra-ui/react';
 
 import { timeToNow } from './helpers';
 

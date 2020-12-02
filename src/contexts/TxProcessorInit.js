@@ -10,7 +10,7 @@ import {
   ModalCloseButton,
   useDisclosure,
   useToast,
-} from '@chakra-ui/core';
+} from '@chakra-ui/react';
 
 import { TxProcessorService } from '../utils/tx-processor-service';
 import {

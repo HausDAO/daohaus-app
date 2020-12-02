@@ -1,5 +1,5 @@
 import React from 'react';
-import { Box, useStyleConfig } from '@chakra-ui/core';
+import { Box, useStyleConfig } from '@chakra-ui/react';
 
 const ContentBox = (props) => {
   const { size, variant, ...rest } = props;

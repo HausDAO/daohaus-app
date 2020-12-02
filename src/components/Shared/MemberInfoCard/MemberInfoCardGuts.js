@@ -1,5 +1,5 @@
 import React from 'react';
-import { Flex, Box, Skeleton } from '@chakra-ui/core';
+import { Flex, Box, Skeleton } from '@chakra-ui/react';
 import TextBox from '../TextBox';
 import { format } from 'date-fns';
 
@@ -13,7 +13,7 @@ const MemberInfoCardGuts = ({ user, member, showMenu }) => {
         <MemberAvatar member={member} />
         {showMenu && <ProfileMenu member={member} />}
       </Flex>
-      <Flex w='75%' justify='space-between' mt={6}>
+      <Flex w='100%' justify='space-between' mt={6}>
         <Box>
           <TextBox>Shares</TextBox>
           <Skeleton isLoaded={member?.shares}>

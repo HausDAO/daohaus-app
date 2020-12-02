@@ -8,7 +8,7 @@ import {
   MenuItem,
   Link,
   useToast,
-} from '@chakra-ui/core';
+} from '@chakra-ui/react';
 import { BsThreeDotsVertical } from 'react-icons/bs';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
 import { useDao, useModals, useUser } from '../../contexts/PokemolContext';
