@@ -199,6 +199,7 @@ const TradeProposalForm = () => {
             <Menu color='white' textTransform='uppercase'>
               <MenuButton
                 as={Button}
+                variant='outline'
                 rightIcon={<Icon as={RiAddFill} color='primary.500' />}
               >
                 Additional Options
