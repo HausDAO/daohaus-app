@@ -3,9 +3,6 @@ import React, { useEffect, useState } from 'react';
 import { useHistory, useParams } from 'react-router-dom';
 
 import ProposalFormModal from '../../components/Modal/ProposalFormModal';
-import ProposalTypeModal from '../../components/Modal/ProposalTypeModal';
-import ProposalsActivityFeed from '../../components/Proposals/ProposalsActivityFeed';
-import ProposalsList from '../../components/Proposals/ProposalsList';
 import ComingSoonOverlay from '../../components/Shared/ComingSoonOverlay';
 import { proposalTypes } from '../../content/proposal-types';
 import { useTheme } from '../../contexts/CustomThemeContext';

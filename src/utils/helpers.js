@@ -1,5 +1,5 @@
 import { anyToBN } from '@netgum/utils';
-import { formatDistanceToNow, formatDuration, format } from 'date-fns';
+import { formatDistanceToNow, format } from 'date-fns';
 
 export const truncateAddr = (addr) => {
   return addr.slice(0, 6) + '...' + addr.slice(-4);
