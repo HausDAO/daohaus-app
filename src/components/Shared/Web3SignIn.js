@@ -33,7 +33,7 @@ export const Web3SignIn = () => {
             toast({
               title: 'Wrong Network',
               position: 'top-right',
-              description: err.msg,
+              description: err?.msg || "Couldn't connect to injected network",
               status: 'warning',
               duration: 9000,
               isClosable: true,
