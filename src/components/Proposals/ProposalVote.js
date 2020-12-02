@@ -144,8 +144,6 @@ const ProposalVote = ({ proposal, setProposal }) => {
     }
   }, [proposals]);
 
-  // TODO disable Process button if another proposal needs processing?
-
   return (
     <>
       <ContentBox>
