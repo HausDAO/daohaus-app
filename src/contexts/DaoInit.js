@@ -77,17 +77,23 @@ const DaoInit = () => {
     }
     const apiData = daoRes ? daoRes.data : {};
 
-    const boostRes = await get(`boosts/${daoParam}`);
-    const boosts = boostRes.data.reduce((boosts, boostData) => {
-      const metadata = boostData.metadata
-        ? JSON.parse(boostData.metadata[0])
-        : null;
-      boosts[boostData.boostKey] = {
-        active: boostData.active,
-        metadata,
-      };
-      return boosts;
-    }, {});
+    const boostRes = await get(`boosts/${daoParam}`).catch((err) =>
+      console.log(err),
+    );
+
+    let boosts = [];
+    if (boostRes?.data) {
+      boosts = boostRes.data.reduce((boosts, boostData) => {
+        const metadata = boostData.metadata
+          ? JSON.parse(boostData.metadata[0])
+          : null;
+        boosts[boostData.boostKey] = {
+          active: boostData.active,
+          metadata,
+        };
+        return boosts;
+      }, {});
+    }
 
     // this will need to parse custom theme data
     const uiMeta = defaultTheme.daoMeta;
