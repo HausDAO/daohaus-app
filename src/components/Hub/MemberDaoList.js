@@ -9,7 +9,7 @@ import {
   Flex,
   Link,
   Text,
-} from '@chakra-ui/core';
+} from '@chakra-ui/react';
 import TextBox from '../Shared/TextBox';
 
 const MemberDaoList = ({ daos }) => {
@@ -23,21 +23,16 @@ const MemberDaoList = ({ daos }) => {
   }, []);
 
   const renderDaoAvatar = (dao) => {
-    const recentRages = dao.rageQuits.filter((rage) => {
-      // 1209600 === 2 weeks in seconds
-      const now = (new Date() / 1000) | 0;
-      return +rage.createdAt >= now - 1209600;
-    });
     const recentProposals = dao.proposals.filter((prop) => {
       return prop.activityFeed.unread;
     });
-    const healthCount = recentRages.length + recentProposals.length;
+    const healthCount = recentProposals.length;
 
     return (
       <Box key={dao.id} mr={3} pb={3}>
         <Link
           as={RouterLink}
-          to={`/dao/${dao.id}`}
+          to={healthCount ? `/dao/${dao.id}/proposals` : `dao/${dao.id}`}
           display='flex'
           flexDirection='column'
           alignItems='center'

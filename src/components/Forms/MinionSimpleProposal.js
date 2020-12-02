@@ -12,7 +12,7 @@ import {
   Textarea,
   Select,
   Text,
-} from '@chakra-ui/core';
+} from '@chakra-ui/react';
 import { RiErrorWarningLine } from 'react-icons/ri';
 
 import {

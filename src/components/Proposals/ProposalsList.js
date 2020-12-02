@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Flex } from '@chakra-ui/core';
+import { Flex } from '@chakra-ui/react';
 
 import {
   useDao,
@@ -48,8 +48,6 @@ const ProposalsList = () => {
             );
             return unread.unread;
           } else {
-            console.log(filter, 'filter');
-
             return prop[filter.type] === filter.value;
           }
         })
@@ -73,8 +71,6 @@ const ProposalsList = () => {
       }
     }
 
-    console.log('filteredProposals', filteredProposals);
-
     setListProposals(filteredProposals);
   };
 
@@ -85,7 +81,7 @@ const ProposalsList = () => {
           <ProposalFilter
             filter={filter}
             setFilter={setFilter}
-            listLength={listProposals.length}
+            proposals={proposals}
           />
         ) : null}
         <ProposalSort sort={sort} setSort={setSort} />

@@ -2,7 +2,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 
 import { formatCreatedAt } from '../../utils/helpers';
-import { Badge, Box, Heading, Stack, Skeleton } from '@chakra-ui/core';
+import { Badge, Box, Heading, Stack, Skeleton } from '@chakra-ui/react';
 
 import ContentBox from '../Shared/ContentBox';
 const ActivityCard = ({ activity, isLoaded }) => {

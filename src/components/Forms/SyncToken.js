@@ -1,9 +1,10 @@
 import React, { useState } from 'react';
-import { Button, Spinner } from '@chakra-ui/react';
+import { Button, Flex, Spinner, Tooltip } from '@chakra-ui/react';
 
 import { useDao, useTxProcessor, useUser } from '../../contexts/PokemolContext';
+import { RiQuestionLine } from 'react-icons/ri';
 
-const Withdraw = ({ tokenBalance, setOptimisticWithdraw }) => {
+const SyncToken = ({ tokenBalance, setOptimisticSync }) => {
   const [loading, setLoading] = useState(false);
   const [user] = useUser();
   const [dao] = useDao();
@@ -15,7 +16,7 @@ const Withdraw = ({ tokenBalance, setOptimisticWithdraw }) => {
       txProcessor.forceCheckTx = true;
       updateTxProcessor({ ...txProcessor });
       setLoading(false);
-      setOptimisticWithdraw(true);
+      setOptimisticSync(true);
     }
     if (!txHash) {
       console.log('error: ', details);
@@ -23,13 +24,12 @@ const Withdraw = ({ tokenBalance, setOptimisticWithdraw }) => {
     }
   };
 
-  const handleWithdraw = async () => {
+  const handleSync = async () => {
     setLoading(true);
 
     try {
-      dao.daoService.moloch.withdrawBalance(
+      dao.daoService.moloch.collectTokens(
         tokenBalance.token.tokenAddress,
-        tokenBalance.tokenBalance,
         txCallBack,
       );
     } catch (err) {
@@ -43,10 +43,22 @@ const Withdraw = ({ tokenBalance, setOptimisticWithdraw }) => {
       {loading ? (
         <Spinner />
       ) : (
-        <Button onClick={handleWithdraw}>Withdraw</Button>
+        <Flex>
+          <Tooltip
+            hasArrow
+            shouldWrapChildren
+            placement='top'
+            label='Looks like some funds were sent directly to the DAO. Sync to update
+            the balance.'
+          >
+            <Button onClick={handleSync} rightIcon={<RiQuestionLine />}>
+              Sync
+            </Button>
+          </Tooltip>
+        </Flex>
       )}
     </>
   );
 };
 
-export default Withdraw;
+export default SyncToken;

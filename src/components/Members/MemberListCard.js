@@ -1,5 +1,5 @@
 import React from 'react';
-import { Flex, Skeleton, Box } from '@chakra-ui/core';
+import { Flex, Skeleton, Box } from '@chakra-ui/react';
 import { format } from 'date-fns';
 
 import MemberAvatar from './MemberAvatar';

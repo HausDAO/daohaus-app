@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { Box, Flex } from '@chakra-ui/core';
+import { Box, Flex } from '@chakra-ui/react';
 
 import ProposalsList from '../../components/Proposals/ProposalsList';
 import ProposalsActivityFeed from '../../components/Proposals/ProposalsActivityFeed';

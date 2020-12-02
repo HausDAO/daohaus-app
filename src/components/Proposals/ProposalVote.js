@@ -1,9 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { Box, Button, Flex, Icon, Skeleton } from '@chakra-ui/core';
+import { Box, Button, Flex, Icon, Skeleton, Tooltip } from '@chakra-ui/react';
 import { FaThumbsUp, FaThumbsDown } from 'react-icons/fa';
+import { RiErrorWarningLine, RiQuestionLine } from 'react-icons/ri';
 import { isAfter, isBefore } from 'date-fns';
+import { motion } from 'framer-motion';
 
+import ContentBox from '../Shared/ContentBox';
+import TextBox from '../Shared/TextBox';
 import {
   useMemberWallet,
   useDaoGraphData,
@@ -13,14 +17,14 @@ import {
   useProposals,
   useWeb3Connect,
 } from '../../contexts/PokemolContext';
-import ContentBox from '../Shared/ContentBox';
-import TextBox from '../Shared/TextBox';
 import { MinionService } from '../../utils/minion-service';
+
+const MotionBox = motion.custom(Box);
 
 const ProposalVote = ({ proposal, setProposal }) => {
   const [user] = useUser();
   const [dao] = useDao();
-  const [wallet] = useMemberWallet();
+  const [memberWallet] = useMemberWallet();
   const [daoData] = useDaoGraphData();
   const [proposals] = useProposals();
   const [web3Connect] = useWeb3Connect();
@@ -147,11 +151,50 @@ const ProposalVote = ({ proposal, setProposal }) => {
       <ContentBox>
         {proposal?.status === 'Unsponsored' && !proposal?.proposalIndex && (
           <Flex justify='center' direction='column'>
-            <Flex justify='center' mb={4} fontFamily='heading'>
-              Balance: {wallet?.tokenBalance} {daoData?.depositToken?.symbol}
+            <Flex justify='center' mb={4}>
+              <Box>
+                <TextBox>
+                  Deposit to Sponsor{' '}
+                  <Tooltip
+                    hasArrow
+                    shouldWrapChildren
+                    placement='bottom'
+                    label='Deposits discourage spam, and are returned after a proposal is processed. Minus the reward for processing, if one has been selected'
+                  >
+                    <Icon mt='-4px' as={RiQuestionLine} />
+                  </Tooltip>
+                </TextBox>
+                <TextBox variant='value'>
+                  {daoData?.proposalDeposit /
+                    10 ** daoData?.depositToken.decimals}{' '}
+                  {daoData?.depositToken?.symbol}
+                  {+memberWallet?.tokenBalance <
+                  +daoData?.proposalDeposit /
+                    10 ** daoData?.depositToken.decimals ? (
+                    <Tooltip
+                      shouldWrapChildren
+                      placement='bottom'
+                      label={
+                        'Insufficient Funds: You only have ' +
+                        memberWallet?.tokenBalance +
+                        ' ' +
+                        daoData?.depositToken?.symbol
+                      }
+                    >
+                      <Icon
+                        color='red.500'
+                        as={RiErrorWarningLine}
+                        ml={2}
+                        mt='-4px'
+                      />
+                    </Tooltip>
+                  ) : null}
+                </TextBox>
+              </Box>
             </Flex>
             <Flex justify='space-around'>
-              {+wallet?.allowance * 10 ** daoData?.depositToken?.decimals >
+              {+memberWallet?.allowance *
+                10 ** daoData?.depositToken?.decimals >
                 +daoData?.proposalDeposit || +daoData?.proposalDeposit === 0 ? (
                 <Button onClick={() => sponsorProposal(proposal.proposalId)}>
                   Sponsor
@@ -221,12 +264,12 @@ const ProposalVote = ({ proposal, setProposal }) => {
                     </Flex>
                     <Flex justify='flex-end' align='center' w='50%'>
                       <Box as='i' fontSize='xs'>
-                        {+proposal?.noVotes > +proposal?.yesVotes &&
+                        {+proposal?.noShares > +proposal?.yesShares &&
                           'Not Passing'}
-                        {+proposal?.yesVotes > +proposal?.noVotes &&
+                        {+proposal?.yesShares > +proposal?.noShares &&
                           'Currently Passing'}
-                        {+proposal?.yesVotes === 0 &&
-                          +proposal?.noVotes === 0 &&
+                        {+proposal?.yesShares === 0 &&
+                          +proposal?.noShares === 0 &&
                           'Awaiting Votes'}
                       </Box>
                     </Flex>
@@ -240,11 +283,11 @@ const ProposalVote = ({ proposal, setProposal }) => {
                           {proposal?.status === 'Passed' && 'Passed'}
                           {(proposal?.status === 'GracePeriod' ||
                             proposal?.status === 'ReadyForProcessing') &&
-                            proposal.yesVotes > proposal.noVotes &&
+                            proposal.yesShares > proposal.noShares &&
                             'Passed'}
                           {(proposal?.status === 'GracePeriod' ||
                             proposal?.status === 'ReadyForProcessing') &&
-                            proposal.noVotes > proposal.yesVotes &&
+                            proposal.noShares > proposal.yesShares &&
                             'Failed'}
                         </TextBox>
                       </Skeleton>
@@ -252,44 +295,59 @@ const ProposalVote = ({ proposal, setProposal }) => {
                   </>
                 )}
               </Flex>
-              <Box
+              <Flex
                 w='100%'
                 h='20px'
-                borderRadius='6px'
-                backgroundColor='white'
-                display='flex'
-                flexDirection='row'
+                borderRadius='999px'
+                backgroundColor='whiteAlpha.500'
+                overflow='hidden'
+                justify='space-between'
               >
-                {+proposal?.yesVotes > 0 && (
-                  <Box
-                    w={`${(+proposal?.yesVotes /
-                      (+proposal.yesVotes + +proposal.noVotes)) *
-                      100}%`}
+                {+proposal?.yesShares > 0 && (
+                  <MotionBox
                     h='100%'
                     backgroundColor='green.500'
-                    borderRadius='6px'
+                    borderRight={
+                      proposal?.noShares > 0
+                        ? '1px solid white'
+                        : '0px solid transparent'
+                    }
+                    animate={{
+                      width: [
+                        '0%',
+                        `${(+proposal?.yesShares /
+                          (+proposal.yesShares + +proposal.noShares)) *
+                          100}%`,
+                      ],
+                    }}
+                    transition={{ duration: 0.5 }}
                   />
                 )}
-                {+proposal?.noVotes > 0 && (
-                  <Box
-                    w={`${(+proposal?.noVotes /
-                      (+proposal.yesVotes + +proposal.noVotes)) *
-                      100}%`}
+                {+proposal?.noShares > 0 && (
+                  <MotionBox
                     h='100%'
                     backgroundColor='red.500'
-                    borderRadius='6px'
+                    animate={{
+                      width: [
+                        '0%',
+                        `${(+proposal?.noShares /
+                          (+proposal.yesShares + +proposal.noShares)) *
+                          100}%`,
+                      ],
+                    }}
+                    transition={{ duration: 0.5 }}
                   />
                 )}
-              </Box>
+              </Flex>
               <Flex justify='space-between' mt={3}>
-                <Skeleton isLoaded={proposal?.yesVotes}>
+                <Skeleton isLoaded={proposal?.yesShares}>
                   <TextBox variant='value'>
-                    {proposal?.yesVotes || '0'} Yes
+                    {proposal?.yesShares || '0'} Yes
                   </TextBox>
                 </Skeleton>
-                <Skeleton isLoaded={proposal?.noVotes}>
+                <Skeleton isLoaded={proposal?.noShares}>
                   <TextBox variant='value'>
-                    {proposal?.noVotes || '0'} No
+                    {proposal?.noShares || '0'} No
                   </TextBox>
                 </Skeleton>
               </Flex>

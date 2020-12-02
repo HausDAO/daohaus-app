@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { Box, Flex, Badge, Skeleton, Icon } from '@chakra-ui/core';
+import { Box, Flex, Badge, Skeleton, Icon } from '@chakra-ui/react';
 import ContentBox from '../Shared/ContentBox';
 // import TextBox from '../Shared/TextBox';
 import { utils } from 'web3';
@@ -84,29 +84,29 @@ const ProposalCard = ({ proposal, isLoaded }) => {
               <Flex align='center'>
                 <Flex h='20px'>
                   <Skeleton isLoaded={isLoaded}>
-                    {(+proposal?.yesVotes > 0 || +proposal?.noVotes > 0) && (
+                    {(+proposal?.yesShares > 0 || +proposal?.noShares > 0) && (
                       <>
                         <Badge
                           colorScheme='green'
                           variant={
-                            +proposal.yesVotes > +proposal.noVotes &&
+                            +proposal.yesShares > +proposal.noShares &&
                             proposal.status !== 'Failed'
                               ? 'solid'
                               : 'outline'
                           }
                           mr={3}
                         >
-                          {proposal?.yesVotes ? proposal.yesVotes : '--'} Yes
+                          {proposal?.yesShares ? proposal.yesShares : '--'} Yes
                         </Badge>
                         <Badge
                           colorScheme='red'
                           variant={
-                            +proposal.noVotes > +proposal.yesVotes
+                            +proposal.noShares > +proposal.yesShares
                               ? 'solid'
                               : 'outline'
                           }
                         >
-                          {proposal?.noVotes ? proposal.noVotes : '--'} No
+                          {proposal?.noShares ? proposal.noShares : '--'} No
                         </Badge>
                       </>
                     )}
@@ -173,7 +173,7 @@ const ProposalCard = ({ proposal, isLoaded }) => {
                   {proposal?.tributeOffered
                     ? utils.fromWei(proposal.tributeOffered)
                     : '--'}{' '}
-                  {proposal.tributeToken || 'WETH'}
+                  {proposal.tributeTokenSymbol || 'WETH'}
                 </Box>
               </Skeleton>
             </Box>
@@ -195,7 +195,7 @@ const ProposalCard = ({ proposal, isLoaded }) => {
                   {proposal?.paymentRequested
                     ? utils.fromWei(proposal.paymentRequested)
                     : '--'}{' '}
-                  {proposal.paymentToken || 'WETH'}
+                  {proposal.paymentTokenSymbol || 'WETH'}
                 </Box>
               </Skeleton>
             </Box>

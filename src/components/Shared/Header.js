@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Box, Flex, Button } from '@chakra-ui/core';
+import { Box, Flex, Button } from '@chakra-ui/react';
 import { useLocation, Link as RouterLink } from 'react-router-dom';
 import { RiAddFill } from 'react-icons/ri';
 import {
@@ -7,6 +7,7 @@ import {
   useNetwork,
   useDao,
   useModals,
+  useMemberWallet,
 } from '../../contexts/PokemolContext';
 import { useTheme } from '../../contexts/CustomThemeContext';
 import { Web3SignIn } from './Web3SignIn';
@@ -16,6 +17,7 @@ import AccountModal from '../Modal/AccountModal';
 const Header = () => {
   const location = useLocation();
   const [user] = useUser();
+  const [memberWallet] = useMemberWallet();
   const [network] = useNetwork();
   const [dao] = useDao();
   const [theme] = useTheme();
@@ -39,7 +41,7 @@ const Header = () => {
         'New ' + theme.daoMeta.member + ' ' + theme.daoMeta.proposal,
       );
     } else if (location.pathname === `/dao/${dao?.address}/proposals/new`) {
-      setPageTitle(theme.daoMeta.proposal);
+      setPageTitle(`New ${theme.daoMeta.proposal}`);
     } else if (location.pathname === `/dao/${dao?.address}/members`) {
       setPageTitle(theme.daoMeta.members);
     } else if (location.pathname === `/dao/${dao?.address}/bank`) {
@@ -90,12 +92,13 @@ const Header = () => {
             </Button>
           )}
           {location.pathname === `/dao/${dao?.address}/members` && (
-            <Button
-              as={RouterLink}
-              to={`/dao/${dao?.address}/proposals/new/member`}
-            >
-              Apply
-            </Button>
+            <>
+              {memberWallet && !memberWallet.activeMember ? (
+                <Button as={RouterLink} to={`/dao/${dao?.address}/members/new`}>
+                  Apply
+                </Button>
+              ) : null}
+            </>
           )}
           {location.pathname === `/dao/${dao?.address}/bank` && (
             <Button

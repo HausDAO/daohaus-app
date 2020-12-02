@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Box } from '@chakra-ui/core';
+import { Box } from '@chakra-ui/react';
 
 import {
   useBalances,
@@ -35,7 +35,7 @@ const Bank = () => {
     <Box w='100%' p={6}>
       <BankTotal tokenBalances={dao?.graphData?.tokenBalances} />
       <BankOverviewChart balances={balances} dao={dao} />
-      <TokenList tokenList={tokenList} />
+      <TokenList tokenList={tokenList} isBank={true} />
     </Box>
   );
 };

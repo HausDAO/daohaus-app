@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Flex, Box } from '@chakra-ui/core';
+import { Flex, Box } from '@chakra-ui/react';
 
 import MembersList from '../../components/Members/MembersList';
 import MemberSnapshot from '../../components/Members/MemberSnapshot';

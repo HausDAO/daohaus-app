@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Link } from '@chakra-ui/core';
+import { Link } from '@chakra-ui/react';
 import Pagination from 'rc-pagination';
 
 const Paginator = ({ perPage, setRecords, allRecords, reset }) => {

@@ -5,7 +5,7 @@ import {
   InputGroup,
   InputRightAddon,
   Select,
-} from '@chakra-ui/core';
+} from '@chakra-ui/react';
 import TextBox from '../Shared/TextBox';
 import React, { useState, useEffect } from 'react';
 import { useDao } from '../../contexts/PokemolContext';

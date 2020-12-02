@@ -5,7 +5,7 @@ import {
   ModalCloseButton,
   ModalBody,
   ModalOverlay,
-} from '@chakra-ui/core';
+} from '@chakra-ui/react';
 
 import { useModals } from '../../contexts/PokemolContext';
 import RageQuitForm from '../Forms/RageQuit';

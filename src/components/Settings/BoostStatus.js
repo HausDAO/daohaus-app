@@ -1,5 +1,5 @@
 import React from 'react';
-import { Box, Flex, Button } from '@chakra-ui/core';
+import { Box, Flex, Button } from '@chakra-ui/react';
 import ComingSoonOverlay from '../Shared/ComingSoonOverlay';
 import TextBox from '../Shared/TextBox';
 import ContentBox from '../Shared/ContentBox';
