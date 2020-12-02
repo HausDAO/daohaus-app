@@ -102,7 +102,6 @@ const DaoInit = () => {
             version,
           )
         : await DaoService.instantiateWithReadOnly(daoParam, version);
-    const currentPeriod = await daoService.moloch.getCurrentPeriod();
 
     updateDaoMetadata({
       address: daoParam,
@@ -110,7 +109,6 @@ const DaoInit = () => {
       ...apiData,
       boosts,
       uiMeta,
-      currentPeriod: parseInt(currentPeriod),
     });
 
     updateContracts({ daoService });
