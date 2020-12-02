@@ -3,7 +3,7 @@ import React, { useState, useEffect } from 'react';
 import { useDao } from '../../contexts/PokemolContext';
 import ProposalFormModal from '../../components/Modal/ProposalFormModal';
 
-const Bank = () => {
+const NewToken = () => {
   const [dao] = useDao();
   const [, setTokenList] = useState(null);
   const [, setProposal] = useState(null);
@@ -28,4 +28,4 @@ const Bank = () => {
   );
 };
 
-export default Bank;
+export default NewToken;
