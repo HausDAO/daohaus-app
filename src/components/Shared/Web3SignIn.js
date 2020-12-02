@@ -17,11 +17,12 @@ export const Web3SignIn = () => {
           const _web3Connect = {
             w3c: new Web3Modal({
               network: getChainData(+process.env.REACT_APP_NETWORK_ID).network,
-              providerOptions,
-              cacheProvider: true,
+              providerOptions: providerOptions(),
+              cacheProvider: false,
+              theme: 'dark',
             }),
           };
-
+          console.log(_web3Connect);
           try {
             const { w3c, web3, provider } = await w3connect(_web3Connect);
             updateWeb3Connect({ w3c, web3, provider });

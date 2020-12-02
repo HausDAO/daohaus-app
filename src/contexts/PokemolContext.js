@@ -19,8 +19,9 @@ const initialState = {
   web3Connect: {
     w3c: new Web3Modal({
       network: getChainData(+process.env.REACT_APP_NETWORK_ID).network,
-      providerOptions,
+      providerOptions: providerOptions(),
       cacheProvider: true,
+      theme: 'dark',
     }),
   },
   contracts: {},

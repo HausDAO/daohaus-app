@@ -6,29 +6,42 @@ import Portis from '@portis/web3';
 import { USER_TYPE } from './dao-service';
 import { getChainData } from './chains';
 
-export const providerOptions = {
-  walletconnect: {
-    network: getChainData(process.env.REACT_APP_NETWORK_ID).network,
-    package: WalletConnectProvider, // required
-    options: {
-      infuraId: process.env.REACT_APP_RPC_URI.split('/').pop(),
-      rpc: {
-        [process.env.REACT_APP_NETWORK_ID]: process.env.REACT_APP_RPC_URI,
+export const providerOptions = () => {
+  const providers = getChainData(+process.env.REACT_APP_NETWORK_ID).providers;
+  const allNetworkProviders = {};
+
+  if (providers.includes('walletconnect')) {
+    allNetworkProviders.walletconnect = {
+      network: getChainData(process.env.REACT_APP_NETWORK_ID).network,
+      package: WalletConnectProvider, // required
+      options: {
+        infuraId: process.env.REACT_APP_RPC_URI.split('/').pop(),
+        rpc: {
+          [process.env.REACT_APP_NETWORK_ID]: process.env.REACT_APP_RPC_URI,
+        },
       },
-    },
-  },
-  fortmatic: {
-    package: Fortmatic, // required
-    options: {
-      key: process.env.REACT_APP_FORTMATIC_KEY || '', // required
-    },
-  },
-  portis: {
-    package: Portis, // required
-    options: {
-      id: process.env.REACT_APP_PORTIS_ID || '', // required
-    },
-  },
+    };
+  }
+
+  if (providers.includes('portis')) {
+    allNetworkProviders.portis = {
+      package: Portis, // required
+      options: {
+        id: process.env.REACT_APP_PORTIS_ID || '', // required
+      },
+    };
+  }
+
+  if (providers.includes('fortmatic')) {
+    allNetworkProviders.fortmatic = {
+      package: Fortmatic, // required
+      options: {
+        key: process.env.REACT_APP_FORTMATIC_KEY || '', // required
+      },
+    };
+  }
+
+  return allNetworkProviders;
 };
 
 export const w3connect = async (web3Connect) => {
