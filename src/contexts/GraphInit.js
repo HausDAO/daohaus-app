@@ -102,7 +102,6 @@ const GraphInit = () => {
             setRecords={setLocalProposals}
             entity='proposals'
             variables={{ contractAddr: daoMetadata.address }}
-            context={{ currentPeriod: daoMetadata.currentPeriod }}
           />
           <GraphFetchMore
             query={MEMBERS_LIST}
@@ -124,7 +123,6 @@ const GraphInit = () => {
             setRecords={setLocalActivities}
             entity='moloch'
             variables={{ contractAddr: daoMetadata.address }}
-            context={{ currentPeriod: daoMetadata.currentPeriod }}
           />
         </>
       ) : null}

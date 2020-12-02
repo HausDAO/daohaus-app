@@ -44,9 +44,11 @@ const ProposalDetail = ({ proposal }) => {
       <Box>
         <Box>
           <Flex justify='space-between'>
+            <TextBox>{proposal?.status}</TextBox>
             <TextBox>
               {proposal ? proposal.proposalType : theme.daoMeta.proposal}
             </TextBox>
+
             <Box>
               {proposal?.proposalIndex ? (
                 <>

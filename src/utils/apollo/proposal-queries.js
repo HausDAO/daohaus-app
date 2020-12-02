@@ -60,9 +60,6 @@ const baseListFields = `
   description @client
   hash @client
   proposalType @client
-  gracePeriod @client
-  votingEnds @client
-  votingStarts @client
   `;
 
 export const PROPOSALS_LIST = gql`

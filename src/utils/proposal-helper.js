@@ -15,81 +15,46 @@ export const ProposalStatus = {
   Unsponsored: 'Unsponsored',
 };
 
-export const inQueue = (proposal, currentPeriod) =>
-  currentPeriod < proposal.startingPeriod;
-
-export const inGracePeriod = (
-  proposal,
-  currentPeriod,
-  votingPeriodLength,
-  gracePeriodLength,
-) =>
-  currentPeriod >= proposal.startingPeriod + votingPeriodLength &&
-  currentPeriod <
-    proposal.startingPeriod + votingPeriodLength + gracePeriodLength;
-
-export const inVotingPeriod = (proposal, currentPeriod, votingPeriodLength) =>
-  currentPeriod >= proposal.startingPeriod &&
-  currentPeriod <= proposal.startingPeriod + votingPeriodLength;
-
-export const passedVotingAndGrace = (
-  proposal,
-  currentPeriod,
-  votingPeriodLength,
-  gracePeriodLength,
-  version,
-) => {
-  if (version === 2 && !proposal.sponsored) {
-    return false;
-  } else {
-    return (
-      currentPeriod >=
-      proposal.startingPeriod + votingPeriodLength + gracePeriodLength
-    );
-  }
+export const inQueue = (proposal) => {
+  const now = (new Date() / 1000) | 0;
+  return now < +proposal.votingPeriodStarts;
 };
 
-export function determineProposalStatus(
-  proposal,
-  currentPeriod,
-  votingPeriodLength,
-  gracePeriodLength,
-  version,
-) {
-  proposal.startingPeriod = +proposal.startingPeriod;
+export const inVotingPeriod = (proposal) => {
+  const now = (new Date() / 1000) | 0;
+  return (
+    now >= +proposal.votingPeriodStarts && now <= +proposal.votingPeriodEnds
+  );
+};
 
+export const inGracePeriod = (proposal) => {
+  const now = (new Date() / 1000) | 0;
+  return now >= +proposal.votingPeriodEnds && now <= +proposal.gracePeriodEnds;
+};
+
+export const afterGracePeriod = (proposal) => {
+  const now = (new Date() / 1000) | 0;
+  return now > +proposal.gracePeriodEnds;
+};
+
+export function determineProposalStatus(proposal) {
   let status;
-  const abortedOrCancelled = proposal.aborted || proposal.cancelled;
-  // if (proposal.processed && abortedOrCancelled) {
-  if (abortedOrCancelled) {
+
+  if (proposal.cancelled) {
     status = ProposalStatus.Cancelled;
-  } else if (version === 2 && !proposal.sponsored) {
+  } else if (!proposal.sponsored) {
     status = ProposalStatus.Unsponsored;
   } else if (proposal.processed && proposal.didPass) {
     status = ProposalStatus.Passed;
   } else if (proposal.processed && !proposal.didPass) {
     status = ProposalStatus.Failed;
-  } else if (
-    inGracePeriod(
-      proposal,
-      currentPeriod,
-      votingPeriodLength,
-      gracePeriodLength,
-    )
-  ) {
-    status = ProposalStatus.GracePeriod;
-  } else if (inVotingPeriod(proposal, currentPeriod, votingPeriodLength)) {
-    status = ProposalStatus.VotingPeriod;
-  } else if (inQueue(proposal, currentPeriod, votingPeriodLength)) {
+  } else if (inQueue(proposal)) {
     status = ProposalStatus.InQueue;
-  } else if (
-    passedVotingAndGrace(
-      proposal,
-      currentPeriod,
-      votingPeriodLength,
-      gracePeriodLength,
-    )
-  ) {
+  } else if (inVotingPeriod(proposal)) {
+    status = ProposalStatus.VotingPeriod;
+  } else if (inGracePeriod(proposal)) {
+    status = ProposalStatus.GracePeriod;
+  } else if (afterGracePeriod(proposal)) {
     status = ProposalStatus.ReadyForProcessing;
   } else {
     status = ProposalStatus.Unknown;
@@ -99,9 +64,7 @@ export function determineProposalStatus(
 }
 
 export const determineProposalType = (proposal) => {
-  if (proposal.molochVersion === '1') {
-    return 'V1 Proposal';
-  } else if (proposal.newMember) {
+  if (proposal.newMember) {
     return 'Member Proposal';
   } else if (proposal.whitelist) {
     return 'Whitelist Token Proposal';
