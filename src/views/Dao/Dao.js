@@ -2,25 +2,38 @@ import { Flex, Box } from '@chakra-ui/react';
 import React, { useEffect, useState } from 'react';
 import DaoActivityFeed from '../../components/Dao/DaoActivityFeed';
 import DaoOverviewDetails from '../../components/Dao/DaoOverviewDetails';
+import NewSummonerModal from '../../components/Modal/NewSummonerModal';
 import MemberInfoCard from '../../components/Shared/MemberInfoCard/MemberInfoCard';
 
 import {
   useDao,
   useUser,
   useMemberWallet,
+  useModals,
+  useProposals,
 } from '../../contexts/PokemolContext';
 
 const Dao = () => {
   const [dao] = useDao();
+  const [proposals] = useProposals();
   const [user] = useUser();
   const [memberWallet] = useMemberWallet();
   const [isMember, setIsMember] = useState(false);
+  const { modals, openModal } = useModals();
 
   useEffect(() => {
     if (memberWallet) {
       setIsMember(memberWallet.activeMember);
     }
   }, [memberWallet]);
+
+  useEffect(() => {
+    console.log('new dao proposals', proposals);
+    if (!proposals.length) {
+      openModal('newSummonerModal');
+    }
+    // eslint-disable-next-line
+  }, [proposals]);
 
   return (
     <>
@@ -51,6 +64,7 @@ const Dao = () => {
           </Flex>
         )}
       </Box>
+      <NewSummonerModal isOpen={modals.newSummonerModal} />
     </>
   );
 };
