@@ -1,7 +1,7 @@
 import React, { Fragment } from 'react';
 import { Box } from '@chakra-ui/react';
 
-import { timeToNow } from './helpers';
+import { IsJsonString, timeToNow } from './helpers';
 
 export const ProposalStatus = {
   Unknown: 'Unknown',
@@ -206,20 +206,13 @@ export const titleMaker = (proposal) => {
     let parsedDetails;
 
     try {
-      parsedDetails = JSON.parse(
-        proposal.details.replace(/(\r\n|\n|\r)/gm, ''),
-      );
+      parsedDetails = IsJsonString(proposal.details)
+        ? JSON.parse(proposal.details.replace(/(\r\n|\n|\r)/gm, ''))
+        : '';
       return parsedDetails.title || '';
     } catch {
-      // one off fix for a bad proposal
-      if (proposal.details && proposal.details.indexOf('link:') > -1) {
-        const fixedDetail = proposal.details.replace('link:', '"link":');
-        const fixedParsed = JSON.parse(fixedDetail);
-        return fixedParsed.title;
-      } else {
-        console.log(`Couldn't parse JSON from metadata`);
-        return `Proposal ${proposal.proposalIndex}`;
-      }
+      console.log(`Couldn't parse JSON from metadata`);
+      return `Proposal ${proposal.proposalIndex}`;
     }
   } else {
     return proposal.details
@@ -230,17 +223,19 @@ export const titleMaker = (proposal) => {
 
 export const descriptionMaker = (proposal) => {
   try {
-    const parsed = JSON.parse(proposal.details.replace(/(\r\n|\n|\r)/gm, ''));
-    return parsed.description;
+    const parsed = IsJsonString(proposal.details)
+      ? JSON.parse(proposal.details.replace(/(\r\n|\n|\r)/gm, ''))
+      : '';
+    return parsed.description || '';
   } catch (e) {
-    console.log('error', e);
-    return ``;
+    return '';
   }
 };
 
 export const hashMaker = (proposal) => {
   try {
-    const parsed = JSON.parse(proposal.details.replace(/(\r\n|\n|\r)/gm, ''));
+    const parsed =
+      IsJsonString(proposal.details) && JSON.parse(proposal.details);
     return parsed.hash || '';
   } catch (e) {
     return '';
@@ -249,11 +244,12 @@ export const hashMaker = (proposal) => {
 
 export const linkMaker = (proposal) => {
   try {
-    const parsed = JSON.parse(proposal.details.replace(/(\r\n|\n|\r)/gm, ''));
-    return typeof parsed.link === 'function' ? null : parsed.link;
+    const parsed =
+      IsJsonString(proposal.details) &&
+      JSON.parse(proposal.details.replace(/(\r\n|\n|\r)/gm, ''));
+    return typeof parsed.link === 'function' ? null : parsed.link || '';
   } catch (e) {
-    console.log('error', e);
-    return null;
+    return '';
   }
 };
 

@@ -7,6 +7,7 @@ import { useDao, useTxProcessor, useUser } from '../../contexts/PokemolContext';
 import AddressInput from './AddressInput';
 import DetailsFields from './DetailFields';
 import { useLocation } from 'react-router-dom';
+import { detailsToJSON } from '../../utils/proposal-helper';
 
 const GuildKickProposalForm = () => {
   const [loading, setLoading] = useState(false);
@@ -71,12 +72,7 @@ const GuildKickProposalForm = () => {
 
     console.log(values);
 
-    const details = JSON.stringify({
-      title: values.title,
-      description: values.description,
-      link: 'https://' + values.link,
-      hash: Math.random(0, 10000),
-    });
+    const details = detailsToJSON(values);
 
     try {
       dao.daoService.molochsubmitGuildKickProposal(
