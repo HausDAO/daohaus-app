@@ -203,7 +203,7 @@ const voteRageActivityData = (record) => {
     }`;
     type = 'vote';
   } else {
-    title = `rage quit ${record.shares} shares and ${record.loot} loot 🖕`;
+    title = `rage quit ${record.shares} shares and ${record.loot} loot`;
     type = 'rage';
   }
   return {

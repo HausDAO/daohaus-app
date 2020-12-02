@@ -104,22 +104,14 @@ const ProposalFormModal = ({
               color='#7579C5'
               mb={4}
             >
-              {proposalForm.type}
-            </Box>
-            <Box
-              fontFamily='heading'
-              fontSize='xl'
-              fontWeight={700}
-              color='white'
-            >
               {proposalForm.heading}
             </Box>
           </ModalHeader>
           <ModalCloseButton />
           <ModalBody>
-            <Box color='#C4C4C4' mb={6}>
+            {/* <Box color='#C4C4C4' mb={6}>
               {proposalForm.subline}
-            </Box>
+            </Box> */}
             {proposalForm.form}
           </ModalBody>
 
