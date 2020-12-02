@@ -150,7 +150,7 @@ export const POPUP_CONTENT = {
         external: true,
       },
       {
-        href: `https://twitter.com/intent/tweet?text=I%20Voted%20https://alpha.daohaus.club${location.pathname}`,
+        href: `https://twitter.com/intent/tweet?text=I%20Voted%20https://alpha.daohaus.club`,
         text: 'Share with the world',
         external: true,
       },
