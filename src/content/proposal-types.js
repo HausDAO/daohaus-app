@@ -1,33 +1,33 @@
 export const proposalTypes = (theme) => {
   return [
     {
-      name: 'Apply',
-      subhead: 'Join the guild!',
+      name: 'Membership',
+      subhead: 'Join the DAO!',
       proposalType: 'member',
       image: 'themes/raidTheme/raidguild__swords-white.svg',
     },
     {
       name: 'Funding',
-      subhead: 'Request funds',
+      subhead: 'Distribute funds',
       proposalType: 'funding',
       image: 'themes/raidTheme/raidguild__swords-white.svg',
     },
     {
       name: 'Token',
-      subhead: 'Whitelist a token',
+      subhead: 'Approve a new asset',
       proposalType: 'whitelist',
+      image: 'themes/raidTheme/raidguild__swords-white.svg',
+    },
+    {
+      name: 'Trade',
+      subhead: 'Trade assets',
+      proposalType: 'trade',
       image: 'themes/raidTheme/raidguild__swords-white.svg',
     },
     {
       name: 'Guild Kick',
       subhead: `Remove a ${theme.daoMeta.member}`,
       proposalType: 'guildkick',
-      image: 'themes/raidTheme/raidguild__swords-white.svg',
-    },
-    {
-      name: 'Trade',
-      subhead: 'Trade funds',
-      proposalType: 'trade',
       image: 'themes/raidTheme/raidguild__swords-white.svg',
     },
     {
