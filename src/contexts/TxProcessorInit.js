@@ -10,6 +10,9 @@ import {
   ModalCloseButton,
   useDisclosure,
   useToast,
+  Text,
+  Icon,
+  Heading,
 } from '@chakra-ui/react';
 
 import { TxProcessorService } from '../utils/tx-processor-service';
@@ -23,8 +26,14 @@ import {
 } from './PokemolContext';
 import ExplorerLink from '../components/Shared/ExplorerLink';
 import { truncateAddr } from '../utils/helpers';
-import { DISPLAY_NAMES, TX_CONTEXTS } from '../utils/tx-processor-helper';
+import {
+  DISPLAY_NAMES,
+  TX_CONTEXTS,
+  POPUP_CONTENT,
+} from '../utils/tx-processor-helper';
 import { mutateMember } from '../utils/proposal-mutations';
+import { Link } from 'react-router-dom';
+import { RiErrorWarningLine } from 'react-icons/ri';
 
 const TxProcessorInit = () => {
   const [, updateRefetchQuery] = useRefetchQuery();
@@ -234,23 +243,50 @@ const TxProcessorInit = () => {
           <ModalCloseButton />
           <ModalBody>
             {latestTx && (
-              <ExplorerLink
-                type='tx'
-                hash={latestTx.tx}
-                linkText={`${truncateAddr(latestTx.tx)} view`}
-              />
-            )}
-            {!loading && (
-              <Box mt={4}>
-                <span role='img' aria-label='confetti'>
-                  🎉
-                </span>{' '}
-                Success{' '}
-                {(latestTx && DISPLAY_NAMES[latestTx?.details?.name]) || ''}{' '}
-                <span role='img' aria-label='confetti'>
-                  🎉
-                </span>
-              </Box>
+              <>
+                <ExplorerLink
+                  type='tx'
+                  hash={latestTx.tx}
+                  linkText={`${truncateAddr(latestTx.tx)} view`}
+                />
+                {!loading && (
+                  <Box mt={4}>
+                    <span role='img' aria-label='confetti'>
+                      🎉
+                    </span>{' '}
+                    Success{' '}
+                    {(latestTx && DISPLAY_NAMES[latestTx?.details?.name]) || ''}{' '}
+                    <span role='img' aria-label='confetti'>
+                      🎉
+                    </span>
+                  </Box>
+                )}
+                {POPUP_CONTENT[latestTx?.details?.name]?.header && (
+                  <Heading>
+                    {POPUP_CONTENT[latestTx?.details?.name]?.header}
+                  </Heading>
+                )}
+                {POPUP_CONTENT[latestTx?.details?.name]?.bodyText.map(
+                  (txt, idx) => (
+                    <Text key={idx}>{txt}</Text>
+                  ),
+                )}
+                {POPUP_CONTENT[latestTx?.details?.name]?.links.length && (
+                  <Text>links:</Text>
+                )}
+                {POPUP_CONTENT[latestTx?.details?.name]?.links.map(
+                  (link, idx) =>
+                    link.external ? (
+                      <Link key={idx} to={link.href}>
+                        {link.text}
+                      </Link>
+                    ) : (
+                      <Link key={idx} to={link.href}>
+                        {link.text} <Icon as={RiErrorWarningLine} />
+                      </Link>
+                    ),
+                )}
+              </>
             )}
           </ModalBody>
         </ModalContent>
