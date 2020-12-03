@@ -2,6 +2,8 @@ import React, { Fragment } from 'react';
 import { Box } from '@chakra-ui/react';
 
 import { IsJsonString, timeToNow } from './helpers';
+import TextBox from '../components/Shared/TextBox';
+import { formatDistanceToNow } from 'date-fns';
 
 export const ProposalStatus = {
   Unknown: 'Unknown',
@@ -247,8 +249,7 @@ export function getProposalCountdownText(proposal) {
       return (
         <Fragment>
           <Box textTransform='uppercase' fontSize='0.8em' fontWeight={700}>
-            <span fontWeight='700'>Voting Begins</span>
-            {timeToNow(proposal.votingPeriodStarts)}
+            Voting Begins {timeToNow(proposal.votingPeriodStarts)}
           </Box>
         </Fragment>
       );
@@ -256,7 +257,7 @@ export function getProposalCountdownText(proposal) {
       return (
         <Fragment>
           <Box textTransform='uppercase' fontSize='0.8em' fontWeight={700}>
-            Voting Ends: {timeToNow(proposal.votingPeriodEnds)}
+            Voting Ends {timeToNow(proposal.votingPeriodEnds)}
           </Box>
         </Fragment>
       );
@@ -265,9 +266,8 @@ export function getProposalCountdownText(proposal) {
         <Fragment>
           <Box textTransform='uppercase' fontSize='0.8em' fontWeight={700}>
             <Box as='span' fontWeight={900}>
-              Grace Period Ends
-            </Box>{' '}
-            {timeToNow(proposal.gracePeriodEnds)}
+              Grace Period Ends {timeToNow(proposal.gracePeriodEnds)}
+            </Box>
           </Box>
         </Fragment>
       );
@@ -305,3 +305,69 @@ export function getProposalCountdownText(proposal) {
       return <Fragment />;
   }
 }
+
+export const getProposalDetailStatus = (proposal) => {
+  switch (proposal.status) {
+    case ProposalStatus.InQueue:
+      return (
+        <>
+          <TextBox>In Queue, Voting Begins</TextBox>
+          <TextBox fontSize='lg' variant='value'>
+            {formatDistanceToNow(
+              new Date(+proposal?.votingPeriodStarts * 1000),
+              {
+                addSuffix: true,
+              },
+            )}
+          </TextBox>
+        </>
+      );
+    case ProposalStatus.VotingPeriod:
+      return (
+        <>
+          <TextBox>Voting Ends</TextBox>
+          <TextBox fontSize='lg' variant='value'>
+            {formatDistanceToNow(new Date(+proposal?.votingPeriodEnds * 1000), {
+              addSuffix: true,
+            })}
+          </TextBox>
+        </>
+      );
+    case ProposalStatus.GracePeriod:
+      return (
+        <>
+          <TextBox>Grace Period Ends</TextBox>
+          <TextBox fontSize='lg' variant='value'>
+            {formatDistanceToNow(new Date(+proposal?.gracePeriodEnds * 1000), {
+              addSuffix: true,
+            })}
+          </TextBox>
+        </>
+      );
+    case ProposalStatus.ReadyForProcessing:
+      return (
+        <>
+          <TextBox>Ready For Processing</TextBox>
+          <TextBox fontSize='lg' variant='value'>
+            {formatDistanceToNow(new Date(+proposal?.gracePeriodEnds * 1000), {
+              addSuffix: true,
+            })}
+          </TextBox>
+        </>
+      );
+    case ProposalStatus.Passed:
+    case ProposalStatus.Failed:
+      return (
+        <>
+          <TextBox>{proposal.status}</TextBox>
+          <TextBox fontSize='lg' variant='value'>
+            {formatDistanceToNow(new Date(+proposal?.gracePeriodEnds * 1000), {
+              addSuffix: true,
+            })}
+          </TextBox>
+        </>
+      );
+    default:
+      return <Fragment />;
+  }
+};

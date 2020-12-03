@@ -9,7 +9,10 @@ import { utils } from 'web3';
 import { useMembers, useMemberWallet } from '../../contexts/PokemolContext';
 import { useTheme } from '../../contexts/CustomThemeContext';
 import { memberProfile, proposalDetails } from '../../utils/helpers';
-import { getProposalCountdownText } from '../../utils/proposal-helper';
+import {
+  getProposalCountdownText,
+  getProposalDetailStatus,
+} from '../../utils/proposal-helper';
 import ProposalMinionCard from './ProposalMinionCard';
 import TextBox from '../Shared/TextBox';
 import MemberAvatar from '../Members/MemberAvatar';
@@ -37,14 +40,14 @@ const ProposalDetail = ({ proposal }) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [memberWallet, proposal]);
 
-  // console.log('proposalDetail js', proposal);
+  // if passed or faild, ex time ago
+  // if needs processing, grace ended ex time ago
 
   return (
     <ContentBox>
       <Box>
         <Box>
           <Flex justify='space-between'>
-            <TextBox>{proposal?.status}</TextBox>
             <TextBox>
               {proposal ? proposal.proposalType : theme.daoMeta.proposal}
             </TextBox>
@@ -52,22 +55,25 @@ const ProposalDetail = ({ proposal }) => {
             <Box>
               {proposal?.proposalIndex ? (
                 <>
-                  <TextBox>
-                    {isBefore(
+                  {proposal?.status ? getProposalDetailStatus(proposal) : '--'}
+
+                  {/* <TextBox> */}
+
+                  {/* {isBefore(
                       Date.now(),
                       new Date(+proposal?.votingPeriodEnds * 1000),
                     )
                       ? 'Voting Period Ends'
-                      : 'Voting Ended'}
-                  </TextBox>
+                      : 'Voting Ended'} */}
+                  {/* </TextBox>
                   <TextBox fontSize='lg' variant='value'>
                     {formatDistanceToNow(
                       new Date(+proposal?.votingPeriodEnds * 1000),
                       {
                         addSuffix: true,
                       },
-                    )}
-                  </TextBox>
+                    )}*/}
+                  {/* </TextBox> */}
                 </>
               ) : (
                 <>
