@@ -25,7 +25,7 @@ const UserAvatar = ({ user }) => {
         <>
           <Skeleton isLoaded={user?.username} m='0 auto'>
             {user.username && (
-              <>
+              <Flex direction='row' alignItems='center'>
                 <Avatar
                   name={user.username}
                   src={makeBlockie(user.username)}
@@ -35,7 +35,7 @@ const UserAvatar = ({ user }) => {
                 <Box fontSize='sm' fontFamily='heading'>
                   {truncateAddr(user.username)}
                 </Box>
-              </>
+              </Flex>
             )}
           </Skeleton>
         </>

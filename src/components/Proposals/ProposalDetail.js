@@ -16,6 +16,7 @@ import {
 import ProposalMinionCard from './ProposalMinionCard';
 import TextBox from '../Shared/TextBox';
 import MemberAvatar from '../Members/MemberAvatar';
+import UserAvatar from '../Shared/UserAvatar';
 import { ZERO_ADDRESS } from '../../utils/constants';
 
 const urlify = (text) => {
@@ -215,9 +216,13 @@ const ProposalDetail = ({ proposal }) => {
           <TextBox mb={2}>Submitted By</TextBox>
           <Skeleton isLoaded={members && proposal?.proposer}>
             {members && proposal?.proposer ? (
-              <MemberAvatar
-                member={memberProfile(members, proposal?.proposer)}
-              />
+              memberProfile(members, proposal?.proposer).profile ? (
+                <MemberAvatar
+                  member={memberProfile(members, proposal?.proposer)}
+                />
+              ) : (
+                <UserAvatar user={memberProfile(members, proposal?.proposer)} />
+              )
             ) : (
               '--'
             )}
@@ -227,14 +232,30 @@ const ProposalDetail = ({ proposal }) => {
           <TextBox mb={2}>Recipient</TextBox>
           <Skeleton isLoaded={members && proposal?.applicant}>
             {members && proposal?.applicant ? (
-              <MemberAvatar
-                member={memberProfile(
-                  members,
-                  proposal?.applicant !== ZERO_ADDRESS
-                    ? proposal?.applicant
-                    : proposal?.proposer,
-                )}
-              />
+              memberProfile(
+                members,
+                proposal?.applicant !== ZERO_ADDRESS
+                  ? proposal?.applicant
+                  : proposal?.proposer,
+              ).profile ? (
+                <MemberAvatar
+                  member={memberProfile(
+                    members,
+                    proposal?.applicant !== ZERO_ADDRESS
+                      ? proposal?.applicant
+                      : proposal?.proposer,
+                  )}
+                />
+              ) : (
+                <UserAvatar
+                  user={memberProfile(
+                    members,
+                    proposal?.applicant !== ZERO_ADDRESS
+                      ? proposal?.applicant
+                      : proposal?.proposer,
+                  )}
+                />
+              )
             ) : (
               '--'
             )}
