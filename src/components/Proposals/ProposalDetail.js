@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import { formatDistanceToNow, isBefore } from 'date-fns';
 import { Badge, Flex, Box, Icon, Link, Skeleton, Text } from '@chakra-ui/react';
 import ContentBox from '../Shared/ContentBox';
 import { RiExternalLinkLine } from 'react-icons/ri';
@@ -51,9 +50,6 @@ const ProposalDetail = ({ proposal }) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [memberWallet, proposal]);
 
-  // if passed or faild, ex time ago
-  // if needs processing, grace ended ex time ago
-
   return (
     <ContentBox>
       <Box>
@@ -67,24 +63,6 @@ const ProposalDetail = ({ proposal }) => {
               {proposal?.proposalIndex ? (
                 <>
                   {proposal?.status ? getProposalDetailStatus(proposal) : '--'}
-
-                  {/* <TextBox> */}
-
-                  {/* {isBefore(
-                      Date.now(),
-                      new Date(+proposal?.votingPeriodEnds * 1000),
-                    )
-                      ? 'Voting Period Ends'
-                      : 'Voting Ended'} */}
-                  {/* </TextBox>
-                  <TextBox fontSize='lg' variant='value'>
-                    {formatDistanceToNow(
-                      new Date(+proposal?.votingPeriodEnds * 1000),
-                      {
-                        addSuffix: true,
-                      },
-                    )}*/}
-                  {/* </TextBox> */}
                 </>
               ) : (
                 <>
