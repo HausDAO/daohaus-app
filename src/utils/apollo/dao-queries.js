@@ -51,7 +51,7 @@ export const DAO_ACTIVITIES = gql`
       id
       title
       version
-      proposals {
+      proposals(orderBy: createdAt, orderDirection: desc) {
         id
         createdAt
         proposalId

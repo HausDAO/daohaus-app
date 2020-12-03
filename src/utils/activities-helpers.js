@@ -263,7 +263,7 @@ const buildProposalHistory = (proposal) => {
       historyStep: 'Submitted',
       activityData: {
         createdAt: proposal.createdAt,
-        memberAddress: proposal.memberAddress,
+        memberAddress: proposal.proposer,
       },
     },
   ];
