@@ -10,6 +10,7 @@ import {
   Spacer,
   Stack,
   IconButton,
+  useBreakpointValue,
 } from '@chakra-ui/react';
 
 import { motion } from 'framer-motion';
@@ -42,8 +43,25 @@ const MotionBox = motion.custom(Box);
 const MotionFlex = motion.custom(Flex);
 
 const bar = {
-  open: { width: 420 },
-  closed: { width: 100 },
+  open: {
+    width: '420px',
+    height: '100vh',
+  },
+  closed: {
+    width: '100px',
+    height: '100vh',
+  },
+};
+
+const barMobile = {
+  open: {
+    width: '100%',
+    height: '100vh',
+  },
+  closed: {
+    width: '100%',
+    height: '100px',
+  },
 };
 
 const nav = {
@@ -89,25 +107,25 @@ const navLinks = {
   },
 };
 
-const background = {
+const layout = {
   open: {
-    width: 'calc(100% - ' + bar.open.width + 'px)',
-    marginLeft: bar.open.width + 'px',
+    width: 'calc(100% - ' + bar.open.width + ')',
+    marginLeft: bar.open.width,
   },
   closed: {
-    width: 'calc(100% - ' + bar.closed.width + 'px)',
-    marginLeft: bar.closed.width + 'px',
+    width: 'calc(100% - ' + bar.closed.width + ')',
+    marginLeft: bar.closed.width,
   },
 };
 
-const layout = {
+const layoutMobile = {
   open: {
-    width: 'calc(100% - ' + bar.open.width + 'px)',
-    marginLeft: bar.open.width + 'px',
+    width: '100%',
+    marginLeft: 0,
   },
   closed: {
-    width: 'calc(100% - ' + bar.closed.width + 'px)',
-    marginLeft: bar.closed.width + 'px',
+    width: '100%',
+    marginLeft: 0,
   },
 };
 
@@ -127,15 +145,21 @@ const Layout = ({ children }) => {
   };
 
   return (
-    <Flex direction='row' minH='100vh' color='white' w='100vw'>
+    <Flex
+      direction={['column', 'column', 'column', 'row']}
+      minH='100vh'
+      w='100vw'
+    >
       <MotionFlex
         initial={sideNavOpen ? 'open' : 'closed'}
         animate={sideNavOpen ? 'open' : 'closed'}
-        variants={bar}
-        h='100vh'
-        w='100%'
+        variants={useBreakpointValue({
+          base: barMobile,
+          sm: barMobile,
+          md: bar,
+        })}
         p={6}
-        position='fixed'
+        position={['relative', 'relative', 'relative', 'fixed']}
         direction='row'
         align='start'
         justifyContent='start'
@@ -144,11 +168,10 @@ const Layout = ({ children }) => {
         overflow='hidden'
       >
         <Flex
-          direction='column'
+          direction={['row', 'row', 'row', 'column']}
           justify='start'
           align='start'
           h='100%'
-          w='100%'
         >
           <Flex align='start' justify='start' direction='row'>
             <Box
@@ -489,7 +512,11 @@ const Layout = ({ children }) => {
         position='fixed'
         initial={sideNavOpen ? 'open' : 'closed'}
         animate={sideNavOpen ? 'open' : 'closed'}
-        variants={background}
+        variants={useBreakpointValue({
+          base: layoutMobile,
+          sm: layoutMobile,
+          md: layout,
+        })}
         h='100vh'
         bgImage={'url(' + theme.images.bgImg + ')'}
         bgSize='cover'
@@ -497,6 +524,7 @@ const Layout = ({ children }) => {
         zIndex='-1'
         top='0'
         right='0'
+        w='100%'
         _before={{
           display: 'block',
           content: '""',
@@ -512,10 +540,14 @@ const Layout = ({ children }) => {
         }}
       />
       <MotionFlex
-        width='100%'
+        w='100%'
         initial={sideNavOpen ? 'open' : 'closed'}
         animate={sideNavOpen ? 'open' : 'closed'}
-        variants={layout}
+        variants={useBreakpointValue({
+          base: layoutMobile,
+          sm: layoutMobile,
+          md: layout,
+        })}
         flexDirection='column'
       >
         <Header></Header>
