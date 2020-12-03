@@ -24,14 +24,16 @@ const ProposalFilter = ({ filter, setFilter, proposals }) => {
   useEffect(() => {
     let options;
     if (memberWallet && memberWallet.activeMember) {
-      const action = proposals.filter((prop) => {
-        const unread = determineUnreadProposalList(
-          prop,
-          memberWallet.activeMember,
-          memberWallet.memberAddress,
-        );
-        return unread.unread;
-      });
+      const action =
+        proposals &&
+        proposals.filter((prop) => {
+          const unread = determineUnreadProposalList(
+            prop,
+            memberWallet.activeMember,
+            memberWallet.memberAddress,
+          );
+          return unread.unread;
+        });
       setActionNeeded(action);
 
       options = getFilterOptions(memberWallet.activeMember, action.length);

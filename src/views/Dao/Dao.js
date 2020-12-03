@@ -19,7 +19,7 @@ const Dao = () => {
   const [user] = useUser();
   const [memberWallet] = useMemberWallet();
   const [isMember, setIsMember] = useState(false);
-  const { modals } = useModals();
+  const { modals, openModal } = useModals();
 
   useEffect(() => {
     if (memberWallet) {
@@ -28,12 +28,13 @@ const Dao = () => {
   }, [memberWallet]);
 
   useEffect(() => {
-    if (!proposals.length) {
+    if (proposals && !proposals.length) {
       // need to wait for proposals to be fully loaded
-      // openModal('newSummonerModal');
+      console.log('maproposals', proposals);
+      openModal('newSummonerModal');
     }
     // eslint-disable-next-line
-  }, [proposals, dao]);
+  }, [proposals]);
 
   return (
     <>

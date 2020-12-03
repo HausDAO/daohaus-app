@@ -37,7 +37,7 @@ const initialState = {
   daoMetadata: null,
   daoGraphData: null,
   userDaos: [],
-  proposals: [],
+  proposals: null,
   members: [],
   balances: [],
   activities: {},

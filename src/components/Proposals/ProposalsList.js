@@ -24,7 +24,7 @@ const ProposalsList = () => {
   const [sort, setSort] = useState();
 
   useEffect(() => {
-    if (proposals.length > 0) {
+    if (proposals && proposals.length > 0) {
       filterAndSortProposals();
       setIsLoaded(true);
     }
@@ -86,15 +86,16 @@ const ProposalsList = () => {
         ) : null}
         <ProposalSort sort={sort} setSort={setSort} />
       </Flex>
-      {pageProposals.map((proposal) => {
-        return (
-          <ProposalCard
-            proposal={proposal}
-            key={proposal.id}
-            isLoaded={isLoaded}
-          />
-        );
-      })}
+      {isLoaded &&
+        pageProposals.map((proposal) => {
+          return (
+            <ProposalCard
+              proposal={proposal}
+              key={proposal.id}
+              isLoaded={isLoaded}
+            />
+          );
+        })}
 
       {isLoaded ? (
         <Paginator
