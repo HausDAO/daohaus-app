@@ -14,6 +14,7 @@ import { RiErrorWarningLine } from 'react-icons/ri';
 import { useDao, useTxProcessor, useUser } from '../../contexts/PokemolContext';
 import DetailsFields from './DetailFields';
 import TextBox from '../Shared/TextBox';
+import { detailsToJSON } from '../../utils/proposal-helper';
 
 const WhitelistProposalForm = () => {
   const [loading, setLoading] = useState(false);
@@ -66,12 +67,7 @@ const WhitelistProposalForm = () => {
 
     console.log(values);
 
-    const details = JSON.stringify({
-      title: values.title,
-      description: values.description,
-      link: 'https://' + values.link,
-      hash: Math.random(0, 10000),
-    });
+    const details = detailsToJSON(values);
 
     try {
       dao.daoService.moloch.submitWhiteListProposal(

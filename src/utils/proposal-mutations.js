@@ -93,7 +93,6 @@ export const mutateProposal = (proposals, options) => {
       proposals[proposalIndex].votingPeriodStarts = Math.round(
         now.getTime() / 1000,
       ).toString();
-      proposals[proposalIndex].votingStarts = 1;
       return proposals;
     }
     case 'submitProposal': {

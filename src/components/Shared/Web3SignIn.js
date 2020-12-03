@@ -17,8 +17,9 @@ export const Web3SignIn = () => {
           const _web3Connect = {
             w3c: new Web3Modal({
               network: getChainData(+process.env.REACT_APP_NETWORK_ID).network,
-              providerOptions,
+              providerOptions: providerOptions(),
               cacheProvider: true,
+              theme: 'dark',
             }),
           };
 
@@ -33,7 +34,7 @@ export const Web3SignIn = () => {
             toast({
               title: 'Wrong Network',
               position: 'top-right',
-              description: err.msg,
+              description: err?.msg || "Couldn't connect to injected network",
               status: 'warning',
               duration: 9000,
               isClosable: true,

@@ -29,17 +29,13 @@ const AddressInput = ({ register, setValue, watch, formLabel }) => {
   };
 
   return (
-    <FormControl>
+    <FormControl mb={5}>
       <TextBox as={FormLabel} htmlFor='applicant'>
         {formLabel}
       </TextBox>
-      <FormHelperText fontSize='xs' id='applicant-helper-text' mb={1}>
-        {ensAddr || 'Use ETH address or ENS'}
-      </FormHelperText>
       <Input
         name='applicant'
         placeholder='0x'
-        mb={5}
         ref={register({
           required: {
             value: true,
@@ -50,6 +46,9 @@ const AddressInput = ({ register, setValue, watch, formLabel }) => {
         focusBorderColor='secondary.500'
         onChange={handleChange}
       />
+      <FormHelperText fontSize='xs' id='applicant-helper-text' mb={1}>
+        {ensAddr || 'Use ETH address or ENS'}
+      </FormHelperText>
       <Input type='hidden' name='applicantHidden' ref={register} />
     </FormControl>
   );

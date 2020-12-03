@@ -5,6 +5,7 @@ import { defaultTheme } from '../themes/theme-defaults';
 import { DaoService, USER_TYPE } from '../utils/dao-service';
 import { validDaoParams } from '../utils/helpers';
 import { get } from '../utils/requests';
+import { useTheme } from './CustomThemeContext';
 
 import {
   useUser,
@@ -19,6 +20,7 @@ const DaoInit = () => {
   const location = useLocation();
   const [contracts, updateContracts] = useContracts();
   const [daoMetadata, updateDaoMetadata] = useDaoMetadata();
+  const [, setTheme] = useTheme();
   const [web3Connect] = useWeb3Connect();
   const [memberWallet, updateMemberWallet] = useMemberWallet();
   const [user] = useUser();
@@ -77,20 +79,33 @@ const DaoInit = () => {
     }
     const apiData = daoRes ? daoRes.data : {};
 
-    const boostRes = await get(`boosts/${daoParam}`);
-    const boosts = boostRes.data.reduce((boosts, boostData) => {
-      const metadata = boostData.metadata
-        ? JSON.parse(boostData.metadata[0])
-        : null;
-      boosts[boostData.boostKey] = {
-        active: boostData.active,
-        metadata,
-      };
-      return boosts;
-    }, {});
+    const boostRes = await get(`boosts/${daoParam}`).catch((err) =>
+      console.log(err),
+    );
 
-    // this will need to parse custom theme data
-    const uiMeta = defaultTheme.daoMeta;
+    // rework with new api end point
+    let boosts = {};
+    if (boostRes?.data) {
+      boosts = boostRes.data.reduce((boosts, boostData) => {
+        const metadata = boostData.metadata
+          ? JSON.parse(boostData.metadata[0])
+          : null;
+        boosts[boostData.boostKey] = {
+          active: boostData.active,
+          metadata,
+        };
+        return boosts;
+      }, {});
+    }
+
+    if (boosts.customTheme?.active) {
+      const themeUpdate = { ...defaultTheme, ...boosts.customTheme.metadata };
+      setTheme(themeUpdate);
+    }
+
+    const uiMeta = boosts.customTheme
+      ? boosts.customTheme.metadata
+      : defaultTheme.daoMeta;
 
     const version = daoRes && daoRes.data.version ? daoRes.data.version : '1';
     const daoService =
@@ -102,7 +117,6 @@ const DaoInit = () => {
             version,
           )
         : await DaoService.instantiateWithReadOnly(daoParam, version);
-    const currentPeriod = await daoService.moloch.getCurrentPeriod();
 
     updateDaoMetadata({
       address: daoParam,
@@ -110,7 +124,6 @@ const DaoInit = () => {
       ...apiData,
       boosts,
       uiMeta,
-      currentPeriod: parseInt(currentPeriod),
     });
 
     updateContracts({ daoService });

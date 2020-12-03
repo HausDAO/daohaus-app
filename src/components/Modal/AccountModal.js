@@ -22,6 +22,7 @@ import {
   useDao,
   useMembers,
   useModals,
+  useWeb3Connect,
 } from '../../contexts/PokemolContext';
 import { memberProfile } from '../../utils/helpers';
 import { DISPLAY_NAMES } from '../../utils/tx-processor-helper';
@@ -31,11 +32,12 @@ import ExplorerLink from '../Shared/ExplorerLink';
 import MemberInfoCardGuts from '../Shared/MemberInfoCard/MemberInfoCardGuts';
 
 const AccountModal = ({ isOpen }) => {
-  const [user] = useUser();
+  const [user, updateUser] = useUser();
   const [dao] = useDao();
   const { closeModals } = useModals();
 
   const [txProcessor] = useTxProcessor();
+  const [web3connect] = useWeb3Connect();
 
   const [members] = useMembers();
   const [member, setMember] = useState(null);
@@ -109,7 +111,21 @@ const AccountModal = ({ isOpen }) => {
           overflowY='scroll'
         >
           {!dao.address ? (
-            <HubProfileCard user={user} />
+            <>
+              <HubProfileCard user={user} />
+              <Link
+                onClick={() => {
+                  web3connect.w3c.clearCachedProvider();
+                  updateUser();
+                  closeModals();
+                  web3connect.w3c.connect();
+                }}
+                color='secondary.400'
+                _hover={{ color: 'secondary.600' }}
+              >
+                Connect a different wallet
+              </Link>
+            </>
           ) : (
             <MemberInfoCardGuts
               user={user}
@@ -127,16 +143,32 @@ const AccountModal = ({ isOpen }) => {
           />
           {dao.address && (
             <Box pt={6}>
-              <Flex direction='row' justify='space-between' align='center'>
-                <Link
-                  as={RouterLink}
-                  to={`/dao/${dao.address}/profile/${user.username}`}
-                  onClick={closeModals}
-                  color='secondary.400'
-                  _hover={{ color: 'secondary.600' }}
-                >
-                  View Member Profile
-                </Link>
+              <Flex direction='row' justify='space-between' align='flex-start'>
+                <Flex direction='column'>
+                  <Link
+                    as={RouterLink}
+                    to={`/dao/${dao.address}/profile/${user.username}`}
+                    onClick={closeModals}
+                    color='secondary.400'
+                    _hover={{ color: 'secondary.600' }}
+                    mb='4px'
+                  >
+                    View Member Profile
+                  </Link>
+                  <Link
+                    onClick={() => {
+                      web3connect.w3c.clearCachedProvider();
+                      updateUser();
+                      closeModals();
+                      web3connect.w3c.connect();
+                    }}
+                    color='secondary.400'
+                    _hover={{ color: 'secondary.600' }}
+                  >
+                    Connect a different wallet
+                  </Link>
+                </Flex>
+
                 <Link
                   color='secondary.400'
                   _hover={{ color: 'secondary.600' }}

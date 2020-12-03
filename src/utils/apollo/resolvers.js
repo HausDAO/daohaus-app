@@ -3,10 +3,6 @@ import { getProfile } from '3box/lib/api';
 
 import {
   determineProposalStatus,
-  inGracePeriod,
-  inVotingPeriod,
-  inQueue,
-  passedVotingAndGrace,
   determineProposalType,
   descriptionMaker,
   hashMaker,
@@ -22,78 +18,10 @@ const _web3 = new Web3(
 
 export const resolvers = {
   Proposal: {
-    status: (proposal, _args, _context) => {
-      const currentPeriod = _context.currentPeriod;
-      return determineProposalStatus(
-        proposal,
-        +currentPeriod,
-        +proposal.moloch.votingPeriodLength,
-        +proposal.moloch.gracePeriodLength,
-        +proposal.moloch.version,
-      );
+    status: (proposal) => {
+      return determineProposalStatus(proposal, proposal.moloch);
     },
-    gracePeriod: (proposal, _args, _context) => {
-      const currentPeriod = _context.currentPeriod;
-      if (
-        inGracePeriod(
-          proposal,
-          currentPeriod,
-          +proposal.moloch.votingPeriodLength,
-          +proposal.moloch.gracePeriodLength,
-        )
-      ) {
-        return (
-          +proposal.startingPeriod +
-          +proposal.moloch.votingPeriodLength +
-          +proposal.moloch.gracePeriodLength -
-          currentPeriod +
-          1 // TODO: why plus 1 here? abort? ¯\_(ツ)_/¯
-        );
-      }
-      return 0;
-    },
-    votingEnds: (proposal, _args, _context) => {
-      const currentPeriod = _context.currentPeriod;
-
-      if (
-        inVotingPeriod(
-          proposal,
-          currentPeriod,
-          +proposal.moloch.votingPeriodLength,
-        )
-      ) {
-        return (
-          proposal.startingPeriod +
-          +proposal.moloch.votingPeriodLength -
-          currentPeriod
-        );
-      }
-      return 0;
-    },
-    votingStarts: (proposal, _args, _context) => {
-      const currentPeriod = _context.currentPeriod;
-      if (inQueue(proposal, currentPeriod)) {
-        return proposal.startingPeriod - currentPeriod;
-      }
-      return 0;
-    },
-    readyForProcessing: (proposal, _args, _context) => {
-      const currentPeriod = _context.currentPeriod;
-      if (
-        passedVotingAndGrace(
-          proposal,
-          currentPeriod,
-          +proposal.moloch.votingPeriodLength,
-          +proposal.moloch.gracePeriodLength,
-          +proposal.moloch.version,
-        ) &&
-        !proposal.processed
-      ) {
-        return true;
-      }
-      return false;
-    },
-    proposalType: (proposal, _args, _context) => {
+    proposalType: (proposal) => {
       return determineProposalType(proposal);
     },
     title: (proposal) => {

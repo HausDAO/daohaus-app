@@ -23,6 +23,7 @@ import TributeInput from './TributeInput';
 import PaymentInput from './PaymentInput';
 import AddressInput from './AddressInput';
 import DetailsFields from './DetailFields';
+import { detailsToJSON } from '../../utils/proposal-helper';
 
 const FundingProposalForm = () => {
   const [loading, setLoading] = useState(false);
@@ -82,12 +83,7 @@ const FundingProposalForm = () => {
   const onSubmit = async (values) => {
     setLoading(true);
 
-    const details = JSON.stringify({
-      title: values.title,
-      description: values.description,
-      link: 'https://' + values.link,
-      hash: Math.random(0, 10000),
-    });
+    const details = detailsToJSON(values);
 
     try {
       dao.daoService.moloch.submitProposal(
@@ -186,10 +182,12 @@ const FundingProposalForm = () => {
           )}
           {(!showShares || !showLoot || !showTribute) && (
             <Menu textTransform='uppercase'>
-              <MenuButton>
-                <Button variant='outline' rightIcon={<Icon as={RiAddFill} />}>
-                  Additional Options
-                </Button>
+              <MenuButton
+                as={Button}
+                variant='outline'
+                rightIcon={<Icon as={RiAddFill} />}
+              >
+                Additional Options
               </MenuButton>
               <MenuList>
                 {!showShares && (

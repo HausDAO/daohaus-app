@@ -33,7 +33,7 @@ const Profile = () => {
   useEffect(() => {
     if (memberWallet) {
       setIsMember(
-        memberWallet.memberAddress.toLowerCase === params.id.toLowerCase(),
+        memberWallet.memberAddress.toLowerCase() === params.id.toLowerCase(),
       );
     }
   }, [memberWallet, params]);

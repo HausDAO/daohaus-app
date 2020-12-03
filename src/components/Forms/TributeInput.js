@@ -60,7 +60,7 @@ const TributeInput = ({ register, setValue, getValues }) => {
 
   const unlock = async () => {
     setLoading(true);
-    const token = getValues('tributeOffered');
+    const token = getValues('tributeToken');
     try {
       await dao.daoService.token.unlock(token);
       setUnlocked(true);

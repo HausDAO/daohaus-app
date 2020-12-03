@@ -1,20 +1,33 @@
 import React, { useState, useEffect } from 'react';
-import { formatDistanceToNow, isBefore } from 'date-fns';
 import { Badge, Flex, Box, Icon, Link, Skeleton, Text } from '@chakra-ui/react';
 import ContentBox from '../Shared/ContentBox';
 import { RiExternalLinkLine } from 'react-icons/ri';
 import { FaThumbsUp, FaThumbsDown } from 'react-icons/fa';
 import { utils } from 'web3';
+import ReactPlayer from 'react-player';
 
 import { useMembers, useMemberWallet } from '../../contexts/PokemolContext';
 import { useTheme } from '../../contexts/CustomThemeContext';
 import { memberProfile, proposalDetails } from '../../utils/helpers';
-import { getProposalCountdownText } from '../../utils/proposal-helper';
+import {
+  getProposalCountdownText,
+  getProposalDetailStatus,
+} from '../../utils/proposal-helper';
 import ProposalMinionCard from './ProposalMinionCard';
 import TextBox from '../Shared/TextBox';
 import MemberAvatar from '../Members/MemberAvatar';
+import { ZERO_ADDRESS } from '../../utils/constants';
 
-const ZERO_ADDRESS = '0x0000000000000000000000000000000000000000';
+const urlify = (text) => {
+  var urlRegex = /(https?:\/\/[^\s]+)/g;
+  return text.replace(urlRegex, function(url) {
+    return (
+      '<a rel="noopener noreferrer" target="_blank" href="' +
+      url +
+      '"> link </a>'
+    );
+  });
+};
 
 const ProposalDetail = ({ proposal }) => {
   const [members] = useMembers();
@@ -37,8 +50,6 @@ const ProposalDetail = ({ proposal }) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [memberWallet, proposal]);
 
-  // console.log('proposalDetail js', proposal);
-
   return (
     <ContentBox>
       <Box>
@@ -47,25 +58,11 @@ const ProposalDetail = ({ proposal }) => {
             <TextBox>
               {proposal ? proposal.proposalType : theme.daoMeta.proposal}
             </TextBox>
+
             <Box>
               {proposal?.proposalIndex ? (
                 <>
-                  <TextBox>
-                    {isBefore(
-                      Date.now(),
-                      new Date(+proposal?.votingPeriodEnds * 1000),
-                    )
-                      ? 'Voting Period Ends'
-                      : 'Voting Ended'}
-                  </TextBox>
-                  <TextBox fontSize='lg' variant='value'>
-                    {formatDistanceToNow(
-                      new Date(+proposal?.votingPeriodEnds * 1000),
-                      {
-                        addSuffix: true,
-                      },
-                    )}
-                  </TextBox>
+                  {proposal?.status ? getProposalDetailStatus(proposal) : '--'}
                 </>
               ) : (
                 <>
@@ -87,16 +84,38 @@ const ProposalDetail = ({ proposal }) => {
             <ProposalMinionCard proposal={proposal} />
           ) : (
             <Skeleton isLoaded={details?.description}>
-              <Box w='100%'>{details?.description}</Box>
+              {details?.description?.indexOf('http') > -1 ? (
+                <Box
+                  w='100%'
+                  dangerouslySetInnerHTML={{
+                    __html: urlify(details?.description),
+                  }}
+                />
+              ) : (
+                <Box w='100%'>{details?.description}</Box>
+              )}
             </Skeleton>
           )}
           <Box mt={6}>
-            <TextBox>Link</TextBox>
+            {!ReactPlayer.canPlay(details?.link) ? (
+              <TextBox>Link</TextBox>
+            ) : null}
             <Skeleton isLoaded={details?.link}>
-              <Link href={details?.link} target='_blank'>
-                {details?.link ? details.link : '-'}{' '}
-                <Icon as={RiExternalLinkLine} color='primary.50' />
-              </Link>
+              {ReactPlayer.canPlay(details?.link) ? (
+                <Box width='100%'>
+                  <ReactPlayer
+                    url={details?.link}
+                    playing={false}
+                    loop={false}
+                    width='100%'
+                  />
+                </Box>
+              ) : (
+                <Link href={details?.link} target='_blank'>
+                  {details?.link ? details.link : '-'}{' '}
+                  <Icon as={RiExternalLinkLine} color='primary.50' />
+                </Link>
+              )}
             </Skeleton>
           </Box>
           <Flex w='100%' justify='space-between' mt={6}>

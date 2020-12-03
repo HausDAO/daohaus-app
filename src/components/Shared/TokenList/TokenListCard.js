@@ -5,19 +5,25 @@ import UsdPrice from '../UsdPrice';
 import UsdValue from '../UsdValue';
 import Withdraw from '../../Forms/Withdraw';
 import SyncToken from '../../Forms/SyncToken';
+import { useMemberWallet } from '../../../contexts/PokemolContext';
 
 const TokenListCard = ({ token, isLoaded, isMember, isBank, hasAction }) => {
+  const [memberWallet] = useMemberWallet();
   const [hasBalance, setHasBalance] = useState();
   const [needsSync, setNeedsSync] = useState();
   const [optimisticWithdraw, setOptimisticWithdraw] = useState(false);
   const [optimisticSync, setOptimisticSync] = useState(false);
 
   useEffect(() => {
+    console.log('isMember', isMember);
     setHasBalance(isMember && +token.tokenBalance > 0);
     setNeedsSync(
-      isBank && token.contractTokenBalance !== token.contractBabeBalance,
+      memberWallet &&
+        memberWallet.activeMember &&
+        isBank &&
+        token.contractTokenBalance !== token.contractBabeBalance,
     );
-  }, [token, isMember, isBank]);
+  }, [token, isMember, isBank, memberWallet]);
 
   const checkOptimisticBalance = () => {
     const optimisticBalance =

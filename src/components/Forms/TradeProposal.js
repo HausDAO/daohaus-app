@@ -22,6 +22,7 @@ import TextBox from '../Shared/TextBox';
 import DetailsFields from './DetailFields';
 import PaymentInput from './PaymentInput';
 import TributeInput from './TributeInput';
+import { detailsToJSON } from '../../utils/proposal-helper';
 
 const TradeProposalForm = () => {
   const [loading, setLoading] = useState(false);
@@ -82,13 +83,7 @@ const TradeProposalForm = () => {
     setLoading(true);
 
     console.log(values);
-
-    const details = JSON.stringify({
-      title: values.title,
-      description: values.description,
-      link: 'https://' + values.link,
-      hash: Math.random(0, 10000),
-    });
+    const details = detailsToJSON(values);
 
     try {
       dao.daoService.moloch.submitProposal(
@@ -204,6 +199,7 @@ const TradeProposalForm = () => {
             <Menu color='white' textTransform='uppercase'>
               <MenuButton
                 as={Button}
+                variant='outline'
                 rightIcon={<Icon as={RiAddFill} color='primary.500' />}
               >
                 Additional Options

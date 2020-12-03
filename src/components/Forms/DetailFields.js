@@ -41,12 +41,7 @@ const DetailsFields = ({ register }) => {
           type='textarea'
           mb={0}
           h={10}
-          ref={register({
-            required: {
-              value: true,
-              message: 'Description is required',
-            },
-          })}
+          ref={register()}
           color='white'
           focusBorderColor='secondary.500'
         />
@@ -62,12 +57,7 @@ const DetailsFields = ({ register }) => {
             placeholder='daolink.club'
             color='white'
             focusBorderColor='secondary.500'
-            ref={register({
-              required: {
-                value: true,
-                message: 'Reference Link is required',
-              },
-            })}
+            ref={register()}
           />
         </InputGroup>
       </Box>
