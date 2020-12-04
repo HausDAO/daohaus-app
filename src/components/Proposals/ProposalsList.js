@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Flex } from '@chakra-ui/react';
+import { Flex, Text, Box } from '@chakra-ui/react';
 
 import {
   useDao,
@@ -104,6 +104,11 @@ const ProposalsList = () => {
           allRecords={listProposals}
         />
       ) : null}
+      {proposals && !proposals.length && (
+        <Box m={6}>
+          <Text>No Proposals here yet</Text>
+        </Box>
+      )}
     </>
   );
 };

@@ -30,7 +30,8 @@ const Dao = () => {
   useEffect(() => {
     if (proposals && !proposals.length) {
       // need to wait for proposals to be fully loaded
-      console.log('maproposals', proposals);
+      // TODO: edge when switching from a new dao proposal page to a current dao proposal page
+      // this popup still shows, proposals must be set empty on transition
       openModal('newSummonerModal');
     }
     // eslint-disable-next-line
