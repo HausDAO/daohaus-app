@@ -15,25 +15,30 @@ import {
 import makeBlockie from 'ethereum-blockies-base64';
 
 import ContentBox from '../Shared/ContentBox';
-// import { getProposalCountdownText } from '../../utils/proposal-helper';
-
-// TODO: get getProposalCountdownText(activity) outside of dao context?
 
 const DaoActivityCard = ({ activity, isLoaded }) => {
   const [profile, setProfile] = useState();
 
   useEffect(() => {
+    let isCancelled = false;
     const fetchProfile = async () => {
       let profileRes;
       try {
         profileRes = await getProfile(activity.activityData.memberAddress);
       } catch (err) {}
-      setProfile(profileRes);
+
+      if (!isCancelled) {
+        setProfile(profileRes);
+      }
     };
 
     if (activity.activityData) {
       fetchProfile();
     }
+
+    return () => {
+      isCancelled = true;
+    };
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [activity]);

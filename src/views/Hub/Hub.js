@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Box, Flex, Link } from '@chakra-ui/react';
 
 import { useUser } from '../../contexts/PokemolContext';
+import { useTheme } from '../../contexts/CustomThemeContext';
 import GraphFetch from '../../components/Shared/GraphFetch';
 import MemberDaoList from '../../components/Hub/MemberDaoList';
 import HubSignedOut from '../../components/Hub/HubSignedOut';
@@ -10,11 +11,18 @@ import HubActivityFeed from '../../components/Hub/HubActivityFeed';
 import TextBox from '../../components/Shared/TextBox';
 import ContentBox from '../../components/Shared/ContentBox';
 import { HUB_MEMBERSHIPS } from '../../utils/apollo/member-queries';
+import { defaultTheme } from '../../themes/theme-defaults';
 
 const Hub = () => {
   const [user] = useUser();
+  const [, setTheme] = useTheme();
   const [memberDaos, setMemberDaos] = useState();
   const [v2Daos, setV2Daos] = useState([]);
+
+  useEffect(() => {
+    setTheme(defaultTheme);
+    // eslint-disable-next-line
+  }, []);
 
   useEffect(() => {
     if (memberDaos) {
