@@ -11,20 +11,28 @@ const ActivityCard = ({ activity, isLoaded }) => {
   const [profile, setProfile] = useState();
 
   useEffect(() => {
+    let isCancelled = false;
     const fetchProfile = async () => {
       let profileRes;
       try {
         profileRes = await getProfile(activity.memberAddress);
       } catch (err) {}
-      setProfile({
-        memberAddress: activity.memberAddress,
-        profile: profileRes,
-      });
+
+      if (!isCancelled) {
+        setProfile({
+          memberAddress: activity.memberAddress,
+          profile: profileRes,
+        });
+      }
     };
 
     if (activity.memberAddress) {
       fetchProfile();
     }
+
+    return () => {
+      isCancelled = true;
+    };
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [activity]);
