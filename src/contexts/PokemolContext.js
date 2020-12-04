@@ -13,7 +13,12 @@ function usePokemolContext() {
 const initialState = {
   network: supportedChains[process.env.REACT_APP_NETWORK_ID],
   refetchQuery: null,
-  modals: { changeDao: false, accountModal: false, ragequitModal: false },
+  modals: {
+    changeDao: false,
+    accountModal: false,
+    ragequitModal: false,
+    newSummonerModal: false,
+  },
 
   user: null,
   web3Connect: {
@@ -32,7 +37,7 @@ const initialState = {
   daoMetadata: null,
   daoGraphData: null,
   userDaos: [],
-  proposals: [],
+  proposals: null,
   members: [],
   balances: [],
   activities: {},

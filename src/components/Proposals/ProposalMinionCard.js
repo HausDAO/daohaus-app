@@ -43,7 +43,7 @@ const ProposalMinionCard = ({ proposal }) => {
       <Skeleton isLoaded={!loading}>
         <Box w='100%' mt={8}>
           <Text>Target Address: {minionDeets?.to}</Text>
-          <Text>Submitted by {minionDeets?.proposer}</Text>
+          <Text>Submitted by: {minionDeets?.proposer}</Text>
           <Text>More info</Text>
         </Box>
       </Skeleton>

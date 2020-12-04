@@ -82,7 +82,7 @@ const Header = () => {
               Edit 3Box Profile
             </Button>
           )}
-          {location.pathname === `/dao/${dao?.address}/proposals` && (
+          {location.pathname === `/dao/${dao?.address}/proposals` && user && (
             <Button
               as={RouterLink}
               to={`/dao/${dao?.address}/proposals/new`}
@@ -91,7 +91,7 @@ const Header = () => {
               New {theme.daoMeta.proposal}
             </Button>
           )}
-          {location.pathname === `/dao/${dao?.address}/members` && (
+          {location.pathname === `/dao/${dao?.address}/members` && user && (
             <>
               {memberWallet && !memberWallet.activeMember ? (
                 <Button as={RouterLink} to={`/dao/${dao?.address}/members/new`}>
@@ -100,7 +100,7 @@ const Header = () => {
               ) : null}
             </>
           )}
-          {location.pathname === `/dao/${dao?.address}/bank` && (
+          {location.pathname === `/dao/${dao?.address}/bank` && user && (
             <Button
               as={RouterLink}
               to={`/dao/${dao?.address}/bank/token/new`}
@@ -111,6 +111,7 @@ const Header = () => {
           )}
           {(location.pathname === `/dao/${dao?.address}/settings` ||
             location.pathname === `/dao/${dao?.address}/settings/boosts`) &&
+            user &&
             // <Button
             //   as={RouterLink}
             //   to={`/dao/${dao?.address}/settings/boosts/new`}
@@ -132,7 +133,9 @@ const Header = () => {
                 variant='outline'
                 onClick={() => openModal('accountModal')}
               >
-                <UserAvatar user={user.profile ? user.profile : user} />
+                <UserAvatar
+                  user={memberWallet?.activeMember ? user.profile : user}
+                />
               </Button>
 
               <AccountModal isOpen={modals.accountModal} />

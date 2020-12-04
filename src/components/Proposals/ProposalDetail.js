@@ -1,5 +1,14 @@
 import React, { useState, useEffect } from 'react';
-import { Badge, Flex, Box, Icon, Link, Skeleton, Text } from '@chakra-ui/react';
+import {
+  Badge,
+  Flex,
+  Box,
+  Icon,
+  Link,
+  Skeleton,
+  Text,
+  Image,
+} from '@chakra-ui/react';
 import ContentBox from '../Shared/ContentBox';
 import { RiExternalLinkLine } from 'react-icons/ri';
 import { FaThumbsUp, FaThumbsDown } from 'react-icons/fa';
@@ -16,6 +25,7 @@ import {
 import ProposalMinionCard from './ProposalMinionCard';
 import TextBox from '../Shared/TextBox';
 import MemberAvatar from '../Members/MemberAvatar';
+import UserAvatar from '../Shared/UserAvatar';
 import { ZERO_ADDRESS } from '../../utils/constants';
 
 const urlify = (text) => {
@@ -27,6 +37,11 @@ const urlify = (text) => {
       '"> link </a>'
     );
   });
+};
+
+const hasImage = (string) => {
+  const imageExtensions = ['.jpg', '.png', '.gif'];
+  return imageExtensions.some((o) => string.includes(o));
 };
 
 const ProposalDetail = ({ proposal }) => {
@@ -77,44 +92,85 @@ const ProposalDetail = ({ proposal }) => {
               )}
             </Box>
           </Flex>
-          <Skeleton isLoaded={details?.title}>
-            <Text fontSize='3xl'>{details?.title ? details?.title : '-'}</Text>
+
+          <Skeleton
+            isLoaded={
+              (details && Object.keys(details).length > 0) ||
+              proposal?.minionAddress
+            }
+          >
+            {details && Object.keys(details).includes('title') ? (
+              <Text fontSize='3xl'>{details.title}</Text>
+            ) : proposal?.minionAddress ? null : (
+              '-'
+            )}
           </Skeleton>
+
           {proposal?.minionAddress ? (
             <ProposalMinionCard proposal={proposal} />
           ) : (
             <Skeleton isLoaded={details?.description}>
-              {details?.description?.indexOf('http') > -1 ? (
-                <Box
-                  w='100%'
-                  dangerouslySetInnerHTML={{
-                    __html: urlify(details?.description),
-                  }}
-                />
-              ) : (
-                <Box w='100%'>{details?.description}</Box>
-              )}
+              {details && Object.keys(details).includes('description') ? (
+                details?.description?.indexOf('http') > -1 ? (
+                  <Box
+                    w='100%'
+                    dangerouslySetInnerHTML={{
+                      __html: urlify(details?.description),
+                    }}
+                  />
+                ) : (
+                  <Box w='100%'>{details?.description}</Box>
+                )
+              ) : null}
             </Skeleton>
           )}
-          <Box mt={6}>
-            {!ReactPlayer.canPlay(details?.link) ? (
+          <Box
+            mt={
+              (details && Object.keys(details).length > 0) ||
+              proposal?.minionAddress
+                ? 6
+                : 2
+            }
+          >
+            {details &&
+            Object.keys(details).includes('link') &&
+            !ReactPlayer.canPlay(details?.link) &&
+            !hasImage(details?.link) ? (
               <TextBox>Link</TextBox>
             ) : null}
-            <Skeleton isLoaded={details?.link}>
-              {ReactPlayer.canPlay(details?.link) ? (
-                <Box width='100%'>
-                  <ReactPlayer
-                    url={details?.link}
-                    playing={false}
-                    loop={false}
-                    width='100%'
-                  />
-                </Box>
-              ) : (
-                <Link href={details?.link} target='_blank'>
-                  {details?.link ? details.link : '-'}{' '}
-                  <Icon as={RiExternalLinkLine} color='primary.50' />
-                </Link>
+            <Skeleton
+              isLoaded={
+                (details && Object.keys(details).length > 0) ||
+                proposal?.minionAddress
+              }
+            >
+              {details ? (
+                Object.keys(details).includes('link') ? (
+                  ReactPlayer.canPlay(details?.link) ? (
+                    <Box width='100%'>
+                      <ReactPlayer
+                        url={details?.link}
+                        playing={false}
+                        loop={false}
+                        width='100%'
+                      />
+                    </Box>
+                  ) : hasImage(details?.link) ? (
+                    <Image
+                      src={`https://${details?.link}`}
+                      maxW='100%'
+                      margin='0 auto'
+                      alt='link image'
+                    />
+                  ) : (
+                    <Link href={`https://${details?.link}`} target='_blank'>
+                      {details?.link ? details.link : '-'}{' '}
+                      <Icon as={RiExternalLinkLine} color='primary.50' />
+                    </Link>
+                  )
+                ) : null
+              ) : proposal?.minionAddress ? null : (
+                '--'
               )}
             </Skeleton>
           </Box>
@@ -171,8 +227,59 @@ const ProposalDetail = ({ proposal }) => {
             )}
           </Flex>
         </Box>
+      </Box>
 
-        <Flex>
+      <Flex mt={6} justify='space-between' pr={!memberVote && '20%'} w='100%'>
+        <Box>
+          <TextBox mb={2}>Submitted By</TextBox>
+          <Skeleton isLoaded={members && proposal?.proposer}>
+            {members && proposal?.proposer ? (
+              memberProfile(members, proposal?.proposer).profile ? (
+                <MemberAvatar
+                  member={memberProfile(members, proposal?.proposer)}
+                />
+              ) : (
+                <UserAvatar user={memberProfile(members, proposal?.proposer)} />
+              )
+            ) : (
+              '--'
+            )}
+          </Skeleton>
+        </Box>
+        <Box>
+          <TextBox mb={2}>Recipient</TextBox>
+          <Skeleton isLoaded={members && proposal?.applicant}>
+            {members && proposal?.applicant ? (
+              memberProfile(
+                members,
+                proposal?.applicant !== ZERO_ADDRESS
+                  ? proposal?.applicant
+                  : proposal?.proposer,
+              ).profile ? (
+                <MemberAvatar
+                  member={memberProfile(
+                    members,
+                    proposal?.applicant !== ZERO_ADDRESS
+                      ? proposal?.applicant
+                      : proposal?.proposer,
+                  )}
+                />
+              ) : (
+                <UserAvatar
+                  user={memberProfile(
+                    members,
+                    proposal?.applicant !== ZERO_ADDRESS
+                      ? proposal?.applicant
+                      : proposal?.proposer,
+                  )}
+                />
+              )
+            ) : (
+              '--'
+            )}
+          </Skeleton>
+        </Box>
+        <Box>
           {memberVote &&
             (+memberVote.uintVote === 1 ? (
               <Flex
@@ -207,38 +314,6 @@ const ProposalDetail = ({ proposal }) => {
                 <Icon as={FaThumbsDown} color='secondary.500' />
               </Flex>
             ))}
-        </Flex>
-      </Box>
-
-      <Flex w='80%' mt={6} justify='space-between'>
-        <Box mr={5}>
-          <TextBox mb={2}>Submitted By</TextBox>
-          <Skeleton isLoaded={members && proposal?.proposer}>
-            {members && proposal?.proposer ? (
-              <MemberAvatar
-                member={memberProfile(members, proposal?.proposer)}
-              />
-            ) : (
-              '--'
-            )}
-          </Skeleton>
-        </Box>
-        <Box>
-          <TextBox mb={2}>Recipient</TextBox>
-          <Skeleton isLoaded={members && proposal?.applicant}>
-            {members && proposal?.applicant ? (
-              <MemberAvatar
-                member={memberProfile(
-                  members,
-                  proposal?.applicant !== ZERO_ADDRESS
-                    ? proposal?.applicant
-                    : proposal?.proposer,
-                )}
-              />
-            ) : (
-              '--'
-            )}
-          </Skeleton>
         </Box>
       </Flex>
     </ContentBox>

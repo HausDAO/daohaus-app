@@ -106,6 +106,7 @@ const GuildKickProposalForm = () => {
             setValue={setValue}
             watch={watch}
             formLabel={'Member To Kick'}
+            guildKick={true}
           />
         </Box>
       </FormControl>

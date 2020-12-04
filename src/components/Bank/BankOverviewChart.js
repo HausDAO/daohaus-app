@@ -31,6 +31,8 @@ import { usePrices } from '../../contexts/PokemolContext';
 import { bankChartTimeframes } from '../../content/chart-content';
 
 const BankOverviewChart = ({ balances, dao }) => {
+  console.log('balances', balances);
+
   const [theme] = useTheme();
   const [prices] = usePrices();
   const [chartData, setChartData] = useState([]);
@@ -91,54 +93,56 @@ const BankOverviewChart = ({ balances, dao }) => {
 
   return (
     <Box>
-      <Skeleton isLoaded={chartData.length > 0}>
-        <Flex justify='flex-end'>
-          <Menu>
-            <MenuButton>
-              Time Frame: {timeframe.name}{' '}
-              <Icon as={FaChevronDown} h='12px' w='12px' />
-            </MenuButton>
-            <MenuList>
-              {bankChartTimeframes.map((time) => {
-                return (
-                  <MenuItem
-                    key={time.value}
-                    onClick={() => handleTimeChange(time)}
-                  >
-                    {time.name}
-                  </MenuItem>
-                );
-              })}
-            </MenuList>
-          </Menu>
-        </Flex>
-        <ContentBox minH='300px'>
-          {chartData.length > 0 ? (
-            <FlexibleWidthXYPlot
-              height={300}
-              margin={{ left: 0, right: 0, top: 40, bottom: 40 }}
-              yDomain={[0, chartData[chartData.length - 1].y || 10]}
-            >
-              {gradient}
-              <LineSeries
-                animate
-                curve='curveNatural'
-                data={chartData}
-                color={theme.colors.primary[50]}
-              />
-              <AreaSeries
-                animate
-                curve='curveNatural'
-                data={chartData}
-                fill={'url(#gradient)'}
-                stroke='transparent'
-              />
-              <XAxis xType='time' tickTotal={0} />
-              <YAxis tickTotal={0} />
-            </FlexibleWidthXYPlot>
-          ) : null}
-        </ContentBox>
-      </Skeleton>
+      {balances.length > 0 ? (
+        <Skeleton isLoaded={chartData.length > 0}>
+          <Flex justify='flex-end'>
+            <Menu>
+              <MenuButton>
+                Time Frame: {timeframe.name}{' '}
+                <Icon as={FaChevronDown} h='12px' w='12px' />
+              </MenuButton>
+              <MenuList>
+                {bankChartTimeframes.map((time) => {
+                  return (
+                    <MenuItem
+                      key={time.value}
+                      onClick={() => handleTimeChange(time)}
+                    >
+                      {time.name}
+                    </MenuItem>
+                  );
+                })}
+              </MenuList>
+            </Menu>
+          </Flex>
+          <ContentBox minH='300px'>
+            {chartData.length > 0 ? (
+              <FlexibleWidthXYPlot
+                height={300}
+                margin={{ left: 0, right: 0, top: 40, bottom: 40 }}
+                yDomain={[0, chartData[chartData.length - 1].y || 10]}
+              >
+                {gradient}
+                <LineSeries
+                  animate
+                  curve='curveNatural'
+                  data={chartData}
+                  color={theme.colors.primary[50]}
+                />
+                <AreaSeries
+                  animate
+                  curve='curveNatural'
+                  data={chartData}
+                  fill={'url(#gradient)'}
+                  stroke='transparent'
+                />
+                <XAxis xType='time' tickTotal={0} />
+                <YAxis tickTotal={0} />
+              </FlexibleWidthXYPlot>
+            ) : null}
+          </ContentBox>
+        </Skeleton>
+      ) : null}
     </Box>
   );
 };

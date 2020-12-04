@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from 'react';
-import { Box, Flex } from '@chakra-ui/react';
+import { Box, Flex, Link } from '@chakra-ui/react';
 
 import { useUser } from '../../contexts/PokemolContext';
+import { useTheme } from '../../contexts/CustomThemeContext';
 import GraphFetch from '../../components/Shared/GraphFetch';
 import MemberDaoList from '../../components/Hub/MemberDaoList';
 import HubSignedOut from '../../components/Hub/HubSignedOut';
@@ -10,11 +11,18 @@ import HubActivityFeed from '../../components/Hub/HubActivityFeed';
 import TextBox from '../../components/Shared/TextBox';
 import ContentBox from '../../components/Shared/ContentBox';
 import { HUB_MEMBERSHIPS } from '../../utils/apollo/member-queries';
+import { defaultTheme } from '../../themes/theme-defaults';
 
 const Hub = () => {
   const [user] = useUser();
+  const [, setTheme] = useTheme();
   const [memberDaos, setMemberDaos] = useState();
   const [v2Daos, setV2Daos] = useState([]);
+
+  useEffect(() => {
+    setTheme(defaultTheme);
+    // eslint-disable-next-line
+  }, []);
 
   useEffect(() => {
     if (memberDaos) {
@@ -34,13 +42,41 @@ const Hub = () => {
           <Flex>
             <Box w='50%'>
               <HubProfileCard />
-              <ContentBox p={6} mt={6} maxW='600px'>
-                {v2Daos.length > 0 ? (
-                  <>
-                    <MemberDaoList daos={v2Daos} />
-                  </>
-                ) : null}
-              </ContentBox>
+              {memberDaos && memberDaos.length > 0 ? (
+                <ContentBox p={6} mt={6} maxW='600px'>
+                  {v2Daos.length > 0 ? (
+                    <>
+                      <MemberDaoList daos={v2Daos} />
+                    </>
+                  ) : null}
+                </ContentBox>
+              ) : (
+                <ContentBox p={6} mt={6} maxW='600px'>
+                  <Flex>
+                    <TextBox>You aren’t a member in any daos yet!</TextBox>
+                  </Flex>
+
+                  <Flex align='center'>
+                    <Box
+                      w='60px'
+                      h='60px'
+                      border='1px dashed rgba(255, 255, 255, 0.2);'
+                      borderRadius='40px'
+                      my={10}
+                    />
+                    <TextBox ml='15px'>Your daos will show here</TextBox>
+                  </Flex>
+
+                  <Link
+                    href='https://daohaus.club'
+                    isExternal
+                    fontSize='md'
+                    textTransform='uppercase'
+                  >
+                    Explore more DAOs
+                  </Link>
+                </ContentBox>
+              )}
             </Box>
 
             <Box pl={8}>

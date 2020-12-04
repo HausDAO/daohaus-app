@@ -101,6 +101,8 @@ const DaoInit = () => {
     if (boosts.customTheme?.active) {
       const themeUpdate = { ...defaultTheme, ...boosts.customTheme.metadata };
       setTheme(themeUpdate);
+    } else {
+      setTheme(defaultTheme);
     }
 
     const uiMeta = boosts.customTheme

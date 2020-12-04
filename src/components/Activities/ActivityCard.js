@@ -1,11 +1,42 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-
-import { formatCreatedAt } from '../../utils/helpers';
+import { getProfile } from '3box';
 import { Badge, Box, Heading, Stack, Skeleton } from '@chakra-ui/react';
 
+import { formatCreatedAt } from '../../utils/helpers';
 import ContentBox from '../Shared/ContentBox';
+import MemberAvatar from '../Members/MemberAvatar';
+
 const ActivityCard = ({ activity, isLoaded }) => {
+  const [profile, setProfile] = useState();
+
+  useEffect(() => {
+    let isCancelled = false;
+    const fetchProfile = async () => {
+      let profileRes;
+      try {
+        profileRes = await getProfile(activity.memberAddress);
+      } catch (err) {}
+
+      if (!isCancelled) {
+        setProfile({
+          memberAddress: activity.memberAddress,
+          profile: profileRes,
+        });
+      }
+    };
+
+    if (activity.memberAddress) {
+      fetchProfile();
+    }
+
+    return () => {
+      isCancelled = true;
+    };
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [activity]);
+
   return (
     <ContentBox mt={2}>
       <Link to={`/dao/${activity.molochAddress}`}>
@@ -36,8 +67,7 @@ const ActivityCard = ({ activity, isLoaded }) => {
               <Box>Shares: {activity?.shares ? activity.shares : '--'}</Box>
               <Box>Loot: {activity?.loot ? activity.loot : '--'}</Box>
               <Box>
-                memberAddress:{' '}
-                {activity?.memberAddress ? activity.memberAddress : '--'}
+                <MemberAvatar member={profile} />
               </Box>
             </Skeleton>
           </>
