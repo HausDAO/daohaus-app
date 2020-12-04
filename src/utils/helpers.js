@@ -50,7 +50,7 @@ export const memberProfile = (members, address) => {
   if (member.length > 0 && Object.keys(member[0].profile).length > 0) {
     return member[0];
   }
-  return { profile: { username: address } };
+  return { username: address };
 };
 
 export const validDaoParams = (location) => {

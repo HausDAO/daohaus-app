@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Box, Flex } from '@chakra-ui/react';
+import { Box, Flex, Link } from '@chakra-ui/react';
 
 import { useUser } from '../../contexts/PokemolContext';
 import GraphFetch from '../../components/Shared/GraphFetch';
@@ -34,13 +34,41 @@ const Hub = () => {
           <Flex>
             <Box w='50%'>
               <HubProfileCard />
-              <ContentBox p={6} mt={6} maxW='600px'>
-                {v2Daos.length > 0 ? (
-                  <>
-                    <MemberDaoList daos={v2Daos} />
-                  </>
-                ) : null}
-              </ContentBox>
+              {memberDaos && memberDaos.length > 0 ? (
+                <ContentBox p={6} mt={6} maxW='600px'>
+                  {v2Daos.length > 0 ? (
+                    <>
+                      <MemberDaoList daos={v2Daos} />
+                    </>
+                  ) : null}
+                </ContentBox>
+              ) : (
+                <ContentBox p={6} mt={6} maxW='600px'>
+                  <Flex>
+                    <TextBox>You aren’t a member in any daos yet!</TextBox>
+                  </Flex>
+
+                  <Flex align='center'>
+                    <Box
+                      w='60px'
+                      h='60px'
+                      border='1px dashed rgba(255, 255, 255, 0.2);'
+                      borderRadius='40px'
+                      my={10}
+                    />
+                    <TextBox ml='15px'>Your daos will show here</TextBox>
+                  </Flex>
+
+                  <Link
+                    href='https://daohaus.club'
+                    isExternal
+                    fontSize='md'
+                    textTransform='uppercase'
+                  >
+                    Explore more DAOs
+                  </Link>
+                </ContentBox>
+              )}
             </Box>
 
             <Box pl={8}>

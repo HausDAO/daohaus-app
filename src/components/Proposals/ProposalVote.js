@@ -150,7 +150,7 @@ const ProposalVote = ({ proposal, setProposal }) => {
         {proposal?.status === 'Unsponsored' && !proposal?.proposalIndex && (
           <Flex justify='center' direction='column'>
             <Flex justify='center' mb={4}>
-              <Box>
+              <Flex justify='center' direction='column'>
                 <TextBox>
                   Deposit to Sponsor{' '}
                   <Tooltip
@@ -162,7 +162,7 @@ const ProposalVote = ({ proposal, setProposal }) => {
                     <Icon mt='-4px' as={RiQuestionLine} />
                   </Tooltip>
                 </TextBox>
-                <TextBox variant='value'>
+                <TextBox variant='value' textAlign='center'>
                   {daoData?.proposalDeposit /
                     10 ** daoData?.depositToken.decimals}{' '}
                   {daoData?.depositToken?.symbol}
@@ -188,7 +188,7 @@ const ProposalVote = ({ proposal, setProposal }) => {
                     </Tooltip>
                   ) : null}
                 </TextBox>
-              </Box>
+              </Flex>
             </Flex>
             <Flex justify='space-around'>
               {+memberWallet?.allowance *

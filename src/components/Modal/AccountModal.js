@@ -23,6 +23,7 @@ import {
   useMembers,
   useModals,
   useWeb3Connect,
+  useMemberWallet,
 } from '../../contexts/PokemolContext';
 import { memberProfile } from '../../utils/helpers';
 import { DISPLAY_NAMES } from '../../utils/tx-processor-helper';
@@ -38,6 +39,7 @@ const AccountModal = ({ isOpen }) => {
 
   const [txProcessor] = useTxProcessor();
   const [web3connect] = useWeb3Connect();
+  const [memberWallet] = useMemberWallet();
 
   const [members] = useMembers();
   const [member, setMember] = useState(null);
@@ -126,13 +128,15 @@ const AccountModal = ({ isOpen }) => {
                 Connect a different wallet
               </Link>
             </>
-          ) : (
+          ) : memberWallet?.activeMember ? (
             <MemberInfoCardGuts
               user={user}
               member={member}
               context={'accountModal'}
               showMenu={false}
             />
+          ) : (
+            <HubProfileCard user={user} />
           )}
           <Box
             mx={-12}
@@ -145,16 +149,18 @@ const AccountModal = ({ isOpen }) => {
             <Box pt={6}>
               <Flex direction='row' justify='space-between' align='flex-start'>
                 <Flex direction='column'>
-                  <Link
-                    as={RouterLink}
-                    to={`/dao/${dao.address}/profile/${user.username}`}
-                    onClick={closeModals}
-                    color='secondary.400'
-                    _hover={{ color: 'secondary.600' }}
-                    mb='4px'
-                  >
-                    View Member Profile
-                  </Link>
+                  {memberWallet?.activeMember && (
+                    <Link
+                      as={RouterLink}
+                      to={`/dao/${dao.address}/profile/${user.username}`}
+                      onClick={closeModals}
+                      color='secondary.400'
+                      _hover={{ color: 'secondary.600' }}
+                      mb='4px'
+                    >
+                      View Member Profile
+                    </Link>
+                  )}
                   <Link
                     onClick={() => {
                       web3connect.w3c.clearCachedProvider();

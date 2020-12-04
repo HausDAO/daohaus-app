@@ -16,7 +16,12 @@ import {
 import { utils } from 'web3';
 import { RiAddFill, RiErrorWarningLine } from 'react-icons/ri';
 
-import { useDao, useTxProcessor, useUser } from '../../contexts/PokemolContext';
+import {
+  useDao,
+  useTxProcessor,
+  useUser,
+  useMemberWallet,
+} from '../../contexts/PokemolContext';
 import TextBox from '../Shared/TextBox';
 
 import PaymentInput from './PaymentInput';
@@ -31,6 +36,7 @@ const MemberProposalForm = () => {
   const [showPaymentRequest, setShowPaymentRequest] = useState(false);
   const [showApplicant, setShowApplicant] = useState(false);
   const [user] = useUser();
+  const [memberWallet] = useMemberWallet();
   const [dao] = useDao();
   const [txProcessor, updateTxProcessor] = useTxProcessor();
   const [currentError, setCurrentError] = useState(null);
@@ -56,9 +62,6 @@ const MemberProposalForm = () => {
       setCurrentError(null);
     }
   }, [errors]);
-
-  // TODO check tribute token < currentWallet.token.balance & unlock
-  // TODO check link is a valid link
 
   const txCallBack = (txHash, details) => {
     console.log('txCallBack', txProcessor);
@@ -104,6 +107,7 @@ const MemberProposalForm = () => {
       console.log('error: ', err);
     }
   };
+  console.log(memberWallet);
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
@@ -178,6 +182,8 @@ const MemberProposalForm = () => {
               register={register}
               setValue={setValue}
               watch={watch}
+              member={true}
+              newMember={!memberWallet.activeMember && true}
             />
           )}
           {(!showApplicant || !showLoot || !showPaymentRequest) && (

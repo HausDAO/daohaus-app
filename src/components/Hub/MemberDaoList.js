@@ -90,64 +90,34 @@ const MemberDaoList = ({ daos }) => {
 
   return (
     <Box w='100%'>
-      {daos?.length > 1 ? (
-        <>
-          <Flex justify='space-between' alignItems='center' mb={6}>
-            <TextBox>
-              Member of {daos.length} DAO{daos.length > 1 && 's'}
-            </TextBox>
-            {canSearch ? (
-              <div>
-                <Input
-                  type='search'
-                  className='input'
-                  placeholder='Search My Daos'
-                  onChange={(e) => handleChange(e)}
-                />
-              </div>
-            ) : null}
-          </Flex>
-
-          <Flex direction='row' overflowX='scroll' mb={6} maxW='100%'>
-            {visibleDaos.map((dao) => renderDaoAvatar(dao))}
-          </Flex>
-
-          <Link
-            href='https://daohaus.club'
-            isExternal
-            fontSize='md'
-            textTransform='uppercase'
-          >
-            Explore more DAOs on DAOhaus
-          </Link>
-        </>
-      ) : (
-        <>
-          <Flex>
-            <TextBox>You aren’t a member in any daos yet!</TextBox>
-          </Flex>
-
-          <Flex align='center'>
-            <Box
-              w='60px'
-              h='60px'
-              border='1px dashed rgba(255, 255, 255, 0.2);'
-              borderRadius='40px'
-              my={10}
+      <Flex justify='space-between' alignItems='center' mb={6}>
+        <TextBox>
+          Member of {daos.length} DAO{daos.length > 1 && 's'}
+        </TextBox>
+        {canSearch ? (
+          <div>
+            <Input
+              type='search'
+              className='input'
+              placeholder='Search My Daos'
+              onChange={(e) => handleChange(e)}
             />
-            <TextBox ml='15px'>Your daos will show here</TextBox>
-          </Flex>
+          </div>
+        ) : null}
+      </Flex>
 
-          <Link
-            href='https://daohaus.club'
-            isExternal
-            fontSize='md'
-            textTransform='uppercase'
-          >
-            Explore more DAOs on DAOhaus
-          </Link>
-        </>
-      )}
+      <Flex direction='row' overflowX='scroll' mb={6} maxW='100%'>
+        {visibleDaos.map((dao) => renderDaoAvatar(dao))}
+      </Flex>
+
+      <Link
+        href='https://daohaus.club'
+        isExternal
+        fontSize='md'
+        textTransform='uppercase'
+      >
+        Explore more DAOs on DAOhaus
+      </Link>
     </Box>
   );
 };
