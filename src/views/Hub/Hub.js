@@ -39,8 +39,12 @@ const Hub = () => {
     <Box p={6}>
       {user ? (
         <>
-          <Flex>
-            <Box w='50%'>
+          <Flex wrap='wrap'>
+            <Box
+              pr={[0, null, null, null, 6]}
+              mb={[6, null, null, null, 0]}
+              w={['100%', null, null, null, '50%']}
+            >
               <HubProfileCard />
               {memberDaos && memberDaos.length > 0 ? (
                 <ContentBox p={6} mt={6} maxW='600px'>
@@ -79,7 +83,7 @@ const Hub = () => {
               )}
             </Box>
 
-            <Box pl={8}>
+            <Box w={['100%', null, null, null, '50%']}>
               <Box
                 fontSize='md'
                 fontFamily='heading'
