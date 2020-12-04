@@ -115,7 +115,7 @@ const ProposalCard = ({ proposal, isLoaded }) => {
               </Flex>
             </Box>
           </Flex>
-          <Flex>
+          <Flex alignItems='center' height='80px'>
             {memberVote && (
               <Box fontSize='sm'>
                 {+memberVote.uintVote === 1 ? (
@@ -155,7 +155,7 @@ const ProposalCard = ({ proposal, isLoaded }) => {
             )}
           </Flex>
         </Box>
-        <Flex justify='space-between' mt={10}>
+        <Flex justify='space-between' mt={2}>
           {(proposal?.tributeOffered > 0 || !proposal?.tributeOffered) && (
             <Box>
               <Box
