@@ -1,5 +1,14 @@
 import React, { useState, useEffect } from 'react';
-import { Badge, Flex, Box, Icon, Link, Skeleton, Text } from '@chakra-ui/react';
+import {
+  Badge,
+  Flex,
+  Box,
+  Icon,
+  Link,
+  Skeleton,
+  Text,
+  Image,
+} from '@chakra-ui/react';
 import ContentBox from '../Shared/ContentBox';
 import { RiExternalLinkLine } from 'react-icons/ri';
 import { FaThumbsUp, FaThumbsDown } from 'react-icons/fa';
@@ -28,6 +37,12 @@ const urlify = (text) => {
       '"> link </a>'
     );
   });
+};
+
+const hasImage = (string) => {
+  const imageExtensions = ['.jpg', '.png', '.gif'];
+  console.log(string);
+  return imageExtensions.some((o) => string.includes(o));
 };
 
 const ProposalDetail = ({ proposal }) => {
@@ -120,7 +135,8 @@ const ProposalDetail = ({ proposal }) => {
           >
             {details &&
             Object.keys(details).includes('link') &&
-            !ReactPlayer.canPlay(details?.link) ? (
+            !ReactPlayer.canPlay(details?.link) &&
+            !hasImage(details?.link) ? (
               <TextBox>Link</TextBox>
             ) : null}
             <Skeleton
@@ -140,8 +156,15 @@ const ProposalDetail = ({ proposal }) => {
                         width='100%'
                       />
                     </Box>
+                  ) : hasImage(details?.link) ? (
+                    <Image
+                      src={`https://${details?.link}`}
+                      maxW='100%'
+                      margin='0 auto'
+                      alt='link image'
+                    />
                   ) : (
-                    <Link href={details?.link} target='_blank'>
+                    <Link href={`https://${details?.link}`} target='_blank'>
                       {details?.link ? details.link : '-'}{' '}
                       <Icon as={RiExternalLinkLine} color='primary.50' />
                     </Link>
