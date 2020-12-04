@@ -10,13 +10,16 @@ import {
   Spacer,
   Stack,
   IconButton,
+  useBreakpointValue,
 } from '@chakra-ui/react';
 
 import { motion } from 'framer-motion';
-import { useDao, useUser } from '../../contexts/PokemolContext';
+import { useDao, useUser, useModals } from '../../contexts/PokemolContext';
 import ChangeDao from '../Shared/ChangeDao';
-
 import Header from '../Shared/Header';
+import { Web3SignIn } from '../Shared/Web3SignIn';
+import UserAvatar from '../Shared/UserAvatar';
+import AccountModal from '../Modal/AccountModal';
 
 import {
   RiBookMarkLine,
@@ -34,6 +37,7 @@ import {
   RiFireLine,
   RiRocket2Line,
   RiArrowLeftSLine,
+  RiCloseLine,
 } from 'react-icons/ri';
 import { GiCastle } from 'react-icons/gi';
 import { useTheme } from '../../contexts/CustomThemeContext';
@@ -41,81 +45,248 @@ import { useTheme } from '../../contexts/CustomThemeContext';
 const MotionBox = motion.custom(Box);
 const MotionFlex = motion.custom(Flex);
 
-const bar = {
-  open: { width: 420 },
-  closed: { width: 100 },
-};
-
-const nav = {
-  open: {
-    opacity: 1,
-    pointerEvents: 'all',
-    marginLeft: '25px',
-    display: 'inline-block',
-  },
-  closed: {
-    opacity: 0,
-    pointerEvents: 'none',
-    marginLeft: '0px',
-    display: 'none',
-  },
-};
-
-const navFlex = {
-  open: {
-    opacity: 1,
-    pointerEvents: 'all',
-    marginLeft: '25px',
-    display: 'flex',
-  },
-  closed: {
-    opacity: 0,
-    pointerEvents: 'none',
-    marginLeft: '0px',
-    display: 'none',
-  },
-};
-
-const navLinks = {
-  open: {
-    opacity: 1,
-    pointerEvents: 'all',
-    marginLeft: '25px',
-  },
-  closed: {
-    opacity: 0,
-    pointerEvents: 'none',
-    marginLeft: '0px',
-  },
-};
-
-const background = {
-  open: {
-    width: 'calc(100% - ' + bar.open.width + 'px)',
-    marginLeft: bar.open.width + 'px',
-  },
-  closed: {
-    width: 'calc(100% - ' + bar.closed.width + 'px)',
-    marginLeft: bar.closed.width + 'px',
-  },
-};
-
-const layout = {
-  open: {
-    width: 'calc(100% - ' + bar.open.width + 'px)',
-    marginLeft: bar.open.width + 'px',
-  },
-  closed: {
-    width: 'calc(100% - ' + bar.closed.width + 'px)',
-    marginLeft: bar.closed.width + 'px',
-  },
-};
-
 const Layout = ({ children }) => {
   const [sideNavOpen, toggleSideNav] = useState();
   const [dao] = useDao();
   const [theme] = useTheme();
   const [user] = useUser();
+  const { modals, openModal } = useModals();
+
+  const bar = useBreakpointValue({
+    base: {
+      open: {
+        width: '100%',
+        height: '100%',
+      },
+      closed: {
+        width: '100%',
+        height: '100px',
+      },
+    },
+    sm: {
+      open: {
+        width: '100%',
+        height: '100vh',
+      },
+      closed: {
+        width: '100%',
+        height: '100px',
+      },
+    },
+    md: {
+      open: {
+        width: '420px',
+        height: '100vh',
+      },
+      closed: {
+        width: '100px',
+        height: '100vh',
+      },
+    },
+  });
+
+  const nav = useBreakpointValue({
+    base: {
+      open: {
+        opacity: 1,
+        pointerEvents: 'all',
+        marginLeft: '25px',
+        display: 'inline-block',
+      },
+      closed: {
+        opacity: 0,
+        pointerEvents: 'none',
+        marginLeft: '0px',
+        display: 'none',
+      },
+    },
+    sm: {
+      open: {
+        opacity: 1,
+        pointerEvents: 'all',
+        marginLeft: '25px',
+        display: 'inline-block',
+      },
+      closed: {
+        opacity: 0,
+        pointerEvents: 'none',
+        marginLeft: '0px',
+        display: 'none',
+      },
+    },
+    md: {
+      open: {
+        opacity: 1,
+        pointerEvents: 'all',
+        marginLeft: '25px',
+        display: 'inline-block',
+        width: 'auto',
+      },
+      closed: {
+        opacity: 0,
+        pointerEvents: 'none',
+        marginLeft: '0px',
+        display: 'none',
+        width: '0px',
+      },
+    },
+  });
+
+  const navFlex = useBreakpointValue({
+    base: {
+      open: {
+        opacity: 1,
+        pointerEvents: 'all',
+        marginLeft: '0px',
+        display: 'flex',
+      },
+      closed: {
+        opacity: 0,
+        pointerEvents: 'none',
+        marginLeft: '0px',
+        display: 'none',
+      },
+    },
+    sm: {
+      open: {
+        opacity: 1,
+        pointerEvents: 'all',
+        marginLeft: '0px',
+        display: 'flex',
+      },
+      closed: {
+        opacity: 0,
+        pointerEvents: 'none',
+        marginLeft: '0px',
+        display: 'none',
+      },
+    },
+    md: {
+      open: {
+        opacity: 1,
+        pointerEvents: 'all',
+        marginLeft: '25px',
+        display: 'flex',
+      },
+      closed: {
+        opacity: 0,
+        pointerEvents: 'none',
+        marginLeft: '0px',
+        display: 'none',
+      },
+    },
+  });
+
+  const navLinks = useBreakpointValue({
+    base: {
+      open: {
+        opacity: 1,
+        pointerEvents: 'all',
+        marginLeft: '0px',
+      },
+      closed: {
+        opacity: 0,
+        pointerEvents: 'none',
+        marginLeft: '0px',
+      },
+    },
+    sm: {
+      open: {
+        opacity: 1,
+        pointerEvents: 'all',
+        marginLeft: '0px',
+      },
+      closed: {
+        opacity: 0,
+        pointerEvents: 'none',
+        marginLeft: '0px',
+      },
+    },
+    md: {
+      open: {
+        opacity: 1,
+        pointerEvents: 'all',
+        marginLeft: '25px',
+      },
+      closed: {
+        opacity: 0,
+        pointerEvents: 'none',
+        marginLeft: '0px',
+      },
+    },
+  });
+
+  const navButtons = useBreakpointValue({
+    base: {
+      open: {
+        opacity: 1,
+        pointerEvents: 'all',
+        display: 'inline-block',
+      },
+      closed: {
+        opacity: 0,
+        pointerEvents: 'none',
+        display: 'none',
+      },
+    },
+    sm: {
+      open: {
+        opacity: 1,
+        pointerEvents: 'all',
+        display: 'inline-block',
+      },
+      closed: {
+        opacity: 0,
+        pointerEvents: 'none',
+        display: 'none',
+      },
+    },
+    md: {
+      open: {
+        opacity: 1,
+        pointerEvents: 'all',
+        display: 'flex',
+      },
+      closed: {
+        opacity: 1,
+        pointerEvents: 'all',
+        display: 'flex',
+      },
+    },
+  });
+
+  const layout = useBreakpointValue({
+    base: {
+      open: {
+        width: '100%',
+        marginLeft: 0,
+      },
+      closed: {
+        width: '100%',
+        marginLeft: 0,
+      },
+    },
+    sm: {
+      open: {
+        width: '100%',
+        marginLeft: 0,
+      },
+      closed: {
+        width: '100%',
+        marginLeft: 0,
+      },
+    },
+    md: {
+      open: {
+        width: 'calc(100% - ' + bar.open.width + ')',
+        marginLeft: bar.open.width,
+      },
+      closed: {
+        width: 'calc(100% - ' + bar.closed.width + ')',
+        marginLeft: bar.closed.width,
+      },
+    },
+  });
 
   useEffect(() => {
     toggleSideNav(JSON.parse(localStorage.getItem('sideNavOpen')));
@@ -127,30 +298,44 @@ const Layout = ({ children }) => {
   };
 
   return (
-    <Flex direction='row' minH='100vh' color='white' w='100vw'>
+    <Flex
+      direction={['column', 'column', 'column', 'row']}
+      minH='100vh'
+      w='100vw'
+    >
       <MotionFlex
         initial={sideNavOpen ? 'open' : 'closed'}
         animate={sideNavOpen ? 'open' : 'closed'}
         variants={bar}
-        h='100vh'
-        w='100%'
         p={6}
-        position='fixed'
-        direction='row'
+        position={['relative', 'relative', 'relative', 'fixed']}
+        direction='column'
         align='start'
         justifyContent='start'
         bg='primary.500'
         zIndex='1'
         overflow='hidden'
+        wrap='wrap'
       >
         <Flex
-          direction='column'
+          direction={['row', 'row', 'row', 'column']}
           justify='start'
-          align='start'
-          h='100%'
+          align={['center', 'center', 'center', 'start']}
           w='100%'
+          wrap='wrap'
         >
-          <Flex align='start' justify='start' direction='row'>
+          <Flex
+            align={['center', 'center', 'center', 'start']}
+            justify={[
+              'space-between',
+              'space-between',
+              'space-between',
+              'start',
+            ]}
+            direction='row'
+            w='100%'
+            wrap='wrap'
+          >
             <Box
               d='block'
               as={RouterLink}
@@ -168,7 +353,29 @@ const Layout = ({ children }) => {
               borderStyle='solid'
               borderColor='transparent'
               _hover={{ border: '2px solid ' + theme.colors.whiteAlpha[500] }}
+              order={[1, null, null, 1]}
             />
+            <Box
+              d={['inline-block', null, null, 'none']}
+              order='3'
+              ml='auto'
+              mr={2}
+            >
+              {user ? (
+                <>
+                  <Button
+                    variant='ghost'
+                    onClick={() => openModal('accountModal')}
+                  >
+                    <UserAvatar user={user.profile ? user.profile : user} />
+                  </Button>
+
+                  <AccountModal isOpen={modals.accountModal} />
+                </>
+              ) : (
+                <Web3SignIn />
+              )}
+            </Box>
             <MotionFlex
               direction='column'
               align='start'
@@ -177,6 +384,9 @@ const Layout = ({ children }) => {
               animate={sideNavOpen ? 'open' : 'closed'}
               variants={navFlex}
               h='48px'
+              mt={[3, null, null, 0]}
+              order={[4, null, null, 2]}
+              w={['100%', null, null, 'calc(100% - 80px)']}
             >
               {dao?.graphData ? (
                 <Link as={RouterLink} to={`/dao/${dao.address}`} fontSize='xl'>
@@ -189,18 +399,35 @@ const Layout = ({ children }) => {
               )}
               <ChangeDao />
             </MotionFlex>
+            <Box
+              w={['auto', null, null, '100%']}
+              order={[3, null, null, 3]}
+              mt={[0, null, null, 6]}
+            >
+              <IconButton
+                variant='ghost'
+                icon={sideNavOpen ? <RiCloseLine /> : <RiMenu3Line />}
+                onClick={handleNavToggle}
+                size='lg'
+                isRound='true'
+                color='secondary.500'
+              />
+            </Box>
           </Flex>
-          <IconButton
-            variant='ghost'
-            icon={sideNavOpen ? <RiArrowLeftSLine /> : <RiMenu3Line />}
-            onClick={handleNavToggle}
-            size='lg'
-            isRound='true'
-            color='secondary.500'
-            mt={6}
-          />
+        </Flex>
+        <MotionFlex
+          initial={sideNavOpen ? 'open' : 'closed'}
+          animate={sideNavOpen ? 'open' : 'closed'}
+          variants={navButtons}
+          direction='row'
+          wrap='wrap'
+        >
           {dao?.graphData ? (
-            <Stack spacing={3} d='flex' flexDirection='column' mt='55px'>
+            <Stack
+              spacing={[1, null, null, 3]}
+              d='flex'
+              mt={[3, null, null, 12]}
+            >
               <Button
                 variant='sideNav'
                 as={RouterLink}
@@ -213,7 +440,7 @@ const Layout = ({ children }) => {
                   initial={sideNavOpen ? 'open' : 'closed'}
                   animate={sideNavOpen ? 'open' : 'closed'}
                   variants={nav}
-                  fontSize='2xl'
+                  fontSize={['lg', null, null, '2xl']}
                   fontFamily='heading'
                 >
                   {theme.daoMeta.proposals}
@@ -231,7 +458,7 @@ const Layout = ({ children }) => {
                   initial={sideNavOpen ? 'open' : 'closed'}
                   animate={sideNavOpen ? 'open' : 'closed'}
                   variants={nav}
-                  fontSize='2xl'
+                  fontSize={['lg', null, null, '2xl']}
                   fontFamily='heading'
                 >
                   {theme.daoMeta.bank}
@@ -248,7 +475,7 @@ const Layout = ({ children }) => {
                   initial={sideNavOpen ? 'open' : 'closed'}
                   animate={sideNavOpen ? 'open' : 'closed'}
                   variants={nav}
-                  fontSize='2xl'
+                  fontSize={['lg', null, null, '2xl']}
                   fontFamily='heading'
                 >
                   {theme.daoMeta.members}
@@ -309,7 +536,11 @@ const Layout = ({ children }) => {
               ) : null}
             </Stack>
           ) : (
-            <Stack spacing={3} d='flex' flexDirection='column' mt='55px'>
+            <Stack
+              spacing={[1, null, null, 3]}
+              d='flex'
+              mt={[3, null, null, 12]}
+            >
               <Button
                 variant='sideNav'
                 as={Link}
@@ -323,7 +554,7 @@ const Layout = ({ children }) => {
                   initial={sideNavOpen ? 'open' : 'closed'}
                   animate={sideNavOpen ? 'open' : 'closed'}
                   variants={nav}
-                  fontSize='2xl'
+                  fontSize={['lg', null, null, '2xl']}
                   fontFamily='heading'
                 >
                   Explore DAOs
@@ -341,7 +572,7 @@ const Layout = ({ children }) => {
                   initial={sideNavOpen ? 'open' : 'closed'}
                   animate={sideNavOpen ? 'open' : 'closed'}
                   variants={nav}
-                  fontSize='2xl'
+                  fontSize={['lg', null, null, '2xl']}
                   fontFamily='heading'
                 >
                   Summon a DAO
@@ -359,7 +590,7 @@ const Layout = ({ children }) => {
                   initial={sideNavOpen ? 'open' : 'closed'}
                   animate={sideNavOpen ? 'open' : 'closed'}
                   variants={nav}
-                  fontSize='2xl'
+                  fontSize={['lg', null, null, '2xl']}
                   fontFamily='heading'
                 >
                   HausDAO
@@ -404,7 +635,13 @@ const Layout = ({ children }) => {
             </Stack>
           )}
           <Spacer />
-          <Flex w='100%'>
+          <Flex
+            w='100%'
+            initial={sideNavOpen ? 'open' : 'closed'}
+            animate={sideNavOpen ? 'open' : 'closed'}
+            variants={navFlex}
+            mt={6}
+          >
             <IconButton
               icon={sideNavOpen ? <RiArrowLeftSLine /> : <RiLinksLine />}
               size='lg'
@@ -482,14 +719,14 @@ const Layout = ({ children }) => {
               </ButtonGroup>
             </MotionFlex>
           </Flex>
-        </Flex>
+        </MotionFlex>
       </MotionFlex>
 
       <MotionBox
         position='fixed'
         initial={sideNavOpen ? 'open' : 'closed'}
         animate={sideNavOpen ? 'open' : 'closed'}
-        variants={background}
+        variants={layout}
         h='100vh'
         bgImage={'url(' + theme.images.bgImg + ')'}
         bgSize='cover'
@@ -497,6 +734,7 @@ const Layout = ({ children }) => {
         zIndex='-1'
         top='0'
         right='0'
+        w='100%'
         _before={{
           display: 'block',
           content: '""',
@@ -512,7 +750,7 @@ const Layout = ({ children }) => {
         }}
       />
       <MotionFlex
-        width='100%'
+        w='100%'
         initial={sideNavOpen ? 'open' : 'closed'}
         animate={sideNavOpen ? 'open' : 'closed'}
         variants={layout}

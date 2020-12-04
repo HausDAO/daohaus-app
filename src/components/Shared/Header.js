@@ -73,8 +73,18 @@ const Header = () => {
   return (
     <>
       <Flex direction='row' justify='space-between' p={6}>
-        <Flex direction='row' justify='flex-start' align='center'>
-          <Box fontSize='3xl' fontFamily='heading' fontWeight={700} mr={10}>
+        <Flex
+          direction='row'
+          justify={['space-between', null, null, 'flex-start']}
+          align='center'
+          w={['100%', null, null, 'auto']}
+        >
+          <Box
+            fontSize={['lg', null, null, '3xl']}
+            fontFamily='heading'
+            fontWeight={700}
+            mr={10}
+          >
             {pageTitle}
           </Box>
           {location.pathname === `/` && user && (
@@ -122,7 +132,12 @@ const Header = () => {
             null}
         </Flex>
 
-        <Flex direction='row' justify='flex-end' align='center'>
+        <Flex
+          direction='row'
+          justify='flex-end'
+          align='center'
+          d={['none', null, null, 'flex']}
+        >
           <Box fontSize='md' mr={5} as='i' fontWeight={200}>
             {network.network}
           </Box>
