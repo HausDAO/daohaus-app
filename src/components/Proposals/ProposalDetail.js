@@ -78,9 +78,20 @@ const ProposalDetail = ({ proposal }) => {
               )}
             </Box>
           </Flex>
-          <Skeleton isLoaded={details?.title}>
-            <Text fontSize='3xl'>{details?.title ? details?.title : '-'}</Text>
+
+          <Skeleton
+            isLoaded={
+              (details && Object.keys(details).length > 0) ||
+              proposal?.minionAddress
+            }
+          >
+            {details && Object.keys(details).includes('title') ? (
+              <Text fontSize='3xl'>{details.title}</Text>
+            ) : proposal?.minionAddress ? null : (
+              '-'
+            )}
           </Skeleton>
+
           {proposal?.minionAddress ? (
             <ProposalMinionCard proposal={proposal} />
           ) : (
@@ -99,13 +110,25 @@ const ProposalDetail = ({ proposal }) => {
               ) : null}
             </Skeleton>
           )}
-          <Box mt={6}>
+          <Box
+            mt={
+              (details && Object.keys(details).length > 0) ||
+              proposal?.minionAddress
+                ? 6
+                : 2
+            }
+          >
             {details &&
             Object.keys(details).includes('link') &&
             !ReactPlayer.canPlay(details?.link) ? (
               <TextBox>Link</TextBox>
             ) : null}
-            <Skeleton isLoaded={details && Object.keys(details).length > 0}>
+            <Skeleton
+              isLoaded={
+                (details && Object.keys(details).length > 0) ||
+                proposal?.minionAddress
+              }
+            >
               {details ? (
                 Object.keys(details).includes('link') ? (
                   ReactPlayer.canPlay(details?.link) ? (
@@ -124,7 +147,7 @@ const ProposalDetail = ({ proposal }) => {
                     </Link>
                   )
                 ) : null
-              ) : (
+              ) : proposal?.minionAddress ? null : (
                 '--'
               )}
             </Skeleton>
