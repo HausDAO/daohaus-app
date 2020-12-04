@@ -30,6 +30,7 @@ const ProposalVote = ({ proposal, setProposal }) => {
   const [web3Connect] = useWeb3Connect();
   const [txProcessor, updateTxProcessor] = useTxProcessor();
   const [nextProposalToProcess, setNextProposal] = useState(null);
+  const [hasVoted, setHasVoted] = useState(false);
   const currentlyVoting = (proposal) => {
     return (
       isBefore(Date.now(), new Date(+proposal?.votingPeriodEnds * 1000)) &&
@@ -134,15 +135,32 @@ const ProposalVote = ({ proposal, setProposal }) => {
   };
 
   useEffect(() => {
-    const proposalsToProcess = proposals
-      .filter((p) => p.status === 'ReadyForProcessing')
-      .sort((a, b) => a.gracePeriodEnds - b.gracePeriodEnds);
+    if (proposals) {
+      const proposalsToProcess = proposals
+        .filter((p) => p.status === 'ReadyForProcessing')
+        .sort((a, b) => a.gracePeriodEnds - b.gracePeriodEnds);
 
-    // console.log(proposalsToProcess);
-    if (proposalsToProcess.length > 0) {
-      setNextProposal(proposalsToProcess[0]);
+      // console.log(proposalsToProcess);
+      if (proposalsToProcess.length > 0) {
+        setNextProposal(proposalsToProcess[0]);
+      }
     }
   }, [proposals]);
+
+  useEffect(() => {
+    if (memberWallet && proposal) {
+      if (proposal.votes.length > 0) {
+        const voted = proposal.votes.some(
+          (vote) =>
+            memberWallet.memberAddress.toLowerCase() ===
+            vote.memberAddress.toLowerCase(),
+        );
+        if (voted === true) {
+          setHasVoted(true);
+        }
+      }
+    }
+  }, [proposal, memberWallet]);
 
   return (
     <>
@@ -219,65 +237,74 @@ const ProposalVote = ({ proposal, setProposal }) => {
           proposal?.status !== 'Cancelled' && (
             <>
               <Flex mb={6} w='100%'>
-                {currentlyVoting(proposal) ? (
-                  <>
-                    {memberWallet && (
-                      <Flex w='48%' justify='space-around'>
-                        <Flex
-                          p={3}
-                          borderWidth='1px'
-                          borderColor='green.500'
-                          borderStyle='solid'
-                          borderRadius='40px'
-                          justiy='center'
-                          align='center'
-                        >
-                          <Icon
-                            as={FaThumbsUp}
-                            color='green.500'
-                            w='25px'
-                            h='25px'
-                            _hover={{ cursor: 'pointer' }}
-                            onClick={() => submitVote(proposal, 1)}
-                          />
+                <Skeleton isLoaded={proposal && memberWallet} w='100%'>
+                  {currentlyVoting(proposal) ? (
+                    <>
+                      {memberWallet && !hasVoted && (
+                        <Flex w='48%' justify='space-around'>
+                          <Flex
+                            p={3}
+                            borderWidth='1px'
+                            borderColor='green.500'
+                            borderStyle='solid'
+                            borderRadius='40px'
+                            justiy='center'
+                            align='center'
+                          >
+                            <Icon
+                              as={FaThumbsUp}
+                              color='green.500'
+                              w='25px'
+                              h='25px'
+                              _hover={{ cursor: 'pointer' }}
+                              onClick={() => submitVote(proposal, 1)}
+                            />
+                          </Flex>
+                          <Flex
+                            p={3}
+                            borderWidth='1px'
+                            borderColor='red.500'
+                            borderStyle='solid'
+                            borderRadius='40px'
+                            justiy='center'
+                            align='center'
+                          >
+                            <Icon
+                              as={FaThumbsDown}
+                              color='red.500'
+                              w='25px'
+                              h='25px'
+                              transform='rotateY(180deg)'
+                              _hover={{ cursor: 'pointer' }}
+                              onClick={() => submitVote(proposal, 2)}
+                            />
+                          </Flex>
                         </Flex>
-                        <Flex
-                          p={3}
-                          borderWidth='1px'
-                          borderColor='red.500'
-                          borderStyle='solid'
-                          borderRadius='40px'
-                          justiy='center'
-                          align='center'
+                      )}
+                      <Flex
+                        justify={
+                          memberWallet && !hasVoted ? 'flex-end' : 'center'
+                        }
+                        align='center'
+                        w={memberWallet && !hasVoted ? '50%' : '100%'}
+                      >
+                        <Box
+                          as='i'
+                          fontSize={memberWallet && !hasVoted ? 'xs' : 'md'}
                         >
-                          <Icon
-                            as={FaThumbsDown}
-                            color='red.500'
-                            w='25px'
-                            h='25px'
-                            transform='rotateY(180deg)'
-                            _hover={{ cursor: 'pointer' }}
-                            onClick={() => submitVote(proposal, 2)}
-                          />
-                        </Flex>
+                          {+proposal?.noShares > +proposal?.yesShares &&
+                            'Not Passing'}
+                          {+proposal?.yesShares > +proposal?.noShares &&
+                            'Currently Passing'}
+                          {+proposal?.yesShares === 0 &&
+                            +proposal?.noShares === 0 &&
+                            'Awaiting Votes'}
+                        </Box>
                       </Flex>
-                    )}
-                    <Flex justify='flex-end' align='center' w='50%'>
-                      <Box as='i' fontSize='xs'>
-                        {+proposal?.noShares > +proposal?.yesShares &&
-                          'Not Passing'}
-                        {+proposal?.yesShares > +proposal?.noShares &&
-                          'Currently Passing'}
-                        {+proposal?.yesShares === 0 &&
-                          +proposal?.noShares === 0 &&
-                          'Awaiting Votes'}
-                      </Box>
-                    </Flex>
-                  </>
-                ) : (
-                  <>
-                    <Flex justify='center' align='center' w='100%'>
-                      <Skeleton isLoaded={proposal?.status}>
+                    </>
+                  ) : (
+                    <>
+                      <Flex justify='center' align='center' w='100%'>
                         <TextBox fontSize='xl' variant='value'>
                           {proposal?.status === 'Failed' && 'Failed'}
                           {proposal?.status === 'Passed' && 'Passed'}
@@ -290,10 +317,10 @@ const ProposalVote = ({ proposal, setProposal }) => {
                             proposal.noShares > proposal.yesShares &&
                             'Failed'}
                         </TextBox>
-                      </Skeleton>
-                    </Flex>
-                  </>
-                )}
+                      </Flex>
+                    </>
+                  )}
+                </Skeleton>
               </Flex>
               <Flex
                 w='100%'

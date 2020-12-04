@@ -41,7 +41,6 @@ const urlify = (text) => {
 
 const hasImage = (string) => {
   const imageExtensions = ['.jpg', '.png', '.gif'];
-  console.log(string);
   return imageExtensions.some((o) => string.includes(o));
 };
 
@@ -228,47 +227,10 @@ const ProposalDetail = ({ proposal }) => {
             )}
           </Flex>
         </Box>
-
-        <Flex>
-          {memberVote &&
-            (+memberVote.uintVote === 1 ? (
-              <Flex
-                pl={6}
-                w='40px'
-                borderColor='secondary.500'
-                borderWidth='2px'
-                borderStyle='solid'
-                borderRadius='40px'
-                p={1}
-                h='40px'
-                justify='center'
-                align='center'
-                m='0 auto'
-              >
-                <Icon as={FaThumbsUp} color='secondary.500' />
-              </Flex>
-            ) : (
-              <Flex
-                pl={6}
-                w='40px'
-                borderColor='secondary.500'
-                borderWidth='2px'
-                borderStyle='solid'
-                borderRadius='40px'
-                p={1}
-                h='40px'
-                justify='center'
-                align='center'
-                m='0 auto'
-              >
-                <Icon as={FaThumbsDown} color='secondary.500' />
-              </Flex>
-            ))}
-        </Flex>
       </Box>
 
-      <Flex w='80%' mt={6} justify='space-between'>
-        <Box mr={5}>
+      <Flex mt={6} justify='space-between' pr={!memberVote && '20%'} w='100%'>
+        <Box>
           <TextBox mb={2}>Submitted By</TextBox>
           <Skeleton isLoaded={members && proposal?.proposer}>
             {members && proposal?.proposer ? (
@@ -316,6 +278,42 @@ const ProposalDetail = ({ proposal }) => {
               '--'
             )}
           </Skeleton>
+        </Box>
+        <Box>
+          {memberVote &&
+            (+memberVote.uintVote === 1 ? (
+              <Flex
+                pl={6}
+                w='40px'
+                borderColor='secondary.500'
+                borderWidth='2px'
+                borderStyle='solid'
+                borderRadius='40px'
+                p={1}
+                h='40px'
+                justify='center'
+                align='center'
+                m='0 auto'
+              >
+                <Icon as={FaThumbsUp} color='secondary.500' />
+              </Flex>
+            ) : (
+              <Flex
+                pl={6}
+                w='40px'
+                borderColor='secondary.500'
+                borderWidth='2px'
+                borderStyle='solid'
+                borderRadius='40px'
+                p={1}
+                h='40px'
+                justify='center'
+                align='center'
+                m='0 auto'
+              >
+                <Icon as={FaThumbsDown} color='secondary.500' />
+              </Flex>
+            ))}
         </Box>
       </Flex>
     </ContentBox>
