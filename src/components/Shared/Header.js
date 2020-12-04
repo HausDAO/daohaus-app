@@ -132,7 +132,9 @@ const Header = () => {
                 variant='outline'
                 onClick={() => openModal('accountModal')}
               >
-                <UserAvatar user={user.profile ? user.profile : user} />
+                <UserAvatar
+                  user={memberWallet?.activeMember ? user.profile : user}
+                />
               </Button>
 
               <AccountModal isOpen={modals.accountModal} />

@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from 'react';
-import { Flex, Box, Skeleton } from '@chakra-ui/react';
+import { Flex, Box, Skeleton, Image } from '@chakra-ui/react';
 
 import UsdPrice from '../UsdPrice';
 import UsdValue from '../UsdValue';
 import Withdraw from '../../Forms/Withdraw';
 import SyncToken from '../../Forms/SyncToken';
 import { useMemberWallet } from '../../../contexts/PokemolContext';
+import { getMainetAddresses } from '../../../utils/price-api';
 
 const TokenListCard = ({ token, isLoaded, isMember, isBank, hasAction }) => {
   const [memberWallet] = useMemberWallet();
@@ -13,6 +14,7 @@ const TokenListCard = ({ token, isLoaded, isMember, isBank, hasAction }) => {
   const [needsSync, setNeedsSync] = useState();
   const [optimisticWithdraw, setOptimisticWithdraw] = useState(false);
   const [optimisticSync, setOptimisticSync] = useState(false);
+  const [tokenMainnetAddress, setTokenMainnetAddress] = useState();
 
   useEffect(() => {
     console.log('isMember', isMember);
@@ -34,12 +36,34 @@ const TokenListCard = ({ token, isLoaded, isMember, isBank, hasAction }) => {
     return optimisticSync ? optimisticBalance : +token.tokenBalance;
   };
 
-  // TODO token images? trust-wallet?
+  useEffect(() => {
+    const fetchMainnetAddresses = async () => {
+      const mainnetAddresses = await getMainetAddresses();
+      if (token && mainnetAddresses) {
+        mainnetAddresses.data.forEach((address) => {
+          if (address?.symbol === token?.token?.symbol) {
+            setTokenMainnetAddress(address.address);
+          }
+        });
+      }
+    };
+    fetchMainnetAddresses();
+  }, [token]);
+
+  const tokenImageUrl = tokenMainnetAddress
+    ? `https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/${tokenMainnetAddress}/logo.png`
+    : null;
+
   return (
     <Flex h='60px' align='center'>
       <Box w='15%'>
         <Skeleton isLoaded={isLoaded}>
-          <Box fontFamily='mono'>{token?.token?.symbol}</Box>
+          <Flex align='center'>
+            {tokenMainnetAddress && (
+              <Image src={tokenImageUrl} height='35px' mr='15px' />
+            )}
+            <Box fontFamily='mono'>{token?.token?.symbol}</Box>
+          </Flex>
         </Skeleton>
       </Box>
       <Box w='55%'>

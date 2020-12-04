@@ -16,6 +16,7 @@ import {
 import ProposalMinionCard from './ProposalMinionCard';
 import TextBox from '../Shared/TextBox';
 import MemberAvatar from '../Members/MemberAvatar';
+import UserAvatar from '../Shared/UserAvatar';
 import { ZERO_ADDRESS } from '../../utils/constants';
 
 const urlify = (text) => {
@@ -84,37 +85,47 @@ const ProposalDetail = ({ proposal }) => {
             <ProposalMinionCard proposal={proposal} />
           ) : (
             <Skeleton isLoaded={details?.description}>
-              {details?.description?.indexOf('http') > -1 ? (
-                <Box
-                  w='100%'
-                  dangerouslySetInnerHTML={{
-                    __html: urlify(details?.description),
-                  }}
-                />
-              ) : (
-                <Box w='100%'>{details?.description}</Box>
-              )}
+              {details && Object.keys(details).includes('description') ? (
+                details?.description?.indexOf('http') > -1 ? (
+                  <Box
+                    w='100%'
+                    dangerouslySetInnerHTML={{
+                      __html: urlify(details?.description),
+                    }}
+                  />
+                ) : (
+                  <Box w='100%'>{details?.description}</Box>
+                )
+              ) : null}
             </Skeleton>
           )}
           <Box mt={6}>
-            {!ReactPlayer.canPlay(details?.link) ? (
+            {details &&
+            Object.keys(details).includes('link') &&
+            !ReactPlayer.canPlay(details?.link) ? (
               <TextBox>Link</TextBox>
             ) : null}
-            <Skeleton isLoaded={details?.link}>
-              {ReactPlayer.canPlay(details?.link) ? (
-                <Box width='100%'>
-                  <ReactPlayer
-                    url={details?.link}
-                    playing={false}
-                    loop={false}
-                    width='100%'
-                  />
-                </Box>
+            <Skeleton isLoaded={details && Object.keys(details).length > 0}>
+              {details ? (
+                Object.keys(details).includes('link') ? (
+                  ReactPlayer.canPlay(details?.link) ? (
+                    <Box width='100%'>
+                      <ReactPlayer
+                        url={details?.link}
+                        playing={false}
+                        loop={false}
+                        width='100%'
+                      />
+                    </Box>
+                  ) : (
+                    <Link href={details?.link} target='_blank'>
+                      {details?.link ? details.link : '-'}{' '}
+                      <Icon as={RiExternalLinkLine} color='primary.50' />
+                    </Link>
+                  )
+                ) : null
               ) : (
-                <Link href={details?.link} target='_blank'>
-                  {details?.link ? details.link : '-'}{' '}
-                  <Icon as={RiExternalLinkLine} color='primary.50' />
-                </Link>
+                '--'
               )}
             </Skeleton>
           </Box>
@@ -215,9 +226,13 @@ const ProposalDetail = ({ proposal }) => {
           <TextBox mb={2}>Submitted By</TextBox>
           <Skeleton isLoaded={members && proposal?.proposer}>
             {members && proposal?.proposer ? (
-              <MemberAvatar
-                member={memberProfile(members, proposal?.proposer)}
-              />
+              memberProfile(members, proposal?.proposer).profile ? (
+                <MemberAvatar
+                  member={memberProfile(members, proposal?.proposer)}
+                />
+              ) : (
+                <UserAvatar user={memberProfile(members, proposal?.proposer)} />
+              )
             ) : (
               '--'
             )}
@@ -227,14 +242,30 @@ const ProposalDetail = ({ proposal }) => {
           <TextBox mb={2}>Recipient</TextBox>
           <Skeleton isLoaded={members && proposal?.applicant}>
             {members && proposal?.applicant ? (
-              <MemberAvatar
-                member={memberProfile(
-                  members,
-                  proposal?.applicant !== ZERO_ADDRESS
-                    ? proposal?.applicant
-                    : proposal?.proposer,
-                )}
-              />
+              memberProfile(
+                members,
+                proposal?.applicant !== ZERO_ADDRESS
+                  ? proposal?.applicant
+                  : proposal?.proposer,
+              ).profile ? (
+                <MemberAvatar
+                  member={memberProfile(
+                    members,
+                    proposal?.applicant !== ZERO_ADDRESS
+                      ? proposal?.applicant
+                      : proposal?.proposer,
+                  )}
+                />
+              ) : (
+                <UserAvatar
+                  user={memberProfile(
+                    members,
+                    proposal?.applicant !== ZERO_ADDRESS
+                      ? proposal?.applicant
+                      : proposal?.proposer,
+                  )}
+                />
+              )
             ) : (
               '--'
             )}
