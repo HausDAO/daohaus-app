@@ -168,9 +168,9 @@ const RageQuitForm = () => {
     </form>
   ) : (
     <Text>
-      Sorry you can not rage at this time. You have a 'Yes' vote on a pending
-      proposal. All proposals with a 'Yes' vote must be completed and processed
-      before you can rage.
+      Sorry you can not rage at this time. You have a &apos;Yes&apos; vote on a
+      pending proposal. All proposals with a &apos;Yes&apos; vote must be
+      completed and processed before you can rage.
     </Text>
   );
 };
