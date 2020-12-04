@@ -7,6 +7,7 @@ import { truncateAddr } from '../../utils/helpers';
 const MemberAvatar = ({ member }) => {
   const hasProfileImage =
     member && member.profile && member.profile.image && member.profile.image[0];
+
   return (
     <Flex direction='row' alignItems='center'>
       {hasProfileImage ? (

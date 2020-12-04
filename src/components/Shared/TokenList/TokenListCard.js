@@ -17,12 +17,12 @@ const TokenListCard = ({ token, isLoaded, isMember, isBank, hasAction }) => {
   const [tokenMainnetAddress, setTokenMainnetAddress] = useState();
 
   useEffect(() => {
-    console.log('isMember', isMember);
     setHasBalance(isMember && +token.tokenBalance > 0);
     setNeedsSync(
       memberWallet &&
         memberWallet.activeMember &&
         isBank &&
+        +token.tokenBalance > 0 &&
         token.contractTokenBalance !== token.contractBabeBalance,
     );
   }, [token, isMember, isBank, memberWallet]);
