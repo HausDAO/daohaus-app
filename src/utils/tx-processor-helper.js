@@ -45,10 +45,22 @@ export const POPUP_CONTENT = {
     displayName: 'Submit Vote',
     header: 'Your Vote is submitted',
     images: [],
-    bodyText: ['You did it', 'You are #1', 'What a dude!'],
+    bodyText: [
+      'A proposal will pass with greater than 50% of the vote',
+      'After the voting period is finished the proposal can be processed',
+      'If you vote yes you can not ragequit until the proposal hase been processed',
+    ],
     links: [
-      { href: 'https://tornado.cash/', text: 'tornado', external: true },
-      { href: 'https://raidguild.org/', text: 'raidguild', external: true },
+      {
+        href: 'https://forum.daohaus.club/t/the-life-of-a-proposal/207',
+        text: 'Life of a Proposal',
+        external: true,
+      },
+      {
+        href: `https://twitter.com/intent/tweet?text=I%20Voted%20https://alpha.daohaus.club`,
+        text: 'Share with the world',
+        external: true,
+      }
     ],
   },
   ragequit: {
@@ -62,12 +74,7 @@ export const POPUP_CONTENT = {
     ],
     links: [
       {
-        href: 'https://tornado.cash/',
-        text: 'How proposals work',
-        external: true,
-      },
-      {
-        href: 'https://raidguild.org/',
+        href: 'https://forum.daohaus.club/c/help-how-to-docs/12',
         text: 'What is Rage Quit',
         external: true,
       },
@@ -89,13 +96,8 @@ export const POPUP_CONTENT = {
     ],
     links: [
       {
-        href: 'https://tornado.cash/',
+        href: 'https://forum.daohaus.club/c/help-how-to-docs/12',
         text: 'How proposals work',
-        external: true,
-      },
-      {
-        href: 'https://raidguild.org/',
-        text: 'What is Rage Quit',
         external: true,
       },
       {
@@ -140,8 +142,8 @@ export const POPUP_CONTENT = {
     ],
     links: [
       {
-        href: 'https://tornado.cash/',
-        text: 'How proposals work',
+        href: 'https://forum.daohaus.club/c/help-how-to-docs/12',
+        text: 'How things work',
         external: true,
       },
       {
@@ -150,7 +152,7 @@ export const POPUP_CONTENT = {
         external: true,
       },
       {
-        href: `https://twitter.com/intent/tweet?text=I%20Voted%20https://alpha.daohaus.club`,
+        href: `https://twitter.com/intent/tweet?text=I%20DAO%20https://alpha.daohaus.club`,
         text: 'Share with the world',
         external: true,
       },
@@ -167,12 +169,11 @@ export const POPUP_CONTENT = {
       'Your proposal will go into unsponsored state',
       'Tokens need a non zero balance to do direct deposits',
       'Share with your friends',
-      'What a dude!',
     ],
     links: [
       {
-        href: 'https://tornado.cash/',
-        text: 'How proposals work',
+        href: 'https://forum.daohaus.club/c/help-how-to-docs/12',
+        text: 'How things work',
         external: true,
       },
       {
@@ -191,7 +192,7 @@ export const POPUP_CONTENT = {
     displayName: 'Withdraw Balance',
     header: 'MoMo...',
     images: [],
-    bodyText: ['Funds should come direct to your wallet', 'What a dude!'],
+    bodyText: ['Funds should come direct to your wallet'],
     links: [
       {
         href: 'https://twitter.com/',
@@ -204,7 +205,7 @@ export const POPUP_CONTENT = {
     displayName: 'Withdraw Balances',
     header: 'MoMoMo...',
     images: [],
-    bodyText: ['Funds should come direct to your wallet', 'What a dude!'],
+    bodyText: ['Funds should come direct to your wallet'],
     links: [
       {
         href: 'https://twitter.com/',
@@ -217,7 +218,7 @@ export const POPUP_CONTENT = {
     displayName: 'Collect Tokens',
     header: 'The Dao is that much richer',
     images: [],
-    bodyText: ['But the real winner is the future', 'What a dude!'],
+    bodyText: ['But the real winner is the future'],
     links: [
       {
         href: 'https://twitter.com/',
