@@ -99,7 +99,11 @@ const MemberProposalForm = () => {
           : '0',
         values.paymentToken || values.tributeToken,
         details,
-        values.applicant || user.username,
+        values?.applicantHidden.startsWith('0x')
+          ? values.applicantHidden
+          : values?.applicant
+          ? values.applicant
+          : user.username,
         txCallBack,
       );
     } catch (err) {

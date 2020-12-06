@@ -76,11 +76,7 @@ const GuildKickProposalForm = () => {
 
     try {
       dao.daoService.molochsubmitGuildKickProposal(
-        values?.memberApplicant
-          ? values?.memberApplicant
-          : values?.applicantHidden.startsWith('0x')
-          ? values.applicantHidden
-          : values.applicant,
+        values.memberApplicant,
         details,
         txCallBack,
       );
