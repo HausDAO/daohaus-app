@@ -71,13 +71,13 @@ const AddressInput = ({
         </FormControl>
       ) : (
         <FormControl mb={5}>
-          <TextBox as={FormLabel} htmlFor='applicant'>
+          <TextBox as={FormLabel} htmlFor='memberApplicant'>
             {formLabel}
           </TextBox>
           <Flex>
             <Select
               icon={<AiOutlineCaretDown />}
-              name='applicant'
+              name='memberApplicant'
               ref={register}
             >
               {members &&
