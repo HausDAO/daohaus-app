@@ -100,11 +100,11 @@ const FundingProposalForm = () => {
           values.tributeToken ||
           '0xd0a1e359811322d97991e03f863a0c30c2cf029c',
         details,
-        values?.memberApplicant
-          ? values?.memberApplicant
-          : values?.applicantHidden.startsWith('0x')
+        values?.applicantHidden.startsWith('0x')
           ? values.applicantHidden
-          : values.applicant,
+          : values?.applicant
+          ? values.applicant
+          : values?.memberApplicant,
         txCallBack,
       );
     } catch (err) {
