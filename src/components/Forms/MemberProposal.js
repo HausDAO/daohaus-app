@@ -99,7 +99,7 @@ const MemberProposalForm = () => {
           : '0',
         values.paymentToken || values.tributeToken,
         details,
-        values?.applicantHidden.startsWith('0x')
+        values?.applicantHidden?.startsWith('0x')
           ? values.applicantHidden
           : values?.applicant
           ? values.applicant
