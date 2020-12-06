@@ -13,8 +13,10 @@ import {
   Text,
   Icon,
   Heading,
+  List,
+  ListItem,
 } from '@chakra-ui/react';
-
+import { VscQuestion } from 'react-icons/vsc';
 import { TxProcessorService } from '../utils/tx-processor-service';
 import {
   useMembers,
@@ -262,29 +264,42 @@ const TxProcessorInit = () => {
                   </Box>
                 )}
                 {POPUP_CONTENT[latestTx?.details?.name]?.header && (
-                  <Heading>
+                  <Heading as='h5' m={2}>
                     {POPUP_CONTENT[latestTx?.details?.name]?.header}
                   </Heading>
                 )}
-                {POPUP_CONTENT[latestTx?.details?.name]?.bodyText.map(
-                  (txt, idx) => (
-                    <Text key={idx}>{txt}</Text>
-                  ),
+                {POPUP_CONTENT[latestTx?.details?.name]?.bodyText && (
+                  <List spacing={3}>
+                    {POPUP_CONTENT[latestTx?.details?.name]?.bodyText.map(
+                      (txt, idx) => (
+                        <ListItem key={idx}>
+                          <Icon as={VscQuestion} />
+                          {txt}
+                        </ListItem>
+                      ),
+                    )}
+                  </List>
                 )}
-                {POPUP_CONTENT[latestTx?.details?.name]?.links.length && (
-                  <Text>links:</Text>
-                )}
-                {POPUP_CONTENT[latestTx?.details?.name]?.links.map(
-                  (link, idx) =>
-                    link.external ? (
-                      <Link key={idx} to={link.href}>
-                        {link.text}
-                      </Link>
-                    ) : (
-                      <Link key={idx} to={link.href}>
-                        {link.text} <Icon as={RiErrorWarningLine} />
-                      </Link>
-                    ),
+                {POPUP_CONTENT[latestTx?.details?.name]?.links && (
+                  <Box m={2}>
+                    {POPUP_CONTENT[latestTx?.details?.name]?.links.length && (
+                      <Text>links:</Text>
+                    )}
+                    {POPUP_CONTENT[latestTx?.details?.name]?.links.map(
+                      (link, idx) =>
+                        link.external ? (
+                          <Link key={idx} to={link.href}>
+                            <Text>{link.text}</Text>
+                          </Link>
+                        ) : (
+                          <Link key={idx} to={link.href}>
+                            <Text>
+                              {link.text} <Icon as={RiErrorWarningLine} />
+                            </Text>
+                          </Link>
+                        ),
+                    )}
+                  </Box>
                 )}
               </>
             )}
