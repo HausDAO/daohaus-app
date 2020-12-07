@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Skeleton, Box } from '@chakra-ui/react';
+import { Skeleton, Box, Text } from '@chakra-ui/react';
 
 import { usePrices } from '../../contexts/PokemolContext';
 import { getTotalBankValue } from '../../utils/bank-helpers';
@@ -20,9 +20,9 @@ const BankTotal = ({ tokenBalances }) => {
   return (
     <>
       <Skeleton isLoaded={tokenBalances?.length > 0}>
-        <TextBox size='xl' variant='value'>
+        <Text fontFamily='mono' fontSize='3xl' variant='value'>
           ${bankTotal.toFixed(2)}
-        </TextBox>
+        </Text>
       </Skeleton>
       <Box>
         <Skeleton isLoaded={tokenBalances?.length > 0}>

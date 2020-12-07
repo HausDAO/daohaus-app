@@ -9,6 +9,7 @@ import {
   Flex,
   Icon,
   MenuDivider,
+  Text,
 } from '@chakra-ui/react';
 import { RiArrowDropDownFill } from 'react-icons/ri';
 
@@ -54,21 +55,25 @@ const ProposalFilter = ({ filter, setFilter, proposals }) => {
   };
 
   return (
-    <Flex direction='row'>
-      <Box mr={3} textTransform='uppercase' fontFamily='heading'>
+    <Flex
+      direction='row'
+      w={['100%', null, null, '50%']}
+      mb={[5, null, null, 0]}
+    >
+      <Text textTransform='uppercase' fontFamily='heading' mr={3}>
         Filter By
-      </Box>
+      </Text>
 
       {filterOptions ? (
         <Menu isLazy>
           <MenuButton
             textTransform='uppercase'
             fontFamily='heading'
-            color='primary.50'
-            _hover={{ textDecoration: 'underline' }}
+            color='secondary.500'
+            _hover={{ color: 'secondary.400' }}
           >
             {buildFilterName()}{' '}
-            <Icon as={RiArrowDropDownFill} color='primary.50' />
+            <Icon as={RiArrowDropDownFill} color='secondary.500' />
           </MenuButton>
           <MenuList bg='black'>
             <MenuGroup>
@@ -79,7 +84,6 @@ const ProposalFilter = ({ filter, setFilter, proposals }) => {
                       key={option.value}
                       onClick={() => setFilter(option)}
                       value={option.value}
-                      _hover={{ color: 'primary.300' }}
                     >
                       {option.value === 'Action Needed'
                         ? `${option.name} (${actionNeeded.length})`
@@ -99,7 +103,6 @@ const ProposalFilter = ({ filter, setFilter, proposals }) => {
                       key={option.value}
                       onClick={() => setFilter(option)}
                       value={option.value}
-                      _hover={{ color: 'primary.300' }}
                     >
                       {option.name}
                     </MenuItem>
@@ -117,7 +120,6 @@ const ProposalFilter = ({ filter, setFilter, proposals }) => {
                       key={option.value}
                       onClick={() => setFilter(option)}
                       value={option.value}
-                      _hover={{ color: 'primary.300' }}
                     >
                       {option.name}
                     </MenuItem>
