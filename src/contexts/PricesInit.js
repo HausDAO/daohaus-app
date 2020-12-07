@@ -30,12 +30,14 @@ const PriceInit = () => {
         const addressesMap = {};
         tokens = daoGraphData.tokenBalances
           .map((token) => {
-            const foundAddress = symbolAddressMap[token.token.symbol];
+            const currentSymbol =
+              token.token.symbol === 'WXDAI' ? 'DAI' : token.token.symbol;
+            const foundAddress = symbolAddressMap[currentSymbol];
             if (foundAddress) {
               addressesMap[foundAddress.toLowerCase()] =
                 token.token.tokenAddress;
             }
-            return symbolAddressMap[token.token.symbol];
+            return symbolAddressMap[currentSymbol];
           })
           .filter((x) => x !== undefined);
 
