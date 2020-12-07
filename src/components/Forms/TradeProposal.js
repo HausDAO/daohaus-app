@@ -22,6 +22,7 @@ import TextBox from '../Shared/TextBox';
 import DetailsFields from './DetailFields';
 import PaymentInput from './PaymentInput';
 import TributeInput from './TributeInput';
+import AddressInput from './AddressInput';
 import { detailsToJSON } from '../../utils/proposal-helper';
 
 const TradeProposalForm = () => {
@@ -41,6 +42,7 @@ const TradeProposalForm = () => {
     register,
     setValue,
     getValues,
+    watch,
     // formState
   } = useForm();
 
@@ -92,11 +94,11 @@ const TradeProposalForm = () => {
         values.tributeOffered
           ? utils.toWei(values.tributeOffered?.toString())
           : '0',
-        values.tributeToken,
+        values.tributeToken || dao.graphData?.depositToken?.tokenAddress,
         values.paymentRequested
           ? utils.toWei(values.paymentRequested?.toString())
           : '0',
-        values.paymentToken || values.tributeToken,
+        values.paymentToken || dao.graphData?.depositToken?.tokenAddress,
         details,
         user.username,
         txCallBack,
@@ -181,19 +183,12 @@ const TradeProposalForm = () => {
           )}
 
           {showApplicant && (
-            <>
-              <TextBox as={FormLabel} htmlFor='applicant' mb={2}>
-                Applicant
-              </TextBox>
-              <Input
-                name='applicant'
-                placeholder='0'
-                mb={5}
-                ref={register}
-                color='white'
-                focusBorderColor='secondary.500'
-              />
-            </>
+            <AddressInput
+              name='applicant'
+              register={register}
+              setValue={setValue}
+              watch={watch}
+            />
           )}
           {(!showApplicant || !showLoot || !showShares) && (
             <Menu color='white' textTransform='uppercase'>
@@ -217,7 +212,7 @@ const TradeProposalForm = () => {
                 )}
                 {!showShares && (
                   <MenuItem onClick={() => setShowShares(true)}>
-                    SHoe Shares
+                    Request Shares
                   </MenuItem>
                 )}
               </MenuList>

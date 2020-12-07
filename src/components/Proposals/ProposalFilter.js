@@ -60,7 +60,7 @@ const ProposalFilter = ({ filter, setFilter, proposals }) => {
       </Box>
 
       {filterOptions ? (
-        <Menu>
+        <Menu isLazy>
           <MenuButton
             textTransform='uppercase'
             fontFamily='heading'

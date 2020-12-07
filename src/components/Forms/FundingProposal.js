@@ -92,17 +92,17 @@ const FundingProposalForm = () => {
         values.tributeOffered
           ? utils.toWei(values.tributeOffered?.toString())
           : '0',
-        values.tributeToken || '0xd0a1e359811322d97991e03f863a0c30c2cf029c',
+        values.tributeToken || dao.graphData.depositToken.tokenAddress,
         values.paymentRequested
           ? utils.toWei(values.paymentRequested?.toString())
           : '0',
-        values.paymentToken ||
-          values.tributeToken ||
-          '0xd0a1e359811322d97991e03f863a0c30c2cf029c',
+        values.paymentToken || dao.graphData.depositToken.tokenAddress,
         details,
-        values?.applicantHidden.startsWith('0x')
+        values?.applicantHidden?.startsWith('0x')
           ? values.applicantHidden
-          : values.applicant,
+          : values?.applicant
+          ? values.applicant
+          : values?.memberApplicant,
         txCallBack,
       );
     } catch (err) {
@@ -124,7 +124,12 @@ const FundingProposalForm = () => {
           <DetailsFields register={register} />
         </Box>
         <Box w='48%'>
-          <AddressInput register={register} setValue={setValue} watch={watch} />
+          <AddressInput
+            name='applicant'
+            register={register}
+            setValue={setValue}
+            watch={watch}
+          />
           <PaymentInput
             register={register}
             setValue={setValue}
