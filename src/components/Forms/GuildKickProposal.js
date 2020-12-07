@@ -75,7 +75,7 @@ const GuildKickProposalForm = () => {
     const details = detailsToJSON(values);
 
     try {
-      dao.daoService.molochsubmitGuildKickProposal(
+      dao.daoService.moloch.submitGuildKickProposal(
         values.memberApplicant,
         details,
         txCallBack,
