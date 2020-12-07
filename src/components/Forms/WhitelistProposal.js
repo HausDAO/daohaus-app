@@ -88,12 +88,13 @@ const WhitelistProposalForm = () => {
         display='flex'
         flexDirection='row'
         justifyContent='space-between'
-        mb={3}
+        mb={5}
+        flexWrap='wrap'
       >
-        <Box w='48%'>
+        <Box w={['100%', null, '50%']} pr={[0, null, 5]}>
           <DetailsFields register={register} />
         </Box>
-        <Box w='48%'>
+        <Box w={['100%', null, '50%']}>
           <TextBox as={FormLabel} htmlFor='tokenAddress' mb={2}>
             Token Address
           </TextBox>

@@ -39,17 +39,18 @@ const Dao = () => {
 
   return (
     <>
-      <Box p={6}>
+      <Box p={6} w='100%'>
         {user && isMember ? (
           <Flex wrap='wrap'>
             <Box
-              pr={[0, null, null, null, 6]}
               w={['100%', null, null, null, '50%']}
+              pr={[0, null, null, null, 6]}
+              mb={6}
             >
               <DaoOverviewDetails dao={dao} />
             </Box>
 
-            <Box w={['100%', null, null, null, '50%']} pt={[6, 0]}>
+            <Box w={['100%', null, null, null, '50%']}>
               <MemberInfoCard user={user} />
               {dao.graphData && (
                 <Box mt={6}>
@@ -60,7 +61,7 @@ const Dao = () => {
           </Flex>
         ) : (
           <Flex h='100%' justify='center' align='center'>
-            <Box w='50%'>
+            <Box>
               <DaoOverviewDetails dao={dao} />
             </Box>
           </Flex>

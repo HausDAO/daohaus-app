@@ -7,8 +7,12 @@ import TextBox from '../../components/Shared/TextBox';
 
 const Settings = () => {
   return (
-    <Flex>
-      <Box w='50%' pl={6}>
+    <Flex p={6} wrap='wrap'>
+      <Box
+        w={['100%', null, null, null, '60%']}
+        pr={[0, null, null, null, 6]}
+        pb={6}
+      >
         <TextBox fontSize='xs'>Dao Contract Settings</TextBox>
         <DaoContractSettings />
         <TextBox fontSize='xs' mt={6}>
@@ -16,7 +20,7 @@ const Settings = () => {
         </TextBox>
         <BoostStatus />
       </Box>
-      <Box w='50%' pl={6}>
+      <Box w={['100%', null, null, null, '40%']}>
         <TextBox>Superpowers</TextBox>
         <Superpowers />
       </Box>
