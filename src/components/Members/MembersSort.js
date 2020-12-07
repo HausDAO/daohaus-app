@@ -23,7 +23,7 @@ const MemberSort = ({ sort, setSort }) => {
         Sort By
       </Box>
 
-      <Menu>
+      <Menu isLazy>
         <MenuButton
           textTransform='uppercase'
           fontFamily='heading'
