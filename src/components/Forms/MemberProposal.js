@@ -83,9 +83,7 @@ const MemberProposalForm = () => {
   const onSubmit = async (values) => {
     setLoading(true);
 
-    console.log(values);
     const details = detailsToJSON(values);
-
     try {
       dao.daoService.moloch.submitProposal(
         values.sharesRequested ? values.sharesRequested?.toString() : '0',
@@ -93,11 +91,11 @@ const MemberProposalForm = () => {
         values.tributeOffered
           ? utils.toWei(values.tributeOffered?.toString())
           : '0',
-        values.tributeToken,
+        values.tributeToken || dao.graphData.depositToken.tokenAddress,
         values.paymentRequested
           ? utils.toWei(values.paymentRequested?.toString())
           : '0',
-        values.paymentToken || values.tributeToken,
+        values.paymentToken || dao.graphData.depositToken.tokenAddress,
         details,
         values?.applicantHidden?.startsWith('0x')
           ? values.applicantHidden
@@ -111,7 +109,6 @@ const MemberProposalForm = () => {
       console.log('error: ', err);
     }
   };
-  console.log(memberWallet);
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>

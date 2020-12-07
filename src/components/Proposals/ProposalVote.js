@@ -237,7 +237,12 @@ const ProposalVote = ({ proposal, setProposal }) => {
           proposal?.status !== 'Cancelled' && (
             <>
               <Flex mb={6} w='100%'>
-                <Skeleton isLoaded={proposal && memberWallet} w='100%'>
+                <Skeleton
+                  isLoaded={proposal}
+                  w='100%'
+                  display='flex'
+                  flexDirection='row'
+                >
                   {currentlyVoting(proposal) ? (
                     <>
                       {memberWallet && !hasVoted && (

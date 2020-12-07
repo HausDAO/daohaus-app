@@ -229,7 +229,13 @@ const ProposalDetail = ({ proposal }) => {
         </Box>
       </Box>
 
-      <Flex mt={6} justify='space-between' pr={!memberVote && '20%'} w='100%'>
+      <Flex
+        mt={6}
+        justify='space-between'
+        direction={['column', 'row']}
+        pr={!memberVote && '20%'}
+        w='100%'
+      >
         <Box>
           <TextBox mb={2}>Submitted By</TextBox>
           <Skeleton isLoaded={members && proposal?.proposer}>
