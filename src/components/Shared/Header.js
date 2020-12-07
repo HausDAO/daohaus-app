@@ -150,6 +150,7 @@ const Header = () => {
               >
                 <UserAvatar
                   user={memberWallet?.activeMember ? user.profile : user}
+                  hideCopy={true}
                 />
               </Button>
 
