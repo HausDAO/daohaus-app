@@ -41,9 +41,9 @@ const Hub = () => {
         <>
           <Flex wrap='wrap'>
             <Box
+              w={['100%', null, null, null, '60%']}
               pr={[0, null, null, null, 6]}
-              mb={[6, null, null, null, 0]}
-              w={['100%', null, null, null, '50%']}
+              pb={6}
             >
               <HubProfileCard />
               {memberDaos && memberDaos.length > 0 ? (
@@ -83,7 +83,7 @@ const Hub = () => {
               )}
             </Box>
 
-            <Box w={['100%', null, null, null, '50%']}>
+            <Box w={['100%', null, null, null, '40%']}>
               <Box
                 fontSize='md'
                 fontFamily='heading'
