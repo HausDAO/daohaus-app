@@ -31,7 +31,7 @@ import { usePrices } from '../../contexts/PokemolContext';
 import { bankChartTimeframes } from '../../content/chart-content';
 
 const BankOverviewChart = ({ balances, dao }) => {
-  console.log('balances', balances);
+  // console.log('balances', balances);
 
   const [theme] = useTheme();
   const [prices] = usePrices();
@@ -63,6 +63,8 @@ const BankOverviewChart = ({ balances, dao }) => {
         if (timeframe.value === 'lifetime') {
           data[0].y = 0;
         }
+
+        console.log('data', data);
 
         setChartData(data);
       } else {
