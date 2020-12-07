@@ -31,8 +31,6 @@ import { usePrices } from '../../contexts/PokemolContext';
 import { bankChartTimeframes } from '../../content/chart-content';
 
 const BankOverviewChart = ({ balances, dao }) => {
-  console.log('balances', balances);
-
   const [theme] = useTheme();
   const [prices] = usePrices();
   const [chartData, setChartData] = useState([]);
@@ -47,6 +45,7 @@ const BankOverviewChart = ({ balances, dao }) => {
           filteredBalances,
           dao.graphData.summoningTime,
         );
+
         const dates = getDatesArray(dateRange.start, dateRange.end);
         const groupedBalances = groupBalancesToDateRange(
           filteredBalances,
@@ -120,7 +119,6 @@ const BankOverviewChart = ({ balances, dao }) => {
               <FlexibleWidthXYPlot
                 height={300}
                 margin={{ left: 0, right: 0, top: 40, bottom: 40 }}
-                yDomain={[0, chartData[chartData.length - 1].y || 10]}
               >
                 {gradient}
                 <LineSeries
