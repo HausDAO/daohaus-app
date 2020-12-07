@@ -75,6 +75,16 @@ const Layout = ({ children }) => {
     },
     md: {
       open: {
+        width: '100%',
+        height: '100vh',
+      },
+      closed: {
+        width: '100%',
+        height: '100px',
+      },
+    },
+    lg: {
+      open: {
         width: '420px',
         height: '100vh',
       },
@@ -115,6 +125,20 @@ const Layout = ({ children }) => {
       },
     },
     md: {
+      open: {
+        opacity: 1,
+        pointerEvents: 'all',
+        marginLeft: '25px',
+        display: 'inline-block',
+      },
+      closed: {
+        opacity: 0,
+        pointerEvents: 'none',
+        marginLeft: '0px',
+        display: 'none',
+      },
+    },
+    lg: {
       open: {
         opacity: 1,
         pointerEvents: 'all',
@@ -165,6 +189,20 @@ const Layout = ({ children }) => {
       open: {
         opacity: 1,
         pointerEvents: 'all',
+        marginLeft: '0px',
+        display: 'flex',
+      },
+      closed: {
+        opacity: 0,
+        pointerEvents: 'none',
+        marginLeft: '0px',
+        display: 'none',
+      },
+    },
+    lg: {
+      open: {
+        opacity: 1,
+        pointerEvents: 'all',
         marginLeft: '25px',
         display: 'flex',
       },
@@ -203,6 +241,18 @@ const Layout = ({ children }) => {
       },
     },
     md: {
+      open: {
+        opacity: 1,
+        pointerEvents: 'all',
+        marginLeft: '0px',
+      },
+      closed: {
+        opacity: 0,
+        pointerEvents: 'none',
+        marginLeft: '0px',
+      },
+    },
+    lg: {
       open: {
         opacity: 1,
         pointerEvents: 'all',
@@ -245,6 +295,18 @@ const Layout = ({ children }) => {
       open: {
         opacity: 1,
         pointerEvents: 'all',
+        display: 'inline-block',
+      },
+      closed: {
+        opacity: 0,
+        pointerEvents: 'none',
+        display: 'none',
+      },
+    },
+    lg: {
+      open: {
+        opacity: 1,
+        pointerEvents: 'all',
         display: 'flex',
       },
       closed: {
@@ -277,6 +339,16 @@ const Layout = ({ children }) => {
       },
     },
     md: {
+      open: {
+        width: '100%',
+        marginLeft: 0,
+      },
+      closed: {
+        width: '100%',
+        marginLeft: 0,
+      },
+    },
+    lg: {
       open: {
         width: 'calc(100% - ' + bar.open.width + ')',
         marginLeft: bar.open.width,

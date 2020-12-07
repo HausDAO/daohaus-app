@@ -118,11 +118,12 @@ const MemberProposalForm = () => {
         flexDirection='row'
         justifyContent='space-between'
         mb={5}
+        flexWrap='wrap'
       >
-        <Box w='48%'>
+        <Box w={['100%', null, '50%']} pr={[0, null, 5]}>
           <DetailsFields register={register} />
         </Box>
-        <Box w='48%'>
+        <Box w={['100%', null, '50%']}>
           <TextBox as={FormLabel} htmlFor='name' mb={2}>
             Shares Requested
           </TextBox>

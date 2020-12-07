@@ -21,11 +21,12 @@ const Proposals = () => {
         <Box
           w={['100%', null, null, null, '60%']}
           pr={[0, null, null, null, 6]}
+          pb={6}
         >
           <ProposalsList />
         </Box>
 
-        <Box w={['100%', null, null, null, '40%']} pt={[6, 0]}>
+        <Box w={['100%', null, null, null, '40%']}>
           <ProposalsActivityFeed />
         </Box>
       </>
