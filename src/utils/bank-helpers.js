@@ -29,12 +29,20 @@ export const getDateRange = (timeframe, balances, createdAt) => {
       end: new Date(balances[balances.length - 1].timestamp * 1000),
     };
   } else {
-    const today = new Date();
-    const startDate = new Date(balances[balances.length - 1].timestamp * 1000);
-    startDate.setMonth(today.getMonth() - timeframe.value);
+    let startDate = new Date();
+    startDate.setMonth(startDate.getMonth() - timeframe.value);
+    if (startDate.getTime() < +createdAt * 1000) {
+      startDate = new Date(createdAt * 1000);
+    }
+
+    let endDate = new Date(balances[balances.length - 1].timestamp * 1000);
+    if (endDate.getTime() < startDate.getTime()) {
+      endDate = new Date();
+    }
+
     return {
       start: startDate,
-      end: new Date(balances[balances.length - 1].timestamp * 1000),
+      end: endDate,
     };
   }
 };
@@ -64,7 +72,7 @@ export const balancesWithValue = (balances, prices) => {
 
 export const groupBalancesToDateRange = (balances, dates) => {
   const groupedByToken = groupBy(balances, 'tokenAddress');
-  return dates.map((date, i) => {
+  let dateBalances = dates.map((date, i) => {
     const value = Object.keys(groupedByToken).reduce((sum, tokenAddress) => {
       const nextBal = groupedByToken[tokenAddress].find(
         (bal) => +bal.timestamp >= date.getTime() / 1000,
@@ -78,6 +86,15 @@ export const groupBalancesToDateRange = (balances, dates) => {
       value,
     };
   });
+
+  if (!dateBalances.some((bal) => bal.value > 0)) {
+    dateBalances = dateBalances.map((bal) => {
+      bal.value = balances[balances.length - 1].value;
+      return bal;
+    });
+  }
+
+  return dateBalances;
 };
 
 export const groupBalancesMemberToDateRange = (balances, dates) => {
