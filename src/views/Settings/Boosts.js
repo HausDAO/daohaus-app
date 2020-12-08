@@ -1,6 +1,8 @@
 import React from 'react';
 // import { Link } from 'react-router-dom';
 import { Box, Flex, Button } from '@chakra-ui/react';
+import ContentBox from '../../components/Shared/ContentBox';
+import TextBox from '../../components/Shared/TextBox';
 // import { useDao } from '../../contexts/PokemolContext';
 
 const boostList = [
@@ -19,39 +21,28 @@ const Boosts = () => {
   // const [dao] = useDao();
 
   return (
-    <Box>
-      <Box
-        fontFamily='heading'
-        fontWeight={700}
-        fontSize='sm'
-        textTransform='uppercase'
-        ml={8}
-      >
+    <Box p={6}>
+      <TextBox fontSize='sm' mb={3}>
         Available Apps
-      </Box>
-      <Flex pl={3}>
+      </TextBox>
+      <Flex wrap='wrap' justify='space-evenly'>
         {boostList.map((boost, i) => {
           return (
-            <Flex
+            <ContentBox
+              d='flex'
               key={i}
-              rounded='lg'
-              bg='blackAlpha.600'
-              borderWidth='1px'
-              borderColor='whiteAlpha.200'
-              p={3}
-              m={3}
-              w='300px'
+              w={['100%', '100%', '50%', '33%']}
               h='370px'
-              direction='column'
-              align='center'
-              justify='space-around'
+              mb={3}
+              p={6}
+              flexDirection='column'
+              alignItems='center'
+              justifyContent='space-around'
             >
               <Box fontFamily='heading' fontSize='2xl' fontWeight={700}>
                 {boost.name}
               </Box>
-              <Box maxW='80%' textAlign='center'>
-                {boost.description}
-              </Box>
+              <Box textAlign='center'>{boost.description}</Box>
               <Button textTransform='uppercase' disabled={true}>
                 Coming Soon
               </Button>
@@ -62,7 +53,7 @@ const Boosts = () => {
               >
                 Add This App
               </Button> */}
-            </Flex>
+            </ContentBox>
           );
         })}
       </Flex>

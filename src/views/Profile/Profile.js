@@ -47,15 +47,19 @@ const Profile = () => {
   }, []);
 
   return (
-    <Flex>
-      <Box w='60%' pl={6}>
+    <Flex wrap='wrap' p={6}>
+      <Box
+        w={['100%', null, null, null, '60%']}
+        pr={[0, null, null, null, 6]}
+        pb={6}
+      >
         {memberProfile && <ProfileOverviewCard user={memberProfile} />}
         <TokenList
           tokenList={memberProfile?.tokenBalances}
           isMember={isMember}
         />
       </Box>
-      <Box pl={6}>
+      <Box w={['100%', null, null, null, '40%']}>
         <ProfileActvityFeed profileAddress={params.id} />
       </Box>
     </Flex>
