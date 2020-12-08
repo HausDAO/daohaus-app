@@ -18,6 +18,7 @@ const validProposalType = (type) => {
     'guildkick',
     'trade',
     'minion',
+    'transmutation',
   ].includes(type);
 };
 

@@ -37,5 +37,12 @@ export const proposalTypes = (theme) => {
       image: 'themes/raidTheme/raidguild__swords-white.svg',
       comingSoon: true,
     },
+    {
+      name: 'Transmutation',
+      subhead: 'Transmutation',
+      proposalType: 'transmutation',
+      image: 'themes/raidTheme/raidguild__swords-white.svg',
+      comingSoon: false,
+    },
   ];
 };
