@@ -494,7 +494,7 @@ const Layout = ({ children }) => {
           initial={sideNavOpen ? 'open' : 'closed'}
           animate={sideNavOpen ? 'open' : 'closed'}
           variants={navButtons}
-          direction='row'
+          direction='column'
           wrap='wrap'
         >
           {dao?.graphData ? (
@@ -502,6 +502,7 @@ const Layout = ({ children }) => {
               spacing={[1, null, null, 3]}
               d='flex'
               mt={[3, null, null, 12]}
+              flexDirection='column'
             >
               <Button
                 variant='sideNav'
@@ -615,6 +616,7 @@ const Layout = ({ children }) => {
               spacing={[1, null, null, 3]}
               d='flex'
               mt={[3, null, null, 12]}
+              flexDirection='column'
             >
               <Button
                 variant='sideNav'
