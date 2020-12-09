@@ -76,7 +76,7 @@ const ProposalsList = () => {
 
   return (
     <>
-      <Flex>
+      <Flex wrap='wrap'>
         {dao.version !== '1' ? (
           <ProposalFilter
             filter={filter}
