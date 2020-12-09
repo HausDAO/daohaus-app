@@ -3,7 +3,6 @@ import { Skeleton, Box, Text } from '@chakra-ui/react';
 
 import { usePrices } from '../../contexts/PokemolContext';
 import { getTotalBankValue } from '../../utils/bank-helpers';
-import TextBox from '../Shared/TextBox';
 
 const BankTotal = ({ tokenBalances }) => {
   const [prices] = usePrices();

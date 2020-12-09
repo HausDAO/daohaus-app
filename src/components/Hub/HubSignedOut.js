@@ -30,7 +30,7 @@ const HubSignedOut = () => {
       <Flex direction='column' align='center'>
         <Web3SignIn />
 
-        <Link href='https://daohaus.club' isExternal>
+        <Link href='https://daohaus.club/explore' isExternal>
           <Box mt={5}>Go to Daohaus</Box>
         </Link>
       </Flex>

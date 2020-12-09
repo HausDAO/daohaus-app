@@ -111,10 +111,11 @@ const MemberDaoList = ({ daos }) => {
       </Flex>
 
       <Link
-        href='https://daohaus.club'
+        href='https://daohaus.club/explore'
         isExternal
         fontSize='md'
         textTransform='uppercase'
+        color='secondary.500'
       >
         Explore more DAOs on DAOhaus
       </Link>

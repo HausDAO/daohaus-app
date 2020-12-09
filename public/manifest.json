@@ -1,7 +1,7 @@
 {
-  "name": "Pokemol",
-  "short_name": "Pokemol",
-  "theme_color": "#bd86fe",
+  "name": "DAOhaus",
+  "short_name": "DAOhaus",
+  "theme_color": "#10153d",
   "background_color": "#ef497b",
   "display": "minimal-ui",
   "Scope": "/",
