@@ -9,6 +9,7 @@ export class TransmutationService {
 
   constructor(web3, accountAddress, setupValues) {
     this.web3 = web3;
+    console.log(setupValues);
     this.contract = new web3.eth.Contract(abi, setupValues.transmutation);
     this.accountAddress = accountAddress;
     this.setupValues = setupValues;

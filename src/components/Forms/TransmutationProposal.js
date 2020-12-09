@@ -8,36 +8,39 @@ import {
   Input,
   Icon,
   Box,
-  Menu,
-  MenuButton,
-  MenuList,
-  MenuItem,
+  Textarea,
+  Heading,
+  Text,
 } from '@chakra-ui/react';
 import TextBox from '../Shared/TextBox';
 import { utils } from 'web3';
 import { RiAddFill, RiErrorWarningLine } from 'react-icons/ri';
 
-import { useDao, useTxProcessor, useUser } from '../../contexts/PokemolContext';
+import {
+  useDao,
+  useTxProcessor,
+  useUser,
+  useWeb3Connect,
+} from '../../contexts/PokemolContext';
 
-import TributeInput from './TributeInput';
-import PaymentInput from './PaymentInput';
-import AddressInput from './AddressInput';
-import DetailsFields from './DetailFields';
-import { detailsToJSON } from '../../utils/proposal-helper';
 import GraphFetch from '../Shared/GraphFetch';
 import { GET_TRANSMUTATION } from '../../utils/boost-queries';
+import { TransmutationService } from '../../utils/transmutation-service';
+import { TokenService } from '../../utils/token-service';
 
 const TransmutationProposal = () => {
   const [loading, setLoading] = useState(false);
-  const [showShares, setShowShares] = useState(false);
-  const [showLoot, setShowLoot] = useState(false);
-  const [showTribute, setShowTribute] = useState(false);
   const [user] = useUser();
   const [dao] = useDao();
+  const [web3Connect] = useWeb3Connect();
   const [txProcessor, updateTxProcessor] = useTxProcessor();
   const [currentError, setCurrentError] = useState(null);
 
   const [transmutationData, setTransmutationData] = useState();
+  const [transmutationService, setTransmutationService] = useState();
+  const [tokenData, setTokenData] = useState([]);
+  const [balance, setBalance] = useState(0);
+  const [symbol, setSymbol] = useState(0);
 
   console.log('tansmutationData', transmutationData);
   console.log('dao', dao);
@@ -84,37 +87,92 @@ const TransmutationProposal = () => {
   //   }
   // };
 
+  useEffect(() => {
+    if (!dao || !transmutationData) {
+      return;
+    }
+    const setupValues = {
+      ...dao.boosts.transmutation.metadata,
+      ...transmutationData[0],
+    };
+    console.log('setupValues', setupValues);
+
+    const ts = new TransmutationService(
+      web3Connect.web3,
+      user.username,
+      setupValues,
+    );
+    setTransmutationService(ts);
+  }, [transmutationData]);
+
+  useEffect(() => {
+    const getBalance = async () => {
+      const token = await transmutationService.giveToken();
+
+      const tokenService = new TokenService(web3Connect.web3, token);
+
+      const balance = await tokenService.balanceOf(
+        transmutationService.setupValues.transmutation,
+      );
+
+      console.log('balance', web3Connect.web3.utils.fromWei(balance));
+      setBalance(web3Connect.web3.utils.fromWei(balance));
+      const symbol = await tokenService.getSymbol();
+      setSymbol(symbol);
+    };
+    if (transmutationService) {
+      getBalance();
+    }
+
+    // eslint-disable-next-line
+  }, [web3Connect.web3]);
+
+  // get getToken
+  useEffect(() => {
+    const getTokenBalance = async () => {
+      const getTokenAddress = await transmutationService.getToken();
+      console.log('getTokenAddress', getTokenAddress);
+      const tokenArray = dao.moloch.tokenBalances.filter(
+        (token) =>
+          token.token.tokenAddress === getTokenAddress.toLowerCase() &&
+          token.guildBank,
+      );
+
+      if (!tokenArray) {
+        setTokenData([]);
+        return;
+      }
+      console.log('tokenArray', tokenArray);
+      setTokenData(
+        tokenArray
+          .filter((token) => token)
+          .map((token) => ({
+            label: token.token.symbol || token.token.tokenAddress,
+            value: token.token.tokenAddress,
+            decimals: token.token.decimals,
+            balanceWei: token.tokenBalance,
+            balance: web3Connect.web3.utils.fromWei(token.tokenBalance),
+          })),
+      );
+    };
+    if (dao && dao.moloch && transmutationService) {
+      getTokenBalance();
+    }
+    // eslint-disable-next-line
+  }, [dao, web3Connect]);
+
+  const displayTribute = (val) => {
+    return val && utils.fromWei('' + val);
+  };
+
   const onSubmit = async (values) => {
     setLoading(true);
 
-    console.log('values', values);
-
-    // const details = detailsToJSON(values);
-
-    // try {
-    //   dao.daoService.moloch.submitProposal(
-    //     values.sharesRequested ? values.sharesRequested?.toString() : '0',
-    //     values.lootRequested ? values.lootRequested?.toString() : '0',
-    //     values.tributeOffered
-    //       ? utils.toWei(values.tributeOffered?.toString())
-    //       : '0',
-    //     values.tributeToken || dao.graphData.depositToken.tokenAddress,
-    //     values.paymentRequested
-    //       ? utils.toWei(values.paymentRequested?.toString())
-    //       : '0',
-    //     values.paymentToken || dao.graphData.depositToken.tokenAddress,
-    //     details,
-    //     values?.applicantHidden?.startsWith('0x')
-    //       ? values.applicantHidden
-    //       : values?.applicant
-    //       ? values.applicant
-    //       : values?.memberApplicant,
-    //     txCallBack,
-    //   );
-    // } catch (err) {
-    //   setLoading(false);
-    //   console.log('error: ', err);
-    // }
+    return transmutationService.propose(
+      values.applicant,
+      values.paymentRequested,
+      values.description,
+    );
   };
 
   return (
@@ -129,101 +187,108 @@ const TransmutationProposal = () => {
             mb={5}
             flexWrap='wrap'
           >
-            <Box w={['100%', null, '50%']} pr={[0, null, 5]}>
-              <DetailsFields register={register} />
-            </Box>
-            <Box w={['100%', null, '50%']}>
-              <AddressInput
-                name='applicant'
-                register={register}
-                setValue={setValue}
-                watch={watch}
-              />
-              <PaymentInput
-                register={register}
-                setValue={setValue}
-                getValues={getValues}
-                errors={errors}
-              />
-
-              {showShares && (
-                <>
-                  <TextBox as={FormLabel} htmlFor='name' mb={2}>
-                    Shares Requested
-                  </TextBox>
-                  <Input
-                    name='sharesRequested'
-                    placeholder='0'
-                    mb={5}
-                    ref={register({
-                      required: {
-                        value: true,
-                        message:
-                          'Requested shares are required for Member Proposals',
-                      },
-                      pattern: {
-                        value: /[0-9]/,
-                        message: 'Requested shares must be a number',
-                      },
-                    })}
-                  />
-                </>
-              )}
-              {showLoot && (
-                <>
-                  <TextBox as={FormLabel} htmlFor='lootRequested' mb={2}>
-                    Loot Requested
-                  </TextBox>
-                  <Input
-                    name='lootRequested'
-                    placeholder='0'
-                    mb={5}
-                    ref={register({
-                      pattern: {
-                        value: /[0-9]/,
-                        message: 'Loot must be a number',
-                      },
-                    })}
-                  />
-                </>
-              )}
-              {showTribute && (
-                <TributeInput
-                  register={register}
-                  setValue={setValue}
-                  getValues={getValues}
-                />
-              )}
-              {(!showShares || !showLoot || !showTribute) && (
-                <Menu textTransform='uppercase'>
-                  <MenuButton
-                    as={Button}
-                    variant='outline'
-                    rightIcon={<Icon as={RiAddFill} />}
-                  >
-                    Additional Options
-                  </MenuButton>
-                  <MenuList>
-                    {!showShares && (
-                      <MenuItem onClick={() => setShowShares(true)}>
-                        Request Shares
-                      </MenuItem>
-                    )}
-                    {!showLoot && (
-                      <MenuItem onClick={() => setShowLoot(true)}>
-                        Request Loot
-                      </MenuItem>
-                    )}
-                    {!showTribute && (
-                      <MenuItem onClick={() => setShowTribute(true)}>
-                        Give Tribute
-                      </MenuItem>
-                    )}
-                  </MenuList>
-                </Menu>
-              )}
-            </Box>
+            <FormLabel
+              htmlFor='description'
+              color='white'
+              fontFamily='heading'
+              textTransform='uppercase'
+              fontSize='xs'
+              fontWeight={700}
+            >
+              Description
+            </FormLabel>
+            <Textarea
+              name='description'
+              placeholder='Short Description'
+              type='textarea'
+              mb={5}
+              h={10}
+              ref={register({
+                required: {
+                  value: true,
+                  message: 'Description is required',
+                },
+              })}
+              color='white'
+              focusBorderColor='secondary.500'
+            />
+            <FormLabel
+              htmlFor='applicant'
+              color='white'
+              fontFamily='heading'
+              textTransform='uppercase'
+              fontSize='xs'
+              fontWeight={700}
+            >
+              Applicant
+            </FormLabel>
+            <Input
+              name='applicant'
+              placeholder='0x'
+              mb={5}
+              ref={register({
+                required: {
+                  value: true,
+                  message: 'Applicant contract is required',
+                },
+              })}
+              color='white'
+              focusBorderColor='secondary.500'
+            />
+            <FormLabel
+              htmlFor='paymentRequested'
+              color='white'
+              fontFamily='heading'
+              textTransform='uppercase'
+              fontSize='xs'
+              fontWeight={700}
+            >
+              Payment Requested
+            </FormLabel>
+            <Input
+              name='paymentRequested'
+              placeholder='0x'
+              mb={5}
+              ref={register({
+                required: {
+                  value: true,
+                  message: 'Payment Requested is required',
+                },
+              })}
+              color='white'
+              focusBorderColor='secondary.500'
+            />
           </FormControl>
+          {tokenData[0] && (
+            <Button
+            //   onClick={() => {
+            //     setFieldValue('paymentRequested', tokenData[0].balance);
+            //   }}
+            >
+              DAO Balance:{' '}
+              {tokenData[0] && tokenData[0].balance.substring(0, 6)}{' '}
+              {tokenData[0] && tokenData[0].label}
+            </Button>
+          )}
+
+          <Box>
+            <Text>
+              Exchange Rate: 1 {tokenData[0] && tokenData[0].label} ={' '}
+              {transmutationService?.setupValues.exchangeRate} {symbol}
+            </Text>
+          </Box>
+          <Box>
+            <h5>Will Return</h5>
+            <Heading as='h2'>
+              {displayTribute(
+                transmutationService
+                  ?.calcTribute(getValues('paymentRequested'))
+                  .toString(),
+              )}{' '}
+              {symbol}
+            </Heading>
+            <Text>{/* Balance: {balance} {symbol} */}</Text>
+          </Box>
           <Flex justify='flex-end' align='center' h='60px'>
             {currentError && (
               <Box color='red.500' fontSize='m' mr={5}>
