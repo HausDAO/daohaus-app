@@ -44,7 +44,7 @@ export const providerOptions = () => {
   return allNetworkProviders;
 };
 
-export const w3connect = async (web3Connect) => {
+export const w3connect = async (web3Connect, currentNetwork) => {
   const provider = await web3Connect.w3c.connect();
 
   const web3 = new Web3(provider);
@@ -52,7 +52,11 @@ export const w3connect = async (web3Connect) => {
   const injectedChainId = await web3.eth.getChainId();
   console.log('injectedChainId', injectedChainId);
 
-  if (+injectedChainId !== +process.env.REACT_APP_NETWORK_ID) {
+  // don't care about this if on hub, only if in dao
+
+  console.log('logging the user in, dao/hub network', currentNetwork);
+  // if (+injectedChainId !== +process.env.REACT_APP_NETWORK_ID) {
+  if (currentNetwork && +injectedChainId !== currentNetwork.network_id) {
     // eslint-disable-next-line no-throw-literal
     throw {
       msg: `Please switch Web3 to the correct network and try signing in again. Detected network: ${

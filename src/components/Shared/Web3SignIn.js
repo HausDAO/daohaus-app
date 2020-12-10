@@ -4,10 +4,11 @@ import { useToast, Button } from '@chakra-ui/react';
 
 import { getChainData } from '../../utils/chains';
 import { w3connect, providerOptions } from '../../utils/auth';
-import { useWeb3Connect } from '../../contexts/PokemolContext';
+import { useNetwork, useWeb3Connect } from '../../contexts/PokemolContext';
 
 export const Web3SignIn = () => {
   const [, updateWeb3Connect] = useWeb3Connect();
+  const [network] = useNetwork();
   const toast = useToast();
 
   return (
@@ -24,7 +25,10 @@ export const Web3SignIn = () => {
           };
 
           try {
-            const { w3c, web3, provider } = await w3connect(_web3Connect);
+            const { w3c, web3, provider } = await w3connect(
+              _web3Connect,
+              network,
+            );
             updateWeb3Connect({ w3c, web3, provider });
 
             // window.location.reload();

@@ -1,4 +1,4 @@
-import supportedChains from './chains';
+import { supportedChains } from './chains';
 
 const chainData = supportedChains[+process.env.REACT_APP_NETWORK_ID];
 const geckoURL = 'https://api.coingecko.com/api/v3/simple/token_price';

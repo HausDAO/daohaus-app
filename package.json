@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
-    "3box": "^1.16.2",
+    "3box": "1.16.2",
     "@apollo/react-hooks": "^4.0.0",
     "@chakra-ui/react": "^1.0.1",
     "@emotion/react": "^11.1.1",

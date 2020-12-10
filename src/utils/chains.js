@@ -4,7 +4,6 @@ export const supportedChains = {
     short_name: 'eth',
     chain: 'ETH',
     network: 'mainnet',
-    chain_id: 1,
     network_id: 1,
     providers: ['walletconnect', 'portis', 'fortmatic'],
     rpc_url: 'https://mainnet.infura.io/',
@@ -26,7 +25,6 @@ export const supportedChains = {
     short_name: 'rin',
     chain: 'ETH',
     network: 'rinkeby',
-    chain_id: 4,
     network_id: 4,
     providers: ['walletconnect', 'portis', 'fortmatic'],
     rpc_url: 'https://rinkeby.infura.io/',
@@ -45,7 +43,6 @@ export const supportedChains = {
     short_name: 'kov',
     chain: 'ETH',
     network: 'kovan',
-    chain_id: 42,
     network_id: 42,
     providers: ['walletconnect', 'portis', 'fortmatic'],
     rpc_url: 'https://kovan.infura.io/',
@@ -64,7 +61,6 @@ export const supportedChains = {
     short_name: 'xdai',
     chain: 'xDAI',
     network: 'xdai',
-    chain_id: 100,
     network_id: 100,
     providers: ['walletconnect', 'portis'],
     rpc_url: 'https://dai.poa.network',
@@ -106,4 +102,10 @@ export function getChainData(chainId) {
   return chainData;
 }
 
-export default supportedChains;
+export function getChainDataByName(name) {
+  const networkId = Object.keys(supportedChains).find((networkId) => {
+    return supportedChains[networkId].network === name;
+  });
+
+  return supportedChains[networkId];
+}

@@ -9,7 +9,7 @@ import { useTheme } from './contexts/CustomThemeContext';
 import { resolvers } from './utils/apollo/resolvers';
 import Routes from './Routes';
 import Layout from './components/Layout/Layout';
-import supportedChains from './utils/chains';
+import { supportedChains } from './utils/chains';
 import UserInit from './contexts/UserInit';
 import DaoInit from './contexts/DaoInit';
 import EnsInit from './contexts/EnsInit';
@@ -17,7 +17,9 @@ import TxProcessorInit from './contexts/TxProcessorInit';
 import GraphInit from './contexts/GraphInit';
 import PriceInit from './contexts/PricesInit';
 
-const chainData = supportedChains[+process.env.REACT_APP_NETWORK_ID];
+// const chainData = supportedChains[+process.env.REACT_APP_NETWORK_ID];
+const chainData = supportedChains[1];
+
 const client = new ApolloClient({
   uri: chainData.subgraph_url,
   clientState: {

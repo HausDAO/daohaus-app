@@ -4,12 +4,14 @@ import { getProfile } from '3box/lib/api';
 
 import { createWeb3User, w3connect } from '../utils/auth';
 import { USER_TYPE } from '../utils/dao-service';
-import { useUser, useWeb3Connect } from './PokemolContext';
+import { useNetwork, useUser, useWeb3Connect } from './PokemolContext';
+import { supportedChains, getChainDataByName } from '../utils/chains';
 
 const UserInit = () => {
   const toast = useToast();
   const [web3Connect, updateWeb3Connect] = useWeb3Connect();
   const [user, updateUser] = useUser();
+  const [network, updateNetwork] = useNetwork();
 
   useEffect(() => {
     initCurrentUser();
@@ -32,7 +34,16 @@ const UserInit = () => {
         case USER_TYPE.WEB3: {
           if (web3Connect.w3c.cachedProvider) {
             try {
-              providerConnect = await w3connect(web3Connect);
+              providerConnect = await w3connect(web3Connect, network);
+
+              console.log('providerConnect', providerConnect);
+              const providerNetwork = getChainDataByName(
+                providerConnect.w3c.providerController.network,
+              );
+
+              console.log('providerNetwork', providerNetwork);
+
+              updateNetwork(providerNetwork);
             } catch (err) {
               console.log(err);
 

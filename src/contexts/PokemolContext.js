@@ -2,7 +2,7 @@ import React, { useContext, useCallback, useMemo } from 'react';
 import Web3Modal from 'web3modal';
 
 import { providerOptions } from '../utils/auth';
-import supportedChains, { getChainData } from '../utils/chains';
+import { supportedChains, getChainData } from '../utils/chains';
 
 const PokemolContext = React.createContext();
 
@@ -11,7 +11,9 @@ function usePokemolContext() {
 }
 
 const initialState = {
-  network: supportedChains[process.env.REACT_APP_NETWORK_ID],
+  // network: supportedChains[process.env.REACT_APP_NETWORK_ID],
+  network: null,
+
   refetchQuery: null,
   modals: {
     changeDao: false,

@@ -1,6 +1,6 @@
 import ApolloClient from 'apollo-boost';
 
-import supportedChains from '../chains';
+import { supportedChains } from '../chains';
 import { resolvers } from './resolvers';
 
 export const supergraphClients = {
