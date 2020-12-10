@@ -1,3 +1,4 @@
+import React, { useState } from 'react';
 import {
   Stack,
   Box,
@@ -8,9 +9,32 @@ import {
   InputLeftAddon,
 } from '@chakra-ui/react';
 import TextBox from '../Shared/TextBox';
-import React from 'react';
+import { stripHttpProtocol } from '../../utils/helpers';
 
 const DetailsFields = ({ register }) => {
+  const [values, setValues] = useState({
+    title: '',
+    description: '',
+    link: '',
+  });
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+
+    if (name === 'link') {
+      setValues({
+        ...values,
+        link: stripHttpProtocol(value),
+      });
+    } else {
+      setValues({
+        ...values,
+        [name]: value,
+      });
+    }
+  };
+  console.log(values);
+
   return (
     <Stack spacing={2}>
       <Box>
@@ -27,6 +51,8 @@ const DetailsFields = ({ register }) => {
               message: 'Title is required',
             },
           })}
+          onChange={handleChange}
+          value={values.title}
           color='white'
           focusBorderColor='secondary.500'
         />
@@ -42,6 +68,8 @@ const DetailsFields = ({ register }) => {
           mb={0}
           h={10}
           ref={register()}
+          onChange={handleChange}
+          value={values.description}
           color='white'
           focusBorderColor='secondary.500'
         />
@@ -57,6 +85,8 @@ const DetailsFields = ({ register }) => {
             placeholder='daolink.club'
             color='white'
             focusBorderColor='secondary.500'
+            onChange={handleChange}
+            value={values.link}
             ref={register()}
           />
         </InputGroup>
