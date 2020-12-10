@@ -12,9 +12,8 @@ import {
   Heading,
   Text,
 } from '@chakra-ui/react';
-import TextBox from '../Shared/TextBox';
 import { utils } from 'web3';
-import { RiAddFill, RiErrorWarningLine } from 'react-icons/ri';
+import { RiErrorWarningLine } from 'react-icons/ri';
 
 import {
   useDao,
@@ -27,6 +26,7 @@ import GraphFetch from '../Shared/GraphFetch';
 import { GET_TRANSMUTATION } from '../../utils/boost-queries';
 import { TransmutationService } from '../../utils/transmutation-service';
 import { TokenService } from '../../utils/token-service';
+import AddressInput from './AddressInput';
 
 const TransmutationProposal = () => {
   const [loading, setLoading] = useState(false);
@@ -42,16 +42,12 @@ const TransmutationProposal = () => {
   const [balance, setBalance] = useState(0);
   const [symbol, setSymbol] = useState(0);
 
-  console.log('tansmutationData', transmutationData);
-  console.log('dao', dao);
-
   const {
     handleSubmit,
     errors,
     register,
     reset,
     setValue,
-    getValues,
     watch,
     // formState
   } = useForm();
@@ -68,71 +64,70 @@ const TransmutationProposal = () => {
     }
   }, [errors]);
 
-  // const txCallBack = (txHash, details) => {
-  //   console.log('txCallBack', txProcessor);
-  //   if (txProcessor && txHash) {
-  //     txProcessor.setTx(txHash, user.username, details);
-  //     txProcessor.forceUpdate = true;
-
-  //     updateTxProcessor({ ...txProcessor });
-  //     // close model here
-  //     // onClose();
-  //     // setShowModal(null);
-  //     setLoading(false);
-  //     reset();
-  //   }
-  //   if (!txHash) {
-  //     console.log('error: ', details);
-  //     setLoading(false);
-  //   }
-  // };
+  const txCallBack = (txHash, details) => {
+    if (txProcessor && txHash) {
+      txProcessor.setTx(txHash, user.username, details, true, false, false);
+      txProcessor.forceCheckTx = true;
+      console.log('force update changed');
+      updateTxProcessor({ ...txProcessor });
+      reset();
+      // close model here
+      // onClose();
+      // setShowModal(null);
+    }
+    if (!txHash) {
+      console.log('error: ', details);
+    }
+  };
 
   useEffect(() => {
-    if (!dao || !transmutationData) {
+    if (!dao || !transmutationData || !user) {
+      return;
+    }
+    if (!dao?.boosts.transmutation) {
       return;
     }
     const setupValues = {
       ...dao.boosts.transmutation.metadata,
       ...transmutationData[0],
     };
-    console.log('setupValues', setupValues);
 
     const ts = new TransmutationService(
       web3Connect.web3,
       user.username,
       setupValues,
+      txCallBack,
     );
     setTransmutationService(ts);
+    // eslint-disable-next-line
   }, [transmutationData]);
 
   useEffect(() => {
-    const getBalance = async () => {
-      const token = await transmutationService.giveToken();
+    const getGiveTokenBalance = async () => {
+      const token = await transmutationData[0].giveToken;
 
       const tokenService = new TokenService(web3Connect.web3, token);
 
-      const balance = await tokenService.balanceOf(
-        transmutationService.setupValues.transmutation,
+      const _balance = await tokenService.balanceOf(
+        transmutationData[0].transmutation,
       );
-
-      console.log('balance', web3Connect.web3.utils.fromWei(balance));
-      setBalance(web3Connect.web3.utils.fromWei(balance));
+      console.log(utils.fromWei(_balance));
+      setBalance(utils.fromWei(_balance));
       const symbol = await tokenService.getSymbol();
       setSymbol(symbol);
     };
-    if (transmutationService) {
-      getBalance();
+    if (web3Connect.web3 && transmutationService) {
+      getGiveTokenBalance();
     }
 
     // eslint-disable-next-line
-  }, [web3Connect.web3]);
+  }, [transmutationService]);
 
   // get getToken
   useEffect(() => {
-    const getTokenBalance = async () => {
-      const getTokenAddress = await transmutationService.getToken();
-      console.log('getTokenAddress', getTokenAddress);
-      const tokenArray = dao.moloch.tokenBalances.filter(
+    const getGetTokenBalance = async () => {
+      const getTokenAddress = transmutationData[0].getToken;
+      const tokenArray = dao.graphData.tokenBalances.filter(
         (token) =>
           token.token.tokenAddress === getTokenAddress.toLowerCase() &&
           token.guildBank,
@@ -142,7 +137,6 @@ const TransmutationProposal = () => {
         setTokenData([]);
         return;
       }
-      console.log('tokenArray', tokenArray);
       setTokenData(
         tokenArray
           .filter((token) => token)
@@ -151,33 +145,37 @@ const TransmutationProposal = () => {
             value: token.token.tokenAddress,
             decimals: token.token.decimals,
             balanceWei: token.tokenBalance,
-            balance: web3Connect.web3.utils.fromWei(token.tokenBalance),
+            balance: utils.fromWei(token.tokenBalance),
           })),
       );
     };
-    if (dao && dao.moloch && transmutationService) {
-      getTokenBalance();
+    if (transmutationService) {
+      getGetTokenBalance();
     }
     // eslint-disable-next-line
-  }, [dao, web3Connect]);
+  }, [balance]);
 
   const displayTribute = (val) => {
-    return val && utils.fromWei('' + val);
+    return utils.fromWei('' + val);
   };
 
   const onSubmit = async (values) => {
     setLoading(true);
-
-    return transmutationService.propose(
-      values.applicant,
-      values.paymentRequested,
-      values.description,
-    );
+    try {
+      await transmutationService.propose(
+        values.applicant,
+        values.paymentRequested,
+        values.description,
+        txCallBack,
+      );
+    } catch (e) {
+      console.error(`Error processing proposal: ${e.toString()}`);
+    }
   };
 
   return (
     <>
-      {transmutationData ? (
+      {transmutationData && transmutationData.length ? (
         <form onSubmit={handleSubmit(onSubmit)}>
           <FormControl
             isInvalid={errors.name}
@@ -222,18 +220,12 @@ const TransmutationProposal = () => {
             >
               Applicant
             </FormLabel>
-            <Input
+            <AddressInput
               name='applicant'
-              placeholder='0x'
-              mb={5}
-              ref={register({
-                required: {
-                  value: true,
-                  message: 'Applicant contract is required',
-                },
-              })}
-              color='white'
-              focusBorderColor='secondary.500'
+              register={register}
+              setValue={setValue}
+              watch={watch}
+              member={true}
             />
             <FormLabel
               htmlFor='paymentRequested'
@@ -260,35 +252,39 @@ const TransmutationProposal = () => {
             />
           </FormControl>
           {tokenData[0] && (
-            <Button
-            //   onClick={() => {
-            //     setFieldValue('paymentRequested', tokenData[0].balance);
-            //   }}
-            >
-              DAO Balance:{' '}
-              {tokenData[0] && tokenData[0].balance.substring(0, 6)}{' '}
-              {tokenData[0] && tokenData[0].label}
-            </Button>
-          )}
+            <>
+              <Button
+                onClick={() => {
+                  setValue('paymentRequested', tokenData[0].balance);
+                }}
+              >
+                DAO Balance:{' '}
+                {tokenData[0] && tokenData[0].balance.substring(0, 6)}{' '}
+                {tokenData[0] && tokenData[0].label}
+              </Button>
 
-          <Box>
-            <Text>
-              Exchange Rate: 1 {tokenData[0] && tokenData[0].label} ={' '}
-              {transmutationService?.setupValues.exchangeRate} {symbol}
-            </Text>
-          </Box>
-          <Box>
-            <h5>Will Return</h5>
-            <Heading as='h2'>
-              {displayTribute(
-                transmutationService
-                  ?.calcTribute(getValues('paymentRequested'))
-                  .toString(),
-              )}{' '}
-              {symbol}
-            </Heading>
-            <Text>{/* Balance: {balance} {symbol} */}</Text>
-          </Box>
+              <Box>
+                <Text>
+                  Exchange Rate: 1 {tokenData[0] && tokenData[0].label} ={' '}
+                  {dao.boosts.transmutation.metadata.exchangeRate} {symbol}
+                </Text>
+              </Box>
+              <Box>
+                <h5>Will Return</h5>
+                <Heading as='h2'>
+                  {displayTribute(
+                    transmutationService
+                      .calcTribute(watch('paymentRequested'))
+                      .toString(),
+                  )}{' '}
+                  {symbol}
+                </Heading>
+                <Text>
+                  Balance: {balance} {symbol}
+                </Text>
+              </Box>
+            </>
+          )}
           <Flex justify='flex-end' align='center' h='60px'>
             {currentError && (
               <Box color='red.500' fontSize='m' mr={5}>
