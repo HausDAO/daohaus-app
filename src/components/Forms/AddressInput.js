@@ -47,7 +47,7 @@ const AddressInput = ({
     <>
       {anyApplicant || member ? (
         <FormControl mb={5}>
-          <TextBox as={FormLabel} htmlFor='applicant'>
+          <TextBox as={FormLabel} size='xs' htmlFor='applicant'>
             {formLabel}
           </TextBox>
           <Input
@@ -71,7 +71,7 @@ const AddressInput = ({
         </FormControl>
       ) : (
         <FormControl mb={5}>
-          <TextBox as={FormLabel} htmlFor='memberApplicant'>
+          <TextBox as={FormLabel} size='xs' htmlFor='memberApplicant'>
             {formLabel}
           </TextBox>
           <Flex>

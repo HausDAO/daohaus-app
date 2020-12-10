@@ -140,7 +140,7 @@ const FundingProposalForm = () => {
 
           {showShares && (
             <>
-              <TextBox as={FormLabel} htmlFor='name' mb={2}>
+              <TextBox as={FormLabel} size='xs' htmlFor='name' mb={2}>
                 Shares Requested
               </TextBox>
               <Input
@@ -163,7 +163,7 @@ const FundingProposalForm = () => {
           )}
           {showLoot && (
             <>
-              <TextBox as={FormLabel} htmlFor='lootRequested' mb={2}>
+              <TextBox as={FormLabel} size='xs' htmlFor='lootRequested' mb={2}>
                 Loot Requested
               </TextBox>
               <Input

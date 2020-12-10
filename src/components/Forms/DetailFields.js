@@ -38,7 +38,7 @@ const DetailsFields = ({ register }) => {
   return (
     <Stack spacing={2}>
       <Box>
-        <TextBox as={FormLabel} htmlFor='title' mb={2}>
+        <TextBox as={FormLabel} size='xs' htmlFor='title' mb={2}>
           Title
         </TextBox>
         <Input
@@ -58,7 +58,7 @@ const DetailsFields = ({ register }) => {
         />
       </Box>
       <Box>
-        <TextBox as={FormLabel} htmlFor='description' mb={2}>
+        <TextBox as={FormLabel} size='xs' htmlFor='description' mb={2}>
           Description
         </TextBox>
         <Textarea
@@ -75,7 +75,7 @@ const DetailsFields = ({ register }) => {
         />
       </Box>
       <Box>
-        <TextBox as={FormLabel} htmlFor='link' mb={2}>
+        <TextBox as={FormLabel} size='xs' htmlFor='link' mb={2}>
           Link
         </TextBox>
         <InputGroup>
@@ -90,7 +90,7 @@ const DetailsFields = ({ register }) => {
             ref={register()}
           />
         </InputGroup>
-        <FormHelperText fontSize='sm' color='whiteAlpha.800'>
+        <FormHelperText fontSize='sm' color='whiteAlpha.700'>
           We&apos;ll remove the https://
         </FormHelperText>
       </Box>

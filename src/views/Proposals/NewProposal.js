@@ -46,7 +46,7 @@ const NewProposal = () => {
   return (
     <Box p={6}>
       <Flex>
-        <TextBox fontSize='xl' fontWeight={700}>
+        <TextBox size='xl' fontWeight={700}>
           Select a Proposal Type
         </TextBox>
       </Flex>

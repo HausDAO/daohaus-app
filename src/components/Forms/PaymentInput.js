@@ -81,7 +81,9 @@ const PaymentInput = ({ register, setValue, getValues, errors }) => {
 
   return (
     <>
-      <TextBox as={FormLabel}>Payment Requested</TextBox>
+      <TextBox as={FormLabel} size='xs'>
+        Payment Requested
+      </TextBox>
       <InputGroup>
         <Button
           onClick={() => setMax()}

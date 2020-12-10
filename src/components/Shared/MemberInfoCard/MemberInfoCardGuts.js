@@ -15,25 +15,25 @@ const MemberInfoCardGuts = ({ user, member, showMenu }) => {
       </Flex>
       <Flex w='100%' justify='space-between' mt={6}>
         <Box>
-          <TextBox>Shares</TextBox>
+          <TextBox size='xs'>Shares</TextBox>
           <Skeleton isLoaded={member?.shares}>
-            <TextBox variant='value'>
+            <TextBox variant='value' size='xl'>
               {member?.shares ? member.shares : '--'}
             </TextBox>
           </Skeleton>
         </Box>
         <Box>
-          <TextBox>Loot</TextBox>
+          <TextBox size='xs'>Loot</TextBox>
           <Skeleton isLoaded={member?.loot}>
-            <TextBox variant='value'>
+            <TextBox variant='value' size='xl'>
               {member?.loot ? member.loot : '-'}
             </TextBox>
           </Skeleton>
         </Box>
         <Box>
-          <TextBox>Anniversary</TextBox>
+          <TextBox size='xs'>Anniversary</TextBox>
           <Skeleton isLoaded={member?.createdAt}>
-            <TextBox variant='value'>
+            <TextBox variant='value' size='xl'>
               {member?.createdAt
                 ? format(new Date(member.createdAt * 1000), 'MMMM d')
                 : '--'}
