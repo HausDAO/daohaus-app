@@ -77,16 +77,19 @@ const DaoInit = () => {
     } catch (err) {
       console.log('api fetch error', daoParam);
     }
-    const apiData = daoRes ? daoRes.data : {};
+    const apiData = daoRes.error ? {} : daoRes;
 
-    const boostRes = await get(`boosts/${daoParam}`).catch((err) =>
-      console.log(err),
-    );
+    let boostRes;
+    try {
+      boostRes = await get(`boosts/${daoParam}`);
+    } catch (err) {
+      console.log('api boost fetch error', daoParam);
+    }
 
     // rework with new api end point
     let boosts = {};
-    if (boostRes?.data) {
-      boosts = boostRes.data.reduce((boosts, boostData) => {
+    if (!boostRes.error) {
+      boosts = boostRes.reduce((boosts, boostData) => {
         const metadata = boostData.metadata
           ? JSON.parse(boostData.metadata[0])
           : null;
@@ -109,7 +112,9 @@ const DaoInit = () => {
       ? boosts.customTheme.metadata
       : defaultTheme.daoMeta;
 
-    const version = daoRes && daoRes.data.version ? daoRes.data.version : '1';
+    // TODO: REMOVE V1 code
+    // const version = daoRes && daoRes.data.version ? daoRes.data.version : '1';
+    const version = 2;
     const daoService =
       user && web3Connect.provider
         ? await DaoService.instantiateWithWeb3(

@@ -1,16 +1,11 @@
-// import axios from 'axios';
 import supportedChains from './chains';
 
 const chainData = supportedChains[+process.env.REACT_APP_NETWORK_ID];
 const geckoURL = 'https://api.coingecko.com/api/v3/simple/token_price';
 const uniswapGhList = 'https://raw.githubusercontent.com';
 
-// export const BaseUrl = () => {
-//   return chainData.api_url;
-// };
-
-export const get = async (endpoint, data) => {
-  const url = `${chainData.metadata_api_url}/${endpoint}`;
+export const get = async (endpoint) => {
+  const url = `${chainData.api_url}/${endpoint}`;
   try {
     const response = await fetch(url);
     return response.json();
@@ -20,7 +15,7 @@ export const get = async (endpoint, data) => {
 };
 
 export const post = async (endpoint, data) => {
-  const url = `${chainData.metadata_api_url}/${endpoint}`;
+  const url = `${chainData.api_url}/${endpoint}`;
   try {
     const response = await fetch(url, {
       method: 'POST',
@@ -37,7 +32,7 @@ export const post = async (endpoint, data) => {
 };
 
 export const put = async (endpoint, data) => {
-  const url = `${chainData.metadata_api_url}/${endpoint}`;
+  const url = `${chainData.api_url}/${endpoint}`;
   try {
     const response = await fetch(url, {
       method: 'PUT',
@@ -72,45 +67,3 @@ export const getMainetAddresses = async () => {
     throw new Error(err);
   }
 };
-
-// export const get = async (endpoint) => {
-//   const baseURL = BaseUrl();
-
-//   const instance = axios.create({
-//     baseURL,
-//     headers: { 'Content-Type': 'application/json' },
-//   });
-//   try {
-//     return await instance.get(`/${endpoint}`);
-//   } catch (err) {
-//     throw new Error(err);
-//   }
-// };
-
-// export const post = async (endpoint, payload) => {
-//   const baseURL = BaseUrl();
-
-//   const instance = axios.create({
-//     baseURL,
-//     headers: { 'Content-Type': 'application/json' },
-//   });
-//   try {
-//     return await instance.post(`/${endpoint}`, payload);
-//   } catch (err) {
-//     return err.response;
-//   }
-// };
-
-// export const put = async (endpoint, payload) => {
-//   const baseURL = BaseUrl();
-
-//   const instance = axios.create({
-//     baseURL,
-//     headers: { 'Content-Type': 'application/json' },
-//   });
-//   try {
-//     return await instance.put(`/${endpoint}`, payload);
-//   } catch (err) {
-//     throw new Error(err);
-//   }
-// };
