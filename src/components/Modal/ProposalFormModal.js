@@ -18,6 +18,7 @@ import WhitelistProposalForm from '../Forms/WhitelistProposal';
 import GuildKickProposalForm from '../Forms/GuildKickProposal';
 import TradeProposalForm from '../Forms/TradeProposal';
 import MinionSimpleProposalForm from '../Forms/MinionSimpleProposal';
+import TransmutationProposal from '../Forms/TransmutationProposal';
 
 const ProposalFormModal = ({
   proposalType,
@@ -66,6 +67,12 @@ const ProposalFormModal = ({
       heading: `New Minion ${theme.daoMeta.proposal}`,
       subline: `Submit a Minion proposal here.`,
       form: <MinionSimpleProposalForm />,
+    },
+    transmutation: {
+      type: `New ${theme.daoMeta.proposal}`,
+      heading: `New Transmutation ${theme.daoMeta.proposal}`,
+      subline: `Submit a Transmutation proposal here.`,
+      form: <TransmutationProposal />,
     },
   };
 
