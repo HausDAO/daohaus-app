@@ -76,6 +76,7 @@ const AddressInput = ({
           </TextBox>
           <Flex>
             <Select
+              placeholder='Select member'
               icon={<AiOutlineCaretDown />}
               name='memberApplicant'
               ref={register}

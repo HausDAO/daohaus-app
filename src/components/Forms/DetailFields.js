@@ -7,6 +7,7 @@ import {
   Input,
   InputGroup,
   InputLeftAddon,
+  FormHelperText,
 } from '@chakra-ui/react';
 import TextBox from '../Shared/TextBox';
 import { stripHttpProtocol } from '../../utils/helpers';
@@ -33,7 +34,6 @@ const DetailsFields = ({ register }) => {
       });
     }
   };
-  console.log(values);
 
   return (
     <Stack spacing={2}>
@@ -90,6 +90,9 @@ const DetailsFields = ({ register }) => {
             ref={register()}
           />
         </InputGroup>
+        <FormHelperText fontSize='sm' color='whiteAlpha.800'>
+          We&apos;ll remove the https://
+        </FormHelperText>
       </Box>
     </Stack>
   );
