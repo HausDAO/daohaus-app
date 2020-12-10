@@ -36,7 +36,7 @@ const ProposalFilter = ({ filter, setFilter, proposals }) => {
         });
       setActionNeeded(action);
 
-      options = getFilterOptions(memberWallet.activeMember, action.length);
+      options = getFilterOptions(memberWallet.activeMember, action?.length);
     } else {
       options = getFilterOptions(false);
     }
