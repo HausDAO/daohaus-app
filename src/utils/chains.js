@@ -10,6 +10,7 @@ export const supportedChains = {
     rpc_url: 'https://mainnet.infura.io/',
     api_url: 'https://luizh7qidl.execute-api.us-east-1.amazonaws.com/prod',
     // api_url: process.env.REACT_APP_PROD_API,
+    metadata_api_url: 'https://data.daohaus.club',
     daohaus_url: 'https://daohaus.club',
     subgraph_url:
       'https://api.thegraph.com/subgraphs/name/odyssy-automaton/daohaus',
@@ -30,6 +31,7 @@ export const supportedChains = {
     providers: ['walletconnect', 'portis', 'fortmatic'],
     rpc_url: 'https://rinkeby.infura.io/',
     api_url: 'https://e5sk5e8me2.execute-api.us-east-1.amazonaws.com/rinkeby',
+    metadata_api_url: 'https://data.daohaus.club',
     daohaus_url: 'https://rinkeby.daohaus.club',
     subgraph_url:
       'https://api.thegraph.com/subgraphs/name/odyssy-automaton/daohaus-rinkeby',
@@ -48,6 +50,7 @@ export const supportedChains = {
     providers: ['walletconnect', 'portis', 'fortmatic'],
     rpc_url: 'https://kovan.infura.io/',
     api_url: 'https://kp7w1od8kd.execute-api.us-east-1.amazonaws.com/kovan',
+    metadata_api_url: 'https://data.daohaus.club',
     daohaus_url: 'https://kovan.daohaus.club',
     subgraph_url:
       'https://api.thegraph.com/subgraphs/name/odyssy-automaton/daohaus-kovan',
@@ -66,6 +69,7 @@ export const supportedChains = {
     providers: ['walletconnect', 'portis'],
     rpc_url: 'https://dai.poa.network',
     api_url: 'https://fbpzfkbqyi.execute-api.us-east-1.amazonaws.com/xdai',
+    metadata_api_url: 'https://data.daohaus.club',
     daohaus_url: 'https://xdai.daohaus.club',
     subgraph_url:
       'https://api.thegraph.com/subgraphs/name/odyssy-automaton/daohaus-xdai',
