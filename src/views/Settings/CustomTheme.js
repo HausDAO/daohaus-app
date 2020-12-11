@@ -5,7 +5,7 @@ import { BiArrowBack } from 'react-icons/bi';
 
 import { useDao } from '../../contexts/PokemolContext';
 import ThemeColorsForm from '../../components/Forms/ThemeColorsForm';
-import ThemePreview from '../../components/Settings/ThemePreview';
+// import ThemePreview from '../../components/Settings/ThemePreview';
 
 const CustomTheme = () => {
   const [dao] = useDao();
@@ -25,7 +25,7 @@ const CustomTheme = () => {
       </Flex>
       <ThemeColorsForm />
 
-      <ThemePreview />
+      {/* <ThemePreview /> */}
     </Box>
   );
 };
