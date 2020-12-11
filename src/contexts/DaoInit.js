@@ -73,29 +73,28 @@ const DaoInit = () => {
   const initDao = async (daoParam) => {
     let daoRes;
     try {
-      daoRes = await get(`moloch/${daoParam}`);
+      daoRes = await get(`dao/${daoParam}`);
     } catch (err) {
       console.log('api fetch error', daoParam);
     }
     const apiData = daoRes.error ? {} : daoRes;
 
-    let boostRes;
-    try {
-      boostRes = await get(`boosts/${daoParam}`);
-    } catch (err) {
-      console.log('api boost fetch error', daoParam);
-    }
+    console.log('daoRes', daoRes);
+
+    // let boostRes;
+    // try {
+    //   boostRes = await get(`boosts/${daoParam}`);
+    // } catch (err) {
+    //   console.log('api boost fetch error', daoParam);
+    // }
 
     // rework with new api end point
     let boosts = {};
-    if (!boostRes.error) {
-      boosts = boostRes.reduce((boosts, boostData) => {
-        const metadata = boostData.metadata
-          ? JSON.parse(boostData.metadata[0])
-          : null;
+    if (apiData.boosts) {
+      boosts = apiData.boosts.reduce((boosts, boostData) => {
         boosts[boostData.boostKey] = {
           active: boostData.active,
-          metadata,
+          metadata: boostData.boostMetadata,
         };
         return boosts;
       }, {});
@@ -114,6 +113,7 @@ const DaoInit = () => {
 
     // TODO: REMOVE V1 code
     // const version = daoRes && daoRes.data.version ? daoRes.data.version : '1';
+    console.log('daoService', web3Connect, user);
     const version = 2;
     const daoService =
       user && web3Connect.provider
@@ -137,6 +137,7 @@ const DaoInit = () => {
   };
 
   const initWeb3DaoService = async () => {
+    console.log('initint web 3 service', user);
     const daoService = await DaoService.instantiateWithWeb3(
       user.username,
       web3Connect.provider,

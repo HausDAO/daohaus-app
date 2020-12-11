@@ -48,7 +48,7 @@ const UserInit = () => {
               console.log(err);
 
               toast({
-                title: 'Wrong Network',
+                title: 'DAO and Web3 Network Mismatch',
                 position: 'top-right',
                 description: err.msg,
                 status: 'warning',

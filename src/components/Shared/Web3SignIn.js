@@ -2,7 +2,6 @@ import React from 'react';
 import Web3Modal from 'web3modal';
 import { useToast, Button } from '@chakra-ui/react';
 
-import { getChainData } from '../../utils/chains';
 import { w3connect, providerOptions } from '../../utils/auth';
 import { useNetwork, useWeb3Connect } from '../../contexts/PokemolContext';
 
@@ -17,7 +16,7 @@ export const Web3SignIn = () => {
         onClick={async () => {
           const _web3Connect = {
             w3c: new Web3Modal({
-              network: getChainData(+process.env.REACT_APP_NETWORK_ID).network,
+              network: network ? network.network : 'mainnet',
               providerOptions: providerOptions(),
               cacheProvider: true,
               theme: 'dark',

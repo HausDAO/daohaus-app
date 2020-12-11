@@ -25,7 +25,9 @@ const initialState = {
   user: null,
   web3Connect: {
     w3c: new Web3Modal({
-      network: getChainData(+process.env.REACT_APP_NETWORK_ID).network,
+      // network: getChainData(+process.env.REACT_APP_NETWORK_ID).network,
+      // TODO: do we want to use localstorage to store the last network use was on?
+      network: 'mainnet',
       providerOptions: providerOptions(),
       cacheProvider: true,
       theme: 'dark',

@@ -1,6 +1,6 @@
 import React from 'react';
 import { Flex, Box, Skeleton, Link, Icon, Text } from '@chakra-ui/react';
-import { useDao } from '../../contexts/PokemolContext';
+import { useDao, useNetwork } from '../../contexts/PokemolContext';
 import { useTheme } from '../../contexts/CustomThemeContext';
 import { format } from 'date-fns';
 import { RiExternalLinkLine } from 'react-icons/ri';
@@ -11,20 +11,23 @@ import { formatPeriods } from '../../utils/helpers';
 
 const DaoContractSettings = () => {
   const [dao] = useDao();
+  const [network] = useNetwork();
   const [theme] = useTheme();
 
   const uri = () => {
-    switch (process.env.REACT_APP_NETWORK_ID) {
-      case '1': {
+    switch (network.network_id) {
+      // switch (process.env.REACT_APP_NETWORK_ID) {
+
+      case 1: {
         return `https://etherscan.io/address/`;
       }
-      case '42': {
+      case 42: {
         return `https://kovan.etherscan.io/address/`;
       }
-      case '4': {
+      case 4: {
         return `https://rinkeby.etherscan.io/address/`;
       }
-      case '100': {
+      case 100: {
         return `https://blockscout.com/poa/xdai/address/`;
       }
       default: {

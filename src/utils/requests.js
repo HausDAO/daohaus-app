@@ -1,11 +1,9 @@
-import { supportedChains } from './chains';
-
-const chainData = supportedChains[+process.env.REACT_APP_NETWORK_ID];
+const metadataApiUrl = 'https://data.daohaus.club';
 const geckoURL = 'https://api.coingecko.com/api/v3/simple/token_price';
 const uniswapGhList = 'https://raw.githubusercontent.com';
 
 export const get = async (endpoint) => {
-  const url = `${chainData.api_url}/${endpoint}`;
+  const url = `${metadataApiUrl}/${endpoint}`;
   try {
     const response = await fetch(url);
     return response.json();
@@ -15,7 +13,7 @@ export const get = async (endpoint) => {
 };
 
 export const post = async (endpoint, data) => {
-  const url = `${chainData.api_url}/${endpoint}`;
+  const url = `${metadataApiUrl}/${endpoint}`;
   try {
     const response = await fetch(url, {
       method: 'POST',
@@ -32,7 +30,7 @@ export const post = async (endpoint, data) => {
 };
 
 export const put = async (endpoint, data) => {
-  const url = `${chainData.api_url}/${endpoint}`;
+  const url = `${metadataApiUrl}/${endpoint}`;
   try {
     const response = await fetch(url, {
       method: 'PUT',

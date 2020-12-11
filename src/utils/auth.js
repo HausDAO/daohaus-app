@@ -6,7 +6,11 @@ import Portis from '@portis/web3';
 import { USER_TYPE } from './dao-service';
 import { getChainData } from './chains';
 
+// all this needs to reinit on netowrk change
+// dao service uses this provider. should we change that?
+
 export const providerOptions = () => {
+  // xdai doesn't have fortmatic here...
   const providers = getChainData(+process.env.REACT_APP_NETWORK_ID).providers;
   const allNetworkProviders = {};
 
