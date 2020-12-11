@@ -81,6 +81,7 @@ const ProposalsList = () => {
           <ProposalFilter
             filter={filter}
             setFilter={setFilter}
+            setSort={setSort}
             proposals={proposals}
           />
         ) : null}
