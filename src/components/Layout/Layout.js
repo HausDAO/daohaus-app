@@ -14,7 +14,12 @@ import {
 } from '@chakra-ui/react';
 
 import { motion } from 'framer-motion';
-import { useDao, useUser, useModals } from '../../contexts/PokemolContext';
+import {
+  useDao,
+  useUser,
+  useModals,
+  useMemberWallet,
+} from '../../contexts/PokemolContext';
 import ChangeDao from '../Shared/ChangeDao';
 import Header from '../Shared/Header';
 import { Web3SignIn } from '../Shared/Web3SignIn';
@@ -50,6 +55,7 @@ const Layout = ({ children }) => {
   const [dao] = useDao();
   const [theme] = useTheme();
   const [user] = useUser();
+  const [memberWallet] = useMemberWallet();
   const { modals, openModal } = useModals();
 
   const bar = useBreakpointValue({
@@ -591,7 +597,7 @@ const Layout = ({ children }) => {
                   Boosts
                 </MotionBox>
               </Button>
-              {user ? (
+              {memberWallet?.activeMember ? (
                 <Button
                   variant='sideNav'
                   as={RouterLink}
@@ -606,7 +612,7 @@ const Layout = ({ children }) => {
                     fontSize='sm'
                     fontFamily='heading'
                   >
-                    Stats
+                    Profile
                   </MotionBox>
                 </Button>
               ) : null}
