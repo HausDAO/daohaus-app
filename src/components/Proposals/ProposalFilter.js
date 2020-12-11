@@ -13,10 +13,10 @@ import {
 import { RiArrowDropDownFill } from 'react-icons/ri';
 
 import { useMemberWallet } from '../../contexts/PokemolContext';
-import { getFilterOptions } from '../../content/proposal-filters';
+import { getFilterOptions, sortOptions } from '../../content/proposal-filters';
 import { determineUnreadProposalList } from '../../utils/proposal-helper';
 
-const ProposalFilter = ({ filter, setFilter, proposals }) => {
+const ProposalFilter = ({ filter, setFilter, proposals, setSort }) => {
   const [memberWallet] = useMemberWallet();
   const [filterOptions, setFilterOptions] = useState();
   const [actionNeeded, setActionNeeded] = useState([]);
@@ -42,6 +42,10 @@ const ProposalFilter = ({ filter, setFilter, proposals }) => {
     }
     setFilterOptions(options);
     setFilter(options[0]);
+
+    if (options[0].value === 'Action Needed') {
+      setSort(sortOptions[1]);
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [memberWallet]);
 
@@ -51,6 +55,13 @@ const ProposalFilter = ({ filter, setFilter, proposals }) => {
     return filter.value === 'Action Needed'
       ? `${filter.name} (${actionNeeded.length})`
       : filter.name;
+  };
+
+  const handleFilterSelect = (option) => {
+    setFilter(option);
+    if (option.value === 'Action Needed') {
+      setSort(sortOptions[1]);
+    }
   };
 
   return (
@@ -81,7 +92,7 @@ const ProposalFilter = ({ filter, setFilter, proposals }) => {
                   return (
                     <MenuItem
                       key={option.value}
-                      onClick={() => setFilter(option)}
+                      onClick={() => handleFilterSelect(option)}
                       value={option.value}
                     >
                       {option.value === 'Action Needed'
@@ -100,7 +111,7 @@ const ProposalFilter = ({ filter, setFilter, proposals }) => {
                   return (
                     <MenuItem
                       key={option.value}
-                      onClick={() => setFilter(option)}
+                      onClick={() => handleFilterSelect(option)}
                       value={option.value}
                     >
                       {option.name}
@@ -117,7 +128,7 @@ const ProposalFilter = ({ filter, setFilter, proposals }) => {
                   return (
                     <MenuItem
                       key={option.value}
-                      onClick={() => setFilter(option)}
+                      onClick={() => handleFilterSelect(option)}
                       value={option.value}
                     >
                       {option.name}
