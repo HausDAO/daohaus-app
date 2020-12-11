@@ -11,7 +11,7 @@ const CustomTheme = () => {
   const [dao] = useDao();
 
   return (
-    <Box w='40%'>
+    <Box>
       <Flex ml={6} justify='space-between' align='center' w='100%'>
         <Flex
           as={RouterLink}
@@ -23,9 +23,12 @@ const CustomTheme = () => {
         </Flex>
         <Button>Save</Button>
       </Flex>
-      <ThemeColorsForm />
-
-      {/* <ThemePreview /> */}
+      <Flex>
+        <Box w='30%'>
+          <ThemeColorsForm />
+        </Box>
+        <Box>{/* <ThemePreview /> */}</Box>
+      </Flex>
     </Box>
   );
 };

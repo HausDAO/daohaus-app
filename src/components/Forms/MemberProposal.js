@@ -21,6 +21,7 @@ import {
   useTxProcessor,
   useUser,
   useMemberWallet,
+  useModals,
 } from '../../contexts/PokemolContext';
 import TextBox from '../Shared/TextBox';
 
@@ -40,6 +41,7 @@ const MemberProposalForm = () => {
   const [dao] = useDao();
   const [txProcessor, updateTxProcessor] = useTxProcessor();
   const [currentError, setCurrentError] = useState(null);
+  const { closeModals } = useModals();
 
   const {
     handleSubmit,
@@ -71,8 +73,7 @@ const MemberProposalForm = () => {
 
       updateTxProcessor({ ...txProcessor });
       // close model here
-      // onClose();
-      // setShowModal(null);
+      closeModals();
     }
     if (!txHash) {
       console.log('error: ', details);

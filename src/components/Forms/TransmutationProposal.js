@@ -17,6 +17,7 @@ import { RiErrorWarningLine } from 'react-icons/ri';
 
 import {
   useDao,
+  useModals,
   useTxProcessor,
   useUser,
   useWeb3Connect,
@@ -41,6 +42,7 @@ const TransmutationProposal = () => {
   const [tokenData, setTokenData] = useState([]);
   const [balance, setBalance] = useState(0);
   const [symbol, setSymbol] = useState(0);
+  const { closeModals } = useModals();
 
   const {
     handleSubmit,
@@ -72,8 +74,7 @@ const TransmutationProposal = () => {
       updateTxProcessor({ ...txProcessor });
       reset();
       // close model here
-      // onClose();
-      // setShowModal(null);
+      closeModals();
     }
     if (!txHash) {
       console.log('error: ', details);

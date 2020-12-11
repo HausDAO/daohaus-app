@@ -41,7 +41,7 @@ const MemberSnapshot = ({ selectedMember }) => {
           <Box>
             <TextBox size='xs'>{theme.daoMeta.members}</TextBox>
             <Skeleton isLoaded={members.length > 0}>
-              <TextBox variant='value' size='xs'>
+              <TextBox variant='value' size='lg'>
                 {members?.length}
               </TextBox>
             </Skeleton>
@@ -49,7 +49,7 @@ const MemberSnapshot = ({ selectedMember }) => {
           <Box>
             <TextBox size='xs'>Shares</TextBox>
             <Skeleton isLoaded={dao?.graphData?.totalShares}>
-              <TextBox variant='value' size='xs'>
+              <TextBox variant='value' size='lg'>
                 {dao?.graphData?.totalShares
                   ? dao?.graphData?.totalShares
                   : '--'}
@@ -60,7 +60,7 @@ const MemberSnapshot = ({ selectedMember }) => {
             <Box>
               <TextBox size='xs'>Loot</TextBox>
               <Skeleton isLoaded={dao?.graphData?.totalLoot}>
-                <TextBox variant='value' size='xs'>
+                <TextBox variant='value' size='lg'>
                   {dao?.graphData?.totalLoot ? dao?.graphData?.totalLoot : '--'}
                 </TextBox>
               </Skeleton>

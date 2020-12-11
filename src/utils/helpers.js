@@ -91,3 +91,7 @@ export const stripHttpProtocol = (string) => {
 
   return newString === '' ? string : newString;
 };
+
+export const numberWithCommas = (num) => {
+  return num.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ',');
+};
