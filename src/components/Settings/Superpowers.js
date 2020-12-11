@@ -1,15 +1,17 @@
 import React from 'react';
-import { Flex, Icon } from '@chakra-ui/react';
-import { BiToggleRight } from 'react-icons/bi';
+import { Link as RouterLink } from 'react-router-dom';
+import { Flex, Icon, Switch } from '@chakra-ui/react';
 import { VscGear } from 'react-icons/vsc';
-import ComingSoonOverlay from '../Shared/ComingSoonOverlay';
+
+import { useDao } from '../../contexts/PokemolContext';
 import ContentBox from '../Shared/ContentBox';
 import TextBox from '../Shared/TextBox';
+import ComingSoonOverlay from '../Shared/ComingSoonOverlay';
 
 const Superpowers = () => {
+  const [dao] = useDao();
   return (
     <ContentBox d='flex' flexDirection='column' position='relative' mt={2}>
-      <ComingSoonOverlay />
       <Flex
         p={4}
         justify='space-between'
@@ -18,21 +20,30 @@ const Superpowers = () => {
         borderBottomStyle='solid'
         borderBottomColor='whiteAlpha.200'
       >
-        <TextBox>Force Proposal on Save</TextBox>
-        <Icon as={BiToggleRight} w='35px' h='35px' />
+        <ComingSoonOverlay />
+        <TextBox colorScheme='whiteAlpha.900'>Force Proposal on Save</TextBox>
+        <Switch id='proposal-on-save' colorScheme='green' />
       </Flex>
       <Flex p={4} justify='space-between' align='center'>
-        <TextBox fontSize='md'>Theme</TextBox>
+        <TextBox size='lg' colorScheme='whiteAlpha.900'>
+          Theme
+        </TextBox>
         <Flex align='center'>
-          <Icon as={VscGear} color='secondary.500' w='25px' h='25px' mr={2} />
-          <Icon as={BiToggleRight} color='secondary.500' w='35px' h='35px' />
+          <RouterLink to={`/dao/${dao.address}/settings/theme`}>
+            <Icon as={VscGear} color='secondary.500' w='25px' h='25px' mr={3} />
+          </RouterLink>
+          <Switch id='theme-boost' colorScheme='green' />
         </Flex>
       </Flex>
       <Flex p={4} justify='space-between' align='center'>
-        <TextBox fontSize='md'>Notifications</TextBox>
+        <TextBox size='lg' colorScheme='whiteAlpha.900'>
+          Notifications
+        </TextBox>
         <Flex align='center'>
-          <Icon as={VscGear} color='secondary.500' w='25px' h='25px' mr={2} />
-          <Icon as={BiToggleRight} color='secondary.500' w='35px' h='35px' />
+          <RouterLink to={`/dao/${dao.address}/settings/notifications`}>
+            <Icon as={VscGear} color='secondary.500' w='25px' h='25px' mr={3} />
+          </RouterLink>
+          <Switch id='notification-boost' colorScheme='green' />
         </Flex>
       </Flex>
     </ContentBox>

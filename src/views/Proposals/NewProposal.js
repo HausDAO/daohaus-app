@@ -18,6 +18,7 @@ const validProposalType = (type) => {
     'guildkick',
     'trade',
     'minion',
+    'transmutation',
   ].includes(type);
 };
 
@@ -45,7 +46,7 @@ const NewProposal = () => {
   return (
     <Box p={6}>
       <Flex>
-        <TextBox fontSize='xl' fontWeight={700}>
+        <TextBox size='xl' fontWeight={700}>
           Select a Proposal Type
         </TextBox>
       </Flex>
@@ -57,52 +58,54 @@ const NewProposal = () => {
           justify='space-around'
           align='center'
         >
-          {proposalTypes(theme).map((p) => {
+          {proposalTypes(theme, dao).map((p) => {
             return (
-              <Box
-                position='relative'
-                as={Flex}
-                key={p.name}
-                display='flex'
-                flexDirection='column'
-                alignItems='center'
-                justifyContent='center'
-                _hover={{ border: '1px solid #7579C5', cursor: 'pointer' }}
-                w='160px'
-                h='200px'
-                p={2}
-                m={1}
-                onClick={() => {
-                  if (p.comingSoon) {
-                    return;
-                  }
-                  setProposalType(p.proposalType);
-                  setShowModal('proposal');
-                }}
-              >
-                {p.comingSoon && <ComingSoonOverlay />}
-                <Image
-                  src={require('../../assets/' + p.image)}
-                  width='50px'
-                  mb={15}
-                />
+              p.show && (
                 <Box
-                  fontSize='md'
-                  fontFamily='heading'
-                  fontWeight={700}
-                  color='white'
+                  position='relative'
+                  as={Flex}
+                  key={p.name}
+                  display='flex'
+                  flexDirection='column'
+                  alignItems='center'
+                  justifyContent='center'
+                  _hover={{ border: '1px solid #7579C5', cursor: 'pointer' }}
+                  w='160px'
+                  h='200px'
+                  p={2}
+                  m={1}
+                  onClick={() => {
+                    if (p.comingSoon) {
+                      return;
+                    }
+                    setProposalType(p.proposalType);
+                    setShowModal('proposal');
+                  }}
                 >
-                  {p.name}
+                  {p.comingSoon && <ComingSoonOverlay />}
+                  <Image
+                    src={require('../../assets/' + p.image)}
+                    width='50px'
+                    mb={15}
+                  />
+                  <Box
+                    fontSize='md'
+                    fontFamily='heading'
+                    fontWeight={700}
+                    color='white'
+                  >
+                    {p.name}
+                  </Box>
+                  <Box
+                    fontSize='xs'
+                    fontFamily='heading'
+                    color='white'
+                    textAlign='center'
+                  >
+                    {p.subhead}
+                  </Box>
                 </Box>
-                <Box
-                  fontSize='xs'
-                  fontFamily='heading'
-                  color='white'
-                  textAlign='center'
-                >
-                  {p.subhead}
-                </Box>
-              </Box>
+              )
             );
           })}
         </Flex>

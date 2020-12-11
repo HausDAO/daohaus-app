@@ -49,10 +49,16 @@ const MembersList = ({ handleSelect, selectedMember }) => {
       </Flex>
       <ContentBox mt={6}>
         <Flex>
-          <TextBox w='43%'>{theme.daoMeta.member}</TextBox>
-          <TextBox w='15%'>Shares</TextBox>
-          <TextBox w='15%'>Loot</TextBox>
-          <TextBox>Join Date</TextBox>
+          <TextBox w='43%' size='xs'>
+            {theme.daoMeta.member}
+          </TextBox>
+          <TextBox w='15%' size='xs'>
+            Shares
+          </TextBox>
+          <TextBox w='15%' size='xs'>
+            Loot
+          </TextBox>
+          <TextBox size='xs'>Join Date</TextBox>
         </Flex>
         {listMembers.map((member) => {
           return (

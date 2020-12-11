@@ -48,6 +48,14 @@ const Header = () => {
       setPageTitle(theme.daoMeta.bank);
     } else if (location.pathname === `/dao/${dao?.address}/settings`) {
       setPageTitle('Settings');
+    } else if (location.pathname === `/dao/${dao?.address}/settings/meta`) {
+      setPageTitle('Metadata');
+    } else if (location.pathname === `/dao/${dao?.address}/settings/theme`) {
+      setPageTitle('Theme');
+    } else if (
+      location.pathname === `/dao/${dao?.address}/settings/notifications`
+    ) {
+      setPageTitle('Notifications');
     } else if (location.pathname === `/dao/${dao?.address}/settings/boosts`) {
       setPageTitle(theme.daoMeta.boosts);
     } else if (
@@ -150,6 +158,7 @@ const Header = () => {
               >
                 <UserAvatar
                   user={memberWallet?.activeMember ? user.profile : user}
+                  hideCopy={true}
                 />
               </Button>
 

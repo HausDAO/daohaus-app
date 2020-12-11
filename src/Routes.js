@@ -19,6 +19,7 @@ import Notifications from './views/Settings/Notifications';
 import Theme from './views/Theme/Theme';
 import DaoTheme from './views/Theme/DaoTheme';
 import NewMember from './views/Members/NewMember';
+import DaoMeta from './views/Settings/DaoMeta';
 
 const Routes = () => {
   return (
@@ -74,6 +75,11 @@ const Routes = () => {
           path='/dao/:dao(\b0x[0-9a-f]{10,40}\b)/settings'
           exact
           component={Settings}
+        />
+        <Route
+          path='/dao/:dao(\b0x[0-9a-f]{10,40}\b)/settings/meta'
+          exact
+          component={DaoMeta}
         />
         <Route
           path='/dao/:dao(\b0x[0-9a-f]{10,40}\b)/settings/boosts'

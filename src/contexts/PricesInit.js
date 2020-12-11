@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 
-import { getMainetAddresses, getUsd } from '../utils/price-api';
+import { getMainetAddresses, getUsd } from '../utils/requests';
 import { useDaoGraphData, useNetwork, usePrices } from './PokemolContext';
 
 const PriceInit = () => {
@@ -23,7 +23,8 @@ const PriceInit = () => {
       let symbolAddressMap;
       if (network.chain_id !== 1) {
         const mainnetAddresses = await getMainetAddresses();
-        symbolAddressMap = mainnetAddresses.data.reduce((map, addr) => {
+
+        symbolAddressMap = mainnetAddresses.reduce((map, addr) => {
           map[addr.symbol] = addr.address.toLowerCase();
           return map;
         }, {});
@@ -42,9 +43,9 @@ const PriceInit = () => {
           .filter((x) => x !== undefined);
 
         res = await getUsd(tokens.join(','));
-        const mappedPrices = Object.keys(res.data).reduce((list, address) => {
+        const mappedPrices = Object.keys(res).reduce((list, address) => {
           list[addressesMap[address.toLowerCase()]] =
-            res.data[address.toLowerCase()];
+            res[address.toLowerCase()];
           return list;
         }, {});
 
@@ -54,7 +55,7 @@ const PriceInit = () => {
           (token) => token.token.tokenAddress,
         );
         res = await getUsd(tokens.join(','));
-        updatePrices(res.data);
+        updatePrices(res);
       }
     } catch (err) {
       console.log('price fetch err', err);

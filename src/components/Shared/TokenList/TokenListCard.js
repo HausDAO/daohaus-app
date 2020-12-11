@@ -6,7 +6,7 @@ import UsdValue from '../UsdValue';
 import Withdraw from '../../Forms/Withdraw';
 import SyncToken from '../../Forms/SyncToken';
 import { useMemberWallet } from '../../../contexts/PokemolContext';
-import { getMainetAddresses } from '../../../utils/price-api';
+import { getMainetAddresses } from '../../../utils/requests';
 
 const TokenListCard = ({ token, isLoaded, isMember, isBank, hasAction }) => {
   const [memberWallet] = useMemberWallet();
@@ -40,7 +40,7 @@ const TokenListCard = ({ token, isLoaded, isMember, isBank, hasAction }) => {
     const fetchMainnetAddresses = async () => {
       const mainnetAddresses = await getMainetAddresses();
       if (token && mainnetAddresses) {
-        mainnetAddresses.data.forEach((address) => {
+        mainnetAddresses.forEach((address) => {
           if (address?.symbol === token?.token?.symbol) {
             setTokenMainnetAddress(address.address);
           }

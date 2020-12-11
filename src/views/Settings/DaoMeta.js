@@ -1,13 +1,12 @@
 import React from 'react';
-import { Flex, Box, Button, Icon } from '@chakra-ui/react';
+import { Box, Button, Flex, Icon } from '@chakra-ui/react';
 import { Link as RouterLink } from 'react-router-dom';
 import { BiArrowBack } from 'react-icons/bi';
 
 import { useDao } from '../../contexts/PokemolContext';
-import ThemeColorsForm from '../../components/Forms/ThemeColorsForm';
-import ThemePreview from '../../components/Settings/ThemePreview';
+import DaoMetaForm from '../../components/Forms/DaoMetaForm';
 
-const CustomTheme = () => {
+const DaoMetadata = () => {
   const [dao] = useDao();
 
   return (
@@ -23,11 +22,9 @@ const CustomTheme = () => {
         </Flex>
         <Button>Save</Button>
       </Flex>
-      <ThemeColorsForm />
-
-      <ThemePreview />
+      <DaoMetaForm />
     </Box>
   );
 };
 
-export default CustomTheme;
+export default DaoMetadata;

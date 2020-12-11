@@ -311,8 +311,8 @@ export const getProposalDetailStatus = (proposal) => {
     case ProposalStatus.InQueue:
       return (
         <>
-          <TextBox>In Queue, Voting Begins</TextBox>
-          <TextBox fontSize='lg' variant='value'>
+          <TextBox size='xs'>In Queue, Voting Begins</TextBox>
+          <TextBox size='lg' variant='value'>
             {formatDistanceToNow(
               new Date(+proposal?.votingPeriodStarts * 1000),
               {
@@ -325,8 +325,8 @@ export const getProposalDetailStatus = (proposal) => {
     case ProposalStatus.VotingPeriod:
       return (
         <>
-          <TextBox>Voting Ends</TextBox>
-          <TextBox fontSize='lg' variant='value'>
+          <TextBox size='xs'>Voting Ends</TextBox>
+          <TextBox size='lg' variant='value'>
             {formatDistanceToNow(new Date(+proposal?.votingPeriodEnds * 1000), {
               addSuffix: true,
             })}
@@ -336,8 +336,8 @@ export const getProposalDetailStatus = (proposal) => {
     case ProposalStatus.GracePeriod:
       return (
         <>
-          <TextBox>Grace Period Ends</TextBox>
-          <TextBox fontSize='lg' variant='value'>
+          <TextBox size='xs'>Grace Period Ends</TextBox>
+          <TextBox size='lg' variant='value'>
             {formatDistanceToNow(new Date(+proposal?.gracePeriodEnds * 1000), {
               addSuffix: true,
             })}
@@ -347,8 +347,8 @@ export const getProposalDetailStatus = (proposal) => {
     case ProposalStatus.ReadyForProcessing:
       return (
         <>
-          <TextBox>Ready For Processing</TextBox>
-          <TextBox fontSize='lg' variant='value'>
+          <TextBox size='xs'>Ready For Processing</TextBox>
+          <TextBox size='lg' variant='value'>
             {formatDistanceToNow(new Date(+proposal?.gracePeriodEnds * 1000), {
               addSuffix: true,
             })}
@@ -359,8 +359,8 @@ export const getProposalDetailStatus = (proposal) => {
     case ProposalStatus.Failed:
       return (
         <>
-          <TextBox>{proposal.status}</TextBox>
-          <TextBox fontSize='lg' variant='value'>
+          <TextBox size='xs'>{proposal.status}</TextBox>
+          <TextBox size='lg' variant='value'>
             {formatDistanceToNow(new Date(+proposal?.gracePeriodEnds * 1000), {
               addSuffix: true,
             })}

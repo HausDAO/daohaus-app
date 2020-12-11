@@ -439,7 +439,10 @@ const Layout = ({ children }) => {
                     variant='ghost'
                     onClick={() => openModal('accountModal')}
                   >
-                    <UserAvatar user={user.profile ? user.profile : user} />
+                    <UserAvatar
+                      user={user.profile ? user.profile : user}
+                      hideCopy={true}
+                    />
                   </Button>
 
                   <AccountModal isOpen={modals.accountModal} />

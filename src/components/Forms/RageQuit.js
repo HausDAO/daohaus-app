@@ -110,7 +110,7 @@ const RageQuitForm = () => {
   return canRage ? (
     <form onSubmit={handleSubmit(onSubmit)}>
       <FormControl isInvalid={errors.name}>
-        <TextBox as={FormLabel} htmlFor='shares' mb={2}>
+        <TextBox as={FormLabel} size='xs' htmlFor='shares' mb={2}>
           Shares to Rage
         </TextBox>
 
@@ -129,7 +129,7 @@ const RageQuitForm = () => {
         <FormHelperText>
           You can Rage up to {member?.shares} shares.
         </FormHelperText>
-        <TextBox as={FormLabel} htmlFor='loot' mt={6} mb={2}>
+        <TextBox as={FormLabel} size='xs' htmlFor='loot' mt={6} mb={2}>
           Loot to Rage
         </TextBox>
         <Input

@@ -45,10 +45,18 @@ const TokenList = ({ tokenList, isMember, isBank }) => {
     <>
       <ContentBox mt={6}>
         <Flex>
-          <TextBox w='15%'>Asset</TextBox>
-          <TextBox w='55%'>{isMember ? 'Internal Balance' : 'Balance'}</TextBox>
-          <TextBox w='15%'>Price</TextBox>
-          <TextBox w='15%'>Value</TextBox>
+          <TextBox w='15%' size='xs'>
+            Asset
+          </TextBox>
+          <TextBox w='55%' size='xs'>
+            {isMember ? 'Internal Balance' : 'Balance'}
+          </TextBox>
+          <TextBox w='15%' size='xs'>
+            Price
+          </TextBox>
+          <TextBox w='15%' size='xs'>
+            Value
+          </TextBox>
           {hasAction ? <TextBox w='15%'></TextBox> : null}
         </Flex>
         {localTokenList?.length > 0 ? (

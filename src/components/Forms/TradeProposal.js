@@ -128,7 +128,7 @@ const TradeProposalForm = () => {
             setValue={setValue}
             getValues={getValues}
           />
-          <TextBox>Trade For</TextBox>
+          <TextBox size='xs'>Trade For</TextBox>
           <PaymentInput
             register={register}
             setValue={setValue}
@@ -138,7 +138,7 @@ const TradeProposalForm = () => {
 
           {showShares && (
             <>
-              <TextBox as={FormLabel} htmlFor='sharesRequested'>
+              <TextBox as={FormLabel} size='xs' htmlFor='sharesRequested'>
                 Shares Requested
               </TextBox>
               <Input
@@ -164,7 +164,7 @@ const TradeProposalForm = () => {
 
           {showLoot && (
             <>
-              <TextBox as={FormLabel} htmlFor='lootRequested' mb={2}>
+              <TextBox as={FormLabel} size='xs' htmlFor='lootRequested' mb={2}>
                 Loot Requested
               </TextBox>
               <Input

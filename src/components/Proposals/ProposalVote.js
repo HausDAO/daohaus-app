@@ -169,7 +169,7 @@ const ProposalVote = ({ proposal, setProposal }) => {
           <Flex justify='center' direction='column'>
             <Flex justify='center' mb={4}>
               <Flex justify='center' direction='column'>
-                <TextBox>
+                <TextBox size='xs'>
                   Deposit to Sponsor{' '}
                   <Tooltip
                     hasArrow
@@ -180,7 +180,7 @@ const ProposalVote = ({ proposal, setProposal }) => {
                     <Icon mt='-4px' as={RiQuestionLine} />
                   </Tooltip>
                 </TextBox>
-                <TextBox variant='value' textAlign='center'>
+                <TextBox variant='value' size='xl' textAlign='center'>
                   {daoData?.proposalDeposit /
                     10 ** daoData?.depositToken.decimals}{' '}
                   {daoData?.depositToken?.symbol}
@@ -310,7 +310,7 @@ const ProposalVote = ({ proposal, setProposal }) => {
                   ) : (
                     <>
                       <Flex justify='center' align='center' w='100%'>
-                        <TextBox fontSize='xl' variant='value'>
+                        <TextBox size='xl' variant='value'>
                           {proposal?.status === 'Failed' && 'Failed'}
                           {proposal?.status === 'Passed' && 'Passed'}
                           {(proposal?.status === 'GracePeriod' ||
@@ -373,12 +373,12 @@ const ProposalVote = ({ proposal, setProposal }) => {
               </Flex>
               <Flex justify='space-between' mt={3}>
                 <Skeleton isLoaded={proposal?.yesShares}>
-                  <TextBox variant='value'>
+                  <TextBox variant='value' size='xl'>
                     {proposal?.yesShares || '0'} Yes
                   </TextBox>
                 </Skeleton>
                 <Skeleton isLoaded={proposal?.noShares}>
-                  <TextBox variant='value'>
+                  <TextBox variant='value' size='xl'>
                     {proposal?.noShares || '0'} No
                   </TextBox>
                 </Skeleton>

@@ -227,6 +227,19 @@ export const POPUP_CONTENT = {
       },
     ],
   },
+  propose: {
+    displayName: 'Transmutation',
+    header: 'Magic',
+    images: [],
+    bodyText: ['from water into wine'],
+    links: [
+      {
+        href: 'https://twitter.com/',
+        text: 'Share with the world',
+        external: true,
+      },
+    ],
+  },
 };
 
 export const txIsUpdated = (tx, entities) => {
