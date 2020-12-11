@@ -1,50 +1,32 @@
 import React from 'react';
-import {
-  Flex,
-  // Editable,
-  // EditableInput,
-  // EditablePreview,
-  FormControl,
-  Input,
-  Textarea,
-} from '@chakra-ui/react';
-import { useForm } from 'react-hook-form';
+import { Flex, Box, Button, Icon } from '@chakra-ui/react';
+import { Link as RouterLink } from 'react-router-dom';
+import { BiArrowBack } from 'react-icons/bi';
 
 import { useDao } from '../../contexts/PokemolContext';
-import ContentBox from '../../components/Shared/ContentBox';
-import TextBox from '../../components/Shared/TextBox';
+import ThemeColorsForm from '../../components/Forms/ThemeColorsForm';
+import ThemePreview from '../../components/Settings/ThemePreview';
 
 const CustomTheme = () => {
   const [dao] = useDao();
-  const { handleSubmit, register } = useForm();
-  console.log(dao);
 
   return (
-    <Flex>
-      <Flex as={ContentBox} m={6} w='35%'>
-        {dao && (
-          <Flex as='form' onSubmit={handleSubmit} direction='column' w='100%'>
-            <FormControl name='daoName' mb={4} w='75%'>
-              <TextBox size='sm'>Name</TextBox>
-              <Input
-                ref={register}
-                defaultValue={dao.name}
-                placeholder='DAOhaus'
-              />
-            </FormControl>
-
-            <FormControl name='daoDescription' mb={4}>
-              <TextBox size='sm'>Description</TextBox>
-              <Textarea
-                ref={register}
-                defaultValue={dao.description}
-                placeholder='A DAO of DAOs'
-              />
-            </FormControl>
-          </Flex>
-        )}
+    <Box w='40%'>
+      <Flex ml={6} justify='space-between' align='center' w='100%'>
+        <Flex
+          as={RouterLink}
+          to={`/dao/${dao.address}/settings`}
+          align='center'
+        >
+          <Icon as={BiArrowBack} color='secondary.500' mr={2} />
+          Back
+        </Flex>
+        <Button>Save</Button>
       </Flex>
-    </Flex>
+      <ThemeColorsForm />
+
+      <ThemePreview />
+    </Box>
   );
 };
 

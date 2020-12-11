@@ -6,6 +6,7 @@ import { VscGear } from 'react-icons/vsc';
 import { useDao } from '../../contexts/PokemolContext';
 import ContentBox from '../Shared/ContentBox';
 import TextBox from '../Shared/TextBox';
+import ComingSoonOverlay from '../Shared/ComingSoonOverlay';
 
 const Superpowers = () => {
   const [dao] = useDao();
@@ -19,6 +20,7 @@ const Superpowers = () => {
         borderBottomStyle='solid'
         borderBottomColor='whiteAlpha.200'
       >
+        <ComingSoonOverlay />
         <TextBox colorScheme='whiteAlpha.900'>Force Proposal on Save</TextBox>
         <Switch id='proposal-on-save' colorScheme='green' />
       </Flex>

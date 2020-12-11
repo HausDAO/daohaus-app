@@ -3,7 +3,7 @@ import React from 'react';
 import { useTempTheme, useTheme } from '../../contexts/CustomThemeContext';
 import { defaultTheme } from '../../themes/theme-defaults';
 // import DaoMetaForm from './DaoMetaForm';
-import ThemeColorsForm from '../../components/Forms/ThemeColorForm';
+import ThemeColorsForm from '../../components/Forms/ThemeColorsForm';
 import ThemePrebuilt from './ThemePrebuilt';
 import ThemeSamples from './ThemeSamples';
 
