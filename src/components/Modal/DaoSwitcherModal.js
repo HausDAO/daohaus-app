@@ -39,8 +39,9 @@ const DaoSwitcherModal = ({ isOpen }) => {
               direction='row'
               justifyContent='space-between'
               alignItems='center'
+              py={2}
             >
-              <Flex direction='row' justify='start' alignItems='center' mb={4}>
+              <Flex direction='row' justify='start' alignItems='center'>
                 <Avatar
                   name={dao.title.substr(0, 1)}
                   src={makeBlockie(dao.id)}
@@ -87,7 +88,9 @@ const DaoSwitcherModal = ({ isOpen }) => {
               direction='row'
               justifyContent='space-between'
               alignItems='center'
-              mb={4}
+              py={2}
+              borderBottom='1px solid'
+              borderColor='whiteAlpha.400'
             >
               <Flex direction='row' justify='flex-start' alignItems='center'>
                 <Image src={BrandImg} w='50px' mr='10px' />

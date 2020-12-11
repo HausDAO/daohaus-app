@@ -1,11 +1,10 @@
 export const TextBoxComponent = {
-  baseStyle: {
-    color: 'whiteAlpha.700',
+  baseStyle: (props) => ({
+    color: props.colorScheme ? props.colorScheme : 'whiteAlpha.700',
     fontFamily: 'heading',
-    fontSize: 'xs',
     textTransform: 'uppercase',
     letterSpacing: '0.15em',
-  },
+  }),
 
   sizes: {
     xs: {
@@ -25,18 +24,17 @@ export const TextBoxComponent = {
     },
   },
   variants: {
-    label: {
-      color: 'whiteAlpha.700',
+    label: (props) => ({
+      color: props.colorScheme ? props.colorScheme : 'whiteAlpha.700',
       fontFamily: 'heading',
       textTransform: 'uppercase',
       letterSpacing: '0.15em',
-    },
-    value: {
-      color: 'whiteAlpha.900',
+    }),
+    value: (props) => ({
+      color: props.colorScheme ? props.colorScheme : 'whiteAlpha.900',
       fontFamily: 'mono',
       textTransform: 'none',
       mt: '9px',
-      fontSize: 'xl',
-    },
+    }),
   },
 };

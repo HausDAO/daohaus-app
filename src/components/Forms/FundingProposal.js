@@ -17,7 +17,7 @@ import TextBox from '../Shared/TextBox';
 import { utils } from 'web3';
 import { RiAddFill, RiErrorWarningLine } from 'react-icons/ri';
 
-import { useDao, useTxProcessor, useUser } from '../../contexts/PokemolContext';
+import { useDao, useModals, useTxProcessor, useUser } from '../../contexts/PokemolContext';
 
 import TributeInput from './TributeInput';
 import PaymentInput from './PaymentInput';
@@ -34,6 +34,7 @@ const FundingProposalForm = () => {
   const [dao] = useDao();
   const [txProcessor, updateTxProcessor] = useTxProcessor();
   const [currentError, setCurrentError] = useState(null);
+  const { closeModals } = useModals();
 
   const {
     handleSubmit,
@@ -69,8 +70,7 @@ const FundingProposalForm = () => {
 
       updateTxProcessor({ ...txProcessor });
       // close model here
-      // onClose();
-      // setShowModal(null);
+      closeModals();
       setLoading(false);
       reset();
     }
@@ -140,7 +140,7 @@ const FundingProposalForm = () => {
 
           {showShares && (
             <>
-              <TextBox as={FormLabel} htmlFor='name' mb={2}>
+              <TextBox as={FormLabel} size='xs' htmlFor='name' mb={2}>
                 Shares Requested
               </TextBox>
               <Input
@@ -163,7 +163,7 @@ const FundingProposalForm = () => {
           )}
           {showLoot && (
             <>
-              <TextBox as={FormLabel} htmlFor='lootRequested' mb={2}>
+              <TextBox as={FormLabel} size='xs' htmlFor='lootRequested' mb={2}>
                 Loot Requested
               </TextBox>
               <Input

@@ -57,7 +57,9 @@ const Hub = () => {
               ) : (
                 <ContentBox p={6} mt={6} maxW='600px'>
                   <Flex>
-                    <TextBox>You aren’t a member in any daos yet!</TextBox>
+                    <TextBox size='sm'>
+                      You aren’t a member in any daos yet!
+                    </TextBox>
                   </Flex>
 
                   <Flex align='center'>
@@ -95,7 +97,7 @@ const Hub = () => {
               {v2Daos.length > 0 ? (
                 <HubActivityFeed daos={v2Daos} />
               ) : (
-                <TextBox my={35}>
+                <TextBox size='sm' my={35}>
                   Recent Activity from your daos will show here
                 </TextBox>
               )}

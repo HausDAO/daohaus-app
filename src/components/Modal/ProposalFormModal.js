@@ -18,17 +18,15 @@ import WhitelistProposalForm from '../Forms/WhitelistProposal';
 import GuildKickProposalForm from '../Forms/GuildKickProposal';
 import TradeProposalForm from '../Forms/TradeProposal';
 import MinionSimpleProposalForm from '../Forms/MinionSimpleProposal';
+import TransmutationProposal from '../Forms/TransmutationProposal';
+import { useModals } from '../../contexts/PokemolContext';
 
-const ProposalFormModal = ({
-  proposalType,
-  isOpen,
-  setShowModal,
-  returnRoute,
-}) => {
+const ProposalFormModal = ({ proposalType, isOpen, returnRoute }) => {
   const [, setLoading] = useState(false);
   const [proposalForm, setProposalForm] = useState(null);
   const [theme] = useTheme();
   const history = useHistory();
+  const { closeModals } = useModals();
 
   const proposalForms = {
     member: {
@@ -67,6 +65,12 @@ const ProposalFormModal = ({
       subline: `Submit a Minion proposal here.`,
       form: <MinionSimpleProposalForm />,
     },
+    transmutation: {
+      type: `New ${theme.daoMeta.proposal}`,
+      heading: `New Transmutation ${theme.daoMeta.proposal}`,
+      subline: `Submit a Transmutation proposal here.`,
+      form: <TransmutationProposal />,
+    },
   };
 
   useEffect(() => {
@@ -78,7 +82,7 @@ const ProposalFormModal = ({
 
   const handleClose = () => {
     setLoading(false);
-    setShowModal(null);
+    closeModals();
     if (returnRoute) {
       history.push(returnRoute);
     }

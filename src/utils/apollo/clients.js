@@ -44,3 +44,18 @@ export const statsgraphClients = {
     uri: supportedChains[100].stats_graph_url,
   }),
 };
+
+export const boostsgraphClients = {
+  1: new ApolloClient({
+    uri: supportedChains[1].boosts_graph_url,
+  }),
+  4: new ApolloClient({
+    uri: supportedChains[4].boosts_graph_url,
+  }),
+  42: new ApolloClient({
+    uri: supportedChains[42].boosts_graph_url,
+  }),
+  100: new ApolloClient({
+    uri: supportedChains[100].boosts_graph_url,
+  }),
+};

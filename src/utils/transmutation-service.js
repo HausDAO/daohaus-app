@@ -9,15 +9,32 @@ export class TransmutationService {
 
   constructor(web3, accountAddress, setupValues) {
     this.web3 = web3;
+    console.log(setupValues);
     this.contract = new web3.eth.Contract(abi, setupValues.transmutation);
     this.accountAddress = accountAddress;
     this.setupValues = setupValues;
+  }
+
+  // internal
+  sendTx(options, callback) {
+    const { from, name, params } = options;
+    const tx = this.contract.methods[name](...params);
+    console.log('this.accountAddr', from);
+    return tx
+      .send({ from: from })
+      .on('transactionHash', (txHash) => {
+        callback(txHash, options);
+      })
+      .on('error', (error) => {
+        callback(null, error);
+      });
   }
 
   calcTribute(paymentRequested) {
     if (!paymentRequested || isNaN(paymentRequested)) {
       return '0';
     }
+
     const bnExchange = this.web3.utils.toBN(
       this.setupValues.exchangeRate * this.setupValues.paddingNumber,
     );
@@ -40,7 +57,7 @@ export class TransmutationService {
     return this.contract.methods.getToken().call();
   }
 
-  async propose(applicant, paymentRequested, description) {
+  async propose(applicant, paymentRequested, description, callback) {
     console.log(
       applicant,
       this.calcTribute(paymentRequested),
@@ -48,15 +65,19 @@ export class TransmutationService {
       description,
       this.accountAddress,
     );
-    const txReceipt = await this.contract.methods
-      .propose(
-        applicant,
-        this.calcTribute(paymentRequested),
-        this.web3.utils.toWei('' + paymentRequested),
-        description,
-      )
-      .send({ from: this.accountAddress });
-
+    const txReceipt = await this.sendTx(
+      {
+        from: this.accountAddress,
+        name: 'propose',
+        params: [
+          applicant,
+          this.calcTribute(paymentRequested),
+          this.web3.utils.toWei('' + paymentRequested),
+          description,
+        ],
+      },
+      callback,
+    );
     return txReceipt.transactionHash;
   }
 }

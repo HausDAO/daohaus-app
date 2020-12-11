@@ -139,7 +139,7 @@ const AccountModal = ({ isOpen }) => {
             <HubProfileCard user={user} />
           )}
           <Box
-            mx={-12}
+            mx={-6}
             mt={6}
             mb={0}
             borderTopWidth='1px'
@@ -188,7 +188,7 @@ const AccountModal = ({ isOpen }) => {
             </Box>
           )}
           <Box
-            mx={-12}
+            mx={-6}
             my={6}
             borderTopWidth='1px'
             borderTopColor='whiteAlpha.200'

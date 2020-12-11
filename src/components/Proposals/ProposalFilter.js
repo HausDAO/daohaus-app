@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
 import {
-  Box,
   Menu,
   MenuButton,
   MenuList,
@@ -9,14 +8,15 @@ import {
   Flex,
   Icon,
   MenuDivider,
+  Text,
 } from '@chakra-ui/react';
 import { RiArrowDropDownFill } from 'react-icons/ri';
 
 import { useMemberWallet } from '../../contexts/PokemolContext';
-import { getFilterOptions } from '../../content/proposal-filters';
+import { getFilterOptions, sortOptions } from '../../content/proposal-filters';
 import { determineUnreadProposalList } from '../../utils/proposal-helper';
 
-const ProposalFilter = ({ filter, setFilter, proposals }) => {
+const ProposalFilter = ({ filter, setFilter, proposals, setSort }) => {
   const [memberWallet] = useMemberWallet();
   const [filterOptions, setFilterOptions] = useState();
   const [actionNeeded, setActionNeeded] = useState([]);
@@ -36,12 +36,17 @@ const ProposalFilter = ({ filter, setFilter, proposals }) => {
         });
       setActionNeeded(action);
 
-      options = getFilterOptions(memberWallet.activeMember, action.length);
+      const actionsCount = action ? action.length : 0;
+      options = getFilterOptions(memberWallet.activeMember, actionsCount);
     } else {
       options = getFilterOptions(false);
     }
     setFilterOptions(options);
     setFilter(options[0]);
+
+    if (options[0].value === 'Action Needed') {
+      setSort(sortOptions[1]);
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [memberWallet]);
 
@@ -53,22 +58,33 @@ const ProposalFilter = ({ filter, setFilter, proposals }) => {
       : filter.name;
   };
 
+  const handleFilterSelect = (option) => {
+    setFilter(option);
+    if (option.value === 'Action Needed') {
+      setSort(sortOptions[1]);
+    }
+  };
+
   return (
-    <Flex direction='row'>
-      <Box mr={3} textTransform='uppercase' fontFamily='heading'>
+    <Flex
+      direction='row'
+      w={['100%', null, null, '50%']}
+      mb={[5, null, null, 0]}
+    >
+      <Text textTransform='uppercase' fontFamily='heading' mr={3}>
         Filter By
-      </Box>
+      </Text>
 
       {filterOptions ? (
         <Menu isLazy>
           <MenuButton
             textTransform='uppercase'
             fontFamily='heading'
-            color='primary.50'
-            _hover={{ textDecoration: 'underline' }}
+            color='secondary.500'
+            _hover={{ color: 'secondary.400' }}
           >
             {buildFilterName()}{' '}
-            <Icon as={RiArrowDropDownFill} color='primary.50' />
+            <Icon as={RiArrowDropDownFill} color='secondary.500' />
           </MenuButton>
           <MenuList bg='black'>
             <MenuGroup>
@@ -77,9 +93,8 @@ const ProposalFilter = ({ filter, setFilter, proposals }) => {
                   return (
                     <MenuItem
                       key={option.value}
-                      onClick={() => setFilter(option)}
+                      onClick={() => handleFilterSelect(option)}
                       value={option.value}
-                      _hover={{ color: 'primary.300' }}
                     >
                       {option.value === 'Action Needed'
                         ? `${option.name} (${actionNeeded.length})`
@@ -97,9 +112,8 @@ const ProposalFilter = ({ filter, setFilter, proposals }) => {
                   return (
                     <MenuItem
                       key={option.value}
-                      onClick={() => setFilter(option)}
+                      onClick={() => handleFilterSelect(option)}
                       value={option.value}
-                      _hover={{ color: 'primary.300' }}
                     >
                       {option.name}
                     </MenuItem>
@@ -115,9 +129,8 @@ const ProposalFilter = ({ filter, setFilter, proposals }) => {
                   return (
                     <MenuItem
                       key={option.value}
-                      onClick={() => setFilter(option)}
+                      onClick={() => handleFilterSelect(option)}
                       value={option.value}
-                      _hover={{ color: 'primary.300' }}
                     >
                       {option.name}
                     </MenuItem>

@@ -35,14 +35,14 @@ const BoostStatus = () => {
       </Flex>
       <Flex justify='space-between'>
         <Box>
-          <TextBox>Boosts</TextBox>
-          <TextBox variant='value' fontSize='md'>
+          <TextBox size='xs'>Boosts</TextBox>
+          <TextBox variant='value' size='md'>
             0 Boosts
           </TextBox>
         </Box>
         <Box>
-          <TextBox fontSize='xs'>Monthly Cost</TextBox>
-          <TextBox variant='value' fontSize='md'>
+          <TextBox size='xs'>Monthly Cost</TextBox>
+          <TextBox variant='value' size='md'>
             0 Boosts
           </TextBox>
         </Box>

@@ -14,7 +14,12 @@ import {
 } from '@chakra-ui/react';
 
 import { motion } from 'framer-motion';
-import { useDao, useUser, useModals } from '../../contexts/PokemolContext';
+import {
+  useDao,
+  useUser,
+  useModals,
+  useMemberWallet,
+} from '../../contexts/PokemolContext';
 import ChangeDao from '../Shared/ChangeDao';
 import Header from '../Shared/Header';
 import { Web3SignIn } from '../Shared/Web3SignIn';
@@ -50,6 +55,7 @@ const Layout = ({ children }) => {
   const [dao] = useDao();
   const [theme] = useTheme();
   const [user] = useUser();
+  const [memberWallet] = useMemberWallet();
   const { modals, openModal } = useModals();
 
   const bar = useBreakpointValue({
@@ -308,11 +314,13 @@ const Layout = ({ children }) => {
         opacity: 1,
         pointerEvents: 'all',
         display: 'flex',
+        width: 'auto',
       },
       closed: {
         opacity: 1,
         pointerEvents: 'all',
         display: 'flex',
+        width: '52px',
       },
     },
   });
@@ -379,7 +387,7 @@ const Layout = ({ children }) => {
         initial={sideNavOpen ? 'open' : 'closed'}
         animate={sideNavOpen ? 'open' : 'closed'}
         variants={bar}
-        p={6}
+        p={5}
         position={['relative', 'relative', 'relative', 'fixed']}
         direction='column'
         align='start'
@@ -494,7 +502,7 @@ const Layout = ({ children }) => {
           initial={sideNavOpen ? 'open' : 'closed'}
           animate={sideNavOpen ? 'open' : 'closed'}
           variants={navButtons}
-          direction='row'
+          direction='column'
           wrap='wrap'
         >
           {dao?.graphData ? (
@@ -502,6 +510,7 @@ const Layout = ({ children }) => {
               spacing={[1, null, null, 3]}
               d='flex'
               mt={[3, null, null, 12]}
+              flexDirection='column'
             >
               <Button
                 variant='sideNav'
@@ -590,7 +599,7 @@ const Layout = ({ children }) => {
                   Boosts
                 </MotionBox>
               </Button>
-              {user ? (
+              {memberWallet?.activeMember ? (
                 <Button
                   variant='sideNav'
                   as={RouterLink}
@@ -605,7 +614,7 @@ const Layout = ({ children }) => {
                     fontSize='sm'
                     fontFamily='heading'
                   >
-                    Stats
+                    Profile
                   </MotionBox>
                 </Button>
               ) : null}
@@ -615,6 +624,7 @@ const Layout = ({ children }) => {
               spacing={[1, null, null, 3]}
               d='flex'
               mt={[3, null, null, 12]}
+              flexDirection='column'
             >
               <Button
                 variant='sideNav'
@@ -716,6 +726,7 @@ const Layout = ({ children }) => {
             animate={sideNavOpen ? 'open' : 'closed'}
             variants={navFlex}
             mt={6}
+            alignSelf='flex-end'
           >
             <IconButton
               icon={sideNavOpen ? <RiArrowLeftSLine /> : <RiLinksLine />}

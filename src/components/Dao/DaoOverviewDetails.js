@@ -39,9 +39,14 @@ const DaoOverviewDetails = ({ dao }) => {
         <Skeleton isLoaded={dao?.description}>
           <Box mt={6}>{dao?.description ? dao.description : '--'}</Box>
         </Skeleton>
-        <Flex direction='row' w='60%' justify='space-between' mt={6}>
+        <Flex
+          direction='row'
+          w={['100%', null, null, null, '60%']}
+          justify='space-between'
+          mt={6}
+        >
           <Box>
-            <TextBox>{theme.daoMeta.members}</TextBox>
+            <TextBox size='xs'>{theme.daoMeta.members}</TextBox>
             <Skeleton isLoaded={members?.length > 0}>
               <TextBox size='lg' variant='value'>
                 {members?.length ? members.length : '--'}
@@ -49,7 +54,7 @@ const DaoOverviewDetails = ({ dao }) => {
             </Skeleton>
           </Box>
           <Box>
-            <TextBox>Shares</TextBox>
+            <TextBox size='xs'>Shares</TextBox>
             <Skeleton isLoaded={dao?.graphData?.totalShares}>
               <TextBox size='lg' variant='value'>
                 {dao?.graphData?.totalShares ? dao.graphData.totalShares : '--'}
@@ -57,7 +62,7 @@ const DaoOverviewDetails = ({ dao }) => {
             </Skeleton>
           </Box>
           <Box>
-            <TextBox>Loot</TextBox>
+            <TextBox size='xs'>Loot</TextBox>
             <Skeleton isLoaded={dao?.graphData?.totalLoot}>
               <TextBox size='lg' variant='value'>
                 {dao?.graphData?.totalLoot ? dao?.graphData?.totalLoot : '--'}
@@ -71,16 +76,14 @@ const DaoOverviewDetails = ({ dao }) => {
         </Box>
         <Flex mt={6}>
           <Button
-            mr={6}
-            onClick={() => history.push(`/dao/${dao.address}/proposals`)}
-          >
-            View {theme.daoMeta.proposals}
-          </Button>
-          <Button
             variant='outline'
+            mr={6}
             onClick={() => history.push(`/dao/${dao.address}/bank`)}
           >
             View {theme.daoMeta.bank}
+          </Button>
+          <Button onClick={() => history.push(`/dao/${dao.address}/proposals`)}>
+            View {theme.daoMeta.proposals}
           </Button>
         </Flex>
       </ContentBox>

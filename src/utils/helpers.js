@@ -79,3 +79,19 @@ export const formatPeriods = (period, duration) => {
   }
   return 0;
 };
+
+export const stripHttpProtocol = (string) => {
+  // regex? var tarea_regex = /(http|https)/;
+  let newString = '';
+  if (string.toLowerCase().indexOf('http://') === 0) {
+    newString = string.replace('http://', '');
+  } else if (string.toLowerCase().indexOf('https://') === 0) {
+    newString = string.replace('https://', '');
+  }
+
+  return newString === '' ? string : newString;
+};
+
+export const numberWithCommas = (num) => {
+  return num.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ',');
+};

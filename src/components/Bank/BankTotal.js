@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from 'react';
-import { Skeleton, Box } from '@chakra-ui/react';
+import { Skeleton, Box, Text } from '@chakra-ui/react';
 
 import { usePrices } from '../../contexts/PokemolContext';
 import { getTotalBankValue } from '../../utils/bank-helpers';
-import TextBox from '../Shared/TextBox';
+import { numberWithCommas } from '../../utils/helpers';
 
 const BankTotal = ({ tokenBalances }) => {
   const [prices] = usePrices();
@@ -20,9 +20,9 @@ const BankTotal = ({ tokenBalances }) => {
   return (
     <>
       <Skeleton isLoaded={tokenBalances?.length > 0}>
-        <TextBox size='xl' variant='value'>
-          ${bankTotal.toFixed(2)}
-        </TextBox>
+        <Text fontFamily='mono' fontSize='3xl' variant='value'>
+          ${numberWithCommas(bankTotal.toFixed(2))}
+        </Text>
       </Skeleton>
       <Box>
         <Skeleton isLoaded={tokenBalances?.length > 0}>

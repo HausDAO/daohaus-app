@@ -91,7 +91,7 @@ const MemberDaoList = ({ daos }) => {
   return (
     <Box w='100%'>
       <Flex justify='space-between' alignItems='center' mb={6}>
-        <TextBox>
+        <TextBox size='xs'>
           Member of {daos.length} DAO{daos.length > 1 && 's'}
         </TextBox>
         {canSearch ? (
@@ -111,10 +111,11 @@ const MemberDaoList = ({ daos }) => {
       </Flex>
 
       <Link
-        href='https://daohaus.club'
+        href='https://daohaus.club/explore'
         isExternal
         fontSize='md'
         textTransform='uppercase'
+        color='secondary.500'
       >
         Explore more DAOs on DAOhaus
       </Link>

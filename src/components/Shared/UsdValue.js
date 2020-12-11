@@ -1,5 +1,6 @@
 import React from 'react';
 import { usePrices } from '../../contexts/PokemolContext';
+import { numberWithCommas } from '../../utils/helpers';
 
 const UsdValue = ({ tokenBalance, optimisticSync }) => {
   const [prices] = usePrices();
@@ -18,7 +19,9 @@ const UsdValue = ({ tokenBalance, optimisticSync }) => {
     : 0;
   const balance = checkOptimisticBalance() / 10 ** +tokenBalance.token.decimals;
 
-  return <div>$ {parseFloat(price * balance).toFixed(2)}</div>;
+  return (
+    <div>$ {numberWithCommas(parseFloat(price * balance).toFixed(2))}</div>
+  );
 };
 
 export default UsdValue;
