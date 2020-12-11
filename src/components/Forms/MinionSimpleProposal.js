@@ -17,6 +17,7 @@ import { RiErrorWarningLine } from 'react-icons/ri';
 
 import {
   useDao,
+  useModals,
   useTxProcessor,
   useUser,
   useWeb3Connect,
@@ -32,6 +33,8 @@ const MinionProposalForm = () => {
   const [txProcessor, updateTxProcessor] = useTxProcessor();
   const [currentError, setCurrentError] = useState(null);
   const [minions, setMinions] = useState([]);
+  const { closeModals } = useModals();
+
 
   const {
     handleSubmit,
@@ -71,8 +74,7 @@ const MinionProposalForm = () => {
 
       updateTxProcessor(txProcessor);
       // close model here
-      // onClose();
-      // setShowModal(null);
+      closeModals();
     }
     if (!txHash) {
       console.log('error: ', details);

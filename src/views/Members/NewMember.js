@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 
-import { useDao } from '../../contexts/PokemolContext';
+import { useDao, useModals } from '../../contexts/PokemolContext';
 import ProposalFormModal from '../../components/Modal/ProposalFormModal';
 import { Flex, Box } from '@chakra-ui/react';
 import MembersList from '../../components/Members/MembersList';
@@ -13,7 +13,9 @@ const NewMember = () => {
   const [dao] = useDao();
   const [, setTokenList] = useState(null);
   const [, setProposal] = useState(null);
-  const [showModal, setShowModal] = useState(true);
+  const { modals, openModal } = useModals();
+
+  openModal('newMember');
 
   useEffect(() => {
     if (dao?.graphData?.tokenBalances) {
@@ -46,8 +48,7 @@ const NewMember = () => {
 
       <ProposalFormModal
         submitProposal={setProposal}
-        isOpen={showModal}
-        setShowModal={setShowModal}
+        isOpen={modals.newMember}
         proposalType={'whitelist'}
         returnRoute={`/dao/${dao?.address}/members`}
       />

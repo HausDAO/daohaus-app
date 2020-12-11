@@ -18,6 +18,9 @@ const initialState = {
     accountModal: false,
     ragequitModal: false,
     newSummonerModal: false,
+    proposal: false,
+    newMember: false,
+    newToken: false,
   },
 
   user: null,
