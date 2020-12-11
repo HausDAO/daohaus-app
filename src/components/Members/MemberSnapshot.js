@@ -25,12 +25,13 @@ const MemberSnapshot = ({ selectedMember }) => {
   return (
     <Box>
       <Flex justify='space-between'>
-        <TextBox>Snapshot</TextBox>
+        <TextBox size='xs'>Snapshot</TextBox>
         <TextBox
           as={Link}
           to={`/dao/${dao?.address}/profile/${
             selectedMember ? selectedMember.memberAddress : user?.username
           }`}
+          size='xs'
         >
           View my profile
         </TextBox>
@@ -38,15 +39,17 @@ const MemberSnapshot = ({ selectedMember }) => {
       <ContentBox mt={3}>
         <Flex justify='space-between'>
           <Box>
-            <TextBox>{theme.daoMeta.members}</TextBox>
+            <TextBox size='xs'>{theme.daoMeta.members}</TextBox>
             <Skeleton isLoaded={members.length > 0}>
-              <TextBox variant='value'>{members?.length}</TextBox>
+              <TextBox variant='value' size='xs'>
+                {members?.length}
+              </TextBox>
             </Skeleton>
           </Box>
           <Box>
-            <TextBox>Shares</TextBox>
+            <TextBox size='xs'>Shares</TextBox>
             <Skeleton isLoaded={dao?.graphData?.totalShares}>
-              <TextBox variant='value'>
+              <TextBox variant='value' size='xs'>
                 {dao?.graphData?.totalShares
                   ? dao?.graphData?.totalShares
                   : '--'}
@@ -55,9 +58,9 @@ const MemberSnapshot = ({ selectedMember }) => {
           </Box>
           {(dao?.graphData?.totalLoot > 0 || !dao?.graphData?.totalLoot) && (
             <Box>
-              <TextBox>Loot</TextBox>
+              <TextBox size='xs'>Loot</TextBox>
               <Skeleton isLoaded={dao?.graphData?.totalLoot}>
-                <TextBox variant='value'>
+                <TextBox variant='value' size='xs'>
                   {dao?.graphData?.totalLoot ? dao?.graphData?.totalLoot : '--'}
                 </TextBox>
               </Skeleton>

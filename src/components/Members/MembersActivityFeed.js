@@ -41,7 +41,7 @@ const MembersActivityFeed = ({ selectedMember }) => {
 
   return (
     <Box mt={6}>
-      <TextBox>Activity Feed</TextBox>
+      <TextBox size='xs'>Activity Feed</TextBox>
 
       {activityData.map((activity) => (
         <DaoActivityCard

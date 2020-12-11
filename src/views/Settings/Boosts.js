@@ -22,7 +22,7 @@ const Boosts = () => {
 
   return (
     <Box p={6}>
-      <TextBox fontSize='sm' mb={3}>
+      <TextBox size='sm' mb={3}>
         Available Apps
       </TextBox>
       <Flex wrap='wrap' justify='space-evenly'>

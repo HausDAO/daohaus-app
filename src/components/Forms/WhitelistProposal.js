@@ -95,7 +95,7 @@ const WhitelistProposalForm = () => {
           <DetailsFields register={register} />
         </Box>
         <Box w={['100%', null, '50%']}>
-          <TextBox as={FormLabel} htmlFor='tokenAddress' mb={2}>
+          <TextBox as={FormLabel} size='xs' htmlFor='tokenAddress' mb={2}>
             Token Address
           </TextBox>
           <Input

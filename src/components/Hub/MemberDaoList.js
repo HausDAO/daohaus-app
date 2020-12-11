@@ -91,7 +91,7 @@ const MemberDaoList = ({ daos }) => {
   return (
     <Box w='100%'>
       <Flex justify='space-between' alignItems='center' mb={6}>
-        <TextBox>
+        <TextBox size='xs'>
           Member of {daos.length} DAO{daos.length > 1 && 's'}
         </TextBox>
         {canSearch ? (
