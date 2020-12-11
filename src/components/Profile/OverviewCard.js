@@ -135,7 +135,7 @@ const OverviewCard = ({ user }) => {
           <Box>
             <TextBox size='sm'>Total Stake</TextBox>
             <TextBox size='4xl' variant='value'>
-              ${memberValue.toFixed(2)}
+              ${numberWithCommas(memberValue.toFixed(2))}
             </TextBox>
           </Box>
           <Box>
