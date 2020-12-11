@@ -4,7 +4,11 @@ import { FaStar } from 'react-icons/fa';
 import { format } from 'date-fns';
 import makeBlockie from 'ethereum-blockies-base64';
 
-import { truncateAddr, memberProfile } from '../../utils/helpers';
+import {
+  truncateAddr,
+  memberProfile,
+  numberWithCommas,
+} from '../../utils/helpers';
 import {
   useEns,
   useDaoGraphData,
@@ -95,7 +99,9 @@ const OverviewCard = ({ user }) => {
               w='100px'
               h='100px'
               rounded='full'
-              src={makeBlockie(user.username)}
+              src={makeBlockie(
+                user.username ? user.username : user.memberAddress,
+              )}
             />
           )}
           <Skeleton isLoaded={user?.createdAt}>
@@ -110,12 +116,15 @@ const OverviewCard = ({ user }) => {
 
         <Flex direction='column'>
           <Box fontSize='xl' fontFamily='heading'>
-            {user?.profile.name || truncateAddr(user.username)}{' '}
+            {user?.profile.name ||
+              truncateAddr(
+                user.username ? user.username : user.memberAddress,
+              )}{' '}
             <span>{user.profile.emoji || ''} </span>
           </Box>
           {user.name ? (
             <Box fontSize='sm' fontFamily='mono'>
-              {truncateAddr(user.username)}
+              {truncateAddr(user.username ? user.username : user.memberAddress)}
             </Box>
           ) : null}
           {ensName && (
