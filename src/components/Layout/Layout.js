@@ -715,6 +715,7 @@ const Layout = ({ children }) => {
             animate={sideNavOpen ? 'open' : 'closed'}
             variants={navFlex}
             mt={6}
+            alignSelf='flex-end'
           >
             <IconButton
               icon={sideNavOpen ? <RiArrowLeftSLine /> : <RiLinksLine />}
