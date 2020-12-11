@@ -314,11 +314,13 @@ const Layout = ({ children }) => {
         opacity: 1,
         pointerEvents: 'all',
         display: 'flex',
+        width: 'auto',
       },
       closed: {
         opacity: 1,
         pointerEvents: 'all',
         display: 'flex',
+        width: '52px',
       },
     },
   });
@@ -385,7 +387,7 @@ const Layout = ({ children }) => {
         initial={sideNavOpen ? 'open' : 'closed'}
         animate={sideNavOpen ? 'open' : 'closed'}
         variants={bar}
-        p={6}
+        p={5}
         position={['relative', 'relative', 'relative', 'fixed']}
         direction='column'
         align='start'
@@ -724,6 +726,7 @@ const Layout = ({ children }) => {
             animate={sideNavOpen ? 'open' : 'closed'}
             variants={navFlex}
             mt={6}
+            alignSelf='flex-end'
           >
             <IconButton
               icon={sideNavOpen ? <RiArrowLeftSLine /> : <RiLinksLine />}

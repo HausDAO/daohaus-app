@@ -76,16 +76,14 @@ const DaoOverviewDetails = ({ dao }) => {
         </Box>
         <Flex mt={6}>
           <Button
-            mr={6}
-            onClick={() => history.push(`/dao/${dao.address}/proposals`)}
-          >
-            View {theme.daoMeta.proposals}
-          </Button>
-          <Button
             variant='outline'
+            mr={6}
             onClick={() => history.push(`/dao/${dao.address}/bank`)}
           >
             View {theme.daoMeta.bank}
+          </Button>
+          <Button onClick={() => history.push(`/dao/${dao.address}/proposals`)}>
+            View {theme.daoMeta.proposals}
           </Button>
         </Flex>
       </ContentBox>
