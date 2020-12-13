@@ -91,7 +91,7 @@ const DaoInit = () => {
     if (!boostRes.error) {
       boosts = boostRes.reduce((boosts, boostData) => {
         const metadata = boostData.metadata
-          ? JSON.parse(boostData.metadata[0])
+          ? JSON.parse(boostData.boostMetadata)
           : null;
         boosts[boostData.boostKey] = {
           active: boostData.active,

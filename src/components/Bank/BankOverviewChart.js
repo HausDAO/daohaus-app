@@ -15,7 +15,7 @@ import {
   MenuList,
   MenuItem,
   Icon,
-  Skeleton,
+  Spinner,
 } from '@chakra-ui/react';
 import { FaChevronDown } from 'react-icons/fa';
 import { useTheme } from '../../contexts/CustomThemeContext';
@@ -36,6 +36,7 @@ const BankOverviewChart = ({ balances, dao }) => {
   const [prices] = usePrices();
   const [chartData, setChartData] = useState([]);
   const [timeframe, setTimeframe] = useState(bankChartTimeframes[0]);
+  console.log(chartData);
 
   useEffect(() => {
     if (balances && prices && dao) {
@@ -93,68 +94,95 @@ const BankOverviewChart = ({ balances, dao }) => {
 
   return (
     <Box>
-      {balances.length > 0 ? (
+      {balances?.length > 0 ? (
         <ContentBox minH='360px'>
-          <Flex wrap='wrap' align='center'>
-            <Box w={['100%', null, null, '50%']}>
+          <Flex wrap='wrap' align='center' position='relative'>
+            <Box position='absolute' top='0px' left='10px'>
               <BankTotal tokenBalances={dao?.graphData?.tokenBalances} />
             </Box>
 
-            <Skeleton
-              isLoaded={chartData.length > 0}
-              w={['100%', null, null, '50%']}
-            >
-              <Flex justify='flex-end'>
-                <Menu>
-                  <MenuButton
-                    color='secondary.500'
-                    fontFamily='heading'
-                    _hover={{ color: 'secondary.400' }}
-                  >
-                    Time Frame: {timeframe.name}{' '}
-                    <Icon as={FaChevronDown} h='12px' w='12px' />
-                  </MenuButton>
-                  <MenuList>
-                    {bankChartTimeframes.map((time) => {
-                      return (
-                        <MenuItem
-                          key={time.value}
-                          onClick={() => handleTimeChange(time)}
-                        >
-                          {time.name}
-                        </MenuItem>
-                      );
-                    })}
-                  </MenuList>
-                </Menu>
-              </Flex>
+            <Box isLoaded={chartData.length > 0} w='100%'>
               {chartData.length > 0 ? (
-                <FlexibleWidthXYPlot
-                  height={300}
-                  margin={{ left: 0, right: 0, top: 40, bottom: 40 }}
-                >
-                  {gradient}
-                  <LineSeries
-                    animate
-                    curve='curveNatural'
-                    data={chartData}
-                    color={theme.colors.primary[50]}
+                <>
+                  <Flex justify='flex-end'>
+                    <Menu>
+                      <MenuButton
+                        color='secondary.500'
+                        fontFamily='heading'
+                        _hover={{ color: 'secondary.400' }}
+                      >
+                        Time Frame: {timeframe.name}{' '}
+                        <Icon as={FaChevronDown} h='12px' w='12px' />
+                      </MenuButton>
+                      <MenuList>
+                        {bankChartTimeframes.map((time) => {
+                          return (
+                            <MenuItem
+                              key={time.value}
+                              onClick={() => handleTimeChange(time)}
+                            >
+                              {time.name}
+                            </MenuItem>
+                          );
+                        })}
+                      </MenuList>
+                    </Menu>
+                  </Flex>
+                  <FlexibleWidthXYPlot
+                    height={300}
+                    margin={{ left: 0, right: 0, top: 40, bottom: 40 }}
+                  >
+                    {gradient}
+                    <LineSeries
+                      animate
+                      curve='curveNatural'
+                      data={chartData}
+                      color={theme.colors.primary[50]}
+                    />
+                    <AreaSeries
+                      animate
+                      curve='curveNatural'
+                      data={chartData}
+                      fill={'url(#gradient)'}
+                      stroke='transparent'
+                    />
+                    <XAxis xType='time' tickTotal={0} />
+                    <YAxis tickTotal={0} />
+                  </FlexibleWidthXYPlot>
+                </>
+              ) : (
+                <Flex w='100%' h='100%' justify='center' align='center'>
+                  <Spinner
+                    thickness='6px'
+                    speed='0.45s'
+                    emptyColor='whiteAlpha.300'
+                    color='primary.500'
+                    size='xl'
+                    my={20}
                   />
-                  <AreaSeries
-                    animate
-                    curve='curveNatural'
-                    data={chartData}
-                    fill={'url(#gradient)'}
-                    stroke='transparent'
-                  />
-                  <XAxis xType='time' tickTotal={0} />
-                  <YAxis tickTotal={0} />
-                </FlexibleWidthXYPlot>
-              ) : null}
-            </Skeleton>
+                </Flex>
+              )}
+            </Box>
           </Flex>
         </ContentBox>
-      ) : null}
+      ) : (
+        <Flex
+          as={ContentBox}
+          w='100%'
+          h='350px'
+          align='center'
+          justify='center'
+        >
+          <Spinner
+            thickness='6px'
+            speed='0.45s'
+            emptyColor='whiteAlpha.300'
+            color='primary.500'
+            size='xl'
+            my={20}
+          />
+        </Flex>
+      )}
     </Box>
   );
 };

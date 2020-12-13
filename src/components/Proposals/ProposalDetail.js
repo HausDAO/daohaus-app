@@ -17,7 +17,11 @@ import ReactPlayer from 'react-player';
 
 import { useMembers, useMemberWallet } from '../../contexts/PokemolContext';
 import { useTheme } from '../../contexts/CustomThemeContext';
-import { memberProfile, proposalDetails } from '../../utils/helpers';
+import {
+  memberProfile,
+  proposalDetails,
+  numberWithCommas,
+} from '../../utils/helpers';
 import {
   getProposalCountdownText,
   getProposalDetailStatus,
@@ -181,8 +185,8 @@ const ProposalDetail = ({ proposal }) => {
                 <Skeleton isLoaded={proposal?.tributeOffered}>
                   <TextBox size='lg' variant='value'>
                     {proposal?.tributeOffered
-                      ? `${utils.fromWei(
-                          proposal.tributeOffered.toString(),
+                      ? `${numberWithCommas(
+                          utils.fromWei(proposal.tributeOffered.toString()),
                         )} ${proposal.tributeTokenSymbol || 'WETH'}`
                       : '--'}
                   </TextBox>
@@ -195,8 +199,8 @@ const ProposalDetail = ({ proposal }) => {
                 <Skeleton isLoaded={proposal?.paymentRequested}>
                   <TextBox size='lg' variant='value'>
                     {proposal?.paymentRequested
-                      ? `${utils.fromWei(
-                          proposal.paymentRequested.toString(),
+                      ? `${numberWithCommas(
+                          utils.fromWei(proposal.paymentRequested.toString()),
                         )} ${proposal.paymentTokenSymbol || 'WETH'}`
                       : '--'}
                   </TextBox>
@@ -209,7 +213,7 @@ const ProposalDetail = ({ proposal }) => {
                 <Skeleton isLoaded={proposal?.sharesRequested}>
                   <TextBox size='lg' variant='value'>
                     {proposal?.sharesRequested
-                      ? proposal.sharesRequested
+                      ? numberWithCommas(proposal.sharesRequested)
                       : '--'}
                   </TextBox>
                 </Skeleton>
@@ -220,7 +224,9 @@ const ProposalDetail = ({ proposal }) => {
                 <TextBox size='xs'>Loot</TextBox>
                 <Skeleton isLoaded={proposal?.lootRequested}>
                   <TextBox size='lg' variant='value'>
-                    {proposal?.lootRequested ? proposal.lootRequested : '--'}
+                    {proposal?.lootRequested
+                      ? numberWithCommas(proposal.lootRequested)
+                      : '--'}
                   </TextBox>
                 </Skeleton>
               </Box>
