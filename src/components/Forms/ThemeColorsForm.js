@@ -13,24 +13,26 @@ import { useTheme } from '../../contexts/CustomThemeContext';
 import ContentBox from '../../components/Shared/ContentBox';
 import TextBox from '../../components/Shared/TextBox';
 
-const ThemeColorsForm = ({ handleThemeUpdate, resetTheme }) => {
+const ThemeColorsForm = ({
+  previewTheme,
+  setPreviewTheme,
+  handlePreviewUpdate,
+  handleThemeUpdate,
+  resetTheme,
+}) => {
   const [theme] = useTheme();
   const { handleSubmit } = useForm();
-  const [values, setValues] = useState({
-    primary500: theme.colors.primary[500],
-    secondary500: theme.colors.secondary[500],
-    background500: theme.colors.background[500],
-  });
   const [pickerOpen, setPickerOpen] = useState(null);
 
-  const onSubmit = (values) => {
-    handleThemeUpdate(values);
+  const onSubmit = () => {
+    console.log(previewTheme);
+    handleThemeUpdate(previewTheme);
   };
-  console.log(values);
+  console.log(previewTheme);
 
   const handleChange = (color, item) => {
-    setValues({
-      ...values,
+    setPreviewTheme({
+      ...previewTheme,
       [item]: color.hex,
     });
     setPickerOpen(null);
@@ -41,13 +43,13 @@ const ThemeColorsForm = ({ handleThemeUpdate, resetTheme }) => {
       <ContentBox as='form' onSubmit={handleSubmit(onSubmit)} m={6}>
         <Stack spacing={4} pr='5%'>
           <Flex justify='space-between' align='center'>
-            <TextBox>Primary Color</TextBox>
+            <TextBox size='sm'>Primary Color</TextBox>
             <Box
               w='35px'
               h='35px'
               borderRadius='25px'
               border={`1px solid ${theme.colors.whiteAlpha[800]}`}
-              bg={values.primary500}
+              bg={previewTheme?.primary500}
               onClick={() => setPickerOpen('primary')}
               _hover={{ cursor: 'pointer' }}
             >
@@ -62,7 +64,7 @@ const ThemeColorsForm = ({ handleThemeUpdate, resetTheme }) => {
                     onClick={() => setPickerOpen(null)}
                   />
                   <SketchPicker
-                    color={values.primary500}
+                    color={previewTheme?.primary500}
                     onChange={(color) => handleChange(color, 'primary500')}
                   />
                 </Box>
@@ -71,13 +73,13 @@ const ThemeColorsForm = ({ handleThemeUpdate, resetTheme }) => {
           </Flex>
 
           <Flex justify='space-between' align='center'>
-            <TextBox>Secondary Color</TextBox>
+            <TextBox size='sm'>Secondary Color</TextBox>
             <Box
               w='35px'
               h='35px'
               borderRadius='25px'
               border={`1px solid ${theme.colors.whiteAlpha[800]}`}
-              bg={values.secondary500}
+              bg={previewTheme?.secondary500}
               onClick={() => setPickerOpen('secondary')}
               _hover={{ cursor: 'pointer' }}
             >
@@ -92,7 +94,7 @@ const ThemeColorsForm = ({ handleThemeUpdate, resetTheme }) => {
                     onClick={() => setPickerOpen(null)}
                   />
                   <SketchPicker
-                    color={values.secondary500}
+                    color={previewTheme?.secondary500}
                     onChange={(color) => handleChange(color, 'secondary500')}
                   />
                 </Box>
@@ -101,13 +103,13 @@ const ThemeColorsForm = ({ handleThemeUpdate, resetTheme }) => {
           </Flex>
 
           <Flex justify='space-between' align='center'>
-            <TextBox>Background Color</TextBox>
+            <TextBox size='sm'>Background Color</TextBox>
             <Box
               w='35px'
               h='35px'
               borderRadius='25px'
               border={`1px solid ${theme.colors.whiteAlpha[800]}`}
-              bg={values.background500}
+              bg={previewTheme?.background500}
               onClick={() => setPickerOpen('background')}
               _hover={{ cursor: 'pointer' }}
             >
@@ -122,7 +124,7 @@ const ThemeColorsForm = ({ handleThemeUpdate, resetTheme }) => {
                     onClick={() => setPickerOpen(null)}
                   />
                   <SketchPicker
-                    color={values.background500}
+                    color={previewTheme?.background500}
                     onChange={(color) => handleChange(color, 'background500')}
                   />
                 </Box>

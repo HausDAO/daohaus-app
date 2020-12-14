@@ -603,7 +603,7 @@ const Layout = ({ children }) => {
                 <Button
                   variant='sideNav'
                   as={RouterLink}
-                  to={`/dao/${dao.address}/profile/${user.username}`}
+                  to={`/dao/${dao.address}/profile/${memberWallet.memberAddress}`}
                   _hover={{ backgroundColor: 'white' }}
                 >
                   <Icon as={RiTrophyLine} w={6} h={6} />

@@ -7,7 +7,7 @@ import {
   LineSeries,
   AreaSeries,
 } from 'react-vis';
-import { Box } from '@chakra-ui/react';
+import { Flex, Spinner } from '@chakra-ui/react';
 import { useTheme } from '../../contexts/CustomThemeContext';
 import { useBalances } from '../../contexts/PokemolContext';
 import {
@@ -66,7 +66,7 @@ const MemberSnapshotChart = ({ chartDimension, dao }) => {
   );
 
   return (
-    <Box w='100%' minH='300px'>
+    <Flex w='100%' minH='300px' justify='center'>
       {chartData.length > 0 ? (
         <FlexibleXYPlot
           yDomain={[0, chartData[chartData.length - 1].y || 10]}
@@ -89,8 +89,17 @@ const MemberSnapshotChart = ({ chartDimension, dao }) => {
             stroke='transparent'
           />
         </FlexibleXYPlot>
-      ) : null}
-    </Box>
+      ) : (
+        <Spinner
+          thickness='6px'
+          speed='0.45s'
+          emptyColor='whiteAlpha.300'
+          color='primary.500'
+          size='xl'
+          mt={20}
+        />
+      )}
+    </Flex>
   );
 };
 
