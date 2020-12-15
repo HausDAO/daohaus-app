@@ -1,7 +1,10 @@
 import React, { useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
+import Web3Modal from 'web3modal';
 
 import { defaultTheme } from '../themes/theme-defaults';
+import { providerOptions, setWeb3Connect } from '../utils/auth';
+import { getChainDataByName } from '../utils/chains';
 import { DaoService, USER_TYPE } from '../utils/dao-service';
 import { validDaoParams } from '../utils/helpers';
 import { get } from '../utils/requests';
@@ -21,7 +24,7 @@ const DaoInit = () => {
   const [contracts, updateContracts] = useContracts();
   const [daoMetadata, updateDaoMetadata] = useDaoMetadata();
   const [, setTheme] = useTheme();
-  const [web3Connect] = useWeb3Connect();
+  const [web3Connect, updateWeb3Connect] = useWeb3Connect();
   const [memberWallet, updateMemberWallet] = useMemberWallet();
   const [user] = useUser();
   const [, clearDaoData] = useDao();
@@ -81,14 +84,10 @@ const DaoInit = () => {
 
     console.log('daoRes', daoRes);
 
-    // let boostRes;
-    // try {
-    //   boostRes = await get(`boosts/${daoParam}`);
-    // } catch (err) {
-    //   console.log('api boost fetch error', daoParam);
-    // }
+    const daoNetwork = getChainDataByName(apiData.network || 'mainnet');
 
-    // rework with new api end point
+    console.log('daoNetwork', daoNetwork);
+
     let boosts = {};
     if (apiData.boosts) {
       boosts = apiData.boosts.reduce((boosts, boostData) => {
@@ -113,7 +112,7 @@ const DaoInit = () => {
 
     // TODO: REMOVE V1 code
     // const version = daoRes && daoRes.data.version ? daoRes.data.version : '1';
-    console.log('daoService', web3Connect, user);
+
     const version = 2;
     const daoService =
       user && web3Connect.provider
@@ -122,8 +121,13 @@ const DaoInit = () => {
             web3Connect.provider,
             daoParam,
             version,
+            daoNetwork,
           )
-        : await DaoService.instantiateWithReadOnly(daoParam, version);
+        : await DaoService.instantiateWithReadOnly(
+            daoParam,
+            version,
+            daoNetwork,
+          );
 
     updateDaoMetadata({
       address: daoParam,
@@ -137,21 +141,39 @@ const DaoInit = () => {
   };
 
   const initWeb3DaoService = async () => {
-    console.log('initint web 3 service', user);
+    const daoNetwork = getChainDataByName(daoMetadata.network || 'mainnet');
+    console.log('initint web 3 service w/ user', web3Connect, daoNetwork);
+
+    let provider = web3Connect.provider;
+
+    if (daoNetwork.network !== web3Connect.w3c.providerController.network) {
+      console.log('setting up new provider on mismatch');
+      const newWeb3Connect = await setWeb3Connect(daoNetwork);
+      provider = newWeb3Connect.provider;
+      updateWeb3Connect(newWeb3Connect);
+    }
+
+    console.log('provider', provider);
+
     const daoService = await DaoService.instantiateWithWeb3(
       user.username,
-      web3Connect.provider,
+      provider,
       daoMetadata.address,
       daoMetadata.version,
+      daoNetwork,
     );
 
     updateContracts({ daoService });
   };
 
   const initMemberWallet = async () => {
+    console.log('****initMemberWallet');
+
     const addrByDelegateKey = await contracts.daoService.moloch.memberAddressByDelegateKey(
       user.username,
     );
+
+    console.log('****initMemberWallet', addrByDelegateKey);
     const tokenBalanceWei = await contracts.daoService.token.balanceOf(
       user.username,
     );

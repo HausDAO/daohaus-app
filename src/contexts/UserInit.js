@@ -5,7 +5,7 @@ import { getProfile } from '3box/lib/api';
 import { createWeb3User, w3connect } from '../utils/auth';
 import { USER_TYPE } from '../utils/dao-service';
 import { useNetwork, useUser, useWeb3Connect } from './PokemolContext';
-import { supportedChains, getChainDataByName } from '../utils/chains';
+import { getChainDataByName } from '../utils/chains';
 
 const UserInit = () => {
   const toast = useToast();
@@ -34,20 +34,10 @@ const UserInit = () => {
         case USER_TYPE.WEB3: {
           if (web3Connect.w3c.cachedProvider) {
             try {
-              console.log(
-                'connecting from userinit web3Connect, network',
-                web3Connect,
-                network,
-              );
-
               providerConnect = await w3connect(web3Connect, network);
-
-              console.log('providerConnect', providerConnect);
               const providerNetwork = getChainDataByName(
                 providerConnect.w3c.providerController.network,
               );
-
-              console.log('providerNetwork', providerNetwork);
 
               updateNetwork(providerNetwork);
             } catch (err) {

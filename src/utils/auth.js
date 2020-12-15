@@ -5,7 +5,22 @@ import Fortmatic from 'fortmatic';
 import Portis from '@portis/web3';
 
 import { USER_TYPE } from './dao-service';
-import { getChainData, getChainDataByName, supportedChains } from './chains';
+import { getChainDataByName, supportedChains } from './chains';
+
+export const setWeb3Connect = async (chainData) => {
+  const web3Connect = {
+    w3c: new Web3Modal({
+      network: chainData.network,
+      providerOptions: providerOptions(chainData),
+      cacheProvider: true,
+      theme: 'dark',
+    }),
+  };
+  const provider = await web3Connect.w3c.connect();
+  const web3 = new Web3(provider);
+  const w3c = web3Connect.w3c;
+  return { w3c, web3, provider };
+};
 
 export const providerOptions = (chainData) => {
   // xdai doesn't have fortmatic here...
@@ -18,7 +33,7 @@ export const providerOptions = (chainData) => {
     const rpcUrl =
       chainData.network_id === 100
         ? 'https://dai.poa.network '
-        : `https://kovan.infura.io/v3/${process.env.REACT_APP_INFURA_KEY}`;
+        : `https://${chainData.network}.infura.io/v3/${process.env.REACT_APP_INFURA_KEY}`;
     allNetworkProviders.walletconnect = {
       // network: getChainData(process.env.REACT_APP_NETWORK_ID).network,
       network: chainData.network,
@@ -57,19 +72,12 @@ export const providerOptions = (chainData) => {
 
 export const w3connect = async (web3Connect, currentNetwork) => {
   if (!currentNetwork) {
-    console.log('NO CONTEXT NETWORK');
-
     const w3cNetwork = getChainDataByName(
       web3Connect.w3c.providerController.network,
     );
-
     let provider = await web3Connect.w3c.connect();
-
     let web3 = new Web3(provider);
-
     const injectedChainId = await web3.eth.getChainId();
-    console.log('w3cNetwork', w3cNetwork);
-    console.log('injectedChainId', injectedChainId);
 
     if (!supportedChains[injectedChainId]) {
       // eslint-disable-next-line no-throw-literal
@@ -84,6 +92,7 @@ export const w3connect = async (web3Connect, currentNetwork) => {
       supportedChains[injectedChainId];
 
     if (mismatchSupportedNetwork) {
+      console.log('network mismatch');
       const injectedNetwork = supportedChains[injectedChainId];
 
       web3Connect = {
@@ -98,28 +107,10 @@ export const w3connect = async (web3Connect, currentNetwork) => {
       web3 = new Web3(provider);
     }
 
-    console.log('logging the user in, dao/hub network', currentNetwork);
-
-    // still might need in dao world?
-
-    // if (currentNetwork && +injectedChainId !== currentNetwork.network_id) {
-    //   // eslint-disable-next-line no-throw-literal
-    //   throw {
-    //     msg: `Please switch Web3 to the correct network and try signing in again. Detected network: ${
-    //       getChainData(injectedChainId).network
-    //     }, Required network: ${
-    //       getChainData(process.env.REACT_APP_NETWORK_ID).network
-    //     }`,
-    //     error: new Error(
-    //       `Injected web3 chainId: ${injectedChainId}, config: ${process.env.REACT_APP_NETWORK_ID}`,
-    //     ),
-    //   };
-    // }
-    // // console.log('w3connect', web3Connect);
     const w3c = web3Connect.w3c;
     return { w3c, web3, provider };
   } else {
-    console.log('WHOOOOOOPS');
+    console.log('currentNetwork in AUTH', currentNetwork);
   }
 };
 

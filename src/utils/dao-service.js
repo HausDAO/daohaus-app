@@ -38,23 +38,34 @@ export class DaoService {
     injected,
     contractAddr,
     version,
+    daoNetwork,
   ) {
+    // const rpcUrl =
+    //   daoNetwork.network_id === 100
+    //     ? 'https://dai.poa.network '
+    //     : `https://${daoNetwork.network}.infura.io/v3/${process.env.REACT_APP_INFURA_KEY}`;
+    // const web3 = new Web3(new Web3.providers.HttpProvider(rpcUrl));
     const web3 = new Web3(injected);
 
-    let moloch;
-    let approvedToken;
-    if (version === 2) {
-      moloch = new Web3MolochServiceV2(
-        web3,
-        contractAddr,
-        accountAddr,
-        version,
-      );
-      approvedToken = await moloch.getDepositToken();
-    } else {
-      moloch = new Web3MolochService(web3, contractAddr, accountAddr, version);
-      approvedToken = await moloch.approvedToken();
-    }
+    console.log('instantiateWithWeb3, web3', web3, daoNetwork, version);
+
+    // let moloch;
+    // let approvedToken;
+    // if (+version === 2) {
+    console.log('new Web3MolochServiceV2', web3);
+    const moloch = new Web3MolochServiceV2(
+      web3,
+      contractAddr,
+      accountAddr,
+      +version,
+    );
+    const approvedToken = await moloch.getDepositToken();
+
+    console.log('approvedToken', approvedToken);
+    // } else {
+    //   moloch = new Web3MolochService(web3, contractAddr, accountAddr, version);
+    //   approvedToken = await moloch.approvedToken();
+    // }
 
     const token = new Web3TokenService(
       web3,
@@ -67,11 +78,15 @@ export class DaoService {
     return singleton;
   }
 
-  static async instantiateWithReadOnly(contractAddr, version) {
-    const web3 = new Web3(
-      new Web3.providers.HttpProvider(process.env.REACT_APP_RPC_URI),
-    );
+  static async instantiateWithReadOnly(contractAddr, version, network) {
+    console.log('daoservice instantiateWithReadOnly');
 
+    const rpcUrl =
+      network.network_id === 100
+        ? 'https://dai.poa.network '
+        : `https://${network.network}.infura.io/v3/${process.env.REACT_APP_INFURA_KEY}`;
+
+    const web3 = new Web3(new Web3.providers.HttpProvider(rpcUrl));
     const moloch = new ReadonlyMolochService(web3, contractAddr, '', version);
 
     let approvedToken;
