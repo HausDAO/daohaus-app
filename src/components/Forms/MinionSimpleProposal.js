@@ -12,6 +12,8 @@ import {
   Textarea,
   Select,
   Text,
+  Switch,
+  Spinner,
 } from '@chakra-ui/react';
 import { RiErrorWarningLine } from 'react-icons/ri';
 
@@ -23,15 +25,21 @@ import {
   useWeb3Connect,
 } from '../../contexts/PokemolContext';
 import { MinionService } from '../../utils/minion-service';
+import { AiOutlineCaretDown } from 'react-icons/ai';
 
 const MinionProposalForm = () => {
   const [loading, setLoading] = useState(false);
+  const [abiLoading, setAbiLoading] = useState(false);
   const [user] = useUser();
   const [dao] = useDao();
   const [web3Connect] = useWeb3Connect();
 
   const [txProcessor, updateTxProcessor] = useTxProcessor();
   const [currentError, setCurrentError] = useState(null);
+  const [abiFunctions, setAbiFunctions] = useState();
+  const [selectedFunction, setSelectedFunction] = useState();
+  const [abiParams, setAbiParams] = useState();
+  const [hexSwitch, setHexSwitch] = useState();
   const [minions, setMinions] = useState([]);
   const { closeModals } = useModals();
 
@@ -48,7 +56,7 @@ const MinionProposalForm = () => {
         (minion) => minion.minionAddress,
       );
       setMinions(_minions);
-      console.log('minis', _minions);
+
     }
     // eslint-disable-next-line
   }, [dao?.graphData?.minions]);
@@ -82,6 +90,7 @@ const MinionProposalForm = () => {
   };
 
   const onSubmit = async (values) => {
+    console.log('values', values);
     setLoading(true);
 
     console.log(values);
@@ -97,11 +106,39 @@ const MinionProposalForm = () => {
 
     const valueWei = web3Connect.web3.utils.toWei(values.value);
 
+    const inputValues = [];
+    let hexData;
+    if (selectedFunction) {
+      Object.keys(values).forEach((param) => {
+        if (param.indexOf('xparam') > -1) {
+          console.log(param);
+          inputValues.push(JSON.parse(values[param]));
+        }
+      });
+      console.log('inputs', inputValues);
+      console.log('selectedFunction', selectedFunction);
+      const aSelectedFunction = abiFunctions.find((func) => {
+        return func.name === selectedFunction;
+      });
+      console.log('aSelectedFunction', aSelectedFunction);
+      try {
+        hexData = web3Connect.web3.eth.abi.encodeFunctionCall(
+          aSelectedFunction,
+          inputValues,
+        );
+        console.log('hexData', hexData);
+      } catch (err) {
+        console.log('ERR', err);
+        setLoading(false);
+        return;
+      }
+    }
+
     try {
       minionService.propose(
         values.targetContract,
         valueWei || setupValues.actionVlaue,
-        values.dataValue,
+        values.dataValue || hexData,
         values.description,
         txCallBack,
       );
@@ -109,6 +146,68 @@ const MinionProposalForm = () => {
       setLoading(false);
       console.log('error: ', err);
     }
+  };
+
+  const handleBlur = async (e) => {
+    const { value } = e.target;
+    setAbiLoading(true);
+    try {
+      const url = `https://blockscout.com/poa/xdai/api?module=contract&action=getabi&address=${value}`;
+      const response = await fetch(url);
+      const json = await response.json();
+      if (!json.result) {
+        setCurrentError(json.message);
+        throw new Error(json.message);
+      }
+      const _abiFunctions = getFunctions(JSON.parse(json.result));
+      setCurrentError(null);
+      setAbiParams(null);
+      setAbiFunctions(_abiFunctions);
+      setAbiLoading(false);
+    } catch (err) {
+      setAbiParams(null);
+      setAbiFunctions(null);
+      setAbiLoading(false);
+      setCurrentError(err);
+      console.log(err);
+    }
+  };
+
+  const selectFunction = (e) => {
+    const { value } = e.target;
+    console.log(value, abiFunctions);
+    const funcPrams = abiFunctions.find((func) => +func.id === +value);
+    setAbiParams(funcPrams.inputs);
+    setSelectedFunction(funcPrams.name);
+  };
+
+  const getFunctions = (abiParam) => {
+    let abi;
+
+    if (typeof abiParam === 'object') {
+      abi = abiParam;
+    } else {
+      try {
+        abi = JSON.parse(abiParam);
+      } catch (e) {
+        // let validation handle errors
+        return [];
+      }
+    }
+    if (!abi) {
+      return [];
+    }
+    const _abiFunctions = abi
+      .filter(({ type, constant }) => type === 'function' && !constant)
+      .map((f, id) => ({ ...f, text: f.name, id }));
+
+    return _abiFunctions;
+  };
+
+  const toggleSwitch = () => {
+    setHexSwitch(!hexSwitch);
+    setAbiParams(null);
+    setSelectedFunction(null);
   };
 
   return minions.length ? (
@@ -177,6 +276,7 @@ const MinionProposalForm = () => {
             })}
             color='white'
             focusBorderColor='secondary.500'
+            onBlur={handleBlur}
           />
           <FormLabel
             htmlFor='value'
@@ -220,32 +320,101 @@ const MinionProposalForm = () => {
           </Stack>
         </Box>
         <Box w={['100%', null, '50%']}>
-          <FormLabel
-            htmlFor='dataValue'
-            color='white'
-            fontFamily='heading'
-            textTransform='uppercase'
-            fontSize='xs'
-            fontWeight={700}
-          >
-            Data
-          </FormLabel>
-          <Textarea
-            name='dataValue'
-            placeholder='Raw Hex Data'
-            type='textarea'
-            mb={5}
-            rows={13}
-            ref={register({
-              required: {
-                value: true,
-                message: 'Data hex value is required',
-              },
-            })}
-            color='white'
-            focusBorderColor='secondary.500'
-          />
+          {hexSwitch ? (
+            <>
+              <FormLabel
+                htmlFor='dataValue'
+                color='white'
+                fontFamily='heading'
+                textTransform='uppercase'
+                fontSize='xs'
+                fontWeight={700}
+              >
+                Data
+              </FormLabel>
+              <Textarea
+                name='dataValue'
+                placeholder='Raw Hex Data'
+                type='textarea'
+                mb={5}
+                rows={13}
+                ref={register({
+                  required: {
+                    value: true,
+                    message: 'Data hex value is required',
+                  },
+                })}
+                color='white'
+                focusBorderColor='secondary.500'
+              />
+            </>
+          ) : (
+            <>
+              <FormLabel
+                htmlFor='abiFunctions'
+                color='white'
+                fontFamily='heading'
+                textTransform='uppercase'
+                fontSize='xs'
+                fontWeight={700}
+              >
+                ABI Functions {abiLoading && <Spinner />}
+              </FormLabel>
+              <Select
+                name='abiFunctions'
+                placeholder='Select function'
+                icon={<AiOutlineCaretDown />}
+                disabled={!abiFunctions}
+                ref={register}
+                onChange={selectFunction}
+              >
+                {abiFunctions &&
+                  abiFunctions.map((funct) => {
+                    return (
+                      <option key={funct.id} value={funct.id}>
+                        {funct.name}
+                      </option>
+                    );
+                  })}
+              </Select>
+              {abiParams && (
+                <>
+                  <FormLabel
+                    htmlFor='abiParams'
+                    color='white'
+                    fontFamily='heading'
+                    textTransform='uppercase'
+                    fontSize='xs'
+                    fontWeight={700}
+                  >
+                    ABI Params
+                  </FormLabel>
+                  {abiParams &&
+                    abiParams.map((param, idx) => {
+                      return (
+                        <Box key={idx}>
+                          <Text>{param.name}</Text>
+                          <Input
+                            name={'xparam' + param.name}
+                            ref={register}
+                            placeholder={param.type}
+                            color='white'
+                            focusBorderColor='secondary.500'
+                          />
+                        </Box>
+                      );
+                    })}
+                </>
+              )}
+            </>
+          )}
         </Box>
+      </FormControl>
+      <FormControl display='flex' alignItems='center'>
+        <FormLabel htmlFor='hexSwitch' mb='0'>
+          Raw hex
+        </FormLabel>
+        <Switch id='hexSwitch' onChange={toggleSwitch} />
       </FormControl>
       <Flex justify='flex-end' align='center' h='60px'>
         {currentError && (
