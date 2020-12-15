@@ -35,7 +35,6 @@ const MinionProposalForm = () => {
   const [minions, setMinions] = useState([]);
   const { closeModals } = useModals();
 
-
   const {
     handleSubmit,
     errors,
@@ -88,7 +87,7 @@ const MinionProposalForm = () => {
     console.log(values);
     const setupValues = {
       minion: values.minionContract,
-      actionVlaue: 0,
+      actionVlaue: '0',
     };
     const minionService = new MinionService(
       web3Connect.web3,
@@ -96,10 +95,12 @@ const MinionProposalForm = () => {
       setupValues,
     );
 
+    const valueWei = web3Connect.web3.utils.toWei(values.value);
+
     try {
       minionService.propose(
         values.targetContract,
-        setupValues.actionVlaue,
+        valueWei || setupValues.actionVlaue,
         values.dataValue,
         values.description,
         txCallBack,
@@ -177,6 +178,29 @@ const MinionProposalForm = () => {
             color='white'
             focusBorderColor='secondary.500'
           />
+          <FormLabel
+            htmlFor='value'
+            color='white'
+            fontFamily='heading'
+            textTransform='uppercase'
+            fontSize='xs'
+            fontWeight={700}
+          >
+            Value
+          </FormLabel>
+          <Input
+            name='value'
+            default='0'
+            mb={5}
+            ref={register({
+              required: {
+                value: true,
+                message: 'Value is required',
+              },
+            })}
+            color='white'
+            focusBorderColor='secondary.500'
+          />
           <Stack spacing={4}>
             <Textarea
               name='description'
@@ -211,7 +235,7 @@ const MinionProposalForm = () => {
             placeholder='Raw Hex Data'
             type='textarea'
             mb={5}
-            rows={10}
+            rows={13}
             ref={register({
               required: {
                 value: true,
