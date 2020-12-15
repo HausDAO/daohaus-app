@@ -8,7 +8,7 @@ import ProposalFormModal from '../../components/Modal/ProposalFormModal';
 import ComingSoonOverlay from '../../components/Shared/ComingSoonOverlay';
 import { proposalTypes } from '../../content/proposal-types';
 import { useTheme } from '../../contexts/CustomThemeContext';
-import { useDao } from '../../contexts/PokemolContext';
+import { useDao, useModals } from '../../contexts/PokemolContext';
 
 const validProposalType = (type) => {
   return [
@@ -29,12 +29,12 @@ const NewProposal = () => {
   const history = useHistory();
   const [proposalType, setProposalType] = useState(null);
   const [, setProposal] = useState(null);
-  const [showModal, setShowModal] = useState();
+  const { modals, openModal } = useModals();
 
   useEffect(() => {
     if (params.type) {
       if (validProposalType(params.type)) {
-        setShowModal('proposal');
+        openModal('proposal');
         setProposalType(params.type);
       } else {
         history.push(`/dao/${params.dao}/proposals`);
@@ -46,7 +46,7 @@ const NewProposal = () => {
   return (
     <Box p={6}>
       <Flex>
-        <TextBox fontSize='xl' fontWeight={700}>
+        <TextBox size='xl' fontWeight={700}>
           Select a Proposal Type
         </TextBox>
       </Flex>
@@ -79,7 +79,7 @@ const NewProposal = () => {
                       return;
                     }
                     setProposalType(p.proposalType);
-                    setShowModal('proposal');
+                    openModal('proposal');
                   }}
                 >
                   {p.comingSoon && <ComingSoonOverlay />}
@@ -113,8 +113,7 @@ const NewProposal = () => {
 
       <ProposalFormModal
         submitProposal={setProposal}
-        isOpen={showModal === 'proposal'}
-        setShowModal={setShowModal}
+        isOpen={modals.proposal}
         proposalType={proposalType}
         returnRoute={`/dao/${dao?.address}/proposals/new`}
       />

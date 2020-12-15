@@ -4,6 +4,7 @@ import { getProfile } from '3box';
 import { Badge, Box, Heading, Stack, Skeleton } from '@chakra-ui/react';
 
 import { formatCreatedAt } from '../../utils/helpers';
+import TextBox from '../Shared/TextBox';
 import ContentBox from '../Shared/ContentBox';
 import MemberAvatar from '../Members/MemberAvatar';
 
@@ -38,21 +39,24 @@ const ActivityCard = ({ activity, isLoaded }) => {
   }, [activity]);
 
   return (
-    <ContentBox mt={2}>
+    <ContentBox mt={3}>
       <Link to={`/dao/${activity.molochAddress}`}>
         {activity.proposalId && (
           <>
             <Skeleton isLoaded={isLoaded}>
-              <Heading as='h4' size='md'>
-                {activity.proposalType}: {activity.daoTitle}
+              <TextBox size='xs' mb={2}>
+                {activity.daoTitle}
+              </TextBox>
+              <Heading as='h4' size='sm' fontWeight='100'>
+                {activity.proposalType}
               </Heading>
               {/* <Box>{getProposalCountdownText(activity)}</Box> */}
 
-              <Stack isInline>
+              <Stack isInline mt={3}>
+                <Badge variant='solid'>{activity.activityFeed.message}</Badge>
                 <Badge colorScheme='green'>{activity.yesVotes} Yes</Badge>
                 <Badge colorScheme='red'>{activity.noVotes} No</Badge>
               </Stack>
-              <Badge>{activity.activityFeed.message}</Badge>
             </Skeleton>
           </>
         )}

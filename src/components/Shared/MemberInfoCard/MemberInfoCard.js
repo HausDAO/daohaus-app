@@ -37,6 +37,7 @@ const MemberInfoCard = ({ user, showMenu }) => {
             as={Link}
             to={'/dao/' + dao.address + '/profile/' + member.memberAddress}
             color='inherit'
+            size='xs'
           >
             View{' '}
             {memberWallet?.memberAddress?.toLowerCase() ===

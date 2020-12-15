@@ -91,7 +91,9 @@ const TributeInput = ({ register, setValue, getValues }) => {
 
   return (
     <>
-      <TextBox as={FormLabel}>Token Tribute</TextBox>
+      <TextBox as={FormLabel} size='xs'>
+        Token Tribute
+      </TextBox>
       <InputGroup>
         {!unlocked && (
           <Button

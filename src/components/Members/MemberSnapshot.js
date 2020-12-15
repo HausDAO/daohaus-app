@@ -14,6 +14,7 @@ import { useTheme } from '../../contexts/CustomThemeContext';
 import MemberSnapshotChart from './MemberSnapshotChart';
 import TextBox from '../Shared/TextBox';
 import ContentBox from '../Shared/ContentBox';
+import { numberWithCommas } from '../../utils/helpers';
 
 const MemberSnapshot = ({ selectedMember }) => {
   const [theme] = useTheme();
@@ -25,12 +26,13 @@ const MemberSnapshot = ({ selectedMember }) => {
   return (
     <Box>
       <Flex justify='space-between'>
-        <TextBox>Snapshot</TextBox>
+        <TextBox size='xs'>Snapshot</TextBox>
         <TextBox
           as={Link}
           to={`/dao/${dao?.address}/profile/${
             selectedMember ? selectedMember.memberAddress : user?.username
           }`}
+          size='xs'
         >
           View my profile
         </TextBox>
@@ -38,33 +40,41 @@ const MemberSnapshot = ({ selectedMember }) => {
       <ContentBox mt={3}>
         <Flex justify='space-between'>
           <Box>
-            <TextBox>{theme.daoMeta.members}</TextBox>
+            <TextBox size='xs'>{theme.daoMeta.members}</TextBox>
             <Skeleton isLoaded={members.length > 0}>
-              <TextBox variant='value'>{members?.length}</TextBox>
+              <TextBox variant='value' size='lg'>
+                {members?.length}
+              </TextBox>
             </Skeleton>
           </Box>
           <Box>
-            <TextBox>Shares</TextBox>
+            <TextBox size='xs'>Shares</TextBox>
             <Skeleton isLoaded={dao?.graphData?.totalShares}>
-              <TextBox variant='value'>
+              <TextBox variant='value' size='lg'>
                 {dao?.graphData?.totalShares
-                  ? dao?.graphData?.totalShares
+                  ? numberWithCommas(dao?.graphData?.totalShares)
                   : '--'}
               </TextBox>
             </Skeleton>
           </Box>
           {(dao?.graphData?.totalLoot > 0 || !dao?.graphData?.totalLoot) && (
             <Box>
-              <TextBox>Loot</TextBox>
+              <TextBox size='xs'>Loot</TextBox>
               <Skeleton isLoaded={dao?.graphData?.totalLoot}>
-                <TextBox variant='value'>
-                  {dao?.graphData?.totalLoot ? dao?.graphData?.totalLoot : '--'}
+                <TextBox variant='value' size='lg'>
+                  {dao?.graphData?.totalLoot
+                    ? numberWithCommas(dao?.graphData?.totalLoot)
+                    : '--'}
                 </TextBox>
               </Skeleton>
             </Box>
           )}
         </Flex>
-        <RadioGroup defaultValue={chartDimension} onChange={setChartDimension}>
+        <RadioGroup
+          defaultValue={chartDimension}
+          onChange={setChartDimension}
+          mt={4}
+        >
           <Stack spacing={4} direction='row'>
             <Radio value='currentShares'>Shares</Radio>
             <Radio value='currentLoot'>Loot</Radio>

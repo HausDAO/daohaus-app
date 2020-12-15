@@ -3,7 +3,12 @@ import { useForm } from 'react-hook-form';
 import { Button, FormControl, Flex, Icon, Box } from '@chakra-ui/react';
 import { RiErrorWarningLine } from 'react-icons/ri';
 
-import { useDao, useTxProcessor, useUser } from '../../contexts/PokemolContext';
+import {
+  useDao,
+  useModals,
+  useTxProcessor,
+  useUser,
+} from '../../contexts/PokemolContext';
 import AddressInput from './AddressInput';
 import DetailsFields from './DetailFields';
 import { useLocation } from 'react-router-dom';
@@ -16,6 +21,7 @@ const GuildKickProposalForm = () => {
   const [txProcessor, updateTxProcessor] = useTxProcessor();
   const [currentError, setCurrentError] = useState(null);
   const location = useLocation();
+  const { closeModals } = useModals();
 
   const {
     handleSubmit,
@@ -58,8 +64,7 @@ const GuildKickProposalForm = () => {
 
       updateTxProcessor({ ...txProcessor });
       // close model here
-      // onClose();
-      // setShowModal(null);
+      closeModals();
     }
     if (!txHash) {
       console.log('error: ', details);

@@ -4,7 +4,11 @@ import { FaStar } from 'react-icons/fa';
 import { format } from 'date-fns';
 import makeBlockie from 'ethereum-blockies-base64';
 
-import { truncateAddr, memberProfile } from '../../utils/helpers';
+import {
+  truncateAddr,
+  memberProfile,
+  numberWithCommas,
+} from '../../utils/helpers';
 import {
   useEns,
   useDaoGraphData,
@@ -95,7 +99,9 @@ const OverviewCard = ({ user }) => {
               w='100px'
               h='100px'
               rounded='full'
-              src={makeBlockie(user.username)}
+              src={makeBlockie(
+                user.username ? user.username : user.memberAddress,
+              )}
             />
           )}
           <Skeleton isLoaded={user?.createdAt}>
@@ -110,12 +116,15 @@ const OverviewCard = ({ user }) => {
 
         <Flex direction='column'>
           <Box fontSize='xl' fontFamily='heading'>
-            {user?.profile.name || truncateAddr(user.username)}{' '}
+            {user?.profile.name ||
+              truncateAddr(
+                user.username ? user.username : user.memberAddress,
+              )}{' '}
             <span>{user.profile.emoji || ''} </span>
           </Box>
           {user.name ? (
             <Box fontSize='sm' fontFamily='mono'>
-              {truncateAddr(user.username)}
+              {truncateAddr(user.username ? user.username : user.memberAddress)}
             </Box>
           ) : null}
           {ensName && (
@@ -133,9 +142,9 @@ const OverviewCard = ({ user }) => {
       <Flex w='48%' direction='column'>
         <Flex justify='space-between'>
           <Box>
-            <TextBox fontSize='sm'>Total Stake</TextBox>
-            <TextBox fontSize='4xl' variant='value'>
-              ${memberValue.toFixed(2)}
+            <TextBox size='sm'>Total Stake</TextBox>
+            <TextBox size='4xl' variant='value'>
+              ${numberWithCommas(memberValue.toFixed(2))}
             </TextBox>
           </Box>
           <Box>
@@ -144,10 +153,10 @@ const OverviewCard = ({ user }) => {
         </Flex>
         <Flex justify='space-between' align='flex-end' mt={4}>
           <Box w='30%'>
-            <TextBox fontSize='xs'>Power</TextBox>
+            <TextBox size='xs'>Power</TextBox>
             <Skeleton isLoaded={member?.shares && dao?.totalShares}>
               {showAlert ? (
-                <TextBox fontSize='xl' variant='value'>
+                <TextBox size='xl' variant='value'>
                   <Flex direction='row' align='center' justify='space-around'>
                     <Icon as={FaStar} color='yellow.500' />
                     100%
@@ -155,7 +164,7 @@ const OverviewCard = ({ user }) => {
                   </Flex>
                 </TextBox>
               ) : (
-                <TextBox fontSize='xl' variant='value'>
+                <TextBox size='xl' variant='value'>
                   {member?.shares &&
                     dao?.totalShares &&
                     ((member?.shares / dao?.totalShares) * 100).toFixed(1)}
@@ -165,17 +174,17 @@ const OverviewCard = ({ user }) => {
             </Skeleton>
           </Box>
           <Box w='30%'>
-            <TextBox fontSize='xs'>Shares</TextBox>
+            <TextBox size='xs'>Shares</TextBox>
             <Skeleton isLoaded={member?.shares >= 0}>
-              <TextBox fontSize='xl' variant='value'>
+              <TextBox size='xl' variant='value'>
                 {member?.shares}
               </TextBox>
             </Skeleton>
           </Box>
           <Box w='30%'>
-            <TextBox fontSize='xs'>Loot</TextBox>
+            <TextBox size='xs'>Loot</TextBox>
             <Skeleton isLoaded={member?.loot >= 0}>
-              <TextBox fontSize='xl' variant='value'>
+              <TextBox size='xl' variant='value'>
                 {member?.loot}
               </TextBox>
             </Skeleton>

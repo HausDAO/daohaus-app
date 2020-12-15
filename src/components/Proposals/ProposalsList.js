@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Flex, Text, Box } from '@chakra-ui/react';
+import { Flex, Text, Box, Spinner } from '@chakra-ui/react';
 
 import {
   useDao,
@@ -81,6 +81,7 @@ const ProposalsList = () => {
           <ProposalFilter
             filter={filter}
             setFilter={setFilter}
+            setSort={setSort}
             proposals={proposals}
           />
         ) : null}
@@ -103,7 +104,18 @@ const ProposalsList = () => {
           setRecords={setPageProposals}
           allRecords={listProposals}
         />
-      ) : null}
+      ) : (
+        <Flex w='100%' h='250px' align='center' justify='center'>
+          <Spinner
+            thickness='6px'
+            speed='0.45s'
+            emptyColor='whiteAlpha.300'
+            color='primary.500'
+            size='xl'
+            mt={40}
+          />
+        </Flex>
+      )}
       {proposals && !proposals.length && (
         <Box m={6}>
           <Text>No Proposals here yet</Text>

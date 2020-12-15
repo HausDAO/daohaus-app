@@ -17,7 +17,11 @@ import ReactPlayer from 'react-player';
 
 import { useMembers, useMemberWallet } from '../../contexts/PokemolContext';
 import { useTheme } from '../../contexts/CustomThemeContext';
-import { memberProfile, proposalDetails } from '../../utils/helpers';
+import {
+  memberProfile,
+  proposalDetails,
+  numberWithCommas,
+} from '../../utils/helpers';
 import {
   getProposalCountdownText,
   getProposalDetailStatus,
@@ -70,7 +74,7 @@ const ProposalDetail = ({ proposal }) => {
       <Box>
         <Box>
           <Flex justify='space-between'>
-            <TextBox>
+            <TextBox size='xs'>
               {proposal ? proposal.proposalType : theme.daoMeta.proposal}
             </TextBox>
 
@@ -136,7 +140,7 @@ const ProposalDetail = ({ proposal }) => {
             Object.keys(details).includes('link') &&
             !ReactPlayer.canPlay(details?.link) &&
             !hasImage(details?.link) ? (
-              <TextBox>Link</TextBox>
+              <TextBox size='xs'>Link</TextBox>
             ) : null}
             <Skeleton
               isLoaded={
@@ -177,12 +181,12 @@ const ProposalDetail = ({ proposal }) => {
           <Flex w='100%' justify='space-between' mt={6}>
             {(proposal?.tributeOffered > 0 || !proposal?.tributeOffered) && (
               <Box>
-                <TextBox>Tribute</TextBox>
+                <TextBox size='xs'>Tribute</TextBox>
                 <Skeleton isLoaded={proposal?.tributeOffered}>
-                  <TextBox fontSize='lg' variant='value'>
+                  <TextBox size='lg' variant='value'>
                     {proposal?.tributeOffered
-                      ? `${utils.fromWei(
-                          proposal.tributeOffered.toString(),
+                      ? `${numberWithCommas(
+                          utils.fromWei(proposal.tributeOffered.toString()),
                         )} ${proposal.tributeTokenSymbol || 'WETH'}`
                       : '--'}
                   </TextBox>
@@ -191,12 +195,12 @@ const ProposalDetail = ({ proposal }) => {
             )}
             {proposal?.paymentRequested > 0 && ( // don't show during loading
               <Box>
-                <TextBox>Payment Requested</TextBox>
+                <TextBox size='xs'>Payment Requested</TextBox>
                 <Skeleton isLoaded={proposal?.paymentRequested}>
-                  <TextBox fontSize='lg' variant='value'>
+                  <TextBox size='lg' variant='value'>
                     {proposal?.paymentRequested
-                      ? `${utils.fromWei(
-                          proposal.paymentRequested.toString(),
+                      ? `${numberWithCommas(
+                          utils.fromWei(proposal.paymentRequested.toString()),
                         )} ${proposal.paymentTokenSymbol || 'WETH'}`
                       : '--'}
                   </TextBox>
@@ -205,11 +209,11 @@ const ProposalDetail = ({ proposal }) => {
             )}
             {(proposal?.sharesRequested > 0 || !proposal?.sharesRequested) && (
               <Box>
-                <TextBox>Shares</TextBox>
+                <TextBox size='xs'>Shares</TextBox>
                 <Skeleton isLoaded={proposal?.sharesRequested}>
-                  <TextBox fontSize='lg' variant='value'>
+                  <TextBox size='lg' variant='value'>
                     {proposal?.sharesRequested
-                      ? proposal.sharesRequested
+                      ? numberWithCommas(proposal.sharesRequested)
                       : '--'}
                   </TextBox>
                 </Skeleton>
@@ -217,10 +221,12 @@ const ProposalDetail = ({ proposal }) => {
             )}
             {proposal?.lootRequested > 0 && ( // don't show during loading
               <Box>
-                <TextBox>Loot</TextBox>
+                <TextBox size='xs'>Loot</TextBox>
                 <Skeleton isLoaded={proposal?.lootRequested}>
                   <TextBox size='lg' variant='value'>
-                    {proposal?.lootRequested ? proposal.lootRequested : '--'}
+                    {proposal?.lootRequested
+                      ? numberWithCommas(proposal.lootRequested)
+                      : '--'}
                   </TextBox>
                 </Skeleton>
               </Box>
@@ -237,7 +243,9 @@ const ProposalDetail = ({ proposal }) => {
         w='100%'
       >
         <Box>
-          <TextBox mb={2}>Submitted By</TextBox>
+          <TextBox size='xs' mb={2}>
+            Submitted By
+          </TextBox>
           <Skeleton isLoaded={members && proposal?.proposer}>
             {members && proposal?.proposer ? (
               memberProfile(members, proposal?.proposer).profile ? (
@@ -253,7 +261,9 @@ const ProposalDetail = ({ proposal }) => {
           </Skeleton>
         </Box>
         <Box>
-          <TextBox mb={2}>Recipient</TextBox>
+          <TextBox size='xs' mb={2}>
+            Recipient
+          </TextBox>
           <Skeleton isLoaded={members && proposal?.applicant}>
             {members && proposal?.applicant ? (
               memberProfile(
@@ -285,7 +295,7 @@ const ProposalDetail = ({ proposal }) => {
             )}
           </Skeleton>
         </Box>
-        <Box>
+        <Flex align='center'>
           {memberVote &&
             (+memberVote.uintVote === 1 ? (
               <Flex
@@ -320,7 +330,7 @@ const ProposalDetail = ({ proposal }) => {
                 <Icon as={FaThumbsDown} color='secondary.500' />
               </Flex>
             ))}
-        </Box>
+        </Flex>
       </Flex>
     </ContentBox>
   );

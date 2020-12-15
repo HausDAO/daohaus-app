@@ -11,7 +11,12 @@ import {
 } from '@chakra-ui/react';
 import { RiErrorWarningLine } from 'react-icons/ri';
 
-import { useDao, useTxProcessor, useUser } from '../../contexts/PokemolContext';
+import {
+  useDao,
+  useModals,
+  useTxProcessor,
+  useUser,
+} from '../../contexts/PokemolContext';
 import DetailsFields from './DetailFields';
 import TextBox from '../Shared/TextBox';
 import { detailsToJSON } from '../../utils/proposal-helper';
@@ -22,6 +27,8 @@ const WhitelistProposalForm = () => {
   const [dao] = useDao();
   const [txProcessor, updateTxProcessor] = useTxProcessor();
   const [currentError, setCurrentError] = useState(null);
+  const { closeModals } = useModals();
+
   console.log(dao);
 
   const {
@@ -53,8 +60,7 @@ const WhitelistProposalForm = () => {
 
       updateTxProcessor({ ...txProcessor });
       // close model here
-      // onClose();
-      // setShowModal(null);
+      closeModals();
     }
     if (!txHash) {
       console.log('error: ', details);
@@ -95,7 +101,7 @@ const WhitelistProposalForm = () => {
           <DetailsFields register={register} />
         </Box>
         <Box w={['100%', null, '50%']}>
-          <TextBox as={FormLabel} htmlFor='tokenAddress' mb={2}>
+          <TextBox as={FormLabel} size='xs' htmlFor='tokenAddress' mb={2}>
             Token Address
           </TextBox>
           <Input

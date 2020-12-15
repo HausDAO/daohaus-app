@@ -7,6 +7,7 @@ import Withdraw from '../../Forms/Withdraw';
 import SyncToken from '../../Forms/SyncToken';
 import { useMemberWallet } from '../../../contexts/PokemolContext';
 import { getMainetAddresses } from '../../../utils/requests';
+import { numberWithCommas } from '../../../utils/helpers';
 
 const TokenListCard = ({ token, isLoaded, isMember, isBank, hasAction }) => {
   const [memberWallet] = useMemberWallet();
@@ -75,9 +76,11 @@ const TokenListCard = ({ token, isLoaded, isMember, isBank, hasAction }) => {
                   `0.0000 ${token.token.symbol}`
                 ) : (
                   <>
-                    {parseFloat(
-                      checkOptimisticBalance() / 10 ** +token.token.decimals,
-                    ).toFixed(4)}{' '}
+                    {numberWithCommas(
+                      parseFloat(
+                        checkOptimisticBalance() / 10 ** +token.token.decimals,
+                      ).toFixed(4),
+                    )}{' '}
                     {token.token.symbol}
                   </>
                 )}

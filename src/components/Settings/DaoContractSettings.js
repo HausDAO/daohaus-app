@@ -39,7 +39,7 @@ const DaoContractSettings = () => {
   return (
     <ContentBox d='flex' w='100%' mt={2} flexDirection='column'>
       <Box>
-        <TextBox>Dao Contract</TextBox>
+        <TextBox size='xs'>Dao Contract</TextBox>
         <Skeleton isLoaded={dao?.address}>
           <Text
             fontFamily='mono'
@@ -59,9 +59,9 @@ const DaoContractSettings = () => {
       </Box>
       <Flex mt={3}>
         <Box w='50%'>
-          <TextBox>{theme.daoMeta.proposal} Deposit</TextBox>
+          <TextBox size='xs'>{theme.daoMeta.proposal} Deposit</TextBox>
           <Skeleton isLoaded={dao?.graphData?.proposalDeposit}>
-            <TextBox variant='value' my={2}>
+            <TextBox variant='value' size='xl' my={2}>
               {dao?.graphData?.proposalDeposit
                 ? dao.graphData.proposalDeposit /
                     10 ** dao.graphData.depositToken.decimals +
@@ -72,9 +72,9 @@ const DaoContractSettings = () => {
           </Skeleton>
         </Box>
         <Box>
-          <TextBox>Processing Reward</TextBox>
+          <TextBox size='xs'>Processing Reward</TextBox>
           <Skeleton isLoaded={dao?.graphData?.periodDuration}>
-            <TextBox variant='value' my={2}>
+            <TextBox variant='value' size='xl' my={2}>
               {dao?.graphData?.processingReward
                 ? dao.graphData.processingReward /
                     10 ** dao.graphData.depositToken.decimals +
@@ -87,9 +87,9 @@ const DaoContractSettings = () => {
       </Flex>
       <Flex>
         <Box w='50%'>
-          <TextBox>Voting Period</TextBox>
+          <TextBox size='xs'>Voting Period</TextBox>
           <Skeleton isLoaded={dao?.graphData}>
-            <TextBox variant='value' my={2}>
+            <TextBox variant='value' size='xl' my={2}>
               {dao?.graphData
                 ? `${formatPeriods(
                     +dao?.graphData?.votingPeriodLength,
@@ -100,9 +100,9 @@ const DaoContractSettings = () => {
           </Skeleton>
         </Box>
         <Box>
-          <TextBox>Grace Period</TextBox>
+          <TextBox size='xs'>Grace Period</TextBox>
           <Skeleton isLoaded={dao?.graphData}>
-            <TextBox variant='value' my={2}>
+            <TextBox variant='value' size='xl' my={2}>
               {dao?.graphData
                 ? `${formatPeriods(
                     +dao?.graphData?.gracePeriodLength,
@@ -115,9 +115,9 @@ const DaoContractSettings = () => {
       </Flex>
       <Flex>
         <Box w='50%'>
-          <TextBox>Summoned</TextBox>
+          <TextBox size='xs'>Summoned</TextBox>
           <Skeleton isLoaded={dao?.createdAt}>
-            <TextBox variant='value' my={2}>
+            <TextBox variant='value' size='xl' my={2}>
               {dao?.createdAt
                 ? format(new Date(+dao?.createdAt), 'MMMM d, yyyy')
                 : '--'}
@@ -125,9 +125,9 @@ const DaoContractSettings = () => {
           </Skeleton>
         </Box>
         <Box>
-          <TextBox>Maximum Proposal Velocity</TextBox>
+          <TextBox size='xs'>Maximum Proposal Velocity</TextBox>
           <Skeleton isLoaded={dao?.graphData?.periodDuration}>
-            <TextBox variant='value' my={2}>
+            <TextBox variant='value' size='xl' my={2}>
               {dao?.graphData?.periodDuration
                 ? `${86400 / +dao?.graphData?.periodDuration} per day`
                 : '--'}

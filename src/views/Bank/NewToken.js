@@ -1,14 +1,14 @@
 import React, { useState, useEffect } from 'react';
 
-import { useDao } from '../../contexts/PokemolContext';
+import { useDao, useModals } from '../../contexts/PokemolContext';
 import ProposalFormModal from '../../components/Modal/ProposalFormModal';
 
 const NewToken = () => {
   const [dao] = useDao();
   const [, setTokenList] = useState(null);
   const [, setProposal] = useState(null);
-  const [showModal, setShowModal] = useState(true);
-
+  const { modals, openModal } = useModals();
+  openModal('newToken');
   useEffect(() => {
     if (dao?.graphData?.tokenBalances) {
       setTokenList(dao.graphData.tokenBalances);
@@ -19,8 +19,7 @@ const NewToken = () => {
     <>
       <ProposalFormModal
         submitProposal={setProposal}
-        isOpen={showModal}
-        setShowModal={setShowModal}
+        isOpen={modals.newToken}
         proposalType={'whitelist'}
         returnRoute={`/dao/${dao?.address}/bank`}
       />

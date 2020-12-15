@@ -16,7 +16,12 @@ import {
 import { utils } from 'web3';
 import { RiAddFill, RiErrorWarningLine } from 'react-icons/ri';
 
-import { useDao, useTxProcessor, useUser } from '../../contexts/PokemolContext';
+import {
+  useDao,
+  useModals,
+  useTxProcessor,
+  useUser,
+} from '../../contexts/PokemolContext';
 import TextBox from '../Shared/TextBox';
 
 import DetailsFields from './DetailFields';
@@ -34,6 +39,8 @@ const TradeProposalForm = () => {
   const [dao] = useDao();
   const [txProcessor, updateTxProcessor] = useTxProcessor();
   const [currentError, setCurrentError] = useState(null);
+  const { closeModals } = useModals();
+
   console.log(dao);
 
   const {
@@ -72,8 +79,7 @@ const TradeProposalForm = () => {
 
       updateTxProcessor({ ...txProcessor });
       // close model here
-      // onClose();
-      // setShowModal(null);
+      closeModals();
     }
     if (!txHash) {
       console.log('error: ', details);
@@ -128,7 +134,7 @@ const TradeProposalForm = () => {
             setValue={setValue}
             getValues={getValues}
           />
-          <TextBox>Trade For</TextBox>
+          <TextBox size='xs'>Trade For</TextBox>
           <PaymentInput
             register={register}
             setValue={setValue}
@@ -138,7 +144,7 @@ const TradeProposalForm = () => {
 
           {showShares && (
             <>
-              <TextBox as={FormLabel} htmlFor='sharesRequested'>
+              <TextBox as={FormLabel} size='xs' htmlFor='sharesRequested'>
                 Shares Requested
               </TextBox>
               <Input
@@ -164,7 +170,7 @@ const TradeProposalForm = () => {
 
           {showLoot && (
             <>
-              <TextBox as={FormLabel} htmlFor='lootRequested' mb={2}>
+              <TextBox as={FormLabel} size='xs' htmlFor='lootRequested' mb={2}>
                 Loot Requested
               </TextBox>
               <Input
