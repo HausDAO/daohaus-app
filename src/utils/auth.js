@@ -71,21 +71,30 @@ export const providerOptions = (chainData) => {
 };
 
 export const w3connect = async (web3Connect, currentNetwork) => {
+  let provider = await web3Connect.w3c.connect();
+  let web3 = new Web3(provider);
+  const injectedChainId = await web3.eth.getChainId();
+  let mismatch = false;
+
+  if (!supportedChains[injectedChainId]) {
+    // eslint-disable-next-line no-throw-literal
+    throw {
+      msg: `DAOhaus doesn't support the detected network: ${injectedChainId}, Please switch to Mainnet, Xdai, Kovan or Rinkeby`,
+      error: new Error(`Injected web3 chainId: ${injectedChainId}`),
+    };
+  }
+
   if (!currentNetwork) {
+    // no selected dao, need to init with user network
     const w3cNetwork = getChainDataByName(
       web3Connect.w3c.providerController.network,
     );
-    let provider = await web3Connect.w3c.connect();
-    let web3 = new Web3(provider);
-    const injectedChainId = await web3.eth.getChainId();
 
-    if (!supportedChains[injectedChainId]) {
-      // eslint-disable-next-line no-throw-literal
-      throw {
-        msg: `DAOhaus doesn't support the detected network: ${injectedChainId}, Please switch to Mainnet, Xdai, Kovan or Rinkeby`,
-        error: new Error(`Injected web3 chainId: ${injectedChainId}`),
-      };
-    }
+    console.log(
+      'mismatch check injectedChainId w3cNetwork',
+      injectedChainId,
+      w3cNetwork,
+    );
 
     const mismatchSupportedNetwork =
       injectedChainId !== w3cNetwork.network_id &&
@@ -105,12 +114,20 @@ export const w3connect = async (web3Connect, currentNetwork) => {
       };
       provider = await web3Connect.w3c.connect();
       web3 = new Web3(provider);
+      mismatch = true;
     }
 
     const w3c = web3Connect.w3c;
-    return { w3c, web3, provider };
+    return { w3c, web3, provider, mismatch };
   } else {
-    console.log('currentNetwork in AUTH', currentNetwork);
+    // there is a dao network
+    if (currentNetwork.network_id !== injectedChainId) {
+      // eslint-disable-next-line no-throw-literal
+      throw {
+        msg: `This DAO is on ${currentNetwork.network}, Please switch your network.`,
+        error: new Error(`Injected web3 chainId: ${injectedChainId}`),
+      };
+    }
   }
 };
 

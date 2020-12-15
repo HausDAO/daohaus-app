@@ -21,7 +21,7 @@ export class MolochService {
   sendTx(options, callback) {
     const { from, name, params } = options;
     const tx = this.daoContract.methods[name](...params);
-    console.log('this.accountAddr', from);
+    console.log('this.accountAddr', from, tx);
     return tx
       .send({ from: from })
       .on('transactionHash', (txHash) => {

@@ -47,7 +47,7 @@ export class DaoService {
     // const web3 = new Web3(new Web3.providers.HttpProvider(rpcUrl));
     const web3 = new Web3(injected);
 
-    console.log('instantiateWithWeb3, web3', web3, daoNetwork, version);
+    // console.log('instantiateWithWeb3, web3', web3, daoNetwork, version);
 
     // let moloch;
     // let approvedToken;

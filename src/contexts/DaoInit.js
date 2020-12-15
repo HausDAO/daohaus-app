@@ -17,16 +17,18 @@ import {
   useContracts,
   useDaoMetadata,
   useDao,
+  useNetwork,
 } from './PokemolContext';
 
 const DaoInit = () => {
   const location = useLocation();
   const [contracts, updateContracts] = useContracts();
+  const [, updateNetwork] = useNetwork();
   const [daoMetadata, updateDaoMetadata] = useDaoMetadata();
   const [, setTheme] = useTheme();
   const [web3Connect, updateWeb3Connect] = useWeb3Connect();
   const [memberWallet, updateMemberWallet] = useMemberWallet();
-  const [user] = useUser();
+  const [user, updateUser] = useUser();
   const [, clearDaoData] = useDao();
 
   useEffect(() => {
@@ -47,7 +49,12 @@ const DaoInit = () => {
     const hasReadOnlyService =
       contracts.daoService && !contracts.daoService.accountAddr;
 
-    if (hasUserAndDao && hasReadOnlyService && web3Connect.provider) {
+    if (
+      hasUserAndDao &&
+      hasReadOnlyService &&
+      web3Connect.provider &&
+      !web3Connect.mismatch
+    ) {
       initWeb3DaoService();
     }
 
@@ -74,6 +81,7 @@ const DaoInit = () => {
   }, [daoMetadata, user, contracts]);
 
   const initDao = async (daoParam) => {
+    console.log('***** initDao');
     let daoRes;
     try {
       daoRes = await get(`dao/${daoParam}`);
@@ -81,12 +89,10 @@ const DaoInit = () => {
       console.log('api fetch error', daoParam);
     }
     const apiData = daoRes.error ? {} : daoRes;
-
-    console.log('daoRes', daoRes);
-
     const daoNetwork = getChainDataByName(apiData.network || 'mainnet');
 
-    console.log('daoNetwork', daoNetwork);
+    console.log('**** setting network DAOINIT', daoNetwork);
+    updateNetwork(daoNetwork);
 
     let boosts = {};
     if (apiData.boosts) {
@@ -141,19 +147,21 @@ const DaoInit = () => {
   };
 
   const initWeb3DaoService = async () => {
+    console.log('^^^^^ initWeb3DaoService');
     const daoNetwork = getChainDataByName(daoMetadata.network || 'mainnet');
-    console.log('initint web 3 service w/ user', web3Connect, daoNetwork);
+    // console.log('initint web 3 service w/ user', web3Connect, daoNetwork);
 
     let provider = web3Connect.provider;
 
     if (daoNetwork.network !== web3Connect.w3c.providerController.network) {
-      console.log('setting up new provider on mismatch');
+      console.log('@@@@@@@@@@@@@@@@setting up new provider on mismatch');
       const newWeb3Connect = await setWeb3Connect(daoNetwork);
       provider = newWeb3Connect.provider;
-      updateWeb3Connect(newWeb3Connect);
+      updateWeb3Connect({ ...newWeb3Connect, mismatch: true });
+      updateUser(null);
     }
 
-    console.log('provider', provider);
+    // console.log('provider', provider);
 
     const daoService = await DaoService.instantiateWithWeb3(
       user.username,
@@ -162,6 +170,8 @@ const DaoInit = () => {
       daoMetadata.version,
       daoNetwork,
     );
+
+    console.log('daoService', daoService);
 
     updateContracts({ daoService });
   };
@@ -172,8 +182,6 @@ const DaoInit = () => {
     const addrByDelegateKey = await contracts.daoService.moloch.memberAddressByDelegateKey(
       user.username,
     );
-
-    console.log('****initMemberWallet', addrByDelegateKey);
     const tokenBalanceWei = await contracts.daoService.token.balanceOf(
       user.username,
     );

@@ -17,10 +17,12 @@ import {
   useDaoGraphData,
   useBalances,
   useActivities,
+  useNetwork,
 } from './PokemolContext';
 
 const GraphInit = () => {
   const location = useLocation();
+  const [network] = useNetwork();
   const [user] = useUser();
   const [daoMetadata] = useDaoMetadata();
   const [, updateUserDaos] = useUserDaos();
@@ -41,9 +43,9 @@ const GraphInit = () => {
 
   useEffect(() => {
     const validParam = validDaoParams(location);
-    setDaoFetch(validParam && address);
+    setDaoFetch(validParam && address && network);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [daoMetadata, location]);
+  }, [daoMetadata, location, network]);
 
   useEffect(() => {
     if (localDao) {

@@ -16,7 +16,7 @@ const UserInit = () => {
   useEffect(() => {
     initCurrentUser();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [web3Connect]);
+  }, [web3Connect, network]);
 
   const initCurrentUser = async () => {
     let loginType = localStorage.getItem('loginType') || USER_TYPE.READ_ONLY;
@@ -35,11 +35,13 @@ const UserInit = () => {
           if (web3Connect.w3c.cachedProvider) {
             try {
               providerConnect = await w3connect(web3Connect, network);
-              const providerNetwork = getChainDataByName(
-                providerConnect.w3c.providerController.network,
-              );
 
-              updateNetwork(providerNetwork);
+              if (providerConnect) {
+                const providerNetwork = getChainDataByName(
+                  providerConnect.w3c.providerController.network,
+                );
+                updateNetwork(providerNetwork);
+              }
             } catch (err) {
               console.log(err);
 
