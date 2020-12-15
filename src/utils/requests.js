@@ -1,7 +1,6 @@
 const metadataApiUrl = 'https://data.daohaus.club';
 const geckoURL = 'https://api.coingecko.com/api/v3/simple/token_price';
 const uniswapGhList = 'https://raw.githubusercontent.com';
-const metadataApiUrl = 'https://data.daohaus.club';
 
 export const get = async (endpoint) => {
   const url = `${metadataApiUrl}/${endpoint}`;

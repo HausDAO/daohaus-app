@@ -1,27 +1,34 @@
 import Web3 from 'web3';
+import Web3Modal from 'web3modal';
 import WalletConnectProvider from '@walletconnect/web3-provider';
 import Fortmatic from 'fortmatic';
 import Portis from '@portis/web3';
 
 import { USER_TYPE } from './dao-service';
-import { getChainData } from './chains';
+import { getChainData, getChainDataByName, supportedChains } from './chains';
 
-// all this needs to reinit on netowrk change
-// dao service uses this provider. should we change that?
-
-export const providerOptions = () => {
+export const providerOptions = (chainData) => {
   // xdai doesn't have fortmatic here...
-  const providers = getChainData(+process.env.REACT_APP_NETWORK_ID).providers;
+  // const providers = getChainData(+process.env.REACT_APP_NETWORK_ID).providers;
+  const providers = chainData.providers;
+
   const allNetworkProviders = {};
 
   if (providers.includes('walletconnect')) {
+    const rpcUrl =
+      chainData.network_id === 100
+        ? 'https://dai.poa.network '
+        : `https://kovan.infura.io/v3/${process.env.REACT_APP_INFURA_KEY}`;
     allNetworkProviders.walletconnect = {
-      network: getChainData(process.env.REACT_APP_NETWORK_ID).network,
+      // network: getChainData(process.env.REACT_APP_NETWORK_ID).network,
+      network: chainData.network,
       package: WalletConnectProvider, // required
       options: {
-        infuraId: process.env.REACT_APP_RPC_URI.split('/').pop(),
+        // infuraId: process.env.REACT_APP_RPC_URI.split('/').pop(),
+        infuraId: process.env.REACT_APP_INFURA_KEY,
         rpc: {
-          [process.env.REACT_APP_NETWORK_ID]: process.env.REACT_APP_RPC_URI,
+          // [process.env.REACT_APP_NETWORK_ID]: process.env.REACT_APP_RPC_URI,
+          [chainData.network_id]: rpcUrl,
         },
       },
     };
@@ -49,33 +56,71 @@ export const providerOptions = () => {
 };
 
 export const w3connect = async (web3Connect, currentNetwork) => {
-  const provider = await web3Connect.w3c.connect();
+  if (!currentNetwork) {
+    console.log('NO CONTEXT NETWORK');
 
-  const web3 = new Web3(provider);
+    const w3cNetwork = getChainDataByName(
+      web3Connect.w3c.providerController.network,
+    );
 
-  const injectedChainId = await web3.eth.getChainId();
-  console.log('injectedChainId', injectedChainId);
+    let provider = await web3Connect.w3c.connect();
 
-  // don't care about this if on hub, only if in dao
+    let web3 = new Web3(provider);
 
-  console.log('logging the user in, dao/hub network', currentNetwork);
-  // if (+injectedChainId !== +process.env.REACT_APP_NETWORK_ID) {
-  if (currentNetwork && +injectedChainId !== currentNetwork.network_id) {
-    // eslint-disable-next-line no-throw-literal
-    throw {
-      msg: `Please switch Web3 to the correct network and try signing in again. Detected network: ${
-        getChainData(injectedChainId).network
-      }, Required network: ${
-        getChainData(process.env.REACT_APP_NETWORK_ID).network
-      }`,
-      error: new Error(
-        `Injected web3 chainId: ${injectedChainId}, config: ${process.env.REACT_APP_NETWORK_ID}`,
-      ),
-    };
+    const injectedChainId = await web3.eth.getChainId();
+    console.log('w3cNetwork', w3cNetwork);
+    console.log('injectedChainId', injectedChainId);
+
+    if (!supportedChains[injectedChainId]) {
+      // eslint-disable-next-line no-throw-literal
+      throw {
+        msg: `DAOhaus doesn't support the detected network: ${injectedChainId}, Please switch to Mainnet, Xdai, Kovan or Rinkeby`,
+        error: new Error(`Injected web3 chainId: ${injectedChainId}`),
+      };
+    }
+
+    const mismatchSupportedNetwork =
+      injectedChainId !== w3cNetwork.network_id &&
+      supportedChains[injectedChainId];
+
+    if (mismatchSupportedNetwork) {
+      const injectedNetwork = supportedChains[injectedChainId];
+
+      web3Connect = {
+        w3c: new Web3Modal({
+          network: injectedNetwork.network,
+          providerOptions: providerOptions(injectedNetwork),
+          cacheProvider: true,
+          theme: 'dark',
+        }),
+      };
+      provider = await web3Connect.w3c.connect();
+      web3 = new Web3(provider);
+    }
+
+    console.log('logging the user in, dao/hub network', currentNetwork);
+
+    // still might need in dao world?
+
+    // if (currentNetwork && +injectedChainId !== currentNetwork.network_id) {
+    //   // eslint-disable-next-line no-throw-literal
+    //   throw {
+    //     msg: `Please switch Web3 to the correct network and try signing in again. Detected network: ${
+    //       getChainData(injectedChainId).network
+    //     }, Required network: ${
+    //       getChainData(process.env.REACT_APP_NETWORK_ID).network
+    //     }`,
+    //     error: new Error(
+    //       `Injected web3 chainId: ${injectedChainId}, config: ${process.env.REACT_APP_NETWORK_ID}`,
+    //     ),
+    //   };
+    // }
+    // // console.log('w3connect', web3Connect);
+    const w3c = web3Connect.w3c;
+    return { w3c, web3, provider };
+  } else {
+    console.log('WHOOOOOOPS');
   }
-  // console.log('w3connect', web3Connect);
-  const w3c = web3Connect.w3c;
-  return { w3c, web3, provider };
 };
 
 export const createWeb3User = (accountAddress) => {

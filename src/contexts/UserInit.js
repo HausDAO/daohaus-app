@@ -34,6 +34,12 @@ const UserInit = () => {
         case USER_TYPE.WEB3: {
           if (web3Connect.w3c.cachedProvider) {
             try {
+              console.log(
+                'connecting from userinit web3Connect, network',
+                web3Connect,
+                network,
+              );
+
               providerConnect = await w3connect(web3Connect, network);
 
               console.log('providerConnect', providerConnect);
