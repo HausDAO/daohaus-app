@@ -29,6 +29,9 @@ export class MinionService {
       .on('transactionHash', (txHash) => {
         console.log('txHash', txHash);
         callback(txHash, name);
+      })
+      .on('error', (error) => {
+        callback(null, error);
       });
   }
 

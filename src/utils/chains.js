@@ -8,6 +8,8 @@ export const supportedChains = {
     network_id: 1,
     providers: ['walletconnect', 'portis', 'fortmatic'],
     rpc_url: 'https://mainnet.infura.io/',
+    abi_api_url:
+      'https://api.etherscan.io/api?module=contract&action=getabi&address=',
     api_url: 'https://luizh7qidl.execute-api.us-east-1.amazonaws.com/prod',
     // api_url: process.env.REACT_APP_PROD_API,
     metadata_api_url: 'https://data.daohaus.club',
@@ -30,6 +32,8 @@ export const supportedChains = {
     network_id: 4,
     providers: ['walletconnect', 'portis', 'fortmatic'],
     rpc_url: 'https://rinkeby.infura.io/',
+    abi_api_url:
+      'https://api-rinkeby.etherscan.io/api?module=contract&action=getabi&address=',
     api_url: 'https://e5sk5e8me2.execute-api.us-east-1.amazonaws.com/rinkeby',
     metadata_api_url: 'https://data.daohaus.club',
     daohaus_url: 'https://rinkeby.daohaus.club',
@@ -49,6 +53,8 @@ export const supportedChains = {
     network_id: 42,
     providers: ['walletconnect', 'portis', 'fortmatic'],
     rpc_url: 'https://kovan.infura.io/',
+    abi_api_url:
+      'https://api-kovan.etherscan.io/api?module=contract&action=getabi&address=',
     api_url: 'https://kp7w1od8kd.execute-api.us-east-1.amazonaws.com/kovan',
     metadata_api_url: 'https://data.daohaus.club',
     daohaus_url: 'https://kovan.daohaus.club',
@@ -68,6 +74,8 @@ export const supportedChains = {
     network_id: 100,
     providers: ['walletconnect', 'portis'],
     rpc_url: 'https://dai.poa.network',
+    abi_api_url:
+      'https://blockscout.com/poa/xdai/api?module=contract&action=getabi&address=',
     api_url: 'https://fbpzfkbqyi.execute-api.us-east-1.amazonaws.com/xdai',
     metadata_api_url: 'https://data.daohaus.club',
     daohaus_url: 'https://xdai.daohaus.club',
