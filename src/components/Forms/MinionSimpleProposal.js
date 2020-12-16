@@ -26,6 +26,7 @@ import {
 } from '../../contexts/PokemolContext';
 import { MinionService } from '../../utils/minion-service';
 import { AiOutlineCaretDown } from 'react-icons/ai';
+import supportedChains from '../../utils/chains';
 
 const MinionProposalForm = () => {
   const [loading, setLoading] = useState(false);
@@ -56,7 +57,6 @@ const MinionProposalForm = () => {
         (minion) => minion.minionAddress,
       );
       setMinions(_minions);
-
     }
     // eslint-disable-next-line
   }, [dao?.graphData?.minions]);
@@ -152,12 +152,22 @@ const MinionProposalForm = () => {
     const { value } = e.target;
     setAbiLoading(true);
     try {
-      const url = `https://blockscout.com/poa/xdai/api?module=contract&action=getabi&address=${value}`;
+      const key =
+        +process.env.REACT_APP_NETWORK_ID === 100
+          ? ''
+          : process.env.REACT_APP_ETHERSCAN_KEY;
+      const url = `${
+        supportedChains[process.env.REACT_APP_NETWORK_ID].abi_api_url
+      }${value}${key && '&apikey=' + key}`;
       const response = await fetch(url);
       const json = await response.json();
-      if (!json.result) {
-        setCurrentError(json.message);
-        throw new Error(json.message);
+
+      if (!json.result || json.status === '0') {
+        const msg =
+          +process.env.REACT_APP_NETWORK_ID === 100
+            ? json.message
+            : json.result;
+        throw new Error(msg);
       }
       const _abiFunctions = getFunctions(JSON.parse(json.result));
       setCurrentError(null);
@@ -252,7 +262,6 @@ const MinionProposalForm = () => {
                 {minion}
               </option>
             ))}
-            <option value={null}>Create a new minion</option>
           </Select>
           <FormLabel
             htmlFor='targetContract'

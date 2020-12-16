@@ -21,6 +21,7 @@ import {
 import { MinionService } from '../../utils/minion-service';
 import abiDecoder from 'abi-decoder';
 import AddressAvatar from '../Shared/AddressAvatar';
+import supportedChains from '../../utils/chains';
 
 const ProposalMinionCard = ({ proposal }) => {
   const [minionDeets, setMinionDeets] = useState();
@@ -65,9 +66,17 @@ const ProposalMinionCard = ({ proposal }) => {
     }
     const getAbi = async () => {
       try {
-        const url = `https://blockscout.com/poa/xdai/api?module=contract&action=getabi&address=${minionDeets.to}`;
+        const key =
+          +process.env.REACT_APP_NETWORK_ID === 100
+            ? ''
+            : process.env.REACT_APP_ETHERSCAN_KEY;
+        const url = `${
+          supportedChains[process.env.REACT_APP_NETWORK_ID].abi_api_url
+        }${minionDeets.to}${key && '&apikey=' + key}`;
         const response = await fetch(url);
+
         const json = await response.json();
+
         abiDecoder.addABI(JSON.parse(json.result));
         const _decodedData = abiDecoder.decodeMethod(minionDeets.data);
         setDecodedData(_decodedData);
