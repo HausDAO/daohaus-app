@@ -40,7 +40,7 @@ export const proposalTypes = (theme, dao) => {
       subhead: 'Minion Simple',
       proposalType: 'minion',
       image: 'themes/raidTheme/raidguild__swords-white.svg',
-      comingSoon: false,
+      comingSoon: true,
       show: true,
     },
     {
