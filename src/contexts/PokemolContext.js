@@ -23,6 +23,7 @@ const initialState = {
     proposal: false,
     newMember: false,
     newToken: false,
+    minionDeets: false,
   },
 
   user: null,

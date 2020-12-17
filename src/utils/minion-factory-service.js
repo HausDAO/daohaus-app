@@ -32,8 +32,8 @@ export class MinionService {
       });
   }
 
-  async summonMinion(daoAddress, details, callback) {
-    const newTx = await this.contract.methods.summonMinion(daoAddress, details);
+  async summonMinion(daoAddress, callback) {
+    const newTx = await this.contract.methods.summonMinion(daoAddress);
     const txReceipt = await this.sendTx('summonMinion', newTx, callback);
     return txReceipt.transactionHash;
   }

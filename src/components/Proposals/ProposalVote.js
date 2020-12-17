@@ -1,6 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { Box, Button, Flex, Icon, Skeleton, Tooltip } from '@chakra-ui/react';
+import {
+  Box,
+  Button,
+  Flex,
+  Icon,
+  Skeleton,
+  Tooltip,
+  Text,
+} from '@chakra-ui/react';
 import { FaThumbsUp, FaThumbsDown } from 'react-icons/fa';
 import { RiErrorWarningLine, RiQuestionLine } from 'react-icons/ri';
 import { isAfter, isBefore } from 'date-fns';
@@ -31,6 +39,8 @@ const ProposalVote = ({ proposal, setProposal }) => {
   const [txProcessor, updateTxProcessor] = useTxProcessor();
   const [nextProposalToProcess, setNextProposal] = useState(null);
   const [hasVoted, setHasVoted] = useState(false);
+  const [minionDeets, setMinionDeets] = useState();
+
   const currentlyVoting = (proposal) => {
     return (
       isBefore(Date.now(), new Date(+proposal?.votingPeriodEnds * 1000)) &&
@@ -133,6 +143,36 @@ const ProposalVote = ({ proposal, setProposal }) => {
       console.log('error: ', err);
     }
   };
+
+  useEffect(() => {
+    let action;
+    const getMinionDeets = async () => {
+      // if (!proposal) {
+      //   return;
+      // }
+      const setupValues = {
+        minion: proposal.minionAddress,
+      };
+      const minionService = new MinionService(
+        web3Connect?.web3,
+        user?.username,
+        setupValues,
+      );
+
+      try {
+        action = await minionService.getAction(proposal.proposalId);
+      } catch (err) {
+        console.log('error: ', err);
+      }
+
+      setMinionDeets(action);
+    };
+    if (proposal?.proposalId) {
+      getMinionDeets();
+    }
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [proposal, user]);
 
   useEffect(() => {
     if (proposals) {
@@ -414,9 +454,13 @@ const ProposalVote = ({ proposal, setProposal }) => {
         {proposal?.status === 'Passed' && proposal?.minionAddress && (
           <Flex justify='center' pt='10px'>
             <Flex direction='column'>
-              <Button onClick={() => executeMinion(proposal)}>
-                Execute Minion
-              </Button>
+              {minionDeets?.executed ? (
+                <Text>Executed</Text>
+              ) : (
+                <Button onClick={() => executeMinion(proposal)}>
+                  Execute Minion
+                </Button>
+              )}
             </Flex>
           </Flex>
         )}
