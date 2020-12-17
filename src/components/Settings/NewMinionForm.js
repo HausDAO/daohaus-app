@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Box, Button, Input } from '@chakra-ui/react';
+import { Box, Button, Input, List, ListItem } from '@chakra-ui/react';
 import TextBox from '../Shared/TextBox';
 import { useForm } from 'react-hook-form';
 import { MinionFactoryService } from '../../utils/minion-factory-service';
@@ -19,10 +19,8 @@ const NewMinionForm = () => {
   const [dao] = useDao();
   const [web3Connect] = useWeb3Connect();
   const { closeModals } = useModals();
-
   const [txProcessor, updateTxProcessor] = useTxProcessor();
   const { handleSubmit, register } = useForm();
-  console.log(dao);
 
   const txCallBack = (txHash, details) => {
     console.log('txCallBack', txProcessor);
@@ -68,8 +66,19 @@ const NewMinionForm = () => {
   };
 
   return (
-    <Box w='60%'>
+    <Box w='90%'>
       <TextBox>Your doorway to the unknown</TextBox>
+      <TextBox>Current Minions</TextBox>
+      <List>
+        {dao?.graphData &&
+          dao.graphData.minions.map((minion) => {
+            return (
+              <ListItem key={minion.minionAddress}>
+                {minion.minionAddress}
+              </ListItem>
+            );
+          })}
+      </List>
       <form onSubmit={handleSubmit(onSubmit)}>
         <Box>
           <Input name='details' placeholder='Name' w='60%' ref={register} />
