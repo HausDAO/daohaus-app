@@ -38,6 +38,7 @@ export const DISPLAY_NAMES = {
   withdrawBalance: 'Withdraw Balance',
   withdrawBalances: 'Withdraw Balances',
   collectTokens: 'Collect Tokens',
+  summonMinion: 'Summon Minion',
 };
 
 export const POPUP_CONTENT = {

@@ -1,7 +1,7 @@
 import Web3 from 'web3';
 import abi from '../contracts/minionFactory.json';
 
-export class MinionService {
+export class MinionFactoryService {
   web3;
   contract;
   daoAddress;
@@ -29,11 +29,14 @@ export class MinionService {
       .on('transactionHash', (txHash) => {
         console.log('txHash', txHash);
         callback(txHash, name);
+      })
+      .on('error', (error) => {
+        callback(null, error);
       });
   }
 
-  async summonMinion(daoAddress, callback) {
-    const newTx = await this.contract.methods.summonMinion(daoAddress);
+  async summonMinion(daoAddress, details = '', callback) {
+    const newTx = await this.contract.methods.summonMinion(daoAddress, details);
     const txReceipt = await this.sendTx('summonMinion', newTx, callback);
     return txReceipt.transactionHash;
   }

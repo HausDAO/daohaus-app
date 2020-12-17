@@ -22,6 +22,7 @@ const initialState = {
     newMember: false,
     newToken: false,
     minionDeets: false,
+    newBoost: false,
   },
 
   user: null,

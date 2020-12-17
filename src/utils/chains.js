@@ -64,6 +64,7 @@ export const supportedChains = {
       'https://api.thegraph.com/subgraphs/name/odyssy-automaton/daohaus-stats-kovan',
     boosts_graph_url:
       'https://api.thegraph.com/subgraphs/name/odyssy-automaton/daohaus-transmutation',
+    minionFactoryAddr: '0x80ec2dB292E7a6D1D5bECB80e6479b2bE048AC98',
   },
   100: {
     name: 'xDAI Chain',
