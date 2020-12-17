@@ -22,6 +22,7 @@ export const supportedChains = {
       'https://api.thegraph.com/subgraphs/name/odyssy-automaton/daohaus-transmutation',
     token_list:
       'https://raw.githubusercontent.com/Uniswap/default-token-list/master/src/tokens/mainnet.json',
+    minionFactoryAddr: 'gas too high',
   },
   4: {
     name: 'Ethereum Rinkeby',
@@ -43,6 +44,7 @@ export const supportedChains = {
       'https://api.thegraph.com/subgraphs/name/odyssy-automaton/daohaus-stats-rinkeby',
     boosts_graph_url:
       'https://api.thegraph.com/subgraphs/name/odyssy-automaton/daohaus-transmutation',
+    minionFactoryAddr: '0x316eFCd421b0654B7aE8E806880D4AE88ecaE206',
   },
   42: {
     name: 'Ethereum Kovan',
@@ -64,6 +66,7 @@ export const supportedChains = {
       'https://api.thegraph.com/subgraphs/name/odyssy-automaton/daohaus-stats-kovan',
     boosts_graph_url:
       'https://api.thegraph.com/subgraphs/name/odyssy-automaton/daohaus-transmutation',
+    minionFactoryAddr: '0x80ec2dB292E7a6D1D5bECB80e6479b2bE048AC98',
   },
   100: {
     name: 'xDAI Chain',
@@ -86,6 +89,7 @@ export const supportedChains = {
     boosts_graph_url:
       'https://api.thegraph.com/subgraphs/name/odyssy-automaton/daohaus-transmutation-xdai',
     token_list: 'http://tokens.honeyswap.org/',
+    minionFactoryAddr: '0x9610389d548Ca0224aCaC40eB3241c5ED88D2479',
   },
 };
 

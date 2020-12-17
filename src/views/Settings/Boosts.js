@@ -3,6 +3,9 @@ import React from 'react';
 import { Box, Flex, Button } from '@chakra-ui/react';
 import ContentBox from '../../components/Shared/ContentBox';
 import TextBox from '../../components/Shared/TextBox';
+import GenericModal from '../../components/Modal/GenericModal';
+import { useModals } from '../../contexts/PokemolContext';
+import NewMinionForm from '../../components/Settings/NewMinionForm';
 // import { useDao } from '../../contexts/PokemolContext';
 
 const boostList = [
@@ -20,12 +23,15 @@ const boostList = [
   {
     name: 'Minion',
     description: 'Create and vote on execution of arbitrary contract calls',
-    comingSoon: true,
+    comingSoon: false,
+    modalName: 'newBoost',
+    modalBody: <NewMinionForm />,
   },
 ];
 
 const Boosts = () => {
   // const [dao] = useDao();
+  const { modals, openModal } = useModals();
 
   return (
     <Box p={6}>
@@ -55,8 +61,17 @@ const Boosts = () => {
                   Coming Soon
                 </Button>
               ) : (
-                <Button textTransform='uppercase'>Add This App</Button>
+                <Button
+                  textTransform='uppercase'
+                  onClick={() => openModal(boost.modalName)}
+                >
+                  Add This App
+                </Button>
               )}
+              <GenericModal
+                isOpen={modals[boost.modalName]}
+                body={boost.modalBody}
+              />
             </ContentBox>
           );
         })}
