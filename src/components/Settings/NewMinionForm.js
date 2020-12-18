@@ -3,7 +3,7 @@ import { Box, Button, Input, List, ListItem } from '@chakra-ui/react';
 import TextBox from '../Shared/TextBox';
 import { useForm } from 'react-hook-form';
 import { MinionFactoryService } from '../../utils/minion-factory-service';
-import supportedChains from '../../utils/chains';
+import { supportedChains } from '../../utils/chains';
 
 import {
   useDao,

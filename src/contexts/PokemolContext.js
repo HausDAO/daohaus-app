@@ -2,7 +2,7 @@ import React, { useContext, useCallback, useMemo } from 'react';
 import Web3Modal from 'web3modal';
 
 import { providerOptions } from '../utils/auth';
-import { supportedChains, getChainData } from '../utils/chains';
+import { supportedChains } from '../utils/chains';
 
 const PokemolContext = React.createContext();
 
@@ -11,7 +11,6 @@ function usePokemolContext() {
 }
 
 const initialState = {
-  // network: supportedChains[1],
   network: null,
 
   refetchQuery: null,
@@ -29,15 +28,14 @@ const initialState = {
   },
 
   user: null,
-  web3Connect: null,
-  // web3Connect: {
-  //   w3c: new Web3Modal({
-  //     network: 'mainnet',
-  //     providerOptions: providerOptions(supportedChains[1]),
-  //     cacheProvider: true,
-  //     theme: 'dark',
-  //   }),
-  // },
+  web3Connect: {
+    w3c: new Web3Modal({
+      network: 'mainnet',
+      providerOptions: providerOptions(supportedChains[1]),
+      cacheProvider: true,
+      theme: 'dark',
+    }),
+  },
   contracts: {},
   txProcessor: {},
   ens: {},
@@ -127,6 +125,7 @@ const reducer = (state, action) => {
         members: initialState.members,
         balances: initialState.balances,
         activities: initialState.activities,
+        network: initialState.network,
       };
     }
     default: {

@@ -9,8 +9,8 @@ import {
   titleMaker,
   determineUnreadActivityFeed,
 } from '../proposal-helper';
-import { TokenService } from '../token-service';
-import { MolochService } from '../moloch-service';
+// import { TokenService } from '../token-service';
+// import { MolochService } from '../moloch-service';
 
 // const rpcUrl =
 // chainData.network_id === 100

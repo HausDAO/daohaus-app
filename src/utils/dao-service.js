@@ -1,10 +1,6 @@
 import Web3 from 'web3';
 
-import {
-  Web3MolochService,
-  Web3MolochServiceV2,
-  ReadonlyMolochService,
-} from './moloch-service';
+import { Web3MolochServiceV2, ReadonlyMolochService } from './moloch-service';
 import { Web3TokenService, TokenService } from './token-service';
 
 let singleton;
@@ -39,19 +35,7 @@ export class DaoService {
     contractAddr,
     version,
   ) {
-    // const rpcUrl =
-    //   daoNetwork.network_id === 100
-    //     ? 'https://dai.poa.network '
-    //     : `https://${daoNetwork.network}.infura.io/v3/${process.env.REACT_APP_INFURA_KEY}`;
-    // const web3 = new Web3(new Web3.providers.HttpProvider(rpcUrl));
     const web3 = new Web3(injected);
-
-    // console.log('instantiateWithWeb3, web3', web3, daoNetwork, version);
-
-    // let moloch;
-    // let approvedToken;
-    // if (+version === 2) {
-    console.log('new Web3MolochServiceV2', web3);
     const moloch = new Web3MolochServiceV2(
       web3,
       contractAddr,
@@ -59,12 +43,6 @@ export class DaoService {
       +version,
     );
     const approvedToken = await moloch.getDepositToken();
-
-    console.log('approvedToken', approvedToken);
-    // } else {
-    //   moloch = new Web3MolochService(web3, contractAddr, accountAddr, version);
-    //   approvedToken = await moloch.approvedToken();
-    // }
 
     const token = new Web3TokenService(
       web3,
@@ -74,12 +52,11 @@ export class DaoService {
     );
 
     singleton = new Web3DaoService(accountAddr, web3, moloch, token);
+
     return singleton;
   }
 
   static async instantiateWithReadOnly(contractAddr, version, network) {
-    console.log('daoservice instantiateWithReadOnly');
-
     const rpcUrl =
       network.network_id === 100
         ? 'https://dai.poa.network '
