@@ -31,7 +31,6 @@ export const setProposaltxLock = (proposals, options) => {
 };
 
 export const mutateMember = (members, options) => {
-  console.log();
   switch (options.name) {
     case 'ragequit': {
       const memberIndex = members.findIndex((m) => {
@@ -48,6 +47,7 @@ export const mutateMember = (members, options) => {
     }
   }
 };
+
 // Not used
 export const mutateProposal = (proposals, options) => {
   switch (options.name) {
