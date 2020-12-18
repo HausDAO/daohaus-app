@@ -9,7 +9,6 @@ export class MinionService {
   setupValues;
 
   constructor(web3, accountAddress, setupValues) {
-    console.log('service init', accountAddress, setupValues);
     if (!web3) {
       web3 = new Web3(
         new Web3.providers.HttpProvider(process.env.REACT_APP_RPC_URI),
