@@ -19,19 +19,19 @@ export const TextBoxComponent = {
     },
     lg: {
       fontSize: 'lg',
-      fontWeight: 800,
+      fontWeight: 700,
     },
     xl: {
       fontSize: 'xl',
-      fontWeight: 900,
+      fontWeight: 700,
     },
     '2xl': {
       fontSize: '2xl',
-      fontWeight: 900,
+      fontWeight: 800,
     },
     '3xl': {
       fontSize: '3xl',
-      fontWeight: 900,
+      fontWeight: 800,
     },
     '4xl': {
       fontSize: '4xl',

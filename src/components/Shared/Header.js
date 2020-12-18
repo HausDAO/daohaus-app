@@ -112,7 +112,10 @@ const Header = () => {
           {location.pathname === `/dao/${dao?.address}/members` && user && (
             <>
               {memberWallet && !memberWallet.activeMember ? (
-                <Button as={RouterLink} to={`/dao/${dao?.address}/members/new`}>
+                <Button
+                  as={RouterLink}
+                  to={`/dao/${dao?.address}/proposals/new/member`}
+                >
                   Apply
                 </Button>
               ) : null}
@@ -121,7 +124,7 @@ const Header = () => {
           {location.pathname === `/dao/${dao?.address}/bank` && user && (
             <Button
               as={RouterLink}
-              to={`/dao/${dao?.address}/bank/token/new`}
+              to={`/dao/${dao?.address}/proposals/new/whitelist`}
               rightIcon={<RiAddFill />}
             >
               Add Asset

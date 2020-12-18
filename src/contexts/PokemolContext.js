@@ -24,6 +24,8 @@ const initialState = {
     newMember: false,
     newToken: false,
     minionDeets: false,
+    newBoost: false,
+    imageHandler: false,
   },
 
   user: null,
