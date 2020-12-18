@@ -156,7 +156,6 @@ const ThemeColorsForm = ({
               ) : null}
             </Box>
           </Flex>
-
           <Flex justify='space-between' align='center'>
             <TextBox size='sm'>Secondary</TextBox>
             <Box
@@ -186,7 +185,6 @@ const ThemeColorsForm = ({
               ) : null}
             </Box>
           </Flex>
-
           <Flex justify='space-between' align='center'>
             <TextBox size='sm'>Background</TextBox>
             <Box
@@ -216,6 +214,7 @@ const ThemeColorsForm = ({
               ) : null}
             </Box>
           </Flex>
+
           <TextBox size='xs'>Fonts</TextBox>
           <Box>
             <TextBox size='sm' mb={1}>
