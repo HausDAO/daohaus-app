@@ -25,8 +25,8 @@ const NewMinionForm = () => {
   const txCallBack = (txHash, details) => {
     console.log('txCallBack', txProcessor);
     if (txProcessor && txHash) {
-      txProcessor.setTx(txHash, user.username, details, true, false);
-      txProcessor.forceUpdate = true;
+      txProcessor.setTx(txHash, user.username, details, true, false, false);
+      txProcessor.forceCheckTx = true;
 
       updateTxProcessor(txProcessor);
       // close model here
