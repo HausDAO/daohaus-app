@@ -6,8 +6,11 @@ import { createWeb3User, w3connect } from '../utils/auth';
 import { USER_TYPE } from '../utils/dao-service';
 import { useNetwork, useUser, useWeb3Connect } from './PokemolContext';
 import { getChainDataByName } from '../utils/chains';
+import { useLocation } from 'react-router-dom';
+import { validDaoParams } from '../utils/helpers';
 
 const UserInit = () => {
+  const location = useLocation();
   const toast = useToast();
   const [web3Connect, updateWeb3Connect] = useWeb3Connect();
   const [user, updateUser] = useUser();
@@ -16,9 +19,11 @@ const UserInit = () => {
   useEffect(() => {
     initCurrentUser();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [web3Connect, network]);
+    // }, [web3Connect, network]);
+  }, [web3Connect]);
 
   const initCurrentUser = async () => {
+    console.log('!!!! UserInit');
     let loginType = localStorage.getItem('loginType') || USER_TYPE.READ_ONLY;
     if (user && user.type === loginType) {
       return;
@@ -27,6 +32,8 @@ const UserInit = () => {
     if (web3Connect.w3c.cachedProvider) {
       loginType = USER_TYPE.WEB3;
     }
+
+    console.log('!!!! UserInit passed');
 
     let providerConnect;
     try {
@@ -40,7 +47,12 @@ const UserInit = () => {
                 const providerNetwork = getChainDataByName(
                   providerConnect.w3c.providerController.network,
                 );
-                updateNetwork(providerNetwork);
+
+                const validParam = validDaoParams(location);
+                if (!validParam) {
+                  console.log('updatnig network USERINIT', providerNetwork);
+                  updateNetwork(providerNetwork);
+                }
               }
             } catch (err) {
               console.log(err);

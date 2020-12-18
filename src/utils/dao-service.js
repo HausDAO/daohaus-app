@@ -38,7 +38,6 @@ export class DaoService {
     injected,
     contractAddr,
     version,
-    daoNetwork,
   ) {
     // const rpcUrl =
     //   daoNetwork.network_id === 100

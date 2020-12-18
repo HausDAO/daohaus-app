@@ -26,7 +26,7 @@ import {
 } from '../../contexts/PokemolContext';
 import { MinionService } from '../../utils/minion-service';
 import { AiOutlineCaretDown } from 'react-icons/ai';
-import supportedChains from '../../utils/chains';
+import { supportedChains } from '../../utils/chains';
 
 const MinionProposalForm = () => {
   const [loading, setLoading] = useState(false);

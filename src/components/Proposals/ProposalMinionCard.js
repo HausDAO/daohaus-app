@@ -21,7 +21,7 @@ import {
 import { MinionService } from '../../utils/minion-service';
 import abiDecoder from 'abi-decoder';
 import AddressAvatar from '../Shared/AddressAvatar';
-import supportedChains from '../../utils/chains';
+import { supportedChains } from '../../utils/chains';
 
 const ProposalMinionCard = ({ proposal }) => {
   const [minionDeets, setMinionDeets] = useState();

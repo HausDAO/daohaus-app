@@ -154,21 +154,22 @@ const DaoInit = () => {
     let provider = web3Connect.provider;
 
     if (daoNetwork.network !== web3Connect.w3c.providerController.network) {
-      console.log('@@@@@@@@@@@@@@@@setting up new provider on mismatch');
       const newWeb3Connect = await setWeb3Connect(daoNetwork);
       provider = newWeb3Connect.provider;
+      console.log(
+        '@@@@@@@@@@@@@@@@setting up new provider on mismatch provider',
+        provider,
+      );
       updateWeb3Connect({ ...newWeb3Connect, mismatch: true });
       updateUser(null);
     }
 
     // console.log('provider', provider);
-
     const daoService = await DaoService.instantiateWithWeb3(
       user.username,
       provider,
       daoMetadata.address,
       daoMetadata.version,
-      daoNetwork,
     );
 
     console.log('daoService', daoService);
