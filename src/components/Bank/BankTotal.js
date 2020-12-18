@@ -27,7 +27,8 @@ const BankTotal = ({ tokenBalances }) => {
       <Box>
         <Skeleton isLoaded={tokenBalances?.length > 0}>
           <Box fontSize='sm' as='i' fontWeight={200}>
-            {tokenBalances?.length} Tokens
+            {tokenBalances?.length} Token
+            {tokenBalances?.length > 1 ? 's' : null}
           </Box>
         </Skeleton>
       </Box>

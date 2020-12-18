@@ -7,7 +7,7 @@ const ImageUpload = ({ setNewImage }) => {
   const [imageUrl, setImageUrl] = useState();
 
   useEffect(() => {
-    //do we need to prefill existing from current theme?
+    // do we need to prefill existing from current theme?
     // if (pic exists?) {
     // setImageUrl(some url);
     // }

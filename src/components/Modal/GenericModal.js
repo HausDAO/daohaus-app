@@ -9,7 +9,7 @@ import {
 
 import { useModals } from '../../contexts/PokemolContext';
 
-const GenericModal = ({ isOpen, body }) => {
+const GenericModal = ({ isOpen, children }) => {
   const { closeModals } = useModals();
 
   return (
@@ -24,7 +24,7 @@ const GenericModal = ({ isOpen, body }) => {
       >
         <ModalCloseButton />
         <ModalBody flexDirection='column' display='flex' maxH='600px'>
-          {body}
+          {children}
         </ModalBody>
       </ModalContent>
     </Modal>

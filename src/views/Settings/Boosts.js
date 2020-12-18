@@ -68,10 +68,9 @@ const Boosts = () => {
                   Add This App
                 </Button>
               )}
-              <GenericModal
-                isOpen={modals[boost.modalName]}
-                body={boost.modalBody}
-              />
+              <GenericModal isOpen={modals[boost.modalName]}>
+                {boost.modalBody}
+              </GenericModal>
             </ContentBox>
           );
         })}

@@ -24,15 +24,24 @@ const ThemePreview = ({ previewValues }) => {
     <Flex
       m={6}
       h='600px'
-      bgImage={`url(${previewValues.bgImg})`}
+      bgImage={`url(${
+        previewValues.bgImg.slice(0, 2) === 'Qm'
+          ? `https://ipfs.infura.io/ipfs/${previewValues.bgImg}`
+          : previewValues.bgImg
+      })`}
       bgColor={previewValues.background500}
       border={`0.5px solid ${theme.colors.whiteAlpha[600]}`}
       borderRadius='2px'
       overflow='scroll'
+      pr={6}
     >
       <Flex h='900px' w='100px' justify='center' bg={previewValues.primary500}>
         <Image
-          src={previewValues.brandImg}
+          src={
+            previewValues.brandImg.slice(0, 2) === 'Qm'
+              ? `https://ipfs.infura.io/ipfs/${previewValues.brandImg}`
+              : previewValues.brandImg
+          }
           borderRadius='40px'
           height='50px'
           width='50px'
