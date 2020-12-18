@@ -37,7 +37,7 @@ const AccountModal = ({ isOpen }) => {
   const [dao] = useDao();
   const { closeModals } = useModals();
 
-  const [txProcessor] = useTxProcessor();
+  const [txProcessor, setTxProcessor] = useTxProcessor();
   const [web3connect] = useWeb3Connect();
   const [memberWallet] = useMemberWallet();
 
@@ -54,17 +54,17 @@ const AccountModal = ({ isOpen }) => {
     }
   }, [members, user]);
 
+  const clearTxList = () => {
+    const clearList = txProcessor.clearHistory();
+    txProcessor.forceUpdate = false;
+    txProcessor.forceCheckTx = false;
+    setTxProcessor({ ...txProcessor });
+    return clearList;
+  };
+
   const RenderTxList = () => {
     const txList = txProcessor.getTxList(user.username);
     const milisecondsAgo = 86400000; // 1 day
-    // dummy data
-    // txList.push({
-    //   id: 1,
-    //   tx: '0x123',tails.name: 'sponsorProposal',
-    //   open: true,
-    //   dateAdded: 1605157095244,
-    // });
-    // filter transactions that are more than a milisecondsAgo old
     return txList
       .filter((tx) => tx.dateAdded > Date.now() - milisecondsAgo)
       .reverse()
@@ -196,6 +196,16 @@ const AccountModal = ({ isOpen }) => {
           <Box mb={6}>
             <Text fontSize='l' fontFamily='heading'>
               Transactions <span>will show here</span>
+              <Link
+                onClick={() => {
+                  clearTxList();
+                }}
+                color='secondary.400'
+                _hover={{ color: 'secondary.600' }}
+                ml={3}
+              >
+                Clear All
+              </Link>
             </Text>
           </Box>
           <RenderTxList />
