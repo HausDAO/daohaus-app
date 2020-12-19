@@ -9,7 +9,6 @@ export class MinionService {
   setupValues;
 
   constructor(web3, accountAddress, setupValues) {
-    console.log('service init', accountAddress, setupValues);
     if (!web3) {
       web3 = new Web3(
         new Web3.providers.HttpProvider(process.env.REACT_APP_RPC_URI),
@@ -22,13 +21,17 @@ export class MinionService {
   }
 
   // internal
-  sendTx(name, tx, callback) {
-    console.log('this.accountAddr', this.accountAddress);
+  sendTx(options, callback) {
+    const { from, name, params } = options;
+    const tx = this.contract.methods[name](...params);
     return tx
-      .send({ from: this.accountAddress })
+      .send({ from: from })
       .on('transactionHash', (txHash) => {
         console.log('txHash', txHash);
-        callback(txHash, name);
+        callback(txHash, options);
+      })
+      .on('error', (error) => {
+        callback(null, error);
       });
   }
 
@@ -42,19 +45,26 @@ export class MinionService {
       description,
     );
 
-    const newTx = await this.contract.methods.proposeAction(
-      actionTo,
-      actionVlaue,
-      actionData,
-      description,
+    const txReceipt = await this.sendTx(
+      {
+        from: this.accountAddress,
+        name: 'proposeAction',
+        params: [actionTo, actionVlaue, actionData, description],
+      },
+      callback,
     );
-    const txReceipt = await this.sendTx('proposeMinionAction', newTx, callback);
     return txReceipt.transactionHash;
   }
 
   async executeAction(proposalId, callback) {
-    const newTx = await this.contract.methods.executeAction(proposalId);
-    const txReceipt = await this.sendTx('executeMinionAction', newTx, callback);
+    const txReceipt = await this.sendTx(
+      {
+        from: this.accountAddress,
+        name: 'executeAction',
+        params: [proposalId],
+      },
+      callback,
+    );
     return txReceipt.transactionHash;
   }
 

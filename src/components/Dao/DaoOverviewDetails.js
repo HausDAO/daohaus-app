@@ -4,7 +4,7 @@ import { Box, Flex, Image, Skeleton, Button } from '@chakra-ui/react';
 
 import { useUser, useMembers } from '../../contexts/PokemolContext';
 import { useTheme } from '../../contexts/CustomThemeContext';
-
+import { numberWithCommas } from '../../utils/helpers';
 import ContentBox from '../Shared/ContentBox';
 import TextBox from '../Shared/TextBox';
 import BankTotal from '../Bank/BankTotal';
@@ -14,6 +14,7 @@ const DaoOverviewDetails = ({ dao }) => {
   const [user] = useUser();
   const [members] = useMembers();
   const history = useHistory();
+  console.log(user);
 
   return (
     <Box>
@@ -39,12 +40,7 @@ const DaoOverviewDetails = ({ dao }) => {
         <Skeleton isLoaded={dao?.description}>
           <Box mt={6}>{dao?.description ? dao.description : '--'}</Box>
         </Skeleton>
-        <Flex
-          direction='row'
-          w={['100%', null, null, null, '60%']}
-          justify='space-between'
-          mt={6}
-        >
+        <Flex direction='row' w='100%' justify='space-between' mt={6}>
           <Box>
             <TextBox size='xs'>{theme.daoMeta.members}</TextBox>
             <Skeleton isLoaded={members?.length > 0}>
@@ -57,7 +53,9 @@ const DaoOverviewDetails = ({ dao }) => {
             <TextBox size='xs'>Shares</TextBox>
             <Skeleton isLoaded={dao?.graphData?.totalShares}>
               <TextBox size='lg' variant='value'>
-                {dao?.graphData?.totalShares ? dao.graphData.totalShares : '--'}
+                {dao?.graphData?.totalShares
+                  ? numberWithCommas(dao.graphData.totalShares)
+                  : '--'}
               </TextBox>
             </Skeleton>
           </Box>
@@ -65,7 +63,9 @@ const DaoOverviewDetails = ({ dao }) => {
             <TextBox size='xs'>Loot</TextBox>
             <Skeleton isLoaded={dao?.graphData?.totalLoot}>
               <TextBox size='lg' variant='value'>
-                {dao?.graphData?.totalLoot ? dao?.graphData?.totalLoot : '--'}
+                {dao?.graphData?.totalLoot
+                  ? numberWithCommas(dao?.graphData?.totalLoot)
+                  : '--'}
               </TextBox>
             </Skeleton>
           </Box>

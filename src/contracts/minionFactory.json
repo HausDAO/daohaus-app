@@ -1,65 +1,80 @@
 [
   {
-    "constant": false,
-    "inputs": [
-      { "internalType": "address", "name": "_dao", "type": "address" },
-      { "internalType": "string", "name": "_details", "type": "string" }
-    ],
-    "name": "summonMinion",
-    "outputs": [],
-    "payable": false,
+    "type": "constructor",
     "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "constant": true,
-    "inputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
-    "name": "Minions",
-    "outputs": [{ "internalType": "address", "name": "", "type": "address" }],
-    "payable": false,
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "constant": true,
-    "inputs": [],
-    "name": "getMinionCount",
-    "outputs": [
-      { "internalType": "uint256", "name": "MinionCount", "type": "uint256" }
-    ],
-    "payable": false,
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "anonymous": false,
     "inputs": [
       {
-        "indexed": true,
-        "internalType": "address",
+        "type": "address",
+        "name": "_template",
+        "internalType": "address payable"
+      }
+    ]
+  },
+  {
+    "type": "event",
+    "name": "SummonMinion",
+    "inputs": [
+      {
+        "type": "address",
         "name": "minion",
-        "type": "address"
-      },
-      {
-        "indexed": true,
         "internalType": "address",
-        "name": "dao",
-        "type": "address"
+        "indexed": true
       },
       {
-        "indexed": false,
+        "type": "address",
+        "name": "moloch",
         "internalType": "address",
-        "name": "summoner",
-        "type": "address"
+        "indexed": true
       },
       {
-        "indexed": false,
-        "internalType": "string",
+        "type": "string",
         "name": "details",
-        "type": "string"
+        "internalType": "string",
+        "indexed": false
+      },
+      {
+        "type": "string",
+        "name": "minionType",
+        "internalType": "string",
+        "indexed": false
       }
     ],
-    "name": "Summoned",
-    "type": "event"
+    "anonymous": false
+  },
+  {
+    "type": "function",
+    "stateMutability": "view",
+    "outputs": [{ "type": "address", "name": "", "internalType": "address" }],
+    "name": "minionList",
+    "inputs": [{ "type": "uint256", "name": "", "internalType": "uint256" }]
+  },
+  {
+    "type": "function",
+    "stateMutability": "view",
+    "outputs": [
+      { "type": "address", "name": "moloch", "internalType": "address" },
+      { "type": "string", "name": "details", "internalType": "string" }
+    ],
+    "name": "minions",
+    "inputs": [{ "type": "address", "name": "", "internalType": "address" }]
+  },
+  {
+    "type": "function",
+    "stateMutability": "nonpayable",
+    "outputs": [{ "type": "address", "name": "", "internalType": "address" }],
+    "name": "summonMinion",
+    "inputs": [
+      { "type": "address", "name": "moloch", "internalType": "address" },
+      { "type": "string", "name": "details", "internalType": "string" }
+    ]
+  },
+  {
+    "type": "function",
+    "stateMutability": "view",
+    "outputs": [
+      { "type": "address", "name": "", "internalType": "address payable" }
+    ],
+    "name": "template",
+    "inputs": []
   }
 ]

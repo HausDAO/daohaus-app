@@ -21,11 +21,13 @@ const Superpowers = () => {
         borderBottomColor='whiteAlpha.200'
       >
         <ComingSoonOverlay />
-        <TextBox colorScheme='whiteAlpha.900'>Force Proposal on Save</TextBox>
+        <TextBox colorScheme='whiteAlpha.900' size='sm'>
+          Force Proposal on Save
+        </TextBox>
         <Switch id='proposal-on-save' colorScheme='green' />
       </Flex>
       <Flex p={4} justify='space-between' align='center'>
-        <TextBox size='lg' colorScheme='whiteAlpha.900'>
+        <TextBox size='md' colorScheme='whiteAlpha.900'>
           Theme
         </TextBox>
         <Flex align='center'>
@@ -36,7 +38,7 @@ const Superpowers = () => {
         </Flex>
       </Flex>
       <Flex p={4} justify='space-between' align='center'>
-        <TextBox size='lg' colorScheme='whiteAlpha.900'>
+        <TextBox size='md' colorScheme='whiteAlpha.900'>
           Notifications
         </TextBox>
         <Flex align='center'>

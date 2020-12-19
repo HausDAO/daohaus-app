@@ -8,6 +8,8 @@ export const supportedChains = {
     network_id: 1,
     providers: ['walletconnect', 'portis', 'fortmatic'],
     rpc_url: 'https://mainnet.infura.io/',
+    abi_api_url:
+      'https://api.etherscan.io/api?module=contract&action=getabi&address=',
     api_url: 'https://luizh7qidl.execute-api.us-east-1.amazonaws.com/prod',
     // api_url: process.env.REACT_APP_PROD_API,
     metadata_api_url: 'https://data.daohaus.club',
@@ -20,6 +22,7 @@ export const supportedChains = {
       'https://api.thegraph.com/subgraphs/name/odyssy-automaton/daohaus-transmutation',
     token_list:
       'https://raw.githubusercontent.com/Uniswap/default-token-list/master/src/tokens/mainnet.json',
+    minionFactoryAddr: 'gas too high',
   },
   4: {
     name: 'Ethereum Rinkeby',
@@ -30,6 +33,8 @@ export const supportedChains = {
     network_id: 4,
     providers: ['walletconnect', 'portis', 'fortmatic'],
     rpc_url: 'https://rinkeby.infura.io/',
+    abi_api_url:
+      'https://api-rinkeby.etherscan.io/api?module=contract&action=getabi&address=',
     api_url: 'https://e5sk5e8me2.execute-api.us-east-1.amazonaws.com/rinkeby',
     metadata_api_url: 'https://data.daohaus.club',
     daohaus_url: 'https://rinkeby.daohaus.club',
@@ -39,6 +44,7 @@ export const supportedChains = {
       'https://api.thegraph.com/subgraphs/name/odyssy-automaton/daohaus-stats-rinkeby',
     boosts_graph_url:
       'https://api.thegraph.com/subgraphs/name/odyssy-automaton/daohaus-transmutation',
+    minionFactoryAddr: '0x316eFCd421b0654B7aE8E806880D4AE88ecaE206',
   },
   42: {
     name: 'Ethereum Kovan',
@@ -49,6 +55,8 @@ export const supportedChains = {
     network_id: 42,
     providers: ['walletconnect', 'portis', 'fortmatic'],
     rpc_url: 'https://kovan.infura.io/',
+    abi_api_url:
+      'https://api-kovan.etherscan.io/api?module=contract&action=getabi&address=',
     api_url: 'https://kp7w1od8kd.execute-api.us-east-1.amazonaws.com/kovan',
     metadata_api_url: 'https://data.daohaus.club',
     daohaus_url: 'https://kovan.daohaus.club',
@@ -58,6 +66,7 @@ export const supportedChains = {
       'https://api.thegraph.com/subgraphs/name/odyssy-automaton/daohaus-stats-kovan',
     boosts_graph_url:
       'https://api.thegraph.com/subgraphs/name/odyssy-automaton/daohaus-transmutation',
+    minionFactoryAddr: '0x80ec2dB292E7a6D1D5bECB80e6479b2bE048AC98',
   },
   100: {
     name: 'xDAI Chain',
@@ -68,6 +77,8 @@ export const supportedChains = {
     network_id: 100,
     providers: ['walletconnect', 'portis'],
     rpc_url: 'https://dai.poa.network',
+    abi_api_url:
+      'https://blockscout.com/poa/xdai/api?module=contract&action=getabi&address=',
     api_url: 'https://fbpzfkbqyi.execute-api.us-east-1.amazonaws.com/xdai',
     metadata_api_url: 'https://data.daohaus.club',
     daohaus_url: 'https://xdai.daohaus.club',
@@ -78,6 +89,7 @@ export const supportedChains = {
     boosts_graph_url:
       'https://api.thegraph.com/subgraphs/name/odyssy-automaton/daohaus-transmutation-xdai',
     token_list: 'http://tokens.honeyswap.org/',
+    minionFactoryAddr: '0x9610389d548Ca0224aCaC40eB3241c5ED88D2479',
   },
 };
 

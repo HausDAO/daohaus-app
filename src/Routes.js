@@ -20,6 +20,7 @@ import Theme from './views/Theme/Theme';
 import DaoTheme from './views/Theme/DaoTheme';
 import NewMember from './views/Members/NewMember';
 import DaoMeta from './views/Settings/DaoMeta';
+import UploadTest from './views/Theme/UploadTest';
 
 const Routes = () => {
   return (
@@ -107,6 +108,7 @@ const Routes = () => {
           component={DaoTheme}
         />
         <Route path='/themeSample' exact component={Theme} />
+        <Route path='/uploadTest' exact component={UploadTest} />
         <Route exact path='/' component={Hub} />
         <Route path='*' component={FourOhFour} />
       </Switch>

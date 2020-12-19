@@ -15,12 +15,27 @@ export const TextBoxComponent = {
     },
     md: {
       fontSize: 'md',
+      fontWeight: 700,
     },
     lg: {
       fontSize: 'lg',
+      fontWeight: 700,
     },
     xl: {
       fontSize: 'xl',
+      fontWeight: 700,
+    },
+    '2xl': {
+      fontSize: '2xl',
+      fontWeight: 800,
+    },
+    '3xl': {
+      fontSize: '3xl',
+      fontWeight: 800,
+    },
+    '4xl': {
+      fontSize: '4xl',
+      fontWeight: 900,
     },
   },
   variants: {

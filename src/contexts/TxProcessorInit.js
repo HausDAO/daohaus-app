@@ -100,6 +100,22 @@ const TxProcessorInit = () => {
         const newMembers = mutateMember(members, latestTx.details);
         console.log(newMembers);
         updateMembers([...newMembers]);
+        setTimeout(() => {
+          updateRefetchQuery('daoMembers');
+        }, 15000);
+      }
+      if (context?.name === 'dao') {
+        // 15 second delay before try refresh
+        setTimeout(() => {
+          updateRefetchQuery('moloch');
+        }, 15000);
+      }
+      if (context?.name === 'proposals') {
+        // 15 second delay before try refresh
+        console.log('proposals');
+        setTimeout(() => {
+          updateRefetchQuery('proposals');
+        }, 15000);
       }
       toast({
         title: 'Transaction away',

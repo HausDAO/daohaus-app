@@ -3,22 +3,35 @@ import React from 'react';
 import { Box, Flex, Button } from '@chakra-ui/react';
 import ContentBox from '../../components/Shared/ContentBox';
 import TextBox from '../../components/Shared/TextBox';
+import GenericModal from '../../components/Modal/GenericModal';
+import { useModals } from '../../contexts/PokemolContext';
+import NewMinionForm from '../../components/Settings/NewMinionForm';
 // import { useDao } from '../../contexts/PokemolContext';
 
 const boostList = [
   {
     name: 'Custom Theme',
     description: 'Customize the visual theme of your community',
+    comingSoon: true,
   },
   {
     name: 'Notifications',
     description:
       'Customize and send notifications of DAO activity to your social channels',
+    comingSoon: true,
+  },
+  {
+    name: 'Minion',
+    description: 'Create and vote on execution of arbitrary contract calls',
+    comingSoon: false,
+    modalName: 'newBoost',
+    modalBody: <NewMinionForm />,
   },
 ];
 
 const Boosts = () => {
   // const [dao] = useDao();
+  const { modals, openModal } = useModals();
 
   return (
     <Box p={6}>
@@ -43,16 +56,21 @@ const Boosts = () => {
                 {boost.name}
               </Box>
               <Box textAlign='center'>{boost.description}</Box>
-              <Button textTransform='uppercase' disabled={true}>
-                Coming Soon
-              </Button>
-              {/* <Button
-                as={Link}
-                textTransform='uppercase'
-                to={`/dao/${dao.address}/settings/boosts/new`}
-              >
-                Add This App
-              </Button> */}
+              {boost.comingSoon ? (
+                <Button textTransform='uppercase' disabled={true}>
+                  Coming Soon
+                </Button>
+              ) : (
+                <Button
+                  textTransform='uppercase'
+                  onClick={() => openModal(boost.modalName)}
+                >
+                  Add This App
+                </Button>
+              )}
+              <GenericModal isOpen={modals[boost.modalName]}>
+                {boost.modalBody}
+              </GenericModal>
             </ContentBox>
           );
         })}

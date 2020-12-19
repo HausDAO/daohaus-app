@@ -1,15 +1,16 @@
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Box, Flex, Badge, Skeleton, Icon } from '@chakra-ui/react';
-import ContentBox from '../Shared/ContentBox';
-// import TextBox from '../Shared/TextBox';
+import { FaThumbsDown, FaThumbsUp } from 'react-icons/fa';
 import { utils } from 'web3';
 import { format } from 'date-fns';
 
 import { useDao, useMemberWallet } from '../../contexts/PokemolContext';
 import { useTheme } from '../../contexts/CustomThemeContext';
 import { getProposalCountdownText } from '../../utils/proposal-helper';
-import { FaThumbsDown, FaThumbsUp } from 'react-icons/fa';
+import { numberWithCommas } from '../../utils/helpers';
+import ContentBox from '../Shared/ContentBox';
+// import TextBox from '../Shared/TextBox';
 
 const ProposalCard = ({ proposal, isLoaded }) => {
   const [dao] = useDao();
@@ -171,7 +172,7 @@ const ProposalCard = ({ proposal, isLoaded }) => {
               <Skeleton isLoaded={isLoaded}>
                 <Box fontSize='lg' fontFamily='space' fontWeight={700}>
                   {proposal?.tributeOffered
-                    ? utils.fromWei(proposal.tributeOffered)
+                    ? numberWithCommas(utils.fromWei(proposal.tributeOffered))
                     : '--'}{' '}
                   {proposal.tributeTokenSymbol || 'WETH'}
                 </Box>
@@ -193,7 +194,7 @@ const ProposalCard = ({ proposal, isLoaded }) => {
               <Skeleton isLoaded={isLoaded}>
                 <Box fontSize='lg' fontFamily='space' fontWeight={700}>
                   {proposal?.paymentRequested
-                    ? utils.fromWei(proposal.paymentRequested)
+                    ? numberWithCommas(utils.fromWei(proposal.paymentRequested))
                     : '--'}{' '}
                   {proposal.paymentTokenSymbol || 'WETH'}
                 </Box>
@@ -214,7 +215,9 @@ const ProposalCard = ({ proposal, isLoaded }) => {
               </Box>
               <Skeleton isLoaded={isLoaded}>
                 <Box fontSize='lg' fontFamily='space' fontWeight={700}>
-                  {proposal?.sharesRequested ? proposal.sharesRequested : '--'}
+                  {proposal?.sharesRequested
+                    ? numberWithCommas(proposal.sharesRequested)
+                    : '--'}
                 </Box>
               </Skeleton>
             </Box>
@@ -233,7 +236,9 @@ const ProposalCard = ({ proposal, isLoaded }) => {
               </Box>
               <Skeleton isLoaded={isLoaded}>
                 <Box fontSize='lg' fontFamily='space' fontWeight={700}>
-                  {proposal?.lootRequested ? proposal.lootRequested : '--'}
+                  {proposal?.lootRequested
+                    ? numberWithCommas(proposal.lootRequested)
+                    : '--'}
                 </Box>
               </Skeleton>
             </Box>

@@ -11,12 +11,20 @@ export const TX_CONTEXTS = [
       'submitGuildKickProposal',
       'submitProposal',
       'cancelProposal',
+      'cancelProposal',
+      'proposeAction', // minion
+      'executeAction', // minion
     ],
   },
   { name: 'members', methods: ['ragequit', 'ragekick'] },
   {
     name: 'dao',
-    methods: ['withdrawBalance', 'withdrawBalances', 'collectTokens'],
+    methods: [
+      'withdrawBalance',
+      'withdrawBalances',
+      'collectTokens',
+      'summonMinion',
+    ],
   },
 ];
 
@@ -38,6 +46,7 @@ export const DISPLAY_NAMES = {
   withdrawBalance: 'Withdraw Balance',
   withdrawBalances: 'Withdraw Balances',
   collectTokens: 'Collect Tokens',
+  summonMinion: 'Summon Minion',
 };
 
 export const POPUP_CONTENT = {
@@ -60,7 +69,7 @@ export const POPUP_CONTENT = {
         href: `https://twitter.com/intent/tweet?text=I%20Voted%20https://alpha.daohaus.club`,
         text: 'Share with the world',
         external: true,
-      }
+      },
     ],
   },
   ragequit: {

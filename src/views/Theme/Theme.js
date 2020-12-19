@@ -3,7 +3,7 @@ import React from 'react';
 import { useTempTheme, useTheme } from '../../contexts/CustomThemeContext';
 import { defaultTheme } from '../../themes/theme-defaults';
 // import DaoMetaForm from './DaoMetaForm';
-import ThemeColorsForm from '../../components/Forms/ThemeColorsForm';
+import CustomThemeForm from '../../components/Forms/CustomThemeForm';
 import ThemePrebuilt from './ThemePrebuilt';
 import ThemeSamples from './ThemeSamples';
 
@@ -24,7 +24,7 @@ const Theme = () => {
 
   return (
     <>
-      <ThemeColorsForm
+      <CustomThemeForm
         handleThemeUpdate={handleThemeUpdate}
         resetTheme={resetTheme}
       />
