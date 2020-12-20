@@ -2,7 +2,7 @@ import React from 'react';
 import { Icon, Link } from '@chakra-ui/react';
 import { RiExternalLinkLine } from 'react-icons/ri';
 
-const ExplorerLink = ({ type, hash, linkText, isIconLink }) => {
+const ExplorerLink = ({ type, hash, isIconLink, children }) => {
   const uri = () => {
     switch (process.env.REACT_APP_NETWORK_ID) {
       case '1': {
@@ -28,8 +28,13 @@ const ExplorerLink = ({ type, hash, linkText, isIconLink }) => {
       <Icon as={RiExternalLinkLine} name='transaction link' />
     </Link>
   ) : (
-    <Link href={`${uri()}${hash}`} isExternal>
-      {linkText}
+    <Link
+      href={`${uri()}${hash}`}
+      isExternal
+      display='flex'
+      alignItems='center'
+    >
+      {children}
     </Link>
   );
 };
