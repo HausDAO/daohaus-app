@@ -29,9 +29,10 @@ const TokenListCard = ({ token, isLoaded, isMember, isBank, hasAction }) => {
   }, [token, isMember, isBank, memberWallet]);
 
   const checkOptimisticBalance = () => {
+    console.log('token', token);
     const optimisticBalance =
       token.contractBalances.token -
-      token.ccontractBalances.babe +
+      token.contractBalances.babe +
       +token.tokenBalance;
 
     return optimisticSync ? optimisticBalance : +token.tokenBalance;
