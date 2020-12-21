@@ -11,6 +11,7 @@ import {
 import { AiOutlineCaretDown } from 'react-icons/ai';
 import TextBox from '../Shared/TextBox';
 import { useEns, useMembers, useUser } from '../../contexts/PokemolContext';
+import { useTheme } from '../../contexts/CustomThemeContext';
 import { truncateAddr } from '../../utils/helpers';
 
 const AddressInput = ({
@@ -25,6 +26,7 @@ const AddressInput = ({
   formLabel = formLabel || 'applicant';
   const [ens] = useEns();
   const [user] = useUser();
+  const [theme] = useTheme();
   const [anyApplicant, setAnyApplicant] = useState(false);
   const [members] = useMembers();
 
@@ -80,6 +82,7 @@ const AddressInput = ({
               icon={<AiOutlineCaretDown />}
               name='memberApplicant'
               ref={register}
+              color='whiteAlpha.900'
             >
               {members &&
                 members.map((member) => {
@@ -87,6 +90,8 @@ const AddressInput = ({
                     <option
                       key={member.memberAddress}
                       value={member.memberAddress}
+                      color={theme.colors.whiteAlpha[900]}
+                      background={theme.colors.blackAlpha[900]}
                     >
                       {member.profile.name
                         ? member.profile.name
