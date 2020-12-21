@@ -39,20 +39,22 @@ const DaoContractSettings = () => {
       <Box>
         <TextBox size='xs'>Dao Contract</TextBox>
         <Skeleton isLoaded={dao?.address}>
-          <Text
-            fontFamily='mono'
-            variant='value'
-            fontSize='sm'
-            as={Link}
-            href={`${uri()}${dao.address}`}
-            target='_blank'
-            rel='noreferrer noopener'
-          >
-            <Flex color='secondary.400' align='center'>
-              {dao?.address ? dao?.address : '--'}
-              <Icon as={RiExternalLinkLine} color='secondary.400' ml={1} />
-            </Flex>
-          </Text>
+          {network ? (
+            <Text
+              fontFamily='mono'
+              variant='value'
+              fontSize='sm'
+              as={Link}
+              href={`${uri()}${dao.address}`}
+              target='_blank'
+              rel='noreferrer noopener'
+            >
+              <Flex color='secondary.400' align='center'>
+                {dao?.address ? dao?.address : '--'}
+                <Icon as={RiExternalLinkLine} color='secondary.400' ml={1} />
+              </Flex>
+            </Text>
+          ) : null}
         </Skeleton>
       </Box>
       <Flex mt={3}>
@@ -114,10 +116,13 @@ const DaoContractSettings = () => {
       <Flex>
         <Box w='50%'>
           <TextBox size='xs'>Summoned</TextBox>
-          <Skeleton isLoaded={dao?.createdAt}>
+          <Skeleton isLoaded={dao?.graphData}>
             <TextBox variant='value' size='xl' my={2}>
-              {dao?.createdAt
-                ? format(new Date(+dao?.createdAt), 'MMMM d, yyyy')
+              {dao?.graphData
+                ? format(
+                    new Date(+dao?.graphData.summoningTime * 1000),
+                    'MMMM d, yyyy',
+                  )
                 : '--'}
             </TextBox>
           </Skeleton>

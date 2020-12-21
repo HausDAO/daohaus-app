@@ -16,7 +16,6 @@ import TextBox from '../../components/Shared/TextBox';
 const DaoMetaOverview = () => {
   const [dao] = useDao();
   const [theme] = useTheme();
-  console.log(theme);
 
   return (
     <Flex as={ContentBox} mt={2} direction='column' w='100%%'>
