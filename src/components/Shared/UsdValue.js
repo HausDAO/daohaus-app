@@ -7,8 +7,8 @@ const UsdValue = ({ tokenBalance, optimisticSync }) => {
 
   const checkOptimisticBalance = () => {
     const optimisticBalance =
-      tokenBalance.contractTokenBalance -
-      tokenBalance.contractBabeBalance +
+      tokenBalance.contractBalances.token -
+      tokenBalance.contractBalances.babe +
       +tokenBalance.tokenBalance;
 
     return optimisticSync ? optimisticBalance : +tokenBalance.tokenBalance;

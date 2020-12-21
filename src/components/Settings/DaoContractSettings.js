@@ -16,8 +16,6 @@ const DaoContractSettings = () => {
 
   const uri = () => {
     switch (network.network_id) {
-      // switch (process.env.REACT_APP_NETWORK_ID) {
-
       case 1: {
         return `https://etherscan.io/address/`;
       }

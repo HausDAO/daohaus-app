@@ -98,3 +98,9 @@ export const numberWithCommas = (num) => {
 
   return noZeroDec.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ',');
 };
+
+export const getRpcUrl = (network) => {
+  return network.network_id === 100
+    ? 'https://dai.poa.network '
+    : `https://${network.network}.infura.io/v3/${process.env.REACT_APP_INFURA_KEY}`;
+};

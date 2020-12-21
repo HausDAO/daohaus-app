@@ -40,7 +40,13 @@ const UserDaoInit = () => {
 
   useEffect(() => {
     if (!validDaoParam) {
-      clearDaoData();
+      clearDaoData({
+        ...web3Connect,
+        forceUserInit:
+          !user ||
+          web3Connect.w3c.providerController.network !==
+            user.providerNetwork.network,
+      });
       return;
     }
 
@@ -127,6 +133,7 @@ const UserDaoInit = () => {
             const profile = await getProfile(web3User.username);
 
             if (!validDaoParam) {
+              console.log('updating network', providerNetwork);
               updateNetwork(providerNetwork);
             }
 

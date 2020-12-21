@@ -13,6 +13,7 @@ const GraphFetch = ({
   setRecords,
   variables,
   entity,
+  context,
   isStats,
   isBoosts,
 }) => {
@@ -32,6 +33,7 @@ const GraphFetch = ({
     client,
     variables,
     fetchPolicy: 'network-only',
+    context,
   });
 
   useEffect(() => {

@@ -125,7 +125,10 @@ const reducer = (state, action) => {
         members: initialState.members,
         balances: initialState.balances,
         activities: initialState.activities,
-        network: initialState.network,
+        web3Connect: action.payload,
+        network: action.payload.forceUserInit
+          ? initialState.network
+          : state.network,
       };
     }
     default: {
@@ -209,8 +212,8 @@ function PokemolContextProvider(props) {
     dispatch({ type: 'closeModals' });
   }, []);
 
-  const clearDaoData = useCallback(() => {
-    dispatch({ type: 'clearDaoData' });
+  const clearDaoData = useCallback((data) => {
+    dispatch({ type: 'clearDaoData', payload: data });
   }, []);
 
   return (

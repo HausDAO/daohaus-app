@@ -8,7 +8,6 @@ const ExplorerLink = ({ type, hash, linkText, isIconLink }) => {
   const [network] = useNetwork();
 
   const uri = () => {
-    // switch (process.env.REACT_APP_NETWORK_ID) {
     switch (network.network_id) {
       case 1: {
         return `https://etherscan.io/${type}/`;

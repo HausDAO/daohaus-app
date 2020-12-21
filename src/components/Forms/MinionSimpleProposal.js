@@ -20,6 +20,7 @@ import { RiErrorWarningLine } from 'react-icons/ri';
 import {
   useDao,
   useModals,
+  useNetwork,
   useTxProcessor,
   useUser,
   useWeb3Connect,
@@ -34,6 +35,7 @@ const MinionProposalForm = () => {
   const [user] = useUser();
   const [dao] = useDao();
   const [web3Connect] = useWeb3Connect();
+  const [network] = useNetwork();
 
   const [txProcessor, updateTxProcessor] = useTxProcessor();
   const [currentError, setCurrentError] = useState(null);
@@ -153,20 +155,15 @@ const MinionProposalForm = () => {
     setAbiLoading(true);
     try {
       const key =
-        +process.env.REACT_APP_NETWORK_ID === 100
-          ? ''
-          : process.env.REACT_APP_ETHERSCAN_KEY;
+        network.network_id === 100 ? '' : process.env.REACT_APP_ETHERSCAN_KEY;
       const url = `${
-        supportedChains[process.env.REACT_APP_NETWORK_ID].abi_api_url
+        supportedChains[network.network_id].abi_api_url
       }${value}${key && '&apikey=' + key}`;
       const response = await fetch(url);
       const json = await response.json();
 
       if (!json.result || json.status === '0') {
-        const msg =
-          +process.env.REACT_APP_NETWORK_ID === 100
-            ? json.message
-            : json.result;
+        const msg = network.network_id === 100 ? json.message : json.result;
         throw new Error(msg);
       }
       const _abiFunctions = getFunctions(JSON.parse(json.result));

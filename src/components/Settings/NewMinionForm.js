@@ -11,6 +11,7 @@ import {
   useUser,
   useWeb3Connect,
   useModals,
+  useNetwork,
 } from '../../contexts/PokemolContext';
 
 const NewMinionForm = () => {
@@ -18,6 +19,7 @@ const NewMinionForm = () => {
   const [user] = useUser();
   const [dao] = useDao();
   const [web3Connect] = useWeb3Connect();
+  const [network] = useNetwork();
   const { closeModals } = useModals();
   const [txProcessor, updateTxProcessor] = useTxProcessor();
   const { handleSubmit, register } = useForm();
@@ -43,8 +45,7 @@ const NewMinionForm = () => {
 
     console.log(values);
     const setupValues = {
-      minionFactory:
-        supportedChains[+process.env.REACT_APP_NETWORK_ID].minionFactoryAddr,
+      minionFactory: supportedChains[network.network_id].minionFactoryAddr,
       actionVlaue: '0',
     };
     const minionFactoryService = new MinionFactoryService(

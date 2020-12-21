@@ -1,4 +1,3 @@
-import Web3 from 'web3';
 import abi from '../contracts/minion.json';
 
 export class MinionService {
@@ -9,11 +8,6 @@ export class MinionService {
   setupValues;
 
   constructor(web3, accountAddress, setupValues) {
-    if (!web3) {
-      web3 = new Web3(
-        new Web3.providers.HttpProvider(process.env.REACT_APP_RPC_URI),
-      );
-    }
     this.web3 = web3;
     this.contract = new web3.eth.Contract(abi, setupValues.minion);
     this.accountAddress = accountAddress;

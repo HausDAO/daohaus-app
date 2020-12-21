@@ -97,6 +97,7 @@ const GraphInit = () => {
             query={HOME_DAO}
             setRecords={setLocalDao}
             entity='moloch'
+            context={{ network }}
             variables={{ contractAddr: daoMetadata.address }}
           />
           <GraphFetchMore
@@ -128,7 +129,7 @@ const GraphInit = () => {
           />
         </>
       ) : null}
-      {user && user.username ? (
+      {user && user.username && network ? (
         <GraphFetch
           query={USER_MEMBERSHIPS}
           setRecords={setLocalUserDaos}

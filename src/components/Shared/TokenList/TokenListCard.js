@@ -24,14 +24,14 @@ const TokenListCard = ({ token, isLoaded, isMember, isBank, hasAction }) => {
         memberWallet.activeMember &&
         isBank &&
         +token.tokenBalance > 0 &&
-        token.contractTokenBalance !== token.contractBabeBalance,
+        token.contractBalances.token !== token.contractBalances.babe,
     );
   }, [token, isMember, isBank, memberWallet]);
 
   const checkOptimisticBalance = () => {
     const optimisticBalance =
-      token.contractTokenBalance -
-      token.contractBabeBalance +
+      token.contractBalances.token -
+      token.ccontractBalances.babe +
       +token.tokenBalance;
 
     return optimisticSync ? optimisticBalance : +token.tokenBalance;
