@@ -78,8 +78,8 @@ const MinionProposalForm = () => {
   const txCallBack = (txHash, details) => {
     console.log('txCallBack', txProcessor);
     if (txProcessor && txHash) {
-      txProcessor.setTx(txHash, user.username, details, true, false);
-      txProcessor.forceUpdate = true;
+      txProcessor.setTx(txHash, user.username, details, true, false, false);
+      txProcessor.forceCheckTx = true;
 
       updateTxProcessor(txProcessor);
       // close model here
@@ -114,7 +114,11 @@ const MinionProposalForm = () => {
       Object.keys(values).forEach((param) => {
         if (param.indexOf('xparam') > -1) {
           console.log(param);
-          inputValues.push(JSON.parse(values[param]));
+          try {
+            inputValues.push(JSON.parse(values[param]));
+          } catch {
+            inputValues.push(values[param]);
+          }
         }
       });
       console.log('inputs', inputValues);

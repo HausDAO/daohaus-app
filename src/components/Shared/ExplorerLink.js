@@ -4,7 +4,7 @@ import { RiExternalLinkLine } from 'react-icons/ri';
 
 import { useNetwork } from '../../contexts/PokemolContext';
 
-const ExplorerLink = ({ type, hash, linkText, isIconLink }) => {
+const ExplorerLink = ({ type, hash, isIconLink, children }) => {
   const [network] = useNetwork();
 
   const uri = () => {
@@ -32,8 +32,13 @@ const ExplorerLink = ({ type, hash, linkText, isIconLink }) => {
       <Icon as={RiExternalLinkLine} name='transaction link' />
     </Link>
   ) : (
-    <Link href={`${uri()}${hash}`} isExternal>
-      {linkText}
+    <Link
+      href={`${uri()}${hash}`}
+      isExternal
+      display='flex'
+      alignItems='center'
+    >
+      {children}
     </Link>
   );
 };

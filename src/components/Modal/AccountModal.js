@@ -87,7 +87,7 @@ const AccountModal = ({ isOpen }) => {
                     color='green.500'
                   />
                 )}
-                <ExplorerLink type={'tx'} hash={tx.tx} isIconLink={true} />
+                <ExplorerLink type={'tx'} hash={tx.tx} isIconLink />
               </Box>
             </Flex>
           </Box>
