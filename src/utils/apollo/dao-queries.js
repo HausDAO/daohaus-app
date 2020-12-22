@@ -19,6 +19,8 @@ export const HOME_DAO = gql`
       guildBankAddress
       minions {
         minionAddress
+        minionType
+        details
       }
       depositToken {
         tokenAddress

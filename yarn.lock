@@ -2,11 +2,7 @@
 # yarn lockfile v1
 
 
-<<<<<<< HEAD
-"3box-orbitdb-plugins@github:3box/3box-orbitdb-plugins#feat/orbit-23":
-=======
 "3box-orbitdb-plugins@3box/3box-orbitdb-plugins#feat/orbit-23":
->>>>>>> feature/haus-fire
   version "1.0.7"
   resolved "https://codeload.github.com/3box/3box-orbitdb-plugins/tar.gz/b46d28ea94a508810d82c6c4c0b340676dd3e7f6"
   dependencies:
@@ -11013,8 +11009,6 @@ ipfs-repo@^0.29.3:
   version "0.29.3"
   resolved "https://registry.yarnpkg.com/ipfs-repo/-/ipfs-repo-0.29.3.tgz#553e804c4c7e68dd8c3c1b5dc55e970beb9fe5cc"
   integrity sha512-kELIrYgE94xrYmyoVvwMgIldqsnQR4d/eulYudswhaQTl7UIRHxyurg1EreofrDHChAx9Hq4PLT7zYEVjGNWNQ==
-<<<<<<< HEAD
-=======
   dependencies:
     base32.js "~0.1.0"
     bignumber.js "^9.0.0"
@@ -11040,7 +11034,6 @@ ipfs-repo@^0.30.1:
   version "0.30.1"
   resolved "https://registry.yarnpkg.com/ipfs-repo/-/ipfs-repo-0.30.1.tgz#28e43cf608f4409fb873557e2ee4d5ac8919f2f4"
   integrity sha512-t/RG/agHGRJ1yyzrwaFRDUyTZgJcdhSGFoeRIrCJuxxApjrXQZMee58SZL9al+jArRu+5sbZqcepLwwdIV95PA==
->>>>>>> feature/haus-fire
   dependencies:
     base32.js "~0.1.0"
     bignumber.js "^9.0.0"
@@ -11049,34 +11042,6 @@ ipfs-repo@^0.30.1:
     datastore-core "~0.7.0"
     datastore-fs "~0.9.0"
     datastore-level "~0.14.0"
-<<<<<<< HEAD
-    debug "^4.1.0"
-    err-code "^1.1.2"
-    interface-datastore "~0.7.0"
-    ipfs-block "~0.8.1"
-    ipfs-repo-migrations "~0.1.0"
-    just-safe-get "^1.3.0"
-    just-safe-set "^2.1.0"
-    lodash.has "^4.5.2"
-    p-queue "^6.0.0"
-    pretty-bytes "^5.3.0"
-    proper-lockfile "^4.0.0"
-    sort-keys "^3.0.0"
-
-ipfs-repo@^0.30.1:
-  version "0.30.1"
-  resolved "https://registry.yarnpkg.com/ipfs-repo/-/ipfs-repo-0.30.1.tgz#28e43cf608f4409fb873557e2ee4d5ac8919f2f4"
-  integrity sha512-t/RG/agHGRJ1yyzrwaFRDUyTZgJcdhSGFoeRIrCJuxxApjrXQZMee58SZL9al+jArRu+5sbZqcepLwwdIV95PA==
-  dependencies:
-    base32.js "~0.1.0"
-    bignumber.js "^9.0.0"
-    bytes "^3.1.0"
-    cids "~0.7.0"
-    datastore-core "~0.7.0"
-    datastore-fs "~0.9.0"
-    datastore-level "~0.14.0"
-=======
->>>>>>> feature/haus-fire
     debug "^4.1.0"
     err-code "^2.0.0"
     interface-datastore "^0.8.0"
@@ -13463,47 +13428,6 @@ libp2p-crypto@~0.13.0:
   version "0.13.0"
   resolved "https://registry.yarnpkg.com/libp2p-crypto/-/libp2p-crypto-0.13.0.tgz#25404ea43bf2fd3802780d9ab87b5d2095d86f07"
   integrity sha512-i3r1TBec/xYmC5bcpPiIs3OyUAU3iy53OdRdxqawKoWTQPjYB+TyQ4w+otT66Y0sMcw70O0wH3GFAfPmQgFn+g==
-<<<<<<< HEAD
-  dependencies:
-    asn1.js "^5.0.0"
-    async "^2.6.0"
-    browserify-aes "^1.2.0"
-    bs58 "^4.0.1"
-    keypair "^1.0.1"
-    libp2p-crypto-secp256k1 "~0.2.2"
-    multihashing-async "~0.4.8"
-    node-forge "^0.7.5"
-    pem-jwk "^1.5.1"
-    protons "^1.0.1"
-    rsa-pem-to-jwk "^1.1.3"
-    tweetnacl "^1.0.0"
-    webcrypto-shim "github:dignifiedquire/webcrypto-shim#master"
-
-libp2p-delegated-content-routing@^0.3.1:
-  version "0.3.1"
-  resolved "https://registry.yarnpkg.com/libp2p-delegated-content-routing/-/libp2p-delegated-content-routing-0.3.1.tgz#45e1711074a68d457c9b4bd92682ad06fb8857c8"
-  integrity sha512-GgEj1FHzNFH6nL0fQ5sFZWcskfWkwVLL+GtY5wZbe9izXftyg5QDVdoKSlYWQUrEjaaAJE+T4KjvtK83T/C7Yg==
-  dependencies:
-    debug "^4.1.1"
-    ipfs-http-client "^33.1.0"
-    multiaddr "^6.1.0"
-    p-queue "^6.1.0"
-
-libp2p-delegated-peer-routing@^0.3.1:
-  version "0.3.1"
-  resolved "https://registry.yarnpkg.com/libp2p-delegated-peer-routing/-/libp2p-delegated-peer-routing-0.3.1.tgz#331d129559b2b257cef5e13260d7ac50d4731768"
-  integrity sha512-WAN2rBsuiS1xqrAaZthKX9vVtXar0nH7ACAWoTNsk2BaAhhds0Shri48NB5jN//kxLo+vC7+WVn4Rgdg3Dp2sA==
-  dependencies:
-    debug "^4.1.1"
-    ipfs-http-client "^33.1.0"
-    p-queue "^6.1.0"
-    peer-id "~0.12.2"
-
-libp2p-floodsub@^0.18.0:
-  version "0.18.0"
-  resolved "https://registry.yarnpkg.com/libp2p-floodsub/-/libp2p-floodsub-0.18.0.tgz#49efd1a9936e898f62abbf041fa2f62049b796e0"
-  integrity sha512-4OihLP5A4LsxNPlfb0mq6vkjAaNu4YxuyYeoj2nNgrRSzr4H8Dz0YtA+DzEDXIgP2RBANSzS+KG9oDeUXDHa/Q==
-=======
   dependencies:
     asn1.js "^5.0.0"
     async "^2.6.0"
@@ -13559,24 +13483,6 @@ libp2p-floodsub@~0.17.1:
   version "0.17.2"
   resolved "https://registry.yarnpkg.com/libp2p-floodsub/-/libp2p-floodsub-0.17.2.tgz#c789bcd55cfb513a4d2f5291bd28d6aa2be271d1"
   integrity sha512-xOljtBcNTerBwRYFnXlJVmTwdYla9YTvBux6HaBE0GvVjPHqOI7gO5WJQ1Nul/7h5qLX5tJqZ4OY5CVn+mcuUQ==
->>>>>>> feature/haus-fire
-  dependencies:
-    async "^2.6.2"
-    bs58 "^4.0.1"
-    debug "^4.1.1"
-    length-prefixed-stream "^2.0.0"
-    libp2p-crypto "~0.16.1"
-    libp2p-pubsub "~0.2.0"
-    protons "^1.0.1"
-    pull-length-prefixed "^1.3.2"
-    pull-pushable "^2.2.0"
-    pull-stream "^3.6.9"
-
-<<<<<<< HEAD
-libp2p-floodsub@~0.17.1:
-  version "0.17.2"
-  resolved "https://registry.yarnpkg.com/libp2p-floodsub/-/libp2p-floodsub-0.17.2.tgz#c789bcd55cfb513a4d2f5291bd28d6aa2be271d1"
-  integrity sha512-xOljtBcNTerBwRYFnXlJVmTwdYla9YTvBux6HaBE0GvVjPHqOI7gO5WJQ1Nul/7h5qLX5tJqZ4OY5CVn+mcuUQ==
   dependencies:
     async "^2.6.2"
     bs58 "^4.0.1"
@@ -13595,14 +13501,6 @@ libp2p-gossipsub@~0.0.5:
   integrity sha512-7IM9hcSkc7pBWEju/a5ZGcUrEHclgVoUU7XPrMsMB7s5QNXziSbLjJvIBlgU7WOxoTmgmZldEtHPkrsPEb1C9A==
   dependencies:
     async "^2.6.2"
-=======
-libp2p-gossipsub@~0.0.5:
-  version "0.0.5"
-  resolved "https://registry.yarnpkg.com/libp2p-gossipsub/-/libp2p-gossipsub-0.0.5.tgz#0206f96cd5f9e74221fb68ce6730f86e2d529294"
-  integrity sha512-7IM9hcSkc7pBWEju/a5ZGcUrEHclgVoUU7XPrMsMB7s5QNXziSbLjJvIBlgU7WOxoTmgmZldEtHPkrsPEb1C9A==
-  dependencies:
-    async "^2.6.2"
->>>>>>> feature/haus-fire
     err-code "^1.1.2"
     libp2p-floodsub "~0.17.1"
     libp2p-pubsub "~0.2.0"
@@ -14126,11 +14024,7 @@ lodash.without@~4.4.0:
   resolved "https://registry.yarnpkg.com/lodash.without/-/lodash.without-4.4.0.tgz#3cd4574a00b67bae373a94b748772640507b7aac"
   integrity sha1-PNRXSgC2e643OpS3SHcmQFB7eqw=
 
-<<<<<<< HEAD
-"lodash@>=3.5 <5", lodash@^4.17.10, lodash@^4.17.11, lodash@^4.17.13, lodash@^4.17.14, lodash@^4.17.15, lodash@^4.17.19, lodash@^4.17.20, lodash@^4.17.4, lodash@^4.17.5, lodash@~4.17.19:
-=======
 "lodash@>=3.5 <5", lodash@^4.0.1, lodash@^4.17.10, lodash@^4.17.11, lodash@^4.17.13, lodash@^4.17.14, lodash@^4.17.15, lodash@^4.17.19, lodash@^4.17.20, lodash@^4.17.4, lodash@^4.17.5, lodash@~4.17.19:
->>>>>>> feature/haus-fire
   version "4.17.20"
   resolved "https://registry.yarnpkg.com/lodash/-/lodash-4.17.20.tgz#b44a9b6297bcb698f1c51a3545a2b3b368d59c52"
   integrity sha512-PlhdFcillOINfeV7Ni6oF1TAEayyZBoZ8bcshTHqOYJYlrqzRK5hagpagky5o4HfCzzd1TRkXPMFq6cKk9rGmA==
@@ -16511,7 +16405,6 @@ peer-book@^0.9.1:
     bs58 "^4.0.1"
     peer-id "~0.12.2"
     peer-info "~0.15.1"
-<<<<<<< HEAD
 
 peer-id@^0.11.0:
   version "0.11.0"
@@ -16528,24 +16421,6 @@ peer-id@^0.12.2, peer-id@~0.12.2, peer-id@~0.12.3:
   resolved "https://registry.yarnpkg.com/peer-id/-/peer-id-0.12.5.tgz#b22a1edc5b4aaaa2bb830b265ba69429823e5179"
   integrity sha512-3xVWrtIvNm9/OPzaQBgXDrfWNx63AftgFQkvqO6YSZy7sP3Fuadwwbn54F/VO9AnpyW/26i0WRQz9FScivXrmw==
   dependencies:
-=======
-
-peer-id@^0.11.0:
-  version "0.11.0"
-  resolved "https://registry.yarnpkg.com/peer-id/-/peer-id-0.11.0.tgz#71bd3fad8fed00e1e0868e5861c79de46ceb3788"
-  integrity sha512-C/lRJk4CWIgOdKvfO572NvHbPcUwe49I6G0toIhDB5tCohqv/qzy0uBcAK9Ww8TvYI6U4J3C8ACShV9fWjNU4w==
-  dependencies:
-    async "^2.6.1"
-    libp2p-crypto "~0.13.0"
-    lodash "^4.17.10"
-    multihashes "~0.4.13"
-
-peer-id@^0.12.2, peer-id@~0.12.2, peer-id@~0.12.3:
-  version "0.12.5"
-  resolved "https://registry.yarnpkg.com/peer-id/-/peer-id-0.12.5.tgz#b22a1edc5b4aaaa2bb830b265ba69429823e5179"
-  integrity sha512-3xVWrtIvNm9/OPzaQBgXDrfWNx63AftgFQkvqO6YSZy7sP3Fuadwwbn54F/VO9AnpyW/26i0WRQz9FScivXrmw==
-  dependencies:
->>>>>>> feature/haus-fire
     async "^2.6.3"
     class-is "^1.1.0"
     libp2p-crypto "~0.16.1"
@@ -17867,11 +17742,7 @@ pull-utf8-decoder@^1.0.2:
   resolved "https://registry.yarnpkg.com/pull-utf8-decoder/-/pull-utf8-decoder-1.0.2.tgz#a7afa2384d1e6415a5d602054126cc8de3bcbce7"
   integrity sha1-p6+iOE0eZBWl1gIFQSbMjeO8vOc=
 
-<<<<<<< HEAD
-"pull-ws@github:hugomrdias/pull-ws#fix/bundle-size":
-=======
 pull-ws@hugomrdias/pull-ws#fix/bundle-size:
->>>>>>> feature/haus-fire
   version "3.3.1"
   resolved "https://codeload.github.com/hugomrdias/pull-ws/tar.gz/8e2ce0bb3b1cd6804828316e937fff8e0bef6225"
   dependencies:

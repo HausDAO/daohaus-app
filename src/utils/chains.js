@@ -19,7 +19,7 @@ export const supportedChains = {
       'https://api.thegraph.com/subgraphs/name/odyssy-automaton/daohaus-transmutation',
     token_list:
       'https://raw.githubusercontent.com/Uniswap/default-token-list/master/src/tokens/mainnet.json',
-    minionFactoryAddr: 'gas too high',
+    minionFactoryAddr: '0x2A0D29d0a9e5DE91512805c3E2B58c1e95700dDa',
   },
   4: {
     name: 'Ethereum Rinkeby',
