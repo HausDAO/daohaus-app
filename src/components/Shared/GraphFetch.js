@@ -16,12 +16,15 @@ const GraphFetch = ({
   context,
   isStats,
   isBoosts,
+  networkOverride,
 }) => {
   const [network] = useNetwork();
   const [refetchQuery, updateRefetchQuery] = useRefetchQuery();
 
   let client;
-  if (isStats) {
+  if (networkOverride) {
+    client = supergraphClients[networkOverride];
+  } else if (isStats) {
     client = statsgraphClients[network.network_id];
   } else if (isBoosts) {
     client = boostsgraphClients[network.network_id];

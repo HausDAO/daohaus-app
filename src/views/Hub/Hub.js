@@ -1,22 +1,20 @@
 import React, { useEffect, useState } from 'react';
 import { Box, Flex, Link, Spinner } from '@chakra-ui/react';
 
-import { useNetwork, useUser } from '../../contexts/PokemolContext';
+import { useUser } from '../../contexts/PokemolContext';
 import { useTheme } from '../../contexts/CustomThemeContext';
-import GraphFetch from '../../components/Shared/GraphFetch';
 import MemberDaoList from '../../components/Hub/MemberDaoList';
 import HubSignedOut from '../../components/Hub/HubSignedOut';
 import HubProfileCard from '../../components/Hub/HubProfileCard';
 import HubActivityFeed from '../../components/Hub/HubActivityFeed';
 import TextBox from '../../components/Shared/TextBox';
 import ContentBox from '../../components/Shared/ContentBox';
-import { HUB_MEMBERSHIPS } from '../../utils/apollo/member-queries';
 import { defaultTheme } from '../../themes/theme-defaults';
+import HubGraphInit from '../../contexts/HubGraphInit';
 
 const Hub = () => {
   const [user] = useUser();
   const [, setTheme] = useTheme();
-  const [network] = useNetwork();
   const [memberDaos, setMemberDaos] = useState();
   const [localDaos, setLocalDaos] = useState([]);
 
@@ -26,12 +24,13 @@ const Hub = () => {
   }, []);
 
   useEffect(() => {
-    console.log('memberDaos', memberDaos);
-
     if (memberDaos) {
       setLocalDaos(
         memberDaos
           .filter((member) => member.moloch.version === '2')
+          .sort((a, b) => {
+            return a.hubSort - b.hubSort;
+          })
           .map((member) => member.moloch),
       );
     }
@@ -104,13 +103,8 @@ const Hub = () => {
             </Box>
           </Flex>
 
-          {network ? (
-            <GraphFetch
-              query={HUB_MEMBERSHIPS}
-              setRecords={setMemberDaos}
-              entity='membersHub'
-              variables={{ memberAddress: user.username }}
-            />
+          {user ? (
+            <HubGraphInit setHubDaos={setMemberDaos} hubDaos={memberDaos} />
           ) : null}
         </>
       ) : (

@@ -48,7 +48,7 @@ const HubActivityFeed = ({ daos }) => {
     );
     setIsLoaded(true);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [daos]);
 
   return (
     <>
