@@ -21,7 +21,6 @@
     "graphql": "^14.6.0",
     "i18next": "^19.4.4",
     "i18next-browser-languagedetector": "^4.1.1",
-    "node-sass": "^4.0.0",
     "polished": "^3.4.4",
     "rc-pagination": "^3.1.2",
     "react": "^16.14.0",
