@@ -79,6 +79,13 @@ const UserDaoInit = () => {
     const hasUserAndDao = user && daoMetadata;
     const hasReadOnlyService =
       contracts.daoService && !contracts.daoService.accountAddr;
+    const userDaoNetworkMatch =
+      user &&
+      user.providerNetwork.network ===
+        web3Connect.w3c.providerController.network;
+    console.log('user', user);
+    console.log('web3Connect', web3Connect);
+    console.log('userDaoNetworkMatch', userDaoNetworkMatch);
 
     if (hasUserAndDao && hasReadOnlyService && web3Connect.provider) {
       initWeb3DaoService();
@@ -88,12 +95,15 @@ const UserDaoInit = () => {
   }, [user, daoMetadata, contracts, web3Connect]);
 
   const initUser = async (currentNetwork, daoLoaded) => {
+    console.log('INITUSER');
     if (validDaoParam && !daoLoaded) {
+      console.log('validDaoParam && !daoLoaded');
       return;
     }
 
     let loginType = localStorage.getItem('loginType') || USER_TYPE.READ_ONLY;
-    if (user && user.type === loginType) {
+    if (user && user.type === loginType && !daoLoaded) {
+      console.log('user && user.type === loginType');
       return;
     }
 
@@ -165,6 +175,7 @@ const UserDaoInit = () => {
     }
     const apiData = daoRes.error ? {} : daoRes;
     const daoNetwork = getChainDataByName(apiData.network);
+    console.log('update dao network', daoNetwork);
     updateNetwork(daoNetwork);
 
     let boosts = {};
@@ -204,10 +215,12 @@ const UserDaoInit = () => {
     });
     updateContracts({ daoService });
 
+    console.log('daoinit inituser');
     initUser(daoNetwork, true);
   };
 
   const initWeb3DaoService = async () => {
+    console.log('initWeb3DaoService');
     const daoService = await DaoService.instantiateWithWeb3(
       user.username,
       web3Connect.provider,
@@ -219,6 +232,7 @@ const UserDaoInit = () => {
   };
 
   const initMemberWallet = async () => {
+    console.log('initMemberWallet');
     const addrByDelegateKey = await contracts.daoService.moloch.memberAddressByDelegateKey(
       user.username,
     );

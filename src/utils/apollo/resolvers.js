@@ -90,6 +90,20 @@ export const resolvers = {
     },
   },
   Member: {
+    networkId: (member, _args, context) => {
+      return context.networkId;
+    },
+    hubSort: (member, _args, context) => {
+      if (context.networkId === '4') {
+        return 4;
+      } else if (context.networkId === '42') {
+        return 3;
+      } else if (context.networkId === '100') {
+        return 2;
+      } else if (context.networkId === '1') {
+        return 1;
+      }
+    },
     profile: async (member) => {
       let profile;
       try {

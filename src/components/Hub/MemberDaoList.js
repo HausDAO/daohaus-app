@@ -17,10 +17,9 @@ const MemberDaoList = ({ daos }) => {
 
   useEffect(() => {
     const firstDaos = [...daos];
-
     setVisibleDaos(firstDaos);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [daos]);
 
   const renderDaoAvatar = (dao) => {
     const recentProposals = dao.proposals.filter((prop) => {
