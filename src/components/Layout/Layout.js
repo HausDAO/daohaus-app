@@ -25,7 +25,7 @@ import Header from '../Shared/Header';
 import { Web3SignIn } from '../Shared/Web3SignIn';
 import UserAvatar from '../Shared/UserAvatar';
 import AccountModal from '../Modal/AccountModal';
-import '../../global.scss';
+import '../../global.css';
 
 import {
   RiBookMarkLine,
