@@ -25,7 +25,7 @@ const GraphInit = () => {
   const [network] = useNetwork();
   const [user] = useUser();
   const [daoMetadata] = useDaoMetadata();
-  const [, updateUserDaos] = useUserDaos();
+  const [userDaos, updateUserDaos] = useUserDaos();
   const [localUserDaos, setLocalUserDaos] = useState();
   const [, updateProposals] = useProposals();
   const [localProposals, setLocalProposals] = useState();
@@ -129,7 +129,7 @@ const GraphInit = () => {
           />
         </>
       ) : null}
-      {user && user.username && network ? (
+      {user && user.username && network && userDaos.length === 0 ? (
         <GraphFetch
           query={USER_MEMBERSHIPS}
           setRecords={setLocalUserDaos}

@@ -13,12 +13,9 @@ const HubGraphInit = ({ hubDaos, setHubDaos }) => {
   const [daoFetch, setDaoFetch] = useState();
 
   useEffect(() => {
-    console.log('user change', user);
-
     if (user) {
       setDaoFetch(true);
     }
-
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [user]);
 

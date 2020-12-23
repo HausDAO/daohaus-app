@@ -25,16 +25,11 @@ const DaoSwitcherModal = ({ isOpen }) => {
   const { closeModals } = useModals();
 
   const renderDaoSelect = () => {
-    // TODO: REMOVE WHEN V1 is ready
     return userDaos
       .filter((dao) => dao.version === '2')
-      .map((dao) => {
+      .map((dao, i) => {
         return (
-          <Link
-            key={dao.id}
-            to={`/dao/${dao.id}`}
-            onClick={() => closeModals()}
-          >
+          <Link key={i} to={`/dao/${dao.id}`} onClick={() => closeModals()}>
             <Flex
               direction='row'
               justifyContent='space-between'

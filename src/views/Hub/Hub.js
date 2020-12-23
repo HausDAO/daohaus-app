@@ -20,6 +20,8 @@ const Hub = () => {
 
   useEffect(() => {
     setTheme(defaultTheme);
+    // reset network when coming back from a dao somehow
+    // setLocalDaos([]);
     // eslint-disable-next-line
   }, []);
 
