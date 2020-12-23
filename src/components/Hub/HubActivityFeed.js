@@ -23,7 +23,7 @@ const HubActivityFeed = ({ daos }) => {
       proposalActivities = [
         ...proposalActivities,
         ...activeProps.map((proposal) => {
-          return { ...proposal, daoTitle: dao.title };
+          return { ...proposal, daoTitle: dao.title, networkId: dao.networkId };
         }),
       ];
 
@@ -36,7 +36,7 @@ const HubActivityFeed = ({ daos }) => {
       rageActivities = [
         ...rageActivities,
         ...activeRages.map((rage) => {
-          return { ...rage, daoTitle: dao.title };
+          return { ...rage, daoTitle: dao.title, networkId: dao.networkId };
         }),
       ];
     });

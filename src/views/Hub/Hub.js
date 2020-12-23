@@ -33,7 +33,9 @@ const Hub = () => {
           .sort((a, b) => {
             return a.hubSort - b.hubSort;
           })
-          .map((member) => member.moloch),
+          .map((member) => {
+            return { ...member.moloch, networkId: member.networkId };
+          }),
       );
     }
   }, [memberDaos]);
