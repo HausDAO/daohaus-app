@@ -17,19 +17,25 @@ import {
 import makeBlockie from 'ethereum-blockies-base64';
 import { RiArrowRightSLine } from 'react-icons/ri';
 
-import { useModals, useUserDaos } from '../../contexts/PokemolContext';
+import { useDao, useModals, useUserDaos } from '../../contexts/PokemolContext';
 import BrandImg from '../../assets/Daohaus__Castle--Dark.svg';
 
 const DaoSwitcherModal = ({ isOpen }) => {
   const [userDaos] = useUserDaos();
   const { closeModals } = useModals();
+  const [, clearDaoData] = useDao();
+
+  const handleNav = () => {
+    clearDaoData();
+    closeModals();
+  };
 
   const renderDaoSelect = () => {
     return userDaos
       .filter((dao) => dao.version === '2')
       .map((dao, i) => {
         return (
-          <Link key={i} to={`/dao/${dao.id}`} onClick={() => closeModals()}>
+          <Link key={i} to={`/dao/${dao.id}`} onClick={handleNav}>
             <Flex
               direction='row'
               justifyContent='space-between'
