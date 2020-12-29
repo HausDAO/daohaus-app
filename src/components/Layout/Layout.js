@@ -40,7 +40,7 @@ import {
   RiBankLine,
   RiTrophyLine,
   RiQuestionLine,
-  RiFireLine,
+  // RiFireLine,
   RiRocket2Line,
   RiArrowLeftSLine,
   RiCloseLine,
@@ -646,10 +646,10 @@ const Layout = ({ children }) => {
                   Explore DAOs
                 </MotionBox>
               </Button>
-              <Button
+              {/* <Button
                 variant='sideNav'
-                as={Link}
-                href='https://daohaus.club/summon'
+                as={RouterLink}
+                to='/summon'
                 _hover={{ backgroundColor: 'white' }}
                 grow='none'
               >
@@ -663,7 +663,7 @@ const Layout = ({ children }) => {
                 >
                   Summon a DAO
                 </MotionBox>
-              </Button>
+              </Button> */}
               <Button
                 variant='sideNav'
                 as={Link}

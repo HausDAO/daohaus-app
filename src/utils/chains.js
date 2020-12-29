@@ -81,6 +81,7 @@ export const supportedChains = {
       'https://api.thegraph.com/subgraphs/name/odyssy-automaton/daohaus-transmutation-xdai',
     token_list: 'http://tokens.honeyswap.org/',
     minionFactoryAddr: '0x9610389d548Ca0224aCaC40eB3241c5ED88D2479',
+    wxdai_contract: ''
   },
 };
 

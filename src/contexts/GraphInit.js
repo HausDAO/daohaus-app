@@ -88,8 +88,11 @@ const GraphInit = () => {
       const currentUseDaos = userDaos || [];
       const updatedUserDaos = [
         ...currentUseDaos,
-        ...localUserDaos.map((membership) => membership.moloch),
+        ...localUserDaos.map((membership) => {
+          return { ...membership.moloch, hubSort: membership.hubSort };
+        }),
       ];
+
       updateUserDaos(updatedUserDaos);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -135,14 +138,9 @@ const GraphInit = () => {
           />
         </>
       ) : null}
-      {user && network && userDaos.length === 0 ? (
+      {/* {user && network && userDaos.length === 0 ? ( */}
+      {user && network ? (
         <>
-          {/* <GraphFetch
-          query={USER_MEMBERSHIPS}
-          setRecords={setLocalUserDaos}
-          entity='members'
-          variables={{ memberAddress: user.username }}
-        /> */}
           {Object.keys(supportedChains).map((networkId) => {
             return (
               <GraphFetch
