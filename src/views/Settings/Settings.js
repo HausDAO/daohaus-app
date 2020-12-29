@@ -7,9 +7,11 @@ import Superpowers from '../../components/Settings/Superpowers';
 import DaoContractSettings from '../../components/Settings/DaoContractSettings';
 import DaoMetaOverview from '../../components/Settings/DaoMetaOverview';
 import TextBox from '../../components/Shared/TextBox';
+import Minions from '../../components/Settings/Minions';
+import { useDao } from '../../contexts/PokemolContext';
 
 const Settings = () => {
-  // const [dao] = useDao();
+  const [dao] = useDao();
 
   return (
     <Flex p={6} wrap='wrap'>
@@ -41,6 +43,12 @@ const Settings = () => {
         <BoostStatus />
         <TextBox size='xs'>Superpowers</TextBox>
         <Superpowers />
+        {dao?.graphData && dao.graphData.minions.length > 0 && (
+          <>
+            <TextBox size='xs'>Minions</TextBox>
+            <Minions />
+          </>
+        )}
       </Box>
     </Flex>
   );
