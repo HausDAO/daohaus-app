@@ -16,6 +16,7 @@ import EnsInit from './contexts/EnsInit';
 import TxProcessorInit from './contexts/TxProcessorInit';
 import GraphInit from './contexts/GraphInit';
 import PriceInit from './contexts/PricesInit';
+import { SummonContextProvider } from './contexts/SummonContext';
 
 const chainData = supportedChains[+process.env.REACT_APP_NETWORK_ID];
 const client = new ApolloClient({
@@ -46,10 +47,12 @@ const App = () => {
       <ChakraProvider theme={theme}>
         <Router>
           <PokemolContextProvider>
-            <Init />
-            <Layout>
-              <Routes />
-            </Layout>
+            <SummonContextProvider>
+              <Init />
+              <Layout>
+                <Routes />
+              </Layout>
+            </SummonContextProvider>
           </PokemolContextProvider>
         </Router>
       </ChakraProvider>

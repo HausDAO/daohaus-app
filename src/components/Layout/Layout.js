@@ -649,7 +649,7 @@ const Layout = ({ children }) => {
               <Button
                 variant='sideNav'
                 as={Link}
-                href='https://daohaus.club/summon'
+                to='/summon'
                 _hover={{ backgroundColor: 'white' }}
                 grow='none'
               >

@@ -98,3 +98,88 @@ export const numberWithCommas = (num) => {
 
   return noZeroDec.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ',');
 };
+
+export const formatPeriodDuration = (seconds) => {
+  // const hours = moment.duration(+seconds, 'seconds').asHours();
+  // if (hours > 1) {
+  //   return `${hours} hour${hours > 1 ? 's' : ''}`;
+  // } else {
+  //   const minutes = moment.duration(+seconds, 'seconds').asMinutes();
+  //   return `${minutes} minute${minutes > 1 ? 's' : ''}`;
+  // }
+  return 0;
+};
+
+export const formatPeriodLength = (periods, duration) => {
+  // const periodSeconds = +periods * duration;
+  // const days = moment.duration(periodSeconds, 'seconds').asDays();
+  // return `${days} day${days > 1 ? 's' : ''}`;
+  return 0;
+};
+
+export const formatDepositWei = (amount) => {
+  // return utils.fromWei(amount.toString(), 'ether');
+  return 0;
+};
+
+export const periodsForForm = (daoData) => {
+  // const votingPeriod = moment
+  //   .duration(+daoData.votingPeriod * +daoData.periodDuration, 'seconds')
+  //   .asDays();
+
+  // const gracePeriod = moment
+  //   .duration(+daoData.gracePeriod * +daoData.periodDuration, 'seconds')
+  //   .asDays();
+
+  // return {
+  //   votingPeriod,
+  //   gracePeriod,
+  // };
+  return {
+    votingPeriod: 0,
+    gracePeriod: 0,
+  };
+};
+
+export const periodsFromForm = (periods, periodDuration) => {
+  // const votingSeconds = moment
+  //   .duration(+periods['formattedPeriods.votingPeriod'], 'days')
+  //   .asSeconds();
+  // const votingPeriod = +votingSeconds / +periodDuration;
+
+  // const graceSeconds = moment
+  //   .duration(+periods['formattedPeriods.gracePeriod'], 'days')
+  //   .asSeconds();
+  // const gracePeriod = +graceSeconds / +periodDuration;
+
+  return {
+    votingPeriod: 0,
+    gracePeriod: 0,
+  };
+};
+
+export const depositsForForm = (daoData) => {
+  return {
+    proposalDeposit: formatDepositWei(daoData.proposalDeposit),
+    processingReward: formatDepositWei(daoData.processingReward),
+  };
+};
+
+export const depositsFromForm = (deposits) => {
+  // const propDeposit = isNaN(+deposits['formattedDeposits.proposalDeposit'])
+  //   ? '0'
+  //   : +deposits['formattedDeposits.proposalDeposit'];
+
+  // const procReward = isNaN(+deposits['formattedDeposits.processingReward'])
+  //   ? '0'
+  //   : +deposits['formattedDeposits.processingReward'];
+
+  // return {
+  //   proposalDeposit: web3.utils.toWei(propDeposit.toString(), 'ether'),
+  //   processingReward: web3.utils.toWei(procReward.toString(), 'ether'),
+  // };
+  return {
+    proposalDeposit: 0,
+    processingReward: 0,
+  };
+};
