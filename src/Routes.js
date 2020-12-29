@@ -21,7 +21,6 @@ import DaoTheme from './views/Theme/DaoTheme';
 import NewMember from './views/Members/NewMember';
 import DaoMeta from './views/Settings/DaoMeta';
 import UploadTest from './views/Theme/UploadTest';
-import Summon from './views/Summon/Summon';
 import SummonWrapper from './views/Summon/SummonWrapper';
 
 const Routes = () => {

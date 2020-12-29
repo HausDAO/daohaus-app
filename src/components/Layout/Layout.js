@@ -40,7 +40,7 @@ import {
   RiBankLine,
   RiTrophyLine,
   RiQuestionLine,
-  RiFireLine,
+  // RiFireLine,
   RiRocket2Line,
   RiArrowLeftSLine,
   RiCloseLine,
@@ -646,7 +646,7 @@ const Layout = ({ children }) => {
                   Explore DAOs
                 </MotionBox>
               </Button>
-              <Button
+              {/* <Button
                 variant='sideNav'
                 as={RouterLink}
                 to='/summon'
@@ -663,7 +663,7 @@ const Layout = ({ children }) => {
                 >
                   Summon a DAO
                 </MotionBox>
-              </Button>
+              </Button> */}
               <Button
                 variant='sideNav'
                 as={Link}
