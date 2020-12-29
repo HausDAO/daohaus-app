@@ -15,18 +15,20 @@ import {
   Switch,
   Spinner,
 } from '@chakra-ui/react';
+import TextBox from '../Shared/TextBox';
 import { RiErrorWarningLine } from 'react-icons/ri';
 
 import {
   useDao,
   useModals,
+  useNetwork,
   useTxProcessor,
   useUser,
   useWeb3Connect,
 } from '../../contexts/PokemolContext';
 import { MinionService } from '../../utils/minion-service';
 import { AiOutlineCaretDown } from 'react-icons/ai';
-import supportedChains from '../../utils/chains';
+import { supportedChains } from '../../utils/chains';
 
 const MinionProposalForm = () => {
   const [loading, setLoading] = useState(false);
@@ -34,6 +36,7 @@ const MinionProposalForm = () => {
   const [user] = useUser();
   const [dao] = useDao();
   const [web3Connect] = useWeb3Connect();
+  const [network] = useNetwork();
 
   const [txProcessor, updateTxProcessor] = useTxProcessor();
   const [currentError, setCurrentError] = useState(null);
@@ -157,20 +160,15 @@ const MinionProposalForm = () => {
     setAbiLoading(true);
     try {
       const key =
-        +process.env.REACT_APP_NETWORK_ID === 100
-          ? ''
-          : process.env.REACT_APP_ETHERSCAN_KEY;
+        network.network_id === 100 ? '' : process.env.REACT_APP_ETHERSCAN_KEY;
       const url = `${
-        supportedChains[process.env.REACT_APP_NETWORK_ID].abi_api_url
+        supportedChains[network.network_id].abi_api_url
       }${value}${key && '&apikey=' + key}`;
       const response = await fetch(url);
       const json = await response.json();
 
       if (!json.result || json.status === '0') {
-        const msg =
-          +process.env.REACT_APP_NETWORK_ID === 100
-            ? json.message
-            : json.result;
+        const msg = network.network_id === 100 ? json.message : json.result;
         throw new Error(msg);
       }
       const _abiFunctions = getFunctions(JSON.parse(json.result));
@@ -235,18 +233,12 @@ const MinionProposalForm = () => {
         flexWrap='wrap'
       >
         <Box w={['100%', null, '50%']} pr={[0, null, 5]}>
-          <FormLabel
-            htmlFor='minionContract'
-            color='white'
-            fontFamily='heading'
-            textTransform='uppercase'
-            fontSize='xs'
-            fontWeight={700}
-          >
+          <TextBox as={FormLabel} size='xs' htmlFor='minionContract'>
             Minion Contract
-          </FormLabel>
+          </TextBox>
           <Select
             name='minionContract'
+            icon={<AiOutlineCaretDown />}
             mb={5}
             focusBorderColor='secondary.500'
             ref={register({
@@ -255,10 +247,7 @@ const MinionProposalForm = () => {
                 message: 'Minion contract is required',
               },
             })}
-            color='black'
-            backgroundColor='white'
             placeholder='Select Minion'
-            variant='flushed'
           >
             {' '}
             {minions.map((minion, idx) => (
@@ -267,16 +256,10 @@ const MinionProposalForm = () => {
               </option>
             ))}
           </Select>
-          <FormLabel
-            htmlFor='targetContract'
-            color='white'
-            fontFamily='heading'
-            textTransform='uppercase'
-            fontSize='xs'
-            fontWeight={700}
-          >
+
+          <TextBox as={FormLabel} size='xs' htmlFor='targetContract'>
             Target Contract
-          </FormLabel>
+          </TextBox>
           <Input
             name='targetContract'
             placeholder='0x'
@@ -287,20 +270,12 @@ const MinionProposalForm = () => {
                 message: 'Target contract is required',
               },
             })}
-            color='white'
             focusBorderColor='secondary.500'
             onBlur={handleBlur}
           />
-          <FormLabel
-            htmlFor='value'
-            color='white'
-            fontFamily='heading'
-            textTransform='uppercase'
-            fontSize='xs'
-            fontWeight={700}
-          >
+          <TextBox as={FormLabel} size='xs' htmlFor='value'>
             Value
-          </FormLabel>
+          </TextBox>
           <Input
             name='value'
             default='0'
@@ -335,16 +310,9 @@ const MinionProposalForm = () => {
         <Box w={['100%', null, '50%']}>
           {hexSwitch ? (
             <>
-              <FormLabel
-                htmlFor='dataValue'
-                color='white'
-                fontFamily='heading'
-                textTransform='uppercase'
-                fontSize='xs'
-                fontWeight={700}
-              >
+              <TextBox as={FormLabel} size='xs' htmlFor='dataValue'>
                 Data
-              </FormLabel>
+              </TextBox>
               <Textarea
                 name='dataValue'
                 placeholder='Raw Hex Data'
@@ -363,16 +331,9 @@ const MinionProposalForm = () => {
             </>
           ) : (
             <>
-              <FormLabel
-                htmlFor='abiFunctions'
-                color='white'
-                fontFamily='heading'
-                textTransform='uppercase'
-                fontSize='xs'
-                fontWeight={700}
-              >
+              <TextBox as={FormLabel} size='xs' htmlFor='abiFunctions'>
                 ABI Functions {abiLoading && <Spinner />}
-              </FormLabel>
+              </TextBox>
               <Select
                 name='abiFunctions'
                 placeholder='Select function'

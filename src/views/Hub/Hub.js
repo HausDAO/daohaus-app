@@ -1,36 +1,41 @@
 import React, { useEffect, useState } from 'react';
-import { Box, Flex, Link } from '@chakra-ui/react';
+import { Box, Flex, Link, Spinner } from '@chakra-ui/react';
 
 import { useUser } from '../../contexts/PokemolContext';
 import { useTheme } from '../../contexts/CustomThemeContext';
-import GraphFetch from '../../components/Shared/GraphFetch';
 import MemberDaoList from '../../components/Hub/MemberDaoList';
 import HubSignedOut from '../../components/Hub/HubSignedOut';
 import HubProfileCard from '../../components/Hub/HubProfileCard';
 import HubActivityFeed from '../../components/Hub/HubActivityFeed';
 import TextBox from '../../components/Shared/TextBox';
 import ContentBox from '../../components/Shared/ContentBox';
-import { HUB_MEMBERSHIPS } from '../../utils/apollo/member-queries';
 import { defaultTheme } from '../../themes/theme-defaults';
+import HubGraphInit from '../../contexts/HubGraphInit';
 
 const Hub = () => {
   const [user] = useUser();
   const [, setTheme] = useTheme();
   const [memberDaos, setMemberDaos] = useState();
-  const [v2Daos, setV2Daos] = useState([]);
+  const [localDaos, setLocalDaos] = useState([]);
 
   useEffect(() => {
     setTheme(defaultTheme);
+    // reset network when coming back from a dao somehow
+    // setLocalDaos([]);
     // eslint-disable-next-line
   }, []);
 
   useEffect(() => {
     if (memberDaos) {
-      // TODO: Remove when v2 is ready
-      setV2Daos(
+      setLocalDaos(
         memberDaos
           .filter((member) => member.moloch.version === '2')
-          .map((member) => member.moloch),
+          .sort((a, b) => {
+            return a.hubSort - b.hubSort;
+          })
+          .map((member) => {
+            return { ...member.moloch, networkId: member.networkId };
+          }),
       );
     }
   }, [memberDaos]);
@@ -48,9 +53,9 @@ const Hub = () => {
               <HubProfileCard />
               {memberDaos && memberDaos.length > 0 ? (
                 <ContentBox p={6} mt={6} maxW='600px'>
-                  {v2Daos.length > 0 ? (
+                  {localDaos.length > 0 ? (
                     <>
-                      <MemberDaoList daos={v2Daos} />
+                      <MemberDaoList daos={localDaos} />
                     </>
                   ) : null}
                 </ContentBox>
@@ -94,22 +99,17 @@ const Hub = () => {
               >
                 Recent Activity
               </Box>
-              {v2Daos.length > 0 ? (
-                <HubActivityFeed daos={v2Daos} />
+              {localDaos.length > 0 ? (
+                <HubActivityFeed daos={localDaos} />
               ) : (
-                <TextBox size='sm' my={35}>
-                  Recent Activity from your daos will show here
-                </TextBox>
+                <Spinner />
               )}
             </Box>
           </Flex>
 
-          <GraphFetch
-            query={HUB_MEMBERSHIPS}
-            setRecords={setMemberDaos}
-            entity='membersHub'
-            variables={{ memberAddress: user.username }}
-          />
+          {user ? (
+            <HubGraphInit setHubDaos={setMemberDaos} hubDaos={memberDaos} />
+          ) : null}
         </>
       ) : (
         <HubSignedOut />

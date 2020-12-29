@@ -150,7 +150,7 @@ const Header = () => {
           d={['none', null, null, 'flex']}
         >
           <Box fontSize='md' mr={5} as='i' fontWeight={200}>
-            {network.network}
+            {network?.network}
           </Box>
 
           {user ? (

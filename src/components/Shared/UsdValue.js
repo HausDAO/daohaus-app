@@ -6,12 +6,11 @@ const UsdValue = ({ tokenBalance, optimisticSync }) => {
   const [prices] = usePrices();
 
   const checkOptimisticBalance = () => {
-    const optimisticBalance =
-      tokenBalance.contractTokenBalance -
-      tokenBalance.contractBabeBalance +
-      +tokenBalance.tokenBalance;
-
-    return optimisticSync ? optimisticBalance : +tokenBalance.tokenBalance;
+    return optimisticSync
+      ? tokenBalance.contractBalances.token -
+          tokenBalance.contractBalances.babe +
+          +tokenBalance.tokenBalance
+      : +tokenBalance.tokenBalance;
   };
 
   const price = prices[tokenBalance.token.tokenAddress]

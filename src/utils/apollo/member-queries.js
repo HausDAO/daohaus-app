@@ -62,6 +62,8 @@ export const HUB_MEMBERSHIPS = gql`
     ) {
       id
       memberAddress
+      networkId @client
+      hubSort @client
       moloch {
         id
         title

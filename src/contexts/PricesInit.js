@@ -21,7 +21,7 @@ const PriceInit = () => {
 
     try {
       let symbolAddressMap;
-      if (network.chain_id !== 1) {
+      if (network.network_id !== 1) {
         const mainnetAddresses = await getMainetAddresses();
 
         symbolAddressMap = mainnetAddresses.reduce((map, addr) => {

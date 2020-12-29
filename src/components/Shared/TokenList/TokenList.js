@@ -29,7 +29,7 @@ const TokenList = ({ tokenList, isMember, isBank }) => {
         tokenList.some((token) => {
           return (
             +token.tokenBalance > 0 &&
-            token.contractTokenBalance !== token.contractBabeBalance
+            token.contractBalances.token !== token.contractBalances.babe
           );
         });
 

@@ -15,15 +15,19 @@ import {
 } from '@chakra-ui/react';
 import {
   useModals,
+  useNetwork,
   useUser,
   useWeb3Connect,
 } from '../../contexts/PokemolContext';
 import { MinionService } from '../../utils/minion-service';
 import abiDecoder from 'abi-decoder';
 import AddressAvatar from '../Shared/AddressAvatar';
-import supportedChains from '../../utils/chains';
+import { supportedChains } from '../../utils/chains';
+import Web3 from 'web3';
+import { getRpcUrl } from '../../utils/helpers';
 
 const ProposalMinionCard = ({ proposal }) => {
+  const [network] = useNetwork();
   const [minionDeets, setMinionDeets] = useState();
   const [decodedData, setDecodedData] = useState();
   const [loading, setLoading] = useState(true);
@@ -37,8 +41,12 @@ const ProposalMinionCard = ({ proposal }) => {
       const setupValues = {
         minion: proposal.minionAddress,
       };
+      const web3 = web3Connect
+        ? web3Connect?.web3
+        : new Web3(new Web3.providers.HttpProvider(getRpcUrl(network)));
+
       const minionService = new MinionService(
-        web3Connect?.web3,
+        web3,
         user?.username,
         setupValues,
       );
@@ -67,12 +75,10 @@ const ProposalMinionCard = ({ proposal }) => {
     const getAbi = async () => {
       try {
         const key =
-          +process.env.REACT_APP_NETWORK_ID === 100
-            ? ''
-            : process.env.REACT_APP_ETHERSCAN_KEY;
-        const url = `${
-          supportedChains[process.env.REACT_APP_NETWORK_ID].abi_api_url
-        }${minionDeets.to}${key && '&apikey=' + key}`;
+          network.network_id === 100 ? '' : process.env.REACT_APP_ETHERSCAN_KEY;
+        const url = `${supportedChains[network.network_id].abi_api_url}${
+          minionDeets.to
+        }${key && '&apikey=' + key}`;
         const response = await fetch(url);
 
         const json = await response.json();
@@ -85,6 +91,7 @@ const ProposalMinionCard = ({ proposal }) => {
       }
     };
     getAbi();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [proposal, minionDeets]);
 
   const displayDecodedData = (data) => {

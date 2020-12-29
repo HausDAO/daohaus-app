@@ -7,6 +7,7 @@ import { formatCreatedAt } from '../../utils/helpers';
 import TextBox from '../Shared/TextBox';
 import ContentBox from '../Shared/ContentBox';
 import MemberAvatar from '../Members/MemberAvatar';
+import { supportedChains } from '../../utils/chains';
 
 const ActivityCard = ({ activity, isLoaded }) => {
   const [profile, setProfile] = useState();
@@ -38,6 +39,10 @@ const ActivityCard = ({ activity, isLoaded }) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [activity]);
 
+  const networkName = (networkId) => {
+    return supportedChains[networkId].network;
+  };
+
   return (
     <ContentBox mt={3}>
       <Link to={`/dao/${activity.molochAddress}`}>
@@ -45,12 +50,14 @@ const ActivityCard = ({ activity, isLoaded }) => {
           <>
             <Skeleton isLoaded={isLoaded}>
               <TextBox size='xs' mb={2}>
-                {activity.daoTitle}
+                {activity.daoTitle}{' '}
+                {activity.networkId ? (
+                  <>- {networkName(activity.networkId)}</>
+                ) : null}
               </TextBox>
               <Heading as='h4' size='sm' fontWeight='100'>
-                {activity.proposalType}
+                {activity.proposalType}: {activity.title}
               </Heading>
-              {/* <Box>{getProposalCountdownText(activity)}</Box> */}
 
               <Stack isInline mt={3}>
                 <Badge variant='solid'>{activity.activityFeed.message}</Badge>

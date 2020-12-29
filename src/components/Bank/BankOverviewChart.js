@@ -36,7 +36,6 @@ const BankOverviewChart = ({ balances, dao }) => {
   const [prices] = usePrices();
   const [chartData, setChartData] = useState([]);
   const [timeframe, setTimeframe] = useState(bankChartTimeframes[0]);
-  console.log(chartData);
 
   useEffect(() => {
     if (balances && prices && dao) {

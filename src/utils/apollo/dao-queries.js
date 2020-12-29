@@ -34,8 +34,7 @@ export const HOME_DAO = gql`
         }
         tokenBalance
         guildBank
-        contractTokenBalance @client
-        contractBabeBalance @client
+        contractBalances @client
         moloch {
           id
           version

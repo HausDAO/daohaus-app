@@ -14,7 +14,6 @@ const DaoOverviewDetails = ({ dao }) => {
   const [user] = useUser();
   const [members] = useMembers();
   const history = useHistory();
-  console.log(user);
 
   return (
     <Box>

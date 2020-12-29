@@ -12,10 +12,6 @@ import {
 import { TokenService } from '../token-service';
 import { MolochService } from '../moloch-service';
 
-const _web3 = new Web3(
-  new Web3.providers.HttpProvider(process.env.REACT_APP_RPC_URI),
-);
-
 export const resolvers = {
   Proposal: {
     status: (proposal) => {
@@ -39,7 +35,15 @@ export const resolvers = {
   },
 
   TokenBalance: {
-    contractTokenBalance: async (tokenBalance, _args, { cache }) => {
+    contractBalances: async (tokenBalance, _args, context) => {
+      const rpcUrl =
+        context.network.network === 'xdai'
+          ? 'https://dai.poa.network '
+          : `https://${context.network.network}.infura.io/v3/${process.env.REACT_APP_INFURA_KEY}`;
+      const _web3 = new Web3(new Web3.providers.HttpProvider(rpcUrl));
+
+      let token, babe;
+
       if (tokenBalance.guildBank) {
         const tokenService = new TokenService(
           _web3,
@@ -48,27 +52,8 @@ export const resolvers = {
 
         const balance = await tokenService.balanceOf(tokenBalance.moloch.id);
 
-        return +balance;
-      } else {
-        return null;
-      }
-    },
-    tokenTotalSupply: async (tokenBalance, _args, { cache }) => {
-      if (tokenBalance.guildBank) {
-        const tokenService = new TokenService(
-          _web3,
-          tokenBalance.token.tokenAddress,
-        );
+        token = +balance;
 
-        const totalSupply = await tokenService.totalSupply();
-
-        return +totalSupply;
-      } else {
-        return null;
-      }
-    },
-    contractBabeBalance: async (tokenBalance, _args, { cache }) => {
-      if (tokenBalance.guildBank) {
         const molochService = new MolochService(
           _web3,
           tokenBalance.moloch.id,
@@ -76,15 +61,21 @@ export const resolvers = {
           2,
         );
 
-        const balance = await molochService.getUserTokenBalance(
+        const babeBalance = await molochService.getUserTokenBalance(
           '0x000000000000000000000000000000000000baBe',
           tokenBalance.token.tokenAddress,
         );
 
-        return +balance;
+        babe = +babeBalance;
       } else {
-        return null;
+        token = null;
+        babe = null;
       }
+
+      return {
+        token,
+        babe,
+      };
     },
   },
   Token: {
@@ -99,6 +90,20 @@ export const resolvers = {
     },
   },
   Member: {
+    networkId: (member, _args, context) => {
+      return context.networkId;
+    },
+    hubSort: (member, _args, context) => {
+      if (context.networkId === '4') {
+        return 4;
+      } else if (context.networkId === '42') {
+        return 3;
+      } else if (context.networkId === '100') {
+        return 2;
+      } else if (context.networkId === '1') {
+        return 1;
+      }
+    },
     profile: async (member) => {
       let profile;
       try {

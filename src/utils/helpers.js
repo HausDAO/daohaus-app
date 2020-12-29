@@ -92,6 +92,7 @@ export const stripHttpProtocol = (string) => {
   return newString === '' ? string : newString;
 };
 
+// use date FNS
 export const numberWithCommas = (num) => {
   // drop zero after decimal
   const noZeroDec = parseInt(num.split('.')[1]) === 0 ? num.split('.')[0] : num;
@@ -182,4 +183,10 @@ export const depositsFromForm = (deposits) => {
     proposalDeposit: 0,
     processingReward: 0,
   };
+};
+
+export const getRpcUrl = (network) => {
+  return network.network_id === 100
+    ? 'https://dai.poa.network '
+    : `https://${network.network}.infura.io/v3/${process.env.REACT_APP_INFURA_KEY}`;
 };
