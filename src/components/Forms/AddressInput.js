@@ -11,6 +11,7 @@ import {
 import { AiOutlineCaretDown } from 'react-icons/ai';
 import TextBox from '../Shared/TextBox';
 import { useEns, useMembers, useUser } from '../../contexts/PokemolContext';
+import { useTheme } from '../../contexts/CustomThemeContext';
 import { truncateAddr } from '../../utils/helpers';
 
 const AddressInput = ({
@@ -25,6 +26,7 @@ const AddressInput = ({
   formLabel = formLabel || 'applicant';
   const [ens] = useEns();
   const [user] = useUser();
+  const [theme] = useTheme();
   const [anyApplicant, setAnyApplicant] = useState(false);
   const [members] = useMembers();
 
@@ -45,11 +47,22 @@ const AddressInput = ({
 
   return (
     <>
-      {anyApplicant || member ? (
+      {!anyApplicant ? (
         <FormControl mb={5}>
-          <TextBox as={FormLabel} size='xs' htmlFor='applicant'>
-            {formLabel}
-          </TextBox>
+          <Flex justify='space-between'>
+            <TextBox as={FormLabel} size='xs' htmlFor='applicant'>
+              {formLabel}
+            </TextBox>
+            {!guildKick && (
+              <Button
+                onClick={() => setAnyApplicant(true)}
+                variant='outline'
+                size='xs'
+              >
+                Select
+              </Button>
+            )}
+          </Flex>
           <Input
             name='applicant'
             placeholder='0x'
@@ -71,40 +84,43 @@ const AddressInput = ({
         </FormControl>
       ) : (
         <FormControl mb={5}>
-          <TextBox as={FormLabel} size='xs' htmlFor='memberApplicant'>
-            {formLabel}
-          </TextBox>
-          <Flex>
-            <Select
-              placeholder='Select member'
-              icon={<AiOutlineCaretDown />}
-              name='memberApplicant'
-              ref={register}
-            >
-              {members &&
-                members.map((member) => {
-                  return (
-                    <option
-                      key={member.memberAddress}
-                      value={member.memberAddress}
-                    >
-                      {member.profile.name
-                        ? member.profile.name
-                        : truncateAddr(member.memberAddress)}
-                    </option>
-                  );
-                })}
-            </Select>
+          <Flex justify='space-between'>
+            <TextBox as={FormLabel} size='xs' htmlFor='memberApplicant'>
+              {formLabel}
+            </TextBox>
             {!guildKick && (
               <Button
-                onClick={() => setAnyApplicant(true)}
-                ml='2px'
+                onClick={() => setAnyApplicant(false)}
                 variant='outline'
+                size='xs'
               >
                 Other
               </Button>
             )}
           </Flex>
+          <Select
+            placeholder='Select member'
+            icon={<AiOutlineCaretDown />}
+            name='memberApplicant'
+            ref={register}
+            color='whiteAlpha.900'
+          >
+            {members &&
+              members.map((member) => {
+                return (
+                  <option
+                    key={member.memberAddress}
+                    value={member.memberAddress}
+                    color={theme.colors.whiteAlpha[900]}
+                    background={theme.colors.blackAlpha[900]}
+                  >
+                    {member.profile.name
+                      ? member.profile.name
+                      : truncateAddr(member.memberAddress)}
+                  </option>
+                );
+              })}
+          </Select>
         </FormControl>
       )}
     </>
