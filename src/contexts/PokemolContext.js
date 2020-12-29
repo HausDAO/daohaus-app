@@ -126,10 +126,11 @@ const reducer = (state, action) => {
         members: initialState.members,
         balances: initialState.balances,
         activities: initialState.activities,
-        web3Connect: action.payload,
-        network: action.payload.forceUserInit
-          ? initialState.network
-          : state.network,
+        web3Connect: action.payload ? action.payload : state.web3Connect,
+        network:
+          action.payload && action.payload.forceUserInit
+            ? initialState.network
+            : state.network,
       };
     }
     default: {

@@ -44,7 +44,7 @@ const UserDaoInit = () => {
   useEffect(() => {
     if (!validDaoParam) {
       clearDaoData({
-        ...web3Connect,
+        web3Connect: web3Connect,
         forceUserInit:
           !user ||
           web3Connect.w3c.providerController.network !==

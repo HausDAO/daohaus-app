@@ -23,8 +23,6 @@ const HubGraphInit = ({ hubDaos, setHubDaos }) => {
     if (localUserDaos) {
       // TODO: Potential dupes?
 
-      // how does this play with member dao fetch in graphinit - we need this everywhere for that dao switcher modal
-      // can we trigger that conditionally in graphinit?
       const currentHubDaos = hubDaos || [];
       const updatedHubDaos = [...currentHubDaos, ...localUserDaos];
       setHubDaos(updatedHubDaos);
