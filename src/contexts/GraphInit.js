@@ -129,7 +129,7 @@ const GraphInit = () => {
           />
         </>
       ) : null}
-      {user && user.username && network && userDaos.length === 0 ? (
+      {user && network && userDaos.length === 0 ? (
         <GraphFetch
           query={USER_MEMBERSHIPS}
           setRecords={setLocalUserDaos}

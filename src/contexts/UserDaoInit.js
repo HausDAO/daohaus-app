@@ -33,11 +33,14 @@ const UserDaoInit = () => {
   const [memberWallet, updateMemberWallet] = useMemberWallet();
   const [, setTheme] = useTheme();
 
+  // init the user/web3connect on app load/connect button
   useEffect(() => {
     initUser(network, web3Connect.forceUserInit);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [web3Connect]);
 
+  // init the dao when we're on a dao route
+  // if not clear dao data and reinit the user for nav back into the hub
   useEffect(() => {
     if (!validDaoParam) {
       clearDaoData({
@@ -56,6 +59,9 @@ const UserDaoInit = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [location]);
 
+  // if we have a dao and a user init the user wallet with data specific to that dao
+  // need to redo on dao change
+  // maybe can change in the dao switcher?
   useEffect(() => {
     const noDaoService =
       !daoMetadata ||
@@ -75,35 +81,34 @@ const UserDaoInit = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [daoMetadata, user, contracts]);
 
+  // if we have a dao and a user re-init the dao contract service with the users web3connect provider
+  // need to redo on dao change
   useEffect(() => {
     const hasUserAndDao = user && daoMetadata;
     const hasReadOnlyService =
       contracts.daoService && !contracts.daoService.accountAddr;
     const userDaoNetworkMatch =
-      user &&
-      user.providerNetwork.network ===
-        web3Connect.w3c.providerController.network;
-    console.log('user', user);
-    console.log('web3Connect', web3Connect);
-    console.log('userDaoNetworkMatch', userDaoNetworkMatch);
+      user && user.providerNetwork.network === network.network;
 
-    if (hasUserAndDao && hasReadOnlyService && web3Connect.provider) {
+    if (
+      hasUserAndDao &&
+      hasReadOnlyService &&
+      web3Connect.provider &&
+      userDaoNetworkMatch
+    ) {
       initWeb3DaoService();
     }
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [user, daoMetadata, contracts, web3Connect]);
+  }, [user, daoMetadata, contracts, web3Connect, network]);
 
   const initUser = async (currentNetwork, daoLoaded) => {
-    console.log('INITUSER');
     if (validDaoParam && !daoLoaded) {
-      console.log('validDaoParam && !daoLoaded');
       return;
     }
 
     let loginType = localStorage.getItem('loginType') || USER_TYPE.READ_ONLY;
     if (user && user.type === loginType && !daoLoaded) {
-      console.log('user && user.type === loginType');
       return;
     }
 
@@ -143,7 +148,6 @@ const UserDaoInit = () => {
             const profile = await getProfile(web3User.username);
 
             if (!validDaoParam) {
-              console.log('updating network', providerNetwork);
               updateNetwork(providerNetwork);
             }
 
@@ -175,7 +179,6 @@ const UserDaoInit = () => {
     }
     const apiData = daoRes.error ? {} : daoRes;
     const daoNetwork = getChainDataByName(apiData.network);
-    console.log('update dao network', daoNetwork);
     updateNetwork(daoNetwork);
 
     let boosts = {};
@@ -215,7 +218,6 @@ const UserDaoInit = () => {
     });
     updateContracts({ daoService });
 
-    console.log('daoinit inituser');
     initUser(daoNetwork, true);
   };
 
@@ -232,7 +234,6 @@ const UserDaoInit = () => {
   };
 
   const initMemberWallet = async () => {
-    console.log('initMemberWallet');
     const addrByDelegateKey = await contracts.daoService.moloch.memberAddressByDelegateKey(
       user.username,
     );

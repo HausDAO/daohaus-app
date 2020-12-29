@@ -14,6 +14,7 @@ const initialState = {
   network: null,
 
   refetchQuery: null,
+
   modals: {
     changeDao: false,
     accountModal: false,
