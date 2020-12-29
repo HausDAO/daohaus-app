@@ -6,15 +6,16 @@ import SummonStepOne from '../../components/Summon/SummonStepOne';
 import HardModeForm from '../../components/Summon/HardModeForm';
 import SummonStepTwo from '../../components/Summon/SummonStepTwo';
 import SummonStepThree from '../../components/Summon/SummonStepThree';
-import { useUser } from '../../contexts/PokemolContext';
+import { useNetwork, useUser } from '../../contexts/PokemolContext';
 import { Box, Heading, Text, Button } from '@chakra-ui/react';
 // import BoostPackages from '../../components/Boosts/BoostPackages';
 // import MiniLoader from '../../components/Shared/Loading/MiniLoader';
 
 const Summon = () => {
   const [user] = useUser();
+  const [network] = useNetwork();
   const [hardMode, setHardMode] = useState(false);
-  const [daoData, setDaoData] = useState(daoConstants());
+  const [daoData, setDaoData] = useState(daoConstants(network.network_id));
   const [isSummoning, setIsSummoning] = useState(false);
   const [currentStep, setCurrentStep] = useState(1);
   const { state, dispatch } = useContext(SummonContext);

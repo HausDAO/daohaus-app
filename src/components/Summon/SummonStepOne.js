@@ -3,8 +3,10 @@ import { Box, Text, Button } from '@chakra-ui/react';
 
 import { daoPresets } from '../../content/summon-presets';
 import PresetCard from './PresetCard';
+import { useNetwork } from '../../contexts/PokemolContext';
 
 const SummonStepOne = ({ daoData, setDaoData, setCurrentStep }) => {
+  const [network] = useNetwork();
   const selectPreset = (preset) => {
     setDaoData((prevState) => {
       return { ...prevState, ...preset };
@@ -12,7 +14,7 @@ const SummonStepOne = ({ daoData, setDaoData, setCurrentStep }) => {
   };
 
   const renderPresets = () => {
-    return daoPresets().map((preset) => {
+    return daoPresets(network.netork_id).map((preset) => {
       const isSelected = daoData.presetName === preset.presetName;
       return (
         <PresetCard

@@ -4,32 +4,30 @@ import imgVentures from '../assets/Daohaus__Castle--Dark.svg';
 import imgImpacts from '../assets/Daohaus__Castle--Dark.svg';
 import imgProjects from '../assets/Daohaus__Castle--Dark.svg';
 import imgClubs from '../assets/Daohaus__Castle--Dark.svg';
-import supportedChains from '../utils/chains';
+import { supportedChains } from '../utils/chains';
 
-const chainData = supportedChains[+process.env.REACT_APP_NETWORK_ID];
-
-export const daoConstants = () => {
+export const daoConstants = (networkId) => {
   const constants = {
     abortWindow: '1',
     dilutionBound: '3',
     version: '2',
   };
 
-  if (process.env.REACT_APP_NETWORK_ID === '100') {
-    constants.approvedToken = chainData.wxdai_contract;
+  if (networkId === '100') {
+    constants.approvedToken = supportedChains[100].wxdai_contract;
   }
 
   return constants;
 };
 
-export const daoPresets = () => {
+export const daoPresets = (networkId) => {
   let presets = [
     {
       presetName: 'Grants',
       presetSubtitle: 'Accelerators',
       presetDescription: 'Spread around the wealth and accelerate good stuff.',
       currency: 'WETH',
-      approvedToken: chainData.weth_contract,
+      approvedToken: supportedChains(networkId).weth_contract,
       minimumTribute: '10',
       votingPeriod: '168',
       gracePeriod: '72',
@@ -46,7 +44,7 @@ export const daoPresets = () => {
       presetDescription:
         'Invest on chain with a venture fund at your fingertips.',
       currency: 'WETH',
-      approvedToken: chainData.weth_contract,
+      approvedToken: supportedChains(networkId).weth_contract,
       minimumTribute: '50',
       votingPeriod: '7',
       gracePeriod: '7',
@@ -62,7 +60,7 @@ export const daoPresets = () => {
       presetSubtitle: 'Services',
       presetDescription: 'BuidL with fellow journeymen for clients and glory.',
       currency: 'DAI',
-      approvedToken: chainData.dai_contract,
+      approvedToken: supportedChains(networkId).dai_contract,
       minimumTribute: '100',
       votingPeriod: '60',
       gracePeriod: '24',
@@ -79,7 +77,7 @@ export const daoPresets = () => {
       presetDescription:
         'Hang with your friends and commrades to nerd out or just chill.',
       currency: 'DAI',
-      approvedToken: chainData.dai_contract,
+      approvedToken: supportedChains(networkId).dai_contract,
       minimumTribute: '10',
       votingPeriod: '4320',
       gracePeriod: '2880',
@@ -96,7 +94,7 @@ export const daoPresets = () => {
       presetDescription:
         'Decentralize to do good for the world and make an impact that lasts.',
       currency: 'DAI',
-      approvedToken: chainData.dai_contract,
+      approvedToken: supportedChains(networkId).dai_contract,
       minimumTribute: '25',
       votingPeriod: '240',
       gracePeriod: '96',
@@ -113,7 +111,7 @@ export const daoPresets = () => {
       presetDescription:
         'Raid together to get projects and products done in record time.',
       currency: 'DAI',
-      approvedToken: chainData.dai_contract,
+      approvedToken: supportedChains(networkId).dai_contract,
       minimumTribute: '250',
       votingPeriod: '60',
       gracePeriod: '36',
@@ -129,7 +127,7 @@ export const daoPresets = () => {
   if (process.env.REACT_APP_NETWORK_ID === '100') {
     presets = presets.map((preset) => {
       preset.currency = 'WXDAI';
-      preset.approvedToken = chainData.wxdai_contract;
+      preset.approvedToken = supportedChains(networkId).wxdai_contract;
       preset.proposalDeposit = '100000000000000000';
       preset.processingReward = '10000000000000000';
 
@@ -139,7 +137,7 @@ export const daoPresets = () => {
   return presets;
 };
 
-export const currencyOptions = () => {
+export const currencyOptions = (networkId) => {
   let options;
 
   if (process.env.REACT_APP_NETWORK_ID === '100') {
@@ -147,7 +145,7 @@ export const currencyOptions = () => {
       {
         value: 'WXDAI',
         label: 'WXDAI',
-        address: chainData.wxdai_contract,
+        address: supportedChains(networkId).wxdai_contract,
       },
     ];
   } else {
@@ -155,12 +153,12 @@ export const currencyOptions = () => {
       {
         value: 'DAI',
         label: 'DAI',
-        address: chainData.dai_contract,
+        address: supportedChains(networkId).dai_contract,
       },
       {
         value: 'WETH',
         label: 'WETH',
-        address: chainData.weth_contract,
+        address: supportedChains(networkId).weth_contract,
       },
     ];
   }

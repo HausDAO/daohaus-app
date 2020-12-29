@@ -10,6 +10,7 @@ import {
   depositsFromForm,
 } from '../../utils/helpers';
 import { currencyOptions } from '../../content/summon-presets';
+import { useNetwork } from '../../contexts/PokemolContext';
 
 const SummonStepThree = ({
   daoData,
@@ -17,6 +18,7 @@ const SummonStepThree = ({
   setCurrentStep,
   handleSummon,
 }) => {
+  const [network] = useNetwork();
   const {
     register,
     getValues,
@@ -78,9 +80,11 @@ const SummonStepThree = ({
   };
 
   const handleCurrencyChange = (event) => {
-    const selectedOption = currencyOptions().find((option) => {
-      return event.target.value === option.value;
-    });
+    const selectedOption = currencyOptions(network.network_id).find(
+      (option) => {
+        return event.target.value === option.value;
+      },
+    );
 
     setDaoData((prevState) => {
       return {
@@ -140,7 +144,7 @@ const SummonStepThree = ({
               onChange={handleCurrencyChange}
               className='inline-field'
             >
-              {currencyOptions().map((option) => {
+              {currencyOptions(network.network_id).map((option) => {
                 return (
                   <option value={option.value} key={option.value}>
                     {option.label}
