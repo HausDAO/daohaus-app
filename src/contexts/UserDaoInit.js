@@ -35,6 +35,7 @@ const UserDaoInit = () => {
 
   // init the user/web3connect on app load/connect button
   useEffect(() => {
+    console.log('init user', web3Connect);
     initUser(network, web3Connect.forceUserInit);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [web3Connect]);
@@ -45,7 +46,7 @@ const UserDaoInit = () => {
     if (!validDaoParam) {
       // TODO: this doesn't need to happen if we are going from one non dao route to another
       clearDaoData({
-        web3Connect: web3Connect,
+        ...web3Connect,
         forceUserInit:
           !user ||
           web3Connect.w3c.providerController.network !==
