@@ -14,7 +14,6 @@ import EnsInit from './contexts/EnsInit';
 import TxProcessorInit from './contexts/TxProcessorInit';
 import GraphInit from './contexts/GraphInit';
 import PriceInit from './contexts/PricesInit';
-import { SummonContextProvider } from './contexts/SummonContext';
 import UserDaoInit from './contexts/UserDaoInit';
 
 const chainData = supportedChains[1];
@@ -46,12 +45,10 @@ const App = () => {
       <ChakraProvider theme={theme}>
         <Router>
           <PokemolContextProvider>
-            <SummonContextProvider>
-              <Init />
-              <Layout>
-                <Routes />
-              </Layout>
-            </SummonContextProvider>
+            <Init />
+            <Layout>
+              <Routes />
+            </Layout>
           </PokemolContextProvider>
         </Router>
       </ChakraProvider>

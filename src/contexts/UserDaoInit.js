@@ -44,14 +44,15 @@ const UserDaoInit = () => {
   // if not clear dao data and reinit the user for nav back into the hub
   useEffect(() => {
     if (!validDaoParam) {
+      console.log('clrearing dao data and user reinit?');
       // TODO: this doesn't need to happen if we are going from one non dao route to another
-      clearDaoData({
-        ...web3Connect,
-        forceUserInit:
-          !user ||
-          web3Connect.w3c.providerController.network !==
-            user.providerNetwork.network,
-      });
+      // clearDaoData({
+      //   ...web3Connect,
+      //   forceUserInit:
+      //     !user ||
+      //     web3Connect.w3c.providerController.network !==
+      //       user.providerNetwork.network,
+      // });
       return;
     }
 

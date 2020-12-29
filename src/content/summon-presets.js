@@ -21,13 +21,14 @@ export const daoConstants = (networkId) => {
 };
 
 export const daoPresets = (networkId) => {
+  console.log('networkId', networkId);
   let presets = [
     {
       presetName: 'Grants',
       presetSubtitle: 'Accelerators',
       presetDescription: 'Spread around the wealth and accelerate good stuff.',
       currency: 'WETH',
-      approvedToken: supportedChains(networkId).weth_contract,
+      approvedToken: supportedChains[networkId].weth_contract,
       minimumTribute: '10',
       votingPeriod: '168',
       gracePeriod: '72',
@@ -44,7 +45,7 @@ export const daoPresets = (networkId) => {
       presetDescription:
         'Invest on chain with a venture fund at your fingertips.',
       currency: 'WETH',
-      approvedToken: supportedChains(networkId).weth_contract,
+      approvedToken: supportedChains[networkId].weth_contract,
       minimumTribute: '50',
       votingPeriod: '7',
       gracePeriod: '7',
@@ -60,7 +61,7 @@ export const daoPresets = (networkId) => {
       presetSubtitle: 'Services',
       presetDescription: 'BuidL with fellow journeymen for clients and glory.',
       currency: 'DAI',
-      approvedToken: supportedChains(networkId).dai_contract,
+      approvedToken: supportedChains[networkId].dai_contract,
       minimumTribute: '100',
       votingPeriod: '60',
       gracePeriod: '24',
@@ -77,7 +78,7 @@ export const daoPresets = (networkId) => {
       presetDescription:
         'Hang with your friends and commrades to nerd out or just chill.',
       currency: 'DAI',
-      approvedToken: supportedChains(networkId).dai_contract,
+      approvedToken: supportedChains[networkId].dai_contract,
       minimumTribute: '10',
       votingPeriod: '4320',
       gracePeriod: '2880',
@@ -94,7 +95,7 @@ export const daoPresets = (networkId) => {
       presetDescription:
         'Decentralize to do good for the world and make an impact that lasts.',
       currency: 'DAI',
-      approvedToken: supportedChains(networkId).dai_contract,
+      approvedToken: supportedChains[networkId].dai_contract,
       minimumTribute: '25',
       votingPeriod: '240',
       gracePeriod: '96',
@@ -111,7 +112,7 @@ export const daoPresets = (networkId) => {
       presetDescription:
         'Raid together to get projects and products done in record time.',
       currency: 'DAI',
-      approvedToken: supportedChains(networkId).dai_contract,
+      approvedToken: supportedChains[networkId].dai_contract,
       minimumTribute: '250',
       votingPeriod: '60',
       gracePeriod: '36',
@@ -127,7 +128,7 @@ export const daoPresets = (networkId) => {
   if (process.env.REACT_APP_NETWORK_ID === '100') {
     presets = presets.map((preset) => {
       preset.currency = 'WXDAI';
-      preset.approvedToken = supportedChains(networkId).wxdai_contract;
+      preset.approvedToken = supportedChains[networkId].wxdai_contract;
       preset.proposalDeposit = '100000000000000000';
       preset.processingReward = '10000000000000000';
 
@@ -145,7 +146,7 @@ export const currencyOptions = (networkId) => {
       {
         value: 'WXDAI',
         label: 'WXDAI',
-        address: supportedChains(networkId).wxdai_contract,
+        address: supportedChains[networkId].wxdai_contract,
       },
     ];
   } else {
@@ -153,12 +154,12 @@ export const currencyOptions = (networkId) => {
       {
         value: 'DAI',
         label: 'DAI',
-        address: supportedChains(networkId).dai_contract,
+        address: supportedChains[networkId].dai_contract,
       },
       {
         value: 'WETH',
         label: 'WETH',
-        address: supportedChains(networkId).weth_contract,
+        address: supportedChains[networkId].weth_contract,
       },
     ];
   }

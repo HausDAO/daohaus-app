@@ -22,6 +22,7 @@ import NewMember from './views/Members/NewMember';
 import DaoMeta from './views/Settings/DaoMeta';
 import UploadTest from './views/Theme/UploadTest';
 import Summon from './views/Summon/Summon';
+import SummonWrapper from './views/Summon/SummonWrapper';
 
 const Routes = () => {
   return (
@@ -108,7 +109,7 @@ const Routes = () => {
           exact
           component={DaoTheme}
         />
-        <Route path='/summon' exact component={Summon} />
+        <Route path='/summon' exact component={SummonWrapper} />
         <Route path='/themeSample' exact component={Theme} />
         <Route path='/uploadTest' exact component={UploadTest} />
         <Route exact path='/' component={Hub} />

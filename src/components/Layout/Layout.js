@@ -648,7 +648,7 @@ const Layout = ({ children }) => {
               </Button>
               <Button
                 variant='sideNav'
-                as={Link}
+                as={RouterLink}
                 to='/summon'
                 _hover={{ backgroundColor: 'white' }}
                 grow='none'

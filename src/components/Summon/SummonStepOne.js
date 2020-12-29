@@ -14,7 +14,7 @@ const SummonStepOne = ({ daoData, setDaoData, setCurrentStep }) => {
   };
 
   const renderPresets = () => {
-    return daoPresets(network.netork_id).map((preset) => {
+    return daoPresets(network.network_id).map((preset) => {
       const isSelected = daoData.presetName === preset.presetName;
       return (
         <PresetCard
