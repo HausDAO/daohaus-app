@@ -28,7 +28,7 @@ const MemberDaoList = ({ daos }) => {
     const healthCount = recentProposals.length;
 
     return (
-      <Box key={dao.id} mr={3} pb={3}>
+      <Box key={dao.id + dao.networkId} mr={3} pb={3}>
         <Link
           as={RouterLink}
           to={healthCount ? `/dao/${dao.id}/proposals` : `dao/${dao.id}`}
@@ -37,7 +37,7 @@ const MemberDaoList = ({ daos }) => {
           alignItems='center'
         >
           <Avatar
-            name={dao.title.substr(0, 1)}
+            name={dao.title ? dao.title.substr(0, 1) : 'no title'}
             src={makeBlockie(dao.id)}
             mb={3}
           >

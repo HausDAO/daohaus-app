@@ -37,14 +37,13 @@ export default class SummonService {
       });
   }
 
-  async cacheNewMoloch(newMoloch) {
+  async cacheNewMoloch(newMoloch, contractAddress = null) {
+
     const res = await post('dao', newMoloch);
     console.log('post response', res);
     if (!res) {
-      console.log('moloch creation error');
-
+      console.log('moloch api creation error');
       this.setLocal({
-        tx: this.summonTx,
         error: 'cache error',
       });
     }
@@ -65,15 +64,15 @@ export default class SummonService {
     );
   }
 
-//   { "name": "_summoner", "type": "address[]" },
-//   { "name": "_approvedTokens", "type": "address[]" },
-//   { "name": "_periodDuration", "type": "uint256" },
-//   { "name": "_votingPeriodLength", "type": "uint256" },
-//   { "name": "_gracePeriodLength", "type": "uint256" },
-//   { "name": "_proposalDeposit", "type": "uint256" },
-//   { "name": "_dilutionBound", "type": "uint256" },
-//   { "name": "_processingReward", "type": "uint256" },
-//   { "name": "_summonerShares", "type": "uint256[]" }
+  //   { "name": "_summoner", "type": "address[]" },
+  //   { "name": "_approvedTokens", "type": "address[]" },
+  //   { "name": "_periodDuration", "type": "uint256" },
+  //   { "name": "_votingPeriodLength", "type": "uint256" },
+  //   { "name": "_gracePeriodLength", "type": "uint256" },
+  //   { "name": "_proposalDeposit", "type": "uint256" },
+  //   { "name": "_dilutionBound", "type": "uint256" },
+  //   { "name": "_processingReward", "type": "uint256" },
+  //   { "name": "_summonerShares", "type": "uint256[]" }
   async summonMoloch(daoData, account, callback) {
     console.log('daoDAta', daoData);
     const _cacheMoloch = {
@@ -107,7 +106,9 @@ export default class SummonService {
       },
       callback,
     );
+    _cacheMoloch.tx = txReceipt.transactionHash;
     await this.cacheNewMoloch(_cacheMoloch);
+
     return txReceipt.transactionHash;
   }
 }

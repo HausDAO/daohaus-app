@@ -29,7 +29,7 @@ const Hub = () => {
     if (memberDaos) {
       setLocalDaos(
         memberDaos
-          .filter((member) => member.moloch.version === '2')
+          .filter((member) => member.moloch.version !== '1')
           .sort((a, b) => {
             return a.hubSort - b.hubSort;
           })

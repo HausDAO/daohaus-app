@@ -102,7 +102,7 @@ const Summon = () => {
       if (txProcessor && txHash) {
         txProcessor.setTx(txHash, user.username, details, true, false, false);
         txProcessor.forceCheckTx = true;
-
+        // state.service.cacheNewMoloch(newMoloch)
         updateTxProcessor(txProcessor);
       }
       if (!txHash) {
