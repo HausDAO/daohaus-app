@@ -125,7 +125,7 @@ export const daoPresets = (networkId) => {
     },
   ];
 
-  if (process.env.REACT_APP_NETWORK_ID === '100') {
+  if (networkId === '100') {
     presets = presets.map((preset) => {
       preset.currency = 'WXDAI';
       preset.approvedToken = supportedChains[networkId].wxdai_contract;
@@ -141,7 +141,7 @@ export const daoPresets = (networkId) => {
 export const currencyOptions = (networkId) => {
   let options;
 
-  if (process.env.REACT_APP_NETWORK_ID === '100') {
+  if (networkId === '100') {
     options = [
       {
         value: 'WXDAI',

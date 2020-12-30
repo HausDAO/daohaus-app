@@ -27,7 +27,6 @@ const UserDaoInit = () => {
   const [web3Connect, updateWeb3Connect] = useWeb3Connect();
   const [user, updateUser] = useUser();
   const [network, updateNetwork] = useNetwork();
-  const [, clearDaoData] = useDao();
   const [daoMetadata, updateDaoMetadata] = useDaoMetadata();
   const [contracts, updateContracts] = useContracts();
   const [memberWallet, updateMemberWallet] = useMemberWallet();

@@ -2,6 +2,7 @@ import React from 'react';
 import { useForm } from 'react-hook-form';
 
 import { Box, Text, Heading, Button, Input, Textarea } from '@chakra-ui/react';
+import { RiArrowLeftFill } from 'react-icons/ri';
 
 import {
   periodsForForm,
@@ -85,6 +86,7 @@ const SummonStepThree = ({
         return event.target.value === option.value;
       },
     );
+    console.log('handle change', selectedOption);
 
     setDaoData((prevState) => {
       return {
@@ -255,6 +257,16 @@ const SummonStepThree = ({
               <span className='required-field Danger'>Should be a number</span>
             )}
           </Text>
+          <Text>
+            Summoner Shares
+            <Input
+              className='inline-field'
+              name='summonerShares'
+              ref={register({
+                required: true,
+              })}
+            />
+          </Text>
         </Box>
         <Box className='StepControl'>
           <Button
@@ -262,7 +274,7 @@ const SummonStepThree = ({
             onClick={() => navigate(2)}
             disabled={!isDirty && !isValid}
           >
-            [left arrow] GO BACK
+            <RiArrowLeftFill /> GO BACK
           </Button>
           <Button
             type='submit'
