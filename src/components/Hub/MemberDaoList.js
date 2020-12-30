@@ -65,7 +65,7 @@ const MemberDaoList = ({ daos }) => {
               whiteSpace: 'nowrap',
             }}
           >
-            {dao.title}
+            {dao.apiMetadata[0].name}
           </Box>
         </Link>
       </Box>
