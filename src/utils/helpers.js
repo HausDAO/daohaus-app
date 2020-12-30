@@ -128,8 +128,6 @@ export const periodsForForm = (daoData) => {
   const gracePeriod =
     (+daoData.gracePeriod * +daoData.periodDuration) / 60 / 60 / 24;
 
-    console.log('periods for form', votingPeriod);
-
   return {
     votingPeriod,
     gracePeriod,
@@ -143,7 +141,6 @@ export const periodsFromForm = (periods, periodDuration) => {
 
   const graceSeconds = +periods['formattedPeriods.gracePeriod'] * 60 * 60 * 24;
   const gracePeriod = +graceSeconds / +periodDuration;
-  console.log('periods from form', votingPeriod);
 
   return {
     votingPeriod,

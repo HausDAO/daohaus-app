@@ -76,8 +76,9 @@ export default class SummonService {
 //   { "name": "_summonerShares", "type": "uint256[]" }
   async summonMoloch(daoData, account, callback) {
     console.log('daoDAta', daoData);
-    const cacheMoloch = {
-      summonerAddress: account,
+    const _cacheMoloch = {
+      summonerAddress: daoData.summoner[0],
+      network: supportedChains[this.networkId].network,
       name: daoData.name.trim(),
       minimumTribute: daoData.minimumTribute,
       description: daoData.description,
@@ -85,13 +86,15 @@ export default class SummonService {
       purpose: daoData.presetName || 'Grants',
     };
 
-    this.setLocal(cacheMoloch);
+    console.log('_cacheMoloch', _cacheMoloch);
+
+    this.setLocal(_cacheMoloch);
     const txReceipt = await this.sendTx(
       {
         from: account,
         name: 'summonMoloch',
         params: [
-          [account],
+          daoData.summoner,
           daoData.approvedToken.split(',').map((item) => item.trim()),
           daoData.periodDuration,
           daoData.votingPeriod,
@@ -99,12 +102,12 @@ export default class SummonService {
           daoData.proposalDeposit,
           daoData.dilutionBound,
           daoData.processingReward,
-          daoData.summonerShares.split(',').map((item) => item.trim()),
+          daoData.summonerShares,
         ],
       },
       callback,
     );
-    await this.cacheNewMoloch(cacheMoloch);
+    await this.cacheNewMoloch(_cacheMoloch);
     return txReceipt.transactionHash;
   }
 }
