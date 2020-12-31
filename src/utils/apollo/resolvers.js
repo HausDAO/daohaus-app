@@ -15,7 +15,8 @@ import { MolochService } from '../moloch-service';
 export const resolvers = {
   Moloch: {
     apiMetadata: async (moloch, _args, context) => {
-      return context.apiMetaDataJson[moloch.id];
+      // need to handle better to get proper network version
+      return context.apiMetaDataJson[moloch.id] || [];
     },
   },
   Proposal: {

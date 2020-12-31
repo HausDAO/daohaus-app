@@ -1,7 +1,8 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
 
 import { Box, Text, Heading, Button, Input, Textarea } from '@chakra-ui/react';
+import { RiArrowLeftFill } from 'react-icons/ri';
 
 import {
   periodsForForm,
@@ -18,6 +19,7 @@ const SummonStepThree = ({
   setCurrentStep,
   handleSummon,
 }) => {
+  const [multiSummoner, setMultiSummoner] = useState(false);
   const [network] = useNetwork();
   const {
     register,
@@ -85,6 +87,7 @@ const SummonStepThree = ({
         return event.target.value === option.value;
       },
     );
+    console.log('handle change', selectedOption);
 
     setDaoData((prevState) => {
       return {
@@ -255,6 +258,33 @@ const SummonStepThree = ({
               <span className='required-field Danger'>Should be a number</span>
             )}
           </Text>
+
+          {!multiSummoner ? (
+            <Text>
+              Summoner Address
+              <Input
+                className='inline-field'
+                name='summoner'
+                disabled={true}
+                ref={register({
+                  required: true,
+                })}
+              />
+              <Button onClick={() => setMultiSummoner(true)}>
+                Multi Summoner
+              </Button>
+            </Text>
+          ) : (
+            <Text>
+              Summoners and shares. Enter one address and amount of shares on
+              each line. Seperate address and amount with a space
+              <Textarea
+                className='inline-field'
+                name='summonerAndShares'
+                ref={register()}
+              />{' '}
+            </Text>
+          )}
         </Box>
         <Box className='StepControl'>
           <Button
@@ -262,7 +292,7 @@ const SummonStepThree = ({
             onClick={() => navigate(2)}
             disabled={!isDirty && !isValid}
           >
-            [left arrow] GO BACK
+            <RiArrowLeftFill /> GO BACK
           </Button>
           <Button
             type='submit'

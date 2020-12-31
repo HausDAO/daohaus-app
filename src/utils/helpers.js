@@ -1,5 +1,6 @@
 import { anyToBN } from '@netgum/utils';
 import { formatDistanceToNow, format } from 'date-fns';
+import { utils } from 'web3';
 
 export const truncateAddr = (addr) => {
   return addr.slice(0, 6) + '...' + addr.slice(-4);
@@ -15,6 +16,7 @@ export const IsJsonString = (str) => {
 };
 
 export const proposalDetails = (details) => {
+  details = details && details.replace(/(\r\n|\n|\r)/gm, ' ');
   return details && IsJsonString(details) ? JSON.parse(details) : null;
 };
 
@@ -101,61 +103,49 @@ export const numberWithCommas = (num) => {
 };
 
 export const formatPeriodDuration = (seconds) => {
-  // const hours = moment.duration(+seconds, 'seconds').asHours();
-  // if (hours > 1) {
-  //   return `${hours} hour${hours > 1 ? 's' : ''}`;
-  // } else {
-  //   const minutes = moment.duration(+seconds, 'seconds').asMinutes();
-  //   return `${minutes} minute${minutes > 1 ? 's' : ''}`;
-  // }
-  return 0;
+  const hours = +seconds / 60 / 60;
+  if (hours > 1) {
+    return `${hours} hour${hours > 1 ? 's' : ''}`;
+  } else {
+    const minutes = +seconds / 60;
+    return `${minutes} minute${minutes > 1 ? 's' : ''}`;
+  }
 };
 
 export const formatPeriodLength = (periods, duration) => {
-  // const periodSeconds = +periods * duration;
-  // const days = moment.duration(periodSeconds, 'seconds').asDays();
-  // return `${days} day${days > 1 ? 's' : ''}`;
-  return 0;
+  const periodSeconds = +periods * duration;
+  const days = periodSeconds / 60 / 60 / 24;
+  return `${days} day${days > 1 ? 's' : ''}`;
 };
 
 export const formatDepositWei = (amount) => {
-  // return utils.fromWei(amount.toString(), 'ether');
-  return 0;
+  return utils.fromWei(amount.toString(), 'ether');
 };
 
 export const periodsForForm = (daoData) => {
-  // const votingPeriod = moment
-  //   .duration(+daoData.votingPeriod * +daoData.periodDuration, 'seconds')
-  //   .asDays();
+  const votingPeriod =
+    (+daoData.votingPeriod * +daoData.periodDuration) / 60 / 60 / 24;
 
-  // const gracePeriod = moment
-  //   .duration(+daoData.gracePeriod * +daoData.periodDuration, 'seconds')
-  //   .asDays();
+  const gracePeriod =
+    (+daoData.gracePeriod * +daoData.periodDuration) / 60 / 60 / 24;
 
-  // return {
-  //   votingPeriod,
-  //   gracePeriod,
-  // };
   return {
-    votingPeriod: 0,
-    gracePeriod: 0,
+    votingPeriod,
+    gracePeriod,
   };
 };
 
 export const periodsFromForm = (periods, periodDuration) => {
-  // const votingSeconds = moment
-  //   .duration(+periods['formattedPeriods.votingPeriod'], 'days')
-  //   .asSeconds();
-  // const votingPeriod = +votingSeconds / +periodDuration;
+  const votingSeconds =
+    +periods['formattedPeriods.votingPeriod'] * 60 * 60 * 24;
+  const votingPeriod = +votingSeconds / +periodDuration;
 
-  // const graceSeconds = moment
-  //   .duration(+periods['formattedPeriods.gracePeriod'], 'days')
-  //   .asSeconds();
-  // const gracePeriod = +graceSeconds / +periodDuration;
+  const graceSeconds = +periods['formattedPeriods.gracePeriod'] * 60 * 60 * 24;
+  const gracePeriod = +graceSeconds / +periodDuration;
 
   return {
-    votingPeriod: 0,
-    gracePeriod: 0,
+    votingPeriod,
+    gracePeriod,
   };
 };
 
@@ -167,21 +157,17 @@ export const depositsForForm = (daoData) => {
 };
 
 export const depositsFromForm = (deposits) => {
-  // const propDeposit = isNaN(+deposits['formattedDeposits.proposalDeposit'])
-  //   ? '0'
-  //   : +deposits['formattedDeposits.proposalDeposit'];
+  const propDeposit = isNaN(+deposits['formattedDeposits.proposalDeposit'])
+    ? '0'
+    : +deposits['formattedDeposits.proposalDeposit'];
 
-  // const procReward = isNaN(+deposits['formattedDeposits.processingReward'])
-  //   ? '0'
-  //   : +deposits['formattedDeposits.processingReward'];
+  const procReward = isNaN(+deposits['formattedDeposits.processingReward'])
+    ? '0'
+    : +deposits['formattedDeposits.processingReward'];
 
-  // return {
-  //   proposalDeposit: web3.utils.toWei(propDeposit.toString(), 'ether'),
-  //   processingReward: web3.utils.toWei(procReward.toString(), 'ether'),
-  // };
   return {
-    proposalDeposit: 0,
-    processingReward: 0,
+    proposalDeposit: utils.toWei(propDeposit.toString(), 'ether'),
+    processingReward: utils.toWei(procReward.toString(), 'ether'),
   };
 };
 

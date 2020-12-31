@@ -12,7 +12,7 @@ import {
 } from '@chakra-ui/react';
 import TextBox from '../Shared/TextBox';
 
-const MemberDaoList = ({ daos }) => {
+const MemberDaoList = ({ daos, label }) => {
   const [visibleDaos, setVisibleDaos] = useState([]);
 
   useEffect(() => {
@@ -28,7 +28,7 @@ const MemberDaoList = ({ daos }) => {
     const healthCount = recentProposals.length;
 
     return (
-      <Box key={dao.id} mr={3} pb={3}>
+      <Box key={dao.id + dao.networkId} mr={3} pb={3}>
         <Link
           as={RouterLink}
           to={healthCount ? `/dao/${dao.id}/proposals` : `dao/${dao.id}`}
@@ -37,7 +37,7 @@ const MemberDaoList = ({ daos }) => {
           alignItems='center'
         >
           <Avatar
-            name={dao.title.substr(0, 1)}
+            name={dao.title ? dao.title.substr(0, 1) : 'no title'}
             src={makeBlockie(dao.id)}
             mb={3}
           >
@@ -65,7 +65,7 @@ const MemberDaoList = ({ daos }) => {
               whiteSpace: 'nowrap',
             }}
           >
-            {dao.apiMetadata[0].name}
+            {dao.apiMetadata[0]?.name}
           </Box>
         </Link>
       </Box>
@@ -88,10 +88,10 @@ const MemberDaoList = ({ daos }) => {
   const canSearch = daos.length > 5;
 
   return (
-    <Box w='100%'>
+    <>
       <Flex justify='space-between' alignItems='center' mb={6}>
         <TextBox size='xs'>
-          Member of {daos.length} DAO{daos.length > 1 && 's'}
+          {label} {daos.length} DAO{daos.length > 1 && 's'}
         </TextBox>
         {canSearch ? (
           <div>
@@ -108,17 +108,7 @@ const MemberDaoList = ({ daos }) => {
       <Flex direction='row' overflowX='scroll' mb={6} maxW='100%'>
         {visibleDaos.map((dao) => renderDaoAvatar(dao))}
       </Flex>
-
-      <Link
-        href='https://daohaus.club/explore'
-        isExternal
-        fontSize='md'
-        textTransform='uppercase'
-        color='secondary.500'
-      >
-        Explore more DAOs on DAOhaus
-      </Link>
-    </Box>
+    </>
   );
 };
 

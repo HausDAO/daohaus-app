@@ -1,6 +1,6 @@
 import React from 'react';
-import { Box, Text, Button } from '@chakra-ui/react';
-
+import { Box, Text, Button, Flex } from '@chakra-ui/react';
+import { RiArrowRightFill } from 'react-icons/ri';
 import { daoPresets } from '../../content/summon-presets';
 import PresetCard from './PresetCard';
 import { useNetwork } from '../../contexts/PokemolContext';
@@ -33,14 +33,14 @@ const SummonStepOne = ({ daoData, setDaoData, setCurrentStep }) => {
         <a href='/help#xDAI'>Quick Start Guide</a> on how to switch to xDAI for
         cheaper, faster interactions for your community.
       </Text>
-      <Box className='SummonStepOne__list'>{renderPresets()}</Box>
+      <Flex className='SummonStepOne__list'>{renderPresets()}</Flex>
       <Box className='StepControl'>
         <Button
           onClick={() => setCurrentStep(2)}
           disabled={!daoData.presetName}
           className={!daoData.presetName ? 'disabled' : ''}
         >
-          Continue [arrow icon]
+          Continue <RiArrowRightFill />
         </Button>
       </Box>
     </Box>

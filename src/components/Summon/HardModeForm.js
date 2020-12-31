@@ -4,6 +4,7 @@ import { Box, Heading, Text, Button, Input, Textarea } from '@chakra-ui/react';
 import { utils } from 'web3';
 
 const HardModeForm = ({ daoData, handleSummon }) => {
+
   const {
     register,
     getValues,
@@ -222,8 +223,7 @@ const HardModeForm = ({ daoData, handleSummon }) => {
             )}{' '}
           </Text>
           <Text>
-            How much is the processing reward (needs to be in wei - 18
-            decimals)?
+            How much is the processing reward?
             <Input
               className='inline-field'
               name='processingReward'
@@ -247,6 +247,15 @@ const HardModeForm = ({ daoData, handleSummon }) => {
             {errors.processingReward?.type === 'pattern' && (
               <span className='required-field'>not a number</span>
             )}{' '}
+          </Text>
+          <Text>
+            Summoners and shares. Enter one address and amount of shares on each
+            line. Seperate address and amount with a space
+            <Textarea
+              className='inline-field'
+              name='summonerAndShares'
+              ref={register()}
+            />{' '}
           </Text>
         </Box>
         <Box className='StepControl'>

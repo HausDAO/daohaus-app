@@ -2,6 +2,7 @@ import React from 'react';
 import { useForm } from 'react-hook-form';
 
 import { Box, Button, Input, Textarea } from '@chakra-ui/react';
+import { RiArrowRightFill, RiArrowLeftFill } from 'react-icons/ri';
 
 const SummonStepTwo = ({ daoData, setDaoData, setCurrentStep }) => {
   const { register, getValues, watch } = useForm({
@@ -36,14 +37,14 @@ const SummonStepTwo = ({ daoData, setDaoData, setCurrentStep }) => {
       <Box>
         <Box className='StepControl'>
           <Button onClick={() => navigate(1)} className='Outlined'>
-            [left arrow] GO BACK
+            <RiArrowLeftFill /> GO BACK
           </Button>
           <Button
             onClick={() => navigate(3)}
             disabled={!canMoveForward}
             className={!canMoveForward ? 'disabled' : ''}
           >
-            NEXT STEP [right arrow]
+            NEXT STEP <RiArrowRightFill/>
           </Button>
         </Box>
       </Box>
