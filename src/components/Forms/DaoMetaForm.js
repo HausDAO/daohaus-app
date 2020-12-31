@@ -27,12 +27,12 @@ import TextBox from '../../components/Shared/TextBox';
 const DaoMetaForm = () => {
   const [dao] = useDao();
   const [theme] = useTheme();
-  const { handleSubmit, register } = useForm();
+  const { register } = useForm();
 
   return (
     <Flex as={ContentBox} m={6} w='100%'>
       {dao && (
-        <Flex as='form' onSubmit={handleSubmit} direction='column' w='100%'>
+        <Flex as='form' direction='column' w='100%'>
           <FormControl id='name' mb={4}>
             <TextBox size='xs' mb={2}>
               Avatar & Name

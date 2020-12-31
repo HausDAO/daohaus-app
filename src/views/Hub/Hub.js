@@ -21,15 +21,11 @@ const Hub = () => {
 
   useEffect(() => {
     setTheme(defaultTheme);
-    // reset network when coming back from a dao somehow
-    // setLocalDaos([]);
     // eslint-disable-next-line
   }, []);
 
   useEffect(() => {
     if (memberDaos) {
-      console.log(memberDaos);
-
       setLocalDaos(
         memberDaos
           .filter((member) => member.moloch.version !== '1')
@@ -52,7 +48,6 @@ const Hub = () => {
             return { ...member.moloch, networkId: member.networkId };
           }),
       );
-      // console.log(localFreshDaos);
     }
   }, [memberDaos]);
 

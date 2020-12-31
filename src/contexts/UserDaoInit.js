@@ -180,9 +180,6 @@ const UserDaoInit = () => {
       }, {});
     }
 
-    const uiMeta = boosts.customTheme
-      ? boosts.customTheme.metadata
-      : defaultTheme.daoMeta;
     const version = 2;
 
     const daoService = await DaoService.instantiateWithReadOnly(
@@ -202,7 +199,6 @@ const UserDaoInit = () => {
       version,
       ...apiData,
       boosts,
-      uiMeta,
     });
     updateContracts({ daoService });
 
