@@ -100,7 +100,8 @@ const BankOverviewChart = ({ balances, dao }) => {
               <BankTotal tokenBalances={dao?.graphData?.tokenBalances} />
             </Box>
 
-            <Box isLoaded={chartData.length > 0} w='100%'>
+            {/* <Box isLoaded={chartData.length > 0} w='100%'> */}
+            <Box w='100%'>
               {chartData.length ? (
                 <>
                   <Flex justify='flex-end'>

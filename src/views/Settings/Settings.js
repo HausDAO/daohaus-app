@@ -13,8 +13,6 @@ import Minions from '../../components/Settings/Minions';
 const Settings = () => {
   const [dao] = useDao();
 
-  console.log('dao', dao);
-
   return (
     <Flex p={6} wrap='wrap'>
       <Box
