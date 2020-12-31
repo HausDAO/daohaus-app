@@ -1,17 +1,19 @@
 import React from 'react';
 import { Box, Flex } from '@chakra-ui/react';
 // import { Link as RouterLink } from 'react-router-dom';
-// import { useDao } from '../../contexts/PokemolContext';
+
+import { useDao } from '../../contexts/PokemolContext';
 import BoostStatus from '../../components/Settings/BoostStatus';
 import Superpowers from '../../components/Settings/Superpowers';
 import DaoContractSettings from '../../components/Settings/DaoContractSettings';
 import DaoMetaOverview from '../../components/Settings/DaoMetaOverview';
 import TextBox from '../../components/Shared/TextBox';
 import Minions from '../../components/Settings/Minions';
-import { useDao } from '../../contexts/PokemolContext';
 
 const Settings = () => {
   const [dao] = useDao();
+
+  console.log('dao', dao);
 
   return (
     <Flex p={6} wrap='wrap'>
