@@ -53,6 +53,7 @@ const CustomTheme = () => {
     handleThemeUpdate(previewTheme);
     const currentValues = tempTheme || defaultTheme;
     const themeUpdate = { ...currentValues, ...previewTheme };
+
     const messageHash = web3Connect.web3.utils.sha3(dao.address);
     const signature = await web3Connect.web3.eth.personal.sign(
       messageHash,

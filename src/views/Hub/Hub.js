@@ -33,7 +33,7 @@ const Hub = () => {
       setLocalDaos(
         memberDaos
           .filter((member) => member.moloch.version !== '1')
-          .filter((member) => member.moloch.title)
+          .filter((member) => member.moloch.apiMetadata[0])
           .sort((a, b) => {
             return a.hubSort - b.hubSort;
           })
@@ -44,7 +44,7 @@ const Hub = () => {
       setLocalFreshDaos(
         memberDaos
           .filter((member) => member.moloch.version !== '1')
-          .filter((member) => !member.moloch.title)
+          .filter((member) => !member.moloch.apiMetadata[0])
           .sort((a, b) => {
             return a.hubSort - b.hubSort;
           })
@@ -53,7 +53,6 @@ const Hub = () => {
           }),
       );
       // console.log(localFreshDaos);
-
     }
   }, [memberDaos]);
 
