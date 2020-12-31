@@ -9,6 +9,7 @@ import { MEMBERS_LIST, USER_MEMBERSHIPS } from '../utils/apollo/member-queries';
 import { PROPOSALS_LIST } from '../utils/apollo/proposal-queries';
 import { supportedChains } from '../utils/chains';
 import { validDaoParams } from '../utils/helpers';
+import { getApiMetadata } from '../utils/requests';
 import {
   useMembers,
   useProposals,
@@ -39,6 +40,7 @@ const GraphInit = () => {
   const [, updateDaoGraphData] = useDaoGraphData();
   const [localDao, setLocalDao] = useState();
   const [daoFetch, setDaoFetch] = useState();
+  const [userDaoFetch, setUserDaoFetch] = useState();
 
   const { address } = daoMetadata || { address: null };
 
@@ -47,6 +49,17 @@ const GraphInit = () => {
     setDaoFetch(validParam && address && network);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [daoMetadata, location, network]);
+
+  useEffect(() => {
+    const fetchDaoMeta = async () => {
+      const mdRes = await getApiMetadata();
+      setUserDaoFetch(mdRes);
+    };
+
+    if (user && network) {
+      fetchDaoMeta();
+    }
+  }, [user, network]);
 
   useEffect(() => {
     if (localDao) {
@@ -88,8 +101,11 @@ const GraphInit = () => {
       const currentUseDaos = userDaos || [];
       const updatedUserDaos = [
         ...currentUseDaos,
-        ...localUserDaos.map((membership) => membership.moloch),
+        ...localUserDaos.map((membership) => {
+          return { ...membership.moloch, hubSort: membership.hubSort };
+        }),
       ];
+
       updateUserDaos(updatedUserDaos);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -135,14 +151,8 @@ const GraphInit = () => {
           />
         </>
       ) : null}
-      {user && network && userDaos.length === 0 ? (
+      {user && network && userDaoFetch ? (
         <>
-          {/* <GraphFetch
-          query={USER_MEMBERSHIPS}
-          setRecords={setLocalUserDaos}
-          entity='members'
-          variables={{ memberAddress: user.username }}
-        /> */}
           {Object.keys(supportedChains).map((networkId) => {
             return (
               <GraphFetch
@@ -152,7 +162,10 @@ const GraphInit = () => {
                 entity='members'
                 variables={{ memberAddress: user.username }}
                 networkOverride={networkId}
-                context={{ networkId: networkId }}
+                context={{
+                  networkId: networkId,
+                  apiMetaDataJson: userDaoFetch,
+                }}
               />
             );
           })}

@@ -4,7 +4,6 @@ import { useToast } from '@chakra-ui/react';
 
 import {
   useContracts,
-  useDao,
   useDaoMetadata,
   useMemberWallet,
   useNetwork,
@@ -34,24 +33,13 @@ const UserDaoInit = () => {
 
   // init the user/web3connect on app load/connect button
   useEffect(() => {
-    console.log('init user', web3Connect);
     initUser(network, web3Connect.forceUserInit);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [web3Connect]);
 
   // init the dao when we're on a dao route
-  // if not clear dao data and reinit the user for nav back into the hub
   useEffect(() => {
     if (!validDaoParam) {
-      console.log('clrearing dao data and user reinit?');
-      // TODO: this doesn't need to happen if we are going from one non dao route to another
-      // clearDaoData({
-      //   ...web3Connect,
-      //   forceUserInit:
-      //     !user ||
-      //     web3Connect.w3c.providerController.network !==
-      //       user.providerNetwork.network,
-      // });
       return;
     }
 
@@ -62,8 +50,6 @@ const UserDaoInit = () => {
   }, [location]);
 
   // if we have a dao and a user init the user wallet with data specific to that dao
-  // need to redo on dao change
-  // maybe can change in the dao switcher?
   useEffect(() => {
     const noDaoService =
       !daoMetadata ||
@@ -78,13 +64,13 @@ const UserDaoInit = () => {
       memberWallet &&
       memberWallet.daoAddress === contracts.daoService.daoAddress;
     if (!walletExists) {
+      console.log('initmember wallet');
       initMemberWallet();
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [daoMetadata, user, contracts]);
 
   // if we have a dao and a user re-init the dao contract service with the users web3connect provider
-  // need to redo on dao change
   useEffect(() => {
     const hasUserAndDao = user && daoMetadata;
     const hasReadOnlyService =
@@ -224,7 +210,6 @@ const UserDaoInit = () => {
   };
 
   const initWeb3DaoService = async () => {
-    console.log('initWeb3DaoService');
     const daoService = await DaoService.instantiateWithWeb3(
       user.username,
       web3Connect.provider,

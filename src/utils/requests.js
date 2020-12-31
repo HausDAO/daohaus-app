@@ -1,6 +1,7 @@
 const metadataApiUrl = 'https://data.daohaus.club';
 const geckoURL = 'https://api.coingecko.com/api/v3/simple/token_price';
 const uniswapGhList = 'https://raw.githubusercontent.com';
+const apiMetadataUrl = 'https://daohaus-metadata.s3.amazonaws.com/daoMeta.json';
 
 export const get = async (endpoint) => {
   const url = `${metadataApiUrl}/${endpoint}`;
@@ -117,6 +118,15 @@ export const ipfsPost = async (creds, file) => {
       },
       body: file,
     });
+    return response.json();
+  } catch (err) {
+    throw new Error(err);
+  }
+};
+
+export const getApiMetadata = async () => {
+  try {
+    const response = await fetch(apiMetadataUrl);
     return response.json();
   } catch (err) {
     throw new Error(err);

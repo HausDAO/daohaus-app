@@ -13,6 +13,11 @@ import { TokenService } from '../token-service';
 import { MolochService } from '../moloch-service';
 
 export const resolvers = {
+  Moloch: {
+    apiMetadata: async (moloch, _args, context) => {
+      return context.apiMetaDataJson[moloch.id];
+    },
+  },
   Proposal: {
     status: (proposal) => {
       return determineProposalStatus(proposal, proposal.moloch);
@@ -33,7 +38,6 @@ export const resolvers = {
       return determineUnreadActivityFeed(proposal);
     },
   },
-
   TokenBalance: {
     contractBalances: async (tokenBalance, _args, context) => {
       const rpcUrl =

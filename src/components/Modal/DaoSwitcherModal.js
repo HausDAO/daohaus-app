@@ -17,22 +17,41 @@ import {
 import makeBlockie from 'ethereum-blockies-base64';
 import { RiArrowRightSLine } from 'react-icons/ri';
 
-import { useDao, useModals, useUserDaos } from '../../contexts/PokemolContext';
+import {
+  useDao,
+  useModals,
+  useUser,
+  useUserDaos,
+  useWeb3Connect,
+} from '../../contexts/PokemolContext';
 import BrandImg from '../../assets/Daohaus__Castle--Dark.svg';
 
 const DaoSwitcherModal = ({ isOpen }) => {
   const [userDaos] = useUserDaos();
   const { closeModals } = useModals();
+  const [web3Connect] = useWeb3Connect();
+  const [user] = useUser();
   const [, clearDaoData] = useDao();
 
-  const handleNav = () => {
-    clearDaoData();
+  const handleNav = (fromHub) => {
+    if (fromHub) {
+      clearDaoData({
+        ...web3Connect,
+        forceUserInit:
+          !user ||
+          web3Connect.w3c.providerController.network !==
+            user.providerNetwork.network,
+      });
+    } else {
+      clearDaoData();
+    }
     closeModals();
   };
 
   const renderDaoSelect = () => {
     return userDaos
       .filter((dao) => dao.version === '2')
+      .sort((a, b) => a.hubSort - b.hubSort)
       .map((dao, i) => {
         return (
           <Link key={i} to={`/dao/${dao.id}`} onClick={handleNav}>
@@ -84,7 +103,7 @@ const DaoSwitcherModal = ({ isOpen }) => {
           maxH='300px'
           overflowY='scroll'
         >
-          <Link to='/' onClick={() => closeModals()}>
+          <Link to='/' onClick={() => handleNav(true)}>
             <Flex
               direction='row'
               justifyContent='space-between'

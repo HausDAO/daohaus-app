@@ -1,5 +1,8 @@
 import React from 'react';
 
+import ContentBox from '../Shared/ContentBox';
+import TextBox from '../Shared/TextBox';
+
 import {
   formatPeriodDuration,
   formatPeriodLength,
@@ -10,14 +13,16 @@ import { Box, Text, Heading } from '@chakra-ui/react';
 
 const PresetCard = ({ preset, selectPreset, isSelected }) => {
   return (
-    <Box
-      className={isSelected ? 'PresetCard isSelected' : 'PresetCard'}
+    <ContentBox
+      borderWidth='2px'
+      borderColor={isSelected ? preset.color : 'transparent'}
       key={preset.presetName}
       onClick={() => selectPreset(preset)}
+      width='33%'
     >
       <Box className='PresetCard__Inner'>
         <Box className='PresetCard__Front'>
-          <img src={preset.img} alt='daohaus' />
+          <img width='48px' src={preset.img} alt='daohaus' />
           <Heading as='h4' style={{ color: preset.color }}>
             {preset.presetName}
           </Heading>
@@ -26,13 +31,8 @@ const PresetCard = ({ preset, selectPreset, isSelected }) => {
           </Heading>
           <Text>{preset.presetDescription}</Text>
         </Box>
-        <Box className='PresetCard__Back'>
-          <Heading as='h4' style={{ color: preset.color }}>
-            {preset.presetName}
-          </Heading>
-          <Heading as='h5' style={{ color: preset.color }}>
-            Default Settings
-          </Heading>
+        <Box className='PresetCard__Back' mt={4}>
+          <TextBox style={{ color: preset.color }}>Default Settings</TextBox>
           <Text>
             Currency: <strong>{preset.currency}</strong>
           </Text>
@@ -71,7 +71,7 @@ const PresetCard = ({ preset, selectPreset, isSelected }) => {
           <Text>* You can change these later</Text>
         </Box>
       </Box>
-    </Box>
+    </ContentBox>
   );
 };
 

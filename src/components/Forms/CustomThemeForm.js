@@ -7,6 +7,7 @@ import {
   Box,
   Select,
   Image,
+  Text,
 } from '@chakra-ui/react';
 import { AiOutlineCaretDown } from 'react-icons/ai';
 import { SketchPicker } from 'react-color';
@@ -16,6 +17,8 @@ import ContentBox from '../Shared/ContentBox';
 import TextBox from '../Shared/TextBox';
 import GenericModal from '../Modal/GenericModal';
 import { ipfsPost, ipfsPrePost } from '../../utils/requests';
+import { themeImagePath } from '../../utils/helpers';
+import { defaultTheme } from '../../themes/theme-defaults';
 
 const bodyFonts = [
   'Rubik',
@@ -40,30 +43,22 @@ const dataFonts = [
   'Cutive Mono',
 ];
 
-const ThemeColorsForm = ({
-  previewTheme,
-  setPreviewTheme,
-  handlePreviewUpdate,
-  handleThemeUpdate,
-  resetTheme,
-}) => {
+const CustomThemeForm = ({ previewTheme, setPreviewTheme }) => {
   const [theme] = useTheme();
   const [dao] = useDao();
   const [imageUrl, setImageUrl] = useState(null);
   const [imageUpload, setImageUpload] = useState(null);
   const [imagePicker, setImagePicker] = useState(null);
   const [pickerOpen, setPickerOpen] = useState(null);
+  const [uploading, setUploading] = useState();
   const { modals, openModal, closeModals } = useModals();
   let upload = useRef();
-
-  console.log(previewTheme);
 
   const handleChange = (color, item) => {
     setPreviewTheme({
       ...previewTheme,
       [item]: color.hex,
     });
-    setPickerOpen(null);
   };
 
   const handleSelectChange = (event) => {
@@ -78,6 +73,20 @@ const ThemeColorsForm = ({
     upload.click();
   };
 
+  const handleClearImage = (type) => {
+    if (type === 'bg') {
+      setPreviewTheme({
+        ...previewTheme,
+        bgImg: '',
+      });
+    } else {
+      setPreviewTheme({
+        ...previewTheme,
+        brandImg: defaultTheme.brandImg,
+      });
+    }
+  };
+
   const handleFileSet = async (event) => {
     console.log(event);
     setImageUrl(URL.createObjectURL(upload.files[0]));
@@ -86,19 +95,13 @@ const ThemeColorsForm = ({
     setImageUpload(formData);
     openModal('imageHandler');
   };
-  console.log(imagePicker);
 
   const handleUpload = async () => {
-    console.log('uploading', imageUpload);
-
+    setUploading(true);
     const keyRes = await ipfsPrePost('dao/ipfs-key', {
       daoAddress: dao.address,
     });
-
-    console.log('keyRes', keyRes);
-
     const ipfsRes = await ipfsPost(keyRes, imageUpload);
-
     console.log('ipfsRes', ipfsRes);
     setPreviewTheme({
       ...previewTheme,
@@ -107,6 +110,7 @@ const ThemeColorsForm = ({
     setImagePicker(null);
     setImageUpload(null);
     setImageUrl(null);
+    setUploading(false);
     closeModals();
   };
 
@@ -118,10 +122,16 @@ const ThemeColorsForm = ({
             <TextBox>How&apos;s this look?</TextBox>
             <Image src={imageUrl} maxH='500px' objectFit='cover' my={4} />
             <ButtonGroup>
-              <Button variant='outline' onClick={handleBrowse}>
+              <Button
+                variant='outline'
+                onClick={handleBrowse}
+                disabled={uploading}
+              >
                 Select Another
               </Button>
-              <Button onClick={handleUpload}>Confirm</Button>
+              <Button onClick={handleUpload} disabled={uploading}>
+                Confirm
+              </Button>
             </ButtonGroup>
           </Flex>
         </GenericModal>
@@ -129,15 +139,16 @@ const ThemeColorsForm = ({
           <TextBox size='xs'>Colors</TextBox>
           <Flex justify='space-between' align='center'>
             <TextBox size='sm'>Primary</TextBox>
-            <Box
-              w='35px'
-              h='35px'
-              borderRadius='25px'
-              border={`1px solid ${theme.colors.whiteAlpha[800]}`}
-              bg={previewTheme?.primary500}
-              onClick={() => setPickerOpen('primary')}
-              _hover={{ cursor: 'pointer' }}
-            >
+            <Box>
+              <Box
+                w='35px'
+                h='35px'
+                borderRadius='25px'
+                border={`1px solid ${theme.colors.whiteAlpha[800]}`}
+                bg={previewTheme?.primary500}
+                onClick={() => setPickerOpen('primary')}
+                _hover={{ cursor: 'pointer' }}
+              />
               {pickerOpen === 'primary' ? (
                 <Box position='absolute' zIndex={2}>
                   <Box
@@ -150,7 +161,10 @@ const ThemeColorsForm = ({
                   />
                   <SketchPicker
                     color={previewTheme?.primary500}
-                    onChange={(color) => handleChange(color, 'primary500')}
+                    onChangeComplete={(color) =>
+                      handleChange(color, 'primary500')
+                    }
+                    disableAlpha={true}
                   />
                 </Box>
               ) : null}
@@ -158,15 +172,16 @@ const ThemeColorsForm = ({
           </Flex>
           <Flex justify='space-between' align='center'>
             <TextBox size='sm'>Secondary</TextBox>
-            <Box
-              w='35px'
-              h='35px'
-              borderRadius='25px'
-              border={`1px solid ${theme.colors.whiteAlpha[800]}`}
-              bg={previewTheme?.secondary500}
-              onClick={() => setPickerOpen('secondary')}
-              _hover={{ cursor: 'pointer' }}
-            >
+            <Box>
+              <Box
+                w='35px'
+                h='35px'
+                borderRadius='25px'
+                border={`1px solid ${theme.colors.whiteAlpha[800]}`}
+                bg={previewTheme?.secondary500}
+                onClick={() => setPickerOpen('secondary')}
+                _hover={{ cursor: 'pointer' }}
+              />
               {pickerOpen === 'secondary' ? (
                 <Box position='absolute' zIndex={2}>
                   <Box
@@ -180,6 +195,7 @@ const ThemeColorsForm = ({
                   <SketchPicker
                     color={previewTheme?.secondary500}
                     onChange={(color) => handleChange(color, 'secondary500')}
+                    disableAlpha={true}
                   />
                 </Box>
               ) : null}
@@ -187,15 +203,16 @@ const ThemeColorsForm = ({
           </Flex>
           <Flex justify='space-between' align='center'>
             <TextBox size='sm'>Background</TextBox>
-            <Box
-              w='35px'
-              h='35px'
-              borderRadius='25px'
-              border={`1px solid ${theme.colors.whiteAlpha[800]}`}
-              bg={previewTheme?.background500}
-              onClick={() => setPickerOpen('background')}
-              _hover={{ cursor: 'pointer' }}
-            >
+            <Box>
+              <Box
+                w='35px'
+                h='35px'
+                borderRadius='25px'
+                border={`1px solid ${theme.colors.whiteAlpha[800]}`}
+                bg={previewTheme?.bg500}
+                onClick={() => setPickerOpen('background')}
+                _hover={{ cursor: 'pointer' }}
+              />
               {pickerOpen === 'background' ? (
                 <Box position='absolute' zIndex={2}>
                   <Box
@@ -207,8 +224,9 @@ const ThemeColorsForm = ({
                     onClick={() => setPickerOpen(null)}
                   />
                   <SketchPicker
-                    color={previewTheme?.background500}
-                    onChange={(color) => handleChange(color, 'background500')}
+                    color={previewTheme?.bg500}
+                    onChange={(color) => handleChange(color, 'bg500')}
+                    disableAlpha={true}
                   />
                 </Box>
               ) : null}
@@ -292,27 +310,73 @@ const ThemeColorsForm = ({
             Images
           </TextBox>
           <ButtonGroup>
-            <Button
-              id='brandImg'
-              variant='outline'
-              onClick={() => {
-                setImagePicker('brandImg');
-                handleBrowse();
-              }}
-            >
-              Logo
-            </Button>
-            <Button
-              id='bgImg'
-              mb={3}
-              variant='outline'
-              onClick={() => {
-                setImagePicker('bgImg');
-                handleBrowse();
-              }}
-            >
-              Background
-            </Button>
+            <Box>
+              <Button
+                id='brandImg'
+                variant='outline'
+                onClick={() => {
+                  setImagePicker('brandImg');
+                  handleBrowse();
+                }}
+              >
+                Logo
+              </Button>
+
+              {previewTheme?.brandImg ? (
+                <>
+                  <Image
+                    src={themeImagePath(previewTheme.brandImg)}
+                    alt='brand image'
+                    w='50px'
+                    h='50px'
+                  />
+
+                  {previewTheme.brandImg.slice(0, 1) !== '/' ? (
+                    <Text
+                      fontSize='xs'
+                      onClick={() => {
+                        handleClearImage('brand');
+                      }}
+                      _hover={{ cursor: 'pointer' }}
+                    >
+                      Clear Brand Image and use default
+                    </Text>
+                  ) : null}
+                </>
+              ) : null}
+            </Box>
+            <Box>
+              <Button
+                id='bgImg'
+                mb={3}
+                variant='outline'
+                onClick={() => {
+                  setImagePicker('bgImg');
+                  handleBrowse();
+                }}
+              >
+                Background
+              </Button>
+              {previewTheme?.bgImg ? (
+                <>
+                  <Image
+                    src={themeImagePath(previewTheme.bgImg)}
+                    alt='bg image'
+                    w='50px'
+                    h='50px'
+                  />
+                  <Text
+                    fontSize='xs'
+                    onClick={() => {
+                      handleClearImage('bg');
+                    }}
+                    _hover={{ cursor: 'pointer' }}
+                  >
+                    Clear Background Image and use color
+                  </Text>
+                </>
+              ) : null}
+            </Box>
           </ButtonGroup>
         </Flex>
       </ContentBox>
@@ -338,4 +402,4 @@ const ThemeColorsForm = ({
   );
 };
 
-export default ThemeColorsForm;
+export default CustomThemeForm;

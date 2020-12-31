@@ -135,7 +135,7 @@ const Summon = () => {
   }, [state]);
 
   return (
-    <>
+    <Box p={6}>
       {user && user.username ? (
         <Box>
           <Box className='Summon__hero'>
@@ -234,7 +234,7 @@ const Summon = () => {
           </Box>
         </Box>
       ) : null}
-    </>
+    </Box>
   );
 };
 
