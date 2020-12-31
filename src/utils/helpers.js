@@ -175,3 +175,17 @@ export const getRpcUrl = (network) => {
     ? 'https://dai.poa.network '
     : `https://${network.network}.infura.io/v3/${process.env.REACT_APP_INFURA_KEY}`;
 };
+
+export const themeImagePath = (imageValue) => {
+  if (
+    !imageValue ||
+    imageValue.slice(0, 1) === '/' ||
+    imageValue.slice(0, 4) === 'http'
+  ) {
+    return imageValue;
+  }
+
+  if (imageValue.slice(0, 2) === 'Qm') {
+    return `https://ipfs.infura.io/ipfs/${imageValue}`;
+  }
+};

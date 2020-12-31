@@ -4,25 +4,28 @@ import GraphFetch from '../components/Shared/GraphFetch';
 import { HUB_MEMBERSHIPS } from '../utils/apollo/member-queries';
 import { supportedChains } from '../utils/chains';
 import { useUser, useUserDaos } from './PokemolContext';
+import { getApiMetadata } from '../utils/requests';
 
 const HubGraphInit = ({ hubDaos, setHubDaos }) => {
   const [user] = useUser();
   const [userDaos, updateUserDaos] = useUserDaos();
   const [localUserDaos, setLocalUserDaos] = useState();
-
   const [daoFetch, setDaoFetch] = useState();
 
   useEffect(() => {
+    const fetchDaos = async () => {
+      const mdRes = await getApiMetadata();
+      setDaoFetch(mdRes);
+    };
+
     if (user) {
-      setDaoFetch(true);
+      fetchDaos();
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [user]);
 
   useEffect(() => {
     if (localUserDaos) {
-      // TODO: Potential dupes?
-
       const currentHubDaos = hubDaos || [];
       const updatedHubDaos = [...currentHubDaos, ...localUserDaos];
       setHubDaos(updatedHubDaos);
@@ -50,7 +53,7 @@ const HubGraphInit = ({ hubDaos, setHubDaos }) => {
                 entity='membersHub'
                 variables={{ memberAddress: user.username }}
                 networkOverride={networkId}
-                context={{ networkId: networkId }}
+                context={{ networkId: networkId, apiMetaDataJson: daoFetch }}
               />
             );
           })}

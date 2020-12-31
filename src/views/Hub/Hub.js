@@ -40,6 +40,8 @@ const Hub = () => {
     }
   }, [memberDaos]);
 
+  console.log('memberDaos', memberDaos);
+
   return (
     <Box p={6}>
       {user ? (

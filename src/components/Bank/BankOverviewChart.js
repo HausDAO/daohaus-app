@@ -9,6 +9,7 @@ import {
 } from 'react-vis';
 import {
   Box,
+  Text,
   Flex,
   Menu,
   MenuButton,
@@ -38,7 +39,7 @@ const BankOverviewChart = ({ balances, dao }) => {
   const [timeframe, setTimeframe] = useState(bankChartTimeframes[0]);
 
   useEffect(() => {
-    if (balances && prices && dao) {
+    if (balances.length && dao.graphData) {
       const filteredBalances = balancesWithValue(balances, prices);
       if (filteredBalances[0]) {
         const dateRange = getDateRange(
@@ -65,11 +66,10 @@ const BankOverviewChart = ({ balances, dao }) => {
         }
 
         setChartData(data);
-      } else {
-        setChartData([]);
       }
     }
-  }, [balances, prices, timeframe, dao]);
+    // eslint-disable-next-line
+  }, [balances, timeframe, dao]);
 
   const handleTimeChange = (time) => {
     setChartData([]);
@@ -93,7 +93,7 @@ const BankOverviewChart = ({ balances, dao }) => {
 
   return (
     <Box>
-      {balances?.length > 0 ? (
+      {balances.length ? (
         <ContentBox minH='360px'>
           <Flex wrap='wrap' align='center' position='relative'>
             <Box position='absolute' top='0px' left='10px'>
@@ -101,7 +101,7 @@ const BankOverviewChart = ({ balances, dao }) => {
             </Box>
 
             <Box isLoaded={chartData.length > 0} w='100%'>
-              {chartData.length > 0 ? (
+              {chartData.length ? (
                 <>
                   <Flex justify='flex-end'>
                     <Menu>
@@ -172,14 +172,7 @@ const BankOverviewChart = ({ balances, dao }) => {
           align='center'
           justify='center'
         >
-          <Spinner
-            thickness='6px'
-            speed='0.45s'
-            emptyColor='whiteAlpha.300'
-            color='primary.500'
-            size='xl'
-            my={20}
-          />
+          <Text>The bank has a $0 balance</Text>
         </Flex>
       )}
     </Box>

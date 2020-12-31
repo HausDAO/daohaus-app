@@ -68,6 +68,7 @@ export const HUB_MEMBERSHIPS = gql`
         id
         title
         version
+        apiMetadata @client
         proposals(orderBy: proposalId, orderDirection: desc, first: 10) {
           id
           createdAt
@@ -121,6 +122,7 @@ export const USER_MEMBERSHIPS = gql`
         id
         title
         version
+        apiMetadata @client
       }
     }
   }
