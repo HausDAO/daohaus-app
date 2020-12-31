@@ -28,6 +28,8 @@ const Hub = () => {
 
   useEffect(() => {
     if (memberDaos) {
+      console.log(memberDaos);
+
       setLocalDaos(
         memberDaos
           .filter((member) => member.moloch.version !== '1')
@@ -50,12 +52,10 @@ const Hub = () => {
             return { ...member.moloch, networkId: member.networkId };
           }),
       );
-      console.log(localFreshDaos);
+      // console.log(localFreshDaos);
 
     }
   }, [memberDaos]);
-
-  console.log('memberDaos', memberDaos);
 
   return (
     <Box p={6}>
