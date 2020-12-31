@@ -57,6 +57,8 @@ const ProposalDetail = ({ proposal }) => {
   const [memberWallet] = useMemberWallet();
   const [memberVote, setMemberVote] = useState();
 
+  console.log('proposal?.details', proposal?.details);
+
   useEffect(() => {
     if (proposal?.votes && memberWallet && memberWallet?.activeMember) {
       setMemberVote(

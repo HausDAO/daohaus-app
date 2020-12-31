@@ -16,6 +16,7 @@ export const IsJsonString = (str) => {
 };
 
 export const proposalDetails = (details) => {
+  details = details && details.replace(/(\r\n|\n|\r)/gm, ' ');
   return details && IsJsonString(details) ? JSON.parse(details) : null;
 };
 

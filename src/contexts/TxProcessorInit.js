@@ -20,6 +20,7 @@ import {
 import { VscQuestion } from 'react-icons/vsc';
 import { RiExternalLinkLine, RiErrorWarningLine } from 'react-icons/ri';
 import { TxProcessorService } from '../utils/tx-processor-service';
+
 import {
   useMembers,
   useProposals,
@@ -107,6 +108,9 @@ const TxProcessorInit = () => {
       }
       if (context?.name === 'dao') {
         // 15 second delay before try refresh
+        if (latestTx.details.name === 'summonMoloch') {
+          console.log('summon Moloch Complete');
+        }
         setTimeout(() => {
           updateRefetchQuery('moloch');
         }, 15000);
@@ -118,6 +122,8 @@ const TxProcessorInit = () => {
           updateRefetchQuery('proposals');
         }, 15000);
       }
+
+      setLoading(false);
       toast({
         title: 'Transaction away',
         position: 'top-right',

@@ -85,18 +85,6 @@ const Summon = () => {
   }, [w3Context, network]);
 
   useEffect(() => {
-    if (network?.network_id && w3Context?.web3) {
-      const summonService = new SummonService(
-        w3Context.web3,
-        network.network_id,
-      );
-      dispatch({ type: 'setService', payload: summonService });
-    }
-
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [w3Context, network]);
-
-  useEffect(() => {
     const txCallBack = (txHash, details) => {
       console.log('txCallBack', txProcessor);
       if (txProcessor && txHash) {

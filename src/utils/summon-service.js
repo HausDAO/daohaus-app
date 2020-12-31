@@ -1,6 +1,6 @@
 import v21FactoryAbi from '../contracts/molochV21.json';
 
-import { post } from './requests';
+import { post, put } from './requests';
 import { supportedChains } from './chains';
 
 export default class SummonService {
@@ -16,16 +16,16 @@ export default class SummonService {
   }
 
   // internal
-  sendTx(options, callback) {
+  sendTx(options, callback, cacheMoloch) {
     const { from, name, params } = options;
     const tx = this.contract.methods[name](...params);
     return tx
       .send({ from: from })
       .on('transactionHash', (txHash) => {
         this.summonTx = txHash;
-        this.setLocal({
-          tx: this.summonTx,
-        });
+        cacheMoloch.tx = this.summonTx;
+        this.cacheNewMoloch(cacheMoloch);
+        options.details = cacheMoloch;
         callback(txHash, options);
       })
       .on('error', (error) => {
@@ -50,14 +50,27 @@ export default class SummonService {
     }
   }
 
-  setLocal(newData, txHash) {
-    let localMoloch = window.localStorage.getItem('pendingMoloches');
+  async updateMolochCache(newMoloch) {
+    const res = await put('dao/update', newMoloch);
+    console.log('post response', res);
+    if (!res) {
+      console.log('moloch api creation error');
+      this.setLocal({
+        error: 'cache error',
+      });
+    } else {
+      this.setLocal(newMoloch);
+    }
+  }
+
+  setLocal(newData) {
+    let localMoloch = window.localStorage.getItem('pendingMoloch');
     if (localMoloch) {
       localMoloch = JSON.parse(localMoloch);
     }
 
     window.localStorage.setItem(
-      'pendingMoloches',
+      'pendingMolochy',
       JSON.stringify({
         ...localMoloch,
         ...newData,
@@ -86,9 +99,6 @@ export default class SummonService {
       purpose: daoData.presetName || 'Grants',
     };
 
-    console.log('_cacheMoloch', _cacheMoloch);
-
-    this.setLocal(_cacheMoloch);
     const txReceipt = await this.sendTx(
       {
         from: account,
@@ -106,6 +116,7 @@ export default class SummonService {
         ],
       },
       callback,
+      _cacheMoloch,
     );
     console.log('txReceipt', txReceipt);
     _cacheMoloch.tx = txReceipt.transactionHash;
