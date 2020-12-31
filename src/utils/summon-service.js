@@ -37,8 +37,7 @@ export default class SummonService {
       });
   }
 
-  async cacheNewMoloch(newMoloch, contractAddress = null) {
-
+  async cacheNewMoloch(newMoloch) {
     const res = await post('dao', newMoloch);
     console.log('post response', res);
     if (!res) {
@@ -46,17 +45,19 @@ export default class SummonService {
       this.setLocal({
         error: 'cache error',
       });
+    } else {
+      this.setLocal(newMoloch);
     }
   }
 
-  setLocal(newData) {
-    let localMoloch = window.localStorage.getItem('pendingMoloch');
+  setLocal(newData, txHash) {
+    let localMoloch = window.localStorage.getItem('pendingMoloches');
     if (localMoloch) {
       localMoloch = JSON.parse(localMoloch);
     }
 
     window.localStorage.setItem(
-      'pendingMoloch',
+      'pendingMoloches',
       JSON.stringify({
         ...localMoloch,
         ...newData,
@@ -106,7 +107,10 @@ export default class SummonService {
       },
       callback,
     );
+    console.log('txReceipt', txReceipt);
     _cacheMoloch.tx = txReceipt.transactionHash;
+    _cacheMoloch.contractAddress =
+      txReceipt.events.SummonComplete.returnValues.moloch;
     await this.cacheNewMoloch(_cacheMoloch);
 
     return txReceipt.transactionHash;

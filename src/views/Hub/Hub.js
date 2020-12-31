@@ -17,6 +17,7 @@ const Hub = () => {
   const [, setTheme] = useTheme();
   const [memberDaos, setMemberDaos] = useState();
   const [localDaos, setLocalDaos] = useState([]);
+  const [localFreshDaos, setLocalFreshDaos] = useState([]);
 
   useEffect(() => {
     setTheme(defaultTheme);
@@ -27,9 +28,22 @@ const Hub = () => {
 
   useEffect(() => {
     if (memberDaos) {
+      console.log(memberDaos);
       setLocalDaos(
         memberDaos
           .filter((member) => member.moloch.version !== '1')
+          .filter((member) => member.moloch.title)
+          .sort((a, b) => {
+            return a.hubSort - b.hubSort;
+          })
+          .map((member) => {
+            return { ...member.moloch, networkId: member.networkId };
+          }),
+      );
+      setLocalFreshDaos(
+        memberDaos
+          .filter((member) => member.moloch.version !== '1')
+          .filter((member) => !member.moloch.title)
           .sort((a, b) => {
             return a.hubSort - b.hubSort;
           })
@@ -54,9 +68,26 @@ const Hub = () => {
               {memberDaos && memberDaos.length > 0 ? (
                 <ContentBox p={6} mt={6} maxW='600px'>
                   {localDaos.length > 0 ? (
-                    <>
-                      <MemberDaoList daos={localDaos} />
-                    </>
+                    <Box w='100%'>
+                      <MemberDaoList label={'MEMBER OF'} daos={localDaos} />
+                      <Link
+                        href='https://daohaus.club/explore'
+                        isExternal
+                        fontSize='md'
+                        textTransform='uppercase'
+                        color='secondary.500'
+                      >
+                        Explore more DAOs on DAOhaus
+                      </Link>
+                    </Box>
+                  ) : null}
+                  {localFreshDaos.length > 0 ? (
+                    <Box w='100%' mt={6}>
+                      <MemberDaoList
+                        label={'NEW SETUP NEEDED FOR'}
+                        daos={localFreshDaos}
+                      />
+                    </Box>
                   ) : null}
                 </ContentBox>
               ) : (
