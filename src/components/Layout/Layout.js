@@ -47,6 +47,7 @@ import {
 } from 'react-icons/ri';
 import { GiCastle } from 'react-icons/gi';
 import { useTheme } from '../../contexts/CustomThemeContext';
+import { themeImagePath } from '../../utils/helpers';
 
 const MotionBox = motion.custom(Box);
 const MotionFlex = motion.custom(Flex);
@@ -425,7 +426,8 @@ const Layout = ({ children }) => {
               h='48px'
               cursor='pointer'
               border='none'
-              bg={'url(' + theme.images.brandImg + ')'}
+              bg={'url(' + themeImagePath(theme.images.brandImg) + ')'}
+              // bg={'url(' + theme.images.brandImg + ')'}
               bgSize='cover'
               bgPosition='center'
               bgRepeat='no-repeat'
@@ -815,7 +817,7 @@ const Layout = ({ children }) => {
         animate={sideNavOpen ? 'open' : 'closed'}
         variants={layout}
         h='100vh'
-        bgImage={'url(' + theme.images.bgImg + ')'}
+        bgImage={'url(' + themeImagePath(theme.images.bgImg) + ')'}
         bgSize='cover'
         bgPosition='center'
         zIndex='-1'
