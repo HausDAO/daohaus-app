@@ -28,7 +28,6 @@ const Hub = () => {
 
   useEffect(() => {
     if (memberDaos) {
-      console.log(memberDaos);
 
       setLocalDaos(
         memberDaos

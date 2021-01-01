@@ -22,6 +22,7 @@ import NewMember from './views/Members/NewMember';
 import DaoMeta from './views/Settings/DaoMeta';
 import UploadTest from './views/Theme/UploadTest';
 import SummonWrapper from './views/Summon/SummonWrapper';
+import RegisterDao from './views/Summon/RegisterDao';
 
 const Routes = () => {
   return (
@@ -109,6 +110,11 @@ const Routes = () => {
           component={DaoTheme}
         />
         <Route path='/summon' exact component={SummonWrapper} />
+        <Route
+          path='/register/:dao(\b0x[0-9a-f]{10,40}\b)'
+          exact
+          component={RegisterDao}
+        />
         <Route path='/themeSample' exact component={Theme} />
         <Route path='/uploadTest' exact component={UploadTest} />
         <Route exact path='/' component={Hub} />
