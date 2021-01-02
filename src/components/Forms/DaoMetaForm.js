@@ -9,6 +9,8 @@ import {
   Stack,
   InputGroup,
   InputLeftAddon,
+  Button,
+  Spinner,
 } from '@chakra-ui/react';
 import { useForm } from 'react-hook-form';
 import {
@@ -19,64 +21,120 @@ import {
   RiMediumFill,
 } from 'react-icons/ri';
 
-import { useDao } from '../../contexts/PokemolContext';
-import { useTheme } from '../../contexts/CustomThemeContext';
 import ContentBox from '../../components/Shared/ContentBox';
 import TextBox from '../../components/Shared/TextBox';
+import { themeImagePath } from '../../utils/helpers';
+import {
+  useNetwork,
+  useUser,
+  useWeb3Connect,
+} from '../../contexts/PokemolContext';
+import { put } from '../../utils/requests';
+import { useState } from 'react/cjs/react.development';
 
-const DaoMetaForm = () => {
-  const [dao] = useDao();
-  const [theme] = useTheme();
-  const { register } = useForm();
+const DaoMetaForm = ({ metadata, handleUpdate }) => {
+  const [web3Connect] = useWeb3Connect();
+  const [user] = useUser();
+  const [network] = useNetwork();
+  const { register, handleSubmit } = useForm();
+  const [loading, setLoading] = useState();
+
+  const onSubmit = async (data) => {
+    setLoading(true);
+    console.log('onsubmit', data);
+    // 1. normal save with contractaddress
+    // 2. new and in db: register save without contract address to look up with summoner + name
+    // 3. new and not in db: create a record
+
+    // what is message if we don't have dao address
+
+    try {
+      const messageHash = web3Connect.web3.utils.sha3(metadata.address);
+      const signature = await web3Connect.web3.eth.personal.sign(
+        messageHash,
+        user.username,
+      );
+
+      const updateData = {
+        ...data,
+        contractAddress: metadata.address,
+        network: network.network,
+        signature,
+      };
+
+      console.log('updateData', updateData);
+
+      const updateRes = await put('dao/update', updateData);
+
+      console.log('updateRes', updateRes);
+
+      // after save we can pass that data back to the parent component to update global state or something
+      handleUpdate(data);
+      setLoading(false);
+    } catch (err) {
+      // handle error messsaging
+      console.log('err', err);
+      setLoading(false);
+    }
+  };
 
   return (
     <Flex as={ContentBox} m={6} w='100%'>
-      {dao && (
-        <Flex as='form' direction='column' w='100%'>
-          <FormControl id='name' mb={4}>
-            <TextBox size='xs' mb={2}>
-              Avatar & Name
-            </TextBox>
-            <Flex>
-              <Image
-                src={theme.images.brandImg}
+      <>
+        {loading ? (
+          <Spinner />
+        ) : (
+          <>
+            {metadata && (
+              <Flex
+                as='form'
+                onSubmit={handleSubmit(onSubmit)}
+                direction='column'
+                w='100%'
+              >
+                <FormControl id='name' mb={4}>
+                  <TextBox size='xs' mb={2}>
+                    Name
+                  </TextBox>
+                  <Flex>
+                    {/* <Image
+                src={themeImagePath(metadata.avatarImg)}
                 borderRadius='40px'
                 height='50px'
                 width='50px'
-              />
-              <Input
-                ref={register}
-                defaultValue={dao.name}
-                placeholder='DAOhaus'
-                name='name'
-                ml={5}
-              />
-            </Flex>
-          </FormControl>
+              /> */}
+                    <Input
+                      ref={register({ required: true })}
+                      defaultValue={metadata.name}
+                      placeholder='Braid Guild'
+                      name='name'
+                    />
+                  </Flex>
+                </FormControl>
 
-          <FormControl id='description' mb={4}>
-            <TextBox size='xs' mb={2}>
-              Description
-            </TextBox>
-            <Textarea
-              ref={register}
-              defaultValue={dao.description}
-              placeholder='A DAO of DAOs'
-              name='description'
-            />
-          </FormControl>
+                <FormControl id='description' mb={4}>
+                  <TextBox size='xs' mb={2}>
+                    Description
+                  </TextBox>
+                  <Textarea
+                    ref={register}
+                    defaultValue={metadata.description}
+                    placeholder='A DAO of DAOs'
+                    name='description'
+                  />
+                </FormControl>
 
-          <FormControl id='purpose' mb={4}>
+                {/* <FormControl id='purpose' mb={4}>
             <TextBox size='xs' mb={2}>
               Purpose
             </TextBox>
             <Input
               ref={register}
-              defaultValue={dao.purpose}
+              defaultValue={metadata.purpose}
               placeholder='To bring creativity and happiness to the realm.'
               name='purpose'
             />
-          </FormControl>
+          </FormControl> 
 
           <FormControl id='tags' mb={4}>
             <TextBox size='xs' mb={2}>
@@ -84,7 +142,7 @@ const DaoMetaForm = () => {
             </TextBox>
             <Input
               ref={register}
-              defaultValue={dao.tags}
+              defaultValue={metadata.tags}
               placeholder='Ethereum, Clubs'
               name='tags'
             />
@@ -102,7 +160,7 @@ const DaoMetaForm = () => {
                 </InputLeftAddon>
                 <Input
                   ref={register}
-                  defaultValue={theme.daoMeta.website}
+                  defaultValue={metadata.links?.website}
                   placeholder='https://daohaus.club'
                   name='website'
                 />
@@ -116,7 +174,7 @@ const DaoMetaForm = () => {
                 </InputLeftAddon>
                 <Input
                   ref={register}
-                  defaultValue={theme.daoMeta.twitter}
+                  defaultValue={metadata.links?.twitter}
                   placeholder='@nowdaoit'
                   name='twitter'
                 />
@@ -130,7 +188,7 @@ const DaoMetaForm = () => {
                 </InputLeftAddon>
                 <Input
                   ref={register}
-                  defaultValue={theme.daoMeta.discord}
+                  defaultValue={metadata.links?.discord}
                   placeholder='https://discord.gg/k7CDCqaRSY'
                   name='discord'
                 />
@@ -144,7 +202,7 @@ const DaoMetaForm = () => {
                 </InputLeftAddon>
                 <Input
                   ref={register}
-                  defaultValue={theme.daoMeta.telegram}
+                  defaultValue={metadata.links?.telegram}
                   placeholder='https://t.me/'
                   name='telegram'
                 />
@@ -158,15 +216,22 @@ const DaoMetaForm = () => {
                 </InputLeftAddon>
                 <Input
                   ref={register}
-                  defaultValue={theme.daoMeta.medium}
+                  defaultValue={metadata.links?.medium}
                   placeholder='https://medium.com/'
                   name='medium'
                 />
               </InputGroup>
             </FormControl>
-          </Stack>
-        </Flex>
-      )}
+          </Stack> */}
+
+                <Button type='submit' disabled={loading}>
+                  Save
+                </Button>
+              </Flex>
+            )}
+          </>
+        )}
+      </>
     </Flex>
   );
 };
