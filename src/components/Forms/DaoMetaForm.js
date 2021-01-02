@@ -9,6 +9,7 @@ import {
   Stack,
   InputGroup,
   InputLeftAddon,
+  Button,
 } from '@chakra-ui/react';
 import { useForm } from 'react-hook-form';
 import {
@@ -24,7 +25,7 @@ import { useTheme } from '../../contexts/CustomThemeContext';
 import ContentBox from '../../components/Shared/ContentBox';
 import TextBox from '../../components/Shared/TextBox';
 
-const DaoMetaForm = () => {
+const DaoMetaForm = ({ onSubmit }) => {
   const [dao] = useDao();
   const [theme] = useTheme();
   const { handleSubmit, register } = useForm();
@@ -32,7 +33,12 @@ const DaoMetaForm = () => {
   return (
     <Flex as={ContentBox} m={6} w='100%'>
       {dao && (
-        <Flex as='form' onSubmit={handleSubmit} direction='column' w='100%'>
+        <Flex
+          as='form'
+          onSubmit={handleSubmit(onSubmit)}
+          direction='column'
+          w='100%'
+        >
           <FormControl id='name' mb={4}>
             <TextBox size='xs' mb={2}>
               Avatar & Name
@@ -165,6 +171,7 @@ const DaoMetaForm = () => {
               </InputGroup>
             </FormControl>
           </Stack>
+          <Button type='submit'>submit</Button>
         </Flex>
       )}
     </Flex>
