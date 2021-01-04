@@ -6,7 +6,6 @@ import { BiArrowBack } from 'react-icons/bi';
 import { useUser } from '../../contexts/PokemolContext';
 import HubGraphInit from '../../contexts/HubGraphInit';
 import DaoMetaForm from '../../components/Forms/DaoMetaForm';
-import SummonService from '../../utils/summon-service';
 
 const RegisterDao = () => {
   const [user] = useUser();
@@ -16,14 +15,17 @@ const RegisterDao = () => {
   const [currentDao, setCurrentDao] = useState();
 
   useEffect(() => {
-    if (user && dao)
+    if (user && dao) {
+      const localMoloch = window.localStorage.getItem('pendingMolochy');
+      const parsedMoloch = JSON.parse(localMoloch);
       setCurrentDao({
         address: dao,
-        title: '', // get this from somewhere
-        description: '',
-        purpose: '',
+        title: parsedMoloch?.name || '',
+        description: parsedMoloch?.description || '',
+        purpose: parsedMoloch?.purpose || '',
         summonerAddress: user.username,
       });
+    }
 
     // console.log(localFreshDaos);
   }, [user, dao]);
