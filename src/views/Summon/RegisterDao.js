@@ -21,44 +21,20 @@ const RegisterDao = () => {
   const [currentDao, setCurrentDao] = useState();
 
   useEffect(() => {
-    if (memberDaos) {
-      if (!dao) {
-        return;
-      }
-      setCurrentDao(
-        memberDaos.find((item) => {
-          return item.moloch.id === dao;
-        }),
-      );
-      // console.log(localFreshDaos);
-    }
-  }, [memberDaos, dao]);
+    setCurrentDao({
+      contractAddress: dao,
+      title: '', // get this from somewhere
+      description: '',
+      purpose: '',
+      summonerAddress: user.username,
+      network: network.network_id,
+    });
+
+    // console.log(localFreshDaos);
+  }, [user, dao]);
 
   const handleUpdate = async (values) => {
     console.log(values);
-    // will need to pass this metadata down as defaults
-    console.log(currentDao.moloch.apiMetaData);
-    const messageHash = web3Connect.web3.utils.sha3(currentDao.moloch.id);
-    const signature = await web3Connect.web3.eth.personal.sign(
-      messageHash,
-      user.username,
-    );
-    console.log(signature);
-    const summonService = new SummonService(
-      web3Connect.web3,
-      network.network_id,
-    );
-    const newMoloch = {
-      summonerAddress: user.username,
-      name: values.name,
-      contractAddress: currentDao.moloch.id,
-      register: true,
-      network: network.network_id,
-      signature: signature,
-    };
-    console.log('moloch update', newMoloch);
-    // summonService.updateMolochCache(newMoloch);
-
     // redirect to dao page
   };
   return (
@@ -70,7 +46,7 @@ const RegisterDao = () => {
           <Text>
             Register + {network.network_id} + {currentDao?.moloch.id}
           </Text>
-          <DaoMetaForm onSubmit={handleUpdate} />
+          <DaoMetaForm onSubmit={handleUpdate} metadata={currentDao} />
         </Box>
       )}
       {user ? (
