@@ -1,30 +1,17 @@
-import React, { useEffect } from "react";
+import React from "react";
+import { Switch, Route } from "react-router-dom";
 
-import { GraphProvider } from "../contexts/GraphContext";
-import { useInjectedProvider } from "../contexts/InjectedProviderContext";
 import { UserContextProvider } from "../contexts/UserContext";
-import { HUB_MEMBERSHIPS } from "../graphQL/member-queries";
 import AuthedHub from "../pagesAuthed/AuthedHub";
-import { supportedChains } from "../utils/chain";
 
 const Authed = ({ provider }) => {
-  // const { injectedChain } = useInjectedProvider();
-
-  const address = provider.selectedAddress;
-  const chainURI = supportedChains[provider.chainId].subgraph_url;
-
-  // useEffect(() => {
-  //   const getGraph = async () => {
-  //     const promise = await apolloGet(chainURI, HUB_MEMBERSHIPS, {
-  //       memberAddress: address,
-  //     });
-  //     console.log(promise);
-  //   };
-  //   getGraph();
-  // }, []);
   return (
     <UserContextProvider provider={provider}>
-      <AuthedHub provider={provider} />
+      <Switch>
+        <Route path="/hub">
+          <AuthedHub provider={provider} />
+        </Route>
+      </Switch>
     </UserContextProvider>
   );
 };

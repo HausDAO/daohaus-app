@@ -4,17 +4,18 @@ import ReactDOM from "react-dom";
 import "./index.css";
 import App from "./App";
 import reportWebVitals from "./reportWebVitals";
+import { BrowserRouter } from "react-router-dom";
 // import { DefaultProvider } from "./contexts/DefaultProviderContext";
 import { InjectedProvider } from "./contexts/InjectedProviderContext";
 import { UserContextProvider } from "./contexts/UserContext";
 
 ReactDOM.render(
   <React.StrictMode>
-    {/* <DefaultProvider> */}
-    <InjectedProvider>
-      <App />
-    </InjectedProvider>
-    {/* </DefaultProvider> */}
+    <BrowserRouter>
+      <InjectedProvider>
+        <App />
+      </InjectedProvider>
+    </BrowserRouter>
   </React.StrictMode>,
   document.getElementById("root")
 );

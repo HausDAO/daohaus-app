@@ -15,8 +15,8 @@ export const Divider = styled.div`
 `;
 export const ListItemCard = styled.section`
   margin-bottom: 1.6rem;
-  padding: 1.6rem 0.8rem;
-  border-bottom: 1px solid ${getColor("lightBorder")};
+  padding: 0.8rem 0.8rem;
+  /* border-bottom: 1px solid ${getColor("lightBorder")}; */
 
   .label {
     margin-bottom: 0.8rem;
@@ -24,6 +24,7 @@ export const ListItemCard = styled.section`
   .title {
     margin-bottom: 0.8rem;
   }
+
   .inner-section {
     padding: 0.8rem;
     /* padding-bottom: 1.6rem; */

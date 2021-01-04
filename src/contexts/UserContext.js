@@ -1,14 +1,8 @@
 import React, { useContext, createContext, useState, useEffect } from "react";
-import { useQuery } from "react-apollo";
 
 import { HUB_MEMBERSHIPS } from "../graphQL/member-queries";
 import { queryAllChains } from "../utils/apollo";
 import { supportedChains } from "../utils/chain";
-import { resolvers } from "../utils/resolvers";
-import { useGraph } from "./GraphContext";
-import { useInjectedProvider } from "./InjectedProviderContext";
-// import { getUser } from "../actions/user";
-// import { useInjectedProvider } from "./InjectedProviderContext";
 
 export const UserContext = createContext();
 
