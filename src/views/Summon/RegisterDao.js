@@ -44,7 +44,7 @@ const RegisterDao = () => {
       ) : (
         <Box>
           <Text>
-            Register + {network.network_id} + {currentDao?.moloch.id}
+            Register + {network.network_id} + {currentDao?.contractAddress}
           </Text>
           <DaoMetaForm onSubmit={handleUpdate} metadata={currentDao} />
         </Box>
