@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Link as RouterLink } from 'react-router-dom';
+import { Link as RouterLink, useHistory } from 'react-router-dom';
 import {
   Box,
   Modal,
@@ -52,6 +52,7 @@ const TxProcessorInit = () => {
   const [latestTx, setLatestTx] = useState();
   const [loading, setLoading] = useState(false);
   const toast = useToast();
+  const history = useHistory();
 
   useEffect(() => {
     /*
@@ -241,6 +242,13 @@ const TxProcessorInit = () => {
     // eslint-disable-next-line
   }, [txProcessor.loaded]);
 
+  const openDaoRegisterRoute = () => {
+    const localMoloch = window.localStorage.getItem('pendingMolochy');
+    const parsedMoloch = localMoloch && JSON.parse(localMoloch);
+    history.push(`/register/${parsedMoloch.contractAddress}`);
+    onClose();
+  };
+
   return (
     <>
       <Modal
@@ -288,9 +296,9 @@ const TxProcessorInit = () => {
                       🎉
                     </span>
                     {latestTx && latestTx?.details?.name === 'summonMoloch' && (
-                      <RouterLink to={`register/${latestTx?.details}`}>
+                      <Button onClick={openDaoRegisterRoute}>
                         Configure DAO
-                      </RouterLink>
+                      </Button>
                     )}
                   </Box>
                 )}

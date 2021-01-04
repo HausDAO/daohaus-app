@@ -33,7 +33,7 @@ const Summon = () => {
     1: 'What kind of Haus will you build?',
     2: 'Give us the basics',
     3: 'Last chance to make changes',
-    4: 'Our magic internet communities take a minute or two to create.',
+    4: 'Our magic internet communities take a minute or two to create. You can see new daos on your Hub page',
   };
 
   const handleSummon = async (data) => {
@@ -224,12 +224,7 @@ const Summon = () => {
                 )}
               </>
             ) : (
-              <>
-                Loading
-                {/* <MiniLoader txHash={state.summonTx} />
-                <Text>While you wait, check out our boosts</Text>
-                <BoostPackages isSummoning={isSummoning} /> */}
-              </>
+              <>Loading</>
             )}
           </Box>
         </Box>
