@@ -21,6 +21,14 @@ const MemberDaoList = ({ daos, label }) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [daos]);
 
+  const getDaoLink = (healthCount, dao) => {
+    if (dao.title) {
+      return healthCount ? `/dao/${dao.id}/proposals` : `dao/${dao.id}`;
+    } else {
+      return `/register/${dao.id}`;
+    }
+  };
+
   const renderDaoAvatar = (dao) => {
     const recentProposals = dao.proposals.filter((prop) => {
       return prop.activityFeed.unread;
@@ -31,7 +39,7 @@ const MemberDaoList = ({ daos, label }) => {
       <Box key={dao.id + dao.networkId} mr={3} pb={3}>
         <Link
           as={RouterLink}
-          to={healthCount ? `/dao/${dao.id}/proposals` : `dao/${dao.id}`}
+          to={getDaoLink(healthCount, dao)}
           display='flex'
           flexDirection='column'
           alignItems='center'

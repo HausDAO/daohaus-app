@@ -51,6 +51,8 @@ export default class SummonService {
   }
 
   async updateMolochCache(newMoloch) {
+    // add netowrk and signature
+    // example theme.js L56
     const res = await put('dao/update', newMoloch);
     console.log('post response', res);
     if (!res) {
@@ -122,7 +124,7 @@ export default class SummonService {
     _cacheMoloch.tx = txReceipt.transactionHash;
     _cacheMoloch.contractAddress =
       txReceipt.events.SummonComplete.returnValues.moloch;
-    await this.cacheNewMoloch(_cacheMoloch);
+    // await this.updateMolochCache(_cacheMoloch);
 
     return txReceipt.transactionHash;
   }
