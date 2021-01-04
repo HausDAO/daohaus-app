@@ -42,11 +42,11 @@ const DaoMetaForm = ({ metadata, handleUpdate }) => {
   const onSubmit = async (data) => {
     setLoading(true);
     console.log('onsubmit', data);
-    // 1. normal save with contractaddress
-    // 2. new and in db: register save without contract address to look up with summoner + name
-    // 3. new and not in db: create a record
+    // gets to summon from summon flow (w/ address) or from hub (w/ address)
+    // 2. summon: send a summon flag, look up by contract address, look up with summoner + name, then update or create a record if not existing
+    // maybe we send a summon flag and the api checks the db on contract address 1st
 
-    // what is message if we don't have dao address
+    // { summoning: true }
 
     try {
       const messageHash = web3Connect.web3.utils.sha3(metadata.address);

@@ -59,7 +59,7 @@ const daoMetaFormFields = [
   },
 ];
 
-const DaoMetaForm = ({ handleThemeUpdate }) => {
+const DaoMetaFormOld = ({ handleThemeUpdate }) => {
   const { register, handleSubmit } = useForm();
   const [theme] = useTheme();
 
@@ -106,4 +106,4 @@ const DaoMetaForm = ({ handleThemeUpdate }) => {
   );
 };
 
-export default DaoMetaForm;
+export default DaoMetaFormOld;

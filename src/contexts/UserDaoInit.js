@@ -64,7 +64,6 @@ const UserDaoInit = () => {
       memberWallet &&
       memberWallet.daoAddress === contracts.daoService.daoAddress;
     if (!walletExists) {
-      console.log('initmember wallet');
       initMemberWallet();
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
