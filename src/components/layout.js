@@ -53,7 +53,7 @@ const SideSpace = styled.aside`
   } */
 `;
 
-const Layout = ({ sideMenu, children }) => {
+const Layout = ({ sideMenu, children, provider }) => {
   return (
     <StyleTemplate>
       <Nav />

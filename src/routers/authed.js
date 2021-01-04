@@ -2,14 +2,22 @@ import React from "react";
 import { Switch, Route } from "react-router-dom";
 
 import { UserContextProvider } from "../contexts/UserContext";
+import AuthedDaoRoutes from "./authedDaoRoutes";
 import AuthedHub from "../pagesAuthed/AuthedHub";
+import { useInjectedProvider } from "../contexts/InjectedProviderContext";
 
-const Authed = ({ provider }) => {
+const Authed = () => {
   return (
-    <UserContextProvider provider={provider}>
+    <UserContextProvider>
       <Switch>
-        <Route path="/hub">
-          <AuthedHub provider={provider} />
+        <Route exact path="/">
+          <AuthedHub />
+        </Route>
+        <Route exact path="/hub">
+          <AuthedHub />
+        </Route>
+        <Route path="/dao/:id">
+          <AuthedDaoRoutes />
         </Route>
       </Switch>
     </UserContextProvider>

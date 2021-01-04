@@ -44,7 +44,7 @@ const combineAndSortProposals = (daosByNetwork) => {
     .sort((a, b) => b.createdAt - a.createdAt);
 };
 
-const NewsFeed = ({ provider }) => {
+const NewsFeed = () => {
   const { userHubDaos, hasLoadedHubData } = useLocalUserData();
 
   const [newsFeed, setNewsFeed] = useState(null);

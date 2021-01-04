@@ -1,11 +1,8 @@
-import React from 'react'
+import React from "react";
+import Layout from "../components/layout";
 
 const AuthedDao = () => {
-  return (
-    <div>
-      
-    </div>
-  )
-}
+  return <Layout></Layout>;
+};
 
-export default AuthedDao
+export default AuthedDao;

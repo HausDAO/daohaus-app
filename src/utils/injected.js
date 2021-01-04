@@ -35,7 +35,7 @@ export const findInjectedProvider = () => {
 };
 
 export const getAddress = (provider) => {
-  return provider.provider.selectedAddress;
+  return provider.selectedAddress;
 };
 export const getTrucatedAddress = (provider) => {
   if (provider) {

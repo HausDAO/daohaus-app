@@ -49,14 +49,16 @@ const Header = () => {
     disconnectDapp,
     injectedProvider,
   } = useInjectedProvider();
-  // console.log(injectedProvider);
+
+  // console.log(provider);
+  const shortAddress = getTrucatedAddress(injectedProvider?.provider);
   return (
     <NavContainer>
       {injectedProvider ? (
         <Button
           className="wallet-button primary"
           onClick={disconnectDapp}
-          content={getTrucatedAddress(injectedProvider)}
+          content={shortAddress}
         />
       ) : (
         <Button
@@ -65,16 +67,6 @@ const Header = () => {
           onClick={requestWallet}
         />
       )}
-      {/* <Button className="text-button logo-button" content="Logo" />
-      <Button
-        className="primary"
-        onClick={address ? openUserMenu : requestWallet}
-        content={
-          address
-            ? address.slice(0, 5) + "..." + address.slice(address.length - 5)
-            : "Connect Account"
-        }
-      /> */}
     </NavContainer>
   );
 };

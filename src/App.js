@@ -9,19 +9,13 @@ import NotAuthed from "./routers/notAuthed";
 function App() {
   const { injectedProvider } = useInjectedProvider();
 
-  const [viewMode, setViewMode] = useState(null);
-
-  useEffect(() => {
-    if (!injectedProvider && localStorage.getItem("hasConnected")) {
-      setViewMode(<Loading />);
-    } else if (injectedProvider) {
-      setViewMode(<Authed provider={injectedProvider.provider} />);
-    } else {
-      setViewMode(<NotAuthed />);
-    }
-  }, [injectedProvider]);
-
-  return <>{viewMode}</>;
+  if (!injectedProvider && localStorage.getItem("hasConnected")) {
+    return <Loading />;
+  } else if (injectedProvider) {
+    return <Authed />;
+  } else {
+    return <NotAuthed />;
+  }
 }
 
 export default App;

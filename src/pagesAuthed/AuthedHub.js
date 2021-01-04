@@ -23,7 +23,7 @@ const AuthedHubPage = styled.div`
   }
 `;
 
-const AuthedHub = ({ provider }) => {
+const AuthedHub = () => {
   return (
     <Layout>
       <AuthedHubPage>
@@ -31,8 +31,8 @@ const AuthedHub = ({ provider }) => {
           <DisplayLg>Hub</DisplayLg>
           <Divider className="hard" />
         </div>
-        <NetworkList provider={provider} />
-        <NewsFeed provider={provider} />
+        <NetworkList />
+        <NewsFeed />
       </AuthedHubPage>
     </Layout>
   );

@@ -6,6 +6,7 @@ import { HeaderLg, Overline } from "../styles/typography";
 import { ListItemCard, Divider } from "./staticElements";
 
 import { useLocalUserData } from "../contexts/UserContext";
+import { useInjectedProvider } from "../contexts/InjectedProviderContext";
 
 const StyledNetworkList = styled.ul`
   list-style: none;
@@ -17,8 +18,12 @@ const StyledNetworkList = styled.ul`
   }
 `;
 
-const NetworkList = ({ provider }) => {
+const NetworkList = () => {
   const { userHubDaos } = useLocalUserData();
+  const {
+    injectedProvider: { provider },
+  } = useInjectedProvider();
+
   const currentNetwork = userHubDaos.find(
     (dao) => dao.networkID === provider.chainId
   );
@@ -49,6 +54,8 @@ const NetworkList = ({ provider }) => {
                   <NetworkDaoList data={network.data} />
                 </ListItemCard>
               );
+            } else {
+              return null;
             }
           })}
           <Divider />

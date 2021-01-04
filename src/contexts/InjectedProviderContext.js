@@ -16,6 +16,7 @@ export const InjectedProvider = ({ children }) => {
 
     if (!chain) {
       console.error("This is not a supported chain");
+      return;
     }
     setInjectedProvider(new ethers.providers.Web3Provider(provider));
     setInjectedChain(supportedChains[provider.chainId]);
@@ -25,7 +26,6 @@ export const InjectedProvider = ({ children }) => {
     //This function is kept inside the useEffect to avoid incorrect/stale state.
     const requestAddressFromUser = async () => {
       const [newAddress] = await requestAddresses();
-      console.log(newAddress);
       if (newAddress) {
         connectProvider();
       } else {
@@ -54,7 +54,7 @@ export const InjectedProvider = ({ children }) => {
       connectProvider();
     };
     const accountsChanged = (account) => {
-      console.log(account);
+      // console.log(account);
     };
     if (!window.ethereum) {
       console.warn("Cannot detect injected provider");
@@ -92,7 +92,12 @@ export const InjectedProvider = ({ children }) => {
 
   return (
     <InjectedProviderContext.Provider
-      value={{ injectedProvider, requestWallet, disconnectDapp, injectedChain }}
+      value={{
+        injectedProvider,
+        requestWallet,
+        disconnectDapp,
+        injectedChain,
+      }}
     >
       {children}
     </InjectedProviderContext.Provider>
@@ -106,5 +111,10 @@ export const useInjectedProvider = () => {
     disconnectDapp,
     injectedChain,
   } = useContext(InjectedProviderContext);
-  return { injectedProvider, requestWallet, disconnectDapp, injectedChain };
+  return {
+    injectedProvider,
+    requestWallet,
+    disconnectDapp,
+    injectedChain,
+  };
 };
