@@ -122,19 +122,38 @@ const DaoMetaForm = ({ metadata, handleUpdate }) => {
                   />
                 </FormControl>
 
-                {/* <FormControl id='purpose' mb={4}>
-            <TextBox size='xs' mb={2}>
-              Purpose
-            </TextBox>
-            <Input
-              ref={register}
-              defaultValue={metadata.purpose}
-              placeholder='To bring creativity and happiness to the realm.'
-              name='purpose'
-            />
-          </FormControl> 
+                <FormControl id='purpose' mb={4}>
+                  <TextBox size='xs' mb={2}>
+                    Purpose
+                  </TextBox>
 
-          <FormControl id='tags' mb={4}>
+                  {/* <Select
+                    defaultValue={
+                      previewTheme.headingFont
+                        ? previewTheme.headingFont
+                        : 'Inknut Antiqua'
+                    }
+                    onChange={handleSelectChange}
+                    w='80%'
+                    icon={<AiOutlineCaretDown />}
+                    name='primaryFont'
+                    id='primaryFont'
+                  >
+                    {headingFonts.map((value) => (
+                      <Box as='option' key={value}>
+                        {value}
+                      </Box>
+                    ))}
+                  </Select> */}
+                  <Input
+                    ref={register}
+                    defaultValue={metadata.purpose}
+                    placeholder='To bring creativity and happiness to the realm.'
+                    name='purpose'
+                  />
+                </FormControl>
+
+                {/*  <FormControl id='tags' mb={4}>
             <TextBox size='xs' mb={2}>
               Tags
             </TextBox>

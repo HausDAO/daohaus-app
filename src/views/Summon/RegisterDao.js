@@ -16,7 +16,7 @@ const RegisterDao = () => {
   const [currentDao, setCurrentDao] = useState();
 
   useEffect(() => {
-    if (user && dao)
+    if (user && dao) {
       setCurrentDao({
         address: dao,
         title: '', // get this from somewhere
@@ -24,6 +24,7 @@ const RegisterDao = () => {
         purpose: '',
         summonerAddress: user.username,
       });
+    }
 
     // console.log(localFreshDaos);
   }, [user, dao]);
