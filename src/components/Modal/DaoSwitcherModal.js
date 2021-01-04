@@ -49,7 +49,6 @@ const DaoSwitcherModal = ({ isOpen }) => {
   };
 
   const renderDaoSelect = () => {
-    console.log('userDaos', userDaos);
     return userDaos
       .filter((dao) => dao.version === '2' || dao.version === '2.1')
       .sort((a, b) => a.hubSort - b.hubSort)

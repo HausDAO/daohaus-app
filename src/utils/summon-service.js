@@ -16,17 +16,18 @@ export default class SummonService {
   }
 
   // internal
-  sendTx(options, callback, cacheMoloch) {
-    const { from, name, params } = options;
+  sendTx(details, callback, cacheMoloch) {
+    const { from, name, params } = details;
     const tx = this.contract.methods[name](...params);
     return tx
       .send({ from: from })
       .on('transactionHash', (txHash) => {
         this.summonTx = txHash;
         cacheMoloch.tx = this.summonTx;
-        this.cacheNewMoloch(cacheMoloch);
-        options.details = cacheMoloch;
-        callback(txHash, options);
+        // this.cacheNewMoloch(cacheMoloch);
+        this.setLocal(cacheMoloch);
+        details.details = cacheMoloch;
+        callback(txHash, details);
       })
       .on('error', (error) => {
         this.setLocal({
@@ -124,7 +125,7 @@ export default class SummonService {
     _cacheMoloch.tx = txReceipt.transactionHash;
     _cacheMoloch.contractAddress =
       txReceipt.events.SummonComplete.returnValues.moloch;
-    // await this.updateMolochCache(_cacheMoloch);
+    this.setLocal(_cacheMoloch);
 
     return txReceipt.transactionHash;
   }

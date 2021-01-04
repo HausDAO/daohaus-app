@@ -18,10 +18,11 @@ const DaoMetadata = () => {
         address: daoMetadata.address,
         name: daoMetadata.name,
         description: daoMetadata.description,
-        //   avatarImg: daoMetadata.avatarImg,
-        //   purpose: daoMetadata.purpose,
+        purpose: daoMetadata.purpose,
+        links: daoMetadata.links,
+        avatarImg: daoMetadata.avatarImg,
+        version: daoMetadata.version,
         //   tags: daoMetadata.tags,
-        //   links: daoMetadata.links,
       });
     }
   }, [daoMetadata, localMetadata]);

@@ -88,7 +88,6 @@ const CustomThemeForm = ({ previewTheme, setPreviewTheme }) => {
   };
 
   const handleFileSet = async (event) => {
-    console.log(event);
     setImageUrl(URL.createObjectURL(upload.files[0]));
     const formData = new FormData();
     formData.append('file', upload.files[0]);
@@ -102,7 +101,6 @@ const CustomThemeForm = ({ previewTheme, setPreviewTheme }) => {
       daoAddress: dao.address,
     });
     const ipfsRes = await ipfsPost(keyRes, imageUpload);
-    console.log('ipfsRes', ipfsRes);
     setPreviewTheme({
       ...previewTheme,
       [imagePicker]: ipfsRes.IpfsHash,

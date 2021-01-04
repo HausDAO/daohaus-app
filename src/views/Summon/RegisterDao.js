@@ -6,7 +6,6 @@ import { BiArrowBack } from 'react-icons/bi';
 import { useUser } from '../../contexts/PokemolContext';
 import HubGraphInit from '../../contexts/HubGraphInit';
 import DaoMetaForm from '../../components/Forms/DaoMetaForm';
-import SummonService from '../../utils/summon-service';
 
 const RegisterDao = () => {
   const [user] = useUser();
@@ -17,16 +16,17 @@ const RegisterDao = () => {
 
   useEffect(() => {
     if (user && dao) {
+      const localMoloch = window.localStorage.getItem('pendingMolochy');
+      const parsedMoloch = JSON.parse(localMoloch);
       setCurrentDao({
         address: dao,
-        title: '', // get this from somewhere
-        description: '',
-        purpose: '',
+        name: parsedMoloch?.name || '',
+        description: parsedMoloch?.description || '',
+        purpose: parsedMoloch?.purpose || '',
         summonerAddress: user.username,
+        version: '2.1',
       });
     }
-
-    // console.log(localFreshDaos);
   }, [user, dao]);
 
   const handleUpdate = async (values) => {
@@ -38,7 +38,7 @@ const RegisterDao = () => {
       {!currentDao ? (
         <Text>loading...</Text>
       ) : (
-        <Box>
+        <>
           <Flex ml={6} justify='space-between' align='center' w='100%'>
             <Flex as={RouterLink} to={`/`} align='center'>
               <Icon as={BiArrowBack} color='secondary.500' mr={2} />
@@ -54,8 +54,10 @@ const RegisterDao = () => {
           >
             Finish your DAO Setup
           </Box>
-          <DaoMetaForm handleUpdate={handleUpdate} metadata={currentDao} />
-        </Box>
+          <Box w='40%'>
+            <DaoMetaForm handleUpdate={handleUpdate} metadata={currentDao} />
+          </Box>
+        </>
       )}
       {user ? (
         <HubGraphInit setHubDaos={setMemberDaos} hubDaos={memberDaos} />

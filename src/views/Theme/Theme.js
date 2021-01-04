@@ -31,8 +31,6 @@ const Theme = () => {
 
       <ThemePrebuilt handleThemeUpdate={handleThemeUpdate} />
 
-      {/* <DaoMetaForm handleThemeUpdate={handleThemeUpdate} /> */}
-
       <ThemeSamples />
     </>
   );

@@ -21,7 +21,6 @@ export const daoConstants = (networkId) => {
 };
 
 export const daoPresets = (networkId) => {
-  console.log('networkId', networkId);
   let presets = [
     {
       presetName: 'Grants',
