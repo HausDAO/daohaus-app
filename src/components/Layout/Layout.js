@@ -425,7 +425,7 @@ const Layout = ({ children }) => {
               h='48px'
               cursor='pointer'
               border='none'
-              bg={'url(' + theme.images.brandImg + ')'}
+              bg={'url(' + theme.images.avatarImg + ')'}
               bgSize='cover'
               bgPosition='center'
               bgRepeat='no-repeat'

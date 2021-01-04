@@ -16,10 +16,10 @@ export const defaultTheme = {
   secondaryAlpha: rgba('#EB8A23', 0.75),
   bg500: '#03061B',
   bgOverlayOpacity: '0.75',
-  primaryFont: 'Inknut Antiqua',
+  headingFont: 'Inknut Antiqua',
   bodyFont: 'Rubik',
   monoFont: 'Space Mono',
-  brandImg: BrandImg,
+  avatarImg: BrandImg,
   bgImg: BgImg,
   daoMeta: {
     proposals: 'Proposals',

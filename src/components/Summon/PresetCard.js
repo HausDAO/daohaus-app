@@ -14,19 +14,24 @@ import { Box, Text, Heading } from '@chakra-ui/react';
 const PresetCard = ({ preset, selectPreset, isSelected }) => {
   return (
     <ContentBox
-      borderWidth='2px'
-      borderColor={isSelected ? preset.color : 'transparent'}
       key={preset.presetName}
       onClick={() => selectPreset(preset)}
       width='33%'
+      cursor='pointer'
+      style={{
+        borderColor: isSelected ? preset.color : 'transparent',
+      }}
+      _hover={{
+        borderColor: isSelected ? preset.color : 'transparent',
+      }}
     >
-      <Box className='PresetCard__Inner'>
+      <Box>
         <Box className='PresetCard__Front'>
           <img width='48px' src={preset.img} alt='daohaus' />
-          <Heading as='h4' style={{ color: preset.color }}>
+          <Heading as='h4' size='md' style={{ color: preset.color }}>
             {preset.presetName}
           </Heading>
-          <Heading as='h5' style={{ color: preset.color }}>
+          <Heading as='h5' size='xs' style={{ color: preset.color }}>
             {preset.presetSubtitle}
           </Heading>
           <Text>{preset.presetDescription}</Text>

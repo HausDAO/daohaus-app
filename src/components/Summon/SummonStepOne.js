@@ -27,13 +27,13 @@ const SummonStepOne = ({ daoData, setDaoData, setCurrentStep }) => {
     });
   };
   return (
-    <Box className='SummonStepOne'>
+    <Box>
       <Text className='Alert'>
         Transaction fees got you down? Check our{' '}
         <a href='/help#xDAI'>Quick Start Guide</a> on how to switch to xDAI for
         cheaper, faster interactions for your community.
       </Text>
-      <Flex className='SummonStepOne__list'>{renderPresets()}</Flex>
+      <Flex wrap='wrap'>{renderPresets()}</Flex>
       <Box className='StepControl'>
         <Button
           onClick={() => setCurrentStep(2)}

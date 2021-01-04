@@ -1,5 +1,6 @@
 import React from 'react';
-import { Flex, Image, Link, Icon } from '@chakra-ui/react';
+import { Avatar, Flex, Image, Link, Icon } from '@chakra-ui/react';
+import makeBlockie from 'ethereum-blockies-base64';
 import {
   RiDiscordFill,
   RiTelegramFill,
@@ -22,7 +23,16 @@ const DaoMetaOverview = () => {
       {dao && (
         <>
           <Flex>
-            <Image src={theme.images.brandImg} h='50px' w='50px' />
+            {theme.images.avatarImg ? (
+              <Avatar src={theme.images.avatarImg} h='50px' w='50px' />
+            ) : (
+              <Avatar
+                h='50px'
+                w='50px'
+                name={dao.title.substr(0, 1)}
+                src={makeBlockie(dao.id)}
+              />
+            )}
             <TextBox variant='value' size='xl' ml={4}>
               {dao.name}
             </TextBox>

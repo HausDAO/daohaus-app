@@ -1,6 +1,7 @@
 import React from 'react';
 import { useHistory } from 'react-router-dom';
-import { Box, Flex, Image, Skeleton, Button } from '@chakra-ui/react';
+import { Avatar, Box, Flex, Skeleton, Button } from '@chakra-ui/react';
+import makeBlockie from 'ethereum-blockies-base64';
 
 import { useUser, useMembers } from '../../contexts/PokemolContext';
 import { useTheme } from '../../contexts/CustomThemeContext';
@@ -24,12 +25,16 @@ const DaoOverviewDetails = ({ dao }) => {
       )}
       <ContentBox mt={2} w='100%'>
         <Flex direction='row' align='center'>
-          <Image
-            src={require('../../assets/Daohaus__Castle--Dark.svg')}
-            alt='DAO Logo'
-            h={50}
-            w={50}
-          />
+          {theme.images.avatarImg ? (
+            <Avatar src={theme.images.avatarImg} h='50px' w='50px' />
+          ) : (
+            <Avatar
+              h='50px'
+              w='50px'
+              name={dao.title.substr(0, 1)}
+              src={makeBlockie(dao.id)}
+            />
+          )}
           <Skeleton isLoaded={dao.name} ml={6}>
             <Box fontSize='2xl' fontWeight={700} fontFamily='heading'>
               {dao.name ? dao.name : '--'}
