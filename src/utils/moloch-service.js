@@ -10,7 +10,7 @@ export class MolochService {
 
   constructor(web3, daoAddress, accountAddr, version) {
     this.web3 = web3;
-    const abi = version === 2 ? DaoAbiV2 : DaoAbi;
+    const abi = version === 2 || version === 2.1 ? DaoAbiV2 : DaoAbi;
     this.daoContract = new web3.eth.Contract(abi, daoAddress);
     this.accountAddr = accountAddr;
     this.contractAddr = daoAddress;

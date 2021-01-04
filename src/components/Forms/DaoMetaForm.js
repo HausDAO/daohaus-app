@@ -42,11 +42,6 @@ const DaoMetaForm = ({ metadata, handleUpdate }) => {
   const onSubmit = async (data) => {
     setLoading(true);
     console.log('onsubmit', data);
-    // gets to summon from summon flow (w/ address) or from hub (w/ address)
-    // 2. summon: send a summon flag, look up by contract address, look up with summoner + name, then update or create a record if not existing
-    // maybe we send a summon flag and the api checks the db on contract address 1st
-
-    // { summoning: true }
 
     try {
       const messageHash = web3Connect.web3.utils.sha3(metadata.address);
@@ -59,10 +54,13 @@ const DaoMetaForm = ({ metadata, handleUpdate }) => {
         ...data,
         contractAddress: metadata.address,
         network: network.network,
+        summonerAddress: metadata.summonerAddress,
+        version: '2.1',
         signature,
       };
 
       console.log('updateData', updateData);
+      console.log('testing', JSON.stringify(updateData));
 
       const updateRes = await put('dao/update', updateData);
 

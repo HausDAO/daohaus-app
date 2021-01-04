@@ -1,52 +1,59 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { Box, Flex, Icon, Text } from '@chakra-ui/react';
+import { Link as RouterLink, useParams, useHistory } from 'react-router-dom';
+import { BiArrowBack } from 'react-icons/bi';
 
-import {
-  useNetwork,
-  useUser,
-  useWeb3Connect,
-} from '../../contexts/PokemolContext';
-import { Text, Box } from '@chakra-ui/react';
-import { useEffect } from 'react/cjs/react.development';
-import { useParams } from 'react-router-dom';
+import { useUser } from '../../contexts/PokemolContext';
 import HubGraphInit from '../../contexts/HubGraphInit';
 import DaoMetaForm from '../../components/Forms/DaoMetaForm';
 import SummonService from '../../utils/summon-service';
 
 const RegisterDao = () => {
-  const [network] = useNetwork();
   const [user] = useUser();
-  const [web3Connect] = useWeb3Connect();
   const { dao } = useParams();
+  const history = useHistory();
   const [memberDaos, setMemberDaos] = useState();
   const [currentDao, setCurrentDao] = useState();
 
   useEffect(() => {
-    setCurrentDao({
-      contractAddress: dao,
-      title: '', // get this from somewhere
-      description: '',
-      purpose: '',
-      summonerAddress: user.username,
-      network: network.network_id,
-    });
+    if (user && dao)
+      setCurrentDao({
+        address: dao,
+        title: '', // get this from somewhere
+        description: '',
+        purpose: '',
+        summonerAddress: user.username,
+      });
 
     // console.log(localFreshDaos);
   }, [user, dao]);
 
   const handleUpdate = async (values) => {
     console.log(values);
-    // redirect to dao page
+    history.push(`/dao/${dao}`);
   };
   return (
     <>
-      {!network || !currentDao ? (
+      {!currentDao ? (
         <Text>loading...</Text>
       ) : (
         <Box>
-          <Text>
-            Register + {network.network_id} + {currentDao?.contractAddress}
-          </Text>
-          <DaoMetaForm onSubmit={handleUpdate} metadata={currentDao} />
+          <Flex ml={6} justify='space-between' align='center' w='100%'>
+            <Flex as={RouterLink} to={`/`} align='center'>
+              <Icon as={BiArrowBack} color='secondary.500' mr={2} />
+              Back
+            </Flex>
+          </Flex>
+
+          <Box
+            fontSize={['lg', null, null, '3xl']}
+            fontFamily='heading'
+            fontWeight={700}
+            ml={10}
+          >
+            Finish your DAO Setup
+          </Box>
+          <DaoMetaForm handleUpdate={handleUpdate} metadata={currentDao} />
         </Box>
       )}
       {user ? (

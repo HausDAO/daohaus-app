@@ -67,7 +67,7 @@ export class DaoService {
     const moloch = new ReadonlyMolochService(web3, contractAddr, '', version);
 
     let approvedToken;
-    if (version === 2) {
+    if (version === 2 || version === 2.1) {
       approvedToken = await moloch.getDepositToken();
     } else {
       approvedToken = await moloch.approvedToken();
