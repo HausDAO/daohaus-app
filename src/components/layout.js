@@ -9,7 +9,7 @@ const StyleTemplate = styled.main`
   display: grid;
   min-height: 100%;
   width: 100%;
-  grid-template-columns: 36rem auto;
+  grid-template-columns: 30rem auto;
   grid-template-rows: 5.6rem auto;
   transition: 0.2s all;
   /* @media ${widthQuery.laptop} {

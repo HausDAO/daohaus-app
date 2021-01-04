@@ -49,22 +49,24 @@ export const InjectedProvider = ({ children }) => {
   //This useEffect handles the initialization of EIP-1193 listeners
   //https://eips.ethereum.org/EIPS/eip-1193
   useEffect(() => {
+    const handleChainChange = (chainId) => {
+      console.log(chainId);
+      connectProvider();
+    };
+    const accountsChanged = (account) => {
+      console.log(account);
+    };
     if (!window.ethereum) {
       console.warn("Cannot detect injected provider");
       return;
     }
     window.ethereum
-      .on("accountsChanged", (accounts) => {
-        // console.log(accounts);
-      })
-      .on("chainChanged", (chainId) => {
-        console.log(chainId);
-        connectProvider();
-      });
+      .on("accountsChanged", accountsChanged)
+      .on("chainChanged", handleChainChange);
     return () => {
       window.ethereum
-        .removeListener("accountsChanged")
-        .removeListener("chainChanged");
+        .removeListener("accountsChanged", handleChainChange)
+        .removeListener("chainChanged", accountsChanged);
     };
   }, []);
 

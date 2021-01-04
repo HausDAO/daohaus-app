@@ -1,7 +1,4 @@
 import styled from "styled-components";
-import { Link } from "react-router-dom";
-
-import { getColor } from "../styles/palette";
 
 export const DisplayXl = styled.h1`
   font-size: 4rem;

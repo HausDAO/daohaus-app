@@ -15,7 +15,8 @@ function App() {
     if (!injectedProvider && localStorage.getItem("hasConnected")) {
       setViewMode(<Loading />);
     } else if (injectedProvider) {
-      setViewMode(<Authed provider={injectedProvider} />);
+      console.log("fired", injectedProvider);
+      setViewMode(<Authed provider={injectedProvider.provider} />);
     } else {
       setViewMode(<NotAuthed />);
     }
