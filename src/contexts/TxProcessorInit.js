@@ -16,6 +16,7 @@ import {
   ListItem,
   Link,
   Stack,
+  Button,
 } from '@chakra-ui/react';
 import { VscQuestion } from 'react-icons/vsc';
 import { RiExternalLinkLine, RiErrorWarningLine } from 'react-icons/ri';
@@ -286,6 +287,11 @@ const TxProcessorInit = () => {
                     <span role='img' aria-label='confetti'>
                       🎉
                     </span>
+                    {latestTx && latestTx?.details?.name === 'summonMoloch' && (
+                      <RouterLink to={`register/${latestTx?.details}`}>
+                        Configure DAO
+                      </RouterLink>
+                    )}
                   </Box>
                 )}
                 {POPUP_CONTENT[latestTx?.details?.name]?.header && (
