@@ -24,7 +24,6 @@ import {
   useUserDaos,
   useWeb3Connect,
 } from '../../contexts/PokemolContext';
-import { useTheme } from '../../contexts/CustomThemeContext';
 import BrandImg from '../../assets/Daohaus__Castle--Dark.svg';
 
 const DaoSwitcherModal = ({ isOpen }) => {
@@ -32,7 +31,6 @@ const DaoSwitcherModal = ({ isOpen }) => {
   const { closeModals } = useModals();
   const [web3Connect] = useWeb3Connect();
   const [user] = useUser();
-  const [theme] = useTheme();
   const [, clearDaoData] = useDao();
 
   const handleNav = (fromHub) => {

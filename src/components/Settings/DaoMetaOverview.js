@@ -1,5 +1,5 @@
 import React from 'react';
-import { Avatar, Flex, Image, Link, Icon } from '@chakra-ui/react';
+import { Avatar, Flex, Link, Icon } from '@chakra-ui/react';
 import makeBlockie from 'ethereum-blockies-base64';
 import {
   RiDiscordFill,
