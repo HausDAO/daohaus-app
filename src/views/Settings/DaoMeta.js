@@ -22,7 +22,7 @@ const DaoMetadata = () => {
         links: daoMetadata.links,
         avatarImg: daoMetadata.avatarImg,
         version: daoMetadata.version,
-        //   tags: daoMetadata.tags,
+        tags: daoMetadata.tags,
       });
     }
   }, [daoMetadata, localMetadata]);

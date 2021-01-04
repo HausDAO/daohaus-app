@@ -13,6 +13,7 @@ import {
   Spinner,
   Select,
   ButtonGroup,
+  FormHelperText,
 } from '@chakra-ui/react';
 import { useForm } from 'react-hook-form';
 import {
@@ -66,6 +67,7 @@ const DaoMetaForm = ({ metadata, handleUpdate }) => {
       if (ipfsHash) {
         data.avatarImg = ipfsHash;
       }
+      data.tags = data.tags.split(',');
 
       const updateData = {
         ...data,
@@ -231,19 +233,19 @@ const DaoMetaForm = ({ metadata, handleUpdate }) => {
                     ))}
                   </Select>
                 </FormControl>
-                {/* 
-               <FormControl id='tags' mb={4}>
-            <TextBox size='xs' mb={2}>
-              Tags
-            </TextBox>
-            <Input
-              ref={register}
-              defaultValue={metadata.tags}
-              placeholder='Ethereum, Clubs'
-              name='tags'
-            />
-            <FormHelperText>Comma-separated list</FormHelperText>
-          </FormControl> */}
+
+                <FormControl id='tags' mb={4}>
+                  <TextBox size='xs' mb={2}>
+                    Tags
+                  </TextBox>
+                  <Input
+                    ref={register}
+                    defaultValue={metadata.tags}
+                    placeholder='Ethereum, Clubs'
+                    name='tags'
+                  />
+                  <FormHelperText>Comma-separated list</FormHelperText>
+                </FormControl>
 
                 <TextBox size='xs' mb={2}>
                   Community Links
