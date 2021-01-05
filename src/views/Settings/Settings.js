@@ -14,6 +14,8 @@ const Settings = () => {
   const [dao] = useDao();
   const [memberWallet] = useMemberWallet();
 
+  console.log('memberWallet', memberWallet);
+
   return (
     <Flex p={6} wrap='wrap'>
       <Box
@@ -25,7 +27,7 @@ const Settings = () => {
         <DaoContractSettings />
         <Flex justify='space-between' mt={6}>
           <TextBox size='xs'>DAO Metadata</TextBox>
-          {memberWallet?.activeMember ? (
+          {/* {memberWallet?.activeMember ? (
             <Link
               as={RouterLink}
               color='secondary.500'
@@ -37,7 +39,7 @@ const Settings = () => {
             >
               Edit
             </Link>
-          ) : null}
+          ) : null} */}
         </Flex>
         <DaoMetaOverview />
       </Box>
