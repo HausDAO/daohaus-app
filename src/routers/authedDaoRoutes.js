@@ -2,7 +2,7 @@ import React from "react";
 import { Switch, Route, useRouteMatch, Redirect } from "react-router-dom";
 import Proposals from "../pages/Proposals";
 
-const AuthedDao = () => {
+const AuthedDaoRoutes = () => {
   const { path, url } = useRouteMatch();
   return (
     <Switch>
@@ -19,4 +19,4 @@ const AuthedDao = () => {
   );
 };
 
-export default AuthedDao;
+export default AuthedDaoRoutes;

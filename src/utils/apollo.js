@@ -61,6 +61,24 @@ export const queryAllChains = async ({
   });
 };
 
+export const multiFetch = async (fetchArray) => {
+  fetchArray.forEach(
+    async ({ endpoint, query, variables, resolvers, reactSetter }) => {
+      try {
+        const data = await apolloQuery({
+          endpoint,
+          query,
+          variables,
+          resolvers,
+        });
+        reactSetter(data);
+      } catch (error) {
+        console.error(error);
+      }
+    }
+  );
+};
+
 // export const queryThenSetReact = async (
 //   options,
 //   setter,

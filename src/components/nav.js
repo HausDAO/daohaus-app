@@ -52,6 +52,7 @@ const Header = () => {
 
   // console.log(provider);
   const shortAddress = getTrucatedAddress(injectedProvider?.provider);
+
   return (
     <NavContainer>
       {injectedProvider ? (

@@ -34,12 +34,9 @@ export const findInjectedProvider = () => {
   }
 };
 
-export const getAddress = (provider) => {
-  return provider.selectedAddress;
-};
 export const getTrucatedAddress = (provider) => {
-  if (provider) {
-    const selectedAddress = getAddress(provider);
+  if (provider && provider.selectedAddress) {
+    const { selectedAddress } = provider;
     return `${selectedAddress.slice(0, 6)}...${selectedAddress.slice(
       selectedAddress.length - 6
     )}`;

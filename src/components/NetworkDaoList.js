@@ -8,7 +8,7 @@ const NetworkDaoList = ({ data }) => {
     <>
       {data.membersHub?.map((dao) => (
         <div className="inner-section" key={dao.id}>
-          <Link to={`/dao/${dao.id}/proposals`}>
+          <Link to={`/dao/${dao.moloch.id}/proposals`}>
             <HeaderMd className="title">{dao.moloch.title}</HeaderMd>
           </Link>
           <BodyXs>Version {dao.moloch.version}</BodyXs>

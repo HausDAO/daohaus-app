@@ -2,9 +2,8 @@ import React from "react";
 import { Switch, Route } from "react-router-dom";
 
 import { UserContextProvider } from "../contexts/UserContext";
-import AuthedDaoRoutes from "./authedDaoRoutes";
 import AuthedHub from "../pagesAuthed/AuthedHub";
-import { useInjectedProvider } from "../contexts/InjectedProviderContext";
+import AuthedDao from "../pagesAuthed/AuthedDao";
 
 const Authed = () => {
   return (
@@ -17,7 +16,7 @@ const Authed = () => {
           <AuthedHub />
         </Route>
         <Route path="/dao/:id">
-          <AuthedDaoRoutes />
+          <AuthedDao />
         </Route>
       </Switch>
     </UserContextProvider>
