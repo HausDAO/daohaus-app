@@ -1,6 +1,7 @@
 import React from 'react';
-import { Box, Flex, Link } from '@chakra-ui/react';
-import { Link as RouterLink } from 'react-router-dom';
+// import { Box, Flex, Link } from '@chakra-ui/react';
+import { Box, Flex } from '@chakra-ui/react';
+// import { Link as RouterLink } from 'react-router-dom';
 
 import { useDao, useMemberWallet } from '../../contexts/PokemolContext';
 import BoostStatus from '../../components/Settings/BoostStatus';
