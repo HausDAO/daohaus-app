@@ -25,6 +25,7 @@ import {
   useWeb3Connect,
 } from '../../contexts/PokemolContext';
 import BrandImg from '../../assets/Daohaus__Castle--Dark.svg';
+import { themeImagePath } from '../../utils/helpers';
 
 const DaoSwitcherModal = ({ isOpen }) => {
   const [userDaos] = useUserDaos();
@@ -68,7 +69,11 @@ const DaoSwitcherModal = ({ isOpen }) => {
               <Flex direction='row' justify='start' alignItems='center'>
                 <Avatar
                   name={dao.apiMetaData?.name.substr(0, 1)}
-                  src={makeBlockie(dao.id)}
+                  src={
+                    dao.apiMetadata?.avatarImg
+                      ? themeImagePath(dao.apiMetadata.avatarImg)
+                      : makeBlockie(dao.id)
+                  }
                   mr='10px'
                 ></Avatar>
                 <Box color='white'>{dao.apiMetadata.name}</Box>
