@@ -1,18 +1,20 @@
 import React, { useState, useEffect } from 'react';
-import { Box, Flex, Icon, Text } from '@chakra-ui/react';
+import { Box, Flex, Icon } from '@chakra-ui/react';
 import { Link as RouterLink, useParams, useHistory } from 'react-router-dom';
 import { BiArrowBack } from 'react-icons/bi';
 
 import { useUser } from '../../contexts/PokemolContext';
 import HubGraphInit from '../../contexts/HubGraphInit';
 import DaoMetaForm from '../../components/Forms/DaoMetaForm';
+import { supportedChains } from '../../utils/chains';
 
 const RegisterDao = () => {
   const [user] = useUser();
-  const { dao } = useParams();
+  const { dao, networkId } = useParams();
   const history = useHistory();
   const [memberDaos, setMemberDaos] = useState();
   const [currentDao, setCurrentDao] = useState();
+  const [needsNetworkChange, setNeedsNetworkChange] = useState();
 
   useEffect(() => {
     if (user && dao) {
@@ -26,17 +28,41 @@ const RegisterDao = () => {
         summonerAddress: user.username,
         version: '2.1',
       });
+
+      setNeedsNetworkChange(+networkId !== user.providerNetwork.network_id);
     }
-  }, [user, dao]);
+  }, [user, dao, networkId]);
 
   const handleUpdate = async (values) => {
     console.log(values);
     history.push(`/dao/${dao}`);
   };
+
+  if (needsNetworkChange) {
+    return (
+      <Box
+        fontSize={['lg', null, null, '3xl']}
+        fontFamily='heading'
+        fontWeight={700}
+        ml={10}
+      >
+        You need to switch to {supportedChains[+networkId].network} to register
+        this dao.
+      </Box>
+    );
+  }
+
   return (
     <>
       {!currentDao ? (
-        <Text>loading...</Text>
+        <Box
+          fontSize={['lg', null, null, '3xl']}
+          fontFamily='heading'
+          fontWeight={700}
+          ml={10}
+        >
+          loading...
+        </Box>
       ) : (
         <>
           <Flex ml={6} justify='space-between' align='center' w='100%'>
