@@ -29,7 +29,6 @@ export const UserContextProvider = ({ children }) => {
   const { injectedProvider } = useInjectedProvider();
   const [userHubDaos, setUserHubDaos] = useSessionStorage("userHubData", []);
   const hasLoadedHubData = userHubDaos.length === 4;
-  console.log(userHubDaos);
 
   useEffect(() => {
     if (!userHubDaos.length) {

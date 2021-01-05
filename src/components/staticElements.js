@@ -33,3 +33,18 @@ export const ListItemCard = styled.section`
     margin-bottom: 0.8rem;
   }
 `;
+export const SplitLayout = styled.div`
+  width: 100%;
+  height: 100%;
+  display: grid;
+  grid-template-columns: minmax(28rem, 56rem) 12rem minmax(36rem, auto);
+  grid-template-rows: 8.4rem auto;
+  .title-section {
+    height: 100%;
+    h2 {
+      margin-bottom: 2.4rem;
+    }
+    grid-row: 1;
+    grid-column: 1/5;
+  }
+`;

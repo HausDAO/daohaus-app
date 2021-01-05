@@ -12,14 +12,17 @@ export const InjectedProvider = ({ children }) => {
 
   const connectProvider = () => {
     const provider = findInjectedProvider();
-    const chain = supportedChains[provider.chainId];
-
-    if (!chain) {
+    if (!supportedChains[provider.chainId]) {
       console.error("This is not a supported chain");
       return;
     }
+    const chain = {
+      ...supportedChains[provider.chainId],
+      chainId: provider.chainId,
+    };
+
     setInjectedProvider(new ethers.providers.Web3Provider(provider));
-    setInjectedChain(supportedChains[provider.chainId]);
+    setInjectedChain(chain);
   };
 
   useEffect(() => {
@@ -50,7 +53,6 @@ export const InjectedProvider = ({ children }) => {
   //https://eips.ethereum.org/EIPS/eip-1193
   useEffect(() => {
     const handleChainChange = (chainId) => {
-      console.log(chainId);
       connectProvider();
     };
     const accountsChanged = (account) => {
@@ -68,7 +70,7 @@ export const InjectedProvider = ({ children }) => {
         .removeListener("accountsChanged", handleChainChange)
         .removeListener("chainChanged", accountsChanged);
     };
-  }, []);
+  }, [injectedProvider]);
 
   const requestWallet = async () => {
     const [injectedAddress] = await requestAddresses();
@@ -89,7 +91,7 @@ export const InjectedProvider = ({ children }) => {
     setInjectedProvider(null);
     localStorage.removeItem("hasConnected");
   };
-
+  const address = injectedProvider?.provider?.selectedAddress;
   return (
     <InjectedProviderContext.Provider
       value={{
@@ -97,24 +99,26 @@ export const InjectedProvider = ({ children }) => {
         requestWallet,
         disconnectDapp,
         injectedChain,
+        address,
       }}
     >
       {children}
     </InjectedProviderContext.Provider>
   );
 };
-
 export const useInjectedProvider = () => {
   const {
     injectedProvider,
     requestWallet,
     disconnectDapp,
     injectedChain,
+    address,
   } = useContext(InjectedProviderContext);
   return {
     injectedProvider,
     requestWallet,
     disconnectDapp,
     injectedChain,
+    address,
   };
 };

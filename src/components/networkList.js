@@ -38,7 +38,10 @@ const NetworkList = () => {
           <HeaderLg className="network-header">Current Network: </HeaderLg>
           <ListItemCard>
             <Overline className="label">{currentNetwork.name}</Overline>
-            <NetworkDaoList data={currentNetwork.data} />
+            <NetworkDaoList
+              data={currentNetwork.data}
+              networkID={currentNetwork.networkID}
+            />
           </ListItemCard>
           <Divider />
         </>
@@ -51,7 +54,10 @@ const NetworkList = () => {
               return (
                 <ListItemCard key={network.networkID}>
                   <Overline className="label">{network.name}</Overline>
-                  <NetworkDaoList data={network.data} />
+                  <NetworkDaoList
+                    data={network.data}
+                    networkID={network.networkID}
+                  />
                 </ListItemCard>
               );
             } else {
