@@ -111,7 +111,7 @@ const Routes = () => {
         />
         <Route path='/summon' exact component={SummonWrapper} />
         <Route
-          path='/register/:dao(\b0x[0-9a-f]{10,40}\b)'
+          path='/register/:dao(\b0x[0-9a-f]{10,40}\b)/:networkId'
           exact
           component={RegisterDao}
         />

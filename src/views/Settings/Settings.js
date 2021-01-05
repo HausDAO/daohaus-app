@@ -1,7 +1,6 @@
 import React from 'react';
-// import { Box, Flex, Link } from '@chakra-ui/react';
-import { Box, Flex } from '@chakra-ui/react';
-// import { Link as RouterLink } from 'react-router-dom';
+import { Box, Flex, Link } from '@chakra-ui/react';
+import { Link as RouterLink } from 'react-router-dom';
 
 import { useDao, useMemberWallet } from '../../contexts/PokemolContext';
 import BoostStatus from '../../components/Settings/BoostStatus';
@@ -15,8 +14,6 @@ const Settings = () => {
   const [dao] = useDao();
   const [memberWallet] = useMemberWallet();
 
-  console.log('memberWallet', memberWallet);
-
   return (
     <Flex p={6} wrap='wrap'>
       <Box
@@ -28,7 +25,7 @@ const Settings = () => {
         <DaoContractSettings />
         <Flex justify='space-between' mt={6}>
           <TextBox size='xs'>DAO Metadata</TextBox>
-          {/* {memberWallet?.activeMember ? (
+          {memberWallet?.activeMember ? (
             <Link
               as={RouterLink}
               color='secondary.500'
@@ -40,7 +37,7 @@ const Settings = () => {
             >
               Edit
             </Link>
-          ) : null} */}
+          ) : null}
         </Flex>
         <DaoMetaOverview />
       </Box>

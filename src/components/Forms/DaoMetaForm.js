@@ -78,7 +78,12 @@ const DaoMetaForm = ({ metadata, handleUpdate }) => {
         signature,
       };
 
-      await put('dao/update', updateData);
+      const res = await put('dao/update', updateData);
+
+      console.log('res', res);
+      if (res.error) {
+        throw res.error;
+      }
 
       handleUpdate(data);
     } catch (err) {

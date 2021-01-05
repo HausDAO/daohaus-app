@@ -310,41 +310,6 @@ const CustomThemeForm = ({ previewTheme, setPreviewTheme }) => {
           <ButtonGroup>
             <Box>
               <Button
-                id='brandImg'
-                variant='outline'
-                onClick={() => {
-                  setImagePicker('brandImg');
-                  handleBrowse();
-                }}
-              >
-                Logo
-              </Button>
-
-              {previewTheme?.brandImg ? (
-                <>
-                  <Image
-                    src={themeImagePath(previewTheme.brandImg)}
-                    alt='brand image'
-                    w='50px'
-                    h='50px'
-                  />
-
-                  {previewTheme.brandImg.slice(0, 1) !== '/' ? (
-                    <Text
-                      fontSize='xs'
-                      onClick={() => {
-                        handleClearImage('brand');
-                      }}
-                      _hover={{ cursor: 'pointer' }}
-                    >
-                      Clear Brand Image and use default
-                    </Text>
-                  ) : null}
-                </>
-              ) : null}
-            </Box>
-            <Box>
-              <Button
                 id='bgImg'
                 mb={3}
                 variant='outline'
