@@ -50,7 +50,11 @@ const DaoSwitcherModal = ({ isOpen }) => {
 
   const renderDaoSelect = () => {
     return userDaos
-      .filter((dao) => dao.version === '2' || dao.version === '2.1')
+      .filter((dao) => {
+        return (
+          (dao.version === '2' || dao.version === '2.1') && dao.apiMetadata
+        );
+      })
       .sort((a, b) => a.hubSort - b.hubSort)
       .map((dao, i) => {
         return (
@@ -67,7 +71,7 @@ const DaoSwitcherModal = ({ isOpen }) => {
                   src={makeBlockie(dao.id)}
                   mr='10px'
                 ></Avatar>
-                <Box color='white'>{dao.title}</Box>
+                <Box color='white'>{dao.apiMetadata.name}</Box>
               </Flex>
               <RiArrowRightSLine color='white' />
             </Flex>

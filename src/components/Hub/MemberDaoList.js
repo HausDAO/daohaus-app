@@ -11,6 +11,7 @@ import {
   Text,
 } from '@chakra-ui/react';
 import TextBox from '../Shared/TextBox';
+import { themeImagePath } from '../../utils/helpers';
 
 const MemberDaoList = ({ daos, label }) => {
   const [visibleDaos, setVisibleDaos] = useState([]);
@@ -22,7 +23,7 @@ const MemberDaoList = ({ daos, label }) => {
   }, [daos]);
 
   const getDaoLink = (healthCount, dao) => {
-    if (dao.title) {
+    if (dao.apiMetadata) {
       return healthCount ? `/dao/${dao.id}/proposals` : `dao/${dao.id}`;
     } else {
       return `/register/${dao.id}`;
@@ -45,8 +46,14 @@ const MemberDaoList = ({ daos, label }) => {
           alignItems='center'
         >
           <Avatar
-            name={dao.title ? dao.title.substr(0, 1) : 'no title'}
-            src={makeBlockie(dao.id)}
+            name={
+              dao.apiMetadata ? dao.apiMetadata.name.substr(0, 1) : 'no title'
+            }
+            src={
+              dao.apiMetadata?.avatarImg
+                ? themeImagePath(dao.apiMetadata.avatarImg)
+                : makeBlockie(dao.id)
+            }
             mb={3}
           >
             {healthCount ? (
@@ -73,7 +80,7 @@ const MemberDaoList = ({ daos, label }) => {
               whiteSpace: 'nowrap',
             }}
           >
-            {dao.apiMetadata[0]?.name}
+            {dao.apiMetadata?.name}
           </Box>
         </Link>
       </Box>
@@ -84,7 +91,9 @@ const MemberDaoList = ({ daos, label }) => {
     if (event.target.value) {
       const resultDaos = daos.filter((dao) => {
         return (
-          dao.title.toLowerCase().indexOf(event.target.value.toLowerCase()) > -1
+          dao.apiMetadata.name
+            .toLowerCase()
+            .indexOf(event.target.value.toLowerCase()) > -1
         );
       });
       setVisibleDaos(resultDaos);
