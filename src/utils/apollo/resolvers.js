@@ -11,11 +11,14 @@ import {
 } from '../proposal-helper';
 import { TokenService } from '../token-service';
 import { MolochService } from '../moloch-service';
+import { supportedChains } from '../chains';
 
 export const resolvers = {
   Moloch: {
     apiMetadata: async (moloch, _args, context) => {
-      return context.apiMetaDataJson[moloch.id];
+      const networkName = supportedChains[+context.networkId].network;
+      const daoMatch = context.apiMetaDataJson[moloch.id] || [];
+      return daoMatch.find((dao) => dao.network === networkName) || null;
     },
   },
   Proposal: {

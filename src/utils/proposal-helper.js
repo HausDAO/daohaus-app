@@ -219,6 +219,7 @@ export const linkMaker = (proposal) => {
 };
 
 export const isMinion = (proposal) => {
+  console.log('parsed', proposal);
   try {
     const parsed = JSON.parse(proposal.details.replace(/(\r\n|\n|\r)/gm, ''));
     return {

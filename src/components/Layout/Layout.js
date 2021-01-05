@@ -32,6 +32,7 @@ import {
   RiDiscordFill,
   RiTelegramFill,
   RiMediumFill,
+  RiTwitterFill,
   RiGlobeLine,
   RiLinksLine,
   RiMenu3Line,
@@ -48,6 +49,7 @@ import {
 import { GiCastle } from 'react-icons/gi';
 import { useTheme } from '../../contexts/CustomThemeContext';
 import { themeImagePath } from '../../utils/helpers';
+import { defaultSocialLinks } from '../../content/socials';
 
 const MotionBox = motion.custom(Box);
 const MotionFlex = motion.custom(Flex);
@@ -426,8 +428,11 @@ const Layout = ({ children }) => {
               h='48px'
               cursor='pointer'
               border='none'
-              bg={'url(' + themeImagePath(theme.images.brandImg) + ')'}
-              // bg={'url(' + theme.images.brandImg + ')'}
+              bg={`url('${
+                dao?.avatarImg
+                  ? themeImagePath(dao.avatarImg)
+                  : themeImagePath(theme.images.brandImg)
+              }')`}
               bgSize='cover'
               bgPosition='center'
               bgRepeat='no-repeat'
@@ -750,61 +755,94 @@ const Layout = ({ children }) => {
               w='100%'
             >
               <ButtonGroup>
-                {theme.daoMeta.website !== '' && (
+                {!dao.address || dao.links?.website ? (
                   <IconButton
                     as={Link}
                     icon={<RiGlobeLine />}
-                    href={theme.daoMeta.website}
+                    href={
+                      !dao.address
+                        ? defaultSocialLinks.website
+                        : dao.links.website
+                    }
                     isExternal
                     size='lg'
                     variant='link'
                     isRound='true'
                   />
-                )}
-                {theme.daoMeta.discord !== '' && (
+                ) : null}
+                {!dao.address || dao.links?.discord ? (
                   <IconButton
                     as={Link}
                     icon={<RiDiscordFill />}
-                    href={theme.daoMeta.discord}
+                    href={
+                      !dao.address
+                        ? defaultSocialLinks.discord
+                        : dao.links.discord
+                    }
                     isExternal
                     size='lg'
                     variant='link'
                     isRound='true'
                   />
-                )}
-                {theme.daoMeta.telegram !== '' && (
+                ) : null}
+                {!dao.address || dao.links?.telegram ? (
                   <IconButton
                     as={Link}
                     icon={<RiTelegramFill />}
-                    href={theme.daoMeta.telegram}
+                    href={
+                      !dao.address
+                        ? defaultSocialLinks.telegram
+                        : dao.links.telegram
+                    }
                     isExternal
                     size='lg'
                     variant='link'
                     isRound='true'
                   />
-                )}
-                {theme.daoMeta.medium !== '' && (
+                ) : null}
+                {!dao.address || dao.links?.medium ? (
                   <IconButton
                     as={Link}
                     icon={<RiMediumFill />}
-                    href={theme.daoMeta.medium}
+                    href={
+                      !dao.address
+                        ? defaultSocialLinks.medium
+                        : dao.links.medium
+                    }
                     isExternal
                     size='lg'
                     variant='link'
                     isRound='true'
                   />
-                )}
-                {theme.daoMeta.other !== '' && (
+                ) : null}
+                {!dao.address || dao.links?.twitter ? (
+                  <IconButton
+                    as={Link}
+                    icon={<RiTwitterFill />}
+                    href={`https://twitter.com/${
+                      !dao.address
+                        ? defaultSocialLinks.twitter
+                        : dao.links.twitter
+                    }`}
+                    isExternal
+                    size='lg'
+                    variant='link'
+                    isRound='true'
+                  />
+                ) : null}
+                {!dao.address || dao.links?.other ? (
                   <IconButton
                     as={Link}
                     icon={<RiLinksLine />}
-                    href={theme.daoMeta.other}
+                    href={
+                      !dao.address ? defaultSocialLinks.other : dao.links.other
+                    }
                     isExternal
                     size='lg'
                     variant='link'
                     isRound='true'
                   />
-                )}
+                ) : null}
               </ButtonGroup>
             </MotionFlex>
           </Flex>

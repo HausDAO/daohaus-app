@@ -240,7 +240,7 @@ const TransmutationProposal = () => {
             </FormLabel>
             <Input
               name='paymentRequested'
-              placeholder='0x'
+              placeholder='100'
               mb={5}
               ref={register({
                 required: {

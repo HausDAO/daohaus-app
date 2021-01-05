@@ -1,6 +1,6 @@
 import v21FactoryAbi from '../contracts/molochV21.json';
 
-import { post } from './requests';
+import { post, put } from './requests';
 import { supportedChains } from './chains';
 
 export default class SummonService {
@@ -16,17 +16,18 @@ export default class SummonService {
   }
 
   // internal
-  sendTx(options, callback) {
-    const { from, name, params } = options;
+  sendTx(details, callback, cacheMoloch) {
+    const { from, name, params } = details;
     const tx = this.contract.methods[name](...params);
     return tx
       .send({ from: from })
       .on('transactionHash', (txHash) => {
         this.summonTx = txHash;
-        this.setLocal({
-          tx: this.summonTx,
-        });
-        callback(txHash, options);
+        cacheMoloch.tx = this.summonTx;
+        // this.cacheNewMoloch(cacheMoloch);
+        this.setLocal(cacheMoloch);
+        details.details = cacheMoloch;
+        callback(txHash, details);
       })
       .on('error', (error) => {
         this.setLocal({
@@ -41,12 +42,27 @@ export default class SummonService {
     const res = await post('dao', newMoloch);
     console.log('post response', res);
     if (!res) {
-      console.log('moloch creation error');
-
+      console.log('moloch api creation error');
       this.setLocal({
-        tx: this.summonTx,
         error: 'cache error',
       });
+    } else {
+      this.setLocal(newMoloch);
+    }
+  }
+
+  async updateMolochCache(newMoloch) {
+    // add netowrk and signature
+    // example theme.js L56
+    const res = await put('dao/update', newMoloch);
+    console.log('post response', res);
+    if (!res) {
+      console.log('moloch api creation error');
+      this.setLocal({
+        error: 'cache error',
+      });
+    } else {
+      this.setLocal(newMoloch);
     }
   }
 
@@ -57,7 +73,7 @@ export default class SummonService {
     }
 
     window.localStorage.setItem(
-      'pendingMoloch',
+      'pendingMolochy',
       JSON.stringify({
         ...localMoloch,
         ...newData,
@@ -65,15 +81,15 @@ export default class SummonService {
     );
   }
 
-//   { "name": "_summoner", "type": "address[]" },
-//   { "name": "_approvedTokens", "type": "address[]" },
-//   { "name": "_periodDuration", "type": "uint256" },
-//   { "name": "_votingPeriodLength", "type": "uint256" },
-//   { "name": "_gracePeriodLength", "type": "uint256" },
-//   { "name": "_proposalDeposit", "type": "uint256" },
-//   { "name": "_dilutionBound", "type": "uint256" },
-//   { "name": "_processingReward", "type": "uint256" },
-//   { "name": "_summonerShares", "type": "uint256[]" }
+  //   { "name": "_summoner", "type": "address[]" },
+  //   { "name": "_approvedTokens", "type": "address[]" },
+  //   { "name": "_periodDuration", "type": "uint256" },
+  //   { "name": "_votingPeriodLength", "type": "uint256" },
+  //   { "name": "_gracePeriodLength", "type": "uint256" },
+  //   { "name": "_proposalDeposit", "type": "uint256" },
+  //   { "name": "_dilutionBound", "type": "uint256" },
+  //   { "name": "_processingReward", "type": "uint256" },
+  //   { "name": "_summonerShares", "type": "uint256[]" }
   async summonMoloch(daoData, account, callback) {
     console.log('daoDAta', daoData);
     const _cacheMoloch = {
@@ -86,9 +102,6 @@ export default class SummonService {
       purpose: daoData.presetName || 'Grants',
     };
 
-    console.log('_cacheMoloch', _cacheMoloch);
-
-    this.setLocal(_cacheMoloch);
     const txReceipt = await this.sendTx(
       {
         from: account,
@@ -106,8 +119,14 @@ export default class SummonService {
         ],
       },
       callback,
+      _cacheMoloch,
     );
-    await this.cacheNewMoloch(_cacheMoloch);
+    console.log('txReceipt', txReceipt);
+    _cacheMoloch.tx = txReceipt.transactionHash;
+    _cacheMoloch.contractAddress =
+      txReceipt.events.SummonComplete.returnValues.moloch;
+    this.setLocal(_cacheMoloch);
+
     return txReceipt.transactionHash;
   }
 }

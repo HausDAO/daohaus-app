@@ -17,11 +17,10 @@ const Hub = () => {
   const [, setTheme] = useTheme();
   const [memberDaos, setMemberDaos] = useState();
   const [localDaos, setLocalDaos] = useState([]);
+  const [localFreshDaos, setLocalFreshDaos] = useState([]);
 
   useEffect(() => {
     setTheme(defaultTheme);
-    // reset network when coming back from a dao somehow
-    // setLocalDaos([]);
     // eslint-disable-next-line
   }, []);
 
@@ -29,7 +28,19 @@ const Hub = () => {
     if (memberDaos) {
       setLocalDaos(
         memberDaos
-          .filter((member) => member.moloch.version === '2')
+          .filter((member) => member.moloch.version !== '1')
+          .filter((member) => member.moloch.apiMetadata)
+          .sort((a, b) => {
+            return a.hubSort - b.hubSort;
+          })
+          .map((member) => {
+            return { ...member.moloch, networkId: member.networkId };
+          }),
+      );
+      setLocalFreshDaos(
+        memberDaos
+          .filter((member) => member.moloch.version !== '1')
+          .filter((member) => !member.moloch.apiMetadata)
           .sort((a, b) => {
             return a.hubSort - b.hubSort;
           })
@@ -39,8 +50,6 @@ const Hub = () => {
       );
     }
   }, [memberDaos]);
-
-  console.log('memberDaos', memberDaos);
 
   return (
     <Box p={6}>
@@ -53,41 +62,58 @@ const Hub = () => {
               pb={6}
             >
               <HubProfileCard />
-              {memberDaos && memberDaos.length > 0 ? (
+              {memberDaos && memberDaos.length > 0 && (
                 <ContentBox p={6} mt={6} maxW='600px'>
                   {localDaos.length > 0 ? (
-                    <>
-                      <MemberDaoList daos={localDaos} />
-                    </>
+                    <Box w='100%'>
+                      <MemberDaoList label={'MEMBER OF'} daos={localDaos} />
+                      <Link
+                        href='https://daohaus.club/explore'
+                        isExternal
+                        fontSize='md'
+                        textTransform='uppercase'
+                        color='secondary.500'
+                      >
+                        Explore more DAOs on DAOhaus
+                      </Link>
+                    </Box>
+                  ) : (
+                    <Box w='100%'>
+                      <Flex>
+                        <TextBox size='sm'>
+                          You aren’t a member in any daos yet!
+                        </TextBox>
+                      </Flex>
+                      <Flex align='center'>
+                        <Box
+                          w='60px'
+                          h='60px'
+                          border='1px dashed rgba(255, 255, 255, 0.2);'
+                          borderRadius='40px'
+                          my={10}
+                        />
+                        <TextBox ml='15px'>Your daos will show here</TextBox>
+                      </Flex>
+                      <Link
+                        href='https://daohaus.club/explore'
+                        isExternal
+                        fontSize='md'
+                        textTransform='uppercase'
+                        color='secondary.500'
+                      >
+                        Explore more DAOs on DAOhaus
+                      </Link>
+                    </Box>
+                  )}
+
+                  {localFreshDaos.length > 0 ? (
+                    <Box w='100%' mt={6}>
+                      <MemberDaoList
+                        label={'NEW SETUP NEEDED FOR'}
+                        daos={localFreshDaos}
+                      />
+                    </Box>
                   ) : null}
-                </ContentBox>
-              ) : (
-                <ContentBox p={6} mt={6} maxW='600px'>
-                  <Flex>
-                    <TextBox size='sm'>
-                      You aren’t a member in any daos yet!
-                    </TextBox>
-                  </Flex>
-
-                  <Flex align='center'>
-                    <Box
-                      w='60px'
-                      h='60px'
-                      border='1px dashed rgba(255, 255, 255, 0.2);'
-                      borderRadius='40px'
-                      my={10}
-                    />
-                    <TextBox ml='15px'>Your daos will show here</TextBox>
-                  </Flex>
-
-                  <Link
-                    href='https://daohaus.club'
-                    isExternal
-                    fontSize='md'
-                    textTransform='uppercase'
-                  >
-                    Explore more DAOs
-                  </Link>
                 </ContentBox>
               )}
             </Box>

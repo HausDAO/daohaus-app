@@ -10,7 +10,7 @@ export const daoConstants = (networkId) => {
   const constants = {
     abortWindow: '1',
     dilutionBound: '3',
-    version: '2',
+    version: '21',
   };
 
   if (networkId === '100') {
@@ -21,7 +21,6 @@ export const daoConstants = (networkId) => {
 };
 
 export const daoPresets = (networkId) => {
-  console.log('networkId', networkId);
   let presets = [
     {
       presetName: 'Grants',
@@ -37,7 +36,7 @@ export const daoPresets = (networkId) => {
       periodDuration: '3600',
       summonerShares: 1,
       color: '#ea8923',
-      version: '2',
+      version: '21',
       img: imgGrants,
     },
     {
@@ -55,7 +54,7 @@ export const daoPresets = (networkId) => {
       periodDuration: '86400',
       summonerShares: 1,
       color: '#AB3593',
-      version: '2',
+      version: '21',
       img: imgVentures,
     },
     {
@@ -72,7 +71,7 @@ export const daoPresets = (networkId) => {
       periodDuration: '7200',
       summonerShares: 1,
       color: '#4FBF9F',
-      version: '2',
+      version: '21',
       img: imgGuilds,
     },
     {
@@ -90,7 +89,7 @@ export const daoPresets = (networkId) => {
       periodDuration: '60',
       summonerShares: 1,
       color: '#F16061',
-      version: '2',
+      version: '21',
       img: imgClubs,
     },
     {
@@ -108,7 +107,7 @@ export const daoPresets = (networkId) => {
       periodDuration: '1800',
       summonerShares: 1,
       color: '#129AC6',
-      version: '2',
+      version: '21',
       img: imgImpacts,
     },
     {
@@ -126,7 +125,7 @@ export const daoPresets = (networkId) => {
       periodDuration: '7200',
       summonerShares: 1,
       color: '#513e97',
-      version: '2',
+      version: '21',
       img: imgProjects,
     },
   ];
