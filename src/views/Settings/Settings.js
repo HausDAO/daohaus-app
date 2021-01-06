@@ -8,7 +8,8 @@ import Superpowers from '../../components/Settings/Superpowers';
 import DaoContractSettings from '../../components/Settings/DaoContractSettings';
 import DaoMetaOverview from '../../components/Settings/DaoMetaOverview';
 import TextBox from '../../components/Shared/TextBox';
-import Minions from '../../components/Settings/Minions';
+import MinionsOverview from '../../components/Settings/MinionsOverview';
+
 
 const Settings = () => {
   const [dao] = useDao();
@@ -49,7 +50,7 @@ const Settings = () => {
         {dao?.graphData && dao.graphData.minions.length > 0 && (
           <>
             <TextBox size='xs'>Minions</TextBox>
-            <Minions />
+            <MinionsOverview />
           </>
         )}
       </Box>

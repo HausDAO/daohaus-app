@@ -23,6 +23,7 @@ import DaoMeta from './views/Settings/DaoMeta';
 import UploadTest from './views/Theme/UploadTest';
 import SummonWrapper from './views/Summon/SummonWrapper';
 import RegisterDao from './views/Summon/RegisterDao';
+import Minions from './components/Settings/Minions';
 
 const Routes = () => {
   return (
@@ -103,6 +104,11 @@ const Routes = () => {
           path='/dao/:dao(\b0x[0-9a-f]{10,40}\b)/settings/notifications'
           exact
           component={Notifications}
+        />
+        <Route
+          path='/dao/:dao(\b0x[0-9a-f]{10,40}\b)/settings/minion/:minion(\b0x[0-9a-f]{10,40}\b)'
+          exact
+          component={Minions}
         />
         <Route
           path='/dao/:dao(\b0x[0-9a-f]{10,40}\b)/psych-out'

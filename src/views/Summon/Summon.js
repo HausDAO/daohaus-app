@@ -57,7 +57,8 @@ const Summon = () => {
     const addrs = [];
     const amounts = [];
     lines.forEach((line) => {
-      const summoner = line.split(' ');
+      // split on comma or white space
+      const summoner = line.split(/,|\s+/).filter((n) => n);
       addrs.push(summoner[0]);
       amounts.push(summoner[1]);
     });
