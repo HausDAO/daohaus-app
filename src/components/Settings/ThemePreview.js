@@ -89,13 +89,13 @@ const ThemePreview = ({ previewValues }) => {
           </Flex>
         </Flex>
         <Box m={6} mb={10}>
-          {proposals && (
+          {proposals && proposals.length ? (
             <ProposalCard
               proposal={proposals[0]}
               key={proposals[0].id}
               isLoaded={proposals}
             />
-          )}
+          ) : null}
         </Box>
         <Box h={20} />
       </Flex>

@@ -39,6 +39,7 @@ import {
 } from '../utils/tx-processor-helper';
 import { mutateMember } from '../utils/proposal-mutations';
 import TextBox from '../components/Shared/TextBox';
+import { getChainDataByName } from '../utils/chains';
 
 const TxProcessorInit = () => {
   const [, updateRefetchQuery] = useRefetchQuery();
@@ -245,7 +246,11 @@ const TxProcessorInit = () => {
   const openDaoRegisterRoute = () => {
     const localMoloch = window.localStorage.getItem('pendingMolochy');
     const parsedMoloch = localMoloch && JSON.parse(localMoloch);
-    history.push(`/register/${parsedMoloch.contractAddress}`);
+    history.push(
+      `/register/${parsedMoloch.contractAddress}/${
+        getChainDataByName(parsedMoloch.network).network_id
+      }`,
+    );
     onClose();
   };
 

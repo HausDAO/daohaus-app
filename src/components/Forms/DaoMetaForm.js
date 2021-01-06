@@ -1,4 +1,4 @@
-import React, { useRef } from 'react';
+import React, { useRef, useState } from 'react';
 import {
   Flex,
   FormControl,
@@ -35,7 +35,6 @@ import {
   useWeb3Connect,
 } from '../../contexts/PokemolContext';
 import { ipfsPost, ipfsPrePost, put } from '../../utils/requests';
-import { useState } from 'react/cjs/react.development';
 import { daoPresets } from '../../content/summon-presets';
 import GenericModal from '../Modal/GenericModal';
 
