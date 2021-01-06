@@ -49,7 +49,8 @@ export const DaoProvider = ({ children }) => {
   const hasCheckedIsMember = useRef(false);
 
   useEffect(() => {
-    // if (!isCorrectNetwork) return;
+    //This condition is brittle. If one request passes, but the rest fail
+    //this stops the app from fetching. We'll need something better later on.
     if (
       daoProposals ||
       daoActivities ||

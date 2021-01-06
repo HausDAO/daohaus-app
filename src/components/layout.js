@@ -9,7 +9,7 @@ const StyleTemplate = styled.main`
   display: grid;
   min-height: 100%;
   width: 100%;
-  grid-template-columns: 30rem auto;
+  grid-template-columns: 32rem auto;
   grid-template-rows: 5.6rem auto;
   transition: 0.2s all;
   /* @media ${widthQuery.laptop} {
@@ -45,7 +45,6 @@ const SideSpace = styled.aside`
   width: 100%;
   grid-column: 1;
   grid-row: 2;
-  background-color: ${getColor("grey300")};
   /* @media ${widthQuery.tablet} {
     height: 100%;
     width: 100%;

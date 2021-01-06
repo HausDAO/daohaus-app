@@ -6,7 +6,6 @@ import { getColor } from "../styles/palette";
 import { widthQuery } from "../styles/responsive";
 import { getTrucatedAddress } from "../utils/injected";
 import Button from "./button";
-// import { Web3SignIn } from "./Web3SignIn";
 
 const NavContainer = styled.nav`
   height: 5.6rem;

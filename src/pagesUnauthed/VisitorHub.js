@@ -1,10 +1,7 @@
 import React from "react";
 import styled from "styled-components";
 
-import NewsFeed from "../components/newsFeed";
-import NetworkList from "../components/networkList";
 import { DisplayLg } from "../styles/typography";
-import { Divider } from "../components/staticElements";
 import Layout from "../components/layout";
 
 const VisitorHubPage = styled.div`
