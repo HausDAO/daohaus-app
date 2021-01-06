@@ -1,7 +1,6 @@
 import React from 'react';
 import { useForm } from 'react-hook-form';
 import { Box, Heading, Text, Button, Input, Textarea } from '@chakra-ui/react';
-import { utils } from 'web3';
 
 const HardModeForm = ({ daoData, handleSummon }) => {
   const {
