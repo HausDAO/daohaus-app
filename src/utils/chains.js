@@ -19,7 +19,7 @@ export const supportedChains = {
       'https://api.thegraph.com/subgraphs/name/odyssy-automaton/daohaus-transmutation',
     token_list:
       'https://raw.githubusercontent.com/Uniswap/default-token-list/master/src/tokens/mainnet.json',
-    minionFactoryAddr: '0x2A0D29d0a9e5DE91512805c3E2B58c1e95700dDa',
+    minion_factory_addr: '0x2A0D29d0a9e5DE91512805c3E2B58c1e95700dDa',
     moloch_factory_addr: '0x38064F40B20347d58b326E767791A6f79cdEddCe',
     dai_contract: '0x6b175474e89094c44da98b954eedeac495271d0f',
     weth_contract: '0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2',
@@ -42,7 +42,7 @@ export const supportedChains = {
       'https://api.thegraph.com/subgraphs/name/odyssy-automaton/daohaus-stats-rinkeby',
     boosts_graph_url:
       'https://api.thegraph.com/subgraphs/name/odyssy-automaton/daohaus-transmutation',
-    minionFactoryAddr: '0x316eFCd421b0654B7aE8E806880D4AE88ecaE206',
+    minion_factory_addr: '0x316eFCd421b0654B7aE8E806880D4AE88ecaE206',
     moloch_factory_addr: '0xC33a4EfecB11D2cAD8E7d8d2a6b5E7FEacCC521d',
     dai_contract: '0x8f2e097e79b1c51be9cba42658862f0192c3e487',
     weth_contract: '0xc778417e063141139fce010982780140aa0cd5ab',
@@ -65,7 +65,7 @@ export const supportedChains = {
       'https://api.thegraph.com/subgraphs/name/odyssy-automaton/daohaus-stats-kovan',
     boosts_graph_url:
       'https://api.thegraph.com/subgraphs/name/odyssy-automaton/daohaus-transmutation',
-    minionFactoryAddr: '0x80ec2dB292E7a6D1D5bECB80e6479b2bE048AC98',
+    minion_factory_addr: '0x80ec2dB292E7a6D1D5bECB80e6479b2bE048AC98',
     moloch_factory_addr: '0x9c5d087f912e7187D9c75e90999b03FB31Ee17f5',
     dai_contract: '0xc4375b7de8af5a38a93548eb8453a498222c4ff2',
     weth_contract: '0xd0a1e359811322d97991e03f863a0c30c2cf029c',
@@ -89,7 +89,8 @@ export const supportedChains = {
     boosts_graph_url:
       'https://api.thegraph.com/subgraphs/name/odyssy-automaton/daohaus-transmutation-xdai',
     token_list: 'http://tokens.honeyswap.org/',
-    minionFactoryAddr: '0x9610389d548Ca0224aCaC40eB3241c5ED88D2479',
+    minion_factory_addr: '0x9610389d548Ca0224aCaC40eB3241c5ED88D2479',
+    moloch_factory_addr: '0x0F50B2F3165db96614fbB6E4262716acc9F9e098',
     wxdai_contract: '0xe91D153E0b41518A2Ce8Dd3D7944Fa863463a97d',
   },
 };

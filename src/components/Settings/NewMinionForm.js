@@ -54,7 +54,7 @@ const NewMinionForm = () => {
 
     console.log(values);
     const setupValues = {
-      minionFactory: supportedChains[network.network_id].minionFactoryAddr,
+      minionFactory: supportedChains[network.network_id].minion_factory_addr,
       actionVlaue: '0',
     };
     const minionFactoryService = new MinionFactoryService(

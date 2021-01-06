@@ -72,7 +72,9 @@ const ActivityCard = ({ activity, isLoaded }) => {
             <Skeleton isLoaded={isLoaded}>
               <Heading as='h4' size='md'>
                 {activity?.createdAt
-                  ? `Rage Quit on ${formatCreatedAt(activity.createdAt)}`
+                  ? `Rage Quit ${activity.daoTitle} on ${formatCreatedAt(
+                      activity.createdAt,
+                    )}`
                   : '--'}
               </Heading>
               <Box>Shares: {activity?.shares ? activity.shares : '--'}</Box>

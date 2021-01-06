@@ -1,56 +1,83 @@
 import React, { useState, useEffect } from 'react';
 import { Flex, Box, Button, Icon, HStack } from '@chakra-ui/react';
 import { Link as RouterLink, useHistory } from 'react-router-dom';
+
 import { BiArrowBack } from 'react-icons/bi';
 
 import { useTempTheme, useTheme } from '../../contexts/CustomThemeContext';
 import { defaultTheme } from '../../themes/theme-defaults';
-import { useDao } from '../../contexts/PokemolContext';
+import {
+  useDao,
+  useNetwork,
+  useUser,
+  useWeb3Connect,
+} from '../../contexts/PokemolContext';
 import { boostPost } from '../../utils/requests';
-import ThemeColorsForm from '../../components/Forms/CustomThemeForm';
+import CustomThemeForm from '../../components/Forms/CustomThemeForm';
 import ThemePreview from '../../components/Settings/ThemePreview';
 
 const CustomTheme = () => {
+  const [web3Connect] = useWeb3Connect();
+  const [user] = useUser();
   const [dao] = useDao();
   const [theme, setTheme] = useTheme();
   const history = useHistory();
   const [tempTheme, setTempTheme] = useTempTheme();
-  const [previewTheme, setPreviewTheme] = useState({
-    primary500: theme.colors.primary[500],
-    secondary500: theme.colors.secondary[500],
-    background500: theme.colors.background[500],
-    brandImg: theme.images.brandImg,
-    bgImg: theme.images.bgImg,
-    primaryFont: theme.fonts.heading,
-    bodyFont: theme.fonts.body,
-    monoFont: theme.fonts.mono,
-  });
+  const [network] = useNetwork();
+  const [previewTheme, setPreviewTheme] = useState();
+
+  useEffect(() => {
+    if (theme) {
+      setPreviewTheme({
+        primary500: theme.colors.primary[500],
+        secondary500: theme.colors.secondary[500],
+        bg500: theme.colors.background[500],
+        brandImg: theme.images.brandImg,
+        bgImg: theme.images.bgImg,
+        primaryFont: theme.fonts.heading,
+        bodyFont: theme.fonts.body,
+        monoFont: theme.fonts.mono,
+      });
+    }
+  }, [theme]);
 
   const handleThemeUpdate = (update) => {
     const currentValues = tempTheme || defaultTheme;
     const themeUpdate = { ...currentValues, ...update };
+
     setTempTheme(themeUpdate);
     setTheme(themeUpdate);
   };
 
   const saveTheme = async () => {
+    handleThemeUpdate(previewTheme);
+    const currentValues = tempTheme || defaultTheme;
+    const themeUpdate = { ...currentValues, ...previewTheme };
+
+    const messageHash = web3Connect.web3.utils.sha3(dao.address);
+    const signature = await web3Connect.web3.eth.personal.sign(
+      messageHash,
+      user.username,
+    );
+
     const updateThemeObject = {
       contractAddress: dao.address,
       boostKey: 'customTheme',
-      metadata: tempTheme,
+      metadata: themeUpdate,
+      network: network.network,
+      signature,
     };
+
     const result = await boostPost('dao/boost', updateThemeObject);
     console.log(result);
-    history.push(`/dao/${dao.address}/settings`);
+
+    if (result === 'success') {
+      history.push(`/dao/${dao.address}/settings`);
+    } else {
+      alert('error: forbidden');
+    }
   };
 
-  // SET DEFAULT THEME PREVIEW
-  useEffect(() => {
-    if (tempTheme) {
-      setPreviewTheme(tempTheme);
-    }
-  }, [tempTheme]);
-  console.log(theme);
   return (
     <Box>
       <Flex ml={6} justify='space-between' align='center'>
@@ -74,21 +101,24 @@ const CustomTheme = () => {
         </HStack>
       </Flex>
       <Flex>
-        <Box w='30%'>
-          <ThemeColorsForm
-            previewTheme={previewTheme}
-            setPreviewTheme={setPreviewTheme}
-            // handlePreviewUpdate={handlePreviewUpdate}
-            handleThemeUpdate={handleThemeUpdate}
-          />
-        </Box>
+        {previewTheme ? (
+          <>
+            <Box w='30%'>
+              <CustomThemeForm
+                previewTheme={previewTheme}
+                setPreviewTheme={setPreviewTheme}
+                handleThemeUpdate={handleThemeUpdate}
+              />
+            </Box>
 
-        <Box w='68%'>
-          <ThemePreview
-            previewValues={previewTheme}
-            setPreviewTheme={setPreviewTheme}
-          />
-        </Box>
+            <Box w='68%'>
+              <ThemePreview
+                previewValues={previewTheme}
+                setPreviewTheme={setPreviewTheme}
+              />
+            </Box>
+          </>
+        ) : null}
       </Flex>
     </Box>
   );

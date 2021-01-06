@@ -11,8 +11,16 @@ import {
 } from '../proposal-helper';
 import { TokenService } from '../token-service';
 import { MolochService } from '../moloch-service';
+import { supportedChains } from '../chains';
 
 export const resolvers = {
+  Moloch: {
+    apiMetadata: async (moloch, _args, context) => {
+      const networkName = supportedChains[+context.networkId].network;
+      const daoMatch = context.apiMetaDataJson[moloch.id] || [];
+      return daoMatch.find((dao) => dao.network === networkName) || null;
+    },
+  },
   Proposal: {
     status: (proposal) => {
       return determineProposalStatus(proposal, proposal.moloch);
@@ -33,7 +41,6 @@ export const resolvers = {
       return determineUnreadActivityFeed(proposal);
     },
   },
-
   TokenBalance: {
     contractBalances: async (tokenBalance, _args, context) => {
       const rpcUrl =

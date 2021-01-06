@@ -1,18 +1,19 @@
 import React from 'react';
-import { Avatar, Flex, Link, Icon } from '@chakra-ui/react';
-import makeBlockie from 'ethereum-blockies-base64';
+import { Flex, Image, Link, Icon, Stack, Badge } from '@chakra-ui/react';
 import {
   RiDiscordFill,
   RiTelegramFill,
   RiTwitterFill,
   RiGlobeLine,
   RiMediumFill,
+  RiLinksLine,
 } from 'react-icons/ri';
 
 import { useDao } from '../../contexts/PokemolContext';
 import { useTheme } from '../../contexts/CustomThemeContext';
 import ContentBox from '../../components/Shared/ContentBox';
 import TextBox from '../../components/Shared/TextBox';
+import { themeImagePath } from '../../utils/helpers';
 
 const DaoMetaOverview = () => {
   const [dao] = useDao();
@@ -23,26 +24,37 @@ const DaoMetaOverview = () => {
       {dao && (
         <>
           <Flex>
-            {theme.images.avatarImg ? (
-              <Avatar src={theme.images.avatarImg} h='50px' w='50px' />
-            ) : (
-              <Avatar
-                h='50px'
-                w='50px'
-                name={dao.title.substr(0, 1)}
-                src={makeBlockie(dao.id)}
-              />
-            )}
+            <Image
+              src={
+                dao.avatarImg
+                  ? themeImagePath(dao.avatarImg)
+                  : theme.images.brandImg
+              }
+              h='50px'
+              w='50px'
+            />
             <TextBox variant='value' size='xl' ml={4}>
               {dao.name}
             </TextBox>
           </Flex>
           <Flex mt={5}>{dao.description}</Flex>
+          <Flex mt={5}>{dao.purpose}</Flex>
+          {dao.tags ? (
+            <>
+              <Flex mt={5}>
+                <Stack direction='row'>
+                  {dao.tags.map((tag) => {
+                    return <Badge key={tag}>{tag}</Badge>;
+                  })}
+                </Stack>
+              </Flex>
+            </>
+          ) : null}
           {dao.name && (
             <Flex mt={3}>
-              {theme.daoMeta.website && (
+              {dao.links?.website ? (
                 <Link
-                  href={theme.daoMeta.website}
+                  href={dao.links.website}
                   target='_blank'
                   rel='noreferrer noopener'
                   m={3}
@@ -55,10 +67,10 @@ const DaoMetaOverview = () => {
                     color='secondary.500'
                   />
                 </Link>
-              )}
-              {theme.daoMeta.discord && (
+              ) : null}
+              {dao.links?.discord ? (
                 <Link
-                  href={theme.daoMeta.discord}
+                  href={dao.links.discord}
                   target='_blank'
                   rel='noreferrer noopener'
                   m={3}
@@ -70,10 +82,10 @@ const DaoMetaOverview = () => {
                     color='secondary.500'
                   />
                 </Link>
-              )}
-              {theme.daoMeta.telegram && (
+              ) : null}
+              {dao.links?.telegram ? (
                 <Link
-                  href={theme.daoMeta.telegram}
+                  href={dao.links.telegram}
                   target='_blank'
                   rel='noreferrer noopener'
                   m={3}
@@ -85,10 +97,10 @@ const DaoMetaOverview = () => {
                     color='secondary.500'
                   />
                 </Link>
-              )}
-              {theme.daoMeta.twitter && (
+              ) : null}
+              {dao.links?.twitter ? (
                 <Link
-                  href={theme.daoMeta.twitter}
+                  href={dao.links.twitter}
                   target='_blank'
                   rel='noreferrer noopener'
                   m={3}
@@ -100,10 +112,10 @@ const DaoMetaOverview = () => {
                     color='secondary.500'
                   />
                 </Link>
-              )}
-              {theme.daoMeta.medium && (
+              ) : null}
+              {dao.links?.medium ? (
                 <Link
-                  href={theme.daoMeta.medium}
+                  href={dao.links.medium}
                   target='_blank'
                   rel='noreferrer noopener'
                   m={3}
@@ -115,7 +127,23 @@ const DaoMetaOverview = () => {
                     color='secondary.500'
                   />
                 </Link>
-              )}
+              ) : null}
+
+              {dao.links?.other ? (
+                <Link
+                  href={dao.links.other}
+                  target='_blank'
+                  rel='noreferrer noopener'
+                  m={3}
+                >
+                  <Icon
+                    as={RiLinksLine}
+                    h='30px'
+                    w='30px'
+                    color='secondary.500'
+                  />
+                </Link>
+              ) : null}
             </Flex>
           )}
         </>

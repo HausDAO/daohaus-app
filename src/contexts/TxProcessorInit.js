@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Link as RouterLink } from 'react-router-dom';
+import { Link as RouterLink, useHistory } from 'react-router-dom';
 import {
   Box,
   Modal,
@@ -16,10 +16,12 @@ import {
   ListItem,
   Link,
   Stack,
+  Button,
 } from '@chakra-ui/react';
 import { VscQuestion } from 'react-icons/vsc';
 import { RiExternalLinkLine, RiErrorWarningLine } from 'react-icons/ri';
 import { TxProcessorService } from '../utils/tx-processor-service';
+
 import {
   useMembers,
   useProposals,
@@ -37,6 +39,7 @@ import {
 } from '../utils/tx-processor-helper';
 import { mutateMember } from '../utils/proposal-mutations';
 import TextBox from '../components/Shared/TextBox';
+import { getChainDataByName } from '../utils/chains';
 
 const TxProcessorInit = () => {
   const [, updateRefetchQuery] = useRefetchQuery();
@@ -50,6 +53,7 @@ const TxProcessorInit = () => {
   const [latestTx, setLatestTx] = useState();
   const [loading, setLoading] = useState(false);
   const toast = useToast();
+  const history = useHistory();
 
   useEffect(() => {
     /*
@@ -107,6 +111,9 @@ const TxProcessorInit = () => {
       }
       if (context?.name === 'dao') {
         // 15 second delay before try refresh
+        if (latestTx.details.name === 'summonMoloch') {
+          console.log('summon Moloch Complete');
+        }
         setTimeout(() => {
           updateRefetchQuery('moloch');
         }, 15000);
@@ -118,6 +125,8 @@ const TxProcessorInit = () => {
           updateRefetchQuery('proposals');
         }, 15000);
       }
+
+      setLoading(false);
       toast({
         title: 'Transaction away',
         position: 'top-right',
@@ -234,6 +243,17 @@ const TxProcessorInit = () => {
     // eslint-disable-next-line
   }, [txProcessor.loaded]);
 
+  const openDaoRegisterRoute = () => {
+    const localMoloch = window.localStorage.getItem('pendingMolochy');
+    const parsedMoloch = localMoloch && JSON.parse(localMoloch);
+    history.push(
+      `/register/${parsedMoloch.contractAddress}/${
+        getChainDataByName(parsedMoloch.network).network_id
+      }`,
+    );
+    onClose();
+  };
+
   return (
     <>
       <Modal
@@ -280,6 +300,11 @@ const TxProcessorInit = () => {
                     <span role='img' aria-label='confetti'>
                       🎉
                     </span>
+                    {latestTx && latestTx?.details?.name === 'summonMoloch' && (
+                      <Button onClick={openDaoRegisterRoute}>
+                        Configure DAO
+                      </Button>
+                    )}
                   </Box>
                 )}
                 {POPUP_CONTENT[latestTx?.details?.name]?.header && (

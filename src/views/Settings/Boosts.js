@@ -1,27 +1,30 @@
 import React from 'react';
 // import { Link } from 'react-router-dom';
 import { Box, Flex, Button } from '@chakra-ui/react';
+
 import ContentBox from '../../components/Shared/ContentBox';
 import TextBox from '../../components/Shared/TextBox';
 import GenericModal from '../../components/Modal/GenericModal';
 import { useModals } from '../../contexts/PokemolContext';
 import NewMinionForm from '../../components/Settings/NewMinionForm';
-// import { useDao } from '../../contexts/PokemolContext';
 
 const boostList = [
   {
     name: 'Custom Theme',
+    key: 'customTheme',
     description: 'Customize the visual theme of your community',
     comingSoon: true,
   },
   {
     name: 'Notifications',
+    key: 'notifications',
     description:
       'Customize and send notifications of DAO activity to your social channels',
     comingSoon: true,
   },
   {
     name: 'Minion',
+    key: 'vanillaMinions',
     description: 'Create and vote on execution of arbitrary contract calls',
     comingSoon: false,
     modalName: 'newBoost',
@@ -30,7 +33,6 @@ const boostList = [
 ];
 
 const Boosts = () => {
-  // const [dao] = useDao();
   const { modals, openModal } = useModals();
 
   return (

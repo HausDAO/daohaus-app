@@ -25,15 +25,15 @@ const Summon = () => {
   const [hardMode, setHardMode] = useState(false);
   const [daoData, setDaoData] = useState(daoConstants(network.network_id));
   const [isSummoning, setIsSummoning] = useState(false);
+  const [summonError, setSummonError] = useState();
   const [currentStep, setCurrentStep] = useState(1);
   const { state, dispatch } = useContext(SummonContext);
-
   // use network to init service
   const stepContent = {
     1: 'What kind of Haus will you build?',
     2: 'Give us the basics',
     3: 'Last chance to make changes',
-    4: 'Our magic internet communities take a minute or two to create.',
+    4: 'Our magic internet communities take a minute or two to create. You can see new daos on your Hub page',
   };
 
   const handleSummon = async (data) => {
@@ -85,28 +85,17 @@ const Summon = () => {
   }, [w3Context, network]);
 
   useEffect(() => {
-    if (network?.network_id && w3Context?.web3) {
-      const summonService = new SummonService(
-        w3Context.web3,
-        network.network_id,
-      );
-      dispatch({ type: 'setService', payload: summonService });
-    }
-
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [w3Context, network]);
-
-  useEffect(() => {
     const txCallBack = (txHash, details) => {
       console.log('txCallBack', txProcessor);
       if (txProcessor && txHash) {
         txProcessor.setTx(txHash, user.username, details, true, false, false);
         txProcessor.forceCheckTx = true;
-
+        // state.service.cacheNewMoloch(newMoloch)
         updateTxProcessor(txProcessor);
       }
       if (!txHash) {
         console.log('error: ', details);
+        setSummonError(details?.message);
         setIsSummoning(false);
       }
     };
@@ -170,6 +159,10 @@ const Summon = () => {
                 {state.errorMessage.message || state.errorMessage}
               </Heading>
             ) : null}
+
+            {summonError && (
+              <Heading as='h1'>{summonError.message || summonError}</Heading>
+            )}
 
             {!isSummoning ? (
               <>
@@ -236,12 +229,7 @@ const Summon = () => {
                 )}
               </>
             ) : (
-              <>
-                Loading
-                {/* <MiniLoader txHash={state.summonTx} />
-                <Text>While you wait, check out our boosts</Text>
-                <BoostPackages isSummoning={isSummoning} /> */}
-              </>
+              <>Loading</>
             )}
           </Box>
         </Box>

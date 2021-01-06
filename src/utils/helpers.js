@@ -3,7 +3,7 @@ import { formatDistanceToNow, format } from 'date-fns';
 import { utils } from 'web3';
 
 export const truncateAddr = (addr) => {
-  return addr.slice(0, 6) + '...' + addr.slice(-4);
+  return addr ? addr.slice(0, 6) + '...' + addr.slice(-4) : null;
 };
 
 export const IsJsonString = (str) => {
@@ -16,6 +16,7 @@ export const IsJsonString = (str) => {
 };
 
 export const proposalDetails = (details) => {
+  details = details && details.replace(/(\r\n|\n|\r)/gm, ' ');
   return details && IsJsonString(details) ? JSON.parse(details) : null;
 };
 
@@ -174,4 +175,18 @@ export const getRpcUrl = (network) => {
   return network.network_id === 100
     ? 'https://dai.poa.network '
     : `https://${network.network}.infura.io/v3/${process.env.REACT_APP_INFURA_KEY}`;
+};
+
+export const themeImagePath = (imageValue) => {
+  if (
+    !imageValue ||
+    imageValue.slice(0, 1) === '/' ||
+    imageValue.slice(0, 4) === 'http'
+  ) {
+    return imageValue;
+  }
+
+  if (imageValue.slice(0, 2) === 'Qm') {
+    return `https://ipfs.infura.io/ipfs/${imageValue}`;
+  }
 };

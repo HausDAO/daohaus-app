@@ -1,10 +1,8 @@
 import React from 'react';
 import { useForm } from 'react-hook-form';
 import { Box, Heading, Text, Button, Input, Textarea } from '@chakra-ui/react';
-import { utils } from 'web3';
 
 const HardModeForm = ({ daoData, handleSummon }) => {
-
   const {
     register,
     getValues,
@@ -77,24 +75,16 @@ const HardModeForm = ({ daoData, handleSummon }) => {
         <Box>
           <Heading as='h4'>Currency</Heading>
           <Box>
-            What is the primary currency contract address?
-            <Input
+            What is the primary currency contract address? Can whitelist more
+            here comma seperated.
+            <Textarea
               className='inline-field'
               name='approvedToken'
-              ref={register({
-                required: true,
-                validate: {
-                  isAddress: (val) => utils.isAddress(val),
-                },
-              })}
-            />
+              placeholder='0xd0a1e359811322d97991e03f863a0c30c2cf029c, 0xc4375b7de8af5a38a93548eb8453a498222c4ff2'
+              ref={register({ required: true })}
+            />{' '}
             {errors.approvedToken?.type === 'required' && (
               <span className='required-field'>add a token address</span>
-            )}
-            {errors.approvedToken?.type === 'isAddress' && (
-              <span className='required-field'>
-                that doesn&apos;t look like a token address
-              </span>
             )}
             <Text>
               How much should it cost to join (needs to be in wei - 18
@@ -254,7 +244,8 @@ const HardModeForm = ({ daoData, handleSummon }) => {
             <Textarea
               className='inline-field'
               name='summonerAndShares'
-              ref={register()}
+              placeholder={`${daoData.summoner} 10`}
+              ref={register({ required: true })}
             />{' '}
           </Text>
         </Box>

@@ -13,12 +13,12 @@ import BankOverviewChart from '../Bank/BankOverviewChart';
 import ProposalCard from '../Proposals/ProposalCard';
 
 const ThemePreview = ({ previewValues }) => {
-  console.log(previewValues);
   const [dao] = useDao();
   const [theme] = useTheme();
   const [balances] = useBalances();
   const [proposals] = useProposals();
-  console.log(dao);
+
+  // TODO: How to get the font from previewValues?
 
   return (
     <Flex
@@ -29,7 +29,7 @@ const ThemePreview = ({ previewValues }) => {
           ? `https://ipfs.infura.io/ipfs/${previewValues.bgImg}`
           : previewValues.bgImg
       })`}
-      bgColor={previewValues.background500}
+      bgColor={previewValues.bg500}
       border={`0.5px solid ${theme.colors.whiteAlpha[600]}`}
       borderRadius='2px'
       overflow='scroll'
@@ -89,13 +89,13 @@ const ThemePreview = ({ previewValues }) => {
           </Flex>
         </Flex>
         <Box m={6} mb={10}>
-          {proposals && (
+          {proposals && proposals.length ? (
             <ProposalCard
               proposal={proposals[0]}
               key={proposals[0].id}
               isLoaded={proposals}
             />
-          )}
+          ) : null}
         </Box>
         <Box h={20} />
       </Flex>

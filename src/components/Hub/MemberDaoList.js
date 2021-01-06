@@ -11,8 +11,9 @@ import {
   Text,
 } from '@chakra-ui/react';
 import TextBox from '../Shared/TextBox';
+import { themeImagePath } from '../../utils/helpers';
 
-const MemberDaoList = ({ daos }) => {
+const MemberDaoList = ({ daos, label }) => {
   const [visibleDaos, setVisibleDaos] = useState([]);
 
   useEffect(() => {
@@ -21,6 +22,14 @@ const MemberDaoList = ({ daos }) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [daos]);
 
+  const getDaoLink = (healthCount, dao) => {
+    if (dao.apiMetadata) {
+      return healthCount ? `/dao/${dao.id}/proposals` : `dao/${dao.id}`;
+    } else {
+      return `/register/${dao.id}/${dao.networkId}`;
+    }
+  };
+
   const renderDaoAvatar = (dao) => {
     const recentProposals = dao.proposals.filter((prop) => {
       return prop.activityFeed.unread;
@@ -28,17 +37,23 @@ const MemberDaoList = ({ daos }) => {
     const healthCount = recentProposals.length;
 
     return (
-      <Box key={dao.id} mr={3} pb={3}>
+      <Box key={dao.id + dao.networkId} mr={3} pb={3}>
         <Link
           as={RouterLink}
-          to={healthCount ? `/dao/${dao.id}/proposals` : `dao/${dao.id}`}
+          to={getDaoLink(healthCount, dao)}
           display='flex'
           flexDirection='column'
           alignItems='center'
         >
           <Avatar
-            name={dao.title.substr(0, 1)}
-            src={makeBlockie(dao.id)}
+            name={
+              dao.apiMetadata ? dao.apiMetadata.name.substr(0, 1) : 'no title'
+            }
+            src={
+              dao.apiMetadata?.avatarImg
+                ? themeImagePath(dao.apiMetadata.avatarImg)
+                : makeBlockie(dao.id)
+            }
             mb={3}
           >
             {healthCount ? (
@@ -65,7 +80,7 @@ const MemberDaoList = ({ daos }) => {
               whiteSpace: 'nowrap',
             }}
           >
-            {dao.title}
+            {dao.apiMetadata?.name}
           </Box>
         </Link>
       </Box>
@@ -76,7 +91,9 @@ const MemberDaoList = ({ daos }) => {
     if (event.target.value) {
       const resultDaos = daos.filter((dao) => {
         return (
-          dao.title.toLowerCase().indexOf(event.target.value.toLowerCase()) > -1
+          dao.apiMetadata.name
+            .toLowerCase()
+            .indexOf(event.target.value.toLowerCase()) > -1
         );
       });
       setVisibleDaos(resultDaos);
@@ -88,10 +105,10 @@ const MemberDaoList = ({ daos }) => {
   const canSearch = daos.length > 5;
 
   return (
-    <Box w='100%'>
+    <>
       <Flex justify='space-between' alignItems='center' mb={6}>
         <TextBox size='xs'>
-          Member of {daos.length} DAO{daos.length > 1 && 's'}
+          {label} {daos.length} DAO{daos.length > 1 && 's'}
         </TextBox>
         {canSearch ? (
           <div>
@@ -108,17 +125,7 @@ const MemberDaoList = ({ daos }) => {
       <Flex direction='row' overflowX='scroll' mb={6} maxW='100%'>
         {visibleDaos.map((dao) => renderDaoAvatar(dao))}
       </Flex>
-
-      <Link
-        href='https://daohaus.club/explore'
-        isExternal
-        fontSize='md'
-        textTransform='uppercase'
-        color='secondary.500'
-      >
-        Explore more DAOs on DAOhaus
-      </Link>
-    </Box>
+    </>
   );
 };
 
