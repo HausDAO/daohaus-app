@@ -281,7 +281,10 @@ const SummonStepThree = ({
               <Textarea
                 className='inline-field'
                 name='summonerAndShares'
-                ref={register()}
+                placeholder={`${daoData.summoner} 10`}
+                ref={register({
+                  required: true,
+                })}
               />{' '}
             </Text>
           )}

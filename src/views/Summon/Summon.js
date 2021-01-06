@@ -25,9 +25,9 @@ const Summon = () => {
   const [hardMode, setHardMode] = useState(false);
   const [daoData, setDaoData] = useState(daoConstants(network.network_id));
   const [isSummoning, setIsSummoning] = useState(false);
+  const [summonError, setSummonError] = useState();
   const [currentStep, setCurrentStep] = useState(1);
   const { state, dispatch } = useContext(SummonContext);
-
   // use network to init service
   const stepContent = {
     1: 'What kind of Haus will you build?',
@@ -95,6 +95,7 @@ const Summon = () => {
       }
       if (!txHash) {
         console.log('error: ', details);
+        setSummonError(details?.message);
         setIsSummoning(false);
       }
     };
@@ -158,6 +159,10 @@ const Summon = () => {
                 {state.errorMessage.message || state.errorMessage}
               </Heading>
             ) : null}
+
+            {summonError && (
+              <Heading as='h1'>{summonError.message || summonError}</Heading>
+            )}
 
             {!isSummoning ? (
               <>

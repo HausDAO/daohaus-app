@@ -13,7 +13,7 @@ export const daoConstants = (networkId) => {
     version: '21',
   };
 
-  if (networkId === '100') {
+  if (networkId === 100) {
     constants.approvedToken = supportedChains[100].wxdai_contract;
   }
 
@@ -130,7 +130,7 @@ export const daoPresets = (networkId) => {
     },
   ];
 
-  if (networkId === '100') {
+  if (networkId === 100) {
     presets = presets.map((preset) => {
       preset.currency = 'WXDAI';
       preset.approvedToken = supportedChains[networkId].wxdai_contract;
@@ -146,7 +146,7 @@ export const daoPresets = (networkId) => {
 export const currencyOptions = (networkId) => {
   let options;
 
-  if (networkId === '100') {
+  if (networkId === 100) {
     options = [
       {
         value: 'WXDAI',

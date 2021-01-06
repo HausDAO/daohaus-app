@@ -44,7 +44,7 @@ const SummonStepTwo = ({ daoData, setDaoData, setCurrentStep }) => {
             disabled={!canMoveForward}
             className={!canMoveForward ? 'disabled' : ''}
           >
-            NEXT STEP <RiArrowRightFill/>
+            NEXT STEP <RiArrowRightFill />
           </Button>
         </Box>
       </Box>

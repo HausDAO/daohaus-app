@@ -41,8 +41,8 @@ const ProposalMinionCard = ({ proposal }) => {
       const setupValues = {
         minion: proposal.minionAddress,
       };
-      const web3 = web3Connect
-        ? web3Connect?.web3
+      const web3 = web3Connect?.web3
+        ? web3Connect.web3
         : new Web3(new Web3.providers.HttpProvider(getRpcUrl(network)));
 
       const minionService = new MinionService(
