@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useParams } from 'react-router-dom';
-import { Flex, Icon, useToast } from '@chakra-ui/react';
+import { Flex, Box, Heading, Icon, useToast } from '@chakra-ui/react';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
 
 import { useDao } from '../../contexts/PokemolContext';
@@ -57,6 +57,12 @@ const Minions = () => {
               </CopyToClipboard>
             </TextBox>
           </Flex>
+          <Box>
+            <Heading as='h3'>Balances</Heading>
+            <Heading as='h3'>Deposit/withdraw/dao withdraw</Heading>
+            <Heading as='h3'>New Prop/ Forged Prop</Heading>
+            <Heading as='h3'>Proposals</Heading>
+          </Box>
         </>
       )}
     </ContentBox>
