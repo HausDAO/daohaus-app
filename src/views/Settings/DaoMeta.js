@@ -1,11 +1,10 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Box, Flex, Icon } from '@chakra-ui/react';
 import { Link as RouterLink, useHistory } from 'react-router-dom';
 import { BiArrowBack } from 'react-icons/bi';
 
 import { useDaoMetadata } from '../../contexts/PokemolContext';
 import DaoMetaForm from '../../components/Forms/DaoMetaForm';
-import { useEffect, useState } from 'react/cjs/react.development';
 
 const DaoMetadata = () => {
   const [daoMetadata, updateDaoMetadata] = useDaoMetadata();
