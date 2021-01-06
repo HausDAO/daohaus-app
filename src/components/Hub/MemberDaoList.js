@@ -26,7 +26,6 @@ const MemberDaoList = ({ daos, label }) => {
     if (dao.apiMetadata) {
       return healthCount ? `/dao/${dao.id}/proposals` : `dao/${dao.id}`;
     } else {
-      console.log('dao', dao);
       return `/register/${dao.id}/${dao.networkId}`;
     }
   };

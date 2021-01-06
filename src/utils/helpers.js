@@ -3,7 +3,7 @@ import { formatDistanceToNow, format } from 'date-fns';
 import { utils } from 'web3';
 
 export const truncateAddr = (addr) => {
-  return addr.slice(0, 6) + '...' + addr.slice(-4);
+  return addr ? addr.slice(0, 6) + '...' + addr.slice(-4) : null;
 };
 
 export const IsJsonString = (str) => {

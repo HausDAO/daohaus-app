@@ -7,7 +7,7 @@ export default class SummonService {
   constructor(web3, networkId) {
     this.web3 = web3;
     this.networkId = networkId;
-    console.log('this.networkId', this.networkId);
+
     this.contract = new this.web3.eth.Contract(
       v21FactoryAbi,
       supportedChains[networkId].moloch_factory_addr,

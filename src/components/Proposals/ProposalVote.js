@@ -132,14 +132,14 @@ const ProposalVote = ({ proposal, setProposal }) => {
 
   const executeMinion = async (proposal) => {
     // TODO: will nedd to check if it has been executed yet
+    const web3 = web3Connect?.web3
+      ? web3Connect.web3
+      : new Web3(new Web3.providers.HttpProvider(getRpcUrl(network)));
     const setupValues = {
       minion: proposal.minionAddress,
     };
-    const minionService = new MinionService(
-      web3Connect.web3,
-      user.username,
-      setupValues,
-    );
+
+    const minionService = new MinionService(web3, user?.username, setupValues);
 
     try {
       minionService.executeAction(proposal.proposalId, txCallBack);
@@ -157,8 +157,8 @@ const ProposalVote = ({ proposal, setProposal }) => {
       const setupValues = {
         minion: proposal.minionAddress,
       };
-      const web3 = web3Connect
-        ? web3Connect?.web3
+      const web3 = web3Connect?.web3
+        ? web3Connect.web3
         : new Web3(new Web3.providers.HttpProvider(getRpcUrl(network)));
 
       const minionService = new MinionService(
