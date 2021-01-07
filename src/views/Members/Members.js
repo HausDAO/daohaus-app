@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Flex, Box } from '@chakra-ui/react';
 
 import MembersList from '../../components/Members/MembersList';
@@ -8,6 +8,25 @@ import MemberInfoCard from '../../components/Shared/MemberInfoCard/MemberInfoCar
 
 const Members = () => {
   const [selectedMember, setSelectedMember] = useState();
+  const [scrolled, setScrolled] = useState(false);
+
+  const handleScroll = () => {
+    const offset = window.scrollY;
+    if (offset > 100) {
+      setScrolled(true);
+    } else {
+      setScrolled(false);
+    }
+  };
+
+  useEffect(() => {
+    window.addEventListener('scroll', handleScroll);
+  });
+
+  const scrolledStyle = {
+    position: 'sticky',
+    top: 20,
+  };
 
   return (
     <Flex p={6} wrap='wrap'>
@@ -22,13 +41,15 @@ const Members = () => {
         />
       </Box>
       <Box w={['100%', null, null, null, '40%']}>
-        {selectedMember ? (
-          <MemberInfoCard user={selectedMember} showMenu={true} />
-        ) : (
-          <MemberSnapshot selectedMember={selectedMember} />
-        )}
+        <Box style={scrolled ? scrolledStyle : null}>
+          {selectedMember ? (
+            <MemberInfoCard user={selectedMember} showMenu={true} />
+          ) : (
+            <MemberSnapshot selectedMember={selectedMember} />
+          )}
 
-        <MembersActivityFeed selectedMember={selectedMember} />
+          <MembersActivityFeed selectedMember={selectedMember} />
+        </Box>
       </Box>
     </Flex>
   );
