@@ -1,6 +1,6 @@
 import React, { useState, useContext, useEffect } from 'react';
 
-import { daoConstants } from '../../content/summon-presets';
+import { daoConstants, daoPresets } from '../../content/summon-presets';
 import { SummonContext } from '../../contexts/SummonContext';
 import SummonStepOne from '../../components/Summon/SummonStepOne';
 import HardModeForm from '../../components/Summon/HardModeForm';
@@ -66,7 +66,8 @@ const Summon = () => {
 
   useEffect(() => {
     if (user?.username) {
-      setDaoData({ ...daoData, summoner: user.username });
+      const presets = daoPresets(network.network_id);
+      setDaoData({ ...daoData, summoner: user.username, ...presets });
     }
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
