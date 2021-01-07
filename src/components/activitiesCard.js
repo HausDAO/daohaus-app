@@ -1,7 +1,7 @@
 import React from "react";
 import styled from "styled-components";
 import { BodyLg, BodyMd, HeaderLg } from "../styles/typography";
-import { formatDistanceToNow } from "date-fns";
+import { parseIfJSON } from "../utils/general";
 
 const StyledActivitesCard = styled.div`
   grid-row: 2;
@@ -17,8 +17,7 @@ const ActivitesCard = ({ activities }) => {
     <StyledActivitesCard>
       <HeaderLg>Activites</HeaderLg>
       {samples.map((sample) => {
-        const isJSON = sample.details[0] === "{";
-        const details = isJSON ? JSON.parse(sample.details) : sample.details;
+        const details = parseIfJSON(sample.details);
         return (
           <div key={sample.id} className="box">
             <BodyLg>{details?.title}</BodyLg>

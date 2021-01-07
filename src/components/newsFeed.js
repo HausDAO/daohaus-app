@@ -1,13 +1,12 @@
 import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 
-import NetworkDaoList from "./NetworkDaoList";
-import { HeaderLg, Overline } from "../styles/typography";
-import { ListItemCard } from "./staticElements";
+import { HeaderLg } from "../styles/typography";
 import ProposalPreview from "./proposalPreview";
 
 import { getColor } from "../styles/palette";
 import { useLocalUserData } from "../contexts/UserContext";
+import { parseIfJSON } from "../utils/general";
 
 const StyledNewsFeed = styled.div`
   border-left: 1px solid ${getColor("lightBorder")};
@@ -31,10 +30,7 @@ const combineAndSortProposals = (daosByNetwork) => {
               ...proposal,
               createdAt: parseInt(proposal.createdAt),
               chain: network.name,
-              details:
-                proposal.details[0] === "{"
-                  ? JSON.parse(proposal.details)
-                  : proposal.details,
+              details: parseIfJSON(proposal.details),
               name: dao.moloch.title,
             })),
           ];

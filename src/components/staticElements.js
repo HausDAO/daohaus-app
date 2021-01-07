@@ -48,3 +48,70 @@ export const SplitLayout = styled.div`
     grid-column: 1/5;
   }
 `;
+export const SideBar = styled.div`
+  height: calc(100% - 5.6rem);
+  width: 32rem;
+  position: fixed;
+  padding-top: 1.6rem;
+  top: 5.6rem;
+  background-color: ${getColor("grey200")};
+`;
+export const StyledSideMenu = styled.div`
+  height: 100%;
+  max-height: 100%;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  .top-list-section,
+  .btn-list-section,
+  .people-list-section,
+  .feedback-about-section {
+    padding: 1.6rem 2.4rem;
+  }
+  .btn-list-section,
+  .feedback-about-section {
+    button {
+      margin-bottom: 0.8rem;
+      padding: 0.4rem 0;
+    }
+    button:last-child {
+      margin-bottom: 0;
+    }
+  }
+  .people-list-section {
+    margin-bottom: auto;
+  }
+  .list-button {
+    padding: 0;
+    font-weight: 400;
+    span.icon-wrapper {
+      margin-right: 1.2rem;
+    }
+    svg {
+      color: ${getColor("grey500")};
+      transition: 0.2s color;
+    }
+    :hover {
+      svg {
+        color: ${getColor("grey600")};
+      }
+    }
+  }
+  .nav-btns {
+    margin-top: 4rem;
+    margin-bottom: 1.6rem;
+  }
+  .user-project-list {
+    list-style: none;
+    margin-top: 1.6rem;
+    margin-bottom: 3.2rem;
+    max-height: 50%;
+    overflow-y: auto;
+  }
+  .end-btns {
+    display: flex;
+  }
+  .hard {
+    margin-bottom: 0;
+  }
+`;

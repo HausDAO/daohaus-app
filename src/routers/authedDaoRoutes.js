@@ -15,7 +15,6 @@ const AuthedDaoRoutes = ({ overview, title }) => {
     daoBalances,
     daoProposals,
     daoMembers,
-    daoOverview,
   } = useLocalDaoData();
 
   return (
@@ -30,13 +29,13 @@ const AuthedDaoRoutes = ({ overview, title }) => {
         />
       </Route>
       <Route exact path={`${path}/proposals`}>
-        <Proposals />
+        <Proposals proposals={daoProposals} />
       </Route>
       <Route exact path={`${path}/bank`}>
-        <Bank />
+        <Bank balances={daoBalances} />
       </Route>
       <Route exact path={`${path}/members`}>
-        <Members />
+        <Members members={daoMembers.daoMembers} />
       </Route>
     </Switch>
   );
