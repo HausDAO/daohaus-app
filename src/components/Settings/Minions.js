@@ -10,6 +10,8 @@ import {
   Button,
   ButtonGroup,
   Avatar,
+  List,
+  ListItem,
 } from '@chakra-ui/react';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
 
@@ -49,6 +51,9 @@ const Minions = () => {
         subline: `A proposal to deposit funds into a minion`,
         title: `Deposit funds to Minion (${minionData?.details})`,
         applicant: minionData?.minionAddress,
+      },
+      minion: {
+        minionContract: minionData?.minionAddress,
       },
     };
   };
@@ -95,6 +100,13 @@ const Minions = () => {
     setProposalType('funding');
     setProposalPresets(formPresets().deposit);
     openModal('proposal');
+  };
+
+  const handleNewMinion = () => {
+    console.log('open minion');
+    setProposalType('minion');
+    setProposalPresets(formPresets().minion);
+    openModal('minion');
   };
 
   const handleMinionWithdraw = () => {
@@ -154,28 +166,43 @@ const Minions = () => {
                   </Text>
                 );
               })}
+            <Button>Add Token</Button>
+
+            <Heading as='h4'>Minion Internal Balance</Heading>
+            <TextBox>Parent: 0 weth</TextBox>
+            <Button>Add Dao</Button>
             <Heading as='h4'>Deposit/withdraw/dao withdraw</Heading>
             <Button onClick={handleDeposit}>Depost from DAO proposal</Button>
+            <Button onClick={handleDeposit}>Transfer Minion Funds</Button>
             <Button onClick={handleMinionWithdraw}>
-              Withdraw funds to DAO
+              Withdraw funds from DAO to Minion
             </Button>
             <Button onClick={handleMinionWithdraw}>
-              Withdraw funds another DAO
+              Withdraw funds from another DAO to DAO
             </Button>
             <Heading as='h4'>New Prop/ Forged Prop</Heading>
-            <Button onClick={() => openModal('proposal')}>
-              New Minion proposal
-            </Button>
+            <Button onClick={handleNewMinion}>New Minion proposal</Button>
+            <Button onClick={handleNewMinion}>Proposal on another DAO</Button>
             <Button>Forged Tool airdrop funds to member/s</Button>
             <Button>Forged Tool stream funds to member/s</Button>
             <Button>Forged Tool mint NFT</Button>
-            <Heading as='h4'>Proposals</Heading>
+            <Heading as='h4'>Activity</Heading>
+            <List>
+              <ListItem>Proposal 1</ListItem>
+              <ListItem>Proposal 2</ListItem>
+              <ListItem>Proposal 3</ListItem>
+            </List>
           </Box>
         </>
       )}
       <ProposalFormModal
         presets={proposalPresets}
         isOpen={modals.proposal}
+        proposalType={proposalType}
+      />
+      <ProposalFormModal
+        presets={proposalPresets}
+        isOpen={modals.minion}
         proposalType={proposalType}
       />
       <GenericModal isOpen={modals.minionWithdraw}>

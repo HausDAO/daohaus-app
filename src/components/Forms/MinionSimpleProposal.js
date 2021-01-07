@@ -30,7 +30,7 @@ import { MinionService } from '../../utils/minion-service';
 import { AiOutlineCaretDown } from 'react-icons/ai';
 import { supportedChains } from '../../utils/chains';
 
-const MinionProposalForm = () => {
+const MinionProposalForm = ({ presets }) => {
   const [loading, setLoading] = useState(false);
   const [abiLoading, setAbiLoading] = useState(false);
   const [user] = useUser();
@@ -52,7 +52,7 @@ const MinionProposalForm = () => {
     errors,
     register,
     // formState
-  } = useForm();
+  } = useForm({ defaultValues: presets });
 
   useEffect(() => {
     if (dao?.graphData?.minions) {
