@@ -12,11 +12,11 @@ import {
 import TextBox from '../Shared/TextBox';
 import { stripHttpProtocol } from '../../utils/helpers';
 
-const DetailsFields = ({ register }) => {
+const DetailsFields = ({ register, presets }) => {
   const [values, setValues] = useState({
-    title: '',
-    description: '',
-    link: '',
+    title: presets?.title || '',
+    description: presets?.description || '',
+    link: presets?.link || '',
   });
 
   const handleChange = (e) => {

@@ -43,7 +43,7 @@ const ProposalVote = ({ proposal, setProposal }) => {
   const [network] = useNetwork();
   const [nextProposalToProcess, setNextProposal] = useState(null);
   const [hasVoted, setHasVoted] = useState(false);
-  const [minionDeets, setMinionDeets] = useState();
+  const [minionSimple, setMinionSimple] = useState();
 
   const currentlyVoting = (proposal) => {
     return (
@@ -173,7 +173,7 @@ const ProposalVote = ({ proposal, setProposal }) => {
         console.log('error: ', err);
       }
 
-      setMinionDeets(action);
+      setMinionSimple(action);
     };
     if (proposal?.proposalId) {
       getMinionDeets();
@@ -462,7 +462,7 @@ const ProposalVote = ({ proposal, setProposal }) => {
         {proposal?.status === 'Passed' && proposal?.minionAddress && (
           <Flex justify='center' pt='10px'>
             <Flex direction='column'>
-              {minionDeets?.executed ? (
+              {minionSimple?.executed ? (
                 <Text>Executed</Text>
               ) : (
                 <Button onClick={() => executeMinion(proposal)}>

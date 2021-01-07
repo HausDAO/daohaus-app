@@ -30,7 +30,7 @@ import AddressInput from './AddressInput';
 import DetailsFields from './DetailFields';
 import { detailsToJSON } from '../../utils/proposal-helper';
 
-const FundingProposalForm = () => {
+const FundingProposalForm = ({ presets }) => {
   const [loading, setLoading] = useState(false);
   const [showShares, setShowShares] = useState(false);
   const [showLoot, setShowLoot] = useState(false);
@@ -50,7 +50,7 @@ const FundingProposalForm = () => {
     getValues,
     watch,
     // formState
-  } = useForm();
+  } = useForm({ defaultValues: presets });
 
   useEffect(() => {
     if (Object.keys(errors).length > 0) {
@@ -127,7 +127,7 @@ const FundingProposalForm = () => {
         flexWrap='wrap'
       >
         <Box w={['100%', null, '50%']} pr={[0, null, 5]}>
-          <DetailsFields register={register} />
+          <DetailsFields presets={presets} register={register} />
         </Box>
         <Box w={['100%', null, '50%']}>
           <AddressInput

@@ -23,9 +23,10 @@ const initialState = {
     proposal: false,
     newMember: false,
     newToken: false,
-    minionDeets: false,
+    minionSimple: false,
     newBoost: false,
     imageHandler: false,
+    minionWithdraw: false,
   },
 
   user: null,

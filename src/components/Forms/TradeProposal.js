@@ -30,7 +30,7 @@ import TributeInput from './TributeInput';
 import AddressInput from './AddressInput';
 import { detailsToJSON } from '../../utils/proposal-helper';
 
-const TradeProposalForm = () => {
+const TradeProposalForm = ({ presets }) => {
   const [loading, setLoading] = useState(false);
   const [showLoot, setShowLoot] = useState(false);
   const [showShares, setShowShares] = useState(false);
@@ -41,8 +41,6 @@ const TradeProposalForm = () => {
   const [currentError, setCurrentError] = useState(null);
   const { closeModals } = useModals();
 
-  console.log(dao);
-
   const {
     handleSubmit,
     errors,
@@ -51,7 +49,7 @@ const TradeProposalForm = () => {
     getValues,
     watch,
     // formState
-  } = useForm();
+  } = useForm({ defaultValues: presets });
 
   useEffect(() => {
     if (Object.keys(errors).length > 0) {
@@ -126,7 +124,7 @@ const TradeProposalForm = () => {
         flexWrap='wrap'
       >
         <Box w={['100%', null, '50%']} pr={[0, null, 5]}>
-          <DetailsFields register={register} />
+          <DetailsFields presets={presets} register={register} />
         </Box>
         <Box w={['100%', null, '50%']}>
           <TributeInput

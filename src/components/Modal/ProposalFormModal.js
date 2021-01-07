@@ -21,7 +21,7 @@ import MinionSimpleProposalForm from '../Forms/MinionSimpleProposal';
 import TransmutationProposal from '../Forms/TransmutationProposal';
 import { useModals } from '../../contexts/PokemolContext';
 
-const ProposalFormModal = ({ proposalType, isOpen, returnRoute }) => {
+const ProposalFormModal = ({ proposalType, isOpen, returnRoute, presets }) => {
   const [, setLoading] = useState(false);
   const [proposalForm, setProposalForm] = useState(null);
   const [theme] = useTheme();
@@ -33,52 +33,63 @@ const ProposalFormModal = ({ proposalType, isOpen, returnRoute }) => {
       type: `New ${theme.daoMeta.proposal}`,
       heading: `New ${theme.daoMeta.member} ${theme.daoMeta.proposal}`,
       subline: `Submit your membership proposal here.`,
-      form: <MemberProposalForm />,
+      form: <MemberProposalForm presets={presets} />,
+      presets: null,
     },
     funding: {
       type: `New ${theme.daoMeta.proposal}`,
       heading: `New Funding ${theme.daoMeta.proposal}`,
       subline: `Submit a funding proposal here.`,
-      form: <FundingProposalForm />,
+      form: <FundingProposalForm presets={presets} />,
+      presets: null,
     },
     whitelist: {
       type: `New ${theme.daoMeta.proposal}`,
       heading: `New Whitelist ${theme.daoMeta.proposal}`,
       subline: `Whitelist a token here.`,
-      form: <WhitelistProposalForm />,
+      form: <WhitelistProposalForm presets={presets} />,
+      presets: null,
     },
     guildkick: {
       type: `New ${theme.daoMeta.proposal}`,
       heading: `New GuildKick ${theme.daoMeta.proposal}`,
       subline: `Kick a perpetrator here.`,
-      form: <GuildKickProposalForm />,
+      form: <GuildKickProposalForm presets={presets} />,
+      presets: null,
     },
     trade: {
       type: `New ${theme.daoMeta.proposal}`,
       heading: `New Trade ${theme.daoMeta.proposal}`,
       subline: `Submit a trade proposal here.`,
-      form: <TradeProposalForm />,
+      form: <TradeProposalForm presets={presets} />,
+      presets: null,
     },
     minion: {
       type: `New ${theme.daoMeta.proposal}`,
       heading: `New Minion ${theme.daoMeta.proposal}`,
       subline: `Submit a Minion proposal here.`,
-      form: <MinionSimpleProposalForm />,
+      form: <MinionSimpleProposalForm presets={presets} />,
+      presets: null,
     },
     transmutation: {
       type: `New ${theme.daoMeta.proposal}`,
       heading: `New Transmutation ${theme.daoMeta.proposal}`,
       subline: `Submit a Transmutation proposal here.`,
-      form: <TransmutationProposal />,
+      form: <TransmutationProposal presets={presets} />,
+      presets: {},
     },
   };
 
   useEffect(() => {
     if (proposalType) {
-      setProposalForm(proposalForms[proposalType]);
+      let _presets = proposalForms[proposalType];
+      if (presets) {
+        _presets = { ..._presets, ...presets };
+      }
+      setProposalForm(_presets);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [proposalType]);
+  }, [proposalType, presets]);
 
   const handleClose = () => {
     setLoading(false);

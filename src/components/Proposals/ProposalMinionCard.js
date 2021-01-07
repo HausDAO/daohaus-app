@@ -28,7 +28,7 @@ import { getRpcUrl } from '../../utils/helpers';
 
 const ProposalMinionCard = ({ proposal }) => {
   const [network] = useNetwork();
-  const [minionDeets, setMinionDeets] = useState();
+  const [minionSimple, setMinionSimple] = useState();
   const [decodedData, setDecodedData] = useState();
   const [loading, setLoading] = useState(true);
   const [web3Connect] = useWeb3Connect();
@@ -59,7 +59,7 @@ const ProposalMinionCard = ({ proposal }) => {
         setLoading(false);
       }
 
-      setMinionDeets(action);
+      setMinionSimple(action);
     };
     if (proposal?.proposalId) {
       getMinionDeets();
@@ -69,7 +69,7 @@ const ProposalMinionCard = ({ proposal }) => {
   }, [proposal, user]);
 
   useEffect(() => {
-    if (!minionDeets) {
+    if (!minionSimple) {
       return;
     }
     const getAbi = async () => {
@@ -77,14 +77,14 @@ const ProposalMinionCard = ({ proposal }) => {
         const key =
           network.network_id === 100 ? '' : process.env.REACT_APP_ETHERSCAN_KEY;
         const url = `${supportedChains[network.network_id].abi_api_url}${
-          minionDeets.to
+          minionSimple.to
         }${key && '&apikey=' + key}`;
         const response = await fetch(url);
 
         const json = await response.json();
 
         abiDecoder.addABI(JSON.parse(json.result));
-        const _decodedData = abiDecoder.decodeMethod(minionDeets.data);
+        const _decodedData = abiDecoder.decodeMethod(minionSimple.data);
         setDecodedData(_decodedData);
       } catch (err) {
         console.log(err);
@@ -92,7 +92,7 @@ const ProposalMinionCard = ({ proposal }) => {
     };
     getAbi();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [proposal, minionDeets]);
+  }, [proposal, minionSimple]);
 
   const displayDecodedData = (data) => {
     return (
@@ -118,17 +118,17 @@ const ProposalMinionCard = ({ proposal }) => {
   return (
     <>
       <Skeleton isLoaded={!loading}>
-        {minionDeets && (
+        {minionSimple && (
           <Box w='100%' mt={8}>
             <Box mb={3}>
-              Target Address: <AddressAvatar addr={minionDeets.to} />
+              Target Address: <AddressAvatar addr={minionSimple.to} />
             </Box>
-            <Button onClick={() => openModal('minionDeets')}>More info</Button>
+            <Button onClick={() => openModal('minionSimple')}>More info</Button>
           </Box>
         )}
       </Skeleton>
       <Modal
-        isOpen={modals.minionDeets}
+        isOpen={modals.minionSimple}
         onClose={() => closeModals()}
         isCentered
       >
