@@ -40,6 +40,7 @@ const UserDaoInit = () => {
   // init the dao when we're on a dao route
   useEffect(() => {
     if (!validDaoParam) {
+      console.log('validDaoParam', validDaoParam);
       return;
     }
 
@@ -161,6 +162,7 @@ const UserDaoInit = () => {
     let daoRes;
     try {
       daoRes = await get(`dao/${daoParam}`);
+      console.log('daoRes', daoRes);
     } catch (err) {
       console.log('api fetch error', daoParam);
     }

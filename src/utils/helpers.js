@@ -57,7 +57,10 @@ export const memberProfile = (members, address) => {
 
 export const validDaoParams = (location) => {
   const pathname = location.pathname.split('/');
-  const daoParam = pathname[2];
+  let daoParam = pathname[2];
+  if (daoParam) {
+    daoParam = daoParam.toLowerCase();
+  }
   const regex = RegExp('0x[0-9a-f]{10,40}');
   return pathname[1] === 'dao' && regex.test(daoParam) ? daoParam : false;
 };
