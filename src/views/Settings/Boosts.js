@@ -10,6 +10,7 @@ import GenericModal from '../../components/Modal/GenericModal';
 import { useDao, useModals } from '../../contexts/PokemolContext';
 import NewMinionForm from '../../components/Settings/NewMinionForm';
 import CustomThemeLaunch from '../../components/Settings/CustomThemeLaunch';
+import NewMinionSafe from '../../components/Settings/NewMinionSafe';
 
 const boostList = [
   {
@@ -28,6 +29,15 @@ const boostList = [
     price: '0',
     modalName: 'newBoost',
     modalBody: <NewMinionForm />,
+  },
+  {
+    name: 'Minion Safe',
+    key: 'minionSafe',
+    description: 'Add the Dao to a Gnosis Safe',
+    comingSoon: false,
+    price: '0',
+    modalName: 'newBoost',
+    modalBody: <NewMinionSafe />,
   },
   {
     name: 'Notifications',
