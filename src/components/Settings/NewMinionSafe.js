@@ -1,28 +1,19 @@
 import React, { useState } from 'react';
-import { Link as RouterLink } from 'react-router-dom';
-import {
-  Box,
-  Button,
-  FormControl,
-  FormHelperText,
-  Heading,
-  Input,
-  Link,
-} from '@chakra-ui/react';
+import { Box, Button } from '@chakra-ui/react';
 import TextBox from '../Shared/TextBox';
-import { useForm } from 'react-hook-form';
-import { MinionFactoryService } from '../../utils/minion-factory-service';
-import { supportedChains } from '../../utils/chains';
 
 import {
   useDao,
   useTxProcessor,
   useUser,
-  useWeb3Connect,
   useModals,
   useNetwork,
+  useWeb3Connect,
 } from '../../contexts/PokemolContext';
-import MinionSafeConfigForm from './MinionSafeConfigForm';
+import MinionSafeEasyMode from './MinionSafeEasyMode';
+import MinionSafeHardMode from './MinionSafeHardMode';
+import { supportedChains } from '../../utils/chains';
+import { MinionSafeService } from '../../utils/minion-safe-service';
 
 const NewMinionSafe = () => {
   const [loading, setLoading] = useState(false);
@@ -32,11 +23,11 @@ const NewMinionSafe = () => {
   const [network] = useNetwork();
   const { closeModals } = useModals();
   const [txProcessor, updateTxProcessor] = useTxProcessor();
-  const [currentMode, setCurrentMode] = useState();
+  const [currentMode, setCurrentMode] = useState(1);
 
-  const mode = {
-    1: { name: 'easy', form: <MinionSafeConfigForm /> },
-    2: { name: 'hard', form: '' },
+  const MODE = {
+    1: { name: 'easy' },
+    2: { name: 'hard' },
   };
 
   const txCallBack = (txHash, details) => {
@@ -54,25 +45,30 @@ const NewMinionSafe = () => {
       setLoading(false);
     }
   };
-
-  const onSubmit = (values) => {
+  const onSubmitExistingSafe = (values) => {
+    console.log(values);
+  };
+  const onSubmitNewSafe = (values) => {
     setLoading(true);
 
     console.log(values);
     const setupValues = {
       minionFactory: supportedChains[network.network_id].minion_factory_addr,
-      actionVlaue: '0',
+      safeProxyFactory: supportedChains[network.network_id].safe_proxy_factory,
+      createAndAddModules:
+        supportedChains[network.network_id].safe_create_and_add_modules,
+      safeMasterCopy: supportedChains[network.network_id].safe_master_copy,
     };
-    const minionFactoryService = new MinionFactoryService(
+    const minionSafeService = new MinionSafeService(
       web3Connect.web3,
       user.username,
       setupValues,
     );
 
     try {
-      minionFactoryService.summonMinion(
-        dao.address,
-        values.details,
+      minionSafeService.setup(
+        values.delegateAddress,
+        values.minionAddress,
         txCallBack,
       );
     } catch (err) {
@@ -81,20 +77,32 @@ const NewMinionSafe = () => {
     }
   };
 
+  const toggleMode = () => {
+    if (currentMode === 2) {
+      setCurrentMode(1);
+    } else {
+      setCurrentMode(2);
+    }
+  };
+
   return (
     <Box w='90%'>
-      <Heading as='h4' size='sm' fontWeight='100'>
-        Minion Safe
-      </Heading>
-      <TextBox>
-        This Minion allows you to interact with a specially created Gnosis Safe
-        for your DAO. This means the DAO can interact with any Gnosis Safe App
-        via proposal. Add a number of Human Co-Signers to execute transactions,
-        once they pass the DAO proposal stage.
-      </TextBox>
+      <TextBox>Minion Safe</TextBox>
       {dao?.graphData && dao.graphData.minions.length > 0 ? (
         <>
-          <MinionSafeConfigForm minions={dao.graphData.minions} />
+          {MODE[currentMode] === MODE[1] ? (
+            <MinionSafeEasyMode
+              minions={dao.graphData.minions}
+              submitAction={onSubmitNewSafe}
+              loading={loading}
+            />
+          ) : (
+            <MinionSafeHardMode
+              minions={dao.graphData.minions}
+              submitAction={onSubmitExistingSafe}
+              loading={loading}
+            />
+          )}
         </>
       ) : (
         <TextBox>You need to add a minion first</TextBox>
@@ -113,6 +121,9 @@ const NewMinionSafe = () => {
           Deploy
         </Button>
       </form> */}
+      <Button onClick={toggleMode}>
+        switch to {currentMode === 1 ? MODE[2].name : MODE[1].name}
+      </Button>
     </Box>
   );
 };

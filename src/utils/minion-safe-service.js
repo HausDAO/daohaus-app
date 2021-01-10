@@ -1,6 +1,8 @@
-import abi from '../contracts/gnosisSafe.json.json';
+import safeProxyFactoryAbi from '../contracts/safeProxyFactory.json';
+import safeCreateAndAddModulesAbi from '../contracts/safeCreateAndAddModule.json';
+import safeMasterCopyAbi from '../contracts/safeGnosis.json';
 
-export class GnosisSafeService {
+export class MinionSafeService {
   web3;
   contract;
   daoAddress;
@@ -10,15 +12,29 @@ export class GnosisSafeService {
   constructor(web3, accountAddress, setupValues) {
     console.log('service init', accountAddress, setupValues);
     this.web3 = web3;
-    this.contract = new web3.eth.Contract(abi, setupValues.gnosisSafe);
     this.accountAddress = accountAddress;
     this.setupValues = setupValues;
+    this.safeProxyFactory = setupValues.safeProxyFactory;
+    this.createAndAddModules = setupValues.createAndAddModules;
+    this.safeMasterCopy = setupValues.safeMasterCopy;
+    this.safeProxyFactoryContract = new web3.eth.Contract(
+      safeProxyFactoryAbi,
+      this.safeProxyFactory,
+    );
+    this.safeCreateAndAddModulesContract = new web3.eth.Contract(
+      safeCreateAndAddModulesAbi,
+      this.safeCreateAndAddModulesAbi,
+    );
+    this.safeMasterCopyContract = new web3.eth.Contract(
+      safeMasterCopyAbi,
+      this.safeMasterCopy,
+    );
   }
 
   // internal
-  sendTx(options, callback) {
+  sendTx(contract, options, callback) {
     const { from, name, params } = options;
-    const tx = this.contract.methods[name](...params);
+    const tx = contract.methods[name](...params);
     return tx
       .send({ from: from })
       .on('transactionHash', (txHash) => {
@@ -30,14 +46,7 @@ export class GnosisSafeService {
       });
   }
 
-  async setup(
-    delegateAddress,
-    minionAddress,
-    threshhold,
-    matercopy,
-    enableModuleData,
-    callback,
-  ) {
+  async setup(delegateAddress, minionAddress, callback) {
     /*
       setup(
     [DELEGATE_ADDRESS, MINION_ADDRESS],
@@ -50,17 +59,27 @@ export class GnosisSafeService {
     0
 )
       */
+    const threshhold = 2;
+    const mastercopy = this.safeMasterCopy;
+    const enableModuleData = null;
+    const setup = await this.safeMasterCopyContract.methods
+      .setup(
+        [delegateAddress, minionAddress],
+        threshhold,
+        mastercopy,
+        enableModuleData,
+        0,
+        0,
+        0,
+        0,
+      )
+      .encodeABI();
     const txReceipt = await this.sendTx(
+      this.safeProxyFactoryContract,
       {
         from: this.accountAddress,
-        name: 'setup',
-        params: [
-          delegateAddress,
-          minionAddress,
-          threshhold,
-          matercopy,
-          enableModuleData,
-        ],
+        name: 'createProxy',
+        params: [mastercopy, setup],
       },
       callback,
     );

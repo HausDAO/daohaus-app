@@ -36,7 +36,7 @@ const boostList = [
     description: 'Add the Dao to a Gnosis Safe',
     comingSoon: false,
     price: '0',
-    modalName: 'newBoost',
+    modalName: 'newMinionSafe',
     modalBody: <NewMinionSafe />,
   },
   {

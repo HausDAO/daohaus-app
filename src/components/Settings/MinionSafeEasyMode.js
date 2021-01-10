@@ -1,55 +1,40 @@
-import React, { useState } from 'react';
-import { Link as RouterLink } from 'react-router-dom';
+import React from 'react';
 import {
   Box,
   Button,
-  FormControl,
-  FormHelperText,
-  Heading,
-  Input,
+  FormLabel,
   InputRightAddon,
   Select,
 } from '@chakra-ui/react';
 import TextBox from '../Shared/TextBox';
 import { useForm } from 'react-hook-form';
 import AddressInput from '../Forms/AddressInput';
+import { truncateAddr } from '../../utils/helpers';
 
-const MinionSafeConfigForm = ({ minions }) => {
+const MinionSafeEasyMode = ({ minions, sumbitAction, loading }) => {
   const { handleSubmit, register, setValue, watch } = useForm();
-  const [loading, setLoading] = useState(false);
 
   const onSubmit = (values) => {
-    setLoading(true);
-
     console.log(values);
-    // const setupValues = {
-    //   minionFactory: supportedChains[network.network_id].minion_factory_addr,
-    //   actionVlaue: '0',
-    // };
-    // const minionFactoryService = new MinionFactoryService(
-    //   web3Connect.web3,
-    //   user.username,
-    //   setupValues,
-    // );
-
-    try {
-      // minion safe factory
-    } catch (err) {
-      setLoading(false);
-      console.log('error: ', err);
-    }
+    sumbitAction(values);
   };
 
   return (
     <>
-      <TextBox fontFamily='heading' fontSize='2xl' fontWeight={700}>
-        Select a Minion
-      </TextBox>
+      <Box>
+        This Minion allows you to interact with a specially created Gnosis Safe
+        for your DAO. This means the DAO can interact with any Gnosis Safe App
+        via proposal. Add a number of Human Co-Signers to execute transactions,
+        once they pass the DAO proposal stage.
+      </Box>
       <form onSubmit={handleSubmit(onSubmit)}>
         <Box>
+          <TextBox as={FormLabel} size='xs' htmlFor='minionAddress' mb={2}>
+            Select Minion
+          </TextBox>
           <InputRightAddon background='primary.500' p={0}>
             <Select
-              name='paymentToken'
+              name='minionAddress'
               ref={register}
               color='white'
               background='primary.500'
@@ -57,16 +42,18 @@ const MinionSafeConfigForm = ({ minions }) => {
             >
               {minions.map((minion, idx) => (
                 <option key={idx} default={!idx} value={minion.minionAddress}>
-                  {minion.name}
+                  {minion.details} {truncateAddr(minion.minionAddress)}
                 </option>
               ))}
             </Select>
           </InputRightAddon>
+
           <AddressInput
             name='delegate'
             register={register}
             setValue={setValue}
             watch={watch}
+            formLabel='Delegate'
           />
         </Box>
         <Button type='submit' isLoading={loading}>
@@ -77,4 +64,4 @@ const MinionSafeConfigForm = ({ minions }) => {
   );
 };
 
-export default MinionSafeConfigForm;
+export default MinionSafeEasyMode;

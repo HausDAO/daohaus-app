@@ -92,6 +92,9 @@ export const supportedChains = {
     minion_factory_addr: '0x9610389d548Ca0224aCaC40eB3241c5ED88D2479',
     moloch_factory_addr: '0x0F50B2F3165db96614fbB6E4262716acc9F9e098',
     wxdai_contract: '0xe91D153E0b41518A2Ce8Dd3D7944Fa863463a97d',
+    safe_proxy_factory: '0x76E2cFc1F5Fa8F6a5b3fC4c8F4788F0116861F9B',
+    safe_create_and_add_modules: '0xF61A721642B0c0C8b334bA3763BA1326F53798C0',
+    safe_master_copy: '0x34CfAC646f301356fAa8B21e94227e3583Fe3F5F',
   },
 };
 

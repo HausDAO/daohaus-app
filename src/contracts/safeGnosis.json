@@ -321,8 +321,8 @@
   },
   {
     "type": "function",
-    "stateMutability": "payable",
-    "payable": true,
+    "stateMutability": "nonpayable",
+    "payable": false,
     "outputs": [{ "type": "bool", "name": "success", "internalType": "bool" }],
     "name": "execTransaction",
     "inputs": [
@@ -466,17 +466,6 @@
         "internalType": "address"
       },
       { "type": "uint256", "name": "_nonce", "internalType": "uint256" }
-    ],
-    "constant": true
-  },
-  {
-    "type": "function",
-    "stateMutability": "view",
-    "payable": false,
-    "outputs": [{ "type": "bool", "name": "", "internalType": "bool" }],
-    "name": "isModuleEnabled",
-    "inputs": [
-      { "type": "address", "name": "module", "internalType": "contract Module" }
     ],
     "constant": true
   },
