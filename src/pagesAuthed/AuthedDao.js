@@ -9,7 +9,7 @@ import { HeaderSm } from "../styles/typography";
 const AuthedDao = () => {
   const { daoOverview } = useLocalDaoData();
 
-  const title = daoOverview ? daoOverview.moloch.title : "Loading...";
+  const title = daoOverview ? daoOverview?.moloch?.title : "Loading...";
 
   return (
     <Layout sideMenu={<DaoSideMenu title={title} />}>

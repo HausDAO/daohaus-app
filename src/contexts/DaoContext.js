@@ -14,11 +14,13 @@ import { useSessionStorage } from "../hooks/useSessionStorage";
 import { multiFetch } from "../utils/apollo";
 import { supportedChains } from "../utils/chain";
 import { useInjectedProvider } from "./InjectedProviderContext";
+import { useToken } from "./TokenContext";
 
 export const DaoContext = createContext();
 
 export const DaoProvider = ({ children }) => {
   const { daoid, daochain } = useParams();
+  const { initNewDao } = useToken();
   const { injectedChain, injectedProvider } = useInjectedProvider();
 
   const daoNetworkData = supportedChains[daochain];
@@ -47,6 +49,7 @@ export const DaoProvider = ({ children }) => {
   const [isMember, setIsMember] = useState(false);
 
   const hasCheckedIsMember = useRef(false);
+  const hasInitializedPrices = useRef(false);
 
   useEffect(() => {
     //This condition is brittle. If one request passes, but the rest fail
@@ -137,6 +140,13 @@ export const DaoProvider = ({ children }) => {
       hasCheckedIsMember.current = true;
     }
   }, [daoMembers, injectedProvider]);
+
+  useEffect(() => {
+    if (daoOverview && !hasInitializedPrices.current && daochain) {
+      initNewDao(daochain, daoOverview.moloch.tokenBalances);
+      hasInitializedPrices.current = true;
+    }
+  }, [daoOverview, initNewDao, daochain]);
 
   return (
     <DaoContext.Provider

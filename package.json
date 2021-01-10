@@ -8,6 +8,7 @@
     "@testing-library/user-event": "^12.1.10",
     "apollo-boost": "^0.4.9",
     "date-fns": "^2.16.1",
+    "deep-eql": "^4.0.0",
     "ethers": "^5.0.24",
     "graphql": "^15.4.0",
     "react": "^17.0.1",
@@ -44,5 +45,8 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "devDependencies": {
+    "@types/deep-equal": "^1.0.1"
   }
 }

@@ -4,18 +4,12 @@ export const createClient = (uri) => {
   return new ApolloClient({ uri });
 };
 
-export const apolloQuery = async ({
-  endpoint,
-  query,
-  variables,
-  resolvers,
-}) => {
+export const apolloQuery = async ({ endpoint, query, variables }) => {
   try {
     const client = createClient(endpoint);
     const results = await client.query({
       query,
       variables,
-      // resolvers,
     });
     return results.data;
   } catch (error) {

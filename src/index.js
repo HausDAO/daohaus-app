@@ -8,13 +8,16 @@ import { BrowserRouter } from "react-router-dom";
 // import { DefaultProvider } from "./contexts/DefaultProviderContext";
 import { InjectedProvider } from "./contexts/InjectedProviderContext";
 import { UserContextProvider } from "./contexts/UserContext";
+import { TokenProvider } from "./contexts/TokenContext";
 
 ReactDOM.render(
   <React.StrictMode>
     <BrowserRouter>
-      <InjectedProvider>
-        <App />
-      </InjectedProvider>
+      <TokenProvider>
+        <InjectedProvider>
+          <App />
+        </InjectedProvider>
+      </TokenProvider>
     </BrowserRouter>
   </React.StrictMode>,
   document.getElementById("root")
