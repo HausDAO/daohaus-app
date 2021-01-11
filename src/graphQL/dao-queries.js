@@ -80,8 +80,8 @@ export const DAO_ACTIVITIES = gql`
         sponsored
         sponsoredAt
         sponsor
-        # proposalType @client
-        # title @client
+        # proposalType @client || Client side logic
+        # title @client || Client side logic
         votes {
           id
           createdAt

@@ -5,6 +5,7 @@ import { UserContextProvider } from "../contexts/UserContext";
 import AuthedHub from "../pagesAuthed/AuthedHub";
 import AuthedDao from "../pagesAuthed/AuthedDao";
 import { DaoProvider } from "../contexts/DaoContext";
+import { MetaDataProvider } from "../contexts/MetaDataContext";
 
 const Authed = () => {
   return (
@@ -17,9 +18,11 @@ const Authed = () => {
           <AuthedHub />
         </Route>
         <Route path="/dao/:daochain/:daoid">
-          <DaoProvider>
-            <AuthedDao />
-          </DaoProvider>
+          <MetaDataProvider>
+            <DaoProvider>
+              <AuthedDao />
+            </DaoProvider>
+          </MetaDataProvider>
         </Route>
       </Switch>
     </UserContextProvider>

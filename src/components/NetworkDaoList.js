@@ -1,7 +1,5 @@
 import React from "react";
 import { Link } from "react-router-dom";
-// import { HUB_MEMBERSHIPS, USER_MEMBERSHIPS } from "../graphQL/member-queries";
-import { BodyXs, HeaderMd } from "../styles/typography";
 
 const NetworkDaoList = ({ data, networkID }) => {
   return (
@@ -9,9 +7,9 @@ const NetworkDaoList = ({ data, networkID }) => {
       {data.membersHub?.map((dao) => (
         <div className="inner-section" key={dao.id}>
           <Link to={`/dao/${networkID}/${dao.moloch.id}`}>
-            <HeaderMd className="title">{dao.moloch.title}</HeaderMd>
+            <h4 className="title">{dao.moloch.title}</h4>
           </Link>
-          <BodyXs>Version {dao.moloch.version}</BodyXs>
+          <p className="version">Version {dao.moloch.version}</p>
         </div>
       ))}
     </>

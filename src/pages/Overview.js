@@ -1,8 +1,6 @@
 import React from "react";
 import ActivitiesCard from "../components/activitiesCard";
 import OverviewCard from "../components/overviewCard";
-import { SplitLayout } from "../components/staticElements";
-import { BodyMd, DisplayLg } from "../styles/typography";
 
 const Overview = React.memo(function Overview({
   overview,
@@ -12,16 +10,16 @@ const Overview = React.memo(function Overview({
   isCorrectNetwork,
 }) {
   return (
-    <SplitLayout>
+    <div>
       <div className="title-section">
-        <DisplayLg>{title}</DisplayLg>
+        <h1>{title}</h1>
         {isCorrectNetwork || (
-          <BodyMd>You are not connected to the correct network</BodyMd>
+          <p>You are not connected to the correct network</p>
         )}
       </div>
       {overview && <OverviewCard overview={overview} isMember={isMember} />}
       {activities && <ActivitiesCard activities={activities} />}
-    </SplitLayout>
+    </div>
   );
 });
 

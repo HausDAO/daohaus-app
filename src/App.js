@@ -1,7 +1,6 @@
 import React from "react";
 
 import { useInjectedProvider } from "./contexts/InjectedProviderContext";
-import Loading from "./components/loading";
 import Authed from "./routers/authed";
 import NotAuthed from "./routers/notAuthed";
 
@@ -9,7 +8,7 @@ function App() {
   const { address, injectedProvider } = useInjectedProvider();
 
   if (!injectedProvider && localStorage.getItem("hasConnected")) {
-    return <Loading />;
+    return <div>Loading</div>;
   } else if (injectedProvider) {
     if (injectedProvider && !address) {
       //This mess is because of Metamask's unreliable address injection

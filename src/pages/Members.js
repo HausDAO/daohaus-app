@@ -8,8 +8,8 @@ const Members = ({ members }) => {
         return (
           <div key={member.id}>
             <HeaderSm>{member.memberAddress}</HeaderSm>
-            <BodyMd>Shares: {member.shares}</BodyMd>
-            <BodyMd>Loot: {member.loot}</BodyMd>
+            <p>Shares: {member.shares}</p>
+            <p>Loot: {member.loot}</p>
           </div>
         );
       })}

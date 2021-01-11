@@ -6,13 +6,14 @@ import Members from "../pages/Members";
 import Overview from "../pages/Overview";
 import Proposals from "../pages/Proposals";
 
-const AuthedDaoRoutes = ({ overview, title }) => {
+const AuthedDaoRoutes = () => {
   const { path } = useRouteMatch();
   const {
     daoActivities,
     isMember,
     isCorrectNetwork,
     daoBalances,
+    daoOverview,
     daoProposals,
     daoMembers,
   } = useLocalDaoData();
@@ -24,8 +25,8 @@ const AuthedDaoRoutes = ({ overview, title }) => {
           activities={daoActivities}
           isMember={isMember}
           isCorrectNetwork={isCorrectNetwork}
-          overview={overview}
-          title={title}
+          overview={daoOverview}
+          // title={title}
           authed
         />
       </Route>

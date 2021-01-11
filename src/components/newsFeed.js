@@ -8,16 +8,6 @@ import { getColor } from "../styles/palette";
 import { useLocalUserData } from "../contexts/UserContext";
 import { parseIfJSON } from "../utils/general";
 
-const StyledNewsFeed = styled.div`
-  border-left: 1px solid ${getColor("lightBorder")};
-  padding: 1.6rem 4rem;
-  grid-column: 3/5;
-  grid-row: 2/3;
-  .header {
-    margin-bottom: 1.6rem;
-  }
-`;
-
 const combineAndSortProposals = (daosByNetwork) => {
   return daosByNetwork
     .reduce((arr, network) => {
@@ -53,13 +43,13 @@ const NewsFeed = () => {
   }, [userHubDaos, hasLoadedHubData]);
 
   return (
-    <StyledNewsFeed>
-      <HeaderLg className="header">Recent Activity:</HeaderLg>
+    <div>
+      <h3 className="header">Recent Activity:</h3>
       {newsFeed &&
         newsFeed.slice(viewing.from, viewing.to + 1).map((proposal) => {
           return <ProposalPreview proposal={proposal} key={proposal.id} />;
         })}
-    </StyledNewsFeed>
+    </div>
   );
 };
 

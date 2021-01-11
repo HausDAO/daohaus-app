@@ -9,13 +9,16 @@ import { BrowserRouter } from "react-router-dom";
 import { InjectedProvider } from "./contexts/InjectedProviderContext";
 import { UserContextProvider } from "./contexts/UserContext";
 import { TokenProvider } from "./contexts/TokenContext";
+import { CustomeThemeProvider } from "./contexts/CustomThemeContext";
 
 ReactDOM.render(
   <React.StrictMode>
     <BrowserRouter>
       <TokenProvider>
         <InjectedProvider>
-          <App />
+          <CustomeThemeProvider>
+            <App />
+          </CustomeThemeProvider>
         </InjectedProvider>
       </TokenProvider>
     </BrowserRouter>

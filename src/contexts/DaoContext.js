@@ -46,6 +46,7 @@ export const DaoProvider = ({ children }) => {
     `balances-${daoid}`,
     null
   );
+
   const [isMember, setIsMember] = useState(false);
 
   const hasCheckedIsMember = useRef(false);
@@ -62,7 +63,7 @@ export const DaoProvider = ({ children }) => {
       daoBalances
     )
       return;
-    if (!daoid || !injectedChain || !daoNetworkData) return;
+    if (!daoid || !daochain || !daoNetworkData) return;
 
     multiFetch([
       {
@@ -113,7 +114,8 @@ export const DaoProvider = ({ children }) => {
     ]);
   }, [
     daoid,
-    injectedChain,
+    //injectedChain  might need again
+    daochain,
     daoNetworkData,
     daoActivities,
     daoBalances,

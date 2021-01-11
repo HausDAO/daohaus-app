@@ -1,6 +1,5 @@
 import React from "react";
 import { useToken } from "../contexts/TokenContext";
-import { HeaderMd } from "../styles/typography";
 import { tallyUSDs } from "../utils/tokenValue";
 
 const BankTotal = () => {
@@ -8,7 +7,7 @@ const BankTotal = () => {
 
   const bankTotal = currentDaoTokens ? tallyUSDs(currentDaoTokens) : "Loading";
 
-  return <HeaderMd>{bankTotal}</HeaderMd>;
+  return <h3>{bankTotal}</h3>;
 };
 
 export default BankTotal;
