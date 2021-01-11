@@ -12,12 +12,14 @@ import TokenList from '../../components/Shared/TokenList/TokenList';
 const Bank = () => {
   const [dao] = useDao();
   const [tokenList, setTokenList] = useState(null);
+  const [version, setVersion] = useState(null);
   const [balances] = useBalances();
   const [, updateRefetchQuery] = useRefetchQuery();
 
   useEffect(() => {
     if (dao?.graphData?.tokenBalances) {
       setTokenList(dao.graphData.tokenBalances);
+      setVersion(dao.version);
     }
   }, [dao]);
 
@@ -33,7 +35,7 @@ const Bank = () => {
   return (
     <Box w='100%' p={6}>
       <BankOverviewChart balances={balances} dao={dao} />
-      <TokenList tokenList={tokenList} isBank={true} />
+      <TokenList tokenList={tokenList} isBank={true} version={version} />
     </Box>
   );
 };
