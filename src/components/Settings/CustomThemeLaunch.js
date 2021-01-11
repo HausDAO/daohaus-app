@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Link as RouterLink } from 'react-router-dom';
-import { Box, Button, Heading } from '@chakra-ui/react';
+import { Box, Button, Heading, Text } from '@chakra-ui/react';
 
 import {
   useDao,
@@ -60,13 +60,14 @@ const CustomThemeLaunch = () => {
     <Box w='90%'>
       {step === 1 ? (
         <>
-          <Heading as='h4' size='sm' fontWeight='100'>
+          <Heading as='h4' size='md' fontWeight='100'>
             Add a Custom Theme
           </Heading>
-          <Box>
-            The first upgrade available is a custom theme for your DAO. You must
-            be a member to launch this boost.
-          </Box>
+          <Text my={6}>
+            The first upgrade available is a customizable theme for your DAO.
+            You can change the look and feel as well the verbage used to fit
+            your community's vibe. You must be a member to add this app.
+          </Text>
           <Button type='submit' disabled={loading} onClick={handleLaunch}>
             Add Custom Theme
           </Button>
@@ -75,10 +76,13 @@ const CustomThemeLaunch = () => {
 
       {step === 2 ? (
         <>
-          <Heading as='h4' size='sm' fontWeight='100'>
-            You can now customize your DAO’s theme!
+          <Heading as='h4' size='md' fontWeight='100'>
+            Custom Theme Added
           </Heading>
-          <Box>This is the first of many upgrades coming.</Box>
+          <Text my={6}>
+            You can now customize your theme of your DAO! You can edit these
+            later in Settings > Custom Theme.
+          </Text>
           <Button as={RouterLink} to={`/dao/${dao.address}/settings/theme`}>
             Edit Custom Theme
           </Button>

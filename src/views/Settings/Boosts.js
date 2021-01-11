@@ -23,7 +23,7 @@ const boostList = [
   {
     name: 'Minion',
     key: 'vanillaMinions',
-    description: 'Create and vote on execution of arbitrary contract calls',
+    description: 'Create and vote on execution of external contracts',
     comingSoon: false,
     price: '0',
     modalName: 'newBoost',
@@ -67,13 +67,11 @@ const Boosts = () => {
           Cost
         </Box>
 
-        <Box textAlign='center' color='red.500'>
+        <Box textAlign='center'>
           {boost.price === '0' ? (
-            <Flex alignItems='center'>
-              <Icon as={FaStar} mr={3} name='free badge' />
+            <Box fontFamily='heading' fontSize='xl' m={0}>
               Free
-              <Icon as={FaStar} ml={3} name='free badge' />
-            </Flex>
+            </Box>
           ) : null}
         </Box>
         {boost.comingSoon ? (
