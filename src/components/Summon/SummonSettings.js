@@ -1,10 +1,9 @@
 import React from 'react';
-import { Box, Heading, Text, Button, Flex } from '@chakra-ui/react';
+import { Box, Text, Button, Flex, Link } from '@chakra-ui/react';
 import { RiArrowRightFill } from 'react-icons/ri';
 import { daoPresets } from '../../content/summon-presets';
 import PresetCard from './PresetCard';
 import { useNetwork } from '../../contexts/PokemolContext';
-import TextBox from '../Shared/TextBox';
 
 import {
   formatPeriodDuration,
@@ -12,7 +11,7 @@ import {
   formatDepositWei,
 } from '../../utils/helpers';
 
-const SummonStepOne = ({ daoData, setDaoData, setCurrentStep }) => {
+const SummonSettings = ({ daoData, setDaoData, setCurrentStep }) => {
   const [network] = useNetwork();
   const selectPreset = (preset) => {
     setDaoData((prevState) => {
@@ -33,13 +32,13 @@ const SummonStepOne = ({ daoData, setDaoData, setCurrentStep }) => {
       );
     });
   };
+
+  const handleReset = () => {
+    console.log('reset');
+  };
+
   return (
     <Box>
-      <Text className='Alert'>
-        Transaction fees got you down? Check our{' '}
-        <a href='/help#xDAI'>Quick Start Guide</a> on how to switch to xDAI for
-        cheaper, faster interactions for your community.
-      </Text>
       <Box
         d='flex'
         wrap='wrap'
@@ -60,16 +59,21 @@ const SummonStepOne = ({ daoData, setDaoData, setCurrentStep }) => {
         >
           {daoData?.currency ? (
             <Box mt={4} p={6}>
-              <Text
-                as='h2'
-                fontFamily='heading'
-                fontSize='2xl'
-                style={{ color: daoData.color }}
-              >
-                {daoData.presetName}
-              </Text>
+              <Flex direction='row' justify='space-between'>
+                <Text
+                  as='h2'
+                  fontFamily='heading'
+                  fontSize='2xl'
+                  style={{ color: daoData.color }}
+                >
+                  Settings
+                </Text>
+                <Button variant='outline' onClick={() => handleReset(true)}>
+                  Reset to Default
+                </Button>
+              </Flex>
               <Text>{daoData.presetDescription}</Text>
-              <TextBox mt={4}>Settings</TextBox>
+
               <Text>
                 Currency: <strong>{daoData.currency}</strong>
               </Text>
@@ -122,8 +126,17 @@ const SummonStepOne = ({ daoData, setDaoData, setCurrentStep }) => {
           )}
         </Flex>
       </Box>
+
+      {network.network === 'kovan' ? (
+        <Text mt={10}>
+          Transaction fees got you down? Check our{' '}
+          <Link to='https://daohaus.club/help#xDAI'>Quick Start Guide</Link> on
+          how to switch to xDAI for cheaper, faster interactions for your
+          community.
+        </Text>
+      ) : null}
     </Box>
   );
 };
 
-export default SummonStepOne;
+export default SummonSettings;

@@ -29,7 +29,7 @@ const PresetCard = ({ preset, selectPreset, isSelected }) => {
         >
           {preset.presetName}
         </Heading>
-        <Text>{preset.presetDescription}</Text>
+        <Text>{preset.presetSubtitle}</Text>
       </Box>
     </Flex>
   );

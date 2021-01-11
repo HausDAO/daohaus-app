@@ -1,19 +1,19 @@
 import React, { useState, useContext, useEffect } from 'react';
+import { Box, Heading, Text, Button, Flex } from '@chakra-ui/react';
 
 import { daoConstants, daoPresets } from '../../content/summon-presets';
 import { SummonContext } from '../../contexts/SummonContext';
-import SummonStepOne from '../../components/Summon/SummonStepOne';
 import HardModeForm from '../../components/Summon/HardModeForm';
-import SummonStepTwo from '../../components/Summon/SummonStepTwo';
-import SummonStepThree from '../../components/Summon/SummonStepThree';
+// import SummonStepTwo from '../../components/Summon/SummonStepTwo';
+// import SummonStepThree from '../../components/Summon/SummonStepThree';
 import {
   useNetwork,
   useTxProcessor,
   useUser,
   useWeb3Connect,
 } from '../../contexts/PokemolContext';
-import { Box, Heading, Text, Button } from '@chakra-ui/react';
 import SummonService from '../../utils/summon-service';
+import SummonSettings from '../../components/Summon/SummonSettings';
 // import BoostPackages from '../../components/Boosts/BoostPackages';
 // import MiniLoader from '../../components/Shared/Loading/MiniLoader';
 
@@ -29,10 +29,11 @@ const Summon = () => {
   const [currentStep, setCurrentStep] = useState(1);
   const { state, dispatch } = useContext(SummonContext);
   // use network to init service
+
   const stepContent = {
     1: 'What kind of Haus will you build?',
-    2: 'Give us the basics',
-    3: 'Last chance to make changes',
+    // 2: 'Give us the basics',
+    // 3: 'Last chance to make changes',
     4: 'Our magic internet communities take a minute or two to create. You can see new daos on your Hub page',
   };
 
@@ -67,7 +68,8 @@ const Summon = () => {
   useEffect(() => {
     if (user?.username) {
       const presets = daoPresets(network.network_id);
-      setDaoData({ ...daoData, summoner: user.username, ...presets });
+      console.log('presets', presets);
+      setDaoData({ ...daoData, summoner: user.username, ...presets[0] });
     }
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -127,7 +129,7 @@ const Summon = () => {
   useEffect(() => {
     if (state.status === 'error') {
       setIsSummoning(false);
-      setCurrentStep(3);
+      setCurrentStep(1);
     }
 
     if (state.status === 'complete') {
@@ -147,12 +149,22 @@ const Summon = () => {
           <Box className='View Summon'>
             <Box className='Row'>
               <Box className='Summon__step'>
-                {currentStep > 4 ? (
-                  <Heading as='h3'>Step {currentStep}</Heading>
-                ) : null}
-                <Text>{stepContent[currentStep]}</Text>
+                <Flex direction='row' justify='space-between'>
+                  <Text>{stepContent[currentStep]}</Text>
+                  {currentStep === 1 ? (
+                    <Box className='ModeSwitch'>
+                      <Text style={{ width: '100%', textAlign: 'center' }}>
+                        <Button
+                          className='mode-link'
+                          onClick={() => setHardMode(true)}
+                        >
+                          Hard Mode
+                        </Button>
+                      </Text>
+                    </Box>
+                  ) : null}
+                </Flex>
               </Box>
-              {currentStep > 4 ? <button>Get Help</button> : null}
             </Box>
 
             {state.status === 'error' ? (
@@ -160,7 +172,6 @@ const Summon = () => {
                 {state.errorMessage.message || state.errorMessage}
               </Heading>
             ) : null}
-
             {summonError && (
               <Heading as='h1'>{summonError.message || summonError}</Heading>
             )}
@@ -170,42 +181,11 @@ const Summon = () => {
                 {!hardMode ? (
                   <>
                     {currentStep === 1 ? (
-                      <SummonStepOne
+                      <SummonSettings
                         daoData={daoData}
                         setDaoData={setDaoData}
                         setCurrentStep={setCurrentStep}
                       />
-                    ) : null}
-
-                    {currentStep === 2 ? (
-                      <SummonStepTwo
-                        daoData={daoData}
-                        setDaoData={setDaoData}
-                        setCurrentStep={setCurrentStep}
-                      />
-                    ) : null}
-
-                    {currentStep === 3 ? (
-                      <SummonStepThree
-                        daoData={daoData}
-                        setDaoData={setDaoData}
-                        setCurrentStep={setCurrentStep}
-                        handleSummon={handleSummon}
-                      />
-                    ) : null}
-
-                    {currentStep === 1 ? (
-                      <Box className='ModeSwitch'>
-                        <Text style={{ width: '100%', textAlign: 'center' }}>
-                          I&apos;m a DAO master, take me to{' '}
-                          <Button
-                            className='mode-link'
-                            onClick={() => setHardMode(true)}
-                          >
-                            Hard Mode
-                          </Button>
-                        </Text>
-                      </Box>
                     ) : null}
                   </>
                 ) : (
