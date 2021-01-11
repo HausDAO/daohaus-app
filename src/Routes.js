@@ -24,6 +24,7 @@ import UploadTest from './views/Theme/UploadTest';
 import SummonWrapper from './views/Summon/SummonWrapper';
 import RegisterDao from './views/Summon/RegisterDao';
 import Minions from './components/Settings/Minions';
+import MinionSafe from './components/Settings/MinionSafe';
 
 const Routes = () => {
   return (
@@ -109,6 +110,11 @@ const Routes = () => {
           path='/dao/:dao(\b0x[0-9a-f]{10,40}\b)/settings/minion/:minion(\b0x[0-9a-f]{10,40}\b)'
           exact
           component={Minions}
+        />
+        <Route
+          path='/dao/:dao(\b0x[0-9a-f]{10,40}\b)/settings/minion-safe'
+          exact
+          component={MinionSafe}
         />
         <Route
           path='/dao/:dao(\b0x[0-9a-f]{10,40}\b)/psych-out'

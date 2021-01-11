@@ -132,3 +132,13 @@ export const getApiMetadata = async () => {
     throw new Error(err);
   }
 };
+
+export const getApiGnosis = async (networkName, endpoint) => {
+  const apiGnosisUrl = `https://safe-transaction.${networkName}.gnosis.io/api/v1/${endpoint}`;
+  try {
+    const response = await fetch(apiGnosisUrl);
+    return response.json();
+  } catch (err) {
+    throw new Error(err);
+  }
+};
