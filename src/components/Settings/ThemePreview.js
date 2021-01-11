@@ -29,6 +29,8 @@ const ThemePreview = ({ previewValues }) => {
           ? `https://ipfs.infura.io/ipfs/${previewValues.bgImg}`
           : previewValues.bgImg
       })`}
+      bgPosition='center center'
+      bgRepeat='no-repeat'
       bgColor={previewValues.bg500}
       border={`0.5px solid ${theme.colors.whiteAlpha[600]}`}
       borderRadius='2px'
