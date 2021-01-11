@@ -6,7 +6,7 @@ import { defaultTokens } from '../../../utils/constants';
 import ContentBox from '../../Shared/ContentBox';
 import TextBox from '../../Shared/TextBox';
 
-const TokenList = ({ tokenList, isMember, isBank }) => {
+const TokenList = ({ tokenList, isMember, isBank, version }) => {
   const [localTokenList, setLocalTokenList] = useState(null);
   const [isLoaded, setIsLoaded] = useState(false);
   const [hasAction, setHasAction] = useState();
@@ -27,10 +27,14 @@ const TokenList = ({ tokenList, isMember, isBank }) => {
       const needsSync =
         isBank &&
         tokenList.some((token) => {
-          return (
-            +token.tokenBalance > 0 &&
-            token.contractBalances.token !== token.contractBalances.babe
-          );
+          if (version === '2.1') {
+            return token.contractBalances.token !== token.contractBalances.babe;
+          } else {
+            return (
+              +token.tokenBalance > 0 &&
+              token.contractBalances.token !== token.contractBalances.babe
+            );
+          }
         });
 
       setHasAction(hasBalance || needsSync);
@@ -39,7 +43,7 @@ const TokenList = ({ tokenList, isMember, isBank }) => {
     } else {
       setLocalTokenList(defaultTokens);
     }
-  }, [tokenList, isMember, isBank]);
+  }, [tokenList, isMember, isBank, version]);
 
   return (
     <>
@@ -69,6 +73,7 @@ const TokenList = ({ tokenList, isMember, isBank }) => {
                 isMember={isMember}
                 isBank={isBank}
                 hasAction={hasAction}
+                version={version}
               />
             );
           })
