@@ -400,7 +400,6 @@ const Layout = ({ children }) => {
         zIndex='1'
         overflow='hidden'
         overflowY='scroll'
-        minHeight='100%'
       >
         <Flex
           direction={['row', 'row', 'row', 'column']}
