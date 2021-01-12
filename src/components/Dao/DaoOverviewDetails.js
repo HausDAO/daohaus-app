@@ -47,9 +47,9 @@ const DaoOverviewDetails = ({ dao }) => {
         <Flex direction='row' w='100%' justify='space-between' mt={6}>
           <Box>
             <TextBox size='xs'>{theme.daoMeta.members}</TextBox>
-            <Skeleton isLoaded={members?.length > 0}>
+            <Skeleton isLoaded={members}>
               <TextBox size='lg' variant='value'>
-                {members?.length ? members.length : '--'}
+                {members?.length ? members.length : 0}
               </TextBox>
             </Skeleton>
           </Box>

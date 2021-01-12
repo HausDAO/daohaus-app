@@ -17,7 +17,7 @@ const ProfileMenu = ({ member }) => {
   const toast = useToast();
   const [dao] = useDao();
   const history = useHistory();
-  const user = useUser();
+  const [user] = useUser();
   const { openModal } = useModals();
 
   const handleGuildkickClick = () => {
@@ -27,51 +27,55 @@ const ProfileMenu = ({ member }) => {
   };
 
   return (
-    <Menu>
-      <MenuButton>
-        <Icon
-          as={BsThreeDotsVertical}
-          color='secondary.400'
-          h='30px'
-          w='30px'
-          _hover={{ cursor: 'pointer' }}
-        />
-      </MenuButton>
-      <MenuList>
-        {user[0].username.toLowerCase() !== member?.memberAddress && (
-          <MenuItem onClick={handleGuildkickClick}>GuildKick</MenuItem>
-        )}
-        {user[0].username.toLowerCase() === member?.memberAddress && (
-          <>
-            <MenuItem onClick={() => openModal('ragequitModal')}>
-              RageQuit
-            </MenuItem>
-          </>
-        )}
-        <Link
-          href={`https://3box.io/${member?.memberAddress}`}
-          target='_blank'
-          rel='noopener noreferrer'
-        >
-          <MenuItem>View 3box Profile</MenuItem>
-        </Link>
+    <>
+      {user ? (
+        <Menu>
+          <MenuButton>
+            <Icon
+              as={BsThreeDotsVertical}
+              color='secondary.400'
+              h='30px'
+              w='30px'
+              _hover={{ cursor: 'pointer' }}
+            />
+          </MenuButton>
+          <MenuList>
+            {user.username.toLowerCase() !== member?.memberAddress && (
+              <MenuItem onClick={handleGuildkickClick}>GuildKick</MenuItem>
+            )}
+            {user.username.toLowerCase() === member?.memberAddress && (
+              <>
+                <MenuItem onClick={() => openModal('ragequitModal')}>
+                  RageQuit
+                </MenuItem>
+              </>
+            )}
+            <Link
+              href={`https://3box.io/${member?.memberAddress}`}
+              target='_blank'
+              rel='noopener noreferrer'
+            >
+              <MenuItem>View 3box Profile</MenuItem>
+            </Link>
 
-        <CopyToClipboard
-          text={member?.memberAddress}
-          onCopy={() =>
-            toast({
-              title: 'Copied Address',
-              position: 'top-right',
-              status: 'success',
-              duration: 3000,
-              isClosable: true,
-            })
-          }
-        >
-          <MenuItem>Copy Address</MenuItem>
-        </CopyToClipboard>
-      </MenuList>
-    </Menu>
+            <CopyToClipboard
+              text={member?.memberAddress}
+              onCopy={() =>
+                toast({
+                  title: 'Copied Address',
+                  position: 'top-right',
+                  status: 'success',
+                  duration: 3000,
+                  isClosable: true,
+                })
+              }
+            >
+              <MenuItem>Copy Address</MenuItem>
+            </CopyToClipboard>
+          </MenuList>
+        </Menu>
+      ) : null}
+    </>
   );
 };
 

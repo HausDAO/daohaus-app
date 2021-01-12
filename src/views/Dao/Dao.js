@@ -23,14 +23,13 @@ const Dao = () => {
 
   useEffect(() => {
     if (memberWallet) {
+      console.log('memberWallet', memberWallet);
       setIsMember(memberWallet.activeMember);
     }
   }, [memberWallet]);
 
   useEffect(() => {
     if (proposals && !proposals.length) {
-      // need to wait for proposals to be fully loaded
-      // TODO: edge when switching from a new dao proposal page to a current dao proposal page
       // this popup still shows, proposals must be set empty on transition
       openModal('newSummonerModal');
     }

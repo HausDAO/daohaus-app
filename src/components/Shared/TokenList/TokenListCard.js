@@ -9,7 +9,14 @@ import { useMemberWallet } from '../../../contexts/PokemolContext';
 import { getMainetAddresses } from '../../../utils/requests';
 import { numberWithCommas } from '../../../utils/helpers';
 
-const TokenListCard = ({ token, isLoaded, isMember, isBank, hasAction }) => {
+const TokenListCard = ({
+  token,
+  isLoaded,
+  isMember,
+  isBank,
+  hasAction,
+  version,
+}) => {
   const [memberWallet] = useMemberWallet();
   const [hasBalance, setHasBalance] = useState();
   const [needsSync, setNeedsSync] = useState();
@@ -19,14 +26,23 @@ const TokenListCard = ({ token, isLoaded, isMember, isBank, hasAction }) => {
 
   useEffect(() => {
     setHasBalance(isMember && +token.tokenBalance > 0);
-    setNeedsSync(
-      memberWallet &&
-        memberWallet.activeMember &&
-        isBank &&
-        +token.tokenBalance > 0 &&
-        token.contractBalances.token !== token.contractBalances.babe,
-    );
-  }, [token, isMember, isBank, memberWallet]);
+    if (version === '2.1') {
+      setNeedsSync(
+        memberWallet &&
+          memberWallet.activeMember &&
+          isBank &&
+          token.contractBalances.token !== token.contractBalances.babe,
+      );
+    } else {
+      setNeedsSync(
+        memberWallet &&
+          memberWallet.activeMember &&
+          isBank &&
+          +token.tokenBalance > 0 &&
+          token.contractBalances.token !== token.contractBalances.babe,
+      );
+    }
+  }, [token, isMember, isBank, version, memberWallet]);
 
   const checkOptimisticBalance = () => {
     return optimisticSync

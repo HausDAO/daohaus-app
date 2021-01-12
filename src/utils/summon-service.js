@@ -123,8 +123,7 @@ export default class SummonService {
     );
     console.log('txReceipt', txReceipt);
     _cacheMoloch.tx = txReceipt.transactionHash;
-    _cacheMoloch.contractAddress =
-      txReceipt.events.SummonComplete.returnValues.moloch;
+    _cacheMoloch.contractAddress = txReceipt.events.SummonComplete.returnValues.moloch.toLowerCase();
     this.setLocal(_cacheMoloch);
 
     return txReceipt.transactionHash;
