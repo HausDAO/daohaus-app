@@ -127,8 +127,8 @@ const Store = ({ children, daoParam }) => {
 
       setBoosts(
         boostRes.data.reduce((boosts, boostData) => {
-          const metadata = boostData.metadata
-            ? JSON.parse(boostData.metadata[0])
+          const metadata = boostData.boostMetadata
+            ? JSON.parse(boostData.boostMetadata)
             : null;
           boosts[boostData.boostKey] = {
             active: boostData.active,
