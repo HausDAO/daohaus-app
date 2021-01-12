@@ -11,12 +11,13 @@ import { useForm } from 'react-hook-form';
 import AddressInput from '../Forms/AddressInput';
 import { truncateAddr } from '../../utils/helpers';
 
-const MinionSafeEasyMode = ({ minions, sumbitAction, loading }) => {
+const MinionSafeEasyMode = ({ minions, submitAction, loading }) => {
+
   const { handleSubmit, register, setValue, watch } = useForm();
 
   const onSubmit = (values) => {
     console.log(values);
-    sumbitAction(values);
+    submitAction(values);
   };
 
   return (

@@ -59,6 +59,7 @@ const NewMinionSafe = () => {
         supportedChains[network.network_id].safe_create_and_add_modules,
       safeMasterCopy: supportedChains[network.network_id].safe_master_copy,
     };
+    console.log('setupValues', setupValues);
     const minionSafeService = new MinionSafeService(
       web3Connect.web3,
       user.username,
@@ -67,7 +68,7 @@ const NewMinionSafe = () => {
 
     try {
       minionSafeService.setup(
-        values.delegateAddress,
+        values.applicantHidden,
         values.minionAddress,
         txCallBack,
       );

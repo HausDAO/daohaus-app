@@ -15,7 +15,7 @@ export class MinionSafeService {
     this.accountAddress = accountAddress;
     this.setupValues = setupValues;
     this.safeProxyFactory = setupValues.safeProxyFactory;
-    this.createAndAddModules = setupValues.createAndAddModules;
+    this.createAndAddModulesAddress = setupValues.createAndAddModules;
     this.safeMasterCopy = setupValues.safeMasterCopy;
     this.safeProxyFactoryContract = new web3.eth.Contract(
       safeProxyFactoryAbi,
@@ -23,7 +23,7 @@ export class MinionSafeService {
     );
     this.safeCreateAndAddModulesContract = new web3.eth.Contract(
       safeCreateAndAddModulesAbi,
-      this.safeCreateAndAddModulesAbi,
+      this.createAndAddModulesAddress,
     );
     this.safeMasterCopyContract = new web3.eth.Contract(
       safeMasterCopyAbi,
@@ -35,6 +35,7 @@ export class MinionSafeService {
   sendTx(contract, options, callback) {
     const { from, name, params } = options;
     const tx = contract.methods[name](...params);
+    console.log('tx', tx);
     return tx
       .send({ from: from })
       .on('transactionHash', (txHash) => {
@@ -59,30 +60,39 @@ export class MinionSafeService {
     0
 )
       */
+    const Address0 = '0x'.padEnd(42, '0');
+
     const threshhold = 2;
     const mastercopy = this.safeMasterCopy;
-    const enableModuleData = null;
-    const setup = await this.safeMasterCopyContract.methods
+    const createAndAddModulesContract = this.safeCreateAndAddModulesContract;
+
+    const enableModuleData = createAndAddModulesContract.methods
+      .enableModule(minionAddress)
+      .encodeABI();
+    console.log('enableModuleData', enableModuleData);
+    const setupData = await this.safeMasterCopyContract.methods
       .setup(
         [delegateAddress, minionAddress],
         threshhold,
-        mastercopy,
+        this.createAndAddModulesAddress,
         enableModuleData,
+        Address0,
+        Address0,
         0,
-        0,
-        0,
-        0,
+        Address0,
       )
       .encodeABI();
+    console.log('setup', setupData);
     const txReceipt = await this.sendTx(
       this.safeProxyFactoryContract,
       {
         from: this.accountAddress,
         name: 'createProxy',
-        params: [mastercopy, setup],
+        params: [mastercopy, setupData],
       },
       callback,
     );
+    console.log('txReceipt', txReceipt);
     return txReceipt.transactionHash;
   }
 }
