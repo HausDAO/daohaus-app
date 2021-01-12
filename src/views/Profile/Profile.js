@@ -2,11 +2,12 @@ import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import { Box, Flex } from '@chakra-ui/react';
 
-import ProfileOverviewCard from '../../components/Profile/OverviewCard';
+import ProfileOverviewCard from '../../components/Profile/ProfileOverviewCard';
 import {
   useMembers,
   useMemberWallet,
   useRefetchQuery,
+  useUser,
 } from '../../contexts/PokemolContext';
 import ProfileActvityFeed from '../../components/Profile/ProfileActivityFeed';
 import TokenList from '../../components/Shared/TokenList/TokenList';
@@ -14,6 +15,7 @@ import TokenList from '../../components/Shared/TokenList/TokenList';
 const Profile = () => {
   const params = useParams();
   const [members] = useMembers();
+  const [user] = useUser();
   const [memberWallet] = useMemberWallet();
   const [memberProfile, setMemberProfile] = useState(null);
   const [, updateRefetchQuery] = useRefetchQuery();
@@ -53,7 +55,7 @@ const Profile = () => {
         pr={[0, null, null, null, 6]}
         pb={6}
       >
-        {memberProfile && <ProfileOverviewCard user={memberProfile} />}
+        <ProfileOverviewCard profile={memberProfile || user} />
         <TokenList
           tokenList={memberProfile?.tokenBalances}
           isMember={isMember}

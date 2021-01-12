@@ -25,6 +25,7 @@ const MembersList = ({ handleSelect, selectedMember }) => {
   }, [members, sort]);
 
   const sortMembers = () => {
+    // const sortedMembers = members.filter((member) => member.exists);
     const sortedMembers = members;
 
     if (sort) {
@@ -38,6 +39,8 @@ const MembersList = ({ handleSelect, selectedMember }) => {
         }
       });
     }
+
+    console.log('sortedMembers', sortedMembers);
 
     setListMembers([...sortedMembers]);
   };

@@ -52,7 +52,13 @@ export class DaoService {
       accountAddr,
     );
 
-    singleton = new Web3DaoService(accountAddr, web3, moloch, token);
+    singleton = new Web3DaoService(
+      accountAddr,
+      web3,
+      moloch,
+      token,
+      contractAddr,
+    );
 
     return singleton;
   }
