@@ -49,7 +49,7 @@ const MemberSnapshot = ({ selectedMember }) => {
         <Flex justify='space-between'>
           <Box>
             <TextBox size='xs'>{theme.daoMeta.members}</TextBox>
-            <Skeleton isLoaded={members.length > 0}>
+            <Skeleton isLoaded={members}>
               <TextBox variant='value' size='lg'>
                 {members?.length}
               </TextBox>

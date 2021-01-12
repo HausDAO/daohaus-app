@@ -23,8 +23,7 @@ const Dao = () => {
 
   useEffect(() => {
     if (memberWallet) {
-      console.log('memberWallet', memberWallet);
-      setIsMember(memberWallet.activeMember);
+      setIsMember(memberWallet.shares > 0);
     }
   }, [memberWallet]);
 
