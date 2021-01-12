@@ -115,6 +115,18 @@ export const formatPeriodDuration = (seconds) => {
   }
 };
 
+export const periodsPerDayPreset = (seconds) => {
+  const hours = +seconds / 60 / 60;
+
+  const perDay = Math.ceil(24 / hours);
+
+  if (24 / hours < 1) {
+    return `Less than ${perDay} per day`;
+  } else {
+    return `${perDay} per day`;
+  }
+};
+
 export const formatPeriodLength = (periods, duration) => {
   const periodSeconds = +periods * duration;
   const days = periodSeconds / 60 / 60 / 24;

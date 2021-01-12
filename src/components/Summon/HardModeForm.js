@@ -1,24 +1,17 @@
 import React from 'react';
 import { useForm } from 'react-hook-form';
+
 import { Box, Heading, Text, Button, Input, Textarea } from '@chakra-ui/react';
 
 const HardModeForm = ({ daoData, handleSummon }) => {
-  const {
-    register,
-    getValues,
-    errors,
-    handleSubmit,
-    watch,
-    formState,
-  } = useForm({
+  const { register, getValues, errors, handleSubmit, formState } = useForm({
     mode: 'onBlur',
     defaultValues: { ...daoData },
   });
   const { isDirty, isValid, isSubmitted } = formState;
 
-  const versionWatch = watch('version');
-
   const onSubmit = (data) => {
+    console.log('data', data);
     handleSummon(data);
   };
 
@@ -29,49 +22,6 @@ const HardModeForm = ({ daoData, handleSummon }) => {
         autoComplete='off'
         className='Form'
       >
-        <Box>
-          <Heading as='h4'>Name</Heading>
-          <Text>
-            <Input
-              className='inline-field'
-              name='name'
-              ref={register({
-                required: true,
-              })}
-            />
-            {errors.name?.type === 'required' && (
-              <span className='required-field'>daos need names</span>
-            )}
-          </Text>
-        </Box>
-
-        <Box>
-          <Heading as='h4'>Description</Heading>
-          <Text>
-            <Textarea
-              className='inline-field'
-              name='description'
-              ref={register({
-                required: true,
-              })}
-            />
-            {errors.description?.type === 'required' && (
-              <span className='required-field'>daos need descriptions</span>
-            )}
-          </Text>
-        </Box>
-
-        {/* <Box>
-          <Heading as="h4">Moloch Version</Heading>
-          <Box>
-            Which Moloch Version?
-            <select className="inline-field" name="version" ref={register}>
-              <option value="1">Version 1</option>
-              <option value="2">Version 2</option>
-            </select>
-          </Box>
-        </Box> */}
-
         <Box>
           <Heading as='h4'>Currency</Heading>
           <Box>
@@ -157,25 +107,6 @@ const HardModeForm = ({ daoData, handleSummon }) => {
           {errors.gracePeriod?.type === 'pattern' && (
             <span className='required-field'>not a number</span>
           )}
-          {versionWatch === '1' ? (
-            <>
-              <Text>How many periods will the abort window last?</Text>
-              <Input
-                className='inline-field'
-                name='abortWindow'
-                ref={register({
-                  required: true,
-                  pattern: /^-?\d*\.?\d*$/,
-                })}
-              />
-              {errors.abortWindow?.type === 'required' && (
-                <span className='required-field'>required</span>
-              )}
-              {errors.abortWindow?.type === 'pattern' && (
-                <span className='required-field'>not a number</span>
-              )}{' '}
-            </>
-          ) : null}
           <Text>What will be the dilution bound?</Text>
           <Input
             className='inline-field'
@@ -244,7 +175,7 @@ const HardModeForm = ({ daoData, handleSummon }) => {
             <Textarea
               className='inline-field'
               name='summonerAndShares'
-              placeholder={`${daoData.summoner} 10`}
+              placeholder={`${daoData.summoner} 1`}
               ref={register({ required: true })}
             />{' '}
           </Text>

@@ -4,8 +4,6 @@ import { Box, Heading, Text, Button, Flex } from '@chakra-ui/react';
 import { daoConstants, daoPresets } from '../../content/summon-presets';
 import { SummonContext } from '../../contexts/SummonContext';
 import HardModeForm from '../../components/Summon/HardModeForm';
-// import SummonStepTwo from '../../components/Summon/SummonStepTwo';
-// import SummonStepThree from '../../components/Summon/SummonStepThree';
 import {
   useNetwork,
   useTxProcessor,
@@ -14,8 +12,6 @@ import {
 } from '../../contexts/PokemolContext';
 import SummonService from '../../utils/summon-service';
 import SummonSettings from '../../components/Summon/SummonSettings';
-// import BoostPackages from '../../components/Boosts/BoostPackages';
-// import MiniLoader from '../../components/Shared/Loading/MiniLoader';
 
 const Summon = () => {
   const [user] = useUser();
@@ -32,8 +28,6 @@ const Summon = () => {
 
   const stepContent = {
     1: 'What kind of Haus will you build?',
-    // 2: 'Give us the basics',
-    // 3: 'Last chance to make changes',
     4: 'Our magic internet communities take a minute or two to create. You can see new daos on your Hub page',
   };
 
@@ -152,16 +146,33 @@ const Summon = () => {
                 <Flex direction='row' justify='space-between'>
                   <Text>{stepContent[currentStep]}</Text>
                   {currentStep === 1 ? (
-                    <Box className='ModeSwitch'>
-                      <Text style={{ width: '100%', textAlign: 'center' }}>
-                        <Button
-                          className='mode-link'
-                          onClick={() => setHardMode(true)}
-                        >
-                          Hard Mode
-                        </Button>
-                      </Text>
-                    </Box>
+                    <>
+                      {!hardMode ? (
+                        <Box className='ModeSwitch'>
+                          <Text style={{ width: '100%', textAlign: 'center' }}>
+                            Need to fine tune your settings?
+                            <Button
+                              className='mode-link'
+                              onClick={() => setHardMode(true)}
+                            >
+                              Hard Mode
+                            </Button>
+                          </Text>
+                        </Box>
+                      ) : (
+                        <Box className='ModeSwitch'>
+                          <Text style={{ width: '100%', textAlign: 'center' }}>
+                            Take me back to{' '}
+                            <Button
+                              className='mode-link'
+                              onClick={() => setHardMode(false)}
+                            >
+                              Fun Mode.
+                            </Button>
+                          </Text>
+                        </Box>
+                      )}
+                    </>
                   ) : null}
                 </Flex>
               </Box>
@@ -184,7 +195,7 @@ const Summon = () => {
                       <SummonSettings
                         daoData={daoData}
                         setDaoData={setDaoData}
-                        setCurrentStep={setCurrentStep}
+                        handleSummon={handleSummon}
                       />
                     ) : null}
                   </>
@@ -195,17 +206,6 @@ const Summon = () => {
                       setDaoData={setDaoData}
                       handleSummon={handleSummon}
                     />
-                    <Box className='ModeSwitch'>
-                      <Text style={{ width: '100%', textAlign: 'center' }}>
-                        Take me back to{' '}
-                        <Button
-                          className='mode-link'
-                          onClick={() => setHardMode(false)}
-                        >
-                          Fun Mode.
-                        </Button>
-                      </Text>
-                    </Box>
                   </>
                 )}
               </>

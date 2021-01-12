@@ -1,7 +1,6 @@
 import imgGrants from '../assets/Daohaus__Castle--Dark.svg';
 import imgGuilds from '../assets/Daohaus__Castle--Dark.svg';
 import imgVentures from '../assets/Daohaus__Castle--Dark.svg';
-import imgImpacts from '../assets/Daohaus__Castle--Dark.svg';
 import imgProjects from '../assets/Daohaus__Castle--Dark.svg';
 import imgClubs from '../assets/Daohaus__Castle--Dark.svg';
 import { supportedChains } from '../utils/chains';
@@ -10,7 +9,7 @@ export const daoConstants = (networkId) => {
   const constants = {
     abortWindow: '1',
     dilutionBound: '3',
-    version: '21',
+    version: '2.1',
   };
 
   if (networkId === 100) {
@@ -37,7 +36,7 @@ export const daoPresets = (networkId) => {
       periodDuration: '7200',
       summonerShares: 1,
       color: '#4FBF9F',
-      version: '21',
+      version: '2.1',
       img: imgGuilds,
     },
     {
@@ -55,7 +54,7 @@ export const daoPresets = (networkId) => {
       periodDuration: '60',
       summonerShares: 1,
       color: '#F16061',
-      version: '21',
+      version: '2.1',
       img: imgClubs,
     },
     {
@@ -73,7 +72,7 @@ export const daoPresets = (networkId) => {
       periodDuration: '86400',
       summonerShares: 1,
       color: '#AB3593',
-      version: '21',
+      version: '2.1',
       img: imgVentures,
     },
     {
@@ -90,7 +89,7 @@ export const daoPresets = (networkId) => {
       periodDuration: '3600',
       summonerShares: 1,
       color: '#ea8923',
-      version: '21',
+      version: '2.1',
       img: imgGrants,
     },
 
@@ -109,7 +108,7 @@ export const daoPresets = (networkId) => {
       periodDuration: '7200',
       summonerShares: 1,
       color: '#513e97',
-      version: '21',
+      version: '2.1',
       img: imgProjects,
     },
   ];

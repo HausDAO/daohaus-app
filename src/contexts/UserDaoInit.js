@@ -40,7 +40,6 @@ const UserDaoInit = () => {
   // init the dao when we're on a dao route
   useEffect(() => {
     if (!validDaoParam) {
-      console.log('validDaoParam', validDaoParam);
       return;
     }
 

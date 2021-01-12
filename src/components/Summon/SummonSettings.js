@@ -1,18 +1,19 @@
 import React from 'react';
-import { Box, Text, Button, Flex, Link } from '@chakra-ui/react';
-import { RiArrowRightFill } from 'react-icons/ri';
+import { Box, Text, Button, Flex, Link, Textarea } from '@chakra-ui/react';
 import { daoPresets } from '../../content/summon-presets';
 import PresetCard from './PresetCard';
 import { useNetwork } from '../../contexts/PokemolContext';
 
 import {
-  formatPeriodDuration,
   formatPeriodLength,
   formatDepositWei,
+  periodsPerDayPreset,
 } from '../../utils/helpers';
+import { useState } from 'react/cjs/react.development';
 
-const SummonSettings = ({ daoData, setDaoData, setCurrentStep }) => {
+const SummonSettings = ({ daoData, setDaoData, handleSummon }) => {
   const [network] = useNetwork();
+  const [multiSummoners, setMultiSummoners] = useState(false);
   const selectPreset = (preset) => {
     setDaoData((prevState) => {
       return { ...prevState, ...preset };
@@ -33,9 +34,17 @@ const SummonSettings = ({ daoData, setDaoData, setCurrentStep }) => {
     });
   };
 
-  const handleReset = () => {
-    console.log('reset');
+  const handleMultiSummonerChange = (e) => {
+    const value = e.target.value;
+    setDaoData((prevState) => {
+      return { ...prevState, summonerAndShares: value };
+    });
   };
+
+  // needed if/when we allow editing setting inline
+  // const handleReset = () => {
+  //   console.log('reset');
+  // };
 
   return (
     <Box>
@@ -68,18 +77,18 @@ const SummonSettings = ({ daoData, setDaoData, setCurrentStep }) => {
                 >
                   Settings
                 </Text>
-                <Button variant='outline' onClick={() => handleReset(true)}>
+                {/* <Button variant='outline' onClick={() => handleReset(true)}>
                   Reset to Default
-                </Button>
+                </Button> */}
               </Flex>
               <Text>{daoData.presetDescription}</Text>
 
               <Text>
-                Currency: <strong>{daoData.currency}</strong>
+                Primary Token: <strong>{daoData.currency}</strong>
               </Text>
               <Text>
-                Period Duration:{' '}
-                <strong>{formatPeriodDuration(daoData.periodDuration)}</strong>
+                Proposal Velocty:{' '}
+                <strong>{periodsPerDayPreset(daoData.periodDuration)}</strong>
               </Text>
               <Text>
                 Voting Period:{' '}
@@ -111,13 +120,28 @@ const SummonSettings = ({ daoData, setDaoData, setCurrentStep }) => {
                   daoData.currency
                 }`}</strong>
               </Text>
+
+              {multiSummoners ? (
+                <Text>
+                  Summoners and shares. Enter one address and amount of shares
+                  on each line. Seperate address and amount with a space
+                  <Textarea
+                    className='inline-field'
+                    name='summonerAndShares'
+                    placeholder={`${daoData.summoner} 1`}
+                    onChange={(e) => handleMultiSummonerChange(e)}
+                  />{' '}
+                </Text>
+              ) : null}
               <Box className='StepControl'>
                 <Button
-                  onClick={() => setCurrentStep(2)}
-                  disabled={!daoData.presetName}
-                  className={!daoData.presetName ? 'disabled' : ''}
+                  variant='outline'
+                  onClick={() => setMultiSummoners(!multiSummoners)}
                 >
-                  Continue <RiArrowRightFill />
+                  {!multiSummoners ? 'Add Multiple Summoners' : 'Cancel'}
+                </Button>
+                <Button onClick={() => handleSummon()} disabled={false}>
+                  Summon
                 </Button>
               </Box>
             </Box>
@@ -127,7 +151,7 @@ const SummonSettings = ({ daoData, setDaoData, setCurrentStep }) => {
         </Flex>
       </Box>
 
-      {network.network === 'kovan' ? (
+      {network.network === 'mainnet' ? (
         <Text mt={10}>
           Transaction fees got you down? Check our{' '}
           <Link to='https://daohaus.club/help#xDAI'>Quick Start Guide</Link> on
