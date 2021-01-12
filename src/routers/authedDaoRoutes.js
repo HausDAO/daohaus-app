@@ -26,6 +26,7 @@ const AuthedDaoRoutes = () => {
           isMember={isMember}
           isCorrectNetwork={isCorrectNetwork}
           overview={daoOverview}
+          members={daoMembers}
           // title={title}
           authed
         />

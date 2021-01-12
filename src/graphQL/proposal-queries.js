@@ -55,10 +55,10 @@ const baseListFields = `
     uintVote
     createdAt
   }
- 
+  
   `;
-// status @client
 // title @client
+// status @client
 // description @client
 // hash @client
 // proposalType @client

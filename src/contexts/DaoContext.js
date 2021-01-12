@@ -13,6 +13,8 @@ import { PROPOSALS_LIST } from "../graphQL/proposal-queries";
 import { useSessionStorage } from "../hooks/useSessionStorage";
 import { multiFetch } from "../utils/apollo";
 import { supportedChains } from "../utils/chain";
+import { resolvers } from "../utils/resolvers";
+import { GET_TRANSMUTATION } from "./boost-queries";
 import { useInjectedProvider } from "./InjectedProviderContext";
 import { useToken } from "./TokenContext";
 import { UserProfileProvider } from "./UserProfilesContext";
@@ -47,6 +49,10 @@ export const DaoProvider = ({ children }) => {
     `balances-${daoid}`,
     null
   );
+  const [daoTransmutations, setTransmutations] = useSessionStorage(
+    `transmutations-${daoid}`,
+    null
+  );
 
   const [isMember, setIsMember] = useState(false);
 
@@ -61,7 +67,8 @@ export const DaoProvider = ({ children }) => {
       daoActivities ||
       daoOverview ||
       daoMembers ||
-      daoBalances
+      daoBalances ||
+      daoTransmutations
     )
       return;
     if (!daoid || !daochain || !daoNetworkData) return;
@@ -101,6 +108,7 @@ export const DaoProvider = ({ children }) => {
           contractAddr: daoid,
           skip: 0,
         },
+        resolvers: resolvers,
         reactSetter: setDaoActivities,
       },
       {
@@ -111,6 +119,14 @@ export const DaoProvider = ({ children }) => {
           skip: 0,
         },
         reactSetter: setDaoBalances,
+      },
+      {
+        endpoint: daoNetworkData.boosts_graph_url,
+        query: GET_TRANSMUTATION,
+        variables: {
+          contractAddress: daoid,
+        },
+        reactSetter: setTransmutations,
       },
     ]);
   }, [
@@ -124,6 +140,7 @@ export const DaoProvider = ({ children }) => {
     daoOverview,
     daoProposals,
     setDaoActivities,
+    setTransmutations,
     setDaoBalances,
     setDaoMembers,
     setDaoOverview,

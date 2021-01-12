@@ -1,3 +1,5 @@
+import { formatDistanceToNow, format } from "date-fns";
+
 export const pipe = (...fns) => (x) =>
   fns.reduce((prev, func) => func(prev), x);
 
@@ -37,4 +39,11 @@ export const numberWithCommas = (num) => {
   const noZeroDec = parseInt(num.split(".")[1]) === 0 ? num.split(".")[0] : num;
 
   return noZeroDec.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",");
+};
+
+export const truncateAddr = (addr) => {
+  return addr ? addr.slice(0, 6) + "..." + addr.slice(-4) : null;
+};
+export const timeToNow = (time) => {
+  return formatDistanceToNow(new Date(time * 1000), { addSuffix: true });
 };

@@ -1,5 +1,5 @@
 import React from "react";
-import ActivitiesCard from "../components/activitiesCard";
+import ActivitiesCard from "../components/activitiesFeed";
 import OverviewCard from "../components/overviewCard";
 
 const Overview = React.memo(function Overview({
@@ -8,6 +8,7 @@ const Overview = React.memo(function Overview({
   title,
   isMember,
   isCorrectNetwork,
+  members,
 }) {
   return (
     <div>
@@ -17,8 +18,14 @@ const Overview = React.memo(function Overview({
           <p>You are not connected to the correct network</p>
         )}
       </div>
-      {overview && <OverviewCard overview={overview} isMember={isMember} />}
-      {activities && <ActivitiesCard activities={activities} />}
+      {overview && (
+        <OverviewCard
+          overview={overview}
+          isMember={isMember}
+          membersAmt={members?.daoMembers?.length}
+        />
+      )}
+      {activities && <ActivitiesCard activities={activities?.moloch} />}
     </div>
   );
 });

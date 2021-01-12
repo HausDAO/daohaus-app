@@ -11,6 +11,7 @@ const AuthedDao = () => {
   const { daochain, daoid } = useParams();
   const { customCopy } = useCustomTheme();
 
+  //useEffect may not be necessary
   useEffect(() => {
     setLinkCopy(customCopy);
   }, [customCopy]);
@@ -22,13 +23,13 @@ const AuthedDao = () => {
           Overview
         </Link>
         <Link className="nav-link" to={`/dao/${daochain}/${daoid}/proposals`}>
-          {linkCopy ? linkCopy["proposals"] : "Proposals"}
+          {linkCopy ? linkCopy.proposals : "Proposals"}
         </Link>
         <Link className="nav-link" to={`/dao/${daochain}/${daoid}/bank`}>
-          {linkCopy ? linkCopy["bank"] : "Proposals"}
+          {linkCopy ? linkCopy.bank : "Proposals"}
         </Link>
         <Link className="nav-link" to={`/dao/${daochain}/${daoid}/members`}>
-          {linkCopy ? linkCopy["members"] : "Proposals"}
+          {linkCopy ? linkCopy.members : "Proposals"}
         </Link>
         <Link className="nav-link" to={`/dao/${daochain}/${daoid}/settings`}>
           Settings
