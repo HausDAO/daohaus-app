@@ -1,18 +1,13 @@
 import React from "react";
-import { BodyMd, HeaderSm } from "../styles/typography";
+import MemberCard from "../components/memberCard";
 
 const Members = ({ members }) => {
   return (
     <div>
-      {members.map((member) => {
-        return (
-          <div key={member.id}>
-            <HeaderSm>{member.memberAddress}</HeaderSm>
-            <p>Shares: {member.shares}</p>
-            <p>Loot: {member.loot}</p>
-          </div>
-        );
-      })}
+      {members &&
+        members?.slice(0, 10).map((member) => {
+          return <MemberCard key={member.id} member={member} />;
+        })}
     </div>
   );
 };

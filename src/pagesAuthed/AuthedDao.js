@@ -3,9 +3,7 @@ import { Link, useParams } from "react-router-dom";
 import { ChakraProvider } from "@chakra-ui/react";
 
 import Layout from "../components/layout";
-import { useLocalDaoData } from "../contexts/DaoContext";
 import AuthedDaoRoutes from "../routers/authedDaoRoutes";
-import { useMetaData } from "../contexts/MetaDataContext";
 
 const AuthedDao = () => {
   const { daochain, daoid } = useParams();
@@ -16,6 +14,7 @@ const AuthedDao = () => {
       <Link to={`/dao/${daochain}/${daoid}/bank`}>Bank</Link>
       <Link to={`/dao/${daochain}/${daoid}/members`}>Members</Link>
       <Link to={`/dao/${daochain}/${daoid}/settings`}>Settings</Link>
+      <Link to={`/hub`}>Hub</Link>
     </nav>
   );
 

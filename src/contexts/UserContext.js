@@ -28,6 +28,7 @@ export const UserContext = createContext();
 export const UserContextProvider = ({ children }) => {
   const { injectedProvider } = useInjectedProvider();
   const [userHubDaos, setUserHubDaos] = useSessionStorage("userHubData", []);
+
   const hasLoadedHubData = userHubDaos.length === 4;
 
   useEffect(() => {

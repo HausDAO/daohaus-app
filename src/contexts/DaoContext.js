@@ -15,6 +15,7 @@ import { multiFetch } from "../utils/apollo";
 import { supportedChains } from "../utils/chain";
 import { useInjectedProvider } from "./InjectedProviderContext";
 import { useToken } from "./TokenContext";
+import { UserProfileProvider } from "./UserProfilesContext";
 
 export const DaoContext = createContext();
 
@@ -162,7 +163,7 @@ export const DaoProvider = ({ children }) => {
         isCorrectNetwork,
       }}
     >
-      {children}
+      <UserProfileProvider members={daoMembers}>{children}</UserProfileProvider>
     </DaoContext.Provider>
   );
 };

@@ -1,24 +1,27 @@
-import React, { useState, useEffect, useRef, useContext, createContext } from "react";
+import React, {
+  useState,
+  useEffect,
+  useRef,
+  useContext,
+  createContext,
+} from "react";
+import { fetchProfile, TestFetchMultiple } from "../utils/3box";
 
 export const UserProfileContext = createContext();
 
-export const UserProfileProvider = ({ children,  }) => {
+export const UserProfileProvider = React.memo(function ({ children, members }) {
+  const [daoMembersProfiles, setDaoMembersProfiles] = useState(null);
 
-  const [daoMembersProfiles, setDaoMembersProfiles] = useState(null)
-
-  
-
-  useEffect(() =>{
-
-  }, [])
-
+  useEffect(() => {}, []);
 
   return (
-    <UserProfileContext.Provider value={{daoMembersProfiles}}>{children}</UserProfileContext.Provider>
+    <UserProfileContext.Provider value={{ daoMembersProfiles }}>
+      {children}
+    </UserProfileContext.Provider>
   );
-};
+});
 
 export const useUserProfile = () => {
-  const {daoMembersProfiles} = useContext(UserProfileContext);
-  return {daoMembersProfiles};
+  const { daoMembersProfiles } = useContext(UserProfileContext);
+  return { daoMembersProfiles };
 };
