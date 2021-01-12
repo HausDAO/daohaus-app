@@ -26,7 +26,7 @@ const DaoTheme = () => {
 
   useEffect(() => {
     if (memberWallet) {
-      setIsMember(memberWallet.activeMember);
+      setIsMember(memberWallet.shares > 0);
     }
   }, [memberWallet]);
 

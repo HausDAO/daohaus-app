@@ -26,7 +26,7 @@ const Superpowers = () => {
             Custom Theme
           </TextBox>
           <Flex align='center'>
-            {memberWallet?.activeMember ? (
+            {memberWallet?.shares > 0 ? (
               <RouterLink to={`/dao/${dao.address}/settings/theme`}>
                 <Icon
                   as={VscGear}

@@ -240,8 +240,6 @@ const UserDaoInit = () => {
     let eth = 0;
     eth = await contracts.daoService.getAccountEth();
 
-    console.log('member', member);
-
     const wallet = {
       daoAddress: contracts.daoService.daoAddress,
       activeMember: member.exists && +member.jailed === 0,
