@@ -3,37 +3,29 @@ import { useHistory } from 'react-router-dom';
 import { Avatar, Box, Flex, Skeleton, Button } from '@chakra-ui/react';
 import makeBlockie from 'ethereum-blockies-base64';
 
-import { useUser, useMembers } from '../../contexts/PokemolContext';
+import { useMembers } from '../../contexts/PokemolContext';
 import { useTheme } from '../../contexts/CustomThemeContext';
-import { numberWithCommas } from '../../utils/helpers';
+import { numberWithCommas, themeImagePath } from '../../utils/helpers';
 import ContentBox from '../Shared/ContentBox';
 import TextBox from '../Shared/TextBox';
 import BankTotal from '../Bank/BankTotal';
 
 const DaoOverviewDetails = ({ dao }) => {
   const [theme] = useTheme();
-  const [user] = useUser();
   const [members] = useMembers();
   const history = useHistory();
 
   return (
     <Box>
-      {user && (
-        <TextBox size='sm' color='whiteAlpha.900'>
-          Details
-        </TextBox>
-      )}
+      <TextBox size='sm' color='whiteAlpha.900'>
+        Details
+      </TextBox>
       <ContentBox mt={2} w='100%'>
         <Flex direction='row' align='center'>
-          {theme.images.avatarImg ? (
-            <Avatar src={theme.images.avatarImg} h='50px' w='50px' />
+          {dao.avatarImg ? (
+            <Avatar src={themeImagePath(dao.avatarImg)} h='50px' w='50px' />
           ) : (
-            <Avatar
-              h='50px'
-              w='50px'
-              name={dao.title.substr(0, 1)}
-              src={makeBlockie(dao.id)}
-            />
+            <Avatar h='50px' w='50px' src={makeBlockie(dao.address || 'oxo')} />
           )}
           <Skeleton isLoaded={dao.name} ml={6}>
             <Box fontSize='2xl' fontWeight={700} fontFamily='heading'>

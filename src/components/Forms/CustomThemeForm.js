@@ -8,6 +8,8 @@ import {
   Select,
   Image,
   Text,
+  FormControl,
+  Input,
 } from '@chakra-ui/react';
 import { AiOutlineCaretDown } from 'react-icons/ai';
 import { SketchPicker } from 'react-color';
@@ -87,6 +89,18 @@ const CustomThemeForm = ({ previewTheme, setPreviewTheme }) => {
     }
   };
 
+  const handleWordsChange = (event) => {
+    const { name, value } = event.target;
+    const updatedThemeWords = {
+      ...previewTheme.daoMeta,
+      [name]: value,
+    };
+    setPreviewTheme({
+      ...previewTheme,
+      daoMeta: updatedThemeWords,
+    });
+  };
+
   const handleFileSet = async (event) => {
     setImageUrl(URL.createObjectURL(upload.files[0]));
     const formData = new FormData();
@@ -110,6 +124,24 @@ const CustomThemeForm = ({ previewTheme, setPreviewTheme }) => {
     setImageUrl(null);
     setUploading(false);
     closeModals();
+  };
+
+  const renderWordsFields = () => {
+    return Object.keys(previewTheme.daoMeta).map((themeKey) => {
+      return (
+        <FormControl mb={4} key={themeKey}>
+          <TextBox size='xs' mb={1}>
+            {themeKey}
+          </TextBox>
+          <Input
+            defaultValue={previewTheme.daoMeta[themeKey]}
+            placeholder={themeKey}
+            name={themeKey}
+            onChange={handleWordsChange}
+          />
+        </FormControl>
+      );
+    });
   };
 
   return (
@@ -342,7 +374,16 @@ const CustomThemeForm = ({ previewTheme, setPreviewTheme }) => {
             </Box>
           </ButtonGroup>
         </Flex>
+
+        <Flex direction='column' justify='center' my={6}>
+          <TextBox size='sm' mb={1}>
+            Interface Words
+          </TextBox>
+
+          {renderWordsFields()}
+        </Flex>
       </ContentBox>
+
       <input
         type='file'
         id='brandImg'
