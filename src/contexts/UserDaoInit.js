@@ -4,6 +4,7 @@ import { useToast } from '@chakra-ui/react';
 
 import {
   useContracts,
+  useDao,
   useDaoMetadata,
   useMemberWallet,
   useNetwork,
@@ -22,7 +23,6 @@ import { defaultTheme } from '../themes/theme-defaults';
 const UserDaoInit = () => {
   const location = useLocation();
   const toast = useToast();
-  const validDaoParam = validDaoParams(location);
   const [web3Connect, updateWeb3Connect] = useWeb3Connect();
   const [user, updateUser] = useUser();
   const [network, updateNetwork] = useNetwork();
@@ -30,6 +30,7 @@ const UserDaoInit = () => {
   const [contracts, updateContracts] = useContracts();
   const [memberWallet, updateMemberWallet] = useMemberWallet();
   const [, setTheme] = useTheme();
+  const [, clearDaoData] = useDao();
 
   // init the user/web3connect on app load/connect button
   useEffect(() => {
@@ -37,8 +38,24 @@ const UserDaoInit = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [web3Connect]);
 
+  // deal with back button from dao to hub
+  useEffect(() => {
+    if (location.pathname === '/') {
+      clearDaoData({
+        ...web3Connect,
+        forceUserInit:
+          !user ||
+          web3Connect.w3c.providerController.network !==
+            user.providerNetwork.network,
+      });
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [location]);
+
   // init the dao when we're on a dao route
   useEffect(() => {
+    const validDaoParam = validDaoParams(location);
+
     if (!validDaoParam) {
       return;
     }
@@ -90,6 +107,8 @@ const UserDaoInit = () => {
   }, [user, daoMetadata, contracts, web3Connect, network]);
 
   const initUser = async (currentNetwork, daoLoaded) => {
+    console.log('initUser', daoLoaded);
+    const validDaoParam = validDaoParams(location);
     if (validDaoParam && !daoLoaded) {
       return;
     }
