@@ -10,7 +10,7 @@ html {
 
 body {
   height: 100vh;
-  color: #394352;
+  color: #e2d5d5;
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen",
     "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue",
     sans-serif;
@@ -31,4 +31,11 @@ div {
 .large-box {
   width: 30rem;
   margin-bottom: 2rem;
+}
+
+a.nav-link {
+  color: #e2d5d5;
+}
+a.nav-link:visited {
+  color: #e2d5d5;
 }

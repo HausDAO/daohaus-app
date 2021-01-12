@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
+import { Flex, Box } from "@chakra-ui/react";
 import { Link, useParams } from "react-router-dom";
-import { ChakraProvider } from "@chakra-ui/react";
 
 import Layout from "../components/layout";
 import AuthedDaoRoutes from "../routers/authedDaoRoutes";
@@ -16,20 +16,28 @@ const AuthedDao = () => {
   }, [customCopy]);
 
   const sideMenu = (
-    <nav>
-      <Link to={`/dao/${daochain}/${daoid}`}>Overview</Link>
-      <Link to={`/dao/${daochain}/${daoid}/proposals`}>
-        {linkCopy ? linkCopy["proposals"] : "Proposals"}
-      </Link>
-      <Link to={`/dao/${daochain}/${daoid}/bank`}>
-        {linkCopy ? linkCopy["bank"] : "Proposals"}
-      </Link>
-      <Link to={`/dao/${daochain}/${daoid}/members`}>
-        {linkCopy ? linkCopy["members"] : "Proposals"}
-      </Link>
-      <Link to={`/dao/${daochain}/${daoid}/settings`}>Settings</Link>
-      <Link to={`/hub`}>Hub</Link>
-    </nav>
+    <Box>
+      <Flex direction="column">
+        <Link className="nav-link" to={`/dao/${daochain}/${daoid}`}>
+          Overview
+        </Link>
+        <Link className="nav-link" to={`/dao/${daochain}/${daoid}/proposals`}>
+          {linkCopy ? linkCopy["proposals"] : "Proposals"}
+        </Link>
+        <Link className="nav-link" to={`/dao/${daochain}/${daoid}/bank`}>
+          {linkCopy ? linkCopy["bank"] : "Proposals"}
+        </Link>
+        <Link className="nav-link" to={`/dao/${daochain}/${daoid}/members`}>
+          {linkCopy ? linkCopy["members"] : "Proposals"}
+        </Link>
+        <Link className="nav-link" to={`/dao/${daochain}/${daoid}/settings`}>
+          Settings
+        </Link>
+        <Link to={`/hub`} className="nav-link">
+          Hub
+        </Link>
+      </Flex>
+    </Box>
   );
 
   return (

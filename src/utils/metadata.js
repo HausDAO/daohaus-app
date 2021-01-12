@@ -51,8 +51,18 @@ const getAllShades = (seedColor) =>
     {}
   );
 
-export const createNewTheme = (newTheme) =>
-  extendTheme({ ...defaultTheme, ...newTheme });
+export const createNewTheme = (newTheme) => {
+  const newThemeData = {
+    THEME_NAME: newTheme.daoName,
+    active: true,
+    colors: {
+      primary: getAllShades(newTheme.boostMetadata.primary500),
+      secondary: getAllShades(newTheme.boostMetadata.secondary500),
+      background: getAllShades(newTheme.boostMetadata.bg500),
+    },
+  };
+  return extendTheme({ ...defaultTheme, ...newThemeData });
+};
 /////////////DEFAULTS//////////////
 export const defaultThemeData = {
   colors: {
