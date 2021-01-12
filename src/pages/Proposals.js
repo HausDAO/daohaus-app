@@ -10,7 +10,6 @@ import {
 } from "../utils/proposalUtils";
 
 const Proposals = React.memo(function Overview({ proposals, activity }) {
-  console.log(proposals?.proposals);
   return (
     <ul>
       {proposals &&

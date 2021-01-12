@@ -7,25 +7,31 @@ export const CustomeThemeContext = createContext();
 
 export const CustomeThemeProvider = ({ children }) => {
   const [theme, setTheme] = useState(defaultTheme);
-  console.log(theme);
+  const [customCopy, setCustomCopy] = useState(null);
+
   const updateTheme = (themeData) => {
     const hasNotChanged = deepEql(theme, themeData);
     if (hasNotChanged) return;
     else {
       setTheme(createNewTheme(themeData));
+      setCustomCopy(themeData.boostMetadata.daoMeta);
     }
   };
 
   const resetTheme = () => setTheme(defaultTheme);
 
   return (
-    <CustomeThemeContext.Provider value={{ updateTheme, resetTheme }}>
+    <CustomeThemeContext.Provider
+      value={{ theme, updateTheme, resetTheme, customCopy }}
+    >
       <ThemeProvider theme={theme}>{children}</ThemeProvider>
     </CustomeThemeContext.Provider>
   );
 };
 
-export const useTheme = () => {
-  const { updateTheme, resetTheme } = useContext(CustomeThemeContext);
-  return { updateTheme, resetTheme };
+export const useCustomTheme = () => {
+  const { theme, updateTheme, resetTheme, customCopy } = useContext(
+    CustomeThemeContext
+  );
+  return { theme, updateTheme, resetTheme, customCopy };
 };

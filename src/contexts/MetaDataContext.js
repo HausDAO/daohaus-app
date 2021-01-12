@@ -11,12 +11,12 @@ import { useParams } from "react-router-dom";
 import { omit } from "../utils/general";
 import { useSessionStorage } from "../hooks/useSessionStorage";
 import { fetchMetaData, formatBoosts } from "../utils/metadata";
-import { useTheme } from "./CustomThemeContext";
+import { useCustomTheme } from "./CustomThemeContext";
 
 export const MetaDataContext = createContext();
 
 export const MetaDataProvider = ({ children }) => {
-  const { updateTheme, resetTheme } = useTheme();
+  const { updateTheme, resetTheme } = useCustomTheme();
   const { daoid } = useParams();
 
   const [daoBoosts, setDaoBoosts] = useSessionStorage(`boosts-${daoid}`, null);
@@ -82,13 +82,17 @@ export const MetaDataProvider = ({ children }) => {
   }, [daoCustomTheme, updateTheme, resetTheme]);
 
   return (
-    <MetaDataContext.Provider value={{ daoMetadata, daoBoosts }}>
+    <MetaDataContext.Provider
+      value={{ daoMetadata, daoBoosts, daoCustomTheme }}
+    >
       {children}
     </MetaDataContext.Provider>
   );
 };
 
 export const useMetaData = () => {
-  const { daoMetadata, daoBoosts } = useContext(MetaDataContext);
-  return { daoMetadata, daoBoosts };
+  const { daoMetadata, daoBoosts, daoCustomTheme } = useContext(
+    MetaDataContext
+  );
+  return { daoMetadata, daoBoosts, daoCustomTheme };
 };

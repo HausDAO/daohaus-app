@@ -1,6 +1,4 @@
 import React from "react";
-import styled from "styled-components";
-import { BodyLg, BodyMd, HeaderLg } from "../styles/typography";
 import { parseIfJSON } from "../utils/general";
 
 const ActivitesCard = ({ activities }) => {
