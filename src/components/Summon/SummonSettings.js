@@ -1,15 +1,14 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Box, Text, Button, Flex, Link, Textarea } from '@chakra-ui/react';
+
 import { daoPresets } from '../../content/summon-presets';
 import PresetCard from './PresetCard';
 import { useNetwork } from '../../contexts/PokemolContext';
-
 import {
   formatPeriodLength,
   formatDepositWei,
   periodsPerDayPreset,
 } from '../../utils/helpers';
-import { useState } from 'react/cjs/react.development';
 
 const SummonSettings = ({ daoData, setDaoData, handleSummon }) => {
   const [network] = useNetwork();
