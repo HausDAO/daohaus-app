@@ -3,6 +3,9 @@ import { useForm } from 'react-hook-form';
 
 import { Box, Heading, Text, Button, Input, Textarea } from '@chakra-ui/react';
 
+import ContentBox from '../Shared/ContentBox';
+import TextBox from '../Shared/TextBox';
+
 const HardModeForm = ({ daoData, handleSummon }) => {
   const { register, getValues, errors, handleSubmit, formState } = useForm({
     mode: 'onBlur',
@@ -16,17 +19,18 @@ const HardModeForm = ({ daoData, handleSummon }) => {
   };
 
   return (
-    <Box className='HardModeForm'>
+    <ContentBox maxWidth='600px'>
       <form
         onSubmit={handleSubmit(onSubmit)}
         autoComplete='off'
         className='Form'
       >
         <Box>
-          <Heading as='h4'>Currency</Heading>
+          <TextBox>Token(s)</TextBox>
           <Box>
-            What is the primary currency contract address? Can whitelist more
-            here comma seperated.
+            What is the primary token contract address? Can whitelist more here
+            as well, separated by a comma and a space (0x58eb..., 0xf7s4...,
+            etc). The first one will be the primary token.
             <Textarea
               className='inline-field'
               name='approvedToken'
@@ -55,7 +59,7 @@ const HardModeForm = ({ daoData, handleSummon }) => {
         </Box>
 
         <Box>
-          <Heading as='h4'>Periods</Heading>
+          <TextBox mt={6}>Periods</TextBox>
           <Box>
             How many seconds per period?
             <Input
@@ -76,7 +80,7 @@ const HardModeForm = ({ daoData, handleSummon }) => {
         </Box>
 
         <Box>
-          <Heading as='h4'>Voting</Heading>
+          <TextBox mt={6}>Voting</TextBox>
           <Text>How many periods will the voting period last?</Text>
           <Input
             className='inline-field'
@@ -125,7 +129,7 @@ const HardModeForm = ({ daoData, handleSummon }) => {
         </Box>
 
         <Box>
-          <Heading as='h4'>Deposits</Heading>
+          <TextBox mt={6}>Deposits</TextBox>
           <Text>
             How much is the proposal deposit (needs to be in wei - 18 decimals)?
             <Input
@@ -159,7 +163,7 @@ const HardModeForm = ({ daoData, handleSummon }) => {
             />{' '}
             {errors.processingReward?.type === 'lessThanDeposit' && (
               <span className='required-field'>
-                processing reward must be less than that proposal deposit
+                processing reward must be less than proposal deposit
               </span>
             )}
             {errors.processingReward?.type === 'required' && (
@@ -169,9 +173,11 @@ const HardModeForm = ({ daoData, handleSummon }) => {
               <span className='required-field'>not a number</span>
             )}{' '}
           </Text>
+          <TextBox mt={6}>Summoners and starting shares</TextBox>
           <Text>
-            Summoners and shares. Enter one address and amount of shares on each
-            line. Seperate address and amount with a space
+            Enter one address and amount of shares on each line. Separate
+            address and amount with a space. Be sure to include yourself as
+            desired.
             <Textarea
               className='inline-field'
               name='summonerAndShares'
@@ -189,7 +195,7 @@ const HardModeForm = ({ daoData, handleSummon }) => {
           </Button>
         </Box>
       </form>
-    </Box>
+    </ContentBox>
   );
 };
 
