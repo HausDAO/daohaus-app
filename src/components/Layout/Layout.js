@@ -398,8 +398,7 @@ const Layout = ({ children }) => {
         justifyContent='start'
         bg='primary.500'
         zIndex='1'
-        overflow='hidden'
-        overflowY='scroll'
+        overflowY='auto'
       >
         <Flex
           direction={['row', 'row', 'row', 'column']}
