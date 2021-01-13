@@ -95,9 +95,6 @@ export default class SummonService {
     const _cacheMoloch = {
       summonerAddress: daoData.summoner[0],
       network: supportedChains[this.networkId].network,
-      name: daoData.name.trim(),
-      minimumTribute: daoData.minimumTribute,
-      description: daoData.description,
       version: daoData.version,
       purpose: daoData.presetName || 'Grants',
     };

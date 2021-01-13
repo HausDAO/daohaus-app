@@ -1,7 +1,6 @@
 import React from 'react';
 // import { Link } from 'react-router-dom';
-import { Box, Flex, Button, Icon } from '@chakra-ui/react';
-import { FaStar } from 'react-icons/fa';
+import { Box, Flex, Button } from '@chakra-ui/react';
 import { Link as RouterLink } from 'react-router-dom';
 
 import ContentBox from '../../components/Shared/ContentBox';
