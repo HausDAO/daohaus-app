@@ -107,7 +107,6 @@ const UserDaoInit = () => {
   }, [user, daoMetadata, contracts, web3Connect, network]);
 
   const initUser = async (currentNetwork, daoLoaded) => {
-    console.log('initUser', daoLoaded);
     const validDaoParam = validDaoParams(location);
     if (validDaoParam && !daoLoaded) {
       return;

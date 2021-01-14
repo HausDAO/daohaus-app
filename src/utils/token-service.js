@@ -129,7 +129,16 @@ export class Web3TokenService extends TokenService {
       return;
     }
     const contract = new this.web3.eth.Contract(Erc20Abi, token);
-    const max = this.web3.utils.toBN(2).pow(this.web3.utils.toBN(255));
+    // should be (2^256)-1
+    let max = this.web3.utils.toBN(2).pow(this.web3.utils.toBN(255));
+    if (
+      token.toLowerCase() ===
+      '0x1f9840a85d5aF5bf1D1762F925BDADdC4201F984'.toLowerCase()
+    ) {
+      console.log('uni approve all');
+      max = '10000000000000000000000000';
+    }
+
     const txReceipt = await contract.methods
       .approve(this.daoAddress, max.toString())
       .send({ from: this.accountAddress });
