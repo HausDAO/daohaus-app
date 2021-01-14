@@ -23,19 +23,14 @@ const DaoOverviewDetails = ({ dao }) => {
       <ContentBox mt={2} w='100%'>
         <Flex direction='row' align='center'>
           <Avatar
-            name={dao.apiMetaData?.name.substr(0, 1)}
+            name={dao.name.substr(0, 1)}
             src={
-              dao.apiMetadata?.avatarImg
-                ? themeImagePath(dao.apiMetadata.avatarImg)
+              dao.avatarImg
+                ? themeImagePath(dao.avatarImg)
                 : makeBlockie(dao.address)
             }
             mr='10px'
           ></Avatar>
-          {dao.avatarImg ? (
-            <Avatar src={themeImagePath(dao.avatarImg)} h='50px' w='50px' />
-          ) : (
-            <Avatar h='50px' w='50px' src={makeBlockie(dao.address || 'oxo')} />
-          )}
           <Skeleton isLoaded={dao.name} ml={6}>
             <Box fontSize='2xl' fontWeight={700} fontFamily='heading'>
               {dao.name ? dao.name : '--'}
