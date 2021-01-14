@@ -1,13 +1,14 @@
 import React, { useEffect, useState } from 'react';
 
 import GraphFetchMore from '../components/Shared/GraphFetchMore';
-import { EXPLORER_DAOS } from '../utils/apollo/dao-queries';
+import { EXPLORER_DAOS } from '../utils/apollo/explore-queries';
 import { supportedChains } from '../utils/chains';
 import { getApiMetadata } from '../utils/requests';
 
-const ExploreGraphInit = ({ daos, setDaos }) => {
+const ExploreGraphInit = ({ daos, setDaos, setFetchComplete }) => {
   const [localDaos, setLocalDaos] = useState();
   const [daoFetch, setDaoFetch] = useState();
+  const [networkFetchCount, setNetworkFetchCount] = useState(0);
 
   useEffect(() => {
     const fetchDaos = async () => {
@@ -24,6 +25,11 @@ const ExploreGraphInit = ({ daos, setDaos }) => {
       const currentDaos = daos || [];
       const updatedDaos = [...currentDaos, ...localDaos];
       setDaos(updatedDaos);
+      setNetworkFetchCount(networkFetchCount + 1);
+
+      if (Object.keys(supportedChains).length === networkFetchCount + 1) {
+        setFetchComplete(true);
+      }
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [localDaos]);

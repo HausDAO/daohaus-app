@@ -21,7 +21,7 @@ import NewMember from './views/Members/NewMember';
 import DaoMeta from './views/Settings/DaoMeta';
 import SummonWrapper from './views/Summon/SummonWrapper';
 import RegisterDao from './views/Summon/RegisterDao';
-import Explore from './views/Explore/Explore';
+import ExplorWrapper from './views/Explore/ExploreWrapper';
 
 const Routes = () => {
   return (
@@ -113,7 +113,7 @@ const Routes = () => {
           exact
           component={DaoTheme}
         />
-        <Route path='/explore' exact component={Explore} />
+        <Route path='/explore' exact component={ExplorWrapper} />
         <Route path='/summon' exact component={SummonWrapper} />
         <Route exact path='/' component={Hub} />
         <Route path='*' component={FourOhFour} />
