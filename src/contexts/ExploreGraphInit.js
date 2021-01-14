@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 
-import GraphFetch from '../components/Shared/GraphFetch';
+import GraphFetchMore from '../components/Shared/GraphFetchMore';
 import { EXPLORER_DAOS } from '../utils/apollo/dao-queries';
 import { supportedChains } from '../utils/chains';
 import { getApiMetadata } from '../utils/requests';
@@ -34,7 +34,7 @@ const ExploreGraphInit = ({ daos, setDaos }) => {
         <>
           {Object.keys(supportedChains).map((networkId) => {
             return (
-              <GraphFetch
+              <GraphFetchMore
                 key={networkId}
                 query={EXPLORER_DAOS}
                 setRecords={setLocalDaos}
