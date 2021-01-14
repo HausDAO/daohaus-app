@@ -1,7 +1,7 @@
 import React from 'react';
 import { useForm } from 'react-hook-form';
 
-import { Box, Heading, Text, Button, Input, Textarea } from '@chakra-ui/react';
+import { Box, Text, Button, Input, Textarea } from '@chakra-ui/react';
 
 import ContentBox from '../Shared/ContentBox';
 import TextBox from '../Shared/TextBox';
