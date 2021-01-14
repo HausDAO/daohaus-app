@@ -20,6 +20,9 @@ export const resolvers = {
       const daoMatch = context.apiMetaDataJson[moloch.id] || [];
       return daoMatch.find((dao) => dao.network === networkName) || null;
     },
+    networkId: (moloch, _args, context) => {
+      return context.networkId;
+    },
   },
   Proposal: {
     status: (proposal) => {

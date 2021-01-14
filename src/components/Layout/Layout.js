@@ -636,9 +636,8 @@ const Layout = ({ children }) => {
             >
               <Button
                 variant='sideNav'
-                as={Link}
-                href='https://daohaus.club'
-                isExternal
+                as={RouterLink}
+                to='/explore'
                 _hover={{ backgroundColor: 'white' }}
                 grow='none'
               >
