@@ -53,36 +53,35 @@ const Settings = () => {
           <>
             <TextBox size='xs'>Minions</TextBox>
             <MinionsOverview />
+
+            {/* start minion safe */}
+
+            <TextBox size='xs'>Minion Safe</TextBox>
+            <ContentBox
+              d='flex'
+              flexDirection='column'
+              position='relative'
+              mt={2}
+            >
+              <Flex p={4} justify='space-between' align='center'>
+                <TextBox size='md' colorScheme='whiteAlpha.900'>
+                  Minion Safe
+                </TextBox>
+              </Flex>
+              <Flex align='center'>
+                <RouterLink to={`/dao/${dao.address}/settings/minion-safe`}>
+                  <Icon
+                    as={VscGear}
+                    color='secondary.500'
+                    w='25px'
+                    h='25px'
+                    mr={3}
+                  />
+                </RouterLink>
+              </Flex>
+            </ContentBox>
           </>
         )}
-        {/* start minion safe */}
-        <>
-          <TextBox size='xs'>Minion Safe</TextBox>
-          <ContentBox
-            d='flex'
-            flexDirection='column'
-            position='relative'
-            mt={2}
-          >
-            <Flex p={4} justify='space-between' align='center'>
-              <TextBox size='md' colorScheme='whiteAlpha.900'>
-                Minion Safe
-              </TextBox>
-            </Flex>
-            <Flex align='center'>
-              <RouterLink to={`/dao/${dao.address}/settings/minion-safe`}>
-                <Icon
-                  as={VscGear}
-                  color='secondary.500'
-                  w='25px'
-                  h='25px'
-                  mr={3}
-                />
-              </RouterLink>
-            </Flex>
-          </ContentBox>
-        </>
-        {/* end minion safe */}
       </Box>
     </Flex>
   );

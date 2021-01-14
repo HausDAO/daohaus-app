@@ -47,42 +47,62 @@ export class MinionSafeService {
       });
   }
 
+  createAndAddModulesData(dataArray) {
+    const ModuleDataWrapper = new this.web3.eth.Contract([
+      {
+        constant: false,
+        inputs: [{ name: 'data', type: 'bytes' }],
+        name: 'setup',
+        outputs: [],
+        payable: false,
+        stateMutability: 'nonpayable',
+        type: 'function',
+      },
+    ]);
+
+    // Remove method id (10) and position of data in payload (64)
+    return dataArray.reduce(
+      (acc, data) =>
+        acc +
+        ModuleDataWrapper.methods
+          .setup(data)
+          .encodeABI()
+          .substr(74),
+      '0x',
+    );
+  }
+
   async setup(delegateAddress, minionAddress, callback) {
-    /*
-      setup(
-    [DELEGATE_ADDRESS, MINION_ADDRESS],
-    2,
-    GNOSIS_SAFE_MASTERCOPY,
-    ENABLE_MODULE_DATA,
-    0,
-    0,
-    0,
-    0
-)
-      */
     const Address0 = '0x'.padEnd(42, '0');
 
     const threshhold = 2;
     const mastercopy = this.safeMasterCopy;
-    const createAndAddModulesContract = this.safeCreateAndAddModulesContract;
 
-    const enableModuleData = createAndAddModulesContract.methods
+    const enableModuleData = this.safeMasterCopyContract.methods
       .enableModule(minionAddress)
       .encodeABI();
-    console.log('enableModuleData', enableModuleData);
+
+    const modulesCreationData = this.createAndAddModulesData([
+      enableModuleData,
+    ]);
+
+    const createAndAddModulesData = this.safeCreateAndAddModulesContract.methods
+      .createAndAddModules(this.safeProxyFactory, modulesCreationData)
+      .encodeABI();
+
     const setupData = await this.safeMasterCopyContract.methods
       .setup(
         [delegateAddress, minionAddress],
         threshhold,
-        this.createAndAddModulesAddress,
-        enableModuleData,
+        mastercopy,
+        createAndAddModulesData,
         Address0,
         Address0,
         0,
         Address0,
       )
       .encodeABI();
-    console.log('setup', setupData);
+
     const txReceipt = await this.sendTx(
       this.safeProxyFactoryContract,
       {
