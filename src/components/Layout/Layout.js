@@ -20,11 +20,13 @@ import {
   useModals,
   useMemberWallet,
 } from '../../contexts/PokemolContext';
+import makeBlockie from 'ethereum-blockies-base64';
 import ChangeDao from '../Shared/ChangeDao';
 import Header from '../Shared/Header';
 import { Web3SignIn } from '../Shared/Web3SignIn';
 import UserAvatar from '../Shared/UserAvatar';
 import AccountModal from '../Modal/AccountModal';
+import BrandImg from '../../assets/Daohaus__Castle--Dark.svg';
 import '../../global.css';
 
 import {
@@ -420,29 +422,51 @@ const Layout = ({ children }) => {
             w='100%'
             wrap='wrap'
           >
-            <Box
-              d='block'
-              as={RouterLink}
-              to={dao?.graphData ? `/dao/${dao.address}` : `/`}
-              w='48px'
-              h='48px'
-              cursor='pointer'
-              border='none'
-              bg={`url('${
-                dao?.avatarImg
-                  ? themeImagePath(dao.avatarImg)
-                  : themeImagePath(theme.images.brandImg)
-              }')`}
-              bgSize='cover'
-              bgPosition='center'
-              bgRepeat='no-repeat'
-              rounded='full'
-              borderWidth='2px'
-              borderStyle='solid'
-              borderColor='transparent'
-              _hover={{ border: '2px solid ' + theme.colors.whiteAlpha[500] }}
-              order={[1, null, null, 1]}
-            />
+            {dao.address ? (
+              <Box
+                d='block'
+                as={RouterLink}
+                to={dao?.graphData ? `/dao/${dao.address}` : `/`}
+                w='48px'
+                h='48px'
+                cursor='pointer'
+                border='none'
+                bg={`url('${
+                  dao.apiMetadata?.avatarImg
+                    ? themeImagePath(dao.apiMetadata.avatarImg)
+                    : makeBlockie(dao.address)
+                }')`}
+                bgSize='cover'
+                bgPosition='center'
+                bgRepeat='no-repeat'
+                rounded='full'
+                borderWidth='2px'
+                borderStyle='solid'
+                borderColor='transparent'
+                _hover={{ border: '2px solid ' + theme.colors.whiteAlpha[500] }}
+                order={[1, null, null, 1]}
+              />
+            ) : (
+              <Box
+                d='block'
+                as={RouterLink}
+                to={`/`}
+                w='48px'
+                h='48px'
+                cursor='pointer'
+                border='none'
+                bg={`url('${BrandImg}')`}
+                bgSize='cover'
+                bgPosition='center'
+                bgRepeat='no-repeat'
+                rounded='full'
+                borderWidth='2px'
+                borderStyle='solid'
+                borderColor='transparent'
+                _hover={{ border: '2px solid ' + theme.colors.whiteAlpha[500] }}
+                order={[1, null, null, 1]}
+              />
+            )}
             <Box
               d={['inline-block', null, null, 'none']}
               order='3'
