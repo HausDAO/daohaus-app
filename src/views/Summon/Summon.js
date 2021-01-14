@@ -148,29 +148,25 @@ const Summon = () => {
                   {currentStep === 1 ? (
                     <>
                       {!hardMode ? (
-                        <Box className='ModeSwitch'>
-                          <Text style={{ width: '100%', textAlign: 'center' }}>
-                            Need to fine tune your settings?
-                            <Button
-                              className='mode-link'
-                              onClick={() => setHardMode(true)}
-                            >
-                              Hard Mode
-                            </Button>
-                          </Text>
-                        </Box>
+                        <Flex align='center' mb={2}>
+                          <Text mr={3}>Need to fine tune your settings?</Text>
+                          <Button
+                            variant='solid'
+                            onClick={() => setHardMode(true)}
+                          >
+                            Hard Mode
+                          </Button>
+                        </Flex>
                       ) : (
-                        <Box className='ModeSwitch'>
-                          <Text style={{ width: '100%', textAlign: 'center' }}>
-                            Take me back to{' '}
-                            <Button
-                              className='mode-link'
-                              onClick={() => setHardMode(false)}
-                            >
-                              Fun Mode.
-                            </Button>
-                          </Text>
-                        </Box>
+                        <Flex align='center' mb={2}>
+                          <Text mr={3}>Take me back to </Text>
+                          <Button
+                            variant='solid'
+                            onClick={() => setHardMode(false)}
+                          >
+                            Fun Mode
+                          </Button>
+                        </Flex>
                       )}
                     </>
                   ) : null}

@@ -80,7 +80,7 @@ const SummonSettings = ({ daoData, setDaoData, handleSummon }) => {
                   Reset to Default
                 </Button> */}
               </Flex>
-              <Text>{daoData.presetDescription}</Text>
+              <Text my={5}>{daoData.presetDescription}</Text>
 
               <Text>
                 Primary Token: <strong>{daoData.currency}</strong>
@@ -108,13 +108,13 @@ const SummonSettings = ({ daoData, setDaoData, handleSummon }) => {
                 </strong>
               </Text>
               <Text>
-                Prop Deposit:{' '}
+                Proposal Deposit:{' '}
                 <strong>{`${formatDepositWei(daoData.proposalDeposit)} ${
                   daoData.currency
                 }`}</strong>
               </Text>
               <Text>
-                Prop Reward:{' '}
+                Proposal Reward:{' '}
                 <strong>{`${formatDepositWei(daoData.processingReward)} ${
                   daoData.currency
                 }`}</strong>
@@ -122,8 +122,9 @@ const SummonSettings = ({ daoData, setDaoData, handleSummon }) => {
 
               {multiSummoners ? (
                 <Text>
-                  Summoners and shares. Enter one address and amount of shares
-                  on each line. Seperate address and amount with a space
+                  Summoners and Shares. Enter one address and amount of shares
+                  on each line, and include yourself. Separate address and
+                  amount with a space. Be sure to include yourself as desired.
                   <Textarea
                     className='inline-field'
                     name='summonerAndShares'
@@ -132,13 +133,14 @@ const SummonSettings = ({ daoData, setDaoData, handleSummon }) => {
                   />{' '}
                 </Text>
               ) : null}
+              <Button
+                variant='outline'
+                my={5}
+                onClick={() => setMultiSummoners(!multiSummoners)}
+              >
+                {!multiSummoners ? 'Add Multiple Summoners' : 'Cancel'}
+              </Button>
               <Box className='StepControl'>
-                <Button
-                  variant='outline'
-                  onClick={() => setMultiSummoners(!multiSummoners)}
-                >
-                  {!multiSummoners ? 'Add Multiple Summoners' : 'Cancel'}
-                </Button>
                 <Button onClick={() => handleSummon()} disabled={false}>
                   Summon
                 </Button>
