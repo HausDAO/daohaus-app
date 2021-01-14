@@ -40,7 +40,7 @@ export const raidGuildTheme = {
   primary500: '#ff3864',
   secondary500: '#6F3EFC',
   bg500: '#121212',
-  brandImg: raidBrand,
+  avatarImg: raidBrand,
   bgImg: raidBg,
   bgOverlayOpacity: '0.5',
   primaryFont: 'Space Mono', // only temporary
@@ -64,7 +64,7 @@ export const mcvTheme = {
   primary500: '#C93C4F',
   secondary500: '#FFA229',
   bg500: '#121212',
-  brandImg: mcvBrand,
+  avatarImg: mcvBrand,
   bgImg: mcvBg,
   bgOverlayOpacity: '0.5',
   primaryFont: 'Space Mono', // only temporary
@@ -88,7 +88,7 @@ export const yearnTheme = {
   primary500: '#007bff',
   secondary500: '#DC6BE5',
   bg500: '#03061B',
-  brandImg: yearnBrand,
+  avatarImg: yearnBrand,
   bgImg: yearnBg,
   bgOverlayOpacity: '0.5',
   primaryFont: 'Space Mono', // only temporary

@@ -75,18 +75,11 @@ const CustomThemeForm = ({ previewTheme, setPreviewTheme }) => {
     upload.click();
   };
 
-  const handleClearImage = (type) => {
-    if (type === 'bg') {
-      setPreviewTheme({
-        ...previewTheme,
-        bgImg: '',
-      });
-    } else {
-      setPreviewTheme({
-        ...previewTheme,
-        brandImg: defaultTheme.brandImg,
-      });
-    }
+  const handleClearImage = () => {
+    setPreviewTheme({
+      ...previewTheme,
+      bgImg: '',
+    });
   };
 
   const handleWordsChange = (event) => {
@@ -363,7 +356,7 @@ const CustomThemeForm = ({ previewTheme, setPreviewTheme }) => {
                   <Text
                     fontSize='xs'
                     onClick={() => {
-                      handleClearImage('bg');
+                      handleClearImage();
                     }}
                     _hover={{ cursor: 'pointer' }}
                   >
@@ -383,16 +376,6 @@ const CustomThemeForm = ({ previewTheme, setPreviewTheme }) => {
           {renderWordsFields()}
         </Flex>
       </ContentBox>
-
-      <input
-        type='file'
-        id='brandImg'
-        accept='image/gif, image/jpeg, image/png'
-        multiple={false}
-        style={{ display: 'none' }}
-        ref={(ref) => (upload = ref)}
-        onChange={(e) => handleFileSet(e)}
-      />
       <input
         type='file'
         id='bgImg'

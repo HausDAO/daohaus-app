@@ -78,7 +78,6 @@ export const setTheme = (daoTheme) => {
     },
     images: {
       avatarImg: themeOverrides.avatarImg,
-      brandImg: themeOverrides.brandImg,
       bgImg: themeOverrides.bgImg,
     },
     fonts: {

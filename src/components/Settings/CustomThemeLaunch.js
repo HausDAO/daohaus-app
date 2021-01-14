@@ -32,7 +32,7 @@ const CustomThemeLaunch = () => {
 
     const newTheme = defaultTheme;
     delete newTheme.bgImg;
-    delete newTheme.brandImg;
+    delete newTheme.avatarImg;
     const updateThemeObject = {
       contractAddress: dao.address,
       boostKey: 'customTheme',
