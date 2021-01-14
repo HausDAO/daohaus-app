@@ -1,13 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import {
-  Avatar,
-  Flex,
-  Skeleton,
-  Box,
-  Image,
-  Icon,
-  Tooltip,
-} from '@chakra-ui/react';
+import { Avatar, Flex, Skeleton, Box, Icon, Tooltip } from '@chakra-ui/react';
 import { FaStar } from 'react-icons/fa';
 import { RiQuestionLine } from 'react-icons/ri';
 import { format } from 'date-fns';

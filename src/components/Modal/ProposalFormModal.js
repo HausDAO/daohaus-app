@@ -97,7 +97,7 @@ const ProposalFormModal = ({ proposalType, isOpen, returnRoute }) => {
           bg='blackAlpha.600'
           borderWidth='1px'
           borderColor='whiteAlpha.200'
-          maxWidth='700px'
+          maxWidth='800px'
         >
           <ModalHeader>
             <Box

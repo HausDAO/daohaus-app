@@ -22,11 +22,14 @@ const DaoOverviewDetails = ({ dao }) => {
       </TextBox>
       <ContentBox mt={2} w='100%'>
         <Flex direction='row' align='center'>
-          {dao.avatarImg ? (
-            <Avatar src={themeImagePath(dao.avatarImg)} h='50px' w='50px' />
-          ) : (
-            <Avatar h='50px' w='50px' src={makeBlockie(dao.address || 'oxo')} />
-          )}
+          <Avatar
+            src={
+              dao.avatarImg
+                ? themeImagePath(dao.avatarImg)
+                : makeBlockie(dao.address || '0x0')
+            }
+            mr='10px'
+          ></Avatar>
           <Skeleton isLoaded={dao.name} ml={6}>
             <Box fontSize='2xl' fontWeight={700} fontFamily='heading'>
               {dao.name ? dao.name : '--'}
