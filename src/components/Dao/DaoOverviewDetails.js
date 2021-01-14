@@ -23,11 +23,10 @@ const DaoOverviewDetails = ({ dao }) => {
       <ContentBox mt={2} w='100%'>
         <Flex direction='row' align='center'>
           <Avatar
-            name={dao.name.substr(0, 1)}
             src={
               dao.avatarImg
                 ? themeImagePath(dao.avatarImg)
-                : makeBlockie(dao.address)
+                : makeBlockie(dao.address || '0x0')
             }
             mr='10px'
           ></Avatar>
