@@ -32,7 +32,6 @@ const CustomTheme = () => {
         primary500: theme.colors.primary[500],
         secondary500: theme.colors.secondary[500],
         bg500: theme.colors.background[500],
-        brandImg: theme.images.brandImg,
         bgImg: theme.images.bgImg,
         primaryFont: theme.fonts.heading,
         bodyFont: theme.fonts.body,

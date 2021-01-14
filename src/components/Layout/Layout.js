@@ -381,6 +381,8 @@ const Layout = ({ children }) => {
     toggleSideNav(!sideNavOpen);
   };
 
+  console.log('theme', theme);
+
   return (
     <Flex
       direction={['column', 'column', 'column', 'row']}
@@ -431,7 +433,7 @@ const Layout = ({ children }) => {
               bg={`url('${
                 dao?.avatarImg
                   ? themeImagePath(dao.avatarImg)
-                  : themeImagePath(theme.images.brandImg)
+                  : themeImagePath(theme.images.avatarImg)
               }')`}
               bgSize='cover'
               bgPosition='center'
@@ -636,6 +638,8 @@ const Layout = ({ children }) => {
             >
               <Button
                 variant='sideNav'
+                // as={RouterLink}
+                // to='/explore'
                 as={Link}
                 href='https://daohaus.club'
                 isExternal
