@@ -83,6 +83,7 @@ const MemberSnapshotChart = ({ chartDimension, dao }) => {
             curve='curveNatural'
             data={chartData}
             color={theme.colors.primary[50]}
+            style={{ fill: 'none' }}
           />
           <AreaSeries
             animate
