@@ -15,14 +15,7 @@ const MemberAvatar = ({ member }) => {
   return (
     <Flex direction='row' alignItems='center'>
       {hasProfileImage ? (
-        <Box
-          as={RouterLink}
-          to={
-            dao?.graphData
-              ? `/dao/${dao.address}/profile/${member.memberAddress}`
-              : null
-          }
-        >
+        <>
           <Avatar
             name={member.memberAddress}
             src={`${'https://ipfs.infura.io/ipfs/' +
@@ -34,7 +27,7 @@ const MemberAvatar = ({ member }) => {
             {member.profile.name || truncateAddr(member.memberAddress)}{' '}
             <span>{member.profile.emoji || ''} </span>
           </Box>
-        </Box>
+        </>
       ) : (
         <>
           <Skeleton
@@ -42,14 +35,7 @@ const MemberAvatar = ({ member }) => {
           >
             <Flex direction='row' alignItems='center'>
               {member?.memberAddress && (
-                <Box
-                  as={RouterLink}
-                  to={
-                    dao?.graphData
-                      ? `/dao/${dao.address}/profile/${member.memberAddress}`
-                      : null
-                  }
-                >
+                <>
                   <Avatar
                     name={member.memberAddress}
                     src={makeBlockie(member.memberAddress)}
@@ -59,7 +45,7 @@ const MemberAvatar = ({ member }) => {
                   <Box fontSize='sm' fontFamily='heading'>
                     {truncateAddr(member.memberAddress)}
                   </Box>
-                </Box>
+                </>
               )}
             </Flex>
           </Skeleton>

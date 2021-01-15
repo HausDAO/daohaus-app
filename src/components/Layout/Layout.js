@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Link as RouterLink } from 'react-router-dom';
 import {
+  Avatar,
   Flex,
   Icon,
   Link,
@@ -425,23 +426,19 @@ const Layout = ({ children }) => {
             wrap='wrap'
           >
             {dao?.address ? (
-              <Box
+              <Avatar
                 d='block'
                 as={RouterLink}
                 to={dao?.graphData ? `/dao/${dao.address}` : `/`}
-                w='48px'
-                h='48px'
+                size='md'
                 cursor='pointer'
                 border='none'
-                bg={`url('${
+                src={
                   dao.avatarImg
                     ? themeImagePath(dao.avatarImg)
                     : makeBlockie(dao.address)
-                }')`}
-                bgSize='cover'
-                bgPosition='center'
-                bgRepeat='no-repeat'
-                rounded='full'
+                }
+                bg={theme.colors.primary}
                 borderWidth='2px'
                 borderStyle='solid'
                 borderColor='transparent'
@@ -449,19 +446,15 @@ const Layout = ({ children }) => {
                 order={[1, null, null, 1]}
               />
             ) : (
-              <Box
+              <Avatar
                 d='block'
                 as={RouterLink}
                 to={`/`}
-                w='48px'
-                h='48px'
+                size='md'
                 cursor='pointer'
                 border='none'
-                bg={`url('${BrandImg}')`}
-                bgSize='cover'
-                bgPosition='center'
-                bgRepeat='no-repeat'
-                rounded='full'
+                src={BrandImg}
+                bg={theme.colors.primary}
                 borderWidth='2px'
                 borderStyle='solid'
                 borderColor='transparent'
