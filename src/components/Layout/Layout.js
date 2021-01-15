@@ -381,8 +381,6 @@ const Layout = ({ children }) => {
     toggleSideNav(!sideNavOpen);
   };
 
-  console.log('theme', theme);
-
   return (
     <Flex
       direction={['column', 'column', 'column', 'row']}
