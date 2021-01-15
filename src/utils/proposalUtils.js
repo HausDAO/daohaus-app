@@ -117,3 +117,30 @@ export const descriptionMaker = (proposal) => {
     return "";
   }
 };
+export const determineUnreadActivityFeed = (proposal) => {
+  const abortedOrCancelled = proposal.aborted || proposal.cancelled;
+  const now = (new Date() / 1000) | 0;
+  const inVotingPeriod =
+    now >= +proposal.votingPeriodStarts && now <= +proposal.votingPeriodEnds;
+  const needsMemberVote = inVotingPeriod && !proposal.votes.length;
+  const needsProcessing =
+    now >= +proposal.gracePeriodEnds && !proposal.processed;
+
+  let message;
+  if (!proposal.sponsored) {
+    message = "New and unsponsored";
+  }
+  if (needsProcessing) {
+    message = "Unprocessed";
+  }
+  if (needsMemberVote) {
+    message = "You haven't voted on this";
+  }
+
+  return {
+    unread:
+      !abortedOrCancelled &&
+      (needsMemberVote || needsProcessing || !proposal.sponsored),
+    message,
+  };
+};

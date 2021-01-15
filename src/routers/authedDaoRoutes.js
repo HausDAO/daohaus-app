@@ -27,18 +27,17 @@ const AuthedDaoRoutes = () => {
           isCorrectNetwork={isCorrectNetwork}
           overview={daoOverview}
           members={daoMembers}
-          // title={title}
           authed
         />
       </Route>
       <Route exact path={`${path}/proposals`}>
-        <Proposals proposals={daoProposals} authed />
+        <Proposals proposals={daoProposals} overview={daoOverview} authed />
       </Route>
       <Route exact path={`${path}/bank`}>
         <Bank balances={daoBalances} authed />
       </Route>
       <Route exact path={`${path}/members`}>
-        <Members members={daoMembers?.daoMembers} authed />
+        <Members members={daoMembers} authed />
       </Route>
     </Switch>
   );

@@ -1,6 +1,12 @@
+import { balanceOf } from "../services/tokenService";
+import { MolochService } from "../services/molochService";
+import { omit } from "./general";
+
 const geckoURL = "https://api.coingecko.com/api/v3/simple/token_price";
 const uniSwapDataURL =
   "https://raw.githubusercontent.com/Uniswap/default-token-list/master/src/tokens/mainnet.json";
+
+const babe = "0x000000000000000000000000000000000000baBe";
 
 const fetchUniswapData = async () => {
   try {
@@ -27,39 +33,42 @@ export const calcTotalUSD = (decimals, tokenBalance, usdVal) => {
 const mergeDataWithTokenPrice = (
   graphTokenData,
   tokenPrices,
-  uniswapDataMap
+  uniswapDataMap,
+  isMainnet
 ) => {
-  return graphTokenData.flat().reduce((obj, tokenType) => {
-    const { token, id, guildBank, moloch, tokenBalance } = tokenType;
-    const usdVal = tokenPrices[token.tokenAddress]
-      ? tokenPrices[token.tokenAddress].usd
-      : 0;
+  return graphTokenData.map((tokenType) => {
+    const { token, tokenBalance } = tokenType;
+    let usdVal;
+    if (isMainnet) {
+      usdVal = tokenPrices[token.tokenAddress].usd || 0;
+    } else {
+      usdVal = tokenPrices[token.altAddress].usd || 0;
+    }
     const logoUri = uniswapDataMap[token.symbol]?.logoUri
       ? uniswapDataMap[token.symbol].logoUri
       : null;
     return {
-      ...obj,
-      [token.tokenAddress]: {
-        usd: usdVal,
-        ...token,
-        id,
-        guildBank,
-        moloch,
-        tokenBalance,
-        totalUSD: calcTotalUSD(token.decimals, tokenBalance, usdVal),
-        logoUri,
-      },
+      ...omit("token", tokenType),
+      ...token,
+      usd: usdVal,
+      totalUSD: calcTotalUSD(token.decimals, tokenBalance, usdVal),
+      logoUri,
     };
-  }, {});
+  });
 };
 
-const fetchForUSD = async (graphTokenData, uniswapDataMap) => {
+const fetchForUSD = async (graphTokenData, uniswapDataMap, { isMainnet }) => {
   const addressList = graphTokenData
-    .map(({ token }) => token.tokenAddress)
+    .map(({ token }) => (isMainnet ? token.tokenAddress : token.altAddress))
     .toString();
   try {
     const tokenPrices = await getUsd(addressList);
-    return mergeDataWithTokenPrice(graphTokenData, tokenPrices, uniswapDataMap);
+    return mergeDataWithTokenPrice(
+      graphTokenData,
+      tokenPrices,
+      uniswapDataMap,
+      isMainnet
+    );
   } catch (error) {
     console.error(error);
   }
@@ -75,7 +84,7 @@ const convertToMainNetVals = async (graphTokenData, symbolAddressMap) => {
         ...tokenType,
         token: {
           ...token,
-          tokenAddress: foundAddress,
+          altAddress: foundAddress,
         },
       };
     } else {
@@ -96,14 +105,18 @@ export const addUSD = async (chainID, graphTokenData) => {
     }, {});
 
     if (chainID === "0x1") {
-      const stateReadyVals = await fetchForUSD(graphTokenData, uniswapDataMap);
+      const stateReadyVals = await fetchForUSD(graphTokenData, uniswapDataMap, {
+        isMainnet: true,
+      });
       return stateReadyVals;
     } else if (chainID === "0x4" || chainID === "0x2a" || chainID === "0x64") {
       const mainNetVals = await convertToMainNetVals(
         graphTokenData,
         uniswapDataMap
       );
-      const stateReadyVals = await fetchForUSD(mainNetVals, uniswapDataMap);
+      const stateReadyVals = await fetchForUSD(mainNetVals, uniswapDataMap, {
+        isMainnet: false,
+      });
       return stateReadyVals;
     } else {
       console.error(`ChainID: ${chainID} is not a valid ID`);
@@ -120,4 +133,33 @@ export const tallyUSDs = (tokenObj) => {
     totalUSD = totalUSD + tokenObj[token].totalUSD;
   }
   return Math.round((totalUSD + Number.EPSILON) * 100) / 100;
+};
+
+export const addContractVals = (tokens, chainID) => {
+  return Promise.all(
+    tokens.map(async (token) => {
+      const tokenBalance = await balanceOf({
+        chainID,
+        tokenAddress: token.tokenAddress,
+        queryAddress: token.moloch.id,
+        is32: false,
+      });
+      const babeBalance = await MolochService({
+        tokenAddress: token.tokenAddress,
+        chainID,
+        daoAddress: token.moloch.id,
+        version: +token.moloch.version,
+      })("getUserTokenBalance")({
+        userAddress: babe,
+        tokenAddress: token.tokenAddress,
+      });
+      return {
+        ...token,
+        contractBalances: {
+          token: +tokenBalance,
+          babe: +babeBalance,
+        },
+      };
+    })
+  );
 };

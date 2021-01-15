@@ -14,6 +14,18 @@ export const fetchMetaData = async (endpoint) => {
   }
 };
 
+///API IDEA, send array of addresses as params and only get metadata for that back.
+export const getApiMetadata = async () => {
+  try {
+    const response = await fetch(
+      "https://daohaus-metadata.s3.amazonaws.com/daoMeta.json"
+    );
+    return response.json();
+  } catch (err) {
+    throw new Error(err);
+  }
+};
+
 export const formatBoosts = (boostsArr) =>
   boostsArr.reduce((obj, boost) => {
     return {

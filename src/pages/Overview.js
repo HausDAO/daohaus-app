@@ -25,7 +25,7 @@ const Overview = React.memo(function Overview({
           membersAmt={members?.daoMembers?.length}
         />
       )}
-      {activities && <ActivitiesCard activities={activities?.moloch} />}
+      {activities && <ActivitiesCard activities={activities} />}
     </div>
   );
 });

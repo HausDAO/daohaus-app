@@ -14,13 +14,11 @@ import { CustomeThemeProvider } from "./contexts/CustomThemeContext";
 ReactDOM.render(
   <React.StrictMode>
     <BrowserRouter>
-      <TokenProvider>
-        <InjectedProvider>
-          <CustomeThemeProvider>
-            <App />
-          </CustomeThemeProvider>
-        </InjectedProvider>
-      </TokenProvider>
+      <InjectedProvider>
+        <CustomeThemeProvider>
+          <App />
+        </CustomeThemeProvider>
+      </InjectedProvider>
     </BrowserRouter>
   </React.StrictMode>,
   document.getElementById("root")

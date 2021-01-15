@@ -1,4 +1,4 @@
-import { formatDistanceToNow, format } from "date-fns";
+import { formatDistanceToNow } from "date-fns";
 
 export const pipe = (...fns) => (x) =>
   fns.reduce((prev, func) => func(prev), x);
@@ -21,14 +21,23 @@ export const IsJsonString = (str) => {
   return true;
 };
 
-//wrapper function that combines react setter, with the a function to operater on the data
-//and an argument for the data. 100% lazy initialized and executed. Can pass args to and from
-//functions and components and fired whenever needed.
+export const createHash = () => {
+  return Math.random().toString(36).slice(2);
+};
 
-// const getAndSet = initReactSetter(setStateFn)(resolverFn)(data)();
-
-export const initReactSetter = (reactSet) => (resolverFn) => (data) => () =>
-  reactSet(resolverFn(data));
+export const detailsToJSON = (values) => {
+  const details = {};
+  details.title = values.title;
+  // random string
+  details.hash = values.hash;
+  if (values.description) {
+    details.description = values.description;
+  }
+  if (values.link) {
+    details.link = values.link;
+  }
+  return JSON.stringify(details);
+};
 
 //omits key/pairs from objects
 export const omit = (keys, obj) =>

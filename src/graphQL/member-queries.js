@@ -87,7 +87,7 @@ export const MEMBERS_LIST = gql`
       didRagequit
       memberAddress
       createdAt
-      # profile @client
+      # profile @client // handled with 3box queries at component level
       moloch {
         id
         totalShares

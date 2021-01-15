@@ -7,28 +7,50 @@ import {
   determineUnreadActivityFeed,
 } from "./proposalUtils";
 
-export const resolvers = {
-  Proposal: {
-    status: (proposal) => {
-      return determineProposalStatus(proposal, proposal.moloch);
-    },
-    proposalType: (proposal) => {
-      return determineProposalType(proposal);
-    },
-    title: (proposal) => {
-      return titleMaker(proposal);
-    },
-    description: (proposal) => {
-      return descriptionMaker(proposal);
-    },
-    hash: (proposal) => {
-      return hashMaker(proposal);
-    },
-    // activityFeed: (proposal) => {
-    //   return determineUnreadActivityFeed(proposal);
-    // },
-  },
+export const proposalResolver = (proposal, fields = {}) => {
+  if (fields.status) {
+    proposal.status = determineProposalStatus(proposal);
+  }
+  if (fields.title) {
+    proposal.title = titleMaker(proposal);
+  }
+  if (fields.description) {
+    proposal.description = descriptionMaker(proposal);
+  }
+  if (fields.hash) {
+    proposal.hash = hashMaker(proposal);
+  }
+  if (fields.proposalType) {
+    proposal.proposalType = determineProposalType(proposal);
+  }
+  if (fields.activityFeed) {
+    proposal.activityFeed = determineUnreadActivityFeed(proposal);
+  }
+  return proposal;
 };
+
+// export const resolvers = {
+//   Proposal: {
+//     status: (proposal) => {
+//       return determineProposalStatus(proposal, proposal.moloch);
+//     },
+//     proposalType: (proposal) => {
+//       return determineProposalType(proposal);
+//     },
+//     title: (proposal) => {
+//       return titleMaker(proposal);
+//     },
+//     description: (proposal) => {
+//       return descriptionMaker(proposal);
+//     },
+//     hash: (proposal) => {
+//       return hashMaker(proposal);
+//     },
+//     // activityFeed: (proposal) => {
+//     //   return determineUnreadActivityFeed(proposal);
+//     // },
+//   },
+// };
 
 // TokenBalance: {
 //   contractBalances: async (tokenBalance, _args, context) => {

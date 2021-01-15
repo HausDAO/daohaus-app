@@ -40,6 +40,7 @@ const baseListFields = `
   whitelist
   yesShares
   yesVotes
+  molochAddress
   molochVersion
   minionAddress
   moloch {
@@ -54,11 +55,11 @@ const baseListFields = `
     memberPower
     uintVote
     createdAt
+    molochAddress
   }
-  
   `;
-// title @client
 // status @client
+// title @client
 // description @client
 // hash @client
 // proposalType @client

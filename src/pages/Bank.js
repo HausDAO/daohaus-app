@@ -1,11 +1,12 @@
 import React from "react";
 
-import { useParams } from "react-router-dom";
 import BankList from "../components/BankList";
+import Chart from "../components/chart";
 
 const Bank = () => {
   return (
     <div>
+      <Chart />
       <BankList />
     </div>
   );

@@ -47,46 +47,66 @@ export const HOME_DAO = gql`
 `;
 
 export const DAO_ACTIVITIES = gql`
-  query molochActivities($contractAddr: String!) {
+  query molochActivities($contractAddr: String!, $skip: Int) {
     moloch(id: $contractAddr) {
       id
       title
       version
-      proposals(orderBy: createdAt, orderDirection: desc) {
+      proposals(orderBy: createdAt, orderDirection: desc, skip: $skip) {
         id
+        aborted
+        applicant
+        cancelled
+        cancelledAt
         createdAt
+        details
+        didPass
+        gracePeriodEnds
+        guildkick
+        isMinion
+        lootRequested
+        memberAddress
+        newMember
+        noShares
+        noVotes
+        paymentRequested
+        paymentTokenDecimals
+        paymentTokenSymbol
+        processed
+        processor
+        processedAt
+        proposer
         proposalId
         proposalIndex
-        details
-        memberAddress
-        applicant
-        newMember
-        whitelist
-        guildkick
+        sharesRequested
+        sponsored
+        sponsor
+        sponsoredAt
+        startingPeriod
         trade
-        cancelled
-        aborted
+        tributeOffered
+        tributeTokenDecimals
+        tributeTokenSymbol
         votingPeriodStarts
         votingPeriodEnds
-        gracePeriodEnds
+        whitelist
+        yesShares
+        yesVotes
         molochAddress
         molochVersion
-        yesVotes
-        noVotes
-        processed
-        processedAt
-        processor
-        proposer
-        sponsored
-        sponsoredAt
-        sponsor
-        # proposalType @client || Client side logic
-        # title @client || Client side logic
+        minionAddress
+        moloch {
+          gracePeriodLength
+          periodDuration
+          version
+          votingPeriodLength
+        }
         votes {
           id
-          createdAt
-          uintVote
           memberAddress
+          memberPower
+          uintVote
+          createdAt
           molochAddress
         }
       }

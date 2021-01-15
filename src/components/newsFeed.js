@@ -13,7 +13,7 @@ const combineAndSortProposals = (daosByNetwork) => {
     .reduce((arr, network) => {
       return [
         ...arr,
-        ...network.data.membersHub.reduce((arr, dao) => {
+        ...network.data.reduce((arr, dao) => {
           return [
             ...arr,
             ...dao.moloch.proposals.map((proposal) => ({

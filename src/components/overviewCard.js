@@ -8,7 +8,7 @@ const OverviewCard = ({ overview, isMember, membersAmt }) => {
   const { daochain, daoid } = useParams;
   const { daoMetadata } = useMetaData();
   const { customCopy } = useCustomTheme();
-  const { tokenBalances, totalLoot, totalShares, title } = overview?.moloch;
+  const { tokenBalances, totalLoot, totalShares, title } = overview;
 
   return (
     <div>

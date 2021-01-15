@@ -34,7 +34,7 @@ const NetworkList = () => {
         <>
           <h3 className="network-header">Other Networks: </h3>
           {otherNetworks.map((network) => {
-            if (network.data.membersHub.length) {
+            if (network.data.length) {
               return (
                 <div key={network.networkID}>
                   <p className="label">{network.name}</p>
