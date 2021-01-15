@@ -13,6 +13,8 @@ const ExploreGraphInit = ({ daos, setDaos, setFetchComplete }) => {
   useEffect(() => {
     const fetchDaos = async () => {
       const mdRes = await getApiMetadata();
+      // get prices here too...
+      // prices in api?
       setDaoFetch(mdRes);
     };
 

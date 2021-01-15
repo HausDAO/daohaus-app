@@ -27,6 +27,7 @@ const ProfileOverviewCard = ({ profile }) => {
   const [prices] = usePrices();
   const [memberWallet] = useMemberWallet();
   const [memberValue, setMemberValue] = useState(0);
+  const [votingPower, setVotingPower] = useState(0);
   const [ensName, setEnsName] = useState(null);
   const params = useParams();
   const [showAlert, setShowAlert] = useState();
@@ -51,6 +52,10 @@ const ProfileOverviewCard = ({ profile }) => {
           (+dao.totalShares + +dao.totalLoot) || 0;
 
       setMemberValue(memberProportion * total);
+
+      const shares = profile.shares || 0;
+      const power = ((+shares / +dao.totalShares) * 100).toFixed(1);
+      setVotingPower(power);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [dao, prices, profile]);
@@ -180,12 +185,7 @@ const ProfileOverviewCard = ({ profile }) => {
                     </TextBox>
                   ) : (
                     <TextBox size='xl' variant='value'>
-                      {profile?.shares &&
-                        dao?.totalShares &&
-                        (profile?.shares / dao?.totalShares || 0 * 100).toFixed(
-                          1,
-                        )}
-                      %
+                      {votingPower}%
                     </TextBox>
                   )}
                 </Skeleton>

@@ -11,7 +11,7 @@ export const EXPLORER_DAOS = gql`
       totalShares
       guildBankAddress
       summoningTime
-      guildBankBalanceV1
+      guildBankValue @client
       apiMetadata @client
       networkId @client
       members(where: { exists: true }) {

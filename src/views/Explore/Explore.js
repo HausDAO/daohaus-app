@@ -28,7 +28,9 @@ const Explore = () => {
     <Box p={6}>
       {state.allDaos.length ? (
         <>
-          <div className='FilterBar'>{/* <ExploreFilters /> */}</div>
+          <div className='FilterBar'>
+            <ExploreFilters />
+          </div>
           <div className='View'>
             <ExploreList />
           </div>

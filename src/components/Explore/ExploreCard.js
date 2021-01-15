@@ -31,7 +31,7 @@ const ExploreCard = ({ dao }) => {
         </Box>
 
         <Box fontSize='md' mt={2} fontFamily='heading'>
-          $5
+          {dao.guildBankValue}
         </Box>
         <Flex direction='row' align='center'>
           <Box fontSize='sm' mr={3}>
@@ -44,9 +44,14 @@ const ExploreCard = ({ dao }) => {
             {dao.tokens.length} Token{dao.tokens.length > 1 ? 's' : ''}
           </Box>
         </Flex>
-        <Badge colorScheme='red' variant='solid' mt={2} mb={2}>
-          {dao.apiMetadata?.purpose}
-        </Badge>
+        <Flex direction='row' align='center'>
+          <Badge colorScheme='red' variant='solid' m='2px 2px 2px 0px'>
+            {dao.apiMetadata?.purpose}
+          </Badge>
+          <Badge colorScheme='blue' variant='solid' m='2px 2px 2px 0px'>
+            {dao.apiMetadata?.network}
+          </Badge>
+        </Flex>
         {dao.apiMetadata?.tags ? (
           <Flex direction='row' wrap='wrap'>
             {dao.apiMetadata.tags.split(',').map((tag) => {
