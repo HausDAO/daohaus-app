@@ -1,3 +1,4 @@
+import { Input } from '@chakra-ui/react';
 import React, { useContext } from 'react';
 
 import { ExploreContext } from '../../contexts/ExploreContext';
@@ -17,14 +18,13 @@ const ExploreSearch = () => {
   };
 
   return (
-    <div>
-      <input
-        type='search'
-        className='input'
-        placeholder='Search Daos'
-        onChange={(e) => handleChange(e)}
-      />
-    </div>
+    <Input
+      maxW='250px'
+      type='search'
+      className='input'
+      placeholder='Search Daos'
+      onChange={(e) => handleChange(e)}
+    />
   );
 };
 

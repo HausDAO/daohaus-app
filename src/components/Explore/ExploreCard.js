@@ -1,15 +1,49 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import makeBlockie from 'ethereum-blockies-base64';
 import { Avatar, Box, Flex, Button, Badge } from '@chakra-ui/react';
 import { Link as RouterLink } from 'react-router-dom';
 
 import ContentBox from '../Shared/ContentBox';
 import { themeImagePath } from '../../utils/helpers';
+import { ExploreContext } from '../../contexts/ExploreContext';
 
 const ExploreCard = ({ dao }) => {
-  if (dao.apiMetadata?.tags) {
-    console.log('dao.apiMetadata.tags', dao.apiMetadata);
-  }
+  const { state, dispatch } = useContext(ExploreContext);
+
+  const handleTagSelect = (tag) => {
+    if (!state.tags.includes(tag.trim())) {
+      const tagUpdate = [...state.tags, tag.trim()];
+      dispatch({ type: 'updateTags', payload: tagUpdate });
+    }
+  };
+
+  const renderTags = () => {
+    if (dao.apiMetadata?.tags) {
+      return (
+        <Flex direction='row' wrap='wrap'>
+          {dao.apiMetadata.tags.split(',').map((tag) => {
+            return (
+              <Badge
+                key={tag}
+                onClick={() => handleTagSelect(tag)}
+                colorScheme='green'
+                variant='outline'
+                fontSize='9px'
+                mr={2}
+                mt={1}
+                _hover={{
+                  cursor: 'pointer',
+                  color: 'white',
+                }}
+              >
+                {tag}
+              </Badge>
+            );
+          })}
+        </Flex>
+      );
+    }
+  };
   return (
     <>
       <ContentBox m={3} w='320px'>
@@ -45,31 +79,15 @@ const ExploreCard = ({ dao }) => {
           </Box>
         </Flex>
         <Flex direction='row' align='center'>
-          <Badge colorScheme='red' variant='solid' m='2px 2px 2px 0px'>
+          <Badge colorScheme='secondary' variant='solid' m='2px 2px 2px 0px'>
             {dao.apiMetadata?.purpose}
           </Badge>
-          <Badge colorScheme='blue' variant='solid' m='2px 2px 2px 0px'>
+          <Badge colorScheme='primary' variant='solid' m='2px 2px 2px 0px'>
             {dao.apiMetadata?.network}
           </Badge>
         </Flex>
-        {dao.apiMetadata?.tags ? (
-          <Flex direction='row' wrap='wrap'>
-            {dao.apiMetadata.tags.split(',').map((tag) => {
-              return (
-                <Badge
-                  colorScheme='green'
-                  variant='outline'
-                  fontSize='9px'
-                  mr={2}
-                  mt={1}
-                  key={tag}
-                >
-                  {tag}
-                </Badge>
-              );
-            })}
-          </Flex>
-        ) : null}
+
+        {renderTags()}
 
         <Box mt={5}>
           <Button as={RouterLink} to={`/dao/${dao.id}`}>

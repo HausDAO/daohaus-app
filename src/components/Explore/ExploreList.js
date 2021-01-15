@@ -16,7 +16,7 @@ const ExploreList = () => {
     if (state.searchTerm) {
       searchedDaos = state.allDaos.filter((dao) => {
         if (!dao.apiMetadata) {
-          console.log('dao MISSING', dao);
+          console.log('unregistered dao', dao);
           return false;
         }
 
@@ -28,9 +28,17 @@ const ExploreList = () => {
       searchedDaos = state.allDaos;
     }
 
+    if (state.tags.length) {
+      searchedDaos = searchedDaos.filter((dao) => {
+        return (
+          dao.apiMetadata.tags &&
+          state.tags.some((tag) => dao.apiMetadata.tags.indexOf(tag) >= 0)
+        );
+      });
+    }
+
     const filteredDaos = searchedDaos.filter((dao) => {
       if (!dao.apiMetadata) {
-        console.log('dao MISSING', dao);
         return false;
       }
       const memberCount = dao.members.length > (state.filters.members[0] || 0);
@@ -43,33 +51,18 @@ const ExploreList = () => {
       );
     });
 
-    console.log('filteredDaos', filteredDaos);
-
-    const sortedDaos = filteredDaos;
-
-    // const sortedDaos = _.orderBy(
-    //   filteredDaos,
-    //   [
-    //     'dao',
-    //     (dao) => {
-    //       if (state.sort.count) {
-    //         return dao[state.sort.value].length;
-    //       } else {
-    //         if (state.sort.value2) {
-    //           return dao[state.sort.value][state.sort.value2];
-    //         } else {
-    //           return dao[state.sort.value];
-    //         }
-    //       }
-    //     },
-    //   ],
-    //   ['desc', 'desc'],
-    // );
+    const sortedDaos = filteredDaos.sort((a, b) => {
+      if (state.sort.count) {
+        return b[state.sort.value].length - a[state.sort.value].length;
+      } else {
+        return b[state.sort.value] - a[state.sort.value];
+      }
+    });
 
     setDaos(sortedDaos);
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [state.sort, state.filters, state.searchTerm]);
+  }, [state.sort, state.filters, state.searchTerm, state.tags]);
 
   const daoList = daos.map((dao) => {
     return (

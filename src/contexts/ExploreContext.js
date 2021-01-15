@@ -15,6 +15,7 @@ const initialState = {
   allDaos: [],
   prices: null,
   sort: SORT_OPTIONS[0],
+  tags: [],
   filters: {
     members: ['1'],
     versions: VERSION_FILTER_OPTIONS.map((o) => o.value),
@@ -62,6 +63,12 @@ const reducer = (state, action) => {
     }
     case 'clearSearchTerm': {
       return { ...state, searchTerm: initialState.searchTerm };
+    }
+    case 'updateTags': {
+      return { ...state, tags: action.payload };
+    }
+    case 'clearTags': {
+      return { ...state, tags: initialState.tags };
     }
 
     default: {
