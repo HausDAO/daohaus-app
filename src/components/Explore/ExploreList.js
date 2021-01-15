@@ -14,7 +14,14 @@ const ExploreList = () => {
     let searchedDaos;
     if (state.searchTerm) {
       searchedDaos = state.allDaos.filter((dao) => {
-        return dao.title.toLowerCase().indexOf(state.searchTerm) > -1;
+        if (!dao.apiMetadata) {
+          console.log('dao MISSING', dao);
+          return false;
+        }
+
+        return (
+          dao.apiMetadata.name.toLowerCase().indexOf(state.searchTerm) > -1
+        );
       });
     } else {
       searchedDaos = state.allDaos;

@@ -11,7 +11,7 @@ const ExploreCard = ({ dao }) => {
               backgroundImage: `url("${makeBlockie(dao.id)}")`,
             }}
           ></div>
-          <h4>{dao.title}</h4>
+          <h4>{dao.apiMetadata.name}</h4>
         </div>
         <p>{dao.apiMetadata.description}</p>
 

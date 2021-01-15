@@ -4,6 +4,7 @@ import { Box, Flex, Spinner } from '@chakra-ui/react';
 import ExploreGraphInit from '../../contexts/ExploreGraphInit';
 import { ExploreContext } from '../../contexts/ExploreContext';
 import ExploreList from '../../components/Explore/ExploreList';
+import ExploreFilters from '../../components/Explore/ExploreFilters';
 
 const Explore = () => {
   const { state, dispatch } = useContext(ExploreContext);
@@ -27,7 +28,9 @@ const Explore = () => {
     <Box p={6}>
       {state.allDaos.length ? (
         <>
-          <div className='FilterBar'>{/* <ExploreFilters /> */}</div>
+          <div className='FilterBar'>
+            <ExploreFilters />
+          </div>
           <div className='View'>
             <ExploreList />
           </div>
