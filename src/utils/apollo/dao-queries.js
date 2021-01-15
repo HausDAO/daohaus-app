@@ -94,6 +94,7 @@ export const DAO_ACTIVITIES = gql`
         id
         createdAt
         memberAddress
+        molochAddress
         shares
         loot
       }

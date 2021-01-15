@@ -74,7 +74,7 @@ const PaymentInput = ({ register, setValue, getValues, errors }) => {
   const validateBalance = (value) => {
     let error;
     if (value > balance) {
-      error = 'Payment Requested is more than the dao has';
+      error = 'Requested funds are more than the DAO has';
     }
     return error || true;
   };
@@ -82,7 +82,7 @@ const PaymentInput = ({ register, setValue, getValues, errors }) => {
   return (
     <>
       <TextBox as={FormLabel} size='xs'>
-        Payment Requested
+        Funds Requested
       </TextBox>
       <InputGroup>
         <Button

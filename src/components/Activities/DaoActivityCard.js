@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { getProfile } from '3box/lib/api';
-import { Link } from 'react-router-dom';
+import { Link as RouterLink } from 'react-router-dom';
 
 import { timeToNow, truncateAddr } from '../../utils/helpers';
 import {
@@ -88,30 +88,37 @@ const DaoActivityCard = ({ activity, isLoaded }) => {
 
   return (
     <ContentBox mt={3}>
-      <Link
-        to={
-          activity?.activityData?.type !== 'rage'
-            ? `/dao/${activity.molochAddress}/proposals/${activity.proposalId}`
-            : '#'
-        }
-      >
-        <Skeleton isLoaded={isLoaded}>
-          <Flex direction='row' justifyContent='space-between'>
-            <Flex direction='column'>
+      <Skeleton isLoaded={isLoaded}>
+        <Flex direction='row' justifyContent='space-between'>
+          <Flex direction='column'>
+            <RouterLink
+              to={
+                activity?.activityData?.type !== 'rage'
+                  ? `/dao/${activity.molochAddress}/proposals/${activity.proposalId}`
+                  : '#'
+              }
+            >
               <Heading as='h4' size='sm'>
                 {renderTitle()}
               </Heading>
-
-              <Flex direction='row' align='center'>
-                <Box mr={2}>{renderBadge()}</Box>
-                <Text as='i' fontSize='xs'>
-                  {activity?.activityData?.createdAt
-                    ? timeToNow(activity.activityData.createdAt)
-                    : '--'}
-                </Text>
-              </Flex>
+            </RouterLink>
+            <Flex direction='row' align='center'>
+              <Box mr={2}>{renderBadge()}</Box>
+              <Text as='i' fontSize='xs'>
+                {activity?.activityData?.createdAt
+                  ? timeToNow(activity.activityData.createdAt)
+                  : '--'}
+              </Text>
             </Flex>
-
+          </Flex>
+          <Box
+            as={RouterLink}
+            to={
+              activity?.activityData
+                ? `/dao/${activity.molochAddress}/profile/${activity.activityData.memberAddress}`
+                : null
+            }
+          >
             {profile && profile.image ? (
               <Avatar
                 src={`${'https://ipfs.infura.io/ipfs/' +
@@ -125,11 +132,12 @@ const DaoActivityCard = ({ activity, isLoaded }) => {
                   activity?.activityData?.memberAddress || '0x0',
                 )}
                 mr={3}
+                size='sm'
               />
             )}
-          </Flex>
-        </Skeleton>
-      </Link>
+          </Box>
+        </Flex>
+      </Skeleton>
     </ContentBox>
   );
 };

@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Link as RouterLink } from 'react-router-dom';
 import {
+  Avatar,
   Flex,
   Icon,
   Link,
@@ -20,11 +21,13 @@ import {
   useModals,
   useMemberWallet,
 } from '../../contexts/PokemolContext';
+import makeBlockie from 'ethereum-blockies-base64';
 import ChangeDao from '../Shared/ChangeDao';
 import Header from '../Shared/Header';
 import { Web3SignIn } from '../Shared/Web3SignIn';
 import UserAvatar from '../Shared/UserAvatar';
 import AccountModal from '../Modal/AccountModal';
+import BrandImg from '../../assets/Daohaus__Castle--Dark.svg';
 import '../../global.css';
 
 import {
@@ -422,29 +425,43 @@ const Layout = ({ children }) => {
             w='100%'
             wrap='wrap'
           >
-            <Box
-              d='block'
-              as={RouterLink}
-              to={dao?.graphData ? `/dao/${dao.address}` : `/`}
-              w='48px'
-              h='48px'
-              cursor='pointer'
-              border='none'
-              bg={`url('${
-                dao?.avatarImg
-                  ? themeImagePath(dao.avatarImg)
-                  : themeImagePath(theme.images.avatarImg)
-              }')`}
-              bgSize='cover'
-              bgPosition='center'
-              bgRepeat='no-repeat'
-              rounded='full'
-              borderWidth='2px'
-              borderStyle='solid'
-              borderColor='transparent'
-              _hover={{ border: '2px solid ' + theme.colors.whiteAlpha[500] }}
-              order={[1, null, null, 1]}
-            />
+            {dao?.address ? (
+              <Avatar
+                d='block'
+                as={RouterLink}
+                to={dao?.graphData ? `/dao/${dao.address}` : `/`}
+                size='md'
+                cursor='pointer'
+                border='none'
+                src={
+                  dao.avatarImg
+                    ? themeImagePath(dao.avatarImg)
+                    : makeBlockie(dao.address)
+                }
+                bg={theme.colors.primary}
+                borderWidth='2px'
+                borderStyle='solid'
+                borderColor='transparent'
+                _hover={{ border: '2px solid ' + theme.colors.whiteAlpha[500] }}
+                order={[1, null, null, 1]}
+              />
+            ) : (
+              <Avatar
+                d='block'
+                as={RouterLink}
+                to={`/`}
+                size='md'
+                cursor='pointer'
+                border='none'
+                src={BrandImg}
+                bg={theme.colors.primary}
+                borderWidth='2px'
+                borderStyle='solid'
+                borderColor='transparent'
+                _hover={{ border: '2px solid ' + theme.colors.whiteAlpha[500] }}
+                order={[1, null, null, 1]}
+              />
+            )}
             <Box
               d={['inline-block', null, null, 'none']}
               order='3'
@@ -751,7 +768,7 @@ const Layout = ({ children }) => {
 
             <MotionFlex
               direction='row'
-              align='center'
+              align='start'
               justify='start'
               initial={sideNavOpen ? 'open' : 'closed'}
               animate={sideNavOpen ? 'open' : 'closed'}
