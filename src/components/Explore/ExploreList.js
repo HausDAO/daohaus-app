@@ -1,3 +1,4 @@
+import { Flex } from '@chakra-ui/react';
 import React, { useContext, useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 
@@ -73,16 +74,20 @@ const ExploreList = () => {
   const daoList = daos.map((dao) => {
     return (
       <div key={dao.id}>
-        <Link
-          to={dao.version === '2' ? `/dao/v2/${dao.id}` : `/dao/v1/${dao.id}`}
-        >
-          <ExploreCard dao={dao} />
-        </Link>
+        <ExploreCard dao={dao} />
       </div>
     );
   });
 
-  return <div>{daos.length ? <div>{daoList}</div> : null}</div>;
+  return (
+    <>
+      {daos.length ? (
+        <Flex wrap='wrap' align='center' justify='flex-start'>
+          {daoList}
+        </Flex>
+      ) : null}
+    </>
+  );
 };
 
 export default ExploreList;

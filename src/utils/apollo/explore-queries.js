@@ -20,7 +20,7 @@ export const EXPLORER_DAOS = gql`
       proposals {
         id
       }
-      approvedTokens {
+      tokens {
         id
       }
       depositToken {
