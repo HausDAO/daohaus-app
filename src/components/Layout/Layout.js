@@ -775,7 +775,7 @@ const Layout = ({ children }) => {
 
             <MotionFlex
               direction='row'
-              align='center'
+              align='start'
               justify='start'
               initial={sideNavOpen ? 'open' : 'closed'}
               animate={sideNavOpen ? 'open' : 'closed'}

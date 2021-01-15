@@ -45,10 +45,10 @@ const ActivityCard = ({ activity, isLoaded }) => {
 
   return (
     <ContentBox mt={3}>
-      <Link to={`/dao/${activity.molochAddress}`}>
-        {activity.proposalId && (
-          <>
-            <Skeleton isLoaded={isLoaded}>
+      {activity.proposalId && (
+        <>
+          <Skeleton isLoaded={isLoaded}>
+            <Link to={`/dao/${activity.molochAddress}`}>
               <TextBox size='xs' mb={2}>
                 {activity.daoTitle}{' '}
                 {activity.networkId ? (
@@ -58,18 +58,20 @@ const ActivityCard = ({ activity, isLoaded }) => {
               <Heading as='h4' size='sm' fontWeight='100'>
                 {activity.proposalType}: {activity.title}
               </Heading>
+            </Link>
 
-              <Stack isInline mt={3}>
-                <Badge variant='solid'>{activity.activityFeed.message}</Badge>
-                <Badge colorScheme='green'>{activity.yesVotes} Yes</Badge>
-                <Badge colorScheme='red'>{activity.noVotes} No</Badge>
-              </Stack>
-            </Skeleton>
-          </>
-        )}
-        {!activity.proposalId && (
-          <>
-            <Skeleton isLoaded={isLoaded}>
+            <Stack isInline mt={3}>
+              <Badge variant='solid'>{activity.activityFeed.message}</Badge>
+              <Badge colorScheme='green'>{activity.yesVotes} Yes</Badge>
+              <Badge colorScheme='red'>{activity.noVotes} No</Badge>
+            </Stack>
+          </Skeleton>
+        </>
+      )}
+      {!activity.proposalId && (
+        <>
+          <Skeleton isLoaded={isLoaded}>
+            <Link to={`/dao/${activity.molochAddress}`}>
               <Heading as='h4' size='md'>
                 {activity?.createdAt
                   ? `Rage Quit ${activity.daoTitle} on ${formatCreatedAt(
@@ -77,15 +79,15 @@ const ActivityCard = ({ activity, isLoaded }) => {
                     )}`
                   : '--'}
               </Heading>
-              <Box>Shares: {activity?.shares ? activity.shares : '--'}</Box>
-              <Box>Loot: {activity?.loot ? activity.loot : '--'}</Box>
-              <Box>
-                <MemberAvatar member={profile} />
-              </Box>
-            </Skeleton>
-          </>
-        )}
-      </Link>
+            </Link>
+            <Box>Shares: {activity?.shares ? activity.shares : '--'}</Box>
+            <Box>Loot: {activity?.loot ? activity.loot : '--'}</Box>
+            <Box>
+              <MemberAvatar member={profile} />
+            </Box>
+          </Skeleton>
+        </>
+      )}
     </ContentBox>
   );
 };
