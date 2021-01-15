@@ -27,6 +27,13 @@ const Hub = () => {
 
   useEffect(() => {
     if (memberDaos) {
+      console.log(
+        'memberDaos',
+        memberDaos.filter((dao) => dao.networkId === '4'),
+      );
+    }
+
+    if (memberDaos) {
       setLoading(false);
       setLocalDaos(
         memberDaos
