@@ -1,6 +1,7 @@
 import safeProxyFactoryAbi from '../contracts/safeProxyFactory.json';
 import safeCreateAndAddModulesAbi from '../contracts/safeCreateAndAddModule.json';
 import safeMasterCopyAbi from '../contracts/safeGnosis.json';
+import { supportedChains } from './chains';
 
 export class MinionSafeService {
   web3;
@@ -17,6 +18,7 @@ export class MinionSafeService {
     this.safeProxyFactory = setupValues.safeProxyFactory;
     this.createAndAddModulesAddress = setupValues.createAndAddModules;
     this.safeMasterCopy = setupValues.safeMasterCopy;
+    this.network = setupValues.network;
     this.safeProxyFactoryContract = new web3.eth.Contract(
       safeProxyFactoryAbi,
       this.safeProxyFactory,
@@ -45,6 +47,21 @@ export class MinionSafeService {
       .on('error', (error) => {
         callback(null, error);
       });
+  }
+
+  setLocal(newData) {
+    let localMinionSafe = window.localStorage.getItem('pendingMinionSafe');
+    if (localMinionSafe) {
+      localMinionSafe = JSON.parse(localMinionSafe);
+    }
+
+    window.localStorage.setItem(
+      'pendingMinionSafe',
+      JSON.stringify({
+        ...localMinionSafe,
+        ...newData,
+      }),
+    );
   }
 
   createAndAddModulesData(dataArray) {
@@ -77,6 +94,11 @@ export class MinionSafeService {
 
     const threshhold = 2;
     const mastercopy = this.safeMasterCopy;
+
+    const cacheMinionSafe = {
+      delegateAddress,
+      network: supportedChains[this.network.network_id].network,
+    };
 
     const enableModuleData = this.safeMasterCopyContract.methods
       .enableModule(minionAddress)
@@ -113,6 +135,11 @@ export class MinionSafeService {
       callback,
     );
     console.log('txReceipt', txReceipt);
+    cacheMinionSafe.tx = txReceipt.transactionHash;
+    cacheMinionSafe.safeAddress =
+      txReceipt.events.ProxyCreation.returnValues.proxy;
+    cacheMinionSafe.txReceipt = txReceipt;
+    this.setLocal(cacheMinionSafe);
     return txReceipt.transactionHash;
   }
 }

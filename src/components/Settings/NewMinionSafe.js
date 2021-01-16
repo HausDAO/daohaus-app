@@ -9,20 +9,24 @@ import {
   useModals,
   useNetwork,
   useWeb3Connect,
+  useDaoMetadata,
 } from '../../contexts/PokemolContext';
 import MinionSafeEasyMode from './MinionSafeEasyMode';
 import MinionSafeHardMode from './MinionSafeHardMode';
 import { supportedChains } from '../../utils/chains';
 import { MinionSafeService } from '../../utils/minion-safe-service';
+import { boostPost } from '../../utils/requests';
 
 const NewMinionSafe = () => {
   const [loading, setLoading] = useState(false);
   const [user] = useUser();
   const [dao] = useDao();
+  const [daoMetadata, updateDaoMetadata] = useDaoMetadata();
   const [web3Connect] = useWeb3Connect();
   const [network] = useNetwork();
   const { closeModals } = useModals();
   const [txProcessor, updateTxProcessor] = useTxProcessor();
+
   const [currentMode, setCurrentMode] = useState(1);
 
   const MODE = {
@@ -45,10 +49,47 @@ const NewMinionSafe = () => {
       setLoading(false);
     }
   };
+
+  const saveBoostMeta = async (delegate, minionAddress) => {
+    const messageHash = web3Connect.web3.utils.sha3(dao.address);
+    const signature = await web3Connect.web3.eth.personal.sign(
+      messageHash,
+      user.username,
+    );
+
+    const _newMinionSafe = {
+      delegate,
+      minionAddress,
+      date: Date.now(),
+      safeAddress: null,
+    };
+
+    const updateMinionSafeObject = {
+      contractAddress: dao.address,
+      boostKey: 'minionSafe',
+      metadata: _newMinionSafe,
+      network: network.network,
+      signature,
+    };
+
+    console.log('updateMinionSafeObject', updateMinionSafeObject);
+
+    const result = await boostPost('dao/boost', updateMinionSafeObject);
+
+    if (result === 'success') {
+      updateDaoMetadata({
+        ...daoMetadata,
+        boosts: { ...daoMetadata, customTheme: _newMinionSafe },
+      });
+    } else {
+      alert('error: forbidden');
+    }
+  };
+
   const onSubmitExistingSafe = (values) => {
     console.log(values);
   };
-  const onSubmitNewSafe = (values) => {
+  const onSubmitNewSafe = async (values) => {
     setLoading(true);
 
     console.log(values);
@@ -58,6 +99,7 @@ const NewMinionSafe = () => {
       createAndAddModules:
         supportedChains[network.network_id].safe_create_and_add_modules,
       safeMasterCopy: supportedChains[network.network_id].safe_master_copy,
+      network: network,
     };
     console.log('setupValues', setupValues);
     const minionSafeService = new MinionSafeService(
@@ -65,6 +107,8 @@ const NewMinionSafe = () => {
       user.username,
       setupValues,
     );
+
+    // await saveBoostMeta(values.applicantHidden, values.minionAddress);
 
     try {
       minionSafeService.setup(
@@ -95,6 +139,7 @@ const NewMinionSafe = () => {
             <MinionSafeEasyMode
               minions={dao.graphData.minions}
               submitAction={onSubmitNewSafe}
+              saveBoostMeta={saveBoostMeta}
               loading={loading}
             />
           ) : (

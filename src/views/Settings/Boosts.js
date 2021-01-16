@@ -38,6 +38,7 @@ const boostList = [
     price: '0',
     modalName: 'newMinionSafe',
     modalBody: <NewMinionSafe />,
+    dependency: 'vanillaMinions',
   },
   {
     name: 'Notifications',
@@ -48,6 +49,17 @@ const boostList = [
     price: '0',
   },
 ];
+
+const hasDependentBoost = (dao, boostKey) => {
+  if (boostKey === 'vanillaMinions') {
+    const minions = dao?.graphData?.minions.length;
+    console.log('Minion', dao.boosts, minions);
+    return minions;
+  }
+  const boostData = dao.boosts[boostKey];
+  console.log(dao.boosts, dao);
+  return boostData && boostData.active;
+};
 
 const Boosts = () => {
   const [dao] = useDao();
@@ -101,12 +113,21 @@ const Boosts = () => {
                 Settings
               </Button>
             ) : (
-              <Button
-                textTransform='uppercase'
-                onClick={() => openModal(boost.modalName)}
-              >
-                Add This App
-              </Button>
+              <>
+                {boost.dependency &&
+                !hasDependentBoost(dao, boost.dependency) ? (
+                  <Button textTransform='uppercase' disabled={true}>
+                    Needs {boost.dependency}
+                  </Button>
+                ) : (
+                  <Button
+                    textTransform='uppercase'
+                    onClick={() => openModal(boost.modalName)}
+                  >
+                    Add This App
+                  </Button>
+                )}
+              </>
             )}
           </>
         )}

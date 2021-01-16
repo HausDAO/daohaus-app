@@ -12,7 +12,6 @@ import AddressInput from '../Forms/AddressInput';
 import { truncateAddr } from '../../utils/helpers';
 
 const MinionSafeEasyMode = ({ minions, submitAction, loading }) => {
-
   const { handleSubmit, register, setValue, watch } = useForm();
 
   const onSubmit = (values) => {
