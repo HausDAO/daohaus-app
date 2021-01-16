@@ -36,13 +36,14 @@ const mergeDataWithTokenPrice = (
   uniswapDataMap,
   isMainnet
 ) => {
+  console.log(graphTokenData);
   return graphTokenData.map((tokenType) => {
     const { token, tokenBalance } = tokenType;
     let usdVal;
     if (isMainnet) {
-      usdVal = tokenPrices[token.tokenAddress].usd || 0;
+      usdVal = tokenPrices[token.tokenAddress]?.usd || 0;
     } else {
-      usdVal = tokenPrices[token.altAddress].usd || 0;
+      usdVal = tokenPrices[token.altAddress]?.usd || 0;
     }
     const logoUri = uniswapDataMap[token.symbol]?.logoUri
       ? uniswapDataMap[token.symbol].logoUri

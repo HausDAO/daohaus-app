@@ -10,7 +10,6 @@ export const InjectedProvider = ({ children }) => {
   const [injectedProvider, setInjectedProvider] = useState(null);
   const [injectedChain, setInjectedChain] = useState(null);
 
-  console.log(injectedProvider);
   const connectProvider = () => {
     const provider = findInjectedProvider();
     if (!supportedChains[provider.chainId]) {
