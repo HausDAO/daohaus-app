@@ -51,7 +51,7 @@ export const DaoProvider = ({ children }) => {
   const [isMember, setIsMember] = useState(false);
 
   const hasPerformedBatchQuery = useRef(false);
-  const hasCheckedIsMember = useRef(false);
+  const currentMember = useRef(false);
 
   useEffect(() => {
     //This condition is brittle. If one request passes, but the rest fail
@@ -116,9 +116,11 @@ export const DaoProvider = ({ children }) => {
           member.memberAddress === injectedProvider.provider.selectedAddress
       );
     };
-    if (daoMembers && !hasCheckedIsMember.current && injectedProvider) {
+    if (daoMembers && injectedProvider) {
+      if (currentMember.current !== injectedProvider?.provider?.selectedAddress)
+        console.log("render");
       setIsMember(checkIfMember(daoMembers));
-      hasCheckedIsMember.current = true;
+      currentMember.current = injectedProvider?.provider?.selectedAddress;
     }
   }, [daoMembers, injectedProvider]);
 

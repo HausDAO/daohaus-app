@@ -10,6 +10,7 @@ export const InjectedProvider = ({ children }) => {
   const [injectedProvider, setInjectedProvider] = useState(null);
   const [injectedChain, setInjectedChain] = useState(null);
 
+  console.log(injectedProvider);
   const connectProvider = () => {
     const provider = findInjectedProvider();
     if (!supportedChains[provider.chainId]) {
@@ -56,7 +57,7 @@ export const InjectedProvider = ({ children }) => {
       connectProvider();
     };
     const accountsChanged = (account) => {
-      // console.log(account);
+      connectProvider();
     };
     if (!window.ethereum) {
       console.warn("Cannot detect injected provider");
