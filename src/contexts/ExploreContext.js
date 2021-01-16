@@ -4,8 +4,7 @@ import { useQuery } from 'react-apollo';
 import { GET_TOKENS } from '../utils/apollo/explore-queries';
 import {
   SORT_OPTIONS,
-  PURPOSE_FILTER_OPTIONS,
-  VERSION_FILTER_OPTIONS,
+  EXPLORE_FILTER_OPTIONS,
 } from '../content/explore-content';
 // import { getUsd, XDAI_TOKEN_PAIRS } from '../util/prices';
 
@@ -18,8 +17,15 @@ const initialState = {
   tags: [],
   filters: {
     members: ['1'],
-    versions: VERSION_FILTER_OPTIONS.map((o) => o.value),
-    purpose: PURPOSE_FILTER_OPTIONS.map((o) => o.value),
+    purpose: EXPLORE_FILTER_OPTIONS.filter((o) => o.type === 'purpose').map(
+      (o) => o.value,
+    ),
+    version: EXPLORE_FILTER_OPTIONS.filter((o) => o.type === 'version').map(
+      (o) => o.value,
+    ),
+    network: EXPLORE_FILTER_OPTIONS.filter((o) => o.type === 'network').map(
+      (o) => o.value,
+    ),
   },
   searchTerm: null,
 };

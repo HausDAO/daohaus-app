@@ -1,16 +1,10 @@
 import React from 'react';
 import { Flex } from '@chakra-ui/react';
 
-import {
-  MEMBER_FILTER_OPTIONS,
-  VERSION_FILTER_OPTIONS,
-  PURPOSE_FILTER_OPTIONS,
-} from '../../content/explore-content';
 import ExploreFilterList from './ExploreFilterList';
 import ExploreSearch from './ExploreSearch';
 import ExploreSort from './ExploreSort';
 import ExploreTagList from './ExploreTagList';
-import TextBox from '../Shared/TextBox';
 
 const ExploreFilters = () => {
   return (
@@ -18,27 +12,7 @@ const ExploreFilters = () => {
       <Flex direction='row' align='center' justify='flex-start'>
         <ExploreSearch />
         <ExploreSort />
-
-        {/* <div>
-        <p>Filters</p>
-        <ExploreFilterList
-          filterKey='members'
-          name='Members'
-          options={MEMBER_FILTER_OPTIONS}
-        />
-
-        <ExploreFilterList
-          filterKey='versions'
-          name='Version'
-          options={VERSION_FILTER_OPTIONS}
-        />
-
-        <ExploreFilterList
-          filterKey='purpose'
-          name='Purpose'
-          options={PURPOSE_FILTER_OPTIONS}
-        />
-      </div> */}
+        <ExploreFilterList />
       </Flex>
 
       <ExploreTagList />

@@ -42,12 +42,19 @@ const ExploreList = () => {
         return false;
       }
       const memberCount = dao.members.length > (state.filters.members[0] || 0);
-      const versionMatch = state.filters.versions.includes(dao.version);
+      const versionMatch = state.filters.version.includes(dao.version);
       const purposeMatch = state.filters.purpose.includes(
         dao.apiMetadata.purpose,
       );
+      const networkMatch = state.filters.network.includes(
+        dao.apiMetadata.networkId,
+      );
       return (
-        !dao.apiMetadata.hide && memberCount && versionMatch && purposeMatch
+        !dao.apiMetadata.hide &&
+        memberCount &&
+        versionMatch &&
+        purposeMatch &&
+        networkMatch
       );
     });
 

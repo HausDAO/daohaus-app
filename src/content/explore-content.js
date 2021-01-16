@@ -19,51 +19,75 @@ export const SORT_OPTIONS = [
   },
 ];
 
-export const MEMBER_FILTER_OPTIONS = [
+export const EXPLORE_FILTER_OPTIONS = [
   {
+    name: 'Mainnet',
     value: '1',
-    name: 'Has more than one Member',
-  },
-];
-
-export const VERSION_FILTER_OPTIONS = [
-  {
-    value: '1',
-    name: 'Moloch V1',
+    type: 'network',
   },
   {
-    value: '2',
-    name: 'Moloch V2',
+    name: 'xDai',
+    value: '100',
+    type: 'network',
   },
   {
-    value: '2.1',
-    name: 'Moloch V2.1',
+    name: 'Kovan',
+    value: '42',
+    type: 'network',
   },
-];
-
-export const PURPOSE_FILTER_OPTIONS = [
   {
-    value: 'Grants',
+    name: 'Rinkeby',
+    value: '4',
+    type: 'network',
+  },
+  {
     name: 'Grants (Accelerators)',
+    value: 'Grants',
+    type: 'purpose',
   },
   {
-    value: 'Ventures',
     name: 'Ventures (Investments)',
+    value: 'Ventures',
+    type: 'purpose',
   },
   {
-    value: 'Guilds',
     name: 'Guilds (Services)',
+    value: 'Guilds',
+    type: 'purpose',
   },
   {
-    value: 'Clubs',
     name: 'Clubs (Social)',
+    value: 'Clubs',
+    type: 'purpose',
   },
   {
-    value: 'Non-profit',
     name: 'Non-profit (Impact)',
+    value: 'Non-profit',
+    type: 'purpose',
   },
   {
-    value: 'Products',
     name: 'Product (Project)',
+    value: 'Products',
+    type: 'purpose',
+  },
+  {
+    name: 'Moloch V1',
+    value: '1',
+    type: 'version',
+  },
+  {
+    name: 'Moloch V2',
+    value: '2',
+    type: 'version',
+  },
+  {
+    name: 'Moloch V2.1',
+    value: '2.1',
+    type: 'version',
+  },
+  {
+    name: 'More than one member',
+    value: 'members',
+    type: 'members',
   },
 ];
