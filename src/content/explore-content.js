@@ -87,7 +87,7 @@ export const EXPLORE_FILTER_OPTIONS = [
   },
   {
     name: 'More than one member',
-    value: 'members',
+    value: '1',
     type: 'members',
   },
 ];

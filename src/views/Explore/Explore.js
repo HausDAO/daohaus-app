@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from 'react';
-import { Box, Flex, Spinner } from '@chakra-ui/react';
+import { Box, Spinner } from '@chakra-ui/react';
 
 import ExploreGraphInit from '../../contexts/ExploreGraphInit';
 import { ExploreContext } from '../../contexts/ExploreContext';
@@ -16,7 +16,6 @@ const Explore = () => {
   //   // eslint-disable-next-line react-hooks/exhaustive-deps
   // }, []);
 
-  // console.log('daos', daos);
   useEffect(() => {
     if (fetchComplete) {
       dispatch({ type: 'setAllDaos', payload: daos });

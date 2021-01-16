@@ -20,7 +20,6 @@ import TextBox from '../Shared/TextBox';
 import GenericModal from '../Modal/GenericModal';
 import { ipfsPost, ipfsPrePost } from '../../utils/requests';
 import { themeImagePath } from '../../utils/helpers';
-import { defaultTheme } from '../../themes/theme-defaults';
 
 const bodyFonts = [
   'Rubik',

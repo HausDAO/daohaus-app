@@ -12,7 +12,7 @@ import {
 import { TokenService } from '../token-service';
 import { MolochService } from '../moloch-service';
 import { supportedChains } from '../chains';
-import { getTotalBankValue } from '../bank-helpers';
+// import { getTotalBankValue } from '../bank-helpers';
 
 export const resolvers = {
   Moloch: {

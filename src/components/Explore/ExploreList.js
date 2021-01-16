@@ -1,6 +1,5 @@
 import { Flex } from '@chakra-ui/react';
 import React, { useContext, useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
 
 import { ExploreContext } from '../../contexts/ExploreContext';
 import ExploreCard from './ExploreCard';
@@ -8,8 +7,6 @@ import ExploreCard from './ExploreCard';
 const ExploreList = () => {
   const [daos, setDaos] = useState([]);
   const { state } = useContext(ExploreContext);
-
-  console.log('state', state);
 
   useEffect(() => {
     let searchedDaos;
@@ -46,9 +43,8 @@ const ExploreList = () => {
       const purposeMatch = state.filters.purpose.includes(
         dao.apiMetadata.purpose,
       );
-      const networkMatch = state.filters.network.includes(
-        dao.apiMetadata.networkId,
-      );
+      const networkMatch = state.filters.network.includes(dao.networkId);
+
       return (
         !dao.apiMetadata.hide &&
         memberCount &&

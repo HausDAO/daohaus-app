@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useContext } from 'react';
 import {
   Menu,
   MenuButton,
@@ -9,6 +9,8 @@ import {
   Icon,
   MenuDivider,
   Text,
+  Switch,
+  FormLabel,
 } from '@chakra-ui/react';
 import { RiArrowDropDownFill } from 'react-icons/ri';
 
@@ -18,18 +20,36 @@ import { ExploreContext } from '../../contexts/ExploreContext';
 const ExploreFilterList = () => {
   const { state, dispatch } = useContext(ExploreContext);
 
-  const handleFilterSelect = (option) => {
-    console.log('option', option);
+  const handleFilterSelect = (option, category, e) => {
+    let updatedFilterValues;
+    if (!e.target.checked) {
+      updatedFilterValues = state.filters[category].filter(
+        (f) => f !== option.value,
+      );
+    } else {
+      updatedFilterValues = [...state.filters[category], option.value];
+    }
+
+    dispatch({
+      type: 'updateFilter',
+      payload: { [category]: updatedFilterValues },
+    });
   };
 
-  const renderOption = (option) => {
+  const renderOption = (option, category) => {
     return (
-      <MenuItem
-        key={option.value}
-        onClick={() => handleFilterSelect(option)}
-        value={option.value}
-      >
-        {option.name}
+      <MenuItem key={option.value} value={option.value}>
+        <Switch
+          id={option.name}
+          size='sm'
+          colorScheme='secondary'
+          mr={3}
+          isChecked={state.filters[category].includes(option.value)}
+          onChange={(e) => handleFilterSelect(option, category, e)}
+        />
+        <FormLabel htmlFor={option.name} mb='0'>
+          {option.name}
+        </FormLabel>
       </MenuItem>
     );
   };
@@ -44,23 +64,20 @@ const ExploreFilterList = () => {
         Filter By
       </Text>
 
-      <Menu isLazy>
+      <Menu isLazy closeOnSelect={false}>
         <MenuButton
           textTransform='uppercase'
           fontFamily='heading'
           color='secondary.500'
           _hover={{ color: 'secondary.400' }}
         >
-          hi there
-          {/* {filter ? filter.name : ''}
-           */}
           <Icon as={RiArrowDropDownFill} color='secondary.500' />
         </MenuButton>
         <MenuList bg='black'>
           <MenuGroup title='Network'>
             {EXPLORE_FILTER_OPTIONS.map((option) => {
               if (option.type === 'network') {
-                return renderOption(option);
+                return renderOption(option, 'network');
               }
               return null;
             })}
@@ -69,7 +86,7 @@ const ExploreFilterList = () => {
           <MenuGroup title='Purpose'>
             {EXPLORE_FILTER_OPTIONS.map((option) => {
               if (option.type === 'purpose') {
-                return renderOption(option);
+                return renderOption(option, 'purpose');
               }
               return null;
             })}
@@ -78,7 +95,7 @@ const ExploreFilterList = () => {
           <MenuGroup title='Version'>
             {EXPLORE_FILTER_OPTIONS.map((option) => {
               if (option.type === 'version') {
-                return renderOption(option);
+                return renderOption(option, 'version');
               }
               return null;
             })}
@@ -87,7 +104,7 @@ const ExploreFilterList = () => {
           <MenuGroup title='Member Count'>
             {EXPLORE_FILTER_OPTIONS.map((option) => {
               if (option.type === 'members') {
-                return renderOption(option);
+                return renderOption(option, 'members');
               }
               return null;
             })}
