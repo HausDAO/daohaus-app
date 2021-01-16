@@ -16,11 +16,11 @@ export const InjectedProvider = ({ children }) => {
       console.error("This is not a supported chain");
       return;
     }
+
     const chain = {
       ...supportedChains[provider.chainId],
       chainId: provider.chainId,
     };
-
     setInjectedProvider(new ethers.providers.Web3Provider(provider));
     setInjectedChain(chain);
   };
@@ -52,6 +52,7 @@ export const InjectedProvider = ({ children }) => {
   //This useEffect handles the initialization of EIP-1193 listeners
   //https://eips.ethereum.org/EIPS/eip-1193
   useEffect(() => {
+    if (injectedProvider) return;
     const handleChainChange = (chainId) => {
       connectProvider();
     };
@@ -66,9 +67,8 @@ export const InjectedProvider = ({ children }) => {
       .on("accountsChanged", accountsChanged)
       .on("chainChanged", handleChainChange);
     return () => {
-      window.ethereum
-        .removeListener("accountsChanged", handleChainChange)
-        .removeListener("chainChanged", accountsChanged);
+      window.ethereum.removeListener("accountsChanged", handleChainChange);
+      window.ethereum.removeListener("chainChanged", accountsChanged);
     };
   }, [injectedProvider]);
 

@@ -118,8 +118,7 @@ export const DaoProvider = ({ children }) => {
     };
     if (daoMembers && injectedProvider) {
       if (currentMember.current !== injectedProvider?.provider?.selectedAddress)
-        console.log("render");
-      setIsMember(checkIfMember(daoMembers));
+        setIsMember(checkIfMember(daoMembers));
       currentMember.current = injectedProvider?.provider?.selectedAddress;
     }
   }, [daoMembers, injectedProvider]);
