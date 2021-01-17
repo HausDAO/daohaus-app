@@ -30,24 +30,22 @@ const proposalTest = (data, shouldEqual, pollId) => {
     );
   }
 };
+// console.log("Poll Started");
+// console.log("GraphFetch:", graphFetch);
+// console.log("testFn:", testFn);
+// console.log("shouldEqual:", shouldEqual);
+// console.log("Args:", args);
+// console.log("Actions:", actions);
 
 export const createPoll = ({ interval = 2000, tries = 20, action = null }) => {
   ///////////////////////GENERIC POLL//////////////////
   const startPoll = ({ graphFetch, testFn, shouldEqual, args, actions }) => {
-    console.log("Poll Started");
-    console.log("GraphFetch:", graphFetch);
-    console.log("testFn:", testFn);
-    console.log("shouldEqual:", shouldEqual);
-    console.log("Args:", args);
-    console.log("Actions:", actions);
     let tryCount = 0;
     const pollId = setInterval(async () => {
       if (tryCount < tries) {
         try {
           const res = await graphFetch(args);
-          console.log("res", res);
           const testResult = testFn(res, shouldEqual, pollId);
-          console.log("testResult", testResult);
           if (testResult) {
             clearInterval(pollId);
             actions.onSuccess();

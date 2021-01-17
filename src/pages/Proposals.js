@@ -6,7 +6,12 @@ import { useCustomTheme } from "../contexts/CustomThemeContext";
 import { useInjectedProvider } from "../contexts/InjectedProviderContext";
 import { useTX } from "../contexts/TXContext";
 import { MolochService } from "../services/molochService";
-import { createHash, detailsToJSON, numberWithCommas } from "../utils/general";
+import {
+  createHash,
+  detailsToJSON,
+  numberWithCommas,
+  timeToNow,
+} from "../utils/general";
 import { createPoll } from "../utils/polls";
 
 import {
@@ -17,7 +22,7 @@ import {
 } from "../utils/proposalUtils";
 
 const Proposals = React.memo(function Proposals({ overview, proposals }) {
-  const { injectedProvider } = useInjectedProvider();
+  const { injectedProvider, address } = useInjectedProvider();
   const { daoid, daochain } = useParams();
   const { theme } = useCustomTheme();
   const { refreshDao } = useTX();
@@ -29,7 +34,7 @@ const Proposals = React.memo(function Proposals({ overview, proposals }) {
       description: "Jordan is using this Contract to test the DaoHaus app",
       hash,
     });
-    const from = injectedProvider.currentProvider?.selectedAddress;
+    const from = address;
     const sampleData = [
       /*applicant*/ from,
       /*sharesRequested:*/ "0",
@@ -78,6 +83,7 @@ const Proposals = React.memo(function Proposals({ overview, proposals }) {
               <h3>{titleMaker(proposal)}</h3>
               <p>{descriptionMaker(proposal)}</p>
               <p>{determineProposalStatus(proposal)}</p>
+              <p>{timeToNow(proposal.createdAt)}</p>
               <p>Yes: {proposal.yesShares}</p>
               <p>No: {proposal.noShares}</p>
               {proposal.paymentRequested > 0 && (

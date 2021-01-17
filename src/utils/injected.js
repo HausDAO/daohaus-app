@@ -1,21 +1,23 @@
 export const requestAddresses = async () => {
   if (window.ethereum) {
     try {
-      const addressArray = await window.ethereum.request({
-        method: "eth_requestAccounts",
-        params: [
-          {
-            eth_accounts: {},
-          },
-        ],
-      });
+      // const addressArray = await window.ethereum.request({
+      //   method: "eth_requestAccounts",
+      //   params: [
+      //     {
+      //       eth_accounts: {},
+      //     },
+      //   ],
+      // });
       // localStorage.setItem("hasConnected", addressArray[0]);
-      return addressArray;
     } catch (error) {
       return console.error(error);
     }
   } else if (window.web3) {
     return window.web3.eth.defaultAccount;
+  } else {
+    console.log("No Injected");
+    return null;
   }
 };
 

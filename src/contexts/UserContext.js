@@ -11,13 +11,13 @@ import { useInjectedProvider } from "./InjectedProviderContext";
 export const UserContext = createContext();
 
 export const UserContextProvider = ({ children }) => {
-  const { injectedProvider } = useInjectedProvider();
+  const { address } = useInjectedProvider();
   const [userHubDaos, setUserHubDaos] = useSessionStorage("userHubData", []);
 
   const hasLoadedHubData = userHubDaos.length === 4;
 
   useEffect(() => {
-    if (!userHubDaos.length) {
+    if (!userHubDaos.length && address) {
       hubChainQuery({
         query: HUB_MEMBERSHIPS,
         supportedChains,
@@ -25,15 +25,11 @@ export const UserContextProvider = ({ children }) => {
         apiFetcher: getApiMetadata,
         reactSetter: setUserHubDaos,
         variables: {
-          memberAddress: injectedProvider.currentProvider.selectedAddress,
+          memberAddress: address,
         },
       });
     }
-  }, [
-    injectedProvider.currentProvider.selectedAddress,
-    userHubDaos,
-    setUserHubDaos,
-  ]);
+  }, [address, userHubDaos, setUserHubDaos]);
 
   return (
     <UserContext.Provider value={{ userHubDaos, hasLoadedHubData }}>

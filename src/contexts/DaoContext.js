@@ -19,7 +19,7 @@ export const DaoContext = createContext();
 
 export const DaoProvider = ({ children }) => {
   const { daoid, daochain } = useParams();
-  const { injectedChain, injectedProvider } = useInjectedProvider();
+  const { injectedChain, injectedProvider, address } = useInjectedProvider();
 
   const daoNetworkData = supportedChains[daochain];
   const isCorrectNetwork = daochain === injectedChain?.chainId;
@@ -70,6 +70,7 @@ export const DaoProvider = ({ children }) => {
       !daoid ||
       !daochain ||
       !daoNetworkData ||
+      !address ||
       hasPerformedBatchQuery.current
     )
       return;
@@ -93,6 +94,7 @@ export const DaoProvider = ({ children }) => {
   }, [
     daoid,
     daochain,
+    address,
     daoNetworkData,
     daoActivities,
     daoBalances,
@@ -111,23 +113,15 @@ export const DaoProvider = ({ children }) => {
 
   useEffect(() => {
     const checkIfMember = (daoMembers) => {
-      return daoMembers.some(
-        (member) =>
-          member.memberAddress ===
-          injectedProvider.currentProvider.selectedAddress
-      );
+      return daoMembers.some((member) => member.memberAddress === address);
     };
-    if (daoMembers && injectedProvider) {
-      if (
-        currentMember.current !==
-        injectedProvider.currentProvider?.selectedAddress
-      ) {
+    if (daoMembers && address) {
+      if (currentMember.current !== address) {
         setIsMember(checkIfMember(daoMembers));
-        currentMember.current =
-          injectedProvider.currentProvider?.selectedAddress;
+        currentMember.current = address;
       }
     }
-  }, [daoMembers, injectedProvider]);
+  }, [daoMembers, address]);
 
   const refetch = () => {
     bigGraphQuery({
