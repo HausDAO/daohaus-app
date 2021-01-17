@@ -25,11 +25,15 @@ export const UserContextProvider = ({ children }) => {
         apiFetcher: getApiMetadata,
         reactSetter: setUserHubDaos,
         variables: {
-          memberAddress: injectedProvider.provider.selectedAddress,
+          memberAddress: injectedProvider.currentProvider.selectedAddress,
         },
       });
     }
-  }, [injectedProvider.provider.selectedAddress, userHubDaos, setUserHubDaos]);
+  }, [
+    injectedProvider.currentProvider.selectedAddress,
+    userHubDaos,
+    setUserHubDaos,
+  ]);
 
   return (
     <UserContext.Provider value={{ userHubDaos, hasLoadedHubData }}>

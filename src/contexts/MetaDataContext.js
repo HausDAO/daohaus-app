@@ -29,7 +29,7 @@ export const MetaDataProvider = ({ children }) => {
     null
   );
 
-  const hasFetched = useRef(false);
+  const hasFetchedMetadata = useRef(false);
   const shouldUpdateTheme = useRef(true);
 
   useEffect(() => {
@@ -53,9 +53,9 @@ export const MetaDataProvider = ({ children }) => {
       }
     };
 
-    if (!hasFetched.current && !daoMetadata) {
+    if (!hasFetchedMetadata.current && !daoMetadata) {
       InitMetaData();
-      hasFetched.current = true;
+      hasFetchedMetadata.current = true;
     }
   }, [
     daoid,
@@ -83,7 +83,13 @@ export const MetaDataProvider = ({ children }) => {
 
   return (
     <MetaDataContext.Provider
-      value={{ daoMetadata, daoBoosts, daoCustomTheme }}
+      value={{
+        daoMetadata,
+        daoBoosts,
+        daoCustomTheme,
+        hasFetchedMetadata,
+        shouldUpdateTheme,
+      }}
     >
       {children}
     </MetaDataContext.Provider>
@@ -91,8 +97,18 @@ export const MetaDataProvider = ({ children }) => {
 };
 
 export const useMetaData = () => {
-  const { daoMetadata, daoBoosts, daoCustomTheme } = useContext(
-    MetaDataContext
-  );
-  return { daoMetadata, daoBoosts, daoCustomTheme };
+  const {
+    daoMetadata,
+    daoBoosts,
+    daoCustomTheme,
+    hasFetchedMetadata,
+    shouldUpdateTheme,
+  } = useContext(MetaDataContext);
+  return {
+    daoMetadata,
+    daoBoosts,
+    daoCustomTheme,
+    hasFetchedMetadata,
+    shouldUpdateTheme,
+  };
 };

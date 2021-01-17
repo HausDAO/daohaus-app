@@ -36,7 +36,6 @@ const mergeDataWithTokenPrice = (
   uniswapDataMap,
   isMainnet
 ) => {
-  console.log(graphTokenData);
   return graphTokenData.map((tokenType) => {
     const { token, tokenBalance } = tokenType;
     let usdVal;

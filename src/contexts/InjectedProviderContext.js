@@ -1,6 +1,5 @@
 import React, { useState, useEffect, useContext, createContext } from "react";
-import { ethers } from "ethers";
-
+import Web3 from "web3";
 import { supportedChains } from "../utils/chain";
 import { requestAddresses, findInjectedProvider } from "../utils/injected";
 
@@ -21,10 +20,14 @@ export const InjectedProvider = ({ children }) => {
       ...supportedChains[provider.chainId],
       chainId: provider.chainId,
     };
-    setInjectedProvider(new ethers.providers.Web3Provider(provider));
-    setInjectedChain(chain);
+    const web3 = new Web3(provider);
+    const injectedAddress = web3.currentProvider.selectedAddress;
+    if (injectedAddress) {
+      localStorage.setItem("hasConnected", injectedAddress);
+      setInjectedProvider(web3);
+      setInjectedChain(chain);
+    }
   };
-
   useEffect(() => {
     //This function is kept inside the useEffect to avoid incorrect/stale state.
     const requestAddressFromUser = async () => {
@@ -77,7 +80,6 @@ export const InjectedProvider = ({ children }) => {
 
     if (injectedAddress) {
       connectProvider();
-      localStorage.setItem("hasConnected", injectedAddress);
     } else {
       localStorage.removeItem("hasConnected");
       console.error("Cannot access injected Provider");
@@ -91,7 +93,7 @@ export const InjectedProvider = ({ children }) => {
     setInjectedProvider(null);
     localStorage.removeItem("hasConnected");
   };
-  const address = injectedProvider?.provider?.selectedAddress;
+  const address = injectedProvider?.currentProvider?.selectedAddress;
   return (
     <InjectedProviderContext.Provider
       value={{

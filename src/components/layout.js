@@ -13,7 +13,7 @@ const Layout = ({ sideMenu, children }) => {
         {sideMenu}
       </GridItem>
       <GridItem colStart={2} colEnd={5} bg={theme.colors.background[500]}>
-        <p>Account: {injectedProvider?.provider?.selectedAddress}</p>
+        <p>Account: {injectedProvider.currentProvider?.selectedAddress}</p>
         {children}
       </GridItem>
     </Grid>

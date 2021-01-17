@@ -7,15 +7,14 @@ import { useInjectedProvider } from "../contexts/InjectedProviderContext";
 
 const NetworkList = () => {
   const { userHubDaos } = useLocalUserData();
-  const {
-    injectedProvider: { provider },
-  } = useInjectedProvider();
+  const { injectedProvider } = useInjectedProvider;
+  const provider = injectedProvider?.currentProvider;
 
   const currentNetwork = userHubDaos.find(
-    (dao) => dao.networkID === provider.chainId
+    (dao) => dao.networkID === provider?.chainId
   );
   const otherNetworks = userHubDaos.filter(
-    (dao) => dao.networkID !== provider.chainId
+    (dao) => dao.networkID !== provider?.chainId
   );
 
   return (

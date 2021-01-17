@@ -13,6 +13,7 @@ import { supportedChains } from "../utils/chain";
 import { useInjectedProvider } from "./InjectedProviderContext";
 import { MetaDataProvider } from "./MetaDataContext";
 import { TokenProvider } from "./TokenContext";
+import { TXProvider } from "./TXContext";
 
 export const DaoContext = createContext();
 
@@ -85,7 +86,6 @@ export const DaoProvider = ({ children }) => {
           setter: { setDaoProposals, setDaoActivities },
         },
         { getter: "getMembers", setter: setDaoMembers },
-        // { getter: "getBalances", setter: setDaoBalances },
         { getter: "getTransmutations", setter: setTransmutations },
       ],
     });
@@ -113,15 +113,39 @@ export const DaoProvider = ({ children }) => {
     const checkIfMember = (daoMembers) => {
       return daoMembers.some(
         (member) =>
-          member.memberAddress === injectedProvider.provider.selectedAddress
+          member.memberAddress ===
+          injectedProvider.currentProvider.selectedAddress
       );
     };
     if (daoMembers && injectedProvider) {
-      if (currentMember.current !== injectedProvider?.provider?.selectedAddress)
+      if (
+        currentMember.current !==
+        injectedProvider.currentProvider?.selectedAddress
+      ) {
         setIsMember(checkIfMember(daoMembers));
-      currentMember.current = injectedProvider?.provider?.selectedAddress;
+        currentMember.current =
+          injectedProvider.currentProvider?.selectedAddress;
+      }
     }
   }, [daoMembers, injectedProvider]);
+
+  const refetch = () => {
+    bigGraphQuery({
+      args: {
+        daoID: daoid,
+        chainID: daochain,
+      },
+      getSetters: [
+        { getter: "getOverview", setter: setDaoOverview },
+        {
+          getter: "getActivities",
+          setter: { setDaoProposals, setDaoActivities },
+        },
+        { getter: "getMembers", setter: setDaoMembers },
+        { getter: "getTransmutations", setter: setTransmutations },
+      ],
+    });
+  };
 
   return (
     <DaoContext.Provider
@@ -133,10 +157,15 @@ export const DaoProvider = ({ children }) => {
         daoOverview,
         isMember,
         isCorrectNetwork,
+        refetch,
+        hasPerformedBatchQuery, //Ref, not state
+        currentMember, //Ref, not state
       }}
     >
       <MetaDataProvider>
-        <TokenProvider>{children}</TokenProvider>
+        <TokenProvider>
+          <TXProvider>{children}</TXProvider>
+        </TokenProvider>
       </MetaDataProvider>
     </DaoContext.Provider>
   );
@@ -151,6 +180,9 @@ export const useLocalDaoData = () => {
     daoOverview,
     isMember,
     isCorrectNetwork,
+    refetch,
+    hasPerformedBatchQuery, //Ref, not state
+    currentMember, //Ref, not state
   } = useContext(DaoContext);
   return {
     daoProposals,
@@ -160,5 +192,8 @@ export const useLocalDaoData = () => {
     daoOverview,
     isMember,
     isCorrectNetwork,
+    refetch,
+    hasPerformedBatchQuery,
+    currentMember,
   };
 };

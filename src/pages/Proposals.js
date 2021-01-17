@@ -1,11 +1,13 @@
 import { Button } from "@chakra-ui/react";
-import React from "react";
+import React, { useState } from "react";
 import { useParams } from "react-router-dom";
 import { utils } from "web3";
 import { useCustomTheme } from "../contexts/CustomThemeContext";
 import { useInjectedProvider } from "../contexts/InjectedProviderContext";
+import { useTX } from "../contexts/TXContext";
 import { MolochService } from "../services/molochService";
 import { createHash, detailsToJSON, numberWithCommas } from "../utils/general";
+import { createPoll } from "../utils/polls";
 
 import {
   determineProposalStatus,
@@ -14,16 +16,12 @@ import {
   descriptionMaker,
 } from "../utils/proposalUtils";
 
-const Proposals = React.memo(function Proposals({
-  overview,
-  proposals,
-  activity,
-}) {
+const Proposals = React.memo(function Proposals({ overview, proposals }) {
   const { injectedProvider } = useInjectedProvider();
   const { daoid, daochain } = useParams();
   const { theme } = useCustomTheme();
+  const { refreshDao } = useTX();
 
-  console.log(injectedProvider);
   const testAddUser = () => {
     const hash = createHash();
     const details = detailsToJSON({
@@ -31,31 +29,47 @@ const Proposals = React.memo(function Proposals({
       description: "Jordan is using this Contract to test the DaoHaus app",
       hash,
     });
+    const from = injectedProvider.currentProvider?.selectedAddress;
     const sampleData = [
+      /*applicant*/ from,
       /*sharesRequested:*/ "0",
       /*lootRequested:*/ "0",
       /*tributeOffered:*/ "0",
       /*tributeToken:*/ overview?.depositToken?.tokenAddress,
       /*paymentRequested:*/ "10000000000000000000",
       /*paymentToken:*/ overview?.depositToken?.tokenAddress,
-      /*details*/ details,
-      /*userAddress*/ injectedProvider?.provider?.selectedAddress,
+      /*detailsObj*/ details,
     ];
-    MolochService({
+    const poll = createPoll({ action: "submitProposal" })({
       daoID: daoid,
       chainID: daochain,
-      version: overview?.daoVersion,
-    })("submitUserProposal")(sampleData);
-
-    // ({(txHash, details) =>
-    //   console.log(txHash, details)}
-    // );
+      hash,
+      actions: {
+        onError: (error) => {
+          console.log(`Could not find a matching proposal: ${error}`);
+        },
+        onSuccess: () => {
+          refreshDao();
+          console.log(
+            `Success: New proposal mined and cached on The Graph. We can now update the UI`
+          );
+        },
+      },
+    });
+    MolochService({
+      web3: injectedProvider,
+      daoAddress: daoid,
+      chainID: daochain,
+      version: overview?.version,
+    })("submitProposal")(sampleData, from, poll);
   };
+
   return (
     <>
       <Button bg={theme.colors.primary[500]} onClick={testAddUser}>
         Test Tx: Member Proposal
       </Button>
+
       <ul>
         {proposals &&
           proposals.slice(0, 5).map((proposal) => (

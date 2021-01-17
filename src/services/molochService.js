@@ -21,31 +21,20 @@ export const MolochService = ({ web3, daoAddress, version, chainID }) => {
         return balance;
       };
     }
-    if (service === "submitUserProposal") {
-      const submitUserProposal = async (args) => {
-        console.log(args);
-      };
-      return async (args, poll) => {
-        await submitUserProposal(args);
-        // onExecute("Tx Sent");
-        // if (poll) {
-        //   const pollRef = setInterval(async () => {
-        //     //poll the graph
-        //     try {
-        //       const pollData = await poll.query;
-        //       if (pollData === pollTest) {
-        //         onSuccess("Tx Complete!", pollData);
-        //       }
-        //     } catch (error) {
-        //       onFail("Tx Failed", error);
-        //     }
-        //   }, 3000);
-        //   //listener reference defined here.
-        //   return function cleanUp() {
-        //     clearInterval(pollRef);
-        //     //delete
-        //   };
-        // }
+    if (service === "submitProposal") {
+      return async (args, from, poll) => {
+        const tx = await contract.methods[service](...args);
+        return tx
+          .send("eth_requestAccounts", { from })
+          .on("transactionHash", (txHash) => {
+            if (poll) {
+              poll();
+            }
+            console.log(txHash);
+          })
+          .on("error", (error) => {
+            console.error(error);
+          });
       };
     }
   };
