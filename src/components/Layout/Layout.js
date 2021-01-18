@@ -10,6 +10,7 @@ import {
   Box,
   Spacer,
   Stack,
+  Tooltip,
   IconButton,
   useBreakpointValue,
 } from '@chakra-ui/react';
@@ -48,6 +49,7 @@ import {
   RiRocket2Line,
   RiArrowLeftSLine,
   RiCloseLine,
+  RiSearch2Line,
 } from 'react-icons/ri';
 import { GiCastle } from 'react-icons/gi';
 import { useTheme } from '../../contexts/CustomThemeContext';
@@ -537,24 +539,30 @@ const Layout = ({ children }) => {
               mt={[3, null, null, 12]}
               flexDirection='column'
             >
-              <Button
-                variant='sideNav'
-                as={RouterLink}
-                to={`/dao/${dao.address}/proposals`}
-                _hover={{ backgroundColor: 'white' }}
-                grow='none'
+              <Tooltip
+                label={theme.daoMeta.proposals}
+                aria-label={theme.daoMeta.proposals}
               >
-                <Icon as={RiBookMarkLine} w={6} h={6} />
-                <MotionBox
-                  initial={sideNavOpen ? 'open' : 'closed'}
-                  animate={sideNavOpen ? 'open' : 'closed'}
-                  variants={nav}
-                  fontSize={['lg', null, null, '2xl']}
-                  fontFamily='heading'
+                <Button
+                  variant='sideNav'
+                  as={RouterLink}
+                  to={`/dao/${dao.address}/proposals`}
+                  _hover={{ backgroundColor: 'white' }}
+                  grow='none'
                 >
-                  {theme.daoMeta.proposals}
-                </MotionBox>
-              </Button>
+                  <Icon as={RiBookMarkLine} w={6} h={6} />
+
+                  <MotionBox
+                    initial={sideNavOpen ? 'open' : 'closed'}
+                    animate={sideNavOpen ? 'open' : 'closed'}
+                    variants={nav}
+                    fontSize={['lg', null, null, '2xl']}
+                    fontFamily='heading'
+                  >
+                    {theme.daoMeta.proposals}
+                  </MotionBox>
+                </Button>
+              </Tooltip>
               <Button
                 variant='sideNav'
                 as={RouterLink}
@@ -651,99 +659,131 @@ const Layout = ({ children }) => {
               mt={[3, null, null, 12]}
               flexDirection='column'
             >
-              <Button
-                variant='sideNav'
-                as={RouterLink}
-                to='/explore'
-                // as={Link}
-                // href='https://daohaus.club'
-                // isExternal
-                _hover={{ backgroundColor: 'white' }}
-                grow='none'
+              <Tooltip
+                label='Explore DAOs'
+                aria-label='Explore DAOs'
+                placement='right'
+                hasArrow
               >
-                <Icon as={RiBookMarkLine} w={6} h={6} />
-                <MotionBox
-                  initial={sideNavOpen ? 'open' : 'closed'}
-                  animate={sideNavOpen ? 'open' : 'closed'}
-                  variants={nav}
-                  fontSize={['lg', null, null, '2xl']}
-                  fontFamily='heading'
+                <Button
+                  variant='sideNav'
+                  as={RouterLink}
+                  to='/explore'
+                  _hover={{ backgroundColor: 'white' }}
+                  grow='none'
                 >
-                  Explore DAOs
-                </MotionBox>
-              </Button>
-              <Button
-                variant='sideNav'
-                as={RouterLink}
-                to='/summon'
-                _hover={{ backgroundColor: 'white' }}
-                grow='none'
+                  <Icon as={RiSearch2Line} w={6} h={6} />
+                  <MotionBox
+                    initial={sideNavOpen ? 'open' : 'closed'}
+                    animate={sideNavOpen ? 'open' : 'closed'}
+                    variants={nav}
+                    fontSize={['lg', null, null, '2xl']}
+                    fontFamily='heading'
+                  >
+                    Explore DAOs
+                  </MotionBox>
+                </Button>
+              </Tooltip>
+              <Tooltip
+                label='Summon a DAO'
+                aria-label='Summon a DAO'
+                placement='right'
+                hasArrow
               >
-                <Icon as={RiFireLine} w={6} h={6} />
-                <MotionBox
-                  initial={sideNavOpen ? 'open' : 'closed'}
-                  animate={sideNavOpen ? 'open' : 'closed'}
-                  variants={nav}
-                  fontSize={['lg', null, null, '2xl']}
-                  fontFamily='heading'
+                <Button
+                  variant='sideNav'
+                  as={RouterLink}
+                  to='/summon'
+                  _hover={{ backgroundColor: 'white' }}
+                  grow='none'
                 >
-                  Summon a DAO
-                </MotionBox>
-              </Button>
-              <Button
-                variant='sideNav'
-                as={Link}
-                href={`/dao/0x283bdc900b6ec9397abb721c5bbff5ace46e0f50`}
-                isExternal
-                _hover={{ backgroundColor: 'white' }}
+                  <Icon as={RiFireLine} w={6} h={6} />
+                  <MotionBox
+                    initial={sideNavOpen ? 'open' : 'closed'}
+                    animate={sideNavOpen ? 'open' : 'closed'}
+                    variants={nav}
+                    fontSize={['lg', null, null, '2xl']}
+                    fontFamily='heading'
+                  >
+                    Summon a DAO
+                  </MotionBox>
+                </Button>
+              </Tooltip>
+              <Tooltip
+                label='HausDAO'
+                aria-label='HausDAO'
+                placement='right'
+                hasArrow
               >
-                <Icon as={RiTeamLine} w={6} h={6} />
-                <MotionBox
-                  initial={sideNavOpen ? 'open' : 'closed'}
-                  animate={sideNavOpen ? 'open' : 'closed'}
-                  variants={nav}
-                  fontSize={['lg', null, null, '2xl']}
-                  fontFamily='heading'
+                <Button
+                  variant='sideNav'
+                  as={Link}
+                  href={`/dao/0x283bdc900b6ec9397abb721c5bbff5ace46e0f50`}
+                  isExternal
+                  _hover={{ backgroundColor: 'white' }}
                 >
-                  HausDAO
-                </MotionBox>
-              </Button>
-              <Button
-                variant='sideNav'
-                as={Link}
-                href='https://daohaus.club/help'
-                isExternal
-                _hover={{ backgroundColor: 'white' }}
+                  <Icon as={RiTeamLine} w={6} h={6} />
+                  <MotionBox
+                    initial={sideNavOpen ? 'open' : 'closed'}
+                    animate={sideNavOpen ? 'open' : 'closed'}
+                    variants={nav}
+                    fontSize={['lg', null, null, '2xl']}
+                    fontFamily='heading'
+                  >
+                    HausDAO
+                  </MotionBox>
+                </Button>
+              </Tooltip>
+              <Tooltip
+                label='Help'
+                aria-label='Help'
+                placement='right'
+                hasArrow
               >
-                <Icon as={RiQuestionLine} w={6} h={6} />
-                <MotionBox
-                  initial={sideNavOpen ? 'open' : 'closed'}
-                  animate={sideNavOpen ? 'open' : 'closed'}
-                  variants={nav}
-                  fontSize='sm'
-                  fontFamily='heading'
+                <Button
+                  variant='sideNav'
+                  as={Link}
+                  href='https://daohaus.club/help'
+                  isExternal
+                  _hover={{ backgroundColor: 'white' }}
                 >
-                  Help
-                </MotionBox>
-              </Button>
-              <Button
-                variant='sideNav'
-                as={Link}
-                href='https://daohaus.club/about'
-                isExternal
-                _hover={{ backgroundColor: 'white' }}
+                  <Icon as={RiQuestionLine} w={6} h={6} />
+                  <MotionBox
+                    initial={sideNavOpen ? 'open' : 'closed'}
+                    animate={sideNavOpen ? 'open' : 'closed'}
+                    variants={nav}
+                    fontSize='sm'
+                    fontFamily='heading'
+                  >
+                    Help
+                  </MotionBox>
+                </Button>
+              </Tooltip>
+              <Tooltip
+                label='About DAOhaus'
+                aria-label='About DAOhaus'
+                placement='right'
+                hasArrow
               >
-                <Icon as={GiCastle} w={6} h={6} />
-                <MotionBox
-                  initial={sideNavOpen ? 'open' : 'closed'}
-                  animate={sideNavOpen ? 'open' : 'closed'}
-                  variants={nav}
-                  fontSize='sm'
-                  fontFamily='heading'
+                <Button
+                  variant='sideNav'
+                  as={Link}
+                  href='https://daohaus.club/about'
+                  isExternal
+                  _hover={{ backgroundColor: 'white' }}
                 >
-                  About
-                </MotionBox>
-              </Button>
+                  <Icon as={GiCastle} w={6} h={6} />
+                  <MotionBox
+                    initial={sideNavOpen ? 'open' : 'closed'}
+                    animate={sideNavOpen ? 'open' : 'closed'}
+                    variants={nav}
+                    fontSize='sm'
+                    fontFamily='heading'
+                  >
+                    About
+                  </MotionBox>
+                </Button>
+              </Tooltip>
             </Stack>
           )}
           <Spacer />
@@ -755,14 +795,21 @@ const Layout = ({ children }) => {
             mt={6}
             alignSelf='flex-end'
           >
-            <IconButton
-              icon={sideNavOpen ? <RiArrowLeftSLine /> : <RiLinksLine />}
-              size='lg'
-              variant='ghost'
-              isRound='true'
-              as={Link}
-              onClick={handleNavToggle}
-            />
+            <Tooltip
+              label='Links'
+              aria-label='Links'
+              placement='right'
+              hasArrow
+            >
+              <IconButton
+                icon={sideNavOpen ? <RiArrowLeftSLine /> : <RiLinksLine />}
+                size='lg'
+                variant='ghost'
+                isRound='true'
+                as={Link}
+                onClick={handleNavToggle}
+              />
+            </Tooltip>
 
             <MotionFlex
               direction='row'
