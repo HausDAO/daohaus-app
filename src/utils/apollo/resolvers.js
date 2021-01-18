@@ -25,7 +25,19 @@ export const resolvers = {
       return context.networkId;
     },
     guildBankValue: async (moloch, _args, _context) => {
-      return getTotalBankValue(moloch.tokenBalances, _context.priceDataJson);
+      if (moloch.version === '1') {
+        const usdPrice = _context.priceDataJson[
+          moloch.depositToken.tokenAddress
+        ] || {
+          price: 0,
+        };
+        return (
+          usdPrice.price *
+          (moloch.guildBankBalanceV1 / 10 ** moloch.depositToken.decimals)
+        );
+      } else {
+        return getTotalBankValue(moloch.tokenBalances, _context.priceDataJson);
+      }
     },
   },
   Proposal: {
