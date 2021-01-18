@@ -1,6 +1,6 @@
 import React, { useContext } from 'react';
 import makeBlockie from 'ethereum-blockies-base64';
-import { Avatar, Box, Flex, Button, Badge, Link } from '@chakra-ui/react';
+import { Avatar, Box, Flex, Button, Badge, Link, Text } from '@chakra-ui/react';
 import { Link as RouterLink } from 'react-router-dom';
 
 import ContentBox from '../Shared/ContentBox';
@@ -30,10 +30,10 @@ const ExploreCard = ({ dao }) => {
               <Badge
                 key={tag}
                 onClick={() => handleTagSelect(tag)}
-                colorScheme='green'
+                colorScheme='secondary.500'
                 variant='outline'
                 fontSize='9px'
-                mr={2}
+                _notLast={{ marginRight: '3px' }}
                 mt={1}
                 _hover={{
                   cursor: 'pointer',
@@ -53,7 +53,7 @@ const ExploreCard = ({ dao }) => {
     switch (dao.apiMetadata.version) {
       case '1': {
         return (
-          <Button as={Link} href={pokemolUrl(dao)} isExternal>
+          <Button minWidth='80px' as={Link} href={pokemolUrl(dao)} isExternal>
             Go
           </Button>
         );
@@ -61,7 +61,7 @@ const ExploreCard = ({ dao }) => {
       case '2':
       case '2.1': {
         return (
-          <Button as={RouterLink} to={`/dao/${dao.id}`}>
+          <Button minWidth='80px' as={RouterLink} to={`/dao/${dao.id}`}>
             Go
           </Button>
         );
@@ -72,53 +72,76 @@ const ExploreCard = ({ dao }) => {
     }
   };
   return (
-    <>
-      <ContentBox m={3} w='320px'>
-        <Flex direction='row' align='center'>
-          <Avatar
-            src={
-              dao.apiMetadata?.avatarImg
-                ? themeImagePath(dao.apiMetadata.avatarImg)
-                : makeBlockie(dao.id)
-            }
-            mr='10px'
-          ></Avatar>
-          <Box fontSize='xl' fontWeight={700} fontFamily='heading'>
-            {dao.apiMetadata.name}
-          </Box>
-        </Flex>
-        <Box fontSize='sm' mt={2}>
-          {dao.apiMetadata.description}
+    <ContentBox
+      w={['100%', '100%', '100%', '340px', '340px']}
+      h='340px'
+      mt={5}
+      style={{ transition: 'all .15s linear' }}
+      _hover={{ transform: 'scale(1.05)' }}
+    >
+      <Flex direction='row' align='center' w='100%'>
+        <Avatar
+          src={
+            dao.apiMetadata?.avatarImg
+              ? themeImagePath(dao.apiMetadata.avatarImg)
+              : makeBlockie(dao.id)
+          }
+          mr='10px'
+          bg='primary'
+        ></Avatar>
+        <Box
+          fontSize='xl'
+          fontWeight={300}
+          fontFamily='heading'
+          lineHeight='1.125'
+        >
+          {dao.apiMetadata.name}
         </Box>
+      </Flex>
+      <Text
+        fontSize='md'
+        color='whiteAlpha.800'
+        h='80px'
+        my={3}
+        style={{
+          WebkitBoxOrient: 'vertical',
+          WebkitLineClamp: 3,
+          overflow: 'hidden',
+          textOverflow: 'ellipsis',
+          maxWidth: '100%',
+        }}
+      >
+        {dao.apiMetadata.description}
+      </Text>
 
-        <Box fontSize='md' mt={2} fontFamily='heading'>
-          {numberWithCommas(dao.guildBankValue.toFixed(2))}
+      <Box fontSize='md' mt={2} fontFamily='heading'>
+        {numberWithCommas(dao.guildBankValue.toFixed(2))}
+      </Box>
+      <Flex direction='row' align='center'>
+        <Box fontSize='sm' mr={3}>
+          {dao.members.length} Members
         </Box>
-        <Flex direction='row' align='center'>
-          <Box fontSize='sm' mr={3}>
-            {dao.members.length} Members
-          </Box>
-          <Box fontSize='sm' mr={3}>
-            |
-          </Box>
-          <Box fontSize='sm'>
-            {dao.tokens.length} Token{dao.tokens.length > 1 ? 's' : ''}
-          </Box>
-        </Flex>
-        <Flex direction='row' align='center'>
-          <Badge colorScheme='secondary' variant='solid' m='2px 2px 2px 0px'>
-            {dao.apiMetadata?.purpose}
-          </Badge>
-          <Badge colorScheme='primary' variant='solid' m='2px 2px 2px 0px'>
-            {dao.apiMetadata?.network}
-          </Badge>
-        </Flex>
+        <Box fontSize='sm' mr={3}>
+          |
+        </Box>
+        <Box fontSize='sm'>
+          {dao.tokens.length} Token{dao.tokens.length > 1 ? 's' : ''}
+        </Box>
+      </Flex>
+      <Flex direction='row' align='center'>
+        <Badge colorScheme='secondary' variant='outline' m='3px 5px 3px 0px'>
+          {dao.apiMetadata?.purpose}
+        </Badge>
+        <Badge colorScheme='primary' variant='outline' m='3px 5px 3px 0px'>
+          {dao.apiMetadata?.network}
+        </Badge>
+      </Flex>
 
-        {renderTags()}
-
+      {renderTags()}
+      <Flex justify='flex-end' w='100%'>
         <Box mt={5}>{renderLink(dao)}</Box>
-      </ContentBox>
-    </>
+      </Flex>
+    </ContentBox>
   );
 };
 
