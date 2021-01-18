@@ -55,6 +55,7 @@ const MemberDaoList = ({ daos, label }) => {
                 : makeBlockie(dao.id)
             }
             mb={3}
+            bg='black'
           >
             {healthCount ? (
               <AvatarBadge
