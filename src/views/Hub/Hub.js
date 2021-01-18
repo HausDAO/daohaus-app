@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import { Box, Flex, Link, Spinner } from '@chakra-ui/react';
+import { Box, Flex, Spinner } from '@chakra-ui/react';
+import { Link as RouterLink } from 'react-router-dom';
 
 import { useUser } from '../../contexts/PokemolContext';
 import { useTheme } from '../../contexts/CustomThemeContext';
@@ -78,15 +79,14 @@ const Hub = () => {
                       {localDaos.length > 0 ? (
                         <Box w='100%'>
                           <MemberDaoList label={'MEMBER OF'} daos={localDaos} />
-                          <Link
-                            href='https://daohaus.club/explore'
-                            isExternal
+                          <RouterLink
+                            to='/explore'
                             fontSize='md'
                             textTransform='uppercase'
                             color='secondary.500'
                           >
-                            Explore more DAOs on DAOhaus
-                          </Link>
+                            Explore more DAOs
+                          </RouterLink>
                         </Box>
                       ) : null}
 
@@ -117,15 +117,14 @@ const Hub = () => {
                           />
                           <TextBox ml='15px'>Your daos will show here</TextBox>
                         </Flex>
-                        <Link
-                          href='https://daohaus.club/explore'
-                          isExternal
+                        <RouterLink
+                          to='/explore'
                           fontSize='md'
                           textTransform='uppercase'
                           color='secondary.500'
                         >
-                          Explore more DAOs on DAOhaus
-                        </Link>
+                          Explore more DAOs
+                        </RouterLink>
                       </Box>
                     </ContentBox>
                   )}
