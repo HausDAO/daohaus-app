@@ -77,7 +77,6 @@ const GraphInit = () => {
 
   useEffect(() => {
     if (localMembers) {
-      // updateMembers(localMembers.filter((member) => member.exists));
       updateMembers(localMembers);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps

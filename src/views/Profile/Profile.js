@@ -5,7 +5,6 @@ import { Box, Flex } from '@chakra-ui/react';
 import ProfileOverviewCard from '../../components/Profile/ProfileOverviewCard';
 import {
   useMembers,
-  useMemberWallet,
   useRefetchQuery,
   useUser,
 } from '../../contexts/PokemolContext';
@@ -16,7 +15,6 @@ const Profile = () => {
   const params = useParams();
   const [members] = useMembers();
   const [user] = useUser();
-  const [memberWallet] = useMemberWallet();
   const [memberProfile, setMemberProfile] = useState(null);
   const [, updateRefetchQuery] = useRefetchQuery();
   const [isMember, setIsMember] = useState(false);
@@ -33,12 +31,10 @@ const Profile = () => {
   }, [members, params]);
 
   useEffect(() => {
-    if (memberWallet) {
-      setIsMember(
-        memberWallet.memberAddress.toLowerCase() === params.id.toLowerCase(),
-      );
+    if (user) {
+      setIsMember(user.username.toLowerCase() === params.id.toLowerCase());
     }
-  }, [memberWallet, params]);
+  }, [params, user]);
 
   useEffect(() => {
     const interval = setInterval(() => {
