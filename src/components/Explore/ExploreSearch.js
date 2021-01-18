@@ -20,6 +20,7 @@ const ExploreSearch = () => {
   return (
     <Input
       maxW='250px'
+      mr={6}
       type='search'
       className='input'
       placeholder='Search Daos'
