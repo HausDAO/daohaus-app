@@ -21,12 +21,7 @@ const ExploreSort = () => {
   };
 
   return (
-    <Flex
-      direction='row'
-      w={['100%', null, null, '50%']}
-      mb={[5, null, null, 0]}
-      ml='5'
-    >
+    <Flex direction='row' ml={10}>
       <Text textTransform='uppercase' fontFamily='heading' mr={3}>
         Sort By
       </Text>
