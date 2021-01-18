@@ -60,11 +60,11 @@ const ExploreFilterList = () => {
   }, 0);
 
   return (
-    <Flex direction='row' ml={10}>
-      <Text textTransform='uppercase' fontFamily='heading' mr={3}>
-        Filters ({filterCount})
-      </Text>
-
+    <Flex
+      direction='row'
+      w={['100%', null, null, 'auto']}
+      my={[5, null, null, 0]}
+    >
       <Menu isLazy closeOnSelect={false}>
         <MenuButton
           textTransform='uppercase'
@@ -72,6 +72,7 @@ const ExploreFilterList = () => {
           color='secondary.500'
           _hover={{ color: 'secondary.400' }}
         >
+          Filters ({filterCount})
           <Icon as={RiArrowDropDownFill} color='secondary.500' />
         </MenuButton>
         <MenuList bg='black'>

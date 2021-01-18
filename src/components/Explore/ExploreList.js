@@ -68,17 +68,13 @@ const ExploreList = () => {
   }, [state.sort, state.filters, state.searchTerm, state.tags]);
 
   const daoList = daos.map((dao) => {
-    return (
-      <div key={dao.id}>
-        <ExploreCard dao={dao} />
-      </div>
-    );
+    return <ExploreCard dao={dao} key={dao.id} />;
   });
 
   return (
     <>
       {daos.length ? (
-        <Flex wrap='wrap' align='center' justify='flex-start'>
+        <Flex wrap='wrap' align='start' justify='space-around' w='100%'>
           {daoList}
         </Flex>
       ) : null}

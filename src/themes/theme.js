@@ -275,11 +275,12 @@ export const setTheme = (daoTheme) => {
       Badge: {
         baseStyle: {
           fontSize: 'xs',
+          fontWeight: '400',
         },
         variants: {
           solid: (props) => ({}),
           outline: (props) => ({
-            color: 'whiteAlpha.800',
+            color: 'whiteAlpha.700',
           }),
         },
         sizes: {},

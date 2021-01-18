@@ -9,7 +9,7 @@ import ExploreTagList from './ExploreTagList';
 const ExploreFilters = () => {
   return (
     <>
-      <Flex direction='row' align='center' justify='flex-start'>
+      <Flex align='center' justify='flex-start' wrap='wrap'>
         <ExploreSearch />
         <ExploreSort />
         <ExploreFilterList />
