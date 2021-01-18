@@ -17,7 +17,6 @@ const ExploreSort = () => {
   const { state, dispatch } = useContext(ExploreContext);
 
   const handleChange = (option) => {
-    console.log('option', option);
     dispatch({ type: 'updateSort', payload: option });
   };
 

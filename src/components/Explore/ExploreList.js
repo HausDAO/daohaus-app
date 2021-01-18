@@ -28,7 +28,7 @@ const ExploreList = () => {
     if (state.tags.length) {
       searchedDaos = searchedDaos.filter((dao) => {
         return (
-          dao.apiMetadata.tags &&
+          dao.apiMetadata?.tags &&
           state.tags.some((tag) => dao.apiMetadata.tags.indexOf(tag) >= 0)
         );
       });

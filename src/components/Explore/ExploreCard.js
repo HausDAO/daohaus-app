@@ -50,7 +50,6 @@ const ExploreCard = ({ dao }) => {
   };
 
   const renderLink = (dao) => {
-    console.log('dao link', dao);
     switch (dao.apiMetadata.version) {
       case '1': {
         return (

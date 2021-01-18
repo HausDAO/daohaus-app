@@ -54,6 +54,11 @@ const ExploreFilterList = () => {
     );
   };
 
+  const filterCount = Object.keys(state.filters).reduce((sum, key) => {
+    sum += state.filters[key].length;
+    return sum;
+  }, 0);
+
   return (
     <Flex
       direction='row'
@@ -61,7 +66,7 @@ const ExploreFilterList = () => {
       mb={[5, null, null, 0]}
     >
       <Text textTransform='uppercase' fontFamily='heading' mr={3}>
-        Filter By
+        Filters ({filterCount})
       </Text>
 
       <Menu isLazy closeOnSelect={false}>
