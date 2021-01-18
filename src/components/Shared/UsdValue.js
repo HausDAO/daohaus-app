@@ -14,7 +14,7 @@ const UsdValue = ({ tokenBalance, optimisticSync }) => {
   };
 
   const price = prices[tokenBalance.token.tokenAddress]
-    ? prices[tokenBalance.token.tokenAddress].usd
+    ? prices[tokenBalance.token.tokenAddress].price
     : 0;
   const balance = checkOptimisticBalance() / 10 ** +tokenBalance.token.decimals;
 

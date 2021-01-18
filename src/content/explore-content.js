@@ -71,8 +71,8 @@ export const EXPLORE_FILTER_OPTIONS = [
     type: 'purpose',
   },
   {
-    name: 'Moloch V1',
-    value: '1',
+    name: 'Moloch V2.1',
+    value: '2.1',
     type: 'version',
   },
   {
@@ -80,9 +80,10 @@ export const EXPLORE_FILTER_OPTIONS = [
     value: '2',
     type: 'version',
   },
+
   {
-    name: 'Moloch V2.1',
-    value: '2.1',
+    name: 'Moloch V1',
+    value: '1',
     type: 'version',
   },
   {

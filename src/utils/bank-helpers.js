@@ -2,7 +2,7 @@ export const getTotalBankValue = (tokenBalances, prices) => {
   return tokenBalances.reduce((sum, balance) => {
     if (balance.guildBank) {
       const price = prices[balance.token.tokenAddress.toLowerCase()]
-        ? prices[balance.token.tokenAddress.toLowerCase()].usd
+        ? prices[balance.token.tokenAddress.toLowerCase()].price
         : 0;
       const value =
         (+balance.tokenBalance / 10 ** balance.token.decimals) * price;
@@ -58,11 +58,11 @@ export const balancesWithValue = (balances, prices) => {
     if (prices[balance.tokenAddress]) {
       const value =
         (balance.balance / 10 ** balance.tokenDecimals) *
-        prices[balance.tokenAddress].usd;
+        prices[balance.tokenAddress].price;
 
       list.push({
         ...balance,
-        usdPrice: prices[balance.tokenAddress].usd,
+        usdPrice: prices[balance.tokenAddress].price,
         value,
       });
     }

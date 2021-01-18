@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { useQuery } from 'react-apollo';
 
 import { GET_TOKENS } from '../utils/apollo/explore-queries';
@@ -6,7 +6,6 @@ import {
   SORT_OPTIONS,
   EXPLORE_FILTER_OPTIONS,
 } from '../content/explore-content';
-// import { getUsd, XDAI_TOKEN_PAIRS } from '../util/prices';
 
 const ExploreContext = React.createContext();
 
@@ -84,42 +83,12 @@ const reducer = (state, action) => {
 };
 
 function ExploreContextProvider(props) {
-  const [fetchComplete, setFetchComplete] = useState(false);
   const [state, dispatch] = React.useReducer(reducer, initialState);
   const value = { state, dispatch };
 
   const { loading, error, data, fetchMore } = useQuery(GET_TOKENS, {
     fetchPolicy: 'network-only',
   });
-
-  useEffect(() => {
-    // const getAllPrices = async () => {
-    //   let uniqueTokens = _.uniq(data.tokens.map((token) => token.tokenAddress));
-    //   if (process.env.REACT_APP_NETWORK_ID === '100') {
-    //     uniqueTokens = uniqueTokens.map(
-    //       (xdaiAddress) => XDAI_TOKEN_PAIRS[xdaiAddress],
-    //     );
-    //   }
-    //   let prices = {};
-    //   try {
-    //     const res = await getUsd(uniqueTokens.join(','));
-    //     prices = res.data;
-    //   } catch (err) {
-    //     console.log('price api error', err);
-    //   }
-    //   if (process.env.REACT_APP_NETWORK_ID === '100') {
-    //     prices = _.mapKeys(prices, (k, v) => {
-    //       const i = Object.values(XDAI_TOKEN_PAIRS).indexOf(v.toLowerCase());
-    //       return Object.keys(XDAI_TOKEN_PAIRS)[i];
-    //     });
-    //   }
-    //   dispatch({ type: 'setPrices', payload: prices });
-    // };
-    // if (fetchComplete) {
-    //   getAllPrices();
-    // }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [fetchComplete]);
 
   if (loading) return <></>;
   if (error) return <p className='View'>Sorry there has been an error</p>;
@@ -128,7 +97,6 @@ function ExploreContextProvider(props) {
     variables: { skip: data.tokens.length },
     updateQuery: (prev, { fetchMoreResult }) => {
       if (fetchMoreResult.tokens.length === 0) {
-        setFetchComplete(true);
         return prev;
       }
 

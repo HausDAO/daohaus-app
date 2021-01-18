@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react';
 import GraphFetchMore from '../components/Shared/GraphFetchMore';
 import { EXPLORER_DAOS } from '../utils/apollo/explore-queries';
 import { supportedChains } from '../utils/chains';
-import { getApiMetadata } from '../utils/requests';
+import { getApiMetadata, getApiPriceData } from '../utils/requests';
 
 const ExploreGraphInit = ({ daos, setDaos, setFetchComplete }) => {
   const [localDaos, setLocalDaos] = useState();
@@ -13,9 +13,8 @@ const ExploreGraphInit = ({ daos, setDaos, setFetchComplete }) => {
   useEffect(() => {
     const fetchDaos = async () => {
       const mdRes = await getApiMetadata();
-      // get prices here too...
-      // prices in api?
-      setDaoFetch(mdRes);
+      const priceRes = await getApiPriceData();
+      setDaoFetch({ meta: mdRes, prices: priceRes });
     };
 
     fetchDaos();
@@ -48,7 +47,11 @@ const ExploreGraphInit = ({ daos, setDaos, setFetchComplete }) => {
                 setRecords={setLocalDaos}
                 entity='moloches'
                 networkOverride={networkId}
-                context={{ networkId: networkId, apiMetaDataJson: daoFetch }}
+                context={{
+                  networkId: networkId,
+                  apiMetaDataJson: daoFetch.meta,
+                  priceDataJson: daoFetch.prices,
+                }}
               />
             );
           })}

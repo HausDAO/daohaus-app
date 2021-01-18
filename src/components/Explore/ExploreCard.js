@@ -1,10 +1,14 @@
 import React, { useContext } from 'react';
 import makeBlockie from 'ethereum-blockies-base64';
-import { Avatar, Box, Flex, Button, Badge } from '@chakra-ui/react';
+import { Avatar, Box, Flex, Button, Badge, Link } from '@chakra-ui/react';
 import { Link as RouterLink } from 'react-router-dom';
 
 import ContentBox from '../Shared/ContentBox';
-import { themeImagePath } from '../../utils/helpers';
+import {
+  numberWithCommas,
+  pokemolUrl,
+  themeImagePath,
+} from '../../utils/helpers';
 import { ExploreContext } from '../../contexts/ExploreContext';
 
 const ExploreCard = ({ dao }) => {
@@ -44,6 +48,30 @@ const ExploreCard = ({ dao }) => {
       );
     }
   };
+
+  const renderLink = (dao) => {
+    console.log('dao link', dao);
+    switch (dao.apiMetadata.version) {
+      case '1': {
+        return (
+          <Button as={Link} href={pokemolUrl(dao)} isExternal>
+            Go
+          </Button>
+        );
+      }
+      case '2':
+      case '2.1': {
+        return (
+          <Button as={RouterLink} to={`/dao/${dao.id}`}>
+            Go
+          </Button>
+        );
+      }
+      default: {
+        return null;
+      }
+    }
+  };
   return (
     <>
       <ContentBox m={3} w='320px'>
@@ -65,7 +93,7 @@ const ExploreCard = ({ dao }) => {
         </Box>
 
         <Box fontSize='md' mt={2} fontFamily='heading'>
-          {dao.guildBankValue}
+          {numberWithCommas(dao.guildBankValue.toFixed(2))}
         </Box>
         <Flex direction='row' align='center'>
           <Box fontSize='sm' mr={3}>
@@ -89,11 +117,7 @@ const ExploreCard = ({ dao }) => {
 
         {renderTags()}
 
-        <Box mt={5}>
-          <Button as={RouterLink} to={`/dao/${dao.id}`}>
-            Go
-          </Button>
-        </Box>
+        <Box mt={5}>{renderLink(dao)}</Box>
       </ContentBox>
     </>
   );
