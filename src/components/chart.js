@@ -1,28 +1,32 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
+import { useSessionStorage } from "../hooks/useSessionStorage";
 import { useParams } from "react-router-dom";
 import { fetchBankValues } from "../utils/theGraph";
 
 const Chart = () => {
   const { daochain, daoid } = useParams();
-  const [chartData, setChartData] = useState(null);
+  const [daoBalances, setDaoBalances] = useSessionStorage(
+    `balances-${daoid}`,
+    null
+  );
 
   useEffect(() => {
-    const fetchChartData = async () => {
+    const fetchBalances = async () => {
       const data = await fetchBankValues({
         daoID: daoid,
         chainID: daochain,
       });
-      setChartData(data);
+      setDaoBalances(data);
     };
-    if (!chartData) {
-      fetchChartData();
+    if (!daoBalances && daochain && daoid) {
+      fetchBalances();
     }
-  }, []);
+  }, [daoBalances, setDaoBalances, daochain, daoid]);
 
   return (
     <div>
       <h3>Chart</h3>
-      {chartData?.length ? `Loaded ${chartData?.length} items` : "Loading..."}
+      {daoBalances ? `Loaded ${daoBalances?.length} items` : "Loading..."}
     </div>
   );
 };

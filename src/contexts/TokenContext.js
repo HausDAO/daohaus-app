@@ -6,7 +6,7 @@ import React, {
   useRef,
 } from "react";
 import { useParams } from "react-router-dom";
-import { addUSD, addContractVals } from "../utils/tokenValue";
+import { initTokenData, addContractVals } from "../utils/tokenValue";
 import { useLocalDaoData } from "./DaoContext";
 
 export const TokenContext = createContext();
@@ -24,13 +24,16 @@ export const TokenProvider = ({ children }) => {
 
   //first fetch API USD values to get fast bank balance
   useEffect(() => {
-    const initNewDao = async () => {
-      const newDaoData = await addUSD(daochain, daoOverview.tokenBalances);
+    const initDaoTokens = async () => {
+      const newDaoData = await initTokenData(
+        daochain,
+        daoOverview.tokenBalances
+      );
       setCurrentDaoTokens(newDaoData);
       shouldFetchInit.current = false;
     };
     if (daoOverview?.tokenBalances && daochain && shouldFetchInit.current) {
-      initNewDao(daochain);
+      initDaoTokens(daochain);
     }
   }, [daoOverview, daochain]);
 

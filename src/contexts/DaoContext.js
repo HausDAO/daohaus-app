@@ -19,7 +19,7 @@ export const DaoContext = createContext();
 
 export const DaoProvider = ({ children }) => {
   const { daoid, daochain } = useParams();
-  const { injectedChain, injectedProvider, address } = useInjectedProvider();
+  const { injectedChain, address } = useInjectedProvider();
 
   const daoNetworkData = supportedChains[daochain];
   const isCorrectNetwork = daochain === injectedChain?.chainId;
@@ -40,10 +40,6 @@ export const DaoProvider = ({ children }) => {
     `members-${daoid}`,
     null
   );
-  const [daoBalances, setDaoBalances] = useSessionStorage(
-    `balances-${daoid}`,
-    null
-  );
   const [daoTransmutations, setTransmutations] = useSessionStorage(
     `transmutations-${daoid}`,
     null
@@ -62,7 +58,6 @@ export const DaoProvider = ({ children }) => {
       daoActivities ||
       daoOverview ||
       daoMembers ||
-      daoBalances ||
       daoTransmutations
     )
       return;
@@ -97,14 +92,12 @@ export const DaoProvider = ({ children }) => {
     address,
     daoNetworkData,
     daoActivities,
-    daoBalances,
     daoMembers,
     daoOverview,
     daoProposals,
     daoTransmutations,
     setDaoActivities,
     setTransmutations,
-    setDaoBalances,
     setDaoMembers,
     setDaoOverview,
     setDaoProposals,
@@ -115,7 +108,7 @@ export const DaoProvider = ({ children }) => {
     const checkIfMember = (daoMembers) => {
       return daoMembers.some((member) => member.memberAddress === address);
     };
-    if (daoMembers && address) {
+    if (daoMembers) {
       if (currentMember.current !== address) {
         setIsMember(checkIfMember(daoMembers));
         currentMember.current = address;
@@ -146,7 +139,6 @@ export const DaoProvider = ({ children }) => {
       value={{
         daoProposals,
         daoActivities,
-        daoBalances,
         daoMembers,
         daoOverview,
         isMember,
@@ -169,7 +161,6 @@ export const useLocalDaoData = () => {
   const {
     daoProposals,
     daoActivities,
-    daoBalances,
     daoMembers,
     daoOverview,
     isMember,
@@ -181,7 +172,6 @@ export const useLocalDaoData = () => {
   return {
     daoProposals,
     daoActivities,
-    daoBalances,
     daoMembers,
     daoOverview,
     isMember,

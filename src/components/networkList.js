@@ -7,7 +7,7 @@ import { useInjectedProvider } from "../contexts/InjectedProviderContext";
 
 const NetworkList = () => {
   const { userHubDaos } = useLocalUserData();
-  const { injectedProvider } = useInjectedProvider;
+  const { injectedProvider } = useInjectedProvider();
   const provider = injectedProvider?.currentProvider;
 
   const currentNetwork = userHubDaos.find(
@@ -21,7 +21,7 @@ const NetworkList = () => {
     <div>
       {currentNetwork && (
         <>
-          <h1 className="network-header">Current Network: </h1>
+          <h3 className="network-header">Current Network: </h3>
           <p className="label">{currentNetwork.name}</p>
           <NetworkDaoList
             data={currentNetwork.data}
