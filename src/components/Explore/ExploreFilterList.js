@@ -60,11 +60,7 @@ const ExploreFilterList = () => {
   }, 0);
 
   return (
-    <Flex
-      direction='row'
-      w={['100%', null, null, '50%']}
-      mb={[5, null, null, 0]}
-    >
+    <Flex direction='row' ml={10}>
       <Text textTransform='uppercase' fontFamily='heading' mr={3}>
         Filters ({filterCount})
       </Text>
