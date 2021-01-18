@@ -384,8 +384,6 @@ const Layout = ({ children }) => {
     toggleSideNav(!sideNavOpen);
   };
 
-  console.log('theme', theme);
-
   return (
     <Flex
       direction={['column', 'column', 'column', 'row']}
@@ -655,11 +653,11 @@ const Layout = ({ children }) => {
             >
               <Button
                 variant='sideNav'
-                // as={RouterLink}
-                // to='/explore'
-                as={Link}
-                href='https://daohaus.club'
-                isExternal
+                as={RouterLink}
+                to='/explore'
+                // as={Link}
+                // href='https://daohaus.club'
+                // isExternal
                 _hover={{ backgroundColor: 'white' }}
                 grow='none'
               >

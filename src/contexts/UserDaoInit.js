@@ -179,7 +179,6 @@ const UserDaoInit = () => {
     let daoRes;
     try {
       daoRes = await get(`dao/${daoParam}`);
-      console.log('daoRes', daoRes);
     } catch (err) {
       console.log('api fetch error', daoParam);
     }

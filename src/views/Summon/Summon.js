@@ -1,5 +1,6 @@
 import React, { useState, useContext, useEffect } from 'react';
 import { Box, Heading, Text, Button, Flex } from '@chakra-ui/react';
+import { Link as RouterLink } from 'react-router-dom';
 
 import { daoConstants, daoPresets } from '../../content/summon-presets';
 import { SummonContext } from '../../contexts/SummonContext';
@@ -28,7 +29,7 @@ const Summon = () => {
 
   const stepContent = {
     1: 'What kind of Haus will you build?',
-    4: 'Our magic internet communities take a minute or two to create. You can see new daos on your Hub page',
+    4: 'Our magic internet communities take a minute or two to create. You will soon see new daos on your Hub page.',
   };
 
   const handleSummon = async (data) => {
@@ -62,7 +63,6 @@ const Summon = () => {
   useEffect(() => {
     if (user?.username) {
       const presets = daoPresets(network.network_id);
-      console.log('presets', presets);
       setDaoData({ ...daoData, summoner: user.username, ...presets[0] });
     }
 
@@ -94,6 +94,7 @@ const Summon = () => {
         console.log('error: ', details);
         setSummonError(details?.message);
         setIsSummoning(false);
+        setCurrentStep(1);
       }
     };
 
@@ -136,13 +137,13 @@ const Summon = () => {
     <Box p={6}>
       {user && user.username ? (
         <Box>
-          <Box className='Summon__hero'>
+          <Box>
             <Heading as='h1'>SUMMON</Heading>
           </Box>
 
-          <Box className='View Summon'>
-            <Box className='Row'>
-              <Box className='Summon__step'>
+          <Box>
+            <Box>
+              <Box>
                 <Flex direction='row' justify='space-between'>
                   <Text>{stepContent[currentStep]}</Text>
                   {currentStep === 1 ? (
@@ -171,6 +172,13 @@ const Summon = () => {
                     </>
                   ) : null}
                 </Flex>
+                {currentStep === 4 ? (
+                  <>
+                    <Button as={RouterLink} to='/'>
+                      GO TO HUB
+                    </Button>
+                  </>
+                ) : null}
               </Box>
             </Box>
 
@@ -205,9 +213,7 @@ const Summon = () => {
                   </>
                 )}
               </>
-            ) : (
-              <>Loading</>
-            )}
+            ) : null}
           </Box>
         </Box>
       ) : null}

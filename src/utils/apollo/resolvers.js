@@ -12,6 +12,7 @@ import {
 import { TokenService } from '../token-service';
 import { MolochService } from '../moloch-service';
 import { supportedChains } from '../chains';
+import { getTotalBankValue } from '../bank-helpers';
 
 export const resolvers = {
   Moloch: {
@@ -22,6 +23,9 @@ export const resolvers = {
     },
     networkId: (moloch, _args, context) => {
       return context.networkId;
+    },
+    guildBankValue: async (moloch, _args, _context) => {
+      return getTotalBankValue(moloch.tokenBalances, _context.priceDataJson);
     },
   },
   Proposal: {
