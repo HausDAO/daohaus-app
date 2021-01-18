@@ -22,9 +22,9 @@ const initialState = {
     version: EXPLORE_FILTER_OPTIONS.filter((o) => o.type === 'version').map(
       (o) => o.value,
     ),
-    network: EXPLORE_FILTER_OPTIONS.filter((o) => o.type === 'network').map(
-      (o) => o.value,
-    ),
+    network: EXPLORE_FILTER_OPTIONS.filter((o) => o.type === 'network')
+      .map((o) => o.value)
+      .filter((o) => o === '1' || o === '100'),
   },
   searchTerm: null,
 };
