@@ -95,6 +95,7 @@ export const supportedChains = {
     safe_proxy_factory: '0x76E2cFc1F5Fa8F6a5b3fC4c8F4788F0116861F9B',
     safe_create_and_add_modules: '0xF61A721642B0c0C8b334bA3763BA1326F53798C0',
     safe_master_copy: '0x34CfAC646f301356fAa8B21e94227e3583Fe3F5F',
+    module_enabler: '0x10286225AE73546Dcf1BB51F4695610Ae1EE5CaD',
   },
 };
 

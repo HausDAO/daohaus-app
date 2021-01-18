@@ -99,6 +99,7 @@ const NewMinionSafe = () => {
       createAndAddModules:
         supportedChains[network.network_id].safe_create_and_add_modules,
       safeMasterCopy: supportedChains[network.network_id].safe_master_copy,
+      moduleEnabler: supportedChains[network.network_id].module_enabler,
       network: network,
     };
     console.log('setupValues', setupValues);
@@ -112,7 +113,7 @@ const NewMinionSafe = () => {
 
     try {
       minionSafeService.setup(
-        values.applicantHidden,
+        values.applicant,
         values.minionAddress,
         txCallBack,
       );

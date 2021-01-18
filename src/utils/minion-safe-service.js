@@ -18,6 +18,7 @@ export class MinionSafeService {
     this.safeProxyFactory = setupValues.safeProxyFactory;
     this.createAndAddModulesAddress = setupValues.createAndAddModules;
     this.safeMasterCopy = setupValues.safeMasterCopy;
+    this.moduleEnabler = setupValues.moduleEnabler;
     this.network = setupValues.network;
     this.safeProxyFactoryContract = new web3.eth.Contract(
       safeProxyFactoryAbi,
@@ -101,20 +102,12 @@ export class MinionSafeService {
       .enableModule(minionAddress)
       .encodeABI();
 
-    const modulesCreationData = this.createAndAddModulesData([
-      enableModuleData,
-    ]);
-
-    const createAndAddModulesData = this.safeCreateAndAddModulesContract.methods
-      .createAndAddModules(this.safeProxyFactory, modulesCreationData)
-      .encodeABI();
-
     const setupData = await this.safe.methods
       .setup(
         [delegateAddress, minionAddress],
         threshold,
-        mastercopy,
-        createAndAddModulesData,
+        this.moduleEnabler,
+        enableModuleData,
         Address0,
         Address0,
         0,
