@@ -116,7 +116,7 @@ const DaoActivityCard = ({ activity, isLoaded }) => {
             to={
               activity?.activityData
                 ? `/dao/${activity.molochAddress}/profile/${activity.activityData.memberAddress}`
-                : null
+                : ''
             }
           >
             {profile && profile.image ? (

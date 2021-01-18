@@ -115,7 +115,7 @@ const ExploreCard = ({ dao }) => {
       </Text>
 
       <Box fontSize='md' mt={2} fontFamily='heading'>
-        {numberWithCommas(dao.guildBankValue.toFixed(2))}
+        ${numberWithCommas(dao.guildBankValue.toFixed(2))}
       </Box>
       <Flex direction='row' align='center'>
         <Box fontSize='sm' mr={3}>
@@ -128,7 +128,7 @@ const ExploreCard = ({ dao }) => {
           {dao.tokens.length} Token{dao.tokens.length > 1 ? 's' : ''}
         </Box>
       </Flex>
-      <Flex direction='row' align='center'>
+      <Flex direction='row' align='center' mt={3}>
         <Badge colorScheme='secondary' variant='outline' m='3px 5px 3px 0px'>
           {dao.apiMetadata?.purpose}
         </Badge>

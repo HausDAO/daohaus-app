@@ -1,14 +1,10 @@
 import React from 'react';
 import makeBlockie from 'ethereum-blockies-base64';
 import { Flex, Avatar, Box, Skeleton } from '@chakra-ui/react';
-import { Link as RouterLink } from 'react-router-dom';
-import { useDao } from '../../contexts/PokemolContext';
 
 import { truncateAddr } from '../../utils/helpers';
 
 const MemberAvatar = ({ member }) => {
-  const [dao] = useDao();
-
   const hasProfileImage =
     member && member.profile && member.profile.image && member.profile.image[0];
 

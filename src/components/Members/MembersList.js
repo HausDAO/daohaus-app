@@ -38,8 +38,6 @@ const MembersList = ({ handleSelect, selectedMember }) => {
       });
     }
 
-    console.log('sortedMembers', sortedMembers);
-
     setListMembers([...sortedMembers]);
   };
 
