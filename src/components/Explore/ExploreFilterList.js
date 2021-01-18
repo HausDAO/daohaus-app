@@ -8,7 +8,6 @@ import {
   Flex,
   Icon,
   MenuDivider,
-  Text,
   Switch,
   FormLabel,
 } from '@chakra-ui/react';
