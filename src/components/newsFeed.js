@@ -1,10 +1,7 @@
 import React, { useState, useEffect } from "react";
-import styled from "styled-components";
 
-import { HeaderLg } from "../styles/typography";
 import ProposalPreview from "./proposalPreview";
 
-import { getColor } from "../styles/palette";
 import { useLocalUserData } from "../contexts/UserContext";
 import { parseIfJSON } from "../utils/general";
 

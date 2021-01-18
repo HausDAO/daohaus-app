@@ -5,7 +5,7 @@ import NetworkList from "../components/networkList";
 import Layout from "../components/layout";
 import { useCustomTheme } from "../contexts/CustomThemeContext";
 
-const AuthedHub = () => {
+const Hub = () => {
   const { theme, resetTheme } = useCustomTheme();
 
   useEffect(() => {
@@ -24,4 +24,4 @@ const AuthedHub = () => {
   );
 };
 
-export default AuthedHub;
+export default Hub;

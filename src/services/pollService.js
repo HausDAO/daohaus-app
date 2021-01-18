@@ -1,7 +1,7 @@
-import { graphQuery } from "./apollo";
+import { graphQuery } from "../utils/apollo";
 import { PROPOSALS_LIST } from "../graphQL/proposal-queries";
-import { getGraphEndpoint } from "./chain";
-import { hashMaker } from "./proposalUtils";
+import { getGraphEndpoint } from "../utils/chain";
+import { hashMaker } from "../utils/proposalUtils";
 
 /////////////CALLS///////////////
 const pollProposals = async ({ daoID, chainID }) =>

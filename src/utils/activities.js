@@ -1,5 +1,3 @@
-import { titleMaker } from "../utils/proposalUtils";
-
 export const getDaoActivites = (daoData) => {
   const proposals = daoData.proposals.filter((prop) => !prop.cancelled);
   const votes = daoData.proposals.flatMap((prop) => {

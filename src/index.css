@@ -4,10 +4,6 @@
   box-sizing: border-box;
 }
 
-html {
-  /* font-size: 10px; */
-}
-
 body {
   height: 100vh;
   color: #e2d5d5;

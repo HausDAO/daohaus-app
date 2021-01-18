@@ -1,17 +1,38 @@
 import React, { useState, useEffect } from "react";
 import { Flex, Box } from "@chakra-ui/react";
-import { Link, useParams } from "react-router-dom";
+import {
+  Link,
+  useParams,
+  Switch,
+  Route,
+  useRouteMatch,
+  Redirect,
+} from "react-router-dom";
 
 import Layout from "../components/layout";
-import AuthedDaoRoutes from "../routers/authedDaoRoutes";
 import { useCustomTheme } from "../contexts/CustomThemeContext";
+import { useLocalDaoData } from "../contexts/DaoContext";
+import Bank from "../pages/Bank";
+import Members from "../pages/Members";
+import Overview from "../pages/Overview";
+import Proposals from "../pages/Proposals";
 
-const AuthedDao = () => {
-  const [linkCopy, setLinkCopy] = useState();
+const Dao = () => {
+  const { path } = useRouteMatch();
+  const {
+    daoActivities,
+    isMember,
+    isCorrectNetwork,
+    daoBalances,
+    daoOverview,
+    daoProposals,
+    daoMembers,
+  } = useLocalDaoData();
   const { daochain, daoid } = useParams();
   const { customCopy } = useCustomTheme();
 
-  //useEffect may not be necessary
+  const [linkCopy, setLinkCopy] = useState();
+
   useEffect(() => {
     setLinkCopy(customCopy);
   }, [customCopy]);
@@ -43,9 +64,28 @@ const AuthedDao = () => {
 
   return (
     <Layout sideMenu={sideMenu}>
-      <AuthedDaoRoutes />
+      <Switch>
+        <Route exact path={`${path}/`}>
+          <Overview
+            activities={daoActivities}
+            isMember={isMember}
+            isCorrectNetwork={isCorrectNetwork}
+            overview={daoOverview}
+            members={daoMembers}
+          />
+        </Route>
+        <Route exact path={`${path}/proposals`}>
+          <Proposals proposals={daoProposals} overview={daoOverview} />
+        </Route>
+        <Route exact path={`${path}/bank`}>
+          <Bank balances={daoBalances} />
+        </Route>
+        <Route exact path={`${path}/members`}>
+          <Members members={daoMembers} />
+        </Route>
+      </Switch>
     </Layout>
   );
 };
 
-export default AuthedDao;
+export default Dao;

@@ -12,7 +12,7 @@ import {
   numberWithCommas,
   timeToNow,
 } from "../utils/general";
-import { createPoll } from "../utils/polls";
+import { createPoll } from "../services/pollService";
 
 import {
   determineProposalStatus,
