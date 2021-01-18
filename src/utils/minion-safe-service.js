@@ -89,7 +89,7 @@ export class MinionSafeService {
   async setup(delegateAddress, minionAddress, callback) {
     const Address0 = '0x'.padEnd(42, '0');
 
-    const threshhold = 2;
+    const threshold = 2;
     const mastercopy = this.safeMasterCopy;
 
     const cacheMinionSafe = {
@@ -112,7 +112,7 @@ export class MinionSafeService {
     const setupData = await this.safe.methods
       .setup(
         [delegateAddress, minionAddress],
-        threshhold,
+        threshold,
         mastercopy,
         createAndAddModulesData,
         Address0,
