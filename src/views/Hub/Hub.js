@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import { Box, Flex, Spinner } from '@chakra-ui/react';
 import { Link as RouterLink } from 'react-router-dom';
+import { Box, Flex, Spinner } from '@chakra-ui/react';
 
 import { useUser } from '../../contexts/PokemolContext';
 import { useTheme } from '../../contexts/CustomThemeContext';
@@ -117,14 +117,23 @@ const Hub = () => {
                           />
                           <TextBox ml='15px'>Your daos will show here</TextBox>
                         </Flex>
+<<<<<<< HEAD
                         <RouterLink
+=======
+                        <Link
+                          as={RouterLink}
+>>>>>>> 42f1b685bb08c601de731fd9d80fdefcb7019e7c
                           to='/explore'
                           fontSize='md'
                           textTransform='uppercase'
                           color='secondary.500'
                         >
                           Explore more DAOs
+<<<<<<< HEAD
                         </RouterLink>
+=======
+                        </Link>
+>>>>>>> 42f1b685bb08c601de731fd9d80fdefcb7019e7c
                       </Box>
                     </ContentBox>
                   )}
