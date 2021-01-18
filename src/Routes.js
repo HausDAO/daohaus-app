@@ -16,15 +16,14 @@ import Boosts from './views/Settings/Boosts';
 import NewBoost from './views/Settings/NewBoost';
 import CustomTheme from './views/Settings/CustomTheme';
 import Notifications from './views/Settings/Notifications';
-import Theme from './views/Theme/Theme';
 import DaoTheme from './views/Theme/DaoTheme';
 import NewMember from './views/Members/NewMember';
 import DaoMeta from './views/Settings/DaoMeta';
-import UploadTest from './views/Theme/UploadTest';
 import SummonWrapper from './views/Summon/SummonWrapper';
 import RegisterDao from './views/Summon/RegisterDao';
 import Minions from './components/Settings/Minions';
 import MinionSafe from './components/Settings/MinionSafe';
+import Explore from './views/Explore/Explore';
 
 const Routes = () => {
   return (
@@ -117,18 +116,17 @@ const Routes = () => {
           component={MinionSafe}
         />
         <Route
-          path='/dao/:dao(\b0x[0-9a-f]{10,40}\b)/psych-out'
-          exact
-          component={DaoTheme}
-        />
-        <Route path='/summon' exact component={SummonWrapper} />
-        <Route
           path='/register/:dao(\b0x[0-9a-f]{10,40}\b)/:networkId'
           exact
           component={RegisterDao}
         />
-        <Route path='/themeSample' exact component={Theme} />
-        <Route path='/uploadTest' exact component={UploadTest} />
+        <Route
+          path='/dao/:dao(\b0x[0-9a-f]{10,40}\b)/psych-out'
+          exact
+          component={DaoTheme}
+        />
+        <Route path='/explore' exact component={Explore} />
+        <Route path='/summon' exact component={SummonWrapper} />
         <Route exact path='/' component={Hub} />
         <Route path='*' component={FourOhFour} />
       </Switch>

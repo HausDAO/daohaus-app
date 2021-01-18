@@ -43,7 +43,7 @@ const ProposalsList = () => {
           if (filter.value === 'Action Needed') {
             const unread = determineUnreadProposalList(
               prop,
-              memberWallet.activeMember,
+              memberWallet.shares > 0,
               memberWallet.memberAddress,
             );
             return unread.unread;

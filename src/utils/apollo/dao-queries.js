@@ -94,8 +94,50 @@ export const DAO_ACTIVITIES = gql`
         id
         createdAt
         memberAddress
+        molochAddress
         shares
         loot
+      }
+    }
+  }
+`;
+
+// guildBankValue @client
+
+export const EXPLORER_DAOS = gql`
+  query moloches($skip: Int) {
+    moloches(orderBy: summoningTime, first: 100, skip: $skip) {
+      id
+      title
+      version
+      totalShares
+      guildBankAddress
+      summoningTime
+      guildBankBalanceV1
+      apiMetadata @client
+      networkId @client
+      members(where: { exists: true }) {
+        id
+      }
+      proposals {
+        id
+      }
+      approvedTokens {
+        id
+      }
+      depositToken {
+        tokenAddress
+        symbol
+        decimals
+      }
+      tokenBalances(where: { guildBank: true }) {
+        id
+        tokenBalance
+        guildBank
+        token {
+          decimals
+          tokenAddress
+        }
       }
     }
   }

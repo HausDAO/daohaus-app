@@ -1,35 +1,35 @@
 import React from 'react';
 import { useHistory } from 'react-router-dom';
-import { Box, Flex, Image, Skeleton, Button } from '@chakra-ui/react';
+import { Avatar, Box, Flex, Skeleton, Button } from '@chakra-ui/react';
+import makeBlockie from 'ethereum-blockies-base64';
 
-import { useUser, useMembers } from '../../contexts/PokemolContext';
+import { useMembers } from '../../contexts/PokemolContext';
 import { useTheme } from '../../contexts/CustomThemeContext';
-import { numberWithCommas } from '../../utils/helpers';
+import { numberWithCommas, themeImagePath } from '../../utils/helpers';
 import ContentBox from '../Shared/ContentBox';
 import TextBox from '../Shared/TextBox';
 import BankTotal from '../Bank/BankTotal';
 
 const DaoOverviewDetails = ({ dao }) => {
   const [theme] = useTheme();
-  const [user] = useUser();
   const [members] = useMembers();
   const history = useHistory();
 
   return (
     <Box>
-      {user && (
-        <TextBox size='sm' color='whiteAlpha.900'>
-          Details
-        </TextBox>
-      )}
+      <TextBox size='sm' color='whiteAlpha.900'>
+        Details
+      </TextBox>
       <ContentBox mt={2} w='100%'>
         <Flex direction='row' align='center'>
-          <Image
-            src={require('../../assets/Daohaus__Castle--Dark.svg')}
-            alt='DAO Logo'
-            h={50}
-            w={50}
-          />
+          <Avatar
+            src={
+              dao.avatarImg
+                ? themeImagePath(dao.avatarImg)
+                : makeBlockie(dao.address || '0x0')
+            }
+            mr='10px'
+          ></Avatar>
           <Skeleton isLoaded={dao.name} ml={6}>
             <Box fontSize='2xl' fontWeight={700} fontFamily='heading'>
               {dao.name ? dao.name : '--'}
@@ -42,9 +42,9 @@ const DaoOverviewDetails = ({ dao }) => {
         <Flex direction='row' w='100%' justify='space-between' mt={6}>
           <Box>
             <TextBox size='xs'>{theme.daoMeta.members}</TextBox>
-            <Skeleton isLoaded={members?.length > 0}>
+            <Skeleton isLoaded={members}>
               <TextBox size='lg' variant='value'>
-                {members?.length ? members.length : '--'}
+                {members?.length ? members.length : 0}
               </TextBox>
             </Skeleton>
           </Box>

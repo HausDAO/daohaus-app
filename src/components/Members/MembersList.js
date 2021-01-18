@@ -3,7 +3,6 @@ import { Flex } from '@chakra-ui/react';
 
 import { useMembers } from '../../contexts/PokemolContext';
 import { useTheme } from '../../contexts/CustomThemeContext';
-import { defaultMembers } from '../../utils/constants';
 import MemberListCard from './MemberListCard';
 import TextBox from '../Shared/TextBox';
 import ContentBox from '../Shared/ContentBox';
@@ -12,7 +11,7 @@ import MemberSort from './MembersSort';
 const MembersList = ({ handleSelect, selectedMember }) => {
   const [theme] = useTheme();
   const [members] = useMembers();
-  const [listMembers, setListMembers] = useState(defaultMembers);
+  const [listMembers, setListMembers] = useState([]);
   const [isLoaded, setIsLoaded] = useState(false);
   const [sort, setSort] = useState();
 
@@ -38,6 +37,8 @@ const MembersList = ({ handleSelect, selectedMember }) => {
         }
       });
     }
+
+    console.log('sortedMembers', sortedMembers);
 
     setListMembers([...sortedMembers]);
   };

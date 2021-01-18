@@ -14,6 +14,7 @@ import {
   useDao,
   useDaoMetadata,
   useNetwork,
+  useTxProcessor,
   useUser,
   useWeb3Connect,
 } from '../../contexts/PokemolContext';
@@ -23,11 +24,14 @@ import { boostPost, getApiGnosis } from '../../utils/requests';
 import { supportedChains } from '../../utils/chains';
 import { MdCheckCircle } from 'react-icons/md';
 import { truncateAddr } from '../../utils/helpers';
+import { MinionSafeService } from '../../utils/minion-safe-service';
+import { MinionService } from '../../utils/minion-service';
 
 const MinionSafe = () => {
   const [network] = useNetwork();
   const [dao] = useDao();
   const [user] = useUser();
+  const [txProcessor, updateTxProcessor] = useTxProcessor();
   const [daoMetadata, updateDaoMetadata] = useDaoMetadata();
 
   const [web3Connect] = useWeb3Connect();
@@ -37,6 +41,21 @@ const MinionSafe = () => {
   const [loading, setLoading] = useState(true);
 
   const pendingMinionSafe = window.localStorage.getItem('pendingMinionSafe');
+
+  const txCallBack = (txHash, details) => {
+    console.log('txCallBack', txProcessor);
+    if (txProcessor && txHash) {
+      txProcessor.setTx(txHash, user.username, details, true, false, false);
+      txProcessor.forceCheckTx = true;
+
+      updateTxProcessor(txProcessor);
+      // close model here
+    }
+    if (!txHash) {
+      console.log('error: ', details);
+      setLoading(false);
+    }
+  };
 
   const saveBoostMeta = async (delegate, safeAddress) => {
     const messageHash = web3Connect.web3.utils.sha3(dao.address);
@@ -68,6 +87,53 @@ const MinionSafe = () => {
       });
     } else {
       alert('error: forbidden');
+    }
+  };
+
+  const submitProposal = async (minion, safe, safeTx) => {
+    console.log(minion, safe, safeTx);
+
+    const setupValues = {
+      minionFactory: supportedChains[network.network_id].minion_factory_addr,
+      safeProxyFactory: supportedChains[network.network_id].safe_proxy_factory,
+      createAndAddModules:
+        supportedChains[network.network_id].safe_create_and_add_modules,
+      safe: safe,
+      network: network,
+    };
+    console.log('setupValues', setupValues);
+    const minionSafeService = new MinionSafeService(
+      web3Connect.web3,
+      user.username,
+      setupValues,
+    );
+
+    const executeData = await minionSafeService.execTransactionFromModule(
+      safeTx.to,
+      safeTx.value,
+      0,
+      0,
+    );
+
+    console.log(executeData);
+
+    const minionSetupValues = {
+      minion,
+      actionVlaue: '0',
+    };
+    const minionService = new MinionService(
+      web3Connect.web3,
+      user.username,
+      minionSetupValues,
+    );
+    const description = 'Minion Safe Test';
+
+    try {
+      // async propose(actionTo, actionVlaue, actionData, description, callback)
+      minionService.propose(safe, 0, executeData, description, txCallBack);
+    } catch (err) {
+      setLoading(false);
+      console.log('error: ', err);
     }
   };
 
@@ -215,7 +281,18 @@ const MinionSafe = () => {
                             <>
                               {tx.txType} {utils.fromWei(tx.value)} to{' '}
                               {truncateAddr(tx.to)}{' '}
-                              <Button>Submit Proposal</Button>
+                              <Button
+                                onClick={() =>
+                                  submitProposal(
+                                    dao.graphData.minions[0].minionAddress,
+                                    daoMetadata.boosts.minionSafe.metadata
+                                      .safeAddress,
+                                    tx,
+                                  )
+                                }
+                              >
+                                Submit Proposal
+                              </Button>
                             </>
                           )}
                         </ListItem>

@@ -27,7 +27,7 @@ const Settings = () => {
         <DaoContractSettings />
         <Flex justify='space-between' mt={6}>
           <TextBox size='xs'>DAO Metadata</TextBox>
-          {memberWallet?.activeMember ? (
+          {memberWallet?.shares > 0 ? (
             <Link
               as={RouterLink}
               color='secondary.500'

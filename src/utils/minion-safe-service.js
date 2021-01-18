@@ -27,10 +27,7 @@ export class MinionSafeService {
       safeCreateAndAddModulesAbi,
       this.createAndAddModulesAddress,
     );
-    this.safeMasterCopyContract = new web3.eth.Contract(
-      safeMasterCopyAbi,
-      this.safeMasterCopy,
-    );
+    this.safe = new web3.eth.Contract(safeMasterCopyAbi, this.safeMasterCopy);
   }
 
   // internal
@@ -100,7 +97,7 @@ export class MinionSafeService {
       network: supportedChains[this.network.network_id].network,
     };
 
-    const enableModuleData = this.safeMasterCopyContract.methods
+    const enableModuleData = this.safe.methods
       .enableModule(minionAddress)
       .encodeABI();
 
@@ -112,7 +109,7 @@ export class MinionSafeService {
       .createAndAddModules(this.safeProxyFactory, modulesCreationData)
       .encodeABI();
 
-    const setupData = await this.safeMasterCopyContract.methods
+    const setupData = await this.safe.methods
       .setup(
         [delegateAddress, minionAddress],
         threshhold,
@@ -141,5 +138,17 @@ export class MinionSafeService {
     cacheMinionSafe.txReceipt = txReceipt;
     this.setLocal(cacheMinionSafe);
     return txReceipt.transactionHash;
+  }
+
+  async execTransactionFromModule(to, value, data, operation, callback) {
+    const CALL = 0;
+
+    const getModulesData = this.safe.methods.getModules().encodeABI();
+    console.log('getModulesData', getModulesData);
+
+    const setupData = await this.safe.methods
+      .execTransactionFromModule(to, value, getModulesData, CALL)
+      .encodeABI();
+    return setupData;
   }
 }

@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import { Flex, Text } from '@chakra-ui/react';
 
 import TokenListCard from './TokenListCard';
-import { defaultTokens } from '../../../utils/constants';
 import ContentBox from '../../Shared/ContentBox';
 import TextBox from '../../Shared/TextBox';
 
@@ -40,8 +39,6 @@ const TokenList = ({ tokenList, isMember, isBank, version }) => {
       setHasAction(hasBalance || needsSync);
 
       setIsLoaded(true);
-    } else {
-      setLocalTokenList(defaultTokens);
     }
   }, [tokenList, isMember, isBank, version]);
 

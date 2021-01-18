@@ -80,14 +80,15 @@ const ProposalMinionCard = ({ proposal }) => {
           minionSimple.to
         }${key && '&apikey=' + key}`;
         const response = await fetch(url);
-
+        console.log('response', response);
         const json = await response.json();
-
+        console.log('parsed', JSON.parse(json.result));
         abiDecoder.addABI(JSON.parse(json.result));
         const _decodedData = abiDecoder.decodeMethod(minionSimple.data);
+        console.log('_decodedData', _decodedData);
         setDecodedData(_decodedData);
       } catch (err) {
-        console.log(err);
+        console.log('EEROR', err);
       }
     };
     getAbi();
@@ -95,6 +96,7 @@ const ProposalMinionCard = ({ proposal }) => {
   }, [proposal, minionSimple]);
 
   const displayDecodedData = (data) => {
+    console.log('data', data);
     return (
       <>
         <Text>Method: {data.name}</Text>

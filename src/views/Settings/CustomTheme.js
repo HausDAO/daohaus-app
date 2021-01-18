@@ -32,11 +32,11 @@ const CustomTheme = () => {
         primary500: theme.colors.primary[500],
         secondary500: theme.colors.secondary[500],
         bg500: theme.colors.background[500],
-        brandImg: theme.images.brandImg,
         bgImg: theme.images.bgImg,
         primaryFont: theme.fonts.heading,
         bodyFont: theme.fonts.body,
         monoFont: theme.fonts.mono,
+        daoMeta: theme.daoMeta,
       });
     }
   }, [theme]);
@@ -54,6 +54,8 @@ const CustomTheme = () => {
     const currentValues = tempTheme || defaultTheme;
     const themeUpdate = { ...currentValues, ...previewTheme };
 
+    console.log('themeUpdate', themeUpdate);
+
     const messageHash = web3Connect.web3.utils.sha3(dao.address);
     const signature = await web3Connect.web3.eth.personal.sign(
       messageHash,
@@ -69,7 +71,6 @@ const CustomTheme = () => {
     };
 
     const result = await boostPost('dao/boost', updateThemeObject);
-    console.log(result);
 
     if (result === 'success') {
       history.push(`/dao/${dao.address}/settings`);

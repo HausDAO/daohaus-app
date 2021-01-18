@@ -27,6 +27,8 @@ const Header = () => {
   useEffect(() => {
     if (location.pathname === '/') {
       setPageTitle('Hub');
+    } else if (location.pathname === `/explore`) {
+      setPageTitle('Explore DAOs');
     } else if (location.pathname === `/dao/${dao?.address}`) {
       setPageTitle('Overview');
     } else if (location.pathname === `/dao/${dao?.address}/proposals`) {
