@@ -140,15 +140,50 @@ export class MinionSafeService {
     return txReceipt.transactionHash;
   }
 
-  async execTransactionFromModule(to, value, data, operation, callback) {
-    const CALL = 0;
-
-    const getModulesData = this.safe.methods.getModules().encodeABI();
-    console.log('getModulesData', getModulesData);
-
-    const setupData = await this.safe.methods
-      .execTransactionFromModule(to, value, getModulesData, CALL)
+  /**
+   * Encodes a transaction from the Gnosis API into a module transaction
+   * @returns ABI encoded function call to `execTransactionFromModule`
+   */
+  execTransactionFromModule(to, value, data, operation) {
+    return this.safe.methods
+      .execTransactionFromModule(
+        to,
+        value,
+        data !== null ? data : '0x',
+        operation,
+      )
       .encodeABI();
-    return setupData;
+  }
+
+  /**
+   * Encodes a transaction from the Gnosis API into a multisig transaction
+   * @returns ABI encoded function call to `execTransaction`
+   */
+  execTransaction(
+    to,
+    value,
+    data,
+    operation,
+    safeTxGas,
+    baseGas,
+    gasPrice,
+    gasToken,
+    refundReceiver,
+    signatures,
+  ) {
+    return this.safe.methods
+      .execTransaction(
+        to,
+        value,
+        data !== null ? data : '0x',
+        operation,
+        safeTxGas,
+        baseGas,
+        gasPrice,
+        gasToken,
+        refundReceiver,
+        signatures,
+      )
+      .encodeABI();
   }
 }
