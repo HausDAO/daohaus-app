@@ -132,17 +132,6 @@ const Header = () => {
               Add Asset
             </Button>
           )}
-          {(location.pathname === `/dao/${dao?.address}/settings` ||
-            location.pathname === `/dao/${dao?.address}/settings/boosts`) &&
-            user &&
-            // <Button
-            //   as={RouterLink}
-            //   to={`/dao/${dao?.address}/settings/boosts/new`}
-            //   rightIcon={<RiAddFill />}
-            // >
-            //   Add {theme.daoMeta.boost}
-            // </Button>
-            null}
         </Flex>
 
         <Flex
@@ -162,7 +151,9 @@ const Header = () => {
                 onClick={() => openModal('accountModal')}
               >
                 <UserAvatar
-                  user={memberWallet?.activeMember ? user.profile : user}
+                  user={
+                    Object.keys(user.profile).length === 0 ? user : user.profile
+                  }
                   hideCopy={true}
                 />
               </Button>

@@ -1,5 +1,5 @@
 import React from 'react';
-import { Box, Flex } from '@chakra-ui/react';
+import { Box, Flex, Link } from '@chakra-ui/react';
 import { Link as RouterLink } from 'react-router-dom';
 
 import { Web3SignIn } from '../Shared/Web3SignIn';
@@ -32,14 +32,15 @@ const HubSignedOut = () => {
       <Flex direction='column' align='center'>
         <Web3SignIn />
 
-        <RouterLink
+        <Link
+          as={RouterLink}
           to='/explore'
           fontSize='md'
           textTransform='uppercase'
           color='secondary.500'
         >
-          Explore DAOs
-        </RouterLink>
+          Explore more DAOs
+        </Link>
       </Flex>
     </Box>
   );

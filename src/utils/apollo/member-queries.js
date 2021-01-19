@@ -3,7 +3,7 @@ import { gql } from 'apollo-boost';
 export const MEMBERS_LIST = gql`
   query membersList($contractAddr: String!, $skip: Int) {
     daoMembers: members(
-      where: { molochAddress: $contractAddr }
+      where: { molochAddress: $contractAddr, exists: true }
       orderBy: shares
       orderDirection: desc
       first: 100
@@ -58,7 +58,9 @@ export const MEMBERS_LIST = gql`
 
 export const HUB_MEMBERSHIPS = gql`
   query membersHub($memberAddress: String!) {
-    membersHub: members(where: { memberAddress: $memberAddress }) {
+    membersHub: members(
+      where: { memberAddress: $memberAddress, exists: true }
+    ) {
       id
       memberAddress
       exists
@@ -114,7 +116,7 @@ export const HUB_MEMBERSHIPS = gql`
 
 export const USER_MEMBERSHIPS = gql`
   query membersUser($memberAddress: String!) {
-    members(where: { memberAddress: $memberAddress }) {
+    members(where: { memberAddress: $memberAddress, exists: true }) {
       id
       memberAddress
       exists

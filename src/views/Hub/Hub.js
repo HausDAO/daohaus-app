@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Link as RouterLink } from 'react-router-dom';
-import { Box, Flex, Spinner } from '@chakra-ui/react';
+import { Box, Flex, Link, Spinner } from '@chakra-ui/react';
 
 import { useUser } from '../../contexts/PokemolContext';
 import { useTheme } from '../../contexts/CustomThemeContext';
@@ -79,14 +79,15 @@ const Hub = () => {
                       {localDaos.length > 0 ? (
                         <Box w='100%'>
                           <MemberDaoList label={'MEMBER OF'} daos={localDaos} />
-                          <RouterLink
+                          <Link
+                            as={RouterLink}
                             to='/explore'
                             fontSize='md'
                             textTransform='uppercase'
                             color='secondary.500'
                           >
                             Explore more DAOs
-                          </RouterLink>
+                          </Link>
                         </Box>
                       ) : null}
 
@@ -117,23 +118,15 @@ const Hub = () => {
                           />
                           <TextBox ml='15px'>Your daos will show here</TextBox>
                         </Flex>
-<<<<<<< HEAD
-                        <RouterLink
-=======
                         <Link
                           as={RouterLink}
->>>>>>> 42f1b685bb08c601de731fd9d80fdefcb7019e7c
                           to='/explore'
                           fontSize='md'
                           textTransform='uppercase'
                           color='secondary.500'
                         >
                           Explore more DAOs
-<<<<<<< HEAD
-                        </RouterLink>
-=======
                         </Link>
->>>>>>> 42f1b685bb08c601de731fd9d80fdefcb7019e7c
                       </Box>
                     </ContentBox>
                   )}
@@ -148,7 +141,7 @@ const Hub = () => {
                 <Box
                   fontSize='md'
                   fontFamily='heading'
-                  textTransform='uppercase'
+                  texttransform='uppercase'
                   fontWeight={700}
                 >
                   Recent Activity

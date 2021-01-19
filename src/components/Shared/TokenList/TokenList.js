@@ -75,7 +75,7 @@ const TokenList = ({ tokenList, isMember, isBank, version }) => {
             );
           })
         ) : (
-          <Text mt='5'>You don&apos;t have any unclaimed balances</Text>
+          <Text mt='5'>No unclaimed balances</Text>
         )}
       </ContentBox>
     </>
