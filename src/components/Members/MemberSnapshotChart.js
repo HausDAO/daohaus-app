@@ -50,7 +50,6 @@ const MemberSnapshotChart = ({ chartDimension, dao }) => {
         y0: 0,
       };
     });
-    console.log('data', data);
     setChartData(data);
   };
 

@@ -15,8 +15,9 @@ const ExploreCard = ({ dao }) => {
   const { state, dispatch } = useContext(ExploreContext);
 
   const handleTagSelect = (tag) => {
-    if (!state.tags.includes(tag.trim())) {
-      const tagUpdate = [...state.tags, tag.trim()];
+    console.log('state.tags', state.tags, tag);
+    if (!state.tags.includes(tag)) {
+      const tagUpdate = [...state.tags, tag];
       dispatch({ type: 'updateTags', payload: tagUpdate });
     }
   };
@@ -25,7 +26,7 @@ const ExploreCard = ({ dao }) => {
     if (dao.apiMetadata?.tags) {
       return (
         <Flex direction='row' wrap='wrap'>
-          {dao.apiMetadata.tags.split(',').map((tag) => {
+          {dao.apiMetadata.tags.map((tag) => {
             return (
               <Badge
                 key={tag}

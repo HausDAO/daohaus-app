@@ -81,7 +81,7 @@ const Hub = () => {
                           <MemberDaoList label={'MEMBER OF'} daos={localDaos} />
                           <Link
                             as={RouterLink}
-                            to={'/explore'}
+                            to='/explore'
                             fontSize='md'
                             textTransform='uppercase'
                             color='secondary.500'
@@ -141,7 +141,7 @@ const Hub = () => {
                 <Box
                   fontSize='md'
                   fontFamily='heading'
-                  textTransform='uppercase'
+                  texttransform='uppercase'
                   fontWeight={700}
                 >
                   Recent Activity
