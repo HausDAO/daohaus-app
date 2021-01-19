@@ -62,31 +62,6 @@ export class MinionSafeService {
     );
   }
 
-  createAndAddModulesData(dataArray) {
-    const ModuleDataWrapper = new this.web3.eth.Contract([
-      {
-        constant: false,
-        inputs: [{ name: 'data', type: 'bytes' }],
-        name: 'setup',
-        outputs: [],
-        payable: false,
-        stateMutability: 'nonpayable',
-        type: 'function',
-      },
-    ]);
-
-    // Remove method id (10) and position of data in payload (64)
-    return dataArray.reduce(
-      (acc, data) =>
-        acc +
-        ModuleDataWrapper.methods
-          .setup(data)
-          .encodeABI()
-          .substr(74),
-      '0x',
-    );
-  }
-
   async setup(delegateAddress, minionAddress, callback) {
     const Address0 = '0x'.padEnd(42, '0');
 
