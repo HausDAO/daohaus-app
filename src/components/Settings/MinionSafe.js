@@ -111,8 +111,8 @@ const MinionSafe = () => {
     const executeData = await minionSafeService.execTransactionFromModule(
       safeTx.to,
       safeTx.value,
-      0,
-      0,
+      safeTx.data,
+      safeTx.operation,
     );
 
     console.log(executeData);
