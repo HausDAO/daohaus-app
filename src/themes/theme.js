@@ -20,12 +20,12 @@ export const getRandomTheme = async (images) => {
 
   if (images) {
     const request = new Request('https://source.unsplash.com/random/200x200');
-    const brandImg = await fetch(request);
+    const avatarImg = await fetch(request);
 
     const requestBg = new Request('https://source.unsplash.com/random/800x800');
     const bgImg = await fetch(requestBg);
 
-    theme.brandImg = brandImg.url;
+    theme.avatarImg = avatarImg.url;
     theme.bgImg = bgImg.url;
   }
 
@@ -77,11 +77,11 @@ export const setTheme = (daoTheme) => {
       },
     },
     images: {
-      brandImg: themeOverrides.brandImg,
+      avatarImg: themeOverrides.avatarImg,
       bgImg: themeOverrides.bgImg,
     },
     fonts: {
-      heading: themeOverrides.primaryFont,
+      heading: themeOverrides.headingFont,
       body: themeOverrides.bodyFont,
       mono: themeOverrides.monoFont,
       hub: 'Mirza',
@@ -275,11 +275,12 @@ export const setTheme = (daoTheme) => {
       Badge: {
         baseStyle: {
           fontSize: 'xs',
+          fontWeight: '400',
         },
         variants: {
           solid: (props) => ({}),
           outline: (props) => ({
-            color: 'whiteAlpha.800',
+            color: 'whiteAlpha.700',
           }),
         },
         sizes: {},

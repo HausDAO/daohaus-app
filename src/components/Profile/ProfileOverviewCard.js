@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import { Flex, Skeleton, Box, Image, Icon } from '@chakra-ui/react';
+import { Avatar, Flex, Skeleton, Box, Icon, Tooltip } from '@chakra-ui/react';
 import { FaStar } from 'react-icons/fa';
+import { RiQuestionLine } from 'react-icons/ri';
 import { format } from 'date-fns';
 import makeBlockie from 'ethereum-blockies-base64';
 
@@ -26,6 +27,7 @@ const ProfileOverviewCard = ({ profile }) => {
   const [prices] = usePrices();
   const [memberWallet] = useMemberWallet();
   const [memberValue, setMemberValue] = useState(0);
+  const [votingPower, setVotingPower] = useState(0);
   const [ensName, setEnsName] = useState(null);
   const params = useParams();
   const [showAlert, setShowAlert] = useState();
@@ -50,6 +52,10 @@ const ProfileOverviewCard = ({ profile }) => {
           (+dao.totalShares + +dao.totalLoot) || 0;
 
       setMemberValue(memberProportion * total);
+
+      const shares = profile.shares || 0;
+      const power = ((+shares / +dao.totalShares) * 100).toFixed(1);
+      setVotingPower(power);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [dao, prices, profile]);
@@ -76,17 +82,15 @@ const ProfileOverviewCard = ({ profile }) => {
           <Flex direction='row' width='50%'>
             <Flex direction='column' align='center' pr={5} minW='40%'>
               {profile?.profile.image && profile?.profile.image[0] ? (
-                <Image
+                <Avatar
                   w='100px'
                   h='100px'
-                  rounded='full'
                   src={`https://ipfs.infura.io/ipfs/${profile.profile.image[0].contentUrl['/']}`}
                 />
               ) : (
-                <Image
+                <Avatar
                   w='100px'
                   h='100px'
-                  rounded='full'
                   src={makeBlockie(
                     profile.username ? profile.username : profile.memberAddress,
                   )}
@@ -142,7 +146,17 @@ const ProfileOverviewCard = ({ profile }) => {
           <Flex w='48%' direction='column'>
             <Flex justify='space-between'>
               <Box>
-                <TextBox size='sm'>Total Stake</TextBox>
+                <TextBox size='sm'>
+                  Exit Amount
+                  <Tooltip
+                    hasArrow
+                    shouldWrapChildren
+                    placement='top'
+                    label='Estimated amount you would receive in tokens if you were to Ragequit'
+                  >
+                    <Icon mt='-4px' as={RiQuestionLine} />
+                  </Tooltip>
+                </TextBox>
                 <TextBox size='4xl' variant='value'>
                   ${numberWithCommas(memberValue.toFixed(2))}
                 </TextBox>
@@ -171,12 +185,7 @@ const ProfileOverviewCard = ({ profile }) => {
                     </TextBox>
                   ) : (
                     <TextBox size='xl' variant='value'>
-                      {profile?.shares &&
-                        dao?.totalShares &&
-                        (profile?.shares / dao?.totalShares || 0 * 100).toFixed(
-                          1,
-                        )}
-                      %
+                      {votingPower}%
                     </TextBox>
                   )}
                 </Skeleton>

@@ -13,6 +13,9 @@ import {
 import { currencyOptions } from '../../content/summon-presets';
 import { useNetwork } from '../../contexts/PokemolContext';
 
+// TODO: Not used right now, but has code to allow adjusting settings and
+// converting between human values and contract values for period duration, ect..
+
 const SummonStepThree = ({
   daoData,
   setDaoData,

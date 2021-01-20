@@ -28,7 +28,7 @@ const DaoMetaOverview = () => {
               src={
                 dao.avatarImg
                   ? themeImagePath(dao.avatarImg)
-                  : theme.images.brandImg
+                  : theme.images.avatarImg
               }
               h='50px'
               w='50px'

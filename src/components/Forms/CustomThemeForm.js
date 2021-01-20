@@ -8,6 +8,8 @@ import {
   Select,
   Image,
   Text,
+  FormControl,
+  Input,
 } from '@chakra-ui/react';
 import { AiOutlineCaretDown } from 'react-icons/ai';
 import { SketchPicker } from 'react-color';
@@ -18,7 +20,6 @@ import TextBox from '../Shared/TextBox';
 import GenericModal from '../Modal/GenericModal';
 import { ipfsPost, ipfsPrePost } from '../../utils/requests';
 import { themeImagePath } from '../../utils/helpers';
-import { defaultTheme } from '../../themes/theme-defaults';
 
 const bodyFonts = [
   'Rubik',
@@ -73,18 +74,23 @@ const CustomThemeForm = ({ previewTheme, setPreviewTheme }) => {
     upload.click();
   };
 
-  const handleClearImage = (type) => {
-    if (type === 'bg') {
-      setPreviewTheme({
-        ...previewTheme,
-        bgImg: '',
-      });
-    } else {
-      setPreviewTheme({
-        ...previewTheme,
-        brandImg: defaultTheme.brandImg,
-      });
-    }
+  const handleClearImage = () => {
+    setPreviewTheme({
+      ...previewTheme,
+      bgImg: '',
+    });
+  };
+
+  const handleWordsChange = (event) => {
+    const { name, value } = event.target;
+    const updatedThemeWords = {
+      ...previewTheme.daoMeta,
+      [name]: value,
+    };
+    setPreviewTheme({
+      ...previewTheme,
+      daoMeta: updatedThemeWords,
+    });
   };
 
   const handleFileSet = async (event) => {
@@ -110,6 +116,24 @@ const CustomThemeForm = ({ previewTheme, setPreviewTheme }) => {
     setImageUrl(null);
     setUploading(false);
     closeModals();
+  };
+
+  const renderWordsFields = () => {
+    return Object.keys(previewTheme.daoMeta).map((themeKey) => {
+      return (
+        <FormControl mb={4} key={themeKey}>
+          <TextBox size='xs' mb={1}>
+            {themeKey}
+          </TextBox>
+          <Input
+            defaultValue={previewTheme.daoMeta[themeKey]}
+            placeholder={themeKey}
+            name={themeKey}
+            onChange={handleWordsChange}
+          />
+        </FormControl>
+      );
+    });
   };
 
   return (
@@ -331,7 +355,7 @@ const CustomThemeForm = ({ previewTheme, setPreviewTheme }) => {
                   <Text
                     fontSize='xs'
                     onClick={() => {
-                      handleClearImage('bg');
+                      handleClearImage();
                     }}
                     _hover={{ cursor: 'pointer' }}
                   >
@@ -342,16 +366,15 @@ const CustomThemeForm = ({ previewTheme, setPreviewTheme }) => {
             </Box>
           </ButtonGroup>
         </Flex>
+
+        <Flex direction='column' justify='center' my={6}>
+          <TextBox size='sm' mb={1}>
+            Interface Words
+          </TextBox>
+
+          {renderWordsFields()}
+        </Flex>
       </ContentBox>
-      <input
-        type='file'
-        id='brandImg'
-        accept='image/gif, image/jpeg, image/png'
-        multiple={false}
-        style={{ display: 'none' }}
-        ref={(ref) => (upload = ref)}
-        onChange={(e) => handleFileSet(e)}
-      />
       <input
         type='file'
         id='bgImg'

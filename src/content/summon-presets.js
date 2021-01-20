@@ -1,7 +1,6 @@
 import imgGrants from '../assets/Daohaus__Castle--Dark.svg';
 import imgGuilds from '../assets/Daohaus__Castle--Dark.svg';
 import imgVentures from '../assets/Daohaus__Castle--Dark.svg';
-import imgImpacts from '../assets/Daohaus__Castle--Dark.svg';
 import imgProjects from '../assets/Daohaus__Castle--Dark.svg';
 import imgClubs from '../assets/Daohaus__Castle--Dark.svg';
 import { supportedChains } from '../utils/chains';
@@ -10,7 +9,7 @@ export const daoConstants = (networkId) => {
   const constants = {
     abortWindow: '1',
     dilutionBound: '3',
-    version: '21',
+    version: '2.1',
   };
 
   if (networkId === 100) {
@@ -23,44 +22,10 @@ export const daoConstants = (networkId) => {
 export const daoPresets = (networkId) => {
   let presets = [
     {
-      presetName: 'Grants',
-      presetSubtitle: 'Accelerators',
-      presetDescription: 'Spread around the wealth and accelerate good stuff.',
-      currency: 'WETH',
-      approvedToken: supportedChains[networkId].weth_contract,
-      minimumTribute: '10',
-      votingPeriod: '168',
-      gracePeriod: '72',
-      proposalDeposit: '10000000000000000',
-      processingReward: '10000000000000000',
-      periodDuration: '3600',
-      summonerShares: 1,
-      color: '#ea8923',
-      version: '21',
-      img: imgGrants,
-    },
-    {
-      presetName: 'Ventures',
-      presetSubtitle: 'Investments',
-      presetDescription:
-        'Invest on chain with a venture fund at your fingertips.',
-      currency: 'WETH',
-      approvedToken: supportedChains[networkId].weth_contract,
-      minimumTribute: '50',
-      votingPeriod: '7',
-      gracePeriod: '7',
-      proposalDeposit: '100000000000000000',
-      processingReward: '10000000000000000',
-      periodDuration: '86400',
-      summonerShares: 1,
-      color: '#AB3593',
-      version: '21',
-      img: imgVentures,
-    },
-    {
       presetName: 'Guilds',
-      presetSubtitle: 'Services',
-      presetDescription: 'BuidL with fellow journeymen for clients and glory.',
+      presetSubtitle: 'Work collectively to offer services',
+      presetDescription:
+        'Best for Worker Cooperatives with small to medium financial throughput.',
       currency: 'DAI',
       approvedToken: supportedChains[networkId].dai_contract,
       minimumTribute: '100',
@@ -71,12 +36,12 @@ export const daoPresets = (networkId) => {
       periodDuration: '7200',
       summonerShares: 1,
       color: '#4FBF9F',
-      version: '21',
+      version: '2.1',
       img: imgGuilds,
     },
     {
       presetName: 'Clubs',
-      presetSubtitle: 'Social',
+      presetSubtitle: 'Little to no financial decisions',
       presetDescription:
         'Hang with your friends and commrades to nerd out or just chill.',
       currency: 'DAI',
@@ -89,30 +54,48 @@ export const daoPresets = (networkId) => {
       periodDuration: '60',
       summonerShares: 1,
       color: '#F16061',
-      version: '21',
+      version: '2.1',
       img: imgClubs,
     },
     {
-      presetName: 'Non-profit',
-      presetSubtitle: 'Impact',
+      presetName: 'Ventures',
+      presetSubtitle: 'Large to XL financial decisions',
       presetDescription:
-        'Decentralize to do good for the world and make an impact that lasts.',
-      currency: 'DAI',
-      approvedToken: supportedChains[networkId].dai_contract,
-      minimumTribute: '25',
-      votingPeriod: '240',
-      gracePeriod: '96',
-      proposalDeposit: '5000000000000000000',
-      processingReward: '0',
-      periodDuration: '1800',
+        'Invest on chain with a venture fund at your fingertips.',
+      currency: 'WETH',
+      approvedToken: supportedChains[networkId].weth_contract,
+      minimumTribute: '50',
+      votingPeriod: '7',
+      gracePeriod: '7',
+      proposalDeposit: '100000000000000000',
+      processingReward: '10000000000000000',
+      periodDuration: '86400',
       summonerShares: 1,
-      color: '#129AC6',
-      version: '21',
-      img: imgImpacts,
+      color: '#AB3593',
+      version: '2.1',
+      img: imgVentures,
     },
     {
+      presetName: 'Grants',
+      presetSubtitle: 'Distribute wealth together',
+      presetDescription: 'Spread around the wealth and accelerate good stuff.',
+      currency: 'WETH',
+      approvedToken: supportedChains[networkId].weth_contract,
+      minimumTribute: '10',
+      votingPeriod: '168',
+      gracePeriod: '72',
+      proposalDeposit: '10000000000000000',
+      processingReward: '10000000000000000',
+      periodDuration: '3600',
+      summonerShares: 1,
+      color: '#ea8923',
+      version: '2.1',
+      img: imgGrants,
+    },
+
+    {
       presetName: 'Products',
-      presetSubtitle: 'Projects',
+      presetSubtitle: 'Govern a Product or Protocol',
       presetDescription:
         'Raid together to get projects and products done in record time.',
       currency: 'DAI',
@@ -125,7 +108,7 @@ export const daoPresets = (networkId) => {
       periodDuration: '7200',
       summonerShares: 1,
       color: '#513e97',
-      version: '21',
+      version: '2.1',
       img: imgProjects,
     },
   ];

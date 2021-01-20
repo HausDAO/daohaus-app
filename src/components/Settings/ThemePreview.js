@@ -11,6 +11,7 @@ import { useTheme } from '../../contexts/CustomThemeContext';
 import TextBox from '../Shared/TextBox';
 import BankOverviewChart from '../Bank/BankOverviewChart';
 import ProposalCard from '../Proposals/ProposalCard';
+import { themeImagePath } from '../../utils/helpers';
 
 const ThemePreview = ({ previewValues }) => {
   const [dao] = useDao();
@@ -39,11 +40,7 @@ const ThemePreview = ({ previewValues }) => {
     >
       <Flex h='900px' w='100px' justify='center' bg={previewValues.primary500}>
         <Image
-          src={
-            previewValues.brandImg.slice(0, 2) === 'Qm'
-              ? `https://ipfs.infura.io/ipfs/${previewValues.brandImg}`
-              : previewValues.brandImg
-          }
+          src={themeImagePath(dao.avatarImg)}
           borderRadius='40px'
           height='50px'
           width='50px'

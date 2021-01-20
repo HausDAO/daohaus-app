@@ -12,6 +12,7 @@ import {
 import { TokenService } from '../token-service';
 import { MolochService } from '../moloch-service';
 import { supportedChains } from '../chains';
+import { getTotalBankValue } from '../bank-helpers';
 
 export const resolvers = {
   Moloch: {
@@ -19,6 +20,24 @@ export const resolvers = {
       const networkName = supportedChains[+context.networkId].network;
       const daoMatch = context.apiMetaDataJson[moloch.id] || [];
       return daoMatch.find((dao) => dao.network === networkName) || null;
+    },
+    networkId: (moloch, _args, context) => {
+      return context.networkId;
+    },
+    guildBankValue: async (moloch, _args, _context) => {
+      if (moloch.version === '1') {
+        const usdPrice = _context.priceDataJson[
+          moloch.depositToken.tokenAddress
+        ] || {
+          price: 0,
+        };
+        return (
+          usdPrice.price *
+          (moloch.guildBankBalanceV1 / 10 ** moloch.depositToken.decimals)
+        );
+      } else {
+        return getTotalBankValue(moloch.tokenBalances, _context.priceDataJson);
+      }
     },
   },
   Proposal: {

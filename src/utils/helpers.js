@@ -2,6 +2,8 @@ import { anyToBN } from '@netgum/utils';
 import { formatDistanceToNow, format } from 'date-fns';
 import { utils } from 'web3';
 
+import { supportedChains } from './chains';
+
 export const truncateAddr = (addr) => {
   return addr ? addr.slice(0, 6) + '...' + addr.slice(-4) : null;
 };
@@ -57,7 +59,10 @@ export const memberProfile = (members, address) => {
 
 export const validDaoParams = (location) => {
   const pathname = location.pathname.split('/');
-  const daoParam = pathname[2];
+  let daoParam = pathname[2];
+  if (daoParam) {
+    daoParam = daoParam.toLowerCase();
+  }
   const regex = RegExp('0x[0-9a-f]{10,40}');
   return pathname[1] === 'dao' && regex.test(daoParam) ? daoParam : false;
 };
@@ -109,6 +114,18 @@ export const formatPeriodDuration = (seconds) => {
   } else {
     const minutes = +seconds / 60;
     return `${minutes} minute${minutes > 1 ? 's' : ''}`;
+  }
+};
+
+export const periodsPerDayPreset = (seconds) => {
+  const hours = +seconds / 60 / 60;
+
+  const perDay = Math.ceil(24 / hours);
+
+  if (24 / hours < 1) {
+    return `Less than ${perDay} per day`;
+  } else {
+    return `${perDay} per day`;
   }
 };
 
@@ -187,6 +204,14 @@ export const themeImagePath = (imageValue) => {
   }
 
   if (imageValue.slice(0, 2) === 'Qm') {
-    return `https://ipfs.infura.io/ipfs/${imageValue}`;
+    // https://ipfs.infura.io/ipfs
+    return `https://gateway.pinata.cloud/ipfs/${imageValue}`;
   }
+};
+
+export const pokemolUrl = (dao) => {
+  const networkName = supportedChains[+dao.networkId].network;
+  const domain =
+    networkName === 'mainnet' ? 'pokemol.com' : `${networkName}.pokemol.com`;
+  return `https://${domain}/dao/${dao.id}`;
 };

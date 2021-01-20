@@ -149,7 +149,7 @@ const AccountModal = ({ isOpen }) => {
             <Box pt={6}>
               <Flex direction='row' justify='space-between' align='flex-start'>
                 <Flex direction='column'>
-                  {memberWallet?.activeMember && (
+                  {user ? (
                     <Link
                       as={RouterLink}
                       to={`/dao/${dao.address}/profile/${user.username}`}
@@ -160,7 +160,7 @@ const AccountModal = ({ isOpen }) => {
                     >
                       View Member Profile
                     </Link>
-                  )}
+                  ) : null}
                   <Link
                     onClick={() => {
                       web3connect.w3c.clearCachedProvider();

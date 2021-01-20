@@ -9,12 +9,7 @@ import {
   Stack,
 } from '@chakra-ui/react';
 
-import {
-  useMembers,
-  useDao,
-  useUser,
-  useMemberWallet,
-} from '../../contexts/PokemolContext';
+import { useMembers, useDao, useUser } from '../../contexts/PokemolContext';
 import { useTheme } from '../../contexts/CustomThemeContext';
 import MemberSnapshotChart from './MemberSnapshotChart';
 import TextBox from '../Shared/TextBox';
@@ -23,7 +18,6 @@ import { numberWithCommas } from '../../utils/helpers';
 
 const MemberSnapshot = ({ selectedMember }) => {
   const [theme] = useTheme();
-  const [memberWallet] = useMemberWallet();
   const [dao] = useDao();
   const [members] = useMembers();
   const [user] = useUser();
@@ -33,7 +27,7 @@ const MemberSnapshot = ({ selectedMember }) => {
     <Box>
       <Flex justify='space-between'>
         <TextBox size='xs'>Snapshot</TextBox>
-        {memberWallet?.activeMember ? (
+        {user || selectedMember ? (
           <TextBox
             as={Link}
             to={`/dao/${dao?.address}/profile/${

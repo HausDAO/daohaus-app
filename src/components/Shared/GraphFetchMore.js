@@ -14,15 +14,23 @@ const GraphFetchMore = ({
   entity,
   context,
   isStats,
+  networkOverride,
 }) => {
   const [network] = useNetwork();
   const [fetched, setFetched] = useState();
   const [refetchQuery, updateRefetchQuery] = useRefetchQuery();
 
+  let client;
+  if (networkOverride) {
+    client = supergraphClients[networkOverride];
+  } else if (isStats) {
+    client = statsgraphClients[network.network_id];
+  } else {
+    client = supergraphClients[network.network_id];
+  }
+
   const { loading, error, data, fetchMore, refetch } = useQuery(query, {
-    client: isStats
-      ? statsgraphClients[network.network_id]
-      : supergraphClients[network.network_id],
+    client,
     variables,
     fetchPolicy: 'network-only',
     context,
@@ -66,7 +74,6 @@ const GraphFetchMore = ({
 
   useEffect(() => {
     if (data && fetched) {
-      // console.log('setting entity', entity);
       setRecords(data[entity]);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps

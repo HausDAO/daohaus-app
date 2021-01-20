@@ -24,7 +24,6 @@ const MemberSnapshotChart = ({ chartDimension, dao }) => {
   const [preppedData, setPreppedData] = useState([]);
 
   useEffect(() => {
-    console.log('balances', balances);
     if (balances.length > 0 && dao && dao.graphData) {
       const dateRange = getDateRange(
         { value: 'lifetime' },
@@ -51,7 +50,6 @@ const MemberSnapshotChart = ({ chartDimension, dao }) => {
         y0: 0,
       };
     });
-    console.log('data', data);
     setChartData(data);
   };
 
@@ -83,6 +81,7 @@ const MemberSnapshotChart = ({ chartDimension, dao }) => {
             curve='curveNatural'
             data={chartData}
             color={theme.colors.primary[50]}
+            style={{ fill: 'none' }}
           />
           <AreaSeries
             animate
