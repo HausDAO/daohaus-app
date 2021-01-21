@@ -173,7 +173,7 @@ const BankOverviewChart = ({ balances, dao }) => {
           align='center'
           justify='center'
         >
-          <Text>The bank has a $0 balance</Text>
+          <Text>Waiting on more balance data.</Text>
         </Flex>
       )}
     </Box>

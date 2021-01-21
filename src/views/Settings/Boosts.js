@@ -30,7 +30,7 @@ const boostList = [
   },
   {
     name: 'Notifications',
-    key: 'notifications',
+    key: 'notifications1',
     description:
       'Customize and send notifications of DAO activity to your social channels',
     comingSoon: true,
