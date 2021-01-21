@@ -1,10 +1,4 @@
-import React, {
-  useEffect,
-  useContext,
-  createContext,
-  useRef,
-  useState,
-} from "react";
+import React, { useEffect, useContext, createContext, useRef } from "react";
 import { useParams } from "react-router-dom";
 import { bigGraphQuery } from "../utils/theGraph";
 import { useSessionStorage } from "../hooks/useSessionStorage";
@@ -134,7 +128,11 @@ export const DaoProvider = ({ children }) => {
     >
       <MetaDataProvider>
         <TokenProvider>
-          <DaoMemberProvider daoMembers={daoMembers} address={address}>
+          <DaoMemberProvider
+            daoMembers={daoMembers}
+            address={address}
+            overview={daoOverview}
+          >
             <TXProvider>{children}</TXProvider>
           </DaoMemberProvider>
         </TokenProvider>

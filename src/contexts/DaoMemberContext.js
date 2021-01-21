@@ -5,14 +5,23 @@ import React, {
   useState,
   useRef,
 } from "react";
+import { useParams } from "react-router-dom";
+import { initMemberWallet } from "../utils/wallet";
 
 export const DaoMemberContext = createContext();
 
-export const DaoMemberProvider = ({ daoMembers, address, children }) => {
+export const DaoMemberProvider = ({
+  daoMembers,
+  address,
+  overview,
+  children,
+}) => {
+  const { daoid, daochain } = useParams();
   const [daoMember, setDaoMember] = useState(null);
   const [isMember, setIsMember] = useState(null);
 
   const currentMemberRef = useRef(false);
+  const memberWallet = useRef(false);
 
   useEffect(() => {
     const checkForMember = (daoMembers) => {
@@ -32,6 +41,34 @@ export const DaoMemberProvider = ({ daoMembers, address, children }) => {
       }
     }
   }, [daoMembers, address]);
+  console.log(daoMember);
+  useEffect(() => {
+    const assembleMemberWallet = async () => {
+      try {
+        const wallet = await initMemberWallet({
+          memberAddress: daoMember.memberAddress,
+          depositToken: overview.depositToken,
+          daoAddress: daoid,
+          chainID: daochain,
+        });
+        if (wallet) {
+          setDaoMember((prevState) => ({
+            ...wallet,
+            ...prevState,
+            hasWallet: true,
+          }));
+        }
+        memberWallet.current = true;
+      } catch (error) {
+        console.error(error);
+        memberWallet.current = true;
+      }
+    };
+
+    if (daoMember && !memberWallet.current && overview && daochain && daoid) {
+      assembleMemberWallet();
+    }
+  }, [daoMember, overview, daochain, daoid]);
 
   return (
     <DaoMemberContext.Provider

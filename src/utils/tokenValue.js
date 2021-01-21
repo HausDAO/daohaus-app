@@ -1,4 +1,4 @@
-import { balanceOf } from "../services/tokenService";
+import { TokenService } from "../services/tokenService";
 import { MolochService } from "../services/molochService";
 import { omit } from "./general";
 
@@ -76,12 +76,11 @@ export const tallyUSDs = (tokenObj) => {
 export const addContractVals = (tokens, chainID) => {
   return Promise.all(
     tokens.map(async (token) => {
-      const tokenBalance = await balanceOf({
+      const tokenBalance = await TokenService({
         chainID,
         tokenAddress: token.tokenAddress,
-        queryAddress: token.moloch.id,
         is32: false,
-      });
+      })("balanceOf")(token.moloch.id);
       const babeBalance = await MolochService({
         tokenAddress: token.tokenAddress,
         chainID,
@@ -101,102 +100,3 @@ export const addContractVals = (tokens, chainID) => {
     })
   );
 };
-
-// const fetchForUSD = async (graphTokenData, uniswapDataMap, { isMainnet }) => {
-//   const addressList = graphTokenData
-//     .map(({ token }) => (isMainnet ? token.tokenAddress : token.altAddress))
-//     .toString();
-//   try {
-//     const tokenPrices = await getUsd(addressList);
-//     return mergeDataWithTokenPrice(
-//       graphTokenData,
-//       tokenPrices,
-//       uniswapDataMap,
-//       isMainnet
-//     );
-//   } catch (error) {
-//     console.error(error);
-//   }
-// };
-
-// const convertToMainNetVals = async (graphTokenData, symbolAddressMap) => {
-//   return graphTokenData.map((tokenType) => {
-//     const { token } = tokenType;
-//     const symbol = token.symbol === "WXDAI" ? "DAI" : token.symbol;
-//     const foundAddress = symbolAddressMap[symbol]?.address;
-//     if (foundAddress) {
-//       return {
-//         ...tokenType,
-//         token: {
-//           ...token,
-//           altAddress: foundAddress,
-//           totalUSD: calcTotalUSD(),
-//         },
-//       };
-//     } else {
-//       return tokenType;
-//     }
-//   });
-// };
-
-// const mergeDataWithTokenPrice = (
-//   graphTokenData,
-//   tokenPrices,
-//   uniswapDataMap,
-//   isMainnet
-// ) => {
-//   return graphTokenData.map((tokenType) => {
-//     const { token, tokenBalance } = tokenType;
-//     let usdVal;
-//     if (isMainnet) {
-//       usdVal = tokenPrices[token.tokenAddress]?.usd || 0;
-//     } else {
-//       usdVal = tokenPrices[token.altAddress]?.usd || 0;
-//     }
-//     const logoUri = uniswapDataMap[token.symbol]?.logoUri
-//       ? uniswapDataMap[token.symbol].logoUri
-//       : null;
-//     return {
-//       ...omit("token", tokenType),
-//       ...token,
-//       usd: usdVal,
-//       totalUSD: calcTotalUSD(token.decimals, tokenBalance, usdVal),
-//       logoUri,
-//     };
-//   });
-// };
-
-// export const addUSD = async (chainID, graphTokenData) => {
-//   try {
-//     const uniswapData = await fetchUniswapData();
-//     const tokenData = await fetchTokenData();
-//     const uniswapDataMap = uniswapData.reduce((map, token) => {
-//       map[token.symbol] = {
-//         address: token.address.toLowerCase(),
-//         logoUri: token.logoURI,
-//       };
-//       return map;
-//     }, {});
-
-//     if (chainID === "0x1") {
-//       const stateReadyVals = await fetchForUSD(graphTokenData, uniswapDataMap, {
-//         isMainnet: true,
-//       });
-//       return stateReadyVals;
-//     } else if (chainID === "0x4" || chainID === "0x2a" || chainID === "0x64") {
-//       const mainNetVals = await convertToMainNetVals(
-//         graphTokenData,
-//         uniswapDataMap
-//       );
-//       const stateReadyVals = await fetchForUSD(mainNetVals, uniswapDataMap, {
-//         isMainnet: false,
-//       });
-//       return stateReadyVals;
-//     } else {
-//       console.error(`ChainID: ${chainID} is not a valid ID`);
-//       return;
-//     }
-//   } catch (error) {
-//     console.error(error);
-//   }
-// };

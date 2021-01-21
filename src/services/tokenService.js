@@ -4,14 +4,10 @@ import Erc20Abi from "../contracts/erc20a.json";
 import Erc20Bytes32Abi from "../contracts/erc20Bytes32.json";
 import { chainByID } from "../utils/chain";
 
-const initTokenContract = ({ web3, abi, tokenAddress }) =>
-  new web3.eth.Contract(abi, tokenAddress);
-
-export const balanceOf = async ({
+export const TokenService = ({
+  web3,
   chainID,
   tokenAddress,
-  queryAddress,
-  web3,
   is32 = false,
   atBlock = "latest",
 }) => {
@@ -21,15 +17,33 @@ export const balanceOf = async ({
   }
   const abi = is32 ? Erc20Bytes32Abi : Erc20Abi;
 
-  const contract = initTokenContract({ web3, abi, tokenAddress });
-  try {
-    const balance = await contract.methods
-      .balanceOf(queryAddress)
-      .call({}, atBlock);
-    return balance;
-  } catch (error) {
-    console.error(error);
-  }
+  const contract = new web3.eth.Contract(abi, tokenAddress);
+  return (service) => {
+    if (service === "balanceOf") {
+      return async (queryAddress) => {
+        try {
+          const balance = await contract.methods
+            .balanceOf(queryAddress)
+            .call({}, atBlock);
+          return balance;
+        } catch (error) {
+          console.error(error);
+        }
+      };
+    }
+    if (service === "allowance") {
+      return async ({ accountAddr, contractAddr }) => {
+        try {
+          const allowance = await contract.methods
+            .allowance(accountAddr, contractAddr)
+            .call();
+          return allowance;
+        } catch (error) {
+          console.error(error);
+        }
+      };
+    }
+  };
 };
 
 // export class TokenService {
