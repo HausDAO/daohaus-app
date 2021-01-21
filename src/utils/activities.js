@@ -1,6 +1,18 @@
-export const getDaoActivites = (daoData) => {
-  const proposals = daoData.proposals.filter((prop) => !prop.cancelled);
-  const votes = daoData.proposals.flatMap((prop) => {
+//ACTIVITY MODEL
+
+// DAO ACTIVITIES: {
+//   title: String
+//   createdAt: Date(UTC),
+//   voteBadge: String,
+//   statusBadge: String,
+//   rageBadge: String
+//   positiveStatus: String,
+//   negativeStatus: String,
+//   voteStatus: String
+// }
+
+const getVotes = (proposals) => {
+  return proposals.flatMap((prop) => {
     const votes = prop.votes.map((vote) => {
       return {
         ...vote,
@@ -10,175 +22,208 @@ export const getDaoActivites = (daoData) => {
     });
     return votes;
   });
-  const rageActivities = daoData.rageQuits;
+};
+
+const handleVoteTitle = (activity) => {
+  return ` voted ${activity?.uintVote ? "Yes" : "No"} on ${
+    activity?.proposalType
+  }`;
+};
+const handleProposal = (proposal) => {
+  if (proposal.processed) {
+    return {
+      title: `processed ${proposal.proposalType}`,
+      createdAt: proposal.sponsoredAt,
+      statusBadge: "processed",
+      memberAddress: proposal.processor,
+    };
+  } else if (proposal.sponsored) {
+    return {
+      title: `sponsored ${proposal.proposalType}`,
+      createdAt: proposal.sponsoredAt,
+      statusBadge: "sponsored",
+      memberAddress: proposal.sponsor,
+    };
+  } else {
+    return {
+      title: `submitted ${proposal.proposalType}`,
+      createdAt: proposal.createdAt,
+      statusBadge: "submitted",
+      memberAddress: proposal.proposer,
+    };
+  }
+};
+
+const handleVote = (vote) => ({
+  memberAddress: vote.memberAddress,
+  title: handleVoteTitle(vote),
+  voteBadge: vote.uintVote,
+  createdAt: vote.createdAt,
+});
+
+const handleRQ = (rq) => ({
+  memberAddress: rq.memberAddress,
+  title: `quit ${rq.shares} shares and ${rq.loot} loot`,
+  rageBadge: "Rage Quit",
+  createdAt: rq.createdAt,
+});
+
+const buildProposalHistory = (proposal) => {
+  const histories = [
+    {
+      title: "Submitted",
+      createdAt: proposal.createdAt,
+      memberAddress: proposal.proposer,
+    },
+  ];
+
+  if (proposal.cancelled || proposal.aborted) {
+    histories.push({
+      title: "Cancelled",
+      negativeStatus: proposal.status,
+      createdAt: proposal.cancelledAt,
+      memberAddress: proposal.proposer,
+    });
+  }
+
+  if (proposal.sponsored) {
+    histories.push({
+      title: "Sponsored",
+      createdAt: proposal.sponsoredAt,
+      memberAddress: proposal.sponsor,
+    });
+  }
+
+  if (proposal.processed) {
+    histories.push({
+      title: "Processed",
+      positiveStatus: proposal.status,
+      createdAt: proposal.processedAt,
+      memberAddress: proposal.processor,
+    });
+  }
+
+  return histories;
+};
+
+const voteHistoryData = (record, proposal) => {
+  const totalVotesShares = +proposal.yesShares + +proposal.noShares;
+  const memberPercentageOfVote = (
+    (+record.memberPower / totalVotesShares) *
+    100
+  ).toFixed(2);
+  const operator = record.uintVote ? "+" : "-";
+  return {
+    title: `voted ${record.uintVote ? "yes" : "no"}`,
+    uintVote: record.uintVote,
+    voteStatus: `${totalVotesShares} Shares (${operator}${memberPercentageOfVote}%)`,
+    createdAt: record.createdAt,
+    memberAddress: record.memberAddress,
+  };
+};
+
+export const getDaoActivites = (daoData) => {
+  const proposals = daoData.proposals
+    .filter((prop) => !prop.cancelled)
+    .map((proposal) => handleProposal(proposal));
+
+  const votes = getVotes(daoData.proposals).map((vote) => handleVote(vote));
+  const rageActivities = daoData.rageQuits.map((rq) => handleRQ(rq));
   const allActivites = proposals
     .concat(votes)
     .concat(rageActivities)
-    .map((activity) => {
-      return {
-        ...activity,
-        activityData:
-          activity.__typename === "Proposal"
-            ? proposalActivityData(activity)
-            : voteRageActivityData(activity),
-      };
-    })
-    .sort((a, b) => +b.activityData.createdAt - +a.activityData.createdAt);
-
+    .sort((a, b) => +b.createdAt - +a.createdAt);
   return allActivites;
 };
 
 export const getProposalsActivites = (daoData) => {
-  const proposals = daoData.proposals.filter((prop) => !prop.cancelled);
-  const votes = daoData.proposals.flatMap((prop) => {
-    const votes = prop.votes.map((vote) => {
-      return {
-        ...vote,
-        proposalType: prop.proposalType,
-        proposalId: prop.proposalId,
-      };
-    });
-    return votes;
-  });
+  const proposals = daoData.proposals
+    .filter((prop) => !prop.cancelled)
+    .map((proposal) => handleProposal(proposal));
+  const votes = getVotes(daoData.proposals).map((vote) => handleVote(vote));
   const allActivites = proposals
     .concat(votes)
-    .map((activity) => {
-      return {
-        ...activity,
-        activityData:
-          activity.__typename === "Proposal"
-            ? proposalActivityData(activity)
-            : voteRageActivityData(activity),
-      };
-    })
-    .sort((a, b) => +b.activityData.createdAt - +a.activityData.createdAt);
-
+    .sort((a, b) => +b.createdAt - +a.createdAt);
   return allActivites;
 };
 
 export const getMembersActivites = (daoData) => {
-  const proposals = daoData.proposals.filter((prop) => {
-    return !prop.cancelled && prop.proposalType === "Member Proposal";
-  });
-  const votes = daoData.proposals
-    .flatMap((prop) => {
-      const votes = prop.votes.map((vote) => {
-        return {
-          ...vote,
-          proposalType: prop.proposalType,
-          proposalId: prop.proposalId,
-        };
-      });
-      return votes;
+  const proposals = daoData.proposals
+    .filter((prop) => {
+      return !prop.cancelled && prop.proposalType === "Member Proposal";
     })
-    .filter((vote) => vote.proposalType === "Member Proposal");
-  const rageActivities = daoData.rageQuits;
+    .map((proposal) => handleProposal(proposal));
+  const votes = getVotes(daoData.proposals)
+    .filter((vote) => vote.proposalType === "Member Proposal")
+    .map((vote) => handleVote(vote));
+
+  const rageActivities = daoData.rageQuits.map((rq) => handleRQ(rq));
   const allActivites = proposals
     .concat(votes)
     .concat(rageActivities)
-    .map((activity) => {
-      return {
-        ...activity,
-        activityData:
-          activity.__typename === "Proposal"
-            ? proposalActivityData(activity)
-            : voteRageActivityData(activity),
-      };
-    })
-    .sort((a, b) => +b.activityData.createdAt - +a.activityData.createdAt);
-
+    .sort((a, b) => +b.createdAt - +a.createdAt);
   return allActivites;
 };
 
-export const getMemberActivites = (daoData, memberAddress) => {
-  const proposals = daoData.proposals.filter((prop) => {
-    const memberRelated =
-      memberAddress?.toLowerCase() === prop.proposer?.toLowerCase() ||
-      memberAddress?.toLowerCase() === prop.sponser?.toLowerCase() ||
-      memberAddress?.toLowerCase() === prop.memberAddress?.toLowerCase() ||
-      memberAddress?.toLowerCase() === prop.applicant?.toLowerCase();
-    return !prop.cancelled && memberRelated;
-  });
-
-  const votes = daoData.proposals
-    .flatMap((prop) => {
-      const votes = prop.votes.map((vote) => {
-        return {
-          ...vote,
-          proposalType: prop.proposalType,
-          proposalId: prop.proposalId,
-        };
-      });
-      return votes;
+export const getMemberActivites = (memberAddress) => (daoData) => {
+  const proposals = daoData.proposals
+    .filter((prop) => {
+      const memberRelated =
+        memberAddress?.toLowerCase() === prop.proposer?.toLowerCase() ||
+        memberAddress?.toLowerCase() === prop.sponser?.toLowerCase() ||
+        memberAddress?.toLowerCase() === prop.memberAddress?.toLowerCase() ||
+        memberAddress?.toLowerCase() === prop.applicant?.toLowerCase();
+      return !prop.cancelled && memberRelated;
     })
+    .map((proposal) => handleProposal(proposal));
+
+  const votes = getVotes(daoData.proposals)
     .filter((vote) => {
       return (
         vote.proposalType === "Member Proposal" &&
         memberAddress === vote.memberAddress
       );
-    });
+    })
+    .map((vote) => handleVote(vote));
 
-  const rageActivities = daoData.rageQuits.filter(
-    (rage) => rage.memberAddress === memberAddress
-  );
+  const rageActivities = daoData.rageQuits
+    .filter((rage) => rage.memberAddress === memberAddress)
+    .map((rq) => handleRQ(rq));
+
   const allActivites = proposals
     .concat(votes)
     .concat(rageActivities)
-    .map((activity) => {
-      return {
-        ...activity,
-        activityData:
-          activity.__typename === "Proposal"
-            ? proposalActivityData(activity)
-            : voteRageActivityData(activity),
-      };
-    })
-    .sort((a, b) => +b.activityData.createdAt - +a.activityData.createdAt);
+    .sort((a, b) => +b.createdAt - +a.createdAt);
 
   return allActivites;
 };
 
 export const getProfileActivites = (daoData, memberAddress) => {
-  const proposals = daoData.proposals.filter((prop) => {
-    const memberRelated =
-      memberAddress?.toLowerCase() === prop.proposer?.toLowerCase() ||
-      memberAddress?.toLowerCase() === prop.sponsor?.toLowerCase() ||
-      memberAddress?.toLowerCase() === prop.memberAddress?.toLowerCase() ||
-      memberAddress?.toLowerCase() === prop.applicant?.toLowerCase();
-    return !prop.cancelled && memberRelated;
-  });
-
-  const votes = daoData.proposals
-    .flatMap((prop) => {
-      const votes = prop.votes.map((vote) => {
-        return {
-          ...vote,
-          proposalType: prop.proposalType,
-          proposalId: prop.proposalId,
-        };
-      });
-      return votes;
+  const proposals = daoData.proposals
+    .filter((prop) => {
+      const memberRelated =
+        memberAddress?.toLowerCase() === prop.proposer?.toLowerCase() ||
+        memberAddress?.toLowerCase() === prop.sponsor?.toLowerCase() ||
+        memberAddress?.toLowerCase() === prop.memberAddress?.toLowerCase() ||
+        memberAddress?.toLowerCase() === prop.applicant?.toLowerCase();
+      return !prop.cancelled && memberRelated;
     })
-    .filter((vote) => {
-      return memberAddress === vote.memberAddress;
-    });
+    .map((proposal) => handleProposal(proposal));
 
-  const rageActivities = daoData.rageQuits.filter(
-    (rage) => rage.memberAddress.toLowerCase() === memberAddress.toLowerCase()
-  );
+  const votes = getVotes(daoData.proposals)
+    .filter((vote) => memberAddress === vote.memberAddress)
+    .map((vote) => handleVote(vote));
+
+  const rageActivities = daoData.rageQuits
+    .filter(
+      (rage) => rage.memberAddress.toLowerCase() === memberAddress.toLowerCase()
+    )
+    .map((rq) => handleRQ(rq));
+
   const allActivites = proposals
     .concat(votes)
     .concat(rageActivities)
-    .map((activity) => {
-      return {
-        ...activity,
-        activityData:
-          activity.__typename === "Proposal"
-            ? proposalActivityData(activity)
-            : voteRageActivityData(activity),
-      };
-    })
-    .sort((a, b) => +b.activityData.createdAt - +a.activityData.createdAt);
+    .sort((a, b) => +b.createdAt - +a.createdAt);
 
   return allActivites;
 };
@@ -186,120 +231,8 @@ export const getProfileActivites = (daoData, memberAddress) => {
 export const getProposalHistories = (proposal) => {
   const votes = proposal.votes.map((vote) => voteHistoryData(vote, proposal));
   const proposalStates = buildProposalHistory(proposal);
-
   const allActivites = proposalStates
     .concat(votes)
-    .sort((a, b) => +b.activityData.createdAt - +a.activityData.createdAt);
-
+    .sort((a, b) => +b.createdAt - +a.createdAt);
   return allActivites;
-};
-
-const voteRageActivityData = (record) => {
-  let title;
-  let type;
-  if (record.__typename === "Vote") {
-    title = `voted ${+record.uintVote === 1 ? "yes" : "no"} on ${
-      record.proposalType
-    }`;
-    type = "vote";
-  } else {
-    title = `rage quit ${record.shares} shares and ${record.loot} loot`;
-    type = "rage";
-  }
-  return {
-    createdAt: record.createdAt,
-    memberAddress: record.memberAddress,
-    title,
-    type,
-  };
-};
-
-const proposalActivityData = (proposal) => {
-  let lastActivityTime = proposal.createdAt;
-  let lastActivity = "submitted";
-  let activityMember = proposal.proposer;
-  let title = `submitted ${proposal.proposalType}`;
-  if (proposal.sponsored) {
-    lastActivityTime = proposal.sponsoredAt;
-    lastActivity = "sponsored";
-    activityMember = proposal.sponsor;
-    title = `sponsored ${proposal.proposalType}`;
-  }
-  if (proposal.processed) {
-    lastActivityTime = proposal.sponsoredAt;
-    lastActivity = "processed";
-    title = `processed ${proposal.proposalType}`;
-    activityMember = proposal.processor;
-  }
-  return {
-    createdAt: lastActivityTime,
-    lastActivity,
-    memberAddress: activityMember,
-    title,
-    type: "proposal",
-  };
-};
-
-const voteHistoryData = (record, proposal) => {
-  const totalVotesShares = +proposal.yesShares + +proposal.noShares;
-  return {
-    ...record,
-    totalVotesShares,
-    memberPercentageOfVote: (
-      (+record.memberPower / totalVotesShares) *
-      100
-    ).toFixed(2),
-    activityData: {
-      createdAt: record.createdAt,
-      memberAddress: record.memberAddress,
-    },
-  };
-};
-
-const buildProposalHistory = (proposal) => {
-  const histories = [
-    {
-      ...proposal,
-      historyStep: "Submitted",
-      activityData: {
-        createdAt: proposal.createdAt,
-        memberAddress: proposal.proposer,
-      },
-    },
-  ];
-
-  if (proposal.cancelled || proposal.aborted) {
-    histories.push({
-      ...proposal,
-      historyStep: "Cancelled",
-      activityData: {
-        createdAt: proposal.cancelledAt,
-        memberAddress: proposal.proposer,
-      },
-    });
-  }
-
-  if (proposal.sponsored) {
-    histories.push({
-      ...proposal,
-      historyStep: "Sponsored",
-      activityData: {
-        createdAt: proposal.sponsoredAt,
-        memberAddress: proposal.sponsor,
-      },
-    });
-  }
-
-  if (proposal.processed) {
-    histories.push({
-      ...proposal,
-      historyStep: "Processed",
-      activityData: {
-        createdAt: proposal.processedAt,
-        memberAddress: proposal.processor,
-      },
-    });
-  }
-
-  return histories;
 };

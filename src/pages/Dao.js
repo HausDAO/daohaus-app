@@ -12,23 +12,26 @@ import {
 import Layout from "../components/layout";
 import { useCustomTheme } from "../contexts/CustomThemeContext";
 import { useLocalDaoData } from "../contexts/DaoContext";
+import { useDaoMember } from "../contexts/DaoMemberContext";
 import Bank from "../pages/Bank";
 import Members from "../pages/Members";
 import Overview from "../pages/Overview";
 import Proposals from "../pages/Proposals";
+import Profile from "../pages/Profile";
+import Proposal from "../pages/Proposal";
+import Settings from "../pages/Settings";
 
 const Dao = () => {
   const { path } = useRouteMatch();
+  const { daochain, daoid } = useParams();
   const {
     daoActivities,
-    isMember,
     isCorrectNetwork,
     daoBalances,
     daoOverview,
-    daoProposals,
     daoMembers,
   } = useLocalDaoData();
-  const { daochain, daoid } = useParams();
+  const { isMember } = useDaoMember();
   const { customCopy } = useCustomTheme();
 
   const [linkCopy, setLinkCopy] = useState();
@@ -63,7 +66,7 @@ const Dao = () => {
   );
 
   return (
-    <Layout sideMenu={sideMenu}>
+    <Layout sideMenu={sideMenu} isCorrectNetwork={isCorrectNetwork}>
       <Switch>
         <Route exact path={`${path}/`}>
           <Overview
@@ -75,13 +78,26 @@ const Dao = () => {
           />
         </Route>
         <Route exact path={`${path}/proposals`}>
-          <Proposals proposals={daoProposals} overview={daoOverview} />
+          <Proposals
+            proposals={daoActivities?.proposals}
+            overview={daoOverview}
+            activities={daoActivities}
+          />
         </Route>
         <Route exact path={`${path}/bank`}>
           <Bank balances={daoBalances} />
         </Route>
         <Route exact path={`${path}/members`}>
-          <Members members={daoMembers} />
+          <Members members={daoMembers} activities={daoActivities} />
+        </Route>
+        <Route exact path={`${path}/settings`}>
+          <Settings overview={daoOverview} />
+        </Route>
+        <Route exact path={`${path}/proposal/:propid`}>
+          <Proposal activities={daoActivities} />
+        </Route>
+        <Route exact path={`${path}/profile/:userid`}>
+          <Profile members={daoMembers} />
         </Route>
       </Switch>
     </Layout>

@@ -14,6 +14,7 @@ import { useInjectedProvider } from "./InjectedProviderContext";
 import { MetaDataProvider } from "./MetaDataContext";
 import { TokenProvider } from "./TokenContext";
 import { TXProvider } from "./TXContext";
+import { DaoMemberProvider } from "./DaoMemberContext";
 
 export const DaoContext = createContext();
 
@@ -44,11 +45,7 @@ export const DaoProvider = ({ children }) => {
     `transmutations-${daoid}`,
     null
   );
-
-  const [isMember, setIsMember] = useState(false);
-
   const hasPerformedBatchQuery = useRef(false);
-  const currentMember = useRef(false);
 
   useEffect(() => {
     //This condition is brittle. If one request passes, but the rest fail
@@ -104,18 +101,6 @@ export const DaoProvider = ({ children }) => {
     isCorrectNetwork,
   ]);
 
-  useEffect(() => {
-    const checkIfMember = (daoMembers) => {
-      return daoMembers.some((member) => member.memberAddress === address);
-    };
-    if (daoMembers) {
-      if (currentMember.current !== address) {
-        setIsMember(checkIfMember(daoMembers));
-        currentMember.current = address;
-      }
-    }
-  }, [daoMembers, address]);
-
   const refetch = () => {
     bigGraphQuery({
       args: {
@@ -141,16 +126,17 @@ export const DaoProvider = ({ children }) => {
         daoActivities,
         daoMembers,
         daoOverview,
-        isMember,
+
         isCorrectNetwork,
         refetch,
         hasPerformedBatchQuery, //Ref, not state
-        currentMember, //Ref, not state
       }}
     >
       <MetaDataProvider>
         <TokenProvider>
-          <TXProvider>{children}</TXProvider>
+          <DaoMemberProvider daoMembers={daoMembers} address={address}>
+            <TXProvider>{children}</TXProvider>
+          </DaoMemberProvider>
         </TokenProvider>
       </MetaDataProvider>
     </DaoContext.Provider>
@@ -163,21 +149,19 @@ export const useLocalDaoData = () => {
     daoActivities,
     daoMembers,
     daoOverview,
-    isMember,
+
     isCorrectNetwork,
     refetch,
     hasPerformedBatchQuery, //Ref, not state
-    currentMember, //Ref, not state
   } = useContext(DaoContext);
   return {
     daoProposals,
     daoActivities,
     daoMembers,
     daoOverview,
-    isMember,
+
     isCorrectNetwork,
     refetch,
     hasPerformedBatchQuery,
-    currentMember,
   };
 };

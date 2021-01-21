@@ -4,7 +4,7 @@ import { Avatar } from "@chakra-ui/react";
 
 import { fetchProfile } from "../utils/3box";
 
-const MemberCard = ({ member }) => {
+const MemberCard = ({ member, selectMember }) => {
   const [memberData, setMemberData] = useState(null);
 
   useEffect(() => {
@@ -23,11 +23,13 @@ const MemberCard = ({ member }) => {
     getProfile();
   }, [member]);
 
-  useEffect(() => {
+  const handleSelect = () => {
     if (memberData) {
-      //get member pic
+      selectMember({ ...member, ...memberData, hasProfile: true });
+    } else {
+      selectMember(member);
     }
-  }, [memberData]);
+  };
 
   return (
     <>
@@ -38,6 +40,7 @@ const MemberCard = ({ member }) => {
             src={`https://ipfs.infura.io/ipfs/${memberData.image[0].contentUrl["/"]}`}
             size="md"
           />
+          <button onClick={handleSelect}>Select Member</button>
           <p>{memberData.name}</p>
           <p>Shares: {member.shares}</p>
           <p>Loot: {member.loot}</p>
@@ -49,7 +52,7 @@ const MemberCard = ({ member }) => {
             src={makeBlockie(member.memberAddress)}
             size="md"
           />
-
+          <button onClick={handleSelect}>Select Member</button>
           <p>{member.memberAddress}</p>
           <p>Shares: {member.shares}</p>
           <p>Loot: {member.loot}</p>

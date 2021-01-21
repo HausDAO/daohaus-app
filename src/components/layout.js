@@ -2,11 +2,19 @@ import React from "react";
 import { Button, Grid, GridItem } from "@chakra-ui/react";
 import { useCustomTheme } from "../contexts/CustomThemeContext";
 import { useInjectedProvider } from "../contexts/InjectedProviderContext";
+import { useOverlay } from "../contexts/OverlayContext";
 
 const Layout = ({ sideMenu, children }) => {
   const { requestWallet, disconnectDapp, address } = useInjectedProvider();
+  const { errorToast, modalWithContent } = useOverlay();
   const { theme } = useCustomTheme();
 
+  const testModal = () => {
+    modalWithContent();
+  };
+  const testToast = () => {
+    errorToast({ title: "Title" });
+  };
   return (
     <Grid h="100%" w="100%" templateColumns="20rem auto">
       <GridItem colSpan={1} bg={theme.colors.primary[500]}>
@@ -18,6 +26,9 @@ const Layout = ({ sideMenu, children }) => {
         ) : (
           <Button onClick={requestWallet}>Sign In</Button>
         )}
+
+        <Button onClick={testModal}>Test Modal</Button>
+        <Button onClick={testToast}>Test Toast</Button>
         {children}
       </GridItem>
     </Grid>

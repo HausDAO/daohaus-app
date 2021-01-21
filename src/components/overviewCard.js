@@ -5,7 +5,7 @@ import { useMetaData } from "../contexts/MetaDataContext";
 import BankTotal from "./bankTotal";
 
 const OverviewCard = ({ overview, isMember, membersAmt }) => {
-  const { daochain, daoid } = useParams;
+  const { daochain, daoid } = useParams();
   const { daoMetadata } = useMetaData();
   const { customCopy } = useCustomTheme();
   const { tokenBalances, totalLoot, totalShares, title } = overview;

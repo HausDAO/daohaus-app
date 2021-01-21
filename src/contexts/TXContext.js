@@ -1,14 +1,16 @@
 import React, { useContext, createContext } from "react";
 import { useLocalDaoData } from "./DaoContext";
+import { useDaoMember } from "./DaoMemberContext";
 import { useMetaData } from "./MetaDataContext";
 import { useToken } from "./TokenContext";
 
 export const TXContext = createContext();
 
 export const TXProvider = ({ children }) => {
-  const { hasPerformedBatchQuery, currentMember, refetch } = useLocalDaoData();
+  const { hasPerformedBatchQuery, refetch } = useLocalDaoData();
   const { hasFetchedMetadata, shouldUpdateTheme } = useMetaData();
   const { shouldFetchInit, shouldFetchContract } = useToken();
+  const { currentMemberRef } = useDaoMember();
 
   const refreshDao = () => {
     //I use useRef to stop excessive rerenders in most of the contexts
@@ -17,14 +19,14 @@ export const TXProvider = ({ children }) => {
 
     //DaoContext
     hasPerformedBatchQuery.current = false;
-    currentMember.current = false;
     //TokenContext
     shouldFetchInit.current = true;
     shouldFetchContract.current = true;
     //MetadataContext
     hasFetchedMetadata.current = false;
     shouldUpdateTheme.current = true;
-
+    //DaoMemberContext
+    currentMemberRef.current = false;
     //Now, I call rerender on DaoContext, which should re-fetch all the graphQueries
     //This should get up all the up to date data from the Graph and spread across the
     //entire component tree. It should also recache the new data automatically

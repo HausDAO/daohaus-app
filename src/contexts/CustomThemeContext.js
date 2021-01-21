@@ -2,6 +2,7 @@ import React, { useContext, createContext, useState } from "react";
 import { ThemeProvider } from "@chakra-ui/react";
 import { defaultTheme, createNewTheme } from "../utils/metadata";
 import deepEql from "deep-eql";
+import OverlayProvider from "./OverlayContext";
 
 export const CustomeThemeContext = createContext();
 
@@ -24,7 +25,9 @@ export const CustomeThemeProvider = ({ children }) => {
     <CustomeThemeContext.Provider
       value={{ theme, updateTheme, resetTheme, customCopy }}
     >
-      <ThemeProvider theme={theme}>{children}</ThemeProvider>
+      <ThemeProvider theme={theme}>
+        <OverlayProvider>{children}</OverlayProvider>
+      </ThemeProvider>
     </CustomeThemeContext.Provider>
   );
 };

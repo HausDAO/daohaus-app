@@ -1,22 +1,19 @@
 import React from "react";
-import ActivitiesCard from "../components/activitiesFeed";
+import ActivitiesFeed from "../components/activitiesFeed";
 import OverviewCard from "../components/overviewCard";
+import { getDaoActivites } from "../utils/activities";
 
 const Overview = React.memo(function Overview({
   overview,
   activities,
   title,
   isMember,
-  isCorrectNetwork,
   members,
 }) {
   return (
     <div>
       <div className="title-section">
         <h1>{title}</h1>
-        {isCorrectNetwork || (
-          <p>You are not connected to the correct network</p>
-        )}
       </div>
       {overview && (
         <OverviewCard
@@ -25,7 +22,13 @@ const Overview = React.memo(function Overview({
           membersAmt={members?.daoMembers?.length}
         />
       )}
-      {activities && <ActivitiesCard activities={activities} />}
+      {activities && (
+        <ActivitiesFeed
+          activities={activities}
+          limit={3}
+          hydrateFn={getDaoActivites}
+        />
+      )}
     </div>
   );
 });
