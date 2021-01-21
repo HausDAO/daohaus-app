@@ -41,7 +41,7 @@ export const DaoMemberProvider = ({
       }
     }
   }, [daoMembers, address]);
-  console.log(daoMember);
+
   useEffect(() => {
     const assembleMemberWallet = async () => {
       try {
