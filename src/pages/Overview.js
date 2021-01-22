@@ -1,5 +1,6 @@
 import React from "react";
 import ActivitiesFeed from "../components/activitiesFeed";
+import MemberInfoCard from "../components/memberInfo";
 import OverviewCard from "../components/overviewCard";
 import { getDaoActivites } from "../utils/activities";
 
@@ -9,6 +10,7 @@ const Overview = React.memo(function Overview({
   title,
   isMember,
   members,
+  daoMember,
 }) {
   return (
     <div>
@@ -22,12 +24,15 @@ const Overview = React.memo(function Overview({
           membersAmt={members?.daoMembers?.length}
         />
       )}
-      {activities && (
-        <ActivitiesFeed
-          activities={activities}
-          limit={3}
-          hydrateFn={getDaoActivites}
-        />
+      {isMember && (
+        <>
+          <ActivitiesFeed
+            activities={activities}
+            limit={3}
+            hydrateFn={getDaoActivites}
+          />
+          <MemberInfoCard member={daoMember} />
+        </>
       )}
     </div>
   );

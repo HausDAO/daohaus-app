@@ -10,7 +10,7 @@ export const TXProvider = ({ children }) => {
   const { hasPerformedBatchQuery, refetch } = useLocalDaoData();
   const { hasFetchedMetadata, shouldUpdateTheme } = useMetaData();
   const { shouldFetchInit, shouldFetchContract } = useToken();
-  const { currentMemberRef } = useDaoMember();
+  const { currentMemberRef, memberWalletRef } = useDaoMember();
 
   const refreshDao = () => {
     //I use useRef to stop excessive rerenders in most of the contexts
@@ -27,6 +27,7 @@ export const TXProvider = ({ children }) => {
     shouldUpdateTheme.current = true;
     //DaoMemberContext
     currentMemberRef.current = false;
+    memberWalletRef.current = false;
     //Now, I call rerender on DaoContext, which should re-fetch all the graphQueries
     //This should get up all the up to date data from the Graph and spread across the
     //entire component tree. It should also recache the new data automatically

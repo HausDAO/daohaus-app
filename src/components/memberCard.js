@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import makeBlockie from "ethereum-blockies-base64";
 import { Avatar } from "@chakra-ui/react";
 
-import { fetchProfile } from "../utils/3box";
+import { handleGetProfile } from "../utils/3box";
 
 const MemberCard = ({ member, selectMember }) => {
   const [memberData, setMemberData] = useState(null);
@@ -10,7 +10,7 @@ const MemberCard = ({ member, selectMember }) => {
   useEffect(() => {
     const getProfile = async () => {
       try {
-        const profile = await fetchProfile(member.memberAddress);
+        const profile = await handleGetProfile(member.memberAddress);
         if (profile.status === "error") {
           return;
         }

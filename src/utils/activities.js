@@ -198,7 +198,7 @@ export const getMemberActivites = (memberAddress) => (daoData) => {
   return allActivites;
 };
 
-export const getProfileActivites = (daoData, memberAddress) => {
+export const getProfileActivites = (memberAddress) => (daoData) => {
   const proposals = daoData.proposals
     .filter((prop) => {
       const memberRelated =

@@ -9,7 +9,6 @@ export const MolochService = ({ web3, daoAddress, version, chainID }) => {
     const rpcUrl = chainByID(chainID).rpc_url;
     web3 = new Web3(new Web3.providers.HttpProvider(rpcUrl));
   }
-  console.log(version);
   const abi = version >= 2 ? DaoAbiV2 : DaoAbi;
   const contract = new web3.eth.Contract(abi, daoAddress);
 

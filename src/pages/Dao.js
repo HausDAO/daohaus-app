@@ -20,10 +20,13 @@ import Proposals from "../pages/Proposals";
 import Profile from "../pages/Profile";
 import Proposal from "../pages/Proposal";
 import Settings from "../pages/Settings";
+import { useToken } from "../contexts/TokenContext";
 
 const Dao = () => {
   const { path } = useRouteMatch();
   const { daochain, daoid } = useParams();
+  const { currentDaoTokens } = useToken();
+
   const {
     daoActivities,
     isCorrectNetwork,
@@ -31,7 +34,7 @@ const Dao = () => {
     daoOverview,
     daoMembers,
   } = useLocalDaoData();
-  const { isMember } = useDaoMember();
+  const { isMember, daoMember } = useDaoMember();
   const { customCopy } = useCustomTheme();
 
   const [linkCopy, setLinkCopy] = useState();
@@ -71,6 +74,7 @@ const Dao = () => {
         <Route exact path={`${path}/`}>
           <Overview
             activities={daoActivities}
+            daoMember={daoMember}
             isMember={isMember}
             isCorrectNetwork={isCorrectNetwork}
             overview={daoOverview}
@@ -97,7 +101,12 @@ const Dao = () => {
           <Proposal activities={daoActivities} />
         </Route>
         <Route exact path={`${path}/profile/:userid`}>
-          <Profile members={daoMembers} />
+          <Profile
+            members={daoMembers}
+            overview={daoOverview}
+            daoTokens={currentDaoTokens}
+            activities={daoActivities}
+          />
         </Route>
       </Switch>
     </Layout>

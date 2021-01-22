@@ -21,7 +21,7 @@ export const DaoMemberProvider = ({
   const [isMember, setIsMember] = useState(null);
 
   const currentMemberRef = useRef(false);
-  const memberWallet = useRef(false);
+  const memberWalletRef = useRef(false);
 
   useEffect(() => {
     const checkForMember = (daoMembers) => {
@@ -58,21 +58,27 @@ export const DaoMemberProvider = ({
             hasWallet: true,
           }));
         }
-        memberWallet.current = true;
+        memberWalletRef.current = true;
       } catch (error) {
         console.error(error);
-        memberWallet.current = true;
+        memberWalletRef.current = true;
       }
     };
 
-    if (daoMember && !memberWallet.current && overview && daochain && daoid) {
+    if (
+      daoMember &&
+      !memberWalletRef.current &&
+      overview &&
+      daochain &&
+      daoid
+    ) {
       assembleMemberWallet();
     }
   }, [daoMember, overview, daochain, daoid]);
 
   return (
     <DaoMemberContext.Provider
-      value={{ currentMemberRef, isMember, daoMember }}
+      value={{ currentMemberRef, isMember, daoMember, memberWalletRef }}
     >
       {children}
     </DaoMemberContext.Provider>
@@ -80,8 +86,8 @@ export const DaoMemberProvider = ({
 };
 
 export const useDaoMember = () => {
-  const { currentMemberRef, isMember, daoMember } = useContext(
+  const { currentMemberRef, isMember, daoMember, memberWalletRef } = useContext(
     DaoMemberContext
   );
-  return { currentMemberRef, isMember, daoMember };
+  return { currentMemberRef, isMember, daoMember, memberWalletRef };
 };

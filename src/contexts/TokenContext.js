@@ -25,10 +25,7 @@ export const TokenProvider = ({ children }) => {
   //first fetch API USD values to get fast bank balance
   useEffect(() => {
     const initDaoTokens = async () => {
-      const newDaoData = await initTokenData(
-        daochain,
-        daoOverview.tokenBalances
-      );
+      const newDaoData = await initTokenData(daoOverview.tokenBalances);
       setCurrentDaoTokens(newDaoData);
       shouldFetchInit.current = false;
     };

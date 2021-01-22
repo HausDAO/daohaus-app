@@ -3,6 +3,7 @@ import { Button, Grid, GridItem } from "@chakra-ui/react";
 import { useCustomTheme } from "../contexts/CustomThemeContext";
 import { useInjectedProvider } from "../contexts/InjectedProviderContext";
 import { useOverlay } from "../contexts/OverlayContext";
+import { truncateAddr } from "../utils/general";
 
 const Layout = ({ sideMenu, children }) => {
   const { requestWallet, disconnectDapp, address } = useInjectedProvider();
@@ -22,13 +23,10 @@ const Layout = ({ sideMenu, children }) => {
       </GridItem>
       <GridItem colStart={2} colEnd={5} bg={theme.colors.background[500]}>
         {address ? (
-          <Button onClick={disconnectDapp}>{address}</Button>
+          <Button onClick={disconnectDapp}>{truncateAddr(address)}</Button>
         ) : (
           <Button onClick={requestWallet}>Sign In</Button>
         )}
-
-        <Button onClick={testModal}>Test Modal</Button>
-        <Button onClick={testToast}>Test Toast</Button>
         {children}
       </GridItem>
     </Grid>

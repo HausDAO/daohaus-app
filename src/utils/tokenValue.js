@@ -41,7 +41,30 @@ export const calcTotalUSD = (decimals, tokenBalance, usdVal) => {
   return (+tokenBalance / 10 ** decimals) * +usdVal;
 };
 
-export const initTokenData = async (chainID, graphTokenData) => {
+const initTokens = async (graphTokenData) => {
+  const tokenCache = window.sessionStorage.getItem("AllTokens");
+  if (!tokenCache) {
+    return initTokenData(graphTokenData);
+  } else {
+    let cachedTokens = [];
+    let newTokens = [];
+
+    for (let tokenObj of graphTokenData) {
+      const address = tokenObj.token.tokenAddress;
+      if (tokenCache[address]) {
+        cachedTokens = [...cachedTokens, tokenObj];
+      } else {
+        newTokens = [...newTokens, tokenObj];
+      }
+    }
+    if (newTokens.length) {
+      const newTokenData = await initTokenData(newTokens);
+      return [...cachedTokens, ...newTokenData];
+    }
+  }
+};
+
+export const initTokenData = async (graphTokenData) => {
   const tokenData = await fetchTokenData();
   const uniswapData = await fetchUniswapData();
   const uniswapDataMap = uniswapData.reduce((map, token) => {
@@ -50,18 +73,26 @@ export const initTokenData = async (chainID, graphTokenData) => {
   }, {});
 
   return graphTokenData.map((tokenObj) => {
+    ensureCacheExists();
     const { token, tokenBalance } = tokenObj;
-    const usdVal = tokenData[token.tokenAddress]?.price || 0;
-    const symbol = tokenData[token.tokenAddress]?.symbol || null;
-    const logoUri = uniswapDataMap[symbol] || null;
-    return {
-      ...omit("token", tokenObj),
-      ...token,
-      symbol,
-      usd: usdVal,
-      totalUSD: calcTotalUSD(token.decimals, tokenBalance, usdVal),
-      logoUri,
-    };
+    const cachedToken = getCachedToken(token.tokenAddress);
+    if (cachedToken) {
+      return cachedToken;
+    } else {
+      const usdVal = tokenData[token.tokenAddress]?.price || 0;
+      const symbol = tokenData[token.tokenAddress]?.symbol || null;
+      const logoUri = uniswapDataMap[symbol] || null;
+      const tokenDataObj = {
+        ...omit("token", tokenObj),
+        ...token,
+        symbol,
+        usd: usdVal,
+        totalUSD: calcTotalUSD(token.decimals, tokenBalance, usdVal),
+        logoUri,
+      };
+      cacheToken(tokenDataObj, token.tokenAddress);
+      return tokenDataObj;
+    }
   });
 };
 
@@ -99,4 +130,31 @@ export const addContractVals = (tokens, chainID) => {
       };
     })
   );
+};
+
+////////Caching Utils//////////////
+
+export const cacheToken = (newToken, tokenAddress) => {
+  if (!newToken) return;
+
+  const tokenCache = JSON.parse(window.sessionStorage.getItem("AllTokens"));
+  const newCache = JSON.stringify({
+    ...tokenCache,
+    [tokenAddress]: newToken,
+  });
+  window.sessionStorage.setItem("AllTokens", newCache);
+};
+
+export const getCachedToken = (tokenAddress) => {
+  const tokenData = JSON.parse(window.sessionStorage.getItem("AllTokens"));
+  return tokenData[tokenAddress] ? tokenData[tokenAddress] : false;
+};
+
+export const ensureCacheExists = () => {
+  const cacheExists = window.sessionStorage.getItem("AllTokens");
+  if (cacheExists) {
+    return true;
+  } else {
+    window.sessionStorage.setItem("AllTokens", JSON.stringify({}));
+  }
 };

@@ -1,16 +1,12 @@
 import React from "react";
 import { Image } from "@chakra-ui/react";
 
-import { useToken } from "../contexts/TokenContext";
-import { numberWithCommas } from "../utils/general";
-
-const BankList = () => {
-  const { currentDaoTokens } = useToken();
-
+const BankList = ({ tokens }) => {
+  console.log(tokens);
   return (
     <div>
-      {currentDaoTokens &&
-        Object.values(currentDaoTokens).map((token) => {
+      {tokens &&
+        Object.values(tokens).map((token) => {
           return (
             <div key={token.id}>
               <p>{token.symbol}</p>

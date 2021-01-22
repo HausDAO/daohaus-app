@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Avatar } from "@chakra-ui/react";
 
-import { fetchProfile } from "../utils/3box";
+import { fetchProfile, handleGetProfile } from "../utils/3box";
 import { truncateAddr, formatCreatedAt, timeToNow } from "../utils/general";
 import makeBlockie from "ethereum-blockies-base64";
 
@@ -14,6 +14,8 @@ const handleAvatar = (activity, profile) => {
     const url = profile?.image[0].contentUrl;
     return (
       <Avatar
+        //adds key to prevent react from skipping this render
+        key={`profile${activity.memberAddress}`}
         name={profile?.name}
         size="sm"
         src={`https://ipfs.infura.io/ipfs/${url["/"]}`}
@@ -22,6 +24,7 @@ const handleAvatar = (activity, profile) => {
   } else {
     return (
       <Avatar
+        key={`no-profile${activity.memberAddress}`}
         name={activity?.memberAddress}
         size="sm"
         src={makeBlockie(activity?.memberAddress)}
@@ -36,7 +39,8 @@ const ActivityCard = ({ activity, displayAvatar }) => {
     let isCancelled = false;
     const getProfile = async () => {
       try {
-        const newProfile = await fetchProfile(activity.memberAddress);
+        const newProfile = await handleGetProfile(activity.memberAddress);
+        if (newProfile.status === "error") return;
         if (!isCancelled) {
           setProfile(newProfile);
         }

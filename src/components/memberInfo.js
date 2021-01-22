@@ -1,8 +1,5 @@
 import React, { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
-import { useLocalDaoData } from "../contexts/DaoContext";
-import { useInjectedProvider } from "../contexts/InjectedProviderContext";
-import { fetchProfile } from "../utils/3box";
 import { timeToNow } from "../utils/general";
 
 const MemberInfoCard = ({ member }) => {
