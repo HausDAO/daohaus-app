@@ -1,15 +1,46 @@
-import React, { useContext } from 'react';
-
+import React from 'react';
 import { Link } from 'react-router-dom';
-import { DaoServiceContext } from '../../contexts/Store';
+import { Flex, Box, Button } from '@chakra-ui/react';
+import { useTheme } from '../../contexts/CustomThemeContext';
 
 const FourOhFour = () => {
-  const [daoService] = useContext(DaoServiceContext);
+  const [theme] = useTheme();
+
   return (
-    <div className="View">
-      You seem to be lost.
-      <Link to={`/dao/${daoService.daoAddress}`}>Go back home.</Link>
-    </div>
+    <Flex align='center' justify='center' w='100%' h='100%'>
+      <Flex direction='column' align='center' h='35%' justify='space-between'>
+        <Box
+          textTransform='uppercase'
+          fontWeight={700}
+          fontSize='md'
+          fontFamily='heading'
+          maxW='350px'
+          textAlign='center'
+        >
+          {theme.daoMeta.f04heading}
+        </Box>
+        <Box
+          textTransform='uppercase'
+          fontWeight={700}
+          fontSize='md'
+          fontFamily='heading'
+          maxW='350px'
+          textAlign='center'
+        >
+          {theme.daoMeta.f04subhead}
+        </Box>
+
+        <Button
+          as={Link}
+          to='/'
+          textTransform='uppercase'
+          w='40%'
+          fontWeight={700}
+        >
+          {theme.daoMeta.f04cta}
+        </Button>
+      </Flex>
+    </Flex>
   );
 };
 

@@ -7,7 +7,7 @@ module.exports = {
     "standard",
     "prettier",
     "plugin:prettier/recommended",
-    "plugin:react/recommended"
+    "plugin:react/recommended",
   ],
   globals: {
     Atomics: "readonly",
@@ -21,14 +21,14 @@ module.exports = {
     ecmaVersion: 2018,
     sourceType: "module"
   },
-  plugins: ["react", "prettier"],
+  plugins: ["react", "prettier", "react-hooks"],
   settings: {
     react: {
       version: "detect"
     }
   },
   rules: {
-    "no-console": "warn",
+    "no-console": "off", // revert to warn or error when ready for prod
     "react/prop-types": "off",
     "no-unused-vars": "error",
     "prettier/prettier": "error"

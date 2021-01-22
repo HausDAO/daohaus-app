@@ -1,0 +1,80 @@
+[
+  {
+    "type": "constructor",
+    "stateMutability": "nonpayable",
+    "inputs": [
+      {
+        "type": "address",
+        "name": "_template",
+        "internalType": "address payable"
+      }
+    ]
+  },
+  {
+    "type": "event",
+    "name": "SummonMinion",
+    "inputs": [
+      {
+        "type": "address",
+        "name": "minion",
+        "internalType": "address",
+        "indexed": true
+      },
+      {
+        "type": "address",
+        "name": "moloch",
+        "internalType": "address",
+        "indexed": true
+      },
+      {
+        "type": "string",
+        "name": "details",
+        "internalType": "string",
+        "indexed": false
+      },
+      {
+        "type": "string",
+        "name": "minionType",
+        "internalType": "string",
+        "indexed": false
+      }
+    ],
+    "anonymous": false
+  },
+  {
+    "type": "function",
+    "stateMutability": "view",
+    "outputs": [{ "type": "address", "name": "", "internalType": "address" }],
+    "name": "minionList",
+    "inputs": [{ "type": "uint256", "name": "", "internalType": "uint256" }]
+  },
+  {
+    "type": "function",
+    "stateMutability": "view",
+    "outputs": [
+      { "type": "address", "name": "moloch", "internalType": "address" },
+      { "type": "string", "name": "details", "internalType": "string" }
+    ],
+    "name": "minions",
+    "inputs": [{ "type": "address", "name": "", "internalType": "address" }]
+  },
+  {
+    "type": "function",
+    "stateMutability": "nonpayable",
+    "outputs": [{ "type": "address", "name": "", "internalType": "address" }],
+    "name": "summonMinion",
+    "inputs": [
+      { "type": "address", "name": "moloch", "internalType": "address" },
+      { "type": "string", "name": "details", "internalType": "string" }
+    ]
+  },
+  {
+    "type": "function",
+    "stateMutability": "view",
+    "outputs": [
+      { "type": "address", "name": "", "internalType": "address payable" }
+    ],
+    "name": "template",
+    "inputs": []
+  }
+]

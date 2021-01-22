@@ -1,140 +1,123 @@
 import React from 'react';
 import { Switch, Route } from 'react-router-dom';
+
 import FourOhFour from './views/404/404';
-import Home from './views/home/Home';
-import Proposals from './views/proposals/Proposals';
-import Proposal from './views/proposal/Proposal';
-import ProposalNew from './views/proposal-new/ProposalNew';
-import Members from './views/members/Members';
-import Member from './views/member/Member';
-import Account from './views/account/Account';
-import SignIn from './views/auth/SignIn';
-import SignOut from './views/auth/SignOut';
-import InvalidRoute from './views/invalidRoute/InvalidRoute';
-import ProposalEngine from './views/proposal-new-v2/ProposalEngine';
-import NewMemberForm from './components/proposal-v2/NewMemberForm';
-import FundingForm from './components/proposal-v2/FundingForm';
-import WhitelistForm from './components/proposal-v2/WhitelistForm';
-import GuildKickForm from './components/proposal-v2/GuildKickForm';
-import TradeForm from './components/proposal-v2/TradeForm';
-import Success from './views/success/Success';
-import Transmutation from './views/boosts/transmutation/Transmutation';
-import Rage from './views/rage/Rage';
+import Hub from './views/Hub/Hub';
+import Dao from './views/Dao/Dao';
+import Proposals from './views/Proposals/Proposals';
+import Proposal from './views/Proposals/Proposal';
+import NewProposal from './views/Proposals/NewProposal';
+import Members from './views/Members/Members';
+import Profile from './views/Profile/Profile';
+import Bank from './views/Bank/Bank';
+import NewToken from './views/Bank/NewToken';
+import Settings from './views/Settings/Settings';
+import Boosts from './views/Settings/Boosts';
+import NewBoost from './views/Settings/NewBoost';
+import CustomTheme from './views/Settings/CustomTheme';
+import Notifications from './views/Settings/Notifications';
+import DaoTheme from './views/Theme/DaoTheme';
+import NewMember from './views/Members/NewMember';
+import DaoMeta from './views/Settings/DaoMeta';
+import SummonWrapper from './views/Summon/SummonWrapper';
+import RegisterDao from './views/Summon/RegisterDao';
+import ExplorWrapper from './views/Explore/ExploreWrapper';
 
-const Routes = (props) => {
-  const { isValid } = props;
-
+const Routes = () => {
   return (
     <>
-      {isValid ? (
-        <Switch>
-          <Route
-            path="/dao/:dao(\b0x[0-9a-f]{10,40}\b)/"
-            exact
-            component={Home}
-          />
-          <Route
-            path="/dao/:dao(\b0x[0-9a-f]{10,40}\b)/proposals"
-            exact
-            component={Proposals}
-          />
-          <Route
-            path="/dao/:dao(\b0x[0-9a-f]{10,40}\b)/proposals/:filter"
-            exact
-            component={Proposals}
-          />
-          <Route
-            path="/dao/:dao(\b0x[0-9a-f]{10,40}\b)/proposal/:id"
-            exact
-            component={Proposal}
-          />
-          <Route
-            path="/dao/:dao(\b0x[0-9a-f]{10,40}\b)/proposal-new"
-            exact
-            component={ProposalNew}
-          />
-          <Route
-            path="/dao/:dao(\b0x[0-9a-f]{10,40}\b)/proposal-engine"
-            exact
-            component={ProposalEngine}
-          />
-          <Route
-            path="/dao/:dao(\b0x[0-9a-f]{10,40}\b)/proposal-member"
-            exact
-            component={NewMemberForm}
-          />
-          <Route
-            path="/dao/:dao(\b0x[0-9a-f]{10,40}\b)/proposal-funding"
-            exact
-            component={FundingForm}
-          />
-          <Route
-            path="/dao/:dao(\b0x[0-9a-f]{10,40}\b)/proposal-whitelist"
-            exact
-            component={WhitelistForm}
-          />
-          <Route
-            path="/dao/:dao(\b0x[0-9a-f]{10,40}\b)/proposal-guildkick"
-            exact
-            component={GuildKickForm}
-          />
-          <Route
-            path="/dao/:dao(\b0x[0-9a-f]{10,40}\b)/proposal-trade"
-            exact
-            component={TradeForm}
-          />
-          <Route
-            path="/dao/:dao(\b0x[0-9a-f]{10,40}\b)/proposal-transmutation"
-            exact
-            component={Transmutation}
-          />
-          <Route
-            path="/dao/:dao(\b0x[0-9a-f]{10,40}\b)/stats-transmutation"
-            exact
-            component={Transmutation}
-          />
-          <Route
-            path="/dao/:dao(\b0x[0-9a-f]{10,40}\b)/success"
-            exact
-            component={Success}
-          />
-          <Route
-            path="/dao/:dao(\b0x[0-9a-f]{10,40}\b)/members"
-            exact
-            component={Members}
-          />
-          <Route
-            path="/dao/:dao(\b0x[0-9a-f]{10,40}\b)/member/:id"
-            exact
-            component={Member}
-          />
-          <Route
-            path="/dao/:dao(\b0x[0-9a-f]{10,40}\b)/account"
-            exact
-            component={Account}
-          />
-          <Route
-            path="/dao/:dao(\b0x[0-9a-f]{10,40}\b)/sign-in"
-            exact
-            component={SignIn}
-          />
-          <Route
-            path="/dao/:dao(\b0x[0-9a-f]{10,40}\b)/sign-out"
-            exact
-            component={SignOut}
-          />
-          <Route
-            path="/dao/:dao(\b0x[0-9a-f]{10,40}\b)/rage"
-            exact
-            component={Rage}
-          />
-          <Route path="*" component={FourOhFour} />
-        </Switch>
-      ) : (
-        <Switch>
-          <Route path="*" component={InvalidRoute} />
-        </Switch>
-      )}
+      <Switch>
+        <Route path='/dao/:dao(\b0x[0-9a-f]{10,40}\b)/' exact component={Dao} />
+        <Route
+          path='/dao/:dao(\b0x[0-9a-f]{10,40}\b)/proposals'
+          exact
+          component={Proposals}
+        />
+        <Route
+          path='/dao/:dao(\b0x[0-9a-f]{10,40}\b)/proposals/new/:type'
+          exact
+          component={NewProposal}
+        />{' '}
+        <Route
+          path='/dao/:dao(\b0x[0-9a-f]{10,40}\b)/proposals/new'
+          exact
+          component={NewProposal}
+        />
+        <Route
+          path='/dao/:dao(\b0x[0-9a-f]{10,40}\b)/proposals/:id'
+          exact
+          component={Proposal}
+        />
+        <Route
+          path='/dao/:dao(\b0x[0-9a-f]{10,40}\b)/members'
+          exact
+          component={Members}
+        />
+        <Route
+          path='/dao/:dao(\b0x[0-9a-f]{10,40}\b)/members/new'
+          exact
+          component={NewMember}
+        />
+        <Route
+          path='/dao/:dao(\b0x[0-9a-f]{10,40}\b)/profile/:id'
+          exact
+          component={Profile}
+        />
+        <Route
+          path='/dao/:dao(\b0x[0-9a-f]{10,40}\b)/bank'
+          exact
+          component={Bank}
+        />
+        <Route
+          path='/dao/:dao(\b0x[0-9a-f]{10,40}\b)/bank/token/new'
+          exact
+          component={NewToken}
+        />
+        <Route
+          path='/dao/:dao(\b0x[0-9a-f]{10,40}\b)/settings'
+          exact
+          component={Settings}
+        />
+        <Route
+          path='/dao/:dao(\b0x[0-9a-f]{10,40}\b)/settings/meta'
+          exact
+          component={DaoMeta}
+        />
+        <Route
+          path='/dao/:dao(\b0x[0-9a-f]{10,40}\b)/settings/boosts'
+          exact
+          component={Boosts}
+        />
+        <Route
+          path='/dao/:dao(\b0x[0-9a-f]{10,40}\b)/settings/boosts/new'
+          exact
+          component={NewBoost}
+        />
+        <Route
+          path='/dao/:dao(\b0x[0-9a-f]{10,40}\b)/settings/theme'
+          exact
+          component={CustomTheme}
+        />
+        <Route
+          path='/dao/:dao(\b0x[0-9a-f]{10,40}\b)/settings/notifications'
+          exact
+          component={Notifications}
+        />
+        <Route
+          path='/register/:dao(\b0x[0-9a-f]{10,40}\b)/:networkId'
+          exact
+          component={RegisterDao}
+        />
+        <Route
+          path='/dao/:dao(\b0x[0-9a-f]{10,40}\b)/psych-out'
+          exact
+          component={DaoTheme}
+        />
+        <Route path='/explore' exact component={ExplorWrapper} />
+        <Route path='/summon' exact component={SummonWrapper} />
+        <Route exact path='/' component={Hub} />
+        <Route path='*' component={FourOhFour} />
+      </Switch>
     </>
   );
 };

@@ -1,148 +1,58 @@
-import React, { useEffect, useState, useContext } from 'react';
+import React from 'react';
 import { BrowserRouter as Router } from 'react-router-dom';
-import styled, { ThemeProvider } from 'styled-components';
-import { useTranslation } from 'react-i18next';
+import { ChakraProvider } from '@chakra-ui/react';
+import ApolloClient from 'apollo-boost';
+import { ApolloProvider } from 'react-apollo';
 
-import { DaoDataContext, DaoServiceContext } from './contexts/Store';
-import { get } from './utils/Requests';
+import { PokemolContextProvider } from './contexts/PokemolContext';
+import { useTheme } from './contexts/CustomThemeContext';
+import { resolvers } from './utils/apollo/resolvers';
 import Routes from './Routes';
-import Header from './components/header/Header';
-import Loading from './components/shared/Loading';
-import {
-  defaultTheme,
-  getAppBackground,
-  GlobalStyle,
-} from './variables.styles';
-import { themeMap } from './themes/themes';
+import Layout from './components/Layout/Layout';
+import { supportedChains } from './utils/chains';
+import EnsInit from './contexts/EnsInit';
+import TxProcessorInit from './contexts/TxProcessorInit';
+import GraphInit from './contexts/GraphInit';
+import PriceInit from './contexts/PricesInit';
+import UserDaoInit from './contexts/UserDaoInit';
 
-const AppDiv = styled.div`
-  background-color: ${(props) => getAppBackground(props.theme)};
-  min-height: 100vh;
-  min-width: 100vw;
-`;
+const chainData = supportedChains[1];
 
-const App = ({ client }) => {
-  const [loading, setloading] = useState(true);
-  const [daoPath, setDaoPath] = useState('');
-  const [daoData, setDaoData] = useContext(DaoDataContext);
-  const [theme, setTheme] = useState(defaultTheme);
-  const [daoService] = useContext(DaoServiceContext);
+const client = new ApolloClient({
+  uri: chainData.subgraph_url,
+  clientState: {
+    resolvers,
+  },
+});
 
-  const { i18n } = useTranslation();
+function Init() {
+  return (
+    <>
+      <UserDaoInit />
+      <TxProcessorInit />
+      <GraphInit />
+      <EnsInit />
+      <PriceInit />
+    </>
+  );
+}
 
-  useEffect(() => {
-    var pathname = window.location.pathname.split('/');
-    const daoParam = pathname[2];
-
-    const getDao = async () => {
-      let apiData = '';
-      if (!daoParam) {
-        setloading(false);
-        return false;
-      }
-      try {
-        const daoRes = await get(`moloch/${daoParam}`);
-        apiData = daoRes.data;
-
-        if (apiData) {
-          setDaoPath(daoParam);
-
-          setDaoData({
-            ...apiData,
-          });
-
-          if (themeMap[apiData.themeName]) {
-            setTheme(themeMap[apiData.themeName]);
-            if (themeMap[apiData.themeName].language) {
-              i18n.changeLanguage(themeMap[apiData.themeName].language);
-            }
-          }
-        } else {
-          setloading(false);
-        }
-      } catch (e) {
-        setloading(false);
-        console.log('error on dao api call', e);
-      }
-    };
-
-    getDao();
-    // eslint-disable-next-line
-  }, []);
-
-  useEffect(() => {
-    // save all web3 data to apollo cache
-    const fetchData = async () => {
-      if (!daoService || !daoData) {
-        client.writeData({
-          data: {
-            currentPeriod: 0,
-            tokenSymbol: 'DAO',
-            guildBankValue: 0,
-            shareValue: 0,
-          },
-        });
-
-        return;
-      }
-
-      const currentPeriod = await daoService.mcDao.getCurrentPeriod();
-      const totalShares = await daoService.mcDao.getTotalShares();
-
-      let guildBankAddr, guildBankValue;
-      const cacheData = {
-        currentPeriod: parseInt(currentPeriod),
-      };
-
-      if (daoData.version !== 2) {
-        guildBankAddr = await daoService.mcDao.getGuildBankAddr();
-        guildBankValue = await daoService.token.balanceOf(guildBankAddr);
-        cacheData.guildBankValue = daoService.web3.utils.fromWei(
-          guildBankValue,
-        );
-        cacheData.tokenSymbol = await daoService.token.getSymbol(
-          theme.symbolOverride,
-        );
-
-        cacheData.shareValue = parseFloat(
-          daoService.web3.utils.fromWei(
-            daoService.web3.utils
-              .toBN(guildBankValue)
-              .div(daoService.web3.utils.toBN(totalShares)),
-          ),
-        );
-      }
-
-      client.writeData({
-        data: cacheData,
-      });
-
-      setloading(false);
-    };
-
-    fetchData();
-
-    // eslint-disable-next-line
-  }, [client, daoData, daoService, daoPath]);
+const App = () => {
+  const [theme] = useTheme();
 
   return (
-    <div className="App">
-      {loading ? (
-        <ThemeProvider theme={theme}>
-          <Loading />
-        </ThemeProvider>
-      ) : (
+    <ApolloProvider client={client}>
+      <ChakraProvider theme={theme}>
         <Router>
-          <ThemeProvider theme={theme}>
-            <GlobalStyle />
-            <AppDiv>
-              <Header />
-              <Routes isValid={!!daoPath} />
-            </AppDiv>
-          </ThemeProvider>
+          <PokemolContextProvider>
+            <Init />
+            <Layout>
+              <Routes />
+            </Layout>
+          </PokemolContextProvider>
         </Router>
-      )}
-    </div>
+      </ChakraProvider>
+    </ApolloProvider>
   );
 };
 
