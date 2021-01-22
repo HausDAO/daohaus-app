@@ -1,23 +1,23 @@
 import React, { useState } from 'react';
-import { Link as RouterLink } from 'react-router-dom';
+// import { Link as RouterLink } from 'react-router-dom';
 import {
   Box,
-  Button,
-  FormControl,
-  FormHelperText,
-  Heading,
-  Input,
-  Text,
+  // Button,
+  // FormControl,
+  // FormHelperText,
+  // Heading,
+  // Input,
+  // Text,
 } from '@chakra-ui/react';
 
-import {
-  useDao,
-  useUser,
-  useWeb3Connect,
-  useNetwork,
-  useDaoMetadata,
-} from '../../contexts/PokemolContext';
-import { boostPost } from '../../utils/requests';
+// import {
+//   useDao,
+//   useUser,
+//   useWeb3Connect,
+//   useNetwork,
+//   useDaoMetadata,
+// } from '../../contexts/PokemolContext';
+// import { boostPost } from '../../utils/requests';
 import CustomThemeLaunch from './CustomThemeLaunch';
 import NewMinionForm from './NewMinionForm';
 import NotificationsLaunch from './NotificationsLaunch';
@@ -25,11 +25,11 @@ import NotificationsLaunch from './NotificationsLaunch';
 
 const BoostLaunchWrapper = ({ boost }) => {
   const [loading, setLoading] = useState(false);
-  const [user] = useUser();
-  const [dao] = useDao();
-  const [daoMetadata, updateDaoMetadata] = useDaoMetadata();
-  const [web3Connect] = useWeb3Connect();
-  const [network] = useNetwork();
+  // const [user] = useUser();
+  // const [dao] = useDao();
+  // const [daoMetadata, updateDaoMetadata] = useDaoMetadata();
+  // const [web3Connect] = useWeb3Connect();
+  // const [network] = useNetwork();
 
   const renderBoostBody = () => {
     switch (boost.key) {
@@ -43,6 +43,9 @@ const BoostLaunchWrapper = ({ boost }) => {
         return (
           <NotificationsLaunch handleLaunch={handleLaunch} loading={loading} />
         );
+      }
+      default: {
+        return null;
       }
     }
   };

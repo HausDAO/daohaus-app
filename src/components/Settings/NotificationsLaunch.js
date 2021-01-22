@@ -15,12 +15,12 @@ import { useForm } from 'react-hook-form';
 
 import {
   useDao,
-  useUser,
-  useWeb3Connect,
-  useNetwork,
-  useDaoMetadata,
+  // useUser,
+  // useWeb3Connect,
+  // useNetwork,
+  // useDaoMetadata,
 } from '../../contexts/PokemolContext';
-import { boostPost } from '../../utils/requests';
+// import { boostPost } from '../../utils/requests';
 import { notificationBoostContent } from '../../content/boost-content';
 
 const NotificationsLaunch = ({ handleLaunch, loading }) => {
