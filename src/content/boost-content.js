@@ -1,9 +1,3 @@
-import React from 'react';
-
-import CustomThemeLaunch from '../components/Settings/CustomThemeLaunch';
-import NewMinionForm from '../components/Settings/NewMinionForm';
-import NotificationsLaunch from '../components/Settings/NotificationsLaunch';
-
 export const boostList = [
   {
     name: 'Custom Theme',
@@ -22,6 +16,7 @@ export const boostList = [
   {
     name: 'Notifications: Level 1',
     key: 'notificationsLevel1',
+    comingSoon: true,
     description:
       'Customize and send notifications of DAO activity to your discord server',
     price: '0',
