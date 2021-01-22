@@ -1,6 +1,6 @@
 import React from 'react';
-import { Icon, Link } from '@chakra-ui/react';
-import { RiArrowDownSLine } from 'react-icons/ri';
+import { IconButton, Link, Tooltip } from '@chakra-ui/react';
+import { RiMenu3Line } from 'react-icons/ri';
 import DaoSwitcherModal from '../Modal/DaoSwitcherModal';
 import { useModals } from '../../contexts/PokemolContext';
 
@@ -9,10 +9,21 @@ const ChangeDao = () => {
 
   return (
     <>
-      <Link fontSize='xs' onClick={() => openModal('changeDao')}>
-        Change Dao
-        <Icon as={RiArrowDownSLine} />
-      </Link>
+      <Tooltip
+        label='Change DAO'
+        aria-label='Change DAO'
+        placement='right'
+        hasArrow
+      >
+        <IconButton
+          icon={<RiMenu3Line />}
+          size='lg'
+          variant='ghost'
+          isRound='true'
+          as={Link}
+          onClick={() => openModal('changeDao')}
+        />
+      </Tooltip>
 
       <DaoSwitcherModal isOpen={modals.changeDao} />
     </>

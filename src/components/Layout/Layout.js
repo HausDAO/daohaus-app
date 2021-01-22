@@ -13,6 +13,13 @@ import {
   Tooltip,
   IconButton,
   useBreakpointValue,
+  Popover,
+  PopoverTrigger,
+  PopoverContent,
+  PopoverBody,
+  PopoverArrow,
+  PopoverCloseButton,
+  Portal,
 } from '@chakra-ui/react';
 
 import { motion } from 'framer-motion';
@@ -392,10 +399,7 @@ const Layout = ({ children }) => {
       minH='100vh'
       w='100vw'
     >
-      <MotionFlex
-        initial={sideNavOpen ? 'open' : 'closed'}
-        animate={sideNavOpen ? 'open' : 'closed'}
-        variants={bar}
+      <Flex
         p={5}
         position={['relative', 'relative', 'relative', 'fixed']}
         direction='column'
@@ -403,6 +407,8 @@ const Layout = ({ children }) => {
         justifyContent='start'
         bg='primary.500'
         zIndex='1'
+        w='100px'
+        minH='100vh'
         overflow='hidden'
         overflowY='auto'
       >
@@ -486,52 +492,16 @@ const Layout = ({ children }) => {
                 <Web3SignIn />
               )}
             </Box>
-            <MotionFlex
-              direction='column'
-              align='start'
-              justify='start'
-              initial={sideNavOpen ? 'open' : 'closed'}
-              animate={sideNavOpen ? 'open' : 'closed'}
-              variants={navFlex}
-              h='48px'
-              mt={[3, null, null, 0]}
-              order={[4, null, null, 2]}
-              w={['100%', null, null, 'calc(100% - 80px)']}
-            >
-              {dao?.graphData ? (
-                <Link as={RouterLink} to={`/dao/${dao.address}`} fontSize='xl'>
-                  {dao.name}
-                </Link>
-              ) : (
-                <Link as={RouterLink} to={`/`} fontSize='xl'>
-                  DAOhaus Hub
-                </Link>
-              )}
-              <ChangeDao />
-            </MotionFlex>
             <Box
               w={['auto', null, null, '100%']}
               order={[3, null, null, 3]}
               mt={[0, null, null, 6]}
             >
-              <IconButton
-                variant='ghost'
-                icon={sideNavOpen ? <RiCloseLine /> : <RiMenu3Line />}
-                onClick={handleNavToggle}
-                size='lg'
-                isRound='true'
-                color='secondary.500'
-              />
+              <ChangeDao />
             </Box>
           </Flex>
         </Flex>
-        <MotionFlex
-          initial={sideNavOpen ? 'open' : 'closed'}
-          animate={sideNavOpen ? 'open' : 'closed'}
-          variants={navButtons}
-          direction='column'
-          wrap='wrap'
-        >
+        <Flex direction='column' wrap='wrap'>
           {dao?.graphData ? (
             <Stack
               spacing={[1, null, null, 3]}
@@ -542,6 +512,8 @@ const Layout = ({ children }) => {
               <Tooltip
                 label={theme.daoMeta.proposals}
                 aria-label={theme.daoMeta.proposals}
+                placement='right'
+                hasArrow
               >
                 <Button
                   variant='sideNav'
@@ -551,114 +523,89 @@ const Layout = ({ children }) => {
                   grow='none'
                 >
                   <Icon as={RiBookMarkLine} w={6} h={6} />
-
-                  <MotionBox
-                    initial={sideNavOpen ? 'open' : 'closed'}
-                    animate={sideNavOpen ? 'open' : 'closed'}
-                    variants={nav}
-                    fontSize={['lg', null, null, '2xl']}
-                    fontFamily='heading'
-                  >
-                    {theme.daoMeta.proposals}
-                  </MotionBox>
                 </Button>
               </Tooltip>
-              <Button
-                variant='sideNav'
-                as={RouterLink}
-                to={`/dao/${dao.address}/bank`}
-                _hover={{ backgroundColor: 'white' }}
-                grow='none'
+              <Tooltip
+                label={theme.daoMeta.bank}
+                aria-label={theme.daoMeta.bank}
+                placement='right'
+                hasArrow
               >
-                <Icon as={RiBankLine} w={6} h={6} />
-                <MotionBox
-                  initial={sideNavOpen ? 'open' : 'closed'}
-                  animate={sideNavOpen ? 'open' : 'closed'}
-                  variants={nav}
-                  fontSize={['lg', null, null, '2xl']}
-                  fontFamily='heading'
-                >
-                  {theme.daoMeta.bank}
-                </MotionBox>
-              </Button>
-              <Button
-                variant='sideNav'
-                as={RouterLink}
-                to={`/dao/${dao.address}/members`}
-                _hover={{ backgroundColor: 'white' }}
-              >
-                <Icon as={RiTeamLine} w={6} h={6} />
-                <MotionBox
-                  initial={sideNavOpen ? 'open' : 'closed'}
-                  animate={sideNavOpen ? 'open' : 'closed'}
-                  variants={nav}
-                  fontSize={['lg', null, null, '2xl']}
-                  fontFamily='heading'
-                >
-                  {theme.daoMeta.members}
-                </MotionBox>
-              </Button>
-              <Button
-                variant='sideNav'
-                as={RouterLink}
-                to={`/dao/${dao.address}/settings`}
-                _hover={{ backgroundColor: 'white' }}
-              >
-                <Icon as={RiSettings3Line} w={6} h={6} />
-                <MotionBox
-                  initial={sideNavOpen ? 'open' : 'closed'}
-                  animate={sideNavOpen ? 'open' : 'closed'}
-                  variants={nav}
-                  fontSize='sm'
-                  fontFamily='heading'
-                >
-                  Settings
-                </MotionBox>
-              </Button>
-              <Button
-                variant='sideNav'
-                as={RouterLink}
-                to={`/dao/${dao.address}/settings/boosts`}
-                _hover={{ backgroundColor: 'white' }}
-              >
-                <Icon as={RiRocket2Line} w={6} h={6} />
-                <MotionBox
-                  initial={sideNavOpen ? 'open' : 'closed'}
-                  animate={sideNavOpen ? 'open' : 'closed'}
-                  variants={nav}
-                  fontSize='sm'
-                  fontFamily='heading'
-                >
-                  Boosts
-                </MotionBox>
-              </Button>
-              {memberWallet?.activeMember ? (
                 <Button
                   variant='sideNav'
                   as={RouterLink}
-                  to={`/dao/${dao.address}/profile/${memberWallet.memberAddress}`}
+                  to={`/dao/${dao.address}/bank`}
+                  _hover={{ backgroundColor: 'white' }}
+                  grow='none'
+                >
+                  <Icon as={RiBankLine} w={6} h={6} />
+                </Button>
+              </Tooltip>
+              <Tooltip
+                label={theme.daoMeta.members}
+                aria-label={theme.daoMeta.members}
+                placement='right'
+                hasArrow
+              >
+                <Button
+                  variant='sideNav'
+                  as={RouterLink}
+                  to={`/dao/${dao.address}/members`}
                   _hover={{ backgroundColor: 'white' }}
                 >
-                  <Icon as={RiTrophyLine} w={6} h={6} />
-                  <MotionBox
-                    initial={sideNavOpen ? 'open' : 'closed'}
-                    animate={sideNavOpen ? 'open' : 'closed'}
-                    variants={nav}
-                    fontSize='sm'
-                    fontFamily='heading'
-                  >
-                    Profile
-                  </MotionBox>
+                  <Icon as={RiTeamLine} w={6} h={6} />
                 </Button>
+              </Tooltip>
+              <Tooltip
+                label='Settings'
+                aria-label='Settings'
+                placement='right'
+                hasArrow
+              >
+                <Button
+                  variant='sideNav'
+                  as={RouterLink}
+                  to={`/dao/${dao.address}/settings`}
+                  _hover={{ backgroundColor: 'white' }}
+                >
+                  <Icon as={RiSettings3Line} w={6} h={6} />
+                </Button>
+              </Tooltip>
+              <Tooltip
+                label='Boosts'
+                aria-label='Boosts'
+                placement='right'
+                hasArrow
+              >
+                <Button
+                  variant='sideNav'
+                  as={RouterLink}
+                  to={`/dao/${dao.address}/settings/boosts`}
+                  _hover={{ backgroundColor: 'white' }}
+                >
+                  <Icon as={RiRocket2Line} w={6} h={6} />
+                </Button>
+              </Tooltip>
+              {memberWallet?.activeMember ? (
+                <Tooltip
+                  label='Profile'
+                  aria-label='Profile'
+                  placement='right'
+                  hasArrow
+                >
+                  <Button
+                    variant='sideNav'
+                    as={RouterLink}
+                    to={`/dao/${dao.address}/profile/${memberWallet.memberAddress}`}
+                    _hover={{ backgroundColor: 'white' }}
+                  >
+                    <Icon as={RiTrophyLine} w={6} h={6} />
+                  </Button>
+                </Tooltip>
               ) : null}
             </Stack>
           ) : (
-            <Stack
-              spacing={[1, null, null, 3]}
-              d='flex'
-              mt={[3, null, null, 12]}
-              flexDirection='column'
-            >
+            <Stack spacing={[1, null, null, 3]} mt={[3, null, null, 12]}>
               <Tooltip
                 label='Explore DAOs'
                 aria-label='Explore DAOs'
@@ -673,15 +620,6 @@ const Layout = ({ children }) => {
                   grow='none'
                 >
                   <Icon as={RiSearch2Line} w={6} h={6} />
-                  <MotionBox
-                    initial={sideNavOpen ? 'open' : 'closed'}
-                    animate={sideNavOpen ? 'open' : 'closed'}
-                    variants={nav}
-                    fontSize={['lg', null, null, '2xl']}
-                    fontFamily='heading'
-                  >
-                    Explore DAOs
-                  </MotionBox>
                 </Button>
               </Tooltip>
               <Tooltip
@@ -698,15 +636,6 @@ const Layout = ({ children }) => {
                   grow='none'
                 >
                   <Icon as={RiFireLine} w={6} h={6} />
-                  <MotionBox
-                    initial={sideNavOpen ? 'open' : 'closed'}
-                    animate={sideNavOpen ? 'open' : 'closed'}
-                    variants={nav}
-                    fontSize={['lg', null, null, '2xl']}
-                    fontFamily='heading'
-                  >
-                    Summon a DAO
-                  </MotionBox>
                 </Button>
               </Tooltip>
               <Tooltip
@@ -723,15 +652,6 @@ const Layout = ({ children }) => {
                   _hover={{ backgroundColor: 'white' }}
                 >
                   <Icon as={RiTeamLine} w={6} h={6} />
-                  <MotionBox
-                    initial={sideNavOpen ? 'open' : 'closed'}
-                    animate={sideNavOpen ? 'open' : 'closed'}
-                    variants={nav}
-                    fontSize={['lg', null, null, '2xl']}
-                    fontFamily='heading'
-                  >
-                    HausDAO
-                  </MotionBox>
                 </Button>
               </Tooltip>
               <Tooltip
@@ -748,15 +668,6 @@ const Layout = ({ children }) => {
                   _hover={{ backgroundColor: 'white' }}
                 >
                   <Icon as={RiQuestionLine} w={6} h={6} />
-                  <MotionBox
-                    initial={sideNavOpen ? 'open' : 'closed'}
-                    animate={sideNavOpen ? 'open' : 'closed'}
-                    variants={nav}
-                    fontSize='sm'
-                    fontFamily='heading'
-                  >
-                    Help
-                  </MotionBox>
                 </Button>
               </Tooltip>
               <Tooltip
@@ -773,153 +684,177 @@ const Layout = ({ children }) => {
                   _hover={{ backgroundColor: 'white' }}
                 >
                   <Icon as={GiCastle} w={6} h={6} />
-                  <MotionBox
-                    initial={sideNavOpen ? 'open' : 'closed'}
-                    animate={sideNavOpen ? 'open' : 'closed'}
-                    variants={nav}
-                    fontSize='sm'
-                    fontFamily='heading'
-                  >
-                    About
-                  </MotionBox>
                 </Button>
               </Tooltip>
             </Stack>
           )}
-          <Spacer />
-          <Flex
-            w='100%'
-            initial={sideNavOpen ? 'open' : 'closed'}
-            animate={sideNavOpen ? 'open' : 'closed'}
-            variants={navFlex}
-            mt={6}
-            alignSelf='flex-end'
-          >
-            <Tooltip
-              label='Links'
-              aria-label='Links'
-              placement='right'
-              hasArrow
-            >
-              <IconButton
-                icon={sideNavOpen ? <RiArrowLeftSLine /> : <RiLinksLine />}
-                size='lg'
-                variant='ghost'
-                isRound='true'
-                as={Link}
-                onClick={handleNavToggle}
-              />
-            </Tooltip>
+          <Box>
+            <Popover placement='right' w='auto'>
+              <Tooltip
+                label='Community Links'
+                aria-label='Community Links'
+                placement='right'
+                hasArrow
+              >
+                <PopoverTrigger>
+                  <Button
+                    variant='sideNav'
+                    _hover={{ backgroundColor: 'white' }}
+                    mt={3}
+                  >
+                    <Icon as={RiLinksLine} w={6} h={6} />
+                  </Button>
+                </PopoverTrigger>
+              </Tooltip>
+              <Portal>
+                <PopoverContent w='auto'>
+                  <PopoverArrow />
+                  <PopoverCloseButton />
+                  <PopoverBody w='auto'>
+                    <Flex direction='row' align='center' justify='start'>
+                      {!dao.address || dao.links?.website ? (
+                        <Tooltip
+                          label='Website'
+                          aria-label='Website'
+                          placement='top'
+                          hasArrow
+                        >
+                          <IconButton
+                            as={Link}
+                            icon={<RiGlobeLine />}
+                            href={
+                              !dao.address
+                                ? defaultSocialLinks.website
+                                : dao.links.website
+                            }
+                            isExternal
+                            size='lg'
+                            variant='link'
+                            isRound='true'
+                          />
+                        </Tooltip>
+                      ) : null}
+                      {!dao.address || dao.links?.discord ? (
+                        <Tooltip
+                          label='Discord'
+                          aria-label='Discord'
+                          placement='top'
+                          hasArrow
+                        >
+                          <IconButton
+                            as={Link}
+                            icon={<RiDiscordFill />}
+                            href={
+                              !dao.address
+                                ? defaultSocialLinks.discord
+                                : dao.links.discord
+                            }
+                            isExternal
+                            size='lg'
+                            variant='link'
+                            isRound='true'
+                          />
+                        </Tooltip>
+                      ) : null}
+                      {!dao.address || dao.links?.telegram ? (
+                        <Tooltip
+                          label='Telegram'
+                          aria-label='Telegram'
+                          placement='top'
+                          hasArrow
+                        >
+                          <IconButton
+                            as={Link}
+                            icon={<RiTelegramFill />}
+                            href={
+                              !dao.address
+                                ? defaultSocialLinks.telegram
+                                : dao.links.telegram
+                            }
+                            isExternal
+                            size='lg'
+                            variant='link'
+                            isRound='true'
+                          />
+                        </Tooltip>
+                      ) : null}
+                      {!dao.address || dao.links?.medium ? (
+                        <Tooltip
+                          label='Blog'
+                          aria-label='Blog'
+                          placement='top'
+                          hasArrow
+                        >
+                          <IconButton
+                            as={Link}
+                            icon={<RiMediumFill />}
+                            href={
+                              !dao.address
+                                ? defaultSocialLinks.medium
+                                : dao.links.medium
+                            }
+                            isExternal
+                            size='lg'
+                            variant='link'
+                            isRound='true'
+                          />
+                        </Tooltip>
+                      ) : null}
+                      {!dao.address || dao.links?.twitter ? (
+                        <Tooltip
+                          label='Twitter'
+                          aria-label='Twitter'
+                          placement='top'
+                          hasArrow
+                        >
+                          <IconButton
+                            as={Link}
+                            icon={<RiTwitterFill />}
+                            href={`https://twitter.com/${
+                              !dao.address
+                                ? defaultSocialLinks.twitter
+                                : dao.links.twitter
+                            }`}
+                            isExternal
+                            size='lg'
+                            variant='link'
+                            isRound='true'
+                          />
+                        </Tooltip>
+                      ) : null}
+                      {!dao.address || dao.links?.other ? (
+                        <Tooltip
+                          label='Other'
+                          aria-label='Other'
+                          placement='top'
+                          hasArrow
+                        >
+                          <IconButton
+                            as={Link}
+                            icon={<RiLinksLine />}
+                            href={
+                              !dao.address
+                                ? defaultSocialLinks.other
+                                : dao.links.other
+                            }
+                            isExternal
+                            size='lg'
+                            variant='link'
+                            isRound='true'
+                          />
+                        </Tooltip>
+                      ) : null}
+                    </Flex>
+                  </PopoverBody>
+                </PopoverContent>
+              </Portal>
+            </Popover>
+          </Box>
+        </Flex>
+      </Flex>
 
-            <MotionFlex
-              direction='row'
-              align='start'
-              justify='start'
-              initial={sideNavOpen ? 'open' : 'closed'}
-              animate={sideNavOpen ? 'open' : 'closed'}
-              variants={navLinks}
-              w='100%'
-            >
-              <ButtonGroup>
-                {!dao.address || dao.links?.website ? (
-                  <IconButton
-                    as={Link}
-                    icon={<RiGlobeLine />}
-                    href={
-                      !dao.address
-                        ? defaultSocialLinks.website
-                        : dao.links.website
-                    }
-                    isExternal
-                    size='lg'
-                    variant='link'
-                    isRound='true'
-                  />
-                ) : null}
-                {!dao.address || dao.links?.discord ? (
-                  <IconButton
-                    as={Link}
-                    icon={<RiDiscordFill />}
-                    href={
-                      !dao.address
-                        ? defaultSocialLinks.discord
-                        : dao.links.discord
-                    }
-                    isExternal
-                    size='lg'
-                    variant='link'
-                    isRound='true'
-                  />
-                ) : null}
-                {!dao.address || dao.links?.telegram ? (
-                  <IconButton
-                    as={Link}
-                    icon={<RiTelegramFill />}
-                    href={
-                      !dao.address
-                        ? defaultSocialLinks.telegram
-                        : dao.links.telegram
-                    }
-                    isExternal
-                    size='lg'
-                    variant='link'
-                    isRound='true'
-                  />
-                ) : null}
-                {!dao.address || dao.links?.medium ? (
-                  <IconButton
-                    as={Link}
-                    icon={<RiMediumFill />}
-                    href={
-                      !dao.address
-                        ? defaultSocialLinks.medium
-                        : dao.links.medium
-                    }
-                    isExternal
-                    size='lg'
-                    variant='link'
-                    isRound='true'
-                  />
-                ) : null}
-                {!dao.address || dao.links?.twitter ? (
-                  <IconButton
-                    as={Link}
-                    icon={<RiTwitterFill />}
-                    href={`https://twitter.com/${
-                      !dao.address
-                        ? defaultSocialLinks.twitter
-                        : dao.links.twitter
-                    }`}
-                    isExternal
-                    size='lg'
-                    variant='link'
-                    isRound='true'
-                  />
-                ) : null}
-                {!dao.address || dao.links?.other ? (
-                  <IconButton
-                    as={Link}
-                    icon={<RiLinksLine />}
-                    href={
-                      !dao.address ? defaultSocialLinks.other : dao.links.other
-                    }
-                    isExternal
-                    size='lg'
-                    variant='link'
-                    isRound='true'
-                  />
-                ) : null}
-              </ButtonGroup>
-            </MotionFlex>
-          </Flex>
-        </MotionFlex>
-      </MotionFlex>
-
-      <MotionBox
+      <Box
         position='fixed'
-        initial={sideNavOpen ? 'open' : 'closed'}
-        animate={sideNavOpen ? 'open' : 'closed'}
-        variants={layout}
         h='100vh'
         bgImage={'url(' + themeImagePath(theme.images.bgImg) + ')'}
         bgSize='cover'
@@ -927,7 +862,7 @@ const Layout = ({ children }) => {
         zIndex='-1'
         top='0'
         right='0'
-        w='100%'
+        w='calc(100% - 100px)'
         _before={{
           display: 'block',
           content: '""',
@@ -942,16 +877,10 @@ const Layout = ({ children }) => {
           zIndex: '-1',
         }}
       />
-      <MotionFlex
-        w='100%'
-        initial={sideNavOpen ? 'open' : 'closed'}
-        animate={sideNavOpen ? 'open' : 'closed'}
-        variants={layout}
-        flexDirection='column'
-      >
+      <Flex w='calc(100% - 100px)' ml='100px' flexDirection='column'>
         <Header></Header>
         {children}
-      </MotionFlex>
+      </Flex>
     </Flex>
   );
 };
