@@ -3,5 +3,6 @@
   "repo": "pokemol-web",
   "tokenAddress": "0x4C9210B9E669d1D776624BDEFebB6D02Eb8bC680",
   "labels": ["backlog"],
-  "votingMethod": "QUADRATIC"
+  "votingMethod": "QUADRATIC",
+  "chainId": 100
 }
