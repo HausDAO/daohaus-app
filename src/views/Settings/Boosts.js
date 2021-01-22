@@ -7,8 +7,8 @@ import ContentBox from '../../components/Shared/ContentBox';
 import TextBox from '../../components/Shared/TextBox';
 import GenericModal from '../../components/Modal/GenericModal';
 import { useDao, useModals } from '../../contexts/PokemolContext';
-import BoostLaunchWrapper from '../../components/Settings/BoostLaunchWrapper';
 import { boostList } from '../../content/boost-content';
+import BoostLaunchWrapper from '../../components/Settings/BoostLaunchWrapper';
 
 const Boosts = () => {
   const [dao] = useDao();
@@ -73,11 +73,7 @@ const Boosts = () => {
           <>
             {!boost.comingSoon ? (
               <>
-                {boost.launchWrapperOverride ? (
-                  boost.launchWrapperOverride
-                ) : (
-                  <BoostLaunchWrapper boost={boost} />
-                )}
+                <BoostLaunchWrapper boost={boost} />
               </>
             ) : null}
           </>

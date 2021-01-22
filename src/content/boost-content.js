@@ -11,15 +11,13 @@ export const boostList = [
     description: 'Customize the visual theme of your community',
     price: '0',
     modalName: 'customThemeLaunch',
-    modalBody: <CustomThemeLaunch />,
   },
   {
     name: 'Minion',
-    key: 'vanillaMinions',
+    key: 'vanillaMinion',
     description: 'Create and vote on execution of external contracts',
     price: '0',
     modalName: 'vanillaMinionLaunch',
-    modalBody: <NewMinionForm />,
   },
   {
     name: 'Notifications: Level 1',
@@ -28,7 +26,6 @@ export const boostList = [
       'Customize and send notifications of DAO activity to your discord server',
     price: '0',
     modalName: 'notificationsLevel1Launch',
-    modalBody: <NotificationsLaunch />,
   },
   {
     name: 'Notifications: Level 2',
@@ -44,25 +41,25 @@ export const boostList = [
 export const notificationBoostContent = {
   actions: [
     {
-      id: 'proposal-ready',
+      id: 'votingPeriod',
       label: 'Proposal Ready for Voting',
     },
     {
-      id: 'proposal-sponsor',
+      id: 'newProposal',
       label: 'Proposal Needs Sponsor',
     },
     {
-      id: 'proposal-closing',
+      id: 'proposalClosing',
       label: 'Proposal Needs a Vote',
       comingSoon: true,
     },
     {
-      id: 'new-member',
+      id: 'newMember',
       label: 'New Member is Official',
       comingSoon: true,
     },
     {
-      id: 'rage-quit',
+      id: 'rageQuit',
       label: 'New Ragequit',
     },
   ],
@@ -72,4 +69,8 @@ export const notificationBoostContent = {
     { name: 'email', comingSoon: true },
     { name: 'twitter', comingSoon: true },
   ],
+  inviteLinks: {
+    discord:
+      'https://discord.com/api/oauth2/authorize?client_id=736999684471521321&permissions=23552&scope=bot',
+  },
 };

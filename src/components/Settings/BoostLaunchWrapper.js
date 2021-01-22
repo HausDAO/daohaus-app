@@ -1,6 +1,14 @@
 import React, { useState } from 'react';
 import { Link as RouterLink } from 'react-router-dom';
-import { Box, Button, Heading, Text } from '@chakra-ui/react';
+import {
+  Box,
+  Button,
+  FormControl,
+  FormHelperText,
+  Heading,
+  Input,
+  Text,
+} from '@chakra-ui/react';
 
 import {
   useDao,
@@ -10,18 +18,34 @@ import {
   useDaoMetadata,
 } from '../../contexts/PokemolContext';
 import { boostPost } from '../../utils/requests';
+import CustomThemeLaunch from './CustomThemeLaunch';
+import NewMinionForm from './NewMinionForm';
+import NotificationsLaunch from './NotificationsLaunch';
+// import { notificationBoostContent } from '../../content/boost-content';
 
 const BoostLaunchWrapper = ({ boost }) => {
   const [loading, setLoading] = useState(false);
-
   const [user] = useUser();
   const [dao] = useDao();
   const [daoMetadata, updateDaoMetadata] = useDaoMetadata();
   const [web3Connect] = useWeb3Connect();
   const [network] = useNetwork();
-  const [step, setStep] = useState('intro');
 
-  console.log('boost', boost);
+  const renderBoostBody = () => {
+    switch (boost.key) {
+      case 'customTheme': {
+        return <CustomThemeLaunch />;
+      }
+      case 'vanillaMinion': {
+        return <NewMinionForm />;
+      }
+      case 'notificationsLevel1': {
+        return (
+          <NotificationsLaunch handleLaunch={handleLaunch} loading={loading} />
+        );
+      }
+    }
+  };
 
   const handleLaunch = async (boostMetadata) => {
     setLoading(true);
@@ -57,16 +81,7 @@ const BoostLaunchWrapper = ({ boost }) => {
     // setLoading(false);
   };
 
-  return (
-    <Box w='90%'>
-      {React.cloneElement(boost.modalBody, {
-        handleLaunch,
-        loading,
-        step,
-        setStep,
-      })}
-    </Box>
-  );
+  return <Box w='90%'>{renderBoostBody()}</Box>;
 };
 
 export default BoostLaunchWrapper;
