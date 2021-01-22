@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { Link as RouterLink } from 'react-router-dom';
 import {
   Avatar,
@@ -41,7 +41,6 @@ import {
   RiTwitterFill,
   RiGlobeLine,
   RiLinksLine,
-  RiMenu3Line,
   RiTeamLine,
   RiSettings3Line,
   RiBankLine,
@@ -56,22 +55,12 @@ import { useTheme } from '../../contexts/CustomThemeContext';
 import { themeImagePath } from '../../utils/helpers';
 import { defaultSocialLinks } from '../../content/socials';
 
-const DesktopNav = ({ children }) => {
-  const [sideNavOpen, toggleSideNav] = useState();
+const DesktopNav = () => {
   const [dao] = useDao();
   const [theme] = useTheme();
   const [user] = useUser();
   const [memberWallet] = useMemberWallet();
   const { modals, openModal } = useModals();
-
-  useEffect(() => {
-    toggleSideNav(JSON.parse(localStorage.getItem('sideNavOpen')));
-  }, []);
-
-  const handleNavToggle = () => {
-    localStorage.setItem('sideNavOpen', `${!sideNavOpen}`);
-    toggleSideNav(!sideNavOpen);
-  };
 
   return (
     <Flex

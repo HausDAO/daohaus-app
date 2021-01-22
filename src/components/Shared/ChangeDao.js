@@ -1,11 +1,22 @@
 import React from 'react';
-import { IconButton, Link, Tooltip } from '@chakra-ui/react';
-import { RiMenu3Line } from 'react-icons/ri';
+import {
+  IconButton,
+  Link,
+  Tooltip,
+  useBreakpointValue,
+} from '@chakra-ui/react';
+import { RiMenu3Line, RiArrowDropDownLine } from 'react-icons/ri';
 import DaoSwitcherModal from '../Modal/DaoSwitcherModal';
 import { useModals } from '../../contexts/PokemolContext';
 
 const ChangeDao = () => {
   const { modals, openModal } = useModals();
+  const changeIcon = useBreakpointValue({
+    base: <RiArrowDropDownLine />,
+    sm: <RiArrowDropDownLine />,
+    md: <RiArrowDropDownLine />,
+    lg: <RiMenu3Line />,
+  });
 
   return (
     <>
@@ -16,7 +27,7 @@ const ChangeDao = () => {
         hasArrow
       >
         <IconButton
-          icon={<RiMenu3Line />}
+          icon={changeIcon}
           size='lg'
           variant='ghost'
           isRound='true'

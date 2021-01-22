@@ -50,13 +50,14 @@ import {
   RiFireLine,
   RiRocket2Line,
   RiSearch2Line,
+  RiCloseLine,
 } from 'react-icons/ri';
 import { GiCastle } from 'react-icons/gi';
 import { useTheme } from '../../contexts/CustomThemeContext';
 import { themeImagePath } from '../../utils/helpers';
 import { defaultSocialLinks } from '../../content/socials';
 
-const MobileNav = ({ children }) => {
+const MobileNav = () => {
   const [sideNavOpen, toggleSideNav] = useState();
   const [dao] = useDao();
   const [theme] = useTheme();
@@ -76,27 +77,20 @@ const MobileNav = ({ children }) => {
   return (
     <Flex
       p={5}
-      position={['relative', 'relative', 'relative', 'fixed']}
+      position='absolute'
       direction='column'
       align='start'
       justifyContent='start'
       bg='primary.500'
       zIndex='1'
       w='100%'
-      minH='100px'
+      minH='80px'
       overflow='hidden'
-      overflowY='auto'
     >
-      <Flex
-        direction={['row', 'row', 'row', 'column']}
-        justify='start'
-        align={['center', 'center', 'center', 'start']}
-        w='100%'
-        wrap='wrap'
-      >
+      <Flex direction='row' justify='start' align='center' w='100%' wrap='wrap'>
         <Flex
-          align={['center', 'center', 'center', 'start']}
-          justify={['space-between', 'space-between', 'space-between', 'start']}
+          align='center'
+          justify='space-between'
           direction='row'
           w='100%'
           wrap='wrap'
@@ -138,6 +132,9 @@ const MobileNav = ({ children }) => {
               order={[1, null, null, 1]}
             />
           )}
+          <Box order={2} ml={3}>
+            <ChangeDao />
+          </Box>
           <Box
             d={['inline-block', null, null, 'none']}
             order='3'
@@ -162,16 +159,18 @@ const MobileNav = ({ children }) => {
               <Web3SignIn />
             )}
           </Box>
-          <Box
-            w={['auto', null, null, '100%']}
-            order={[3, null, null, 3]}
-            mt={[0, null, null, 6]}
-          >
-            <ChangeDao />
-          </Box>
+          <Button onClick={handleNavToggle} order='4'>
+            <Icon as={sideNavOpen ? RiCloseLine : RiMenu3Line} />
+          </Button>
         </Flex>
       </Flex>
-      <Flex direction='column' wrap='wrap'>
+      <Flex
+        direction='column'
+        wrap='wrap'
+        h={sideNavOpen ? '100vh' : '0px'}
+        transition='all .25s ease-in-out'
+        overflowY='auto'
+      >
         {dao?.graphData ? (
           <Stack
             spacing={[1, null, null, 3]}
@@ -179,99 +178,65 @@ const MobileNav = ({ children }) => {
             mt={[3, null, null, 12]}
             flexDirection='column'
           >
-            <Tooltip
-              label={theme.daoMeta.proposals}
-              aria-label={theme.daoMeta.proposals}
-              placement='right'
-              hasArrow
+            <Button
+              variant='sideNav'
+              as={RouterLink}
+              to={`/dao/${dao.address}/proposals`}
+              _hover={{ backgroundColor: 'white' }}
+              onClick={handleNavToggle}
+              leftIcon={<RiBookMarkLine />}
             >
-              <Button
-                variant='sideNav'
-                as={RouterLink}
-                to={`/dao/${dao.address}/proposals`}
-                _hover={{ backgroundColor: 'white' }}
-                grow='none'
-              >
-                <Icon as={RiBookMarkLine} w={6} h={6} />
-              </Button>
-            </Tooltip>
-            <Tooltip
-              label={theme.daoMeta.bank}
-              aria-label={theme.daoMeta.bank}
-              placement='right'
-              hasArrow
+              {theme.daoMeta.proposals}
+            </Button>
+            <Button
+              variant='sideNav'
+              as={RouterLink}
+              to={`/dao/${dao.address}/bank`}
+              _hover={{ backgroundColor: 'white' }}
+              onClick={handleNavToggle}
+              leftIcon={<RiBankLine />}
             >
-              <Button
-                variant='sideNav'
-                as={RouterLink}
-                to={`/dao/${dao.address}/bank`}
-                _hover={{ backgroundColor: 'white' }}
-                grow='none'
-              >
-                <Icon as={RiBankLine} w={6} h={6} />
-              </Button>
-            </Tooltip>
-            <Tooltip
-              label={theme.daoMeta.members}
-              aria-label={theme.daoMeta.members}
-              placement='right'
-              hasArrow
+              {theme.daoMeta.bank}
+            </Button>
+            <Button
+              variant='sideNav'
+              as={RouterLink}
+              to={`/dao/${dao.address}/members`}
+              _hover={{ backgroundColor: 'white' }}
+              onClick={handleNavToggle}
+              leftIcon={<RiTeamLine />}
             >
-              <Button
-                variant='sideNav'
-                as={RouterLink}
-                to={`/dao/${dao.address}/members`}
-                _hover={{ backgroundColor: 'white' }}
-              >
-                <Icon as={RiTeamLine} w={6} h={6} />
-              </Button>
-            </Tooltip>
-            <Tooltip
-              label='Settings'
-              aria-label='Settings'
-              placement='right'
-              hasArrow
+              {theme.daoMeta.members}
+            </Button>
+            <Button
+              variant='sideNav'
+              as={RouterLink}
+              to={`/dao/${dao.address}/settings`}
+              _hover={{ backgroundColor: 'white' }}
+              onClick={handleNavToggle}
+              leftIcon={<RiSettings3Line />}
             >
-              <Button
-                variant='sideNav'
-                as={RouterLink}
-                to={`/dao/${dao.address}/settings`}
-                _hover={{ backgroundColor: 'white' }}
-              >
-                <Icon as={RiSettings3Line} w={6} h={6} />
-              </Button>
-            </Tooltip>
-            <Tooltip
-              label='Boosts'
-              aria-label='Boosts'
-              placement='right'
-              hasArrow
+              Settings
+            </Button>
+            <Button
+              variant='sideNav'
+              as={RouterLink}
+              to={`/dao/${dao.address}/settings/boosts`}
+              _hover={{ backgroundColor: 'white' }}
+              leftIcon={<RiRocket2Line />}
             >
-              <Button
-                variant='sideNav'
-                as={RouterLink}
-                to={`/dao/${dao.address}/settings/boosts`}
-                _hover={{ backgroundColor: 'white' }}
-              >
-                <Icon as={RiRocket2Line} w={6} h={6} />
-              </Button>
-            </Tooltip>
+              Boosts
+            </Button>
             {memberWallet?.activeMember ? (
-              <Tooltip
-                label='Profile'
-                aria-label='Profile'
-                placement='right'
-                hasArrow
+              <Button
+                variant='sideNav'
+                as={RouterLink}
+                to={`/dao/${dao.address}/profile/${memberWallet.memberAddress}`}
+                _hover={{ backgroundColor: 'white' }}
+                leftIcon={<RiTrophyLine />}
               >
-                <Button
-                  variant='sideNav'
-                  as={RouterLink}
-                  to={`/dao/${dao.address}/profile/${memberWallet.memberAddress}`}
-                  _hover={{ backgroundColor: 'white' }}
-                >
-                  <Icon as={RiTrophyLine} w={6} h={6} />
-                </Button>
-              </Tooltip>
+                Profile
+              </Button>
             ) : null}
           </Stack>
         ) : (
