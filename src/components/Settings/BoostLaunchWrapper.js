@@ -10,26 +10,28 @@ import {
   // Text,
 } from '@chakra-ui/react';
 
-// import {
-//   useDao,
-//   useUser,
-//   useWeb3Connect,
-//   useNetwork,
-//   useDaoMetadata,
-// } from '../../contexts/PokemolContext';
+import {
+  useDao,
+  // useUser,
+  // useWeb3Connect,
+  // useNetwork,
+  // useDaoMetadata,
+} from '../../contexts/PokemolContext';
 // import { boostPost } from '../../utils/requests';
 import CustomThemeLaunch from './CustomThemeLaunch';
 import NewMinionForm from './NewMinionForm';
 import NotificationsLaunch from './NotificationsLaunch';
+import { useHistory } from 'react-router-dom';
 // import { notificationBoostContent } from '../../content/boost-content';
 
 const BoostLaunchWrapper = ({ boost }) => {
   const [loading, setLoading] = useState(false);
   // const [user] = useUser();
-  // const [dao] = useDao();
+  const [dao] = useDao();
   // const [daoMetadata, updateDaoMetadata] = useDaoMetadata();
   // const [web3Connect] = useWeb3Connect();
   // const [network] = useNetwork();
+  const history = useHistory();
 
   const renderBoostBody = () => {
     switch (boost.key) {
@@ -41,7 +43,11 @@ const BoostLaunchWrapper = ({ boost }) => {
       }
       case 'notificationsLevel1': {
         return (
-          <NotificationsLaunch handleLaunch={handleLaunch} loading={loading} />
+          <NotificationsLaunch
+            handleLaunch={handleLaunch}
+            loading={loading}
+            setLoading={setLoading}
+          />
         );
       }
       default: {
@@ -54,6 +60,11 @@ const BoostLaunchWrapper = ({ boost }) => {
     setLoading(true);
 
     console.log('boostMetadata', boostMetadata);
+
+    window.setTimeout(() => {
+      // alert("Hello");
+      history.push(`/dao/${dao.address}/settings/notifications`);
+    }, 3000);
 
     // const messageHash = web3Connect.web3.utils.sha3(dao.address);
     // const signature = await web3Connect.web3.eth.personal.sign(
