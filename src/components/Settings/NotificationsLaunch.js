@@ -13,19 +13,15 @@ import {
 } from '@chakra-ui/react';
 import { useForm } from 'react-hook-form';
 
-import {
-  useDao,
-  // useUser,
-  // useWeb3Connect,
-  // useNetwork,
-  // useDaoMetadata,
-} from '../../contexts/PokemolContext';
-// import { boostPost } from '../../utils/requests';
+import { useDao } from '../../contexts/PokemolContext';
 import { notificationBoostContent } from '../../content/boost-content';
+import { get } from '../../utils/requests';
 
-const NotificationsLaunch = ({ handleLaunch, loading }) => {
+const NotificationsLaunch = ({ handleLaunch, loading, setLoading }) => {
   const [dao] = useDao();
-  const { handleSubmit, register } = useForm();
+  const { handleSubmit, register, getValues } = useForm();
+  const [connectionError, setConnectionError] = useState();
+  const [isConnected, setIsConnected] = useState();
 
   const [step, setStep] = useState('intro');
 
@@ -42,6 +38,23 @@ const NotificationsLaunch = ({ handleLaunch, loading }) => {
     setStep('success');
   };
 
+  const testConnection = async () => {
+    setLoading(true);
+    const values = getValues();
+
+    // TODO: ERROR ON 'SUCCESS'
+    const res = await get(`dao/discord-status/${values.channelId}`);
+
+    console.log('res', res);
+    if (res.error) {
+      setConnectionError(res.error);
+    } else {
+      setIsConnected(true);
+    }
+
+    setLoading(false);
+  };
+
   return (
     <>
       {step === 'intro' ? (
@@ -52,13 +65,7 @@ const NotificationsLaunch = ({ handleLaunch, loading }) => {
           <Text my={6}>
             Hook up dao activity notifications to your Discord server.
           </Text>
-          <Button
-            type='submit'
-            disabled={loading}
-            onClick={() => setStep('directions1')}
-          >
-            Get Started
-          </Button>
+          <Button onClick={() => setStep('directions1')}>Get Started</Button>
         </>
       ) : null}
 
@@ -86,13 +93,7 @@ const NotificationsLaunch = ({ handleLaunch, loading }) => {
             indicated.
           </Text>
 
-          <Button
-            type='submit'
-            disabled={loading}
-            onClick={() => setStep('directions2')}
-          >
-            Next
-          </Button>
+          <Button onClick={() => setStep('directions2')}>Next</Button>
         </>
       ) : null}
 
@@ -130,9 +131,23 @@ const NotificationsLaunch = ({ handleLaunch, loading }) => {
                 />
               </FormControl>
             </Box>
-            <Button type='submit' isLoading={loading}>
-              Deploy
-            </Button>
+            {!isConnected ? (
+              <>
+                <Text mb={2} color='red.500'>
+                  {connectionError}
+                </Text>
+                <Button disabled={loading} onClick={testConnection}>
+                  Test Connection
+                </Button>
+              </>
+            ) : (
+              <>
+                <Text mb={2}>Success!</Text>
+                <Button type='submit' isLoading={loading}>
+                  Launch Notifications
+                </Button>
+              </>
+            )}
           </form>
         </>
       ) : null}
