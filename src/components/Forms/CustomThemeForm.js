@@ -13,7 +13,6 @@ import {
   TabPanels,
   Tab,
   TabPanel,
-  Text,
   FormControl,
   Input,
 } from '@chakra-ui/react';
