@@ -1,25 +1,20 @@
-import React, {
-  useEffect,
-  useContext,
-  createContext,
-  useRef,
-  useState,
-} from "react";
+import React, { useEffect, useContext, createContext, useRef } from "react";
 import { useParams } from "react-router-dom";
-import { BANK_BALANCES } from "../graphQL/bank-queries";
-import { DAO_ACTIVITIES, HOME_DAO } from "../graphQL/dao-queries";
-import { MEMBERS_LIST } from "../graphQL/member-queries";
-import { PROPOSALS_LIST } from "../graphQL/proposal-queries";
+import { bigGraphQuery } from "../utils/theGraph";
 import { useSessionStorage } from "../hooks/useSessionStorage";
-import { multiFetch } from "../utils/apollo";
+
 import { supportedChains } from "../utils/chain";
 import { useInjectedProvider } from "./InjectedProviderContext";
+import { MetaDataProvider } from "./MetaDataContext";
+import { TokenProvider } from "./TokenContext";
+import { TXProvider } from "./TXContext";
+import { DaoMemberProvider } from "./DaoMemberContext";
 
 export const DaoContext = createContext();
 
 export const DaoProvider = ({ children }) => {
   const { daoid, daochain } = useParams();
-  const { injectedChain, injectedProvider } = useInjectedProvider();
+  const { injectedChain, address } = useInjectedProvider();
 
   const daoNetworkData = supportedChains[daochain];
   const isCorrectNetwork = daochain === injectedChain?.chainId;
@@ -40,13 +35,11 @@ export const DaoProvider = ({ children }) => {
     `members-${daoid}`,
     null
   );
-  const [daoBalances, setDaoBalances] = useSessionStorage(
-    `balances-${daoid}`,
+  const [daoTransmutations, setTransmutations] = useSessionStorage(
+    `transmutations-${daoid}`,
     null
   );
-  const [isMember, setIsMember] = useState(false);
-
-  const hasCheckedIsMember = useRef(false);
+  const hasPerformedBatchQuery = useRef(false);
 
   useEffect(() => {
     //This condition is brittle. If one request passes, but the rest fail
@@ -56,122 +49,115 @@ export const DaoProvider = ({ children }) => {
       daoActivities ||
       daoOverview ||
       daoMembers ||
-      daoBalances
+      daoTransmutations
     )
       return;
-    if (!daoid || !injectedChain || !daoNetworkData) return;
+    if (
+      !daoid ||
+      !daochain ||
+      !daoNetworkData ||
+      !address ||
+      hasPerformedBatchQuery.current
+    )
+      return;
 
-    multiFetch([
-      {
-        endpoint: daoNetworkData.subgraph_url,
-        query: PROPOSALS_LIST,
-        variables: {
-          contractAddr: daoid,
-          skip: 0,
-        },
-        reactSetter: setDaoProposals,
+    bigGraphQuery({
+      args: {
+        daoID: daoid,
+        chainID: daochain,
       },
-      {
-        endpoint: daoNetworkData.subgraph_url,
-        query: HOME_DAO,
-        variables: {
-          contractAddr: daoid,
+      getSetters: [
+        { getter: "getOverview", setter: setDaoOverview },
+        {
+          getter: "getActivities",
+          setter: { setDaoProposals, setDaoActivities },
         },
-        reactSetter: setDaoOverview,
-      },
-      {
-        endpoint: daoNetworkData.subgraph_url,
-        query: MEMBERS_LIST,
-        variables: {
-          contractAddr: daoid,
-          skip: 0,
-        },
-        reactSetter: setDaoMembers,
-      },
-
-      {
-        endpoint: daoNetworkData.subgraph_url,
-        query: DAO_ACTIVITIES,
-        variables: {
-          contractAddr: daoid,
-          skip: 0,
-        },
-        reactSetter: setDaoActivities,
-      },
-      {
-        endpoint: daoNetworkData.stats_graph_url,
-        query: BANK_BALANCES,
-        variables: {
-          molochAddress: daoid,
-          skip: 0,
-        },
-        reactSetter: setDaoBalances,
-      },
-    ]);
+        { getter: "getMembers", setter: setDaoMembers },
+        { getter: "getTransmutations", setter: setTransmutations },
+      ],
+    });
+    hasPerformedBatchQuery.current = true;
   }, [
     daoid,
-    injectedChain,
+    daochain,
+    address,
     daoNetworkData,
     daoActivities,
-    daoBalances,
     daoMembers,
     daoOverview,
     daoProposals,
+    daoTransmutations,
     setDaoActivities,
-    setDaoBalances,
+    setTransmutations,
     setDaoMembers,
     setDaoOverview,
     setDaoProposals,
     isCorrectNetwork,
   ]);
 
-  useEffect(() => {
-    const checkIfMember = (membersObj) => {
-      return membersObj.daoMembers.some(
-        (member) =>
-          member.memberAddress === injectedProvider.provider.selectedAddress
-      );
-    };
-    if (daoMembers && !hasCheckedIsMember.current && injectedProvider) {
-      setIsMember(checkIfMember(daoMembers));
-      hasCheckedIsMember.current = true;
-    }
-  }, [daoMembers, injectedProvider]);
+  const refetch = () => {
+    bigGraphQuery({
+      args: {
+        daoID: daoid,
+        chainID: daochain,
+      },
+      getSetters: [
+        { getter: "getOverview", setter: setDaoOverview },
+        {
+          getter: "getActivities",
+          setter: { setDaoProposals, setDaoActivities },
+        },
+        { getter: "getMembers", setter: setDaoMembers },
+        { getter: "getTransmutations", setter: setTransmutations },
+      ],
+    });
+  };
 
   return (
     <DaoContext.Provider
       value={{
         daoProposals,
         daoActivities,
-        daoBalances,
         daoMembers,
         daoOverview,
-        isMember,
+
         isCorrectNetwork,
+        refetch,
+        hasPerformedBatchQuery, //Ref, not state
       }}
     >
-      {children}
+      <MetaDataProvider>
+        <TokenProvider>
+          <DaoMemberProvider
+            daoMembers={daoMembers}
+            address={address}
+            overview={daoOverview}
+          >
+            <TXProvider>{children}</TXProvider>
+          </DaoMemberProvider>
+        </TokenProvider>
+      </MetaDataProvider>
     </DaoContext.Provider>
   );
 };
 
-export const useLocalDaoData = () => {
+export const useDao = () => {
   const {
     daoProposals,
     daoActivities,
-    daoBalances,
     daoMembers,
     daoOverview,
-    isMember,
     isCorrectNetwork,
+    refetch,
+    hasPerformedBatchQuery, //Ref, not state
   } = useContext(DaoContext);
   return {
     daoProposals,
     daoActivities,
-    daoBalances,
     daoMembers,
     daoOverview,
-    isMember,
     isCorrectNetwork,
+    refetch,
+    hasPerformedBatchQuery,
   };
 };

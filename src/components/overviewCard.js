@@ -1,21 +1,37 @@
 import React from "react";
-import styled from "styled-components";
-import { BodyMd, HeaderLg } from "../styles/typography";
-import { formatDistanceToNow } from "date-fns";
+import { useParams, Link } from "react-router-dom";
+import { useCustomTheme } from "../contexts/CustomThemeContext";
+import { useMetaData } from "../contexts/MetaDataContext";
+import BankTotal from "./bankTotal";
 
-const StyledOverviewCard = styled.div``;
+const OverviewCard = ({ overview, isMember, membersAmt }) => {
+  const { daochain, daoid } = useParams();
+  const { daoMetadata } = useMetaData();
+  const { customCopy } = useCustomTheme();
+  const { tokenBalances, totalLoot, totalShares, title } = overview;
 
-const OverviewCard = ({ overview, isMember }) => {
-  const { tokenBalances, totalLoot, totalShares, title } = overview?.moloch;
   return (
-    <StyledOverviewCard>
-      <HeaderLg>Overview</HeaderLg>
-      <BodyMd>{isMember ? "You are a member" : "You are not a member"}</BodyMd>
-      <BodyMd>Name: {title} </BodyMd>
-      <BodyMd>Shares: {totalShares} </BodyMd>
-      <BodyMd>Loot: {totalLoot} </BodyMd>
-      <BodyMd>{tokenBalances.length} Tokens </BodyMd>
-    </StyledOverviewCard>
+    <div>
+      <div>
+        <h4>Details</h4>
+        <p>{isMember ? "You are a member" : "You are not a member"}</p>
+        <h2>{title} </h2>
+        {daoMetadata && <p>{daoMetadata?.description}</p>}
+        <p>
+          {customCopy ? customCopy?.members : "Members"}: {membersAmt}
+        </p>
+        <BankTotal customBank={customCopy?.bank} />
+        <p>Shares: {totalShares} </p>
+        <p>Loot: {totalLoot} </p>
+        <p>{tokenBalances.length} Tokens </p>
+        <Link className="nav-link" to={`/dao/${daochain}/${daoid}/proposals`}>
+          <p>{customCopy ? customCopy.proposals : "Proposals"}</p>
+        </Link>
+        <Link className="nav-link" to={`/dao/${daochain}/${daoid}/bank`}>
+          <p>{customCopy ? customCopy.bank : "Proposals"}</p>
+        </Link>
+      </div>
+    </div>
   );
 };
 

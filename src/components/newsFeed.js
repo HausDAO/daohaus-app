@@ -1,29 +1,16 @@
 import React, { useState, useEffect } from "react";
-import styled from "styled-components";
 
-import { HeaderLg } from "../styles/typography";
 import ProposalPreview from "./proposalPreview";
 
-import { getColor } from "../styles/palette";
-import { useLocalUserData } from "../contexts/UserContext";
+import { useUser } from "../contexts/UserContext";
 import { parseIfJSON } from "../utils/general";
-
-const StyledNewsFeed = styled.div`
-  border-left: 1px solid ${getColor("lightBorder")};
-  padding: 1.6rem 4rem;
-  grid-column: 3/5;
-  grid-row: 2/3;
-  .header {
-    margin-bottom: 1.6rem;
-  }
-`;
 
 const combineAndSortProposals = (daosByNetwork) => {
   return daosByNetwork
     .reduce((arr, network) => {
       return [
         ...arr,
-        ...network.data.membersHub.reduce((arr, dao) => {
+        ...network.data.reduce((arr, dao) => {
           return [
             ...arr,
             ...dao.moloch.proposals.map((proposal) => ({
@@ -41,7 +28,7 @@ const combineAndSortProposals = (daosByNetwork) => {
 };
 
 const NewsFeed = () => {
-  const { userHubDaos, hasLoadedHubData } = useLocalUserData();
+  const { userHubDaos, hasLoadedHubData } = useUser();
 
   const [newsFeed, setNewsFeed] = useState(null);
   const [viewing, setViewing] = useState({ from: 0, to: 9 });
@@ -53,13 +40,13 @@ const NewsFeed = () => {
   }, [userHubDaos, hasLoadedHubData]);
 
   return (
-    <StyledNewsFeed>
-      <HeaderLg className="header">Recent Activity:</HeaderLg>
+    <div>
+      <h3 className="header">Recent Activity:</h3>
       {newsFeed &&
         newsFeed.slice(viewing.from, viewing.to + 1).map((proposal) => {
           return <ProposalPreview proposal={proposal} key={proposal.id} />;
         })}
-    </StyledNewsFeed>
+    </div>
   );
 };
 

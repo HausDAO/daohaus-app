@@ -1,24 +1,36 @@
 {
-  "name": "basic",
+  "name": "new-context-build",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@chakra-ui/react": "^1.1.6",
+    "@emotion/react": "^11.1.4",
+    "@emotion/styled": "^11.0.0",
+    "@portis/web3": "^3.0.3",
     "@testing-library/jest-dom": "^5.11.4",
     "@testing-library/react": "^11.1.0",
     "@testing-library/user-event": "^12.1.10",
+    "@walletconnect/web3-provider": "^1.3.3",
     "apollo-boost": "^0.4.9",
     "date-fns": "^2.16.1",
+    "deep-eql": "^4.0.0",
+    "ethereum-blockies-base64": "^1.0.2",
     "ethers": "^5.0.24",
+    "fortmatic": "^2.2.1",
+    "framer-motion": "^3.2.0",
     "graphql": "^15.4.0",
+    "polished": "^4.0.5",
     "react": "^17.0.1",
     "react-apollo": "^3.1.5",
     "react-contextual": "^5.0.2",
     "react-dom": "^17.0.1",
     "react-feather": "^2.0.9",
+    "react-icons": "^4.1.0",
     "react-router-dom": "^5.2.0",
     "react-scripts": "4.0.1",
     "styled-components": "^5.2.1",
     "web-vitals": "^0.2.4",
+    "web3": "^1.3.1",
     "web3modal": "^1.9.2"
   },
   "scripts": {
@@ -44,5 +56,8 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "devDependencies": {
+    "@types/deep-equal": "^1.0.1"
   }
 }

@@ -4,10 +4,11 @@ export const supportedChains = {
     short_name: "eth",
     chain: "ETH",
     network: "mainnet",
+
     chain_id: 1,
     network_id: 1,
     providers: ["walletconnect", "portis", "fortmatic"],
-    rpc_url: `https://mainnet.infura.io/${process.env.REACT_APP_INFURA_PROJECT_ID}`,
+    rpc_url: `https://mainnet.infura.io/v3/${process.env.REACT_APP_INFURA_PROJECT_ID}`,
     abi_api_url:
       "https://api.etherscan.io/api?module=contract&action=getabi&address=",
     metadata_api_url: "https://data.daohaus.club",
@@ -30,7 +31,7 @@ export const supportedChains = {
     chain_id: 4,
     network_id: 4,
     providers: ["walletconnect", "portis", "fortmatic"],
-    rpc_url: `https://rinkeby.infura.io/${process.env.REACT_APP_INFURA_PROJECT_ID}`,
+    rpc_url: `https://rinkeby.infura.io/v3/${process.env.REACT_APP_INFURA_PROJECT_ID}`,
     abi_api_url:
       "https://api-rinkeby.etherscan.io/api?module=contract&action=getabi&address=",
     metadata_api_url: "https://data.daohaus.club",
@@ -51,7 +52,7 @@ export const supportedChains = {
     chain_id: 42,
     network_id: 42,
     providers: ["walletconnect", "portis", "fortmatic"],
-    rpc_url: `https://kovan.infura.io/${process.env.REACT_APP_INFURA_PROJECT_ID}`,
+    rpc_url: `https://kovan.infura.io/v3/${process.env.REACT_APP_INFURA_PROJECT_ID}`,
     abi_api_url:
       "https://api-kovan.etherscan.io/api?module=contract&action=getabi&address=",
     metadata_api_url: "https://data.daohaus.club",
@@ -88,3 +89,7 @@ export const supportedChains = {
     wxdai_contract: "",
   },
 };
+
+export const chainByID = (chainID) => supportedChains[chainID];
+export const getGraphEndpoint = (chainID, endpointType) =>
+  chainByID(chainID)[endpointType];

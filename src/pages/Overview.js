@@ -1,27 +1,41 @@
 import React from "react";
-import ActivitiesCard from "../components/activitiesCard";
+import ActivitiesFeed from "../components/activitiesFeed";
+import MemberInfoCard from "../components/memberInfo";
 import OverviewCard from "../components/overviewCard";
-import { SplitLayout } from "../components/staticElements";
-import { BodyMd, DisplayLg } from "../styles/typography";
+import { getDaoActivites } from "../utils/activities";
 
 const Overview = React.memo(function Overview({
   overview,
   activities,
   title,
   isMember,
-  isCorrectNetwork,
+  members,
+  daoMember,
 }) {
   return (
-    <SplitLayout>
+    <div>
       <div className="title-section">
-        <DisplayLg>{title}</DisplayLg>
-        {isCorrectNetwork || (
-          <BodyMd>You are not connected to the correct network</BodyMd>
-        )}
+        <h1>{title}</h1>
       </div>
-      {overview && <OverviewCard overview={overview} isMember={isMember} />}
-      {activities && <ActivitiesCard activities={activities} />}
-    </SplitLayout>
+      {overview && (
+        <OverviewCard
+          overview={overview}
+          isMember={isMember}
+          membersAmt={members?.daoMembers?.length}
+        />
+        // <DaoOverviewDetails members={members} overview={overview} />
+      )}
+      {isMember && (
+        <>
+          <ActivitiesFeed
+            activities={activities}
+            limit={3}
+            hydrateFn={getDaoActivites}
+          />
+          <MemberInfoCard member={daoMember} />
+        </>
+      )}
+    </div>
   );
 });
 

@@ -1,64 +1,62 @@
 import React from "react";
-import styled from "styled-components";
+import { Flex, Box, useBreakpointValue } from "@chakra-ui/react";
+import DesktopNav from "../nav/desktopNav";
+import "../global.css";
+// import MobileNav from "./MobileNav";
+import Header from "../components/header";
+// import "../global.css";
 
-import Nav from "./nav";
-import { widthQuery } from "../styles/responsive";
-import { getColor } from "../styles/palette";
+import { useCustomTheme } from "../contexts/CustomThemeContext";
+import { themeImagePath } from "../utils/metadata";
 
-const StyleTemplate = styled.main`
-  display: grid;
-  min-height: 100%;
-  width: 100%;
-  grid-template-columns: 32rem auto;
-  grid-template-rows: 5.6rem auto;
-  transition: 0.2s all;
-  /* @media ${widthQuery.laptop} {
-    grid-template-columns: 28rem 4rem minmax(60rem, 80rem) auto;
-  }
-  @media ${widthQuery.tablet} {
-    position: relative;
-    margin-top: 5.6rem;
-    display: block;
-  } */
-`;
-const MainSpace = styled.main`
-  width: 100%;
-  grid-column: 2/3;
-  grid-row: 2;
-  padding: 4rem;
-  z-index: 0;
+const Layout = ({ children, navLinks, brand, daoMetaData, dao }) => {
+  const { theme } = useCustomTheme();
+  const mainNav = useBreakpointValue({
+    lg: <DesktopNav navLinks={navLinks} brand={brand} />,
+  });
 
-  /* @media ${widthQuery.tablet} {
-    max-width: 72rem;
-    padding: 4rem;
-  }
-  @media ${widthQuery.mobileL} {
-    max-width: 72rem;
-    padding: 2.4rem;
-  }
-  @media ${widthQuery.mobileS} {
-    padding: 1.6rem;
-  } */
-`;
-
-const SideSpace = styled.aside`
-  width: 100%;
-  grid-column: 1;
-  grid-row: 2;
-  /* @media ${widthQuery.tablet} {
-    height: 100%;
-    width: 100%;
-    z-index: 20;
-  } */
-`;
-
-const Layout = ({ sideMenu, children, provider }) => {
   return (
-    <StyleTemplate>
-      <Nav />
-      <SideSpace>{sideMenu}</SideSpace>
-      <MainSpace>{children}</MainSpace>
-    </StyleTemplate>
+    <Flex
+      direction={["column", "column", "column", "row"]}
+      minH="100vh"
+      w="100vw"
+    >
+      {mainNav}
+
+      <Box
+        position="fixed"
+        h="100vh"
+        bgImage={`url(${themeImagePath(theme.images.bgImg)})`}
+        bgSize="cover"
+        bgPosition="center"
+        zIndex="-1"
+        top={0}
+        right="0"
+        w={["100%", null, null, "calc(100% - 100px)"]}
+        _before={{
+          display: "block",
+          content: '""',
+          position: "absolute",
+          w: "100%",
+          h: "100%",
+          bgColor: "background.500",
+          opacity: theme.styles.bgOverlayOpacity,
+          pointerEvents: "none",
+          top: "0",
+          right: "0",
+          zIndex: "-1",
+        }}
+      />
+      <Flex
+        w={["100%", null, null, "calc(100% - 100px)"]}
+        ml={[0, null, null, "100px"]}
+        mt={["80px", null, null, "0px"]}
+        flexDirection="column"
+      >
+        <Header daoMetaData={daoMetaData} dao={dao} />
+        {children}
+      </Flex>
+    </Flex>
   );
 };
 

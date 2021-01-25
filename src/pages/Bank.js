@@ -1,8 +1,17 @@
 import React from "react";
-import { useParams } from "react-router-dom";
+
+import BankList from "../components/BankList";
+import Chart from "../components/chart";
+import { useToken } from "../contexts/TokenContext";
 
 const Bank = () => {
-  return <div>Bank!</div>;
+  const { currentDaoTokens } = useToken();
+  return (
+    <div>
+      <Chart />
+      <BankList tokens={currentDaoTokens} />
+    </div>
+  );
 };
 
 export default Bank;

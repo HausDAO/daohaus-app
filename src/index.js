@@ -5,15 +5,16 @@ import "./index.css";
 import App from "./App";
 import reportWebVitals from "./reportWebVitals";
 import { BrowserRouter } from "react-router-dom";
-// import { DefaultProvider } from "./contexts/DefaultProviderContext";
 import { InjectedProvider } from "./contexts/InjectedProviderContext";
-import { UserContextProvider } from "./contexts/UserContext";
+import { CustomThemeProvider } from "./contexts/CustomThemeContext";
 
 ReactDOM.render(
   <React.StrictMode>
     <BrowserRouter>
       <InjectedProvider>
-        <App />
+        <CustomThemeProvider>
+          <App />
+        </CustomThemeProvider>
       </InjectedProvider>
     </BrowserRouter>
   </React.StrictMode>,
