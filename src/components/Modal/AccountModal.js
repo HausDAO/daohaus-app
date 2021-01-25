@@ -153,7 +153,7 @@ const AccountModal = ({ isOpen }) => {
                     <Link
                       as={RouterLink}
                       to={`/dao/${dao.address}/profile/${user.username}`}
-                      onClick={closeModals}
+                      onClick={() => closeModals()}
                       color='secondary.400'
                       _hover={{ color: 'secondary.600' }}
                       mb='4px'
@@ -180,7 +180,7 @@ const AccountModal = ({ isOpen }) => {
                   _hover={{ color: 'secondary.600' }}
                   as={RouterLink}
                   to='/'
-                  onClick={closeModals}
+                  onClick={() => closeModals()}
                 >
                   Go to Hub
                 </Link>

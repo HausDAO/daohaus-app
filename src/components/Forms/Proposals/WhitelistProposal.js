@@ -1,6 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import { useForm } from 'react-hook-form';
-import { Button, FormControl, Flex, Icon, Box } from '@chakra-ui/react';
+import {
+  Button,
+  FormLabel,
+  FormControl,
+  Flex,
+  Input,
+  Icon,
+  Box,
+} from '@chakra-ui/react';
 import { RiErrorWarningLine } from 'react-icons/ri';
 
 import {
@@ -8,39 +16,27 @@ import {
   useModals,
   useTxProcessor,
   useUser,
-} from '../../contexts/PokemolContext';
-import AddressInput from './AddressInput';
-import DetailsFields from './DetailFields';
-import { useLocation } from 'react-router-dom';
-import { detailsToJSON } from '../../utils/proposal-helper';
+} from '../../../contexts/PokemolContext';
+import DetailsFields from '../Shared/DetailFields';
+import TextBox from '../../Shared/TextBox';
+import { detailsToJSON } from '../../../utils/proposal-helper';
 
-const GuildKickProposalForm = () => {
+const WhitelistProposalForm = () => {
   const [loading, setLoading] = useState(false);
   const [user] = useUser();
   const [dao] = useDao();
   const [txProcessor, updateTxProcessor] = useTxProcessor();
   const [currentError, setCurrentError] = useState(null);
-  const location = useLocation();
   const { closeModals } = useModals();
+
+  console.log(dao);
 
   const {
     handleSubmit,
     errors,
     register,
-    setValue,
-    watch,
     // formState
   } = useForm();
-
-  useEffect(() => {
-    // TODO: expand to work for any search param on all forms
-    if (location.search && location.search.split('applicant=')[1]) {
-      const applicantAddress = location.search.split('applicant=')[1];
-      setValue('applicantHidden', applicantAddress);
-      setValue('applicant', applicantAddress);
-    }
-    // eslint-disable-next-line
-  }, [location]);
 
   useEffect(() => {
     if (Object.keys(errors).length > 0) {
@@ -80,8 +76,8 @@ const GuildKickProposalForm = () => {
     const details = detailsToJSON(values);
 
     try {
-      dao.daoService.moloch.submitGuildKickProposal(
-        values.memberApplicant,
+      dao.daoService.moloch.submitWhiteListProposal(
+        values.tokenAddress,
         details,
         txCallBack,
       );
@@ -105,12 +101,16 @@ const GuildKickProposalForm = () => {
           <DetailsFields register={register} />
         </Box>
         <Box w={['100%', null, '50%']}>
-          <AddressInput
-            register={register}
-            setValue={setValue}
-            watch={watch}
-            formLabel={'Member To Kick'}
-            guildKick={true}
+          <TextBox as={FormLabel} size='xs' htmlFor='tokenAddress' mb={2}>
+            Token Address
+          </TextBox>
+          <Input
+            name='tokenAddress'
+            placeholder='0x'
+            mb={3}
+            ref={register}
+            color='white'
+            focusBorderColor='secondary.500'
           />
         </Box>
       </FormControl>
@@ -136,4 +136,4 @@ const GuildKickProposalForm = () => {
   );
 };
 
-export default GuildKickProposalForm;
+export default WhitelistProposalForm;

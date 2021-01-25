@@ -15,8 +15,8 @@ import {
   Switch,
   Spinner,
 } from '@chakra-ui/react';
-import TextBox from '../Shared/TextBox';
 import { RiErrorWarningLine } from 'react-icons/ri';
+import { AiOutlineCaretDown } from 'react-icons/ai';
 
 import {
   useDao,
@@ -25,10 +25,10 @@ import {
   useTxProcessor,
   useUser,
   useWeb3Connect,
-} from '../../contexts/PokemolContext';
-import { MinionService } from '../../utils/minion-service';
-import { AiOutlineCaretDown } from 'react-icons/ai';
-import { supportedChains } from '../../utils/chains';
+} from '../../../contexts/PokemolContext';
+import TextBox from '../../Shared/TextBox';
+import { MinionService } from '../../../utils/minion-service';
+import { supportedChains } from '../../../utils/chains';
 
 const MinionProposalForm = () => {
   const [loading, setLoading] = useState(false);

@@ -13,7 +13,7 @@ const GenericModal = ({ isOpen, children }) => {
   const { closeModals } = useModals();
 
   return (
-    <Modal isOpen={isOpen} onClose={closeModals} isCentered>
+    <Modal isOpen={isOpen} onClose={() => closeModals()} isCentered>
       <ModalOverlay />
       <ModalContent
         rounded='lg'

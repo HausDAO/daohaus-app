@@ -48,6 +48,8 @@ const Header = () => {
       setPageTitle(theme.daoMeta.members);
     } else if (location.pathname === `/dao/${dao?.address}/bank`) {
       setPageTitle(theme.daoMeta.bank);
+    } else if (location.pathname === `/dao/${dao?.address}/allies`) {
+      setPageTitle('Allies');
     } else if (location.pathname === `/dao/${dao?.address}/settings`) {
       setPageTitle('Settings');
     } else if (location.pathname === `/dao/${dao?.address}/settings/meta`) {

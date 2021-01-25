@@ -4,7 +4,7 @@ import { Flex, Box, Skeleton, Image } from '@chakra-ui/react';
 import UsdPrice from '../UsdPrice';
 import UsdValue from '../UsdValue';
 import Withdraw from '../../Forms/Withdraw';
-import SyncToken from '../../Forms/SyncToken';
+import SyncToken from '../../Forms/Shared/SyncToken';
 import { useMemberWallet } from '../../../contexts/PokemolContext';
 import { getMainetAddresses } from '../../../utils/requests';
 import { numberWithCommas } from '../../../utils/helpers';

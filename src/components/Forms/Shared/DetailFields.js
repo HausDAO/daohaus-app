@@ -9,8 +9,8 @@ import {
   InputLeftAddon,
   FormHelperText,
 } from '@chakra-ui/react';
-import TextBox from '../Shared/TextBox';
-import { stripHttpProtocol } from '../../utils/helpers';
+import TextBox from '../../Shared/TextBox';
+import { stripHttpProtocol } from '../../../utils/helpers';
 
 const DetailsFields = ({ register }) => {
   const [values, setValues] = useState({

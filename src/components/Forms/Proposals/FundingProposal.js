@@ -13,6 +13,7 @@ import {
   MenuList,
   MenuItem,
 } from '@chakra-ui/react';
+import TextBox from '../../Shared/TextBox';
 import { utils } from 'web3';
 import { RiAddFill, RiErrorWarningLine } from 'react-icons/ri';
 
@@ -21,32 +22,30 @@ import {
   useModals,
   useTxProcessor,
   useUser,
-} from '../../contexts/PokemolContext';
-import TextBox from '../Shared/TextBox';
+} from '../../../contexts/PokemolContext';
 
-import DetailsFields from './DetailFields';
-import PaymentInput from './PaymentInput';
-import TributeInput from './TributeInput';
-import AddressInput from './AddressInput';
-import { detailsToJSON } from '../../utils/proposal-helper';
+import TributeInput from '../Shared/TributeInput';
+import PaymentInput from '../Shared/PaymentInput';
+import AddressInput from '../Shared/AddressInput';
+import DetailsFields from '../Shared/DetailFields';
+import { detailsToJSON } from '../../../utils/proposal-helper';
 
-const TradeProposalForm = () => {
+const FundingProposalForm = () => {
   const [loading, setLoading] = useState(false);
-  const [showLoot, setShowLoot] = useState(false);
   const [showShares, setShowShares] = useState(false);
-  const [showApplicant, setShowApplicant] = useState(false);
+  const [showLoot, setShowLoot] = useState(false);
+  const [showTribute, setShowTribute] = useState(false);
   const [user] = useUser();
   const [dao] = useDao();
   const [txProcessor, updateTxProcessor] = useTxProcessor();
   const [currentError, setCurrentError] = useState(null);
   const { closeModals } = useModals();
 
-  console.log(dao);
-
   const {
     handleSubmit,
     errors,
     register,
+    reset,
     setValue,
     getValues,
     watch,
@@ -63,12 +62,9 @@ const TradeProposalForm = () => {
     } else {
       setCurrentError(null);
     }
-
-    // eslint-disable-next-line
   }, [errors]);
 
   // TODO check tribute token < currentWallet.token.balance & unlock
-  // TODO check payment token < dao.token.balance
   // TODO check link is a valid link
 
   const txCallBack = (txHash, details) => {
@@ -80,6 +76,8 @@ const TradeProposalForm = () => {
       updateTxProcessor({ ...txProcessor });
       // close model here
       closeModals();
+      setLoading(false);
+      reset();
     }
     if (!txHash) {
       console.log('error: ', details);
@@ -90,7 +88,6 @@ const TradeProposalForm = () => {
   const onSubmit = async (values) => {
     setLoading(true);
 
-    console.log(values);
     const details = detailsToJSON(values);
 
     try {
@@ -100,13 +97,17 @@ const TradeProposalForm = () => {
         values.tributeOffered
           ? utils.toWei(values.tributeOffered?.toString())
           : '0',
-        values.tributeToken || dao.graphData?.depositToken?.tokenAddress,
+        values.tributeToken || dao.graphData.depositToken.tokenAddress,
         values.paymentRequested
           ? utils.toWei(values.paymentRequested?.toString())
           : '0',
-        values.paymentToken || dao.graphData?.depositToken?.tokenAddress,
+        values.paymentToken || dao.graphData.depositToken.tokenAddress,
         details,
-        user.username,
+        values?.applicantHidden?.startsWith('0x')
+          ? values.applicantHidden
+          : values?.applicant
+          ? values.applicant
+          : values?.memberApplicant,
         txCallBack,
       );
     } catch (err) {
@@ -129,12 +130,12 @@ const TradeProposalForm = () => {
           <DetailsFields register={register} />
         </Box>
         <Box w={['100%', null, '50%']}>
-          <TributeInput
+          <AddressInput
+            name='applicant'
             register={register}
             setValue={setValue}
-            getValues={getValues}
+            watch={watch}
           />
-          <TextBox size='xs'>Trade For</TextBox>
           <PaymentInput
             register={register}
             setValue={setValue}
@@ -144,7 +145,7 @@ const TradeProposalForm = () => {
 
           {showShares && (
             <>
-              <TextBox as={FormLabel} size='xs' htmlFor='sharesRequested'>
+              <TextBox as={FormLabel} size='xs' htmlFor='name' mb={2}>
                 Shares Requested
               </TextBox>
               <Input
@@ -162,12 +163,9 @@ const TradeProposalForm = () => {
                     message: 'Requested shares must be a number',
                   },
                 })}
-                color='white'
-                focusBorderColor='secondary.500'
               />
             </>
           )}
-
           {showLoot && (
             <>
               <TextBox as={FormLabel} size='xs' htmlFor='lootRequested' mb={2}>
@@ -183,33 +181,29 @@ const TradeProposalForm = () => {
                     message: 'Loot must be a number',
                   },
                 })}
-                color='white'
-                focusBorderColor='secondary.500'
               />
             </>
           )}
-
-          {showApplicant && (
-            <AddressInput
-              name='applicant'
+          {showTribute && (
+            <TributeInput
               register={register}
               setValue={setValue}
-              watch={watch}
+              getValues={getValues}
             />
           )}
-          {(!showApplicant || !showLoot || !showShares) && (
-            <Menu color='white' textTransform='uppercase'>
+          {(!showShares || !showLoot || !showTribute) && (
+            <Menu textTransform='uppercase'>
               <MenuButton
                 as={Button}
                 variant='outline'
-                rightIcon={<Icon as={RiAddFill} color='primary.500' />}
+                rightIcon={<Icon as={RiAddFill} />}
               >
                 Additional Options
               </MenuButton>
               <MenuList>
-                {!showApplicant && (
-                  <MenuItem onClick={() => setShowApplicant(true)}>
-                    Applicant
+                {!showShares && (
+                  <MenuItem onClick={() => setShowShares(true)}>
+                    Request Shares
                   </MenuItem>
                 )}
                 {!showLoot && (
@@ -217,9 +211,9 @@ const TradeProposalForm = () => {
                     Request Loot
                   </MenuItem>
                 )}
-                {!showShares && (
-                  <MenuItem onClick={() => setShowShares(true)}>
-                    Request Shares
+                {!showTribute && (
+                  <MenuItem onClick={() => setShowTribute(true)}>
+                    Give Tribute
                   </MenuItem>
                 )}
               </MenuList>
@@ -229,8 +223,8 @@ const TradeProposalForm = () => {
       </FormControl>
       <Flex justify='flex-end' align='center' h='60px'>
         {currentError && (
-          <Box color='secondary.300' fontSize='m' mr={5}>
-            <Icon as={RiErrorWarningLine} color='secondary.300' mr={2} />
+          <Box color='red.500' fontSize='m' mr={5}>
+            <Icon as={RiErrorWarningLine} color='red.500' mr={2} />
             {currentError.message}
           </Box>
         )}
@@ -249,4 +243,4 @@ const TradeProposalForm = () => {
   );
 };
 
-export default TradeProposalForm;
+export default FundingProposalForm;
