@@ -1,23 +1,21 @@
 import {
   Button,
-  FormErrorMessage,
   FormLabel,
   Input,
   InputGroup,
   InputRightAddon,
   Select,
 } from '@chakra-ui/react';
-import TextBox from '../Shared/TextBox';
+import TextBox from '../../Shared/TextBox';
 import React, { useState, useEffect } from 'react';
-import { useDao } from '../../contexts/PokemolContext';
+import { useDao } from '../../../contexts/PokemolContext';
 
-const PaymentInput = ({ register, setValue, getValues, errors }) => {
+const TributeInput = ({ register, setValue, getValues }) => {
+  const [unlocked, setUnlocked] = useState(true);
   const [balance, setBalance] = useState(0);
-
+  const [loading, setLoading] = useState(false);
   const [tokenData, setTokenData] = useState([]);
   const [dao] = useDao();
-
-  // const watchToken = watch('paymentToken', '');
 
   useEffect(() => {
     if (dao?.graphData && !tokenData.length) {
@@ -30,7 +28,6 @@ const PaymentInput = ({ register, setValue, getValues, errors }) => {
         (token) =>
           token.guildBank && token.token.tokenAddress !== depositTokenAddress,
       );
-
       tokenArray.unshift(depositToken);
       setTokenData(
         tokenArray.map((token) => ({
@@ -54,69 +51,94 @@ const PaymentInput = ({ register, setValue, getValues, errors }) => {
   }, [tokenData]);
 
   const handleChange = async () => {
-    const paymentToken = getValues('paymentToken');
-    if (tokenData.length && paymentToken) {
-      getMax(paymentToken);
+    const tributeToken = getValues('tributeToken');
+    const tributeOffered = getValues('tributeOffered');
+    await checkUnlocked(tributeToken, tributeOffered);
+    await getMax(tributeToken);
+    return true;
+  };
+
+  const unlock = async () => {
+    setLoading(true);
+    const token = getValues('tributeToken');
+    try {
+      await dao.daoService.token.unlock(token);
+      setUnlocked(true);
+    } catch (err) {
+      console.log('error:', err);
     }
+    setLoading(false);
+  };
+
+  const checkUnlocked = async (token, amount) => {
+    console.log('check', token, amount);
+    if (amount === '' || !token) {
+      return;
+    }
+    const amountApproved = await dao.daoService.token.unlocked(token);
+    const isUnlocked = amountApproved > amount;
+    setUnlocked(isUnlocked);
   };
 
   const getMax = async (token) => {
-    const selected = tokenData.find((item) => item.value === token);
-    if (selected) {
-      setBalance(selected.balance / 10 ** selected.decimals);
-    }
+    const max = await dao.daoService.token.balanceOfToken(token);
+    setBalance(max);
   };
 
   const setMax = async () => {
-    setValue('paymentRequested', balance);
-  };
-
-  const validateBalance = (value) => {
-    let error;
-    if (value > balance) {
-      error = 'Requested funds are more than the DAO has';
-    }
-    return error || true;
+    setValue('tributeOffered', balance);
   };
 
   return (
     <>
       <TextBox as={FormLabel} size='xs'>
-        Funds Requested
+        Token Tribute
       </TextBox>
       <InputGroup>
+        {!unlocked && (
+          <Button
+            onClick={() => unlock()}
+            isLoading={loading}
+            size='xs'
+            position='absolute'
+            right='0'
+            bottom='-10px'
+          >
+            Unlock
+          </Button>
+        )}
         <Button
           onClick={() => setMax()}
           size='xs'
+          variant='outline'
           position='absolute'
           right='0'
           top='-30px'
-          variant='outline'
         >
           Max: {balance && balance.toFixed(4)}
         </Button>
         <Input
-          name='paymentRequested'
+          name='tributeOffered'
           placeholder='0'
           mb={5}
           ref={register({
             pattern: {
               value: /[0-9]/,
-              message: 'Payment must be a number',
+              message: 'Tribute must be a number',
             },
-            validate: validateBalance,
           })}
           color='white'
           focusBorderColor='secondary.500'
+          onChange={handleChange}
         />
         <InputRightAddon background='primary.500' p={0}>
           <Select
-            name='paymentToken'
+            name='tributeToken'
+            defaultValue='0xd0a1e359811322d97991e03f863a0c30c2cf029c'
             ref={register}
             onChange={handleChange}
             color='white'
             background='primary.500'
-            w='100%'
           >
             {' '}
             {tokenData.map((token, idx) => (
@@ -127,12 +149,8 @@ const PaymentInput = ({ register, setValue, getValues, errors }) => {
           </Select>
         </InputRightAddon>
       </InputGroup>
-
-      <FormErrorMessage>
-        {errors.paymentToken && errors.paymentToken.message}
-      </FormErrorMessage>
     </>
   );
 };
 
-export default PaymentInput;
+export default TributeInput;

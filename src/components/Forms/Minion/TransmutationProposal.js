@@ -21,13 +21,13 @@ import {
   useTxProcessor,
   useUser,
   useWeb3Connect,
-} from '../../contexts/PokemolContext';
+} from '../../../contexts/PokemolContext';
 
-import GraphFetch from '../Shared/GraphFetch';
-import { GET_TRANSMUTATION } from '../../utils/apollo/boost-queries';
-import { TransmutationService } from '../../utils/transmutation-service';
-import { TokenService } from '../../utils/token-service';
-import AddressInput from './AddressInput';
+import GraphFetch from '../../Shared/GraphFetch';
+import { GET_TRANSMUTATION } from '../../../utils/apollo/boost-queries';
+import { TransmutationService } from '../../../utils/transmutation-service';
+import { TokenService } from '../../../utils/token-service';
+import AddressInput from '../Shared/AddressInput';
 
 const TransmutationProposal = () => {
   const [loading, setLoading] = useState(false);

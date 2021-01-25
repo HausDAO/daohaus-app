@@ -1,7 +1,11 @@
 import React, { useState } from 'react';
 import { Button, Flex, Spinner, Tooltip } from '@chakra-ui/react';
 
-import { useDao, useTxProcessor, useUser } from '../../contexts/PokemolContext';
+import {
+  useDao,
+  useTxProcessor,
+  useUser,
+} from '../../../contexts/PokemolContext';
 import { RiQuestionLine } from 'react-icons/ri';
 
 const SyncToken = ({ tokenBalance, setOptimisticSync }) => {

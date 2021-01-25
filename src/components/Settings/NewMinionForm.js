@@ -95,8 +95,9 @@ const NewMinionForm = () => {
         </>
       )}
       <Box>
-        Your Minion allows you to upgrade your dao with Boosts. We've seeded it
-        with some boosts to start. Deploy the Minion to claim your Boosts.
+        Your Minion allows you to upgrade your dao with Boosts. We&apos;ve
+        seeded it with some boosts to start. Deploy the Minion to claim your
+        Boosts.
       </Box>
       <form onSubmit={handleSubmit(onSubmit)}>
         <Box>
