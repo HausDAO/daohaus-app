@@ -17,7 +17,12 @@ import TextBox from '../Shared/TextBox';
 import { utils } from 'web3';
 import { RiAddFill, RiErrorWarningLine } from 'react-icons/ri';
 
-import { useDao, useModals, useTxProcessor, useUser } from '../../contexts/PokemolContext';
+import {
+  useDao,
+  useModals,
+  useTxProcessor,
+  useUser,
+} from '../../contexts/PokemolContext';
 
 import TributeInput from './TributeInput';
 import PaymentInput from './PaymentInput';

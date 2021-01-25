@@ -10,7 +10,9 @@ const UsdPrice = ({ tokenBalance }) => {
       ${' '}
       {prices[tokenBalance.token.tokenAddress]
         ? numberWithCommas(
-            parseFloat(prices[tokenBalance.token.tokenAddress].usd).toFixed(2),
+            parseFloat(prices[tokenBalance.token.tokenAddress].price).toFixed(
+              2,
+            ),
           )
         : '0'}
     </div>

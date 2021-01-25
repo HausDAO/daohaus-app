@@ -20,12 +20,12 @@ export const getRandomTheme = async (images) => {
 
   if (images) {
     const request = new Request('https://source.unsplash.com/random/200x200');
-    const brandImg = await fetch(request);
+    const avatarImg = await fetch(request);
 
     const requestBg = new Request('https://source.unsplash.com/random/800x800');
     const bgImg = await fetch(requestBg);
 
-    theme.brandImg = brandImg.url;
+    theme.avatarImg = avatarImg.url;
     theme.bgImg = bgImg.url;
   }
 
@@ -77,11 +77,11 @@ export const setTheme = (daoTheme) => {
       },
     },
     images: {
-      brandImg: themeOverrides.brandImg,
+      avatarImg: themeOverrides.avatarImg,
       bgImg: themeOverrides.bgImg,
     },
     fonts: {
-      heading: themeOverrides.primaryFont,
+      heading: themeOverrides.headingFont,
       body: themeOverrides.bodyFont,
       mono: themeOverrides.monoFont,
       hub: 'Mirza',
@@ -96,11 +96,6 @@ export const setTheme = (daoTheme) => {
       member: themeOverrides.daoMeta.member,
       boosts: themeOverrides.daoMeta.boosts,
       boost: themeOverrides.daoMeta.boost,
-      discord: themeOverrides.daoMeta.discord,
-      medium: themeOverrides.daoMeta.medium,
-      telegram: themeOverrides.daoMeta.telegram,
-      website: themeOverrides.daoMeta.website,
-      other: themeOverrides.daoMeta.other,
       f04title: themeOverrides.daoMeta.f04title,
       f04heading: themeOverrides.daoMeta.f04heading,
       f04subhead: themeOverrides.daoMeta.f04subhead,
@@ -277,14 +272,54 @@ export const setTheme = (daoTheme) => {
           focusBorderColor: 'secondary.500',
         },
       },
+      Tabs: {
+        parts: ['root', 'tablist', 'tab', 'tabpanel', 'indicator'],
+        baseStyle: {
+          root: {
+            color: 'whiteAlpha.500',
+            borderColor: 'whiteAlpha.500',
+          },
+          tab: {
+            bg: 'transparent',
+            color: 'inherit',
+            borderColor: 'inherit',
+            borderBottom: '1px solid',
+            _hover: {
+              color: 'whiteAlpha.800',
+              borderColor: 'whiteAlpha.800',
+            },
+            _focus: {
+              color: 'whiteAlpha.900',
+            },
+            _selected: {
+              color: 'white',
+              borderColor: 'white',
+            },
+            _active: {
+              color: 'white',
+              borderColor: 'white',
+            },
+            _disabled: {
+              opacity: 0.4,
+              cursor: 'not-allowed',
+            },
+          },
+          tablist: {},
+          tabpanel: {},
+          indicator: {},
+        },
+        sizes: {},
+        defaultProps: {},
+      },
       Badge: {
         baseStyle: {
           fontSize: 'xs',
+          fontWeight: '400',
         },
         variants: {
           solid: (props) => ({}),
           outline: (props) => ({
-            color: 'whiteAlpha.800',
+            color: 'whiteAlpha.700',
           }),
         },
         sizes: {},

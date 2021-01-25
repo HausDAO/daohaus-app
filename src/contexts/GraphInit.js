@@ -7,7 +7,9 @@ import { BANK_BALANCES } from '../utils/apollo/bank-queries';
 import { DAO_ACTIVITIES, HOME_DAO } from '../utils/apollo/dao-queries';
 import { MEMBERS_LIST, USER_MEMBERSHIPS } from '../utils/apollo/member-queries';
 import { PROPOSALS_LIST } from '../utils/apollo/proposal-queries';
+import { supportedChains } from '../utils/chains';
 import { validDaoParams } from '../utils/helpers';
+import { getApiMetadata } from '../utils/requests';
 import {
   useMembers,
   useProposals,
@@ -17,13 +19,15 @@ import {
   useDaoGraphData,
   useBalances,
   useActivities,
+  useNetwork,
 } from './PokemolContext';
 
 const GraphInit = () => {
   const location = useLocation();
+  const [network] = useNetwork();
   const [user] = useUser();
   const [daoMetadata] = useDaoMetadata();
-  const [, updateUserDaos] = useUserDaos();
+  const [userDaos, updateUserDaos] = useUserDaos();
   const [localUserDaos, setLocalUserDaos] = useState();
   const [, updateProposals] = useProposals();
   const [localProposals, setLocalProposals] = useState();
@@ -36,14 +40,26 @@ const GraphInit = () => {
   const [, updateDaoGraphData] = useDaoGraphData();
   const [localDao, setLocalDao] = useState();
   const [daoFetch, setDaoFetch] = useState();
+  const [userDaoFetch, setUserDaoFetch] = useState();
 
   const { address } = daoMetadata || { address: null };
 
   useEffect(() => {
     const validParam = validDaoParams(location);
-    setDaoFetch(validParam && address);
+    setDaoFetch(validParam && address && network);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [daoMetadata, location]);
+  }, [daoMetadata, location, network]);
+
+  useEffect(() => {
+    const fetchDaoMeta = async () => {
+      const mdRes = await getApiMetadata();
+      setUserDaoFetch(mdRes);
+    };
+
+    if (user && network) {
+      fetchDaoMeta();
+    }
+  }, [user, network]);
 
   useEffect(() => {
     if (localDao) {
@@ -82,39 +98,48 @@ const GraphInit = () => {
 
   useEffect(() => {
     if (localUserDaos) {
-      updateUserDaos(localUserDaos.map((membership) => membership.moloch));
+      const currentUseDaos = userDaos || [];
+      const updatedUserDaos = [
+        ...currentUseDaos,
+        ...localUserDaos.map((membership) => {
+          return { ...membership.moloch, hubSort: membership.hubSort };
+        }),
+      ];
+
+      updateUserDaos(updatedUserDaos);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [localUserDaos]);
 
   return (
     <>
-      {daoFetch ? (
+      {daoFetch && address ? (
         <>
           <GraphFetch
             query={HOME_DAO}
             setRecords={setLocalDao}
             entity='moloch'
-            variables={{ contractAddr: daoMetadata.address }}
+            context={{ network }}
+            variables={{ contractAddr: address }}
           />
           <GraphFetchMore
             query={PROPOSALS_LIST}
             setRecords={setLocalProposals}
             entity='proposals'
-            variables={{ contractAddr: daoMetadata.address }}
+            variables={{ contractAddr: address }}
           />
           <GraphFetchMore
             query={MEMBERS_LIST}
             setRecords={setLocalMembers}
             entity='daoMembers'
-            variables={{ contractAddr: daoMetadata.address }}
+            variables={{ contractAddr: address }}
           />
           <GraphFetchMore
             query={BANK_BALANCES}
             setRecords={setLocalBalances}
             entity='balances'
             variables={{
-              molochAddress: daoMetadata.address,
+              molochAddress: address,
             }}
             isStats={true}
           />
@@ -122,17 +147,29 @@ const GraphInit = () => {
             query={DAO_ACTIVITIES}
             setRecords={setLocalActivities}
             entity='moloch'
-            variables={{ contractAddr: daoMetadata.address }}
+            variables={{ contractAddr: address }}
           />
         </>
       ) : null}
-      {user && user.username ? (
-        <GraphFetch
-          query={USER_MEMBERSHIPS}
-          setRecords={setLocalUserDaos}
-          entity='members'
-          variables={{ memberAddress: user.username }}
-        />
+      {user && network && userDaoFetch ? (
+        <>
+          {Object.keys(supportedChains).map((networkId) => {
+            return (
+              <GraphFetch
+                key={networkId}
+                query={USER_MEMBERSHIPS}
+                setRecords={setLocalUserDaos}
+                entity='members'
+                variables={{ memberAddress: user.username }}
+                networkOverride={networkId}
+                context={{
+                  networkId: networkId,
+                  apiMetaDataJson: userDaoFetch,
+                }}
+              />
+            );
+          })}
+        </>
       ) : null}
     </>
   );

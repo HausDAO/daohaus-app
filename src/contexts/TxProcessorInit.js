@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-
+import { Link as RouterLink, useHistory } from 'react-router-dom';
 import {
   Box,
   Modal,
@@ -10,14 +10,18 @@ import {
   ModalCloseButton,
   useDisclosure,
   useToast,
-  Text,
   Icon,
   Heading,
   List,
   ListItem,
+  Link,
+  Stack,
+  Button,
 } from '@chakra-ui/react';
 import { VscQuestion } from 'react-icons/vsc';
+import { RiExternalLinkLine, RiErrorWarningLine } from 'react-icons/ri';
 import { TxProcessorService } from '../utils/tx-processor-service';
+
 import {
   useMembers,
   useProposals,
@@ -34,8 +38,8 @@ import {
   POPUP_CONTENT,
 } from '../utils/tx-processor-helper';
 import { mutateMember } from '../utils/proposal-mutations';
-import { Link } from 'react-router-dom';
-import { RiErrorWarningLine } from 'react-icons/ri';
+import TextBox from '../components/Shared/TextBox';
+import { getChainDataByName } from '../utils/chains';
 
 const TxProcessorInit = () => {
   const [, updateRefetchQuery] = useRefetchQuery();
@@ -49,6 +53,7 @@ const TxProcessorInit = () => {
   const [latestTx, setLatestTx] = useState();
   const [loading, setLoading] = useState(false);
   const toast = useToast();
+  const history = useHistory();
 
   useEffect(() => {
     /*
@@ -106,6 +111,9 @@ const TxProcessorInit = () => {
       }
       if (context?.name === 'dao') {
         // 15 second delay before try refresh
+        if (latestTx.details.name === 'summonMoloch') {
+          console.log('summon Moloch Complete');
+        }
         setTimeout(() => {
           updateRefetchQuery('moloch');
         }, 15000);
@@ -117,6 +125,8 @@ const TxProcessorInit = () => {
           updateRefetchQuery('proposals');
         }, 15000);
       }
+
+      setLoading(false);
       toast({
         title: 'Transaction away',
         position: 'top-right',
@@ -233,6 +243,17 @@ const TxProcessorInit = () => {
     // eslint-disable-next-line
   }, [txProcessor.loaded]);
 
+  const openDaoRegisterRoute = () => {
+    const localMoloch = window.localStorage.getItem('pendingMolochy');
+    const parsedMoloch = localMoloch && JSON.parse(localMoloch);
+    history.push(
+      `/register/${parsedMoloch.contractAddress}/${
+        getChainDataByName(parsedMoloch.network).network_id
+      }`,
+    );
+    onClose();
+  };
+
   return (
     <>
       <Modal
@@ -262,11 +283,13 @@ const TxProcessorInit = () => {
           <ModalBody>
             {latestTx && (
               <>
-                <ExplorerLink
-                  type='tx'
-                  hash={latestTx.tx}
-                  linkText={`${truncateAddr(latestTx.tx)} view`}
-                />
+                <ExplorerLink type='tx' hash={latestTx.tx}>
+                  <TextBox>{truncateAddr(latestTx.tx)}</TextBox>{' '}
+                  <TextBox colorScheme='secondary.500' size='sm'>
+                    view
+                  </TextBox>{' '}
+                  <Icon as={RiExternalLinkLine} color='secondary.500' ml={1} />
+                </ExplorerLink>
                 {!loading && (
                   <Box mt={4}>
                     <span role='img' aria-label='confetti'>
@@ -277,6 +300,11 @@ const TxProcessorInit = () => {
                     <span role='img' aria-label='confetti'>
                       🎉
                     </span>
+                    {latestTx && latestTx?.details?.name === 'summonMoloch' && (
+                      <Button onClick={openDaoRegisterRoute}>
+                        Configure DAO
+                      </Button>
+                    )}
                   </Box>
                 )}
                 {POPUP_CONTENT[latestTx?.details?.name]?.header && (
@@ -289,8 +317,7 @@ const TxProcessorInit = () => {
                     {POPUP_CONTENT[latestTx?.details?.name]?.bodyText.map(
                       (txt, idx) => (
                         <ListItem key={idx}>
-                          <Icon as={VscQuestion} />
-                          {txt}
+                          <Icon as={VscQuestion} /> {txt}
                         </ListItem>
                       ),
                     )}
@@ -299,22 +326,22 @@ const TxProcessorInit = () => {
                 {POPUP_CONTENT[latestTx?.details?.name]?.links && (
                   <Box m={2}>
                     {POPUP_CONTENT[latestTx?.details?.name]?.links.length && (
-                      <Text>links:</Text>
+                      <TextBox size='sm'>links:</TextBox>
                     )}
-                    {POPUP_CONTENT[latestTx?.details?.name]?.links.map(
-                      (link, idx) =>
-                        link.external ? (
-                          <Link key={idx} to={link.href}>
-                            <Text>{link.text}</Text>
-                          </Link>
-                        ) : (
-                          <Link key={idx} to={link.href}>
-                            <Text>
+                    <Stack spacing='4px'>
+                      {POPUP_CONTENT[latestTx?.details?.name]?.links.map(
+                        (link, idx) =>
+                          link.external ? (
+                            <TextBox as={Link} key={idx} href={link.href}>
+                              {link.text}
+                            </TextBox>
+                          ) : (
+                            <TextBox as={RouterLink} key={idx} to={link.href}>
                               {link.text} <Icon as={RiErrorWarningLine} />
-                            </Text>
-                          </Link>
-                        ),
-                    )}
+                            </TextBox>
+                          ),
+                      )}
+                    </Stack>
                   </Box>
                 )}
               </>

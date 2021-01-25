@@ -2,7 +2,7 @@ import React, { useContext, useCallback, useMemo } from 'react';
 import Web3Modal from 'web3modal';
 
 import { providerOptions } from '../utils/auth';
-import supportedChains, { getChainData } from '../utils/chains';
+import { supportedChains } from '../utils/chains';
 
 const PokemolContext = React.createContext();
 
@@ -11,8 +11,10 @@ function usePokemolContext() {
 }
 
 const initialState = {
-  network: supportedChains[process.env.REACT_APP_NETWORK_ID],
+  network: null,
+
   refetchQuery: null,
+
   modals: {
     changeDao: false,
     accountModal: false,
@@ -29,8 +31,8 @@ const initialState = {
   user: null,
   web3Connect: {
     w3c: new Web3Modal({
-      network: getChainData(+process.env.REACT_APP_NETWORK_ID).network,
-      providerOptions: providerOptions(),
+      network: 'mainnet',
+      providerOptions: providerOptions(supportedChains[1]),
       cacheProvider: true,
       theme: 'dark',
     }),
@@ -124,6 +126,11 @@ const reducer = (state, action) => {
         members: initialState.members,
         balances: initialState.balances,
         activities: initialState.activities,
+        web3Connect: action.payload ? action.payload : state.web3Connect,
+        network:
+          action.payload && action.payload.forceUserInit
+            ? initialState.network
+            : state.network,
       };
     }
     default: {
@@ -207,8 +214,8 @@ function PokemolContextProvider(props) {
     dispatch({ type: 'closeModals' });
   }, []);
 
-  const clearDaoData = useCallback(() => {
-    dispatch({ type: 'clearDaoData' });
+  const clearDaoData = useCallback((data) => {
+    dispatch({ type: 'clearDaoData', payload: data });
   }, []);
 
   return (

@@ -24,6 +24,7 @@ export const TX_CONTEXTS = [
       'withdrawBalances',
       'collectTokens',
       'summonMinion',
+      'summonMoloch',
     ],
   },
 ];
@@ -47,6 +48,7 @@ export const DISPLAY_NAMES = {
   withdrawBalances: 'Withdraw Balances',
   collectTokens: 'Collect Tokens',
   summonMinion: 'Summon Minion',
+  summonMoloch: 'Summon Dao',
 };
 
 export const POPUP_CONTENT = {
@@ -242,6 +244,28 @@ export const POPUP_CONTENT = {
     images: [],
     bodyText: ['from water into wine'],
     links: [
+      {
+        href: 'https://twitter.com/',
+        text: 'Share with the world',
+        external: true,
+      },
+    ],
+  },
+  summonMoloch: {
+    displayName: 'Summon New Moloch',
+    header: 'New Dao in the Forge',
+    images: [],
+    bodyText: [
+      'Summoning can take some time',
+      'After the transaction is complete you will be asked to verify your settings',
+      'Share with twiter and tell the world you are a dao summoner',
+    ],
+    links: [
+      {
+        href: 'https://forum.daohaus.club/c/help-how-to-docs/12',
+        text: 'How proposals work',
+        external: true,
+      },
       {
         href: 'https://twitter.com/',
         text: 'Share with the world',

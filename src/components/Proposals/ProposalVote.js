@@ -24,8 +24,11 @@ import {
   useTxProcessor,
   useProposals,
   useWeb3Connect,
+  useNetwork,
 } from '../../contexts/PokemolContext';
 import { MinionService } from '../../utils/minion-service';
+import Web3 from 'web3';
+import { getRpcUrl } from '../../utils/helpers';
 
 const MotionBox = motion.custom(Box);
 
@@ -37,6 +40,7 @@ const ProposalVote = ({ proposal, setProposal }) => {
   const [proposals] = useProposals();
   const [web3Connect] = useWeb3Connect();
   const [txProcessor, updateTxProcessor] = useTxProcessor();
+  const [network] = useNetwork();
   const [nextProposalToProcess, setNextProposal] = useState(null);
   const [hasVoted, setHasVoted] = useState(false);
   const [minionDeets, setMinionDeets] = useState();
@@ -128,14 +132,14 @@ const ProposalVote = ({ proposal, setProposal }) => {
 
   const executeMinion = async (proposal) => {
     // TODO: will nedd to check if it has been executed yet
+    const web3 = web3Connect?.web3
+      ? web3Connect.web3
+      : new Web3(new Web3.providers.HttpProvider(getRpcUrl(network)));
     const setupValues = {
       minion: proposal.minionAddress,
     };
-    const minionService = new MinionService(
-      web3Connect.web3,
-      user.username,
-      setupValues,
-    );
+
+    const minionService = new MinionService(web3, user?.username, setupValues);
 
     try {
       minionService.executeAction(proposal.proposalId, txCallBack);
@@ -153,8 +157,12 @@ const ProposalVote = ({ proposal, setProposal }) => {
       const setupValues = {
         minion: proposal.minionAddress,
       };
+      const web3 = web3Connect?.web3
+        ? web3Connect.web3
+        : new Web3(new Web3.providers.HttpProvider(getRpcUrl(network)));
+
       const minionService = new MinionService(
-        web3Connect?.web3,
+        web3,
         user?.username,
         setupValues,
       );

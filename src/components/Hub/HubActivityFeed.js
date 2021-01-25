@@ -23,7 +23,11 @@ const HubActivityFeed = ({ daos }) => {
       proposalActivities = [
         ...proposalActivities,
         ...activeProps.map((proposal) => {
-          return { ...proposal, daoTitle: dao.title };
+          return {
+            ...proposal,
+            daoTitle: dao.apiMetadata.name,
+            networkId: dao.networkId,
+          };
         }),
       ];
 
@@ -36,7 +40,11 @@ const HubActivityFeed = ({ daos }) => {
       rageActivities = [
         ...rageActivities,
         ...activeRages.map((rage) => {
-          return { ...rage, daoTitle: dao.title };
+          return {
+            ...rage,
+            daoTitle: dao.apiMetadata.name,
+            networkId: dao.networkId,
+          };
         }),
       ];
     });
@@ -48,7 +56,7 @@ const HubActivityFeed = ({ daos }) => {
     );
     setIsLoaded(true);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [daos]);
 
   return (
     <>

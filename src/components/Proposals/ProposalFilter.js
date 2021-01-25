@@ -23,13 +23,13 @@ const ProposalFilter = ({ filter, setFilter, proposals, setSort }) => {
 
   useEffect(() => {
     let options;
-    if (memberWallet && memberWallet.activeMember) {
+    if (memberWallet && memberWallet.shares > 0) {
       const action =
         proposals &&
         proposals.filter((prop) => {
           const unread = determineUnreadProposalList(
             prop,
-            memberWallet.activeMember,
+            memberWallet.shares > 0,
             memberWallet.memberAddress,
           );
           return unread.unread;
@@ -37,7 +37,7 @@ const ProposalFilter = ({ filter, setFilter, proposals, setSort }) => {
       setActionNeeded(action);
 
       const actionsCount = action ? action.length : 0;
-      options = getFilterOptions(memberWallet.activeMember, actionsCount);
+      options = getFilterOptions(memberWallet.shares > 0, actionsCount);
     } else {
       options = getFilterOptions(false);
     }

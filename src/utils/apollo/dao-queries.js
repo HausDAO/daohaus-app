@@ -19,6 +19,8 @@ export const HOME_DAO = gql`
       guildBankAddress
       minions {
         minionAddress
+        minionType
+        details
       }
       depositToken {
         tokenAddress
@@ -34,8 +36,7 @@ export const HOME_DAO = gql`
         }
         tokenBalance
         guildBank
-        contractTokenBalance @client
-        contractBabeBalance @client
+        contractBalances @client
         moloch {
           id
           version
@@ -93,6 +94,7 @@ export const DAO_ACTIVITIES = gql`
         id
         createdAt
         memberAddress
+        molochAddress
         shares
         loot
       }

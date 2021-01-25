@@ -1,4 +1,3 @@
-import Web3 from 'web3';
 import abi from '../contracts/minionFactory.json';
 
 export class MinionFactoryService {
@@ -10,11 +9,6 @@ export class MinionFactoryService {
 
   constructor(web3, accountAddress, setupValues) {
     console.log('service init', accountAddress, setupValues);
-    if (!web3) {
-      web3 = new Web3(
-        new Web3.providers.HttpProvider(process.env.REACT_APP_RPC_URI),
-      );
-    }
     this.web3 = web3;
     this.contract = new web3.eth.Contract(abi, setupValues.minionFactory);
     this.accountAddress = accountAddress;

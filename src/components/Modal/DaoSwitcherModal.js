@@ -17,24 +17,49 @@ import {
 import makeBlockie from 'ethereum-blockies-base64';
 import { RiArrowRightSLine } from 'react-icons/ri';
 
-import { useModals, useUserDaos } from '../../contexts/PokemolContext';
+import {
+  useDao,
+  useModals,
+  useUser,
+  useUserDaos,
+  useWeb3Connect,
+} from '../../contexts/PokemolContext';
 import BrandImg from '../../assets/Daohaus__Castle--Dark.svg';
+import { themeImagePath } from '../../utils/helpers';
 
 const DaoSwitcherModal = ({ isOpen }) => {
   const [userDaos] = useUserDaos();
   const { closeModals } = useModals();
+  const [web3Connect] = useWeb3Connect();
+  const [user] = useUser();
+  const [, clearDaoData] = useDao();
+
+  const handleNav = (fromHub) => {
+    if (fromHub) {
+      clearDaoData({
+        ...web3Connect,
+        forceUserInit:
+          !user ||
+          web3Connect.w3c.providerController.network !==
+            user.providerNetwork.network,
+      });
+    } else {
+      clearDaoData();
+    }
+    closeModals();
+  };
 
   const renderDaoSelect = () => {
-    // TODO: REMOVE WHEN V1 is ready
     return userDaos
-      .filter((dao) => dao.version === '2')
-      .map((dao) => {
+      .filter((dao) => {
         return (
-          <Link
-            key={dao.id}
-            to={`/dao/${dao.id}`}
-            onClick={() => closeModals()}
-          >
+          (dao.version === '2' || dao.version === '2.1') && dao.apiMetadata
+        );
+      })
+      .sort((a, b) => a.hubSort - b.hubSort)
+      .map((dao, i) => {
+        return (
+          <Link key={i} to={`/dao/${dao.id}`} onClick={handleNav}>
             <Flex
               direction='row'
               justifyContent='space-between'
@@ -43,11 +68,15 @@ const DaoSwitcherModal = ({ isOpen }) => {
             >
               <Flex direction='row' justify='start' alignItems='center'>
                 <Avatar
-                  name={dao.title.substr(0, 1)}
-                  src={makeBlockie(dao.id)}
+                  name={dao.apiMetaData?.name.substr(0, 1)}
+                  src={
+                    dao.apiMetadata?.avatarImg
+                      ? themeImagePath(dao.apiMetadata.avatarImg)
+                      : makeBlockie(dao.id)
+                  }
                   mr='10px'
                 ></Avatar>
-                <Box color='white'>{dao.title}</Box>
+                <Box color='white'>{dao.apiMetadata.name}</Box>
               </Flex>
               <RiArrowRightSLine color='white' />
             </Flex>
@@ -83,7 +112,7 @@ const DaoSwitcherModal = ({ isOpen }) => {
           maxH='300px'
           overflowY='scroll'
         >
-          <Link to='/' onClick={() => closeModals()}>
+          <Link to='/' onClick={() => handleNav(true)}>
             <Flex
               direction='row'
               justifyContent='space-between'

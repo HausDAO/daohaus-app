@@ -27,6 +27,8 @@ const Header = () => {
   useEffect(() => {
     if (location.pathname === '/') {
       setPageTitle('Hub');
+    } else if (location.pathname === `/explore`) {
+      setPageTitle('Explore DAOs');
     } else if (location.pathname === `/dao/${dao?.address}`) {
       setPageTitle('Overview');
     } else if (location.pathname === `/dao/${dao?.address}/proposals`) {
@@ -130,17 +132,6 @@ const Header = () => {
               Add Asset
             </Button>
           )}
-          {(location.pathname === `/dao/${dao?.address}/settings` ||
-            location.pathname === `/dao/${dao?.address}/settings/boosts`) &&
-            user &&
-            // <Button
-            //   as={RouterLink}
-            //   to={`/dao/${dao?.address}/settings/boosts/new`}
-            //   rightIcon={<RiAddFill />}
-            // >
-            //   Add {theme.daoMeta.boost}
-            // </Button>
-            null}
         </Flex>
 
         <Flex
@@ -150,7 +141,7 @@ const Header = () => {
           d={['none', null, null, 'flex']}
         >
           <Box fontSize='md' mr={5} as='i' fontWeight={200}>
-            {network.network}
+            {network?.network}
           </Box>
 
           {user ? (
@@ -160,7 +151,9 @@ const Header = () => {
                 onClick={() => openModal('accountModal')}
               >
                 <UserAvatar
-                  user={memberWallet?.activeMember ? user.profile : user}
+                  user={
+                    Object.keys(user.profile).length === 0 ? user : user.profile
+                  }
                   hideCopy={true}
                 />
               </Button>

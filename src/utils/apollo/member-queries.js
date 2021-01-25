@@ -10,6 +10,7 @@ export const MEMBERS_LIST = gql`
       skip: $skip
     ) {
       id
+      exists
       delegateKey
       shares
       loot
@@ -62,10 +63,14 @@ export const HUB_MEMBERSHIPS = gql`
     ) {
       id
       memberAddress
+      exists
+      networkId @client
+      hubSort @client
       moloch {
         id
         title
         version
+        apiMetadata @client
         proposals(orderBy: proposalId, orderDirection: desc, first: 10) {
           id
           createdAt
@@ -114,10 +119,13 @@ export const USER_MEMBERSHIPS = gql`
     members(where: { memberAddress: $memberAddress, exists: true }) {
       id
       memberAddress
+      exists
+      hubSort @client
       moloch {
         id
         title
         version
+        apiMetadata @client
       }
     }
   }

@@ -2,19 +2,23 @@ import React from 'react';
 import { Icon, Link } from '@chakra-ui/react';
 import { RiExternalLinkLine } from 'react-icons/ri';
 
-const ExplorerLink = ({ type, hash, linkText, isIconLink }) => {
+import { useNetwork } from '../../contexts/PokemolContext';
+
+const ExplorerLink = ({ type, hash, isIconLink, children }) => {
+  const [network] = useNetwork();
+
   const uri = () => {
-    switch (process.env.REACT_APP_NETWORK_ID) {
-      case '1': {
+    switch (network.network_id) {
+      case 1: {
         return `https://etherscan.io/${type}/`;
       }
-      case '42': {
+      case 42: {
         return `https://kovan.etherscan.io/${type}/`;
       }
-      case '4': {
+      case 4: {
         return `https://rinkeby.etherscan.io/${type}/`;
       }
-      case '100': {
+      case 100: {
         return `https://blockscout.com/poa/xdai/${type}/`;
       }
       default: {
@@ -28,8 +32,13 @@ const ExplorerLink = ({ type, hash, linkText, isIconLink }) => {
       <Icon as={RiExternalLinkLine} name='transaction link' />
     </Link>
   ) : (
-    <Link href={`${uri()}${hash}`} isExternal>
-      {linkText}
+    <Link
+      href={`${uri()}${hash}`}
+      isExternal
+      display='flex'
+      alignItems='center'
+    >
+      {children}
     </Link>
   );
 };

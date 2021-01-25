@@ -1,9 +1,18 @@
 import React, { useState } from 'react';
-import { Box, Button, Input, List, ListItem } from '@chakra-ui/react';
+import { Link as RouterLink } from 'react-router-dom';
+import {
+  Box,
+  Button,
+  FormControl,
+  FormHelperText,
+  Heading,
+  Input,
+  Link,
+} from '@chakra-ui/react';
 import TextBox from '../Shared/TextBox';
 import { useForm } from 'react-hook-form';
 import { MinionFactoryService } from '../../utils/minion-factory-service';
-import supportedChains from '../../utils/chains';
+import { supportedChains } from '../../utils/chains';
 
 import {
   useDao,
@@ -11,6 +20,7 @@ import {
   useUser,
   useWeb3Connect,
   useModals,
+  useNetwork,
 } from '../../contexts/PokemolContext';
 
 const NewMinionForm = () => {
@@ -18,6 +28,7 @@ const NewMinionForm = () => {
   const [user] = useUser();
   const [dao] = useDao();
   const [web3Connect] = useWeb3Connect();
+  const [network] = useNetwork();
   const { closeModals } = useModals();
   const [txProcessor, updateTxProcessor] = useTxProcessor();
   const { handleSubmit, register } = useForm();
@@ -43,8 +54,7 @@ const NewMinionForm = () => {
 
     console.log(values);
     const setupValues = {
-      minionFactory:
-        supportedChains[+process.env.REACT_APP_NETWORK_ID].minionFactoryAddr,
+      minionFactory: supportedChains[network.network_id].minion_factory_addr,
       actionVlaue: '0',
     };
     const minionFactoryService = new MinionFactoryService(
@@ -67,24 +77,38 @@ const NewMinionForm = () => {
 
   return (
     <Box w='90%'>
-      <TextBox>Your doorway to the unknown</TextBox>
-      <TextBox>Current Minions</TextBox>
-      <List>
-        {dao?.graphData &&
-          dao.graphData.minions.map((minion) => {
-            return (
-              <ListItem key={minion.minionAddress}>
-                {minion.minionAddress}
-              </ListItem>
-            );
-          })}
-      </List>
+      <Heading as='h4' size='sm' fontWeight='100'>
+        Deploy Your Minion
+      </Heading>
+      {dao?.graphData && dao.graphData.minions.length > 0 && (
+        <>
+          <TextBox fontFamily='heading' fontSize='2xl' fontWeight={700}>
+            Current Minions
+          </TextBox>
+          <Box>
+            You have {dao.graphData.minions.length} minions already. are you
+            looking for some
+            <Link as={RouterLink} to={`/dao/${dao?.address}/settings`}>
+              settings?
+            </Link>
+          </Box>
+        </>
+      )}
+      <Box>
+        Your Minion allows you to upgrade your dao with Boosts. We've seeded it
+        with some boosts to start. Deploy the Minion to claim your Boosts.
+      </Box>
       <form onSubmit={handleSubmit(onSubmit)}>
         <Box>
-          <Input name='details' placeholder='Name' w='60%' ref={register} />
+          <FormControl mb={5}>
+            <Input name='details' placeholder='Frank' w='60%' ref={register} />
+            <FormHelperText fontSize='xs' id='name-helper-text' mb={1}>
+              Give your Minion a name.
+            </FormHelperText>
+          </FormControl>
         </Box>
         <Button type='submit' isLoading={loading}>
-          Summon
+          Deploy
         </Button>
       </form>
     </Box>

@@ -1,15 +1,18 @@
 import React from 'react';
-import { Box, Flex } from '@chakra-ui/react';
-// import { Link as RouterLink } from 'react-router-dom';
-// import { useDao } from '../../contexts/PokemolContext';
+import { Box, Flex, Link } from '@chakra-ui/react';
+import { Link as RouterLink } from 'react-router-dom';
+
+import { useDao, useMemberWallet } from '../../contexts/PokemolContext';
 import BoostStatus from '../../components/Settings/BoostStatus';
 import Superpowers from '../../components/Settings/Superpowers';
 import DaoContractSettings from '../../components/Settings/DaoContractSettings';
 import DaoMetaOverview from '../../components/Settings/DaoMetaOverview';
 import TextBox from '../../components/Shared/TextBox';
+import Minions from '../../components/Settings/Minions';
 
 const Settings = () => {
-  // const [dao] = useDao();
+  const [dao] = useDao();
+  const [memberWallet] = useMemberWallet();
 
   return (
     <Flex p={6} wrap='wrap'>
@@ -22,17 +25,19 @@ const Settings = () => {
         <DaoContractSettings />
         <Flex justify='space-between' mt={6}>
           <TextBox size='xs'>DAO Metadata</TextBox>
-          {/* <Link
-            as={RouterLink}
-            color='secondary.500'
-            fontFamily='heading'
-            fontSize='xs'
-            textTransform='uppercase'
-            letterSpacing='0.15em'
-            to={`/dao/${dao.address}/settings/meta`}
-          >
-            Edit
-          </Link> */}
+          {memberWallet?.shares > 0 ? (
+            <Link
+              as={RouterLink}
+              color='secondary.500'
+              fontFamily='heading'
+              fontSize='xs'
+              textTransform='uppercase'
+              letterSpacing='0.15em'
+              to={`/dao/${dao.address}/settings/meta`}
+            >
+              Edit
+            </Link>
+          ) : null}
         </Flex>
         <DaoMetaOverview />
       </Box>
@@ -41,6 +46,12 @@ const Settings = () => {
         <BoostStatus />
         <TextBox size='xs'>Superpowers</TextBox>
         <Superpowers />
+        {dao?.graphData && dao.graphData.minions.length > 0 && (
+          <>
+            <TextBox size='xs'>Minions</TextBox>
+            <Minions />
+          </>
+        )}
       </Box>
     </Flex>
   );

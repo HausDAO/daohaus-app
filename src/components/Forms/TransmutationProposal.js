@@ -24,7 +24,7 @@ import {
 } from '../../contexts/PokemolContext';
 
 import GraphFetch from '../Shared/GraphFetch';
-import { GET_TRANSMUTATION } from '../../utils/boost-queries';
+import { GET_TRANSMUTATION } from '../../utils/apollo/boost-queries';
 import { TransmutationService } from '../../utils/transmutation-service';
 import { TokenService } from '../../utils/token-service';
 import AddressInput from './AddressInput';
@@ -240,7 +240,7 @@ const TransmutationProposal = () => {
             </FormLabel>
             <Input
               name='paymentRequested'
-              placeholder='0x'
+              placeholder='100'
               mb={5}
               ref={register({
                 required: {

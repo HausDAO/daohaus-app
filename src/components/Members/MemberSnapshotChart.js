@@ -15,6 +15,7 @@ import {
   getDatesArray,
   groupBalancesMemberToDateRange,
 } from '../../utils/bank-helpers';
+import TextBox from '../Shared/TextBox';
 
 const MemberSnapshotChart = ({ chartDimension, dao }) => {
   const [theme] = useTheme();
@@ -80,6 +81,7 @@ const MemberSnapshotChart = ({ chartDimension, dao }) => {
             curve='curveNatural'
             data={chartData}
             color={theme.colors.primary[50]}
+            style={{ fill: 'none' }}
           />
           <AreaSeries
             animate
@@ -90,14 +92,22 @@ const MemberSnapshotChart = ({ chartDimension, dao }) => {
           />
         </FlexibleXYPlot>
       ) : (
-        <Spinner
-          thickness='6px'
-          speed='0.45s'
-          emptyColor='whiteAlpha.300'
-          color='primary.500'
-          size='xl'
-          mt={20}
-        />
+        <>
+          {balances.length > 0 ? (
+            <Spinner
+              thickness='6px'
+              speed='0.45s'
+              emptyColor='whiteAlpha.300'
+              color='primary.500'
+              size='xl'
+              mt={20}
+            />
+          ) : (
+            <TextBox size='xs' mt='20'>
+              There is no member data
+            </TextBox>
+          )}
+        </>
       )}
     </Flex>
   );

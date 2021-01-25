@@ -2,11 +2,10 @@ import React, { useState, useEffect } from 'react';
 import { Flex, Text } from '@chakra-ui/react';
 
 import TokenListCard from './TokenListCard';
-import { defaultTokens } from '../../../utils/constants';
 import ContentBox from '../../Shared/ContentBox';
 import TextBox from '../../Shared/TextBox';
 
-const TokenList = ({ tokenList, isMember, isBank }) => {
+const TokenList = ({ tokenList, isMember, isBank, version }) => {
   const [localTokenList, setLocalTokenList] = useState(null);
   const [isLoaded, setIsLoaded] = useState(false);
   const [hasAction, setHasAction] = useState();
@@ -27,19 +26,21 @@ const TokenList = ({ tokenList, isMember, isBank }) => {
       const needsSync =
         isBank &&
         tokenList.some((token) => {
-          return (
-            +token.tokenBalance > 0 &&
-            token.contractTokenBalance !== token.contractBabeBalance
-          );
+          if (version === '2.1') {
+            return token.contractBalances.token !== token.contractBalances.babe;
+          } else {
+            return (
+              +token.tokenBalance > 0 &&
+              token.contractBalances.token !== token.contractBalances.babe
+            );
+          }
         });
 
       setHasAction(hasBalance || needsSync);
 
       setIsLoaded(true);
-    } else {
-      setLocalTokenList(defaultTokens);
     }
-  }, [tokenList, isMember, isBank]);
+  }, [tokenList, isMember, isBank, version]);
 
   return (
     <>
@@ -69,11 +70,12 @@ const TokenList = ({ tokenList, isMember, isBank }) => {
                 isMember={isMember}
                 isBank={isBank}
                 hasAction={hasAction}
+                version={version}
               />
             );
           })
         ) : (
-          <Text mt='5'>You don&apos;t have any unclaimed balances</Text>
+          <Text mt='5'>No unclaimed balances</Text>
         )}
       </ContentBox>
     </>

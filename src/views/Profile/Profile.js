@@ -2,11 +2,11 @@ import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import { Box, Flex } from '@chakra-ui/react';
 
-import ProfileOverviewCard from '../../components/Profile/OverviewCard';
+import ProfileOverviewCard from '../../components/Profile/ProfileOverviewCard';
 import {
   useMembers,
-  useMemberWallet,
   useRefetchQuery,
+  useUser,
 } from '../../contexts/PokemolContext';
 import ProfileActvityFeed from '../../components/Profile/ProfileActivityFeed';
 import TokenList from '../../components/Shared/TokenList/TokenList';
@@ -14,7 +14,7 @@ import TokenList from '../../components/Shared/TokenList/TokenList';
 const Profile = () => {
   const params = useParams();
   const [members] = useMembers();
-  const [memberWallet] = useMemberWallet();
+  const [user] = useUser();
   const [memberProfile, setMemberProfile] = useState(null);
   const [, updateRefetchQuery] = useRefetchQuery();
   const [isMember, setIsMember] = useState(false);
@@ -31,12 +31,10 @@ const Profile = () => {
   }, [members, params]);
 
   useEffect(() => {
-    if (memberWallet) {
-      setIsMember(
-        memberWallet.memberAddress.toLowerCase() === params.id.toLowerCase(),
-      );
+    if (user) {
+      setIsMember(user.username.toLowerCase() === params.id.toLowerCase());
     }
-  }, [memberWallet, params]);
+  }, [params, user]);
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -53,7 +51,7 @@ const Profile = () => {
         pr={[0, null, null, null, 6]}
         pb={6}
       >
-        {memberProfile && <ProfileOverviewCard user={memberProfile} />}
+        <ProfileOverviewCard profile={memberProfile || user} />
         <TokenList
           tokenList={memberProfile?.tokenBalances}
           isMember={isMember}
