@@ -10,13 +10,6 @@ import {
   Stack,
   Tooltip,
   IconButton,
-  Popover,
-  PopoverTrigger,
-  PopoverContent,
-  PopoverBody,
-  PopoverArrow,
-  PopoverCloseButton,
-  Portal,
 } from '@chakra-ui/react';
 
 import {
@@ -159,7 +152,12 @@ const MobileNav = () => {
               <Web3SignIn />
             )}
           </Box>
-          <Button onClick={handleNavToggle} order='4'>
+          <Button
+            onClick={handleNavToggle}
+            order='4'
+            variant='ghost'
+            color='secondary.500'
+          >
             <Icon as={sideNavOpen ? RiCloseLine : RiMenu3Line} />
           </Button>
         </Flex>
@@ -222,6 +220,7 @@ const MobileNav = () => {
               variant='sideNav'
               as={RouterLink}
               to={`/dao/${dao.address}/settings/boosts`}
+              onClick={handleNavToggle}
               _hover={{ backgroundColor: 'white' }}
               leftIcon={<RiRocket2Line />}
             >
@@ -232,6 +231,7 @@ const MobileNav = () => {
                 variant='sideNav'
                 as={RouterLink}
                 to={`/dao/${dao.address}/profile/${memberWallet.memberAddress}`}
+                onClick={handleNavToggle}
                 _hover={{ backgroundColor: 'white' }}
                 leftIcon={<RiTrophyLine />}
               >
@@ -241,244 +241,148 @@ const MobileNav = () => {
           </Stack>
         ) : (
           <Stack spacing={[1, null, null, 3]} mt={[3, null, null, 12]}>
-            <Tooltip
-              label='Explore DAOs'
-              aria-label='Explore DAOs'
-              placement='right'
-              hasArrow
+            <Button
+              variant='sideNav'
+              as={RouterLink}
+              to='/explore'
+              onClick={handleNavToggle}
+              _hover={{ backgroundColor: 'white' }}
+              leftIcon={<RiSearch2Line />}
             >
-              <Button
-                variant='sideNav'
-                as={RouterLink}
-                to='/explore'
-                _hover={{ backgroundColor: 'white' }}
-                grow='none'
-              >
-                <Icon as={RiSearch2Line} w={6} h={6} />
-              </Button>
-            </Tooltip>
-            <Tooltip
-              label='Summon a DAO'
-              aria-label='Summon a DAO'
-              placement='right'
-              hasArrow
+              Explore DAOs
+            </Button>
+            <Button
+              variant='sideNav'
+              as={RouterLink}
+              to='/summon'
+              onClick={handleNavToggle}
+              _hover={{ backgroundColor: 'white' }}
+              leftIcon={<RiFireLine />}
             >
-              <Button
-                variant='sideNav'
-                as={RouterLink}
-                to='/summon'
-                _hover={{ backgroundColor: 'white' }}
-                grow='none'
-              >
-                <Icon as={RiFireLine} w={6} h={6} />
-              </Button>
-            </Tooltip>
-            <Tooltip
-              label='HausDAO'
-              aria-label='HausDAO'
-              placement='right'
-              hasArrow
+              Summon a DAO
+            </Button>
+            <Button
+              variant='sideNav'
+              as={Link}
+              href={`/dao/0x283bdc900b6ec9397abb721c5bbff5ace46e0f50`}
+              onClick={handleNavToggle}
+              isExternal
+              _hover={{ backgroundColor: 'white' }}
+              leftIcon={<RiTeamLine />}
             >
-              <Button
-                variant='sideNav'
-                as={Link}
-                href={`/dao/0x283bdc900b6ec9397abb721c5bbff5ace46e0f50`}
-                isExternal
-                _hover={{ backgroundColor: 'white' }}
-              >
-                <Icon as={RiTeamLine} w={6} h={6} />
-              </Button>
-            </Tooltip>
-            <Tooltip label='Help' aria-label='Help' placement='right' hasArrow>
-              <Button
-                variant='sideNav'
-                as={Link}
-                href='https://daohaus.club/help'
-                isExternal
-                _hover={{ backgroundColor: 'white' }}
-              >
-                <Icon as={RiQuestionLine} w={6} h={6} />
-              </Button>
-            </Tooltip>
-            <Tooltip
-              label='About DAOhaus'
-              aria-label='About DAOhaus'
-              placement='right'
-              hasArrow
+              HausDAO
+            </Button>
+            <Button
+              variant='sideNav'
+              as={Link}
+              href='https://daohaus.club/help'
+              onClick={handleNavToggle}
+              isExternal
+              _hover={{ backgroundColor: 'white' }}
+              leftIcon={<RiQuestionLine />}
             >
-              <Button
-                variant='sideNav'
-                as={Link}
-                href='https://daohaus.club/about'
-                isExternal
-                _hover={{ backgroundColor: 'white' }}
-              >
-                <Icon as={GiCastle} w={6} h={6} />
-              </Button>
-            </Tooltip>
+              Help
+            </Button>
+            <Button
+              variant='sideNav'
+              as={Link}
+              href='https://daohaus.club/about'
+              onClick={handleNavToggle}
+              isExternal
+              _hover={{ backgroundColor: 'white' }}
+              leftIcon={<GiCastle />}
+            >
+              About DAOhaus
+            </Button>
           </Stack>
         )}
-        <Box>
-          <Popover placement='right' w='auto'>
-            <Tooltip
-              label='Community Links'
-              aria-label='Community Links'
-              placement='right'
-              hasArrow
-            >
-              <PopoverTrigger>
-                <Button
-                  variant='sideNav'
-                  _hover={{ backgroundColor: 'white' }}
-                  mt={3}
-                >
-                  <Icon as={RiLinksLine} w={6} h={6} />
-                </Button>
-              </PopoverTrigger>
-            </Tooltip>
-            <Portal>
-              <PopoverContent w='auto'>
-                <PopoverArrow />
-                <PopoverCloseButton />
-                <PopoverBody w='auto'>
-                  <Flex direction='row' align='center' justify='start'>
-                    {!dao.address || dao.links?.website ? (
-                      <Tooltip
-                        label='Website'
-                        aria-label='Website'
-                        placement='top'
-                        hasArrow
-                      >
-                        <IconButton
-                          as={Link}
-                          icon={<RiGlobeLine />}
-                          href={
-                            !dao.address
-                              ? defaultSocialLinks.website
-                              : dao.links.website
-                          }
-                          isExternal
-                          size='lg'
-                          variant='link'
-                          isRound='true'
-                        />
-                      </Tooltip>
-                    ) : null}
-                    {!dao.address || dao.links?.discord ? (
-                      <Tooltip
-                        label='Discord'
-                        aria-label='Discord'
-                        placement='top'
-                        hasArrow
-                      >
-                        <IconButton
-                          as={Link}
-                          icon={<RiDiscordFill />}
-                          href={
-                            !dao.address
-                              ? defaultSocialLinks.discord
-                              : dao.links.discord
-                          }
-                          isExternal
-                          size='lg'
-                          variant='link'
-                          isRound='true'
-                        />
-                      </Tooltip>
-                    ) : null}
-                    {!dao.address || dao.links?.telegram ? (
-                      <Tooltip
-                        label='Telegram'
-                        aria-label='Telegram'
-                        placement='top'
-                        hasArrow
-                      >
-                        <IconButton
-                          as={Link}
-                          icon={<RiTelegramFill />}
-                          href={
-                            !dao.address
-                              ? defaultSocialLinks.telegram
-                              : dao.links.telegram
-                          }
-                          isExternal
-                          size='lg'
-                          variant='link'
-                          isRound='true'
-                        />
-                      </Tooltip>
-                    ) : null}
-                    {!dao.address || dao.links?.medium ? (
-                      <Tooltip
-                        label='Blog'
-                        aria-label='Blog'
-                        placement='top'
-                        hasArrow
-                      >
-                        <IconButton
-                          as={Link}
-                          icon={<RiMediumFill />}
-                          href={
-                            !dao.address
-                              ? defaultSocialLinks.medium
-                              : dao.links.medium
-                          }
-                          isExternal
-                          size='lg'
-                          variant='link'
-                          isRound='true'
-                        />
-                      </Tooltip>
-                    ) : null}
-                    {!dao.address || dao.links?.twitter ? (
-                      <Tooltip
-                        label='Twitter'
-                        aria-label='Twitter'
-                        placement='top'
-                        hasArrow
-                      >
-                        <IconButton
-                          as={Link}
-                          icon={<RiTwitterFill />}
-                          href={`https://twitter.com/${
-                            !dao.address
-                              ? defaultSocialLinks.twitter
-                              : dao.links.twitter
-                          }`}
-                          isExternal
-                          size='lg'
-                          variant='link'
-                          isRound='true'
-                        />
-                      </Tooltip>
-                    ) : null}
-                    {!dao.address || dao.links?.other ? (
-                      <Tooltip
-                        label='Other'
-                        aria-label='Other'
-                        placement='top'
-                        hasArrow
-                      >
-                        <IconButton
-                          as={Link}
-                          icon={<RiLinksLine />}
-                          href={
-                            !dao.address
-                              ? defaultSocialLinks.other
-                              : dao.links.other
-                          }
-                          isExternal
-                          size='lg'
-                          variant='link'
-                          isRound='true'
-                        />
-                      </Tooltip>
-                    ) : null}
-                  </Flex>
-                </PopoverBody>
-              </PopoverContent>
-            </Portal>
-          </Popover>
+        <Box mt={5}>
+          <Flex direction='row' align='center' justify='start'>
+            {!dao.address || dao.links?.website ? (
+              <IconButton
+                as={Link}
+                icon={<RiGlobeLine />}
+                href={
+                  !dao.address ? defaultSocialLinks.website : dao.links.website
+                }
+                isExternal
+                size='lg'
+                variant='link'
+                isRound='true'
+                onClick={handleNavToggle}
+              />
+            ) : null}
+            {!dao.address || dao.links?.discord ? (
+              <IconButton
+                as={Link}
+                icon={<RiDiscordFill />}
+                href={
+                  !dao.address ? defaultSocialLinks.discord : dao.links.discord
+                }
+                isExternal
+                size='lg'
+                variant='link'
+                isRound='true'
+                onClick={handleNavToggle}
+              />
+            ) : null}
+            {!dao.address || dao.links?.telegram ? (
+              <IconButton
+                as={Link}
+                icon={<RiTelegramFill />}
+                href={
+                  !dao.address
+                    ? defaultSocialLinks.telegram
+                    : dao.links.telegram
+                }
+                isExternal
+                size='lg'
+                variant='link'
+                isRound='true'
+                onClick={handleNavToggle}
+              />
+            ) : null}
+            {!dao.address || dao.links?.medium ? (
+              <IconButton
+                as={Link}
+                icon={<RiMediumFill />}
+                href={
+                  !dao.address ? defaultSocialLinks.medium : dao.links.medium
+                }
+                isExternal
+                size='lg'
+                variant='link'
+                isRound='true'
+                onClick={handleNavToggle}
+              />
+            ) : null}
+            {!dao.address || dao.links?.twitter ? (
+              <IconButton
+                as={Link}
+                icon={<RiTwitterFill />}
+                href={`https://twitter.com/${
+                  !dao.address ? defaultSocialLinks.twitter : dao.links.twitter
+                }`}
+                isExternal
+                size='lg'
+                variant='link'
+                isRound='true'
+                onClick={handleNavToggle}
+              />
+            ) : null}
+            {!dao.address || dao.links?.other ? (
+              <IconButton
+                as={Link}
+                icon={<RiLinksLine />}
+                href={!dao.address ? defaultSocialLinks.other : dao.links.other}
+                isExternal
+                size='lg'
+                variant='link'
+                isRound='true'
+                onClick={handleNavToggle}
+              />
+            ) : null}
+          </Flex>
         </Box>
       </Flex>
     </Flex>

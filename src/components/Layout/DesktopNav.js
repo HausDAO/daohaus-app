@@ -9,6 +9,7 @@ import {
   Box,
   Stack,
   Tooltip,
+  TooltipProps,
   IconButton,
   Popover,
   PopoverTrigger,
@@ -17,6 +18,7 @@ import {
   PopoverArrow,
   PopoverCloseButton,
   Portal,
+  forwardRef,
 } from '@chakra-ui/react';
 
 import {
@@ -349,17 +351,19 @@ const DesktopNav = () => {
               aria-label='Community Links'
               placement='right'
               hasArrow
+              shouldWrapChildren
             >
               <PopoverTrigger>
                 <Button
                   variant='sideNav'
-                  _hover={{ backgroundColor: 'white' }}
+                  _hover={{ backgroundColor: 'white', color: 'secondary.500' }}
                   mt={3}
                 >
                   <Icon as={RiLinksLine} w={6} h={6} />
                 </Button>
               </PopoverTrigger>
             </Tooltip>
+
             <Portal>
               <PopoverContent w='auto'>
                 <PopoverArrow />
