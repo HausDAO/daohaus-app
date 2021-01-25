@@ -7,14 +7,14 @@ import React, {
 } from "react";
 import { useParams } from "react-router-dom";
 import { initTokenData, addContractVals } from "../utils/tokenValue";
-import { useLocalDaoData } from "./DaoContext";
+import { useDao } from "./DaoContext";
 
 export const TokenContext = createContext();
 
 export const TokenProvider = ({ children }) => {
   //If we're seeing too many rerenders we can bring daoOverview in
   // as props and React.memo the data.
-  const { daoOverview } = useLocalDaoData();
+  const { daoOverview } = useDao();
 
   const { daochain } = useParams();
   const [currentDaoTokens, setCurrentDaoTokens] = useState(null);

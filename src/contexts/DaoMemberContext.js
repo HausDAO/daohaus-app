@@ -84,7 +84,6 @@ export const DaoMemberProvider = ({
     </DaoMemberContext.Provider>
   );
 };
-
 export const useDaoMember = () => {
   const { currentMemberRef, isMember, daoMember, memberWalletRef } = useContext(
     DaoMemberContext

@@ -141,13 +141,12 @@ export const DaoProvider = ({ children }) => {
   );
 };
 
-export const useLocalDaoData = () => {
+export const useDao = () => {
   const {
     daoProposals,
     daoActivities,
     daoMembers,
     daoOverview,
-
     isCorrectNetwork,
     refetch,
     hasPerformedBatchQuery, //Ref, not state
@@ -157,7 +156,6 @@ export const useLocalDaoData = () => {
     daoActivities,
     daoMembers,
     daoOverview,
-
     isCorrectNetwork,
     refetch,
     hasPerformedBatchQuery,

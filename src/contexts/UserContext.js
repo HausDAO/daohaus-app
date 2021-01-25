@@ -37,7 +37,7 @@ export const UserContextProvider = ({ children }) => {
     </UserContext.Provider>
   );
 };
-export const useLocalUserData = () => {
+export const useUser = () => {
   const { userHubDaos, hasLoadedHubData } = useContext(UserContext);
   return { userHubDaos, hasLoadedHubData };
 };

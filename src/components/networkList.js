@@ -2,11 +2,11 @@ import React from "react";
 
 import NetworkDaoList from "../components/NetworkDaoList";
 
-import { useLocalUserData } from "../contexts/UserContext";
+import { useUser } from "../contexts/UserContext";
 import { useInjectedProvider } from "../contexts/InjectedProviderContext";
 
 const NetworkList = () => {
-  const { userHubDaos } = useLocalUserData();
+  const { userHubDaos } = useUser();
   const { injectedProvider } = useInjectedProvider();
   const provider = injectedProvider?.currentProvider;
 

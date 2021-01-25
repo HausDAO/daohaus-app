@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 
 import ProposalPreview from "./proposalPreview";
 
-import { useLocalUserData } from "../contexts/UserContext";
+import { useUser } from "../contexts/UserContext";
 import { parseIfJSON } from "../utils/general";
 
 const combineAndSortProposals = (daosByNetwork) => {
@@ -28,7 +28,7 @@ const combineAndSortProposals = (daosByNetwork) => {
 };
 
 const NewsFeed = () => {
-  const { userHubDaos, hasLoadedHubData } = useLocalUserData();
+  const { userHubDaos, hasLoadedHubData } = useUser();
 
   const [newsFeed, setNewsFeed] = useState(null);
   const [viewing, setViewing] = useState({ from: 0, to: 9 });

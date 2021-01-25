@@ -23,6 +23,7 @@ const Overview = React.memo(function Overview({
           isMember={isMember}
           membersAmt={members?.daoMembers?.length}
         />
+        // <DaoOverviewDetails members={members} overview={overview} />
       )}
       {isMember && (
         <>

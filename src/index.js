@@ -6,15 +6,15 @@ import App from "./App";
 import reportWebVitals from "./reportWebVitals";
 import { BrowserRouter } from "react-router-dom";
 import { InjectedProvider } from "./contexts/InjectedProviderContext";
-import { CustomeThemeProvider } from "./contexts/CustomThemeContext";
+import { CustomThemeProvider } from "./contexts/CustomThemeContext";
 
 ReactDOM.render(
   <React.StrictMode>
     <BrowserRouter>
       <InjectedProvider>
-        <CustomeThemeProvider>
+        <CustomThemeProvider>
           <App />
-        </CustomeThemeProvider>
+        </CustomThemeProvider>
       </InjectedProvider>
     </BrowserRouter>
   </React.StrictMode>,

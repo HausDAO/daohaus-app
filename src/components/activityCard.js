@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { Avatar } from "@chakra-ui/react";
 
-import { fetchProfile, handleGetProfile } from "../utils/3box";
-import { truncateAddr, formatCreatedAt, timeToNow } from "../utils/general";
+import { handleGetProfile } from "../utils/3box";
+import { timeToNow } from "../utils/general";
 import makeBlockie from "ethereum-blockies-base64";
 
 const handleName = (activity, profile) => {

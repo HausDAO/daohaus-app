@@ -1,5 +1,5 @@
 import React, { useContext, createContext } from "react";
-import { useLocalDaoData } from "./DaoContext";
+import { useDao } from "./DaoContext";
 import { useDaoMember } from "./DaoMemberContext";
 import { useMetaData } from "./MetaDataContext";
 import { useToken } from "./TokenContext";
@@ -7,7 +7,7 @@ import { useToken } from "./TokenContext";
 export const TXContext = createContext();
 
 export const TXProvider = ({ children }) => {
-  const { hasPerformedBatchQuery, refetch } = useLocalDaoData();
+  const { hasPerformedBatchQuery, refetch } = useDao();
   const { hasFetchedMetadata, shouldUpdateTheme } = useMetaData();
   const { shouldFetchInit, shouldFetchContract } = useToken();
   const { currentMemberRef, memberWalletRef } = useDaoMember();

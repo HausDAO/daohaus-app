@@ -86,10 +86,6 @@ const Proposals = React.memo(function Proposals({
 
   return (
     <>
-      <Button bg={theme.colors.primary[500]} onClick={testAddUser}>
-        Test Tx: Member Proposal
-      </Button>
-
       <ul>
         {proposals &&
           proposals.slice(0, 5).map((proposal) => (

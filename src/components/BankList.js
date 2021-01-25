@@ -2,7 +2,6 @@ import React from "react";
 import { Image } from "@chakra-ui/react";
 
 const BankList = ({ tokens }) => {
-  console.log(tokens);
   return (
     <div>
       {tokens &&
