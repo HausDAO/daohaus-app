@@ -9,7 +9,6 @@ import {
   Box,
   Stack,
   Tooltip,
-  TooltipProps,
   IconButton,
   Popover,
   PopoverTrigger,
@@ -18,7 +17,6 @@ import {
   PopoverArrow,
   PopoverCloseButton,
   Portal,
-  forwardRef,
 } from '@chakra-ui/react';
 
 import {
