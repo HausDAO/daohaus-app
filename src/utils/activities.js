@@ -1,4 +1,4 @@
-//ACTIVITY MODEL
+// ACTIVITY MODEL
 
 // DAO ACTIVITIES: {
 //   title: String
@@ -25,7 +25,7 @@ const getVotes = (proposals) => {
 };
 
 const handleVoteTitle = (activity) => {
-  return ` voted ${activity?.uintVote ? "Yes" : "No"} on ${
+  return ` voted ${activity?.uintVote ? 'Yes' : 'No'} on ${
     activity?.proposalType
   }`;
 };
@@ -34,21 +34,21 @@ const handleProposal = (proposal) => {
     return {
       title: `processed ${proposal.proposalType}`,
       createdAt: proposal.sponsoredAt,
-      statusBadge: "processed",
+      statusBadge: 'processed',
       memberAddress: proposal.processor,
     };
   } else if (proposal.sponsored) {
     return {
       title: `sponsored ${proposal.proposalType}`,
       createdAt: proposal.sponsoredAt,
-      statusBadge: "sponsored",
+      statusBadge: 'sponsored',
       memberAddress: proposal.sponsor,
     };
   } else {
     return {
       title: `submitted ${proposal.proposalType}`,
       createdAt: proposal.createdAt,
-      statusBadge: "submitted",
+      statusBadge: 'submitted',
       memberAddress: proposal.proposer,
     };
   }
@@ -64,14 +64,14 @@ const handleVote = (vote) => ({
 const handleRQ = (rq) => ({
   memberAddress: rq.memberAddress,
   title: `quit ${rq.shares} shares and ${rq.loot} loot`,
-  rageBadge: "Rage Quit",
+  rageBadge: 'Rage Quit',
   createdAt: rq.createdAt,
 });
 
 const buildProposalHistory = (proposal) => {
   const histories = [
     {
-      title: "Submitted",
+      title: 'Submitted',
       createdAt: proposal.createdAt,
       memberAddress: proposal.proposer,
     },
@@ -79,7 +79,7 @@ const buildProposalHistory = (proposal) => {
 
   if (proposal.cancelled || proposal.aborted) {
     histories.push({
-      title: "Cancelled",
+      title: 'Cancelled',
       negativeStatus: proposal.status,
       createdAt: proposal.cancelledAt,
       memberAddress: proposal.proposer,
@@ -88,7 +88,7 @@ const buildProposalHistory = (proposal) => {
 
   if (proposal.sponsored) {
     histories.push({
-      title: "Sponsored",
+      title: 'Sponsored',
       createdAt: proposal.sponsoredAt,
       memberAddress: proposal.sponsor,
     });
@@ -96,7 +96,7 @@ const buildProposalHistory = (proposal) => {
 
   if (proposal.processed) {
     histories.push({
-      title: "Processed",
+      title: 'Processed',
       positiveStatus: proposal.status,
       createdAt: proposal.processedAt,
       memberAddress: proposal.processor,
@@ -112,9 +112,9 @@ const voteHistoryData = (record, proposal) => {
     (+record.memberPower / totalVotesShares) *
     100
   ).toFixed(2);
-  const operator = record.uintVote ? "+" : "-";
+  const operator = record.uintVote ? '+' : '-';
   return {
-    title: `voted ${record.uintVote ? "yes" : "no"}`,
+    title: `voted ${record.uintVote ? 'yes' : 'no'}`,
     uintVote: record.uintVote,
     voteStatus: `${totalVotesShares} Shares (${operator}${memberPercentageOfVote}%)`,
     createdAt: record.createdAt,
@@ -150,11 +150,11 @@ export const getProposalsActivites = (daoData) => {
 export const getMembersActivites = (daoData) => {
   const proposals = daoData.proposals
     .filter((prop) => {
-      return !prop.cancelled && prop.proposalType === "Member Proposal";
+      return !prop.cancelled && prop.proposalType === 'Member Proposal';
     })
     .map((proposal) => handleProposal(proposal));
   const votes = getVotes(daoData.proposals)
-    .filter((vote) => vote.proposalType === "Member Proposal")
+    .filter((vote) => vote.proposalType === 'Member Proposal')
     .map((vote) => handleVote(vote));
 
   const rageActivities = daoData.rageQuits.map((rq) => handleRQ(rq));
@@ -180,7 +180,7 @@ export const getMemberActivites = (memberAddress) => (daoData) => {
   const votes = getVotes(daoData.proposals)
     .filter((vote) => {
       return (
-        vote.proposalType === "Member Proposal" &&
+        vote.proposalType === 'Member Proposal' &&
         memberAddress === vote.memberAddress
       );
     })
@@ -216,7 +216,8 @@ export const getProfileActivites = (memberAddress) => (daoData) => {
 
   const rageActivities = daoData.rageQuits
     .filter(
-      (rage) => rage.memberAddress.toLowerCase() === memberAddress.toLowerCase()
+      (rage) =>
+        rage.memberAddress.toLowerCase() === memberAddress.toLowerCase(),
     )
     .map((rq) => handleRQ(rq));
 

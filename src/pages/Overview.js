@@ -1,8 +1,8 @@
-import React from "react";
-import ActivitiesFeed from "../components/activitiesFeed";
-import MemberInfoCard from "../components/memberInfo";
-import OverviewCard from "../components/overviewCard";
-import { getDaoActivites } from "../utils/activities";
+import React from 'react';
+import ActivitiesFeed from '../components/activitiesFeed';
+import MemberInfoCard from '../components/memberInfo';
+import OverviewCard from '../components/overviewCard';
+import { getDaoActivites } from '../utils/activities';
 
 const Overview = React.memo(function Overview({
   overview,
@@ -12,16 +12,17 @@ const Overview = React.memo(function Overview({
   members,
   daoMember,
 }) {
+  console.log(members);
   return (
     <div>
-      <div className="title-section">
+      <div className='title-section'>
         <h1>{title}</h1>
       </div>
       {overview && (
         <OverviewCard
           overview={overview}
           isMember={isMember}
-          membersAmt={members?.daoMembers?.length}
+          membersAmt={members?.length}
         />
         // <DaoOverviewDetails members={members} overview={overview} />
       )}

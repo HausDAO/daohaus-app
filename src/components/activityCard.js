@@ -1,9 +1,9 @@
-import React, { useEffect, useState } from "react";
-import { Avatar } from "@chakra-ui/react";
+import React, { useEffect, useState } from 'react';
+import { Avatar } from '@chakra-ui/react';
 
-import { handleGetProfile } from "../utils/3box";
-import { timeToNow } from "../utils/general";
-import makeBlockie from "ethereum-blockies-base64";
+import { handleGetProfile } from '../utils/3box';
+import { timeToNow } from '../utils/general';
+import makeBlockie from 'ethereum-blockies-base64';
 
 const handleName = (activity, profile) => {
   return profile ? profile?.name : activity?.memberAddress;
@@ -14,11 +14,11 @@ const handleAvatar = (activity, profile) => {
     const url = profile?.image[0].contentUrl;
     return (
       <Avatar
-        //adds key to prevent react from skipping this render
+        // adds key to prevent react from skipping this render
         key={`profile${activity.memberAddress}`}
         name={profile?.name}
-        size="sm"
-        src={`https://ipfs.infura.io/ipfs/${url["/"]}`}
+        size='sm'
+        src={`https://ipfs.infura.io/ipfs/${url['/']}`}
       />
     );
   } else {
@@ -26,7 +26,7 @@ const handleAvatar = (activity, profile) => {
       <Avatar
         key={`no-profile${activity.memberAddress}`}
         name={activity?.memberAddress}
-        size="sm"
+        size='sm'
         src={makeBlockie(activity?.memberAddress)}
       />
     );
@@ -40,7 +40,7 @@ const ActivityCard = ({ activity, displayAvatar }) => {
     const getProfile = async () => {
       try {
         const newProfile = await handleGetProfile(activity.memberAddress);
-        if (newProfile.status === "error") return;
+        if (newProfile.status === 'error') return;
         if (!isCancelled) {
           setProfile(newProfile);
         }
@@ -56,7 +56,7 @@ const ActivityCard = ({ activity, displayAvatar }) => {
     };
   }, [activity]);
 
-  //ACTIVITY MODEL
+  // ACTIVITY MODEL
 
   // activity: {
   //   title: String
@@ -76,7 +76,7 @@ const ActivityCard = ({ activity, displayAvatar }) => {
         </p>
       )}
       {activity?.createdAt && <p> {timeToNow(activity.createdAt)}</p>}
-      {activity?.voteBadge && <p>{activity.voteBadge ? "Yes" : "No"}</p>}
+      {activity?.voteBadge && <p>{activity.voteBadge ? 'Yes' : 'No'}</p>}
       {activity?.statusBadge && <p>{activity.statusBadge}</p>}
       {activity?.negativeStatus && <p>{activity.negativeStatus}</p>}
       {activity?.positiveStatus && <p>{activity.positiveStatus}</p>}

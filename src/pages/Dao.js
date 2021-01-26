@@ -1,16 +1,16 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect } from 'react';
 
-import { RiTrophyLine } from "react-icons/ri";
-import { useParams } from "react-router-dom";
-import Layout from "../components/layout";
-import { useDaoMember } from "../contexts/DaoMemberContext";
+import { RiTrophyLine } from 'react-icons/ri';
+import { useParams } from 'react-router-dom';
+import Layout from '../components/layout';
+import { useDaoMember } from '../contexts/DaoMemberContext';
 
-import { generateDaoLinks, defaultDaoData } from "../utils/navLinks";
-import DaoRouter from "../routers/daoRouter";
-import { useUser } from "../contexts/UserContext";
-import { useMetaData } from "../contexts/MetaDataContext";
-import makeBlockie from "ethereum-blockies-base64";
-import { themeImagePath } from "../utils/metadata";
+import { generateDaoLinks } from '../utils/navLinks';
+import DaoRouter from '../routers/daoRouter';
+// import { useUser } from '../contexts/UserContext';
+import { useMetaData } from '../contexts/MetaDataContext';
+import makeBlockie from 'ethereum-blockies-base64';
+import { themeImagePath } from '../utils/metadata';
 
 const handleDaoAvatar = (daoMetaData, daoID) => {
   if (daoMetaData?.avatarImg) {
@@ -30,7 +30,7 @@ const Dao = () => {
     if (daoMember) {
       const profileLink = {
         icon: RiTrophyLine,
-        label: "Profile",
+        label: 'Profile',
         path: `/dao/${daochain}/${daoid}/profile/${daoMember.memberAddress}`,
       };
       setNavLinks([...generateDaoLinks(daochain, daoid), profileLink]);

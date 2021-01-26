@@ -1,17 +1,17 @@
-import React from "react";
-import { useParams } from "react-router-dom";
-import { utils } from "web3";
-import ActivitiesFeed from "../components/activitiesFeed";
-import { getProposalHistories } from "../utils/activities";
+import React from 'react';
+import { useParams } from 'react-router-dom';
+import { utils } from 'web3';
+import ActivitiesFeed from '../components/activitiesFeed';
+import { getProposalHistories } from '../utils/activities';
 
-import { numberWithCommas, timeToNow } from "../utils/general";
+import { numberWithCommas, timeToNow } from '../utils/general';
 
 import {
   determineProposalStatus,
   determineProposalType,
   titleMaker,
   descriptionMaker,
-} from "../utils/proposalUtils";
+} from '../utils/proposalUtils';
 
 const Proposal = ({ activities }) => {
   const { propid } = useParams();
@@ -23,7 +23,7 @@ const Proposal = ({ activities }) => {
     <>
       {currentProposal && (
         <>
-          <div key={currentProposal.id} className="large-box">
+          <div key={currentProposal.id} className='large-box'>
             <p>{determineProposalType(currentProposal)}</p>
             <h3>{titleMaker(currentProposal)}</h3>
             <p>{descriptionMaker(currentProposal)}</p>
@@ -33,9 +33,9 @@ const Proposal = ({ activities }) => {
             <p>No: {currentProposal.noShares}</p>
             {currentProposal.paymentRequested > 0 && (
               <p>
-                Payment Requested{" "}
+                Payment Requested{' '}
                 {numberWithCommas(
-                  utils.fromWei(currentProposal.paymentRequested)
+                  utils.fromWei(currentProposal.paymentRequested),
                 )}
               </p>
             )}

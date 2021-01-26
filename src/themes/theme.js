@@ -1,28 +1,28 @@
-import { extendTheme } from "@chakra-ui/react";
-import { lighten, darken } from "polished";
-//Custom Chakra Components
-import { ContentBoxComponent } from "./content-box-component";
-import { TextBoxComponent } from "./text-box-component";
-import { defaultTheme } from "./defaultTheme";
+import { extendTheme } from '@chakra-ui/react';
+import { lighten, darken } from 'polished';
+// Custom Chakra Components
+import { ContentBoxComponent } from './content-box-component';
+import { TextBoxComponent } from './text-box-component';
+import { defaultTheme } from './defaultTheme';
 
 export const getRandomTheme = async (images) => {
   const theme = {
     primary500: `#${((Math.random() * 0xffffff) << 0)
       .toString(16)
-      .padStart(6, "0")}`,
+      .padStart(6, '0')}`,
     secondary500: `#${((Math.random() * 0xffffff) << 0)
       .toString(16)
-      .padStart(6, "0")}`,
+      .padStart(6, '0')}`,
     bg500: `#${((Math.random() * 0xffffff) << 0)
       .toString(16)
-      .padStart(6, "0")}`,
+      .padStart(6, '0')}`,
   };
 
   if (images) {
-    const request = new Request("https://source.unsplash.com/random/200x200");
+    const request = new Request('https://source.unsplash.com/random/200x200');
     const avatarImg = await fetch(request);
 
-    const requestBg = new Request("https://source.unsplash.com/random/800x800");
+    const requestBg = new Request('https://source.unsplash.com/random/800x800');
     const bgImg = await fetch(requestBg);
 
     theme.avatarImg = avatarImg.url;
@@ -85,9 +85,9 @@ export const createTheme = (daoTheme) => {
       heading: themeOverrides.headingFont,
       body: themeOverrides.bodyFont,
       mono: themeOverrides.monoFont,
-      hub: "Mirza",
-      accessory: "Roboto Mono",
-      space: "Space Mono",
+      hub: 'Mirza',
+      accessory: 'Roboto Mono',
+      space: 'Space Mono',
     },
     daoMeta: {
       proposals: themeOverrides.daoMeta.proposals,
@@ -108,201 +108,201 @@ export const createTheme = (daoTheme) => {
       Button: {
         // 1. Update the base styles
         baseStyle: {
-          fontWeight: "medium", // Normally, it's "semibold"
-          _hover: { scale: "1.05" },
+          fontWeight: 'medium', // Normally, it's "semibold"
+          _hover: { scale: '1.05' },
         },
         // 2. Add a new button size or extend existing
         sizes: {},
         // 3. Add a new visual variant
         variants: {
           primary: {
-            bg: "primary.400",
-            _hover: { bg: "primary.500" },
+            bg: 'primary.400',
+            _hover: { bg: 'primary.500' },
           },
           sideNav: {
-            bg: "transparent",
-            color: "whiteAlpha.900",
-            borderRadius: "9999px",
-            height: "56px",
-            alignItems: "center",
-            justifyContent: "flex-start",
-            _hover: { bg: "transparent", color: "secondary.500", scale: "1" },
+            bg: 'transparent',
+            color: 'whiteAlpha.900',
+            borderRadius: '9999px',
+            height: '56px',
+            alignItems: 'center',
+            justifyContent: 'flex-start',
+            _hover: { bg: 'transparent', color: 'secondary.500', scale: '1' },
             _active: {
-              boxShadow: "none",
-              borderColor: "transparent",
-              outline: "none",
-              backgroundColor: "white",
+              boxShadow: 'none',
+              borderColor: 'transparent',
+              outline: 'none',
+              backgroundColor: 'white',
             },
             _focus: {
-              boxShadow: "none",
-              borderColor: "transparent",
-              outline: "none",
+              boxShadow: 'none',
+              borderColor: 'transparent',
+              outline: 'none',
             },
           },
           // 4. Override existing variants
           solid: (props) => ({
-            bg: "secondary.400",
-            color: "white",
-            _hover: { bg: "secondary.500", color: "white" },
+            bg: 'secondary.400',
+            color: 'white',
+            _hover: { bg: 'secondary.500', color: 'white' },
             _focus: {
-              bg: "secondary.500",
-              color: "white",
-              boxShadow: "0 0 0 3px blackAlpha.600",
+              bg: 'secondary.500',
+              color: 'white',
+              boxShadow: '0 0 0 3px blackAlpha.600',
             },
-            _active: { bg: "inherit" },
+            _active: { bg: 'inherit' },
           }),
           outline: (props) => ({
-            borderColor: "secondary.400",
-            bg: "transparent",
-            color: "secondary.400",
+            borderColor: 'secondary.400',
+            bg: 'transparent',
+            color: 'secondary.400',
             _hover: {
-              borderColor: "secondary.500",
-              color: "secondary.500",
-              bg: "transparent",
+              borderColor: 'secondary.500',
+              color: 'secondary.500',
+              bg: 'transparent',
             },
-            _active: { bg: "inherit" },
+            _active: { bg: 'inherit' },
           }),
         },
       },
       IconButton: {
         // 1. Update the base styles
         baseStyle: {
-          borderRadius: "9999px",
-          _hover: { scale: "5" },
+          borderRadius: '9999px',
+          _hover: { scale: '5' },
         },
         // 2. Add a new button size or extend existing
         sizes: {},
         // 3. Add a new visual variant
-        defaultProps: { isRound: "true" },
+        defaultProps: { isRound: 'true' },
         variants: {
           primary: {
-            bg: "primary.400",
-            _hover: { bg: "primary.500" },
+            bg: 'primary.400',
+            _hover: { bg: 'primary.500' },
           },
           // 4. Override existing variants
           solid: (props) => ({
-            bg: "secondary.400",
-            color: "white",
-            _hover: { bg: "secondary.500", color: "white" },
+            bg: 'secondary.400',
+            color: 'white',
+            _hover: { bg: 'secondary.500', color: 'white' },
             _focus: {
-              bg: "secondary.500",
-              color: "white",
-              boxShadow: "0 0 0 3px blackAlpha.600",
+              bg: 'secondary.500',
+              color: 'white',
+              boxShadow: '0 0 0 3px blackAlpha.600',
             },
-            _active: { bg: "inherit" },
+            _active: { bg: 'inherit' },
           }),
           outline: (props) => ({
-            borderColor: "secondary.400",
-            bg: "transparent",
-            color: "secondary.400",
+            borderColor: 'secondary.400',
+            bg: 'transparent',
+            color: 'secondary.400',
             _hover: {
-              borderColor: "secondary.500",
-              color: "secondary.500",
-              bg: "transparent",
+              borderColor: 'secondary.500',
+              color: 'secondary.500',
+              bg: 'transparent',
             },
-            _active: { bg: "inherit" },
+            _active: { bg: 'inherit' },
           }),
           ghost: (props) => ({
-            bg: "transparent",
-            color: "whiteAlpha.900",
+            bg: 'transparent',
+            color: 'whiteAlpha.900',
             _hover: {
-              borderColor: "secondary.500",
-              color: "secondary.500",
-              bg: "whiteAlpha.900",
+              borderColor: 'secondary.500',
+              color: 'secondary.500',
+              bg: 'whiteAlpha.900',
             },
-            _active: { bg: "inherit" },
+            _active: { bg: 'inherit' },
           }),
         },
       },
       Menu: {
-        parts: ["menu", "button", "item", "list"],
+        parts: ['menu', 'button', 'item', 'list'],
         baseStyle: {
           menu: {
-            boxShadow: "lg",
-            rounded: "lg",
-            flexDirection: "column",
-            py: "2",
-            color: "white",
-            borderColor: "whiteAlpha.50",
+            boxShadow: 'lg',
+            rounded: 'lg',
+            flexDirection: 'column',
+            py: '2',
+            color: 'white',
+            borderColor: 'whiteAlpha.50',
           },
           list: {
-            bg: "blackAlpha.800",
+            bg: 'blackAlpha.800',
           },
           item: {
-            fontWeight: "medium",
-            lineHeight: "tall",
-            color: "white",
-            _hover: { bg: "secondary.500" },
-            _active: { bg: "secondary.500" },
-            _focus: { bg: "secondary.500" },
+            fontWeight: 'medium',
+            lineHeight: 'tall',
+            color: 'white',
+            _hover: { bg: 'secondary.500' },
+            _active: { bg: 'secondary.500' },
+            _focus: { bg: 'secondary.500' },
           },
         },
         sizes: {},
         defaultProps: {
-          size: "md",
+          size: 'md',
         },
       },
       Modal: {
-        parts: ["overlay"],
+        parts: ['overlay'],
         baseStyle: {
           overlay: {
-            bg: "primaryAlpha",
+            bg: 'primaryAlpha',
           },
         },
         sizes: {},
         defaultProps: {},
       },
       Input: {
-        parts: ["field", "addon"],
+        parts: ['field', 'addon'],
         baseStyle: {
           field: {
-            borderColor: "whiteAlpha.50",
-            color: "whiteAlpha.900",
-            focusBorderColor: "secondary.500",
+            borderColor: 'whiteAlpha.50',
+            color: 'whiteAlpha.900',
+            focusBorderColor: 'secondary.500',
           },
           addon: {
-            color: "whiteAlpha.900",
-            bg: "transparent",
-            focusBorderColor: "secondary.500",
+            color: 'whiteAlpha.900',
+            bg: 'transparent',
+            focusBorderColor: 'secondary.500',
           },
         },
         variants: {},
         sizes: {},
         defaultProps: {
-          size: "md",
-          focusBorderColor: "secondary.500",
+          size: 'md',
+          focusBorderColor: 'secondary.500',
         },
       },
       Tabs: {
-        parts: ["root", "tablist", "tab", "tabpanel", "indicator"],
+        parts: ['root', 'tablist', 'tab', 'tabpanel', 'indicator'],
         baseStyle: {
           root: {
-            color: "whiteAlpha.500",
-            borderColor: "whiteAlpha.500",
+            color: 'whiteAlpha.500',
+            borderColor: 'whiteAlpha.500',
           },
           tab: {
-            bg: "transparent",
-            color: "inherit",
-            borderColor: "inherit",
-            borderBottom: "1px solid",
+            bg: 'transparent',
+            color: 'inherit',
+            borderColor: 'inherit',
+            borderBottom: '1px solid',
             _hover: {
-              color: "whiteAlpha.800",
-              borderColor: "whiteAlpha.800",
+              color: 'whiteAlpha.800',
+              borderColor: 'whiteAlpha.800',
             },
             _focus: {
-              color: "whiteAlpha.900",
+              color: 'whiteAlpha.900',
             },
             _selected: {
-              color: "white",
-              borderColor: "white",
+              color: 'white',
+              borderColor: 'white',
             },
             _active: {
-              color: "white",
-              borderColor: "white",
+              color: 'white',
+              borderColor: 'white',
             },
             _disabled: {
               opacity: 0.4,
-              cursor: "not-allowed",
+              cursor: 'not-allowed',
             },
           },
           tablist: {},
@@ -314,36 +314,36 @@ export const createTheme = (daoTheme) => {
       },
       Badge: {
         baseStyle: {
-          fontSize: "xs",
-          fontWeight: "400",
+          fontSize: 'xs',
+          fontWeight: '400',
         },
         variants: {
           solid: (props) => ({}),
           outline: (props) => ({
-            color: "whiteAlpha.700",
+            color: 'whiteAlpha.700',
           }),
         },
         sizes: {},
         defaultProps: {
-          variant: "outline",
+          variant: 'outline',
         },
       },
       Heading: {
         baseStyle: {},
         variants: {
           label: {
-            color: "whiteAlpha.700",
-            fontSize: "xs",
-            textTransform: "uppercase",
-            letterSpacing: "0.15em",
+            color: 'whiteAlpha.700',
+            fontSize: 'xs',
+            textTransform: 'uppercase',
+            letterSpacing: '0.15em',
             marginTop: 0,
-            lineHeight: "xs",
+            lineHeight: 'xs',
           },
           value: {
-            color: "whiteAlpha.900",
-            fontWeight: "400",
-            fontFamily: "mono",
-            fontSize: "xl",
+            color: 'whiteAlpha.900',
+            fontWeight: '400',
+            fontFamily: 'mono',
+            fontSize: 'xl',
           },
         },
         sizes: {},
@@ -351,30 +351,30 @@ export const createTheme = (daoTheme) => {
       },
       Textarea: {
         baseStyle: {
-          color: "whiteAlpha.900",
+          color: 'whiteAlpha.900',
         },
         defaultProps: {
-          focusBorderColor: "secondary.500",
+          focusBorderColor: 'secondary.500',
         },
       },
       Link: {
         baseStyle: {
-          transition: "all 0.15s linear",
-          _hover: { textDecoration: "none", color: "secondary.500" },
+          transition: 'all 0.15s linear',
+          _hover: { textDecoration: 'none', color: 'secondary.500' },
         },
       },
     },
     styles: {
       bgOverlayOpacity: themeOverrides.bgOverlayOpacity,
       global: {
-        "html, body": {
-          fontSize: "m",
-          color: "whiteAlpha.900",
-          lineHeight: "tall",
+        'html, body': {
+          fontSize: 'm',
+          color: 'whiteAlpha.900',
+          lineHeight: 'tall',
         },
         a: {
-          transition: "all 0.15s linear",
-          _hover: { textDecoration: "none", color: "secondary.500" },
+          transition: 'all 0.15s linear',
+          _hover: { textDecoration: 'none', color: 'secondary.500' },
         },
       },
     },

@@ -4,12 +4,12 @@ import React, {
   createContext,
   useEffect,
   useRef,
-} from "react";
+} from 'react';
 
-import { useParams } from "react-router-dom";
+import { useParams } from 'react-router-dom';
 
-import { useCustomTheme } from "./CustomThemeContext";
-import { useUser } from "./UserContext";
+import { useCustomTheme } from './CustomThemeContext';
+import { useUser } from './UserContext';
 
 export const MetaDataContext = createContext();
 

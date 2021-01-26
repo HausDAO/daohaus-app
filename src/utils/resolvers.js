@@ -5,7 +5,7 @@ import {
   descriptionMaker,
   hashMaker,
   determineUnreadActivityFeed,
-} from "./proposalUtils";
+} from './proposalUtils';
 
 export const proposalResolver = (proposal, fields = {}) => {
   if (fields.status) {

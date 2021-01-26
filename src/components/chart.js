@@ -1,13 +1,13 @@
-import React, { useEffect } from "react";
-import { useSessionStorage } from "../hooks/useSessionStorage";
-import { useParams } from "react-router-dom";
-import { fetchBankValues } from "../utils/theGraph";
+import React, { useEffect } from 'react';
+import { useSessionStorage } from '../hooks/useSessionStorage';
+import { useParams } from 'react-router-dom';
+import { fetchBankValues } from '../utils/theGraph';
 
 const Chart = () => {
   const { daochain, daoid } = useParams();
   const [daoBalances, setDaoBalances] = useSessionStorage(
     `balances-${daoid}`,
-    null
+    null,
   );
 
   useEffect(() => {
@@ -26,7 +26,7 @@ const Chart = () => {
   return (
     <div>
       <h3>Chart</h3>
-      {daoBalances ? `Loaded ${daoBalances?.length} items` : "Loading..."}
+      {daoBalances ? `Loaded ${daoBalances?.length} items` : 'Loading...'}
     </div>
   );
 };

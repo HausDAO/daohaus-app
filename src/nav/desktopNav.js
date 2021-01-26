@@ -1,26 +1,26 @@
-import React from "react";
-import { Link as RouterLink, useParams } from "react-router-dom";
+import React from 'react';
+// import { Link as RouterLink, useParams } from 'react-router-dom';
 import {
-  Avatar,
+  // Avatar,
   Flex,
-  Icon,
-  Link,
-  Button,
-  Box,
+  // Icon,
+  // Link,
+  // Button,
+  // Box,
   Stack,
-  Tooltip,
-  IconButton,
-  Popover,
-  PopoverTrigger,
-  PopoverContent,
-  PopoverBody,
-  PopoverArrow,
-  PopoverCloseButton,
-  Portal,
-} from "@chakra-ui/react";
+  // Tooltip,
+  // IconButton,
+  // Popover,
+  // PopoverTrigger,
+  // PopoverContent,
+  // PopoverBody,
+  // PopoverArrow,
+  // PopoverCloseButton,
+  // Portal,
+} from '@chakra-ui/react';
 
-import Brand from "./brand";
-import NavLink from "./navlink";
+import Brand from './brand';
+import NavLink from './navlink';
 
 // import { Web3SignIn } from "../Shared/Web3SignIn";
 // import UserAvatar from "../Shared/UserAvatar";
@@ -35,24 +35,24 @@ const DesktopNav = ({ navLinks, brand }) => {
   return (
     <Flex
       p={5}
-      position={["relative", "relative", "relative", "fixed"]}
-      direction="column"
-      align="start"
-      justifyContent="start"
-      bg="primary.500"
-      zIndex="1"
-      w="100px"
-      minH="100vh"
-      overflow="hidden"
-      overflowY="auto"
+      position={['relative', 'relative', 'relative', 'fixed']}
+      direction='column'
+      align='start'
+      justifyContent='start'
+      bg='primary.500'
+      zIndex='1'
+      w='100px'
+      minH='100vh'
+      overflow='hidden'
+      overflowY='auto'
     >
       <Brand brandImg={brand?.brandImg} brandPath={brand?.brandPath} />
-      <Flex direction="column" wrap="wrap">
+      <Flex direction='column' wrap='wrap'>
         <Stack
           spacing={[1, null, null]}
-          d="flex"
+          d='flex'
           mt={[3, null, null, 12]}
-          flexDirection="column"
+          flexDirection='column'
         >
           {navLinks &&
             navLinks.map((link) => {

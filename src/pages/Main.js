@@ -1,7 +1,7 @@
-import React from "react";
+import React from 'react';
 
-import NewsFeed from "../components/newsFeed";
-import NetworkList from "../components/networkList";
+import NewsFeed from '../components/newsFeed';
+import NetworkList from '../components/networkList';
 
 const Main = () => {
   return (

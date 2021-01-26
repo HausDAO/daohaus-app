@@ -1,8 +1,8 @@
-import React from "react";
-import { Box, Flex } from "@chakra-ui/react";
-import { useLocation } from "react-router-dom";
-import { useInjectedProvider } from "../contexts/InjectedProviderContext";
-import { getCopy } from "../utils/metadata";
+import React from 'react';
+import { Box, Flex } from '@chakra-ui/react';
+import { useLocation } from 'react-router-dom';
+import { useInjectedProvider } from '../contexts/InjectedProviderContext';
+import { getCopy } from '../utils/metadata';
 
 const Header = ({ dao, daoMetaData }) => {
   const location = useLocation();
@@ -10,24 +10,24 @@ const Header = ({ dao, daoMetaData }) => {
 
   const getHeading = () => {
     switch (location.pathname) {
-      case "/":
-        return "Hub";
-      case "/explore":
-        return "Explore DAOs";
-      case "/summon":
-        return "Summon";
+      case '/':
+        return 'Hub';
+      case '/explore':
+        return 'Explore DAOs';
+      case '/summon':
+        return 'Summon';
       case `/dao/${dao.chainID}/${dao.daoID}`:
-        return getCopy(daoMetaData, "name");
+        return getCopy(daoMetaData, 'name');
       case `/dao/${dao.chainID}/${dao.daoID}/proposals`:
-        return getCopy(daoMetaData, "proposals");
+        return getCopy(daoMetaData, 'proposals');
       case `/dao/${dao.chainID}/${dao.daoID}/bank`:
-        return getCopy(daoMetaData, "bank");
+        return getCopy(daoMetaData, 'bank');
       case `/dao/${dao.chainID}/${dao.daoID}/members`:
-        return getCopy(daoMetaData, "members");
+        return getCopy(daoMetaData, 'members');
       case `/dao/${dao.chainID}/${dao.daoID}/boosts`:
-        return "Boosts";
+        return 'Boosts';
       case `/dao/${dao.chainID}/${dao.daoID}/settings`:
-        return "Settings";
+        return 'Settings';
     }
   };
 
@@ -88,17 +88,17 @@ const Header = ({ dao, daoMetaData }) => {
   // }
 
   return (
-    <Flex direction="row" justify="space-between" p={6}>
+    <Flex direction='row' justify='space-between' p={6}>
       <Flex
-        direction="row"
-        justify={["space-between", null, null, "flex-start"]}
-        align="center"
-        w={["100%", null, null, "auto"]}
+        direction='row'
+        justify={['space-between', null, null, 'flex-start']}
+        align='center'
+        w={['100%', null, null, 'auto']}
       >
         <Box
-          fontSize={["lg", null, null, "3xl"]}
-          color="#ffffff"
-          fontFamily="heading"
+          fontSize={['lg', null, null, '3xl']}
+          color='#ffffff'
+          fontFamily='heading'
           fontWeight={700}
           mr={10}
         >
@@ -142,12 +142,12 @@ const Header = ({ dao, daoMetaData }) => {
       </Flex>
 
       <Flex
-        direction="row"
-        justify="flex-end"
-        align="center"
-        d={["none", null, null, "flex"]}
+        direction='row'
+        justify='flex-end'
+        align='center'
+        d={['none', null, null, 'flex']}
       >
-        <Box fontSize="md" mr={5} as="i" fontWeight={200}>
+        <Box fontSize='md' mr={5} as='i' fontWeight={200}>
           {injectedChain?.name}
         </Box>
         {/* <ChainDisplay /> */}

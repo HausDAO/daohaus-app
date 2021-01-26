@@ -1,9 +1,9 @@
-import React from "react";
+import React from 'react';
 
-import NetworkDaoList from "../components/NetworkDaoList";
+import NetworkDaoList from '../components/NetworkDaoList';
 
-import { useUser } from "../contexts/UserContext";
-import { useInjectedProvider } from "../contexts/InjectedProviderContext";
+import { useUser } from '../contexts/UserContext';
+import { useInjectedProvider } from '../contexts/InjectedProviderContext';
 
 const NetworkList = () => {
   const { userHubDaos } = useUser();
@@ -11,18 +11,18 @@ const NetworkList = () => {
   const provider = injectedProvider?.currentProvider;
 
   const currentNetwork = userHubDaos.find(
-    (dao) => dao.networkID === provider?.chainId
+    (dao) => dao.networkID === provider?.chainId,
   );
   const otherNetworks = userHubDaos.filter(
-    (dao) => dao.networkID !== provider?.chainId
+    (dao) => dao.networkID !== provider?.chainId,
   );
 
   return (
     <div>
       {currentNetwork && (
         <>
-          <h3 className="network-header">Current Network: </h3>
-          <p className="label">{currentNetwork.name}</p>
+          <h3 className='network-header'>Current Network: </h3>
+          <p className='label'>{currentNetwork.name}</p>
           <NetworkDaoList
             data={currentNetwork.data}
             networkID={currentNetwork.networkID}
@@ -31,12 +31,12 @@ const NetworkList = () => {
       )}
       {otherNetworks.length > 0 && (
         <>
-          <h3 className="network-header">Other Networks: </h3>
+          <h3 className='network-header'>Other Networks: </h3>
           {otherNetworks.map((network) => {
             if (network.data.length) {
               return (
                 <div key={network.networkID}>
-                  <p className="label">{network.name}</p>
+                  <p className='label'>{network.name}</p>
                   <NetworkDaoList
                     data={network.data}
                     networkID={network.networkID}

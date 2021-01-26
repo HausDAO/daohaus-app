@@ -1,9 +1,9 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect } from 'react';
 
-import ProposalPreview from "./proposalPreview";
+import ProposalPreview from './proposalPreview';
 
-import { useUser } from "../contexts/UserContext";
-import { parseIfJSON } from "../utils/general";
+import { useUser } from '../contexts/UserContext';
+import { parseIfJSON } from '../utils/general';
 
 const combineAndSortProposals = (daosByNetwork) => {
   return daosByNetwork
@@ -31,7 +31,7 @@ const NewsFeed = () => {
   const { userHubDaos, hasLoadedHubData } = useUser();
 
   const [newsFeed, setNewsFeed] = useState(null);
-  const [viewing, setViewing] = useState({ from: 0, to: 9 });
+  const [viewing] = useState({ from: 0, to: 9 });
 
   useEffect(() => {
     if (hasLoadedHubData) {
@@ -41,7 +41,7 @@ const NewsFeed = () => {
 
   return (
     <div>
-      <h3 className="header">Recent Activity:</h3>
+      <h3 className='header'>Recent Activity:</h3>
       {newsFeed &&
         newsFeed.slice(viewing.from, viewing.to + 1).map((proposal) => {
           return <ProposalPreview proposal={proposal} key={proposal.id} />;

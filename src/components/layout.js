@@ -1,13 +1,13 @@
-import React from "react";
-import { Flex, Box, useBreakpointValue } from "@chakra-ui/react";
-import DesktopNav from "../nav/desktopNav";
-import "../global.css";
+import React from 'react';
+import { Flex, Box, useBreakpointValue } from '@chakra-ui/react';
+import DesktopNav from '../nav/desktopNav';
+import '../global.css';
 // import MobileNav from "./MobileNav";
-import Header from "../components/header";
+import Header from '../components/header';
 // import "../global.css";
 
-import { useCustomTheme } from "../contexts/CustomThemeContext";
-import { themeImagePath } from "../utils/metadata";
+import { useCustomTheme } from '../contexts/CustomThemeContext';
+import { themeImagePath } from '../utils/metadata';
 
 const Layout = ({ children, navLinks, brand, daoMetaData, dao }) => {
   const { theme } = useCustomTheme();
@@ -17,44 +17,44 @@ const Layout = ({ children, navLinks, brand, daoMetaData, dao }) => {
 
   return (
     <Flex
-      direction={["column", "column", "column", "row"]}
-      minH="100vh"
-      w="100vw"
+      direction={['column', 'column', 'column', 'row']}
+      minH='100vh'
+      w='100vw'
     >
       {mainNav}
 
       <Box
-        position="fixed"
-        h="100vh"
+        position='fixed'
+        h='100vh'
         bgImage={`url(${themeImagePath(theme.images.bgImg)})`}
-        bgSize="cover"
-        bgPosition="center"
-        zIndex="-1"
+        bgSize='cover'
+        bgPosition='center'
+        zIndex='-1'
         top={0}
-        right="0"
-        w={["100%", null, null, "calc(100% - 100px)"]}
+        right='0'
+        w={['100%', null, null, 'calc(100% - 100px)']}
         _before={{
-          display: "block",
+          display: 'block',
           content: '""',
-          position: "absolute",
-          w: "100%",
-          h: "100%",
-          bgColor: "background.500",
+          position: 'absolute',
+          w: '100%',
+          h: '100%',
+          bgColor: 'background.500',
           opacity: theme.styles.bgOverlayOpacity,
-          pointerEvents: "none",
-          top: "0",
-          right: "0",
-          zIndex: "-1",
+          pointerEvents: 'none',
+          top: '0',
+          right: '0',
+          zIndex: '-1',
         }}
       />
       <Flex
-        w={["100%", null, null, "calc(100% - 100px)"]}
-        ml={[0, null, null, "100px"]}
-        mt={["80px", null, null, "0px"]}
-        flexDirection="column"
+        w={['100%', null, null, 'calc(100% - 100px)']}
+        ml={[0, null, null, '100px']}
+        mt={['80px', null, null, '0px']}
+        flexDirection='column'
       >
         <Header daoMetaData={daoMetaData} dao={dao} />
-        {children}
+        <Box p={6}>{children}</Box>
       </Flex>
     </Flex>
   );

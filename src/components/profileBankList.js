@@ -1,6 +1,6 @@
-import React, { useEffect, useState } from "react";
-import { initTokenData } from "../utils/tokenValue";
-import BankList from "./BankList";
+import React, { useEffect, useState } from 'react';
+import { initTokenData } from '../utils/tokenValue';
+import BankList from './BankList';
 
 const ProfileBankList = ({ tokenData }) => {
   const [memberTokens, setMemberTokens] = useState(null);

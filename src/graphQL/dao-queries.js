@@ -1,4 +1,4 @@
-import { gql } from "apollo-boost";
+import { gql } from 'apollo-boost';
 
 export const HOME_DAO = gql`
   query moloch($contractAddr: String!) {

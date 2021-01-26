@@ -1,5 +1,5 @@
-import { TokenService } from "../services/tokenService";
-import { utils } from "web3";
+import { TokenService } from '../services/tokenService';
+import { utils } from 'web3';
 
 export const initMemberWallet = async ({
   memberAddress,
@@ -12,13 +12,13 @@ export const initMemberWallet = async ({
     tokenAddress: depositToken.tokenAddress,
   });
   const tokenBalance = utils.fromWei(
-    await depositTokenContract("balanceOf")(memberAddress)
+    await depositTokenContract('balanceOf')(memberAddress),
   );
   const allowance = utils.fromWei(
-    await depositTokenContract("allowance")({
+    await depositTokenContract('allowance')({
       accountAddr: memberAddress,
       contractAddr: daoAddress,
-    })
+    }),
   );
 
   return {

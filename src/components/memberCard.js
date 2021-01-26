@@ -1,8 +1,8 @@
-import React, { useState, useEffect } from "react";
-import makeBlockie from "ethereum-blockies-base64";
-import { Avatar } from "@chakra-ui/react";
+import React, { useState, useEffect } from 'react';
+import makeBlockie from 'ethereum-blockies-base64';
+import { Avatar } from '@chakra-ui/react';
 
-import { handleGetProfile } from "../utils/3box";
+import { handleGetProfile } from '../utils/3box';
 
 const MemberCard = ({ member, selectMember }) => {
   const [memberData, setMemberData] = useState(null);
@@ -11,7 +11,7 @@ const MemberCard = ({ member, selectMember }) => {
     const getProfile = async () => {
       try {
         const profile = await handleGetProfile(member.memberAddress);
-        if (profile.status === "error") {
+        if (profile.status === 'error') {
           return;
         }
         setMemberData(profile);
@@ -37,8 +37,8 @@ const MemberCard = ({ member, selectMember }) => {
         <div key={memberData.proofDid}>
           <Avatar
             name={memberData.name}
-            src={`https://ipfs.infura.io/ipfs/${memberData.image[0].contentUrl["/"]}`}
-            size="md"
+            src={`https://ipfs.infura.io/ipfs/${memberData.image[0].contentUrl['/']}`}
+            size='md'
           />
           <button onClick={handleSelect}>Select Member</button>
           <p>{memberData.name}</p>
@@ -50,7 +50,7 @@ const MemberCard = ({ member, selectMember }) => {
           <Avatar
             name={member.memberAddress}
             src={makeBlockie(member.memberAddress)}
-            size="md"
+            size='md'
           />
           <button onClick={handleSelect}>Select Member</button>
           <p>{member.memberAddress}</p>

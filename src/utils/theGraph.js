@@ -1,11 +1,11 @@
-import { graphQuery } from "./apollo";
-import { BANK_BALANCES } from "../graphQL/bank-queries";
-import { GET_TRANSMUTATION } from "../graphQL/boost-queries";
-import { DAO_ACTIVITIES, HOME_DAO } from "../graphQL/dao-queries";
-import { MEMBERS_LIST } from "../graphQL/member-queries";
-import { proposalResolver } from "../utils/resolvers";
-import { getGraphEndpoint } from "../utils/chain";
-import { omit } from "./general";
+import { graphQuery } from './apollo';
+import { BANK_BALANCES } from '../graphQL/bank-queries';
+import { GET_TRANSMUTATION } from '../graphQL/boost-queries';
+import { DAO_ACTIVITIES, HOME_DAO } from '../graphQL/dao-queries';
+import { MEMBERS_LIST } from '../graphQL/member-queries';
+import { proposalResolver } from '../utils/resolvers';
+import { getGraphEndpoint } from '../utils/chain';
+import { omit } from './general';
 
 export const graphFetchAll = async (args, items = [], skip = 0) => {
   try {
@@ -31,9 +31,9 @@ export const graphFetchAll = async (args, items = [], skip = 0) => {
 
 export const fetchBankValues = async (args) => {
   return graphFetchAll({
-    endpoint: getGraphEndpoint(args.chainID, "stats_graph_url"),
+    endpoint: getGraphEndpoint(args.chainID, 'stats_graph_url'),
     query: BANK_BALANCES,
-    subfield: "balances",
+    subfield: 'balances',
     variables: {
       molochAddress: args.daoID,
     },
@@ -43,7 +43,7 @@ export const fetchBankValues = async (args) => {
 const fetchAllActivity = async (args, items = [], skip = 0) => {
   try {
     const result = await graphQuery({
-      endpoint: getGraphEndpoint(args.chainID, "subgraph_url"),
+      endpoint: getGraphEndpoint(args.chainID, 'subgraph_url'),
       query: DAO_ACTIVITIES,
       variables: {
         contractAddr: args.daoID,
@@ -65,7 +65,7 @@ const completeQueries = {
   async getOverview(args, setter) {
     try {
       const graphOverview = await graphQuery({
-        endpoint: getGraphEndpoint(args.chainID, "subgraph_url"),
+        endpoint: getGraphEndpoint(args.chainID, 'subgraph_url'),
         query: HOME_DAO,
         variables: {
           contractAddr: args.daoID,
@@ -80,7 +80,7 @@ const completeQueries = {
     try {
       const activity = await fetchAllActivity(args);
       const resolvedActivity = {
-        //manually copying to prevent unnecessary copies of proposals
+        // manually copying to prevent unnecessary copies of proposals
         id: activity.id,
         rageQuits: activity.rageQuits,
         title: activity.title,
@@ -92,7 +92,7 @@ const completeQueries = {
             description: true,
             hash: true,
             proposalType: true,
-          })
+          }),
         ),
       };
       setter.setDaoActivities(resolvedActivity);
@@ -104,9 +104,9 @@ const completeQueries = {
   async getMembers(args, setter) {
     try {
       const graphMembers = await graphFetchAll({
-        endpoint: getGraphEndpoint(args.chainID, "subgraph_url"),
+        endpoint: getGraphEndpoint(args.chainID, 'subgraph_url'),
         query: MEMBERS_LIST,
-        subfield: "daoMembers",
+        subfield: 'daoMembers',
         variables: {
           contractAddr: args.daoID,
         },
@@ -119,7 +119,7 @@ const completeQueries = {
   async getTransmutations(args, setter) {
     try {
       const transmutations = await graphQuery({
-        endpoint: getGraphEndpoint(args.chainID, "boosts_graph_url"),
+        endpoint: getGraphEndpoint(args.chainID, 'boosts_graph_url'),
         query: GET_TRANSMUTATION,
         variables: {
           contractAddress: args.daoID,
@@ -133,7 +133,7 @@ const completeQueries = {
 };
 
 export const bigGraphQuery = ({ args, getSetters }) => {
-  for (let getSetter of getSetters) {
+  for (const getSetter of getSetters) {
     const { getter, setter } = getSetter;
     completeQueries[getter](args, setter);
   }
@@ -142,14 +142,14 @@ export const bigGraphQuery = ({ args, getSetters }) => {
 const buildCrossChainQuery = (supportedChains, endpointType) => {
   let array = [];
 
-  for (let chain in supportedChains) {
+  for (const chain in supportedChains) {
     array = [
       ...array,
       {
         name: supportedChains[chain].name,
         endpoint: supportedChains[chain][endpointType],
         networkID: chain,
-        apiMatch: chain === "0x64" ? "xdai" : supportedChains[chain].network,
+        apiMatch: chain === '0x64' ? 'xdai' : supportedChains[chain].network,
       },
     ];
   }
@@ -183,14 +183,14 @@ export const hubChainQuery = async ({
         const withResolvedProposals = {
           ...dao,
           moloch: {
-            ...omit("proposals", dao.moloch),
+            ...omit('proposals', dao.moloch),
             proposals: dao.moloch.proposals.map((proposal) =>
               proposalResolver(proposal, {
                 proposalType: true,
                 description: true,
                 title: true,
                 activityFeed: true,
-              })
+              }),
             ),
           },
         };
