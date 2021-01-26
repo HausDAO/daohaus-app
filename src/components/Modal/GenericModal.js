@@ -9,11 +9,17 @@ import {
 
 import { useModals } from '../../contexts/PokemolContext';
 
-const GenericModal = ({ isOpen, children }) => {
+const GenericModal = ({ isOpen, children, closeOnOverlayClick = true }) => {
   const { closeModals } = useModals();
 
   return (
-    <Modal isOpen={isOpen} onClose={() => closeModals()} isCentered>
+    <Modal
+      isOpen={isOpen}
+      closeOnEsc={false}
+      closeOnOverlayClick={closeOnOverlayClick}
+      onClose={() => closeModals()}
+      isCentered
+    >
       <ModalOverlay />
       <ModalContent
         rounded='lg'

@@ -14,23 +14,23 @@ export const boostList = [
     modalName: 'vanillaMinionLaunch',
   },
   {
-    name: 'Notifications: Level 1',
+    name: 'Discord Notificatons',
     key: 'notificationsLevel1',
-    comingSoon: true,
+    // comingSoon: true,
     description:
       'Customize and send notifications of DAO activity to your discord server',
     price: '0',
     modalName: 'notificationsLevel1Launch',
   },
-  {
-    name: 'Notifications: Level 2',
-    key: 'notificationsLevel2',
-    description:
-      'Customize and send notifications of DAO activity to more of your social channels',
-    comingSoon: true,
-    modalName: 'notificationsLevel2Launch',
-    price: '0',
-  },
+  // {
+  //   name: 'Notifications: Level 2',
+  //   key: 'notificationsLevel2',
+  //   description:
+  //     'Customize and send notifications of DAO activity to more of your social channels',
+  //   comingSoon: true,
+  //   modalName: 'notificationsLevel2Launch',
+  //   price: '0',
+  // },
 ];
 
 export const notificationBoostContent = {

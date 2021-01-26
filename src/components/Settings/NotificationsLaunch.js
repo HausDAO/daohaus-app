@@ -17,20 +17,24 @@ import { useDao } from '../../contexts/PokemolContext';
 import { notificationBoostContent } from '../../content/boost-content';
 import { get } from '../../utils/requests';
 
-const NotificationsLaunch = ({ handleLaunch, loading, setLoading }) => {
+const NotificationsLaunch = ({
+  handleLaunch,
+  loading,
+  setLoading,
+  stepOverride,
+}) => {
   const [dao] = useDao();
   const { handleSubmit, register, getValues } = useForm();
   const [connectionError, setConnectionError] = useState();
   const [isConnected, setIsConnected] = useState();
-
-  const [step, setStep] = useState('intro');
+  const [step, setStep] = useState(stepOverride || 'intro');
 
   const onSubmit = async (values) => {
     const boostMetadata = [
       {
-        discord: {
-          channelId: values.channelId,
-        },
+        type: 'discord',
+        channelId: values.channelId,
+        active: true,
         actions: ['votingPeriod', 'rageQuit', 'newProposal'],
       },
     ];
@@ -42,7 +46,6 @@ const NotificationsLaunch = ({ handleLaunch, loading, setLoading }) => {
     setLoading(true);
     const values = getValues();
 
-    // TODO: ERROR ON 'SUCCESS'
     const res = await get(`dao/discord-status/${values.channelId}`);
 
     console.log('res', res);
@@ -51,7 +54,6 @@ const NotificationsLaunch = ({ handleLaunch, loading, setLoading }) => {
     } else {
       setIsConnected(true);
     }
-
     setLoading(false);
   };
 
@@ -60,7 +62,7 @@ const NotificationsLaunch = ({ handleLaunch, loading, setLoading }) => {
       {step === 'intro' ? (
         <>
           <Heading as='h4' size='md' fontWeight='100'>
-            Add Notifications Level 1
+            Add Notifications Discord
           </Heading>
           <Text my={6}>
             Hook up dao activity notifications to your Discord server.
@@ -72,7 +74,7 @@ const NotificationsLaunch = ({ handleLaunch, loading, setLoading }) => {
       {step === 'directions1' ? (
         <>
           <Heading as='h4' size='md' fontWeight='100'>
-            Notification Level 1 - Setup Instructions
+            Discord Notifications - Setup Instructions
           </Heading>
           <Text mt={6} fontWeight={700}>
             Step 1
@@ -99,13 +101,21 @@ const NotificationsLaunch = ({ handleLaunch, loading, setLoading }) => {
 
       {step === 'directions2' ? (
         <>
-          <Heading as='h4' size='md' fontWeight='100'>
-            Notification Level 1 - Setup Instructions
-          </Heading>
-          <Text mt={6} fontWeight={700}>
-            Step 2
-          </Text>
-          <Text mb={6}>Get the Discord channel ID</Text>
+          {!stepOverride ? (
+            <>
+              <Heading as='h4' size='md' fontWeight='100'>
+                Discord Notifications - Setup Instructions
+              </Heading>
+              <Text mt={6} fontWeight={700}>
+                Step 2
+              </Text>
+              <Text mb={6}>Get the Discord channel ID</Text>
+            </>
+          ) : (
+            <Heading as='h4' size='md' fontWeight='100'>
+              Change the Discord channel ID
+            </Heading>
+          )}
           <Text mb={3} fontSize='xs'>
             In Discord, open your User Settings -> Appearance -> Enable
             Developer Mode. Right click on the Discord text channel you want the
@@ -144,7 +154,9 @@ const NotificationsLaunch = ({ handleLaunch, loading, setLoading }) => {
               <>
                 <Text mb={2}>Success!</Text>
                 <Button type='submit' isLoading={loading}>
-                  Launch Notifications
+                  {stepOverride
+                    ? 'Update Notifications'
+                    : 'Launch Notifications'}
                 </Button>
               </>
             )}
@@ -159,7 +171,7 @@ const NotificationsLaunch = ({ handleLaunch, loading, setLoading }) => {
           ) : (
             <>
               <Heading as='h4' size='md' fontWeight='100'>
-                Notification Level 1 Added
+                Discord Notifications Added
               </Heading>
               <Text my={6}>
                 We have turned on a couple notifications for you. You can edit
