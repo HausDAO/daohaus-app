@@ -1,4 +1,4 @@
-import React, { createContext, useState, useContext } from "react";
+import React, { createContext, useState, useContext } from 'react';
 import {
   Modal,
   ModalOverlay,
@@ -9,9 +9,9 @@ import {
   ModalCloseButton,
   useToast,
   Button,
-  Lorem,
+  // Lorem,
   useDisclosure,
-} from "@chakra-ui/react";
+} from '@chakra-ui/react';
 
 const OverlayContext = createContext();
 
@@ -32,8 +32,8 @@ export const OverlayProvider = ({ children }) => {
     toast({
       title: content.title,
       description: content.description,
-      position: "top-right",
-      status: "error",
+      position: 'top-right',
+      status: 'error',
       duration: 7000,
       isClosable: true,
     });
@@ -42,8 +42,8 @@ export const OverlayProvider = ({ children }) => {
     toast({
       title: content.title,
       description: content.description,
-      position: "top-right",
-      status: "success",
+      position: 'top-right',
+      status: 'success',
       duration: 3000,
       isClosable: true,
     });
@@ -52,8 +52,8 @@ export const OverlayProvider = ({ children }) => {
     toast({
       title: content.title,
       description: content.description,
-      position: "top-right",
-      status: "warning",
+      position: 'top-right',
+      status: 'warning',
       duration: 5000,
       isClosable: true,
     });
@@ -72,16 +72,16 @@ export const OverlayProvider = ({ children }) => {
         <ModalOverlay />
         <ModalContent>
           <ModalHeader>
-            {modalContent?.header ? modalContent.header : "Header"}
+            {modalContent?.header ? modalContent.header : 'Header'}
           </ModalHeader>
           <ModalCloseButton />
           <ModalBody>{modalContent?.body && modalContent.body}</ModalBody>
           <ModalFooter>
-            <Button colorScheme="blue" mr={3} onClick={onClose}>
+            <Button colorScheme='blue' mr={3} onClick={onClose}>
               Close
             </Button>
             {modalContent?.secondaryBtn && (
-              <Button variant="ghost">Secondary Action</Button>
+              <Button variant='ghost'>Secondary Action</Button>
             )}
           </ModalFooter>
         </ModalContent>

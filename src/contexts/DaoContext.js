@@ -1,14 +1,14 @@
-import React, { useEffect, useContext, createContext, useRef } from "react";
-import { useParams } from "react-router-dom";
-import { bigGraphQuery } from "../utils/theGraph";
-import { useSessionStorage } from "../hooks/useSessionStorage";
+import React, { useEffect, useContext, createContext, useRef } from 'react';
+import { useParams } from 'react-router-dom';
+import { bigGraphQuery } from '../utils/theGraph';
+import { useSessionStorage } from '../hooks/useSessionStorage';
 
-import { supportedChains } from "../utils/chain";
-import { useInjectedProvider } from "./InjectedProviderContext";
-import { MetaDataProvider } from "./MetaDataContext";
-import { TokenProvider } from "./TokenContext";
-import { TXProvider } from "./TXContext";
-import { DaoMemberProvider } from "./DaoMemberContext";
+import { supportedChains } from '../utils/chain';
+import { useInjectedProvider } from './InjectedProviderContext';
+import { MetaDataProvider } from './MetaDataContext';
+import { TokenProvider } from './TokenContext';
+import { TXProvider } from './TXContext';
+import { DaoMemberProvider } from './DaoMemberContext';
 
 export const DaoContext = createContext();
 
@@ -21,29 +21,29 @@ export const DaoProvider = ({ children }) => {
 
   const [daoProposals, setDaoProposals] = useSessionStorage(
     `proposals-${daoid}`,
-    null
+    null,
   );
   const [daoActivities, setDaoActivities] = useSessionStorage(
     `activities-${daoid}`,
-    null
+    null,
   );
   const [daoOverview, setDaoOverview] = useSessionStorage(
     `overview-${daoid}`,
-    null
+    null,
   );
   const [daoMembers, setDaoMembers] = useSessionStorage(
     `members-${daoid}`,
-    null
+    null,
   );
   const [daoTransmutations, setTransmutations] = useSessionStorage(
     `transmutations-${daoid}`,
-    null
+    null,
   );
   const hasPerformedBatchQuery = useRef(false);
 
   useEffect(() => {
-    //This condition is brittle. If one request passes, but the rest fail
-    //this stops the app from fetching. We'll need something better later on.
+    // This condition is brittle. If one request passes, but the rest fail
+    // this stops the app from fetching. We'll need something better later on.
     if (
       daoProposals ||
       daoActivities ||
@@ -67,13 +67,13 @@ export const DaoProvider = ({ children }) => {
         chainID: daochain,
       },
       getSetters: [
-        { getter: "getOverview", setter: setDaoOverview },
+        { getter: 'getOverview', setter: setDaoOverview },
         {
-          getter: "getActivities",
+          getter: 'getActivities',
           setter: { setDaoProposals, setDaoActivities },
         },
-        { getter: "getMembers", setter: setDaoMembers },
-        { getter: "getTransmutations", setter: setTransmutations },
+        { getter: 'getMembers', setter: setDaoMembers },
+        { getter: 'getTransmutations', setter: setTransmutations },
       ],
     });
     hasPerformedBatchQuery.current = true;
@@ -102,13 +102,13 @@ export const DaoProvider = ({ children }) => {
         chainID: daochain,
       },
       getSetters: [
-        { getter: "getOverview", setter: setDaoOverview },
+        { getter: 'getOverview', setter: setDaoOverview },
         {
-          getter: "getActivities",
+          getter: 'getActivities',
           setter: { setDaoProposals, setDaoActivities },
         },
-        { getter: "getMembers", setter: setDaoMembers },
-        { getter: "getTransmutations", setter: setTransmutations },
+        { getter: 'getMembers', setter: setDaoMembers },
+        { getter: 'getTransmutations', setter: setTransmutations },
       ],
     });
   };
@@ -123,7 +123,7 @@ export const DaoProvider = ({ children }) => {
 
         isCorrectNetwork,
         refetch,
-        hasPerformedBatchQuery, //Ref, not state
+        hasPerformedBatchQuery, // Ref, not state
       }}
     >
       <MetaDataProvider>
@@ -149,7 +149,7 @@ export const useDao = () => {
     daoOverview,
     isCorrectNetwork,
     refetch,
-    hasPerformedBatchQuery, //Ref, not state
+    hasPerformedBatchQuery, // Ref, not state
   } = useContext(DaoContext);
   return {
     daoProposals,

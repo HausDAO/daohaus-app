@@ -1,12 +1,12 @@
-import React from "react";
-import ReactDOM from "react-dom";
+import React from 'react';
+import ReactDOM from 'react-dom';
 
-import "./index.css";
-import App from "./App";
-import reportWebVitals from "./reportWebVitals";
-import { BrowserRouter } from "react-router-dom";
-import { InjectedProvider } from "./contexts/InjectedProviderContext";
-import { CustomThemeProvider } from "./contexts/CustomThemeContext";
+import './index.css';
+import App from './App';
+import reportWebVitals from './reportWebVitals';
+import { BrowserRouter } from 'react-router-dom';
+import { InjectedProvider } from './contexts/InjectedProviderContext';
+import { CustomThemeProvider } from './contexts/CustomThemeContext';
 
 ReactDOM.render(
   <React.StrictMode>
@@ -18,7 +18,7 @@ ReactDOM.render(
       </InjectedProvider>
     </BrowserRouter>
   </React.StrictMode>,
-  document.getElementById("root")
+  document.getElementById('root'),
 );
 
 // If you want to start measuring performance in your app, pass a function

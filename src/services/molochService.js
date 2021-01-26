@@ -1,8 +1,8 @@
-import Web3 from "web3";
+import Web3 from 'web3';
 
-import DaoAbi from "../contracts/mcdao.json";
-import DaoAbiV2 from "../contracts/molochV2.json";
-import { chainByID } from "../utils/chain";
+import DaoAbi from '../contracts/mcdao.json';
+import DaoAbiV2 from '../contracts/molochV2.json';
+import { chainByID } from '../utils/chain';
 
 export const MolochService = ({ web3, daoAddress, version, chainID }) => {
   if (!web3) {
@@ -13,7 +13,7 @@ export const MolochService = ({ web3, daoAddress, version, chainID }) => {
   const contract = new web3.eth.Contract(abi, daoAddress);
 
   return function getService(service) {
-    if (service === "getUserTokenBalance") {
+    if (service === 'getUserTokenBalance') {
       return async ({ userAddress, tokenAddress }) => {
         const balance = await contract.methods
           .getUserTokenBalance(userAddress, tokenAddress)
@@ -21,13 +21,13 @@ export const MolochService = ({ web3, daoAddress, version, chainID }) => {
         return balance;
       };
     }
-    if (service === "members") {
+    if (service === 'members') {
       return async (memberAddress) => {
         const member = await contract.methods.members(memberAddress).call();
         return member;
       };
     }
-    if (service === "memberAddressByDelegateKey") {
+    if (service === 'memberAddressByDelegateKey') {
       return async (memberAddress) => {
         const address = await contract.methods
           .memberAddressByDelegateKey(memberAddress)
@@ -35,18 +35,18 @@ export const MolochService = ({ web3, daoAddress, version, chainID }) => {
         return address.toLowerCase();
       };
     }
-    if (service === "submitProposal") {
+    if (service === 'submitProposal') {
       return async (args, from, poll) => {
         const tx = await contract.methods[service](...args);
         return tx
-          .send("eth_requestAccounts", { from })
-          .on("transactionHash", (txHash) => {
+          .send('eth_requestAccounts', { from })
+          .on('transactionHash', (txHash) => {
             if (poll) {
               poll();
             }
             console.log(txHash);
           })
-          .on("error", (error) => {
+          .on('error', (error) => {
             console.error(error);
           });
       };

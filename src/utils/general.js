@@ -1,4 +1,4 @@
-import { formatDistanceToNow } from "date-fns";
+import { formatDistanceToNow } from 'date-fns';
 
 export const pipe = (...fns) => (x) =>
   fns.reduce((prev, func) => func(prev), x);
@@ -22,7 +22,9 @@ export const IsJsonString = (str) => {
 };
 
 export const createHash = () => {
-  return Math.random().toString(36).slice(2);
+  return Math.random()
+    .toString(36)
+    .slice(2);
 };
 
 export const detailsToJSON = (values) => {
@@ -39,19 +41,19 @@ export const detailsToJSON = (values) => {
   return JSON.stringify(details);
 };
 
-//omits key/pairs from objects
+// omits key/pairs from objects
 export const omit = (keys, obj) =>
   Object.fromEntries(Object.entries(obj).filter(([k]) => !keys.includes(k)));
 
 export const numberWithCommas = (num) => {
   // drop zero after decimal
-  const noZeroDec = parseInt(num.split(".")[1]) === 0 ? num.split(".")[0] : num;
+  const noZeroDec = parseInt(num.split('.')[1]) === 0 ? num.split('.')[0] : num;
 
-  return noZeroDec.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",");
+  return noZeroDec.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ',');
 };
 
 export const truncateAddr = (addr) => {
-  return addr ? addr.slice(0, 6) + "..." + addr.slice(-4) : null;
+  return addr ? addr.slice(0, 6) + '...' + addr.slice(-4) : null;
 };
 export const timeToNow = (time) => {
   return formatDistanceToNow(new Date(time * 1000), { addSuffix: true });

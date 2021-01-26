@@ -1,5 +1,5 @@
-import React from "react";
-import { Image } from "@chakra-ui/react";
+import React from 'react';
+import { Image } from '@chakra-ui/react';
 
 const BankList = ({ tokens }) => {
   return (
@@ -10,13 +10,13 @@ const BankList = ({ tokens }) => {
             <div key={token.id}>
               <p>{token.symbol}</p>
               {token.logoUri && (
-                <Image src={token.logoUri} height="35px" mr="15px" />
+                <Image src={token.logoUri} height='35px' mr='15px' />
               )}
               <p>
-                Balance:{" "}
+                Balance:{' '}
                 {parseFloat(
-                  +token.tokenBalance / 10 ** +token.decimals
-                ).toFixed(4)}{" "}
+                  +token.tokenBalance / 10 ** +token.decimals,
+                ).toFixed(4)}{' '}
                 {token.symbol}
               </p>
               <p>Price: ${token.usd}</p>

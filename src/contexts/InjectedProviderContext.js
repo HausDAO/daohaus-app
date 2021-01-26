@@ -1,14 +1,14 @@
-import React, { useState, useEffect, useContext, createContext } from "react";
-import Web3 from "web3";
-import Web3Modal from "web3modal";
+import React, { useState, useEffect, useContext, createContext } from 'react';
+import Web3 from 'web3';
+import Web3Modal from 'web3modal';
 
-import { supportedChains } from "../utils/chain";
-import { getProviderOptions } from "../utils/web3Modal";
+import { supportedChains } from '../utils/chain';
+import { getProviderOptions } from '../utils/web3Modal';
 
 const defaultModal = new Web3Modal({
   providerOptions: getProviderOptions(),
   cacheProvider: true,
-  theme: "dark",
+  theme: 'dark',
 });
 
 export const InjectedProviderContext = createContext();
@@ -22,12 +22,12 @@ export const InjectedProvider = ({ children }) => {
     const web3Modal = new Web3Modal({
       providerOptions: getProviderOptions(),
       cacheProvider: true,
-      theme: "dark",
+      theme: 'dark',
     });
 
     const provider = await web3Modal.connect();
     if (!supportedChains[provider.chainId]) {
-      console.error("This is not a supported chain");
+      console.error('This is not a supported chain');
       return;
     }
 
@@ -48,8 +48,8 @@ export const InjectedProvider = ({ children }) => {
     }
   }, [injectedProvider, web3Modal]);
 
-  //This useEffect handles the initialization of EIP-1193 listeners
-  //https://eips.ethereum.org/EIPS/eip-1193
+  // This useEffect handles the initialization of EIP-1193 listeners
+  // https://eips.ethereum.org/EIPS/eip-1193
   useEffect(() => {
     if (injectedProvider) return;
     const handleChainChange = (chainId) => {
@@ -59,15 +59,15 @@ export const InjectedProvider = ({ children }) => {
       connectProvider();
     };
     if (!window.ethereum) {
-      console.warn("Cannot detect injected provider");
+      console.warn('Cannot detect injected provider');
       return;
     }
     window.ethereum
-      .on("accountsChanged", accountsChanged)
-      .on("chainChanged", handleChainChange);
+      .on('accountsChanged', accountsChanged)
+      .on('chainChanged', handleChainChange);
     return () => {
-      window.ethereum.removeListener("accountsChanged", handleChainChange);
-      window.ethereum.removeListener("chainChanged", accountsChanged);
+      window.ethereum.removeListener('accountsChanged', handleChainChange);
+      window.ethereum.removeListener('chainChanged', accountsChanged);
     };
   }, [injectedProvider]);
 

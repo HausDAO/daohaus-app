@@ -1,19 +1,19 @@
-import WalletConnectProvider from "@walletconnect/web3-provider";
-import Fortmatic from "fortmatic";
-import Portis from "@portis/web3";
+import WalletConnectProvider from '@walletconnect/web3-provider';
+import Fortmatic from 'fortmatic';
+import Portis from '@portis/web3';
 
-import { chainByID } from "./chain";
+import { chainByID } from './chain';
 
-const isInjected = () => (window.ethereum?.chainId ? true : false);
+const isInjected = () => !!window.ethereum?.chainId;
 
 export const attemptInjectedChainData = () =>
-  isInjected() ? chainByID(window.ethereum.chainId) : chainByID("0x1");
+  isInjected() ? chainByID(window.ethereum.chainId) : chainByID('0x1');
 
 const addNetworkProviders = (chainData) => {
   const allProviders = {};
   const providersToAdd = chainData.providers;
 
-  if (providersToAdd.includes("walletconnect")) {
+  if (providersToAdd.includes('walletconnect')) {
     allProviders.walletConnect = {
       network: chainData.network,
       package: WalletConnectProvider,
@@ -23,19 +23,19 @@ const addNetworkProviders = (chainData) => {
       },
     };
   }
-  if (providersToAdd.includes("portis")) {
+  if (providersToAdd.includes('portis')) {
     allProviders.portis = {
       package: Portis,
       options: {
-        id: process.env.REACT_APP_PORTIS_ID || "",
+        id: process.env.REACT_APP_PORTIS_ID || '',
       },
     };
   }
-  if (providersToAdd.includes("fortmatic")) {
+  if (providersToAdd.includes('fortmatic')) {
     allProviders.fortmatic = {
       package: Fortmatic, // required
       options: {
-        key: process.env.REACT_APP_FORTMATIC_KEY || "", // required
+        key: process.env.REACT_APP_FORTMATIC_KEY || '', // required
       },
     };
   }

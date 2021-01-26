@@ -1,6 +1,6 @@
-import React, { useEffect, useState } from "react";
-import { Link, useParams } from "react-router-dom";
-import { timeToNow } from "../utils/general";
+import React from 'react';
+import { Link, useParams } from 'react-router-dom';
+import { timeToNow } from '../utils/general';
 
 const MemberInfoCard = ({ member }) => {
   const { daoid, daochain } = useParams();

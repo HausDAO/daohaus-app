@@ -1,18 +1,18 @@
-import React, { useContext, createContext, useEffect } from "react";
+import React, { useContext, createContext, useEffect } from 'react';
 
-import { getApiMetadata } from "../utils/metadata";
+import { getApiMetadata } from '../utils/metadata';
 
-import { useSessionStorage } from "../hooks/useSessionStorage";
-import { HUB_MEMBERSHIPS } from "../graphQL/member-queries";
-import { hubChainQuery } from "../utils/theGraph";
-import { supportedChains } from "../utils/chain";
-import { useInjectedProvider } from "./InjectedProviderContext";
+import { useSessionStorage } from '../hooks/useSessionStorage';
+import { HUB_MEMBERSHIPS } from '../graphQL/member-queries';
+import { hubChainQuery } from '../utils/theGraph';
+import { supportedChains } from '../utils/chain';
+import { useInjectedProvider } from './InjectedProviderContext';
 
 export const UserContext = createContext();
 
 export const UserContextProvider = ({ children }) => {
   const { address } = useInjectedProvider();
-  const [userHubDaos, setUserHubDaos] = useSessionStorage("userHubData", []);
+  const [userHubDaos, setUserHubDaos] = useSessionStorage('userHubData', []);
 
   const hasLoadedHubData = userHubDaos.length === 4;
 
@@ -21,7 +21,7 @@ export const UserContextProvider = ({ children }) => {
       hubChainQuery({
         query: HUB_MEMBERSHIPS,
         supportedChains,
-        endpointType: "subgraph_url",
+        endpointType: 'subgraph_url',
         apiFetcher: getApiMetadata,
         reactSetter: setUserHubDaos,
         variables: {

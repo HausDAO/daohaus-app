@@ -1,12 +1,12 @@
-import { graphQuery } from "../utils/apollo";
-import { PROPOSALS_LIST } from "../graphQL/proposal-queries";
-import { getGraphEndpoint } from "../utils/chain";
-import { hashMaker } from "../utils/proposalUtils";
+import { graphQuery } from '../utils/apollo';
+import { PROPOSALS_LIST } from '../graphQL/proposal-queries';
+import { getGraphEndpoint } from '../utils/chain';
+import { hashMaker } from '../utils/proposalUtils';
 
-/////////////CALLS///////////////
+/// //////////CALLS///////////////
 const pollProposals = async ({ daoID, chainID }) =>
   await graphQuery({
-    endpoint: getGraphEndpoint(chainID, "subgraph_url"),
+    endpoint: getGraphEndpoint(chainID, 'subgraph_url'),
     query: PROPOSALS_LIST,
     variables: {
       contractAddr: daoID,
@@ -14,7 +14,7 @@ const pollProposals = async ({ daoID, chainID }) =>
     },
   });
 
-/////////////TESTS///////////////
+/// //////////TESTS///////////////
 const proposalTest = (data, shouldEqual, pollId) => {
   console.log(data);
   if (data.proposals) {
@@ -26,7 +26,7 @@ const proposalTest = (data, shouldEqual, pollId) => {
   } else {
     clearInterval(pollId);
     throw new Error(
-      `Poll test did recieve the expected results from the graph: ${data}`
+      `Poll test did recieve the expected results from the graph: ${data}`,
     );
   }
 };
@@ -38,7 +38,7 @@ const proposalTest = (data, shouldEqual, pollId) => {
 // console.log("Actions:", actions);
 
 export const createPoll = ({ interval = 2000, tries = 20, action = null }) => {
-  ///////////////////////GENERIC POLL//////////////////
+  /// ////////////////////GENERIC POLL//////////////////
   const startPoll = ({ graphFetch, testFn, shouldEqual, args, actions }) => {
     let tryCount = 0;
     const pollId = setInterval(async () => {
@@ -59,17 +59,17 @@ export const createPoll = ({ interval = 2000, tries = 20, action = null }) => {
           clearInterval(pollId);
         }
       } else {
-        actions.onError("Ran out of tries");
+        actions.onError('Ran out of tries');
         clearInterval(pollId);
       }
     }, interval);
     return pollId;
   };
 
-  ////////////////////ACTIONS//////////////////////////
+  /// /////////////////ACTIONS//////////////////////////
   if (!action) {
-    throw new Error("User must submit an action argument");
-  } else if (action === "submitProposal") {
+    throw new Error('User must submit an action argument');
+  } else if (action === 'submitProposal') {
     return ({ daoID, chainID, hash, actions }) => () =>
       startPoll({
         graphFetch: pollProposals,

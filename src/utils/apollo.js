@@ -1,4 +1,4 @@
-import ApolloClient from "apollo-boost";
+import ApolloClient from 'apollo-boost';
 
 export const createClient = (uri) => {
   return new ApolloClient({ uri });

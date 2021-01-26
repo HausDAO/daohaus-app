@@ -1,10 +1,10 @@
-import React from "react";
-import { Box, useStyleConfig } from "@chakra-ui/react";
+import React from 'react';
+import { Box, useStyleConfig } from '@chakra-ui/react';
 
 const TextBox = (props) => {
   const { size, variant, colorScheme, ...rest } = props;
 
-  const styles = useStyleConfig("TextBoxComponent", {
+  const styles = useStyleConfig('TextBoxComponent', {
     size,
     variant,
     colorScheme,

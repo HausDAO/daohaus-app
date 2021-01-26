@@ -1,11 +1,11 @@
-import React, { useState } from "react";
-import { Link, useParams } from "react-router-dom";
-import ActivitiesFeed from "../components/activitiesFeed";
-import Chart from "../components/chart";
-import MemberCard from "../components/memberCard";
-import MemberInfo from "../components/memberInfo";
-import { useDaoMember } from "../contexts/DaoMemberContext";
-import { getMemberActivites, getMembersActivites } from "../utils/activities";
+import React, { useState } from 'react';
+import { Link, useParams } from 'react-router-dom';
+import ActivitiesFeed from '../components/activitiesFeed';
+import Chart from '../components/chart';
+import MemberCard from '../components/memberCard';
+import MemberInfo from '../components/memberInfo';
+import { useDaoMember } from '../contexts/DaoMemberContext';
+import { getMemberActivites, getMembersActivites } from '../utils/activities';
 
 const Members = ({ members, activities }) => {
   const { daoMember } = useDaoMember();

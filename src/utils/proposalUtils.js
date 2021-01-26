@@ -1,15 +1,15 @@
-import { IsJsonString } from "./general";
+import { IsJsonString } from './general';
 
 export const ProposalStatus = {
-  Unknown: "Unknown",
-  InQueue: "InQueue",
-  VotingPeriod: "VotingPeriod",
-  GracePeriod: "GracePeriod",
-  Cancelled: "Cancelled",
-  Passed: "Passed",
-  Failed: "Failed",
-  ReadyForProcessing: "ReadyForProcessing",
-  Unsponsored: "Unsponsored",
+  Unknown: 'Unknown',
+  InQueue: 'InQueue',
+  VotingPeriod: 'VotingPeriod',
+  GracePeriod: 'GracePeriod',
+  Cancelled: 'Cancelled',
+  Passed: 'Passed',
+  Failed: 'Failed',
+  ReadyForProcessing: 'ReadyForProcessing',
+  Unsponsored: 'Unsponsored',
 };
 
 export const inQueue = (proposal) => {
@@ -61,32 +61,32 @@ export function determineProposalStatus(proposal) {
 }
 export const determineProposalType = (proposal) => {
   if (proposal.newMember) {
-    return "Member Proposal";
+    return 'Member Proposal';
   } else if (proposal.whitelist) {
-    return "Whitelist Token Proposal";
+    return 'Whitelist Token Proposal';
   } else if (proposal.guildkick) {
-    return "Guildkick Proposal";
+    return 'Guildkick Proposal';
   } else if (proposal.trade) {
-    return "Trade Proposal";
+    return 'Trade Proposal';
   } else if (proposal.isMinion) {
-    return "Minion Proposal";
+    return 'Minion Proposal';
   } else {
-    return "Funding Proposal";
+    return 'Funding Proposal';
   }
 };
 export const titleMaker = (proposal) => {
-  const details = proposal.details.split("~");
+  const details = proposal.details.split('~');
 
-  if (details[0] === "id") {
+  if (details[0] === 'id') {
     return details[3];
-  } else if (details[0][0] === "{") {
+  } else if (details[0][0] === '{') {
     let parsedDetails;
 
     try {
       parsedDetails = IsJsonString(proposal.details)
-        ? JSON.parse(proposal.details.replace(/(\r\n|\n|\r)/gm, ""))
-        : "";
-      return parsedDetails.title || "";
+        ? JSON.parse(proposal.details.replace(/(\r\n|\n|\r)/gm, ''))
+        : '';
+      return parsedDetails.title || '';
     } catch {
       console.log(`Couldn't parse JSON from metadata`);
       return `Proposal ${proposal.proposalIndex}`;
@@ -101,20 +101,20 @@ export const hashMaker = (proposal) => {
   try {
     const parsed =
       IsJsonString(proposal.details) && JSON.parse(proposal.details);
-    return parsed.hash || "";
+    return parsed.hash || '';
   } catch (e) {
-    return "";
+    return '';
   }
 };
 
 export const descriptionMaker = (proposal) => {
   try {
     const parsed = IsJsonString(proposal.details)
-      ? JSON.parse(proposal.details.replace(/(\r\n|\n|\r)/gm, ""))
-      : "";
-    return parsed.description || "";
+      ? JSON.parse(proposal.details.replace(/(\r\n|\n|\r)/gm, ''))
+      : '';
+    return parsed.description || '';
   } catch (e) {
-    return "";
+    return '';
   }
 };
 export const determineUnreadActivityFeed = (proposal) => {
@@ -128,10 +128,10 @@ export const determineUnreadActivityFeed = (proposal) => {
 
   let message;
   if (!proposal.sponsored) {
-    message = "New and unsponsored";
+    message = 'New and unsponsored';
   }
   if (needsProcessing) {
-    message = "Unprocessed";
+    message = 'Unprocessed';
   }
   if (needsMemberVote) {
     message = "You haven't voted on this";

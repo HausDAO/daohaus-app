@@ -4,15 +4,15 @@ import React, {
   useState,
   useEffect,
   useRef,
-} from "react";
-import { useParams } from "react-router-dom";
-import { initTokenData, addContractVals } from "../utils/tokenValue";
-import { useDao } from "./DaoContext";
+} from 'react';
+import { useParams } from 'react-router-dom';
+import { initTokenData, addContractVals } from '../utils/tokenValue';
+import { useDao } from './DaoContext';
 
 export const TokenContext = createContext();
 
 export const TokenProvider = ({ children }) => {
-  //If we're seeing too many rerenders we can bring daoOverview in
+  // If we're seeing too many rerenders we can bring daoOverview in
   // as props and React.memo the data.
   const { daoOverview } = useDao();
 
@@ -22,7 +22,7 @@ export const TokenProvider = ({ children }) => {
   const shouldFetchInit = useRef(true);
   const shouldFetchContract = useRef(true);
 
-  //first fetch API USD values to get fast bank balance
+  // first fetch API USD values to get fast bank balance
   useEffect(() => {
     const initDaoTokens = async () => {
       const newDaoData = await initTokenData(daoOverview.tokenBalances);
@@ -34,12 +34,12 @@ export const TokenProvider = ({ children }) => {
     }
   }, [daoOverview, daochain]);
 
-  //then fetch contract values for more exact amount.
+  // then fetch contract values for more exact amount.
   useEffect(() => {
     const getContractValues = async () => {
       const withContractValues = await addContractVals(
         currentDaoTokens,
-        daochain
+        daochain,
       );
       setCurrentDaoTokens(withContractValues);
       shouldFetchContract.current = false;
@@ -60,7 +60,7 @@ export const TokenProvider = ({ children }) => {
 
 export const useToken = () => {
   const { currentDaoTokens, shouldFetchInit, shouldFetchContract } = useContext(
-    TokenContext
+    TokenContext,
   );
   return { currentDaoTokens, shouldFetchInit, shouldFetchContract };
 };

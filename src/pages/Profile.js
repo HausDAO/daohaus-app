@@ -1,27 +1,27 @@
-import React, { useState, useEffect } from "react";
-import { Avatar } from "@chakra-ui/react";
-import makeBlockie from "ethereum-blockies-base64";
+import React, { useState, useEffect } from 'react';
+import { Avatar } from '@chakra-ui/react';
+import makeBlockie from 'ethereum-blockies-base64';
 
-import { useParams } from "react-router-dom";
-import { ethers } from "ethers";
-import { handleGetProfile } from "../utils/3box";
-import { truncateAddr } from "../utils/general";
-import { chainByID } from "../utils/chain";
-import { tallyUSDs } from "../utils/tokenValue";
-import ProfileBankList from "../components/profileBankList";
-import ActivitiesFeed from "../components/activitiesFeed";
-import { getProfileActivites } from "../utils/activities";
+import { useParams } from 'react-router-dom';
+import { ethers } from 'ethers';
+import { handleGetProfile } from '../utils/3box';
+import { truncateAddr } from '../utils/general';
+import { chainByID } from '../utils/chain';
+import { tallyUSDs } from '../utils/tokenValue';
+// import ProfileBankList from '../components/profileBankList';
+import ActivitiesFeed from '../components/activitiesFeed';
+import { getProfileActivites } from '../utils/activities';
 
 const handleAvatar = (member, profile) => {
   if (profile?.image?.length) {
     const url = profile?.image[0].contentUrl;
     return (
       <Avatar
-        //uses key, otherwise React skips rerender
+        // uses key, otherwise React skips rerender
         key={`profile${member}`}
         name={profile?.name}
-        size="lg"
-        src={`https://ipfs.infura.io/ipfs/${url["/"]}`}
+        size='lg'
+        src={`https://ipfs.infura.io/ipfs/${url['/']}`}
       />
     );
   } else {
@@ -29,7 +29,7 @@ const handleAvatar = (member, profile) => {
       <Avatar
         key={`no-profile${member}`}
         name={member?.memberAddress}
-        size="lg"
+        size='lg'
         src={makeBlockie(member?.memberAddress)}
       />
     );
@@ -75,7 +75,7 @@ const Profile = ({ members, overview, daoTokens, activities }) => {
     const getProfile = async () => {
       try {
         const profile = await handleGetProfile(currentMember.memberAddress);
-        if (profile.status === "error") return;
+        if (profile.status === 'error') return;
         setProfile(profile);
       } catch (error) {
         console.error(error);
@@ -90,7 +90,7 @@ const Profile = ({ members, overview, daoTokens, activities }) => {
     const lookupEns = async () => {
       if (currentMember?.memberAddress) {
         const ethersProvider = ethers.getDefaultProvider(
-          chainByID(daochain).rpc_url
+          chainByID(daochain).rpc_url,
         );
         const result = await ethersProvider.lookupAddress(userid);
         if (result) {
@@ -114,16 +114,16 @@ const Profile = ({ members, overview, daoTokens, activities }) => {
             {profile?.job && <p>{profile.job}</p>}
             {profile?.employer && <p>{profile.employer}</p>}
             <p>
-              Exit Amount:{" "}
+              Exit Amount:{' '}
               {daoTokens &&
                 overview &&
-                calcValue(currentMember, daoTokens, overview)}{" "}
+                calcValue(currentMember, daoTokens, overview)}{' '}
             </p>
             <p>
-              Power:{" "}
+              Power:{' '}
               {daoTokens &&
                 overview &&
-                calcPower(currentMember, overview) + "%"}
+                calcPower(currentMember, overview) + '%'}
             </p>
             <p>Shares: {currentMember.shares}</p>
             <p>Loot: {currentMember.loot}</p>

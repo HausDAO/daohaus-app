@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from "react";
-import ActivityCard from "./activityCard";
+import React from 'react';
+import ActivityCard from './activityCard';
 
 const ActivitiesFeed = ({ activities, hydrateFn, limit }) => {
   const allActivities = activities ? hydrateFn(activities) : [];

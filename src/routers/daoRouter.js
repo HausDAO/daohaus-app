@@ -1,16 +1,16 @@
-import React from "react";
-import { Switch, Route, useRouteMatch } from "react-router-dom";
+import React from 'react';
+import { Switch, Route, useRouteMatch } from 'react-router-dom';
 
-import { useDao } from "../contexts/DaoContext";
-import { useDaoMember } from "../contexts/DaoMemberContext";
-import Bank from "../pages/Bank";
-import Members from "../pages/Members";
-import Overview from "../pages/Overview";
-import Proposals from "../pages/Proposals";
-import Profile from "../pages/Profile";
-import Proposal from "../pages/Proposal";
-import Settings from "../pages/Settings";
-import { useToken } from "../contexts/TokenContext";
+import { useDao } from '../contexts/DaoContext';
+import { useDaoMember } from '../contexts/DaoMemberContext';
+import Bank from '../pages/Bank';
+import Members from '../pages/Members';
+import Overview from '../pages/Overview';
+import Proposals from '../pages/Proposals';
+import Profile from '../pages/Profile';
+import Proposal from '../pages/Proposal';
+import Settings from '../pages/Settings';
+import { useToken } from '../contexts/TokenContext';
 
 const DaoRouter = () => {
   const { path } = useRouteMatch();

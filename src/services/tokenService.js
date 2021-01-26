@@ -1,15 +1,15 @@
-import Web3 from "web3";
+import Web3 from 'web3';
 
-import Erc20Abi from "../contracts/erc20a.json";
-import Erc20Bytes32Abi from "../contracts/erc20Bytes32.json";
-import { chainByID } from "../utils/chain";
+import Erc20Abi from '../contracts/erc20a.json';
+import Erc20Bytes32Abi from '../contracts/erc20Bytes32.json';
+import { chainByID } from '../utils/chain';
 
 export const TokenService = ({
   web3,
   chainID,
   tokenAddress,
   is32 = false,
-  atBlock = "latest",
+  atBlock = 'latest',
 }) => {
   if (!web3) {
     const rpcUrl = chainByID(chainID).rpc_url;
@@ -19,7 +19,7 @@ export const TokenService = ({
 
   const contract = new web3.eth.Contract(abi, tokenAddress);
   return (service) => {
-    if (service === "balanceOf") {
+    if (service === 'balanceOf') {
       return async (queryAddress) => {
         try {
           const balance = await contract.methods
@@ -31,7 +31,7 @@ export const TokenService = ({
         }
       };
     }
-    if (service === "allowance") {
+    if (service === 'allowance') {
       return async ({ accountAddr, contractAddr }) => {
         try {
           const allowance = await contract.methods

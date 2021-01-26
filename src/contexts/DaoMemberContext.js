@@ -4,9 +4,9 @@ import React, {
   useEffect,
   useState,
   useRef,
-} from "react";
-import { useParams } from "react-router-dom";
-import { initMemberWallet } from "../utils/wallet";
+} from 'react';
+import { useParams } from 'react-router-dom';
+import { initMemberWallet } from '../utils/wallet';
 
 export const DaoMemberContext = createContext();
 
@@ -86,7 +86,7 @@ export const DaoMemberProvider = ({
 };
 export const useDaoMember = () => {
   const { currentMemberRef, isMember, daoMember, memberWalletRef } = useContext(
-    DaoMemberContext
+    DaoMemberContext,
   );
   return { currentMemberRef, isMember, daoMember, memberWalletRef };
 };
