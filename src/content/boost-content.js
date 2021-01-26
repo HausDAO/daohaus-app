@@ -16,7 +16,7 @@ export const boostList = [
   {
     name: 'Notifications: Level 1',
     key: 'notificationsLevel1',
-    comingSoon: true,
+    // comingSoon: true,
     description:
       'Customize and send notifications of DAO activity to your discord server',
     price: '0',
