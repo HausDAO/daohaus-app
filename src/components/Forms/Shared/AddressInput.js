@@ -9,10 +9,10 @@ import {
   Flex,
 } from '@chakra-ui/react';
 import { AiOutlineCaretDown } from 'react-icons/ai';
-import TextBox from '../Shared/TextBox';
-import { useEns, useMembers, useUser } from '../../contexts/PokemolContext';
-import { useTheme } from '../../contexts/CustomThemeContext';
-import { truncateAddr } from '../../utils/helpers';
+import TextBox from '../../Shared/TextBox';
+import { useEns, useMembers, useUser } from '../../../contexts/PokemolContext';
+import { useTheme } from '../../../contexts/CustomThemeContext';
+import { truncateAddr } from '../../../utils/helpers';
 
 const AddressInput = ({
   register,

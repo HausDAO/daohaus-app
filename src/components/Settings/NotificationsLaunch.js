@@ -62,7 +62,7 @@ const NotificationsLaunch = ({
       {step === 'intro' ? (
         <>
           <Heading as='h4' size='md' fontWeight='100'>
-            Add Notifications Level 1
+            Add Notifications Discord
           </Heading>
           <Text my={6}>
             Hook up dao activity notifications to your Discord server.
@@ -74,7 +74,7 @@ const NotificationsLaunch = ({
       {step === 'directions1' ? (
         <>
           <Heading as='h4' size='md' fontWeight='100'>
-            Notification Level 1 - Setup Instructions
+            Discord Notifications - Setup Instructions
           </Heading>
           <Text mt={6} fontWeight={700}>
             Step 1
@@ -104,7 +104,7 @@ const NotificationsLaunch = ({
           {!stepOverride ? (
             <>
               <Heading as='h4' size='md' fontWeight='100'>
-                Notification Level 1 - Setup Instructions
+                Discord Notifications - Setup Instructions
               </Heading>
               <Text mt={6} fontWeight={700}>
                 Step 2
@@ -171,7 +171,7 @@ const NotificationsLaunch = ({
           ) : (
             <>
               <Heading as='h4' size='md' fontWeight='100'>
-                Notification Level 1 Added
+                Discord Notifications Added
               </Heading>
               <Text my={6}>
                 We have turned on a couple notifications for you. You can edit

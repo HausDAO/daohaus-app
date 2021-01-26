@@ -12,13 +12,13 @@ import {
 } from '@chakra-ui/react';
 
 import { useTheme } from '../../contexts/CustomThemeContext';
-import MemberProposalForm from '../Forms/MemberProposal';
-import FundingProposalForm from '../Forms/FundingProposal';
-import WhitelistProposalForm from '../Forms/WhitelistProposal';
-import GuildKickProposalForm from '../Forms/GuildKickProposal';
-import TradeProposalForm from '../Forms/TradeProposal';
-import MinionSimpleProposalForm from '../Forms/MinionSimpleProposal';
-import TransmutationProposal from '../Forms/TransmutationProposal';
+import MemberProposalForm from '../Forms/Proposals/MemberProposal';
+import FundingProposalForm from '../Forms/Proposals/FundingProposal';
+import WhitelistProposalForm from '../Forms/Proposals/WhitelistProposal';
+import GuildKickProposalForm from '../Forms/Proposals/GuildKickProposal';
+import TradeProposalForm from '../Forms/Proposals/TradeProposal';
+import MinionSimpleProposalForm from '../Forms/Minion/MinionSimpleProposal';
+import TransmutationProposal from '../Forms/Minion/TransmutationProposal';
 import { useModals } from '../../contexts/PokemolContext';
 
 const ProposalFormModal = ({ proposalType, isOpen, returnRoute }) => {

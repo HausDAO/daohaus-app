@@ -9,19 +9,22 @@ import {
   Icon,
   Box,
 } from '@chakra-ui/react';
+import { utils } from 'web3';
 import { RiErrorWarningLine } from 'react-icons/ri';
 
 import {
   useDao,
-  useModals,
   useTxProcessor,
   useUser,
-} from '../../contexts/PokemolContext';
-import DetailsFields from './DetailFields';
-import TextBox from '../Shared/TextBox';
-import { detailsToJSON } from '../../utils/proposal-helper';
+  useModals,
+} from '../../../contexts/PokemolContext';
+import TextBox from '../../Shared/TextBox';
 
-const WhitelistProposalForm = () => {
+import TributeInput from '../Shared/TributeInput';
+import DetailsFields from '../Shared/DetailFields';
+import { detailsToJSON } from '../../../utils/proposal-helper';
+
+const StakeProposalForm = () => {
   const [loading, setLoading] = useState(false);
   const [user] = useUser();
   const [dao] = useDao();
@@ -29,14 +32,7 @@ const WhitelistProposalForm = () => {
   const [currentError, setCurrentError] = useState(null);
   const { closeModals } = useModals();
 
-  console.log(dao);
-
-  const {
-    handleSubmit,
-    errors,
-    register,
-    // formState
-  } = useForm();
+  const { handleSubmit, errors, register, setValue, getValues } = useForm();
 
   useEffect(() => {
     if (Object.keys(errors).length > 0) {
@@ -49,8 +45,6 @@ const WhitelistProposalForm = () => {
       setCurrentError(null);
     }
   }, [errors]);
-
-  // TODO check link is a valid link
 
   const txCallBack = (txHash, details) => {
     console.log('txCallBack', txProcessor);
@@ -71,14 +65,25 @@ const WhitelistProposalForm = () => {
   const onSubmit = async (values) => {
     setLoading(true);
 
-    console.log(values);
-
     const details = detailsToJSON(values);
-
     try {
-      dao.daoService.moloch.submitWhiteListProposal(
-        values.tokenAddress,
+      dao.daoService.moloch.submitProposal(
+        values.sharesRequested ? values.sharesRequested?.toString() : '0',
+        values.lootRequested ? values.lootRequested?.toString() : '0',
+        values.tributeOffered
+          ? utils.toWei(values.tributeOffered?.toString())
+          : '0',
+        values.tributeToken || dao.graphData.depositToken.tokenAddress,
+        values.paymentRequested
+          ? utils.toWei(values.paymentRequested?.toString())
+          : '0',
+        values.paymentToken || dao.graphData.depositToken.tokenAddress,
         details,
+        values?.applicantHidden?.startsWith('0x')
+          ? values.applicantHidden
+          : values?.applicant
+          ? values.applicant
+          : user.username,
         txCallBack,
       );
     } catch (err) {
@@ -101,16 +106,30 @@ const WhitelistProposalForm = () => {
           <DetailsFields register={register} />
         </Box>
         <Box w={['100%', null, '50%']}>
-          <TextBox as={FormLabel} size='xs' htmlFor='tokenAddress' mb={2}>
-            Token Address
+          <TextBox as={FormLabel} size='xs' htmlFor='name' mb={2}>
+            Shares Requested
           </TextBox>
           <Input
-            name='tokenAddress'
-            placeholder='0x'
-            mb={3}
-            ref={register}
+            name='sharesRequested'
+            placeholder='0'
+            mb={5}
+            ref={register({
+              required: {
+                value: true,
+                message: 'Requested shares are required for Member Proposals',
+              },
+              pattern: {
+                value: /[0-9]/,
+                message: 'Requested shares must be a number',
+              },
+            })}
             color='white'
             focusBorderColor='secondary.500'
+          />
+          <TributeInput
+            register={register}
+            setValue={setValue}
+            getValues={getValues}
           />
         </Box>
       </FormControl>
@@ -136,4 +155,4 @@ const WhitelistProposalForm = () => {
   );
 };
 
-export default WhitelistProposalForm;
+export default StakeProposalForm;

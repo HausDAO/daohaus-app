@@ -1,16 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useForm } from 'react-hook-form';
-import {
-  Button,
-  FormLabel,
-  FormControl,
-  Flex,
-  Input,
-  Icon,
-  Box,
-  FormHelperText,
-  Text,
-} from '@chakra-ui/react';
+import { Button, FormControl, Flex, Icon, Box, Text } from '@chakra-ui/react';
 
 import {
   useDao,
@@ -19,7 +9,7 @@ import {
   useTxProcessor,
   useUser,
 } from '../../contexts/PokemolContext';
-import TextBox from '../Shared/TextBox';
+import RageInput from './Shared/RageInput';
 import { RiErrorWarningLine } from 'react-icons/ri';
 import { memberProfile } from '../../utils/helpers';
 
@@ -38,7 +28,9 @@ const RageQuitForm = () => {
     handleSubmit,
     errors,
     register,
-    // formState
+    setError,
+    clearErrors,
+    setValue,
   } = useForm();
 
   useEffect(() => {
@@ -91,64 +83,54 @@ const RageQuitForm = () => {
   };
 
   const onSubmit = async (values) => {
-    setLoading(true);
-
-    console.log(values);
-
-    try {
-      dao.daoService.moloch.rageQuit(
-        values.shares ? values.shares : 0,
-        values.loot ? values.loot : 0,
-        txCallBack,
-      );
-    } catch (err) {
+    if (
+      (values.shares === '' || values.shares === '0') &&
+      (values.loot === '' || values.loot === '0')
+    ) {
+      setError('loot or shares', { message: 'Set loot or shares to RageQuit' });
       setLoading(false);
-      console.log('*******************error: ', err);
+      setTimeout(() => {
+        clearErrors('loot or shares');
+      }, 500);
+    } else {
+      setLoading(true);
+
+      console.log(values);
+
+      try {
+        dao.daoService.moloch.rageQuit(
+          values.shares ? values.shares : 0,
+          values.loot ? values.loot : 0,
+          txCallBack,
+        );
+      } catch (err) {
+        setLoading(false);
+        console.log('*******************error: ', err);
+      }
     }
   };
 
   return canRage ? (
     <form onSubmit={handleSubmit(onSubmit)}>
-      <FormControl isInvalid={errors.name}>
-        <TextBox as={FormLabel} size='xs' htmlFor='shares' mb={2}>
-          Shares to Rage
-        </TextBox>
-
-        <Input
-          name='shares'
-          placeholder='0'
-          ref={register({
-            pattern: {
-              value: /[0-9]/,
-              message: 'Shares must be a number',
-            },
-          })}
-          color='white'
-          focusBorderColor='secondary.500'
+      <FormControl isInvalid={errors.name} mt={4}>
+        <RageInput
+          register={register}
+          setValue={setValue}
+          label='Shares to Rage'
+          type='shares'
+          max={member?.shares}
         />
-        <FormHelperText>
-          You can Rage up to {member?.shares} shares.
-        </FormHelperText>
-        <TextBox as={FormLabel} size='xs' htmlFor='loot' mt={6} mb={2}>
-          Loot to Rage
-        </TextBox>
-        <Input
-          name='loot'
-          placeholder='0'
-          ref={register({
-            pattern: {
-              value: /[0-9]/,
-              message: 'Loot must be a number',
-            },
-          })}
-          color='white'
-          focusBorderColor='secondary.500'
+        <RageInput
+          register={register}
+          setValue={setValue}
+          label='Loot to Rage'
+          type='loot'
+          max={member?.loot}
         />
-        <FormHelperText>You can Rage up to {member?.loot} loot.</FormHelperText>
 
         <Flex justify='flex-end' align='center'>
           {currentError && (
-            <Box color='secondary.300' fontSize='m'>
+            <Box color='secondary.300' fontSize='m' mr={2}>
               <Icon as={RiErrorWarningLine} color='secondary.300' mr={2} />
               {currentError.message}
             </Box>

@@ -15,9 +15,9 @@ const GenericModal = ({ isOpen, children, closeOnOverlayClick = true }) => {
   return (
     <Modal
       isOpen={isOpen}
-      onClose={closeModals}
       closeOnEsc={false}
       closeOnOverlayClick={closeOnOverlayClick}
+      onClose={() => closeModals()}
       isCentered
     >
       <ModalOverlay />

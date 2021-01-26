@@ -16,7 +16,7 @@ import Boosts from './views/Settings/Boosts';
 import NewBoost from './views/Settings/NewBoost';
 import CustomTheme from './views/Settings/CustomTheme';
 import Notifications from './views/Settings/Notifications';
-import DaoTheme from './views/Theme/DaoTheme';
+import Allies from './views/Settings/Allies';
 import NewMember from './views/Members/NewMember';
 import DaoMeta from './views/Settings/DaoMeta';
 import SummonWrapper from './views/Summon/SummonWrapper';
@@ -109,9 +109,9 @@ const Routes = () => {
           component={RegisterDao}
         />
         <Route
-          path='/dao/:dao(\b0x[0-9a-f]{10,40}\b)/psych-out'
+          path='/dao/:dao(\b0x[0-9a-f]{10,40}\b)/allies'
           exact
-          component={DaoTheme}
+          component={Allies}
         />
         <Route path='/explore' exact component={ExplorWrapper} />
         <Route path='/summon' exact component={SummonWrapper} />
