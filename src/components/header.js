@@ -1,12 +1,13 @@
 import React from 'react';
-import { Box, Flex } from '@chakra-ui/react';
+import { Box, Flex, Button } from '@chakra-ui/react';
 import { useLocation } from 'react-router-dom';
 import { useInjectedProvider } from '../contexts/InjectedProviderContext';
 import { getCopy } from '../utils/metadata';
+import Web3SignIn from './web3SignIn';
 
 const Header = ({ dao, daoMetaData }) => {
   const location = useLocation();
-  const { injectedChain } = useInjectedProvider();
+  const { address, injectedChain, disconnectDapp } = useInjectedProvider();
 
   const getHeading = () => {
     switch (location.pathname) {
@@ -152,22 +153,22 @@ const Header = ({ dao, daoMetaData }) => {
         </Box>
         {/* <ChainDisplay /> */}
 
-        {/* {user ? (
+        {address ? (
           <>
-            <Button variant="outline" onClick={() => openModal("accountModal")}>
-              <UserAvatar
+            <Button variant='outline' onClick={disconnectDapp}>
+              {/* <UserAvatar
                 user={
                   Object.keys(user.profile).length === 0 ? user : user.profile
                 }
                 hideCopy={true}
-              />
+              /> */}
             </Button>
 
-            <AccountModal isOpen={modals.accountModal} />
+            {/* <AccountModal isOpen={modals.accountModal} /> */}
           </>
         ) : (
           <Web3SignIn />
-        )} */}
+        )}
       </Flex>
     </Flex>
   );

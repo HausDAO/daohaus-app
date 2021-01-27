@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { utils } from 'web3';
 import { Flex, Box, Skeleton, Badge, Icon } from '@chakra-ui/react';
@@ -17,29 +17,29 @@ import {
 } from '../utils/general';
 // import { createPoll } from '../services/pollService';
 
-import {
-  determineProposalStatus,
-  determineProposalType,
-  titleMaker,
-  // descriptionMaker,
-} from '../utils/proposalUtils';
 import ContentBox from './ContentBox';
 
 const ProposalCard = ({ proposal }) => {
-  console.log(proposal);
+  // console.log(proposal);
   const { daochain, daoid } = useParams();
-  const [memberVote, setMemberVote] = useState();
+  // const [memberVote, setMemberVote] = useState();
 
-  useEffect(() => {
-    if (proposal.votes && proposal.memberAddress) {
-      setMemberVote(
-        proposal.votes.find(
-          (vote) => vote.memberAddress === proposal.memberAddress.toLowerCase(),
-        ),
-      );
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [proposal]);
+  // useEffect(() => {
+  //   if (proposal.votes && proposal.memberAddress) {
+  //     setMemberVote(
+  //       proposal.votes.find(
+  //         (vote) => vote.memberAddress === proposal.memberAddress.toLowerCase(),
+  //       ),
+  //     );
+  //   }
+  //   // eslint-disable-next-line react-hooks/exhaustive-deps
+  // }, [proposal]);
+
+  const memberVote = proposal
+    ? proposal?.votes?.find(
+        (vote) => vote.memberAddress === proposal.memberAddress.toLowerCase(),
+      )
+    : null;
 
   return (
     <Link
@@ -58,25 +58,25 @@ const ProposalCard = ({ proposal }) => {
             fontFamily='heading'
             letterSpacing='0.1em'
           >
-            {determineProposalType(proposal)}
+            {proposal?.proposalType}
           </Box>
           <Box>
-            <Skeleton isLoaded={determineProposalStatus(proposal)}>
-              <Badge>{determineProposalStatus(proposal)}</Badge>
+            <Skeleton isLoaded={proposal?.status}>
+              <Badge>{proposal?.status}</Badge>
             </Skeleton>
           </Box>
         </Flex>
         <Flex justify='space-between' mt={3}>
           <Box>
-            <Skeleton isLoaded={titleMaker(proposal)}>
+            <Skeleton isLoaded={proposal?.title}>
               <Box fontWeight={700} fontSize='lg' fontFamily='heading'>
-                {titleMaker(proposal) || '--'}
+                {proposal?.title || '--'}
               </Box>
             </Skeleton>
             <Skeleton isLoaded={proposal?.createdAt}>
               <Box fontSize='xs' as='i'>
                 {`Submitted ${format(
-                  new Date(proposal.createdAt * 1000),
+                  new Date(proposal?.createdAt * 1000),
                   'MMM d, y',
                 )}` || '--'}
               </Box>

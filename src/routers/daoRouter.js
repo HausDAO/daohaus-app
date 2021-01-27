@@ -52,7 +52,7 @@ const DaoRouter = () => {
       <Route exact path={`${path}/settings`}>
         <Settings overview={daoOverview} />
       </Route>
-      <Route exact path={`${path}/proposal/:propid`}>
+      <Route exact path={`${path}/proposals/:propid`}>
         <Proposal activities={daoActivities} />
       </Route>
       <Route exact path={`${path}/profile/:userid`}>

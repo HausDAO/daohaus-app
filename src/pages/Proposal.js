@@ -1,16 +1,19 @@
 import React from 'react';
 import { useParams } from 'react-router-dom';
-import { utils } from 'web3';
+// import { utils } from 'web3';
+import { Flex, Box } from '@chakra-ui/react';
 import ActivitiesFeed from '../components/activitiesFeed';
 import { getProposalHistories } from '../utils/activities';
 
-import { numberWithCommas, timeToNow } from '../utils/general';
+// import { numberWithCommas, timeToNow } from '../utils/general';
+import TextBox from '../components/TextBox';
+import ContentBox from '../components/ContentBox';
 
 import {
-  determineProposalStatus,
+  // determineProposalStatus,
   determineProposalType,
-  titleMaker,
-  descriptionMaker,
+  // titleMaker,
+  // descriptionMaker,
 } from '../utils/proposalUtils';
 
 const Proposal = ({ activities }) => {
@@ -20,10 +23,49 @@ const Proposal = ({ activities }) => {
     : null;
 
   return (
-    <>
-      {currentProposal && (
-        <>
-          <div key={currentProposal.id} className='large-box'>
+    <Box>
+      <Flex wrap='wrap'>
+        <Flex
+          direction='column'
+          w={['100%', null, null, null, '60%']}
+          pr={[0, null, null, null, 6]}
+        >
+          <Box pt={6}>
+            <ContentBox>
+              <Box>
+                <Box>
+                  <Flex justify='space-between'>
+                    <TextBox size='xs'>
+                      {determineProposalType(currentProposal)}
+                    </TextBox>
+                  </Flex>
+                </Box>
+              </Box>
+            </ContentBox>
+          </Box>
+        </Flex>
+        <Flex
+          direction='column'
+          w={['100%', null, null, null, '40%']}
+          pt={[6, 0]}
+        >
+          <Box>
+            {!currentProposal?.cancelled && (
+              <TextBox size='md'>Actions</TextBox>
+            )}
+          </Box>
+          <Box pt={6}>
+            {/* {!proposal?.cancelled && (
+              <ProposalVote proposal={proposal} setProposal={setProposal} />
+            )} */}
+            <ActivitiesFeed
+              limit={6}
+              activities={currentProposal}
+              hydrateFn={getProposalHistories}
+            />
+          </Box>
+        </Flex>
+        {/* <div key={currentProposal.id} className='large-box'>
             <p>{determineProposalType(currentProposal)}</p>
             <h3>{titleMaker(currentProposal)}</h3>
             <p>{descriptionMaker(currentProposal)}</p>
@@ -39,15 +81,9 @@ const Proposal = ({ activities }) => {
                 )}
               </p>
             )}
-          </div>
-          <ActivitiesFeed
-            limit={6}
-            activities={currentProposal}
-            hydrateFn={getProposalHistories}
-          />
-        </>
-      )}
-    </>
+          </div> */}
+      </Flex>
+    </Box>
   );
 };
 
