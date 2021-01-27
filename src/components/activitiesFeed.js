@@ -1,12 +1,13 @@
 import React from 'react';
 import ActivityCard from './activityCard';
+import TextBox from './TextBox';
 
 const ActivitiesFeed = ({ activities, hydrateFn, limit }) => {
   const allActivities = activities ? hydrateFn(activities) : [];
 
   return (
-    <div>
-      <h3>Activites</h3>
+    <>
+      <TextBox>Activities</TextBox>
       {allActivities &&
         allActivities
           .slice(0, limit)
@@ -17,7 +18,7 @@ const ActivitiesFeed = ({ activities, hydrateFn, limit }) => {
               displayAvatar={true}
             />
           ))}
-    </div>
+    </>
   );
 };
 

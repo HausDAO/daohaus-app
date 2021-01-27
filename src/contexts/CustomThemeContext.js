@@ -1,9 +1,9 @@
-import React, { useContext, createContext, useState } from "react";
-import { ChakraProvider } from "@chakra-ui/react";
+import React, { useContext, createContext, useState } from 'react';
+import { ChakraProvider } from '@chakra-ui/react';
 // import { defaultTheme } from "../themes/defaultTheme";
 // import { defaultTheme, createNewTheme } from "../themes/customTheme";
-import { createTheme, useDefault } from "../themes/theme";
-import OverlayProvider from "./OverlayContext";
+import { createTheme, useDefault } from '../themes/theme';
+import OverlayProvider from './OverlayContext';
 
 export const CustomThemeContext = createContext();
 

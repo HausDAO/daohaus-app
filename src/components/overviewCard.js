@@ -61,7 +61,7 @@ const OverviewCard = ({ overview, isMember, membersAmt }) => {
           </Box>
         </Flex>
         <Box mt={6}>
-          <TextBox size='md'>{getCopy(daoMetaData, 'bank')}</TextBox>
+          <TextBox size='sm'>{getCopy(daoMetaData, 'bank')}</TextBox>
           <BankTotal tokenBalances={tokenBalances} />
         </Box>
         <Flex mt={6}>
