@@ -62,7 +62,7 @@ const NotificationsLaunch = ({
       {step === 'intro' ? (
         <>
           <Heading as='h4' size='md' fontWeight='100'>
-            Add Notifications Discord
+            Add Discord Notifications
           </Heading>
           <Text my={6}>
             Hook up dao activity notifications to your Discord server.

@@ -22,6 +22,15 @@ export const boostList = [
     price: '0',
     modalName: 'notificationsLevel1Launch',
   },
+  {
+    name: 'Discourse Forum',
+    key: 'discourse',
+    // comingSoon: true,
+    description:
+      'Add a forum for discussing proposals. Launch a new category in the DAOhaus Discourse forum and enable topic creation for all of your proposals.',
+    price: '0',
+    modalName: 'discourseLaunch',
+  },
   // {
   //   name: 'Notifications: Level 2',
   //   key: 'notificationsLevel2',

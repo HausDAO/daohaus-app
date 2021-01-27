@@ -42,8 +42,6 @@ const Settings = () => {
         <DaoMetaOverview />
       </Box>
       <Box w={['100%', null, null, null, '50%']}>
-        <TextBox size='xs'>Boost Status</TextBox>
-        <BoostStatus />
         <Flex justify='space-between' mt={6}>
           <TextBox size='xs'>Superpowers</TextBox>
           <Link
@@ -65,6 +63,8 @@ const Settings = () => {
             <Minions />
           </>
         )}
+        <TextBox size='xs'>Boost Status</TextBox>
+        <BoostStatus />
       </Box>
     </Flex>
   );
