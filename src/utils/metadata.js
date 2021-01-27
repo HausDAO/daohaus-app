@@ -50,7 +50,6 @@ export const getCopy = (metaData, word) => {
   if (!metaData) {
     return;
   }
-  console.log(metaData);
   word = word.toLowerCase();
 
   if (word === 'name') return metaData.name;

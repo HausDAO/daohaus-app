@@ -26,7 +26,6 @@ import {
 import ContentBox from './ContentBox';
 
 const ProposalCard = ({ proposal }) => {
-  console.log(proposal);
   const { daochain, daoid } = useParams();
   const [memberVote, setMemberVote] = useState();
 

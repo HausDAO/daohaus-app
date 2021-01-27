@@ -7,9 +7,12 @@ import ChangeDao from './changeDao';
 import { useCustomTheme } from '../contexts/CustomThemeContext';
 import { themeImagePath } from '../utils/metadata';
 
-const defaultImg = themeImagePath(BrandImg);
-
-const Brand = React.memo(function Brand({ brandImg, brandPath }) {
+const Brand = React.memo(function Brand({ dao }) {
+  const brandImg = dao?.daoMetaData?.avatarImg
+    ? themeImagePath(dao?.daoMetaData?.avatarImg)
+    : themeImagePath(BrandImg);
+  const brandLink =
+    dao?.daoID && dao?.chainID ? `/dao/${dao?.chainID}/${dao?.daoID}` : '/';
   const { theme } = useCustomTheme();
 
   return (
@@ -30,11 +33,11 @@ const Brand = React.memo(function Brand({ brandImg, brandPath }) {
         <Avatar
           d='block'
           as={RouterLink}
-          to={brandPath || '/'}
+          to={brandLink}
           size='md'
           cursor='pointer'
           border='none'
-          src={brandImg || defaultImg}
+          src={brandImg}
           bg={theme.colors.primary}
           borderWidth='2px'
           borderStyle='solid'

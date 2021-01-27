@@ -2,17 +2,15 @@ import React from 'react';
 import { Flex, Box, useBreakpointValue } from '@chakra-ui/react';
 import DesktopNav from '../nav/desktopNav';
 import '../global.css';
-// import MobileNav from "./MobileNav";
 import Header from '../components/header';
-// import "../global.css";
 
 import { useCustomTheme } from '../contexts/CustomThemeContext';
 import { themeImagePath } from '../utils/metadata';
 
-const Layout = ({ children, navLinks, brand, daoMetaData, dao }) => {
+const Layout = ({ children, dao }) => {
   const { theme } = useCustomTheme();
   const mainNav = useBreakpointValue({
-    lg: <DesktopNav navLinks={navLinks} brand={brand} />,
+    lg: <DesktopNav dao={dao} />,
   });
 
   return (
@@ -53,7 +51,7 @@ const Layout = ({ children, navLinks, brand, daoMetaData, dao }) => {
         mt={['80px', null, null, '0px']}
         flexDirection='column'
       >
-        <Header daoMetaData={daoMetaData} dao={dao} />
+        <Header dao={dao} />
         <Box p={6}>{children}</Box>
       </Flex>
     </Flex>

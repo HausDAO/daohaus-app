@@ -1,19 +1,18 @@
 import {
   RiBookMarkLine,
-  // RiDiscordFill,
-  // RiTelegramFill,
-  // RiMediumFill,
-  // RiTwitterFill,
-  // RiGlobeLine,
-  // RiLinksLine,
+  RiDiscordFill,
+  RiTelegramFill,
+  RiMediumFill,
+  RiTwitterFill,
+  RiGlobeLine,
   RiTeamLine,
   RiSettings3Line,
   RiBankLine,
-  // RiTrophyLine,
   RiQuestionLine,
   RiFireLine,
   RiRocket2Line,
   RiSearch2Line,
+  RiLinksLine,
 } from 'react-icons/ri';
 import { GiCastle } from 'react-icons/gi';
 
@@ -49,3 +48,35 @@ export const generateDaoLinks = (chainID, daoID) =>
     ...link,
     path: `/dao/${chainID}/${daoID}/${link.label.toLowerCase()}`,
   }));
+
+export const defaultSocialLinks = [
+  { icon: RiDiscordFill, label: 'Discord', href: 'https://discord.gg/NPEJysW' },
+  {
+    icon: RiTelegramFill,
+    label: 'Telegram',
+    href: 'https://t.me/joinchat/IJqu9xPa0xzYLN1mmFKo8g',
+  },
+  {
+    icon: RiMediumFill,
+    label: 'Medium',
+    href: 'https://medium.com/daohaus-club',
+  },
+  {
+    icon: RiGlobeLine,
+    label: 'Website',
+    href: 'https://app.daohaus.club/',
+  },
+  {
+    icon: RiTwitterFill,
+    label: 'Twitter',
+    href: 'https://twitter.com/@nowdaoit',
+  },
+  { icon: RiLinksLine, label: 'Other', href: 'https://wikipedia.com' },
+];
+export const generateDaoSocials = (metaData) => {
+  if (!metaData) return;
+  const daoLinks = metaData.links;
+  return defaultSocialLinks
+    .filter((link) => daoLinks[link.label.toLowerCase()])
+    .map((link) => ({ ...link, href: daoLinks[link.label.toLowerCase()] }));
+};
