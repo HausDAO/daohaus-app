@@ -1,16 +1,20 @@
 import React from 'react';
 import { Flex, Box, useBreakpointValue } from '@chakra-ui/react';
-import DesktopNav from '../nav/desktopNav';
-import '../global.css';
-import Header from '../components/header';
 
+import DesktopNav from '../nav/desktopNav';
+import MobileNav from '../nav/mobileNav';
+import Header from '../components/header';
 import { useCustomTheme } from '../contexts/CustomThemeContext';
 import { themeImagePath } from '../utils/metadata';
 
+import '../global.css';
 const Layout = ({ children, dao }) => {
   const { theme } = useCustomTheme();
   const mainNav = useBreakpointValue({
     lg: <DesktopNav dao={dao} />,
+    md: <MobileNav dao={dao} />,
+    sm: <MobileNav dao={dao} />,
+    base: <MobileNav dao={dao} />,
   });
 
   return (

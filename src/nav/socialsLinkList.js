@@ -3,7 +3,7 @@ import React from 'react';
 import { defaultSocialLinks, generateDaoSocials } from '../utils/navLinks';
 import SocialLink from './socialLink';
 
-const SocialsLinkList = ({ dao }) => {
+const SocialsLinkList = ({ dao, view, toggleNav }) => {
   const socialLinks = dao?.daoMetaData
     ? generateDaoSocials(dao?.daoMetaData)
     : defaultSocialLinks;
@@ -16,6 +16,8 @@ const SocialsLinkList = ({ dao }) => {
             href={link.href}
             label={link.label}
             icon={<Icon as={link.icon} w={6} h={6} />}
+            view={view}
+            onClick={toggleNav}
           />
         );
       })}

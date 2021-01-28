@@ -4,7 +4,6 @@ import {
   Icon,
   Button,
   Box,
-  Stack,
   Tooltip,
   Popover,
   PopoverTrigger,
@@ -19,6 +18,7 @@ import { RiLinksLine } from 'react-icons/ri';
 import Brand from './brand';
 import NavLinkList from './navLinkList';
 import SocialsLinkList from './socialsLinkList';
+import ChangeDao from './changeDao';
 
 const DesktopNav = ({ dao }) => {
   return (
@@ -35,16 +35,32 @@ const DesktopNav = ({ dao }) => {
       overflow='hidden'
       overflowY='auto'
     >
-      <Brand dao={dao} />
-      <Flex direction='column' wrap='wrap'>
-        <Stack
-          spacing={[1, null, null]}
-          d='flex'
-          mt={[3, null, null, 12]}
-          flexDirection='column'
+      <Flex
+        direction={['row', 'row', 'row', 'column']}
+        justify='start'
+        align={['center', 'center', 'center', 'start']}
+        w='100%'
+        wrap='wrap'
+      >
+        <Flex
+          align={['center', 'center', 'center', 'start']}
+          justify={['space-between', 'space-between', 'space-between', 'start']}
+          direction='row'
+          w='100%'
+          wrap='wrap'
         >
-          <NavLinkList dao={dao} view='desktop' />
-        </Stack>
+          <Brand dao={dao} />
+          <Box
+            w={['auto', null, null, '100%']}
+            order={[3, null, null, 3]}
+            mt={[0, null, null, 6]}
+          >
+            <ChangeDao />
+          </Box>
+        </Flex>
+      </Flex>
+      <Flex direction='column' wrap='wrap'>
+        <NavLinkList dao={dao} view='desktop' />
         <Box>
           <Popover placement='right' w='auto'>
             <Tooltip
@@ -81,5 +97,4 @@ const DesktopNav = ({ dao }) => {
     </Flex>
   );
 };
-
 export default DesktopNav;
