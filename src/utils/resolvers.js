@@ -3,6 +3,7 @@ import {
   determineProposalType,
   titleMaker,
   descriptionMaker,
+  linkMaker,
   hashMaker,
   determineUnreadActivityFeed,
 } from './proposalUtils';
@@ -16,6 +17,9 @@ export const proposalResolver = (proposal, fields = {}) => {
   }
   if (fields.description) {
     proposal.description = descriptionMaker(proposal);
+  }
+  if (fields.link) {
+    proposal.link = linkMaker(proposal);
   }
   if (fields.hash) {
     proposal.hash = hashMaker(proposal);

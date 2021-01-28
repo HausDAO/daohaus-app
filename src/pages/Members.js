@@ -5,14 +5,19 @@ import ActivitiesFeed from '../components/activitiesFeed';
 import Chart from '../components/chart';
 import MemberCard from '../components/memberCard';
 import MemberInfo from '../components/memberInfo';
+import ContentBox from '../components/ContentBox';
+import TextBox from '../components/TextBox';
 import { useDaoMember } from '../contexts/DaoMemberContext';
+import { useMetaData } from '../contexts/MetaDataContext';
 import { getMemberActivites, getMembersActivites } from '../utils/activities';
+import { getCopy } from '../utils/metadata';
 
 const Members = ({ members, activities }) => {
   const { daoMember } = useDaoMember();
   const { daoid, daochain } = useParams();
   const [selectedMember, setSelectedMember] = useState(null);
   const [scrolled, setScrolled] = useState(false);
+  const { daoMetaData } = useMetaData();
 
   const selectMember = (member) => {
     if (selectedMember == null) {
@@ -45,23 +50,36 @@ const Members = ({ members, activities }) => {
   };
 
   return (
-    <Flex p={6} wrap='wrap'>
+    <Flex wrap='wrap'>
       <Box
         w={['100%', null, null, null, '60%']}
         pr={[0, null, null, null, 6]}
         pb={6}
       >
-        <h3>Members</h3>
-        {members &&
-          members?.slice(0, 10).map((member) => {
-            return (
-              <MemberCard
-                key={member.id}
-                member={member}
-                selectMember={selectMember}
-              />
-            );
-          })}
+        <ContentBox mt={6}>
+          <Flex>
+            <TextBox w='43%' size='xs'>
+              {getCopy(daoMetaData, 'member')}
+            </TextBox>
+            <TextBox w='15%' size='xs'>
+              Shares
+            </TextBox>
+            <TextBox w='15%' size='xs'>
+              Loot
+            </TextBox>
+            <TextBox size='xs'>Join Date</TextBox>
+          </Flex>
+          {members &&
+            members?.slice(0, 10).map((member) => {
+              return (
+                <MemberCard
+                  key={member.id}
+                  member={member}
+                  selectMember={selectMember}
+                />
+              );
+            })}
+        </ContentBox>
       </Box>
       <Box w={['100%', null, null, null, '40%']}>
         <Box style={scrolled ? scrolledStyle : null}>

@@ -90,6 +90,7 @@ const completeQueries = {
             status: true,
             title: true,
             description: true,
+            link: true,
             hash: true,
             proposalType: true,
           }),
