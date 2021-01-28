@@ -1,3 +1,4 @@
+import { chainByNetworkId } from './chain';
 import { omit } from './general';
 
 const metadataApiUrl = 'https://data.daohaus.club';
@@ -44,6 +45,13 @@ export const themeImagePath = (imageValue) => {
     // https://ipfs.infura.io/ipfs
     return `https://gateway.pinata.cloud/ipfs/${imageValue}`;
   }
+};
+
+export const pokemolUrl = (dao) => {
+  const networkName = chainByNetworkId(+dao.networkId).network;
+  const domain =
+    networkName === 'mainnet' ? 'pokemol.com' : `${networkName}.pokemol.com`;
+  return `https://${domain}/dao/${dao.id}`;
 };
 
 export const getCopy = (metaData, word) => {

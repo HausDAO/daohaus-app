@@ -1,12 +1,23 @@
-import React from 'react';
+import React, { useContext } from 'react';
+import { Spinner } from '@chakra-ui/react';
+import ExploreFilters from '../components/exploreFilters';
+import ExploreList from '../components/exploreList';
 import Layout from '../components/layout';
-import { ExploreContextProvider } from '../contexts/ExploreContext';
+import { ExploreContext } from '../contexts/ExploreContext';
 
 const Explore = () => {
+  const { hasLoadedExploreData } = useContext(ExploreContext);
   return (
-    <ExploreContextProvider>
-      <Layout>Explore!</Layout>
-    </ExploreContextProvider>
+    <Layout>
+      {hasLoadedExploreData ? (
+        <>
+          <ExploreFilters />
+          <ExploreList />
+        </>
+      ) : (
+        <Spinner />
+      )}
+    </Layout>
   );
 };
 

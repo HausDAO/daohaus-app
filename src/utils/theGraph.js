@@ -19,6 +19,7 @@ export const graphFetchAll = async (args, items = [], skip = 0) => {
         skip,
       },
     });
+
     const newItems = result[subfield];
     if (newItems.length === 100) {
       return graphFetchAll(args, [...newItems, ...items], skip + 100);
@@ -151,6 +152,7 @@ const buildCrossChainQuery = (supportedChains, endpointType) => {
         name: supportedChains[chain].name,
         endpoint: supportedChains[chain][endpointType],
         networkID: chain,
+        network_id: supportedChains[chain].network_id,
         apiMatch: chain === '0x64' ? 'xdai' : supportedChains[chain].network,
       },
     ];
@@ -217,7 +219,6 @@ export const exploreChainQuery = async ({
   endpointType,
   reactSetter,
   apiFetcher,
-  variables,
 }) => {
   const metaDataMap = await apiFetcher();
   const prices = await fetchTokenData();
@@ -228,14 +229,14 @@ export const exploreChainQuery = async ({
   };
   buildCrossChainQuery(supportedChains, endpointType).forEach(async (chain) => {
     try {
-      const chainData = await graphQuery({
+      const chainData = await graphFetchAll({
         endpoint: chain.endpoint,
         query,
-        variables,
+        subfield: 'moloches',
       });
 
-      const withMetaData = chainData?.moloches.map((dao) => {
-        const withResolvedDao = daoResolver(dao, prices);
+      const withMetaData = chainData.map((dao) => {
+        const withResolvedDao = daoResolver(dao, { prices, chain });
         return {
           ...withResolvedDao,
           meta: daoMapLookup(dao?.id, chain.apiMatch),

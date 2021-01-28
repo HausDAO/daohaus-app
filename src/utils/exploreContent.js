@@ -22,22 +22,22 @@ export const SORT_OPTIONS = [
 export const EXPLORE_FILTER_OPTIONS = [
   {
     name: 'Mainnet',
-    value: '1',
+    value: 1,
     type: 'network',
   },
   {
     name: 'xDai',
-    value: '100',
+    value: 100,
     type: 'network',
   },
   {
     name: 'Kovan',
-    value: '42',
+    value: 42,
     type: 'network',
   },
   {
     name: 'Rinkeby',
-    value: '4',
+    value: 4,
     type: 'network',
   },
   {

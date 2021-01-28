@@ -11,9 +11,6 @@ import { SORT_OPTIONS, EXPLORE_FILTER_OPTIONS } from '../utils/exploreContent';
 export const ExploreContext = createContext();
 
 const initialState = {
-  allDaos: [],
-  sort: SORT_OPTIONS[0],
-  tags: [],
   filters: {
     members: ['1'],
     purpose: EXPLORE_FILTER_OPTIONS.filter((o) => o.type === 'purpose').map(
@@ -24,20 +21,18 @@ const initialState = {
     ),
     network: EXPLORE_FILTER_OPTIONS.filter((o) => o.type === 'network')
       .map((o) => o.value)
-      .filter((o) => o === '1' || o === '100'),
+      .filter((o) => o === 1 || o === 100),
   },
   searchTerm: null,
+  sort: SORT_OPTIONS[0],
+  tags: [],
 };
 
 const reducer = (state, action) => {
   switch (action.type) {
-    case 'setAllDaos': {
-      return { ...state, allDaos: action.payload };
-    }
     case 'resetExplore': {
       return {
         ...state,
-        allDaos: initialState.allDaos,
         sort: initialState.sort,
         filters: initialState.filters,
         searchTerm: initialState.searchTerm,
