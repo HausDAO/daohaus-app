@@ -1,13 +1,19 @@
 import React from 'react';
+import { useLocation, Link as RouterLink } from 'react-router-dom';
+import { RiAddFill } from 'react-icons/ri';
 import { Box, Flex, Button } from '@chakra-ui/react';
-import { useLocation } from 'react-router-dom';
 import { useInjectedProvider } from '../contexts/InjectedProviderContext';
 import { getCopy } from '../utils/metadata';
-import Web3SignIn from './web3SignIn';
+import UserAvatar from './userAvatar';
 
-const Header = ({ dao, daoMetaData }) => {
+const Header = ({ dao }) => {
   const location = useLocation();
-  const { address, injectedChain, disconnectDapp } = useInjectedProvider();
+  const {
+    injectedChain,
+    address,
+    requestWallet,
+    disconnectDapp,
+  } = useInjectedProvider();
 
   const getHeading = () => {
     switch (location.pathname) {
@@ -18,75 +24,69 @@ const Header = ({ dao, daoMetaData }) => {
       case '/summon':
         return 'Summon';
       case `/dao/${dao.chainID}/${dao.daoID}`:
-        return getCopy(daoMetaData, 'name');
+        return 'Overview';
       case `/dao/${dao.chainID}/${dao.daoID}/proposals`:
-        return getCopy(daoMetaData, 'proposals');
+        return getCopy(dao.daoMetaData, 'proposals');
       case `/dao/${dao.chainID}/${dao.daoID}/bank`:
-        return getCopy(daoMetaData, 'bank');
+        return getCopy(dao.daoMetaData, 'bank');
       case `/dao/${dao.chainID}/${dao.daoID}/members`:
-        return getCopy(daoMetaData, 'members');
+        return getCopy(dao.daoMetaData, 'members');
       case `/dao/${dao.chainID}/${dao.daoID}/boosts`:
         return 'Boosts';
       case `/dao/${dao.chainID}/${dao.daoID}/settings`:
         return 'Settings';
+      case `/dao/${dao.chainID}/${dao.daoID}/profile/${address}`:
+        return 'Settings';
+      case `/dao/${dao.chainID}/${dao.daoID}/proposals/new/`:
+        return `New ${getCopy('proposal')}`;
     }
   };
-
-  // const getTitle = () => {
-  //   if (location.pathname === "/") {
-  //     setPageTitle("Hub");
-  //   } else if (location.pathname === `/explore`) {
-  //     setPageTitle("Explore DAOs");
-  //   } else if (location.pathname === `/dao/${dao?.address}`) {
-  //     setPageTitle("Overview");
-  //   } else if (location.pathname === `/dao/${dao?.address}/proposals`) {
-  //     setPageTitle(theme.daoMeta.proposals);
-  //     // TODO proposals id regex
-  //   } else if (location.pathname === `/dao/${dao?.address}/proposals`) {
-  //     setPageTitle(theme.daoMeta.proposals);
-  //   } else if (
-  //     location.pathname === `/dao/${dao?.address}/proposals/new/member`
-  //   ) {
-  //     setPageTitle(
-  //       "New " + theme.daoMeta.member + " " + theme.daoMeta.proposal
-  //     );
-  //   } else if (location.pathname === `/dao/${dao?.address}/proposals/new`) {
-  //     setPageTitle(`New ${theme.daoMeta.proposal}`);
-  //   } else if (location.pathname === `/dao/${dao?.address}/members`) {
-  //     setPageTitle(theme.daoMeta.members);
-  //   } else if (location.pathname === `/dao/${dao?.address}/bank`) {
-  //     setPageTitle(theme.daoMeta.bank);
-  //   } else if (location.pathname === `/dao/${dao?.address}/settings`) {
-  //     setPageTitle("Settings");
-  //   } else if (location.pathname === `/dao/${dao?.address}/settings/meta`) {
-  //     setPageTitle("Metadata");
-  //   } else if (location.pathname === `/dao/${dao?.address}/settings/theme`) {
-  //     setPageTitle("Theme");
-  //   } else if (
-  //     location.pathname === `/dao/${dao?.address}/settings/notifications`
-  //   ) {
-  //     setPageTitle("Notifications");
-  //   } else if (location.pathname === `/dao/${dao?.address}/settings/boosts`) {
-  //     setPageTitle(theme.daoMeta.boosts);
-  //   } else if (
-  //     location.pathname === `/dao/${dao?.address}/settings/boosts/new`
-  //   ) {
-  //     setPageTitle("New " + theme.daoMeta.boost);
-  //   } else if (
-  //     location.pathname === `/themeSample` ||
-  //     location.pathname === `/theme`
-  //   ) {
-  //     setPageTitle("Theme Samples");
-  //   } else if (
-  //     location.pathname === `/dao/${dao?.address}/profile/${user?.username}`
-  //   ) {
-  //     setPageTitle(`${theme.daoMeta.member} Profile`);
-  //   } else {
-  //     // TODO pull from graph data
-  //     setPageTitle(dao?.apiMeta?.name);
-  //   }
-  //   // eslint-disable-next-line react-hooks/exhaustive-deps
-  // }
+  const getHeaderElement = () => {
+    if (location.pathname === `/` && address) {
+      return (
+        <Button as='a' href='https://3box.io/hub' target='_blank'>
+          Edit 3Box Profile
+        </Button>
+      );
+    } else if (
+      location.pathname === `/dao/${dao?.chainID}/${dao?.daoID}/proposals` &&
+      address
+    ) {
+      return (
+        <Button
+          as={RouterLink}
+          to={`/dao/${dao?.chainID}/${dao?.daoID}/proposals/new`}
+          rightIcon={<RiAddFill />}
+        >
+          New {getCopy(dao?.daoMetaData, 'proposal')}
+        </Button>
+      );
+    } else if (
+      location.pathname === `/dao/${dao?.chainID}/${dao?.daoID}/members` &&
+      address &&
+      dao.daoMember
+    ) {
+      return (
+        <Button
+          as={RouterLink}
+          to={`/dao/${dao?.chainID}/${dao?.daoID}/proposals/new/member`}
+        >
+          Apply
+        </Button>
+      );
+    } else if (
+      location.pathname === `/dao/${dao?.chainID}/${dao?.daoID}/bank` &&
+      address
+    ) {
+      <Button
+        as={RouterLink}
+        to={`/dao/${dao?.chainID}/${dao?.daoID}/proposals/new/whitelist`}
+        rightIcon={<RiAddFill />}
+      >
+        Add Asset
+      </Button>;
+    }
+  };
 
   return (
     <Flex direction='row' justify='space-between' p={6}>
@@ -105,43 +105,8 @@ const Header = ({ dao, daoMetaData }) => {
         >
           {getHeading()}
         </Box>
-        {/* {location.pathname === `/` && user && (
-            <Button as="a" href="https://3box.io/hub" target="_blank">
-              Edit 3Box Profile
-            </Button>
-          )}
-          {location.pathname === `/dao/${dao?.address}/proposals` && user && (
-            <Button
-              as={RouterLink}
-              to={`/dao/${dao?.address}/proposals/new`}
-              rightIcon={<RiAddFill />}
-            >
-              New {theme.daoMeta.proposal}
-            </Button>
-          )}
-          {location.pathname === `/dao/${dao?.address}/members` && user && (
-            <>
-              {memberWallet && !memberWallet.activeMember ? (
-                <Button
-                  as={RouterLink}
-                  to={`/dao/${dao?.address}/proposals/new/member`}
-                >
-                  Apply
-                </Button>
-              ) : null}
-            </>
-          )}
-          {location.pathname === `/dao/${dao?.address}/bank` && user && (
-            <Button
-              as={RouterLink}
-              to={`/dao/${dao?.address}/proposals/new/whitelist`}
-              rightIcon={<RiAddFill />}
-            >
-              Add Asset
-            </Button>
-          )} */}
+        {getHeaderElement()}
       </Flex>
-
       <Flex
         direction='row'
         justify='flex-end'
@@ -151,26 +116,74 @@ const Header = ({ dao, daoMetaData }) => {
         <Box fontSize='md' mr={5} as='i' fontWeight={200}>
           {injectedChain?.name}
         </Box>
-        {/* <ChainDisplay /> */}
 
         {address ? (
-          <>
-            <Button variant='outline' onClick={disconnectDapp}>
-              {/* <UserAvatar
-                user={
-                  Object.keys(user.profile).length === 0 ? user : user.profile
-                }
-                hideCopy={true}
-              /> */}
-            </Button>
-
-            {/* <AccountModal isOpen={modals.accountModal} /> */}
-          </>
+          <Button variant='outline' onClick={disconnectDapp}>
+            <UserAvatar copyEnabled={false} />
+          </Button>
         ) : (
-          <Web3SignIn />
+          <Button variant='outline' onClick={requestWallet}>
+            Connect Wallet
+          </Button>
+          // <Web3SignIn />
         )}
       </Flex>
     </Flex>
   );
 };
 export default Header;
+// const getTitle = () => {
+//   if (location.pathname === "/") {
+//     setPageTitle("Hub");
+//   } else if (location.pathname === `/explore`) {
+//     setPageTitle("Explore DAOs");
+//   } else if (location.pathname === `/dao/${dao?.address}`) {
+//     setPageTitle("Overview");
+//   } else if (location.pathname === `/dao/${dao?.address}/proposals`) {
+//     setPageTitle(theme.daoMeta.proposals);
+//     // TODO proposals id regex
+//   } else if (location.pathname === `/dao/${dao?.address}/proposals`) {
+//     setPageTitle(theme.daoMeta.proposals);
+//   } else if (
+//     location.pathname === `/dao/${dao?.address}/proposals/new/member`
+//   ) {
+//     setPageTitle(
+//       "New " + theme.daoMeta.member + " " + theme.daoMeta.proposal
+//     );
+//   } else if (location.pathname === `/dao/${dao?.address}/proposals/new`) {
+//     setPageTitle(`New ${theme.daoMeta.proposal}`);
+//   } else if (location.pathname === `/dao/${dao?.address}/members`) {
+//     setPageTitle(theme.daoMeta.members);
+//   } else if (location.pathname === `/dao/${dao?.address}/bank`) {
+//     setPageTitle(theme.daoMeta.bank);
+//   } else if (location.pathname === `/dao/${dao?.address}/settings`) {
+//     setPageTitle("Settings");
+//   } else if (location.pathname === `/dao/${dao?.address}/settings/meta`) {
+//     setPageTitle("Metadata");
+//   } else if (location.pathname === `/dao/${dao?.address}/settings/theme`) {
+//     setPageTitle("Theme");
+//   } else if (
+//     location.pathname === `/dao/${dao?.address}/settings/notifications`
+//   ) {
+//     setPageTitle("Notifications");
+//   } else if (location.pathname === `/dao/${dao?.address}/settings/boosts`) {
+//     setPageTitle(theme.daoMeta.boosts);
+//   } else if (
+//     location.pathname === `/dao/${dao?.address}/settings/boosts/new`
+//   ) {
+//     setPageTitle("New " + theme.daoMeta.boost);
+//   } else if (
+//     location.pathname === `/themeSample` ||
+//     location.pathname === `/theme`
+//   ) {
+//     setPageTitle("Theme Samples");
+//   } else if (
+//     location.pathname === `/dao/${dao?.address}/profile/${user?.username}`
+//   ) {
+//     setPageTitle(`${theme.daoMeta.member} Profile`);
+//   } else {
+//     // TODO pull from graph data
+//     setPageTitle(dao?.apiMeta?.name);
+//   }
+//   // eslint-disable-next-line react-hooks/exhaustive-deps
+// }
