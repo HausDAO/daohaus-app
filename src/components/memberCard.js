@@ -4,7 +4,7 @@ import { Avatar, Flex, Box, Skeleton } from '@chakra-ui/react';
 import { format } from 'date-fns';
 import { handleGetProfile } from '../utils/3box';
 
-const MemberCard = ({ member, selectMember }) => {
+const MemberCard = ({ member, selectMember, selectedMember }) => {
   const [memberData, setMemberData] = useState(null);
 
   // TODO how to know member is selected member?
@@ -40,7 +40,7 @@ const MemberCard = ({ member, selectMember }) => {
       align='center'
       pl={3}
       bg={
-        member // && member.memberAddress === address.toLowerCase()
+        selectedMember // && member.memberAddress === address.toLowerCase()
           ? 'primary.500'
           : null
       }
