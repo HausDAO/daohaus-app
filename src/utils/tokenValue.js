@@ -18,7 +18,7 @@ const fetchUniswapData = async () => {
   }
 };
 
-const fetchTokenData = async () => {
+export const fetchTokenData = async () => {
   try {
     const response = await fetch(tokenAPI);
     return response.json();
@@ -130,6 +130,22 @@ export const addContractVals = (tokens, chainID) => {
       };
     }),
   );
+};
+
+export const getTotalBankValue = (tokenBalances, prices) => {
+  return tokenBalances.reduce((sum, balance) => {
+    if (balance.guildBank) {
+      const price = prices[balance.token.tokenAddress.toLowerCase()]
+        ? prices[balance.token.tokenAddress.toLowerCase()].price
+        : 0;
+      const value =
+        (+balance.tokenBalance / 10 ** balance.token.decimals) * price;
+
+      return (sum += value);
+    } else {
+      return sum;
+    }
+  }, 0);
 };
 
 /// /////Caching Utils//////////////

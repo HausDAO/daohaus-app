@@ -93,3 +93,14 @@ export const supportedChains = {
 export const chainByID = (chainID) => supportedChains[chainID];
 export const getGraphEndpoint = (chainID, endpointType) =>
   chainByID(chainID)[endpointType];
+
+export const chainByNetworkId = (networkId) => {
+  const idMapping = {
+    1: supportedChains['0x1'],
+    4: supportedChains['0x4'],
+    42: supportedChains['0x2a'],
+    100: supportedChains['0x64'],
+  };
+
+  return idMapping[networkId];
+};
