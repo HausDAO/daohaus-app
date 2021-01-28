@@ -3,8 +3,9 @@ import { BANK_BALANCES } from '../graphQL/bank-queries';
 import { GET_TRANSMUTATION } from '../graphQL/boost-queries';
 import { DAO_ACTIVITIES, HOME_DAO } from '../graphQL/dao-queries';
 import { MEMBERS_LIST } from '../graphQL/member-queries';
-import { proposalResolver } from '../utils/resolvers';
+import { proposalResolver, daoResolver } from '../utils/resolvers';
 import { getGraphEndpoint } from '../utils/chain';
+import { fetchTokenData } from '../utils/tokenValue';
 import { omit } from './general';
 
 export const graphFetchAll = async (args, items = [], skip = 0) => {
@@ -197,6 +198,47 @@ export const hubChainQuery = async ({
         return {
           ...withResolvedProposals,
           meta: daoMapLookup(dao?.moloch?.id, chain.apiMatch),
+        };
+      });
+
+      reactSetter((prevState) => [
+        ...prevState,
+        { ...chain, data: withMetaData },
+      ]);
+    } catch (error) {
+      console.error(error);
+    }
+  });
+};
+
+export const exploreChainQuery = async ({
+  query,
+  supportedChains,
+  endpointType,
+  reactSetter,
+  apiFetcher,
+  variables,
+}) => {
+  const metaDataMap = await apiFetcher();
+  const prices = await fetchTokenData();
+
+  const daoMapLookup = (address, chainName) => {
+    const daoMatch = metaDataMap[address] || [];
+    return daoMatch.find((dao) => dao.network === chainName) || null;
+  };
+  buildCrossChainQuery(supportedChains, endpointType).forEach(async (chain) => {
+    try {
+      const chainData = await graphQuery({
+        endpoint: chain.endpoint,
+        query,
+        variables,
+      });
+
+      const withMetaData = chainData?.moloches.map((dao) => {
+        const withResolvedDao = daoResolver(dao, prices);
+        return {
+          ...withResolvedDao,
+          meta: daoMapLookup(dao?.id, chain.apiMatch),
         };
       });
 

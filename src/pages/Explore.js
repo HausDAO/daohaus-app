@@ -1,8 +1,13 @@
 import React from 'react';
 import Layout from '../components/layout';
+import { ExploreContextProvider } from '../contexts/ExploreContext';
 
 const Explore = () => {
-  return <Layout>Explore!</Layout>;
+  return (
+    <ExploreContextProvider>
+      <Layout>Explore!</Layout>
+    </ExploreContextProvider>
+  );
 };
 
 export default Explore;
