@@ -44,7 +44,6 @@ export const MolochService = ({ web3, daoAddress, version, chainID }) => {
             if (poll) {
               poll();
             }
-            console.log(txHash);
           })
           .on('error', (error) => {
             console.error(error);

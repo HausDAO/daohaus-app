@@ -127,7 +127,6 @@ export const linkMaker = (proposal) => {
   try {
     const parsed =
       IsJsonString(proposal.details) && JSON.parse(proposal.details);
-    console.log(parsed);
     return parsed.link || '';
   } catch (e) {
     return '';

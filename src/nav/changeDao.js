@@ -6,6 +6,7 @@ import {
   useBreakpointValue,
 } from '@chakra-ui/react';
 import { RiMenu3Line, RiArrowDropDownLine } from 'react-icons/ri';
+import DaoSwitcherModal from '../modals/daoSwitcherModal';
 // import DaoSwitcherModal from "../Modal/DaoSwitcherModal";
 // import { useModals } from "../../contexts/PokemolContext";
 
@@ -36,7 +37,7 @@ const ChangeDao = () => {
         />
       </Tooltip>
 
-      {/* <DaoSwitcherModal isOpen={modals.changeDao} /> */}
+      <DaoSwitcherModal />
     </>
   );
 };

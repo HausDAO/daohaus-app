@@ -18,11 +18,15 @@ const OverlayContext = createContext();
 export const OverlayProvider = ({ children }) => {
   const toast = useToast();
   const [modalContent, setModalContent] = useState(null);
+  const [modalType, setModalType] = useState('small');
   const { isOpen, onOpen, onClose } = useDisclosure();
 
-  const modalWithContent = (modalContent) => {
+  const modalWithContent = (modalType = 'small', modalContent) => {
     setModalContent(modalContent);
     onOpen();
+  };
+  const replaceModalContent = (modalContent) => {
+    setModalContent(modalContent);
   };
   const closeModal = () => {
     setModalContent(null);
@@ -58,11 +62,44 @@ export const OverlayProvider = ({ children }) => {
       isClosable: true,
     });
   };
+
+  const getModalBody = () => {
+    if (modalType === 'small') {
+      return (
+        <ModalContent
+          rounded='lg'
+          bg='black'
+          borderWidth='1px'
+          borderColor='whiteAlpha.200'
+        >
+          <ModalHeader>
+            <Box
+              fontFamily='heading'
+              textTransform='uppercase'
+              fontSize='sm'
+              fontWeight={700}
+              color='white'
+            >
+              {modalContent?.header ? modalContent.header : 'Header'}
+            </Box>
+          </ModalHeader>
+          <ModalBody>{modalContent?.body && modalContent.body}</ModalBody>;
+          <ModalCloseButton />
+          {getModalBody()}
+          {modalContent?.footer && <ModalFooter> modal.footer</ModalFooter>}
+        </ModalContent>
+      );
+    }
+  };
+
+  // GENERAL STRUCTURE OF modalContent state
+
   return (
     <OverlayContext.Provider
       value={{
         modalWithContent,
         closeModal,
+        replaceModalContent,
         errorToast,
         successToast,
         warningToast,
@@ -70,21 +107,6 @@ export const OverlayProvider = ({ children }) => {
     >
       <Modal isOpen={isOpen} onClose={onClose}>
         <ModalOverlay />
-        <ModalContent>
-          <ModalHeader>
-            {modalContent?.header ? modalContent.header : 'Header'}
-          </ModalHeader>
-          <ModalCloseButton />
-          <ModalBody>{modalContent?.body && modalContent.body}</ModalBody>
-          <ModalFooter>
-            <Button colorScheme='blue' mr={3} onClick={onClose}>
-              Close
-            </Button>
-            {modalContent?.secondaryBtn && (
-              <Button variant='ghost'>Secondary Action</Button>
-            )}
-          </ModalFooter>
-        </ModalContent>
       </Modal>
       {children}
     </OverlayContext.Provider>
