@@ -31,7 +31,7 @@ const proposalTest = (data, shouldEqual, pollId) => {
   }
 };
 // console.log("Poll Started");
-// console.log("GraphFetch:", graphFetch);
+// console.log("pollFetch:", pollFetch);
 // console.log("testFn:", testFn);
 // console.log("shouldEqual:", shouldEqual);
 // console.log("Args:", args);
@@ -39,12 +39,12 @@ const proposalTest = (data, shouldEqual, pollId) => {
 
 export const createPoll = ({ interval = 2000, tries = 20, action = null }) => {
   /// ////////////////////GENERIC POLL//////////////////
-  const startPoll = ({ graphFetch, testFn, shouldEqual, args, actions }) => {
+  const startPoll = ({ pollFetch, testFn, shouldEqual, args, actions }) => {
     let tryCount = 0;
     const pollId = setInterval(async () => {
       if (tryCount < tries) {
         try {
-          const res = await graphFetch(args);
+          const res = await pollFetch(args);
           const testResult = testFn(res, shouldEqual, pollId);
           if (testResult) {
             clearInterval(pollId);
@@ -72,7 +72,7 @@ export const createPoll = ({ interval = 2000, tries = 20, action = null }) => {
   } else if (action === 'submitProposal') {
     return ({ daoID, chainID, hash, actions }) => () =>
       startPoll({
-        graphFetch: pollProposals,
+        pollFetch: pollProposals,
         testFn: proposalTest,
         shouldEqual: hash,
         args: { daoID, chainID },

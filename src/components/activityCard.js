@@ -12,11 +12,11 @@ import {
 import makeBlockie from 'ethereum-blockies-base64';
 
 import { handleGetProfile } from '../utils/3box';
-import { timeToNow } from '../utils/general';
+import { timeToNow, truncateAddr } from '../utils/general';
 import ContentBox from './ContentBox';
 
 const handleName = (activity, profile) => {
-  return profile ? profile?.name : activity?.memberAddress;
+  return profile ? profile?.name : truncateAddr(activity?.memberAddress);
 };
 
 const handleAvatar = (activity, profile) => {

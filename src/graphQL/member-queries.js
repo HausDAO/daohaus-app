@@ -21,19 +21,20 @@ export const HUB_MEMBERSHIPS = gql`
     ) {
       id
       memberAddress
-      # networkId @client
-      # hubSort @client
       moloch {
         id
-        title
         version
         proposals(orderBy: proposalId, orderDirection: desc, first: 10) {
           id
           createdAt
           proposalId
           proposalIndex
+          proposer
           processed
+          processor
           sponsored
+          sponsor
+          sponsoredAt
           details
           newMember
           whitelist
@@ -48,10 +49,6 @@ export const HUB_MEMBERSHIPS = gql`
           molochVersion
           yesVotes
           noVotes
-          # proposalType @client
-          # description @client
-          # title @client
-          # activityFeed @client
           votes(where: { memberAddress: $memberAddress }) {
             id
             memberAddress

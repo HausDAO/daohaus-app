@@ -6,11 +6,10 @@ import {
   useBreakpointValue,
 } from '@chakra-ui/react';
 import { RiMenu3Line, RiArrowDropDownLine } from 'react-icons/ri';
-// import DaoSwitcherModal from "../Modal/DaoSwitcherModal";
-// import { useModals } from "../../contexts/PokemolContext";
+import { useOverlay } from '../contexts/OverlayContext';
 
 const ChangeDao = () => {
-  // const { modals, openModal } = useModals();
+  const { setDaoSwitcherModal } = useOverlay();
   const changeIcon = useBreakpointValue({
     base: <RiArrowDropDownLine />,
     sm: <RiArrowDropDownLine />,
@@ -18,6 +17,7 @@ const ChangeDao = () => {
     lg: <RiMenu3Line />,
   });
 
+  const toggleModal = () => setDaoSwitcherModal((prevState) => !prevState);
   return (
     <>
       <Tooltip
@@ -32,11 +32,9 @@ const ChangeDao = () => {
           variant='ghost'
           isRound='true'
           as={Link}
-          // onClick={() => openModal("changeDao")}
+          onClick={toggleModal}
         />
       </Tooltip>
-
-      {/* <DaoSwitcherModal isOpen={modals.changeDao} /> */}
     </>
   );
 };

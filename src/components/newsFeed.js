@@ -1,42 +1,49 @@
 import React, { useState, useEffect } from 'react';
-
-import ProposalPreview from './proposalPreview';
-
-import { useUser } from '../contexts/UserContext';
-import { parseIfJSON } from '../utils/general';
 import { Box } from '@chakra-ui/react';
 
-const combineAndSortProposals = (daosByNetwork) => {
-  return daosByNetwork
-    .reduce((arr, network) => {
-      return [
-        ...arr,
-        ...network.data.reduce((arr, dao) => {
-          return [
-            ...arr,
-            ...dao.moloch.proposals.map((proposal) => ({
-              ...proposal,
-              createdAt: parseInt(proposal.createdAt),
-              chain: network.name,
-              details: parseIfJSON(proposal.details),
-              name: dao.moloch.title,
-            })),
-          ];
-        }, []),
-      ];
-    }, [])
-    .sort((a, b) => b.createdAt - a.createdAt);
+import { useUser } from '../contexts/UserContext';
+import ActivitiesFeed from './activitiesFeed';
+import { getDaoActivites } from '../utils/activities';
+
+const combineDaoDataForHub = (userHubDaos) => {
+  return userHubDaos.reduce(
+    (activities, network) => {
+      network.data.forEach((dao) => {
+        activities.proposals = [
+          ...activities.proposals,
+          ...dao.moloch.proposals.filter((prop) => prop.activityFeed.unread),
+        ];
+        activities.rageQuits = [
+          ...activities.rageQuits,
+          ...dao.moloch.rageQuits.filter((rage) => {
+            // 1209600000 === 2 weeks
+            const now = (new Date() / 1000) | 0;
+            // return +rage.createdAt >= now - 1209600;
+            return +rage.createdAt >= now - 2419200;
+          }),
+        ];
+      });
+
+      return activities;
+    },
+    { proposals: [], rageQuits: [] },
+  );
 };
+
+// each dao - get unread props
 
 const NewsFeed = () => {
   const { userHubDaos, hasLoadedHubData } = useUser();
+  const [daoData, setDaoData] = useState(null);
 
-  const [newsFeed, setNewsFeed] = useState(null);
-  const [viewing] = useState({ from: 0, to: 9 });
+  console.log('userHubDaos', userHubDaos);
 
   useEffect(() => {
     if (hasLoadedHubData) {
-      setNewsFeed(combineAndSortProposals(userHubDaos));
+      const combo = combineDaoDataForHub(userHubDaos);
+
+      console.log('combo', combo);
+      setDaoData(combo);
     }
   }, [userHubDaos, hasLoadedHubData]);
 
@@ -50,10 +57,13 @@ const NewsFeed = () => {
       >
         Recent Activity
       </Box>
-      {newsFeed &&
-        newsFeed.slice(viewing.from, viewing.to + 1).map((proposal) => {
-          return <ProposalPreview proposal={proposal} key={proposal.id} />;
-        })}
+      {daoData ? (
+        <ActivitiesFeed
+          activities={daoData}
+          limit={7}
+          hydrateFn={getDaoActivites}
+        />
+      ) : null}
     </>
   );
 };
