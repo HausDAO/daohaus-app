@@ -243,10 +243,12 @@ export const exploreChainQuery = async ({
         };
       });
 
-      reactSetter((prevState) => [
-        ...prevState,
-        { ...chain, data: withMetaData },
-      ]);
+      reactSetter((prevState) => {
+        return {
+          chains: [...prevState.chains, chain],
+          data: [...prevState.data, ...withMetaData],
+        };
+      });
     } catch (error) {
       console.error(error);
     }
