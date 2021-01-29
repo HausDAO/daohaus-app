@@ -1,33 +1,14 @@
 import React, { createContext, useState, useContext } from 'react';
-import {
-  Modal,
-  ModalOverlay,
-  ModalContent,
-  ModalHeader,
-  ModalFooter,
-  ModalBody,
-  ModalCloseButton,
-  useToast,
-  Button,
-  // Lorem,
-  useDisclosure,
-} from '@chakra-ui/react';
+import { useToast } from '@chakra-ui/react';
 
 const OverlayContext = createContext();
 
 export const OverlayProvider = ({ children }) => {
   const toast = useToast();
-  const [modalContent, setModalContent] = useState(null);
-  const { isOpen, onOpen, onClose } = useDisclosure();
+  const [daoSwitcherModal, setDaoSwitcherModal] = useState(false);
+  const [hubAccountModal, setHubAccountModal] = useState(false);
+  const [daoAccountModal, setDaoAccountModal] = useState(true);
 
-  const modalWithContent = (modalContent) => {
-    setModalContent(modalContent);
-    onOpen();
-  };
-  const closeModal = () => {
-    setModalContent(null);
-    onClose();
-  };
   const errorToast = (content) => {
     toast({
       title: content.title,
@@ -58,34 +39,21 @@ export const OverlayProvider = ({ children }) => {
       isClosable: true,
     });
   };
+
   return (
     <OverlayContext.Provider
       value={{
-        modalWithContent,
-        closeModal,
+        daoSwitcherModal,
+        setDaoSwitcherModal,
+        hubAccountModal,
+        setHubAccountModal,
+        daoAccountModal,
+        setDaoAccountModal,
         errorToast,
         successToast,
         warningToast,
       }}
     >
-      <Modal isOpen={isOpen} onClose={onClose}>
-        <ModalOverlay />
-        <ModalContent>
-          <ModalHeader>
-            {modalContent?.header ? modalContent.header : 'Header'}
-          </ModalHeader>
-          <ModalCloseButton />
-          <ModalBody>{modalContent?.body && modalContent.body}</ModalBody>
-          <ModalFooter>
-            <Button colorScheme='blue' mr={3} onClick={onClose}>
-              Close
-            </Button>
-            {modalContent?.secondaryBtn && (
-              <Button variant='ghost'>Secondary Action</Button>
-            )}
-          </ModalFooter>
-        </ModalContent>
-      </Modal>
       {children}
     </OverlayContext.Provider>
   );
@@ -95,15 +63,23 @@ export default OverlayProvider;
 
 export const useOverlay = () => {
   const {
-    modalWithContent,
-    closeModal,
+    daoSwitcherModal,
+    setDaoSwitcherModal,
+    hubAccountModal,
+    setHubAccountModal,
+    daoAccountModal,
+    setDaoAccountModal,
     errorToast,
     successToast,
     warningToast,
   } = useContext(OverlayContext);
   return {
-    modalWithContent,
-    closeModal,
+    daoSwitcherModal,
+    setDaoSwitcherModal,
+    daoAccountModal,
+    setDaoAccountModal,
+    hubAccountModal,
+    setHubAccountModal,
     errorToast,
     successToast,
     warningToast,

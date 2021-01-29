@@ -8,8 +8,15 @@ import { DaoProvider } from './contexts/DaoContext';
 import Explore from './pages/Explore';
 import Summon from './pages/Summon';
 import { ExploreContextProvider } from './contexts/ExploreContext';
+import DaoSwitcherModal from './modals/daoSwitcherModal';
 
 function App() {
+  const AppScopedModals = () => (
+    <>
+      <DaoSwitcherModal />
+    </>
+  );
+
   return (
     <UserContextProvider>
       <Switch>
@@ -30,6 +37,7 @@ function App() {
           </DaoProvider>
         </Route>
       </Switch>
+      <AppScopedModals />
     </UserContextProvider>
   );
 }

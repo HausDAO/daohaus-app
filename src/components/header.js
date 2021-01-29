@@ -5,15 +5,12 @@ import { Box, Flex, Button } from '@chakra-ui/react';
 import { useInjectedProvider } from '../contexts/InjectedProviderContext';
 import { getCopy } from '../utils/metadata';
 import UserAvatar from './userAvatar';
+import { useOverlay } from '../contexts/OverlayContext';
 
 const Header = ({ dao }) => {
   const location = useLocation();
-  const {
-    injectedChain,
-    address,
-    requestWallet,
-    disconnectDapp,
-  } = useInjectedProvider();
+  const { setHubAccountModal, setDaoAccountModal } = useOverlay();
+  const { injectedChain, address, requestWallet } = useInjectedProvider();
 
   const getHeading = () => {
     switch (location.pathname) {
@@ -88,6 +85,14 @@ const Header = ({ dao }) => {
     }
   };
 
+  const toggleAccountModal = () => {
+    if (!dao) {
+      setHubAccountModal((prevState) => !prevState);
+    } else {
+      setDaoAccountModal((prevState) => !prevState);
+    }
+  };
+
   return (
     <Flex direction='row' justify='space-between' p={6}>
       <Flex
@@ -118,7 +123,7 @@ const Header = ({ dao }) => {
         </Box>
 
         {address ? (
-          <Button variant='outline' onClick={disconnectDapp}>
+          <Button variant='outline' onClick={toggleAccountModal}>
             <UserAvatar copyEnabled={false} />
           </Button>
         ) : (
