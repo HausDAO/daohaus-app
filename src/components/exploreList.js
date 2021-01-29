@@ -8,56 +8,51 @@ const ExploreList = () => {
   const { state, exploreDaos } = useContext(ExploreContext);
 
   useEffect(() => {
-    let searchedDaos;
-    if (state.searchTerm) {
-      searchedDaos = exploreDaos.data.filter((dao) => {
+    const filteredAndSortedDaos = exploreDaos.data
+      .filter((dao) => {
         if (!dao.meta) {
+          console.log('unregistered dao', dao);
           return false;
         }
 
-        return dao.meta.name.toLowerCase().indexOf(state.searchTerm) > -1;
-      });
-    } else {
-      searchedDaos = exploreDaos.data;
-    }
+        let searchMatch = true;
+        if (state.searchTerm) {
+          searchMatch =
+            dao.meta.name.toLowerCase().indexOf(state.searchTerm) > -1;
+        }
 
-    if (state.tags.length) {
-      searchedDaos = searchedDaos.filter((dao) => {
+        let tagMatch = true;
+        if (state.tags.length) {
+          tagMatch =
+            dao.meta?.tags.length &&
+            state.tags.some((tag) => dao.meta.tags.indexOf(tag) >= 0);
+        }
+
+        const memberCount =
+          dao.members.length > (state.filters.members[0] || 0);
+        const versionMatch = state.filters.version.includes(dao.version);
+        const purposeMatch = state.filters.purpose.includes(dao.meta.purpose);
+        const networkMatch = state.filters.network.includes(dao.networkId);
+
         return (
-          dao.meta?.tags.length &&
-          state.tags.some((tag) => dao.meta.tags.indexOf(tag) >= 0)
+          !dao.meta.hide &&
+          searchMatch &&
+          tagMatch &&
+          memberCount &&
+          versionMatch &&
+          purposeMatch &&
+          networkMatch
         );
+      })
+      .sort((a, b) => {
+        if (state.sort.count) {
+          return b[state.sort.value].length - a[state.sort.value].length;
+        } else {
+          return b[state.sort.value] - a[state.sort.value];
+        }
       });
-    }
 
-    const filteredDaos = searchedDaos.filter((dao) => {
-      if (!dao.meta) {
-        console.log('unregistered dao', dao);
-        return false;
-      }
-      const memberCount = dao.members.length > (state.filters.members[0] || 0);
-      const versionMatch = state.filters.version.includes(dao.version);
-      const purposeMatch = state.filters.purpose.includes(dao.meta.purpose);
-      const networkMatch = state.filters.network.includes(dao.networkId);
-
-      return (
-        !dao.meta.hide &&
-        memberCount &&
-        versionMatch &&
-        purposeMatch &&
-        networkMatch
-      );
-    });
-
-    const sortedDaos = filteredDaos.sort((a, b) => {
-      if (state.sort.count) {
-        return b[state.sort.value].length - a[state.sort.value].length;
-      } else {
-        return b[state.sort.value] - a[state.sort.value];
-      }
-    });
-
-    setDaos(sortedDaos);
+    setDaos(filteredAndSortedDaos);
   }, [state.sort, state.filters, state.searchTerm, state.tags]);
 
   const daoList = daos.map((dao, i) => {
