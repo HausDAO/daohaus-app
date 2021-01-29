@@ -23,6 +23,7 @@ import CustomThemeLaunch from './CustomThemeLaunch';
 import NewMinionForm from './NewMinionForm';
 import NotificationsLaunch from './NotificationsLaunch';
 import { useHistory } from 'react-router-dom';
+import DiscourseLaunch from './DiscourseLaunch';
 
 const BoostLaunchWrapper = ({ boost }) => {
   const [loading, setLoading] = useState(false);
@@ -51,6 +52,15 @@ const BoostLaunchWrapper = ({ boost }) => {
           />
         );
       }
+      case 'discourse': {
+        return (
+          <DiscourseLaunch
+            handleLaunch={handleLaunch}
+            loading={loading}
+            setLoading={setLoading}
+          />
+        );
+      }
       default: {
         return null;
       }
@@ -59,6 +69,8 @@ const BoostLaunchWrapper = ({ boost }) => {
 
   const handleLaunch = async (boostMetadata) => {
     setLoading(true);
+
+    console.log('boostMetadata', boostMetadata);
 
     const messageHash = web3Connect.web3.utils.sha3(dao.address);
     const signature = await web3Connect.web3.eth.personal.sign(
@@ -74,6 +86,8 @@ const BoostLaunchWrapper = ({ boost }) => {
       signature,
     };
 
+    console.log('updateThemeObject', updateThemeObject);
+
     const result = await boostPost('dao/boost', updateThemeObject);
     setLoading(false);
 
@@ -81,12 +95,14 @@ const BoostLaunchWrapper = ({ boost }) => {
       updateDaoMetadata({
         ...daoMetadata,
         boosts: {
-          ...daoMetadata,
+          ...daoMetadata.boosts,
           [boost.key]: { active: true, metadata: boostMetadata },
         },
       });
       closeModals();
-      history.push(`/dao/${dao.address}/settings/notifications`);
+
+      // TODO: send to boost specific based on boostkey and give next steps.
+      history.push(`/dao/${dao.address}/settings`);
     } else {
       alert('forbidden, are you an active dao member?');
     }

@@ -60,6 +60,10 @@ const Header = () => {
       location.pathname === `/dao/${dao?.address}/settings/notifications`
     ) {
       setPageTitle('Notifications');
+    } else if (
+      location.pathname === `/dao/${dao?.address}/settings/discourse`
+    ) {
+      setPageTitle('Discourse');
     } else if (location.pathname === `/dao/${dao?.address}/settings/boosts`) {
       setPageTitle(theme.daoMeta.boosts);
     } else if (

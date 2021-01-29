@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link as RouterLink } from 'react-router-dom';
-import { Flex, Icon } from '@chakra-ui/react';
+import { Flex, Icon, Link } from '@chakra-ui/react';
 import { VscGear } from 'react-icons/vsc';
 
 import { useDao, useMemberWallet } from '../../contexts/PokemolContext';
@@ -10,6 +10,8 @@ import TextBox from '../Shared/TextBox';
 const Superpowers = () => {
   const [dao] = useDao();
   const [memberWallet] = useMemberWallet();
+
+  console.log('dao', dao);
 
   return (
     <ContentBox
@@ -65,6 +67,28 @@ const Superpowers = () => {
                 Only Active Members can change manage this.
               </TextBox>
             )}
+          </Flex>
+        </Flex>
+      ) : null}
+
+      {dao?.boosts?.discourse?.active ? (
+        <Flex p={4} justify='space-between' align='center'>
+          <TextBox size='md' colorScheme='whiteAlpha.900'>
+            Discourse Forum
+          </TextBox>
+          <Flex align='center'>
+            <Link
+              href={`https://forum.daohaus.club/c/${dao.boosts.discourse.metadata.slug}/${dao.boosts.discourse.metadata.categoryId}`}
+              isExternal
+            >
+              <Icon
+                as={VscGear}
+                color='secondary.500'
+                w='25px'
+                h='25px'
+                mr={3}
+              />
+            </Link>
           </Flex>
         </Flex>
       ) : null}

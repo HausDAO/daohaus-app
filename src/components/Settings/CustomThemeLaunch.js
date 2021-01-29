@@ -46,7 +46,7 @@ const CustomThemeLaunch = () => {
     if (result === 'success') {
       updateDaoMetadata({
         ...daoMetadata,
-        boosts: { ...daoMetadata, customTheme: newTheme },
+        boosts: { ...daoMetadata.boosts, customTheme: newTheme },
       });
       setStep(2);
     } else {
