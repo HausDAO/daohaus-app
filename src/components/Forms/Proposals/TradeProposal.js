@@ -13,7 +13,6 @@ import {
   MenuList,
   MenuItem,
 } from '@chakra-ui/react';
-import { utils } from 'web3';
 import { RiAddFill, RiErrorWarningLine } from 'react-icons/ri';
 
 import {
@@ -29,6 +28,7 @@ import PaymentInput from '../Shared/PaymentInput';
 import TributeInput from '../Shared/TributeInput';
 import AddressInput from '../Shared/AddressInput';
 import { detailsToJSON } from '../../../utils/proposal-helper';
+import { valToDecimalString } from '../../../utils/helpers';
 
 const TradeProposalForm = () => {
   const [loading, setLoading] = useState(false);
@@ -98,11 +98,19 @@ const TradeProposalForm = () => {
         values.sharesRequested ? values.sharesRequested?.toString() : '0',
         values.lootRequested ? values.lootRequested?.toString() : '0',
         values.tributeOffered
-          ? utils.toWei(values.tributeOffered?.toString())
+          ? valToDecimalString(
+              values.tributeToken,
+              values.tributeToken || dao.graphData.depositToken.tokenAddress,
+              dao.graphData.tokenBalances,
+            )
           : '0',
         values.tributeToken || dao.graphData?.depositToken?.tokenAddress,
         values.paymentRequested
-          ? utils.toWei(values.paymentRequested?.toString())
+          ? valToDecimalString(
+              values.paymentRequested,
+              values.paymentToken || dao.graphData.depositToken.tokenAddress,
+              dao.graphData.tokenBalances,
+            )
           : '0',
         values.paymentToken || dao.graphData?.depositToken?.tokenAddress,
         details,

@@ -76,7 +76,7 @@ const TributeInput = ({ register, setValue, getValues }) => {
       return;
     }
     const amountApproved = await dao.daoService.token.unlocked(token);
-    const isUnlocked = amountApproved > amount;
+    const isUnlocked = +amountApproved > amount;
     setUnlocked(isUnlocked);
   };
 
