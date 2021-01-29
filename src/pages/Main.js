@@ -21,11 +21,13 @@ const Main = () => {
           <>
             <HubProfileCard address={address} />
             <NetworkList />
-            <NewsFeed />
           </>
         ) : (
           <HubSignedOut />
         )}
+      </Box>
+      <Box w={['100%', null, null, null, '40%']}>
+        <NewsFeed />
       </Box>
     </Flex>
   );

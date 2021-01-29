@@ -4,6 +4,7 @@ import ProposalPreview from './proposalPreview';
 
 import { useUser } from '../contexts/UserContext';
 import { parseIfJSON } from '../utils/general';
+import { Box } from '@chakra-ui/react';
 
 const combineAndSortProposals = (daosByNetwork) => {
   return daosByNetwork
@@ -40,13 +41,20 @@ const NewsFeed = () => {
   }, [userHubDaos, hasLoadedHubData]);
 
   return (
-    <div>
-      <h3 className='header'>Recent Activity:</h3>
+    <>
+      <Box
+        fontSize='md'
+        fontFamily='heading'
+        texttransform='uppercase'
+        fontWeight={700}
+      >
+        Recent Activity
+      </Box>
       {newsFeed &&
         newsFeed.slice(viewing.from, viewing.to + 1).map((proposal) => {
           return <ProposalPreview proposal={proposal} key={proposal.id} />;
         })}
-    </div>
+    </>
   );
 };
 
