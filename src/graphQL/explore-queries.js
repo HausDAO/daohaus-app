@@ -1,8 +1,5 @@
 import { gql } from 'apollo-boost';
 
-// guildBankValue @client
-// networkId @client
-
 export const EXPLORER_DAOS = gql`
   query moloches($skip: Int) {
     moloches(orderBy: summoningTime, first: 100, skip: $skip) {
@@ -12,8 +9,8 @@ export const EXPLORER_DAOS = gql`
       totalShares
       guildBankAddress
       summoningTime
+      summoner
       guildBankBalanceV1
-
       members(where: { exists: true }) {
         id
       }
