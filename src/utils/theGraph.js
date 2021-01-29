@@ -3,8 +3,9 @@ import { BANK_BALANCES } from '../graphQL/bank-queries';
 import { GET_TRANSMUTATION } from '../graphQL/boost-queries';
 import { DAO_ACTIVITIES, HOME_DAO } from '../graphQL/dao-queries';
 import { MEMBERS_LIST } from '../graphQL/member-queries';
-import { proposalResolver } from '../utils/resolvers';
+import { proposalResolver, daoResolver } from '../utils/resolvers';
 import { getGraphEndpoint } from '../utils/chain';
+import { fetchTokenData } from '../utils/tokenValue';
 import { omit } from './general';
 
 export const graphFetchAll = async (args, items = [], skip = 0) => {
@@ -18,6 +19,7 @@ export const graphFetchAll = async (args, items = [], skip = 0) => {
         skip,
       },
     });
+
     const newItems = result[subfield];
     if (newItems.length === 100) {
       return graphFetchAll(args, [...newItems, ...items], skip + 100);
@@ -150,6 +152,7 @@ const buildCrossChainQuery = (supportedChains, endpointType) => {
         name: supportedChains[chain].name,
         endpoint: supportedChains[chain][endpointType],
         networkID: chain,
+        network_id: supportedChains[chain].network_id,
         apiMatch: chain === '0x64' ? 'xdai' : supportedChains[chain].network,
       },
     ];
@@ -204,6 +207,48 @@ export const hubChainQuery = async ({
         ...prevState,
         { ...chain, data: withMetaData },
       ]);
+    } catch (error) {
+      console.error(error);
+    }
+  });
+};
+
+export const exploreChainQuery = async ({
+  query,
+  supportedChains,
+  endpointType,
+  reactSetter,
+  apiFetcher,
+}) => {
+  const metaDataMap = await apiFetcher();
+  const prices = await fetchTokenData();
+
+  const daoMapLookup = (address, chainName) => {
+    const daoMatch = metaDataMap[address] || [];
+    return daoMatch.find((dao) => dao.network === chainName) || null;
+  };
+  buildCrossChainQuery(supportedChains, endpointType).forEach(async (chain) => {
+    try {
+      const chainData = await graphFetchAll({
+        endpoint: chain.endpoint,
+        query,
+        subfield: 'moloches',
+      });
+
+      const withMetaData = chainData.map((dao) => {
+        const withResolvedDao = daoResolver(dao, { prices, chain });
+        return {
+          ...withResolvedDao,
+          meta: daoMapLookup(dao?.id, chain.apiMatch),
+        };
+      });
+
+      reactSetter((prevState) => {
+        return {
+          chains: [...prevState.chains, chain],
+          data: [...prevState.data, ...withMetaData],
+        };
+      });
     } catch (error) {
       console.error(error);
     }

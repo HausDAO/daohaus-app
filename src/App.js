@@ -7,6 +7,7 @@ import Dao from './pages/Dao';
 import { DaoProvider } from './contexts/DaoContext';
 import Explore from './pages/Explore';
 import Summon from './pages/Summon';
+import { ExploreContextProvider } from './contexts/ExploreContext';
 
 function App() {
   return (
@@ -16,7 +17,9 @@ function App() {
           <Hub />
         </Route>
         <Route exact path='/explore'>
-          <Explore />
+          <ExploreContextProvider>
+            <Explore />
+          </ExploreContextProvider>
         </Route>
         <Route exact path='/summon'>
           <Summon />
