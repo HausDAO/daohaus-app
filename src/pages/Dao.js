@@ -6,16 +6,28 @@ import { useDaoMember } from '../contexts/DaoMemberContext';
 
 import DaoRouter from '../routers/daoRouter';
 import { useMetaData } from '../contexts/MetaDataContext';
+import DaoAccountModal from '../modals/daoAccountModal';
 
 const Dao = () => {
   const { daoid, daochain } = useParams();
   const { daoMember } = useDaoMember();
   const { daoMetaData } = useMetaData();
 
+  const DaoScopedModals = () => (
+    <>
+      <DaoAccountModal />
+    </>
+  );
+
+  const dao = { daoID: daoid, chainID: daochain, daoMetaData, daoMember };
+
   return (
-    <Layout dao={{ daoID: daoid, chainID: daochain, daoMetaData, daoMember }}>
-      <DaoRouter />
-    </Layout>
+    <>
+      <Layout dao={dao}>
+        <DaoRouter />
+        <DaoScopedModals />
+      </Layout>
+    </>
   );
 };
 

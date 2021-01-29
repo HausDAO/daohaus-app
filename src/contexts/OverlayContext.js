@@ -1,37 +1,14 @@
 import React, { createContext, useState, useContext } from 'react';
-import {
-  Modal,
-  ModalOverlay,
-  ModalContent,
-  ModalHeader,
-  ModalFooter,
-  ModalBody,
-  ModalCloseButton,
-  useToast,
-  Button,
-  // Lorem,
-  useDisclosure,
-} from '@chakra-ui/react';
+import { useToast } from '@chakra-ui/react';
 
 const OverlayContext = createContext();
 
 export const OverlayProvider = ({ children }) => {
   const toast = useToast();
-  const [modalContent, setModalContent] = useState(null);
-  const [modalType, setModalType] = useState('small');
-  const { isOpen, onOpen, onClose } = useDisclosure();
+  const [daoSwitcherModal, setDaoSwitcherModal] = useState(false);
+  const [hubAccountModal, setHubAccountModal] = useState(false);
+  const [daoAccountModal, setDaoAccountModal] = useState(true);
 
-  const modalWithContent = (modalType = 'small', modalContent) => {
-    setModalContent(modalContent);
-    onOpen();
-  };
-  const replaceModalContent = (modalContent) => {
-    setModalContent(modalContent);
-  };
-  const closeModal = () => {
-    setModalContent(null);
-    onClose();
-  };
   const errorToast = (content) => {
     toast({
       title: content.title,
@@ -63,51 +40,20 @@ export const OverlayProvider = ({ children }) => {
     });
   };
 
-  const getModalBody = () => {
-    if (modalType === 'small') {
-      return (
-        <ModalContent
-          rounded='lg'
-          bg='black'
-          borderWidth='1px'
-          borderColor='whiteAlpha.200'
-        >
-          <ModalHeader>
-            <Box
-              fontFamily='heading'
-              textTransform='uppercase'
-              fontSize='sm'
-              fontWeight={700}
-              color='white'
-            >
-              {modalContent?.header ? modalContent.header : 'Header'}
-            </Box>
-          </ModalHeader>
-          <ModalBody>{modalContent?.body && modalContent.body}</ModalBody>;
-          <ModalCloseButton />
-          {getModalBody()}
-          {modalContent?.footer && <ModalFooter> modal.footer</ModalFooter>}
-        </ModalContent>
-      );
-    }
-  };
-
-  // GENERAL STRUCTURE OF modalContent state
-
   return (
     <OverlayContext.Provider
       value={{
-        modalWithContent,
-        closeModal,
-        replaceModalContent,
+        daoSwitcherModal,
+        setDaoSwitcherModal,
+        hubAccountModal,
+        setHubAccountModal,
+        daoAccountModal,
+        setDaoAccountModal,
         errorToast,
         successToast,
         warningToast,
       }}
     >
-      <Modal isOpen={isOpen} onClose={onClose}>
-        <ModalOverlay />
-      </Modal>
       {children}
     </OverlayContext.Provider>
   );
@@ -117,15 +63,23 @@ export default OverlayProvider;
 
 export const useOverlay = () => {
   const {
-    modalWithContent,
-    closeModal,
+    daoSwitcherModal,
+    setDaoSwitcherModal,
+    hubAccountModal,
+    setHubAccountModal,
+    daoAccountModal,
+    setDaoAccountModal,
     errorToast,
     successToast,
     warningToast,
   } = useContext(OverlayContext);
   return {
-    modalWithContent,
-    closeModal,
+    daoSwitcherModal,
+    setDaoSwitcherModal,
+    daoAccountModal,
+    setDaoAccountModal,
+    hubAccountModal,
+    setHubAccountModal,
     errorToast,
     successToast,
     warningToast,

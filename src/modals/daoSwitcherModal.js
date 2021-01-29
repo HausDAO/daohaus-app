@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import {
   Modal,
@@ -22,19 +22,29 @@ import { useUser } from '../contexts/UserContext';
 import { getDaosByNetwork } from '../utils/dao';
 import { useInjectedProvider } from '../contexts/InjectedProviderContext';
 import { themeImagePath } from '../utils/metadata';
+import { useOverlay } from '../contexts/OverlayContext';
 
 const DaoSwitcherModal = () => {
+  const { daoSwitcherModal, setDaoSwitcherModal } = useOverlay();
   const { userHubDaos } = useUser();
   const { injectedChain } = useInjectedProvider();
-
   const daosByNetwork =
     userHubDaos && injectedChain?.chainId
       ? getDaosByNetwork(userHubDaos, injectedChain.chainId)
       : {};
 
+  const handleClose = () => {
+    setDaoSwitcherModal(false);
+  };
+
   const renderDaoList = (network) =>
     network.data.map((dao) => (
-      <Link key={dao.id} to={`/dao/${network.networkID}/${dao.id}`}>
+      <Link
+        key={dao.id}
+        to={`/dao/${network.networkID}/${dao.meta?.contractAddress ||
+          dao.moloch?.id}`}
+        onClick={handleClose}
+      >
         <Flex
           direction='row'
           justifyContent='space-between'
@@ -86,28 +96,56 @@ const DaoSwitcherModal = () => {
     });
 
   return (
-    <>
-      <Link to='/'>
-        <Flex
-          direction='row'
-          justifyContent='space-between'
-          alignItems='center'
-          py={2}
-          borderBottom='1px solid'
-          borderColor='whiteAlpha.400'
+    <Modal isOpen={daoSwitcherModal} onClose={handleClose} isCentered>
+      <ModalOverlay />
+      <ModalContent
+        rounded='lg'
+        bg='black'
+        borderWidth='1px'
+        borderColor='whiteAlpha.200'
+      >
+        <ModalHeader>
+          <Box
+            fontFamily='heading'
+            textTransform='uppercase'
+            fontSize='sm'
+            fontWeight={700}
+            color='white'
+          >
+            Go to DAO
+          </Box>
+        </ModalHeader>
+        <ModalCloseButton color='white' />
+        <ModalBody
+          flexDirection='column'
+          display='flex'
+          maxH='300px'
+          overflowY='scroll'
         >
-          <Flex direction='row' justify='flex-start' alignItems='center'>
-            <Image src={BrandImg} w='50px' mr='10px' />
-            <Box color='white'>Hub</Box>
-          </Flex>
-          <RiArrowRightSLine color='white' />
-        </Flex>
-      </Link>
-      Current Network:
-      {userHubDaos ? <>{renderCurrentNetwork()}</> : <Spinner />}
-      Other Networks:
-      {userHubDaos ? <>{renderOtherNetworks()}</> : <Spinner />}
-    </>
+          <Link to='/' onClick={handleClose}>
+            <Flex
+              direction='row'
+              justifyContent='space-between'
+              alignItems='center'
+              py={2}
+              mb={3}
+              borderBottom='1px solid'
+              borderColor='whiteAlpha.400'
+            >
+              <Flex direction='row' justify='flex-start' alignItems='center'>
+                <Image src={BrandImg} w='50px' mr='10px' />
+                <Box color='white'>Hub</Box>
+              </Flex>
+              <RiArrowRightSLine color='white' />
+            </Flex>
+          </Link>
+          Current Network:
+          {userHubDaos ? <>{renderCurrentNetwork()}</> : <Spinner />}
+          Other Networks:
+          {userHubDaos ? <>{renderOtherNetworks()}</> : <Spinner />}
+        </ModalBody>
+      </ModalContent>
+    </Modal>
   );
 };
 
