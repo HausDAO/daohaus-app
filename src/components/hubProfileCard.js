@@ -2,13 +2,11 @@ import React, { useEffect, useState } from 'react';
 import { Flex, Box, Image } from '@chakra-ui/react';
 import makeBlockie from 'ethereum-blockies-base64';
 
-import { useInjectedProvider } from '../contexts/InjectedProviderContext';
 import { handleGetProfile } from '../utils/3box';
 import { truncateAddr } from '../utils/general';
 
-const HubProfileCard = () => {
+const HubProfileCard = ({ address }) => {
   const [profile, setProfile] = useState(null);
-  const { address } = useInjectedProvider();
 
   useEffect(() => {
     const getProfile = async () => {
