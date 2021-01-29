@@ -42,7 +42,6 @@ export const themeImagePath = (imageValue) => {
   }
 
   if (imageValue.slice(0, 2) === 'Qm') {
-    // https://ipfs.infura.io/ipfs
     return `https://gateway.pinata.cloud/ipfs/${imageValue}`;
   }
 };

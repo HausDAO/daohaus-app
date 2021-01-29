@@ -8,13 +8,9 @@ const ExploreList = () => {
   const { state, exploreDaos } = useContext(ExploreContext);
 
   useEffect(() => {
-    const allDaos = exploreDaos.flatMap((network) => {
-      return network.data;
-    });
-
     let searchedDaos;
     if (state.searchTerm) {
-      searchedDaos = allDaos.filter((dao) => {
+      searchedDaos = exploreDaos.data.filter((dao) => {
         if (!dao.meta) {
           return false;
         }
@@ -22,7 +18,7 @@ const ExploreList = () => {
         return dao.meta.name.toLowerCase().indexOf(state.searchTerm) > -1;
       });
     } else {
-      searchedDaos = allDaos;
+      searchedDaos = exploreDaos.data;
     }
 
     if (state.tags.length) {
@@ -62,8 +58,6 @@ const ExploreList = () => {
     });
 
     setDaos(sortedDaos);
-
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [state.sort, state.filters, state.searchTerm, state.tags]);
 
   const daoList = daos.map((dao, i) => {

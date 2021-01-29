@@ -72,13 +72,16 @@ const reducer = (state, action) => {
 };
 
 export const ExploreContextProvider = ({ children }) => {
-  const [exploreDaos, setExploreDaos] = useSessionStorage('exploreDaoData', []);
+  const [exploreDaos, setExploreDaos] = useSessionStorage('exploreDaoData', {
+    chains: [],
+    data: [],
+  });
   const [state, dispatch] = React.useReducer(reducer, initialState);
 
-  const hasLoadedExploreData = exploreDaos.length === 4;
+  const hasLoadedExploreData = exploreDaos.chains.length === 4;
 
   useEffect(() => {
-    if (!exploreDaos.length) {
+    if (!exploreDaos.chains.length) {
       exploreChainQuery({
         query: EXPLORER_DAOS,
         supportedChains,
