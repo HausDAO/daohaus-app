@@ -1,5 +1,5 @@
-import { anyToBN } from '@netgum/utils';
 import { formatDistanceToNow, format } from 'date-fns';
+import { ethers } from 'ethers';
 import { utils } from 'web3';
 
 import { supportedChains } from './chains';
@@ -25,18 +25,29 @@ export const proposalDetails = (details) => {
 export const valToDecimalString = (value, tokenAddress, tokens) => {
   // get correct value of token with decimal places
   // returns a string
+  const scaleFactor = 10;
+  const perc = 10 ** scaleFactor;
 
-  const tdata = tokens.find((token) => token.value === tokenAddress);
-  if (value >= 1000) {
-    const decimals = anyToBN(tdata.decimals);
-    const exp = anyToBN(10).pow(decimals);
+  const tdata = tokens.find(
+    (token) => token.token.tokenAddress === tokenAddress,
+  );
+  const exp = ethers.BigNumber.from(10).pow(
+    ethers.BigNumber.from(tdata.token.decimals),
+  );
 
-    return anyToBN(value)
+  if (value >= perc) {
+    return ethers.BigNumber.from(value)
       .mul(exp)
       .toString();
   } else {
-    return (value * 10 ** tdata.decimals).toString();
+    value = value * perc;
+
+    return ethers.BigNumber.from(value)
+      .mul(exp)
+      .div(ethers.BigNumber.from(perc))
+      .toString();
   }
+
 };
 
 export const formatCreatedAt = (createdAt) => {

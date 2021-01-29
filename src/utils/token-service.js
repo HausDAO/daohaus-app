@@ -1,6 +1,6 @@
 import Erc20Abi from '../contracts/erc20a.json';
 import Erc20Bytes32Abi from '../contracts/erc20Bytes32.json';
-
+import { MaxUint256 } from '@ethersproject/constants'
 export class TokenService {
   web3;
   contract;
@@ -129,18 +129,9 @@ export class Web3TokenService extends TokenService {
       return;
     }
     const contract = new this.web3.eth.Contract(Erc20Abi, token);
-    // should be (2^256)-1
-    let max = this.web3.utils.toBN(2).pow(this.web3.utils.toBN(255));
-    if (
-      token.toLowerCase() ===
-      '0x1f9840a85d5aF5bf1D1762F925BDADdC4201F984'.toLowerCase()
-    ) {
-      console.log('uni approve all');
-      max = '10000000000000000000000000';
-    }
 
     const txReceipt = await contract.methods
-      .approve(this.daoAddress, max.toString())
+      .approve(this.daoAddress, MaxUint256)
       .send({ from: this.accountAddress });
 
     return txReceipt.transactionHash;
@@ -154,9 +145,8 @@ export class Web3TokenService extends TokenService {
     if (token === '0x000000000000000') {
       return 0;
     }
-    console.log('token', token);
+
     const contract = new this.web3.eth.Contract(Erc20Abi, token);
-    console.log('contract', contract);
     const allowance = await contract.methods
       .allowance(accountAddr, contractAddr)
       .call();
