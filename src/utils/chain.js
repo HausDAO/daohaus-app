@@ -4,9 +4,8 @@ export const supportedChains = {
     short_name: 'eth',
     chain: 'ETH',
     network: 'mainnet',
-
-    chain_id: 1,
     network_id: 1,
+    chain_id: '0x1',
     providers: ['walletconnect', 'portis', 'fortmatic'],
     rpc_url: `https://mainnet.infura.io/v3/${process.env.REACT_APP_INFURA_PROJECT_ID}`,
     abi_api_url:
@@ -28,8 +27,8 @@ export const supportedChains = {
     short_name: 'rin',
     chain: 'ETH',
     network: 'rinkeby',
-    chain_id: 4,
     network_id: 4,
+    chain_id: '0x4',
     providers: ['walletconnect', 'portis', 'fortmatic'],
     rpc_url: `https://rinkeby.infura.io/v3/${process.env.REACT_APP_INFURA_PROJECT_ID}`,
     abi_api_url:
@@ -49,8 +48,8 @@ export const supportedChains = {
     short_name: 'kov',
     chain: 'ETH',
     network: 'kovan',
-    chain_id: 42,
     network_id: 42,
+    chain_id: '0x2a',
     providers: ['walletconnect', 'portis', 'fortmatic'],
     rpc_url: `https://kovan.infura.io/v3/${process.env.REACT_APP_INFURA_PROJECT_ID}`,
     abi_api_url:
@@ -69,9 +68,9 @@ export const supportedChains = {
     name: 'xDAI Chain',
     short_name: 'xdai',
     chain: 'xDAI',
-    network: 'mainnet',
-    chain_id: 100,
-    network_id: 1,
+    network: 'xdai',
+    network_id: 100,
+    chain_id: '0x64',
     providers: ['walletconnect', 'portis'],
     rpc_url: 'https://dai.poa.network',
     abi_api_url:
@@ -103,4 +102,12 @@ export const chainByNetworkId = (networkId) => {
   };
 
   return idMapping[networkId];
+};
+
+export const chainByName = (networkName) => {
+  const networkKey = Object.keys(supportedChains).find((chainId) => {
+    return supportedChains[chainId].network === networkName;
+  });
+
+  return supportedChains[networkKey];
 };

@@ -1,9 +1,6 @@
 import React, { useEffect, useContext } from 'react';
 
-// import NewsFeed from '../components/newsFeed';
-// import NetworkList from '../components/networkList';
 import Layout from '../components/layout';
-// import HubRouter from '../routers/hubRouter';
 import { CustomThemeContext } from '../contexts/CustomThemeContext';
 import HubAccountModal from '../modals/hubAccountModal';
 import { defaultHubData } from '../utils/navLinks';

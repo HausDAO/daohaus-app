@@ -17,7 +17,7 @@ import { useOverlay } from '../contexts/OverlayContext';
 import { useDaoMember } from '../contexts/DaoMemberContext';
 import MemberInfoGuts from '../components/memberInfoGuts';
 import { useInjectedProvider } from '../contexts/InjectedProviderContext';
-import RenderTxList from '../components/renderTxList';
+// import RenderTxList from '../components/renderTxList';
 
 const DaoAccountModal = () => {
   const { daoAccountModal, setDaoAccountModal } = useOverlay();

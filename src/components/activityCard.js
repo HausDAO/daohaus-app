@@ -12,11 +12,12 @@ import {
 import makeBlockie from 'ethereum-blockies-base64';
 
 import { handleGetProfile } from '../utils/3box';
-import { timeToNow } from '../utils/general';
+import { timeToNow, truncateAddr } from '../utils/general';
 import ContentBox from './ContentBox';
+import { chainByName } from '../utils/chain';
 
 const handleName = (activity, profile) => {
-  return profile ? profile?.name : activity?.memberAddress;
+  return profile ? profile?.name : truncateAddr(activity?.memberAddress);
 };
 
 const handleAvatar = (activity, profile) => {
@@ -109,18 +110,31 @@ const ActivityCard = ({ activity, displayAvatar }) => {
   //   statusBadge: String,
   //   rageBadge: String
   //   status: String
+  //   daoData: Object (dao meta from api, only on hub cards)
   // }
   const name = handleName(activity, profile);
+  const chain = daochain || chainByName(activity.daoData.network).chain_id;
+  const daoAddress = daoid || activity.daoData.contractAddress;
   return (
     <ContentBox mt={3}>
       <Skeleton isLoaded={activity}>
+        {activity.daoData ? (
+          <Flex direction='row' justifyContent='space-between' mb={5}>
+            <Heading size='xs' fontFamily='mono'>
+              {activity.daoData.name}
+            </Heading>
+            <Badge mr={2} variant='outline'>
+              {chainByName(activity.daoData.network).network}
+            </Badge>
+          </Flex>
+        ) : null}
         <Flex direction='row' justifyContent='space-between'>
           <Flex direction='column'>
             {activity?.title && (
               <RouterLink
                 to={
                   activity?.activityData?.type !== 'rage'
-                    ? `/dao/${daochain}/${daoid}/proposals/${activity.proposalId}`
+                    ? `/dao/${chain}/${daoAddress}/proposals/${activity.proposalId}`
                     : '#'
                 }
               >
@@ -158,7 +172,7 @@ const ActivityCard = ({ activity, displayAvatar }) => {
             as={RouterLink}
             to={
               activity?.activityData
-                ? `/dao/${daochain}/${daoid}/profile/${activity.activityData.memberAddress}`
+                ? `/dao/${chain}/${daoAddress}/profile/${activity.activityData.memberAddress}`
                 : ''
             }
           >

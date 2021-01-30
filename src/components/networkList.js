@@ -1,47 +1,81 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 
-import NetworkDaoList from '../components/NetworkDaoList';
+import NetworkDaoList from './networkDaoList';
 
 import { useUser } from '../contexts/UserContext';
 import { useInjectedProvider } from '../contexts/InjectedProviderContext';
+import ContentBox from './ContentBox';
+import {
+  Accordion,
+  AccordionItem,
+  Box,
+  Flex,
+  Input,
+  Text,
+} from '@chakra-ui/react';
+import TextBox from './TextBox';
 
 const NetworkList = () => {
   const { userHubDaos } = useUser();
   const { injectedProvider } = useInjectedProvider();
   const provider = injectedProvider?.currentProvider;
+  const [searchTerm, setSearchTerm] = useState();
+  const [sortedDaos, setSortedDaos] = useState({});
 
-  const currentNetwork = userHubDaos.find(
-    (dao) => dao.networkID === provider?.chainId,
-  );
-  const otherNetworks = userHubDaos.filter(
-    (dao) => dao.networkID !== provider?.chainId,
-  );
+  useEffect(() => {
+    const currentNetwork = userHubDaos.find(
+      (dao) => dao.networkID === provider?.chainId,
+    );
+    const otherNetworks = userHubDaos
+      .filter((dao) => dao.networkID !== provider?.chainId)
+      .sort((a, b) =>
+        a.networkID === '0x64' ? -1 : a.network_id - b.network_id,
+      );
+    const count = userHubDaos.reduce((sum, network) => {
+      sum += network.data.length;
+      return sum;
+    }, 0);
+    setSortedDaos({ currentNetwork, otherNetworks, count });
+  }, []);
+
+  const handleChange = (event) => {
+    setSearchTerm(event.target.value);
+  };
 
   return (
-    <div>
-      {currentNetwork && (
+    <ContentBox p={6} mt={6} maxW='600px'>
+      <Flex justify='space-between' alignItems='center' mb={6}>
+        <TextBox size='xs'>
+          Member of {sortedDaos?.count || 0} DAO{sortedDaos?.count > 1 && 's'}
+        </TextBox>
+        <Input
+          type='search'
+          className='input'
+          placeholder='Search My Daos'
+          maxW={300}
+          onChange={(e) => handleChange(e)}
+        />
+      </Flex>
+      {sortedDaos.currentNetwork && (
         <>
-          <h3 className='network-header'>Current Network: </h3>
-          <p className='label'>{currentNetwork.name}</p>
           <NetworkDaoList
-            data={currentNetwork.data}
-            networkID={currentNetwork.networkID}
+            data={sortedDaos.currentNetwork.data}
+            network={sortedDaos.currentNetwork}
+            searchTerm={searchTerm}
           />
         </>
       )}
-      {otherNetworks.length > 0 && (
+      {sortedDaos.otherNetworks?.length > 0 && (
         <>
-          <h3 className='network-header'>Other Networks: </h3>
-          {otherNetworks.map((network) => {
+          {sortedDaos.otherNetworks.map((network) => {
             if (network.data.length) {
               return (
-                <div key={network.networkID}>
-                  <p className='label'>{network.name}</p>
-                  <NetworkDaoList
-                    data={network.data}
-                    networkID={network.networkID}
-                  />
-                </div>
+                <NetworkDaoList
+                  data={network.data}
+                  network={network}
+                  searchTerm={searchTerm}
+                  key={network.network_id}
+                />
               );
             } else {
               return null;
@@ -49,7 +83,7 @@ const NetworkList = () => {
           })}
         </>
       )}
-    </div>
+    </ContentBox>
   );
 };
 
