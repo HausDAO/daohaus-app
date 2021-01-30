@@ -1,52 +1,31 @@
 import React, { useState, useEffect } from 'react';
-
-import ProposalPreview from './proposalPreview';
+import { Box } from '@chakra-ui/react';
 
 import { useUser } from '../contexts/UserContext';
-import { parseIfJSON } from '../utils/general';
-
-const combineAndSortProposals = (daosByNetwork) => {
-  return daosByNetwork
-    .reduce((arr, network) => {
-      return [
-        ...arr,
-        ...network.data.reduce((arr, dao) => {
-          return [
-            ...arr,
-            ...dao.moloch.proposals.map((proposal) => ({
-              ...proposal,
-              createdAt: parseInt(proposal.createdAt),
-              chain: network.name,
-              details: parseIfJSON(proposal.details),
-              name: dao.moloch.title,
-            })),
-          ];
-        }, []),
-      ];
-    }, [])
-    .sort((a, b) => b.createdAt - a.createdAt);
-};
+import ActivitiesFeed from './activitiesFeed';
+import { getDaoActivites } from '../utils/activities';
+import { combineDaoDataForHub } from '../utils/dao';
 
 const NewsFeed = () => {
   const { userHubDaos, hasLoadedHubData } = useUser();
-
-  const [newsFeed, setNewsFeed] = useState(null);
-  const [viewing] = useState({ from: 0, to: 9 });
+  const [daoData, setDaoData] = useState(null);
 
   useEffect(() => {
     if (hasLoadedHubData) {
-      setNewsFeed(combineAndSortProposals(userHubDaos));
+      setDaoData(combineDaoDataForHub(userHubDaos));
     }
   }, [userHubDaos, hasLoadedHubData]);
 
   return (
-    <div>
-      <h3 className='header'>Recent Activity:</h3>
-      {newsFeed &&
-        newsFeed.slice(viewing.from, viewing.to + 1).map((proposal) => {
-          return <ProposalPreview proposal={proposal} key={proposal.id} />;
-        })}
-    </div>
+    <>
+      {daoData ? (
+        <ActivitiesFeed
+          activities={daoData}
+          limit={7}
+          hydrateFn={getDaoActivites}
+        />
+      ) : null}
+    </>
   );
 };
 

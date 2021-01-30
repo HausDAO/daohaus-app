@@ -41,7 +41,12 @@ const Header = ({ dao }) => {
   const getHeaderElement = () => {
     if (location.pathname === `/` && address) {
       return (
-        <Button as='a' href='https://3box.io/hub' target='_blank'>
+        <Button
+          as='a'
+          href='https://3box.io/hub'
+          target='_blank'
+          variant='outline'
+        >
           Edit 3Box Profile
         </Button>
       );
