@@ -7,7 +7,7 @@ export const OverlayProvider = ({ children }) => {
   const toast = useToast();
   const [daoSwitcherModal, setDaoSwitcherModal] = useState(false);
   const [hubAccountModal, setHubAccountModal] = useState(false);
-  const [daoAccountModal, setDaoAccountModal] = useState(true);
+  const [daoAccountModal, setDaoAccountModal] = useState(false);
 
   const errorToast = (content) => {
     toast({

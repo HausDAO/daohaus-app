@@ -13,6 +13,7 @@ import {
 import HubProfileCard from '../components/hubProfileCard';
 import { useOverlay } from '../contexts/OverlayContext';
 import { useInjectedProvider } from '../contexts/InjectedProviderContext';
+import TxList from '../components/TxList';
 
 const HubAccountModal = () => {
   const { disconnectDapp, requestWallet } = useInjectedProvider();
@@ -61,7 +62,7 @@ const HubAccountModal = () => {
           <Text fontSize='l' fontFamily='heading'>
             Transactions <span>will show here</span>
           </Text>
-          {/* <RenderTxList /> */}
+          <TxList />
         </ModalBody>
       </ModalContent>
     </Modal>

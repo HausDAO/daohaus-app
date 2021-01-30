@@ -17,7 +17,7 @@ import { useOverlay } from '../contexts/OverlayContext';
 import { useDaoMember } from '../contexts/DaoMemberContext';
 import MemberInfoGuts from '../components/memberInfoGuts';
 import { useInjectedProvider } from '../contexts/InjectedProviderContext';
-import RenderTxList from '../components/renderTxList';
+import TxList from '../components/TxList';
 
 const DaoAccountModal = () => {
   const { daoAccountModal, setDaoAccountModal } = useOverlay();
@@ -110,7 +110,7 @@ const DaoAccountModal = () => {
               Transactions <span>will show here</span>
             </Text>
           </Box>
-          {/* <RenderTxList /> */}
+          <TxList />
         </ModalBody>
       </ModalContent>
     </Modal>
