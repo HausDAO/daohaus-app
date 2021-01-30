@@ -36,6 +36,8 @@ const handleProposal = (proposal) => {
       createdAt: proposal.sponsoredAt,
       statusBadge: 'processed',
       memberAddress: proposal.processor,
+      proposalId: proposal.proposalId,
+      daoData: proposal.daoData,
     };
   } else if (proposal.sponsored) {
     return {
@@ -43,6 +45,8 @@ const handleProposal = (proposal) => {
       createdAt: proposal.sponsoredAt,
       statusBadge: 'sponsored',
       memberAddress: proposal.sponsor,
+      proposalId: proposal.proposalId,
+      daoData: proposal.daoData,
     };
   } else {
     return {
@@ -50,6 +54,8 @@ const handleProposal = (proposal) => {
       createdAt: proposal.createdAt,
       statusBadge: 'submitted',
       memberAddress: proposal.proposer,
+      proposalId: proposal.proposalId,
+      daoData: proposal.daoData,
     };
   }
 };
@@ -66,6 +72,7 @@ const handleRQ = (rq) => ({
   title: `quit ${rq.shares} shares and ${rq.loot} loot`,
   rageBadge: 'Rage Quit',
   createdAt: rq.createdAt,
+  daoData: rq.daoData,
 });
 
 const buildProposalHistory = (proposal) => {
