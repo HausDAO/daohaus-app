@@ -42,7 +42,7 @@ export const MolochService = ({ web3, daoAddress, version, chainID }) => {
           .send('eth_requestAccounts', { from })
           .on('transactionHash', (txHash) => {
             if (poll) {
-              poll();
+              poll(txHash);
             }
           })
           .on('error', (error) => {

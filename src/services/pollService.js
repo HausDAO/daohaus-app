@@ -16,11 +16,10 @@ const pollProposals = async ({ daoID, chainID }) =>
 
 /// //////////TESTS///////////////
 const proposalTest = (data, shouldEqual, pollId) => {
-  console.log(data);
   if (data.proposals) {
-    const recentProposalHashes = data.proposals
-      .slice(0, 10)
-      .map((proposal) => hashMaker(proposal));
+    const recentProposalHashes = data.proposals.map((proposal) =>
+      hashMaker(proposal),
+    );
     console.log(recentProposalHashes);
     return recentProposalHashes.includes(shouldEqual);
   } else {
@@ -30,16 +29,30 @@ const proposalTest = (data, shouldEqual, pollId) => {
     );
   }
 };
-// console.log("Poll Started");
-// console.log("pollFetch:", pollFetch);
-// console.log("testFn:", testFn);
-// console.log("shouldEqual:", shouldEqual);
-// console.log("Args:", args);
-// console.log("Actions:", actions);
 
-export const createPoll = ({ interval = 2000, tries = 20, action = null }) => {
+export const createPoll = ({
+  interval = 2000,
+  tries = 20,
+  action = null,
+  cachePoll = null,
+}) => {
   /// ////////////////////GENERIC POLL//////////////////
-  const startPoll = ({ pollFetch, testFn, shouldEqual, args, actions }) => {
+  const startPoll = ({
+    pollFetch,
+    testFn,
+    shouldEqual,
+    args,
+    actions,
+    txHash,
+  }) => {
+    // console.log('Poll Started');
+    // console.log('pollFetch:', pollFetch);
+    // console.log('testFn:', testFn);
+    // console.log('shouldEqual:', shouldEqual);
+    // console.log('Args:', args);
+    // console.log('Actions:', actions);
+    // console.log('TX-Hash', txHash);
+
     let tryCount = 0;
     const pollId = setInterval(async () => {
       if (tryCount < tries) {
@@ -48,18 +61,18 @@ export const createPoll = ({ interval = 2000, tries = 20, action = null }) => {
           const testResult = testFn(res, shouldEqual, pollId);
           if (testResult) {
             clearInterval(pollId);
-            actions.onSuccess();
+            actions.onSuccess(txHash);
             return res;
           } else {
             tryCount++;
           }
         } catch (error) {
           console.error(error);
-          actions.onError(error);
+          actions.onError(error, txHash);
           clearInterval(pollId);
         }
       } else {
-        actions.onError('Ran out of tries');
+        actions.onError('Ran out of tries', txHash);
         clearInterval(pollId);
       }
     }, interval);
@@ -70,13 +83,36 @@ export const createPoll = ({ interval = 2000, tries = 20, action = null }) => {
   if (!action) {
     throw new Error('User must submit an action argument');
   } else if (action === 'submitProposal') {
-    return ({ daoID, chainID, hash, actions }) => () =>
+    return ({ daoID, chainID, hash, actions }) => (txHash) => {
       startPoll({
         pollFetch: pollProposals,
         testFn: proposalTest,
         shouldEqual: hash,
         args: { daoID, chainID },
         actions,
+        txHash,
       });
+      if (cachePoll) {
+        cachePoll({
+          txHash,
+          timeSent: Date.now(),
+          status: 'unresolved',
+          resolvedMsg: `Submitted proposal`,
+          unresolvedMsg: `Submitting proposal`,
+          successMsg: `Proposal Submitted to ${daoID} on ${chainID}`,
+          errorMsg: `Error Submitting proposal ${daoID} on ${chainID}`,
+          pollData: {
+            action,
+            interval,
+            tries,
+          },
+          pollArgs: {
+            daoID,
+            chainID,
+            hash,
+          },
+        });
+      }
+    };
   }
 };
