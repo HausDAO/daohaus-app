@@ -1,18 +1,10 @@
 import React, { useEffect, useState } from 'react';
+import { Flex, Input } from '@chakra-ui/react';
 
 import NetworkDaoList from './networkDaoList';
-
 import { useUser } from '../contexts/UserContext';
 import { useInjectedProvider } from '../contexts/InjectedProviderContext';
 import ContentBox from './ContentBox';
-import {
-  Accordion,
-  AccordionItem,
-  Box,
-  Flex,
-  Input,
-  Text,
-} from '@chakra-ui/react';
 import TextBox from './TextBox';
 
 const NetworkList = () => {
@@ -36,7 +28,7 @@ const NetworkList = () => {
       return sum;
     }, 0);
     setSortedDaos({ currentNetwork, otherNetworks, count });
-  }, []);
+  }, [userHubDaos]);
 
   const handleChange = (event) => {
     setSearchTerm(event.target.value);
@@ -67,7 +59,7 @@ const NetworkList = () => {
       )}
       {sortedDaos.otherNetworks?.length > 0 && (
         <>
-          {sortedDaos.otherNetworks.map((network) => {
+          {sortedDaos.otherNetworks.map((network, i) => {
             if (network.data.length) {
               return (
                 <NetworkDaoList
@@ -75,6 +67,7 @@ const NetworkList = () => {
                   network={network}
                   searchTerm={searchTerm}
                   key={network.network_id}
+                  index={i}
                 />
               );
             } else {
