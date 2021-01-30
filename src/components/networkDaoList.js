@@ -16,8 +16,10 @@ import {
 import { themeImagePath } from '../utils/metadata';
 import makeBlockie from 'ethereum-blockies-base64';
 
-const NetworkDaoList = ({ data, network, searchTerm }) => {
+const NetworkDaoList = ({ data, network, searchTerm, index }) => {
   const [sortedDaoList, setSortedDaoList] = useState([]);
+
+  console.log('index', index);
 
   useEffect(() => {
     setSortedDaoList(
@@ -35,7 +37,7 @@ const NetworkDaoList = ({ data, network, searchTerm }) => {
 
   const getDaoLink = (unReadCount, dao) => {
     if (!dao.meta) {
-      return `/register/${dao.network.networkID}/${dao.id}/`;
+      return `/register/${dao.network.networkID}/${dao.molochAddress}/`;
     }
 
     // TODO: how to deal with v1 link
@@ -43,8 +45,8 @@ const NetworkDaoList = ({ data, network, searchTerm }) => {
     //   // return pokemolUrl(dao);
     // } else {
     return unReadCount
-      ? `/dao/${network.networkID}/${dao.id}/proposals`
-      : `dao/${dao.id}`;
+      ? `/dao/${network.networkID}/${dao.molochAddress}/proposals`
+      : `dao/${network.networkID}/${dao.molochAddress}`;
     // }
   };
 
@@ -54,7 +56,7 @@ const NetworkDaoList = ({ data, network, searchTerm }) => {
     }).length;
 
     return (
-      <Box key={dao.id + dao.networkID} mr={3} pb={3}>
+      <Box key={dao.molochAddress + dao.networkID} mr={3} pb={3}>
         <Link
           as={RouterLink}
           to={getDaoLink(unReadCount, dao)}
@@ -67,7 +69,7 @@ const NetworkDaoList = ({ data, network, searchTerm }) => {
             src={
               dao.meta?.avatarImg
                 ? themeImagePath(dao.meta.avatarImg)
-                : makeBlockie(dao.id)
+                : makeBlockie(dao.molochAddress)
             }
             mb={3}
             bg='black'
@@ -122,7 +124,9 @@ const NetworkDaoList = ({ data, network, searchTerm }) => {
   };
 
   const defaultOpen =
-    network.networkID === '0x1' || network.networkID === '0x64' ? 0 : null;
+    !index || network.networkID === '0x1' || network.networkID === '0x64'
+      ? 0
+      : null;
 
   return (
     <>

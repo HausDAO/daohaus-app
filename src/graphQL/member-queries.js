@@ -21,6 +21,7 @@ export const HUB_MEMBERSHIPS = gql`
     ) {
       id
       memberAddress
+      molochAddress
       moloch {
         id
         version
