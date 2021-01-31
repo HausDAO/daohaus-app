@@ -19,8 +19,6 @@ import makeBlockie from 'ethereum-blockies-base64';
 const NetworkDaoList = ({ data, network, searchTerm, index }) => {
   const [sortedDaoList, setSortedDaoList] = useState([]);
 
-  console.log('index', index);
-
   useEffect(() => {
     setSortedDaoList(
       data

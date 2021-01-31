@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import { Box } from '@chakra-ui/react';
 
 import { useUser } from '../contexts/UserContext';
 import ActivitiesFeed from './activitiesFeed';
