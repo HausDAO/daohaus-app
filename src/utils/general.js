@@ -61,3 +61,15 @@ export const timeToNow = (time) => {
 // export const formatCreatedAt = (createdAt) => {
 //   return format(new Date(createdAt * 1000), "MMM dd, yyyy");
 // };
+
+export const stripHttpProtocol = (string) => {
+  // regex? var tarea_regex = /(http|https)/;
+  let newString = '';
+  if (string.toLowerCase().indexOf('http://') === 0) {
+    newString = string.replace('http://', '');
+  } else if (string.toLowerCase().indexOf('https://') === 0) {
+    newString = string.replace('https://', '');
+  }
+
+  return newString === '' ? string : newString;
+};

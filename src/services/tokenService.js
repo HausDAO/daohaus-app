@@ -43,6 +43,21 @@ export const TokenService = ({
         }
       };
     }
+    if (service === 'approve') {
+      return async (args, from, poll) => {
+        const tx = await contract.methods[service](...args);
+        return tx
+          .send('approve', { from })
+          .on('transactionHash', (txHash) => {
+            if (poll) {
+              poll(txHash);
+            }
+          })
+          .on('error', (error) => {
+            console.error(error);
+          });
+      };
+    }
   };
 };
 

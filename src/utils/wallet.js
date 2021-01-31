@@ -7,6 +7,8 @@ export const initMemberWallet = async ({
   chainID,
   depositToken,
 }) => {
+  // TODO handle tokens with different decimals
+
   const depositTokenContract = TokenService({
     chainID,
     tokenAddress: depositToken.tokenAddress,

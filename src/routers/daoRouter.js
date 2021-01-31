@@ -9,6 +9,7 @@ import Overview from '../pages/Overview';
 import Proposals from '../pages/Proposals';
 import Profile from '../pages/Profile';
 import Proposal from '../pages/Proposal';
+import NewProposal from '../pages/NewProposal';
 import Settings from '../pages/Settings';
 import { useToken } from '../contexts/TokenContext';
 
@@ -51,6 +52,12 @@ const DaoRouter = () => {
       </Route>
       <Route exact path={`${path}/settings`}>
         <Settings overview={daoOverview} />
+      </Route>
+      <Route exact path={`${path}/proposals/new/:proposalType`}>
+        <NewProposal />
+      </Route>
+      <Route exact path={`${path}/proposals/new`}>
+        <NewProposal />
       </Route>
       <Route exact path={`${path}/proposals/:propid`}>
         <Proposal activities={daoActivities} />

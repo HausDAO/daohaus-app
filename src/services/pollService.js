@@ -114,5 +114,37 @@ export const createPoll = ({
         });
       }
     };
+  } else if (action === 'unlockToken') {
+    return ({ daoID, chainID, tokenAddress, actions }) => (txHash) => {
+      startPoll({
+        pollFetch: pollProposals,
+        testFn: proposalTest,
+        shouldEqual: txHash,
+        args: { daoID, chainID, tokenAddress },
+        actions,
+        txHash,
+      });
+      if (cachePoll) {
+        cachePoll({
+          txHash,
+          timeSent: Date.now(),
+          status: 'unresolved',
+          resolvedMsg: `Unlocked Token`,
+          unresolvedMsg: `Unlocking token`,
+          successMsg: `Unlocking token for ${daoID} on ${chainID}`,
+          errorMsg: `Error unlocking token for ${daoID} on ${chainID}`,
+          pollData: {
+            action,
+            interval,
+            tries,
+          },
+          pollArgs: {
+            daoID,
+            tokenAddress,
+            chainID,
+          },
+        });
+      }
+    };
   }
 };
