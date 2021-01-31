@@ -8,6 +8,7 @@ export const OverlayProvider = ({ children }) => {
   const [daoSwitcherModal, setDaoSwitcherModal] = useState(false);
   const [hubAccountModal, setHubAccountModal] = useState(false);
   const [daoAccountModal, setDaoAccountModal] = useState(false);
+  const [proposalModal, setProposalModal] = useState(false);
 
   const errorToast = (content) => {
     toast({
@@ -49,6 +50,8 @@ export const OverlayProvider = ({ children }) => {
         setHubAccountModal,
         daoAccountModal,
         setDaoAccountModal,
+        proposalModal,
+        setProposalModal,
         errorToast,
         successToast,
         warningToast,
@@ -69,6 +72,8 @@ export const useOverlay = () => {
     setHubAccountModal,
     daoAccountModal,
     setDaoAccountModal,
+    proposalModal,
+    setProposalModal,
     errorToast,
     successToast,
     warningToast,
@@ -80,6 +85,8 @@ export const useOverlay = () => {
     setDaoAccountModal,
     hubAccountModal,
     setHubAccountModal,
+    proposalModal,
+    setProposalModal,
     errorToast,
     successToast,
     warningToast,

@@ -7,8 +7,6 @@ import { handleGetProfile } from '../utils/3box';
 const MemberCard = ({ member, selectMember, selectedMember }) => {
   const [memberData, setMemberData] = useState(null);
 
-  // TODO how to know member is selected member?
-
   useEffect(() => {
     const getProfile = async () => {
       try {
@@ -33,6 +31,7 @@ const MemberCard = ({ member, selectMember, selectedMember }) => {
     }
   };
   console.log(memberData);
+  console.log(member);
 
   return (
     <Flex
@@ -40,7 +39,7 @@ const MemberCard = ({ member, selectMember, selectedMember }) => {
       align='center'
       pl={3}
       bg={
-        selectedMember // && member.memberAddress === address.toLowerCase()
+        member?.memberAddress === selectedMember?.memberAddress // && member.memberAddress === address.toLowerCase()
           ? 'primary.500'
           : null
       }
@@ -52,7 +51,7 @@ const MemberCard = ({ member, selectMember, selectedMember }) => {
       onClick={handleSelect}
     >
       <Flex w='43%' direction='column' justify='space-between'>
-        {member && memberData ? (
+        {member && memberData?.image?.length ? (
           <Avatar
             name={memberData.name}
             src={`https://ipfs.infura.io/ipfs/${memberData.image[0].contentUrl['/']}`}

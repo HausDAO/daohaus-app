@@ -51,7 +51,11 @@ export const TokenProvider = ({ children }) => {
 
   return (
     <TokenContext.Provider
-      value={{ currentDaoTokens, shouldFetchInit, shouldFetchContract }}
+      value={{
+        currentDaoTokens,
+        shouldFetchInit,
+        shouldFetchContract,
+      }}
     >
       {children}
     </TokenContext.Provider>
@@ -62,5 +66,9 @@ export const useToken = () => {
   const { currentDaoTokens, shouldFetchInit, shouldFetchContract } = useContext(
     TokenContext,
   );
-  return { currentDaoTokens, shouldFetchInit, shouldFetchContract };
+  return {
+    currentDaoTokens,
+    shouldFetchInit,
+    shouldFetchContract,
+  };
 };

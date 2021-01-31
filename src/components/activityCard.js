@@ -21,6 +21,7 @@ const handleName = (activity, profile) => {
 };
 
 const handleAvatar = (activity, profile) => {
+  console.log(activity);
   if (profile?.image?.length) {
     const url = profile?.image[0].contentUrl;
     return (
@@ -36,7 +37,7 @@ const handleAvatar = (activity, profile) => {
     return (
       <Avatar
         key={`no-profile${activity.memberAddress}`}
-        name={activity?.memberAddress}
+        name={truncateAddr(activity?.memberAddress)}
         size='sm'
         src={makeBlockie(activity?.memberAddress)}
       />
@@ -58,7 +59,7 @@ const ActivityCard = ({ activity, displayAvatar }) => {
           setProfile(newProfile);
         }
       } catch (error) {
-        console.log("MemberDoesn't have a profile");
+        console.log("Member doesn't have a profile");
       }
     };
     if (activity.memberAddress) {

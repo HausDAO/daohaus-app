@@ -1,6 +1,7 @@
 import { TokenService } from '../services/tokenService';
 import { MolochService } from '../services/molochService';
 import { omit } from './general';
+import { ethers } from 'ethers';
 
 const geckoURL = 'https://api.coingecko.com/api/v3/simple/token_price';
 const uniSwapDataURL =
@@ -146,6 +147,31 @@ export const getTotalBankValue = (tokenBalances, prices) => {
       return sum;
     }
   }, 0);
+};
+
+export const valToDecimalString = (value, tokenAddress, tokens) => {
+  // get correct value of token with decimal places
+  // returns a string
+  const scaleFactor = 10;
+  const perc = 10 ** scaleFactor;
+
+  const tdata = tokens.find((token) => token.tokenAddress === tokenAddress);
+  const exp = ethers.BigNumber.from(10).pow(
+    ethers.BigNumber.from(tdata.decimals),
+  );
+
+  if (value >= perc) {
+    return ethers.BigNumber.from(value)
+      .mul(exp)
+      .toString();
+  } else {
+    value = value * perc;
+
+    return ethers.BigNumber.from(value)
+      .mul(exp)
+      .div(ethers.BigNumber.from(perc))
+      .toString();
+  }
 };
 
 /// /////Caching Utils//////////////

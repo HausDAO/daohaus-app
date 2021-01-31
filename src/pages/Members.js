@@ -76,6 +76,7 @@ const Members = ({ members, activities }) => {
                   key={member.id}
                   member={member}
                   selectMember={selectMember}
+                  selectedMember={selectedMember}
                 />
               );
             })}
