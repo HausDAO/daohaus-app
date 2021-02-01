@@ -91,7 +91,6 @@ const NewProposal = () => {
                     // }
                     setProposalType(p.proposalType);
                     setProposalModal(true);
-                    console.log(p.proposalType);
                   }}
                 >
                   {/* {p.comingSoon && <ComingSoonOverlay />} */}

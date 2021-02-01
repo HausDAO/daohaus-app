@@ -29,19 +29,30 @@ import PaymentInput from './paymentInput';
 import TributeInput from './tributeInput';
 import AddressInput from './addressInput';
 import DetailsFields from './detailFields';
-import { detailsToJSON } from '../utils/general';
+import { useInjectedProvider } from '../contexts/InjectedProviderContext';
+import { useOverlay } from '../contexts/OverlayContext';
+import { useTX } from '../contexts/TXContext';
+import { useUser } from '../contexts/UserContext';
+import { useParams } from 'react-router-dom';
+import { createHash, detailsToJSON } from '../utils/general';
+import { createPoll } from '../services/pollService';
+import { MolochService } from '../services/molochService';
+import { useDao } from '../contexts/DaoContext';
+import { valToDecimalString } from '../utils/tokenValue';
 
 const MemberProposalForm = () => {
+  const { injectedProvider, address } = useInjectedProvider();
+  const { errorToast, successToast } = useOverlay();
+  const { daoOverview } = useDao();
+  const { refreshDao } = useTX();
+  const { cachePoll, resolvePoll } = useUser();
+  const { daoid, daochain } = useParams();
+
   const [loading, setLoading] = useState(false);
   const [showLoot, setShowLoot] = useState(false);
   const [showPaymentRequest, setShowPaymentRequest] = useState(false);
   const [showApplicant, setShowApplicant] = useState(false);
-  // const [user] = useUser();
-  // const [memberWallet] = useMemberWallet();
-  // const [dao] = useDao();
-  // const [txProcessor, updateTxProcessor] = useTxProcessor();
   const [currentError, setCurrentError] = useState(null);
-  // const { closeModals } = useModals();
 
   const {
     handleSubmit,
@@ -82,34 +93,74 @@ const MemberProposalForm = () => {
   // };
 
   const onSubmit = async (values) => {
-    setLoading(true);
+    // setLoading(true);
 
     const details = detailsToJSON(values);
-    try {
-      // dao.daoService.moloch.submitProposal(
-      //   values.sharesRequested ? values.sharesRequested?.toString() : '0',
-      //   values.lootRequested ? values.lootRequested?.toString() : '0',
-      //   values.tributeOffered
-      //     ? utils.toWei(values.tributeOffered?.toString())
-      //     : '0',
-      //   values.tributeToken || dao.graphData.depositToken.tokenAddress,
-      //   values.paymentRequested
-      //     ? utils.toWei(values.paymentRequested?.toString())
-      //     : '0',
-      //   values.paymentToken || dao.graphData.depositToken.tokenAddress,
-      //   details,
-      //   values?.applicantHidden?.startsWith('0x')
-      //     ? values.applicantHidden
-      //     : values?.applicant
-      //     ? values.applicant
-      //     : user.username,
-      //   txCallBack,
-      // );
-      console.log(details);
-    } catch (err) {
-      setLoading(false);
-      console.log('error: ', err);
-    }
+    const hash = createHash();
+    const { tokenBalances, depositToken } = daoOverview;
+    const tributeToken = values.tributeToken || depositToken.tokenAddress;
+    console.log('tributeToken', tributeToken);
+    const paymentToken = values.paymentToken || depositToken.tokenAddress;
+    console.log('paymentToken', paymentToken);
+    const tributeOffered = '0';
+
+    // values.tributeOffered
+    //   ? valToDecimalString(values.tributeOffered, tributeToken, tokenBalances)
+    //   : '0';
+    const paymentRequested = values.paymentRequested
+      ? valToDecimalString(values.paymentRequested, paymentToken, tokenBalances)
+      : '0';
+    const applicant = values?.applicantHidden?.startsWith('0x')
+      ? values.applicantHidden
+      : values?.applicant
+      ? values.applicant
+      : address;
+    const args = [
+      applicant,
+      values.sharesRequested || '0',
+      values.lootRequested || '0',
+      tributeOffered,
+      tributeToken,
+      paymentRequested,
+      paymentToken,
+      details,
+    ];
+    console.log('args', args);
+    console.log('hash', hash);
+    console.log('applicant', applicant);
+
+    // try {
+    //   const poll = createPoll({ action: 'submitProposal', cachePoll })({
+    //     daoID: daoid,
+    //     chainID: daochain,
+    //     hash,
+    //     actions: {
+    //       onError: (error, txHash) => {
+    //         errorToast({
+    //           title: `There was an error.`,
+    //         });
+    //         resolvePoll(txHash);
+    //         console.error(`Could not find a matching proposal: ${error}`);
+    //       },
+    //       onSuccess: (txHash) => {
+    //         successToast({
+    //           title: 'Proposal Submitted to the Dao!',
+    //         });
+    //         refreshDao();
+    //         resolvePoll(txHash);
+    //       },
+    //     },
+    //   });
+    //   MolochService({
+    //     web3: injectedProvider,
+    //     daoAddress: daoid,
+    //     chainID: daochain,
+    //     version: daoOverview.version,
+    //   })('submitProposal')(args, from, poll);
+    // } catch (err) {
+    //   setLoading(false);
+    //   console.log('error: ', err);
+    // }
   };
 
   return (

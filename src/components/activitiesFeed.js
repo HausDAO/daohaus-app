@@ -4,7 +4,6 @@ import TextBox from './TextBox';
 
 const ActivitiesFeed = ({ activities, hydrateFn, limit }) => {
   const allActivities = activities ? hydrateFn(activities) : [];
-  console.log(activities);
 
   return (
     <>

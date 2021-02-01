@@ -34,68 +34,9 @@ import { useParams } from 'react-router-dom';
 import { MolochService } from '../services/molochService';
 import { useUser } from '../contexts/UserContext';
 
-const Proposals = React.memo(function Proposals({
-  overview,
-  proposals,
-  activities,
-}) {
-  const { injectedProvider, address } = useInjectedProvider();
-  const { errorToast, successToast } = useOverlay();
-  const { refreshDao } = useTX();
-  const { cachePoll, resolvePoll } = useUser();
-  const { daoid, daochain } = useParams();
-
-  const testAddUser = () => {
-    const hash = createHash();
-    const details = detailsToJSON({
-      title: 'Test!',
-      description: 'Jordan is using this Contract to test the DaoHaus app',
-      hash,
-    });
-
-    const from = address;
-    const sampleData = [
-      /* applicant */ from,
-      /* sharesRequested: */ '0',
-      /* lootRequested: */ '0',
-      /* tributeOffered: */ '0',
-      /* tributeToken: */ overview?.depositToken?.tokenAddress,
-      /* paymentRequested: */ '10000000000000000000',
-      /* paymentToken: */ overview?.depositToken?.tokenAddress,
-      /* detailsObj */ details,
-    ];
-    const poll = createPoll({ action: 'submitProposal', cachePoll })({
-      daoID: daoid,
-      chainID: daochain,
-      hash,
-      actions: {
-        onError: (error, txHash) => {
-          errorToast({
-            title: `There was an error.`,
-          });
-          resolvePoll(txHash);
-          console.error(`Could not find a matching proposal: ${error}`);
-        },
-        onSuccess: (txHash) => {
-          successToast({
-            title: 'Proposal Submitted to the Dao!',
-          });
-          refreshDao();
-          resolvePoll(txHash);
-        },
-      },
-    });
-    MolochService({
-      web3: injectedProvider,
-      daoAddress: daoid,
-      chainID: daochain,
-      version: overview?.version,
-    })('submitProposal')(sampleData, from, poll);
-  };
-
+const Proposals = React.memo(function Proposals({ proposals, activities }) {
   return (
     <Flex wrap='wrap'>
-      <Button onClick={testAddUser}></Button>
       <Box
         w={['100%', null, null, null, '60%']}
         pr={[0, null, null, null, 6]}
