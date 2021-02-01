@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import makeBlockie from 'ethereum-blockies-base64';
-import { Avatar, Flex, Box, Skeleton } from '@chakra-ui/react';
+import { Flex, Box, Skeleton } from '@chakra-ui/react';
 import { format } from 'date-fns';
+import UserAvatar from '../components/userAvatar';
 import { handleGetProfile } from '../utils/3box';
 
 const MemberCard = ({ member, selectMember, selectedMember }) => {
@@ -16,7 +16,7 @@ const MemberCard = ({ member, selectMember, selectedMember }) => {
         }
         setMemberData(profile);
       } catch (error) {
-        console.log("MemberDoesn't have a profile");
+        console.log("Member doesn't have a profile");
       }
     };
 
@@ -30,8 +30,6 @@ const MemberCard = ({ member, selectMember, selectedMember }) => {
       selectMember(member);
     }
   };
-  console.log(memberData);
-  console.log(member);
 
   return (
     <Flex
@@ -51,19 +49,7 @@ const MemberCard = ({ member, selectMember, selectedMember }) => {
       onClick={handleSelect}
     >
       <Flex w='43%' direction='column' justify='space-between'>
-        {member && memberData?.image?.length ? (
-          <Avatar
-            name={memberData.name}
-            src={`https://ipfs.infura.io/ipfs/${memberData.image[0].contentUrl['/']}`}
-            size='md'
-          />
-        ) : (
-          <Avatar
-            name={member.memberAddress}
-            src={makeBlockie(member.memberAddress)}
-            size='md'
-          />
-        )}
+        <UserAvatar user={{ ...member, ...memberData }} copyEnabled={false} />
       </Flex>
       <Box w='15%'>
         <Skeleton isLoaded={member?.shares}>

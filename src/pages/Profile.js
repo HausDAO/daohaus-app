@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Avatar } from '@chakra-ui/react';
+import { Avatar, Flex } from '@chakra-ui/react';
 import makeBlockie from 'ethereum-blockies-base64';
 
 import { useParams } from 'react-router-dom';
@@ -11,6 +11,7 @@ import { tallyUSDs } from '../utils/tokenValue';
 // import ProfileBankList from '../components/profileBankList';
 import ActivitiesFeed from '../components/activitiesFeed';
 import { getProfileActivites } from '../utils/activities';
+import ContentBox from '../components/ContentBox';
 
 const handleAvatar = (member, profile) => {
   if (profile?.image?.length) {
@@ -20,7 +21,8 @@ const handleAvatar = (member, profile) => {
         // uses key, otherwise React skips rerender
         key={`profile${member}`}
         name={profile?.name}
-        size='lg'
+        width='100px'
+        height='100px'
         src={`https://ipfs.infura.io/ipfs/${url['/']}`}
       />
     );
@@ -29,7 +31,8 @@ const handleAvatar = (member, profile) => {
       <Avatar
         key={`no-profile${member}`}
         name={member?.memberAddress}
-        size='lg'
+        width='100px'
+        height='100px'
         src={makeBlockie(member?.memberAddress)}
       />
     );
@@ -86,62 +89,62 @@ const Profile = ({ members, overview, daoTokens, activities }) => {
     }
   }, [currentMember, profile]);
 
-  useEffect(() => {
-    const lookupEns = async () => {
-      if (currentMember?.memberAddress) {
-        const ethersProvider = ethers.getDefaultProvider(
-          chainByID(daochain).rpc_url,
-        );
-        const result = await ethersProvider.lookupAddress(userid);
-        if (result) {
-          setEns(result);
-        }
-      }
-    };
-    lookupEns();
-  }, [currentMember, daochain, userid]);
+  // useEffect(() => {
+  //   const lookupEns = async () => {
+  //     if (currentMember?.memberAddress) {
+  //       const ethersProvider = ethers.getDefaultProvider(
+  //         chainByID(daochain).rpc_url,
+  //       );
+  //       const result = await ethersProvider.lookupAddress(userid);
+  //       if (result) {
+  //         setEns(result);
+  //       }
+  //     }
+  //   };
+  //   lookupEns();
+  // }, [currentMember, daochain, userid]);
 
   return (
-    <div>
-      {currentMember ? (
-        <>
-          <div>
-            <h4>Profile Card</h4>
-            <h2>{handleName(currentMember, profile)}</h2>
-            {profile?.emoji && <span>{profile.emoji}</span>}
-            {handleAvatar(currentMember, profile)}
-            {ens && <p>{ens}</p>}
-            {profile?.job && <p>{profile.job}</p>}
-            {profile?.employer && <p>{profile.employer}</p>}
-            <p>
-              Exit Amount:{' '}
-              {daoTokens &&
-                overview &&
-                calcValue(currentMember, daoTokens, overview)}{' '}
-            </p>
-            <p>
-              Power:{' '}
-              {daoTokens &&
-                overview &&
-                calcPower(currentMember, overview) + '%'}
-            </p>
-            <p>Shares: {currentMember.shares}</p>
-            <p>Loot: {currentMember.loot}</p>
-          </div>
+    <>
+      <ContentBox as={Flex} p={6} w='100%' justify='space-between'>
+        {currentMember ? (
+          <Flex direction='row' width='50%'>
+            <Flex direction='column' align='center' pr={5} minW='40%'>
+              <h2>{handleName(currentMember, profile)}</h2>
+              {profile?.emoji && <span>{profile.emoji}</span>}
+              {handleAvatar(currentMember, profile)}
+              {/* {ens && <p>{ens}</p>} */}
+              {profile?.job && <p>{profile.job}</p>}
+              {profile?.employer && <p>{profile.employer}</p>}
+              <p>
+                Exit Amount:{' '}
+                {daoTokens &&
+                  overview &&
+                  calcValue(currentMember, daoTokens, overview)}{' '}
+              </p>
+              <p>
+                Power:{' '}
+                {daoTokens &&
+                  overview &&
+                  calcPower(currentMember, overview) + '%'}
+              </p>
+              <p>Shares: {currentMember.shares}</p>
+              <p>Loot: {currentMember.loot}</p>
+            </Flex>
+          </Flex>
+        ) : (
+          <h3>Member not found</h3>
+        )}
+      </ContentBox>
 
-          {activities && (
-            <ActivitiesFeed
-              limit={5}
-              hydrateFn={getProfileActivites(currentMember.memberAddress)}
-              activities={activities}
-            />
-          )}
-          {/* <ProfileBankList tokenData={currentMember.tokenBalances} /> */}
-        </>
-      ) : (
-        <h3>Member not found</h3>
+      {activities && (
+        <ActivitiesFeed
+          limit={5}
+          hydrateFn={getProfileActivites(currentMember.memberAddress)}
+          activities={activities}
+        />
       )}
-    </div>
+    </>
   );
 };
 

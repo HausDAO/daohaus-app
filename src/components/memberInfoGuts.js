@@ -1,23 +1,43 @@
-import React from 'react';
-import makeBlockie from 'ethereum-blockies-base64';
-import { Avatar, Flex, Box, Skeleton } from '@chakra-ui/react';
+import React, { useState, useEffect } from 'react';
+import { Flex, Box, Skeleton } from '@chakra-ui/react';
 // import { timeToNow } from '../utils/general';
 import { format } from 'date-fns';
 import TextBox from './TextBox';
-// import { handleGetProfile } from '../utils/3box';
+import UserAvatar from './userAvatar';
+import { handleGetProfile } from '../utils/3box';
 
 const MemberInfoGuts = ({ member }) => {
-  // const name = member.hasProfile ? member.name : member.memberAddress;
+  const [memberData, setMemberData] = useState(null);
+
+  useEffect(() => {
+    const getProfile = async () => {
+      try {
+        const profile = await handleGetProfile(member.memberAddress);
+        if (profile.status === 'error') {
+          return;
+        }
+        setMemberData(profile);
+      } catch (error) {
+        console.log("MemberDoesn't have a profile");
+      }
+    };
+
+    getProfile();
+  }, [member]);
 
   return (
     <>
       {member && (
         <>
           <Flex justify='space-between'>
-            <Avatar
+            {/* <Avatar
               name={member.memberAddress}
               src={makeBlockie(member.memberAddress)}
               size='md'
+            /> */}
+            <UserAvatar
+              user={{ ...member, ...memberData }}
+              copyEnabled={false}
             />
             {/* {showMenu && <ProfileMenu member={member} />} */}
           </Flex>

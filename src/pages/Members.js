@@ -70,7 +70,7 @@ const Members = ({ members, activities }) => {
             <TextBox size='xs'>Join Date</TextBox>
           </Flex>
           {members &&
-            members?.slice(0, 10).map((member) => {
+            members?.map((member) => {
               return (
                 <MemberCard
                   key={member.id}

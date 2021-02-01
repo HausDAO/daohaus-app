@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { utils } from 'web3';
 import {
@@ -16,16 +16,19 @@ import { getProposalHistories } from '../utils/activities';
 import { RiExternalLinkLine } from 'react-icons/ri';
 import { FaThumbsUp, FaThumbsDown } from 'react-icons/fa';
 import ReactPlayer from 'react-player';
+import { AddressZero } from '@ethersproject/constants';
 
 import { numberWithCommas } from '../utils/general';
 import TextBox from '../components/TextBox';
 import ContentBox from '../components/ContentBox';
-// import ProposalVote from '../components/proposalVote';
+import UserAvatar from '../components/userAvatar';
 
 import {
   getProposalCountdownText,
   getProposalDetailStatus,
 } from '../utils/proposalUtils';
+import { handleGetProfile } from '../utils/3box';
+// import ProposalVote from '../components/proposalVote';
 
 const urlify = (text) => {
   var urlRegex = /(https?:\/\/[^\s]+)/g;
@@ -57,6 +60,36 @@ const Proposal = ({ activities }) => {
           vote.memberAddress === currentProposal.memberAddress.toLowerCase(),
       )
     : null;
+  const [proposer, setProposer] = useState(null);
+  const [applicant, setApplicant] = useState(null);
+
+  useEffect(() => {
+    if (currentProposal) {
+      const proposerProfile = handleGetProfile(currentProposal.proposer);
+      const applicantProfile = handleGetProfile(
+        currentProposal?.applicant !== AddressZero
+          ? currentProposal.applicant
+          : currentProposal.proposer,
+      );
+      setProposer({
+        memberAddress: currentProposal.proposer,
+        ...proposerProfile,
+      });
+      if (currentProposal.applicant !== AddressZero) {
+        setApplicant({
+          memberAddress: currentProposal.applicant,
+          ...applicantProfile,
+        });
+      } else {
+        setApplicant({
+          memberAddress: currentProposal.proposer,
+          ...applicantProfile,
+        });
+      }
+    }
+  }, [currentProposal]);
+
+  console.log(currentProposal);
 
   return (
     <Box>
@@ -250,57 +283,16 @@ const Proposal = ({ activities }) => {
                   <TextBox size='xs' mb={2}>
                     Submitted By
                   </TextBox>
-                  <Skeleton isLoaded={currentProposal?.proposer}>
-                    {currentProposal?.proposer ? (
-                      // memberProfile(members, proposal?.proposer).profile ? (
-                      //   <MemberAvatar
-                      //     member={memberProfile(members, proposal?.proposer)}
-                      //   />
-                      // ) : (
-                      //   <UserAvatar
-                      //     user={memberProfile(members, proposal?.proposer)}
-                      //   />
-                      // )
-                      <Box>{currentProposal?.proposer}</Box>
-                    ) : (
-                      '--'
-                    )}
+                  <Skeleton isLoaded={proposer}>
+                    {proposer ? <UserAvatar user={proposer} /> : '--'}
                   </Skeleton>
                 </Box>
                 <Box>
                   <TextBox size='xs' mb={2}>
                     Recipient
                   </TextBox>
-                  <Skeleton isLoaded={currentProposal?.applicant}>
-                    {currentProposal?.applicant ? (
-                      // memberProfile(
-                      //   members,
-                      //   currentProposal?.applicant !== ZERO_ADDRESS
-                      //     ? currentProposal?.applicant
-                      //     : currentProposal?.proposer,
-                      // ).profile ? (
-                      //   <MemberAvatar
-                      //     member={memberProfile(
-                      //       members,
-                      //       currentProposal?.applicant !== ZERO_ADDRESS
-                      //         ? currentProposal?.applicant
-                      //         : currentProposal?.proposer,
-                      //     )}
-                      //   />
-                      // ) : (
-                      //   <UserAvatar
-                      //     user={memberProfile(
-                      //       members,
-                      //       proposal?.applicant !== ZERO_ADDRESS
-                      //         ? proposal?.applicant
-                      //         : proposal?.proposer,
-                      //     )}
-                      //   />
-                      // )
-                      <Box>{currentProposal?.applicant}</Box>
-                    ) : (
-                      '--'
-                    )}
+                  <Skeleton isLoaded={applicant}>
+                    {applicant ? <UserAvatar user={applicant} /> : '--'}
                   </Skeleton>
                 </Box>
                 <Flex align='center'>
