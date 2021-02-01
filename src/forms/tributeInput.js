@@ -78,7 +78,6 @@ const TributeInput = ({ register, setValue, getValues }) => {
     const token = getValues('tributeToken');
     const tokenAmount = getValues('tributeOffered');
     // ? multiply times decimals
-    console.log(tokenAmount);
     try {
       const poll = createPoll({ action: 'unlockToken', cachePoll })({
         daoID: daoid,
@@ -136,7 +135,6 @@ const TributeInput = ({ register, setValue, getValues }) => {
       chainID: daochain,
       tokenAddress: token.value,
     });
-    console.log(tokenContract);
     const max = await tokenContract('balanceOf')(address);
     setBalance(max);
   };

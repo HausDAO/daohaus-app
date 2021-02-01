@@ -21,7 +21,6 @@ const handleName = (activity, profile) => {
 };
 
 const handleAvatar = (activity, profile) => {
-  console.log(activity);
   if (profile?.image?.length) {
     const url = profile?.image[0].contentUrl;
     return (

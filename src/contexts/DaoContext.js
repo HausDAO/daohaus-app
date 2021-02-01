@@ -1,4 +1,10 @@
-import React, { useEffect, useContext, createContext, useRef } from 'react';
+import React, {
+  useEffect,
+  useContext,
+  createContext,
+  useRef,
+  useState,
+} from 'react';
 import { useParams } from 'react-router-dom';
 import { bigGraphQuery } from '../utils/theGraph';
 import { useSessionStorage } from '../hooks/useSessionStorage';
@@ -39,6 +45,7 @@ export const DaoProvider = ({ children }) => {
     `transmutations-${daoid}`,
     null,
   );
+  const [currentDaoAddress, setCurrentDaoAddress] = useState(daoid);
   const hasPerformedBatchQuery = useRef(false);
 
   useEffect(() => {
@@ -56,7 +63,7 @@ export const DaoProvider = ({ children }) => {
       !daoid ||
       !daochain ||
       !daoNetworkData ||
-      !address ||
+      // !address ||
       hasPerformedBatchQuery.current
     )
       return;
@@ -80,7 +87,7 @@ export const DaoProvider = ({ children }) => {
   }, [
     daoid,
     daochain,
-    address,
+    // address,
     daoNetworkData,
     daoActivities,
     daoMembers,
@@ -113,6 +120,18 @@ export const DaoProvider = ({ children }) => {
     });
   };
 
+  useEffect(() => {
+    if (currentDaoAddress !== daoid) {
+      hasPerformedBatchQuery.current = false;
+      setDaoOverview(null);
+      setDaoActivities(null);
+      setDaoMembers(null);
+      setDaoProposals(null);
+      setTransmutations(null);
+      setCurrentDaoAddress(daoid);
+    }
+  }, [currentDaoAddress, daoid]);
+
   return (
     <DaoContext.Provider
       value={{
@@ -120,7 +139,6 @@ export const DaoProvider = ({ children }) => {
         daoActivities,
         daoMembers,
         daoOverview,
-
         isCorrectNetwork,
         refetch,
         hasPerformedBatchQuery, // Ref, not state
