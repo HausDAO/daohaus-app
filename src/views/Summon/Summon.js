@@ -102,16 +102,25 @@ const Summon = () => {
       const [addrs, shares] = parseSummonresAndShares(
         daoData.summonerAndShares,
       );
-      if (addrs.length) {
-        daoData.summoner = addrs;
-        daoData.summonerShares = shares;
-      } else {
-        daoData.summoner = [daoData.summoner];
-        daoData.summonerShares = [1];
-      }
 
-      console.log('summoning HERE', daoData);
-      await state.service.summonMoloch(daoData, user.username, txCallBack);
+      let summoner;
+      let summonerShares;
+
+      if (addrs.length) {
+        summoner = addrs;
+        summonerShares = shares;
+      } else {
+        summoner = [
+          Array.isArray(daoData.summoner)
+            ? daoData.summoner[0]
+            : daoData.summoner,
+        ];
+        summonerShares = [1];
+      }
+      const summonData = { ...daoData, summoner, summonerShares };
+
+      console.log('summoning HERE', summonData);
+      await state.service.summonMoloch(summonData, user.username, txCallBack);
     };
 
     if (daoData.summon) {
