@@ -12,7 +12,7 @@ import { handleGetProfile } from '../utils/3box';
 //  TODO Refactor copy UI
 //  Build Generic user Avatar component for all avatars
 
-const UserAvatar = ({ copyEnabled }) => {
+const UserAvatar = ({ user, copyEnabled }) => {
   const [profile, setProfile] = useState(null);
   const { address } = useInjectedProvider();
   const toast = useToast();
@@ -46,13 +46,14 @@ const UserAvatar = ({ copyEnabled }) => {
 
   return (
     <Flex direction='row' alignItems='center'>
-      {profile && address ? (
+      {user && (
         <>
           <Avatar
-            name={profile?.name || truncateAddr(address)}
+            name={user.name || truncateAddr(user.memberAddress)}
             src={
-              `https://ipfs.infura.io/ipfs/${profile.image[0].contentUrl['/']}` ||
-              makeBlockie(address)
+              user?.image?.length
+                ? `https://ipfs.infura.io/ipfs/${user?.image[0].contentUrl['/']}`
+                : makeBlockie(user.memberAddress)
             }
             size='sm'
           />
@@ -62,17 +63,47 @@ const UserAvatar = ({ copyEnabled }) => {
             fontFamily='heading'
             d={['none', null, null, 'inline-block']}
           >
-            {profile?.name || truncateAddr(address)}
-            <span>{profile?.emoji && profile.emoji} </span>
-            {copyEnabled !== true && (
+            {user?.name || truncateAddr(user.memberAddress)}
+            <Box as='span' ml={1}>
+              {user?.emoji && user.emoji}{' '}
+            </Box>
+            {copyEnabled === true && (
               <CopyToClipboard text={address} onCopy={handleNotifyCopied}>
                 <Icon as={FaCopy} color='secondary.300' ml={2} />
               </CopyToClipboard>
             )}
           </Box>
         </>
-      ) : (
-        <>
+      )}
+      {!user &&
+        (profile ? (
+          <>
+            <Avatar
+              name={profile?.name || truncateAddr(address)}
+              src={
+                `https://ipfs.infura.io/ipfs/${profile.image[0].contentUrl['/']}` ||
+                makeBlockie(address)
+              }
+              size='sm'
+            />
+            <Box
+              ml={3}
+              fontSize='sm'
+              fontFamily='heading'
+              d={['none', null, null, 'inline-block']}
+            >
+              {profile?.name || truncateAddr(address)}
+              <Box as='span' ml={1}>
+                {profile?.emoji && profile.emoji}{' '}
+              </Box>
+              {copyEnabled === true && (
+                <CopyToClipboard text={address} onCopy={handleNotifyCopied}>
+                  <Icon as={FaCopy} color='secondary.300' ml={2} />
+                </CopyToClipboard>
+              )}
+            </Box>
+          </>
+        ) : (
           <Skeleton isLoaded={address} m='0 auto'>
             {address && (
               <Flex direction='row' alignItems='center'>
@@ -84,7 +115,7 @@ const UserAvatar = ({ copyEnabled }) => {
                   d={['none', null, null, 'inline-block']}
                 >
                   {truncateAddr(address)}
-                  {copyEnabled && (
+                  {copyEnabled === true && (
                     <CopyToClipboard text={address} onCopy={handleNotifyCopied}>
                       <Icon as={FaCopy} color='secondary.300' ml={2} />
                     </CopyToClipboard>
@@ -93,8 +124,7 @@ const UserAvatar = ({ copyEnabled }) => {
               </Flex>
             )}
           </Skeleton>
-        </>
-      )}
+        ))}
     </Flex>
   );
 };

@@ -20,20 +20,7 @@ import {
 import ContentBox from './ContentBox';
 
 const ProposalCard = ({ proposal }) => {
-  // console.log(proposal);
   const { daochain, daoid } = useParams();
-  // const [memberVote, setMemberVote] = useState();
-
-  // useEffect(() => {
-  //   if (proposal.votes && proposal.memberAddress) {
-  //     setMemberVote(
-  //       proposal.votes.find(
-  //         (vote) => vote.memberAddress === proposal.memberAddress.toLowerCase(),
-  //       ),
-  //     );
-  //   }
-  //   // eslint-disable-next-line react-hooks/exhaustive-deps
-  // }, [proposal]);
 
   const memberVote = proposal
     ? proposal?.votes?.find(
