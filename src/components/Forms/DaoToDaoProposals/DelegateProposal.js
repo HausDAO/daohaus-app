@@ -78,7 +78,7 @@ const StakeProposalForm = () => {
         values.lootRequested ? values.lootRequested?.toString() : '0',
         values.tributeOffered
           ? valToDecimalString(
-              values.tributeToken,
+              values.tributeOffered,
               values.tributeToken || dao.graphData.depositToken.tokenAddress,
               dao.graphData.tokenBalances,
             )
