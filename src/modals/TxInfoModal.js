@@ -1,18 +1,37 @@
 import React from 'react';
-import { useInjectedProvider } from '../contexts/InjectedProviderContext';
+import { Link as RouterLink } from 'react-router-dom';
+import {
+  Box,
+  Modal,
+  ModalOverlay,
+  ModalContent,
+  ModalHeader,
+  ModalBody,
+  ModalCloseButton,
+  Icon,
+  Heading,
+  List,
+  ListItem,
+  Link,
+  Stack,
+} from '@chakra-ui/react';
+import { VscQuestion } from 'react-icons/vsc';
+import { RiExternalLinkLine, RiErrorWarningLine } from 'react-icons/ri';
+import TextBox from '../components/TextBox';
+
 import { useOverlay } from '../contexts/OverlayContext';
 import { useUser } from '../contexts/UserContext';
 import { getLastTx } from '../utils/txData';
+import { truncateAddr } from '../utils/general';
+import ExplorerLink from '../components/explorerLink';
 
 const TxInfoModal = () => {
   const { outstandingTXs } = useUser();
-  const { address } = useInjectedProvider();
   const { txInfoModal, setTxInfoModal } = useOverlay();
 
-  const mostRecentTx = getLastTx(outstandingTXs, address);
-  const isLoading = mostRecentTx?.status === 'unresolved';
-  clg;
+  const latestTx = getLastTx(outstandingTXs);
   const handleClose = () => setTxInfoModal(false);
+
   return (
     <Modal isOpen={txInfoModal} onClose={handleClose}>
       <ModalOverlay />
@@ -26,68 +45,80 @@ const TxInfoModal = () => {
         m={6}
         mt={2}
       >
-        <ModalHeader></ModalHeader>
+        <ModalHeader>
+          {latestTx?.displayName || 'Transaction'}{' '}
+          {latestTx?.status === 'resolved' ? 'Completed' : 'Submitted'}
+        </ModalHeader>
         <ModalCloseButton />
         <ModalBody>
           {latestTx && (
             <>
-              <ExplorerLink type='tx' hash={latestTx.tx}>
-                <TextBox>{truncateAddr(latestTx.tx)}</TextBox>{' '}
+              <ExplorerLink
+                type='tx'
+                hash={latestTx.txHash}
+                chainID={latestTx.pollArgs.chainID}
+              >
+                <TextBox>{truncateAddr(latestTx.txHash)}</TextBox>{' '}
                 <TextBox colorScheme='secondary.500' size='sm'>
                   view
                 </TextBox>{' '}
                 <Icon as={RiExternalLinkLine} color='secondary.500' ml={1} />
               </ExplorerLink>
-              {!loading && (
+              {latestTx.status === 'resolved' && (
                 <Box mt={4}>
                   <span role='img' aria-label='confetti'>
                     🎉
                   </span>{' '}
-                  Success{' '}
-                  {(latestTx && DISPLAY_NAMES[latestTx?.details?.name]) || ''}{' '}
+                  Success {latestTx.resolvedMsg}
+                  {''}
                   <span role='img' aria-label='confetti'>
                     🎉
                   </span>
-                  {latestTx && latestTx?.details?.name === 'summonMoloch' && (
+                  {/* {latestTx && latestTx?.action === 'summonMoloch' && (
                     <Button onClick={openDaoRegisterRoute}>
                       Configure DAO
                     </Button>
-                  )}
+                  )} */}
                 </Box>
               )}
-              {POPUP_CONTENT[latestTx?.details?.name]?.header && (
+              {latestTx.header && (
                 <Heading as='h5' m={2}>
-                  {POPUP_CONTENT[latestTx?.details?.name]?.header}
+                  {latestTx.header}
                 </Heading>
               )}
-              {POPUP_CONTENT[latestTx?.details?.name]?.bodyText && (
+              {latestTx?.bodyText && (
                 <List spacing={3}>
-                  {POPUP_CONTENT[latestTx?.details?.name]?.bodyText.map(
-                    (txt, idx) => (
-                      <ListItem key={idx}>
-                        <Icon as={VscQuestion} /> {txt}
-                      </ListItem>
-                    ),
-                  )}
+                  {latestTx?.bodyText.map((txt, idx) => (
+                    <ListItem key={idx}>
+                      <Icon as={VscQuestion} /> {txt}
+                    </ListItem>
+                  ))}
                 </List>
               )}
-              {POPUP_CONTENT[latestTx?.details?.name]?.links && (
+              {latestTx?.links && (
                 <Box m={2}>
-                  {POPUP_CONTENT[latestTx?.details?.name]?.links.length && (
+                  {latestTx?.links.length && (
                     <TextBox size='sm'>links:</TextBox>
                   )}
                   <Stack spacing='4px'>
-                    {POPUP_CONTENT[latestTx?.details?.name]?.links.map(
-                      (link, idx) =>
-                        link.external ? (
-                          <TextBox as={Link} key={idx} href={link.href}>
-                            {link.text}
-                          </TextBox>
-                        ) : (
-                          <TextBox as={RouterLink} key={idx} to={link.href}>
-                            {link.text} <Icon as={RiErrorWarningLine} />
-                          </TextBox>
-                        ),
+                    {latestTx?.links.map((link, idx) =>
+                      link.external ? (
+                        <TextBox
+                          as={Link}
+                          key={`${link.href}-${link.idx}`}
+                          href={link.href}
+                        >
+                          {link.text}
+                        </TextBox>
+                      ) : (
+                        <TextBox
+                          as={RouterLink}
+                          key={`${link.href}-${link.idx}`}
+                          to={link.href}
+                        >
+                          {link.text} <Icon as={RiErrorWarningLine} />
+                        </TextBox>
+                      ),
                     )}
                   </Stack>
                 </Box>

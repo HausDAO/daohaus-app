@@ -42,15 +42,16 @@ export const MolochService = ({ web3, daoAddress, version, chainID }) => {
       };
     }
     if (service === 'submitProposal') {
-      return async (args, from, poll) => {
+      return async ({ args, address, poll, onTxHash }) => {
         // console.log('args', args);
         // console.log('from', from);
         // console.log('poll', poll);
         const tx = await contract.methods[service](...args);
         return tx
-          .send('eth_requestAccounts', { from })
+          .send('eth_requestAccounts', { from: address })
           .on('transactionHash', (txHash) => {
             if (poll) {
+              onTxHash();
               poll(txHash);
             }
           })

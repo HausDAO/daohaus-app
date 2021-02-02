@@ -252,7 +252,6 @@ const addPopupModalData = (tx) =>
         displayName: DISPLAY_NAMES[tx.action],
       }
     : null;
-export const getLastTx = (TXs, address) => {
-  if (!TXs || !address || !TXs[address].length) return null;
-  return addPopupModalData(TXs[address][0]);
+export const getLastTx = (TXs) => {
+  return TXs?.length ? addPopupModalData(TXs[0]) : null;
 };

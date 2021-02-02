@@ -9,11 +9,13 @@ import Explore from './pages/Explore';
 import Summon from './pages/Summon';
 import { ExploreContextProvider } from './contexts/ExploreContext';
 import DaoSwitcherModal from './modals/daoSwitcherModal';
+import TxInfoModal from './modals/TxInfoModal';
 
 function App() {
   const AppScopedModals = () => (
     <>
       <DaoSwitcherModal />
+      <TxInfoModal />
     </>
   );
 

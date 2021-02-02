@@ -34,7 +34,12 @@ import { valToDecimalString } from '../utils/tokenValue';
 
 const MemberProposalForm = () => {
   const { injectedProvider, address } = useInjectedProvider();
-  const { errorToast, successToast, setProposalModal } = useOverlay();
+  const {
+    errorToast,
+    successToast,
+    setProposalModal,
+    setTxInfoModal,
+  } = useOverlay();
   const { daoOverview } = useDao();
   const { refreshDao } = useTX();
   const { cachePoll, resolvePoll } = useUser();
@@ -96,43 +101,45 @@ const MemberProposalForm = () => {
       details,
     ];
 
-    // try {
-    //   const poll = createPoll({ action: 'submitProposal', cachePoll })({
-    //     daoID: daoid,
-    //     chainID: daochain,
-    //     hash,
-    //     actions: {
-    //       onError: (error, txHash) => {
-    //         errorToast({
-    //           title: `There was an error.`,
-    //         });
-    //         resolvePoll(txHash);
-    //         console.error(`Could not find a matching proposal: ${error}`);
-    //       },
-    //       onSuccess: (txHash) => {
-    //         successToast({
-    //           title: 'Member Proposal Submitted to the Dao!',
-    //         });
-    //         refreshDao();
-    //         resolvePoll(txHash);
-    //       },
-    //     },
-    //   });
-    //   MolochService({
-    //     web3: injectedProvider,
-    //     daoAddress: daoid,
-    //     chainID: daochain,
-    //     version: daoOverview.version,
-    //   })('submitProposal')(args, address, poll);
-    setProposalModal(false);
-
-    // } catch (err) {
-    //   setLoading(false);
-    //   console.log('error: ', err);
-    //    errorToast({
-    //      title: `There was an error.`,
-    //    });
-    // }
+    try {
+      const poll = createPoll({ action: 'submitProposal', cachePoll })({
+        daoID: daoid,
+        chainID: daochain,
+        hash,
+        actions: {
+          onError: (error, txHash) => {
+            errorToast({
+              title: `There was an error.`,
+            });
+            resolvePoll(txHash);
+            console.error(`Could not find a matching proposal: ${error}`);
+          },
+          onSuccess: (txHash) => {
+            successToast({
+              title: 'Member Proposal Submitted to the Dao!',
+            });
+            refreshDao();
+            resolvePoll(txHash);
+          },
+        },
+      });
+      const onTxHash = () => {
+        setProposalModal(false);
+        setTxInfoModal(true);
+      };
+      MolochService({
+        web3: injectedProvider,
+        daoAddress: daoid,
+        chainID: daochain,
+        version: daoOverview.version,
+      })('submitProposal')({ args, address, poll, onTxHash });
+    } catch (err) {
+      setLoading(false);
+      console.error('error: ', err);
+      errorToast({
+        title: `There was an error.`,
+      });
+    }
   };
 
   return (
