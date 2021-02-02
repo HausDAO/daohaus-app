@@ -1,4 +1,5 @@
 import { supportedChains } from './chain';
+import { utils } from 'web3';
 
 export const parseSummonresAndShares = (data) => {
   if (!data) {
@@ -13,6 +14,28 @@ export const parseSummonresAndShares = (data) => {
     amounts.push(summoner[1]);
   });
   return [addrs, amounts];
+};
+
+export const periodsPerDayPreset = (seconds) => {
+  const hours = +seconds / 60 / 60;
+
+  const perDay = Math.ceil(24 / hours);
+
+  if (24 / hours < 1) {
+    return `Less than ${perDay} per day`;
+  } else {
+    return `${perDay} per day`;
+  }
+};
+
+export const formatPeriodLength = (periods, duration) => {
+  const periodSeconds = +periods * duration;
+  const days = periodSeconds / 60 / 60 / 24;
+  return `${days} day${days > 1 ? 's' : ''}`;
+};
+
+export const formatDepositWei = (amount) => {
+  return utils.fromWei(amount.toString(), 'ether');
 };
 
 export const daoConstants = (chainId) => {

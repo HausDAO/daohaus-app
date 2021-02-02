@@ -4,7 +4,11 @@ import { Button, Flex, Box, Text } from '@chakra-ui/react';
 
 import Layout from '../components/layout';
 import { useInjectedProvider } from '../contexts/InjectedProviderContext';
-import { daoConstants, parseSummonresAndShares } from '../utils/summoning';
+import {
+  daoConstants,
+  daoPresets,
+  parseSummonresAndShares,
+} from '../utils/summoning';
 import SummonHard from '../forms/summonHard';
 import SummonEasy from '../forms/summonEasy';
 
@@ -17,7 +21,12 @@ const Summon = () => {
 
   useEffect(() => {
     if (injectedChain) {
-      setDaoData(daoConstants(injectedChain.chain_id));
+      const presets = daoPresets(injectedChain.chain_id);
+      setDaoData({
+        ...daoConstants(injectedChain.chain_id),
+        summoner: address,
+        ...presets[0],
+      });
     }
   }, [injectedChain]);
 
@@ -54,7 +63,7 @@ const Summon = () => {
   return (
     <Layout>
       <>
-        {address ? (
+        {injectedChain ? (
           <>
             {!isSummoning ? (
               <>
