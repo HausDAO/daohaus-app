@@ -5,28 +5,14 @@ import { Flex, Box, Skeleton, Badge, Icon } from '@chakra-ui/react';
 import { FaThumbsDown, FaThumbsUp } from 'react-icons/fa';
 import { format } from 'date-fns';
 
-// import { useCustomTheme } from '../contexts/CustomThemeContext';
-// import { useInjectedProvider } from '../contexts/InjectedProviderContext';
-// import { useTX } from '../contexts/TXContext';
-// import { MolochService } from '../services/molochService';
-import {
-  // createHash,
-  // detailsToJSON,
-  numberWithCommas,
-  // timeToNow,
-} from '../utils/general';
-// import { createPoll } from '../services/pollService';
-
+import { numberWithCommas } from '../utils/general';
+import { memberVote } from '../utils/proposalUtils';
 import ContentBox from './ContentBox';
+import { useInjectedProvider } from '../contexts/InjectedProviderContext';
 
 const ProposalCard = ({ proposal }) => {
   const { daochain, daoid } = useParams();
-
-  const memberVote = proposal
-    ? proposal?.votes?.find(
-        (vote) => vote.memberAddress === proposal.memberAddress.toLowerCase(),
-      )
-    : null;
+  const { address } = useInjectedProvider();
 
   return (
     <Link
@@ -105,9 +91,9 @@ const ProposalCard = ({ proposal }) => {
           </Box>
         </Flex>
         <Flex alignItems='center' height='80px'>
-          {memberVote && (
+          {memberVote(proposal, address) !== null && (
             <Box fontSize='sm'>
-              {+memberVote.uintVote === 1 ? (
+              {+memberVote(proposal, address) === 1 ? (
                 <Flex
                   pl={6}
                   w='40px'

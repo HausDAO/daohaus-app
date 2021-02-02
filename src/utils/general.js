@@ -46,8 +46,10 @@ export const omit = (keys, obj) =>
   Object.fromEntries(Object.entries(obj).filter(([k]) => !keys.includes(k)));
 
 export const numberWithCommas = (num) => {
+  const localNum = typeof num !== 'string' ? num.toString() : num;
   // drop zero after decimal
-  const noZeroDec = parseInt(num.split('.')[1]) === 0 ? num.split('.')[0] : num;
+  const noZeroDec =
+    parseInt(localNum.split('.')[1]) === 0 ? localNum.split('.')[0] : localNum;
 
   return noZeroDec.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ',');
 };
@@ -58,9 +60,30 @@ export const truncateAddr = (addr) => {
 export const timeToNow = (time) => {
   return formatDistanceToNow(new Date(time * 1000), { addSuffix: true });
 };
+
 // export const formatCreatedAt = (createdAt) => {
 //   return format(new Date(createdAt * 1000), "MMM dd, yyyy");
 // };
+
+export const formatPeriods = (period, duration) => {
+  if (period && duration) {
+    let s = period * duration;
+    const d = Math.floor(s / (3600 * 24));
+    s -= d * 3600 * 24;
+    const h = Math.floor(s / 3600);
+    s -= h * 3600;
+    const m = Math.floor(s / 60);
+    s -= m * 60;
+    const tmp = [];
+    d && tmp.push(d + 'd');
+    (d || h) && h && tmp.push(h + 'h');
+    (d || h || m) && m && tmp.push(m + 'm');
+    s && tmp.push(s + 's');
+
+    return tmp.join(' ');
+  }
+  return 0;
+};
 
 export const stripHttpProtocol = (string) => {
   // regex? var tarea_regex = /(http|https)/;

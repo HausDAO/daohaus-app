@@ -63,6 +63,7 @@ export const MolochService = ({ web3, daoAddress, version, chainID }) => {
     if (
       service === 'submitProposal' ||
       service === 'sponsorProposal' ||
+      service === 'cancelProposal' ||
       service === 'submitVote' ||
       service === 'processProposal' ||
       service === 'processWhitelistProposal' ||
