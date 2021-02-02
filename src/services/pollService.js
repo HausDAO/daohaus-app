@@ -1,9 +1,10 @@
 import { BigNumber } from 'ethers';
 import { graphQuery } from '../utils/apollo';
 import { PROPOSALS_LIST } from '../graphQL/proposal-queries';
-import { getGraphEndpoint } from '../utils/chain';
+import { chainByID, getGraphEndpoint } from '../utils/chain';
 import { hashMaker } from '../utils/proposalUtils';
 import { TokenService } from '../services/tokenService';
+import { truncateAddr } from '../utils/general';
 
 /// //////////CALLS///////////////
 const pollProposals = async ({ daoID, chainID }) =>
@@ -119,12 +120,17 @@ export const createPoll = ({
       if (cachePoll) {
         cachePoll({
           txHash,
+          action,
           timeSent: Date.now(),
           status: 'unresolved',
           resolvedMsg: `Submitted proposal`,
           unresolvedMsg: `Submitting proposal`,
-          successMsg: `Proposal Submitted to ${daoID} on ${chainID}`,
-          errorMsg: `Error Submitting proposal ${daoID} on ${chainID}`,
+          successMsg: `Proposal Submitted to ${truncateAddr(
+            daoID,
+          )} on ${chainByID(chainID)}`,
+          errorMsg: `Error Submitting proposal ${truncateAddr(
+            daoID,
+          )} on ${chainByID(chainID)}`,
           pollData: {
             action,
             interval,
