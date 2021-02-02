@@ -12,9 +12,11 @@ import {
   AccordionIcon,
   AccordionItem,
   AccordionPanel,
+  Icon,
 } from '@chakra-ui/react';
 import { themeImagePath } from '../utils/metadata';
 import makeBlockie from 'ethereum-blockies-base64';
+import { FiAlertOctagon } from 'react-icons/fi';
 
 const NetworkDaoList = ({ data, network, searchTerm, index }) => {
   const [sortedDaoList, setSortedDaoList] = useState([]);
@@ -63,28 +65,32 @@ const NetworkDaoList = ({ data, network, searchTerm, index }) => {
           flexDirection='column'
           alignItems='center'
         >
-          <Avatar
-            name={dao.meta ? dao.meta.name.substr(0, 1) : 'no title'}
-            src={
-              dao.meta?.avatarImg
-                ? themeImagePath(dao.meta.avatarImg)
-                : makeBlockie(dao.molochAddress)
-            }
-            mb={3}
-            bg='black'
-          >
-            {unReadCount ? (
-              <AvatarBadge
-                boxSize='1.25em'
-                bg='red.500'
-                borderColor='transparent'
-                transition='all 0.15s linear'
-                _hover={{ bg: 'secondary.500' }}
-              >
-                <Text fontSize='xs'>{unReadCount}</Text>
-              </AvatarBadge>
-            ) : null}
-          </Avatar>
+          {!dao.meta ? (
+            <Icon as={FiAlertOctagon} color='yellow.300' h={50} w={50} mb={3} />
+          ) : (
+            <Avatar
+              name={dao.meta ? dao.meta.name.substr(0, 1) : 'no title'}
+              src={
+                dao.meta?.avatarImg
+                  ? themeImagePath(dao.meta.avatarImg)
+                  : makeBlockie(dao.molochAddress)
+              }
+              mb={3}
+              bg='black'
+            >
+              {unReadCount ? (
+                <AvatarBadge
+                  boxSize='1.25em'
+                  bg='red.500'
+                  borderColor='transparent'
+                  transition='all 0.15s linear'
+                  _hover={{ bg: 'secondary.500' }}
+                >
+                  <Text fontSize='xs'>{unReadCount}</Text>
+                </AvatarBadge>
+              ) : null}
+            </Avatar>
+          )}
 
           {dao.meta ? (
             <Box
@@ -103,7 +109,7 @@ const NetworkDaoList = ({ data, network, searchTerm, index }) => {
           ) : (
             <Box
               fontFamily='mono'
-              fontSize='sm'
+              fontSize='xs'
               color='red.500'
               fontWeight='900'
               style={{
@@ -114,7 +120,7 @@ const NetworkDaoList = ({ data, network, searchTerm, index }) => {
                 whiteSpace: 'nowrap',
               }}
             >
-              REGISTER ME
+              REGISTER NEW DAO
             </Box>
           )}
         </Link>
