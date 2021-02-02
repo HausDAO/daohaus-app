@@ -31,6 +31,9 @@ function App() {
         <Route exact path='/summon'>
           <Summon />
         </Route>
+        <Route exact path='/register/:daochain/:daoid'>
+          <Summon />
+        </Route>
         <Route path='/dao/:daochain/:daoid'>
           <DaoProvider>
             <Dao />

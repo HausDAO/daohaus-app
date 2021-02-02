@@ -1,6 +1,6 @@
 import React from 'react';
 
-import BankList from '../components/bankList';
+// import BankList from '../components/bankList';
 import Chart from '../components/chart';
 import { useToken } from '../contexts/TokenContext';
 
@@ -9,7 +9,7 @@ const Bank = () => {
   return (
     <div>
       <Chart />
-      <BankList tokens={currentDaoTokens} />
+      {/* <BankList tokens={currentDaoTokens} /> */}
     </div>
   );
 };
