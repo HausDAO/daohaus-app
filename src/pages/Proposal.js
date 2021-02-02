@@ -1,14 +1,19 @@
 import React from 'react';
-import { useParams } from 'react-router-dom';
-import { Flex, Box } from '@chakra-ui/react';
+import { useParams, Link as RouterLink } from 'react-router-dom';
+import { Flex, Box, Stack, Link, Icon } from '@chakra-ui/react';
+import { RiArrowLeftLine } from 'react-icons/ri';
+
 import ActivitiesFeed from '../components/activitiesFeed';
 import { getProposalHistories } from '../utils/activities';
 import TextBox from '../components/TextBox';
 import ProposalDetails from '../components/proposalDetails';
 import ProposalActions from '../components/proposalActions';
+import { useMetaData } from '../contexts/MetaDataContext';
+import { getCopy } from '../utils/metadata';
 
 const Proposal = ({ activities }) => {
-  const { propid } = useParams();
+  const { propid, daochain, daoid } = useParams();
+  const { daoMetaData } = useMetaData();
   const currentProposal = activities
     ? activities?.proposals?.find((proposal) => proposal.proposalId === propid)
     : null;
@@ -21,6 +26,18 @@ const Proposal = ({ activities }) => {
           w={['100%', null, null, null, '60%']}
           pr={[0, null, null, null, 6]}
         >
+          <Link as={RouterLink} to={`/dao/${daochain}/${daoid}/proposals`}>
+            <TextBox size='md'>
+              <Icon
+                name='arrow-back'
+                color='primary.50'
+                as={RiArrowLeftLine}
+                h='20px'
+                w='20px'
+              />{' '}
+              All {getCopy(daoMetaData, 'proposals')}
+            </TextBox>
+          </Link>
           <ProposalDetails proposal={currentProposal} />
         </Flex>
         <Flex
@@ -33,7 +50,7 @@ const Proposal = ({ activities }) => {
               <TextBox size='md'>Actions</TextBox>
             )}
           </Box>
-          <Box pt={6}>
+          <Stack pt={6} spacing={6}>
             {!currentProposal?.cancelled && (
               <ProposalActions proposal={currentProposal} />
             )}
@@ -42,7 +59,7 @@ const Proposal = ({ activities }) => {
               activities={currentProposal}
               hydrateFn={getProposalHistories}
             />
-          </Box>
+          </Stack>
         </Flex>
       </Flex>
     </Box>

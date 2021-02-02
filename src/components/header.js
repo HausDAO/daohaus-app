@@ -13,11 +13,11 @@ const Header = ({ dao }) => {
   const { injectedChain, address, requestWallet } = useInjectedProvider();
 
   const daoConnectedAndWrongChain = () => {
-    return dao?.chainID && injectedChain?.chainId !== dao?.chainID;
+    return address && dao?.chainID && injectedChain?.chainId !== dao?.chainID;
   };
 
   const WrongNetworkToolTip = ({ children }) => {
-    const withToolTip = (
+    return daoConnectedAndWrongChain() ? (
       <Tooltip
         hasArrow
         label='Please change networks in your wallet to interact with this DAO.'
@@ -26,8 +26,9 @@ const Header = ({ dao }) => {
       >
         {children}
       </Tooltip>
+    ) : (
+      children
     );
-    return daoConnectedAndWrongChain() ? withToolTip : children;
   };
 
   const getHeading = () => {

@@ -291,10 +291,12 @@ export const getProposalDetailStatus = (proposal) => {
 };
 
 // return boolean as to whether user voted on a given proposal
-export const memberVote = (proposal) => {
+export const memberHasVoted = (proposal, userAddress) => {
   return proposal
     ? proposal?.votes?.find(
-        (vote) => vote.memberAddress === proposal.memberAddress.toLowerCase(),
+        (vote) =>
+          vote.memberAddress === userAddress.toLowerCase() ||
+          proposal.memberAddress.toLowerCase(),
       )
     : null;
 };

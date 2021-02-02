@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   FormControl,
   FormHelperText,
@@ -14,6 +14,7 @@ import { useDao } from '../contexts/DaoContext';
 // import { useEns, useMembers, useUser } from '../../../contexts/PokemolContext';
 import { useCustomTheme } from '../contexts/CustomThemeContext';
 import { truncateAddr } from '../utils/general';
+import { handleGetProfile } from '../utils/3box';
 
 const AddressInput = ({
   register,
@@ -31,6 +32,7 @@ const AddressInput = ({
   const { daoMembers } = useDao();
   const [anyApplicant, setAnyApplicant] = useState(false);
   // const [members] = useMembers();
+  const [localMembers, setLocalMembers] = useState([]);
 
   const ensAddr = watch('applicantHidden', '');
 
@@ -47,7 +49,19 @@ const AddressInput = ({
     // }
   };
 
-  console.log(daoMembers);
+  useEffect(async () => {
+    if (daoMembers) {
+      const memberProfiles = Promise.all(
+        daoMembers.map(async (member) => {
+          return {
+            ...member,
+            ...(await handleGetProfile(member.memberAddress)),
+          };
+        }),
+      );
+      setLocalMembers(await memberProfiles);
+    }
+  }, [daoMembers]);
 
   return (
     <>
@@ -109,21 +123,20 @@ const AddressInput = ({
             ref={register}
             color='whiteAlpha.900'
           >
-            {daoMembers &&
-              daoMembers.map((member) => {
-                return (
-                  <option
-                    key={member.memberAddress}
-                    value={member.memberAddress}
-                    color={theme.colors.whiteAlpha[900]}
-                    background={theme.colors.blackAlpha[900]}
-                  >
-                    {member?.profile?.name
-                      ? member?.profile?.name
-                      : truncateAddr(member.memberAddress)}
-                  </option>
-                );
-              })}
+            {localMembers?.map((member) => {
+              return (
+                <option
+                  key={member.memberAddress}
+                  value={member.memberAddress}
+                  color={theme.colors.whiteAlpha[900]}
+                  background={theme.colors.blackAlpha[900]}
+                >
+                  {member?.name
+                    ? member?.name
+                    : truncateAddr(member.memberAddress)}
+                </option>
+              );
+            })}
           </Select>
         </FormControl>
       )}
