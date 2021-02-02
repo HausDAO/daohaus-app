@@ -289,3 +289,12 @@ export const getProposalDetailStatus = (proposal) => {
       return <Fragment />;
   }
 };
+
+// return boolean as to whether user voted on a given proposal
+export const memberVote = (proposal) => {
+  return proposal
+    ? proposal?.votes?.find(
+        (vote) => vote.memberAddress === proposal.memberAddress.toLowerCase(),
+      )
+    : null;
+};

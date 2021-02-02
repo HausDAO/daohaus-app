@@ -1,7 +1,9 @@
+import { BigNumber } from 'ethers';
 import { graphQuery } from '../utils/apollo';
 import { PROPOSALS_LIST } from '../graphQL/proposal-queries';
 import { getGraphEndpoint } from '../utils/chain';
 import { hashMaker } from '../utils/proposalUtils';
+import { TokenService } from '../services/tokenService';
 
 /// //////////CALLS///////////////
 const pollProposals = async ({ daoID, chainID }) =>
@@ -13,6 +15,23 @@ const pollProposals = async ({ daoID, chainID }) =>
       skip: 0,
     },
   });
+
+const pollTokenAllowances = async ({
+  chainID,
+  daoID,
+  tokenAddress,
+  userAddress,
+}) => {
+  const tokenContract = TokenService({
+    chainID,
+    tokenAddress,
+  });
+  const amountApproved = await tokenContract('allowance')({
+    accountAddr: userAddress,
+    contractAddr: daoID,
+  });
+  return amountApproved;
+};
 
 /// //////////TESTS///////////////
 const proposalTest = (data, shouldEqual, pollId) => {
@@ -28,6 +47,11 @@ const proposalTest = (data, shouldEqual, pollId) => {
       `Poll test did recieve the expected results from the graph: ${data}`,
     );
   }
+};
+
+const tokenAllowanceTest = (data, shouldEqual, pollId) => {
+  console.log('new allowance: ', data);
+  return BigNumber.from(data).gte(shouldEqual);
 };
 
 export const createPoll = ({
@@ -115,12 +139,19 @@ export const createPoll = ({
       }
     };
   } else if (action === 'unlockToken') {
-    return ({ daoID, chainID, tokenAddress, actions }) => (txHash) => {
+    return ({
+      daoID,
+      chainID,
+      tokenAddress,
+      userAddress,
+      unlockAmount,
+      actions,
+    }) => (txHash) => {
       startPoll({
-        pollFetch: pollProposals,
-        testFn: proposalTest,
-        shouldEqual: txHash,
-        args: { daoID, chainID, tokenAddress },
+        pollFetch: pollTokenAllowances,
+        testFn: tokenAllowanceTest,
+        shouldEqual: unlockAmount,
+        args: { daoID, chainID, tokenAddress, userAddress, unlockAmount },
         actions,
         txHash,
       });
@@ -142,6 +173,8 @@ export const createPoll = ({
             daoID,
             tokenAddress,
             chainID,
+            userAddress,
+            unlockAmount,
           },
         });
       }

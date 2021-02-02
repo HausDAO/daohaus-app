@@ -54,7 +54,7 @@ const NewProposal = () => {
   }, [params]);
 
   return (
-    <Box p={6}>
+    <Box>
       <ProposalScopedModals proposalType={proposalType} />
       <Flex>
         <TextBox size='xl' fontWeight={700}>
