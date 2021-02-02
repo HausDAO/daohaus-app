@@ -60,5 +60,30 @@ export const MolochService = ({ web3, daoAddress, version, chainID }) => {
           });
       };
     }
+    if (
+      service === 'submitProposal' ||
+      service === 'sponsorProposal' ||
+      service === 'submitVote' ||
+      service === 'processProposal' ||
+      service === 'processWhitelistProposal' ||
+      service === 'processGuildKickProposal'
+    ) {
+      return async (args, from, poll) => {
+        console.log('args', args);
+        console.log('from', from);
+        console.log('poll', poll);
+        const tx = await contract.methods[service](...args);
+        return tx
+          .send('eth_requestAccounts', { from })
+          .on('transactionHash', (txHash) => {
+            if (poll) {
+              poll(txHash);
+            }
+          })
+          .on('error', (error) => {
+            console.error(error);
+          });
+      };
+    }
   };
 };

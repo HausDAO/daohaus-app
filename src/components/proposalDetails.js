@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react';
-// import { useParams } from 'react-router-dom';
 import { utils } from 'web3';
 import {
   Flex,
@@ -16,7 +15,6 @@ import { FaThumbsUp, FaThumbsDown } from 'react-icons/fa';
 import ReactPlayer from 'react-player';
 import { AddressZero } from '@ethersproject/constants';
 
-import { numberWithCommas } from '../utils/general';
 import TextBox from '../components/TextBox';
 import ContentBox from '../components/ContentBox';
 import UserAvatar from '../components/userAvatar';
@@ -26,6 +24,7 @@ import {
   getProposalDetailStatus,
 } from '../utils/proposalUtils';
 import { handleGetProfile } from '../utils/3box';
+import { numberWithCommas } from '../utils/general';
 
 const urlify = (text) => {
   var urlRegex = /(https?:\/\/[^\s]+)/g;
@@ -44,18 +43,19 @@ const hasImage = (string) => {
 };
 
 const ProposalDetails = ({ proposal }) => {
+  const [proposer, setProposer] = useState(null);
+  const [applicant, setApplicant] = useState(null);
+
   const memberVote = proposal
     ? proposal?.votes?.find(
         (vote) => vote.memberAddress === proposal.memberAddress.toLowerCase(),
       )
     : null;
-  const [proposer, setProposer] = useState(null);
-  const [applicant, setApplicant] = useState(null);
 
-  useEffect(() => {
+  useEffect(async () => {
     if (proposal) {
-      const proposerProfile = handleGetProfile(proposal.proposer);
-      const applicantProfile = handleGetProfile(
+      const proposerProfile = await handleGetProfile(proposal.proposer);
+      const applicantProfile = await handleGetProfile(
         proposal?.applicant !== AddressZero
           ? proposal.applicant
           : proposal.proposer,
@@ -78,15 +78,13 @@ const ProposalDetails = ({ proposal }) => {
     }
   }, [proposal]);
 
-  console.log(proposal);
-
   return (
     <Box pt={6}>
       <ContentBox>
         <Box>
           <Box>
             <Flex justify='space-between'>
-              <TextBox size='xs'>{proposal.proposalType}</TextBox>
+              <TextBox size='xs'>{proposal?.proposalType}</TextBox>
 
               <Box>
                 {proposal?.proposalIndex ? (
