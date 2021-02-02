@@ -13,16 +13,8 @@ import {
   MenuList,
   MenuItem,
 } from '@chakra-ui/react';
-// import { utils } from 'web3';
 import { RiAddFill, RiErrorWarningLine } from 'react-icons/ri';
 
-// import {
-//   useDao,
-//   useTxProcessor,
-//   useUser,
-//   useMemberWallet,
-//   useModals,
-// } from '../../../contexts/PokemolContext';
 import TextBox from '../components/TextBox';
 
 import PaymentInput from './paymentInput';
@@ -76,37 +68,15 @@ const MemberProposalForm = () => {
     }
   }, [errors]);
 
-  // const txCallBack = (txHash, details) => {
-  //   console.log('txCallBack', txProcessor);
-  //   if (txProcessor && txHash) {
-  //     txProcessor.setTx(txHash, user.username, details);
-  //     txProcessor.forceUpdate = true;
-
-  //     updateTxProcessor({ ...txProcessor });
-  //     // close model here
-  //     closeModals();
-  //   }
-  //   if (!txHash) {
-  //     console.log('error: ', details);
-  //     setLoading(false);
-  //   }
-  // };
-
   const onSubmit = async (values) => {
-    // setLoading(true);
-
-    const details = detailsToJSON(values);
     const hash = createHash();
+    const details = detailsToJSON({ ...values, hash });
     const { tokenBalances, depositToken } = daoOverview;
     const tributeToken = values.tributeToken || depositToken.tokenAddress;
-    console.log('tributeToken', tributeToken);
     const paymentToken = values.paymentToken || depositToken.tokenAddress;
-    console.log('paymentToken', paymentToken);
-    const tributeOffered = '0';
-
-    // values.tributeOffered
-    //   ? valToDecimalString(values.tributeOffered, tributeToken, tokenBalances)
-    //   : '0';
+    const tributeOffered = values.tributeOffered
+      ? valToDecimalString(values.tributeOffered, tributeToken, tokenBalances)
+      : '0';
     const paymentRequested = values.paymentRequested
       ? valToDecimalString(values.paymentRequested, paymentToken, tokenBalances)
       : '0';
@@ -125,42 +95,39 @@ const MemberProposalForm = () => {
       paymentToken,
       details,
     ];
-    console.log('args', args);
-    console.log('hash', hash);
-    console.log('applicant', applicant);
 
-    // try {
-    //   const poll = createPoll({ action: 'submitProposal', cachePoll })({
-    //     daoID: daoid,
-    //     chainID: daochain,
-    //     hash,
-    //     actions: {
-    //       onError: (error, txHash) => {
-    //         errorToast({
-    //           title: `There was an error.`,
-    //         });
-    //         resolvePoll(txHash);
-    //         console.error(`Could not find a matching proposal: ${error}`);
-    //       },
-    //       onSuccess: (txHash) => {
-    //         successToast({
-    //           title: 'Proposal Submitted to the Dao!',
-    //         });
-    //         refreshDao();
-    //         resolvePoll(txHash);
-    //       },
-    //     },
-    //   });
-    //   MolochService({
-    //     web3: injectedProvider,
-    //     daoAddress: daoid,
-    //     chainID: daochain,
-    //     version: daoOverview.version,
-    //   })('submitProposal')(args, from, poll);
-    // } catch (err) {
-    //   setLoading(false);
-    //   console.log('error: ', err);
-    // }
+    try {
+      const poll = createPoll({ action: 'submitProposal', cachePoll })({
+        daoID: daoid,
+        chainID: daochain,
+        hash,
+        actions: {
+          onError: (error, txHash) => {
+            errorToast({
+              title: `There was an error.`,
+            });
+            resolvePoll(txHash);
+            console.error(`Could not find a matching proposal: ${error}`);
+          },
+          onSuccess: (txHash) => {
+            successToast({
+              title: 'Member Proposal Submitted to the Dao!',
+            });
+            refreshDao();
+            resolvePoll(txHash);
+          },
+        },
+      });
+      MolochService({
+        web3: injectedProvider,
+        daoAddress: daoid,
+        chainID: daochain,
+        version: daoOverview.version,
+      })('submitProposal')(args, address, poll);
+    } catch (err) {
+      setLoading(false);
+      console.log('error: ', err);
+    }
   };
 
   return (

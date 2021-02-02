@@ -76,6 +76,7 @@ const TributeInput = ({ register, setValue, getValues }) => {
   const unlock = async () => {
     setLoading(true);
     const token = getValues('tributeToken');
+    console.log(token);
     const tokenAmount = getValues('tributeOffered');
     // ? multiply times decimals
     try {
@@ -133,7 +134,7 @@ const TributeInput = ({ register, setValue, getValues }) => {
     console.log(token);
     const tokenContract = TokenService({
       chainID: daochain,
-      tokenAddress: token.value,
+      tokenAddress: token,
     });
     const max = await tokenContract('balanceOf')(address);
     setBalance(max);

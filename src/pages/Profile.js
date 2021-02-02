@@ -3,10 +3,8 @@ import { Avatar, Flex } from '@chakra-ui/react';
 import makeBlockie from 'ethereum-blockies-base64';
 
 import { useParams } from 'react-router-dom';
-import { ethers } from 'ethers';
 import { handleGetProfile } from '../utils/3box';
 import { truncateAddr } from '../utils/general';
-import { chainByID } from '../utils/chain';
 import { tallyUSDs } from '../utils/tokenValue';
 // import ProfileBankList from '../components/profileBankList';
 import ActivitiesFeed from '../components/activitiesFeed';
@@ -66,9 +64,9 @@ const handleName = (member, profile) => {
   return profile?.name ? profile.name : truncateAddr(member.memberAddress);
 };
 const Profile = ({ members, overview, daoTokens, activities }) => {
-  const { daochain, userid } = useParams();
+  const { userid } = useParams();
   const [profile, setProfile] = useState(null);
-  const [ens, setEns] = useState(null);
+  // const [ens, setEns] = useState(null);
 
   const currentMember = members
     ? members.find((member) => member.memberAddress === userid)
