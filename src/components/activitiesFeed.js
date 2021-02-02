@@ -1,23 +1,35 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import ActivityCard from './activityCard';
+import Paginator from './paginator';
 import TextBox from './TextBox';
 
-const ActivitiesFeed = ({ activities, hydrateFn, limit }) => {
-  const allActivities = activities ? hydrateFn(activities) : [];
+const ActivitiesFeed = ({
+  activities,
+  hydrateFn,
+  limit,
+  heading = 'Activities',
+}) => {
+  const [allActivities, setAllActivities] = useState(null);
+  const [pagedActivities, setPagedActivities] = useState(null);
+
+  useEffect(() => {
+    if (activities) {
+      setAllActivities(hydrateFn(activities));
+    }
+  }, [activities]);
 
   return (
     <>
-      <TextBox>Activities</TextBox>
-      {allActivities &&
-        allActivities
-          .slice(0, limit)
-          .map((activity, index) => (
-            <ActivityCard
-              key={index}
-              activity={activity}
-              displayAvatar={true}
-            />
-          ))}
+      <TextBox>{heading}</TextBox>
+      {pagedActivities &&
+        pagedActivities.map((activity, index) => (
+          <ActivityCard key={index} activity={activity} displayAvatar={true} />
+        ))}
+      <Paginator
+        perPage={limit}
+        setRecords={setPagedActivities}
+        allRecords={allActivities}
+      />
     </>
   );
 };
