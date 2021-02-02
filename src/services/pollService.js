@@ -2,7 +2,7 @@ import { BigNumber } from 'ethers';
 import { graphQuery } from '../utils/apollo';
 import { PROPOSALS_LIST } from '../graphQL/proposal-queries';
 import { getGraphEndpoint } from '../utils/chain';
-import { hashMaker, memberHasVoted } from '../utils/proposalUtils';
+import { hashMaker, memberVote } from '../utils/proposalUtils';
 import { TokenService } from '../services/tokenService';
 
 /// //////////CALLS///////////////
@@ -55,9 +55,11 @@ const tokenAllowanceTest = (data, shouldEqual, pollId) => {
 };
 
 const sponsorProposalTest = (data, shouldEqual, pollId) => {
+  console.log(data);
+  console.log('shouldEqual :>> ', shouldEqual);
   if (data.proposals) {
     const proposal = data.proposals.find(
-      (proposal) => proposal.id === shouldEqual,
+      (proposal) => proposal.proposalId === shouldEqual,
     );
     console.log(proposal);
     return proposal?.sponsored;
@@ -71,13 +73,14 @@ const sponsorProposalTest = (data, shouldEqual, pollId) => {
 
 const submitVoteTest = (data, shouldEqual, pollId) => {
   const [proposalId, userAddress] = shouldEqual;
-
+  console.log(data);
+  console.log(proposalId, userAddress);
   if (data.proposals) {
     const proposal = data.proposals.find(
-      (proposal) => proposal.id === proposalId,
+      (proposal) => proposal.proposalId === proposalId,
     );
     console.log(proposal);
-    return memberHasVoted(proposal, userAddress);
+    return memberVote(proposal, userAddress) !== null;
   } else {
     clearInterval(pollId);
     throw new Error(
@@ -87,12 +90,31 @@ const submitVoteTest = (data, shouldEqual, pollId) => {
 };
 
 const processProposalTest = (data, shouldEqual, pollId) => {
+  console.log(data);
+  console.log(shouldEqual);
   if (data.proposals) {
     const proposal = data.proposals.find(
       (proposal) => proposal.proposalIndex === shouldEqual,
     );
     console.log(proposal);
     return proposal?.processed;
+  } else {
+    clearInterval(pollId);
+    throw new Error(
+      `Poll test did recieve the expected results from the graph: ${data}`,
+    );
+  }
+};
+
+const cancelProposalTest = (data, shouldEqual, pollId) => {
+  console.log(data);
+  console.log(shouldEqual);
+  if (data.proposals) {
+    const proposal = data.proposals.find(
+      (proposal) => proposal.proposalId === shouldEqual,
+    );
+    console.log(proposal);
+    return proposal?.cancelled;
   } else {
     clearInterval(pollId);
     throw new Error(
@@ -326,6 +348,39 @@ export const createPoll = ({
             daoID,
             chainID,
             proposalIndex,
+          },
+        });
+      }
+    };
+  } else if (action === 'cancelProposal') {
+    return ({ daoID, chainID, proposalId, actions }) => (txHash) => {
+      startPoll({
+        pollFetch: pollProposals,
+        testFn: cancelProposalTest,
+        shouldEqual: proposalId,
+        args: { daoID, chainID, proposalId },
+        actions,
+        txHash,
+      });
+      if (cachePoll) {
+        cachePoll({
+          txHash,
+          action,
+          timeSent: Date.now(),
+          status: 'unresolved',
+          resolvedMsg: `Cancelled proposal`,
+          unresolvedMsg: `Cancelling proposal`,
+          successMsg: `Proposal #${proposalId} Cancelled for ${daoID} on ${chainID}`,
+          errorMsg: `Error Cancelling proposal #${proposalId} for ${daoID} on ${chainID}`,
+          pollData: {
+            action,
+            interval,
+            tries,
+          },
+          pollArgs: {
+            daoID,
+            chainID,
+            proposalId,
           },
         });
       }

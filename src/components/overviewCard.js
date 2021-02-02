@@ -1,14 +1,14 @@
 import React from 'react';
 import { useParams, useHistory } from 'react-router-dom';
-import { Flex, Box, Skeleton, Button } from '@chakra-ui/react';
-// import { useCustomTheme } from '../contexts/CustomThemeContext';
+import { Flex, Box, Skeleton, Button, Avatar } from '@chakra-ui/react';
+import makeBlockie from 'ethereum-blockies-base64';
 import { useMetaData } from '../contexts/MetaDataContext';
-import { getCopy } from '../utils/metadata';
+import { getCopy, themeImagePath } from '../utils/metadata';
 import BankTotal from './bankTotal';
 import TextBox from './TextBox';
 import ContentBox from './ContentBox';
 
-const OverviewCard = ({ overview, isMember, membersAmt }) => {
+const OverviewCard = ({ overview, membersAmt }) => {
   const { daochain, daoid } = useParams();
   const { daoMetaData } = useMetaData();
   const { tokenBalances, totalLoot, totalShares, title } = overview;
@@ -21,11 +21,20 @@ const OverviewCard = ({ overview, isMember, membersAmt }) => {
       </TextBox>
       <ContentBox mt={2} w='100%'>
         <Flex direction='row' align='center'>
-          {/* <p>{isMember ? "You are a member" : "You are not a member"}</p> */}
           <Skeleton isLoaded={title} ml={6}>
-            <Box fontSize='2xl' fontWeight={700} fontFamily='heading'>
-              {title || '--'}
-            </Box>
+            <Flex align='center'>
+              <Avatar
+                src={
+                  daoMetaData?.avatarImg
+                    ? themeImagePath(daoMetaData.avatarImg)
+                    : makeBlockie(daoid || '0x0')
+                }
+                mr={6}
+              />
+              <Box fontSize='2xl' fontWeight={700} fontFamily='heading'>
+                {title || '--'}
+              </Box>
+            </Flex>
           </Skeleton>
         </Flex>
         <Skeleton isLoaded={daoMetaData?.description}>

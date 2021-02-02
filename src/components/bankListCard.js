@@ -106,7 +106,11 @@ const TokenListCard = ({
       <Box w='15%'>
         <Skeleton isLoaded={token?.usd >= 0}>
           <Box fontFamily='mono'>
-            {token?.usd ? <Box>{token?.usd}</Box> : '--'}
+            {token?.usd ? (
+              <Box>${numberWithCommas(token?.usd.toFixed(2))}</Box>
+            ) : (
+              '--'
+            )}
           </Box>
         </Skeleton>
       </Box>
@@ -115,7 +119,11 @@ const TokenListCard = ({
           <Box fontFamily='mono'>
             {token?.tokenBalance ? (
               <>
-                {optimisticWithdraw ? '$ 0.00' : <Box>{token?.totalUSD}</Box>}
+                {optimisticWithdraw ? (
+                  '$ 0.00'
+                ) : (
+                  <Box>${numberWithCommas(token?.totalUSD.toFixed(2))}</Box>
+                )}
               </>
             ) : (
               '--'

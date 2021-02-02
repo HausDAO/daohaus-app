@@ -22,9 +22,11 @@ import UserAvatar from '../components/userAvatar';
 import {
   getProposalCountdownText,
   getProposalDetailStatus,
+  memberVote,
 } from '../utils/proposalUtils';
 import { handleGetProfile } from '../utils/3box';
 import { numberWithCommas } from '../utils/general';
+import { useInjectedProvider } from '../contexts/InjectedProviderContext';
 
 const urlify = (text) => {
   var urlRegex = /(https?:\/\/[^\s]+)/g;
@@ -45,12 +47,7 @@ const hasImage = (string) => {
 const ProposalDetails = ({ proposal }) => {
   const [proposer, setProposer] = useState(null);
   const [applicant, setApplicant] = useState(null);
-
-  const memberVote = proposal
-    ? proposal?.votes?.find(
-        (vote) => vote.memberAddress === proposal.memberAddress.toLowerCase(),
-      )
-    : null;
+  const { address } = useInjectedProvider();
 
   useEffect(async () => {
     if (proposal) {
@@ -141,36 +138,38 @@ const ProposalDetails = ({ proposal }) => {
             !hasImage(proposal?.link) ? (
               <TextBox size='xs'>Link</TextBox>
             ) : null}
-            <Skeleton isLoaded={proposal?.link || proposal?.minionAddress}>
-              {proposal?.link ? (
-                proposal?.link ? (
-                  ReactPlayer.canPlay(proposal?.link) ? (
-                    <Box width='100%'>
-                      <ReactPlayer
-                        url={proposal?.link}
-                        playing={false}
-                        loop={false}
-                        width='100%'
+            {proposal?.link !== '' && (
+              <Skeleton isLoaded={proposal?.link || proposal?.minionAddress}>
+                {proposal?.link ? (
+                  proposal?.link ? (
+                    ReactPlayer.canPlay(proposal?.link) ? (
+                      <Box width='100%'>
+                        <ReactPlayer
+                          url={proposal?.link}
+                          playing={false}
+                          loop={false}
+                          width='100%'
+                        />
+                      </Box>
+                    ) : hasImage(proposal?.link) ? (
+                      <Image
+                        src={`https://${proposal?.link}`}
+                        maxW='100%'
+                        margin='0 auto'
+                        alt='link image'
                       />
-                    </Box>
-                  ) : hasImage(proposal?.link) ? (
-                    <Image
-                      src={`https://${proposal?.link}`}
-                      maxW='100%'
-                      margin='0 auto'
-                      alt='link image'
-                    />
-                  ) : (
-                    <Link href={`https://${proposal?.link}`} target='_blank'>
-                      {proposal?.link ? proposal?.link : '-'}{' '}
-                      <Icon as={RiExternalLinkLine} color='primary.50' />
-                    </Link>
-                  )
-                ) : null
-              ) : proposal?.minionAddress ? null : (
-                '--'
-              )}
-            </Skeleton>
+                    ) : (
+                      <Link href={`https://${proposal?.link}`} target='_blank'>
+                        {proposal?.link ? proposal?.link : '-'}{' '}
+                        <Icon as={RiExternalLinkLine} color='primary.50' />
+                      </Link>
+                    )
+                  ) : null
+                ) : proposal?.minionAddress ? null : (
+                  '--'
+                )}
+              </Skeleton>
+            )}
           </Box>
         </Box>
         <Flex w='100%' justify='space-between' mt={6}>
@@ -231,7 +230,7 @@ const ProposalDetails = ({ proposal }) => {
           mt={6}
           justify='space-between'
           direction={['column', 'row']}
-          pr={!memberVote && '20%'}
+          pr={memberVote(proposal, address) !== null && '5%'}
           w='100%'
         >
           <Box>
@@ -251,8 +250,8 @@ const ProposalDetails = ({ proposal }) => {
             </Skeleton>
           </Box>
           <Flex align='center'>
-            {memberVote &&
-              (+memberVote.uintVote === 1 ? (
+            {memberVote(proposal, address) !== null &&
+              (+memberVote(proposal, address) === 1 ? (
                 <Flex
                   pl={6}
                   w='40px'

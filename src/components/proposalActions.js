@@ -25,7 +25,7 @@ import { createPoll } from '../services/pollService';
 import { MolochService } from '../services/molochService';
 import ContentBox from './ContentBox';
 import TextBox from './TextBox';
-import { memberHasVoted } from '../utils/proposalUtils';
+import { memberVote } from '../utils/proposalUtils';
 
 // import { MinionService } from '../../utils/minion-service';
 // import Web3 from 'web3';
@@ -36,7 +36,7 @@ const MotionBox = motion.custom(Box);
 const ProposalVote = ({ proposal }) => {
   const [nextProposalToProcess, setNextProposal] = useState(null);
   // const [hasVoted] = useState(false);
-  const [, setLoading] = useState(false);
+  const [loading, setLoading] = useState(false);
   const { daoOverview, daoProposals } = useDao();
   const { daoMember } = useDaoMember();
   const { daochain, daoid } = useParams();
@@ -55,7 +55,7 @@ const ProposalVote = ({ proposal }) => {
   };
   // console.log(daoMember);
   // console.log(currentlyVoting());
-  // console.log(daoProposals);
+  // console.log(proposal);
 
   // const txCallBack = (txHash, details) => {
   //   // if (txProcessor && txHash) {
@@ -73,18 +73,48 @@ const ProposalVote = ({ proposal }) => {
   // };
 
   const cancelProposal = async (id) => {
+    setLoading(true);
     try {
-      // await dao.daoService.moloch.cancelProposal(id, txCallBack);
       console.log(id);
+      const poll = createPoll({ action: 'cancelProposal', cachePoll })({
+        daoID: daoid,
+        chainID: daochain,
+        proposalId: id,
+        actions: {
+          onError: (error, txHash) => {
+            errorToast({
+              title: `There was an error.`,
+            });
+            resolvePoll(txHash);
+            console.error(`Could not find a matching proposal: ${error}`);
+            setLoading(false);
+          },
+          onSuccess: (txHash) => {
+            successToast({
+              title: 'Cancelled proposal. Queued for voting!',
+            });
+            refreshDao();
+            resolvePoll(txHash);
+            setLoading(false);
+          },
+        },
+      });
+      MolochService({
+        web3: injectedProvider,
+        daoAddress: daoid,
+        chainID: daochain,
+        version: daoOverview.version,
+      })('cancelProposal')([id], address, poll);
     } catch (err) {
-      console.log('user rejected or transaction failed', err);
+      setLoading(false);
+      console.log('error: ', err);
     }
   };
 
   const unlock = async (token) => {
     setLoading(true);
     console.log(token);
-    // TODO change to unlimited or a fixed amount unlock
+    // TODO change to unlimited
     const tokenAmount = (100 * 10 ** 18).toString();
     // ? multiply times decimals
     try {
@@ -101,6 +131,7 @@ const ProposalVote = ({ proposal }) => {
             });
             resolvePoll(txHash);
             console.error(`Could not unlock token: ${error}`);
+            setLoading(false);
           },
           onSuccess: (txHash) => {
             successToast({
@@ -109,6 +140,7 @@ const ProposalVote = ({ proposal }) => {
             });
             refreshDao();
             resolvePoll(txHash);
+            setLoading(false);
           },
         },
       });
@@ -120,11 +152,12 @@ const ProposalVote = ({ proposal }) => {
       // setUnlocked(true);
     } catch (err) {
       console.log('error:', err);
+      setLoading(false);
     }
-    setLoading(false);
   };
 
   const sponsorProposal = async (id) => {
+    setLoading(true);
     console.log('sponsor ', id);
     try {
       const poll = createPoll({ action: 'sponsorProposal', cachePoll })({
@@ -138,6 +171,7 @@ const ProposalVote = ({ proposal }) => {
             });
             resolvePoll(txHash);
             console.error(`Could not find a matching proposal: ${error}`);
+            setLoading(false);
           },
           onSuccess: (txHash) => {
             successToast({
@@ -145,6 +179,7 @@ const ProposalVote = ({ proposal }) => {
             });
             refreshDao();
             resolvePoll(txHash);
+            setLoading(false);
           },
         },
       });
@@ -166,13 +201,14 @@ const ProposalVote = ({ proposal }) => {
     //   vote,
     //   txCallBack,
     // );
+    setLoading(true);
 
     try {
       const poll = createPoll({ action: 'submitVote', cachePoll })({
         daoID: daoid,
         chainID: daochain,
         proposalId: proposal.proposalId,
-        vote: vote,
+        userAddress: address,
         actions: {
           onError: (error, txHash) => {
             errorToast({
@@ -187,6 +223,7 @@ const ProposalVote = ({ proposal }) => {
             });
             refreshDao();
             resolvePoll(txHash);
+            setLoading(false);
           },
         },
       });
@@ -207,23 +244,11 @@ const ProposalVote = ({ proposal }) => {
     let processFn = 'processProposal';
 
     if (proposal.whitelist) {
-      // await dao.daoService.moloch.processWhitelistProposal(
-      //   proposal.proposalIndex,
-      //   txCallBack,
-      // );
       proposalType = 'whitelist';
       processFn = 'processWhitelistProposal';
-
-      // console.log('process whitelist');
     } else if (proposal.guildkick) {
-      // await dao.daoService.moloch.processGuildKickProposal(
-      //   proposal.proposalIndex,
-      //   txCallBack,
-      // );
       proposalType = 'guildkick';
       processFn = 'processWhitelistProposal';
-
-      // console.log('guildkick process');
     }
     console.log('proposalType :>> ', proposalType);
     console.log('processFn :>> ', processFn);
@@ -379,12 +404,16 @@ const ProposalVote = ({ proposal }) => {
                 10 ** daoOverview?.depositToken?.decimals >
                 +daoOverview?.proposalDeposit ||
               +daoOverview?.proposalDeposit === 0 ? (
-                <Button onClick={() => sponsorProposal(proposal?.proposalId)}>
+                <Button
+                  onClick={() => sponsorProposal(proposal?.proposalId)}
+                  isLoading={loading}
+                >
                   Sponsor
                 </Button>
               ) : (
                 <Button
                   onClick={() => unlock(daoOverview.depositToken.tokenAddress)}
+                  isLoading={loading}
                 >
                   Unlock
                 </Button>
@@ -393,6 +422,7 @@ const ProposalVote = ({ proposal }) => {
                 <Button
                   variant='outline'
                   onClick={() => cancelProposal(proposal?.proposalId)}
+                  isLoading={loading}
                 >
                   Cancel
                 </Button>
@@ -412,7 +442,7 @@ const ProposalVote = ({ proposal }) => {
                 >
                   {currentlyVoting(proposal) ? (
                     <>
-                      {daoMember && !memberHasVoted(proposal) && (
+                      {daoMember && memberVote(proposal, address) !== null && (
                         <Flex w='48%' justify='space-around'>
                           <Flex
                             p={3}
@@ -455,20 +485,24 @@ const ProposalVote = ({ proposal }) => {
                       )}
                       <Flex
                         justify={
-                          daoMember && !memberHasVoted(proposal)
+                          daoMember && memberVote(proposal, address) === null
                             ? 'flex-end'
                             : 'center'
                         }
                         align='center'
                         w={
-                          daoMember && !memberHasVoted(proposal)
+                          daoMember && memberVote(proposal, address) === null
                             ? '50%'
                             : '100%'
                         }
                       >
                         <Box
                           as='i'
-                          fontSize={daoMember && !memberHasVoted ? 'xs' : 'md'}
+                          fontSize={
+                            daoMember && memberVote(proposal, address) === null
+                              ? 'xs'
+                              : 'md'
+                          }
                         >
                           {+proposal?.noShares > +proposal?.yesShares &&
                             'Not Passing'}
@@ -564,7 +598,10 @@ const ProposalVote = ({ proposal }) => {
           (nextProposalToProcess?.proposalId === proposal?.proposalId ? (
             <Flex justify='center' pt='10px'>
               <Flex direction='column'>
-                <Button onClick={() => processProposal(proposal)}>
+                <Button
+                  onClick={() => processProposal(proposal)}
+                  isLoading={loading}
+                >
                   Process
                 </Button>
               </Flex>
