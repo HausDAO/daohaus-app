@@ -2,11 +2,7 @@ import React from 'react';
 import { useInjectedProvider } from '../contexts/InjectedProviderContext';
 import { useOverlay } from '../contexts/OverlayContext';
 import { useUser } from '../contexts/UserContext';
-
-const getLastTx = (TXs, address) => {
-  if (!TXs || !address || !TXs[address].length) return null;
-  return TXs[address][0];
-};
+import { getLastTx } from '../utils/txData';
 
 const TxInfoModal = () => {
   const { outstandingTXs } = useUser();
@@ -15,7 +11,7 @@ const TxInfoModal = () => {
 
   const mostRecentTx = getLastTx(outstandingTXs, address);
   const isLoading = mostRecentTx?.status === 'unresolved';
-
+  clg;
   const handleClose = () => setTxInfoModal(false);
   return (
     <Modal isOpen={txInfoModal} onClose={handleClose}>
@@ -30,13 +26,7 @@ const TxInfoModal = () => {
         m={6}
         mt={2}
       >
-        <ModalHeader>
-          {mostRecentTx
-            ? isLoading
-              ? mostRecentTx.unresolvedMsg
-              : mostRecentTx.resolvedMsg
-            : 'Transaction Submitted'}
-        </ModalHeader>
+        <ModalHeader></ModalHeader>
         <ModalCloseButton />
         <ModalBody>
           {latestTx && (
