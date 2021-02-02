@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import {
   Box,
@@ -7,7 +7,7 @@ import {
   Icon,
   Skeleton,
   Tooltip,
-  Text,
+  // Text,
 } from '@chakra-ui/react';
 import { FaThumbsUp, FaThumbsDown } from 'react-icons/fa';
 import { RiErrorWarningLine, RiQuestionLine } from 'react-icons/ri';
@@ -28,7 +28,7 @@ const MotionBox = motion.custom(Box);
 
 const ProposalVote = ({ proposal }) => {
   const [nextProposalToProcess, setNextProposal] = useState(null);
-  const [hasVoted, setHasVoted] = useState(false);
+  const [hasVoted] = useState(false);
   const { daoOverview } = useDao();
   const { memberWalletRef } = useDaoMember();
   const { daochain, daoid } = useParams();
