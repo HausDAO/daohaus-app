@@ -35,7 +35,8 @@ const NetworkDaoList = ({ data, network, searchTerm, index }) => {
 
   const getDaoLink = (unReadCount, dao) => {
     if (!dao.meta) {
-      return `/register/${dao.network.networkID}/${dao.molochAddress}/`;
+      console.log('dao', dao);
+      return `/register/${network.networkID}/${dao.molochAddress}/`;
     }
 
     // TODO: how to deal with v1 link

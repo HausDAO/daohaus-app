@@ -9,7 +9,7 @@ const orderDaosByNetwork = (userHubDaos, userNetwork) => ({
     : null,
 });
 const excludeVersionsBelow = (daos, version) =>
-  daos.filter((dao) => dao.meta.version >= version);
+  daos.filter((dao) => dao.meta && dao.meta.version >= version);
 const excludeEmptyNetworks = (networks) =>
   networks.filter((network) => network?.data?.length);
 

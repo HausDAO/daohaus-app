@@ -11,13 +11,32 @@ import {
 } from '../utils/summoning';
 import SummonHard from '../forms/summonHard';
 import SummonEasy from '../forms/summonEasy';
+import { createPoll } from '../services/pollService';
+import { useUser } from '../contexts/UserContext';
+import { useOverlay } from '../contexts/OverlayContext';
+import { SummonService } from '../services/summonService';
 
 const Summon = () => {
-  const { address, injectedChain, requestWallet } = useInjectedProvider();
+  const {
+    address,
+    injectedChain,
+    requestWallet,
+    injectedProvider,
+  } = useInjectedProvider();
+  const { cachePoll, resolvePoll } = useUser();
+  const { errorToast, successToast } = useOverlay();
   const [hardMode, setHardMode] = useState(false);
   const [daoData, setDaoData] = useState(null);
   const [isSummoning, setIsSummoning] = useState(false);
   const [summonError, setSummonError] = useState(null);
+
+  if (injectedChain) {
+    console.log(
+      'daoPresets',
+      injectedChain.chain_id,
+      daoPresets(injectedChain.chain_id),
+    );
+  }
 
   useEffect(() => {
     if (injectedChain) {
@@ -57,7 +76,51 @@ const Summon = () => {
     const summonData = { ...daoData, summoner, summonerShares };
 
     console.log('summoning HERE', summonData);
+
+    const summonParams = [
+      summonData.summoner,
+      summonData.approvedToken.split(',').map((item) => item.trim()),
+      summonData.periodDuration,
+      summonData.votingPeriod,
+      summonData.gracePeriod,
+      summonData.proposalDeposit,
+      summonData.dilutionBound,
+      summonData.processingReward,
+      summonData.summonerShares,
+    ];
     // await state.service.summonMoloch(summonData, user.username, txCallBack);
+
+    try {
+      const poll = createPoll({ action: 'summonMoloch', cachePoll })({
+        chainID: injectedChain.chain_id,
+        summoner: summonData.summoner[0],
+        summoningTime: (new Date().getTime() / 1000).toFixed(),
+        actions: {
+          onError: (error, txHash) => {
+            console.error(`error: ${error}`);
+            errorToast({
+              title: `There was an error.`,
+            });
+            resolvePoll(txHash);
+            setSummonError(error);
+          },
+          onSuccess: (txHash) => {
+            successToast({
+              title: 'A new DAO has Risen!',
+            });
+            // maybe refresh hub data here - need to add that to useUser i think
+            // refreshDao();
+            resolvePoll(txHash);
+          },
+        },
+      });
+      SummonService({
+        web3: injectedProvider,
+        chainID: injectedChain.chain_id,
+      })('summonMoloch')(summonParams, address, poll);
+    } catch (err) {
+      console.log('error:', err);
+    }
   };
 
   return (

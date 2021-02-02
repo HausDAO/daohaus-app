@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import React, { useState } from 'react';
+import { Link, useParams } from 'react-router-dom';
 import {
   Box,
   Button,
@@ -7,13 +7,16 @@ import {
   Icon,
   Skeleton,
   Tooltip,
-  Text,
+  // Text,
 } from '@chakra-ui/react';
 import { FaThumbsUp, FaThumbsDown } from 'react-icons/fa';
 import { RiErrorWarningLine, RiQuestionLine } from 'react-icons/ri';
 import { isAfter, isBefore } from 'date-fns';
 import { motion } from 'framer-motion';
 
+import { useDao } from '../contexts/DaoContext';
+import { useDaoMember } from '../contexts/DaoMemberContext';
+import { useInjectedProvider } from '../contexts/InjectedProviderContext';
 import ContentBox from './ContentBox';
 import TextBox from './TextBox';
 
@@ -25,7 +28,11 @@ const MotionBox = motion.custom(Box);
 
 const ProposalVote = ({ proposal }) => {
   const [nextProposalToProcess, setNextProposal] = useState(null);
-  const [hasVoted, setHasVoted] = useState(false);
+  const [hasVoted] = useState(false);
+  const { daoOverview } = useDao();
+  const { memberWalletRef } = useDaoMember();
+  const { daochain, daoid } = useParams();
+  const { address } = useInjectedProvider();
   // const [minionDeets, setMinionDeets] = useState();
 
   const currentlyVoting = (proposal) => {
@@ -34,21 +41,24 @@ const ProposalVote = ({ proposal }) => {
       isAfter(Date.now(), new Date(+proposal?.votingPeriodStarts * 1000))
     );
   };
+  console.log(memberWalletRef);
+  console.log(currentlyVoting());
+  console.log(proposal);
 
-  const txCallBack = (txHash, details) => {
-    // if (txProcessor && txHash) {
-    //   txProcessor.setTx(txHash, user.username, details);
-    //   txProcessor.forceUpdate = true;
-    //   console.log('force update changed');
-    //   updateTxProcessor({ ...txProcessor });
-    //   // close model here
-    //   // onClose();
-    //   // setShowModal(null);
-    // }
-    // if (!txHash) {
-    //   console.log('error: ', details);
-    // }
-  };
+  // const txCallBack = (txHash, details) => {
+  //   // if (txProcessor && txHash) {
+  //   //   txProcessor.setTx(txHash, user.username, details);
+  //   //   txProcessor.forceUpdate = true;
+  //   //   console.log('force update changed');
+  //   //   updateTxProcessor({ ...txProcessor });
+  //   //   // close model here
+  //   //   // onClose();
+  //   //   // setShowModal(null);
+  //   // }
+  //   // if (!txHash) {
+  //   //   console.log('error: ', details);
+  //   // }
+  // };
 
   const cancelProposal = async (id) => {
     try {
@@ -196,7 +206,7 @@ const ProposalVote = ({ proposal }) => {
   //       }
   //     }
   //   }
-  // }, [proposal, memberWallet]);
+  // }, [proposal, memberWalletRef]);
 
   return (
     <>
@@ -217,20 +227,20 @@ const ProposalVote = ({ proposal }) => {
                   </Tooltip>
                 </TextBox>
                 <TextBox variant='value' size='xl' textAlign='center'>
-                  {daoData?.proposalDeposit /
-                    10 ** daoData?.depositToken.decimals}{' '}
-                  {daoData?.depositToken?.symbol}
-                  {+memberWallet?.tokenBalance <
-                  +daoData?.proposalDeposit /
-                    10 ** daoData?.depositToken.decimals ? (
+                  {daoOverview?.proposalDeposit /
+                    10 ** daoOverview?.depositToken.decimals}{' '}
+                  {daoOverview?.depositToken?.symbol}
+                  {+memberWalletRef?.tokenBalance <
+                  +daoOverview?.proposalDeposit /
+                    10 ** daoOverview?.depositToken.decimals ? (
                     <Tooltip
                       shouldWrapChildren
                       placement='bottom'
                       label={
                         'Insufficient Funds: You only have ' +
-                        memberWallet?.tokenBalance +
+                        memberWalletRef?.tokenBalance +
                         ' ' +
-                        daoData?.depositToken?.symbol
+                        daoOverview?.depositToken?.symbol
                       }
                     >
                       <Icon
@@ -245,23 +255,24 @@ const ProposalVote = ({ proposal }) => {
               </Flex>
             </Flex>
             <Flex justify='space-around'>
-              {+memberWallet?.allowance *
-                10 ** daoData?.depositToken?.decimals >
-                +daoData?.proposalDeposit || +daoData?.proposalDeposit === 0 ? (
-                <Button onClick={() => sponsorProposal(proposal.proposalId)}>
+              {+memberWalletRef?.allowance *
+                10 ** daoOverview?.depositToken?.decimals >
+                +daoOverview?.proposalDeposit ||
+              +daoOverview?.proposalDeposit === 0 ? (
+                <Button onClick={() => sponsorProposal(proposal?.proposalId)}>
                   Sponsor
                 </Button>
               ) : (
                 <Button
-                  onClick={() => unlock(daoData.depositToken.tokenAddress)}
+                  onClick={() => unlock(daoOverview.depositToken.tokenAddress)}
                 >
                   Unlock
                 </Button>
               )}
-              {proposal?.proposer === user?.username.toLowerCase() && (
+              {proposal?.proposer === address?.toLowerCase() && (
                 <Button
                   variant='outline'
-                  onClick={() => cancelProposal(proposal.proposalId)}
+                  onClick={() => cancelProposal(proposal?.proposalId)}
                 >
                   Cancel
                 </Button>
@@ -281,7 +292,7 @@ const ProposalVote = ({ proposal }) => {
                 >
                   {currentlyVoting(proposal) ? (
                     <>
-                      {memberWallet && !hasVoted && (
+                      {memberWalletRef && !hasVoted && (
                         <Flex w='48%' justify='space-around'>
                           <Flex
                             p={3}
@@ -324,14 +335,14 @@ const ProposalVote = ({ proposal }) => {
                       )}
                       <Flex
                         justify={
-                          memberWallet && !hasVoted ? 'flex-end' : 'center'
+                          memberWalletRef && !hasVoted ? 'flex-end' : 'center'
                         }
                         align='center'
-                        w={memberWallet && !hasVoted ? '50%' : '100%'}
+                        w={memberWalletRef && !hasVoted ? '50%' : '100%'}
                       >
                         <Box
                           as='i'
-                          fontSize={memberWallet && !hasVoted ? 'xs' : 'md'}
+                          fontSize={memberWalletRef && !hasVoted ? 'xs' : 'md'}
                         >
                           {+proposal?.noShares > +proposal?.yesShares &&
                             'Not Passing'}
@@ -422,9 +433,9 @@ const ProposalVote = ({ proposal }) => {
             </>
           )}
 
-        {memberWallet &&
+        {memberWalletRef &&
           proposal?.status === 'ReadyForProcessing' &&
-          (nextProposalToProcess.proposalId === proposal?.proposalId ? (
+          (nextProposalToProcess?.proposalId === proposal?.proposalId ? (
             <Flex justify='center' pt='10px'>
               <Flex direction='column'>
                 <Button onClick={() => processProposal(proposal)}>
@@ -437,11 +448,11 @@ const ProposalVote = ({ proposal }) => {
               <Flex direction='column'>
                 <Button
                   as={Link}
-                  to={`/dao/${dao?.address}/proposals/${nextProposalToProcess.proposalId}`}
+                  to={`/dao/${daochain}/${daoid}/proposals/${nextProposalToProcess?.proposalId}`}
                   variant='outline'
-                  onClick={() => setProposal(nextProposalToProcess)}
+                  onClick={() => setNextProposal(nextProposalToProcess)}
                 >
-                  Proposal {nextProposalToProcess.proposalId} Needs Processing
+                  Proposal {nextProposalToProcess?.proposalId} Needs Processing
                   Next
                 </Button>
               </Flex>

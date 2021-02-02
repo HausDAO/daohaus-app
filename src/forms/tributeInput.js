@@ -59,7 +59,7 @@ const TributeInput = ({ register, setValue, getValues }) => {
   useEffect(() => {
     if (tokenData.length) {
       const depositToken = tokenData[0];
-      getMax(depositToken);
+      getMax(depositToken.value);
       setMax();
     }
     // eslint-disable-next-line
@@ -76,12 +76,16 @@ const TributeInput = ({ register, setValue, getValues }) => {
   const unlock = async () => {
     setLoading(true);
     const token = getValues('tributeToken');
+    console.log(token);
     const tokenAmount = getValues('tributeOffered');
     // ? multiply times decimals
     try {
       const poll = createPoll({ action: 'unlockToken', cachePoll })({
         daoID: daoid,
         chainID: daochain,
+        tokenAddress: token,
+        userAddress: address,
+        unlockAmount: tokenAmount,
         actions: {
           onError: (error, txHash) => {
             errorToast({
@@ -133,7 +137,7 @@ const TributeInput = ({ register, setValue, getValues }) => {
     console.log(token);
     const tokenContract = TokenService({
       chainID: daochain,
-      tokenAddress: token.value,
+      tokenAddress: token,
     });
     const max = await tokenContract('balanceOf')(address);
     setBalance(max);

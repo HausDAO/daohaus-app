@@ -1,7 +1,10 @@
+import { BigNumber } from 'ethers';
 import { graphQuery } from '../utils/apollo';
 import { PROPOSALS_LIST } from '../graphQL/proposal-queries';
+import { DAO_POLL } from '../graphQL/dao-queries';
 import { getGraphEndpoint } from '../utils/chain';
 import { hashMaker } from '../utils/proposalUtils';
+import { TokenService } from '../services/tokenService';
 
 /// //////////CALLS///////////////
 const pollProposals = async ({ daoID, chainID }) =>
@@ -13,6 +16,34 @@ const pollProposals = async ({ daoID, chainID }) =>
       skip: 0,
     },
   });
+
+const pollTokenAllowances = async ({
+  chainID,
+  daoID,
+  tokenAddress,
+  userAddress,
+}) => {
+  const tokenContract = TokenService({
+    chainID,
+    tokenAddress,
+  });
+  const amountApproved = await tokenContract('allowance')({
+    accountAddr: userAddress,
+    contractAddr: daoID,
+  });
+  return amountApproved;
+};
+
+const pollMolochSummon = async ({ chainID, summoner, summoningTime }) => {
+  await graphQuery({
+    endpoint: getGraphEndpoint(chainID, 'subgraph_url'),
+    query: DAO_POLL,
+    variables: {
+      summoner,
+      summoningTime,
+    },
+  });
+};
 
 /// //////////TESTS///////////////
 const proposalTest = (data, shouldEqual, pollId) => {
@@ -28,6 +59,17 @@ const proposalTest = (data, shouldEqual, pollId) => {
       `Poll test did recieve the expected results from the graph: ${data}`,
     );
   }
+};
+
+const tokenAllowanceTest = (data, shouldEqual, pollId) => {
+  console.log('new allowance: ', data);
+  return BigNumber.from(data).gte(shouldEqual);
+};
+
+const molochSummonTest = (data, shouldEqual, pollId) => {
+  console.log('new moloch: ', data);
+  // should this match proposalTest and clear the interval?
+  return data && data.moloches.length > 0;
 };
 
 export const createPoll = ({
@@ -115,18 +157,26 @@ export const createPoll = ({
       }
     };
   } else if (action === 'unlockToken') {
-    return ({ daoID, chainID, tokenAddress, actions }) => (txHash) => {
+    return ({
+      daoID,
+      chainID,
+      tokenAddress,
+      userAddress,
+      unlockAmount,
+      actions,
+    }) => (txHash) => {
       startPoll({
-        pollFetch: pollProposals,
-        testFn: proposalTest,
-        shouldEqual: txHash,
-        args: { daoID, chainID, tokenAddress },
+        pollFetch: pollTokenAllowances,
+        testFn: tokenAllowanceTest,
+        shouldEqual: unlockAmount,
+        args: { daoID, chainID, tokenAddress, userAddress, unlockAmount },
         actions,
         txHash,
       });
       if (cachePoll) {
         cachePoll({
           txHash,
+          action,
           timeSent: Date.now(),
           status: 'unresolved',
           resolvedMsg: `Unlocked Token`,
@@ -142,7 +192,39 @@ export const createPoll = ({
             daoID,
             tokenAddress,
             chainID,
+            userAddress,
+            unlockAmount,
           },
+        });
+      }
+    };
+  } else if (action === 'summonMoloch') {
+    return ({ chainID, summoner, summoningTime, actions }) => (txHash) => {
+      startPoll({
+        pollFetch: pollMolochSummon,
+        testFn: molochSummonTest,
+        // not really needed, just checking to see if we get an entity at all
+        shouldEqual: { summoner, summoningTime },
+        args: { chainID, summoner, summoningTime },
+        actions,
+        txHash,
+      });
+      if (cachePoll) {
+        cachePoll({
+          txHash,
+          action,
+          timeSent: Date.now(),
+          status: 'unresolved',
+          resolvedMsg: `DAO summoned`,
+          unresolvedMsg: `Summoning DAO`,
+          successMsg: `A New DAO has Risen on ${chainID}`,
+          errorMsg: `Error summoning DAO on ${chainID}`,
+          pollData: {
+            action,
+            interval,
+            tries,
+          },
+          pollArgs: { chainID, summoner, summoningTime },
         });
       }
     };
