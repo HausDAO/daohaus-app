@@ -1,6 +1,6 @@
 import React from 'react';
 
-import BankList from '../components/bankList';
+import BankList from '../components/BankList';
 import Chart from '../components/chart';
 import { useToken } from '../contexts/TokenContext';
 

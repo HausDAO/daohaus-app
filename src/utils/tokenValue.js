@@ -155,9 +155,11 @@ export const valToDecimalString = (value, tokenAddress, tokens) => {
   const scaleFactor = 10;
   const perc = 10 ** scaleFactor;
 
-  const tdata = tokens.find((token) => token.tokenAddress === tokenAddress);
+  const tdata = tokens.find(
+    (token) => token.token.tokenAddress === tokenAddress,
+  );
   const exp = ethers.BigNumber.from(10).pow(
-    ethers.BigNumber.from(tdata.decimals),
+    ethers.BigNumber.from(tdata.token.decimals),
   );
 
   if (value >= perc) {
