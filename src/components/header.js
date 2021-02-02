@@ -1,7 +1,7 @@
 import React from 'react';
 import { useLocation, Link as RouterLink } from 'react-router-dom';
-import { RiAddFill } from 'react-icons/ri';
-import { Box, Flex, Button } from '@chakra-ui/react';
+import { RiAddFill, RiInformationLine } from 'react-icons/ri';
+import { Box, Flex, Button, Icon, Tooltip } from '@chakra-ui/react';
 import { useInjectedProvider } from '../contexts/InjectedProviderContext';
 import { getCopy } from '../utils/metadata';
 import UserAvatar from './userAvatar';
@@ -11,6 +11,24 @@ const Header = ({ dao }) => {
   const location = useLocation();
   const { setHubAccountModal, setDaoAccountModal } = useOverlay();
   const { injectedChain, address, requestWallet } = useInjectedProvider();
+
+  const daoConnectedAndWrongChain = () => {
+    return dao?.chainID && injectedChain?.chainId !== dao?.chainID;
+  };
+
+  const WrongNetworkToolTip = ({ children }) => {
+    const withToolTip = (
+      <Tooltip
+        hasArrow
+        label='Please change networks in your wallet to interact with this DAO.'
+        bg='secondary.500'
+        placement='left-start'
+      >
+        {children}
+      </Tooltip>
+    );
+    return daoConnectedAndWrongChain() ? withToolTip : children;
+  };
 
   const getHeading = () => {
     switch (location.pathname) {
@@ -123,9 +141,26 @@ const Header = ({ dao }) => {
         align='center'
         d={['none', null, null, 'flex']}
       >
-        <Box fontSize='md' mr={5} as='i' fontWeight={200}>
-          {injectedChain?.name}
-        </Box>
+        <WrongNetworkToolTip>
+          <Flex
+            align='center'
+            mr={5}
+            background={daoConnectedAndWrongChain() && 'secondary.500'}
+            p='5px 12px'
+            borderRadius='20px'
+          >
+            {daoConnectedAndWrongChain() && (
+              <Icon as={RiInformationLine} mr={2} />
+            )}
+            <Box
+              fontSize='md'
+              as={daoConnectedAndWrongChain() && 'i'}
+              fontWeight={daoConnectedAndWrongChain() ? 600 : 200}
+            >
+              {injectedChain?.name}
+            </Box>
+          </Flex>
+        </WrongNetworkToolTip>
 
         {address ? (
           <Button variant='outline' onClick={toggleAccountModal}>

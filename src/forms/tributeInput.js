@@ -59,7 +59,7 @@ const TributeInput = ({ register, setValue, getValues }) => {
   useEffect(() => {
     if (tokenData.length) {
       const depositToken = tokenData[0];
-      getMax(depositToken);
+      getMax(depositToken.value);
       setMax();
     }
     // eslint-disable-next-line
@@ -83,6 +83,9 @@ const TributeInput = ({ register, setValue, getValues }) => {
       const poll = createPoll({ action: 'unlockToken', cachePoll })({
         daoID: daoid,
         chainID: daochain,
+        tokenAddress: token,
+        userAddress: address,
+        unlockAmount: tokenAmount,
         actions: {
           onError: (error, txHash) => {
             errorToast({
