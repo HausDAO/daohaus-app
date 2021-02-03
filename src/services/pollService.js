@@ -1,6 +1,7 @@
 import { BigNumber } from 'ethers';
 import { graphQuery } from '../utils/apollo';
 import { PROPOSALS_LIST } from '../graphQL/proposal-queries';
+import { DAO_POLL } from '../graphQL/dao-queries';
 import { getGraphEndpoint } from '../utils/chain';
 import { hashMaker, memberVote } from '../utils/proposalUtils';
 import { TokenService } from '../services/tokenService';
@@ -33,6 +34,17 @@ const pollTokenAllowances = async ({
   return amountApproved;
 };
 
+const pollMolochSummon = async ({ chainID, summoner, summoningTime }) => {
+  await graphQuery({
+    endpoint: getGraphEndpoint(chainID, 'subgraph_url'),
+    query: DAO_POLL,
+    variables: {
+      summoner,
+      summoningTime,
+    },
+  });
+};
+
 /// //////////TESTS///////////////
 const submitProposalTest = (data, shouldEqual, pollId) => {
   if (data.proposals) {
@@ -52,6 +64,18 @@ const submitProposalTest = (data, shouldEqual, pollId) => {
 const tokenAllowanceTest = (data, shouldEqual, pollId) => {
   console.log('new allowance: ', data);
   return BigNumber.from(data).gte(shouldEqual);
+};
+
+const molochSummonTest = (data, shouldEqual, pollId) => {
+  console.log('new moloch: ', data);
+  if (data.moloches) {
+    return data.moloches.length > 0;
+  } else {
+    clearInterval(pollId);
+    throw new Error(
+      `Poll test did recieve the expected results from the graph: ${data}`,
+    );
+  }
 };
 
 const sponsorProposalTest = (data, shouldEqual, pollId) => {
@@ -386,6 +410,36 @@ export const createPoll = ({
             chainID,
             proposalId,
           },
+        });
+      }
+    };
+  } else if (action === 'summonMoloch') {
+    return ({ chainID, summoner, summoningTime, actions }) => (txHash) => {
+      startPoll({
+        pollFetch: pollMolochSummon,
+        testFn: molochSummonTest,
+        // not really needed, just checking to see if we get an entity at all
+        shouldEqual: { summoner, summoningTime },
+        args: { chainID, summoner, summoningTime },
+        actions,
+        txHash,
+      });
+      if (cachePoll) {
+        cachePoll({
+          txHash,
+          action,
+          timeSent: Date.now(),
+          status: 'unresolved',
+          resolvedMsg: `DAO summoned`,
+          unresolvedMsg: `Summoning DAO`,
+          successMsg: `A New DAO has Risen on ${chainID}`,
+          errorMsg: `Error summoning DAO on ${chainID}`,
+          pollData: {
+            action,
+            interval,
+            tries,
+          },
+          pollArgs: { chainID, summoner, summoningTime },
         });
       }
     };
