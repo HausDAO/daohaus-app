@@ -175,7 +175,11 @@ export const createPoll = ({
   /// /////////////////ACTIONS//////////////////////////
   if (!action) {
     throw new Error('User must submit an action argument');
-  } else if (action === 'submitProposal') {
+  } else if (
+    action === 'submitProposal' ||
+    action === 'submitWhitelistProposal' ||
+    action === 'submitGuildKickProposal'
+  ) {
     return ({ daoID, chainID, hash, actions }) => (txHash) => {
       startPoll({
         pollFetch: pollProposals,

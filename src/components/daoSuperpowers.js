@@ -4,6 +4,7 @@ import { Flex, Icon, Switch } from '@chakra-ui/react';
 import { VscGear } from 'react-icons/vsc';
 
 import { useDaoMember } from '../contexts/DaoMemberContext';
+// import { useMetaData } from '../contexts/MetaDataContext';
 import ContentBox from './ContentBox';
 import TextBox from './TextBox';
 import ComingSoonOverlay from './comingSoonOverlay';
@@ -11,8 +12,9 @@ import ComingSoonOverlay from './comingSoonOverlay';
 const Superpowers = () => {
   const { daochain, daoid } = useParams();
   const { daoMember } = useDaoMember();
+  // const { apiMetaData } = useMetaData();
   const [customTheme] = useState(true);
-  console.log(daoMember);
+  // console.log(apiMetaData);
 
   return (
     <ContentBox

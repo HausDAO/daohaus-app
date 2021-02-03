@@ -26,6 +26,9 @@ import { MolochService } from '../services/molochService';
 import ContentBox from './ContentBox';
 import TextBox from './TextBox';
 import { memberVote } from '../utils/proposalUtils';
+import { supportedChains } from '../utils/chain';
+import { getCopy } from '../utils/metadata';
+import { useMetaData } from '../contexts/MetaDataContext';
 
 // import { MinionService } from '../../utils/minion-service';
 // import Web3 from 'web3';
@@ -35,15 +38,15 @@ const MotionBox = motion.custom(Box);
 
 const ProposalVote = ({ proposal }) => {
   const [nextProposalToProcess, setNextProposal] = useState(null);
-  // const [hasVoted] = useState(false);
   const [loading, setLoading] = useState(false);
   const { daoOverview, daoProposals } = useDao();
   const { daoMember } = useDaoMember();
   const { daochain, daoid } = useParams();
-  const { address, injectedProvider } = useInjectedProvider();
+  const { address, injectedProvider, injectedChain } = useInjectedProvider();
   const { cachePoll, resolvePoll } = useUser();
   const { errorToast, successToast } = useOverlay();
   const { refreshDao } = useTX();
+  const { daoMetaData } = useMetaData();
 
   // const [minionDeets, setMinionDeets] = useState();
 
@@ -53,24 +56,31 @@ const ProposalVote = ({ proposal }) => {
       isAfter(Date.now(), new Date(+proposal?.votingPeriodStarts * 1000))
     );
   };
-  // console.log(daoMember);
-  // console.log(currentlyVoting());
-  // console.log(proposal);
 
-  // const txCallBack = (txHash, details) => {
-  //   // if (txProcessor && txHash) {
-  //   //   txProcessor.setTx(txHash, user.username, details);
-  //   //   txProcessor.forceUpdate = true;
-  //   //   console.log('force update changed');
-  //   //   updateTxProcessor({ ...txProcessor });
-  //   //   // close model here
-  //   //   // onClose();
-  //   //   // setShowModal(null);
-  //   // }
-  //   // if (!txHash) {
-  //   //   console.log('error: ', details);
-  //   // }
-  // };
+  const daoConnectedAndSameChain = () => {
+    return address && daochain && injectedChain?.chainId === daochain;
+  };
+
+  const NetworkOverlay = ({ children }) => (
+    <Flex
+      position='absolute'
+      top='0px'
+      left='0px'
+      bottom='0px'
+      right='0px'
+      zIndex='3'
+      fontFamily='heading'
+      fontSize='xl'
+      fontWeight={700}
+      align='center'
+      justify='center'
+      style={{ backdropFilter: 'blur(6px)' }}
+    >
+      {`Connect to ${supportedChains[daochain]?.network[0].toUpperCase() +
+        supportedChains[daochain]?.network.slice(1)}
+      for ${getCopy(daoMetaData, 'proposal')} actions`}
+    </Flex>
+  );
 
   const cancelProposal = async (id) => {
     setLoading(true);
@@ -196,13 +206,7 @@ const ProposalVote = ({ proposal }) => {
   };
 
   const submitVote = async (proposal, vote) => {
-    // await dao.daoService.moloch.submitVote(
-    //   proposal.proposalIndex,
-    //   vote,
-    //   txCallBack,
-    // );
     setLoading(true);
-
     try {
       const poll = createPoll({ action: 'submitVote', cachePoll })({
         daoID: daoid,
@@ -240,6 +244,7 @@ const ProposalVote = ({ proposal }) => {
   };
 
   const processProposal = async (proposal) => {
+    setLoading(true);
     let proposalType = 'other';
     let processFn = 'processProposal';
 
@@ -266,6 +271,7 @@ const ProposalVote = ({ proposal }) => {
             });
             resolvePoll(txHash);
             console.error(`Could not find a matching proposal: ${error}`);
+            setLoading(false);
           },
           onSuccess: (txHash) => {
             successToast({
@@ -273,6 +279,7 @@ const ProposalVote = ({ proposal }) => {
             });
             refreshDao();
             resolvePoll(txHash);
+            setLoading(false);
           },
         },
       });
@@ -355,7 +362,10 @@ const ProposalVote = ({ proposal }) => {
 
   return (
     <>
-      <ContentBox>
+      <ContentBox position='relative'>
+        {!daoConnectedAndSameChain() &&
+          ((proposal?.status === 'Unsponsored' && !proposal?.proposalIndex) ||
+            proposal?.status === 'ReadyForProcessing') && <NetworkOverlay />}
         {proposal?.status === 'Unsponsored' && !proposal?.proposalIndex && (
           <Flex justify='center' direction='column'>
             <Flex justify='center' mb={4}>
@@ -442,7 +452,7 @@ const ProposalVote = ({ proposal }) => {
                 >
                   {currentlyVoting(proposal) ? (
                     <>
-                      {daoMember && memberVote(proposal, address) !== null && (
+                      {daoMember && memberVote(proposal, address) === null && (
                         <Flex w='48%' justify='space-around'>
                           <Flex
                             p={3}

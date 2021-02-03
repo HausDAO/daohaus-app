@@ -118,7 +118,7 @@ export const POPUP_CONTENT = {
     bodyText: [
       'Your proposal will go into unsponsored state',
       'Share with your friends',
-      'What a dude!',
+      "Find a champion if you don't have any shares",
     ],
     links: [
       {

@@ -1,25 +1,44 @@
 import React, { useState, useEffect } from 'react';
+import { useLocation, useParams } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
-import { Button, FormControl, Flex, Icon, Box } from '@chakra-ui/react';
+import {
+  Button,
+  // FormLabel,
+  FormControl,
+  Flex,
+  // Input,
+  Icon,
+  Box,
+} from '@chakra-ui/react';
 import { RiErrorWarningLine } from 'react-icons/ri';
-import { useLocation } from 'react-router-dom';
 
-// import {
-//   useDao,
-//   useModals,
-//   useTxProcessor,
-//   useUser,
-// } from '../../../contexts/PokemolContext';
-import AddressInput from './addressInput';
+import { useTX } from '../contexts/TXContext';
+import { useUser } from '../contexts/UserContext';
+import { useInjectedProvider } from '../contexts/InjectedProviderContext';
+import { useOverlay } from '../contexts/OverlayContext';
+import { createHash, detailsToJSON } from '../utils/general';
+import { createPoll } from '../services/pollService';
+import { MolochService } from '../services/molochService';
+import { useDao } from '../contexts/DaoContext';
 import DetailsFields from './detailFields';
-// import { detailsToJSON } from '../utils/general';
+import AddressInput from './addressInput';
+// import TextBox from '../components/TextBox';
 
 const GuildKickProposalForm = () => {
   const [loading, setLoading] = useState(false);
   // const [user] = useUser();
-  // const [dao] = useDao();
-  // const [txProcessor, updateTxProcessor] = useTxProcessor();
+  const { daochain, daoid } = useParams();
+  const { address, injectedProvider } = useInjectedProvider();
   const [currentError, setCurrentError] = useState(null);
+  const {
+    errorToast,
+    successToast,
+    setProposalModal,
+    setTxInfoModal,
+  } = useOverlay();
+  const { daoOverview } = useDao();
+  const { refreshDao } = useTX();
+  const { cachePoll, resolvePoll } = useUser();
   const location = useLocation();
   // const { closeModals } = useModals();
 
@@ -56,38 +75,58 @@ const GuildKickProposalForm = () => {
 
   // TODO check link is a valid link
 
-  // const txCallBack = (txHash, details) => {
-  //   console.log('txCallBack', txProcessor);
-  //   if (txProcessor && txHash) {
-  //     txProcessor.setTx(txHash, user.username, details);
-  //     txProcessor.forceUpdate = true;
-
-  //     updateTxProcessor({ ...txProcessor });
-  //     // close model here
-  //     closeModals();
-  //   }
-  //   if (!txHash) {
-  //     console.log('error: ', details);
-  //     setLoading(false);
-  //   }
-  // };
+  // dao.daoService.moloch.submitGuildKickProposal(
+  //   values.memberApplicant,
+  //   details,
+  //   txCallBack,
+  // );
 
   const onSubmit = async (values) => {
     setLoading(true);
-
-    console.log(values);
-
-    // const details = detailsToJSON(values);
+    const hash = createHash();
+    const details = detailsToJSON({ ...values, hash });
+    const args = [values.memberApplicant, details];
 
     try {
-      // dao.daoService.moloch.submitGuildKickProposal(
-      //   values.memberApplicant,
-      //   details,
-      //   txCallBack,
-      // );
+      const poll = createPoll({ action: 'submitProposal', cachePoll })({
+        daoID: daoid,
+        chainID: daochain,
+        hash,
+        actions: {
+          onError: (error, txHash) => {
+            errorToast({
+              title: `There was an error.`,
+            });
+            resolvePoll(txHash);
+            setLoading(false);
+            console.error(`Could not find a matching proposal: ${error}`);
+          },
+          onSuccess: (txHash) => {
+            successToast({
+              title: 'Member Proposal Submitted to the Dao!',
+            });
+            refreshDao();
+            resolvePoll(txHash);
+            setLoading(false);
+          },
+        },
+      });
+      const onTxHash = () => {
+        setProposalModal(false);
+        setTxInfoModal(true);
+      };
+      MolochService({
+        web3: injectedProvider,
+        daoAddress: daoid,
+        chainID: daochain,
+        version: daoOverview.version,
+      })('submitGuildKickProposal')({ args, address, poll, onTxHash });
     } catch (err) {
       setLoading(false);
-      console.log('error: ', err);
+      console.error('error: ', err);
+      errorToast({
+        title: `There was an error.`,
+      });
     }
   };
 
