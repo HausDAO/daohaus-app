@@ -1,10 +1,4 @@
-import React, {
-  useEffect,
-  useContext,
-  createContext,
-  useRef,
-  useState,
-} from 'react';
+import React, { useEffect, useContext, createContext, useRef } from 'react';
 import { useParams } from 'react-router-dom';
 import { bigGraphQuery } from '../utils/theGraph';
 import { useSessionStorage } from '../hooks/useSessionStorage';
@@ -45,8 +39,10 @@ export const DaoProvider = ({ children }) => {
     `transmutations-${daoid}`,
     null,
   );
-  const [currentDaoAddress, setCurrentDaoAddress] = useState(daoid);
+  // const [currentDaoAddress, setCurrentDaoAddress] = useState(daoid);
   const hasPerformedBatchQuery = useRef(false);
+
+  console.log(daoProposals);
 
   useEffect(() => {
     // This condition is brittle. If one request passes, but the rest fail
@@ -119,18 +115,6 @@ export const DaoProvider = ({ children }) => {
       ],
     });
   };
-
-  useEffect(() => {
-    if (currentDaoAddress !== daoid) {
-      hasPerformedBatchQuery.current = false;
-      setDaoOverview(null);
-      setDaoActivities(null);
-      setDaoMembers(null);
-      setDaoProposals(null);
-      setTransmutations(null);
-      setCurrentDaoAddress(daoid);
-    }
-  }, [currentDaoAddress, daoid]);
 
   return (
     <DaoContext.Provider
