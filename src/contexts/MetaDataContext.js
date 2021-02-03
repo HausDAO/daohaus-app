@@ -7,6 +7,7 @@ import React, {
 } from 'react';
 
 import { useParams } from 'react-router-dom';
+import { fetchMetaData } from '../utils/metadata';
 
 import { useCustomTheme } from './CustomThemeContext';
 import { useUser } from './UserContext';
@@ -20,6 +21,7 @@ export const MetaDataProvider = ({ children }) => {
 
   const [customCopy, setCustomCopy] = useState(null);
   const [daoMetaData, setDaoMetaData] = useState(null);
+  const [apiMetaData, setApiMetaData] = useState(null);
 
   const hasFetchedMetadata = useRef(false);
   const shouldUpdateTheme = useRef(true);
@@ -47,6 +49,20 @@ export const MetaDataProvider = ({ children }) => {
     }
   }, [daoMetaData]);
 
+  useState(() => {
+    const getApiMetadata = async () => {
+      try {
+        const data = await fetchMetaData(daoid);
+        setApiMetaData(data);
+      } catch (error) {
+        console.error(error);
+      }
+    };
+    if (daoid) {
+      getApiMetadata();
+    }
+  }, [daoid]);
+
   return (
     <MetaDataContext.Provider
       value={{
@@ -54,6 +70,7 @@ export const MetaDataProvider = ({ children }) => {
         customCopy,
         hasFetchedMetadata,
         shouldUpdateTheme,
+        apiMetaData,
       }}
     >
       {children}
@@ -67,11 +84,13 @@ export const useMetaData = () => {
     hasFetchedMetadata,
     shouldUpdateTheme,
     customCopy,
+    apiMetaData,
   } = useContext(MetaDataContext);
   return {
     daoMetaData,
     hasFetchedMetadata,
     shouldUpdateTheme,
     customCopy,
+    apiMetaData,
   };
 };
