@@ -37,7 +37,6 @@ const NetworkDaoList = ({ data, network, searchTerm, index }) => {
 
   const getDaoLink = (unReadCount, dao) => {
     if (!dao.meta) {
-      console.log('dao', dao);
       return `/register/${network.networkID}/${dao.molochAddress}/`;
     }
 
