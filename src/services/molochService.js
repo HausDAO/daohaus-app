@@ -41,25 +41,6 @@ export const MolochService = ({ web3, daoAddress, version, chainID }) => {
         return address.toLowerCase();
       };
     }
-    if (service === 'submitProposal') {
-      return async ({ args, address, poll, onTxHash }) => {
-        // console.log('args', args);
-        // console.log('from', from);
-        // console.log('poll', poll);
-        const tx = await contract.methods[service](...args);
-        return tx
-          .send('eth_requestAccounts', { from: address })
-          .on('transactionHash', (txHash) => {
-            if (poll) {
-              onTxHash();
-              poll(txHash);
-            }
-          })
-          .on('error', (error) => {
-            console.error(error);
-          });
-      };
-    }
     if (
       service === 'submitProposal' ||
       service === 'sponsorProposal' ||
@@ -71,15 +52,16 @@ export const MolochService = ({ web3, daoAddress, version, chainID }) => {
       service === 'submitWhitelistProposal' ||
       service === 'submitGuildKickProposal'
     ) {
-      return async (args, from, poll) => {
-        console.log('args', args);
-        console.log('from', from);
-        console.log('poll', poll);
+      return async ({ args, address, poll, onTxHash }) => {
+        // console.log('args', args);
+        // console.log('from', address);
+        // console.log('poll', poll);
         const tx = await contract.methods[service](...args);
         return tx
-          .send('eth_requestAccounts', { from })
+          .send('eth_requestAccounts', { from: address })
           .on('transactionHash', (txHash) => {
             if (poll) {
+              onTxHash();
               poll(txHash);
             }
           })

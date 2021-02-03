@@ -37,11 +37,12 @@ function App() {
         <Route exact path='/register/:registerchain/:registerid'>
           <Register />
         </Route>
-        <Route path='/dao/:daochain/:daoid'>
-          <DaoProvider>
-            <Dao />
-          </DaoProvider>
-        </Route>
+        <Route
+          path='/dao/:daochain/:daoid'
+          render={(routeProps) => {
+            return <Dao key={routeProps.match.params.daoid} {...routeProps} />;
+          }}
+        />
       </Switch>
       <AppScopedModals />
     </UserContextProvider>

@@ -44,16 +44,18 @@ const handleAvatar = (activity, profile) => {
   }
 };
 
-const ActivityCard = ({ activity, displayAvatar, includeLink }) => {
+const ActivityCard = ({ activity, displayAvatar }) => {
   const [profile, setProfile] = useState(null);
   const { daochain, daoid } = useParams();
-
   useEffect(() => {
     let isCancelled = false;
     const getProfile = async () => {
       try {
         const newProfile = await handleGetProfile(activity.memberAddress);
-        if (newProfile.status === 'error') return;
+        if (newProfile.status === 'error') {
+          // setProfile(null);
+          return;
+        }
         if (!isCancelled) {
           setProfile(newProfile);
         }
@@ -67,7 +69,7 @@ const ActivityCard = ({ activity, displayAvatar, includeLink }) => {
     return () => {
       isCancelled = true;
     };
-  }, [activity]);
+  }, [activity.memberAddress]);
 
   // const renderBadge = () => {
   //   if (activity && activity.voteBadge) {

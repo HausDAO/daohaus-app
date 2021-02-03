@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { ethers } from 'ethers';
 import {
   FormControl,
   FormHelperText,
@@ -15,6 +16,8 @@ import { useDao } from '../contexts/DaoContext';
 import { useCustomTheme } from '../contexts/CustomThemeContext';
 import { truncateAddr } from '../utils/general';
 import { handleGetProfile } from '../utils/3box';
+import { chainByID } from '../utils/chain';
+import { useParams } from 'react-router-dom';
 
 const AddressInput = ({
   register,
@@ -26,9 +29,9 @@ const AddressInput = ({
   member,
 }) => {
   formLabel = formLabel || 'applicant';
-  // const [ens] = useEns();
   // const [user] = useUser();
   const { theme } = useCustomTheme();
+  const { daochain } = useParams();
   const { daoMembers } = useDao();
   const [anyApplicant, setAnyApplicant] = useState(false);
   // const [members] = useMembers();
@@ -37,16 +40,19 @@ const AddressInput = ({
   const ensAddr = watch('applicantHidden', '');
 
   const handleChange = async (e) => {
-    // if (e.target.value.endsWith('.eth')) {
-    //   const address = await ens.provider.resolveName(e.target.value);
-    //   if (address) {
-    //     setValue('applicantHidden', address);
-    //   } else {
-    //     setValue('applicantHidden', 'No ENS set');
-    //   }
-    // } else {
-    //   setValue('applicantHidden', '');
-    // }
+    if (e.target.value.endsWith('.eth') && daochain === '0x1') {
+      const ethersProvider = ethers.getDefaultProvider(
+        chainByID('0x1').rpc_url,
+      );
+      const address = await ethersProvider.resolveName(e.target.value);
+      if (address) {
+        setValue('applicantHidden', address);
+      } else {
+        setValue('applicantHidden', 'No ENS set');
+      }
+    } else {
+      setValue('applicantHidden', '');
+    }
   };
 
   useEffect(async () => {

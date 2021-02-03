@@ -28,6 +28,7 @@ import TextBox from './TextBox';
 import { memberVote } from '../utils/proposalUtils';
 import { supportedChains } from '../utils/chain';
 import { getCopy } from '../utils/metadata';
+import { capitalize } from '../utils/general';
 import { useMetaData } from '../contexts/MetaDataContext';
 
 // import { MinionService } from '../../utils/minion-service';
@@ -44,7 +45,12 @@ const ProposalVote = ({ proposal }) => {
   const { daochain, daoid } = useParams();
   const { address, injectedProvider, injectedChain } = useInjectedProvider();
   const { cachePoll, resolvePoll } = useUser();
-  const { errorToast, successToast } = useOverlay();
+  const {
+    errorToast,
+    successToast,
+    setProposalModal,
+    setTxInfoModal,
+  } = useOverlay();
   const { refreshDao } = useTX();
   const { daoMetaData } = useMetaData();
 
@@ -76,14 +82,35 @@ const ProposalVote = ({ proposal }) => {
       justify='center'
       style={{ backdropFilter: 'blur(6px)' }}
     >
-      {`Connect to ${supportedChains[daochain]?.network[0].toUpperCase() +
-        supportedChains[daochain]?.network.slice(1)}
+      {`Connect to ${capitalize(supportedChains[daochain]?.network)}
       for ${getCopy(daoMetaData, 'proposal')} actions`}
     </Flex>
   );
 
+  const NonMemberToolTip = ({ children }) => {
+    console.log(daoMember);
+    return daoMember ? (
+      children
+    ) : (
+      <Tooltip
+        hasArrow
+        label={<Box fontFamily='heading'>Members can sponsor!</Box>}
+        bg='secondary.500'
+        placement='left-start'
+      >
+        {children}
+      </Tooltip>
+    );
+  };
+
+  const onTxHash = () => {
+    setProposalModal(false);
+    setTxInfoModal(true);
+  };
+
   const cancelProposal = async (id) => {
     setLoading(true);
+    const args = [id];
     try {
       console.log(id);
       const poll = createPoll({ action: 'cancelProposal', cachePoll })({
@@ -114,7 +141,7 @@ const ProposalVote = ({ proposal }) => {
         daoAddress: daoid,
         chainID: daochain,
         version: daoOverview.version,
-      })('cancelProposal')([id], address, poll);
+      })('cancelProposal')({ args, address, poll, onTxHash });
     } catch (err) {
       setLoading(false);
       console.log('error: ', err);
@@ -126,6 +153,7 @@ const ProposalVote = ({ proposal }) => {
     console.log(token);
     // TODO change to unlimited
     const tokenAmount = (100 * 10 ** 18).toString();
+    const args = [daoid, tokenAmount];
     // ? multiply times decimals
     try {
       const poll = createPoll({ action: 'unlockToken', cachePoll })({
@@ -158,7 +186,7 @@ const ProposalVote = ({ proposal }) => {
         web3: injectedProvider,
         chainID: daochain,
         tokenAddress: token,
-      })('approve')([daoid, tokenAmount], address, poll);
+      })('approve')({ args, address, poll, onTxHash });
       // setUnlocked(true);
     } catch (err) {
       console.log('error:', err);
@@ -169,6 +197,7 @@ const ProposalVote = ({ proposal }) => {
   const sponsorProposal = async (id) => {
     setLoading(true);
     console.log('sponsor ', id);
+    const args = [id];
     try {
       const poll = createPoll({ action: 'sponsorProposal', cachePoll })({
         daoID: daoid,
@@ -198,7 +227,7 @@ const ProposalVote = ({ proposal }) => {
         daoAddress: daoid,
         chainID: daochain,
         version: daoOverview.version,
-      })('sponsorProposal')([id], address, poll);
+      })('sponsorProposal')({ args, address, poll, onTxHash });
     } catch (err) {
       setLoading(false);
       console.log('error: ', err);
@@ -207,6 +236,7 @@ const ProposalVote = ({ proposal }) => {
 
   const submitVote = async (proposal, vote) => {
     setLoading(true);
+    const args = [proposal.proposalIndex, vote];
     try {
       const poll = createPoll({ action: 'submitVote', cachePoll })({
         daoID: daoid,
@@ -223,7 +253,7 @@ const ProposalVote = ({ proposal }) => {
           },
           onSuccess: (txHash) => {
             successToast({
-              title: 'Sponsored proposal. Queued for voting!',
+              title: 'Vote submitted. Your community appreciates you.',
             });
             refreshDao();
             resolvePoll(txHash);
@@ -236,7 +266,7 @@ const ProposalVote = ({ proposal }) => {
         daoAddress: daoid,
         chainID: daochain,
         version: daoOverview.version,
-      })('submitVote')([proposal.proposalIndex, vote], address, poll);
+      })('submitVote')({ args, address, poll, onTxHash });
     } catch (err) {
       setLoading(false);
       console.log('error: ', err);
@@ -257,6 +287,7 @@ const ProposalVote = ({ proposal }) => {
     }
     console.log('proposalType :>> ', proposalType);
     console.log('processFn :>> ', processFn);
+    const args = [proposal.proposalIndex];
 
     try {
       const poll = createPoll({ action: 'processProposal', cachePoll })({
@@ -275,7 +306,7 @@ const ProposalVote = ({ proposal }) => {
           },
           onSuccess: (txHash) => {
             successToast({
-              title: 'Sponsored proposal. Queued for voting!',
+              title: 'Proposal processed. Get that money!',
             });
             refreshDao();
             resolvePoll(txHash);
@@ -288,7 +319,7 @@ const ProposalVote = ({ proposal }) => {
         daoAddress: daoid,
         chainID: daochain,
         version: daoOverview.version,
-      })(processFn)([proposal.proposalIndex], address, poll);
+      })(processFn)({ args, address, poll, onTxHash });
     } catch (err) {
       setLoading(false);
       console.log('error: ', err);
@@ -359,6 +390,7 @@ const ProposalVote = ({ proposal }) => {
       }
     }
   }, [daoProposals]);
+  console.log(daoMember);
 
   return (
     <>
@@ -421,12 +453,17 @@ const ProposalVote = ({ proposal }) => {
                   Sponsor
                 </Button>
               ) : (
-                <Button
-                  onClick={() => unlock(daoOverview.depositToken.tokenAddress)}
-                  isLoading={loading}
-                >
-                  Unlock
-                </Button>
+                <NonMemberToolTip>
+                  <Button
+                    onClick={() =>
+                      unlock(daoOverview.depositToken.tokenAddress)
+                    }
+                    isLoading={loading}
+                    isDisabled={!daoMember}
+                  >
+                    Unlock
+                  </Button>
+                </NonMemberToolTip>
               )}
               {proposal?.proposer === address?.toLowerCase() && (
                 <Button
