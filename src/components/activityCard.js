@@ -44,7 +44,7 @@ const handleAvatar = (activity, profile) => {
   }
 };
 
-const ActivityCard = ({ activity, displayAvatar }) => {
+const ActivityCard = ({ activity, displayAvatar, includeLink }) => {
   const [profile, setProfile] = useState(null);
   const { daochain, daoid } = useParams();
 

@@ -3,7 +3,7 @@ import { graphQuery } from '../utils/apollo';
 import { PROPOSALS_LIST } from '../graphQL/proposal-queries';
 import { DAO_POLL } from '../graphQL/dao-queries';
 import { getGraphEndpoint } from '../utils/chain';
-import { hashMaker } from '../utils/proposalUtils';
+import { hashMaker, memberVote } from '../utils/proposalUtils';
 import { TokenService } from '../services/tokenService';
 
 /// //////////CALLS///////////////
@@ -46,7 +46,7 @@ const pollMolochSummon = async ({ chainID, summoner, summoningTime }) => {
 };
 
 /// //////////TESTS///////////////
-const proposalTest = (data, shouldEqual, pollId) => {
+const submitProposalTest = (data, shouldEqual, pollId) => {
   if (data.proposals) {
     const recentProposalHashes = data.proposals.map((proposal) =>
       hashMaker(proposal),
@@ -68,8 +68,83 @@ const tokenAllowanceTest = (data, shouldEqual, pollId) => {
 
 const molochSummonTest = (data, shouldEqual, pollId) => {
   console.log('new moloch: ', data);
-  // should this match proposalTest and clear the interval?
-  return data && data.moloches.length > 0;
+  if (data.moloches) {
+    return data.moloches.length > 0;
+  } else {
+    clearInterval(pollId);
+    throw new Error(
+      `Poll test did recieve the expected results from the graph: ${data}`,
+    );
+  }
+};
+
+const sponsorProposalTest = (data, shouldEqual, pollId) => {
+  console.log(data);
+  console.log('shouldEqual :>> ', shouldEqual);
+  if (data.proposals) {
+    const proposal = data.proposals.find(
+      (proposal) => proposal.proposalId === shouldEqual,
+    );
+    console.log(proposal);
+    return proposal?.sponsored;
+  } else {
+    clearInterval(pollId);
+    throw new Error(
+      `Poll test did recieve the expected results from the graph: ${data}`,
+    );
+  }
+};
+
+const submitVoteTest = (data, shouldEqual, pollId) => {
+  const [proposalId, userAddress] = shouldEqual;
+  console.log(data);
+  console.log(proposalId, userAddress);
+  if (data.proposals) {
+    const proposal = data.proposals.find(
+      (proposal) => proposal.proposalId === proposalId,
+    );
+    console.log(proposal);
+    return memberVote(proposal, userAddress) !== null;
+  } else {
+    clearInterval(pollId);
+    throw new Error(
+      `Poll test did recieve the expected results from the graph: ${data}`,
+    );
+  }
+};
+
+const processProposalTest = (data, shouldEqual, pollId) => {
+  console.log(data);
+  console.log(shouldEqual);
+  if (data.proposals) {
+    const proposal = data.proposals.find(
+      (proposal) => proposal.proposalIndex === shouldEqual,
+    );
+    console.log(proposal);
+    return proposal?.processed;
+  } else {
+    clearInterval(pollId);
+    throw new Error(
+      `Poll test did recieve the expected results from the graph: ${data}`,
+    );
+  }
+};
+
+const cancelProposalTest = (data, shouldEqual, pollId) => {
+  console.log(data);
+  console.log(shouldEqual);
+  if (data.proposals) {
+    const proposal = data.proposals.find(
+      (proposal) => proposal.proposalId === shouldEqual,
+    );
+    console.log(proposal);
+    return proposal?.cancelled;
+  } else {
+    clearInterval(pollId);
+    throw new Error(
+      `Poll test did recieve the expected results from the graph: ${data}`,
+    );
+  }
 };
 
 export const createPoll = ({
@@ -124,11 +199,15 @@ export const createPoll = ({
   /// /////////////////ACTIONS//////////////////////////
   if (!action) {
     throw new Error('User must submit an action argument');
-  } else if (action === 'submitProposal') {
+  } else if (
+    action === 'submitProposal' ||
+    action === 'submitWhitelistProposal' ||
+    action === 'submitGuildKickProposal'
+  ) {
     return ({ daoID, chainID, hash, actions }) => (txHash) => {
       startPoll({
         pollFetch: pollProposals,
-        testFn: proposalTest,
+        testFn: submitProposalTest,
         shouldEqual: hash,
         args: { daoID, chainID },
         actions,
@@ -137,6 +216,7 @@ export const createPoll = ({
       if (cachePoll) {
         cachePoll({
           txHash,
+          action,
           timeSent: Date.now(),
           status: 'unresolved',
           resolvedMsg: `Submitted proposal`,
@@ -194,6 +274,141 @@ export const createPoll = ({
             chainID,
             userAddress,
             unlockAmount,
+          },
+        });
+      }
+    };
+  } else if (action === 'sponsorProposal') {
+    return ({ daoID, chainID, proposalId, actions }) => (txHash) => {
+      startPoll({
+        pollFetch: pollProposals,
+        testFn: sponsorProposalTest,
+        shouldEqual: proposalId,
+        args: { daoID, chainID, proposalId },
+        actions,
+        txHash,
+      });
+      if (cachePoll) {
+        cachePoll({
+          txHash,
+          action,
+          timeSent: Date.now(),
+          status: 'unresolved',
+          resolvedMsg: `Sponsored proposal`,
+          unresolvedMsg: `Sponsoring proposal`,
+          successMsg: `Proposal #${proposalId} Sponsored for ${daoID} on ${chainID}`,
+          errorMsg: `Error Sponsoring proposal #${proposalId} for ${daoID} on ${chainID}`,
+          pollData: {
+            action,
+            interval,
+            tries,
+          },
+          pollArgs: {
+            daoID,
+            chainID,
+            proposalId,
+          },
+        });
+      }
+    };
+  } else if (action === 'submitVote') {
+    return ({ daoID, chainID, proposalId, userAddress, actions }) => (
+      txHash,
+    ) => {
+      startPoll({
+        pollFetch: pollProposals,
+        testFn: submitVoteTest,
+        shouldEqual: [proposalId, userAddress],
+        args: { daoID, chainID, proposalId, userAddress },
+        actions,
+        txHash,
+      });
+      if (cachePoll) {
+        cachePoll({
+          txHash,
+          action,
+          timeSent: Date.now(),
+          status: 'unresolved',
+          resolvedMsg: `Voted on proposal #${proposalId}`,
+          unresolvedMsg: `Voted on proposal #${proposalId}`,
+          successMsg: `Voted on proposal #${proposalId} for ${daoID} on ${chainID}`,
+          errorMsg: `Error voting on proposal #${proposalId} for ${daoID} on ${chainID}`,
+          pollData: {
+            action,
+            interval,
+            tries,
+          },
+          pollArgs: {
+            daoID,
+            chainID,
+            proposalId,
+            userAddress,
+          },
+        });
+      }
+    };
+  } else if (action === 'processProposal') {
+    return ({ daoID, chainID, proposalIndex, actions }) => (txHash) => {
+      startPoll({
+        pollFetch: pollProposals,
+        testFn: processProposalTest,
+        shouldEqual: proposalIndex,
+        args: { daoID, chainID, proposalIndex },
+        actions,
+        txHash,
+      });
+      if (cachePoll) {
+        cachePoll({
+          txHash,
+          action,
+          timeSent: Date.now(),
+          status: 'unresolved',
+          resolvedMsg: `Processed proposal`,
+          unresolvedMsg: `Processing proposal`,
+          successMsg: `Proposal #${proposalIndex} Processed for ${daoID} on ${chainID}`,
+          errorMsg: `Error Sponsoring proposal #${proposalIndex} for ${daoID} on ${chainID}`,
+          pollData: {
+            action,
+            interval,
+            tries,
+          },
+          pollArgs: {
+            daoID,
+            chainID,
+            proposalIndex,
+          },
+        });
+      }
+    };
+  } else if (action === 'cancelProposal') {
+    return ({ daoID, chainID, proposalId, actions }) => (txHash) => {
+      startPoll({
+        pollFetch: pollProposals,
+        testFn: cancelProposalTest,
+        shouldEqual: proposalId,
+        args: { daoID, chainID, proposalId },
+        actions,
+        txHash,
+      });
+      if (cachePoll) {
+        cachePoll({
+          txHash,
+          action,
+          timeSent: Date.now(),
+          status: 'unresolved',
+          resolvedMsg: `Cancelled proposal`,
+          unresolvedMsg: `Cancelling proposal`,
+          successMsg: `Proposal #${proposalId} Cancelled for ${daoID} on ${chainID}`,
+          errorMsg: `Error Cancelling proposal #${proposalId} for ${daoID} on ${chainID}`,
+          pollData: {
+            action,
+            interval,
+            tries,
+          },
+          pollArgs: {
+            daoID,
+            chainID,
+            proposalId,
           },
         });
       }

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import {
   Box,
@@ -17,8 +17,18 @@ import { motion } from 'framer-motion';
 import { useDao } from '../contexts/DaoContext';
 import { useDaoMember } from '../contexts/DaoMemberContext';
 import { useInjectedProvider } from '../contexts/InjectedProviderContext';
+import { useUser } from '../contexts/UserContext';
+import { TokenService } from '../services/tokenService';
+import { useTX } from '../contexts/TXContext';
+import { useOverlay } from '../contexts/OverlayContext';
+import { createPoll } from '../services/pollService';
+import { MolochService } from '../services/molochService';
 import ContentBox from './ContentBox';
 import TextBox from './TextBox';
+import { memberVote } from '../utils/proposalUtils';
+import { supportedChains } from '../utils/chain';
+import { getCopy } from '../utils/metadata';
+import { useMetaData } from '../contexts/MetaDataContext';
 
 // import { MinionService } from '../../utils/minion-service';
 // import Web3 from 'web3';
@@ -28,11 +38,16 @@ const MotionBox = motion.custom(Box);
 
 const ProposalVote = ({ proposal }) => {
   const [nextProposalToProcess, setNextProposal] = useState(null);
-  const [hasVoted] = useState(false);
-  const { daoOverview } = useDao();
-  const { memberWalletRef } = useDaoMember();
+  const [loading, setLoading] = useState(false);
+  const { daoOverview, daoProposals } = useDao();
+  const { daoMember } = useDaoMember();
   const { daochain, daoid } = useParams();
-  const { address } = useInjectedProvider();
+  const { address, injectedProvider, injectedChain } = useInjectedProvider();
+  const { cachePoll, resolvePoll } = useUser();
+  const { errorToast, successToast } = useOverlay();
+  const { refreshDao } = useTX();
+  const { daoMetaData } = useMetaData();
+
   // const [minionDeets, setMinionDeets] = useState();
 
   const currentlyVoting = (proposal) => {
@@ -41,90 +56,242 @@ const ProposalVote = ({ proposal }) => {
       isAfter(Date.now(), new Date(+proposal?.votingPeriodStarts * 1000))
     );
   };
-  console.log(memberWalletRef);
-  console.log(currentlyVoting());
-  console.log(proposal);
 
-  // const txCallBack = (txHash, details) => {
-  //   // if (txProcessor && txHash) {
-  //   //   txProcessor.setTx(txHash, user.username, details);
-  //   //   txProcessor.forceUpdate = true;
-  //   //   console.log('force update changed');
-  //   //   updateTxProcessor({ ...txProcessor });
-  //   //   // close model here
-  //   //   // onClose();
-  //   //   // setShowModal(null);
-  //   // }
-  //   // if (!txHash) {
-  //   //   console.log('error: ', details);
-  //   // }
-  // };
+  const daoConnectedAndSameChain = () => {
+    return address && daochain && injectedChain?.chainId === daochain;
+  };
+
+  const NetworkOverlay = ({ children }) => (
+    <Flex
+      position='absolute'
+      top='0px'
+      left='0px'
+      bottom='0px'
+      right='0px'
+      zIndex='3'
+      fontFamily='heading'
+      fontSize='xl'
+      fontWeight={700}
+      align='center'
+      justify='center'
+      style={{ backdropFilter: 'blur(6px)' }}
+    >
+      {`Connect to ${supportedChains[daochain]?.network[0].toUpperCase() +
+        supportedChains[daochain]?.network.slice(1)}
+      for ${getCopy(daoMetaData, 'proposal')} actions`}
+    </Flex>
+  );
 
   const cancelProposal = async (id) => {
+    setLoading(true);
     try {
-      // await dao.daoService.moloch.cancelProposal(id, txCallBack);
       console.log(id);
+      const poll = createPoll({ action: 'cancelProposal', cachePoll })({
+        daoID: daoid,
+        chainID: daochain,
+        proposalId: id,
+        actions: {
+          onError: (error, txHash) => {
+            errorToast({
+              title: `There was an error.`,
+            });
+            resolvePoll(txHash);
+            console.error(`Could not find a matching proposal: ${error}`);
+            setLoading(false);
+          },
+          onSuccess: (txHash) => {
+            successToast({
+              title: 'Cancelled proposal. Queued for voting!',
+            });
+            refreshDao();
+            resolvePoll(txHash);
+            setLoading(false);
+          },
+        },
+      });
+      MolochService({
+        web3: injectedProvider,
+        daoAddress: daoid,
+        chainID: daochain,
+        version: daoOverview.version,
+      })('cancelProposal')([id], address, poll);
     } catch (err) {
-      console.log('user rejected or transaction failed', err);
+      setLoading(false);
+      console.log('error: ', err);
     }
   };
 
   const unlock = async (token) => {
-    console.log('unlock ', token);
+    setLoading(true);
+    console.log(token);
+    // TODO change to unlimited
+    const tokenAmount = (100 * 10 ** 18).toString();
+    // ? multiply times decimals
     try {
-      // await dao.daoService.token.unlock(token, txCallBack);
-      console.log(token);
+      const poll = createPoll({ action: 'unlockToken', cachePoll })({
+        daoID: daoid,
+        chainID: daochain,
+        tokenAddress: token,
+        userAddress: address,
+        unlockAmount: tokenAmount,
+        actions: {
+          onError: (error, txHash) => {
+            errorToast({
+              title: `Failed to unlock token`,
+            });
+            resolvePoll(txHash);
+            console.error(`Could not unlock token: ${error}`);
+            setLoading(false);
+          },
+          onSuccess: (txHash) => {
+            successToast({
+              // ? update to token symbol or name
+              title: `Tribute token ${daoOverview?.depositToken?.symbol} unlocked`,
+            });
+            refreshDao();
+            resolvePoll(txHash);
+            setLoading(false);
+          },
+        },
+      });
+      TokenService({
+        web3: injectedProvider,
+        chainID: daochain,
+        tokenAddress: token,
+      })('approve')([daoid, tokenAmount], address, poll);
+      // setUnlocked(true);
     } catch (err) {
-      console.log(err);
+      console.log('error:', err);
+      setLoading(false);
     }
   };
 
   const sponsorProposal = async (id) => {
+    setLoading(true);
     console.log('sponsor ', id);
     try {
-      // await dao.daoService.moloch.sponsorProposal(id, txCallBack);
-      console.log(id);
+      const poll = createPoll({ action: 'sponsorProposal', cachePoll })({
+        daoID: daoid,
+        chainID: daochain,
+        proposalId: id,
+        actions: {
+          onError: (error, txHash) => {
+            errorToast({
+              title: `There was an error.`,
+            });
+            resolvePoll(txHash);
+            console.error(`Could not find a matching proposal: ${error}`);
+            setLoading(false);
+          },
+          onSuccess: (txHash) => {
+            successToast({
+              title: 'Sponsored proposal. Queued for voting!',
+            });
+            refreshDao();
+            resolvePoll(txHash);
+            setLoading(false);
+          },
+        },
+      });
+      MolochService({
+        web3: injectedProvider,
+        daoAddress: daoid,
+        chainID: daochain,
+        version: daoOverview.version,
+      })('sponsorProposal')([id], address, poll);
     } catch (err) {
-      console.log('user rejected or transaction failed', err);
+      setLoading(false);
+      console.log('error: ', err);
     }
   };
 
   const submitVote = async (proposal, vote) => {
+    setLoading(true);
     try {
-      // await dao.daoService.moloch.submitVote(
-      //   proposal.proposalIndex,
-      //   vote,
-      //   txCallBack,
-      // );
-      console.log(proposal);
-    } catch (e) {
-      console.error(`Error processing proposal: ${e.toString()}`);
+      const poll = createPoll({ action: 'submitVote', cachePoll })({
+        daoID: daoid,
+        chainID: daochain,
+        proposalId: proposal.proposalId,
+        userAddress: address,
+        actions: {
+          onError: (error, txHash) => {
+            errorToast({
+              title: `There was an error.`,
+            });
+            resolvePoll(txHash);
+            console.error(`Could not find a matching proposal: ${error}`);
+          },
+          onSuccess: (txHash) => {
+            successToast({
+              title: 'Sponsored proposal. Queued for voting!',
+            });
+            refreshDao();
+            resolvePoll(txHash);
+            setLoading(false);
+          },
+        },
+      });
+      MolochService({
+        web3: injectedProvider,
+        daoAddress: daoid,
+        chainID: daochain,
+        version: daoOverview.version,
+      })('submitVote')([proposal.proposalIndex, vote], address, poll);
+    } catch (err) {
+      setLoading(false);
+      console.log('error: ', err);
     }
   };
 
   const processProposal = async (proposal) => {
+    setLoading(true);
+    let proposalType = 'other';
+    let processFn = 'processProposal';
+
+    if (proposal.whitelist) {
+      proposalType = 'whitelist';
+      processFn = 'processWhitelistProposal';
+    } else if (proposal.guildkick) {
+      proposalType = 'guildkick';
+      processFn = 'processWhitelistProposal';
+    }
+    console.log('proposalType :>> ', proposalType);
+    console.log('processFn :>> ', processFn);
+
     try {
-      if (proposal.whitelist) {
-        // await dao.daoService.moloch.processWhitelistProposal(
-        //   proposal.proposalIndex,
-        //   txCallBack,
-        // );
-        console.log('process whitelist');
-      } else if (proposal.guildkick) {
-        // await dao.daoService.moloch.processGuildKickProposal(
-        //   proposal.proposalIndex,
-        //   txCallBack,
-        // );
-        console.log('guildkick process');
-      } else {
-        // await dao.daoService.moloch.processProposal(
-        //   proposal.proposalIndex,
-        //   txCallBack,
-        // );
-        console.log('process proposal');
-      }
-    } catch (e) {
-      console.error(`Error processing proposal: ${e.toString()}`);
+      const poll = createPoll({ action: 'processProposal', cachePoll })({
+        daoID: daoid,
+        chainID: daochain,
+        proposalType: proposalType,
+        proposalIndex: proposal.proposalIndex,
+        actions: {
+          onError: (error, txHash) => {
+            errorToast({
+              title: `There was an error.`,
+            });
+            resolvePoll(txHash);
+            console.error(`Could not find a matching proposal: ${error}`);
+            setLoading(false);
+          },
+          onSuccess: (txHash) => {
+            successToast({
+              title: 'Sponsored proposal. Queued for voting!',
+            });
+            refreshDao();
+            resolvePoll(txHash);
+            setLoading(false);
+          },
+        },
+      });
+      MolochService({
+        web3: injectedProvider,
+        daoAddress: daoid,
+        chainID: daochain,
+        version: daoOverview.version,
+      })(processFn)([proposal.proposalIndex], address, poll);
+    } catch (err) {
+      setLoading(false);
+      console.log('error: ', err);
     }
   };
 
@@ -180,37 +347,25 @@ const ProposalVote = ({ proposal }) => {
   //   // eslint-disable-next-line react-hooks/exhaustive-deps
   // }, [proposal, user]);
 
-  // useEffect(() => {
-  //   if (proposals) {
-  //     const proposalsToProcess = proposals
-  //       .filter((p) => p.status === 'ReadyForProcessing')
-  //       .sort((a, b) => a.gracePeriodEnds - b.gracePeriodEnds);
+  useEffect(() => {
+    if (daoProposals) {
+      const proposalsToProcess = daoProposals
+        .filter((p) => p.status === 'ReadyForProcessing')
+        .sort((a, b) => a.gracePeriodEnds - b.gracePeriodEnds);
 
-  //     // console.log(proposalsToProcess);
-  //     if (proposalsToProcess.length > 0) {
-  //       setNextProposal(proposalsToProcess[0]);
-  //     }
-  //   }
-  // }, [proposals]);
-
-  // useEffect(() => {
-  //   if (memberWallet && proposal) {
-  //     if (proposal.votes.length > 0) {
-  //       const voted = proposal.votes.some(
-  //         (vote) =>
-  //           memberWallet.memberAddress.toLowerCase() ===
-  //           vote.memberAddress.toLowerCase(),
-  //       );
-  //       if (voted === true) {
-  //         setHasVoted(true);
-  //       }
-  //     }
-  //   }
-  // }, [proposal, memberWalletRef]);
+      console.log(proposalsToProcess);
+      if (proposalsToProcess.length > 0) {
+        setNextProposal(proposalsToProcess[0]);
+      }
+    }
+  }, [daoProposals]);
 
   return (
     <>
-      <ContentBox>
+      <ContentBox position='relative'>
+        {!daoConnectedAndSameChain() &&
+          ((proposal?.status === 'Unsponsored' && !proposal?.proposalIndex) ||
+            proposal?.status === 'ReadyForProcessing') && <NetworkOverlay />}
         {proposal?.status === 'Unsponsored' && !proposal?.proposalIndex && (
           <Flex justify='center' direction='column'>
             <Flex justify='center' mb={4}>
@@ -230,7 +385,7 @@ const ProposalVote = ({ proposal }) => {
                   {daoOverview?.proposalDeposit /
                     10 ** daoOverview?.depositToken.decimals}{' '}
                   {daoOverview?.depositToken?.symbol}
-                  {+memberWalletRef?.tokenBalance <
+                  {+daoMember?.tokenBalance <
                   +daoOverview?.proposalDeposit /
                     10 ** daoOverview?.depositToken.decimals ? (
                     <Tooltip
@@ -238,7 +393,7 @@ const ProposalVote = ({ proposal }) => {
                       placement='bottom'
                       label={
                         'Insufficient Funds: You only have ' +
-                        memberWalletRef?.tokenBalance +
+                        daoMember?.tokenBalance +
                         ' ' +
                         daoOverview?.depositToken?.symbol
                       }
@@ -255,16 +410,20 @@ const ProposalVote = ({ proposal }) => {
               </Flex>
             </Flex>
             <Flex justify='space-around'>
-              {+memberWalletRef?.allowance *
+              {+daoMember?.allowance *
                 10 ** daoOverview?.depositToken?.decimals >
                 +daoOverview?.proposalDeposit ||
               +daoOverview?.proposalDeposit === 0 ? (
-                <Button onClick={() => sponsorProposal(proposal?.proposalId)}>
+                <Button
+                  onClick={() => sponsorProposal(proposal?.proposalId)}
+                  isLoading={loading}
+                >
                   Sponsor
                 </Button>
               ) : (
                 <Button
                   onClick={() => unlock(daoOverview.depositToken.tokenAddress)}
+                  isLoading={loading}
                 >
                   Unlock
                 </Button>
@@ -273,6 +432,7 @@ const ProposalVote = ({ proposal }) => {
                 <Button
                   variant='outline'
                   onClick={() => cancelProposal(proposal?.proposalId)}
+                  isLoading={loading}
                 >
                   Cancel
                 </Button>
@@ -292,7 +452,7 @@ const ProposalVote = ({ proposal }) => {
                 >
                   {currentlyVoting(proposal) ? (
                     <>
-                      {memberWalletRef && !hasVoted && (
+                      {daoMember && memberVote(proposal, address) === null && (
                         <Flex w='48%' justify='space-around'>
                           <Flex
                             p={3}
@@ -335,14 +495,24 @@ const ProposalVote = ({ proposal }) => {
                       )}
                       <Flex
                         justify={
-                          memberWalletRef && !hasVoted ? 'flex-end' : 'center'
+                          daoMember && memberVote(proposal, address) === null
+                            ? 'flex-end'
+                            : 'center'
                         }
                         align='center'
-                        w={memberWalletRef && !hasVoted ? '50%' : '100%'}
+                        w={
+                          daoMember && memberVote(proposal, address) === null
+                            ? '50%'
+                            : '100%'
+                        }
                       >
                         <Box
                           as='i'
-                          fontSize={memberWalletRef && !hasVoted ? 'xs' : 'md'}
+                          fontSize={
+                            daoMember && memberVote(proposal, address) === null
+                              ? 'xs'
+                              : 'md'
+                          }
                         >
                           {+proposal?.noShares > +proposal?.yesShares &&
                             'Not Passing'}
@@ -433,12 +603,15 @@ const ProposalVote = ({ proposal }) => {
             </>
           )}
 
-        {memberWalletRef &&
+        {daoMember &&
           proposal?.status === 'ReadyForProcessing' &&
           (nextProposalToProcess?.proposalId === proposal?.proposalId ? (
             <Flex justify='center' pt='10px'>
               <Flex direction='column'>
-                <Button onClick={() => processProposal(proposal)}>
+                <Button
+                  onClick={() => processProposal(proposal)}
+                  isLoading={loading}
+                >
                   Process
                 </Button>
               </Flex>

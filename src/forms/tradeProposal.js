@@ -13,33 +13,43 @@ import {
   MenuList,
   MenuItem,
 } from '@chakra-ui/react';
-// import { utils } from 'web3';
 import { RiAddFill, RiErrorWarningLine } from 'react-icons/ri';
 
-// import {
-//   useDao,
-//   useModals,
-//   useTxProcessor,
-//   useUser,
-// } from '../../../contexts/PokemolContext';
 import TextBox from '../components/TextBox';
 
-import DetailsFields from './detailFields';
 import PaymentInput from './paymentInput';
 import TributeInput from './tributeInput';
 import AddressInput from './addressInput';
-// import { detailsToJSON } from '../utils/general';
+import DetailsFields from './detailFields';
+import { useInjectedProvider } from '../contexts/InjectedProviderContext';
+import { useOverlay } from '../contexts/OverlayContext';
+import { useTX } from '../contexts/TXContext';
+import { useUser } from '../contexts/UserContext';
+import { useParams } from 'react-router-dom';
+import { createHash, detailsToJSON } from '../utils/general';
+import { createPoll } from '../services/pollService';
+import { MolochService } from '../services/molochService';
+import { useDao } from '../contexts/DaoContext';
+import { valToDecimalString } from '../utils/tokenValue';
 
 const TradeProposalForm = () => {
+  const { injectedProvider, address } = useInjectedProvider();
+  const {
+    errorToast,
+    successToast,
+    setProposalModal,
+    setTxInfoModal,
+  } = useOverlay();
+  const { daoOverview } = useDao();
+  const { refreshDao } = useTX();
+  const { cachePoll, resolvePoll } = useUser();
+  const { daoid, daochain } = useParams();
+
   const [loading, setLoading] = useState(false);
-  const [showLoot, setShowLoot] = useState(false);
   const [showShares, setShowShares] = useState(false);
+  const [showLoot, setShowLoot] = useState(false);
   const [showApplicant, setShowApplicant] = useState(false);
-  // const [user] = useUser();
-  // const [dao] = useDao();
-  // const [txProcessor, updateTxProcessor] = useTxProcessor();
   const [currentError, setCurrentError] = useState(null);
-  // const { closeModals } = useModals();
 
   // console.log(dao);
 
@@ -50,7 +60,6 @@ const TradeProposalForm = () => {
     setValue,
     getValues,
     watch,
-    // formState
   } = useForm();
 
   useEffect(() => {
@@ -67,51 +76,75 @@ const TradeProposalForm = () => {
     // eslint-disable-next-line
   }, [errors]);
 
-  // TODO check tribute token < currentWallet.token.balance & unlock
-  // TODO check payment token < dao.token.balance
-  // TODO check link is a valid link
-
-  // const txCallBack = (txHash, details) => {
-  //   console.log('txCallBack', txProcessor);
-  //   if (txProcessor && txHash) {
-  //     txProcessor.setTx(txHash, user.username, details);
-  //     txProcessor.forceUpdate = true;
-
-  //     updateTxProcessor({ ...txProcessor });
-  //     // close model here
-  //     closeModals();
-  //   }
-  //   if (!txHash) {
-  //     console.log('error: ', details);
-  //     setLoading(false);
-  //   }
-  // };
-
   const onSubmit = async (values) => {
     setLoading(true);
-
-    console.log(values);
-    // const details = detailsToJSON(values);
+    const hash = createHash();
+    const details = detailsToJSON({ ...values, hash });
+    const { tokenBalances, depositToken } = daoOverview;
+    const tributeToken = values.tributeToken || depositToken.tokenAddress;
+    const paymentToken = values.paymentToken || depositToken.tokenAddress;
+    const tributeOffered = values.tributeOffered
+      ? valToDecimalString(values.tributeOffered, tributeToken, tokenBalances)
+      : '0';
+    const paymentRequested = values.paymentRequested
+      ? valToDecimalString(values.paymentRequested, paymentToken, tokenBalances)
+      : '0';
+    const applicant = values?.applicantHidden?.startsWith('0x')
+      ? values.applicantHidden
+      : values?.applicant
+      ? values.applicant
+      : address;
+    const args = [
+      applicant,
+      values.sharesRequested || '0',
+      values.lootRequested || '0',
+      tributeOffered,
+      tributeToken,
+      paymentRequested,
+      paymentToken,
+      details,
+    ];
 
     try {
-      // dao.daoService.moloch.submitProposal(
-      //   values.sharesRequested ? values.sharesRequested?.toString() : '0',
-      //   values.lootRequested ? values.lootRequested?.toString() : '0',
-      //   values.tributeOffered
-      //     ? utils.toWei(values.tributeOffered?.toString())
-      //     : '0',
-      //   values.tributeToken || dao.graphData?.depositToken?.tokenAddress,
-      //   values.paymentRequested
-      //     ? utils.toWei(values.paymentRequested?.toString())
-      //     : '0',
-      //   values.paymentToken || dao.graphData?.depositToken?.tokenAddress,
-      //   details,
-      //   user.username,
-      //   txCallBack,
-      // );
+      const poll = createPoll({ action: 'submitProposal', cachePoll })({
+        daoID: daoid,
+        chainID: daochain,
+        hash,
+        actions: {
+          onError: (error, txHash) => {
+            errorToast({
+              title: `There was an error.`,
+            });
+            resolvePoll(txHash);
+            setLoading(false);
+            console.error(`Could not find a matching proposal: ${error}`);
+          },
+          onSuccess: (txHash) => {
+            successToast({
+              title: 'Member Proposal Submitted to the Dao!',
+            });
+            refreshDao();
+            resolvePoll(txHash);
+            setLoading(false);
+          },
+        },
+      });
+      const onTxHash = () => {
+        setProposalModal(false);
+        setTxInfoModal(true);
+      };
+      MolochService({
+        web3: injectedProvider,
+        daoAddress: daoid,
+        chainID: daochain,
+        version: daoOverview.version,
+      })('submitProposal')({ args, address, poll, onTxHash });
     } catch (err) {
       setLoading(false);
-      console.log('error: ', err);
+      console.error('error: ', err);
+      errorToast({
+        title: `There was an error.`,
+      });
     }
   };
 

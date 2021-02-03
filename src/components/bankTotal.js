@@ -2,7 +2,7 @@ import React from 'react';
 import { Skeleton, Text, Box } from '@chakra-ui/react';
 import { useToken } from '../contexts/TokenContext';
 import { tallyUSDs } from '../utils/tokenValue';
-// import { numberWithCommas } from '../utils/general';
+import { numberWithCommas } from '../utils/general';
 
 const BankTotal = ({ customBank }) => {
   const { currentDaoTokens } = useToken();
@@ -13,7 +13,7 @@ const BankTotal = ({ customBank }) => {
     <>
       <Skeleton isLoaded={currentDaoTokens?.length > 0}>
         <Text fontFamily='mono' fontSize='3xl' variant='value'>
-          ${bankTotal && bankTotal}
+          ${bankTotal && numberWithCommas(bankTotal)}
         </Text>
       </Skeleton>
       <Box>

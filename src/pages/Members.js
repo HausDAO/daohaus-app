@@ -41,6 +41,7 @@ const Members = ({ members, activities }) => {
   };
 
   useEffect(() => {
+    // TODO cancel this on leave page
     window.addEventListener('scroll', handleScroll);
   });
 

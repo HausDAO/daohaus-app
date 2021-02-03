@@ -34,12 +34,16 @@ import { valToDecimalString } from '../utils/tokenValue';
 
 const MemberProposalForm = () => {
   const { injectedProvider, address } = useInjectedProvider();
-  const { errorToast, successToast } = useOverlay();
+  const {
+    errorToast,
+    successToast,
+    setProposalModal,
+    setTxInfoModal,
+  } = useOverlay();
   const { daoOverview } = useDao();
   const { refreshDao } = useTX();
   const { cachePoll, resolvePoll } = useUser();
   const { daoid, daochain } = useParams();
-
   const [loading, setLoading] = useState(false);
   const [showLoot, setShowLoot] = useState(false);
   const [showPaymentRequest, setShowPaymentRequest] = useState(false);
@@ -53,7 +57,6 @@ const MemberProposalForm = () => {
     setValue,
     getValues,
     watch,
-    // formState
   } = useForm();
 
   useEffect(() => {
@@ -69,6 +72,7 @@ const MemberProposalForm = () => {
   }, [errors]);
 
   const onSubmit = async (values) => {
+    setLoading(true);
     const hash = createHash();
     const details = detailsToJSON({ ...values, hash });
     const { tokenBalances, depositToken } = daoOverview;
@@ -107,6 +111,7 @@ const MemberProposalForm = () => {
               title: `There was an error.`,
             });
             resolvePoll(txHash);
+            setLoading(false);
             console.error(`Could not find a matching proposal: ${error}`);
           },
           onSuccess: (txHash) => {
@@ -115,18 +120,26 @@ const MemberProposalForm = () => {
             });
             refreshDao();
             resolvePoll(txHash);
+            setLoading(false);
           },
         },
       });
+      const onTxHash = () => {
+        setProposalModal(false);
+        setTxInfoModal(true);
+      };
       MolochService({
         web3: injectedProvider,
         daoAddress: daoid,
         chainID: daochain,
         version: daoOverview.version,
-      })('submitProposal')(args, address, poll);
+      })('submitProposal')({ args, address, poll, onTxHash });
     } catch (err) {
       setLoading(false);
-      console.log('error: ', err);
+      console.error('error: ', err);
+      errorToast({
+        title: `There was an error.`,
+      });
     }
   };
 

@@ -25,10 +25,11 @@ const getVotes = (proposals) => {
 };
 
 const handleVoteTitle = (activity) => {
-  return ` voted ${activity?.uintVote ? 'Yes' : 'No'} on ${
+  return ` voted ${+activity?.uintVote === 1 ? 'Yes' : 'No'} on ${
     activity?.proposalType
   }`;
 };
+
 const handleProposal = (proposal) => {
   if (proposal.processed) {
     return {
@@ -121,7 +122,7 @@ const voteHistoryData = (record, proposal) => {
   ).toFixed(2);
   const operator = record.uintVote ? '+' : '-';
   return {
-    title: `voted ${record.uintVote ? 'yes' : 'no'}`,
+    title: `voted ${+record.uintVote === 1 ? 'yes' : 'no'}`,
     uintVote: record.uintVote,
     voteStatus: `${totalVotesShares} Shares (${operator}${memberPercentageOfVote}%)`,
     createdAt: record.createdAt,

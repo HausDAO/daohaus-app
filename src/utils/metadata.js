@@ -4,7 +4,7 @@ import { omit } from './general';
 const metadataApiUrl = 'https://data.daohaus.club';
 
 export const fetchMetaData = async (endpoint) => {
-  const url = `${metadataApiUrl}/${endpoint}`;
+  const url = `${metadataApiUrl}/dao/${endpoint}`;
   try {
     const response = await fetch(url);
     return response.json();
@@ -77,6 +77,10 @@ export const getCopy = (metaData, word) => {
       return customCopy?.members || 'Members';
     } else if (word === 'member') {
       return customCopy?.member || 'Member';
+    } else if (word === 'settings') {
+      return customCopy?.settings || 'Settings';
+    } else if (word === 'profile') {
+      return customCopy?.profile || 'Profile';
     } else if (word === 'f04title') {
       return customCopy?.f04title || "404 What's Lost Can Be Found";
     } else if (word === 'f04heading') {

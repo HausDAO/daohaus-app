@@ -6,28 +6,42 @@ import { useInjectedProvider } from '../contexts/InjectedProviderContext';
 import { getCopy } from '../utils/metadata';
 import UserAvatar from './userAvatar';
 import { useOverlay } from '../contexts/OverlayContext';
+import { supportedChains } from '../utils/chain';
 
 const Header = ({ dao }) => {
   const location = useLocation();
   const { setHubAccountModal, setDaoAccountModal } = useOverlay();
   const { injectedChain, address, requestWallet } = useInjectedProvider();
-
-  const daoConnectedAndWrongChain = () => {
-    return dao?.chainID && injectedChain?.chainId !== dao?.chainID;
+  const daoConnectedAndSameChain = () => {
+    return address && dao?.chainID && injectedChain?.chainId === dao.chainID;
   };
 
   const WrongNetworkToolTip = ({ children }) => {
-    const withToolTip = (
+    return (!address && dao) || (address && !dao) ? (
+      children
+    ) : daoConnectedAndSameChain(
+        address,
+        injectedChain?.chainID,
+        dao?.chainID,
+      ) ? (
+      children
+    ) : (
       <Tooltip
         hasArrow
-        label='Please change networks in your wallet to interact with this DAO.'
+        label={
+          <Box fontFamily='heading'>
+            Please update your network to{' '}
+            {supportedChains[dao?.chainID]?.network[0].toUpperCase() +
+              supportedChains[dao?.chainID]?.network.slice(1)}{' '}
+            to interact with this DAO.
+          </Box>
+        }
         bg='secondary.500'
         placement='left-start'
       >
         {children}
       </Tooltip>
     );
-    return daoConnectedAndWrongChain() ? withToolTip : children;
   };
 
   const getHeading = () => {
@@ -42,20 +56,29 @@ const Header = ({ dao }) => {
         return 'Overview';
       case `/dao/${dao.chainID}/${dao.daoID}/proposals`:
         return getCopy(dao.daoMetaData, 'proposals');
+      case `/dao/${dao.chainID}/${dao.daoID}/proposals/new/`:
+        return `New ${getCopy(dao.daoMetaData, 'proposal')}`;
       case `/dao/${dao.chainID}/${dao.daoID}/bank`:
         return getCopy(dao.daoMetaData, 'bank');
       case `/dao/${dao.chainID}/${dao.daoID}/members`:
         return getCopy(dao.daoMetaData, 'members');
-      case `/dao/${dao.chainID}/${dao.daoID}/boosts`:
-        return 'Boosts';
-      case `/dao/${dao.chainID}/${dao.daoID}/settings`:
-        return 'Settings';
       case `/dao/${dao.chainID}/${dao.daoID}/profile/${address}`:
-        return 'Settings';
-      case `/dao/${dao.chainID}/${dao.daoID}/proposals/new/`:
-        return `New ${getCopy('proposal')}`;
+        return 'Profile';
+      case `/dao/${dao.chainID}/${dao.daoID}/settings`:
+        return getCopy(dao.daoMetaData, 'settings');
+      case `/dao/${dao.chainID}/${dao.daoID}/settings/meta`:
+        return 'Metadata';
+      case `/dao/${dao.chainID}/${dao.daoID}/settings/theme`:
+        return 'Custom Theme';
+      case `/dao/${dao.chainID}/${dao.daoID}/settings/notifications`:
+        return 'Notifications';
+      case `/dao/${dao.chainID}/${dao.daoID}/settings/boosts`:
+        return getCopy(dao.daoMetaData, 'boosts');
+      case `/dao/${dao.chainID}/${dao.daoID}/settings/boosts/new`:
+        return 'New ' + getCopy(dao.daoMetaData, 'boost');
     }
   };
+
   const getHeaderElement = () => {
     if (location.pathname === `/` && address) {
       return (
@@ -70,7 +93,7 @@ const Header = ({ dao }) => {
       );
     } else if (
       location.pathname === `/dao/${dao?.chainID}/${dao?.daoID}/proposals` &&
-      address
+      daoConnectedAndSameChain(address, dao?.chainID, injectedChain?.chainID)
     ) {
       return (
         <Button
@@ -83,8 +106,7 @@ const Header = ({ dao }) => {
       );
     } else if (
       location.pathname === `/dao/${dao?.chainID}/${dao?.daoID}/members` &&
-      address &&
-      dao.daoMember
+      daoConnectedAndSameChain(address, dao?.chainID, injectedChain?.chainID)
     ) {
       return (
         <Button
@@ -96,7 +118,8 @@ const Header = ({ dao }) => {
       );
     } else if (
       location.pathname === `/dao/${dao?.chainID}/${dao?.daoID}/bank` &&
-      address
+      daoConnectedAndSameChain(address, dao?.chainID, injectedChain?.chainID) &&
+      dao.daoMember
     ) {
       <Button
         as={RouterLink}
@@ -142,24 +165,36 @@ const Header = ({ dao }) => {
         d={['none', null, null, 'flex']}
       >
         <WrongNetworkToolTip>
-          <Flex
-            align='center'
-            mr={5}
-            background={daoConnectedAndWrongChain() && 'secondary.500'}
-            p='5px 12px'
-            borderRadius='20px'
-          >
-            {daoConnectedAndWrongChain() && (
-              <Icon as={RiInformationLine} mr={2} />
-            )}
-            <Box
-              fontSize='md'
-              as={daoConnectedAndWrongChain() && 'i'}
-              fontWeight={daoConnectedAndWrongChain() ? 600 : 200}
+          {(!address && dao) || (address && !dao) ? (
+            <Flex align='center' mr={5} p='5px 12px' borderRadius='20px'>
+              <Box fontSize='md' fontWeight={200}>
+                {injectedChain?.name}
+              </Box>
+            </Flex>
+          ) : !daoConnectedAndSameChain(
+              address,
+              dao?.chainID,
+              injectedChain?.chainID,
+            ) ? (
+            <Flex
+              align='center'
+              mr={5}
+              background='secondary.500'
+              p='5px 12px'
+              borderRadius='20px'
             >
-              {injectedChain?.name}
-            </Box>
-          </Flex>
+              <Icon as={RiInformationLine} mr={2} />
+              <Box fontSize='md' as='i' fontWeight={600}>
+                {injectedChain?.name}
+              </Box>
+            </Flex>
+          ) : (
+            <Flex align='center' mr={5} p='5px 12px' borderRadius='20px'>
+              <Box fontSize='md' fontWeight={200}>
+                {injectedChain?.name}
+              </Box>
+            </Flex>
+          )}
         </WrongNetworkToolTip>
 
         {address ? (
