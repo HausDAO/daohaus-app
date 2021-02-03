@@ -11,8 +11,6 @@ const Superpowers = () => {
   const [dao] = useDao();
   const [memberWallet] = useMemberWallet();
 
-  console.log('dao', dao);
-
   return (
     <ContentBox
       d='flex'
