@@ -1,5 +1,5 @@
 import React from 'react';
-import { Switch, Route, useRouteMatch } from 'react-router-dom';
+import { Switch, Route, useRouteMatch, useParams } from 'react-router-dom';
 
 import { useDao } from '../contexts/DaoContext';
 import { useDaoMember } from '../contexts/DaoMemberContext';
@@ -12,6 +12,8 @@ import Proposal from '../pages/Proposal';
 import NewProposal from '../pages/NewProposal';
 import Settings from '../pages/Settings';
 import { useToken } from '../contexts/TokenContext';
+import Layout from '../components/layout';
+import { useMetaData } from '../contexts/MetaDataContext';
 
 const DaoRouter = () => {
   const { path } = useRouteMatch();
@@ -25,52 +27,59 @@ const DaoRouter = () => {
     daoMembers,
   } = useDao();
   const { isMember, daoMember } = useDaoMember();
+
+  const { daoid, daochain } = useParams();
+  const { daoMetaData } = useMetaData();
+
+  const dao = { daoID: daoid, chainID: daochain, daoMetaData, daoMember };
   return (
-    <Switch>
-      <Route exact path={`${path}/`}>
-        <Overview
-          activities={daoActivities}
-          daoMember={daoMember}
-          isMember={isMember}
-          isCorrectNetwork={isCorrectNetwork}
-          overview={daoOverview}
-          members={daoMembers}
-        />
-      </Route>
-      <Route exact path={`${path}/proposals`}>
-        <Proposals
-          proposals={daoActivities?.proposals}
-          overview={daoOverview}
-          activities={daoActivities}
-        />
-      </Route>
-      <Route exact path={`${path}/bank`}>
-        <Bank balances={daoBalances} />
-      </Route>
-      <Route exact path={`${path}/members`}>
-        <Members members={daoMembers} activities={daoActivities} />
-      </Route>
-      <Route exact path={`${path}/settings`}>
-        <Settings overview={daoOverview} />
-      </Route>
-      <Route exact path={`${path}/proposals/new/:proposalType`}>
-        <NewProposal />
-      </Route>
-      <Route exact path={`${path}/proposals/new`}>
-        <NewProposal />
-      </Route>
-      <Route exact path={`${path}/proposals/:propid`}>
-        <Proposal activities={daoActivities} />
-      </Route>
-      <Route exact path={`${path}/profile/:userid`}>
-        <Profile
-          members={daoMembers}
-          overview={daoOverview}
-          daoTokens={currentDaoTokens}
-          activities={daoActivities}
-        />
-      </Route>
-    </Switch>
+    <Layout dao={dao}>
+      <Switch>
+        <Route exact path={`${path}/`}>
+          <Overview
+            activities={daoActivities}
+            daoMember={daoMember}
+            isMember={isMember}
+            isCorrectNetwork={isCorrectNetwork}
+            overview={daoOverview}
+            members={daoMembers}
+          />
+        </Route>
+        <Route exact path={`${path}/proposals`}>
+          <Proposals
+            proposals={daoActivities?.proposals}
+            overview={daoOverview}
+            activities={daoActivities}
+          />
+        </Route>
+        <Route exact path={`${path}/bank`}>
+          <Bank balances={daoBalances} />
+        </Route>
+        <Route exact path={`${path}/members`}>
+          <Members members={daoMembers} activities={daoActivities} />
+        </Route>
+        <Route exact path={`${path}/settings`}>
+          <Settings overview={daoOverview} />
+        </Route>
+        <Route exact path={`${path}/proposals/new/:proposalType`}>
+          <NewProposal />
+        </Route>
+        <Route exact path={`${path}/proposals/new`}>
+          <NewProposal />
+        </Route>
+        <Route exact path={`${path}/proposals/:propid`}>
+          <Proposal activities={daoActivities} />
+        </Route>
+        <Route exact path={`${path}/profile/:userid`}>
+          <Profile
+            members={daoMembers}
+            overview={daoOverview}
+            daoTokens={currentDaoTokens}
+            activities={daoActivities}
+          />
+        </Route>
+      </Switch>
+    </Layout>
   );
 };
 

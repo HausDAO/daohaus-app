@@ -53,7 +53,7 @@ const ActivityCard = ({ activity, displayAvatar }) => {
       try {
         const newProfile = await handleGetProfile(activity.memberAddress);
         if (newProfile.status === 'error') {
-          setProfile(null);
+          // setProfile(null);
           return;
         }
         if (!isCancelled) {
