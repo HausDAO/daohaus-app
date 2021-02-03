@@ -30,7 +30,10 @@ export const MetaDataProvider = ({ children }) => {
     if (userHubDaos) {
       const daoMeta = userHubDaos
         ?.find((network) => network.networkID === daochain)
-        ?.data.find((dao) => dao.meta.contractAddress === daoid)?.meta;
+        ?.data.find((dao) => {
+          return dao.meta?.contractAddress === daoid;
+        })?.meta;
+
       setDaoMetaData(daoMeta);
     }
   }, [userHubDaos, daochain, daoid]);
@@ -53,6 +56,7 @@ export const MetaDataProvider = ({ children }) => {
     const getApiMetadata = async () => {
       try {
         const data = await fetchMetaData(daoid);
+        console.log('data', data);
         setApiMetaData(data);
       } catch (error) {
         console.error(error);

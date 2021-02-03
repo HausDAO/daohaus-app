@@ -172,6 +172,7 @@ export const hubChainQuery = async ({
 
   const daoMapLookup = (address, chainName) => {
     const daoMatch = metaDataMap[address] || [];
+
     return daoMatch.find((dao) => dao.network === chainName) || null;
   };
   buildCrossChainQuery(supportedChains, endpointType).forEach(async (chain) => {

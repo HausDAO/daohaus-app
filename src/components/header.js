@@ -1,5 +1,5 @@
 import React from 'react';
-import { useLocation, Link as RouterLink } from 'react-router-dom';
+import { useLocation, Link as RouterLink, useParams } from 'react-router-dom';
 import { RiAddFill, RiInformationLine } from 'react-icons/ri';
 import { Box, Flex, Button, Icon, Tooltip } from '@chakra-ui/react';
 import { useInjectedProvider } from '../contexts/InjectedProviderContext';
@@ -10,6 +10,7 @@ import { supportedChains } from '../utils/chain';
 
 const Header = ({ dao }) => {
   const location = useLocation();
+  const params = useParams();
   const { setHubAccountModal, setDaoAccountModal } = useOverlay();
   const { injectedChain, address, requestWallet } = useInjectedProvider();
   const daoConnectedAndSameChain = () => {
@@ -52,6 +53,8 @@ const Header = ({ dao }) => {
         return 'Explore DAOs';
       case '/summon':
         return 'Summon';
+      case `/register/${params.registerchain}/${params.registerid}`:
+        return 'Finish your DAO Setup';
       case `/dao/${dao.chainID}/${dao.daoID}`:
         return 'Overview';
       case `/dao/${dao.chainID}/${dao.daoID}/proposals`:

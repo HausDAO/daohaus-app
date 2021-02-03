@@ -72,9 +72,7 @@ const molochSummonTest = (data, shouldEqual, pollId) => {
     return data.moloches.length > 0;
   } else {
     clearInterval(pollId);
-    throw new Error(
-      `Poll test did recieve the expected results from the graph: ${data}`,
-    );
+    throw new Error(`Bad query, clearing poll: ${data}`);
   }
 };
 
