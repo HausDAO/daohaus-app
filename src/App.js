@@ -3,7 +3,6 @@ import { Switch, Route } from 'react-router-dom';
 
 import { UserContextProvider } from './contexts/UserContext';
 import { ExploreContextProvider } from './contexts/ExploreContext';
-import { DaoProvider } from './contexts/DaoContext';
 import Hub from './pages/Hub';
 import Dao from './pages/Dao';
 import Explore from './pages/Explore';

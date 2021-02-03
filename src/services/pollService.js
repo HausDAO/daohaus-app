@@ -416,7 +416,6 @@ export const createPoll = ({
       startPoll({
         pollFetch: pollMolochSummon,
         testFn: molochSummonTest,
-        // not really needed, just checking to see if we get an entity at all
         shouldEqual: { summoner, summoningTime },
         args: { chainID, summoner, summoningTime },
         actions,

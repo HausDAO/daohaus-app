@@ -222,12 +222,11 @@ export const POPUP_CONTENT = {
   },
   summonMoloch: {
     displayName: 'Summon New Moloch',
-    header: 'New Dao in the Forge',
+    header: 'New DAO is in the forge!',
     images: [],
     bodyText: [
-      'Summoning can take some time',
-      'After the transaction is complete you will be asked to verify your settings',
-      'Share with twiter and tell the world you are a dao summoner',
+      'Our magic internet communities take a minute or two to create. After the transaction is complete you will be asked to verify your settings.',
+      'Some things to read or do while you wait:',
     ],
     links: [
       {
@@ -237,10 +236,13 @@ export const POPUP_CONTENT = {
       },
       {
         href: 'https://twitter.com/',
-        text: 'Share with the world',
+        text: 'Share with the world on Twitter',
         external: true,
       },
     ],
+    successText: 'A New DAO Has RISEN!',
+    waitingText:
+      'If this is mainnet and taking forever, maybe come back later. If/when the transaction completes you will soon see the new dao on your Hub page.',
   },
 };
 
