@@ -4,7 +4,7 @@ import { omit } from './general';
 const metadataApiUrl = 'https://data.daohaus.club';
 
 export const fetchMetaData = async (endpoint) => {
-  const url = `${metadataApiUrl}/${endpoint}`;
+  const url = `${metadataApiUrl}/dao/${endpoint}`;
   try {
     const response = await fetch(url);
     return response.json();
