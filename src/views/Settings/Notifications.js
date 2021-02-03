@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   Flex,
   Stack,
@@ -21,7 +21,6 @@ import {
   useUser,
   useWeb3Connect,
 } from '../../contexts/PokemolContext';
-import { useState } from 'react/cjs/react.development';
 import { boostPost } from '../../utils/requests';
 import GenericModal from '../../components/Modal/GenericModal';
 import NotificationsLaunch from '../../components/Settings/NotificationsLaunch';
