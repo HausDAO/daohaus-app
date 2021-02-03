@@ -53,9 +53,9 @@ export const MolochService = ({ web3, daoAddress, version, chainID }) => {
       service === 'submitGuildKickProposal'
     ) {
       return async ({ args, address, poll, onTxHash }) => {
-        console.log('args', args);
-        console.log('from', address);
-        console.log('poll', poll);
+        // console.log('args', args);
+        // console.log('from', address);
+        // console.log('poll', poll);
         const tx = await contract.methods[service](...args);
         return tx
           .send('eth_requestAccounts', { from: address })
