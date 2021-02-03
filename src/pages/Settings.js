@@ -2,7 +2,7 @@ import React from 'react';
 import { Box, Flex, Link } from '@chakra-ui/react';
 import { Link as RouterLink, useParams } from 'react-router-dom';
 
-import { useDao } from '../contexts/DaoContext';
+// import { useDao } from '../contexts/DaoContext';
 import { useDaoMember } from '../contexts/DaoMemberContext';
 // import BoostStatus from '../components/Settings/BoostStatus';
 import Superpowers from '../components/daoSuperpowers';
@@ -14,8 +14,7 @@ import TextBox from '../components/TextBox';
 const Settings = () => {
   const { daochain, daoid } = useParams();
   const { daoMember } = useDaoMember();
-  const { daoOverview } = useDao();
-  console.log(daoOverview);
+  // const { daoOverview } = useDao();
 
   return (
     <Flex wrap='wrap'>
