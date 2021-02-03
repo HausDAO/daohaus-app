@@ -30,9 +30,7 @@ const Paginator = ({ perPage, setRecords, allRecords, reset }) => {
       // setCurrentPage(page);
       setRecords(filterVisibleRecords(allRecords, currentPage));
     }
-
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [allRecords]);
+  }, [allRecords, currentPage]);
 
   useEffect(() => {
     if (reset) {

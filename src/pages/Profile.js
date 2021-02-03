@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Avatar, Flex, Skeleton, Box, Tooltip, Icon } from '@chakra-ui/react';
+import { ethers } from 'ethers';
 import makeBlockie from 'ethereum-blockies-base64';
 import { useParams } from 'react-router-dom';
 import { format } from 'date-fns';
@@ -14,6 +15,7 @@ import ActivitiesFeed from '../components/activitiesFeed';
 import { getProfileActivites } from '../utils/activities';
 import ContentBox from '../components/ContentBox';
 import TextBox from '../components/TextBox';
+import { chainByID } from '../utils/chain';
 
 // TODO handle non members
 
@@ -71,10 +73,10 @@ const handleName = (member, profile) => {
 };
 
 const Profile = ({ members, overview, daoTokens, activities }) => {
-  const { userid } = useParams();
+  const { userid, daochain } = useParams();
   const [profile, setProfile] = useState(null);
   const [showAlert] = useState(false);
-  // const [ens, setEns] = useState(null);
+  const [ens, setEns] = useState(null);
 
   const currentMember = members
     ? members.find((member) => member.memberAddress === userid)
@@ -95,20 +97,20 @@ const Profile = ({ members, overview, daoTokens, activities }) => {
     }
   }, [currentMember, profile]);
 
-  // useEffect(() => {
-  //   const lookupEns = async () => {
-  //     if (currentMember?.memberAddress) {
-  //       const ethersProvider = ethers.getDefaultProvider(
-  //         chainByID(daochain).rpc_url,
-  //       );
-  //       const result = await ethersProvider.lookupAddress(userid);
-  //       if (result) {
-  //         setEns(result);
-  //       }
-  //     }
-  //   };
-  //   lookupEns();
-  // }, [currentMember, daochain, userid]);
+  useEffect(() => {
+    const lookupEns = async () => {
+      if (currentMember?.memberAddress) {
+        const ethersProvider = ethers.getDefaultProvider(
+          chainByID(daochain).rpc_url,
+        );
+        const result = await ethersProvider.lookupAddress(userid);
+        if (result) {
+          setEns(result);
+        }
+      }
+    };
+    lookupEns();
+  }, [currentMember, daochain, userid]);
 
   return (
     <Flex wrap='wrap'>
@@ -152,11 +154,11 @@ const Profile = ({ members, overview, daoTokens, activities }) => {
                       </Box>
                     )}
                   </Box>
-                  {/* {ens && (
-                <Box fontSize='sm' fontFamily='mono'>
-                  {ens}
-                </Box>
-              )} */}
+                  {ens && (
+                    <Box fontSize='sm' fontFamily='mono'>
+                      {ens}
+                    </Box>
+                  )}
                   {profile?.description && (
                     <Box fontSize='sm' fontFamily='mono'>
                       {profile?.description}
