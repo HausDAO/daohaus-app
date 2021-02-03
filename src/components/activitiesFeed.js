@@ -23,7 +23,11 @@ const ActivitiesFeed = ({
       <TextBox>{heading}</TextBox>
       {pagedActivities &&
         pagedActivities.map((activity, index) => (
-          <ActivityCard key={index} activity={activity} displayAvatar={true} />
+          <ActivityCard
+            key={`${activity.id}-${index}`}
+            activity={activity}
+            displayAvatar={true}
+          />
         ))}
       <Paginator
         perPage={limit}

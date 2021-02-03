@@ -5,7 +5,7 @@ import MemberInfoCard from '../components/memberInfo';
 import OverviewCard from '../components/overviewCard';
 import { getDaoActivites } from '../utils/activities';
 
-const Overview = React.memo(function Overview({
+const Overview = React.memo(function overview({
   overview,
   activities,
   isMember,
