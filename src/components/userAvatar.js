@@ -81,8 +81,9 @@ const UserAvatar = ({ user, copyEnabled }) => {
             <Avatar
               name={profile?.name || truncateAddr(address)}
               src={
-                `https://ipfs.infura.io/ipfs/${profile.image[0].contentUrl['/']}` ||
-                makeBlockie(address)
+                profile?.image?.length
+                  ? `https://ipfs.infura.io/ipfs/${profile.image[0].contentUrl['/']}`
+                  : makeBlockie(address)
               }
               size='sm'
             />

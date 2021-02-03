@@ -44,7 +44,6 @@ const MemberProposalForm = () => {
   const { refreshDao } = useTX();
   const { cachePoll, resolvePoll } = useUser();
   const { daoid, daochain } = useParams();
-
   const [loading, setLoading] = useState(false);
   const [showLoot, setShowLoot] = useState(false);
   const [showPaymentRequest, setShowPaymentRequest] = useState(false);
@@ -58,7 +57,6 @@ const MemberProposalForm = () => {
     setValue,
     getValues,
     watch,
-    // formState
   } = useForm();
 
   useEffect(() => {
@@ -74,6 +72,7 @@ const MemberProposalForm = () => {
   }, [errors]);
 
   const onSubmit = async (values) => {
+    setLoading(true);
     const hash = createHash();
     const details = detailsToJSON({ ...values, hash });
     const { tokenBalances, depositToken } = daoOverview;
@@ -112,6 +111,7 @@ const MemberProposalForm = () => {
               title: `There was an error.`,
             });
             resolvePoll(txHash);
+            setLoading(false);
             console.error(`Could not find a matching proposal: ${error}`);
           },
           onSuccess: (txHash) => {
@@ -120,6 +120,7 @@ const MemberProposalForm = () => {
             });
             refreshDao();
             resolvePoll(txHash);
+            setLoading(false);
           },
         },
       });
