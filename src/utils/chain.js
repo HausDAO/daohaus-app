@@ -7,7 +7,7 @@ export const supportedChains = {
     network_id: 1,
     chain_id: '0x1',
     providers: ['walletconnect', 'portis', 'fortmatic'],
-    rpc_url: `https://mainnet.infura.io/v3/${process.env.REACT_APP_INFURA_PROJECT_ID}`,
+    rpc_url: `https://${process.env.REACT_APP_RPC_URI}.eth.rpc.rivet.cloud/`,
     abi_api_url:
       'https://api.etherscan.io/api?module=contract&action=getabi&address=',
     metadata_api_url: 'https://data.daohaus.club',
@@ -33,7 +33,7 @@ export const supportedChains = {
     network_id: 4,
     chain_id: '0x4',
     providers: ['walletconnect', 'portis', 'fortmatic'],
-    rpc_url: `https://rinkeby.infura.io/v3/${process.env.REACT_APP_INFURA_PROJECT_ID}`,
+    rpc_url: `https://${process.env.REACT_APP_RPC_URI}.rinkeby.rpc.rivet.cloud/`,
     abi_api_url:
       'https://api-rinkeby.etherscan.io/api?module=contract&action=getabi&address=',
     metadata_api_url: 'https://data.daohaus.club',
