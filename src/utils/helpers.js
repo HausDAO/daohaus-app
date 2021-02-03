@@ -47,7 +47,6 @@ export const valToDecimalString = (value, tokenAddress, tokens) => {
       .div(ethers.BigNumber.from(perc))
       .toString();
   }
-
 };
 
 export const formatCreatedAt = (createdAt) => {
@@ -200,9 +199,24 @@ export const depositsFromForm = (deposits) => {
 };
 
 export const getRpcUrl = (network) => {
-  return network.network_id === 100
-    ? 'https://dai.poa.network '
-    : `https://${network.network}.infura.io/v3/${process.env.REACT_APP_INFURA_KEY}`;
+  // return network.network_id === 100
+  //   ? 'https://dai.poa.network '
+  //   : `https://${network.network}.infura.io/v3/${process.env.REACT_APP_INFURA_KEY}`;
+
+  switch (network.network_id) {
+    case 100: {
+      return 'https://dai.poa.network';
+    }
+    case 1: {
+      return `https://${process.env.REACT_APP_RPC_URI}.eth.rpc.rivet.cloud/`;
+    }
+    case 4: {
+      return `https://${process.env.REACT_APP_RPC_URI}.rinkeby.rpc.rivet.cloud/`;
+    }
+    case 42: {
+      return `https://${network.network}.infura.io/v3/${process.env.REACT_APP_INFURA_KEY}`;
+    }
+  }
 };
 
 export const themeImagePath = (imageValue) => {
