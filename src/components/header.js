@@ -7,6 +7,7 @@ import { getCopy } from '../utils/metadata';
 import UserAvatar from './userAvatar';
 import { useOverlay } from '../contexts/OverlayContext';
 import { supportedChains } from '../utils/chain';
+import { capitalize } from '../utils/general';
 
 const Header = ({ dao }) => {
   const location = useLocation();
@@ -31,9 +32,8 @@ const Header = ({ dao }) => {
         label={
           <Box fontFamily='heading'>
             Please update your network to{' '}
-            {supportedChains[dao?.chainID]?.network[0].toUpperCase() +
-              supportedChains[dao?.chainID]?.network.slice(1)}{' '}
-            to interact with this DAO.
+            {capitalize(supportedChains[dao?.chainID]?.network)} to interact
+            with this DAO.
           </Box>
         }
         bg='secondary.500'

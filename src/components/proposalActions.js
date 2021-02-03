@@ -28,6 +28,7 @@ import TextBox from './TextBox';
 import { memberVote } from '../utils/proposalUtils';
 import { supportedChains } from '../utils/chain';
 import { getCopy } from '../utils/metadata';
+import { capitalize } from '../utils/general';
 import { useMetaData } from '../contexts/MetaDataContext';
 
 // import { MinionService } from '../../utils/minion-service';
@@ -76,8 +77,7 @@ const ProposalVote = ({ proposal }) => {
       justify='center'
       style={{ backdropFilter: 'blur(6px)' }}
     >
-      {`Connect to ${supportedChains[daochain]?.network[0].toUpperCase() +
-        supportedChains[daochain]?.network.slice(1)}
+      {`Connect to ${capitalize(supportedChains[daochain]?.network)}
       for ${getCopy(daoMetaData, 'proposal')} actions`}
     </Flex>
   );
