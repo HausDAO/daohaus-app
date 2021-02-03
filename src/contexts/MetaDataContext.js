@@ -56,7 +56,6 @@ export const MetaDataProvider = ({ children }) => {
     const getApiMetadata = async () => {
       try {
         const data = await fetchMetaData(daoid);
-        console.log('data', data);
         setApiMetaData(data);
       } catch (error) {
         console.error(error);

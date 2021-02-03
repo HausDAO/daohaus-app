@@ -15,10 +15,6 @@ import {
   ButtonGroup,
   Button,
 } from '@chakra-ui/react';
-// import makeBlockie from 'ethereum-blockies-base64';
-// import { RiArrowRightSLine } from 'react-icons/ri';
-
-// import BrandImg from '../assets/img/Daohaus__Castle--Dark.svg';
 import { useOverlay } from '../contexts/OverlayContext';
 import TextBox from '../components/TextBox';
 import { ipfsPost, ipfsPrePost } from '../utils/metadata';

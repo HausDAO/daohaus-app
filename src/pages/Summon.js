@@ -23,7 +23,7 @@ const Summon = () => {
     requestWallet,
     injectedProvider,
   } = useInjectedProvider();
-  const { cachePoll, resolvePoll } = useUser();
+  const { cachePoll, resolvePoll, refetch } = useUser();
   const { errorToast, successToast } = useOverlay();
   const [hardMode, setHardMode] = useState(false);
   const [daoData, setDaoData] = useState(null);
@@ -108,8 +108,7 @@ const Summon = () => {
             successToast({
               title: 'A new DAO has Risen!',
             });
-            // maybe refresh hub data here - need to add that to useUser i think
-            // refreshDao();
+            refetch();
             resolvePoll(txHash);
           },
         },

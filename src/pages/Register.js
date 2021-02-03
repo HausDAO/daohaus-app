@@ -7,11 +7,15 @@ import Layout from '../components/layout';
 import { useInjectedProvider } from '../contexts/InjectedProviderContext';
 import { supportedChains } from '../utils/chain';
 import DaoMetaForm from '../forms/daoMetaForm';
+import { useUser } from '../contexts/UserContext';
+import { useSessionStorage } from '../hooks/useSessionStorage';
 
 const Register = () => {
   const { registerchain, registerid } = useParams();
+  const { refetch } = useUser();
   const history = useHistory();
   const { address, injectedChain, requestWallet } = useInjectedProvider();
+  const [, setExploreDaos] = useSessionStorage('exploreDaoData');
   const [currentDao, setCurrentDao] = useState();
   const [needsNetworkChange, setNeedsNetworkChange] = useState();
 
@@ -31,7 +35,13 @@ const Register = () => {
   }, [address, injectedChain]);
 
   const handleUpdate = async (values) => {
-    console.log(values);
+    console.log('updated dao', values);
+    refetch();
+    setExploreDaos({
+      chains: [],
+      data: [],
+    });
+
     history.push(`/dao/${registerchain}/${registerid}`);
   };
 
