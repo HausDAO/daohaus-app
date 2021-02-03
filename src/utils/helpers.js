@@ -216,6 +216,9 @@ export const getRpcUrl = (network) => {
     case 42: {
       return `https://${network.network}.infura.io/v3/${process.env.REACT_APP_INFURA_KEY}`;
     }
+    default: {
+      return `https://${process.env.REACT_APP_RPC_URI}.eth.rpc.rivet.cloud/`;
+    }
   }
 };
 
