@@ -17,7 +17,7 @@ import FundingProposalForm from '../forms/fundingProposal';
 import WhitelistProposalForm from '../forms/whitelistProposal';
 import GuildKickProposalForm from '../forms/guildKickProposal';
 import TradeProposalForm from '../forms/tradeProposal';
-// import MinionSimpleProposalForm from '../forms/minionSimpleProposal';
+import MinionSimpleProposalForm from '../forms/minionSimpleProposal';
 // import TransmutationProposal from '../forms/transmutationProposal';
 import { getCopy } from '../utils/metadata';
 import { useMetaData } from '../contexts/MetaDataContext';
@@ -64,12 +64,12 @@ const ProposalFormModal = ({ proposalType, returnRoute }) => {
       subline: `Submit a trade proposal here.`,
       form: <TradeProposalForm />,
     },
-    // minion: {
-    //   type: `New ${getCopy(daoMetaData, 'proposal')}`,
-    //   heading: `New Minion ${getCopy(daoMetaData, 'proposal')}`,
-    //   subline: `Submit a Minion proposal here.`,
-    //   form: <MinionSimpleProposalForm />,
-    // },
+    minion: {
+      type: `New ${getCopy(daoMetaData, 'proposal')}`,
+      heading: `New Minion ${getCopy(daoMetaData, 'proposal')}`,
+      subline: `Submit a Minion proposal here.`,
+      form: <MinionSimpleProposalForm />,
+    },
     // transmutation: {
     //   type: `New ${getCopy(daoMetaData, 'proposal')}`,
     //   heading: `New Transmutation ${getCopy(daoMetaData, 'proposal')}`,

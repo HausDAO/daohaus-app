@@ -18,6 +18,7 @@ import { AddressZero } from '@ethersproject/constants';
 import TextBox from '../components/TextBox';
 import ContentBox from '../components/ContentBox';
 import UserAvatar from '../components/userAvatar';
+import ProposalMinionCard from '../components/proposalMinionCard';
 
 import {
   getProposalCountdownText,
@@ -114,8 +115,7 @@ const ProposalDetails = ({ proposal }) => {
           </Box>
 
           {proposal?.minionAddress ? (
-            // <ProposalMinionCard proposal={proposal} />
-            <Box>Minion Details</Box>
+            <ProposalMinionCard proposal={proposal} />
           ) : (
             <Skeleton isLoaded={proposal?.description}>
               {proposal?.description ? (

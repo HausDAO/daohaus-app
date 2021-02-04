@@ -101,7 +101,7 @@ const Profile = ({ members, overview, daoTokens, activities }) => {
     const lookupEns = async () => {
       if (currentMember?.memberAddress) {
         const ethersProvider = ethers.getDefaultProvider(
-          chainByID(daochain).rpc_url,
+          chainByID('0x1').rpc_url,
         );
         const result = await ethersProvider.lookupAddress(userid);
         if (result) {

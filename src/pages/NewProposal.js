@@ -9,6 +9,7 @@ import ProposalModal from '../modals/proposalModal';
 import { proposalTypes } from '../content/proposal-types';
 import { useMetaData } from '../contexts/MetaDataContext';
 import { useOverlay } from '../contexts/OverlayContext';
+import { getCopy } from '../utils/metadata';
 // import { setProposalModal } from '../contexts/OverlayContext';
 // import { useDao } from '../contexts/DaoContext';
 
@@ -19,8 +20,8 @@ const validProposalType = (type) => {
     'whitelist',
     'guildkick',
     'trade',
-    // 'minion',
-    // 'transmutation',
+    'minion',
+    'transmutation',
   ].includes(type);
 };
 
@@ -58,7 +59,7 @@ const NewProposal = () => {
       <ProposalScopedModals proposalType={proposalType} />
       <Flex>
         <TextBox size='xl' fontWeight={700}>
-          Select a Proposal Type
+          Select {getCopy(daoMetaData, 'proposal')} Type
         </TextBox>
       </Flex>
 

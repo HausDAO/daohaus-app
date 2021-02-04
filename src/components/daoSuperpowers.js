@@ -17,13 +17,7 @@ const Superpowers = () => {
   // console.log(apiMetaData);
 
   return (
-    <ContentBox
-      d='flex'
-      flexDirection='column'
-      position='relative'
-      mt={2}
-      mb={6}
-    >
+    <ContentBox d='flex' flexDirection='column' position='relative'>
       {customTheme ? (
         <Flex p={4} justify='space-between' align='center'>
           <TextBox size='md' colorScheme='whiteAlpha.900'>
