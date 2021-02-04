@@ -19,7 +19,7 @@ export const MetaDataProvider = ({ children }) => {
   const { updateTheme, resetTheme } = useCustomTheme();
   const { daoid, daochain } = useParams();
 
-  const [customCopy, setCustomCopy] = useState(null);
+  const [customTerms, setCustomTerms] = useState(null);
   const [daoMetaData, setDaoMetaData] = useState(null);
   const [apiMetaData, setApiMetaData] = useState(null);
 
@@ -34,46 +34,38 @@ export const MetaDataProvider = ({ children }) => {
           return dao.meta?.contractAddress === daoid;
         })?.meta;
 
-      setDaoMetaData(daoMeta);
+      if (daoMeta && shouldUpdateTheme.current) {
+        console.log('SET BY HUB QUERY');
+        if (daoMeta.customTheme) {
+          updateTheme(daoMeta.customTheme);
+        } else {
+          resetTheme();
+        }
+        if (daoMeta.customTerms) {
+          setCustomTerms(daoMeta.customTerms);
+        }
+        setDaoMetaData(daoMeta);
+        shouldUpdateTheme.current = false;
+      }
     }
   }, [userHubDaos, daochain, daoid]);
 
   useEffect(() => {
-    if (daoMetaData?.customTheme && shouldUpdateTheme.current) {
-      updateTheme(daoMetaData.customTheme);
-      console.log('HUB UPDATE FIRST');
-      if (daoMetaData?.customTheme?.daoMeta) {
-        setCustomCopy({
-          ...daoMetaData.customTheme.daoMeta,
-          name: daoMetaData.name,
-        });
-      }
-      shouldUpdateTheme.current = false;
-    } else {
-      resetTheme();
-    }
-  }, [daoMetaData]);
-
-  useEffect(() => {
     const getApiMetadata = async () => {
       try {
-        const data = await fetchMetaData(daoid);
-        setApiMetaData(data);
-        if (shouldUpdateTheme.current && data?.boosts?.length) {
-          console.log('API UPDATE FIRST');
-
-          const boosts = data.boosts;
-          const customThemeDao = boosts.find(
-            (boost) => boost.boostKey[0] === 'customTheme',
-          );
-          if (customThemeDao) {
-            console.log(customThemeDao.boostMetadata);
-            updateTheme(customThemeDao.boostMetadata);
-            if (customThemeDao?.boostMetadata?.daoMeta) {
-              setCustomCopy(customThemeDao?.boostMetadata?.daoMeta);
-            }
-            shouldUpdateTheme.current = false;
+        const [data] = await fetchMetaData(daoid);
+        if (shouldUpdateTheme.current && !daoMetaData) {
+          console.log('SET BY API');
+          if (data.customTheme) {
+            updateTheme(data.customTheme);
+          } else {
+            resetTheme();
           }
+          if (data.customTerms) {
+            setCustomTerms(data.customTerms);
+          }
+          setDaoMetaData(data);
+          shouldUpdateTheme.current = false;
         }
       } catch (error) {
         console.error(error);
@@ -86,20 +78,19 @@ export const MetaDataProvider = ({ children }) => {
 
   const fetchApiMetadata = async () => {
     try {
-      const data = await fetchMetaData(daoid);
-      setApiMetaData(data);
-      if (shouldUpdateTheme.current && data?.boosts?.length) {
-        const boosts = data.boosts;
-        const customThemeDao = boosts.find(
-          (boost) => boost.boostKey[0] === 'customTheme',
-        );
-        if (customThemeDao) {
-          updateTheme(customThemeDao.boostMetadata);
-          if (customThemeDao?.boostMetadata?.daoMeta) {
-            setCustomCopy(customThemeDao?.boostMetadata?.daoMeta);
-          }
-          shouldUpdateTheme.current = false;
+      const [data] = await fetchMetaData(daoid);
+      if (shouldUpdateTheme.current && !daoMetaData) {
+        console.log('SET BY API');
+        if (data.customTheme) {
+          updateTheme(data.customTheme);
+        } else {
+          resetTheme();
         }
+        if (data.customTerms) {
+          setCustomTerms(data.customTerms);
+        }
+        setDaoMetaData(data);
+        shouldUpdateTheme.current = false;
       }
     } catch (error) {
       console.error(error);
@@ -116,7 +107,7 @@ export const MetaDataProvider = ({ children }) => {
     <MetaDataContext.Provider
       value={{
         daoMetaData,
-        customCopy,
+        customTerms,
         hasFetchedMetadata,
         shouldUpdateTheme,
         apiMetaData,
@@ -133,7 +124,7 @@ export const useMetaData = () => {
     daoMetaData,
     hasFetchedMetadata,
     shouldUpdateTheme,
-    customCopy,
+    customTerms,
     apiMetaData,
     refetchMetaData,
   } = useContext(MetaDataContext);
@@ -141,7 +132,7 @@ export const useMetaData = () => {
     daoMetaData,
     hasFetchedMetadata,
     shouldUpdateTheme,
-    customCopy,
+    customTerms,
     apiMetaData,
     refetchMetaData,
   };
