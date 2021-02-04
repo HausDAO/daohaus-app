@@ -15,6 +15,9 @@ import { useUser } from '../contexts/UserContext';
 import { useOverlay } from '../contexts/OverlayContext';
 import { SummonService } from '../services/summonService';
 import SummonPending from '../components/summonPending';
+import { graphQuery } from '../utils/apollo';
+import { getGraphEndpoint } from '../utils/chain';
+import { DAO_POLL } from '../graphQL/dao-queries';
 
 const Summon = () => {
   const {
@@ -31,6 +34,7 @@ const Summon = () => {
   const [pendingTx, setPendingTx] = useState(null);
   const [success, setSuccess] = useState(false);
   const [summonError, setSummonError] = useState(null);
+  const now = (new Date().getTime() / 1000).toFixed();
 
   useEffect(() => {
     if (injectedChain) {
@@ -68,8 +72,7 @@ const Summon = () => {
       summonerShares = [1];
     }
     const summonData = { ...daoData, summoner, summonerShares };
-
-    console.log('summoning HERE', summonData);
+    console.log('summoning', summonData);
 
     const summonParams = [
       summonData.summoner,
@@ -82,13 +85,12 @@ const Summon = () => {
       summonData.processingReward,
       summonData.summonerShares,
     ];
-    // await state.service.summonMoloch(summonData, user.username, txCallBack);
 
     try {
       const poll = createPoll({ action: 'summonMoloch', cachePoll })({
         chainID: injectedChain.chain_id,
         summoner: summonData.summoner[0],
-        createdAt: (new Date().getTime() / 1000).toFixed(),
+        createdAt: now,
         actions: {
           onError: (error, txHash) => {
             console.error(`error: ${error}`);
@@ -102,9 +104,10 @@ const Summon = () => {
             successToast({
               title: 'A new DAO has Risen!',
             });
-            setSuccess(true);
+
             refetch();
             resolvePoll(txHash);
+            getnewDaoAddress();
           },
         },
       });
@@ -125,6 +128,18 @@ const Summon = () => {
         title: `There was an error.`,
       });
     }
+  };
+
+  const getnewDaoAddress = async () => {
+    const res = await graphQuery({
+      endpoint: getGraphEndpoint(injectedChain.chain_id, 'subgraph_url'),
+      query: DAO_POLL,
+      variables: {
+        summoner: address,
+        createdAt: now,
+      },
+    });
+    setSuccess(res.moloches[0].id);
   };
 
   return (

@@ -96,17 +96,9 @@ export const UserContextProvider = ({ children }) => {
   };
 
   const refetch = () => {
+    // TODO - this is not working -it stopped the doubling, doesn have the meta yet
+    // sessionStorage.removeItem('userHubData');
     setUserHubDaos([]);
-    hubChainQuery({
-      query: HUB_MEMBERSHIPS,
-      supportedChains,
-      endpointType: 'subgraph_url',
-      apiFetcher: getApiMetadata,
-      reactSetter: setUserHubDaos,
-      variables: {
-        memberAddress: address,
-      },
-    });
   };
 
   return (

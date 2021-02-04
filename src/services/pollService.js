@@ -35,7 +35,7 @@ const pollTokenAllowances = async ({
 };
 
 const pollMolochSummon = async ({ chainID, summoner, createdAt }) => {
-  await graphQuery({
+  return await graphQuery({
     endpoint: getGraphEndpoint(chainID, 'subgraph_url'),
     query: DAO_POLL,
     variables: {
