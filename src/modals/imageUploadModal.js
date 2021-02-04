@@ -1,16 +1,9 @@
 import React, { useRef, useState } from 'react';
-import { Link } from 'react-router-dom';
 import {
   Modal,
   ModalContent,
-  ModalHeader,
-  ModalCloseButton,
-  ModalBody,
   ModalOverlay,
-  Box,
   Flex,
-  Avatar,
-  Spinner,
   Image,
   ButtonGroup,
   Button,
