@@ -16,19 +16,22 @@ export const SummonService = ({ web3, chainID, atBlock = 'latest' }) => {
   return (service) => {
     if (service === 'summonMoloch') {
       return async ({ args, from, poll, onTxHash }) => {
-        console.log('args', args);
-        const tx = await contract.methods[service](...args);
-        return tx
-          .send({ from })
-          .on('transactionHash', (txHash) => {
-            if (poll) {
-              onTxHash(txHash);
-              poll(txHash);
-            }
-          })
-          .on('error', (error) => {
-            console.error(error);
-          });
+        try {
+          const tx = await contract.methods[service](...args);
+          return tx
+            .send({ from })
+            .on('transactionHash', (txHash) => {
+              if (poll) {
+                onTxHash(txHash);
+                poll(txHash);
+              }
+            })
+            .on('error', (error) => {
+              console.error(error);
+            });
+        } catch (error) {
+          return error;
+        }
       };
     }
   };

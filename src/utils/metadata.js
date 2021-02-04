@@ -143,15 +143,10 @@ export const ipfsPrePost = async (endpoint, data) => {
 export const ipfsPost = async (creds, file) => {
   const url = `https://api.pinata.cloud/pinning/pinFileToIPFS`;
 
-  console.log('creds', creds);
-  // const
-
   try {
     const response = await fetch(url, {
       method: 'POST',
       headers: {
-        // 'Content-Type':
-        // 'multipart/form-data; boundary=—-WebKitFormBoundaryfgtsKTYLsT7PNUVD',
         pinata_api_key: creds.pinata_api_key,
         pinata_secret_api_key: creds.pinata_api_secret,
       },

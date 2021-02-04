@@ -95,18 +95,8 @@ export const UserContextProvider = ({ children }) => {
     setOutstandingTXs(newUserCache);
   };
 
-  const refetch = () => {
+  const refetchUserHubDaos = () => {
     setUserHubDaos([]);
-    hubChainQuery({
-      query: HUB_MEMBERSHIPS,
-      supportedChains,
-      endpointType: 'subgraph_url',
-      apiFetcher: getApiMetadata,
-      reactSetter: setUserHubDaos,
-      variables: {
-        memberAddress: address,
-      },
-    });
   };
 
   return (
@@ -117,7 +107,7 @@ export const UserContextProvider = ({ children }) => {
         cachePoll,
         resolvePoll,
         outstandingTXs,
-        refetch,
+        refetchUserHubDaos,
       }}
     >
       {children}
@@ -131,7 +121,7 @@ export const useUser = () => {
     cachePoll,
     resolvePoll,
     outstandingTXs,
-    refetch,
+    refetchUserHubDaos,
   } = useContext(UserContext);
   return {
     userHubDaos,
@@ -139,6 +129,6 @@ export const useUser = () => {
     cachePoll,
     resolvePoll,
     outstandingTXs,
-    refetch,
+    refetchUserHubDaos,
   };
 };

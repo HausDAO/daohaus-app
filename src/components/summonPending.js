@@ -43,7 +43,7 @@ const SummonPending = ({ txHash, success, chainId }) => {
           <Box fontSize='3xl' fontFamily='heading' fontWeight={700} mb={10}>
             {POPUP_CONTENT.summonMoloch.successText}
           </Box>
-          <Button as={RouterLink} to={`/register/${'1'}/${'2'}`}>
+          <Button as={RouterLink} to={`/register/${chainId}/${success}`}>
             CONFIGURE DAO
           </Button>
         </>
@@ -73,13 +73,18 @@ const SummonPending = ({ txHash, success, chainId }) => {
           </Stack>
 
           {txHash ? (
-            <Link href={`${uri(chainId)}/${txHash}`} isExternal mb={10}>
+            <Link
+              href={`${uri(chainId)}/${txHash}`}
+              isExternal
+              fontSize='2xl'
+              color='secondary.500'
+            >
               View Transaction on block explorer{' '}
               <Icon as={RiExternalLinkLine} />
             </Link>
           ) : null}
 
-          <Box fontSize='sm' mb={10}>
+          <Box fontSize='sm' mb={10} mt={5}>
             {POPUP_CONTENT.summonMoloch.waitingText}
           </Box>
           <Button as={RouterLink} to='/'>

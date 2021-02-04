@@ -14,6 +14,7 @@ import Settings from '../pages/Settings';
 import { useToken } from '../contexts/TokenContext';
 import Layout from '../components/layout';
 import { useMetaData } from '../contexts/MetaDataContext';
+import Meta from '../pages/Meta';
 
 const DaoRouter = () => {
   const { path } = useRouteMatch();
@@ -60,6 +61,9 @@ const DaoRouter = () => {
         </Route>
         <Route exact path={`${path}/settings`}>
           <Settings overview={daoOverview} />
+        </Route>
+        <Route exact path={`${path}/settings/meta`}>
+          <Meta overview={daoOverview} />
         </Route>
         <Route exact path={`${path}/proposals/new/:proposalType`}>
           <NewProposal />
