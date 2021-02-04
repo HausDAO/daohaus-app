@@ -93,6 +93,27 @@ export const supportedChains = {
     moloch_factory_addr: '0x0F50B2F3165db96614fbB6E4262716acc9F9e098',
     wxdai_contract: '0xe91D153E0b41518A2Ce8Dd3D7944Fa863463a97d',
   },
+ 137: {
+  name: 'Matic',
+  short_name: 'matic',
+  chain: 'MATIC',
+  network: 'matic',
+  network_id: 137,
+  providers: ['walletconnect', 'portis', 'fortmatic'],
+  rpc_url: 'https://rpc-mainnet.maticvigil.com',
+  abi_api_url:
+    'https://mainnet.maticvigil.com/api/swagger/',
+  metadata_api_url: 'https://data.daohaus.club',
+  subgraph_url:
+    'http://35.224.233.211/subgraphs/name/matic/daohaus-automation/graphql',
+  stats_graph_url:
+    'http://35.224.233.211/subgraphs/name/matic/daohaus/graphql',
+  minion_factory_addr: '0x91Eb3d16Cb09dC884bB3146e04C1A1cF80EEa548',
+  moloch_factory_addr: '0x6690C139564144b27ebABA71F9126611a23A31C9',
+  dai_contract: '0x8f3Cf7ad23Cd3CaDbD9735AFf958023239c6A063',
+  weth_contract: '0x2791Bca1f2de4661ED88A30C99A7a9449Aa84174',
+}
+
 };
 
 export function getChainData(chainId) {
