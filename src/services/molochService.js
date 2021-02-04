@@ -52,7 +52,7 @@ export const MolochService = ({ web3, daoAddress, version, chainID }) => {
       service === 'submitWhitelistProposal' ||
       service === 'submitGuildKickProposal'
     ) {
-      return async ({ args, address, poll, onTxHash, onTxError }) => {
+      return async ({ args, address, poll, onTxHash }) => {
         // console.log('args', args);
         // console.log('from', address);
         // console.log('poll', poll);
@@ -68,10 +68,8 @@ export const MolochService = ({ web3, daoAddress, version, chainID }) => {
               return txHash;
             })
             .on('error', (error) => {
-              if (onTxError) {
-                onTxError(error);
-              }
-              console.error(error);
+              // console.error('This was not caught by component', error);
+              return error;
             });
         } catch (error) {
           return error;

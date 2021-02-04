@@ -39,24 +39,39 @@ export const MetaDataProvider = ({ children }) => {
   }, [userHubDaos, daochain, daoid]);
 
   useEffect(() => {
-    if (daoMetaData?.customTheme) {
+    if (daoMetaData?.customTheme && shouldUpdateTheme.current) {
       updateTheme(daoMetaData.customTheme);
+      console.log('HUB UPDATE FIRST');
       if (daoMetaData?.customTheme?.daoMeta) {
         setCustomCopy({
           ...daoMetaData.customTheme.daoMeta,
           name: daoMetaData.name,
         });
       }
+      shouldUpdateTheme.current = false;
     } else {
       resetTheme();
     }
   }, [daoMetaData]);
 
-  useState(() => {
+  useEffect(() => {
     const getApiMetadata = async () => {
       try {
         const data = await fetchMetaData(daoid);
         setApiMetaData(data);
+        if (shouldUpdateTheme.current && data?.boosts?.length) {
+          const boosts = data.boosts;
+          const customThemeDao = boosts.find(
+            (boost) => boost.boostKey[0] === 'customTheme',
+          );
+          if (customThemeDao) {
+            updateTheme(customThemeDao.boostMetadata);
+            if (customThemeDao?.boostMetadata?.daoMeta) {
+              setCustomCopy(customThemeDao?.boostMetadata?.daoMeta);
+            }
+            shouldUpdateTheme.current = false;
+          }
+        }
       } catch (error) {
         console.error(error);
       }

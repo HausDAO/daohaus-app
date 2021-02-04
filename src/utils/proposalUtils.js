@@ -162,6 +162,7 @@ export const determineUnreadActivityFeed = (proposal) => {
 };
 
 export function getProposalCountdownText(proposal) {
+  console.log(proposal);
   switch (proposal.status) {
     case ProposalStatus.InQueue:
       return (
