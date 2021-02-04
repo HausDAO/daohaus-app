@@ -26,15 +26,6 @@ export const MetaDataProvider = ({ children }) => {
   const hasFetchedMetadata = useRef(false);
   const shouldUpdateTheme = useRef(true);
 
-  const getApiMetadata = async () => {
-    try {
-      const data = await fetchMetaData(daoid);
-      setApiMetaData(data);
-    } catch (error) {
-      console.error(error);
-    }
-  };
-
   useEffect(() => {
     if (userHubDaos) {
       const daoMeta = userHubDaos
@@ -69,11 +60,14 @@ export const MetaDataProvider = ({ children }) => {
         const data = await fetchMetaData(daoid);
         setApiMetaData(data);
         if (shouldUpdateTheme.current && data?.boosts?.length) {
+          console.log('API UPDATE FIRST');
+
           const boosts = data.boosts;
           const customThemeDao = boosts.find(
             (boost) => boost.boostKey[0] === 'customTheme',
           );
           if (customThemeDao) {
+            console.log(customThemeDao.boostMetadata);
             updateTheme(customThemeDao.boostMetadata);
             if (customThemeDao?.boostMetadata?.daoMeta) {
               setCustomCopy(customThemeDao?.boostMetadata?.daoMeta);
@@ -90,8 +84,31 @@ export const MetaDataProvider = ({ children }) => {
     }
   }, [daoid]);
 
+  const fetchApiMetadata = async () => {
+    try {
+      const data = await fetchMetaData(daoid);
+      setApiMetaData(data);
+      if (shouldUpdateTheme.current && data?.boosts?.length) {
+        const boosts = data.boosts;
+        const customThemeDao = boosts.find(
+          (boost) => boost.boostKey[0] === 'customTheme',
+        );
+        if (customThemeDao) {
+          updateTheme(customThemeDao.boostMetadata);
+          if (customThemeDao?.boostMetadata?.daoMeta) {
+            setCustomCopy(customThemeDao?.boostMetadata?.daoMeta);
+          }
+          shouldUpdateTheme.current = false;
+        }
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
   const refetchMetaData = () => {
-    getApiMetadata();
+    shouldUpdateTheme.current = true;
+    fetchApiMetadata();
     refetchUserHubDaos();
   };
 
