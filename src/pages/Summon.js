@@ -89,7 +89,7 @@ const Summon = () => {
       const poll = createPoll({ action: 'summonMoloch', cachePoll })({
         chainID: injectedChain.chain_id,
         summoner: summonData.summoner[0],
-        summoningTime: (new Date().getTime() / 1000).toFixed(),
+        createdAt: (new Date().getTime() / 1000).toFixed(),
         actions: {
           onError: (error, txHash) => {
             console.error(`error: ${error}`);

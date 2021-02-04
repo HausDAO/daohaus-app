@@ -73,7 +73,7 @@ const NetworkDaoList = ({ data, network, searchTerm, index }) => {
             : true;
         })
         .sort((a, b) => {
-          return !a.meta ? -100 : +b.meta.version - +a.meta.version;
+          return !a.meta ? -100 : +b.meta?.version - +a.meta?.version;
         }),
     );
   }, [searchTerm]);

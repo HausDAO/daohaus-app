@@ -73,10 +73,10 @@ const SummonPending = ({ txHash, success, chainId }) => {
           </Stack>
 
           {txHash ? (
-            <TextBox as={Link} href={`${uri(chainId)}/${txHash}`} mb={5}>
+            <Link href={`${uri(chainId)}/${txHash}`} isExternal mb={10}>
               View Transaction on block explorer{' '}
               <Icon as={RiExternalLinkLine} />
-            </TextBox>
+            </Link>
           ) : null}
 
           <Box fontSize='sm' mb={10}>
