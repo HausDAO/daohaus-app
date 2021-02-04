@@ -117,15 +117,16 @@ const Summon = () => {
         setPendingTx(txHash);
       };
 
-      SummonService({
+      await SummonService({
         web3: injectedProvider,
         chainID: injectedChain.chain_id,
       })('summonMoloch')({ args: summonParams, from: address, poll, onTxHash });
     } catch (err) {
-      console.log('error:', err);
+      console.log('error in tx', err);
       setIsSummoning(false);
       errorToast({
         title: `There was an error.`,
+        description: err?.message || '',
       });
     }
   };
