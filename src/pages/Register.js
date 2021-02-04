@@ -32,10 +32,9 @@ const Register = () => {
     }
   }, [address, injectedChain]);
 
-  const handleUpdate = async (values) => {
-    console.log('updated dao', values);
+  const handleUpdate = async () => {
     refetch();
-    localStorage.removeItem('exploreDaoData');
+    sessionStorage.removeItem('exploreDaoData');
 
     history.push(`/dao/${registerchain}/${registerid}`);
   };

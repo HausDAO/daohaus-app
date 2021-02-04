@@ -123,7 +123,7 @@ export const DAO_ACTIVITIES = gql`
 
 export const DAO_POLL = gql`
   query moloches($summoner: String!, $createdAt: String!) {
-    moloches(where: { summoner: $summoner, createdAt_gt: createdAt }) {
+    moloches(where: { summoner: $summoner, createdAt_gt: $createdAt }) {
       id
       summoner
       createdAt
