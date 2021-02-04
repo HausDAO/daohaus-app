@@ -8,7 +8,7 @@ import { useDaoMember } from '../contexts/DaoMemberContext';
 import DaoMetaForm from '../forms/daoMetaForm';
 
 const Meta = () => {
-  const { apiMetaData, refetchMetaData } = useMetaData();
+  const { apiMetaData, refetchMetaData, daoMetaData } = useMetaData();
   const { isMember } = useDaoMember();
   const [localMetadata, setLocalMetadata] = useState();
   const history = useHistory();
@@ -29,7 +29,7 @@ const Meta = () => {
     }
   }, [apiMetaData, localMetadata]);
 
-  const handleUpdate = (newDaoData) => {
+  const handleUpdate = () => {
     refetchMetaData();
     history.push(`/dao/${daochain}/${daoid}/settings`);
   };
