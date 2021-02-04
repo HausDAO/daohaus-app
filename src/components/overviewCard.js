@@ -11,7 +11,7 @@ import ContentBox from './ContentBox';
 const OverviewCard = ({ overview, membersAmt }) => {
   const { daochain, daoid } = useParams();
   const { daoMetaData } = useMetaData();
-  const { tokenBalances, totalLoot, totalShares, title } = overview;
+  const { tokenBalances, totalLoot, totalShares } = overview;
   const history = useHistory();
 
   return (
@@ -21,7 +21,7 @@ const OverviewCard = ({ overview, membersAmt }) => {
       </TextBox>
       <ContentBox mt={2} w='100%'>
         <Flex direction='row' align='center'>
-          <Skeleton isLoaded={title} ml={6}>
+          <Skeleton isLoaded={daoMetaData?.name} ml={6}>
             <Flex align='center'>
               <Avatar
                 src={
@@ -32,7 +32,7 @@ const OverviewCard = ({ overview, membersAmt }) => {
                 mr={6}
               />
               <Box fontSize='2xl' fontWeight={700} fontFamily='heading'>
-                {title || '--'}
+                {daoMetaData?.name || '--'}
               </Box>
             </Flex>
           </Skeleton>

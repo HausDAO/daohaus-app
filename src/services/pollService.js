@@ -34,13 +34,13 @@ const pollTokenAllowances = async ({
   return amountApproved;
 };
 
-const pollMolochSummon = async ({ chainID, summoner, summoningTime }) => {
+const pollMolochSummon = async ({ chainID, summoner, createdAt }) => {
   await graphQuery({
     endpoint: getGraphEndpoint(chainID, 'subgraph_url'),
     query: DAO_POLL,
     variables: {
       summoner,
-      summoningTime,
+      createdAt,
     },
   });
 };
@@ -68,13 +68,13 @@ const tokenAllowanceTest = (data, shouldEqual, pollId) => {
 
 const molochSummonTest = (data, shouldEqual, pollId) => {
   console.log('new moloch: ', data);
+  // could we pass this value back?
   if (data.moloches) {
     return data.moloches.length > 0;
   } else {
+    console.log('no data.moloches');
     clearInterval(pollId);
-    throw new Error(
-      `Poll test did recieve the expected results from the graph: ${data}`,
-    );
+    throw new Error(`Bad query, clearing poll: ${data}`);
   }
 };
 
@@ -414,13 +414,12 @@ export const createPoll = ({
       }
     };
   } else if (action === 'summonMoloch') {
-    return ({ chainID, summoner, summoningTime, actions }) => (txHash) => {
+    return ({ chainID, summoner, createdAt, actions }) => (txHash) => {
       startPoll({
         pollFetch: pollMolochSummon,
         testFn: molochSummonTest,
-        // not really needed, just checking to see if we get an entity at all
-        shouldEqual: { summoner, summoningTime },
-        args: { chainID, summoner, summoningTime },
+        shouldEqual: { summoner, createdAt },
+        args: { chainID, summoner, createdAt },
         actions,
         txHash,
       });
@@ -439,7 +438,7 @@ export const createPoll = ({
             interval,
             tries,
           },
-          pollArgs: { chainID, summoner, summoningTime },
+          pollArgs: { chainID, summoner, createdAt },
         });
       }
     };

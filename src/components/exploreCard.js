@@ -4,7 +4,7 @@ import { Avatar, Box, Flex, Button, Badge, Link, Text } from '@chakra-ui/react';
 import { Link as RouterLink } from 'react-router-dom';
 import ContentBox from './ContentBox';
 import { ExploreContext } from '../contexts/ExploreContext';
-import { pokemolUrl, themeImagePath } from '../utils/metadata';
+import { pokemolUrlExplore, themeImagePath } from '../utils/metadata';
 import { numberWithCommas } from '../utils/general';
 
 const ExploreCard = ({ dao }) => {
@@ -50,7 +50,12 @@ const ExploreCard = ({ dao }) => {
     switch (dao.meta.version) {
       case '1': {
         return (
-          <Button minWidth='80px' as={Link} href={pokemolUrl(dao)} isExternal>
+          <Button
+            minWidth='80px'
+            as={Link}
+            href={pokemolUrlExplore(dao)}
+            isExternal
+          >
             Go
           </Button>
         );

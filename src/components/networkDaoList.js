@@ -14,9 +14,51 @@ import {
   AccordionPanel,
   Icon,
 } from '@chakra-ui/react';
-import { themeImagePath } from '../utils/metadata';
+import { pokemolUrlHubList, themeImagePath } from '../utils/metadata';
 import makeBlockie from 'ethereum-blockies-base64';
 import { FiAlertOctagon } from 'react-icons/fi';
+
+const LinkForVersion = ({ children, dao, unReadCount, network }) => {
+  const getDaoLink = (unReadCount, dao) => {
+    if (!dao.meta) {
+      return `/register/${network.networkID}/${dao.molochAddress}`;
+    }
+    if (dao.meta.version === '1') {
+      return pokemolUrlHubList(dao);
+    } else {
+      return unReadCount
+        ? `/dao/${network.networkID}/${dao.molochAddress}/proposals`
+        : `dao/${network.networkID}/${dao.molochAddress}`;
+    }
+  };
+
+  if (dao.meta && dao.meta.version === '1') {
+    return (
+      <Link
+        href={getDaoLink(unReadCount, dao)}
+        target='_blank'
+        rel='noreferrer noopener'
+        display='flex'
+        flexDirection='column'
+        alignItems='center'
+      >
+        {children}
+      </Link>
+    );
+  } else {
+    return (
+      <Link
+        as={RouterLink}
+        to={getDaoLink(unReadCount, dao)}
+        display='flex'
+        flexDirection='column'
+        alignItems='center'
+      >
+        {children}
+      </Link>
+    );
+  }
+};
 
 const NetworkDaoList = ({ data, network, searchTerm, index }) => {
   const [sortedDaoList, setSortedDaoList] = useState([]);
@@ -26,29 +68,15 @@ const NetworkDaoList = ({ data, network, searchTerm, index }) => {
       data
         ?.filter((dao) => {
           return searchTerm
-            ? dao.meta.name.toLowerCase().indexOf(searchTerm.toLowerCase()) > -1
+            ? dao.meta?.name.toLowerCase().indexOf(searchTerm.toLowerCase()) >
+                -1
             : true;
         })
         .sort((a, b) => {
-          return !a.meta ? -100 : +b.meta.version - +a.meta.version;
+          return !a.meta ? -100 : +b.meta?.version - +a.meta?.version;
         }),
     );
   }, [searchTerm]);
-
-  const getDaoLink = (unReadCount, dao) => {
-    if (!dao.meta) {
-      return `/register/${network.networkID}/${dao.molochAddress}/`;
-    }
-
-    // TODO: how to deal with v1 link
-    // if (dao.meta.version === '1') {
-    //   // return pokemolUrl(dao);
-    // } else {
-    return unReadCount
-      ? `/dao/${network.networkID}/${dao.molochAddress}/proposals`
-      : `dao/${network.networkID}/${dao.molochAddress}`;
-    // }
-  };
 
   const renderDaoAvatar = (dao) => {
     const unReadCount = dao.moloch.proposals.filter((prop) => {
@@ -57,13 +85,7 @@ const NetworkDaoList = ({ data, network, searchTerm, index }) => {
 
     return (
       <Box key={dao.molochAddress + dao.networkID} mr={3} pb={3}>
-        <Link
-          as={RouterLink}
-          to={getDaoLink(unReadCount, dao)}
-          display='flex'
-          flexDirection='column'
-          alignItems='center'
-        >
+        <LinkForVersion dao={dao} unReadCount={unReadCount} network={network}>
           {!dao.meta ? (
             <Icon as={FiAlertOctagon} color='yellow.300' h={50} w={50} mb={3} />
           ) : (
@@ -122,7 +144,7 @@ const NetworkDaoList = ({ data, network, searchTerm, index }) => {
               REGISTER NEW DAO
             </Box>
           )}
-        </Link>
+        </LinkForVersion>
       </Box>
     );
   };

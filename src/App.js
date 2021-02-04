@@ -2,11 +2,12 @@ import React from 'react';
 import { Switch, Route } from 'react-router-dom';
 
 import { UserContextProvider } from './contexts/UserContext';
+import { ExploreContextProvider } from './contexts/ExploreContext';
 import Hub from './pages/Hub';
 import Dao from './pages/Dao';
 import Explore from './pages/Explore';
 import Summon from './pages/Summon';
-import { ExploreContextProvider } from './contexts/ExploreContext';
+import Register from './pages/Register';
 import DaoSwitcherModal from './modals/daoSwitcherModal';
 import TxInfoModal from './modals/TxInfoModal';
 
@@ -32,8 +33,8 @@ function App() {
         <Route exact path='/summon'>
           <Summon />
         </Route>
-        <Route exact path='/register/:daochain/:daoid'>
-          <Summon />
+        <Route exact path='/register/:registerchain/:registerid'>
+          <Register />
         </Route>
         <Route
           path='/dao/:daochain/:daoid'

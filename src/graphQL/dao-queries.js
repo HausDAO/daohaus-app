@@ -122,11 +122,11 @@ export const DAO_ACTIVITIES = gql`
 `;
 
 export const DAO_POLL = gql`
-  query moloches($summoner: String!, $summoningTime: String!) {
-    moloches(where: { summoner: $summoner, summoningTime_gt: summoningTime }) {
+  query moloches($summoner: String!, $createdAt: String!) {
+    moloches(where: { summoner: $summoner, createdAt_gt: createdAt }) {
       id
       summoner
-      summoningTime
+      createdAt
     }
   }
 `;
