@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import { Flex, Box } from '@chakra-ui/react';
+
 import ActivitiesFeed from '../components/activitiesFeed';
 import Chart from '../components/chart';
 import MemberCard from '../components/memberCard';
@@ -43,7 +44,7 @@ const Members = ({ members, activities }) => {
   useEffect(() => {
     // TODO cancel this on leave page
     window.addEventListener('scroll', handleScroll);
-  });
+  }, []);
 
   const scrolledStyle = {
     position: 'sticky',

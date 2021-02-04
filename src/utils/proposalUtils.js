@@ -161,69 +161,67 @@ export const determineUnreadActivityFeed = (proposal) => {
   };
 };
 
-export function getProposalCountdownText(proposal) {
-  console.log(proposal);
-  switch (proposal.status) {
-    case ProposalStatus.InQueue:
-      return (
-        <Fragment>
-          <Box textTransform='uppercase' fontSize='0.8em' fontWeight={700}>
-            Voting Begins {timeToNow(proposal.votingPeriodStarts)}
+export const getProposalCountdownText = (proposal) => {
+  if (proposal.InQueue) {
+    return (
+      <Fragment>
+        <Box textTransform='uppercase' fontSize='0.8em' fontWeight={700}>
+          Voting Begins {timeToNow(proposal.votingPeriodStarts)}
+        </Box>
+      </Fragment>
+    );
+  } else if (proposal.VotingPeriod) {
+    return (
+      <Fragment>
+        <Box textTransform='uppercase' fontSize='0.8em' fontWeight={700}>
+          Voting Ends {timeToNow(proposal.votingPeriodEnds)}
+        </Box>
+      </Fragment>
+    );
+  } else if (proposal.GracePeriodEnds) {
+    return (
+      <Fragment>
+        <Box textTransform='uppercase' fontSize='0.8em' fontWeight={700}>
+          <Box as='span' fontWeight={900}>
+            Grace Period Ends {timeToNow(proposal.gracePeriodEnds)}
           </Box>
-        </Fragment>
-      );
-    case ProposalStatus.VotingPeriod:
-      return (
-        <Fragment>
-          <Box textTransform='uppercase' fontSize='0.8em' fontWeight={700}>
-            Voting Ends {timeToNow(proposal.votingPeriodEnds)}
-          </Box>
-        </Fragment>
-      );
-    case ProposalStatus.GracePeriod:
-      return (
-        <Fragment>
-          <Box textTransform='uppercase' fontSize='0.8em' fontWeight={700}>
-            <Box as='span' fontWeight={900}>
-              Grace Period Ends {timeToNow(proposal.gracePeriodEnds)}
-            </Box>
-          </Box>
-        </Fragment>
-      );
-    case ProposalStatus.Passed:
-      return (
-        <Box textTransform='uppercase' fontSize='0.8em' fontWeight={700}>
-          Passed
         </Box>
-      );
-    case ProposalStatus.Failed:
-      return (
-        <Box textTransform='uppercase' fontSize='0.8em' fontWeight={700}>
-          Failed
-        </Box>
-      );
-    case ProposalStatus.Cancelled:
-      return (
-        <Box textTransform='uppercase' fontSize='0.8em' fontWeight={700}>
-          Cancelled
-        </Box>
-      );
-    case ProposalStatus.ReadyForProcessing:
-      return (
-        <Box textTransform='uppercase' fontSize='0.8em' fontWeight={700}>
-          Ready For Processing
-        </Box>
-      );
-    case ProposalStatus.Unsponsored:
-      return (
-        <Box textTransform='uppercase' fontSize='0.8em' fontWeight={700}>
-          Unsponsored
-        </Box>
-      );
-    default:
-      return <Fragment />;
+      </Fragment>
+    );
+  } else if (proposal.Passed) {
+    return (
+      <Box textTransform='uppercase' fontSize='0.8em' fontWeight={700}>
+        Passed
+      </Box>
+    );
+  } else if (proposal.Failed) {
+    return (
+      <Box textTransform='uppercase' fontSize='0.8em' fontWeight={700}>
+        Failed
+      </Box>
+    );
+  } else if (proposal.Cancelled) {
+    return (
+      <Box textTransform='uppercase' fontSize='0.8em' fontWeight={700}>
+        Cancelled
+      </Box>
+    );
+  } else if (proposal.ReadyForProcessing) {
+    return (
+      <Box textTransform='uppercase' fontSize='0.8em' fontWeight={700}>
+        Ready For Processing
+      </Box>
+    );
+  } else if (proposal.Unsponsored) {
+    return (
+      <Box textTransform='uppercase' fontSize='0.8em' fontWeight={700}>
+        Unsponsored
+      </Box>
+    );
+  } else {
+    return <Fragment />;
   }
-}
+};
 
 export const getProposalDetailStatus = (proposal) => {
   switch (proposal.status) {
