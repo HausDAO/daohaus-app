@@ -182,7 +182,7 @@ const UserDaoInit = () => {
     } catch (err) {
       console.log('api fetch error', daoParam);
     }
-    const apiData = daoRes.error ? {} : daoRes;
+    const apiData = daoRes.error ? {} : daoRes[0];
     const daoNetwork = getChainDataByName(apiData.network);
     updateNetwork(daoNetwork);
 

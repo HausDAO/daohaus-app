@@ -86,6 +86,8 @@ export const w3connect = async (web3Connect, currentNetwork) => {
     };
   }
 
+  console.log('web3Connect.w3c', web3Connect.w3c);
+
   const w3cNetwork = getChainDataByName(
     web3Connect.w3c.providerController.network,
   );
