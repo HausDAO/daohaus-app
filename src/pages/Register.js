@@ -11,7 +11,7 @@ import { useUser } from '../contexts/UserContext';
 
 const Register = () => {
   const { registerchain, registerid } = useParams();
-  const { refetch } = useUser();
+  const { refetchUserHubDaos } = useUser();
   const history = useHistory();
   const { address, injectedChain, requestWallet } = useInjectedProvider();
   const [currentDao, setCurrentDao] = useState();
@@ -33,7 +33,7 @@ const Register = () => {
   }, [address, injectedChain]);
 
   const handleUpdate = async () => {
-    refetch();
+    refetchUserHubDaos();
     sessionStorage.removeItem('exploreDaoData');
 
     history.push(`/dao/${registerchain}/${registerid}`);

@@ -26,7 +26,7 @@ const Summon = () => {
     requestWallet,
     injectedProvider,
   } = useInjectedProvider();
-  const { cachePoll, resolvePoll, refetch } = useUser();
+  const { cachePoll, resolvePoll, refetchUserHubDaos } = useUser();
   const { errorToast, successToast } = useOverlay();
   const [hardMode, setHardMode] = useState(false);
   const [daoData, setDaoData] = useState(null);
@@ -105,7 +105,7 @@ const Summon = () => {
               title: 'A new DAO has Risen!',
             });
 
-            refetch();
+            refetchUserHubDaos();
             resolvePoll(txHash);
             getnewDaoAddress();
           },
