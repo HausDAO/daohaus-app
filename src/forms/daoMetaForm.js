@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react';
+import React, { useState } from 'react';
 import {
   Flex,
   FormControl,
@@ -12,7 +12,6 @@ import {
   Button,
   Spinner,
   Select,
-  ButtonGroup,
   FormHelperText,
 } from '@chakra-ui/react';
 import { useForm } from 'react-hook-form';
@@ -24,43 +23,30 @@ import {
   RiMediumFill,
 } from 'react-icons/ri';
 import { AiOutlineCaretDown, AiFillQuestionCircle } from 'react-icons/ai';
+import { useInjectedProvider } from '../contexts/InjectedProviderContext';
+import ContentBox from '../components/ContentBox';
+import TextBox from '../components/TextBox';
+import { daoPresets } from '../utils/summoning';
+import { put, themeImagePath } from '../utils/metadata';
+import ImageUploadModal from '../modals/imageUploadModal';
 
-import ContentBox from '../../components/Shared/ContentBox';
-import TextBox from '../../components/Shared/TextBox';
-import { themeImagePath } from '../../utils/helpers';
-import {
-  useModals,
-  useNetwork,
-  useUser,
-  useWeb3Connect,
-} from '../../contexts/PokemolContext';
-import { ipfsPost, ipfsPrePost, put } from '../../utils/requests';
-import { daoPresets } from '../../content/summon-presets';
-import GenericModal from '../Modal/GenericModal';
-
-const puposes = daoPresets(1).map((preset) => preset.presetName);
+const puposes = daoPresets('0x1').map((preset) => preset.presetName);
 
 const DaoMetaForm = ({ metadata, handleUpdate }) => {
-  const [web3Connect] = useWeb3Connect();
-  const [user] = useUser();
-  const [network] = useNetwork();
-  const { modals, openModal, closeModals } = useModals();
-  const [imageUrl, setImageUrl] = useState(null);
-  const [imageUpload, setImageUpload] = useState(null);
+  const { address, injectedProvider, injectedChain } = useInjectedProvider();
   const [ipfsHash, setIpfsHash] = useState();
   const [loading, setLoading] = useState();
   const [uploading, setUploading] = useState();
   const { register, handleSubmit } = useForm();
-  let upload = useRef();
 
   const onSubmit = async (data) => {
     setLoading(true);
 
     try {
-      const messageHash = web3Connect.web3.utils.sha3(metadata.address);
-      const signature = await web3Connect.web3.eth.personal.sign(
+      const messageHash = injectedProvider.utils.sha3(metadata.address);
+      const signature = await injectedProvider.eth.personal.sign(
         messageHash,
-        user.username,
+        address,
       );
 
       if (ipfsHash) {
@@ -71,7 +57,7 @@ const DaoMetaForm = ({ metadata, handleUpdate }) => {
       const updateData = {
         ...data,
         contractAddress: metadata.address,
-        network: network.network,
+        network: injectedChain.network,
         summonerAddress: metadata.summonerAddress,
         version: metadata.version,
         signature,
@@ -79,43 +65,15 @@ const DaoMetaForm = ({ metadata, handleUpdate }) => {
 
       const res = await put('dao/update', updateData);
 
-      console.log('res', res);
       if (res.error) {
         throw res.error;
       }
 
       handleUpdate(data);
     } catch (err) {
-      // handle error messaging
       console.log('err', err);
       setLoading(false);
     }
-  };
-
-  const handleBrowse = () => {
-    upload.value = null;
-    upload.click();
-  };
-
-  const handleFileSet = async (event) => {
-    setImageUrl(URL.createObjectURL(upload.files[0]));
-    const formData = new FormData();
-    formData.append('file', upload.files[0]);
-    setImageUpload(formData);
-    openModal('imageHandler');
-  };
-
-  const handleUpload = async () => {
-    setUploading(true);
-    const keyRes = await ipfsPrePost('dao/ipfs-key', {
-      daoAddress: metadata.address,
-    });
-    const ipfsRes = await ipfsPost(keyRes, imageUpload);
-    setIpfsHash(ipfsRes.IpfsHash);
-    setImageUpload(null);
-    setImageUrl(null);
-    setUploading(false);
-    closeModals();
   };
 
   return (
@@ -145,51 +103,13 @@ const DaoMetaForm = ({ metadata, handleUpdate }) => {
                       </>
                     ) : null}
 
-                    <Button
-                      id='avatarImg'
-                      variant='outline'
-                      onClick={() => {
-                        handleBrowse();
-                      }}
-                    >
-                      {ipfsHash || metadata.avatarImg
-                        ? 'Change Avatar'
-                        : 'Upload Avatar'}
-                    </Button>
-
-                    <input
-                      type='file'
-                      id='avatarImg'
-                      accept='image/gif, image/jpeg, image/png'
-                      multiple={false}
-                      style={{ display: 'none' }}
-                      ref={(ref) => (upload = ref)}
-                      onChange={(e) => handleFileSet(e)}
+                    <ImageUploadModal
+                      ipfsHash={ipfsHash}
+                      setIpfsHash={setIpfsHash}
+                      setUploading={setUploading}
+                      uploading={uploading}
+                      metadata={metadata}
                     />
-
-                    <GenericModal isOpen={modals.imageHandler}>
-                      <Flex align='center' direction='column'>
-                        <TextBox>How&apos;s this look?</TextBox>
-                        <Image
-                          src={imageUrl}
-                          maxH='500px'
-                          objectFit='cover'
-                          my={4}
-                        />
-                        <ButtonGroup>
-                          <Button
-                            variant='outline'
-                            onClick={handleBrowse}
-                            disabled={uploading}
-                          >
-                            Select Another
-                          </Button>
-                          <Button onClick={handleUpload} disabled={uploading}>
-                            Confirm
-                          </Button>
-                        </ButtonGroup>
-                      </Flex>
-                    </GenericModal>
                   </Flex>
                 </FormControl>
                 <FormControl id='name' mb={4}>

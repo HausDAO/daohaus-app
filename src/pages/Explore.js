@@ -7,6 +7,7 @@ import { ExploreContext } from '../contexts/ExploreContext';
 
 const Explore = () => {
   const { hasLoadedExploreData } = useContext(ExploreContext);
+
   return (
     <Layout>
       {hasLoadedExploreData ? (

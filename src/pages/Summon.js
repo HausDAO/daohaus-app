@@ -15,6 +15,7 @@ import { createPoll } from '../services/pollService';
 import { useUser } from '../contexts/UserContext';
 import { useOverlay } from '../contexts/OverlayContext';
 import { SummonService } from '../services/summonService';
+import SummonPending from '../components/summonPending';
 
 const Summon = () => {
   const {
@@ -23,20 +24,14 @@ const Summon = () => {
     requestWallet,
     injectedProvider,
   } = useInjectedProvider();
-  const { cachePoll, resolvePoll } = useUser();
+  const { cachePoll, resolvePoll, refetch } = useUser();
   const { errorToast, successToast } = useOverlay();
   const [hardMode, setHardMode] = useState(false);
   const [daoData, setDaoData] = useState(null);
   const [isSummoning, setIsSummoning] = useState(false);
+  const [pendingTx, setPendingTx] = useState(null);
+  const [success, setSuccess] = useState(false);
   const [summonError, setSummonError] = useState(null);
-
-  if (injectedChain) {
-    console.log(
-      'daoPresets',
-      injectedChain.chain_id,
-      daoPresets(injectedChain.chain_id),
-    );
-  }
 
   useEffect(() => {
     if (injectedChain) {
@@ -94,7 +89,7 @@ const Summon = () => {
       const poll = createPoll({ action: 'summonMoloch', cachePoll })({
         chainID: injectedChain.chain_id,
         summoner: summonData.summoner[0],
-        summoningTime: (new Date().getTime() / 1000).toFixed(),
+        createdAt: (new Date().getTime() / 1000).toFixed(),
         actions: {
           onError: (error, txHash) => {
             console.error(`error: ${error}`);
@@ -108,18 +103,28 @@ const Summon = () => {
             successToast({
               title: 'A new DAO has Risen!',
             });
-            // maybe refresh hub data here - need to add that to useUser i think
-            // refreshDao();
+            setSuccess(true);
+            refetch();
             resolvePoll(txHash);
           },
         },
       });
+
+      const onTxHash = (txHash) => {
+        console.log('tx', txHash);
+        setPendingTx(txHash);
+      };
+
       SummonService({
         web3: injectedProvider,
         chainID: injectedChain.chain_id,
-      })('summonMoloch')(summonParams, address, poll);
+      })('summonMoloch')({ args: summonParams, from: address, poll, onTxHash });
     } catch (err) {
       console.log('error:', err);
+      setIsSummoning(false);
+      errorToast({
+        title: `There was an error.`,
+      });
     }
   };
 
@@ -175,29 +180,11 @@ const Summon = () => {
                 )}
               </>
             ) : (
-              <Box
-                rounded='lg'
-                bg='blackAlpha.600'
-                borderWidth='1px'
-                borderColor='whiteAlpha.200'
-                p={6}
-                m={[10, 'auto', 0, 'auto']}
-                w='50%'
-                textAlign='center'
-              >
-                <Box
-                  fontSize='3xl'
-                  fontFamily='heading'
-                  fontWeight={700}
-                  mb={10}
-                >
-                  Our magic internet communities take a minute or two to create.
-                  You will soon see new daos on your Hub page.
-                </Box>
-                <Button as={RouterLink} to='/'>
-                  GO TO HUB
-                </Button>
-              </Box>
+              <SummonPending
+                txHash={pendingTx}
+                success={success}
+                chainId={injectedChain.chain_id}
+              />
             )}
           </>
         ) : (
