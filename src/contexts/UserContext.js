@@ -95,9 +95,7 @@ export const UserContextProvider = ({ children }) => {
     setOutstandingTXs(newUserCache);
   };
 
-  const refetch = () => {
-    // TODO - this is not working -it stopped the doubling, doesn have the meta yet
-    // sessionStorage.removeItem('userHubData');
+  const refetchUserHubDaos = () => {
     setUserHubDaos([]);
   };
 
@@ -109,7 +107,7 @@ export const UserContextProvider = ({ children }) => {
         cachePoll,
         resolvePoll,
         outstandingTXs,
-        refetch,
+        refetchUserHubDaos,
       }}
     >
       {children}
@@ -123,7 +121,7 @@ export const useUser = () => {
     cachePoll,
     resolvePoll,
     outstandingTXs,
-    refetch,
+    refetchUserHubDaos,
   } = useContext(UserContext);
   return {
     userHubDaos,
@@ -131,6 +129,6 @@ export const useUser = () => {
     cachePoll,
     resolvePoll,
     outstandingTXs,
-    refetch,
+    refetchUserHubDaos,
   };
 };

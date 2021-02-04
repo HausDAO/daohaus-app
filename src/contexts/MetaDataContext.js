@@ -15,7 +15,7 @@ import { useUser } from './UserContext';
 export const MetaDataContext = createContext();
 
 export const MetaDataProvider = ({ children }) => {
-  const { userHubDaos } = useUser();
+  const { userHubDaos, refetchUserHubDaos } = useUser();
   const { updateTheme, resetTheme } = useCustomTheme();
   const { daoid, daochain } = useParams();
 
@@ -25,6 +25,15 @@ export const MetaDataProvider = ({ children }) => {
 
   const hasFetchedMetadata = useRef(false);
   const shouldUpdateTheme = useRef(true);
+
+  const getApiMetadata = async () => {
+    try {
+      const data = await fetchMetaData(daoid);
+      setApiMetaData(data);
+    } catch (error) {
+      console.error(error);
+    }
+  };
 
   useEffect(() => {
     if (userHubDaos) {
@@ -53,18 +62,15 @@ export const MetaDataProvider = ({ children }) => {
   }, [daoMetaData]);
 
   useState(() => {
-    const getApiMetadata = async () => {
-      try {
-        const data = await fetchMetaData(daoid);
-        setApiMetaData(data);
-      } catch (error) {
-        console.error(error);
-      }
-    };
     if (daoid) {
       getApiMetadata();
     }
   }, [daoid]);
+
+  const refetchMetaData = () => {
+    getApiMetadata();
+    refetchUserHubDaos();
+  };
 
   return (
     <MetaDataContext.Provider
@@ -74,6 +80,7 @@ export const MetaDataProvider = ({ children }) => {
         hasFetchedMetadata,
         shouldUpdateTheme,
         apiMetaData,
+        refetchMetaData,
       }}
     >
       {children}
@@ -88,6 +95,7 @@ export const useMetaData = () => {
     shouldUpdateTheme,
     customCopy,
     apiMetaData,
+    refetchMetaData,
   } = useContext(MetaDataContext);
   return {
     daoMetaData,
@@ -95,5 +103,6 @@ export const useMetaData = () => {
     shouldUpdateTheme,
     customCopy,
     apiMetaData,
+    refetchMetaData,
   };
 };
