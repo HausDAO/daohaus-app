@@ -36,14 +36,18 @@ const Meta = () => {
 
   return (
     <Flex wrap='wrap'>
-      <Flex ml={6} justify='space-between' align='center' w='100%'>
-        <Flex as={RouterLink} to={`/`} align='center'>
+      <Flex justify='space-between' align='center' w='100%'>
+        <Flex
+          as={RouterLink}
+          to={`/dao/${daochain}/${daoid}/settings`}
+          align='center'
+        >
           <Icon as={BiArrowBack} color='secondary.500' mr={2} />
           Back
         </Flex>
       </Flex>
       {isMember ? (
-        <Box w='40%'>
+        <Box w='40%' mt={2}>
           <DaoMetaForm handleUpdate={handleUpdate} metadata={localMetadata} />
         </Box>
       ) : (

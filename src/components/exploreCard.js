@@ -6,6 +6,7 @@ import ContentBox from './ContentBox';
 import { ExploreContext } from '../contexts/ExploreContext';
 import { pokemolUrlExplore, themeImagePath } from '../utils/metadata';
 import { numberWithCommas } from '../utils/general';
+import { chainByNetworkId } from '../utils/chain';
 
 const ExploreCard = ({ dao }) => {
   const { state, dispatch } = useContext(ExploreContext);
@@ -63,7 +64,11 @@ const ExploreCard = ({ dao }) => {
       case '2':
       case '2.1': {
         return (
-          <Button minWidth='80px' as={RouterLink} to={`/dao/${dao.id}`}>
+          <Button
+            minWidth='80px'
+            as={RouterLink}
+            to={`/dao/${chainByNetworkId(dao.networkId).chain_id}/${dao.id}`}
+          >
             Go
           </Button>
         );
