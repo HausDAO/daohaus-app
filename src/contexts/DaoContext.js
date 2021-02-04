@@ -42,8 +42,6 @@ export const DaoProvider = ({ children }) => {
   // const [currentDaoAddress, setCurrentDaoAddress] = useState(daoid);
   const hasPerformedBatchQuery = useRef(false);
 
-  console.log(daoProposals);
-
   useEffect(() => {
     // This condition is brittle. If one request passes, but the rest fail
     // this stops the app from fetching. We'll need something better later on.

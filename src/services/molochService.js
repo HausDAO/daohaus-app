@@ -52,22 +52,30 @@ export const MolochService = ({ web3, daoAddress, version, chainID }) => {
       service === 'submitWhitelistProposal' ||
       service === 'submitGuildKickProposal'
     ) {
-      return async ({ args, address, poll, onTxHash }) => {
+      return async ({ args, address, poll, onTxHash, onTxError }) => {
         // console.log('args', args);
         // console.log('from', address);
         // console.log('poll', poll);
-        const tx = await contract.methods[service](...args);
-        return tx
-          .send('eth_requestAccounts', { from: address })
-          .on('transactionHash', (txHash) => {
-            if (poll) {
-              onTxHash();
-              poll(txHash);
-            }
-          })
-          .on('error', (error) => {
-            console.error(error);
-          });
+        try {
+          const tx = await contract.methods[service](...args);
+          return tx
+            .send('eth_requestAccounts', { from: address })
+            .on('transactionHash', (txHash) => {
+              if (poll) {
+                onTxHash();
+                poll(txHash);
+              }
+              return txHash;
+            })
+            .on('error', (error) => {
+              if (onTxError) {
+                onTxError(error);
+              }
+              console.error(error);
+            });
+        } catch (error) {
+          return error;
+        }
       };
     }
   };

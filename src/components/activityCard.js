@@ -44,9 +44,11 @@ const handleAvatar = (activity, profile) => {
   }
 };
 
-const ActivityCard = ({ activity, displayAvatar }) => {
+const ActivityCard = ({ activity, displayAvatar, isLink = true }) => {
+  console.log(isLink);
   const [profile, setProfile] = useState(null);
   const { daochain, daoid } = useParams();
+
   useEffect(() => {
     let isCancelled = false;
     const getProfile = async () => {
@@ -132,19 +134,24 @@ const ActivityCard = ({ activity, displayAvatar }) => {
         ) : null}
         <Flex direction='row' justifyContent='space-between'>
           <Flex direction='column'>
-            {activity?.title && (
-              <RouterLink
-                to={
-                  activity?.activityData?.type !== 'rage'
-                    ? `/dao/${chain}/${daoAddress}/proposals/${activity.proposalId}`
-                    : '#'
-                }
-              >
+            {activity?.title &&
+              (isLink ? (
+                <RouterLink
+                  to={
+                    activity?.activityData?.type !== 'rage'
+                      ? `/dao/${chain}/${daoAddress}/proposals/${activity.proposalId}`
+                      : '#'
+                  }
+                >
+                  <Heading as='h4' size='sm'>
+                    {name} {activity.title}
+                  </Heading>
+                </RouterLink>
+              ) : (
                 <Heading as='h4' size='sm'>
                   {name} {activity.title}
                 </Heading>
-              </RouterLink>
-            )}
+              ))}
             <Flex direction='row' align='center' mt={3}>
               {activity?.voteBadge && (
                 <Badge

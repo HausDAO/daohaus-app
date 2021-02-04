@@ -128,7 +128,7 @@ const MemberProposalForm = () => {
         setProposalModal(false);
         setTxInfoModal(true);
       };
-      MolochService({
+      await MolochService({
         web3: injectedProvider,
         daoAddress: daoid,
         chainID: daochain,
@@ -139,6 +139,7 @@ const MemberProposalForm = () => {
       console.error('error: ', err);
       errorToast({
         title: `There was an error.`,
+        description: err?.message || '',
       });
     }
   };

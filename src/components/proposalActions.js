@@ -390,7 +390,6 @@ const ProposalVote = ({ proposal }) => {
       }
     }
   }, [daoProposals]);
-  console.log(daoMember);
 
   return (
     <>

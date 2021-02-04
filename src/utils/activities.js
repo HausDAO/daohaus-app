@@ -61,12 +61,15 @@ const handleProposal = (proposal) => {
   }
 };
 
-const handleVote = (vote) => ({
-  memberAddress: vote.memberAddress,
-  title: handleVoteTitle(vote),
-  voteBadge: vote.uintVote,
-  createdAt: vote.createdAt,
-});
+const handleVote = (vote) => {
+  return {
+    proposalId: vote.proposalId,
+    memberAddress: vote.memberAddress,
+    title: handleVoteTitle(vote),
+    voteBadge: vote.uintVote,
+    createdAt: vote.createdAt,
+  };
+};
 
 const handleRQ = (rq) => ({
   memberAddress: rq.memberAddress,

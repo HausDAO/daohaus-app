@@ -1,3 +1,5 @@
+console.log(process.env.REACT_APP_RPC_URI);
+
 export const supportedChains = {
   '0x1': {
     name: 'Ethereum Mainnet',
