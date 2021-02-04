@@ -39,6 +39,8 @@ const handleProposal = (proposal) => {
       memberAddress: proposal.processor,
       proposalId: proposal.proposalId,
       daoData: proposal.daoData,
+      yesVotes: proposal.yesVotes,
+      noVotes: proposal.noVotes,
     };
   } else if (proposal.sponsored) {
     return {
@@ -48,6 +50,8 @@ const handleProposal = (proposal) => {
       memberAddress: proposal.sponsor,
       proposalId: proposal.proposalId,
       daoData: proposal.daoData,
+      yesVotes: proposal.yesVotes,
+      noVotes: proposal.noVotes,
     };
   } else {
     return {
@@ -57,16 +61,21 @@ const handleProposal = (proposal) => {
       memberAddress: proposal.proposer,
       proposalId: proposal.proposalId,
       daoData: proposal.daoData,
+      yesVotes: proposal.yesVotes,
+      noVotes: proposal.noVotes,
     };
   }
 };
 
-const handleVote = (vote) => ({
-  memberAddress: vote.memberAddress,
-  title: handleVoteTitle(vote),
-  voteBadge: vote.uintVote,
-  createdAt: vote.createdAt,
-});
+const handleVote = (vote) => {
+  return {
+    proposalId: vote.proposalId,
+    memberAddress: vote.memberAddress,
+    title: handleVoteTitle(vote),
+    voteBadge: vote.uintVote,
+    createdAt: vote.createdAt,
+  };
+};
 
 const handleRQ = (rq) => ({
   memberAddress: rq.memberAddress,

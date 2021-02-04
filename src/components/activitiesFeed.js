@@ -8,12 +8,14 @@ const ActivitiesFeed = ({
   hydrateFn,
   limit,
   heading = 'Activities',
+  isLink,
 }) => {
   const [allActivities, setAllActivities] = useState(null);
   const [pagedActivities, setPagedActivities] = useState(null);
 
   useEffect(() => {
     if (activities) {
+      console.log(activities);
       setAllActivities(hydrateFn(activities));
     }
   }, [activities]);
@@ -27,6 +29,7 @@ const ActivitiesFeed = ({
             key={`${activity.id}-${index}`}
             activity={activity}
             displayAvatar={true}
+            isLink={isLink}
           />
         ))}
       <Paginator

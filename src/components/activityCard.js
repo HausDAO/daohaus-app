@@ -44,9 +44,10 @@ const handleAvatar = (activity, profile) => {
   }
 };
 
-const ActivityCard = ({ activity, displayAvatar }) => {
+const ActivityCard = ({ activity, displayAvatar, isLink = true }) => {
   const [profile, setProfile] = useState(null);
   const { daochain, daoid } = useParams();
+
   useEffect(() => {
     let isCancelled = false;
     const getProfile = async () => {
@@ -120,7 +121,7 @@ const ActivityCard = ({ activity, displayAvatar }) => {
   return (
     <ContentBox mt={3}>
       <Skeleton isLoaded={activity}>
-        {activity.daoData ? (
+        {activity.daoData && (
           <Flex direction='row' justifyContent='space-between' mb={5}>
             <Heading size='xs' fontFamily='mono'>
               {activity.daoData.name}
@@ -129,22 +130,27 @@ const ActivityCard = ({ activity, displayAvatar }) => {
               {chainByName(activity.daoData.network).network}
             </Badge>
           </Flex>
-        ) : null}
+        )}
         <Flex direction='row' justifyContent='space-between'>
           <Flex direction='column'>
-            {activity?.title && (
-              <RouterLink
-                to={
-                  activity?.activityData?.type !== 'rage'
-                    ? `/dao/${chain}/${daoAddress}/proposals/${activity.proposalId}`
-                    : '#'
-                }
-              >
+            {activity?.title &&
+              (isLink ? (
+                <RouterLink
+                  to={
+                    activity?.activityData?.type !== 'rage'
+                      ? `/dao/${chain}/${daoAddress}/proposals/${activity.proposalId}`
+                      : '#'
+                  }
+                >
+                  <Heading as='h4' size='sm'>
+                    {name} {activity.title}
+                  </Heading>
+                </RouterLink>
+              ) : (
                 <Heading as='h4' size='sm'>
                   {name} {activity.title}
                 </Heading>
-              </RouterLink>
-            )}
+              ))}
             <Flex direction='row' align='center' mt={3}>
               {activity?.voteBadge && (
                 <Badge
@@ -165,7 +171,31 @@ const ActivityCard = ({ activity, displayAvatar }) => {
                   Rage
                 </Badge>
               )}
-              <Text as='i' fontSize='xs'>
+              {activity?.yesVotes && activity.daoData && (
+                <Badge
+                  colorScheme='green'
+                  variant={
+                    +activity.yesVotes > +activity.noVotes &&
+                    activity.status !== 'Failed'
+                      ? 'solid'
+                      : 'outline'
+                  }
+                  mr={3}
+                >
+                  {activity?.yesVotes ? activity.yesVotes : '--'} Yes
+                </Badge>
+              )}
+              {activity?.noVotes && activity.daoData && (
+                <Badge
+                  colorScheme='red'
+                  variant={
+                    +activity.noVotes > +activity.yesVotes ? 'solid' : 'outline'
+                  }
+                >
+                  {activity?.noVotes ? activity.noVotes : '--'} No
+                </Badge>
+              )}
+              <Text as='i' fontSize='xs' ml={3}>
                 {activity?.createdAt ? timeToNow(activity.createdAt) : '--'}
               </Text>
             </Flex>

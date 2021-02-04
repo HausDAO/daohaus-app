@@ -58,6 +58,7 @@ const Proposal = ({ activities }) => {
               limit={6}
               activities={currentProposal}
               hydrateFn={getProposalHistories}
+              isLink={false}
             />
           </Stack>
         </Flex>

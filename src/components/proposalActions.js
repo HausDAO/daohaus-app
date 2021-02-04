@@ -88,7 +88,6 @@ const ProposalVote = ({ proposal }) => {
   );
 
   const NonMemberToolTip = ({ children }) => {
-    console.log(daoMember);
     return daoMember ? (
       children
     ) : (
@@ -384,13 +383,11 @@ const ProposalVote = ({ proposal }) => {
         .filter((p) => p.status === 'ReadyForProcessing')
         .sort((a, b) => a.gracePeriodEnds - b.gracePeriodEnds);
 
-      console.log(proposalsToProcess);
       if (proposalsToProcess.length > 0) {
         setNextProposal(proposalsToProcess[0]);
       }
     }
   }, [daoProposals]);
-  console.log(daoMember);
 
   return (
     <>
