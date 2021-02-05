@@ -35,22 +35,6 @@ const NewMinionForm = () => {
   // const [txProcessor, updateTxProcessor] = useTxProcessor();
   const { handleSubmit, register } = useForm();
 
-  // const txCallBack = (txHash, details) => {
-  //   console.log('txCallBack', txProcessor);
-  //   if (txProcessor && txHash) {
-  //     txProcessor.setTx(txHash, user.username, details, true, false, false);
-  //     txProcessor.forceCheckTx = true;
-
-  //     updateTxProcessor(txProcessor);
-  //     // close model here
-  //     closeModals();
-  //   }
-  //   if (!txHash) {
-  //     console.log('error: ', details);
-  //     setLoading(false);
-  //   }
-  // };
-
   const onSubmit = (values) => {
     setLoading(true);
 
@@ -77,35 +61,38 @@ const NewMinionForm = () => {
     // }
   };
 
+  console.log('daoOverview', daoOverview);
+
   return (
     <Box w='90%'>
-      <Heading as='h4' size='sm' fontWeight='100'>
+      <Heading as='h4' size='md' fontWeight='100' mb={10}>
         Deploy Your Minion
       </Heading>
       {daoOverview?.minions.length > 0 && (
         <>
-          <TextBox fontFamily='heading' fontSize='2xl' fontWeight={700}>
-            Current Minions
-          </TextBox>
-          <Box>
-            You have {daoOverview?.minions.length} minions already. are you
-            looking for some
-            <Link as={RouterLink} to={`/dao/${daochain}/${daoid}/settings`}>
-              settings?
+          <Box mb={5} fontSize='md'>
+            You have {daoOverview.minions.length} minion
+            {daoOverview.minions.length > 1 ? 's' : ''} already. Are you looking
+            for the{' '}
+            <Link
+              as={RouterLink}
+              to={`/dao/${daochain}/${daoid}/settings`}
+              color='secondary.500'
+            >
+              Settings?
             </Link>
           </Box>
         </>
       )}
-      <Box>
-        Your Minion allows you to upgrade your dao with Boosts. We&apos;ve
-        seeded it with some boosts to start. Deploy the Minion to claim your
-        Boosts.
+      <Box mb={3} fontSize='sm'>
+        Deploying a Minion will allow the DAO to make arbitrary transaction
+        calls from successful proposals.
       </Box>
       <form onSubmit={handleSubmit(onSubmit)}>
-        <Box>
+        <Box mb={3} fontSize='sm'>
           <FormControl mb={5}>
             <Input name='details' placeholder='Frank' w='60%' ref={register} />
-            <FormHelperText fontSize='xs' id='name-helper-text' mb={1}>
+            <FormHelperText fontSize='sm' id='name-helper-text' mb={1}>
               Give your Minion a name.
             </FormHelperText>
           </FormControl>
