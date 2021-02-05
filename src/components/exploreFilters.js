@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from 'react';
-import { Flex } from '@chakra-ui/react';
+import { Box, Flex } from '@chakra-ui/react';
 
 import ExploreSearch from './exploreSearch';
 import ExploreTagList from './exploreTagList';
@@ -22,7 +22,9 @@ const ExploreFilters = () => {
     <>
       <Flex align='center' justify='flex-start' wrap='wrap'>
         <ExploreSearch />
-        <ListSort sort={sort} setSort={setSort} options={SORT_OPTIONS} />
+        <Box mr={1}>
+          <ListSort sort={sort} setSort={setSort} options={SORT_OPTIONS} />
+        </Box>
         <ExploreFilterList />
       </Flex>
 
