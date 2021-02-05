@@ -11,6 +11,8 @@ import Profile from '../pages/Profile';
 import Proposal from '../pages/Proposal';
 import NewProposal from '../pages/NewProposal';
 import Settings from '../pages/Settings';
+import Allies from '../pages/Allies';
+import Boosts from '../pages/Boosts';
 import { useToken } from '../contexts/TokenContext';
 import Layout from '../components/layout';
 import { useMetaData } from '../contexts/MetaDataContext';
@@ -30,9 +32,15 @@ const DaoRouter = () => {
   const { isMember, daoMember } = useDaoMember();
 
   const { daoid, daochain } = useParams();
-  const { daoMetaData } = useMetaData();
+  const { daoMetaData, customTerms } = useMetaData();
 
-  const dao = { daoID: daoid, chainID: daochain, daoMetaData, daoMember };
+  const dao = {
+    daoID: daoid,
+    chainID: daochain,
+    daoMetaData,
+    daoMember,
+    customTerms,
+  };
   return (
     <Layout dao={dao}>
       <Switch>
@@ -59,11 +67,24 @@ const DaoRouter = () => {
         <Route exact path={`${path}/members`}>
           <Members members={daoMembers} activities={daoActivities} />
         </Route>
+
+        <Route exact path={`${path}/settings/boosts`}>
+          <Boosts />
+        </Route>
+        {/* <Route exact path={`${path}/settings/notifications`}>
+          <Notifications />
+        </Route> */}
+        {/* <Route exact path={`${path}/settings/theme`}>
+          <ThemeBuilder />
+        </Route> */}
         <Route exact path={`${path}/settings`}>
           <Settings overview={daoOverview} />
         </Route>
         <Route exact path={`${path}/settings/meta`}>
           <Meta overview={daoOverview} />
+        </Route>
+        <Route exact path={`${path}/allies`}>
+          <Allies />
         </Route>
         <Route exact path={`${path}/proposals/new/:proposalType`}>
           <NewProposal />

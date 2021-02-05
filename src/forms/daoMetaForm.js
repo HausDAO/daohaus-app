@@ -77,7 +77,7 @@ const DaoMetaForm = ({ metadata, handleUpdate }) => {
   };
 
   return (
-    <Flex as={ContentBox} m={6} w='100%'>
+    <Flex as={ContentBox} w='100%'>
       <>
         {loading ? (
           <Spinner />

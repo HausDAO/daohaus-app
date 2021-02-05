@@ -30,10 +30,7 @@ import { supportedChains } from '../utils/chain';
 import { getCopy } from '../utils/metadata';
 import { capitalize } from '../utils/general';
 import { useMetaData } from '../contexts/MetaDataContext';
-
-// import { MinionService } from '../../utils/minion-service';
-// import Web3 from 'web3';
-// import { getRpcUrl } from '../../utils/helpers';
+import { MinionService } from '../services/minionService';
 
 const MotionBox = motion.custom(Box);
 
@@ -52,9 +49,8 @@ const ProposalVote = ({ proposal }) => {
     setTxInfoModal,
   } = useOverlay();
   const { refreshDao } = useTX();
-  const { daoMetaData } = useMetaData();
-
-  // const [minionDeets, setMinionDeets] = useState();
+  const { customTerms } = useMetaData();
+  const [minionDeets, setMinionDeets] = useState();
 
   const currentlyVoting = (proposal) => {
     return (
@@ -65,6 +61,12 @@ const ProposalVote = ({ proposal }) => {
 
   const daoConnectedAndSameChain = () => {
     return address && daochain && injectedChain?.chainId === daochain;
+  };
+
+  const userRejectedToast = () => {
+    errorToast({
+      title: `User rejected transaction signature.`,
+    });
   };
 
   const NetworkOverlay = ({ children }) => (
@@ -83,7 +85,7 @@ const ProposalVote = ({ proposal }) => {
       style={{ backdropFilter: 'blur(6px)' }}
     >
       {`Connect to ${capitalize(supportedChains[daochain]?.network)}
-      for ${getCopy(daoMetaData, 'proposal')} actions`}
+      for ${getCopy(customTerms, 'proposal')} actions`}
     </Flex>
   );
 
@@ -93,7 +95,7 @@ const ProposalVote = ({ proposal }) => {
     ) : (
       <Tooltip
         hasArrow
-        label={<Box fontFamily='heading'>Members can sponsor!</Box>}
+        label={<Box fontFamily='heading'>Only members can sponsor!</Box>}
         bg='secondary.500'
         placement='left-start'
       >
@@ -135,7 +137,7 @@ const ProposalVote = ({ proposal }) => {
           },
         },
       });
-      MolochService({
+      await MolochService({
         web3: injectedProvider,
         daoAddress: daoid,
         chainID: daochain,
@@ -144,6 +146,7 @@ const ProposalVote = ({ proposal }) => {
     } catch (err) {
       setLoading(false);
       console.log('error: ', err);
+      userRejectedToast();
     }
   };
 
@@ -181,7 +184,7 @@ const ProposalVote = ({ proposal }) => {
           },
         },
       });
-      TokenService({
+      await TokenService({
         web3: injectedProvider,
         chainID: daochain,
         tokenAddress: token,
@@ -190,6 +193,7 @@ const ProposalVote = ({ proposal }) => {
     } catch (err) {
       console.log('error:', err);
       setLoading(false);
+      userRejectedToast();
     }
   };
 
@@ -221,7 +225,7 @@ const ProposalVote = ({ proposal }) => {
           },
         },
       });
-      MolochService({
+      await MolochService({
         web3: injectedProvider,
         daoAddress: daoid,
         chainID: daochain,
@@ -230,6 +234,7 @@ const ProposalVote = ({ proposal }) => {
     } catch (err) {
       setLoading(false);
       console.log('error: ', err);
+      userRejectedToast();
     }
   };
 
@@ -260,7 +265,7 @@ const ProposalVote = ({ proposal }) => {
           },
         },
       });
-      MolochService({
+      await MolochService({
         web3: injectedProvider,
         daoAddress: daoid,
         chainID: daochain,
@@ -269,6 +274,7 @@ const ProposalVote = ({ proposal }) => {
     } catch (err) {
       setLoading(false);
       console.log('error: ', err);
+      userRejectedToast();
     }
   };
 
@@ -313,7 +319,7 @@ const ProposalVote = ({ proposal }) => {
           },
         },
       });
-      MolochService({
+      await MolochService({
         web3: injectedProvider,
         daoAddress: daoid,
         chainID: daochain,
@@ -322,60 +328,46 @@ const ProposalVote = ({ proposal }) => {
     } catch (err) {
       setLoading(false);
       console.log('error: ', err);
+      userRejectedToast();
     }
   };
 
-  // const executeMinion = async (proposal) => {
-  //   // TODO: will nedd to check if it has been executed yet
-  //   const web3 = web3Connect?.web3
-  //     ? web3Connect.web3
-  //     : new Web3(new Web3.providers.HttpProvider(getRpcUrl(network)));
-  //   const setupValues = {
-  //     minion: proposal.minionAddress,
-  //   };
+  const executeMinion = async (proposal) => {
+    // TODO: will nedd to check if it has been executed yet
+    // const web3 = web3Connect?.web3
+    //   ? web3Connect.web3
+    //   : new Web3(new Web3.providers.HttpProvider(getRpcUrl(network)));
+    // const setupValues = {
+    //   minion: proposal.minionAddress,
+    // };
+    // const minionService = new MinionService(web3, user?.username, setupValues);
+    // try {
+    //   minionService.executeAction(proposal.proposalId, txCallBack);
+    // } catch (err) {
+    //   console.log('error: ', err);
+    // }
+  };
 
-  //   const minionService = new MinionService(web3, user?.username, setupValues);
-
-  //   try {
-  //     minionService.executeAction(proposal.proposalId, txCallBack);
-  //   } catch (err) {
-  //     console.log('error: ', err);
-  //   }
-  // };
-
-  // useEffect(() => {
-  //   let action;
-  //   const getMinionDeets = async () => {
-  //     // if (!proposal) {
-  //     //   return;
-  //     // }
-  //     const setupValues = {
-  //       minion: proposal.minionAddress,
-  //     };
-  //     const web3 = web3Connect?.web3
-  //       ? web3Connect.web3
-  //       : new Web3(new Web3.providers.HttpProvider(getRpcUrl(network)));
-
-  //     const minionService = new MinionService(
-  //       web3,
-  //       user?.username,
-  //       setupValues,
-  //     );
-
-  //     try {
-  //       action = await minionService.getAction(proposal.proposalId);
-  //     } catch (err) {
-  //       console.log('error: ', err);
-  //     }
-
-  //     setMinionDeets(action);
-  //   };
-  //   if (proposal?.proposalId) {
-  //     getMinionDeets();
-  //   }
-
-  //   // eslint-disable-next-line react-hooks/exhaustive-deps
-  // }, [proposal, user]);
+  useEffect(() => {
+    let action;
+    const getMinionDeets = async () => {
+      try {
+        action = await MinionService({
+          minion: proposal?.minionAddress,
+          chainID: daochain,
+        })('getAction')({ proposalId: proposal?.proposalId });
+      } catch (err) {
+        console.log('error: ', err);
+      } finally {
+        setLoading(false);
+      }
+      setMinionDeets(action);
+    };
+    if (proposal?.proposalId) {
+      getMinionDeets();
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [proposal]);
 
   useEffect(() => {
     if (daoProposals) {
@@ -439,18 +431,18 @@ const ProposalVote = ({ proposal }) => {
               </Flex>
             </Flex>
             <Flex justify='space-around'>
-              {+daoMember?.allowance *
-                10 ** daoOverview?.depositToken?.decimals >
-                +daoOverview?.proposalDeposit ||
-              +daoOverview?.proposalDeposit === 0 ? (
-                <Button
-                  onClick={() => sponsorProposal(proposal?.proposalId)}
-                  isLoading={loading}
-                >
-                  Sponsor
-                </Button>
-              ) : (
-                <NonMemberToolTip>
+              <NonMemberToolTip>
+                {+daoMember?.allowance *
+                  10 ** daoOverview?.depositToken?.decimals >
+                  +daoOverview?.proposalDeposit ||
+                +daoOverview?.proposalDeposit === 0 ? (
+                  <Button
+                    onClick={() => sponsorProposal(proposal?.proposalId)}
+                    isLoading={loading}
+                  >
+                    Sponsor
+                  </Button>
+                ) : (
                   <Button
                     onClick={() =>
                       unlock(daoOverview.depositToken.tokenAddress)
@@ -460,8 +452,8 @@ const ProposalVote = ({ proposal }) => {
                   >
                     Unlock
                   </Button>
-                </NonMemberToolTip>
-              )}
+                )}
+              </NonMemberToolTip>
               {proposal?.proposer === address?.toLowerCase() && (
                 <Button
                   variant='outline'
@@ -665,11 +657,11 @@ const ProposalVote = ({ proposal }) => {
               </Flex>
             </Flex>
           ))}
-        {/* {proposal?.status === 'Passed' && proposal?.minionAddress && (
+        {proposal?.status === 'Passed' && proposal?.minionAddress && (
           <Flex justify='center' pt='10px'>
             <Flex direction='column'>
               {minionDeets?.executed ? (
-                <Text>Executed</Text>
+                <Box>Executed</Box>
               ) : (
                 <Button onClick={() => executeMinion(proposal)}>
                   Execute Minion
@@ -677,7 +669,7 @@ const ProposalVote = ({ proposal }) => {
               )}
             </Flex>
           </Flex>
-        )} */}
+        )}
       </ContentBox>
     </>
   );

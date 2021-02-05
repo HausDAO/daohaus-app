@@ -8,6 +8,10 @@ import { BrowserRouter } from 'react-router-dom';
 import { InjectedProvider } from './contexts/InjectedProviderContext';
 import { CustomThemeProvider } from './contexts/CustomThemeContext';
 
+window.onunload = function() {
+  sessionStorage.clear();
+};
+
 ReactDOM.render(
   <React.StrictMode>
     <BrowserRouter>

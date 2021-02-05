@@ -1,5 +1,5 @@
 import { getCopy } from '../utils/metadata';
-export const proposalTypes = (daoMetaData) => {
+export const proposalTypes = (customTerms) => {
   return [
     {
       name: 'Membership',
@@ -31,26 +31,26 @@ export const proposalTypes = (daoMetaData) => {
     },
     {
       name: 'Guild Kick',
-      subhead: `Remove a ${getCopy(daoMetaData, 'member')}`,
+      subhead: `Remove a ${getCopy(customTerms, 'member')}`,
       proposalType: 'guildkick',
       image: 'swords-white.svg',
       show: true,
     },
-    // {
-    //   name: 'Minion',
-    //   subhead: 'Minion Simple',
-    //   proposalType: 'minion',
-    //   image: 'swords-white.svg',
-    //   comingSoon: false,
-    //   show: true,
-    // },
+    {
+      name: 'Minion',
+      subhead: 'Minion Simple',
+      proposalType: 'minion',
+      image: 'swords-white.svg',
+      comingSoon: false,
+      show: true,
+    },
     // {
     //   name: 'Transmutation',
     //   subhead: 'Transmutation',
     //   proposalType: 'transmutation',
     //   image: 'themes/raidTheme/raidguild__swords-white.svg',
     //   comingSoon: false,
-    //   show: dao?.boosts?.transmutation,
+    //   show: api.transmutation,
     // },
   ];
 };

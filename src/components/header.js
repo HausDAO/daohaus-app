@@ -58,17 +58,17 @@ const Header = ({ dao }) => {
       case `/dao/${dao.chainID}/${dao.daoID}`:
         return 'Overview';
       case `/dao/${dao.chainID}/${dao.daoID}/proposals`:
-        return getCopy(dao.daoMetaData, 'proposals');
+        return getCopy(dao.customTerms, 'proposals');
       case `/dao/${dao.chainID}/${dao.daoID}/proposals/new/`:
-        return `New ${getCopy(dao.daoMetaData, 'proposal')}`;
+        return `New ${getCopy(dao.customTerms, 'proposal')}`;
       case `/dao/${dao.chainID}/${dao.daoID}/bank`:
-        return getCopy(dao.daoMetaData, 'bank');
+        return getCopy(dao.customTerms, 'bank');
       case `/dao/${dao.chainID}/${dao.daoID}/members`:
-        return getCopy(dao.daoMetaData, 'members');
+        return getCopy(dao.customTerms, 'members');
       case `/dao/${dao.chainID}/${dao.daoID}/profile/${address}`:
         return 'Profile';
       case `/dao/${dao.chainID}/${dao.daoID}/settings`:
-        return getCopy(dao.daoMetaData, 'settings');
+        return getCopy(dao.customTerms, 'settings');
       case `/dao/${dao.chainID}/${dao.daoID}/settings/meta`:
         return 'Metadata';
       case `/dao/${dao.chainID}/${dao.daoID}/settings/theme`:
@@ -76,9 +76,9 @@ const Header = ({ dao }) => {
       case `/dao/${dao.chainID}/${dao.daoID}/settings/notifications`:
         return 'Notifications';
       case `/dao/${dao.chainID}/${dao.daoID}/settings/boosts`:
-        return getCopy(dao.daoMetaData, 'boosts');
+        return getCopy(dao.customTerms, 'boosts');
       case `/dao/${dao.chainID}/${dao.daoID}/settings/boosts/new`:
-        return 'New ' + getCopy(dao.daoMetaData, 'boost');
+        return 'New ' + getCopy(dao.customTerms, 'boost');
     }
   };
 
@@ -104,7 +104,7 @@ const Header = ({ dao }) => {
           to={`/dao/${dao?.chainID}/${dao?.daoID}/proposals/new`}
           rightIcon={<RiAddFill />}
         >
-          New {getCopy(dao?.daoMetaData, 'proposal')}
+          New {getCopy(dao?.customTerms, 'proposal')}
         </Button>
       );
     } else if (

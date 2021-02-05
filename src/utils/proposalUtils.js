@@ -216,7 +216,7 @@ export function getProposalCountdownText(proposal) {
           </Box>
         </Fragment>
       );
-    case ProposalStatus.GracePeriod:
+    case ProposalStatus.GracePeriodEnds:
       return (
         <Fragment>
           <Box textTransform='uppercase' fontSize='0.8em' fontWeight={700}>

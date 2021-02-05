@@ -13,7 +13,7 @@ import { getCopy } from '../utils/metadata';
 
 const Proposal = ({ activities }) => {
   const { propid, daochain, daoid } = useParams();
-  const { daoMetaData } = useMetaData();
+  const { customTerms } = useMetaData();
   const currentProposal = activities
     ? activities?.proposals?.find((proposal) => proposal.proposalId === propid)
     : null;
@@ -35,7 +35,7 @@ const Proposal = ({ activities }) => {
                 h='20px'
                 w='20px'
               />{' '}
-              All {getCopy(daoMetaData, 'proposals')}
+              All {getCopy(customTerms, 'proposals')}
             </TextBox>
           </Link>
           <ProposalDetails proposal={currentProposal} />

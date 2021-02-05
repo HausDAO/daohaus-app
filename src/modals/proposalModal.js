@@ -17,7 +17,7 @@ import FundingProposalForm from '../forms/fundingProposal';
 import WhitelistProposalForm from '../forms/whitelistProposal';
 import GuildKickProposalForm from '../forms/guildKickProposal';
 import TradeProposalForm from '../forms/tradeProposal';
-// import MinionSimpleProposalForm from '../forms/minionSimpleProposal';
+import MinionSimpleProposalForm from '../forms/minionSimpleProposal';
 // import TransmutationProposal from '../forms/transmutationProposal';
 import { getCopy } from '../utils/metadata';
 import { useMetaData } from '../contexts/MetaDataContext';
@@ -26,53 +26,53 @@ import { useOverlay } from '../contexts/OverlayContext';
 const ProposalFormModal = ({ proposalType, returnRoute }) => {
   const [, setLoading] = useState(false);
   const [proposalForm, setProposalForm] = useState(null);
-  const { daoMetaData } = useMetaData();
+  const { customTerms } = useMetaData();
   // const history = useHistory();
   const { proposalModal, setProposalModal } = useOverlay();
 
   const proposalForms = {
     member: {
-      type: `New ${getCopy(daoMetaData, 'proposal')}`,
-      heading: `New ${getCopy(daoMetaData, 'member')} ${getCopy(
-        daoMetaData,
+      type: `New ${getCopy(customTerms, 'proposal')}`,
+      heading: `New ${getCopy(customTerms, 'member')} ${getCopy(
+        customTerms,
         'proposal',
       )}`,
       subline: `Submit your membership proposal here.`,
       form: <MemberProposalForm />,
     },
     funding: {
-      type: `New ${getCopy(daoMetaData, 'proposal')}`,
-      heading: `New Funding ${getCopy(daoMetaData, 'proposal')}`,
+      type: `New ${getCopy(customTerms, 'proposal')}`,
+      heading: `New Funding ${getCopy(customTerms, 'proposal')}`,
       subline: `Submit a funding proposal here.`,
       form: <FundingProposalForm />,
     },
     whitelist: {
-      type: `New ${getCopy(daoMetaData, 'proposal')}`,
-      heading: `New Whitelist ${getCopy(daoMetaData, 'proposal')}`,
+      type: `New ${getCopy(customTerms, 'proposal')}`,
+      heading: `New Whitelist ${getCopy(customTerms, 'proposal')}`,
       subline: `Whitelist a token here.`,
       form: <WhitelistProposalForm />,
     },
     guildkick: {
-      type: `New ${getCopy(daoMetaData, 'proposal')}`,
-      heading: `New GuildKick ${getCopy(daoMetaData, 'proposal')}`,
+      type: `New ${getCopy(customTerms, 'proposal')}`,
+      heading: `New GuildKick ${getCopy(customTerms, 'proposal')}`,
       subline: `Kick a perpetrator here.`,
       form: <GuildKickProposalForm />,
     },
     trade: {
-      type: `New ${getCopy(daoMetaData, 'proposal')}`,
-      heading: `New Trade ${getCopy(daoMetaData, 'proposal')}`,
+      type: `New ${getCopy(customTerms, 'proposal')}`,
+      heading: `New Trade ${getCopy(customTerms, 'proposal')}`,
       subline: `Submit a trade proposal here.`,
       form: <TradeProposalForm />,
     },
-    // minion: {
-    //   type: `New ${getCopy(daoMetaData, 'proposal')}`,
-    //   heading: `New Minion ${getCopy(daoMetaData, 'proposal')}`,
-    //   subline: `Submit a Minion proposal here.`,
-    //   form: <MinionSimpleProposalForm />,
-    // },
+    minion: {
+      type: `New ${getCopy(customTerms, 'proposal')}`,
+      heading: `New Minion ${getCopy(customTerms, 'proposal')}`,
+      subline: `Submit a Minion proposal here.`,
+      form: <MinionSimpleProposalForm />,
+    },
     // transmutation: {
-    //   type: `New ${getCopy(daoMetaData, 'proposal')}`,
-    //   heading: `New Transmutation ${getCopy(daoMetaData, 'proposal')}`,
+    //   type: `New ${getCopy(customTerms, 'proposal')}`,
+    //   heading: `New Transmutation ${getCopy(customTerms, 'proposal')}`,
     //   subline: `Submit a Transmutation proposal here.`,
     //   form: <TransmutationProposal />,
     // },

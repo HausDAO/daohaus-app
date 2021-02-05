@@ -35,8 +35,6 @@ const MembersChart = () => {
   const [chartData, setChartData] = useState([]);
   const [chartDimension, setChartDimension] = useState('currentShares');
 
-  console.log('daoOverView', daoOverview);
-
   useEffect(() => {
     const fetchBalances = async () => {
       const data = await fetchBankValues({
@@ -51,7 +49,7 @@ const MembersChart = () => {
   }, [daoBalances, setDaoBalances, daochain, daoid]);
 
   useEffect(() => {
-    if (daoBalances.length) {
+    if (daoBalances?.length) {
       const dateRange = getDateRange(
         { value: 'lifetime' },
         daoBalances,
@@ -99,7 +97,7 @@ const MembersChart = () => {
 
   return (
     <Box>
-      {daoBalances.length ? (
+      {daoBalances?.length ? (
         <ContentBox minH='360px'>
           <Flex justify='space-between'>
             <Box>

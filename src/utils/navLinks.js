@@ -16,12 +16,13 @@ import {
 } from 'react-icons/ri';
 import { GiCastle } from 'react-icons/gi';
 
+// no slash on the path
 export const defaultDaoData = [
-  { icon: RiBookMarkLine, label: 'Proposals' },
-  { icon: RiBankLine, label: 'Bank' },
-  { icon: RiTeamLine, label: 'Members' },
-  { icon: RiSettings3Line, label: 'Settings' },
-  { icon: RiRocket2Line, label: 'Boosts' },
+  { icon: RiBookMarkLine, label: 'Proposals', path: 'proposals' },
+  { icon: RiBankLine, label: 'Bank', path: 'bank' },
+  { icon: RiTeamLine, label: 'Members', path: 'members' },
+  { icon: RiSettings3Line, label: 'Settings', path: 'settings' },
+  { icon: RiRocket2Line, label: 'Boosts', path: 'settings/boosts' },
 ];
 export const defaultHubData = [
   { icon: RiSearch2Line, label: 'Explore', path: '/explore' },
@@ -46,7 +47,7 @@ export const defaultHubData = [
 export const generateDaoLinks = (chainID, daoID) =>
   defaultDaoData.map((link) => ({
     ...link,
-    path: `/dao/${chainID}/${daoID}/${link.label.toLowerCase()}`,
+    path: `/dao/${chainID}/${daoID}/${link.path}`,
   }));
 
 export const defaultSocialLinks = [
@@ -73,10 +74,9 @@ export const defaultSocialLinks = [
   },
   { icon: RiLinksLine, label: 'Other', href: 'https://wikipedia.com' },
 ];
-export const generateDaoSocials = (metaData) => {
-  if (!metaData) return;
-  const daoLinks = metaData.links;
+export const generateDaoSocials = (customTerms) => {
+  if (!customTerms) return;
   return defaultSocialLinks
-    .filter((link) => daoLinks[link.label.toLowerCase()])
-    .map((link) => ({ ...link, href: daoLinks[link.label.toLowerCase()] }));
+    .filter((link) => customTerms[link.label.toLowerCase()])
+    .map((link) => ({ ...link, href: customTerms[link.label.toLowerCase()] }));
 };

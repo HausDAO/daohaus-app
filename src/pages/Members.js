@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import { Flex, Box } from '@chakra-ui/react';
+
 import ActivitiesFeed from '../components/activitiesFeed';
 import MemberCard from '../components/memberCard';
 import MemberInfo from '../components/memberInfo';
@@ -17,7 +18,7 @@ const Members = ({ members, activities }) => {
   const { daoid, daochain } = useParams();
   const [selectedMember, setSelectedMember] = useState(null);
   const [scrolled, setScrolled] = useState(false);
-  const { daoMetaData } = useMetaData();
+  const { customTerms } = useMetaData();
 
   const selectMember = (member) => {
     if (selectedMember == null) {
@@ -31,19 +32,19 @@ const Members = ({ members, activities }) => {
     }
   };
 
-  const handleScroll = () => {
-    const offset = window.scrollY;
-    if (offset > 100) {
-      setScrolled(true);
-    } else {
-      setScrolled(false);
-    }
-  };
-
   useEffect(() => {
-    // TODO cancel this on leave page
+    const handleScroll = () => {
+      const offset = window.scrollY;
+      if (offset > 100) {
+        setScrolled(true);
+      } else {
+        setScrolled(false);
+      }
+    };
+
     window.addEventListener('scroll', handleScroll);
-  });
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
 
   const scrolledStyle = {
     position: 'sticky',
@@ -60,7 +61,7 @@ const Members = ({ members, activities }) => {
         <ContentBox mt={6}>
           <Flex>
             <TextBox w='43%' size='xs'>
-              {getCopy(daoMetaData, 'member')}
+              {getCopy(customTerms, 'member')}
             </TextBox>
             <TextBox w='15%' size='xs'>
               Shares

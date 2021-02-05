@@ -88,7 +88,7 @@ const ProposalFilters = ({ filter, setFilter, proposals, setSort }) => {
           </MenuButton>
           <MenuList bg='black'>
             <MenuGroup>
-              {filterOptions.map((option) => {
+              {filterOptions?.map((option) => {
                 if (option.type === 'main') {
                   return (
                     <MenuItem
@@ -107,7 +107,7 @@ const ProposalFilters = ({ filter, setFilter, proposals, setSort }) => {
             </MenuGroup>
             <MenuDivider />
             <MenuGroup title='Proposal Type'>
-              {filterOptions.map((option) => {
+              {filterOptions?.map((option) => {
                 if (option.type === 'proposalType') {
                   return (
                     <MenuItem
@@ -124,7 +124,7 @@ const ProposalFilters = ({ filter, setFilter, proposals, setSort }) => {
             </MenuGroup>
             <MenuDivider />
             <MenuGroup title='Proposal Status'>
-              {filterOptions.map((option) => {
+              {filterOptions?.map((option) => {
                 if (option.type === 'status') {
                   return (
                     <MenuItem

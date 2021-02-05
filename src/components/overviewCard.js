@@ -10,7 +10,7 @@ import ContentBox from './ContentBox';
 
 const OverviewCard = ({ overview, membersAmt }) => {
   const { daochain, daoid } = useParams();
-  const { daoMetaData } = useMetaData();
+  const { daoMetaData, customTerms } = useMetaData();
   const { tokenBalances, totalLoot, totalShares } = overview;
   const history = useHistory();
 
@@ -45,7 +45,7 @@ const OverviewCard = ({ overview, membersAmt }) => {
 
         <Flex direction='row' w='100%' justify='space-between' mt={6}>
           <Box>
-            <TextBox size='xs'>{getCopy(daoMetaData, 'members')}</TextBox>
+            <TextBox size='xs'>{getCopy(customTerms, 'members')}</TextBox>
             <Skeleton isLoaded={membersAmt}>
               <TextBox size='lg' variant='value'>
                 {membersAmt || 0}
@@ -70,7 +70,7 @@ const OverviewCard = ({ overview, membersAmt }) => {
           </Box>
         </Flex>
         <Box mt={6}>
-          <TextBox size='sm'>{getCopy(daoMetaData, 'bank')}</TextBox>
+          <TextBox size='sm'>{getCopy(customTerms, 'bank')}</TextBox>
           <BankTotal tokenBalances={tokenBalances} />
         </Box>
         <Flex mt={6}>
@@ -80,13 +80,13 @@ const OverviewCard = ({ overview, membersAmt }) => {
             onClick={() => history.push(`/dao/${daochain}/${daoid}/bank`)}
             value='bank'
           >
-            View {getCopy(daoMetaData, 'bank')}
+            View {getCopy(customTerms, 'bank')}
           </Button>
           <Button
             onClick={() => history.push(`/dao/${daochain}/${daoid}/proposals`)}
             value='proposals'
           >
-            View {getCopy(daoMetaData, 'proposals')}
+            View {getCopy(customTerms, 'proposals')}
           </Button>
         </Flex>
       </ContentBox>

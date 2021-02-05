@@ -1,20 +1,21 @@
 import React from 'react';
-import { Box, Flex, Link } from '@chakra-ui/react';
+import { Box, Flex, Link, Stack } from '@chakra-ui/react';
 import { Link as RouterLink, useParams } from 'react-router-dom';
 
-// import { useDao } from '../contexts/DaoContext';
+import { useDao } from '../contexts/DaoContext';
 import { useDaoMember } from '../contexts/DaoMemberContext';
-// import BoostStatus from '../components/Settings/BoostStatus';
+import BoostStatus from '../components/boostStatus';
 import Superpowers from '../components/daoSuperpowers';
 import DaoContractSettings from '../components/daoContractSettings';
 import DaoMetaOverview from '../components/daoMetaOverview';
 import TextBox from '../components/TextBox';
-// import Minions from '../components/Settings/Minions';
+import Minions from '../components/minionList';
 
 const Settings = () => {
   const { daochain, daoid } = useParams();
   const { daoMember } = useDaoMember();
-  // const { daoOverview } = useDao();
+  const { daoOverview } = useDao();
+  console.log(daoOverview);
 
   return (
     <Flex wrap='wrap'>
@@ -43,18 +44,18 @@ const Settings = () => {
         </Flex>
         <DaoMetaOverview />
       </Box>
-      <Box w={['100%', null, null, null, '50%']}>
+      <Stack w={['100%', null, null, null, '50%']} spacing={4}>
         <TextBox size='xs'>Superpowers</TextBox>
         <Superpowers />
-        {/* {dao?.graphData && dao.graphData.minions.length > 0 && (
+        {daoOverview?.minions.length > 0 && (
           <>
             <TextBox size='xs'>Minions</TextBox>
             <Minions />
           </>
-        )} */}
+        )}
         <TextBox size='xs'>Boost Status</TextBox>
-        {/* <BoostStatus /> */}
-      </Box>
+        <BoostStatus />
+      </Stack>
     </Flex>
   );
 };

@@ -14,7 +14,7 @@ import { getCopy } from '../utils/metadata';
 const DaoContractSettings = () => {
   const { daoOverview } = useDao();
   const { daochain, daoid } = useParams();
-  const { daoMetaData } = useMetaData();
+  const { customTerms } = useMetaData();
   // const [network] = useNetwork();
   // const [theme] = useTheme();
 
@@ -62,7 +62,7 @@ const DaoContractSettings = () => {
       <Flex mt={3}>
         <Box w='50%'>
           <TextBox size='xs'>
-            {getCopy(daoMetaData, 'proposal')} Deposit
+            {getCopy(customTerms, 'proposal')} Deposit
           </TextBox>
           <Skeleton isLoaded={daoOverview?.proposalDeposit}>
             <TextBox variant='value' size='xl' my={2}>

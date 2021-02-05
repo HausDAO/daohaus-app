@@ -17,54 +17,53 @@ const ProposalsList = ({ proposals }) => {
   const [sort, setSort] = useState();
 
   useEffect(() => {
+    const filterAndSortProposals = () => {
+      let filteredProposals = proposals;
+
+      if (sort && filter) {
+        filteredProposals = proposals
+          .filter((prop) => {
+            if (filter.value === 'All') {
+              return true;
+            }
+            if (filter.value === 'Action Needed') {
+              const unread = determineUnreadProposalList(
+                prop,
+                daoMember.shares > 0,
+                daoMember.memberAddress,
+              );
+              return unread.unread;
+            } else {
+              return prop[filter.type] === filter.value;
+            }
+          })
+          .sort((a, b) => {
+            if (sort.value === 'submissionDateAsc') {
+              return +a.createdAt - +b.createdAt;
+            } else if (sort.value === 'voteCountDesc') {
+              return b.votes.length - a.votes.length;
+            } else {
+              return +b.createdAt - +a.createdAt;
+            }
+          });
+
+        if (
+          sort.value !== 'submissionDateAsc' &&
+          sort.value !== 'submissionDateDesc'
+        ) {
+          filteredProposals = filteredProposals.sort((a, b) => {
+            return a.status === sort.value ? -1 : 1;
+          });
+        }
+      }
+
+      setListProposals(filteredProposals);
+    };
     if (proposals && proposals.length > 0) {
       filterAndSortProposals();
       setIsLoaded(true);
     }
   }, [proposals, sort, filter]);
-
-  const filterAndSortProposals = () => {
-    let filteredProposals = proposals;
-
-    if (sort && filter) {
-      filteredProposals = proposals
-        .filter((prop) => {
-          if (filter.value === 'All') {
-            return true;
-          }
-          if (filter.value === 'Action Needed') {
-            const unread = determineUnreadProposalList(
-              prop,
-              daoMember.shares > 0,
-              daoMember.memberAddress,
-            );
-            return unread.unread;
-          } else {
-            return prop[filter.type] === filter.value;
-          }
-        })
-        .sort((a, b) => {
-          if (sort.value === 'submissionDateAsc') {
-            return +a.createdAt - +b.createdAt;
-          } else if (sort.value === 'voteCountDesc') {
-            return b.votes.length - a.votes.length;
-          } else {
-            return +b.createdAt - +a.createdAt;
-          }
-        });
-
-      if (
-        sort.value !== 'submissionDateAsc' &&
-        sort.value !== 'submissionDateDesc'
-      ) {
-        filteredProposals = filteredProposals.sort((a, b) => {
-          return a.status === sort.value ? -1 : 1;
-        });
-      }
-    }
-
-    setListProposals(filteredProposals);
-  };
 
   return (
     <>
@@ -78,7 +77,7 @@ const ProposalsList = ({ proposals }) => {
         <ProposalSort sort={sort} setSort={setSort} />
       </Flex>
       {isLoaded &&
-        pageProposals.map((proposal) => {
+        pageProposals?.map((proposal) => {
           return <ProposalCard key={proposal.id} proposal={proposal} />;
         })}
 
