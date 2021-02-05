@@ -74,10 +74,9 @@ export const defaultSocialLinks = [
   },
   { icon: RiLinksLine, label: 'Other', href: 'https://wikipedia.com' },
 ];
-export const generateDaoSocials = (metaData) => {
-  if (!metaData) return;
-  const daoLinks = metaData.links;
+export const generateDaoSocials = (customTerms) => {
+  if (!customTerms) return;
   return defaultSocialLinks
-    .filter((link) => daoLinks[link.label.toLowerCase()])
-    .map((link) => ({ ...link, href: daoLinks[link.label.toLowerCase()] }));
+    .filter((link) => customTerms[link.label.toLowerCase()])
+    .map((link) => ({ ...link, href: customTerms[link.label.toLowerCase()] }));
 };

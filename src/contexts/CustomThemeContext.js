@@ -12,6 +12,7 @@ export const CustomThemeProvider = ({ children }) => {
   // const [customCopy, setCustomCopy] = useState(null);
 
   const updateTheme = (themeData) => {
+    console.log(themeData);
     const newTheme = createTheme(themeData);
     setTheme(newTheme);
   };

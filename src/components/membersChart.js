@@ -9,20 +9,7 @@ import {
   AreaSeries,
   GradientDefs,
 } from 'react-vis';
-import {
-  Box,
-  Flex,
-  Icon,
-  MenuButton,
-  Menu,
-  Spinner,
-  MenuList,
-  MenuItem,
-  RadioGroup,
-  Stack,
-  Radio,
-} from '@chakra-ui/react';
-import { FaChevronDown } from 'react-icons/fa';
+import { Box, Flex, Spinner, RadioGroup, Stack, Radio } from '@chakra-ui/react';
 
 import { fetchBankValues } from '../utils/theGraph';
 import {
@@ -34,9 +21,6 @@ import { useDao } from '../contexts/DaoContext';
 import { useCustomTheme } from '../contexts/CustomThemeContext';
 import ContentBox from './ContentBox';
 import TextBox from './TextBox';
-import { getCopy } from '../utils/metadata';
-import { useMetaData } from '../contexts/MetaDataContext';
-import BankTotal from './bankTotal';
 
 const MembersChart = () => {
   const { daochain, daoid } = useParams();
@@ -46,7 +30,6 @@ const MembersChart = () => {
   );
   const { theme } = useCustomTheme();
   const { daoOverview } = useDao();
-  const { daoMetaData } = useMetaData();
   const [preppedData, setPreppedData] = useState([]);
   const [chartData, setChartData] = useState([]);
   const [chartDimension, setChartDimension] = useState('currentShares');
@@ -65,7 +48,7 @@ const MembersChart = () => {
   }, [daoBalances, setDaoBalances, daochain, daoid]);
 
   useEffect(() => {
-    if (daoBalances.length) {
+    if (daoBalances?.length) {
       const dateRange = getDateRange(
         { value: 'lifetime' },
         daoBalances,
@@ -111,11 +94,9 @@ const MembersChart = () => {
     </GradientDefs>
   );
 
-  console.log('chartData', chartData.length);
-
   return (
     <Box>
-      {daoBalances.length ? (
+      {daoBalances?.length ? (
         <ContentBox minH='360px'>
           <RadioGroup
             defaultValue={chartDimension}

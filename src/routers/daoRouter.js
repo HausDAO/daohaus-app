@@ -32,9 +32,15 @@ const DaoRouter = () => {
   const { isMember, daoMember } = useDaoMember();
 
   const { daoid, daochain } = useParams();
-  const { daoMetaData } = useMetaData();
+  const { daoMetaData, customTerms } = useMetaData();
 
-  const dao = { daoID: daoid, chainID: daochain, daoMetaData, daoMember };
+  const dao = {
+    daoID: daoid,
+    chainID: daochain,
+    daoMetaData,
+    daoMember,
+    customTerms,
+  };
   return (
     <Layout dao={dao}>
       <Switch>

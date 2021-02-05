@@ -19,21 +19,16 @@ export const MetaDataProvider = ({ children }) => {
   const { updateTheme, resetTheme } = useCustomTheme();
   const { daoid, daochain } = useParams();
 
-  const [customCopy, setCustomCopy] = useState(null);
+  const [customTerms, setCustomTerms] = useState(null);
   const [daoMetaData, setDaoMetaData] = useState(null);
-  const [apiMetaData, setApiMetaData] = useState(null);
 
   const hasFetchedMetadata = useRef(false);
   const shouldUpdateTheme = useRef(true);
 
-  const getApiMetadata = async () => {
-    try {
-      const data = await fetchMetaData(daoid);
-      setApiMetaData(data);
-    } catch (error) {
-      console.error(error);
-    }
-  };
+  //  We're essentially calling the same function 3 times here.
+  //  I have to keep them separate so that the useEffect has
+  //  access to relevant state. I can investigate the useCallback/Effect pattern
+  //  of handling this in the future.
 
   useEffect(() => {
     if (userHubDaos) {
@@ -43,32 +38,72 @@ export const MetaDataProvider = ({ children }) => {
           return dao.meta?.contractAddress === daoid;
         })?.meta;
 
-      setDaoMetaData(daoMeta);
+      if (daoMeta && shouldUpdateTheme.current) {
+        console.log('SET BY HUB QUERY');
+        if (daoMeta.customTheme) {
+          updateTheme(daoMeta.customTheme);
+        } else {
+          resetTheme();
+        }
+        if (daoMeta.customTerms) {
+          setCustomTerms(daoMeta.customTerms);
+        }
+        setDaoMetaData(daoMeta);
+        shouldUpdateTheme.current = false;
+      }
     }
   }, [userHubDaos, daochain, daoid]);
 
   useEffect(() => {
-    if (daoMetaData?.customTheme) {
-      updateTheme(daoMetaData.customTheme);
-      if (daoMetaData?.customTheme?.daoMeta) {
-        setCustomCopy({
-          ...daoMetaData.customTheme.daoMeta,
-          name: daoMetaData.name,
-        });
+    const getApiMetadata = async () => {
+      try {
+        const [data] = await fetchMetaData(daoid);
+        if (shouldUpdateTheme.current && !daoMetaData) {
+          console.log('SET BY API');
+          if (data.customTheme) {
+            updateTheme(data.customTheme);
+          } else {
+            resetTheme();
+          }
+          if (data.customTerms) {
+            setCustomTerms(data.customTerms);
+          }
+          setDaoMetaData(data);
+          shouldUpdateTheme.current = false;
+        }
+      } catch (error) {
+        console.error(error);
       }
-    } else {
-      resetTheme();
-    }
-  }, [daoMetaData]);
-
-  useState(() => {
+    };
     if (daoid) {
       getApiMetadata();
     }
   }, [daoid]);
 
+  const fetchApiMetadata = async () => {
+    try {
+      const [data] = await fetchMetaData(daoid);
+      if (shouldUpdateTheme.current && !daoMetaData) {
+        console.log('SET BY API');
+        if (data.customTheme) {
+          updateTheme(data.customTheme);
+        } else {
+          resetTheme();
+        }
+        if (data.customTerms) {
+          setCustomTerms(data.customTerms);
+        }
+        setDaoMetaData(data);
+        shouldUpdateTheme.current = false;
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
   const refetchMetaData = () => {
-    getApiMetadata();
+    shouldUpdateTheme.current = true;
+    fetchApiMetadata();
     refetchUserHubDaos();
   };
 
@@ -76,10 +111,9 @@ export const MetaDataProvider = ({ children }) => {
     <MetaDataContext.Provider
       value={{
         daoMetaData,
-        customCopy,
+        customTerms,
         hasFetchedMetadata,
         shouldUpdateTheme,
-        apiMetaData,
         refetchMetaData,
       }}
     >
@@ -93,16 +127,14 @@ export const useMetaData = () => {
     daoMetaData,
     hasFetchedMetadata,
     shouldUpdateTheme,
-    customCopy,
-    apiMetaData,
+    customTerms,
     refetchMetaData,
   } = useContext(MetaDataContext);
   return {
     daoMetaData,
     hasFetchedMetadata,
     shouldUpdateTheme,
-    customCopy,
-    apiMetaData,
+    customTerms,
     refetchMetaData,
   };
 };

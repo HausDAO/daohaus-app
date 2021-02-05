@@ -49,7 +49,7 @@ const ProposalVote = ({ proposal }) => {
     setTxInfoModal,
   } = useOverlay();
   const { refreshDao } = useTX();
-  const { daoMetaData } = useMetaData();
+  const { customTerms } = useMetaData();
   const [minionDeets, setMinionDeets] = useState();
 
   const currentlyVoting = (proposal) => {
@@ -85,7 +85,7 @@ const ProposalVote = ({ proposal }) => {
       style={{ backdropFilter: 'blur(6px)' }}
     >
       {`Connect to ${capitalize(supportedChains[daochain]?.network)}
-      for ${getCopy(daoMetaData, 'proposal')} actions`}
+      for ${getCopy(customTerms, 'proposal')} actions`}
     </Flex>
   );
 

@@ -15,7 +15,6 @@ const ActivitiesFeed = ({
 
   useEffect(() => {
     if (activities) {
-      console.log(activities);
       setAllActivities(hydrateFn(activities));
     }
   }, [activities]);

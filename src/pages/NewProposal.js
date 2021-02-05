@@ -33,7 +33,7 @@ const ProposalScopedModals = ({ proposalType }) => (
 
 const NewProposal = () => {
   // const { daoid } = useDao();
-  const { daoMetaData } = useMetaData();
+  const { customTerms } = useMetaData();
   const params = useParams();
   const history = useHistory();
   const [proposalType, setProposalType] = useState(null);
@@ -59,7 +59,7 @@ const NewProposal = () => {
       <ProposalScopedModals proposalType={proposalType} />
       <Flex>
         <TextBox size='xl' fontWeight={700}>
-          Select {getCopy(daoMetaData, 'proposal')} Type
+          Select {getCopy(customTerms, 'proposal')} Type
         </TextBox>
       </Flex>
 
@@ -70,7 +70,7 @@ const NewProposal = () => {
           justify='space-around'
           align='center'
         >
-          {proposalTypes(daoMetaData).map((p) => {
+          {proposalTypes(customTerms)?.map((p) => {
             return (
               p.show && (
                 <Box

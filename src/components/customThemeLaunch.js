@@ -14,7 +14,7 @@ const CustomThemeLaunch = () => {
   const { address, injectedProvider } = useInjectedProvider();
   const { daochain, daoid } = useDao();
   const [dao] = useDao();
-  const { daoMetaData } = useMetaData();
+  // const { daoMetaData } = useMetaData();
   // const [web3Connect] = useWeb3Connect();
   // const [network] = useNetwork();
   const [step, setStep] = useState(1);
