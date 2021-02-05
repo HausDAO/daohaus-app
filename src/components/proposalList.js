@@ -57,7 +57,6 @@ const ProposalsList = ({ proposals }) => {
           });
         }
       }
-
       setListProposals(filteredProposals);
     };
     if (proposals && proposals.length > 0) {

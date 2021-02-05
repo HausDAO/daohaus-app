@@ -132,7 +132,7 @@ const BankChart = () => {
             <Flex wrap='wrap' align='center' position='relative'>
               <Box position='absolute' top='0px' left='10px'>
                 <TextBox size='sm'>{getCopy(customTerms, 'bank')}</TextBox>
-                <BankTotal tokenBalances={daoOverview.tokenBalances} />
+                <BankTotal tokenBalances={daoOverview?.tokenBalances} />
               </Box>
 
               <Box w='100%'>

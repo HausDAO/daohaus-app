@@ -50,20 +50,24 @@ export const MolochService = ({ web3, daoAddress, version, chainID }) => {
       service === 'processWhitelistProposal' ||
       service === 'processGuildKickProposal' ||
       service === 'submitWhitelistProposal' ||
-      service === 'submitGuildKickProposal'
+      service === 'submitGuildKickProposal' ||
+      service === 'collectTokens'
     ) {
       return async ({ args, address, poll, onTxHash }) => {
-        // console.log('args', args);
-        // console.log('from', address);
-        // console.log('poll', poll);
+        console.log('args', args);
+        console.log('from', address);
+        console.log('poll', poll);
+
         try {
           const tx = await contract.methods[service](...args);
           return tx
             .send('eth_requestAccounts', { from: address })
             .on('transactionHash', (txHash) => {
               if (poll) {
-                onTxHash();
                 poll(txHash);
+              }
+              if (onTxHash) {
+                onTxHash();
               }
               return txHash;
             })
