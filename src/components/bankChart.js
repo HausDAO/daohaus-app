@@ -53,7 +53,7 @@ const BankChart = () => {
   const { theme } = useCustomTheme();
   const { daoOverview } = useDao();
   const { currentDaoTokens } = useToken();
-  const { daoMetaData } = useMetaData();
+  const { customTerms } = useMetaData();
   const [chartData, setChartData] = useState([]);
   const [timeframe, setTimeframe] = useState(bankChartTimeframes[0]);
 
@@ -71,7 +71,7 @@ const BankChart = () => {
   }, [daoBalances, setDaoBalances, daochain, daoid]);
 
   useEffect(() => {
-    if (daoBalances.length && currentDaoTokens) {
+    if (daoBalances?.length && currentDaoTokens) {
       const prices = currentDaoTokens.reduce((priceMap, token) => {
         priceMap[token.tokenAddress] = token;
         return priceMap;
@@ -127,11 +127,11 @@ const BankChart = () => {
   return (
     <div>
       <Box>
-        {daoBalances.length ? (
+        {daoBalances?.length ? (
           <ContentBox minH='360px'>
             <Flex wrap='wrap' align='center' position='relative'>
               <Box position='absolute' top='0px' left='10px'>
-                <TextBox size='sm'>{getCopy(daoMetaData, 'bank')}</TextBox>
+                <TextBox size='sm'>{getCopy(customTerms, 'bank')}</TextBox>
                 <BankTotal tokenBalances={daoOverview.tokenBalances} />
               </Box>
 

@@ -18,7 +18,7 @@ const Members = ({ members, activities }) => {
   const { daoid, daochain } = useParams();
   const [selectedMember, setSelectedMember] = useState(null);
   const [scrolled, setScrolled] = useState(false);
-  const { daoMetaData } = useMetaData();
+  const { customTerms } = useMetaData();
 
   const selectMember = (member) => {
     if (selectedMember == null) {
@@ -61,7 +61,7 @@ const Members = ({ members, activities }) => {
         <ContentBox mt={6}>
           <Flex>
             <TextBox w='43%' size='xs'>
-              {getCopy(daoMetaData, 'member')}
+              {getCopy(customTerms, 'member')}
             </TextBox>
             <TextBox w='15%' size='xs'>
               Shares

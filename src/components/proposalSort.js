@@ -37,7 +37,7 @@ const ProposalSort = ({ sort, setSort }) => {
           {sort?.name} <Icon as={RiArrowDropDownFill} />
         </MenuButton>
         <MenuList bg='black'>
-          {sortOptions.map((option) => (
+          {sortOptions?.map((option) => (
             <MenuItem
               key={option.value}
               onClick={() => setSort(option)}

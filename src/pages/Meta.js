@@ -8,7 +8,7 @@ import { useDaoMember } from '../contexts/DaoMemberContext';
 import DaoMetaForm from '../forms/daoMetaForm';
 
 const Meta = () => {
-  const { apiMetaData, refetchMetaData, daoMetaData } = useMetaData();
+  const { apiMetaData, refetchMetaData } = useMetaData();
   const { isMember } = useDaoMember();
   const [localMetadata, setLocalMetadata] = useState();
   const history = useHistory();

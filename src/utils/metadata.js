@@ -1,5 +1,5 @@
 import { chainByNetworkId } from './chain';
-import { omit } from './general';
+import { capitalize, omit } from './general';
 
 const metadataApiUrl = 'https://data.daohaus.club';
 
@@ -61,48 +61,42 @@ export const pokemolUrlExplore = (dao) => {
   return `https://${domain}/dao/${dao.id}`;
 };
 
-export const getCopy = (metaData, word) => {
-  if (!metaData) {
-    return;
+export const getCopy = (customTerms, word) => {
+  if (!customTerms) {
+    return capitalize(word);
   }
   word = word.toLowerCase();
-
-  if (word === 'name') return metaData.name;
-  else if (word === 'description') return metaData.description;
-  else {
-    const customCopy = metaData?.customTheme?.daoMeta;
-    if (word === 'proposal') {
-      return customCopy?.proposal || 'Proposal';
-    } else if (word === 'proposals') {
-      return customCopy?.proposals || 'Proposals';
-    } else if (word === 'bank') {
-      return customCopy?.bank || 'Bank';
-    } else if (word === 'boost') {
-      return customCopy?.boost || 'Boost';
-    } else if (word === 'boosts') {
-      return customCopy?.boosts || 'Boosts';
-    } else if (word === 'members') {
-      return customCopy?.members || 'Members';
-    } else if (word === 'member') {
-      return customCopy?.member || 'Member';
-    } else if (word === 'settings') {
-      return customCopy?.settings || 'Settings';
-    } else if (word === 'profile') {
-      return customCopy?.profile || 'Profile';
-    } else if (word === 'f04title') {
-      return customCopy?.f04title || "404 What's Lost Can Be Found";
-    } else if (word === 'f04heading') {
-      return customCopy?.f04heading || 'You have been slain';
-    } else if (word === 'f04subhead') {
-      return (
-        customCopy?.f04subhead ||
-        'Please reload from the most recent save point.'
-      );
-    } else if (word === 'f04cta') {
-      return customCopy?.f04cta || 'Start Over.';
-    } else {
-      return 'WORD!';
-    }
+  if (word === 'proposal') {
+    return customTerms?.proposal || 'Proposal';
+  } else if (word === 'proposals') {
+    return customTerms?.proposals || 'Proposals';
+  } else if (word === 'bank') {
+    return customTerms?.bank || 'Bank';
+  } else if (word === 'boost') {
+    return customTerms?.boost || 'Boost';
+  } else if (word === 'boosts') {
+    return customTerms?.boosts || 'Boosts';
+  } else if (word === 'members') {
+    return customTerms?.members || 'Members';
+  } else if (word === 'member') {
+    return customTerms?.member || 'Member';
+  } else if (word === 'settings') {
+    return customTerms?.settings || 'Settings';
+  } else if (word === 'profile') {
+    return customTerms?.profile || 'Profile';
+  } else if (word === 'f04title') {
+    return customTerms?.f04title || "404 What's Lost Can Be Found";
+  } else if (word === 'f04heading') {
+    return customTerms?.f04heading || 'You have been slain';
+  } else if (word === 'f04subhead') {
+    return (
+      customTerms?.f04subhead ||
+      'Please reload from the most recent save point.'
+    );
+  } else if (word === 'f04cta') {
+    return customTerms?.f04cta || 'Start Over.';
+  } else {
+    return 'WORD!';
   }
 };
 

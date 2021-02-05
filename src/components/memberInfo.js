@@ -9,7 +9,7 @@ import ContentBox from './ContentBox';
 
 const MemberInfoCard = ({ member }) => {
   const { daoid, daochain } = useParams();
-  const { daoMetaData } = useMetaData();
+  const { customTerms } = useMetaData();
   // const name = member.hasProfile ? member.name : member.memberAddress;
 
   return (
@@ -17,7 +17,7 @@ const MemberInfoCard = ({ member }) => {
       {member && (
         <>
           <Flex justify='space-between'>
-            <TextBox size='sm'>{getCopy(daoMetaData, 'member')} Info</TextBox>
+            <TextBox size='sm'>{getCopy(customTerms, 'member')} Info</TextBox>
             {member && (
               <TextBox
                 as={Link}

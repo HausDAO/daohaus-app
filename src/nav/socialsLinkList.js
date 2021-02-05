@@ -4,8 +4,8 @@ import { defaultSocialLinks, generateDaoSocials } from '../utils/navLinks';
 import SocialLink from './socialLink';
 
 const SocialsLinkList = ({ dao, view, toggleNav }) => {
-  const socialLinks = dao?.daoMetaData
-    ? generateDaoSocials(dao?.daoMetaData)
+  const socialLinks = dao?.customTerms
+    ? generateDaoSocials(dao?.customTerms)
     : defaultSocialLinks;
   return (
     <>
