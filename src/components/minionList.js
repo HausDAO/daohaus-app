@@ -24,7 +24,7 @@ const MinionList = () => {
             align='center'
             key={minion.minionAddress}
           >
-            <TextBox size='md' colorScheme='whiteAlpha.900'>
+            <TextBox size='sm' colorScheme='whiteAlpha.900'>
               {minion.minionType}: {minion.details}{' '}
               {truncateAddr(minion.minionAddress)}
               <CopyToClipboard

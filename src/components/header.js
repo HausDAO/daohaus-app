@@ -75,6 +75,8 @@ const Header = ({ dao }) => {
         return 'Custom Theme';
       case `/dao/${dao.chainID}/${dao.daoID}/settings/notifications`:
         return 'Notifications';
+      case `/dao/${dao.chainID}/${dao.daoID}/settings/minion/\b0x[0-9a-f]{10,40}\b`:
+        return 'Minions';
       case `/dao/${dao.chainID}/${dao.daoID}/settings/boosts`:
         return getCopy(dao.customTerms, 'boosts');
       case `/dao/${dao.chainID}/${dao.daoID}/settings/boosts/new`:
