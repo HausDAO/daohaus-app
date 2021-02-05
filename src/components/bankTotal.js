@@ -3,7 +3,6 @@ import { Skeleton, Text, Box } from '@chakra-ui/react';
 import { useToken } from '../contexts/TokenContext';
 import { tallyUSDs } from '../utils/tokenValue';
 import { numberWithCommas } from '../utils/general';
-
 const BankTotal = ({ customBank }) => {
   const { currentDaoTokens } = useToken();
 

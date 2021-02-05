@@ -53,8 +53,8 @@ export const DaoMemberProvider = ({
         });
         if (wallet) {
           setDaoMember((prevState) => ({
-            ...wallet,
             ...prevState,
+            ...wallet,
             hasWallet: true,
           }));
         }
