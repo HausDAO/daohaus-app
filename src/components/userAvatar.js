@@ -69,7 +69,12 @@ const UserAvatar = ({ user, copyEnabled }) => {
             </Box>
             {copyEnabled === true && (
               <CopyToClipboard text={address} onCopy={handleNotifyCopied}>
-                <Icon as={FaCopy} color='secondary.300' ml={2} />
+                <Icon
+                  as={FaCopy}
+                  color='secondary.300'
+                  ml={2}
+                  _hover={{ cursor: 'pointer' }}
+                />
               </CopyToClipboard>
             )}
           </Box>

@@ -4,9 +4,10 @@ import { Flex, Box, Skeleton } from '@chakra-ui/react';
 import { format } from 'date-fns';
 import TextBox from './TextBox';
 import UserAvatar from './userAvatar';
+import ProfileMenu from './profileMenu';
 import { handleGetProfile } from '../utils/3box';
 
-const MemberInfoGuts = ({ member }) => {
+const MemberInfoGuts = ({ member, showMenu }) => {
   const [memberData, setMemberData] = useState(null);
 
   useEffect(() => {
@@ -39,7 +40,7 @@ const MemberInfoGuts = ({ member }) => {
               user={{ ...member, ...memberData }}
               copyEnabled={false}
             />
-            {/* {showMenu && <ProfileMenu member={member} />} */}
+            {showMenu && <ProfileMenu member={member} />}
           </Flex>
           <Flex w='100%' justify='space-between' mt={6}>
             <Box>

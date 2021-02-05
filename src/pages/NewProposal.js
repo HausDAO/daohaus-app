@@ -32,11 +32,11 @@ const ProposalScopedModals = ({ proposalType }) => (
 );
 
 const NewProposal = () => {
-  // const { daoid } = useDao();
-  const { customTerms } = useMetaData();
+  const { customTerms, daoMetaData } = useMetaData();
   const params = useParams();
   const history = useHistory();
   const [proposalType, setProposalType] = useState(null);
+
   // const [, setProposal] = useState(null);
   const { setProposalModal } = useOverlay();
   // const { modals, openModal } = useModals();
@@ -70,7 +70,7 @@ const NewProposal = () => {
           justify='space-around'
           align='center'
         >
-          {proposalTypes(customTerms)?.map((p) => {
+          {proposalTypes(customTerms, daoMetaData?.boosts)?.map((p) => {
             return (
               p.show && (
                 <Box
