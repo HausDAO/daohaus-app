@@ -105,7 +105,7 @@ export const supportedChains = {
     'https://mainnet.maticvigil.com/api/swagger/',
   metadata_api_url: 'https://data.daohaus.club',
   subgraph_url:
-    'http://35.224.233.211/subgraphs/name/matic/daohaus-automation/graphql',
+    'http://35.224.233.211/subgraphs/name/matic/daohaus-supergraph/graphql',
   stats_graph_url:
     'http://35.224.233.211/subgraphs/name/matic/daohaus/graphql',
   minion_factory_addr: '0x91Eb3d16Cb09dC884bB3146e04C1A1cF80EEa548',
