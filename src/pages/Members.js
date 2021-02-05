@@ -90,11 +90,17 @@ const Members = ({ members, activities }) => {
           ) : (
             <>
               {daoMember && (
-                <Link
-                  to={`/dao/${daochain}/${daoid}/profile/${daoMember.memberAddress}`}
-                >
-                  View My Profile
-                </Link>
+                <Flex justify='space-between' mb={5}>
+                  <TextBox size='xs'>Snapshot</TextBox>
+                  <TextBox
+                    as={Link}
+                    to={`/dao/${daochain}/${daoid}/profile/${daoMember.memberAddress}`}
+                    color='inherit'
+                    size='xs'
+                  >
+                    View My Profile
+                  </TextBox>
+                </Flex>
               )}
               <MembersChart />
             </>
