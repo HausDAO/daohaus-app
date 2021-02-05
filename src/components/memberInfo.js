@@ -33,7 +33,7 @@ const MemberInfoCard = ({ member }) => {
             )}
           </Flex>
           <ContentBox mt={3}>
-            <MemberInfoGuts member={member} showMenu={false} />
+            <MemberInfoGuts member={member} showMenu={true} />
           </ContentBox>
         </>
       )}

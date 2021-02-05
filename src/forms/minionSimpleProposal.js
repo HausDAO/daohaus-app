@@ -19,36 +19,36 @@ import { useParams } from 'react-router-dom';
 import { RiErrorWarningLine } from 'react-icons/ri';
 import { AiOutlineCaretDown } from 'react-icons/ai';
 
-// import {
-//   useDao,
-//   useModals,
-//   useNetwork,
-//   useTxProcessor,
-//   useUser,
-//   useWeb3Connect,
-// } from '../../../contexts/PokemolContext';
-// import { useInjectedProvider } from '../contexts/InjectedProviderContext';
+import { useInjectedProvider } from '../contexts/InjectedProviderContext';
 import { useDao } from '../contexts/DaoContext';
+import { useUser } from '../contexts/UserContext';
+import { useTX } from '../contexts/TXContext';
+import { useOverlay } from '../contexts/OverlayContext';
 import TextBox from '../components/TextBox';
-// import { MinionService } from '../services/minionService';
+import { MinionService } from '../services/minionService';
+import { createPoll } from '../services/pollService';
 import { chainByID } from '../utils/chain';
 
 const MinionProposalForm = () => {
   const [loading, setLoading] = useState(false);
   const [abiLoading, setAbiLoading] = useState(false);
   const { daoOverview } = useDao();
-  const { daochain } = useParams();
-  // const { address, injectedProvider } = useInjectedProvider();
-  // const [network] = useNetwork();
-
-  // const [txProcessor, updateTxProcessor] = useTxProcessor();
+  const { daochain, daoid } = useParams();
+  const { address, injectedProvider } = useInjectedProvider();
+  const { cachePoll, resolvePoll } = useUser();
+  const {
+    errorToast,
+    successToast,
+    setProposalModal,
+    setTxInfoModal,
+  } = useOverlay();
+  const { refreshDao } = useTX();
   const [currentError, setCurrentError] = useState(null);
   const [abiFunctions, setAbiFunctions] = useState();
-  const [, setSelectedFunction] = useState();
+  const [selectedFunction, setSelectedFunction] = useState();
   const [abiParams, setAbiParams] = useState();
   const [hexSwitch, setHexSwitch] = useState();
   const [minions, setMinions] = useState([]);
-  // const { closeModals } = useModals();
 
   const {
     handleSubmit,
@@ -79,27 +79,11 @@ const MinionProposalForm = () => {
     }
   }, [errors]);
 
-  // const txCallBack = (txHash, details) => {
-  //   console.log('txCallBack', txProcessor);
-  //   if (txProcessor && txHash) {
-  //     txProcessor.setTx(txHash, user.username, details, true, false, false);
-  //     txProcessor.forceCheckTx = true;
-
-  //     updateTxProcessor(txProcessor);
-  //     // close model here
-  //     closeModals();
-  //   }
-  //   if (!txHash) {
-  //     console.log('error: ', details);
-  //     setLoading(false);
-  //   }
-  // };
-
   const onSubmit = async (values) => {
     console.log('values', values);
     setLoading(true);
 
-    // console.log(values);
+    console.log(values.minionContract);
     // const setupValues = {
     //   minion: values.minionContract,
     //   actionVlaue: '0',
@@ -110,52 +94,83 @@ const MinionProposalForm = () => {
     //   setupValues,
     // );
 
-    // const valueWei = web3Connect.web3.utils.toWei(values.value);
+    const valueWei = injectedProvider.utils.toWei(values.value);
 
-    // const inputValues = [];
-    // let hexData;
-    // if (selectedFunction) {
-    //   Object.keys(values).forEach((param) => {
-    //     if (param.indexOf('xparam') > -1) {
-    //       console.log(param);
-    //       try {
-    //         inputValues.push(JSON.parse(values[param]));
-    //       } catch {
-    //         inputValues.push(values[param]);
-    //       }
-    //     }
-    //   });
-    //   console.log('inputs', inputValues);
-    //   console.log('selectedFunction', selectedFunction);
-    //   const aSelectedFunction = abiFunctions.find((func) => {
-    //     return func.name === selectedFunction;
-    //   });
-    //   console.log('aSelectedFunction', aSelectedFunction);
-    //   try {
-    //     hexData = web3Connect.web3.eth.abi.encodeFunctionCall(
-    //       aSelectedFunction,
-    //       inputValues,
-    //     );
-    //     console.log('hexData', hexData);
-    //   } catch (err) {
-    //     console.log('ERR', err);
-    //     setLoading(false);
-    //     return;
-    //   }
-    // }
-
-    // try {
-    //   minionService.propose(
-    //     values.targetContract,
-    //     valueWei || setupValues.actionVlaue,
-    //     values.dataValue || hexData,
-    //     values.description,
-    //     txCallBack,
-    //   );
-    // } catch (err) {
-    //   setLoading(false);
-    //   console.log('error: ', err);
-    // }
+    const inputValues = [];
+    let hexData;
+    if (selectedFunction) {
+      Object.keys(values).forEach((param) => {
+        if (param.indexOf('xparam') > -1) {
+          console.log(param);
+          try {
+            inputValues.push(JSON.parse(values[param]));
+          } catch {
+            inputValues.push(values[param]);
+          }
+        }
+      });
+      console.log('inputs', inputValues);
+      console.log('selectedFunction', selectedFunction);
+      const aSelectedFunction = abiFunctions.find((func) => {
+        return func.name === selectedFunction;
+      });
+      console.log('aSelectedFunction', aSelectedFunction);
+      try {
+        hexData = injectedProvider.eth.abi.encodeFunctionCall(
+          aSelectedFunction,
+          inputValues,
+        );
+        console.log('hexData', hexData);
+      } catch (err) {
+        console.log('ERR', err);
+        setLoading(false);
+        return;
+      }
+    }
+    const args = [
+      values.targetContract,
+      valueWei || '0',
+      values.dataValue || hexData,
+      values.description,
+    ];
+    try {
+      const poll = createPoll({ action: 'minionProposeAction', cachePoll })({
+        daoID: daoid,
+        chainID: daochain,
+        targetContract: values.targetContract,
+        data: values.dataValue,
+        actions: {
+          onError: (error, txHash) => {
+            errorToast({
+              title: `There was an error.`,
+            });
+            resolvePoll(txHash);
+            console.error(`Could not find a matching proposal: ${error}`);
+            setLoading(false);
+          },
+          onSuccess: (txHash) => {
+            successToast({
+              title: 'Proposal submitted.',
+            });
+            refreshDao();
+            resolvePoll(txHash);
+            setLoading(false);
+          },
+        },
+      });
+      const onTxHash = () => {
+        setProposalModal(false);
+        setTxInfoModal(true);
+      };
+      await MinionService({
+        web3: injectedProvider,
+        minion: values.minionAddress,
+        chainID: daochain,
+      })('proposeAction')({ args, address, poll, onTxHash });
+    } catch (err) {
+      setLoading(false);
+      console.log('error: ', err);
+    }
   };
 
   const handleBlur = async (e) => {
@@ -360,26 +375,29 @@ const MinionProposalForm = () => {
                     color='white'
                     fontFamily='heading'
                     textTransform='uppercase'
-                    fontSize='xs'
+                    fontSize='sm'
                     fontWeight={700}
+                    mt={4}
                   >
                     ABI Params
                   </FormLabel>
-                  {abiParams &&
-                    abiParams.map((param, idx) => {
-                      return (
-                        <Box key={idx}>
-                          <Text>{param.name}</Text>
-                          <Input
-                            name={'xparam' + param.name}
-                            ref={register}
-                            placeholder={param.type}
-                            color='white'
-                            focusBorderColor='secondary.500'
-                          />
-                        </Box>
-                      );
-                    })}
+                  <Stack spacing={3}>
+                    {abiParams &&
+                      abiParams.map((param, idx) => {
+                        return (
+                          <Stack key={idx} spacing={1}>
+                            <TextBox size='xs'>{param.name}</TextBox>
+                            <Input
+                              name={'xparam' + param.name}
+                              ref={register}
+                              placeholder={param.type}
+                              color='white'
+                              focusBorderColor='secondary.500'
+                            />
+                          </Stack>
+                        );
+                      })}
+                  </Stack>
                 </>
               )}
             </>
