@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import { Flex, Box } from '@chakra-ui/react';
 import ActivitiesFeed from '../components/activitiesFeed';
-import Chart from '../components/chart';
 import MemberCard from '../components/memberCard';
 import MemberInfo from '../components/memberInfo';
 import ContentBox from '../components/ContentBox';
@@ -11,6 +10,7 @@ import { useDaoMember } from '../contexts/DaoMemberContext';
 import { useMetaData } from '../contexts/MetaDataContext';
 import { getMemberActivites, getMembersActivites } from '../utils/activities';
 import { getCopy } from '../utils/metadata';
+import MembersChart from '../components/membersChart';
 
 const Members = ({ members, activities }) => {
   const { daoMember } = useDaoMember();
@@ -96,7 +96,7 @@ const Members = ({ members, activities }) => {
                   View My Profile
                 </Link>
               )}
-              <Chart />
+              <MembersChart />
             </>
           )}
           {selectedMember ? (

@@ -44,7 +44,7 @@ const bankChartTimeframes = [
   { name: '6 months', value: 6 },
 ];
 
-const Chart = () => {
+const BankChart = () => {
   const { daochain, daoid } = useParams();
   const [daoBalances, setDaoBalances] = useSessionStorage(
     `balances-${daoid}`,
@@ -216,4 +216,4 @@ const Chart = () => {
   );
 };
 
-export default Chart;
+export default BankChart;
