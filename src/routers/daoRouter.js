@@ -19,6 +19,7 @@ import { useToken } from '../contexts/TokenContext';
 import Layout from '../components/layout';
 import { useMetaData } from '../contexts/MetaDataContext';
 import Meta from '../pages/Meta';
+import Notifications from '../pages/Notifications';
 
 const DaoRouter = () => {
   const { path } = useRouteMatch();
@@ -73,9 +74,9 @@ const DaoRouter = () => {
         <Route exact path={`${path}/settings/boosts`}>
           <Boosts />
         </Route>
-        {/* <Route exact path={`${path}/settings/notifications`}>
+        <Route exact path={`${path}/settings/notifications`}>
           <Notifications />
-        </Route> */}
+        </Route>
         <Route exact path={`${path}/settings/theme`}>
           <ThemeBuilder />
         </Route>

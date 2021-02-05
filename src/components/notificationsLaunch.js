@@ -130,6 +130,11 @@ const NotificationsLaunch = ({
             you will need to add the Haus Bot roll into the channel permissions.
           </Text>
 
+          <Text fontSize='xs'>
+            Once we verify the channel connection you will need to sign a
+            message with meta mask and we will be all set!
+          </Text>
+
           <form onSubmit={handleSubmit(onSubmit)}>
             <Box mt={6}>
               <FormControl mb={5}>

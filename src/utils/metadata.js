@@ -6,7 +6,6 @@ const metadataApiUrl = 'https://data.daohaus.club';
 export const fetchMetaData = async (endpoint) => {
   const url = `${metadataApiUrl}/dao/${endpoint}`;
 
-  console.log('url', url);
   try {
     const response = await fetch(url);
 
