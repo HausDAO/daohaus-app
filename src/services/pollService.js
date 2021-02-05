@@ -1,7 +1,7 @@
 import { BigNumber } from 'ethers';
 import { graphQuery } from '../utils/apollo';
 import { PROPOSALS_LIST } from '../graphQL/proposal-queries';
-import { DAO_POLL } from '../graphQL/dao-queries';
+import { DAO_POLL, MINION_POLL } from '../graphQL/dao-queries';
 import { getGraphEndpoint } from '../utils/chain';
 import { hashMaker, memberVote } from '../utils/proposalUtils';
 import { TokenService } from '../services/tokenService';
@@ -41,6 +41,17 @@ const pollMolochSummon = async ({ chainID, summoner, createdAt }) => {
     query: DAO_POLL,
     variables: {
       summoner,
+      createdAt,
+    },
+  });
+};
+
+const pollMinionSummon = async ({ chainID, molochAddress, createdAt }) => {
+  return await graphQuery({
+    endpoint: getGraphEndpoint(chainID, 'subgraph_url'),
+    query: MINION_POLL,
+    variables: {
+      molochAddress,
       createdAt,
     },
   });
@@ -87,11 +98,21 @@ const tokenAllowanceTest = (data, shouldEqual, pollId) => {
 
 const molochSummonTest = (data, shouldEqual, pollId) => {
   console.log('new moloch: ', data);
-  // could we pass this value back?
   if (data.moloches) {
     return data.moloches.length > 0;
   } else {
     console.log('no data.moloches');
+    clearInterval(pollId);
+    throw new Error(`Bad query, clearing poll: ${data}`);
+  }
+};
+
+const minonSummonTest = (data, shouldEqual, pollId) => {
+  console.log('new minion: ', data);
+  if (data.moloch) {
+    return data.moloch.minions.length > 0;
+  } else {
+    console.log('no data.moloch');
     clearInterval(pollId);
     throw new Error(`Bad query, clearing poll: ${data}`);
   }
@@ -647,6 +668,36 @@ export const createPoll = ({
             tries,
           },
           pollArgs: { daoID, chainID, minion, proposalId },
+        });
+      }
+    };
+  } else if (action === 'summonMinion') {
+    console.log('action', action);
+    return ({ chainID, molochAddress, createdAt, actions }) => (txHash) => {
+      startPoll({
+        pollFetch: pollMinionSummon,
+        testFn: minonSummonTest,
+        shouldEqual: { molochAddress, createdAt },
+        args: { chainID, molochAddress, createdAt },
+        actions,
+        txHash,
+      });
+      if (cachePoll) {
+        cachePoll({
+          txHash,
+          action,
+          timeSent: Date.now(),
+          status: 'unresolved',
+          resolvedMsg: `Minion summoned`,
+          unresolvedMsg: `Summoning Minion`,
+          successMsg: `A New Minion has Risen on ${chainID}`,
+          errorMsg: `Error summoning Minion on ${chainID}`,
+          pollData: {
+            action,
+            interval,
+            tries,
+          },
+          pollArgs: { chainID, molochAddress, createdAt },
         });
       }
     };

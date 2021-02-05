@@ -130,3 +130,14 @@ export const DAO_POLL = gql`
     }
   }
 `;
+
+export const MINION_POLL = gql`
+  query moloch($molochAddress: String!, $createdAt: String!) {
+    moloch(id: $molochAddress) {
+      id
+      minions(where: { createdAt_gt: $createdAt }) {
+        id
+      }
+    }
+  }
+`;

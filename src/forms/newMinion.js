@@ -38,7 +38,6 @@ const NewMinionForm = () => {
     setLoading(true);
     setStep(2);
 
-    // args = [daoAddress, details]
     const summonParams = [daoid, values.details];
 
     try {
