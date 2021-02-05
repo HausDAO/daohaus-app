@@ -53,7 +53,6 @@ const TokenListCard = ({
           +token.tokenBalance
       : +token.tokenBalance;
   };
-
   // useEffect(() => {
   //   const fetchMainnetAddresses = async () => {
   //     const mainnetAddresses = await getMainetAddresses();
