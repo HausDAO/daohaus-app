@@ -11,13 +11,12 @@ import {
   ModalHeader,
   ModalOverlay,
   Skeleton,
-  Stack,
   HStack,
 } from '@chakra-ui/react';
 import { useParams } from 'react-router-dom';
 import abiDecoder from 'abi-decoder';
 
-import { useInjectedProvider } from '../contexts/InjectedProviderContext';
+// import { useInjectedProvider } from '../contexts/InjectedProviderContext';
 import { MinionService } from '../services/minionService';
 import AddressAvatar from './addressAvatar';
 import TextBox from './TextBox';
@@ -29,7 +28,7 @@ const ProposalMinionCard = ({ proposal }) => {
   const [decodedData, setDecodedData] = useState();
   const [loading, setLoading] = useState(true);
   const [showModal, setShowModal] = useState(false);
-  const { address } = useInjectedProvider();
+  // const { address } = useInjectedProvider();
 
   useEffect(() => {
     let action;

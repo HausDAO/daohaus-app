@@ -10,13 +10,13 @@ import { boostList } from '../content/boost-content';
 // import BoostLaunchWrapper from '../components/boostLaunchWrapper';
 
 const Boosts = () => {
-  const { apiMetaData } = useMetaData();
+  const { daoMetaData } = useMetaData();
   const { daochain, daoid } = useParams();
   // const { modals, openModal } = useModals();
-  console.log(apiMetaData);
+  console.log(daoMetaData);
 
   const renderBoostCard = (boost, i) => {
-    const boostData = apiMetaData?.boosts[boost.key];
+    const boostData = daoMetaData?.boosts[boost.key];
     console.log(boostData);
     const hasBoost = boostData && boostData.active;
     console.log('boost: ', boost, 'hasBoost: ', hasBoost);
@@ -91,7 +91,7 @@ const Boosts = () => {
         Available Apps
       </TextBox>
       <Flex wrap='wrap' justify='space-evenly'>
-        {apiMetaData?.boosts
+        {daoMetaData?.boosts
           ? boostList.map((boost, i) => {
               return renderBoostCard(boost, i);
             })

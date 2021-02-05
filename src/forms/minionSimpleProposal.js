@@ -27,24 +27,24 @@ import { AiOutlineCaretDown } from 'react-icons/ai';
 //   useUser,
 //   useWeb3Connect,
 // } from '../../../contexts/PokemolContext';
-import { useInjectedProvider } from '../contexts/InjectedProviderContext';
+// import { useInjectedProvider } from '../contexts/InjectedProviderContext';
 import { useDao } from '../contexts/DaoContext';
 import TextBox from '../components/TextBox';
-import { MinionService } from '../services/minionService';
-import { supportedChains, chainByID } from '../utils/chain';
+// import { MinionService } from '../services/minionService';
+import { chainByID } from '../utils/chain';
 
 const MinionProposalForm = () => {
   const [loading, setLoading] = useState(false);
   const [abiLoading, setAbiLoading] = useState(false);
   const { daoOverview } = useDao();
   const { daochain } = useParams();
-  const { address, injectedProvider } = useInjectedProvider();
+  // const { address, injectedProvider } = useInjectedProvider();
   // const [network] = useNetwork();
 
   // const [txProcessor, updateTxProcessor] = useTxProcessor();
   const [currentError, setCurrentError] = useState(null);
   const [abiFunctions, setAbiFunctions] = useState();
-  const [selectedFunction, setSelectedFunction] = useState();
+  const [, setSelectedFunction] = useState();
   const [abiParams, setAbiParams] = useState();
   const [hexSwitch, setHexSwitch] = useState();
   const [minions, setMinions] = useState([]);

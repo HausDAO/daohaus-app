@@ -1,13 +1,12 @@
 import React, { useState, useRef } from 'react';
 import {
-  Avatar,
+  Image,
   Button,
   Flex,
   Stack,
   ButtonGroup,
   Box,
   Select,
-  Image,
   Tabs,
   TabList,
   TabPanels,
@@ -18,13 +17,13 @@ import {
 } from '@chakra-ui/react';
 import { AiOutlineCaretDown } from 'react-icons/ai';
 import { SketchPicker } from 'react-color';
-import { useModals, useDao } from '../../contexts/PokemolContext';
-import { useTheme } from '../../contexts/CustomThemeContext';
-import ContentBox from '../Shared/ContentBox';
-import TextBox from '../Shared/TextBox';
-import GenericModal from '../Modal/GenericModal';
-import { ipfsPost, ipfsPrePost } from '../../utils/requests';
-import { themeImagePath } from '../../utils/helpers';
+// import { useDao } from '../contexts/DaoContext';
+import { useCustomTheme } from '../contexts/CustomThemeContext';
+import ContentBox from '../components/ContentBox';
+import TextBox from '../components/TextBox';
+// import GenericModal from '../Modal/GenericModal';
+// import { ipfsPost, ipfsPrePost } from '../utils/requests';
+import { themeImagePath } from '../utils/metadata';
 
 const bodyFonts = [
   'Rubik',
@@ -42,7 +41,7 @@ const headingFonts = [
   ...bodyFonts,
 ];
 
-const dataFonts = [
+const monoFonts = [
   'Space Mono',
   'JetBrains Mono',
   'Roboto Mono',
@@ -50,14 +49,14 @@ const dataFonts = [
 ];
 
 const CustomThemeForm = ({ previewTheme, setPreviewTheme }) => {
-  const [theme] = useTheme();
-  const [dao] = useDao();
-  const [imageUrl, setImageUrl] = useState(null);
-  const [imageUpload, setImageUpload] = useState(null);
-  const [imagePicker, setImagePicker] = useState(null);
+  const { theme } = useCustomTheme();
+  // const { daoOverview } = useDao();
+  // // const [imageUrl, setImageUrl] = useState(null);
+  // const [imageUpload, setImageUpload] = useState(null);
+  // const [imagePicker, setImagePicker] = useState(null);
   const [pickerOpen, setPickerOpen] = useState(null);
-  const [uploading, setUploading] = useState();
-  const { modals, openModal, closeModals } = useModals();
+  // const [uploading, setUploading] = useState();
+  // const { modals, openModal, closeModals } = useModals();
   let upload = useRef();
 
   const handleChange = (color, item) => {
@@ -99,29 +98,29 @@ const CustomThemeForm = ({ previewTheme, setPreviewTheme }) => {
   };
 
   const handleFileSet = async (event) => {
-    setImageUrl(URL.createObjectURL(upload.files[0]));
-    const formData = new FormData();
-    formData.append('file', upload.files[0]);
-    setImageUpload(formData);
-    openModal('imageHandler');
+    // setImageUrl(URL.createObjectURL(upload.files[0]));
+    // const formData = new FormData();
+    // formData.append('file', upload.files[0]);
+    // setImageUpload(formData);
+    // // openModal('imageHandler');
   };
 
-  const handleUpload = async () => {
-    setUploading(true);
-    const keyRes = await ipfsPrePost('dao/ipfs-key', {
-      daoAddress: dao.address,
-    });
-    const ipfsRes = await ipfsPost(keyRes, imageUpload);
-    setPreviewTheme({
-      ...previewTheme,
-      [imagePicker]: ipfsRes.IpfsHash,
-    });
-    setImagePicker(null);
-    setImageUpload(null);
-    setImageUrl(null);
-    setUploading(false);
-    closeModals();
-  };
+  // const handleUpload = async () => {
+  //   // setUploading(true);
+  //   // const keyRes = await ipfsPrePost('dao/ipfs-key', {
+  //   //   daoAddress: daoOverview.address,
+  //   // });
+  //   // const ipfsRes = await ipfsPost(keyRes, imageUpload);
+  //   // setPreviewTheme({
+  //   //   ...previewTheme,
+  //   //   [imagePicker]: ipfsRes.IpfsHash,
+  //   // });
+  //   // setImagePicker(null);
+  //   // setImageUpload(null);
+  //   // setImageUrl(null);
+  //   // setUploading(false);
+  //   // // closeModals();
+  // };
 
   const renderWordsFields = () => {
     return Object.keys(previewTheme.daoMeta).map((themeKey) => {
@@ -152,7 +151,7 @@ const CustomThemeForm = ({ previewTheme, setPreviewTheme }) => {
 
           <TabPanels>
             <TabPanel>
-              <GenericModal isOpen={modals.imageHandler}>
+              {/* <GenericModal isOpen={modals.imageHandler}>
                 <Flex align='center' direction='column'>
                   <TextBox>How&apos;s this look?</TextBox>
                   <Image src={imageUrl} maxH='500px' objectFit='cover' my={4} />
@@ -169,7 +168,7 @@ const CustomThemeForm = ({ previewTheme, setPreviewTheme }) => {
                     </Button>
                   </ButtonGroup>
                 </Flex>
-              </GenericModal>
+              </GenericModal> */}
               <Stack spacing={4} pr='5%'>
                 <TextBox size='xs'>Colors</TextBox>
                 <Flex justify='space-between' align='center'>
@@ -284,8 +283,8 @@ const CustomThemeForm = ({ previewTheme, setPreviewTheme }) => {
                     onChange={handleSelectChange}
                     w='80%'
                     icon={<AiOutlineCaretDown />}
-                    name='primaryFont'
-                    id='primaryFont'
+                    name='headingFont'
+                    id='headingFont'
                   >
                     {headingFonts.map((value) => (
                       <Box as='option' key={value}>
@@ -300,8 +299,8 @@ const CustomThemeForm = ({ previewTheme, setPreviewTheme }) => {
                   </TextBox>
                   <Select
                     defaultValue={
-                      previewTheme.headingFont
-                        ? previewTheme.headingFont
+                      previewTheme.bodyFont
+                        ? previewTheme.bodyFont
                         : 'Inknut Antiqua'
                     }
                     onChange={handleSelectChange}
@@ -323,8 +322,8 @@ const CustomThemeForm = ({ previewTheme, setPreviewTheme }) => {
                   </TextBox>
                   <Select
                     defaultValue={
-                      previewTheme.headingFont
-                        ? previewTheme.headingFont
+                      previewTheme.monoFont
+                        ? previewTheme.monoFont
                         : 'Inknut Antiqua'
                     }
                     onChange={handleSelectChange}
@@ -333,7 +332,7 @@ const CustomThemeForm = ({ previewTheme, setPreviewTheme }) => {
                     name='monoFont'
                     id='monoFont'
                   >
-                    {dataFonts.map((value) => (
+                    {monoFonts.map((value) => (
                       <Box as='option' key={value} id={value}>
                         {value}
                       </Box>
@@ -353,7 +352,7 @@ const CustomThemeForm = ({ previewTheme, setPreviewTheme }) => {
                       mb={3}
                       variant='outline'
                       onClick={() => {
-                        setImagePicker('bgImg');
+                        // setImagePicker('bgImg');
                         handleBrowse();
                       }}
                     >
@@ -361,7 +360,7 @@ const CustomThemeForm = ({ previewTheme, setPreviewTheme }) => {
                     </Button>
                     {previewTheme?.bgImg ? (
                       <>
-                        <Avatar
+                        <Image
                           src={themeImagePath(previewTheme.bgImg)}
                           alt='background image'
                           w='50px'

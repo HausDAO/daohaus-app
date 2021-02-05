@@ -13,6 +13,7 @@ import {
   Spinner,
   Select,
   FormHelperText,
+  HStack,
 } from '@chakra-ui/react';
 import { useForm } from 'react-hook-form';
 import {
@@ -38,6 +39,7 @@ const DaoMetaForm = ({ metadata, handleUpdate }) => {
   const [loading, setLoading] = useState();
   const [uploading, setUploading] = useState();
   const { register, handleSubmit } = useForm();
+  console.log(metadata);
 
   const onSubmit = async (data) => {
     setLoading(true);
@@ -91,7 +93,7 @@ const DaoMetaForm = ({ metadata, handleUpdate }) => {
                 w='100%'
               >
                 <FormControl id='avatarImg' mb={4}>
-                  <Flex direction='row'>
+                  <HStack spacing={4}>
                     {ipfsHash || metadata.avatarImg ? (
                       <>
                         <Image
@@ -110,7 +112,7 @@ const DaoMetaForm = ({ metadata, handleUpdate }) => {
                       uploading={uploading}
                       metadata={metadata}
                     />
-                  </Flex>
+                  </HStack>
                 </FormControl>
                 <FormControl id='name' mb={4}>
                   <TextBox size='xs' mb={2}>

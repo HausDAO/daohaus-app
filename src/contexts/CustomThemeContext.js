@@ -9,6 +9,7 @@ export const CustomThemeContext = createContext();
 
 export const CustomThemeProvider = ({ children }) => {
   const [theme, setTheme] = useState(useDefault);
+  const [tempTheme, setTempTheme] = useState(null);
   // const [customCopy, setCustomCopy] = useState(null);
 
   const updateTheme = (themeData) => {
@@ -17,10 +18,16 @@ export const CustomThemeProvider = ({ children }) => {
     setTheme(newTheme);
   };
 
+  const updateTempTheme = (theme) => {
+    setTempTheme(theme);
+  };
+
   const resetTheme = () => setTheme(useDefault);
 
   return (
-    <CustomThemeContext.Provider value={{ theme, updateTheme, resetTheme }}>
+    <CustomThemeContext.Provider
+      value={{ theme, updateTheme, tempTheme, updateTempTheme, resetTheme }}
+    >
       <ChakraProvider theme={theme}>
         <OverlayProvider>{children}</OverlayProvider>
       </ChakraProvider>
@@ -29,6 +36,12 @@ export const CustomThemeProvider = ({ children }) => {
 };
 
 export const useCustomTheme = () => {
-  const { theme, updateTheme, resetTheme } = useContext(CustomThemeContext);
-  return { theme, updateTheme, resetTheme };
+  const {
+    theme,
+    updateTheme,
+    tempTheme,
+    updateTempTheme,
+    resetTheme,
+  } = useContext(CustomThemeContext);
+  return { theme, updateTheme, tempTheme, updateTempTheme, resetTheme };
 };
