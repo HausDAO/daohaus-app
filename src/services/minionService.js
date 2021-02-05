@@ -24,8 +24,11 @@ export const MinionService = ({ web3, minion, chainID }) => {
         return action;
       };
     }
-    if (service === 'propose' || service === 'executeAction') {
+    if (service === 'proposeAction' || service === 'executeAction') {
       return async ({ args, address, poll, onTxHash }) => {
+        console.log(args);
+        console.log(address);
+        console.log(poll);
         const tx = await contract.methods[service](...args);
         return tx
           .send('eth_requestAccounts', { from: address })
@@ -40,117 +43,5 @@ export const MinionService = ({ web3, minion, chainID }) => {
           });
       };
     }
-    // if (service === 'memberAddressByDelegateKey') {
-    //   return async (memberAddress) => {
-    //     const address = await contract.methods
-    //       .memberAddressByDelegateKey(memberAddress)
-    //       .call();
-    //     return address.toLowerCase();
-    //   };
-    // }
-    // if (
-    //   service === 'submitProposal' ||
-    //   service === 'sponsorProposal' ||
-    //   service === 'cancelProposal' ||
-    //   service === 'submitVote' ||
-    //   service === 'processProposal' ||
-    //   service === 'processWhitelistProposal' ||
-    //   service === 'processGuildKickProposal' ||
-    //   service === 'submitWhitelistProposal' ||
-    //   service === 'submitGuildKickProposal'
-    // ) {
-    //   return async ({ args, address, poll, onTxHash }) => {
-    //     // console.log('args', args);
-    //     // console.log('from', address);
-    //     // console.log('poll', poll);
-    //     const tx = await contract.methods[service](...args);
-    //     return tx
-    //       .send('eth_requestAccounts', { from: address })
-    //       .on('transactionHash', (txHash) => {
-    //         if (poll) {
-    //           onTxHash();
-    //           poll(txHash);
-    //         }
-    //       })
-    //       .on('error', (error) => {
-    //         console.error(error);
-    //       });
-    //   };
-    // }
   };
 };
-
-// import abi from '../contracts/minion.json';
-
-// export class MinionService {
-//   web3;
-//   contract;
-//   daoAddress;
-//   accountAddress;
-//   setupValues;
-
-//   constructor(web3, accountAddress, setupValues) {
-//     this.web3 = web3;
-//     this.contract = new web3.eth.Contract(abi, setupValues.minion);
-//     this.accountAddress = accountAddress;
-//     this.setupValues = setupValues;
-//   }
-
-//   // internal
-//   sendTx(options, callback) {
-//     const { from, name, params } = options;
-//     const tx = this.contract.methods[name](...params);
-//     return tx
-//       .send({ from: from })
-//       .on('transactionHash', (txHash) => {
-//         console.log('txHash', txHash);
-//         callback(txHash, options);
-//       })
-//       .on('error', (error) => {
-//         callback(null, error);
-//       });
-//   }
-
-//   async propose(actionTo, actionValue, actionData, description, callback) {
-//     console.log(
-//       'service',
-//       actionTo,
-//       actionValue,
-//       actionData,
-//       this.accountAddress,
-//       description,
-//     );
-
-//     const txReceipt = await this.sendTx(
-//       {
-//         from: this.accountAddress,
-//         name: 'proposeAction',
-//         params: [actionTo, actionVlaue, actionData, description],
-//       },
-//       callback,
-//     );
-//     return txReceipt.transactionHash;
-//   }
-
-//   async executeAction(proposalId, callback) {
-//     const txReceipt = await this.sendTx(
-//       {
-//         from: this.accountAddress,
-//         name: 'executeAction',
-//         params: [proposalId],
-//       },
-//       callback,
-//     );
-//     return txReceipt.transactionHash;
-//   }
-
-//   async getAction(proposalId) {
-//     let action;
-//     try {
-//       action = await this.contract.methods.actions(proposalId).call();
-//       return action;
-//     } catch {
-//       return undefined;
-//     }
-//   }
-// }

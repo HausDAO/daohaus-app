@@ -1,5 +1,5 @@
 import { getCopy } from '../utils/metadata';
-export const proposalTypes = (customTerms) => {
+export const proposalTypes = (customTerms, boosts) => {
   return [
     {
       name: 'Membership',
@@ -44,14 +44,14 @@ export const proposalTypes = (customTerms) => {
       comingSoon: false,
       show: true,
     },
-    // {
-    //   name: 'Transmutation',
-    //   subhead: 'Transmutation',
-    //   proposalType: 'transmutation',
-    //   image: 'themes/raidTheme/raidguild__swords-white.svg',
-    //   comingSoon: false,
-    //   show: api.transmutation,
-    // },
+    {
+      name: 'Transmutation',
+      subhead: 'Transmutation',
+      proposalType: 'transmutation',
+      image: 'swords-white.svg',
+      comingSoon: false,
+      show: boosts?.transmutation && boosts?.transmutation?.active,
+    },
   ];
 };
 

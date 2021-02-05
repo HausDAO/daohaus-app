@@ -18,7 +18,7 @@ import WhitelistProposalForm from '../forms/whitelistProposal';
 import GuildKickProposalForm from '../forms/guildKickProposal';
 import TradeProposalForm from '../forms/tradeProposal';
 import MinionSimpleProposalForm from '../forms/minionSimpleProposal';
-// import TransmutationProposal from '../forms/transmutationProposal';
+import TransmutationProposal from '../forms/transmutationProposal';
 import { getCopy } from '../utils/metadata';
 import { useMetaData } from '../contexts/MetaDataContext';
 import { useOverlay } from '../contexts/OverlayContext';
@@ -70,12 +70,12 @@ const ProposalFormModal = ({ proposalType, returnRoute }) => {
       subline: `Submit a Minion proposal here.`,
       form: <MinionSimpleProposalForm />,
     },
-    // transmutation: {
-    //   type: `New ${getCopy(customTerms, 'proposal')}`,
-    //   heading: `New Transmutation ${getCopy(customTerms, 'proposal')}`,
-    //   subline: `Submit a Transmutation proposal here.`,
-    //   form: <TransmutationProposal />,
-    // },
+    transmutation: {
+      type: `New ${getCopy(customTerms, 'proposal')}`,
+      heading: `New Transmutation ${getCopy(customTerms, 'proposal')}`,
+      subline: `Submit a Transmutation proposal here.`,
+      form: <TransmutationProposal />,
+    },
   };
 
   useEffect(() => {
