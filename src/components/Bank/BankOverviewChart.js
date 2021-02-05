@@ -68,7 +68,7 @@ const BankOverviewChart = ({ balances, dao }) => {
         setChartData(data);
       }
     }
-  }, [balances, timeframe, dao]);
+  }, [balances, timeframe, dao, prices]);
 
   const handleTimeChange = (time) => {
     setChartData([]);
