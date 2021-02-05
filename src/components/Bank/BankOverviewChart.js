@@ -68,7 +68,6 @@ const BankOverviewChart = ({ balances, dao }) => {
         setChartData(data);
       }
     }
-    // eslint-disable-next-line
   }, [balances, timeframe, dao]);
 
   const handleTimeChange = (time) => {

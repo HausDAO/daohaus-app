@@ -186,16 +186,16 @@ const UserDaoInit = () => {
     const daoNetwork = getChainDataByName(apiData.network);
     updateNetwork(daoNetwork);
 
-    let boosts = {};
-    if (apiData.boosts) {
-      boosts = apiData.boosts.reduce((boosts, boostData) => {
-        boosts[boostData.boostKey] = {
-          active: boostData.active,
-          metadata: boostData.boostMetadata,
-        };
-        return boosts;
-      }, {});
-    }
+    const boosts = apiData.boosts || {};
+    // if (apiData.boosts) {
+    //   boosts = apiData.boosts.reduce((boosts, boostData) => {
+    //     boosts[boostData.boostKey] = {
+    //       active: boostData.active,
+    //       metadata: boostData.boostMetadata,
+    //     };
+    //     return boosts;
+    //   }, {});
+    // }
 
     const version = 2;
 
