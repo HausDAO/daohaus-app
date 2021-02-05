@@ -13,6 +13,7 @@ import { tallyUSDs } from '../utils/tokenValue';
 // import ProfileBankList from '../components/profileBankList';
 import ActivitiesFeed from '../components/activitiesFeed';
 import { getProfileActivites } from '../utils/activities';
+import ProfileMenu from '../components/profileMenu';
 import ContentBox from '../components/ContentBox';
 import TextBox from '../components/TextBox';
 import { chainByID } from '../utils/chain';
@@ -166,8 +167,6 @@ const Profile = ({ members, overview, daoTokens, activities }) => {
                   )}
                 </Flex>
               </Flex>
-              {/* {profile?.job && <p>{profile.job}</p>}
-              {profile?.employer && <p>{profile.employer}</p>} */}
               <Flex w='48%' direction='column'>
                 <Flex justify='space-between'>
                   <Box>
@@ -192,9 +191,9 @@ const Profile = ({ members, overview, daoTokens, activities }) => {
                     </TextBox>
                   </Box>
                   <Box>
-                    {/* {profile.memberAddress ? (
-                      <ProfileMenu member={profile} />
-                    ) : null} */}
+                    {profile ? (
+                      <ProfileMenu member={{ ...currentMember, ...profile }} />
+                    ) : null}
                   </Box>
                 </Flex>
                 <Flex justify='space-between' align='flex-end' mt={4}>

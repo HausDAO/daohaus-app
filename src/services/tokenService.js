@@ -19,6 +19,16 @@ export const TokenService = ({
 
   const contract = new web3.eth.Contract(abi, tokenAddress);
   return (service) => {
+    if (service === 'symbol') {
+      return async () => {
+        try {
+          const symbol = await contract.methods.symbol().call();
+          return symbol;
+        } catch (error) {
+          console.error(error);
+        }
+      };
+    }
     if (service === 'balanceOf') {
       return async (queryAddress) => {
         try {

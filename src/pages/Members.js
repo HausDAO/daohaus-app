@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useParams } from 'react-router-dom';
-import { Flex, Box } from '@chakra-ui/react';
+import { Flex, Box, Stack } from '@chakra-ui/react';
 
 import ActivitiesFeed from '../components/activitiesFeed';
 import MemberCard from '../components/memberCard';
@@ -115,27 +115,30 @@ const Members = ({ members, activities }) => {
           </ContentBox>
         </Box>
         <Box w={['100%', null, null, null, '40%']}>
-          <Box style={scrolled ? scrolledStyle : null}>
-            {selectedMember ? (
-              <MemberInfo member={selectedMember} />
-            ) : (
-              <>
-                {daoMember && (
-                  <Flex justify='space-between' mb={5}>
-                    <TextBox size='xs'>Snapshot</TextBox>
-                    <TextBox
-                      as={Link}
-                      to={`/dao/${daochain}/${daoid}/profile/${daoMember.memberAddress}`}
-                      color='inherit'
-                      size='xs'
-                    >
-                      View My Profile
-                    </TextBox>
-                  </Flex>
-                )}
-                <MembersChart />
-              </>
-            )}
+          <Stack style={scrolled ? scrolledStyle : null} spacing={4}>
+            <Box>
+              {selectedMember ? (
+                <MemberInfo member={selectedMember} />
+              ) : (
+                <>
+                  {daoMember && (
+                    <Flex justify='space-between' mb={5}>
+                      <TextBox size='xs'>Snapshot</TextBox>
+                      <TextBox
+                        as={Link}
+                        to={`/dao/${daochain}/${daoid}/profile/${daoMember.memberAddress}`}
+                        color='inherit'
+                        size='xs'
+                      >
+                        View My Profile
+                      </TextBox>
+                    </Flex>
+                  )}
+                  <MembersChart />
+                </>
+              )}
+            </Box>
+
             {selectedMember ? (
               <ActivitiesFeed
                 limit={2}
@@ -149,7 +152,7 @@ const Members = ({ members, activities }) => {
                 hydrateFn={getMembersActivites}
               />
             ) : null}
-          </Box>
+          </Stack>
         </Box>
       </Flex>
     </>

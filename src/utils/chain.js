@@ -121,3 +121,23 @@ export const chainByName = (networkName) => {
 
   return supportedChains[networkKey];
 };
+
+export const txUri = (daochain) => {
+  switch (daochain) {
+    case '0x1': {
+      return `https://etherscan.io/tx/`;
+    }
+    case '0x2a': {
+      return `https://kovan.etherscan.io/tx/`;
+    }
+    case '0x4': {
+      return `https://rinkeby.etherscan.io/tx/`;
+    }
+    case '0x64': {
+      return `https://blockscout.com/poa/xdai/tx/`;
+    }
+    default: {
+      return `https://etherscan.io/tx/`;
+    }
+  }
+};

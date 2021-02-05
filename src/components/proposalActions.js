@@ -333,7 +333,7 @@ const ProposalVote = ({ proposal }) => {
   };
 
   const executeMinion = async (proposal) => {
-    // TODO: will nedd to check if it has been executed yet
+    // TODO: will need to check if it has been executed yet
     // const web3 = web3Connect?.web3
     //   ? web3Connect.web3
     //   : new Web3(new Web3.providers.HttpProvider(getRpcUrl(network)));
@@ -342,10 +342,49 @@ const ProposalVote = ({ proposal }) => {
     // };
     // const minionService = new MinionService(web3, user?.username, setupValues);
     // try {
+
     //   minionService.executeAction(proposal.proposalId, txCallBack);
     // } catch (err) {
     //   console.log('error: ', err);
     // }
+    const args = [proposal.proposalId];
+    try {
+      const poll = createPoll({ action: 'minionExecuteAction', cachePoll })({
+        daoID: daoid,
+        chainID: daochain,
+        proposalId: proposal.proposalId,
+        actions: {
+          onError: (error, txHash) => {
+            errorToast({
+              title: `There was an error.`,
+            });
+            resolvePoll(txHash);
+            console.error(`Could not find a matching proposal: ${error}`);
+            setLoading(false);
+          },
+          onSuccess: (txHash) => {
+            successToast({
+              title: 'Minion action executed.',
+            });
+            refreshDao();
+            resolvePoll(txHash);
+            setLoading(false);
+          },
+        },
+      });
+      const onTxHash = () => {
+        setProposalModal(false);
+        setTxInfoModal(true);
+      };
+      await MinionService({
+        web3: injectedProvider,
+        minion: proposal?.minionAddress,
+        chainID: daochain,
+      })('executeAction')({ args, address, poll, onTxHash });
+    } catch (err) {
+      setLoading(false);
+      console.log('error: ', err);
+    }
   };
 
   useEffect(() => {

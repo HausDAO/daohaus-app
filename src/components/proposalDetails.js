@@ -238,7 +238,7 @@ const ProposalDetails = ({ proposal }) => {
               Submitted By
             </TextBox>
             <Skeleton isLoaded={proposer}>
-              {proposer ? <UserAvatar user={proposer} /> : '--'}
+              {proposer ? <UserAvatar user={proposer} copyEnabled /> : '--'}
             </Skeleton>
           </Box>
           <Box>
@@ -246,7 +246,7 @@ const ProposalDetails = ({ proposal }) => {
               Recipient
             </TextBox>
             <Skeleton isLoaded={applicant}>
-              {applicant ? <UserAvatar user={applicant} /> : '--'}
+              {applicant ? <UserAvatar user={applicant} copyEnabled /> : '--'}
             </Skeleton>
           </Box>
           <Flex align='center'>
