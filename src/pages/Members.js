@@ -56,7 +56,7 @@ const Members = ({ members, activities }) => {
   };
 
   useEffect(() => {
-    if (members.length > 0) {
+    if (members && members.length > 0) {
       sortMembers();
     }
   }, [members, sort]);

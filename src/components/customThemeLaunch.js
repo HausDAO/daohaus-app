@@ -1,58 +1,32 @@
 import React, { useState } from 'react';
-import { Link as RouterLink } from 'react-router-dom';
-import { Box, Button, Heading, Text } from '@chakra-ui/react';
+import { Link as RouterLink, useParams } from 'react-router-dom';
+import { Box, Button, Heading, Spinner, Text } from '@chakra-ui/react';
 
-import { useDao } from '../contexts/DaoContext';
-// import { defaultTheme } from '../../themes/theme-defaults';
-import { boostPost } from '../utils/requests';
-import { useInjectedProvider } from '../contexts/InjectedProviderContext';
-import { useMetaData } from '../contexts/MetaDataContext';
+import { defaultTheme } from '../themes/defaultTheme';
 
-const CustomThemeLaunch = () => {
-  const [loading, setLoading] = useState(false);
-  // const [user] = useUser();
-  const { address, injectedProvider } = useInjectedProvider();
-  const { daochain, daoid } = useDao();
-  const [dao] = useDao();
-  // const { daoMetaData } = useMetaData();
-  // const [web3Connect] = useWeb3Connect();
-  // const [network] = useNetwork();
+const CustomThemeLaunch = ({ handleLaunch, loading, setLoading }) => {
+  const { daochain, daoid } = useParams();
   const [step, setStep] = useState(1);
 
-  const handleLaunch = async () => {
+  const onSubmit = async () => {
     setLoading(true);
+    const newTheme = defaultTheme;
+    delete newTheme.bgImg;
+    delete newTheme.avatarImg;
 
-    // const messageHash = web3Connect.web3.utils.sha3(dao.address);
-    // const signature = await web3Connect.web3.eth.personal.sign(
-    //   messageHash,
-    //   user.username,
-    // );
-
-    // const newTheme = defaultTheme;
-    // delete newTheme.bgImg;
-    // delete newTheme.avatarImg;
-    // const updateThemeObject = {
-    //   contractAddress: dao.address,
-    //   boostKey: 'customTheme',
-    //   metadata: newTheme,
-    //   network: network.network,
-    //   signature,
-    // };
-
-    // const result = await boostPost('dao/boost', updateThemeObject);
-
-    // if (result === 'success') {
-    //   updateDaoMetadata({
-    //     ...daoMetadata,
-    //     boosts: { ...daoMetadata, customTheme: newTheme },
-    //   });
-    //   setStep(2);
-    // } else {
-    //   alert('error: forbidden');
-    // }
-
-    setLoading(false);
+    const success = await handleLaunch(newTheme);
+    if (success) {
+      setStep('success');
+    }
   };
+
+  if (loading) {
+    return (
+      <Box w='90%'>
+        <Spinner />
+      </Box>
+    );
+  }
 
   return (
     <Box w='90%'>
@@ -64,15 +38,16 @@ const CustomThemeLaunch = () => {
           <Text my={6}>
             The first upgrade available is a customizable theme for your DAO.
             You can change the look and feel as well the verbage used to fit
-            your community&apos;s vibe. You must be a member to add this app.
+            your community&apos;s vibe.
           </Text>
-          <Button type='submit' disabled={loading} onClick={handleLaunch}>
+          <Text my={6}>You must be a member to add this app.</Text>
+          <Button type='submit' disabled={loading} onClick={onSubmit}>
             Add Custom Theme
           </Button>
         </>
       ) : null}
 
-      {step === 2 ? (
+      {step === 'success' ? (
         <>
           <Heading as='h4' size='md' fontWeight='100'>
             Custom Theme Added

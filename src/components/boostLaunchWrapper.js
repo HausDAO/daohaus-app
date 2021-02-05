@@ -10,28 +10,30 @@ import {
   // Text,
 } from '@chakra-ui/react';
 
-// import { boostPost } from '../../utils/requests';
 import CustomThemeLaunch from './customThemeLaunch';
 import NewMinionForm from '../forms/newMinion';
 import NotificationsLaunch from './notificationsLaunch';
-import { useHistory } from 'react-router-dom';
-// import { notificationBoostContent } from '../../content/boost-content';
+import { useParams } from 'react-router-dom';
+import { useInjectedProvider } from '../contexts/InjectedProviderContext';
+import { boostPost } from '../utils/metadata';
+import { useMetaData } from '../contexts/MetaDataContext';
 
 const BoostLaunchWrapper = ({ boost }) => {
   const [loading, setLoading] = useState(false);
-  // const [user] = useUser();
-  // const [dao] = useDao();
-  // const [daoMetadata, updateDaoMetadata] = useDaoMetadata();
-  // const [web3Connect] = useWeb3Connect();
-  // const [network] = useNetwork();
-  const history = useHistory();
-
-  console.log('BoostLaunchWrapper', boost);
+  const { address, injectedProvider, injectedChain } = useInjectedProvider();
+  const { daoid } = useParams();
+  const { refetchMetaData } = useMetaData();
 
   const renderBoostBody = () => {
     switch (boost.key) {
       case 'customTheme': {
-        return <CustomThemeLaunch />;
+        return (
+          <CustomThemeLaunch
+            handleLaunch={handleLaunch}
+            loading={loading}
+            setLoading={setLoading}
+          />
+        );
       }
       case 'vanillaMinion': {
         return <NewMinionForm />;
@@ -54,40 +56,37 @@ const BoostLaunchWrapper = ({ boost }) => {
   const handleLaunch = async (boostMetadata) => {
     setLoading(true);
 
-    console.log('boostMetadata', boostMetadata);
+    try {
+      const messageHash = injectedProvider.utils.sha3(daoid);
+      const signature = await injectedProvider.eth.personal.sign(
+        messageHash,
+        address,
+      );
 
-    // window.setTimeout(() => {
-    //   // alert("Hello");
-    //   history.push(`/dao/${dao.address}/settings/notifications`);
-    // }, 3000);
+      const updateThemeObject = {
+        contractAddress: daoid,
+        boostKey: boost.key,
+        metadata: boostMetadata,
+        network: injectedChain.network,
+        signature,
+      };
 
-    // const messageHash = web3Connect.web3.utils.sha3(dao.address);
-    // const signature = await web3Connect.web3.eth.personal.sign(
-    //   messageHash,
-    //   user.username,
-    // );
+      const result = await boostPost('dao/boost', updateThemeObject);
 
-    // const updateThemeObject = {
-    //   contractAddress: dao.address,
-    //   boostKey: boost.key,
-    //   metadata: boostMetadata,
-    //   network: network.network,
-    //   signature,
-    // };
-
-    // const result = await boostPost('dao/boost', updateThemeObject);
-
-    // if (result === 'success') {
-    //   updateDaoMetadata({
-    //     ...daoMetadata,
-    //     boosts: { ...daoMetadata, [boost.key]: boostMetadata },
-    //   });
-    //   setStep('success);
-    // } else {
-    //   alert('error: forbidden');
-    // }
-
-    // setLoading(false);
+      if (result === 'success') {
+        refetchMetaData();
+        setLoading(false);
+        return true;
+      } else {
+        setLoading(false);
+        alert('forbidden, are you an active dao member?');
+        return false;
+      }
+    } catch (err) {
+      console.log('err', err);
+      setLoading(false);
+      return false;
+    }
   };
 
   return <Box w='90%'>{renderBoostBody()}</Box>;

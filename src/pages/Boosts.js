@@ -16,10 +16,8 @@ const Boosts = () => {
   const { setGenericModal } = useOverlay();
 
   const renderBoostCard = (boost, i) => {
-    const boostData = daoMetaData?.boosts[boost.key];
+    const boostData = daoMetaData.boosts && daoMetaData.boosts[boost.key];
     const hasBoost = boostData && boostData.active;
-
-    console.log('boost', boost);
 
     return (
       <ContentBox
@@ -57,7 +55,7 @@ const Boosts = () => {
             {hasBoost ? (
               <Button
                 as={RouterLink}
-                to={`/dao/${daochain}/${daoid}/settings`}
+                to={`/dao/${daochain}/${daoid}/settings/${boost.successRoute}`}
                 textTransform='uppercase'
               >
                 Settings
@@ -91,7 +89,7 @@ const Boosts = () => {
         Available Apps
       </TextBox>
       <Flex wrap='wrap' justify='space-evenly'>
-        {daoMetaData?.boosts
+        {daoMetaData
           ? boostList.map((boost, i) => {
               return renderBoostCard(boost, i);
             })

@@ -5,6 +5,7 @@ export const boostList = [
     description: 'Customize the visual theme of your community',
     price: '0',
     modalName: 'customThemeLaunch',
+    successRoute: 'theme',
   },
   {
     name: 'Minion',
@@ -12,6 +13,7 @@ export const boostList = [
     description: 'Create and vote on execution of external contracts',
     price: '0',
     modalName: 'vanillaMinionLaunch',
+    successRoute: '',
   },
   {
     name: 'Discord Notificatons',
@@ -20,6 +22,7 @@ export const boostList = [
       'Customize and send notifications of DAO activity to your discord server',
     price: '0',
     modalName: 'notificationsLevel1Launch',
+    successRoute: 'notifications',
   },
   {
     name: 'MinionSafe',
@@ -28,6 +31,7 @@ export const boostList = [
     price: '0',
     comingSoon: true,
     modalName: 'minionSafeLaunch',
+    successRoute: '',
   },
   {
     name: 'Discourse Forum',
@@ -37,6 +41,7 @@ export const boostList = [
       'Add a forum for discussing proposals. Launch a new category in the DAOhaus Discourse forum and enable topic creation for all of your proposals.',
     price: '0',
     modalName: 'discourseLaunch',
+    successRoute: '',
   },
 ];
 
