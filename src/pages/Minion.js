@@ -29,18 +29,18 @@ import { useEffect } from 'react/cjs/react.development';
 // import ProposalFormModal from '../Modal/ProposalFormModal';
 // import GenericModal from '../Modal/GenericModal';
 import makeBlockie from 'ethereum-blockies-base64';
-// import { TokenService } from '../services/tokenService';
+import { TokenService } from '../services/tokenService';
 
 const MinionDetails = () => {
-  const { daoOverview } = useDao();
-  // const [members] = useMembers();
+  const { daoOverview, daoMembers } = useDao();
   // const [web3Connect] = useWeb3Connect();
   // const { modals, openModal } = useModals();
   const { currentDaoTokens } = useToken();
   const { daochain, daoid, minion } = useParams();
   const toast = useToast();
   const [minionData, setMinionData] = useState();
-  const [tokenBalances] = useState();
+  const [tokenBalances, setTokenBalances] = useState();
+  const [minionBalances, setMinionBalances] = useState();
   // const [proposalType, setProposalType] = useState();
   // const [proposalPresets, setProposalPresets] = useState();
   // const [withdrawSetup, setWithdrawSetup] = useState();
@@ -69,35 +69,49 @@ const MinionDetails = () => {
     setMinionData(_minionData);
   }, [daoOverview, minion]);
 
-  console.log(currentDaoTokens);
+  useEffect(() => {
+    console.log('daoMembers', daoMembers);
+    console.log('minion', minion);
+
+    if (daoMembers) {
+      const _minionBalances = daoMembers.find((member) => {
+        console.log(member.memberAddress);
+        if (member.memberAddress === minion) {
+          return member.tokenBalances;
+        }
+      });
+      console.log('_minionBalances', _minionBalances);
+      setMinionBalances(_minionBalances);
+    }
+    // eslint-disable-next-line
+  }, [daoMembers, minion]);
 
   useEffect(() => {
     if (!currentDaoTokens) {
+      return;
     }
-    // const getMinionBalances = async () => {
-    //   const _tokenBalances = {};
-    //   const promises = [];
-    //   const tokens = currentDaoTokens.map(async (b) => {
-    //     const tokenService = TokenService({
-    //       tokenAddress: b.tokenAddress,
-    //       chainID: daochain,
-    //     });
+    const getMinionBalances = async () => {
+      const _tokenBalances = {};
+      const promises = [];
 
-    //     promises.push(tokenService('balanceOf')(minion));
-    //     return b.tokenAddress;
-    //   });
-    //   const balances = await Promise.all(promises);
+      const tokens = currentDaoTokens.map((b) => {
+        const tokenService = TokenService({
+          tokenAddress: b.tokenAddress,
+          chainID: daochain,
+        });
+        const tokenPromise = tokenService('balanceOf')(minion);
+        promises.push(tokenPromise);
+        return b.tokenAddress;
+      });
+      const balances = await Promise.all(promises);
+      tokens.forEach((token, idx) => {
+        _tokenBalances[tokens[idx]] =
+          balances[idx] / 10 ** currentDaoTokens[idx].decimals;
+      });
+      setTokenBalances(_tokenBalances);
+    };
 
-    //   tokens.forEach((token, idx) => {
-    //     console.log(idx);
-    //     console.log(tokens);
-    //     _tokenBalances[tokens[idx]] =
-    //       balances[idx] / 10 ** currentDaoTokens[idx].decimals;
-    //   });
-    //   setTokenBalances(_tokenBalances);
-    // };
-
-    // getMinionBalances();
+    getMinionBalances();
   }, [currentDaoTokens, minion]);
 
   const handleDeposit = () => {
@@ -136,7 +150,7 @@ const MinionDetails = () => {
           />
           <TextBox size='md' align='center'>
             {' '}
-            Settings
+            Settings (under construction ( ͡° ͜ʖ ͡°) )
           </TextBox>
         </HStack>
       </Link>
@@ -192,11 +206,11 @@ const MinionDetails = () => {
                 <Stack spacing={2}>
                   <Heading fontSize='xl'>Get Balances</Heading>
                   {tokenBalances &&
-                    Object.keys(tokenBalances).map((token) => {
-                      console.log(token);
+                    Object.keys(tokenBalances).map((token, idx) => {
                       return (
-                        <Text key={token}>
-                          {token}: {tokenBalances[token]}
+                        <Text key={idx}>
+                          {currentDaoTokens[idx].symbol}: {tokenBalances[token]}
+                          <Button ml={6}>send</Button>
                         </Text>
                       );
                     })}
@@ -204,78 +218,20 @@ const MinionDetails = () => {
                 </Stack>
 
                 <Stack spacing={2}>
-                  <Heading fontSize='xl'>Minion Internal Balance</Heading>
+                  <Heading fontSize='xl'>Minion Internal Balances</Heading>
                   <HStack spacing={4}>
                     <Box>
-                      <TextBox>Parent:</TextBox>
+                      <TextBox>DAO:</TextBox>
                       <TextBox variant='value' size='xl'>
-                        0 weth
+                        {minionBalances ? (
+                          <Button ml={6}>Withdraw</Button>
+                        ) : (
+                          <Text>nothing to withdraw</Text>
+                        )}
                       </TextBox>
+                      <Button>Add Another DAO</Button>
                     </Box>
-                    <Button w='15%'>Add Dao</Button>
                   </HStack>
-                </Stack>
-
-                <Stack spacing={2}>
-                  <Heading fontSize='xl'>
-                    Deposit, Withdraw, & Fetch From DAO
-                  </Heading>
-                  <HStack spacing={2}>
-                    <Button onClick={handleDeposit} w='15%' fontSize='xs'>
-                      Depost from DAO proposal
-                    </Button>
-                    <Button onClick={handleDeposit} w='15%' fontSize='xs'>
-                      Transfer Minion Funds
-                    </Button>
-                    <Button
-                      onClick={handleMinionWithdraw}
-                      w='20%'
-                      fontSize='xs'
-                    >
-                      Withdraw funds from DAO to Minion
-                    </Button>
-                    <Button
-                      onClick={handleMinionWithdraw}
-                      w='20%'
-                      fontSize='xs'
-                    >
-                      Withdraw funds from another DAO to DAO
-                    </Button>
-                  </HStack>
-                </Stack>
-
-                <Stack spacing={2}>
-                  <Heading fontSize='xl'>New Prop/ Forged Prop</Heading>
-                  <HStack spacing={2}>
-                    <Button onClick={handleNewMinion} w='15%' fontSize='xs'>
-                      New Minion proposal
-                    </Button>
-                    <Button
-                      onClick={handleNewMinion}
-                      w='15%'
-                      isDisabled={true}
-                      fontSize='xs'
-                    >
-                      Proposal on another DAO
-                    </Button>
-                    <Button w='20%' isDisabled={true} fontSize='xs'>
-                      Forged Tool airdrop funds to member/s
-                    </Button>
-                    <Button w='20%' isDisabled={true} fontSize='xs'>
-                      Forged Tool stream funds to member/s
-                    </Button>
-                    <Button w='15%' isDisabled={true} fontSize='xs'>
-                      Forged Tool mint NFT
-                    </Button>
-                  </HStack>
-                </Stack>
-                <Stack>
-                  <Heading fontSize='xl'>Activity</Heading>
-                  <List>
-                    <ListItem>Proposal 1</ListItem>
-                    <ListItem>Proposal 2</ListItem>
-                    <ListItem>Proposal 3</ListItem>
-                  </List>
                 </Stack>
               </Stack>
             </Box>
