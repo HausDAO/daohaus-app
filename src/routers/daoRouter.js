@@ -13,6 +13,8 @@ import NewProposal from '../pages/NewProposal';
 import Settings from '../pages/Settings';
 import Allies from '../pages/Allies';
 import Boosts from '../pages/Boosts';
+import Minion from '../pages/Minion';
+import ThemeBuilder from '../pages/ThemeBuilder';
 import { useToken } from '../contexts/TokenContext';
 import Layout from '../components/layout';
 import { useMetaData } from '../contexts/MetaDataContext';
@@ -74,14 +76,20 @@ const DaoRouter = () => {
         {/* <Route exact path={`${path}/settings/notifications`}>
           <Notifications />
         </Route> */}
-        {/* <Route exact path={`${path}/settings/theme`}>
+        <Route exact path={`${path}/settings/theme`}>
           <ThemeBuilder />
-        </Route> */}
+        </Route>
         <Route exact path={`${path}/settings`}>
           <Settings overview={daoOverview} />
         </Route>
         <Route exact path={`${path}/settings/meta`}>
           <Meta overview={daoOverview} />
+        </Route>
+        <Route
+          exact
+          path={`${path}/settings/minion/:minion`} // path={`${path}/settings/minion/:minion(\b0x[0-9a-f]{10,40}\b)`}
+        >
+          <Minion />
         </Route>
         <Route exact path={`${path}/allies`}>
           <Allies />

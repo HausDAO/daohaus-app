@@ -8,26 +8,26 @@ import { useDaoMember } from '../contexts/DaoMemberContext';
 import DaoMetaForm from '../forms/daoMetaForm';
 
 const Meta = () => {
-  const { apiMetaData, refetchMetaData } = useMetaData();
+  const { daoMetaData, refetchMetaData } = useMetaData();
   const { isMember } = useDaoMember();
   const [localMetadata, setLocalMetadata] = useState();
   const history = useHistory();
   const { daochain, daoid } = useParams();
 
   useEffect(() => {
-    if (apiMetaData && !localMetadata) {
+    if (daoMetaData && !localMetadata) {
       setLocalMetadata({
-        address: apiMetaData.contractAddress,
-        name: apiMetaData.name,
-        description: apiMetaData.description,
-        purpose: apiMetaData.purpose,
-        links: apiMetaData.links,
-        avatarImg: apiMetaData.avatarImg,
-        version: apiMetaData.version,
-        tags: apiMetaData.tags,
+        address: daoMetaData.contractAddress,
+        name: daoMetaData.name,
+        description: daoMetaData.description,
+        purpose: daoMetaData.purpose,
+        links: daoMetaData.links,
+        avatarImg: daoMetaData.avatarImg,
+        version: daoMetaData.version,
+        tags: daoMetaData.tags,
       });
     }
-  }, [apiMetaData, localMetadata]);
+  }, [daoMetaData, localMetadata]);
 
   const handleUpdate = () => {
     refetchMetaData();

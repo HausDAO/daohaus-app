@@ -126,33 +126,32 @@ const TransmutationProposal = () => {
 
   // get getToken
   useEffect(() => {
-    const getGetTokenBalance = async () => {
-      const getTokenAddress = transmutationData[0].getToken;
-      const tokenArray = dao.graphData.tokenBalances.filter(
-        (token) =>
-          token.token.tokenAddress === getTokenAddress.toLowerCase() &&
-          token.guildBank,
-      );
-
-      if (!tokenArray) {
-        setTokenData([]);
-        return;
-      }
-      setTokenData(
-        tokenArray
-          .filter((token) => token)
-          .map((token) => ({
-            label: token.token.symbol || token.token.tokenAddress,
-            value: token.token.tokenAddress,
-            decimals: token.token.decimals,
-            balanceWei: token.tokenBalance,
-            balance: utils.fromWei(token.tokenBalance),
-          })),
-      );
-    };
-    if (transmutationService) {
-      getGetTokenBalance();
-    }
+    // const getGetTokenBalance = async () => {
+    //   const getTokenAddress = transmutationData[0].getToken;
+    //   const tokenArray = dao.graphData.tokenBalances.filter(
+    //     (token) =>
+    //       token.token.tokenAddress === getTokenAddress.toLowerCase() &&
+    //       token.guildBank,
+    //   );
+    //   if (!tokenArray) {
+    //     setTokenData([]);
+    //     return;
+    //   }
+    //   setTokenData(
+    //     tokenArray
+    //       .filter((token) => token)
+    //       .map((token) => ({
+    //         label: token.token.symbol || token.token.tokenAddress,
+    //         value: token.token.tokenAddress,
+    //         decimals: token.token.decimals,
+    //         balanceWei: token.tokenBalance,
+    //         balance: utils.fromWei(token.tokenBalance),
+    //       })),
+    //   );
+    // };
+    // if (transmutationService) {
+    //   getGetTokenBalance();
+    // }
     // eslint-disable-next-line
   }, [balance]);
 
@@ -162,16 +161,16 @@ const TransmutationProposal = () => {
 
   const onSubmit = async (values) => {
     setLoading(true);
-    try {
-      await transmutationService.propose(
-        values.applicant,
-        values.paymentRequested,
-        values.description,
-        txCallBack,
-      );
-    } catch (e) {
-      console.error(`Error processing proposal: ${e.toString()}`);
-    }
+    // try {
+    //   await transmutationService.propose(
+    //     values.applicant,
+    //     values.paymentRequested,
+    //     values.description,
+    //     txCallBack,
+    //   );
+    // } catch (e) {
+    //   console.error(`Error processing proposal: ${e.toString()}`);
+    // }
   };
 
   return (

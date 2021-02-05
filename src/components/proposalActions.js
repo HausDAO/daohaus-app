@@ -363,7 +363,7 @@ const ProposalVote = ({ proposal }) => {
       }
       setMinionDeets(action);
     };
-    if (proposal?.proposalId) {
+    if (proposal?.proposalId && proposal?.minionAddress) {
       getMinionDeets();
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
