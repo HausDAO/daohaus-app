@@ -33,7 +33,6 @@ export const formatBoosts = (boostsArr) =>
   }, {});
 
 export const themeImagePath = (imageValue) => {
-  console.log(imageValue);
   if (
     !imageValue ||
     imageValue.slice(0, 1) === '/' ||

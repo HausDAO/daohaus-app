@@ -5,6 +5,7 @@ import { DAO_POLL } from '../graphQL/dao-queries';
 import { getGraphEndpoint } from '../utils/chain';
 import { hashMaker, memberVote } from '../utils/proposalUtils';
 import { TokenService } from '../services/tokenService';
+import { MolochService } from './molochService';
 
 /// //////////CALLS///////////////
 const pollProposals = async ({ daoID, chainID }) =>
@@ -42,6 +43,24 @@ const pollMolochSummon = async ({ chainID, summoner, createdAt }) => {
       summoner,
       createdAt,
     },
+  });
+};
+
+const pollBabe = async ({ chainID, daoID, daoVersion, tokenAddress }) => {
+  console.log('chainID', chainID);
+  console.log('daoID', daoID);
+  console.log('daoVersion', daoVersion);
+  console.log('tokenAddress', tokenAddress);
+
+  const BABE = '0x000000000000000000000000000000000000baBe';
+
+  return await MolochService({
+    chainID,
+    daoAddress: daoID,
+    version: daoVersion,
+  })('getUserTokenBalance')({
+    userAddress: BABE,
+    tokenAddress,
   });
 };
 
@@ -143,6 +162,20 @@ const cancelProposalTest = (data, shouldEqual, pollId) => {
     clearInterval(pollId);
     throw new Error(
       `Poll test did recieve the expected results from the graph: ${data}`,
+    );
+  }
+};
+
+const collectTokenTest = (newBabeVal, tokenContractVal, pollId) => {
+  console.log('newBabeVal', newBabeVal);
+  console.log('tokenContractVal', tokenContractVal);
+  console.log('pollId', pollId);
+  if (newBabeVal) {
+    return +newBabeVal === +tokenContractVal;
+  } else {
+    clearInterval(pollId);
+    throw new Error(
+      `Poll for collect tokens did not recieve new Babe value from the contract: ${newBabeVal}`,
     );
   }
 };
@@ -441,6 +474,55 @@ export const createPoll = ({
           pollArgs: { chainID, summoner, createdAt },
         });
       }
+    };
+  } else if (action === 'collectTokens') {
+    return ({ token, actions, chainID, daoID }) => (txHash) => {
+      console.log('Poll Args: token', token);
+      console.log('Poll Args: actions', actions);
+      console.log('Poll Args: chainID', chainID);
+      console.log('Poll Args: daoID', daoID);
+      console.log('Poll Args: txHash', txHash);
+
+      if (!token?.contractBalances?.token)
+        throw new Error(
+          `token object does not contain .contractBalances.token`,
+        );
+      if (!token?.moloch?.version)
+        throw new Error(`token object does not contain .moloch.version`);
+
+      startPoll({
+        pollFetch: pollBabe,
+        testFn: collectTokenTest,
+        shouldEqual: token.contractBalances.token,
+        args: {
+          chainID,
+          daoID,
+          daoVersion: token?.moloch?.version,
+          tokenAddress: token?.tokenAddress,
+        },
+        actions,
+        txHash,
+      });
+      cachePoll({
+        txHash,
+        action,
+        timeSent: Date.now(),
+        status: 'unresolved',
+        resolvedMsg: `Token Value Synced`,
+        unresolvedMsg: `Syncing Token Value`,
+        successMsg: `Token value has been synced`,
+        errorMsg: `Error syncing token value`,
+        pollData: {
+          action,
+          interval,
+          tries,
+        },
+        pollArgs: {
+          chainID,
+          daoID,
+          token,
+        },
+      });
     };
   }
 };

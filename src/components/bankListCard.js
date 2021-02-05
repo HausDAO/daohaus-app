@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Flex, Box, Skeleton, Image } from '@chakra-ui/react';
 
 // import Withdraw from '../../Forms/Withdraw';
@@ -6,49 +6,53 @@ import { Flex, Box, Skeleton, Image } from '@chakra-ui/react';
 // import { useMemberWallet } from '../../../contexts/PokemolContext';
 // import { getMainetAddresses } from '../../../utils/requests';
 import { numberWithCommas } from '../utils/general';
+import SyncTokenButton from './syncTokenButton';
+import { useDaoMember } from '../contexts/DaoMemberContext';
 
 const TokenListCard = ({
   token,
   isLoaded,
   isMember,
-  isBank,
+  isBank = true,
   hasAction,
-  version,
+  view,
+  version = '2.1',
 }) => {
   // const [memberWallet] = useMemberWallet();
-  // const [hasBalance, setHasBalance] = useState();
-  // const [needsSync, setNeedsSync] = useState();
+  const { daoMember } = useDaoMember();
+  const [hasBalance, setHasBalance] = useState(null);
+  const [needsSync, setNeedsSync] = useState(null);
   const [optimisticWithdraw] = useState(false);
-  // const [optimisticSync, setOptimisticSync] = useState(false);
+  const [optimisticSync, setOptimisticSync] = useState(false);
   // const [tokenMainnetAddress, setTokenMainnetAddress] = useState();
 
-  // useEffect(() => {
-  //   setHasBalance(isMember && +token.tokenBalance > 0);
-  //   if (version === '2.1') {
-  //     setNeedsSync(
-  //       memberWallet &&
-  //         memberWallet.activeMember &&
-  //         isBank &&
-  //         token.contractBalances.token !== token.contractBalances.babe,
-  //     );
-  //   } else {
-  //     setNeedsSync(
-  //       memberWallet &&
-  //         memberWallet.activeMember &&
-  //         isBank &&
-  //         +token.tokenBalance > 0 &&
-  //         token.contractBalances.token !== token.contractBalances.babe,
-  //     );
-  //   }
-  // }, [token, isMember, isBank, version, memberWallet]);
+  useEffect(() => {
+    if (token?.contractBalances) {
+      // setHasBalance(isMember && +token.tokenBalance);
+      if (version === '2.1') {
+        const isAccurateBalance =
+          daoMember?.hasWallet &&
+          isBank &&
+          token.contractBalances.token !== token.contractBalances.babe;
+        setNeedsSync(isAccurateBalance);
+      } else {
+        const isAccurateBalance =
+          daoMember &&
+          isBank &&
+          +token.tokenBalance &&
+          token.contractBalances.token !== token.contractBalances.babe;
+        setNeedsSync(isAccurateBalance);
+      }
+    }
+  }, [token, isBank, version, daoMember]);
 
-  // const checkOptimisticBalance = () => {
-  //   return optimisticSync
-  //     ? token.contractBalances.token -
-  //         token.contractBalances.babe +
-  //         +token.tokenBalance
-  //     : +token.tokenBalance;
-  // };
+  const checkOptimisticBalance = () => {
+    return optimisticSync
+      ? token.contractBalances.token -
+          token.contractBalances.babe +
+          +token.tokenBalance
+      : +token.tokenBalance;
+  };
 
   // useEffect(() => {
   //   const fetchMainnetAddresses = async () => {
@@ -63,10 +67,6 @@ const TokenListCard = ({
   //   };
   //   fetchMainnetAddresses();
   // }, [token]);
-
-  // const tokenImageUrl = tokenMainnetAddress
-  //   ? `https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/${tokenMainnetAddress}/logo.png`
-  //   : null;
 
   return (
     <Flex h='60px' align='center'>
@@ -141,17 +141,10 @@ const TokenListCard = ({
               />
             </Skeleton>
           ) : null}
-
-          {needsSync && !optimisticSync ? (
-            <Skeleton isLoaded={isLoaded}>
-              <SyncToken
-                tokenBalance={token}
-                setOptimisticSync={setOptimisticSync}
-              />
-            </Skeleton>
-          ) : null}
-        </Box>
-      ) : null} */}
+*/}
+      {needsSync && !optimisticSync && (
+        <SyncTokenButton token={token} setOptimisticSync={setOptimisticSync} />
+      )}
     </Flex>
   );
 };
