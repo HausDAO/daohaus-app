@@ -5,8 +5,11 @@ const metadataApiUrl = 'https://data.daohaus.club';
 
 export const fetchMetaData = async (endpoint) => {
   const url = `${metadataApiUrl}/dao/${endpoint}`;
+
+  console.log('url', url);
   try {
     const response = await fetch(url);
+
     return response.json();
   } catch (err) {
     throw new Error(err);
@@ -33,7 +36,6 @@ export const formatBoosts = (boostsArr) =>
   }, {});
 
 export const themeImagePath = (imageValue) => {
-  console.log(imageValue);
   if (
     !imageValue ||
     imageValue.slice(0, 1) === '/' ||

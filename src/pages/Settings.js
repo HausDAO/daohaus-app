@@ -15,7 +15,6 @@ const Settings = () => {
   const { daochain, daoid } = useParams();
   const { daoMember } = useDaoMember();
   const { daoOverview } = useDao();
-  console.log(daoOverview);
 
   return (
     <Flex wrap='wrap'>

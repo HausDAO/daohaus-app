@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Link as RouterLink } from 'react-router-dom';
+import { Link as RouterLink, useParams } from 'react-router-dom';
 import {
   Box,
   Button,
@@ -13,39 +13,44 @@ import {
 } from '@chakra-ui/react';
 import { useForm } from 'react-hook-form';
 
-import { useDao } from '../contexts/DaoContext';
 import { notificationBoostContent } from '../content/boost-content';
 import { get } from '../utils/requests';
 
-const NotificationsLaunch = ({ handleLaunch, loading, setLoading }) => {
-  const { dao } = useDao();
+const NotificationsLaunch = ({
+  handleLaunch,
+  loading,
+  setLoading,
+  stepOverride,
+}) => {
   const { handleSubmit, register, getValues } = useForm();
+  const { daoid, daochain } = useParams();
   const [connectionError, setConnectionError] = useState();
   const [isConnected, setIsConnected] = useState();
-
-  const [step, setStep] = useState('intro');
+  const [step, setStep] = useState(stepOverride || 'intro');
 
   const onSubmit = async (values) => {
+    setLoading(true);
     const boostMetadata = [
       {
-        discord: {
-          channelId: values.channelId,
-        },
+        type: 'discord',
+        channelId: values.channelId,
+        active: true,
         actions: ['votingPeriod', 'rageQuit', 'newProposal'],
       },
     ];
-    handleLaunch(boostMetadata);
-    setStep('success');
+    const success = await handleLaunch(boostMetadata);
+    console.log('success', success);
+
+    if (success) {
+      setStep('success');
+    }
   };
 
   const testConnection = async () => {
     setLoading(true);
     const values = getValues();
 
-    // TODO: ERROR ON 'SUCCESS'
     const res = await get(`dao/discord-status/${values.channelId}`);
-
-    console.log('res', res);
     if (res.error) {
       setConnectionError(res.error);
     } else {
@@ -60,7 +65,7 @@ const NotificationsLaunch = ({ handleLaunch, loading, setLoading }) => {
       {step === 'intro' ? (
         <>
           <Heading as='h4' size='md' fontWeight='100'>
-            Add Notifications Level 1
+            Add Discord Notifications
           </Heading>
           <Text my={6}>
             Hook up dao activity notifications to your Discord server.
@@ -72,7 +77,7 @@ const NotificationsLaunch = ({ handleLaunch, loading, setLoading }) => {
       {step === 'directions1' ? (
         <>
           <Heading as='h4' size='md' fontWeight='100'>
-            Notification Level 1 - Setup Instructions
+            Discord Notifications - Setup Instructions
           </Heading>
           <Text mt={6} fontWeight={700}>
             Step 1
@@ -99,15 +104,23 @@ const NotificationsLaunch = ({ handleLaunch, loading, setLoading }) => {
 
       {step === 'directions2' ? (
         <>
-          <Heading as='h4' size='md' fontWeight='100'>
-            Notification Level 1 - Setup Instructions
-          </Heading>
-          <Text mt={6} fontWeight={700}>
-            Step 2
-          </Text>
-          <Text mb={6}>Get the Discord channel ID</Text>
+          {!stepOverride ? (
+            <>
+              <Heading as='h4' size='md' fontWeight='100'>
+                Discord Notifications - Setup Instructions
+              </Heading>
+              <Text mt={6} fontWeight={700}>
+                Step 2
+              </Text>
+              <Text mb={6}>Get the Discord channel ID</Text>
+            </>
+          ) : (
+            <Heading as='h4' size='md' fontWeight='100'>
+              Change the Discord channel ID
+            </Heading>
+          )}
           <Text mb={3} fontSize='xs'>
-            In Discord, open your User Settings -> Appearance -> Enable
+            In Discord, open your User Settings &gt; Appearance &gt; Enable
             Developer Mode. Right click on the Discord text channel you want the
             bot to interact with and press “Copy ID”.
           </Text>
@@ -144,7 +157,9 @@ const NotificationsLaunch = ({ handleLaunch, loading, setLoading }) => {
               <>
                 <Text mb={2}>Success!</Text>
                 <Button type='submit' isLoading={loading}>
-                  Launch Notifications
+                  {stepOverride
+                    ? 'Update Notifications'
+                    : 'Launch Notifications'}
                 </Button>
               </>
             )}
@@ -159,16 +174,16 @@ const NotificationsLaunch = ({ handleLaunch, loading, setLoading }) => {
           ) : (
             <>
               <Heading as='h4' size='md' fontWeight='100'>
-                Notification Level 1 Added
+                Discord Notifications Added
               </Heading>
               <Text my={6}>
                 We have turned on a couple notifications for you. You can edit
-                these later in Settings > Notifications.
+                these later in Settings &gt; Notifications.
               </Text>
 
               <Button
                 as={RouterLink}
-                to={`/dao/${dao.address}/settings/notifications`}
+                to={`/dao/${daochain}/${daoid}/settings/notifications`}
               >
                 Manage Settings
               </Button>

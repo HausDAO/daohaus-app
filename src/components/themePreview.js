@@ -23,7 +23,7 @@ const ThemePreview = ({ previewValues }) => {
       m={6}
       h='600px'
       bgImage={`url(${
-        previewValues.bgImg.slice(0, 2) === 'Qm'
+        previewValues.bgImg?.slice(0, 2) === 'Qm'
           ? `https://ipfs.infura.io/ipfs/${previewValues.bgImg}`
           : previewValues.bgImg
       })`}
@@ -37,7 +37,7 @@ const ThemePreview = ({ previewValues }) => {
     >
       <Flex h='900px' w='100px' justify='center' bg={previewValues.primary500}>
         <Image
-          src={themeImagePath(daoMetaData.avatarImg)}
+          src={themeImagePath(daoMetaData?.avatarImg)}
           borderRadius='40px'
           height='50px'
           width='50px'

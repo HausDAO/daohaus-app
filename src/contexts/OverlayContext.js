@@ -11,6 +11,7 @@ export const OverlayProvider = ({ children }) => {
   const [proposalModal, setProposalModal] = useState(false);
   const [txInfoModal, setTxInfoModal] = useState(false);
   const [imageUploadModal, setImageUploadModal] = useState(false);
+  const [genericModal, setGenericModal] = useState({});
 
   const errorToast = (content) => {
     toast({
@@ -61,6 +62,8 @@ export const OverlayProvider = ({ children }) => {
         setTxInfoModal,
         imageUploadModal,
         setImageUploadModal,
+        genericModal,
+        setGenericModal,
       }}
     >
       {children}
@@ -87,6 +90,8 @@ export const useOverlay = () => {
     setTxInfoModal,
     imageUploadModal,
     setImageUploadModal,
+    genericModal,
+    setGenericModal,
   } = useContext(OverlayContext);
   return {
     daoSwitcherModal,
@@ -104,5 +109,7 @@ export const useOverlay = () => {
     setTxInfoModal,
     imageUploadModal,
     setImageUploadModal,
+    genericModal,
+    setGenericModal,
   };
 };
