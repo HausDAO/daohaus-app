@@ -161,10 +161,79 @@ export const determineUnreadActivityFeed = (proposal) => {
   };
 };
 
-export const getProposalCountdownText = (proposal) => {
-  if (proposal.InQueue) {
-    return (
-      <Fragment>
+export const determineUnreadProposalList = (
+  proposal,
+  activeMember,
+  memberAddress,
+) => {
+  const abortedOrCancelled = proposal.aborted || proposal.cancelled;
+  const now = (new Date() / 1000) | 0;
+  const inVotingPeriod =
+    now >= +proposal.votingPeriodStarts && now <= +proposal.votingPeriodEnds;
+
+  const memberVoted = proposal.votes.some(
+    (vote) => vote.memberAddress.toLowerCase() === memberAddress.toLowerCase(),
+  );
+  const needsMemberVote = activeMember && inVotingPeriod && !memberVoted;
+
+  const needsProcessing =
+    now >= +proposal.gracePeriodEnds && !proposal.processed;
+
+  let message;
+  if (!proposal.sponsored) {
+    message = 'New and unsponsored';
+  }
+  if (needsProcessing) {
+    message = 'Unprocessed';
+  }
+  if (needsMemberVote) {
+    message = "You haven't voted on this";
+  }
+
+  return {
+    unread:
+      !abortedOrCancelled &&
+      (needsMemberVote || needsProcessing || !proposal.sponsored),
+    message,
+  };
+};
+
+export function getProposalCountdownText(proposal) {
+  switch (proposal.status) {
+    case ProposalStatus.InQueue:
+      return (
+        <Fragment>
+          <Box textTransform='uppercase' fontSize='0.8em' fontWeight={700}>
+            Voting Begins {timeToNow(proposal.votingPeriodStarts)}
+          </Box>
+        </Fragment>
+      );
+    case ProposalStatus.VotingPeriod:
+      return (
+        <Fragment>
+          <Box textTransform='uppercase' fontSize='0.8em' fontWeight={700}>
+            Voting Ends {timeToNow(proposal.votingPeriodEnds)}
+          </Box>
+        </Fragment>
+      );
+    case ProposalStatus.GracePeriodEnds:
+      return (
+        <Fragment>
+          <Box textTransform='uppercase' fontSize='0.8em' fontWeight={700}>
+            <Box as='span' fontWeight={900}>
+              Grace Period Ends {timeToNow(proposal.gracePeriodEnds)}
+            </Box>
+          </Box>
+        </Fragment>
+      );
+    case ProposalStatus.Passed:
+      return (
+        <Box textTransform='uppercase' fontSize='0.8em' fontWeight={700}>
+          Passed
+        </Box>
+      );
+    case ProposalStatus.Failed:
+      return (
         <Box textTransform='uppercase' fontSize='0.8em' fontWeight={700}>
           Voting Begins {timeToNow(proposal.votingPeriodStarts)}
         </Box>

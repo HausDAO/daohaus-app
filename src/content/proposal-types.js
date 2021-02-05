@@ -36,21 +36,21 @@ export const proposalTypes = (daoMetaData) => {
       image: 'swords-white.svg',
       show: true,
     },
-    // {
-    //   name: 'Minion',
-    //   subhead: 'Minion Simple',
-    //   proposalType: 'minion',
-    //   image: 'swords-white.svg',
-    //   comingSoon: false,
-    //   show: true,
-    // },
+    {
+      name: 'Minion',
+      subhead: 'Minion Simple',
+      proposalType: 'minion',
+      image: 'swords-white.svg',
+      comingSoon: false,
+      show: true,
+    },
     // {
     //   name: 'Transmutation',
     //   subhead: 'Transmutation',
     //   proposalType: 'transmutation',
     //   image: 'themes/raidTheme/raidguild__swords-white.svg',
     //   comingSoon: false,
-    //   show: dao?.boosts?.transmutation,
+    //   show: api.transmutation,
     // },
   ];
 };

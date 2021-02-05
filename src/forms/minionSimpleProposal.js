@@ -15,37 +15,40 @@ import {
   Switch,
   Spinner,
 } from '@chakra-ui/react';
+import { useParams } from 'react-router-dom';
 import { RiErrorWarningLine } from 'react-icons/ri';
 import { AiOutlineCaretDown } from 'react-icons/ai';
 
-import {
-  useDao,
-  useModals,
-  useNetwork,
-  useTxProcessor,
-  useUser,
-  useWeb3Connect,
-} from '../../../contexts/PokemolContext';
-import TextBox from '../../Shared/TextBox';
-import { MinionService } from '../../../utils/minion-service';
-import { supportedChains } from '../../../utils/chains';
+// import {
+//   useDao,
+//   useModals,
+//   useNetwork,
+//   useTxProcessor,
+//   useUser,
+//   useWeb3Connect,
+// } from '../../../contexts/PokemolContext';
+import { useInjectedProvider } from '../contexts/InjectedProviderContext';
+import { useDao } from '../contexts/DaoContext';
+import TextBox from '../components/TextBox';
+import { MinionService } from '../services/minionService';
+import { supportedChains, chainByID } from '../utils/chain';
 
 const MinionProposalForm = () => {
   const [loading, setLoading] = useState(false);
   const [abiLoading, setAbiLoading] = useState(false);
-  const [user] = useUser();
-  const [dao] = useDao();
-  const [web3Connect] = useWeb3Connect();
-  const [network] = useNetwork();
+  const { daoOverview } = useDao();
+  const { daochain } = useParams();
+  const { address, injectedProvider } = useInjectedProvider();
+  // const [network] = useNetwork();
 
-  const [txProcessor, updateTxProcessor] = useTxProcessor();
+  // const [txProcessor, updateTxProcessor] = useTxProcessor();
   const [currentError, setCurrentError] = useState(null);
   const [abiFunctions, setAbiFunctions] = useState();
   const [selectedFunction, setSelectedFunction] = useState();
   const [abiParams, setAbiParams] = useState();
   const [hexSwitch, setHexSwitch] = useState();
   const [minions, setMinions] = useState([]);
-  const { closeModals } = useModals();
+  // const { closeModals } = useModals();
 
   const {
     handleSubmit,
@@ -55,14 +58,14 @@ const MinionProposalForm = () => {
   } = useForm();
 
   useEffect(() => {
-    if (dao?.graphData?.minions) {
-      const _minions = dao.graphData.minions.map(
+    if (daoOverview?.minions) {
+      const _minions = daoOverview.minions.map(
         (minion) => minion.minionAddress,
       );
       setMinions(_minions);
     }
     // eslint-disable-next-line
-  }, [dao?.graphData?.minions]);
+  }, [daoOverview?.minions]);
 
   useEffect(() => {
     if (Object.keys(errors).length > 0) {
@@ -76,83 +79,83 @@ const MinionProposalForm = () => {
     }
   }, [errors]);
 
-  const txCallBack = (txHash, details) => {
-    console.log('txCallBack', txProcessor);
-    if (txProcessor && txHash) {
-      txProcessor.setTx(txHash, user.username, details, true, false, false);
-      txProcessor.forceCheckTx = true;
+  // const txCallBack = (txHash, details) => {
+  //   console.log('txCallBack', txProcessor);
+  //   if (txProcessor && txHash) {
+  //     txProcessor.setTx(txHash, user.username, details, true, false, false);
+  //     txProcessor.forceCheckTx = true;
 
-      updateTxProcessor(txProcessor);
-      // close model here
-      closeModals();
-    }
-    if (!txHash) {
-      console.log('error: ', details);
-      setLoading(false);
-    }
-  };
+  //     updateTxProcessor(txProcessor);
+  //     // close model here
+  //     closeModals();
+  //   }
+  //   if (!txHash) {
+  //     console.log('error: ', details);
+  //     setLoading(false);
+  //   }
+  // };
 
   const onSubmit = async (values) => {
     console.log('values', values);
     setLoading(true);
 
-    console.log(values);
-    const setupValues = {
-      minion: values.minionContract,
-      actionVlaue: '0',
-    };
-    const minionService = new MinionService(
-      web3Connect.web3,
-      user.username,
-      setupValues,
-    );
+    // console.log(values);
+    // const setupValues = {
+    //   minion: values.minionContract,
+    //   actionVlaue: '0',
+    // };
+    // const minionService = new MinionService(
+    //   web3Connect.web3,
+    //   user.username,
+    //   setupValues,
+    // );
 
-    const valueWei = web3Connect.web3.utils.toWei(values.value);
+    // const valueWei = web3Connect.web3.utils.toWei(values.value);
 
-    const inputValues = [];
-    let hexData;
-    if (selectedFunction) {
-      Object.keys(values).forEach((param) => {
-        if (param.indexOf('xparam') > -1) {
-          console.log(param);
-          try {
-            inputValues.push(JSON.parse(values[param]));
-          } catch {
-            inputValues.push(values[param]);
-          }
-        }
-      });
-      console.log('inputs', inputValues);
-      console.log('selectedFunction', selectedFunction);
-      const aSelectedFunction = abiFunctions.find((func) => {
-        return func.name === selectedFunction;
-      });
-      console.log('aSelectedFunction', aSelectedFunction);
-      try {
-        hexData = web3Connect.web3.eth.abi.encodeFunctionCall(
-          aSelectedFunction,
-          inputValues,
-        );
-        console.log('hexData', hexData);
-      } catch (err) {
-        console.log('ERR', err);
-        setLoading(false);
-        return;
-      }
-    }
+    // const inputValues = [];
+    // let hexData;
+    // if (selectedFunction) {
+    //   Object.keys(values).forEach((param) => {
+    //     if (param.indexOf('xparam') > -1) {
+    //       console.log(param);
+    //       try {
+    //         inputValues.push(JSON.parse(values[param]));
+    //       } catch {
+    //         inputValues.push(values[param]);
+    //       }
+    //     }
+    //   });
+    //   console.log('inputs', inputValues);
+    //   console.log('selectedFunction', selectedFunction);
+    //   const aSelectedFunction = abiFunctions.find((func) => {
+    //     return func.name === selectedFunction;
+    //   });
+    //   console.log('aSelectedFunction', aSelectedFunction);
+    //   try {
+    //     hexData = web3Connect.web3.eth.abi.encodeFunctionCall(
+    //       aSelectedFunction,
+    //       inputValues,
+    //     );
+    //     console.log('hexData', hexData);
+    //   } catch (err) {
+    //     console.log('ERR', err);
+    //     setLoading(false);
+    //     return;
+    //   }
+    // }
 
-    try {
-      minionService.propose(
-        values.targetContract,
-        valueWei || setupValues.actionVlaue,
-        values.dataValue || hexData,
-        values.description,
-        txCallBack,
-      );
-    } catch (err) {
-      setLoading(false);
-      console.log('error: ', err);
-    }
+    // try {
+    //   minionService.propose(
+    //     values.targetContract,
+    //     valueWei || setupValues.actionVlaue,
+    //     values.dataValue || hexData,
+    //     values.description,
+    //     txCallBack,
+    //   );
+    // } catch (err) {
+    //   setLoading(false);
+    //   console.log('error: ', err);
+    // }
   };
 
   const handleBlur = async (e) => {
@@ -160,15 +163,14 @@ const MinionProposalForm = () => {
     setAbiLoading(true);
     try {
       const key =
-        network.network_id === 100 ? '' : process.env.REACT_APP_ETHERSCAN_KEY;
-      const url = `${
-        supportedChains[network.network_id].abi_api_url
-      }${value}${key && '&apikey=' + key}`;
+        daochain === '0x64' ? '' : process.env.REACT_APP_ETHERSCAN_KEY;
+      const url = `${chainByID(daochain).abi_api_url}${value}${key &&
+        '&apikey=' + key}`;
       const response = await fetch(url);
       const json = await response.json();
 
       if (!json.result || json.status === '0') {
-        const msg = network.network_id === 100 ? json.message : json.result;
+        const msg = daochain === '0x64' ? json.message : json.result;
         throw new Error(msg);
       }
       const _abiFunctions = getFunctions(JSON.parse(json.result));

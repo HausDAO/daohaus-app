@@ -32,18 +32,18 @@ const Members = ({ members, activities }) => {
     }
   };
 
-  const handleScroll = () => {
-    const offset = window.scrollY;
-    if (offset > 100) {
-      setScrolled(true);
-    } else {
-      setScrolled(false);
-    }
-  };
-
   useEffect(() => {
-    // TODO cancel this on leave page
+    const handleScroll = () => {
+      const offset = window.scrollY;
+      if (offset > 100) {
+        setScrolled(true);
+      } else {
+        setScrolled(false);
+      }
+    };
+
     window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
   const scrolledStyle = {

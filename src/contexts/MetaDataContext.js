@@ -21,10 +21,14 @@ export const MetaDataProvider = ({ children }) => {
 
   const [customTerms, setCustomTerms] = useState(null);
   const [daoMetaData, setDaoMetaData] = useState(null);
-  const [apiMetaData, setApiMetaData] = useState(null);
 
   const hasFetchedMetadata = useRef(false);
   const shouldUpdateTheme = useRef(true);
+
+  //  We're essentially calling the same function 3 times here.
+  //  I have to keep them separate so that the useEffect has
+  //  access to relevant state. I can investigate the useCallback/Effect pattern
+  //  of handling this in the future.
 
   useEffect(() => {
     if (userHubDaos) {
@@ -110,7 +114,6 @@ export const MetaDataProvider = ({ children }) => {
         customTerms,
         hasFetchedMetadata,
         shouldUpdateTheme,
-        apiMetaData,
         refetchMetaData,
       }}
     >
@@ -125,7 +128,6 @@ export const useMetaData = () => {
     hasFetchedMetadata,
     shouldUpdateTheme,
     customTerms,
-    apiMetaData,
     refetchMetaData,
   } = useContext(MetaDataContext);
   return {
@@ -133,7 +135,6 @@ export const useMetaData = () => {
     hasFetchedMetadata,
     shouldUpdateTheme,
     customTerms,
-    apiMetaData,
     refetchMetaData,
   };
 };
