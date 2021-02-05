@@ -6,14 +6,12 @@ import { BiArrowBack } from 'react-icons/bi';
 import { useCustomTheme } from '../contexts/CustomThemeContext';
 import { useInjectedProvider } from '../contexts/InjectedProviderContext';
 import { defaultTheme } from '../themes/defaultTheme';
-import { useDao } from '../contexts/DaoContext';
 import { boostPost } from '../utils/requests';
 import CustomThemeForm from '../forms/customTheme';
 import ThemePreview from '../components/themePreview';
 
 const ThemeBuilder = () => {
-  const { address, injectedProvider } = useInjectedProvider();
-  const { daoOverview } = useDao();
+  const { address, injectedProvider, injectedChain } = useInjectedProvider();
   const { daochain, daoid } = useParams();
   const { theme, updateTheme, tempTheme, updateTempTheme } = useCustomTheme();
   const history = useHistory();
@@ -33,7 +31,6 @@ const ThemeBuilder = () => {
       });
     }
   }, [theme]);
-  console.log(daoOverview);
 
   const handleThemeUpdate = (update) => {
     const currentValues = tempTheme || defaultTheme;
@@ -48,8 +45,6 @@ const ThemeBuilder = () => {
     const currentValues = tempTheme || defaultTheme;
     const themeUpdate = { ...currentValues, ...previewTheme };
 
-    console.log('themeUpdate', themeUpdate);
-
     const messageHash = injectedProvider.utils.sha3(daoid);
     const signature = await injectedProvider.eth.personal.sign(
       messageHash,
@@ -60,13 +55,14 @@ const ThemeBuilder = () => {
       contractAddress: daoid,
       boostKey: 'customTheme',
       metadata: themeUpdate,
-      network: daoOverview.network,
+      network: injectedChain.network,
       signature,
     };
 
     const result = await boostPost('dao/boost', updateThemeObject);
 
     if (result === 'success') {
+      // TODO: refresh daoMetaData?
       history.push(`/dao/${daochain}/${daoid}/settings`);
     } else {
       alert('error: forbidden');

@@ -4,22 +4,22 @@ import { Link as RouterLink, useParams } from 'react-router-dom';
 
 import ContentBox from '../components/ContentBox';
 import TextBox from '../components/TextBox';
-// import GenericModal from '../modal/genericModal';
 import { useMetaData } from '../contexts/MetaDataContext';
 import { boostList } from '../content/boost-content';
-// import BoostLaunchWrapper from '../components/boostLaunchWrapper';
+import GenericModal from '../modals/genericModal';
+import { useOverlay } from '../contexts/OverlayContext';
+import BoostLaunchWrapper from '../components/boostLaunchWrapper';
 
 const Boosts = () => {
   const { daoMetaData } = useMetaData();
   const { daochain, daoid } = useParams();
-  // const { modals, openModal } = useModals();
-  console.log(daoMetaData);
+  const { setGenericModal } = useOverlay();
 
   const renderBoostCard = (boost, i) => {
     const boostData = daoMetaData?.boosts[boost.key];
-    console.log(boostData);
     const hasBoost = boostData && boostData.active;
-    console.log('boost: ', boost, 'hasBoost: ', hasBoost);
+
+    console.log('boost', boost);
 
     return (
       <ContentBox
@@ -65,14 +65,14 @@ const Boosts = () => {
             ) : (
               <Button
                 textTransform='uppercase'
-                // onClick={() => openModal(boost.modalName)}
+                onClick={() => setGenericModal({ [boost.key]: true })}
               >
                 Add This App
               </Button>
             )}
           </>
         )}
-        {/* <GenericModal isOpen={modals[boost.modalName]}>
+        <GenericModal closeOnOverlayClick={false} modalId={boost.key}>
           <>
             {!boost.comingSoon ? (
               <>
@@ -80,7 +80,7 @@ const Boosts = () => {
               </>
             ) : null}
           </>
-        </GenericModal> */}
+        </GenericModal>
       </ContentBox>
     );
   };

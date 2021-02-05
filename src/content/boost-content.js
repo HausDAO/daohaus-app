@@ -14,22 +14,29 @@ export const boostList = [
     modalName: 'vanillaMinionLaunch',
   },
   {
-    name: 'Notifications: Level 1',
+    name: 'Discord Notificatons',
     key: 'notificationsLevel1',
-    comingSoon: true,
     description:
       'Customize and send notifications of DAO activity to your discord server',
     price: '0',
     modalName: 'notificationsLevel1Launch',
   },
   {
-    name: 'Notifications: Level 2',
-    key: 'notificationsLevel2',
-    description:
-      'Customize and send notifications of DAO activity to more of your social channels',
-    comingSoon: true,
-    modalName: 'notificationsLevel2Launch',
+    name: 'MinionSafe',
+    key: 'minionSafe',
+    description: 'Launch and interact with a Gnosis Safe multisig',
     price: '0',
+    comingSoon: true,
+    modalName: 'minionSafeLaunch',
+  },
+  {
+    name: 'Discourse Forum',
+    key: 'discourse',
+    comingSoon: true,
+    description:
+      'Add a forum for discussing proposals. Launch a new category in the DAOhaus Discourse forum and enable topic creation for all of your proposals.',
+    price: '0',
+    modalName: 'discourseLaunch',
   },
 ];
 
