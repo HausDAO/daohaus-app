@@ -21,6 +21,7 @@ import { useDao } from '../contexts/DaoContext';
 import { useCustomTheme } from '../contexts/CustomThemeContext';
 import ContentBox from './ContentBox';
 import TextBox from './TextBox';
+import { numberWithCommas } from '../utils/general';
 
 const MembersChart = () => {
   const { daochain, daoid } = useParams();
@@ -29,7 +30,7 @@ const MembersChart = () => {
     null,
   );
   const { theme } = useCustomTheme();
-  const { daoOverview } = useDao();
+  const { daoOverview, daoMembers } = useDao();
   const [preppedData, setPreppedData] = useState([]);
   const [chartData, setChartData] = useState([]);
   const [chartDimension, setChartDimension] = useState('currentShares');
@@ -98,6 +99,32 @@ const MembersChart = () => {
     <Box>
       {daoBalances?.length ? (
         <ContentBox minH='360px'>
+          <Flex justify='space-between'>
+            <Box>
+              <TextBox size='xs'>{theme.daoMeta.members}</TextBox>
+              <TextBox variant='value' size='lg'>
+                {daoMembers.length}
+              </TextBox>
+            </Box>
+            <Box>
+              <TextBox size='xs'>Shares</TextBox>
+              <TextBox variant='value' size='lg'>
+                {daoOverview.totalShares
+                  ? numberWithCommas(daoOverview.totalShares)
+                  : '--'}
+              </TextBox>
+            </Box>
+            {(daoOverview.totalLoot > 0 || !daoOverview.totalLoot) && (
+              <Box>
+                <TextBox size='xs'>Loot</TextBox>
+                <TextBox variant='value' size='lg'>
+                  {daoOverview.totalLoot
+                    ? numberWithCommas(daoOverview.totalLoot)
+                    : '--'}
+                </TextBox>
+              </Box>
+            )}
+          </Flex>
           <RadioGroup
             defaultValue={chartDimension}
             onChange={setChartDimension}
@@ -108,8 +135,8 @@ const MembersChart = () => {
               <Radio value='currentLoot'>Loot</Radio>
             </Stack>
           </RadioGroup>
-          <Flex wrap='wrap' align='center' position='relative'>
-            <Box w='100%'>
+          <Flex justify='center' mt={4}>
+            <Flex w='100%' minH='300px' justify='center'>
               {chartData.length ? (
                 <FlexibleXYPlot
                   yDomain={[0, chartData[chartData.length - 1].y || 10]}
@@ -145,7 +172,7 @@ const MembersChart = () => {
                   />
                 </Flex>
               )}
-            </Box>
+            </Flex>
           </Flex>
         </ContentBox>
       ) : (
