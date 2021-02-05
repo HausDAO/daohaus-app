@@ -6,7 +6,8 @@ import { determineUnreadProposalList } from '../utils/proposalUtils';
 import { useDaoMember } from '../contexts/DaoMemberContext';
 import Paginator from './paginator';
 import ProposalFilters from './proposalFilters';
-import ProposalSort from './proposalSort';
+import ListSort from './listSort';
+import { sortOptions } from '../utils/proposalContent';
 
 const ProposalsList = ({ proposals }) => {
   const { daoMember } = useDaoMember();
@@ -74,7 +75,7 @@ const ProposalsList = ({ proposals }) => {
           setSort={setSort}
           proposals={proposals}
         />
-        <ProposalSort sort={sort} setSort={setSort} />
+        <ListSort sort={sort} setSort={setSort} options={sortOptions} />
       </Flex>
       {isLoaded &&
         pageProposals?.map((proposal) => {

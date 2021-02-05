@@ -12,6 +12,8 @@ import { useMetaData } from '../contexts/MetaDataContext';
 import { getMemberActivites, getMembersActivites } from '../utils/activities';
 import { getCopy } from '../utils/metadata';
 import MembersChart from '../components/membersChart';
+import ListSort from '../components/listSort';
+import { membersSortOptions } from '../utils/memberContent';
 
 const Members = ({ members, activities }) => {
   const { daoMember } = useDaoMember();
@@ -19,6 +21,8 @@ const Members = ({ members, activities }) => {
   const [selectedMember, setSelectedMember] = useState(null);
   const [scrolled, setScrolled] = useState(false);
   const { customTerms } = useMetaData();
+  const [listMembers, setListMembers] = useState(members);
+  const [sort, setSort] = useState();
 
   const selectMember = (member) => {
     if (selectedMember == null) {
@@ -51,77 +55,104 @@ const Members = ({ members, activities }) => {
     top: 20,
   };
 
+  useEffect(() => {
+    if (members.length > 0) {
+      sortMembers();
+    }
+  }, [members, sort]);
+
+  const sortMembers = () => {
+    const sortedMembers = members;
+
+    if (sort) {
+      sortedMembers.sort((a, b) => {
+        if (sort.value === 'joinDateAsc') {
+          return +a.createdAt - +b.createdAt;
+        } else if (sort.value === 'joinDateDesc') {
+          return +b.createdAt - +a.createdAt;
+        } else {
+          return +b[sort.value] - +a[sort.value];
+        }
+      });
+    }
+
+    setListMembers([...sortedMembers]);
+  };
+
   return (
-    <Flex wrap='wrap'>
-      <Box
-        w={['100%', null, null, null, '60%']}
-        pr={[0, null, null, null, 6]}
-        pb={6}
-      >
-        <ContentBox mt={6}>
-          <Flex>
-            <TextBox w='43%' size='xs'>
-              {getCopy(customTerms, 'member')}
-            </TextBox>
-            <TextBox w='15%' size='xs'>
-              Shares
-            </TextBox>
-            <TextBox w='15%' size='xs'>
-              Loot
-            </TextBox>
-            <TextBox size='xs'>Join Date</TextBox>
-          </Flex>
-          {members &&
-            members?.map((member) => {
-              return (
-                <MemberCard
-                  key={member.id}
-                  member={member}
-                  selectMember={selectMember}
-                  selectedMember={selectedMember}
-                />
-              );
-            })}
-        </ContentBox>
-      </Box>
-      <Box w={['100%', null, null, null, '40%']}>
-        <Box style={scrolled ? scrolledStyle : null}>
-          {selectedMember ? (
-            <MemberInfo member={selectedMember} />
-          ) : (
-            <>
-              {daoMember && (
-                <Flex justify='space-between' mb={5}>
-                  <TextBox size='xs'>Snapshot</TextBox>
-                  <TextBox
-                    as={Link}
-                    to={`/dao/${daochain}/${daoid}/profile/${daoMember.memberAddress}`}
-                    color='inherit'
-                    size='xs'
-                  >
-                    View My Profile
-                  </TextBox>
-                </Flex>
-              )}
-              <MembersChart />
-            </>
-          )}
-          {selectedMember ? (
-            <ActivitiesFeed
-              limit={2}
-              activities={activities}
-              hydrateFn={getMemberActivites(selectedMember.memberAddress)}
-            />
-          ) : daoMember ? (
-            <ActivitiesFeed
-              limit={2}
-              activities={activities}
-              hydrateFn={getMembersActivites}
-            />
-          ) : null}
+    <>
+      <ListSort sort={sort} setSort={setSort} options={membersSortOptions} />
+      <Flex wrap='wrap'>
+        <Box
+          w={['100%', null, null, null, '60%']}
+          pr={[0, null, null, null, 6]}
+          pb={6}
+        >
+          <ContentBox mt={6}>
+            <Flex>
+              <TextBox w='43%' size='xs'>
+                {getCopy(customTerms, 'member')}
+              </TextBox>
+              <TextBox w='15%' size='xs'>
+                Shares
+              </TextBox>
+              <TextBox w='15%' size='xs'>
+                Loot
+              </TextBox>
+              <TextBox size='xs'>Join Date</TextBox>
+            </Flex>
+            {listMembers &&
+              listMembers?.map((member) => {
+                return (
+                  <MemberCard
+                    key={member.id}
+                    member={member}
+                    selectMember={selectMember}
+                    selectedMember={selectedMember}
+                  />
+                );
+              })}
+          </ContentBox>
         </Box>
-      </Box>
-    </Flex>
+        <Box w={['100%', null, null, null, '40%']}>
+          <Box style={scrolled ? scrolledStyle : null}>
+            {selectedMember ? (
+              <MemberInfo member={selectedMember} />
+            ) : (
+              <>
+                {daoMember && (
+                  <Flex justify='space-between' mb={5}>
+                    <TextBox size='xs'>Snapshot</TextBox>
+                    <TextBox
+                      as={Link}
+                      to={`/dao/${daochain}/${daoid}/profile/${daoMember.memberAddress}`}
+                      color='inherit'
+                      size='xs'
+                    >
+                      View My Profile
+                    </TextBox>
+                  </Flex>
+                )}
+                <MembersChart />
+              </>
+            )}
+            {selectedMember ? (
+              <ActivitiesFeed
+                limit={2}
+                activities={activities}
+                hydrateFn={getMemberActivites(selectedMember.memberAddress)}
+              />
+            ) : daoMember ? (
+              <ActivitiesFeed
+                limit={2}
+                activities={activities}
+                hydrateFn={getMembersActivites}
+              />
+            ) : null}
+          </Box>
+        </Box>
+      </Flex>
+    </>
   );
 };
 
