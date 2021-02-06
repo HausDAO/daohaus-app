@@ -8,19 +8,21 @@ import { Flex, Box, Skeleton, Image } from '@chakra-ui/react';
 import { numberWithCommas } from '../utils/general';
 import SyncTokenButton from './syncTokenButton';
 import { useDaoMember } from '../contexts/DaoMemberContext';
+import Withdraw from './withdraw';
 
 const TokenListCard = ({
   token,
-  isLoaded,
-  isMember,
+  // isLoaded,
+  // isMember,
   isBank = true,
-  hasAction,
-  view,
+  // hasAction,
+  // view,
   version = '2.1',
+  hasBalance,
 }) => {
   // const [memberWallet] = useMemberWallet();
   const { daoMember } = useDaoMember();
-  const [hasBalance, setHasBalance] = useState(null);
+  // const [hasBalance, setHasBalance] = useState(null);
   const [needsSync, setNeedsSync] = useState(null);
   const [optimisticWithdraw] = useState(false);
   const [optimisticSync, setOptimisticSync] = useState(false);
@@ -46,14 +48,13 @@ const TokenListCard = ({
     }
   }, [token, isBank, version, daoMember]);
 
-  const checkOptimisticBalance = () => {
-    return optimisticSync
-      ? token.contractBalances.token -
-          token.contractBalances.babe +
-          +token.tokenBalance
-      : +token.tokenBalance;
-  };
-
+  // const checkOptimisticBalance = () => {
+  //   return optimisticSync
+  //     ? token.contractBalances.token -
+  //         token.contractBalances.babe +
+  //         +token.tokenBalance
+  //     : +token.tokenBalance;
+  // };
   // useEffect(() => {
   //   const fetchMainnetAddresses = async () => {
   //     const mainnetAddresses = await getMainetAddresses();
@@ -131,17 +132,14 @@ const TokenListCard = ({
           </Box>
         </Skeleton>
       </Box>
-      {/* {hasAction ? (
-        <Box w='15%'>
-          {hasBalance && !optimisticWithdraw ? (
-            <Skeleton isLoaded={isLoaded}>
-              <Withdraw
-                tokenBalance={token}
-                setOptimisticWithdraw={setOptimisticWithdraw}
-              />
-            </Skeleton>
-          ) : null}
-*/}
+
+      <Box w='15%'>
+        {hasBalance && (
+          // <Skeleton>
+          <Withdraw tokenBalance={token} />
+          // </Skeleton>
+        )}
+      </Box>
       {needsSync && !optimisticSync && (
         <SyncTokenButton token={token} setOptimisticSync={setOptimisticSync} />
       )}

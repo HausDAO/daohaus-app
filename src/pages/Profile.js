@@ -9,7 +9,8 @@ import { FaStar } from 'react-icons/fa';
 
 import { handleGetProfile } from '../utils/3box';
 import { truncateAddr, numberWithCommas } from '../utils/general';
-import { tallyUSDs } from '../utils/tokenValue';
+import { initTokenData, tallyUSDs } from '../utils/tokenValue';
+import BankList from '../components/BankList';
 // import ProfileBankList from '../components/profileBankList';
 import ActivitiesFeed from '../components/activitiesFeed';
 import { getProfileActivites } from '../utils/activities';
@@ -75,13 +76,21 @@ const handleName = (member, profile) => {
 
 const Profile = ({ members, overview, daoTokens, activities }) => {
   const { userid, daochain } = useParams();
+
+  const [tokensRecievable, setTokensRecievable] = useState([]);
   const [profile, setProfile] = useState(null);
   const [showAlert] = useState(false);
+  const [currentMember, setCurrentMember] = useState(null);
   const [ens, setEns] = useState(null);
 
-  const currentMember = members
-    ? members.find((member) => member.memberAddress === userid)
-    : null;
+  useEffect(() => {
+    setCurrentMember(
+      members?.find(
+        (member) =>
+          member?.memberAddress?.toLowerCase() === userid?.toLowerCase(),
+      ),
+    );
+  }, []);
 
   useEffect(() => {
     const getProfile = async () => {
@@ -113,6 +122,23 @@ const Profile = ({ members, overview, daoTokens, activities }) => {
     lookupEns();
   }, [currentMember, daochain, userid]);
 
+  useEffect(() => {
+    const initMemberTokens = async (tokensWithBalance) => {
+      const newTokenData = await initTokenData(tokensWithBalance);
+      setTokensRecievable(newTokenData);
+    };
+    if (currentMember?.tokenBalances && daochain) {
+      const tokensWithBalance = currentMember.tokenBalances.filter(
+        (token) => +token.tokenBalance > 0,
+      );
+      if (tokensWithBalance?.length) {
+        initMemberTokens(tokensWithBalance);
+      } else {
+        setTokensRecievable([]);
+      }
+    }
+  }, [currentMember]);
+
   return (
     <Flex wrap='wrap'>
       <Box
@@ -126,7 +152,7 @@ const Profile = ({ members, overview, daoTokens, activities }) => {
               <Flex direction='row' width='50%'>
                 <Flex direction='column' align='center' pr={5} minW='40%'>
                   {handleAvatar(currentMember, profile)}
-                  <Skeleton isLoaded={profile}>
+                  <Skeleton isLoaded={profile || currentMember}>
                     {currentMember?.memberAddress ? (
                       <Box
                         fontFamily='heading'
@@ -199,7 +225,7 @@ const Profile = ({ members, overview, daoTokens, activities }) => {
                 <Flex justify='space-between' align='flex-end' mt={4}>
                   <Box w='30%'>
                     <TextBox size='xs'>Power</TextBox>
-                    <Skeleton isLoaded={profile}>
+                    <Skeleton isLoaded={profile || currentMember}>
                       {showAlert ? (
                         <TextBox size='xl' variant='value'>
                           <Flex
@@ -245,9 +271,13 @@ const Profile = ({ members, overview, daoTokens, activities }) => {
             <h3>Member not found</h3>
           )}
         </ContentBox>
+        <BankList
+          tokens={tokensRecievable}
+          hasBalance={tokensRecievable.length}
+        />
       </Box>
       <Box w={['100%', null, null, null, '40%']}>
-        {activities && (
+        {activities && currentMember && (
           <ActivitiesFeed
             limit={5}
             hydrateFn={getProfileActivites(currentMember.memberAddress)}

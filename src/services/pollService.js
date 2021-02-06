@@ -1,11 +1,11 @@
 import { BigNumber } from 'ethers';
 import { graphQuery } from '../utils/apollo';
 import { PROPOSALS_LIST } from '../graphQL/proposal-queries';
-import { DAO_POLL, MINION_POLL } from '../graphQL/dao-queries';
+import { DAO_POLL, MINION_POLL, HOME_DAO } from '../graphQL/dao-queries';
 import { getGraphEndpoint } from '../utils/chain';
 import { hashMaker, memberVote } from '../utils/proposalUtils';
 import { TokenService } from '../services/tokenService';
-import { MolochService } from './molochService';
+// import { MolochService } from './molochService';
 
 /// //////////CALLS///////////////
 const pollProposals = async ({ daoID, chainID }) =>
@@ -58,21 +58,30 @@ const pollMinionSummon = async ({ chainID, molochAddress, createdAt }) => {
 };
 
 const pollBabe = async ({ chainID, daoID, daoVersion, tokenAddress }) => {
-  console.log('chainID', chainID);
-  console.log('daoID', daoID);
-  console.log('daoVersion', daoVersion);
-  console.log('tokenAddress', tokenAddress);
-
-  const BABE = '0x000000000000000000000000000000000000baBe';
-
-  return await MolochService({
-    chainID,
-    daoAddress: daoID,
-    version: daoVersion,
-  })('getUserTokenBalance')({
-    userAddress: BABE,
-    tokenAddress,
-  });
+  // const BABE = '0x000000000000000000000000000000000000baBe';
+  try {
+    //   const babeBalance = await MolochService({
+    //     chainID,
+    //     daoAddress: daoID,
+    //     version: daoVersion,
+    //   })('getUserTokenBalance')({
+    //     userAddress: BABE,
+    //     tokenAddress,
+    //   });
+    const daoOverview = await graphQuery({
+      endpoint: getGraphEndpoint(chainID, 'subgraph_url'),
+      query: HOME_DAO,
+      variables: {
+        contractAddr: daoID,
+      },
+    });
+    const graphBalance = daoOverview?.moloch?.tokenBalances?.find(
+      (tokenObj) => tokenObj?.token?.tokenAddress === tokenAddress,
+    )?.tokenBalance;
+    return graphBalance;
+  } catch (error) {
+    return error;
+  }
 };
 
 /// //////////TESTS///////////////
@@ -226,16 +235,18 @@ const transmutationProposalTest = (data, shouldEqual, pollId) => {
   }
 };
 
-const collectTokenTest = (newBabeVal, tokenContractVal, pollId) => {
-  console.log('newBabeVal', newBabeVal);
-  console.log('tokenContractVal', tokenContractVal);
+const collectTokenTest = (graphBalance, oldBalance, pollId) => {
+  console.log('graphBalance', graphBalance);
+  console.log('oldBalance', oldBalance);
+  // console.log('babeBalance', babeBalance);
+  // console.log('tokenContractVal', tokenContractVal);
   console.log('pollId', pollId);
-  if (newBabeVal) {
-    return +newBabeVal === +tokenContractVal;
+  if (graphBalance) {
+    return graphBalance !== oldBalance;
   } else {
     clearInterval(pollId);
     throw new Error(
-      `Poll for collect tokens did not recieve new Babe value from the contract: ${newBabeVal}`,
+      `Poll for collect tokens did not recieve new value from the graph`,
     );
   }
 };
@@ -537,12 +548,6 @@ export const createPoll = ({
     };
   } else if (action === 'collectTokens') {
     return ({ token, actions, chainID, daoID }) => (txHash) => {
-      console.log('Poll Args: token', token);
-      console.log('Poll Args: actions', actions);
-      console.log('Poll Args: chainID', chainID);
-      console.log('Poll Args: daoID', daoID);
-      console.log('Poll Args: txHash', txHash);
-
       if (!token?.contractBalances?.token)
         throw new Error(
           `token object does not contain .contractBalances.token`,
@@ -553,7 +558,7 @@ export const createPoll = ({
       startPoll({
         pollFetch: pollBabe,
         testFn: collectTokenTest,
-        shouldEqual: token.contractBalances.token,
+        shouldEqual: token.tokenBalance,
         args: {
           chainID,
           daoID,

@@ -8,8 +8,8 @@ import {
   useToast,
   Button,
   Avatar,
-  List,
-  ListItem,
+  // List,
+  // ListItem,
   Link,
   HStack,
   Stack,
@@ -116,27 +116,27 @@ const MinionDetails = () => {
     getMinionBalances();
   }, [currentDaoTokens, minion]);
 
-  const handleDeposit = () => {
-    // setProposalType('funding');
-    // setProposalPresets(formPresets().deposit);
-    // openModal('proposal');
-  };
+  // const handleDeposit = () => {
+  //   // setProposalType('funding');
+  //   // setProposalPresets(formPresets().deposit);
+  //   // openModal('proposal');
+  // };
 
-  const handleNewMinion = () => {
-    // console.log('open minion');
-    // setProposalType('minion');
-    // setProposalPresets(formPresets().minion);
-    // openModal('minion');
-  };
+  // const handleNewMinion = () => {
+  //   // console.log('open minion');
+  //   // setProposalType('minion');
+  //   // setProposalPresets(formPresets().minion);
+  //   // openModal('minion');
+  // };
 
-  const handleMinionWithdraw = () => {
-    // const minionMember = members.find(
-    //   (member) => member.memberAddress === minion.minionAddress,
-    // );
-    // console.log(minionMember);
-    // setWithdrawSetup(minionMember);
-    // openModal('minionWithdraw');
-  };
+  // const handleMinionWithdraw = () => {
+  //   // const minionMember = members.find(
+  //   //   (member) => member.memberAddress === minion.minionAddress,
+  //   // );
+  //   // console.log(minionMember);
+  //   // setWithdrawSetup(minionMember);
+  //   // openModal('minionWithdraw');
+  // };
   console.log(tokenBalances);
 
   return (
