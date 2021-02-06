@@ -185,6 +185,7 @@ const cancelProposalTest = (data, shouldEqual, pollId) => {
 };
 
 const minionProposeTest = (data, shouldEqual, pollId) => {
+  // new minion proposal after time submitted
   console.log(data);
   console.log(shouldEqual);
   if (data.proposals) {
@@ -202,12 +203,18 @@ const minionProposeTest = (data, shouldEqual, pollId) => {
 };
 
 const minionExecuteTest = (data, shouldEqual, pollId) => {
+  // use minion address and proposal ID to get action details and check if executed
   console.log(data);
   console.log(shouldEqual);
   if (data.proposals) {
     const proposal = data.proposals.find(
       (proposal) => proposal.proposalId === shouldEqual,
     );
+
+    // await MinionService({
+    //   minion: proposal?.minionAddress,
+    //   chainID: daochain,
+    // })('getAction')({ proposalId: proposal?.proposalId });
     console.log(proposal);
     return proposal?.cancelled;
   } else {
@@ -219,6 +226,7 @@ const minionExecuteTest = (data, shouldEqual, pollId) => {
 };
 
 const transmutationProposalTest = (data, shouldEqual, pollId) => {
+  // check if new proposal with hash(?)
   console.log(data);
   console.log(shouldEqual);
   if (data.proposals) {
@@ -703,6 +711,38 @@ export const createPoll = ({
             tries,
           },
           pollArgs: { chainID, molochAddress, createdAt },
+        });
+      }
+    };
+  } else if (action === 'ragequit') {
+    console.log('action', action);
+    return ({ daoID, chainID, sharesRaged, lootRaged, actions }) => (
+      txHash,
+    ) => {
+      startPoll({
+        pollFetch: pollMinionSummon,
+        testFn: minonSummonTest,
+        shouldEqual: { daoID, sharesRaged, lootRaged },
+        args: { daoID, chainID, sharesRaged, lootRaged },
+        actions,
+        txHash,
+      });
+      if (cachePoll) {
+        cachePoll({
+          txHash,
+          action,
+          timeSent: Date.now(),
+          status: 'unresolved',
+          resolvedMsg: `Minion summoned`,
+          unresolvedMsg: `Summoning Minion`,
+          successMsg: `A New Minion has Risen on ${chainID}`,
+          errorMsg: `Error summoning Minion on ${chainID}`,
+          pollData: {
+            action,
+            interval,
+            tries,
+          },
+          pollArgs: { daoID, chainID, sharesRaged, lootRaged },
         });
       }
     };
