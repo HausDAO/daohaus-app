@@ -5,7 +5,7 @@ import { DAO_POLL, MINION_POLL, HOME_DAO } from '../graphQL/dao-queries';
 import { getGraphEndpoint } from '../utils/chain';
 import { hashMaker, memberVote } from '../utils/proposalUtils';
 import { TokenService } from '../services/tokenService';
-import { MolochService } from './molochService';
+// import { MolochService } from './molochService';
 
 /// //////////CALLS///////////////
 const pollProposals = async ({ daoID, chainID }) =>
