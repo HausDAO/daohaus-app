@@ -10,6 +10,7 @@ import { proposalTypes } from '../content/proposal-types';
 import { useMetaData } from '../contexts/MetaDataContext';
 import { useOverlay } from '../contexts/OverlayContext';
 import { getCopy } from '../utils/metadata';
+import ComingSoonOverlay from '../components/comingSoonOverlay';
 // import { setProposalModal } from '../contexts/OverlayContext';
 // import { useDao } from '../contexts/DaoContext';
 
@@ -94,12 +95,8 @@ const NewProposal = () => {
                     setProposalModal(true);
                   }}
                 >
-                  {/* {p.comingSoon && <ComingSoonOverlay />} */}
-                  <Image
-                    src={require('../assets/img/' + p.image)}
-                    width='50px'
-                    mb={15}
-                  />
+                  {p.comingSoon && <ComingSoonOverlay />}
+                  <Image src={p.image} width='50px' mb={15} />
                   <Box
                     fontSize='md'
                     fontFamily='heading'

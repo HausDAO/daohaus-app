@@ -62,7 +62,7 @@ const Members = ({ members, activities }) => {
   }, [members, sort]);
 
   const sortMembers = () => {
-    const sortedMembers = members;
+    const sortedMembers = members.filter((member) => member.exists);
 
     if (sort) {
       sortedMembers.sort((a, b) => {

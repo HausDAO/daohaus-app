@@ -1,46 +1,48 @@
 import { getCopy } from '../utils/metadata';
+import swordImg from '../assets/img/swords-white.svg';
+
 export const proposalTypes = (customTerms, boosts) => {
   return [
     {
       name: 'Membership',
       subhead: 'Join the DAO!',
       proposalType: 'member',
-      image: 'swords-white.svg',
+      image: swordImg,
       show: true,
     },
     {
       name: 'Funding',
       subhead: 'Distribute funds',
       proposalType: 'funding',
-      image: 'swords-white.svg',
+      image: swordImg,
       show: true,
     },
     {
       name: 'Token',
       subhead: 'Approve a new asset',
       proposalType: 'whitelist',
-      image: 'swords-white.svg',
+      image: swordImg,
       show: true,
     },
     {
       name: 'Trade',
       subhead: 'Trade assets',
       proposalType: 'trade',
-      image: 'swords-white.svg',
+      image: swordImg,
       show: true,
     },
     {
       name: 'Guild Kick',
       subhead: `Remove a ${getCopy(customTerms, 'member')}`,
       proposalType: 'guildkick',
-      image: 'swords-white.svg',
+      image: swordImg,
       show: true,
     },
     {
       name: 'Minion',
       subhead: 'Minion Simple',
       proposalType: 'minion',
-      image: 'swords-white.svg',
+      image: swordImg,
       comingSoon: false,
       show: true,
     },
@@ -48,7 +50,7 @@ export const proposalTypes = (customTerms, boosts) => {
       name: 'Transmutation',
       subhead: 'Transmutation',
       proposalType: 'transmutation',
-      image: 'swords-white.svg',
+      image: swordImg,
       comingSoon: false,
       show: boosts?.transmutation && boosts?.transmutation?.active,
     },
