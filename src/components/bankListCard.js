@@ -11,16 +11,16 @@ import { useDaoMember } from '../contexts/DaoMemberContext';
 
 const TokenListCard = ({
   token,
-  isLoaded,
-  isMember,
+  // isLoaded,
+  // isMember,
   isBank = true,
-  hasAction,
-  view,
+  // hasAction,
+  // view,
   version = '2.1',
 }) => {
   // const [memberWallet] = useMemberWallet();
   const { daoMember } = useDaoMember();
-  const [hasBalance, setHasBalance] = useState(null);
+  // const [hasBalance, setHasBalance] = useState(null);
   const [needsSync, setNeedsSync] = useState(null);
   const [optimisticWithdraw] = useState(false);
   const [optimisticSync, setOptimisticSync] = useState(false);
@@ -46,13 +46,13 @@ const TokenListCard = ({
     }
   }, [token, isBank, version, daoMember]);
 
-  const checkOptimisticBalance = () => {
-    return optimisticSync
-      ? token.contractBalances.token -
-          token.contractBalances.babe +
-          +token.tokenBalance
-      : +token.tokenBalance;
-  };
+  // const checkOptimisticBalance = () => {
+  //   return optimisticSync
+  //     ? token.contractBalances.token -
+  //         token.contractBalances.babe +
+  //         +token.tokenBalance
+  //     : +token.tokenBalance;
+  // };
   // useEffect(() => {
   //   const fetchMainnetAddresses = async () => {
   //     const mainnetAddresses = await getMainetAddresses();

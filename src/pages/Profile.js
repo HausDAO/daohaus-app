@@ -77,11 +77,17 @@ const Profile = ({ members, overview, daoTokens, activities }) => {
   const { userid, daochain } = useParams();
   const [profile, setProfile] = useState(null);
   const [showAlert] = useState(false);
+  const [currentMember, setCurrentMember] = useState(null);
   const [ens, setEns] = useState(null);
 
-  const currentMember = members
-    ? members.find((member) => member.memberAddress === userid)
-    : null;
+  useEffect(() => {
+    setCurrentMember(
+      members.find(
+        (member) =>
+          member?.memberAddress?.toLowerCase() === userid?.toLowerCase(),
+      ),
+    );
+  }, []);
 
   useEffect(() => {
     const getProfile = async () => {
@@ -126,7 +132,7 @@ const Profile = ({ members, overview, daoTokens, activities }) => {
               <Flex direction='row' width='50%'>
                 <Flex direction='column' align='center' pr={5} minW='40%'>
                   {handleAvatar(currentMember, profile)}
-                  <Skeleton isLoaded={profile}>
+                  <Skeleton isLoaded={profile || currentMember}>
                     {currentMember?.memberAddress ? (
                       <Box
                         fontFamily='heading'
@@ -199,7 +205,7 @@ const Profile = ({ members, overview, daoTokens, activities }) => {
                 <Flex justify='space-between' align='flex-end' mt={4}>
                   <Box w='30%'>
                     <TextBox size='xs'>Power</TextBox>
-                    <Skeleton isLoaded={profile}>
+                    <Skeleton isLoaded={profile || currentMember}>
                       {showAlert ? (
                         <TextBox size='xl' variant='value'>
                           <Flex
@@ -247,7 +253,7 @@ const Profile = ({ members, overview, daoTokens, activities }) => {
         </ContentBox>
       </Box>
       <Box w={['100%', null, null, null, '40%']}>
-        {activities && (
+        {activities && currentMember && (
           <ActivitiesFeed
             limit={5}
             hydrateFn={getProfileActivites(currentMember.memberAddress)}
