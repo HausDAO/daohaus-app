@@ -5,7 +5,7 @@ import ContentBox from './ContentBox';
 import BankListCard from './bankListCard';
 // import { useToken } from '../contexts/TokenContext';
 
-const BankList = ({ tokens }) => {
+const BankList = ({ tokens, hasBalance }) => {
   return (
     <ContentBox mt={6}>
       <Flex>
@@ -25,7 +25,13 @@ const BankList = ({ tokens }) => {
       </Flex>
       {tokens ? (
         tokens?.map((token) => {
-          return <BankListCard key={token?.id} token={token} />;
+          return (
+            <BankListCard
+              key={token?.id}
+              token={token}
+              hasBalance={hasBalance}
+            />
+          );
         })
       ) : (
         <Text mt='5'>No unclaimed balances</Text>

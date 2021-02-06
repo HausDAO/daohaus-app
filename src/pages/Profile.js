@@ -9,7 +9,8 @@ import { FaStar } from 'react-icons/fa';
 
 import { handleGetProfile } from '../utils/3box';
 import { truncateAddr, numberWithCommas } from '../utils/general';
-import { tallyUSDs } from '../utils/tokenValue';
+import { initTokenData, tallyUSDs } from '../utils/tokenValue';
+import BankList from '../components/BankList';
 // import ProfileBankList from '../components/profileBankList';
 import ActivitiesFeed from '../components/activitiesFeed';
 import { getProfileActivites } from '../utils/activities';
@@ -75,6 +76,8 @@ const handleName = (member, profile) => {
 
 const Profile = ({ members, overview, daoTokens, activities }) => {
   const { userid, daochain } = useParams();
+
+  const [tokensRecievable, setTokensRecievable] = useState([]);
   const [profile, setProfile] = useState(null);
   const [showAlert] = useState(false);
   const [currentMember, setCurrentMember] = useState(null);
@@ -82,7 +85,7 @@ const Profile = ({ members, overview, daoTokens, activities }) => {
 
   useEffect(() => {
     setCurrentMember(
-      members.find(
+      members?.find(
         (member) =>
           member?.memberAddress?.toLowerCase() === userid?.toLowerCase(),
       ),
@@ -118,6 +121,23 @@ const Profile = ({ members, overview, daoTokens, activities }) => {
     };
     lookupEns();
   }, [currentMember, daochain, userid]);
+
+  useEffect(() => {
+    const initMemberTokens = async (tokensWithBalance) => {
+      const newTokenData = await initTokenData(tokensWithBalance);
+      setTokensRecievable(newTokenData);
+    };
+    if (currentMember?.tokenBalances && daochain) {
+      const tokensWithBalance = currentMember.tokenBalances.filter(
+        (token) => +token.tokenBalance > 0,
+      );
+      if (tokensWithBalance?.length) {
+        initMemberTokens(tokensWithBalance);
+      } else {
+        setTokensRecievable([]);
+      }
+    }
+  }, [currentMember]);
 
   return (
     <Flex wrap='wrap'>
@@ -251,6 +271,10 @@ const Profile = ({ members, overview, daoTokens, activities }) => {
             <h3>Member not found</h3>
           )}
         </ContentBox>
+        <BankList
+          tokens={tokensRecievable}
+          hasBalance={tokensRecievable.length}
+        />
       </Box>
       <Box w={['100%', null, null, null, '40%']}>
         {activities && currentMember && (

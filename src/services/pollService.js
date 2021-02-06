@@ -58,11 +58,6 @@ const pollMinionSummon = async ({ chainID, molochAddress, createdAt }) => {
 };
 
 const pollBabe = async ({ chainID, daoID, daoVersion, tokenAddress }) => {
-  console.log('chainID', chainID);
-  console.log('daoID', daoID);
-  console.log('daoVersion', daoVersion);
-  console.log('tokenAddress', tokenAddress);
-
   // const BABE = '0x000000000000000000000000000000000000baBe';
   try {
     //   const babeBalance = await MolochService({
@@ -80,7 +75,6 @@ const pollBabe = async ({ chainID, daoID, daoVersion, tokenAddress }) => {
         contractAddr: daoID,
       },
     });
-    console.log('daoOverview', daoOverview);
     const graphBalance = daoOverview?.moloch?.tokenBalances?.find(
       (tokenObj) => tokenObj?.token?.tokenAddress === tokenAddress,
     )?.tokenBalance;
@@ -554,12 +548,6 @@ export const createPoll = ({
     };
   } else if (action === 'collectTokens') {
     return ({ token, actions, chainID, daoID }) => (txHash) => {
-      console.log('Poll Args: token', token);
-      console.log('Poll Args: actions', actions);
-      console.log('Poll Args: chainID', chainID);
-      console.log('Poll Args: daoID', daoID);
-      console.log('Poll Args: txHash', txHash);
-
       if (!token?.contractBalances?.token)
         throw new Error(
           `token object does not contain .contractBalances.token`,

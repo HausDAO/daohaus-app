@@ -8,6 +8,7 @@ import { Flex, Box, Skeleton, Image } from '@chakra-ui/react';
 import { numberWithCommas } from '../utils/general';
 import SyncTokenButton from './syncTokenButton';
 import { useDaoMember } from '../contexts/DaoMemberContext';
+import Withdraw from './withdraw';
 
 const TokenListCard = ({
   token,
@@ -17,6 +18,7 @@ const TokenListCard = ({
   // hasAction,
   // view,
   version = '2.1',
+  hasBalance,
 }) => {
   // const [memberWallet] = useMemberWallet();
   const { daoMember } = useDaoMember();
@@ -130,17 +132,14 @@ const TokenListCard = ({
           </Box>
         </Skeleton>
       </Box>
-      {/* {hasAction ? (
-        <Box w='15%'>
-          {hasBalance && !optimisticWithdraw ? (
-            <Skeleton isLoaded={isLoaded}>
-              <Withdraw
-                tokenBalance={token}
-                setOptimisticWithdraw={setOptimisticWithdraw}
-              />
-            </Skeleton>
-          ) : null}
-*/}
+
+      <Box w='15%'>
+        {hasBalance && (
+          // <Skeleton>
+          <Withdraw tokenBalance={token} />
+          // </Skeleton>
+        )}
+      </Box>
       {needsSync && !optimisticSync && (
         <SyncTokenButton token={token} setOptimisticSync={setOptimisticSync} />
       )}
