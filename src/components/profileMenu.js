@@ -13,23 +13,21 @@ import { BsThreeDotsVertical } from 'react-icons/bs';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
 import { useDaoMember } from '../contexts/DaoMemberContext';
 import { useInjectedProvider } from '../contexts/InjectedProviderContext';
+import { useOverlay } from '../contexts/OverlayContext';
 
 const ProfileMenu = ({ member }) => {
   const toast = useToast();
   const { address } = useInjectedProvider();
   const { daoMember } = useDaoMember();
   const { daochain, daoid } = useParams();
+  const { setGenericModal } = useOverlay();
   const history = useHistory();
-  // const [user] = useUser();
-  // const { openModal } = useModals();
 
   const handleGuildkickClick = () => {
     history.push(
       `/dao/${daochain}/${daoid}/proposals/new/guildkick?applicant=${member.memberAddress}`,
     );
   };
-
-  console.log(member);
 
   return (
     <Menu>
@@ -47,7 +45,7 @@ const ProfileMenu = ({ member }) => {
           (address.toLowerCase() !== member?.memberAddress ? (
             <MenuItem onClick={handleGuildkickClick}>GuildKick</MenuItem>
           ) : (
-            <MenuItem onClick={() => console.log('ragequitModal')}>
+            <MenuItem onClick={() => setGenericModal({ rageQuit: true })}>
               RageQuit
             </MenuItem>
           ))}

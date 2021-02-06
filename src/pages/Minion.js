@@ -59,6 +59,8 @@ const MinionDetails = () => {
   //   };
   // };
 
+  console.log('daoMembers', daoMembers);
+
   useEffect(() => {
     if (!daoOverview?.minions.length) {
       return;

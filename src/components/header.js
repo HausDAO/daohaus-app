@@ -55,6 +55,15 @@ const Header = ({ dao }) => {
         return 'Summon';
       case `/register/${params.registerchain}/${params.registerid}`:
         return 'Finish your DAO Setup';
+      default:
+        return "404 What's Lost Can Be Found";
+    }
+  };
+
+  const getDaoHeading = () => {
+    switch (location.pathname) {
+      case `/register/${params.registerchain}/${params.registerid}`:
+        return 'Finish your DAO Setup';
       case `/dao/${dao.chainID}/${dao.daoID}`:
         return 'Overview';
       case `/dao/${dao.chainID}/${dao.daoID}/proposals`:
@@ -81,6 +90,8 @@ const Header = ({ dao }) => {
         return getCopy(dao.customTerms, 'boosts');
       case `/dao/${dao.chainID}/${dao.daoID}/settings/boosts/new`:
         return 'New ' + getCopy(dao.customTerms, 'boost');
+      default:
+        return "404 What's Lost Can Be Found";
     }
   };
 
@@ -159,7 +170,7 @@ const Header = ({ dao }) => {
           fontWeight={700}
           mr={10}
         >
-          {getHeading()}
+          {dao ? getDaoHeading() : getHeading()}
         </Box>
         {getHeaderElement()}
       </Flex>

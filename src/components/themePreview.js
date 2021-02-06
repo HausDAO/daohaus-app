@@ -1,22 +1,19 @@
 import React from 'react';
-import { Flex, Image, Box, Icon } from '@chakra-ui/react';
+import { Flex, Image, Box, Icon, HStack, Button } from '@chakra-ui/react';
 import { RiArrowDropDownFill } from 'react-icons/ri';
 
 import { useCustomTheme } from '../contexts/CustomThemeContext';
-// import TextBox from './TextBox';
-// import BankOverviewChart from '../Bank/BankOverviewChart';
+
+import ThemeChart from './themeChart';
 import ThemeProposalCard from './themeProposalCard';
-import { themeImagePath } from '../utils/metadata';
+import { themeImagePath, getCopy } from '../utils/metadata';
 import { useMetaData } from '../contexts/MetaDataContext';
 
 const ThemePreview = ({ previewValues }) => {
-  const { daoMetaData } = useMetaData();
+  const { daoMetaData, customTerms } = useMetaData();
   const { theme } = useCustomTheme();
-  // const [balances] = useBalances();
-  // const [proposals] = useProposals();
-  console.log(previewValues);
 
-  // TODO: How to get the font from previewValues?
+  console.log(previewValues);
 
   return (
     <Flex
@@ -47,19 +44,33 @@ const ThemePreview = ({ previewValues }) => {
         />
       </Flex>
       <Flex w='100%' direction='column'>
-        <Box
-          size='xl'
-          color='whiteAlpha.900'
-          fontWeight={800}
-          fontFamily={previewValues.headingFont}
-          ml={6}
-          my={6}
-        >
-          {daoMetaData?.name}
-        </Box>
+        <Flex w='100%' justify='space-between'>
+          <Box
+            size='xl'
+            color='whiteAlpha.900'
+            fontWeight={800}
+            fontFamily={previewValues.headingFont}
+            ml={6}
+            my={6}
+          >
+            {daoMetaData?.name}
+          </Box>
+          <HStack spacing={2}>
+            <Button
+              color={previewValues?.secondary500}
+              borderColor={previewValues?.secondary500}
+              variant='outline'
+            >
+              {getCopy(customTerms, 'bank')}
+            </Button>
+            <Button color='whiteAlpha500' bg={previewValues?.secondary500}>
+              {getCopy(customTerms, 'proposals')}
+            </Button>
+          </HStack>
+        </Flex>
+
         <Box ml={6}>
-          {/* <BankOverviewChart balances={balances} dao={dao} /> */}
-          <Box>Bank Chart</Box>
+          <ThemeChart previewValues={previewValues} />
         </Box>
 
         <Flex w='70%' justify='space-between' mx={6} mt={6}>
