@@ -26,7 +26,6 @@ export const TokenProvider = ({ children }) => {
   useEffect(() => {
     const initDaoTokens = async () => {
       const newDaoData = await initTokens(daoOverview.tokenBalances);
-
       setCurrentDaoTokens(newDaoData);
       shouldFetchInit.current = false;
     };
