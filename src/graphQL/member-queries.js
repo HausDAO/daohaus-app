@@ -14,6 +14,7 @@ export const USER_MEMBERSHIPS = gql`
     }
   }
 `;
+
 export const HUB_MEMBERSHIPS = gql`
   query membersHub($memberAddress: String!) {
     membersHub: members(

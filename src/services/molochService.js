@@ -51,7 +51,8 @@ export const MolochService = ({ web3, daoAddress, version, chainID }) => {
       service === 'processGuildKickProposal' ||
       service === 'submitWhitelistProposal' ||
       service === 'submitGuildKickProposal' ||
-      service === 'collectTokens'
+      service === 'collectTokens' ||
+      service === 'withdrawBalance'
     ) {
       return async ({ args, address, poll, onTxHash }) => {
         console.log('args', args);
