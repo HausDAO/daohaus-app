@@ -26,6 +26,7 @@ export const TokenProvider = ({ children }) => {
   useEffect(() => {
     const initDaoTokens = async () => {
       const newDaoData = await initTokens(daoOverview.tokenBalances);
+
       setCurrentDaoTokens(newDaoData);
       shouldFetchInit.current = false;
     };
@@ -41,6 +42,7 @@ export const TokenProvider = ({ children }) => {
         currentDaoTokens,
         daochain,
       );
+
       setCurrentDaoTokens(withContractValues);
       shouldFetchContract.current = false;
     };
@@ -49,12 +51,19 @@ export const TokenProvider = ({ children }) => {
     }
   }, [currentDaoTokens, daochain]);
 
+  const refetchTokens = async () => {
+    const newDaoData = await initTokens(daoOverview.tokenBalances);
+    setCurrentDaoTokens(newDaoData);
+    shouldFetchContract.current = true;
+  };
+
   return (
     <TokenContext.Provider
       value={{
         currentDaoTokens,
         shouldFetchInit,
         shouldFetchContract,
+        refetchTokens,
       }}
     >
       {children}

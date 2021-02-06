@@ -3,8 +3,11 @@ import { Flex, Text } from '@chakra-ui/react';
 import TextBox from './TextBox';
 import ContentBox from './ContentBox';
 import BankListCard from './bankListCard';
+import { useToken } from '../contexts/TokenContext';
 
-const BankList = ({ tokens }) => {
+const BankList = () => {
+  const { currentDaoTokens } = useToken();
+  console.log('At BANK LIST: ', currentDaoTokens);
   return (
     <ContentBox mt={6}>
       <Flex>
@@ -22,8 +25,8 @@ const BankList = ({ tokens }) => {
         </TextBox>
         {/* {false ? <TextBox w='15%'></TextBox> : null} */}
       </Flex>
-      {tokens ? (
-        Object.values(tokens).map((token) => {
+      {currentDaoTokens ? (
+        currentDaoTokens?.map((token) => {
           return <BankListCard key={token?.id} token={token} />;
         })
       ) : (

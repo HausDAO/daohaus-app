@@ -16,34 +16,15 @@ import { useParams } from 'react-router-dom';
 import { createPoll } from '../services/pollService';
 import { MolochService } from '../services/molochService';
 
-const SyncTokenButton = ({ token, setOptimisticSync }) => {
+const SyncTokenButton = ({ token }) => {
   const { injectedProvider, address } = useInjectedProvider();
-  const {
-    errorToast,
-    successToast,
-    setProposalModal,
-    setTxInfoModal,
-  } = useOverlay();
+  const { errorToast, successToast } = useOverlay();
   const { daoOverview } = useDao();
   const { refreshDao } = useTX();
   const { cachePoll, resolvePoll } = useUser();
   const { daoid, daochain } = useParams();
 
   const [loading, setLoading] = useState(false);
-
-  const txCallBack = (txHash, details) => {
-    // if (txProcessor && txHash) {
-    //   txProcessor.setTx(txHash, user.username, details, true, false, false);
-    //   txProcessor.forceCheckTx = true;
-    //   updateTxProcessor({ ...txProcessor });
-    //   setLoading(false);
-    //   setOptimisticSync(true);
-    // }
-    // if (!txHash) {
-    //   console.log('error: ', details);
-    //   setLoading(false);
-    // }
-  };
 
   const handleSync = async () => {
     setLoading(true);
@@ -77,16 +58,14 @@ const SyncTokenButton = ({ token, setOptimisticSync }) => {
             successToast({
               title: 'Synced Token!',
             });
+            sessionStorage.removeItem('AllTokens');
             refreshDao();
             setLoading(false);
             resolvePoll(txHash);
           },
         },
       });
-      const onTxHash = () => {
-        //  setTxInfoModal(true);
-        //  do we do a TX info modal?
-      };
+
       const args = [token.tokenAddress];
 
       await MolochService({
