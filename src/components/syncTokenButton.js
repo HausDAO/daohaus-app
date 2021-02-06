@@ -58,6 +58,7 @@ const SyncTokenButton = ({ token }) => {
             successToast({
               title: 'Synced Token!',
             });
+            sessionStorage.removeItem('AllTokens');
             refreshDao();
             setLoading(false);
             resolvePoll(txHash);

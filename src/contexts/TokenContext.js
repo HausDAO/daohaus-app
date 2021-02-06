@@ -25,8 +25,8 @@ export const TokenProvider = ({ children }) => {
   // first fetch API USD values to get fast bank balance
   useEffect(() => {
     const initDaoTokens = async () => {
-      console.log('INIT TOKEN FIRED');
       const newDaoData = await initTokens(daoOverview.tokenBalances);
+
       setCurrentDaoTokens(newDaoData);
       shouldFetchInit.current = false;
     };
@@ -38,8 +38,6 @@ export const TokenProvider = ({ children }) => {
   // then fetch contract values for more exact amount.
   useEffect(() => {
     const getContractValues = async () => {
-      console.log('TOKEN SYNC CHECKED');
-
       const withContractValues = await addContractVals(
         currentDaoTokens,
         daochain,
