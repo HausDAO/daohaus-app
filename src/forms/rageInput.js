@@ -7,7 +7,7 @@ import {
   FormLabel,
   Box,
 } from '@chakra-ui/react';
-import TextBox from '../../Shared/TextBox';
+import TextBox from '../components/TextBox';
 
 const RageInput = ({ register, setValue, label, type, max }) => {
   const setMax = () => {

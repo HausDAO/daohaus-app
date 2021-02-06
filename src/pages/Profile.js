@@ -12,6 +12,9 @@ import { truncateAddr, numberWithCommas } from '../utils/general';
 import { initTokenData, tallyUSDs } from '../utils/tokenValue';
 import BankList from '../components/BankList';
 // import ProfileBankList from '../components/profileBankList';
+// import { useOverlay } from '../contexts/OverlayContext';
+import GenericModal from '../modals/genericModal';
+import RageQuitForm from '../forms/rageQuit';
 import ActivitiesFeed from '../components/activitiesFeed';
 import { getProfileActivites } from '../utils/activities';
 import ProfileMenu from '../components/profileMenu';
@@ -146,6 +149,9 @@ const Profile = ({ members, overview, daoTokens, activities }) => {
         pr={[0, null, null, null, 6]}
         pb={6}
       >
+        <GenericModal modalId='rageQuit' closeOnOverlayClick={false}>
+          <RageQuitForm />
+        </GenericModal>
         <ContentBox as={Flex} p={6} w='100%' justify='space-between'>
           {currentMember ? (
             <>

@@ -38,9 +38,7 @@ const NewProposal = () => {
   const history = useHistory();
   const [proposalType, setProposalType] = useState(null);
 
-  // const [, setProposal] = useState(null);
   const { setProposalModal } = useOverlay();
-  // const { modals, openModal } = useModals();
 
   useEffect(() => {
     if (params.type) {

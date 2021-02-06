@@ -1,28 +1,35 @@
 import React, { useState, useEffect } from 'react';
+import { useParams } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import { Button, FormControl, Flex, Icon, Box, Text } from '@chakra-ui/react';
-
-import {
-  useDao,
-  useMembers,
-  useModals,
-  useTxProcessor,
-  useUser,
-} from '../../contexts/PokemolContext';
-import RageInput from './Shared/RageInput';
 import { RiErrorWarningLine } from 'react-icons/ri';
-import { memberProfile } from '../../utils/helpers';
+
+import { useDao } from '../contexts/DaoContext';
+import { useDaoMember } from '../contexts/DaoMemberContext';
+import { useInjectedProvider } from '../contexts/InjectedProviderContext';
+import { useOverlay } from '../contexts/OverlayContext';
+import { useUser } from '../contexts/UserContext';
+import { useTX } from '../contexts/TXContext';
+import RageInput from './rageInput';
+import { createPoll } from '../services/pollService';
+import { MolochService } from '../services/molochService';
 
 const RageQuitForm = () => {
   const [loading, setLoading] = useState(false);
   const [canRage, setCanRage] = useState(false);
-  const [member, setMember] = useState();
-  const [user] = useUser();
-  const [dao] = useDao();
-  const [members] = useMembers();
-  const [txProcessor, updateTxProcessor] = useTxProcessor();
+  const { address } = useInjectedProvider();
+  const { daoOverview } = useDao();
+  const { daoMember } = useDaoMember();
+  const { daochain, daoid } = useParams();
   const [currentError, setCurrentError] = useState(null);
-  const { closeModals } = useModals();
+  const { cachePoll, resolvePoll } = useUser();
+  const {
+    errorToast,
+    successToast,
+    setGenericModal,
+    setTxInfoModal,
+  } = useOverlay();
+  const { refreshDao } = useTX();
 
   const {
     handleSubmit,
@@ -34,24 +41,19 @@ const RageQuitForm = () => {
   } = useForm();
 
   useEffect(() => {
-    if (user?.memberAddress) {
-      setMember(user);
-    } else {
-      setMember(memberProfile(members, user.username));
-    }
-  }, [members, user]);
-
-  useEffect(() => {
     const getCanRage = async () => {
-      const _canRage = await dao.daoService.moloch.canRagequit(
-        member.highestIndexYesVote.proposalIndex,
-      );
-      setCanRage(_canRage);
+      console.log(daoMember?.highestIndexYesVote?.proposalIndex);
+      if (daoMember?.highestIndexYesVote?.proposalIndex) {
+        const _canRage = await MolochService({
+          daoAddress: daoid,
+          version: daoOverview.version,
+          chainID: daochain,
+        })('canRagequit')(daoMember?.highestIndexYesVote?.proposalIndex);
+        setCanRage(_canRage);
+      }
     };
-    if (member) {
-      getCanRage();
-    }
-  }, [dao, member]);
+    getCanRage();
+  }, [address]);
 
   useEffect(() => {
     if (Object.keys(errors).length > 0) {
@@ -65,23 +67,6 @@ const RageQuitForm = () => {
     }
   }, [errors]);
 
-  // TODO check tribute token < currentWallet.token.balance & unlock
-  // TODO check link is a valid link
-
-  const txCallBack = (txHash, details) => {
-    console.log('txCallBack', txProcessor);
-    if (txProcessor && txHash) {
-      closeModals();
-      txProcessor.setTx(txHash, user.username, details, true, false, false);
-      txProcessor.forceCheckTx = true;
-      updateTxProcessor({ ...txProcessor });
-    }
-    if (!txHash) {
-      console.log('error: ', details);
-      setLoading(false);
-    }
-  };
-
   const onSubmit = async (values) => {
     if (
       (values.shares === '' || values.shares === '0') &&
@@ -91,22 +76,51 @@ const RageQuitForm = () => {
       setLoading(false);
       setTimeout(() => {
         clearErrors('loot or shares');
-      }, 500);
-    } else {
-      setLoading(true);
-
-      console.log(values);
-
-      try {
-        dao.daoService.moloch.rageQuit(
-          values.shares ? values.shares : 0,
-          values.loot ? values.loot : 0,
-          txCallBack,
-        );
-      } catch (err) {
         setLoading(false);
-        console.log('*******************error: ', err);
-      }
+      }, 500);
+    }
+
+    setLoading(true);
+    console.log(values);
+    const args = [values.shares || 0, values.loot || 0];
+    try {
+      const poll = createPoll({ action: 'ragequit', cachePoll })({
+        daoID: daoid,
+        chainID: daochain,
+        sharesRaged: values.shares || 0,
+        lootRaged: values.loot || 0,
+        actions: {
+          onError: (error, txHash) => {
+            errorToast({
+              title: `There was an error.`,
+            });
+            resolvePoll(txHash);
+            console.error(`Could not find a matching proposal: ${error}`);
+            setLoading(false);
+          },
+          onSuccess: (txHash) => {
+            successToast({
+              title: 'Minion action executed.',
+            });
+            refreshDao();
+            resolvePoll(txHash);
+            setLoading(false);
+          },
+        },
+      });
+      const onTxHash = () => {
+        setGenericModal({});
+        setTxInfoModal(true);
+      };
+
+      await MolochService({
+        daoAddress: daoid,
+        version: daoOverview.version,
+        chainID: daochain,
+      })('ragequit')({ args, address, poll, onTxHash });
+    } catch (err) {
+      setLoading(false);
+      console.log('*******************error: ', err);
     }
   };
 
@@ -118,14 +132,14 @@ const RageQuitForm = () => {
           setValue={setValue}
           label='Shares to Rage'
           type='shares'
-          max={member?.shares}
+          max={daoMember?.shares}
         />
         <RageInput
           register={register}
           setValue={setValue}
           label='Loot to Rage'
           type='loot'
-          max={member?.loot}
+          max={daoMember?.loot}
         />
 
         <Flex justify='flex-end' align='center'>
