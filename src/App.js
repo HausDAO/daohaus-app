@@ -1,5 +1,5 @@
 import React from 'react';
-import { Switch, Route } from 'react-router-dom';
+import { Switch, Route, Redirect } from 'react-router-dom';
 
 import { UserContextProvider } from './contexts/UserContext';
 import { ExploreContextProvider } from './contexts/ExploreContext';
@@ -10,6 +10,7 @@ import Summon from './pages/Summon';
 import Register from './pages/Register';
 import DaoSwitcherModal from './modals/daoSwitcherModal';
 import TxInfoModal from './modals/TxInfoModal';
+import FourOhFour from './pages/404';
 
 function App() {
   const AppScopedModals = () => (
@@ -22,6 +23,9 @@ function App() {
   return (
     <UserContextProvider>
       <Switch>
+        <Route exact path='/dao/:dao(\b0x[0-9a-f]{10,40}\b)'>
+          <Redirect to='/' />
+        </Route>
         <Route exact path='/'>
           <Hub />
         </Route>
@@ -42,6 +46,7 @@ function App() {
             return <Dao key={routeProps.match.params.daoid} {...routeProps} />;
           }}
         />
+        <Route path='*' component={FourOhFour} />
       </Switch>
       <AppScopedModals />
     </UserContextProvider>
