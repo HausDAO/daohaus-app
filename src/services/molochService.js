@@ -60,6 +60,7 @@ export const MolochService = ({ web3, daoAddress, version, chainID }) => {
       service === 'submitWhitelistProposal' ||
       service === 'submitGuildKickProposal' ||
       service === 'collectTokens' ||
+      service === 'withdrawBalance' ||
       service === 'ragequit'
     ) {
       return async ({ args, address, poll, onTxHash }) => {

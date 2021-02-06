@@ -87,13 +87,15 @@ const Profile = ({ members, overview, daoTokens, activities }) => {
   const [ens, setEns] = useState(null);
 
   useEffect(() => {
-    setCurrentMember(
-      members?.find(
-        (member) =>
-          member?.memberAddress?.toLowerCase() === userid?.toLowerCase(),
-      ),
-    );
-  }, []);
+    if (members) {
+      setCurrentMember(
+        members?.find(
+          (member) =>
+            member?.memberAddress?.toLowerCase() === userid?.toLowerCase(),
+        ),
+      );
+    }
+  }, [members]);
 
   useEffect(() => {
     const getProfile = async () => {

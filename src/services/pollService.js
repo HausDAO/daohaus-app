@@ -5,6 +5,7 @@ import { DAO_POLL, MINION_POLL, HOME_DAO } from '../graphQL/dao-queries';
 import { getGraphEndpoint } from '../utils/chain';
 import { hashMaker, memberVote } from '../utils/proposalUtils';
 import { TokenService } from '../services/tokenService';
+import { MEMBERS_LIST } from '../graphQL/member-queries';
 // import { MolochService } from './molochService';
 
 /// //////////CALLS///////////////
@@ -57,17 +58,8 @@ const pollMinionSummon = async ({ chainID, molochAddress, createdAt }) => {
   });
 };
 
-const pollBabe = async ({ chainID, daoID, daoVersion, tokenAddress }) => {
-  // const BABE = '0x000000000000000000000000000000000000baBe';
+const syncTokenPoll = async ({ chainID, daoID, tokenAddress }) => {
   try {
-    //   const babeBalance = await MolochService({
-    //     chainID,
-    //     daoAddress: daoID,
-    //     version: daoVersion,
-    //   })('getUserTokenBalance')({
-    //     userAddress: BABE,
-    //     tokenAddress,
-    //   });
     const daoOverview = await graphQuery({
       endpoint: getGraphEndpoint(chainID, 'subgraph_url'),
       query: HOME_DAO,
@@ -79,6 +71,32 @@ const pollBabe = async ({ chainID, daoID, daoVersion, tokenAddress }) => {
       (tokenObj) => tokenObj?.token?.tokenAddress === tokenAddress,
     )?.tokenBalance;
     return graphBalance;
+  } catch (error) {
+    return error;
+  }
+};
+
+const withdrawTokenFetch = async ({
+  chainID,
+  daoID,
+  memberAddress,
+  tokenAddress,
+}) => {
+  try {
+    const data = await graphQuery({
+      endpoint: getGraphEndpoint(chainID, 'subgraph_url'),
+      query: MEMBERS_LIST,
+      variables: {
+        contractAddr: daoID,
+      },
+    });
+    const member = data.daoMembers?.find(
+      (member) => member?.memberAddress?.toLowerCase() === memberAddress,
+    );
+    const newTokenBalance = member.tokenBalances.find(
+      (tokenObj) => tokenObj.token.tokenAddress === tokenAddress,
+    ).tokenBalance;
+    return newTokenBalance;
   } catch (error) {
     return error;
   }
@@ -255,6 +273,17 @@ const collectTokenTest = (graphBalance, oldBalance, pollId) => {
     clearInterval(pollId);
     throw new Error(
       `Poll for collect tokens did not recieve new value from the graph`,
+    );
+  }
+};
+
+const withdrawTokenTest = (data, shouldEqual, pollId) => {
+  if (data) {
+    return +data === 0;
+  } else {
+    clearInterval(pollId);
+    throw new Error(
+      `Poll test did recieve the expected results from the graph: ${data}`,
     );
   }
 };
@@ -564,7 +593,7 @@ export const createPoll = ({
         throw new Error(`token object does not contain .moloch.version`);
 
       startPoll({
-        pollFetch: pollBabe,
+        pollFetch: syncTokenPoll,
         testFn: collectTokenTest,
         shouldEqual: token.tokenBalance,
         args: {
@@ -713,6 +742,44 @@ export const createPoll = ({
           pollArgs: { chainID, molochAddress, createdAt },
         });
       }
+    };
+  } else if (action === 'withdrawBalance') {
+    return ({ tokenAddress, memberAddress, actions, chainID, daoID }) => (
+      txHash,
+    ) => {
+      startPoll({
+        pollFetch: withdrawTokenFetch,
+        testFn: withdrawTokenTest,
+        args: {
+          chainID,
+          daoID,
+          memberAddress,
+          tokenAddress,
+        },
+        actions,
+        txHash,
+      });
+      cachePoll({
+        txHash,
+        action,
+        timeSent: Date.now(),
+        status: 'unresolved',
+        resolvedMsg: `Withdrew Tokens`,
+        unresolvedMsg: `Withdrawing tokens`,
+        successMsg: `Successfully withdrew tokens!`,
+        errorMsg: `There was an error withdrawing tokens`,
+        pollData: {
+          action,
+          interval,
+          tries,
+        },
+        pollArgs: {
+          chainID,
+          daoID,
+          memberAddress,
+          tokenAddress,
+        },
+      });
     };
   } else if (action === 'ragequit') {
     console.log('action', action);
