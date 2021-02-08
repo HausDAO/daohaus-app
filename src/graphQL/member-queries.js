@@ -82,6 +82,7 @@ export const MEMBERS_LIST = gql`
       shares
       loot
       kicked
+      jailed
       tokenTribute
       didRagequit
       memberAddress

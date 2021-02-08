@@ -10,7 +10,6 @@ import ContentBox from './ContentBox';
 const MemberInfoCard = ({ member }) => {
   const { daoid, daochain } = useParams();
   const { customTerms } = useMetaData();
-  // const name = member.hasProfile ? member.name : member.memberAddress;
 
   return (
     <>
@@ -25,10 +24,7 @@ const MemberInfoCard = ({ member }) => {
                 color='inherit'
                 size='xs'
               >
-                View{' '}
-                {/* {memberWallet?.memberAddress?.toLowerCase() ===
-                member?.memberAddress && 'my'}{' '} */}
-                profile
+                View profile
               </TextBox>
             )}
           </Flex>

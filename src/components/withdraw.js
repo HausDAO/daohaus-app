@@ -38,7 +38,6 @@ const Withdraw = ({ token }) => {
   //     setLoading(false);
   //   }
   // };
-  console.log(token);
 
   const handleWithdraw = async () => {
     setLoading(true);

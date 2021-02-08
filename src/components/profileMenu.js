@@ -11,14 +11,12 @@ import {
 } from '@chakra-ui/react';
 import { BsThreeDotsVertical } from 'react-icons/bs';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
-import { useDaoMember } from '../contexts/DaoMemberContext';
 import { useInjectedProvider } from '../contexts/InjectedProviderContext';
 import { useOverlay } from '../contexts/OverlayContext';
 
 const ProfileMenu = ({ member }) => {
   const toast = useToast();
   const { address } = useInjectedProvider();
-  const { daoMember } = useDaoMember();
   const { daochain, daoid } = useParams();
   const { setGenericModal } = useOverlay();
   const history = useHistory();
@@ -28,6 +26,13 @@ const ProfileMenu = ({ member }) => {
       `/dao/${daochain}/${daoid}/proposals/new/guildkick?applicant=${member.memberAddress}`,
     );
   };
+
+  const isMember =
+    address &&
+    member.memberAddress &&
+    address.toLowerCase() === member.memberAddress.toLowerCase();
+
+  const hasSharesOrloot = +member.shares > 0 || +member.loot > 0;
 
   return (
     <Menu>
@@ -41,14 +46,19 @@ const ProfileMenu = ({ member }) => {
         />
       </MenuButton>
       <MenuList>
-        {daoMember &&
-          (address.toLowerCase() !== member?.memberAddress ? (
-            <MenuItem onClick={handleGuildkickClick}>GuildKick</MenuItem>
-          ) : (
-            <MenuItem onClick={() => setGenericModal({ rageQuit: true })}>
-              RageQuit
-            </MenuItem>
-          ))}
+        {address ? (
+          <>
+            {isMember && hasSharesOrloot ? (
+              <MenuItem onClick={() => setGenericModal({ rageQuit: true })}>
+                RageQuit
+              </MenuItem>
+            ) : null}
+
+            {!isMember && member.exists && hasSharesOrloot ? (
+              <MenuItem onClick={handleGuildkickClick}>GuildKick</MenuItem>
+            ) : null}
+          </>
+        ) : null}
 
         <Link
           href={`https://3box.io/${member?.memberAddress}`}

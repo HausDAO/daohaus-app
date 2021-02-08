@@ -1,45 +1,17 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import { Flex, Box, Skeleton } from '@chakra-ui/react';
-// import { timeToNow } from '../utils/general';
 import { format } from 'date-fns';
 import TextBox from './TextBox';
 import UserAvatar from './userAvatar';
 import ProfileMenu from './profileMenu';
-import { handleGetProfile } from '../utils/3box';
 
 const MemberInfoGuts = ({ member, showMenu }) => {
-  const [memberData, setMemberData] = useState(null);
-
-  useEffect(() => {
-    const getProfile = async () => {
-      try {
-        const profile = await handleGetProfile(member.memberAddress);
-        if (profile.status === 'error') {
-          return;
-        }
-        setMemberData(profile);
-      } catch (error) {
-        console.log("MemberDoesn't have a profile");
-      }
-    };
-
-    getProfile();
-  }, [member]);
-
   return (
     <>
       {member && (
         <>
           <Flex justify='space-between'>
-            {/* <Avatar
-              name={member.memberAddress}
-              src={makeBlockie(member.memberAddress)}
-              size='md'
-            /> */}
-            <UserAvatar
-              user={{ ...member, ...memberData }}
-              copyEnabled={false}
-            />
+            <UserAvatar user={{ ...member }} copyEnabled={false} />
             {showMenu && <ProfileMenu member={member} />}
           </Flex>
           <Flex w='100%' justify='space-between' mt={6}>

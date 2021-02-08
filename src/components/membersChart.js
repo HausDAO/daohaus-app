@@ -49,7 +49,7 @@ const MembersChart = () => {
   }, [daoBalances, setDaoBalances, daochain, daoid]);
 
   useEffect(() => {
-    if (daoBalances?.length) {
+    if (daoBalances?.length && daoOverview) {
       const dateRange = getDateRange(
         { value: 'lifetime' },
         daoBalances,
@@ -62,7 +62,7 @@ const MembersChart = () => {
       );
       setPreppedData(groupedBalances);
     }
-  }, [daoBalances]);
+  }, [daoBalances, daoOverview]);
 
   useEffect(() => {
     if (preppedData.length > 0 && chartDimension) {
@@ -97,7 +97,7 @@ const MembersChart = () => {
 
   return (
     <Box>
-      {daoBalances?.length ? (
+      {daoBalances?.length && daoMembers?.length && daoOverview ? (
         <ContentBox minH='360px'>
           <Flex justify='space-between'>
             <Box>

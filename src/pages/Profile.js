@@ -9,7 +9,7 @@ import { FaStar } from 'react-icons/fa';
 
 import { handleGetProfile } from '../utils/3box';
 import { truncateAddr, numberWithCommas } from '../utils/general';
-import { initTokenData, tallyUSDs } from '../utils/tokenValue';
+import { initTokenData } from '../utils/tokenValue';
 import BankList from '../components/BankList';
 // import ProfileBankList from '../components/profileBankList';
 // import { useOverlay } from '../contexts/OverlayContext';
@@ -21,74 +21,34 @@ import ProfileMenu from '../components/profileMenu';
 import ContentBox from '../components/ContentBox';
 import TextBox from '../components/TextBox';
 import { chainByID } from '../utils/chain';
-
-// TODO handle non members
-
-const handleAvatar = (member, profile) => {
-  if (profile?.image?.length) {
-    const url = profile?.image[0].contentUrl;
-    return (
-      <Avatar
-        // uses key, otherwise React skips rerender
-        key={`profile${member}`}
-        name={profile?.name}
-        width='100px'
-        height='100px'
-        src={`https://ipfs.infura.io/ipfs/${url['/']}`}
-      />
-    );
-  } else {
-    return (
-      <Avatar
-        key={`no-profile${member}`}
-        name={member?.memberAddress}
-        width='100px'
-        height='100px'
-        src={makeBlockie(member?.memberAddress)}
-      />
-    );
-  }
-};
-
-const calcValue = (member, daoTokens, overview) => {
-  if (daoTokens && member && overview) {
-    const { loot, shares } = member;
-    const { totalShares, totalLoot } = overview;
-    const totalDaoVal = tallyUSDs(daoTokens);
-    const memberProportion = (shares + loot) / (totalShares + totalLoot) || 0;
-
-    const result = memberProportion * totalDaoVal;
-    return result.toFixed(2);
-  } else {
-    return 0;
-  }
-};
-
-const calcPower = (member, overview) => {
-  if (member?.shares && overview?.totalShares) {
-    const total = (member.shares / overview.totalShares) * 100;
-    return total.toFixed(1);
-  } else {
-    return 0;
-  }
-};
-
-const handleName = (member, profile) => {
-  return profile?.name ? profile.name : truncateAddr(member.memberAddress);
-};
+import { calcPower, calcValue } from '../utils/profile';
+import { useInjectedProvider } from '../contexts/InjectedProviderContext';
 
 const Profile = ({ members, overview, daoTokens, activities }) => {
-  const { userid, daochain } = useParams();
+  // is address
+  // exists, doesn't exist has balance, no entity
 
-  const [tokensRecievable, setTokensRecievable] = useState([]);
+  const { userid, daochain } = useParams();
+  const { address } = useInjectedProvider();
+  const [isLoggedInAddress, setIsLoggedInAddress] = useState(false);
+  const [memberEntity, setMemberEntity] = useState(null);
   const [profile, setProfile] = useState(null);
-  const [showAlert] = useState(false);
-  const [currentMember, setCurrentMember] = useState(null);
+  const [tokensReceivable, setTokensReceivable] = useState([]);
   const [ens, setEns] = useState(null);
+
+  // console.log('members', members);
+  // console.log('memberEntity', memberEntity);
+  // console.log('profile', profile);
+
+  useEffect(() => {
+    if (address) {
+      setIsLoggedInAddress(userid.toLowerCase() === address.toLowerCase());
+    }
+  }, [address]);
 
   useEffect(() => {
     if (members) {
-      setCurrentMember(
+      setMemberEntity(
         members?.find(
           (member) =>
             member?.memberAddress?.toLowerCase() === userid?.toLowerCase(),
@@ -100,21 +60,21 @@ const Profile = ({ members, overview, daoTokens, activities }) => {
   useEffect(() => {
     const getProfile = async () => {
       try {
-        const profile = await handleGetProfile(currentMember.memberAddress);
+        const profile = await handleGetProfile(userid);
         if (profile.status === 'error') return;
         setProfile(profile);
       } catch (error) {
         console.error(error);
       }
     };
-    if (currentMember && !profile) {
+    if (userid && !profile) {
       getProfile();
     }
-  }, [currentMember, profile]);
+  }, [userid, profile]);
 
   useEffect(() => {
     const lookupEns = async () => {
-      if (currentMember?.memberAddress) {
+      if (userid) {
         const ethersProvider = ethers.getDefaultProvider(
           chainByID('0x1').rpc_url,
         );
@@ -125,24 +85,53 @@ const Profile = ({ members, overview, daoTokens, activities }) => {
       }
     };
     lookupEns();
-  }, [currentMember, daochain, userid]);
+  }, [daochain, userid]);
 
   useEffect(() => {
     const initMemberTokens = async (tokensWithBalance) => {
       const newTokenData = await initTokenData(tokensWithBalance);
-      setTokensRecievable(newTokenData);
+      setTokensReceivable(newTokenData);
     };
-    if (currentMember?.tokenBalances && daochain) {
-      const tokensWithBalance = currentMember.tokenBalances.filter(
+    if (memberEntity?.tokenBalances && daochain) {
+      const tokensWithBalance = memberEntity.tokenBalances.filter(
         (token) => +token.tokenBalance > 0,
       );
       if (tokensWithBalance?.length) {
         initMemberTokens(tokensWithBalance);
       } else {
-        setTokensRecievable([]);
+        setTokensReceivable([]);
       }
     }
-  }, [currentMember]);
+  }, [memberEntity]);
+
+  const handleAvatar = (member, profile) => {
+    if (profile?.image?.length) {
+      const url = profile?.image[0].contentUrl;
+      return (
+        <Avatar
+          key={`profile${member}`}
+          name={profile?.name}
+          width='100px'
+          height='100px'
+          src={`https://ipfs.infura.io/ipfs/${url['/']}`}
+        />
+      );
+    } else {
+      return (
+        <Avatar
+          key={`no-profile${userid}`}
+          name={userid}
+          width='100px'
+          height='100px'
+          src={makeBlockie(userid)}
+        />
+      );
+    }
+  };
+
+  const handleName = (profile) => {
+    return profile?.name ? profile.name : truncateAddr(userid);
+  };
 
   return (
     <Flex wrap='wrap'>
@@ -155,34 +144,36 @@ const Profile = ({ members, overview, daoTokens, activities }) => {
           <RageQuitForm />
         </GenericModal>
         <ContentBox as={Flex} p={6} w='100%' justify='space-between'>
-          {currentMember ? (
+          {userid ? (
             <>
               <Flex direction='row' width='50%'>
                 <Flex direction='column' align='center' pr={5} minW='40%'>
-                  {handleAvatar(currentMember, profile)}
-                  <Skeleton isLoaded={profile || currentMember}>
-                    {currentMember?.memberAddress ? (
-                      <Box
-                        fontFamily='heading'
-                        fontSize='xs'
-                        textAlign='center'
-                        mt={5}
-                      >
+                  {handleAvatar(userid, profile)}
+                  <Box
+                    fontFamily='heading'
+                    fontSize='xs'
+                    textAlign='center'
+                    mt={5}
+                  >
+                    {memberEntity?.exists ? (
+                      <>
                         Joined{' '}
-                        {currentMember?.createdAt
+                        {memberEntity?.createdAt
                           ? format(
-                              new Date(+currentMember?.createdAt * 1000),
+                              new Date(+memberEntity?.createdAt * 1000),
                               'MMM. d, yyyy',
                             )
                           : '--'}
-                      </Box>
-                    ) : null}
-                  </Skeleton>
+                      </>
+                    ) : (
+                      <>Not a member of this DAO</>
+                    )}
+                  </Box>
                 </Flex>
 
                 <Flex direction='column'>
                   <Box fontSize='xl' fontFamily='heading'>
-                    {handleName(currentMember, profile)}
+                    {handleName(profile)}
                     {profile?.emoji && (
                       <Box as='span' ml={2}>
                         {profile.emoji}
@@ -220,75 +211,59 @@ const Profile = ({ members, overview, daoTokens, activities }) => {
                       {daoTokens &&
                         overview &&
                         numberWithCommas(
-                          calcValue(currentMember, daoTokens, overview),
+                          calcValue(memberEntity, daoTokens, overview),
                         )}
                     </TextBox>
                   </Box>
                   <Box>
                     {profile ? (
-                      <ProfileMenu member={{ ...currentMember, ...profile }} />
+                      <ProfileMenu member={{ ...memberEntity, ...profile }} />
                     ) : null}
                   </Box>
                 </Flex>
                 <Flex justify='space-between' align='flex-end' mt={4}>
                   <Box w='30%'>
                     <TextBox size='xs'>Power</TextBox>
-                    <Skeleton isLoaded={profile || currentMember}>
-                      {showAlert ? (
-                        <TextBox size='xl' variant='value'>
-                          <Flex
-                            direction='row'
-                            align='center'
-                            justify='space-around'
-                          >
-                            <Icon as={FaStar} color='yellow.500' />
-                            100%
-                            <Icon as={FaStar} color='yellow.500' />
-                          </Flex>
-                        </TextBox>
-                      ) : (
-                        <TextBox size='xl' variant='value'>
-                          {daoTokens &&
-                            overview &&
-                            calcPower(currentMember, overview)}
-                          %
-                        </TextBox>
-                      )}
+                    <Skeleton isLoaded={profile || memberEntity}>
+                      <TextBox size='xl' variant='value'>
+                        {daoTokens &&
+                          overview &&
+                          calcPower(memberEntity, overview)}
+                        %
+                      </TextBox>
                     </Skeleton>
                   </Box>
                   <Box w='30%'>
                     <TextBox size='xs'>Shares</TextBox>
-                    <Skeleton isLoaded={currentMember?.shares >= 0}>
+                    <Skeleton isLoaded={memberEntity?.shares >= 0}>
                       <TextBox size='xl' variant='value'>
-                        {currentMember?.shares}
+                        {memberEntity?.shares}
                       </TextBox>
                     </Skeleton>
                   </Box>
                   <Box w='30%'>
                     <TextBox size='xs'>Loot</TextBox>
-                    <Skeleton isLoaded={currentMember?.loot >= 0}>
+                    <Skeleton isLoaded={memberEntity?.loot >= 0}>
                       <TextBox size='xl' variant='value'>
-                        {currentMember?.loot}
+                        {memberEntity?.loot}
                       </TextBox>
                     </Skeleton>
                   </Box>
                 </Flex>
               </Flex>
             </>
-          ) : (
-            <h3>Member not found</h3>
-          )}
+          ) : null}
         </ContentBox>
         <BankList
-          tokens={tokensRecievable}
-          hasBalance={tokensRecievable.length}
+          tokens={tokensReceivable}
+          hasBalance={tokensReceivable.length}
         />
       </Box>
       <Box w={['100%', null, null, null, '40%']}>
-        {activities && currentMember && (
+        {activities && memberEntity && (
           <ActivitiesFeed
             limit={5}
-            hydrateFn={getProfileActivites(currentMember.memberAddress)}
+            hydrateFn={getProfileActivites(memberEntity.memberAddress)}
             activities={activities}
           />
         )}
