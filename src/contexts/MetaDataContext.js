@@ -39,7 +39,6 @@ export const MetaDataProvider = ({ children }) => {
         })?.meta;
 
       if (daoMeta && shouldUpdateTheme.current) {
-        console.log('SET BY HUB QUERY');
         if (daoMeta.customTheme) {
           updateTheme(daoMeta.customTheme);
         } else {
@@ -59,7 +58,6 @@ export const MetaDataProvider = ({ children }) => {
       try {
         const [data] = await fetchMetaData(daoid);
         if (shouldUpdateTheme.current && !daoMetaData) {
-          console.log('SET BY API');
           if (data.customTheme) {
             updateTheme(data.customTheme);
           } else {
@@ -84,7 +82,6 @@ export const MetaDataProvider = ({ children }) => {
     try {
       const [data] = await fetchMetaData(daoid);
       if (shouldUpdateTheme.current && !daoMetaData) {
-        console.log('SET BY API');
         if (data.customTheme) {
           updateTheme(data.customTheme);
         } else {

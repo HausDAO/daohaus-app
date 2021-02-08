@@ -71,7 +71,7 @@ const ThemeBuilder = () => {
 
   return (
     <Box>
-      <Flex ml={6} justify='space-between' align='center'>
+      <Flex justify='space-between' align='center'>
         <Flex
           as={RouterLink}
           to={`/dao/${daochain}/${daoid}/settings`}

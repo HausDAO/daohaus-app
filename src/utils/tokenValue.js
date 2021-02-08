@@ -46,7 +46,7 @@ export const initTokens = async (graphTokenData) => {
   const tokenCache = JSON.parse(window.sessionStorage.getItem('AllTokens'));
 
   if (!tokenCache) {
-    return initTokenData(graphTokenData);
+    return initTokenData(graphTokenData, true);
   } else {
     let cachedTokens = [];
     let newTokens = [];
@@ -59,9 +59,8 @@ export const initTokens = async (graphTokenData) => {
         newTokens = [...newTokens, tokenObj];
       }
     }
-
     if (newTokens.length) {
-      const newTokenData = await initTokenData(newTokens);
+      const newTokenData = await initTokenData(newTokens, true);
       return [...cachedTokens, ...newTokenData];
     } else {
       return cachedTokens;
@@ -69,7 +68,7 @@ export const initTokens = async (graphTokenData) => {
   }
 };
 
-export const initTokenData = async (graphTokenData) => {
+export const initTokenData = async (graphTokenData, shouldCache = false) => {
   const tokenData = await fetchTokenData();
   const uniswapData = await fetchUniswapData();
   const uniswapDataMap = uniswapData.reduce((map, token) => {
@@ -78,7 +77,9 @@ export const initTokenData = async (graphTokenData) => {
   }, {});
 
   return graphTokenData.map((tokenObj) => {
-    ensureCacheExists();
+    if (shouldCache) {
+      ensureCacheExists();
+    }
     const { token, tokenBalance } = tokenObj;
 
     const usdVal = tokenData[token.tokenAddress]?.price || 0;
@@ -92,7 +93,9 @@ export const initTokenData = async (graphTokenData) => {
       totalUSD: calcTotalUSD(token.decimals, tokenBalance, usdVal),
       logoUri,
     };
-    cacheToken(tokenDataObj, token.tokenAddress);
+    if (shouldCache) {
+      cacheToken(tokenDataObj, token.tokenAddress);
+    }
     return tokenDataObj;
   });
 };
@@ -108,27 +111,31 @@ export const tallyUSDs = (tokenObj) => {
 export const addContractVals = (tokens, chainID) => {
   return Promise.all(
     tokens.map(async (token) => {
-      const tokenBalance = await TokenService({
-        chainID,
-        tokenAddress: token.tokenAddress,
-        is32: false,
-      })('balanceOf')(token.moloch.id);
-      const babeBalance = await MolochService({
-        tokenAddress: token.tokenAddress,
-        chainID,
-        daoAddress: token.moloch.id,
-        version: +token.moloch.version,
-      })('getUserTokenBalance')({
-        userAddress: babe,
-        tokenAddress: token.tokenAddress,
-      });
-      return {
-        ...token,
-        contractBalances: {
-          token: +tokenBalance,
-          babe: +babeBalance,
-        },
-      };
+      try {
+        const tokenBalance = await TokenService({
+          chainID,
+          tokenAddress: token.tokenAddress,
+          is32: false,
+        })('balanceOf')(token?.moloch?.id);
+        const babeBalance = await MolochService({
+          tokenAddress: token.tokenAddress,
+          chainID,
+          daoAddress: token?.moloch?.id,
+          version: +token?.moloch?.version,
+        })('getUserTokenBalance')({
+          userAddress: babe,
+          tokenAddress: token.tokenAddress,
+        });
+        return {
+          ...token,
+          contractBalances: {
+            token: +tokenBalance,
+            babe: +babeBalance,
+          },
+        };
+      } catch (error) {
+        console.error(error);
+      }
     }),
   );
 };

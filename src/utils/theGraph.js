@@ -114,6 +114,7 @@ const completeQueries = {
           contractAddr: args.daoID,
         },
       });
+
       setter(graphMembers);
     } catch (error) {
       console.error(error);

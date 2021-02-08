@@ -14,6 +14,7 @@ export const USER_MEMBERSHIPS = gql`
     }
   }
 `;
+
 export const HUB_MEMBERSHIPS = gql`
   query membersHub($memberAddress: String!) {
     membersHub: members(
@@ -81,6 +82,7 @@ export const MEMBERS_LIST = gql`
       shares
       loot
       kicked
+      jailed
       tokenTribute
       didRagequit
       memberAddress

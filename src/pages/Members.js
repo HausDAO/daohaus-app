@@ -62,7 +62,10 @@ const Members = ({ members, activities }) => {
   }, [members, sort]);
 
   const sortMembers = () => {
-    const sortedMembers = members.filter((member) => member.exists);
+    // TODO - show guild kicked members
+    const sortedMembers = members.filter(
+      (member) => member.exists || member.jailed,
+    );
 
     if (sort) {
       sortedMembers.sort((a, b) => {

@@ -136,7 +136,7 @@ const TokenListCard = ({
       <Box w='15%'>
         {hasBalance && (
           // <Skeleton>
-          <Withdraw tokenBalance={token} />
+          <Withdraw token={token} />
           // </Skeleton>
         )}
       </Box>
