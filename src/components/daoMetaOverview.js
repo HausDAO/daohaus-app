@@ -9,14 +9,11 @@ import {
   RiLinksLine,
 } from 'react-icons/ri';
 
-import { useMetaData } from '../contexts/MetaDataContext';
 import ContentBox from './ContentBox';
 import TextBox from './TextBox';
 import { themeImagePath } from '../utils/metadata';
 
-const DaoMetaOverview = () => {
-  const { daoMetaData } = useMetaData();
-
+const DaoMetaOverview = ({ daoMetaData }) => {
   return (
     <Flex as={ContentBox} mt={2} direction='column' w='100%%'>
       {daoMetaData && (

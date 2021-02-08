@@ -11,7 +11,6 @@ import {
 import { VscGear } from 'react-icons/vsc';
 import { useParams } from 'react-router-dom';
 
-import { useMetaData } from '../contexts/MetaDataContext';
 import { useInjectedProvider } from '../contexts/InjectedProviderContext';
 import { boostPost } from '../utils/metadata';
 import { useOverlay } from '../contexts/OverlayContext';
@@ -21,8 +20,7 @@ import { notificationBoostContent } from '../content/boost-content';
 import GenericModal from '../modals/genericModal';
 import NotificationsLaunch from '../components/notificationsLaunch';
 
-const Notifications = () => {
-  const { daoMetaData, refetchMetaData } = useMetaData();
+const Notifications = ({ daoMetaData, refetchMetaData }) => {
   const { injectedProvider, injectedChain, address } = useInjectedProvider();
   const { daoid } = useParams();
   const { setGenericModal, successToast, errorToast } = useOverlay();

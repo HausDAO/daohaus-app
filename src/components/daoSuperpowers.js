@@ -3,31 +3,27 @@ import { Link as RouterLink, useParams } from 'react-router-dom';
 import { Flex, Icon, Link } from '@chakra-ui/react';
 import { VscGear } from 'react-icons/vsc';
 
-import { useDaoMember } from '../contexts/DaoMemberContext';
 import ContentBox from './ContentBox';
 import TextBox from './TextBox';
-import { useMetaData } from '../contexts/MetaDataContext';
+import { useInjectedProvider } from '../contexts/InjectedProviderContext';
 
-const Superpowers = () => {
+const Superpowers = ({ daoMember, daoMetaData }) => {
   const { daochain, daoid } = useParams();
-  const { daoMember } = useDaoMember();
-  const { daoMetaData } = useMetaData();
+  const { address, injectedChain } = useInjectedProvider();
+
+  const daoConnectedAndSameChain = () => {
+    return address && daochain && injectedChain?.chainId === daochain;
+  };
 
   return (
-    <ContentBox
-      d='flex'
-      flexDirection='column'
-      position='relative'
-      mt={2}
-      mb={6}
-    >
+    <ContentBox d='flex' flexDirection='column' position='relative'>
       {daoMetaData?.boosts?.customTheme?.active ? (
         <Flex p={4} justify='space-between' align='center'>
           <TextBox size='md' colorScheme='whiteAlpha.900'>
             Custom Theme
           </TextBox>
           <Flex align='center'>
-            {daoMember?.shares > 0 ? (
+            {daoConnectedAndSameChain() && daoMember?.shares > 0 ? (
               <RouterLink to={`/dao/${daochain}/${daoid}/settings/theme`}>
                 <Icon
                   as={VscGear}
@@ -38,8 +34,8 @@ const Superpowers = () => {
                 />
               </RouterLink>
             ) : (
-              <TextBox colorScheme='whiteAlpha.900' size='xs'>
-                Only Active Members can change the theme.
+              <TextBox colorScheme='whiteAlpha.900' size='xs' maxW='250px'>
+                Active Members only
               </TextBox>
             )}
           </Flex>
@@ -52,7 +48,7 @@ const Superpowers = () => {
             Notifications
           </TextBox>
           <Flex align='center'>
-            {daoMember?.shares > 0 ? (
+            {daoConnectedAndSameChain() && daoMember?.shares > 0 ? (
               <RouterLink
                 to={`/dao/${daochain}/${daoid}/settings/notifications`}
               >

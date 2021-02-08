@@ -2,13 +2,15 @@ import React from 'react';
 
 import BankList from '../components/BankList';
 import BankChart from '../components/bankChart';
-import { useToken } from '../contexts/TokenContext';
 
-const Bank = () => {
-  const { currentDaoTokens } = useToken();
+const Bank = ({ overview, customTerms, currentDaoTokens }) => {
   return (
     <div>
-      <BankChart />
+      <BankChart
+        currentDaoTokens={currentDaoTokens}
+        overview={overview}
+        customTerms={customTerms}
+      />
       <BankList tokens={currentDaoTokens} />
     </div>
   );

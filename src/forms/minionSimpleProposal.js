@@ -150,7 +150,7 @@ const MinionProposalForm = () => {
           },
           onSuccess: (txHash) => {
             successToast({
-              title: 'Proposal submitted.',
+              title: 'Minion proposal submitted.',
             });
             refreshDao();
             resolvePoll(txHash);
@@ -164,7 +164,7 @@ const MinionProposalForm = () => {
       };
       await MinionService({
         web3: injectedProvider,
-        minion: values.minionAddress,
+        minion: values.minionContract,
         chainID: daochain,
       })('proposeAction')({ args, address, poll, onTxHash });
     } catch (err) {

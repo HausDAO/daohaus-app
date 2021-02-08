@@ -56,6 +56,7 @@ const FundingProposalForm = () => {
     errors,
     register,
     setValue,
+    setError,
     getValues,
     watch,
   } = useForm();
@@ -179,6 +180,7 @@ const FundingProposalForm = () => {
               <Input
                 name='sharesRequested'
                 placeholder='0'
+                defaultValue='0'
                 mb={5}
                 ref={register({
                   required: {
@@ -202,6 +204,7 @@ const FundingProposalForm = () => {
               <Input
                 name='lootRequested'
                 placeholder='0'
+                defaultValue='0'
                 mb={5}
                 ref={register({
                   pattern: {
@@ -217,6 +220,7 @@ const FundingProposalForm = () => {
               register={register}
               setValue={setValue}
               getValues={getValues}
+              setError={setError}
             />
           )}
           {(!showShares || !showLoot || !showTribute) && (
