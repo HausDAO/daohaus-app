@@ -23,7 +23,6 @@ const Members = ({ members, activities }) => {
   const { customTerms } = useMetaData();
   const [listMembers, setListMembers] = useState(members);
   const [sort, setSort] = useState();
-
   const selectMember = (member) => {
     if (selectedMember == null) {
       setSelectedMember(member);

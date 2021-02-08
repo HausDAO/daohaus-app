@@ -55,8 +55,9 @@ const Layout = ({ children, dao }) => {
         mt={['80px', null, null, '0px']}
         flexDirection='column'
       >
-        <Header dao={dao} />
-        <Box p={6}>{children}</Box>
+        {children}
+        {/* <Header dao={dao} /> */}
+        {/* <Box p={6}>{children}</Box> */}
       </Flex>
     </Flex>
   );

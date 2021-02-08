@@ -221,7 +221,6 @@ const Header = ({ dao }) => {
           <Button variant='outline' onClick={requestWallet}>
             Connect Wallet
           </Button>
-          // <Web3SignIn />
         )}
       </Flex>
     </Flex>

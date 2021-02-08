@@ -55,6 +55,7 @@ const DaoRouter = () => {
             isCorrectNetwork={isCorrectNetwork}
             overview={daoOverview}
             members={daoMembers}
+            daoMetaData={daoMetaData}
           />
         </Route>
         <Route exact path={`${path}/proposals`}>
@@ -62,6 +63,7 @@ const DaoRouter = () => {
             proposals={daoActivities?.proposals}
             overview={daoOverview}
             activities={daoActivities}
+            customTerms={customTerms}
           />
         </Route>
         <Route exact path={`${path}/bank`}>
