@@ -14,6 +14,7 @@ import { getCopy } from '../utils/metadata';
 import MembersChart from '../components/membersChart';
 import ListSort from '../components/listSort';
 import { membersSortOptions } from '../utils/memberContent';
+import MemberFilters from '../components/memberFilters';
 
 const Members = ({ members, activities }) => {
   const { daoMember } = useDaoMember();
@@ -23,6 +24,8 @@ const Members = ({ members, activities }) => {
   const { customTerms } = useMetaData();
   const [listMembers, setListMembers] = useState(members);
   const [sort, setSort] = useState();
+  const [filter, setFilter] = useState();
+
   const selectMember = (member) => {
     if (selectedMember == null) {
       setSelectedMember(member);
@@ -58,10 +61,26 @@ const Members = ({ members, activities }) => {
     if (members && members.length > 0) {
       sortMembers();
     }
-  }, [members, sort]);
+  }, [members, sort, filter]);
 
   const sortMembers = () => {
-    const sortedMembers = members.filter((member) => member.exists);
+    const sortedMembers = members.filter((member) => {
+      const active = +member.shares > 0 || (+member.loot > 0 && !member.jailed);
+      switch (filter?.value) {
+        case 'active': {
+          return member.exists && active;
+        }
+        case 'inactive': {
+          return member.exists && !active && !member.jailed;
+        }
+        case 'jailed': {
+          return member.jailed;
+        }
+        default: {
+          return member.exists && active;
+        }
+      }
+    });
 
     if (sort) {
       sortedMembers.sort((a, b) => {
@@ -80,7 +99,10 @@ const Members = ({ members, activities }) => {
 
   return (
     <>
-      <ListSort sort={sort} setSort={setSort} options={membersSortOptions} />
+      <Flex>
+        <ListSort sort={sort} setSort={setSort} options={membersSortOptions} />
+        <MemberFilters filter={filter} setFilter={setFilter} />
+      </Flex>
       <Flex wrap='wrap'>
         <Box
           w={['100%', null, null, null, '60%']}

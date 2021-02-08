@@ -3,7 +3,6 @@ import { Flex, Text } from '@chakra-ui/react';
 import TextBox from './TextBox';
 import ContentBox from './ContentBox';
 import BankListCard from './bankListCard';
-// import { useToken } from '../contexts/TokenContext';
 
 const BankList = ({ tokens, hasBalance }) => {
   return (
@@ -21,7 +20,7 @@ const BankList = ({ tokens, hasBalance }) => {
         <TextBox w='15%' size='xs'>
           Value
         </TextBox>
-        {/* {false ? <TextBox w='15%'></TextBox> : null} */}
+        {hasBalance ? <TextBox w='15%'></TextBox> : null}
       </Flex>
       {tokens ? (
         tokens?.map((token) => {

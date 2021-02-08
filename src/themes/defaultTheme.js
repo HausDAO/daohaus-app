@@ -27,9 +27,9 @@ export const defaultTheme = {
     guildKick: 'Guild Kick',
     minion: 'Minion',
     minions: 'Minions',
-    f04title: "404 What's Lost Can Be Found",
-    f04heading: 'You have been slain',
-    f04subhead: 'Please reload from the most recent save point.',
-    f04cta: 'Start Over',
+    // f04title: "404 What's Lost Can Be Found",
+    // f04heading: 'You have been slain',
+    // f04subhead: 'Please reload from the most recent save point.',
+    // f04cta: 'Start Over',
   },
 };
