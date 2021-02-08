@@ -11,26 +11,25 @@ import {
 } from 'react-vis';
 import { Box, Flex, Spinner, RadioGroup, Stack, Radio } from '@chakra-ui/react';
 
-import { fetchBankValues } from '../utils/theGraph';
+import { useCustomTheme } from '../contexts/CustomThemeContext';
 import {
   getDateRange,
   getDatesArray,
   groupBalancesMemberToDateRange,
 } from '../utils/charts';
-import { useDao } from '../contexts/DaoContext';
-import { useCustomTheme } from '../contexts/CustomThemeContext';
 import ContentBox from './ContentBox';
 import TextBox from './TextBox';
+import { fetchBankValues } from '../utils/theGraph';
 import { numberWithCommas } from '../utils/general';
+import { getCopy } from '../utils/metadata';
 
-const MembersChart = () => {
+const MembersChart = ({ overview, daoMetaData, daoMembers }) => {
   const { daochain, daoid } = useParams();
   const [daoBalances, setDaoBalances] = useSessionStorage(
     `balances-${daoid}`,
     null,
   );
   const { theme } = useCustomTheme();
-  const { daoOverview, daoMembers } = useDao();
   const [preppedData, setPreppedData] = useState([]);
   const [chartData, setChartData] = useState([]);
   const [chartDimension, setChartDimension] = useState('currentShares');
@@ -49,11 +48,11 @@ const MembersChart = () => {
   }, [daoBalances, setDaoBalances, daochain, daoid]);
 
   useEffect(() => {
-    if (daoBalances?.length && daoOverview) {
+    if (daoBalances?.length && overview) {
       const dateRange = getDateRange(
         { value: 'lifetime' },
         daoBalances,
-        daoOverview.summoningTime,
+        overview.summoningTime,
       );
       const dates = getDatesArray(dateRange.start, dateRange.end);
       const groupedBalances = groupBalancesMemberToDateRange(
@@ -62,7 +61,7 @@ const MembersChart = () => {
       );
       setPreppedData(groupedBalances);
     }
-  }, [daoBalances, daoOverview]);
+  }, [daoBalances, overview]);
 
   useEffect(() => {
     if (preppedData.length > 0 && chartDimension) {
@@ -85,10 +84,10 @@ const MembersChart = () => {
   const gradient = (
     <GradientDefs>
       <linearGradient id='gradient' x1='0' x2='0' y1='0' y2='100%'>
-        <stop offset='0%' stopColor={theme.colors.primary[50]} />
+        <stop offset='0%' stopColor={theme?.colors.primary[50]} />
         <stop
           offset='100%'
-          stopColor={theme.colors.primary[50]}
+          stopColor={theme?.colors.primary[50]}
           stopOpacity={0}
         />
       </linearGradient>
@@ -97,29 +96,29 @@ const MembersChart = () => {
 
   return (
     <Box>
-      {daoBalances?.length && daoMembers?.length && daoOverview ? (
+      {daoBalances?.length && daoMembers?.length && overview ? (
         <ContentBox minH='360px'>
           <Flex justify='space-between'>
             <Box>
-              <TextBox size='xs'>{theme.daoMeta.members}</TextBox>
+              <TextBox size='xs'>{getCopy(daoMetaData, 'members')}</TextBox>
               <TextBox variant='value' size='lg'>
-                {daoMembers.length}
+                {daoMembers?.length}
               </TextBox>
             </Box>
             <Box>
               <TextBox size='xs'>Shares</TextBox>
               <TextBox variant='value' size='lg'>
-                {daoOverview.totalShares
-                  ? numberWithCommas(daoOverview.totalShares)
+                {overview?.totalShares
+                  ? numberWithCommas(overview.totalShares)
                   : '--'}
               </TextBox>
             </Box>
-            {(daoOverview.totalLoot > 0 || !daoOverview.totalLoot) && (
+            {(overview?.totalLoot > 0 || !overview.totalLoot) && (
               <Box>
                 <TextBox size='xs'>Loot</TextBox>
                 <TextBox variant='value' size='lg'>
-                  {daoOverview.totalLoot
-                    ? numberWithCommas(daoOverview.totalLoot)
+                  {overview?.totalLoot
+                    ? numberWithCommas(overview.totalLoot)
                     : '--'}
                 </TextBox>
               </Box>
@@ -149,7 +148,7 @@ const MembersChart = () => {
                     animate
                     curve='curveNatural'
                     data={chartData}
-                    color={theme.colors.primary[50]}
+                    color={theme?.colors.primary[50]}
                     style={{ fill: 'none' }}
                   />
                   <AreaSeries

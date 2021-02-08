@@ -68,13 +68,15 @@ const Header = ({ dao }) => {
         return 'Overview';
       case `/dao/${dao.chainID}/${dao.daoID}/proposals`:
         return getCopy(dao.customTerms, 'proposals');
+      case `/dao/${dao.chainID}/${dao.daoID}/proposals/${params.propid}`:
+        return getCopy(dao.customTerms, 'proposals');
       case `/dao/${dao.chainID}/${dao.daoID}/proposals/new/`:
         return `New ${getCopy(dao.customTerms, 'proposal')}`;
       case `/dao/${dao.chainID}/${dao.daoID}/bank`:
         return getCopy(dao.customTerms, 'bank');
       case `/dao/${dao.chainID}/${dao.daoID}/members`:
         return getCopy(dao.customTerms, 'members');
-      case `/dao/${dao.chainID}/${dao.daoID}/profile/${address}`:
+      case `/dao/${dao.chainID}/${dao.daoID}/profile/${params.userid}`:
         return 'Profile';
       case `/dao/${dao.chainID}/${dao.daoID}/settings`:
         return getCopy(dao.customTerms, 'settings');
@@ -84,7 +86,7 @@ const Header = ({ dao }) => {
         return 'Custom Theme';
       case `/dao/${dao.chainID}/${dao.daoID}/settings/notifications`:
         return 'Notifications';
-      case `/dao/${dao.chainID}/${dao.daoID}/settings/minion/\b0x[0-9a-f]{10,40}\b`:
+      case `/dao/${dao.chainID}/${dao.daoID}/settings/minion/${params.minion}`:
         return 'Minions';
       case `/dao/${dao.chainID}/${dao.daoID}/settings/boosts`:
         return getCopy(dao.customTerms, 'boosts');

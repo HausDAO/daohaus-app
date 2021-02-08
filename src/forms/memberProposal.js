@@ -164,6 +164,7 @@ const MemberProposalForm = () => {
           <Input
             name='sharesRequested'
             placeholder='0'
+            defaultValue='0'
             mb={5}
             ref={register({
               required: {
@@ -191,6 +192,7 @@ const MemberProposalForm = () => {
               <Input
                 name='lootRequested'
                 placeholder='0'
+                defaultValue='0'
                 mb={5}
                 ref={register({
                   pattern: {

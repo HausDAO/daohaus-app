@@ -96,7 +96,7 @@ const DaoSwitcherModal = () => {
 
   return (
     <Modal isOpen={daoSwitcherModal} onClose={handleClose} isCentered>
-      <ModalOverlay />
+      <ModalOverlay bgColor='background.500' />
       <ModalContent
         rounded='lg'
         bg='black'

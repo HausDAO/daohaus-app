@@ -7,8 +7,6 @@ import MemberCard from '../components/memberCard';
 import MemberInfo from '../components/memberInfo';
 import ContentBox from '../components/ContentBox';
 import TextBox from '../components/TextBox';
-import { useDaoMember } from '../contexts/DaoMemberContext';
-import { useMetaData } from '../contexts/MetaDataContext';
 import { getMemberActivites, getMembersActivites } from '../utils/activities';
 import { getCopy } from '../utils/metadata';
 import MembersChart from '../components/membersChart';
@@ -16,12 +14,18 @@ import ListSort from '../components/listSort';
 import { membersSortOptions } from '../utils/memberContent';
 import MemberFilters from '../components/memberFilters';
 
-const Members = ({ members, activities }) => {
-  const { daoMember } = useDaoMember();
+const Members = ({
+  members,
+  activities,
+  overview,
+  daoMember,
+  daoMembers,
+  customTerms,
+  daoMetaData,
+}) => {
   const { daoid, daochain } = useParams();
   const [selectedMember, setSelectedMember] = useState(null);
   const [scrolled, setScrolled] = useState(false);
-  const { customTerms } = useMetaData();
   const [listMembers, setListMembers] = useState(members);
   const [sort, setSort] = useState();
   const [filter, setFilter] = useState();
@@ -127,7 +131,7 @@ const Members = ({ members, activities }) => {
           <Stack style={scrolled ? scrolledStyle : null} spacing={4}>
             <Box>
               {selectedMember ? (
-                <MemberInfo member={selectedMember} />
+                <MemberInfo member={selectedMember} customTerms={customTerms} />
               ) : (
                 <>
                   {daoMember && (
@@ -143,7 +147,11 @@ const Members = ({ members, activities }) => {
                       </TextBox>
                     </Flex>
                   )}
-                  <MembersChart />
+                  <MembersChart
+                    overview={overview}
+                    daoMembers={daoMembers}
+                    daoMetaData={daoMetaData}
+                  />
                 </>
               )}
             </Box>

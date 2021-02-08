@@ -34,7 +34,7 @@ const TxInfoModal = () => {
 
   return (
     <Modal isOpen={txInfoModal} onClose={handleClose}>
-      <ModalOverlay />
+      <ModalOverlay bgColor='background.400' />
       <ModalContent
         rounded='lg'
         bg='background.600'

@@ -28,7 +28,7 @@ const HubAccountModal = () => {
 
   return (
     <Modal isOpen={hubAccountModal} onClose={handleClose} isCentered>
-      <ModalOverlay />
+      <ModalOverlay bgColor='background.500' />
       <ModalContent
         rounded='lg'
         bg='blackAlpha.800'

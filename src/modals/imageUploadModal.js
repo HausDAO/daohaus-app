@@ -1,4 +1,5 @@
 import React, { useRef, useState } from 'react';
+import { useParams } from 'react-router-dom';
 import {
   Modal,
   ModalContent,
@@ -17,11 +18,14 @@ const ImageUploadModal = ({
   setIpfsHash,
   setUploading,
   uploading,
-  metadata,
+  matchMeta,
+  changeLabel,
+  setLabel,
 }) => {
   const { imageUploadModal, setImageUploadModal } = useOverlay();
   const [imageUrl, setImageUrl] = useState(null);
   const [imageUpload, setImageUpload] = useState(null);
+  const { daoid } = useParams();
   let upload = useRef();
 
   const handleBrowse = () => {
@@ -40,7 +44,7 @@ const ImageUploadModal = ({
   const handleUpload = async () => {
     setUploading(true);
     const keyRes = await ipfsPrePost('dao/ipfs-key', {
-      daoAddress: metadata.address,
+      daoAddress: daoid,
     });
     const ipfsRes = await ipfsPost(keyRes, imageUpload);
     setIpfsHash(ipfsRes.IpfsHash);
@@ -63,7 +67,7 @@ const ImageUploadModal = ({
           handleBrowse();
         }}
       >
-        {ipfsHash || metadata.avatarImg ? 'Change Avatar' : 'Upload Avatar'}
+        {ipfsHash || matchMeta ? changeLabel : setLabel}
       </Button>
       <input
         type='file'

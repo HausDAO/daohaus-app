@@ -24,7 +24,7 @@ import { chainByID } from '../utils/chain';
 import { calcPower, calcValue } from '../utils/profile';
 import { useInjectedProvider } from '../contexts/InjectedProviderContext';
 
-const Profile = ({ members, overview, daoTokens, activities }) => {
+const Profile = ({ members, overview, daoTokens, daoMember, activities }) => {
   // is address
   // exists, doesn't exist has balance, no entity
 
@@ -140,8 +140,8 @@ const Profile = ({ members, overview, daoTokens, activities }) => {
         pr={[0, null, null, null, 6]}
         pb={6}
       >
-        <GenericModal modalId='rageQuit' closeOnOverlayClick={false}>
-          <RageQuitForm />
+        <GenericModal modalId='rageQuit' closeOnOverlayClick={true}>
+          <RageQuitForm overview={overview} daoMember={daoMember} />
         </GenericModal>
         <ContentBox as={Flex} p={6} w='100%' justify='space-between'>
           {userid ? (

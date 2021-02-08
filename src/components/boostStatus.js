@@ -9,8 +9,6 @@ const BoostStatus = () => {
     <ContentBox
       as={Flex}
       p={6}
-      mt={2}
-      mb={6}
       w='100%'
       h='175px'
       direction='column'
