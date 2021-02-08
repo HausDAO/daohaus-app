@@ -2,17 +2,17 @@ import React from 'react';
 import { Flex, Box, Skeleton } from '@chakra-ui/react';
 import { format } from 'date-fns';
 import TextBox from './TextBox';
-import UserAvatar from './userAvatar';
 import ProfileMenu from './profileMenu';
+import AddressAvatar from './addressAvatar';
 
-const MemberInfoGuts = ({ member, showMenu }) => {
+const MemberInfoGuts = ({ member }) => {
   return (
     <>
       {member && (
         <>
           <Flex justify='space-between'>
-            <UserAvatar user={{ ...member }} copyEnabled={false} />
-            {showMenu && <ProfileMenu member={member} />}
+            <AddressAvatar addr={member.memberAddress} hideCopy={true} />
+            <ProfileMenu member={member} />
           </Flex>
           <Flex w='100%' justify='space-between' mt={6}>
             <Box>

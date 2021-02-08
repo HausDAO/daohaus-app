@@ -1,34 +1,11 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import { Flex, Box, Skeleton, Badge } from '@chakra-ui/react';
 import { format } from 'date-fns';
-import UserAvatar from '../components/userAvatar';
-import { handleGetProfile } from '../utils/3box';
+import AddressAvatar from './addressAvatar';
 
 const MemberCard = ({ member, selectMember, selectedMember }) => {
-  const [memberData, setMemberData] = useState(null);
-
-  useEffect(() => {
-    const getProfile = async () => {
-      try {
-        const profile = await handleGetProfile(member.memberAddress);
-        if (profile.status === 'error') {
-          return;
-        }
-        setMemberData(profile);
-      } catch (error) {
-        console.log("Member doesn't have a profile");
-      }
-    };
-
-    getProfile();
-  }, [member]);
-
   const handleSelect = () => {
-    if (memberData) {
-      selectMember({ ...member, ...memberData, hasProfile: true });
-    } else {
-      selectMember(member);
-    }
+    selectMember(member);
   };
 
   return (
@@ -50,7 +27,7 @@ const MemberCard = ({ member, selectMember, selectedMember }) => {
     >
       <Flex w='43%' direction='column' justify='space-between'>
         <Flex direction='row' justify='space-between' align='center'>
-          <UserAvatar user={{ ...member, ...memberData }} copyEnabled={false} />
+          <AddressAvatar addr={member.memberAddress} hideCopy={true} />
           {member.jailed ? (
             <Badge variant='solid' colorScheme='red' mr={5} height='100%'>
               JAILED

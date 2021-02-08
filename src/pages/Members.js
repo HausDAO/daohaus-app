@@ -26,18 +26,6 @@ const Members = ({ members, activities }) => {
   const [sort, setSort] = useState();
   const [filter, setFilter] = useState();
 
-  const selectMember = (member) => {
-    if (selectedMember == null) {
-      setSelectedMember(member);
-    } else {
-      if (selectedMember.memberAddress === member.memberAddress) {
-        setSelectedMember(null);
-      } else {
-        setSelectedMember(member);
-      }
-    }
-  };
-
   useEffect(() => {
     const handleScroll = () => {
       const offset = window.scrollY;
@@ -128,7 +116,7 @@ const Members = ({ members, activities }) => {
                   <MemberCard
                     key={member.id}
                     member={member}
-                    selectMember={selectMember}
+                    selectMember={setSelectedMember}
                     selectedMember={selectedMember}
                   />
                 );
