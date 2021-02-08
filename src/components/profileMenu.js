@@ -29,8 +29,6 @@ const ProfileMenu = ({ member }) => {
     );
   };
 
-  console.log(member);
-
   return (
     <Menu>
       <MenuButton>

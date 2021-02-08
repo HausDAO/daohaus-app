@@ -9,7 +9,7 @@ import { FaStar } from 'react-icons/fa';
 
 import { handleGetProfile } from '../utils/3box';
 import { truncateAddr, numberWithCommas } from '../utils/general';
-import { initTokenData, tallyUSDs } from '../utils/tokenValue';
+import { initTokenData } from '../utils/tokenValue';
 import BankList from '../components/BankList';
 // import ProfileBankList from '../components/profileBankList';
 import ActivitiesFeed from '../components/activitiesFeed';
@@ -18,63 +18,14 @@ import ProfileMenu from '../components/profileMenu';
 import ContentBox from '../components/ContentBox';
 import TextBox from '../components/TextBox';
 import { chainByID } from '../utils/chain';
-
-// TODO handle non members
-
-const handleAvatar = (member, profile) => {
-  if (profile?.image?.length) {
-    const url = profile?.image[0].contentUrl;
-    return (
-      <Avatar
-        // uses key, otherwise React skips rerender
-        key={`profile${member}`}
-        name={profile?.name}
-        width='100px'
-        height='100px'
-        src={`https://ipfs.infura.io/ipfs/${url['/']}`}
-      />
-    );
-  } else {
-    return (
-      <Avatar
-        key={`no-profile${member}`}
-        name={member?.memberAddress}
-        width='100px'
-        height='100px'
-        src={makeBlockie(member?.memberAddress)}
-      />
-    );
-  }
-};
-
-const calcValue = (member, daoTokens, overview) => {
-  if (daoTokens && member && overview) {
-    const { loot, shares } = member;
-    const { totalShares, totalLoot } = overview;
-    const totalDaoVal = tallyUSDs(daoTokens);
-    const memberProportion = (shares + loot) / (totalShares + totalLoot) || 0;
-
-    const result = memberProportion * totalDaoVal;
-    return result.toFixed(2);
-  } else {
-    return 0;
-  }
-};
-
-const calcPower = (member, overview) => {
-  if (member?.shares && overview?.totalShares) {
-    const total = (member.shares / overview.totalShares) * 100;
-    return total.toFixed(1);
-  } else {
-    return 0;
-  }
-};
-
-const handleName = (member, profile) => {
-  return profile?.name ? profile.name : truncateAddr(member.memberAddress);
-};
+import { calcPower, calcValue } from '../utils/profile';
 
 const Profile = ({ members, overview, daoTokens, activities }) => {
+  // is address
+  // exists, doesn't exist has balance, no entity
+
+  console.log('members', members);
+
   const { userid, daochain } = useParams();
 
   const [tokensRecievable, setTokensRecievable] = useState([]);
@@ -138,6 +89,35 @@ const Profile = ({ members, overview, daoTokens, activities }) => {
       }
     }
   }, [currentMember]);
+
+  const handleAvatar = (member, profile) => {
+    if (profile?.image?.length) {
+      const url = profile?.image[0].contentUrl;
+      return (
+        <Avatar
+          key={`profile${member}`}
+          name={profile?.name}
+          width='100px'
+          height='100px'
+          src={`https://ipfs.infura.io/ipfs/${url['/']}`}
+        />
+      );
+    } else {
+      return (
+        <Avatar
+          key={`no-profile${member}`}
+          name={member?.memberAddress}
+          width='100px'
+          height='100px'
+          src={makeBlockie(member?.memberAddress)}
+        />
+      );
+    }
+  };
+
+  const handleName = (member, profile) => {
+    return profile?.name ? profile.name : truncateAddr(member.memberAddress);
+  };
 
   return (
     <Flex wrap='wrap'>

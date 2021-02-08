@@ -3,18 +3,19 @@ import { Stack } from '@chakra-ui/react';
 import { RiTrophyLine } from 'react-icons/ri';
 
 import NavLink from './navlink';
-// import { useMetaData } from '../contexts/MetaDataContext';
 import { defaultHubData, generateDaoLinks } from '../utils/navLinks';
+import { useInjectedProvider } from '../contexts/InjectedProviderContext';
+// import { useMetaData } from '../contexts/MetaDataContext';
 // import { getCopy } from '../utils/metadata';
 
 const NavLinkList = ({ dao, view, toggleNav = null }) => {
   // const { daoMetaData } = useMetaData();
+  const { address } = useInjectedProvider();
   const navLinks =
     dao?.chainID && dao?.daoID
       ? generateDaoLinks(dao.chainID, dao.daoID)
       : defaultHubData;
-  const isDaoMember =
-    dao?.daoMember?.memberAddress && dao?.chainID && dao?.daoID;
+  const inDao = dao?.daoID && address;
 
   return (
     <Stack
@@ -37,15 +38,15 @@ const NavLinkList = ({ dao, view, toggleNav = null }) => {
             />
           );
         })}
-      {isDaoMember && (
+      {inDao ? (
         <NavLink
           label={'Profile'}
-          path={`/dao/${dao.chainID}/${dao.daoID}/profile/${dao.daoMember.memberAddress}`}
+          path={`/dao/${dao.chainID}/${dao.daoID}/profile/${address}`}
           icon={RiTrophyLine}
           view={view}
           onClick={toggleNav}
         />
-      )}
+      ) : null}
     </Stack>
   );
 };

@@ -22,9 +22,9 @@ export const defaultTheme = {
     member: 'Member',
     boosts: 'Apps',
     boost: 'App',
-    f04title: "404 What's Lost Can Be Found",
-    f04heading: 'You have been slain',
-    f04subhead: 'Please reload from the most recent save point.',
-    f04cta: 'Start Over',
+    // f04title: "404 What's Lost Can Be Found",
+    // f04heading: 'You have been slain',
+    // f04subhead: 'Please reload from the most recent save point.',
+    // f04cta: 'Start Over',
   },
 };
