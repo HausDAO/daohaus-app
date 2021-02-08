@@ -37,7 +37,7 @@ const DaoAccountModal = () => {
 
   return (
     <Modal isOpen={daoAccountModal} onClose={handleClose} isCentered>
-      <ModalOverlay />
+      <ModalOverlay bgColor='background.500' />
       <ModalContent
         rounded='lg'
         bg='blackAlpha.800'

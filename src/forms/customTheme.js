@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   Image,
   Button,
@@ -17,12 +17,10 @@ import {
 } from '@chakra-ui/react';
 import { AiOutlineCaretDown } from 'react-icons/ai';
 import { SketchPicker } from 'react-color';
-// import { useDao } from '../contexts/DaoContext';
 import { useCustomTheme } from '../contexts/CustomThemeContext';
 import ContentBox from '../components/ContentBox';
 import TextBox from '../components/TextBox';
-// import GenericModal from '../Modal/GenericModal';
-// import { ipfsPost, ipfsPrePost } from '../utils/requests';
+import ImageUploadModal from '../modals/imageUploadModal';
 import { themeImagePath } from '../utils/metadata';
 
 const bodyFonts = [
@@ -50,14 +48,9 @@ const monoFonts = [
 
 const CustomThemeForm = ({ previewTheme, setPreviewTheme }) => {
   const { theme } = useCustomTheme();
-  // const { daoOverview } = useDao();
-  // // const [imageUrl, setImageUrl] = useState(null);
-  // const [imageUpload, setImageUpload] = useState(null);
-  // const [imagePicker, setImagePicker] = useState(null);
   const [pickerOpen, setPickerOpen] = useState(null);
-  // const [uploading, setUploading] = useState();
-  // const { modals, openModal, closeModals } = useModals();
-  let upload = useRef();
+  const [ipfsHash, setIpfsHash] = useState();
+  const [uploading, setUploading] = useState();
 
   const handleChange = (color, item) => {
     setPreviewTheme({
@@ -66,16 +59,20 @@ const CustomThemeForm = ({ previewTheme, setPreviewTheme }) => {
     });
   };
 
+  useEffect(() => {
+    if (ipfsHash) {
+      setPreviewTheme({
+        ...previewTheme,
+        bgImg: ipfsHash,
+      });
+    }
+  }, [ipfsHash]);
+
   const handleSelectChange = (event) => {
     setPreviewTheme({
       ...previewTheme,
       [event.target.id]: event.target.value,
     });
-  };
-
-  const handleBrowse = () => {
-    upload.value = null;
-    upload.click();
   };
 
   const handleClearImage = () => {
@@ -96,31 +93,6 @@ const CustomThemeForm = ({ previewTheme, setPreviewTheme }) => {
       daoMeta: updatedThemeWords,
     });
   };
-
-  const handleFileSet = async (event) => {
-    // setImageUrl(URL.createObjectURL(upload.files[0]));
-    // const formData = new FormData();
-    // formData.append('file', upload.files[0]);
-    // setImageUpload(formData);
-    // // openModal('imageHandler');
-  };
-
-  // const handleUpload = async () => {
-  //   // setUploading(true);
-  //   // const keyRes = await ipfsPrePost('dao/ipfs-key', {
-  //   //   daoAddress: daoOverview.address,
-  //   // });
-  //   // const ipfsRes = await ipfsPost(keyRes, imageUpload);
-  //   // setPreviewTheme({
-  //   //   ...previewTheme,
-  //   //   [imagePicker]: ipfsRes.IpfsHash,
-  //   // });
-  //   // setImagePicker(null);
-  //   // setImageUpload(null);
-  //   // setImageUrl(null);
-  //   // setUploading(false);
-  //   // // closeModals();
-  // };
 
   const renderWordsFields = () => {
     return Object.keys(previewTheme.daoMeta).map((themeKey) => {
@@ -150,24 +122,6 @@ const CustomThemeForm = ({ previewTheme, setPreviewTheme }) => {
 
         <TabPanels>
           <TabPanel>
-            {/* <GenericModal isOpen={modals.imageHandler}>
-                <Flex align='center' direction='column'>
-                  <TextBox>How&apos;s this look?</TextBox>
-                  <Image src={imageUrl} maxH='500px' objectFit='cover' my={4} />
-                  <ButtonGroup>
-                    <Button
-                      variant='outline'
-                      onClick={handleBrowse}
-                      disabled={uploading}
-                    >
-                      Select Another
-                    </Button>
-                    <Button onClick={handleUpload} disabled={uploading}>
-                      Confirm
-                    </Button>
-                  </ButtonGroup>
-                </Flex>
-              </GenericModal> */}
             <Stack spacing={4} pr='5%'>
               <TextBox size='xs'>Colors</TextBox>
               <Flex justify='space-between' align='center'>
@@ -183,7 +137,7 @@ const CustomThemeForm = ({ previewTheme, setPreviewTheme }) => {
                     _hover={{ cursor: 'pointer' }}
                   />
                   {pickerOpen === 'primary' ? (
-                    <Box position='absolute' zIndex={2}>
+                    <Box position='absolute' zIndex={5}>
                       <Box
                         position='fixed'
                         top='0px'
@@ -216,7 +170,7 @@ const CustomThemeForm = ({ previewTheme, setPreviewTheme }) => {
                     _hover={{ cursor: 'pointer' }}
                   />
                   {pickerOpen === 'secondary' ? (
-                    <Box position='absolute' zIndex={2}>
+                    <Box position='absolute' zIndex={5}>
                       <Box
                         position='fixed'
                         top='0px'
@@ -249,7 +203,7 @@ const CustomThemeForm = ({ previewTheme, setPreviewTheme }) => {
                     _hover={{ cursor: 'pointer' }}
                   />
                   {pickerOpen === 'background' ? (
-                    <Box position='absolute' zIndex={2}>
+                    <Box position='absolute' zIndex={5}>
                       <Box
                         position='fixed'
                         top='0px'
@@ -281,6 +235,7 @@ const CustomThemeForm = ({ previewTheme, setPreviewTheme }) => {
                   }
                   onChange={handleSelectChange}
                   w='80%'
+                  color='whiteAlpha.800'
                   icon={<AiOutlineCaretDown />}
                   name='headingFont'
                   id='headingFont'
@@ -304,6 +259,7 @@ const CustomThemeForm = ({ previewTheme, setPreviewTheme }) => {
                   }
                   onChange={handleSelectChange}
                   w='80%'
+                  color='whiteAlpha.800'
                   icon={<AiOutlineCaretDown />}
                   name='bodyFont'
                   id='bodyFont'
@@ -327,6 +283,7 @@ const CustomThemeForm = ({ previewTheme, setPreviewTheme }) => {
                   }
                   onChange={handleSelectChange}
                   w='80%'
+                  color='whiteAlpha.800'
                   icon={<AiOutlineCaretDown />}
                   name='monoFont'
                   id='monoFont'
@@ -346,21 +303,22 @@ const CustomThemeForm = ({ previewTheme, setPreviewTheme }) => {
               </TextBox>
               <ButtonGroup>
                 <Box>
-                  <Button
-                    id='bgImg'
-                    mb={3}
-                    variant='outline'
-                    onClick={() => {
-                      // setImagePicker('bgImg');
-                      handleBrowse();
-                    }}
-                  >
-                    Background
-                  </Button>
-                  {previewTheme?.bgImg ? (
+                  <ImageUploadModal
+                    ipfsHash={ipfsHash}
+                    setIpfsHash={setIpfsHash}
+                    setUploading={setUploading}
+                    uploading={uploading}
+                    matchMeta={previewTheme?.bgImg}
+                    setLabel='Upload Background'
+                    changeLabel='Change Background'
+                  />
+                  {ipfsHash || previewTheme?.bgImg ? (
                     <>
                       <Image
-                        src={themeImagePath(previewTheme.bgImg)}
+                        src={
+                          themeImagePath(ipfsHash) ||
+                          themeImagePath(previewTheme.bgImg)
+                        }
                         alt='background image'
                         w='50px'
                         h='50px'
@@ -379,15 +337,6 @@ const CustomThemeForm = ({ previewTheme, setPreviewTheme }) => {
                   ) : null}
                 </Box>
               </ButtonGroup>
-              <input
-                type='file'
-                id='bgImg'
-                accept='image/gif, image/jpeg, image/png'
-                multiple={false}
-                style={{ display: 'none' }}
-                ref={(ref) => (upload = ref)}
-                onChange={(e) => handleFileSet(e)}
-              />
             </Flex>
           </TabPanel>
           <TabPanel>

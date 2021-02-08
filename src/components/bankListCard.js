@@ -1,10 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Flex, Box, Skeleton, Image } from '@chakra-ui/react';
 
-// import Withdraw from '../../Forms/Withdraw';
-// import SyncToken from '../../Forms/Shared/SyncToken';
-// import { useMemberWallet } from '../../../contexts/PokemolContext';
-// import { getMainetAddresses } from '../../../utils/requests';
 import { numberWithCommas } from '../utils/general';
 import SyncTokenButton from './syncTokenButton';
 import { useDaoMember } from '../contexts/DaoMemberContext';
@@ -15,18 +11,16 @@ const TokenListCard = ({
   // isLoaded,
   // isMember,
   isBank = true,
-  // hasAction,
+  hasAction,
   // view,
   version = '2.1',
   hasBalance,
 }) => {
-  // const [memberWallet] = useMemberWallet();
   const { daoMember } = useDaoMember();
   // const [hasBalance, setHasBalance] = useState(null);
   const [needsSync, setNeedsSync] = useState(null);
   const [optimisticWithdraw] = useState(false);
   const [optimisticSync, setOptimisticSync] = useState(false);
-  // const [tokenMainnetAddress, setTokenMainnetAddress] = useState();
 
   useEffect(() => {
     if (token?.contractBalances) {
@@ -133,13 +127,7 @@ const TokenListCard = ({
         </Skeleton>
       </Box>
 
-      <Box w='15%'>
-        {hasBalance && (
-          // <Skeleton>
-          <Withdraw token={token} />
-          // </Skeleton>
-        )}
-      </Box>
+      <Box w='15%'>{hasBalance && <Withdraw token={token} />}</Box>
       {needsSync && !optimisticSync && (
         <SyncTokenButton token={token} setOptimisticSync={setOptimisticSync} />
       )}

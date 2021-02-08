@@ -8,12 +8,16 @@ import { getProposalHistories } from '../utils/activities';
 import TextBox from '../components/TextBox';
 import ProposalDetails from '../components/proposalDetails';
 import ProposalActions from '../components/proposalActions';
-import { useMetaData } from '../contexts/MetaDataContext';
 import { getCopy } from '../utils/metadata';
 
-const Proposal = ({ activities }) => {
+const Proposal = ({
+  activities,
+  overview,
+  daoProposals,
+  daoMember,
+  customTerms,
+}) => {
   const { propid, daochain, daoid } = useParams();
-  const { customTerms } = useMetaData();
   const currentProposal = activities
     ? activities?.proposals?.find((proposal) => proposal.proposalId === propid)
     : null;
@@ -52,7 +56,12 @@ const Proposal = ({ activities }) => {
           </Box>
           <Stack pt={6} spacing={6}>
             {!currentProposal?.cancelled && (
-              <ProposalActions proposal={currentProposal} />
+              <ProposalActions
+                proposal={currentProposal}
+                overview={overview}
+                daoMember={daoMember}
+                daoProposals={daoProposals}
+              />
             )}
             <ActivitiesFeed
               limit={6}

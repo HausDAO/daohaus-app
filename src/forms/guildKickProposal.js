@@ -82,10 +82,11 @@ const GuildKickProposalForm = () => {
   // );
 
   const onSubmit = async (values) => {
+    console.log(values);
     setLoading(true);
     const hash = createHash();
     const details = detailsToJSON({ ...values, hash });
-    const args = [values.memberApplicant, details];
+    const args = [values.applicant, details];
 
     try {
       const poll = createPoll({ action: 'submitProposal', cachePoll })({
@@ -115,7 +116,7 @@ const GuildKickProposalForm = () => {
         setProposalModal(false);
         setTxInfoModal(true);
       };
-      MolochService({
+      await MolochService({
         web3: injectedProvider,
         daoAddress: daoid,
         chainID: daochain,
@@ -125,7 +126,7 @@ const GuildKickProposalForm = () => {
       setLoading(false);
       console.error('error: ', err);
       errorToast({
-        title: `There was an error.`,
+        title: err?.message,
       });
     }
   };
