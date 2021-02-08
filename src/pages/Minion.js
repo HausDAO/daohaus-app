@@ -82,7 +82,7 @@ const MinionDetails = ({ overview, members, currentDaoTokens }) => {
       setMinionBalances(_minionBalances);
     }
     // eslint-disable-next-line
-  }, [daoMembers, minion]);
+  }, [members, minion]);
 
   useEffect(() => {
     if (!currentDaoTokens) {

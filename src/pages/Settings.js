@@ -11,7 +11,6 @@ import Minions from '../components/minionList';
 
 const Settings = ({ overview, daoMember, daoMetaData, customTerms }) => {
   const { daochain, daoid } = useParams();
-  console.log(daoMetaData);
 
   return (
     <Flex wrap='wrap'>
