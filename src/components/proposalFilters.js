@@ -35,6 +35,7 @@ const ProposalFilters = ({ filter, setFilter, proposals, setSort }) => {
           );
           return unread.unread;
         });
+
       setActionNeeded(action);
 
       const actionsCount = action ? action.length : 0;

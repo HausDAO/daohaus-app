@@ -30,7 +30,7 @@ module.exports = {
   rules: {
     'no-console': 'off', // revert to warn or error when ready for prod
     'react/prop-types': 'off',
-    'no-unused-vars': 'error',
+    'no-unused-vars': 'warn',
     'prettier/prettier': 'error',
   },
 };
