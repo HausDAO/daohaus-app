@@ -44,6 +44,7 @@ const DaoRouter = () => {
     daoMember,
     customTerms,
   };
+
   return (
     <Layout dao={dao}>
       <Switch>
@@ -55,6 +56,7 @@ const DaoRouter = () => {
             isCorrectNetwork={isCorrectNetwork}
             overview={daoOverview}
             members={daoMembers}
+            currentDaoTokens={currentDaoTokens}
           />
         </Route>
         <Route exact path={`${path}/proposals`}>

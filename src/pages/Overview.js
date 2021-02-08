@@ -11,6 +11,7 @@ const Overview = React.memo(function overview({
   isMember,
   members,
   daoMember,
+  currentDaoTokens,
 }) {
   return (
     <Box w='100%'>
@@ -25,6 +26,7 @@ const Overview = React.memo(function overview({
               overview={overview}
               isMember={isMember}
               membersAmt={members?.length}
+              currentDaoTokens={currentDaoTokens}
             />
           </Box>
         )}

@@ -8,10 +8,10 @@ import BankTotal from './bankTotal';
 import TextBox from './TextBox';
 import ContentBox from './ContentBox';
 
-const OverviewCard = ({ overview, membersAmt }) => {
+const OverviewCard = ({ overview, membersAmt, currentDaoTokens }) => {
   const { daochain, daoid } = useParams();
   const { daoMetaData, customTerms } = useMetaData();
-  const { tokenBalances, totalLoot, totalShares } = overview;
+  const { totalLoot, totalShares } = overview;
   const history = useHistory();
 
   return (
@@ -71,7 +71,7 @@ const OverviewCard = ({ overview, membersAmt }) => {
         </Flex>
         <Box mt={6}>
           <TextBox size='sm'>{getCopy(customTerms, 'bank')}</TextBox>
-          <BankTotal tokenBalances={tokenBalances} />
+          <BankTotal tokenBalances={currentDaoTokens} />
         </Box>
         <Flex mt={6}>
           <Button
