@@ -4,10 +4,10 @@ import { RiAddFill, RiInformationLine } from 'react-icons/ri';
 import { Box, Flex, Button, Icon, Tooltip } from '@chakra-ui/react';
 import { useInjectedProvider } from '../contexts/InjectedProviderContext';
 import { getCopy } from '../utils/metadata';
-import UserAvatar from './userAvatar';
 import { useOverlay } from '../contexts/OverlayContext';
 import { supportedChains } from '../utils/chain';
 import { capitalize } from '../utils/general';
+import AddressAvatar from './addressAvatar';
 
 const Header = ({ dao }) => {
   const location = useLocation();
@@ -217,7 +217,7 @@ const Header = ({ dao }) => {
 
         {address ? (
           <Button variant='outline' onClick={toggleAccountModal}>
-            <UserAvatar copyEnabled={false} />
+            <AddressAvatar addr={address} hideCopy={true} />
           </Button>
         ) : (
           <Button variant='outline' onClick={requestWallet}>

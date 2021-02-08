@@ -141,3 +141,14 @@ export const MINION_POLL = gql`
     }
   }
 `;
+
+export const RAGE_QUIT_POLL = gql`
+  query rageQuits($molochAddress: String!, $createdAt: String!) {
+    moloch(id: $molochAddress) {
+      id
+      rageQuits(where: { createdAt_gt: $createdAt }) {
+        id
+      }
+    }
+  }
+`;

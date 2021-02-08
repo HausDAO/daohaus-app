@@ -26,6 +26,7 @@ const RageQuitForm = ({ overview, daoMember }) => {
     setTxInfoModal,
   } = useOverlay();
   const { refreshDao } = useTX();
+  const now = (new Date().getTime() / 1000).toFixed();
 
   const {
     handleSubmit,
@@ -81,10 +82,9 @@ const RageQuitForm = ({ overview, daoMember }) => {
     const args = [values.shares || '0', values.loot || '0'];
     try {
       const poll = createPoll({ action: 'ragequit', cachePoll })({
-        daoID: daoid,
         chainID: daochain,
-        sharesRaged: values.shares || 0,
-        lootRaged: values.loot || 0,
+        molochAddress: daoid,
+        createdAt: now,
         actions: {
           onError: (error, txHash) => {
             errorToast({
@@ -96,7 +96,7 @@ const RageQuitForm = ({ overview, daoMember }) => {
           },
           onSuccess: (txHash) => {
             successToast({
-              title: 'Ragequit submitted.',
+              title: 'Rage Quit submitted.',
             });
             refreshDao();
             resolvePoll(txHash);
@@ -108,7 +108,6 @@ const RageQuitForm = ({ overview, daoMember }) => {
         setGenericModal({});
         setTxInfoModal(true);
       };
-      console.log(overview.version);
       await MolochService({
         web3: injectedProvider,
         daoAddress: daoid,

@@ -31,7 +31,7 @@ const MemberInfoCard = ({ member, customTerms }) => {
             )}
           </Flex>
           <ContentBox mt={3}>
-            <MemberInfoGuts member={member} showMenu={true} />
+            <MemberInfoGuts member={member} />
           </ContentBox>
         </>
       )}
