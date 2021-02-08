@@ -32,6 +32,8 @@ const ProfileMenu = ({ member }) => {
     member.memberAddress &&
     address.toLowerCase() === member.memberAddress.toLowerCase();
 
+  const hasSharesOrloot = +member.shares > 0 || +member.loot > 0;
+
   return (
     <Menu>
       <MenuButton>
@@ -46,13 +48,13 @@ const ProfileMenu = ({ member }) => {
       <MenuList>
         {address ? (
           <>
-            {isMember ? (
+            {isMember && hasSharesOrloot ? (
               <MenuItem onClick={() => setGenericModal({ rageQuit: true })}>
                 RageQuit
               </MenuItem>
             ) : null}
 
-            {!isMember && member.exists ? (
+            {!isMember && member.exists && hasSharesOrloot ? (
               <MenuItem onClick={handleGuildkickClick}>GuildKick</MenuItem>
             ) : null}
           </>

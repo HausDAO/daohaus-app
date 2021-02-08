@@ -66,7 +66,7 @@ const Members = ({ members, activities }) => {
   const sortMembers = () => {
     const sortedMembers = members.filter((member) => {
       const active = +member.shares > 0 || (+member.loot > 0 && !member.jailed);
-      switch (filter.value) {
+      switch (filter?.value) {
         case 'active': {
           return member.exists && active;
         }
@@ -77,7 +77,7 @@ const Members = ({ members, activities }) => {
           return member.jailed;
         }
         default: {
-          return member.exists;
+          return member.exists && active;
         }
       }
     });
