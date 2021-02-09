@@ -48,12 +48,13 @@ const Settings = ({ overview, daoMember, daoMetaData, customTerms }) => {
           <DaoMetaOverview daoMetaData={daoMetaData} />
         </Box>
         <Stack w={['100%', null, null, null, '50%']} spacing={4}>
-          {daoMetaData?.boosts && Object.keys(daoMetaData?.boosts).length > 0 && (
+          {daoMetaData?.boosts &&
+          Object.keys(daoMetaData?.boosts).length > 0 ? (
             <Stack spacing={2}>
               <TextBox size='xs'>Superpowers</TextBox>
               <Superpowers daoMetaData={daoMetaData} daoMember={daoMember} />
             </Stack>
-          )}
+          ) : null}
           {overview?.minions?.length > 0 && (
             <Stack spacing={2}>
               <TextBox size='xs'>Minions</TextBox>

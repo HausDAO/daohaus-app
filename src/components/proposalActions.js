@@ -152,6 +152,7 @@ const ProposalVote = ({ proposal, overview, daoProposals, daoMember }) => {
     // TODO change to unlimited
     const tokenAmount = (100 * 10 ** 18).toString();
     const args = [daoid, tokenAmount];
+
     // ? multiply times decimals
     try {
       const poll = createPoll({ action: 'unlockToken', cachePoll })({
@@ -184,7 +185,7 @@ const ProposalVote = ({ proposal, overview, daoProposals, daoMember }) => {
         web3: injectedProvider,
         chainID: daochain,
         tokenAddress: token,
-      })('approve')({ args, address, poll, onTxHash });
+      })('approve')({ args, from: address, poll, onTxHash });
       // setUnlocked(true);
     } catch (err) {
       console.log('error:', err);

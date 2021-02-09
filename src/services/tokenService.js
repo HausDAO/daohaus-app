@@ -54,7 +54,7 @@ export const TokenService = ({
       };
     }
     if (service === 'approve') {
-      return async (args, from, poll) => {
+      return async ({ args, from, poll }) => {
         const tx = await contract.methods[service](...args);
         return tx
           .send('approve', { from })
