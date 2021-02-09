@@ -99,7 +99,6 @@ const GuildKickProposalForm = () => {
               title: `There was an error.`,
             });
             resolvePoll(txHash);
-            setLoading(false);
             console.error(`Could not find a matching proposal: ${error}`);
           },
           onSuccess: (txHash) => {
@@ -108,7 +107,6 @@ const GuildKickProposalForm = () => {
             });
             refreshDao();
             resolvePoll(txHash);
-            setLoading(false);
           },
         },
       });

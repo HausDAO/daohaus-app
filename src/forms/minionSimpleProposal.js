@@ -150,7 +150,6 @@ const MinionProposalForm = () => {
             });
             resolvePoll(txHash);
             console.error(`Could not find a matching proposal: ${error}`);
-            setLoading(false);
           },
           onSuccess: (txHash) => {
             successToast({
@@ -158,7 +157,6 @@ const MinionProposalForm = () => {
             });
             refreshDao();
             resolvePoll(txHash);
-            setLoading(false);
           },
         },
       });
