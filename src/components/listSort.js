@@ -16,7 +16,7 @@ const ListSort = ({ sort, setSort, options }) => {
   }, []);
 
   return (
-    <Flex direction='row'>
+    <Flex direction='row' mb={[4, null, null, 0]}>
       <Box
         mr={3}
         textTransform='uppercase'
