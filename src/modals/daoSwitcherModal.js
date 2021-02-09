@@ -20,7 +20,7 @@ import { RiArrowRightSLine } from 'react-icons/ri';
 
 import BrandImg from '../assets/img/Daohaus__Castle--Dark.svg';
 import { useUser } from '../contexts/UserContext';
-import { getDaosByNetwork } from '../utils/dao';
+import { getDaosByNetwork, filterDAOsByName } from '../utils/dao';
 import { useInjectedProvider } from '../contexts/InjectedProviderContext';
 import { themeImagePath } from '../utils/metadata';
 import { useOverlay } from '../contexts/OverlayContext';
@@ -29,7 +29,7 @@ const DaoSwitcherModal = () => {
   const { daoSwitcherModal, setDaoSwitcherModal } = useOverlay();
   const { userHubDaos } = useUser();
   const { injectedChain } = useInjectedProvider();
-  const [searchTerm, setSearchTerm] = useState();
+  const [searchTerm, setSearchTerm] = useState(null);
   const daosByNetwork =
     userHubDaos && injectedChain?.chainId
       ? getDaosByNetwork(userHubDaos, injectedChain.chainId)
@@ -44,32 +44,17 @@ const DaoSwitcherModal = () => {
 
   useEffect(() => {
     if (daosByNetwork) {
-      if (!searchTerm) {
+      if (!searchTerm || typeof searchTerm !== 'string') {
         setFilteredDaos(daosByNetwork);
       } else {
         setFilteredDaos({
-          currentNetwork: {
-            ...daosByNetwork.currentNetwork,
-            data: daosByNetwork.currentNetwork.data.filter((dao) => {
-              return searchTerm
-                ? dao.meta?.name
-                    .toLowerCase()
-                    .indexOf(searchTerm.toLowerCase()) > -1
-                : true;
-            }),
-          },
-          otherNetworks: daosByNetwork.otherNetworks.map((network) => {
-            return {
-              ...network,
-              data: network.data.filter((dao) => {
-                return searchTerm
-                  ? dao.meta?.name
-                      .toLowerCase()
-                      .indexOf(searchTerm.toLowerCase()) > -1
-                  : true;
-              }),
-            };
-          }),
+          currentNetwork: filterDAOsByName(
+            daosByNetwork.currentNetwork,
+            searchTerm,
+          ),
+          otherNetworks: daosByNetwork.otherNetworks.map((network) =>
+            filterDAOsByName(network, searchTerm),
+          ),
         });
       }
     }
@@ -157,9 +142,19 @@ const DaoSwitcherModal = () => {
             fontSize='sm'
             fontWeight={700}
             color='white'
+            mb={3}
           >
             Go to DAO
           </Box>
+          <FormControl>
+            <Input
+              type='search'
+              className='input'
+              placeholder='Search My Daos'
+              maxW={300}
+              onChange={(e) => handleChange(e)}
+            />
+          </FormControl>
         </ModalHeader>
         <ModalCloseButton color='white' />
         <ModalBody
@@ -185,15 +180,6 @@ const DaoSwitcherModal = () => {
               <RiArrowRightSLine color='white' />
             </Flex>
           </Link>
-          <FormControl mb={4}>
-            <Input
-              type='search'
-              className='input'
-              placeholder='Search My Daos'
-              maxW={300}
-              onChange={(e) => handleChange(e)}
-            />
-          </FormControl>
           Current Network:
           {userHubDaos ? <>{renderCurrentNetwork()}</> : <Spinner />}
           Other Networks:
