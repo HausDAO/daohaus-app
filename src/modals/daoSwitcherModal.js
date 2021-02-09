@@ -17,6 +17,7 @@ import {
 } from '@chakra-ui/react';
 import makeBlockie from 'ethereum-blockies-base64';
 import { RiArrowRightSLine } from 'react-icons/ri';
+import { rgba } from 'polished';
 
 import BrandImg from '../assets/img/Daohaus__Castle--Dark.svg';
 import { useUser } from '../contexts/UserContext';
@@ -24,12 +25,15 @@ import { getDaosByNetwork, filterDAOsByName } from '../utils/dao';
 import { useInjectedProvider } from '../contexts/InjectedProviderContext';
 import { themeImagePath } from '../utils/metadata';
 import { useOverlay } from '../contexts/OverlayContext';
+import { useCustomTheme } from '../contexts/CustomThemeContext';
 
 const DaoSwitcherModal = () => {
   const { daoSwitcherModal, setDaoSwitcherModal } = useOverlay();
   const { userHubDaos } = useUser();
   const { injectedChain } = useInjectedProvider();
-  const [searchTerm, setSearchTerm] = useState(null);
+  const [searchTerm, setSearchTerm] = useState();
+  const { theme } = useCustomTheme();
+
   const daosByNetwork =
     userHubDaos && injectedChain?.chainId
       ? getDaosByNetwork(userHubDaos, injectedChain.chainId)
@@ -128,7 +132,7 @@ const DaoSwitcherModal = () => {
 
   return (
     <Modal isOpen={daoSwitcherModal} onClose={handleClose} isCentered>
-      <ModalOverlay bgColor='background.500' />
+      <ModalOverlay bgColor={rgba(theme.colors.background[500], 0.8)} />
       <ModalContent
         rounded='lg'
         bg='black'

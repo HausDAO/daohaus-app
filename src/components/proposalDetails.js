@@ -52,10 +52,12 @@ const ProposalDetails = ({ proposal }) => {
       <ContentBox>
         <Box>
           <Box>
-            <Flex justify='space-between'>
-              <TextBox size='xs'>{proposal?.proposalType}</TextBox>
+            <Flex justify='space-between' wrap={['wrap', null, null, 'nowrap']}>
+              <TextBox size='xs' mb={[3, null, null, 0]}>
+                {proposal?.proposalType}
+              </TextBox>
 
-              <Box>
+              <Box fontSize={['sm', null, null, 'md']}>
                 {proposal?.proposalIndex ? (
                   <>
                     {proposal?.status
