@@ -11,7 +11,7 @@ import { useUser } from '../contexts/UserContext';
 import MainViewLayout from '../components/mainViewLayout';
 
 const Register = () => {
-  const { registerchain, registerid } = useParams();
+  const { registerchain, daoid } = useParams();
   const { refetchUserHubDaos } = useUser();
   const history = useHistory();
   const { address, injectedChain, requestWallet } = useInjectedProvider();
@@ -21,7 +21,7 @@ const Register = () => {
   useEffect(() => {
     if (address && injectedChain) {
       setCurrentDao({
-        address: registerid,
+        address: daoid,
         name: '',
         description: '',
         purpose: '',
@@ -37,7 +37,7 @@ const Register = () => {
     refetchUserHubDaos();
     sessionStorage.removeItem('exploreDaoData');
 
-    history.push(`/dao/${registerchain}/${registerid}`);
+    history.push(`/dao/${registerchain}/${daoid}`);
   };
 
   return (

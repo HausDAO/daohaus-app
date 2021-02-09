@@ -9,9 +9,15 @@ import DaoMetaOverview from '../components/daoMetaOverview';
 import TextBox from '../components/TextBox';
 import Minions from '../components/minionList';
 import MainViewLayout from '../components/mainViewLayout';
+import { useInjectedProvider } from '../contexts/InjectedProviderContext';
 
 const Settings = ({ overview, daoMember, daoMetaData, customTerms }) => {
   const { daochain, daoid } = useParams();
+  const { address, injectedChain } = useInjectedProvider();
+
+  const daoConnectedAndSameChain = () => {
+    return address && daochain && injectedChain?.chainId === daochain;
+  };
 
   return (
     <MainViewLayout header='Settings' isDao={true}>
@@ -25,7 +31,7 @@ const Settings = ({ overview, daoMember, daoMetaData, customTerms }) => {
           <DaoContractSettings overview={overview} customTerms={customTerms} />
           <Flex justify='space-between' mt={6}>
             <TextBox size='xs'>DAO Metadata</TextBox>
-            {+daoMember?.shares > 0 ? (
+            {+daoMember?.shares > 0 && daoConnectedAndSameChain() ? (
               <Link
                 as={RouterLink}
                 color='secondary.500'
@@ -42,12 +48,13 @@ const Settings = ({ overview, daoMember, daoMetaData, customTerms }) => {
           <DaoMetaOverview daoMetaData={daoMetaData} />
         </Box>
         <Stack w={['100%', null, null, null, '50%']} spacing={4}>
-          {Object.keys(daoMetaData?.boosts).length > 0 && (
+          {daoMetaData?.boosts &&
+          Object.keys(daoMetaData?.boosts).length > 0 ? (
             <Stack spacing={2}>
               <TextBox size='xs'>Superpowers</TextBox>
               <Superpowers daoMetaData={daoMetaData} daoMember={daoMember} />
             </Stack>
-          )}
+          ) : null}
           {overview?.minions?.length > 0 && (
             <Stack spacing={2}>
               <TextBox size='xs'>Minions</TextBox>

@@ -3,14 +3,11 @@ import { Flex, Input } from '@chakra-ui/react';
 
 import NetworkDaoList from './networkDaoList';
 import { useUser } from '../contexts/UserContext';
-import { useInjectedProvider } from '../contexts/InjectedProviderContext';
 import ContentBox from './ContentBox';
 import TextBox from './TextBox';
 
 const NetworkList = () => {
   const { userHubDaos } = useUser();
-  const { injectedProvider } = useInjectedProvider();
-  const provider = injectedProvider?.currentProvider;
   const [searchTerm, setSearchTerm] = useState();
   const [sortedDaos, setSortedDaos] = useState({});
 
