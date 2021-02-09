@@ -55,7 +55,13 @@ const MobileNav = ({ dao }) => {
           wrap='wrap'
         >
           <Brand dao={dao} />
-          <Box order={2} ml={3}>
+          <Box
+            order={2}
+            ml={3}
+            borderWidth='thin'
+            borderColor='whiteAlpha.400'
+            borderRadius='25px'
+          >
             <ChangeDao />
           </Box>
           <Box
