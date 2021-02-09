@@ -185,7 +185,7 @@ const ProposalVote = ({ proposal, overview, daoProposals, daoMember }) => {
         web3: injectedProvider,
         chainID: daochain,
         tokenAddress: token,
-      })('approve')({ args, from: address, poll, onTxHash });
+      })('approve')({ args, address, poll, onTxHash });
       // setUnlocked(true);
     } catch (err) {
       console.log('error:', err);
@@ -330,20 +330,6 @@ const ProposalVote = ({ proposal, overview, daoProposals, daoMember }) => {
   };
 
   const executeMinion = async (proposal) => {
-    // TODO: will need to check if it has been executed yet
-    // const web3 = web3Connect?.web3
-    //   ? web3Connect.web3
-    //   : new Web3(new Web3.providers.HttpProvider(getRpcUrl(network)));
-    // const setupValues = {
-    //   minion: proposal.minionAddress,
-    // };
-    // const minionService = new MinionService(web3, user?.username, setupValues);
-    // try {
-
-    //   minionService.executeAction(proposal.proposalId, txCallBack);
-    // } catch (err) {
-    //   console.log('error: ', err);
-    // }
     const args = [proposal.proposalId];
     try {
       const poll = createPoll({ action: 'minionExecuteAction', cachePoll })({
@@ -420,9 +406,11 @@ const ProposalVote = ({ proposal, overview, daoProposals, daoMember }) => {
   return (
     <>
       <ContentBox position='relative'>
-        {!daoConnectedAndSameChain() &&
+        {(!daoConnectedAndSameChain() &&
           ((proposal?.status === 'Unsponsored' && !proposal?.proposalIndex) ||
-            proposal?.status === 'ReadyForProcessing') && <NetworkOverlay />}
+            proposal?.status === 'ReadyForProcessing')) ||
+          ((proposal?.status !== 'Unsponsored' || proposal?.proposalIndex) &&
+            proposal?.status !== 'Cancelled' && <NetworkOverlay />)}
         {proposal?.status === 'Unsponsored' && !proposal?.proposalIndex && (
           <Flex justify='center' direction='column'>
             <Flex justify='center' mb={4}>
