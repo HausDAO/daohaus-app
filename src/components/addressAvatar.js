@@ -14,7 +14,6 @@ const AddressAvatar = React.memo(function AddrAvatar({
   const toast = useToast();
   const [profile, setProfile] = useState(null);
   const [hasFetched, setHasFetched] = useState(false);
-  // console.log(profile);
   useEffect(() => {
     let shouldFetch = true;
     const getProfile = async () => {
@@ -43,7 +42,6 @@ const AddressAvatar = React.memo(function AddrAvatar({
   }, [addr]);
 
   const renderImage = (addr) => {
-    console.log(profile);
     if (profile?.image?.length) {
       return `https://ipfs.infura.io/ipfs/${profile?.image[0].contentUrl['/']}`;
     } else if (profile === false) {
