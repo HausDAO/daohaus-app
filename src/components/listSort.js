@@ -17,7 +17,12 @@ const ListSort = ({ sort, setSort, options }) => {
 
   return (
     <Flex direction='row'>
-      <Box mr={3} textTransform='uppercase' fontFamily='heading'>
+      <Box
+        mr={3}
+        textTransform='uppercase'
+        fontFamily='heading'
+        fontSize={['sm', null, null, 'md']}
+      >
         Sort By
       </Box>
 
@@ -25,6 +30,7 @@ const ListSort = ({ sort, setSort, options }) => {
         <MenuButton
           textTransform='uppercase'
           fontFamily='heading'
+          fontSize={['sm', null, null, 'md']}
           color='secondary.500'
         >
           {sort?.name} <Icon as={RiArrowDropDownFill} color='secondary.500' />

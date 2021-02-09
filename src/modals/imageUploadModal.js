@@ -9,9 +9,12 @@ import {
   ButtonGroup,
   Button,
 } from '@chakra-ui/react';
+import { rgba } from 'polished';
+
 import { useOverlay } from '../contexts/OverlayContext';
 import TextBox from '../components/TextBox';
 import { ipfsPost, ipfsPrePost } from '../utils/metadata';
+import { useCustomTheme } from '../contexts/CustomThemeContext';
 
 const ImageUploadModal = ({
   ipfsHash,
@@ -26,6 +29,7 @@ const ImageUploadModal = ({
   const [imageUrl, setImageUrl] = useState(null);
   const [imageUpload, setImageUpload] = useState(null);
   const { daoid } = useParams();
+  const { theme } = useCustomTheme();
   let upload = useRef();
 
   const handleBrowse = () => {
@@ -79,7 +83,7 @@ const ImageUploadModal = ({
         onChange={(e) => handleFileSet(e)}
       />
       <Modal isOpen={imageUploadModal} onClose={handleClose} isCentered>
-        <ModalOverlay />
+        <ModalOverlay bgColor={rgba(theme.colors.background[500], 0.8)} />
         <ModalContent
           rounded='lg'
           bg='black'

@@ -33,7 +33,7 @@ const Proposal = ({
             pr={[0, null, null, null, 6]}
           >
             <Link as={RouterLink} to={`/dao/${daochain}/${daoid}/proposals`}>
-              <TextBox size='md'>
+              <TextBox size={['sm', null, null, 'md']}>
                 <Icon
                   name='arrow-back'
                   color='primary.50'

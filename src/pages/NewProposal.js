@@ -56,7 +56,7 @@ const NewProposal = ({ customTerms, daoMetaData }) => {
       <Box>
         <ProposalScopedModals proposalType={proposalType} />
         <Flex>
-          <TextBox size='xl' fontWeight={700}>
+          <TextBox size={['md', null, null, 'xl']} fontWeight={700}>
             Select {getCopy(customTerms, 'proposal')} Type
           </TextBox>
         </Flex>

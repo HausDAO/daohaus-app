@@ -90,6 +90,7 @@ const TributeInput = ({ register, setValue, getValues, setError }) => {
       getValues('tributeToken'),
       daoOverview.tokenBalances,
     );
+    const args = [daoid, tokenAmount];
 
     try {
       const poll = createPoll({ action: 'unlockToken', cachePoll })({
@@ -120,7 +121,7 @@ const TributeInput = ({ register, setValue, getValues, setError }) => {
         web3: injectedProvider,
         chainID: daochain,
         tokenAddress: token,
-      })('approve')([daoid, tokenAmount], address, poll);
+      })('approve')({ args, address, poll });
       setUnlocked(true);
     } catch (err) {
       console.log('error:', err);

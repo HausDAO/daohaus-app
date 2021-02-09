@@ -4,7 +4,7 @@ import { Box, Button, Icon, Spinner, Stack, Link } from '@chakra-ui/react';
 import { RiExternalLinkLine, RiErrorWarningLine } from 'react-icons/ri';
 
 import TextBox from './TextBox';
-import { POPUP_CONTENT } from '../utils/txData';
+import { POPUP_CONTENT } from '../content/pending-tx-modal';
 import { txUri } from '../utils/chain';
 
 const SummonPending = ({ txHash, success, chainId }) => {

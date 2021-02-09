@@ -6,11 +6,14 @@ import {
   ModalBody,
   ModalOverlay,
 } from '@chakra-ui/react';
+import { rgba } from 'polished';
 
 import { useOverlay } from '../contexts/OverlayContext';
+import { useCustomTheme } from '../contexts/CustomThemeContext';
 
 const GenericModal = ({ children, modalId, closeOnOverlayClick = true }) => {
   const { genericModal, setGenericModal } = useOverlay();
+  const { theme } = useCustomTheme();
 
   return (
     <Modal
@@ -20,7 +23,7 @@ const GenericModal = ({ children, modalId, closeOnOverlayClick = true }) => {
       onClose={() => setGenericModal({})}
       isCentered
     >
-      <ModalOverlay bgColor='background.500' />
+      <ModalOverlay bgColor={rgba(theme.colors.background[500], 0.8)} />
       <ModalContent
         rounded='lg'
         bg='blackAlpha.800'
