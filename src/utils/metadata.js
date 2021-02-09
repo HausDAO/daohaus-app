@@ -67,7 +67,7 @@ export const getCopy = (customTerms, word) => {
   if (!customTerms) {
     return capitalize(word);
   }
-  word = word.toLowerCase();
+  word = word?.toLowerCase();
   if (word === 'proposal') {
     return customTerms?.proposal || 'Proposal';
   } else if (word === 'proposals') {
