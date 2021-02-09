@@ -79,7 +79,9 @@ const Withdraw = ({ token }) => {
       {loading ? (
         <Spinner />
       ) : (
-        <Button onClick={handleWithdraw}>Withdraw</Button>
+        <Button size='sm' onClick={handleWithdraw}>
+          Withdraw
+        </Button>
       )}
     </>
   );
