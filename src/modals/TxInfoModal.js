@@ -128,7 +128,7 @@ const TxInfoModal = () => {
                     <Stack spacing={3} mt={2}>
                       {latestTx?.links.map((link, idx) =>
                         link.external ? (
-                          <Flex align='center'>
+                          <Flex align='center' key={`${link.href}-${link.idx}`}>
                             <Icon
                               as={RiLinksLine}
                               mr={2}
@@ -136,7 +136,6 @@ const TxInfoModal = () => {
                             />
                             <Box
                               as={Link}
-                              key={`${link.href}-${link.idx}`}
                               href={link.href}
                               fontFamily='mono'
                               fontWeight={400}
@@ -152,7 +151,7 @@ const TxInfoModal = () => {
                             />
                           </Flex>
                         ) : (
-                          <Flex align='center'>
+                          <Flex align='center' key={`${link.href}-${link.idx}`}>
                             <Icon
                               as={RiLinksLine}
                               mr={2}
@@ -160,7 +159,6 @@ const TxInfoModal = () => {
                             />
                             <Box
                               as={RouterLink}
-                              key={`${link.href}-${link.idx}`}
                               to={link.href}
                               fontFamily='mono'
                               fontWeight={400}
