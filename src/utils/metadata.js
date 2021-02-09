@@ -97,8 +97,10 @@ export const getCopy = (customTerms, word) => {
     );
   } else if (word === 'f04cta') {
     return customTerms?.f04cta || 'Start Over.';
+  } else if (typeof word !== 'string') {
+    return 'Error';
   } else {
-    return 'WORD!';
+    return capitalize(word);
   }
 };
 

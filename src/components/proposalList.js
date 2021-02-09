@@ -12,15 +12,14 @@ import { sortOptions } from '../utils/proposalContent';
 const ProposalsList = ({ proposals }) => {
   const { daoMember } = useDaoMember();
   const [listProposals, setListProposals] = useState(proposals);
-  const [pageProposals, setPageProposals] = useState(proposals);
+  const [pageProposals, setPageProposals] = useState(null);
   const [isLoaded, setIsLoaded] = useState(false);
-  const [filter, setFilter] = useState();
-  const [sort, setSort] = useState();
+  const [filter, setFilter] = useState(null);
+  const [sort, setSort] = useState(null);
 
   useEffect(() => {
     const filterAndSortProposals = () => {
       let filteredProposals = proposals;
-
       if (sort && filter) {
         filteredProposals = proposals
           .filter((prop) => {
@@ -47,7 +46,6 @@ const ProposalsList = ({ proposals }) => {
               return +b.createdAt - +a.createdAt;
             }
           });
-
         if (
           sort.value !== 'submissionDateAsc' &&
           sort.value !== 'submissionDateDesc'
@@ -59,7 +57,7 @@ const ProposalsList = ({ proposals }) => {
       }
       setListProposals(filteredProposals);
     };
-    if (proposals && proposals.length > 0) {
+    if (proposals?.length) {
       filterAndSortProposals();
       setIsLoaded(true);
     }

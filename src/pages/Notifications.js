@@ -19,6 +19,7 @@ import TextBox from '../components/TextBox';
 import { notificationBoostContent } from '../content/boost-content';
 import GenericModal from '../modals/genericModal';
 import NotificationsLaunch from '../components/notificationsLaunch';
+import MainViewLayout from '../components/mainViewLayout';
 
 const Notifications = ({ daoMetaData, refetchMetaData }) => {
   const { injectedProvider, injectedChain, address } = useInjectedProvider();
@@ -184,7 +185,7 @@ const Notifications = ({ daoMetaData, refetchMetaData }) => {
   };
 
   return (
-    <>
+    <MainViewLayout header='Notifications' isDao={true}>
       {localMetadata ? (
         <>
           <Flex justify='space-around' mt='150px'>
@@ -237,7 +238,7 @@ const Notifications = ({ daoMetaData, refetchMetaData }) => {
           </Box>
         </Flex>
       )}
-    </>
+    </MainViewLayout>
   );
 };
 

@@ -64,6 +64,7 @@ const DaoRouter = () => {
             proposals={daoActivities?.proposals}
             overview={daoOverview}
             activities={daoActivities}
+            customTerms={customTerms}
           />
         </Route>
         <Route exact path={`${path}/bank`}>
@@ -71,6 +72,7 @@ const DaoRouter = () => {
             currentDaoTokens={currentDaoTokens}
             overview={daoOverview}
             customTerms={customTerms}
+            daoMember={daoMember}
           />
         </Route>
         <Route exact path={`${path}/members`}>
@@ -86,7 +88,7 @@ const DaoRouter = () => {
         </Route>
 
         <Route exact path={`${path}/settings/boosts`}>
-          <Boosts />
+          <Boosts customTerms={customTerms} />
         </Route>
         <Route exact path={`${path}/settings/notifications`}>
           <Notifications

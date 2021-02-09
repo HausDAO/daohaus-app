@@ -6,7 +6,7 @@ import { useInjectedProvider } from '../contexts/InjectedProviderContext';
 import { getCopy } from '../utils/metadata';
 import { useOverlay } from '../contexts/OverlayContext';
 import { supportedChains } from '../utils/chain';
-import { capitalize } from '../utils/general';
+import { capitalize, daoConnectedAndSameChain } from '../utils/general';
 import AddressAvatar from './addressAvatar';
 
 const Header = ({ dao }) => {
@@ -14,9 +14,6 @@ const Header = ({ dao }) => {
   const params = useParams();
   const { setHubAccountModal, setDaoAccountModal } = useOverlay();
   const { injectedChain, address, requestWallet } = useInjectedProvider();
-  const daoConnectedAndSameChain = () => {
-    return address && dao?.chainID && injectedChain?.chainId === dao.chainID;
-  };
 
   const WrongNetworkToolTip = ({ children }) => {
     return (!address && dao) || (address && !dao) ? (
@@ -223,7 +220,6 @@ const Header = ({ dao }) => {
           <Button variant='outline' onClick={requestWallet}>
             Connect Wallet
           </Button>
-          // <Web3SignIn />
         )}
       </Flex>
     </Flex>

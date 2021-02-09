@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useParams } from 'react-router-dom';
-import { Flex, Box, Stack } from '@chakra-ui/react';
+import { Flex, Box, Stack, Button } from '@chakra-ui/react';
 
 import ActivitiesFeed from '../components/activitiesFeed';
 import MemberCard from '../components/memberCard';
@@ -13,6 +13,9 @@ import MembersChart from '../components/membersChart';
 import ListSort from '../components/listSort';
 import { membersSortOptions } from '../utils/memberContent';
 import MemberFilters from '../components/memberFilters';
+import MainViewLayout from '../components/mainViewLayout';
+import { useInjectedProvider } from '../contexts/InjectedProviderContext';
+import { daoConnectedAndSameChain } from '../utils/general';
 
 const Members = ({
   members,
@@ -24,6 +27,7 @@ const Members = ({
   daoMetaData,
 }) => {
   const { daoid, daochain } = useParams();
+  const { address, injectedChain } = useInjectedProvider();
   const [selectedMember, setSelectedMember] = useState(null);
   const [scrolled, setScrolled] = useState(false);
   const [listMembers, setListMembers] = useState(members);
@@ -88,9 +92,28 @@ const Members = ({
 
     setListMembers([...sortedMembers]);
   };
+  console.log(
+    daoConnectedAndSameChain(address, injectedChain?.chainId, daochain),
+  );
+  console.log(address, injectedChain?.chainId, daochain);
+
+  const ctaButton = daoConnectedAndSameChain(
+    address,
+    injectedChain?.chainId,
+    daochain,
+  ) && (
+    <Button as={Link} to={`/dao/${daochain}/${daoid}/proposals/new/member`}>
+      Apply
+    </Button>
+  );
 
   return (
-    <>
+    <MainViewLayout
+      header={'Bank'}
+      headerEl={ctaButton}
+      customTerms={customTerms}
+      isDao={true}
+    >
       <Flex>
         <ListSort sort={sort} setSort={setSort} options={membersSortOptions} />
         <MemberFilters filter={filter} setFilter={setFilter} />
@@ -172,7 +195,7 @@ const Members = ({
           </Stack>
         </Box>
       </Flex>
-    </>
+    </MainViewLayout>
   );
 };
 

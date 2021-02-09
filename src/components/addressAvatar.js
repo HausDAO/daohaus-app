@@ -31,15 +31,17 @@ const AddressAvatar = ({ addr, hideCopy = false }) => {
   return (
     <Flex direction='row' alignItems='center'>
       <Flex direction='row' alignItems='center'>
-        <Avatar
-          name={addr}
-          src={
-            profile?.image?.length
-              ? `https://ipfs.infura.io/ipfs/${profile?.image[0].contentUrl['/']}`
-              : makeBlockie(addr)
-          }
-          size='sm'
-        />
+        {addr && (
+          <Avatar
+            name={addr}
+            src={
+              profile?.image?.length
+                ? `https://ipfs.infura.io/ipfs/${profile?.image[0].contentUrl['/']}`
+                : makeBlockie(addr)
+            }
+            size='sm'
+          />
+        )}
         <Box
           fontSize='sm'
           fontFamily='heading'

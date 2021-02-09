@@ -3,7 +3,6 @@ import { Flex, Box, useBreakpointValue } from '@chakra-ui/react';
 
 import DesktopNav from '../nav/desktopNav';
 import MobileNav from '../nav/mobileNav';
-import Header from '../components/header';
 import { useCustomTheme } from '../contexts/CustomThemeContext';
 import { themeImagePath } from '../utils/metadata';
 
@@ -55,8 +54,7 @@ const Layout = ({ children, dao }) => {
         mt={['80px', null, null, '0px']}
         flexDirection='column'
       >
-        <Header dao={dao} />
-        <Box p={6}>{children}</Box>
+        {children}
       </Flex>
     </Flex>
   );

@@ -39,7 +39,6 @@ const DaoMetaForm = ({ metadata, handleUpdate }) => {
   const [loading, setLoading] = useState();
   const [uploading, setUploading] = useState();
   const { register, handleSubmit } = useForm();
-  console.log(metadata);
 
   const onSubmit = async (data) => {
     setLoading(true);
