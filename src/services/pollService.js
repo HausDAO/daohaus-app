@@ -11,7 +11,7 @@ import { getGraphEndpoint } from '../utils/chain';
 import { hashMaker, memberVote } from '../utils/proposalUtils';
 import { TokenService } from '../services/tokenService';
 import { MEMBERS_LIST } from '../graphQL/member-queries';
-// import { MolochService } from './molochService';
+import { MinionService } from './minionService';
 
 /// //////////CALLS///////////////
 const pollProposals = async ({ daoID, chainID }) =>
@@ -229,26 +229,25 @@ const cancelProposalTest = (data, shouldEqual, pollId) => {
   }
 };
 
-const minionExecuteTest = (data, shouldEqual, pollId) => {
+const minionExecuteTest = async (data, proposalId, daochain, pollId) => {
   // use minion address and proposal ID to get action details and check if executed
   console.log(data);
-  console.log(shouldEqual);
+  console.log(proposalId);
   if (data.proposals) {
     const proposal = data.proposals.find(
-      (proposal) => proposal.proposalId === shouldEqual,
+      (proposal) => proposal.proposalId === proposalId,
     );
-
-    // await MinionService({
-    //   minion: proposal?.minionAddress,
-    //   chainID: daochain,
-    // })('getAction')({ proposalId: proposal?.proposalId });
     console.log(proposal);
-    return proposal?.cancelled;
+
+    const minionDeets = await MinionService({
+      minion: proposal?.minionAddress,
+      chainID: daochain,
+    })('getAction')({ proposalId: proposal?.proposalId });
+    console.log(minionDeets);
+    return minionDeets?.executed;
   } else {
     clearInterval(pollId);
-    throw new Error(
-      `Poll test did recieve the expected results from the graph: ${data}`,
-    );
+    throw new Error(`Minion proposal not found the graph: ${data}`);
   }
 };
 
