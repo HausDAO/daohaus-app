@@ -126,13 +126,15 @@ const Header = ({ dao }) => {
       daoConnectedAndSameChain(address, dao?.chainID, injectedChain?.chainID) &&
       dao.daoMember
     ) {
-      <Button
-        as={RouterLink}
-        to={`/dao/${dao?.chainID}/${dao?.daoID}/proposals/new/whitelist`}
-        rightIcon={<RiAddFill />}
-      >
-        Add Asset
-      </Button>;
+      return (
+        <Button
+          as={RouterLink}
+          to={`/dao/${dao?.chainID}/${dao?.daoID}/proposals/new/whitelist`}
+          rightIcon={<RiAddFill />}
+        >
+          Approve Asset
+        </Button>
+      );
     }
   };
 
@@ -217,6 +219,7 @@ const Header = ({ dao }) => {
   );
 };
 export default Header;
+
 // const getTitle = () => {
 //   if (location.pathname === "/") {
 //     setPageTitle("Hub");
