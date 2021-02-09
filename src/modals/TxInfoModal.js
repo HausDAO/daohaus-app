@@ -15,12 +15,14 @@ import {
   Link,
   Stack,
 } from '@chakra-ui/react';
+import { rgba } from 'polished';
 import { VscQuestion } from 'react-icons/vsc';
 import { RiExternalLinkLine, RiErrorWarningLine } from 'react-icons/ri';
 import TextBox from '../components/TextBox';
 
 import { useOverlay } from '../contexts/OverlayContext';
 import { useUser } from '../contexts/UserContext';
+import { useCustomTheme } from '../contexts/CustomThemeContext';
 import { getLastTx } from '../utils/txData';
 import { truncateAddr } from '../utils/general';
 import ExplorerLink from '../components/explorerLink';
@@ -28,13 +30,14 @@ import ExplorerLink from '../components/explorerLink';
 const TxInfoModal = () => {
   const { outstandingTXs } = useUser();
   const { txInfoModal, setTxInfoModal } = useOverlay();
+  const { theme } = useCustomTheme();
 
   const latestTx = getLastTx(outstandingTXs);
   const handleClose = () => setTxInfoModal(false);
 
   return (
     <Modal isOpen={txInfoModal} onClose={handleClose}>
-      <ModalOverlay bgColor='background.400' />
+      <ModalOverlay bgColor={rgba(theme.colors.background[500], 0.8)} />
       <ModalContent
         rounded='lg'
         bg='background.600'
