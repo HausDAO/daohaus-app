@@ -18,6 +18,7 @@ import { TokenService } from '../services/tokenService';
 import { useTX } from '../contexts/TXContext';
 import { createPoll } from '../services/pollService';
 import { useUser } from '../contexts/UserContext';
+import { valToDecimalString } from '../utils/tokenValue';
 
 const TributeInput = ({ register, setValue, getValues, setError }) => {
   const [unlocked, setUnlocked] = useState(true);
@@ -78,14 +79,18 @@ const TributeInput = ({ register, setValue, getValues, setError }) => {
         message: 'Tribute token must be unlocked to tribute.',
       });
     }
-  });
+  }, [unlocked]);
 
   const unlock = async () => {
     setLoading(true);
     const token = getValues('tributeToken');
     console.log(token);
-    const tokenAmount = getValues('tributeOffered');
-    // ? multiply times decimals
+    const tokenAmount = valToDecimalString(
+      getValues('tributeOffered'),
+      getValues('tributeToken'),
+      daoOverview.tokenBalances,
+    );
+
     try {
       const poll = createPoll({ action: 'unlockToken', cachePoll })({
         daoID: daoid,

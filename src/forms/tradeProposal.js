@@ -59,6 +59,7 @@ const TradeProposalForm = () => {
     register,
     setValue,
     getValues,
+    setError,
     watch,
   } = useForm();
 
@@ -166,6 +167,7 @@ const TradeProposalForm = () => {
             register={register}
             setValue={setValue}
             getValues={getValues}
+            setError={setError}
           />
           <TextBox size='xs'>Trade For</TextBox>
           <PaymentInput
