@@ -15,14 +15,17 @@ import {
 } from '@chakra-ui/react';
 import { useParams } from 'react-router-dom';
 import abiDecoder from 'abi-decoder';
+import { rgba } from 'polished';
 
 import { MinionService } from '../services/minionService';
+import { useCustomTheme } from '../contexts/CustomThemeContext';
 import AddressAvatar from './addressAvatar';
 import TextBox from './TextBox';
 import { chainByID } from '../utils/chain';
 
 const ProposalMinionCard = ({ proposal }) => {
   const { daochain } = useParams();
+  const { theme } = useCustomTheme();
   const [minionDeets, setMinionDeets] = useState();
   const [decodedData, setDecodedData] = useState();
   const [loading, setLoading] = useState(true);
@@ -124,7 +127,7 @@ const ProposalMinionCard = ({ proposal }) => {
         )}
       </Skeleton>
       <Modal isOpen={showModal} onClose={() => setShowModal(false)} isCentered>
-        <ModalOverlay />
+        <ModalOverlay bgColor={rgba(theme.colors.background[500], 0.8)} />
         <ModalContent
           rounded='lg'
           bg='black'

@@ -113,7 +113,7 @@ const Members = React.memo(function MembersPage({
       customTerms={customTerms}
       isDao={true}
     >
-      <Flex>
+      <Flex wrap={['wrap', null, null, 'nowrap']} justify='space-between'>
         <ListSort sort={sort} setSort={setSort} options={membersSortOptions} />
         <MemberFilters filter={filter} setFilter={setFilter} />
       </Flex>
@@ -124,17 +124,27 @@ const Members = React.memo(function MembersPage({
           pb={6}
         >
           <ContentBox mt={6}>
-            <Flex>
-              <TextBox w='43%' size='xs'>
+            <Flex justify='space-between'>
+              <TextBox w={['50%', null, null, '43%']} size='xs'>
                 {getCopy(customTerms, 'member')}
               </TextBox>
-              <TextBox w='15%' size='xs'>
+              <TextBox
+                w={['25%', null, null, '15%']}
+                size='xs'
+                textAlign='center'
+              >
                 Shares
               </TextBox>
-              <TextBox w='15%' size='xs'>
+              <TextBox
+                w={['20%', null, null, '15%']}
+                size='xs'
+                textAlign='center'
+              >
                 Loot
               </TextBox>
-              <TextBox size='xs'>Join Date</TextBox>
+              <TextBox size='xs' d={['none', null, null, 'inline-block']}>
+                Join Date
+              </TextBox>
             </Flex>
             {listMembers?.map((member) => {
               return (
@@ -159,19 +169,21 @@ const Members = React.memo(function MembersPage({
                 />
               ) : (
                 <>
-                  {daoMember && (
-                    <Flex justify='space-between' mb={5}>
-                      <TextBox size='xs'>Snapshot</TextBox>
-                      <TextBox
-                        as={Link}
-                        to={`/dao/${daochain}/${daoid}/profile/${daoMember.memberAddress}`}
-                        color='inherit'
-                        size='xs'
-                      >
-                        View My Profile
-                      </TextBox>
-                    </Flex>
-                  )}
+                  <Flex justify='space-between' mb={5}>
+                    <TextBox size='xs'>Snapshot</TextBox>
+                    <TextBox
+                      as={Link}
+                      to={`/dao/${daochain}/${daoid}/profile/${daoMember?.memberAddress ||
+                        address}`}
+                      color='inherit'
+                      size='xs'
+                    >
+                      View{' '}
+                      {!daoMember ||
+                        (daoMember.memberAddress === address && 'My')}{' '}
+                      Profile
+                    </TextBox>
+                  </Flex>
                   <MembersChart
                     overview={overview}
                     daoMembers={daoMembers}
