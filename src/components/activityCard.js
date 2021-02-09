@@ -134,7 +134,7 @@ const ActivityCard = ({ activity, displayAvatar, isLink = true }) => {
         <Flex direction='row' justifyContent='space-between'>
           <Flex direction='column'>
             {activity?.title &&
-              (isLink ? (
+              (isLink && activity?.proposalId ? (
                 <RouterLink
                   to={
                     activity?.activityData?.type !== 'rage'
