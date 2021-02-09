@@ -6,6 +6,7 @@ import {
   MINION_POLL,
   HOME_DAO,
   RAGE_QUIT_POLL,
+  MINION_PROPOSAL_POLL,
 } from '../graphQL/dao-queries';
 import { getGraphEndpoint } from '../utils/chain';
 import { hashMaker, memberVote } from '../utils/proposalUtils';
@@ -58,6 +59,17 @@ const pollMinionSummon = async ({ chainID, molochAddress, createdAt }) => {
     query: MINION_POLL,
     variables: {
       molochAddress,
+      createdAt,
+    },
+  });
+};
+
+const pollMinionProposal = async ({ chainID, minionAddress, createdAt }) => {
+  return await graphQuery({
+    endpoint: getGraphEndpoint(chainID, 'subgraph_url'),
+    query: MINION_PROPOSAL_POLL,
+    variables: {
+      minionAddress,
       createdAt,
     },
   });
@@ -156,6 +168,17 @@ const minonSummonTest = (data, shouldEqual, pollId) => {
     return data.moloch.minions.length > 0;
   } else {
     console.log('no data.moloch');
+    clearInterval(pollId);
+    throw new Error(`Bad query, clearing poll: ${data}`);
+  }
+};
+
+const minonProposalTest = (data, shouldEqual, pollId) => {
+  console.log('minions: ', data);
+  if (data.minions && data.minions[0]) {
+    return data.minions[0].proposals.length > 0;
+  } else {
+    console.log('no data.minions');
     clearInterval(pollId);
     throw new Error(`Bad query, clearing poll: ${data}`);
   }
@@ -619,12 +642,12 @@ export const createPoll = ({
       }
     };
   } else if (action === 'minionProposeAction') {
-    return ({ daoID, chainID, hash, actions }) => (txHash) => {
+    return ({ minionAddress, createdAt, chainID, actions }) => (txHash) => {
       startPoll({
-        pollFetch: pollProposals,
-        testFn: submitProposalTest,
-        shouldEqual: hash,
-        args: { daoID, chainID, hash },
+        pollFetch: pollMinionProposal,
+        testFn: minonProposalTest,
+        shouldEqual: createdAt,
+        args: { minionAddress, chainID, createdAt },
         actions,
         txHash,
       });
@@ -636,14 +659,14 @@ export const createPoll = ({
           status: 'unresolved',
           resolvedMsg: `Minion proposal submitted`,
           unresolvedMsg: `Submitting minion proposal`,
-          successMsg: `Minion proposal submitted for ${daoID} on ${chainID}`,
-          errorMsg: `Error submitting minion proposal for ${daoID} on ${chainID}`,
+          successMsg: `Minion proposal submitted for ${minionAddress} on ${chainID}`,
+          errorMsg: `Error submitting minion proposal for ${minionAddress} on ${chainID}`,
           pollData: {
             action,
             interval,
             tries,
           },
-          pollArgs: { daoID, chainID, hash },
+          pollArgs: { minionAddress, createdAt, chainID },
         });
       }
     };

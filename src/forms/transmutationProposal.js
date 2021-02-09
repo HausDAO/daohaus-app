@@ -28,7 +28,7 @@ import { useUser } from '../contexts/UserContext';
 import { useTX } from '../contexts/TXContext';
 import { useOverlay } from '../contexts/OverlayContext';
 import { createPoll } from '../services/pollService';
-import { createHash } from '../utils/general';
+import { createHash, detailsToJSON } from '../utils/general';
 
 const TransmutationProposal = () => {
   const [loading, setLoading] = useState(false);
@@ -167,10 +167,10 @@ const TransmutationProposal = () => {
   const onSubmit = async (values) => {
     setLoading(true);
     const hash = createHash();
-    const details = {
+    const details = detailsToJSON({
       hash,
       description: values.description || '',
-    };
+    });
     const args = [
       values.applicant,
       tributeReturned.toString(),
