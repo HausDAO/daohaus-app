@@ -12,9 +12,11 @@ const Overview = React.memo(function overview({
   isMember,
   members,
   daoMember,
+  currentDaoTokens,
+  customTerms,
 }) {
   return (
-    <MainViewLayout isDao={true} header='Overview'>
+    <MainViewLayout header='Bank' customTerms={customTerms}>
       <Box w='100%'>
         <Flex wrap='wrap'>
           {overview && (
@@ -27,6 +29,7 @@ const Overview = React.memo(function overview({
                 overview={overview}
                 isMember={isMember}
                 membersAmt={members?.length}
+                currentDaoTokens={currentDaoTokens}
               />
             </Box>
           )}

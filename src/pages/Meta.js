@@ -3,13 +3,9 @@ import { Box, Flex, Icon } from '@chakra-ui/react';
 import { useHistory, useParams, Link as RouterLink } from 'react-router-dom';
 import { BiArrowBack } from 'react-icons/bi';
 
-import { useMetaData } from '../contexts/MetaDataContext';
-import { useDaoMember } from '../contexts/DaoMemberContext';
 import DaoMetaForm from '../forms/daoMetaForm';
 
-const Meta = () => {
-  const { daoMetaData, refetchMetaData } = useMetaData();
-  const { isMember } = useDaoMember();
+const Meta = ({ isMember, daoMetaData, refetchMetaData }) => {
   const [localMetadata, setLocalMetadata] = useState();
   const history = useHistory();
   const { daochain, daoid } = useParams();

@@ -7,7 +7,7 @@ import TextBox from '../components/TextBox';
 import ProposalModal from '../modals/proposalModal';
 // import ComingSoonOverlay from '../../components/Shared/ComingSoonOverlay';
 import { proposalTypes } from '../content/proposal-types';
-import { useMetaData } from '../contexts/MetaDataContext';
+// import { useMetaData } from '../contexts/MetaDataContext';
 import { useOverlay } from '../contexts/OverlayContext';
 import { getCopy } from '../utils/metadata';
 import ComingSoonOverlay from '../components/comingSoonOverlay';
@@ -32,8 +32,7 @@ const ProposalScopedModals = ({ proposalType }) => (
   </>
 );
 
-const NewProposal = () => {
-  const { customTerms, daoMetaData } = useMetaData();
+const NewProposal = ({ customTerms, daoMetaData }) => {
   const params = useParams();
   const history = useHistory();
   const [proposalType, setProposalType] = useState(null);
@@ -41,17 +40,16 @@ const NewProposal = () => {
   const { setProposalModal } = useOverlay();
 
   useEffect(() => {
-    if (params.type) {
-      if (validProposalType(params.type)) {
-        // openModal('proposal');
-        setProposalType(params.type);
-        console.log(params.type);
+    if (params.proposalType) {
+      if (validProposalType(params.proposalType)) {
+        setProposalType(params.proposalType);
+        setProposalModal(true);
       } else {
         history.push(`/dao/${params.dao}/proposals`);
       }
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [params]);
+  }, [params?.proposalType]);
 
   return (
     <Box>

@@ -35,12 +35,9 @@ const TransmutationProposal = () => {
   const { address, injectedProvider } = useInjectedProvider();
   const { daoOverview } = useDao();
   const { daoMetaData } = useMetaData();
-  // const [web3Connect] = useWeb3Connect();
-  // const [txProcessor, updateTxProcessor] = useTxProcessor();
   const [currentError, setCurrentError] = useState(null);
 
   const [transmutationData, setTransmutationData] = useState();
-  // const [transmutationService, setTransmutationService] = useState();
   const [tokenData, setTokenData] = useState([]);
   const [balance, setBalance] = useState(0);
   const [symbol, setSymbol] = useState(0);
@@ -205,6 +202,7 @@ const TransmutationProposal = () => {
         setTxInfoModal(true);
       };
       await TransmutationService({
+        web3: injectedProvider,
         transmutation: transmutationData[0].transmutation,
         setupValues: transmutationValues,
         chainID: daochain,

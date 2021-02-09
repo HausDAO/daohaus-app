@@ -18,8 +18,6 @@ import {
 import { CopyToClipboard } from 'react-copy-to-clipboard';
 import { RiArrowLeftLine } from 'react-icons/ri';
 
-import { useDao } from '../contexts/DaoContext';
-import { useToken } from '../contexts/TokenContext';
 import ContentBox from '../components/ContentBox';
 import TextBox from '../components/TextBox';
 import { truncateAddr } from '../utils/general';
@@ -31,11 +29,9 @@ import { useEffect } from 'react/cjs/react.development';
 import makeBlockie from 'ethereum-blockies-base64';
 import { TokenService } from '../services/tokenService';
 
-const MinionDetails = () => {
-  const { daoOverview, daoMembers } = useDao();
+const MinionDetails = ({ overview, members, currentDaoTokens }) => {
   // const [web3Connect] = useWeb3Connect();
   // const { modals, openModal } = useModals();
-  const { currentDaoTokens } = useToken();
   const { daochain, daoid, minion } = useParams();
   const toast = useToast();
   const [minionData, setMinionData] = useState();
@@ -59,24 +55,24 @@ const MinionDetails = () => {
   //   };
   // };
 
-  console.log('daoMembers', daoMembers);
+  console.log('daoMembers', members);
 
   useEffect(() => {
-    if (!daoOverview?.minions.length) {
+    if (!overview?.minions.length) {
       return;
     }
-    const _minionData = daoOverview?.minions.find((m) => {
+    const _minionData = overview?.minions.find((m) => {
       return m.minionAddress === minion;
     });
     setMinionData(_minionData);
-  }, [daoOverview, minion]);
+  }, [overview, minion]);
 
   useEffect(() => {
-    console.log('daoMembers', daoMembers);
+    console.log('daoMembers', members);
     console.log('minion', minion);
 
-    if (daoMembers) {
-      const _minionBalances = daoMembers.find((member) => {
+    if (members) {
+      const _minionBalances = members.find((member) => {
         console.log(member.memberAddress);
         if (member.memberAddress === minion) {
           return member.tokenBalances;
@@ -86,7 +82,7 @@ const MinionDetails = () => {
       setMinionBalances(_minionBalances);
     }
     // eslint-disable-next-line
-  }, [daoMembers, minion]);
+  }, [members, minion]);
 
   useEffect(() => {
     if (!currentDaoTokens) {

@@ -28,14 +28,14 @@ const DaoRouter = () => {
   const {
     daoActivities,
     isCorrectNetwork,
-    daoBalances,
     daoOverview,
     daoMembers,
+    daoProposals,
   } = useDao();
   const { isMember, daoMember } = useDaoMember();
 
   const { daoid, daochain } = useParams();
-  const { daoMetaData, customTerms } = useMetaData();
+  const { daoMetaData, customTerms, refetchMetaData } = useMetaData();
 
   const dao = {
     daoID: daoid,
@@ -44,6 +44,7 @@ const DaoRouter = () => {
     daoMember,
     customTerms,
   };
+
   return (
     <Layout dao={dao}>
       <Switch>
@@ -55,7 +56,7 @@ const DaoRouter = () => {
             isCorrectNetwork={isCorrectNetwork}
             overview={daoOverview}
             members={daoMembers}
-            daoMetaData={daoMetaData}
+            currentDaoTokens={currentDaoTokens}
           />
         </Route>
         <Route exact path={`${path}/proposals`}>
@@ -67,44 +68,78 @@ const DaoRouter = () => {
           />
         </Route>
         <Route exact path={`${path}/bank`}>
-          <Bank balances={daoBalances} customTerms={customTerms} />
+          <Bank
+            currentDaoTokens={currentDaoTokens}
+            overview={daoOverview}
+            customTerms={customTerms}
+          />
         </Route>
         <Route exact path={`${path}/members`}>
-          <Members members={daoMembers} activities={daoActivities} />
+          <Members
+            members={daoMembers}
+            activities={daoActivities}
+            overview={daoOverview}
+            daoMember={daoMember}
+            daoMembers={daoMembers}
+            customTerms={customTerms}
+            daoMetaData={daoMetaData}
+          />
         </Route>
 
         <Route exact path={`${path}/settings/boosts`}>
           <Boosts customTerms={customTerms} />
         </Route>
         <Route exact path={`${path}/settings/notifications`}>
-          <Notifications />
+          <Notifications
+            daoMetaData={daoMetaData}
+            refetchMetaData={refetchMetaData}
+          />
         </Route>
         <Route exact path={`${path}/settings/theme`}>
-          <ThemeBuilder />
+          <ThemeBuilder refetchMetaData={refetchMetaData} />
         </Route>
         <Route exact path={`${path}/settings`}>
-          <Settings overview={daoOverview} />
+          <Settings
+            overview={daoOverview}
+            daoMember={daoMember}
+            daoMetaData={daoMetaData}
+            customTerms={customTerms}
+          />
         </Route>
         <Route exact path={`${path}/settings/meta`}>
-          <Meta overview={daoOverview} />
+          <Meta
+            daoMetaData={daoMetaData}
+            isMember={isMember}
+            refetchMetaData={refetchMetaData}
+          />
         </Route>
         <Route
           exact
           path={`${path}/settings/minion/:minion`} // path={`${path}/settings/minion/:minion(\b0x[0-9a-f]{10,40}\b)`}
         >
-          <Minion />
+          <Minion
+            overview={daoOverview}
+            members={daoMembers}
+            currentDaoTokens={currentDaoTokens}
+          />
         </Route>
         <Route exact path={`${path}/allies`}>
           <Allies />
         </Route>
         <Route exact path={`${path}/proposals/new/:proposalType`}>
-          <NewProposal />
+          <NewProposal customTerms={customTerms} daoMetaData={daoMetaData} />
         </Route>
         <Route exact path={`${path}/proposals/new`}>
-          <NewProposal />
+          <NewProposal customTerms={customTerms} daoMetaData={daoMetaData} />
         </Route>
         <Route exact path={`${path}/proposals/:propid`}>
-          <Proposal activities={daoActivities} />
+          <Proposal
+            overview={daoOverview}
+            daoMember={daoMember}
+            activities={daoActivities}
+            customTerms={customTerms}
+            daoProposals={daoProposals}
+          />
         </Route>
         <Route exact path={`${path}/profile/:userid`}>
           <Profile
@@ -112,6 +147,7 @@ const DaoRouter = () => {
             overview={daoOverview}
             daoTokens={currentDaoTokens}
             activities={daoActivities}
+            daoMember={daoMember}
           />
         </Route>
       </Switch>

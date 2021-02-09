@@ -5,14 +5,11 @@ import makeBlockie from 'ethereum-blockies-base64';
 import { useParams } from 'react-router-dom';
 import { format } from 'date-fns';
 import { RiQuestionLine } from 'react-icons/ri';
-import { FaStar } from 'react-icons/fa';
 
 import { handleGetProfile } from '../utils/3box';
 import { truncateAddr, numberWithCommas } from '../utils/general';
 import { initTokenData } from '../utils/tokenValue';
 import BankList from '../components/BankList';
-// import ProfileBankList from '../components/profileBankList';
-// import { useOverlay } from '../contexts/OverlayContext';
 import GenericModal from '../modals/genericModal';
 import RageQuitForm from '../forms/rageQuit';
 import ActivitiesFeed from '../components/activitiesFeed';
@@ -22,29 +19,13 @@ import ContentBox from '../components/ContentBox';
 import TextBox from '../components/TextBox';
 import { chainByID } from '../utils/chain';
 import { calcPower, calcValue } from '../utils/profile';
-import { useInjectedProvider } from '../contexts/InjectedProviderContext';
 
-const Profile = ({ members, overview, daoTokens, activities }) => {
-  // is address
-  // exists, doesn't exist has balance, no entity
-
+const Profile = ({ members, overview, daoTokens, daoMember, activities }) => {
   const { userid, daochain } = useParams();
-  const { address } = useInjectedProvider();
-  const [isLoggedInAddress, setIsLoggedInAddress] = useState(false);
   const [memberEntity, setMemberEntity] = useState(null);
   const [profile, setProfile] = useState(null);
   const [tokensReceivable, setTokensReceivable] = useState([]);
   const [ens, setEns] = useState(null);
-
-  // console.log('members', members);
-  // console.log('memberEntity', memberEntity);
-  // console.log('profile', profile);
-
-  useEffect(() => {
-    if (address) {
-      setIsLoggedInAddress(userid.toLowerCase() === address.toLowerCase());
-    }
-  }, [address]);
 
   useEffect(() => {
     if (members) {
@@ -140,8 +121,8 @@ const Profile = ({ members, overview, daoTokens, activities }) => {
         pr={[0, null, null, null, 6]}
         pb={6}
       >
-        <GenericModal modalId='rageQuit' closeOnOverlayClick={false}>
-          <RageQuitForm />
+        <GenericModal modalId='rageQuit' closeOnOverlayClick={true}>
+          <RageQuitForm overview={overview} daoMember={daoMember} />
         </GenericModal>
         <ContentBox as={Flex} p={6} w='100%' justify='space-between'>
           {userid ? (

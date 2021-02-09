@@ -4,10 +4,10 @@ import { RiAddFill, RiInformationLine } from 'react-icons/ri';
 import { Box, Flex, Button, Icon, Tooltip } from '@chakra-ui/react';
 import { useInjectedProvider } from '../contexts/InjectedProviderContext';
 import { getCopy } from '../utils/metadata';
-import UserAvatar from './userAvatar';
 import { useOverlay } from '../contexts/OverlayContext';
 import { supportedChains } from '../utils/chain';
 import { capitalize } from '../utils/general';
+import AddressAvatar from './addressAvatar';
 
 const Header = ({ dao }) => {
   const location = useLocation();
@@ -68,13 +68,15 @@ const Header = ({ dao }) => {
         return 'Overview';
       case `/dao/${dao.chainID}/${dao.daoID}/proposals`:
         return getCopy(dao.customTerms, 'proposals');
+      case `/dao/${dao.chainID}/${dao.daoID}/proposals/${params.propid}`:
+        return getCopy(dao.customTerms, 'proposals');
       case `/dao/${dao.chainID}/${dao.daoID}/proposals/new/`:
         return `New ${getCopy(dao.customTerms, 'proposal')}`;
       case `/dao/${dao.chainID}/${dao.daoID}/bank`:
         return getCopy(dao.customTerms, 'bank');
       case `/dao/${dao.chainID}/${dao.daoID}/members`:
         return getCopy(dao.customTerms, 'members');
-      case `/dao/${dao.chainID}/${dao.daoID}/profile/${address}`:
+      case `/dao/${dao.chainID}/${dao.daoID}/profile/${params.userid}`:
         return 'Profile';
       case `/dao/${dao.chainID}/${dao.daoID}/settings`:
         return getCopy(dao.customTerms, 'settings');
@@ -84,7 +86,7 @@ const Header = ({ dao }) => {
         return 'Custom Theme';
       case `/dao/${dao.chainID}/${dao.daoID}/settings/notifications`:
         return 'Notifications';
-      case `/dao/${dao.chainID}/${dao.daoID}/settings/minion/\b0x[0-9a-f]{10,40}\b`:
+      case `/dao/${dao.chainID}/${dao.daoID}/settings/minion/${params.minion}`:
         return 'Minions';
       case `/dao/${dao.chainID}/${dao.daoID}/settings/boosts`:
         return getCopy(dao.customTerms, 'boosts');
@@ -215,7 +217,7 @@ const Header = ({ dao }) => {
 
         {address ? (
           <Button variant='outline' onClick={toggleAccountModal}>
-            <UserAvatar copyEnabled={false} />
+            <AddressAvatar addr={address} hideCopy={true} />
           </Button>
         ) : (
           <Button variant='outline' onClick={requestWallet}>

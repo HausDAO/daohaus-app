@@ -10,7 +10,7 @@ import { boostPost } from '../utils/requests';
 import CustomThemeForm from '../forms/customTheme';
 import ThemePreview from '../components/themePreview';
 
-const ThemeBuilder = () => {
+const ThemeBuilder = ({ refetchMetaData }) => {
   const { address, injectedProvider, injectedChain } = useInjectedProvider();
   const { daochain, daoid } = useParams();
   const { theme, updateTheme, tempTheme, updateTempTheme } = useCustomTheme();
@@ -23,6 +23,7 @@ const ThemeBuilder = () => {
         primary500: theme.colors.primary[500],
         secondary500: theme.colors.secondary[500],
         bg500: theme.colors.background[500],
+        bgOverlayOpacity: 0.75,
         bgImg: theme.images.bgImg,
         headingFont: theme.fonts.heading,
         bodyFont: theme.fonts.body,
@@ -39,11 +40,16 @@ const ThemeBuilder = () => {
     updateTempTheme(themeUpdate);
     updateTheme(themeUpdate);
   };
-
+  // save Alpha also
   const saveTheme = async () => {
     handleThemeUpdate(previewTheme);
     const currentValues = tempTheme || defaultTheme;
-    const themeUpdate = { ...currentValues, ...previewTheme };
+    const themeUpdate = {
+      ...currentValues,
+      ...previewTheme,
+      primaryAlpha: theme.colors.primary[500],
+      secondaryAlpha: theme.colors.secondary[500],
+    };
 
     const messageHash = injectedProvider.utils.sha3(daoid);
     const signature = await injectedProvider.eth.personal.sign(
@@ -63,11 +69,13 @@ const ThemeBuilder = () => {
 
     if (result === 'success') {
       // TODO: refresh daoMetaData?
+      refetchMetaData();
       history.push(`/dao/${daochain}/${daoid}/settings`);
     } else {
       alert('error: forbidden');
     }
   };
+  // disable buttons on wrong chain
 
   return (
     <Box>
@@ -81,7 +89,9 @@ const ThemeBuilder = () => {
           Back
         </Flex>
         <HStack spacing='10px' mr='4%'>
-          <Button variant='outline'>Use an NFT</Button>
+          <Button variant='outline' isDisabled={true}>
+            Use an NFT
+          </Button>
           <Button
             variant='outline'
             onClick={() => handleThemeUpdate(previewTheme)}

@@ -21,23 +21,6 @@ const Withdraw = ({ token }) => {
   const { daoid, daochain } = useParams();
 
   const [loading, setLoading] = useState(false);
-  // const [user] = useUser();
-  // const [dao] = useDao();
-  // const [txProcessor, updateTxProcessor] = useTxProcessor();
-
-  // const txCallBack = (txHash, details) => {
-  //   if (txProcessor && txHash) {
-  //     txProcessor.setTx(txHash, user.username, details, true, false, false);
-  //     txProcessor.forceCheckTx = true;
-  //     updateTxProcessor({ ...txProcessor });
-  //     setLoading(false);
-  //     setOptimisticWithdraw(true);
-  //   }
-  //   if (!txHash) {
-  //     console.log('error: ', details);
-  //     setLoading(false);
-  //   }
-  // };
 
   const handleWithdraw = async () => {
     setLoading(true);

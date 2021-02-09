@@ -9,8 +9,8 @@ import '../global.css';
 import NavLinkList from './navLinkList';
 import Brand from './brand';
 import { useInjectedProvider } from '../contexts/InjectedProviderContext';
-import UserAvatar from '../components/userAvatar';
 import SocialsLinkList from './socialsLinkList';
+import AddressAvatar from '../components/addressAvatar';
 
 const MobileNav = ({ dao }) => {
   const { address, disconnectDapp, requestWallet } = useInjectedProvider();
@@ -55,7 +55,7 @@ const MobileNav = ({ dao }) => {
           >
             {address ? (
               <Button variant='outline' onClick={disconnectDapp}>
-                <UserAvatar copyEnabled={false} />
+                <AddressAvatar addr={address} hideCopy={true} />
               </Button>
             ) : (
               <Button variant='outline' onClick={requestWallet}>

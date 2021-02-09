@@ -4,8 +4,6 @@ import { useForm } from 'react-hook-form';
 import { Button, FormControl, Flex, Icon, Box, Text } from '@chakra-ui/react';
 import { RiErrorWarningLine } from 'react-icons/ri';
 
-import { useDao } from '../contexts/DaoContext';
-import { useDaoMember } from '../contexts/DaoMemberContext';
 import { useInjectedProvider } from '../contexts/InjectedProviderContext';
 import { useOverlay } from '../contexts/OverlayContext';
 import { useUser } from '../contexts/UserContext';
@@ -14,12 +12,10 @@ import RageInput from './rageInput';
 import { createPoll } from '../services/pollService';
 import { MolochService } from '../services/molochService';
 
-const RageQuitForm = () => {
+const RageQuitForm = ({ overview, daoMember }) => {
   const [loading, setLoading] = useState(false);
   const [canRage, setCanRage] = useState(false);
-  const { address } = useInjectedProvider();
-  const { daoOverview } = useDao();
-  const { daoMember } = useDaoMember();
+  const { address, injectedProvider } = useInjectedProvider();
   const { daochain, daoid } = useParams();
   const [currentError, setCurrentError] = useState(null);
   const { cachePoll, resolvePoll } = useUser();
@@ -30,6 +26,7 @@ const RageQuitForm = () => {
     setTxInfoModal,
   } = useOverlay();
   const { refreshDao } = useTX();
+  const now = (new Date().getTime() / 1000).toFixed();
 
   const {
     handleSubmit,
@@ -46,7 +43,7 @@ const RageQuitForm = () => {
       if (daoMember?.highestIndexYesVote?.proposalIndex) {
         const _canRage = await MolochService({
           daoAddress: daoid,
-          version: daoOverview.version,
+          version: overview.version,
           chainID: daochain,
         })('canRagequit')(daoMember?.highestIndexYesVote?.proposalIndex);
         setCanRage(_canRage);
@@ -82,13 +79,12 @@ const RageQuitForm = () => {
 
     setLoading(true);
     console.log(values);
-    const args = [values.shares || 0, values.loot || 0];
+    const args = [values.shares || '0', values.loot || '0'];
     try {
       const poll = createPoll({ action: 'ragequit', cachePoll })({
-        daoID: daoid,
         chainID: daochain,
-        sharesRaged: values.shares || 0,
-        lootRaged: values.loot || 0,
+        molochAddress: daoid,
+        createdAt: now,
         actions: {
           onError: (error, txHash) => {
             errorToast({
@@ -100,7 +96,7 @@ const RageQuitForm = () => {
           },
           onSuccess: (txHash) => {
             successToast({
-              title: 'Minion action executed.',
+              title: 'Rage Quit submitted.',
             });
             refreshDao();
             resolvePoll(txHash);
@@ -112,15 +108,15 @@ const RageQuitForm = () => {
         setGenericModal({});
         setTxInfoModal(true);
       };
-
       await MolochService({
+        web3: injectedProvider,
         daoAddress: daoid,
-        version: daoOverview.version,
+        version: overview.version,
         chainID: daochain,
       })('ragequit')({ args, address, poll, onTxHash });
     } catch (err) {
       setLoading(false);
-      console.log('*******************error: ', err);
+      console.log(err);
     }
   };
 

@@ -87,7 +87,6 @@ const ProposalFormModal = ({ proposalType, returnRoute }) => {
 
   const handleClose = () => {
     setLoading(false);
-    // closeModals();
     setProposalModal(false);
     // if (returnRoute) {
     //   history.push(returnRoute);
@@ -96,7 +95,7 @@ const ProposalFormModal = ({ proposalType, returnRoute }) => {
 
   return (
     <Modal isOpen={proposalModal} onClose={handleClose} isCentered>
-      <ModalOverlay />
+      <ModalOverlay bgColor='background.400' />
       <ModalContent
         rounded='lg'
         bg='blackAlpha.600'

@@ -109,7 +109,9 @@ const DaoMetaForm = ({ metadata, handleUpdate }) => {
                       setIpfsHash={setIpfsHash}
                       setUploading={setUploading}
                       uploading={uploading}
-                      metadata={metadata}
+                      matchMeta={metadata?.avatarImg}
+                      setLabel='Upload Avatar'
+                      changeLabel='Change Avatar'
                     />
                   </HStack>
                 </FormControl>

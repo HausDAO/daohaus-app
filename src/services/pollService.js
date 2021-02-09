@@ -1,7 +1,12 @@
 import { BigNumber } from 'ethers';
 import { graphQuery } from '../utils/apollo';
 import { PROPOSALS_LIST } from '../graphQL/proposal-queries';
-import { DAO_POLL, MINION_POLL, HOME_DAO } from '../graphQL/dao-queries';
+import {
+  DAO_POLL,
+  MINION_POLL,
+  HOME_DAO,
+  RAGE_QUIT_POLL,
+} from '../graphQL/dao-queries';
 import { getGraphEndpoint } from '../utils/chain';
 import { hashMaker, memberVote } from '../utils/proposalUtils';
 import { TokenService } from '../services/tokenService';
@@ -51,6 +56,17 @@ const pollMinionSummon = async ({ chainID, molochAddress, createdAt }) => {
   return await graphQuery({
     endpoint: getGraphEndpoint(chainID, 'subgraph_url'),
     query: MINION_POLL,
+    variables: {
+      molochAddress,
+      createdAt,
+    },
+  });
+};
+
+const pollRageQuit = async ({ chainID, molochAddress, createdAt }) => {
+  return await graphQuery({
+    endpoint: getGraphEndpoint(chainID, 'subgraph_url'),
+    query: RAGE_QUIT_POLL,
     variables: {
       molochAddress,
       createdAt,
@@ -138,6 +154,17 @@ const minonSummonTest = (data, shouldEqual, pollId) => {
   console.log('new minion: ', data);
   if (data.moloch) {
     return data.moloch.minions.length > 0;
+  } else {
+    console.log('no data.moloch');
+    clearInterval(pollId);
+    throw new Error(`Bad query, clearing poll: ${data}`);
+  }
+};
+
+const rageQuitTest = (data, shouldEqual, pollId) => {
+  console.log('new rage quit: ', data);
+  if (data.moloch) {
+    return data.moloch.rageQuits.length > 0;
   } else {
     console.log('no data.moloch');
     clearInterval(pollId);
@@ -783,14 +810,12 @@ export const createPoll = ({
     };
   } else if (action === 'ragequit') {
     console.log('action', action);
-    return ({ daoID, chainID, sharesRaged, lootRaged, actions }) => (
-      txHash,
-    ) => {
+    return ({ chainID, molochAddress, createdAt, actions }) => (txHash) => {
       startPoll({
-        pollFetch: pollMinionSummon,
-        testFn: minonSummonTest,
-        shouldEqual: { daoID, sharesRaged, lootRaged },
-        args: { daoID, chainID, sharesRaged, lootRaged },
+        pollFetch: pollRageQuit,
+        testFn: rageQuitTest,
+        shouldEqual: { molochAddress, createdAt },
+        args: { chainID, molochAddress, createdAt },
         actions,
         txHash,
       });
@@ -800,16 +825,16 @@ export const createPoll = ({
           action,
           timeSent: Date.now(),
           status: 'unresolved',
-          resolvedMsg: `Minion summoned`,
-          unresolvedMsg: `Summoning Minion`,
-          successMsg: `A New Minion has Risen on ${chainID}`,
-          errorMsg: `Error summoning Minion on ${chainID}`,
+          resolvedMsg: `Rage Quit Completed`,
+          unresolvedMsg: `Rage Quitting`,
+          successMsg: `You Rage Quit`,
+          errorMsg: `Error Rage Quitting`,
           pollData: {
             action,
             interval,
             tries,
           },
-          pollArgs: { daoID, chainID, sharesRaged, lootRaged },
+          pollArgs: { chainID, molochAddress, createdAt },
         });
       }
     };

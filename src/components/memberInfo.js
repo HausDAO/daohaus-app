@@ -1,15 +1,16 @@
 import React from 'react';
 import { Link, useParams } from 'react-router-dom';
 import { Flex } from '@chakra-ui/react';
-import { useMetaData } from '../contexts/MetaDataContext';
+
+import { useInjectedProvider } from '../contexts/InjectedProviderContext';
 import { getCopy } from '../utils/metadata';
 import MemberInfoGuts from './memberInfoGuts';
 import TextBox from './TextBox';
 import ContentBox from './ContentBox';
 
-const MemberInfoCard = ({ member }) => {
+const MemberInfoCard = ({ member, customTerms }) => {
+  const { address } = useInjectedProvider();
   const { daoid, daochain } = useParams();
-  const { customTerms } = useMetaData();
 
   return (
     <>
@@ -24,12 +25,13 @@ const MemberInfoCard = ({ member }) => {
                 color='inherit'
                 size='xs'
               >
-                View profile
+                View {address.toLowerCase() === member?.memberAddress && 'my'}{' '}
+                profile
               </TextBox>
             )}
           </Flex>
           <ContentBox mt={3}>
-            <MemberInfoGuts member={member} showMenu={true} />
+            <MemberInfoGuts member={member} />
           </ContentBox>
         </>
       )}

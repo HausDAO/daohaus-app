@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { utils } from 'web3';
 import {
   Flex,
@@ -17,7 +17,7 @@ import { AddressZero } from '@ethersproject/constants';
 
 import TextBox from '../components/TextBox';
 import ContentBox from '../components/ContentBox';
-import UserAvatar from '../components/userAvatar';
+import AddressAvatar from '../components/addressAvatar';
 import ProposalMinionCard from '../components/proposalMinionCard';
 
 import {
@@ -25,7 +25,6 @@ import {
   getProposalDetailStatus,
   memberVote,
 } from '../utils/proposalUtils';
-import { handleGetProfile } from '../utils/3box';
 import { numberWithCommas } from '../utils/general';
 import { useInjectedProvider } from '../contexts/InjectedProviderContext';
 
@@ -46,35 +45,7 @@ const hasImage = (string) => {
 };
 
 const ProposalDetails = ({ proposal }) => {
-  const [proposer, setProposer] = useState(null);
-  const [applicant, setApplicant] = useState(null);
   const { address } = useInjectedProvider();
-
-  useEffect(async () => {
-    if (proposal) {
-      const proposerProfile = await handleGetProfile(proposal.proposer);
-      const applicantProfile = await handleGetProfile(
-        proposal?.applicant !== AddressZero
-          ? proposal.applicant
-          : proposal.proposer,
-      );
-      setProposer({
-        memberAddress: proposal.proposer,
-        ...proposerProfile,
-      });
-      if (proposal.applicant !== AddressZero) {
-        setApplicant({
-          memberAddress: proposal.applicant,
-          ...applicantProfile,
-        });
-      } else {
-        setApplicant({
-          memberAddress: proposal.proposer,
-          ...applicantProfile,
-        });
-      }
-    }
-  }, [proposal]);
 
   return (
     <Box pt={6}>
@@ -237,16 +208,26 @@ const ProposalDetails = ({ proposal }) => {
             <TextBox size='xs' mb={2}>
               Submitted By
             </TextBox>
-            <Skeleton isLoaded={proposer}>
-              {proposer ? <UserAvatar user={proposer} copyEnabled /> : '--'}
+            <Skeleton isLoaded={proposal}>
+              {proposal ? <AddressAvatar addr={proposal.proposer} /> : '--'}
             </Skeleton>
           </Box>
           <Box>
             <TextBox size='xs' mb={2}>
               Recipient
             </TextBox>
-            <Skeleton isLoaded={applicant}>
-              {applicant ? <UserAvatar user={applicant} copyEnabled /> : '--'}
+            <Skeleton isLoaded={proposal}>
+              {proposal ? (
+                <AddressAvatar
+                  addr={
+                    proposal.applicant === AddressZero
+                      ? proposal.proposer
+                      : proposal.applicant
+                  }
+                />
+              ) : (
+                '--'
+              )}
             </Skeleton>
           </Box>
           <Flex align='center'>

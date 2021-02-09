@@ -16,7 +16,7 @@ import { useOverlay } from '../contexts/OverlayContext';
 
 const ProfileMenu = ({ member }) => {
   const toast = useToast();
-  const { address } = useInjectedProvider();
+  const { address, injectedChain } = useInjectedProvider();
   const { daochain, daoid } = useParams();
   const { setGenericModal } = useOverlay();
   const history = useHistory();
@@ -33,6 +33,9 @@ const ProfileMenu = ({ member }) => {
     address.toLowerCase() === member.memberAddress.toLowerCase();
 
   const hasSharesOrloot = +member.shares > 0 || +member.loot > 0;
+  const daoConnectedAndSameChain = () => {
+    return address && daochain && injectedChain?.chainId === daochain;
+  };
 
   return (
     <Menu>
@@ -46,7 +49,7 @@ const ProfileMenu = ({ member }) => {
         />
       </MenuButton>
       <MenuList>
-        {address ? (
+        {daoConnectedAndSameChain() ? (
           <>
             {isMember && hasSharesOrloot ? (
               <MenuItem onClick={() => setGenericModal({ rageQuit: true })}>
