@@ -49,28 +49,6 @@ const ProfileMenu = ({ member }) => {
         />
       </MenuButton>
       <MenuList>
-        {daoConnectedAndSameChain() ? (
-          <>
-            {isMember && hasSharesOrloot ? (
-              <MenuItem onClick={() => setGenericModal({ rageQuit: true })}>
-                RageQuit
-              </MenuItem>
-            ) : null}
-
-            {!isMember && member.exists && hasSharesOrloot ? (
-              <MenuItem onClick={handleGuildkickClick}>GuildKick</MenuItem>
-            ) : null}
-          </>
-        ) : null}
-
-        <Link
-          href={`https://3box.io/${member?.memberAddress}`}
-          target='_blank'
-          rel='noopener noreferrer'
-        >
-          <MenuItem>View 3box Profile</MenuItem>
-        </Link>
-
         <CopyToClipboard
           text={member?.memberAddress}
           onCopy={() =>
@@ -85,6 +63,28 @@ const ProfileMenu = ({ member }) => {
         >
           <MenuItem>Copy Address</MenuItem>
         </CopyToClipboard>
+
+        <Link
+          href={`https://3box.io/${member?.memberAddress}`}
+          target='_blank'
+          rel='noopener noreferrer'
+        >
+          <MenuItem>View 3box Profile</MenuItem>
+        </Link>
+
+        {daoConnectedAndSameChain() ? (
+          <>
+            {isMember && hasSharesOrloot ? (
+              <MenuItem onClick={() => setGenericModal({ rageQuit: true })}>
+                RageQuit
+              </MenuItem>
+            ) : null}
+
+            {!isMember && member.exists && hasSharesOrloot ? (
+              <MenuItem onClick={handleGuildkickClick}>GuildKick</MenuItem>
+            ) : null}
+          </>
+        ) : null}
       </MenuList>
     </Menu>
   );
