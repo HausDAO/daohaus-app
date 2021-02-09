@@ -148,28 +148,6 @@ const DaoSwitcherModal = () => {
         borderWidth='1px'
         borderColor='whiteAlpha.200'
       >
-<<<<<<< HEAD
-        <ModalHeader>
-          <Box
-            fontFamily='heading'
-            textTransform='uppercase'
-            fontSize='sm'
-            fontWeight={700}
-            color='white'
-            mb={3}
-          >
-            Go to DAO
-          </Box>
-          <FormControl>
-            <Input
-              type='search'
-              className='input'
-              placeholder='Search My Daos'
-              maxW={300}
-              onChange={(e) => handleChange(e)}
-            />
-          </FormControl>
-=======
         <ModalHeader pb={0}>
           <Flex justify='space-between' align='center' w='90%'>
             <Box
@@ -192,7 +170,6 @@ const DaoSwitcherModal = () => {
               />
             </FormControl>
           </Flex>
->>>>>>> 30bd2a4f3bd49c5cd3fba2c2b4e8eeb984cc34fd
         </ModalHeader>
         <ModalCloseButton color='white' />
         <ModalBody
