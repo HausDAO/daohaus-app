@@ -55,6 +55,7 @@ const MemberProposalForm = () => {
     errors,
     register,
     setValue,
+    setError,
     getValues,
     watch,
   } = useForm();
@@ -183,6 +184,7 @@ const MemberProposalForm = () => {
             register={register}
             setValue={setValue}
             getValues={getValues}
+            setError={setError}
           />
           {showLoot && (
             <>
