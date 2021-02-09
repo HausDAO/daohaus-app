@@ -5,14 +5,14 @@ import TextBox from './TextBox';
 import ProfileMenu from './profileMenu';
 import AddressAvatar from './addressAvatar';
 
-const MemberInfoGuts = ({ member }) => {
+const MemberInfoGuts = ({ member, showMenu }) => {
   return (
     <>
       {member && (
         <>
           <Flex justify='space-between'>
             <AddressAvatar addr={member.memberAddress} hideCopy={true} />
-            <ProfileMenu member={member} />
+            {showMenu ? <ProfileMenu member={member} /> : null}
           </Flex>
           <Flex w='100%' justify='space-between' mt={6}>
             <Box>

@@ -100,6 +100,7 @@ const Profile = ({ members, overview, daoTokens, daoMember, activities }) => {
           <BankList
             tokens={tokensReceivable}
             hasBalance={tokensReceivable.length}
+            profile={true}
           />
         </Box>
         <Box w={['100%', null, null, null, '40%']}>

@@ -10,6 +10,7 @@ import { handleGetProfile } from '../utils/3box';
 const AddressAvatar = React.memo(function AddrAvatar({
   addr,
   hideCopy = false,
+  alwaysShowName,
 }) {
   const toast = useToast();
   const [profile, setProfile] = useState(null);
@@ -61,7 +62,12 @@ const AddressAvatar = React.memo(function AddrAvatar({
           fontSize='sm'
           fontFamily='heading'
           ml={3}
-          d={['none', null, null, 'inline-block']}
+          d={[
+            !alwaysShowName ? 'none' : 'inline-block',
+            null,
+            null,
+            'inline-block',
+          ]}
         >
           {profile?.name || truncateAddr(addr)}
           <Box as='span' ml={1}>

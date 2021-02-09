@@ -206,12 +206,16 @@ const ProposalDetails = ({ proposal }) => {
           pr={memberVote(proposal, address) !== null && '5%'}
           w='100%'
         >
-          <Box>
+          <Box mb={[3, null, null, 0]}>
             <TextBox size='xs' mb={2}>
               Submitted By
             </TextBox>
             <Skeleton isLoaded={proposal}>
-              {proposal ? <AddressAvatar addr={proposal.proposer} /> : '--'}
+              {proposal ? (
+                <AddressAvatar addr={proposal.proposer} alwaysShowName={true} />
+              ) : (
+                '--'
+              )}
             </Skeleton>
           </Box>
           <Box>
@@ -226,6 +230,7 @@ const ProposalDetails = ({ proposal }) => {
                       ? proposal.proposer
                       : proposal.applicant
                   }
+                  alwaysShowName={true}
                 />
               ) : (
                 '--'
