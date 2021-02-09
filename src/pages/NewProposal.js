@@ -5,16 +5,11 @@ import ContentBox from '../components/ContentBox';
 import TextBox from '../components/TextBox';
 
 import ProposalModal from '../modals/proposalModal';
-// import ComingSoonOverlay from '../../components/Shared/ComingSoonOverlay';
 import { proposalTypes } from '../content/proposal-types';
-// import { useMetaData } from '../contexts/MetaDataContext';
 import { useOverlay } from '../contexts/OverlayContext';
 import { getCopy } from '../utils/metadata';
 import ComingSoonOverlay from '../components/comingSoonOverlay';
-import { capitalize } from '../utils/general';
 import MainViewLayout from '../components/mainViewLayout';
-// import { setProposalModal } from '../contexts/OverlayContext';
-// import { useDao } from '../contexts/DaoContext';
 
 const validProposalType = (type) => {
   return [

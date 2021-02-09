@@ -595,26 +595,28 @@ export const createPoll = ({
         actions,
         txHash,
       });
-      cachePoll({
-        txHash,
-        action,
-        timeSent: Date.now(),
-        status: 'unresolved',
-        resolvedMsg: `Token Value Synced`,
-        unresolvedMsg: `Syncing Token Value`,
-        successMsg: `Token value has been synced`,
-        errorMsg: `Error syncing token value`,
-        pollData: {
+      if (cachePoll) {
+        cachePoll({
+          txHash,
           action,
-          interval,
-          tries,
-        },
-        pollArgs: {
-          chainID,
-          daoID,
-          token,
-        },
-      });
+          timeSent: Date.now(),
+          status: 'unresolved',
+          resolvedMsg: `Token Value Synced`,
+          unresolvedMsg: `Syncing Token Value`,
+          successMsg: `Token value has been synced`,
+          errorMsg: `Error syncing token value`,
+          pollData: {
+            action,
+            interval,
+            tries,
+          },
+          pollArgs: {
+            chainID,
+            daoID,
+            token,
+          },
+        });
+      }
     };
   } else if (action === 'minionProposeAction') {
     return ({ daoID, chainID, hash, actions }) => (txHash) => {
@@ -749,27 +751,29 @@ export const createPoll = ({
         actions,
         txHash,
       });
-      cachePoll({
-        txHash,
-        action,
-        timeSent: Date.now(),
-        status: 'unresolved',
-        resolvedMsg: `Withdrew Tokens`,
-        unresolvedMsg: `Withdrawing tokens`,
-        successMsg: `Successfully withdrew tokens!`,
-        errorMsg: `There was an error withdrawing tokens`,
-        pollData: {
+      if (cachePoll) {
+        cachePoll({
+          txHash,
           action,
-          interval,
-          tries,
-        },
-        pollArgs: {
-          chainID,
-          daoID,
-          memberAddress,
-          tokenAddress,
-        },
-      });
+          timeSent: Date.now(),
+          status: 'unresolved',
+          resolvedMsg: `Withdrew Tokens`,
+          unresolvedMsg: `Withdrawing tokens`,
+          successMsg: `Successfully withdrew tokens!`,
+          errorMsg: `There was an error withdrawing tokens`,
+          pollData: {
+            action,
+            interval,
+            tries,
+          },
+          pollArgs: {
+            chainID,
+            daoID,
+            memberAddress,
+            tokenAddress,
+          },
+        });
+      }
     };
   } else if (action === 'ragequit') {
     console.log('action', action);
