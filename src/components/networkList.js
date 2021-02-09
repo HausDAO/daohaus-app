@@ -15,19 +15,14 @@ const NetworkList = () => {
   const [sortedDaos, setSortedDaos] = useState({});
 
   useEffect(() => {
-    const currentNetwork = userHubDaos.find(
-      (dao) => dao.networkID === provider?.chainId,
-    );
-    const otherNetworks = userHubDaos
-      .filter((dao) => dao.networkID !== provider?.chainId)
-      .sort((a, b) =>
-        a.networkID === '0x64' ? -1 : a.network_id - b.network_id,
-      );
+    const networkDaos = userHubDaos.sort((a, b) => {
+      return a.hubSortOrder - b.hubSortOrder;
+    });
     const count = userHubDaos.reduce((sum, network) => {
       sum += network.data.length;
       return sum;
     }, 0);
-    setSortedDaos({ currentNetwork, otherNetworks, count });
+    setSortedDaos({ networkDaos, count });
   }, [userHubDaos]);
 
   const handleChange = (event) => {
@@ -48,18 +43,9 @@ const NetworkList = () => {
           onChange={(e) => handleChange(e)}
         />
       </Flex>
-      {sortedDaos.currentNetwork && (
+      {sortedDaos.networkDaos?.length > 0 && (
         <>
-          <NetworkDaoList
-            data={sortedDaos.currentNetwork.data}
-            network={sortedDaos.currentNetwork}
-            searchTerm={searchTerm}
-          />
-        </>
-      )}
-      {sortedDaos.otherNetworks?.length > 0 && (
-        <>
-          {sortedDaos.otherNetworks.map((network, i) => {
+          {sortedDaos.networkDaos.map((network, i) => {
             if (network.data.length) {
               return (
                 <NetworkDaoList
