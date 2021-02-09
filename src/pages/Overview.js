@@ -41,6 +41,7 @@ const Overview = React.memo(function overview({
                   activities={activities}
                   limit={3}
                   hydrateFn={getDaoActivites}
+                  heading='Recent Activity'
                 />
               </Box>
             </Box>

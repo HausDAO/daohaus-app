@@ -10,10 +10,11 @@ import { useInjectedProvider } from '../contexts/InjectedProviderContext';
 
 const NavLinkList = ({ dao, view, toggleNav = null }) => {
   // const { daoMetaData } = useMetaData();
+
   const { address } = useInjectedProvider();
   const navLinks =
-    dao?.chainID && dao?.daoID
-      ? generateDaoLinks(dao.chainID, dao.daoID)
+    dao?.chainID && dao?.daoID && dao.daoProposals
+      ? generateDaoLinks(dao.chainID, dao.daoID, dao.daoProposals)
       : defaultHubData;
   const inDao = dao?.daoID && address;
 

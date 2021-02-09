@@ -115,7 +115,12 @@ const TxInfoModal = () => {
                   <List spacing={3}>
                     {latestTx?.bodyText.map((txt, idx) => (
                       <ListItem key={idx} fontSize={['sm', null, null, 'md']}>
-                        <Icon as={RiInformationLine} /> {txt}
+                        <Icon
+                          as={RiInformationLine}
+                          color='primary.200'
+                          mr={2}
+                        />
+                        {txt}
                       </ListItem>
                     ))}
                   </List>
@@ -129,11 +134,7 @@ const TxInfoModal = () => {
                       {latestTx?.links.map((link, idx) =>
                         link.external ? (
                           <Flex align='center' key={`${link.href}-${link.idx}`}>
-                            <Icon
-                              as={RiLinksLine}
-                              mr={2}
-                              color='secondary.500'
-                            />
+                            <Icon as={RiLinksLine} mr={2} color='primary.200' />
                             <Box
                               as={Link}
                               href={link.href}

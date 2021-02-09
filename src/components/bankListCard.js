@@ -65,7 +65,10 @@ const TokenListCard = ({
 
   return (
     <Flex h='60px' align='center'>
-      <Box w='15%'>
+      <Box
+        w={hasBalance || needsSync ? '20%' : '15%'}
+        d={['none', null, null, 'inline-block']}
+      >
         <Skeleton isLoaded={token?.symbol}>
           <Flex align='center'>
             {token?.logoUri && (
@@ -76,7 +79,14 @@ const TokenListCard = ({
           </Flex>
         </Skeleton>
       </Box>
-      <Box w='55%'>
+      <Box
+        w={[
+          hasBalance || needsSync ? '45%' : '60%',
+          null,
+          null,
+          hasBalance || needsSync ? '45%' : '50%',
+        ]}
+      >
         <Skeleton isLoaded={token?.tokenBalance}>
           <Box fontFamily='mono'>
             {token.tokenBalance ? (
@@ -98,7 +108,10 @@ const TokenListCard = ({
           </Box>
         </Skeleton>
       </Box>
-      <Box w='15%'>
+      <Box
+        w={hasBalance || needsSync ? '15%' : '20%'}
+        d={['none', null, null, 'inline-block']}
+      >
         <Skeleton isLoaded={token?.usd >= 0}>
           <Box fontFamily='mono'>
             {token?.usd ? (
@@ -109,7 +122,14 @@ const TokenListCard = ({
           </Box>
         </Skeleton>
       </Box>
-      <Box w='15%'>
+      <Box
+        w={[
+          needsSync || hasBalance ? '30%' : '40%',
+          null,
+          null,
+          hasBalance || needsSync ? '15%' : '20%',
+        ]}
+      >
         <Skeleton isLoaded={token?.totalUSD >= 0}>
           <Box fontFamily='mono'>
             {token?.tokenBalance ? (
@@ -127,10 +147,18 @@ const TokenListCard = ({
         </Skeleton>
       </Box>
 
-      <Box w='15%'>{hasBalance && <Withdraw token={token} />}</Box>
-      {needsSync && !optimisticSync && (
-        <SyncTokenButton token={token} setOptimisticSync={setOptimisticSync} />
-      )}
+      <Box
+        w={['25%', null, null, '20%']}
+        d={hasBalance || needsSync ? 'inline-block' : 'none'}
+      >
+        {hasBalance && <Withdraw token={token} />}
+        {needsSync && !optimisticSync && (
+          <SyncTokenButton
+            token={token}
+            setOptimisticSync={setOptimisticSync}
+          />
+        )}
+      </Box>
     </Flex>
   );
 };
