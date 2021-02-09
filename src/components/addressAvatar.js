@@ -7,39 +7,57 @@ import { Flex, Avatar, Box, useToast, Icon } from '@chakra-ui/react';
 import { truncateAddr } from '../utils/general';
 import { handleGetProfile } from '../utils/3box';
 
-const AddressAvatar = ({ addr, hideCopy = false }) => {
+const AddressAvatar = React.memo(function AddrAvatar({
+  addr,
+  hideCopy = false,
+}) {
   const toast = useToast();
   const [profile, setProfile] = useState(null);
-
+  const [hasFetched, setHasFetched] = useState(false);
+  // console.log(profile);
   useEffect(() => {
+    let shouldFetch = true;
     const getProfile = async () => {
-      try {
-        const profile = await handleGetProfile(addr);
-        if (profile.status === 'error') {
-          setProfile(null);
-          return;
+      if (shouldFetch) {
+        try {
+          // console.log('fired');
+          const profile = await handleGetProfile(addr);
+          if (profile.status === 'error') {
+            setProfile(false);
+            setHasFetched(true);
+            return;
+          }
+          setProfile(profile);
+          setHasFetched(true);
+        } catch (error) {
+          console.log("Member doesn't have a profile");
         }
-        setProfile(profile);
-      } catch (error) {
-        console.log("Member doesn't have a profile");
       }
     };
-    getProfile();
+    if (!hasFetched) {
+      getProfile();
+    }
+    return () => {
+      shouldFetch = false;
+    };
   }, [addr]);
+
+  const renderImage = (addr) => {
+    console.log(profile);
+    if (profile?.image?.length) {
+      return `https://ipfs.infura.io/ipfs/${profile?.image[0].contentUrl['/']}`;
+    } else if (profile === false) {
+      return makeBlockie(addr);
+    } else {
+      return null;
+    }
+  };
 
   return (
     <Flex direction='row' alignItems='center'>
       <Flex direction='row' alignItems='center'>
-        {addr && (
-          <Avatar
-            name={addr}
-            src={
-              profile?.image?.length
-                ? `https://ipfs.infura.io/ipfs/${profile?.image[0].contentUrl['/']}`
-                : makeBlockie(addr)
-            }
-            size='sm'
-          />
+        {addr && hasFetched && (
+          <Avatar name={addr} src={renderImage(addr)} size='sm' />
         )}
         <Box
           fontSize='sm'
@@ -51,7 +69,7 @@ const AddressAvatar = ({ addr, hideCopy = false }) => {
           <Box as='span' ml={1}>
             {profile?.emoji && profile.emoji}{' '}
           </Box>
-          {hideCopy !== true && (
+          {hideCopy || (
             <CopyToClipboard
               text={addr}
               onCopy={() =>
@@ -76,6 +94,6 @@ const AddressAvatar = ({ addr, hideCopy = false }) => {
       </Flex>
     </Flex>
   );
-};
+});
 
 export default AddressAvatar;

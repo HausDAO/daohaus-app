@@ -16,6 +16,7 @@ import MemberFilters from '../components/memberFilters';
 import MainViewLayout from '../components/mainViewLayout';
 import { useInjectedProvider } from '../contexts/InjectedProviderContext';
 import { daoConnectedAndSameChain } from '../utils/general';
+import deepEqual from 'deep-eql';
 
 const Members = React.memo(function MembersPage({
   members,
@@ -32,8 +33,8 @@ const Members = React.memo(function MembersPage({
   const [selectedMember, setSelectedMember] = useState(null);
   const [scrolled, setScrolled] = useState(false);
   const [listMembers, setListMembers] = useState(null);
-  const [sort, setSort] = useState(null);
-  const [filter, setFilter] = useState(null);
+  const [sort, setSort] = useState('shares');
+  const [filter, setFilter] = useState('active');
 
   useEffect(() => {
     const handleScroll = () => {
@@ -86,7 +87,9 @@ const Members = React.memo(function MembersPage({
           }
         });
       }
-      setListMembers([...sortedMembers]);
+      if (!deepEqual(sortedMembers, listMembers)) {
+        setListMembers([...sortedMembers]);
+      }
     };
     if (members?.length > 0) {
       sortMembers();
@@ -134,6 +137,7 @@ const Members = React.memo(function MembersPage({
               <TextBox size='xs'>Join Date</TextBox>
             </Flex>
             {listMembers?.map((member) => {
+              console.log('fired');
               return (
                 <MemberCard
                   key={member.id}

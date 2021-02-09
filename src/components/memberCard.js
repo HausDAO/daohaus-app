@@ -1,5 +1,5 @@
 import React from 'react';
-import { Flex, Box, Skeleton, Badge } from '@chakra-ui/react';
+import { Flex, Box, Badge } from '@chakra-ui/react';
 import { format } from 'date-fns';
 import AddressAvatar from './addressAvatar';
 
@@ -42,21 +42,15 @@ const MemberCard = ({ member, selectMember, selectedMember }) => {
         </Flex>
       </Flex>
       <Box w='15%'>
-        <Skeleton isLoaded={member?.shares}>
-          <Box fontFamily='mono'>{member.shares || '--'}</Box>
-        </Skeleton>
+        <Box fontFamily='mono'>{member?.shares || '--'}</Box>
       </Box>
       <Box w='15%'>
-        <Skeleton isLoaded={member?.loot}>
-          <Box fontFamily='mono'>{member.loot || '--'}</Box>
-        </Skeleton>
+        <Box fontFamily='mono'>{member?.loot || '--'}</Box>
       </Box>
       <Box>
-        <Skeleton isLoaded={member?.createdAt}>
-          <Box fontFamily='mono'>
-            {format(new Date(+member.createdAt * 1000), 'MMM. d, yyyy') || '--'}
-          </Box>
-        </Skeleton>
+        <Box fontFamily='mono'>
+          {format(new Date(+member?.createdAt * 1000), 'MMM. d, yyyy') || '--'}
+        </Box>
       </Box>
     </Flex>
   );
