@@ -50,7 +50,7 @@ const Header = ({ dao }) => {
         return 'Explore DAOs';
       case '/summon':
         return 'Summon';
-      case `/register/${params.registerchain}/${params.registerid}`:
+      case `/register/${params.registerchain}/${params.daoid}`:
         return 'Finish your DAO Setup';
       default:
         return "404 What's Lost Can Be Found";
@@ -59,7 +59,7 @@ const Header = ({ dao }) => {
 
   const getDaoHeading = () => {
     switch (location.pathname) {
-      case `/register/${params.registerchain}/${params.registerid}`:
+      case `/register/${params.registerchain}/${params.daoid}`:
         return 'Finish your DAO Setup';
       case `/dao/${dao.chainID}/${dao.daoID}`:
         return 'Overview';

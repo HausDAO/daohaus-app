@@ -37,7 +37,7 @@ function App() {
         <Route exact path='/summon'>
           <Summon />
         </Route>
-        <Route exact path='/register/:registerchain/:registerid'>
+        <Route exact path='/register/:registerchain/:daoid'>
           <Register />
         </Route>
         <Route
