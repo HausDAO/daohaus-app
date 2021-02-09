@@ -4,27 +4,8 @@ import { Box, Button, Icon, Spinner, Stack, Link } from '@chakra-ui/react';
 import { RiExternalLinkLine, RiErrorWarningLine } from 'react-icons/ri';
 
 import TextBox from './TextBox';
-import { POPUP_CONTENT } from '../utils/txData';
-
-const uri = (daochain) => {
-  switch (daochain) {
-    case '0x1': {
-      return `https://etherscan.io/tx/`;
-    }
-    case '0x2a': {
-      return `https://kovan.etherscan.io/tx/`;
-    }
-    case '0x4': {
-      return `https://rinkeby.etherscan.io/tx/`;
-    }
-    case '0x64': {
-      return `https://blockscout.com/poa/xdai/tx/`;
-    }
-    default: {
-      return `https://etherscan.io/tx/`;
-    }
-  }
-};
+import { POPUP_CONTENT } from '../content/pending-tx-modal';
+import { txUri } from '../utils/chain';
 
 const SummonPending = ({ txHash, success, chainId }) => {
   return (
@@ -74,13 +55,12 @@ const SummonPending = ({ txHash, success, chainId }) => {
 
           {txHash ? (
             <Link
-              href={`${uri(chainId)}/${txHash}`}
+              href={`${txUri(chainId)}/${txHash}`}
               isExternal
               fontSize='2xl'
               color='secondary.500'
             >
-              View Transaction on block explorer{' '}
-              <Icon as={RiExternalLinkLine} />
+              View Transaction <Icon as={RiExternalLinkLine} />
             </Link>
           ) : null}
 

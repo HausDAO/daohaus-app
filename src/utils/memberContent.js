@@ -16,3 +16,21 @@ export const membersSortOptions = [
     value: 'joinDateDesc',
   },
 ];
+
+export const membersFilterOptions = [
+  {
+    name: 'Active',
+    value: 'active',
+    type: 'main',
+  },
+  {
+    name: 'Inactive',
+    value: 'inactive',
+    type: 'main',
+  },
+  {
+    name: 'Jailed',
+    value: 'jailed',
+    type: 'main',
+  },
+];

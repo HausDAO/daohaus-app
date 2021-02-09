@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Flex, Text, Box, Spinner } from '@chakra-ui/react';
+import { Flex, Text, Spinner } from '@chakra-ui/react';
 
 import ProposalCard from './proposalCard';
 import { determineUnreadProposalList } from '../utils/proposalUtils';
@@ -8,19 +8,18 @@ import Paginator from './paginator';
 import ProposalFilters from './proposalFilters';
 import ListSort from './listSort';
 import { sortOptions } from '../utils/proposalContent';
+import ContentBox from './ContentBox';
 
 const ProposalsList = ({ proposals }) => {
   const { daoMember } = useDaoMember();
   const [listProposals, setListProposals] = useState(proposals);
-  const [pageProposals, setPageProposals] = useState(proposals);
+  const [pageProposals, setPageProposals] = useState(null);
   const [isLoaded, setIsLoaded] = useState(false);
-  const [filter, setFilter] = useState();
-  const [sort, setSort] = useState();
-
+  const [filter, setFilter] = useState(null);
+  const [sort, setSort] = useState(null);
   useEffect(() => {
     const filterAndSortProposals = () => {
       let filteredProposals = proposals;
-
       if (sort && filter) {
         filteredProposals = proposals
           .filter((prop) => {
@@ -47,7 +46,6 @@ const ProposalsList = ({ proposals }) => {
               return +b.createdAt - +a.createdAt;
             }
           });
-
         if (
           sort.value !== 'submissionDateAsc' &&
           sort.value !== 'submissionDateDesc'
@@ -59,7 +57,7 @@ const ProposalsList = ({ proposals }) => {
       }
       setListProposals(filteredProposals);
     };
-    if (proposals && proposals.length > 0) {
+    if (proposals?.length) {
       filterAndSortProposals();
       setIsLoaded(true);
     }
@@ -99,10 +97,10 @@ const ProposalsList = ({ proposals }) => {
           />
         </Flex>
       )}
-      {proposals && !proposals.length && (
-        <Box m={6}>
+      {listProposals && !listProposals.length && (
+        <ContentBox mt={6} p={3}>
           <Text>No Proposals here yet</Text>
-        </Box>
+        </ContentBox>
       )}
     </>
   );

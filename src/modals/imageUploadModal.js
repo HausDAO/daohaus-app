@@ -1,4 +1,5 @@
 import React, { useRef, useState } from 'react';
+import { useParams } from 'react-router-dom';
 import {
   Modal,
   ModalContent,
@@ -8,20 +9,27 @@ import {
   ButtonGroup,
   Button,
 } from '@chakra-ui/react';
+import { rgba } from 'polished';
+
 import { useOverlay } from '../contexts/OverlayContext';
 import TextBox from '../components/TextBox';
 import { ipfsPost, ipfsPrePost } from '../utils/metadata';
+import { useCustomTheme } from '../contexts/CustomThemeContext';
 
 const ImageUploadModal = ({
   ipfsHash,
   setIpfsHash,
   setUploading,
   uploading,
-  metadata,
+  matchMeta,
+  changeLabel,
+  setLabel,
 }) => {
   const { imageUploadModal, setImageUploadModal } = useOverlay();
   const [imageUrl, setImageUrl] = useState(null);
   const [imageUpload, setImageUpload] = useState(null);
+  const { daoid } = useParams();
+  const { theme } = useCustomTheme();
   let upload = useRef();
 
   const handleBrowse = () => {
@@ -40,7 +48,7 @@ const ImageUploadModal = ({
   const handleUpload = async () => {
     setUploading(true);
     const keyRes = await ipfsPrePost('dao/ipfs-key', {
-      daoAddress: metadata.address,
+      daoAddress: daoid,
     });
     const ipfsRes = await ipfsPost(keyRes, imageUpload);
     setIpfsHash(ipfsRes.IpfsHash);
@@ -63,7 +71,7 @@ const ImageUploadModal = ({
           handleBrowse();
         }}
       >
-        {ipfsHash || metadata.avatarImg ? 'Change Avatar' : 'Upload Avatar'}
+        {ipfsHash || matchMeta ? changeLabel : setLabel}
       </Button>
       <input
         type='file'
@@ -75,7 +83,7 @@ const ImageUploadModal = ({
         onChange={(e) => handleFileSet(e)}
       />
       <Modal isOpen={imageUploadModal} onClose={handleClose} isCentered>
-        <ModalOverlay />
+        <ModalOverlay bgColor={rgba(theme.colors.background[500], 0.8)} />
         <ModalContent
           rounded='lg'
           bg='black'

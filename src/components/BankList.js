@@ -1,57 +1,64 @@
 import React from 'react';
-import { Flex, Text } from '@chakra-ui/react';
+import { Flex, Text, Box } from '@chakra-ui/react';
 import TextBox from './TextBox';
 import ContentBox from './ContentBox';
 import BankListCard from './bankListCard';
 
-const BankList = ({ tokens }) => {
+const BankList = ({ tokens, profile, hasBalance, needsSync }) => {
   return (
     <ContentBox mt={6}>
       <Flex>
-        <TextBox w='15%' size='xs'>
-          Asset
-        </TextBox>
-        <TextBox w='55%' size='xs'>
-          {'Balance'}
-        </TextBox>
-        <TextBox w='15%' size='xs'>
-          Price
-        </TextBox>
-        <TextBox w='15%' size='xs'>
-          Value
-        </TextBox>
-        {/* {false ? <TextBox w='15%'></TextBox> : null} */}
+        <Box
+          w={hasBalance || needsSync ? '20%' : '15%'}
+          d={['none', null, null, 'inline-block']}
+        >
+          <TextBox size='xs'>Asset</TextBox>
+        </Box>
+        <Box
+          w={[
+            hasBalance || needsSync ? '45%' : '60%',
+            null,
+            null,
+            hasBalance || needsSync ? '45%' : '50%',
+          ]}
+        >
+          <TextBox size='xs'>{profile ? 'Internal Bal.' : 'Balance'}</TextBox>
+        </Box>
+        <Box
+          w={hasBalance || needsSync ? '15%' : '20%'}
+          d={['none', null, null, 'inline-block']}
+        >
+          <TextBox size='xs'>Price</TextBox>
+        </Box>
+        <Box
+          w={[
+            hasBalance || needsSync ? '30%' : '40%',
+            null,
+            null,
+            hasBalance || needsSync ? '15%' : '20%',
+          ]}
+        >
+          <TextBox size='xs'>Value</TextBox>
+        </Box>
+
+        {hasBalance || needsSync ? (
+          <Box w={['25%', null, null, '20%']}></Box>
+        ) : null}
       </Flex>
       {tokens ? (
-        Object.values(tokens).map((token) => {
-          return <BankListCard key={token?.id} token={token} />;
+        tokens?.map((token) => {
+          return (
+            <BankListCard
+              key={token?.id}
+              token={token}
+              hasBalance={hasBalance}
+            />
+          );
         })
       ) : (
         <Text mt='5'>No unclaimed balances</Text>
       )}
     </ContentBox>
-    // <div>
-    //   {tokens &&
-    //     Object.values(tokens).map((token) => {
-    //       return (
-    //         <div key={token.id}>
-    //           <p>{token.symbol}</p>
-    //           {token.logoUri && (
-    //             <Image src={token.logoUri} height='35px' mr='15px' />
-    //           )}
-    //           <p>
-    //             Balance:{' '}
-    //             {parseFloat(
-    //               +token.tokenBalance / 10 ** +token.decimals,
-    //             ).toFixed(4)}{' '}
-    //             {token.symbol}
-    //           </p>
-    //           <p>Price: ${token.usd}</p>
-    //           <p>Value: ${token.totalUSD}</p>
-    //         </div>
-    //       );
-    //     })}
-    // </div>
   );
 };
 

@@ -6,6 +6,7 @@ export const supportedChains = {
     network: 'mainnet',
     network_id: 1,
     chain_id: '0x1',
+    hub_sort_order: 1,
     providers: ['walletconnect', 'portis', 'fortmatic'],
     rpc_url: `https://${process.env.REACT_APP_RPC_URI}.eth.rpc.rivet.cloud/`,
     abi_api_url:
@@ -32,6 +33,7 @@ export const supportedChains = {
     network: 'rinkeby',
     network_id: 4,
     chain_id: '0x4',
+    hub_sort_order: 4,
     providers: ['walletconnect', 'portis', 'fortmatic'],
     rpc_url: `https://${process.env.REACT_APP_RPC_URI}.rinkeby.rpc.rivet.cloud/`,
     abi_api_url:
@@ -56,6 +58,7 @@ export const supportedChains = {
     network: 'kovan',
     network_id: 42,
     chain_id: '0x2a',
+    hub_sort_order: 3,
     providers: ['walletconnect', 'portis', 'fortmatic'],
     rpc_url: `https://kovan.infura.io/v3/${process.env.REACT_APP_INFURA_PROJECT_ID}`,
     abi_api_url:
@@ -80,6 +83,7 @@ export const supportedChains = {
     network: 'xdai',
     network_id: 100,
     chain_id: '0x64',
+    hub_sort_order: 2,
     providers: ['walletconnect', 'portis'],
     rpc_url: 'https://dai.poa.network',
     abi_api_url:
@@ -120,4 +124,24 @@ export const chainByName = (networkName) => {
   });
 
   return supportedChains[networkKey];
+};
+
+export const txUri = (daochain) => {
+  switch (daochain) {
+    case '0x1': {
+      return `https://etherscan.io/tx/`;
+    }
+    case '0x2a': {
+      return `https://kovan.etherscan.io/tx/`;
+    }
+    case '0x4': {
+      return `https://rinkeby.etherscan.io/tx/`;
+    }
+    case '0x64': {
+      return `https://blockscout.com/poa/xdai/tx/`;
+    }
+    default: {
+      return `https://etherscan.io/tx/`;
+    }
+  }
 };

@@ -4,20 +4,23 @@ import ExploreFilters from '../components/exploreFilters';
 import ExploreList from '../components/exploreList';
 import Layout from '../components/layout';
 import { ExploreContext } from '../contexts/ExploreContext';
+import MainViewLayout from '../components/mainViewLayout';
 
 const Explore = () => {
   const { hasLoadedExploreData } = useContext(ExploreContext);
 
   return (
     <Layout>
-      {hasLoadedExploreData ? (
-        <>
-          <ExploreFilters />
-          <ExploreList />
-        </>
-      ) : (
-        <Spinner />
-      )}
+      <MainViewLayout header='Explore DAOs'>
+        {hasLoadedExploreData ? (
+          <>
+            <ExploreFilters />
+            <ExploreList />
+          </>
+        ) : (
+          <Spinner />
+        )}
+      </MainViewLayout>
     </Layout>
   );
 };

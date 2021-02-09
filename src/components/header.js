@@ -4,19 +4,16 @@ import { RiAddFill, RiInformationLine } from 'react-icons/ri';
 import { Box, Flex, Button, Icon, Tooltip } from '@chakra-ui/react';
 import { useInjectedProvider } from '../contexts/InjectedProviderContext';
 import { getCopy } from '../utils/metadata';
-import UserAvatar from './userAvatar';
 import { useOverlay } from '../contexts/OverlayContext';
 import { supportedChains } from '../utils/chain';
-import { capitalize } from '../utils/general';
+import { capitalize, daoConnectedAndSameChain } from '../utils/general';
+import AddressAvatar from './addressAvatar';
 
 const Header = ({ dao }) => {
   const location = useLocation();
   const params = useParams();
   const { setHubAccountModal, setDaoAccountModal } = useOverlay();
   const { injectedChain, address, requestWallet } = useInjectedProvider();
-  const daoConnectedAndSameChain = () => {
-    return address && dao?.chainID && injectedChain?.chainId === dao.chainID;
-  };
 
   const WrongNetworkToolTip = ({ children }) => {
     return (!address && dao) || (address && !dao) ? (
@@ -53,11 +50,22 @@ const Header = ({ dao }) => {
         return 'Explore DAOs';
       case '/summon':
         return 'Summon';
-      case `/register/${params.registerchain}/${params.registerid}`:
+      case `/register/${params.registerchain}/${params.daoid}`:
+        return 'Finish your DAO Setup';
+      default:
+        return "404 What's Lost Can Be Found";
+    }
+  };
+
+  const getDaoHeading = () => {
+    switch (location.pathname) {
+      case `/register/${params.registerchain}/${params.daoid}`:
         return 'Finish your DAO Setup';
       case `/dao/${dao.chainID}/${dao.daoID}`:
         return 'Overview';
       case `/dao/${dao.chainID}/${dao.daoID}/proposals`:
+        return getCopy(dao.customTerms, 'proposals');
+      case `/dao/${dao.chainID}/${dao.daoID}/proposals/${params.propid}`:
         return getCopy(dao.customTerms, 'proposals');
       case `/dao/${dao.chainID}/${dao.daoID}/proposals/new/`:
         return `New ${getCopy(dao.customTerms, 'proposal')}`;
@@ -65,7 +73,7 @@ const Header = ({ dao }) => {
         return getCopy(dao.customTerms, 'bank');
       case `/dao/${dao.chainID}/${dao.daoID}/members`:
         return getCopy(dao.customTerms, 'members');
-      case `/dao/${dao.chainID}/${dao.daoID}/profile/${address}`:
+      case `/dao/${dao.chainID}/${dao.daoID}/profile/${params.userid}`:
         return 'Profile';
       case `/dao/${dao.chainID}/${dao.daoID}/settings`:
         return getCopy(dao.customTerms, 'settings');
@@ -75,12 +83,14 @@ const Header = ({ dao }) => {
         return 'Custom Theme';
       case `/dao/${dao.chainID}/${dao.daoID}/settings/notifications`:
         return 'Notifications';
-      case `/dao/${dao.chainID}/${dao.daoID}/settings/minion/\b0x[0-9a-f]{10,40}\b`:
+      case `/dao/${dao.chainID}/${dao.daoID}/settings/minion/${params.minion}`:
         return 'Minions';
       case `/dao/${dao.chainID}/${dao.daoID}/settings/boosts`:
         return getCopy(dao.customTerms, 'boosts');
       case `/dao/${dao.chainID}/${dao.daoID}/settings/boosts/new`:
         return 'New ' + getCopy(dao.customTerms, 'boost');
+      default:
+        return "404 What's Lost Can Be Found";
     }
   };
 
@@ -161,7 +171,7 @@ const Header = ({ dao }) => {
           fontWeight={700}
           mr={10}
         >
-          {getHeading()}
+          {dao ? getDaoHeading() : getHeading()}
         </Box>
         {getHeaderElement()}
       </Flex>
@@ -206,13 +216,12 @@ const Header = ({ dao }) => {
 
         {address ? (
           <Button variant='outline' onClick={toggleAccountModal}>
-            <UserAvatar copyEnabled={false} />
+            <AddressAvatar addr={address} hideCopy={true} />
           </Button>
         ) : (
           <Button variant='outline' onClick={requestWallet}>
             Connect Wallet
           </Button>
-          // <Web3SignIn />
         )}
       </Flex>
     </Flex>

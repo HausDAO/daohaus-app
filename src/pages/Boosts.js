@@ -9,11 +9,21 @@ import { boostList } from '../content/boost-content';
 import GenericModal from '../modals/genericModal';
 import { useOverlay } from '../contexts/OverlayContext';
 import BoostLaunchWrapper from '../components/boostLaunchWrapper';
+import MainViewLayout from '../components/mainViewLayout';
+import { useInjectedProvider } from '../contexts/InjectedProviderContext';
+import { daoConnectedAndSameChain } from '../utils/general';
 
-const Boosts = () => {
+const Boosts = ({ customTerms }) => {
   const { daoMetaData } = useMetaData();
   const { daochain, daoid } = useParams();
   const { setGenericModal } = useOverlay();
+  const { address, injectedChain } = useInjectedProvider();
+
+  const canInteract = daoConnectedAndSameChain(
+    address,
+    injectedChain?.chainId,
+    daochain,
+  );
 
   const renderBoostCard = (boost, i) => {
     const boostData = daoMetaData.boosts && daoMetaData.boosts[boost.key];
@@ -57,6 +67,7 @@ const Boosts = () => {
                 as={RouterLink}
                 to={`/dao/${daochain}/${daoid}/settings/${boost.successRoute}`}
                 textTransform='uppercase'
+                disabled={!canInteract}
               >
                 Settings
               </Button>
@@ -64,6 +75,7 @@ const Boosts = () => {
               <Button
                 textTransform='uppercase'
                 onClick={() => setGenericModal({ [boost.key]: true })}
+                disabled={!canInteract}
               >
                 Add This App
               </Button>
@@ -84,18 +96,20 @@ const Boosts = () => {
   };
 
   return (
-    <Box p={6}>
-      <TextBox size='sm' mb={3}>
-        Available Apps
-      </TextBox>
-      <Flex wrap='wrap' justify='space-evenly'>
-        {daoMetaData
-          ? boostList.map((boost, i) => {
-              return renderBoostCard(boost, i);
-            })
-          : null}
-      </Flex>
-    </Box>
+    <MainViewLayout header='Boosts' customTerms={customTerms} isDao={true}>
+      <Box p={6}>
+        <TextBox size='sm' mb={3}>
+          Available Apps
+        </TextBox>
+        <Flex wrap='wrap' justify='space-evenly'>
+          {daoMetaData
+            ? boostList.map((boost, i) => {
+                return renderBoostCard(boost, i);
+              })
+            : null}
+        </Flex>
+      </Box>
+    </MainViewLayout>
   );
 };
 

@@ -14,8 +14,6 @@ import { RiErrorWarningLine, RiQuestionLine } from 'react-icons/ri';
 import { isAfter, isBefore } from 'date-fns';
 import { motion } from 'framer-motion';
 
-import { useDao } from '../contexts/DaoContext';
-import { useDaoMember } from '../contexts/DaoMemberContext';
 import { useInjectedProvider } from '../contexts/InjectedProviderContext';
 import { useUser } from '../contexts/UserContext';
 import { TokenService } from '../services/tokenService';
@@ -34,11 +32,9 @@ import { MinionService } from '../services/minionService';
 
 const MotionBox = motion.custom(Box);
 
-const ProposalVote = ({ proposal }) => {
+const ProposalVote = ({ proposal, overview, daoProposals, daoMember }) => {
   const [nextProposalToProcess, setNextProposal] = useState(null);
   const [loading, setLoading] = useState(false);
-  const { daoOverview, daoProposals } = useDao();
-  const { daoMember } = useDaoMember();
   const { daochain, daoid } = useParams();
   const { address, injectedProvider, injectedChain } = useInjectedProvider();
   const { cachePoll, resolvePoll } = useUser();
@@ -77,15 +73,21 @@ const ProposalVote = ({ proposal }) => {
       bottom='0px'
       right='0px'
       zIndex='3'
-      fontFamily='heading'
-      fontSize='xl'
-      fontWeight={700}
       align='center'
       justify='center'
       style={{ backdropFilter: 'blur(6px)' }}
     >
-      {`Connect to ${capitalize(supportedChains[daochain]?.network)}
+      <Box
+        maxW={['70%', null, null, 'auto']}
+        fontFamily='heading'
+        fontSize={['md', null, null, 'xl']}
+        fontWeight={700}
+        textAlign='center'
+        zIndex='3'
+      >
+        {`Connect to ${capitalize(supportedChains[daochain]?.network)}
       for ${getCopy(customTerms, 'proposal')} actions`}
+      </Box>
     </Flex>
   );
 
@@ -129,7 +131,7 @@ const ProposalVote = ({ proposal }) => {
           },
           onSuccess: (txHash) => {
             successToast({
-              title: 'Cancelled proposal. Queued for voting!',
+              title: 'Cancelled proposal!',
             });
             refreshDao();
             resolvePoll(txHash);
@@ -141,7 +143,7 @@ const ProposalVote = ({ proposal }) => {
         web3: injectedProvider,
         daoAddress: daoid,
         chainID: daochain,
-        version: daoOverview.version,
+        version: overview.version,
       })('cancelProposal')({ args, address, poll, onTxHash });
     } catch (err) {
       setLoading(false);
@@ -156,6 +158,7 @@ const ProposalVote = ({ proposal }) => {
     // TODO change to unlimited
     const tokenAmount = (100 * 10 ** 18).toString();
     const args = [daoid, tokenAmount];
+
     // ? multiply times decimals
     try {
       const poll = createPoll({ action: 'unlockToken', cachePoll })({
@@ -176,7 +179,7 @@ const ProposalVote = ({ proposal }) => {
           onSuccess: (txHash) => {
             successToast({
               // ? update to token symbol or name
-              title: `Tribute token ${daoOverview?.depositToken?.symbol} unlocked`,
+              title: `Tribute token ${overview?.depositToken?.symbol} unlocked`,
             });
             refreshDao();
             resolvePoll(txHash);
@@ -199,7 +202,7 @@ const ProposalVote = ({ proposal }) => {
 
   const sponsorProposal = async (id) => {
     setLoading(true);
-    console.log('sponsor ', id);
+    console.log('sponsor ', id, injectedProvider, address);
     const args = [id];
     try {
       const poll = createPoll({ action: 'sponsorProposal', cachePoll })({
@@ -229,7 +232,7 @@ const ProposalVote = ({ proposal }) => {
         web3: injectedProvider,
         daoAddress: daoid,
         chainID: daochain,
-        version: daoOverview.version,
+        version: overview.version,
       })('sponsorProposal')({ args, address, poll, onTxHash });
     } catch (err) {
       setLoading(false);
@@ -269,7 +272,7 @@ const ProposalVote = ({ proposal }) => {
         web3: injectedProvider,
         daoAddress: daoid,
         chainID: daochain,
-        version: daoOverview.version,
+        version: overview.version,
       })('submitVote')({ args, address, poll, onTxHash });
     } catch (err) {
       setLoading(false);
@@ -323,7 +326,7 @@ const ProposalVote = ({ proposal }) => {
         web3: injectedProvider,
         daoAddress: daoid,
         chainID: daochain,
-        version: daoOverview.version,
+        version: overview.version,
       })(processFn)({ args, address, poll, onTxHash });
     } catch (err) {
       setLoading(false);
@@ -333,19 +336,44 @@ const ProposalVote = ({ proposal }) => {
   };
 
   const executeMinion = async (proposal) => {
-    // TODO: will nedd to check if it has been executed yet
-    // const web3 = web3Connect?.web3
-    //   ? web3Connect.web3
-    //   : new Web3(new Web3.providers.HttpProvider(getRpcUrl(network)));
-    // const setupValues = {
-    //   minion: proposal.minionAddress,
-    // };
-    // const minionService = new MinionService(web3, user?.username, setupValues);
-    // try {
-    //   minionService.executeAction(proposal.proposalId, txCallBack);
-    // } catch (err) {
-    //   console.log('error: ', err);
-    // }
+    const args = [proposal.proposalId];
+    try {
+      const poll = createPoll({ action: 'minionExecuteAction', cachePoll })({
+        minionAddress: proposal.minionAddress,
+        chainID: daochain,
+        proposalId: proposal.proposalId,
+        actions: {
+          onError: (error, txHash) => {
+            errorToast({
+              title: `There was an error.`,
+            });
+            resolvePoll(txHash);
+            console.error(`Could not find a matching proposal: ${error}`);
+            setLoading(false);
+          },
+          onSuccess: (txHash) => {
+            successToast({
+              title: 'Minion action executed.',
+            });
+            refreshDao();
+            resolvePoll(txHash);
+            setLoading(false);
+          },
+        },
+      });
+      const onTxHash = () => {
+        setProposalModal(false);
+        setTxInfoModal(true);
+      };
+      await MinionService({
+        web3: injectedProvider,
+        minion: proposal.minionAddress,
+        chainID: daochain,
+      })('executeAction')({ args, address, poll, onTxHash });
+    } catch (err) {
+      setLoading(false);
+      console.log('error: ', err);
+    }
   };
 
   useEffect(() => {
@@ -356,6 +384,8 @@ const ProposalVote = ({ proposal }) => {
           minion: proposal?.minionAddress,
           chainID: daochain,
         })('getAction')({ proposalId: proposal?.proposalId });
+
+        console.log('action', action);
       } catch (err) {
         console.log('error: ', err);
       } finally {
@@ -387,6 +417,9 @@ const ProposalVote = ({ proposal }) => {
         {!daoConnectedAndSameChain() &&
           ((proposal?.status === 'Unsponsored' && !proposal?.proposalIndex) ||
             proposal?.status === 'ReadyForProcessing') && <NetworkOverlay />}
+        {!daoConnectedAndSameChain() &&
+          (proposal?.status !== 'Unsponsored' || proposal?.proposalIndex) &&
+          proposal?.status !== 'Cancelled' && <NetworkOverlay />}
         {proposal?.status === 'Unsponsored' && !proposal?.proposalIndex && (
           <Flex justify='center' direction='column'>
             <Flex justify='center' mb={4}>
@@ -403,12 +436,12 @@ const ProposalVote = ({ proposal }) => {
                   </Tooltip>
                 </TextBox>
                 <TextBox variant='value' size='xl' textAlign='center'>
-                  {daoOverview?.proposalDeposit /
-                    10 ** daoOverview?.depositToken.decimals}{' '}
-                  {daoOverview?.depositToken?.symbol}
+                  {overview?.proposalDeposit /
+                    10 ** overview?.depositToken.decimals}{' '}
+                  {overview?.depositToken?.symbol}
                   {+daoMember?.tokenBalance <
-                  +daoOverview?.proposalDeposit /
-                    10 ** daoOverview?.depositToken.decimals ? (
+                  +overview?.proposalDeposit /
+                    10 ** overview?.depositToken.decimals ? (
                     <Tooltip
                       shouldWrapChildren
                       placement='bottom'
@@ -416,7 +449,7 @@ const ProposalVote = ({ proposal }) => {
                         'Insufficient Funds: You only have ' +
                         daoMember?.tokenBalance +
                         ' ' +
-                        daoOverview?.depositToken?.symbol
+                        overview?.depositToken?.symbol
                       }
                     >
                       <Icon
@@ -433,9 +466,9 @@ const ProposalVote = ({ proposal }) => {
             <Flex justify='space-around'>
               <NonMemberToolTip>
                 {+daoMember?.allowance *
-                  10 ** daoOverview?.depositToken?.decimals >
-                  +daoOverview?.proposalDeposit ||
-                +daoOverview?.proposalDeposit === 0 ? (
+                  10 ** overview?.depositToken?.decimals >
+                  +overview?.proposalDeposit ||
+                +overview?.proposalDeposit === 0 ? (
                   <Button
                     onClick={() => sponsorProposal(proposal?.proposalId)}
                     isLoading={loading}
@@ -444,9 +477,7 @@ const ProposalVote = ({ proposal }) => {
                   </Button>
                 ) : (
                   <Button
-                    onClick={() =>
-                      unlock(daoOverview.depositToken.tokenAddress)
-                    }
+                    onClick={() => unlock(overview.depositToken.tokenAddress)}
                     isLoading={loading}
                     isDisabled={!daoMember}
                   >

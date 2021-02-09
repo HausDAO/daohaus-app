@@ -1,40 +1,40 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useParams } from 'react-router-dom';
-import { Flex, Box } from '@chakra-ui/react';
+import { Flex, Box, Stack, Button } from '@chakra-ui/react';
 
 import ActivitiesFeed from '../components/activitiesFeed';
 import MemberCard from '../components/memberCard';
 import MemberInfo from '../components/memberInfo';
 import ContentBox from '../components/ContentBox';
 import TextBox from '../components/TextBox';
-import { useDaoMember } from '../contexts/DaoMemberContext';
-import { useMetaData } from '../contexts/MetaDataContext';
 import { getMemberActivites, getMembersActivites } from '../utils/activities';
 import { getCopy } from '../utils/metadata';
 import MembersChart from '../components/membersChart';
 import ListSort from '../components/listSort';
 import { membersSortOptions } from '../utils/memberContent';
+import MemberFilters from '../components/memberFilters';
+import MainViewLayout from '../components/mainViewLayout';
+import { useInjectedProvider } from '../contexts/InjectedProviderContext';
+import { daoConnectedAndSameChain } from '../utils/general';
+import deepEqual from 'deep-eql';
 
-const Members = ({ members, activities }) => {
-  const { daoMember } = useDaoMember();
+const Members = React.memo(function MembersPage({
+  members,
+  activities,
+  overview,
+  daoMember,
+  daoMembers,
+  customTerms,
+  daoMetaData,
+}) {
   const { daoid, daochain } = useParams();
+  const { address, injectedChain } = useInjectedProvider();
+
   const [selectedMember, setSelectedMember] = useState(null);
   const [scrolled, setScrolled] = useState(false);
-  const { customTerms } = useMetaData();
-  const [listMembers, setListMembers] = useState(members);
-  const [sort, setSort] = useState();
-
-  const selectMember = (member) => {
-    if (selectedMember == null) {
-      setSelectedMember(member);
-    } else {
-      if (selectedMember.memberAddress === member.memberAddress) {
-        setSelectedMember(null);
-      } else {
-        setSelectedMember(member);
-      }
-    }
-  };
+  const [listMembers, setListMembers] = useState(null);
+  const [sort, setSort] = useState('shares');
+  const [filter, setFilter] = useState('active');
 
   useEffect(() => {
     const handleScroll = () => {
@@ -56,32 +56,67 @@ const Members = ({ members, activities }) => {
   };
 
   useEffect(() => {
-    if (members && members.length > 0) {
-      sortMembers();
-    }
-  }, [members, sort]);
-
-  const sortMembers = () => {
-    const sortedMembers = members;
-
-    if (sort) {
-      sortedMembers.sort((a, b) => {
-        if (sort.value === 'joinDateAsc') {
-          return +a.createdAt - +b.createdAt;
-        } else if (sort.value === 'joinDateDesc') {
-          return +b.createdAt - +a.createdAt;
-        } else {
-          return +b[sort.value] - +a[sort.value];
+    const sortMembers = () => {
+      const sortedMembers = members.filter((member) => {
+        const active =
+          +member.shares > 0 || (+member.loot > 0 && !member.jailed);
+        switch (filter?.value) {
+          case 'active': {
+            return member.exists && active;
+          }
+          case 'inactive': {
+            return member.exists && !active && !member.jailed;
+          }
+          case 'jailed': {
+            return member.jailed;
+          }
+          default: {
+            return member.exists && active;
+          }
         }
       });
-    }
 
-    setListMembers([...sortedMembers]);
-  };
+      if (sort && filter) {
+        sortedMembers.sort((a, b) => {
+          if (sort.value === 'joinDateAsc') {
+            return +a.createdAt - +b.createdAt;
+          } else if (sort.value === 'joinDateDesc') {
+            return +b.createdAt - +a.createdAt;
+          } else {
+            return +b[sort.value] - +a[sort.value];
+          }
+        });
+      }
+      if (!deepEqual(sortedMembers, listMembers)) {
+        setListMembers([...sortedMembers]);
+      }
+    };
+    if (members?.length > 0) {
+      sortMembers();
+    }
+  }, [members, sort, filter]);
+
+  const ctaButton = daoConnectedAndSameChain(
+    address,
+    injectedChain?.chainId,
+    daochain,
+  ) && (
+    <Button as={Link} to={`/dao/${daochain}/${daoid}/proposals/new/member`}>
+      Apply
+    </Button>
+  );
 
   return (
-    <>
-      <ListSort sort={sort} setSort={setSort} options={membersSortOptions} />
+    <MainViewLayout
+      header={'Members'}
+      headerEl={ctaButton}
+      customTerms={customTerms}
+      isDao={true}
+    >
+      <Flex>
+        <ListSort sort={sort} setSort={setSort} options={membersSortOptions} />
+        <MemberFilters filter={filter} setFilter={setFilter} />
+      </Flex>
       <Flex wrap='wrap'>
         <Box
           w={['100%', null, null, null, '60%']}
@@ -101,41 +136,51 @@ const Members = ({ members, activities }) => {
               </TextBox>
               <TextBox size='xs'>Join Date</TextBox>
             </Flex>
-            {listMembers &&
-              listMembers?.map((member) => {
-                return (
-                  <MemberCard
-                    key={member.id}
-                    member={member}
-                    selectMember={selectMember}
-                    selectedMember={selectedMember}
-                  />
-                );
-              })}
+            {listMembers?.map((member) => {
+              return (
+                <MemberCard
+                  key={member.id}
+                  member={member}
+                  selectMember={setSelectedMember}
+                  selectedMember={selectedMember}
+                />
+              );
+            })}
           </ContentBox>
         </Box>
         <Box w={['100%', null, null, null, '40%']}>
-          <Box style={scrolled ? scrolledStyle : null}>
-            {selectedMember ? (
-              <MemberInfo member={selectedMember} />
-            ) : (
-              <>
-                {daoMember && (
-                  <Flex justify='space-between' mb={5}>
-                    <TextBox size='xs'>Snapshot</TextBox>
-                    <TextBox
-                      as={Link}
-                      to={`/dao/${daochain}/${daoid}/profile/${daoMember.memberAddress}`}
-                      color='inherit'
-                      size='xs'
-                    >
-                      View My Profile
-                    </TextBox>
-                  </Flex>
-                )}
-                <MembersChart />
-              </>
-            )}
+          <Stack style={scrolled ? scrolledStyle : null} spacing={4}>
+            <Box>
+              {selectedMember ? (
+                <MemberInfo
+                  key={selectedMember.memberAddress}
+                  member={selectedMember}
+                  customTerms={customTerms}
+                />
+              ) : (
+                <>
+                  {daoMember && (
+                    <Flex justify='space-between' mb={5}>
+                      <TextBox size='xs'>Snapshot</TextBox>
+                      <TextBox
+                        as={Link}
+                        to={`/dao/${daochain}/${daoid}/profile/${daoMember.memberAddress}`}
+                        color='inherit'
+                        size='xs'
+                      >
+                        View My Profile
+                      </TextBox>
+                    </Flex>
+                  )}
+                  <MembersChart
+                    overview={overview}
+                    daoMembers={daoMembers}
+                    daoMetaData={daoMetaData}
+                  />
+                </>
+              )}
+            </Box>
+
             {selectedMember ? (
               <ActivitiesFeed
                 limit={2}
@@ -149,11 +194,11 @@ const Members = ({ members, activities }) => {
                 hydrateFn={getMembersActivites}
               />
             ) : null}
-          </Box>
+          </Stack>
         </Box>
       </Flex>
-    </>
+    </MainViewLayout>
   );
-};
+});
 
 export default Members;

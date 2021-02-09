@@ -4,6 +4,7 @@ import ActivitiesFeed from '../components/activitiesFeed';
 import MemberInfoCard from '../components/memberInfo';
 import OverviewCard from '../components/overviewCard';
 import { getDaoActivites } from '../utils/activities';
+import MainViewLayout from '../components/mainViewLayout';
 
 const Overview = React.memo(function overview({
   overview,
@@ -11,37 +12,43 @@ const Overview = React.memo(function overview({
   isMember,
   members,
   daoMember,
+  currentDaoTokens,
+  customTerms,
 }) {
   return (
-    <Box w='100%'>
-      <Flex wrap='wrap'>
-        {overview && (
-          <Box
-            w={['100%', null, null, null, '50%']}
-            pr={[0, null, null, null, 6]}
-            mb={6}
-          >
-            <OverviewCard
-              overview={overview}
-              isMember={isMember}
-              membersAmt={members?.length}
-            />
-          </Box>
-        )}
-        {isMember && (
-          <Box w={['100%', null, null, null, '50%']}>
-            <MemberInfoCard member={daoMember} />
-            <Box mt={6}>
-              <ActivitiesFeed
-                activities={activities}
-                limit={3}
-                hydrateFn={getDaoActivites}
+    <MainViewLayout header='Overview' customTerms={customTerms} isDao={true}>
+      <Box w='100%'>
+        <Flex wrap='wrap'>
+          {overview && (
+            <Box
+              w={['100%', null, null, null, '50%']}
+              pr={[0, null, null, null, 6]}
+              mb={6}
+            >
+              <OverviewCard
+                overview={overview}
+                isMember={isMember}
+                membersAmt={members?.length}
+                currentDaoTokens={currentDaoTokens}
               />
             </Box>
-          </Box>
-        )}
-      </Flex>
-    </Box>
+          )}
+          {isMember && (
+            <Box w={['100%', null, null, null, '50%']}>
+              <MemberInfoCard member={daoMember} />
+              <Box mt={6}>
+                <ActivitiesFeed
+                  activities={activities}
+                  limit={3}
+                  hydrateFn={getDaoActivites}
+                  heading='Recent Activity'
+                />
+              </Box>
+            </Box>
+          )}
+        </Flex>
+      </Box>
+    </MainViewLayout>
   );
 });
 

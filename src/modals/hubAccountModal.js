@@ -9,15 +9,18 @@ import {
   ModalCloseButton,
   ModalBody,
 } from '@chakra-ui/react';
+import { rgba } from 'polished';
 
 import HubProfileCard from '../components/hubProfileCard';
 import { useOverlay } from '../contexts/OverlayContext';
 import { useInjectedProvider } from '../contexts/InjectedProviderContext';
+import { useCustomTheme } from '../contexts/CustomThemeContext';
 import TxList from '../components/TxList';
 
 const HubAccountModal = () => {
   const { disconnectDapp, requestWallet } = useInjectedProvider();
   const { hubAccountModal, setHubAccountModal } = useOverlay();
+  const { theme } = useCustomTheme();
 
   const handleClose = () => setHubAccountModal(false);
   const handleSwitchWallet = () => {
@@ -28,7 +31,7 @@ const HubAccountModal = () => {
 
   return (
     <Modal isOpen={hubAccountModal} onClose={handleClose} isCentered>
-      <ModalOverlay />
+      <ModalOverlay bgColor={rgba(theme.colors.background[500], 0.8)} />
       <ModalContent
         rounded='lg'
         bg='blackAlpha.800'

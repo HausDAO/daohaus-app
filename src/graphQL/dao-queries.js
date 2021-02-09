@@ -130,3 +130,36 @@ export const DAO_POLL = gql`
     }
   }
 `;
+
+export const MINION_POLL = gql`
+  query moloch($molochAddress: String!, $createdAt: String!) {
+    moloch(id: $molochAddress) {
+      id
+      minions(where: { createdAt_gt: $createdAt }) {
+        id
+      }
+    }
+  }
+`;
+
+export const RAGE_QUIT_POLL = gql`
+  query rageQuits($molochAddress: String!, $createdAt: String!) {
+    moloch(id: $molochAddress) {
+      id
+      rageQuits(where: { createdAt_gt: $createdAt }) {
+        id
+      }
+    }
+  }
+`;
+
+export const MINION_PROPOSAL_POLL = gql`
+  query minions($minionAddress: String!, $createdAt: String!) {
+    minions(where: { minionAddress: $minionAddress }) {
+      id
+      proposals(where: { createdAt_gt: $createdAt }) {
+        id
+      }
+    }
+  }
+`;

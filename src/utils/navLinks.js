@@ -44,11 +44,18 @@ export const defaultHubData = [
   },
 ];
 
-export const generateDaoLinks = (chainID, daoID) =>
-  defaultDaoData.map((link) => ({
-    ...link,
-    path: `/dao/${chainID}/${daoID}/${link.path}`,
-  }));
+export const generateDaoLinks = (chainID, daoID, proposals) => {
+  return defaultDaoData.map((link) => {
+    let path = `/dao/${chainID}/${daoID}/${link.path}`;
+    if (link.path === 'proposals' && !proposals.length) {
+      path = `${path}/new`;
+    }
+    return {
+      ...link,
+      path,
+    };
+  });
+};
 
 export const defaultSocialLinks = [
   { icon: RiDiscordFill, label: 'Discord', href: 'https://discord.gg/NPEJysW' },

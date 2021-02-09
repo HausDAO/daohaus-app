@@ -39,7 +39,6 @@ const DaoMetaForm = ({ metadata, handleUpdate }) => {
   const [loading, setLoading] = useState();
   const [uploading, setUploading] = useState();
   const { register, handleSubmit } = useForm();
-  console.log(metadata);
 
   const onSubmit = async (data) => {
     setLoading(true);
@@ -64,6 +63,7 @@ const DaoMetaForm = ({ metadata, handleUpdate }) => {
         version: metadata.version,
         signature,
       };
+      console.log('data', data);
 
       const res = await put('dao/update', updateData);
 
@@ -110,7 +110,9 @@ const DaoMetaForm = ({ metadata, handleUpdate }) => {
                       setIpfsHash={setIpfsHash}
                       setUploading={setUploading}
                       uploading={uploading}
-                      metadata={metadata}
+                      matchMeta={metadata?.avatarImg}
+                      setLabel='Upload Avatar'
+                      changeLabel='Change Avatar'
                     />
                   </HStack>
                 </FormControl>

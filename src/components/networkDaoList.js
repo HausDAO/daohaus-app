@@ -165,7 +165,22 @@ const NetworkDaoList = ({ data, network, searchTerm, index }) => {
             <AccordionIcon />
           </AccordionButton>
           <AccordionPanel>
-            <Flex direction='row' overflowX='scroll' mb={6} maxW='100%'>
+            <Flex
+              direction='row'
+              overflowX='scroll'
+              mb={6}
+              maxW='100%'
+              css={{
+                /* Hide scrollbar for IE and Edge */
+                '&::MsOverflowStyle': 'none',
+                /* Hide scrollbar for Chrome/Opera */
+                '&::WebkitScrollbar': {
+                  display: 'none',
+                },
+                /* Hide scrollbar for Firefox */
+                '&::ScrollbarWidth': 'none',
+              }}
+            >
               {sortedDaoList.map((dao) => renderDaoAvatar(dao))}
             </Flex>
           </AccordionPanel>

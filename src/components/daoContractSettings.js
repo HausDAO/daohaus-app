@@ -4,19 +4,13 @@ import { Flex, Box, Skeleton, Link, Icon, Text } from '@chakra-ui/react';
 import { format } from 'date-fns';
 import { RiExternalLinkLine } from 'react-icons/ri';
 
-import { useDao } from '../contexts/DaoContext';
-import { useMetaData } from '../contexts/MetaDataContext';
 import ContentBox from './ContentBox';
 import TextBox from './TextBox';
 import { formatPeriods } from '../utils/general';
 import { getCopy } from '../utils/metadata';
 
-const DaoContractSettings = () => {
-  const { daoOverview } = useDao();
+const DaoContractSettings = ({ overview, customTerms }) => {
   const { daochain, daoid } = useParams();
-  const { customTerms } = useMetaData();
-  // const [network] = useNetwork();
-  // const [theme] = useTheme();
 
   const uri = () => {
     switch (daochain) {
@@ -64,26 +58,26 @@ const DaoContractSettings = () => {
           <TextBox size='xs'>
             {getCopy(customTerms, 'proposal')} Deposit
           </TextBox>
-          <Skeleton isLoaded={daoOverview?.proposalDeposit}>
+          <Skeleton isLoaded={overview?.proposalDeposit}>
             <TextBox variant='value' size='xl' my={2}>
-              {daoOverview?.proposalDeposit
-                ? daoOverview?.proposalDeposit /
-                    10 ** daoOverview?.depositToken.decimals +
+              {overview?.proposalDeposit
+                ? overview?.proposalDeposit /
+                    10 ** overview?.depositToken.decimals +
                   ' ' +
-                  daoOverview?.depositToken.symbol
+                  overview?.depositToken.symbol
                 : '--'}
             </TextBox>
           </Skeleton>
         </Box>
         <Box>
           <TextBox size='xs'>Processing Reward</TextBox>
-          <Skeleton isLoaded={daoOverview?.processingReward}>
+          <Skeleton isLoaded={overview?.processingReward}>
             <TextBox variant='value' size='xl' my={2}>
-              {daoOverview?.processingReward
-                ? daoOverview.processingReward /
-                    10 ** daoOverview?.depositToken.decimals +
+              {overview?.processingReward
+                ? overview.processingReward /
+                    10 ** overview?.depositToken.decimals +
                   ' ' +
-                  daoOverview.depositToken.symbol
+                  overview.depositToken.symbol
                 : '--'}
             </TextBox>
           </Skeleton>
@@ -92,12 +86,12 @@ const DaoContractSettings = () => {
       <Flex>
         <Box w='50%'>
           <TextBox size='xs'>Voting Period</TextBox>
-          <Skeleton isLoaded={daoOverview?.votingPeriodLength}>
+          <Skeleton isLoaded={overview?.votingPeriodLength}>
             <TextBox variant='value' size='xl' my={2}>
-              {daoOverview
+              {overview
                 ? `${formatPeriods(
-                    +daoOverview?.votingPeriodLength,
-                    +daoOverview?.periodDuration,
+                    +overview?.votingPeriodLength,
+                    +overview?.periodDuration,
                   )}`
                 : '--'}
             </TextBox>
@@ -105,12 +99,12 @@ const DaoContractSettings = () => {
         </Box>
         <Box>
           <TextBox size='xs'>Grace Period</TextBox>
-          <Skeleton isLoaded={daoOverview?.gracePeriodLength}>
+          <Skeleton isLoaded={overview?.gracePeriodLength}>
             <TextBox variant='value' size='xl' my={2}>
-              {daoOverview
+              {overview
                 ? `${formatPeriods(
-                    +daoOverview.gracePeriodLength,
-                    +daoOverview.periodDuration,
+                    +overview.gracePeriodLength,
+                    +overview.periodDuration,
                   )}`
                 : '--'}
             </TextBox>
@@ -120,11 +114,11 @@ const DaoContractSettings = () => {
       <Flex>
         <Box w='50%'>
           <TextBox size='xs'>Summoned</TextBox>
-          <Skeleton isLoaded={daoOverview?.summoningTime}>
+          <Skeleton isLoaded={overview?.summoningTime}>
             <TextBox variant='value' size='xl' my={2}>
-              {daoOverview
+              {overview
                 ? format(
-                    new Date(+daoOverview?.summoningTime * 1000),
+                    new Date(+overview?.summoningTime * 1000),
                     'MMMM d, yyyy',
                   )
                 : '--'}
@@ -133,10 +127,10 @@ const DaoContractSettings = () => {
         </Box>
         <Box>
           <TextBox size='xs'>Maximum Proposal Velocity</TextBox>
-          <Skeleton isLoaded={daoOverview?.periodDuration}>
+          <Skeleton isLoaded={overview?.periodDuration}>
             <TextBox variant='value' size='xl' my={2}>
-              {daoOverview?.periodDuration
-                ? `${86400 / +daoOverview?.periodDuration} per day`
+              {overview?.periodDuration
+                ? `${86400 / +overview?.periodDuration} per day`
                 : '--'}
             </TextBox>
           </Skeleton>

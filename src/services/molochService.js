@@ -33,6 +33,14 @@ export const MolochService = ({ web3, daoAddress, version, chainID }) => {
         return member;
       };
     }
+    if (service === 'canRagequit') {
+      return async (highestIndexYesVote) => {
+        const canRage = await contract.methods
+          .canRagequit(highestIndexYesVote)
+          .call();
+        return canRage;
+      };
+    }
     if (service === 'memberAddressByDelegateKey') {
       return async (memberAddress) => {
         const address = await contract.methods
@@ -51,13 +59,11 @@ export const MolochService = ({ web3, daoAddress, version, chainID }) => {
       service === 'processGuildKickProposal' ||
       service === 'submitWhitelistProposal' ||
       service === 'submitGuildKickProposal' ||
-      service === 'collectTokens'
+      service === 'collectTokens' ||
+      service === 'withdrawBalance' ||
+      service === 'ragequit'
     ) {
       return async ({ args, address, poll, onTxHash }) => {
-        console.log('args', args);
-        console.log('from', address);
-        console.log('poll', poll);
-
         try {
           const tx = await contract.methods[service](...args);
           return tx

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { utils } from 'web3';
 import {
   Flex,
@@ -17,7 +17,7 @@ import { AddressZero } from '@ethersproject/constants';
 
 import TextBox from '../components/TextBox';
 import ContentBox from '../components/ContentBox';
-import UserAvatar from '../components/userAvatar';
+import AddressAvatar from '../components/addressAvatar';
 import ProposalMinionCard from '../components/proposalMinionCard';
 
 import {
@@ -25,7 +25,6 @@ import {
   getProposalDetailStatus,
   memberVote,
 } from '../utils/proposalUtils';
-import { handleGetProfile } from '../utils/3box';
 import { numberWithCommas } from '../utils/general';
 import { useInjectedProvider } from '../contexts/InjectedProviderContext';
 
@@ -46,45 +45,19 @@ const hasImage = (string) => {
 };
 
 const ProposalDetails = ({ proposal }) => {
-  const [proposer, setProposer] = useState(null);
-  const [applicant, setApplicant] = useState(null);
   const { address } = useInjectedProvider();
-
-  useEffect(async () => {
-    if (proposal) {
-      const proposerProfile = await handleGetProfile(proposal.proposer);
-      const applicantProfile = await handleGetProfile(
-        proposal?.applicant !== AddressZero
-          ? proposal.applicant
-          : proposal.proposer,
-      );
-      setProposer({
-        memberAddress: proposal.proposer,
-        ...proposerProfile,
-      });
-      if (proposal.applicant !== AddressZero) {
-        setApplicant({
-          memberAddress: proposal.applicant,
-          ...applicantProfile,
-        });
-      } else {
-        setApplicant({
-          memberAddress: proposal.proposer,
-          ...applicantProfile,
-        });
-      }
-    }
-  }, [proposal]);
 
   return (
     <Box pt={6}>
       <ContentBox>
         <Box>
           <Box>
-            <Flex justify='space-between'>
-              <TextBox size='xs'>{proposal?.proposalType}</TextBox>
+            <Flex justify='space-between' wrap={['wrap', null, null, 'nowrap']}>
+              <TextBox size='xs' mb={[3, null, null, 0]}>
+                {proposal?.proposalType}
+              </TextBox>
 
-              <Box>
+              <Box fontSize={['sm', null, null, 'md']}>
                 {proposal?.proposalIndex ? (
                   <>
                     {proposal?.status
@@ -233,20 +206,35 @@ const ProposalDetails = ({ proposal }) => {
           pr={memberVote(proposal, address) !== null && '5%'}
           w='100%'
         >
-          <Box>
+          <Box mb={[3, null, null, 0]}>
             <TextBox size='xs' mb={2}>
               Submitted By
             </TextBox>
-            <Skeleton isLoaded={proposer}>
-              {proposer ? <UserAvatar user={proposer} /> : '--'}
+            <Skeleton isLoaded={proposal}>
+              {proposal ? (
+                <AddressAvatar addr={proposal.proposer} alwaysShowName={true} />
+              ) : (
+                '--'
+              )}
             </Skeleton>
           </Box>
           <Box>
             <TextBox size='xs' mb={2}>
               Recipient
             </TextBox>
-            <Skeleton isLoaded={applicant}>
-              {applicant ? <UserAvatar user={applicant} /> : '--'}
+            <Skeleton isLoaded={proposal}>
+              {proposal ? (
+                <AddressAvatar
+                  addr={
+                    proposal.applicant === AddressZero
+                      ? proposal.proposer
+                      : proposal.applicant
+                  }
+                  alwaysShowName={true}
+                />
+              ) : (
+                '--'
+              )}
             </Skeleton>
           </Box>
           <Flex align='center'>

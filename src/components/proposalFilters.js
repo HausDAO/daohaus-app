@@ -35,6 +35,7 @@ const ProposalFilters = ({ filter, setFilter, proposals, setSort }) => {
           );
           return unread.unread;
         });
+
       setActionNeeded(action);
 
       const actionsCount = action ? action.length : 0;
@@ -71,7 +72,12 @@ const ProposalFilters = ({ filter, setFilter, proposals, setSort }) => {
       w={['100%', null, null, '50%']}
       mb={[5, null, null, 0]}
     >
-      <Text textTransform='uppercase' fontFamily='heading' mr={3}>
+      <Text
+        textTransform='uppercase'
+        fontFamily='heading'
+        mr={3}
+        fontSize={['sm', null, null, 'md']}
+      >
         Filter By
       </Text>
 
@@ -80,6 +86,7 @@ const ProposalFilters = ({ filter, setFilter, proposals, setSort }) => {
           <MenuButton
             textTransform='uppercase'
             fontFamily='heading'
+            fontSize={['sm', null, null, 'md']}
             color='secondary.500'
             _hover={{ color: 'secondary.400' }}
           >

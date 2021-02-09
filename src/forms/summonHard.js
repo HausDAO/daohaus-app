@@ -38,21 +38,6 @@ const SummonHard = ({ daoData, handleSummon }) => {
             {errors.approvedToken?.type === 'required' && (
               <span className='required-field'>add a token address</span>
             )}
-            <Text>
-              How much should it cost to join (needs to be in wei - 18
-              decimals)?
-            </Text>
-            <Input
-              className='inline-field'
-              name='minimumTribute'
-              ref={register({
-                required: true,
-                pattern: /^-?\d*\.?\d*$/,
-              })}
-            />
-            {errors.minimumTribute?.type === 'required' && (
-              <span className='required-field'>required</span>
-            )}
           </Box>
         </Box>
 

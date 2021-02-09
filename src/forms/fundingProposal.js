@@ -56,6 +56,7 @@ const FundingProposalForm = () => {
     errors,
     register,
     setValue,
+    setError,
     getValues,
     watch,
   } = useForm();
@@ -112,7 +113,6 @@ const FundingProposalForm = () => {
               title: `There was an error.`,
             });
             resolvePoll(txHash);
-            setLoading(false);
             console.error(`Could not find a matching proposal: ${error}`);
           },
           onSuccess: (txHash) => {
@@ -121,7 +121,6 @@ const FundingProposalForm = () => {
             });
             refreshDao();
             resolvePoll(txHash);
-            setLoading(false);
           },
         },
       });
@@ -179,16 +178,17 @@ const FundingProposalForm = () => {
               <Input
                 name='sharesRequested'
                 placeholder='0'
+                defaultValue='0'
                 mb={5}
                 ref={register({
                   required: {
                     value: true,
                     message:
-                      'Requested shares are required for Member Proposals',
+                      'Requested shares are required. Set to zero for no shares.',
                   },
                   pattern: {
-                    value: /[0-9]/,
-                    message: 'Requested shares must be a number',
+                    value: /^[0-9]+$/,
+                    message: 'Requested shares must be a whole number',
                   },
                 })}
               />
@@ -202,11 +202,12 @@ const FundingProposalForm = () => {
               <Input
                 name='lootRequested'
                 placeholder='0'
+                defaultValue='0'
                 mb={5}
                 ref={register({
                   pattern: {
-                    value: /[0-9]/,
-                    message: 'Loot must be a number',
+                    value: /^[0-9]+$/,
+                    message: 'Loot must be a whole number',
                   },
                 })}
               />
@@ -217,6 +218,7 @@ const FundingProposalForm = () => {
               register={register}
               setValue={setValue}
               getValues={getValues}
+              setError={setError}
             />
           )}
           {(!showShares || !showLoot || !showTribute) && (

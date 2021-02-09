@@ -28,13 +28,10 @@ import {
   getDatesArray,
   groupBalancesToDateRange,
 } from '../utils/charts';
-import { useDao } from '../contexts/DaoContext';
-import { useToken } from '../contexts/TokenContext';
 import { useCustomTheme } from '../contexts/CustomThemeContext';
 import ContentBox from './ContentBox';
 import TextBox from './TextBox';
 import { getCopy } from '../utils/metadata';
-import { useMetaData } from '../contexts/MetaDataContext';
 import BankTotal from './bankTotal';
 
 const bankChartTimeframes = [
@@ -44,16 +41,13 @@ const bankChartTimeframes = [
   { name: '6 months', value: 6 },
 ];
 
-const BankChart = () => {
+const BankChart = ({ overview, customTerms, currentDaoTokens }) => {
   const { daochain, daoid } = useParams();
   const [daoBalances, setDaoBalances] = useSessionStorage(
     `balances-${daoid}`,
     null,
   );
   const { theme } = useCustomTheme();
-  const { daoOverview } = useDao();
-  const { currentDaoTokens } = useToken();
-  const { customTerms } = useMetaData();
   const [chartData, setChartData] = useState([]);
   const [timeframe, setTimeframe] = useState(bankChartTimeframes[0]);
 
@@ -82,7 +76,7 @@ const BankChart = () => {
         const dateRange = getDateRange(
           timeframe,
           filteredBalances,
-          daoOverview.summoningTime,
+          overview.summoningTime,
         );
         const dates = getDatesArray(dateRange.start, dateRange.end);
         const groupedBalances = groupBalancesToDateRange(
@@ -132,7 +126,7 @@ const BankChart = () => {
             <Flex wrap='wrap' align='center' position='relative'>
               <Box position='absolute' top='0px' left='10px'>
                 <TextBox size='sm'>{getCopy(customTerms, 'bank')}</TextBox>
-                <BankTotal tokenBalances={daoOverview?.tokenBalances} />
+                <BankTotal tokenBalances={currentDaoTokens} />
               </Box>
 
               <Box w='100%'>

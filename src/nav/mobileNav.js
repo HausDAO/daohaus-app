@@ -9,11 +9,13 @@ import '../global.css';
 import NavLinkList from './navLinkList';
 import Brand from './brand';
 import { useInjectedProvider } from '../contexts/InjectedProviderContext';
-import UserAvatar from '../components/userAvatar';
+import { useOverlay } from '../contexts/OverlayContext';
 import SocialsLinkList from './socialsLinkList';
+import AddressAvatar from '../components/addressAvatar';
 
 const MobileNav = ({ dao }) => {
-  const { address, disconnectDapp, requestWallet } = useInjectedProvider();
+  const { address, requestWallet } = useInjectedProvider();
+  const { setHubAccountModal, setDaoAccountModal } = useOverlay();
   const [isOpen, setIsOpen] = useState(
     JSON.parse(localStorage.getItem('sideNavOpen')),
   );
@@ -22,6 +24,15 @@ const MobileNav = ({ dao }) => {
     localStorage.setItem('sideNavOpen', `${!isOpen}`);
     setIsOpen((prevState) => !prevState);
   };
+
+  const toggleAccountModal = () => {
+    if (!dao) {
+      setHubAccountModal((prevState) => !prevState);
+    } else {
+      setDaoAccountModal((prevState) => !prevState);
+    }
+  };
+
   return (
     <Flex
       p={5}
@@ -30,7 +41,7 @@ const MobileNav = ({ dao }) => {
       align='start'
       justifyContent='start'
       bg='primary.500'
-      zIndex='1'
+      zIndex='5'
       w='100%'
       minH='80px'
       overflow='hidden'
@@ -44,7 +55,13 @@ const MobileNav = ({ dao }) => {
           wrap='wrap'
         >
           <Brand dao={dao} />
-          <Box order={2} ml={3}>
+          <Box
+            order={2}
+            ml={3}
+            borderWidth='thin'
+            borderColor='whiteAlpha.400'
+            borderRadius='25px'
+          >
             <ChangeDao />
           </Box>
           <Box
@@ -54,8 +71,8 @@ const MobileNav = ({ dao }) => {
             mr={2}
           >
             {address ? (
-              <Button variant='outline' onClick={disconnectDapp}>
-                <UserAvatar copyEnabled={false} />
+              <Button variant='outline' onClick={toggleAccountModal}>
+                <AddressAvatar addr={address} hideCopy={true} />
               </Button>
             ) : (
               <Button variant='outline' onClick={requestWallet}>

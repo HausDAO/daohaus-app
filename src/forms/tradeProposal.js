@@ -59,6 +59,7 @@ const TradeProposalForm = () => {
     register,
     setValue,
     getValues,
+    setError,
     watch,
   } = useForm();
 
@@ -116,7 +117,6 @@ const TradeProposalForm = () => {
               title: `There was an error.`,
             });
             resolvePoll(txHash);
-            setLoading(false);
             console.error(`Could not find a matching proposal: ${error}`);
           },
           onSuccess: (txHash) => {
@@ -125,7 +125,6 @@ const TradeProposalForm = () => {
             });
             refreshDao();
             resolvePoll(txHash);
-            setLoading(false);
           },
         },
       });
@@ -166,6 +165,7 @@ const TradeProposalForm = () => {
             register={register}
             setValue={setValue}
             getValues={getValues}
+            setError={setError}
           />
           <TextBox size='xs'>Trade For</TextBox>
           <PaymentInput
@@ -191,8 +191,8 @@ const TradeProposalForm = () => {
                       'Requested shares are required for Member Proposals',
                   },
                   pattern: {
-                    value: /[0-9]/,
-                    message: 'Requested shares must be a number',
+                    value: /^[0-9]+$/,
+                    message: 'Requested shares must be a whole number',
                   },
                 })}
                 color='white'

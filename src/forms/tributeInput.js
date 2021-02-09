@@ -18,9 +18,9 @@ import { TokenService } from '../services/tokenService';
 import { useTX } from '../contexts/TXContext';
 import { createPoll } from '../services/pollService';
 import { useUser } from '../contexts/UserContext';
-// import { valToDecimalString } from '../utils/tokenValue';
+import { valToDecimalString } from '../utils/tokenValue';
 
-const TributeInput = ({ register, setValue, getValues }) => {
+const TributeInput = ({ register, setValue, getValues, setError }) => {
   const [unlocked, setUnlocked] = useState(true);
   const [balance, setBalance] = useState(0);
   const [loading, setLoading] = useState(false);
@@ -60,7 +60,6 @@ const TributeInput = ({ register, setValue, getValues }) => {
     if (tokenData.length) {
       const depositToken = tokenData[0];
       getMax(depositToken.value);
-      setMax();
     }
     // eslint-disable-next-line
   }, [tokenData]);
@@ -73,12 +72,26 @@ const TributeInput = ({ register, setValue, getValues }) => {
     return true;
   };
 
+  useEffect(() => {
+    if (!unlocked) {
+      setError('tributeOffered', {
+        type: 'allowance',
+        message: 'Tribute token must be unlocked to tribute.',
+      });
+    }
+  }, [unlocked]);
+
   const unlock = async () => {
     setLoading(true);
     const token = getValues('tributeToken');
     console.log(token);
-    const tokenAmount = getValues('tributeOffered');
-    // ? multiply times decimals
+    const tokenAmount = valToDecimalString(
+      getValues('tributeOffered'),
+      getValues('tributeToken'),
+      daoOverview.tokenBalances,
+    );
+    const args = [daoid, tokenAmount];
+
     try {
       const poll = createPoll({ action: 'unlockToken', cachePoll })({
         daoID: daoid,
@@ -108,7 +121,7 @@ const TributeInput = ({ register, setValue, getValues }) => {
         web3: injectedProvider,
         chainID: daochain,
         tokenAddress: token,
-      })('approve')([daoid, tokenAmount], address, poll);
+      })('approve')({ args, address, poll });
       setUnlocked(true);
     } catch (err) {
       console.log('error:', err);
@@ -144,7 +157,11 @@ const TributeInput = ({ register, setValue, getValues }) => {
   };
 
   const setMax = async () => {
-    setValue('tributeOffered', balance);
+    const tributeToken = getValues('tributeToken');
+    setValue(
+      'tributeOffered',
+      balance / 10 ** tokenData.find((t) => t.value === tributeToken).decimals,
+    );
   };
 
   return (

@@ -14,6 +14,7 @@ export const USER_MEMBERSHIPS = gql`
     }
   }
 `;
+
 export const HUB_MEMBERSHIPS = gql`
   query membersHub($memberAddress: String!) {
     membersHub: members(
@@ -70,7 +71,7 @@ export const HUB_MEMBERSHIPS = gql`
 export const MEMBERS_LIST = gql`
   query membersList($contractAddr: String!, $skip: Int) {
     daoMembers: members(
-      where: { molochAddress: $contractAddr, exists: true }
+      where: { molochAddress: $contractAddr }
       orderBy: shares
       orderDirection: desc
       first: 100
@@ -81,11 +82,12 @@ export const MEMBERS_LIST = gql`
       shares
       loot
       kicked
+      jailed
       tokenTribute
       didRagequit
       memberAddress
+      exists
       createdAt
-      # profile @client // handled with 3box queries at component level
       moloch {
         id
         totalShares

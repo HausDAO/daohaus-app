@@ -40,9 +40,8 @@ const CustomThemeLaunch = ({ handleLaunch, loading, setLoading }) => {
             You can change the look and feel as well the verbage used to fit
             your community&apos;s vibe.
           </Text>
-          <Text my={6}>.</Text>
 
-          <Text fontSize='xs'>
+          <Text fontSize='xs' mb={5}>
             You must be a member to add this app, so we wull have you sign a
             message with meta mask and we will be all set!
           </Text>

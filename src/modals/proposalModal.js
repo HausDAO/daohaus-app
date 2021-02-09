@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react';
-// import { useHistory } from 'react-router-dom';
 import {
   Modal,
   ModalContent,
@@ -10,24 +9,25 @@ import {
   ModalOverlay,
   Box,
 } from '@chakra-ui/react';
+import { rgba } from 'polished';
 
-// import { useTheme } from '../../contexts/CustomThemeContext';
 import MemberProposalForm from '../forms/memberProposal';
 import FundingProposalForm from '../forms/fundingProposal';
 import WhitelistProposalForm from '../forms/whitelistProposal';
 import GuildKickProposalForm from '../forms/guildKickProposal';
 import TradeProposalForm from '../forms/tradeProposal';
 import MinionSimpleProposalForm from '../forms/minionSimpleProposal';
-// import TransmutationProposal from '../forms/transmutationProposal';
+import TransmutationProposal from '../forms/transmutationProposal';
 import { getCopy } from '../utils/metadata';
 import { useMetaData } from '../contexts/MetaDataContext';
 import { useOverlay } from '../contexts/OverlayContext';
+import { useCustomTheme } from '../contexts/CustomThemeContext';
 
 const ProposalFormModal = ({ proposalType, returnRoute }) => {
   const [, setLoading] = useState(false);
   const [proposalForm, setProposalForm] = useState(null);
   const { customTerms } = useMetaData();
-  // const history = useHistory();
+  const { theme } = useCustomTheme();
   const { proposalModal, setProposalModal } = useOverlay();
 
   const proposalForms = {
@@ -70,12 +70,12 @@ const ProposalFormModal = ({ proposalType, returnRoute }) => {
       subline: `Submit a Minion proposal here.`,
       form: <MinionSimpleProposalForm />,
     },
-    // transmutation: {
-    //   type: `New ${getCopy(customTerms, 'proposal')}`,
-    //   heading: `New Transmutation ${getCopy(customTerms, 'proposal')}`,
-    //   subline: `Submit a Transmutation proposal here.`,
-    //   form: <TransmutationProposal />,
-    // },
+    transmutation: {
+      type: `New ${getCopy(customTerms, 'proposal')}`,
+      heading: `New Transmutation ${getCopy(customTerms, 'proposal')}`,
+      subline: `Submit a Transmutation proposal here.`,
+      form: <TransmutationProposal />,
+    },
   };
 
   useEffect(() => {
@@ -87,7 +87,6 @@ const ProposalFormModal = ({ proposalType, returnRoute }) => {
 
   const handleClose = () => {
     setLoading(false);
-    // closeModals();
     setProposalModal(false);
     // if (returnRoute) {
     //   history.push(returnRoute);
@@ -96,7 +95,7 @@ const ProposalFormModal = ({ proposalType, returnRoute }) => {
 
   return (
     <Modal isOpen={proposalModal} onClose={handleClose} isCentered>
-      <ModalOverlay />
+      <ModalOverlay bgColor={rgba(theme.colors.background[500], 0.8)} />
       <ModalContent
         rounded='lg'
         bg='blackAlpha.600'

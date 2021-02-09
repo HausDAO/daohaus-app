@@ -18,6 +18,7 @@ import SummonPending from '../components/summonPending';
 import { graphQuery } from '../utils/apollo';
 import { getGraphEndpoint } from '../utils/chain';
 import { DAO_POLL } from '../graphQL/dao-queries';
+import MainViewLayout from '../components/mainViewLayout';
 
 const Summon = () => {
   const {
@@ -55,11 +56,9 @@ const Summon = () => {
       ...data,
     };
     setDaoData(newDaoData);
-    summonDao(newDaoData);
-  };
-
-  const summonDao = async () => {
-    const [addrs, shares] = parseSummonresAndShares(daoData.summonerAndShares);
+    const [addrs, shares] = parseSummonresAndShares(
+      newDaoData.summonerAndShares,
+    );
 
     let summoner;
     let summonerShares;
@@ -71,8 +70,7 @@ const Summon = () => {
       summoner = [address];
       summonerShares = [1];
     }
-    const summonData = { ...daoData, summoner, summonerShares };
-    console.log('summoning', summonData);
+    const summonData = { ...newDaoData, summoner, summonerShares };
 
     const summonParams = [
       summonData.summoner,
@@ -85,6 +83,8 @@ const Summon = () => {
       summonData.processingReward,
       summonData.summonerShares,
     ];
+
+    console.log('summonParams', summonParams);
 
     try {
       const poll = createPoll({ action: 'summonMoloch', cachePoll })({
@@ -145,7 +145,7 @@ const Summon = () => {
 
   return (
     <Layout>
-      <>
+      <MainViewLayout header='Summon'>
         {injectedChain ? (
           <>
             {!isSummoning ? (
@@ -222,7 +222,7 @@ const Summon = () => {
             </Flex>
           </Box>
         )}
-      </>
+      </MainViewLayout>
     </Layout>
   );
 };

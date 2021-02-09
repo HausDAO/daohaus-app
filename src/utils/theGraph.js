@@ -114,6 +114,7 @@ const completeQueries = {
           contractAddr: args.daoID,
         },
       });
+
       setter(graphMembers);
     } catch (error) {
       console.error(error);
@@ -153,6 +154,7 @@ const buildCrossChainQuery = (supportedChains, endpointType) => {
         endpoint: supportedChains[chain][endpointType],
         networkID: chain,
         network_id: supportedChains[chain].network_id,
+        hubSortOrder: supportedChains[chain].hub_sort_order,
         apiMatch: chain === '0x64' ? 'xdai' : supportedChains[chain].network,
       },
     ];

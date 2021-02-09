@@ -1,34 +1,11 @@
-import React, { useState, useEffect } from 'react';
-import { Flex, Box, Skeleton } from '@chakra-ui/react';
+import React from 'react';
+import { Flex, Box, Badge } from '@chakra-ui/react';
 import { format } from 'date-fns';
-import UserAvatar from '../components/userAvatar';
-import { handleGetProfile } from '../utils/3box';
+import AddressAvatar from './addressAvatar';
 
 const MemberCard = ({ member, selectMember, selectedMember }) => {
-  const [memberData, setMemberData] = useState(null);
-
-  useEffect(() => {
-    const getProfile = async () => {
-      try {
-        const profile = await handleGetProfile(member.memberAddress);
-        if (profile.status === 'error') {
-          return;
-        }
-        setMemberData(profile);
-      } catch (error) {
-        console.log("Member doesn't have a profile");
-      }
-    };
-
-    getProfile();
-  }, [member]);
-
   const handleSelect = () => {
-    if (memberData) {
-      selectMember({ ...member, ...memberData, hasProfile: true });
-    } else {
-      selectMember(member);
-    }
+    selectMember(member);
   };
 
   return (
@@ -49,24 +26,31 @@ const MemberCard = ({ member, selectMember, selectedMember }) => {
       onClick={handleSelect}
     >
       <Flex w='43%' direction='column' justify='space-between'>
-        <UserAvatar user={{ ...member, ...memberData }} copyEnabled={false} />
+        <Flex direction='row' justify='space-between' align='center'>
+          <AddressAvatar addr={member.memberAddress} hideCopy={true} />
+          {member.jailed ? (
+            <Badge variant='solid' colorScheme='red' mr={5} height='100%'>
+              JAILED
+            </Badge>
+          ) : null}
+
+          {!member.jailed && member.shares === '0' && member.loot === '0' ? (
+            <Badge variant='solid' colorScheme='secondary' mr={5} height='100%'>
+              INACTIVE
+            </Badge>
+          ) : null}
+        </Flex>
       </Flex>
       <Box w='15%'>
-        <Skeleton isLoaded={member?.shares}>
-          <Box fontFamily='mono'>{member.shares || '--'}</Box>
-        </Skeleton>
+        <Box fontFamily='mono'>{member?.shares || '--'}</Box>
       </Box>
       <Box w='15%'>
-        <Skeleton isLoaded={member?.loot}>
-          <Box fontFamily='mono'>{member.loot || '--'}</Box>
-        </Skeleton>
+        <Box fontFamily='mono'>{member?.loot || '--'}</Box>
       </Box>
       <Box>
-        <Skeleton isLoaded={member?.createdAt}>
-          <Box fontFamily='mono'>
-            {format(new Date(+member.createdAt * 1000), 'MMM. d, yyyy') || '--'}
-          </Box>
-        </Skeleton>
+        <Box fontFamily='mono'>
+          {format(new Date(+member?.createdAt * 1000), 'MMM. d, yyyy') || '--'}
+        </Box>
       </Box>
     </Flex>
   );

@@ -41,9 +41,11 @@ const ProposalCard = ({ proposal }) => {
         </Flex>
         <Flex justify='space-between' mt={3}>
           <Box>
-            <Skeleton isLoaded={proposal?.title}>
+            <Skeleton isLoaded={proposal}>
               <Box fontWeight={700} fontSize='lg' fontFamily='heading'>
-                {proposal?.title || '--'}
+                {proposal?.proposalType === 'Minion Proposal'
+                  ? 'Minion'
+                  : `${proposal?.title || '--'}`}
               </Box>
             </Skeleton>
             <Skeleton isLoaded={proposal?.createdAt}>

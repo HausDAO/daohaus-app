@@ -5,15 +5,16 @@ import {
   Tooltip,
   useBreakpointValue,
 } from '@chakra-ui/react';
-import { RiMenu3Line, RiArrowDropDownLine } from 'react-icons/ri';
+import { RiMenu3Line } from 'react-icons/ri';
+import { HiOutlineSwitchVertical } from 'react-icons/hi';
 import { useOverlay } from '../contexts/OverlayContext';
 
 const ChangeDao = () => {
   const { setDaoSwitcherModal } = useOverlay();
   const changeIcon = useBreakpointValue({
-    base: <RiArrowDropDownLine />,
-    sm: <RiArrowDropDownLine />,
-    md: <RiArrowDropDownLine />,
+    base: <HiOutlineSwitchVertical />,
+    sm: <HiOutlineSwitchVertical />,
+    md: <HiOutlineSwitchVertical />,
     lg: <RiMenu3Line />,
   });
 

@@ -1,30 +1,26 @@
 import React, { useState, useEffect } from 'react';
 import { Flex, Box, Skeleton, Image } from '@chakra-ui/react';
 
-// import Withdraw from '../../Forms/Withdraw';
-// import SyncToken from '../../Forms/Shared/SyncToken';
-// import { useMemberWallet } from '../../../contexts/PokemolContext';
-// import { getMainetAddresses } from '../../../utils/requests';
 import { numberWithCommas } from '../utils/general';
 import SyncTokenButton from './syncTokenButton';
 import { useDaoMember } from '../contexts/DaoMemberContext';
+import Withdraw from './withdraw';
 
 const TokenListCard = ({
   token,
-  isLoaded,
-  isMember,
+  // isLoaded,
+  // isMember,
   isBank = true,
   hasAction,
-  view,
+  // view,
   version = '2.1',
+  hasBalance,
 }) => {
-  // const [memberWallet] = useMemberWallet();
   const { daoMember } = useDaoMember();
-  const [hasBalance, setHasBalance] = useState(null);
+  // const [hasBalance, setHasBalance] = useState(null);
   const [needsSync, setNeedsSync] = useState(null);
   const [optimisticWithdraw] = useState(false);
   const [optimisticSync, setOptimisticSync] = useState(false);
-  // const [tokenMainnetAddress, setTokenMainnetAddress] = useState();
 
   useEffect(() => {
     if (token?.contractBalances) {
@@ -46,14 +42,13 @@ const TokenListCard = ({
     }
   }, [token, isBank, version, daoMember]);
 
-  const checkOptimisticBalance = () => {
-    return optimisticSync
-      ? token.contractBalances.token -
-          token.contractBalances.babe +
-          +token.tokenBalance
-      : +token.tokenBalance;
-  };
-
+  // const checkOptimisticBalance = () => {
+  //   return optimisticSync
+  //     ? token.contractBalances.token -
+  //         token.contractBalances.babe +
+  //         +token.tokenBalance
+  //     : +token.tokenBalance;
+  // };
   // useEffect(() => {
   //   const fetchMainnetAddresses = async () => {
   //     const mainnetAddresses = await getMainetAddresses();
@@ -70,7 +65,10 @@ const TokenListCard = ({
 
   return (
     <Flex h='60px' align='center'>
-      <Box w='15%'>
+      <Box
+        w={hasBalance || needsSync ? '20%' : '15%'}
+        d={['none', null, null, 'inline-block']}
+      >
         <Skeleton isLoaded={token?.symbol}>
           <Flex align='center'>
             {token?.logoUri && (
@@ -81,7 +79,14 @@ const TokenListCard = ({
           </Flex>
         </Skeleton>
       </Box>
-      <Box w='55%'>
+      <Box
+        w={[
+          hasBalance || needsSync ? '45%' : '60%',
+          null,
+          null,
+          hasBalance || needsSync ? '45%' : '50%',
+        ]}
+      >
         <Skeleton isLoaded={token?.tokenBalance}>
           <Box fontFamily='mono'>
             {token.tokenBalance ? (
@@ -103,7 +108,10 @@ const TokenListCard = ({
           </Box>
         </Skeleton>
       </Box>
-      <Box w='15%'>
+      <Box
+        w={hasBalance || needsSync ? '15%' : '20%'}
+        d={['none', null, null, 'inline-block']}
+      >
         <Skeleton isLoaded={token?.usd >= 0}>
           <Box fontFamily='mono'>
             {token?.usd ? (
@@ -114,7 +122,14 @@ const TokenListCard = ({
           </Box>
         </Skeleton>
       </Box>
-      <Box w='15%'>
+      <Box
+        w={[
+          needsSync || hasBalance ? '30%' : '40%',
+          null,
+          null,
+          hasBalance || needsSync ? '15%' : '20%',
+        ]}
+      >
         <Skeleton isLoaded={token?.totalUSD >= 0}>
           <Box fontFamily='mono'>
             {token?.tokenBalance ? (
@@ -131,20 +146,19 @@ const TokenListCard = ({
           </Box>
         </Skeleton>
       </Box>
-      {/* {hasAction ? (
-        <Box w='15%'>
-          {hasBalance && !optimisticWithdraw ? (
-            <Skeleton isLoaded={isLoaded}>
-              <Withdraw
-                tokenBalance={token}
-                setOptimisticWithdraw={setOptimisticWithdraw}
-              />
-            </Skeleton>
-          ) : null}
-*/}
-      {needsSync && !optimisticSync && (
-        <SyncTokenButton token={token} setOptimisticSync={setOptimisticSync} />
-      )}
+
+      <Box
+        w={['25%', null, null, '20%']}
+        d={hasBalance || needsSync ? 'inline-block' : 'none'}
+      >
+        {hasBalance && <Withdraw token={token} />}
+        {needsSync && !optimisticSync && (
+          <SyncTokenButton
+            token={token}
+            setOptimisticSync={setOptimisticSync}
+          />
+        )}
+      </Box>
     </Flex>
   );
 };

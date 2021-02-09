@@ -9,8 +9,9 @@ import { defaultTheme } from '../themes/defaultTheme';
 import { boostPost } from '../utils/requests';
 import CustomThemeForm from '../forms/customTheme';
 import ThemePreview from '../components/themePreview';
+import MainViewLayout from '../components/mainViewLayout';
 
-const ThemeBuilder = () => {
+const ThemeBuilder = ({ refetchMetaData }) => {
   const { address, injectedProvider, injectedChain } = useInjectedProvider();
   const { daochain, daoid } = useParams();
   const { theme, updateTheme, tempTheme, updateTempTheme } = useCustomTheme();
@@ -23,6 +24,7 @@ const ThemeBuilder = () => {
         primary500: theme.colors.primary[500],
         secondary500: theme.colors.secondary[500],
         bg500: theme.colors.background[500],
+        bgOverlayOpacity: 0.75,
         bgImg: theme.images.bgImg,
         headingFont: theme.fonts.heading,
         bodyFont: theme.fonts.body,
@@ -39,11 +41,16 @@ const ThemeBuilder = () => {
     updateTempTheme(themeUpdate);
     updateTheme(themeUpdate);
   };
-
+  // save Alpha also
   const saveTheme = async () => {
     handleThemeUpdate(previewTheme);
     const currentValues = tempTheme || defaultTheme;
-    const themeUpdate = { ...currentValues, ...previewTheme };
+    const themeUpdate = {
+      ...currentValues,
+      ...previewTheme,
+      primaryAlpha: theme.colors.primary[500],
+      secondaryAlpha: theme.colors.secondary[500],
+    };
 
     const messageHash = injectedProvider.utils.sha3(daoid);
     const signature = await injectedProvider.eth.personal.sign(
@@ -63,55 +70,61 @@ const ThemeBuilder = () => {
 
     if (result === 'success') {
       // TODO: refresh daoMetaData?
+      refetchMetaData();
       history.push(`/dao/${daochain}/${daoid}/settings`);
     } else {
       alert('error: forbidden');
     }
   };
+  // disable buttons on wrong chain
 
   return (
-    <Box>
-      <Flex ml={6} justify='space-between' align='center'>
-        <Flex
-          as={RouterLink}
-          to={`/dao/${daochain}/${daoid}/settings`}
-          align='center'
-        >
-          <Icon as={BiArrowBack} color='secondary.500' mr={2} />
-          Back
-        </Flex>
-        <HStack spacing='10px' mr='4%'>
-          <Button variant='outline'>Use an NFT</Button>
-          <Button
-            variant='outline'
-            onClick={() => handleThemeUpdate(previewTheme)}
+    <MainViewLayout header='Custom Theme' isDao={true}>
+      <Box>
+        <Flex justify='space-between' align='center'>
+          <Flex
+            as={RouterLink}
+            to={`/dao/${daochain}/${daoid}/settings`}
+            align='center'
           >
-            Full Screen Preview
-          </Button>
-          <Button onClick={saveTheme}>Save Changes</Button>
-        </HStack>
-      </Flex>
-      <Flex>
-        {previewTheme ? (
-          <>
-            <Box w='30%'>
-              <CustomThemeForm
-                previewTheme={previewTheme}
-                setPreviewTheme={setPreviewTheme}
-                handleThemeUpdate={handleThemeUpdate}
-              />
-            </Box>
+            <Icon as={BiArrowBack} color='secondary.500' mr={2} />
+            Back
+          </Flex>
+          <HStack spacing='10px' mr='4%'>
+            <Button variant='outline' isDisabled={true}>
+              Use an NFT
+            </Button>
+            <Button
+              variant='outline'
+              onClick={() => handleThemeUpdate(previewTheme)}
+            >
+              Full Screen Preview
+            </Button>
+            <Button onClick={saveTheme}>Save Changes</Button>
+          </HStack>
+        </Flex>
+        <Flex>
+          {previewTheme ? (
+            <>
+              <Box w='30%'>
+                <CustomThemeForm
+                  previewTheme={previewTheme}
+                  setPreviewTheme={setPreviewTheme}
+                  handleThemeUpdate={handleThemeUpdate}
+                />
+              </Box>
 
-            <Box w='68%'>
-              <ThemePreview
-                previewValues={previewTheme}
-                setPreviewTheme={setPreviewTheme}
-              />
-            </Box>
-          </>
-        ) : null}
-      </Flex>
-    </Box>
+              <Box w='68%'>
+                <ThemePreview
+                  previewValues={previewTheme}
+                  setPreviewTheme={setPreviewTheme}
+                />
+              </Box>
+            </>
+          ) : null}
+        </Flex>
+      </Box>
+    </MainViewLayout>
   );
 };
 

@@ -8,9 +8,10 @@ import { useInjectedProvider } from '../contexts/InjectedProviderContext';
 import { supportedChains } from '../utils/chain';
 import DaoMetaForm from '../forms/daoMetaForm';
 import { useUser } from '../contexts/UserContext';
+import MainViewLayout from '../components/mainViewLayout';
 
 const Register = () => {
-  const { registerchain, registerid } = useParams();
+  const { registerchain, daoid } = useParams();
   const { refetchUserHubDaos } = useUser();
   const history = useHistory();
   const { address, injectedChain, requestWallet } = useInjectedProvider();
@@ -20,7 +21,7 @@ const Register = () => {
   useEffect(() => {
     if (address && injectedChain) {
       setCurrentDao({
-        address: registerid,
+        address: daoid,
         name: '',
         description: '',
         purpose: '',
@@ -36,73 +37,80 @@ const Register = () => {
     refetchUserHubDaos();
     sessionStorage.removeItem('exploreDaoData');
 
-    history.push(`/dao/${registerchain}/${registerid}`);
+    history.push(`/dao/${registerchain}/${daoid}`);
   };
 
   return (
     <Layout>
-      {injectedChain && !needsNetworkChange ? (
-        <>
-          {!currentDao ? (
-            <Box
-              fontSize={['lg', null, null, '3xl']}
-              fontFamily='heading'
-              fontWeight={700}
-              ml={10}
-            >
-              loading...
-            </Box>
-          ) : (
-            <>
-              <Flex ml={6} justify='space-between' align='center' w='100%'>
-                <Flex as={RouterLink} to={`/`} align='center'>
-                  <Icon as={BiArrowBack} color='secondary.500' mr={2} />
-                  Back
+      <MainViewLayout header='Register'>
+        {injectedChain && !needsNetworkChange ? (
+          <>
+            {!currentDao ? (
+              <Box
+                fontSize={['lg', null, null, '3xl']}
+                fontFamily='heading'
+                fontWeight={700}
+                ml={10}
+              >
+                loading...
+              </Box>
+            ) : (
+              <>
+                <Flex ml={6} justify='space-between' align='center' w='100%'>
+                  <Flex as={RouterLink} to={`/`} align='center'>
+                    <Icon as={BiArrowBack} color='secondary.500' mr={2} />
+                    Back
+                  </Flex>
                 </Flex>
-              </Flex>
-              <Box w='40%'>
-                <DaoMetaForm
-                  handleUpdate={handleUpdate}
-                  metadata={currentDao}
-                />
-              </Box>
-            </>
-          )}
-        </>
-      ) : (
-        <Box
-          rounded='lg'
-          bg='blackAlpha.600'
-          borderWidth='1px'
-          borderColor='whiteAlpha.200'
-          p={6}
-          m={[10, 'auto', 0, 'auto']}
-          w='50%'
-          textAlign='center'
-        >
-          {!injectedChain ? (
-            <>
-              <Box fontSize='3xl' fontFamily='heading' fontWeight={700} mb={10}>
-                Connect your wallet to register your dao.
-              </Box>
+                <Box w='40%'>
+                  <DaoMetaForm
+                    handleUpdate={handleUpdate}
+                    metadata={currentDao}
+                  />
+                </Box>
+              </>
+            )}
+          </>
+        ) : (
+          <Box
+            rounded='lg'
+            bg='blackAlpha.600'
+            borderWidth='1px'
+            borderColor='whiteAlpha.200'
+            p={6}
+            m={[10, 'auto', 0, 'auto']}
+            w='50%'
+            textAlign='center'
+          >
+            {!injectedChain ? (
+              <>
+                <Box
+                  fontSize='3xl'
+                  fontFamily='heading'
+                  fontWeight={700}
+                  mb={10}
+                >
+                  Connect your wallet to register your dao.
+                </Box>
 
-              <Flex direction='column' align='center'>
-                <Button onClick={requestWallet}>Connect Wallet</Button>
-              </Flex>
-            </>
-          ) : (
-            <Box
-              fontSize={['lg', null, null, '3xl']}
-              fontFamily='heading'
-              fontWeight={700}
-              ml={10}
-            >
-              You need to switch your network to{' '}
-              {supportedChains[registerchain].name} to register this dao.
-            </Box>
-          )}
-        </Box>
-      )}
+                <Flex direction='column' align='center'>
+                  <Button onClick={requestWallet}>Connect Wallet</Button>
+                </Flex>
+              </>
+            ) : (
+              <Box
+                fontSize={['lg', null, null, '3xl']}
+                fontFamily='heading'
+                fontWeight={700}
+                ml={10}
+              >
+                You need to switch your network to{' '}
+                {supportedChains[registerchain].name} to register this dao.
+              </Box>
+            )}
+          </Box>
+        )}
+      </MainViewLayout>
     </Layout>
   );
 };

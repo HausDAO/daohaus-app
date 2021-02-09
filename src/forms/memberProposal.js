@@ -55,6 +55,7 @@ const MemberProposalForm = () => {
     errors,
     register,
     setValue,
+    setError,
     getValues,
     watch,
   } = useForm();
@@ -111,7 +112,6 @@ const MemberProposalForm = () => {
               title: `There was an error.`,
             });
             resolvePoll(txHash);
-            setLoading(false);
             console.error(`Could not find a matching proposal: ${error}`);
           },
           onSuccess: (txHash) => {
@@ -120,13 +120,12 @@ const MemberProposalForm = () => {
             });
             refreshDao();
             resolvePoll(txHash);
-            setLoading(false);
           },
         },
       });
       const onTxHash = () => {
-        setProposalModal(false);
         setTxInfoModal(true);
+        setProposalModal(false);
       };
       await MolochService({
         web3: injectedProvider,
@@ -164,6 +163,7 @@ const MemberProposalForm = () => {
           <Input
             name='sharesRequested'
             placeholder='0'
+            defaultValue='0'
             mb={5}
             ref={register({
               required: {
@@ -171,8 +171,8 @@ const MemberProposalForm = () => {
                 message: 'Requested shares are required for Member Proposals',
               },
               pattern: {
-                value: /[0-9]/,
-                message: 'Requested shares must be a number',
+                value: /^[0-9]+$/,
+                message: 'Requested shares must be a whole number',
               },
             })}
             color='white'
@@ -182,6 +182,7 @@ const MemberProposalForm = () => {
             register={register}
             setValue={setValue}
             getValues={getValues}
+            setError={setError}
           />
           {showLoot && (
             <>
@@ -191,6 +192,7 @@ const MemberProposalForm = () => {
               <Input
                 name='lootRequested'
                 placeholder='0'
+                defaultValue='0'
                 mb={5}
                 ref={register({
                   pattern: {

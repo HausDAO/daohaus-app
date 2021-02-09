@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import {
   Modal,
@@ -12,31 +12,73 @@ import {
   Avatar,
   Spinner,
   Image,
+  Input,
+  FormControl,
 } from '@chakra-ui/react';
 import makeBlockie from 'ethereum-blockies-base64';
 import { RiArrowRightSLine } from 'react-icons/ri';
+import { rgba } from 'polished';
 
 import BrandImg from '../assets/img/Daohaus__Castle--Dark.svg';
 import { useUser } from '../contexts/UserContext';
-import { getDaosByNetwork } from '../utils/dao';
+import { getDaosByNetwork, filterDAOsByName } from '../utils/dao';
 import { useInjectedProvider } from '../contexts/InjectedProviderContext';
 import { themeImagePath } from '../utils/metadata';
 import { useOverlay } from '../contexts/OverlayContext';
+import { useCustomTheme } from '../contexts/CustomThemeContext';
 
 const DaoSwitcherModal = () => {
   const { daoSwitcherModal, setDaoSwitcherModal } = useOverlay();
   const { userHubDaos } = useUser();
   const { injectedChain } = useInjectedProvider();
-  const daosByNetwork =
-    userHubDaos && injectedChain?.chainId
-      ? getDaosByNetwork(userHubDaos, injectedChain.chainId)
-      : {};
+  const { theme } = useCustomTheme();
+
+  const [searchTerm, setSearchTerm] = useState(null);
+  const [daosByNetwork, setDaosByNetwork] = useState({});
+  const [filteredDaos, setFilteredDaos] = useState();
+
+  // const daosByNetwork =
+  //   userHubDaos && injectedChain?.chainId
+  //     ? getDaosByNetwork(userHubDaos, injectedChain.chainId)
+  //     : {};
+
+  useEffect(() => {
+    if ((userHubDaos, injectedChain && injectedChain.chainId)) {
+      const newNetworks = getDaosByNetwork(userHubDaos, injectedChain.chainId);
+      setDaosByNetwork(newNetworks);
+    }
+  }, [userHubDaos, injectedChain]);
+
+  useEffect(() => {
+    // console.log('daosByNetwork', daosByNetwork);
+    // console.log('searchTerm', searchTerm);
+    if (daosByNetwork) {
+      if (!searchTerm || typeof searchTerm !== 'string') {
+        setFilteredDaos(daosByNetwork);
+      } else {
+        setFilteredDaos({
+          currentNetwork: filterDAOsByName(
+            daosByNetwork.currentNetwork,
+            searchTerm,
+          ),
+          otherNetworks: daosByNetwork.otherNetworks.map((network) =>
+            filterDAOsByName(network, searchTerm),
+          ),
+        });
+      }
+    }
+  }, [searchTerm, daosByNetwork]);
+
+  const handleChange = (event) => {
+    setSearchTerm(event.target.value);
+  };
 
   const handleClose = () => {
     setDaoSwitcherModal(false);
   };
 
   const renderDaoList = (network) =>
+    network?.data &&
     network.data.map((dao) => (
       <Link
         key={dao.id}
@@ -68,7 +110,7 @@ const DaoSwitcherModal = () => {
     ));
 
   const renderCurrentNetwork = () => {
-    const currentNetwork = daosByNetwork?.currentNetwork || null;
+    const currentNetwork = filteredDaos?.currentNetwork || null;
     if (currentNetwork) {
       return (
         <Box key={currentNetwork.networkID} mb={3}>
@@ -82,8 +124,8 @@ const DaoSwitcherModal = () => {
   };
 
   const renderOtherNetworks = () =>
-    daosByNetwork?.otherNetworks &&
-    daosByNetwork.otherNetworks.map((network, i) => {
+    filteredDaos?.otherNetworks &&
+    filteredDaos.otherNetworks.map((network, i) => {
       return (
         <Box key={network.networkID} mb={3}>
           <Box fontSize='md' mr={5} as='i' fontWeight={200}>
@@ -96,29 +138,41 @@ const DaoSwitcherModal = () => {
 
   return (
     <Modal isOpen={daoSwitcherModal} onClose={handleClose} isCentered>
-      <ModalOverlay />
+      <ModalOverlay bgColor={rgba(theme.colors.background[500], 0.8)} />
       <ModalContent
         rounded='lg'
         bg='black'
         borderWidth='1px'
         borderColor='whiteAlpha.200'
       >
-        <ModalHeader>
-          <Box
-            fontFamily='heading'
-            textTransform='uppercase'
-            fontSize='sm'
-            fontWeight={700}
-            color='white'
-          >
-            Go to DAO
-          </Box>
+        <ModalHeader pb={0}>
+          <Flex justify='space-between' align='center' w='90%'>
+            <Box
+              fontFamily='heading'
+              textTransform='uppercase'
+              fontSize='sm'
+              fontWeight={700}
+              mb={3}
+              color='white'
+            >
+              Go to DAO
+            </Box>
+            <FormControl w='auto' mb={4}>
+              <Input
+                type='search'
+                className='input'
+                placeholder='Search My Daos'
+                maxW={200}
+                onChange={(e) => handleChange(e)}
+              />
+            </FormControl>
+          </Flex>
         </ModalHeader>
         <ModalCloseButton color='white' />
         <ModalBody
           flexDirection='column'
           display='flex'
-          maxH='300px'
+          maxH='400px'
           overflowY='scroll'
         >
           <Link to='/' onClick={handleClose}>
