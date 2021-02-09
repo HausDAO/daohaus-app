@@ -22,15 +22,19 @@ const ActivitiesFeed = ({
   return (
     <>
       <TextBox>{heading}</TextBox>
-      {pagedActivities &&
-        pagedActivities.map((activity, index) => (
-          <ActivityCard
-            key={`${activity.id}-${index}`}
-            activity={activity}
-            displayAvatar={true}
-            isLink={isLink}
-          />
-        ))}
+      {pagedActivities
+        ? pagedActivities.map((activity, index) => (
+            <ActivityCard
+              key={`${activity.id}-${index}`}
+              activity={activity}
+              displayAvatar={true}
+              isLink={isLink}
+            />
+          ))
+        : null}
+      {!activities?.length ? (
+        <TextBox variant='value'>Not much happing yet</TextBox>
+      ) : null}
       <Paginator
         perPage={limit}
         setRecords={setPagedActivities}
