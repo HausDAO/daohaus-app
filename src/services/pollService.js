@@ -229,24 +229,6 @@ const cancelProposalTest = (data, shouldEqual, pollId) => {
   }
 };
 
-const minionProposeTest = (data, shouldEqual, pollId) => {
-  // new minion proposal after time submitted
-  console.log(data);
-  console.log(shouldEqual);
-  if (data.proposals) {
-    const proposal = data.proposals.find(
-      (proposal) => proposal.proposalId === shouldEqual,
-    );
-    console.log(proposal);
-    return proposal?.cancelled;
-  } else {
-    clearInterval(pollId);
-    throw new Error(
-      `Poll test did recieve the expected results from the graph: ${data}`,
-    );
-  }
-};
-
 const minionExecuteTest = (data, shouldEqual, pollId) => {
   // use minion address and proposal ID to get action details and check if executed
   console.log(data);
@@ -260,24 +242,6 @@ const minionExecuteTest = (data, shouldEqual, pollId) => {
     //   minion: proposal?.minionAddress,
     //   chainID: daochain,
     // })('getAction')({ proposalId: proposal?.proposalId });
-    console.log(proposal);
-    return proposal?.cancelled;
-  } else {
-    clearInterval(pollId);
-    throw new Error(
-      `Poll test did recieve the expected results from the graph: ${data}`,
-    );
-  }
-};
-
-const transmutationProposalTest = (data, shouldEqual, pollId) => {
-  // check if new proposal with hash(?)
-  console.log(data);
-  console.log(shouldEqual);
-  if (data.proposals) {
-    const proposal = data.proposals.find(
-      (proposal) => proposal.proposalId === shouldEqual,
-    );
     console.log(proposal);
     return proposal?.cancelled;
   } else {
@@ -654,12 +618,12 @@ export const createPoll = ({
       });
     };
   } else if (action === 'minionProposeAction') {
-    return ({ daoID, chainID, minion, data, actions }) => (txHash) => {
+    return ({ daoID, chainID, hash, actions }) => (txHash) => {
       startPoll({
         pollFetch: pollProposals,
-        testFn: minionProposeTest,
-        shouldEqual: { minion, data },
-        args: { daoID, chainID, minion, data },
+        testFn: submitProposalTest,
+        shouldEqual: hash,
+        args: { daoID, chainID, hash },
         actions,
         txHash,
       });
@@ -671,14 +635,14 @@ export const createPoll = ({
           status: 'unresolved',
           resolvedMsg: `Minion proposal submitted`,
           unresolvedMsg: `Submitting minion proposal`,
-          successMsg: `Minion proposal submitted for ${minion} on behalf of ${daoID} on ${chainID}`,
-          errorMsg: `Error submitting minion proposal for ${minion} on behalf of ${daoID} on ${chainID}`,
+          successMsg: `Minion proposal submitted for ${daoID} on ${chainID}`,
+          errorMsg: `Error submitting minion proposal for ${daoID} on ${chainID}`,
           pollData: {
             action,
             interval,
             tries,
           },
-          pollArgs: { daoID, chainID, minion, data },
+          pollArgs: { daoID, chainID, hash },
         });
       }
     };
@@ -712,12 +676,12 @@ export const createPoll = ({
       }
     };
   } else if (action === 'transmutationProposal') {
-    return ({ daoID, chainID, minion, proposalId, actions }) => (txHash) => {
+    return ({ daoID, chainID, hash, actions }) => (txHash) => {
       startPoll({
         pollFetch: pollProposals,
-        testFn: transmutationProposalTest,
-        shouldEqual: { minion, proposalId },
-        args: { daoID, chainID, minion, proposalId },
+        testFn: submitProposalTest,
+        shouldEqual: hash,
+        args: { daoID, chainID, hash },
         actions,
         txHash,
       });
@@ -736,7 +700,7 @@ export const createPoll = ({
             interval,
             tries,
           },
-          pollArgs: { daoID, chainID, minion, proposalId },
+          pollArgs: { daoID, chainID, hash },
         });
       }
     };

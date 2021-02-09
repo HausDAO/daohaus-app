@@ -28,6 +28,7 @@ import TextBox from '../components/TextBox';
 import { MinionService } from '../services/minionService';
 import { createPoll } from '../services/pollService';
 import { chainByID } from '../utils/chain';
+import { createHash } from '../utils/general';
 
 const MinionProposalForm = () => {
   const [loading, setLoading] = useState(false);
@@ -127,18 +128,22 @@ const MinionProposalForm = () => {
         return;
       }
     }
+    const hash = createHash();
+    const details = {
+      id: hash,
+      description: values.description,
+    };
     const args = [
       values.targetContract,
       valueWei || '0',
       values.dataValue || hexData,
-      values.description,
+      details,
     ];
     try {
       const poll = createPoll({ action: 'minionProposeAction', cachePoll })({
         daoID: daoid,
         chainID: daochain,
-        targetContract: values.targetContract,
-        data: values.dataValue,
+        hash,
         actions: {
           onError: (error, txHash) => {
             errorToast({
