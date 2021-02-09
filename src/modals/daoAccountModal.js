@@ -11,6 +11,7 @@ import {
   ModalCloseButton,
   ModalBody,
 } from '@chakra-ui/react';
+import { rgba } from 'polished';
 
 import HubProfileCard from '../components/hubProfileCard';
 import { useOverlay } from '../contexts/OverlayContext';
@@ -18,12 +19,14 @@ import { useDaoMember } from '../contexts/DaoMemberContext';
 import MemberInfoGuts from '../components/memberInfoGuts';
 import { useInjectedProvider } from '../contexts/InjectedProviderContext';
 import TxList from '../components/TxList';
+import { useCustomTheme } from '../contexts/CustomThemeContext';
 
 const DaoAccountModal = () => {
   const { daoAccountModal, setDaoAccountModal } = useOverlay();
   const { daoMember, isMember } = useDaoMember();
   const { address, disconnectDapp, requestWallet } = useInjectedProvider();
   const { daoid, daochain } = useParams();
+  const { theme } = useCustomTheme();
 
   const handleClose = () => {
     setDaoAccountModal(false);
@@ -37,7 +40,7 @@ const DaoAccountModal = () => {
 
   return (
     <Modal isOpen={daoAccountModal} onClose={handleClose} isCentered>
-      <ModalOverlay bgColor='background.500' />
+      <ModalOverlay bgColor={rgba(theme.colors.background[500], 0.8)} />
       <ModalContent
         rounded='lg'
         bg='blackAlpha.800'
