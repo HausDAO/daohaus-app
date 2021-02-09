@@ -64,10 +64,6 @@ export const MolochService = ({ web3, daoAddress, version, chainID }) => {
       service === 'ragequit'
     ) {
       return async ({ args, address, poll, onTxHash }) => {
-        console.log('args', args);
-        console.log('from', address);
-        console.log('poll', poll);
-
         try {
           const tx = await contract.methods[service](...args);
           return tx
