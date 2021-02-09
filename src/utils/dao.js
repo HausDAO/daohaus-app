@@ -54,3 +54,10 @@ export const combineDaoDataForHub = (userHubDaos) => {
     { proposals: [], rageQuits: [] },
   );
 };
+
+export const filterDAOsByName = (network, searchTerm) => ({
+  ...network,
+  data: network.data.filter((dao) =>
+    dao.meta.name.toLowerCase().includes(searchTerm.toLowerCase()),
+  ),
+});

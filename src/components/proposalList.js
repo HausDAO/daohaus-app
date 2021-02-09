@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Flex, Box, Spinner } from '@chakra-ui/react';
+import { Flex, Text, Spinner } from '@chakra-ui/react';
 
 import ProposalCard from './proposalCard';
 import { determineUnreadProposalList } from '../utils/proposalUtils';
@@ -8,7 +8,7 @@ import Paginator from './paginator';
 import ProposalFilters from './proposalFilters';
 import ListSort from './listSort';
 import { sortOptions } from '../utils/proposalContent';
-import TextBox from './TextBox';
+import ContentBox from './ContentBox';
 
 const ProposalsList = ({ proposals }) => {
   const { daoMember } = useDaoMember();
@@ -17,7 +17,6 @@ const ProposalsList = ({ proposals }) => {
   const [isLoaded, setIsLoaded] = useState(false);
   const [filter, setFilter] = useState(null);
   const [sort, setSort] = useState(null);
-
   useEffect(() => {
     const filterAndSortProposals = () => {
       let filteredProposals = proposals;
@@ -98,10 +97,10 @@ const ProposalsList = ({ proposals }) => {
           />
         </Flex>
       )}
-      {proposals && !proposals.length && (
-        <Box m={6}>
-          <TextBox variant='value'>No Proposals here yet</TextBox>
-        </Box>
+      {listProposals && !listProposals.length && (
+        <ContentBox mt={6} p={3}>
+          <Text>No Proposals here yet</Text>
+        </ContentBox>
       )}
     </>
   );
