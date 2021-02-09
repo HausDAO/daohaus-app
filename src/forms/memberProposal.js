@@ -112,7 +112,6 @@ const MemberProposalForm = () => {
               title: `There was an error.`,
             });
             resolvePoll(txHash);
-            setLoading(false);
             console.error(`Could not find a matching proposal: ${error}`);
           },
           onSuccess: (txHash) => {
@@ -121,13 +120,12 @@ const MemberProposalForm = () => {
             });
             refreshDao();
             resolvePoll(txHash);
-            setLoading(false);
           },
         },
       });
       const onTxHash = () => {
-        setProposalModal(false);
         setTxInfoModal(true);
+        setProposalModal(false);
       };
       await MolochService({
         web3: injectedProvider,
