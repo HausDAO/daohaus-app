@@ -2,6 +2,7 @@ import React from 'react';
 import { Link as RouterLink, useParams } from 'react-router-dom';
 import { Flex, Icon, Link } from '@chakra-ui/react';
 import { VscGear } from 'react-icons/vsc';
+import { RiExternalLinkLine } from 'react-icons/ri';
 
 import ContentBox from './ContentBox';
 import TextBox from './TextBox';
@@ -62,7 +63,7 @@ const Superpowers = ({ daoMember, daoMetaData }) => {
               </RouterLink>
             ) : (
               <TextBox colorScheme='whiteAlpha.900' size='xs'>
-                Only Active Members can change manage this.
+                Active Members only
               </TextBox>
             )}
           </Flex>
@@ -80,7 +81,7 @@ const Superpowers = ({ daoMember, daoMetaData }) => {
               isExternal
             >
               <Icon
-                as={VscGear}
+                as={RiExternalLinkLine}
                 color='secondary.500'
                 w='25px'
                 h='25px'

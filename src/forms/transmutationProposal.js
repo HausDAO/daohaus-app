@@ -28,6 +28,7 @@ import { useUser } from '../contexts/UserContext';
 import { useTX } from '../contexts/TXContext';
 import { useOverlay } from '../contexts/OverlayContext';
 import { createPoll } from '../services/pollService';
+import { createHash } from '../utils/general';
 
 const TransmutationProposal = () => {
   const [loading, setLoading] = useState(false);
@@ -165,19 +166,23 @@ const TransmutationProposal = () => {
 
   const onSubmit = async (values) => {
     setLoading(true);
+    const hash = createHash();
+    const details = {
+      hash,
+      description: values.description || '',
+    };
     const args = [
       values.applicant,
       tributeReturned.toString(),
       injectedProvider.utils.toWei('' + values.paymentRequested),
-      values.description,
+      details,
     ];
 
     try {
       const poll = createPoll({ action: 'transmutationProposal', cachePoll })({
         daoID: daoid,
         chainID: daochain,
-        applicant: values.applicant,
-        paymentRequested: values.paymentRequested,
+        hash,
         actions: {
           onError: (error, txHash) => {
             errorToast({

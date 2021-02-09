@@ -177,6 +177,8 @@ const NetworkDaoList = ({ data, network, searchTerm, index }) => {
                 '&::WebkitScrollbar': {
                   display: 'none',
                 },
+                /* Hide scrollbar for Firefox */
+                '&::ScrollbarWidth': 'none',
               }}
             >
               {sortedDaoList.map((dao) => renderDaoAvatar(dao))}

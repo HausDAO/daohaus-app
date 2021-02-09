@@ -31,7 +31,7 @@ const Settings = ({ overview, daoMember, daoMetaData, customTerms }) => {
           <DaoContractSettings overview={overview} customTerms={customTerms} />
           <Flex justify='space-between' mt={6}>
             <TextBox size='xs'>DAO Metadata</TextBox>
-            {+daoMember?.shares > 0 && daoConnectedAndSameChain() ? (
+            {daoConnectedAndSameChain() && +daoMember?.shares > 0 ? (
               <Link
                 as={RouterLink}
                 color='secondary.500'
