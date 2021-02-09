@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import {
   Modal,
@@ -12,6 +12,8 @@ import {
   Avatar,
   Spinner,
   Image,
+  Input,
+  FormControl,
 } from '@chakra-ui/react';
 import makeBlockie from 'ethereum-blockies-base64';
 import { RiArrowRightSLine } from 'react-icons/ri';
@@ -27,10 +29,55 @@ const DaoSwitcherModal = () => {
   const { daoSwitcherModal, setDaoSwitcherModal } = useOverlay();
   const { userHubDaos } = useUser();
   const { injectedChain } = useInjectedProvider();
+  const [searchTerm, setSearchTerm] = useState();
   const daosByNetwork =
     userHubDaos && injectedChain?.chainId
       ? getDaosByNetwork(userHubDaos, injectedChain.chainId)
       : {};
+  const [filteredDaos, setFilteredDaos] = useState();
+
+  useEffect(() => {
+    if ((userHubDaos, injectedChain && injectedChain.chainId)) {
+      setFilteredDaos(daosByNetwork);
+    }
+  }, [userHubDaos, injectedChain]);
+
+  useEffect(() => {
+    if (daosByNetwork) {
+      if (!searchTerm) {
+        setFilteredDaos(daosByNetwork);
+      } else {
+        setFilteredDaos({
+          currentNetwork: {
+            ...daosByNetwork.currentNetwork,
+            data: daosByNetwork.currentNetwork.data.filter((dao) => {
+              return searchTerm
+                ? dao.meta?.name
+                    .toLowerCase()
+                    .indexOf(searchTerm.toLowerCase()) > -1
+                : true;
+            }),
+          },
+          otherNetworks: daosByNetwork.otherNetworks.map((network) => {
+            return {
+              ...network,
+              data: network.data.filter((dao) => {
+                return searchTerm
+                  ? dao.meta?.name
+                      .toLowerCase()
+                      .indexOf(searchTerm.toLowerCase()) > -1
+                  : true;
+              }),
+            };
+          }),
+        });
+      }
+    }
+  }, [searchTerm]);
+
+  const handleChange = (event) => {
+    setSearchTerm(event.target.value);
+  };
 
   const handleClose = () => {
     setDaoSwitcherModal(false);
@@ -68,7 +115,7 @@ const DaoSwitcherModal = () => {
     ));
 
   const renderCurrentNetwork = () => {
-    const currentNetwork = daosByNetwork?.currentNetwork || null;
+    const currentNetwork = filteredDaos?.currentNetwork || null;
     if (currentNetwork) {
       return (
         <Box key={currentNetwork.networkID} mb={3}>
@@ -82,8 +129,8 @@ const DaoSwitcherModal = () => {
   };
 
   const renderOtherNetworks = () =>
-    daosByNetwork?.otherNetworks &&
-    daosByNetwork.otherNetworks.map((network, i) => {
+    filteredDaos?.otherNetworks &&
+    filteredDaos.otherNetworks.map((network, i) => {
       return (
         <Box key={network.networkID} mb={3}>
           <Box fontSize='md' mr={5} as='i' fontWeight={200}>
@@ -118,7 +165,7 @@ const DaoSwitcherModal = () => {
         <ModalBody
           flexDirection='column'
           display='flex'
-          maxH='300px'
+          maxH='400px'
           overflowY='scroll'
         >
           <Link to='/' onClick={handleClose}>
@@ -138,6 +185,15 @@ const DaoSwitcherModal = () => {
               <RiArrowRightSLine color='white' />
             </Flex>
           </Link>
+          <FormControl mb={4}>
+            <Input
+              type='search'
+              className='input'
+              placeholder='Search My Daos'
+              maxW={300}
+              onChange={(e) => handleChange(e)}
+            />
+          </FormControl>
           Current Network:
           {userHubDaos ? <>{renderCurrentNetwork()}</> : <Spinner />}
           Other Networks:
