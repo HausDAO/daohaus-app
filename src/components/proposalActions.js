@@ -83,7 +83,7 @@ const ProposalVote = ({ proposal, overview, daoProposals, daoMember }) => {
         fontSize={['md', null, null, 'xl']}
         fontWeight={700}
         textAlign='center'
-        zIndex='3'
+        zIndex='2'
       >
         {`Connect to ${capitalize(supportedChains[daochain]?.network)}
       for ${getCopy(customTerms, 'proposal')} actions`}

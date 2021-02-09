@@ -138,17 +138,17 @@ const ProfileCard = ({ overview, daoTokens, ens, profile, memberEntity }) => {
               </Box>
               <Box w='30%'>
                 <TextBox size='xs'>Shares</TextBox>
-                <Skeleton isLoaded={memberEntity?.shares >= 0}>
+                <Skeleton isLoaded={!memberEntity || memberEntity?.shares >= 0}>
                   <TextBox size='xl' variant='value'>
-                    {memberEntity?.shares}
+                    {memberEntity?.shares || '0'}
                   </TextBox>
                 </Skeleton>
               </Box>
               <Box w='30%'>
                 <TextBox size='xs'>Loot</TextBox>
-                <Skeleton isLoaded={memberEntity?.loot >= 0}>
+                <Skeleton isLoaded={!memberEntity || memberEntity?.loot >= 0}>
                   <TextBox size='xl' variant='value'>
-                    {memberEntity?.loot}
+                    {memberEntity?.loot || '0'}
                   </TextBox>
                 </Skeleton>
               </Box>
