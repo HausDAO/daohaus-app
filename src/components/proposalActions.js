@@ -73,15 +73,21 @@ const ProposalVote = ({ proposal, overview, daoProposals, daoMember }) => {
       bottom='0px'
       right='0px'
       zIndex='3'
-      fontFamily='heading'
-      fontSize='xl'
-      fontWeight={700}
       align='center'
       justify='center'
       style={{ backdropFilter: 'blur(6px)' }}
     >
-      {`Connect to ${capitalize(supportedChains[daochain]?.network)}
+      <Box
+        maxW={['70%', null, null, 'auto']}
+        fontFamily='heading'
+        fontSize={['md', null, null, 'xl']}
+        fontWeight={700}
+        textAlign='center'
+        zIndex='3'
+      >
+        {`Connect to ${capitalize(supportedChains[daochain]?.network)}
       for ${getCopy(customTerms, 'proposal')} actions`}
+      </Box>
     </Flex>
   );
 
@@ -406,11 +412,12 @@ const ProposalVote = ({ proposal, overview, daoProposals, daoMember }) => {
   return (
     <>
       <ContentBox position='relative'>
-        {(!daoConnectedAndSameChain() &&
+        {!daoConnectedAndSameChain() &&
           ((proposal?.status === 'Unsponsored' && !proposal?.proposalIndex) ||
-            proposal?.status === 'ReadyForProcessing')) ||
-          ((proposal?.status !== 'Unsponsored' || proposal?.proposalIndex) &&
-            proposal?.status !== 'Cancelled' && <NetworkOverlay />)}
+            proposal?.status === 'ReadyForProcessing') && <NetworkOverlay />}
+        {!daoConnectedAndSameChain() &&
+          (proposal?.status !== 'Unsponsored' || proposal?.proposalIndex) &&
+          proposal?.status !== 'Cancelled' && <NetworkOverlay />}
         {proposal?.status === 'Unsponsored' && !proposal?.proposalIndex && (
           <Flex justify='center' direction='column'>
             <Flex justify='center' mb={4}>
