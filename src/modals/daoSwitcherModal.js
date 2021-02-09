@@ -153,16 +153,26 @@ const DaoSwitcherModal = () => {
         borderWidth='1px'
         borderColor='whiteAlpha.200'
       >
-        <ModalHeader>
+        <ModalHeader pb={0}>
           <Box
             fontFamily='heading'
             textTransform='uppercase'
             fontSize='sm'
             fontWeight={700}
+            mb={3}
             color='white'
           >
             Go to DAO
           </Box>
+          <FormControl mb={4}>
+            <Input
+              type='search'
+              className='input'
+              placeholder='Search My Daos'
+              maxW={200}
+              onChange={(e) => handleChange(e)}
+            />
+          </FormControl>
         </ModalHeader>
         <ModalCloseButton color='white' />
         <ModalBody
@@ -188,15 +198,6 @@ const DaoSwitcherModal = () => {
               <RiArrowRightSLine color='white' />
             </Flex>
           </Link>
-          <FormControl mb={4}>
-            <Input
-              type='search'
-              className='input'
-              placeholder='Search My Daos'
-              maxW={300}
-              onChange={(e) => handleChange(e)}
-            />
-          </FormControl>
           Current Network:
           {userHubDaos ? <>{renderCurrentNetwork()}</> : <Spinner />}
           Other Networks:

@@ -127,9 +127,18 @@ const TokenListCard = ({
         </Skeleton>
       </Box>
 
-      <Box w='15%'>{hasBalance && <Withdraw token={token} />}</Box>
+      {hasBalance && (
+        <Box w='15%'>
+          <Withdraw token={token} />
+        </Box>
+      )}
       {needsSync && !optimisticSync && (
-        <SyncTokenButton token={token} setOptimisticSync={setOptimisticSync} />
+        <Box w='15%'>
+          <SyncTokenButton
+            token={token}
+            setOptimisticSync={setOptimisticSync}
+          />
+        </Box>
       )}
     </Flex>
   );
