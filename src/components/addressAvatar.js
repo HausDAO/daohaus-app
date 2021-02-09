@@ -24,7 +24,6 @@ const AddressAvatar = ({ addr, hideCopy = false }) => {
         console.log("Member doesn't have a profile");
       }
     };
-
     getProfile();
   }, [addr]);
 

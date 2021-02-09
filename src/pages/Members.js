@@ -17,7 +17,7 @@ import MainViewLayout from '../components/mainViewLayout';
 import { useInjectedProvider } from '../contexts/InjectedProviderContext';
 import { daoConnectedAndSameChain } from '../utils/general';
 
-const Members = ({
+const Members = React.memo(function MembersPage({
   members,
   activities,
   overview,
@@ -25,14 +25,15 @@ const Members = ({
   daoMembers,
   customTerms,
   daoMetaData,
-}) => {
+}) {
   const { daoid, daochain } = useParams();
   const { address, injectedChain } = useInjectedProvider();
+
   const [selectedMember, setSelectedMember] = useState(null);
   const [scrolled, setScrolled] = useState(false);
-  const [listMembers, setListMembers] = useState(members);
-  const [sort, setSort] = useState();
-  const [filter, setFilter] = useState();
+  const [listMembers, setListMembers] = useState(null);
+  const [sort, setSort] = useState(null);
+  const [filter, setFilter] = useState(null);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -54,48 +55,43 @@ const Members = ({
   };
 
   useEffect(() => {
-    if (members && members.length > 0) {
+    const sortMembers = () => {
+      const sortedMembers = members.filter((member) => {
+        const active =
+          +member.shares > 0 || (+member.loot > 0 && !member.jailed);
+        switch (filter?.value) {
+          case 'active': {
+            return member.exists && active;
+          }
+          case 'inactive': {
+            return member.exists && !active && !member.jailed;
+          }
+          case 'jailed': {
+            return member.jailed;
+          }
+          default: {
+            return member.exists && active;
+          }
+        }
+      });
+
+      if (sort && filter) {
+        sortedMembers.sort((a, b) => {
+          if (sort.value === 'joinDateAsc') {
+            return +a.createdAt - +b.createdAt;
+          } else if (sort.value === 'joinDateDesc') {
+            return +b.createdAt - +a.createdAt;
+          } else {
+            return +b[sort.value] - +a[sort.value];
+          }
+        });
+      }
+      setListMembers([...sortedMembers]);
+    };
+    if (members?.length > 0) {
       sortMembers();
     }
   }, [members, sort, filter]);
-
-  const sortMembers = () => {
-    const sortedMembers = members.filter((member) => {
-      const active = +member.shares > 0 || (+member.loot > 0 && !member.jailed);
-      switch (filter?.value) {
-        case 'active': {
-          return member.exists && active;
-        }
-        case 'inactive': {
-          return member.exists && !active && !member.jailed;
-        }
-        case 'jailed': {
-          return member.jailed;
-        }
-        default: {
-          return member.exists && active;
-        }
-      }
-    });
-
-    if (sort) {
-      sortedMembers.sort((a, b) => {
-        if (sort.value === 'joinDateAsc') {
-          return +a.createdAt - +b.createdAt;
-        } else if (sort.value === 'joinDateDesc') {
-          return +b.createdAt - +a.createdAt;
-        } else {
-          return +b[sort.value] - +a[sort.value];
-        }
-      });
-    }
-
-    setListMembers([...sortedMembers]);
-  };
-  console.log(
-    daoConnectedAndSameChain(address, injectedChain?.chainId, daochain),
-  );
-  console.log(address, injectedChain?.chainId, daochain);
 
   const ctaButton = daoConnectedAndSameChain(
     address,
@@ -109,7 +105,7 @@ const Members = ({
 
   return (
     <MainViewLayout
-      header={'Bank'}
+      header={'Members'}
       headerEl={ctaButton}
       customTerms={customTerms}
       isDao={true}
@@ -137,17 +133,16 @@ const Members = ({
               </TextBox>
               <TextBox size='xs'>Join Date</TextBox>
             </Flex>
-            {listMembers &&
-              listMembers?.map((member) => {
-                return (
-                  <MemberCard
-                    key={member.id}
-                    member={member}
-                    selectMember={setSelectedMember}
-                    selectedMember={selectedMember}
-                  />
-                );
-              })}
+            {listMembers?.map((member) => {
+              return (
+                <MemberCard
+                  key={member.id}
+                  member={member}
+                  selectMember={setSelectedMember}
+                  selectedMember={selectedMember}
+                />
+              );
+            })}
           </ContentBox>
         </Box>
         <Box w={['100%', null, null, null, '40%']}>
@@ -197,6 +192,6 @@ const Members = ({
       </Flex>
     </MainViewLayout>
   );
-};
+});
 
 export default Members;
