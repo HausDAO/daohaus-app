@@ -15,6 +15,7 @@ import MembersChart from '../components/membersChart';
 import ListSort from '../components/listSort';
 import { membersSortOptions } from '../utils/memberContent';
 import MemberFilters from '../components/memberFilters';
+import MainViewLayout from '../components/mainViewLayout';
 
 const Members = ({ members, activities }) => {
   const { daoMember } = useDaoMember();
@@ -98,7 +99,7 @@ const Members = ({ members, activities }) => {
   };
 
   return (
-    <>
+    <MainViewLayout header={'Bank'} customTerms={customTerms}>
       <Flex>
         <ListSort sort={sort} setSort={setSort} options={membersSortOptions} />
         <MemberFilters filter={filter} setFilter={setFilter} />
@@ -176,7 +177,7 @@ const Members = ({ members, activities }) => {
           </Stack>
         </Box>
       </Flex>
-    </>
+    </MainViewLayout>
   );
 };
 

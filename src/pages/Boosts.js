@@ -9,8 +9,9 @@ import { boostList } from '../content/boost-content';
 import GenericModal from '../modals/genericModal';
 import { useOverlay } from '../contexts/OverlayContext';
 import BoostLaunchWrapper from '../components/boostLaunchWrapper';
+import MainViewLayout from '../components/mainViewLayout';
 
-const Boosts = () => {
+const Boosts = ({ customTerms }) => {
   const { daoMetaData } = useMetaData();
   const { daochain, daoid } = useParams();
   const { setGenericModal } = useOverlay();
@@ -84,18 +85,20 @@ const Boosts = () => {
   };
 
   return (
-    <Box p={6}>
-      <TextBox size='sm' mb={3}>
-        Available Apps
-      </TextBox>
-      <Flex wrap='wrap' justify='space-evenly'>
-        {daoMetaData
-          ? boostList.map((boost, i) => {
-              return renderBoostCard(boost, i);
-            })
-          : null}
-      </Flex>
-    </Box>
+    <MainViewLayout header='Boosts' customTerms={customTerms}>
+      <Box p={6}>
+        <TextBox size='sm' mb={3}>
+          Available Apps
+        </TextBox>
+        <Flex wrap='wrap' justify='space-evenly'>
+          {daoMetaData
+            ? boostList.map((boost, i) => {
+                return renderBoostCard(boost, i);
+              })
+            : null}
+        </Flex>
+      </Box>
+    </MainViewLayout>
   );
 };
 

@@ -67,14 +67,14 @@ const DaoRouter = () => {
           />
         </Route>
         <Route exact path={`${path}/bank`}>
-          <Bank balances={daoBalances} />
+          <Bank balances={daoBalances} customTerms={customTerms} />
         </Route>
         <Route exact path={`${path}/members`}>
           <Members members={daoMembers} activities={daoActivities} />
         </Route>
 
         <Route exact path={`${path}/settings/boosts`}>
-          <Boosts />
+          <Boosts customTerms={customTerms} />
         </Route>
         <Route exact path={`${path}/settings/notifications`}>
           <Notifications />
