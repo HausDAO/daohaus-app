@@ -15,6 +15,7 @@ const AddressAvatar = React.memo(function AddrAvatar({
   const toast = useToast();
   const [profile, setProfile] = useState(null);
   const [hasFetched, setHasFetched] = useState(false);
+
   useEffect(() => {
     let shouldFetch = true;
     const getProfile = async () => {
