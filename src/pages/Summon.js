@@ -18,6 +18,7 @@ import SummonPending from '../components/summonPending';
 import { graphQuery } from '../utils/apollo';
 import { getGraphEndpoint } from '../utils/chain';
 import { DAO_POLL } from '../graphQL/dao-queries';
+import MainViewLayout from '../components/mainViewLayout';
 
 const Summon = () => {
   const {
@@ -145,7 +146,7 @@ const Summon = () => {
 
   return (
     <Layout>
-      <>
+      <MainViewLayout header='Summon'>
         {injectedChain ? (
           <>
             {!isSummoning ? (
@@ -222,7 +223,7 @@ const Summon = () => {
             </Flex>
           </Box>
         )}
-      </>
+      </MainViewLayout>
     </Layout>
   );
 };

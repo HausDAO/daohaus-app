@@ -19,6 +19,7 @@ import ContentBox from '../components/ContentBox';
 import TextBox from '../components/TextBox';
 import { chainByID } from '../utils/chain';
 import { calcPower, calcValue } from '../utils/profile';
+import MainViewLayout from '../components/mainViewLayout';
 
 const Profile = ({ members, overview, daoTokens, daoMember, activities }) => {
   const { userid, daochain } = useParams();
@@ -115,141 +116,143 @@ const Profile = ({ members, overview, daoTokens, daoMember, activities }) => {
   };
 
   return (
-    <Flex wrap='wrap'>
-      <Box
-        w={['100%', null, null, null, '60%']}
-        pr={[0, null, null, null, 6]}
-        pb={6}
-      >
-        <GenericModal modalId='rageQuit' closeOnOverlayClick={true}>
-          <RageQuitForm overview={overview} daoMember={daoMember} />
-        </GenericModal>
-        <ContentBox as={Flex} p={6} w='100%' justify='space-between'>
-          {userid ? (
-            <>
-              <Flex direction='row' width='50%'>
-                <Flex direction='column' align='center' pr={5} minW='40%'>
-                  {handleAvatar(userid, profile)}
-                  <Box
-                    fontFamily='heading'
-                    fontSize='xs'
-                    textAlign='center'
-                    mt={5}
-                  >
-                    {memberEntity?.exists ? (
-                      <>
-                        Joined{' '}
-                        {memberEntity?.createdAt
-                          ? format(
-                              new Date(+memberEntity?.createdAt * 1000),
-                              'MMM. d, yyyy',
-                            )
-                          : '--'}
-                      </>
-                    ) : (
-                      <>Not a member of this DAO</>
-                    )}
-                  </Box>
-                </Flex>
+    <MainViewLayout header='Profile' isDao={true}>
+      <Flex wrap='wrap'>
+        <Box
+          w={['100%', null, null, null, '60%']}
+          pr={[0, null, null, null, 6]}
+          pb={6}
+        >
+          <GenericModal modalId='rageQuit' closeOnOverlayClick={true}>
+            <RageQuitForm overview={overview} daoMember={daoMember} />
+          </GenericModal>
+          <ContentBox as={Flex} p={6} w='100%' justify='space-between'>
+            {userid ? (
+              <>
+                <Flex direction='row' width='50%'>
+                  <Flex direction='column' align='center' pr={5} minW='40%'>
+                    {handleAvatar(userid, profile)}
+                    <Box
+                      fontFamily='heading'
+                      fontSize='xs'
+                      textAlign='center'
+                      mt={5}
+                    >
+                      {memberEntity?.exists ? (
+                        <>
+                          Joined{' '}
+                          {memberEntity?.createdAt
+                            ? format(
+                                new Date(+memberEntity?.createdAt * 1000),
+                                'MMM. d, yyyy',
+                              )
+                            : '--'}
+                        </>
+                      ) : (
+                        <>Not a member of this DAO</>
+                      )}
+                    </Box>
+                  </Flex>
 
-                <Flex direction='column'>
-                  <Box fontSize='xl' fontFamily='heading'>
-                    {handleName(profile)}
-                    {profile?.emoji && (
-                      <Box as='span' ml={2}>
-                        {profile.emoji}
+                  <Flex direction='column'>
+                    <Box fontSize='xl' fontFamily='heading'>
+                      {handleName(profile)}
+                      {profile?.emoji && (
+                        <Box as='span' ml={2}>
+                          {profile.emoji}
+                        </Box>
+                      )}
+                    </Box>
+                    {ens && (
+                      <Box fontSize='sm' fontFamily='mono'>
+                        {ens}
                       </Box>
                     )}
-                  </Box>
-                  {ens && (
-                    <Box fontSize='sm' fontFamily='mono'>
-                      {ens}
-                    </Box>
-                  )}
-                  {profile?.description && (
-                    <Box fontSize='sm' fontFamily='mono'>
-                      {profile?.description}
-                    </Box>
-                  )}
+                    {profile?.description && (
+                      <Box fontSize='sm' fontFamily='mono'>
+                        {profile?.description}
+                      </Box>
+                    )}
+                  </Flex>
                 </Flex>
-              </Flex>
-              <Flex w='48%' direction='column'>
-                <Flex justify='space-between'>
-                  <Box>
-                    <TextBox size='sm'>
-                      Exit Amount
-                      <Tooltip
-                        hasArrow
-                        shouldWrapChildren
-                        placement='top'
-                        label='Estimated amount you would receive in tokens if you were to Ragequit'
-                      >
-                        <Icon mt='-4px' as={RiQuestionLine} />
-                      </Tooltip>
-                    </TextBox>
-                    <TextBox size='4xl' variant='value'>
-                      $
-                      {daoTokens &&
-                        overview &&
-                        numberWithCommas(
-                          calcValue(memberEntity, daoTokens, overview),
-                        )}
-                    </TextBox>
-                  </Box>
-                  <Box>
-                    {profile ? (
-                      <ProfileMenu member={{ ...memberEntity, ...profile }} />
-                    ) : null}
-                  </Box>
-                </Flex>
-                <Flex justify='space-between' align='flex-end' mt={4}>
-                  <Box w='30%'>
-                    <TextBox size='xs'>Power</TextBox>
-                    <Skeleton isLoaded={profile || memberEntity}>
-                      <TextBox size='xl' variant='value'>
+                <Flex w='48%' direction='column'>
+                  <Flex justify='space-between'>
+                    <Box>
+                      <TextBox size='sm'>
+                        Exit Amount
+                        <Tooltip
+                          hasArrow
+                          shouldWrapChildren
+                          placement='top'
+                          label='Estimated amount you would receive in tokens if you were to Ragequit'
+                        >
+                          <Icon mt='-4px' as={RiQuestionLine} />
+                        </Tooltip>
+                      </TextBox>
+                      <TextBox size='4xl' variant='value'>
+                        $
                         {daoTokens &&
                           overview &&
-                          calcPower(memberEntity, overview)}
-                        %
+                          numberWithCommas(
+                            calcValue(memberEntity, daoTokens, overview),
+                          )}
                       </TextBox>
-                    </Skeleton>
-                  </Box>
-                  <Box w='30%'>
-                    <TextBox size='xs'>Shares</TextBox>
-                    <Skeleton isLoaded={memberEntity?.shares >= 0}>
-                      <TextBox size='xl' variant='value'>
-                        {memberEntity?.shares}
-                      </TextBox>
-                    </Skeleton>
-                  </Box>
-                  <Box w='30%'>
-                    <TextBox size='xs'>Loot</TextBox>
-                    <Skeleton isLoaded={memberEntity?.loot >= 0}>
-                      <TextBox size='xl' variant='value'>
-                        {memberEntity?.loot}
-                      </TextBox>
-                    </Skeleton>
-                  </Box>
+                    </Box>
+                    <Box>
+                      {profile ? (
+                        <ProfileMenu member={{ ...memberEntity, ...profile }} />
+                      ) : null}
+                    </Box>
+                  </Flex>
+                  <Flex justify='space-between' align='flex-end' mt={4}>
+                    <Box w='30%'>
+                      <TextBox size='xs'>Power</TextBox>
+                      <Skeleton isLoaded={profile || memberEntity}>
+                        <TextBox size='xl' variant='value'>
+                          {daoTokens &&
+                            overview &&
+                            calcPower(memberEntity, overview)}
+                          %
+                        </TextBox>
+                      </Skeleton>
+                    </Box>
+                    <Box w='30%'>
+                      <TextBox size='xs'>Shares</TextBox>
+                      <Skeleton isLoaded={memberEntity?.shares >= 0}>
+                        <TextBox size='xl' variant='value'>
+                          {memberEntity?.shares}
+                        </TextBox>
+                      </Skeleton>
+                    </Box>
+                    <Box w='30%'>
+                      <TextBox size='xs'>Loot</TextBox>
+                      <Skeleton isLoaded={memberEntity?.loot >= 0}>
+                        <TextBox size='xl' variant='value'>
+                          {memberEntity?.loot}
+                        </TextBox>
+                      </Skeleton>
+                    </Box>
+                  </Flex>
                 </Flex>
-              </Flex>
-            </>
-          ) : null}
-        </ContentBox>
-        <BankList
-          tokens={tokensReceivable}
-          hasBalance={tokensReceivable.length}
-        />
-      </Box>
-      <Box w={['100%', null, null, null, '40%']}>
-        {activities && memberEntity && (
-          <ActivitiesFeed
-            limit={5}
-            hydrateFn={getProfileActivites(memberEntity.memberAddress)}
-            activities={activities}
+              </>
+            ) : null}
+          </ContentBox>
+          <BankList
+            tokens={tokensReceivable}
+            hasBalance={tokensReceivable.length}
           />
-        )}
-      </Box>
-    </Flex>
+        </Box>
+        <Box w={['100%', null, null, null, '40%']}>
+          {activities && memberEntity && (
+            <ActivitiesFeed
+              limit={5}
+              hydrateFn={getProfileActivites(memberEntity.memberAddress)}
+              activities={activities}
+            />
+          )}
+        </Box>
+      </Flex>
+    </MainViewLayout>
   );
 };
 

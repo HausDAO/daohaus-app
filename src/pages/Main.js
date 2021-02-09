@@ -1,5 +1,5 @@
 import React from 'react';
-import { Flex, Box } from '@chakra-ui/react';
+import { Flex, Box, Button } from '@chakra-ui/react';
 
 import NewsFeed from '../components/newsFeed';
 import NetworkList from '../components/networkList';
@@ -11,8 +11,13 @@ import MainViewLayout from '../components/mainViewLayout';
 const Main = () => {
   const { address } = useInjectedProvider();
 
+  const ctaButton = (
+    <Button as='a' href='https://3box.io/hub' target='_blank' variant='outline'>
+      Edit 3Box Profile
+    </Button>
+  );
   return (
-    <MainViewLayout header='Hub'>
+    <MainViewLayout header='Hub' headerEl={ctaButton}>
       <Flex wrap='wrap'>
         <Box
           w={['100%', null, null, null, '60%']}

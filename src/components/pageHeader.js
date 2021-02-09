@@ -1,25 +1,10 @@
 import React from 'react';
-import { useLocation, Link as RouterLink, useParams } from 'react-router-dom';
-import { RiAddFill, RiInformationLine } from 'react-icons/ri';
-import { Box, Flex, Button, Icon, Tooltip } from '@chakra-ui/react';
-import { useInjectedProvider } from '../contexts/InjectedProviderContext';
-import { WrongNetworkToolTip } from '../components/wrongNetworkToolTip';
+import { Box, Flex } from '@chakra-ui/react';
+import WrongNetworkToolTip from './wrongNetworkToolTip';
 import { getCopy } from '../utils/metadata';
-import UserAvatar from './userAvatar';
-import { useOverlay } from '../contexts/OverlayContext';
-import { supportedChains } from '../utils/chain';
-import { capitalize } from '../utils/general';
 import Web3SignIn from './web3SignIn';
-import { useMetaData } from '../contexts/MetaDataContext';
 
 const PageHeader = ({ isDao, header, headerEl, customTerms }) => {
-  // const daoConnectedAndSameChain = () => {
-  //   return address && dao?.chainID && injectedChain?.chainId === dao.chainID;
-  // };
-  // const location = useLocation();
-  // const params = useParams();
-  // const { injectedChain, address } = useInjectedProvider();
-
   return (
     <Flex direction='row' justify='space-between' p={6}>
       <Flex
@@ -35,10 +20,9 @@ const PageHeader = ({ isDao, header, headerEl, customTerms }) => {
           fontWeight={700}
           mr={10}
         >
-          {/* {dao ? getDaoHeading() : getHeading()} */}
           {customTerms ? getCopy(customTerms, header) : header}
         </Box>
-        {/* {getHeaderElement()} */}
+        {headerEl}
       </Flex>
       <Flex
         direction='row'
@@ -46,8 +30,8 @@ const PageHeader = ({ isDao, header, headerEl, customTerms }) => {
         align='center'
         d={['none', null, null, 'flex']}
       >
-        {/* <WrongNetworkToolTip isDao={isDao} /> */}
-        <Web3SignIn />
+        {isDao && <WrongNetworkToolTip />}
+        <Web3SignIn isDao={isDao} />
       </Flex>
     </Flex>
   );

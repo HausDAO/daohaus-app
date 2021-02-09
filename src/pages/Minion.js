@@ -28,6 +28,7 @@ import { useEffect } from 'react/cjs/react.development';
 // import GenericModal from '../Modal/GenericModal';
 import makeBlockie from 'ethereum-blockies-base64';
 import { TokenService } from '../services/tokenService';
+import MainViewLayout from '../components/mainViewLayout';
 
 const MinionDetails = ({ overview, members, currentDaoTokens }) => {
   // const [web3Connect] = useWeb3Connect();
@@ -136,110 +137,112 @@ const MinionDetails = ({ overview, members, currentDaoTokens }) => {
   console.log(tokenBalances);
 
   return (
-    <Box>
-      <Link as={RouterLink} to={`/dao/${daochain}/${daoid}/settings`}>
-        <HStack spacing={3}>
-          <Icon
-            name='arrow-back'
-            color='primary.50'
-            as={RiArrowLeftLine}
-            h='20px'
-            w='20px'
-          />
-          <TextBox size='md' align='center'>
-            {' '}
-            Settings (under construction ( ͡° ͜ʖ ͡°) )
-          </TextBox>
-        </HStack>
-      </Link>
-      <ContentBox d='flex' flexDirection='column' position='relative' mt={2}>
-        {minionData ? (
-          <>
-            <Flex
-              p={4}
-              justify='space-between'
-              align='center'
-              key={minionData.minionAddress}
-            >
-              <Box>
+    <MainViewLayout header='Minion' isDao={true}>
+      <Box>
+        <Link as={RouterLink} to={`/dao/${daochain}/${daoid}/settings`}>
+          <HStack spacing={3}>
+            <Icon
+              name='arrow-back'
+              color='primary.50'
+              as={RiArrowLeftLine}
+              h='20px'
+              w='20px'
+            />
+            <TextBox size='md' align='center'>
+              {' '}
+              Settings (under construction ( ͡° ͜ʖ ͡°) )
+            </TextBox>
+          </HStack>
+        </Link>
+        <ContentBox d='flex' flexDirection='column' position='relative' mt={2}>
+          {minionData ? (
+            <>
+              <Flex
+                p={4}
+                justify='space-between'
+                align='center'
+                key={minionData.minionAddress}
+              >
+                <Box>
+                  <Flex align='center'>
+                    <Avatar
+                      name={minionData.minionAddress}
+                      src={makeBlockie(minionData.minionAddress)}
+                      mr={3}
+                    />
+                    <Heading>{minionData.details}</Heading>
+                  </Flex>
+                </Box>
                 <Flex align='center'>
-                  <Avatar
-                    name={minionData.minionAddress}
-                    src={makeBlockie(minionData.minionAddress)}
-                    mr={3}
-                  />
-                  <Heading>{minionData.details}</Heading>
-                </Flex>
-              </Box>
-              <Flex align='center'>
-                <TextBox size='md' colorScheme='whiteAlpha.900'>
-                  {minionData.minionType}:{' '}
-                  <Box as='span' color='primary.100'>
-                    {truncateAddr(minionData.minionAddress)}
-                  </Box>
-                </TextBox>
-                <CopyToClipboard
-                  text={minionData.minionAddress}
-                  onCopy={() =>
-                    toast({
-                      title: 'Copied Minion Address',
-                      position: 'top-right',
-                      status: 'success',
-                      duration: 3000,
-                      isClosable: true,
-                    })
-                  }
-                >
-                  <Icon
-                    as={FaCopy}
-                    color='secondary.300'
-                    ml={2}
-                    _hover={{ cursor: 'pointer' }}
-                  />
-                </CopyToClipboard>
-              </Flex>
-            </Flex>
-            <Box>
-              <Stack spacing={6}>
-                <Stack spacing={2}>
-                  <Heading fontSize='xl'>Get Balances</Heading>
-                  {tokenBalances &&
-                    Object.keys(tokenBalances).map((token, idx) => {
-                      return (
-                        <Text key={idx}>
-                          {currentDaoTokens[idx].symbol}: {tokenBalances[token]}
-                          <Button ml={6}>send</Button>
-                        </Text>
-                      );
-                    })}
-                  <Button w='15%'>Add Token</Button>
-                </Stack>
-
-                <Stack spacing={2}>
-                  <Heading fontSize='xl'>Minion Internal Balances</Heading>
-                  <HStack spacing={4}>
-                    <Box>
-                      <TextBox>DAO:</TextBox>
-                      <TextBox variant='value' size='xl'>
-                        {minionBalances ? (
-                          <Button ml={6}>Withdraw</Button>
-                        ) : (
-                          <Text>nothing to withdraw</Text>
-                        )}
-                      </TextBox>
-                      <Button>Add Another DAO</Button>
+                  <TextBox size='md' colorScheme='whiteAlpha.900'>
+                    {minionData.minionType}:{' '}
+                    <Box as='span' color='primary.100'>
+                      {truncateAddr(minionData.minionAddress)}
                     </Box>
-                  </HStack>
+                  </TextBox>
+                  <CopyToClipboard
+                    text={minionData.minionAddress}
+                    onCopy={() =>
+                      toast({
+                        title: 'Copied Minion Address',
+                        position: 'top-right',
+                        status: 'success',
+                        duration: 3000,
+                        isClosable: true,
+                      })
+                    }
+                  >
+                    <Icon
+                      as={FaCopy}
+                      color='secondary.300'
+                      ml={2}
+                      _hover={{ cursor: 'pointer' }}
+                    />
+                  </CopyToClipboard>
+                </Flex>
+              </Flex>
+              <Box>
+                <Stack spacing={6}>
+                  <Stack spacing={2}>
+                    <Heading fontSize='xl'>Get Balances</Heading>
+                    {tokenBalances &&
+                      Object.keys(tokenBalances).map((token, idx) => {
+                        return (
+                          <Text key={idx}>
+                            {currentDaoTokens[idx].symbol}:{' '}
+                            {tokenBalances[token]}
+                            <Button ml={6}>send</Button>
+                          </Text>
+                        );
+                      })}
+                    <Button w='15%'>Add Token</Button>
+                  </Stack>
+
+                  <Stack spacing={2}>
+                    <Heading fontSize='xl'>Minion Internal Balances</Heading>
+                    <HStack spacing={4}>
+                      <Box>
+                        <TextBox>DAO:</TextBox>
+                        <TextBox variant='value' size='xl'>
+                          {minionBalances ? (
+                            <Button ml={6}>Withdraw</Button>
+                          ) : (
+                            <Text>nothing to withdraw</Text>
+                          )}
+                        </TextBox>
+                        <Button>Add Another DAO</Button>
+                      </Box>
+                    </HStack>
+                  </Stack>
                 </Stack>
-              </Stack>
-            </Box>
-          </>
-        ) : (
-          <Flex justify='center'>
-            <Box fontFamily='heading'>No minion found</Box>
-          </Flex>
-        )}
-        {/* <ProposalFormModal
+              </Box>
+            </>
+          ) : (
+            <Flex justify='center'>
+              <Box fontFamily='heading'>No minion found</Box>
+            </Flex>
+          )}
+          {/* <ProposalFormModal
         presets={proposalPresets}
         isOpen={modals.proposal}
         proposalType={proposalType}
@@ -249,7 +252,7 @@ const MinionDetails = ({ overview, members, currentDaoTokens }) => {
         isOpen={modals.minion}
         proposalType={proposalType}
       /> */}
-        {/* <GenericModal isOpen={modals.minionWithdraw}>
+          {/* <GenericModal isOpen={modals.minionWithdraw}>
         <Flex align='center' direction='column'>
           <TextBox>Withdraw</TextBox>
           <TextBox>{withdrawSetup?.tokenBalances[0]}</TextBox>
@@ -259,8 +262,9 @@ const MinionDetails = ({ overview, members, currentDaoTokens }) => {
           </ButtonGroup>
         </Flex>
       </GenericModal> */}
-      </ContentBox>
-    </Box>
+        </ContentBox>
+      </Box>
+    </MainViewLayout>
   );
 };
 

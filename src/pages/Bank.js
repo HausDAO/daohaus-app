@@ -2,12 +2,40 @@ import React from 'react';
 
 import BankList from '../components/BankList';
 import BankChart from '../components/bankChart';
-import { useToken } from '../contexts/TokenContext';
+// import { useToken } from '../contexts/TokenContext';
 import MainViewLayout from '../components/mainViewLayout';
+import { useParams, Link } from 'react-router-dom';
+import { useInjectedProvider } from '../contexts/InjectedProviderContext';
+import { daoConnectedAndSameChain } from '../utils/general';
+import { Button } from '@chakra-ui/react';
+import { RiAddFill } from 'react-icons/ri';
 
-const Bank = ({ overview, customTerms, currentDaoTokens }) => {
+const Bank = ({ overview, customTerms, currentDaoTokens, daoMember }) => {
+  const { daoid, daochain } = useParams();
+  const { address, injectedChain } = useInjectedProvider();
+
+  const ctaButton = daoConnectedAndSameChain(
+    address,
+    injectedChain?.chainId,
+    daochain,
+  ) &&
+    daoMember && (
+      <Button
+        as={Link}
+        to={`/dao/${daochain}/${daoid}/proposals/new/whitelist`}
+        rightIcon={<RiAddFill />}
+      >
+        Add Asset
+      </Button>
+    );
+
   return (
-    <MainViewLayout header='bank' customTerms={customTerms}>
+    <MainViewLayout
+      header='Bank'
+      customTerms={customTerms}
+      headerEl={ctaButton}
+      isDao={true}
+    >
       <BankChart
         currentDaoTokens={currentDaoTokens}
         overview={overview}

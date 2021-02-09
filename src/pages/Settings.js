@@ -14,7 +14,7 @@ const Settings = ({ overview, daoMember, daoMetaData, customTerms }) => {
   const { daochain, daoid } = useParams();
 
   return (
-    <MainViewLayout header='Settings'>
+    <MainViewLayout header='Settings' isDao={true}>
       <Flex wrap='wrap'>
         <Box
           w={['100%', null, null, null, '50%']}

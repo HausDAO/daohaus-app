@@ -19,7 +19,6 @@ const ProposalsList = ({ proposals }) => {
 
   useEffect(() => {
     const filterAndSortProposals = () => {
-      console.log('fired');
       let filteredProposals = proposals;
       if (sort && filter) {
         filteredProposals = proposals

@@ -4,6 +4,7 @@ import { useHistory, useParams, Link as RouterLink } from 'react-router-dom';
 import { BiArrowBack } from 'react-icons/bi';
 
 import DaoMetaForm from '../forms/daoMetaForm';
+import MainViewLayout from '../components/mainViewLayout';
 
 const Meta = ({ isMember, daoMetaData, refetchMetaData }) => {
   const [localMetadata, setLocalMetadata] = useState();
@@ -31,39 +32,41 @@ const Meta = ({ isMember, daoMetaData, refetchMetaData }) => {
   };
 
   return (
-    <Flex wrap='wrap'>
-      <Flex justify='space-between' align='center' w='100%'>
-        <Flex
-          as={RouterLink}
-          to={`/dao/${daochain}/${daoid}/settings`}
-          align='center'
-        >
-          <Icon as={BiArrowBack} color='secondary.500' mr={2} />
-          Back
+    <MainViewLayout header='DAO Metadata' isDao={true}>
+      <Flex wrap='wrap'>
+        <Flex justify='space-between' align='center' w='100%'>
+          <Flex
+            as={RouterLink}
+            to={`/dao/${daochain}/${daoid}/settings`}
+            align='center'
+          >
+            <Icon as={BiArrowBack} color='secondary.500' mr={2} />
+            Back
+          </Flex>
         </Flex>
+        {isMember ? (
+          <Box w='40%' mt={2}>
+            <DaoMetaForm handleUpdate={handleUpdate} metadata={localMetadata} />
+          </Box>
+        ) : (
+          <Box
+            rounded='lg'
+            bg='blackAlpha.600'
+            borderWidth='1px'
+            borderColor='whiteAlpha.200'
+            p={6}
+            m={[10, 'auto', 0, 'auto']}
+            w='50%'
+            textAlign='center'
+            fontSize={['lg', null, null, '3xl']}
+            fontFamily='heading'
+            fontWeight={700}
+          >
+            Members Only
+          </Box>
+        )}
       </Flex>
-      {isMember ? (
-        <Box w='40%' mt={2}>
-          <DaoMetaForm handleUpdate={handleUpdate} metadata={localMetadata} />
-        </Box>
-      ) : (
-        <Box
-          rounded='lg'
-          bg='blackAlpha.600'
-          borderWidth='1px'
-          borderColor='whiteAlpha.200'
-          p={6}
-          m={[10, 'auto', 0, 'auto']}
-          w='50%'
-          textAlign='center'
-          fontSize={['lg', null, null, '3xl']}
-          fontFamily='heading'
-          fontWeight={700}
-        >
-          Members Only
-        </Box>
-      )}
-    </Flex>
+    </MainViewLayout>
   );
 };
 

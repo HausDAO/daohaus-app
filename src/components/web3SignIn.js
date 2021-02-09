@@ -2,11 +2,7 @@ import React from 'react';
 import { Button } from '@chakra-ui/react';
 import { useInjectedProvider } from '../contexts/InjectedProviderContext';
 import { useOverlay } from '../contexts/OverlayContext';
-import UserAvatar from './userAvatar';
-// import Web3 from 'web3';
-
-// import { w3connect } from '../../utils/auth';
-// import { useNetwork, useWeb3Connect } from '../../contexts/PokemolContext';
+import AddressAvatar from './addressAvatar';
 
 export const Web3SignIn = ({ isDao }) => {
   const { requestWallet, address } = useInjectedProvider();
@@ -24,7 +20,7 @@ export const Web3SignIn = ({ isDao }) => {
     <>
       {address ? (
         <Button variant='outline' onClick={toggleAccountModal}>
-          <UserAvatar copyEnabled={false} />
+          <AddressAvatar hideCopy={true} addr={address} />
         </Button>
       ) : (
         <Button variant='outline' onClick={requestWallet}>

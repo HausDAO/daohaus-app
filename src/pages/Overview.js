@@ -16,7 +16,7 @@ const Overview = React.memo(function overview({
   customTerms,
 }) {
   return (
-    <MainViewLayout header='Bank' customTerms={customTerms}>
+    <MainViewLayout header='Bank' customTerms={customTerms} isDao={true}>
       <Box w='100%'>
         <Flex wrap='wrap'>
           {overview && (

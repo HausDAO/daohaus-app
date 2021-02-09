@@ -1,18 +1,44 @@
 import React from 'react';
-import { Box, Flex } from '@chakra-ui/react';
+import { Box, Button, Flex } from '@chakra-ui/react';
 
 import ActivitiesFeed from '../components/activitiesFeed';
+import { Link as RouterLink, useParams } from 'react-router-dom';
 import { getProposalsActivites } from '../utils/activities';
 import ProposalsList from '../components/proposalList';
 import MainViewLayout from '../components/mainViewLayout';
+import { daoConnectedAndSameChain } from '../utils/general';
+import { useInjectedProvider } from '../contexts/InjectedProviderContext';
+import { getCopy } from '../utils/metadata';
+import { RiAddFill } from 'react-icons/ri';
 
 const Proposals = React.memo(function Proposals({
   proposals,
   activities,
   customTerms,
 }) {
+  const { daoid, daochain } = useParams();
+  const { address, injectedChain } = useInjectedProvider();
+
+  const ctaButton = daoConnectedAndSameChain(
+    address,
+    injectedChain?.chainId,
+    daochain,
+  ) && (
+    <Button
+      as={RouterLink}
+      to={`/dao/${daochain}/${daoid}/proposals/new`}
+      rightIcon={<RiAddFill />}
+    >
+      New {getCopy(customTerms, 'proposal')}
+    </Button>
+  );
   return (
-    <MainViewLayout header='Proposals' customTerms={customTerms} isDao={true}>
+    <MainViewLayout
+      header='Proposals'
+      headerEl={ctaButton}
+      customTerms={customTerms}
+      isDao={true}
+    >
       <Flex wrap='wrap'>
         <Box
           w={['100%', null, null, null, '60%']}

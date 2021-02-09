@@ -10,8 +10,8 @@ const Explore = () => {
   const { hasLoadedExploreData } = useContext(ExploreContext);
 
   return (
-    <MainViewLayout header='Explore DAOs'>
-      <Layout>
+    <Layout>
+      <MainViewLayout header='Explore DAOs'>
         {hasLoadedExploreData ? (
           <>
             <ExploreFilters />
@@ -20,8 +20,8 @@ const Explore = () => {
         ) : (
           <Spinner />
         )}
-      </Layout>
-    </MainViewLayout>
+      </MainViewLayout>
+    </Layout>
   );
 };
 

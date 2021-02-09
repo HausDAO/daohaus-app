@@ -85,7 +85,7 @@ const Boosts = ({ customTerms }) => {
   };
 
   return (
-    <MainViewLayout header='Boosts' customTerms={customTerms}>
+    <MainViewLayout header='Boosts' customTerms={customTerms} isDao={true}>
       <Box p={6}>
         <TextBox size='sm' mb={3}>
           Available Apps
