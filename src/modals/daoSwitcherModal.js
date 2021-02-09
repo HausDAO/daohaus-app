@@ -21,7 +21,7 @@ import { rgba } from 'polished';
 
 import BrandImg from '../assets/img/Daohaus__Castle--Dark.svg';
 import { useUser } from '../contexts/UserContext';
-import { getDaosByNetwork } from '../utils/dao';
+import { getDaosByNetwork, filterDAOsByName } from '../utils/dao';
 import { useInjectedProvider } from '../contexts/InjectedProviderContext';
 import { themeImagePath } from '../utils/metadata';
 import { useOverlay } from '../contexts/OverlayContext';
@@ -31,52 +31,46 @@ const DaoSwitcherModal = () => {
   const { daoSwitcherModal, setDaoSwitcherModal } = useOverlay();
   const { userHubDaos } = useUser();
   const { injectedChain } = useInjectedProvider();
-  const [searchTerm, setSearchTerm] = useState();
   const { theme } = useCustomTheme();
-  const daosByNetwork =
-    userHubDaos && injectedChain?.chainId
-      ? getDaosByNetwork(userHubDaos, injectedChain.chainId)
-      : {};
+
+  const [searchTerm, setSearchTerm] = useState(null);
+  const [daosByNetwork, setDaosByNetwork] = useState({});
   const [filteredDaos, setFilteredDaos] = useState();
+
+  // const daosByNetwork =
+  //   userHubDaos && injectedChain?.chainId
+  //     ? getDaosByNetwork(userHubDaos, injectedChain.chainId)
+  //     : {};
 
   useEffect(() => {
     if ((userHubDaos, injectedChain && injectedChain.chainId)) {
-      setFilteredDaos(daosByNetwork);
+      console.log(userHubDaos);
+      const newNetworks = getDaosByNetwork(userHubDaos, injectedChain.chainId);
+      console.log(newNetworks);
+      setDaosByNetwork(newNetworks);
     }
   }, [userHubDaos, injectedChain]);
 
+  console.log(daosByNetwork);
   useEffect(() => {
+    // console.log('daosByNetwork', daosByNetwork);
+    // console.log('searchTerm', searchTerm);
     if (daosByNetwork) {
-      if (!searchTerm) {
+      if (!searchTerm || typeof searchTerm !== 'string') {
         setFilteredDaos(daosByNetwork);
       } else {
         setFilteredDaos({
-          currentNetwork: {
-            ...daosByNetwork.currentNetwork,
-            data: daosByNetwork.currentNetwork.data.filter((dao) => {
-              return searchTerm
-                ? dao.meta?.name
-                    .toLowerCase()
-                    .indexOf(searchTerm.toLowerCase()) > -1
-                : true;
-            }),
-          },
-          otherNetworks: daosByNetwork.otherNetworks.map((network) => {
-            return {
-              ...network,
-              data: network.data.filter((dao) => {
-                return searchTerm
-                  ? dao.meta?.name
-                      .toLowerCase()
-                      .indexOf(searchTerm.toLowerCase()) > -1
-                  : true;
-              }),
-            };
-          }),
+          currentNetwork: filterDAOsByName(
+            daosByNetwork.currentNetwork,
+            searchTerm,
+          ),
+          otherNetworks: daosByNetwork.otherNetworks.map((network) =>
+            filterDAOsByName(network, searchTerm),
+          ),
         });
       }
     }
-  }, [searchTerm]);
+  }, [searchTerm, daosByNetwork]);
 
   const handleChange = (event) => {
     setSearchTerm(event.target.value);
@@ -87,6 +81,7 @@ const DaoSwitcherModal = () => {
   };
 
   const renderDaoList = (network) =>
+    network?.data &&
     network.data.map((dao) => (
       <Link
         key={dao.id}
@@ -153,6 +148,28 @@ const DaoSwitcherModal = () => {
         borderWidth='1px'
         borderColor='whiteAlpha.200'
       >
+<<<<<<< HEAD
+        <ModalHeader>
+          <Box
+            fontFamily='heading'
+            textTransform='uppercase'
+            fontSize='sm'
+            fontWeight={700}
+            color='white'
+            mb={3}
+          >
+            Go to DAO
+          </Box>
+          <FormControl>
+            <Input
+              type='search'
+              className='input'
+              placeholder='Search My Daos'
+              maxW={300}
+              onChange={(e) => handleChange(e)}
+            />
+          </FormControl>
+=======
         <ModalHeader pb={0}>
           <Flex justify='space-between' align='center' w='90%'>
             <Box
@@ -175,6 +192,7 @@ const DaoSwitcherModal = () => {
               />
             </FormControl>
           </Flex>
+>>>>>>> 30bd2a4f3bd49c5cd3fba2c2b4e8eeb984cc34fd
         </ModalHeader>
         <ModalCloseButton color='white' />
         <ModalBody
