@@ -58,11 +58,6 @@ const baseListFields = `
     molochAddress
   }
   `;
-// status @client
-// title @client
-// description @client
-// hash @client
-// proposalType @client
 
 export const PROPOSALS_LIST = gql`
   query proposals($contractAddr: String!, $skip: Int) {

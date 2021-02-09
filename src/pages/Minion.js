@@ -6,14 +6,14 @@ import {
   Heading,
   Icon,
   useToast,
-  Button,
+  // Button,
   Avatar,
   // List,
   // ListItem,
   Link,
   HStack,
-  Stack,
-  Text,
+  // Stack,
+  // Text,
 } from '@chakra-ui/react';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
 import { RiArrowLeftLine } from 'react-icons/ri';
@@ -29,6 +29,8 @@ import { useEffect } from 'react/cjs/react.development';
 import makeBlockie from 'ethereum-blockies-base64';
 import { TokenService } from '../services/tokenService';
 import MainViewLayout from '../components/mainViewLayout';
+import BankList from '../components/BankList';
+import { initTokenData } from '../utils/tokenValue';
 
 const MinionDetails = ({ overview, members, currentDaoTokens }) => {
   // const [web3Connect] = useWeb3Connect();
@@ -56,7 +58,7 @@ const MinionDetails = ({ overview, members, currentDaoTokens }) => {
   //   };
   // };
 
-  console.log('daoMembers', members);
+  console.log('minionBalances', minionBalances, tokenBalances);
 
   useEffect(() => {
     if (!overview?.minions.length) {
@@ -71,8 +73,7 @@ const MinionDetails = ({ overview, members, currentDaoTokens }) => {
   useEffect(() => {
     console.log('daoMembers', members);
     console.log('minion', minion);
-
-    if (members) {
+    const setUpBalances = async () => {
       const _minionBalances = members.find((member) => {
         console.log(member.memberAddress);
         if (member.memberAddress === minion) {
@@ -80,7 +81,14 @@ const MinionDetails = ({ overview, members, currentDaoTokens }) => {
         }
       });
       console.log('_minionBalances', _minionBalances);
-      setMinionBalances(_minionBalances);
+      const newTokenData = await initTokenData(_minionBalances.tokenBalances);
+
+      console.log('newTokenData', newTokenData);
+      setMinionBalances(newTokenData);
+    };
+
+    if (members) {
+      setUpBalances();
     }
     // eslint-disable-next-line
   }, [members, minion]);
@@ -134,7 +142,6 @@ const MinionDetails = ({ overview, members, currentDaoTokens }) => {
   //   // setWithdrawSetup(minionMember);
   //   // openModal('minionWithdraw');
   // };
-  console.log(tokenBalances);
 
   return (
     <MainViewLayout header='Minion' isDao={true}>
@@ -202,6 +209,15 @@ const MinionDetails = ({ overview, members, currentDaoTokens }) => {
                 </Flex>
               </Flex>
               <Box>
+                {minionBalances ? (
+                  <BankList
+                    tokens={minionBalances}
+                    hasBalance={false}
+                    profile={true}
+                  />
+                ) : null}
+              </Box>
+              {/* <Box>
                 <Stack spacing={6}>
                   <Stack spacing={2}>
                     <Heading fontSize='xl'>Get Balances</Heading>
@@ -235,7 +251,7 @@ const MinionDetails = ({ overview, members, currentDaoTokens }) => {
                     </HStack>
                   </Stack>
                 </Stack>
-              </Box>
+              </Box> */}
             </>
           ) : (
             <Flex justify='center'>

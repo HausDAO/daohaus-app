@@ -186,11 +186,11 @@ const FundingProposalForm = () => {
                   required: {
                     value: true,
                     message:
-                      'Requested shares are required for Member Proposals',
+                      'Requested shares are required. Set to zero for no shares.',
                   },
                   pattern: {
-                    value: /[0-9]/,
-                    message: 'Requested shares must be a number',
+                    value: /^[0-9]+$/,
+                    message: 'Requested shares must be a whole number',
                   },
                 })}
               />
@@ -208,8 +208,8 @@ const FundingProposalForm = () => {
                 mb={5}
                 ref={register({
                   pattern: {
-                    value: /[0-9]/,
-                    message: 'Loot must be a number',
+                    value: /^[0-9]+$/,
+                    message: 'Loot must be a whole number',
                   },
                 })}
               />

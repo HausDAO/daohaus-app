@@ -75,6 +75,17 @@ const pollMinionProposal = async ({ chainID, minionAddress, createdAt }) => {
   });
 };
 
+const pollMinionExecute = async ({ chainID, minionAddress, proposalId }) => {
+  const action = await MinionService({
+    minion: minionAddress,
+    chainID,
+  })('getAction')({ proposalId });
+
+  console.log('poll action', action);
+
+  return action.executed;
+};
+
 const pollRageQuit = async ({ chainID, molochAddress, createdAt }) => {
   return await graphQuery({
     endpoint: getGraphEndpoint(chainID, 'subgraph_url'),
@@ -252,26 +263,8 @@ const cancelProposalTest = (data, shouldEqual, pollId) => {
   }
 };
 
-const minionExecuteTest = async (data, proposalId, daochain, pollId) => {
-  // use minion address and proposal ID to get action details and check if executed
-  console.log(data);
-  console.log(proposalId);
-  if (data.proposals) {
-    const proposal = data.proposals.find(
-      (proposal) => proposal.proposalId === proposalId,
-    );
-    console.log(proposal);
-
-    const minionDeets = await MinionService({
-      minion: proposal?.minionAddress,
-      chainID: daochain,
-    })('getAction')({ proposalId: proposal?.proposalId });
-    console.log(minionDeets);
-    return minionDeets?.executed;
-  } else {
-    clearInterval(pollId);
-    throw new Error(`Minion proposal not found the graph: ${data}`);
-  }
+const minionExecuteTest = async (executed, shouldEqual, pollId) => {
+  return executed === shouldEqual;
 };
 
 const collectTokenTest = (graphBalance, oldBalance, pollId) => {
@@ -671,12 +664,12 @@ export const createPoll = ({
       }
     };
   } else if (action === 'minionExecuteAction') {
-    return ({ daoID, chainID, minion, proposalId, actions }) => (txHash) => {
+    return ({ chainID, minionAddress, proposalId, actions }) => (txHash) => {
       startPoll({
-        pollFetch: pollProposals,
+        pollFetch: pollMinionExecute,
         testFn: minionExecuteTest,
-        shouldEqual: { minion, proposalId },
-        args: { daoID, chainID, minion, proposalId },
+        shouldEqual: true,
+        args: { chainID, minionAddress, proposalId },
         actions,
         txHash,
       });
@@ -695,7 +688,7 @@ export const createPoll = ({
             interval,
             tries,
           },
-          pollArgs: { daoID, chainID, minion, proposalId },
+          pollArgs: { chainID, minionAddress, proposalId },
         });
       }
     };

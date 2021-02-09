@@ -32,8 +32,8 @@ const ActivitiesFeed = ({
             />
           ))
         : null}
-      {!activities?.length ? (
-        <TextBox variant='value'>Not much happing yet</TextBox>
+      {!allActivities?.length ? (
+        <TextBox variant='value'>Not much happening yet</TextBox>
       ) : null}
       <Paginator
         perPage={limit}

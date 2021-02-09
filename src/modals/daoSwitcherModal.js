@@ -44,14 +44,11 @@ const DaoSwitcherModal = () => {
 
   useEffect(() => {
     if ((userHubDaos, injectedChain && injectedChain.chainId)) {
-      console.log(userHubDaos);
       const newNetworks = getDaosByNetwork(userHubDaos, injectedChain.chainId);
-      console.log(newNetworks);
       setDaosByNetwork(newNetworks);
     }
   }, [userHubDaos, injectedChain]);
 
-  console.log(daosByNetwork);
   useEffect(() => {
     // console.log('daosByNetwork', daosByNetwork);
     // console.log('searchTerm', searchTerm);

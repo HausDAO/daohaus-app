@@ -339,7 +339,7 @@ const ProposalVote = ({ proposal, overview, daoProposals, daoMember }) => {
     const args = [proposal.proposalId];
     try {
       const poll = createPoll({ action: 'minionExecuteAction', cachePoll })({
-        daoID: daoid,
+        minionAddress: proposal.minionAddress,
         chainID: daochain,
         proposalId: proposal.proposalId,
         actions: {
@@ -367,7 +367,7 @@ const ProposalVote = ({ proposal, overview, daoProposals, daoMember }) => {
       };
       await MinionService({
         web3: injectedProvider,
-        minion: proposal?.minionAddress,
+        minion: proposal.minionAddress,
         chainID: daochain,
       })('executeAction')({ args, address, poll, onTxHash });
     } catch (err) {
@@ -384,6 +384,8 @@ const ProposalVote = ({ proposal, overview, daoProposals, daoMember }) => {
           minion: proposal?.minionAddress,
           chainID: daochain,
         })('getAction')({ proposalId: proposal?.proposalId });
+
+        console.log('action', action);
       } catch (err) {
         console.log('error: ', err);
       } finally {
