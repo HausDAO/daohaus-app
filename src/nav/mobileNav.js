@@ -9,11 +9,13 @@ import '../global.css';
 import NavLinkList from './navLinkList';
 import Brand from './brand';
 import { useInjectedProvider } from '../contexts/InjectedProviderContext';
+import { useOverlay } from '../contexts/OverlayContext';
 import SocialsLinkList from './socialsLinkList';
 import AddressAvatar from '../components/addressAvatar';
 
 const MobileNav = ({ dao }) => {
-  const { address, disconnectDapp, requestWallet } = useInjectedProvider();
+  const { address, requestWallet } = useInjectedProvider();
+  const { setHubAccountModal, setDaoAccountModal } = useOverlay();
   const [isOpen, setIsOpen] = useState(
     JSON.parse(localStorage.getItem('sideNavOpen')),
   );
@@ -22,6 +24,15 @@ const MobileNav = ({ dao }) => {
     localStorage.setItem('sideNavOpen', `${!isOpen}`);
     setIsOpen((prevState) => !prevState);
   };
+
+  const toggleAccountModal = () => {
+    if (!dao) {
+      setHubAccountModal((prevState) => !prevState);
+    } else {
+      setDaoAccountModal((prevState) => !prevState);
+    }
+  };
+
   return (
     <Flex
       p={5}
@@ -54,7 +65,7 @@ const MobileNav = ({ dao }) => {
             mr={2}
           >
             {address ? (
-              <Button variant='outline' onClick={disconnectDapp}>
+              <Button variant='outline' onClick={toggleAccountModal}>
                 <AddressAvatar addr={address} hideCopy={true} />
               </Button>
             ) : (
