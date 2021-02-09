@@ -1,4 +1,10 @@
-import React, { useContext, createContext, useEffect, useState } from 'react';
+import React, {
+  useContext,
+  createContext,
+  useEffect,
+  useState,
+  useRef,
+} from 'react';
 
 import { getApiMetadata } from '../utils/metadata';
 
@@ -19,9 +25,10 @@ export const UserContextProvider = ({ children }) => {
   const [outstandingTXs, setOutstandingTXs] = useState([]);
 
   const hasLoadedHubData = userHubDaos.length === 4;
+  const prevAddress = useRef(null);
 
   useEffect(() => {
-    if (!userHubDaos.length && address) {
+    const bigQuery = () => {
       hubChainQuery({
         query: HUB_MEMBERSHIPS,
         supportedChains,
@@ -32,6 +39,13 @@ export const UserContextProvider = ({ children }) => {
           memberAddress: address,
         },
       });
+    };
+    if (!userHubDaos.length && address && prevAddress.current === null) {
+      bigQuery();
+      prevAddress.current = address;
+    } else if (prevAddress.current !== address && address) {
+      setUserHubDaos([]);
+      prevAddress.current = null;
     }
   }, [address, userHubDaos, setUserHubDaos]);
 
@@ -96,6 +110,7 @@ export const UserContextProvider = ({ children }) => {
   };
 
   const refetchUserHubDaos = () => {
+    prevAddress.current = null;
     setUserHubDaos([]);
   };
 

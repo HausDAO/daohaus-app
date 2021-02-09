@@ -31,22 +31,30 @@ const DaoSwitcherModal = () => {
   const { daoSwitcherModal, setDaoSwitcherModal } = useOverlay();
   const { userHubDaos } = useUser();
   const { injectedChain } = useInjectedProvider();
-  const [searchTerm, setSearchTerm] = useState();
   const { theme } = useCustomTheme();
 
-  const daosByNetwork =
-    userHubDaos && injectedChain?.chainId
-      ? getDaosByNetwork(userHubDaos, injectedChain.chainId)
-      : {};
+  const [searchTerm, setSearchTerm] = useState(null);
+  const [daosByNetwork, setDaosByNetwork] = useState({});
   const [filteredDaos, setFilteredDaos] = useState();
+
+  // const daosByNetwork =
+  //   userHubDaos && injectedChain?.chainId
+  //     ? getDaosByNetwork(userHubDaos, injectedChain.chainId)
+  //     : {};
 
   useEffect(() => {
     if ((userHubDaos, injectedChain && injectedChain.chainId)) {
-      setFilteredDaos(daosByNetwork);
+      console.log(userHubDaos);
+      const newNetworks = getDaosByNetwork(userHubDaos, injectedChain.chainId);
+      console.log(newNetworks);
+      setDaosByNetwork(newNetworks);
     }
   }, [userHubDaos, injectedChain]);
 
+  console.log(daosByNetwork);
   useEffect(() => {
+    // console.log('daosByNetwork', daosByNetwork);
+    // console.log('searchTerm', searchTerm);
     if (daosByNetwork) {
       if (!searchTerm || typeof searchTerm !== 'string') {
         setFilteredDaos(daosByNetwork);
@@ -62,7 +70,7 @@ const DaoSwitcherModal = () => {
         });
       }
     }
-  }, [searchTerm]);
+  }, [searchTerm, daosByNetwork]);
 
   const handleChange = (event) => {
     setSearchTerm(event.target.value);
@@ -73,6 +81,7 @@ const DaoSwitcherModal = () => {
   };
 
   const renderDaoList = (network) =>
+    network?.data &&
     network.data.map((dao) => (
       <Link
         key={dao.id}
