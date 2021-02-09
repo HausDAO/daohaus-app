@@ -137,7 +137,6 @@ const Members = React.memo(function MembersPage({
               <TextBox size='xs'>Join Date</TextBox>
             </Flex>
             {listMembers?.map((member) => {
-              console.log('fired');
               return (
                 <MemberCard
                   key={member.id}
@@ -153,7 +152,11 @@ const Members = React.memo(function MembersPage({
           <Stack style={scrolled ? scrolledStyle : null} spacing={4}>
             <Box>
               {selectedMember ? (
-                <MemberInfo member={selectedMember} customTerms={customTerms} />
+                <MemberInfo
+                  key={selectedMember.memberAddress}
+                  member={selectedMember}
+                  customTerms={customTerms}
+                />
               ) : (
                 <>
                   {daoMember && (
