@@ -171,8 +171,8 @@ const MemberProposalForm = () => {
                 message: 'Requested shares are required for Member Proposals',
               },
               pattern: {
-                value: /[0-9]/,
-                message: 'Requested shares must be a number',
+                value: /^[0-9]+$/,
+                message: 'Requested shares must be a whole number',
               },
             })}
             color='white'

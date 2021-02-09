@@ -94,12 +94,10 @@ export const titleMaker = (proposal) => {
       return parsedDetails.title || '';
     } catch {
       console.log(`Couldn't parse JSON from metadata`);
-      return `Proposal ${proposal.proposalIndex}`;
+      return `Proposal`;
     }
   } else {
-    return proposal.details
-      ? proposal.details
-      : `Proposal ${proposal.proposalIndex}`;
+    return proposal.details ? proposal.details : `Proposal`;
   }
 };
 export const hashMaker = (proposal) => {

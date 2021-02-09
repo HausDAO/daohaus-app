@@ -28,13 +28,13 @@ import TextBox from '../components/TextBox';
 import { MinionService } from '../services/minionService';
 import { createPoll } from '../services/pollService';
 import { chainByID } from '../utils/chain';
-import { createHash } from '../utils/general';
+import { detailsToJSON } from '../utils/general';
 
 const MinionProposalForm = () => {
   const [loading, setLoading] = useState(false);
   const [abiLoading, setAbiLoading] = useState(false);
   const { daoOverview } = useDao();
-  const { daochain, daoid } = useParams();
+  const { daochain } = useParams();
   const { address, injectedProvider } = useInjectedProvider();
   const { cachePoll, resolvePoll } = useUser();
   const {
@@ -50,6 +50,7 @@ const MinionProposalForm = () => {
   const [abiParams, setAbiParams] = useState();
   const [hexSwitch, setHexSwitch] = useState();
   const [minions, setMinions] = useState([]);
+  const now = (new Date().getTime() / 1000).toFixed();
 
   const {
     handleSubmit,
@@ -128,11 +129,9 @@ const MinionProposalForm = () => {
         return;
       }
     }
-    const hash = createHash();
-    const details = {
-      id: hash,
+    const details = detailsToJSON({
       description: values.description,
-    };
+    });
     const args = [
       values.targetContract,
       valueWei || '0',
@@ -141,9 +140,9 @@ const MinionProposalForm = () => {
     ];
     try {
       const poll = createPoll({ action: 'minionProposeAction', cachePoll })({
-        daoID: daoid,
+        minionAddress: values.minionContract,
+        createdAt: now,
         chainID: daochain,
-        hash,
         actions: {
           onError: (error, txHash) => {
             errorToast({
