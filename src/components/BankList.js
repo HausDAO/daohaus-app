@@ -52,6 +52,7 @@ const BankList = ({ tokens, profile, hasBalance, needsSync }) => {
               key={token?.id}
               token={token}
               hasBalance={hasBalance}
+              needsSync={needsSync}
             />
           );
         })

@@ -122,6 +122,15 @@ export const daoPresets = (networkId) => {
 
       return preset;
     });
+  } else if (networkId === 137) {
+    presets = presets.map((preset) => {
+      preset.currency = 'WMATIC';
+      preset.approvedToken = supportedChains[networkId].weth_contract;
+      preset.proposalDeposit = '100000000000000000';
+      preset.processingReward = '10000000000000000';
+
+      return preset;
+    });
   }
   return presets;
 };

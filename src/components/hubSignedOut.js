@@ -12,8 +12,8 @@ const HubSignedOut = () => {
       borderWidth='1px'
       borderColor='whiteAlpha.200'
       p={6}
-      m={[10, 'auto', 0, 'auto']}
-      w='50%'
+      m={[6, 'auto', 0, 'auto']}
+      w={['80%', null, null, '50%']}
       textAlign='left'
     >
       <Box fontSize='3xl' fontFamily='heading' fontWeight={700} mb={10}>

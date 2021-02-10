@@ -44,11 +44,16 @@ const ProfileCard = ({ overview, daoTokens, ens, profile, memberEntity }) => {
   };
 
   return (
-    <ContentBox as={Flex} p={6} w='100%' justify='space-between'>
+    <ContentBox>
       {userid ? (
-        <>
-          <Flex direction='row' width='50%'>
-            <Flex direction='column' align='center' pr={5} minW='40%'>
+        <Flex w='100%' justify='space-between' wrap='wrap'>
+          <Flex direction='row' w={['100%', null, null, '50%']}>
+            <Flex
+              direction='column'
+              align={['start', null, null, 'center']}
+              pr={5}
+              minW='40%'
+            >
               {handleAvatar(userid, profile)}
               <Box fontFamily='heading' fontSize='xs' textAlign='center' mt={5}>
                 {memberEntity?.exists ? (
@@ -67,7 +72,7 @@ const ProfileCard = ({ overview, daoTokens, ens, profile, memberEntity }) => {
               </Box>
             </Flex>
 
-            <Flex direction='column'>
+            <Flex direction='column' align='start'>
               <Box fontSize='xl' fontFamily='heading'>
                 {handleName(profile)}
                 {profile?.emoji && (
@@ -88,7 +93,11 @@ const ProfileCard = ({ overview, daoTokens, ens, profile, memberEntity }) => {
               )}
             </Flex>
           </Flex>
-          <Flex w='48%' direction='column'>
+          <Flex
+            direction='column'
+            w={['100%', null, null, '50%']}
+            mt={[4, null, null, 0]}
+          >
             <Flex justify='space-between'>
               <Box>
                 <TextBox size='sm'>
@@ -102,7 +111,7 @@ const ProfileCard = ({ overview, daoTokens, ens, profile, memberEntity }) => {
                     <Icon mt='-4px' as={RiQuestionLine} />
                   </Tooltip>
                 </TextBox>
-                <TextBox size='4xl' variant='value'>
+                <TextBox fontSize={['xl', null, null, '4xl']} variant='value'>
                   $
                   {daoTokens &&
                     overview &&
@@ -129,23 +138,23 @@ const ProfileCard = ({ overview, daoTokens, ens, profile, memberEntity }) => {
               </Box>
               <Box w='30%'>
                 <TextBox size='xs'>Shares</TextBox>
-                <Skeleton isLoaded={memberEntity?.shares >= 0}>
+                <Skeleton isLoaded={!memberEntity || memberEntity?.shares >= 0}>
                   <TextBox size='xl' variant='value'>
-                    {memberEntity?.shares}
+                    {memberEntity?.shares || '0'}
                   </TextBox>
                 </Skeleton>
               </Box>
               <Box w='30%'>
                 <TextBox size='xs'>Loot</TextBox>
-                <Skeleton isLoaded={memberEntity?.loot >= 0}>
+                <Skeleton isLoaded={!memberEntity || memberEntity?.loot >= 0}>
                   <TextBox size='xl' variant='value'>
-                    {memberEntity?.loot}
+                    {memberEntity?.loot || '0'}
                   </TextBox>
                 </Skeleton>
               </Box>
             </Flex>
           </Flex>
-        </>
+        </Flex>
       ) : null}
     </ContentBox>
   );

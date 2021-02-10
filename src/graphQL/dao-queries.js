@@ -152,3 +152,14 @@ export const RAGE_QUIT_POLL = gql`
     }
   }
 `;
+
+export const MINION_PROPOSAL_POLL = gql`
+  query minions($minionAddress: String!, $createdAt: String!) {
+    minions(where: { minionAddress: $minionAddress }) {
+      id
+      proposals(where: { createdAt_gt: $createdAt }) {
+        id
+      }
+    }
+  }
+`;

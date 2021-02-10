@@ -12,7 +12,6 @@ const MemberCard = ({ member, selectMember, selectedMember }) => {
     <Flex
       h='60px'
       align='center'
-      pl={3}
       bg={
         member?.memberAddress === selectedMember?.memberAddress // && member.memberAddress === address.toLowerCase()
           ? 'primary.500'
@@ -24,10 +23,19 @@ const MemberCard = ({ member, selectMember, selectedMember }) => {
         borderRadius: '4px',
       }}
       onClick={handleSelect}
+      justify='space-between'
     >
-      <Flex w='43%' direction='column' justify='space-between'>
+      <Flex
+        w={['50%', null, null, '43%']}
+        direction='column'
+        justify='space-between'
+      >
         <Flex direction='row' justify='space-between' align='center'>
-          <AddressAvatar addr={member.memberAddress} hideCopy={true} />
+          <AddressAvatar
+            addr={member.memberAddress}
+            hideCopy={true}
+            alwaysShowName={true}
+          />
           {member.jailed ? (
             <Badge variant='solid' colorScheme='red' mr={5} height='100%'>
               JAILED
@@ -41,16 +49,14 @@ const MemberCard = ({ member, selectMember, selectedMember }) => {
           ) : null}
         </Flex>
       </Flex>
-      <Box w='15%'>
-        <Box fontFamily='mono'>{member?.shares || '--'}</Box>
+      <Box w={['25%', null, null, '15%']} fontFamily='mono' textAlign='right'>
+        {member?.shares || '--'}
       </Box>
-      <Box w='15%'>
-        <Box fontFamily='mono'>{member?.loot || '--'}</Box>
+      <Box w={['20%', null, null, '15%']} fontFamily='mono' textAlign='right'>
+        {member?.loot || '--'}
       </Box>
-      <Box>
-        <Box fontFamily='mono'>
-          {format(new Date(+member?.createdAt * 1000), 'MMM. d, yyyy') || '--'}
-        </Box>
+      <Box d={['none', null, null, 'inline-block']} fontFamily='mono'>
+        {format(new Date(+member?.createdAt * 1000), 'MMM. d, yyyy') || '--'}
       </Box>
     </Flex>
   );

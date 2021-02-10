@@ -6,6 +6,7 @@ import {
   MINION_POLL,
   HOME_DAO,
   RAGE_QUIT_POLL,
+  MINION_PROPOSAL_POLL,
 } from '../graphQL/dao-queries';
 import { getGraphEndpoint } from '../utils/chain';
 import { hashMaker, memberVote } from '../utils/proposalUtils';
@@ -61,6 +62,28 @@ const pollMinionSummon = async ({ chainID, molochAddress, createdAt }) => {
       createdAt,
     },
   });
+};
+
+const pollMinionProposal = async ({ chainID, minionAddress, createdAt }) => {
+  return await graphQuery({
+    endpoint: getGraphEndpoint(chainID, 'subgraph_url'),
+    query: MINION_PROPOSAL_POLL,
+    variables: {
+      minionAddress,
+      createdAt,
+    },
+  });
+};
+
+const pollMinionExecute = async ({ chainID, minionAddress, proposalId }) => {
+  const action = await MinionService({
+    minion: minionAddress,
+    chainID,
+  })('getAction')({ proposalId });
+
+  console.log('poll action', action);
+
+  return action.executed;
 };
 
 const pollRageQuit = async ({ chainID, molochAddress, createdAt }) => {
@@ -161,6 +184,17 @@ const minonSummonTest = (data, shouldEqual, pollId) => {
   }
 };
 
+const minonProposalTest = (data, shouldEqual, pollId) => {
+  console.log('minions: ', data);
+  if (data.minions && data.minions[0]) {
+    return data.minions[0].proposals.length > 0;
+  } else {
+    console.log('no data.minions');
+    clearInterval(pollId);
+    throw new Error(`Bad query, clearing poll: ${data}`);
+  }
+};
+
 const rageQuitTest = (data, shouldEqual, pollId) => {
   console.log('new rage quit: ', data);
   if (data.moloch) {
@@ -229,26 +263,8 @@ const cancelProposalTest = (data, shouldEqual, pollId) => {
   }
 };
 
-const minionExecuteTest = async (data, proposalId, daochain, pollId) => {
-  // use minion address and proposal ID to get action details and check if executed
-  console.log(data);
-  console.log(proposalId);
-  if (data.proposals) {
-    const proposal = data.proposals.find(
-      (proposal) => proposal.proposalId === proposalId,
-    );
-    console.log(proposal);
-
-    const minionDeets = await MinionService({
-      minion: proposal?.minionAddress,
-      chainID: daochain,
-    })('getAction')({ proposalId: proposal?.proposalId });
-    console.log(minionDeets);
-    return minionDeets?.executed;
-  } else {
-    clearInterval(pollId);
-    throw new Error(`Minion proposal not found the graph: ${data}`);
-  }
+const minionExecuteTest = async (executed, shouldEqual, pollId) => {
+  return executed === shouldEqual;
 };
 
 const collectTokenTest = (graphBalance, oldBalance, pollId) => {
@@ -619,12 +635,12 @@ export const createPoll = ({
       }
     };
   } else if (action === 'minionProposeAction') {
-    return ({ daoID, chainID, hash, actions }) => (txHash) => {
+    return ({ minionAddress, createdAt, chainID, actions }) => (txHash) => {
       startPoll({
-        pollFetch: pollProposals,
-        testFn: submitProposalTest,
-        shouldEqual: hash,
-        args: { daoID, chainID, hash },
+        pollFetch: pollMinionProposal,
+        testFn: minonProposalTest,
+        shouldEqual: createdAt,
+        args: { minionAddress, chainID, createdAt },
         actions,
         txHash,
       });
@@ -636,24 +652,24 @@ export const createPoll = ({
           status: 'unresolved',
           resolvedMsg: `Minion proposal submitted`,
           unresolvedMsg: `Submitting minion proposal`,
-          successMsg: `Minion proposal submitted for ${daoID} on ${chainID}`,
-          errorMsg: `Error submitting minion proposal for ${daoID} on ${chainID}`,
+          successMsg: `Minion proposal submitted for ${minionAddress} on ${chainID}`,
+          errorMsg: `Error submitting minion proposal for ${minionAddress} on ${chainID}`,
           pollData: {
             action,
             interval,
             tries,
           },
-          pollArgs: { daoID, chainID, hash },
+          pollArgs: { minionAddress, createdAt, chainID },
         });
       }
     };
   } else if (action === 'minionExecuteAction') {
-    return ({ daoID, chainID, minion, proposalId, actions }) => (txHash) => {
+    return ({ chainID, minionAddress, proposalId, actions }) => (txHash) => {
       startPoll({
-        pollFetch: pollProposals,
+        pollFetch: pollMinionExecute,
         testFn: minionExecuteTest,
-        shouldEqual: { minion, proposalId },
-        args: { daoID, chainID, minion, proposalId },
+        shouldEqual: true,
+        args: { chainID, minionAddress, proposalId },
         actions,
         txHash,
       });
@@ -672,7 +688,7 @@ export const createPoll = ({
             interval,
             tries,
           },
-          pollArgs: { daoID, chainID, minion, proposalId },
+          pollArgs: { chainID, minionAddress, proposalId },
         });
       }
     };

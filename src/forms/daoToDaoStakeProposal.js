@@ -119,7 +119,7 @@ const StakeProposalForm = () => {
                 message: 'Requested shares are required for Member Proposals',
               },
               pattern: {
-                value: /[0-9]/,
+                value: /^[0-9]+$/,
                 message: 'Requested shares must be a number',
               },
             })}

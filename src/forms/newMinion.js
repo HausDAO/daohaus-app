@@ -15,7 +15,7 @@ import { RiExternalLinkLine } from 'react-icons/ri';
 import { useForm } from 'react-hook-form';
 
 import { MinionFactoryService } from '../services/minionFactoryService';
-import { txUri } from '../utils/chain';
+import { supportedChains } from '../utils/chain';
 import { useInjectedProvider } from '../contexts/InjectedProviderContext';
 import { createPoll } from '../services/pollService';
 import { useUser } from '../contexts/UserContext';
@@ -146,7 +146,7 @@ const NewMinionForm = () => {
           <Box my={10}>
             {pendingTx ? (
               <Link
-                href={`${txUri(daochain)}/${pendingTx}`}
+                href={`${supportedChains[daochain].block_explorer}/tx/${pendingTx}`}
                 isExternal
                 fontSize='2xl'
                 color='secondary.500'

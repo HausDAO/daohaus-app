@@ -33,9 +33,10 @@ const Boosts = ({ customTerms }) => {
       <ContentBox
         d='flex'
         key={i}
-        w={['100%', '100%', '50%', '33%']}
+        w={['100%', '100%', '40%', '30%']}
         h='370px'
-        mb={3}
+        m={3}
+        mb={6}
         p={6}
         flexDirection='column'
         alignItems='center'
@@ -97,7 +98,7 @@ const Boosts = ({ customTerms }) => {
 
   return (
     <MainViewLayout header='Boosts' customTerms={customTerms} isDao={true}>
-      <Box p={6}>
+      <Box>
         <TextBox size='sm' mb={3}>
           Available Apps
         </TextBox>

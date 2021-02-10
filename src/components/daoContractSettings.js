@@ -8,29 +8,10 @@ import ContentBox from './ContentBox';
 import TextBox from './TextBox';
 import { formatPeriods } from '../utils/general';
 import { getCopy } from '../utils/metadata';
+import { supportedChains } from '../utils/chain';
 
 const DaoContractSettings = ({ overview, customTerms }) => {
   const { daochain, daoid } = useParams();
-
-  const uri = () => {
-    switch (daochain) {
-      case '0x1': {
-        return `https://etherscan.io/address/`;
-      }
-      case '0x2a': {
-        return `https://kovan.etherscan.io/address/`;
-      }
-      case '0x4': {
-        return `https://rinkeby.etherscan.io/address/`;
-      }
-      case '0x64': {
-        return `https://blockscout.com/poa/xdai/address/`;
-      }
-      default: {
-        return `https://etherscan.io/address/`;
-      }
-    }
-  };
 
   return (
     <ContentBox d='flex' w='100%' mt={2} flexDirection='column'>
@@ -42,7 +23,7 @@ const DaoContractSettings = ({ overview, customTerms }) => {
             variant='value'
             fontSize='sm'
             as={Link}
-            href={`${uri()}${daoid}`}
+            href={`${supportedChains[daochain].block_explorer}/address/${daoid}`}
             target='_blank'
             rel='noreferrer noopener'
           >
