@@ -7,6 +7,8 @@ import {
   Select,
 } from '@chakra-ui/react';
 import { utils } from 'web3';
+import { ethers } from 'ethers';
+
 import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import TextBox from '../components/TextBox';
@@ -18,7 +20,6 @@ import { TokenService } from '../services/tokenService';
 import { useTX } from '../contexts/TXContext';
 import { createPoll } from '../services/pollService';
 import { useUser } from '../contexts/UserContext';
-import { valToDecimalString } from '../utils/tokenValue';
 
 const TributeInput = ({ register, setValue, getValues, setError }) => {
   const [unlocked, setUnlocked] = useState(true);
@@ -85,11 +86,8 @@ const TributeInput = ({ register, setValue, getValues, setError }) => {
     setLoading(true);
     const token = getValues('tributeToken');
     console.log(token);
-    const tokenAmount = valToDecimalString(
-      getValues('tributeOffered'),
-      getValues('tributeToken'),
-      daoOverview.tokenBalances,
-    );
+    const tokenAmount = ethers.constants.MaxUint256;
+
     const args = [daoid, tokenAmount];
 
     try {
@@ -106,6 +104,7 @@ const TributeInput = ({ register, setValue, getValues, setError }) => {
             });
             resolvePoll(txHash);
             console.error(`Could not find a matching proposal: ${error}`);
+            setLoading(false);
           },
           onSuccess: (txHash) => {
             successToast({
@@ -114,6 +113,8 @@ const TributeInput = ({ register, setValue, getValues, setError }) => {
             });
             refreshDao();
             resolvePoll(txHash);
+            setUnlocked(true);
+            setLoading(false);
           },
         },
       });
@@ -122,17 +123,16 @@ const TributeInput = ({ register, setValue, getValues, setError }) => {
         chainID: daochain,
         tokenAddress: token,
       })('approve')({ args, address, poll });
-      setUnlocked(true);
     } catch (err) {
       console.log('error:', err);
     }
-    setLoading(false);
   };
 
   const checkUnlocked = async (token, amount) => {
     console.log('check', token, amount);
-    if (amount === '' || !token) {
-      // return;
+    if (amount === '' || !token || typeof +amount !== 'number') {
+      setUnlocked(true);
+      return;
     }
     const tokenContract = TokenService({
       chainID: daochain,
@@ -142,7 +142,13 @@ const TributeInput = ({ register, setValue, getValues, setError }) => {
       accountAddr: address,
       contractAddr: daoid,
     });
-    const isUnlocked = amountApproved > amount;
+    console.log(
+      'amountApproved > amount',
+      +amountApproved > +amount,
+      amountApproved,
+      amount,
+    );
+    const isUnlocked = +amountApproved > +amount;
     setUnlocked(isUnlocked);
   };
 
