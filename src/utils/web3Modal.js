@@ -39,7 +39,6 @@ const addNetworkProviders = (chainData) => {
       },
     };
   }
-  console.log(allProviders);
   return allProviders;
 };
 

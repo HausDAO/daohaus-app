@@ -21,6 +21,7 @@ export const InjectedProviderContext = createContext();
 
 export const InjectedProvider = ({ children }) => {
   const [injectedProvider, setInjectedProvider] = useState(null);
+  const [address, setAddress] = useState(null);
   const [injectedChain, setInjectedChain] = useState(null);
   const [web3Modal, setWeb3Modal] = useState(defaultModal);
 
@@ -44,10 +45,14 @@ export const InjectedProvider = ({ children }) => {
       chainId: provider.chainId,
     };
     const web3 = new Web3(provider);
+    console.log(web3);
 
-    setInjectedProvider(web3);
-    setInjectedChain(chain);
-    setWeb3Modal(web3Modal);
+    if (web3?.currentProvider?.selectedAddress) {
+      setInjectedProvider(web3);
+      setAddress(web3.currentProvider.selectedAddress);
+      setInjectedChain(chain);
+      setWeb3Modal(web3Modal);
+    }
   };
 
   useEffect(() => {
@@ -100,7 +105,7 @@ export const InjectedProvider = ({ children }) => {
     setWeb3Modal(defaultModal);
     web3Modal.clearCachedProvider();
   };
-  const address = injectedProvider?.currentProvider?.selectedAddress;
+  // const address = injectedProvider?.currentProvider?.selectedAddress;
   return (
     <InjectedProviderContext.Provider
       value={{
