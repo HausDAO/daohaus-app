@@ -7,7 +7,7 @@ import { getDaoActivites } from '../utils/activities';
 import MainViewLayout from '../components/mainViewLayout';
 
 const Overview = React.memo(function overview({
-  overview,
+  daoOverview,
   activities,
   isMember,
   members,
@@ -26,7 +26,7 @@ const Overview = React.memo(function overview({
               mb={6}
             >
               <OverviewCard
-                overview={overview}
+                daoOverview={daoOverview}
                 isMember={isMember}
                 membersAmt={members?.length}
                 currentDaoTokens={currentDaoTokens}
