@@ -14,7 +14,7 @@ const addNetworkProviders = (chainData) => {
   const providersToAdd = chainData.providers;
 
   if (providersToAdd.includes('walletconnect')) {
-    allProviders.walletConnect = {
+    allProviders.walletconnect = {
       network: chainData.network,
       package: WalletConnectProvider,
       options: {
@@ -39,6 +39,7 @@ const addNetworkProviders = (chainData) => {
       },
     };
   }
+  console.log(allProviders);
   return allProviders;
 };
 
