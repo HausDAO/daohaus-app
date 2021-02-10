@@ -8,10 +8,11 @@ import BankTotal from './bankTotal';
 import TextBox from './TextBox';
 import ContentBox from './ContentBox';
 
-const OverviewCard = ({ overview, membersAmt, currentDaoTokens }) => {
+const OverviewCard = ({ daoOverview, membersAmt, currentDaoTokens }) => {
   const { daochain, daoid } = useParams();
   const { daoMetaData, customTerms } = useMetaData();
-  const { totalLoot, totalShares } = overview;
+  const totalShares = daoOverview?.totalShares;
+  const totalLoot = daoOverview?.totalLoot;
   const history = useHistory();
 
   return (

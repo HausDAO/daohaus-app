@@ -5,7 +5,7 @@ import { RiExternalLinkLine, RiErrorWarningLine } from 'react-icons/ri';
 
 import TextBox from './TextBox';
 import { POPUP_CONTENT } from '../content/pending-tx-modal';
-import { txUri } from '../utils/chain';
+import { supportedChains } from '../utils/chain';
 
 const SummonPending = ({ txHash, success, chainId }) => {
   return (
@@ -55,7 +55,7 @@ const SummonPending = ({ txHash, success, chainId }) => {
 
           {txHash ? (
             <Link
-              href={`${txUri(chainId)}/${txHash}`}
+              href={`${supportedChains[chainId].block_explorer}/tx/${txHash}`}
               isExternal
               fontSize='2xl'
               color='secondary.500'
