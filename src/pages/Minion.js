@@ -81,7 +81,12 @@ const MinionDetails = ({ overview, members, currentDaoTokens }) => {
         }
       });
       console.log('_minionBalances', _minionBalances);
-      const newTokenData = await initTokenData(_minionBalances.tokenBalances);
+      let newTokenData;
+      if (_minionBalances) {
+        newTokenData = await initTokenData(_minionBalances.tokenBalances);
+      } else {
+        newTokenData = [];
+      }
 
       console.log('newTokenData', newTokenData);
       setMinionBalances(newTokenData);

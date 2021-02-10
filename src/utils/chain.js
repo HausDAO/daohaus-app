@@ -111,14 +111,14 @@ export const supportedChains = {
     metadata_api_url: 'https://data.daohaus.club',
     abi_api_url: 'https://mainnet.maticvigil.com/api/swagger/',
     subgraph_url:
-      'http://35.224.233.211/subgraphs/name/matic/daohaus-supergraph/graphql',
-    stats_graph_url:
-      'http://35.224.233.211/subgraphs/name/matic/daohaus/graphql',
+      'http://35.224.233.211/subgraphs/name/matic/daohaus-supergraph',
+    stats_graph_url: 'http://35.224.233.211/subgraphs/name/matic/daohaus',
     boosts_graph_url: '',
     minion_factory_addr: '0x91Eb3d16Cb09dC884bB3146e04C1A1cF80EEa548',
     moloch_factory_addr: '0x6690C139564144b27ebABA71F9126611a23A31C9',
     dai_contract: '0x8f3Cf7ad23Cd3CaDbD9735AFf958023239c6A063',
-    weth_contract: '0x2791Bca1f2de4661ED88A30C99A7a9449Aa84174',
+    usdc_contract: '0x2791Bca1f2de4661ED88A30C99A7a9449Aa84174',
+    weth_contract: '0x0d500b1d8e8ef31e21c99d1db9a6444d3adf1270',
     block_explorer: 'https://explorer-mainnet.maticvigil.com/',
   },
 };
@@ -145,24 +145,4 @@ export const chainByName = (networkName) => {
   });
 
   return supportedChains[networkKey];
-};
-
-export const txUri = (daochain) => {
-  switch (daochain) {
-    case '0x1': {
-      return `https://etherscan.io/tx/`;
-    }
-    case '0x2a': {
-      return `https://kovan.etherscan.io/tx/`;
-    }
-    case '0x4': {
-      return `https://rinkeby.etherscan.io/tx/`;
-    }
-    case '0x64': {
-      return `https://blockscout.com/poa/xdai/tx/`;
-    }
-    default: {
-      return `https://etherscan.io/tx/`;
-    }
-  }
 };

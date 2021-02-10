@@ -62,7 +62,7 @@ export const DaoProvider = ({ children }) => {
     )
       return;
 
-    bigGraphQuery({
+    const bigQueryOptions = {
       args: {
         daoID: daoid,
         chainID: daochain,
@@ -74,9 +74,17 @@ export const DaoProvider = ({ children }) => {
           setter: { setDaoProposals, setDaoActivities },
         },
         { getter: 'getMembers', setter: setDaoMembers },
-        { getter: 'getTransmutations', setter: setTransmutations },
       ],
-    });
+    };
+
+    if (daochain !== '0x89') {
+      bigQueryOptions.getSetters.push({
+        getter: 'getTransmutations',
+        setter: setTransmutations,
+      });
+    }
+    bigGraphQuery(bigQueryOptions);
+
     hasPerformedBatchQuery.current = true;
   }, [
     daoid,
