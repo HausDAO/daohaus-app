@@ -125,6 +125,7 @@ const TributeInput = ({ register, setValue, getValues, setError }) => {
       })('approve')({ args, address, poll });
     } catch (err) {
       console.log('error:', err);
+      setLoading(false);
     }
   };
 
