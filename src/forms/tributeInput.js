@@ -203,6 +203,20 @@ const TributeInput = ({ register, setValue, getValues, setError }) => {
           placeholder='0'
           mb={5}
           ref={register({
+            validate: {
+              inefficienFunds: (value) => {
+                if (+value > +utils.fromWei(balance)) {
+                  return 'Inefficient Funds.';
+                }
+                return true;
+              },
+              locked: () => {
+                if (!unlocked) {
+                  return 'Tribute token must be unlocked to tribute.';
+                }
+                return true;
+              },
+            },
             pattern: {
               value: /[0-9]/,
               message: 'Tribute must be a number',
