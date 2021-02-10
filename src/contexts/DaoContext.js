@@ -105,7 +105,7 @@ export const DaoProvider = ({ children }) => {
   ]);
 
   const refetch = () => {
-    bigGraphQuery({
+    const bigQueryOptions = {
       args: {
         daoID: daoid,
         chainID: daochain,
@@ -117,9 +117,17 @@ export const DaoProvider = ({ children }) => {
           setter: { setDaoProposals, setDaoActivities },
         },
         { getter: 'getMembers', setter: setDaoMembers },
-        { getter: 'getTransmutations', setter: setTransmutations },
       ],
-    });
+    };
+
+    if (daochain !== '0x89') {
+      bigQueryOptions.getSetters.push({
+        getter: 'getTransmutations',
+        setter: setTransmutations,
+      });
+    }
+
+    bigGraphQuery(bigQueryOptions);
   };
 
   return (
