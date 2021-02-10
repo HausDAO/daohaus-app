@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import {
   Box,
+  Flex,
   Button,
   Divider,
   Modal,
@@ -112,17 +113,18 @@ const ProposalMinionCard = ({ proposal }) => {
     <>
       <Skeleton isLoaded={!loading}>
         {minionDeets && (
-          <HStack mt={8} spacing={10}>
+          <HStack mt={8} spacing={2}>
             <Box>
               <TextBox size='xs' mb={3}>
                 Target Address
               </TextBox>
-              <AddressAvatar addr={minionDeets.to} />
+              <AddressAvatar addr={minionDeets.to} alwaysShowName={true} />
             </Box>
-
-            <Button w='15%' onClick={() => setShowModal(true)}>
-              More info
-            </Button>
+            <Flex w={['25%', null, null, '15%']} align='center' m={0}>
+              <Button w='175px' onClick={() => setShowModal(true)}>
+                More info
+              </Button>
+            </Flex>
           </HStack>
         )}
       </Skeleton>
