@@ -11,7 +11,8 @@ import ContentBox from './ContentBox';
 const OverviewCard = ({ daoOverview, membersAmt, currentDaoTokens }) => {
   const { daochain, daoid } = useParams();
   const { daoMetaData, customTerms } = useMetaData();
-  const { totalLoot, totalShares } = daoOverview;
+  const totalShares = daoOverview?.totalShares;
+  const totalLoot = daoOverview?.totalLoot;
   const history = useHistory();
 
   return (
