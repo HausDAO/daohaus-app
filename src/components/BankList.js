@@ -5,47 +5,37 @@ import ContentBox from './ContentBox';
 import BankListCard from './bankListCard';
 
 const BankList = ({ tokens, profile, hasBalance, needsSync }) => {
+  const hasAction = hasBalance || needsSync;
+
   return (
     <ContentBox mt={6}>
       <Flex>
         <Box
-          w={hasBalance || needsSync ? '20%' : '15%'}
+          w={hasAction ? '20%' : '15%'}
           d={['none', null, null, 'inline-block']}
         >
           <TextBox size='xs'>Asset</TextBox>
         </Box>
         <Box
-          w={[
-            hasBalance || needsSync ? '45%' : '60%',
-            null,
-            null,
-            hasBalance || needsSync ? '45%' : '50%',
-          ]}
+          w={[hasAction ? '45%' : '60%', null, null, hasAction ? '45%' : '50%']}
         >
           <TextBox size='xs'>{profile ? 'Internal Bal.' : 'Balance'}</TextBox>
         </Box>
         <Box
-          w={hasBalance || needsSync ? '15%' : '20%'}
+          w={hasAction ? '15%' : '20%'}
           d={['none', null, null, 'inline-block']}
         >
           <TextBox size='xs'>Price</TextBox>
         </Box>
         <Box
-          w={[
-            hasBalance || needsSync ? '30%' : '40%',
-            null,
-            null,
-            hasBalance || needsSync ? '15%' : '20%',
-          ]}
+          w={[hasAction ? '30%' : '40%', null, null, hasAction ? '15%' : '20%']}
         >
           <TextBox size='xs'>Value</TextBox>
         </Box>
 
-        {hasBalance || needsSync ? (
-          <Box w={['25%', null, null, '20%']}></Box>
-        ) : null}
+        {hasAction ? <Box w={['25%', null, null, '20%']}></Box> : null}
       </Flex>
-      {tokens ? (
+      {(tokens && !profile) || (hasBalance && profile) ? (
         tokens?.map((token) => {
           return (
             <BankListCard

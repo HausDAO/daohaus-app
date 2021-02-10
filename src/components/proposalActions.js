@@ -65,7 +65,7 @@ const ProposalVote = ({ proposal, overview, daoProposals, daoMember }) => {
     });
   };
 
-  const NetworkOverlay = ({ children }) => (
+  const NetworkOverlay = () => (
     <Flex
       position='absolute'
       top='0px'
@@ -419,7 +419,8 @@ const ProposalVote = ({ proposal, overview, daoProposals, daoMember }) => {
             proposal?.status === 'ReadyForProcessing') && <NetworkOverlay />}
         {!daoConnectedAndSameChain() &&
           (proposal?.status !== 'Unsponsored' || proposal?.proposalIndex) &&
-          proposal?.status !== 'Cancelled' && <NetworkOverlay />}
+          proposal?.status !== 'Cancelled' &&
+          !proposal?.status === 'ReadyForProcessing' && <NetworkOverlay />}
         {proposal?.status === 'Unsponsored' && !proposal?.proposalIndex && (
           <Flex justify='center' direction='column'>
             <Flex justify='center' mb={4}>

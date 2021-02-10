@@ -1,17 +1,29 @@
 import React from 'react';
 import { useParams } from 'react-router-dom';
-import { Flex, Box, Skeleton, Link, Icon, Text } from '@chakra-ui/react';
+import {
+  Flex,
+  Box,
+  Skeleton,
+  Link,
+  Icon,
+  Text,
+  useBreakpointValue,
+} from '@chakra-ui/react';
 import { format } from 'date-fns';
 import { RiExternalLinkLine } from 'react-icons/ri';
 
 import ContentBox from './ContentBox';
 import TextBox from './TextBox';
-import { formatPeriods } from '../utils/general';
+import { formatPeriods, truncateAddr } from '../utils/general';
 import { getCopy } from '../utils/metadata';
 import { supportedChains } from '../utils/chain';
 
 const DaoContractSettings = ({ overview, customTerms }) => {
   const { daochain, daoid } = useParams();
+  const daoAddress = useBreakpointValue({
+    base: truncateAddr(daoid),
+    md: daoid,
+  });
 
   return (
     <ContentBox d='flex' w='100%' mt={2} flexDirection='column'>
@@ -28,14 +40,14 @@ const DaoContractSettings = ({ overview, customTerms }) => {
             rel='noreferrer noopener'
           >
             <Flex color='secondary.400' align='center'>
-              {daoid || '--'}
+              {daoAddress || '--'}
               <Icon as={RiExternalLinkLine} color='secondary.400' ml={1} />
             </Flex>
           </Text>
         </Skeleton>
       </Box>
-      <Flex mt={3}>
-        <Box w='50%'>
+      <Flex mt={3} wrap='wrap'>
+        <Box w={['100%', null, null, '50%']}>
           <TextBox size='xs'>
             {getCopy(customTerms, 'proposal')} Deposit
           </TextBox>
@@ -64,8 +76,8 @@ const DaoContractSettings = ({ overview, customTerms }) => {
           </Skeleton>
         </Box>
       </Flex>
-      <Flex>
-        <Box w='50%'>
+      <Flex wrap='wrap'>
+        <Box w={['100%', null, null, '50%']}>
           <TextBox size='xs'>Voting Period</TextBox>
           <Skeleton isLoaded={overview?.votingPeriodLength}>
             <TextBox variant='value' size='xl' my={2}>
@@ -92,8 +104,8 @@ const DaoContractSettings = ({ overview, customTerms }) => {
           </Skeleton>
         </Box>
       </Flex>
-      <Flex>
-        <Box w='50%'>
+      <Flex wrap='wrap'>
+        <Box w={['100%', null, null, '50%']}>
           <TextBox size='xs'>Summoned</TextBox>
           <Skeleton isLoaded={overview?.summoningTime}>
             <TextBox variant='value' size='xl' my={2}>
