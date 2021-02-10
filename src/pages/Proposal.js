@@ -33,16 +33,19 @@ const Proposal = ({
             pr={[0, null, null, null, 6]}
           >
             <Link as={RouterLink} to={`/dao/${daochain}/${daoid}/proposals`}>
-              <TextBox size={['sm', null, null, 'md']}>
+              <Flex align='center'>
                 <Icon
                   name='arrow-back'
                   color='primary.50'
                   as={RiArrowLeftLine}
                   h='20px'
                   w='20px'
-                />{' '}
-                All {getCopy(customTerms, 'proposals')}
-              </TextBox>
+                  mr={2}
+                />
+                <TextBox size={['sm', null, null, 'md']}>
+                  All {getCopy(customTerms, 'proposals')}
+                </TextBox>
+              </Flex>
             </Link>
             <ProposalDetails proposal={currentProposal} />
           </Flex>
