@@ -14,6 +14,12 @@ const ProposalCard = ({ proposal }) => {
   const { daochain, daoid } = useParams();
   const { address } = useInjectedProvider();
 
+  console.log('proposal', proposal);
+
+  const formatStatus = (status) => {
+    return status.split(/(?=[A-Z])/).join(' ');
+  };
+
   return (
     <Link
       key={proposal.id}
@@ -35,7 +41,7 @@ const ProposalCard = ({ proposal }) => {
           </Box>
           <Box>
             <Skeleton isLoaded={proposal?.status}>
-              <Badge>{proposal?.status}</Badge>
+              <Badge>{proposal ? formatStatus(proposal.status) : ''}</Badge>
             </Skeleton>
           </Box>
         </Flex>

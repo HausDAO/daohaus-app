@@ -26,6 +26,9 @@ function App() {
         <Route exact path='/dao/:dao(\b0x[0-9a-f]{10,40}\b)'>
           <Redirect to='/' />
         </Route>
+        <Route exact path='/dao/:dao(\b0x[0-9a-f]{10,40}\b)/*'>
+          <Redirect to='/' />
+        </Route>
         <Route exact path='/'>
           <Hub />
         </Route>
