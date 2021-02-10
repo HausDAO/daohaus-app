@@ -1,8 +1,7 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 
 import BankList from '../components/BankList';
 import BankChart from '../components/bankChart';
-// import { useToken } from '../contexts/TokenContext';
 import MainViewLayout from '../components/mainViewLayout';
 import { useParams, Link } from 'react-router-dom';
 import { useInjectedProvider } from '../contexts/InjectedProviderContext';
@@ -13,6 +12,7 @@ import { RiAddFill } from 'react-icons/ri';
 const Bank = ({ overview, customTerms, currentDaoTokens, daoMember }) => {
   const { daoid, daochain } = useParams();
   const { address, injectedChain } = useInjectedProvider();
+  const [needsSync, setNeedsSync] = useState(false);
 
   const ctaButton = daoConnectedAndSameChain(
     address,
@@ -29,6 +29,18 @@ const Bank = ({ overview, customTerms, currentDaoTokens, daoMember }) => {
       </Button>
     );
 
+  useEffect(() => {
+    if (currentDaoTokens) {
+      console.log('currentDaoTokens', currentDaoTokens);
+      setNeedsSync(false);
+      // setNeedsSync(
+      //   currentDaoTokens.some((token) => {
+      //     return token.contractBalances.token !== token.contractBalances.babe;
+      //   }),
+      // );
+    }
+  }, [currentDaoTokens]);
+
   return (
     <MainViewLayout
       header='Bank'
@@ -41,7 +53,7 @@ const Bank = ({ overview, customTerms, currentDaoTokens, daoMember }) => {
         overview={overview}
         customTerms={customTerms}
       />
-      <BankList tokens={currentDaoTokens} />
+      <BankList tokens={currentDaoTokens} needsSync={needsSync} />
     </MainViewLayout>
   );
 };
