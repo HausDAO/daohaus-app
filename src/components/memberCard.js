@@ -49,10 +49,18 @@ const MemberCard = ({ member, selectMember, selectedMember }) => {
           ) : null}
         </Flex>
       </Flex>
-      <Box w={['25%', null, null, '15%']} fontFamily='mono' textAlign='right'>
+      <Box
+        w={['25%', null, null, '15%']}
+        fontFamily='mono'
+        textAlign={['right', null, null, 'center']}
+      >
         {member?.shares || '--'}
       </Box>
-      <Box w={['20%', null, null, '15%']} fontFamily='mono' textAlign='right'>
+      <Box
+        w={['20%', null, null, '15%']}
+        fontFamily='mono'
+        textAlign={['right', null, null, 'center']}
+      >
         {member?.loot || '--'}
       </Box>
       <Box d={['none', null, null, 'inline-block']} fontFamily='mono'>
