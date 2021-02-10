@@ -51,7 +51,9 @@ export const numberWithCommas = (num) => {
   const noZeroDec =
     parseInt(localNum.split('.')[1]) === 0 ? localNum.split('.')[0] : localNum;
 
-  return noZeroDec.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ',');
+  // TODO What was this regex for?
+  // return noZeroDec.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ',');
+  return noZeroDec.toString();
 };
 
 export const truncateAddr = (addr) => {

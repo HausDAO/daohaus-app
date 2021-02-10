@@ -43,6 +43,44 @@ export const boostList = [
     modalName: 'discourseLaunch',
     successRoute: '',
   },
+  {
+    name: 'Token Supply',
+    key: 'tokenSupply',
+    comingSoon: true,
+    description:
+      'Bring Your Own Token or a Launch a new one and manage issuance as a DAO.',
+    price: '1',
+    modalName: 'tokenSupply',
+    successRoute: '',
+  },
+  {
+    name: 'Offchain Voting',
+    key: 'offchainVoting',
+    comingSoon: true,
+    description:
+      'Gasless voting for quicker, smaller decisions or just collecting signal.',
+    price: '1',
+    modalName: 'offchainVoting',
+    successRoute: '',
+  },
+  {
+    name: 'Manage Liquidity',
+    key: 'liquidity',
+    comingSoon: true,
+    description: 'Set pool parameters and add or remove liquidity collectively',
+    price: '1',
+    modalName: 'manageLiquidity',
+    successRoute: '',
+  },
+  {
+    name: 'NFT Banks',
+    key: 'nftBank',
+    comingSoon: true,
+    description: 'Buy, sell & showcase NFTs as a DAO',
+    price: '1',
+    modalName: 'nftBank',
+    successRoute: '',
+  },
 ];
 
 export const notificationBoostContent = {
