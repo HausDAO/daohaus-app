@@ -8,11 +8,8 @@ import Withdraw from './withdraw';
 
 const TokenListCard = ({
   token,
-  // isLoaded,
-  // isMember,
   isBank = true,
   hasAction,
-  // view,
   version = '2.1',
   hasBalance,
 }) => {
@@ -41,27 +38,6 @@ const TokenListCard = ({
       }
     }
   }, [token, isBank, version, daoMember]);
-
-  // const checkOptimisticBalance = () => {
-  //   return optimisticSync
-  //     ? token.contractBalances.token -
-  //         token.contractBalances.babe +
-  //         +token.tokenBalance
-  //     : +token.tokenBalance;
-  // };
-  // useEffect(() => {
-  //   const fetchMainnetAddresses = async () => {
-  //     const mainnetAddresses = await getMainetAddresses();
-  //     if (token && mainnetAddresses) {
-  //       mainnetAddresses.forEach((address) => {
-  //         if (address?.symbol === token?.token?.symbol) {
-  //           setTokenMainnetAddress(address.address);
-  //         }
-  //       });
-  //     }
-  //   };
-  //   fetchMainnetAddresses();
-  // }, [token]);
 
   return (
     <Flex h='60px' align='center'>

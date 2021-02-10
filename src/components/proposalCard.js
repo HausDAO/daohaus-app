@@ -14,8 +14,6 @@ const ProposalCard = ({ proposal }) => {
   const { daochain, daoid } = useParams();
   const { address } = useInjectedProvider();
 
-  console.log('proposal', proposal);
-
   const formatStatus = (status) => {
     return status.split(/(?=[A-Z])/).join(' ');
   };
