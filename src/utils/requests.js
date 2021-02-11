@@ -1,5 +1,4 @@
 const metadataApiUrl = 'https://data.daohaus.club';
-const uniswapGhList = 'https://raw.githubusercontent.com';
 const apiMetadataUrl = 'https://daohaus-metadata.s3.amazonaws.com/daoMeta.json';
 const apiPricedataUrl =
   'https://daohaus-metadata.s3.amazonaws.com/daoTokenPrices.json';
@@ -48,18 +47,6 @@ export const put = async (endpoint, data) => {
   }
 };
 
-export const getMainetAddresses = async () => {
-  const url = `${uniswapGhList}/Uniswap/default-token-list/master/src/tokens/mainnet.json`;
-  try {
-    const response = await fetch(url);
-
-    console.log('');
-    return response.json();
-  } catch (err) {
-    throw new Error(err);
-  }
-};
-
 export const boostPost = async (endpoint, data) => {
   const url = `${metadataApiUrl}/${endpoint}`;
   try {
@@ -96,9 +83,6 @@ export const ipfsPrePost = async (endpoint, data) => {
 
 export const ipfsPost = async (creds, file) => {
   const url = `https://api.pinata.cloud/pinning/pinFileToIPFS`;
-
-  console.log('creds', creds);
-  // const
 
   try {
     const response = await fetch(url, {

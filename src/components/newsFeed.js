@@ -17,7 +17,7 @@ const NewsFeed = () => {
 
   return (
     <>
-      {daoData ? (
+      {daoData && (daoData.proposals.length || daoData.rageQuits.length) ? (
         <ActivitiesFeed
           activities={daoData}
           limit={7}

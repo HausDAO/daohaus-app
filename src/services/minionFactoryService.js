@@ -16,6 +16,8 @@ export const MinionFactoryService = ({ web3, chainID }) => {
   return (service) => {
     if (service === 'summonMinion') {
       return async ({ args, from, poll, onTxHash }) => {
+        console.log({ args, from, poll, onTxHash });
+        console.log(contract);
         try {
           console.log(args, from);
           const tx = await contract.methods[service](...args);

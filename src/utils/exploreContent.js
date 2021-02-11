@@ -24,11 +24,19 @@ export const EXPLORE_FILTER_OPTIONS = [
     name: 'Mainnet',
     value: 1,
     type: 'network',
+    default: true,
   },
   {
     name: 'xDai',
     value: 100,
     type: 'network',
+    default: true,
+  },
+  {
+    name: 'Matic',
+    value: 137,
+    type: 'network',
+    default: true,
   },
   {
     name: 'Kovan',
