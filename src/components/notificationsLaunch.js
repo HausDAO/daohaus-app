@@ -22,11 +22,12 @@ const NotificationsLaunch = ({
   setLoading,
   stepOverride,
 }) => {
-  const { handleSubmit, register, getValues } = useForm();
+  const { handleSubmit, register, getValues, watch } = useForm();
   const { daoid, daochain } = useParams();
   const [connectionError, setConnectionError] = useState();
   const [isConnected, setIsConnected] = useState();
   const [step, setStep] = useState(stepOverride || 'intro');
+  const watchChannel = watch('channelId');
 
   const onSubmit = async (values) => {
     setLoading(true);
@@ -51,7 +52,8 @@ const NotificationsLaunch = ({
     const values = getValues();
 
     const res = await get(`dao/discord-status/${values.channelId}`);
-    if (res.error) {
+    console.log('res');
+    if (res.error || res === []) {
       setConnectionError(res.error);
     } else {
       setIsConnected(true);
@@ -124,15 +126,16 @@ const NotificationsLaunch = ({
             Developer Mode. Right click on the Discord text channel you want the
             bot to interact with and press “Copy ID”.
           </Text>
-          <Text fontSize='xs'>
+          <Text fontSize='xs' mb={3}>
             You need to ensure the new ‘Haus Bot’ role is able to view this
             channel. If the channel is not public for @everyone on the server,
-            you will need to add the Haus Bot roll into the channel permissions.
+            you will need to add the Haus Bot role into the channel permissions.
           </Text>
 
           <Text fontSize='xs'>
-            Once we verify the channel connection you will need to sign a
-            message with meta mask and we will be all set!
+            Once we verify the channel connection you will be asked to sign a
+            message with MetaMask to verify your DAO membership and we will be
+            all set!
           </Text>
 
           <form onSubmit={handleSubmit(onSubmit)}>
@@ -154,7 +157,10 @@ const NotificationsLaunch = ({
                 <Text mb={2} color='red.500'>
                   {connectionError}
                 </Text>
-                <Button disabled={loading} onClick={testConnection}>
+                <Button
+                  disabled={loading || !watchChannel}
+                  onClick={testConnection}
+                >
                   Test Connection
                 </Button>
               </>

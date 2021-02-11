@@ -51,12 +51,26 @@ const BankChart = ({ overview, customTerms, currentDaoTokens }) => {
   const [chartData, setChartData] = useState([]);
   const [timeframe, setTimeframe] = useState(bankChartTimeframes[0]);
 
+  console.log('daoBalances', daoBalances);
+
+  // http://localhost:3000/dao/0x2a/0x258192aa4a113f431344f5226716e92de3415658/bank
+  // has one balance record
+  // {
+  //   balances(where:{
+  //     molochAddress:"0x258192aa4a113f431344f5226716e92de3415658"
+  //   }) {
+  //     id
+  //     balance
+  //   }
+  // }
+
   useEffect(() => {
     const fetchBalances = async () => {
       const data = await fetchBankValues({
         daoID: daoid,
         chainID: daochain,
       });
+      console.log('data', data);
       setDaoBalances(data);
     };
     if (!daoBalances && daochain && daoid) {

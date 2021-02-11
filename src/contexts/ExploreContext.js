@@ -20,8 +20,8 @@ const initialState = {
       (o) => o.value,
     ),
     network: EXPLORE_FILTER_OPTIONS.filter((o) => o.type === 'network')
-      .map((o) => o.value)
-      .filter((o) => o === 1 || o === 100),
+      .filter((o) => o.default)
+      .map((o) => o.value),
   },
   searchTerm: null,
   sort: SORT_OPTIONS[0],
@@ -78,7 +78,8 @@ export const ExploreContextProvider = ({ children }) => {
   });
   const [state, dispatch] = React.useReducer(reducer, initialState);
 
-  const hasLoadedExploreData = exploreDaos.chains.length === 4;
+  const hasLoadedExploreData =
+    exploreDaos.chains.length === Object.keys(supportedChains).length;
 
   useEffect(() => {
     if (!exploreDaos.chains.length) {
