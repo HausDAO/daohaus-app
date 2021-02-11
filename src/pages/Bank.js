@@ -30,14 +30,15 @@ const Bank = ({ overview, customTerms, currentDaoTokens, daoMember }) => {
     );
 
   useEffect(() => {
-    if (currentDaoTokens) {
-      console.log('currentDaoTokens', currentDaoTokens);
-      setNeedsSync(false);
-      // setNeedsSync(
-      //   currentDaoTokens.some((token) => {
-      //     return token.contractBalances.token !== token.contractBalances.babe;
-      //   }),
-      // );
+    if (currentDaoTokens && daoMember?.exists) {
+      setNeedsSync(
+        currentDaoTokens.some((token) => {
+          return (
+            token.contractBalances &&
+            token.contractBalances.token !== token.contractBalances.babe
+          );
+        }),
+      );
     }
   }, [currentDaoTokens]);
 

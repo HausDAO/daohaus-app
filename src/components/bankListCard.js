@@ -1,27 +1,25 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Flex, Box, Skeleton, Image } from '@chakra-ui/react';
 
 import { numberWithCommas } from '../utils/general';
 import SyncTokenButton from './syncTokenButton';
-import { useDaoMember } from '../contexts/DaoMemberContext';
 import Withdraw from './withdraw';
+import { useDaoMember } from '../contexts/DaoMemberContext';
 
 const TokenListCard = ({
   token,
   isBank = true,
-  hasAction,
+  hasSync,
   version = '2.1',
   hasBalance,
 }) => {
   const { daoMember } = useDaoMember();
-  // const [hasBalance, setHasBalance] = useState(null);
   const [needsSync, setNeedsSync] = useState(null);
   const [optimisticWithdraw] = useState(false);
   const [optimisticSync, setOptimisticSync] = useState(false);
 
   useEffect(() => {
     if (token?.contractBalances) {
-      // setHasBalance(isMember && +token.tokenBalance);
       if (version === '2.1') {
         const isAccurateBalance =
           daoMember?.hasWallet &&
@@ -42,7 +40,7 @@ const TokenListCard = ({
   return (
     <Flex h='60px' align='center'>
       <Box
-        w={hasBalance || needsSync ? '20%' : '15%'}
+        w={hasBalance || hasSync ? '20%' : '15%'}
         d={['none', null, null, 'inline-block']}
       >
         <Skeleton isLoaded={token?.symbol}>
@@ -57,10 +55,10 @@ const TokenListCard = ({
       </Box>
       <Box
         w={[
-          hasBalance || needsSync ? '45%' : '60%',
+          hasBalance || hasSync ? '45%' : '60%',
           null,
           null,
-          hasBalance || needsSync ? '45%' : '50%',
+          hasBalance || hasSync ? '45%' : '50%',
         ]}
       >
         <Skeleton isLoaded={token?.tokenBalance}>
@@ -85,7 +83,7 @@ const TokenListCard = ({
         </Skeleton>
       </Box>
       <Box
-        w={hasBalance || needsSync ? '15%' : '20%'}
+        w={hasBalance || hasSync ? '15%' : '20%'}
         d={['none', null, null, 'inline-block']}
       >
         <Skeleton isLoaded={token?.usd >= 0}>
@@ -100,10 +98,10 @@ const TokenListCard = ({
       </Box>
       <Box
         w={[
-          needsSync || hasBalance ? '30%' : '40%',
+          hasSync || hasBalance ? '30%' : '40%',
           null,
           null,
-          hasBalance || needsSync ? '15%' : '20%',
+          hasBalance || hasSync ? '15%' : '20%',
         ]}
       >
         <Skeleton isLoaded={token?.totalUSD >= 0}>
@@ -125,7 +123,7 @@ const TokenListCard = ({
 
       <Box
         w={['25%', null, null, '20%']}
-        d={hasBalance || needsSync ? 'inline-block' : 'none'}
+        d={hasBalance || hasSync ? 'inline-block' : 'none'}
       >
         {hasBalance && <Withdraw token={token} />}
         {needsSync && !optimisticSync && (

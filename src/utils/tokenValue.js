@@ -43,29 +43,30 @@ export const calcTotalUSD = (decimals, tokenBalance, usdVal) => {
 };
 
 export const initTokens = async (graphTokenData) => {
-  const tokenCache = JSON.parse(window.sessionStorage.getItem('AllTokens'));
+  return initTokenData(graphTokenData, true);
+  // const tokenCache = JSON.parse(window.sessionStorage.getItem('AllTokens'));
 
-  if (!tokenCache) {
-    return initTokenData(graphTokenData, true);
-  } else {
-    let cachedTokens = [];
-    let newTokens = [];
+  // if (!tokenCache) {
+  //   return initTokenData(graphTokenData, true);
+  // } else {
+  //   let cachedTokens = [];
+  //   let newTokens = [];
 
-    for (const tokenObj of graphTokenData) {
-      const address = tokenObj.token.tokenAddress;
-      if (tokenCache[address]) {
-        cachedTokens = [...cachedTokens, tokenCache[address]];
-      } else {
-        newTokens = [...newTokens, tokenObj];
-      }
-    }
-    if (newTokens.length) {
-      const newTokenData = await initTokenData(newTokens, true);
-      return [...cachedTokens, ...newTokenData];
-    } else {
-      return cachedTokens;
-    }
-  }
+  //   for (const tokenObj of graphTokenData) {
+  //     const address = tokenObj.token.tokenAddress;
+  //     if (tokenCache[address]) {
+  //       cachedTokens = [...cachedTokens, tokenCache[address]];
+  //     } else {
+  //       newTokens = [...newTokens, tokenObj];
+  //     }
+  //   }
+  //   if (newTokens.length) {
+  //     const newTokenData = await initTokenData(newTokens, true);
+  //     return [...cachedTokens, ...newTokenData];
+  //   } else {
+  //     return cachedTokens;
+  //   }
+  // }
 };
 
 export const initTokenData = async (graphTokenData, shouldCache = false) => {
