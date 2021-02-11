@@ -126,7 +126,10 @@ const ExploreCard = ({ dao }) => {
       </Box>
       <Flex direction='row' align='center'>
         <Box fontSize='sm' mr={3}>
-          {dao.members.length} Members
+          {dao.members.length === 100
+            ? `${dao.members.length}+`
+            : `${dao.members.lengt}`}{' '}
+          Members
         </Box>
         <Box fontSize='sm' mr={3}>
           |

@@ -19,6 +19,7 @@ export const BANK_BALANCES = gql`
       tokenDecimals
       currentShares
       currentLoot
+      action
     }
   }
 `;

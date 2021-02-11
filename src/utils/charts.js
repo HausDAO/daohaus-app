@@ -26,7 +26,10 @@ export const getDateRange = (timeframe, balances, createdAt) => {
 };
 
 export const getDatesArray = (start, end, range = []) => {
-  if (start > end) return range;
+  if (start > end) {
+    // return range.length === 1 ? [...range, addDays(range[0], 7)] : range;
+    return range;
+  }
   const next = addDays(start, 7);
   return getDatesArray(next, end, [...range, start]);
 };
@@ -77,12 +80,9 @@ export const groupBalancesToDateRange = (balances, dates) => {
 
 export const groupBalancesMemberToDateRange = (balances, dates) => {
   return dates.map((date, i) => {
-    let balance;
-    if (i === 0) {
-      balance = { currentShares: 0, currentLoot: 0 };
-    } else {
-      balance = balances.find((bal) => +bal.timestamp >= date.getTime() / 1000);
-    }
+    const balance = balances.find(
+      (bal) => +bal.timestamp >= date.getTime() / 1000,
+    );
 
     return {
       date,
@@ -92,15 +92,21 @@ export const groupBalancesMemberToDateRange = (balances, dates) => {
   });
 };
 
+export const addDays = (date, days = 1) => {
+  const result = new Date(date);
+  result.setDate(result.getDate() + days);
+  return result;
+};
+
+export const subtractDays = (date, days = 1) => {
+  const result = new Date(date);
+  result.setDate(result.getDate() - days);
+  return result;
+};
+
 const groupBy = (xs, key) => {
   return xs.reduce(function(rv, x) {
     (rv[x[key]] = rv[x[key]] || []).push(x);
     return rv;
   }, {});
-};
-
-const addDays = (date, days = 1) => {
-  const result = new Date(date);
-  result.setDate(result.getDate() + days);
-  return result;
 };
