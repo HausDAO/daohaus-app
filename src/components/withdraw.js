@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Button, Spinner } from '@chakra-ui/react';
+import { Button, Spinner, Tooltip } from '@chakra-ui/react';
 
 import { useInjectedProvider } from '../contexts/InjectedProviderContext';
 import { useOverlay } from '../contexts/OverlayContext';
@@ -10,17 +10,18 @@ import { useParams } from 'react-router-dom';
 import { createPoll } from '../services/pollService';
 import { MolochService } from '../services/molochService';
 
-// import { useDao, useTxProcessor, useUser } from '../../contexts/PokemolContext';
-
 const Withdraw = ({ token }) => {
-  const { injectedProvider, address } = useInjectedProvider();
+  const { injectedProvider, address, injectedChain } = useInjectedProvider();
   const { errorToast, successToast, setTxInfoModal } = useOverlay();
   const { daoOverview } = useDao();
   const { refreshDao } = useTX();
   const { cachePoll, resolvePoll } = useUser();
   const { daoid, daochain } = useParams();
-
   const [loading, setLoading] = useState(false);
+
+  const daoConnectedAndSameChain = () => {
+    return address && daochain && injectedChain?.chainId === daochain;
+  };
 
   const handleWithdraw = async () => {
     setLoading(true);
@@ -79,9 +80,25 @@ const Withdraw = ({ token }) => {
       {loading ? (
         <Spinner />
       ) : (
-        <Button size='sm' onClick={handleWithdraw}>
-          Withdraw
-        </Button>
+        <>
+          {daoConnectedAndSameChain() ? (
+            <Button size='sm' onClick={handleWithdraw}>
+              Withdraw
+            </Button>
+          ) : (
+            <Tooltip
+              hasArrow
+              shouldWrapChildren
+              placement='bottom'
+              label='Wrong network'
+              bg='secondary.500'
+            >
+              <Button size='sm' disabled={true}>
+                Withdraw
+              </Button>
+            </Tooltip>
+          )}
+        </>
       )}
     </>
   );

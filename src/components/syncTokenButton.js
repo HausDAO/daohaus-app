@@ -12,14 +12,17 @@ import { createPoll } from '../services/pollService';
 import { MolochService } from '../services/molochService';
 
 const SyncTokenButton = ({ token }) => {
-  const { injectedProvider, address } = useInjectedProvider();
+  const { injectedProvider, address, injectedChain } = useInjectedProvider();
   const { errorToast, successToast } = useOverlay();
   const { daoOverview } = useDao();
   const { refreshDao } = useTX();
   const { cachePoll, resolvePoll } = useUser();
   const { daoid, daochain } = useParams();
-
   const [loading, setLoading] = useState(false);
+
+  const daoConnectedAndSameChain = () => {
+    return address && daochain && injectedChain?.chainId === daochain;
+  };
 
   const handleSync = async () => {
     setLoading(true);
@@ -85,17 +88,29 @@ const SyncTokenButton = ({ token }) => {
         <Spinner />
       ) : (
         <Flex>
-          <Tooltip
-            hasArrow
-            shouldWrapChildren
-            placement='top'
-            label='Looks like some funds were sent directly to the DAO. Sync to update
-            the balance.'
-          >
-            <Button onClick={handleSync} rightIcon={<RiQuestionLine />}>
-              Sync
-            </Button>
-          </Tooltip>
+          {daoConnectedAndSameChain() ? (
+            <Tooltip
+              hasArrow
+              shouldWrapChildren
+              placement='top'
+              label='Looks like some funds were sent directly to the DAO. Sync to update
+                    the balance.'
+            >
+              <Button onClick={handleSync} rightIcon={<RiQuestionLine />}>
+                Sync
+              </Button>
+            </Tooltip>
+          ) : (
+            <Tooltip
+              hasArrow
+              shouldWrapChildren
+              placement='bottom'
+              label='Wrong network'
+              bg='secondary.500'
+            >
+              <Button disabled={true}>Sync</Button>
+            </Tooltip>
+          )}
         </Flex>
       )}
     </>

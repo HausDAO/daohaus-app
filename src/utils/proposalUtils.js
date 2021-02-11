@@ -172,10 +172,17 @@ export const determineUnreadProposalList = (
   const memberVoted = proposal.votes.some(
     (vote) => vote.memberAddress.toLowerCase() === memberAddress.toLowerCase(),
   );
-  const needsMemberVote = activeMember && inVotingPeriod && !memberVoted;
+  const needsMemberVote =
+    proposal.sponsored && activeMember && inVotingPeriod && !memberVoted;
 
   const needsProcessing =
-    now >= +proposal.gracePeriodEnds && !proposal.processed;
+    proposal.sponsored &&
+    now >= +proposal.gracePeriodEnds &&
+    !proposal.processed;
+
+  const twoWeeksAgo = ((new Date() / 1000) | 0) - 1.21e6;
+  const unsponsoredAndNotExpired =
+    !proposal.sponsored && +proposal.createdAt > twoWeeksAgo;
 
   let message;
   if (!proposal.sponsored) {
@@ -191,7 +198,7 @@ export const determineUnreadProposalList = (
   return {
     unread:
       !abortedOrCancelled &&
-      (needsMemberVote || needsProcessing || !proposal.sponsored),
+      (needsMemberVote || needsProcessing || unsponsoredAndNotExpired),
     message,
   };
 };

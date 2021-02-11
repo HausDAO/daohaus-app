@@ -13,9 +13,11 @@ import ProfileCard from '../components/profileCard';
 import { getProfileActivites } from '../utils/activities';
 import { chainByID } from '../utils/chain';
 import MainViewLayout from '../components/mainViewLayout';
+import { useInjectedProvider } from '../contexts/InjectedProviderContext';
 
 const Profile = ({ members, overview, daoTokens, daoMember, activities }) => {
   const { userid, daochain } = useParams();
+  const { address } = useInjectedProvider();
   const [memberEntity, setMemberEntity] = useState(null);
   const [profile, setProfile] = useState(null);
   const [tokensReceivable, setTokensReceivable] = useState([]);
@@ -79,6 +81,16 @@ const Profile = ({ members, overview, daoTokens, daoMember, activities }) => {
     }
   }, [memberEntity]);
 
+  const hasBalance = () => {
+    return (
+      address &&
+      address.toLowerCase() === userid.toLowerCase() &&
+      tokensReceivable.length
+    );
+  };
+
+  console.log('hasBalance', hasBalance());
+
   return (
     <MainViewLayout header='Profile' isDao={true}>
       <Flex wrap='wrap'>
@@ -99,7 +111,7 @@ const Profile = ({ members, overview, daoTokens, daoMember, activities }) => {
           />
           <BankList
             tokens={tokensReceivable}
-            hasBalance={tokensReceivable.length}
+            hasBalance={hasBalance()}
             profile={true}
           />
         </Box>
