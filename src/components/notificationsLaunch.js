@@ -22,11 +22,14 @@ const NotificationsLaunch = ({
   setLoading,
   stepOverride,
 }) => {
-  const { handleSubmit, register, getValues } = useForm();
+  const { handleSubmit, register, getValues, watch } = useForm();
   const { daoid, daochain } = useParams();
   const [connectionError, setConnectionError] = useState();
   const [isConnected, setIsConnected] = useState();
   const [step, setStep] = useState(stepOverride || 'intro');
+  const watchChannel = watch('channelId');
+
+  console.log('watchChannel', watchChannel);
 
   const onSubmit = async (values) => {
     setLoading(true);
@@ -51,7 +54,8 @@ const NotificationsLaunch = ({
     const values = getValues();
 
     const res = await get(`dao/discord-status/${values.channelId}`);
-    if (res.error) {
+    console.log('res');
+    if (res.error || res === []) {
       setConnectionError(res.error);
     } else {
       setIsConnected(true);
@@ -155,7 +159,10 @@ const NotificationsLaunch = ({
                 <Text mb={2} color='red.500'>
                   {connectionError}
                 </Text>
-                <Button disabled={loading} onClick={testConnection}>
+                <Button
+                  disabled={loading || !watchChannel}
+                  onClick={testConnection}
+                >
                   Test Connection
                 </Button>
               </>
