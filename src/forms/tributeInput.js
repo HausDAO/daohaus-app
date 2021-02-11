@@ -125,6 +125,7 @@ const TributeInput = ({ register, setValue, getValues, setError }) => {
       })('approve')({ args, address, poll });
     } catch (err) {
       console.log('error:', err);
+      setLoading(false);
     }
   };
 
@@ -206,13 +207,13 @@ const TributeInput = ({ register, setValue, getValues, setError }) => {
             validate: {
               inefficienFunds: (value) => {
                 if (+value > +utils.fromWei(balance)) {
-                  return 'Inefficient Funds.';
+                  return 'Insufficient Funds';
                 }
                 return true;
               },
               locked: () => {
                 if (!unlocked) {
-                  return 'Tribute token must be unlocked to tribute.';
+                  return 'Tribute token must be unlocked to tribute';
                 }
                 return true;
               },
