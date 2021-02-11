@@ -83,22 +83,6 @@ const ProposalVote = ({ proposal, overview, daoProposals, daoMember }) => {
     </Flex>
   );
 
-  // const NonMemberToolTip = ({ children }) => {
-  //   console.log(+daoMember?.shares > 0);
-  //   return +daoMember?.shares > 0 ? (
-  //     { children }
-  //   ) : (
-  //     <Tooltip
-  //       hasArrow
-  //       label={<Box fontFamily='heading'>Only members can sponsor!</Box>}
-  //       bg='secondary.500'
-  //       placement='left-start'
-  //     >
-  //       {children}
-  //     </Tooltip>
-  //   );
-  // };
-
   const onTxHash = () => {
     setProposalModal(false);
     setTxInfoModal(true);

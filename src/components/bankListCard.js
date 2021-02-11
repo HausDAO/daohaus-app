@@ -15,8 +15,6 @@ const TokenListCard = ({
 }) => {
   const { daoMember } = useDaoMember();
   const [needsSync, setNeedsSync] = useState(null);
-  const [optimisticWithdraw] = useState(false);
-  const [optimisticSync, setOptimisticSync] = useState(false);
 
   useEffect(() => {
     if (token?.contractBalances) {
@@ -65,18 +63,12 @@ const TokenListCard = ({
           <Box fontFamily='mono'>
             {token.tokenBalance ? (
               <>
-                {optimisticWithdraw ? (
-                  `0.0000 ${token.symbol}`
-                ) : (
-                  <>
-                    {numberWithCommas(
-                      parseFloat(
-                        +token.tokenBalance / 10 ** +token.decimals,
-                      ).toFixed(4),
-                    )}{' '}
-                    {token.symbol}
-                  </>
-                )}
+                {numberWithCommas(
+                  parseFloat(
+                    +token.tokenBalance / 10 ** +token.decimals,
+                  ).toFixed(4),
+                )}{' '}
+                {token.symbol}
               </>
             ) : null}
           </Box>
@@ -107,13 +99,7 @@ const TokenListCard = ({
         <Skeleton isLoaded={token?.totalUSD >= 0}>
           <Box fontFamily='mono'>
             {token?.tokenBalance ? (
-              <>
-                {optimisticWithdraw ? (
-                  '$ 0.00'
-                ) : (
-                  <Box>${numberWithCommas(token?.totalUSD.toFixed(2))}</Box>
-                )}
-              </>
+              <Box>${numberWithCommas(token?.totalUSD.toFixed(2))}</Box>
             ) : (
               '--'
             )}
@@ -126,12 +112,7 @@ const TokenListCard = ({
         d={hasBalance || hasSync ? 'inline-block' : 'none'}
       >
         {hasBalance && <Withdraw token={token} />}
-        {needsSync && !optimisticSync && (
-          <SyncTokenButton
-            token={token}
-            setOptimisticSync={setOptimisticSync}
-          />
-        )}
+        {needsSync && <SyncTokenButton token={token} />}
       </Box>
     </Flex>
   );

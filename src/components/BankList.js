@@ -35,7 +35,7 @@ const BankList = ({ tokens, profile, hasBalance, needsSync }) => {
 
         {hasAction ? <Box w={['25%', null, null, '20%']}></Box> : null}
       </Flex>
-      {(tokens && !profile) || (hasBalance && profile) ? (
+      {tokens ? (
         tokens
           .sort((a, b) => b.totalUSD - a.totalUSD)
           .map((token) => {
@@ -49,7 +49,9 @@ const BankList = ({ tokens, profile, hasBalance, needsSync }) => {
             );
           })
       ) : (
-        <Text mt='5'>No unclaimed balances</Text>
+        <Text fontFamily='mono' mt='5'>
+          No unclaimed balances
+        </Text>
       )}
     </ContentBox>
   );
