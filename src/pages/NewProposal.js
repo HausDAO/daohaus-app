@@ -18,6 +18,7 @@ const validProposalType = (type) => {
     'whitelist',
     'guildkick',
     'trade',
+    'lootgrab',
     'minion',
     'transmutation',
   ].includes(type);

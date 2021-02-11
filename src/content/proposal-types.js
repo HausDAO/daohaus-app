@@ -54,6 +54,14 @@ export const proposalTypes = (customTerms, boosts) => {
       comingSoon: false,
       show: boosts?.transmutation && boosts?.transmutation?.active,
     },
+    {
+      name: 'Loot Grab',
+      subhead: 'Get dat loot',
+      proposalType: 'lootgrab',
+      image: swordImg,
+      comingSoon: false,
+      show: true,
+    },
   ];
 };
 
