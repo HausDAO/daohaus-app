@@ -29,9 +29,7 @@ export const TokenProvider = ({ children }) => {
       setCurrentDaoTokens(newDaoData);
       shouldFetchInit.current = false;
     };
-    console.log('daoOverview in TokenContext', daoOverview);
     if (daoOverview?.tokenBalances && daochain && shouldFetchInit.current) {
-      console.log('fetching');
       initDaoTokens(daochain);
     }
   }, [daoOverview, daochain]);

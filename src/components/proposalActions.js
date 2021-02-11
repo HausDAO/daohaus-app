@@ -1,14 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useParams } from 'react-router-dom';
-import {
-  Box,
-  Button,
-  Flex,
-  Icon,
-  Skeleton,
-  Tooltip,
-  // Text,
-} from '@chakra-ui/react';
+import { Box, Button, Flex, Icon, Skeleton, Tooltip } from '@chakra-ui/react';
 import { FaThumbsUp, FaThumbsDown } from 'react-icons/fa';
 import { RiErrorWarningLine, RiQuestionLine } from 'react-icons/ri';
 import { isAfter, isBefore } from 'date-fns';
@@ -91,20 +83,21 @@ const ProposalVote = ({ proposal, overview, daoProposals, daoMember }) => {
     </Flex>
   );
 
-  const NonMemberToolTip = ({ children }) => {
-    return daoMember ? (
-      children
-    ) : (
-      <Tooltip
-        hasArrow
-        label={<Box fontFamily='heading'>Only members can sponsor!</Box>}
-        bg='secondary.500'
-        placement='left-start'
-      >
-        {children}
-      </Tooltip>
-    );
-  };
+  // const NonMemberToolTip = ({ children }) => {
+  //   console.log(+daoMember?.shares > 0);
+  //   return +daoMember?.shares > 0 ? (
+  //     { children }
+  //   ) : (
+  //     <Tooltip
+  //       hasArrow
+  //       label={<Box fontFamily='heading'>Only members can sponsor!</Box>}
+  //       bg='secondary.500'
+  //       placement='left-start'
+  //     >
+  //       {children}
+  //     </Tooltip>
+  //   );
+  // };
 
   const onTxHash = () => {
     setProposalModal(false);
@@ -384,8 +377,6 @@ const ProposalVote = ({ proposal, overview, daoProposals, daoMember }) => {
           minion: proposal?.minionAddress,
           chainID: daochain,
         })('getAction')({ proposalId: proposal?.proposalId });
-
-        console.log('action', action);
       } catch (err) {
         console.log('error: ', err);
       } finally {
@@ -421,6 +412,7 @@ const ProposalVote = ({ proposal, overview, daoProposals, daoMember }) => {
           (proposal?.status !== 'Unsponsored' || proposal?.proposalIndex) &&
           proposal?.status !== 'Cancelled' &&
           !proposal?.status === 'ReadyForProcessing' && <NetworkOverlay />}
+
         {proposal?.status === 'Unsponsored' && !proposal?.proposalIndex && (
           <Flex justify='center' direction='column'>
             <Flex justify='center' mb={4}>
@@ -465,27 +457,39 @@ const ProposalVote = ({ proposal, overview, daoProposals, daoMember }) => {
               </Flex>
             </Flex>
             <Flex justify='space-around'>
-              <NonMemberToolTip>
-                {+daoMember?.allowance *
-                  10 ** overview?.depositToken?.decimals >
-                  +overview?.proposalDeposit ||
-                +overview?.proposalDeposit === 0 ? (
-                  <Button
-                    onClick={() => sponsorProposal(proposal?.proposalId)}
-                    isLoading={loading}
-                  >
-                    Sponsor
-                  </Button>
-                ) : (
-                  <Button
-                    onClick={() => unlock(overview.depositToken.tokenAddress)}
-                    isLoading={loading}
-                    isDisabled={!daoMember}
-                  >
-                    Unlock
-                  </Button>
-                )}
-              </NonMemberToolTip>
+              {+daoMember?.shares > 0 ? (
+                <>
+                  {+daoMember?.allowance *
+                    10 ** overview?.depositToken?.decimals >
+                    +overview?.proposalDeposit ||
+                  +overview?.proposalDeposit === 0 ? (
+                    <Button
+                      onClick={() => sponsorProposal(proposal?.proposalId)}
+                      isLoading={loading}
+                    >
+                      Sponsor
+                    </Button>
+                  ) : (
+                    <Button
+                      onClick={() => unlock(overview.depositToken.tokenAddress)}
+                      isLoading={loading}
+                      isDisabled={!daoMember}
+                    >
+                      Unlock
+                    </Button>
+                  )}
+                </>
+              ) : (
+                <Tooltip
+                  hasArrow
+                  shouldWrapChildren
+                  placement='bottom'
+                  label='Only members can sponsor!'
+                  bg='secondary.500'
+                >
+                  <Button isDisabled={true}>Sponsor</Button>
+                </Tooltip>
+              )}
               {proposal?.proposer === address?.toLowerCase() && (
                 <Button
                   variant='outline'
@@ -510,47 +514,48 @@ const ProposalVote = ({ proposal, overview, daoProposals, daoMember }) => {
                 >
                   {currentlyVoting(proposal) ? (
                     <>
-                      {daoMember && memberVote(proposal, address) === null && (
-                        <Flex w='48%' justify='space-around'>
-                          <Flex
-                            p={3}
-                            borderWidth='1px'
-                            borderColor='green.500'
-                            borderStyle='solid'
-                            borderRadius='40px'
-                            justiy='center'
-                            align='center'
-                          >
-                            <Icon
-                              as={FaThumbsUp}
-                              color='green.500'
-                              w='25px'
-                              h='25px'
-                              _hover={{ cursor: 'pointer' }}
-                              onClick={() => submitVote(proposal, 1)}
-                            />
+                      {daoConnectedAndSameChain() &&
+                        memberVote(proposal, address) === null && (
+                          <Flex w='48%' justify='space-around'>
+                            <Flex
+                              p={3}
+                              borderWidth='1px'
+                              borderColor='green.500'
+                              borderStyle='solid'
+                              borderRadius='40px'
+                              justiy='center'
+                              align='center'
+                            >
+                              <Icon
+                                as={FaThumbsUp}
+                                color='green.500'
+                                w='25px'
+                                h='25px'
+                                _hover={{ cursor: 'pointer' }}
+                                onClick={() => submitVote(proposal, 1)}
+                              />
+                            </Flex>
+                            <Flex
+                              p={3}
+                              borderWidth='1px'
+                              borderColor='red.500'
+                              borderStyle='solid'
+                              borderRadius='40px'
+                              justiy='center'
+                              align='center'
+                            >
+                              <Icon
+                                as={FaThumbsDown}
+                                color='red.500'
+                                w='25px'
+                                h='25px'
+                                transform='rotateY(180deg)'
+                                _hover={{ cursor: 'pointer' }}
+                                onClick={() => submitVote(proposal, 2)}
+                              />
+                            </Flex>
                           </Flex>
-                          <Flex
-                            p={3}
-                            borderWidth='1px'
-                            borderColor='red.500'
-                            borderStyle='solid'
-                            borderRadius='40px'
-                            justiy='center'
-                            align='center'
-                          >
-                            <Icon
-                              as={FaThumbsDown}
-                              color='red.500'
-                              w='25px'
-                              h='25px'
-                              transform='rotateY(180deg)'
-                              _hover={{ cursor: 'pointer' }}
-                              onClick={() => submitVote(proposal, 2)}
-                            />
-                          </Flex>
-                        </Flex>
-                      )}
+                        )}
                       <Flex
                         justify={
                           daoMember && memberVote(proposal, address) === null
@@ -661,7 +666,7 @@ const ProposalVote = ({ proposal, overview, daoProposals, daoMember }) => {
             </>
           )}
 
-        {daoMember &&
+        {daoConnectedAndSameChain() &&
           proposal?.status === 'ReadyForProcessing' &&
           (nextProposalToProcess?.proposalId === proposal?.proposalId ? (
             <Flex justify='center' pt='10px'>
