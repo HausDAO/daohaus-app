@@ -27,6 +27,7 @@ import {
   balancesWithValue,
   getDatesArray,
   groupBalancesToDateRange,
+  subtractDays,
 } from '../utils/charts';
 import { useCustomTheme } from '../contexts/CustomThemeContext';
 import ContentBox from './ContentBox';
@@ -51,26 +52,12 @@ const BankChart = ({ overview, customTerms, currentDaoTokens }) => {
   const [chartData, setChartData] = useState([]);
   const [timeframe, setTimeframe] = useState(bankChartTimeframes[0]);
 
-  console.log('daoBalances', daoBalances);
-
-  // http://localhost:3000/dao/0x2a/0x258192aa4a113f431344f5226716e92de3415658/bank
-  // has one balance record
-  // {
-  //   balances(where:{
-  //     molochAddress:"0x258192aa4a113f431344f5226716e92de3415658"
-  //   }) {
-  //     id
-  //     balance
-  //   }
-  // }
-
   useEffect(() => {
     const fetchBalances = async () => {
       const data = await fetchBankValues({
         daoID: daoid,
         chainID: daochain,
       });
-      console.log('data', data);
       setDaoBalances(data);
     };
     if (!daoBalances && daochain && daoid) {
@@ -92,11 +79,13 @@ const BankChart = ({ overview, customTerms, currentDaoTokens }) => {
           filteredBalances,
           overview.summoningTime,
         );
+
         const dates = getDatesArray(dateRange.start, dateRange.end);
         const groupedBalances = groupBalancesToDateRange(
           filteredBalances,
           dates,
         );
+
         const data = groupedBalances.map((balance, i) => {
           return {
             x: balance.date,
@@ -104,10 +93,26 @@ const BankChart = ({ overview, customTerms, currentDaoTokens }) => {
             y0: 0,
           };
         });
-        if (timeframe.value === 'lifetime') {
-          data[0].y = 0;
+
+        if (timeframe.value === 'lifetime' || data.length === 1) {
+          data.unshift({
+            x: subtractDays(data[0].x, 7),
+            y: 0,
+            y0: 0,
+          });
         }
-        setChartData(data);
+
+        if (data.every((bal) => bal.y === 0)) {
+          setChartData(
+            data.map((b) => {
+              return { ...b, y0: -100 };
+            }),
+          );
+        } else {
+          setChartData(data);
+        }
+      } else {
+        setChartData([]);
       }
     }
   }, [daoBalances, currentDaoTokens, timeframe]);

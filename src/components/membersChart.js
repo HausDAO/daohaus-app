@@ -16,6 +16,7 @@ import {
   getDateRange,
   getDatesArray,
   groupBalancesMemberToDateRange,
+  subtractDays,
 } from '../utils/charts';
 import ContentBox from './ContentBox';
 import TextBox from './TextBox';
@@ -55,10 +56,12 @@ const MembersChart = ({ overview, daoMetaData, daoMembers }) => {
         overview.summoningTime,
       );
       const dates = getDatesArray(dateRange.start, dateRange.end);
+
       const groupedBalances = groupBalancesMemberToDateRange(
         daoBalances,
         dates,
       );
+
       setPreppedData(groupedBalances);
     }
   }, [daoBalances, overview]);
@@ -78,6 +81,13 @@ const MembersChart = ({ overview, daoMetaData, daoMembers }) => {
       };
     });
 
+    if (data.length === 1) {
+      data.unshift({
+        x: subtractDays(data[0].x, 7),
+        y: 0,
+        y0: 0,
+      });
+    }
     setChartData(data);
   };
 
