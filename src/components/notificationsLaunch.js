@@ -29,8 +29,6 @@ const NotificationsLaunch = ({
   const [step, setStep] = useState(stepOverride || 'intro');
   const watchChannel = watch('channelId');
 
-  console.log('watchChannel', watchChannel);
-
   const onSubmit = async (values) => {
     setLoading(true);
     const boostMetadata = [
