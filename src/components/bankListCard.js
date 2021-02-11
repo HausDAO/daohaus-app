@@ -3,7 +3,6 @@ import { Flex, Box, Skeleton, Image } from '@chakra-ui/react';
 
 import { numberWithCommas } from '../utils/general';
 import SyncTokenButton from './syncTokenButton';
-// import { useDaoMember } from '../contexts/DaoMemberContext';
 import Withdraw from './withdraw';
 import { useDaoMember } from '../contexts/DaoMemberContext';
 
@@ -18,8 +17,6 @@ const TokenListCard = ({
   const [needsSync, setNeedsSync] = useState(null);
   const [optimisticWithdraw] = useState(false);
   const [optimisticSync, setOptimisticSync] = useState(false);
-
-  console.log('needsSync', needsSync);
 
   useEffect(() => {
     if (token?.contractBalances) {
