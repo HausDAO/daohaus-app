@@ -39,6 +39,7 @@ const ProposalVote = ({ proposal, overview, daoProposals, daoMember }) => {
   const { refreshDao } = useTX();
   const { customTerms } = useMetaData();
   const [minionDeets, setMinionDeets] = useState();
+  const [enoughDeposit, setEnoughDeposit] = useState();
 
   const currentlyVoting = (proposal) => {
     return (
@@ -88,6 +89,22 @@ const ProposalVote = ({ proposal, overview, daoProposals, daoMember }) => {
     setTxInfoModal(true);
   };
 
+  useEffect(() => {
+    const getDepositTokenBalance = async () => {
+      const depositTokenBalance = await TokenService({
+        tokenAddress: overview?.depositToken.tokenAddress,
+        chainID: daochain,
+      })('balanceOf')(address);
+      setEnoughDeposit(
+        +depositTokenBalance >
+          +overview?.proposalDeposit / 10 ** overview?.depositToken.decimals,
+      );
+    };
+    if (overview?.depositToken) {
+      getDepositTokenBalance();
+    }
+  }, [overview]);
+
   const cancelProposal = async (id) => {
     setLoading(true);
     const args = [id];
@@ -132,11 +149,10 @@ const ProposalVote = ({ proposal, overview, daoProposals, daoMember }) => {
   const unlock = async (token) => {
     setLoading(true);
     console.log(token);
-    // TODO change to unlimited
-    const tokenAmount = (100 * 10 ** 18).toString();
+
+    const tokenAmount = (+overview?.proposalDeposit).toString();
     const args = [daoid, tokenAmount];
 
-    // ? multiply times decimals
     try {
       const poll = createPoll({ action: 'unlockToken', cachePoll })({
         daoID: daoid,
@@ -270,8 +286,7 @@ const ProposalVote = ({ proposal, overview, daoProposals, daoMember }) => {
       proposalType = 'guildkick';
       processFn = 'processWhitelistProposal';
     }
-    console.log('proposalType :>> ', proposalType);
-    console.log('processFn :>> ', processFn);
+
     const args = [proposal.proposalIndex];
 
     try {
@@ -416,9 +431,7 @@ const ProposalVote = ({ proposal, overview, daoProposals, daoMember }) => {
                   {overview?.proposalDeposit /
                     10 ** overview?.depositToken.decimals}{' '}
                   {overview?.depositToken?.symbol}
-                  {+daoMember?.tokenBalance <
-                  +overview?.proposalDeposit /
-                    10 ** overview?.depositToken.decimals ? (
+                  {!enoughDeposit ? (
                     <Tooltip
                       shouldWrapChildren
                       placement='bottom'
@@ -449,6 +462,7 @@ const ProposalVote = ({ proposal, overview, daoProposals, daoMember }) => {
                   +overview?.proposalDeposit === 0 ? (
                     <Button
                       onClick={() => sponsorProposal(proposal?.proposalId)}
+                      isDisabled={!enoughDeposit}
                       isLoading={loading}
                     >
                       Sponsor
@@ -499,6 +513,7 @@ const ProposalVote = ({ proposal, overview, daoProposals, daoMember }) => {
                   {currentlyVoting(proposal) ? (
                     <>
                       {daoConnectedAndSameChain() &&
+                        +daoMember?.shares > 0 &&
                         memberVote(proposal, address) === null && (
                           <Flex w='48%' justify='space-around'>
                             <Flex
