@@ -511,7 +511,7 @@ const ProposalVote = ({ proposal, overview, daoProposals, daoMember }) => {
                       {daoConnectedAndSameChain(
                         address,
                         daochain,
-                        injectedChain.chainId,
+                        injectedChain?.chainId,
                       ) &&
                         +daoMember?.shares > 0 &&
                         memberVote(proposal, address) === null && (
@@ -665,7 +665,7 @@ const ProposalVote = ({ proposal, overview, daoProposals, daoMember }) => {
             </>
           )}
 
-        {daoConnectedAndSameChain(address, daochain, injectedChain.chainId) &&
+        {daoConnectedAndSameChain(address, daochain, injectedChain?.chainId) &&
           proposal?.status === 'ReadyForProcessing' &&
           (nextProposalToProcess?.proposalId === proposal?.proposalId ? (
             <Flex justify='center' pt='10px'>
