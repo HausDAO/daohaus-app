@@ -10,14 +10,11 @@ import TextBox from '../components/TextBox';
 import Minions from '../components/minionList';
 import MainViewLayout from '../components/mainViewLayout';
 import { useInjectedProvider } from '../contexts/InjectedProviderContext';
+import { daoConnectedAndSameChain } from '../utils/general';
 
 const Settings = ({ overview, daoMember, daoMetaData, customTerms }) => {
   const { daochain, daoid } = useParams();
   const { address, injectedChain } = useInjectedProvider();
-
-  const daoConnectedAndSameChain = () => {
-    return address && daochain && injectedChain?.chainId === daochain;
-  };
 
   return (
     <MainViewLayout header='Settings' isDao={true}>
@@ -31,7 +28,11 @@ const Settings = ({ overview, daoMember, daoMetaData, customTerms }) => {
           <DaoContractSettings overview={overview} customTerms={customTerms} />
           <Flex justify='space-between' mt={6}>
             <TextBox size='xs'>DAO Metadata</TextBox>
-            {daoConnectedAndSameChain() && +daoMember?.shares > 0 ? (
+            {daoConnectedAndSameChain(
+              address,
+              daochain,
+              injectedChain?.chainId,
+            ) && +daoMember?.shares > 0 ? (
               <Link
                 as={RouterLink}
                 color='secondary.500'
