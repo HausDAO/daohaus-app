@@ -23,7 +23,13 @@ export const cacheProfile = (newProfile, memberAddress) => {
     ...profileCache,
     [memberAddress]: newProfile,
   });
-  window.sessionStorage.setItem('3BoxProfiles', newCache);
+  try {
+    window.sessionStorage.setItem('3BoxProfiles', newCache);
+  } catch (error) {
+    console.log('Session storage is full');
+    console.log('clearing session storage');
+    sessionStorage.clear();
+  }
 };
 
 export const getCachedProfile = (memberAddress) => {
@@ -36,7 +42,13 @@ export const ensureCacheExists = () => {
   if (cacheExists) {
     return true;
   } else {
-    window.sessionStorage.setItem('3BoxProfiles', JSON.stringify({}));
+    try {
+      window.sessionStorage.setItem('3BoxProfiles', JSON.stringify({}));
+    } catch (error) {
+      console.log('Sessions storage is full');
+      console.log('clearing sessions storage');
+      sessionStorage.clear();
+    }
   }
 };
 

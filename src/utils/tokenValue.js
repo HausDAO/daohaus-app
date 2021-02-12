@@ -42,34 +42,7 @@ export const calcTotalUSD = (decimals, tokenBalance, usdVal) => {
   return (+tokenBalance / 10 ** decimals) * +usdVal;
 };
 
-export const initTokens = async (graphTokenData) => {
-  return initTokenData(graphTokenData, true);
-  // const tokenCache = JSON.parse(window.sessionStorage.getItem('AllTokens'));
-
-  // if (!tokenCache) {
-  //   return initTokenData(graphTokenData, true);
-  // } else {
-  //   let cachedTokens = [];
-  //   let newTokens = [];
-
-  //   for (const tokenObj of graphTokenData) {
-  //     const address = tokenObj.token.tokenAddress;
-  //     if (tokenCache[address]) {
-  //       cachedTokens = [...cachedTokens, tokenCache[address]];
-  //     } else {
-  //       newTokens = [...newTokens, tokenObj];
-  //     }
-  //   }
-  //   if (newTokens.length) {
-  //     const newTokenData = await initTokenData(newTokens, true);
-  //     return [...cachedTokens, ...newTokenData];
-  //   } else {
-  //     return cachedTokens;
-  //   }
-  // }
-};
-
-export const initTokenData = async (graphTokenData, shouldCache = false) => {
+export const initTokenData = async (graphTokenData) => {
   const tokenData = await fetchTokenData();
   const uniswapData = await fetchUniswapData();
   const uniswapDataMap = uniswapData.reduce((map, token) => {
@@ -78,9 +51,6 @@ export const initTokenData = async (graphTokenData, shouldCache = false) => {
   }, {});
 
   return graphTokenData.map((tokenObj) => {
-    if (shouldCache) {
-      ensureCacheExists();
-    }
     const { token, tokenBalance } = tokenObj;
 
     const usdVal = tokenData[token.tokenAddress]?.price || 0;
@@ -94,9 +64,7 @@ export const initTokenData = async (graphTokenData, shouldCache = false) => {
       totalUSD: calcTotalUSD(token.decimals, tokenBalance, usdVal),
       logoUri,
     };
-    if (shouldCache) {
-      cacheToken(tokenDataObj, token.tokenAddress);
-    }
+
     return tokenDataObj;
   });
 };
@@ -110,6 +78,7 @@ export const tallyUSDs = (tokenObj) => {
 };
 
 export const addContractVals = (tokens, chainID) => {
+  console.log('FETCHED FOR CONTRACT VALS');
   return Promise.all(
     tokens.map(async (token) => {
       try {
@@ -181,27 +150,5 @@ export const valToDecimalString = (value, tokenAddress, tokens) => {
       .mul(exp)
       .div(ethers.BigNumber.from(perc))
       .toString();
-  }
-};
-
-/// /////Caching Utils//////////////
-
-export const cacheToken = (newToken, tokenAddress) => {
-  if (!newToken) return;
-
-  const tokenCache = JSON.parse(window.sessionStorage.getItem('AllTokens'));
-  const newCache = JSON.stringify({
-    ...tokenCache,
-    [tokenAddress]: newToken,
-  });
-  window.sessionStorage.setItem('AllTokens', newCache);
-};
-
-export const ensureCacheExists = () => {
-  const cacheExists = window.sessionStorage.getItem('AllTokens');
-  if (cacheExists) {
-    return true;
-  } else {
-    window.sessionStorage.setItem('AllTokens', JSON.stringify({}));
   }
 };
