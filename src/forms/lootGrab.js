@@ -43,6 +43,8 @@ const LootGrabForm = () => {
   const [currentError, setCurrentError] = useState(null);
   const [editDetails, setEditDetails] = useState();
 
+  const ratio = 1.1;
+
   const {
     handleSubmit,
     errors,
@@ -88,7 +90,7 @@ const LootGrabForm = () => {
     const args = [
       applicant,
       values.sharesRequested || '0',
-      Math.floor(values.tributeOffered || '0').toString(),
+      Math.floor(values.tributeOffered * ratio || '0').toString(),
       tributeOffered,
       tributeToken,
       paymentRequested,
@@ -167,7 +169,7 @@ const LootGrabForm = () => {
           />
 
           <TextBox>
-            Loot: {Math.floor(watch('tributeOffered') || 0).toString()}
+            Loot: {Math.floor(watch('tributeOffered') * ratio || 0).toString()}
           </TextBox>
         </Box>
       </FormControl>

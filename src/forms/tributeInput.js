@@ -130,7 +130,7 @@ const TributeInput = ({ register, setValue, getValues, setError }) => {
   };
 
   const checkUnlocked = async (token, amount) => {
-    console.log('check', token, amount);
+    // console.log('check', token, amount);
     if (amount === '' || !token || typeof +amount !== 'number') {
       setUnlocked(true);
       return;
@@ -143,18 +143,12 @@ const TributeInput = ({ register, setValue, getValues, setError }) => {
       accountAddr: address,
       contractAddr: daoid,
     });
-    console.log(
-      'amountApproved > amount',
-      +amountApproved > +amount,
-      amountApproved,
-      amount,
-    );
+
     const isUnlocked = +amountApproved > +amount;
     setUnlocked(isUnlocked);
   };
 
   const getMax = async (token) => {
-    console.log(token);
     const tokenContract = TokenService({
       chainID: daochain,
       tokenAddress: token,
