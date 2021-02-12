@@ -17,7 +17,7 @@ import { useCustomTheme } from '../contexts/CustomThemeContext';
 import { truncateAddr } from '../utils/general';
 import { handleGetProfile } from '../utils/3box';
 import { chainByID } from '../utils/chain';
-import { useParams } from 'react-router-dom';
+// import { useParams } from 'react-router-dom';
 
 const AddressInput = ({
   register,
@@ -31,7 +31,7 @@ const AddressInput = ({
   formLabel = formLabel || 'applicant';
   // const [user] = useUser();
   const { theme } = useCustomTheme();
-  const { daochain } = useParams();
+  // const { daochain } = useParams();
   const { daoMembers } = useDao();
   const [anyApplicant, setAnyApplicant] = useState(false);
   // const [members] = useMembers();
@@ -40,7 +40,8 @@ const AddressInput = ({
   const ensAddr = watch('applicantHidden', '');
 
   const handleChange = async (e) => {
-    if (e.target.value.endsWith('.eth') && daochain === '0x1') {
+    console.log('blah');
+    if (e.target.value.endsWith('.eth')) {
       const ethersProvider = ethers.getDefaultProvider(
         chainByID('0x1').rpc_url,
       );

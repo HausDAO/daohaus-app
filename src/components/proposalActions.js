@@ -400,7 +400,7 @@ const ProposalVote = ({ proposal, overview, daoProposals, daoMember }) => {
         {proposal?.status === 'Unsponsored' && !proposal?.proposalIndex && (
           <Flex justify='center' direction='column'>
             <Flex justify='center' mb={4}>
-              <Flex justify='center' direction='column'>
+              <Flex justify='center' direction='column' align='center'>
                 <TextBox size='xs'>
                   Deposit to Sponsor{' '}
                   <Tooltip

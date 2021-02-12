@@ -118,7 +118,7 @@ const TributeInput = ({ register, setValue, getValues, setError }) => {
           },
         },
       });
-      TokenService({
+      await TokenService({
         web3: injectedProvider,
         chainID: daochain,
         tokenAddress: token,

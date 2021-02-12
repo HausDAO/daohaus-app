@@ -26,14 +26,24 @@ import { useOverlay } from '../contexts/OverlayContext';
 import { useTX } from '../contexts/TXContext';
 import { useUser } from '../contexts/UserContext';
 import { useParams } from 'react-router-dom';
-import { createHash, detailsToJSON } from '../utils/general';
+import {
+  createHash,
+  detailsToJSON,
+  daoConnectedAndSameChain,
+} from '../utils/general';
 import { createPoll } from '../services/pollService';
 import { MolochService } from '../services/molochService';
 import { useDao } from '../contexts/DaoContext';
 import { valToDecimalString } from '../utils/tokenValue';
+import { chainByID } from '../utils/chain';
 
 const MemberProposalForm = () => {
-  const { injectedProvider, address } = useInjectedProvider();
+  const {
+    injectedProvider,
+    address,
+    requestWallet,
+    injectedChain,
+  } = useInjectedProvider();
   const {
     errorToast,
     successToast,
@@ -262,14 +272,30 @@ const MemberProposalForm = () => {
           </Box>
         )}
         <Box>
-          <Button
-            type='submit'
-            loadingText='Submitting'
-            isLoading={loading}
-            disabled={loading}
-          >
-            Submit
-          </Button>
+          {daoConnectedAndSameChain(
+            address,
+            daochain,
+            injectedChain?.chainId,
+          ) ? (
+            <Button
+              type='submit'
+              loadingText='Submitting'
+              isLoading={loading}
+              disabled={loading}
+            >
+              Submit
+            </Button>
+          ) : (
+            <Button
+              onClick={requestWallet}
+              isDisabled={daochain !== injectedChain?.chainId}
+            >
+              Connect{' '}
+              {daochain !== injectedChain?.chainId
+                ? `to ${chainByID(daochain).name}`
+                : 'Wallet'}
+            </Button>
+          )}
         </Box>
       </Flex>
     </form>
