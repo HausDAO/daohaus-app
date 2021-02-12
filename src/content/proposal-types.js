@@ -1,7 +1,7 @@
 import { getCopy } from '../utils/metadata';
 import swordImg from '../assets/img/swords-white.svg';
 
-export const proposalTypes = (customTerms, boosts) => {
+export const proposalTypes = (customTerms, boosts, daoid) => {
   return [
     {
       name: 'Membership',
@@ -53,6 +53,14 @@ export const proposalTypes = (customTerms, boosts) => {
       image: swordImg,
       comingSoon: false,
       show: boosts?.transmutation && boosts?.transmutation?.active,
+    },
+    {
+      name: 'Loot Grab',
+      subhead: 'Get dat loot',
+      proposalType: 'lootgrab',
+      image: swordImg,
+      comingSoon: false,
+      show: daoid === '0xff3f8c0b98454306fb0bda57e5ae38cbfa66cc0d',
     },
   ];
 };

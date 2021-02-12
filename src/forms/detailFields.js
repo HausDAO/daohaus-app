@@ -12,9 +12,9 @@ import {
 import TextBox from '../components/TextBox';
 import { stripHttpProtocol } from '../utils/general';
 
-const DetailsFields = ({ register }) => {
+const DetailsFields = ({ register, defaultTitle }) => {
   const [values, setValues] = useState({
-    title: '',
+    title: defaultTitle || '',
     description: '',
     link: '',
   });

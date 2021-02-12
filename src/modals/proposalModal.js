@@ -22,6 +22,7 @@ import { getCopy } from '../utils/metadata';
 import { useMetaData } from '../contexts/MetaDataContext';
 import { useOverlay } from '../contexts/OverlayContext';
 import { useCustomTheme } from '../contexts/CustomThemeContext';
+import LootGrabForm from '../forms/lootGrab';
 
 const ProposalFormModal = ({ proposalType, returnRoute }) => {
   const [, setLoading] = useState(false);
@@ -45,6 +46,12 @@ const ProposalFormModal = ({ proposalType, returnRoute }) => {
       heading: `New Funding ${getCopy(customTerms, 'proposal')}`,
       subline: `Submit a funding proposal here.`,
       form: <FundingProposalForm />,
+    },
+    lootgrab: {
+      type: `New ${getCopy(customTerms, 'proposal')}`,
+      heading: `New Loot Grab ${getCopy(customTerms, 'proposal')}`,
+      subline: `Submit a loot grab proposal here.`,
+      form: <LootGrabForm />,
     },
     whitelist: {
       type: `New ${getCopy(customTerms, 'proposal')}`,
