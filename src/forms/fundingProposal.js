@@ -153,16 +153,6 @@ const FundingProposalForm = () => {
     }
   };
 
-  console.log(address);
-  console.log(daochain);
-  console.log(injectedChain);
-
-  // const daoConnectedAndSameChain = () => {
-  //   return address && daochain && daochain === injectedChain?.chainId;
-  // };
-
-  // console.log(daoConnectedAndSameChain());
-
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
       <FormControl

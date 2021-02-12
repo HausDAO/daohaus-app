@@ -18,7 +18,7 @@ import TextBox from './TextBox';
 import { memberVote } from '../utils/proposalUtils';
 import { supportedChains } from '../utils/chain';
 import { getCopy } from '../utils/metadata';
-import { capitalize } from '../utils/general';
+import { capitalize, daoConnectedAndSameChain } from '../utils/general';
 import { useMetaData } from '../contexts/MetaDataContext';
 import { MinionService } from '../services/minionService';
 
@@ -46,10 +46,6 @@ const ProposalVote = ({ proposal, overview, daoProposals, daoMember }) => {
       isBefore(Date.now(), new Date(+proposal?.votingPeriodEnds * 1000)) &&
       isAfter(Date.now(), new Date(+proposal?.votingPeriodStarts * 1000))
     );
-  };
-
-  const daoConnectedAndSameChain = () => {
-    return address && daochain && injectedChain?.chainId === daochain;
   };
 
   const userRejectedToast = () => {
@@ -404,10 +400,10 @@ const ProposalVote = ({ proposal, overview, daoProposals, daoMember }) => {
   return (
     <>
       <ContentBox position='relative'>
-        {!daoConnectedAndSameChain() &&
+        {!daoConnectedAndSameChain(address, daochain, injectedChain?.chainId) &&
           ((proposal?.status === 'Unsponsored' && !proposal?.proposalIndex) ||
             proposal?.status === 'ReadyForProcessing') && <NetworkOverlay />}
-        {!daoConnectedAndSameChain() &&
+        {!daoConnectedAndSameChain(address, daochain, injectedChain?.chainId) &&
           (proposal?.status !== 'Unsponsored' || proposal?.proposalIndex) &&
           proposal?.status !== 'Cancelled' &&
           !proposal?.status === 'ReadyForProcessing' && <NetworkOverlay />}
@@ -512,7 +508,11 @@ const ProposalVote = ({ proposal, overview, daoProposals, daoMember }) => {
                 >
                   {currentlyVoting(proposal) ? (
                     <>
-                      {daoConnectedAndSameChain() &&
+                      {daoConnectedAndSameChain(
+                        address,
+                        daochain,
+                        injectedChain.chainId,
+                      ) &&
                         +daoMember?.shares > 0 &&
                         memberVote(proposal, address) === null && (
                           <Flex w='48%' justify='space-around'>
@@ -665,7 +665,7 @@ const ProposalVote = ({ proposal, overview, daoProposals, daoMember }) => {
             </>
           )}
 
-        {daoConnectedAndSameChain() &&
+        {daoConnectedAndSameChain(address, daochain, injectedChain.chainId) &&
           proposal?.status === 'ReadyForProcessing' &&
           (nextProposalToProcess?.proposalId === proposal?.proposalId ? (
             <Flex justify='center' pt='10px'>
