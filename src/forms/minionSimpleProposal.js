@@ -421,7 +421,7 @@ const MinionProposalForm = () => {
           {daoConnectedAndSameChain(
             address,
             daochain,
-            injectedChain?.chainID,
+            injectedChain?.chainId,
           ) ? (
             <Button
               type='submit'
@@ -434,10 +434,10 @@ const MinionProposalForm = () => {
           ) : (
             <Button
               onClick={requestWallet}
-              isDisabled={daochain !== injectedChain?.chainID}
+              isDisabled={daochain !== injectedChain?.chainId}
             >
               Connect{' '}
-              {daochain !== injectedChain?.chainID
+              {daochain !== injectedChain?.chainId
                 ? `to ${chainByID(daochain).name}`
                 : 'Wallet'}
             </Button>

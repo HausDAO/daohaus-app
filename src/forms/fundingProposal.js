@@ -153,9 +153,15 @@ const FundingProposalForm = () => {
     }
   };
 
-  console.log(
-    daoConnectedAndSameChain(address, daochain, injectedProvider?.chainID),
-  );
+  console.log(address);
+  console.log(daochain);
+  console.log(injectedChain);
+
+  // const daoConnectedAndSameChain = () => {
+  //   return address && daochain && daochain === injectedChain?.chainId;
+  // };
+
+  // console.log(daoConnectedAndSameChain());
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
@@ -276,7 +282,7 @@ const FundingProposalForm = () => {
           {daoConnectedAndSameChain(
             address,
             daochain,
-            injectedChain?.chainID,
+            injectedChain?.chainId,
           ) ? (
             <Button
               type='submit'
@@ -289,10 +295,10 @@ const FundingProposalForm = () => {
           ) : (
             <Button
               onClick={requestWallet}
-              isDisabled={daochain !== injectedChain?.chainID}
+              isDisabled={daochain !== injectedChain?.chainId}
             >
               Connect{' '}
-              {daochain !== injectedChain?.chainID
+              {daochain !== injectedChain?.chainId
                 ? `to ${chainByID(daochain).name}`
                 : 'Wallet'}
             </Button>

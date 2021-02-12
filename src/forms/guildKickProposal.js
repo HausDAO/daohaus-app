@@ -147,7 +147,7 @@ const GuildKickProposalForm = () => {
           {daoConnectedAndSameChain(
             address,
             daochain,
-            injectedChain?.chainID,
+            injectedChain?.chainId,
           ) ? (
             <Button
               type='submit'
@@ -160,10 +160,10 @@ const GuildKickProposalForm = () => {
           ) : (
             <Button
               onClick={requestWallet}
-              isDisabled={daochain !== injectedChain?.chainID}
+              isDisabled={daochain !== injectedChain?.chainId}
             >
               Connect{' '}
-              {daochain !== injectedChain?.chainID
+              {daochain !== injectedChain?.chainId
                 ? `to ${chainByID(daochain).name}`
                 : 'Wallet'}
             </Button>

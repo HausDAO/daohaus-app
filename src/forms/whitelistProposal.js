@@ -66,11 +66,6 @@ const WhitelistProposalForm = () => {
 
   // TODO check link is a valid link
 
-  // dao.daoService.moloch.submitWhiteListProposal(
-  //   values.tokenAddress,
-  //   details,
-  //   txCallBack)
-
   console.log(address);
 
   const onSubmit = async (values) => {
@@ -160,7 +155,7 @@ const WhitelistProposalForm = () => {
           {daoConnectedAndSameChain(
             address,
             daochain,
-            injectedChain?.chainID,
+            injectedChain?.chainId,
           ) ? (
             <Button
               type='submit'
@@ -173,10 +168,10 @@ const WhitelistProposalForm = () => {
           ) : (
             <Button
               onClick={requestWallet}
-              isDisabled={daochain !== injectedChain?.chainID}
+              isDisabled={daochain !== injectedChain?.chainId}
             >
               Connect{' '}
-              {daochain !== injectedChain?.chainID
+              {daochain !== injectedChain?.chainId
                 ? `to ${chainByID(daochain).name}`
                 : 'Wallet'}
             </Button>
