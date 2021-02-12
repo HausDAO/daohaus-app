@@ -60,7 +60,8 @@ export const proposalTypes = (customTerms, boosts, daoid) => {
       proposalType: 'lootgrab',
       image: swordImg,
       comingSoon: false,
-      show: daoid === '0xff3f8c0b98454306fb0bda57e5ae38cbfa66cc0d',
+      // show: daoid === '0xff3f8c0b98454306fb0bda57e5ae38cbfa66cc0d',
+      show: false,
     },
   ];
 };
