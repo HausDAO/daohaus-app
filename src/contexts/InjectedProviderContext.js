@@ -8,17 +8,12 @@ import React, {
 import Web3 from 'web3';
 import Web3Modal from 'web3modal';
 
-<<<<<<< HEAD
 import { supportedChains } from '../utils/chain';
 import {
   deriveChainId,
   deriveSelectedAddress,
   getProviderOptions,
 } from '../utils/web3Modal';
-=======
-import { supportedChains, chainByNetworkId } from '../utils/chain';
-import { getProviderOptions } from '../utils/web3Modal';
->>>>>>> 279419af (fixes)
 
 const defaultModal = new Web3Modal({
   providerOptions: getProviderOptions(),
