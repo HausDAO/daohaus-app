@@ -28,14 +28,19 @@ import TextBox from '../components/TextBox';
 import { MinionService } from '../services/minionService';
 import { createPoll } from '../services/pollService';
 import { chainByID } from '../utils/chain';
-import { detailsToJSON } from '../utils/general';
+import { detailsToJSON, daoConnectedAndSameChain } from '../utils/general';
 
 const MinionProposalForm = () => {
   const [loading, setLoading] = useState(false);
   const [abiLoading, setAbiLoading] = useState(false);
   const { daoOverview } = useDao();
   const { daochain } = useParams();
-  const { address, injectedProvider } = useInjectedProvider();
+  const {
+    address,
+    injectedProvider,
+    requestWallet,
+    injectedChain,
+  } = useInjectedProvider();
   const { cachePoll, resolvePoll } = useUser();
   const {
     errorToast,
@@ -52,12 +57,7 @@ const MinionProposalForm = () => {
   const [minions, setMinions] = useState([]);
   const now = (new Date().getTime() / 1000).toFixed();
 
-  const {
-    handleSubmit,
-    errors,
-    register,
-    // formState
-  } = useForm();
+  const { handleSubmit, errors, register } = useForm();
 
   useEffect(() => {
     if (daoOverview?.minions) {
@@ -81,20 +81,18 @@ const MinionProposalForm = () => {
     }
   }, [errors]);
 
+  // useEffect(() => {
+  //   if (!address) {
+  //     setError({
+  //       type: 'wallet',
+  //       message: 'Connect a wallet to submit a proposal.',
+  //     });
+  //   }
+  // }, [address]);
+
   const onSubmit = async (values) => {
     console.log('values', values);
     setLoading(true);
-
-    console.log(values.minionContract);
-    // const setupValues = {
-    //   minion: values.minionContract,
-    //   actionVlaue: '0',
-    // };
-    // const minionService = new MinionService(
-    //   web3Connect.web3,
-    //   user.username,
-    //   setupValues,
-    // );
 
     const valueWei = injectedProvider.utils.toWei(values.value);
 
@@ -420,14 +418,30 @@ const MinionProposalForm = () => {
           </Box>
         )}
         <Box>
-          <Button
-            type='submit'
-            loadingText='Submitting'
-            isLoading={loading}
-            disabled={loading}
-          >
-            Submit
-          </Button>
+          {daoConnectedAndSameChain(
+            address,
+            daochain,
+            injectedChain?.chainID,
+          ) ? (
+            <Button
+              type='submit'
+              loadingText='Submitting'
+              isLoading={loading}
+              disabled={loading}
+            >
+              Submit
+            </Button>
+          ) : (
+            <Button
+              onClick={requestWallet}
+              isDisabled={daochain !== injectedChain?.chainID}
+            >
+              Connect{' '}
+              {daochain !== injectedChain?.chainID
+                ? `to ${chainByID(daochain).name}`
+                : 'Wallet'}
+            </Button>
+          )}
         </Box>
       </Flex>
     </form>

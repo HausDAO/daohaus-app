@@ -26,14 +26,24 @@ import { useOverlay } from '../contexts/OverlayContext';
 import { useTX } from '../contexts/TXContext';
 import { useUser } from '../contexts/UserContext';
 import { useParams } from 'react-router-dom';
-import { createHash, detailsToJSON } from '../utils/general';
+import {
+  createHash,
+  detailsToJSON,
+  daoConnectedAndSameChain,
+} from '../utils/general';
 import { createPoll } from '../services/pollService';
 import { MolochService } from '../services/molochService';
 import { useDao } from '../contexts/DaoContext';
 import { valToDecimalString } from '../utils/tokenValue';
+import { chainByID } from '../utils/chain';
 
 const FundingProposalForm = () => {
-  const { injectedProvider, address } = useInjectedProvider();
+  const {
+    injectedProvider,
+    address,
+    requestWallet,
+    injectedChain,
+  } = useInjectedProvider();
   const {
     errorToast,
     successToast,
@@ -128,7 +138,7 @@ const FundingProposalForm = () => {
         setProposalModal(false);
         setTxInfoModal(true);
       };
-      MolochService({
+      await MolochService({
         web3: injectedProvider,
         daoAddress: daoid,
         chainID: daochain,
@@ -142,6 +152,10 @@ const FundingProposalForm = () => {
       });
     }
   };
+
+  console.log(
+    daoConnectedAndSameChain(address, daochain, injectedProvider?.chainID),
+  );
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
@@ -259,14 +273,30 @@ const FundingProposalForm = () => {
           </Box>
         )}
         <Box>
-          <Button
-            type='submit'
-            loadingText='Submitting'
-            isLoading={loading}
-            disabled={loading}
-          >
-            Submit
-          </Button>
+          {daoConnectedAndSameChain(
+            address,
+            daochain,
+            injectedChain?.chainID,
+          ) ? (
+            <Button
+              type='submit'
+              loadingText='Submitting'
+              isLoading={loading}
+              disabled={loading}
+            >
+              Submit
+            </Button>
+          ) : (
+            <Button
+              onClick={requestWallet}
+              isDisabled={daochain !== injectedChain?.chainID}
+            >
+              Connect{' '}
+              {daochain !== injectedChain?.chainID
+                ? `to ${chainByID(daochain).name}`
+                : 'Wallet'}
+            </Button>
+          )}
         </Box>
       </Flex>
     </form>

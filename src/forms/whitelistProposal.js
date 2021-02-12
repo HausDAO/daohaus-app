@@ -16,17 +16,27 @@ import { useTX } from '../contexts/TXContext';
 import { useUser } from '../contexts/UserContext';
 import { useInjectedProvider } from '../contexts/InjectedProviderContext';
 import { useOverlay } from '../contexts/OverlayContext';
-import { createHash, detailsToJSON } from '../utils/general';
+import {
+  createHash,
+  detailsToJSON,
+  daoConnectedAndSameChain,
+} from '../utils/general';
 import { createPoll } from '../services/pollService';
 import { MolochService } from '../services/molochService';
 import { useDao } from '../contexts/DaoContext';
+import { chainByID } from '../utils/chain';
 import DetailsFields from './detailFields';
 import TextBox from '../components/TextBox';
 
 const WhitelistProposalForm = () => {
   const [loading, setLoading] = useState(false);
   const { daochain, daoid } = useParams();
-  const { address, injectedProvider } = useInjectedProvider();
+  const {
+    address,
+    injectedProvider,
+    requestWallet,
+    injectedChain,
+  } = useInjectedProvider();
   const [currentError, setCurrentError] = useState(null);
   const {
     errorToast,
@@ -147,14 +157,30 @@ const WhitelistProposalForm = () => {
           </Box>
         )}
         <Box>
-          <Button
-            type='submit'
-            loadingText='Submitting'
-            isLoading={loading}
-            isDisabled={loading}
-          >
-            Submit
-          </Button>
+          {daoConnectedAndSameChain(
+            address,
+            daochain,
+            injectedChain?.chainID,
+          ) ? (
+            <Button
+              type='submit'
+              loadingText='Submitting'
+              isLoading={loading}
+              isDisabled={loading}
+            >
+              Submit
+            </Button>
+          ) : (
+            <Button
+              onClick={requestWallet}
+              isDisabled={daochain !== injectedChain?.chainID}
+            >
+              Connect{' '}
+              {daochain !== injectedChain?.chainID
+                ? `to ${chainByID(daochain).name}`
+                : 'Wallet'}
+            </Button>
+          )}
         </Box>
       </Flex>
     </form>

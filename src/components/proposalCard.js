@@ -135,7 +135,7 @@ const ProposalCard = ({ proposal }) => {
             </Box>
           )}
         </Flex>
-        <Flex justify='space-between' mt={2}>
+        <Flex justify='space-between' mt={2} wrap='wrap'>
           {(proposal?.tributeOffered > 0 || !proposal?.tributeOffered) && (
             <Box>
               <Box
