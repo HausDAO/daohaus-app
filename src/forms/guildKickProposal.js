@@ -1,34 +1,34 @@
 import React, { useState, useEffect } from 'react';
 import { useLocation, useParams } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
-import {
-  Button,
-  // FormLabel,
-  FormControl,
-  Flex,
-  // Input,
-  Icon,
-  Box,
-} from '@chakra-ui/react';
+import { Button, FormControl, Flex, Icon, Box } from '@chakra-ui/react';
 import { RiErrorWarningLine } from 'react-icons/ri';
 
 import { useTX } from '../contexts/TXContext';
 import { useUser } from '../contexts/UserContext';
 import { useInjectedProvider } from '../contexts/InjectedProviderContext';
 import { useOverlay } from '../contexts/OverlayContext';
-import { createHash, detailsToJSON } from '../utils/general';
+import {
+  createHash,
+  detailsToJSON,
+  daoConnectedAndSameChain,
+} from '../utils/general';
 import { createPoll } from '../services/pollService';
 import { MolochService } from '../services/molochService';
 import { useDao } from '../contexts/DaoContext';
 import DetailsFields from './detailFields';
 import AddressInput from './addressInput';
-// import TextBox from '../components/TextBox';
+import { chainByID } from '../utils/chain';
 
 const GuildKickProposalForm = () => {
   const [loading, setLoading] = useState(false);
-  // const [user] = useUser();
   const { daochain, daoid } = useParams();
-  const { address, injectedProvider } = useInjectedProvider();
+  const {
+    address,
+    injectedProvider,
+    requestWallet,
+    injectedChain,
+  } = useInjectedProvider();
   const [currentError, setCurrentError] = useState(null);
   const {
     errorToast,
@@ -40,16 +40,8 @@ const GuildKickProposalForm = () => {
   const { refreshDao } = useTX();
   const { cachePoll, resolvePoll } = useUser();
   const location = useLocation();
-  // const { closeModals } = useModals();
 
-  const {
-    handleSubmit,
-    errors,
-    register,
-    setValue,
-    watch,
-    // formState
-  } = useForm();
+  const { handleSubmit, errors, register, setValue, watch } = useForm();
 
   useEffect(() => {
     // TODO: expand to work for any search param on all forms
@@ -72,14 +64,6 @@ const GuildKickProposalForm = () => {
       setCurrentError(null);
     }
   }, [errors]);
-
-  // TODO check link is a valid link
-
-  // dao.daoService.moloch.submitGuildKickProposal(
-  //   values.memberApplicant,
-  //   details,
-  //   txCallBack,
-  // );
 
   const onSubmit = async (values) => {
     console.log(values);
@@ -160,14 +144,30 @@ const GuildKickProposalForm = () => {
           </Box>
         )}
         <Box>
-          <Button
-            type='submit'
-            loadingText='Submitting'
-            isLoading={loading}
-            disabled={loading}
-          >
-            Submit
-          </Button>
+          {daoConnectedAndSameChain(
+            address,
+            daochain,
+            injectedChain?.chainId,
+          ) ? (
+            <Button
+              type='submit'
+              loadingText='Submitting'
+              isLoading={loading}
+              disabled={loading}
+            >
+              Submit
+            </Button>
+          ) : (
+            <Button
+              onClick={requestWallet}
+              isDisabled={daochain !== injectedChain?.chainId}
+            >
+              Connect{' '}
+              {daochain !== injectedChain?.chainId
+                ? `to ${chainByID(daochain).name}`
+                : 'Wallet'}
+            </Button>
+          )}
         </Box>
       </Flex>
     </form>

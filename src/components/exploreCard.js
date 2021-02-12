@@ -128,7 +128,7 @@ const ExploreCard = ({ dao }) => {
         <Box fontSize='sm' mr={3}>
           {dao.members.length === 100
             ? `${dao.members.length}+`
-            : `${dao.members.lengt}`}{' '}
+            : `${dao.members.length}`}{' '}
           Members
         </Box>
         <Box fontSize='sm' mr={3}>

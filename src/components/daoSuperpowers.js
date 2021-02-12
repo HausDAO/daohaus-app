@@ -5,16 +5,12 @@ import { VscGear } from 'react-icons/vsc';
 import { RiExternalLinkLine } from 'react-icons/ri';
 
 import ContentBox from './ContentBox';
-// import TextBox from './TextBox';
 import { useInjectedProvider } from '../contexts/InjectedProviderContext';
+import { daoConnectedAndSameChain } from '../utils/general';
 
 const Superpowers = ({ daoMember, daoMetaData }) => {
   const { daochain, daoid } = useParams();
   const { address, injectedChain } = useInjectedProvider();
-
-  const daoConnectedAndSameChain = () => {
-    return address && daochain && injectedChain?.chainId === daochain;
-  };
 
   return (
     <ContentBox d='flex' flexDirection='column' position='relative'>
@@ -31,7 +27,11 @@ const Superpowers = ({ daoMember, daoMetaData }) => {
               Custom Theme
             </Box>
             <Flex align='center'>
-              {daoConnectedAndSameChain() && daoMember?.shares > 0 ? (
+              {daoConnectedAndSameChain(
+                address,
+                daochain,
+                injectedChain?.chainId,
+              ) && daoMember?.shares > 0 ? (
                 <RouterLink to={`/dao/${daochain}/${daoid}/settings/theme`}>
                   <Icon
                     as={VscGear}
@@ -67,7 +67,11 @@ const Superpowers = ({ daoMember, daoMetaData }) => {
               Notifications
             </Box>
             <Flex align='center'>
-              {daoConnectedAndSameChain() && daoMember?.shares > 0 ? (
+              {daoConnectedAndSameChain(
+                address,
+                daochain,
+                injectedChain?.chainId,
+              ) && daoMember?.shares > 0 ? (
                 <RouterLink
                   to={`/dao/${daochain}/${daoid}/settings/notifications`}
                 >

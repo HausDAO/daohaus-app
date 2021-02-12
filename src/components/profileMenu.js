@@ -13,6 +13,7 @@ import { BsThreeDotsVertical } from 'react-icons/bs';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
 import { useInjectedProvider } from '../contexts/InjectedProviderContext';
 import { useOverlay } from '../contexts/OverlayContext';
+import { daoConnectedAndSameChain } from '../utils/general';
 
 const ProfileMenu = ({ member }) => {
   const toast = useToast();
@@ -33,9 +34,6 @@ const ProfileMenu = ({ member }) => {
     address.toLowerCase() === member.memberAddress.toLowerCase();
 
   const hasSharesOrloot = +member.shares > 0 || +member.loot > 0;
-  const daoConnectedAndSameChain = () => {
-    return address && daochain && injectedChain?.chainId === daochain;
-  };
 
   return (
     <Menu>
@@ -72,7 +70,7 @@ const ProfileMenu = ({ member }) => {
           <MenuItem>View 3box Profile</MenuItem>
         </Link>
 
-        {daoConnectedAndSameChain() ? (
+        {daoConnectedAndSameChain(address, daochain, injectedChain.chainId) ? (
           <>
             {isMember && hasSharesOrloot ? (
               <MenuItem onClick={() => setGenericModal({ rageQuit: true })}>

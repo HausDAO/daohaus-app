@@ -145,9 +145,9 @@ const ProposalDetails = ({ proposal }) => {
             )}
           </Box>
         </Box>
-        <Flex w='100%' justify='space-between' mt={6}>
+        <Flex w='100%' justify='space-between' mt={6} wrap='wrap'>
           {(proposal?.tributeOffered > 0 || !proposal?.tributeOffered) && (
-            <Box>
+            <Box mb={3}>
               <TextBox size='xs'>Tribute</TextBox>
               <Skeleton isLoaded={proposal?.tributeOffered}>
                 <TextBox size='lg' variant='value'>
@@ -161,7 +161,7 @@ const ProposalDetails = ({ proposal }) => {
             </Box>
           )}
           {proposal?.paymentRequested > 0 && ( // don't show during loading
-            <Box>
+            <Box mb={3}>
               <TextBox size='xs'>Payment Requested</TextBox>
               <Skeleton isLoaded={proposal?.paymentRequested}>
                 <TextBox size='lg' variant='value'>
@@ -175,7 +175,7 @@ const ProposalDetails = ({ proposal }) => {
             </Box>
           )}
           {(proposal?.sharesRequested > 0 || !proposal?.sharesRequested) && (
-            <Box>
+            <Box mb={3}>
               <TextBox size='xs'>Shares</TextBox>
               <Skeleton isLoaded={proposal?.sharesRequested}>
                 <TextBox size='lg' variant='value'>
@@ -187,7 +187,7 @@ const ProposalDetails = ({ proposal }) => {
             </Box>
           )}
           {proposal?.lootRequested > 0 && ( // don't show during loading
-            <Box>
+            <Box mb={3}>
               <TextBox size='xs'>Loot</TextBox>
               <Skeleton isLoaded={proposal?.lootRequested}>
                 <TextBox size='lg' variant='value'>
@@ -200,7 +200,7 @@ const ProposalDetails = ({ proposal }) => {
           )}
         </Flex>
         <Flex
-          mt={6}
+          mt={3}
           justify='space-between'
           direction={['column', 'row']}
           pr={memberVote(proposal, address) !== null && '5%'}

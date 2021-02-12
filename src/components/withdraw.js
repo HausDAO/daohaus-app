@@ -9,6 +9,7 @@ import { useUser } from '../contexts/UserContext';
 import { useParams } from 'react-router-dom';
 import { createPoll } from '../services/pollService';
 import { MolochService } from '../services/molochService';
+import { daoConnectedAndSameChain } from '../utils/general';
 
 const Withdraw = ({ token }) => {
   const { injectedProvider, address, injectedChain } = useInjectedProvider();
@@ -18,10 +19,6 @@ const Withdraw = ({ token }) => {
   const { cachePoll, resolvePoll } = useUser();
   const { daoid, daochain } = useParams();
   const [loading, setLoading] = useState(false);
-
-  const daoConnectedAndSameChain = () => {
-    return address && daochain && injectedChain?.chainId === daochain;
-  };
 
   const handleWithdraw = async () => {
     setLoading(true);
@@ -81,7 +78,11 @@ const Withdraw = ({ token }) => {
         <Spinner />
       ) : (
         <>
-          {daoConnectedAndSameChain() ? (
+          {daoConnectedAndSameChain(
+            address,
+            daochain,
+            injectedChain?.chainId,
+          ) ? (
             <Button size='sm' onClick={handleWithdraw}>
               Withdraw
             </Button>

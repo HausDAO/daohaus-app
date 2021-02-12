@@ -14,7 +14,13 @@ export const useSessionStorage = (key, defaultVal) => {
   });
 
   useEffect(() => {
-    window.sessionStorage.setItem(key, JSON.stringify(state));
+    try {
+      window.sessionStorage.setItem(key, JSON.stringify(state));
+    } catch (error) {
+      console.log('SESSION STORAGE FULL');
+      console.log('clearing session storage');
+      sessionStorage.clear();
+    }
   }, [state, key]);
 
   return [state, setState];

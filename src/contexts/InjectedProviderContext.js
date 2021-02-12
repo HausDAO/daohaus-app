@@ -9,7 +9,11 @@ import Web3 from 'web3';
 import Web3Modal from 'web3modal';
 
 import { supportedChains } from '../utils/chain';
-import { getProviderOptions } from '../utils/web3Modal';
+import {
+  deriveChainId,
+  deriveSelectedAddress,
+  getProviderOptions,
+} from '../utils/web3Modal';
 
 const defaultModal = new Web3Modal({
   providerOptions: getProviderOptions(),
@@ -35,18 +39,14 @@ export const InjectedProvider = ({ children }) => {
     });
 
     const provider = await web3Modal.connect();
-    if (!supportedChains[provider.chainId]) {
-      console.error('This is not a supported chain');
-      return;
-    }
 
+    provider.selectedAddress = deriveSelectedAddress(provider);
+    const chainId = deriveChainId(provider);
     const chain = {
-      ...supportedChains[provider.chainId],
-      chainId: provider.chainId,
+      ...supportedChains[chainId],
+      chainId,
     };
     const web3 = new Web3(provider);
-    console.log(web3);
-
     if (web3?.currentProvider?.selectedAddress) {
       setInjectedProvider(web3);
       setAddress(web3.currentProvider.selectedAddress);

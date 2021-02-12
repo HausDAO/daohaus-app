@@ -2,9 +2,9 @@ import WalletConnectProvider from '@walletconnect/web3-provider';
 import Fortmatic from 'fortmatic';
 import Portis from '@portis/web3';
 
-import { chainByID } from './chain';
+import { chainByID, chainByNetworkId } from './chain';
 
-const isInjected = () => !!window.ethereum?.chainId;
+const isInjected = () => window.ethereum?.chainId;
 
 export const attemptInjectedChainData = () =>
   isInjected() ? chainByID(window.ethereum.chainId) : chainByID('0x1');
@@ -44,3 +44,19 @@ const addNetworkProviders = (chainData) => {
 
 export const getProviderOptions = () =>
   addNetworkProviders(attemptInjectedChainData());
+
+export const deriveChainId = (provider) => {
+  if (provider.isMetaMask) {
+    return provider.chainId;
+  } else if (provider.wc) {
+    return chainByNetworkId(provider.chainId).chain_id;
+  }
+};
+
+export const deriveSelectedAddress = (provider) => {
+  if (provider.isMetaMask) {
+    return provider.selectedAddress;
+  } else if (provider.wc) {
+    return provider.accounts[0];
+  }
+};
