@@ -285,10 +285,10 @@ const FundingProposalForm = () => {
           ) : (
             <Button
               onClick={requestWallet}
-              isDisabled={daochain !== injectedChain?.chainId}
+              isDisabled={injectedChain && daochain !== injectedChain?.chainId}
             >
               Connect{' '}
-              {daochain !== injectedChain?.chainId
+              {injectedChain && daochain !== injectedChain?.chainId
                 ? `to ${chainByID(daochain).name}`
                 : 'Wallet'}
             </Button>
