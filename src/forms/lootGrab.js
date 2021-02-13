@@ -19,15 +19,25 @@ import { useOverlay } from '../contexts/OverlayContext';
 import { useTX } from '../contexts/TXContext';
 import { useUser } from '../contexts/UserContext';
 import { useParams } from 'react-router-dom';
-import { createHash, detailsToJSON } from '../utils/general';
+import {
+  createHash,
+  daoConnectedAndSameChain,
+  detailsToJSON,
+} from '../utils/general';
 import { createPoll } from '../services/pollService';
 import { MolochService } from '../services/molochService';
 import { useDao } from '../contexts/DaoContext';
 import { valToDecimalString } from '../utils/tokenValue';
 import { RiErrorWarningLine } from 'react-icons/ri';
+import { chainByID } from '../utils/chain';
 
 const LootGrabForm = () => {
-  const { injectedProvider, address } = useInjectedProvider();
+  const {
+    injectedProvider,
+    address,
+    requestWallet,
+    injectedChain,
+  } = useInjectedProvider();
   const {
     errorToast,
     successToast,
@@ -186,15 +196,32 @@ const LootGrabForm = () => {
             <Link onClick={() => setEditDetails(true)}>Edit Details</Link>
           )}
         </Box>
+
         <Box>
-          <Button
-            type='submit'
-            loadingText='Submitting'
-            isLoading={loading}
-            disabled={loading}
-          >
-            Submit
-          </Button>
+          {daoConnectedAndSameChain(
+            address,
+            daochain,
+            injectedChain?.chainId,
+          ) ? (
+            <Button
+              type='submit'
+              loadingText='Submitting'
+              isLoading={loading}
+              disabled={loading}
+            >
+              Submit
+            </Button>
+          ) : (
+            <Button
+              onClick={requestWallet}
+              isDisabled={injectedChain && daochain !== injectedChain?.chainId}
+            >
+              Connect
+              {injectedChain && daochain !== injectedChain?.chainId
+                ? `to ${chainByID(daochain).name}`
+                : 'Wallet'}
+            </Button>
+          )}
         </Box>
       </Flex>
     </form>
