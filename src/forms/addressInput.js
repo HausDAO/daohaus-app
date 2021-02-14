@@ -40,7 +40,6 @@ const AddressInput = ({
   const ensAddr = watch('applicantHidden', '');
 
   const handleChange = async (e) => {
-    console.log('blah');
     if (e.target.value.endsWith('.eth')) {
       const ethersProvider = ethers.getDefaultProvider(
         chainByID('0x1').rpc_url,
