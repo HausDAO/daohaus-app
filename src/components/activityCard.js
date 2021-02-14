@@ -48,19 +48,11 @@ const ActivityCard = ({ activity, displayAvatar, isLink = true }) => {
   const [profile, setProfile] = useState(null);
   const { daochain, daoid } = useParams();
 
-  if (activity.proposalId === '20') {
-    console.log('******activity', activity);
-  }
-
   useEffect(() => {
     let isCancelled = false;
     const getProfile = async () => {
       try {
         const newProfile = await handleGetProfile(activity.memberAddress);
-
-        if (activity.proposalId === '20') {
-          console.log('******newProfile', newProfile);
-        }
 
         if (newProfile.status === 'error') {
           setProfile(null);

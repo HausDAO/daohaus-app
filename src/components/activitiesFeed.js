@@ -19,8 +19,6 @@ const ActivitiesFeed = ({
     }
   }, [activities]);
 
-  console.log('allActivities', allActivities);
-
   return (
     <>
       <TextBox>{heading}</TextBox>
