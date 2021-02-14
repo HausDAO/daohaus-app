@@ -7,6 +7,7 @@ import reportWebVitals from './reportWebVitals';
 import { BrowserRouter } from 'react-router-dom';
 import { InjectedProvider } from './contexts/InjectedProviderContext';
 import { CustomThemeProvider } from './contexts/CustomThemeContext';
+import { testGetData, testPostData } from './utils/errorLog';
 
 window.onunload = function() {
   sessionStorage.clear();

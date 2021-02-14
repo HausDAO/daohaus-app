@@ -31,6 +31,7 @@ import { createPoll } from '../services/pollService';
 import { MolochService } from '../services/molochService';
 import { useDao } from '../contexts/DaoContext';
 import { valToDecimalString } from '../utils/tokenValue';
+import { LogError } from '../utils/errorLog';
 
 const MemberProposalForm = () => {
   const { injectedProvider, address } = useInjectedProvider();
@@ -133,12 +134,29 @@ const MemberProposalForm = () => {
         chainID: daochain,
         version: daoOverview.version,
       })('submitProposal')({ args, address, poll, onTxHash });
-    } catch (err) {
+    } catch (error) {
+      const errMsg = error?.message || '';
       setLoading(false);
-      console.error('error: ', err);
+      LogError({
+        at: 'memberPropsal.js',
+        type: 'Contract TX: Member Proposal',
+        errMsg,
+        userAddress: address,
+        priority: 1,
+        hash,
+        formData: values,
+        TxArgs: args,
+        contextData: {
+          // injectedProvider,
+          address,
+          daoOverview,
+          daoid,
+          daochain,
+        },
+      });
       errorToast({
         title: `There was an error.`,
-        description: err?.message || '',
+        description: errMsg,
       });
     }
   };
