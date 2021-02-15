@@ -129,6 +129,7 @@ export const getTotalBankValue = (tokenBalances, prices) => {
 export const valToDecimalString = (value, tokenAddress, tokens) => {
   // get correct value of token with decimal places
   // returns a string
+  console.log(value, tokenAddress, tokens);
   const scaleFactor = 10;
   const perc = 10 ** scaleFactor;
 

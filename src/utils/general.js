@@ -1,4 +1,5 @@
 import { formatDistanceToNow } from 'date-fns';
+import { utils } from 'ethers';
 
 export const pipe = (...fns) => (x) =>
   fns.reduce((prev, func) => func(prev), x);
@@ -51,9 +52,7 @@ export const numberWithCommas = (num) => {
   const noZeroDec =
     parseInt(localNum.split('.')[1]) === 0 ? localNum.split('.')[0] : localNum;
 
-  // TODO What was this regex for?
-  // return noZeroDec.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ',');
-  return noZeroDec.toString();
+  return utils.commify(noZeroDec);
 };
 
 export const truncateAddr = (addr) => {
