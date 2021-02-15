@@ -163,6 +163,7 @@ const TributeInput = ({ register, setValue, getValues, setError }) => {
       'tributeOffered',
       balance / 10 ** tokenData.find((t) => t.value === tributeToken).decimals,
     );
+    handleChange();
   };
 
   return (
