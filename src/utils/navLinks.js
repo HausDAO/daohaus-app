@@ -39,8 +39,8 @@ export const defaultHubData = [
   },
   {
     icon: GiCastle,
-    label: 'About Dao Haus',
-    href: 'https://daohaus.club/about',
+    label: 'About DaoHaus',
+    href: 'https://daohaus.club/',
   },
 ];
 
