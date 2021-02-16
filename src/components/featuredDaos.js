@@ -9,6 +9,7 @@ import LexAvatar from '../assets/img/lex__avatar.png';
 import MGDAvatar from '../assets/img/mgd__avatar.jpg';
 import VenturesAvatar from '../assets/img/ventures__avatar.jpg';
 import RaidAvatar from '../assets/img/raidguild__avatar.png';
+import MachiXAvatar from '../assets/img/machix__avatar.jpg';
 
 const FeaturedDaos = () => {
   return (
@@ -139,6 +140,31 @@ const FeaturedDaos = () => {
               marginRight='5px'
             >
               Investments
+            </Badge>
+            <Badge variant='outline' colorScheme='primary' textAlign='center'>
+              Mainnet
+            </Badge>
+          </Flex>
+        </ContentBox>
+        <ContentBox
+          _hover={{ transform: 'scale(1.05)' }}
+          direction='column'
+          as={RouterLink}
+          to={`/dao/0x1/0x016e79e9101a8eaa3e7f46d6d1c267819c09c939`}
+          justify='start'
+          align='center'
+        >
+          <Avatar src={MachiXAvatar} alt='' />
+          <Text>Machi X DAO</Text>
+          <Text fontSize='xs'>Community of Crypto Artists</Text>
+          <Flex mt={2} justify='center'>
+            <Badge
+              variant='outline'
+              colorScheme='secondary'
+              textAlign='center'
+              marginRight='5px'
+            >
+              Guilds
             </Badge>
             <Badge variant='outline' colorScheme='primary' textAlign='center'>
               Mainnet
