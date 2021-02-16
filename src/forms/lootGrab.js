@@ -53,7 +53,7 @@ const LootGrabForm = () => {
   const [currentError, setCurrentError] = useState(null);
   const [editDetails, setEditDetails] = useState();
 
-  const ratio = 1.1;
+  const ratio = 1;
 
   const {
     handleSubmit,
@@ -131,10 +131,10 @@ const LootGrabForm = () => {
         },
       });
       const onTxHash = () => {
-        setProposalModal(false);
         setTxInfoModal(true);
+        setProposalModal(false);
       };
-      MolochService({
+      await MolochService({
         web3: injectedProvider,
         daoAddress: daoid,
         chainID: daochain,
@@ -145,6 +145,7 @@ const LootGrabForm = () => {
       console.error('error: ', err);
       errorToast({
         title: `There was an error.`,
+        description: err?.message || '',
       });
     }
   };

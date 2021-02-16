@@ -7,12 +7,11 @@ import {
   Select,
 } from '@chakra-ui/react';
 import { utils } from 'web3';
-import { ethers } from 'ethers';
+import { MaxUint256 } from '@ethersproject/constants';
 
 import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import TextBox from '../components/TextBox';
-// import { useToken } from '../contexts/TokenContext';
 import { useDao } from '../contexts/DaoContext';
 import { useInjectedProvider } from '../contexts/InjectedProviderContext';
 import { useOverlay } from '../contexts/OverlayContext';
@@ -86,9 +85,8 @@ const TributeInput = ({ register, setValue, getValues, setError }) => {
     setLoading(true);
     const token = getValues('tributeToken');
     console.log(token);
-    const tokenAmount = ethers.constants.MaxUint256;
 
-    const args = [daoid, tokenAmount];
+    const args = [daoid, MaxUint256];
 
     try {
       const poll = createPoll({ action: 'unlockToken', cachePoll })({
@@ -96,7 +94,7 @@ const TributeInput = ({ register, setValue, getValues, setError }) => {
         chainID: daochain,
         tokenAddress: token,
         userAddress: address,
-        unlockAmount: tokenAmount,
+        unlockAmount: MaxUint256,
         actions: {
           onError: (error, txHash) => {
             errorToast({
@@ -163,6 +161,7 @@ const TributeInput = ({ register, setValue, getValues, setError }) => {
       'tributeOffered',
       balance / 10 ** tokenData.find((t) => t.value === tributeToken).decimals,
     );
+    handleChange();
   };
 
   return (
