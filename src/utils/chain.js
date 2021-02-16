@@ -111,9 +111,9 @@ export const supportedChains = {
     metadata_api_url: 'https://data.daohaus.club',
     abi_api_url: 'https://mainnet.maticvigil.com/api/swagger/',
     subgraph_url:
-      'https://api.thegraph.com/subgraphs/id/QmXe4TC4qscqy6W8frLQQNtNYxyFSC7NycqF85yPSxxBMN',
+      'https://api.thegraph.com/subgraphs/name/odyssy-automaton/daohaus-matic',
     stats_graph_url:
-      'https://graph01.ginete.in/subgraphs/name/odyssy-automaton/daohaus',
+      'https://api.thegraph.com/subgraphs/name/odyssy-automaton/daohaus-stats-matic',
     boosts_graph_url: '',
     minion_factory_addr: '0x9417470616865De678267DAfA6574A66Fe413451',
     moloch_factory_addr: '0x6690C139564144b27ebABA71F9126611a23A31C9',
