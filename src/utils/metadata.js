@@ -190,6 +190,16 @@ export const put = async (endpoint, data) => {
   }
 };
 
+export const createDiscourseForum = async (metadata) => {
+  try {
+    const response = await post('create-forum', metadata);
+
+    return response;
+  } catch (err) {
+    throw new Error(err);
+  }
+};
+
 /// //////////DEFAULTS//////////////
 
 // const defaultMeta = {

@@ -36,6 +36,7 @@ import { MolochService } from '../services/molochService';
 import { useDao } from '../contexts/DaoContext';
 import { valToDecimalString } from '../utils/tokenValue';
 import { chainByID } from '../utils/chain';
+import DiscourseProposalFields from '../components/discourseProposalFields';
 
 const FundingProposalForm = () => {
   const {
@@ -86,7 +87,15 @@ const FundingProposalForm = () => {
   const onSubmit = async (values) => {
     setLoading(true);
     const hash = createHash();
-    const details = detailsToJSON({ ...values, hash });
+
+    console.log('values', values);
+
+    let details;
+    if (values.createForum) {
+    } else {
+      details = detailsToJSON({ ...values, hash });
+    }
+
     const { tokenBalances, depositToken } = daoOverview;
     const tributeToken = values.tributeToken || depositToken.tokenAddress;
     const paymentToken = values.paymentToken || depositToken.tokenAddress;
@@ -112,45 +121,45 @@ const FundingProposalForm = () => {
       details,
     ];
 
-    try {
-      const poll = createPoll({ action: 'submitProposal', cachePoll })({
-        daoID: daoid,
-        chainID: daochain,
-        hash,
-        actions: {
-          onError: (error, txHash) => {
-            errorToast({
-              title: `There was an error.`,
-            });
-            resolvePoll(txHash);
-            console.error(`Could not find a matching proposal: ${error}`);
-          },
-          onSuccess: (txHash) => {
-            successToast({
-              title: 'Member Proposal Submitted to the Dao!',
-            });
-            refreshDao();
-            resolvePoll(txHash);
-          },
-        },
-      });
-      const onTxHash = () => {
-        setProposalModal(false);
-        setTxInfoModal(true);
-      };
-      await MolochService({
-        web3: injectedProvider,
-        daoAddress: daoid,
-        chainID: daochain,
-        version: daoOverview.version,
-      })('submitProposal')({ args, address, poll, onTxHash });
-    } catch (err) {
-      setLoading(false);
-      console.error('error: ', err);
-      errorToast({
-        title: `There was an error.`,
-      });
-    }
+    // try {
+    //   const poll = createPoll({ action: 'submitProposal', cachePoll })({
+    //     daoID: daoid,
+    //     chainID: daochain,
+    //     hash,
+    //     actions: {
+    //       onError: (error, txHash) => {
+    //         errorToast({
+    //           title: `There was an error.`,
+    //         });
+    //         resolvePoll(txHash);
+    //         console.error(`Could not find a matching proposal: ${error}`);
+    //       },
+    //       onSuccess: (txHash) => {
+    //         successToast({
+    //           title: 'Member Proposal Submitted to the Dao!',
+    //         });
+    //         refreshDao();
+    //         resolvePoll(txHash);
+    //       },
+    //     },
+    //   });
+    //   const onTxHash = () => {
+    //     setProposalModal(false);
+    //     setTxInfoModal(true);
+    //   };
+    //   await MolochService({
+    //     web3: injectedProvider,
+    //     daoAddress: daoid,
+    //     chainID: daochain,
+    //     version: daoOverview.version,
+    //   })('submitProposal')({ args, address, poll, onTxHash });
+    // } catch (err) {
+    //   setLoading(false);
+    //   console.error('error: ', err);
+    //   errorToast({
+    //     title: `There was an error.`,
+    //   });
+    // }
   };
 
   return (
@@ -165,6 +174,11 @@ const FundingProposalForm = () => {
       >
         <Box w={['100%', null, '50%']} pr={[0, null, 5]}>
           <DetailsFields register={register} />
+          <DiscourseProposalFields
+            register={register}
+            watch={watch}
+            setValue={setValue}
+          />
         </Box>
         <Box w={['100%', null, '50%']}>
           <AddressInput
@@ -261,6 +275,7 @@ const FundingProposalForm = () => {
           )}
         </Box>
       </FormControl>
+
       <Flex justify='flex-end' align='center' h='60px'>
         {currentError && (
           <Box color='red.500' fontSize='m' mr={5}>
