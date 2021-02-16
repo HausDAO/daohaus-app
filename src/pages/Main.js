@@ -8,9 +8,12 @@ import HubProfileCard from '../components/hubProfileCard';
 import { useInjectedProvider } from '../contexts/InjectedProviderContext';
 import HubSignedOut from '../components/hubSignedOut';
 import MainViewLayout from '../components/mainViewLayout';
+import { useUser } from '../contexts/UserContext';
 
 const Main = () => {
   const { address } = useInjectedProvider();
+
+  const { userHubDaos } = useUser();
 
   const ctaButton = (
     <Button as='a' href='https://3box.io/hub' target='_blank' variant='outline'>
@@ -34,7 +37,7 @@ const Main = () => {
             <HubSignedOut />
           )}
         </Box>
-        {address ? (
+        {address && userHubDaos ? (
           <Box w={['100%', null, null, null, '40%']}>
             <NewsFeed />
           </Box>
