@@ -5,6 +5,7 @@ import { FaThumbsUp, FaThumbsDown } from 'react-icons/fa';
 import { RiErrorWarningLine, RiQuestionLine } from 'react-icons/ri';
 import { isAfter, isBefore } from 'date-fns';
 import { motion } from 'framer-motion';
+import { MaxUint256 } from '@ethersproject/constants';
 
 import { useInjectedProvider } from '../contexts/InjectedProviderContext';
 import { useUser } from '../contexts/UserContext';
@@ -146,8 +147,7 @@ const ProposalVote = ({ proposal, overview, daoProposals, daoMember }) => {
     setLoading(true);
     console.log(token);
 
-    const tokenAmount = (+overview?.proposalDeposit).toString();
-    const args = [daoid, tokenAmount];
+    const args = [daoid, MaxUint256];
 
     try {
       const poll = createPoll({ action: 'unlockToken', cachePoll })({
@@ -155,7 +155,7 @@ const ProposalVote = ({ proposal, overview, daoProposals, daoMember }) => {
         chainID: daochain,
         tokenAddress: token,
         userAddress: address,
-        unlockAmount: tokenAmount,
+        unlockAmount: MaxUint256,
         actions: {
           onError: (error, txHash) => {
             errorToast({
