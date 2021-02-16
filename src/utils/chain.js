@@ -118,7 +118,6 @@ export const supportedChains = {
     minion_factory_addr: '0x9417470616865De678267DAfA6574A66Fe413451',
     moloch_factory_addr: '0x6690C139564144b27ebABA71F9126611a23A31C9',
     dai_contract: '0x8f3Cf7ad23Cd3CaDbD9735AFf958023239c6A063',
-    usdc_contract: '0x2791Bca1f2de4661ED88A30C99A7a9449Aa84174',
     weth_contract: '0x0d500b1d8e8ef31e21c99d1db9a6444d3adf1270',
     block_explorer: 'https://explorer-mainnet.maticvigil.com/',
   },

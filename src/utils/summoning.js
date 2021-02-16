@@ -146,6 +146,17 @@ export const daoPresets = (chainId) => {
       return preset;
     });
   }
+
+  if (chainId === '0x89') {
+    presets = presets.map((preset) => {
+      preset.currency = 'WMATIC';
+      preset.approvedToken = supportedChains[chainId].weth_contract;
+      preset.proposalDeposit = '100000000000000000';
+      preset.processingReward = '10000000000000000';
+
+      return preset;
+    });
+  }
   return presets;
 };
 
@@ -158,6 +169,19 @@ export const currencyOptions = (chainId) => {
         value: 'WXDAI',
         label: 'WXDAI',
         address: supportedChains[chainId].wxdai_contract,
+      },
+    ];
+  } else if (chainId === '0x89') {
+    options = [
+      {
+        value: 'WMATIC',
+        label: 'WMATIC',
+        address: supportedChains[chainId].weth,
+      },
+      {
+        value: 'DAI',
+        label: 'DAI',
+        address: supportedChains[chainId].dai_contract,
       },
     ];
   } else {
