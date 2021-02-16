@@ -2,6 +2,7 @@ import React from 'react';
 import { Flex, Box, Button } from '@chakra-ui/react';
 
 import NewsFeed from '../components/newsFeed';
+import FeaturedDaos from '../components/featuredDaos';
 import NetworkList from '../components/networkList';
 import HubProfileCard from '../components/hubProfileCard';
 import { useInjectedProvider } from '../contexts/InjectedProviderContext';
@@ -33,9 +34,15 @@ const Main = () => {
             <HubSignedOut />
           )}
         </Box>
-        <Box w={['100%', null, null, null, '40%']}>
-          <NewsFeed />
-        </Box>
+        {address ? (
+          <Box w={['100%', null, null, null, '40%']}>
+            <NewsFeed />
+          </Box>
+        ) : (
+          <Box w={['100%', null, null, null, '40%']}>
+            <FeaturedDaos />
+          </Box>
+        )}
       </Flex>
     </MainViewLayout>
   );

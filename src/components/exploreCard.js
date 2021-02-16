@@ -54,6 +54,7 @@ const ExploreCard = ({ dao }) => {
           <Button
             minWidth='80px'
             as={Link}
+            variant='outline'
             href={pokemolUrlExplore(dao)}
             isExternal
           >
@@ -67,6 +68,7 @@ const ExploreCard = ({ dao }) => {
           <Button
             minWidth='80px'
             as={RouterLink}
+            variant='outline'
             to={`/dao/${chainByNetworkId(dao.networkId).chain_id}/${dao.id}`}
           >
             Go
