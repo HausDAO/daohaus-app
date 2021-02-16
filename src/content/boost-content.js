@@ -25,22 +25,22 @@ export const boostList = [
     successRoute: 'notifications',
   },
   {
+    name: 'Discourse Forum',
+    key: 'discourse',
+    comingSoon: false,
+    description:
+      'Add a forum for discussing proposals. Launch a new category in the DAOhaus Discourse forum and enable topic creation for all of your proposals.',
+    price: '0',
+    modalName: 'discourseLaunch',
+    successRoute: '',
+  },
+  {
     name: 'MinionSafe',
     key: 'minionSafe',
     description: 'Launch and interact with a Gnosis Safe multisig',
     price: '0',
     comingSoon: true,
     modalName: 'minionSafeLaunch',
-    successRoute: '',
-  },
-  {
-    name: 'Discourse Forum',
-    key: 'discourse',
-    comingSoon: true,
-    description:
-      'Add a forum for discussing proposals. Launch a new category in the DAOhaus Discourse forum and enable topic creation for all of your proposals.',
-    price: '0',
-    modalName: 'discourseLaunch',
     successRoute: '',
   },
   {

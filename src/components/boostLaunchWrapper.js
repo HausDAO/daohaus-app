@@ -1,14 +1,5 @@
 import React, { useState } from 'react';
-// import { Link as RouterLink } from 'react-router-dom';
-import {
-  Box,
-  // Button,
-  // FormControl,
-  // FormHelperText,
-  // Heading,
-  // Input,
-  // Text,
-} from '@chakra-ui/react';
+import { Box } from '@chakra-ui/react';
 
 import CustomThemeLaunch from './customThemeLaunch';
 import NewMinionForm from '../forms/newMinion';
@@ -17,6 +8,7 @@ import { useParams } from 'react-router-dom';
 import { useInjectedProvider } from '../contexts/InjectedProviderContext';
 import { boostPost } from '../utils/metadata';
 import { useMetaData } from '../contexts/MetaDataContext';
+import DiscourseLaunch from './discourseLaunch';
 
 const BoostLaunchWrapper = ({ boost }) => {
   const [loading, setLoading] = useState(false);
@@ -37,6 +29,15 @@ const BoostLaunchWrapper = ({ boost }) => {
       }
       case 'vanillaMinion': {
         return <NewMinionForm />;
+      }
+      case 'discourse': {
+        return (
+          <DiscourseLaunch
+            handleLaunch={handleLaunch}
+            loading={loading}
+            setLoading={setLoading}
+          />
+        );
       }
       case 'notificationsLevel1': {
         return (
