@@ -1,15 +1,30 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
-import { Box, Text, Button, Input, Textarea } from '@chakra-ui/react';
+import { Box, Text, Button, Input, Textarea, Icon } from '@chakra-ui/react';
 import ContentBox from '../components/ContentBox';
 import TextBox from '../components/TextBox';
+import { validateSummonresAndShares } from '../utils/summoning';
+import { RiErrorWarningLine } from 'react-icons/ri';
 
 const SummonHard = ({ daoData, handleSummon }) => {
+  const [currentError, setCurrentError] = useState(null);
   const { register, getValues, errors, handleSubmit, formState } = useForm({
     mode: 'onBlur',
     defaultValues: { ...daoData },
   });
-  const { isDirty, isValid, isSubmitted } = formState;
+  const { isDirty, isValid } = formState;
+
+  useEffect(() => {
+    if (Object.keys(errors).length > 0) {
+      const newE = Object.keys(errors)[0];
+      setCurrentError({
+        field: newE,
+        ...errors[newE],
+      });
+    } else {
+      setCurrentError(null);
+    }
+  }, [errors]);
 
   const onSubmit = (data) => {
     console.log('data', data);
@@ -165,15 +180,26 @@ const SummonHard = ({ daoData, handleSummon }) => {
               className='inline-field'
               name='summonerAndShares'
               placeholder={`${daoData.summoner} 1`}
-              ref={register({ required: true })}
+              ref={register({
+                required: true,
+                validate: {
+                  invalidList: (value) => {
+                    const errMsg = validateSummonresAndShares(value);
+                    return errMsg;
+                  },
+                },
+              })}
             />{' '}
           </Text>
         </Box>
         <Box className='StepControl'>
-          <Button
-            type='submit'
-            disabled={isSubmitted || (!isDirty && !isValid)}
-          >
+          {currentError && (
+            <Box color='red.500' fontSize='m' mr={5}>
+              <Icon as={RiErrorWarningLine} color='red.500' mr={2} />
+              {currentError.message}
+            </Box>
+          )}
+          <Button type='submit' disabled={!isDirty && !isValid}>
             SUMMON
           </Button>
         </Box>

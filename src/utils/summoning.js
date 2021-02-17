@@ -16,6 +16,29 @@ export const parseSummonresAndShares = (data) => {
   return [addrs, amounts];
 };
 
+export const validateSummonresAndShares = (data) => {
+  const [addrs, amounts] = parseSummonresAndShares(data);
+  let errMsg = true;
+  if (!addrs.length || !amounts.length) {
+    errMsg = 'Something went wrong with the summoner list';
+    return errMsg;
+  }
+  addrs.forEach((addr) => {
+    try {
+      utils.toChecksumAddress(addr);
+    } catch (err) {
+      errMsg = err.message;
+    }
+  });
+
+  amounts.forEach((amount) => {
+    if (amount % 1 !== 0) {
+      errMsg = 'Only whole share amounts allowed';
+    }
+  });
+  return errMsg;
+};
+
 export const periodsPerDayPreset = (seconds) => {
   const hours = +seconds / 60 / 60;
 
