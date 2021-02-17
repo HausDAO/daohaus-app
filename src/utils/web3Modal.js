@@ -16,7 +16,6 @@ const addNetworkProviders = (chainData) => {
     return false;
   }
   const providersToAdd = chainData.providers;
-  console.log(chainData.rpc_url);
   if (providersToAdd.includes('walletconnect')) {
     allProviders.walletconnect = {
       network: chainData.network,

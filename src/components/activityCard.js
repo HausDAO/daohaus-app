@@ -116,6 +116,7 @@ const ActivityCard = ({ activity, displayAvatar, isLink = true }) => {
   //   status: String
   //   daoData: Object (dao meta from api, only on hub cards)
   // }
+
   const name = handleName(activity, profile);
   const chain = daochain || chainByName(activity.daoData.network).chain_id;
   const daoAddress = daoid || activity.daoData.contractAddress;
