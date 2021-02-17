@@ -1,7 +1,7 @@
 import React, { createContext, useState, useContext } from 'react';
 import { useToast } from '@chakra-ui/react';
 
-const OverlayContext = createContext();
+export const OverlayContext = createContext();
 
 export const OverlayProvider = ({ children }) => {
   const toast = useToast();

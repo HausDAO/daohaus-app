@@ -137,6 +137,7 @@ const TributeInput = ({ register, setValue, getValues, setError }) => {
       chainID: daochain,
       tokenAddress: token,
     });
+
     const amountApproved = await tokenContract('allowance')({
       accountAddr: address,
       contractAddr: daoid,

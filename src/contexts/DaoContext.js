@@ -77,7 +77,7 @@ export const DaoProvider = ({ children }) => {
       ],
     };
 
-    if (daochain !== '0x89') {
+    if (daochain !== '0x89' && daochain !== '0x4a') {
       bigQueryOptions.getSetters.push({
         getter: 'getTransmutations',
         setter: setTransmutations,
