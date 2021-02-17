@@ -35,6 +35,7 @@ const pollTokenAllowances = async ({
     chainID,
     tokenAddress,
   });
+
   const amountApproved = await tokenContract('allowance')({
     accountAddr: userAddress,
     contractAddr: daoID,
@@ -296,7 +297,7 @@ const withdrawTokenTest = (data, shouldEqual, pollId) => {
 
 export const createPoll = ({
   interval = 2000,
-  tries = 20,
+  tries = 30,
   action = null,
   cachePoll = null,
 }) => {
