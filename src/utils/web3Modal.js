@@ -16,14 +16,20 @@ const addNetworkProviders = (chainData) => {
     return false;
   }
   const providersToAdd = chainData.providers;
-
+  console.log(chainData.rpc_url);
   if (providersToAdd.includes('walletconnect')) {
     allProviders.walletconnect = {
       network: chainData.network,
       package: WalletConnectProvider,
       options: {
-        infuraId: process.env.REACT_APP_INFURA_PROJECT_ID,
-        rpc: chainData.rpc_url,
+        // infuraId: process.env.REACT_APP_INFURA_PROJECT_ID,
+        rpc: {
+          1: `https://${process.env.REACT_APP_RPC_URI}.eth.rpc.rivet.cloud/`,
+          4: `https://${process.env.REACT_APP_RPC_URI}.rinkeby.rpc.rivet.cloud/`,
+          42: `https://kovan.infura.io/v3/${process.env.REACT_APP_INFURA_PROJECT_ID}`,
+          100: 'https://dai.poa.network',
+          137: 'https://rpc-mainnet.maticvigil.com',
+        },
       },
     };
   }

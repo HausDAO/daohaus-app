@@ -52,9 +52,7 @@ export const InjectedProvider = ({ children }) => {
     });
 
     const provider = await web3Modal.connect();
-
     provider.selectedAddress = deriveSelectedAddress(provider);
-
     const chainId = deriveChainId(provider);
 
     const chain = {
@@ -117,6 +115,7 @@ export const InjectedProvider = ({ children }) => {
 
   const disconnectDapp = async () => {
     setInjectedProvider(null);
+    setAddress(null);
     setWeb3Modal(defaultModal);
     web3Modal.clearCachedProvider();
   };
