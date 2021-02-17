@@ -1,7 +1,21 @@
 import React from 'react';
 import { Link as RouterLink } from 'react-router-dom';
-import { Box, Button, Icon, Spinner, Stack, Link } from '@chakra-ui/react';
-import { RiExternalLinkLine, RiErrorWarningLine } from 'react-icons/ri';
+import {
+  Box,
+  Button,
+  Flex,
+  Text,
+  Icon,
+  Spinner,
+  Stack,
+  Link,
+} from '@chakra-ui/react';
+import {
+  RiExternalLinkLine,
+  RiErrorWarningLine,
+  RiCheckLine,
+} from 'react-icons/ri';
+import ContentBox from './ContentBox';
 
 import TextBox from './TextBox';
 import { POPUP_CONTENT } from '../content/pending-tx-modal';
@@ -9,70 +23,114 @@ import { supportedChains } from '../utils/chain';
 
 const SummonPending = ({ txHash, success, chainId }) => {
   return (
-    <Box
-      rounded='lg'
-      bg='blackAlpha.600'
-      borderWidth='1px'
-      borderColor='whiteAlpha.200'
-      p={6}
+    <ContentBox
       m={[10, 'auto', 0, 'auto']}
-      w='50%'
+      w={['100%', null, null, '600px']}
       textAlign='center'
     >
-      {success ? (
-        <>
-          <Box fontSize='3xl' fontFamily='heading' fontWeight={700} mb={10}>
+      <Box fontSize='xl' fontFamily='heading' fontWeight={700} mb={10}>
+        {POPUP_CONTENT.summonMoloch.header}
+      </Box>
+      {txHash && !success ? (
+        <Flex direction='column' align='center' my={6}>
+          <Spinner size='xl' color='secondary.500' />
+          <Text fontSize='xs' pt={3}>
+            DAO is in the forge ...
+          </Text>
+        </Flex>
+      ) : null}
+      {!txHash && (
+        <Text my={6}>Check your wallet for a transaction to confirm</Text>
+      )}
+      {txHash && success ? (
+        <Flex align='center' direction='column' w='100%' my={6}>
+          <Box
+            borderColor='secondary.500'
+            style={{
+              width: '48px',
+              height: '48px',
+              padding: '6px',
+              borderRadius: '50%',
+              border: '2px solid',
+            }}
+          >
+            <RiCheckLine
+              style={{
+                width: '36px',
+                height: '36px',
+                color: 'white',
+              }}
+            />
+          </Box>
+          <Text fontSize='xs' pt={3}>
+            Confirmed
+          </Text>
+        </Flex>
+      ) : null}
+
+      {txHash ? (
+        <Link
+          href={`${supportedChains[chainId].block_explorer}/tx/${txHash}`}
+          isExternal
+          color='secondary.500'
+          fontSize={['xs', null, null, 'sm']}
+          fontWeight={600}
+          textAlign='center'
+        >
+          {success ? 'View' : 'Watch'} Transaction{' '}
+          <Icon as={RiExternalLinkLine} />
+        </Link>
+      ) : null}
+
+      {txHash && success ? (
+        <Box my={6}>
+          <Box fontSize='xl' fontFamily='heading' fontWeight={700}>
             {POPUP_CONTENT.summonMoloch.successText}
           </Box>
-          <Button as={RouterLink} to={`/register/${chainId}/${success}`}>
+          <Button as={RouterLink} to={`/register/${chainId}/${success}`} mt={3}>
             CONFIGURE DAO
           </Button>
-        </>
-      ) : (
-        <>
-          <Box fontSize='3xl' fontFamily='heading' fontWeight={700} mb={10}>
-            {POPUP_CONTENT.summonMoloch.header}
-          </Box>
-          {!success ? <Spinner mb={10} /> : null}
-          {POPUP_CONTENT.summonMoloch.bodyText.map((text, idx) => (
-            <Box fontSize='lg' mb={5} fontWeight={700} key={idx}>
-              {text}{' '}
+        </Box>
+      ) : null}
+
+      {txHash && !success && (
+        <Box w='100%'>
+          <Flex direction='column' maxW='300px' m='0 auto' justify='center'>
+            {POPUP_CONTENT.summonMoloch.bodyText.map((text, idx) => (
+              <Box
+                fontSize={['xs', null, null, 'sm']}
+                mt={5}
+                fontWeight={400}
+                key={idx}
+                textAlign='left'
+              >
+                {text}{' '}
+              </Box>
+            ))}
+
+            <Stack spacing={3} mt={5}>
+              {POPUP_CONTENT.summonMoloch.links.map((link, idx) =>
+                link.external ? (
+                  <TextBox as={Link} key={idx} href={link.href}>
+                    {link.text} <Icon as={RiExternalLinkLine} />
+                  </TextBox>
+                ) : (
+                  <TextBox as={RouterLink} key={idx} to={link.href}>
+                    {link.text} <Icon as={RiErrorWarningLine} />
+                  </TextBox>
+                ),
+              )}
+            </Stack>
+            <Box fontSize='xs' textAlign='left'>
+              {POPUP_CONTENT.summonMoloch.waitingText}
             </Box>
-          ))}
-          <Stack spacing='4px' mb={5}>
-            {POPUP_CONTENT.summonMoloch.links.map((link, idx) =>
-              link.external ? (
-                <TextBox as={Link} key={idx} href={link.href}>
-                  {link.text} <Icon as={RiExternalLinkLine} />
-                </TextBox>
-              ) : (
-                <TextBox as={RouterLink} key={idx} to={link.href}>
-                  {link.text} <Icon as={RiErrorWarningLine} />
-                </TextBox>
-              ),
-            )}
-          </Stack>
-
-          {txHash ? (
-            <Link
-              href={`${supportedChains[chainId].block_explorer}/tx/${txHash}`}
-              isExternal
-              fontSize='2xl'
-              color='secondary.500'
-            >
-              View Transaction <Icon as={RiExternalLinkLine} />
-            </Link>
-          ) : null}
-
-          <Box fontSize='sm' mb={10} mt={5}>
-            {POPUP_CONTENT.summonMoloch.waitingText}
-          </Box>
-          <Button as={RouterLink} to='/'>
-            GO TO HUB
-          </Button>
-        </>
+            <Button variant='outline' as={RouterLink} to='/' mt={5}>
+              GO TO HUB
+            </Button>
+          </Flex>
+        </Box>
       )}
-    </Box>
+    </ContentBox>
   );
 };
 
