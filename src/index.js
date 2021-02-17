@@ -13,6 +13,8 @@ window.onunload = function() {
   sessionStorage.clear();
 };
 
+testGetData();
+
 ReactDOM.render(
   <React.StrictMode>
     <BrowserRouter>

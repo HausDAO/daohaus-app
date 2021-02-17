@@ -1,21 +1,21 @@
-// const webAPIKey = 'AIzaSyADOdVxsMq90sQXPZv2gZlcfla-yXgBH5E';
-const projectId = 'daohaus-err-log';
+import { v4 as uuidv4 } from 'uuid';
 
+const projectId = 'daohaus-err-log';
 const posturl = `https://firestore.googleapis.com/v1/projects/${projectId}/databases/(default)/documents/errors`;
 
-// export const testGetData = async () => {
-//   try {
-//     const res = await fetch(url);
-//     const json = await res.json();
-//     console.log(json.documents);
-//   } catch (error) {
-//     console.log(error);
-//   }
-// };
-
-export const postError = async (data) => {
+export const testGetData = async () => {
   try {
-    await fetch(posturl, {
+    const res = await fetch(posturl);
+    const json = await res.json();
+    console.log(json.documents);
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+export const postError = async (data, id) => {
+  try {
+    await fetch(`${posturl}?documentId=${id}`, {
       method: 'POST',
       body: JSON.stringify(data),
       headers: { 'Content-type': 'application/json; charset=UTF-8' },
@@ -25,20 +25,14 @@ export const postError = async (data) => {
   }
 };
 
-const createError = ({
-  at,
-  errMsg,
-  type,
-  priority,
-  userAddress,
-  formData,
-  TxArgs,
-  contextData,
-  hash,
-}) => {
+const createError = (errData, id) => {
+  const { caughtAt, errMsg, daoAddress, type, priority, userAddress } = errData;
+
   const firestoreError = {
     fields: {
-      created: { timestampValue: new Date() },
+      created: { integerValue: Date.now() },
+      data: { stringValue: JSON.stringify(errData) },
+      id: { stringValue: id },
     },
   };
 
@@ -49,36 +43,31 @@ const createError = ({
     firestoreError.fields.errMsg = { stringValue: errMsg };
   }
   if (userAddress) {
-    firestoreError.fields.userAddress = { stringValue: userAddress };
-  }
-  if (priority) {
-    firestoreError.fields.priority = { stringValue: priority.toString() };
-  }
-  if (at) {
-    firestoreError.fields.at = { stringValue: at };
-  }
-  if (TxArgs) {
-    firestoreError.fields.TxArgs = { stringValue: JSON.stringify(TxArgs) };
-  }
-  if (formData) {
-    firestoreError.fields.formData = { stringValue: JSON.stringify(formData) };
-  }
-  if (contextData) {
-    firestoreError.fields.contextData = {
-      stringValue: JSON.stringify(contextData),
+    firestoreError.fields.userAddress = {
+      stringValue: userAddress.toLowerCase(),
     };
   }
-  if (hash) {
-    firestoreError.fields.hash = { stringValue: hash };
+  if (daoAddress) {
+    firestoreError.fields.daoAddress = {
+      stringValue: daoAddress.toLowerCase(),
+    };
   }
+  if (priority) {
+    firestoreError.fields.priority = { integerValue: priority };
+  }
+  if (caughtAt) {
+    firestoreError.fields.caughtAt = { stringValue: caughtAt };
+  }
+
   return firestoreError;
 };
 
 export const LogError = async (data) => {
+  const id = uuidv4();
   try {
-    const errData = createError(data);
+    const errData = createError(data, id);
     console.log(errData);
-    await postError(errData);
+    await postError(errData, id);
   } catch (error) {
     console.error('ERROR LOG FAILED: ', error);
   }

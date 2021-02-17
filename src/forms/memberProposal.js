@@ -137,17 +137,17 @@ const MemberProposalForm = () => {
     } catch (error) {
       const errMsg = error?.message || '';
       setLoading(false);
+
       LogError({
-        at: 'memberPropsal.js',
-        type: 'Contract TX: Member Proposal',
+        caughtAt: 'memberPropsal.js',
         errMsg,
+        type: 'Contract TX: Member Proposal',
         userAddress: address,
+        daoAddress: daoid,
         priority: 1,
-        hash,
         formData: values,
         TxArgs: args,
         contextData: {
-          // injectedProvider,
           address,
           daoOverview,
           daoid,
