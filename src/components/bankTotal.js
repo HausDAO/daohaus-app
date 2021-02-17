@@ -10,7 +10,7 @@ const BankTotal = ({ tokenBalances }) => {
     <>
       <Skeleton isLoaded={tokenBalances?.length > 0}>
         <Text fontFamily='mono' fontSize='3xl' variant='value'>
-          ${bankTotal && numberWithCommas(bankTotal)}
+          ${bankTotal !== 'Loading' && numberWithCommas(bankTotal)}
         </Text>
       </Skeleton>
       <Box>

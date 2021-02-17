@@ -5,6 +5,7 @@ import { FaThumbsUp, FaThumbsDown } from 'react-icons/fa';
 import { RiErrorWarningLine, RiQuestionLine } from 'react-icons/ri';
 import { isAfter, isBefore } from 'date-fns';
 import { motion } from 'framer-motion';
+import { MaxUint256 } from '@ethersproject/constants';
 
 import { useInjectedProvider } from '../contexts/InjectedProviderContext';
 import { useUser } from '../contexts/UserContext';
@@ -18,7 +19,7 @@ import TextBox from './TextBox';
 import { memberVote } from '../utils/proposalUtils';
 import { supportedChains } from '../utils/chain';
 import { getCopy } from '../utils/metadata';
-import { capitalize } from '../utils/general';
+import { capitalize, daoConnectedAndSameChain } from '../utils/general';
 import { useMetaData } from '../contexts/MetaDataContext';
 import { MinionService } from '../services/minionService';
 
@@ -39,16 +40,13 @@ const ProposalVote = ({ proposal, overview, daoProposals, daoMember }) => {
   const { refreshDao } = useTX();
   const { customTerms } = useMetaData();
   const [minionDeets, setMinionDeets] = useState();
+  const [enoughDeposit, setEnoughDeposit] = useState();
 
   const currentlyVoting = (proposal) => {
     return (
       isBefore(Date.now(), new Date(+proposal?.votingPeriodEnds * 1000)) &&
       isAfter(Date.now(), new Date(+proposal?.votingPeriodStarts * 1000))
     );
-  };
-
-  const daoConnectedAndSameChain = () => {
-    return address && daochain && injectedChain?.chainId === daochain;
   };
 
   const userRejectedToast = () => {
@@ -87,6 +85,22 @@ const ProposalVote = ({ proposal, overview, daoProposals, daoMember }) => {
     setProposalModal(false);
     setTxInfoModal(true);
   };
+
+  useEffect(() => {
+    const getDepositTokenBalance = async () => {
+      const depositTokenBalance = await TokenService({
+        tokenAddress: overview?.depositToken.tokenAddress,
+        chainID: daochain,
+      })('balanceOf')(address);
+      setEnoughDeposit(
+        +depositTokenBalance >
+          +overview?.proposalDeposit / 10 ** overview?.depositToken.decimals,
+      );
+    };
+    if (overview?.depositToken) {
+      getDepositTokenBalance();
+    }
+  }, [overview]);
 
   const cancelProposal = async (id) => {
     setLoading(true);
@@ -132,18 +146,16 @@ const ProposalVote = ({ proposal, overview, daoProposals, daoMember }) => {
   const unlock = async (token) => {
     setLoading(true);
     console.log(token);
-    // TODO change to unlimited
-    const tokenAmount = (100 * 10 ** 18).toString();
-    const args = [daoid, tokenAmount];
 
-    // ? multiply times decimals
+    const args = [daoid, MaxUint256];
+
     try {
       const poll = createPoll({ action: 'unlockToken', cachePoll })({
         daoID: daoid,
         chainID: daochain,
         tokenAddress: token,
         userAddress: address,
-        unlockAmount: tokenAmount,
+        unlockAmount: MaxUint256,
         actions: {
           onError: (error, txHash) => {
             errorToast({
@@ -270,8 +282,7 @@ const ProposalVote = ({ proposal, overview, daoProposals, daoMember }) => {
       proposalType = 'guildkick';
       processFn = 'processWhitelistProposal';
     }
-    console.log('proposalType :>> ', proposalType);
-    console.log('processFn :>> ', processFn);
+
     const args = [proposal.proposalIndex];
 
     try {
@@ -389,10 +400,10 @@ const ProposalVote = ({ proposal, overview, daoProposals, daoMember }) => {
   return (
     <>
       <ContentBox position='relative'>
-        {!daoConnectedAndSameChain() &&
+        {!daoConnectedAndSameChain(address, daochain, injectedChain?.chainId) &&
           ((proposal?.status === 'Unsponsored' && !proposal?.proposalIndex) ||
             proposal?.status === 'ReadyForProcessing') && <NetworkOverlay />}
-        {!daoConnectedAndSameChain() &&
+        {!daoConnectedAndSameChain(address, daochain, injectedChain?.chainId) &&
           (proposal?.status !== 'Unsponsored' || proposal?.proposalIndex) &&
           proposal?.status !== 'Cancelled' &&
           !proposal?.status === 'ReadyForProcessing' && <NetworkOverlay />}
@@ -400,7 +411,7 @@ const ProposalVote = ({ proposal, overview, daoProposals, daoMember }) => {
         {proposal?.status === 'Unsponsored' && !proposal?.proposalIndex && (
           <Flex justify='center' direction='column'>
             <Flex justify='center' mb={4}>
-              <Flex justify='center' direction='column'>
+              <Flex justify='center' direction='column' align='center'>
                 <TextBox size='xs'>
                   Deposit to Sponsor{' '}
                   <Tooltip
@@ -416,9 +427,7 @@ const ProposalVote = ({ proposal, overview, daoProposals, daoMember }) => {
                   {overview?.proposalDeposit /
                     10 ** overview?.depositToken.decimals}{' '}
                   {overview?.depositToken?.symbol}
-                  {+daoMember?.tokenBalance <
-                  +overview?.proposalDeposit /
-                    10 ** overview?.depositToken.decimals ? (
+                  {!enoughDeposit ? (
                     <Tooltip
                       shouldWrapChildren
                       placement='bottom'
@@ -449,6 +458,7 @@ const ProposalVote = ({ proposal, overview, daoProposals, daoMember }) => {
                   +overview?.proposalDeposit === 0 ? (
                     <Button
                       onClick={() => sponsorProposal(proposal?.proposalId)}
+                      isDisabled={!enoughDeposit}
                       isLoading={loading}
                     >
                       Sponsor
@@ -498,7 +508,12 @@ const ProposalVote = ({ proposal, overview, daoProposals, daoMember }) => {
                 >
                   {currentlyVoting(proposal) ? (
                     <>
-                      {daoConnectedAndSameChain() &&
+                      {daoConnectedAndSameChain(
+                        address,
+                        daochain,
+                        injectedChain?.chainId,
+                      ) &&
+                        +daoMember?.shares > 0 &&
                         memberVote(proposal, address) === null && (
                           <Flex w='48%' justify='space-around'>
                             <Flex
@@ -650,7 +665,7 @@ const ProposalVote = ({ proposal, overview, daoProposals, daoMember }) => {
             </>
           )}
 
-        {daoConnectedAndSameChain() &&
+        {daoConnectedAndSameChain(address, daochain, injectedChain?.chainId) &&
           proposal?.status === 'ReadyForProcessing' &&
           (nextProposalToProcess?.proposalId === proposal?.proposalId ? (
             <Flex justify='center' pt='10px'>

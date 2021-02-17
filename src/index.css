@@ -45,6 +45,6 @@ ul.rc-pagination {
   border: 1px solid white;
 }
 
-#WEB3_CONNECT_MODAL_ID {
-  z-index: 8;
+#WEB3_CONNECT_MODAL_ID .web3modal-modal-lightbox {
+  z-index: 2000;
 }
