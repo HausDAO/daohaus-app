@@ -11,6 +11,10 @@ export const attemptInjectedChainData = () =>
 
 const addNetworkProviders = (chainData) => {
   const allProviders = {};
+  if (!chainData) {
+    // this will fire if window.ethererum exists, but the user is on the wrong chain
+    return false;
+  }
   const providersToAdd = chainData.providers;
 
   if (providersToAdd.includes('walletconnect')) {

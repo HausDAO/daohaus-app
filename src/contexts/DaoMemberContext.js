@@ -51,6 +51,7 @@ export const DaoMemberProvider = ({
           daoAddress: daoid,
           chainID: daochain,
         });
+
         if (wallet) {
           setDaoMember((prevState) => ({
             ...prevState,
