@@ -7,6 +7,7 @@ import React, {
 } from 'react';
 import Web3 from 'web3';
 import Web3Modal from 'web3modal';
+import { OverlayContext } from './OverlayContext';
 
 import { supportedChains } from '../utils/chain';
 import {
@@ -28,12 +29,24 @@ export const InjectedProvider = ({ children }) => {
   const [address, setAddress] = useState(null);
   const [injectedChain, setInjectedChain] = useState(null);
   const [web3Modal, setWeb3Modal] = useState(defaultModal);
+  const { errorToast } = useContext(OverlayContext);
 
   const hasListeners = useRef(null);
 
   const connectProvider = async () => {
+    const providerOptions = getProviderOptions();
+
+    if (!providerOptions) {
+      setInjectedProvider(null);
+      setAddress(null);
+      setWeb3Modal(defaultModal);
+      window.localStorage.removeItem('WEB3_CONNECT_CACHED_PROVIDER');
+      errorToast({ title: 'Could not connect to unsupported network' });
+      return;
+    }
+
     const web3Modal = new Web3Modal({
-      providerOptions: getProviderOptions(),
+      providerOptions,
       cacheProvider: true,
       theme: 'dark',
     });
@@ -41,7 +54,9 @@ export const InjectedProvider = ({ children }) => {
     const provider = await web3Modal.connect();
 
     provider.selectedAddress = deriveSelectedAddress(provider);
+
     const chainId = deriveChainId(provider);
+
     const chain = {
       ...supportedChains[chainId],
       chainId,
@@ -56,10 +71,10 @@ export const InjectedProvider = ({ children }) => {
   };
 
   useEffect(() => {
-    if (!injectedProvider && web3Modal.cachedProvider) {
+    if (window.localStorage.getItem('WEB3_CONNECT_CACHED_PROVIDER')) {
       connectProvider();
     }
-  }, [injectedProvider, web3Modal]);
+  }, []);
 
   // This useEffect handles the initialization of EIP-1193 listeners
   // https://eips.ethereum.org/EIPS/eip-1193
@@ -105,7 +120,7 @@ export const InjectedProvider = ({ children }) => {
     setWeb3Modal(defaultModal);
     web3Modal.clearCachedProvider();
   };
-  // const address = injectedProvider?.currentProvider?.selectedAddress;
+
   return (
     <InjectedProviderContext.Provider
       value={{

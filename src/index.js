@@ -15,11 +15,11 @@ window.onunload = function() {
 ReactDOM.render(
   <React.StrictMode>
     <BrowserRouter>
-      <InjectedProvider>
-        <CustomThemeProvider>
+      <CustomThemeProvider>
+        <InjectedProvider>
           <App />
-        </CustomThemeProvider>
-      </InjectedProvider>
+        </InjectedProvider>
+      </CustomThemeProvider>
     </BrowserRouter>
   </React.StrictMode>,
   document.getElementById('root'),
