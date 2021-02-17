@@ -5,11 +5,11 @@ export const parseSummonresAndShares = (data) => {
   if (!data) {
     return [[], []];
   }
-  const lines = data.split('\n');
+  const lines = data.split(/\r?\n/);
   const addrs = [];
   const amounts = [];
   lines.forEach((line) => {
-    const summoner = line.split(' ');
+    const summoner = line.split(/\s+/);
     addrs.push(summoner[0]);
     amounts.push(summoner[1]);
   });
