@@ -93,27 +93,45 @@ export const supportedChains = {
     moloch_factory_addr: '0x0F50B2F3165db96614fbB6E4262716acc9F9e098',
     wxdai_contract: '0xe91D153E0b41518A2Ce8Dd3D7944Fa863463a97d',
   },
- 137: {
-  name: 'Matic',
-  short_name: 'matic',
-  chain: 'MATIC',
-  network: 'matic',
-  network_id: 137,
-  providers: ['walletconnect', 'portis', 'fortmatic'],
-  rpc_url: 'https://rpc-mainnet.maticvigil.com',
-  abi_api_url:
-    'https://mainnet.maticvigil.com/api/swagger/',
-  metadata_api_url: 'https://data.daohaus.club',
-  subgraph_url:
-    'http://35.224.233.211/subgraphs/name/matic/daohaus-supergraph/graphql',
-  stats_graph_url:
-    'http://35.224.233.211/subgraphs/name/matic/daohaus/graphql',
-  minion_factory_addr: '0x91Eb3d16Cb09dC884bB3146e04C1A1cF80EEa548',
-  moloch_factory_addr: '0x6690C139564144b27ebABA71F9126611a23A31C9',
-  dai_contract: '0x8f3Cf7ad23Cd3CaDbD9735AFf958023239c6A063',
-  weth_contract: '0x2791Bca1f2de4661ED88A30C99A7a9449Aa84174',
-}
-
+  137: {
+    name: 'Matic',
+    short_name: 'matic',
+    chain: 'MATIC',
+    network: 'matic',
+    network_id: 137,
+    providers: ['walletconnect', 'portis', 'fortmatic'],
+    rpc_url: 'https://rpc-mainnet.maticvigil.com',
+    abi_api_url: 'https://mainnet.maticvigil.com/api/swagger/',
+    metadata_api_url: 'https://data.daohaus.club',
+    subgraph_url:
+      'http://35.224.233.211/subgraphs/name/matic/daohaus-supergraph/graphql',
+    stats_graph_url:
+      'http://35.224.233.211/subgraphs/name/matic/daohaus/graphql',
+    minion_factory_addr: '0x91Eb3d16Cb09dC884bB3146e04C1A1cF80EEa548',
+    moloch_factory_addr: '0x6690C139564144b27ebABA71F9126611a23A31C9',
+    dai_contract: '0x8f3Cf7ad23Cd3CaDbD9735AFf958023239c6A063',
+    weth_contract: '0x2791Bca1f2de4661ED88A30C99A7a9449Aa84174',
+  },
+  74: {
+    name: 'IDChain',
+    short_name: 'idchain',
+    chain: 'IDChain',
+    network: 'idchain',
+    network_id: 74,
+    providers: ['walletconnect'],
+    rpc_url: 'https://idchain.one/rpc/',
+    abi_api_url:
+      'https://explorer.idchain.one/api?module=contract&action=getabi&address=',
+    metadata_api_url: 'https://data.daohaus.club',
+    subgraph_url:
+      'https://graph.idchain.one/subgraphs/name/idchain/daohaus-supergraph/graphql',
+    stats_graph_url:
+      'https://graph.idchain.one/subgraphs/name/idchain/daohaus-stats/graphql',
+    minion_factory_addr: '0x90253955D4066eE27C183B4644089a5A04A888F1',
+    moloch_factory_addr: '0x99B4525D6d6F6c3161D0abd6A58B482f46ad5Cd0',
+    dai_contract: '0xE1A400f340bf4eeDbc4Bbb553f1BFf7Ec4656E3e',
+    weth_contract: '0x2b309226500ADc5956a422950A2AD6E6333Bb315',
+  },
 };
 
 export function getChainData(chainId) {
