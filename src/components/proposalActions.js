@@ -97,7 +97,7 @@ const ProposalVote = ({ proposal, overview, daoProposals, daoMember }) => {
           +overview?.proposalDeposit / 10 ** overview?.depositToken.decimals,
       );
     };
-    if (overview?.depositToken) {
+    if (overview?.depositToken && address) {
       getDepositTokenBalance();
     }
   }, [overview]);
@@ -396,8 +396,6 @@ const ProposalVote = ({ proposal, overview, daoProposals, daoMember }) => {
       }
     }
   }, [daoProposals]);
-
-  console.log('daoMember', daoMember);
 
   return (
     <>

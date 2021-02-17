@@ -35,6 +35,7 @@ const pollTokenAllowances = async ({
     chainID,
     tokenAddress,
   });
+
   const amountApproved = await tokenContract('allowance')({
     accountAddr: userAddress,
     contractAddr: daoID,
