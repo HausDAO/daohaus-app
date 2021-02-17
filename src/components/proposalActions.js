@@ -397,6 +397,8 @@ const ProposalVote = ({ proposal, overview, daoProposals, daoMember }) => {
     }
   }, [daoProposals]);
 
+  console.log('daoMember', daoMember);
+
   return (
     <>
       <ContentBox position='relative'>
@@ -433,7 +435,7 @@ const ProposalVote = ({ proposal, overview, daoProposals, daoMember }) => {
                       placement='bottom'
                       label={
                         'Insufficient Funds: You only have ' +
-                        daoMember?.tokenBalance +
+                        daoMember?.depositTokenBalance +
                         ' ' +
                         overview?.depositToken?.symbol
                       }
