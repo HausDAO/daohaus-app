@@ -97,7 +97,7 @@ const ProposalVote = ({ proposal, overview, daoProposals, daoMember }) => {
           +overview?.proposalDeposit / 10 ** overview?.depositToken.decimals,
       );
     };
-    if (overview?.depositToken) {
+    if (overview?.depositToken && address) {
       getDepositTokenBalance();
     }
   }, [overview]);
@@ -433,7 +433,7 @@ const ProposalVote = ({ proposal, overview, daoProposals, daoMember }) => {
                       placement='bottom'
                       label={
                         'Insufficient Funds: You only have ' +
-                        daoMember?.tokenBalance +
+                        daoMember?.depositTokenBalance +
                         ' ' +
                         overview?.depositToken?.symbol
                       }

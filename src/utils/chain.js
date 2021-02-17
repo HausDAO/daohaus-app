@@ -31,7 +31,7 @@ export const supportedChains = {
     network: 'rinkeby',
     network_id: 4,
     chain_id: '0x4',
-    hub_sort_order: 5,
+    hub_sort_order: 6,
     providers: ['walletconnect', 'portis', 'fortmatic'],
     rpc_url: `https://${process.env.REACT_APP_RPC_URI}.rinkeby.rpc.rivet.cloud/`,
     abi_api_url:
@@ -56,7 +56,7 @@ export const supportedChains = {
     network: 'kovan',
     network_id: 42,
     chain_id: '0x2a',
-    hub_sort_order: 4,
+    hub_sort_order: 5,
     providers: ['walletconnect', 'portis', 'fortmatic'],
     rpc_url: `https://kovan.infura.io/v3/${process.env.REACT_APP_INFURA_PROJECT_ID}`,
     abi_api_url:
@@ -119,7 +119,31 @@ export const supportedChains = {
     moloch_factory_addr: '0x6690C139564144b27ebABA71F9126611a23A31C9',
     dai_contract: '0x8f3Cf7ad23Cd3CaDbD9735AFf958023239c6A063',
     weth_contract: '0x0d500b1d8e8ef31e21c99d1db9a6444d3adf1270',
-    block_explorer: 'https://explorer-mainnet.maticvigil.com/',
+    block_explorer: 'https://explorer-mainnet.maticvigil.com',
+  },
+  '0x4a': {
+    name: 'IDChain',
+    short_name: 'idchain',
+    chain: 'IDChain',
+    network: 'idchain',
+    network_id: 74,
+    chain_id: '0x4a',
+    hub_sort_order: 4,
+    providers: ['walletconnect'],
+    rpc_url: 'https://idchain.one/rpc/',
+    metadata_api_url: 'https://data.daohaus.club',
+    abi_api_url:
+      'https://explorer.idchain.one/api?module=contract&action=getabi&address=',
+    subgraph_url:
+      'https://graph.idchain.one/subgraphs/name/idchain/daohaus-supergraph',
+    stats_graph_url:
+      'https://graph.idchain.one/subgraphs/name/idchain/daohaus-stats',
+    boosts_graph_url: '',
+    minion_factory_addr: '0x90253955D4066eE27C183B4644089a5A04A888F1',
+    moloch_factory_addr: '0x99B4525D6d6F6c3161D0abd6A58B482f46ad5Cd0',
+    dai_contract: '0xE1A400f340bf4eeDbc4Bbb553f1BFf7Ec4656E3e',
+    weth_contract: '0x2b309226500ADc5956a422950A2AD6E6333Bb315',
+    block_explorer: 'https://explorer.idchain.one',
   },
 };
 
@@ -132,6 +156,7 @@ export const chainByNetworkId = (networkId) => {
     1: supportedChains['0x1'],
     4: supportedChains['0x4'],
     42: supportedChains['0x2a'],
+    74: supportedChains['0x4a'],
     100: supportedChains['0x64'],
     137: supportedChains['0x89'],
   };
