@@ -190,11 +190,13 @@ export const put = async (endpoint, data) => {
   }
 };
 
-export const createDiscourseForum = async (metadata) => {
-  try {
-    const response = await post('create-forum', metadata);
+export const getForumTopics = async (categoryId) => {
+  const url = `${metadataApiUrl}/dao/discourse-topics/${categoryId}`;
 
-    return response;
+  try {
+    const response = await fetch(url);
+
+    return response.json();
   } catch (err) {
     throw new Error(err);
   }

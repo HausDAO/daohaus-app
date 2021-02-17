@@ -1,34 +1,42 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   Checkbox,
-  Flex,
   FormControl,
   FormLabel,
-  Input,
   Select,
+  Box,
 } from '@chakra-ui/react';
 import { AiOutlineCaretDown } from 'react-icons/ai';
 
 import TextBox from './TextBox';
 import { useMetaData } from '../contexts/MetaDataContext';
 import { useCustomTheme } from '../contexts/CustomThemeContext';
-import { eu } from 'date-fns/locale';
-
-const forumTopics = [
-  {
-    id: 261,
-    title: 'About the cheese dao category',
-  },
-  {
-    id: 262,
-    title: 'wtf',
-  },
-];
+import { getForumTopics } from '../utils/metadata';
 
 const DiscourseProposalFields = ({ register, watch, setValue }) => {
   const { daoMetaData } = useMetaData();
   const { theme } = useCustomTheme();
   const watchCreateForum = watch('createForum', false);
+  const [forumTopics, setForumTopics] = useState([]);
+
+  useEffect(() => {
+    const fetchForumTopics = async () => {
+      const topicsRes = await getForumTopics(
+        daoMetaData.boosts.discourse.metadata.categoryId,
+      );
+
+      console.log('topicsRes', topicsRes);
+      setForumTopics(
+        topicsRes.sort((a, b) => {
+          return b.id - a.id;
+        }),
+      );
+    };
+
+    if (daoMetaData?.boosts.discourse?.active) {
+      fetchForumTopics();
+    }
+  }, [daoMetaData]);
 
   useEffect(() => {
     if (watchCreateForum) {
@@ -41,47 +49,43 @@ const DiscourseProposalFields = ({ register, watch, setValue }) => {
     <>
       {daoMetaData?.boosts.discourse?.active ? (
         <>
-          <TextBox as={FormLabel} size='sm' htmlFor='discourse' mb={2} mt={7}>
-            Add a Discourse Forum Topic?
+          <TextBox as={FormLabel} size='xs' htmlFor='createForum' mt={10}>
+            Discourse Forum
           </TextBox>
-          <FormControl mb={5}>
+          <FormControl mt={2} mb={5}>
             <Checkbox
               ref={register}
               name='createForum'
               defaultIsChecked={false}
             >
-              <TextBox as={FormLabel} size='xs' htmlFor='createForum' mt={1}>
-                Create a New Topic
-              </TextBox>
+              <Box size='xs' htmlFor='createForum' mt={1}>
+                Create a new topic
+              </Box>
             </Checkbox>
           </FormControl>
-          {!watchCreateForum ? (
-            <FormControl mb={5}>
-              <TextBox as={FormLabel} size='xs' htmlFor='forumId'>
-                OR Select existing forum topic
-              </TextBox>
-              <Select
-                placeholder='Select forum topic'
-                icon={<AiOutlineCaretDown />}
-                name='forumId'
-                color='whiteAlpha.900'
-                ref={register}
-              >
-                {forumTopics?.map((topic) => {
-                  return (
-                    <option
-                      key={topic.id}
-                      value={topic.id}
-                      color={theme.colors.whiteAlpha[900]}
-                      background={theme.colors.blackAlpha[900]}
-                    >
-                      {topic.title}
-                    </option>
-                  );
-                })}
-              </Select>
-            </FormControl>
-          ) : null}
+          <FormControl mb={5}>
+            <Select
+              placeholder='Connect to a current topic'
+              icon={<AiOutlineCaretDown />}
+              name='forumId'
+              color='whiteAlpha.900'
+              ref={register}
+              disabled={watchCreateForum}
+            >
+              {forumTopics?.map((topic) => {
+                return (
+                  <option
+                    key={topic.id}
+                    value={topic.id}
+                    color={theme.colors.whiteAlpha[900]}
+                    background={theme.colors.blackAlpha[900]}
+                  >
+                    {topic.title}
+                  </option>
+                );
+              })}
+            </Select>
+          </FormControl>
         </>
       ) : null}
     </>

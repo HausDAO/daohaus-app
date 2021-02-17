@@ -6,6 +6,7 @@ import {
   linkMaker,
   hashMaker,
   determineUnreadActivityFeed,
+  forumIdMaker,
 } from './proposalUtils';
 
 import { getTotalBankValue } from './tokenValue';
@@ -26,12 +27,16 @@ export const proposalResolver = (proposal, fields = {}) => {
   if (fields.hash) {
     proposal.hash = hashMaker(proposal);
   }
+  if (fields.forumId) {
+    proposal.forumId = forumIdMaker(proposal);
+  }
   if (fields.proposalType) {
     proposal.proposalType = determineProposalType(proposal);
   }
   if (fields.activityFeed) {
     proposal.activityFeed = determineUnreadActivityFeed(proposal);
   }
+
   return proposal;
 };
 

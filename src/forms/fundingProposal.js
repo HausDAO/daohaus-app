@@ -37,6 +37,8 @@ import { useDao } from '../contexts/DaoContext';
 import { valToDecimalString } from '../utils/tokenValue';
 import { chainByID } from '../utils/chain';
 import DiscourseProposalFields from '../components/discourseProposalFields';
+import { post } from '../utils/metadata';
+import { useMetaData } from '../contexts/MetaDataContext';
 
 const FundingProposalForm = () => {
   const {
@@ -52,6 +54,7 @@ const FundingProposalForm = () => {
     setTxInfoModal,
   } = useOverlay();
   const { daoOverview } = useDao();
+  const { daoMetaData } = useMetaData();
   const { refreshDao } = useTX();
   const { cachePoll, resolvePoll } = useUser();
   const { daoid, daochain } = useParams();
@@ -90,12 +93,6 @@ const FundingProposalForm = () => {
 
     console.log('values', values);
 
-    let details;
-    if (values.createForum) {
-    } else {
-      details = detailsToJSON({ ...values, hash });
-    }
-
     const { tokenBalances, depositToken } = daoOverview;
     const tributeToken = values.tributeToken || depositToken.tokenAddress;
     const paymentToken = values.paymentToken || depositToken.tokenAddress;
@@ -110,6 +107,35 @@ const FundingProposalForm = () => {
       : values?.applicant
       ? values.applicant
       : address;
+
+    let details;
+    if (
+      values.createForum &&
+      daoMetaData?.boosts?.discourse?.metadata?.categoryId
+    ) {
+      const forumData = {
+        ...values,
+        title: `Funding Proposal: ${values.title}`,
+        applicant,
+        category: daoMetaData.boosts.discourse.metadata.categoryId,
+        shares: values.sharesRequested || '0',
+        loot: values.lootRequested || '0',
+        paymentRequested: values.paymentRequested || '0',
+        tributeOffered: values.tributeOffered || '0',
+      };
+
+      const forumRes = await await post('dao/discourse-topic', forumData);
+      console.log('forumRes', forumRes);
+      details = detailsToJSON({
+        ...values,
+        hash,
+        discourseId: forumRes || '',
+      });
+    } else {
+      details = detailsToJSON({ ...values, hash });
+    }
+    console.log('details', details);
+
     const args = [
       applicant,
       values.sharesRequested || '0',
@@ -121,45 +147,45 @@ const FundingProposalForm = () => {
       details,
     ];
 
-    // try {
-    //   const poll = createPoll({ action: 'submitProposal', cachePoll })({
-    //     daoID: daoid,
-    //     chainID: daochain,
-    //     hash,
-    //     actions: {
-    //       onError: (error, txHash) => {
-    //         errorToast({
-    //           title: `There was an error.`,
-    //         });
-    //         resolvePoll(txHash);
-    //         console.error(`Could not find a matching proposal: ${error}`);
-    //       },
-    //       onSuccess: (txHash) => {
-    //         successToast({
-    //           title: 'Member Proposal Submitted to the Dao!',
-    //         });
-    //         refreshDao();
-    //         resolvePoll(txHash);
-    //       },
-    //     },
-    //   });
-    //   const onTxHash = () => {
-    //     setProposalModal(false);
-    //     setTxInfoModal(true);
-    //   };
-    //   await MolochService({
-    //     web3: injectedProvider,
-    //     daoAddress: daoid,
-    //     chainID: daochain,
-    //     version: daoOverview.version,
-    //   })('submitProposal')({ args, address, poll, onTxHash });
-    // } catch (err) {
-    //   setLoading(false);
-    //   console.error('error: ', err);
-    //   errorToast({
-    //     title: `There was an error.`,
-    //   });
-    // }
+    try {
+      const poll = createPoll({ action: 'submitProposal', cachePoll })({
+        daoID: daoid,
+        chainID: daochain,
+        hash,
+        actions: {
+          onError: (error, txHash) => {
+            errorToast({
+              title: `There was an error.`,
+            });
+            resolvePoll(txHash);
+            console.error(`Could not find a matching proposal: ${error}`);
+          },
+          onSuccess: (txHash) => {
+            successToast({
+              title: 'Member Proposal Submitted to the Dao!',
+            });
+            refreshDao();
+            resolvePoll(txHash);
+          },
+        },
+      });
+      const onTxHash = () => {
+        setProposalModal(false);
+        setTxInfoModal(true);
+      };
+      await MolochService({
+        web3: injectedProvider,
+        daoAddress: daoid,
+        chainID: daochain,
+        version: daoOverview.version,
+      })('submitProposal')({ args, address, poll, onTxHash });
+    } catch (err) {
+      setLoading(false);
+      console.error('error: ', err);
+      errorToast({
+        title: `There was an error.`,
+      });
+    }
   };
 
   return (

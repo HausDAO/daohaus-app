@@ -47,6 +47,8 @@ const hasImage = (string) => {
 const ProposalDetails = ({ proposal }) => {
   const { address } = useInjectedProvider();
 
+  console.log('proposal', proposal);
+
   return (
     <Box pt={6}>
       <ContentBox>
@@ -144,6 +146,14 @@ const ProposalDetails = ({ proposal }) => {
               </Skeleton>
             )}
           </Box>
+          {proposal?.forumId ? (
+            <Box width='100%' fontSize='sm' mt={5}>
+              <Link href={`https://forum.daohaus.club/t/${proposal.forumId}`}>
+                Discuss this proposal on the Discourse forum{' '}
+                <Icon as={RiExternalLinkLine} color='primary.50' />
+              </Link>
+            </Box>
+          ) : null}
         </Box>
         <Flex w='100%' justify='space-between' mt={6} wrap='wrap'>
           {(proposal?.tributeOffered > 0 || !proposal?.tributeOffered) && (
