@@ -11,7 +11,6 @@ import {
   Link,
   Text,
 } from '@chakra-ui/react';
-import { VscGear } from 'react-icons/vsc';
 import { useParams } from 'react-router-dom';
 
 import { useInjectedProvider } from '../contexts/InjectedProviderContext';
@@ -19,8 +18,6 @@ import { boostPost } from '../utils/metadata';
 import { useOverlay } from '../contexts/OverlayContext';
 import ContentBox from '../components/ContentBox';
 import TextBox from '../components/TextBox';
-import { notificationBoostContent } from '../content/boost-content';
-import NotificationsLaunch from '../components/notificationsLaunch';
 import MainViewLayout from '../components/mainViewLayout';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
 import { FaCopy } from 'react-icons/fa';

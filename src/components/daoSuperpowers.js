@@ -1,8 +1,7 @@
 import React from 'react';
 import { Link as RouterLink, useParams } from 'react-router-dom';
-import { Box, Flex, Icon, Link, Stack } from '@chakra-ui/react';
+import { Box, Flex, Icon, Stack } from '@chakra-ui/react';
 import { VscGear } from 'react-icons/vsc';
-import { RiExternalLinkLine } from 'react-icons/ri';
 
 import ContentBox from './ContentBox';
 import { useInjectedProvider } from '../contexts/InjectedProviderContext';
