@@ -19,9 +19,9 @@ import { useOverlay } from './OverlayContext';
 const numOfSupportedChains = Object.keys(supportedChains).length;
 
 export const UserContext = createContext();
-const address = '0x44bf6f5b5a5884e748fc87e10ddc4b6eb3c027c7';
+
 export const UserContextProvider = ({ children }) => {
-  // const { address } = useInjectedProvider();
+  const { address } = useInjectedProvider();
   const { successToast, errorToast } = useOverlay();
 
   const [userHubDaos, setUserHubDaos] = useSessionStorage('userHubData', []);
