@@ -36,6 +36,8 @@ import { MolochService } from '../services/molochService';
 import { useDao } from '../contexts/DaoContext';
 import { valToDecimalString } from '../utils/tokenValue';
 import { chainByID } from '../utils/chain';
+import { useMetaData } from '../contexts/MetaDataContext';
+import { createForumTopic } from '../utils/discourse';
 
 const FundingProposalForm = () => {
   const {
@@ -53,6 +55,7 @@ const FundingProposalForm = () => {
   const { daoOverview } = useDao();
   const { refreshDao } = useTX();
   const { cachePoll, resolvePoll } = useUser();
+  const { daoMetaData } = useMetaData();
   const { daoid, daochain } = useParams();
 
   const [loading, setLoading] = useState(false);
@@ -85,7 +88,10 @@ const FundingProposalForm = () => {
 
   const onSubmit = async (values) => {
     setLoading(true);
+    const now = (new Date().getTime() / 1000).toFixed();
     const hash = createHash();
+
+    console.log('values', values);
     const details = detailsToJSON({ ...values, hash });
     const { tokenBalances, depositToken } = daoOverview;
     const tributeToken = values.tributeToken || depositToken.tokenAddress;
@@ -101,6 +107,7 @@ const FundingProposalForm = () => {
       : values?.applicant
       ? values.applicant
       : address;
+
     const args = [
       applicant,
       values.sharesRequested || '0',
@@ -127,10 +134,19 @@ const FundingProposalForm = () => {
           },
           onSuccess: (txHash) => {
             successToast({
-              title: 'Member Proposal Submitted to the Dao!',
+              title: 'Funding Proposal Submitted to the Dao!',
             });
             refreshDao();
             resolvePoll(txHash);
+            createForumTopic({
+              chainID: daochain,
+              daoID: daoid,
+              afterTime: now,
+              proposalType: 'Funding Proposal',
+              values,
+              applicant,
+              daoMetaData,
+            });
           },
         },
       });
@@ -261,6 +277,7 @@ const FundingProposalForm = () => {
           )}
         </Box>
       </FormControl>
+
       <Flex justify='flex-end' align='center' h='60px'>
         {currentError && (
           <Box color='red.500' fontSize='m' mr={5}>

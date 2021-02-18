@@ -32,6 +32,7 @@ export const proposalResolver = (proposal, fields = {}) => {
   if (fields.activityFeed) {
     proposal.activityFeed = determineUnreadActivityFeed(proposal);
   }
+
   return proposal;
 };
 

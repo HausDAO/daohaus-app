@@ -20,6 +20,7 @@ import Layout from '../components/layout';
 import { useMetaData } from '../contexts/MetaDataContext';
 import Meta from '../pages/Meta';
 import Notifications from '../pages/Notifications';
+import DiscourseSettings from '../pages/DiscourseSettings';
 
 const DaoRouter = () => {
   const { path } = useRouteMatch();
@@ -93,6 +94,12 @@ const DaoRouter = () => {
         </Route>
         <Route exact path={`${path}/settings/notifications`}>
           <Notifications
+            daoMetaData={daoMetaData}
+            refetchMetaData={refetchMetaData}
+          />
+        </Route>
+        <Route exact path={`${path}/settings/discourse`}>
+          <DiscourseSettings
             daoMetaData={daoMetaData}
             refetchMetaData={refetchMetaData}
           />

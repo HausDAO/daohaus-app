@@ -27,6 +27,7 @@ import {
 } from '../utils/proposalUtils';
 import { numberWithCommas } from '../utils/general';
 import { useInjectedProvider } from '../contexts/InjectedProviderContext';
+import DiscourseProposalTopic from './discourseProposalTopic';
 
 const urlify = (text) => {
   var urlRegex = /(https?:\/\/[^\s]+)/g;
@@ -44,7 +45,7 @@ const hasImage = (string) => {
   return imageExtensions.some((o) => string.includes(o));
 };
 
-const ProposalDetails = ({ proposal }) => {
+const ProposalDetails = ({ proposal, daoMember }) => {
   const { address } = useInjectedProvider();
 
   return (
@@ -144,6 +145,7 @@ const ProposalDetails = ({ proposal }) => {
               </Skeleton>
             )}
           </Box>
+          <DiscourseProposalTopic proposal={proposal} daoMember={daoMember} />
         </Box>
         <Flex w='100%' justify='space-between' mt={6} wrap='wrap'>
           {(proposal?.tributeOffered > 0 || !proposal?.tributeOffered) && (

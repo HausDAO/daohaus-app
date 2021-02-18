@@ -5,10 +5,6 @@ import DaoAbiV2 from '../contracts/molochV2.json';
 import { chainByID } from '../utils/chain';
 
 export const MolochService = ({ web3, daoAddress, version, chainID }) => {
-  // console.log('web3', web3);
-  // console.log('daoAddress', daoAddress);
-  // console.log('version', version);
-  // console.log('chainID', chainID);
   if (!web3) {
     const rpcUrl = chainByID(chainID).rpc_url;
     web3 = new Web3(new Web3.providers.HttpProvider(rpcUrl));
@@ -17,8 +13,6 @@ export const MolochService = ({ web3, daoAddress, version, chainID }) => {
   const contract = new web3.eth.Contract(abi, daoAddress);
 
   return function getService(service) {
-    // console.log('service', service);
-
     if (service === 'getUserTokenBalance') {
       return async ({ userAddress, tokenAddress }) => {
         const balance = await contract.methods

@@ -30,6 +30,8 @@ import { useDao } from '../contexts/DaoContext';
 import { valToDecimalString } from '../utils/tokenValue';
 import { RiErrorWarningLine } from 'react-icons/ri';
 import { chainByID } from '../utils/chain';
+import { useMetaData } from '../contexts/MetaDataContext';
+import { createForumTopic } from '../utils/discourse';
 
 const LootGrabForm = () => {
   const {
@@ -48,6 +50,7 @@ const LootGrabForm = () => {
   const { refreshDao } = useTX();
   const { cachePoll, resolvePoll } = useUser();
   const { daoid, daochain } = useParams();
+  const { daoMetaData } = useMetaData();
 
   const [loading, setLoading] = useState(false);
   const [currentError, setCurrentError] = useState(null);
@@ -81,6 +84,7 @@ const LootGrabForm = () => {
     console.log(values);
 
     setLoading(true);
+    const now = (new Date().getTime() / 1000).toFixed();
     const hash = createHash();
     const details = detailsToJSON({ ...values, hash });
     const { tokenBalances, depositToken } = daoOverview;
@@ -123,10 +127,19 @@ const LootGrabForm = () => {
           },
           onSuccess: (txHash) => {
             successToast({
-              title: 'Member Proposal Submitted to the Dao!',
+              title: 'Loot Grab Proposal Submitted to the Dao!',
             });
             refreshDao();
             resolvePoll(txHash);
+            createForumTopic({
+              chainID: daochain,
+              daoID: daoid,
+              afterTime: now,
+              proposalType: 'Loot Grab',
+              values,
+              applicant,
+              daoMetaData,
+            });
           },
         },
       });

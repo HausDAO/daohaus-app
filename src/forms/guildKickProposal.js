@@ -19,6 +19,8 @@ import { useDao } from '../contexts/DaoContext';
 import DetailsFields from './detailFields';
 import AddressInput from './addressInput';
 import { chainByID } from '../utils/chain';
+import { useMetaData } from '../contexts/MetaDataContext';
+import { createForumTopic } from '../utils/discourse';
 
 const GuildKickProposalForm = () => {
   const [loading, setLoading] = useState(false);
@@ -39,6 +41,7 @@ const GuildKickProposalForm = () => {
   const { daoOverview } = useDao();
   const { refreshDao } = useTX();
   const { cachePoll, resolvePoll } = useUser();
+  const { daoMetaData } = useMetaData();
   const location = useLocation();
 
   const { handleSubmit, errors, register, setValue, watch } = useForm();
@@ -66,8 +69,8 @@ const GuildKickProposalForm = () => {
   }, [errors]);
 
   const onSubmit = async (values) => {
-    console.log(values);
     setLoading(true);
+    const now = (new Date().getTime() / 1000).toFixed();
     const hash = createHash();
     const details = detailsToJSON({ ...values, hash });
     const args = [values.applicant, details];
@@ -87,10 +90,19 @@ const GuildKickProposalForm = () => {
           },
           onSuccess: (txHash) => {
             successToast({
-              title: 'Member Proposal Submitted to the Dao!',
+              title: 'GuildKick Proposal Submitted to the Dao!',
             });
             refreshDao();
             resolvePoll(txHash);
+            createForumTopic({
+              chainID: daochain,
+              daoID: daoid,
+              afterTime: now,
+              proposalType: 'GuildKick Proposal',
+              values,
+              applicant: values.applicant,
+              daoMetaData,
+            });
           },
         },
       });
