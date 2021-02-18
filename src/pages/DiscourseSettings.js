@@ -32,7 +32,7 @@ const DiscourseSettings = ({ daoMetaData, refetchMetaData }) => {
   const [loading, setLoading] = useState();
 
   useEffect(() => {
-    if (daoMetaData?.boosts?.notificationsLevel1?.active) {
+    if (daoMetaData?.boosts?.discourse?.active) {
       setLocalMetadata(daoMetaData.boosts.discourse.metadata);
     }
   }, [daoMetaData]);
