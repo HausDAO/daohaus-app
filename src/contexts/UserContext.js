@@ -16,6 +16,8 @@ import { useInjectedProvider } from './InjectedProviderContext';
 import { createPoll } from '../services/pollService';
 import { useOverlay } from './OverlayContext';
 
+const numOfSupportedChains = Object.keys(supportedChains).length;
+
 export const UserContext = createContext();
 
 export const UserContextProvider = ({ children }) => {
@@ -24,7 +26,7 @@ export const UserContextProvider = ({ children }) => {
   const { successToast, errorToast } = useOverlay();
   const [outstandingTXs, setOutstandingTXs] = useState([]);
 
-  const hasLoadedHubData = userHubDaos.length === 4;
+  const hasLoadedHubData = userHubDaos?.length === numOfSupportedChains;
   const prevAddress = useRef(null);
 
   useEffect(() => {

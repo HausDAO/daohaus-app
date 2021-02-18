@@ -7,6 +7,7 @@ import {
   Link,
   Textarea,
   Heading,
+  Icon,
 } from '@chakra-ui/react';
 
 import { useInjectedProvider } from '../contexts/InjectedProviderContext';
@@ -15,11 +16,14 @@ import {
   formatPeriodLength,
   formatDepositWei,
   periodsPerDayPreset,
+  validateSummonresAndShares,
 } from '../utils/summoning';
+import { RiErrorWarningLine } from 'react-icons/ri';
 
 const SummonEasy = ({ daoData, setDaoData, handleSummon }) => {
   const { injectedChain } = useInjectedProvider();
   const [multiSummoners, setMultiSummoners] = useState(false);
+  const [currentError, setCurrentError] = useState(false);
 
   const selectPreset = (preset) => {
     setDaoData((prevState) => {
@@ -29,6 +33,14 @@ const SummonEasy = ({ daoData, setDaoData, handleSummon }) => {
 
   const handleMultiSummonerChange = (e) => {
     const value = e.target.value;
+    const isValid = validateSummonresAndShares(value);
+
+    if (isValid !== true) {
+      setCurrentError(isValid);
+      return;
+    } else {
+      setCurrentError(false);
+    }
     setDaoData((prevState) => {
       return { ...prevState, summonerAndShares: value };
     });
@@ -163,7 +175,13 @@ const SummonEasy = ({ daoData, setDaoData, handleSummon }) => {
                 {!multiSummoners ? 'Add Multiple Summoners' : 'Cancel'}
               </Button>
               <Box className='StepControl'>
-                <Button onClick={() => handleSummon()} disabled={false}>
+                {currentError && (
+                  <Box color='red.500' fontSize='m' mr={5}>
+                    <Icon as={RiErrorWarningLine} color='red.500' mr={2} />
+                    {currentError}
+                  </Box>
+                )}
+                <Button onClick={() => handleSummon()} disabled={currentError}>
                   Summon
                 </Button>
               </Box>
