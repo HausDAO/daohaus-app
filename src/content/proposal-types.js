@@ -56,7 +56,7 @@ export const proposalTypes = (customTerms, boosts, daoid) => {
     },
     {
       name: 'Loot Grab',
-      subhead: 'Get dat loot',
+      subhead: 'Request Loot with a tribute',
       proposalType: 'lootgrab',
       image: swordImg,
       comingSoon: false,
