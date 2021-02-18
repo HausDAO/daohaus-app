@@ -29,12 +29,15 @@ import { MinionService } from '../services/minionService';
 import { createPoll } from '../services/pollService';
 import { chainByID } from '../utils/chain';
 import { detailsToJSON, daoConnectedAndSameChain } from '../utils/general';
+import { useMetaData } from '../contexts/MetaDataContext';
+import { createForumTopic } from '../utils/discourse';
 
 const MinionProposalForm = () => {
   const [loading, setLoading] = useState(false);
   const [abiLoading, setAbiLoading] = useState(false);
   const { daoOverview } = useDao();
-  const { daochain } = useParams();
+  const { daoMetaData } = useMetaData();
+  const { daochain, daoid } = useParams();
   const {
     address,
     injectedProvider,
@@ -80,15 +83,6 @@ const MinionProposalForm = () => {
       setCurrentError(null);
     }
   }, [errors]);
-
-  // useEffect(() => {
-  //   if (!address) {
-  //     setError({
-  //       type: 'wallet',
-  //       message: 'Connect a wallet to submit a proposal.',
-  //     });
-  //   }
-  // }, [address]);
 
   const onSubmit = async (values) => {
     console.log('values', values);
@@ -155,6 +149,15 @@ const MinionProposalForm = () => {
             });
             refreshDao();
             resolvePoll(txHash);
+            createForumTopic({
+              chainID: daochain,
+              daoID: daoid,
+              afterTime: now,
+              proposalType: 'Minion Proposal',
+              values,
+              applicant: address,
+              daoMetaData,
+            });
           },
         },
       });

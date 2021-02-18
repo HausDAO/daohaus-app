@@ -17,13 +17,13 @@ const NewsFeed = () => {
 
   return (
     <>
-      {daoData && (daoData.proposals.length || daoData.rageQuits.length) ? (
+      {daoData && (daoData.proposals.length || daoData.rageQuits.length) && (
         <ActivitiesFeed
           activities={daoData}
           limit={7}
           hydrateFn={getDaoActivites}
         />
-      ) : null}
+      )}
     </>
   );
 };

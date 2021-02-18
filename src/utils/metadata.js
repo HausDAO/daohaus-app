@@ -190,6 +190,18 @@ export const put = async (endpoint, data) => {
   }
 };
 
+export const getForumTopics = async (categoryId) => {
+  const url = `${metadataApiUrl}/dao/discourse-topics/${categoryId}`;
+
+  try {
+    const response = await fetch(url);
+
+    return response.json();
+  } catch (err) {
+    throw new Error(err);
+  }
+};
+
 /// //////////DEFAULTS//////////////
 
 // const defaultMeta = {

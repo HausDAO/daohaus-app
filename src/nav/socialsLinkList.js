@@ -1,12 +1,20 @@
 import { Icon } from '@chakra-ui/react';
 import React from 'react';
-import { defaultSocialLinks, generateDaoSocials } from '../utils/navLinks';
+import {
+  defaultSocialLinks,
+  generateDaoSocials,
+  generateDiscourseLink,
+} from '../utils/navLinks';
 import SocialLink from './socialLink';
 
 const SocialsLinkList = ({ dao, view, toggleNav }) => {
-  const socialLinks = dao?.customTerms
-    ? generateDaoSocials(dao?.customTerms)
+  const socialLinks = dao?.links
+    ? generateDaoSocials(dao?.links)
     : defaultSocialLinks;
+  const discourseLinkData = dao?.daoMetaData?.boosts?.discourse?.active
+    ? generateDiscourseLink(dao.daoMetaData.boosts.discourse.metadata)
+    : null;
+
   return (
     <>
       {socialLinks?.map((link, index) => {
@@ -21,6 +29,17 @@ const SocialsLinkList = ({ dao, view, toggleNav }) => {
           />
         );
       })}
+
+      {discourseLinkData ? (
+        <SocialLink
+          key={discourseLinkData.categoryId}
+          href={discourseLinkData.href}
+          label={discourseLinkData.label}
+          icon={<Icon as={discourseLinkData.icon} w={6} h={6} />}
+          view={view}
+          onClick={toggleNav}
+        />
+      ) : null}
     </>
   );
 };

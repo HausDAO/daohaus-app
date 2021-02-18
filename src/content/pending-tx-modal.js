@@ -1,22 +1,17 @@
 export const POPUP_CONTENT = {
   submitVote: {
     displayName: 'Submit Vote',
-    header: 'Your Vote is submitted',
+    header: 'Next Steps',
     images: [],
     bodyText: [
       'A proposal will pass with greater than 50% of the vote',
-      'After the voting period is finished the proposal can be processed',
-      'If you vote yes you can not ragequit until the proposal hase been processed',
+      'Grace period comes after voting period. After which, the proposal can be processed',
+      'If you voted yes, you can not ragequit until the proposal has been processed',
     ],
     links: [
       {
         href: 'https://forum.daohaus.club/t/the-life-of-a-proposal/207',
         text: 'Life of a Proposal',
-        external: true,
-      },
-      {
-        href: `https://twitter.com/intent/tweet?text=I%20Voted%20https://alpha.daohaus.club`,
-        text: 'Share with the world',
         external: true,
       },
     ],
@@ -36,11 +31,6 @@ export const POPUP_CONTENT = {
         text: 'What is Rage Quit',
         external: true,
       },
-      {
-        href: 'https://twitter.com/',
-        text: 'Share with the world',
-        external: true,
-      },
     ],
   },
   processProposal: {
@@ -48,19 +38,12 @@ export const POPUP_CONTENT = {
     header: 'For the realm...',
     images: [],
     bodyText: [
-      'If your dao has a processing reward you can claim it',
-      'if not, the dao thanks you for your gas sacrifice',
-      'Share with twiter and tell the world you are a dao master',
+      'If this DAO has a processing reward you can claim it in your profile',
     ],
     links: [
       {
         href: 'https://forum.daohaus.club/c/help-how-to-docs/12',
         text: 'How proposals work',
-        external: true,
-      },
-      {
-        href: 'https://twitter.com/',
-        text: 'Share with the world',
         external: true,
       },
     ],
@@ -91,27 +74,16 @@ export const POPUP_CONTENT = {
   },
   submitProposal: {
     displayName: 'Submit Vote',
-    header: 'While your proposal is being mined...',
+    header: 'Next Steps',
     images: [],
     bodyText: [
-      'Your proposal will go into unsponsored state',
-      'Share with your friends',
-      "Find a champion if you don't have any shares",
+      'Your proposal is ready to sponsor',
+      'A member has to sponsor your proposal',
     ],
     links: [
       {
         href: 'https://forum.daohaus.club/c/help-how-to-docs/12',
-        text: 'How things work',
-        external: true,
-      },
-      {
-        href: 'https://raidguild.org/',
-        text: 'What is Rage Quit',
-        external: true,
-      },
-      {
-        href: `https://twitter.com/intent/tweet?text=I%20DAO%20https://alpha.daohaus.club`,
-        text: 'Share with the world',
+        text: 'The Life of a Proposal',
         external: true,
       },
     ],
@@ -121,105 +93,52 @@ export const POPUP_CONTENT = {
   },
   submitWhitelistProposal: {
     displayName: 'Submit Whitelist Proposal',
-    header: 'Tokens Tokens Tokens...',
+    header: 'Next Steps',
     images: [],
     bodyText: [
-      'Your proposal will go into unsponsored state',
+      'Your proposal is ready to sponsor',
       'Tokens need a non zero balance to do direct deposits',
-      'Share with your friends',
     ],
-    links: [
-      {
-        href: 'https://forum.daohaus.club/c/help-how-to-docs/12',
-        text: 'How things work',
-        external: true,
-      },
-      {
-        href: 'https://raidguild.org/',
-        text: 'What is Rage Quit',
-        external: true,
-      },
-      {
-        href: 'https://twitter.com/',
-        text: 'Share with the world',
-        external: true,
-      },
-    ],
+    links: [],
   },
   withdrawBalance: {
     displayName: 'Withdraw Balance',
-    header: 'MoMo...',
+    header: 'Next Steps',
     images: [],
-    bodyText: ['Funds should come direct to your wallet'],
-    links: [
-      {
-        href: 'https://twitter.com/',
-        text: 'Share with the world',
-        external: true,
-      },
-    ],
+    bodyText: ['Tokens go to your wallet'],
+    links: [],
   },
   withdrawBalances: {
     displayName: 'Withdraw Balances',
-    header: 'MoMoMo...',
+    header: 'Next Steps',
     images: [],
     bodyText: ['Funds should come direct to your wallet'],
-    links: [
-      {
-        href: 'https://twitter.com/',
-        text: 'Share with the world',
-        external: true,
-      },
-    ],
+    links: [],
   },
   collectTokens: {
     displayName: 'Collect Tokens',
     header: 'The Dao is that much richer',
     images: [],
     bodyText: ['But the real winner is the future'],
-    links: [
-      {
-        href: 'https://twitter.com/',
-        text: 'Share with the world',
-        external: true,
-      },
-    ],
+    links: [],
   },
   propose: {
     displayName: 'Transmutation',
     header: 'Magic',
     images: [],
-    bodyText: ['from water into wine'],
-    links: [
-      {
-        href: 'https://twitter.com/',
-        text: 'Share with the world',
-        external: true,
-      },
-    ],
+    bodyText: ['From water into wine'],
+    links: [],
   },
   summonMoloch: {
     displayName: 'Summon New Moloch',
-    header: 'New DAO is in the forge!',
+    header: 'Summon a DAO',
     images: [],
     bodyText: [
-      'Our magic internet communities take a minute or two to create. After the transaction is complete you will be asked to verify your settings.',
-      'Some things to read or do while you wait:',
+      'Our magic internet communities take a minute or two to create. After the transaction completes, you will be prompted to configure your DAO.',
     ],
-    links: [
-      {
-        href: 'https://forum.daohaus.club/c/help-how-to-docs/12',
-        text: 'How proposals work',
-        external: true,
-      },
-      {
-        href: 'https://twitter.com/',
-        text: 'Share with the world on Twitter',
-        external: true,
-      },
-    ],
+    links: [],
     successText: 'A New DAO Has RISEN!',
     waitingText:
-      'If this is mainnet and taking forever, maybe come back later. If/when the transaction completes you will soon see the new dao on your Hub page.',
+      'If this is mainnet and taking awhile, you can come back later. If/when the transaction completes, you will soon see the new DAO in your Hub.',
   },
 };

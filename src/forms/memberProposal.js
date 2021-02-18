@@ -37,6 +37,8 @@ import { useDao } from '../contexts/DaoContext';
 import { valToDecimalString } from '../utils/tokenValue';
 import { LogError } from '../utils/errorLog';
 import { chainByID } from '../utils/chain';
+import { createForumTopic } from '../utils/discourse';
+import { useMetaData } from '../contexts/MetaDataContext';
 
 const MemberProposalForm = () => {
   const {
@@ -54,6 +56,7 @@ const MemberProposalForm = () => {
   const { daoOverview } = useDao();
   const { refreshDao } = useTX();
   const { cachePoll, resolvePoll } = useUser();
+  const { daoMetaData } = useMetaData();
   const { daoid, daochain } = useParams();
   const [loading, setLoading] = useState(false);
   const [showLoot, setShowLoot] = useState(false);
@@ -85,6 +88,7 @@ const MemberProposalForm = () => {
 
   const onSubmit = async (values) => {
     setLoading(true);
+    const now = (new Date().getTime() / 1000).toFixed();
     const hash = createHash();
     const details = detailsToJSON({ ...values, hash });
     const { tokenBalances, depositToken } = daoOverview;
@@ -131,6 +135,15 @@ const MemberProposalForm = () => {
             });
             refreshDao();
             resolvePoll(txHash);
+            createForumTopic({
+              chainID: daochain,
+              daoID: daoid,
+              afterTime: now,
+              proposalType: 'Member Proposal',
+              values,
+              applicant,
+              daoMetaData,
+            });
           },
         },
       });

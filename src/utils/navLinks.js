@@ -14,6 +14,7 @@ import {
   RiSearch2Line,
   RiLinksLine,
 } from 'react-icons/ri';
+import { FaDiscourse } from 'react-icons/fa';
 import { GiCastle } from 'react-icons/gi';
 
 // no slash on the path
@@ -81,9 +82,19 @@ export const defaultSocialLinks = [
   },
   { icon: RiLinksLine, label: 'Other', href: 'https://wikipedia.com' },
 ];
+
 export const generateDaoSocials = (customTerms) => {
   if (!customTerms) return;
   return defaultSocialLinks
     .filter((link) => customTerms[link.label.toLowerCase()])
     .map((link) => ({ ...link, href: customTerms[link.label.toLowerCase()] }));
+};
+
+export const generateDiscourseLink = (metadata) => {
+  return {
+    ...metadata,
+    href: `https://forum.daohaus.club/c/${metadata.slug}/${metadata.categoryId}`,
+    label: 'Discourse',
+    icon: FaDiscourse,
+  };
 };

@@ -33,8 +33,14 @@ export const EXPLORE_FILTER_OPTIONS = [
     default: true,
   },
   {
-    name: 'Matic',
+    name: 'Polygon (Matic)',
     value: 137,
+    type: 'network',
+    default: true,
+  },
+  {
+    name: 'IDChain',
+    value: 74,
     type: 'network',
     default: true,
   },
