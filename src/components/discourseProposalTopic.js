@@ -32,7 +32,7 @@ const DiscourseProposalTopic = ({ proposal, daoMember }) => {
       setForumTopic(topicMatch ? topicMatch.id : null);
     };
 
-    if (daoMetaData?.boosts.discourse?.active && proposal?.proposalId) {
+    if (daoMetaData?.boosts?.discourse?.active && proposal?.proposalId) {
       fetchForumTopics();
     }
   }, [daoMetaData, proposal]);
@@ -71,7 +71,7 @@ const DiscourseProposalTopic = ({ proposal, daoMember }) => {
 
   return (
     <>
-      {daoMetaData?.boosts.discourse?.active ? (
+      {daoMetaData?.boosts?.discourse?.active ? (
         <Box width='100%' fontSize='sm' mt={5}>
           {loading ? (
             <Spinner />

@@ -15,8 +15,8 @@ export const createForumTopic = async ({
   sigData,
 }) => {
   if (
-    daoMetaData?.boosts.discourse?.active &&
-    daoMetaData?.boosts.discourse?.metadata?.autoProposal
+    daoMetaData?.boosts?.discourse?.active &&
+    daoMetaData?.boosts?.discourse?.metadata?.autoProposal
   ) {
     let title;
     let isAuto = false;
