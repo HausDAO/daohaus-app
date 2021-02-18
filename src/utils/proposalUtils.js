@@ -131,16 +131,6 @@ export const linkMaker = (proposal) => {
   }
 };
 
-export const forumIdMaker = (proposal) => {
-  try {
-    const parsed =
-      IsJsonString(proposal.details) && JSON.parse(proposal.details);
-    return parsed.forumId || '';
-  } catch (e) {
-    return '';
-  }
-};
-
 export const determineUnreadActivityFeed = (proposal) => {
   const abortedOrCancelled = proposal.aborted || proposal.cancelled;
   const now = (new Date() / 1000) | 0;

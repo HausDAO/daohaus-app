@@ -29,7 +29,7 @@ export const boostList = [
     key: 'discourse',
     comingSoon: false,
     description:
-      'Add a forum for discussing proposals. Launch a new category in the DAOhaus Discourse forum and enable topic creation for all of your proposals.',
+      'Launch a new category for your DAO in the DAOhaus Discourse forum and enable topic creation for discussing all of your proposals.',
     price: '0',
     modalName: 'discourseLaunch',
     successRoute: '',

@@ -36,9 +36,8 @@ import { MolochService } from '../services/molochService';
 import { useDao } from '../contexts/DaoContext';
 import { valToDecimalString } from '../utils/tokenValue';
 import { chainByID } from '../utils/chain';
-import DiscourseProposalFields from '../components/discourseProposalFields';
-import { post } from '../utils/metadata';
 import { useMetaData } from '../contexts/MetaDataContext';
+import { createForumTopic } from '../utils/discourse';
 
 const FundingProposalForm = () => {
   const {
@@ -54,9 +53,9 @@ const FundingProposalForm = () => {
     setTxInfoModal,
   } = useOverlay();
   const { daoOverview } = useDao();
-  const { daoMetaData } = useMetaData();
   const { refreshDao } = useTX();
   const { cachePoll, resolvePoll } = useUser();
+  const { daoMetaData } = useMetaData();
   const { daoid, daochain } = useParams();
 
   const [loading, setLoading] = useState(false);
@@ -89,10 +88,11 @@ const FundingProposalForm = () => {
 
   const onSubmit = async (values) => {
     setLoading(true);
+    const now = (new Date().getTime() / 1000).toFixed();
     const hash = createHash();
 
     console.log('values', values);
-
+    const details = detailsToJSON({ ...values, hash });
     const { tokenBalances, depositToken } = daoOverview;
     const tributeToken = values.tributeToken || depositToken.tokenAddress;
     const paymentToken = values.paymentToken || depositToken.tokenAddress;
@@ -107,34 +107,6 @@ const FundingProposalForm = () => {
       : values?.applicant
       ? values.applicant
       : address;
-
-    let details;
-    if (
-      values.createForum &&
-      daoMetaData?.boosts?.discourse?.metadata?.categoryId
-    ) {
-      const forumData = {
-        ...values,
-        title: `Funding Proposal: ${values.title}`,
-        applicant,
-        category: daoMetaData.boosts.discourse.metadata.categoryId,
-        shares: values.sharesRequested || '0',
-        loot: values.lootRequested || '0',
-        paymentRequested: values.paymentRequested || '0',
-        tributeOffered: values.tributeOffered || '0',
-      };
-
-      const forumRes = await await post('dao/discourse-topic', forumData);
-      console.log('forumRes', forumRes);
-      details = detailsToJSON({
-        ...values,
-        hash,
-        discourseId: forumRes || '',
-      });
-    } else {
-      details = detailsToJSON({ ...values, hash });
-    }
-    console.log('details', details);
 
     const args = [
       applicant,
@@ -166,6 +138,16 @@ const FundingProposalForm = () => {
             });
             refreshDao();
             resolvePoll(txHash);
+
+            createForumTopic({
+              chainID: daochain,
+              daoID: daoid,
+              afterTime: now,
+              proposalType: 'Funding Proposal',
+              values,
+              applicant,
+              daoMetaData,
+            });
           },
         },
       });
@@ -200,11 +182,6 @@ const FundingProposalForm = () => {
       >
         <Box w={['100%', null, '50%']} pr={[0, null, 5]}>
           <DetailsFields register={register} />
-          <DiscourseProposalFields
-            register={register}
-            watch={watch}
-            setValue={setValue}
-          />
         </Box>
         <Box w={['100%', null, '50%']}>
           <AddressInput

@@ -1,38 +1,30 @@
 import React, { useState } from 'react';
 import { Link as RouterLink, useParams } from 'react-router-dom';
-import {
-  Box,
-  Button,
-  Flex,
-  FormControl,
-  FormHelperText,
-  Heading,
-  Input,
-  Spinner,
-  Text,
-} from '@chakra-ui/react';
+import { Box, Button, Flex, Heading, Spinner, Text } from '@chakra-ui/react';
 import { SketchPicker } from 'react-color';
-import { useForm } from 'react-hook-form';
 
 import { useMetaData } from '../contexts/MetaDataContext';
+import { useCustomTheme } from '../contexts/CustomThemeContext';
 import TextBox from './TextBox';
 
 const DiscourseLaunch = ({ handleLaunch, loading, setLoading }) => {
   const { daoMetaData } = useMetaData();
   const { daoid, daochain } = useParams();
+  const { theme } = useCustomTheme();
   const [pickerOpen, setPickerOpen] = useState(null);
   const [step, setStep] = useState('intro');
   const [colors, setColors] = useState({
-    color: '#000000',
-    textColor: '#ffffff',
+    color: theme.colors.primary[500],
   });
+
+  console.log('theme', theme);
 
   const onSubmit = async () => {
     setLoading(true);
     const boostMetadata = {
       name: daoMetaData.name,
       color: colors.color.replace('#', ''),
-      textColor: colors.textColor.replace('#', ''),
+      autoProposal: true,
     };
     const success = await handleLaunch(boostMetadata);
     if (success) {
@@ -110,12 +102,14 @@ const DiscourseLaunch = ({ handleLaunch, loading, setLoading }) => {
                 Discourse Forum Added
               </Heading>
               <Text my={6}>
-                There will be a link to this forum in your setting page. You
-                will also see buttons in proposal pages and forms to add new
-                forum topics for your proposals.
+                You can find a link to your forum and manage the boost in the
+                Discourse settings page.
               </Text>
 
-              <Button as={RouterLink} to={`/dao/${daochain}/${daoid}/settings`}>
+              <Button
+                as={RouterLink}
+                to={`/dao/${daochain}/${daoid}/settings/discourse`}
+              >
                 Settings
               </Button>
             </>

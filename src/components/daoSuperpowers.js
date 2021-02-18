@@ -109,18 +109,30 @@ const Superpowers = ({ daoMember, daoMetaData }) => {
               Discourse Forum
             </Box>
             <Flex align='center'>
-              <Link
-                href={`https://forum.daohaus.club/c/${daoMetaData.boosts.discourse.metadata.slug}/${daoMetaData.boosts.discourse.metadata.categoryId}`}
-                isExternal
-              >
-                <Icon
-                  as={RiExternalLinkLine}
-                  color='secondary.500'
-                  w='25px'
-                  h='25px'
-                  mr={3}
-                />
-              </Link>
+              {daoConnectedAndSameChain(
+                address,
+                daochain,
+                injectedChain?.chainId,
+              ) && daoMember?.shares > 0 ? (
+                <RouterLink to={`/dao/${daochain}/${daoid}/settings/discourse`}>
+                  <Icon
+                    as={VscGear}
+                    color='secondary.500'
+                    w='25px'
+                    h='25px'
+                    mr={3}
+                  />
+                </RouterLink>
+              ) : (
+                <Box
+                  color='whiteAlpha.900'
+                  fontSize={['xs', null, null, 'sm']}
+                  fontFamily='mono'
+                  maxW={['auto', null, null, '250px']}
+                >
+                  Active Members only
+                </Box>
+              )}
             </Flex>
           </Flex>
         ) : null}
