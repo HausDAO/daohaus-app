@@ -3,7 +3,7 @@ import { useLocation, Link as RouterLink, useParams } from 'react-router-dom';
 import { RiAddFill, RiInformationLine } from 'react-icons/ri';
 import { Box, Flex, Button, Icon, Tooltip } from '@chakra-ui/react';
 import { useInjectedProvider } from '../contexts/InjectedProviderContext';
-import { getCopy } from '../utils/metadata';
+import { getTerm } from '../utils/metadata';
 import { useOverlay } from '../contexts/OverlayContext';
 import { supportedChains } from '../utils/chain';
 import { capitalize, daoConnectedAndSameChain } from '../utils/general';
@@ -64,19 +64,19 @@ const Header = ({ dao }) => {
       case `/dao/${dao.chainID}/${dao.daoID}`:
         return 'Overview';
       case `/dao/${dao.chainID}/${dao.daoID}/proposals`:
-        return getCopy(dao.customTerms, 'proposals');
+        return getTerm(dao.customTerms, 'proposals');
       case `/dao/${dao.chainID}/${dao.daoID}/proposals/${params.propid}`:
-        return getCopy(dao.customTerms, 'proposals');
+        return getTerm(dao.customTerms, 'proposals');
       case `/dao/${dao.chainID}/${dao.daoID}/proposals/new/`:
-        return `New ${getCopy(dao.customTerms, 'proposal')}`;
+        return `New ${getTerm(dao.customTerms, 'proposal')}`;
       case `/dao/${dao.chainID}/${dao.daoID}/bank`:
-        return getCopy(dao.customTerms, 'bank');
+        return getTerm(dao.customTerms, 'bank');
       case `/dao/${dao.chainID}/${dao.daoID}/members`:
-        return getCopy(dao.customTerms, 'members');
+        return getTerm(dao.customTerms, 'members');
       case `/dao/${dao.chainID}/${dao.daoID}/profile/${params.userid}`:
         return 'Profile';
       case `/dao/${dao.chainID}/${dao.daoID}/settings`:
-        return getCopy(dao.customTerms, 'settings');
+        return getTerm(dao.customTerms, 'settings');
       case `/dao/${dao.chainID}/${dao.daoID}/settings/meta`:
         return 'Metadata';
       case `/dao/${dao.chainID}/${dao.daoID}/settings/theme`:
@@ -86,9 +86,9 @@ const Header = ({ dao }) => {
       case `/dao/${dao.chainID}/${dao.daoID}/settings/minion/${params.minion}`:
         return 'Minions';
       case `/dao/${dao.chainID}/${dao.daoID}/settings/boosts`:
-        return getCopy(dao.customTerms, 'boosts');
+        return getTerm(dao.customTerms, 'boosts');
       case `/dao/${dao.chainID}/${dao.daoID}/settings/boosts/new`:
-        return 'New ' + getCopy(dao.customTerms, 'boost');
+        return 'New ' + getTerm(dao.customTerms, 'boost');
       default:
         return "404 What's Lost Can Be Found";
     }
@@ -116,7 +116,7 @@ const Header = ({ dao }) => {
           to={`/dao/${dao?.chainID}/${dao?.daoID}/proposals/new`}
           rightIcon={<RiAddFill />}
         >
-          New {getCopy(dao?.customTerms, 'proposal')}
+          New {getTerm(dao?.customTerms, 'proposal')}
         </Button>
       );
     } else if (

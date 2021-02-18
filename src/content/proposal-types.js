@@ -1,4 +1,4 @@
-import { getCopy } from '../utils/metadata';
+import { getTerm } from '../utils/metadata';
 import swordImg from '../assets/img/swords-white.svg';
 
 export const proposalTypes = (customTerms, boosts, daoid) => {
@@ -33,7 +33,7 @@ export const proposalTypes = (customTerms, boosts, daoid) => {
     },
     {
       name: 'Guild Kick',
-      subhead: `Remove a ${getCopy(customTerms, 'member')}`,
+      subhead: `Remove a ${getTerm(customTerms, 'member')}`,
       proposalType: 'guildkick',
       image: swordImg,
       show: true,

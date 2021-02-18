@@ -8,7 +8,7 @@ import { getProposalHistories } from '../utils/activities';
 import TextBox from '../components/TextBox';
 import ProposalDetails from '../components/proposalDetails';
 import ProposalActions from '../components/proposalActions';
-import { getCopy } from '../utils/metadata';
+import { getTerm } from '../utils/metadata';
 import MainViewLayout from '../components/mainViewLayout';
 
 const Proposal = ({
@@ -24,7 +24,7 @@ const Proposal = ({
     : null;
 
   return (
-    <MainViewLayout header='Proposal' isDao={true}>
+    <MainViewLayout header='Proposal' isDao={true} customTerms={customTerms}>
       <Box>
         <Flex wrap='wrap'>
           <Flex
@@ -43,7 +43,7 @@ const Proposal = ({
                   mr={2}
                 />
                 <TextBox size={['sm', null, null, 'md']}>
-                  All {getCopy(customTerms, 'proposals')}
+                  All {getTerm(customTerms, 'proposals')}
                 </TextBox>
               </Flex>
             </Link>

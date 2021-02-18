@@ -83,11 +83,11 @@ export const defaultSocialLinks = [
   { icon: RiLinksLine, label: 'Other', href: 'https://wikipedia.com' },
 ];
 
-export const generateDaoSocials = (customTerms) => {
-  if (!customTerms) return;
+export const generateDaoSocials = (linksMetaObj) => {
+  if (!linksMetaObj) return;
   return defaultSocialLinks
-    .filter((link) => customTerms[link.label.toLowerCase()])
-    .map((link) => ({ ...link, href: customTerms[link.label.toLowerCase()] }));
+    .filter((link) => linksMetaObj[link.label.toLowerCase()])
+    .map((link) => ({ ...link, href: linksMetaObj[link.label.toLowerCase()] }));
 };
 
 export const generateDiscourseLink = (metadata) => {

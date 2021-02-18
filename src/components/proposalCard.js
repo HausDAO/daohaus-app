@@ -9,8 +9,9 @@ import { numberWithCommas } from '../utils/general';
 import { memberVote } from '../utils/proposalUtils';
 import ContentBox from './ContentBox';
 import { useInjectedProvider } from '../contexts/InjectedProviderContext';
+import { getCustomProposalTerm } from '../utils/metadata';
 
-const ProposalCard = ({ proposal }) => {
+const ProposalCard = ({ proposal, customTerms }) => {
   const { daochain, daoid } = useParams();
   const { address } = useInjectedProvider();
 
@@ -35,7 +36,9 @@ const ProposalCard = ({ proposal }) => {
             fontFamily='heading'
             letterSpacing='0.1em'
           >
-            {proposal?.proposalType}
+            {customTerms
+              ? getCustomProposalTerm(customTerms, proposal?.proposalType)
+              : proposal?.proposalType}
           </Box>
           <Box>
             <Skeleton isLoaded={proposal?.status}>

@@ -78,7 +78,6 @@ export const tallyUSDs = (tokenObj) => {
 };
 
 export const addContractVals = (tokens, chainID) => {
-  console.log('FETCHED FOR CONTRACT VALS');
   return Promise.all(
     tokens.map(async (token) => {
       try {

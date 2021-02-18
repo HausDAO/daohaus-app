@@ -73,53 +73,11 @@ const ActivityCard = ({ activity, displayAvatar, isLink = true }) => {
     };
   }, [activity.memberAddress]);
 
-  // const renderBadge = () => {
-  //   if (activity && activity.voteBadge) {
-  //     switch (activity.activityData.type) {
-  //       case 'proposal': {
-  //         return (
-  //           <Badge variant='solid'>{activity.activityData.lastActivity}</Badge>
-  //         );
-  //       }
-  //       case 'rage': {
-  //         return (
-  //           <Badge variant='solid' colorScheme='red'>
-  //             Rage
-  //           </Badge>
-  //         );
-  //       }
-  //       case 'vote': {
-  //         return (
-  //           <Badge
-  //             colorScheme={+activity.uintVote === 1 ? 'green' : 'red'}
-  //             variant='solid'
-  //           >
-  //             {+activity.uintVote === 1 ? 'Yes' : 'No'}
-  //           </Badge>
-  //         );
-  //       }
-  //       default: {
-  //         return null;
-  //       }
-  //     }
-  //   }
-  // };
-
-  // ACTIVITY MODEL
-  // TODO needs proposalId if applicable
-  // activity: {
-  //   title: String
-  //   createdAt: INT date(UTC),
-  //   voteBadge: Int,
-  //   statusBadge: String,
-  //   rageBadge: String
-  //   status: String
-  //   daoData: Object (dao meta from api, only on hub cards)
-  // }
-
   const name = handleName(activity, profile);
-  const chain = daochain || chainByName(activity.daoData.network).chain_id;
+  // console.log(activity.daoData.network);
+  const chain = daochain || chainByName(activity.daoData.network)?.chain_id;
   const daoAddress = daoid || activity.daoData.contractAddress;
+
   return (
     <ContentBox mt={3}>
       <Skeleton isLoaded={activity}>

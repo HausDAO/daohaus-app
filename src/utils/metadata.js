@@ -63,7 +63,7 @@ export const pokemolUrlExplore = (dao) => {
   return `https://${domain}/dao/${dao.id}`;
 };
 
-export const getCopy = (customTerms, word) => {
+export const getTerm = (customTerms, word) => {
   if (!customTerms) {
     return capitalize(word);
   }
@@ -90,6 +90,16 @@ export const getCopy = (customTerms, word) => {
     return customTerms?.f04title || "404 What's Lost Can Be Found";
   } else if (word === 'f04heading') {
     return customTerms?.f04heading || 'You have been slain';
+  } else if (word === 'settings') {
+    return customTerms?.settings || 'Settings';
+  } else if (word === 'rage quit' || word === 'ragequit') {
+    return customTerms?.ragequit || 'Rage Quit';
+  } else if (word === 'guild kick' || word === 'guildkick') {
+    return customTerms?.guildkick || 'Guild Kick';
+  } else if (word === 'minion') {
+    return customTerms?.minion || 'minion';
+  } else if (word === 'minions') {
+    return customTerms?.minions || 'Minions';
   } else if (word === 'f04subhead') {
     return (
       customTerms?.f04subhead ||
@@ -101,6 +111,14 @@ export const getCopy = (customTerms, word) => {
     return 'Error';
   } else {
     return capitalize(word);
+  }
+};
+
+export const getCustomProposalTerm = (customTerms, proposalTerm) => {
+  if (customTerms?.proposal && customTerms?.proposal !== 'Proposal') {
+    return proposalTerm.replace('Proposal', customTerms.proposal);
+  } else {
+    return 'Proposal';
   }
 };
 

@@ -22,8 +22,9 @@ export const UserContext = createContext();
 
 export const UserContextProvider = ({ children }) => {
   const { address } = useInjectedProvider();
-  const [userHubDaos, setUserHubDaos] = useSessionStorage('userHubData', []);
   const { successToast, errorToast } = useOverlay();
+
+  const [userHubDaos, setUserHubDaos] = useSessionStorage('userHubData', []);
   const [outstandingTXs, setOutstandingTXs] = useState([]);
 
   const hasLoadedHubData = userHubDaos?.length === numOfSupportedChains;
