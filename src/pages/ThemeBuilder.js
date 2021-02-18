@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Flex, Box, Button, Icon, HStack } from '@chakra-ui/react';
 import { Link as RouterLink, useHistory, useParams } from 'react-router-dom';
 import { BiArrowBack } from 'react-icons/bi';
+import { rgba } from 'polished';
 
 import { useCustomTheme } from '../contexts/CustomThemeContext';
 import { useInjectedProvider } from '../contexts/InjectedProviderContext';
@@ -10,11 +11,13 @@ import { boostPost } from '../utils/requests';
 import CustomThemeForm from '../forms/customTheme';
 import ThemePreview from '../components/themePreview';
 import MainViewLayout from '../components/mainViewLayout';
+import { useMetaData } from '../contexts/MetaDataContext';
 
 const ThemeBuilder = ({ refetchMetaData }) => {
   const { address, injectedProvider, injectedChain } = useInjectedProvider();
   const { daochain, daoid } = useParams();
   const { theme, updateTheme, tempTheme, updateTempTheme } = useCustomTheme();
+  const { customTerms } = useMetaData();
   const history = useHistory();
   const [previewTheme, setPreviewTheme] = useState();
 
@@ -29,10 +32,10 @@ const ThemeBuilder = ({ refetchMetaData }) => {
         headingFont: theme.fonts.heading,
         bodyFont: theme.fonts.body,
         monoFont: theme.fonts.mono,
-        daoMeta: theme.daoMeta,
+        daoMeta: customTerms,
       });
     }
-  }, [theme]);
+  }, [theme, customTerms]);
 
   const handleThemeUpdate = (update) => {
     const currentValues = tempTheme || defaultTheme;
@@ -41,15 +44,15 @@ const ThemeBuilder = ({ refetchMetaData }) => {
     updateTempTheme(themeUpdate);
     updateTheme(themeUpdate);
   };
-  // save Alpha also
+
   const saveTheme = async () => {
     handleThemeUpdate(previewTheme);
     const currentValues = tempTheme || defaultTheme;
     const themeUpdate = {
       ...currentValues,
       ...previewTheme,
-      primaryAlpha: theme.colors.primary[500],
-      secondaryAlpha: theme.colors.secondary[500],
+      primaryAlpha: rgba(previewTheme.primary500, 0.9),
+      secondaryAlpha: rgba(previewTheme.secondary500, 0.75),
     };
 
     const messageHash = injectedProvider.utils.sha3(daoid);
@@ -69,14 +72,12 @@ const ThemeBuilder = ({ refetchMetaData }) => {
     const result = await boostPost('dao/boost', updateThemeObject);
 
     if (result === 'success') {
-      // TODO: refresh daoMetaData?
       refetchMetaData();
       history.push(`/dao/${daochain}/${daoid}/settings`);
     } else {
       alert('error: forbidden');
     }
   };
-  // disable buttons on wrong chain
 
   return (
     <MainViewLayout header='Custom Theme' isDao={true}>
