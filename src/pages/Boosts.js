@@ -12,6 +12,7 @@ import BoostLaunchWrapper from '../components/boostLaunchWrapper';
 import MainViewLayout from '../components/mainViewLayout';
 import { useInjectedProvider } from '../contexts/InjectedProviderContext';
 import { daoConnectedAndSameChain } from '../utils/general';
+import { getCopy } from '../utils/metadata';
 
 const Boosts = ({ customTerms }) => {
   const { daoMetaData } = useMetaData();
@@ -78,7 +79,7 @@ const Boosts = ({ customTerms }) => {
                 onClick={() => setGenericModal({ [boost.key]: true })}
                 disabled={!canInteract}
               >
-                Add This App
+                Add This {getCopy(customTerms, 'boost')}
               </Button>
             )}
           </>
@@ -100,7 +101,7 @@ const Boosts = ({ customTerms }) => {
     <MainViewLayout header='Boosts' customTerms={customTerms} isDao={true}>
       <Box>
         <TextBox size='sm' mb={3}>
-          Available Apps
+          Available {getCopy(customTerms, 'boosts')}
         </TextBox>
         <Flex wrap='wrap' justify='space-evenly'>
           {daoMetaData

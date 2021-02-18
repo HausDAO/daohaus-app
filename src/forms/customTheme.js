@@ -52,7 +52,7 @@ const CustomThemeForm = ({ previewTheme, setPreviewTheme }) => {
   const [ipfsHash, setIpfsHash] = useState();
   const [uploading, setUploading] = useState();
 
-  const handleChange = (color, item) => {
+  const handleColorChange = (color, item) => {
     setPreviewTheme({
       ...previewTheme,
       [item]: color.hex,
@@ -68,12 +68,27 @@ const CustomThemeForm = ({ previewTheme, setPreviewTheme }) => {
     }
   }, [ipfsHash]);
 
-  const handleSelectChange = (event) => {
+  const handleChange = (event) => {
     setPreviewTheme({
       ...previewTheme,
       [event.target.id]: event.target.value,
     });
   };
+
+  const resetWords = () => {
+    setPreviewTheme({
+      ...previewTheme,
+      daoMeta: theme.daoMeta,
+    });
+  };
+
+  // const handleBgChange = (val) => {
+  //   console.log(val);
+  //   setPreviewTheme({
+  //     ...previewTheme,
+  //     bgOverlayOpacity: val / 100,
+  //   });
+  // };
 
   const handleClearImage = () => {
     setPreviewTheme({
@@ -102,10 +117,11 @@ const CustomThemeForm = ({ previewTheme, setPreviewTheme }) => {
             {themeKey}
           </TextBox>
           <Input
-            defaultValue={previewTheme.daoMeta[themeKey]}
+            type='text'
             placeholder={themeKey}
             name={themeKey}
             onChange={handleWordsChange}
+            value={previewTheme.daoMeta[themeKey]}
           />
         </FormControl>
       );
@@ -149,7 +165,7 @@ const CustomThemeForm = ({ previewTheme, setPreviewTheme }) => {
                       <SketchPicker
                         color={previewTheme?.primary500}
                         onChangeComplete={(color) =>
-                          handleChange(color, 'primary500')
+                          handleColorChange(color, 'primary500')
                         }
                         disableAlpha={true}
                       />
@@ -182,7 +198,7 @@ const CustomThemeForm = ({ previewTheme, setPreviewTheme }) => {
                       <SketchPicker
                         color={previewTheme?.secondary500}
                         onChange={(color) =>
-                          handleChange(color, 'secondary500')
+                          handleColorChange(color, 'secondary500')
                         }
                         disableAlpha={true}
                       />
@@ -214,13 +230,38 @@ const CustomThemeForm = ({ previewTheme, setPreviewTheme }) => {
                       />
                       <SketchPicker
                         color={previewTheme?.bg500}
-                        onChange={(color) => handleChange(color, 'bg500')}
+                        onChange={(color) => handleColorChange(color, 'bg500')}
                         disableAlpha={true}
                       />
                     </Box>
                   ) : null}
                 </Box>
               </Flex>
+              <Stack spacing={2}>
+                <TextBox size='sm'>Background Opacity</TextBox>
+                <Box>
+                  {/* <Slider
+                    aria-label='bg-opacity-slider'
+                    colorScheme='secondary.500'
+                    min={0}
+                    max={100}
+                    step={5}
+                    defaultValue={previewTheme.bgOverlayOpacity * 100}
+                    onChangeEnd={(val) => handleBgChange(val)}
+                  >
+                    <SliderTrack>
+                      <SliderFilledTrack />
+                    </SliderTrack>
+                    <SliderThumb />
+                  </Slider> */}
+                  <Input
+                    type='text'
+                    id='bgOverlayOpacity'
+                    defaultValue={previewTheme.bgOverlayOpacity}
+                    onChange={handleChange}
+                  />
+                </Box>
+              </Stack>
 
               <TextBox size='xs'>Fonts</TextBox>
               <Box>
@@ -233,7 +274,7 @@ const CustomThemeForm = ({ previewTheme, setPreviewTheme }) => {
                       ? previewTheme.headingFont
                       : 'Inknut Antiqua'
                   }
-                  onChange={handleSelectChange}
+                  onChange={handleChange}
                   w='80%'
                   color='whiteAlpha.800'
                   icon={<AiOutlineCaretDown />}
@@ -257,7 +298,7 @@ const CustomThemeForm = ({ previewTheme, setPreviewTheme }) => {
                       ? previewTheme.bodyFont
                       : 'Inknut Antiqua'
                   }
-                  onChange={handleSelectChange}
+                  onChange={handleChange}
                   w='80%'
                   color='whiteAlpha.800'
                   icon={<AiOutlineCaretDown />}
@@ -281,7 +322,7 @@ const CustomThemeForm = ({ previewTheme, setPreviewTheme }) => {
                       ? previewTheme.monoFont
                       : 'Inknut Antiqua'
                   }
-                  onChange={handleSelectChange}
+                  onChange={handleChange}
                   w='80%'
                   color='whiteAlpha.800'
                   icon={<AiOutlineCaretDown />}
@@ -340,13 +381,20 @@ const CustomThemeForm = ({ previewTheme, setPreviewTheme }) => {
             </Flex>
           </TabPanel>
           <TabPanel>
-            <Flex direction='column' my={6}>
-              <TextBox size='xs' mb={3}>
-                Interface Words
-              </TextBox>
+            {previewTheme?.daoMeta ? (
+              <Flex direction='column' my={6}>
+                <Flex justify='space-between' align='center'>
+                  <TextBox size='xs' mb={3}>
+                    Interface Words
+                  </TextBox>
+                  <Button variant='outline' onClick={resetWords}>
+                    Reset
+                  </Button>
+                </Flex>
 
-              {renderWordsFields()}
-            </Flex>
+                {renderWordsFields()}
+              </Flex>
+            ) : null}
           </TabPanel>
         </TabPanels>
       </Tabs>

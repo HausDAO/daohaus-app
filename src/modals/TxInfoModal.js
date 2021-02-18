@@ -135,7 +135,7 @@ const TxInfoModal = () => {
                     {latestTx.header}
                   </Heading>
                 )}
-                {latestTx?.bodyText && (
+                {latestTx?.bodyText ? (
                   <List spacing={3}>
                     {latestTx?.bodyText.map((txt, idx) => (
                       <ListItem
@@ -157,8 +157,8 @@ const TxInfoModal = () => {
                       </ListItem>
                     ))}
                   </List>
-                )}
-                {latestTx?.links && (
+                ) : null}
+                {latestTx?.links ? (
                   <Box m={2}>
                     {latestTx?.links.length && (
                       <TextBox size='sm'>Links</TextBox>
@@ -204,7 +204,7 @@ const TxInfoModal = () => {
                       )}
                     </Stack>
                   </Box>
-                )}
+                ) : null}
               </>
             )}
           </Stack>
