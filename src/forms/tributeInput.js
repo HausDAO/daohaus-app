@@ -172,7 +172,7 @@ const TributeInput = ({ register, setValue, getValues, setError }) => {
       <Tooltip
         hasArrow
         shouldWrapChildren
-        label='Only tokens approved by the DAO are allowed here. Approve more with a whitelist proposal'
+        label='Only tokens approved by the DAO are allowed here. Members can add more approved tokens with Token proposals'
         placement='top'
       >
         <TextBox as={FormLabel} size='xs' d='flex' alignItems='center'>

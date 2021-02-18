@@ -7,8 +7,10 @@ import {
   Icon,
   Box,
   Link,
+  Tooltip,
   VisuallyHidden,
 } from '@chakra-ui/react';
+import { RiErrorWarningLine, RiInformationLine } from 'react-icons/ri';
 
 import TextBox from '../components/TextBox';
 
@@ -28,7 +30,6 @@ import { createPoll } from '../services/pollService';
 import { MolochService } from '../services/molochService';
 import { useDao } from '../contexts/DaoContext';
 import { valToDecimalString } from '../utils/tokenValue';
-import { RiErrorWarningLine } from 'react-icons/ri';
 import { chainByID } from '../utils/chain';
 import { useMetaData } from '../contexts/MetaDataContext';
 import { createForumTopic } from '../utils/discourse';
@@ -191,9 +192,18 @@ const LootGrabForm = () => {
             getValues={getValues}
             setError={setError}
           />
-
-          <TextBox>
-            Loot: {Math.floor(watch('tributeOffered') * ratio || 0).toString()}
+          <Tooltip
+            label='Amount of Loot you can request is calculated based on the amount of tribute'
+            hasArrow
+            placement='top'
+            shouldWrapChildren
+          >
+            <TextBox size='xs' d='flex' alignItems='center'>
+              Loot Requested <RiInformationLine style={{ marginLeft: 5 }} />
+            </TextBox>
+          </Tooltip>
+          <TextBox variant='value'>
+            {Math.floor(watch('tributeOffered') * ratio || 0).toString()}
           </TextBox>
         </Box>
       </FormControl>
