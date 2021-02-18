@@ -36,6 +36,8 @@ import { MolochService } from '../services/molochService';
 import { useDao } from '../contexts/DaoContext';
 import { valToDecimalString } from '../utils/tokenValue';
 import { chainByID } from '../utils/chain';
+import { useMetaData } from '../contexts/MetaDataContext';
+import { createForumTopic } from '../utils/discourse';
 
 const TradeProposalForm = () => {
   const {
@@ -54,6 +56,7 @@ const TradeProposalForm = () => {
   const { refreshDao } = useTX();
   const { cachePoll, resolvePoll } = useUser();
   const { daoid, daochain } = useParams();
+  const { daoMetaData } = useMetaData();
 
   const [loading, setLoading] = useState(false);
   const [showShares, setShowShares] = useState(false);
@@ -89,6 +92,7 @@ const TradeProposalForm = () => {
 
   const onSubmit = async (values) => {
     setLoading(true);
+    const now = (new Date().getTime() / 1000).toFixed();
     const hash = createHash();
     const details = detailsToJSON({ ...values, hash });
     const { tokenBalances, depositToken } = daoOverview;
@@ -131,10 +135,19 @@ const TradeProposalForm = () => {
           },
           onSuccess: (txHash) => {
             successToast({
-              title: 'Member Proposal Submitted to the Dao!',
+              title: 'Trade Proposal Submitted to the Dao!',
             });
             refreshDao();
             resolvePoll(txHash);
+            createForumTopic({
+              chainID: daochain,
+              daoID: daoid,
+              afterTime: now,
+              proposalType: 'Trade Proposal',
+              values,
+              applicant,
+              daoMetaData,
+            });
           },
         },
       });

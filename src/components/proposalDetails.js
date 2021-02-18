@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { utils } from 'web3';
 import {
   Flex,
@@ -9,11 +9,9 @@ import {
   Image,
   Link,
   Icon,
-  Button,
-  Spinner,
 } from '@chakra-ui/react';
 import { RiExternalLinkLine } from 'react-icons/ri';
-import { FaThumbsUp, FaThumbsDown, FaDiscourse } from 'react-icons/fa';
+import { FaThumbsUp, FaThumbsDown } from 'react-icons/fa';
 import ReactPlayer from 'react-player';
 import { AddressZero } from '@ethersproject/constants';
 
@@ -29,10 +27,7 @@ import {
 } from '../utils/proposalUtils';
 import { numberWithCommas } from '../utils/general';
 import { useInjectedProvider } from '../contexts/InjectedProviderContext';
-import { useMetaData } from '../contexts/MetaDataContext';
-import { getForumTopics } from '../utils/metadata';
-import { createForumTopic } from '../utils/discourse';
-import { useParams } from 'react-router-dom';
+import DiscourseProposalTopic from './discourseProposalTopic';
 
 const urlify = (text) => {
   var urlRegex = /(https?:\/\/[^\s]+)/g;
@@ -50,68 +45,8 @@ const hasImage = (string) => {
   return imageExtensions.some((o) => string.includes(o));
 };
 
-const ProposalDetails = ({ proposal }) => {
-  const { address, injectedProvider, injectedChain } = useInjectedProvider();
-  const { daoMetaData } = useMetaData();
-  const { daoid, daochain } = useParams();
-  const [forumTopic, setForumTopic] = useState(null);
-  const [discourseLoading, setDiscourseLoading] = useState();
-
-  console.log('proposal', proposal);
-
-  useEffect(() => {
-    const fetchForumTopics = async () => {
-      setDiscourseLoading(true);
-      const topicsRes = await getForumTopics(
-        daoMetaData.boosts.discourse.metadata.categoryId,
-      );
-
-      console.log('proposal', proposal);
-      console.log('topicsRes', topicsRes);
-
-      const topicMatch = topicsRes.find((topic) => {
-        const propId = topic.title.split(':')[0];
-        return propId === proposal.proposalId;
-      });
-
-      setForumTopic(topicMatch ? topicMatch.id : null);
-      setDiscourseLoading(false);
-    };
-
-    if (daoMetaData?.boosts.discourse?.active && proposal?.proposalId) {
-      fetchForumTopics();
-    }
-  }, [daoMetaData, proposal]);
-
-  console.log('forumTopic', forumTopic);
-
-  const handleDiscourseTopic = async () => {
-    setDiscourseLoading(true);
-    const messageHash = injectedProvider.utils.sha3(daoid);
-    const signature = await injectedProvider.eth.personal.sign(
-      messageHash,
-      address,
-    );
-
-    const discourseRes = await createForumTopic({
-      chainID: daochain,
-      daoID: daoid,
-      ...proposal,
-      values: { ...proposal },
-      daoMetaData,
-      category: daoMetaData.boosts.discourse.metadata.categoryId,
-      sigData: {
-        contractAddress: daoid,
-        network: injectedChain.network,
-        signature,
-      },
-    });
-
-    console.log('discourseRes', discourseRes);
-
-    setForumTopic(discourseRes);
-    setDiscourseLoading(false);
-  };
+const ProposalDetails = ({ proposal, daoMember }) => {
+  const { address } = useInjectedProvider();
 
   return (
     <Box pt={6}>
@@ -210,30 +145,7 @@ const ProposalDetails = ({ proposal }) => {
               </Skeleton>
             )}
           </Box>
-          {daoMetaData?.boosts.discourse?.active ? (
-            <Box width='100%' fontSize='sm' mt={5}>
-              {discourseLoading ? (
-                <Spinner />
-              ) : (
-                <>
-                  {forumTopic ? (
-                    <Link
-                      href={`https://forum.daohaus.club/t/${forumTopic}`}
-                      isExternal
-                    >
-                      Discuss this proposal on the Discourse forum{' '}
-                      <Icon as={RiExternalLinkLine} color='primary.50' />
-                    </Link>
-                  ) : (
-                    <Button size='sm' onClick={handleDiscourseTopic}>
-                      <Icon as={FaDiscourse} w={4} mr={1} /> Add a Discourse
-                      Topic for this proposal
-                    </Button>
-                  )}
-                </>
-              )}
-            </Box>
-          ) : null}
+          <DiscourseProposalTopic proposal={proposal} daoMember={daoMember} />
         </Box>
         <Flex w='100%' justify='space-between' mt={6} wrap='wrap'>
           {(proposal?.tributeOffered > 0 || !proposal?.tributeOffered) && (

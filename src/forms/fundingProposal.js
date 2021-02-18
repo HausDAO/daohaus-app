@@ -134,11 +134,10 @@ const FundingProposalForm = () => {
           },
           onSuccess: (txHash) => {
             successToast({
-              title: 'Member Proposal Submitted to the Dao!',
+              title: 'Funding Proposal Submitted to the Dao!',
             });
             refreshDao();
             resolvePoll(txHash);
-
             createForumTopic({
               chainID: daochain,
               daoID: daoid,
