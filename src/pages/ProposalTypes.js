@@ -2,23 +2,19 @@ import React, { useEffect, useState } from 'react';
 import {
   Flex,
   Stack,
-  Icon,
   Switch,
   Box,
   Button,
   Spinner,
+  Input,
 } from '@chakra-ui/react';
-import { VscGear } from 'react-icons/vsc';
 import { useParams } from 'react-router-dom';
-
 import { useInjectedProvider } from '../contexts/InjectedProviderContext';
-import { boostPost, getCopy } from '../utils/metadata';
+import { boostPost, getTerm } from '../utils/metadata';
 import { useOverlay } from '../contexts/OverlayContext';
 import ContentBox from '../components/ContentBox';
 import TextBox from '../components/TextBox';
 import { proposalTypesContent } from '../content/boost-content';
-import GenericModal from '../modals/genericModal';
-import NotificationsLaunch from '../components/notificationsLaunch';
 import MainViewLayout from '../components/mainViewLayout';
 import { useMetaData } from '../contexts/MetaDataContext';
 
@@ -37,23 +33,22 @@ const ProposalTypes = ({ daoMetaData, refetchMetaData }) => {
     }
   }, [daoMetaData]);
 
-  const handleSave = async (newChannelMetadata) => {
+  const handleSave = async () => {
     setLoading(true);
 
     try {
+      const metaUpdate = localMetadata;
+      console.log(metaUpdate);
+
       const messageHash = injectedProvider.utils.sha3(daoid);
       const signature = await injectedProvider.eth.personal.sign(
         messageHash,
         address,
       );
 
-      const metaUpdate = newChannelMetadata
-        ? [{ ...localMetadata[0], channelId: newChannelMetadata[0].channelId }]
-        : localMetadata;
-
       const updateNotifications = {
         contractAddress: daoid,
-        boostKey: 'notificationsLevel1',
+        boostKey: 'proposalTypes',
         metadata: metaUpdate,
         network: injectedChain.network,
         signature,
@@ -80,28 +75,22 @@ const ProposalTypes = ({ daoMetaData, refetchMetaData }) => {
   };
 
   const handleChange = (proposal, e) => {
-    if (e.target.checked) {
-      setLocalMetadata({
-        ...localMetadata,
-        [proposal.key]: { active: true },
-      });
-    } else {
-      setLocalMetadata(
-        localMetadata.map((channel) => {
-          channel.actions.splice(channel.actions.indexOf(proposal.id), 1);
-          return channel;
-        }),
-      );
-    }
-
+    console.log(proposal.key);
+    console.log(e.target.checked);
+    const updateData = localMetadata;
+    updateData[proposal.key] = {
+      active: e.target.checked,
+      ...updateData[proposal.key],
+    };
+    console.log(updateData);
+    setLocalMetadata(updateData);
     setHasChanges(true);
   };
 
   const renderProposalType = (proposal) => {
-    const isActive =
-      Object.keys(localMetadata).includes(proposal.key) &&
-      localMetadata[proposal.key].active === true;
-
+    const isActive = localMetadata[proposal.key].active === true;
+    console.log(isActive);
+    console.log(Object.keys(localMetadata[proposal.key]));
     return (
       <ContentBox as={Flex} justify='space-between' key={proposal.label}>
         <TextBox size='sm'>{proposal.label}</TextBox>
@@ -110,21 +99,38 @@ const ProposalTypes = ({ daoMetaData, refetchMetaData }) => {
             <TextBox size='xs'>Coming Soon</TextBox>
           ) : (
             <Switch
-              id={proposal.id}
-              colorScheme='green'
-              isChecked={isActive}
+              id={proposal.key}
+              colorScheme='blue'
+              value={localMetadata[proposal.key].active === true}
               onChange={(e) => handleChange(proposal, e)}
               disabled={loading}
             />
           )}
         </Flex>
+        {isActive &&
+          proposal.options?.length &&
+          proposal.options.map((option) => {
+            console.log(
+              Object.keys(localMetadata[proposal.key]).includes(option.id),
+            );
+
+            Object.keys(localMetadata[proposal.key]).includes(option.id) && (
+              <Flex mt={3} key={`${proposal.key}-${option.id}`}>
+                <Input
+                  type={option.type}
+                  // id={option.id}
+                  defaultValue={localMetadata[proposal.key][option.id]}
+                />
+              </Flex>
+            );
+          })}
       </ContentBox>
     );
   };
 
   return (
     <MainViewLayout
-      header={`${getCopy(customTerms, 'proposal')} ${getCopy(
+      header={`${getTerm(customTerms, 'proposal')} ${getTerm(
         customTerms,
         'settings',
       )}`}
@@ -136,7 +142,7 @@ const ProposalTypes = ({ daoMetaData, refetchMetaData }) => {
             <Box w='45%'>
               <Flex justify='space-between'>
                 <TextBox colorScheme='white' size='sm' mb={2}>
-                  Proposal Types
+                  {getTerm(customTerms, 'proposal')} Types
                 </TextBox>
               </Flex>
 

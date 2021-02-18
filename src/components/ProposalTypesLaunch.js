@@ -3,7 +3,7 @@ import { Link as RouterLink, useParams } from 'react-router-dom';
 import { Box, Button, Heading, Spinner, Text } from '@chakra-ui/react';
 
 import { useMetaData } from '../contexts/MetaDataContext';
-import { getCopy } from '../utils/metadata';
+import { getTerm } from '../utils/metadata';
 
 const ProposalTypesLaunch = ({ handleLaunch, loading, setLoading }) => {
   const { daochain, daoid } = useParams();
@@ -40,7 +40,7 @@ const ProposalTypesLaunch = ({ handleLaunch, loading, setLoading }) => {
       {step === 1 ? (
         <>
           <Heading as='h4' size='md' fontWeight='100'>
-            Configure {getCopy(customTerms, 'proposal')} Types
+            Configure {getTerm(customTerms, 'proposal')} Types
           </Heading>
           <Text my={6}>
             You can override the proposal types to turn some off and customize
