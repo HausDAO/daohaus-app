@@ -5,28 +5,28 @@ export const proposalTypes = (customTerms, boosts, daoid) => {
   return [
     {
       name: 'Membership',
-      subhead: 'Join the DAO!',
+      subhead: 'Request Shares and/or Loot',
       proposalType: 'member',
       image: swordImg,
       show: true,
     },
     {
       name: 'Funding',
-      subhead: 'Distribute funds',
+      subhead: 'Request or distribute funds',
       proposalType: 'funding',
       image: swordImg,
       show: true,
     },
     {
       name: 'Token',
-      subhead: 'Approve a new asset',
+      subhead: 'Approve a new token',
       proposalType: 'whitelist',
       image: swordImg,
       show: true,
     },
     {
       name: 'Trade',
-      subhead: 'Trade assets',
+      subhead: 'Trade tokens',
       proposalType: 'trade',
       image: swordImg,
       show: true,

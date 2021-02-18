@@ -8,7 +8,9 @@ import {
   Select,
   Button,
   Flex,
+  Tooltip,
 } from '@chakra-ui/react';
+import { RiInformationLine } from 'react-icons/ri';
 import { AiOutlineCaretDown } from 'react-icons/ai';
 import TextBox from '../components/TextBox';
 import { useDao } from '../contexts/DaoContext';
@@ -74,9 +76,22 @@ const AddressInput = ({
       {!anyApplicant ? (
         <FormControl mb={5}>
           <Flex justify='space-between'>
-            <TextBox as={FormLabel} size='xs' htmlFor='applicant'>
-              {formLabel}
-            </TextBox>
+            <Tooltip
+              hasArrow
+              shouldWrapChildren
+              label='Address to receive the Shares, Loot, and/or Funding requested in this proposal.'
+              placement='top'
+            >
+              <TextBox
+                as={FormLabel}
+                size='xs'
+                htmlFor='applicant'
+                d='flex'
+                alignItems='center'
+              >
+                {formLabel} <RiInformationLine style={{ marginLeft: 5 }} />
+              </TextBox>
+            </Tooltip>
             {!guildKick && (
               <Button
                 onClick={() => setAnyApplicant(true)}
