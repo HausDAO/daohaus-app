@@ -147,7 +147,7 @@ const buildCrossChainQuery = (supportedChains, endpointType) => {
   let array = [];
 
   for (const chain in supportedChains) {
-    console.log(chain);
+    // console.log(chain);
     array = [
       ...array,
       {

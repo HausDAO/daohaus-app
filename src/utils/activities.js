@@ -140,7 +140,6 @@ const voteHistoryData = (record, proposal) => {
 };
 
 export const getDaoActivites = (daoData) => {
-  console.log(daoData);
   const proposals = daoData.proposals
     .filter((prop) => !prop.cancelled)
     .map((proposal) => handleProposal(proposal));

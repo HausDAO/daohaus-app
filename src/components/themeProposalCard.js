@@ -3,8 +3,9 @@ import { Flex, Box, Badge, Icon } from '@chakra-ui/react';
 import { FaThumbsUp } from 'react-icons/fa';
 import { format } from 'date-fns';
 import ContentBox from './ContentBox';
+import { getCustomProposalTerm } from '../utils/metadata';
 
-const ThemeProposalCard = ({ previewValues }) => {
+const ThemeProposalCard = ({ previewValues, customTerms }) => {
   return (
     <ContentBox
       mt={3}
@@ -18,7 +19,9 @@ const ThemeProposalCard = ({ previewValues }) => {
           fontFamily={previewValues.headingFont}
           letterSpacing='0.1em'
         >
-          Member Proposal
+          {customTerms
+            ? getCustomProposalTerm(customTerms, 'Member Proposal')
+            : 'Member Proposal'}
         </Box>
         <Box>
           <Badge>Passed</Badge>

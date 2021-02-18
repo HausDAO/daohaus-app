@@ -1,7 +1,7 @@
 import React from 'react';
 import { Box, Flex } from '@chakra-ui/react';
 import WrongNetworkToolTip from './wrongNetworkToolTip';
-import { getCopy } from '../utils/metadata';
+import { getTerm } from '../utils/metadata';
 import Web3SignIn from './web3SignIn';
 
 const PageHeader = ({ isDao, header, headerEl, customTerms }) => {
@@ -20,7 +20,7 @@ const PageHeader = ({ isDao, header, headerEl, customTerms }) => {
           fontWeight={700}
           mr={10}
         >
-          {customTerms ? getCopy(customTerms, header) : header}
+          {customTerms ? getTerm(customTerms, header) : header}
         </Box>
         {headerEl}
       </Flex>

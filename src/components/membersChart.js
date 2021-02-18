@@ -22,7 +22,7 @@ import ContentBox from './ContentBox';
 import TextBox from './TextBox';
 import { fetchBankValues } from '../utils/theGraph';
 import { numberWithCommas } from '../utils/general';
-import { getCopy } from '../utils/metadata';
+import { getTerm } from '../utils/metadata';
 
 const MembersChart = ({ overview, daoMetaData, daoMembers }) => {
   const { daochain, daoid } = useParams();
@@ -110,7 +110,7 @@ const MembersChart = ({ overview, daoMetaData, daoMembers }) => {
         <ContentBox minH='360px'>
           <Flex justify='space-between'>
             <Box>
-              <TextBox size='xs'>{getCopy(daoMetaData, 'members')}</TextBox>
+              <TextBox size='xs'>{getTerm(daoMetaData, 'members')}</TextBox>
               <TextBox variant='value' size='lg'>
                 {daoMembers?.length}
               </TextBox>

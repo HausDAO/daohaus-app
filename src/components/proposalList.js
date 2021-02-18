@@ -10,7 +10,7 @@ import ListSort from './listSort';
 import { sortOptions } from '../utils/proposalContent';
 import ContentBox from './ContentBox';
 
-const ProposalsList = ({ proposals }) => {
+const ProposalsList = ({ proposals, customTerms }) => {
   const { daoMember } = useDaoMember();
   const [listProposals, setListProposals] = useState(proposals);
   const [pageProposals, setPageProposals] = useState(null);
@@ -76,7 +76,13 @@ const ProposalsList = ({ proposals }) => {
       </Flex>
       {isLoaded &&
         pageProposals?.map((proposal) => {
-          return <ProposalCard key={proposal.id} proposal={proposal} />;
+          return (
+            <ProposalCard
+              key={proposal.id}
+              proposal={proposal}
+              customTerms={customTerms}
+            />
+          );
         })}
 
       {isLoaded ? (

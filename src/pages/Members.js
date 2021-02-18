@@ -8,7 +8,7 @@ import MemberInfo from '../components/memberInfo';
 import ContentBox from '../components/ContentBox';
 import TextBox from '../components/TextBox';
 import { getMemberActivites, getMembersActivites } from '../utils/activities';
-import { getCopy } from '../utils/metadata';
+import { getTerm } from '../utils/metadata';
 import MembersChart from '../components/membersChart';
 import ListSort from '../components/listSort';
 import { membersSortOptions } from '../utils/memberContent';
@@ -130,7 +130,7 @@ const Members = React.memo(function MembersPage({
           <ContentBox mt={6}>
             <Flex justify='space-between'>
               <TextBox w={['50%', null, null, '43%']} size='xs'>
-                {getCopy(customTerms, 'member')}
+                {getTerm(customTerms, 'member')}
               </TextBox>
               <TextBox
                 w={['25%', null, null, '15%']}

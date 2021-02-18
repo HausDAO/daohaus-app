@@ -3,7 +3,7 @@ import { useParams, useHistory } from 'react-router-dom';
 import { Flex, Box, Skeleton, Button, Avatar } from '@chakra-ui/react';
 import makeBlockie from 'ethereum-blockies-base64';
 import { useMetaData } from '../contexts/MetaDataContext';
-import { getCopy, themeImagePath } from '../utils/metadata';
+import { getTerm, themeImagePath } from '../utils/metadata';
 import BankTotal from './bankTotal';
 import TextBox from './TextBox';
 import ContentBox from './ContentBox';
@@ -46,7 +46,7 @@ const OverviewCard = ({ daoOverview, membersAmt, currentDaoTokens }) => {
 
         <Flex direction='row' w='100%' justify='space-between' mt={6}>
           <Box>
-            <TextBox size='xs'>{getCopy(customTerms, 'members')}</TextBox>
+            <TextBox size='xs'>{getTerm(customTerms, 'members')}</TextBox>
             <Skeleton isLoaded={membersAmt}>
               <TextBox size='lg' variant='value'>
                 {membersAmt || 0}
@@ -71,7 +71,7 @@ const OverviewCard = ({ daoOverview, membersAmt, currentDaoTokens }) => {
           </Box>
         </Flex>
         <Box mt={6}>
-          <TextBox size='sm'>{getCopy(customTerms, 'bank')}</TextBox>
+          <TextBox size='sm'>{getTerm(customTerms, 'bank')}</TextBox>
           <BankTotal tokenBalances={currentDaoTokens} />
         </Box>
         <Flex mt={6}>
@@ -81,13 +81,13 @@ const OverviewCard = ({ daoOverview, membersAmt, currentDaoTokens }) => {
             onClick={() => history.push(`/dao/${daochain}/${daoid}/bank`)}
             value='bank'
           >
-            View {getCopy(customTerms, 'bank')}
+            View {getTerm(customTerms, 'bank')}
           </Button>
           <Button
             onClick={() => history.push(`/dao/${daochain}/${daoid}/proposals`)}
             value='proposals'
           >
-            View {getCopy(customTerms, 'proposals')}
+            View {getTerm(customTerms, 'proposals')}
           </Button>
         </Flex>
       </ContentBox>

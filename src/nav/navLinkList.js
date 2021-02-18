@@ -5,8 +5,9 @@ import { RiTrophyLine } from 'react-icons/ri';
 import NavLink from './navlink';
 import { defaultHubData, generateDaoLinks } from '../utils/navLinks';
 import { useInjectedProvider } from '../contexts/InjectedProviderContext';
+import { getTerm } from '../utils/metadata';
 // import { useMetaData } from '../contexts/MetaDataContext';
-// import { getCopy } from '../utils/metadata';
+// import { getTerm } from '../utils/metadata';
 
 const NavLinkList = ({ dao, view, toggleNav = null }) => {
   // const { daoMetaData } = useMetaData();
@@ -30,7 +31,11 @@ const NavLinkList = ({ dao, view, toggleNav = null }) => {
           return (
             <NavLink
               key={link.path || link.href}
-              label={link.label} // {getCopy(daoMetaData, link.label)}
+              label={
+                dao?.customTerms
+                  ? getTerm(dao.customTerms, link.label)
+                  : link.label
+              }
               path={link.path}
               href={link.href}
               icon={link.icon}

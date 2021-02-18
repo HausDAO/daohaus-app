@@ -20,7 +20,7 @@ import { FaChevronDown } from 'react-icons/fa';
 
 import ContentBox from './ContentBox';
 import TextBox from './TextBox';
-import { getCopy } from '../utils/metadata';
+import { getTerm } from '../utils/metadata';
 import { useMetaData } from '../contexts/MetaDataContext';
 
 const bankChartTimeframes = [
@@ -62,7 +62,7 @@ const ThemeChart = ({ previewValues }) => {
       <ContentBox minH='360px'>
         <Flex wrap='wrap' align='center' position='relative'>
           <Box position='absolute' top='0px' left='10px'>
-            <TextBox size='sm'>{getCopy(customTerms, 'bank')}</TextBox>
+            <TextBox size='sm'>{getTerm(customTerms, 'bank')}</TextBox>
             <Box fontFamily='heading' fontSize='2xl' fontWeight={800}>
               $1337.42
             </Box>
