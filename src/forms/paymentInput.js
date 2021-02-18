@@ -6,7 +6,9 @@ import {
   InputGroup,
   InputRightAddon,
   Select,
+  Tooltip,
 } from '@chakra-ui/react';
+import { RiInformationLine } from 'react-icons/ri';
 import TextBox from '../components/TextBox';
 import React, { useState, useEffect } from 'react';
 import { useDao } from '../contexts/DaoContext';
@@ -80,9 +82,16 @@ const PaymentInput = ({ register, setValue, getValues, errors }) => {
 
   return (
     <>
-      <TextBox as={FormLabel} size='xs'>
-        Payment Requested
-      </TextBox>
+      <Tooltip
+        hasArrow
+        shouldWrapChildren
+        label='Request funds from the DAO'
+        placement='top'
+      >
+        <TextBox as={FormLabel} size='xs' d='flex' alignItems='center'>
+          Payment Requested <RiInformationLine style={{ marginLeft: 5 }} />
+        </TextBox>
+      </Tooltip>
       <InputGroup>
         <Button
           onClick={() => setMax()}

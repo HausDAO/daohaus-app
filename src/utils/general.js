@@ -39,6 +39,9 @@ export const detailsToJSON = (values) => {
   if (values.link) {
     details.link = values.link;
   }
+  if (values.forumId) {
+    details.forumId = values.forumId;
+  }
   return JSON.stringify(details);
 };
 

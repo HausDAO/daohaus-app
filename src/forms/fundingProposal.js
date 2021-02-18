@@ -12,8 +12,13 @@ import {
   MenuButton,
   MenuList,
   MenuItem,
+  Tooltip,
 } from '@chakra-ui/react';
-import { RiAddFill, RiErrorWarningLine } from 'react-icons/ri';
+import {
+  RiAddFill,
+  RiErrorWarningLine,
+  RiInformationLine,
+} from 'react-icons/ri';
 
 import TextBox from '../components/TextBox';
 
@@ -36,6 +41,8 @@ import { MolochService } from '../services/molochService';
 import { useDao } from '../contexts/DaoContext';
 import { valToDecimalString } from '../utils/tokenValue';
 import { chainByID } from '../utils/chain';
+import { useMetaData } from '../contexts/MetaDataContext';
+import { createForumTopic } from '../utils/discourse';
 
 const FundingProposalForm = () => {
   const {
@@ -53,6 +60,7 @@ const FundingProposalForm = () => {
   const { daoOverview } = useDao();
   const { refreshDao } = useTX();
   const { cachePoll, resolvePoll } = useUser();
+  const { daoMetaData } = useMetaData();
   const { daoid, daochain } = useParams();
 
   const [loading, setLoading] = useState(false);
@@ -85,7 +93,10 @@ const FundingProposalForm = () => {
 
   const onSubmit = async (values) => {
     setLoading(true);
+    const now = (new Date().getTime() / 1000).toFixed();
     const hash = createHash();
+
+    console.log('values', values);
     const details = detailsToJSON({ ...values, hash });
     const { tokenBalances, depositToken } = daoOverview;
     const tributeToken = values.tributeToken || depositToken.tokenAddress;
@@ -101,6 +112,7 @@ const FundingProposalForm = () => {
       : values?.applicant
       ? values.applicant
       : address;
+
     const args = [
       applicant,
       values.sharesRequested || '0',
@@ -127,10 +139,19 @@ const FundingProposalForm = () => {
           },
           onSuccess: (txHash) => {
             successToast({
-              title: 'Member Proposal Submitted to the Dao!',
+              title: 'Funding Proposal Submitted to the Dao!',
             });
             refreshDao();
             resolvePoll(txHash);
+            createForumTopic({
+              chainID: daochain,
+              daoID: daoid,
+              afterTime: now,
+              proposalType: 'Funding Proposal',
+              values,
+              applicant,
+              daoMetaData,
+            });
           },
         },
       });
@@ -182,9 +203,24 @@ const FundingProposalForm = () => {
 
           {showShares && (
             <>
-              <TextBox as={FormLabel} size='xs' htmlFor='name' mb={2}>
-                Shares Requested
-              </TextBox>
+              <Tooltip
+                hasArrow
+                shouldWrapChildren
+                label='Shares provide voting power and exposure to assets. Only whole numbers accepted here, no decimals plz'
+                placement='top'
+              >
+                <TextBox
+                  as={FormLabel}
+                  size='xs'
+                  htmlFor='name'
+                  mb={2}
+                  d='flex'
+                  alignItems='center'
+                >
+                  Shares Requested{' '}
+                  <RiInformationLine style={{ marginLeft: 5 }} />
+                </TextBox>
+              </Tooltip>
               <Input
                 name='sharesRequested'
                 placeholder='0'
@@ -206,9 +242,23 @@ const FundingProposalForm = () => {
           )}
           {showLoot && (
             <>
-              <TextBox as={FormLabel} size='xs' htmlFor='lootRequested' mb={2}>
-                Loot Requested
-              </TextBox>
+              <Tooltip
+                hasArrow
+                shouldWrapChildren
+                label='Loot provides exposure to assets but no voting power. Only whole numbers accepted here, no decimals plz'
+                placement='top'
+              >
+                <TextBox
+                  as={FormLabel}
+                  size='xs'
+                  htmlFor='lootRequested'
+                  mb={2}
+                  d='flex'
+                  alignItems='center'
+                >
+                  Loot Requested
+                </TextBox>
+              </Tooltip>
               <Input
                 name='lootRequested'
                 placeholder='0'
@@ -261,6 +311,7 @@ const FundingProposalForm = () => {
           )}
         </Box>
       </FormControl>
+
       <Flex justify='flex-end' align='center' h='60px'>
         {currentError && (
           <Box color='red.500' fontSize='m' mr={5}>

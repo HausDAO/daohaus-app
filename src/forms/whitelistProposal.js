@@ -27,6 +27,8 @@ import { useDao } from '../contexts/DaoContext';
 import { chainByID } from '../utils/chain';
 import DetailsFields from './detailFields';
 import TextBox from '../components/TextBox';
+import { useMetaData } from '../contexts/MetaDataContext';
+import { createForumTopic } from '../utils/discourse';
 
 const WhitelistProposalForm = () => {
   const [loading, setLoading] = useState(false);
@@ -47,8 +49,7 @@ const WhitelistProposalForm = () => {
   const { daoOverview } = useDao();
   const { refreshDao } = useTX();
   const { cachePoll, resolvePoll } = useUser();
-
-  // console.log(dao);
+  const { daoMetaData } = useMetaData();
 
   const { handleSubmit, errors, register } = useForm();
 
@@ -69,6 +70,7 @@ const WhitelistProposalForm = () => {
   console.log(address);
 
   const onSubmit = async (values) => {
+    const now = (new Date().getTime() / 1000).toFixed();
     const hash = createHash();
     const details = detailsToJSON({ ...values, hash });
     const args = [values.tokenAddress, details];
@@ -93,6 +95,15 @@ const WhitelistProposalForm = () => {
               });
               refreshDao();
               resolvePoll(txHash);
+              createForumTopic({
+                chainID: daochain,
+                daoID: daoid,
+                afterTime: now,
+                proposalType: 'Whitelist Proposal',
+                values,
+                applicant: address,
+                daoMetaData,
+              });
             },
           },
         },

@@ -90,3 +90,13 @@ export const PROPOSALS_LIST_IS_MEMBER = gql`
     }
   }
 `;
+
+export const PROPOSALS_DISCOURSE_TOPIC = gql`
+  query proposals($molochAddress: String!, $createdAt: String!) {
+    proposals(
+      where: { molochAddress: $molochAddress, createdAt_gt: $createdAt }
+    ) {
+      proposalId
+    }
+  }
+`;

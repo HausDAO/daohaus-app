@@ -28,7 +28,7 @@ module.exports = {
     },
   },
   rules: {
-    'no-console': 'off', // revert to warn or error when ready for prod
+    'no-console': 'off',
     'react/prop-types': 'off',
     'no-unused-vars': 'error',
     'prettier/prettier': 'error',

@@ -29,6 +29,7 @@ import { useTX } from '../contexts/TXContext';
 import { useOverlay } from '../contexts/OverlayContext';
 import { createPoll } from '../services/pollService';
 import { createHash, detailsToJSON } from '../utils/general';
+import { createForumTopic } from '../utils/discourse';
 
 const TransmutationProposal = () => {
   const [loading, setLoading] = useState(false);
@@ -166,6 +167,7 @@ const TransmutationProposal = () => {
 
   const onSubmit = async (values) => {
     setLoading(true);
+    const now = (new Date().getTime() / 1000).toFixed();
     const hash = createHash();
     const details = detailsToJSON({
       hash,
@@ -197,6 +199,15 @@ const TransmutationProposal = () => {
             });
             refreshDao();
             resolvePoll(txHash);
+            createForumTopic({
+              chainID: daochain,
+              daoID: daoid,
+              afterTime: now,
+              proposalType: 'Transmutation Proposal',
+              values,
+              applicant: values.applicant,
+              daoMetaData,
+            });
           },
         },
       });
