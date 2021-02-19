@@ -39,29 +39,25 @@ export const afterGracePeriod = (proposal) => {
 };
 
 export function determineProposalStatus(proposal) {
-  let status;
-
   if (proposal.cancelled) {
-    status = ProposalStatus.Cancelled;
+    return ProposalStatus.Cancelled;
   } else if (!proposal.sponsored) {
-    status = ProposalStatus.Unsponsored;
+    return ProposalStatus.Unsponsored;
   } else if (proposal.processed && proposal.didPass) {
-    status = ProposalStatus.Passed;
+    return ProposalStatus.Passed;
   } else if (proposal.processed && !proposal.didPass) {
-    status = ProposalStatus.Failed;
-  } else if (inQueue(proposal)) {
-    status = ProposalStatus.InQueue;
+    return ProposalStatus.Failed;
   } else if (inVotingPeriod(proposal)) {
-    status = ProposalStatus.VotingPeriod;
+    return ProposalStatus.VotingPeriod;
+  } else if (inQueue(proposal)) {
+    return ProposalStatus.InQueue;
   } else if (inGracePeriod(proposal)) {
-    status = ProposalStatus.GracePeriod;
+    return ProposalStatus.GracePeriod;
   } else if (afterGracePeriod(proposal)) {
-    status = ProposalStatus.ReadyForProcessing;
+    return ProposalStatus.ReadyForProcessing;
   } else {
-    status = ProposalStatus.Unknown;
+    return ProposalStatus.Unknown;
   }
-
-  return status;
 }
 export const determineProposalType = (proposal) => {
   if (proposal.newMember) {
@@ -203,8 +199,8 @@ export const determineUnreadProposalList = (
   };
 };
 
-export function getProposalCountdownText(proposal) {
-  switch (proposal.status) {
+export function getProposalCountdownText(proposal, status) {
+  switch (status) {
     case ProposalStatus.InQueue:
       return (
         <Fragment>
@@ -266,8 +262,42 @@ export function getProposalCountdownText(proposal) {
   }
 }
 
-export const getProposalDetailStatus = (proposal) => {
-  switch (proposal.status) {
+export const getProposalCardDetailStatus = (proposal, status) => {
+  switch (status) {
+    case ProposalStatus.InQueue:
+      return (
+        'Voting Begins ' +
+        formatDistanceToNow(new Date(+proposal?.votingPeriodStarts * 1000), {
+          addSuffix: true,
+        })
+      );
+    case ProposalStatus.VotingPeriod:
+      return (
+        'Ends ' +
+        formatDistanceToNow(new Date(+proposal?.votingPeriodEnds * 1000), {
+          addSuffix: true,
+        })
+      );
+    case ProposalStatus.GracePeriod:
+      return (
+        'Ends ' +
+        formatDistanceToNow(new Date(+proposal?.gracePeriodEnds * 1000), {
+          addSuffix: true,
+        })
+      );
+    case ProposalStatus.Failed:
+    case ProposalStatus.Passed:
+    case ProposalStatus.ReadyForProcessing:
+      return formatDistanceToNow(new Date(+proposal?.gracePeriodEnds * 1000), {
+        addSuffix: true,
+      });
+    default:
+      return <Fragment />;
+  }
+};
+
+export const getProposalDetailStatus = (proposal, status) => {
+  switch (status) {
     case ProposalStatus.InQueue:
       return (
         <>
