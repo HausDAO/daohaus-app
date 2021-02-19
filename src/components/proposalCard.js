@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { utils } from 'web3';
 import { Flex, Box, Skeleton, Badge, Icon } from '@chakra-ui/react';
@@ -6,18 +6,31 @@ import { FaThumbsDown, FaThumbsUp } from 'react-icons/fa';
 import { format } from 'date-fns';
 
 import { numberWithCommas } from '../utils/general';
-import { memberVote } from '../utils/proposalUtils';
+import {
+  determineProposalStatus,
+  getProposalCardDetailStatus,
+  // getProposalCardDetailStatus,
+  memberVote,
+} from '../utils/proposalUtils';
 import ContentBox from './ContentBox';
 import { useInjectedProvider } from '../contexts/InjectedProviderContext';
 import { getCustomProposalTerm } from '../utils/metadata';
+import { useEffect } from 'react/cjs/react.development';
 
+const formatStatus = (status) => {
+  return status.split(/(?=[A-Z])/).join(' ');
+};
 const ProposalCard = ({ proposal, customTerms }) => {
   const { daochain, daoid } = useParams();
   const { address } = useInjectedProvider();
+  const [status, setStatus] = useState(null);
 
-  const formatStatus = (status) => {
-    return status.split(/(?=[A-Z])/).join(' ');
-  };
+  useEffect(() => {
+    if (proposal) {
+      const statusStr = determineProposalStatus(proposal);
+      setStatus(statusStr);
+    }
+  }, [proposal]);
 
   return (
     <Link
@@ -41,8 +54,15 @@ const ProposalCard = ({ proposal, customTerms }) => {
               : proposal?.proposalType}
           </Box>
           <Box>
-            <Skeleton isLoaded={proposal?.status}>
-              <Badge>{proposal ? formatStatus(proposal.status) : ''}</Badge>
+            <Skeleton isLoaded={status}>
+              <Flex align='flex-end' direction='column'>
+                <Badge mb='1'>{status && formatStatus(status)}</Badge>
+                <Box fontSize='xs'>
+                  {status
+                    ? getProposalCardDetailStatus(proposal, status)
+                    : '--'}
+                </Box>
+              </Flex>
             </Skeleton>
           </Box>
         </Flex>
@@ -67,14 +87,14 @@ const ProposalCard = ({ proposal, customTerms }) => {
           <Box>
             <Flex align='center'>
               <Flex h='20px'>
-                <Skeleton isLoaded={proposal?.status}>
+                <Skeleton isLoaded={status}>
                   {(+proposal?.yesShares > 0 || +proposal?.noShares > 0) && (
                     <>
                       <Badge
                         colorScheme='green'
                         variant={
                           +proposal.yesShares > +proposal.noShares &&
-                          proposal.status !== 'Failed'
+                          status !== 'Failed'
                             ? 'solid'
                             : 'outline'
                         }

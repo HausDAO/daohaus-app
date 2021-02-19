@@ -17,6 +17,7 @@ const ProposalsList = ({ proposals, customTerms }) => {
   const [isLoaded, setIsLoaded] = useState(false);
   const [filter, setFilter] = useState(null);
   const [sort, setSort] = useState(null);
+
   useEffect(() => {
     const filterAndSortProposals = () => {
       let filteredProposals = proposals;
