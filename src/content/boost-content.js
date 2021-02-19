@@ -35,7 +35,16 @@ export const boostList = [
     successRoute: '',
   },
   {
-    name: 'MinionSafe',
+    name: 'Proposal Types',
+    key: 'proposalTypes',
+    description:
+      'Customize the proposal types available for members to streamline onboarding or other DAO activities.',
+    price: '0',
+    modalName: 'ProposalTypesLaunch',
+    successRoute: 'proposals',
+  },
+  {
+    name: 'Minion Safe',
     key: 'minionSafe',
     description: 'Launch and interact with a Gnosis Safe multisig',
     price: '0',
@@ -119,3 +128,18 @@ export const notificationBoostContent = {
       'https://discord.com/api/oauth2/authorize?client_id=736999684471521321&permissions=23552&scope=bot',
   },
 };
+
+export const proposalTypesContent = [
+  { key: 'member', label: 'Member' },
+  { key: 'funding', label: 'Funding' },
+  { key: 'whitelist', label: 'Whitelist' },
+  { key: 'trade', label: 'Trade' },
+  { key: 'guildKick', label: 'Guild Kick' },
+  {
+    key: 'lootGrab',
+    label: 'Loot Grab',
+    options: [
+      { id: 'ratio', type: 'text', default: 1, validation: 'greater than 0' },
+    ],
+  },
+];

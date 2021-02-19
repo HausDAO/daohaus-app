@@ -6,7 +6,7 @@ import { rgba } from 'polished';
 import { useCustomTheme } from '../contexts/CustomThemeContext';
 import ThemeChart from './themeChart';
 import ThemeProposalCard from './themeProposalCard';
-import { themeImagePath, getCopy } from '../utils/metadata';
+import { themeImagePath, getTerm } from '../utils/metadata';
 import { useMetaData } from '../contexts/MetaDataContext';
 
 const ThemePreview = ({ previewValues }) => {
@@ -31,7 +31,10 @@ const ThemePreview = ({ previewValues }) => {
       <Flex
         w='100%'
         h='900px'
-        bgColor={rgba(previewValues.bg500, 0.5)}
+        bgColor={rgba(
+          previewValues.bg500,
+          parseFloat(previewValues.bgOverlayOpacity || 0),
+        )}
         zIndex={2}
       >
         <Flex
@@ -68,10 +71,10 @@ const ThemePreview = ({ previewValues }) => {
                 borderColor={previewValues?.secondary500}
                 variant='outline'
               >
-                {getCopy(customTerms, 'bank')}
+                {getTerm(customTerms, 'bank')}
               </Button>
               <Button color='whiteAlpha500' bg={previewValues?.secondary500}>
-                {getCopy(customTerms, 'proposals')}
+                {getTerm(customTerms, 'proposals')}
               </Button>
             </HStack>
           </Flex>
@@ -121,7 +124,10 @@ const ThemePreview = ({ previewValues }) => {
             </Flex>
           </Flex>
           <Box mb={10}>
-            <ThemeProposalCard previewValues={previewValues} />
+            <ThemeProposalCard
+              previewValues={previewValues}
+              customTerms={customTerms}
+            />
           </Box>
           <Box h={20} />
         </Flex>

@@ -18,7 +18,7 @@ import ContentBox from './ContentBox';
 import TextBox from './TextBox';
 import { memberVote } from '../utils/proposalUtils';
 import { supportedChains } from '../utils/chain';
-import { getCopy } from '../utils/metadata';
+import { getTerm } from '../utils/metadata';
 import { capitalize, daoConnectedAndSameChain } from '../utils/general';
 import { useMetaData } from '../contexts/MetaDataContext';
 import { MinionService } from '../services/minionService';
@@ -76,7 +76,7 @@ const ProposalVote = ({ proposal, overview, daoProposals, daoMember }) => {
         zIndex='2'
       >
         {`Connect to ${capitalize(supportedChains[daochain]?.network)}
-      for ${getCopy(customTerms, 'proposal')} actions`}
+      for ${getTerm(customTerms, 'proposal')} actions`}
       </Box>
     </Flex>
   );

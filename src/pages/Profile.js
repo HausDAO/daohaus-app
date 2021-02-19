@@ -89,8 +89,6 @@ const Profile = ({ members, overview, daoTokens, daoMember, activities }) => {
     );
   };
 
-  console.log('hasBalance', hasBalance());
-
   return (
     <MainViewLayout header='Profile' isDao={true}>
       <Flex wrap='wrap'>

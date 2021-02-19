@@ -25,7 +25,6 @@ const handleAvatar = (activity, profile) => {
     const url = profile?.image[0].contentUrl;
     return (
       <Avatar
-        // adds key to prevent react from skipping this render
         key={`profile${activity.memberAddress}`}
         name={profile?.name}
         size='sm'
@@ -73,53 +72,20 @@ const ActivityCard = ({ activity, displayAvatar, isLink = true }) => {
     };
   }, [activity.memberAddress]);
 
-  // const renderBadge = () => {
-  //   if (activity && activity.voteBadge) {
-  //     switch (activity.activityData.type) {
-  //       case 'proposal': {
-  //         return (
-  //           <Badge variant='solid'>{activity.activityData.lastActivity}</Badge>
-  //         );
-  //       }
-  //       case 'rage': {
-  //         return (
-  //           <Badge variant='solid' colorScheme='red'>
-  //             Rage
-  //           </Badge>
-  //         );
-  //       }
-  //       case 'vote': {
-  //         return (
-  //           <Badge
-  //             colorScheme={+activity.uintVote === 1 ? 'green' : 'red'}
-  //             variant='solid'
-  //           >
-  //             {+activity.uintVote === 1 ? 'Yes' : 'No'}
-  //           </Badge>
-  //         );
-  //       }
-  //       default: {
-  //         return null;
-  //       }
-  //     }
-  //   }
-  // };
-
-  // ACTIVITY MODEL
-  // TODO needs proposalId if applicable
-  // activity: {
-  //   title: String
-  //   createdAt: INT date(UTC),
-  //   voteBadge: Int,
-  //   statusBadge: String,
-  //   rageBadge: String
-  //   status: String
-  //   daoData: Object (dao meta from api, only on hub cards)
-  // }
-
   const name = handleName(activity, profile);
-  const chain = daochain || chainByName(activity.daoData.network).chain_id;
-  const daoAddress = daoid || activity.daoData.contractAddress;
+  const chain = daochain || chainByName(activity?.daoData?.network)?.chain_id;
+  const daoAddress = daoid || activity?.daoData?.contractAddress;
+
+  const profileLink =
+    chain && daoAddress && activity?.memberAddress
+      ? `/dao/${chain}/${daoAddress}/profile/${activity.memberAddress}`
+      : null;
+
+  const proposalLink =
+    chain && daoAddress && activity?.proposalId
+      ? `/dao/${chain}/${daoAddress}/proposals/${activity.proposalId}`
+      : null;
+
   return (
     <ContentBox mt={3}>
       <Skeleton isLoaded={activity}>
@@ -136,14 +102,8 @@ const ActivityCard = ({ activity, displayAvatar, isLink = true }) => {
         <Flex direction='row' justifyContent='space-between'>
           <Flex direction='column'>
             {activity?.title &&
-              (isLink && activity?.proposalId ? (
-                <RouterLink
-                  to={
-                    activity?.activityData?.type !== 'rage'
-                      ? `/dao/${chain}/${daoAddress}/proposals/${activity.proposalId}`
-                      : '#'
-                  }
-                >
+              (isLink && proposalLink ? (
+                <RouterLink to={proposalLink}>
                   <Heading as='h4' size='sm'>
                     {name} {activity.title}
                   </Heading>
@@ -202,16 +162,13 @@ const ActivityCard = ({ activity, displayAvatar, isLink = true }) => {
               </Text>
             </Flex>
           </Flex>
-          <Box
-            as={RouterLink}
-            to={
-              activity?.activityData
-                ? `/dao/${chain}/${daoAddress}/profile/${activity.activityData.memberAddress}`
-                : ''
-            }
-          >
-            {displayAvatar && handleAvatar(activity, profile)}
-          </Box>
+          {isLink && profileLink ? (
+            <Box as={RouterLink} to={profileLink}>
+              {displayAvatar && handleAvatar(activity, profile)}
+            </Box>
+          ) : (
+            <Box>{displayAvatar && handleAvatar(activity, profile)}</Box>
+          )}
         </Flex>
       </Skeleton>
     </ContentBox>

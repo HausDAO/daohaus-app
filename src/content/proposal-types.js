@@ -1,39 +1,39 @@
-import { getCopy } from '../utils/metadata';
+import { getTerm } from '../utils/metadata';
 import swordImg from '../assets/img/swords-white.svg';
 
 export const proposalTypes = (customTerms, boosts, daoid) => {
   return [
     {
       name: 'Membership',
-      subhead: 'Join the DAO!',
+      subhead: 'Request Shares and/or Loot',
       proposalType: 'member',
       image: swordImg,
       show: true,
     },
     {
       name: 'Funding',
-      subhead: 'Distribute funds',
+      subhead: 'Request or distribute funds',
       proposalType: 'funding',
       image: swordImg,
       show: true,
     },
     {
       name: 'Token',
-      subhead: 'Approve a new asset',
+      subhead: 'Approve a new token',
       proposalType: 'whitelist',
       image: swordImg,
       show: true,
     },
     {
       name: 'Trade',
-      subhead: 'Trade assets',
+      subhead: 'Trade tokens',
       proposalType: 'trade',
       image: swordImg,
       show: true,
     },
     {
       name: 'Guild Kick',
-      subhead: `Remove a ${getCopy(customTerms, 'member')}`,
+      subhead: `Remove a ${getTerm(customTerms, 'member')}`,
       proposalType: 'guildkick',
       image: swordImg,
       show: true,
@@ -56,7 +56,7 @@ export const proposalTypes = (customTerms, boosts, daoid) => {
     },
     {
       name: 'Loot Grab',
-      subhead: 'Get dat loot',
+      subhead: 'Request Loot with a tribute',
       proposalType: 'lootgrab',
       image: swordImg,
       comingSoon: false,

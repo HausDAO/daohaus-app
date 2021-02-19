@@ -18,7 +18,7 @@ import GuildKickProposalForm from '../forms/guildKickProposal';
 import TradeProposalForm from '../forms/tradeProposal';
 import MinionSimpleProposalForm from '../forms/minionSimpleProposal';
 import TransmutationProposal from '../forms/transmutationProposal';
-import { getCopy } from '../utils/metadata';
+import { getTerm } from '../utils/metadata';
 import { useMetaData } from '../contexts/MetaDataContext';
 import { useOverlay } from '../contexts/OverlayContext';
 import { useCustomTheme } from '../contexts/CustomThemeContext';
@@ -33,8 +33,8 @@ const ProposalFormModal = ({ proposalType, returnRoute }) => {
 
   const proposalForms = {
     member: {
-      type: `New ${getCopy(customTerms, 'proposal')}`,
-      heading: `New ${getCopy(customTerms, 'member')} ${getCopy(
+      type: `New ${getTerm(customTerms, 'proposal')}`,
+      heading: `New ${getTerm(customTerms, 'member')} ${getTerm(
         customTerms,
         'proposal',
       )}`,
@@ -42,44 +42,44 @@ const ProposalFormModal = ({ proposalType, returnRoute }) => {
       form: <MemberProposalForm />,
     },
     funding: {
-      type: `New ${getCopy(customTerms, 'proposal')}`,
-      heading: `New Funding ${getCopy(customTerms, 'proposal')}`,
+      type: `New ${getTerm(customTerms, 'proposal')}`,
+      heading: `New Funding ${getTerm(customTerms, 'proposal')}`,
       subline: `Submit a funding proposal here.`,
       form: <FundingProposalForm />,
     },
     lootgrab: {
-      type: `New ${getCopy(customTerms, 'proposal')}`,
-      heading: `New Loot Grab ${getCopy(customTerms, 'proposal')}`,
+      type: `New ${getTerm(customTerms, 'proposal')}`,
+      heading: `New Loot Grab ${getTerm(customTerms, 'proposal')}`,
       subline: `Submit a loot grab proposal here.`,
       form: <LootGrabForm />,
     },
     whitelist: {
-      type: `New ${getCopy(customTerms, 'proposal')}`,
-      heading: `New Whitelist ${getCopy(customTerms, 'proposal')}`,
+      type: `New ${getTerm(customTerms, 'proposal')}`,
+      heading: `New Whitelist ${getTerm(customTerms, 'proposal')}`,
       subline: `Whitelist a token here.`,
       form: <WhitelistProposalForm />,
     },
     guildkick: {
-      type: `New ${getCopy(customTerms, 'proposal')}`,
-      heading: `New GuildKick ${getCopy(customTerms, 'proposal')}`,
+      type: `New ${getTerm(customTerms, 'proposal')}`,
+      heading: `New GuildKick ${getTerm(customTerms, 'proposal')}`,
       subline: `Kick a perpetrator here.`,
       form: <GuildKickProposalForm />,
     },
     trade: {
-      type: `New ${getCopy(customTerms, 'proposal')}`,
-      heading: `New Trade ${getCopy(customTerms, 'proposal')}`,
+      type: `New ${getTerm(customTerms, 'proposal')}`,
+      heading: `New Trade ${getTerm(customTerms, 'proposal')}`,
       subline: `Submit a trade proposal here.`,
       form: <TradeProposalForm />,
     },
     minion: {
-      type: `New ${getCopy(customTerms, 'proposal')}`,
-      heading: `New Minion ${getCopy(customTerms, 'proposal')}`,
+      type: `New ${getTerm(customTerms, 'proposal')}`,
+      heading: `New Minion ${getTerm(customTerms, 'proposal')}`,
       subline: `Submit a Minion proposal here.`,
       form: <MinionSimpleProposalForm />,
     },
     transmutation: {
-      type: `New ${getCopy(customTerms, 'proposal')}`,
-      heading: `New Transmutation ${getCopy(customTerms, 'proposal')}`,
+      type: `New ${getTerm(customTerms, 'proposal')}`,
+      heading: `New Transmutation ${getTerm(customTerms, 'proposal')}`,
       subline: `Submit a Transmutation proposal here.`,
       form: <TransmutationProposal />,
     },

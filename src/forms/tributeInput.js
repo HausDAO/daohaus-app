@@ -5,7 +5,9 @@ import {
   InputGroup,
   InputRightAddon,
   Select,
+  Tooltip,
 } from '@chakra-ui/react';
+import { RiInformationLine } from 'react-icons/ri';
 import { utils } from 'web3';
 import { MaxUint256 } from '@ethersproject/constants';
 
@@ -167,9 +169,16 @@ const TributeInput = ({ register, setValue, getValues, setError }) => {
 
   return (
     <>
-      <TextBox as={FormLabel} size='xs'>
-        Token Tribute
-      </TextBox>
+      <Tooltip
+        hasArrow
+        shouldWrapChildren
+        label='Only tokens approved by the DAO are allowed here. Members can add more approved tokens with Token proposals'
+        placement='top'
+      >
+        <TextBox as={FormLabel} size='xs' d='flex' alignItems='center'>
+          Token Tribute <RiInformationLine style={{ marginLeft: 5 }} />
+        </TextBox>
+      </Tooltip>
       <InputGroup>
         {!unlocked && (
           <Button

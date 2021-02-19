@@ -15,7 +15,7 @@ import { RiExternalLinkLine } from 'react-icons/ri';
 import ContentBox from './ContentBox';
 import TextBox from './TextBox';
 import { formatPeriods, truncateAddr } from '../utils/general';
-import { getCopy } from '../utils/metadata';
+import { getTerm } from '../utils/metadata';
 import { supportedChains } from '../utils/chain';
 
 const DaoContractSettings = ({ overview, customTerms }) => {
@@ -49,7 +49,7 @@ const DaoContractSettings = ({ overview, customTerms }) => {
       <Flex mt={3} wrap='wrap'>
         <Box w={['100%', null, null, '50%']}>
           <TextBox size='xs'>
-            {getCopy(customTerms, 'proposal')} Deposit
+            {getTerm(customTerms, 'proposal')} Deposit
           </TextBox>
           <Skeleton isLoaded={overview?.proposalDeposit}>
             <TextBox variant='value' size='xl' my={2}>

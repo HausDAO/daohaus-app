@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { utils } from 'web3';
 import {
   Flex,
@@ -19,15 +19,18 @@ import TextBox from '../components/TextBox';
 import ContentBox from '../components/ContentBox';
 import AddressAvatar from '../components/addressAvatar';
 import ProposalMinionCard from '../components/proposalMinionCard';
-
 import {
+  determineProposalStatus,
   getProposalCountdownText,
   getProposalDetailStatus,
   memberVote,
 } from '../utils/proposalUtils';
 import { numberWithCommas } from '../utils/general';
+import { getCustomProposalTerm } from '../utils/metadata';
 import { useInjectedProvider } from '../contexts/InjectedProviderContext';
 import DiscourseProposalTopic from './discourseProposalTopic';
+import { useMetaData } from '../contexts/MetaDataContext';
+import { useEffect } from 'react/cjs/react.development';
 
 const urlify = (text) => {
   var urlRegex = /(https?:\/\/[^\s]+)/g;
@@ -47,6 +50,15 @@ const hasImage = (string) => {
 
 const ProposalDetails = ({ proposal, daoMember }) => {
   const { address } = useInjectedProvider();
+  const { customTerms } = useMetaData();
+  const [status, setStatus] = useState(null);
+
+  useEffect(() => {
+    if (proposal) {
+      const statusStr = determineProposalStatus(proposal);
+      setStatus(statusStr);
+    }
+  }, [proposal]);
 
   return (
     <Box pt={6}>
@@ -55,22 +67,20 @@ const ProposalDetails = ({ proposal, daoMember }) => {
           <Box>
             <Flex justify='space-between' wrap={['wrap', null, null, 'nowrap']}>
               <TextBox size='xs' mb={[3, null, null, 0]}>
-                {proposal?.proposalType}
+                {getCustomProposalTerm(customTerms, proposal?.proposalType)}
               </TextBox>
 
               <Box fontSize={['sm', null, null, 'md']}>
                 {proposal?.proposalIndex ? (
                   <>
-                    {proposal?.status
-                      ? getProposalDetailStatus(proposal)
-                      : '--'}
+                    {status ? getProposalDetailStatus(proposal, status) : '--'}
                   </>
                 ) : (
                   <>
-                    <Skeleton isLoaded={proposal?.status}>
+                    <Skeleton isLoaded={status}>
                       <Badge>
-                        {proposal?.status
-                          ? getProposalCountdownText(proposal)
+                        {status
+                          ? getProposalCountdownText(proposal, status)
                           : '--'}
                       </Badge>
                     </Skeleton>

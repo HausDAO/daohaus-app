@@ -1,19 +1,27 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { useParams, useHistory } from 'react-router-dom';
 import { Flex, Box, Skeleton, Button, Avatar } from '@chakra-ui/react';
 import makeBlockie from 'ethereum-blockies-base64';
 import { useMetaData } from '../contexts/MetaDataContext';
-import { getCopy, themeImagePath } from '../utils/metadata';
+import { getTerm, themeImagePath } from '../utils/metadata';
 import BankTotal from './bankTotal';
 import TextBox from './TextBox';
 import ContentBox from './ContentBox';
+import { getActiveMembers } from '../utils/dao';
 
-const OverviewCard = ({ daoOverview, membersAmt, currentDaoTokens }) => {
+const OverviewCard = ({ daoOverview, members, currentDaoTokens }) => {
   const { daochain, daoid } = useParams();
   const { daoMetaData, customTerms } = useMetaData();
+  const [activeMembers, setActiveMembers] = useState(null);
   const totalShares = daoOverview?.totalShares;
   const totalLoot = daoOverview?.totalLoot;
   const history = useHistory();
+
+  useEffect(() => {
+    if (members?.length) {
+      setActiveMembers(getActiveMembers(members));
+    }
+  }, [members]);
 
   return (
     <Box>
@@ -46,12 +54,14 @@ const OverviewCard = ({ daoOverview, membersAmt, currentDaoTokens }) => {
 
         <Flex direction='row' w='100%' justify='space-between' mt={6}>
           <Box>
-            <TextBox size='xs'>{getCopy(customTerms, 'members')}</TextBox>
-            <Skeleton isLoaded={membersAmt}>
-              <TextBox size='lg' variant='value'>
-                {membersAmt || 0}
-              </TextBox>
-            </Skeleton>
+            <TextBox size='xs'>
+              Active {getTerm(customTerms, 'members')}
+            </TextBox>
+            {/* <Skeleton isLoaded={members}> */}
+            <TextBox size='lg' variant='value'>
+              {activeMembers?.length ? activeMembers.length : 0}
+            </TextBox>
+            {/* </Skeleton> */}
           </Box>
           <Box>
             <TextBox size='xs'>Shares</TextBox>
@@ -71,7 +81,7 @@ const OverviewCard = ({ daoOverview, membersAmt, currentDaoTokens }) => {
           </Box>
         </Flex>
         <Box mt={6}>
-          <TextBox size='sm'>{getCopy(customTerms, 'bank')}</TextBox>
+          <TextBox size='sm'>{getTerm(customTerms, 'bank')}</TextBox>
           <BankTotal tokenBalances={currentDaoTokens} />
         </Box>
         <Flex mt={6}>
@@ -81,13 +91,13 @@ const OverviewCard = ({ daoOverview, membersAmt, currentDaoTokens }) => {
             onClick={() => history.push(`/dao/${daochain}/${daoid}/bank`)}
             value='bank'
           >
-            View {getCopy(customTerms, 'bank')}
+            View {getTerm(customTerms, 'bank')}
           </Button>
           <Button
             onClick={() => history.push(`/dao/${daochain}/${daoid}/proposals`)}
             value='proposals'
           >
-            View {getCopy(customTerms, 'proposals')}
+            View {getTerm(customTerms, 'proposals')}
           </Button>
         </Flex>
       </ContentBox>

@@ -7,7 +7,8 @@ export const supportedChains = {
     network_id: 1,
     chain_id: '0x1',
     hub_sort_order: 1,
-    providers: ['walletconnect', 'portis', 'fortmatic'],
+    providers: ['walletconnect'],
+    // , 'portis', 'fortmatic'
     rpc_url: `https://${process.env.REACT_APP_RPC_URI}.eth.rpc.rivet.cloud/`,
     abi_api_url:
       'https://api.etherscan.io/api?module=contract&action=getabi&address=',
@@ -32,7 +33,8 @@ export const supportedChains = {
     network_id: 4,
     chain_id: '0x4',
     hub_sort_order: 6,
-    providers: ['walletconnect', 'portis', 'fortmatic'],
+    providers: ['walletconnect'],
+    // , 'portis', 'fortmatic'
     rpc_url: `https://${process.env.REACT_APP_RPC_URI}.rinkeby.rpc.rivet.cloud/`,
     abi_api_url:
       'https://api-rinkeby.etherscan.io/api?module=contract&action=getabi&address=',
@@ -57,7 +59,8 @@ export const supportedChains = {
     network_id: 42,
     chain_id: '0x2a',
     hub_sort_order: 5,
-    providers: ['walletconnect', 'portis', 'fortmatic'],
+    providers: ['walletconnect'],
+    // , 'portis', 'fortmatic'
     rpc_url: `https://kovan.infura.io/v3/${process.env.REACT_APP_INFURA_PROJECT_ID}`,
     abi_api_url:
       'https://api-kovan.etherscan.io/api?module=contract&action=getabi&address=',
@@ -82,7 +85,8 @@ export const supportedChains = {
     network_id: 100,
     chain_id: '0x64',
     hub_sort_order: 2,
-    providers: ['walletconnect', 'portis'],
+    providers: ['walletconnect'],
+    // , 'portis',
     rpc_url: 'https://dai.poa.network',
     abi_api_url:
       'https://blockscout.com/poa/xdai/api?module=contract&action=getabi&address=',

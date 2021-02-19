@@ -8,7 +8,7 @@ import ProposalsList from '../components/proposalList';
 import MainViewLayout from '../components/mainViewLayout';
 import { daoConnectedAndSameChain } from '../utils/general';
 import { useInjectedProvider } from '../contexts/InjectedProviderContext';
-import { getCopy } from '../utils/metadata';
+import { getTerm } from '../utils/metadata';
 import { RiAddFill } from 'react-icons/ri';
 
 const Proposals = React.memo(function Proposals({
@@ -29,7 +29,7 @@ const Proposals = React.memo(function Proposals({
       to={`/dao/${daochain}/${daoid}/proposals/new`}
       rightIcon={<RiAddFill />}
     >
-      New {getCopy(customTerms, 'proposal')}
+      New {getTerm(customTerms, 'proposal')}
     </Button>
   );
   return (
@@ -45,7 +45,7 @@ const Proposals = React.memo(function Proposals({
           pr={[0, null, null, null, 6]}
           pb={6}
         >
-          <ProposalsList proposals={proposals} />
+          <ProposalsList proposals={proposals} customTerms={customTerms} />
         </Box>
 
         <Box w={['100%', null, null, null, '40%']}>

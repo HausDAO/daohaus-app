@@ -3,6 +3,8 @@ import { Switch, Route, useRouteMatch, useParams } from 'react-router-dom';
 
 import { useDao } from '../contexts/DaoContext';
 import { useDaoMember } from '../contexts/DaoMemberContext';
+import { useToken } from '../contexts/TokenContext';
+import { useMetaData } from '../contexts/MetaDataContext';
 import Bank from '../pages/Bank';
 import Members from '../pages/Members';
 import Overview from '../pages/Overview';
@@ -15,12 +17,11 @@ import Allies from '../pages/Allies';
 import Boosts from '../pages/Boosts';
 import Minion from '../pages/Minion';
 import ThemeBuilder from '../pages/ThemeBuilder';
-import { useToken } from '../contexts/TokenContext';
 import Layout from '../components/layout';
-import { useMetaData } from '../contexts/MetaDataContext';
 import Meta from '../pages/Meta';
 import Notifications from '../pages/Notifications';
 import DiscourseSettings from '../pages/DiscourseSettings';
+import ProposalTypes from '../pages/ProposalTypes';
 
 const DaoRouter = () => {
   const { path } = useRouteMatch();
@@ -121,6 +122,9 @@ const DaoRouter = () => {
             isMember={isMember}
             refetchMetaData={refetchMetaData}
           />
+        </Route>
+        <Route exact path={`${path}/settings/proposals`}>
+          <ProposalTypes daoMetaData={daoMetaData} />
         </Route>
         <Route
           exact

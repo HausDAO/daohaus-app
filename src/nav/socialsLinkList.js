@@ -8,12 +8,14 @@ import {
 import SocialLink from './socialLink';
 
 const SocialsLinkList = ({ dao, view, toggleNav }) => {
-  const socialLinks = dao?.links
-    ? generateDaoSocials(dao?.links)
+  // console.log(dao.daoMetaData);
+  const socialLinks = dao?.daoMetaData?.links
+    ? generateDaoSocials(dao?.daoMetaData?.links)
     : defaultSocialLinks;
   const discourseLinkData = dao?.daoMetaData?.boosts?.discourse?.active
     ? generateDiscourseLink(dao.daoMetaData.boosts.discourse.metadata)
     : null;
+  // console.log(getTerm(dao.customTerms, 'proposals'));
 
   return (
     <>

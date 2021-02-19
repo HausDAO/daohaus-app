@@ -32,7 +32,7 @@ import {
 import { useCustomTheme } from '../contexts/CustomThemeContext';
 import ContentBox from './ContentBox';
 import TextBox from './TextBox';
-import { getCopy } from '../utils/metadata';
+import { getTerm } from '../utils/metadata';
 import BankTotal from './bankTotal';
 
 const bankChartTimeframes = [
@@ -144,7 +144,7 @@ const BankChart = ({ overview, customTerms, currentDaoTokens }) => {
           <ContentBox minH='360px'>
             <Flex wrap='wrap' align='center' position='relative'>
               <Box position='absolute' top='0px' left='10px'>
-                <TextBox size='sm'>{getCopy(customTerms, 'bank')}</TextBox>
+                <TextBox size='sm'>{getTerm(customTerms, 'bank')}</TextBox>
                 <BankTotal tokenBalances={currentDaoTokens} />
               </Box>
 

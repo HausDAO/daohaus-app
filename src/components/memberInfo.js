@@ -3,7 +3,7 @@ import { Link, useParams } from 'react-router-dom';
 import { Flex } from '@chakra-ui/react';
 
 import { useInjectedProvider } from '../contexts/InjectedProviderContext';
-import { getCopy } from '../utils/metadata';
+import { getTerm } from '../utils/metadata';
 import MemberInfoGuts from './memberInfoGuts';
 import TextBox from './TextBox';
 import ContentBox from './ContentBox';
@@ -17,7 +17,7 @@ const MemberInfoCard = ({ member, customTerms }) => {
       {member && (
         <>
           <Flex justify='space-between'>
-            <TextBox size='sm'>{getCopy(customTerms, 'member')} Info</TextBox>
+            <TextBox size='sm'>{getTerm(customTerms, 'member')} Info</TextBox>
             {member && (
               <TextBox
                 as={Link}

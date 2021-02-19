@@ -17,7 +17,7 @@ const Settings = ({ overview, daoMember, daoMetaData, customTerms }) => {
   const { address, injectedChain } = useInjectedProvider();
 
   return (
-    <MainViewLayout header='Settings' isDao={true}>
+    <MainViewLayout header='Settings' isDao={true} customTerms={customTerms}>
       <Flex wrap='wrap'>
         <Box
           w={['100%', null, null, null, '50%']}
