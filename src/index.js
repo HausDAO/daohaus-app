@@ -10,6 +10,7 @@ import { CustomThemeProvider } from './contexts/CustomThemeContext';
 
 window.onunload = function() {
   sessionStorage.clear();
+  localStorage.clear();
 };
 
 ReactDOM.render(

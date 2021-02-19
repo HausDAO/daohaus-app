@@ -54,11 +54,13 @@ const addNetworkProviders = (chainData) => {
 export const getProviderOptions = () =>
   addNetworkProviders(attemptInjectedChainData());
 
-export const deriveChainId = (provider) => {
+export const deriveChainId = async (provider) => {
   if (provider.isMetaMask) {
     return provider.chainId;
   } else if (provider.wc) {
     return chainByNetworkId(provider.chainId).chain_id;
+  } else if (provider.isPortis) {
+    return chainByNetworkId(provider._portis.config.network.chainId).chain_id;
   }
 };
 
@@ -67,5 +69,7 @@ export const deriveSelectedAddress = (provider) => {
     return provider.selectedAddress;
   } else if (provider.wc) {
     return provider.accounts[0];
+  } else if (provider.isPortis) {
+    return provider._portis._selectedAddress;
   }
 };
