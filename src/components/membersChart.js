@@ -23,6 +23,7 @@ import TextBox from './TextBox';
 import { fetchBankValues } from '../utils/theGraph';
 import { numberWithCommas } from '../utils/general';
 import { getTerm } from '../utils/metadata';
+import { getActiveMembers } from '../utils/dao';
 
 const MembersChart = ({ overview, daoMetaData, daoMembers }) => {
   const { daochain, daoid } = useParams();
@@ -34,6 +35,13 @@ const MembersChart = ({ overview, daoMetaData, daoMembers }) => {
   const [preppedData, setPreppedData] = useState([]);
   const [chartData, setChartData] = useState([]);
   const [chartDimension, setChartDimension] = useState('currentShares');
+  const [activeMembers, setActiveMembers] = useState(null);
+
+  useEffect(() => {
+    if (daoMembers?.length) {
+      setActiveMembers(getActiveMembers(daoMembers));
+    }
+  }, [daoMembers]);
 
   useEffect(() => {
     const fetchBalances = async () => {
@@ -110,9 +118,11 @@ const MembersChart = ({ overview, daoMetaData, daoMembers }) => {
         <ContentBox minH='360px'>
           <Flex justify='space-between'>
             <Box>
-              <TextBox size='xs'>{getTerm(daoMetaData, 'members')}</TextBox>
+              <TextBox size='xs'>
+                Active {getTerm(daoMetaData, 'members')}
+              </TextBox>
               <TextBox variant='value' size='lg'>
-                {daoMembers?.length}
+                {activeMembers?.length ? activeMembers.length : 0}
               </TextBox>
             </Box>
             <Box>

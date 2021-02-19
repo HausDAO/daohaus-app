@@ -74,9 +74,14 @@ const ActivityCard = ({ activity, displayAvatar, isLink = true }) => {
   }, [activity.memberAddress]);
 
   const name = handleName(activity, profile);
-  // console.log(activity.daoData.network);
   const chain = daochain || chainByName(activity.daoData.network)?.chain_id;
   const daoAddress = daoid || activity.daoData.contractAddress;
+
+  console.log(
+    activity?.activityData
+      ? `/dao/${chain}/${daoAddress}/profile/${activity.activityData.memberAddress}`
+      : '',
+  );
 
   return (
     <ContentBox mt={3}>

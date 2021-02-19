@@ -61,3 +61,11 @@ export const filterDAOsByName = (network, searchTerm) => ({
     dao.meta.name.toLowerCase().includes(searchTerm.toLowerCase()),
   ),
 });
+
+export const getActiveMembers = (members) => {
+  const active = members.filter(
+    (member) => +member.shares > 0 || +member.loot > 0,
+  );
+  console.log(active);
+  return active;
+};
