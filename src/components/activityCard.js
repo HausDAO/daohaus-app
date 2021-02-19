@@ -25,7 +25,6 @@ const handleAvatar = (activity, profile) => {
     const url = profile?.image[0].contentUrl;
     return (
       <Avatar
-        // adds key to prevent react from skipping this render
         key={`profile${activity.memberAddress}`}
         name={profile?.name}
         size='sm'
@@ -74,14 +73,18 @@ const ActivityCard = ({ activity, displayAvatar, isLink = true }) => {
   }, [activity.memberAddress]);
 
   const name = handleName(activity, profile);
-  const chain = daochain || chainByName(activity.daoData.network)?.chain_id;
-  const daoAddress = daoid || activity.daoData.contractAddress;
+  const chain = daochain || chainByName(activity?.daoData?.network)?.chain_id;
+  const daoAddress = daoid || activity?.daoData?.contractAddress;
 
-  console.log(
-    activity?.activityData
-      ? `/dao/${chain}/${daoAddress}/profile/${activity.activityData.memberAddress}`
-      : '',
-  );
+  const profileLink =
+    chain && daoAddress && activity?.memberAddress
+      ? `/dao/${chain}/${daoAddress}/profile/${activity.memberAddress}`
+      : null;
+
+  const proposalLink =
+    chain && daoAddress && activity?.proposalId
+      ? `/dao/${chain}/${daoAddress}/proposals/${activity.proposalId}`
+      : null;
 
   return (
     <ContentBox mt={3}>
@@ -99,14 +102,8 @@ const ActivityCard = ({ activity, displayAvatar, isLink = true }) => {
         <Flex direction='row' justifyContent='space-between'>
           <Flex direction='column'>
             {activity?.title &&
-              (isLink && activity?.proposalId ? (
-                <RouterLink
-                  to={
-                    activity?.activityData?.type !== 'rage'
-                      ? `/dao/${chain}/${daoAddress}/proposals/${activity.proposalId}`
-                      : '#'
-                  }
-                >
+              (isLink && proposalLink ? (
+                <RouterLink to={proposalLink}>
                   <Heading as='h4' size='sm'>
                     {name} {activity.title}
                   </Heading>
@@ -165,16 +162,13 @@ const ActivityCard = ({ activity, displayAvatar, isLink = true }) => {
               </Text>
             </Flex>
           </Flex>
-          <Box
-            as={RouterLink}
-            to={
-              activity?.activityData
-                ? `/dao/${chain}/${daoAddress}/profile/${activity.activityData.memberAddress}`
-                : ''
-            }
-          >
-            {displayAvatar && handleAvatar(activity, profile)}
-          </Box>
+          {isLink && profileLink ? (
+            <Box as={RouterLink} to={profileLink}>
+              {displayAvatar && handleAvatar(activity, profile)}
+            </Box>
+          ) : (
+            <Box>{displayAvatar && handleAvatar(activity, profile)}</Box>
+          )}
         </Flex>
       </Skeleton>
     </ContentBox>
