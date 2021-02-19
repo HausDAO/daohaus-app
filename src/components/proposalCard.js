@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { utils } from 'web3';
 import { Flex, Box, Skeleton, Badge, Icon } from '@chakra-ui/react';
@@ -15,7 +15,6 @@ import {
 import ContentBox from './ContentBox';
 import { useInjectedProvider } from '../contexts/InjectedProviderContext';
 import { getCustomProposalTerm } from '../utils/metadata';
-import { useEffect } from 'react/cjs/react.development';
 
 const formatStatus = (status) => {
   return status.split(/(?=[A-Z])/).join(' ');
