@@ -7,7 +7,6 @@ let daoMetaData;
 export const setPageState = (type, val) => {
   if (type === 'injectedProvider') {
     injectedProvider = val;
-    console.log('set InjectedProvider in store', injectedProvider);
   }
 };
 

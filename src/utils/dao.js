@@ -62,10 +62,5 @@ export const filterDAOsByName = (network, searchTerm) => ({
   ),
 });
 
-export const getActiveMembers = (members) => {
-  const active = members.filter(
-    (member) => +member.shares > 0 || +member.loot > 0,
-  );
-  console.log(active);
-  return active;
-};
+export const getActiveMembers = (members) =>
+  members.filter((member) => +member.shares > 0 || +member.loot > 0);

@@ -115,7 +115,11 @@ export const getTerm = (customTerms, word) => {
 };
 
 export const getCustomProposalTerm = (customTerms, proposalTerm) => {
-  if (customTerms?.proposal && customTerms?.proposal !== 'Proposal') {
+  if (
+    customTerms?.proposal &&
+    customTerms?.proposal !== 'Proposal' &&
+    proposalTerm
+  ) {
     return proposalTerm.replace('Proposal', customTerms.proposal);
   } else {
     return 'Proposal';

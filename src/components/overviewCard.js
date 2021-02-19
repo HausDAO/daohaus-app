@@ -21,7 +21,6 @@ const OverviewCard = ({ daoOverview, members, currentDaoTokens }) => {
     if (members?.length) {
       setActiveMembers(getActiveMembers(members));
     }
-    console.log(members);
   }, [members]);
 
   return (
