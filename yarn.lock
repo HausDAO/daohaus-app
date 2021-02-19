@@ -2627,16 +2627,6 @@
   resolved "https://registry.yarnpkg.com/@popperjs/core/-/core-2.4.4.tgz#11d5db19bd178936ec89cd84519c4de439574398"
   integrity sha512-1oO6+dN5kdIA3sKPZhRGJTfGVP4SWV6KqlMOwry4J3HfyD68sl/3KmG7DeYUzvN+RbhXDnv/D8vNNB8168tAMg==
 
-"@portis/web3@^3.0.3":
-  version "3.0.3"
-  resolved "https://registry.yarnpkg.com/@portis/web3/-/web3-3.0.3.tgz#ab56bb1b9e827c59d56409571ef04bf7d058f5b3"
-  integrity sha512-OT8p3lx3p4LwCvxnHNtiwPs/eoMBJFILpVhbj/9CkA3oa/HMKsxiZQbYH6yaj0b5ZZx80zgLYVVorHT7klKv0g==
-  dependencies:
-    ethereumjs-util "5.2.0"
-    penpal "3.0.7"
-    pocket-js-core "0.0.3"
-    web3-provider-engine "16.0.0"
-
 "@reach/alert@0.11.0":
   version "0.11.0"
   resolved "https://registry.yarnpkg.com/@reach/alert/-/alert-0.11.0.tgz#34bea3e9e286fa54a86adaa1a3730faff9b2bda3"
@@ -4060,14 +4050,6 @@ axe-core@^4.0.2:
   resolved "https://registry.yarnpkg.com/axe-core/-/axe-core-4.1.1.tgz#70a7855888e287f7add66002211a423937063eaf"
   integrity sha512-5Kgy8Cz6LPC9DJcNb3yjAXTu3XihQgEdnIg50c//zOC/MyLP0Clg+Y8Sh9ZjjnvBrDZU4DgXS9C3T9r4/scGZQ==
 
-axios@^0.18.0:
-  version "0.18.1"
-  resolved "https://registry.yarnpkg.com/axios/-/axios-0.18.1.tgz#ff3f0de2e7b5d180e757ad98000f1081b87bcea3"
-  integrity sha512-0BfJq4NSfQXd+SkFdrvFbG7addhYSBA2mQwISr46pD6E5iqkWg02RAs8vyTT/j0RTnoYmeXauBuSv1qKwR179g==
-  dependencies:
-    follow-redirects "1.5.10"
-    is-buffer "^2.0.2"
-
 axobject-query@^2.2.0:
   version "2.2.0"
   resolved "https://registry.yarnpkg.com/axobject-query/-/axobject-query-2.2.0.tgz#943d47e10c0b704aa42275e20edf3722648989be"
@@ -4336,19 +4318,12 @@ binary-extensions@^2.0.0:
   resolved "https://registry.yarnpkg.com/binary-extensions/-/binary-extensions-2.1.0.tgz#30fa40c9e7fe07dbc895678cd287024dea241dd9"
   integrity sha512-1Yj8h9Q+QDF5FzhMs/c9+6UntbD5MkRfRwac8DoEm9ZfUBZ7tZ55YcGVAzEe4bXsdQHEk+s9S5wsOKVdZrw0tQ==
 
-bindings@^1.2.1, bindings@^1.5.0:
+bindings@^1.5.0:
   version "1.5.0"
   resolved "https://registry.yarnpkg.com/bindings/-/bindings-1.5.0.tgz#10353c9e945334bc0511a6d90b38fbc7c9c504df"
   integrity sha512-p2q/t/mhvuOj/UeLlV6566GD/guowlr0hHxClI0W9m7MWYkL1F0hLo+0Aexs9HSPCtR1SXQ0TD3MMKrXZajbiQ==
   dependencies:
     file-uri-to-path "1.0.0"
-
-bip66@^1.1.5:
-  version "1.1.5"
-  resolved "https://registry.yarnpkg.com/bip66/-/bip66-1.1.5.tgz#01fa8748785ca70955d5011217d1b3139969ca22"
-  integrity sha1-AfqHSHhcpwlV1QESF9GzE5lpyiI=
-  dependencies:
-    safe-buffer "^5.0.1"
 
 blakejs@^1.1.0:
   version "1.1.0"
@@ -4454,7 +4429,7 @@ browser-process-hrtime@^1.0.0:
   resolved "https://registry.yarnpkg.com/browser-process-hrtime/-/browser-process-hrtime-1.0.0.tgz#3c9b4b7d782c8121e56f10106d84c0d0ffc94626"
   integrity sha512-9o5UecI3GhkpM6DrXr69PblIuWxPKk9Y0jHBRhdocZ2y7YECBFCsHm79Pr3OyR2AvjhDkabFJaDJMYRazHgsow==
 
-browserify-aes@^1.0.0, browserify-aes@^1.0.4, browserify-aes@^1.0.6, browserify-aes@^1.2.0:
+browserify-aes@^1.0.0, browserify-aes@^1.0.4, browserify-aes@^1.2.0:
   version "1.2.0"
   resolved "https://registry.yarnpkg.com/browserify-aes/-/browserify-aes-1.2.0.tgz#326734642f403dabc3003209853bb70ad428ef48"
   integrity sha512-+7CHXqGuspUn/Sl5aO7Ea0xWGAtETPXNSAjHo48JfLdPWcMng33Xe4znFvQweqc/uzk5zSOI3H52CYnjCfb5hA==
@@ -5814,13 +5789,6 @@ debug@2.6.9, debug@^2.2.0, debug@^2.3.3, debug@^2.6.0, debug@^2.6.9:
   dependencies:
     ms "2.0.0"
 
-debug@=3.1.0:
-  version "3.1.0"
-  resolved "https://registry.yarnpkg.com/debug/-/debug-3.1.0.tgz#5bb5a0672628b64149566ba16819e61518c67261"
-  integrity sha512-OX8XqP7/1a9cqkxYw2yXss15f26NKWBpDXQd0/uK/KPqdQhxbPa994hnzjcE2VqQpDslf55723cKPUOGSmMY3g==
-  dependencies:
-    ms "2.0.0"
-
 debug@^3.1.1, debug@^3.2.5:
   version "3.2.7"
   resolved "https://registry.yarnpkg.com/debug/-/debug-3.2.7.tgz#72580b7e9145fb39b6676f9c5e5fb100b934179a"
@@ -6176,15 +6144,6 @@ dotenv@8.2.0:
   version "8.2.0"
   resolved "https://registry.yarnpkg.com/dotenv/-/dotenv-8.2.0.tgz#97e619259ada750eea3e4ea3e26bceea5424b16a"
   integrity sha512-8sJ78ElpbDJBHNeBzUbUVLsqKdccaa/BXF1uPTw3GrvQTBgrQrtObr2mUrE38vzYd8cEv+m/JBfDLioYcfXoaw==
-
-drbg.js@^1.0.1:
-  version "1.0.1"
-  resolved "https://registry.yarnpkg.com/drbg.js/-/drbg.js-1.0.1.tgz#3e36b6c42b37043823cdbc332d58f31e2445480b"
-  integrity sha1-Pja2xCs3BDgjzbwzLVjzHiRFSAs=
-  dependencies:
-    browserify-aes "^1.0.6"
-    create-hash "^1.1.2"
-    create-hmac "^1.1.4"
 
 duplexer3@^0.1.4:
   version "0.1.4"
@@ -6799,7 +6758,7 @@ eth-json-rpc-filters@^4.2.1:
     lodash.flatmap "^4.5.0"
     safe-event-emitter "^1.0.1"
 
-eth-json-rpc-infura@5.1.0, eth-json-rpc-infura@^5.1.0:
+eth-json-rpc-infura@^5.1.0:
   version "5.1.0"
   resolved "https://registry.yarnpkg.com/eth-json-rpc-infura/-/eth-json-rpc-infura-5.1.0.tgz#e6da7dc47402ce64c54e7018170d89433c4e8fb6"
   integrity sha512-THzLye3PHUSGn1EXMhg6WTLW9uim7LQZKeKaeYsS9+wOBcamRiCQVGHa6D2/4P0oS0vSaxsBnU/J6qvn0MPdow==
@@ -6973,19 +6932,6 @@ ethereumjs-tx@^2.1.1:
   dependencies:
     ethereumjs-common "^1.5.0"
     ethereumjs-util "^6.0.0"
-
-ethereumjs-util@5.2.0:
-  version "5.2.0"
-  resolved "https://registry.yarnpkg.com/ethereumjs-util/-/ethereumjs-util-5.2.0.tgz#3e0c0d1741471acf1036052d048623dee54ad642"
-  integrity sha512-CJAKdI0wgMbQFLlLRtZKGcy/L6pzVRgelIZqRqNbuVFM3K9VEnyfbcvz0ncWMRNCe4kaHWjwRYQcYMucmwsnWA==
-  dependencies:
-    bn.js "^4.11.0"
-    create-hash "^1.1.2"
-    ethjs-util "^0.1.3"
-    keccak "^1.0.2"
-    rlp "^2.0.0"
-    safe-buffer "^5.1.1"
-    secp256k1 "^3.0.1"
 
 ethereumjs-util@^5.0.0, ethereumjs-util@^5.1.1, ethereumjs-util@^5.1.2, ethereumjs-util@^5.1.5:
   version "5.2.1"
@@ -7471,13 +7417,6 @@ focus-lock@^0.7.0:
   resolved "https://registry.yarnpkg.com/focus-lock/-/focus-lock-0.7.0.tgz#b2bfb0ca7beacc8710a1ff74275fe0dc60a1d88a"
   integrity sha512-LI7v2mH02R55SekHYdv9pRHR9RajVNyIJ2N5IEkWbg7FT5ZmJ9Hw4mWxHeEUcd+dJo0QmzztHvDvWcc7prVFsw==
 
-follow-redirects@1.5.10:
-  version "1.5.10"
-  resolved "https://registry.yarnpkg.com/follow-redirects/-/follow-redirects-1.5.10.tgz#7b7a9f9aea2fdff36786a94ff643ed07f4ff5e2a"
-  integrity sha512-0V5l4Cizzvqt5D44aTXbFZz+FtyXV1vrDN6qrelxtfYQKW0KO0W2T/hkE8xvGa/540LkZlkaUjO4ailYTFtHVQ==
-  dependencies:
-    debug "=3.1.0"
-
 follow-redirects@^1.0.0:
   version "1.13.0"
   resolved "https://registry.yarnpkg.com/follow-redirects/-/follow-redirects-1.13.0.tgz#b42e8d93a2a7eea5ed88633676d6597bc8e384db"
@@ -7519,11 +7458,6 @@ form-data@~2.3.2:
     asynckit "^0.4.0"
     combined-stream "^1.0.6"
     mime-types "^2.1.12"
-
-fortmatic@^2.2.1:
-  version "2.2.1"
-  resolved "https://registry.yarnpkg.com/fortmatic/-/fortmatic-2.2.1.tgz#91ce9159c1fe539bd87e483125fca5c27a410a86"
-  integrity sha512-PEfPoErJSErU2A8iYD2Mab2c8eJK5dCdCr1jR/8yc49aEAlyQ4UXnZXyeO6MU5zBGkDAZmg9brnRSPzc+8MKPQ==
 
 forwarded@~0.1.2:
   version "0.1.2"
@@ -8474,11 +8408,6 @@ is-buffer@^1.1.5:
   version "1.1.6"
   resolved "https://registry.yarnpkg.com/is-buffer/-/is-buffer-1.1.6.tgz#efaa2ea9daa0d7ab2ea13a97b2b8ad51fefbe8be"
   integrity sha512-NcdALwpXkTm5Zvvbk7owOUSvVvBKDgKP5/ewfXEznmQFfs4ZRmanOeKBTjRVjka3QFoN6XJ+9F3USqfHqTaU5w==
-
-is-buffer@^2.0.2:
-  version "2.0.5"
-  resolved "https://registry.yarnpkg.com/is-buffer/-/is-buffer-2.0.5.tgz#ebc252e400d22ff8d77fa09888821a24a658c191"
-  integrity sha512-i2R6zNFDwgEHJyQUtJEk0XFi1i0dPFn/oqjK3/vPCcDeJvW5NQ83V8QbicfF1SupOaB0h8ntgBC2YiE7dfyctQ==
 
 is-callable@^1.1.4, is-callable@^1.2.2:
   version "1.2.2"
@@ -9490,16 +9419,6 @@ jsprim@^1.2.2:
     array-includes "^3.1.1"
     object.assign "^4.1.1"
 
-keccak@^1.0.2:
-  version "1.4.0"
-  resolved "https://registry.yarnpkg.com/keccak/-/keccak-1.4.0.tgz#572f8a6dbee8e7b3aa421550f9e6408ca2186f80"
-  integrity sha512-eZVaCpblK5formjPjeTBik7TAg+pqnDrMHIffSvi9Lh7PQgM1+hSzakUeZFCk9DVVG0dacZJuaz2ntwlzZUIBw==
-  dependencies:
-    bindings "^1.2.1"
-    inherits "^2.0.3"
-    nan "^2.2.1"
-    safe-buffer "^5.1.0"
-
 keccak@^3.0.0:
   version "3.0.1"
   resolved "https://registry.yarnpkg.com/keccak/-/keccak-3.0.1.tgz#ae30a0e94dbe43414f741375cff6d64c8bea0bff"
@@ -10275,7 +10194,7 @@ multihashes@^0.4.15, multihashes@~0.4.15:
     multibase "^0.7.0"
     varint "^5.0.0"
 
-nan@^2.12.1, nan@^2.14.0, nan@^2.2.1:
+nan@^2.12.1:
   version "2.14.2"
   resolved "https://registry.yarnpkg.com/nan/-/nan-2.14.2.tgz#f5376400695168f4cc694ac9393d0c9585eeea19"
   integrity sha512-M2ufzIiINKCuDfBSAUr1vWQ+vuVcA9kqx8JJUsbQi6yf1uGRyb7HfpdfUr5qLXf3B/t8dPvcjhKMmlfnP47EzQ==
@@ -10992,11 +10911,6 @@ pbkdf2@^3.0.17, pbkdf2@^3.0.3:
     safe-buffer "^5.0.1"
     sha.js "^2.4.8"
 
-penpal@3.0.7:
-  version "3.0.7"
-  resolved "https://registry.yarnpkg.com/penpal/-/penpal-3.0.7.tgz#d252711ed93b30f1d867eb82342785b3a95f5f75"
-  integrity sha512-WSXiq5HnEvzvY05SHhaXcsviUmCvh4Ze8AiIZzvmdzaaYAAx4rx8c6Xq6+MaVDG/Nfve3VmGD8HyRP3CkPvPbQ==
-
 performance-now@^0.2.0:
   version "0.2.0"
   resolved "https://registry.yarnpkg.com/performance-now/-/performance-now-0.2.0.tgz#33ef30c5c77d4ea21c5a53869d91b56d8f2555e5"
@@ -11090,13 +11004,6 @@ pnp-webpack-plugin@1.6.4:
   integrity sha512-7Wjy+9E3WwLOEL30D+m8TSTF7qJJUJLONBnwQp0518siuMxUQUbgZwssaFX+QKlZkjHZcw/IpZCt/H0srrntSg==
   dependencies:
     ts-pnp "^1.1.6"
-
-pocket-js-core@0.0.3:
-  version "0.0.3"
-  resolved "https://registry.yarnpkg.com/pocket-js-core/-/pocket-js-core-0.0.3.tgz#1ab278b9a6a5775e2bdc3c2c2e218057774061e4"
-  integrity sha512-OUTEvEVutdjLT6YyldvAlSebpBueUUWg2XKxGNt5u3QqrmLpBOOBmdDnGMNJ+lEwXtko+JqgwFq+HTi4g1QDVg==
-  dependencies:
-    axios "^0.18.0"
 
 polished@^4.0.5:
   version "4.0.5"
@@ -12224,13 +12131,6 @@ react-fast-compare@3.2.0, react-fast-compare@^3.0.1:
   resolved "https://registry.yarnpkg.com/react-fast-compare/-/react-fast-compare-3.2.0.tgz#641a9da81b6a6320f270e89724fb45a0b39e43bb"
   integrity sha512-rtGImPZ0YyLrscKI9xTpV8psd6I8VAtjKCzQDlzyDvqJA8XOW78TXYQwNRNd8g8JZnDu8q9Fu/1v4HPAVwVdHA==
 
-react-feather@^2.0.9:
-  version "2.0.9"
-  resolved "https://registry.yarnpkg.com/react-feather/-/react-feather-2.0.9.tgz#6e42072130d2fa9a09d4476b0e61b0ed17814480"
-  integrity sha512-yMfCGRkZdXwIs23Zw/zIWCJO3m3tlaUvtHiXlW+3FH7cIT6fiK1iJ7RJWugXq7Fso8ZaQyUm92/GOOHXvkiVUw==
-  dependencies:
-    prop-types "^15.7.2"
-
 react-focus-lock@2.4.1:
   version "2.4.1"
   resolved "https://registry.yarnpkg.com/react-focus-lock/-/react-focus-lock-2.4.1.tgz#e842cc93da736b5c5d331799012544295cbcee4f"
@@ -13074,20 +12974,6 @@ scrypt-js@3.0.1, scrypt-js@^3.0.0, scrypt-js@^3.0.1:
   resolved "https://registry.yarnpkg.com/scrypt-js/-/scrypt-js-3.0.1.tgz#d314a57c2aef69d1ad98a138a21fe9eafa9ee312"
   integrity sha512-cdwTTnqPu0Hyvf5in5asVdZocVDTNRmR7XEcJuIzMjJeSHybHl7vpB66AzwTaIg6CLSbtjcxc8fqcySfnTkccA==
 
-secp256k1@^3.0.1:
-  version "3.8.0"
-  resolved "https://registry.yarnpkg.com/secp256k1/-/secp256k1-3.8.0.tgz#28f59f4b01dbee9575f56a47034b7d2e3b3b352d"
-  integrity sha512-k5ke5avRZbtl9Tqx/SA7CbY3NF6Ro+Sj9cZxezFzuBlLDmyqPiL8hJJ+EmzD8Ig4LUDByHJ3/iPOVoRixs/hmw==
-  dependencies:
-    bindings "^1.5.0"
-    bip66 "^1.1.5"
-    bn.js "^4.11.8"
-    create-hash "^1.2.0"
-    drbg.js "^1.0.1"
-    elliptic "^6.5.2"
-    nan "^2.14.0"
-    safe-buffer "^5.1.2"
-
 secp256k1@^4.0.1:
   version "4.0.2"
   resolved "https://registry.yarnpkg.com/secp256k1/-/secp256k1-4.0.2.tgz#15dd57d0f0b9fdb54ac1fa1694f40e5e9a54f4a1"
@@ -13807,7 +13693,7 @@ style-value-types@^4.0.1:
     hey-listen "^1.0.8"
     tslib "^1.10.0"
 
-styled-components@^5.1.1, styled-components@^5.2.1:
+styled-components@^5.1.1:
   version "5.2.1"
   resolved "https://registry.yarnpkg.com/styled-components/-/styled-components-5.2.1.tgz#6ed7fad2dc233825f64c719ffbdedd84ad79101a"
   integrity sha512-sBdgLWrCFTKtmZm/9x7jkIabjFNVzCUeKfoQsM6R3saImkUnjx0QYdLwJHBjY9ifEcmjDamJDVfknWm1yxZPxQ==
@@ -14897,34 +14783,6 @@ web3-net@1.3.1:
     web3-core "1.3.1"
     web3-core-method "1.3.1"
     web3-utils "1.3.1"
-
-web3-provider-engine@16.0.0:
-  version "16.0.0"
-  resolved "https://registry.yarnpkg.com/web3-provider-engine/-/web3-provider-engine-16.0.0.tgz#4664c1b7eef93ca93503c9b4391fef7c323af9f6"
-  integrity sha512-mFE1YgaxbN42mD2LltZlpgslkghBamCPR+rJuE7KRxo+hVtC4LdC3leKBOVZvSn4GHJpruGz55ShhkjYGu8Ilg==
-  dependencies:
-    async "^2.5.0"
-    backoff "^2.5.0"
-    clone "^2.0.0"
-    cross-fetch "^2.1.0"
-    eth-block-tracker "^4.4.2"
-    eth-json-rpc-filters "^4.2.1"
-    eth-json-rpc-infura "5.1.0"
-    eth-json-rpc-middleware "^6.0.0"
-    eth-rpc-errors "^3.0.0"
-    eth-sig-util "^1.4.2"
-    ethereumjs-block "^1.2.2"
-    ethereumjs-tx "^1.2.0"
-    ethereumjs-util "^5.1.5"
-    ethereumjs-vm "^2.3.4"
-    json-stable-stringify "^1.0.1"
-    promise-to-callback "^1.0.0"
-    readable-stream "^2.2.9"
-    request "^2.85.0"
-    semaphore "^1.0.3"
-    ws "^5.1.1"
-    xhr "^2.2.0"
-    xtend "^4.0.1"
 
 web3-provider-engine@16.0.1:
   version "16.0.1"

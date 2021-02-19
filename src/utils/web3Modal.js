@@ -1,6 +1,4 @@
 import WalletConnectProvider from '@walletconnect/web3-provider';
-import Fortmatic from 'fortmatic';
-import Portis from '@portis/web3';
 
 import { chainByID, chainByNetworkId } from './chain';
 
@@ -32,36 +30,37 @@ const addNetworkProviders = (chainData) => {
       },
     };
   }
-  if (providersToAdd.includes('portis')) {
-    allProviders.portis = {
-      package: Portis,
-      options: {
-        id: process.env.REACT_APP_PORTIS_ID || '',
-      },
-    };
-  }
-  if (providersToAdd.includes('fortmatic')) {
-    allProviders.fortmatic = {
-      package: Fortmatic, // required
-      options: {
-        key: process.env.REACT_APP_FORTMATIC_KEY || '', // required
-      },
-    };
-  }
+  // if (providersToAdd.includes('portis')) {
+  //   allProviders.portis = {
+  //     package: Portis,
+  //     options: {
+  //       id: process.env.REACT_APP_PORTIS_ID || '',
+  //     },
+  //   };
+  // }
+  // if (providersToAdd.includes('fortmatic')) {
+  //   allProviders.fortmatic = {
+  //     package: Fortmatic, // required
+  //     options: {
+  //       key: process.env.REACT_APP_FORTMATIC_KEY || '', // required
+  //     },
+  //   };
+  // }
   return allProviders;
 };
 
 export const getProviderOptions = () =>
   addNetworkProviders(attemptInjectedChainData());
 
-export const deriveChainId = async (provider) => {
+export const deriveChainId = (provider) => {
   if (provider.isMetaMask) {
     return provider.chainId;
   } else if (provider.wc) {
     return chainByNetworkId(provider.chainId).chain_id;
-  } else if (provider.isPortis) {
-    return chainByNetworkId(provider._portis.config.network.chainId).chain_id;
   }
+  // else if (provider.isPortis) {
+  //   return chainByNetworkId(provider._portis.config.network.chainId).chain_id;
+  // }
 };
 
 export const deriveSelectedAddress = (provider) => {
@@ -69,7 +68,8 @@ export const deriveSelectedAddress = (provider) => {
     return provider.selectedAddress;
   } else if (provider.wc) {
     return provider.accounts[0];
-  } else if (provider.isPortis) {
-    return provider._portis._selectedAddress;
   }
+  // else if (provider.isPortis) {
+  //   return provider._portis._selectedAddress;
+  // }
 };

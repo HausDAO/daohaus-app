@@ -53,8 +53,7 @@ export const InjectedProvider = ({ children }) => {
     });
 
     const provider = await web3Modal.connect();
-    console.log(provider);
-    provider.selectedAddress = await deriveSelectedAddress(provider);
+    provider.selectedAddress = deriveSelectedAddress(provider);
     const chainId = deriveChainId(provider);
 
     const chain = {
