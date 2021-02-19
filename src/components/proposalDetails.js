@@ -19,15 +19,16 @@ import TextBox from '../components/TextBox';
 import ContentBox from '../components/ContentBox';
 import AddressAvatar from '../components/addressAvatar';
 import ProposalMinionCard from '../components/proposalMinionCard';
-
 import {
   getProposalCountdownText,
   getProposalDetailStatus,
   memberVote,
 } from '../utils/proposalUtils';
 import { numberWithCommas } from '../utils/general';
+import { getCustomProposalTerm } from '../utils/metadata';
 import { useInjectedProvider } from '../contexts/InjectedProviderContext';
 import DiscourseProposalTopic from './discourseProposalTopic';
+import { useMetaData } from '../contexts/MetaDataContext';
 
 const urlify = (text) => {
   var urlRegex = /(https?:\/\/[^\s]+)/g;
@@ -47,6 +48,7 @@ const hasImage = (string) => {
 
 const ProposalDetails = ({ proposal, daoMember }) => {
   const { address } = useInjectedProvider();
+  const { customTerms } = useMetaData();
 
   return (
     <Box pt={6}>
@@ -55,7 +57,7 @@ const ProposalDetails = ({ proposal, daoMember }) => {
           <Box>
             <Flex justify='space-between' wrap={['wrap', null, null, 'nowrap']}>
               <TextBox size='xs' mb={[3, null, null, 0]}>
-                {proposal?.proposalType}
+                {getCustomProposalTerm(customTerms, proposal?.proposalType)}
               </TextBox>
 
               <Box fontSize={['sm', null, null, 'md']}>

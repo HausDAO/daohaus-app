@@ -31,7 +31,10 @@ const ThemePreview = ({ previewValues }) => {
       <Flex
         w='100%'
         h='900px'
-        bgColor={rgba(previewValues.bg500, 0.5)}
+        bgColor={rgba(
+          previewValues.bg500,
+          parseFloat(previewValues.bgOverlayOpacity || 0),
+        )}
         zIndex={2}
       >
         <Flex
