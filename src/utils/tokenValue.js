@@ -50,23 +50,25 @@ export const initTokenData = async (graphTokenData) => {
     return map;
   }, {});
 
-  return graphTokenData.map((tokenObj) => {
-    const { token, tokenBalance } = tokenObj;
+  return graphTokenData
+    .map((tokenObj) => {
+      const { token, tokenBalance } = tokenObj;
 
-    const usdVal = tokenData[token.tokenAddress]?.price || 0;
-    const symbol = tokenData[token.tokenAddress]?.symbol || null;
-    const logoUri = uniswapDataMap[symbol] || null;
-    const tokenDataObj = {
-      ...omit('token', tokenObj),
-      ...token,
-      symbol,
-      usd: usdVal,
-      totalUSD: calcTotalUSD(token.decimals, tokenBalance, usdVal),
-      logoUri,
-    };
+      const usdVal = tokenData[token.tokenAddress]?.price || 0;
+      const symbol = tokenData[token.tokenAddress]?.symbol || null;
+      const logoUri = uniswapDataMap[symbol] || null;
+      const tokenDataObj = {
+        ...omit('token', tokenObj),
+        ...token,
+        symbol,
+        usd: usdVal,
+        totalUSD: calcTotalUSD(token.decimals, tokenBalance, usdVal),
+        logoUri,
+      };
 
-    return tokenDataObj;
-  });
+      return tokenDataObj;
+    })
+    .filter((t) => t.symbol !== null);
 };
 
 export const tallyUSDs = (tokenObj) => {
@@ -98,8 +100,8 @@ export const addContractVals = (tokens, chainID) => {
         return {
           ...token,
           contractBalances: {
-            token: +tokenBalance,
-            babe: +babeBalance,
+            token: +tokenBalance || 0,
+            babe: +babeBalance || 0,
           },
         };
       } catch (error) {
