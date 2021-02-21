@@ -91,7 +91,7 @@ const DaoRouter = () => {
         </Route>
 
         <Route exact path={`${path}/settings/boosts`}>
-          <Boosts customTerms={customTerms} />
+          <Boosts customTerms={customTerms} daoMember={daoMember} />
         </Route>
         <Route exact path={`${path}/settings/notifications`}>
           <Notifications
@@ -124,7 +124,10 @@ const DaoRouter = () => {
           />
         </Route>
         <Route exact path={`${path}/settings/proposals`}>
-          <ProposalTypes daoMetaData={daoMetaData} />
+          <ProposalTypes
+            daoMetaData={daoMetaData}
+            refetchMetaData={refetchMetaData}
+          />
         </Route>
         <Route
           exact
@@ -140,10 +143,18 @@ const DaoRouter = () => {
           <Allies />
         </Route>
         <Route exact path={`${path}/proposals/new/:proposalType`}>
-          <NewProposal customTerms={customTerms} daoMetaData={daoMetaData} />
+          <NewProposal
+            customTerms={customTerms}
+            daoMetaData={daoMetaData}
+            daoOverview={daoOverview}
+          />
         </Route>
         <Route exact path={`${path}/proposals/new`}>
-          <NewProposal customTerms={customTerms} daoMetaData={daoMetaData} />
+          <NewProposal
+            customTerms={customTerms}
+            daoMetaData={daoMetaData}
+            daoOverview={daoOverview}
+          />
         </Route>
         <Route exact path={`${path}/proposals/:propid`}>
           <Proposal

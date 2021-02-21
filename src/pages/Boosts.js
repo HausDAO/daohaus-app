@@ -14,17 +14,15 @@ import { useInjectedProvider } from '../contexts/InjectedProviderContext';
 import { daoConnectedAndSameChain } from '../utils/general';
 import { getTerm } from '../utils/metadata';
 
-const Boosts = ({ customTerms }) => {
+const Boosts = ({ customTerms, daoMember }) => {
   const { daoMetaData } = useMetaData();
   const { daochain, daoid } = useParams();
   const { setGenericModal } = useOverlay();
   const { address, injectedChain } = useInjectedProvider();
 
-  const canInteract = daoConnectedAndSameChain(
-    address,
-    injectedChain?.chainId,
-    daochain,
-  );
+  const canInteract =
+    daoConnectedAndSameChain(address, injectedChain?.chainId, daochain) &&
+    +daoMember?.shares > 0;
 
   const renderBoostCard = (boost, i) => {
     const boostData = daoMetaData.boosts && daoMetaData.boosts[boost.key];
@@ -47,9 +45,11 @@ const Boosts = ({ customTerms }) => {
           {boost.name}
         </Box>
         <Box textAlign='center'>{boost.description}</Box>
-        <Box textAlign='center' fontFamily='heading'>
-          Cost
-        </Box>
+        {boost.price === '0' ? (
+          <Box textAlign='center' fontFamily='heading'>
+            Cost
+          </Box>
+        ) : null}
 
         <Box textAlign='center'>
           {boost.price === '0' ? (

@@ -131,7 +131,12 @@ const TributeInput = ({ register, setValue, getValues, setError }) => {
 
   const checkUnlocked = async (token, amount) => {
     // console.log('check', token, amount);
-    if (amount === '' || !token || typeof +amount !== 'number') {
+    if (
+      amount === '' ||
+      !token ||
+      typeof +amount !== 'number' ||
+      +amount === 0
+    ) {
       setUnlocked(true);
       return;
     }
