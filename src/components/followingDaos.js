@@ -1,24 +1,24 @@
 import React from 'react';
-import { Box, Flex, Icon } from '@chakra-ui/react';
+import { Box, Flex, Icon, Image } from '@chakra-ui/react';
 import { RiLoginBoxLine } from 'react-icons/ri';
 import { Link as RouterLink } from 'react-router-dom';
 import ContentBox from '../components/ContentBox';
 import TextBox from '../components/TextBox';
-// import MetaChill from '../assets/meta_chill.png';
-// import FedPapers from '../assets/fedpapers-brand.png';
+import MetaChill from '../assets/img/metacartel__avatar.jpg';
+import LexDAO from '../assets/img/lex__avatar.png';
 
 const followingDaos = [
   {
-    // img: MetaChill,
+    img: MetaChill,
     name: 'MetaCartel',
     tags: ['grants'],
     link: '/dao/0x1/0xee629a192374caf2a72cf1695c485c5c89611ef2',
   },
   {
-    // img: FedPapers,
-    name: 'Federalist Papers',
+    img: LexDAO,
+    name: 'LexDao',
     tags: ['club'],
-    link: '/dao/0x64/0xb4abc512610411682108513fd17c90e46c39d82e',
+    link: '/dao/0x64/0x58234d4bf7a83693dc0815d97189ed7d188f6981',
   },
 ];
 
@@ -32,7 +32,14 @@ const Following = () => {
         {followingDaos.map((dao, i) => (
           <Flex key={dao.name} align='center' justify='space-between' py={4}>
             <Flex align='center'>
-              {/* <Image src={dao.img} alt={dao.name} w='50px' h='50px' mr={4} /> */}
+              <Image
+                src={dao.img}
+                alt={dao.name}
+                w='50px'
+                h='50px'
+                mr={4}
+                borderRadius='50px'
+              />
               <Box>
                 <Box fontSize='lg' fontFamily='heading' fontWeight={700} pb={2}>
                   {dao.name}

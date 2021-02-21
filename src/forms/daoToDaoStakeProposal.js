@@ -9,28 +9,26 @@ import {
   Icon,
   Box,
 } from '@chakra-ui/react';
-import { utils } from 'web3';
+// import { utils } from 'web3';
 import { RiErrorWarningLine } from 'react-icons/ri';
 
-import {
-  useDao,
-  useTxProcessor,
-  useUser,
-  useModals,
-} from '../../../contexts/PokemolContext';
-import TextBox from '../../Shared/TextBox';
+// import {
+//   useDao,
+//   useTxProcessor,
+//   useUser,
+//   useModals,
+// } from '../../../contexts/PokemolContext';
+import TextBox from '../components/TextBox';
 
-import TributeInput from '../Shared/TributeInput';
-import DetailsFields from '../Shared/DetailFields';
-import { detailsToJSON } from '../../../utils/proposal-helper';
+import TributeInput from './tributeInput';
+import DetailsFields from './detailFields';
+import { detailsToJSON } from '../utils/general';
+import { useOverlay } from '../contexts/OverlayContext';
 
 const StakeProposalForm = () => {
   const [loading, setLoading] = useState(false);
-  const [user] = useUser();
-  const [dao] = useDao();
-  const [txProcessor, updateTxProcessor] = useTxProcessor();
   const [currentError, setCurrentError] = useState(null);
-  const { closeModals } = useModals();
+  const { setD2dProposalModal } = useOverlay();
 
   const { handleSubmit, errors, register, setValue, getValues } = useForm();
 
@@ -46,50 +44,36 @@ const StakeProposalForm = () => {
     }
   }, [errors]);
 
-  const txCallBack = (txHash, details) => {
-    console.log('txCallBack', txProcessor);
-    if (txProcessor && txHash) {
-      txProcessor.setTx(txHash, user.username, details);
-      txProcessor.forceUpdate = true;
-
-      updateTxProcessor({ ...txProcessor });
-      // close model here
-      closeModals();
-    }
-    if (!txHash) {
-      console.log('error: ', details);
-      setLoading(false);
-    }
-  };
-
   const onSubmit = async (values) => {
     setLoading(true);
 
     const details = detailsToJSON(values);
-    try {
-      dao.daoService.moloch.submitProposal(
-        values.sharesRequested ? values.sharesRequested?.toString() : '0',
-        values.lootRequested ? values.lootRequested?.toString() : '0',
-        values.tributeOffered
-          ? utils.toWei(values.tributeOffered?.toString())
-          : '0',
-        values.tributeToken || dao.graphData.depositToken.tokenAddress,
-        values.paymentRequested
-          ? utils.toWei(values.paymentRequested?.toString())
-          : '0',
-        values.paymentToken || dao.graphData.depositToken.tokenAddress,
-        details,
-        values?.applicantHidden?.startsWith('0x')
-          ? values.applicantHidden
-          : values?.applicant
-          ? values.applicant
-          : user.username,
-        txCallBack,
-      );
-    } catch (err) {
-      setLoading(false);
-      console.log('error: ', err);
-    }
+    console.log(details);
+    // try {
+    //   dao.daoService.moloch.submitProposal(
+    //     values.sharesRequested ? values.sharesRequested?.toString() : '0',
+    //     values.lootRequested ? values.lootRequested?.toString() : '0',
+    //     values.tributeOffered
+    //       ? utils.toWei(values.tributeOffered?.toString())
+    //       : '0',
+    //     values.tributeToken || dao.graphData.depositToken.tokenAddress,
+    //     values.paymentRequested
+    //       ? utils.toWei(values.paymentRequested?.toString())
+    //       : '0',
+    //     values.paymentToken || dao.graphData.depositToken.tokenAddress,
+    //     details,
+    //     values?.applicantHidden?.startsWith('0x')
+    //       ? values.applicantHidden
+    //       : values?.applicant
+    //       ? values.applicant
+    //       : user.username,
+    //     txCallBack,
+    //   );
+    // } catch (err) {
+    //   setLoading(false);
+    //   console.log('error: ', err);
+    // }
+    setD2dProposalModal((prevState) => !prevState);
   };
 
   return (
