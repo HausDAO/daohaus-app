@@ -50,6 +50,7 @@ export const boostList = [
     price: '0',
     comingSoon: true,
     modalName: 'minionSafeLaunch',
+    dependency: 'vanillaMinions',
     successRoute: '',
   },
   {
@@ -139,7 +140,38 @@ export const proposalTypesContent = [
     key: 'lootGrab',
     label: 'Loot Grab',
     options: [
-      { id: 'ratio', type: 'text', default: 1, validation: 'greater than 0' },
+      {
+        id: 'ratio',
+        label: 'Loot to Tribute Ratio',
+        type: 'text',
+        default: 1,
+        validation: (val) => +val >= 0 && +val <= 1,
+        validationText: 'Must be between 0 and 1',
+      },
     ],
+  },
+];
+
+export const superpowerLinks = [
+  { boostKey: 'customTheme', label: 'Custom Theme', link: 'settings/theme' },
+  {
+    boostKey: 'notificationsLevel1',
+    label: 'Notifications',
+    link: 'settings/notifications',
+  },
+  {
+    boostKey: 'discourse',
+    label: 'Discourse Forum',
+    link: 'settings/discourse',
+  },
+  {
+    boostKey: 'proposalTypes',
+    label: 'Proposal Settings',
+    link: 'settings/proposals',
+  },
+  {
+    boostKey: 'minionSafe',
+    label: 'Minion Safe',
+    link: 'settings/minion-safe',
   },
 ];

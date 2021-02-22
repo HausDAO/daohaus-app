@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { utils } from 'web3';
 import { Flex, Box, Skeleton, Badge, Icon } from '@chakra-ui/react';
@@ -15,7 +15,6 @@ import {
 import ContentBox from './ContentBox';
 import { useInjectedProvider } from '../contexts/InjectedProviderContext';
 import { getCustomProposalTerm } from '../utils/metadata';
-import { useEffect } from 'react/cjs/react.development';
 
 const formatStatus = (status) => {
   return status.split(/(?=[A-Z])/).join(' ');
@@ -67,7 +66,7 @@ const ProposalCard = ({ proposal, customTerms }) => {
           </Box>
         </Flex>
         <Flex justify='space-between' mt={3}>
-          <Box>
+          <Box maxW='70%'>
             <Skeleton isLoaded={proposal}>
               <Box fontWeight={700} fontSize='lg' fontFamily='heading'>
                 {proposal?.proposalType === 'Minion Proposal'

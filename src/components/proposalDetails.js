@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { utils } from 'web3';
 import {
   Flex,
@@ -30,7 +30,6 @@ import { getCustomProposalTerm } from '../utils/metadata';
 import { useInjectedProvider } from '../contexts/InjectedProviderContext';
 import DiscourseProposalTopic from './discourseProposalTopic';
 import { useMetaData } from '../contexts/MetaDataContext';
-import { useEffect } from 'react/cjs/react.development';
 
 const urlify = (text) => {
   var urlRegex = /(https?:\/\/[^\s]+)/g;

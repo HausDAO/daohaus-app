@@ -10,6 +10,7 @@ import { useInjectedProvider } from '../contexts/InjectedProviderContext';
 import { boostPost } from '../utils/metadata';
 import { useMetaData } from '../contexts/MetaDataContext';
 import DiscourseLaunch from './discourseLaunch';
+import NewMinionSafe from './newMinionSafe';
 
 const BoostLaunchWrapper = ({ boost }) => {
   const [loading, setLoading] = useState(false);
@@ -30,6 +31,9 @@ const BoostLaunchWrapper = ({ boost }) => {
       }
       case 'vanillaMinion': {
         return <NewMinionForm />;
+      }
+      case 'minionSafe': {
+        return <NewMinionSafe />;
       }
       case 'discourse': {
         return (

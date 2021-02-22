@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useParams, Link as RouterLink } from 'react-router-dom';
 import {
   Flex,
@@ -22,7 +22,6 @@ import ContentBox from '../components/ContentBox';
 import TextBox from '../components/TextBox';
 import { truncateAddr } from '../utils/general';
 import { FaCopy } from 'react-icons/fa';
-import { useEffect } from 'react/cjs/react.development';
 // import { TokenService } from '../../utils/token-service';
 // import ProposalFormModal from '../Modal/ProposalFormModal';
 // import GenericModal from '../Modal/GenericModal';

@@ -24,6 +24,8 @@ export const MinionService = ({ web3, minion, chainID }) => {
         return action;
       };
     }
+    // proposeAction args: [ target contract, ether value, function call data, details ]
+    // executeAction args: [ proposal id ]
     if (service === 'proposeAction' || service === 'executeAction') {
       return async ({ args, address, poll, onTxHash }) => {
         console.log(args);

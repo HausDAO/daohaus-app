@@ -1,26 +1,17 @@
 import React, { useState, useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { Button, FormControl, Flex, Input, Icon, Box } from '@chakra-ui/react';
-import { utils } from 'web3';
 import { RiErrorWarningLine } from 'react-icons/ri';
 
-import {
-  useDao,
-  useTxProcessor,
-  useUser,
-  useModals,
-} from '../../../contexts/PokemolContext';
-import TextBox from '../../Shared/TextBox';
-import { detailsToJSON } from '../../../utils/proposal-helper';
-import RageInput from '../Shared/RageInput';
+import { useOverlay } from '../contexts/OverlayContext';
+import TextBox from '../components/TextBox';
+import { detailsToJSON } from '../utils/general';
+import RageInput from './rageInput';
 
-const StakeProposalForm = () => {
+const RageQuitProposalForm = () => {
   const [loading, setLoading] = useState(false);
-  const [user] = useUser();
-  const [dao] = useDao();
-  const [txProcessor, updateTxProcessor] = useTxProcessor();
   const [currentError, setCurrentError] = useState(null);
-  const { closeModals } = useModals();
+  const { setD2dProposalModal } = useOverlay();
 
   const { handleSubmit, errors, register, setValue } = useForm();
 
@@ -36,51 +27,39 @@ const StakeProposalForm = () => {
     }
   }, [errors]);
 
-  const txCallBack = (txHash, details) => {
-    console.log('txCallBack', txProcessor);
-    if (txProcessor && txHash) {
-      txProcessor.setTx(txHash, user.username, details);
-      txProcessor.forceUpdate = true;
-
-      updateTxProcessor({ ...txProcessor });
-      // close model here
-      closeModals();
-    }
-    if (!txHash) {
-      console.log('error: ', details);
-      setLoading(false);
-    }
-  };
-
   const onSubmit = async (values) => {
     setLoading(true);
 
     const details = detailsToJSON(values);
-    try {
-      dao.daoService.moloch.submitProposal(
-        values.sharesRequested ? values.sharesRequested?.toString() : '0',
-        values.lootRequested ? values.lootRequested?.toString() : '0',
-        values.tributeOffered
-          ? utils.toWei(values.tributeOffered?.toString())
-          : '0',
-        values.tributeToken || dao.graphData.depositToken.tokenAddress,
-        values.paymentRequested
-          ? utils.toWei(values.paymentRequested?.toString())
-          : '0',
-        values.paymentToken || dao.graphData.depositToken.tokenAddress,
-        details,
-        values?.applicantHidden?.startsWith('0x')
-          ? values.applicantHidden
-          : values?.applicant
-          ? values.applicant
-          : user.username,
-        txCallBack,
-      );
-    } catch (err) {
-      setLoading(false);
-      console.log('error: ', err);
-    }
+    console.log(details);
+    // try {
+    //   dao.daoService.moloch.submitProposal(
+    //     values.sharesRequested ? values.sharesRequested?.toString() : '0',
+    //     values.lootRequested ? values.lootRequested?.toString() : '0',
+    //     values.tributeOffered
+    //       ? utils.toWei(values.tributeOffered?.toString())
+    //       : '0',
+    //     values.tributeToken || dao.graphData.depositToken.tokenAddress,
+    //     values.paymentRequested
+    //       ? utils.toWei(values.paymentRequested?.toString())
+    //       : '0',
+    //     values.paymentToken || dao.graphData.depositToken.tokenAddress,
+    //     details,
+    //     values?.applicantHidden?.startsWith('0x')
+    //       ? values.applicantHidden
+    //       : values?.applicant
+    //       ? values.applicant
+    //       : user.username,
+    //     txCallBack,
+    //   );
+    // } catch (err) {
+    //   setLoading(false);
+    //   console.log('error: ', err);
+    // }
+    setD2dProposalModal((prevState) => !prevState);
   };
+
+  const handleChange = () => {};
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
@@ -110,6 +89,7 @@ const StakeProposalForm = () => {
             name='hausToReceive'
             placeholder='0'
             value={10}
+            onChange={handleChange}
             color='white'
             focusBorderColor='secondary.500'
           />
@@ -153,4 +133,4 @@ const StakeProposalForm = () => {
   );
 };
 
-export default StakeProposalForm;
+export default RageQuitProposalForm;

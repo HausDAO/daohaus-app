@@ -47,6 +47,8 @@ const RageQuitForm = ({ overview, daoMember }) => {
           chainID: daochain,
         })('canRagequit')(daoMember?.highestIndexYesVote?.proposalIndex);
         setCanRage(_canRage);
+      } else {
+        setCanRage(true);
       }
     };
     getCanRage();
