@@ -4,7 +4,7 @@ import { Link as RouterLink, useParams } from 'react-router-dom';
 
 import ContentBox from '../components/ContentBox';
 import TextBox from '../components/TextBox';
-import { useMetaData } from '../contexts/MetaDataContext';
+// import { useMetaData } from '../contexts/MetaDataContext';
 import { boostList } from '../content/boost-content';
 import GenericModal from '../modals/genericModal';
 import { useOverlay } from '../contexts/OverlayContext';
@@ -14,8 +14,8 @@ import { useInjectedProvider } from '../contexts/InjectedProviderContext';
 import { daoConnectedAndSameChain } from '../utils/general';
 import { getTerm } from '../utils/metadata';
 
-const Boosts = ({ customTerms, daoMember }) => {
-  const { daoMetaData } = useMetaData();
+const Boosts = ({ customTerms, daoMember, daoOverview, daoMetaData }) => {
+  // const { daoMetaData } = useMetaData();
   const { daochain, daoid } = useParams();
   const { setGenericModal } = useOverlay();
   const { address, injectedChain } = useInjectedProvider();
@@ -23,6 +23,19 @@ const Boosts = ({ customTerms, daoMember }) => {
   const canInteract =
     daoConnectedAndSameChain(address, injectedChain?.chainId, daochain) &&
     +daoMember?.shares > 0;
+
+  const hasDependentBoost = (boostKey) => {
+    if (boostKey === 'vanillaMinions') {
+      const minions = daoOverview.minions.length;
+      console.log('Minion', daoMetaData.boosts, minions);
+      return minions;
+    }
+    const boostData = daoMetaData.boosts[boostKey];
+    console.log(daoMetaData.boosts, daoOverview);
+    return boostData && boostData.active;
+  };
+
+  console.log(daoMetaData);
 
   const renderBoostCard = (boost, i) => {
     const boostData = daoMetaData.boosts && daoMetaData.boosts[boost.key];
@@ -74,13 +87,29 @@ const Boosts = ({ customTerms, daoMember }) => {
                 Settings
               </Button>
             ) : (
-              <Button
-                textTransform='uppercase'
-                onClick={() => setGenericModal({ [boost.key]: true })}
-                disabled={!canInteract}
-              >
-                Add This {getTerm(customTerms, 'boost')}
-              </Button>
+              <>
+                {boost.dependency && !hasDependentBoost(boost?.dependency) ? (
+                  <Button textTransform='uppercase' disabled={true}>
+                    Needs {boost.dependency}
+                  </Button>
+                ) : (
+                  <Button
+                    textTransform='uppercase'
+                    onClick={() => setGenericModal({ [boost.key]: true })}
+                    disabled={!canInteract}
+                  >
+                    Add This App
+                  </Button>
+                )}
+              </>
+
+              // <Button
+              //   textTransform='uppercase'
+              //   onClick={() => setGenericModal({ [boost.key]: true })}
+              //   disabled={!canInteract}
+              // >
+              //   Add This {getTerm(customTerms, 'boost')}
+              // </Button>
             )}
           </>
         )}

@@ -50,6 +50,7 @@ export const boostList = [
     price: '0',
     comingSoon: true,
     modalName: 'minionSafeLaunch',
+    dependency: 'vanillaMinions',
     successRoute: '',
   },
   {
@@ -167,5 +168,10 @@ export const superpowerLinks = [
     boostKey: 'proposalTypes',
     label: 'Proposal Settings',
     link: 'settings/proposals',
+  },
+  {
+    boostKey: 'minionSafe',
+    label: 'Minion Safe',
+    link: 'settings/minion-safe',
   },
 ];
