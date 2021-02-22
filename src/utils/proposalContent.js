@@ -1,15 +1,11 @@
-export const getFilterOptions = (isMember, actionNeededCount) => {
-  const options = [
-    {
-      name: 'Action Needed',
-      value: 'Action Needed',
-      type: 'main',
-    },
+export const defaultFilterOptions = {
+  main: [
     {
       name: 'All',
       value: 'All',
-      type: 'main',
     },
+  ],
+  'Proposal Type': [
     {
       name: 'Funding Proposals',
       value: 'Funding Proposal',
@@ -40,6 +36,8 @@ export const getFilterOptions = (isMember, actionNeededCount) => {
       value: 'Minion Proposal',
       type: 'proposalType',
     },
+  ],
+  'Proposal Status': [
     {
       name: 'Unsponsored',
       value: 'Unsponsored',
@@ -80,26 +78,35 @@ export const getFilterOptions = (isMember, actionNeededCount) => {
       value: 'Cancelled',
       type: 'status',
     },
-  ];
-
-  if (!isMember || !actionNeededCount) {
-    options.splice(0, 1);
-  }
-
-  return options;
+  ],
 };
+export const getMemberFilters = () => ({
+  ...defaultFilterOptions,
+  main: [
+    {
+      name: 'Action Needed',
+      value: 'Action Needed',
+    },
+    {
+      name: 'All',
+      value: 'All',
+    },
+  ],
+});
 
-export const sortOptions = [
-  {
-    name: 'Newest',
-    value: 'submissionDateDesc',
-  },
-  {
-    name: 'Oldest',
-    value: 'submissionDateAsc',
-  },
-  {
-    name: 'Most Votes',
-    value: 'voteCountDesc',
-  },
-];
+export const sortOptions = {
+  main: [
+    {
+      name: 'Newest',
+      value: 'submissionDateDesc',
+    },
+    {
+      name: 'Oldest',
+      value: 'submissionDateAsc',
+    },
+    {
+      name: 'Most Votes',
+      value: 'voteCountDesc',
+    },
+  ],
+};
