@@ -50,12 +50,9 @@ const GenericSelect = ({
         <MenuList bg='black'>
           {sections?.map((sectionName, index) => {
             return (
-              <>
+              <span key={sectionName}>
                 {index === 0 || <MenuDivider />}
-                <MenuGroup
-                  key={sectionName}
-                  title={sectionName !== 'main' && sectionName}
-                >
+                <MenuGroup title={sectionName !== 'main' && sectionName}>
                   {options?.[sectionName]?.map((option, index) => {
                     return (
                       <MenuItem
@@ -70,7 +67,7 @@ const GenericSelect = ({
                     );
                   })}
                 </MenuGroup>
-              </>
+              </span>
             );
           })}
         </MenuList>

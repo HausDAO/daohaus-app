@@ -1,10 +1,16 @@
+export const actionNeededFilter = {
+  name: 'Action Needed',
+  value: 'Action Needed',
+  type: 'Action Needed',
+};
+export const allFilter = {
+  name: 'All',
+  value: 'All',
+  type: 'All',
+};
+
 export const defaultFilterOptions = {
-  main: [
-    {
-      name: 'All',
-      value: 'All',
-    },
-  ],
+  main: [allFilter],
   'Proposal Type': [
     {
       name: 'Funding Proposals',
@@ -80,33 +86,16 @@ export const defaultFilterOptions = {
     },
   ],
 };
+
 export const getMemberFilters = () => ({
   ...defaultFilterOptions,
-  main: [
-    {
-      name: 'Action Needed',
-      value: 'Action Needed',
-    },
-    {
-      name: 'All',
-      value: 'All',
-    },
-  ],
+  main: [actionNeededFilter, allFilter],
 });
 
 export const sortOptions = {
   main: [
-    {
-      name: 'Newest',
-      value: 'submissionDateDesc',
-    },
-    {
-      name: 'Oldest',
-      value: 'submissionDateAsc',
-    },
-    {
-      name: 'Most Votes',
-      value: 'voteCountDesc',
-    },
+    { name: 'Newest', value: 'submissionDateDesc' },
+    { name: 'Oldest', value: 'submissionDateAsc' },
+    { name: 'Most Votes', value: 'voteCountDesc' },
   ],
 };

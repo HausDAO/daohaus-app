@@ -11,11 +11,17 @@ import {
   defaultFilterOptions,
   getMemberFilters,
   sortOptions,
+  actionNeededFilter,
+  allFilter,
 } from '../utils/proposalContent';
 import ContentBox from './ContentBox';
 import GenericSelect from './genericSelect';
 import { useEffect } from 'react/cjs/react.development';
-import { determineUnreadProposalList } from '../utils/proposalUtils';
+import {
+  determineUnreadProposalList,
+  handleListFilter,
+  handleListSort,
+} from '../utils/proposalUtils';
 import { useDaoMember } from '../contexts/DaoMemberContext';
 
 const ProposalsList = ({ proposals, customTerms }) => {
@@ -27,8 +33,8 @@ const ProposalsList = ({ proposals, customTerms }) => {
   const [isLoaded, setIsLoaded] = useState(false);
 
   const [filterOptions, setFilterOptions] = useState(defaultFilterOptions);
-  const [filter, setFilter] = useState('All');
-  const [sort, setSort] = useState('Newest');
+  const [filter, setFilter] = useState(null);
+  const [sort, setSort] = useState(null);
   const [unreadItems, setUnreadItems] = useState(null);
 
   useEffect(() => {
@@ -41,17 +47,16 @@ const ProposalsList = ({ proposals, customTerms }) => {
     const setActionNeeded = (unread) => {
       setFilterOptions(getMemberFilters());
       setUnreadItems(unread);
-      setListProposals(unread);
-      setFilter('Action Needed');
-      setSort('Oldest');
+      setFilter(actionNeededFilter);
+      setSort({ name: 'Oldest', value: 'submissionDateAsc' });
     };
     const setDisplayAll = () => {
       setFilterOptions(defaultFilterOptions);
       setUnreadItems(0);
-      setListProposals(proposals);
-      setFilter('All');
-      setSort('Newest');
+      setFilter(allFilter);
+      setSort({ name: 'Newest', value: 'submissionDateDesc' });
     };
+
     if (daoMember && +daoMember.shares > 0 && proposals?.length) {
       const unread = proposals.filter(
         (proposal) =>
@@ -68,22 +73,37 @@ const ProposalsList = ({ proposals, customTerms }) => {
     }
   }, [daoMember]);
 
+  useEffect(() => {
+    if (!proposals || !filter || !sort) return;
+    setListProposals(
+      handleListSort(handleListFilter(proposals, filter, daoMember), sort),
+    );
+  }, [filter, sort, proposals, daoMember]);
+
   const handleFilter = (option) => {
-    if (option?.value && option?.type && option?.name) {
-      setListProposals(
-        proposals.filter((proposal) => proposal[option.type] === option.value),
+    if (!option?.value || !option?.type || !option?.name) {
+      console.error(
+        'Filter component did not update. Received incorrect data stucture',
       );
-      setFilter(option.name);
+      return;
     }
+    setFilter(option);
   };
+
   const handleSort = (option) => {
-    // if()
+    if (!option?.value || !option?.name) {
+      console.error(
+        'Sort component did not update. Received incorrect data stucture',
+      );
+      return;
+    }
+    setSort(option);
   };
   return (
     <>
       <Flex wrap='wrap'>
         <GenericSelect
-          currentOption={filter}
+          currentOption={filter?.name}
           options={filterOptions}
           handleSelect={handleFilter}
           label='Filter By'
@@ -92,7 +112,7 @@ const ProposalsList = ({ proposals, customTerms }) => {
         />
         <GenericSelect
           label='Sort By'
-          currentOption={sort}
+          currentOption={sort?.name}
           options={sortOptions}
           handleSelect={handleSort}
         />
@@ -136,48 +156,3 @@ const ProposalsList = ({ proposals, customTerms }) => {
 };
 
 export default ProposalsList;
-// useEffect(() => {
-//   const filterAndSortProposals = () => {
-//     let filteredProposals = proposals;
-//     if (sort && filter) {
-//       filteredProposals = proposals
-//         .filter((prop) => {
-//           if (filter.value === 'All') {
-//             return true;
-//           }
-//           if (filter.value === 'Action Needed') {
-//             const unread = determineUnreadProposalList(
-//               prop,
-//               daoMember.shares > 0,
-//               daoMember.memberAddress,
-//             );
-//             return unread.unread;
-//           } else {
-//             return prop[filter.type] === filter.value;
-//           }
-//         })
-//         .sort((a, b) => {
-//           if (sort.value === 'submissionDateAsc') {
-//             return +a.createdAt - +b.createdAt;
-//           } else if (sort.value === 'voteCountDesc') {
-//             return b.votes.length - a.votes.length;
-//           } else {
-//             return +b.createdAt - +a.createdAt;
-//           }
-//         });
-//       if (
-//         sort.value !== 'submissionDateAsc' &&
-//         sort.value !== 'submissionDateDesc'
-//       ) {
-//         filteredProposals = filteredProposals.sort((a, b) => {
-//           return a.status === sort.value ? -1 : 1;
-//         });
-//       }
-//     }
-//     setListProposals(filteredProposals);
-//   };
-//   if (proposals?.length) {
-//     filterAndSortProposals();
-//     setIsLoaded(true);
-//   }
-// }, [proposals, sort, filter]);
