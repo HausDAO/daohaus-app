@@ -30,10 +30,11 @@ const ProposalScopedModals = ({ proposalType }) => (
   </>
 );
 
-const NewProposal = ({ customTerms, daoMetaData }) => {
+const NewProposal = ({ customTerms, daoMetaData, daoOverview }) => {
   const params = useParams();
   const history = useHistory();
   const [proposalType, setProposalType] = useState(null);
+  const [activeProposalTypes, setActiveProposalTypes] = useState();
 
   const { setProposalModal } = useOverlay();
 
@@ -49,9 +50,23 @@ const NewProposal = ({ customTerms, daoMetaData }) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [params?.proposalType]);
 
-  // const dynamicHeader = proposalType
-  //   ? capitalize(proposalType) + 'Proposal'
-  //   : 'New Proposal';
+  useEffect(() => {
+    if (daoMetaData?.boosts?.proposalTypes?.active) {
+      proposalTypes(
+        customTerms,
+        daoMetaData?.boosts,
+        daoOverview?.minions?.length,
+      );
+    }
+    setActiveProposalTypes(
+      proposalTypes(
+        customTerms,
+        daoMetaData?.boosts,
+        daoOverview?.minions?.length,
+      ),
+    );
+  }, []);
+
   return (
     <MainViewLayout
       header={`New ${getTerm(customTerms, 'Proposal')}`}
@@ -72,57 +87,55 @@ const NewProposal = ({ customTerms, daoMetaData }) => {
             justify='space-around'
             align='center'
           >
-            {proposalTypes(customTerms, daoMetaData?.boosts, params.daoid)?.map(
-              (p) => {
-                return (
-                  p.show && (
+            {activeProposalTypes?.map((p) => {
+              return (
+                p.show && (
+                  <Box
+                    position='relative'
+                    as={Flex}
+                    key={p.name}
+                    display='flex'
+                    flexDirection='column'
+                    alignItems='center'
+                    justifyContent='center'
+                    _hover={{
+                      border: '1px solid #7579C5',
+                      cursor: 'pointer',
+                    }}
+                    w='160px'
+                    h='200px'
+                    p={2}
+                    m={1}
+                    onClick={() => {
+                      // if (p.comingSoon) {
+                      //   return;
+                      // }
+                      setProposalType(p.proposalType);
+                      setProposalModal(true);
+                    }}
+                  >
+                    {p.comingSoon && <ComingSoonOverlay />}
+                    <Image src={p.image} width='50px' mb={15} />
                     <Box
-                      position='relative'
-                      as={Flex}
-                      key={p.name}
-                      display='flex'
-                      flexDirection='column'
-                      alignItems='center'
-                      justifyContent='center'
-                      _hover={{
-                        border: '1px solid #7579C5',
-                        cursor: 'pointer',
-                      }}
-                      w='160px'
-                      h='200px'
-                      p={2}
-                      m={1}
-                      onClick={() => {
-                        // if (p.comingSoon) {
-                        //   return;
-                        // }
-                        setProposalType(p.proposalType);
-                        setProposalModal(true);
-                      }}
+                      fontSize='md'
+                      fontFamily='heading'
+                      fontWeight={700}
+                      color='white'
                     >
-                      {p.comingSoon && <ComingSoonOverlay />}
-                      <Image src={p.image} width='50px' mb={15} />
-                      <Box
-                        fontSize='md'
-                        fontFamily='heading'
-                        fontWeight={700}
-                        color='white'
-                      >
-                        {p.name}
-                      </Box>
-                      <Box
-                        fontSize='xs'
-                        fontFamily='heading'
-                        color='white'
-                        textAlign='center'
-                      >
-                        {p.subhead}
-                      </Box>
+                      {p.name}
                     </Box>
-                  )
-                );
-              },
-            )}
+                    <Box
+                      fontSize='xs'
+                      fontFamily='heading'
+                      color='white'
+                      textAlign='center'
+                    >
+                      {p.subhead}
+                    </Box>
+                  </Box>
+                )
+              );
+            })}
           </Flex>
         </ContentBox>
       </Box>

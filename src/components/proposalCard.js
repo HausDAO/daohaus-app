@@ -66,7 +66,7 @@ const ProposalCard = ({ proposal, customTerms }) => {
           </Box>
         </Flex>
         <Flex justify='space-between' mt={3}>
-          <Box>
+          <Box maxW='70%'>
             <Skeleton isLoaded={proposal}>
               <Box fontWeight={700} fontSize='lg' fontFamily='heading'>
                 {proposal?.proposalType === 'Minion Proposal'

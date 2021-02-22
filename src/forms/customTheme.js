@@ -153,7 +153,7 @@ const CustomThemeForm = ({ previewTheme, setPreviewTheme }) => {
                     _hover={{ cursor: 'pointer' }}
                   />
                   {pickerOpen === 'primary' ? (
-                    <Box position='absolute' zIndex={5}>
+                    <Box position='absolute' zIndex={5} color='black'>
                       <Box
                         position='fixed'
                         top='0px'
@@ -186,7 +186,7 @@ const CustomThemeForm = ({ previewTheme, setPreviewTheme }) => {
                     _hover={{ cursor: 'pointer' }}
                   />
                   {pickerOpen === 'secondary' ? (
-                    <Box position='absolute' zIndex={5}>
+                    <Box position='absolute' zIndex={5} color='black'>
                       <Box
                         position='fixed'
                         top='0px'
@@ -219,7 +219,7 @@ const CustomThemeForm = ({ previewTheme, setPreviewTheme }) => {
                     _hover={{ cursor: 'pointer' }}
                   />
                   {pickerOpen === 'background' ? (
-                    <Box position='absolute' zIndex={5}>
+                    <Box position='absolute' zIndex={5} color='black'>
                       <Box
                         position='fixed'
                         top='0px'

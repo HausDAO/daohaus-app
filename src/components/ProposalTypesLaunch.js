@@ -18,7 +18,7 @@ const ProposalTypesLaunch = ({ handleLaunch, loading, setLoading }) => {
       whitelist: { active: true },
       trade: { active: true },
       guildKick: { active: true },
-      lootGrab: { active: true, ratio: 1 },
+      lootGrab: { active: false, ratio: 1 },
     };
 
     const success = await handleLaunch(proposalTypes);

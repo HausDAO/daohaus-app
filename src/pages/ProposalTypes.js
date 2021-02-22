@@ -7,8 +7,12 @@ import {
   Button,
   Spinner,
   Input,
+  Icon,
+  Tooltip,
 } from '@chakra-ui/react';
-import { useParams } from 'react-router-dom';
+import { BiArrowBack } from 'react-icons/bi';
+import { RiQuestionLine } from 'react-icons/ri';
+import { useParams, Link as RouterLink } from 'react-router-dom';
 import { useInjectedProvider } from '../contexts/InjectedProviderContext';
 import { boostPost, getTerm } from '../utils/metadata';
 import { useOverlay } from '../contexts/OverlayContext';
@@ -20,12 +24,13 @@ import { useMetaData } from '../contexts/MetaDataContext';
 
 const ProposalTypes = ({ daoMetaData, refetchMetaData }) => {
   const { injectedProvider, injectedChain, address } = useInjectedProvider();
-  const { daoid } = useParams();
+  const { daochain, daoid } = useParams();
   const { customTerms } = useMetaData();
   const { setGenericModal, successToast, errorToast } = useOverlay();
   const [localMetadata, setLocalMetadata] = useState();
   const [hasChanges, setHasChanges] = useState();
   const [loading, setLoading] = useState();
+  const [error, setError] = useState(null);
 
   useEffect(() => {
     if (daoMetaData?.boosts?.proposalTypes?.active) {
@@ -75,54 +80,101 @@ const ProposalTypes = ({ daoMetaData, refetchMetaData }) => {
   };
 
   const handleChange = (proposal, e) => {
-    console.log(proposal.key);
-    console.log(e.target.checked);
-    const updateData = localMetadata;
-    updateData[proposal.key] = {
-      active: e.target.checked,
-      ...updateData[proposal.key],
+    const updateData = {
+      ...localMetadata,
+      [proposal.key]: {
+        ...localMetadata[proposal.key],
+        active: e.target.checked,
+      },
     };
-    console.log(updateData);
     setLocalMetadata(updateData);
     setHasChanges(true);
   };
 
+  const handleOptionChange = (key, option, e) => {
+    if (option?.validation(e.target.value)) {
+      setLocalMetadata({
+        ...localMetadata,
+        [key]: {
+          ...localMetadata[key],
+          [option.id]: e.target.value,
+        },
+      });
+      setHasChanges(true);
+      setError(null);
+    } else {
+      setError({ error: option.validationText });
+    }
+  };
+
   const renderProposalType = (proposal) => {
     const isActive = localMetadata[proposal.key].active === true;
-    console.log(isActive);
-    console.log(Object.keys(localMetadata[proposal.key]));
     return (
-      <ContentBox as={Flex} justify='space-between' key={proposal.label}>
-        <TextBox size='sm'>{proposal.label}</TextBox>
-        <Flex align='center'>
-          {proposal.comingSoon ? (
-            <TextBox size='xs'>Coming Soon</TextBox>
-          ) : (
-            <Switch
-              id={proposal.key}
-              colorScheme='blue'
-              value={localMetadata[proposal.key].active === true}
-              onChange={(e) => handleChange(proposal, e)}
-              disabled={loading}
-            />
-          )}
+      <ContentBox key={proposal.label}>
+        <Flex justify='space-between'>
+          <TextBox size='sm'>{proposal.label}</TextBox>
+          <Flex align='center'>
+            {proposal.comingSoon ? (
+              <TextBox size='xs'>Coming Soon</TextBox>
+            ) : (
+              <Switch
+                id={proposal.key}
+                colorScheme='blue'
+                isChecked={isActive}
+                onChange={(e) => handleChange(proposal, e)}
+                disabled={loading}
+              />
+            )}
+          </Flex>
         </Flex>
         {isActive &&
           proposal.options?.length &&
           proposal.options.map((option) => {
-            console.log(
-              Object.keys(localMetadata[proposal.key]).includes(option.id),
-            );
+            return localMetadata?.[proposal.key][option.id] ? (
+              <Flex
+                mt={3}
+                key={`${proposal.key}-${option.id}`}
+                justify='space-around'
+                align='center'
+                wrap='wrap'
+              >
+                <Flex align='center'>
+                  <TextBox size='xs'>{option.label}</TextBox>
+                  {option.validationText ? (
+                    <Tooltip
+                      hasArrow
+                      shouldWrapChildren
+                      placement='top'
+                      label={option.validationText}
+                    >
+                      <Icon ml={2} as={RiQuestionLine} color='whiteAlpha.800' />
+                    </Tooltip>
+                  ) : null}
+                </Flex>
 
-            Object.keys(localMetadata[proposal.key]).includes(option.id) && (
-              <Flex mt={3} key={`${proposal.key}-${option.id}`}>
-                <Input
-                  type={option.type}
-                  // id={option.id}
-                  defaultValue={localMetadata[proposal.key][option.id]}
-                />
+                <Box maxW='50%'>
+                  <Input
+                    type={option.type}
+                    id={option.id}
+                    defaultValue={
+                      localMetadata[proposal.key][option.id] ||
+                      option?.default ||
+                      0
+                    }
+                    border={error ? '1px solid red' : '1px solid white'}
+                    textAlign='right'
+                    onChange={(e) =>
+                      handleOptionChange(proposal.key, option, e)
+                    }
+                  />
+                  {error ? (
+                    <Box mt={2} fontSize='sm' color='red'>
+                      {option.validationText}
+                    </Box>
+                  ) : null}
+                </Box>
               </Flex>
-            );
+            ) : null;
           })}
       </ContentBox>
     );
@@ -138,8 +190,28 @@ const ProposalTypes = ({ daoMetaData, refetchMetaData }) => {
     >
       {localMetadata ? (
         <>
-          <Flex justify='space-around' mt='150px'>
-            <Box w='45%'>
+          <Flex justify='space-between' align='center' w='100%'>
+            <Flex
+              as={RouterLink}
+              to={`/dao/${daochain}/${daoid}/settings`}
+              align='center'
+            >
+              <Icon as={BiArrowBack} color='secondary.500' mr={2} />
+              Back
+            </Flex>
+            <Flex>
+              {loading ? <Spinner /> : null}
+              <Button
+                mx='2.5%'
+                disabled={!hasChanges || loading}
+                onClick={() => handleSave()}
+              >
+                Save Changes
+              </Button>
+            </Flex>
+          </Flex>
+          <Flex justify='space-around' mt='100px'>
+            <Box w={['90%', '80%', '60%', '45%']}>
               <Flex justify='space-between'>
                 <TextBox colorScheme='white' size='sm' mb={2}>
                   {getTerm(customTerms, 'proposal')} Types
@@ -152,16 +224,6 @@ const ProposalTypes = ({ daoMetaData, refetchMetaData }) => {
                 )}
               </Stack>
             </Box>
-          </Flex>
-          <Flex justify='flex-end' align='center' w='100%'>
-            {loading ? <Spinner /> : null}
-            <Button
-              mr='2.5%'
-              disabled={!hasChanges || loading}
-              onClick={() => handleSave()}
-            >
-              Save Changes
-            </Button>
           </Flex>
         </>
       ) : (

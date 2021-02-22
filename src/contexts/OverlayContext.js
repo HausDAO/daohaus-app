@@ -11,6 +11,8 @@ export const OverlayProvider = ({ children }) => {
   const [proposalModal, setProposalModal] = useState(false);
   const [txInfoModal, setTxInfoModal] = useState(false);
   const [imageUploadModal, setImageUploadModal] = useState(false);
+  const [d2dProposalTypeModal, setD2dProposalTypeModal] = useState(false);
+  const [d2dProposalModal, setD2dProposalModal] = useState(false);
   const [genericModal, setGenericModal] = useState({});
 
   const errorToast = (content) => {
@@ -62,6 +64,10 @@ export const OverlayProvider = ({ children }) => {
         setTxInfoModal,
         imageUploadModal,
         setImageUploadModal,
+        d2dProposalTypeModal,
+        setD2dProposalTypeModal,
+        d2dProposalModal,
+        setD2dProposalModal,
         genericModal,
         setGenericModal,
       }}
@@ -90,6 +96,10 @@ export const useOverlay = () => {
     setTxInfoModal,
     imageUploadModal,
     setImageUploadModal,
+    d2dProposalTypeModal,
+    setD2dProposalTypeModal,
+    d2dProposalModal,
+    setD2dProposalModal,
     genericModal,
     setGenericModal,
   } = useContext(OverlayContext);
@@ -109,6 +119,10 @@ export const useOverlay = () => {
     setTxInfoModal,
     imageUploadModal,
     setImageUploadModal,
+    d2dProposalTypeModal,
+    setD2dProposalTypeModal,
+    d2dProposalModal,
+    setD2dProposalModal,
     genericModal,
     setGenericModal,
   };
