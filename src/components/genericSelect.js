@@ -17,11 +17,11 @@ const GenericSelect = ({
   handleSelect,
   currentOption,
   label,
-  alertNumber,
-  showAlert,
+  count,
 }) => {
   const sections = Object.keys(options);
 
+  const showCount = count != null;
   return (
     <Flex
       direction='row'
@@ -44,7 +44,7 @@ const GenericSelect = ({
           color='secondary.500'
           _hover={{ color: 'secondary.400' }}
         >
-          {currentOption} {alertNumber && `(${alertNumber})`}
+          {currentOption} {showCount && `(${count})`}
           <Icon as={RiArrowDropDownFill} color='secondary.500' />
         </MenuButton>
         <MenuList bg='black'>
@@ -60,9 +60,7 @@ const GenericSelect = ({
                         value={option.value}
                         onClick={() => handleSelect(option)}
                       >
-                        {option.value === showAlert
-                          ? `${option.name} (${alertNumber})`
-                          : option.name}
+                        {option.name}
                       </MenuItem>
                     );
                   })}

@@ -120,7 +120,9 @@ const ActivityCard = ({ activity, displayAvatar, isLink = true }) => {
                   variant='solid'
                   colorScheme={activity.voteBadge === 1 ? 'green' : 'red'}
                 >
-                  {activity.voteBadge && activity.voteBadge ? 'Yes' : 'No'}
+                  {activity.voteBadge && activity.voteBadge === 1
+                    ? 'Yes'
+                    : 'No'}
                 </Badge>
               )}
               {activity?.statusBadge && (
