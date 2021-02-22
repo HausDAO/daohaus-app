@@ -1,12 +1,8 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Flex, Text, Spinner } from '@chakra-ui/react';
 
 import ProposalCard from './proposalCard';
-// import { determineUnreadProposalList } from '../utils/proposalUtils';
-// import { useDaoMember } from '../contexts/DaoMemberContext';
 import Paginator from './paginator';
-// import ProposalFilters from './proposalFilters';
-// import ListSort from './listSort';
 import {
   defaultFilterOptions,
   getMemberFilters,
@@ -16,7 +12,6 @@ import {
 } from '../utils/proposalContent';
 import ContentBox from './ContentBox';
 import GenericSelect from './genericSelect';
-import { useEffect } from 'react/cjs/react.development';
 import {
   determineUnreadProposalList,
   handleListFilter,
