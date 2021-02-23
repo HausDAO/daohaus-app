@@ -88,7 +88,6 @@ const ActivityCard = ({ activity, displayAvatar, isLink = true }) => {
   return (
     <ContentBox mt={3}>
       <Skeleton isLoaded={activity}>
-        {!name && console.log(truncateAddr(activity.memberAddress))}
         {activity.daoData && (
           <Flex direction='row' justifyContent='space-between' mb={5}>
             <Heading size='xs' fontFamily='mono'>

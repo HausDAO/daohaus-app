@@ -197,8 +197,9 @@ const Members = React.memo(function MembersPage({
               )}
             </Box>
 
-            {selectedMember ? (
+            {selectedMember?.memberAddress ? (
               <ActivitiesFeed
+                key={selectedMember?.memberAddress}
                 limit={2}
                 activities={activities}
                 hydrateFn={getMemberActivites(selectedMember.memberAddress)}

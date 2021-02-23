@@ -9,7 +9,6 @@ import { numberWithCommas } from '../utils/general';
 import {
   determineProposalStatus,
   getProposalCardDetailStatus,
-  // getProposalCardDetailStatus,
   memberVote,
 } from '../utils/proposalUtils';
 import ContentBox from './ContentBox';
