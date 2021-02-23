@@ -16,9 +16,8 @@ import { timeToNow, truncateAddr } from '../utils/general';
 import ContentBox from './ContentBox';
 import { chainByName } from '../utils/chain';
 
-const handleName = (activity, profile) => {
-  return profile ? profile?.name : truncateAddr(activity?.memberAddress);
-};
+const handleName = (activity, profile) =>
+  profile?.name ? profile?.name : truncateAddr(activity?.memberAddress);
 
 const handleAvatar = (activity, profile) => {
   if (profile?.image?.length) {
@@ -89,6 +88,7 @@ const ActivityCard = ({ activity, displayAvatar, isLink = true }) => {
   return (
     <ContentBox mt={3}>
       <Skeleton isLoaded={activity}>
+        {!name && console.log(truncateAddr(activity.memberAddress))}
         {activity.daoData && (
           <Flex direction='row' justifyContent='space-between' mb={5}>
             <Heading size='xs' fontFamily='mono'>
