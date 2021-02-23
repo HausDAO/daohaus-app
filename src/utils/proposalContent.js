@@ -3,6 +3,11 @@ export const actionNeededFilter = {
   value: 'Action Needed',
   type: 'Action Needed',
 };
+export const activeFilter = {
+  name: 'Active',
+  value: 'Active',
+  type: 'Active',
+};
 export const allFilter = {
   name: 'All',
   value: 'All',
@@ -87,10 +92,21 @@ export const defaultFilterOptions = {
   ],
 };
 
-export const getMemberFilters = () => ({
-  ...defaultFilterOptions,
-  main: [actionNeededFilter, allFilter],
-});
+export const getFilters = (daoMember, unread) => {
+  if (+daoMember?.shares && unread?.length) {
+    return {
+      ...defaultFilterOptions,
+      main: [actionNeededFilter, allFilter],
+    };
+  } else if (!+daoMember?.shares && unread?.length) {
+    return {
+      ...defaultFilterOptions,
+      main: [activeFilter, allFilter],
+    };
+  } else {
+    return defaultFilterOptions;
+  }
+};
 
 export const sortOptions = {
   main: [

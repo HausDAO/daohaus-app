@@ -1,13 +1,13 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Flex, Text, Spinner } from '@chakra-ui/react';
 
 import ProposalCard from './proposalCard';
 import Paginator from './paginator';
 import {
   defaultFilterOptions,
-  getMemberFilters,
+  getFilters,
   sortOptions,
-  actionNeededFilter,
+  // actionNeededFilter,
   allFilter,
 } from '../utils/proposalContent';
 import ContentBox from './ContentBox';
@@ -18,12 +18,13 @@ import {
   handleListSort,
 } from '../utils/proposalUtils';
 import { useDaoMember } from '../contexts/DaoMemberContext';
-import useLocalStorage from '../hooks/useLocalStorage';
 import { useParams } from 'react-router-dom';
+import { useSessionStorage } from '../hooks/useSessionStorage';
+import { useInjectedProvider } from '../contexts/InjectedProviderContext';
 
 const ProposalsList = ({ proposals, customTerms }) => {
   const { daoMember } = useDaoMember();
-
+  const { address } = useInjectedProvider();
   const [paginatedProposals, setPageProposals] = useState(null);
   const [listProposals, setListProposals] = useState(null);
 
@@ -31,8 +32,10 @@ const ProposalsList = ({ proposals, customTerms }) => {
   const { daoid } = useParams();
 
   const [filterOptions, setFilterOptions] = useState(defaultFilterOptions);
-  const [filter, setFilter] = useLocalStorage(`${daoid}-filter`, null);
-  const [sort, setSort] = useLocalStorage(`${daoid}-sort`, null);
+  const [filter, setFilter] = useSessionStorage(`${daoid}-filter`, null);
+  const [sort, setSort] = useSessionStorage(`${daoid}-sort`, null);
+
+  const prevMember = useRef('No Address');
 
   useEffect(() => {
     if (proposals?.length) {
@@ -41,32 +44,26 @@ const ProposalsList = ({ proposals, customTerms }) => {
   }, [proposals]);
 
   useEffect(() => {
-    const setActionNeeded = (unread) => {
-      setFilterOptions(getMemberFilters(unread));
-      if (filter || sort) return;
-      setFilter(actionNeededFilter);
-      setSort({ name: 'Oldest', value: 'submissionDateAsc' });
-    };
-    const setDisplayAll = () => {
-      setFilterOptions(defaultFilterOptions);
-      if (filter || sort) return;
-      setFilter(allFilter);
-      setSort({ name: 'Newest', value: 'submissionDateDesc' });
-    };
-    if (daoMember && +daoMember.shares > 0 && proposals?.length) {
-      const unread = proposals.filter(
-        (proposal) =>
-          determineUnreadProposalList(proposal, true, daoMember.memberAddress)
-            ?.unread,
-      );
-      if (unread.length) {
-        setActionNeeded(unread);
-      } else {
-        setDisplayAll();
-      }
-    } else {
-      setDisplayAll();
-    }
+    if (!proposals) return;
+
+    //  Later on, create functionality to only call the assigment below if daoMember is true or false
+    //  This would require setting that functionality in the context
+    const unread = proposals.filter(
+      (proposal) =>
+        determineUnreadProposalList(proposal, true, daoMember?.memberAddress)
+          ?.unread,
+    );
+
+    const newOptions = getFilters(daoMember, unread);
+    setFilterOptions(newOptions);
+    if (prevMember.current === address) return;
+    setFilter(newOptions?.main?.[0] || allFilter);
+    setSort(
+      unread?.length
+        ? { name: 'Oldest', value: 'submissionDateAsc' }
+        : { name: 'Newest', value: 'submissionDateDesc' },
+    );
+    prevMember.current = address;
   }, [daoMember, proposals, filter, sort]);
 
   useEffect(() => {
@@ -74,7 +71,7 @@ const ProposalsList = ({ proposals, customTerms }) => {
     setListProposals(
       handleListSort(handleListFilter(proposals, filter, daoMember), sort),
     );
-  }, [filter, sort, proposals, daoMember]);
+  }, [filter, sort, proposals, daoMember, address]);
 
   const handleFilter = (option) => {
     if (!option?.value || !option?.type || !option?.name) {

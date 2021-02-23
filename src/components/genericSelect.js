@@ -20,7 +20,6 @@ const GenericSelect = ({
   count,
 }) => {
   const sections = Object.keys(options);
-
   const showCount = count != null;
   return (
     <Flex

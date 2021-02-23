@@ -165,9 +165,13 @@ export const determineUnreadProposalList = (
   const inVotingPeriod =
     now >= +proposal.votingPeriodStarts && now <= +proposal.votingPeriodEnds;
 
-  const memberVoted = proposal.votes.some(
-    (vote) => vote.memberAddress.toLowerCase() === memberAddress.toLowerCase(),
-  );
+  let memberVoted = false;
+  if (memberAddress) {
+    memberVoted = proposal.votes.some(
+      (vote) =>
+        vote.memberAddress.toLowerCase() === memberAddress.toLowerCase(),
+    );
+  }
   const needsMemberVote =
     proposal.sponsored && activeMember && inVotingPeriod && !memberVoted;
 
@@ -379,10 +383,10 @@ export const handleListFilter = (proposals, filter, daoMember) => {
   }));
   if (filter.value === 'All') {
     return updatedProposals;
-  } else if (filter.value === 'Action Needed' && daoMember?.memberAddress) {
+  } else if (filter.value === 'Action Needed' || filter.value === 'Active') {
     return updatedProposals.filter(
       (proposal) =>
-        determineUnreadProposalList(proposal, true, daoMember.memberAddress)
+        determineUnreadProposalList(proposal, true, daoMember?.memberAddress)
           ?.unread,
     );
   } else {
@@ -394,7 +398,6 @@ export const handleListFilter = (proposals, filter, daoMember) => {
 
 export const handleListSort = (proposals, sort) => {
   if (sort.value === 'submissionDateAsc') {
-    console.log('votecountdesc');
     return proposals.sort((a, b) => +a.createdAt - +b.createdAt);
   } else if (sort.value === 'voteCountDesc') {
     return proposals

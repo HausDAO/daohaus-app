@@ -191,7 +191,6 @@ const ProposalVote = ({ proposal, overview, daoProposals, daoMember }) => {
 
   const sponsorProposal = async (id) => {
     setLoading(true);
-    console.log('sponsor ', id, injectedProvider, address);
     const args = [id];
     try {
       const poll = createPoll({ action: 'sponsorProposal', cachePoll })({

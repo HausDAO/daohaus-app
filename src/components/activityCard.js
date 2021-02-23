@@ -16,9 +16,8 @@ import { timeToNow, truncateAddr } from '../utils/general';
 import ContentBox from './ContentBox';
 import { chainByName } from '../utils/chain';
 
-const handleName = (activity, profile) => {
-  return profile ? profile?.name : truncateAddr(activity?.memberAddress);
-};
+const handleName = (activity, profile) =>
+  profile?.name ? profile?.name : truncateAddr(activity?.memberAddress);
 
 const handleAvatar = (activity, profile) => {
   if (profile?.image?.length) {
