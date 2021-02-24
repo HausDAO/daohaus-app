@@ -47,7 +47,6 @@ const Proposals = React.memo(function Proposals({
         >
           <ProposalsList proposals={proposals} customTerms={customTerms} />
         </Box>
-
         <Box w={['100%', null, null, null, '40%']}>
           <ActivitiesFeed
             limit={5}

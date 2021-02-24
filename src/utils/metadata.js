@@ -121,6 +121,8 @@ export const getCustomProposalTerm = (customTerms, proposalTerm) => {
     proposalTerm
   ) {
     return proposalTerm.replace('Proposal', customTerms.proposal);
+  } else if (proposalTerm) {
+    return proposalTerm;
   } else {
     return 'Proposal';
   }
@@ -162,7 +164,6 @@ export const ipfsPrePost = async (endpoint, data) => {
 
 export const ipfsPost = async (creds, file) => {
   const url = `https://api.pinata.cloud/pinning/pinFileToIPFS`;
-
   try {
     const response = await fetch(url, {
       method: 'POST',

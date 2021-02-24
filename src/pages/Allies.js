@@ -1,30 +1,30 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Box } from '@chakra-ui/react';
-// import { useModals } from '../../contexts/PokemolContext';
+
 import Following from '../components/followingDaos';
 import MainViewLayout from '../components/mainViewLayout';
-// import DaoToDaoManager from '../../components/Settings/DaoToDaoManager';
-// import DaoToDaoProposalModal from '../../components/Modal/DaoToDaoProposalModal';
-// import DaoToDaoProposalTypeModal from '../../components/Modal/DaoToDaoProposalTypeModal';
+import DaoToDaoManager from '../components/daoToDaoManager';
+import DaoToDaoProposalModal from '../modals/daoToDaoProposalModal';
+import DaoToDaoProposalTypeModal from '../modals/daoToDaoProposalTypeModal';
+import { useOverlay } from '../contexts/OverlayContext';
 
 const Allies = () => {
-  // const { modals } = useModals();
-
-  // const [proposalType, setProposalType] = useState(null);
+  const { d2dProposalModal } = useOverlay();
+  const [proposalType, setProposalType] = useState(null);
 
   return (
     <MainViewLayout header='Allies'>
-      <Box pl={6}>
-        {/* <DaoToDaoProposalTypeModal
-        isOpen={modals.daoToDaoProposalType}
-        setProposalType={setProposalType}
-      /> */}
-        {/* <DaoToDaoProposalModal
-        isOpen={modals.daoToDaoProposal}
-        proposalType={proposalType}
-      /> */}
+      <Box>
+        <DaoToDaoProposalTypeModal
+          isOpen={true}
+          setProposalType={setProposalType}
+        />
+        <DaoToDaoProposalModal
+          isOpen={d2dProposalModal}
+          proposalType={proposalType}
+        />
         <Following />
-        {/* <DaoToDaoManager /> */}
+        <DaoToDaoManager />
       </Box>
     </MainViewLayout>
   );

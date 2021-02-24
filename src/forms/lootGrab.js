@@ -56,8 +56,7 @@ const LootGrabForm = () => {
   const [loading, setLoading] = useState(false);
   const [currentError, setCurrentError] = useState(null);
   const [editDetails, setEditDetails] = useState();
-
-  const ratio = 1;
+  const [ratio, setRatio] = useState(1);
 
   const {
     handleSubmit,
@@ -80,6 +79,15 @@ const LootGrabForm = () => {
       setCurrentError(null);
     }
   }, [errors]);
+
+  useEffect(() => {
+    if (daoMetaData?.boosts?.proposalTypes?.active) {
+      const daoRatio = +daoMetaData?.boosts?.proposalTypes?.metadata?.lootGrab
+        ?.ratio;
+      // console.log(options);
+      setRatio(daoRatio);
+    }
+  });
 
   const onSubmit = async (values) => {
     console.log(values);
@@ -192,16 +200,20 @@ const LootGrabForm = () => {
             getValues={getValues}
             setError={setError}
           />
-          <Tooltip
-            label='Amount of Loot you can request is calculated based on the amount of tribute'
-            hasArrow
-            placement='top'
-            shouldWrapChildren
-          >
-            <TextBox size='xs' d='flex' alignItems='center'>
-              Loot Requested <RiInformationLine style={{ marginLeft: 5 }} />
-            </TextBox>
-          </Tooltip>
+          <Flex justify='space-between' mt={4}>
+            <Tooltip
+              label='Amount of Loot you can request is calculated based on the amount of tribute'
+              hasArrow
+              placement='top'
+              shouldWrapChildren
+            >
+              <TextBox size='xs' d='flex' alignItems='center'>
+                Loot Requested <RiInformationLine style={{ marginLeft: 5 }} />
+              </TextBox>
+            </Tooltip>
+            <Box fontSize='sm'>Ratio: {ratio}</Box>
+          </Flex>
+
           <TextBox variant='value'>
             {Math.floor(watch('tributeOffered') * ratio || 0).toString()}
           </TextBox>
@@ -209,10 +221,10 @@ const LootGrabForm = () => {
       </FormControl>
       <Flex justify='flex-end' align='center' h='60px'>
         {currentError && (
-          <Box color='red.500' fontSize='m' mr={5}>
+          <Flex color='red.500' fontSize='m' mr={5} align='center'>
             <Icon as={RiErrorWarningLine} color='red.500' mr={2} />
             {currentError.message}
-          </Box>
+          </Flex>
         )}
 
         <Box p='4'>

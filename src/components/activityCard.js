@@ -16,9 +16,8 @@ import { timeToNow, truncateAddr } from '../utils/general';
 import ContentBox from './ContentBox';
 import { chainByName } from '../utils/chain';
 
-const handleName = (activity, profile) => {
-  return profile ? profile?.name : truncateAddr(activity?.memberAddress);
-};
+const handleName = (activity, profile) =>
+  profile?.name ? profile?.name : truncateAddr(activity?.memberAddress);
 
 const handleAvatar = (activity, profile) => {
   if (profile?.image?.length) {
@@ -120,7 +119,9 @@ const ActivityCard = ({ activity, displayAvatar, isLink = true }) => {
                   variant='solid'
                   colorScheme={activity.voteBadge === 1 ? 'green' : 'red'}
                 >
-                  {activity.voteBadge && activity.voteBadge ? 'Yes' : 'No'}
+                  {activity.voteBadge && activity.voteBadge === 1
+                    ? 'Yes'
+                    : 'No'}
                 </Badge>
               )}
               {activity?.statusBadge && (

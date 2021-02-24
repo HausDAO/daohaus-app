@@ -1,82 +1,116 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Flex, Text, Spinner } from '@chakra-ui/react';
 
 import ProposalCard from './proposalCard';
-import { determineUnreadProposalList } from '../utils/proposalUtils';
-import { useDaoMember } from '../contexts/DaoMemberContext';
 import Paginator from './paginator';
-import ProposalFilters from './proposalFilters';
-import ListSort from './listSort';
-import { sortOptions } from '../utils/proposalContent';
+import {
+  defaultFilterOptions,
+  getFilters,
+  sortOptions,
+  // actionNeededFilter,
+  allFilter,
+} from '../utils/proposalContent';
 import ContentBox from './ContentBox';
+import GenericSelect from './genericSelect';
+import {
+  determineUnreadProposalList,
+  handleListFilter,
+  handleListSort,
+} from '../utils/proposalUtils';
+import { useDaoMember } from '../contexts/DaoMemberContext';
+import { useParams } from 'react-router-dom';
+import { useSessionStorage } from '../hooks/useSessionStorage';
+import { useInjectedProvider } from '../contexts/InjectedProviderContext';
 
 const ProposalsList = ({ proposals, customTerms }) => {
   const { daoMember } = useDaoMember();
-  const [listProposals, setListProposals] = useState(proposals);
-  const [pageProposals, setPageProposals] = useState(null);
+  const { address } = useInjectedProvider();
+  const [paginatedProposals, setPageProposals] = useState(null);
+  const [listProposals, setListProposals] = useState(null);
+
   const [isLoaded, setIsLoaded] = useState(false);
-  const [filter, setFilter] = useState(null);
-  const [sort, setSort] = useState(null);
+  const { daoid } = useParams();
+
+  const [filterOptions, setFilterOptions] = useState(defaultFilterOptions);
+  const [filter, setFilter] = useSessionStorage(`${daoid}-filter`, null);
+  const [sort, setSort] = useSessionStorage(`${daoid}-sort`, null);
+
+  const prevMember = useRef('No Address');
 
   useEffect(() => {
-    const filterAndSortProposals = () => {
-      let filteredProposals = proposals;
-      if (sort && filter) {
-        filteredProposals = proposals
-          .filter((prop) => {
-            if (filter.value === 'All') {
-              return true;
-            }
-            if (filter.value === 'Action Needed') {
-              const unread = determineUnreadProposalList(
-                prop,
-                daoMember.shares > 0,
-                daoMember.memberAddress,
-              );
-              return unread.unread;
-            } else {
-              return prop[filter.type] === filter.value;
-            }
-          })
-          .sort((a, b) => {
-            if (sort.value === 'submissionDateAsc') {
-              return +a.createdAt - +b.createdAt;
-            } else if (sort.value === 'voteCountDesc') {
-              return b.votes.length - a.votes.length;
-            } else {
-              return +b.createdAt - +a.createdAt;
-            }
-          });
-        if (
-          sort.value !== 'submissionDateAsc' &&
-          sort.value !== 'submissionDateDesc'
-        ) {
-          filteredProposals = filteredProposals.sort((a, b) => {
-            return a.status === sort.value ? -1 : 1;
-          });
-        }
-      }
-      setListProposals(filteredProposals);
-    };
     if (proposals?.length) {
-      filterAndSortProposals();
       setIsLoaded(true);
     }
-  }, [proposals, sort, filter]);
+  }, [proposals]);
 
+  useEffect(() => {
+    if (!proposals) return;
+
+    //  Later on, create functionality to only call the assigment below if daoMember is true or false
+    //  This would require setting that functionality in the context
+    const unread = proposals.filter(
+      (proposal) =>
+        determineUnreadProposalList(proposal, true, daoMember?.memberAddress)
+          ?.unread,
+    );
+
+    const newOptions = getFilters(daoMember, unread);
+    setFilterOptions(newOptions);
+    if (prevMember.current === address) return;
+    setFilter(newOptions?.main?.[0] || allFilter);
+    setSort(
+      unread?.length
+        ? { name: 'Oldest', value: 'submissionDateAsc' }
+        : { name: 'Newest', value: 'submissionDateDesc' },
+    );
+    prevMember.current = address;
+  }, [daoMember, proposals, filter, sort]);
+
+  useEffect(() => {
+    if (!proposals || !filter || !sort) return;
+    setListProposals(
+      handleListSort(handleListFilter(proposals, filter, daoMember), sort),
+    );
+  }, [filter, sort, proposals, daoMember, address]);
+
+  const handleFilter = (option) => {
+    if (!option?.value || !option?.type || !option?.name) {
+      console.error(
+        'Filter component did not update. Received incorrect data stucture',
+      );
+      return;
+    }
+    setFilter(option);
+  };
+
+  const handleSort = (option) => {
+    if (!option?.value || !option?.name) {
+      console.error(
+        'Sort component did not update. Received incorrect data stucture',
+      );
+      return;
+    }
+    setSort(option);
+  };
   return (
     <>
       <Flex wrap='wrap'>
-        <ProposalFilters
-          filter={filter}
-          setFilter={setFilter}
-          setSort={setSort}
-          proposals={proposals}
+        <GenericSelect
+          currentOption={filter?.name}
+          options={filterOptions}
+          handleSelect={handleFilter}
+          label='Filter By'
+          count={listProposals?.length}
         />
-        <ListSort sort={sort} setSort={setSort} options={sortOptions} />
+        <GenericSelect
+          label='Sort By'
+          currentOption={sort?.name}
+          options={sortOptions}
+          handleSelect={handleSort}
+        />
       </Flex>
       {isLoaded &&
-        pageProposals?.map((proposal) => {
+        paginatedProposals?.map((proposal) => {
           return (
             <ProposalCard
               key={proposal.id}

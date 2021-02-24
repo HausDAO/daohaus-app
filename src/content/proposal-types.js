@@ -1,42 +1,43 @@
 import { getTerm } from '../utils/metadata';
 import swordImg from '../assets/img/swords-white.svg';
 
-export const proposalTypes = (customTerms, boosts, daoid) => {
+export const proposalTypes = (customTerms, boosts, minions) => {
+  const daoPropTypes = boosts?.proposalTypes?.metadata;
   return [
     {
       name: 'Membership',
       subhead: 'Request Shares and/or Loot',
       proposalType: 'member',
       image: swordImg,
-      show: true,
+      show: daoPropTypes ? daoPropTypes?.member?.active : true,
     },
     {
       name: 'Funding',
       subhead: 'Request or distribute funds',
       proposalType: 'funding',
       image: swordImg,
-      show: true,
+      show: daoPropTypes ? daoPropTypes?.funding?.active : true,
     },
     {
       name: 'Token',
       subhead: 'Approve a new token',
       proposalType: 'whitelist',
       image: swordImg,
-      show: true,
+      show: daoPropTypes ? daoPropTypes?.whitelist?.active : true,
     },
     {
       name: 'Trade',
       subhead: 'Trade tokens',
       proposalType: 'trade',
       image: swordImg,
-      show: true,
+      show: daoPropTypes ? daoPropTypes?.trade?.active : true,
     },
     {
       name: 'Guild Kick',
       subhead: `Remove a ${getTerm(customTerms, 'member')}`,
       proposalType: 'guildkick',
       image: swordImg,
-      show: true,
+      show: daoPropTypes ? daoPropTypes?.guildKick?.active : true,
     },
     {
       name: 'Minion',
@@ -44,7 +45,7 @@ export const proposalTypes = (customTerms, boosts, daoid) => {
       proposalType: 'minion',
       image: swordImg,
       comingSoon: false,
-      show: true,
+      show: minions > 0,
     },
     {
       name: 'Transmutation',
@@ -60,7 +61,7 @@ export const proposalTypes = (customTerms, boosts, daoid) => {
       proposalType: 'lootgrab',
       image: swordImg,
       comingSoon: false,
-      show: daoid === '0xff3f8c0b98454306fb0bda57e5ae38cbfa66cc0d',
+      show: daoPropTypes ? daoPropTypes?.lootGrab?.active : false,
     },
   ];
 };
@@ -71,35 +72,35 @@ export const daoToDaoProposalTypes = () => {
       name: 'Stake',
       subhead: 'Have your DAO join UBERhaus',
       proposalType: 'd2dStake',
-      image: 'themes/raidTheme/raidguild__swords-white.svg',
+      image: swordImg,
       show: true,
     },
     {
       name: 'Vote',
       subhead: 'Vote on proposals in UberHaus',
       proposalType: 'd2dVote',
-      image: 'themes/raidTheme/raidguild__swords-white.svg',
+      image: swordImg,
       show: false,
     },
     {
       name: 'Delegate',
       subhead: "Manage your DAO's delegate",
       proposalType: 'd2dDelegate',
-      image: 'themes/raidTheme/raidguild__swords-white.svg',
+      image: swordImg,
       show: true,
     },
     {
       name: 'Rage Quit',
       subhead: 'RageQuit your % of $HAUS from UBERhaus',
       proposalType: 'd2dRageQuit',
-      image: 'themes/raidTheme/raidguild__swords-white.svg',
+      image: swordImg,
       show: true,
     },
     {
       name: 'Distro Rewards',
       subhead: 'Get DAO Rewards from UBERhaus',
       proposalType: 'd2dDistroRewards',
-      image: 'themes/raidTheme/raidguild__swords-white.svg',
+      image: swordImg,
       show: true,
     },
   ];

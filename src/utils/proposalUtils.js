@@ -165,9 +165,13 @@ export const determineUnreadProposalList = (
   const inVotingPeriod =
     now >= +proposal.votingPeriodStarts && now <= +proposal.votingPeriodEnds;
 
-  const memberVoted = proposal.votes.some(
-    (vote) => vote.memberAddress.toLowerCase() === memberAddress.toLowerCase(),
-  );
+  let memberVoted = false;
+  if (memberAddress) {
+    memberVoted = proposal.votes.some(
+      (vote) =>
+        vote.memberAddress.toLowerCase() === memberAddress.toLowerCase(),
+    );
+  }
   const needsMemberVote =
     proposal.sponsored && activeMember && inVotingPeriod && !memberVoted;
 
@@ -370,4 +374,39 @@ export const memberVote = (proposal, userAddress) => {
       )
     : null;
   return vote ? vote.uintVote : null;
+};
+
+export const handleListFilter = (proposals, filter, daoMember) => {
+  const updatedProposals = proposals.map((proposal) => ({
+    ...proposal,
+    status: determineProposalStatus(proposal),
+  }));
+  if (filter.value === 'All') {
+    return updatedProposals;
+  } else if (filter.value === 'Action Needed' || filter.value === 'Active') {
+    return updatedProposals.filter(
+      (proposal) =>
+        determineUnreadProposalList(proposal, true, daoMember?.memberAddress)
+          ?.unread,
+    );
+  } else {
+    return updatedProposals.filter(
+      (proposal) => proposal[filter.type] === filter.value,
+    );
+  }
+};
+
+export const handleListSort = (proposals, sort) => {
+  if (sort.value === 'submissionDateAsc') {
+    return proposals.sort((a, b) => +a.createdAt - +b.createdAt);
+  } else if (sort.value === 'voteCountDesc') {
+    return proposals
+      .sort((a, b) => b.votes.length - a.votes.length)
+      .sort((a, b) => (a.status === sort.value ? -1 : 1));
+  } else if (sort.value === 'submissionDateDesc') {
+    return proposals.sort((a, b) => +b.createdAt - +a.createdAt);
+  } else {
+    console.error('Received incorrect sort data type');
+    return proposals;
+  }
 };

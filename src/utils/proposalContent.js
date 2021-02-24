@@ -1,15 +1,22 @@
-export const getFilterOptions = (isMember, actionNeededCount) => {
-  const options = [
-    {
-      name: 'Action Needed',
-      value: 'Action Needed',
-      type: 'main',
-    },
-    {
-      name: 'All',
-      value: 'All',
-      type: 'main',
-    },
+export const actionNeededFilter = {
+  name: 'Action Needed',
+  value: 'Action Needed',
+  type: 'Action Needed',
+};
+export const activeFilter = {
+  name: 'Active',
+  value: 'Active',
+  type: 'Active',
+};
+export const allFilter = {
+  name: 'All',
+  value: 'All',
+  type: 'All',
+};
+
+export const defaultFilterOptions = {
+  main: [allFilter],
+  'Proposal Type': [
     {
       name: 'Funding Proposals',
       value: 'Funding Proposal',
@@ -40,6 +47,8 @@ export const getFilterOptions = (isMember, actionNeededCount) => {
       value: 'Minion Proposal',
       type: 'proposalType',
     },
+  ],
+  'Proposal Status': [
     {
       name: 'Unsponsored',
       value: 'Unsponsored',
@@ -80,26 +89,29 @@ export const getFilterOptions = (isMember, actionNeededCount) => {
       value: 'Cancelled',
       type: 'status',
     },
-  ];
-
-  if (!isMember || !actionNeededCount) {
-    options.splice(0, 1);
-  }
-
-  return options;
+  ],
 };
 
-export const sortOptions = [
-  {
-    name: 'Newest',
-    value: 'submissionDateDesc',
-  },
-  {
-    name: 'Oldest',
-    value: 'submissionDateAsc',
-  },
-  {
-    name: 'Most Votes',
-    value: 'voteCountDesc',
-  },
-];
+export const getFilters = (daoMember, unread) => {
+  if (+daoMember?.shares && unread?.length) {
+    return {
+      ...defaultFilterOptions,
+      main: [actionNeededFilter, allFilter],
+    };
+  } else if (!+daoMember?.shares && unread?.length) {
+    return {
+      ...defaultFilterOptions,
+      main: [activeFilter, allFilter],
+    };
+  } else {
+    return defaultFilterOptions;
+  }
+};
+
+export const sortOptions = {
+  main: [
+    { name: 'Newest', value: 'submissionDateDesc' },
+    { name: 'Oldest', value: 'submissionDateAsc' },
+    { name: 'Most Votes', value: 'voteCountDesc' },
+  ],
+};

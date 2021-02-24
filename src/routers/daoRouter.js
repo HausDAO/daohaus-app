@@ -22,6 +22,7 @@ import Meta from '../pages/Meta';
 import Notifications from '../pages/Notifications';
 import DiscourseSettings from '../pages/DiscourseSettings';
 import ProposalTypes from '../pages/ProposalTypes';
+import MinionSafe from '../pages/MinionSafe';
 
 const DaoRouter = () => {
   const { path } = useRouteMatch();
@@ -89,9 +90,13 @@ const DaoRouter = () => {
             daoMetaData={daoMetaData}
           />
         </Route>
-
         <Route exact path={`${path}/settings/boosts`}>
-          <Boosts customTerms={customTerms} />
+          <Boosts
+            daoOverview={daoOverview}
+            daoMetaData={daoMetaData}
+            customTerms={customTerms}
+            daoMember={daoMember}
+          />
         </Route>
         <Route exact path={`${path}/settings/notifications`}>
           <Notifications
@@ -124,7 +129,10 @@ const DaoRouter = () => {
           />
         </Route>
         <Route exact path={`${path}/settings/proposals`}>
-          <ProposalTypes daoMetaData={daoMetaData} />
+          <ProposalTypes
+            daoMetaData={daoMetaData}
+            refetchMetaData={refetchMetaData}
+          />
         </Route>
         <Route
           exact
@@ -136,14 +144,33 @@ const DaoRouter = () => {
             currentDaoTokens={currentDaoTokens}
           />
         </Route>
+        <Route
+          exact
+          path={`${path}/settings/minion-safe`} // path={`${path}/settings/minion/:minion(\b0x[0-9a-f]{10,40}\b)`}
+        >
+          <MinionSafe
+            daoOverview={daoOverview}
+            daoMetaData={daoMetaData}
+            members={daoMembers}
+            currentDaoTokens={currentDaoTokens}
+          />
+        </Route>
         <Route exact path={`${path}/allies`}>
           <Allies />
         </Route>
         <Route exact path={`${path}/proposals/new/:proposalType`}>
-          <NewProposal customTerms={customTerms} daoMetaData={daoMetaData} />
+          <NewProposal
+            customTerms={customTerms}
+            daoMetaData={daoMetaData}
+            daoOverview={daoOverview}
+          />
         </Route>
         <Route exact path={`${path}/proposals/new`}>
-          <NewProposal customTerms={customTerms} daoMetaData={daoMetaData} />
+          <NewProposal
+            customTerms={customTerms}
+            daoMetaData={daoMetaData}
+            daoOverview={daoOverview}
+          />
         </Route>
         <Route exact path={`${path}/proposals/:propid`}>
           <Proposal
