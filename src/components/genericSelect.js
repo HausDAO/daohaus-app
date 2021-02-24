@@ -26,6 +26,7 @@ const GenericSelect = ({
       direction='row'
       w={['100%', null, null, '50%']}
       mb={[5, null, null, 0]}
+      // zIndex='10'
     >
       <Text
         textTransform='uppercase'

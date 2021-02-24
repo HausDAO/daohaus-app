@@ -31,7 +31,7 @@ const AddressInput = ({
   member,
 }) => {
   formLabel = formLabel || 'applicant';
-  // const [user] = useUser();
+  // const [user] g= useUser();
   const { theme } = useCustomTheme();
   // const { daochain } = useParams();
   const { daoMembers } = useDao();
