@@ -107,7 +107,9 @@ const FundingProposalForm = () => {
     const paymentRequested = values.paymentRequested
       ? valToDecimalString(values.paymentRequested, paymentToken, tokenBalances)
       : '0';
-    const applicant = values?.applicantHidden?.startsWith('0x')
+    const applicant = values?.memberApplicant
+      ? values.memberApplicant
+      : values?.applicantHidden?.startsWith('0x')
       ? values.applicantHidden
       : values?.applicant
       ? values.applicant
