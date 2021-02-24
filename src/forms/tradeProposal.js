@@ -104,12 +104,12 @@ const TradeProposalForm = () => {
     const paymentRequested = values.paymentRequested
       ? valToDecimalString(values.paymentRequested, paymentToken, tokenBalances)
       : '0';
-    const applicant = values?.memberApplicant
-      ? values.memberApplicant
-      : values?.applicantHidden?.startsWith('0x')
+    const applicant = values?.applicantHidden?.startsWith('0x')
       ? values.applicantHidden
       : values?.applicant
       ? values.applicant
+      : values?.memberApplicant
+      ? values.memberApplicant
       : address;
     const args = [
       applicant,
