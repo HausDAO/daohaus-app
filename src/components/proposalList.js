@@ -7,7 +7,6 @@ import {
   defaultFilterOptions,
   getFilters,
   sortOptions,
-  // actionNeededFilter,
   allFilter,
 } from '../utils/proposalContent';
 import ContentBox from './ContentBox';
@@ -16,11 +15,13 @@ import {
   determineUnreadProposalList,
   handleListFilter,
   handleListSort,
+  searchProposals,
 } from '../utils/proposalUtils';
 import { useDaoMember } from '../contexts/DaoMemberContext';
 import { useParams } from 'react-router-dom';
 import { useSessionStorage } from '../hooks/useSessionStorage';
 import { useInjectedProvider } from '../contexts/InjectedProviderContext';
+import ProposalSearch from './proposalSearch';
 
 const ProposalsList = ({ proposals, customTerms }) => {
   const { daoMember } = useDaoMember();
@@ -36,6 +37,7 @@ const ProposalsList = ({ proposals, customTerms }) => {
   const [sort, setSort] = useSessionStorage(`${daoid}-sort`, null);
 
   const prevMember = useRef('No Address');
+  const searchMode = useRef(false);
 
   useEffect(() => {
     if (proposals?.length) {
@@ -44,7 +46,8 @@ const ProposalsList = ({ proposals, customTerms }) => {
   }, [proposals]);
 
   useEffect(() => {
-    if (!proposals) return;
+    const sameUser = prevMember.current === address;
+    if (!proposals || sameUser) return;
 
     //  Later on, create functionality to only call the assigment below if daoMember is true or false
     //  This would require setting that functionality in the context
@@ -56,18 +59,23 @@ const ProposalsList = ({ proposals, customTerms }) => {
 
     const newOptions = getFilters(daoMember, unread);
     setFilterOptions(newOptions);
-    if (prevMember.current === address) return;
-    setFilter(newOptions?.main?.[0] || allFilter);
-    setSort(
-      unread?.length
-        ? { name: 'Oldest', value: 'submissionDateAsc' }
-        : { name: 'Newest', value: 'submissionDateDesc' },
-    );
+    // if ((!sameUser && filter && sort) || (!sameUser && !filter && !sort)) {
+
+    const hasSavedChanges =
+      prevMember.current === 'No Address' && filter && sort;
+    if (!hasSavedChanges) {
+      setFilter(newOptions?.main?.[0] || allFilter);
+      setSort(
+        unread?.length
+          ? { name: 'Oldest', value: 'submissionDateAsc' }
+          : { name: 'Newest', value: 'submissionDateDesc' },
+      );
+    }
     prevMember.current = address;
   }, [daoMember, proposals, filter, sort]);
 
   useEffect(() => {
-    if (!proposals || !filter || !sort) return;
+    if (!proposals || !filter || !sort || searchMode.current) return;
     setListProposals(
       handleListSort(handleListFilter(proposals, filter, daoMember), sort),
     );
@@ -80,6 +88,7 @@ const ProposalsList = ({ proposals, customTerms }) => {
       );
       return;
     }
+    searchMode.current = false;
     setFilter(option);
   };
 
@@ -90,11 +99,18 @@ const ProposalsList = ({ proposals, customTerms }) => {
       );
       return;
     }
+    searchMode.current = false;
     setSort(option);
+  };
+  const performSearch = (address, searchFilters) => {
+    setSort({ name: 'Newest', value: 'submissionDateDesc' });
+    setFilter(allFilter);
+    setListProposals(searchProposals(address, searchFilters, proposals));
+    searchMode.current = true;
   };
   return (
     <>
-      <Flex wrap='wrap'>
+      <Flex wrap='wrap' position='relative'>
         <GenericSelect
           currentOption={filter?.name}
           options={filterOptions}
@@ -107,7 +123,10 @@ const ProposalsList = ({ proposals, customTerms }) => {
           currentOption={sort?.name}
           options={sortOptions}
           handleSelect={handleSort}
+          // uses custom props to prevent overlap with search button
+          containerProps={{ width: ['100%', null, null, '38%'], zIndex: '10' }}
         />
+        <ProposalSearch performSearch={performSearch} />
       </Flex>
       {isLoaded &&
         paginatedProposals?.map((proposal) => {

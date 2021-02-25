@@ -19,6 +19,13 @@ import Brand from './brand';
 import NavLinkList from './navLinkList';
 import SocialsLinkList from './socialsLinkList';
 import ChangeDao from './changeDao';
+import styled from '@emotion/styled';
+
+const TemporaryPopoverFix = styled.span`
+  .css-n0uled {
+    max-width: fit-content;
+  }
+`;
 
 const DesktopNav = ({ dao }) => {
   return (
@@ -81,15 +88,17 @@ const DesktopNav = ({ dao }) => {
               </PopoverTrigger>
             </Tooltip>
             <Portal>
-              <PopoverContent w='auto'>
-                <PopoverArrow />
-                <PopoverCloseButton />
-                <PopoverBody w='auto'>
-                  <Flex direction='row' align='center' justify='start'>
-                    <SocialsLinkList dao={dao} view={'desktop'} />
-                  </Flex>
-                </PopoverBody>
-              </PopoverContent>
+              <TemporaryPopoverFix>
+                <PopoverContent width='fit-content'>
+                  <PopoverArrow />
+                  <PopoverCloseButton />
+                  <PopoverBody w='auto'>
+                    <Flex direction='row' align='center' justify='start'>
+                      <SocialsLinkList dao={dao} view={'desktop'} />
+                    </Flex>
+                  </PopoverBody>
+                </PopoverContent>
+              </TemporaryPopoverFix>
             </Portal>
           </Popover>
         </Box>
