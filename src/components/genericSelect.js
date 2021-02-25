@@ -18,14 +18,17 @@ const GenericSelect = ({
   currentOption,
   label,
   count,
+  containerProps = {},
 }) => {
   const sections = Object.keys(options);
   const showCount = count != null;
+
   return (
     <Flex
       direction='row'
       w={['100%', null, null, '50%']}
       mb={[5, null, null, 0]}
+      {...containerProps}
       // zIndex='10'
     >
       <Text

@@ -15,6 +15,7 @@ import {
   determineUnreadProposalList,
   handleListFilter,
   handleListSort,
+  searchProposals,
 } from '../utils/proposalUtils';
 import { useDaoMember } from '../contexts/DaoMemberContext';
 import { useParams } from 'react-router-dom';
@@ -36,6 +37,7 @@ const ProposalsList = ({ proposals, customTerms }) => {
   const [sort, setSort] = useSessionStorage(`${daoid}-sort`, null);
 
   const prevMember = useRef('No Address');
+  const searchMode = useRef(false);
 
   useEffect(() => {
     if (proposals?.length) {
@@ -73,7 +75,7 @@ const ProposalsList = ({ proposals, customTerms }) => {
   }, [daoMember, proposals, filter, sort]);
 
   useEffect(() => {
-    if (!proposals || !filter || !sort) return;
+    if (!proposals || !filter || !sort || searchMode.current) return;
     setListProposals(
       handleListSort(handleListFilter(proposals, filter, daoMember), sort),
     );
@@ -86,6 +88,7 @@ const ProposalsList = ({ proposals, customTerms }) => {
       );
       return;
     }
+    searchMode.current = false;
     setFilter(option);
   };
 
@@ -96,7 +99,14 @@ const ProposalsList = ({ proposals, customTerms }) => {
       );
       return;
     }
+    searchMode.current = false;
     setSort(option);
+  };
+  const performSearch = (address, searchFilters) => {
+    setSort({ name: 'Newest', value: 'submissionDateDesc' });
+    setFilter(allFilter);
+    setListProposals(searchProposals(address, searchFilters, proposals));
+    searchMode.current = true;
   };
   return (
     <>
@@ -113,8 +123,10 @@ const ProposalsList = ({ proposals, customTerms }) => {
           currentOption={sort?.name}
           options={sortOptions}
           handleSelect={handleSort}
+          // uses custom props to prevent overlap with search button
+          containerProps={{ width: ['100%', null, null, '38%'], zIndex: '10' }}
         />
-        <ProposalSearch />
+        <ProposalSearch performSearch={performSearch} />
       </Flex>
       {isLoaded &&
         paginatedProposals?.map((proposal) => {

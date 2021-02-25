@@ -21,16 +21,20 @@ import { handleGetProfile } from '../utils/3box';
 import { chainByID } from '../utils/chain';
 // import { useParams } from 'react-router-dom';
 
+const defaultTipLabel =
+  'Address to receive the Shares, Loot, and/or Funding requested in this proposal.';
+
 const AddressInput = ({
   register,
   setValue,
   watch,
-  formLabel,
+  formLabel = 'applicant',
   guildKick,
+  tipLabel = defaultTipLabel,
+
   newMember,
   member,
 }) => {
-  formLabel = formLabel || 'applicant';
   // const [user] g= useUser();
   const { theme } = useCustomTheme();
   // const { daochain } = useParams();
@@ -79,7 +83,7 @@ const AddressInput = ({
             <Tooltip
               hasArrow
               shouldWrapChildren
-              label='Address to receive the Shares, Loot, and/or Funding requested in this proposal.'
+              label={tipLabel}
               placement='top'
             >
               <TextBox
