@@ -224,24 +224,3 @@ export const getForumTopics = async (categoryId) => {
     throw new Error(err);
   }
 };
-
-/// //////////DEFAULTS//////////////
-
-// const defaultMeta = {
-//   proposals: "Proposals",
-//   proposal: "Proposal",
-//   bank: "Bank",
-//   members: "Members",
-//   member: "Member",
-//   boosts: "Apps",
-//   boost: "App",
-//   discord: "https://discord.gg/NPEJysW",
-//   medium: "https://medium.com/daohaus-club",
-//   telegram: "https://t.me/joinchat/IJqu9xPa0xzYLN1mmFKo8g",
-//   website: "https://daohaus.club",
-//   other: "https://wikipedia.com",
-//   f04title: "404 What's Lost Can Be Found",
-//   f04heading: "You have been slain",
-//   f04subhead: "Please reload from the most recent save point.",
-//   f04cta: "Start Over",
-// };

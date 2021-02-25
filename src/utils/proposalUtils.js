@@ -410,3 +410,13 @@ export const handleListSort = (proposals, sort) => {
     return proposals;
   }
 };
+
+export const searchProposals = (rawAddress, filterArr, proposals) => {
+  const activeFilters = filterArr.filter((f) => f.active);
+  const address = rawAddress.toLowerCase();
+  return proposals.filter((proposal) =>
+    activeFilters.some(
+      (filter) => proposal[filter.value] === address && proposal,
+    ),
+  );
+};

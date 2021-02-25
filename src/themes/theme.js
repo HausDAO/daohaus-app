@@ -317,6 +317,16 @@ export const createTheme = (daoTheme) => {
         sizes: {},
         defaultProps: {},
       },
+      Popover: {
+        parts: ['popper'],
+        baseStyle: (props) => ({
+          popper: {
+            zIndex: 10,
+            maxW: props.width ? props.width : 'xs',
+            w: '100%',
+          },
+        }),
+      },
       Badge: {
         baseStyle: {
           fontSize: 'xs',
