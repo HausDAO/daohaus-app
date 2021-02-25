@@ -119,7 +119,7 @@ export const supportedChains = {
     stats_graph_url:
       'https://api.thegraph.com/subgraphs/name/odyssy-automaton/daohaus-stats-matic',
     boosts_graph_url: '',
-    minion_factory_addr: '0x9417470616865De678267DAfA6574A66Fe413451',
+    minion_factory_addr: '0x52A67B01f029ED2EfEa7E17Dbb56397a612bf245',
     moloch_factory_addr: '0x6690C139564144b27ebABA71F9126611a23A31C9',
     dai_contract: '0x8f3Cf7ad23Cd3CaDbD9735AFf958023239c6A063',
     weth_contract: '0x0d500b1d8e8ef31e21c99d1db9a6444d3adf1270',

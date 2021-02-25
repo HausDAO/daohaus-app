@@ -27,15 +27,12 @@ const Boosts = ({ customTerms, daoMember, daoOverview, daoMetaData }) => {
   const hasDependentBoost = (boostKey) => {
     if (boostKey === 'vanillaMinions') {
       const minions = daoOverview.minions.length;
-      console.log('Minion', daoMetaData.boosts, minions);
       return minions;
     }
     const boostData = daoMetaData.boosts[boostKey];
     console.log(daoMetaData.boosts, daoOverview);
     return boostData && boostData.active;
   };
-
-  console.log(daoMetaData);
 
   const renderBoostCard = (boost, i) => {
     const boostData = daoMetaData.boosts && daoMetaData.boosts[boost.key];
