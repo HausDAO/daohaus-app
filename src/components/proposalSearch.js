@@ -140,6 +140,7 @@ const ProposalSearch = ({ performSearch }) => {
                 register={register}
                 setValue={setValue}
                 formLabel='Member address'
+                tipLabel='Search proposals by Ethereum address or ENS address, or select a member from the dropdown.'
               />
             </form>
             <AddressFilterOptions
