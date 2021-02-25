@@ -23,6 +23,7 @@ import Notifications from '../pages/Notifications';
 import DiscourseSettings from '../pages/DiscourseSettings';
 import ProposalTypes from '../pages/ProposalTypes';
 import MinionSafe from '../pages/MinionSafe';
+import CcoContribution from '../pages/CcoContrubution';
 
 const DaoRouter = () => {
   const { path } = useRouteMatch();
@@ -188,6 +189,12 @@ const DaoRouter = () => {
             daoTokens={currentDaoTokens}
             activities={daoActivities}
             daoMember={daoMember}
+          />
+        </Route>
+        <Route exact path={`${path}/cco`}>
+          <CcoContribution
+            daoMetaData={daoMetaData}
+            currentDaoTokens={currentDaoTokens}
           />
         </Route>
       </Switch>
