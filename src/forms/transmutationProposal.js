@@ -169,10 +169,8 @@ const TransmutationProposal = () => {
     setLoading(true);
     const now = (new Date().getTime() / 1000).toFixed();
     const hash = createHash();
-    const details = detailsToJSON({
-      hash,
-      description: values.description || '',
-    });
+    const details = `${values.description}", "hash": "${hash}`;
+
     const args = [
       values.applicant,
       tributeReturned.toString(),
