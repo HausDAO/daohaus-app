@@ -35,6 +35,7 @@ const baseListFields = `
   tributeOffered
   tributeTokenDecimals
   tributeTokenSymbol
+  tributeToken
   votingPeriodStarts
   votingPeriodEnds
   whitelist

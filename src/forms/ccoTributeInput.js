@@ -1,19 +1,9 @@
-import {
-  Button,
-  FormLabel,
-  Input,
-  InputGroup,
-  InputRightAddon,
-  Select,
-  Tooltip,
-} from '@chakra-ui/react';
-import { RiInformationLine } from 'react-icons/ri';
+import { Button, Input, InputGroup, InputRightAddon } from '@chakra-ui/react';
 import { utils } from 'web3';
 import { MaxUint256 } from '@ethersproject/constants';
 
 import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
-import TextBox from '../components/TextBox';
 import { useDao } from '../contexts/DaoContext';
 import { useInjectedProvider } from '../contexts/InjectedProviderContext';
 import { useOverlay } from '../contexts/OverlayContext';
@@ -22,7 +12,14 @@ import { useTX } from '../contexts/TXContext';
 import { createPoll } from '../services/pollService';
 import { useUser } from '../contexts/UserContext';
 
-const TributeInput = ({ register, setValue, getValues, setError }) => {
+const CcoTributeInput = ({
+  register,
+  setValue,
+  getValues,
+  setError,
+  roundData,
+  contributionClosed,
+}) => {
   const [unlocked, setUnlocked] = useState(true);
   const [balance, setBalance] = useState(0);
   const [loading, setLoading] = useState(false);
@@ -46,7 +43,6 @@ const TributeInput = ({ register, setValue, getValues, setError }) => {
           token.guildBank && token.token.tokenAddress !== depositTokenAddress,
       );
       tokenArray.unshift(depositToken);
-      console.log('tokenArray', tokenArray);
       setTokenData(
         tokenArray.map((token) => ({
           label: token.token.symbol || token.tokenAddress,
@@ -56,7 +52,6 @@ const TributeInput = ({ register, setValue, getValues, setError }) => {
         })),
       );
     }
-    // eslint-disable-next-line;
   }, [daoOverview]);
 
   useEffect(() => {
@@ -64,11 +59,10 @@ const TributeInput = ({ register, setValue, getValues, setError }) => {
       const depositToken = tokenData[0];
       getMax(depositToken.value);
     }
-    // eslint-disable-next-line
   }, [tokenData]);
 
   const handleChange = async () => {
-    const tributeToken = getValues('tributeToken');
+    const tributeToken = roundData.ccoToken.tokenAddress;
     const tributeOffered = getValues('tributeOffered');
     await checkUnlocked(tributeToken, tributeOffered);
     await getMax(tributeToken);
@@ -86,7 +80,7 @@ const TributeInput = ({ register, setValue, getValues, setError }) => {
 
   const unlock = async () => {
     setLoading(true);
-    const token = getValues('tributeToken');
+    const token = roundData.ccoToken.tokenAddress;
     const args = [daoid, MaxUint256];
 
     try {
@@ -162,27 +156,8 @@ const TributeInput = ({ register, setValue, getValues, setError }) => {
     setBalance(max);
   };
 
-  const setMax = async () => {
-    const tributeToken = getValues('tributeToken');
-    setValue(
-      'tributeOffered',
-      balance / 10 ** tokenData.find((t) => t.value === tributeToken).decimals,
-    );
-    handleChange();
-  };
-
   return (
     <>
-      <Tooltip
-        hasArrow
-        shouldWrapChildren
-        label='Only tokens approved by the DAO are allowed here. Members can add more approved tokens with Token proposals'
-        placement='top'
-      >
-        <TextBox as={FormLabel} size='xs' d='flex' alignItems='center'>
-          Token Tribute <RiInformationLine style={{ marginLeft: 5 }} />
-        </TextBox>
-      </Tooltip>
       <InputGroup>
         {!unlocked && (
           <Button
@@ -196,16 +171,6 @@ const TributeInput = ({ register, setValue, getValues, setError }) => {
             Unlock
           </Button>
         )}
-        <Button
-          onClick={() => setMax()}
-          size='xs'
-          variant='outline'
-          position='absolute'
-          right='0'
-          top='-30px'
-        >
-          Max: {balance && parseFloat(utils.fromWei(balance)).toFixed(4)}
-        </Button>
         <Input
           name='tributeOffered'
           placeholder='0'
@@ -226,34 +191,30 @@ const TributeInput = ({ register, setValue, getValues, setError }) => {
               },
             },
             pattern: {
-              value: /[0-9]/,
-              message: 'Tribute must be a number',
+              value: /^[0-9]+$/,
+              message: 'CCO Contribution must be a whole number',
+            },
+            max: {
+              value: +roundData.currentRound.maxContribution,
+              message: `${roundData.currentRound.maxContribution} ${roundData.ccoToken.symbol} per person max`,
+            },
+            min: {
+              value: +roundData.currentRound.minContribution,
+              message: `${roundData.currentRound.minContribution} ${roundData.ccoToken.symbol} per person min`,
             },
           })}
           color='white'
           focusBorderColor='secondary.500'
           onChange={handleChange}
+          disabled={contributionClosed}
         />
-        <InputRightAddon background='primary.500' p={0}>
-          <Select
-            name='tributeToken'
-            defaultValue='0xd0a1e359811322d97991e03f863a0c30c2cf029c'
-            ref={register}
-            onChange={handleChange}
-            color='white'
-            background='primary.500'
-          >
-            {' '}
-            {tokenData.map((token, idx) => (
-              <option key={idx} default={!idx} value={token.value}>
-                {token.label}
-              </option>
-            ))}
-          </Select>
+
+        <InputRightAddon background='primary.500' p={2}>
+          {roundData.ccoToken.symbol}
         </InputRightAddon>
       </InputGroup>
     </>
   );
 };
 
-export default TributeInput;
+export default CcoTributeInput;
