@@ -81,6 +81,7 @@ const completeQueries = {
   async getActivities(args, setter) {
     try {
       const activity = await fetchAllActivity(args);
+
       const resolvedActivity = {
         // manually copying to prevent unnecessary copies of proposals
         id: activity.id,

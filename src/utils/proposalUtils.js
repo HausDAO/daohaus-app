@@ -77,17 +77,18 @@ export const determineProposalType = (proposal) => {
 
 export const titleMaker = (proposal) => {
   const details = proposal.details.split('~');
-
   if (details[0] === 'id') {
     return details[3];
   } else if (details[0][0] === '{') {
     let parsedDetails;
 
     try {
+      // console.log('proposal.details', proposal.details);
+      console.log(IsJsonString(proposal.details));
       parsedDetails = IsJsonString(proposal.details)
         ? JSON.parse(proposal.details.replace(/(\r\n|\n|\r)/gm, ''))
         : '';
-      return parsedDetails.title || '';
+      return parsedDetails.title || 'Whoops! Could not parse JSON data';
     } catch {
       console.log(`Couldn't parse JSON from metadata`);
       return `Proposal`;

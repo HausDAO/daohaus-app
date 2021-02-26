@@ -166,6 +166,7 @@ const TransmutationProposal = () => {
   };
 
   const onSubmit = async (values) => {
+    console.log(values);
     setLoading(true);
     const now = (new Date().getTime() / 1000).toFixed();
     const hash = createHash();

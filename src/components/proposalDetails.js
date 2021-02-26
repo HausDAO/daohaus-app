@@ -101,8 +101,8 @@ const ProposalDetails = ({ proposal, daoMember }) => {
             <ProposalMinionCard proposal={proposal} />
           ) : (
             <Skeleton isLoaded={proposal?.description}>
-              {proposal?.description ? (
-                proposal?.description.indexOf('http') > -1 ? (
+              {proposal?.description &&
+                (proposal?.description.indexOf('http') > -1 ? (
                   <Box
                     w='100%'
                     dangerouslySetInnerHTML={{
@@ -111,8 +111,7 @@ const ProposalDetails = ({ proposal, daoMember }) => {
                   />
                 ) : (
                   <Box w='100%'>{proposal?.description}</Box>
-                )
-              ) : null}
+                ))}
             </Skeleton>
           )}
           <Box mt={proposal?.link || proposal?.minionAddress ? 6 : 2}>
