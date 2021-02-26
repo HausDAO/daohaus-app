@@ -87,6 +87,7 @@ export const DAO_ACTIVITIES = gql`
         tributeOffered
         tributeTokenDecimals
         tributeTokenSymbol
+        tributeToken
         votingPeriodStarts
         votingPeriodEnds
         whitelist

@@ -62,7 +62,9 @@ export const truncateAddr = (addr) => {
   return addr ? addr.slice(0, 6) + '...' + addr.slice(-4) : null;
 };
 export const timeToNow = (time) => {
-  return formatDistanceToNow(new Date(time * 1000), { addSuffix: true });
+  return formatDistanceToNow(new Date(time * 1000), {
+    addSuffix: true,
+  });
 };
 
 // export const formatCreatedAt = (createdAt) => {
