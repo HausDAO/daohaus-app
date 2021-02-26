@@ -57,6 +57,7 @@ const CcoContribution = React.memo(function ccocontribution({
         roundOpen:
           +round.startTime < now &&
           +`${+round.startTime + +round.duration}` > now,
+        roundOver: +`${+round.startTime + +round.duration}` < now,
       };
 
       setRoundData({
@@ -66,6 +67,8 @@ const CcoContribution = React.memo(function ccocontribution({
         claimTokenValue: daoMetaData.boosts.cco.metadata.claimTokenValue,
         claimTokenSymbol: daoMetaData.boosts.cco.metadata.claimTokenSymbol,
         raiseStartTime: daoMetaData.boosts.cco.metadata.raiseStartTime,
+        beforeRaise: +daoMetaData.boosts.cco.metadata.raiseStartTime > now,
+        raiseOver: +`${+round.startTime + +round.duration}` < now,
         claimPeriodStartTime:
           daoMetaData.boosts.cco.metadata.claimPeriodStartTime,
         claimOpen: +daoMetaData.boosts.cco.metadata.claimPeriodStartTime < now,
@@ -81,10 +84,6 @@ const CcoContribution = React.memo(function ccocontribution({
       const addressProposals = contributionProposals.filter((proposal) => {
         return isCcoProposalForAddress(proposal, address, roundData);
       });
-
-      console.log('roundData', roundData);
-      console.log('contributionProposals', contributionProposals);
-      console.log('addressProposals', addressProposals);
 
       const contributionTotal = contributionTotalValue(
         contributionProposals,
@@ -141,7 +140,11 @@ const CcoContribution = React.memo(function ccocontribution({
                       {isEligible === 'unchecked' ? (
                         <Button
                           onClick={checkEligibility}
-                          disabled={checkingEligibility}
+                          disabled={
+                            checkingEligibility ||
+                            roundData.beforeRaise ||
+                            roundData.raiseOver
+                          }
                         >
                           {!checkingEligibility ? (
                             <>Check Eligibility</>
@@ -176,7 +179,10 @@ const CcoContribution = React.memo(function ccocontribution({
                           2. Contribute
                         </TextBox>
                         <Text fontSize='sm' color='whiteAlpha.700' as='i'>
-                          {countDownText(roundData.currentRound)}
+                          {countDownText(
+                            roundData.currentRound,
+                            roundData.raiseOver,
+                          )}
                         </Text>
                       </Flex>
                       {!eligibleBlock ? (
@@ -322,7 +328,7 @@ const CcoContribution = React.memo(function ccocontribution({
                     </Box>
                   </Flex>
                   <TextBox size='sm' color='whiteAlpha.900'>
-                    {countDownText(roundData.currentRound)}
+                    {countDownText(roundData.currentRound, roundData.raiseOver)}
                   </TextBox>
                 </ContentBox>
                 <ContentBox mt={2} w='100%'>
