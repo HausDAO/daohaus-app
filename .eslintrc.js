@@ -30,9 +30,8 @@ module.exports = {
   rules: {
     'no-console': 'off',
     'react/prop-types': 'off',
-    // 'no-unused-vars': 'error',
-    'no-unused-vars': 'warn',
-
+    'no-unused-vars': 'error',
+    // 'no-unused-vars': 'warn',
     'prettier/prettier': 'error',
   },
 };

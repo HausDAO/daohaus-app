@@ -156,15 +156,6 @@ const CcoTributeInput = ({
     setBalance(max);
   };
 
-  const setMax = async () => {
-    const tributeToken = getValues('tributeToken');
-    setValue(
-      'tributeOffered',
-      balance / 10 ** tokenData.find((t) => t.value === tributeToken).decimals,
-    );
-    handleChange();
-  };
-
   return (
     <>
       <InputGroup>
