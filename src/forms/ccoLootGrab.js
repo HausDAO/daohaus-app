@@ -1,0 +1,198 @@
+import React, { useState, useEffect } from 'react';
+import { useForm } from 'react-hook-form';
+import { Button, FormControl, Flex, Icon, Box, Text } from '@chakra-ui/react';
+import { RiErrorWarningLine } from 'react-icons/ri';
+
+import { useInjectedProvider } from '../contexts/InjectedProviderContext';
+import { useOverlay } from '../contexts/OverlayContext';
+import { useTX } from '../contexts/TXContext';
+import { useUser } from '../contexts/UserContext';
+import { useParams } from 'react-router-dom';
+import {
+  createHash,
+  daoConnectedAndSameChain,
+  detailsToJSON,
+} from '../utils/general';
+import { createPoll } from '../services/pollService';
+import { MolochService } from '../services/molochService';
+import { useDao } from '../contexts/DaoContext';
+import { valToDecimalString } from '../utils/tokenValue';
+import { chainByID } from '../utils/chain';
+import { useMetaData } from '../contexts/MetaDataContext';
+import CcoTributeInput from './ccoTributeInput';
+
+const CcoLootGrabForm = ({ roundData, currentContributionData }) => {
+  const {
+    injectedProvider,
+    address,
+    requestWallet,
+    injectedChain,
+  } = useInjectedProvider();
+  const { errorToast, successToast, setTxInfoModal } = useOverlay();
+  const { daoOverview } = useDao();
+  const { refreshDao } = useTX();
+  const { cachePoll, resolvePoll } = useUser();
+  const { daoid, daochain } = useParams();
+  const { daoMetaData } = useMetaData();
+
+  const [loading, setLoading] = useState(false);
+  const [currentError, setCurrentError] = useState(null);
+  const [ratio, setRatio] = useState(1);
+
+  const {
+    handleSubmit,
+    errors,
+    register,
+    setValue,
+    setError,
+    getValues,
+  } = useForm({ reValidateMode: 'onSubmit' });
+
+  useEffect(() => {
+    if (Object.keys(errors).length > 0) {
+      const newE = Object.keys(errors)[0];
+      setCurrentError({
+        field: newE,
+        ...errors[newE],
+      });
+    } else {
+      setCurrentError(null);
+    }
+  }, [errors]);
+
+  useEffect(() => {
+    if (daoMetaData?.boosts?.cco?.active) {
+      const daoRatio = +daoMetaData.boosts.cco.metadata.ratio;
+      setRatio(daoRatio);
+    }
+  });
+
+  const onSubmit = async (values) => {
+    setLoading(true);
+    const hash = createHash();
+    const details = detailsToJSON({ title: 'CCO contribution!', hash });
+    const { tokenBalances, depositToken } = daoOverview;
+    const tributeToken = roundData.ccoToken.tokenAddress;
+    const paymentToken = depositToken.tokenAddress;
+    const tributeOffered = values.tributeOffered
+      ? valToDecimalString(values.tributeOffered, tributeToken, tokenBalances)
+      : '0';
+    const paymentRequested = '0';
+    const applicant = address;
+    const args = [
+      applicant,
+      values.sharesRequested || '0',
+      Math.floor(values.tributeOffered * ratio || '0').toString(),
+      tributeOffered,
+      tributeToken,
+      paymentRequested,
+      paymentToken,
+      details,
+    ];
+    try {
+      const poll = createPoll({ action: 'submitProposalCco', cachePoll })({
+        daoID: daoid,
+        chainID: daochain,
+        hash,
+        actions: {
+          onError: (error, txHash) => {
+            errorToast({
+              title: `There was an error.`,
+            });
+            resolvePoll(txHash);
+            console.error(`Could not find a matching proposal: ${error}`);
+          },
+          onSuccess: (txHash) => {
+            successToast({
+              title: 'Contribution Submitted!',
+            });
+            setValue('tributeOffered', '0');
+            refreshDao();
+            resolvePoll(txHash);
+            setLoading(false);
+          },
+        },
+      });
+      const onTxHash = () => {
+        setTxInfoModal(true);
+      };
+      await MolochService({
+        web3: injectedProvider,
+        daoAddress: daoid,
+        chainID: daochain,
+        version: daoOverview.version,
+      })('submitProposal')({ args, address, poll, onTxHash });
+    } catch (err) {
+      setLoading(false);
+      console.error('error: ', err);
+      errorToast({
+        title: `There was an error.`,
+        description: err?.message || '',
+      });
+    }
+  };
+
+  return (
+    <form onSubmit={handleSubmit(onSubmit)}>
+      <Flex justifyContent='space-between' mb={3}>
+        <Text fontSize='sm' color='whiteAlpha.700' as='i'>
+          {`${roundData.currentRound.maxContribution} ${roundData.ccoToken.symbol}`}{' '}
+          per person max
+        </Text>
+        <Text fontSize='sm' color='whiteAlpha.700' as='i'>
+          {`${currentContributionData?.addressRemaining}`}/
+          {`${roundData.currentRound.maxContribution} ${roundData.ccoToken.symbol}`}{' '}
+          remaining
+        </Text>
+      </Flex>
+      <FormControl
+        isInvalid={errors.name}
+        display='flex'
+        flexDirection='row'
+        justifyContent='space-between'
+        mb={0}
+        flexWrap='wrap'
+      >
+        <Box w={['100%', null, '80%']}>
+          <CcoTributeInput
+            register={register}
+            setValue={setValue}
+            getValues={getValues}
+            setError={setError}
+            roundData={roundData}
+            contributionClosed={currentContributionData?.addressRemaining <= 0}
+          />
+        </Box>
+        {daoConnectedAndSameChain(address, daochain, injectedChain?.chainId) ? (
+          <Button
+            type='submit'
+            loadingText='Submitting'
+            isLoading={loading}
+            disabled={loading || currentContributionData?.addressRemaining <= 0}
+          >
+            Submit
+          </Button>
+        ) : (
+          <Button
+            onClick={requestWallet}
+            isDisabled={injectedChain && daochain !== injectedChain?.chainId}
+          >
+            Connect
+            {injectedChain && daochain !== injectedChain?.chainId
+              ? `to ${chainByID(daochain).name}`
+              : 'Wallet'}
+          </Button>
+        )}
+      </FormControl>
+
+      {currentError && (
+        <Flex color='red.500' fontSize='m' mr={5} align='center'>
+          <Icon as={RiErrorWarningLine} color='red.500' mr={2} />
+          {currentError.message}
+        </Flex>
+      )}
+    </form>
+  );
+};
+
+export default CcoLootGrabForm;

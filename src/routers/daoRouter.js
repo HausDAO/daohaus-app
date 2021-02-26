@@ -23,7 +23,7 @@ import Notifications from '../pages/Notifications';
 import DiscourseSettings from '../pages/DiscourseSettings';
 import ProposalTypes from '../pages/ProposalTypes';
 import MinionSafe from '../pages/MinionSafe';
-import CcoContribution from '../pages/CcoContrubution';
+import CcoContribution from '../pages/CcoContribution';
 
 const DaoRouter = () => {
   const { path } = useRouteMatch();
@@ -195,6 +195,7 @@ const DaoRouter = () => {
           <CcoContribution
             daoMetaData={daoMetaData}
             currentDaoTokens={currentDaoTokens}
+            daoProposals={daoProposals}
           />
         </Route>
       </Switch>
