@@ -88,16 +88,6 @@ const NewMinionForm = () => {
     }
   };
 
-  if (daochain === '0x89') {
-    return (
-      <Box w='90%'>
-        <Heading as='h4' size='md' fontWeight='100' mb={10}>
-          Minions are brewing. Try back later.
-        </Heading>
-      </Box>
-    );
-  }
-
   return (
     <Box w='90%'>
       {step === 1 ? (
