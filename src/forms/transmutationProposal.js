@@ -28,7 +28,7 @@ import { useUser } from '../contexts/UserContext';
 import { useTX } from '../contexts/TXContext';
 import { useOverlay } from '../contexts/OverlayContext';
 import { createPoll } from '../services/pollService';
-import { createHash, detailsToJSON } from '../utils/general';
+import { createHash } from '../utils/general';
 import { createForumTopic } from '../utils/discourse';
 
 const TransmutationProposal = () => {
