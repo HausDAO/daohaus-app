@@ -70,7 +70,11 @@ const CcoLootGrabForm = ({ roundData, currentContributionData }) => {
   const onSubmit = async (values) => {
     setLoading(true);
     const hash = createHash();
-    const details = detailsToJSON({ title: 'CCO contribution!', hash });
+    const details = detailsToJSON({
+      title: 'CCO contribution!',
+      cco: true,
+      hash,
+    });
     const { tokenBalances, depositToken } = daoOverview;
     const tributeToken = roundData.ccoToken.tokenAddress;
     const paymentToken = depositToken.tokenAddress;
