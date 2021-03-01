@@ -15,6 +15,7 @@ import {
   RiCheckboxCircleLine,
   RiCloseCircleLine,
   RiErrorWarningLine,
+  RiSearchLine,
 } from 'react-icons/ri';
 import { useForm } from 'react-hook-form';
 import { isEthAddress } from '../utils/general';
@@ -33,7 +34,7 @@ const defaultFilters = [
   { value: 'processor', name: 'Processed By', active: true },
 ];
 
-const ProposalSearch = ({ performSearch }) => {
+const ProposalSearch = ({ performSearch, resetSearch }) => {
   const [searchFilters, setSearchFilters] = useState(defaultFilters);
   const {
     handleSubmit,
@@ -42,7 +43,10 @@ const ProposalSearch = ({ performSearch }) => {
     setValue,
     setError,
     watch,
+    reset,
   } = useForm();
+
+  const [isEnabled, setIsEnabled] = useState(false);
 
   const inputAddr = watch('applicant');
   const inputENS = watch('applicantHidden');
@@ -51,10 +55,13 @@ const ProposalSearch = ({ performSearch }) => {
   useEffect(() => {
     if (isEthAddress(inputAddr)) {
       handleSearch(inputAddr);
+      setIsEnabled(true);
     } else if (isEthAddress(inputENS)) {
       handleSearch(inputENS);
+      setIsEnabled(true);
     } else if (isEthAddress(selectAddr)) {
       handleSearch(selectAddr);
+      setIsEnabled(true);
     }
   }, [inputAddr, inputENS, selectAddr, searchFilters]);
 
@@ -87,6 +94,12 @@ const ProposalSearch = ({ performSearch }) => {
       );
     }
   };
+  const clearSearch = () => {
+    console.log('fired');
+    reset();
+    setIsEnabled(false);
+    resetSearch();
+  };
 
   return (
     <Flex
@@ -97,7 +110,7 @@ const ProposalSearch = ({ performSearch }) => {
       position={['relative', null, null, 'absolute']}
       right='0'
       mt='1'
-      zIndex='0'
+      zIndex='5'
     >
       <Popover placement='bottom-end'>
         <PopoverTrigger>
@@ -110,6 +123,7 @@ const ProposalSearch = ({ performSearch }) => {
             p='0'
             h='inherit'
             zIndex='15'
+            leftIcon={isEnabled && <RiSearchLine />}
           >
             Search
             <Icon as={RiArrowDropDownFill} color='white' />
@@ -139,10 +153,13 @@ const ProposalSearch = ({ performSearch }) => {
                 watch={watch}
                 register={register}
                 setValue={setValue}
+                canClear={isEnabled}
+                clearFn={clearSearch}
                 formLabel='Member address'
                 tipLabel='Search proposals by Ethereum address or ENS address, or select a member from the dropdown.'
               />
             </form>
+
             <AddressFilterOptions
               filters={searchFilters}
               handleToggleFilter={handleToggleFilter}

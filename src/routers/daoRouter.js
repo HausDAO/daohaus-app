@@ -24,6 +24,7 @@ import DiscourseSettings from '../pages/DiscourseSettings';
 import ProposalTypes from '../pages/ProposalTypes';
 import MinionSafe from '../pages/MinionSafe';
 import CcoContribution from '../pages/CcoContribution';
+import Staking from '../pages/Staking';
 
 const DaoRouter = () => {
   const { path } = useRouteMatch();
@@ -98,6 +99,15 @@ const DaoRouter = () => {
             customTerms={customTerms}
             daoMember={daoMember}
           />
+        </Route>
+        <Route exact path={`${path}/staking`}>
+          <Staking />
+          {/* <Boosts
+            daoOverview={daoOverview}
+            daoMetaData={daoMetaData}
+            customTerms={customTerms}
+            daoMember={daoMember}
+          /> */}
         </Route>
         <Route exact path={`${path}/settings/notifications`}>
           <Notifications

@@ -31,7 +31,8 @@ const AddressInput = ({
   formLabel = 'applicant',
   guildKick,
   tipLabel = defaultTipLabel,
-
+  canClear,
+  clearFn,
   newMember,
   member,
 }) => {
@@ -96,6 +97,17 @@ const AddressInput = ({
                 {formLabel} <RiInformationLine style={{ marginLeft: 5 }} />
               </TextBox>
             </Tooltip>
+            {canClear && clearFn && (
+              <Button
+                onClick={clearFn}
+                variant='outline'
+                size='xs'
+                ml='auto'
+                mr={2}
+              >
+                Clear
+              </Button>
+            )}
             {!guildKick && (
               <Button
                 onClick={() => setAnyApplicant(true)}
@@ -131,6 +143,17 @@ const AddressInput = ({
             <TextBox as={FormLabel} size='xs' htmlFor='memberApplicant'>
               {formLabel}
             </TextBox>
+            {canClear && clearFn && (
+              <Button
+                onClick={clearFn}
+                variant='outline'
+                size='xs'
+                ml='auto'
+                mr={2}
+              >
+                Clear
+              </Button>
+            )}
             {!guildKick && (
               <Button
                 onClick={() => setAnyApplicant(false)}
