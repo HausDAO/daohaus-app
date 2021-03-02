@@ -35,7 +35,6 @@ const ExploreList = () => {
         const networkMatch = state.filters.network.includes(dao.networkId);
 
         return (
-          !dao.meta.hide &&
           searchMatch &&
           tagMatch &&
           memberCount &&
