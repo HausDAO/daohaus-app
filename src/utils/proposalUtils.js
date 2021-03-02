@@ -83,11 +83,8 @@ export const titleMaker = (proposal) => {
     let parsedDetails;
 
     try {
-<<<<<<< HEAD
       // console.log('proposal.details', proposal.details);
       // console.log(IsJsonString(proposal.details));
-=======
->>>>>>> 5b559e6bc61690dfbcad2645e4819e510e390fb1
       parsedDetails = IsJsonString(proposal.details)
         ? JSON.parse(proposal.details.replace(/(\r\n|\n|\r)/gm, ''))
         : '';

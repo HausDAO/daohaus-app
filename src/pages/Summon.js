@@ -1,18 +1,12 @@
 import React, { useEffect, useState } from 'react';
-import {
-  Button,
-  Flex,
-  Box,
-  Text,
-  InputGroup,
-  Input,
-  InputRightAddon,
-  Icon,
-} from '@chakra-ui/react';
+import { Button, Flex, Box, Text } from '@chakra-ui/react';
 
 import Layout from '../components/layout';
 import { useInjectedProvider } from '../contexts/InjectedProviderContext';
 import {
+  cloneDaoPresets,
+  cloneMembers,
+  cloneTokens,
   daoConstants,
   daoPresets,
   parseSummonresAndShares,
@@ -29,9 +23,10 @@ import { getGraphEndpoint } from '../utils/chain';
 import { DAO_POLL } from '../graphQL/dao-queries';
 import MainViewLayout from '../components/mainViewLayout';
 import { capitalize } from '../utils/general';
-import ContentBox from '../components/ContentBox';
-import { RiSearchLine } from 'react-icons/ri';
 import TemporaryCloneSummon from '../components/temporaryCloneSummon';
+
+const tokenMsg =
+  'Token addresses are different across chains. If you would like to clone the same tokens to a different network, you will need to manually add the equivalent token addresses here.';
 
 const Summon = () => {
   const {
@@ -145,15 +140,33 @@ const Summon = () => {
   };
 
   const getnewDaoAddress = async () => {
-    const res = await graphQuery({
-      endpoint: getGraphEndpoint(injectedChain.chain_id, 'subgraph_url'),
-      query: DAO_POLL,
-      variables: {
-        summoner: address,
-        createdAt: now,
-      },
+    try {
+      const res = await graphQuery({
+        endpoint: getGraphEndpoint(injectedChain.chain_id, 'subgraph_url'),
+        query: DAO_POLL,
+        variables: {
+          summoner: address,
+          createdAt: now,
+        },
+      });
+      setSuccess(res.moloches[0].id);
+    } catch (error) {
+      console.error(error);
+      setSuccess();
+    }
+  };
+
+  const handleCloneDAO = (daoOverview, daoMembers, daoNetwork) => {
+    setDaoData({
+      ...daoConstants(injectedChain.chain_id),
+      summoner: '',
+      summonerAndShares: cloneMembers(daoMembers),
+      approvedToken:
+        injectedChain.chainId === daoNetwork
+          ? cloneTokens(daoOverview)
+          : tokenMsg,
+      ...cloneDaoPresets(daoOverview, daoMembers),
     });
-    setSuccess(res.moloches[0].id);
   };
 
   return (
@@ -237,7 +250,9 @@ const Summon = () => {
             </Flex>
           </Box>
         )}
-        {hardMode && <TemporaryCloneSummon chainID={injectedChain.chainId} />}
+        {hardMode && !isSummoning && (
+          <TemporaryCloneSummon handleCloneDAO={handleCloneDAO} />
+        )}
       </MainViewLayout>
     </Layout>
   );

@@ -248,6 +248,25 @@ export const currencyOptions = (chainId) => {
 
   return options;
 };
+// V1 example
+// depositToken: {tokenAddress: "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2", symbol: "WETH", decimals: "18", __typename: "Token"}
+// gracePeriodLength: "35"
+// guildBankAddress: "0x211a94468ba1e379236b45ca42dc63ee93139c7e"
+// id: "0x1fd169a4f5c59acf79d0fd5d91d1201ef1bce9f1"
+// minions: []
+// newContract: "1"
+// periodDuration: "17280"
+// processingReward: "100000000000000000"
+// proposalDeposit: "10000000000000000000"
+// summoner: "0x512e07a093aaa20ba288392eadf03838c7a4e522"
+// summoningTime: "1550131297"
+// title: "Moloch DAO"
+// tokenBalances: []
+// totalLoot: "0"
+// totalShares: "4324"
+// version: "1"
+// votingPeriodLength: "35"
+// __typename: "Moloch"
 
 export const cloneDaoPresets = (daoOverview) => {
   return {
@@ -256,8 +275,8 @@ export const cloneDaoPresets = (daoOverview) => {
     proposalDeposit: daoOverview.proposalDeposit,
     processingReward: daoOverview.processingReward,
     periodDuration: daoOverview.periodDuration,
-    summonerShares: 1,
-    version: daoOverview.version,
+    // summonerShares: 1,
+    version: 2.1,
   };
 };
 // const deleteLastCharacter = (string) => string.slice(0, string.length - 1);
