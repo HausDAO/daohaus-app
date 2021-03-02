@@ -84,7 +84,7 @@ export const titleMaker = (proposal) => {
 
     try {
       // console.log('proposal.details', proposal.details);
-      console.log(IsJsonString(proposal.details));
+      // console.log(IsJsonString(proposal.details));
       parsedDetails = IsJsonString(proposal.details)
         ? JSON.parse(proposal.details.replace(/(\r\n|\n|\r)/gm, ''))
         : '';
