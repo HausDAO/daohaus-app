@@ -1,5 +1,14 @@
 import React, { useEffect, useState } from 'react';
-import { Button, Flex, Box, Text } from '@chakra-ui/react';
+import {
+  Button,
+  Flex,
+  Box,
+  Text,
+  InputGroup,
+  Input,
+  InputRightAddon,
+  Icon,
+} from '@chakra-ui/react';
 
 import Layout from '../components/layout';
 import { useInjectedProvider } from '../contexts/InjectedProviderContext';
@@ -19,6 +28,10 @@ import { graphQuery } from '../utils/apollo';
 import { getGraphEndpoint } from '../utils/chain';
 import { DAO_POLL } from '../graphQL/dao-queries';
 import MainViewLayout from '../components/mainViewLayout';
+import { capitalize } from '../utils/general';
+import ContentBox from '../components/ContentBox';
+import { RiSearchLine } from 'react-icons/ri';
+import TemporaryCloneSummon from '../components/temporaryCloneSummon';
 
 const Summon = () => {
   const {
@@ -176,6 +189,7 @@ const Summon = () => {
                     </Flex>
                   )}
                 </Flex>
+
                 {!hardMode ? (
                   <>
                     <SummonEasy
@@ -190,6 +204,7 @@ const Summon = () => {
                       daoData={daoData}
                       setDaoData={setDaoData}
                       handleSummon={handleSummon}
+                      networkName={capitalize(injectedChain.network)}
                     />
                   </>
                 )}
@@ -222,6 +237,7 @@ const Summon = () => {
             </Flex>
           </Box>
         )}
+        {hardMode && <TemporaryCloneSummon chainID={injectedChain.chainId} />}
       </MainViewLayout>
     </Layout>
   );

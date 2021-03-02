@@ -23,7 +23,6 @@ const SummonHard = ({ daoData, handleSummon, networkName }) => {
     errors,
     handleSubmit,
     formState,
-    setValue,
     reset,
   } = useForm({
     mode: 'onBlur',
@@ -66,7 +65,7 @@ const SummonHard = ({ daoData, handleSummon, networkName }) => {
             <Tooltip
               label={
                 <Box fontFamily='heading'>
-                  If you would like to summon to a different network, switch
+                  If you would like to summon on a different network, switch
                   networks on your wallet
                 </Box>
               }
