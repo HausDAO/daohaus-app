@@ -52,7 +52,7 @@ const Clone = ({ daoOverview, daoMembers }) => {
           injectedChain.chainId === daochain
             ? cloneTokens(daoOverview)
             : tokenMsg,
-        ...cloneDaoPresets(daoOverview, daoMembers),
+        ...cloneDaoPresets(daoOverview),
       });
     }
   }, [injectedChain, daoMembers, daoOverview]);

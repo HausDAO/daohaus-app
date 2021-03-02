@@ -9,6 +9,7 @@ export const HOME_DAO = gql`
       summoningTime
       newContract
       totalShares
+      dilutionBound
       totalLoot
       version
       periodDuration
