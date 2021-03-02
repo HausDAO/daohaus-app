@@ -81,6 +81,7 @@ const completeQueries = {
   async getActivities(args, setter) {
     try {
       const activity = await fetchAllActivity(args);
+
       const resolvedActivity = {
         // manually copying to prevent unnecessary copies of proposals
         id: activity.id,
@@ -186,26 +187,29 @@ export const hubChainQuery = async ({
         variables,
       });
 
-      const withMetaData = chainData?.membersHub.map((dao) => {
-        const withResolvedProposals = {
-          ...dao,
-          moloch: {
-            ...omit('proposals', dao.moloch),
-            proposals: dao.moloch.proposals.map((proposal) =>
-              proposalResolver(proposal, {
-                proposalType: true,
-                description: true,
-                title: true,
-                activityFeed: true,
-              }),
-            ),
-          },
-        };
-        return {
-          ...withResolvedProposals,
-          meta: daoMapLookup(dao?.moloch?.id, chain.apiMatch),
-        };
-      });
+      const withMetaData = chainData?.membersHub
+        .map((dao) => {
+          const withResolvedProposals = {
+            ...dao,
+            moloch: {
+              ...omit('proposals', dao.moloch),
+              proposals: dao.moloch.proposals.map((proposal) =>
+                proposalResolver(proposal, {
+                  proposalType: true,
+                  description: true,
+                  title: true,
+                  activityFeed: true,
+                }),
+              ),
+            },
+          };
+
+          return {
+            ...withResolvedProposals,
+            meta: daoMapLookup(dao?.moloch?.id, chain.apiMatch),
+          };
+        })
+        .filter((dao) => !dao.meta || !dao.meta.hide);
 
       reactSetter((prevState) => [
         ...prevState,
@@ -239,13 +243,15 @@ export const exploreChainQuery = async ({
         subfield: 'moloches',
       });
 
-      const withMetaData = chainData.map((dao) => {
-        const withResolvedDao = daoResolver(dao, { prices, chain });
-        return {
-          ...withResolvedDao,
-          meta: daoMapLookup(dao?.id, chain.apiMatch),
-        };
-      });
+      const withMetaData = chainData
+        .map((dao) => {
+          const withResolvedDao = daoResolver(dao, { prices, chain });
+          return {
+            ...withResolvedDao,
+            meta: daoMapLookup(dao?.id, chain.apiMatch),
+          };
+        })
+        .filter((dao) => !dao.meta || !dao.meta.hide);
 
       reactSetter((prevState) => {
         return {

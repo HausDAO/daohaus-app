@@ -39,9 +39,11 @@ const CcoContribution = React.memo(function ccocontribution({
 
   useEffect(() => {
     if (currentDaoTokens && daoMetaData?.boosts?.cco?.active) {
+      console.log('currentDaoTokens', currentDaoTokens);
       const ccoToken = currentDaoTokens.find(
         (token) =>
-          token.tokenAddress === daoMetaData.boosts.cco.metadata.tributeToken,
+          token.tokenAddress.toLowerCase() ===
+          daoMetaData.boosts.cco.metadata.tributeToken.toLowerCase(),
       );
 
       const now = new Date() / 1000;
@@ -119,6 +121,10 @@ const CcoContribution = React.memo(function ccocontribution({
   };
 
   const eligibleBlock = isEligible === 'denied' || isEligible === 'unchecked';
+  // canContribute: isEligible, addressRemaining > 0, remaining > 0, inWIndow
+  // const contributionClosed = currentContributionData?. currentContributionData?.addressRemaining <= 0;
+
+  console.log('roundData', roundData);
 
   return (
     <MainViewLayout header='DAOhaus CCO' isDao={true}>
@@ -252,7 +258,7 @@ const CcoContribution = React.memo(function ccocontribution({
                           </Text>
                           <TextBox variant='value' size='md' my={2}>
                             {`${roundData.claimTokenValue *
-                              currentContributionData?.addressTotal} ${
+                              currentContributionData?.addressTotal || 0} ${
                               roundData.claimTokenSymbol
                             }`}
                           </TextBox>

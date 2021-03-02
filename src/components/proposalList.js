@@ -59,7 +59,6 @@ const ProposalsList = ({ proposals, customTerms }) => {
 
     const newOptions = getFilters(daoMember, unread);
     setFilterOptions(newOptions);
-    // if ((!sameUser && filter && sort) || (!sameUser && !filter && !sort)) {
 
     const hasSavedChanges =
       prevMember.current === 'No Address' && filter && sort;
@@ -108,6 +107,12 @@ const ProposalsList = ({ proposals, customTerms }) => {
     setListProposals(searchProposals(address, searchFilters, proposals));
     searchMode.current = true;
   };
+  const resetSearch = () => {
+    searchMode.current = false;
+    prevMember.current = 'inReset';
+    setFilter(null);
+    setSort(null);
+  };
   return (
     <>
       <Flex wrap='wrap' position='relative'>
@@ -126,7 +131,10 @@ const ProposalsList = ({ proposals, customTerms }) => {
           // uses custom props to prevent overlap with search button
           containerProps={{ width: ['100%', null, null, '38%'], zIndex: '10' }}
         />
-        <ProposalSearch performSearch={performSearch} />
+        <ProposalSearch
+          performSearch={performSearch}
+          resetSearch={resetSearch}
+        />
       </Flex>
       {isLoaded &&
         paginatedProposals?.map((proposal) => {
