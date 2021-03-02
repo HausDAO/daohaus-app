@@ -1,14 +1,30 @@
 import React, { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
-import { Box, Text, Button, Input, Textarea, Icon } from '@chakra-ui/react';
+import {
+  Box,
+  Text,
+  Button,
+  Input,
+  Textarea,
+  Icon,
+  Tooltip,
+  Flex,
+} from '@chakra-ui/react';
 import ContentBox from '../components/ContentBox';
 import TextBox from '../components/TextBox';
 import { validateSummonresAndShares } from '../utils/summoning';
-import { RiErrorWarningLine } from 'react-icons/ri';
+import { RiErrorWarningLine, RiInformationLine } from 'react-icons/ri';
 
-const SummonHard = ({ daoData, handleSummon }) => {
+const SummonHard = ({ daoData, handleSummon, networkName }) => {
   const [currentError, setCurrentError] = useState(null);
-  const { register, getValues, errors, handleSubmit, formState } = useForm({
+  const {
+    register,
+    getValues,
+    errors,
+    handleSubmit,
+    formState,
+    reset,
+  } = useForm({
     mode: 'onBlur',
     defaultValues: { ...daoData },
   });
@@ -26,8 +42,13 @@ const SummonHard = ({ daoData, handleSummon }) => {
     }
   }, [errors]);
 
+  useEffect(() => {
+    reset({
+      ...daoData,
+    });
+  }, [daoData]);
+
   const onSubmit = (data) => {
-    console.log('data', data);
     handleSummon(data);
   };
 
@@ -39,6 +60,25 @@ const SummonHard = ({ daoData, handleSummon }) => {
         className='Form'
       >
         <Box>
+          <Flex mb={4}>
+            <TextBox>Summoning on: {networkName} </TextBox>
+            <Tooltip
+              label={
+                <Box fontFamily='heading'>
+                  If you would like to summon on a different network, switch
+                  networks on your wallet
+                </Box>
+              }
+              transform='translateY(-10px)'
+              bg='secondary.500'
+              placement='right'
+            >
+              <Flex alignItems='center' ml={2}>
+                <Icon as={RiInformationLine} />
+              </Flex>
+            </Tooltip>
+          </Flex>
+
           <TextBox>Token(s)</TextBox>
           <Box>
             What is the primary token contract address? Can whitelist more here
@@ -55,7 +95,7 @@ const SummonHard = ({ daoData, handleSummon }) => {
             )}
           </Box>
         </Box>
-
+        {/* {isCloning && daochain !== } */}
         <Box>
           <TextBox mt={6}>Periods</TextBox>
           <Box>

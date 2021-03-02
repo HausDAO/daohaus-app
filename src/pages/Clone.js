@@ -1,18 +1,15 @@
 import React, { useEffect, useState } from 'react';
 import { Button, Flex, Box, Text } from '@chakra-ui/react';
 
-import Layout from '../components/layout';
 import { useInjectedProvider } from '../contexts/InjectedProviderContext';
 import {
-  cloneDaoPresets,
-  cloneMembers,
-  cloneTokens,
   daoConstants,
-  daoPresets,
+  cloneMembers,
+  cloneDaoPresets,
   parseSummonresAndShares,
+  cloneTokens,
 } from '../utils/summoning';
 import SummonHard from '../forms/summonHard';
-import SummonEasy from '../forms/summonEasy';
 import { createPoll } from '../services/pollService';
 import { useUser } from '../contexts/UserContext';
 import { useOverlay } from '../contexts/OverlayContext';
@@ -22,13 +19,13 @@ import { graphQuery } from '../utils/apollo';
 import { getGraphEndpoint } from '../utils/chain';
 import { DAO_POLL } from '../graphQL/dao-queries';
 import MainViewLayout from '../components/mainViewLayout';
+import { useParams } from 'react-router-dom';
 import { capitalize } from '../utils/general';
-import TemporaryCloneSummon from '../components/temporaryCloneSummon';
 
 const tokenMsg =
   'Token addresses are different across chains. If you would like to clone the same tokens to a different network, you will need to manually add the equivalent token addresses here.';
 
-const Summon = () => {
+const Clone = ({ daoOverview, daoMembers }) => {
   const {
     address,
     injectedChain,
@@ -36,8 +33,8 @@ const Summon = () => {
     injectedProvider,
   } = useInjectedProvider();
   const { cachePoll, resolvePoll, refetchUserHubDaos } = useUser();
+  const { daochain } = useParams();
   const { errorToast, successToast } = useOverlay();
-  const [hardMode, setHardMode] = useState(false);
   const [daoData, setDaoData] = useState(null);
   const [isSummoning, setIsSummoning] = useState(false);
   const [pendingTx, setPendingTx] = useState(null);
@@ -46,19 +43,22 @@ const Summon = () => {
   const now = (new Date().getTime() / 1000).toFixed();
 
   useEffect(() => {
-    if (injectedChain) {
-      const presets = daoPresets(injectedChain.chain_id);
+    if (injectedChain && daoOverview && daoMembers) {
       setDaoData({
         ...daoConstants(injectedChain.chain_id),
-        summoner: address,
-        ...presets[0],
+        summoner: '',
+        summonerAndShares: cloneMembers(daoMembers),
+        approvedToken:
+          injectedChain.chainId === daochain
+            ? cloneTokens(daoOverview)
+            : tokenMsg,
+        ...cloneDaoPresets(daoOverview),
       });
     }
-  }, [injectedChain]);
+  }, [injectedChain, daoMembers, daoOverview]);
 
   const handleSummon = async (data) => {
     setIsSummoning(true);
-
     const newDaoData = {
       ...daoData,
       ...data,
@@ -152,110 +152,51 @@ const Summon = () => {
       setSuccess(res.moloches[0].id);
     } catch (error) {
       console.error(error);
-      setSuccess();
     }
   };
 
-  const handleCloneDAO = (daoOverview, daoMembers, daoNetwork) => {
-    setDaoData({
-      ...daoConstants(injectedChain.chain_id),
-      summoner: '',
-      summonerAndShares: cloneMembers(daoMembers),
-      approvedToken:
-        injectedChain.chainId === daoNetwork
-          ? cloneTokens(daoOverview)
-          : tokenMsg,
-      ...cloneDaoPresets(daoOverview, daoMembers),
-    });
-  };
-
   return (
-    <Layout>
-      <MainViewLayout header='Summon'>
-        {injectedChain ? (
-          <>
-            {!isSummoning ? (
-              <>
-                <Flex direction='row' justify='space-between'>
-                  <Text>What kind of Haus will you build?</Text>
-
-                  {summonError ? (
-                    <Text as='h1'>{summonError.message || summonError}</Text>
-                  ) : null}
-
-                  {!hardMode ? (
-                    <Flex align='center' mb={2}>
-                      <Text mr={3}>Need to fine tune your settings?</Text>
-                      <Button variant='solid' onClick={() => setHardMode(true)}>
-                        Hard Mode
-                      </Button>
-                    </Flex>
-                  ) : (
-                    <Flex align='center' mb={2}>
-                      <Text mr={3}>Take me back to </Text>
-                      <Button
-                        variant='solid'
-                        onClick={() => setHardMode(false)}
-                      >
-                        Fun Mode
-                      </Button>
-                    </Flex>
-                  )}
-                </Flex>
-
-                {!hardMode ? (
-                  <>
-                    <SummonEasy
-                      daoData={daoData}
-                      setDaoData={setDaoData}
-                      handleSummon={handleSummon}
-                    />
-                  </>
-                ) : (
-                  <>
-                    <SummonHard
-                      daoData={daoData}
-                      setDaoData={setDaoData}
-                      handleSummon={handleSummon}
-                      networkName={capitalize(injectedChain.network)}
-                    />
-                  </>
-                )}
-              </>
-            ) : (
-              <SummonPending
-                txHash={pendingTx}
-                success={success}
-                chainId={injectedChain.chain_id}
-              />
-            )}
-          </>
-        ) : (
-          <Box
-            rounded='lg'
-            bg='blackAlpha.600'
-            borderWidth='1px'
-            borderColor='whiteAlpha.200'
-            p={6}
-            m={[10, 'auto', 0, 'auto']}
-            w='50%'
-            textAlign='center'
-          >
-            <Box fontSize='3xl' fontFamily='heading' fontWeight={700} mb={10}>
-              Connect your wallet to summon a DAO.
-            </Box>
-
-            <Flex direction='column' align='center'>
-              <Button onClick={requestWallet}>Connect Wallet</Button>
-            </Flex>
+    <MainViewLayout header='Clone this DAO'>
+      {summonError && <Text as='h1'>{summonError.message || summonError}</Text>}
+      {daoData ? (
+        <>
+          {!isSummoning ? (
+            <SummonHard
+              daoData={daoData}
+              setDaoData={setDaoData}
+              handleSummon={handleSummon}
+              networkName={capitalize(injectedChain.network)}
+            />
+          ) : (
+            <SummonPending
+              txHash={pendingTx}
+              success={success}
+              chainId={injectedChain.chain_id}
+            />
+          )}
+        </>
+      ) : (
+        <Box
+          rounded='lg'
+          bg='blackAlpha.600'
+          borderWidth='1px'
+          borderColor='whiteAlpha.200'
+          p={6}
+          m={[10, 'auto', 0, 'auto']}
+          w='50%'
+          textAlign='center'
+        >
+          <Box fontSize='3xl' fontFamily='heading' fontWeight={700} mb={10}>
+            Connect your wallet to summon a DAO.
           </Box>
-        )}
-        {hardMode && !isSummoning && (
-          <TemporaryCloneSummon handleCloneDAO={handleCloneDAO} />
-        )}
-      </MainViewLayout>
-    </Layout>
+
+          <Flex direction='column' align='center'>
+            <Button onClick={requestWallet}>Connect Wallet</Button>
+          </Flex>
+        </Box>
+      )}
+    </MainViewLayout>
   );
 };
 
-export default Summon;
+export default Clone;
