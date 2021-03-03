@@ -25,8 +25,11 @@ import MainViewLayout from '../components/mainViewLayout';
 import { capitalize } from '../utils/general';
 import TemporaryCloneSummon from '../components/temporaryCloneSummon';
 
+// const tokenMsg =
+//   'Token addresses are different across chains. If you would like to clone the same tokens to a different network, you will need to manually add the equivalent token addresses here.';
+
 const tokenMsg =
-  'Token addresses are different across chains. If you would like to clone the same tokens to a different network, you will need to manually add the equivalent token addresses here.';
+  '0xe91d153e0b41518a2ce8dd3d7944fa863463a97d, 0xb0c5f3100a4d9d9532a4cfd68c55f1ae8da987eb';
 
 const Summon = () => {
   const {
