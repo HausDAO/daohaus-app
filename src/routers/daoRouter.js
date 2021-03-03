@@ -64,6 +64,7 @@ const DaoRouter = () => {
             daoOverview={daoOverview}
             members={daoMembers}
             currentDaoTokens={currentDaoTokens}
+            daoMetaData={daoMetaData}
           />
         </Route>
         <Route exact path={`${path}/proposals`}>
@@ -197,6 +198,13 @@ const DaoRouter = () => {
             daoTokens={currentDaoTokens}
             activities={daoActivities}
             daoMember={daoMember}
+          />
+        </Route>
+        <Route exact path={`${path}/uberhaus/proposals/new`}>
+          <NewProposal
+            customTerms={customTerms}
+            daoMetaData={daoMetaData}
+            daoOverview={daoOverview}
           />
         </Route>
         <Route exact path={`${path}/cco`}>
