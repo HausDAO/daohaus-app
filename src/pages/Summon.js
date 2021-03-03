@@ -43,7 +43,6 @@ const Summon = () => {
   const [pendingTx, setPendingTx] = useState(null);
   const [success, setSuccess] = useState(false);
   const [summonError, setSummonError] = useState(null);
-  const now = (new Date().getTime() / 1000).toFixed();
 
   useEffect(() => {
     if (injectedChain) {
@@ -58,7 +57,7 @@ const Summon = () => {
 
   const handleSummon = async (data) => {
     setIsSummoning(true);
-
+    const now = (new Date().getTime() / 1000).toFixed();
     const newDaoData = {
       ...daoData,
       ...data,
@@ -115,7 +114,7 @@ const Summon = () => {
 
             refetchUserHubDaos();
             resolvePoll(txHash);
-            getnewDaoAddress();
+            getnewDaoAddress(summonData.summoner[0], now);
           },
         },
       });
@@ -139,13 +138,13 @@ const Summon = () => {
     }
   };
 
-  const getnewDaoAddress = async () => {
+  const getnewDaoAddress = async (summoner, now) => {
     try {
       const res = await graphQuery({
         endpoint: getGraphEndpoint(injectedChain.chain_id, 'subgraph_url'),
         query: DAO_POLL,
         variables: {
-          summoner: address,
+          summoner,
           createdAt: now,
         },
       });
