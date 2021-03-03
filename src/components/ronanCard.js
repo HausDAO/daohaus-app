@@ -19,7 +19,8 @@ const RonanCard = () => {
       amtEarned={earnings}
       onHarvest={handleHarvest}
       onWithdraw={handleWithdraw}
-      submitBtn={{ label: 'STAKE', fn: handleStake }}
+      submitBtn={{ label: 'STAKE ON FARMHAUS', fn: handleStake }}
+      farmHausRedirect={true}
     />
   );
 };

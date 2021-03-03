@@ -25,6 +25,7 @@ import ProposalTypes from '../pages/ProposalTypes';
 import MinionSafe from '../pages/MinionSafe';
 import CcoContribution from '../pages/CcoContribution';
 import Staking from '../pages/Staking';
+import Clone from '../pages/Clone';
 
 const DaoRouter = () => {
   const { path } = useRouteMatch();
@@ -63,6 +64,7 @@ const DaoRouter = () => {
             daoOverview={daoOverview}
             members={daoMembers}
             currentDaoTokens={currentDaoTokens}
+            daoMetaData={daoMetaData}
           />
         </Route>
         <Route exact path={`${path}/proposals`}>
@@ -102,12 +104,9 @@ const DaoRouter = () => {
         </Route>
         <Route exact path={`${path}/staking`}>
           <Staking />
-          {/* <Boosts
-            daoOverview={daoOverview}
-            daoMetaData={daoMetaData}
-            customTerms={customTerms}
-            daoMember={daoMember}
-          /> */}
+        </Route>
+        <Route exact path={`${path}/settings/clone`}>
+          <Clone daoMembers={daoMembers} daoOverview={daoOverview} />
         </Route>
         <Route exact path={`${path}/settings/notifications`}>
           <Notifications
@@ -199,6 +198,13 @@ const DaoRouter = () => {
             daoTokens={currentDaoTokens}
             activities={daoActivities}
             daoMember={daoMember}
+          />
+        </Route>
+        <Route exact path={`${path}/uberhaus/proposals/new`}>
+          <NewProposal
+            customTerms={customTerms}
+            daoMetaData={daoMetaData}
+            daoOverview={daoOverview}
           />
         </Route>
         <Route exact path={`${path}/cco`}>

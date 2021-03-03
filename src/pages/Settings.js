@@ -66,6 +66,11 @@ const Settings = ({ overview, daoMember, daoMetaData, customTerms }) => {
             <TextBox size='xs'>Boost Status</TextBox>
             <BoostStatus />
           </Stack>
+          <Stack spacing={2}>
+            <TextBox size='xs'>Clone this DAO</TextBox>
+
+            {/* <BoostStatus /> */}
+          </Stack>
         </Stack>
       </Flex>
     </MainViewLayout>

@@ -248,3 +248,38 @@ export const currencyOptions = (chainId) => {
 
   return options;
 };
+
+export const cloneDaoPresets = (daoOverview) => {
+  return {
+    votingPeriod: daoOverview.votingPeriodLength,
+    gracePeriod: daoOverview.gracePeriodLength,
+    proposalDeposit: daoOverview.proposalDeposit,
+    processingReward: daoOverview.processingReward,
+    periodDuration: daoOverview.periodDuration,
+    dilutionBound: daoOverview.dilutionBound || 3,
+    // summonerShares: 1,
+    version: 2.1,
+  };
+};
+
+export const cloneMembers = (daoMembers) =>
+  daoMembers
+    .reduce(
+      (string, member) =>
+        +member?.shares > 0
+          ? string +
+            `${member.memberAddress} ${member.shares}
+`
+          : string,
+      '',
+    )
+    .trim();
+
+export const cloneTokens = (daoOverview) => {
+  const primaryTokenAddress = daoOverview.depositToken.tokenAddress;
+  const otherTokensAddress = daoOverview.tokenBalances
+    .map(({ token }) => token.tokenAddress)
+    .filter((address) => address !== primaryTokenAddress);
+  const allAddresses = [primaryTokenAddress, ...otherTokensAddress];
+  return allAddresses.join(', ');
+};
