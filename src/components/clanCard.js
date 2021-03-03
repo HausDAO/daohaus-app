@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useHistory, useParams } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import StakeCard from '../components/stakeCard';
 import { isEthAddress } from '../utils/general';
@@ -7,7 +7,7 @@ import { supportedChains } from '../utils/chain';
 
 const ClanCard = () => {
   const { daochain } = useParams();
-  const history = useHistory();
+  // const history = useHistory();
   const [error, setError] = useState(null);
   const { register, getValues } = useForm();
   const handleConnect = () => {
