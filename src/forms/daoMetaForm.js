@@ -59,7 +59,6 @@ const DaoMetaForm = ({ metadata, handleUpdate }) => {
         ...data,
         contractAddress: metadata.address,
         network: injectedChain.network,
-        summonerAddress: metadata.summonerAddress,
         version: metadata.version,
         signature,
       };

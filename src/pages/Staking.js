@@ -41,8 +41,8 @@ const Staking = () => {
             mb={4}
             wrap={['wrap', null, null, 'nowrap']}
           >
-            <RonanCard />
             <ClanCard />
+            <RonanCard />
             <ShogunCard />
           </Flex>
           <PriceBox />

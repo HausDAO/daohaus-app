@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { useHistory } from 'react-router-dom';
+import { useHistory, useLocation } from 'react-router-dom';
 import {
   Modal,
   ModalContent,
@@ -23,6 +23,7 @@ const DaoToDaoProposalFormModal = ({ proposalType, isOpen, returnRoute }) => {
   const [, setLoading] = useState(false);
   const [proposalForm, setProposalForm] = useState(null);
   const history = useHistory();
+  const location = useLocation();
   const { theme } = useCustomTheme();
   const { setD2dProposalModal } = useOverlay();
 
@@ -60,10 +61,13 @@ const DaoToDaoProposalFormModal = ({ proposalType, isOpen, returnRoute }) => {
   };
 
   useEffect(() => {
+    console.log('location', location);
+  }, [location]);
+
+  useEffect(() => {
     if (proposalType) {
       setProposalForm(daoToDaoProposalForms[proposalType]);
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [proposalType]);
 
   const handleClose = () => {

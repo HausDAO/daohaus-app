@@ -7,10 +7,11 @@ import {
   FormLabel,
   Input,
   InputRightAddon,
+  Link,
+  Text,
 } from '@chakra-ui/react';
 
 import ContentBox from '../components/ContentBox';
-import TextBox from '../components/TextBox';
 
 const StakeCard = (props) => {
   const {
@@ -24,6 +25,9 @@ const StakeCard = (props) => {
     onHarvest,
     onWithdraw,
     submitBtn,
+    farmHausRedirect,
+    register,
+    error,
     ...rest
   } = props;
 
@@ -53,66 +57,94 @@ const StakeCard = (props) => {
       <Box fontSize='sm' textAlign='center' mb={3}>
         {reward}
       </Box>
-      <Flex
-        maxWidth='250px'
-        width='100%'
-        minWidth='200px'
-        justifyContent='flex-start'
-      >
-        <Box as={FormLabel} fontSize='xs' color='whiteAlpha.700'>
-          {inputLabel}
-        </Box>
-      </Flex>
-      <InputGroup
-        maxWidth='250px'
-        width='100%'
-        minWidth='200px'
-        justifyContent='center'
-      >
-        <Input
-          placeholder='0'
-          mb={5}
-          color='white'
-          focusBorderColor='secondary.500'
-        />
-        {inputMax && (
-          <InputRightAddon background='primary.500' p={0}>
-            <Button size='md' variant='text'>
-              Max
-            </Button>
-          </InputRightAddon>
-        )}
-      </InputGroup>
-      <Button
-        px='2.5rem'
-        mb={5}
-        textTransform='uppercase'
-        onClick={handleSubmit}
-      >
-        {submitBtn?.label}
-      </Button>
-      <Flex align='center' mb={3}>
-        <TextBox size='xs' transform='translateY(2px)' mr={2}>
-          Earned:
-        </TextBox>
-        <Box fontFamily='mono' fontSize='lg' fontWeight={700}>
-          {amtEarned}
-        </Box>
-      </Flex>
-      <Flex>
+      {farmHausRedirect ? (
         <Button
-          size='sm'
-          variant='outline'
-          px='1.5rem'
-          mr={4}
-          onClick={onHarvest}
+          as={Link}
+          href='https://farm.daohaus.club/farms'
+          isExternal
+          px='2.5rem'
+          mb={5}
+          textTransform='uppercase'
+          onClick={handleSubmit}
         >
-          Harvest
+          {submitBtn?.label}
         </Button>
-        <Button size='sm' variant='outline' px='1.5rem' onClick={onWithdraw}>
-          Withdraw All
-        </Button>
-      </Flex>
+      ) : (
+        <>
+          <Flex
+            maxWidth='250px'
+            width='100%'
+            minWidth='200px'
+            justifyContent='flex-start'
+          >
+            <Box as={FormLabel} fontSize='xs' color='whiteAlpha.700'>
+              {inputLabel}
+            </Box>
+          </Flex>
+          <InputGroup
+            maxWidth='250px'
+            width='100%'
+            minWidth='200px'
+            justifyContent='center'
+          >
+            <Input
+              placeholder='0'
+              mb={5}
+              color='white'
+              focusBorderColor='secondary.500'
+              name='daoAddress'
+              ref={register()}
+            />
+            {inputMax && (
+              <InputRightAddon background='primary.500' p={0}>
+                <Button size='md' variant='text'>
+                  Max
+                </Button>
+              </InputRightAddon>
+            )}
+          </InputGroup>
+          {error ? (
+            <Text fontSize='xs' color='red.500'>
+              {error}
+            </Text>
+          ) : null}
+          <Button
+            px='2.5rem'
+            mb={5}
+            textTransform='uppercase'
+            onClick={handleSubmit}
+          >
+            {submitBtn?.label}
+          </Button>
+          {/* <Flex align='center' mb={3}>
+            <TextBox size='xs' transform='translateY(2px)' mr={2}>
+              Earned:
+            </TextBox>
+            <Box fontFamily='mono' fontSize='lg' fontWeight={700}>
+              {amtEarned}
+            </Box>
+          </Flex>
+          <Flex>
+            <Button
+              size='sm'
+              variant='outline'
+              px='1.5rem'
+              mr={4}
+              onClick={onHarvest}
+            >
+              Harvest
+            </Button>
+            <Button
+              size='sm'
+              variant='outline'
+              px='1.5rem'
+              onClick={onWithdraw}
+            >
+              Withdraw All
+            </Button>
+          </Flex> */}
+        </>
+      )}
     </ContentBox>
   );
 };

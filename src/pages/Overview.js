@@ -5,6 +5,7 @@ import MemberInfoCard from '../components/memberInfo';
 import OverviewCard from '../components/overviewCard';
 import { getDaoActivites } from '../utils/activities';
 import MainViewLayout from '../components/mainViewLayout';
+import StakingBanner from '../components/stakingBanner';
 // import { getActiveMembers } from '../utils/dao';
 
 const Overview = React.memo(function overview({
@@ -15,7 +16,9 @@ const Overview = React.memo(function overview({
   daoMember,
   currentDaoTokens,
   customTerms,
+  daoMetaData,
 }) {
+  console.log('daoMetaData', daoMetaData);
   return (
     <MainViewLayout header='Overview' customTerms={customTerms} isDao={true}>
       <Box w='100%'>
@@ -32,6 +35,7 @@ const Overview = React.memo(function overview({
                 members={members}
                 currentDaoTokens={currentDaoTokens}
               />
+              {daoMetaData?.isUberHaus ? <StakingBanner /> : null}
             </Box>
           )}
           {isMember && (
