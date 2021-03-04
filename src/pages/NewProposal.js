@@ -47,7 +47,6 @@ const NewProposal = ({ customTerms, daoMetaData, daoOverview }) => {
         history.push(`/dao/${params.daochain}/${params.daoid}/proposals`);
       }
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [params?.proposalType]);
 
   useEffect(() => {
@@ -65,7 +64,7 @@ const NewProposal = ({ customTerms, daoMetaData, daoOverview }) => {
         daoOverview?.minions?.length,
       ),
     );
-  }, []);
+  }, [daoMetaData]);
 
   return (
     <MainViewLayout

@@ -21,7 +21,11 @@ import { chainByID } from '../utils/chain';
 import { useMetaData } from '../contexts/MetaDataContext';
 import CcoTributeInput from './ccoTributeInput';
 
-const CcoLootGrabForm = ({ roundData, currentContributionData }) => {
+const CcoLootGrabForm = ({
+  roundData,
+  currentContributionData,
+  contributionClosed,
+}) => {
   const {
     injectedProvider,
     address,
@@ -164,7 +168,7 @@ const CcoLootGrabForm = ({ roundData, currentContributionData }) => {
             getValues={getValues}
             setError={setError}
             roundData={roundData}
-            contributionClosed={currentContributionData?.addressRemaining <= 0}
+            contributionClosed={contributionClosed}
           />
         </Box>
         {daoConnectedAndSameChain(address, daochain, injectedChain?.chainId) ? (
@@ -172,7 +176,7 @@ const CcoLootGrabForm = ({ roundData, currentContributionData }) => {
             type='submit'
             loadingText='Submitting'
             isLoading={loading}
-            disabled={loading || currentContributionData?.addressRemaining <= 0}
+            disabled={loading || contributionClosed}
           >
             Submit
           </Button>

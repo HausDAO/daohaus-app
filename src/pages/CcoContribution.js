@@ -20,7 +20,7 @@ import {
   claimCountDownText,
 } from '../utils/cco';
 import { getEligibility } from '../utils/metadata';
-import { timeToNow } from '../utils/general';
+import { numberWithCommas, timeToNow } from '../utils/general';
 
 import { useInjectedProvider } from '../contexts/InjectedProviderContext';
 import CcoLootGrabForm from '../forms/ccoLootGrab';
@@ -47,11 +47,22 @@ const CcoContribution = React.memo(function ccocontribution({
       );
 
       const now = new Date() / 1000;
-      const round = daoMetaData.boosts.cco.metadata.rounds.find(
-        // TODO: make this dynamic based on start times and now time
-        // const now = new Date() / 1000;
-        (round) => round.round === 1,
-      );
+      // const
+      let round;
+      if (now < daoMetaData.boosts.cco.metadata.raiseStartTime) {
+        round = daoMetaData.boosts.cco.metadata.rounds[0];
+      } else {
+        round = daoMetaData.boosts.cco.metadata.rounds.find((round, i) => {
+          const inRound =
+            +round.startTime < now &&
+            +`${+round.startTime + +round.duration}` > now;
+          return (
+            i === daoMetaData.boosts.cco.metadata.rounds.length - 1 || inRound
+          );
+        });
+      }
+
+      console.log('round', round);
 
       const currentRound = {
         ...round,
@@ -121,8 +132,11 @@ const CcoContribution = React.memo(function ccocontribution({
   };
 
   const eligibleBlock = isEligible === 'denied' || isEligible === 'unchecked';
-  // canContribute: isEligible, addressRemaining > 0, remaining > 0, inWIndow
-  // const contributionClosed = currentContributionData?. currentContributionData?.addressRemaining <= 0;
+  const raiseAtMax = currentContributionData?.remaining <= 0;
+  const contributionClosed =
+    roundData?.raiseOver ||
+    currentContributionData?.addressRemaining <= 0 ||
+    raiseAtMax;
 
   console.log('roundData', roundData);
 
@@ -191,11 +205,18 @@ const CcoContribution = React.memo(function ccocontribution({
                           )}
                         </Text>
                       </Flex>
+                      {raiseAtMax ? (
+                        <TextBox variant='value' size='md' my={2}>
+                          Round closed. No room left.
+                        </TextBox>
+                      ) : null}
+
                       {!eligibleBlock ? (
                         <>
                           <CcoLootGrabForm
                             roundData={roundData}
                             currentContributionData={currentContributionData}
+                            contributionClosed={contributionClosed}
                           />
 
                           {currentContributionData ? (
@@ -295,7 +316,9 @@ const CcoContribution = React.memo(function ccocontribution({
                         Min target
                       </TextBox>
                       <TextBox variant='value' size='xl' my={2}>
-                        {`${roundData.currentRound.minTarget} ${roundData.ccoToken.symbol}`}
+                        {`${numberWithCommas(
+                          roundData.currentRound.minTarget,
+                        )} ${roundData.ccoToken.symbol}`}
                       </TextBox>
                     </Box>
                     <Box>
@@ -303,7 +326,9 @@ const CcoContribution = React.memo(function ccocontribution({
                         Max target
                       </TextBox>
                       <TextBox variant='value' size='xl' my={2}>
-                        {`${roundData.currentRound.maxTarget} ${roundData.ccoToken.symbol}`}
+                        {`${numberWithCommas(
+                          roundData.currentRound.maxTarget,
+                        )} ${roundData.ccoToken.symbol}`}
                       </TextBox>
                     </Box>
                   </Flex>
@@ -313,11 +338,11 @@ const CcoContribution = React.memo(function ccocontribution({
                         Contributed
                       </TextBox>
                       <TextBox variant='value' size='xl' my={2}>
-                        {`${
+                        {`${numberWithCommas(
                           currentContributionData
                             ? currentContributionData.contributionTotal
-                            : 0
-                        } ${roundData.ccoToken.symbol}`}
+                            : 0,
+                        )} ${roundData.ccoToken.symbol}`}
                       </TextBox>
                     </Box>
                     <Box>
@@ -325,11 +350,11 @@ const CcoContribution = React.memo(function ccocontribution({
                         Room Left
                       </TextBox>
                       <TextBox variant='value' size='xl' my={2}>
-                        {`${
+                        {`${numberWithCommas(
                           currentContributionData
                             ? currentContributionData.remaining
-                            : 0
-                        } ${roundData.ccoToken.symbol}`}
+                            : 0,
+                        )} ${roundData.ccoToken.symbol}`}
                       </TextBox>
                     </Box>
                   </Flex>
