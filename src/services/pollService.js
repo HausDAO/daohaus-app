@@ -11,7 +11,7 @@ import {
 import { getGraphEndpoint } from '../utils/chain';
 import { hashMaker, memberVote } from '../utils/proposalUtils';
 import { TokenService } from '../services/tokenService';
-import { MEMBERS_LIST } from '../graphQL/member-queries';
+import { MEMBERS_LIST, MEMBER_DELEGATE_KEY } from '../graphQL/member-queries';
 import { MinionService } from './minionService';
 
 /// //////////CALLS///////////////
@@ -137,6 +137,22 @@ const withdrawTokenFetch = async ({
       (tokenObj) => tokenObj.token.tokenAddress === tokenAddress,
     ).tokenBalance;
     return newTokenBalance;
+  } catch (error) {
+    return error;
+  }
+};
+
+const updateDelegateFetch = async ({ daoID, chainID, memberAddress }) => {
+  try {
+    const res = await graphQuery({
+      endpoint: getGraphEndpoint(chainID, 'subgraph_url'),
+      query: MEMBER_DELEGATE_KEY,
+      variables: {
+        contractAddr: daoID,
+        memberAddr: memberAddress,
+      },
+    });
+    return res.members[0];
   } catch (error) {
     return error;
   }
@@ -295,6 +311,17 @@ const withdrawTokenTest = (data, shouldEqual, pollId) => {
   }
 };
 
+const updateDelegateTest = (data, shouldEqual, pollId) => {
+  if (data) {
+    return data.delegateKey.toLowerCase() === shouldEqual.toLowerCase();
+  } else {
+    clearInterval(pollId);
+    throw new Error(
+      `Poll test did recieve the expected results from the graph: ${data}`,
+    );
+  }
+};
+
 export const createPoll = ({
   interval = 2000,
   tries = 30,
@@ -324,6 +351,7 @@ export const createPoll = ({
         try {
           const res = await pollFetch(args);
           const testResult = testFn(res, shouldEqual, pollId);
+          console.log(testResult);
           if (testResult) {
             clearInterval(pollId);
             actions.onSuccess(txHash);
@@ -852,6 +880,38 @@ export const createPoll = ({
             tries,
           },
           pollArgs: { chainID, molochAddress, createdAt },
+        });
+      }
+    };
+  } else if (action === 'updateDelegateKey') {
+    console.log('action', action);
+    return ({ chainID, daoID, memberAddress, delegateAddress, actions }) => (
+      txHash,
+    ) => {
+      startPoll({
+        pollFetch: updateDelegateFetch,
+        testFn: updateDelegateTest,
+        shouldEqual: delegateAddress,
+        args: { chainID, daoID, memberAddress },
+        actions,
+        txHash,
+      });
+      if (cachePoll) {
+        cachePoll({
+          txHash,
+          action,
+          timeSent: Date.now(),
+          status: 'unresolved',
+          resolvedMsg: `Delegate has been updated`,
+          unresolvedMsg: `Updating delegate`,
+          successMsg: `Updated delegate address to ${delegateAddress}`,
+          errorMsg: `Poll error on updateDelegate`,
+          pollData: {
+            action,
+            interval,
+            tries,
+          },
+          pollArgs: { chainID, daoID, memberAddress, delegateAddress },
         });
       }
     };

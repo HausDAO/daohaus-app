@@ -38,7 +38,7 @@ const DaoRouter = () => {
     daoMembers,
     daoProposals,
   } = useDao();
-  const { isMember, daoMember } = useDaoMember();
+  const { isMember, daoMember, delegate } = useDaoMember();
 
   const { daoid, daochain } = useParams();
   const { daoMetaData, customTerms, refetchMetaData } = useMetaData();
@@ -76,6 +76,7 @@ const DaoRouter = () => {
         </Route>
         <Route exact path={`${path}/bank`}>
           <Bank
+            delegate={delegate}
             currentDaoTokens={currentDaoTokens}
             overview={daoOverview}
             customTerms={customTerms}
@@ -188,6 +189,7 @@ const DaoRouter = () => {
             activities={daoActivities}
             customTerms={customTerms}
             daoProposals={daoProposals}
+            delegate={delegate}
           />
         </Route>
         <Route exact path={`${path}/profile/:userid`}>

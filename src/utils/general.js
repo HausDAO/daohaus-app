@@ -121,3 +121,15 @@ export const isEthAddress = (string) =>
   typeof string === 'string' && /^0x[a-fA-F0-9]{40}$/.test(string)
     ? string
     : false;
+
+export const isDelegating = (member) => {
+  if (member?.memberAddress && member?.delegateKey) {
+    return member?.memberAddress !== member?.delegateKey;
+  }
+};
+export const checkIfUserIsDelegate = (address, daoMembers) => {
+  if (address && daoMembers) {
+    const lowCaseAddress = address?.toLowerCase();
+    return daoMembers.filter((member) => member.delegateKey === lowCaseAddress);
+  }
+};

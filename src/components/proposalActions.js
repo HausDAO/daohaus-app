@@ -19,13 +19,43 @@ import TextBox from './TextBox';
 import { memberVote } from '../utils/proposalUtils';
 import { supportedChains } from '../utils/chain';
 import { getTerm } from '../utils/metadata';
-import { capitalize, daoConnectedAndSameChain } from '../utils/general';
+import {
+  capitalize,
+  daoConnectedAndSameChain,
+  isDelegating,
+} from '../utils/general';
 import { useMetaData } from '../contexts/MetaDataContext';
 import { MinionService } from '../services/minionService';
 
 const MotionBox = motion.custom(Box);
 
-const ProposalVote = ({ proposal, overview, daoProposals, daoMember }) => {
+const getAllowance = (daoMember, delegate) => {
+  if (daoMember?.hasWallet && daoMember?.allowance) {
+    return +daoMember.allowance;
+  } else if (delegate?.hasWallet && delegate?.allowance) {
+    return +delegate.allowance;
+  } else {
+    return null;
+  }
+};
+
+const canInteract = (daoMember, delegate) => {
+  if (+daoMember?.shares > 0 && !isDelegating(daoMember)) {
+    return true;
+  } else if (delegate) {
+    return true;
+  } else {
+    return false;
+  }
+};
+
+const ProposalVote = ({
+  proposal,
+  overview,
+  daoProposals,
+  daoMember,
+  delegate,
+}) => {
   const [nextProposalToProcess, setNextProposal] = useState(null);
   const [loading, setLoading] = useState(false);
   const { daochain, daoid } = useParams();
@@ -42,6 +72,8 @@ const ProposalVote = ({ proposal, overview, daoProposals, daoMember }) => {
   const [minionDeets, setMinionDeets] = useState();
   const [enoughDeposit, setEnoughDeposit] = useState();
 
+  // const canInteract = !isDelegating(daoMember) || delegate;
+
   const currentlyVoting = (proposal) => {
     return (
       isBefore(Date.now(), new Date(+proposal?.votingPeriodEnds * 1000)) &&
@@ -54,7 +86,6 @@ const ProposalVote = ({ proposal, overview, daoProposals, daoMember }) => {
       title: `User rejected transaction signature.`,
     });
   };
-
   const NetworkOverlay = () => (
     <Flex
       position='absolute'
@@ -449,9 +480,9 @@ const ProposalVote = ({ proposal, overview, daoProposals, daoMember }) => {
               </Flex>
             </Flex>
             <Flex justify='space-around'>
-              {+daoMember?.shares > 0 ? (
+              {canInteract(daoMember, delegate) ? (
                 <>
-                  {+daoMember?.allowance *
+                  {getAllowance(daoMember, delegate) *
                     10 ** overview?.depositToken?.decimals >
                     +overview?.proposalDeposit ||
                   +overview?.proposalDeposit === 0 ? (
@@ -466,7 +497,6 @@ const ProposalVote = ({ proposal, overview, daoProposals, daoMember }) => {
                     <Button
                       onClick={() => unlock(overview.depositToken.tokenAddress)}
                       isLoading={loading}
-                      isDisabled={!daoMember}
                     >
                       Unlock
                     </Button>
@@ -477,7 +507,7 @@ const ProposalVote = ({ proposal, overview, daoProposals, daoMember }) => {
                   hasArrow
                   shouldWrapChildren
                   placement='bottom'
-                  label='Only members can sponsor!'
+                  label='You have no shares to vote with. Either you are not a member or you have delegated voting power to another member'
                   bg='secondary.500'
                 >
                   <Button isDisabled={true}>Sponsor</Button>
@@ -512,7 +542,7 @@ const ProposalVote = ({ proposal, overview, daoProposals, daoMember }) => {
                         daochain,
                         injectedChain?.chainId,
                       ) &&
-                        +daoMember?.shares > 0 &&
+                        canInteract(daoMember, delegate) &&
                         memberVote(proposal, address) === null && (
                           <Flex w='48%' justify='space-around'>
                             <Flex

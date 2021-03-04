@@ -10,12 +10,15 @@ import { useUser } from '../contexts/UserContext';
 import { useParams } from 'react-router-dom';
 import { createPoll } from '../services/pollService';
 import { MolochService } from '../services/molochService';
+import { useDaoMember } from '../contexts/DaoMemberContext';
+import { isDelegating } from '../utils/general';
 
 const SyncTokenButton = ({ token }) => {
   const { injectedProvider, address, injectedChain } = useInjectedProvider();
   const { errorToast, successToast } = useOverlay();
   const { daoOverview } = useDao();
   const { refreshDao } = useTX();
+  const { daoMember, delegate } = useDaoMember();
   const { cachePoll, resolvePoll } = useUser();
   const { daoid, daochain } = useParams();
   const [loading, setLoading] = useState(false);
@@ -23,6 +26,8 @@ const SyncTokenButton = ({ token }) => {
   const daoConnectedAndSameChain = () => {
     return address && daochain && injectedChain?.chainId === daochain;
   };
+
+  const canSync = !isDelegating(daoMember) || delegate;
 
   const handleSync = async () => {
     setLoading(true);
@@ -88,7 +93,7 @@ const SyncTokenButton = ({ token }) => {
         <Spinner />
       ) : (
         <Flex>
-          {daoConnectedAndSameChain() ? (
+          {daoConnectedAndSameChain() && canSync ? (
             <Tooltip
               hasArrow
               shouldWrapChildren
@@ -105,7 +110,7 @@ const SyncTokenButton = ({ token }) => {
               hasArrow
               shouldWrapChildren
               placement='bottom'
-              label='Wrong network'
+              label='Unable to sync token. Check that you are connected to correct network. Note, members who have delegated their voting power cannot sync tokens'
               bg='secondary.500'
             >
               <Button disabled={true}>Sync</Button>

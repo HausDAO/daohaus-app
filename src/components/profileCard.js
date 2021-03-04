@@ -1,11 +1,19 @@
 import React from 'react';
-import { Avatar, Flex, Skeleton, Box, Tooltip, Icon } from '@chakra-ui/react';
+import {
+  Avatar,
+  Flex,
+  Skeleton,
+  Box,
+  Tooltip,
+  Icon,
+  Link,
+} from '@chakra-ui/react';
 import makeBlockie from 'ethereum-blockies-base64';
 import { useParams } from 'react-router-dom';
 import { format } from 'date-fns';
 import { RiQuestionLine } from 'react-icons/ri';
 
-import { truncateAddr, numberWithCommas } from '../utils/general';
+import { truncateAddr, numberWithCommas, isDelegating } from '../utils/general';
 import ProfileMenu from '../components/profileMenu';
 import ContentBox from '../components/ContentBox';
 import TextBox from '../components/TextBox';
@@ -13,7 +21,6 @@ import { calcPower, calcValue } from '../utils/profile';
 
 const ProfileCard = ({ overview, daoTokens, ens, profile, memberEntity }) => {
   const { userid } = useParams();
-
   const handleAvatar = (member, profile) => {
     if (profile?.image?.length) {
       const url = profile?.image[0].contentUrl;
@@ -43,6 +50,7 @@ const ProfileCard = ({ overview, daoTokens, ens, profile, memberEntity }) => {
     return profile?.name ? profile.name : truncateAddr(userid);
   };
 
+  console.log(memberEntity);
   return (
     <ContentBox>
       {userid ? (
@@ -121,9 +129,9 @@ const ProfileCard = ({ overview, daoTokens, ens, profile, memberEntity }) => {
                 </TextBox>
               </Box>
               <Box>
-                {profile ? (
+                {memberEntity && (
                   <ProfileMenu member={{ ...memberEntity, ...profile }} />
-                ) : null}
+                )}
               </Box>
             </Flex>
             <Flex justify='space-between' align='flex-end' mt={4}>
@@ -154,6 +162,14 @@ const ProfileCard = ({ overview, daoTokens, ens, profile, memberEntity }) => {
               </Box>
             </Flex>
           </Flex>
+          {memberEntity && isDelegating(memberEntity) && (
+            <TextBox size='xs' mt={3}>
+              Is delegating power to{' '}
+              <Link color='secondary.300'>
+                {truncateAddr(memberEntity?.delegateKey)}
+              </Link>
+            </TextBox>
+          )}
         </Flex>
       ) : null}
     </ContentBox>
