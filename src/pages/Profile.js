@@ -14,6 +14,7 @@ import { getProfileActivites } from '../utils/activities';
 import { chainByID } from '../utils/chain';
 import MainViewLayout from '../components/mainViewLayout';
 import { useInjectedProvider } from '../contexts/InjectedProviderContext';
+import UpdateDelegate from '../forms/UpdateDelegate';
 
 const Profile = ({ members, overview, daoTokens, daoMember, activities }) => {
   const { userid, daochain } = useParams();
@@ -99,6 +100,9 @@ const Profile = ({ members, overview, daoTokens, daoMember, activities }) => {
         >
           <GenericModal modalId='rageQuit' closeOnOverlayClick={true}>
             <RageQuitForm overview={overview} daoMember={daoMember} />
+          </GenericModal>
+          <GenericModal modalId='updateDelegate' closeOnOverlayClick={true}>
+            <UpdateDelegate overview={overview} />
           </GenericModal>
           <ProfileCard
             overview={overview}

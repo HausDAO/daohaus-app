@@ -123,3 +123,14 @@ export const MEMBERS_LIST = gql`
     }
   }
 `;
+
+export const MEMBER_DELEGATE_KEY = gql`
+  query membersList($contractAddr: String!, $memberAddr: String!) {
+    members(
+      where: { molochAddress: $contractAddr, memberAddress: $memberAddr }
+    ) {
+      memberAddress
+      delegateKey
+    }
+  }
+`;
