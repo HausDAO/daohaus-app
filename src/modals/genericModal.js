@@ -23,7 +23,10 @@ const GenericModal = ({ children, modalId, closeOnOverlayClick = true }) => {
       onClose={() => setGenericModal({})}
       isCentered
     >
-      <ModalOverlay bgColor={rgba(theme.colors.background[500], 0.8)} style={{ backdropFilter: 'blur(6px)' }} />
+      <ModalOverlay
+        bgColor={rgba(theme.colors.background[500], 0.8)}
+        style={{ backdropFilter: 'blur(6px)' }}
+      />
       <ModalContent
         rounded='lg'
         bg='blackAlpha.800'
