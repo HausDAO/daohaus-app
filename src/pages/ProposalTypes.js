@@ -108,7 +108,10 @@ const ProposalTypes = ({ daoMetaData, refetchMetaData }) => {
   };
 
   const renderProposalType = (proposal) => {
-    const isActive = localMetadata[proposal.key].active === true;
+    const isActive =
+      proposal.key in localMetadata
+        ? localMetadata[proposal.key].active === true
+        : false;
     return (
       <ContentBox key={proposal.label}>
         <Flex justify='space-between'>
@@ -122,7 +125,10 @@ const ProposalTypes = ({ daoMetaData, refetchMetaData }) => {
                 colorScheme='blue'
                 isChecked={isActive}
                 onChange={(e) => handleChange(proposal, e)}
-                disabled={loading}
+                isDisabled={
+                  loading ||
+                  (!proposal.default && !(proposal?.key in daoMetaData.boosts))
+                }
               />
             )}
           </Flex>
@@ -199,8 +205,8 @@ const ProposalTypes = ({ daoMetaData, refetchMetaData }) => {
               <Icon as={BiArrowBack} color='secondary.500' mr={2} />
               Back
             </Flex>
-            <Flex>
-              {loading ? <Spinner /> : null}
+            <Flex align='center'>
+              {loading ? <Spinner mr={4} /> : null}
               <Button
                 mx='2.5%'
                 disabled={!hasChanges || loading}
