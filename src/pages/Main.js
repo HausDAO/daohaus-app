@@ -9,6 +9,8 @@ import { useInjectedProvider } from '../contexts/InjectedProviderContext';
 import HubSignedOut from '../components/hubSignedOut';
 import MainViewLayout from '../components/mainViewLayout';
 import { useUser } from '../contexts/UserContext';
+import { MM_ADDCHAIN_DATA } from '../utils/chain';
+// import { MM_ADDCHAIN_DATA } from '../utils/chain';
 
 const Main = () => {
   const { address } = useInjectedProvider();
@@ -23,8 +25,20 @@ const Main = () => {
       Edit 3Box Profile
     </Button>
   );
+
+  const test = async (e) => {
+    await window?.ethereum?.request({
+      id: '1',
+      jsonrpc: '2.0',
+      method: 'wallet_addEthereumChain',
+      params: [MM_ADDCHAIN_DATA[e.target.value]],
+    });
+  };
   return (
     <MainViewLayout header='Hub' headerEl={address ? ctaButton : null}>
+      <Button onClick={test} value='0x4a'>
+        Switch Or Add
+      </Button>
       <Flex wrap='wrap'>
         <Box
           w={['100%', null, null, null, '60%']}

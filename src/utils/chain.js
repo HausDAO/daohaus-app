@@ -175,3 +175,52 @@ export const chainByName = (networkName) => {
 
   return supportedChains[networkKey];
 };
+
+export const MM_ADDCHAIN_DATA = {
+  '0x89': {
+    chainId: '0x89',
+    chainName: 'Matic Mainnet',
+    rpcUrls: ['https://rpc-mainnet.maticvigil.com/'],
+    blockExplorerUrls: ['https://explorer.matic.network/'],
+    nativeCurrency: {
+      name: 'Matic',
+      symbol: 'MATIC',
+      decimals: 18,
+    },
+  },
+  '0x64': {
+    chainId: '0x64',
+    chainName: 'xDai',
+    rpcUrls: ['https://dai.poa.network'],
+    blockExplorerUrls: ['https://blockscout.com/poa/xdai'],
+    nativeCurrency: {
+      name: 'xDai',
+      symbol: 'XDAI',
+      decimals: 18,
+    },
+  },
+  '0x4a': {
+    chainId: '0x4a',
+    chainName: 'IDchain',
+    rpcUrls: ['https://idchain.one/rpc/'],
+    blockExplorerUrls: ['https://explorer.idchain.one'],
+    nativeCurrency: {
+      name: 'eidi',
+      symbol: 'EIDI',
+      decimals: 18,
+    },
+  },
+};
+
+export const EIP3085 = {
+  SUPPORTED: {
+    '0x64': true,
+    '0x89': true,
+    '0x4a': true,
+  },
+  NOT_SUPPORTED: {
+    '0x1': true,
+    '0x2a': true,
+    '0x4': true,
+  },
+};
