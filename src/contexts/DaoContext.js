@@ -89,7 +89,6 @@ export const DaoProvider = ({ children }) => {
   }, [
     daoid,
     daochain,
-    // address,
     daoNetworkData,
     daoActivities,
     daoMembers,

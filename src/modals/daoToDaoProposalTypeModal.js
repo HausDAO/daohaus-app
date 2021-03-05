@@ -56,7 +56,12 @@ const DaoToDaoProposalTypeModal = ({ setProposalType }) => {
   };
 
   return (
-    <Modal isOpen={d2dProposalTypeModal} onClose={handleClose} isCentered>
+    <Modal
+      isOpen={d2dProposalTypeModal}
+      onClose={handleClose}
+      closeOnOverlayClick={false}
+      isCentered
+    >
       <ModalOverlay bgColor={rgba(theme.colors.background[500], 0.8)} />
       <ModalContent
         rounded='lg'

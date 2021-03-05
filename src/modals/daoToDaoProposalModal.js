@@ -79,7 +79,12 @@ const DaoToDaoProposalFormModal = ({ proposalType, isOpen, returnRoute }) => {
   };
 
   return (
-    <Modal isOpen={isOpen} onClose={handleClose} isCentered>
+    <Modal
+      isOpen={isOpen}
+      onClose={handleClose}
+      closeOnOverlayClick={false}
+      isCentered
+    >
       <ModalOverlay bgColor={rgba(theme.colors.background[500], 0.8)} />
       {proposalForm && (
         <ModalContent

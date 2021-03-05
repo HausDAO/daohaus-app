@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Link as RouterLink, useParams } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import {
   Box,
   Button,
@@ -14,21 +14,22 @@ import {
 import { RiExternalLinkLine } from 'react-icons/ri';
 import { useForm } from 'react-hook-form';
 
-import { MinionFactoryService } from '../services/minionFactoryService';
+import { UberHausMinionFactoryService } from '../services/uberHausMinionService';
 import { supportedChains } from '../utils/chain';
 import { useInjectedProvider } from '../contexts/InjectedProviderContext';
 import { createPoll } from '../services/pollService';
 import { useUser } from '../contexts/UserContext';
 import { useOverlay } from '../contexts/OverlayContext';
 import { useDao } from '../contexts/DaoContext';
+import { UBERHAUS_ADDRESS } from '../utils/uberhaus';
 
-const NewMinionForm = () => {
+const NewUberHausMinion = () => {
   const [loading, setLoading] = useState(false);
   const { daochain, daoid } = useParams();
   const { address, injectedProvider, injectedChain } = useInjectedProvider();
-  const { daoOverview, refetch } = useDao();
+  const { refetch } = useDao();
   const { cachePoll, resolvePoll } = useUser();
-  const { errorToast, successToast } = useOverlay();
+  const { errorToast, successToast, setGenericModal } = useOverlay();
   const { handleSubmit, register } = useForm();
   const [step, setStep] = useState(1);
   const [pendingTx, setPendingTx] = useState(null);
@@ -38,7 +39,16 @@ const NewMinionForm = () => {
     setLoading(true);
     setStep(2);
 
-    const summonParams = [daoid, values.details];
+    const controllerAddress = '0x000000000000000000000000000000000000beef';
+    const summonParams = [
+      daoid,
+      UBERHAUS_ADDRESS,
+      address,
+      '10',
+      values.details,
+    ];
+
+    console.log('summonParams', summonParams);
 
     try {
       const poll = createPoll({ action: 'summonMinion', cachePoll })({
@@ -73,10 +83,15 @@ const NewMinionForm = () => {
         setPendingTx(txHash);
       };
 
-      await MinionFactoryService({
+      await UberHausMinionFactoryService({
         web3: injectedProvider,
         chainID: injectedChain.chain_id,
-      })('summonMinion')({ args: summonParams, from: address, poll, onTxHash });
+      })('summonUberHausMinion')({
+        args: summonParams,
+        from: address,
+        poll,
+        onTxHash,
+      });
     } catch (err) {
       console.log('error in tx', err);
       setLoading(false);
@@ -93,28 +108,12 @@ const NewMinionForm = () => {
       {step === 1 ? (
         <>
           <Heading as='h4' size='md' fontWeight='100' mb={10}>
-            Deploy Your Minion
+            Step 1: Deploy UberHAUS Minion
           </Heading>
-          {daoOverview?.minions.length > 0 && (
-            <>
-              <Box mb={5} fontSize='md'>
-                You have {daoOverview.minions.length} minion
-                {daoOverview.minions.length > 1 ? 's' : ''} already. Are you
-                looking for the{' '}
-                <Link
-                  as={RouterLink}
-                  to={`/dao/${daochain}/${daoid}/settings`}
-                  color='secondary.500'
-                >
-                  Settings?
-                </Link>
-              </Box>
-            </>
-          )}
           <Box mb={3} fontSize='sm'>
-            Deploying a Minion will allow the DAO to interact with external
-            contracts through proposals
+            This minion will manage your membership in UberHaus.
           </Box>
+
           <form onSubmit={handleSubmit(onSubmit)}>
             <Box mb={3} fontSize='sm'>
               <FormControl mb={5}>
@@ -139,7 +138,7 @@ const NewMinionForm = () => {
       {step === 2 ? (
         <>
           <Heading as='h4' size='md' fontWeight='100' mb={10}>
-            Deploying Your Minion
+            Deploying
           </Heading>
           <Spinner />
 
@@ -161,15 +160,13 @@ const NewMinionForm = () => {
       {step === 'success' ? (
         <>
           <Heading as='h4' size='md' fontWeight='100' mb={10}>
-            A Minion is at your service
+            The Minion is ready.
           </Heading>
-          <Button as={RouterLink} to={`/dao/${daochain}/${daoid}/settings`}>
-            Settings
-          </Button>
+          <Button onClick={() => setGenericModal({})}>Close</Button>
         </>
       ) : null}
     </Box>
   );
 };
 
-export default NewMinionForm;
+export default NewUberHausMinion;

@@ -22,6 +22,7 @@ export const HOME_DAO = gql`
         minionAddress
         minionType
         details
+        uberHausAddress
       }
       depositToken {
         tokenAddress

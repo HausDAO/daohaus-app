@@ -49,6 +49,13 @@ const StakeProposalForm = () => {
 
     const details = detailsToJSON(values);
     console.log(details);
+
+    // address targetDao,
+    // address actionTo,
+    // address token,
+    // uint256 actionValue,
+    // bytes calldata actionData,
+    // string calldata details
     // try {
     //   dao.daoService.moloch.submitProposal(
     //     values.sharesRequested ? values.sharesRequested?.toString() : '0',
@@ -114,6 +121,7 @@ const StakeProposalForm = () => {
             register={register}
             setValue={setValue}
             getValues={getValues}
+            setError={setCurrentError}
           />
         </Box>
       </FormControl>

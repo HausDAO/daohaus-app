@@ -99,14 +99,6 @@ const Boosts = ({ customTerms, daoMember, daoOverview, daoMetaData }) => {
                   </Button>
                 )}
               </>
-
-              // <Button
-              //   textTransform='uppercase'
-              //   onClick={() => setGenericModal({ [boost.key]: true })}
-              //   disabled={!canInteract}
-              // >
-              //   Add This {getTerm(customTerms, 'boost')}
-              // </Button>
             )}
           </>
         )}
