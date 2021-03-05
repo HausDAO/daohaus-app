@@ -35,29 +35,18 @@ export const DaoProvider = ({ children }) => {
     `members-${daoid}`,
     null,
   );
-  const [daoTransmutations, setTransmutations] = useSessionStorage(
-    `transmutations-${daoid}`,
-    null,
-  );
+
   // const [currentDaoAddress, setCurrentDaoAddress] = useState(daoid);
   const hasPerformedBatchQuery = useRef(false);
 
   useEffect(() => {
     // This condition is brittle. If one request passes, but the rest fail
     // this stops the app from fetching. We'll need something better later on.
-    if (
-      daoProposals ||
-      daoActivities ||
-      daoOverview ||
-      daoMembers ||
-      daoTransmutations
-    )
-      return;
+    if (daoProposals || daoActivities || daoOverview || daoMembers) return;
     if (
       !daoid ||
       !daochain ||
       !daoNetworkData ||
-      // !address ||
       hasPerformedBatchQuery.current
     )
       return;
@@ -77,27 +66,18 @@ export const DaoProvider = ({ children }) => {
       ],
     };
 
-    if (daochain !== '0x89' && daochain !== '0x4a') {
-      bigQueryOptions.getSetters.push({
-        getter: 'getTransmutations',
-        setter: setTransmutations,
-      });
-    }
     bigGraphQuery(bigQueryOptions);
 
     hasPerformedBatchQuery.current = true;
   }, [
     daoid,
     daochain,
-    // address,
     daoNetworkData,
     daoActivities,
     daoMembers,
     daoOverview,
     daoProposals,
-    daoTransmutations,
     setDaoActivities,
-    setTransmutations,
     setDaoMembers,
     setDaoOverview,
     setDaoProposals,
@@ -119,13 +99,6 @@ export const DaoProvider = ({ children }) => {
         { getter: 'getMembers', setter: setDaoMembers },
       ],
     };
-
-    if (daochain !== '0x89') {
-      bigQueryOptions.getSetters.push({
-        getter: 'getTransmutations',
-        setter: setTransmutations,
-      });
-    }
 
     bigGraphQuery(bigQueryOptions);
   };

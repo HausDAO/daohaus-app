@@ -10,8 +10,6 @@ const WrongNetworkToolTip = () => {
   const { address, injectedChain, injectedProvider } = useInjectedProvider();
   const { daochain } = useParams();
 
-  console.log(injectedProvider?.currentProvider?.isMetaMask);
-
   const handleSwitchNetwork = async () => {
     if (daochain && window?.ethereum) {
       try {

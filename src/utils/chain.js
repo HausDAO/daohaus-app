@@ -70,7 +70,7 @@ export const supportedChains = {
     stats_graph_url:
       'https://api.thegraph.com/subgraphs/name/odyssy-automaton/daohaus-stats-kovan',
     boosts_graph_url:
-      'https://api.thegraph.com/subgraphs/name/odyssy-automaton/daohaus-transmutation',
+      'https://api.thegraph.com/subgraphs/name/odyssy-automaton/daohaus-boosts-kovan',
     minion_factory_addr: '0x80ec2dB292E7a6D1D5bECB80e6479b2bE048AC98',
     moloch_factory_addr: '0x9c5d087f912e7187D9c75e90999b03FB31Ee17f5',
     dai_contract: '0xc4375b7de8af5a38a93548eb8453a498222c4ff2',
@@ -96,7 +96,7 @@ export const supportedChains = {
     stats_graph_url:
       'https://api.thegraph.com/subgraphs/name/odyssy-automaton/daohaus-stats-xdai',
     boosts_graph_url:
-      'https://api.thegraph.com/subgraphs/name/odyssy-automaton/daohaus-transmutation-xdai',
+      'https://api.thegraph.com/subgraphs/name/odyssy-automaton/daohaus-boosts-xdai',
     minion_factory_addr: '0x9610389d548Ca0224aCaC40eB3241c5ED88D2479',
     moloch_factory_addr: '0x0F50B2F3165db96614fbB6E4262716acc9F9e098',
     wxdai_contract: '0xe91D153E0b41518A2Ce8Dd3D7944Fa863463a97d',

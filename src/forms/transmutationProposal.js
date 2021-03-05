@@ -30,8 +30,19 @@ import { useOverlay } from '../contexts/OverlayContext';
 import { createPoll } from '../services/pollService';
 import { createHash } from '../utils/general';
 import { createForumTopic } from '../utils/discourse';
+import { useSessionStorage } from '../hooks/useSessionStorage';
 
 const TransmutationProposal = () => {
+  const {
+    handleSubmit,
+    errors,
+    register,
+    // reset,
+    setValue,
+    watch,
+    // formState
+  } = useForm();
+
   const [loading, setLoading] = useState(false);
   const { daochain, daoid } = useParams();
   const { address, injectedProvider } = useInjectedProvider();
@@ -43,7 +54,10 @@ const TransmutationProposal = () => {
   const [tokenData, setTokenData] = useState([]);
   const [balance, setBalance] = useState(0);
   const [symbol, setSymbol] = useState(0);
-  const [transmutationValues, setTransmutationValues] = useState(null);
+  const [transmutationValues, setTransmutationValues] = useSessionStorage(
+    `${daoid}-transmutations`,
+    null,
+  );
   const [tributeReturned, setTributeReturned] = useState(null);
   const { cachePoll, resolvePoll } = useUser();
   const {
@@ -54,16 +68,7 @@ const TransmutationProposal = () => {
   } = useOverlay();
   const { refreshDao } = useTX();
   // const { closeModals } = useModals();
-
-  const {
-    handleSubmit,
-    errors,
-    register,
-    // reset,
-    setValue,
-    watch,
-    // formState
-  } = useForm();
+  const paymentRequested = watch('paymentRequested');
 
   useEffect(() => {
     if (Object.keys(errors).length > 0) {
@@ -90,69 +95,82 @@ const TransmutationProposal = () => {
     };
     setTransmutationValues(setupValues);
     // eslint-disable-next-line
-  }, [transmutationData]);
+  }, [transmutationData, daoMetaData, transmutationData, address]);
 
   useEffect(() => {
     const getGiveTokenBalance = async () => {
-      const token = transmutationData[0].giveToken;
-      const tokenService = TokenService({
-        tokenAddress: token,
-        chainID: daochain,
-      });
-      const _balance = await tokenService('balanceOf')(
-        transmutationData[0].transmutation,
-      );
-      // console.log(injectedProvider?.utils.fromWei(_balance));
-      setBalance(injectedProvider?.utils.fromWei(_balance));
-      const symbol = await tokenService('symbol')();
-      setSymbol(symbol);
+      const token = transmutationData[0].distributionToken;
+      try {
+        const tokenService = TokenService({
+          tokenAddress: token,
+          chainID: daochain,
+        });
+        const _balance = await tokenService('balanceOf')(
+          transmutationData[0].transmutation,
+        );
+
+        if (_balance) {
+          // console.log(injectedProvider?.utils.fromWei(_balance));
+          setBalance(injectedProvider?.utils.fromWei(_balance.toString()));
+          const symbol = await tokenService('symbol')();
+          setSymbol(symbol);
+        }
+      } catch (error) {
+        console.error(error);
+      }
     };
-    if (transmutationData) {
+    if (transmutationData?.length) {
       getGiveTokenBalance();
     }
     // eslint-disable-next-line
-  }, [transmutationData]);
+  }, [transmutationData, injectedProvider]);
 
   useEffect(() => {
     const getTributeReturned = async () => {
-      const paymentRequested = watch('paymentRequested');
       const tribute = await TransmutationService({
         setupValues: transmutationValues,
         chainID: daochain,
       })('calcTribute')({ paymentRequested });
       setTributeReturned(tribute);
     };
-    if (watch('paymentRequested')) {
+    if (paymentRequested) {
       getTributeReturned();
+    } else {
+      setTributeReturned('0');
     }
-  }, [watch('paymentRequested')]);
+  }, [paymentRequested]);
 
   // get getToken
   useEffect(() => {
     const getGetTokenBalance = async () => {
-      const getTokenAddress = transmutationData[0].getToken;
-      const tokenArray = daoOverview?.tokenBalances.filter(
-        (token) =>
-          token.token.tokenAddress === getTokenAddress.toLowerCase() &&
-          token.guildBank,
-      );
-      if (!tokenArray) {
-        setTokenData([]);
-        return;
+      try {
+        console.log('transmutationData', transmutationData);
+        const getTokenAddress = transmutationData[0].capitalToken;
+        const tokenArray = daoOverview?.tokenBalances.filter(
+          (token) =>
+            token.token.tokenAddress === getTokenAddress.toLowerCase() &&
+            token.guildBank,
+        );
+        if (!tokenArray) {
+          setTokenData([]);
+          return;
+        }
+        setTokenData(
+          tokenArray
+            // .filter((token) => token)
+            .map((token) => ({
+              label: token.token.symbol || token.token.tokenAddress,
+              value: token.token.tokenAddress,
+              decimals: token.token.decimals,
+              balanceWei: token.tokenBalance,
+              balance: injectedProvider?.utils.fromWei(token.tokenBalance),
+            })),
+        );
+      } catch (error) {
+        console.error(error);
       }
-      setTokenData(
-        tokenArray
-          .filter((token) => token)
-          .map((token) => ({
-            label: token.token.symbol || token.token.tokenAddress,
-            value: token.token.tokenAddress,
-            decimals: token.token.decimals,
-            balanceWei: token.tokenBalance,
-            balance: injectedProvider?.utils.fromWei(token.tokenBalance),
-          })),
-      );
     };
-    if (transmutationData) {
+    if (transmutationData?.length) {
       getGetTokenBalance();
     }
     // eslint-disable-next-line
@@ -166,7 +184,6 @@ const TransmutationProposal = () => {
   };
 
   const onSubmit = async (values) => {
-    console.log(values);
     setLoading(true);
     const now = (new Date().getTime() / 1000).toFixed();
     const hash = createHash();
@@ -234,7 +251,7 @@ const TransmutationProposal = () => {
           contractAddress: daoid,
         },
       });
-
+      console.log(records);
       setTransmutationData(records.transmutations);
     };
     if (daoid) {
@@ -370,14 +387,7 @@ const TransmutationProposal = () => {
           </Flex>
         </form>
       ) : (
-        // <GraphFetch
-        //   query={GET_TRANSMUTATION}
-        //   setRecords={setTransmutationData}
-        //   entity='transmutations'
-        //   isBoosts={true}
-        //   variables={{ contractAddress: dao.address }}
-        // />
-        <Box>Records</Box>
+        <Box>No Results</Box>
       )}
     </>
   );
