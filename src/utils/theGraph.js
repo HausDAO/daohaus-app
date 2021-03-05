@@ -44,7 +44,6 @@ export const fetchBankValues = async (args) => {
 };
 
 export const fetchUberHausData = async (args) => {
-  console.log('args', args);
   return graphQuery({
     endpoint: getGraphEndpoint(args.chainID, 'subgraph_url'),
     query: UBERHAUS_DATA,

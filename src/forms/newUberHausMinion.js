@@ -14,7 +14,7 @@ import {
 import { RiExternalLinkLine } from 'react-icons/ri';
 import { useForm } from 'react-hook-form';
 
-import { UberHausMinionFactoryService } from '../services/uberHausMinionService';
+import { UberHausMinionFactoryService } from '../services/uberHausMinionFactoryService';
 import { supportedChains } from '../utils/chain';
 import { useInjectedProvider } from '../contexts/InjectedProviderContext';
 import { createPoll } from '../services/pollService';
@@ -44,7 +44,7 @@ const NewUberHausMinion = () => {
       daoid,
       UBERHAUS_ADDRESS,
       address,
-      '10',
+      '500',
       values.details,
     ];
 

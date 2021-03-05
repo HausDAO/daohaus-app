@@ -18,7 +18,11 @@ import { useParams } from 'react-router-dom';
 import { useSessionStorage } from '../hooks/useSessionStorage';
 import { fetchUberHausData } from '../utils/theGraph';
 import { format } from 'date-fns';
-import { UBERHAUS_ADDRESS } from '../utils/uberhaus';
+import {
+  UBERHAUS_ADDRESS,
+  UBERHAUS_NETWORK,
+  UBERHAUS_STAKING_TOKEN,
+} from '../utils/uberhaus';
 
 // TODO don't show for rinkeby/kovan. how does this work across network? will uberhaus be on mainnet or xdai? matic?
 
@@ -27,7 +31,6 @@ import { UBERHAUS_ADDRESS } from '../utils/uberhaus';
 //  // needs to be on xdai
 //  // step 1: then can launch an uberMinion
 //  // step 2: make a stake proposal for shares - need help content here
-const UBERHAUS_NETWORK = '0x2a';
 
 const DaoToDaoManager = ({ daoOverview, daoMetaData, setProposalType }) => {
   const {
@@ -57,17 +60,17 @@ const DaoToDaoManager = ({ daoOverview, daoMetaData, setProposalType }) => {
 
     if (daoOverview) {
       // TODO: adjust when there are multiple uberhaus
-      const uberHausMinion = daoOverview.minions.find(
+      const uberHausMinionData = daoOverview.minions.find(
         (minion) =>
           minion.minionType === 'UberHaus minion' &&
           minion.uberHausAddress === UBERHAUS_ADDRESS,
       );
-      console.log('uberHausMinion', uberHausMinion);
-      if (uberHausMinion) {
-        setUberHausMinion(uberHausMinion);
+      console.log('uberHausMinion', uberHausMinionData);
+      if (uberHausMinionData) {
+        setUberHausMinion(uberHausMinionData);
         fetchUberHaus(
-          uberHausMinion.uberHausAddress,
-          uberHausMinion.minionAddress,
+          uberHausMinionData.uberHausAddress,
+          uberHausMinionData.minionAddress,
         );
       }
     }
@@ -83,6 +86,15 @@ const DaoToDaoManager = ({ daoOverview, daoMetaData, setProposalType }) => {
   const noMinion = !uberHausMinion;
   const notMember = uberHausMinion && !uberHausData?.members[0];
   const isMember = uberHausMinion && uberHausData?.members[0];
+  const whiteListedStakingToken =
+    daoOverview &&
+    uberHausData &&
+    daoOverview.tokenBalances.some((balance) => {
+      return (
+        balance.token.tokenAddress.toLowerCase() ===
+        UBERHAUS_STAKING_TOKEN.toLowerCase()
+      );
+    });
 
   if (daochain !== UBERHAUS_NETWORK) {
     return (
@@ -140,9 +152,11 @@ const DaoToDaoManager = ({ daoOverview, daoMetaData, setProposalType }) => {
           <Flex justify='space-between' py={4}>
             <Box>
               <TextBox size='sm'>Almost In</TextBox>
-              <Box fontSize='md' my={2}>
-                DAO NEEDS $HAUS whitelisted
-              </Box>
+              {!whiteListedStakingToken ? (
+                <Box fontSize='md' my={2}>
+                  DAO NEEDS $HAUS whitelisted
+                </Box>
+              ) : null}
               <Box fontSize='md' my={2}>
                 {daoMetaData?.name} is ready to stake HAUS and join uberHAUS
               </Box>

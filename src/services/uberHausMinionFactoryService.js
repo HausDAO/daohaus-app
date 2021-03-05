@@ -1,17 +1,20 @@
 import Web3 from 'web3';
 
-import UberHausMinionAbi from '../contracts/uberHausMinion.json';
+import UberHausMinionFactoryAbi from '../contracts/uberHausMinionFactory.json';
 import { chainByID } from '../utils/chain';
 
-export const UberHausMinionService = ({ web3, chainID, uberHausMinion }) => {
+export const UberHausMinionFactoryService = ({ web3, chainID }) => {
   if (!web3) {
     const rpcUrl = chainByID(chainID).rpc_url;
     web3 = new Web3(new Web3.providers.HttpProvider(rpcUrl));
   }
-  const abi = UberHausMinionAbi;
-  const contract = new web3.eth.Contract(abi, uberHausMinion);
+  const abi = UberHausMinionFactoryAbi;
+  const contract = new web3.eth.Contract(
+    abi,
+    chainByID(chainID).uberhaus_minion_factory_addr,
+  );
   return (service) => {
-    if (service === 'proposeAction') {
+    if (service === 'summonUberHausMinion') {
       return async ({ args, from, poll, onTxHash }) => {
         console.log({ args, from, poll, onTxHash });
         console.log(contract);
