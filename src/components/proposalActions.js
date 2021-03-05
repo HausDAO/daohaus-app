@@ -96,7 +96,6 @@ const ProposalVote = ({
       zIndex='3'
       align='center'
       justify='center'
-      style={{ backdropFilter: 'blur(6px)' }}
     >
       <Box
         maxW={['70%', null, null, 'auto']}

@@ -31,13 +31,12 @@ const HubAccountModal = () => {
 
   return (
     <Modal isOpen={hubAccountModal} onClose={handleClose} isCentered>
-      <ModalOverlay bgColor={rgba(theme.colors.background[500], 0.8)} />
+      <ModalOverlay bgColor={rgba(theme.colors.background[500], 0.8)} style={{ backdropFilter: 'blur(6px)' }} />
       <ModalContent
         rounded='lg'
         bg='blackAlpha.800'
         borderWidth='1px'
         borderColor='whiteAlpha.200'
-        style={{ backdropFilter: 'blur(6px)' }}
         py={6}
       >
         <ModalCloseButton />
