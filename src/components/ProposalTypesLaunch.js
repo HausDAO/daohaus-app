@@ -19,6 +19,8 @@ const ProposalTypesLaunch = ({ handleLaunch, loading, setLoading }) => {
       trade: { active: true },
       guildKick: { active: true },
       lootGrab: { active: false, ratio: 1 },
+      transmutation: { active: false },
+      minion: { active: false },
     };
 
     const success = await handleLaunch(proposalTypes);
