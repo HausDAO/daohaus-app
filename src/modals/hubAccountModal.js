@@ -37,6 +37,7 @@ const HubAccountModal = () => {
         bg='blackAlpha.800'
         borderWidth='1px'
         borderColor='whiteAlpha.200'
+        style={{ backdropFilter: 'blur(6px)' }}
         py={6}
       >
         <ModalCloseButton />
