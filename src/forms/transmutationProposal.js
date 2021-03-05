@@ -30,6 +30,7 @@ import { useOverlay } from '../contexts/OverlayContext';
 import { createPoll } from '../services/pollService';
 import { createHash } from '../utils/general';
 import { createForumTopic } from '../utils/discourse';
+import { useSessionStorage } from '../hooks/useSessionStorage';
 
 const TransmutationProposal = () => {
   const [loading, setLoading] = useState(false);
@@ -43,7 +44,10 @@ const TransmutationProposal = () => {
   const [tokenData, setTokenData] = useState([]);
   const [balance, setBalance] = useState(0);
   const [symbol, setSymbol] = useState(0);
-  const [transmutationValues, setTransmutationValues] = useState(null);
+  const [transmutationValues, setTransmutationValues] = useSessionStorage(
+    `${daoid}-transmutations`,
+    null,
+  );
   const [tributeReturned, setTributeReturned] = useState(null);
   const { cachePoll, resolvePoll } = useUser();
   const {
