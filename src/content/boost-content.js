@@ -131,14 +131,15 @@ export const notificationBoostContent = {
 };
 
 export const proposalTypesContent = [
-  { key: 'member', label: 'Member' },
-  { key: 'funding', label: 'Funding' },
-  { key: 'whitelist', label: 'Whitelist' },
-  { key: 'trade', label: 'Trade' },
-  { key: 'guildKick', label: 'Guild Kick' },
+  { key: 'member', label: 'Member', default: true },
+  { key: 'funding', label: 'Funding', default: true },
+  { key: 'whitelist', label: 'Whitelist', default: true },
+  { key: 'trade', label: 'Trade', default: true },
+  { key: 'guildKick', label: 'Guild Kick', default: true },
   {
     key: 'lootGrab',
     label: 'Loot Grab',
+    default: true,
     options: [
       {
         id: 'ratio',
@@ -150,6 +151,8 @@ export const proposalTypesContent = [
       },
     ],
   },
+  { key: 'transmutation', label: 'Transmutation', default: false },
+  { key: 'minion', label: 'Minion', default: false },
 ];
 
 export const superpowerLinks = [
