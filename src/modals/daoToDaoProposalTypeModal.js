@@ -64,6 +64,7 @@ const DaoToDaoProposalTypeModal = ({ setProposalType }) => {
         borderWidth='1px'
         borderColor='whiteAlpha.200'
         maxWidth='500px'
+        style={{ backdropFilter: 'blur(6px)' }}
       >
         <ModalHeader>
           <Flex align='center' justify='space-between'>
