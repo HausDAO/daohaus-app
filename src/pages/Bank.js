@@ -9,7 +9,13 @@ import { daoConnectedAndSameChain } from '../utils/general';
 import { Button } from '@chakra-ui/react';
 import { RiAddFill } from 'react-icons/ri';
 
-const Bank = ({ overview, customTerms, currentDaoTokens, daoMember }) => {
+const Bank = ({
+  overview,
+  customTerms,
+  currentDaoTokens,
+  daoMember,
+  delegate,
+}) => {
   const { daoid, daochain } = useParams();
   const { address, injectedChain } = useInjectedProvider();
   const [needsSync, setNeedsSync] = useState(false);
@@ -30,7 +36,8 @@ const Bank = ({ overview, customTerms, currentDaoTokens, daoMember }) => {
     );
 
   useEffect(() => {
-    if (currentDaoTokens && daoMember?.exists) {
+    const canSync = daoMember?.exists || delegate;
+    if (currentDaoTokens && canSync) {
       setNeedsSync(
         currentDaoTokens.some((token) => {
           return (
@@ -40,7 +47,7 @@ const Bank = ({ overview, customTerms, currentDaoTokens, daoMember }) => {
         }),
       );
     }
-  }, [currentDaoTokens]);
+  }, [currentDaoTokens, daoMember, delegate]);
 
   return (
     <MainViewLayout

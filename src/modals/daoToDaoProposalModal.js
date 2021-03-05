@@ -88,6 +88,7 @@ const DaoToDaoProposalFormModal = ({ proposalType, isOpen, returnRoute }) => {
           borderWidth='1px'
           borderColor='whiteAlpha.200'
           maxWidth='700px'
+          style={{ backdropFilter: 'blur(6px)' }}
         >
           <ModalHeader>
             <Box

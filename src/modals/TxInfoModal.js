@@ -50,6 +50,7 @@ const TxInfoModal = () => {
         borderWidth='1px'
         borderColor='white'
         fontFamily='heading'
+        style={{ backdropFilter: 'blur(6px)' }}
         p={6}
         pt={1}
       >

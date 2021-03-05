@@ -114,6 +114,7 @@ const ProposalFormModal = ({ proposalType, returnRoute }) => {
         borderWidth='1px'
         borderColor='whiteAlpha.200'
         maxWidth='800px'
+        style={{ backdropFilter: 'blur(6px)' }}
       >
         <ModalHeader>
           <Box
