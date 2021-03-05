@@ -43,14 +43,13 @@ const TxInfoModal = () => {
 
   return (
     <Modal isOpen={txInfoModal} onClose={handleClose} isCentered>
-      <ModalOverlay bgColor={rgba(theme.colors.background[500], 0.8)} />
+      <ModalOverlay bgColor={rgba(theme.colors.background[500], 0.8)} style={{ backdropFilter: 'blur(6px)' }} />
       <ModalContent
         rounded='lg'
         bg='background.600'
         borderWidth='1px'
         borderColor='white'
         fontFamily='heading'
-        style={{ backdropFilter: 'blur(6px)' }}
         p={6}
         pt={1}
       >
