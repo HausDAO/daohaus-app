@@ -25,9 +25,7 @@ const validProposalType = (type) => {
 };
 
 const ProposalScopedModals = ({ proposalType }) => (
-  <>
-    <ProposalModal proposalType={proposalType} />
-  </>
+  <ProposalModal proposalType={proposalType} />
 );
 
 const NewProposal = ({ customTerms, daoMetaData, daoOverview }) => {
@@ -64,7 +62,7 @@ const NewProposal = ({ customTerms, daoMetaData, daoOverview }) => {
         daoOverview?.minions?.length,
       ),
     );
-  }, [daoMetaData]);
+  }, [customTerms, daoMetaData, daoOverview]);
 
   return (
     <MainViewLayout

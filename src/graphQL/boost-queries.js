@@ -9,8 +9,7 @@ export const GET_TRANSMUTATION = gql`
       distributionToken
       minion
       trust
-      getToken
-      giveToken
+      capitalToken
     }
   }
 `;
