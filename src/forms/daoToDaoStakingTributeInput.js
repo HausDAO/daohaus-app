@@ -4,47 +4,20 @@ import {
   Input,
   InputGroup,
   InputRightAddon,
-  Select,
   Tooltip,
 } from '@chakra-ui/react';
 import { RiInformationLine } from 'react-icons/ri';
 import { utils } from 'web3';
-import { MaxUint256 } from '@ethersproject/constants';
 
 import React, { useState, useEffect } from 'react';
-import { useParams } from 'react-router-dom';
 import TextBox from '../components/TextBox';
 import { useDao } from '../contexts/DaoContext';
-import { useInjectedProvider } from '../contexts/InjectedProviderContext';
-import { useOverlay } from '../contexts/OverlayContext';
-import { TokenService } from '../services/tokenService';
-import { useTX } from '../contexts/TXContext';
-import { createPoll } from '../services/pollService';
-import { useUser } from '../contexts/UserContext';
-import {
-  UBERHAUS_STAKING_TOKEN,
-  UBERHAUS_STAKING_TOKEN_SYMBOL,
-} from '../utils/uberhaus';
+import { UBERHAUS_STAKING_TOKEN_SYMBOL } from '../utils/uberhaus';
 
-const DaoToDaoStakingTributeInput = ({
-  register,
-  setValue,
-  getValues,
-  setError,
-  stakingToken,
-}) => {
-  const [unlocked, setUnlocked] = useState(true);
+const DaoToDaoStakingTributeInput = ({ register, setValue, stakingToken }) => {
   const [balance, setBalance] = useState(0);
-  const [loading, setLoading] = useState(false);
   const [tokenData, setTokenData] = useState([]);
   const { daoOverview } = useDao();
-  const { daochain, daoid } = useParams();
-  const { injectedProvider, address } = useInjectedProvider();
-  const { errorToast, successToast } = useOverlay();
-  const { refreshDao } = useTX();
-  const { cachePoll, resolvePoll } = useUser();
-
-  console.log('stakingToken', stakingToken);
 
   useEffect(() => {
     if (daoOverview && !tokenData.length) {
@@ -72,102 +45,16 @@ const DaoToDaoStakingTributeInput = ({
 
   useEffect(() => {
     if (stakingToken) {
-      getMax(stakingToken.value);
+      getMax();
     }
   }, [stakingToken]);
 
   const handleChange = async () => {
-    const tributeToken = UBERHAUS_STAKING_TOKEN;
-    // const tributeOffered = getValues('tributeOffered');
-    // await checkUnlocked(tributeToken, tributeOffered);
-    await getMax(tributeToken);
+    await getMax();
     return true;
   };
 
-  useEffect(() => {
-    if (!unlocked) {
-      setError('tributeOffered', {
-        type: 'allowance',
-        message: 'Tribute token must be unlocked to tribute.',
-      });
-    }
-  }, [unlocked]);
-
-  // const unlock = async () => {
-  //   setLoading(true);
-  //   const token = UBERHAUS_STAKING_TOKEN;
-  //   const args = [daoid, MaxUint256];
-
-  //   try {
-  //     const poll = createPoll({ action: 'unlockToken', cachePoll })({
-  //       daoID: daoid,
-  //       chainID: daochain,
-  //       tokenAddress: token,
-  //       userAddress: address,
-  //       unlockAmount: MaxUint256,
-  //       actions: {
-  //         onError: (error, txHash) => {
-  //           errorToast({
-  //             title: `There was an error.`,
-  //           });
-  //           resolvePoll(txHash);
-  //           console.error(`Could not find a matching proposal: ${error}`);
-  //           setLoading(false);
-  //         },
-  //         onSuccess: (txHash) => {
-  //           successToast({
-  //             // ? update to token symbol or name
-  //             title: 'Tribute token unlocked',
-  //           });
-  //           refreshDao();
-  //           resolvePoll(txHash);
-  //           setUnlocked(true);
-  //           setLoading(false);
-  //         },
-  //       },
-  //     });
-  //     await TokenService({
-  //       web3: injectedProvider,
-  //       chainID: daochain,
-  //       tokenAddress: token,
-  //     })('approve')({ args, address, poll });
-  //   } catch (err) {
-  //     console.log('error:', err);
-  //     setLoading(false);
-  //   }
-  // };
-
-  // const checkUnlocked = async (token, amount) => {
-  //   // console.log('check', token, amount);
-  //   if (
-  //     amount === '' ||
-  //     !token ||
-  //     typeof +amount !== 'number' ||
-  //     +amount === 0
-  //   ) {
-  //     setUnlocked(true);
-  //     return;
-  //   }
-  //   const tokenContract = TokenService({
-  //     chainID: daochain,
-  //     tokenAddress: token,
-  //   });
-
-  //   const amountApproved = await tokenContract('allowance')({
-  //     accountAddr: address,
-  //     contractAddr: daoid,
-  //   });
-
-  //   const isUnlocked = +amountApproved > +amount;
-  //   setUnlocked(isUnlocked);
-  // };
-
-  const getMax = async (token) => {
-    // const tokenContract = TokenService({
-    //   chainID: daochain,
-    //   tokenAddress: token,
-    // });
-    // const max = await tokenContract('balanceOf')(address);
+  const getMax = async () => {
     const max = stakingToken.balance;
     setBalance(max);
   };
@@ -179,6 +66,8 @@ const DaoToDaoStakingTributeInput = ({
     );
     handleChange();
   };
+
+  const noWhitelistOrBalance = !stakingToken || !stakingToken.balance;
 
   return (
     <>
@@ -193,18 +82,6 @@ const DaoToDaoStakingTributeInput = ({
         </TextBox>
       </Tooltip>
       <InputGroup>
-        {/* {!unlocked && (
-          <Button
-            onClick={() => unlock()}
-            isLoading={loading}
-            size='xs'
-            position='absolute'
-            right='0'
-            bottom='-10px'
-          >
-            Unlock
-          </Button>
-        )} */}
         <Button
           onClick={() => setMax()}
           size='xs'
@@ -212,7 +89,7 @@ const DaoToDaoStakingTributeInput = ({
           position='absolute'
           right='0'
           top='-30px'
-          disabled={!stakingToken}
+          disabled={noWhitelistOrBalance}
         >
           Max: {balance && parseFloat(utils.fromWei(balance)).toFixed(4)}
         </Button>
@@ -228,12 +105,6 @@ const DaoToDaoStakingTributeInput = ({
                 }
                 return true;
               },
-              // locked: () => {
-              //   if (!unlocked) {
-              //     return 'Tribute token must be unlocked to tribute';
-              //   }
-              //   return true;
-              // },
             },
             pattern: {
               value: /[0-9]/,
@@ -243,7 +114,7 @@ const DaoToDaoStakingTributeInput = ({
           color='white'
           focusBorderColor='secondary.500'
           onChange={handleChange}
-          disabled={!stakingToken}
+          disabled={noWhitelistOrBalance}
         />
         <InputRightAddon background='primary.500' p={2}>
           {UBERHAUS_STAKING_TOKEN_SYMBOL}

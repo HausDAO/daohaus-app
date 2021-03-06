@@ -6,3 +6,51 @@ export const UBERHAUS_STAKING_TOKEN =
 export const UBERHAUS_STAKING_TOKEN_SYMBOL = 'fHAUS';
 // CHANGE TO 500 when xdai for real
 export const UBERHAUS_MINION_REWARDS_FACTOR = '10';
+
+export const TEMP_SUBMIT_PROPOSAL_ABI = {
+  constant: false,
+  inputs: [
+    {
+      name: 'applicant',
+      type: 'address',
+    },
+    {
+      name: 'sharesRequested',
+      type: 'uint256',
+    },
+    {
+      name: 'lootRequested',
+      type: 'uint256',
+    },
+    {
+      name: 'tributeOffered',
+      type: 'uint256',
+    },
+    {
+      name: 'tributeToken',
+      type: 'address',
+    },
+    {
+      name: 'paymentRequested',
+      type: 'uint256',
+    },
+    {
+      name: 'paymentToken',
+      type: 'address',
+    },
+    {
+      name: 'details',
+      type: 'string',
+    },
+  ],
+  name: 'submitProposal',
+  outputs: [
+    {
+      name: 'proposalId',
+      type: 'uint256',
+    },
+  ],
+  payable: false,
+  stateMutability: 'nonpayable',
+  type: 'function',
+};

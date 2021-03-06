@@ -10,19 +10,27 @@ export const UberHausMinionService = ({ web3, chainID, uberHausMinion }) => {
   }
   const abi = UberHausMinionAbi;
   const contract = new web3.eth.Contract(abi, uberHausMinion);
-  return (service) => {
-    if (service === 'proposeAction') {
-      return async ({ args, from, poll, onTxHash }) => {
-        console.log({ args, from, poll, onTxHash });
+
+  return function getService(service) {
+    if (service === 'getAction') {
+      return async ({ proposalId }) => {
+        const action = await contract.methods.actions(proposalId).call();
+        return action;
+      };
+    }
+
+    if (service === 'proposeAction' || service === 'executeAction') {
+      return async ({ args, address, poll, onTxHash }) => {
         console.log(contract);
         try {
-          console.log(args, from);
+          console.log(args, address);
           const tx = await contract.methods[service](...args);
+          console.log('tx', tx);
           return tx
-            .send({ from })
+            .send('eth_requestAccounts', { from: address })
             .on('transactionHash', (txHash) => {
               if (poll) {
-                onTxHash(txHash);
+                onTxHash();
                 poll(txHash);
               }
             })

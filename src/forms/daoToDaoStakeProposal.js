@@ -26,6 +26,7 @@ import { useOverlay } from '../contexts/OverlayContext';
 import DaoToDaoStakingTributeInput from './daoToDaoStakingTributeInput';
 import { useDao } from '../contexts/DaoContext';
 import {
+  TEMP_SUBMIT_PROPOSAL_ABI,
   UBERHAUS_ADDRESS,
   UBERHAUS_STAKING_TOKEN,
   UBERHAUS_STAKING_TOKEN_SYMBOL,
@@ -39,6 +40,7 @@ import { createForumTopic } from '../utils/discourse';
 import { useMetaData } from '../contexts/MetaDataContext';
 import { UberHausMinionService } from '../services/uberHausMinionService';
 import { useInjectedProvider } from '../contexts/InjectedProviderContext';
+import { TokenService } from '../services/tokenService';
 
 const StakeProposalForm = () => {
   const { injectedProvider, address } = useInjectedProvider();
@@ -60,6 +62,8 @@ const StakeProposalForm = () => {
 
   const { handleSubmit, errors, register, setValue, getValues } = useForm();
 
+  console.log('injectedProvider', injectedProvider);
+
   useEffect(() => {
     if (Object.keys(errors).length > 0) {
       const newE = Object.keys(errors)[0];
@@ -73,21 +77,37 @@ const StakeProposalForm = () => {
   }, [errors]);
 
   useEffect(() => {
-    if (daoOverview) {
+    const setupTokenData = async () => {
       const stakingTokenData = daoOverview.tokenBalances.find(
         (token) =>
           token.token.tokenAddress.toLowerCase() ===
           UBERHAUS_STAKING_TOKEN.toLowerCase(),
       );
+      const uberHausMinionData = daoOverview.minions.find(
+        (minion) =>
+          minion.minionType === 'UberHaus minion' &&
+          minion.uberHausAddress === UBERHAUS_ADDRESS,
+      );
+      const tokenBalance = await TokenService({
+        daochain,
+        tokenAddress: stakingTokenData.tokenAddress,
+        is32: false,
+      })('balanceOf')(uberHausMinionData.minionAddress);
+
+      console.log('mininon tokenBalance', tokenBalance);
+
       if (stakingTokenData) {
         setStakingToken({
           label: stakingTokenData.token.symbol || stakingTokenData.tokenAddress,
           symbol: stakingTokenData.token.symbol,
           value: stakingTokenData.token.tokenAddress,
           decimals: stakingTokenData.token.decimals,
-          balance: stakingTokenData.tokenBalance,
+          balance: tokenBalance,
         });
       }
+    };
+    if (daoOverview) {
+      setupTokenData();
     }
   }, [daoOverview]);
 
@@ -107,10 +127,12 @@ const StakeProposalForm = () => {
       uberType: 'staking',
       hash,
     });
+
+    console.log('details', details);
     const tributeOffered = values.tributeOffered
       ? valToDecimalString(
           values.tributeOffered,
-          UBERHAUS_STAKING_TOKEN,
+          UBERHAUS_STAKING_TOKEN.toLowerCase(),
           daoOverview.tokenBalances,
         )
       : '0';
@@ -121,16 +143,52 @@ const StakeProposalForm = () => {
     // uint256 actionValue,
     // bytes calldata actionData,
     // string calldata details
-    const callData = '';
+
+    // get from moloch abi - submitProposal
+
+    // build proposal args
+    // const args = [
+    //   applicant,
+    //   values.sharesRequested || '0',
+    //   values.lootRequested || '0',
+    //   tributeOffered,
+    //   tributeToken,
+    //   paymentRequested,
+    //   paymentToken,
+    //   details,
+    // ];
+    const inputValues = [
+      uberHausMinionData.minionAddress,
+      values.sharesRequested || '0',
+      '0',
+      tributeOffered,
+      UBERHAUS_STAKING_TOKEN,
+      '0',
+      // UBERHAUS_STAKING_TOKEN,
+      // deplosit token
+      '0xd0a1e359811322d97991e03f863a0c30c2cf029c',
+      details,
+    ];
+
+    console.log('inputValues', inputValues);
+
+    const aSelectedFunction = TEMP_SUBMIT_PROPOSAL_ABI;
+
+    const hexData = injectedProvider.eth.abi.encodeFunctionCall(
+      aSelectedFunction,
+      inputValues,
+    );
 
     const args = [
       daoid,
       UBERHAUS_ADDRESS,
       UBERHAUS_STAKING_TOKEN,
-      tributeOffered,
-      callData,
+      '0',
+      hexData,
       details,
     ];
+
+    console.log('args', args);
 
     try {
       const poll = createPoll({ action: 'uberHausProposeAction', cachePoll })({
@@ -183,6 +241,8 @@ const StakeProposalForm = () => {
     }
   };
 
+  const noWhitelistOrBalance = !stakingToken || !stakingToken.balance;
+
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
       <FormControl
@@ -234,11 +294,12 @@ const StakeProposalForm = () => {
           </Box>
         )}
 
-        {!stakingToken ? (
+        {noWhitelistOrBalance ? (
           <Box color='secondary.300' fontSize='m' mr={5}>
             <Icon as={RiErrorWarningLine} color='secondary.300' mr={2} />
             You can&apos;t staking into UberHAUS until{' '}
-            {UBERHAUS_STAKING_TOKEN_SYMBOL} is whitelisted
+            {UBERHAUS_STAKING_TOKEN_SYMBOL} is whitelisted and your UberHAUS
+            minion has a $HAUS balance.
           </Box>
         ) : null}
         <Box>
@@ -246,7 +307,7 @@ const StakeProposalForm = () => {
             type='submit'
             loadingText='Submitting'
             isLoading={loading}
-            disabled={loading || !stakingToken}
+            disabled={loading || noWhitelistOrBalance}
           >
             Submit
           </Button>

@@ -39,7 +39,7 @@ const NewUberHausMinion = () => {
     setLoading(true);
     setStep(2);
 
-    const controllerAddress = '0x000000000000000000000000000000000000beef';
+    // const controllerAddress = '0x000000000000000000000000000000000000beef';
     const summonParams = [
       daoid,
       UBERHAUS_ADDRESS,
