@@ -8,27 +8,23 @@ import {
   Input,
   Icon,
   Box,
+  useToast,
 } from '@chakra-ui/react';
-// import { utils } from 'web3';
+import { CopyToClipboard } from 'react-copy-to-clipboard';
 import { RiErrorWarningLine } from 'react-icons/ri';
+import { FaCopy } from 'react-icons/fa';
 
-// import {
-//   useDao,
-//   useTxProcessor,
-//   useUser,
-//   useModals,
-// } from '../../../contexts/PokemolContext';
 import TextBox from '../components/TextBox';
-
+import molochAbi from '../contracts/molochV2.json';
 import DetailsFields from './detailFields';
 import { createHash, detailsToJSON } from '../utils/general';
 import { useOverlay } from '../contexts/OverlayContext';
 import DaoToDaoStakingTributeInput from './daoToDaoStakingTributeInput';
 import { useDao } from '../contexts/DaoContext';
 import {
-  TEMP_SUBMIT_PROPOSAL_ABI,
   UBERHAUS_ADDRESS,
   UBERHAUS_STAKING_TOKEN,
+  UBERHAUS_STAKING_TOKEN_DECIMALS,
   UBERHAUS_STAKING_TOKEN_SYMBOL,
 } from '../utils/uberhaus';
 import { useParams } from 'react-router-dom';
@@ -45,9 +41,10 @@ import { TokenService } from '../services/tokenService';
 const StakeProposalForm = () => {
   const { injectedProvider, address } = useInjectedProvider();
   const { daoOverview } = useDao();
-  const { daoMetaData } = useMetaData;
+  const { daoMetaData } = useMetaData();
   const { daoid, daochain } = useParams();
   const { cachePoll, resolvePoll } = useUser();
+  const toast = useToast();
   const { refreshDao } = useTX();
   const {
     setD2dProposalModal,
@@ -61,8 +58,6 @@ const StakeProposalForm = () => {
   const [stakingToken, setStakingToken] = useState(null);
 
   const { handleSubmit, errors, register, setValue, getValues } = useForm();
-
-  console.log('injectedProvider', injectedProvider);
 
   useEffect(() => {
     if (Object.keys(errors).length > 0) {
@@ -78,33 +73,26 @@ const StakeProposalForm = () => {
 
   useEffect(() => {
     const setupTokenData = async () => {
-      const stakingTokenData = daoOverview.tokenBalances.find(
-        (token) =>
-          token.token.tokenAddress.toLowerCase() ===
-          UBERHAUS_STAKING_TOKEN.toLowerCase(),
-      );
       const uberHausMinionData = daoOverview.minions.find(
         (minion) =>
           minion.minionType === 'UberHaus minion' &&
           minion.uberHausAddress === UBERHAUS_ADDRESS,
       );
+
       const tokenBalance = await TokenService({
-        daochain,
-        tokenAddress: stakingTokenData.tokenAddress,
+        chainID: daochain,
+        tokenAddress: UBERHAUS_STAKING_TOKEN,
         is32: false,
       })('balanceOf')(uberHausMinionData.minionAddress);
 
-      console.log('mininon tokenBalance', tokenBalance);
-
-      if (stakingTokenData) {
-        setStakingToken({
-          label: stakingTokenData.token.symbol || stakingTokenData.tokenAddress,
-          symbol: stakingTokenData.token.symbol,
-          value: stakingTokenData.token.tokenAddress,
-          decimals: stakingTokenData.token.decimals,
-          balance: tokenBalance,
-        });
-      }
+      setStakingToken({
+        label: UBERHAUS_STAKING_TOKEN_SYMBOL,
+        symbol: UBERHAUS_STAKING_TOKEN_SYMBOL,
+        value: UBERHAUS_STAKING_TOKEN,
+        decimals: UBERHAUS_STAKING_TOKEN_DECIMALS,
+        balance: tokenBalance,
+        uberHausMinionData,
+      });
     };
     if (daoOverview) {
       setupTokenData();
@@ -137,46 +125,24 @@ const StakeProposalForm = () => {
         )
       : '0';
 
-    // address targetDao,
-    // address actionTo,
-    // address token,
-    // uint256 actionValue,
-    // bytes calldata actionData,
-    // string calldata details
-
-    // get from moloch abi - submitProposal
-
-    // build proposal args
-    // const args = [
-    //   applicant,
-    //   values.sharesRequested || '0',
-    //   values.lootRequested || '0',
-    //   tributeOffered,
-    //   tributeToken,
-    //   paymentRequested,
-    //   paymentToken,
-    //   details,
-    // ];
-    const inputValues = [
+    const submitProposalArgs = [
       uberHausMinionData.minionAddress,
       values.sharesRequested || '0',
       '0',
       tributeOffered,
       UBERHAUS_STAKING_TOKEN,
       '0',
-      // UBERHAUS_STAKING_TOKEN,
-      // deplosit token
-      '0xd0a1e359811322d97991e03f863a0c30c2cf029c',
+      daoOverview.depositToken.tokenAddress,
       details,
     ];
 
-    console.log('inputValues', inputValues);
-
-    const aSelectedFunction = TEMP_SUBMIT_PROPOSAL_ABI;
+    const submitProposalAbiData = molochAbi.find(
+      (f) => f.name === 'SubmitProposal',
+    );
 
     const hexData = injectedProvider.eth.abi.encodeFunctionCall(
-      aSelectedFunction,
-      inputValues,
+      submitProposalAbiData,
+      submitProposalArgs,
     );
 
     const args = [
@@ -241,7 +207,7 @@ const StakeProposalForm = () => {
     }
   };
 
-  const noWhitelistOrBalance = !stakingToken || !stakingToken.balance;
+  const noBalance = !stakingToken || +stakingToken.balance <= 0;
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
@@ -294,12 +260,32 @@ const StakeProposalForm = () => {
           </Box>
         )}
 
-        {noWhitelistOrBalance ? (
+        {noBalance ? (
           <Box color='secondary.300' fontSize='m' mr={5}>
             <Icon as={RiErrorWarningLine} color='secondary.300' mr={2} />
-            You can&apos;t staking into UberHAUS until{' '}
-            {UBERHAUS_STAKING_TOKEN_SYMBOL} is whitelisted and your UberHAUS
-            minion has a $HAUS balance.
+            You can&apos;t staking into UberHAUS until your UberHAUS minion has
+            a {UBERHAUS_STAKING_TOKEN_SYMBOL} balance. Send{' '}
+            {UBERHAUS_STAKING_TOKEN_SYMBOL} your minion&apos;s address:{' '}
+            {stakingToken?.uberHausMinionData.minionAddress}
+            <CopyToClipboard
+              text={stakingToken?.uberHausMinionData.minionAddress}
+              onCopy={() =>
+                toast({
+                  title: 'Copied Address',
+                  position: 'top-right',
+                  status: 'success',
+                  duration: 3000,
+                  isClosable: true,
+                })
+              }
+            >
+              <Icon
+                as={FaCopy}
+                color='secondary.300'
+                ml={2}
+                _hover={{ cursor: 'pointer' }}
+              />
+            </CopyToClipboard>
           </Box>
         ) : null}
         <Box>
@@ -307,7 +293,7 @@ const StakeProposalForm = () => {
             type='submit'
             loadingText='Submitting'
             isLoading={loading}
-            disabled={loading || noWhitelistOrBalance}
+            disabled={loading || noBalance}
           >
             Submit
           </Button>

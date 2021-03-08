@@ -47,10 +47,10 @@ export const fetchUberHausData = async (args) => {
   return graphQuery({
     endpoint: getGraphEndpoint(args.chainID, 'subgraph_url'),
     query: UBERHAUS_DATA,
-    // subfield: 'members',
     variables: {
       molochAddress: args.molochAddress,
       memberAddress: args.memberAddress,
+      minionId: args.minionId,
     },
   });
 };

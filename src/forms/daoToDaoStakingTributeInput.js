@@ -4,6 +4,7 @@ import {
   Input,
   InputGroup,
   InputRightAddon,
+  Text,
   Tooltip,
 } from '@chakra-ui/react';
 import { RiInformationLine } from 'react-icons/ri';
@@ -74,7 +75,7 @@ const DaoToDaoStakingTributeInput = ({ register, setValue, stakingToken }) => {
       <Tooltip
         hasArrow
         shouldWrapChildren
-        label='Only tokens approved by the DAO are allowed here. Members can add more approved tokens with Token proposals'
+        label='DAOs must stake HAUS to join UberHAUS. Your UberHAUS minion will need to have HAUS before this proposal can be executed.'
         placement='top'
       >
         <TextBox as={FormLabel} size='xs' d='flex' alignItems='center'>
@@ -120,6 +121,11 @@ const DaoToDaoStakingTributeInput = ({ register, setValue, stakingToken }) => {
           {UBERHAUS_STAKING_TOKEN_SYMBOL}
         </InputRightAddon>
       </InputGroup>
+      {noWhitelistOrBalance ? (
+        <Text my={2} size='sm'>
+          send haus to
+        </Text>
+      ) : null}
     </>
   );
 };
