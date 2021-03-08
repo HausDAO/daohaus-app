@@ -57,14 +57,16 @@ const DaoToDaoProposalTypeModal = ({ setProposalType }) => {
 
   return (
     <Modal isOpen={d2dProposalTypeModal} onClose={handleClose} isCentered>
-      <ModalOverlay bgColor={rgba(theme.colors.background[500], 0.8)} />
+      <ModalOverlay
+        bgColor={rgba(theme.colors.background[500], 0.8)}
+        style={{ backdropFilter: 'blur(6px)' }}
+      />
       <ModalContent
         rounded='lg'
         bg='blackAlpha.600'
         borderWidth='1px'
         borderColor='whiteAlpha.200'
         maxWidth='500px'
-        style={{ backdropFilter: 'blur(6px)' }}
       >
         <ModalHeader>
           <Flex align='center' justify='space-between'>
