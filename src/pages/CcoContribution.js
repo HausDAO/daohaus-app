@@ -194,7 +194,7 @@ const CcoContribution = React.memo(function ccocontribution({
                 {networkMatch() ? (
                   <>
                     <ContentBox mt={2} w='100%'>
-                      <Flex justifyContent='space-between'>
+                      <Flex direction='column'>
                         <TextBox size='sm' color='whiteAlpha.900' mb={7}>
                           2. Contribute
                         </TextBox>
@@ -204,6 +204,9 @@ const CcoContribution = React.memo(function ccocontribution({
                             roundData.raiseOver,
                           )}
                         </Text>
+                        <Text fontSize='sm' color='whiteAlpha.700' mt={2}>
+                          {`${roundData.claimTokenValue} ${roundData.ccoToken.symbol} = 1 ${roundData.claimTokenSymbol} | ${roundData.currentRound.maxContribution} ${roundData.ccoToken.symbol} max per person`}
+                        </Text>
                       </Flex>
                       {raiseAtMax ? (
                         <TextBox variant='value' size='md' my={2}>
@@ -212,7 +215,7 @@ const CcoContribution = React.memo(function ccocontribution({
                       ) : null}
 
                       {!eligibleBlock ? (
-                        <>
+                        <Box borderTopWidth='1px' mt={3}>
                           <CcoLootGrabForm
                             roundData={roundData}
                             currentContributionData={currentContributionData}
@@ -251,7 +254,7 @@ const CcoContribution = React.memo(function ccocontribution({
                               )}
                             </Box>
                           ) : null}
-                        </>
+                        </Box>
                       ) : null}
                     </ContentBox>
 
@@ -389,9 +392,21 @@ const CcoContribution = React.memo(function ccocontribution({
                     isExternal
                     display='flex'
                     alignItems='center'
+                    mb={5}
                   >
                     <TextBox fontSize='sm' colorScheme='secondary.500'>
                       About CCOs
+                    </TextBox>
+                  </Link>
+
+                  <Link
+                    href='https://daohaus.club/ '
+                    isExternal
+                    display='flex'
+                    alignItems='center'
+                  >
+                    <TextBox fontSize='sm' colorScheme='secondary.500'>
+                      FAQ
                     </TextBox>
                   </Link>
                 </ContentBox>

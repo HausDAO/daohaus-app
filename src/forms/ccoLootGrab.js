@@ -50,7 +50,10 @@ const CcoLootGrabForm = ({
     setValue,
     setError,
     getValues,
+    watch,
   } = useForm({ reValidateMode: 'onSubmit' });
+
+  const currentTribute = watch('tributeOffered');
 
   useEffect(() => {
     if (Object.keys(errors).length > 0) {
@@ -142,11 +145,7 @@ const CcoLootGrabForm = ({
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
-      <Flex justifyContent='space-between' mb={3}>
-        <Text fontSize='sm' color='whiteAlpha.700' as='i'>
-          {`${roundData.currentRound.maxContribution} ${roundData.ccoToken.symbol}`}{' '}
-          per person max
-        </Text>
+      <Flex justifyContent='space-between' my={3}>
         <Text fontSize='sm' color='whiteAlpha.700' as='i'>
           {`${currentContributionData?.addressRemaining}`}/
           {`${roundData.currentRound.maxContribution} ${roundData.ccoToken.symbol}`}{' '}
@@ -157,11 +156,12 @@ const CcoLootGrabForm = ({
         isInvalid={errors.name}
         display='flex'
         flexDirection='row'
-        justifyContent='space-between'
+        justifyContent='flex-start'
+        alignItems='baseline'
         mb={0}
         flexWrap='wrap'
       >
-        <Box w={['100%', null, '80%']}>
+        <Box w={['100%', null, '70%']}>
           <CcoTributeInput
             register={register}
             setValue={setValue}
@@ -171,6 +171,21 @@ const CcoLootGrabForm = ({
             contributionClosed={contributionClosed}
           />
         </Box>
+        <Text fontSize='sm' color='whiteAlpha.700' as='i' ml={5}>
+          {`will return -> ${+currentTribute / +roundData.claimTokenValue} ${
+            roundData.claimTokenSymbol
+          } `}
+        </Text>
+      </FormControl>
+
+      <Flex justifyContent='flex-end'>
+        {currentError && (
+          <Flex color='red.500' fontSize='m' mr={5} align='center'>
+            <Icon as={RiErrorWarningLine} color='red.500' mr={2} />
+            {currentError.message}
+          </Flex>
+        )}
+
         {daoConnectedAndSameChain(address, daochain, injectedChain?.chainId) ? (
           <Button
             type='submit'
@@ -191,14 +206,7 @@ const CcoLootGrabForm = ({
               : 'Wallet'}
           </Button>
         )}
-      </FormControl>
-
-      {currentError && (
-        <Flex color='red.500' fontSize='m' mr={5} align='center'>
-          <Icon as={RiErrorWarningLine} color='red.500' mr={2} />
-          {currentError.message}
-        </Flex>
-      )}
+      </Flex>
     </form>
   );
 };
