@@ -33,6 +33,7 @@ const AddressInput = ({
   tipLabel = defaultTipLabel,
   canClear,
   clearFn,
+  memberOnly = false,
   newMember,
   member,
 }) => {
@@ -40,7 +41,7 @@ const AddressInput = ({
   const { theme } = useCustomTheme();
   // const { daochain } = useParams();
   const { daoMembers } = useDao();
-  const [anyApplicant, setAnyApplicant] = useState(false);
+  const [anyApplicant, setAnyApplicant] = useState(memberOnly);
   // const [members] = useMembers();
   const [localMembers, setLocalMembers] = useState([]);
 
@@ -154,7 +155,7 @@ const AddressInput = ({
                 Clear
               </Button>
             )}
-            {!guildKick && (
+            {!guildKick && !memberOnly ? (
               <Button
                 onClick={() => setAnyApplicant(false)}
                 variant='outline'
@@ -162,7 +163,7 @@ const AddressInput = ({
               >
                 Other
               </Button>
-            )}
+            ) : null}
           </Flex>
           <Select
             placeholder='Select member'

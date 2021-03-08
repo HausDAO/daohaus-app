@@ -21,7 +21,12 @@ import { createPoll } from '../services/pollService';
 import { useUser } from '../contexts/UserContext';
 import { useOverlay } from '../contexts/OverlayContext';
 import { useDao } from '../contexts/DaoContext';
-import { UBERHAUS_ADDRESS } from '../utils/uberhaus';
+import {
+  UBERHAUS_ADDRESS,
+  UBERHAUS_MINION_REWARDS_FACTOR,
+} from '../utils/uberhaus';
+import AddressInput from './addressInput';
+import { isEthAddress } from '../utils/general';
 
 const NewUberHausMinion = () => {
   const [loading, setLoading] = useState(false);
@@ -30,21 +35,29 @@ const NewUberHausMinion = () => {
   const { refetch } = useDao();
   const { cachePoll, resolvePoll } = useUser();
   const { errorToast, successToast, setGenericModal } = useOverlay();
-  const { handleSubmit, register } = useForm();
+  const { handleSubmit, register, setValue, watch } = useForm();
   const [step, setStep] = useState(1);
   const [pendingTx, setPendingTx] = useState(null);
+  const [missingDelegate, setMissingDelegate] = useState(false);
   const now = (new Date().getTime() / 1000).toFixed();
 
   const onSubmit = async (values) => {
+    console.log('values', values, isEthAddress(values.memberApplicant));
+    if (!isEthAddress(values.memberApplicant)) {
+      setMissingDelegate(true);
+      return;
+    }
+
     setLoading(true);
     setStep(2);
 
-    // const controllerAddress = '0x000000000000000000000000000000000000beef';
+    const ZERO_ADDRESS = '0x0000000000000000000000000000000000000000';
     const summonParams = [
       daoid,
       UBERHAUS_ADDRESS,
-      address,
-      '500',
+      ZERO_ADDRESS,
+      values.memberApplicant,
+      UBERHAUS_MINION_REWARDS_FACTOR,
       values.details,
     ];
 
@@ -111,11 +124,23 @@ const NewUberHausMinion = () => {
             Step 1: Deploy UberHAUS Minion
           </Heading>
           <Box mb={3} fontSize='sm'>
-            This minion will manage your membership in UberHaus.
+            This minion will manage your membership in UberHaus. A DAO member
+            needs to be added as the Delegate and will be in charge of voting in
+            UberHAUS. You can change the Delegate at any time through a
+            proposal.
           </Box>
 
           <form onSubmit={handleSubmit(onSubmit)}>
             <Box mb={3} fontSize='sm'>
+              <AddressInput
+                name='applicant'
+                formLabel='delegate'
+                tipLabel='DAO member address that will be able to vote in UberHAUS. You can change this later through a proposal.'
+                register={register}
+                setValue={setValue}
+                watch={watch}
+                memberOnly={true}
+              />
               <FormControl mb={5}>
                 <FormHelperText fontSize='sm' id='name-helper-text' mb={3}>
                   A Minion needs a name
@@ -128,7 +153,17 @@ const NewUberHausMinion = () => {
                 />
               </FormControl>
             </Box>
-            <Button type='submit' isLoading={loading}>
+            {missingDelegate ? (
+              <FormHelperText
+                fontSize='xs'
+                id='applicant-helper-text'
+                my={3}
+                color='red.500'
+              >
+                A delegate is required
+              </FormHelperText>
+            ) : null}
+            <Button type='submit' isLoading={loading} disabled={loading}>
               Deploy
             </Button>
           </form>
