@@ -80,7 +80,10 @@ const DaoToDaoProposalFormModal = ({ proposalType, isOpen, returnRoute }) => {
 
   return (
     <Modal isOpen={isOpen} onClose={handleClose} isCentered>
-      <ModalOverlay bgColor={rgba(theme.colors.background[500], 0.8)} />
+      <ModalOverlay
+        bgColor={rgba(theme.colors.background[500], 0.8)}
+        style={{ backdropFilter: 'blur(6px)' }}
+      />
       {proposalForm && (
         <ModalContent
           rounded='lg'
@@ -88,7 +91,6 @@ const DaoToDaoProposalFormModal = ({ proposalType, isOpen, returnRoute }) => {
           borderWidth='1px'
           borderColor='whiteAlpha.200'
           maxWidth='700px'
-          style={{ backdropFilter: 'blur(6px)' }}
         >
           <ModalHeader>
             <Box
