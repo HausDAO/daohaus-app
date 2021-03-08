@@ -15,6 +15,7 @@ const ComingSoonOverlay = () => {
       fontWeight={700}
       align='center'
       justify='center'
+      style={{ backdropFilter: 'blur(6px)' }}
     >
       Coming Soon
     </Flex>
