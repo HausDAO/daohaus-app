@@ -23,6 +23,7 @@ const Main = () => {
       Edit 3Box Profile
     </Button>
   );
+
   return (
     <MainViewLayout header='Hub' headerEl={address ? ctaButton : null}>
       <Flex wrap='wrap'>

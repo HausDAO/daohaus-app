@@ -6,6 +6,7 @@ import React, {
   useRef,
 } from 'react';
 import { useParams } from 'react-router-dom';
+import { checkIfUserIsDelegate } from '../utils/general';
 import { initMemberWallet } from '../utils/wallet';
 
 export const DaoMemberContext = createContext();
@@ -18,6 +19,7 @@ export const DaoMemberProvider = ({
 }) => {
   const { daoid, daochain } = useParams();
   const [daoMember, setDaoMember] = useState(null);
+  const [delegate, setDelegate] = useState(null);
   const [isMember, setIsMember] = useState(null);
 
   const currentMemberRef = useRef(false);
@@ -27,13 +29,22 @@ export const DaoMemberProvider = ({
     const checkForMember = (daoMembers) => {
       return daoMembers.find((member) => member.memberAddress === address);
     };
+
     if (daoMembers) {
       if (currentMemberRef.current !== address) {
         const currentMember = checkForMember(daoMembers);
         if (currentMember) {
           setDaoMember(currentMember);
           setIsMember(true);
+          setDelegate(false);
         } else {
+          const delegatees = checkIfUserIsDelegate(address, daoMembers);
+          if (delegatees?.length) {
+            setDelegate({
+              delegateKey: address,
+              delegatees,
+            });
+          }
           setDaoMember(false);
           setIsMember(false);
         }
@@ -46,48 +57,74 @@ export const DaoMemberProvider = ({
     const assembleMemberWallet = async () => {
       try {
         const wallet = await initMemberWallet({
-          memberAddress: daoMember.memberAddress,
+          memberAddress: address,
           depositToken: overview.depositToken,
           daoAddress: daoid,
           chainID: daochain,
         });
 
         if (wallet) {
-          setDaoMember((prevState) => ({
-            ...prevState,
-            ...wallet,
-            hasWallet: true,
-          }));
+          if (daoMember) {
+            setDaoMember((prevState) => ({
+              ...prevState,
+              ...wallet,
+              hasWallet: true,
+            }));
+          } else if (delegate) {
+            setDelegate((prevState) => ({
+              ...prevState,
+              ...wallet,
+              hasWallet: true,
+            }));
+          }
         }
-        memberWalletRef.current = true;
+        memberWalletRef.current = address;
       } catch (error) {
         console.error(error);
-        memberWalletRef.current = true;
+        memberWalletRef.current = address;
       }
     };
 
+    const canVote = daoMember || delegate;
     if (
-      daoMember &&
-      !memberWalletRef.current &&
+      canVote &&
+      memberWalletRef.current !== address &&
       overview &&
       daochain &&
-      daoid
+      daoid &&
+      address
     ) {
       assembleMemberWallet();
     }
-  }, [daoMember, overview, daochain, daoid]);
+  }, [daoMember, overview, daochain, daoid, delegate]);
 
   return (
     <DaoMemberContext.Provider
-      value={{ currentMemberRef, isMember, daoMember, memberWalletRef }}
+      value={{
+        currentMemberRef,
+        isMember,
+        daoMember,
+        memberWalletRef,
+        delegate,
+      }}
     >
       {children}
     </DaoMemberContext.Provider>
   );
 };
 export const useDaoMember = () => {
-  const { currentMemberRef, isMember, daoMember, memberWalletRef } = useContext(
-    DaoMemberContext,
-  );
-  return { currentMemberRef, isMember, daoMember, memberWalletRef };
+  const {
+    currentMemberRef,
+    isMember,
+    daoMember,
+    memberWalletRef,
+    delegate,
+  } = useContext(DaoMemberContext);
+  return {
+    currentMemberRef,
+    isMember,
+    daoMember,
+    memberWalletRef,
+    delegate,
+  };
 };

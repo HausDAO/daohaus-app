@@ -55,7 +55,8 @@ export const MolochService = ({ web3, daoAddress, version, chainID }) => {
       service === 'submitGuildKickProposal' ||
       service === 'collectTokens' ||
       service === 'withdrawBalance' ||
-      service === 'ragequit'
+      service === 'ragequit' ||
+      service === 'updateDelegateKey'
     ) {
       return async ({ args, address, poll, onTxHash }) => {
         try {
@@ -63,6 +64,7 @@ export const MolochService = ({ web3, daoAddress, version, chainID }) => {
           return tx
             .send('eth_requestAccounts', { from: address })
             .on('transactionHash', (txHash) => {
+              console.log('transactionHash');
               if (poll) {
                 poll(txHash);
               }
@@ -76,6 +78,7 @@ export const MolochService = ({ web3, daoAddress, version, chainID }) => {
               return error;
             });
         } catch (error) {
+          console.error(error);
           return error;
         }
       };

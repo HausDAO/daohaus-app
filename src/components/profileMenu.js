@@ -30,8 +30,8 @@ const ProfileMenu = ({ member }) => {
 
   const isMember =
     address &&
-    member.memberAddress &&
-    address.toLowerCase() === member.memberAddress.toLowerCase();
+    member?.memberAddress &&
+    address.toLowerCase() === member?.memberAddress.toLowerCase();
 
   const hasSharesOrloot = +member.shares > 0 || +member.loot > 0;
 
@@ -70,11 +70,18 @@ const ProfileMenu = ({ member }) => {
           <MenuItem>View 3box Profile</MenuItem>
         </Link>
 
-        {daoConnectedAndSameChain(address, daochain, injectedChain.chainId) ? (
+        {daoConnectedAndSameChain(address, daochain, injectedChain?.chainId) ? (
           <>
             {isMember && hasSharesOrloot ? (
               <MenuItem onClick={() => setGenericModal({ rageQuit: true })}>
                 RageQuit
+              </MenuItem>
+            ) : null}
+            {isMember && hasSharesOrloot ? (
+              <MenuItem
+                onClick={() => setGenericModal({ updateDelegate: true })}
+              >
+                Add Delegate Key
               </MenuItem>
             ) : null}
 

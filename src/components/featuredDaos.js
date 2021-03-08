@@ -50,7 +50,7 @@ const FeaturedDaos = () => {
           _hover={{ transform: 'scale(1.05)' }}
           direction='column'
           as={RouterLink}
-          to={`/dao/0x1/0x7d58c962356ae66ba91b108751d67ae5d3b022fc`}
+          to={`/dao/0x89/0x93fa3b9d57bcddda4ed2ee40831f5859a9c417b7`}
           justify='start'
           align='center'
         >
@@ -67,7 +67,7 @@ const FeaturedDaos = () => {
               Grants
             </Badge>
             <Badge variant='outline' colorScheme='primary' textAlign='center'>
-              Mainnet
+              Polygon
             </Badge>
           </Flex>
         </ContentBox>
@@ -75,7 +75,7 @@ const FeaturedDaos = () => {
           _hover={{ transform: 'scale(1.05)' }}
           direction='column'
           as={RouterLink}
-          to={`/dao/0x1/0xbeb3e32355a933501c247e2dbde6e6ca2489bf3d`}
+          to={`/dao/0x64/0xfe1084bc16427e5eb7f13fc19bcd4e641f7d571f`}
           justify='start'
           align='center'
         >
@@ -92,7 +92,7 @@ const FeaturedDaos = () => {
               Guilds
             </Badge>
             <Badge variant='outline' colorScheme='primary' textAlign='center'>
-              Mainnet
+              xDAI
             </Badge>
           </Flex>
         </ContentBox>

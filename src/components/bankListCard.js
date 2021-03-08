@@ -9,31 +9,34 @@ import { useDaoMember } from '../contexts/DaoMemberContext';
 const TokenListCard = ({
   token,
   isBank = true,
-  hasSync,
   version = '2.1',
   hasBalance,
+  hasSync,
 }) => {
-  const { daoMember } = useDaoMember();
+  const { daoMember, delegate } = useDaoMember();
   const [needsSync, setNeedsSync] = useState(null);
 
   useEffect(() => {
     if (token?.contractBalances) {
       if (version === '2.1') {
+        const wallet = daoMember?.hasWallet || delegate?.hasWallet;
         const isAccurateBalance =
-          daoMember?.hasWallet &&
+          wallet &&
           isBank &&
           token.contractBalances.token !== token.contractBalances.babe;
+
         setNeedsSync(isAccurateBalance);
       } else {
+        const canInteract = !!(daoMember || delegate);
         const isAccurateBalance =
-          daoMember &&
+          canInteract &&
           isBank &&
           +token.tokenBalance &&
           token.contractBalances.token !== token.contractBalances.babe;
         setNeedsSync(isAccurateBalance);
       }
     }
-  }, [token, isBank, version, daoMember]);
+  }, [token, isBank, version, daoMember, delegate]);
 
   return (
     <Flex h='60px' align='center'>

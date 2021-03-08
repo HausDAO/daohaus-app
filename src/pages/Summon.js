@@ -59,8 +59,9 @@ const Summon = () => {
   }, [injectedChain]);
 
   const handleSummon = async (data) => {
-    setIsSummoning(true);
     const now = (new Date().getTime() / 1000).toFixed();
+    setIsSummoning(true);
+
     const newDaoData = {
       ...daoData,
       ...data,

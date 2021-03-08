@@ -17,6 +17,7 @@ const Proposal = ({
   daoProposals,
   daoMember,
   customTerms,
+  delegate,
 }) => {
   const { propid, daochain, daoid } = useParams();
   const currentProposal = activities
@@ -65,6 +66,7 @@ const Proposal = ({
                   proposal={currentProposal}
                   overview={overview}
                   daoMember={daoMember}
+                  delegate={delegate}
                   daoProposals={daoProposals}
                 />
               )}

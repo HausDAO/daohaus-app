@@ -1,37 +1,79 @@
 import React from 'react';
 import { RiInformationLine } from 'react-icons/ri';
-import { Box, Flex, Icon, Tooltip } from '@chakra-ui/react';
+import { Box, Button, Flex, Icon, Tooltip } from '@chakra-ui/react';
 import { useInjectedProvider } from '../contexts/InjectedProviderContext';
 import { capitalize, daoConnectedAndSameChain } from '../utils/general';
 import { useParams } from 'react-router-dom';
-import { supportedChains } from '../utils/chain';
+import { EIP3085, MM_ADDCHAIN_DATA, supportedChains } from '../utils/chain';
 
 const WrongNetworkToolTip = () => {
-  const { address, injectedChain } = useInjectedProvider();
+  const { address, injectedChain, injectedProvider } = useInjectedProvider();
   const { daochain } = useParams();
 
-  const NetworkToolTip = ({ children }) => {
-    return !address ? (
-      children
-    ) : daoConnectedAndSameChain(address, injectedChain?.chainId, daochain) ? (
-      children
-    ) : (
-      <Tooltip
-        hasArrow
-        label={
-          <Box fontFamily='heading'>
-            Please update your network to{' '}
-            {capitalize(supportedChains[daochain]?.network)} to interact with
-            this DAO.
-          </Box>
-        }
-        bg='secondary.500'
-        placement='left-start'
-      >
-        {children}
-      </Tooltip>
-    );
+  const handleSwitchNetwork = async () => {
+    if (daochain && window?.ethereum) {
+      try {
+        await window?.ethereum?.request({
+          id: '1',
+          jsonrpc: '2.0',
+          method: 'wallet_addEthereumChain',
+          params: [MM_ADDCHAIN_DATA[daochain]],
+        });
+      } catch (error) {
+        console.error(error);
+      }
+    }
   };
+
+  const NetworkToolTip = ({ children }) => {
+    if (
+      !address ||
+      daoConnectedAndSameChain(address, injectedChain?.chainId, daochain)
+    ) {
+      return children;
+    } else {
+      return EIP3085.NOT_SUPPORTED[daochain] ||
+        !injectedProvider?.currentProvider?.isMetaMask ? (
+        <Tooltip
+          hasArrow
+          label={
+            <Box fontFamily='heading'>
+              Please update your network to{' '}
+              {capitalize(supportedChains[daochain]?.network)} to interact with
+              this DAO.
+            </Box>
+          }
+          bg='secondary.500'
+          placement='left-start'
+        >
+          {children}
+        </Tooltip>
+      ) : (
+        <Tooltip
+          hasArrow
+          label={
+            <Box fontFamily='heading' value={daochain}>
+              Click to update your MetaMask provider to{' '}
+              {capitalize(supportedChains[daochain]?.network)} to interact with
+              this DAO.
+            </Box>
+          }
+          bg='secondary.500'
+          placement='left-start'
+        >
+          <Button
+            variant='text'
+            px={0}
+            onClick={handleSwitchNetwork}
+            value={daochain}
+          >
+            {children}
+          </Button>
+        </Tooltip>
+      );
+    }
+  };
+
   return (
     <NetworkToolTip>
       {!address ? (
