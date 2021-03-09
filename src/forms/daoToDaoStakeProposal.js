@@ -138,9 +138,6 @@ const StakeProposalForm = () => {
       (f) => f.type === 'function' && f.name === 'submitProposal',
     );
 
-    console.log('submitProposalArgs', submitProposalArgs);
-    console.log('submitProposalAbiData', submitProposalAbiData);
-
     const hexData = injectedProvider.eth.abi.encodeFunctionCall(
       submitProposalAbiData,
       submitProposalArgs,
