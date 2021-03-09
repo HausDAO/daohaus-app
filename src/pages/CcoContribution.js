@@ -128,7 +128,7 @@ const CcoContribution = React.memo(function ccocontribution({
   };
 
   const networkMatch = () => {
-    return injectedChain.network === roundData.network;
+    return injectedChain?.network === roundData.network;
   };
 
   const eligibleBlock = isEligible === 'denied' || isEligible === 'unchecked';
