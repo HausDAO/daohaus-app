@@ -1,7 +1,7 @@
 import {
   RiBookMarkLine,
   RiDiscordFill,
-  RiTelegramFill,
+  // RiTelegramFill,
   RiMediumFill,
   RiTwitterFill,
   RiGlobeLine,
@@ -12,11 +12,11 @@ import {
   RiFireLine,
   RiRocket2Line,
   RiSearch2Line,
-  RiLinksLine,
+  // RiLinksLine,
   // RiHeartsLine,
 } from 'react-icons/ri';
 import { FaDiscourse } from 'react-icons/fa';
-import { GiCastle } from 'react-icons/gi';
+// import { GiCastle } from 'react-icons/gi';
 
 // no slash on the path
 export const defaultDaoData = [
