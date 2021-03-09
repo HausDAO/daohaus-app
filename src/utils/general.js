@@ -42,6 +42,12 @@ export const detailsToJSON = (values) => {
   if (values.forumId) {
     details.forumId = values.forumId;
   }
+  if (values.uberHaus) {
+    details.uberHaus = values.uberHaus;
+  }
+  if (values.uberType) {
+    details.uberType = values.uberType;
+  }
   return JSON.stringify(details);
 };
 

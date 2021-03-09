@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from 'react';
-import { Flex, Box, Skeleton, Image } from '@chakra-ui/react';
+import { Flex, Box, Skeleton, Image, useToast, Icon } from '@chakra-ui/react';
+import { CopyToClipboard } from 'react-copy-to-clipboard';
+import { FaCopy } from 'react-icons/fa';
 
 import { numberWithCommas } from '../utils/general';
 import SyncTokenButton from './syncTokenButton';
@@ -13,6 +15,7 @@ const TokenListCard = ({
   hasBalance,
   hasSync,
 }) => {
+  const toast = useToast();
   const { daoMember, delegate } = useDaoMember();
   const [needsSync, setNeedsSync] = useState(null);
 
@@ -51,6 +54,26 @@ const TokenListCard = ({
             )}
 
             <Box fontFamily='mono'>{token?.symbol}</Box>
+
+            <CopyToClipboard
+              text={token?.tokenAddress}
+              onCopy={() =>
+                toast({
+                  title: 'Copied Address',
+                  position: 'top-right',
+                  status: 'success',
+                  duration: 3000,
+                  isClosable: true,
+                })
+              }
+            >
+              <Icon
+                as={FaCopy}
+                color='secondary.300'
+                ml={2}
+                _hover={{ cursor: 'pointer' }}
+              />
+            </CopyToClipboard>
           </Flex>
         </Skeleton>
       </Box>

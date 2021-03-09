@@ -6,6 +6,7 @@ import ContentBox from '../components/ContentBox';
 import TextBox from '../components/TextBox';
 import MetaChill from '../assets/img/metacartel__avatar.jpg';
 import LexDAO from '../assets/img/lex__avatar.png';
+import ComingSoonOverlay from './comingSoonOverlay';
 
 const followingDaos = [
   {
@@ -25,10 +26,11 @@ const followingDaos = [
 const Following = () => {
   return (
     <>
-      <TextBox size='xs' mb={2}>
+      <TextBox size='xs' mb={2} mt={10}>
         Friends
       </TextBox>
-      <ContentBox w='40%'>
+      <ContentBox w='40%' position='relative'>
+        <ComingSoonOverlay />
         {followingDaos.map((dao, i) => (
           <Flex key={dao.name} align='center' justify='space-between' py={4}>
             <Flex align='center'>

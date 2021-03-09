@@ -167,7 +167,7 @@ const DaoRouter = () => {
           />
         </Route>
         <Route exact path={`${path}/allies`}>
-          <Allies />
+          <Allies daoOverview={daoOverview} daoMetaData={daoMetaData} />
         </Route>
         <Route exact path={`${path}/proposals/new/:proposalType`}>
           <NewProposal
