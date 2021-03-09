@@ -13,7 +13,7 @@ import {
   RiRocket2Line,
   RiSearch2Line,
   RiLinksLine,
-  RiHeartsLine,
+  // RiHeartsLine,
 } from 'react-icons/ri';
 import { FaDiscourse } from 'react-icons/fa';
 import { GiCastle } from 'react-icons/gi';
