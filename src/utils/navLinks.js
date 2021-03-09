@@ -31,20 +31,20 @@ export const defaultHubData = [
   { icon: RiSearch2Line, label: 'Explore', path: '/explore' },
   { icon: RiFireLine, label: 'Summon', path: '/summon' },
   {
-    icon: RiTeamLine,
-    label: 'HausDao',
-    path: '/dao/0x64/0x283bdc900b6ec9397abb721c5bbff5ace46e0f50',
-  },
-  {
     icon: RiQuestionLine,
     label: 'Help',
-    href: 'https://daohaus.club/help',
+    href: 'https://docs.daohaus.club',
   },
-  {
-    icon: GiCastle,
-    label: 'About DaoHaus',
-    href: 'https://daohaus.club/',
-  },
+  // {
+  //   icon: GiCastle,
+  //   label: 'About DaoHaus',
+  //   href: 'https://daohaus.club/',
+  // },
+  // {
+  //   icon: RiTeamLine,
+  //   label: 'UberHaus',
+  //   path: '/dao/0x64/???',
+  // },
 ];
 
 export const generateDaoLinks = (chainID, daoID, proposals) => {
@@ -63,26 +63,20 @@ export const generateDaoLinks = (chainID, daoID, proposals) => {
 export const defaultSocialLinks = [
   { icon: RiDiscordFill, label: 'Discord', href: 'https://discord.gg/NPEJysW' },
   {
-    icon: RiTelegramFill,
-    label: 'Telegram',
-    href: 'https://t.me/joinchat/IJqu9xPa0xzYLN1mmFKo8g',
-  },
-  {
     icon: RiMediumFill,
-    label: 'Medium',
-    href: 'https://medium.com/daohaus-club',
+    label: 'Blog',
+    href: 'https://daohaus.substack.com',
   },
   {
     icon: RiGlobeLine,
     label: 'Website',
-    href: 'https://app.daohaus.club/',
+    href: 'https://daohaus.club/',
   },
   {
     icon: RiTwitterFill,
     label: 'Twitter',
     href: 'https://twitter.com/@nowdaoit',
   },
-  { icon: RiLinksLine, label: 'Other', href: 'https://wikipedia.com' },
 ];
 
 export const generateDaoSocials = (linksMetaObj) => {
