@@ -7,8 +7,10 @@ import DaoToDaoManager from '../components/daoToDaoManager';
 import DaoToDaoProposalModal from '../modals/daoToDaoProposalModal';
 import DaoToDaoProposalTypeModal from '../modals/daoToDaoProposalTypeModal';
 import { useOverlay } from '../contexts/OverlayContext';
+import GenericModal from '../modals/genericModal';
+import NewUberHausMinion from '../forms/newUberHausMinion';
 
-const Allies = () => {
+const Allies = ({ daoOverview, daoMetaData }) => {
   const { d2dProposalModal } = useOverlay();
   const [proposalType, setProposalType] = useState(null);
 
@@ -23,8 +25,15 @@ const Allies = () => {
           isOpen={d2dProposalModal}
           proposalType={proposalType}
         />
+        <GenericModal closeOnOverlayClick={false} modalId='uberMinionLaunch'>
+          <NewUberHausMinion />
+        </GenericModal>
+        <DaoToDaoManager
+          daoOverview={daoOverview}
+          daoMetaData={daoMetaData}
+          setProposalType={setProposalType}
+        />
         <Following />
-        <DaoToDaoManager />
       </Box>
     </MainViewLayout>
   );

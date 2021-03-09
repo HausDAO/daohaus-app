@@ -7,6 +7,7 @@ import { proposalResolver, daoResolver } from '../utils/resolvers';
 import { getGraphEndpoint } from '../utils/chain';
 import { fetchTokenData } from '../utils/tokenValue';
 import { omit } from './general';
+import { UBERHAUS_DATA } from '../graphQL/uberhaus-queries';
 
 export const graphFetchAll = async (args, items = [], skip = 0) => {
   try {
@@ -38,6 +39,18 @@ export const fetchBankValues = async (args) => {
     subfield: 'balances',
     variables: {
       molochAddress: args.daoID,
+    },
+  });
+};
+
+export const fetchUberHausData = async (args) => {
+  return graphQuery({
+    endpoint: getGraphEndpoint(args.chainID, 'subgraph_url'),
+    query: UBERHAUS_DATA,
+    variables: {
+      molochAddress: args.molochAddress,
+      memberAddress: args.memberAddress,
+      minionId: args.minionId,
     },
   });
 };

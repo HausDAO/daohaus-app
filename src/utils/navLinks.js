@@ -13,6 +13,7 @@ import {
   RiRocket2Line,
   RiSearch2Line,
   RiLinksLine,
+  RiHeartsLine,
 } from 'react-icons/ri';
 import { FaDiscourse } from 'react-icons/fa';
 import { GiCastle } from 'react-icons/gi';
@@ -24,6 +25,7 @@ export const defaultDaoData = [
   { icon: RiTeamLine, label: 'Members', path: 'members' },
   { icon: RiSettings3Line, label: 'Settings', path: 'settings' },
   { icon: RiRocket2Line, label: 'Boosts', path: 'settings/boosts' },
+  // { icon: RiHeartsLine, label: 'Allies', path: 'allies' },
 ];
 export const defaultHubData = [
   { icon: RiSearch2Line, label: 'Explore', path: '/explore' },

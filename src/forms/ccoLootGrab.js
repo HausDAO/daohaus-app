@@ -21,7 +21,11 @@ import { chainByID } from '../utils/chain';
 import { useMetaData } from '../contexts/MetaDataContext';
 import CcoTributeInput from './ccoTributeInput';
 
-const CcoLootGrabForm = ({ roundData, currentContributionData }) => {
+const CcoLootGrabForm = ({
+  roundData,
+  currentContributionData,
+  contributionClosed,
+}) => {
   const {
     injectedProvider,
     address,
@@ -46,7 +50,10 @@ const CcoLootGrabForm = ({ roundData, currentContributionData }) => {
     setValue,
     setError,
     getValues,
+    watch,
   } = useForm({ reValidateMode: 'onSubmit' });
+
+  const currentTribute = watch('tributeOffered');
 
   useEffect(() => {
     if (Object.keys(errors).length > 0) {
@@ -138,11 +145,7 @@ const CcoLootGrabForm = ({ roundData, currentContributionData }) => {
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
-      <Flex justifyContent='space-between' mb={3}>
-        <Text fontSize='sm' color='whiteAlpha.700' as='i'>
-          {`${roundData.currentRound.maxContribution} ${roundData.ccoToken.symbol}`}{' '}
-          per person max
-        </Text>
+      <Flex justifyContent='space-between' my={3}>
         <Text fontSize='sm' color='whiteAlpha.700' as='i'>
           {`${currentContributionData?.addressRemaining}`}/
           {`${roundData.currentRound.maxContribution} ${roundData.ccoToken.symbol}`}{' '}
@@ -153,26 +156,42 @@ const CcoLootGrabForm = ({ roundData, currentContributionData }) => {
         isInvalid={errors.name}
         display='flex'
         flexDirection='row'
-        justifyContent='space-between'
+        justifyContent='flex-start'
+        alignItems='baseline'
         mb={0}
         flexWrap='wrap'
       >
-        <Box w={['100%', null, '80%']}>
+        <Box w={['100%', null, '70%']}>
           <CcoTributeInput
             register={register}
             setValue={setValue}
             getValues={getValues}
             setError={setError}
             roundData={roundData}
-            contributionClosed={currentContributionData?.addressRemaining <= 0}
+            contributionClosed={contributionClosed}
           />
         </Box>
+        <Text fontSize='sm' color='whiteAlpha.700' as='i' ml={5}>
+          {`will return -> ${+currentTribute / +roundData.claimTokenValue} ${
+            roundData.claimTokenSymbol
+          } `}
+        </Text>
+      </FormControl>
+
+      <Flex justifyContent='flex-end'>
+        {currentError && (
+          <Flex color='red.500' fontSize='m' mr={5} align='center'>
+            <Icon as={RiErrorWarningLine} color='red.500' mr={2} />
+            {currentError.message}
+          </Flex>
+        )}
+
         {daoConnectedAndSameChain(address, daochain, injectedChain?.chainId) ? (
           <Button
             type='submit'
             loadingText='Submitting'
             isLoading={loading}
-            disabled={loading || currentContributionData?.addressRemaining <= 0}
+            disabled={loading || contributionClosed}
           >
             Submit
           </Button>
@@ -187,14 +206,7 @@ const CcoLootGrabForm = ({ roundData, currentContributionData }) => {
               : 'Wallet'}
           </Button>
         )}
-      </FormControl>
-
-      {currentError && (
-        <Flex color='red.500' fontSize='m' mr={5} align='center'>
-          <Icon as={RiErrorWarningLine} color='red.500' mr={2} />
-          {currentError.message}
-        </Flex>
-      )}
+      </Flex>
     </form>
   );
 };
