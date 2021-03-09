@@ -79,7 +79,7 @@ const tryGetDetails = (details) => {
 };
 
 export const determineProposalType = (proposal) => {
-  // can return a wide array of data. Be very defensive when dealing with
+  // can return a wide array of data types and structures. Be very defensive when dealing with
   // anything returned from tryGetDetails.
   const parsedDetails = tryGetDetails(proposal.details);
 
