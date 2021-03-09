@@ -405,7 +405,7 @@ const ProposalVote = ({
   useEffect(() => {
     let action;
     const getMinionDeets = async () => {
-      console.log('proposal', proposal);
+      // console.log('proposal', proposal);
       try {
         // action = await MinionService({
         action = await UberHausMinionService({

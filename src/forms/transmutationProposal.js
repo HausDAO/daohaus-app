@@ -182,13 +182,13 @@ const TransmutationProposal = () => {
   };
 
   const onSubmit = async (values) => {
+    console.log(values);
     setLoading(true);
     const now = (new Date().getTime() / 1000).toFixed();
     const hash = createHash();
     const details = detailsToJSON({
       ...values,
       hash,
-      title: 'Transmutation',
       isTransmutation: true,
     });
     const args = [
@@ -197,7 +197,6 @@ const TransmutationProposal = () => {
       injectedProvider.utils.toWei('' + values.paymentRequested),
       details,
     ];
-
     try {
       const poll = createPoll({ action: 'transmutationProposal', cachePoll })({
         daoID: daoid,
@@ -265,6 +264,31 @@ const TransmutationProposal = () => {
     <>
       {transmutationData && transmutationData.length ? (
         <form onSubmit={handleSubmit(onSubmit)}>
+          <FormControl>
+            <FormLabel
+              htmlFor='title'
+              color='white'
+              fontFamily='heading'
+              textTransform='uppercase'
+              fontSize='xs'
+              fontWeight={700}
+            >
+              Proposal Title
+            </FormLabel>
+            <Input
+              name='title'
+              placeholder='Title Name'
+              mb={5}
+              ref={register({
+                required: {
+                  value: true,
+                  message: 'Proposal needs a title',
+                },
+              })}
+              color='white'
+              focusBorderColor='secondary.500'
+            />
+          </FormControl>
           <FormControl
             isInvalid={errors.name}
             display='flex'
