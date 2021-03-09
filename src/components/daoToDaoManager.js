@@ -9,9 +9,12 @@ import {
   ListItem,
   Text,
   Icon,
+  useToast,
 } from '@chakra-ui/react';
 import { BsBoxArrowInRight } from 'react-icons/bs';
 import { format } from 'date-fns';
+import { CopyToClipboard } from 'react-copy-to-clipboard';
+import { FaCopy } from 'react-icons/fa';
 
 import ContentBox from '../components/ContentBox';
 import TextBox from '../components/TextBox';
@@ -23,9 +26,10 @@ import {
   UBERHAUS_ADDRESS,
   UBERHAUS_NETWORK,
   UBERHAUS_STAKING_TOKEN,
+  UBERHAUS_STAKING_TOKEN_SYMBOL,
 } from '../utils/uberhaus';
-
-// TODO don't show for rinkeby/kovan. how does this work across network? will uberhaus be on mainnet or xdai? matic?
+import { TokenService } from '../services/tokenService';
+import { IsJsonString } from '../utils/general';
 
 const DaoToDaoManager = ({ daoOverview, daoMetaData, setProposalType }) => {
   const {
@@ -33,6 +37,7 @@ const DaoToDaoManager = ({ daoOverview, daoMetaData, setProposalType }) => {
     setD2dProposalModal,
     setGenericModal,
   } = useOverlay();
+  const toast = useToast();
   const { daochain, daoid } = useParams();
   const [uberHausMinion, setUberHausMinion] = useState(null);
 
@@ -42,35 +47,43 @@ const DaoToDaoManager = ({ daoOverview, daoMetaData, setProposalType }) => {
   );
 
   useEffect(() => {
-    console.log('daoOverview', daoOverview, daoMetaData);
-    const fetchUberHaus = async (uberHausAddress, minionAddress) => {
-      const data = await fetchUberHausData({
-        chainID: daochain,
-        molochAddress: uberHausAddress,
-        memberAddress: minionAddress,
-        minionId: `${daoOverview.id}-minion-${minionAddress}`,
-      });
-      console.log('data', data);
-      setUberHausData({
-        ...data.moloch,
-        proposals: data.minion ? data.minion.proposals : [],
-      });
+    const setup = async () => {
+      const fetchUberHaus = async (uberHausAddress, minionAddress) => {
+        const data = await fetchUberHausData({
+          chainID: daochain,
+          molochAddress: uberHausAddress,
+          memberAddress: minionAddress,
+          minionId: `${daoOverview.id}-minion-${minionAddress}`,
+        });
+        setUberHausData({
+          ...data.moloch,
+          proposals: data.minion ? data.minion.proposals : [],
+        });
+      };
+
+      if (daoOverview) {
+        const uberHausMinionData = daoOverview.minions.find(
+          (minion) =>
+            minion.minionType === 'UberHaus minion' &&
+            minion.uberHausAddress === UBERHAUS_ADDRESS,
+        );
+        if (uberHausMinionData) {
+          const tokenBalance = await TokenService({
+            chainID: daochain,
+            tokenAddress: UBERHAUS_STAKING_TOKEN,
+            is32: false,
+          })('balanceOf')(uberHausMinionData.minionAddress);
+          setUberHausMinion({ ...uberHausMinionData, balance: tokenBalance });
+          fetchUberHaus(
+            uberHausMinionData.uberHausAddress,
+            uberHausMinionData.minionAddress,
+          );
+        }
+      }
     };
 
     if (daoOverview) {
-      const uberHausMinionData = daoOverview.minions.find(
-        (minion) =>
-          minion.minionType === 'UberHaus minion' &&
-          minion.uberHausAddress === UBERHAUS_ADDRESS,
-      );
-      console.log('uberHausMinion', uberHausMinionData);
-      if (uberHausMinionData) {
-        setUberHausMinion(uberHausMinionData);
-        fetchUberHaus(
-          uberHausMinionData.uberHausAddress,
-          uberHausMinionData.minionAddress,
-        );
-      }
+      setup();
     }
   }, [daoOverview]);
 
@@ -81,9 +94,11 @@ const DaoToDaoManager = ({ daoOverview, daoMetaData, setProposalType }) => {
     setProposalType('d2dStake');
   };
 
+  const wrongChain = daochain !== UBERHAUS_NETWORK;
   const noMinion = !uberHausMinion;
   const notMember = uberHausMinion && !uberHausData?.members[0];
   const isMember = uberHausMinion && uberHausData?.members[0];
+  const hasMinionBalance = uberHausMinion && +uberHausMinion.balance > 0;
   const whiteListedStakingToken =
     daoOverview &&
     uberHausData &&
@@ -94,36 +109,58 @@ const DaoToDaoManager = ({ daoOverview, daoMetaData, setProposalType }) => {
       );
     });
 
-  console.log('uberHausData', uberHausData);
   const activeProposals = uberHausData
     ? uberHausData.proposals.filter((prop) => {
         return !prop.cancelled && !prop.processed;
       })
     : [];
-  // TODO: brittle check here. might need boost graph to track this?
-  // lets just have this as active prop/memberhip or delegate and in child or haus dao
-  const activeMembershipProposal = notMember && activeProposals[0];
+
+  // TODO: brittle check here. will this show if already a member
+  // add check to see if it's open and if there is one in uberhaus
+
+  // TODO: add uberhaus proposals to this list
+
+  // TODO: get delegate, if none have button to delegate form
+
+  const activeMembershipProposal =
+    notMember &&
+    activeProposals.find((prop) => {
+      const details = IsJsonString(prop.details)
+        ? JSON.parse(prop.details.replace(/(\r\n|\n|\r)/gm, ''))
+        : '';
+      console.log('details', details);
+      return details.uberType === 'staking';
+    });
   console.log('activeMembershipProposal', activeMembershipProposal);
 
-  // other states:
-  // has membershop proposal
-  // // needs delegate
-  // // open delegate proposal
-  // also need to check if a prop is in uerhaus for them
-
-  // going to be easier pulling these fro daoProposals with hydrated data... but need for uberhaus props too
-
-  if (daochain !== UBERHAUS_NETWORK) {
+  if (wrongChain) {
     return (
-      <Box fontSize='md' my={2}>
-        <OrderedList>
-          <ListItem>Summon burner dao ion xdai</ListItem>
-          <ListItem>
-            join button in your xdai burner dao to launch uberhaus minion
-          </ListItem>
-          <ListItem>stake haus for shares</ListItem>
-        </OrderedList>
-      </Box>
+      <>
+        <TextBox size='xs' mb={2}>
+          DAO On DAO Memberships
+        </TextBox>
+        <ContentBox w='40%'>
+          <Flex align='center'>
+            <Image src={DAOHaus} w='50px' h='50px' mr={4} />
+            <Box fontFamily='heading' fontSize='xl' fontWeight={900}>
+              UberHAUS
+            </Box>
+          </Flex>
+          <Box fontSize='md' my={2}>
+            UberHAUS is on xDAI. You&apos;ll need to summon a clone of your dao
+            to join.
+            <OrderedList>
+              <ListItem>Summon burner dao ion xdai</ListItem>
+              <ListItem>
+                join button in your xdai burner dao to launch uberhaus minion
+              </ListItem>
+              <ListItem>stake haus for shares</ListItem>
+            </OrderedList>
+          </Box>
+
+          <Button w='25%'>Clone</Button>
+        </ContentBox>
+      </>
     );
   }
 
@@ -139,6 +176,7 @@ const DaoToDaoManager = ({ daoOverview, daoMetaData, setProposalType }) => {
             UberHAUS
           </Box>
         </Flex>
+
         {noMinion ? (
           <Box>
             <TextBox my={2} size='sm'>
@@ -165,23 +203,21 @@ const DaoToDaoManager = ({ daoOverview, daoMetaData, setProposalType }) => {
             </Button>
           </Box>
         ) : null}
+
         {notMember && !activeMembershipProposal ? (
           <Flex justify='space-between' py={4}>
             <Box>
-              <TextBox size='sm'>Almost In</TextBox>
+              <TextBox size='sm'>
+                Stake {UBERHAUS_STAKING_TOKEN_SYMBOL}{' '}
+              </TextBox>
               {!whiteListedStakingToken ? (
                 <Box fontSize='md' my={2}>
-                  DAO NEEDS $HAUS whitelisted
+                  FYI: Whitelist {UBERHAUS_STAKING_TOKEN_SYMBOL} to recieve
+                  reward after staking.
                 </Box>
               ) : null}
 
-              {!whiteListedStakingToken ? (
-                <Box fontSize='md' my={2}>
-                  DAO NEEDS $HAUS whitelisted
-                </Box>
-              ) : null}
-
-              {whiteListedStakingToken ? (
+              {hasMinionBalance ? (
                 <>
                   <Box fontSize='md' my={2}>
                     {daoMetaData?.name} is ready to stake HAUS and join uberHAUS
@@ -190,10 +226,70 @@ const DaoToDaoManager = ({ daoOverview, daoMetaData, setProposalType }) => {
                     Stake
                   </Button>
                 </>
-              ) : null}
+              ) : (
+                <>
+                  <Box fontSize='md' my={2}>
+                    You can&apos;t staking into UberHAUS until your UberHAUS
+                    minion has a {UBERHAUS_STAKING_TOKEN_SYMBOL} balance. Send{' '}
+                    {UBERHAUS_STAKING_TOKEN_SYMBOL} directly to your
+                    minion&apos;s address: {uberHausMinion.minionAddress}.
+                  </Box>
+                  <CopyToClipboard
+                    text={uberHausMinion.minionAddress}
+                    onCopy={() =>
+                      toast({
+                        title: 'Copied Address',
+                        position: 'top-right',
+                        status: 'success',
+                        duration: 3000,
+                        isClosable: true,
+                      })
+                    }
+                  >
+                    <Icon
+                      as={FaCopy}
+                      color='secondary.300'
+                      ml={2}
+                      _hover={{ cursor: 'pointer' }}
+                    />
+                  </CopyToClipboard>
+                  <Box fontSize='md' my={2}>
+                    Or create a funding proposal if you want to send from your
+                    dao to the minion.
+                  </Box>
+                </>
+              )}
             </Box>
           </Flex>
-        ) : null}
+        ) : (
+          <>
+            {activeMembershipProposal ? (
+              <Box>
+                <Flex justify='space-between' py={4}>
+                  <Box>
+                    <TextBox size='sm'>Shares</TextBox>
+                    <TextBox variant='value'>0</TextBox>
+                  </Box>
+                  <Box>
+                    <TextBox size='sm'>Loot</TextBox>
+                    <TextBox variant='value'>0</TextBox>
+                  </Box>
+                  <Box>
+                    <TextBox size='sm'>Join Date</TextBox>
+                    <TextBox variant='value'>pending</TextBox>
+                  </Box>
+                </Flex>
+                <Link
+                  to={`/dao/${daochain}/${daoid}/proposals/${activeMembershipProposal.proposalId}`}
+                >
+                  Staking proposal in progress
+                  <Icon as={BsBoxArrowInRight} ml={10} />
+                </Link>
+              </Box>
+            ) : null}
+          </>
+        )}
+
         {isMember ? (
           <>
             <Flex justify='space-between' py={4}>
@@ -247,27 +343,18 @@ const DaoToDaoManager = ({ daoOverview, daoMetaData, setProposalType }) => {
                 </Button>
               </Flex>
             </Box>
-          </>
-        ) : null}
-        {activeProposals.length ? (
-          <>
-            {activeMembershipProposal ? (
-              <Box>
-                proposal card
-                {/* <Text
-                  fontFamily='heading'
-                  mb={2}
-                  size='xs'
-                  color='secondary.300'
-                >
-                  membership proposal card here
-                </Text> */}
-              </Box>
-            ) : (
-              <Flex justifyContent='flex-start' alignItems='baseline'>
+
+            {activeProposals.length ? (
+              <Flex
+                justifyContent='flex-start'
+                alignItems='baseline'
+                borderTopWidth='1px'
+                borderTopColor='whiteAlpha.200'
+                my={3}
+              >
                 <Text
                   fontFamily='heading'
-                  mb={2}
+                  my={2}
                   size='xs'
                   color='secondary.300'
                 >
@@ -279,7 +366,7 @@ const DaoToDaoManager = ({ daoOverview, daoMetaData, setProposalType }) => {
                   <Icon as={BsBoxArrowInRight} ml={10} />
                 </Link>
               </Flex>
-            )}
+            ) : null}
           </>
         ) : null}
       </ContentBox>
