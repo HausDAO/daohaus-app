@@ -25,7 +25,7 @@ export const defaultDaoData = [
   { icon: RiTeamLine, label: 'Members', path: 'members' },
   { icon: RiSettings3Line, label: 'Settings', path: 'settings' },
   { icon: RiRocket2Line, label: 'Boosts', path: 'settings/boosts' },
-  { icon: RiHeartsLine, label: 'Allies', path: 'allies' },
+  // { icon: RiHeartsLine, label: 'Allies', path: 'allies' },
 ];
 export const defaultHubData = [
   { icon: RiSearch2Line, label: 'Explore', path: '/explore' },
