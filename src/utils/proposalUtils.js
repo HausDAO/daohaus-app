@@ -59,7 +59,30 @@ export function determineProposalStatus(proposal) {
     return ProposalStatus.Unknown;
   }
 }
+
+const tryGetDetails = (details) => {
+  try {
+    const parsedDetails = JSON.parse(details);
+    if (!parsedDetails) {
+      return '';
+    } else if (
+      typeof parsedDetails === 'string' ||
+      typeof parsedDetails === 'number'
+    ) {
+      return parsedDetails;
+    } else {
+      return parsedDetails;
+    }
+  } catch (error) {
+    return '';
+  }
+};
+
 export const determineProposalType = (proposal) => {
+  // can return a wide array of data. Be very defensive when dealing with
+  // anything returned from tryGetDetails.
+  const parsedDetails = tryGetDetails(proposal.details);
+
   if (proposal.newMember) {
     return 'Member Proposal';
   } else if (proposal.whitelist) {
@@ -70,6 +93,8 @@ export const determineProposalType = (proposal) => {
     return 'Trade Proposal';
   } else if (proposal.isMinion) {
     return 'Minion Proposal';
+  } else if (parsedDetails?.isTransmutation) {
+    return 'Transmutation Proposal';
   } else {
     return 'Funding Proposal';
   }
@@ -83,8 +108,6 @@ export const titleMaker = (proposal) => {
     let parsedDetails;
 
     try {
-      // console.log('proposal.details', proposal.details);
-      // console.log(IsJsonString(proposal.details));
       parsedDetails = IsJsonString(proposal.details)
         ? JSON.parse(proposal.details.replace(/(\r\n|\n|\r)/gm, ''))
         : '';

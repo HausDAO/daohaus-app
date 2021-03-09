@@ -55,6 +55,10 @@ export const TransmutationService = ({
 
     if (service === 'propose') {
       return async ({ args, address, poll, onTxHash }) => {
+        console.log('args', args);
+        console.log('address', address);
+        console.log('poll', poll);
+        console.log('onTxHash', onTxHash);
         const tx = await contract.methods[service](...args);
         return tx
           .send('eth_requestAccounts', { from: address })
