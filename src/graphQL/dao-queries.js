@@ -22,6 +22,7 @@ export const HOME_DAO = gql`
         minionAddress
         minionType
         details
+        uberHausAddress
       }
       depositToken {
         tokenAddress
@@ -97,6 +98,9 @@ export const DAO_ACTIVITIES = gql`
         molochAddress
         molochVersion
         minionAddress
+        minion {
+          minionType
+        }
         moloch {
           gracePeriodLength
           periodDuration

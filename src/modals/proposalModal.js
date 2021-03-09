@@ -101,7 +101,12 @@ const ProposalFormModal = ({ proposalType, returnRoute }) => {
   };
 
   return (
-    <Modal isOpen={proposalModal} onClose={handleClose} isCentered>
+    <Modal
+      isOpen={proposalModal}
+      onClose={handleClose}
+      closeOnOverlayClick={false}
+      isCentered
+    >
       <ModalOverlay
         bgColor={rgba(theme.colors.background[500], 0.8)}
         style={{ backdropFilter: 'blur(6px)' }}

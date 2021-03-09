@@ -25,7 +25,8 @@ import {
   isDelegating,
 } from '../utils/general';
 import { useMetaData } from '../contexts/MetaDataContext';
-import { MinionService } from '../services/minionService';
+// import { MinionService } from '../services/minionService';
+import { UberHausMinionService } from '../services/uberHausMinionService';
 
 const MotionBox = motion.custom(Box);
 
@@ -383,9 +384,16 @@ const ProposalVote = ({
         setProposalModal(false);
         setTxInfoModal(true);
       };
-      await MinionService({
+
+      console.log('proposal.minionAddress', proposal.minionAddress);
+      // TODO: load proper service here
+      // await MinionService({
+      //   web3: injectedProvider,
+      //   minion: proposal.minionAddress,
+      //   chainID: daochain,
+      await UberHausMinionService({
         web3: injectedProvider,
-        minion: proposal.minionAddress,
+        uberHausMinion: proposal.minionAddress,
         chainID: daochain,
       })('executeAction')({ args, address, poll, onTxHash });
     } catch (err) {
@@ -397,9 +405,13 @@ const ProposalVote = ({
   useEffect(() => {
     let action;
     const getMinionDeets = async () => {
+      console.log('proposal', proposal);
       try {
-        action = await MinionService({
-          minion: proposal?.minionAddress,
+        // action = await MinionService({
+        action = await UberHausMinionService({
+          // minion: proposal?.minionAddress,
+          web3: injectedProvider,
+          uberHausMinion: proposal.minionAddress,
           chainID: daochain,
         })('getAction')({ proposalId: proposal?.proposalId });
       } catch (err) {

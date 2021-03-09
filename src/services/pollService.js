@@ -285,11 +285,6 @@ const minionExecuteTest = async (executed, shouldEqual, pollId) => {
 };
 
 const collectTokenTest = (graphBalance, oldBalance, pollId) => {
-  console.log('graphBalance', graphBalance);
-  console.log('oldBalance', oldBalance);
-  // console.log('babeBalance', babeBalance);
-  // console.log('tokenContractVal', tokenContractVal);
-  console.log('pollId', pollId);
   if (graphBalance) {
     return graphBalance !== oldBalance;
   } else {
@@ -715,6 +710,35 @@ export const createPoll = ({
           resolvedMsg: `Minion proposal submitted`,
           unresolvedMsg: `Submitting minion proposal`,
           successMsg: `Minion proposal submitted for ${minionAddress} on ${chainID}`,
+          errorMsg: `Error submitting minion proposal for ${minionAddress} on ${chainID}`,
+          pollData: {
+            action,
+            interval,
+            tries,
+          },
+          pollArgs: { minionAddress, createdAt, chainID },
+        });
+      }
+    };
+  } else if (action === 'uberHausProposeAction') {
+    return ({ minionAddress, createdAt, chainID, actions }) => (txHash) => {
+      startPoll({
+        pollFetch: pollMinionProposal,
+        testFn: minonProposalTest,
+        shouldEqual: createdAt,
+        args: { minionAddress, chainID, createdAt },
+        actions,
+        txHash,
+      });
+      if (cachePoll) {
+        cachePoll({
+          txHash,
+          action,
+          timeSent: Date.now(),
+          status: 'unresolved',
+          resolvedMsg: `UberHAUS proposal submitted`,
+          unresolvedMsg: `Submitting UberHAUS proposal`,
+          successMsg: `UberHAUS proposal submitted for ${minionAddress} on ${chainID}`,
           errorMsg: `Error submitting minion proposal for ${minionAddress} on ${chainID}`,
           pollData: {
             action,

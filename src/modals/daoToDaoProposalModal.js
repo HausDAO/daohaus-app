@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { useHistory, useLocation } from 'react-router-dom';
+import { useHistory } from 'react-router-dom';
 import {
   Modal,
   ModalContent,
@@ -23,7 +23,6 @@ const DaoToDaoProposalFormModal = ({ proposalType, isOpen, returnRoute }) => {
   const [, setLoading] = useState(false);
   const [proposalForm, setProposalForm] = useState(null);
   const history = useHistory();
-  const location = useLocation();
   const { theme } = useCustomTheme();
   const { setD2dProposalModal } = useOverlay();
 
@@ -61,10 +60,6 @@ const DaoToDaoProposalFormModal = ({ proposalType, isOpen, returnRoute }) => {
   };
 
   useEffect(() => {
-    console.log('location', location);
-  }, [location]);
-
-  useEffect(() => {
     if (proposalType) {
       setProposalForm(daoToDaoProposalForms[proposalType]);
     }
@@ -79,7 +74,12 @@ const DaoToDaoProposalFormModal = ({ proposalType, isOpen, returnRoute }) => {
   };
 
   return (
-    <Modal isOpen={isOpen} onClose={handleClose} isCentered>
+    <Modal
+      isOpen={isOpen}
+      onClose={handleClose}
+      closeOnOverlayClick={false}
+      isCentered
+    >
       <ModalOverlay
         bgColor={rgba(theme.colors.background[500], 0.8)}
         style={{ backdropFilter: 'blur(6px)' }}
