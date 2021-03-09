@@ -101,6 +101,7 @@ const DaoToDaoManager = ({ daoOverview, daoMetaData, setProposalType }) => {
       })
     : [];
   // TODO: brittle check here. might need boost graph to track this?
+  // lets just have this as active prop/memberhip or delegate and in child or haus dao
   const activeMembershipProposal = notMember && activeProposals[0];
   console.log('activeMembershipProposal', activeMembershipProposal);
 
@@ -109,6 +110,8 @@ const DaoToDaoManager = ({ daoOverview, daoMetaData, setProposalType }) => {
   // // needs delegate
   // // open delegate proposal
   // also need to check if a prop is in uerhaus for them
+
+  // going to be easier pulling these fro daoProposals with hydrated data... but need for uberhaus props too
 
   if (daochain !== UBERHAUS_NETWORK) {
     return (
@@ -162,7 +165,7 @@ const DaoToDaoManager = ({ daoOverview, daoMetaData, setProposalType }) => {
             </Button>
           </Box>
         ) : null}
-        {notMember ? (
+        {notMember && !activeMembershipProposal ? (
           <Flex justify='space-between' py={4}>
             <Box>
               <TextBox size='sm'>Almost In</TextBox>
@@ -250,12 +253,15 @@ const DaoToDaoManager = ({ daoOverview, daoMetaData, setProposalType }) => {
           <>
             {activeMembershipProposal ? (
               <Box>
-                <Text
+                proposal card
+                {/* <Text
                   fontFamily='heading'
                   mb={2}
                   size='xs'
                   color='secondary.300'
-                ></Text>
+                >
+                  membership proposal card here
+                </Text> */}
               </Box>
             ) : (
               <Flex justifyContent='flex-start' alignItems='baseline'>

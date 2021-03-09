@@ -98,6 +98,9 @@ export const DAO_ACTIVITIES = gql`
         molochAddress
         molochVersion
         minionAddress
+        minion {
+          minionType
+        }
         moloch {
           gracePeriodLength
           periodDuration

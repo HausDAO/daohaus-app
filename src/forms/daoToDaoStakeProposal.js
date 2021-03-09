@@ -50,7 +50,6 @@ const StakeProposalForm = () => {
     setD2dProposalModal,
     errorToast,
     successToast,
-    setProposalModal,
     setTxInfoModal,
   } = useOverlay();
   const [loading, setLoading] = useState(false);
@@ -116,7 +115,6 @@ const StakeProposalForm = () => {
       hash,
     });
 
-    console.log('details', details);
     const tributeOffered = values.tributeOffered
       ? valToDecimalString(
           values.tributeOffered,
@@ -137,8 +135,11 @@ const StakeProposalForm = () => {
     ];
 
     const submitProposalAbiData = molochAbi.find(
-      (f) => f.name === 'SubmitProposal',
+      (f) => f.type === 'function' && f.name === 'submitProposal',
     );
+
+    console.log('submitProposalArgs', submitProposalArgs);
+    console.log('submitProposalAbiData', submitProposalAbiData);
 
     const hexData = injectedProvider.eth.abi.encodeFunctionCall(
       submitProposalAbiData,
@@ -189,7 +190,7 @@ const StakeProposalForm = () => {
         },
       });
       const onTxHash = () => {
-        setProposalModal(false);
+        setD2dProposalModal((prevState) => !prevState);
         setTxInfoModal(true);
       };
       await UberHausMinionService({
