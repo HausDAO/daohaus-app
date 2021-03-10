@@ -21,7 +21,8 @@ import {
 } from '../utils/cco';
 import { getEligibility } from '../utils/metadata';
 import { numberWithCommas, timeToNow } from '../utils/general';
-
+import GenericModal from '../modals/genericModal';
+import { useOverlay } from '../contexts/OverlayContext';
 import { useInjectedProvider } from '../contexts/InjectedProviderContext';
 import CcoLootGrabForm from '../forms/ccoLootGrab';
 
@@ -30,6 +31,7 @@ const CcoContribution = React.memo(function ccocontribution({
   currentDaoTokens,
   daoProposals,
 }) {
+  const { setGenericModal } = useOverlay();
   const { daochain, daoid } = useParams();
   const { address, injectedChain } = useInjectedProvider();
   const [roundData, setRoundData] = useState(null);
@@ -180,7 +182,8 @@ const CcoContribution = React.memo(function ccocontribution({
                       ) : null}
                       {isEligible === 'denied' ? (
                         <TextBox variant='value' size='md' my={2}>
-                          Address is not eligible
+                          Address is not eligible. Try again with another
+                          address that has interacted with a DAO.
                         </TextBox>
                       ) : null}
                     </>
@@ -210,7 +213,7 @@ const CcoContribution = React.memo(function ccocontribution({
                       </Flex>
                       {raiseAtMax ? (
                         <TextBox variant='value' size='md' my={2}>
-                          Round closed. No room left.
+                          Max target reached and there is no room left.
                         </TextBox>
                       ) : null}
 
@@ -374,6 +377,22 @@ const CcoContribution = React.memo(function ccocontribution({
                   >
                     Resources
                   </Box>
+                  <TextBox
+                    fontSize='sm'
+                    colorScheme='secondary.500'
+                    onClick={() => setGenericModal({ ccoProcess: true })}
+                    mb={5}
+                  >
+                    CCO Overview
+                  </TextBox>
+                  <TextBox
+                    fontSize='sm'
+                    colorScheme='secondary.500'
+                    onClick={() => setGenericModal({ xDaiHelp: true })}
+                    mb={5}
+                  >
+                    How to get wxDAI
+                  </TextBox>
 
                   <Link
                     href='https://daohaus.club/ '
@@ -383,34 +402,145 @@ const CcoContribution = React.memo(function ccocontribution({
                     mb={5}
                   >
                     <TextBox fontSize='sm' colorScheme='secondary.500'>
-                      About DAOhaus
+                      More About DAOhaus
                     </TextBox>
                   </Link>
 
                   <Link
-                    href='https://daohaus.club/ '
+                    href='https://docs.daohaus.club/cco '
                     isExternal
                     display='flex'
                     alignItems='center'
                     mb={5}
                   >
                     <TextBox fontSize='sm' colorScheme='secondary.500'>
-                      About CCOs
-                    </TextBox>
-                  </Link>
-
-                  <Link
-                    href='https://daohaus.club/ '
-                    isExternal
-                    display='flex'
-                    alignItems='center'
-                  >
-                    <TextBox fontSize='sm' colorScheme='secondary.500'>
-                      FAQ
+                      More About CCOs
                     </TextBox>
                   </Link>
                 </ContentBox>
               </Box>
+              <GenericModal modalId='ccoProcess'>
+                <Box>
+                  <Text mb={3} fontFamily='heading'>
+                    Overview of this CCO
+                  </Text>
+                  <TextBox>1. Check Eligibility</TextBox>
+                  <Text mb={5}>
+                    We have scraped every known dao contract, including
+                    &apos;The DAO&apos;, Ethereum&apos;s first major attempt at
+                    a DAO. If your address has interacted with a DAO before, you
+                    should be eligible to contribute.
+                  </Text>
+                  <TextBox>2. Contribute</TextBox>
+                  <Text>
+                    Contributions are open until max target is reached.
+                  </Text>
+                  <TextBox variant='value' mb={3}>
+                    1 HAUS = 8.88 wxDAI
+                  </TextBox>
+                  <TextBox size='xs'>Round 1</TextBox>
+                  <Text mb={5}>
+                    Starts at 8am EST March 15th
+                    <br />
+                    Runs for 4 Days or until max target is reached
+                    <br />
+                    Ends 8am EST March 19th
+                    <br />
+                    min contribution per person: 50 wxDAI
+                    <br />
+                    max contribution per person: 5,000 wxDAI
+                    <br />
+                    min target: 500,000 wxDAI
+                    <br />
+                    max target: 1,111,110 wxDAI
+                  </Text>
+                  <TextBox size='xs'>Round 2 (IF needed)</TextBox>
+                  <Text mb={5}>
+                    IF max target is not reached by the end of Round 1, then
+                    Round 2 begins.
+                    <br />
+                    Max contribution per person is raised to 50,000 wxDAI
+                    <br />
+                    Starts 8am EST March 19th
+                    <br />
+                    Runs for 3 Days or until max target is reached.
+                    <br />
+                    max target: 1,111,110 wxDAI
+                  </Text>
+                  <TextBox>3. Claim</TextBox>
+                  <Text>
+                    Claiming opens Tuesday, Mar 23 at 12pm EST
+                    <br />
+                    IF min target is reached, contributors will be able to claim
+                    their proportionate HAUS tokens.
+                    <br />
+                    IF min target is not reached after Round 2, contributors
+                    will be able to withdraw their original wxDAI contributions.
+                  </Text>
+                </Box>
+              </GenericModal>
+              <GenericModal modalId='xDaiHelp'>
+                <TextBox>xDAI Quick Start</TextBox>
+                <TextBox size='sm' my={5}>
+                  Add xDAI network to Metamask
+                </TextBox>
+                <TextBox size='xs' mb={5}>
+                  Magic
+                </TextBox>
+                <Button variant='outline'>Add xDAI to Metamask</Button>
+                <TextBox size='xs' my={5}>
+                  Manual
+                </TextBox>
+                <Text fontFamily='mono'>
+                  Network Name: xDai
+                  <br />
+                  New RPC URL: https://rpc.xdaichain.com/
+                  <br />
+                  Chain ID: 0x64 (100)
+                  <br />
+                  Symbol: xDai
+                  <br />
+                  Block Explorer URL: https://blockscout.com/xdai/mainnet
+                </Text>
+                <TextBox size='sm' my={5}>
+                  Get some wxDAI
+                </TextBox>
+                <Text mb={3}>
+                  1. Swap to DAI on a DEX.{' '}
+                  <Link
+                    color='secondary.500'
+                    isExternal
+                    href='https://uniswap.exchange'
+                  >
+                    Go to Uniswap
+                  </Link>
+                </Text>
+                <Text mb={3}>
+                  2. On Mainnet: Use the Bridge to send the DAI to yourself on
+                  the xDAI network{' '}
+                  <Link
+                    isExternal
+                    color='secondary.500'
+                    href='http://bridge.xdaichain.com/'
+                  >
+                    Go to Bridge
+                  </Link>
+                </Text>
+                <Text mb={3}>
+                  3. Switch to xDAI network in Metamask, and you should see your
+                  xDAI balance.
+                </Text>
+                <Text>
+                  4. Still on xDAI, wrap the xDAI into wxDAI at{' '}
+                  <Link
+                    color='secondary.500'
+                    isExternal
+                    href='https://wrapeth.com'
+                  >
+                    Wrapeth
+                  </Link>
+                </Text>
+              </GenericModal>
             </>
           ) : (
             <Box>DAO does not have an active CCO</Box>
