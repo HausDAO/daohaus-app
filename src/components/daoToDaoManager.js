@@ -25,6 +25,7 @@ import { fetchUberHausData } from '../utils/theGraph';
 import {
   UBERHAUS_ADDRESS,
   UBERHAUS_NETWORK,
+  UBERHAUS_NETWORK_NAME,
   UBERHAUS_STAKING_TOKEN,
   UBERHAUS_STAKING_TOKEN_SYMBOL,
 } from '../utils/uberhaus';
@@ -101,10 +102,9 @@ const DaoToDaoManager = ({ daoOverview, daoMetaData, setProposalType }) => {
   const uberAlly = daoMetaData?.allies.find(
     (ally) => ally.allyType === 'uberHausBurner' && ally.isParent,
   );
-  // TODO: Display the link to the uberparent if applicable
-  // const uberParent = daoMetaData?.allies.find(
-  //   (ally) => ally.allyType === 'uberHausBurner' && !ally.isParent,
-  // );
+  const uberParent = daoMetaData?.allies.find(
+    (ally) => ally.allyType === 'uberHausBurner' && !ally.isParent,
+  );
   const noMinion = !uberHausMinion;
   const notMember = uberHausMinion && !uberHausData?.members[0];
   const isMember = uberHausMinion && uberHausData?.members[0];
@@ -164,7 +164,7 @@ const DaoToDaoManager = ({ daoOverview, daoMetaData, setProposalType }) => {
                     uberAlly.ally
                   }/allies`}
                 >
-                  Your UberHAUS member is an xDai clone
+                  Your UberHAUS member is an {UBERHAUS_NETWORK_NAME} clone
                   <Icon as={BsBoxArrowInRight} ml={10} />
                 </Link>
               </Box>
@@ -172,13 +172,15 @@ const DaoToDaoManager = ({ daoOverview, daoMetaData, setProposalType }) => {
           ) : (
             <>
               <Box fontSize='md' my={2}>
-                UberHAUS is on xDAI. You&apos;ll need to summon a clone of your
-                dao to join.
+                UberHAUS is on {UBERHAUS_NETWORK_NAME}. You&apos;ll need to
+                summon a clone of your dao to join.
                 <OrderedList>
-                  <ListItem>Summon burner dao ion xdai</ListItem>
                   <ListItem>
-                    join button in your xdai burner dao to launch uberhaus
-                    minion
+                    Summon burner dao on {UBERHAUS_NETWORK_NAME}
+                  </ListItem>
+                  <ListItem>
+                    join button in your {UBERHAUS_NETWORK_NAME} burner dao to
+                    launch uberhaus minion
                   </ListItem>
                   <ListItem>stake haus for shares</ListItem>
                 </OrderedList>
@@ -210,8 +212,8 @@ const DaoToDaoManager = ({ daoOverview, daoMetaData, setProposalType }) => {
               {daoMetaData?.name} is not a member of UberHAUS
             </TextBox>
             <Box fontSize='md' my={2}>
-              DAOs on xDAI can join UberHAUS by staking $HAUS for governance
-              shares.
+              DAOs on {UBERHAUS_NETWORK_NAME} can join UberHAUS by staking $HAUS
+              for governance shares.
             </Box>
             <Box fontSize='md' my={2}>
               Lorem Ipsum directions here.
