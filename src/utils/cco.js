@@ -24,13 +24,15 @@ export const isCcoProposal = (proposal, round) => {
   const parsedDetails = IsJsonString(proposal.details)
     ? JSON.parse(proposal.details)
     : { cco: false };
+  const failed = proposal.processed && !proposal.didPass;
   return (
     !proposal.cancelled &&
     parsedDetails.cco &&
     +proposal.createdAt > +round.raiseStartTime &&
     proposal.tributeToken === round.ccoToken.tokenAddress &&
     proposal.sharesRequested === '0' &&
-    +proposal.lootRequested > 0
+    +proposal.lootRequested > 0 &&
+    !failed
   );
 };
 
@@ -38,13 +40,15 @@ export const isCcoProposalForAddress = (proposal, address, round) => {
   const parsedDetails = IsJsonString(proposal.details)
     ? JSON.parse(proposal.details)
     : { cco: false };
+  const failed = proposal.processed && !proposal.didPass;
   return (
     !proposal.cancelled &&
     parsedDetails.cco &&
     address.toLowerCase() === proposal.applicant.toLowerCase() &&
     proposal.tributeToken === round.ccoToken.tokenAddress &&
     proposal.sharesRequested === '0' &&
-    +proposal.lootRequested > 0
+    +proposal.lootRequested > 0 &&
+    !failed
   );
 };
 
