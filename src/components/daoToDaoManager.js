@@ -32,6 +32,7 @@ import {
 import { TokenService } from '../services/tokenService';
 import { IsJsonString } from '../utils/general';
 import { chainByName } from '../utils/chain';
+import DaoToDaoUberAlly from './daoToDaoUberAllyLink';
 
 const DaoToDaoManager = ({ daoOverview, daoMetaData, setProposalType }) => {
   const {
@@ -47,8 +48,6 @@ const DaoToDaoManager = ({ daoOverview, daoMetaData, setProposalType }) => {
     `uberhaus-${daoid}`,
     null,
   );
-
-  console.log('daoMetaData', daoMetaData);
 
   useEffect(() => {
     const setup = async () => {
@@ -125,12 +124,11 @@ const DaoToDaoManager = ({ daoOverview, daoMetaData, setProposalType }) => {
       })
     : [];
 
-  console.log('uberAllies', uberAlly);
-
   // TODO: brittle check here. will this show if already a member
   // add check to see if it's open and if there is one in uberhaus
   // TODO: add uberhaus proposals to this list
   // TODO: get delegate, if none have button to delegate form
+  // TODO: maybe just get a proposal count and show links to active in this dao and active in uberhaus to teach people
 
   const activeMembershipProposal =
     notMember &&
@@ -157,18 +155,16 @@ const DaoToDaoManager = ({ daoOverview, daoMetaData, setProposalType }) => {
             </Box>
           </Flex>
           {uberAlly ? (
-            <>
-              <Box fontSize='md' my={2}>
-                <Link
-                  to={`/dao/${chainByName(uberAlly.allyNetwork).chain_id}/${
+            <Box mt={5}>
+              <DaoToDaoUberAlly
+                dao={{
+                  name: `Manange your membership in your ${UBERHAUS_NETWORK_NAME} burner dao`,
+                  link: `/dao/${chainByName(uberAlly.allyNetwork).chain_id}/${
                     uberAlly.ally
-                  }/allies`}
-                >
-                  Your UberHAUS member is an {UBERHAUS_NETWORK_NAME} clone
-                  <Icon as={BsBoxArrowInRight} ml={10} />
-                </Link>
-              </Box>
-            </>
+                  }/allies`,
+                }}
+              />
+            </Box>
           ) : (
             <>
               <Box fontSize='md' my={2}>
@@ -397,6 +393,19 @@ const DaoToDaoManager = ({ daoOverview, daoMetaData, setProposalType }) => {
               </Flex>
             ) : null}
           </>
+        ) : null}
+        {uberParent ? (
+          <Box mt={5}>
+            <DaoToDaoUberAlly
+              dao={{
+                bodyText: `This is your ${UBERHAUS_NETWORK_NAME} burner dao`,
+                name: `Visit your home dao`,
+                link: `/dao/${chainByName(uberParent.allyNetwork).chain_id}/${
+                  uberParent.ally
+                }/allies`,
+              }}
+            />
+          </Box>
         ) : null}
       </ContentBox>
     </>
