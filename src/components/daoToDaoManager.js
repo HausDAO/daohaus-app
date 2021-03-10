@@ -30,6 +30,7 @@ import {
 } from '../utils/uberhaus';
 import { TokenService } from '../services/tokenService';
 import { IsJsonString } from '../utils/general';
+import { chainByName } from '../utils/chain';
 
 const DaoToDaoManager = ({ daoOverview, daoMetaData, setProposalType }) => {
   const {
@@ -45,6 +46,8 @@ const DaoToDaoManager = ({ daoOverview, daoMetaData, setProposalType }) => {
     `uberhaus-${daoid}`,
     null,
   );
+
+  console.log('daoMetaData', daoMetaData);
 
   useEffect(() => {
     const setup = async () => {
@@ -95,6 +98,13 @@ const DaoToDaoManager = ({ daoOverview, daoMetaData, setProposalType }) => {
   };
 
   const wrongChain = daochain !== UBERHAUS_NETWORK;
+  const uberAlly = daoMetaData?.allies.find(
+    (ally) => ally.allyType === 'uberHausBurner' && ally.isParent,
+  );
+  // TODO: Display the link to the uberparent if applicable
+  // const uberParent = daoMetaData?.allies.find(
+  //   (ally) => ally.allyType === 'uberHausBurner' && !ally.isParent,
+  // );
   const noMinion = !uberHausMinion;
   const notMember = uberHausMinion && !uberHausData?.members[0];
   const isMember = uberHausMinion && uberHausData?.members[0];
@@ -115,11 +125,11 @@ const DaoToDaoManager = ({ daoOverview, daoMetaData, setProposalType }) => {
       })
     : [];
 
+  console.log('uberAllies', uberAlly);
+
   // TODO: brittle check here. will this show if already a member
   // add check to see if it's open and if there is one in uberhaus
-
   // TODO: add uberhaus proposals to this list
-
   // TODO: get delegate, if none have button to delegate form
 
   const activeMembershipProposal =
@@ -146,19 +156,36 @@ const DaoToDaoManager = ({ daoOverview, daoMetaData, setProposalType }) => {
               UberHAUS
             </Box>
           </Flex>
-          <Box fontSize='md' my={2}>
-            UberHAUS is on xDAI. You&apos;ll need to summon a clone of your dao
-            to join.
-            <OrderedList>
-              <ListItem>Summon burner dao ion xdai</ListItem>
-              <ListItem>
-                join button in your xdai burner dao to launch uberhaus minion
-              </ListItem>
-              <ListItem>stake haus for shares</ListItem>
-            </OrderedList>
-          </Box>
-
-          <Button w='25%'>Clone</Button>
+          {uberAlly ? (
+            <>
+              <Box fontSize='md' my={2}>
+                <Link
+                  to={`/dao/${chainByName(uberAlly.allyNetwork).chain_id}/${
+                    uberAlly.ally
+                  }/allies`}
+                >
+                  Your UberHAUS member is an xDai clone
+                  <Icon as={BsBoxArrowInRight} ml={10} />
+                </Link>
+              </Box>
+            </>
+          ) : (
+            <>
+              <Box fontSize='md' my={2}>
+                UberHAUS is on xDAI. You&apos;ll need to summon a clone of your
+                dao to join.
+                <OrderedList>
+                  <ListItem>Summon burner dao ion xdai</ListItem>
+                  <ListItem>
+                    join button in your xdai burner dao to launch uberhaus
+                    minion
+                  </ListItem>
+                  <ListItem>stake haus for shares</ListItem>
+                </OrderedList>
+              </Box>
+              <Button w='25%'>Clone</Button>
+            </>
+          )}
         </ContentBox>
       </>
     );
