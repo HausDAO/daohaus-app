@@ -25,11 +25,14 @@ import { fetchUberHausData } from '../utils/theGraph';
 import {
   UBERHAUS_ADDRESS,
   UBERHAUS_NETWORK,
+  UBERHAUS_NETWORK_NAME,
   UBERHAUS_STAKING_TOKEN,
   UBERHAUS_STAKING_TOKEN_SYMBOL,
 } from '../utils/uberhaus';
 import { TokenService } from '../services/tokenService';
 import { IsJsonString } from '../utils/general';
+import { chainByName } from '../utils/chain';
+import DaoToDaoUberAlly from './daoToDaoUberAllyLink';
 
 const DaoToDaoManager = ({ daoOverview, daoMetaData, setProposalType }) => {
   const {
@@ -95,6 +98,12 @@ const DaoToDaoManager = ({ daoOverview, daoMetaData, setProposalType }) => {
   };
 
   const wrongChain = daochain !== UBERHAUS_NETWORK;
+  const uberAlly = daoMetaData?.allies.find(
+    (ally) => ally.allyType === 'uberHausBurner' && ally.isParent,
+  );
+  const uberParent = daoMetaData?.allies.find(
+    (ally) => ally.allyType === 'uberHausBurner' && !ally.isParent,
+  );
   const noMinion = !uberHausMinion;
   const notMember = uberHausMinion && !uberHausData?.members[0];
   const isMember = uberHausMinion && uberHausData?.members[0];
@@ -117,10 +126,9 @@ const DaoToDaoManager = ({ daoOverview, daoMetaData, setProposalType }) => {
 
   // TODO: brittle check here. will this show if already a member
   // add check to see if it's open and if there is one in uberhaus
-
   // TODO: add uberhaus proposals to this list
-
   // TODO: get delegate, if none have button to delegate form
+  // TODO: maybe just get a proposal count and show links to active in this dao and active in uberhaus to teach people
 
   const activeMembershipProposal =
     notMember &&
@@ -146,19 +154,36 @@ const DaoToDaoManager = ({ daoOverview, daoMetaData, setProposalType }) => {
               UberHAUS
             </Box>
           </Flex>
-          <Box fontSize='md' my={2}>
-            UberHAUS is on xDAI. You&apos;ll need to summon a clone of your dao
-            to join.
-            <OrderedList>
-              <ListItem>Summon burner dao ion xdai</ListItem>
-              <ListItem>
-                join button in your xdai burner dao to launch uberhaus minion
-              </ListItem>
-              <ListItem>stake haus for shares</ListItem>
-            </OrderedList>
-          </Box>
-
-          <Button w='25%'>Clone</Button>
+          {uberAlly ? (
+            <Box mt={5}>
+              <DaoToDaoUberAlly
+                dao={{
+                  name: `Manange your membership in your ${UBERHAUS_NETWORK_NAME} burner dao`,
+                  link: `/dao/${chainByName(uberAlly.allyNetwork).chain_id}/${
+                    uberAlly.ally
+                  }/allies`,
+                }}
+              />
+            </Box>
+          ) : (
+            <>
+              <Box fontSize='md' my={2}>
+                UberHAUS is on {UBERHAUS_NETWORK_NAME}. You&apos;ll need to
+                summon a clone of your dao to join.
+                <OrderedList>
+                  <ListItem>
+                    Summon burner dao on {UBERHAUS_NETWORK_NAME}
+                  </ListItem>
+                  <ListItem>
+                    join button in your {UBERHAUS_NETWORK_NAME} burner dao to
+                    launch uberhaus minion
+                  </ListItem>
+                  <ListItem>stake haus for shares</ListItem>
+                </OrderedList>
+              </Box>
+              <Button w='25%'>Clone</Button>
+            </>
+          )}
         </ContentBox>
       </>
     );
@@ -183,8 +208,8 @@ const DaoToDaoManager = ({ daoOverview, daoMetaData, setProposalType }) => {
               {daoMetaData?.name} is not a member of UberHAUS
             </TextBox>
             <Box fontSize='md' my={2}>
-              DAOs on xDAI can join UberHAUS by staking $HAUS for governance
-              shares.
+              DAOs on {UBERHAUS_NETWORK_NAME} can join UberHAUS by staking $HAUS
+              for governance shares.
             </Box>
             <Box fontSize='md' my={2}>
               Lorem Ipsum directions here.
@@ -368,6 +393,19 @@ const DaoToDaoManager = ({ daoOverview, daoMetaData, setProposalType }) => {
               </Flex>
             ) : null}
           </>
+        ) : null}
+        {uberParent ? (
+          <Box mt={5}>
+            <DaoToDaoUberAlly
+              dao={{
+                bodyText: `This is your ${UBERHAUS_NETWORK_NAME} burner dao`,
+                name: `Visit your home dao`,
+                link: `/dao/${chainByName(uberParent.allyNetwork).chain_id}/${
+                  uberParent.ally
+                }/allies`,
+              }}
+            />
+          </Box>
         ) : null}
       </ContentBox>
     </>

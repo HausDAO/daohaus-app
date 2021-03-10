@@ -8,7 +8,6 @@ import { useDao } from '../contexts/DaoContext';
 import { useInjectedProvider } from '../contexts/InjectedProviderContext';
 import { useOverlay } from '../contexts/OverlayContext';
 import { TokenService } from '../services/tokenService';
-import { useTX } from '../contexts/TXContext';
 import { createPoll } from '../services/pollService';
 import { useUser } from '../contexts/UserContext';
 
@@ -28,7 +27,6 @@ const CcoTributeInput = ({
   const { daochain, daoid } = useParams();
   const { injectedProvider, address } = useInjectedProvider();
   const { errorToast, successToast } = useOverlay();
-  const { refreshDao } = useTX();
   const { cachePoll, resolvePoll } = useUser();
 
   useEffect(() => {
