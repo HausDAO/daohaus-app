@@ -41,7 +41,6 @@ const CcoContribution = React.memo(function ccocontribution({
 
   useEffect(() => {
     if (currentDaoTokens && daoMetaData?.boosts?.cco?.active) {
-      console.log('currentDaoTokens', currentDaoTokens);
       const ccoToken = currentDaoTokens.find(
         (token) =>
           token.tokenAddress.toLowerCase() ===
@@ -49,7 +48,6 @@ const CcoContribution = React.memo(function ccocontribution({
       );
 
       const now = new Date() / 1000;
-      // const
       let round;
       if (now < daoMetaData.boosts.cco.metadata.raiseStartTime) {
         round = daoMetaData.boosts.cco.metadata.rounds[0];
@@ -63,8 +61,6 @@ const CcoContribution = React.memo(function ccocontribution({
           );
         });
       }
-
-      console.log('round', round);
 
       const currentRound = {
         ...round,
@@ -126,6 +122,7 @@ const CcoContribution = React.memo(function ccocontribution({
     setCheckingEligibility(true);
     const eligibleRes = await getEligibility(address);
     setIsEligible(eligibleRes ? 'checked' : 'denied');
+    // todo set in local {address: status}, then can rerun on init i guess
     setCheckingEligibility(false);
   };
 
@@ -139,8 +136,6 @@ const CcoContribution = React.memo(function ccocontribution({
     roundData?.raiseOver ||
     currentContributionData?.addressRemaining <= 0 ||
     raiseAtMax;
-
-  console.log('roundData', roundData);
 
   return (
     <MainViewLayout header='DAOhaus CCO' isDao={true}>

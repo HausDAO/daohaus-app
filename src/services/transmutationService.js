@@ -1,6 +1,6 @@
 import Web3 from 'web3';
 
-import TransmutationAbi from '../contracts/transmutation.json';
+import TransmutationAbi from '../contracts/newTransmutation.json';
 
 import { chainByID } from '../utils/chain';
 
@@ -22,8 +22,6 @@ export const TransmutationService = ({
   const contract = new web3.eth.Contract(abi, transmutation);
 
   return function getService(service) {
-    // console.log('service', service);
-
     if (service === 'giveToken') {
       return async () => {
         const action = await contract.methods.giveToken().call();
@@ -41,7 +39,6 @@ export const TransmutationService = ({
         if (!paymentRequested || isNaN(paymentRequested)) {
           return '0';
         }
-
         const bnExchange = web3.utils.toBN(
           setupValues.exchangeRate * setupValues.paddingNumber,
         );
@@ -55,11 +52,13 @@ export const TransmutationService = ({
         return tributeOffered;
       };
     }
+
     if (service === 'propose') {
       return async ({ args, address, poll, onTxHash }) => {
-        console.log(args);
-        console.log(address);
-        console.log(poll);
+        console.log('args', args);
+        console.log('address', address);
+        console.log('poll', poll);
+        console.log('onTxHash', onTxHash);
         const tx = await contract.methods[service](...args);
         return tx
           .send('eth_requestAccounts', { from: address })

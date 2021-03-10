@@ -101,10 +101,8 @@ const CcoTributeInput = ({
           },
           onSuccess: (txHash) => {
             successToast({
-              // ? update to token symbol or name
               title: 'Tribute token unlocked',
             });
-            refreshDao();
             resolvePoll(txHash);
             setUnlocked(true);
             setLoading(false);
