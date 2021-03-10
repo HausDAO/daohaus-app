@@ -50,6 +50,7 @@ export const detailsToJSON = (values) => {
   }
   if (values.cco) {
     details.cco = values.cco;
+  }
   if (values.isTransmutation) {
     details.isTransmutation = true;
   }
