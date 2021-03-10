@@ -9,10 +9,11 @@ import {
   MINION_PROPOSAL_POLL,
 } from '../graphQL/dao-queries';
 import { getGraphEndpoint } from '../utils/chain';
-import { hashMaker, memberVote } from '../utils/proposalUtils';
+import { hashMaker, memberVote, MINION_TYPES } from '../utils/proposalUtils';
 import { TokenService } from '../services/tokenService';
 import { MEMBERS_LIST, MEMBER_DELEGATE_KEY } from '../graphQL/member-queries';
 import { MinionService } from './minionService';
+import { UberHausMinionService } from './uberHausMinionService';
 
 /// //////////CALLS///////////////
 const pollProposals = async ({ daoID, chainID }) =>
@@ -76,15 +77,32 @@ const pollMinionProposal = async ({ chainID, minionAddress, createdAt }) => {
   });
 };
 
-const pollMinionExecute = async ({ chainID, minionAddress, proposalId }) => {
-  const action = await MinionService({
-    minion: minionAddress,
-    chainID,
-  })('getAction')({ proposalId });
-
-  console.log('poll action', action);
-
-  return action.executed;
+const pollMinionExecute = async ({
+  chainID,
+  minionAddress,
+  proposalId,
+  minionType,
+}) => {
+  try {
+    if (minionType === MINION_TYPES.VANILLA) {
+      const action = await MinionService({
+        minion: minionAddress,
+        chainID,
+      })('getAction')({ proposalId });
+      console.log(action);
+      return action.executed;
+    } else if (minionType === MINION_TYPES.UBER) {
+      const action = await UberHausMinionService({
+        minion: minionAddress,
+        chainID,
+      })('getAction')({ proposalId });
+      console.log(action);
+      return action.executed;
+    }
+  } catch (error) {
+    console.log(chainID, minionAddress, proposalId, minionType);
+    console.error('Error caught in Poll block of TX:', error);
+  }
 };
 
 const pollRageQuit = async ({ chainID, molochAddress, createdAt }) => {
@@ -750,12 +768,14 @@ export const createPoll = ({
       }
     };
   } else if (action === 'minionExecuteAction') {
-    return ({ chainID, minionAddress, proposalId, actions }) => (txHash) => {
+    return ({ chainID, minionAddress, proposalId, actions, minionType }) => (
+      txHash,
+    ) => {
       startPoll({
         pollFetch: pollMinionExecute,
         testFn: minionExecuteTest,
         shouldEqual: true,
-        args: { chainID, minionAddress, proposalId },
+        args: { chainID, minionAddress, proposalId, minionType },
         actions,
         txHash,
       });

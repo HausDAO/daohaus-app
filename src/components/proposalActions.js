@@ -363,6 +363,7 @@ const ProposalVote = ({
         minionAddress: proposal.minionAddress,
         chainID: daochain,
         proposalId: proposal.proposalId,
+        minionType: proposal?.minion?.minionType,
         actions: {
           onError: (error, txHash) => {
             errorToast({
@@ -411,7 +412,6 @@ const ProposalVote = ({
     const getMinionDeets = async () => {
       try {
         if (proposal.minion?.minionType === MINION_TYPES.VANILLA) {
-          console.log('VANILLA');
           const action = await MinionService({
             minion: proposal?.minionAddress,
             web3: injectedProvider,
@@ -456,9 +456,14 @@ const ProposalVote = ({
     }
   }, [daoProposals]);
 
+  const testRefreshDao = () => {
+    refreshDao();
+  };
+
   return (
     <>
       <ContentBox position='relative'>
+        <Button onClick={testRefreshDao}>Refresh Dao</Button>
         {!daoConnectedAndSameChain(address, daochain, injectedChain?.chainId) &&
           ((proposal?.status === 'Unsponsored' && !proposal?.proposalIndex) ||
             proposal?.status === 'ReadyForProcessing') && <NetworkOverlay />}

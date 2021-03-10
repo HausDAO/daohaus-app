@@ -25,7 +25,6 @@ import TextBox from './TextBox';
 import { chainByID } from '../utils/chain';
 import { UberHausMinionService } from '../services/uberHausMinionService';
 import { MINION_TYPES } from '../utils/proposalUtils';
-// import MinionDetails from '../pages/Minion';
 
 const ProposalMinionCard = ({ proposal }) => {
   const { daochain } = useParams();
@@ -66,7 +65,6 @@ const ProposalMinionCard = ({ proposal }) => {
   useEffect(() => {
     const getAbi = async () => {
       try {
-        // call only for etherscan compatible networks
         const key =
           daochain === '0x64' ? '' : process.env.REACT_APP_ETHERSCAN_KEY;
         const url = `${chainByID(daochain).abi_api_url}${minionDeets.to}${key &&
@@ -119,7 +117,6 @@ const ProposalMinionCard = ({ proposal }) => {
       </>
     );
   };
-  console.log(minionDeets?.to);
   return (
     <>
       <Skeleton isLoaded={!loading}>
