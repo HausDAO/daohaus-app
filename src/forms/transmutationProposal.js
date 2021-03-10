@@ -28,7 +28,7 @@ import { useUser } from '../contexts/UserContext';
 import { useTX } from '../contexts/TXContext';
 import { useOverlay } from '../contexts/OverlayContext';
 import { createPoll } from '../services/pollService';
-import { createHash } from '../utils/general';
+import { createHash, detailsToJSON } from '../utils/general';
 import { createForumTopic } from '../utils/discourse';
 import { useSessionStorage } from '../hooks/useSessionStorage';
 
@@ -122,7 +122,6 @@ const TransmutationProposal = () => {
     if (transmutationData?.length) {
       getGiveTokenBalance();
     }
-    // eslint-disable-next-line
   }, [transmutationData, injectedProvider]);
 
   useEffect(() => {
@@ -173,8 +172,7 @@ const TransmutationProposal = () => {
     if (transmutationData?.length) {
       getGetTokenBalance();
     }
-    // eslint-disable-next-line
-  }, [transmutationData]);
+  }, [transmutationData, daoOverview]);
 
   const displayTribute = (val) => {
     if (val) {
@@ -184,18 +182,21 @@ const TransmutationProposal = () => {
   };
 
   const onSubmit = async (values) => {
+    console.log(values);
     setLoading(true);
     const now = (new Date().getTime() / 1000).toFixed();
     const hash = createHash();
-    const details = `${values.description}", "hash": "${hash}`;
-
+    const details = detailsToJSON({
+      ...values,
+      hash,
+      isTransmutation: true,
+    });
     const args = [
       values.applicant,
       tributeReturned.toString(),
       injectedProvider.utils.toWei('' + values.paymentRequested),
       details,
     ];
-
     try {
       const poll = createPoll({ action: 'transmutationProposal', cachePoll })({
         daoID: daoid,
@@ -263,6 +264,31 @@ const TransmutationProposal = () => {
     <>
       {transmutationData && transmutationData.length ? (
         <form onSubmit={handleSubmit(onSubmit)}>
+          <FormControl>
+            <FormLabel
+              htmlFor='title'
+              color='white'
+              fontFamily='heading'
+              textTransform='uppercase'
+              fontSize='xs'
+              fontWeight={700}
+            >
+              Proposal Title
+            </FormLabel>
+            <Input
+              name='title'
+              placeholder='Title Name'
+              mb={5}
+              ref={register({
+                required: {
+                  value: true,
+                  message: 'Proposal needs a title',
+                },
+              })}
+              color='white'
+              focusBorderColor='secondary.500'
+            />
+          </FormControl>
           <FormControl
             isInvalid={errors.name}
             display='flex'

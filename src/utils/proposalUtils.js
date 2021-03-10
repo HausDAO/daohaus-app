@@ -16,6 +16,25 @@ export const ProposalStatus = {
   Unsponsored: 'Unsponsored',
 };
 
+export const PROPOSAL_TYPES = {
+  MEMBER: 'Member Proposal',
+  WHITELIST: 'Whitelist Token Proposal',
+  GUILDKICK: 'Guild Kick Proposal',
+  TRADE: 'Trade Proposal',
+  MINION_UBER_STAKE: 'UberHAUS Staking Proposal',
+  MINION_UBER_DEL: 'UberHAUS Delegate Proposal',
+  MINION_UBER_DEFAULT: 'UberHAUS Minion Proposal',
+  MINION_DEFAULT: 'Minion Proposal',
+  MINION_VANILLA: 'Vanilla Minion',
+  TRANSMUTATION: 'Transmutation Proposal',
+  FUNDING: 'Funding Proposal',
+};
+
+export const MINION_TYPES = {
+  VANILLA: 'vanilla minion',
+  UBER: 'UberHaus minion',
+};
+
 export const inQueue = (proposal) => {
   const now = (new Date() / 1000) | 0;
   return now < +proposal.votingPeriodStarts;
@@ -59,19 +78,71 @@ export function determineProposalStatus(proposal) {
     return ProposalStatus.Unknown;
   }
 }
-export const determineProposalType = (proposal) => {
-  if (proposal.newMember) {
-    return 'Member Proposal';
-  } else if (proposal.whitelist) {
-    return 'Whitelist Token Proposal';
-  } else if (proposal.guildkick) {
-    return 'Guildkick Proposal';
-  } else if (proposal.trade) {
-    return 'Trade Proposal';
-  } else if (proposal.isMinion) {
-    return 'Minion Proposal';
+
+const tryGetDetails = (details) => {
+  try {
+    const parsedDetails = JSON.parse(details);
+    if (!parsedDetails) {
+      return '';
+    } else if (
+      typeof parsedDetails === 'string' ||
+      typeof parsedDetails === 'number'
+    ) {
+      return parsedDetails;
+    } else {
+      return parsedDetails;
+    }
+  } catch (error) {
+    return '';
+  }
+};
+
+const getMinionProposalType = (proposal, details) => {
+  const getUberTypeFromDetails = (details) => {
+    if (details?.uberType === 'staking') {
+      return PROPOSAL_TYPES.MINION_UBER_STAKE;
+    } else if (details?.uberType === 'delegate') {
+      return PROPOSAL_TYPES.MINION_UBER_DEL;
+    } else {
+      console.error('Uberhaus Minion type not detected');
+      return PROPOSAL_TYPES.MINION_UBER_DEFAULT;
+    }
+  };
+  const getUberTypeFromGraphData = (proposal) => {
+    if (proposal?.minion?.minionType === MINION_TYPES.VANILLA) {
+      return PROPOSAL_TYPES.MINION_VANILLA;
+    } else {
+      console.error('Minion type not detected');
+      return PROPOSAL_TYPES.MINION_DEFAULT;
+    }
+  };
+
+  if (proposal?.minion?.minionType === MINION_TYPES.UBER) {
+    return getUberTypeFromDetails(details);
   } else {
-    return 'Funding Proposal';
+    return getUberTypeFromGraphData(proposal);
+  }
+};
+
+export const determineProposalType = (proposal) => {
+  // can return a wide array of data types and structures. Be very defensive when dealing with
+  // anything returned from tryGetDetails.
+  const parsedDetails = tryGetDetails(proposal.details);
+
+  if (proposal.newMember) {
+    return PROPOSAL_TYPES.MEMBER;
+  } else if (proposal.whitelist) {
+    return PROPOSAL_TYPES.WHITELIST;
+  } else if (proposal.guildkick) {
+    return PROPOSAL_TYPES.GUILDKICK;
+  } else if (parsedDetails?.isTransmutation) {
+    return PROPOSAL_TYPES.TRANSMUTATION;
+  } else if (proposal.trade) {
+    return PROPOSAL_TYPES.TRADE;
+  } else if (proposal.isMinion) {
+    return getMinionProposalType(proposal, parsedDetails);
+  } else {
+    return PROPOSAL_TYPES.FUNDING;
   }
 };
 
@@ -83,8 +154,6 @@ export const titleMaker = (proposal) => {
     let parsedDetails;
 
     try {
-      // console.log('proposal.details', proposal.details);
-      // console.log(IsJsonString(proposal.details));
       parsedDetails = IsJsonString(proposal.details)
         ? JSON.parse(proposal.details.replace(/(\r\n|\n|\r)/gm, ''))
         : '';

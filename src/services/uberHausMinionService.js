@@ -8,8 +8,7 @@ export const UberHausMinionService = ({ web3, chainID, uberHausMinion }) => {
     const rpcUrl = chainByID(chainID).rpc_url;
     web3 = new Web3(new Web3.providers.HttpProvider(rpcUrl));
   }
-  const abi = UberHausMinionAbi;
-  const contract = new web3.eth.Contract(abi, uberHausMinion);
+  const contract = new web3.eth.Contract(UberHausMinionAbi, uberHausMinion);
 
   return function getService(service) {
     if (service === 'getAction') {
@@ -18,14 +17,12 @@ export const UberHausMinionService = ({ web3, chainID, uberHausMinion }) => {
         return action;
       };
     }
-
-    // if (service === 'currentDelegate') {
-    //   return async () => {
-    //     const action = await contract.methods.currentDelegate.call();
-    //     return action;
-    //   };
-    // }
-
+    if (service === 'currentDelegate') {
+      return async () => {
+        const action = await contract.methods.currentDelegate().call();
+        return action;
+      };
+    }
     if (service === 'proposeAction' || service === 'executeAction') {
       return async ({ args, address, poll, onTxHash }) => {
         console.log(contract);
@@ -45,6 +42,7 @@ export const UberHausMinionService = ({ web3, chainID, uberHausMinion }) => {
               console.error(error);
             });
         } catch (error) {
+          console.log('fired in service');
           return error;
         }
       };

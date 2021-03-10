@@ -17,7 +17,6 @@ export const MinionService = ({ web3, minion, chainID }) => {
 
   return function getService(service) {
     // console.log('service', service);
-
     if (service === 'getAction') {
       return async ({ proposalId }) => {
         const action = await contract.methods.actions(proposalId).call();
