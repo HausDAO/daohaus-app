@@ -311,7 +311,7 @@ const ProposalVote = ({
       processFn = 'processWhitelistProposal';
     } else if (proposal.guildkick) {
       proposalType = 'guildkick';
-      processFn = 'processWhitelistProposal';
+      processFn = 'processGuildKickProposal';
     }
 
     const args = [proposal.proposalIndex];
