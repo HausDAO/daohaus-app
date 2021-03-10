@@ -50,7 +50,7 @@ const ProfileCard = ({ overview, daoTokens, ens, profile, memberEntity }) => {
     return profile?.name ? profile.name : truncateAddr(userid);
   };
 
-  console.log(memberEntity);
+  // console.log(memberEntity);
   return (
     <ContentBox>
       {userid ? (

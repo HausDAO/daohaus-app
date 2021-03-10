@@ -10,6 +10,8 @@ import {
 
 import { getTotalBankValue } from './tokenValue';
 
+//  TODO. Can be made a lot more effecient. We are parsing JSON for each of these fields.
+//  Would be better if there was a way to parse once since JSON.parse is relatively expensive.
 export const proposalResolver = (proposal, fields = {}) => {
   if (fields.status) {
     proposal.status = determineProposalStatus(proposal);
