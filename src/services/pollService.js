@@ -11,7 +11,11 @@ import {
 import { getGraphEndpoint } from '../utils/chain';
 import { hashMaker, memberVote } from '../utils/proposalUtils';
 import { TokenService } from '../services/tokenService';
-import { MEMBERS_LIST, MEMBER_DELEGATE_KEY } from '../graphQL/member-queries';
+import {
+  MEMBERS_LIST,
+  MEMBER_DELEGATE_KEY,
+  RAGE_KICK_POLL,
+} from '../graphQL/member-queries';
 import { MinionService } from './minionService';
 
 /// //////////CALLS///////////////
@@ -98,6 +102,17 @@ const pollRageQuit = async ({ chainID, molochAddress, createdAt }) => {
   });
 };
 
+const pollRageKick = async ({ chainID, daoID, memberAddress }) => {
+  return await graphQuery({
+    endpoint: getGraphEndpoint(chainID, 'subgraph_url'),
+    query: RAGE_KICK_POLL,
+    variables: {
+      contractAddr: daoID,
+      memberAddr: memberAddress,
+    },
+  });
+};
+
 const syncTokenPoll = async ({ chainID, daoID, tokenAddress }) => {
   try {
     const daoOverview = await graphQuery({
@@ -177,6 +192,10 @@ const submitProposalTest = (data, shouldEqual, pollId) => {
 const tokenAllowanceTest = (data, shouldEqual, pollId) => {
   console.log('new allowance: ', data);
   return BigNumber.from(data).gte(shouldEqual);
+};
+
+const rageKickTest = (data, shouldEqual, pollId) => {
+  return data.members[0].loot === '0';
 };
 
 const molochSummonTest = (data, shouldEqual, pollId) => {
@@ -936,6 +955,36 @@ export const createPoll = ({
             tries,
           },
           pollArgs: { chainID, daoID, memberAddress, delegateAddress },
+        });
+      }
+    };
+  } else if (action === 'ragekick') {
+    console.log('action', action);
+    return ({ chainID, daoID, memberAddress, actions }) => (txHash) => {
+      startPoll({
+        pollFetch: pollRageKick,
+        testFn: rageKickTest,
+        shouldEqual: { daoID, memberAddress },
+        args: { chainID, daoID, memberAddress },
+        actions,
+        txHash,
+      });
+      if (cachePoll) {
+        cachePoll({
+          txHash,
+          action,
+          timeSent: Date.now(),
+          status: 'unresolved',
+          resolvedMsg: `Rage Kick Completed`,
+          unresolvedMsg: `Rage Kicking`,
+          successMsg: `You Rage Kicked`,
+          errorMsg: `Error Rage Kicking`,
+          pollData: {
+            action,
+            interval,
+            tries,
+          },
+          pollArgs: { chainID, daoID, memberAddress },
         });
       }
     };

@@ -134,3 +134,14 @@ export const MEMBER_DELEGATE_KEY = gql`
     }
   }
 `;
+
+export const RAGE_KICK_POLL = gql`
+  query membersList($contractAddr: String!, $memberAddr: String!) {
+    members(
+      where: { molochAddress: $contractAddr, memberAddress: $memberAddr }
+    ) {
+      memberAddress
+      loot
+    }
+  }
+`;
