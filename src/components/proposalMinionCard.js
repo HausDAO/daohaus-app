@@ -25,6 +25,7 @@ import TextBox from './TextBox';
 import { chainByID } from '../utils/chain';
 import { UberHausMinionService } from '../services/uberHausMinionService';
 import { MINION_TYPES } from '../utils/proposalUtils';
+// import MinionDetails from '../pages/Minion';
 
 const ProposalMinionCard = ({ proposal }) => {
   const { daochain } = useParams();
@@ -51,6 +52,7 @@ const ProposalMinionCard = ({ proposal }) => {
           setMinionDeets(action);
         }
       } catch (err) {
+        console.error(err);
         setMinionDeets(null);
       } finally {
         setLoading(false);
@@ -62,23 +64,26 @@ const ProposalMinionCard = ({ proposal }) => {
   }, [proposal, daochain]);
 
   useEffect(() => {
-    if (!minionDeets) return;
     const getAbi = async () => {
       try {
-        const key = daochain === 100 ? '' : process.env.REACT_APP_ETHERSCAN_KEY;
+        // call only for etherscan compatible networks
+        const key =
+          daochain === '0x64' ? '' : process.env.REACT_APP_ETHERSCAN_KEY;
         const url = `${chainByID(daochain).abi_api_url}${minionDeets.to}${key &&
           '&apikey=' + key}`;
         const response = await fetch(url);
         const json = await response.json();
-        abiDecoder.addABI(json);
+        const parsed = JSON.parse(json.result);
+        abiDecoder.addABI(parsed);
         const _decodedData = abiDecoder.decodeMethod(minionDeets.data);
         setDecodedData(_decodedData);
       } catch (err) {
         console.log(err);
       }
     };
-    getAbi();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+    if (proposal && minionDeets) {
+      getAbi();
+    }
   }, [proposal, minionDeets]);
 
   const displayDecodedData = (data) => {
@@ -114,7 +119,7 @@ const ProposalMinionCard = ({ proposal }) => {
       </>
     );
   };
-
+  console.log(minionDeets?.to);
   return (
     <>
       <Skeleton isLoaded={!loading}>
@@ -124,7 +129,9 @@ const ProposalMinionCard = ({ proposal }) => {
               <TextBox size='xs' mb={3}>
                 Target Address
               </TextBox>
-              <AddressAvatar addr={minionDeets.to} alwaysShowName={true} />
+              {minionDeets?.to && (
+                <AddressAvatar addr={minionDeets.to} alwaysShowName={true} />
+              )}
             </Box>
             <Flex w={['25%', null, null, '15%']} align='center' m={0}>
               <Button w='175px' onClick={() => setShowModal(true)}>
