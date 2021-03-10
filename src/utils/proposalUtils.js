@@ -21,13 +21,18 @@ export const PROPOSAL_TYPES = {
   WHITELIST: 'Whitelist Token Proposal',
   GUILDKICK: 'Guild Kick Proposal',
   TRADE: 'Trade Proposal',
-  MINION_UBERSTAKE: 'UberHAUS Staking Proposal',
+  MINION_UBER_STAKE: 'UberHAUS Staking Proposal',
   MINION_UBER_DEL: 'UberHAUS Delegate Proposal',
   MINION_UBER_DEFAULT: 'UberHAUS Minion Proposal',
   MINION_DEFAULT: 'Minion Proposal',
   MINION_VANILLA: 'Vanilla Minion',
   TRANSMUTATION: 'Transmutation Proposal',
   FUNDING: 'Funding Proposal',
+};
+
+export const MINION_TYPES = {
+  VANILLA: 'vanilla minion',
+  UBER: 'UberHaus minion',
 };
 
 export const inQueue = (proposal) => {
@@ -95,7 +100,7 @@ const tryGetDetails = (details) => {
 const getMinionProposalType = (proposal, details) => {
   const getUberTypeFromDetails = (details) => {
     if (details?.uberType === 'staking') {
-      return PROPOSAL_TYPES.MINION_UBERSTAKE;
+      return PROPOSAL_TYPES.MINION_UBER_STAKE;
     } else if (details?.uberType === 'delegate') {
       return PROPOSAL_TYPES.MINION_UBER_DEL;
     } else {
@@ -104,7 +109,7 @@ const getMinionProposalType = (proposal, details) => {
     }
   };
   const getUberTypeFromGraphData = (proposal) => {
-    if (proposal?.minion?.minionType === 'vanilla minion') {
+    if (proposal?.minion?.minionType === MINION_TYPES.VANILLA) {
       return PROPOSAL_TYPES.MINION_VANILLA;
     } else {
       console.error('Minion type not detected');
@@ -112,7 +117,7 @@ const getMinionProposalType = (proposal, details) => {
     }
   };
 
-  if (proposal?.minion?.minionType === 'UberHaus minion') {
+  if (proposal?.minion?.minionType === MINION_TYPES.UBER) {
     return getUberTypeFromDetails(details);
   } else {
     return getUberTypeFromGraphData(proposal);
@@ -123,10 +128,6 @@ export const determineProposalType = (proposal) => {
   // can return a wide array of data types and structures. Be very defensive when dealing with
   // anything returned from tryGetDetails.
   const parsedDetails = tryGetDetails(proposal.details);
-  if (proposal?.isMinion) {
-    console.log('parsedDeatails', parsedDetails);
-    console.log('proposal', proposal);
-  }
 
   if (proposal.newMember) {
     return PROPOSAL_TYPES.MEMBER;

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { utils } from 'web3';
-import { Link } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 import {
   Flex,
   Box,
@@ -10,6 +10,7 @@ import {
   Image,
   Icon,
   Tooltip,
+  Spinner,
 } from '@chakra-ui/react';
 import { RiExternalLinkLine } from 'react-icons/ri';
 import { FaThumbsUp, FaThumbsDown } from 'react-icons/fa';
@@ -25,6 +26,7 @@ import {
   getProposalCountdownText,
   getProposalDetailStatus,
   memberVote,
+  MINION_TYPES,
   PROPOSAL_TYPES,
 } from '../utils/proposalUtils';
 import { numberWithCommas } from '../utils/general';
@@ -32,6 +34,7 @@ import { getCustomProposalTerm } from '../utils/metadata';
 import { useInjectedProvider } from '../contexts/InjectedProviderContext';
 import DiscourseProposalTopic from './discourseProposalTopic';
 import { useMetaData } from '../contexts/MetaDataContext';
+import { UberHausMinionService } from '../services/uberHausMinionService';
 
 const UBER_LINK =
   '/dao/0x2a/0x96714523778e51b898b072089e5615d4db71078e/proposals';
@@ -217,6 +220,7 @@ const ProposalDetails = ({ proposal, daoMember }) => {
         </Flex>
         <Flex
           mt={3}
+          mb={6}
           justify='space-between'
           direction={['column', 'row']}
           pr={memberVote(proposal, address) !== null && '5%'}
@@ -234,7 +238,7 @@ const ProposalDetails = ({ proposal, daoMember }) => {
               )}
             </Skeleton>
           </Box>
-          {proposal?.proposalType !== PROPOSAL_TYPES.MINION_UBERSTAKE ? (
+          {proposal?.proposalType !== PROPOSAL_TYPES.MINION_UBER_STAKE ? (
             <Box key={proposal?.proposalType}>
               <TextBox size='xs' mb={2}>
                 Recipient
@@ -294,7 +298,7 @@ const ProposalDetails = ({ proposal, daoMember }) => {
               ))}
           </Flex>
         </Flex>
-        {proposal?.proposalType === PROPOSAL_TYPES.MINION_UBERSTAKE && (
+        {proposal?.minion?.minionType === MINION_TYPES.UBER && (
           <DelegateBox proposal={proposal} />
         )}
       </ContentBox>
@@ -325,7 +329,7 @@ const DelegateRecipient = ({ proposal }) => {
     >
       <Box as={Link} to={UBER_LINK}>
         <TextBox size='xs' mb={2}>
-          Delegate
+          Minion
         </TextBox>
         <Skeleton isLoaded={proposal}>
           {proposal ? (
@@ -347,27 +351,43 @@ const DelegateRecipient = ({ proposal }) => {
 };
 
 const DelegateBox = ({ proposal }) => {
+  const { daochain, daoid } = useParams();
+  const [minionDelegate, setMinionDelegate] = useState(null);
+
+  useEffect(() => {
+    const getDelegate = async () => {
+      try {
+        const delegate = await UberHausMinionService({
+          chainID: daochain,
+          uberHausMinion: proposal?.minionAddress,
+        })('currentDelegate')();
+        setMinionDelegate(delegate);
+      } catch (error) {
+        console.error(error?.message);
+      }
+    };
+    if (proposal?.minionAddress) {
+      getDelegate();
+    }
+  }, [proposal]);
+
   return (
-    <>
-      {proposal?.minionAddress && (
-        <Flex
-          mt={6}
-          justify='space-between'
-          direction={['column', 'row']}
-          w='100%'
-        >
-          <Box mb={[3, null, null, 0]}>
-            <TextBox size='xs' mb={2}>
-              Current Delegate:
-            </TextBox>
-            <Skeleton isLoaded={proposal}>
-              <Flex>{proposal?.minionAddress}</Flex>
-              <Flex>Other Info</Flex>
-              <Flex>Yada Yada</Flex>
-            </Skeleton>
-          </Box>
-        </Flex>
-      )}
-    </>
+    <Box display='inline-block'>
+      <Box
+        as={Link}
+        to={`/dao/${daochain}/${daoid}/profile/${minionDelegate}`}
+        mt={6}
+        flexDirection='column'
+      >
+        <TextBox size='xs' mb={2}>
+          Current Delegate
+        </TextBox>
+        {minionDelegate ? (
+          <AddressAvatar addr={minionDelegate} alwaysShowName={true} />
+        ) : (
+          <Spinner />
+        )}
+      </Box>
+    </Box>
   );
 };
