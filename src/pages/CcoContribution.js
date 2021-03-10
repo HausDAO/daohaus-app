@@ -377,6 +377,7 @@ const CcoContribution = React.memo(function ccocontribution({
                     colorScheme='secondary.500'
                     onClick={() => setGenericModal({ ccoProcess: true })}
                     mb={5}
+                    cursor='pointer'
                   >
                     CCO Overview
                   </TextBox>
@@ -385,6 +386,7 @@ const CcoContribution = React.memo(function ccocontribution({
                     colorScheme='secondary.500'
                     onClick={() => setGenericModal({ xDaiHelp: true })}
                     mb={5}
+                    cursor='pointer'
                   >
                     How to get wxDAI
                   </TextBox>
