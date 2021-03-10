@@ -19,6 +19,13 @@ export const UberHausMinionService = ({ web3, chainID, uberHausMinion }) => {
       };
     }
 
+    // if (service === 'currentDelegate') {
+    //   return async () => {
+    //     const action = await contract.methods.currentDelegate.call();
+    //     return action;
+    //   };
+    // }
+
     if (service === 'proposeAction' || service === 'executeAction') {
       return async ({ args, address, poll, onTxHash }) => {
         console.log(contract);

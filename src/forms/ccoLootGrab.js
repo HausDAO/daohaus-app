@@ -100,6 +100,7 @@ const CcoLootGrabForm = ({
       paymentToken,
       details,
     ];
+
     try {
       const poll = createPoll({ action: 'submitProposalCco', cachePoll })({
         daoID: daoid,
