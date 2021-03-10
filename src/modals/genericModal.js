@@ -35,7 +35,12 @@ const GenericModal = ({ children, modalId, closeOnOverlayClick = true }) => {
         py={6}
       >
         <ModalCloseButton />
-        <ModalBody flexDirection='column' display='flex' maxH='600px'>
+        <ModalBody
+          flexDirection='column'
+          display='flex'
+          maxH='600px'
+          overflow='auto'
+        >
           {children}
         </ModalBody>
       </ModalContent>
