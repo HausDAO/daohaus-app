@@ -6,6 +6,7 @@ import OverviewCard from '../components/overviewCard';
 import { getDaoActivites } from '../utils/activities';
 import MainViewLayout from '../components/mainViewLayout';
 import StakingBanner from '../components/stakingBanner';
+import CcoBanner from '../components/ccoBanner';
 // import { getActiveMembers } from '../utils/dao';
 
 const Overview = React.memo(function overview({
@@ -35,6 +36,7 @@ const Overview = React.memo(function overview({
                 currentDaoTokens={currentDaoTokens}
               />
               {daoMetaData?.isUberHaus ? <StakingBanner /> : null}
+              {daoMetaData?.boosts?.cco?.active ? <CcoBanner /> : null}
             </Box>
           )}
           {isMember && (

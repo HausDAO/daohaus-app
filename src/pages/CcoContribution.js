@@ -96,6 +96,8 @@ const CcoContribution = React.memo(function ccocontribution({
         return isCcoProposalForAddress(proposal, address, roundData);
       });
 
+      console.log('addressProposals', addressProposals);
+
       const contributionTotal = contributionTotalValue(
         contributionProposals,
         roundData,
