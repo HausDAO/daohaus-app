@@ -19,6 +19,7 @@ export const UBERHAUS_DATA = gql`
         cancelled
         processed
         newMember
+        details
       }
     }
     minion(id: $minionId) {

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import makeBlockie from 'ethereum-blockies-base64';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
 import { FaCopy } from 'react-icons/fa';
@@ -14,32 +14,35 @@ const AddressAvatar = React.memo(function AddrAvatar({
 }) {
   const toast = useToast();
   const [profile, setProfile] = useState(null);
-  const [hasFetched, setHasFetched] = useState(false);
+  // const [hasFetched, setHasFetched] = useState(false);
 
+  const hasFetched = useRef(false);
   useEffect(() => {
-    let shouldFetch = true;
+    let shouldUpdate = true;
     const getProfile = async () => {
-      if (shouldFetch) {
-        try {
-          // console.log('fired');
-          const profile = await handleGetProfile(addr);
+      try {
+        hasFetched.current = true;
+        // console.log('fired');
+        const profile = await handleGetProfile(addr);
+        if (shouldUpdate) {
           if (profile.status === 'error') {
             setProfile(false);
-            setHasFetched(true);
             return;
+          } else {
+            setProfile(profile);
           }
-          setProfile(profile);
-          setHasFetched(true);
-        } catch (error) {
-          console.log("Member doesn't have a profile");
         }
+      } catch (error) {
+        console.log("Member doesn't have a profile");
+        hasFetched.current = true;
       }
     };
-    if (!hasFetched) {
+
+    if (addr && !hasFetched.current) {
       getProfile();
     }
     return () => {
-      shouldFetch = false;
+      shouldUpdate = false;
     };
   }, [addr]);
 

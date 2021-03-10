@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { utils } from 'web3';
+import { Link, useParams } from 'react-router-dom';
 import {
   Flex,
   Box,
@@ -7,8 +8,9 @@ import {
   Badge,
   Text,
   Image,
-  Link,
   Icon,
+  Tooltip,
+  Spinner,
 } from '@chakra-ui/react';
 import { RiExternalLinkLine } from 'react-icons/ri';
 import { FaThumbsUp, FaThumbsDown } from 'react-icons/fa';
@@ -24,12 +26,18 @@ import {
   getProposalCountdownText,
   getProposalDetailStatus,
   memberVote,
+  MINION_TYPES,
+  PROPOSAL_TYPES,
 } from '../utils/proposalUtils';
 import { numberWithCommas } from '../utils/general';
 import { getCustomProposalTerm } from '../utils/metadata';
 import { useInjectedProvider } from '../contexts/InjectedProviderContext';
 import DiscourseProposalTopic from './discourseProposalTopic';
 import { useMetaData } from '../contexts/MetaDataContext';
+import { UberHausMinionService } from '../services/uberHausMinionService';
+
+const UBER_LINK =
+  '/dao/0x2a/0x96714523778e51b898b072089e5615d4db71078e/proposals';
 
 const urlify = (text) => {
   var urlRegex = /(https?:\/\/[^\s]+)/g;
@@ -59,7 +67,7 @@ const ProposalDetails = ({ proposal, daoMember }) => {
     }
   }, [proposal]);
 
-  console.log('proposal', proposal);
+  // console.log('proposal', proposal);
 
   return (
     <Box pt={6}>
@@ -116,12 +124,11 @@ const ProposalDetails = ({ proposal, daoMember }) => {
                 ))}
             </Skeleton>
           )}
+
           <Box mt={proposal?.link || proposal?.minionAddress ? 6 : 2}>
             {proposal?.link &&
-            !ReactPlayer.canPlay(proposal?.link) &&
-            !hasImage(proposal?.link) ? (
-              <TextBox size='xs'>Link</TextBox>
-            ) : null}
+              !ReactPlayer.canPlay(proposal?.link) &&
+              !hasImage(proposal?.link) && <TextBox size='xs'>Link</TextBox>}
             {proposal?.link !== '' && (
               <Skeleton isLoaded={proposal?.link || proposal?.minionAddress}>
                 {proposal?.link ? (
@@ -213,6 +220,7 @@ const ProposalDetails = ({ proposal, daoMember }) => {
         </Flex>
         <Flex
           mt={3}
+          mb={6}
           justify='space-between'
           direction={['column', 'row']}
           pr={memberVote(proposal, address) !== null && '5%'}
@@ -230,25 +238,29 @@ const ProposalDetails = ({ proposal, daoMember }) => {
               )}
             </Skeleton>
           </Box>
-          <Box>
-            <TextBox size='xs' mb={2}>
-              Recipient
-            </TextBox>
-            <Skeleton isLoaded={proposal}>
-              {proposal ? (
-                <AddressAvatar
-                  addr={
-                    proposal.applicant === AddressZero
-                      ? proposal.proposer
-                      : proposal.applicant
-                  }
-                  alwaysShowName={true}
-                />
-              ) : (
-                '--'
-              )}
-            </Skeleton>
-          </Box>
+          {proposal?.proposalType !== PROPOSAL_TYPES.MINION_UBER_STAKE ? (
+            <Box key={proposal?.proposalType}>
+              <TextBox size='xs' mb={2}>
+                Recipient
+              </TextBox>
+              <Skeleton isLoaded={proposal}>
+                {proposal ? (
+                  <AddressAvatar
+                    addr={
+                      proposal.applicant === AddressZero
+                        ? proposal.proposer
+                        : proposal.applicant
+                    }
+                    alwaysShowName={true}
+                  />
+                ) : (
+                  '--'
+                )}
+              </Skeleton>
+            </Box>
+          ) : (
+            <DelegateRecipient proposal={proposal} />
+          )}
           <Flex align='center'>
             {memberVote(proposal, address) !== null &&
               (+memberVote(proposal, address) === 1 ? (
@@ -286,9 +298,96 @@ const ProposalDetails = ({ proposal, daoMember }) => {
               ))}
           </Flex>
         </Flex>
+        {proposal?.minion?.minionType === MINION_TYPES.UBER && (
+          <DelegateBox proposal={proposal} />
+        )}
       </ContentBox>
     </Box>
   );
 };
 
 export default ProposalDetails;
+
+const DelegateRecipient = ({ proposal }) => {
+  return (
+    <Tooltip
+      hasArrow
+      label={
+        <Box fontFamily='heading' p={5}>
+          <TextBox mb={2}>Uber Proposal</TextBox>
+          <Flex mb={2}>
+            This UberHAUS Staking Proposal is delegated through a Minion.
+          </Flex>
+          <Flex>
+            Once the proposal is executed, it is voted on in the uberHAUS DAO.
+            (Click to visit)
+          </Flex>
+        </Box>
+      }
+      bg='primary.500'
+      placement='top'
+    >
+      <Box as={Link} to={UBER_LINK}>
+        <TextBox size='xs' mb={2}>
+          Minion
+        </TextBox>
+        <Skeleton isLoaded={proposal}>
+          {proposal ? (
+            <AddressAvatar
+              addr={
+                proposal.applicant === AddressZero
+                  ? proposal.proposer
+                  : proposal.applicant
+              }
+              alwaysShowName={true}
+            />
+          ) : (
+            '--'
+          )}
+        </Skeleton>
+      </Box>
+    </Tooltip>
+  );
+};
+
+const DelegateBox = ({ proposal }) => {
+  const { daochain, daoid } = useParams();
+  const [minionDelegate, setMinionDelegate] = useState(null);
+
+  useEffect(() => {
+    const getDelegate = async () => {
+      try {
+        const delegate = await UberHausMinionService({
+          chainID: daochain,
+          uberHausMinion: proposal?.minionAddress,
+        })('currentDelegate')();
+        setMinionDelegate(delegate);
+      } catch (error) {
+        console.error(error?.message);
+      }
+    };
+    if (proposal?.minionAddress) {
+      getDelegate();
+    }
+  }, [proposal]);
+
+  return (
+    <Box display='inline-block'>
+      <Box
+        as={Link}
+        to={`/dao/${daochain}/${daoid}/profile/${minionDelegate}`}
+        mt={6}
+        flexDirection='column'
+      >
+        <TextBox size='xs' mb={2}>
+          Current Delegate
+        </TextBox>
+        {minionDelegate ? (
+          <AddressAvatar addr={minionDelegate} alwaysShowName={true} />
+        ) : (
+          <Spinner />
+        )}
+      </Box>
+    </Box>
+  );
+};

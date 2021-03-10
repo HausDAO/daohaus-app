@@ -23,6 +23,8 @@ import { useCustomTheme } from '../contexts/CustomThemeContext';
 import AddressAvatar from './addressAvatar';
 import TextBox from './TextBox';
 import { chainByID } from '../utils/chain';
+import { UberHausMinionService } from '../services/uberHausMinionService';
+import { MINION_TYPES } from '../utils/proposalUtils';
 
 const ProposalMinionCard = ({ proposal }) => {
   const { daochain } = useParams();
@@ -33,46 +35,53 @@ const ProposalMinionCard = ({ proposal }) => {
   const [showModal, setShowModal] = useState(false);
 
   useEffect(() => {
-    let action;
     const getMinionDeets = async () => {
       try {
-        action = await MinionService({
-          minion: proposal?.minionAddress,
-          chainID: daochain,
-        })('getAction')({ proposalId: proposal?.proposalId });
+        if (proposal.minion?.minionType === MINION_TYPES.VANILLA) {
+          const action = await MinionService({
+            minion: proposal?.minionAddress,
+            chainID: daochain,
+          })('getAction')({ proposalId: proposal?.proposalId });
+          setMinionDeets(action);
+        } else if (proposal.minion?.minionType === MINION_TYPES.UBER) {
+          const action = await UberHausMinionService({
+            uberHausMinion: proposal.minionAddress,
+            chainID: daochain,
+          })('getAction')({ proposalId: proposal.proposalId });
+          setMinionDeets(action);
+        }
       } catch (err) {
-        console.log('error: ', err);
+        console.error(err);
+        setMinionDeets(null);
       } finally {
         setLoading(false);
       }
-      setMinionDeets(action);
     };
-    if (proposal?.proposalId) {
+    if (proposal?.proposalId && proposal?.minionAddress && daochain) {
       getMinionDeets();
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [proposal]);
+  }, [proposal, daochain]);
 
   useEffect(() => {
-    if (!minionDeets) {
-      return;
-    }
     const getAbi = async () => {
       try {
-        const key = daochain === 100 ? '' : process.env.REACT_APP_ETHERSCAN_KEY;
+        const key =
+          daochain === '0x64' ? '' : process.env.REACT_APP_ETHERSCAN_KEY;
         const url = `${chainByID(daochain).abi_api_url}${minionDeets.to}${key &&
           '&apikey=' + key}`;
         const response = await fetch(url);
         const json = await response.json();
-        abiDecoder.addABI(JSON.parse(json.result));
+        const parsed = JSON.parse(json.result);
+        abiDecoder.addABI(parsed);
         const _decodedData = abiDecoder.decodeMethod(minionDeets.data);
         setDecodedData(_decodedData);
       } catch (err) {
         console.log(err);
       }
     };
-    getAbi();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+    if (proposal && minionDeets) {
+      getAbi();
+    }
   }, [proposal, minionDeets]);
 
   const displayDecodedData = (data) => {
@@ -108,7 +117,6 @@ const ProposalMinionCard = ({ proposal }) => {
       </>
     );
   };
-
   return (
     <>
       <Skeleton isLoaded={!loading}>
@@ -118,7 +126,9 @@ const ProposalMinionCard = ({ proposal }) => {
               <TextBox size='xs' mb={3}>
                 Target Address
               </TextBox>
-              <AddressAvatar addr={minionDeets.to} alwaysShowName={true} />
+              {minionDeets?.to && (
+                <AddressAvatar addr={minionDeets.to} alwaysShowName={true} />
+              )}
             </Box>
             <Flex w={['25%', null, null, '15%']} align='center' m={0}>
               <Button w='175px' onClick={() => setShowModal(true)}>

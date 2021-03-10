@@ -92,14 +92,15 @@ const DiscourseProposalTopic = ({ proposal, daoMember }) => {
                     address,
                     daochain,
                     injectedChain?.chainId,
-                  ) && +daoMember?.shares > 0 ? (
-                    <Button size='sm' onClick={handleDiscourseTopic}>
-                      <Icon as={FaDiscourse} w={4} mr={1} /> Add a Discourse
-                      Topic for this proposal
-                    </Button>
-                  ) : null}
+                  ) &&
+                    +daoMember?.shares > 0 && (
+                      <Button size='sm' onClick={handleDiscourseTopic}>
+                        <Icon as={FaDiscourse} w={4} mr={1} /> Add a Discourse
+                        Topic for this proposal
+                      </Button>
+                    )}
 
-                  {error ? <Text>{error}</Text> : null}
+                  {error && <Text>{error}</Text>}
                 </>
               )}
             </>
