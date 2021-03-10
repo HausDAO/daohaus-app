@@ -23,7 +23,7 @@ const Proposal = ({
   const currentProposal = activities
     ? activities?.proposals?.find((proposal) => proposal.proposalId === propid)
     : null;
-
+  // console.log(currentProposal);
   return (
     <MainViewLayout header='Proposal' isDao={true} customTerms={customTerms}>
       <Box>
