@@ -25,6 +25,7 @@ import GenericModal from '../modals/genericModal';
 import { useOverlay } from '../contexts/OverlayContext';
 import { useInjectedProvider } from '../contexts/InjectedProviderContext';
 import CcoLootGrabForm from '../forms/ccoLootGrab';
+import CcoClaim from '../forms/ccoClaim';
 
 const CcoContribution = React.memo(function ccocontribution({
   daoMetaData,
@@ -38,6 +39,7 @@ const CcoContribution = React.memo(function ccocontribution({
   const [isEligible, setIsEligible] = useState('unchecked');
   const [checkingEligibility, setCheckingEligibility] = useState(false);
   const [currentContributionData, setCurrentContributionData] = useState(null);
+  const [claimComplete, setClaimComplete] = useState(false);
 
   useEffect(() => {
     if (currentDaoTokens && daoMetaData?.boosts?.cco?.active) {
@@ -287,8 +289,21 @@ const CcoContribution = React.memo(function ccocontribution({
                             }`}
                           </TextBox>
                         </Box>
-                        <Button disabled={!roundData.claimOpen}>Claim</Button>
+                        <CcoClaim setClaimComplete={setClaimComplete} />
                       </Flex>
+                      {claimComplete ? (
+                        <Box mt={5} fontSize='lg'>
+                          Your claim is complete. Withdraw your{' '}
+                          {roundData.claimTokenSymbol} on the{' '}
+                          <Text
+                            as={RouterLink}
+                            color='secondary.500'
+                            to={`/dao/${daochain}/${daoid}/profile/${address}`}
+                          >
+                            Profile page
+                          </Text>
+                        </Box>
+                      ) : null}
                     </ContentBox>
                   </>
                 ) : null}
