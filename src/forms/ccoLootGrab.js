@@ -18,7 +18,6 @@ import { MolochService } from '../services/molochService';
 import { useDao } from '../contexts/DaoContext';
 import { valToDecimalString } from '../utils/tokenValue';
 import { chainByID } from '../utils/chain';
-import { useMetaData } from '../contexts/MetaDataContext';
 import CcoTributeInput from './ccoTributeInput';
 
 const CcoLootGrabForm = ({
