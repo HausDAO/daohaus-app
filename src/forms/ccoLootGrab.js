@@ -25,6 +25,7 @@ const CcoLootGrabForm = ({
   roundData,
   currentContributionData,
   contributionClosed,
+  daoMetaData,
 }) => {
   const {
     injectedProvider,
@@ -37,7 +38,6 @@ const CcoLootGrabForm = ({
   const { refreshDao } = useTX();
   const { cachePoll, resolvePoll } = useUser();
   const { daoid, daochain } = useParams();
-  const { daoMetaData } = useMetaData();
 
   const [loading, setLoading] = useState(false);
   const [currentError, setCurrentError] = useState(null);
@@ -54,6 +54,8 @@ const CcoLootGrabForm = ({
   } = useForm({ reValidateMode: 'onSubmit' });
 
   const currentTribute = watch('tributeOffered');
+
+  // console.log('currentTribute')
 
   useEffect(() => {
     if (Object.keys(errors).length > 0) {

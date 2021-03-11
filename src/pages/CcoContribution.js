@@ -126,7 +126,6 @@ const CcoContribution = React.memo(function ccocontribution({
     setCheckingEligibility(true);
     const eligibleRes = await getEligibility(address);
     setIsEligible(eligibleRes ? 'checked' : 'denied');
-    // todo set in local {address: status}, then can rerun on init i guess
     setCheckingEligibility(false);
   };
 
@@ -219,6 +218,7 @@ const CcoContribution = React.memo(function ccocontribution({
                       {!eligibleBlock ? (
                         <Box borderTopWidth='1px' mt={3}>
                           <CcoLootGrabForm
+                            daoMetaData={daoMetaData}
                             roundData={roundData}
                             currentContributionData={currentContributionData}
                             contributionClosed={contributionClosed}
