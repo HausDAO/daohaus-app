@@ -8,13 +8,11 @@ import { useDao } from '../contexts/DaoContext';
 import { useInjectedProvider } from '../contexts/InjectedProviderContext';
 import { useOverlay } from '../contexts/OverlayContext';
 import { TokenService } from '../services/tokenService';
-import { useTX } from '../contexts/TXContext';
 import { createPoll } from '../services/pollService';
 import { useUser } from '../contexts/UserContext';
 
 const CcoTributeInput = ({
   register,
-  setValue,
   getValues,
   setError,
   roundData,
@@ -28,7 +26,6 @@ const CcoTributeInput = ({
   const { daochain, daoid } = useParams();
   const { injectedProvider, address } = useInjectedProvider();
   const { errorToast, successToast } = useOverlay();
-  const { refreshDao } = useTX();
   const { cachePoll, resolvePoll } = useUser();
 
   useEffect(() => {
@@ -101,10 +98,8 @@ const CcoTributeInput = ({
           },
           onSuccess: (txHash) => {
             successToast({
-              // ? update to token symbol or name
               title: 'Tribute token unlocked',
             });
-            refreshDao();
             resolvePoll(txHash);
             setUnlocked(true);
             setLoading(false);
@@ -123,7 +118,6 @@ const CcoTributeInput = ({
   };
 
   const checkUnlocked = async (token, amount) => {
-    // console.log('check', token, amount);
     if (
       amount === '' ||
       !token ||
@@ -201,6 +195,10 @@ const CcoTributeInput = ({
             min: {
               value: +roundData.currentRound.minContribution,
               message: `${roundData.currentRound.minContribution} ${roundData.ccoToken.symbol} per person min`,
+            },
+            required: {
+              value: true,
+              message: 'Contribution required',
             },
           })}
           color='white'

@@ -1,7 +1,7 @@
 import {
   RiBookMarkLine,
   RiDiscordFill,
-  RiTelegramFill,
+  // RiTelegramFill,
   RiMediumFill,
   RiTwitterFill,
   RiGlobeLine,
@@ -12,11 +12,11 @@ import {
   RiFireLine,
   RiRocket2Line,
   RiSearch2Line,
-  RiLinksLine,
-  RiHeartsLine,
+  // RiLinksLine,
+  // RiHeartsLine,
 } from 'react-icons/ri';
 import { FaDiscourse } from 'react-icons/fa';
-import { GiCastle } from 'react-icons/gi';
+// import { GiCastle } from 'react-icons/gi';
 
 // no slash on the path
 export const defaultDaoData = [
@@ -25,26 +25,26 @@ export const defaultDaoData = [
   { icon: RiTeamLine, label: 'Members', path: 'members' },
   { icon: RiSettings3Line, label: 'Settings', path: 'settings' },
   { icon: RiRocket2Line, label: 'Boosts', path: 'settings/boosts' },
-  { icon: RiHeartsLine, label: 'Allies', path: 'allies' },
+  // { icon: RiHeartsLine, label: 'Allies', path: 'allies' },
 ];
 export const defaultHubData = [
   { icon: RiSearch2Line, label: 'Explore', path: '/explore' },
   { icon: RiFireLine, label: 'Summon', path: '/summon' },
   {
-    icon: RiTeamLine,
-    label: 'HausDao',
-    path: '/dao/0x64/0x283bdc900b6ec9397abb721c5bbff5ace46e0f50',
-  },
-  {
     icon: RiQuestionLine,
     label: 'Help',
-    href: 'https://daohaus.club/help',
+    href: 'https://docs.daohaus.club',
   },
-  {
-    icon: GiCastle,
-    label: 'About DaoHaus',
-    href: 'https://daohaus.club/',
-  },
+  // {
+  //   icon: GiCastle,
+  //   label: 'About DaoHaus',
+  //   href: 'https://daohaus.club/',
+  // },
+  // {
+  //   icon: RiTeamLine,
+  //   label: 'UberHaus',
+  //   path: '/dao/0x64/???',
+  // },
 ];
 
 export const generateDaoLinks = (chainID, daoID, proposals) => {
@@ -63,26 +63,20 @@ export const generateDaoLinks = (chainID, daoID, proposals) => {
 export const defaultSocialLinks = [
   { icon: RiDiscordFill, label: 'Discord', href: 'https://discord.gg/NPEJysW' },
   {
-    icon: RiTelegramFill,
-    label: 'Telegram',
-    href: 'https://t.me/joinchat/IJqu9xPa0xzYLN1mmFKo8g',
-  },
-  {
     icon: RiMediumFill,
-    label: 'Medium',
-    href: 'https://medium.com/daohaus-club',
+    label: 'Blog',
+    href: 'https://daohaus.substack.com',
   },
   {
     icon: RiGlobeLine,
     label: 'Website',
-    href: 'https://app.daohaus.club/',
+    href: 'https://daohaus.club/',
   },
   {
     icon: RiTwitterFill,
     label: 'Twitter',
     href: 'https://twitter.com/@nowdaoit',
   },
-  { icon: RiLinksLine, label: 'Other', href: 'https://wikipedia.com' },
 ];
 
 export const generateDaoSocials = (linksMetaObj) => {

@@ -48,6 +48,9 @@ export const detailsToJSON = (values) => {
   if (values.uberType) {
     details.uberType = values.uberType;
   }
+  if (values.cco) {
+    details.cco = values.cco;
+  }
   if (values.isTransmutation) {
     details.isTransmutation = true;
   }
