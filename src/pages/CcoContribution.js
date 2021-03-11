@@ -42,6 +42,10 @@ const CcoContribution = React.memo(function ccocontribution({
   const [claimComplete, setClaimComplete] = useState(false);
 
   useEffect(() => {
+    setIsEligible('unchecked');
+  }, [address]);
+
+  useEffect(() => {
     if (currentDaoTokens && daoMetaData?.boosts?.cco?.active) {
       const ccoToken = currentDaoTokens.find(
         (token) =>

@@ -72,7 +72,7 @@ export const supportedChains = {
     boosts_graph_url:
       'https://api.thegraph.com/subgraphs/name/odyssy-automaton/daohaus-boosts-kovan',
     minion_factory_addr: '0x80ec2dB292E7a6D1D5bECB80e6479b2bE048AC98',
-    uberhaus_minion_factory_addr: '0xDeB04F32b2ac46B4E6530319Cb82A0ACCE84653c',
+    uberhaus_minion_factory_addr: '0x03042577463E3820F9cA6Ca3906BAad599ba9382',
     moloch_factory_addr: '0x9c5d087f912e7187D9c75e90999b03FB31Ee17f5',
     dai_contract: '0xc4375b7de8af5a38a93548eb8453a498222c4ff2',
     weth_contract: '0xd0a1e359811322d97991e03f863a0c30c2cf029c',
@@ -87,7 +87,6 @@ export const supportedChains = {
     chain_id: '0x64',
     hub_sort_order: 2,
     providers: ['walletconnect'],
-    // , 'portis',
     rpc_url: 'https://dai.poa.network',
     abi_api_url:
       'https://blockscout.com/poa/xdai/api?module=contract&action=getabi&address=',
@@ -102,6 +101,7 @@ export const supportedChains = {
     moloch_factory_addr: '0x0F50B2F3165db96614fbB6E4262716acc9F9e098',
     wxdai_contract: '0xe91D153E0b41518A2Ce8Dd3D7944Fa863463a97d',
     block_explorer: 'https://blockscout.com/poa/xdai',
+    uberhaus_minion_factory_addr: '0xf5106077892992B84c33C35CA8763895eb80B298',
   },
   '0x89': {
     name: 'Matic',
