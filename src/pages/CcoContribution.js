@@ -287,8 +287,8 @@ const CcoContribution = React.memo(function ccocontribution({
                             HAUS Available to Claim
                           </Text>
                           <TextBox variant='value' size='md' my={2}>
-                            {`${roundData.claimTokenValue *
-                              currentContributionData?.addressTotal || 0} ${
+                            {`${currentContributionData?.addressTotal /
+                              roundData.claimTokenValue || 0} ${
                               roundData.claimTokenSymbol
                             }`}
                           </TextBox>
