@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useLocation } from 'react-router-dom';
 import {
   Flex,
   FormControl,
@@ -30,6 +31,8 @@ import TextBox from '../components/TextBox';
 import { daoPresets } from '../utils/summoning';
 import { put, themeImagePath } from '../utils/metadata';
 import ImageUploadModal from '../modals/imageUploadModal';
+import { getQueryStringParams } from '../utils/general';
+import { supportedChains } from '../utils/chain';
 
 const puposes = daoPresets('0x1').map((preset) => preset.presetName);
 
@@ -39,6 +42,7 @@ const DaoMetaForm = ({ metadata, handleUpdate }) => {
   const [loading, setLoading] = useState();
   const [uploading, setUploading] = useState();
   const { register, handleSubmit } = useForm();
+  const location = useLocation();
 
   const onSubmit = async (data) => {
     setLoading(true);
@@ -62,7 +66,19 @@ const DaoMetaForm = ({ metadata, handleUpdate }) => {
         version: metadata.version,
         signature,
       };
-      console.log('data', data);
+
+      if (location.search) {
+        const searchParams = getQueryStringParams(location.search);
+        if (searchParams.parentDao && searchParams.parentChainId) {
+          const ally = {
+            parent: searchParams.parentDao,
+            parentNetwork: supportedChains[searchParams.parentChainId].network,
+            allyType: 'uberHausBurner',
+          };
+
+          updateData.ally = ally;
+        }
+      }
 
       const res = await put('dao/update', updateData);
 

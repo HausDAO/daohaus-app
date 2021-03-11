@@ -21,11 +21,16 @@ import { DAO_POLL } from '../graphQL/dao-queries';
 import MainViewLayout from '../components/mainViewLayout';
 import { useParams } from 'react-router-dom';
 import { capitalize } from '../utils/general';
+import {
+  UBERHAUS_BURNER_TOKENS,
+  UBERHAUS_NETWORK,
+  UBERHAUS_NETWORK_NAME,
+} from '../utils/uberhaus';
 
 const tokenMsg =
   'Token addresses are different across chains. If you would like to clone the same tokens to a different network, you will need to manually add the equivalent token addresses here.';
 
-const Clone = ({ daoOverview, daoMembers }) => {
+const Clone = ({ daoOverview, daoMembers, isUberHaus = false }) => {
   const {
     address,
     injectedChain,
@@ -44,14 +49,17 @@ const Clone = ({ daoOverview, daoMembers }) => {
 
   useEffect(() => {
     if (injectedChain && daoOverview && daoMembers) {
+      let tokens = tokenMsg;
+      if (isUberHaus) {
+        tokens = UBERHAUS_BURNER_TOKENS;
+      } else if (injectedChain.chainId === daochain) {
+        tokens = cloneTokens(daoOverview);
+      }
       setDaoData({
         ...daoConstants(injectedChain.chain_id),
         summoner: '',
         summonerAndShares: cloneMembers(daoMembers),
-        approvedToken:
-          injectedChain.chainId === daochain
-            ? cloneTokens(daoOverview)
-            : tokenMsg,
+        approvedToken: tokens,
         ...cloneDaoPresets(daoOverview),
       });
     }
@@ -91,8 +99,6 @@ const Clone = ({ daoOverview, daoMembers }) => {
       summonData.processingReward,
       summonData.summonerShares,
     ];
-
-    console.log('summonParams', summonParams);
 
     try {
       const poll = createPoll({ action: 'summonMoloch', cachePoll })({
@@ -155,27 +161,12 @@ const Clone = ({ daoOverview, daoMembers }) => {
     }
   };
 
-  return (
-    <MainViewLayout header='Clone this DAO'>
-      {summonError && <Text as='h1'>{summonError.message || summonError}</Text>}
-      {daoData ? (
-        <>
-          {!isSummoning ? (
-            <SummonHard
-              daoData={daoData}
-              setDaoData={setDaoData}
-              handleSummon={handleSummon}
-              networkName={capitalize(injectedChain.network)}
-            />
-          ) : (
-            <SummonPending
-              txHash={pendingTx}
-              success={success}
-              chainId={injectedChain.chain_id}
-            />
-          )}
-        </>
-      ) : (
+  const uberCloneWrongNetwork =
+    isUberHaus && injectedChain && injectedChain.chain_id !== UBERHAUS_NETWORK;
+
+  if (!daoData) {
+    return (
+      <MainViewLayout header='Clone this DAO'>
         <Box
           rounded='lg'
           bg='blackAlpha.600'
@@ -194,6 +185,49 @@ const Clone = ({ daoOverview, daoMembers }) => {
             <Button onClick={requestWallet}>Connect Wallet</Button>
           </Flex>
         </Box>
+      </MainViewLayout>
+    );
+  }
+
+  if (uberCloneWrongNetwork) {
+    return (
+      <MainViewLayout header='Clone this DAO'>
+        <Box
+          rounded='lg'
+          bg='blackAlpha.600'
+          borderWidth='1px'
+          borderColor='whiteAlpha.200'
+          p={6}
+          m={[10, 'auto', 0, 'auto']}
+          w='50%'
+          textAlign='center'
+        >
+          <Box fontSize='3xl' fontFamily='heading' fontWeight={700} mb={10}>
+            Switch your network to {UBERHAUS_NETWORK_NAME} to move forward
+          </Box>
+        </Box>
+      </MainViewLayout>
+    );
+  }
+
+  return (
+    <MainViewLayout header='Clone this DAO'>
+      {summonError && <Text as='h1'>{summonError.message || summonError}</Text>}
+      {!isSummoning ? (
+        <SummonHard
+          daoData={daoData}
+          setDaoData={setDaoData}
+          handleSummon={handleSummon}
+          networkName={capitalize(injectedChain.network)}
+          isUberHaus={isUberHaus}
+        />
+      ) : (
+        <SummonPending
+          txHash={pendingTx}
+          success={success}
+          chainId={injectedChain.chain_id}
+          isUberHaus={isUberHaus}
+        />
       )}
     </MainViewLayout>
   );
