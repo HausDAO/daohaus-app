@@ -13,7 +13,6 @@ import { useUser } from '../contexts/UserContext';
 
 const CcoTributeInput = ({
   register,
-  setValue,
   getValues,
   setError,
   roundData,
@@ -119,7 +118,6 @@ const CcoTributeInput = ({
   };
 
   const checkUnlocked = async (token, amount) => {
-    // console.log('check', token, amount);
     if (
       amount === '' ||
       !token ||
@@ -197,6 +195,10 @@ const CcoTributeInput = ({
             min: {
               value: +roundData.currentRound.minContribution,
               message: `${roundData.currentRound.minContribution} ${roundData.ccoToken.symbol} per person min`,
+            },
+            required: {
+              value: true,
+              message: 'Contribution required',
             },
           })}
           color='white'

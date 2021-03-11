@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Link, useParams } from 'react-router-dom';
+import { Link as RouterLink, useParams } from 'react-router-dom';
 import {
   Image,
   Flex,
@@ -10,6 +10,7 @@ import {
   Text,
   Icon,
   useToast,
+  Link,
 } from '@chakra-ui/react';
 import { BsBoxArrowInRight } from 'react-icons/bs';
 import { format } from 'date-fns';
@@ -43,7 +44,6 @@ const DaoToDaoManager = ({ daoOverview, daoMetaData, setProposalType }) => {
   const toast = useToast();
   const { daochain, daoid } = useParams();
   const [uberHausMinion, setUberHausMinion] = useState(null);
-
   const [uberHausData, setUberHausData] = useSessionStorage(
     `uberhaus-${daoid}`,
     null,
@@ -158,7 +158,7 @@ const DaoToDaoManager = ({ daoOverview, daoMetaData, setProposalType }) => {
             <Box mt={5}>
               <DaoToDaoUberAlly
                 dao={{
-                  name: `Manange your membership in your ${UBERHAUS_NETWORK_NAME} burner dao`,
+                  name: `Manange membership in your ${UBERHAUS_NETWORK_NAME} burner dao`,
                   link: `/dao/${chainByName(uberAlly.allyNetwork).chain_id}/${
                     uberAlly.ally
                   }/allies`,
@@ -170,6 +170,17 @@ const DaoToDaoManager = ({ daoOverview, daoMetaData, setProposalType }) => {
               <Box fontSize='md' my={2}>
                 UberHAUS is on {UBERHAUS_NETWORK_NAME}. You&apos;ll need to
                 summon a clone of your dao to join.
+                <Box my={2}>
+                  <Link
+                    href='https://discord.gg/eJsBk3sf'
+                    target='_blank'
+                    rel='noreferrer noopener'
+                    m={3}
+                  >
+                    If you want some help with this drop into our Discord
+                    support channel
+                  </Link>
+                </Box>
                 <OrderedList>
                   <ListItem>
                     Summon burner dao on {UBERHAUS_NETWORK_NAME}
@@ -181,7 +192,13 @@ const DaoToDaoManager = ({ daoOverview, daoMetaData, setProposalType }) => {
                   <ListItem>stake haus for shares</ListItem>
                 </OrderedList>
               </Box>
-              <Button w='25%'>Clone</Button>
+              <Button
+                w='25%'
+                as={RouterLink}
+                to={`/dao/${daochain}/${daoid}/uberhaus/clone`}
+              >
+                Clone
+              </Button>
             </>
           )}
         </ContentBox>
@@ -304,12 +321,12 @@ const DaoToDaoManager = ({ daoOverview, daoMetaData, setProposalType }) => {
                     <TextBox variant='value'>pending</TextBox>
                   </Box>
                 </Flex>
-                <Link
+                <RouterLink
                   to={`/dao/${daochain}/${daoid}/proposals/${activeMembershipProposal.proposalId}`}
                 >
                   Staking proposal in progress
                   <Icon as={BsBoxArrowInRight} ml={10} />
-                </Link>
+                </RouterLink>
               </Box>
             ) : null}
           </>
@@ -387,9 +404,9 @@ const DaoToDaoManager = ({ daoOverview, daoMetaData, setProposalType }) => {
                     activeProposals.length > 1 ? 'S' : ''
                   }`}
                 </Text>
-                <Link to={`/dao/${daochain}/${daoid}/proposals`}>
+                <RouterLink to={`/dao/${daochain}/${daoid}/proposals`}>
                   <Icon as={BsBoxArrowInRight} ml={10} />
-                </Link>
+                </RouterLink>
               </Flex>
             ) : null}
           </>
