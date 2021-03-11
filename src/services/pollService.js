@@ -927,6 +927,36 @@ export const createPoll = ({
         });
       }
     };
+  } else if (action === 'ragequitClaim') {
+    console.log('action', action);
+    return ({ chainID, molochAddress, createdAt, actions }) => (txHash) => {
+      startPoll({
+        pollFetch: pollRageQuit,
+        testFn: rageQuitTest,
+        shouldEqual: { molochAddress, createdAt },
+        args: { chainID, molochAddress, createdAt },
+        actions,
+        txHash,
+      });
+      if (cachePoll) {
+        cachePoll({
+          txHash,
+          action,
+          timeSent: Date.now(),
+          status: 'unresolved',
+          resolvedMsg: `Claim Completed`,
+          unresolvedMsg: `Claiming`,
+          successMsg: `Claim Completed. You got your $HAUS`,
+          errorMsg: `Error Claiming`,
+          pollData: {
+            action,
+            interval,
+            tries,
+          },
+          pollArgs: { chainID, molochAddress, createdAt },
+        });
+      }
+    };
   } else if (action === 'updateDelegateKey') {
     console.log('action', action);
     return ({ chainID, daoID, memberAddress, delegateAddress, actions }) => (
