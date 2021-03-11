@@ -238,7 +238,7 @@ const ProposalDetails = ({ proposal, daoMember }) => {
               )}
             </Skeleton>
           </Box>
-          {proposal?.proposalType !== PROPOSAL_TYPES.MINION_UBER_STAKE ? (
+          {proposal?.minion?.minionType !== MINION_TYPES.UBER ? (
             <Box key={proposal?.proposalType}>
               <TextBox size='xs' mb={2}>
                 Recipient

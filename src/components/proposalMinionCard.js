@@ -24,7 +24,7 @@ import AddressAvatar from './addressAvatar';
 import TextBox from './TextBox';
 import { chainByID } from '../utils/chain';
 import { UberHausMinionService } from '../services/uberHausMinionService';
-import { MINION_TYPES } from '../utils/proposalUtils';
+import { PROPOSAL_TYPES } from '../utils/proposalUtils';
 
 const ProposalMinionCard = ({ proposal }) => {
   const { daochain } = useParams();
@@ -37,17 +37,24 @@ const ProposalMinionCard = ({ proposal }) => {
   useEffect(() => {
     const getMinionDeets = async () => {
       try {
-        if (proposal.minion?.minionType === MINION_TYPES.VANILLA) {
+        if (proposal.proposalType === PROPOSAL_TYPES.MINION_VANILLA) {
           const action = await MinionService({
             minion: proposal?.minionAddress,
             chainID: daochain,
           })('getAction')({ proposalId: proposal?.proposalId });
           setMinionDeets(action);
-        } else if (proposal.minion?.minionType === MINION_TYPES.UBER) {
+        } else if (proposal.proposalType === PROPOSAL_TYPES.MINION_UBER_STAKE) {
           const action = await UberHausMinionService({
             uberHausMinion: proposal.minionAddress,
             chainID: daochain,
-          })('getAction')({ proposalId: proposal.proposalId });
+          })('getAction')({ proposalId: proposal?.proposalId });
+          setMinionDeets(action);
+        } else if (proposal.proposalType === PROPOSAL_TYPES.MINION_UBER_DEL) {
+          const action = await UberHausMinionService({
+            uberHausMinion: proposal.minionAddress,
+            chainID: daochain,
+          })('getAppointment')({ proposalId: proposal?.proposalId });
+          console.log(action);
           setMinionDeets(action);
         }
       } catch (err) {
@@ -79,7 +86,8 @@ const ProposalMinionCard = ({ proposal }) => {
         console.log(err);
       }
     };
-    if (proposal && minionDeets) {
+    if (proposal && minionDeets?.bytes) {
+      console.log(minionDeets.bytes);
       getAbi();
     }
   }, [proposal, minionDeets]);
@@ -124,17 +132,27 @@ const ProposalMinionCard = ({ proposal }) => {
           <HStack mt={8} spacing={2}>
             <Box>
               <TextBox size='xs' mb={3}>
-                Target Address
+                {minionDeets?.nominee ? 'Delegate Nominee' : 'Target Address'}
               </TextBox>
               {minionDeets?.to && (
                 <AddressAvatar addr={minionDeets.to} alwaysShowName={true} />
               )}
+              {minionDeets?.nominee && (
+                <Box>
+                  <AddressAvatar
+                    addr={minionDeets.nominee}
+                    alwaysShowName={true}
+                  />
+                </Box>
+              )}
             </Box>
-            <Flex w={['25%', null, null, '15%']} align='center' m={0}>
-              <Button w='175px' onClick={() => setShowModal(true)}>
-                More info
-              </Button>
-            </Flex>
+            {minionDeets?.to && (
+              <Flex w={['25%', null, null, '15%']} align='center' m={0}>
+                <Button w='175px' onClick={() => setShowModal(true)}>
+                  More info
+                </Button>
+              </Flex>
+            )}
           </HStack>
         )}
       </Skeleton>

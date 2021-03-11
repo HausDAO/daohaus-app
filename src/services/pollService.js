@@ -9,7 +9,7 @@ import {
   MINION_PROPOSAL_POLL,
 } from '../graphQL/dao-queries';
 import { getGraphEndpoint } from '../utils/chain';
-import { hashMaker, memberVote, MINION_TYPES } from '../utils/proposalUtils';
+import { hashMaker, memberVote, PROPOSAL_TYPES } from '../utils/proposalUtils';
 import { TokenService } from '../services/tokenService';
 import { MEMBERS_LIST, MEMBER_DELEGATE_KEY } from '../graphQL/member-queries';
 import { MinionService } from './minionService';
@@ -81,26 +81,33 @@ const pollMinionExecute = async ({
   chainID,
   minionAddress,
   proposalId,
-  minionType,
+  proposalType,
 }) => {
   try {
-    if (minionType === MINION_TYPES.VANILLA) {
+    if (proposalType === PROPOSAL_TYPES.MINION_VANILLA) {
       const action = await MinionService({
         minion: minionAddress,
         chainID,
       })('getAction')({ proposalId });
       console.log(action);
       return action.executed;
-    } else if (minionType === MINION_TYPES.UBER) {
+    } else if (proposalType === PROPOSAL_TYPES.MINION_UBER_STAKE) {
       const action = await UberHausMinionService({
         minion: minionAddress,
         chainID,
       })('getAction')({ proposalId });
       console.log(action);
       return action.executed;
+    } else if (proposalType === PROPOSAL_TYPES.MINION_UBER_DEL) {
+      const action = await UberHausMinionService({
+        minion: minionAddress,
+        chainID,
+      })('getAppointment')({ proposalId });
+      console.log(action);
+      return action.executed;
     }
   } catch (error) {
-    console.log(chainID, minionAddress, proposalId, minionType);
+    console.log(chainID, minionAddress, proposalId, proposalType);
     console.error('Error caught in Poll block of TX:', error);
   }
 };
@@ -350,14 +357,6 @@ export const createPoll = ({
     actions,
     txHash,
   }) => {
-    // console.log('Poll Started');
-    // console.log('pollFetch:', pollFetch);
-    // console.log('testFn:', testFn);
-    // console.log('shouldEqual:', shouldEqual);
-    // console.log('Args:', args);
-    // console.log('Actions:', actions);
-    // console.log('TX-Hash', txHash);
-
     let tryCount = 0;
     const pollId = setInterval(async () => {
       if (tryCount < tries) {
@@ -768,14 +767,14 @@ export const createPoll = ({
       }
     };
   } else if (action === 'minionExecuteAction') {
-    return ({ chainID, minionAddress, proposalId, actions, minionType }) => (
+    return ({ chainID, minionAddress, proposalId, actions, proposalType }) => (
       txHash,
     ) => {
       startPoll({
         pollFetch: pollMinionExecute,
         testFn: minionExecuteTest,
         shouldEqual: true,
-        args: { chainID, minionAddress, proposalId, minionType },
+        args: { chainID, minionAddress, proposalId, proposalType },
         actions,
         txHash,
       });
@@ -956,6 +955,45 @@ export const createPoll = ({
             tries,
           },
           pollArgs: { chainID, daoID, memberAddress, delegateAddress },
+        });
+      }
+    };
+  } else if (action === 'uberHausNominateDelegate') {
+    return ({
+      chainID,
+      minionAddress,
+      newDelegateAddress,
+      actions,
+      createdAt,
+    }) => (txHash) => {
+      console.log('newDelegateAddress', newDelegateAddress);
+      console.log('minionAddress', minionAddress);
+      console.log('chainID', chainID);
+
+      startPoll({
+        pollFetch: pollMinionProposal,
+        testFn: minonProposalTest,
+        shouldEqual: newDelegateAddress,
+        args: { createdAt, minionAddress, chainID },
+        actions,
+        txHash,
+      });
+      if (cachePoll) {
+        cachePoll({
+          txHash,
+          action,
+          timeSent: Date.now(),
+          status: 'unresolved',
+          resolvedMsg: `Created uberHAUS delegate proposal`,
+          unresolvedMsg: `Creating proposal`,
+          successMsg: `Created uberHAUS delegate proposal`,
+          errorMsg: `Poll error on nominateDelegate`,
+          pollData: {
+            action,
+            interval,
+            tries,
+          },
+          pollArgs: { chainID, minionAddress },
         });
       }
     };

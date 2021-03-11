@@ -16,7 +16,11 @@ import { createPoll } from '../services/pollService';
 import { MolochService } from '../services/molochService';
 import ContentBox from './ContentBox';
 import TextBox from './TextBox';
-import { memberVote, MINION_TYPES } from '../utils/proposalUtils';
+import {
+  memberVote,
+  MINION_TYPES,
+  PROPOSAL_TYPES,
+} from '../utils/proposalUtils';
 import { supportedChains } from '../utils/chain';
 import { getTerm } from '../utils/metadata';
 import {
@@ -363,7 +367,7 @@ const ProposalVote = ({
         minionAddress: proposal.minionAddress,
         chainID: daochain,
         proposalId: proposal.proposalId,
-        minionType: proposal?.minion?.minionType,
+        proposalType: proposal?.proposalType,
         actions: {
           onError: (error, txHash) => {
             errorToast({
@@ -387,18 +391,25 @@ const ProposalVote = ({
         setProposalModal(false);
         setTxInfoModal(true);
       };
-      if (proposal.minion?.minionType === MINION_TYPES.VANILLA) {
+      if (proposal.proposalType === PROPOSAL_TYPES.MINION_VANILLA) {
         await MinionService({
           web3: injectedProvider,
           minion: proposal.minionAddress,
           chainID: daochain,
         })('executeAction')({ args, address, poll, onTxHash });
-      } else if (proposal.minion?.minionType === MINION_TYPES.UBER) {
+      } else if (proposal.proposalType === PROPOSAL_TYPES.MINION_UBER_STAKE) {
         await UberHausMinionService({
           web3: injectedProvider,
           uberHausMinion: proposal.minionAddress,
           chainID: daochain,
         })('executeAction')({ args, address, poll, onTxHash });
+      } else if (proposal.proposalType === PROPOSAL_TYPES.MINION_UBER_DEL) {
+        console.log('DELEGATE ACTION FIRED');
+        await UberHausMinionService({
+          web3: injectedProvider,
+          uberHausMinion: proposal.minionAddress,
+          chainID: daochain,
+        })('executeAppointment')({ args, address, poll, onTxHash });
       } else {
         console.error('Could not find minion type');
       }
@@ -411,19 +422,26 @@ const ProposalVote = ({
   useEffect(() => {
     const getMinionDeets = async () => {
       try {
-        if (proposal.minion?.minionType === MINION_TYPES.VANILLA) {
+        if (proposal.proposalType === PROPOSAL_TYPES.MINION_VANILLA) {
           const action = await MinionService({
             minion: proposal?.minionAddress,
             web3: injectedProvider,
             chainID: daochain,
           })('getAction')({ proposalId: proposal?.proposalId });
           setMinionDeets(action);
-        } else if (proposal.minion?.minionType === MINION_TYPES.UBER) {
+        } else if (proposal.proposalType === PROPOSAL_TYPES.MINION_UBER_STAKE) {
           const action = await UberHausMinionService({
             web3: injectedProvider,
             uberHausMinion: proposal.minionAddress,
             chainID: daochain,
-          })('getAction')({ proposalId: proposal.proposalId });
+          })('getAction')({ proposalId: proposal?.proposalId });
+          setMinionDeets(action);
+        } else if (proposal.proposalType === PROPOSAL_TYPES.MINION_UBER_DEL) {
+          const action = await UberHausMinionService({
+            web3: injectedProvider,
+            uberHausMinion: proposal.minionAddress,
+            chainID: daochain,
+          })('getAppointment')({ proposalId: proposal?.proposalId });
           setMinionDeets(action);
         }
       } catch (err) {
