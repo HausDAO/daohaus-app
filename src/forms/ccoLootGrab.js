@@ -150,7 +150,9 @@ const CcoLootGrabForm = ({
     <form onSubmit={handleSubmit(onSubmit)}>
       <Flex justifyContent='space-between' my={3}>
         <Text fontSize='sm' color='whiteAlpha.700' as='i'>
-          {`${currentContributionData?.addressRemaining}`}/
+          {`${currentContributionData?.addressRemaining ||
+            roundData.currentRound.maxContribution}`}
+          /
           {`${roundData.currentRound.maxContribution} ${roundData.ccoToken.symbol}`}{' '}
           remaining
         </Text>

@@ -19,6 +19,7 @@ const Overview = React.memo(function overview({
   customTerms,
   daoMetaData,
 }) {
+  console.log('daoMetaData', daoMetaData);
   return (
     <MainViewLayout header='Overview' customTerms={customTerms} isDao={true}>
       <Box w='100%'>
