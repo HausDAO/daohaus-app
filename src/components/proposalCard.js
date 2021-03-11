@@ -10,6 +10,7 @@ import {
   determineProposalStatus,
   getProposalCardDetailStatus,
   memberVote,
+  PROPOSAL_TYPES,
 } from '../utils/proposalUtils';
 import ContentBox from './ContentBox';
 import { useInjectedProvider } from '../contexts/InjectedProviderContext';
@@ -167,7 +168,9 @@ const ProposalCard = ({ proposal, customTerms }) => {
                 letterSpacing='0.1em'
                 color='whiteAlpha.600'
               >
-                Tribute
+                {PROPOSAL_TYPES.TRANSMUTATION
+                  ? 'Tranmutation Amount'
+                  : 'Tribute'}
               </Box>
               <Skeleton isLoaded={proposal?.tributeOffered}>
                 <Box fontSize='lg' fontFamily='space' fontWeight={700}>

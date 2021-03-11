@@ -11,6 +11,8 @@ import {
   Textarea,
   Heading,
   Text,
+  InputGroup,
+  Spinner,
 } from '@chakra-ui/react';
 import { RiErrorWarningLine } from 'react-icons/ri';
 import { useParams } from 'react-router-dom';
@@ -192,7 +194,7 @@ const TransmutationProposal = () => {
       isTransmutation: true,
     });
     const args = [
-      values.applicant,
+      transmutationData[0].minion,
       tributeReturned.toString(),
       injectedProvider.utils.toWei('' + values.paymentRequested),
       details,
@@ -222,7 +224,8 @@ const TransmutationProposal = () => {
               afterTime: now,
               proposalType: 'Transmutation Proposal',
               values,
-              applicant: values.applicant,
+              minion: transmutationData[0].minion,
+              applicant: address,
               daoMetaData,
             });
           },
@@ -323,49 +326,22 @@ const TransmutationProposal = () => {
               focusBorderColor='secondary.500'
             />
             <FormLabel
-              htmlFor='applicant'
               color='white'
               fontFamily='heading'
-              textTransform='uppercase'
-              fontSize='xs'
-              fontWeight={700}
-            >
-              Applicant
-            </FormLabel>
-            <AddressInput
-              name='applicant'
-              register={register}
-              setValue={setValue}
-              watch={watch}
-              member={true}
-            />
-            <FormLabel
               htmlFor='paymentRequested'
-              color='white'
-              fontFamily='heading'
               textTransform='uppercase'
               fontSize='xs'
               fontWeight={700}
             >
               Payment Requested
             </FormLabel>
-            <Input
-              name='paymentRequested'
-              placeholder='100'
-              mb={5}
-              ref={register({
-                required: {
-                  value: true,
-                  message: 'Payment Requested is required',
-                },
-              })}
-              color='white'
-              focusBorderColor='secondary.500'
-            />
-          </FormControl>
-          {tokenData[0] && (
-            <>
+            <InputGroup onSubmit={handleSubmit(onSubmit)}>
               <Button
+                size='xs'
+                position='absolute'
+                right='0'
+                top='-30px'
+                variant='outline'
                 onClick={() => {
                   setValue('paymentRequested', tokenData[0].balance);
                 }}
@@ -374,24 +350,41 @@ const TransmutationProposal = () => {
                 {tokenData[0] && tokenData[0].balance.substring(0, 6)}{' '}
                 {tokenData[0] && tokenData[0].label}
               </Button>
-
+              <Input
+                name='paymentRequested'
+                autoComplete='off'
+                id='paymentRequested'
+                placeholder='100'
+                ref={register({
+                  required: {
+                    value: true,
+                    message: 'Payment Requested is required',
+                  },
+                })}
+                color='white'
+                focusBorderColor='secondary.500'
+              />
+            </InputGroup>
+          </FormControl>
+          {tokenData[0] && (
+            <Flex flexDir='column'>
               <Box>
                 <Text>
-                  Exchange Rate: 1 {tokenData[0] && tokenData[0].label} ={' '}
+                  Exchange Rate: 1 {tokenData[0] && tokenData[0].label} =&gt;{' '}
                   {daoMetaData?.boosts.transmutation.metadata.exchangeRate}{' '}
                   {symbol}
                 </Text>
               </Box>
               <Box>
-                <h5>Will Return</h5>
-                <Heading as='h2'>
-                  {displayTribute(tributeReturned)} {symbol}
-                </Heading>
                 <Text>
-                  Balance: {balance} {symbol}
+                  Returns: {displayTribute(tributeReturned)} {symbol}
+                </Text>
+
+                <Text>
+                  {symbol} Balance: {balance}
                 </Text>
               </Box>
-            </>
+            </Flex>
           )}
           <Flex justify='flex-end' align='center' h='60px'>
             {currentError && (
@@ -413,7 +406,14 @@ const TransmutationProposal = () => {
           </Flex>
         </form>
       ) : (
-        <Box>No Results</Box>
+        <Flex
+          alignItems='center'
+          justifyContent='center'
+          flexDirection='column'
+        >
+          <Spinner mb={5} />
+          <Box>Fetching transmutation data</Box>
+        </Flex>
       )}
     </>
   );

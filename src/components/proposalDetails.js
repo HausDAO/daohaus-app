@@ -27,7 +27,6 @@ import {
   getProposalDetailStatus,
   memberVote,
   MINION_TYPES,
-  PROPOSAL_TYPES,
 } from '../utils/proposalUtils';
 import { numberWithCommas } from '../utils/general';
 import { getCustomProposalTerm } from '../utils/metadata';
