@@ -202,6 +202,13 @@ const DaoRouter = () => {
             daoMember={daoMember}
           />
         </Route>
+        <Route exact path={`${path}/uberhaus/clone`}>
+          <Clone
+            daoMembers={daoMembers}
+            daoOverview={daoOverview}
+            isUberHaus={true}
+          />
+        </Route>
         <Route exact path={`${path}/uberhaus/proposals/new`}>
           <NewProposal
             customTerms={customTerms}

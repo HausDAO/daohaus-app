@@ -15,7 +15,7 @@ import TextBox from '../components/TextBox';
 import { validateSummonresAndShares } from '../utils/summoning';
 import { RiErrorWarningLine, RiInformationLine } from 'react-icons/ri';
 
-const SummonHard = ({ daoData, handleSummon, networkName }) => {
+const SummonHard = ({ daoData, handleSummon, networkName, isUberHaus }) => {
   const [currentError, setCurrentError] = useState(null);
   const {
     register,
@@ -81,9 +81,17 @@ const SummonHard = ({ daoData, handleSummon, networkName }) => {
 
           <TextBox>Token(s)</TextBox>
           <Box>
-            What is the primary token contract address? Can whitelist more here
-            as well, separated by a comma and a space (0x58eb..., 0xf7s4...,
-            etc). The first one will be the primary token.
+            <Box>
+              What is the primary token contract address? Can whitelist more
+              here as well, separated by a comma and a space (0x58eb...,
+              0xf7s4..., etc). The first one will be the primary token.
+            </Box>
+            {isUberHaus ? (
+              <Box my={5} color='secondary.500'>
+                We have pre-filled this with the the wrapped native token for
+                the network and the HAUS token.
+              </Box>
+            ) : null}
             <Textarea
               className='inline-field'
               name='approvedToken'

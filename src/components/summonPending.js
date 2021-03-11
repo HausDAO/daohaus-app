@@ -1,5 +1,5 @@
 import React from 'react';
-import { Link as RouterLink } from 'react-router-dom';
+import { Link as RouterLink, useParams } from 'react-router-dom';
 import {
   Box,
   Button,
@@ -21,7 +21,8 @@ import TextBox from './TextBox';
 import { POPUP_CONTENT } from '../content/pending-tx-modal';
 import { supportedChains } from '../utils/chain';
 
-const SummonPending = ({ txHash, success, chainId }) => {
+const SummonPending = ({ txHash, success, chainId, isUberHaus = false }) => {
+  const { daoid, daochain } = useParams();
   return (
     <ContentBox
       m={[10, 'auto', 0, 'auto']}
@@ -87,7 +88,13 @@ const SummonPending = ({ txHash, success, chainId }) => {
           <Box fontSize='xl' fontFamily='heading' fontWeight={700}>
             {POPUP_CONTENT.summonMoloch.successText}
           </Box>
-          <Button as={RouterLink} to={`/register/${chainId}/${success}`} mt={3}>
+          <Button
+            as={RouterLink}
+            to={`/register/${chainId}/${success}${
+              isUberHaus ? `?parentDao=${daoid}&parentChainId=${daochain}` : ''
+            }`}
+            mt={3}
+          >
             CONFIGURE DAO
           </Button>
         </Box>
@@ -121,12 +128,16 @@ const SummonPending = ({ txHash, success, chainId }) => {
                 ),
               )}
             </Stack>
-            <Box fontSize='xs' textAlign='left'>
-              {POPUP_CONTENT.summonMoloch.waitingText}
-            </Box>
-            <Button variant='outline' as={RouterLink} to='/' mt={5}>
-              GO TO HUB
-            </Button>
+            {!isUberHaus ? (
+              <>
+                <Box fontSize='xs' textAlign='left'>
+                  {POPUP_CONTENT.summonMoloch.waitingText}
+                </Box>
+                <Button variant='outline' as={RouterLink} to='/' mt={5}>
+                  GO TO HUB
+                </Button>
+              </>
+            ) : null}
           </Flex>
         </Box>
       )}
