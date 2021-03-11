@@ -16,11 +16,7 @@ import { createPoll } from '../services/pollService';
 import { MolochService } from '../services/molochService';
 import ContentBox from './ContentBox';
 import TextBox from './TextBox';
-import {
-  memberVote,
-  MINION_TYPES,
-  PROPOSAL_TYPES,
-} from '../utils/proposalUtils';
+import { memberVote, PROPOSAL_TYPES } from '../utils/proposalUtils';
 import { supportedChains } from '../utils/chain';
 import { getTerm } from '../utils/metadata';
 import {
@@ -29,7 +25,6 @@ import {
   isDelegating,
 } from '../utils/general';
 import { useMetaData } from '../contexts/MetaDataContext';
-// import { MinionService } from '../services/minionService';
 import { UberHausMinionService } from '../services/uberHausMinionService';
 import { MinionService } from '../services/minionService';
 
@@ -78,7 +73,6 @@ const ProposalVote = ({
   const [minionDeets, setMinionDeets] = useState();
   const [enoughDeposit, setEnoughDeposit] = useState();
 
-  // const canInteract = !isDelegating(daoMember) || delegate;
   const currentlyVoting = (proposal) => {
     return (
       isBefore(Date.now(), new Date(+proposal?.votingPeriodEnds * 1000)) &&
@@ -217,7 +211,6 @@ const ProposalVote = ({
         chainID: daochain,
         tokenAddress: token,
       })('approve')({ args, address, poll, onTxHash });
-      // setUnlocked(true);
     } catch (err) {
       console.log('error:', err);
       setLoading(false);
@@ -474,14 +467,9 @@ const ProposalVote = ({
     }
   }, [daoProposals]);
 
-  const testRefreshDao = () => {
-    refreshDao();
-  };
-
   return (
     <>
       <ContentBox position='relative'>
-        <Button onClick={testRefreshDao}>Refresh Dao</Button>
         {!daoConnectedAndSameChain(address, daochain, injectedChain?.chainId) &&
           ((proposal?.status === 'Unsponsored' && !proposal?.proposalIndex) ||
             proposal?.status === 'ReadyForProcessing') && <NetworkOverlay />}
@@ -489,7 +477,6 @@ const ProposalVote = ({
           (proposal?.status !== 'Unsponsored' || proposal?.proposalIndex) &&
           proposal?.status !== 'Cancelled' &&
           !proposal?.status === 'ReadyForProcessing' && <NetworkOverlay />}
-
         {proposal?.status === 'Unsponsored' && !proposal?.proposalIndex && (
           <Flex justify='center' direction='column'>
             <Flex justify='center' mb={4}>

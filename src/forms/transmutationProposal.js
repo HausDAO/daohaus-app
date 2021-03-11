@@ -9,7 +9,6 @@ import {
   Icon,
   Box,
   Textarea,
-  Heading,
   Text,
   InputGroup,
   Spinner,
@@ -24,7 +23,6 @@ import { graphQuery } from '../utils/apollo';
 import { getGraphEndpoint } from '../utils/chain';
 import { TransmutationService } from '../services/transmutationService';
 import { TokenService } from '../services/tokenService';
-import AddressInput from './addressInput';
 import { GET_TRANSMUTATION } from '../graphQL/boost-queries';
 import { useUser } from '../contexts/UserContext';
 import { useTX } from '../contexts/TXContext';

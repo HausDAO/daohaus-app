@@ -87,7 +87,6 @@ const ProposalMinionCard = ({ proposal }) => {
       }
     };
     if (proposal && minionDeets?.bytes) {
-      console.log(minionDeets.bytes);
       getAbi();
     }
   }, [proposal, minionDeets]);
