@@ -6,6 +6,8 @@ import { isCcoProposal, contributionTotalValue } from '../utils/cco';
 import { useTX } from '../contexts/TXContext';
 import ContentBox from '../components/ContentBox';
 
+// TODO: add timestamps and time until voting ends
+
 const CcoHelper = React.memo(function ccohelper({
   daoMetaData,
   currentDaoTokens,
