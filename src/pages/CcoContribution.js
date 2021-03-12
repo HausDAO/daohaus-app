@@ -42,6 +42,10 @@ const CcoContribution = React.memo(function ccocontribution({
   const [claimComplete, setClaimComplete] = useState(false);
 
   useEffect(() => {
+    setIsEligible('unchecked');
+  }, [address]);
+
+  useEffect(() => {
     if (currentDaoTokens && daoMetaData?.boosts?.cco?.active) {
       const ccoToken = currentDaoTokens.find(
         (token) =>
@@ -283,8 +287,8 @@ const CcoContribution = React.memo(function ccocontribution({
                             HAUS Available to Claim
                           </Text>
                           <TextBox variant='value' size='md' my={2}>
-                            {`${roundData.claimTokenValue *
-                              currentContributionData?.addressTotal || 0} ${
+                            {`${currentContributionData?.addressTotal /
+                              roundData.claimTokenValue || 0} ${
                               roundData.claimTokenSymbol
                             }`}
                           </TextBox>

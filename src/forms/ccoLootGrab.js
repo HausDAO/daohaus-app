@@ -18,7 +18,6 @@ import { MolochService } from '../services/molochService';
 import { useDao } from '../contexts/DaoContext';
 import { valToDecimalString } from '../utils/tokenValue';
 import { chainByID } from '../utils/chain';
-import { useMetaData } from '../contexts/MetaDataContext';
 import CcoTributeInput from './ccoTributeInput';
 
 const CcoLootGrabForm = ({
@@ -150,7 +149,9 @@ const CcoLootGrabForm = ({
     <form onSubmit={handleSubmit(onSubmit)}>
       <Flex justifyContent='space-between' my={3}>
         <Text fontSize='sm' color='whiteAlpha.700' as='i'>
-          {`${currentContributionData?.addressRemaining}`}/
+          {`${currentContributionData?.addressRemaining ||
+            roundData.currentRound.maxContribution}`}
+          /
           {`${roundData.currentRound.maxContribution} ${roundData.ccoToken.symbol}`}{' '}
           remaining
         </Text>
