@@ -27,6 +27,7 @@ import { useInjectedProvider } from '../contexts/InjectedProviderContext';
 import CcoLootGrabForm from '../forms/ccoLootGrab';
 import CcoClaim from '../forms/ccoClaim';
 import { useTX } from '../contexts/TXContext';
+import ComingSoonOverlay from '../components/comingSoonOverlay';
 
 const CcoContribution = React.memo(function ccocontribution({
   daoMetaData,
@@ -152,10 +153,14 @@ const CcoContribution = React.memo(function ccocontribution({
     roundData?.raiseOver ||
     currentContributionData?.addressRemaining <= 0 ||
     raiseAtMax;
+  const now = new Date() / 1000;
+  const beforeClaimPeriod = roundData?.claimPeriodStartTime > now;
+
+  console.log('daoMetaData', daoMetaData);
 
   return (
     <MainViewLayout header='DAOhaus CCO' isDao={true}>
-      <Box w='100%'>
+      <Box w='100%' position='relative'>
         <Flex wrap='wrap'>
           {roundData ? (
             <>
@@ -302,7 +307,9 @@ const CcoContribution = React.memo(function ccocontribution({
                             }`}
                           </TextBox>
                         </Box>
-                        <CcoClaim setClaimComplete={setClaimComplete} />
+                        {!beforeClaimPeriod ? (
+                          <CcoClaim setClaimComplete={setClaimComplete} />
+                        ) : null}
                       </Flex>
                       {claimComplete ? (
                         <Box mt={5} fontSize='lg'>
@@ -570,7 +577,17 @@ const CcoContribution = React.memo(function ccocontribution({
               </GenericModal>
             </>
           ) : (
-            <Box>DAO does not have an active CCO</Box>
+            <>
+              <Box>DAO does not have an active CCO</Box>
+              {daoMetaData?.boosts?.cco && !daoMetaData.boosts.cco.active ? (
+                <Box mt={500}>
+                  <ComingSoonOverlay
+                    message='CCO is paused for maintenance. Check back soon.'
+                    fontSize='3xl'
+                  />
+                </Box>
+              ) : null}
+            </>
           )}
         </Flex>
       </Box>
