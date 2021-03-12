@@ -34,6 +34,7 @@ import { TokenService } from '../services/tokenService';
 import { IsJsonString } from '../utils/general';
 import { chainByName } from '../utils/chain';
 import DaoToDaoUberAlly from './daoToDaoUberAllyLink';
+import ComingSoonOverlay from './comingSoonOverlay';
 
 const DaoToDaoManager = ({ daoOverview, daoMetaData, setProposalType }) => {
   const {
@@ -154,53 +155,56 @@ const DaoToDaoManager = ({ daoOverview, daoMetaData, setProposalType }) => {
               UberHAUS
             </Box>
           </Flex>
-          {uberAlly ? (
-            <Box mt={5}>
-              <DaoToDaoUberAlly
-                dao={{
-                  name: `Manange membership in your ${UBERHAUS_NETWORK_NAME} burner dao`,
-                  link: `/dao/${chainByName(uberAlly.allyNetwork).chain_id}/${
-                    uberAlly.ally
-                  }/allies`,
-                }}
-              />
-            </Box>
-          ) : (
-            <>
-              <Box fontSize='md' my={2}>
-                UberHAUS is on {UBERHAUS_NETWORK_NAME}. You&apos;ll need to
-                summon a clone of your dao to join.
-                <Box my={2}>
-                  <Link
-                    href='https://discord.gg/eJsBk3sf'
-                    target='_blank'
-                    rel='noreferrer noopener'
-                    m={3}
-                  >
-                    If you want some help with this drop into our Discord
-                    support channel
-                  </Link>
-                </Box>
-                <OrderedList>
-                  <ListItem>
-                    Summon burner dao on {UBERHAUS_NETWORK_NAME}
-                  </ListItem>
-                  <ListItem>
-                    join button in your {UBERHAUS_NETWORK_NAME} burner dao to
-                    launch uberhaus minion
-                  </ListItem>
-                  <ListItem>stake haus for shares</ListItem>
-                </OrderedList>
+          <Box position='relative' width='100%'>
+            <ComingSoonOverlay message='👀 Check back soon!' />
+            {uberAlly ? (
+              <Box mt={5}>
+                <DaoToDaoUberAlly
+                  dao={{
+                    name: `Manange membership in your ${UBERHAUS_NETWORK_NAME} burner dao`,
+                    link: `/dao/${chainByName(uberAlly.allyNetwork).chain_id}/${
+                      uberAlly.ally
+                    }/allies`,
+                  }}
+                />
               </Box>
-              <Button
-                w='25%'
-                as={RouterLink}
-                to={`/dao/${daochain}/${daoid}/uberhaus/clone`}
-              >
-                Clone
-              </Button>
-            </>
-          )}
+            ) : (
+              <>
+                <Box fontSize='md' my={2}>
+                  UberHAUS is on {UBERHAUS_NETWORK_NAME}. You&apos;ll need to
+                  summon a clone of your dao to join.
+                  <Box my={2}>
+                    <Link
+                      href='https://discord.gg/eJsBk3sf'
+                      target='_blank'
+                      rel='noreferrer noopener'
+                      m={3}
+                    >
+                      If you want some help with this drop into our Discord
+                      support channel
+                    </Link>
+                  </Box>
+                  <OrderedList>
+                    <ListItem>
+                      Summon burner dao on {UBERHAUS_NETWORK_NAME}
+                    </ListItem>
+                    <ListItem>
+                      join button in your {UBERHAUS_NETWORK_NAME} burner dao to
+                      launch uberhaus minion
+                    </ListItem>
+                    <ListItem>stake haus for shares</ListItem>
+                  </OrderedList>
+                </Box>
+                <Button
+                  w='25%'
+                  as={RouterLink}
+                  to={`/dao/${daochain}/${daoid}/uberhaus/clone`}
+                >
+                  Clone
+                </Button>
+              </>
+            )}
+          </Box>
         </ContentBox>
       </>
     );

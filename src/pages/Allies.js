@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Box, Button, Flex } from '@chakra-ui/react';
 
-import Following from '../components/followingDaos';
+// import Following from '../components/followingDaos';
 import MainViewLayout from '../components/mainViewLayout';
 import DaoToDaoManager from '../components/daoToDaoManager';
 import DaoToDaoProposalModal from '../modals/daoToDaoProposalModal';
@@ -58,7 +58,7 @@ const Allies = ({ daoOverview, daoMetaData }) => {
           daoMetaData={daoMetaData}
           setProposalType={setProposalType}
         />
-        <Following />
+        {/* <Following /> */}
       </Box>
     </MainViewLayout>
   );

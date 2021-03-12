@@ -156,8 +156,6 @@ const CcoContribution = React.memo(function ccocontribution({
   const now = new Date() / 1000;
   const beforeClaimPeriod = roundData?.claimPeriodStartTime > now;
 
-  console.log('daoMetaData', daoMetaData);
-
   return (
     <MainViewLayout header='DAOhaus CCO' isDao={true}>
       <Box w='100%' position='relative'>
