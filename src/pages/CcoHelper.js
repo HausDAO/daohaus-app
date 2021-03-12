@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
-import { Box, Table, Thead, Tr, Th, Tbody, Td, Flex } from '@chakra-ui/react';
+import { Box, Table, Thead, Tr, Th, Tbody, Td } from '@chakra-ui/react';
 import MainViewLayout from '../components/mainViewLayout';
 import { isCcoProposal, contributionTotalValue } from '../utils/cco';
 import { useTX } from '../contexts/TXContext';
