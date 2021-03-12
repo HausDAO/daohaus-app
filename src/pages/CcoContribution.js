@@ -26,6 +26,7 @@ import { useOverlay } from '../contexts/OverlayContext';
 import { useInjectedProvider } from '../contexts/InjectedProviderContext';
 import CcoLootGrabForm from '../forms/ccoLootGrab';
 import CcoClaim from '../forms/ccoClaim';
+import { useTX } from '../contexts/TXContext';
 
 const CcoContribution = React.memo(function ccocontribution({
   daoMetaData,
@@ -40,6 +41,14 @@ const CcoContribution = React.memo(function ccocontribution({
   const [checkingEligibility, setCheckingEligibility] = useState(false);
   const [currentContributionData, setCurrentContributionData] = useState(null);
   const [claimComplete, setClaimComplete] = useState(false);
+  const { refreshDao } = useTX();
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      refreshDao();
+    }, 30000);
+    return () => clearInterval(interval);
+  }, []);
 
   useEffect(() => {
     setIsEligible('unchecked');
@@ -102,8 +111,6 @@ const CcoContribution = React.memo(function ccocontribution({
         return isCcoProposalForAddress(proposal, address, roundData);
       });
 
-      console.log('addressProposals', addressProposals);
-
       const contributionTotal = contributionTotalValue(
         contributionProposals,
         roundData,
@@ -122,7 +129,9 @@ const CcoContribution = React.memo(function ccocontribution({
           +roundData.currentRound.maxContribution - addressTotal,
       });
 
-      setIsEligible(addressTotal > 0 ? 'checked' : 'unchecked');
+      if (isEligible === 'unchecked') {
+        setIsEligible(addressTotal > 0 ? 'checked' : 'unchecked');
+      }
     }
   }, [address, roundData, daoProposals]);
 
