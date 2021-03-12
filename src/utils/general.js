@@ -65,7 +65,9 @@ export const numberWithCommas = (num) => {
   const localNum = typeof num !== 'string' ? num.toString() : num;
   // drop zero after decimal
   const noZeroDec =
-    parseInt(localNum.split('.')[1]) === 0 ? localNum.split('.')[0] : localNum;
+    parseInt(localNum.split('.')[1]) === 0
+      ? localNum.split('.')[0]
+      : parseInt(localNum);
 
   return utils.commify(noZeroDec);
 };
