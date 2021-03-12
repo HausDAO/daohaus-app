@@ -176,11 +176,7 @@ const CcoContribution = React.memo(function ccocontribution({
                       {isEligible === 'unchecked' ? (
                         <Button
                           onClick={checkEligibility}
-                          disabled={
-                            checkingEligibility ||
-                            roundData.beforeRaise ||
-                            roundData.raiseOver
-                          }
+                          disabled={checkingEligibility || roundData.raiseOver}
                         >
                           {!checkingEligibility ? (
                             <>Check Eligibility</>
@@ -190,9 +186,18 @@ const CcoContribution = React.memo(function ccocontribution({
                         </Button>
                       ) : null}
                       {isEligible === 'checked' ? (
-                        <TextBox variant='value' size='md' my={2}>
-                          You&apos;re eligible. Kudos for interacting with daos!
-                        </TextBox>
+                        <>
+                          <TextBox variant='value' size='md' my={2}>
+                            You&apos;re eligible. Kudos for interacting with
+                            daos!
+                          </TextBox>
+
+                          {roundData.beforeRaise ? (
+                            <TextBox variant='value' size='md' my={2}>
+                              Come back when the contribution round begins.
+                            </TextBox>
+                          ) : null}
+                        </>
                       ) : null}
                       {isEligible === 'denied' ? (
                         <TextBox variant='value' size='md' my={2}>
@@ -231,7 +236,7 @@ const CcoContribution = React.memo(function ccocontribution({
                         </TextBox>
                       ) : null}
 
-                      {!eligibleBlock ? (
+                      {!eligibleBlock && !roundData.beforeRaise ? (
                         <Box borderTopWidth='1px' mt={3}>
                           <CcoLootGrabForm
                             daoMetaData={daoMetaData}

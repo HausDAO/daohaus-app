@@ -82,7 +82,7 @@ export const timeToNow = (time) => {
 };
 
 // export const formatCreatedAt = (createdAt) => {
-//   return format(new Date(createdAt * 1000), "MMM dd, yyyy");
+//   return format(new Date(createdAt * 1000), 'MMM dd, yyyy');
 // };
 
 export const formatPeriods = (period, duration) => {
