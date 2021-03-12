@@ -5,6 +5,7 @@ import MainViewLayout from '../components/mainViewLayout';
 import { isCcoProposal, contributionTotalValue } from '../utils/cco';
 import { useTX } from '../contexts/TXContext';
 import ContentBox from '../components/ContentBox';
+import { timeToNow } from '../utils/general';
 
 // TODO: add timestamps and time until voting ends
 
@@ -173,9 +174,14 @@ const CcoHelper = React.memo(function ccohelper({
 
   const renderRow = (proposal) => {
     return (
-      <Tr>
+      <Tr key={proposal.proposalId}>
         <Td>{proposal.proposalId}</Td>
-        <Td>{proposal.status}</Td>
+        <Td>{timeToNow(proposal.createdAt)}</Td>
+        <Td>
+          {proposal.status === 'Voting Period'
+            ? `${proposal.status} ends ${timeToNow(proposal.votingPeriodEnds)}`
+            : proposal.status}
+        </Td>
         <Td>{proposal.lootRequested}</Td>
         <Td>{`${proposal.tributeOffered /
           10 ** proposal.tributeTokenDecimals} ${
@@ -196,11 +202,11 @@ const CcoHelper = React.memo(function ccohelper({
 
   const renderOtherRow = (proposal) => {
     return (
-      <Tr>
+      <Tr key={proposal.proposalId}>
         <Td>{proposal.proposalId}</Td>
+        <Td>{proposal.createdAt}</Td>
         <Td>{proposal.details}</Td>
         <Td>{proposal.status}</Td>
-
         <Td>
           <Link
             to={`/dao/${daochain}/${daoid}/proposals/${proposal.proposalId}`}
@@ -218,13 +224,14 @@ const CcoHelper = React.memo(function ccohelper({
           <ContentBox w='100%'>
             {Object.keys(proposals).map((section) => {
               return (
-                <>
+                <Box key={section}>
                   <Box mt={10}>{section}</Box>
                   <Table size='sm' variant='simple'>
                     <Thead>
                       <Tr>
                         <Th>proposal ID</Th>
-                        <Td>status</Td>
+                        <Th>created At</Th>
+                        <Th>status</Th>
                         <Th>loot</Th>
                         <Th>tribute</Th>
                         <Th>votes</Th>
@@ -237,7 +244,7 @@ const CcoHelper = React.memo(function ccohelper({
                       })}
                     </Tbody>
                   </Table>
-                </>
+                </Box>
               );
             })}
           </ContentBox>
@@ -249,6 +256,7 @@ const CcoHelper = React.memo(function ccohelper({
               <Thead>
                 <Tr>
                   <Th>proposal ID</Th>
+                  <Th>created At</Th>
                   <Th>details</Th>
                   <Th>status</Th>
                   <Th>link</Th>
