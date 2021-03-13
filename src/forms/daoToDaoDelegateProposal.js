@@ -24,10 +24,20 @@ import DAOHaus from '../assets/img/Daohaus__Castle--Dark.svg';
 import TextBox from '../components/TextBox';
 import DetailsFields from './detailFields';
 import AddressInput from './addressInput';
-import { detailsToJSON } from '../utils/general';
+import { createHash, detailsToJSON } from '../utils/general';
 // import { useInjectedProvider } from '../contexts/InjectedProviderContext';
 import { useOverlay } from '../contexts/OverlayContext';
 import DelegateMenu from '../components/DelegateMenu';
+import { useDao } from '../contexts/DaoContext';
+import { UBERHAUS_ADDRESS } from '../utils/uberhaus';
+import { useParams } from 'react-router-dom';
+import { useUser } from '../contexts/UserContext';
+import { createPoll } from '../services/pollService';
+import { createForumTopic } from '../utils/discourse';
+import { useMetaData } from '../contexts/MetaDataContext';
+import { useInjectedProvider } from '../contexts/InjectedProviderContext';
+import { UberHausMinionService } from '../services/uberHausMinionService';
+import { useTX } from '../contexts/TXContext';
 
 // TODO pass delegate to delegate menu
 // TODO replace delegate with user avatar
@@ -35,11 +45,19 @@ import DelegateMenu from '../components/DelegateMenu';
 
 const DelegateProposalForm = () => {
   const [loading, setLoading] = useState(false);
-  // const { daoid } = useParams();
-  // const { address } = useInjectedProvider();
+  const { daoid, daochain } = useParams();
+  const { daoMetaData } = useMetaData();
+  const { injectedProvider, address } = useInjectedProvider();
   const [currentError, setCurrentError] = useState(null);
-  const { setD2dProposalModal } = useOverlay();
-
+  const {
+    setD2dProposalModal,
+    errorToast,
+    successToast,
+    setTxInfoModal,
+  } = useOverlay();
+  const { daoOverview } = useDao();
+  const { refreshDao } = useTX();
+  const { cachePoll, resolvePoll } = useUser();
   const { handleSubmit, errors, register, setValue, watch } = useForm();
 
   useEffect(() => {
@@ -57,33 +75,80 @@ const DelegateProposalForm = () => {
   const onSubmit = async (values) => {
     setLoading(true);
 
-    const details = detailsToJSON(values);
-    console.log(details);
-    // try {
-    //   dao.daoService.moloch.submitProposal(
-    //     values.sharesRequested ? values.sharesRequested?.toString() : '0',
-    //     values.lootRequested ? values.lootRequested?.toString() : '0',
-    //     values.tributeOffered
-    //       ? utils.toWei(values.tributeOffered?.toString())
-    //       : '0',
-    //     values.tributeToken || dao.graphData.depositToken.tokenAddress,
-    //     values.paymentRequested
-    //       ? utils.toWei(values.paymentRequested?.toString())
-    //       : '0',
-    //     values.paymentToken || dao.graphData.depositToken.tokenAddress,
-    //     details,
-    //     values?.applicantHidden?.startsWith('0x')
-    //       ? values.applicantHidden
-    //       : values?.applicant
-    //       ? values.applicant
-    //       : user.username,
-    //     txCallBack,
-    //   );
-    // } catch (err) {
-    //   setLoading(false);
-    //   console.log('error: ', err);
-    // }
-    setD2dProposalModal((prevState) => !prevState);
+    const now = (new Date().getTime() / 1000).toFixed();
+    const uberHausMinionData = daoOverview.minions.find(
+      (minion) =>
+        minion.minionType === 'UberHaus minion' &&
+        minion.uberHausAddress === UBERHAUS_ADDRESS,
+    );
+    const hash = createHash();
+    const details = detailsToJSON({
+      ...values,
+      uberHaus: true,
+      uberType: 'delegate',
+      hash,
+    });
+
+    const args = [
+      UBERHAUS_ADDRESS,
+      values.memberApplicant,
+      values.delegateTerm,
+      details,
+    ];
+
+    try {
+      const poll = createPoll({
+        action: 'uberHausNominateDelegate',
+        cachePoll,
+      })({
+        minionAddress: uberHausMinionData.minionAddress,
+        chainID: daochain,
+        newDelegateAddress: values?.memberApplicant,
+        createdAt: now,
+        actions: {
+          onError: (error, txHash) => {
+            errorToast({
+              title: `There was an error.`,
+            });
+            resolvePoll(txHash);
+            console.error(`Could not find a matching proposal: ${error}`);
+          },
+          onSuccess: (txHash) => {
+            successToast({
+              title: 'UberHAUS Membership Proposal Submitted to the DAO!',
+            });
+            refreshDao();
+            resolvePoll(txHash);
+            createForumTopic({
+              chainID: daochain,
+              daoID: daoid,
+              afterTime: now,
+              proposalType: 'UberHAUS Delegate Proposal',
+              values,
+              daoid,
+              daoMetaData,
+            });
+          },
+        },
+      });
+      const onTxHash = () => {
+        setD2dProposalModal((prevState) => !prevState);
+        setTxInfoModal(true);
+      };
+      await UberHausMinionService({
+        web3: injectedProvider,
+        uberHausMinion: uberHausMinionData.minionAddress,
+        chainID: daochain,
+      })('nominateDelegate')({ args, address, poll, onTxHash });
+    } catch (err) {
+      setLoading(false);
+      setD2dProposalModal((prevState) => !prevState);
+      console.error('error: ', err);
+      errorToast({
+        title: `There was an error.`,
+        details: err?.message || '',
+      });
+    }
   };
 
   return (
@@ -117,6 +182,7 @@ const DelegateProposalForm = () => {
             register={register}
             setValue={setValue}
             watch={watch}
+            memberOnly={true}
           />
           <TextBox as={FormLabel} size='xs' htmlFor='name' mb={2}>
             Term

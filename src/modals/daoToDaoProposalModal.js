@@ -15,9 +15,20 @@ import { rgba } from 'polished';
 import StakeProposalForm from '../forms/daoToDaoStakeProposal';
 import DelegateProposalForm from '../forms/daoToDaoDelegateProposal';
 import RageQuitProposalForm from '../forms/daoToDaoRageQuitProposal';
+import WithdrawPullForm from '../forms/daoToDaoWithdrawPull';
 import DistributeRewardsProposalForm from '../forms/daoToDaoDistributeRewardsProposal';
 import { useCustomTheme } from '../contexts/CustomThemeContext';
 import { useOverlay } from '../contexts/OverlayContext';
+
+const getModalWidth = (proposalType) => {
+  if (proposalType === 'd2dRageQuit') {
+    return '400px';
+  } else if (proposalType === 'd2dWithdraw') {
+    return ['400px', null, null, '900px'];
+  } else {
+    return '700px';
+  }
+};
 
 const DaoToDaoProposalFormModal = ({ proposalType, isOpen, returnRoute }) => {
   const [, setLoading] = useState(false);
@@ -40,22 +51,28 @@ const DaoToDaoProposalFormModal = ({ proposalType, isOpen, returnRoute }) => {
     //   form: <VoteProposalForm />,
     // },
     d2dDelegate: {
-      type: `New Uber Quest`,
+      type: `New Uber Proposal`,
       heading: `Choose Champion`,
       subline: `Manage your delegate to UBERhaus`,
       form: <DelegateProposalForm />,
     },
     d2dRageQuit: {
-      type: `New Uber Quest`,
-      heading: `RageQuit $HAUS`,
-      subline: `RageQuit your stake from UBERhaus`,
+      type: `New Uber Proposal`,
+      heading: `RageQuit`,
+      subline: `Submit a proposal to RageQuit from UberHaus`,
       form: <RageQuitProposalForm />,
     },
     d2dDistroRewards: {
-      type: `New Uber Quest`,
+      type: `New Uber Proposal`,
       heading: `Trigger $HAUS Distro`,
       subline: `Get DAO Rewards from UBERhaus`,
       form: <DistributeRewardsProposalForm />,
+    },
+    d2dWithdraw: {
+      type: `New Uber Proposal`,
+      heading: ``,
+      subline: ``,
+      form: <WithdrawPullForm />,
     },
   };
 
@@ -90,7 +107,7 @@ const DaoToDaoProposalFormModal = ({ proposalType, isOpen, returnRoute }) => {
           bg='blackAlpha.600'
           borderWidth='1px'
           borderColor='whiteAlpha.200'
-          maxWidth='700px'
+          maxWidth={getModalWidth(proposalType)}
         >
           <ModalHeader>
             <Box
