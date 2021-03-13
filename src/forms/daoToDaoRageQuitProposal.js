@@ -1,19 +1,31 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import { useForm } from 'react-hook-form';
-import { Button, FormControl, Flex, Input, Icon, Box } from '@chakra-ui/react';
+import { Button, FormControl, Flex, Icon, Box } from '@chakra-ui/react';
 import { RiErrorWarningLine } from 'react-icons/ri';
+import { UBERHAUS_ADDRESS } from '../utils/uberhaus';
 
 import { useOverlay } from '../contexts/OverlayContext';
-import TextBox from '../components/TextBox';
-import { detailsToJSON } from '../utils/general';
+// import { createHash, detailsToJSON } from '../utils/general';
 import RageInput from './rageInput';
+// import { PROPOSAL_TYPES } from '../utils/proposalUtils';
+import { useDao } from '../contexts/DaoContext';
+import { MolochService } from '../services/molochService';
 
 const RageQuitProposalForm = () => {
   const [loading, setLoading] = useState(false);
   const [currentError, setCurrentError] = useState(null);
   const { setD2dProposalModal } = useOverlay();
+  const { daoOverview } = useDao();
 
   const { handleSubmit, errors, register, setValue } = useForm();
+
+  const currentMinion = useMemo(() => {
+    return daoOverview.minions.find(
+      (minion) =>
+        minion.minionType === 'UberHaus minion' &&
+        minion.uberHausAddress === UBERHAUS_ADDRESS,
+    );
+  }, [daoOverview]);
 
   useEffect(() => {
     if (Object.keys(errors).length > 0) {
@@ -27,11 +39,119 @@ const RageQuitProposalForm = () => {
     }
   }, [errors]);
 
+  useEffect(() => {
+    MolochService();
+  }, [currentMinion]);
+
   const onSubmit = async (values) => {
     setLoading(true);
 
-    const details = detailsToJSON(values);
-    console.log(details);
+    // const hash = createHash();
+    // const now = (new Date().getTime() / 1000).toFixed();
+
+    // const details = detailsToJSON({
+    //   values,
+    //   uberHaus: true,
+    //   uberType: PROPOSAL_TYPES.MINION_UBER_RQ,
+    //   hash,
+    // });
+
+    // const hash = createHash();
+    // const details = detailsToJSON({
+    //   ...values,
+    //   uberHaus: true,
+    //   uberType: 'staking',
+    //   hash,
+    // });
+
+    // const tributeOffered = values.tributeOffered
+    //   ? valToDecimalString(
+    //       values.tributeOffered,
+    //       UBERHAUS_STAKING_TOKEN.toLowerCase(),
+    //       daoOverview.tokenBalances,
+    //     )
+    //   : '0';
+
+    // const submitProposalArgs = [
+    //   uberHausMinionData.minionAddress,
+    //   values.sharesRequested || '0',
+    //   '0',
+    //   tributeOffered,
+    //   UBERHAUS_STAKING_TOKEN,
+    //   '0',
+    //   daoOverview.depositToken.tokenAddress,
+    //   details,
+    // ];
+
+    // const submitProposalAbiData = molochAbi.find(
+    //   (f) => f.type === 'function' && f.name === 'submitProposal',
+    // );
+
+    // const hexData = injectedProvider.eth.abi.encodeFunctionCall(
+    //   submitProposalAbiData,
+    //   submitProposalArgs,
+    // );
+
+    // const args = [
+    //   daoid,
+    //   UBERHAUS_ADDRESS,
+    //   UBERHAUS_STAKING_TOKEN,
+    //   '0',
+    //   hexData,
+    //   details,
+    // ];
+
+    // console.log('args', args);
+
+    // try {
+    //   const poll = createPoll({ action: 'uberHausProposeAction', cachePoll })({
+    //     minionAddress: uberHausMinionData.minionAddress,
+    //     createdAt: now,
+    //     chainID: daochain,
+    //     hash,
+    //     actions: {
+    //       onError: (error, txHash) => {
+    //         errorToast({
+    //           title: `There was an error.`,
+    //         });
+    //         resolvePoll(txHash);
+    //         console.error(`Could not find a matching proposal: ${error}`);
+    //       },
+    //       onSuccess: (txHash) => {
+    //         successToast({
+    //           title: 'UberHAUS Membership Proposal Submitted to the DAO!',
+    //         });
+    //         refreshDao();
+    //         resolvePoll(txHash);
+    //         createForumTopic({
+    //           chainID: daochain,
+    //           daoID: daoid,
+    //           afterTime: now,
+    //           proposalType: 'UberHAUS Membership Proposal',
+    //           values,
+    //           daoid,
+    //           daoMetaData,
+    //         });
+    //       },
+    //     },
+    //   });
+    //   const onTxHash = () => {
+    //     setD2dProposalModal((prevState) => !prevState);
+    //     setTxInfoModal(true);
+    //   };
+    //   await UberHausMinionService({
+    //     web3: injectedProvider,
+    //     uberHausMinion: uberHausMinionData.minionAddress,
+    //     chainID: daochain,
+    //   })('proposeAction')({ args, address, poll, onTxHash });
+    // } catch (err) {
+    //   setLoading(false);
+    //   setD2dProposalModal((prevState) => !prevState);
+    //   console.error('error: ', err);
+    //   errorToast({
+    //     title: `There was an error.`,
+    //   });
+    // }
     // try {
     //   dao.daoService.moloch.submitProposal(
     //     values.sharesRequested ? values.sharesRequested?.toString() : '0',
@@ -59,7 +179,7 @@ const RageQuitProposalForm = () => {
     setD2dProposalModal((prevState) => !prevState);
   };
 
-  const handleChange = () => {};
+  // const handleChange = () => {};
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
@@ -69,21 +189,38 @@ const RageQuitProposalForm = () => {
         flexDirection='row'
         justifyContent='space-between'
         mb={5}
+        mt={6}
         flexWrap='wrap'
       >
-        <Box w={['100%', null, '50%']} pr={[0, null, 5]}>
+        <Box w='100%' pr={[0, null, 5]}>
+          {/* <RageInput
+            register={register}
+            setValue={setValue}
+            label='Shares to Rage Quit'
+            type='shares'
+            max='10'
+          /> */}
           <RageInput
             register={register}
             setValue={setValue}
-            label="Shares You'll RageQuit"
+            label='Shares to Rage'
             type='shares'
-            max='10'
+            max={10}
+            mb={6}
           />
-          <Flex justify='center' my={3}>
+          <RageInput
+            register={register}
+            setValue={setValue}
+            label='Loot to Rage'
+            type='loot'
+            max={10}
+          />
+
+          {/* <Flex justify='center' my={3}>
             <TextBox size='xs'>Equals</TextBox>
-          </Flex>
-          <TextBox size='xs' htmlFor='hausToReceive' mb={2}>
-            HAUS You&apos;ll Receive
+          </Flex> */}
+          {/* <TextBox size='xs' htmlFor='hausToReceive' mb={2} mt={6}>
+            Loot to Rage Quit
           </TextBox>
           <Input
             name='hausToReceive'
@@ -92,7 +229,7 @@ const RageQuitProposalForm = () => {
             onChange={handleChange}
             color='white'
             focusBorderColor='secondary.500'
-          />
+          /> */}
           <Flex justify='center' mt={8}>
             <Button
               type='submit'
@@ -111,7 +248,7 @@ const RageQuitProposalForm = () => {
           </Flex>
         </Box>
 
-        <Box w={['100%', null, '50%']} p={3}>
+        {/* <Box w={['100%', null, '50%']} p={3}>
           <Box fontFamily='heading' fontSize='2xl' fontWeight={900} mb={3}>
             Important Info:
           </Box>
@@ -127,7 +264,7 @@ const RageQuitProposalForm = () => {
           <Button variant='outline' mt={3}>
             Confirm RageQuit
           </Button>
-        </Box>
+        </Box> */}
       </FormControl>
     </form>
   );

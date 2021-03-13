@@ -116,7 +116,6 @@ const ProposalMinionCard = ({ proposal }) => {
               </HStack>
               <TextBox size='xs'>Value:</TextBox>
               <TextBox variant='value'>{param.value.toString()}</TextBox>
-
               <Divider my={2} />
             </Box>
           );
