@@ -26,6 +26,9 @@ import { useOverlay } from '../contexts/OverlayContext';
 import { useInjectedProvider } from '../contexts/InjectedProviderContext';
 import CcoLootGrabForm from '../forms/ccoLootGrab';
 import CcoClaim from '../forms/ccoClaim';
+import { useTX } from '../contexts/TXContext';
+import ComingSoonOverlay from '../components/comingSoonOverlay';
+import { MM_ADDCHAIN_DATA } from '../utils/chain';
 
 const CcoContribution = React.memo(function ccocontribution({
   daoMetaData,
@@ -34,12 +37,20 @@ const CcoContribution = React.memo(function ccocontribution({
 }) {
   const { setGenericModal } = useOverlay();
   const { daochain, daoid } = useParams();
-  const { address, injectedChain } = useInjectedProvider();
+  const { address, injectedChain, requestWallet } = useInjectedProvider();
   const [roundData, setRoundData] = useState(null);
   const [isEligible, setIsEligible] = useState('unchecked');
   const [checkingEligibility, setCheckingEligibility] = useState(false);
   const [currentContributionData, setCurrentContributionData] = useState(null);
   const [claimComplete, setClaimComplete] = useState(false);
+  const { refreshDao } = useTX();
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      refreshDao();
+    }, 30000);
+    return () => clearInterval(interval);
+  }, []);
 
   useEffect(() => {
     setIsEligible('unchecked');
@@ -102,8 +113,6 @@ const CcoContribution = React.memo(function ccocontribution({
         return isCcoProposalForAddress(proposal, address, roundData);
       });
 
-      console.log('addressProposals', addressProposals);
-
       const contributionTotal = contributionTotalValue(
         contributionProposals,
         roundData,
@@ -122,9 +131,26 @@ const CcoContribution = React.memo(function ccocontribution({
           +roundData.currentRound.maxContribution - addressTotal,
       });
 
-      setIsEligible(addressTotal > 0 ? 'checked' : 'unchecked');
+      if (isEligible === 'unchecked') {
+        setIsEligible(addressTotal > 0 ? 'checked' : 'unchecked');
+      }
     }
   }, [address, roundData, daoProposals]);
+
+  const handleSwitchNetwork = async () => {
+    if (daochain && window?.ethereum) {
+      try {
+        await window?.ethereum?.request({
+          id: '1',
+          jsonrpc: '2.0',
+          method: 'wallet_addEthereumChain',
+          params: [MM_ADDCHAIN_DATA[daochain]],
+        });
+      } catch (error) {
+        console.error(error);
+      }
+    }
+  };
 
   const checkEligibility = async () => {
     setCheckingEligibility(true);
@@ -143,10 +169,12 @@ const CcoContribution = React.memo(function ccocontribution({
     roundData?.raiseOver ||
     currentContributionData?.addressRemaining <= 0 ||
     raiseAtMax;
+  const now = new Date() / 1000;
+  const beforeClaimPeriod = roundData?.claimPeriodStartTime > now;
 
   return (
     <MainViewLayout header='DAOhaus CCO' isDao={true}>
-      <Box w='100%'>
+      <Box w='100%' position='relative'>
         <Flex wrap='wrap'>
           {roundData ? (
             <>
@@ -164,11 +192,7 @@ const CcoContribution = React.memo(function ccocontribution({
                       {isEligible === 'unchecked' ? (
                         <Button
                           onClick={checkEligibility}
-                          disabled={
-                            checkingEligibility ||
-                            roundData.beforeRaise ||
-                            roundData.raiseOver
-                          }
+                          disabled={checkingEligibility || roundData.raiseOver}
                         >
                           {!checkingEligibility ? (
                             <>Check Eligibility</>
@@ -178,9 +202,18 @@ const CcoContribution = React.memo(function ccocontribution({
                         </Button>
                       ) : null}
                       {isEligible === 'checked' ? (
-                        <TextBox variant='value' size='md' my={2}>
-                          You&apos;re eligible. Kudos for interacting with daos!
-                        </TextBox>
+                        <>
+                          <TextBox variant='value' size='md' my={2}>
+                            You&apos;re eligible. Kudos for interacting with
+                            DAOs!
+                          </TextBox>
+
+                          {roundData.beforeRaise ? (
+                            <TextBox variant='value' size='md' my={2}>
+                              Come back when the contribution round begins.
+                            </TextBox>
+                          ) : null}
+                        </>
                       ) : null}
                       {isEligible === 'denied' ? (
                         <TextBox variant='value' size='md' my={2}>
@@ -190,9 +223,17 @@ const CcoContribution = React.memo(function ccocontribution({
                       ) : null}
                     </>
                   ) : (
-                    <TextBox variant='value' size='md' my={2}>
-                      Switch to the {roundData.network} network
-                    </TextBox>
+                    <>
+                      {address ? (
+                        <Button onClick={handleSwitchNetwork}>
+                          Switch to the {roundData.network} network
+                        </Button>
+                      ) : (
+                        <Button onClick={requestWallet} mb={6}>
+                          Connect Wallet
+                        </Button>
+                      )}
+                    </>
                   )}
                 </ContentBox>
 
@@ -219,7 +260,7 @@ const CcoContribution = React.memo(function ccocontribution({
                         </TextBox>
                       ) : null}
 
-                      {!eligibleBlock ? (
+                      {!eligibleBlock && !roundData.beforeRaise ? (
                         <Box borderTopWidth='1px' mt={3}>
                           <CcoLootGrabForm
                             daoMetaData={daoMetaData}
@@ -293,7 +334,9 @@ const CcoContribution = React.memo(function ccocontribution({
                             }`}
                           </TextBox>
                         </Box>
-                        <CcoClaim setClaimComplete={setClaimComplete} />
+                        {!beforeClaimPeriod ? (
+                          <CcoClaim setClaimComplete={setClaimComplete} />
+                        ) : null}
                       </Flex>
                       {claimComplete ? (
                         <Box mt={5} fontSize='lg'>
@@ -499,7 +542,7 @@ const CcoContribution = React.memo(function ccocontribution({
               </GenericModal>
               <GenericModal modalId='xDaiHelp'>
                 <TextBox>xDAI Quick Start</TextBox>
-                <TextBox size='sm' my={5}>
+                <TextBox size='sm' my={5} onClick={handleSwitchNetwork}>
                   Add xDAI network to Metamask
                 </TextBox>
                 <TextBox size='xs' mb={5}>
@@ -561,7 +604,17 @@ const CcoContribution = React.memo(function ccocontribution({
               </GenericModal>
             </>
           ) : (
-            <Box>DAO does not have an active CCO</Box>
+            <>
+              <Box>DAO does not have an active CCO</Box>
+              {daoMetaData?.boosts?.cco && !daoMetaData.boosts.cco.active ? (
+                <Box mt={500}>
+                  <ComingSoonOverlay
+                    message='CCO is paused for maintenance. Check back soon.'
+                    fontSize='3xl'
+                  />
+                </Box>
+              ) : null}
+            </>
           )}
         </Flex>
       </Box>

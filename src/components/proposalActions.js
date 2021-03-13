@@ -71,7 +71,7 @@ const ProposalVote = ({
   const { refreshDao } = useTX();
   const { customTerms } = useMetaData();
   const [minionDeets, setMinionDeets] = useState();
-  const [enoughDeposit, setEnoughDeposit] = useState();
+  const [enoughDeposit, setEnoughDeposit] = useState(false);
 
   const currentlyVoting = (proposal) => {
     return (
@@ -123,7 +123,7 @@ const ProposalVote = ({
         chainID: daochain,
       })('balanceOf')(address);
       setEnoughDeposit(
-        +depositTokenBalance >
+        +depositTokenBalance / 10 ** overview?.depositToken.decimals >
           +overview?.proposalDeposit / 10 ** overview?.depositToken.decimals,
       );
     };
