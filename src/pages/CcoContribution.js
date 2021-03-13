@@ -28,6 +28,7 @@ import CcoLootGrabForm from '../forms/ccoLootGrab';
 import CcoClaim from '../forms/ccoClaim';
 import { useTX } from '../contexts/TXContext';
 import ComingSoonOverlay from '../components/comingSoonOverlay';
+import { MM_ADDCHAIN_DATA } from '../utils/chain';
 
 const CcoContribution = React.memo(function ccocontribution({
   daoMetaData,
@@ -36,7 +37,7 @@ const CcoContribution = React.memo(function ccocontribution({
 }) {
   const { setGenericModal } = useOverlay();
   const { daochain, daoid } = useParams();
-  const { address, injectedChain } = useInjectedProvider();
+  const { address, injectedChain, requestWallet } = useInjectedProvider();
   const [roundData, setRoundData] = useState(null);
   const [isEligible, setIsEligible] = useState('unchecked');
   const [checkingEligibility, setCheckingEligibility] = useState(false);
@@ -136,6 +137,21 @@ const CcoContribution = React.memo(function ccocontribution({
     }
   }, [address, roundData, daoProposals]);
 
+  const handleSwitchNetwork = async () => {
+    if (daochain && window?.ethereum) {
+      try {
+        await window?.ethereum?.request({
+          id: '1',
+          jsonrpc: '2.0',
+          method: 'wallet_addEthereumChain',
+          params: [MM_ADDCHAIN_DATA[daochain]],
+        });
+      } catch (error) {
+        console.error(error);
+      }
+    }
+  };
+
   const checkEligibility = async () => {
     setCheckingEligibility(true);
     const eligibleRes = await getEligibility(address);
@@ -189,7 +205,7 @@ const CcoContribution = React.memo(function ccocontribution({
                         <>
                           <TextBox variant='value' size='md' my={2}>
                             You&apos;re eligible. Kudos for interacting with
-                            daos!
+                            DAOs!
                           </TextBox>
 
                           {roundData.beforeRaise ? (
@@ -207,9 +223,17 @@ const CcoContribution = React.memo(function ccocontribution({
                       ) : null}
                     </>
                   ) : (
-                    <TextBox variant='value' size='md' my={2}>
-                      Switch to the {roundData.network} network
-                    </TextBox>
+                    <>
+                      {address ? (
+                        <Button onClick={handleSwitchNetwork}>
+                          Switch to the {roundData.network} network
+                        </Button>
+                      ) : (
+                        <Button onClick={requestWallet} mb={6}>
+                          Connect Wallet
+                        </Button>
+                      )}
+                    </>
                   )}
                 </ContentBox>
 
@@ -518,7 +542,7 @@ const CcoContribution = React.memo(function ccocontribution({
               </GenericModal>
               <GenericModal modalId='xDaiHelp'>
                 <TextBox>xDAI Quick Start</TextBox>
-                <TextBox size='sm' my={5}>
+                <TextBox size='sm' my={5} onClick={handleSwitchNetwork}>
                   Add xDAI network to Metamask
                 </TextBox>
                 <TextBox size='xs' mb={5}>
