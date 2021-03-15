@@ -5,7 +5,7 @@ import MainViewLayout from '../components/mainViewLayout';
 import { isCcoProposal, contributionTotalValue } from '../utils/cco';
 import { useTX } from '../contexts/TXContext';
 import ContentBox from '../components/ContentBox';
-import { timeToNow } from '../utils/general';
+import { groupByKey, timeToNow } from '../utils/general';
 
 // TODO: add timestamps and time until voting ends
 
@@ -25,6 +25,7 @@ const CcoHelper = React.memo(function ccohelper({
     processed: [],
   });
   const [otherProposals, setOtherProposals] = useState([]);
+  const [groupedByApplicant, setGroupedByApplicant] = useState({});
 
   const { refreshDao } = useTX();
 
@@ -125,6 +126,12 @@ const CcoHelper = React.memo(function ccohelper({
       const inVoting = [];
       const afterVoting = [];
       const processed = [];
+      const groupedByApplicant = groupByKey(
+        currentContributionData.contributionProposals,
+        'applicant',
+      );
+
+      setGroupedByApplicant(groupedByApplicant);
 
       const sortedProps = currentContributionData.contributionProposals.reduce(
         (coll, prop) => {
@@ -176,7 +183,7 @@ const CcoHelper = React.memo(function ccohelper({
     return (
       <Tr key={proposal.proposalId}>
         <Td>{proposal.proposalId}</Td>
-        <Td>{timeToNow(proposal.createdAt)}</Td>
+        {/* <Td>{timeToNow(proposal.createdAt)}</Td> */}
         <Td>{new Date(+proposal.createdAt * 1000).toISOString()}</Td>
         <Td>
           {proposal.status === 'Voting Period'
@@ -204,7 +211,7 @@ const CcoHelper = React.memo(function ccohelper({
             target='_blank'
             rel='noreferrer'
           >
-            check
+            {proposal.applicant}
           </a>
         </Td>
       </Tr>
@@ -228,6 +235,20 @@ const CcoHelper = React.memo(function ccohelper({
       </Tr>
     );
   };
+
+  const renderGroupedRow = (proposal) => {
+    return (
+      <Tr key={proposal.proposalId}>
+        <Td>{proposal.applicant}</Td>
+        <Td>{proposal.proposalId}</Td>
+        <Td>{proposal.lootRequested}</Td>
+        <Td>{`${proposal.tributeOffered /
+          10 ** proposal.tributeTokenDecimals} ${
+          proposal.tributeTokenSymbol
+        }`}</Td>
+      </Tr>
+    );
+  };
   return (
     <MainViewLayout header='DAOhaus CCO' isDao={true}>
       <Box w='100%'>
@@ -241,7 +262,7 @@ const CcoHelper = React.memo(function ccohelper({
                     <Thead>
                       <Tr>
                         <Th>proposal ID</Th>
-                        <Th>created At</Th>
+                        {/* <Th>created At</Th> */}
                         <Th>timestamp</Th>
                         <Th>status</Th>
                         <Th>loot</Th>
@@ -281,6 +302,36 @@ const CcoHelper = React.memo(function ccohelper({
                 })}
               </Tbody>
             </Table>
+          </ContentBox>
+        </Box>
+
+        <Box w={'100%'}>
+          <ContentBox w='100%'>
+            <Box mt={10}>grouped by applicant</Box>
+
+            {Object.keys(groupedByApplicant).map((key) => {
+              if (groupedByApplicant[key].length > 1) {
+                return (
+                  <Table size='sm' variant='unstyled' key={key}>
+                    <Thead>
+                      <Tr>
+                        <Th>applicant</Th>
+                        <Th>proposal ID</Th>
+                        <Th>loot</Th>
+                        <Th>tribute</Th>
+                      </Tr>
+                    </Thead>
+                    <Tbody>
+                      {groupedByApplicant[key].map((prop) => {
+                        return renderGroupedRow(prop);
+                      })}
+                    </Tbody>
+                  </Table>
+                );
+              } else {
+                return null;
+              }
+            })}
           </ContentBox>
         </Box>
       </Box>
