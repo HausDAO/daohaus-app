@@ -86,7 +86,10 @@ const CcoHelper = React.memo(function ccohelper({
     if (roundData && daoProposals && daoProposals.length) {
       const contributionProposals = [];
       const otherProps = [];
-      const propSplit = daoProposals.reduce(
+      const sortedByPropId = daoProposals.sort((a, b) => {
+        return +b.proposalId - +a.proposalId;
+      });
+      const propSplit = sortedByPropId.reduce(
         (coll, proposal) => {
           if (isCcoProposal(proposal, roundData)) {
             coll.contributionProposals.push(proposal);
@@ -295,6 +298,17 @@ const CcoHelper = React.memo(function ccohelper({
             })}
           </ContentBox>
         </Box>
+        {daoProposals ? (
+          <Box my={10} w={'100%'}>
+            <ContentBox w='100%' fontSize='xl'>
+              current total sponsored:{' '}
+              {daoProposals.reduce((s, p) => {
+                s += p.sponsored ? +p.tributeOffered / 10 ** 18 : 0;
+                return s;
+              }, 0)}
+            </ContentBox>
+          </Box>
+        ) : null}
         <Box w={'100%'}>
           <ContentBox w='100%'>
             <Box mt={10}>nonCcoProposals</Box>
