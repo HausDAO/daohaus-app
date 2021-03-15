@@ -57,9 +57,8 @@ const CcoContribution = React.memo(function ccocontribution({
   }, [address]);
 
   useEffect(() => {
-    if (currentDaoTokens && daoMetaData?.boosts?.cco) {
-      // if (currentDaoTokens && daoMetaData?.boosts?.cco?.active) {
-
+    // if (currentDaoTokens && daoMetaData?.boosts?.cco) {
+    if (currentDaoTokens && daoMetaData?.boosts?.cco?.active) {
       const ccoToken = currentDaoTokens.find(
         (token) =>
           token.tokenAddress.toLowerCase() ===
@@ -638,7 +637,7 @@ const CcoContribution = React.memo(function ccocontribution({
               {daoMetaData?.boosts?.cco && !daoMetaData.boosts.cco.active ? (
                 <Box mt={500}>
                   <ComingSoonOverlay
-                    message='Contribution period is complete. The max contribution target was hit.'
+                    message='Max target was hit and our community contribution opportunity is complete.'
                     fontSize='3xl'
                   />
                 </Box>
