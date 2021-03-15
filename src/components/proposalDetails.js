@@ -27,7 +27,6 @@ import {
   getProposalDetailStatus,
   memberVote,
   MINION_TYPES,
-  PROPOSAL_TYPES,
 } from '../utils/proposalUtils';
 import { numberWithCommas } from '../utils/general';
 import { getCustomProposalTerm } from '../utils/metadata';
@@ -238,7 +237,7 @@ const ProposalDetails = ({ proposal, daoMember }) => {
               )}
             </Skeleton>
           </Box>
-          {proposal?.proposalType !== PROPOSAL_TYPES.MINION_UBER_STAKE ? (
+          {proposal?.minion?.minionType !== MINION_TYPES.UBER ? (
             <Box key={proposal?.proposalType}>
               <TextBox size='xs' mb={2}>
                 Recipient

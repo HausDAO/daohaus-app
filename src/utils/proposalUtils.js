@@ -22,6 +22,7 @@ export const PROPOSAL_TYPES = {
   GUILDKICK: 'Guild Kick Proposal',
   TRADE: 'Trade Proposal',
   MINION_UBER_STAKE: 'UberHAUS Staking Proposal',
+  MINION_UBER_RQ: 'UberHAUS RageQuit Proposal',
   MINION_UBER_DEL: 'UberHAUS Delegate Proposal',
   MINION_UBER_DEFAULT: 'UberHAUS Minion Proposal',
   MINION_DEFAULT: 'Minion Proposal',

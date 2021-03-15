@@ -9,13 +9,13 @@ import {
 } from '@chakra-ui/react';
 import TextBox from '../components/TextBox';
 
-const RageInput = ({ register, setValue, label, type, max }) => {
+const RageInput = ({ register, setValue, label, type, max, mb = 2 }) => {
   const setMax = () => {
     setValue(type, max);
   };
 
   return (
-    <Box mb={2}>
+    <Box mb={mb}>
       <TextBox as={FormLabel} size='xs' htmlFor={type} mb={2}>
         {label}
       </TextBox>

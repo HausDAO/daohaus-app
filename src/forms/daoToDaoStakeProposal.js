@@ -37,6 +37,7 @@ import { useMetaData } from '../contexts/MetaDataContext';
 import { UberHausMinionService } from '../services/uberHausMinionService';
 import { useInjectedProvider } from '../contexts/InjectedProviderContext';
 import { TokenService } from '../services/tokenService';
+import { PROPOSAL_TYPES } from '../utils/proposalUtils';
 
 const StakeProposalForm = () => {
   const { injectedProvider, address } = useInjectedProvider();
@@ -111,7 +112,7 @@ const StakeProposalForm = () => {
     const details = detailsToJSON({
       ...values,
       uberHaus: true,
-      uberType: 'staking',
+      uberType: PROPOSAL_TYPES.MINION_UBER_STAKE,
       hash,
     });
 
