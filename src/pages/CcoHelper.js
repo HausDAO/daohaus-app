@@ -178,13 +178,19 @@ const CcoHelper = React.memo(function ccohelper({
   }, [currentContributionData]);
 
   const renderRow = (proposal) => {
+    const voteWarning =
+      proposal.status === 'VotingPeriod' &&
+      +proposal.yesShares <= proposal.noShares;
     return (
-      <Tr key={proposal.proposalId}>
+      <Tr
+        key={proposal.proposalId}
+        backgroundColor={voteWarning ? 'red.500' : ''}
+      >
         <Td>{proposal.proposalId}</Td>
         {/* <Td>{timeToNow(proposal.createdAt)}</Td> */}
         <Td>{new Date(+proposal.createdAt * 1000).toISOString()}</Td>
         <Td>
-          {proposal.status === 'Voting Period'
+          {proposal.status === 'VotingPeriod'
             ? `${proposal.status} ends ${timeToNow(proposal.votingPeriodEnds)}`
             : proposal.status}
         </Td>
