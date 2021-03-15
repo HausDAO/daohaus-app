@@ -7,7 +7,7 @@ import { useTX } from '../contexts/TXContext';
 import ContentBox from '../components/ContentBox';
 import { groupByKey, timeToNow } from '../utils/general';
 
-// TODO: add timestamps and time until voting ends
+const START_TIME_OVERRIDE = 1615809574;
 
 const CcoHelper = React.memo(function ccohelper({
   daoMetaData,
@@ -258,6 +258,14 @@ const CcoHelper = React.memo(function ccohelper({
               return (
                 <Box key={section}>
                   <Box mt={10}>{section}</Box>
+                  <Box mt={10}>
+                    current total tribute:{' '}
+                    {proposals[section].reduce((s, p) => {
+                      s += +p.tributeOffered / 10 ** 18;
+                      return s;
+                    }, 0)}
+                  </Box>
+
                   <Table size='sm' variant='simple'>
                     <Thead>
                       <Tr>
