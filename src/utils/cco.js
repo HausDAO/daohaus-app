@@ -28,7 +28,7 @@ export const isCcoProposal = (proposal, round) => {
   return (
     !proposal.cancelled &&
     parsedDetails.cco &&
-    +proposal.createdAt > +round.raiseStartTime &&
+    +proposal.createdAt >= +round.raiseStartTime &&
     proposal.tributeToken === round.ccoToken.tokenAddress &&
     proposal.sharesRequested === '0' &&
     +proposal.lootRequested > 0 &&
