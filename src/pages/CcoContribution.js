@@ -57,7 +57,9 @@ const CcoContribution = React.memo(function ccocontribution({
   }, [address]);
 
   useEffect(() => {
-    if (currentDaoTokens && daoMetaData?.boosts?.cco?.active) {
+    if (currentDaoTokens && daoMetaData?.boosts?.cco) {
+      // if (currentDaoTokens && daoMetaData?.boosts?.cco?.active) {
+
       const ccoToken = currentDaoTokens.find(
         (token) =>
           token.tokenAddress.toLowerCase() ===
@@ -105,7 +107,7 @@ const CcoContribution = React.memo(function ccocontribution({
   }, [currentDaoTokens, daoMetaData]);
 
   useEffect(() => {
-    if (roundData && address && daoProposals.length) {
+    if (roundData && address && daoProposals && daoProposals.length) {
       const contributionProposals = daoProposals.filter((proposal) => {
         return isCcoProposal(proposal, roundData);
       });
@@ -636,7 +638,7 @@ const CcoContribution = React.memo(function ccocontribution({
               {daoMetaData?.boosts?.cco && !daoMetaData.boosts.cco.active ? (
                 <Box mt={500}>
                   <ComingSoonOverlay
-                    message='CCO is paused for maintenance. Check back soon.'
+                    message='Contribution period is complete. The max contribution target was hit.'
                     fontSize='3xl'
                   />
                 </Box>
