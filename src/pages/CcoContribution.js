@@ -611,7 +611,7 @@ const CcoContribution = React.memo(function ccocontribution({
               {daoMetaData?.boosts?.cco && !daoMetaData.boosts.cco.active ? (
                 <Box mt={500}>
                   <ComingSoonOverlay
-                    message='Contribution period is complete. Max target has been exceeded.'
+                    message='Contribution period is complete. The max contribution target was hit.'
                     fontSize='3xl'
                   />
                 </Box>
