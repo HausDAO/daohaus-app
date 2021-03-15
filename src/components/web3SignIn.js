@@ -20,7 +20,7 @@ export const Web3SignIn = ({ isDao }) => {
     <>
       {address ? (
         <Button variant='outline' onClick={toggleAccountModal}>
-          <AddressAvatar hideCopy={true} addr={address} />
+          <AddressAvatar hideCopy={true} addr={address} key={address} />
         </Button>
       ) : (
         <Button variant='outline' onClick={requestWallet}>

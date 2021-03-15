@@ -34,7 +34,7 @@ const Main = () => {
         >
           {address ? (
             <>
-              <HubProfileCard address={address} />
+              <HubProfileCard address={address} key={address} />
               <NetworkList />
             </>
           ) : (

@@ -22,12 +22,25 @@ export const UberHausMinionService = ({ web3, chainID, uberHausMinion }) => {
         const action = await contract.methods.currentDelegate().call();
         return action;
       };
-    }
-    if (service === 'proposeAction' || service === 'executeAction') {
+    } else if (service === 'getAppointment') {
+      return async ({ proposalId }) => {
+        const action = await contract.methods.appointments(proposalId).call();
+        return action;
+      };
+    } else if (
+      service === 'proposeAction' ||
+      service === 'executeAction' ||
+      service === 'executeAppointment' ||
+      service === 'nominateDelegate'
+    ) {
       return async ({ args, address, poll, onTxHash }) => {
-        console.log(contract);
+        console.log('IN CONTRACT');
+        console.log('service', service);
+        console.log('args', args);
+        console.log('address', address);
+        console.log('poll', poll);
+        console.log('onTxHash', onTxHash);
         try {
-          console.log(args, address);
           const tx = await contract.methods[service](...args);
           console.log('tx', tx);
           return tx
@@ -43,6 +56,7 @@ export const UberHausMinionService = ({ web3, chainID, uberHausMinion }) => {
             });
         } catch (error) {
           console.log('fired in service');
+          console.error(error);
           return error;
         }
       };

@@ -36,7 +36,7 @@ const CcoHelper = React.memo(function ccohelper({
   }, []);
 
   useEffect(() => {
-    if (currentDaoTokens && daoMetaData?.boosts?.cco?.active) {
+    if (currentDaoTokens && daoMetaData?.boosts?.cco) {
       const ccoToken = currentDaoTokens.find(
         (token) =>
           token.tokenAddress.toLowerCase() ===
@@ -84,7 +84,7 @@ const CcoHelper = React.memo(function ccohelper({
   }, [currentDaoTokens, daoMetaData]);
 
   useEffect(() => {
-    if (roundData && daoProposals.length) {
+    if (roundData && daoProposals && daoProposals.length) {
       const contributionProposals = [];
       const otherProps = [];
       const propSplit = daoProposals.reduce(
@@ -177,6 +177,7 @@ const CcoHelper = React.memo(function ccohelper({
       <Tr key={proposal.proposalId}>
         <Td>{proposal.proposalId}</Td>
         <Td>{timeToNow(proposal.createdAt)}</Td>
+        <Td>{new Date(+proposal.createdAt * 1000).toISOString()}</Td>
         <Td>
           {proposal.status === 'Voting Period'
             ? `${proposal.status} ends ${timeToNow(proposal.votingPeriodEnds)}`
@@ -195,6 +196,16 @@ const CcoHelper = React.memo(function ccohelper({
           >
             View
           </Link>
+        </Td>
+
+        <Td>
+          <a
+            href={`https://data.daohaus.club/dao/know-your-dao/${proposal.applicant}`}
+            target='_blank'
+            rel='noreferrer'
+          >
+            check
+          </a>
         </Td>
       </Tr>
     );
@@ -231,11 +242,13 @@ const CcoHelper = React.memo(function ccohelper({
                       <Tr>
                         <Th>proposal ID</Th>
                         <Th>created At</Th>
+                        <Th>timestamp</Th>
                         <Th>status</Th>
                         <Th>loot</Th>
                         <Th>tribute</Th>
                         <Th>votes</Th>
                         <Th>link</Th>
+                        <Th>valid address</Th>
                       </Tr>
                     </Thead>
                     <Tbody>
@@ -249,7 +262,7 @@ const CcoHelper = React.memo(function ccohelper({
             })}
           </ContentBox>
         </Box>
-        <Box w={['100%', null, null, null, '50%']}>
+        <Box w={'100%'}>
           <ContentBox w='100%'>
             <Box mt={10}>nonCcoProposals</Box>
             <Table size='sm' variant='simple'>
