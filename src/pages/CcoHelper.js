@@ -7,8 +7,6 @@ import { useTX } from '../contexts/TXContext';
 import ContentBox from '../components/ContentBox';
 import { groupByKey, timeToNow } from '../utils/general';
 
-const START_TIME_OVERRIDE = 1615809574;
-
 const CcoHelper = React.memo(function ccohelper({
   daoMetaData,
   currentDaoTokens,
