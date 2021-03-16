@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { Box, Button, Flex } from '@chakra-ui/react';
 
 // import Following from '../components/followingDaos';
@@ -10,11 +10,61 @@ import { useOverlay } from '../contexts/OverlayContext';
 import GenericModal from '../modals/genericModal';
 import NewUberHausMinion from '../forms/newUberHausMinion';
 import { useInjectedProvider } from '../contexts/InjectedProviderContext';
+import { useSessionStorage } from '../hooks/useSessionStorage';
+import { useParams } from 'react-router-dom';
+import { bigGraphQuery } from '../utils/theGraph';
+import { UBERHAUS_ADDRESS } from '../utils/uberhaus';
 
 const Allies = ({ daoOverview, daoMetaData }) => {
+  const { daoid, daochain } = useParams();
+
+  const [uberProposals, setUberProposals] = useSessionStorage(
+    `U-proposals`,
+    null,
+  );
+  const [uberOverview, setUberOveriew] = useSessionStorage(`U-overview`, null);
+  const [uberMembers, setUberMembers] = useSessionStorage(`U-members`, null);
+
   const { d2dProposalModal } = useOverlay();
   const [proposalType, setProposalType] = useState(null);
   const { address, requestWallet } = useInjectedProvider();
+
+  const hasPerformedBatchQuery = useRef(false);
+
+  useEffect(() => {
+    // do not reload if truthy
+    if (uberProposals || uberMembers || uberOverview) return;
+
+    // do not fetch without necessary data
+    if (!daoid || !daochain || hasPerformedBatchQuery.current) return;
+    // fetch only after child dao's data loads
+    // if (!daoOverview || !daoMetaData) return;
+
+    const bigQueryOptions = {
+      args: {
+        daoID: UBERHAUS_ADDRESS,
+        chainID: '0x2a',
+      },
+      getSetters: [
+        { getter: 'getOverview', setter: setUberOveriew },
+        {
+          getter: 'getActivities',
+          setter: { setUberProposals },
+        },
+        { getter: 'getMembers', setter: setUberMembers },
+      ],
+    };
+    bigGraphQuery(bigQueryOptions);
+
+    hasPerformedBatchQuery.current = true;
+  }, [
+    daoid,
+    daochain,
+    uberMembers,
+    uberProposals,
+    uberOverview,
+    uberProposals,
+  ]);
 
   if (!address) {
     return (
