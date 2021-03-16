@@ -112,8 +112,18 @@ const completeQueries = {
           }),
         ),
       };
-      setter.setDaoActivities(resolvedActivity);
-      setter.setDaoProposals(resolvedActivity.proposals);
+      if (setter.setDaoActivities) {
+        setter.setDaoActivities(resolvedActivity);
+      }
+      if (setter.setDaoProposals) {
+        setter.setDaoProposals(resolvedActivity.proposals);
+      }
+      if (setter.setUberProposals) {
+        setter.setUberProposals(resolvedActivity.proposals);
+      }
+      if (setter.setUberActivities) {
+        setter.setUberActivities(resolvedActivity.proposals);
+      }
     } catch (error) {
       console.error(error);
     }
