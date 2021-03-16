@@ -37,12 +37,9 @@ const AddressInput = ({
   newMember,
   member,
 }) => {
-  // const [user] g= useUser();
   const { theme } = useCustomTheme();
-  // const { daochain } = useParams();
   const { daoMembers } = useDao();
   const [anyApplicant, setAnyApplicant] = useState(memberOnly);
-  // const [members] = useMembers();
   const [localMembers, setLocalMembers] = useState([]);
 
   const ensAddr = watch('applicantHidden', '');
