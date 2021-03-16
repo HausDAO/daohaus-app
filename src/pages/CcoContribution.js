@@ -488,10 +488,39 @@ const CcoContribution = React.memo(function ccocontribution({
                   </Text>
                   <TextBox>1. Check Eligibility</TextBox>
                   <Text mb={5}>
-                    We have scraped every known dao contract, including
-                    &apos;The DAO&apos;, Ethereum&apos;s first major attempt at
-                    a DAO. If your address has interacted with a DAO before, you
-                    should be eligible to contribute.
+                    We have scraped a ton of dao contracts, including &apos;The
+                    DAO&apos;, Ethereum&apos;s first major attempt at a DAO.
+                    There are ~44k addresses that have ‘proven’ eligible for
+                    HAUS distribution, all of the below actions demonstrate a
+                    willingness to govern within the Ethereum ecosystem and
+                    therefore are included:
+                    <ul>
+                      <li>
+                        All addresses that have ever sent or received TheDAO
+                        tokens
+                      </li>
+                      <li>All members of Snapshot Spaces</li>
+                      <li>
+                        All vote creators and voters from Aragon Voting module
+                      </li>
+                      <li>
+                        All addresses with VoteCast or DelegateChanged from
+                        Compound
+                      </li>
+                      <li>
+                        All stakers scraped from the Yearn Staked Event Emitted
+                      </li>
+                      <li>
+                        All addresses with VoteCast or DelegateChanged from
+                        Uniswap
+                      </li>
+                      <li>
+                        All addresses that were in the ‘to or from’ fields from
+                        DXDAO
+                      </li>
+                      <li>All addresses with VoteEmitted events from Aave</li>
+                      <li>All Moloch DAO users</li>
+                    </ul>
                   </Text>
                   <TextBox>2. Contribute</TextBox>
                   <Text>
@@ -526,8 +555,6 @@ const CcoContribution = React.memo(function ccocontribution({
                     Starts 8am EST March 19th
                     <br />
                     Runs for 3 Days or until max target is reached.
-                    <br />
-                    max target: 1,111,110 wxDAI
                   </Text>
                   <TextBox>3. Claim</TextBox>
                   <Text>
@@ -546,10 +573,10 @@ const CcoContribution = React.memo(function ccocontribution({
                 <TextBox size='sm' my={5} onClick={handleSwitchNetwork}>
                   Add xDAI network to Metamask
                 </TextBox>
-                <TextBox size='xs' mb={5}>
+                {/* <TextBox size='xs' mb={5}>
                   Magic
                 </TextBox>
-                <Button variant='outline'>Add xDAI to Metamask</Button>
+                <Button variant='outline'>Add xDAI to Metamask</Button> */}
                 <TextBox size='xs' my={5}>
                   Manual
                 </TextBox>

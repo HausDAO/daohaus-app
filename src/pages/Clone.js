@@ -66,6 +66,7 @@ const Clone = ({ daoOverview, daoMembers, isUberHaus = false }) => {
   }, [injectedChain, daoMembers, daoOverview]);
 
   const handleSummon = async (data) => {
+    console.log(data);
     setIsSummoning(true);
     const newDaoData = {
       ...daoData,
@@ -91,7 +92,7 @@ const Clone = ({ daoOverview, daoMembers, isUberHaus = false }) => {
     const summonParams = [
       summonData.summoner,
       summonData.approvedToken.split(',').map((item) => item.trim()),
-      summonData.periodDuration,
+      data.seconds || summonData.periodDuration,
       summonData.votingPeriod,
       summonData.gracePeriod,
       summonData.proposalDeposit,
@@ -99,6 +100,7 @@ const Clone = ({ daoOverview, daoMembers, isUberHaus = false }) => {
       summonData.processingReward,
       summonData.summonerShares,
     ];
+    console.log(summonParams);
 
     try {
       const poll = createPoll({ action: 'summonMoloch', cachePoll })({
