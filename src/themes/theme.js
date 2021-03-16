@@ -278,6 +278,27 @@ export const createTheme = (daoTheme) => {
           focusBorderColor: 'secondary.500',
         },
       },
+      NumberInput: {
+        parts: ['field', 'addon'],
+        baseStyle: {
+          field: {
+            borderColor: 'whiteAlpha.50',
+            color: 'whiteAlpha.900',
+            focusBorderColor: 'secondary.500',
+          },
+          addon: {
+            color: 'whiteAlpha.900',
+            bg: 'transparent',
+            focusBorderColor: 'secondary.500',
+          },
+        },
+        variants: {},
+        sizes: {},
+        defaultProps: {
+          size: 'md',
+          focusBorderColor: 'secondary.500',
+        },
+      },
       Tabs: {
         parts: ['root', 'tablist', 'tab', 'tabpanel', 'indicator'],
         baseStyle: {

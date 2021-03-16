@@ -14,6 +14,7 @@ import ContentBox from '../components/ContentBox';
 import TextBox from '../components/TextBox';
 import { validateSummonresAndShares } from '../utils/summoning';
 import { RiErrorWarningLine, RiInformationLine } from 'react-icons/ri';
+import TimeInput from '../components/timeInput';
 
 const SummonHard = ({ daoData, handleSummon, networkName, isUberHaus }) => {
   const [currentError, setCurrentError] = useState(null);
@@ -24,10 +25,15 @@ const SummonHard = ({ daoData, handleSummon, networkName, isUberHaus }) => {
     handleSubmit,
     formState,
     reset,
+    watch,
+    setError,
+    clearErrors,
+    setValue,
   } = useForm({
     mode: 'onBlur',
     defaultValues: { ...daoData },
   });
+  const [timePeriodInSeconds, setTimePeriod] = useState('');
   const { isDirty, isValid } = formState;
 
   useEffect(() => {
@@ -49,7 +55,7 @@ const SummonHard = ({ daoData, handleSummon, networkName, isUberHaus }) => {
   }, [daoData]);
 
   const onSubmit = (data) => {
-    handleSummon(data);
+    handleSummon({ data, seconds: timePeriodInSeconds?.toString() });
   };
 
   return (
@@ -106,25 +112,16 @@ const SummonHard = ({ daoData, handleSummon, networkName, isUberHaus }) => {
         {/* {isCloning && daochain !== } */}
         <Box>
           <TextBox mt={6}>Periods</TextBox>
-          <Box>
-            How many seconds per period?
-            <Input
-              className='inline-field'
-              name='periodDuration'
-              ref={register({
-                required: true,
-                pattern: /^-?\d*\.?\d*$/,
-              })}
-            />
-            {errors.periodDuration?.type === 'required' && (
-              <span className='required-field'>required</span>
-            )}
-            {errors.periodDuration?.type === 'pattern' && (
-              <span className='required-field'>not a number</span>
-            )}
-          </Box>
+          <TimeInput
+            errors={errors}
+            register={register}
+            watch={watch}
+            setError={setError}
+            setValue={setValue}
+            clearErrors={clearErrors}
+            setTimePeriod={setTimePeriod}
+          />
         </Box>
-
         <Box>
           <TextBox mt={6}>Voting</TextBox>
           <Text>How many periods will the voting period last?</Text>

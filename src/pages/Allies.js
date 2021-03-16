@@ -46,10 +46,7 @@ const Allies = ({ daoOverview, daoMetaData }) => {
           isOpen={true}
           setProposalType={setProposalType}
         />
-        <DaoToDaoProposalModal
-          isOpen={d2dProposalModal}
-          proposalType={proposalType}
-        />
+        <DaoToDaoProposalModal isOpen={true} proposalType={'d2dDelegate'} />
         <GenericModal closeOnOverlayClick={false} modalId='uberMinionLaunch'>
           <NewUberHausMinion />
         </GenericModal>

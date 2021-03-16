@@ -1,6 +1,34 @@
 import { formatDistanceToNow } from 'date-fns';
 import { utils } from 'ethers';
 
+export const SECONDS = {
+  PER_MINUTE: 60,
+  PER_HOUR: 3600,
+  PER_DAY: 86400,
+  PER_WEEK: 604800,
+};
+
+export const calcSeconds = (val, unit) => {
+  if (!unit || !val) return;
+
+  unit = unit.toLowerCase();
+  val = parseInt(val);
+  if (unit === 'seconds' || unit === 'second') {
+    return val;
+  } else if (unit === 'minutes' || unit === 'minute') {
+    return val * SECONDS.PER_MINUTE;
+  } else if (unit === 'hours' || unit === 'hour') {
+    return val * SECONDS.PER_HOUR;
+  } else if (unit === 'days' || unit === 'day') {
+    return val * SECONDS.PER_DAY;
+  } else if (unit === 'weeks' || unit === 'week') {
+    return val * SECONDS.PER_WEEK;
+  } else {
+    console.error('Did not receive the corrent arguments to calculate time');
+    return false;
+  }
+};
+
 export const pipe = (...fns) => (x) =>
   fns.reduce((prev, func) => func(prev), x);
 
@@ -69,7 +97,7 @@ export const numberWithCommas = (num) => {
       ? localNum.split('.')[0]
       : parseInt(localNum);
 
-  return utils.commify(noZeroDec);
+  return noZeroDec ? utils.commify(noZeroDec) : num;
 };
 
 export const truncateAddr = (addr) => {

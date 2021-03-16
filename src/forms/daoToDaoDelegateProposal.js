@@ -38,6 +38,7 @@ import { useMetaData } from '../contexts/MetaDataContext';
 import { useInjectedProvider } from '../contexts/InjectedProviderContext';
 import { UberHausMinionService } from '../services/uberHausMinionService';
 import { useTX } from '../contexts/TXContext';
+import TimeInput from '../components/timeInput';
 
 // TODO pass delegate to delegate menu
 // TODO replace delegate with user avatar
@@ -48,6 +49,7 @@ const DelegateProposalForm = () => {
   const { daoid, daochain } = useParams();
   const { daoMetaData } = useMetaData();
   const { injectedProvider, address } = useInjectedProvider();
+  const [timePeriod, setTimePeriod] = useState(0);
   const [currentError, setCurrentError] = useState(null);
   const {
     setD2dProposalModal,
@@ -58,7 +60,15 @@ const DelegateProposalForm = () => {
   const { daoOverview } = useDao();
   const { refreshDao } = useTX();
   const { cachePoll, resolvePoll } = useUser();
-  const { handleSubmit, errors, register, setValue, watch } = useForm();
+  const {
+    handleSubmit,
+    errors,
+    register,
+    setValue,
+    watch,
+    setError,
+    clearErrors,
+  } = useForm();
 
   useEffect(() => {
     if (Object.keys(errors).length > 0) {
@@ -92,10 +102,9 @@ const DelegateProposalForm = () => {
     const args = [
       UBERHAUS_ADDRESS,
       values.memberApplicant,
-      values.delegateTerm,
+      timePeriod?.toString() || values.delegateTerm,
       details,
     ];
-
     try {
       const poll = createPoll({
         action: 'uberHausNominateDelegate',
@@ -175,7 +184,6 @@ const DelegateProposalForm = () => {
             </Box>
             <DelegateMenu />
           </Flex>
-
           <AddressInput
             name='delegate'
             formLabel='Delegate Address'
@@ -184,10 +192,24 @@ const DelegateProposalForm = () => {
             watch={watch}
             memberOnly={true}
           />
-          <TextBox as={FormLabel} size='xs' htmlFor='name' mb={2}>
-            Term
-          </TextBox>
-          <Input
+          <TimeInput
+            errors={errors}
+            register={register}
+            setValue={setValue}
+            watch={watch}
+            setError={setError}
+            clearErrors={clearErrors}
+            inputName='delegateTerm'
+            setTimePeriod={setTimePeriod}
+            displayTotalSeconds={false}
+            label={
+              <TextBox as={FormLabel} size='xs' htmlFor='name' mb={2}>
+                Delegation period length
+              </TextBox>
+            }
+          />
+
+          {/* <Input
             name='delegateTerm'
             placeholder='0'
             mb={5}
@@ -203,7 +225,7 @@ const DelegateProposalForm = () => {
             })}
             color='white'
             focusBorderColor='secondary.500'
-          />
+          /> */}
         </Box>
       </FormControl>
       <Flex justify='flex-end' align='center' h='60px'>
