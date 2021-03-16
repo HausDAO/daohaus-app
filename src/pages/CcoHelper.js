@@ -7,8 +7,6 @@ import { useTX } from '../contexts/TXContext';
 import ContentBox from '../components/ContentBox';
 import { groupByKey, timeToNow } from '../utils/general';
 
-// TODO: add timestamps and time until voting ends
-
 const CcoHelper = React.memo(function ccohelper({
   daoMetaData,
   currentDaoTokens,
@@ -88,7 +86,10 @@ const CcoHelper = React.memo(function ccohelper({
     if (roundData && daoProposals && daoProposals.length) {
       const contributionProposals = [];
       const otherProps = [];
-      const propSplit = daoProposals.reduce(
+      const sortedByPropId = daoProposals.sort((a, b) => {
+        return +b.proposalId - +a.proposalId;
+      });
+      const propSplit = sortedByPropId.reduce(
         (coll, proposal) => {
           if (isCcoProposal(proposal, roundData)) {
             coll.contributionProposals.push(proposal);
@@ -180,13 +181,19 @@ const CcoHelper = React.memo(function ccohelper({
   }, [currentContributionData]);
 
   const renderRow = (proposal) => {
+    const voteWarning =
+      proposal.status === 'VotingPeriod' &&
+      +proposal.yesShares <= proposal.noShares;
     return (
-      <Tr key={proposal.proposalId}>
+      <Tr
+        key={proposal.proposalId}
+        backgroundColor={voteWarning ? 'red.500' : ''}
+      >
         <Td>{proposal.proposalId}</Td>
         {/* <Td>{timeToNow(proposal.createdAt)}</Td> */}
         <Td>{new Date(+proposal.createdAt * 1000).toISOString()}</Td>
         <Td>
-          {proposal.status === 'Voting Period'
+          {proposal.status === 'VotingPeriod'
             ? `${proposal.status} ends ${timeToNow(proposal.votingPeriodEnds)}`
             : proposal.status}
         </Td>
@@ -258,6 +265,14 @@ const CcoHelper = React.memo(function ccohelper({
               return (
                 <Box key={section}>
                   <Box mt={10}>{section}</Box>
+                  <Box mt={10}>
+                    current total tribute:{' '}
+                    {proposals[section].reduce((s, p) => {
+                      s += +p.tributeOffered / 10 ** 18;
+                      return s;
+                    }, 0)}
+                  </Box>
+
                   <Table size='sm' variant='simple'>
                     <Thead>
                       <Tr>
@@ -283,6 +298,17 @@ const CcoHelper = React.memo(function ccohelper({
             })}
           </ContentBox>
         </Box>
+        {daoProposals ? (
+          <Box my={10} w={'100%'}>
+            <ContentBox w='100%' fontSize='xl'>
+              current total sponsored:{' '}
+              {daoProposals.reduce((s, p) => {
+                s += p.sponsored ? +p.tributeOffered / 10 ** 18 : 0;
+                return s;
+              }, 0)}
+            </ContentBox>
+          </Box>
+        ) : null}
         <Box w={'100%'}>
           <ContentBox w='100%'>
             <Box mt={10}>nonCcoProposals</Box>
