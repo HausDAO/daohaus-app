@@ -35,8 +35,14 @@ import { IsJsonString } from '../utils/general';
 import { chainByName } from '../utils/chain';
 import DaoToDaoUberAlly from './daoToDaoUberAllyLink';
 import ComingSoonOverlay from './comingSoonOverlay';
+import AddressAvatar from './addressAvatar';
 
-const DaoToDaoManager = ({ daoOverview, daoMetaData, setProposalType }) => {
+const DaoToDaoManager = ({
+  daoOverview,
+  daoMetaData,
+  setProposalType,
+  uberDelegate,
+}) => {
   const {
     setD2dProposalTypeModal,
     setD2dProposalModal,
@@ -137,10 +143,10 @@ const DaoToDaoManager = ({ daoOverview, daoMetaData, setProposalType }) => {
       const details = IsJsonString(prop.details)
         ? JSON.parse(prop.details.replace(/(\r\n|\n|\r)/gm, ''))
         : '';
-      console.log('details', details);
+      // console.log('details', details);
       return details.uberType === 'staking';
     });
-  console.log('activeMembershipProposal', activeMembershipProposal);
+  // console.log('activeMembershipProposal', activeMembershipProposal);
 
   if (wrongChain) {
     return (
@@ -363,11 +369,12 @@ const DaoToDaoManager = ({ daoOverview, daoMetaData, setProposalType }) => {
             </Flex>
             <Box>
               <TextBox mb={2} size='sm'>
-                Delegate
+                uberhaus Delegate
               </TextBox>
               <Flex justify='space-between'>
                 <Flex>
-                  <Image
+                  <AddressAvatar addr={uberDelegate} />
+                  {/* <Image
                     src={DAOHaus}
                     alt='delegate name'
                     w='50px'
@@ -381,7 +388,7 @@ const DaoToDaoManager = ({ daoOverview, daoMetaData, setProposalType }) => {
                     <Box fontFamily='mono' fontSize='sm'>
                       Takashi.eth
                     </Box>
-                  </Box>
+                  </Box> */}
                 </Flex>
 
                 <Button w='25%' onClick={openModal}>

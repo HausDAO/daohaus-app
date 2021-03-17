@@ -30,7 +30,15 @@ const getModalWidth = (proposalType) => {
   }
 };
 
-const DaoToDaoProposalFormModal = ({ proposalType, isOpen, returnRoute }) => {
+const DaoToDaoProposalFormModal = ({
+  proposalType,
+  isOpen,
+  returnRoute,
+  daoMembers,
+  uberMembers,
+  uberHausMinion,
+  uberDelegate,
+}) => {
   const [, setLoading] = useState(false);
   const [proposalForm, setProposalForm] = useState(null);
   const history = useHistory();
@@ -54,7 +62,14 @@ const DaoToDaoProposalFormModal = ({ proposalType, isOpen, returnRoute }) => {
       type: `New Uber Proposal`,
       heading: `Choose Champion`,
       subline: `Manage your delegate to UBERhaus`,
-      form: <DelegateProposalForm />,
+      form: (
+        <DelegateProposalForm
+          daoMembers={daoMembers}
+          uberMembers={uberMembers}
+          uberHausMinion={uberHausMinion}
+          uberDelegate={uberDelegate}
+        />
+      ),
     },
     d2dRageQuit: {
       type: `New Uber Proposal`,

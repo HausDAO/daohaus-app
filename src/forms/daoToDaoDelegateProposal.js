@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 // import { useParams } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import {
@@ -38,12 +38,19 @@ import { useInjectedProvider } from '../contexts/InjectedProviderContext';
 import { UberHausMinionService } from '../services/uberHausMinionService';
 import { useTX } from '../contexts/TXContext';
 import TimeInput from '../components/timeInput';
+import AddressAvatar from '../components/addressAvatar';
+import { USER_MEMBERSHIPS } from '../graphQL/member-queries';
 
 // TODO pass delegate to delegate menu
 // TODO replace delegate with user avatar
 // TODO sort out term limits, emergency recall
 
-const DelegateProposalForm = () => {
+const DelegateProposalForm = ({
+  daoMembers,
+  uberMembers,
+  uberHausMinion,
+  uberDelegate,
+}) => {
   const [loading, setLoading] = useState(false);
   const { daoid, daochain } = useParams();
   const { daoMetaData } = useMetaData();
@@ -69,6 +76,26 @@ const DelegateProposalForm = () => {
     clearErrors,
   } = useForm();
 
+  const candidates = useMemo(() => {
+    console.log(daoMembers);
+    if (!daoMembers || !uberHausMinion || !uberMembers || !uberDelegate) return;
+    console.log('fired');
+    console.log(uberHausMinion);
+    return daoMembers.filter((member) => {
+      const hasShares = +member.shares > 0;
+      const isNotDelegate = member.memberAddress !== uberDelegate;
+      const isNotUberMemberOrDelegate = uberMembers.every(
+        (uberMember) =>
+          member.memberAddress !== uberMember.memberAddress &&
+          member.memberAddress !== uberMember.delegateKey,
+      );
+      if (hasShares && isNotDelegate && isNotUberMemberOrDelegate) {
+        return member;
+      }
+    });
+  }, [daoMembers, uberHausMinion, uberMembers, uberDelegate]);
+
+  console.log(candidates);
   useEffect(() => {
     if (Object.keys(errors).length > 0) {
       const newE = Object.keys(errors)[0];
@@ -85,11 +112,7 @@ const DelegateProposalForm = () => {
     setLoading(true);
 
     const now = (new Date().getTime() / 1000).toFixed();
-    const uberHausMinionData = daoOverview.minions.find(
-      (minion) =>
-        minion.minionType === 'UberHaus minion' &&
-        minion.uberHausAddress === UBERHAUS_ADDRESS,
-    );
+
     const hash = createHash();
     const details = detailsToJSON({
       ...values,
@@ -104,12 +127,13 @@ const DelegateProposalForm = () => {
       timePeriod?.toString() || values.delegateTerm,
       details,
     ];
+    console.log(uberHausMinion);
     try {
       const poll = createPoll({
         action: 'uberHausNominateDelegate',
         cachePoll,
       })({
-        minionAddress: uberHausMinionData.minionAddress,
+        minionAddress: uberHausMinion.minionAddress,
         chainID: daochain,
         newDelegateAddress: values?.memberApplicant,
         createdAt: now,
@@ -145,7 +169,7 @@ const DelegateProposalForm = () => {
       };
       await UberHausMinionService({
         web3: injectedProvider,
-        uberHausMinion: uberHausMinionData.minionAddress,
+        uberHausMinion: uberHausMinion.minionAddress,
         chainID: daochain,
       })('nominateDelegate')({ args, address, poll, onTxHash });
     } catch (err) {
@@ -177,10 +201,7 @@ const DelegateProposalForm = () => {
             Current Delegate
           </TextBox>
           <Flex w='60%' align='center' justify='space-between' pb={3}>
-            <Image src={DAOHaus} w='40px' h='40px' />
-            <Box fontFamily='heading' fontWeight={900}>
-              takashi.eth
-            </Box>
+            <AddressAvatar addr={uberDelegate} />
             <DelegateMenu />
           </Flex>
           <AddressInput
@@ -190,6 +211,8 @@ const DelegateProposalForm = () => {
             setValue={setValue}
             watch={watch}
             memberOnly={true}
+            overrideData={candidates}
+            memberOverride={true}
           />
           <TimeInput
             errors={errors}
