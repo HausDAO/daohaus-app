@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { utils } from 'web3';
-import { Link, useParams } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import {
   Flex,
   Box,
@@ -11,6 +11,7 @@ import {
   Icon,
   Tooltip,
   Spinner,
+  Link,
 } from '@chakra-ui/react';
 import { RiExternalLinkLine } from 'react-icons/ri';
 import { FaThumbsUp, FaThumbsDown } from 'react-icons/fa';
