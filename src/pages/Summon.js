@@ -83,7 +83,7 @@ const Summon = () => {
     const summonParams = [
       summonData.summoner,
       summonData.approvedToken.split(',').map((item) => item.trim()),
-      summonData.periodDuration,
+      data.seconds || summonData.periodDuration,
       summonData.votingPeriod,
       summonData.gracePeriod,
       summonData.proposalDeposit,

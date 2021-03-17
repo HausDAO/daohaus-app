@@ -61,6 +61,8 @@ const NewUberHausMinion = () => {
       values.details,
     ];
 
+    console.log('summonParams', summonParams);
+
     try {
       const poll = createPoll({ action: 'summonMinion', cachePoll })({
         chainID: injectedChain.chain_id,

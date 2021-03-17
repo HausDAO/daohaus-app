@@ -352,6 +352,7 @@ const ProposalVote = ({
   };
 
   const executeMinion = async (proposal) => {
+    console.log('proposal', proposal);
     if (!proposal?.minion) return;
 
     const args = [proposal.proposalId];
@@ -390,7 +391,10 @@ const ProposalVote = ({
           minion: proposal.minionAddress,
           chainID: daochain,
         })('executeAction')({ args, address, poll, onTxHash });
-      } else if (proposal.proposalType === PROPOSAL_TYPES.MINION_UBER_STAKE) {
+      } else if (
+        proposal.proposalType === PROPOSAL_TYPES.MINION_UBER_STAKE ||
+        proposal.proposalType === PROPOSAL_TYPES.MINION_UBER_DEFAULT
+      ) {
         await UberHausMinionService({
           web3: injectedProvider,
           uberHausMinion: proposal.minionAddress,
@@ -422,7 +426,10 @@ const ProposalVote = ({
             chainID: daochain,
           })('getAction')({ proposalId: proposal?.proposalId });
           setMinionDeets(action);
-        } else if (proposal.proposalType === PROPOSAL_TYPES.MINION_UBER_STAKE) {
+        } else if (
+          proposal.proposalType === PROPOSAL_TYPES.MINION_UBER_STAKE ||
+          proposal.proposalType === PROPOSAL_TYPES.MINION_UBER_DEFAULT
+        ) {
           const action = await UberHausMinionService({
             web3: injectedProvider,
             uberHausMinion: proposal.minionAddress,
