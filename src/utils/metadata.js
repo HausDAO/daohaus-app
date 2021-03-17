@@ -235,3 +235,12 @@ export const getEligibility = async (address) => {
     throw new Error(err);
   }
 };
+
+export const getDateTime = async () => {
+  try {
+    const response = await fetch(`https://data.daohaus.club/dao/get-utc`);
+    return response.json();
+  } catch (err) {
+    throw new Error(err);
+  }
+};

@@ -148,15 +148,15 @@ const DaoToDaoManager = ({ daoOverview, daoMetaData, setProposalType }) => {
         <TextBox size='xs' mb={2}>
           DAO On DAO Memberships
         </TextBox>
-        <ContentBox w='40%'>
+        <ContentBox w='40%' position='relative'>
           <Flex align='center'>
             <Image src={DAOHaus} w='50px' h='50px' mr={4} />
             <Box fontFamily='heading' fontSize='xl' fontWeight={900}>
               UberHAUS
             </Box>
           </Flex>
-          <Box position='relative' width='100%'>
-            <ComingSoonOverlay message='👀 Check back soon!' />
+          <ComingSoonOverlay message='👀 Check back soon!' />
+          <Box>
             {uberAlly ? (
               <Box mt={5}>
                 <DaoToDaoUberAlly
@@ -215,13 +215,14 @@ const DaoToDaoManager = ({ daoOverview, daoMetaData, setProposalType }) => {
       <TextBox size='xs' mb={2}>
         DAO On DAO Memberships
       </TextBox>
-      <ContentBox w='40%'>
+      <ContentBox w='40%' position='relative'>
         <Flex align='center'>
           <Image src={DAOHaus} w='50px' h='50px' mr={4} />
           <Box fontFamily='heading' fontSize='xl' fontWeight={900}>
             UberHAUS
           </Box>
         </Flex>
+        <ComingSoonOverlay message='👀 Check back soon!' />
 
         {noMinion ? (
           <Box>
