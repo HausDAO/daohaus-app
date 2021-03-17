@@ -31,6 +31,7 @@ import { TokenService } from '../services/tokenService';
 import { useOverlay } from '../contexts/OverlayContext';
 import { pendingUberHausStakingProposal } from '../utils/proposalUtils';
 import { truncateAddr } from '../utils/general';
+import DaoToDaoProposalCard from './daoToDaoProposalCard';
 
 // import ComingSoonOverlay from './comingSoonOverlay';
 
@@ -217,7 +218,7 @@ const DaoToDaoManager = ({
               </>
             ) : null}
 
-            {hasMinionNotMember ? (
+            {hasMinionNotMember && !uberHausMinion.activeMembershipProposal ? (
               <>
                 <Box fontSize='md' my={2}>
                   {daoMetaData?.name} is not a member of UberHAUS
@@ -227,55 +228,57 @@ const DaoToDaoManager = ({
                   {UBERHAUS_STAKING_TOKEN_SYMBOL} into the UberHAUS DAO.
                 </Box>
 
-                {!uberHausMinion.activeMembershipProposal ? (
-                  <>
-                    {+uberHausMinion.balance <= 0 ? (
-                      <>
-                        <Box fontSize='md' my={2}>
-                          Before you can make a proposal you&apos;ll need to
-                          send {UBERHAUS_STAKING_TOKEN_SYMBOL} to your
-                          minion&apos;s address
-                        </Box>
-                        <Flex>
-                          <>{truncateAddr(uberHausMinion.minionAddress)}</>
+                <>
+                  {+uberHausMinion.balance <= 0 ? (
+                    <>
+                      <Box fontSize='md' my={2}>
+                        Before you can make a proposal you&apos;ll need to send{' '}
+                        {UBERHAUS_STAKING_TOKEN_SYMBOL} to your minion&apos;s
+                        address
+                      </Box>
+                      <Flex>
+                        <>{truncateAddr(uberHausMinion.minionAddress)}</>
 
-                          <CopyToClipboard
-                            text={uberHausMinion.minionAddress}
-                            onCopy={() =>
-                              toast({
-                                title: 'Copied Address',
-                                position: 'top-right',
-                                status: 'success',
-                                duration: 3000,
-                                isClosable: true,
-                              })
-                            }
-                          >
-                            <Icon
-                              as={FaCopy}
-                              color='secondary.300'
-                              ml={2}
-                              _hover={{ cursor: 'pointer' }}
-                            />
-                          </CopyToClipboard>
-                        </Flex>
-                        <Box fontSize='md' my={2}>
-                          Or create a funding proposal from the dao to the
-                          minion address.
-                        </Box>
-                      </>
-                    ) : (
-                      <Button w='75%' onClick={handleStakeClick}>
-                        Make Staking Proposal
-                      </Button>
-                    )}
-                  </>
-                ) : (
-                  <Box fontSize='md' my={2}>
-                    display active proposal
-                  </Box>
-                )}
+                        <CopyToClipboard
+                          text={uberHausMinion.minionAddress}
+                          onCopy={() =>
+                            toast({
+                              title: 'Copied Address',
+                              position: 'top-right',
+                              status: 'success',
+                              duration: 3000,
+                              isClosable: true,
+                            })
+                          }
+                        >
+                          <Icon
+                            as={FaCopy}
+                            color='secondary.300'
+                            ml={2}
+                            _hover={{ cursor: 'pointer' }}
+                          />
+                        </CopyToClipboard>
+                      </Flex>
+                      <Box fontSize='md' my={2}>
+                        Or create a funding proposal from the dao to the minion
+                        address.
+                      </Box>
+                    </>
+                  ) : (
+                    <Button w='75%' onClick={handleStakeClick}>
+                      Make Staking Proposal
+                    </Button>
+                  )}
+                </>
               </>
+            ) : null}
+
+            {uberHausMinion?.activeMembershipProposal ? (
+              <Box mt={10}>
+                <DaoToDaoProposalCard
+                  proposal={uberHausMinion.activeMembershipProposal}
+                />
+              </Box>
             ) : null}
 
             {uberParent ? (
