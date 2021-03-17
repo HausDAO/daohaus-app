@@ -168,8 +168,8 @@ const ProposalCard = ({ proposal, customTerms }) => {
                 letterSpacing='0.1em'
                 color='whiteAlpha.600'
               >
-                {PROPOSAL_TYPES.TRANSMUTATION
-                  ? 'Tranmutation Amount'
+                {proposal?.proposalType === PROPOSAL_TYPES.TRANSMUTATION
+                  ? 'Transmuting'
                   : 'Tribute'}
               </Box>
               <Skeleton isLoaded={proposal?.tributeOffered}>

@@ -167,7 +167,11 @@ const ProposalDetails = ({ proposal, daoMember }) => {
         <Flex w='100%' justify='space-between' mt={6} wrap='wrap'>
           {(proposal?.tributeOffered > 0 || !proposal?.tributeOffered) && (
             <Box mb={3}>
-              <TextBox size='xs'>Tribute</TextBox>
+              <TextBox size='xs'>
+                {proposal?.proposalType === 'Transmutation Proposal'
+                  ? 'Transmuting'
+                  : 'Tribute'}
+              </TextBox>
               <Skeleton isLoaded={proposal?.tributeOffered}>
                 <TextBox size='lg' variant='value'>
                   {proposal?.tributeOffered
