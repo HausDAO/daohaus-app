@@ -19,7 +19,7 @@ import {
   contributionTotalValue,
   claimCountDownText,
 } from '../utils/cco';
-import { getEligibility } from '../utils/metadata';
+import { getEligibility, getDateTime } from '../utils/metadata';
 import { numberWithCommas, timeToNow } from '../utils/general';
 import GenericModal from '../modals/genericModal';
 import { useOverlay } from '../contexts/OverlayContext';
@@ -48,7 +48,8 @@ const CcoContribution = React.memo(function ccocontribution({
   useEffect(() => {
     const interval = setInterval(() => {
       refreshDao();
-    }, 30000);
+      // TODO: What is a good refresh rate
+    }, 10000);
     return () => clearInterval(interval);
   }, []);
 
@@ -57,15 +58,15 @@ const CcoContribution = React.memo(function ccocontribution({
   }, [address]);
 
   useEffect(() => {
-    // if (currentDaoTokens && daoMetaData?.boosts?.cco) {
-    if (currentDaoTokens && daoMetaData?.boosts?.cco?.active) {
+    const setup = async () => {
       const ccoToken = currentDaoTokens.find(
         (token) =>
           token.tokenAddress.toLowerCase() ===
           daoMetaData.boosts.cco.metadata.tributeToken.toLowerCase(),
       );
 
-      const now = new Date() / 1000;
+      const date = await getDateTime();
+      const now = +date.seconds;
       let round;
       if (now < daoMetaData.boosts.cco.metadata.raiseStartTime) {
         round = daoMetaData.boosts.cco.metadata.rounds[0];
@@ -90,6 +91,7 @@ const CcoContribution = React.memo(function ccocontribution({
       };
 
       setRoundData({
+        now,
         ccoToken,
         currentRound,
         network: daoMetaData.boosts.cco.metadata.network,
@@ -102,12 +104,19 @@ const CcoContribution = React.memo(function ccocontribution({
           daoMetaData.boosts.cco.metadata.claimPeriodStartTime,
         claimOpen: +daoMetaData.boosts.cco.metadata.claimPeriodStartTime < now,
       });
+    };
+
+    // if (currentDaoTokens && daoMetaData?.boosts?.cco) {
+    if (currentDaoTokens && daoMetaData?.boosts?.cco?.active) {
+      setup();
     }
   }, [currentDaoTokens, daoMetaData]);
 
   useEffect(() => {
     if (roundData && address && daoProposals && daoProposals.length) {
       const contributionProposals = daoProposals.filter((proposal) => {
+        // TODO: right now this is checking on sponsored, will need to adjust
+        // to look at unsponsored and stop at max limit
         return isCcoProposal(proposal, roundData);
       });
       const addressProposals = contributionProposals.filter((proposal) => {
@@ -170,8 +179,10 @@ const CcoContribution = React.memo(function ccocontribution({
     roundData?.raiseOver ||
     currentContributionData?.addressRemaining <= 0 ||
     raiseAtMax;
-  const now = new Date() / 1000;
-  const beforeClaimPeriod = roundData?.claimPeriodStartTime > now;
+  // const now = new Date() / 1000;
+  const beforeClaimPeriod = roundData
+    ? roundData.claimPeriodStartTime > roundData.now
+    : true;
 
   return (
     <MainViewLayout header='DAOhaus CCO' isDao={true}>
@@ -193,7 +204,11 @@ const CcoContribution = React.memo(function ccocontribution({
                       {isEligible === 'unchecked' ? (
                         <Button
                           onClick={checkEligibility}
-                          disabled={checkingEligibility || roundData.raiseOver}
+                          disabled={
+                            checkingEligibility ||
+                            roundData.raiseOver ||
+                            raiseAtMax
+                          }
                         >
                           {!checkingEligibility ? (
                             <>Check Eligibility</>
@@ -245,19 +260,21 @@ const CcoContribution = React.memo(function ccocontribution({
                         <TextBox size='sm' color='whiteAlpha.900' mb={7}>
                           2. Contribute
                         </TextBox>
-                        <Text fontSize='sm' color='whiteAlpha.700' as='i'>
-                          {countDownText(
-                            roundData.currentRound,
-                            roundData.raiseOver,
-                          )}
-                        </Text>
+                        {!raiseAtMax ? (
+                          <Text fontSize='sm' color='whiteAlpha.700' as='i'>
+                            {countDownText(
+                              roundData.currentRound,
+                              roundData.raiseOver,
+                            )}
+                          </Text>
+                        ) : null}
                         <Text fontSize='sm' color='whiteAlpha.700' mt={2}>
                           {`${roundData.claimTokenValue} ${roundData.ccoToken.symbol} = 1 ${roundData.claimTokenSymbol} | ${roundData.currentRound.maxContribution} ${roundData.ccoToken.symbol} max per person`}
                         </Text>
                       </Flex>
                       {raiseAtMax ? (
                         <TextBox variant='value' size='md' my={2}>
-                          Max target reached and there is no room left.
+                          Max target reached. Contributions are closed.
                         </TextBox>
                       ) : null}
 
@@ -415,18 +432,29 @@ const CcoContribution = React.memo(function ccocontribution({
                       <TextBox size='sm' color='whiteAlpha.900'>
                         Room Left
                       </TextBox>
-                      <TextBox variant='value' size='xl' my={2}>
-                        {`${numberWithCommas(
-                          currentContributionData
-                            ? currentContributionData.remaining
-                            : 0,
-                        )} ${roundData.ccoToken.symbol}`}
-                      </TextBox>
+                      {!raiseAtMax ? (
+                        <TextBox variant='value' size='xl' my={2}>
+                          {`${numberWithCommas(
+                            currentContributionData
+                              ? currentContributionData.remaining
+                              : 0,
+                          )} ${roundData.ccoToken.symbol}`}
+                        </TextBox>
+                      ) : (
+                        <TextBox variant='value' size='xl' my={2}>
+                          {`0 ${roundData.ccoToken.symbol}`}
+                        </TextBox>
+                      )}
                     </Box>
                   </Flex>
-                  <TextBox size='sm' color='whiteAlpha.900'>
-                    {countDownText(roundData.currentRound, roundData.raiseOver)}
-                  </TextBox>
+                  {!raiseAtMax ? (
+                    <TextBox size='sm' color='whiteAlpha.900'>
+                      {countDownText(
+                        roundData.currentRound,
+                        roundData.raiseOver,
+                      )}
+                    </TextBox>
+                  ) : null}
                 </ContentBox>
                 <ContentBox mt={2} w='100%'>
                   <Box
@@ -490,7 +518,7 @@ const CcoContribution = React.memo(function ccocontribution({
                   <Text mb={5}>
                     We have scraped a ton of dao contracts, including &apos;The
                     DAO&apos;, Ethereum&apos;s first major attempt at a DAO.
-                    There are ~44k addresses that have ‘proven’ eligible for
+                    There are ~122k addresses that have ‘proven’ eligible for
                     HAUS distribution, all of the below actions demonstrate a
                     willingness to govern within the Ethereum ecosystem and
                     therefore are included:
