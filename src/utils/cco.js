@@ -28,6 +28,7 @@ export const isCcoProposal = (proposal, round) => {
   const failed = proposal.processed && !proposal.didPass;
   return (
     !proposal.cancelled &&
+    proposal.sponsored &&
     parsedDetails.cco &&
     // +proposal.createdAt >= +round.raiseStartTime &&
     +proposal.createdAt >= START_TIME_OVERRIDE &&

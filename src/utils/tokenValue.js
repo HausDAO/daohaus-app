@@ -73,7 +73,11 @@ export const initTokenData = async (graphTokenData) => {
 
 export const tallyUSDs = (tokenObj) => {
   let totalUSD = 0;
+
   for (const token in tokenObj) {
+    // if (!tokenObj[token]?.totalUSD) {
+    //   console.error('TokenError', tokenObj);
+    // }
     totalUSD = totalUSD + tokenObj[token].totalUSD;
   }
   return Math.round((totalUSD + Number.EPSILON) * 100) / 100;
