@@ -27,7 +27,7 @@ import { useInjectedProvider } from '../contexts/InjectedProviderContext';
 import CcoLootGrabForm from '../forms/ccoLootGrab';
 import CcoClaim from '../forms/ccoClaim';
 import { useTX } from '../contexts/TXContext';
-// import ComingSoonOverlay from '../components/comingSoonOverlay';
+import ComingSoonOverlay from '../components/comingSoonOverlay';
 import { MM_ADDCHAIN_DATA } from '../utils/chain';
 
 const CcoContribution = React.memo(function ccocontribution({
@@ -106,8 +106,8 @@ const CcoContribution = React.memo(function ccocontribution({
       });
     };
 
-    if (currentDaoTokens && daoMetaData?.boosts?.cco) {
-      // if (currentDaoTokens && daoMetaData?.boosts?.cco?.active) {
+    // if (currentDaoTokens && daoMetaData?.boosts?.cco) {
+    if (currentDaoTokens && daoMetaData?.boosts?.cco?.active) {
       setup();
     }
   }, [currentDaoTokens, daoMetaData]);
@@ -662,14 +662,14 @@ const CcoContribution = React.memo(function ccocontribution({
           ) : (
             <>
               <Box>DAO does not have an active CCO</Box>
-              {/* {daoMetaData?.boosts?.cco && !daoMetaData.boosts.cco.active ? (
+              {daoMetaData?.boosts?.cco && !daoMetaData.boosts.cco.active ? (
                 <Box mt={500}>
                   <ComingSoonOverlay
                     message='Max target was hit and our community contribution opportunity is complete.'
                     fontSize='3xl'
                   />
                 </Box>
-              ) : null} */}
+              ) : null}
             </>
           )}
         </Flex>
