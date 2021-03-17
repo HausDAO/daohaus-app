@@ -124,7 +124,7 @@ const NewUberHausMinion = () => {
             Step 1: Deploy UberHAUS Minion
           </Heading>
           <Box mb={3} fontSize='sm'>
-            This minion will manage your membership in UberHaus. A DAO member
+            This minion will manage your membership in UberHAUS. A DAO member
             needs to be added as the Delegate and will be in charge of voting in
             UberHAUS. You can change the Delegate at any time through a
             proposal.

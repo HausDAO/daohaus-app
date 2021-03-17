@@ -4,6 +4,8 @@ import { Box, Button, Flex } from '@chakra-ui/react';
 // import Following from '../components/followingDaos';
 import MainViewLayout from '../components/mainViewLayout';
 import DaoToDaoManager from '../components/daoToDaoManager';
+import DaoToDaoManagerAlt from '../components/daoToDaoManagerAlt';
+
 import DaoToDaoProposalModal from '../modals/daoToDaoProposalModal';
 import DaoToDaoProposalTypeModal from '../modals/daoToDaoProposalTypeModal';
 import { useOverlay } from '../contexts/OverlayContext';
@@ -16,7 +18,13 @@ import { bigGraphQuery } from '../utils/theGraph';
 import { UBERHAUS_ADDRESS } from '../utils/uberhaus';
 import { UberHausMinionService } from '../services/uberHausMinionService';
 
-const Allies = ({ daoOverview, daoMetaData, daoMembers }) => {
+const Allies = ({
+  daoOverview,
+  daoMetaData,
+  isMember,
+  proposals,
+  daoMembers,
+}) => {
   const { daoid, daochain } = useParams();
 
   const [uberProposals, setUberProposals] = useSessionStorage(
@@ -38,8 +46,6 @@ const Allies = ({ daoOverview, daoMetaData, daoMembers }) => {
 
     // do not fetch without necessary data
     if (!daoid || !daochain || hasPerformedBatchQuery.current) return;
-    // fetch only after child dao's data loads
-    // if (!daoOverview || !daoMetaData) return;
 
     const bigQueryOptions = {
       args: {
@@ -107,7 +113,7 @@ const Allies = ({ daoOverview, daoMetaData, daoMembers }) => {
         textAlign='center'
       >
         <Box fontSize='3xl' fontFamily='heading' fontWeight={700} mb={10}>
-          Connect your wallet to summon a DAO.
+          Connect your wallet.
         </Box>
 
         <Flex direction='column' align='center'>
@@ -140,6 +146,16 @@ const Allies = ({ daoOverview, daoMetaData, daoMembers }) => {
           daoOverview={daoOverview}
           daoMetaData={daoMetaData}
           setProposalType={setProposalType}
+        />
+        <DaoToDaoManagerAlt
+          daoOverview={daoOverview}
+          daoMetaData={daoMetaData}
+          setProposalType={setProposalType}
+          isMember={isMember}
+          uberProposals={uberProposals}
+          uberMembers={uberMembers}
+          uberOverview={uberOverview}
+          daoProposals={proposals}
         />
         {/* <Following /> */}
       </Box>
