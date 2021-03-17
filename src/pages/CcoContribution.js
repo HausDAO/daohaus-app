@@ -119,9 +119,13 @@ const CcoContribution = React.memo(function ccocontribution({
         // to look at unsponsored and stop at max limit
         return isCcoProposal(proposal, roundData);
       });
+
+      console.log('contributionProposals', contributionProposals);
       const addressProposals = contributionProposals.filter((proposal) => {
         return isCcoProposalForAddress(proposal, address, roundData);
       });
+
+      console.log('addressProposals', addressProposals);
 
       const contributionTotal = contributionTotalValue(
         contributionProposals,

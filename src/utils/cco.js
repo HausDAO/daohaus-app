@@ -21,7 +21,7 @@ export const claimCountDownText = (claimStartTime) => {
 };
 
 export const isCcoProposal = (proposal, round) => {
-  const START_TIME_OVERRIDE = 1615809574;
+  // const START_TIME_OVERRIDE = 1615809574;
   const parsedDetails = IsJsonString(proposal.details)
     ? JSON.parse(proposal.details)
     : { cco: false };
@@ -30,8 +30,8 @@ export const isCcoProposal = (proposal, round) => {
     !proposal.cancelled &&
     proposal.sponsored &&
     parsedDetails.cco &&
-    // +proposal.createdAt >= +round.raiseStartTime &&
-    +proposal.createdAt >= START_TIME_OVERRIDE &&
+    +proposal.createdAt >= +round.raiseStartTime &&
+    // +proposal.createdAt >= START_TIME_OVERRIDE &&
     proposal.tributeToken === round.ccoToken.tokenAddress &&
     proposal.sharesRequested === '0' &&
     +proposal.lootRequested > 0 &&
