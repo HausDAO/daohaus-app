@@ -401,7 +401,6 @@ const ProposalVote = ({
           chainID: daochain,
         })('executeAction')({ args, address, poll, onTxHash });
       } else if (proposal.proposalType === PROPOSAL_TYPES.MINION_UBER_DEL) {
-        console.log('DELEGATE ACTION FIRED');
         await UberHausMinionService({
           web3: injectedProvider,
           uberHausMinion: proposal.minionAddress,

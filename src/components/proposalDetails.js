@@ -258,7 +258,7 @@ const ProposalDetails = ({ proposal, daoMember }) => {
               </Skeleton>
             </Box>
           ) : (
-            <DelegateRecipient proposal={proposal} />
+            <MinionBox proposal={proposal} />
           )}
           <Flex align='center'>
             {memberVote(proposal, address) !== null &&
@@ -307,7 +307,7 @@ const ProposalDetails = ({ proposal, daoMember }) => {
 
 export default ProposalDetails;
 
-const DelegateRecipient = ({ proposal }) => {
+const MinionBox = ({ proposal }) => {
   return (
     <Tooltip
       hasArrow

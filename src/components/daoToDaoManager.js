@@ -228,7 +228,7 @@ const DaoToDaoManager = ({
             UberHAUS
           </Box>
         </Flex>
-        <ComingSoonOverlay message='👀 Check back soon!' />
+        {/* <ComingSoonOverlay message='👀 Check back soon!' /> */}
 
         {noMinion ? (
           <Box>

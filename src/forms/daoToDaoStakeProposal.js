@@ -112,7 +112,7 @@ const StakeProposalForm = () => {
     const details = detailsToJSON({
       ...values,
       uberHaus: true,
-      uberType: PROPOSAL_TYPES.MINION_UBER_STAKE,
+      uberType: 'staking',
       hash,
     });
 
@@ -145,8 +145,8 @@ const StakeProposalForm = () => {
     );
 
     const args = [
-      daoid,
       UBERHAUS_ADDRESS,
+      daoid,
       UBERHAUS_STAKING_TOKEN,
       '0',
       hexData,
@@ -202,6 +202,7 @@ const StakeProposalForm = () => {
       console.error('error: ', err);
       errorToast({
         title: `There was an error.`,
+        desciption: err?.desciption || '',
       });
     }
   };

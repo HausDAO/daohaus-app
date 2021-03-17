@@ -104,8 +104,11 @@ const getMinionProposalType = (proposal, details) => {
       return PROPOSAL_TYPES.MINION_UBER_STAKE;
     } else if (details?.uberType === 'delegate') {
       return PROPOSAL_TYPES.MINION_UBER_DEL;
+    } else if (details?.uberType === 'ragequit') {
+      return PROPOSAL_TYPES.MINION_UBER_RQ;
     } else {
-      console.error('Uberhaus Minion type not detected');
+      console.warn('Uberhaus Minion type not detected');
+      console.log(details);
       return PROPOSAL_TYPES.MINION_UBER_DEFAULT;
     }
   };

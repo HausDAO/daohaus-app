@@ -75,7 +75,12 @@ const DaoToDaoProposalFormModal = ({
       type: `New Uber Proposal`,
       heading: `RageQuit`,
       subline: `Submit a proposal to RageQuit from UberHaus`,
-      form: <RageQuitProposalForm />,
+      form: (
+        <RageQuitProposalForm
+          uberHausMinion={uberHausMinion}
+          uberMembers={uberMembers}
+        />
+      ),
     },
     d2dDistroRewards: {
       type: `New Uber Proposal`,

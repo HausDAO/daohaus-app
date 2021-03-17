@@ -63,7 +63,6 @@ const DelegateProposalForm = ({
     successToast,
     setTxInfoModal,
   } = useOverlay();
-  const { daoOverview } = useDao();
   const { refreshDao } = useTX();
   const { cachePoll, resolvePoll } = useUser();
   const {
@@ -77,10 +76,7 @@ const DelegateProposalForm = ({
   } = useForm();
 
   const candidates = useMemo(() => {
-    console.log(daoMembers);
     if (!daoMembers || !uberHausMinion || !uberMembers || !uberDelegate) return;
-    console.log('fired');
-    console.log(uberHausMinion);
     return daoMembers.filter((member) => {
       const hasShares = +member.shares > 0;
       const isNotDelegate = member.memberAddress !== uberDelegate;
@@ -95,7 +91,6 @@ const DelegateProposalForm = ({
     });
   }, [daoMembers, uberHausMinion, uberMembers, uberDelegate]);
 
-  console.log(candidates);
   useEffect(() => {
     if (Object.keys(errors).length > 0) {
       const newE = Object.keys(errors)[0];
@@ -127,7 +122,7 @@ const DelegateProposalForm = ({
       timePeriod?.toString() || values.delegateTerm,
       details,
     ];
-    console.log(uberHausMinion);
+
     try {
       const poll = createPoll({
         action: 'uberHausNominateDelegate',
@@ -200,13 +195,13 @@ const DelegateProposalForm = ({
           <TextBox size='xs' htmlFor='name' mb={2}>
             Current Delegate
           </TextBox>
-          <Flex w='60%' align='center' justify='space-between' pb={3}>
+          <Flex w='100%' align='center' justify='space-between' pb={3} mb={2}>
             <AddressAvatar addr={uberDelegate} />
             <DelegateMenu />
           </Flex>
           <AddressInput
             name='delegate'
-            formLabel='Delegate Address'
+            formLabel='Eligable Delegates'
             register={register}
             setValue={setValue}
             watch={watch}
@@ -230,24 +225,6 @@ const DelegateProposalForm = ({
               </TextBox>
             }
           />
-
-          {/* <Input
-            name='delegateTerm'
-            placeholder='0'
-            mb={5}
-            ref={register({
-              required: {
-                value: true,
-                message: 'Delegate term is required for Delegate Proposals',
-              },
-              pattern: {
-                value: /[0-9]/,
-                message: 'Term must be a number in months',
-              },
-            })}
-            color='white'
-            focusBorderColor='secondary.500'
-          /> */}
         </Box>
       </FormControl>
       <Flex justify='flex-end' align='center' h='60px'>
