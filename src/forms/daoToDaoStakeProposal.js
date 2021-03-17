@@ -112,7 +112,7 @@ const StakeProposalForm = () => {
     const details = detailsToJSON({
       ...values,
       uberHaus: true,
-      uberType: PROPOSAL_TYPES.MINION_UBER_STAKE,
+      uberType: 'staking',
       hash,
     });
 
