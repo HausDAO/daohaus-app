@@ -4,12 +4,12 @@ import { Button } from '@chakra-ui/button';
 import { Badge, Box, Flex } from '@chakra-ui/layout';
 
 const DaoToDaoProposalCard = ({ proposal }) => {
-  const { daochain } = useParams();
+  const { daochain, daoid } = useParams();
 
   return (
     <>
       <Box fontSize='md' fontFamily='heading' fontWeight={700} pb={2}>
-        Membership Proposal
+        Pending Membership Proposal
       </Box>
       <Box fontSize='xs'>{proposal.status}</Box>
       <Flex justifyContent='space-between' alignItems='center'>
@@ -42,7 +42,7 @@ const DaoToDaoProposalCard = ({ proposal }) => {
           variant='outline'
           to={`/dao/${daochain}/${proposal?.molochAddress}/proposals/${proposal.proposalId}`}
         >
-          View
+          {daoid === proposal?.molochAddress ? 'View' : 'View in UberHAUS'}
         </Button>
       </Flex>
     </>

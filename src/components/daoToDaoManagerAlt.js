@@ -9,6 +9,7 @@ import {
   Link,
   ListItem,
   OrderedList,
+  Spinner,
   useToast,
 } from '@chakra-ui/react';
 import CopyToClipboard from 'react-copy-to-clipboard';
@@ -54,6 +55,7 @@ const DaoToDaoManager = ({
     setGenericModal,
   } = useOverlay();
   const [uberHausMinion, setUberHausMinion] = useState(null);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const setup = async () => {
@@ -70,14 +72,6 @@ const DaoToDaoManager = ({
               uberHausMinionData.minionAddress.toLowerCase()
             );
           });
-
-          console.log('daoProposals', daoProposals);
-
-          const hi = daoProposals.find((prop) =>
-            pendingUberHausStakingProposal(prop),
-          );
-
-          console.log('hi', hi);
 
           const activeMembershipProposal =
             (!uberHausMembership &&
@@ -97,11 +91,15 @@ const DaoToDaoManager = ({
             uberHausMembership,
             activeMembershipProposal,
           });
+          setLoading(false);
         }
+      } else {
+        setLoading(false);
       }
     };
 
     if (daoOverview) {
+      setLoading(true);
       setup();
     }
   }, [daoOverview, uberMembers, uberProposals, daoProposals]);
@@ -143,157 +141,166 @@ const DaoToDaoManager = ({
         </Flex>
         {/* <ComingSoonOverlay message='👀 Check back soon!' /> */}
 
-        {daoNotOnUberNetwork ? (
-          <Box>
-            {uberAlly ? (
-              <Box mt={5}>
-                <DaoToDaoUberAlly
-                  dao={{
-                    name: `Manange membership in the ${UBERHAUS_NETWORK_NAME} burner dao`,
-                    link: `/dao/${chainByName(uberAlly.allyNetwork).chain_id}/${
-                      uberAlly.ally
-                    }/allies`,
-                  }}
-                />
-              </Box>
-            ) : (
-              <>
-                {!userNetworkMismatchOrNotMember ? (
-                  <Box fontSize='md' my={2}>
-                    Are you a member of this DAO and on the correct network?
+        {loading ? (
+          <Spinner />
+        ) : (
+          <>
+            {daoNotOnUberNetwork ? (
+              <Box>
+                {uberAlly ? (
+                  <Box mt={5}>
+                    <DaoToDaoUberAlly
+                      dao={{
+                        name: `Manange membership in the ${UBERHAUS_NETWORK_NAME} burner dao`,
+                        link: `/dao/${
+                          chainByName(uberAlly.allyNetwork).chain_id
+                        }/${uberAlly.ally}/allies`,
+                      }}
+                    />
                   </Box>
                 ) : (
                   <>
-                    <Box fontSize='md' my={2}>
-                      UberHAUS is on the {UBERHAUS_NETWORK_NAME} network.
-                      You&apos;ll need to summon a clone of your DAO there to
-                      join.
-                      <Box my={2}>
-                        <Link
-                          href='https://discord.gg/eJsBk3sf'
-                          target='_blank'
-                          rel='noreferrer noopener'
-                          color='secondary.500'
-                          my={3}
-                        >
-                          Get help in our Discord.
-                        </Link>
+                    {!userNetworkMismatchOrNotMember ? (
+                      <Box fontSize='md' my={2}>
+                        Are you a member of this DAO and on the correct network?
                       </Box>
-                    </Box>
-                    <Button
-                      w='50%'
-                      as={RouterLink}
-                      to={`/dao/${daochain}/${daoid}/uberhaus/clone`}
-                    >
-                      Summon Clone
-                    </Button>
+                    ) : (
+                      <>
+                        <Box fontSize='md' my={2}>
+                          UberHAUS is on the {UBERHAUS_NETWORK_NAME} network.
+                          You&apos;ll need to summon a clone of your DAO there
+                          to join.
+                          <Box my={2}>
+                            <Link
+                              href='https://discord.gg/eJsBk3sf'
+                              target='_blank'
+                              rel='noreferrer noopener'
+                              color='secondary.500'
+                              my={3}
+                            >
+                              Get help in our Discord.
+                            </Link>
+                          </Box>
+                        </Box>
+                        <Button
+                          w='50%'
+                          as={RouterLink}
+                          to={`/dao/${daochain}/${daoid}/uberhaus/clone`}
+                        >
+                          Summon Clone
+                        </Button>
+                      </>
+                    )}
                   </>
                 )}
+              </Box>
+            ) : (
+              <>
+                {!uberHausMinion ? (
+                  <>
+                    <Box fontSize='md' my={2}>
+                      {daoMetaData?.name} is not a member of UberHAUS
+                    </Box>
+                    <Box fontSize='md' my={2}>
+                      The 1st step to join is to summon a minion to help with
+                      membership duties.
+                    </Box>
+                    {userNetworkMismatchOrNotMember ? (
+                      <Box fontSize='md' my={2}>
+                        Are you a member of this DAO and on the correct network?
+                      </Box>
+                    ) : (
+                      <Button
+                        w='50%'
+                        onClick={() =>
+                          setGenericModal({ uberMinionLaunch: true })
+                        }
+                      >
+                        Summon Minion
+                      </Button>
+                    )}
+                  </>
+                ) : null}
+
+                {hasMinionNotMember &&
+                !uberHausMinion.activeMembershipProposal ? (
+                  <>
+                    <Box fontSize='md' my={2}>
+                      {daoMetaData?.name} is not a member of UberHAUS
+                    </Box>
+                    <Box fontSize='md' my={2}>
+                      The 2nd step to join is to make a proposal to stake{' '}
+                      {UBERHAUS_STAKING_TOKEN_SYMBOL} into the UberHAUS DAO.
+                    </Box>
+
+                    <>
+                      {+uberHausMinion.balance <= 0 ? (
+                        <>
+                          <Box fontSize='md' my={2}>
+                            Before you can make a proposal you&apos;ll need to
+                            send {UBERHAUS_STAKING_TOKEN_SYMBOL} to your
+                            minion&apos;s address
+                          </Box>
+                          <Flex>
+                            <>{truncateAddr(uberHausMinion.minionAddress)}</>
+
+                            <CopyToClipboard
+                              text={uberHausMinion.minionAddress}
+                              onCopy={() =>
+                                toast({
+                                  title: 'Copied Address',
+                                  position: 'top-right',
+                                  status: 'success',
+                                  duration: 3000,
+                                  isClosable: true,
+                                })
+                              }
+                            >
+                              <Icon
+                                as={FaCopy}
+                                color='secondary.300'
+                                ml={2}
+                                _hover={{ cursor: 'pointer' }}
+                              />
+                            </CopyToClipboard>
+                          </Flex>
+                          <Box fontSize='md' my={2}>
+                            Or create a funding proposal from the dao to the
+                            minion address.
+                          </Box>
+                        </>
+                      ) : (
+                        <Button w='75%' onClick={handleStakeClick}>
+                          Make Staking Proposal
+                        </Button>
+                      )}
+                    </>
+                  </>
+                ) : null}
+
+                {uberHausMinion?.activeMembershipProposal ? (
+                  <Box mt={10}>
+                    <DaoToDaoProposalCard
+                      proposal={uberHausMinion.activeMembershipProposal}
+                    />
+                  </Box>
+                ) : null}
+
+                {uberParent ? (
+                  <Box mt={10} borderTop='1px' py={5}>
+                    <DaoToDaoUberAlly
+                      dao={{
+                        bodyText: `Your UberHAUS membership is managed here in this ${UBERHAUS_NETWORK_NAME} clone DAO`,
+                        name: `Visit your home dao`,
+                        link: `/dao/${
+                          chainByName(uberParent.allyNetwork).chain_id
+                        }/${uberParent.ally}/allies`,
+                      }}
+                    />
+                  </Box>
+                ) : null}
               </>
             )}
-          </Box>
-        ) : (
-          <>
-            {!uberHausMinion ? (
-              <>
-                <Box fontSize='md' my={2}>
-                  {daoMetaData?.name} is not a member of UberHAUS
-                </Box>
-                <Box fontSize='md' my={2}>
-                  The 1st step to join is to summon a minion to help with
-                  membership duties.
-                </Box>
-                {userNetworkMismatchOrNotMember ? (
-                  <Box fontSize='md' my={2}>
-                    Are you a member of this DAO and on the correct network?
-                  </Box>
-                ) : (
-                  <Button
-                    w='50%'
-                    onClick={() => setGenericModal({ uberMinionLaunch: true })}
-                  >
-                    Summon Minion
-                  </Button>
-                )}
-              </>
-            ) : null}
-
-            {hasMinionNotMember && !uberHausMinion.activeMembershipProposal ? (
-              <>
-                <Box fontSize='md' my={2}>
-                  {daoMetaData?.name} is not a member of UberHAUS
-                </Box>
-                <Box fontSize='md' my={2}>
-                  The 2nd step to join is to make a proposal to stake{' '}
-                  {UBERHAUS_STAKING_TOKEN_SYMBOL} into the UberHAUS DAO.
-                </Box>
-
-                <>
-                  {+uberHausMinion.balance <= 0 ? (
-                    <>
-                      <Box fontSize='md' my={2}>
-                        Before you can make a proposal you&apos;ll need to send{' '}
-                        {UBERHAUS_STAKING_TOKEN_SYMBOL} to your minion&apos;s
-                        address
-                      </Box>
-                      <Flex>
-                        <>{truncateAddr(uberHausMinion.minionAddress)}</>
-
-                        <CopyToClipboard
-                          text={uberHausMinion.minionAddress}
-                          onCopy={() =>
-                            toast({
-                              title: 'Copied Address',
-                              position: 'top-right',
-                              status: 'success',
-                              duration: 3000,
-                              isClosable: true,
-                            })
-                          }
-                        >
-                          <Icon
-                            as={FaCopy}
-                            color='secondary.300'
-                            ml={2}
-                            _hover={{ cursor: 'pointer' }}
-                          />
-                        </CopyToClipboard>
-                      </Flex>
-                      <Box fontSize='md' my={2}>
-                        Or create a funding proposal from the dao to the minion
-                        address.
-                      </Box>
-                    </>
-                  ) : (
-                    <Button w='75%' onClick={handleStakeClick}>
-                      Make Staking Proposal
-                    </Button>
-                  )}
-                </>
-              </>
-            ) : null}
-
-            {uberHausMinion?.activeMembershipProposal ? (
-              <Box mt={10}>
-                <DaoToDaoProposalCard
-                  proposal={uberHausMinion.activeMembershipProposal}
-                />
-              </Box>
-            ) : null}
-
-            {uberParent ? (
-              <Box mt={10} borderTop='1px' py={5}>
-                <DaoToDaoUberAlly
-                  dao={{
-                    bodyText: `Your UberHAUS membership is managed here in this ${UBERHAUS_NETWORK_NAME} clone DAO`,
-                    name: `Visit your home dao`,
-                    link: `/dao/${
-                      chainByName(uberParent.allyNetwork).chain_id
-                    }/${uberParent.ally}/allies`,
-                  }}
-                />
-              </Box>
-            ) : null}
           </>
         )}
       </ContentBox>
