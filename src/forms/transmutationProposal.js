@@ -31,6 +31,7 @@ import { createPoll } from '../services/pollService';
 import { createHash, detailsToJSON } from '../utils/general';
 import { createForumTopic } from '../utils/discourse';
 import { useSessionStorage } from '../hooks/useSessionStorage';
+import AddressInput from './addressInput';
 
 const TransmutationProposal = () => {
   const {
@@ -191,8 +192,17 @@ const TransmutationProposal = () => {
       hash,
       isTransmutation: true,
     });
+
+    const applicant = values?.applicantHidden?.startsWith('0x')
+      ? values.applicantHidden
+      : values?.applicant
+      ? values.applicant
+      : values?.memberApplicant
+      ? values.memberApplicant
+      : address;
+
     const args = [
-      transmutationData[0].minion,
+      applicant,
       tributeReturned.toString(),
       injectedProvider.utils.toWei('' + values.paymentRequested),
       details,
@@ -363,6 +373,15 @@ const TransmutationProposal = () => {
                 focusBorderColor='secondary.500'
               />
             </InputGroup>
+
+            <Box mt={5} width='100%'>
+              <AddressInput
+                name='applicant'
+                register={register}
+                setValue={setValue}
+                watch={watch}
+              />
+            </Box>
           </FormControl>
           {tokenData[0] && (
             <Flex flexDir='column'>
