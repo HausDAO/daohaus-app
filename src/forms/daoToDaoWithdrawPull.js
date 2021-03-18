@@ -42,20 +42,33 @@ const FormWrapper = styled.form`
   width: 100%;
 `;
 
-const WithdrawPullForm = ({ uberMembers, uberHausMinion, refreshAllies }) => {
+const WithdrawPullForm = ({
+  uberMembers,
+  uberHausMinion,
+  uberDelegate,
+  uberOverview,
+}) => {
   const [currentView, setCurrentView] = useState('withdraw');
 
   const BothForms = () => (
     <>
       <WithdrawForm uberMembers={uberMembers} uberHausMinion={uberHausMinion} />
-      <PullForm uberMembers={uberMembers} uberHausMinion={uberHausMinion} />
+      <PullForm
+        uberDelegate={uberDelegate}
+        uberHausMinion={uberHausMinion}
+        uberOverview={uberOverview}
+      />
     </>
   );
   const getCurrentMobileForm = (currentView) => {
     return currentView === 'withdraw' ? (
       <WithdrawForm uberMembers={uberMembers} uberHausMinion={uberHausMinion} />
     ) : (
-      <PullForm uberMembers={uberMembers} uberHausMinion={uberHausMinion} />
+      <PullForm
+        uberDelegate={uberDelegate}
+        uberHausMinion={uberHausMinion}
+        uberOverview={uberOverview}
+      />
     );
   };
 
@@ -106,7 +119,7 @@ const WithdrawPullForm = ({ uberMembers, uberHausMinion, refreshAllies }) => {
 
 export default WithdrawPullForm;
 
-const WithdrawForm = ({ uberMembers, uberHausMinion, refreshAllies }) => {
+const WithdrawForm = ({ uberMembers, uberHausMinion }) => {
   const { successToast, errorToast, setTxInfoModal } = useOverlay();
   const { cachePoll, resolvePoll } = useUser();
   const { refreshDao } = useTX();
@@ -137,14 +150,16 @@ const WithdrawForm = ({ uberMembers, uberHausMinion, refreshAllies }) => {
 
   useEffect(() => {
     if (!uberMembers || !uberHausMinion || !withdrawToken) return;
+
     const uberMinionMember = uberMembers.find(
       (member) => member.memberAddress === uberHausMinion.minionAddress,
     );
     if (uberMinionMember) {
       const tokenBalances = uberMinionMember.tokenBalances;
       const token = tokenBalances.find(
-        ({ token }) => token.tokenAddress === withdrawToken.toLowerCase(),
+        ({ token }) => token.tokenAddress === withdrawToken?.toLowerCase(),
       );
+      console.log(tokenBalances);
       const readableBalance = displayBalance(
         token?.tokenBalance,
         token?.token?.decimals,
@@ -286,19 +301,38 @@ const WithdrawForm = ({ uberMembers, uberHausMinion, refreshAllies }) => {
   );
 };
 
-const PullForm = ({ uberMembers, uberHausMinion }) => {
-  const [loading, setLoading] = useState(false);
-  const [currentError, setCurrentError] = useState(null);
+const PullForm = ({
+  uberHausMinion,
+  uberDelegate,
+  uberTokens,
+  uberOverview,
+}) => {
+  const { injectedProvider, address } = useInjectedProvider();
+  const { daoid, daochain } = useParams();
+  const { cachePoll, resolvePoll } = useUser();
+  const { daoMembers } = useDao();
+  const {
+    errorToast,
+    successToast,
+    setD2dProposalModal,
+    setTxInfoModal,
+  } = useOverlay();
+  const { refreshDao } = useTX();
+
   // const { setD2dProposalModal } = useOverlay();
 
-  const [selectedToken, setSelectedToken] = useState(null);
+  const [currentError, setCurrentError] = useState(null);
+  const [loading, setLoading] = useState(false);
+  const [decimals, setDecimals] = useState(0);
+  // const [selectedToken, setSelectedToken] = useState(null);
+
   const [loadToken, setLoadToken] = useState(false);
   const [balance, setBalance] = useState({ readable: 0, real: 0 });
-  const { daoid, daochain } = useParams();
-  const { daoMembers } = useDao();
 
   const { handleSubmit, errors, register, watch, setValue } = useForm();
   const pullToken = watch('pullToken');
+
+  const isDelegate = address === uberDelegate?.toLowerCase();
 
   useEffect(() => {
     if (Object.keys(errors).length > 0) {
@@ -318,12 +352,19 @@ const PullForm = ({ uberMembers, uberHausMinion }) => {
     const getTokenBalance = async () => {
       try {
         setLoadToken(true);
-        const balance = await TokenService({
+
+        const tokenService = TokenService({
           chainID: daochain,
           tokenAddress: pullToken,
-        })('balanceOf')(uberHausMinion.minionAddress);
-        console.log(balance.toString().length);
-        const readableBalance = displayBalance(balance, '18');
+        });
+
+        const balance = await tokenService('balanceOf')(
+          uberHausMinion.minionAddress,
+        );
+
+        const tokenDecimals = await tokenService('decimals')();
+        const readableBalance = displayBalance(balance, tokenDecimals);
+
         setBalance({ readable: readableBalance || 0, real: balance || 0 });
         setLoadToken(false);
       } catch (error) {
@@ -335,8 +376,75 @@ const PullForm = ({ uberMembers, uberHausMinion }) => {
     }
   }, [uberHausMinion, pullToken]);
 
-  const onSubmit = (values) => {
+  const onSubmit = async (values) => {
     setLoading(true);
+    console.log('formValues', values);
+
+    const tokenAddress = values.pullToken;
+    const currentBalance = balance.real;
+    const uberTokens = uberOverview.tokenBalances;
+    const withdrawAmt = values.pull
+      ? valToDecimalString(values.pull, tokenAddress, uberTokens)
+      : '0';
+    const args = [tokenAddress, withdrawAmt];
+    const expectedBalance = +currentBalance - +withdrawAmt;
+
+    try {
+      const poll = createPoll({ action: 'pullGuildFunds', cachePoll })({
+        tokenAddress,
+        memberAddress: uberHausMinion.minionAddress,
+        chainID: daochain,
+        uber: true,
+        expectedBalance,
+        daoID: UBERHAUS_ADDRESS,
+        actions: {
+          onError: (error, txHash) => {
+            errorToast({
+              title: `There was an error.`,
+            });
+            resolvePoll(txHash);
+            console.error(`Could not pull funds: ${error}`);
+          },
+          onSuccess: (txHash) => {
+            successToast({
+              title: 'Pulled funds from UberHausMinion',
+            });
+            refreshDao();
+            resolvePoll(txHash);
+          },
+        },
+      });
+      const onTxHash = () => {
+        setD2dProposalModal((prevState) => !prevState);
+        setTxInfoModal(true);
+      };
+      await UberHausMinionService({
+        web3: injectedProvider,
+        uberHausMinion: uberHausMinion.minionAddress,
+        chainID: daochain,
+      })('doWithdraw')({ args, address, poll, onTxHash });
+    } catch (err) {
+      setD2dProposalModal((prevState) => !prevState);
+      setLoading(false);
+      console.error('error: ', err);
+      errorToast({
+        title: `There was an error.`,
+        description: err.message || '',
+      });
+    }
+    setD2dProposalModal((prevState) => !prevState);
+  };
+
+  const inputHelperText = () => {
+    if (!isDelegate) {
+      return 'Must be DAO delegate in order to withdraw funds';
+    } else if (loadToken) {
+      return 'Loading token data...';
+    } else if (!pullToken) {
+      return 'Select a token';
+    } else {
+      return null;
+    }
   };
 
   return (
@@ -364,6 +472,7 @@ const PullForm = ({ uberMembers, uberHausMinion }) => {
             Transfer funds from minion to your DAO
           </Box>
         </Flex>
+
         <Box w='100%'>
           <TokenSelect
             selectProps={{ mb: '6' }}
@@ -371,6 +480,7 @@ const PullForm = ({ uberMembers, uberHausMinion }) => {
             id='PullSelect'
             name='pullToken'
             register={register}
+            disabled={!isDelegate}
           />
           <MaxOutInput
             register={register}
@@ -378,17 +488,17 @@ const PullForm = ({ uberMembers, uberHausMinion }) => {
             label='Pull'
             name='pull'
             id='pull'
-            disabled={!pullToken || loadToken}
-            helperText={!pullToken && 'Select a token'}
+            disabled={!pullToken || loadToken || !isDelegate}
+            helperText={inputHelperText()}
             setValue={setValue}
           />
 
-          <Flex justify='center' mt={8}>
+          <Flex justify='center' mt={8} flexDir='column' alignItems='center'>
             <Button
               type='submit'
               loadingText='Submitting'
               isLoading={loading}
-              disabled={loading}
+              disabled={loading || !isDelegate}
             >
               Submit
             </Button>
@@ -408,12 +518,14 @@ const PullForm = ({ uberMembers, uberHausMinion }) => {
 const temporaryTokenOptions = [
   { name: UBERHAUS_STAKING_TOKEN_SYMBOL, value: UBERHAUS_STAKING_TOKEN },
 ];
+
 const TokenSelect = ({
   selectProps = {},
   label = 'token',
   id,
   register,
   name,
+  disabled,
 }) => {
   return (
     <Box>
@@ -427,6 +539,7 @@ const TokenSelect = ({
         name={name}
         placeholder='--Select Token--'
         color='whiteAlpha.900'
+        disabled={disabled}
       >
         {temporaryTokenOptions.map((token) => (
           <option key={token.value} value={token.value}>

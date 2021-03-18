@@ -38,6 +38,7 @@ const DaoToDaoProposalFormModal = ({
   uberMembers,
   uberHausMinion,
   uberDelegate,
+  uberOverview,
 }) => {
   const [, setLoading] = useState(false);
   const [proposalForm, setProposalForm] = useState(null);
@@ -97,6 +98,7 @@ const DaoToDaoProposalFormModal = ({
           uberMembers={uberMembers}
           uberHausMinion={uberHausMinion}
           uberDelegate={uberDelegate}
+          uberOverview={uberOverview}
           // refreshAllies={refreshAllies}
         />
       ),
@@ -108,7 +110,7 @@ const DaoToDaoProposalFormModal = ({
     if (proposalType) {
       setProposalForm(daoToDaoProposalForms[proposalType]);
     }
-  }, [proposalType, uberMembers, uberHausMinion]);
+  }, [proposalType, uberMembers, uberHausMinion, uberDelegate, uberOverview]);
 
   const handleClose = () => {
     setLoading(false);

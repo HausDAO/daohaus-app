@@ -137,6 +137,7 @@ const Allies = ({
           uberMembers={uberMembers}
           uberDelegate={uberDelegate}
           uberHausMinion={uberHausMinion}
+          uberOverview={uberOverview}
         />
         <GenericModal closeOnOverlayClick={true} modalId='uberMinionLaunch'>
           <NewUberHausMinion />

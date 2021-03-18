@@ -164,3 +164,22 @@ export const displayBalance = (tokenBalance, decimals) => {
     return parseFloat(+tokenBalance / 10 ** +decimals).toFixed(4);
   }
 };
+
+export const addZeros = (roundedVal, decimals) => {
+  const scaleFactor = 10;
+  const perc = 10 ** scaleFactor;
+
+  const exp = ethers.BigNumber.from(10).pow(ethers.BigNumber.from(decimals));
+
+  if (roundedVal >= perc) {
+    return ethers.BigNumber.from(roundedVal)
+      .mul(exp)
+      .toString();
+  } else {
+    roundedVal = roundedVal * perc;
+    return ethers.BigNumber.from(roundedVal)
+      .mul(exp)
+      .div(ethers.BigNumber.from(perc))
+      .toString();
+  }
+};
