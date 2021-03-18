@@ -5,25 +5,26 @@ import { DaoDataContext } from '../../contexts/Store';
 
 export const StyledBanner = styled.header`
   background-color: rgb(16, 21, 61);
-  height: 150px;
+  height: auto;
   display: flex;
   flex-direction: column;
   align-items: center;
-  font-size: 1em;
+  justify-content: center;
   width: calc(100% - 30px);
-  padding: 0px 15px;
-  box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.05);
-  h1 {
+  padding: 25px 15px;
+  p {
     color: white;
-  }
-  a {
-    font-size: 20px;
+    margin: 0;
+    font-size: 21px;
+    span {
+      color: rgba(255, 255, 2550.85);
+    }
   }
 `;
 
 export const StyledHeader = styled.header`
   background-color: ${(props) => props.theme.appBackground};
-  height: 60px;
+  height: auto;
   display: flex;
   flex-direction: row;
   align-items: center;
@@ -31,7 +32,6 @@ export const StyledHeader = styled.header`
   font-size: 1em;
   width: calc(100% - 30px);
   padding: 0px 15px;
-  box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.05);
 `;
 
 const Header = () => {
@@ -40,10 +40,12 @@ const Header = () => {
     <>
       {daoData && daoData.version !== 1 ? (
         <StyledBanner>
-          <h1>There is a new version of the Pokemol DAO interface!</h1>
-          <p className="DaoText">
+          <p>
+            Pokemol has been rebuilt from the ground up as part of DAOhaus V2.
+          </p>
+          <p>
             <a href="https://app.daohaus.club/">
-              Use it now at https://app.daohaus.club/
+              Use it now at -> https://app.daohaus.club/
             </a>
           </p>
         </StyledBanner>
