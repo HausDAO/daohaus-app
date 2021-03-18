@@ -12,6 +12,7 @@ import { getGraphEndpoint } from '../utils/chain';
 import { hashMaker, memberVote, PROPOSAL_TYPES } from '../utils/proposalUtils';
 import { TokenService } from '../services/tokenService';
 import { MEMBERS_LIST, MEMBER_DELEGATE_KEY } from '../graphQL/member-queries';
+import { UBERHAUS_MEMBER_DELEGATE } from '../graphQL/uberhaus-queries';
 import { MinionService } from './minionService';
 import { UberHausMinionService } from './uberHausMinionService';
 
@@ -183,6 +184,26 @@ const updateDelegateFetch = async ({ daoID, chainID, memberAddress }) => {
   }
 };
 
+const pollUberHausDelegateSet = async ({
+  uberHausAddress,
+  minionAddress,
+  chainID,
+}) => {
+  try {
+    const res = await graphQuery({
+      endpoint: getGraphEndpoint(chainID, 'subgraph_url'),
+      query: UBERHAUS_MEMBER_DELEGATE,
+      variables: {
+        molochAddress: uberHausAddress,
+        memberAddress: minionAddress,
+      },
+    });
+    return res.members[0];
+  } catch (error) {
+    return error;
+  }
+};
+
 /// //////////TESTS///////////////
 const submitProposalTest = (data, shouldEqual, pollId) => {
   if (data.proposals) {
@@ -332,6 +353,17 @@ const withdrawTokenTest = (data, shouldEqual, pollId) => {
 };
 
 const updateDelegateTest = (data, shouldEqual, pollId) => {
+  if (data) {
+    return data.delegateKey.toLowerCase() === shouldEqual.toLowerCase();
+  } else {
+    clearInterval(pollId);
+    throw new Error(
+      `Poll test did recieve the expected results from the graph: ${data}`,
+    );
+  }
+};
+
+const uberHausDelegateSetTest = (data, shouldEqual, pollId) => {
   if (data) {
     return data.delegateKey.toLowerCase() === shouldEqual.toLowerCase();
   } else {
@@ -1018,6 +1050,41 @@ export const createPoll = ({
           unresolvedMsg: `Creating proposal`,
           successMsg: `Created uberHAUS delegate proposal`,
           errorMsg: `Poll error on nominateDelegate`,
+          pollData: {
+            action,
+            interval,
+            tries,
+          },
+          pollArgs: { chainID, minionAddress },
+        });
+      }
+    };
+  } else if (action === 'setInitialDelegate') {
+    return ({
+      chainID,
+      minionAddress,
+      uberHausAddress,
+      delegateAddress,
+      actions,
+    }) => (txHash) => {
+      startPoll({
+        pollFetch: pollUberHausDelegateSet,
+        testFn: uberHausDelegateSetTest,
+        shouldEqual: delegateAddress,
+        args: { uberHausAddress, minionAddress, delegateAddress, chainID },
+        actions,
+        txHash,
+      });
+      if (cachePoll) {
+        cachePoll({
+          txHash,
+          action,
+          timeSent: Date.now(),
+          status: 'unresolved',
+          resolvedMsg: `UberHAUS delegate set`,
+          unresolvedMsg: `Setting UberHAUS delegate`,
+          successMsg: `Set UberHAUS delegate`,
+          errorMsg: `Poll error on setInitialDelegate`,
           pollData: {
             action,
             interval,
