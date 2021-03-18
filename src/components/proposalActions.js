@@ -123,8 +123,9 @@ const ProposalVote = ({
         chainID: daochain,
       })('balanceOf')(address);
       setEnoughDeposit(
-        +depositTokenBalance / 10 ** overview?.depositToken.decimals >
-          +overview?.proposalDeposit / 10 ** overview?.depositToken.decimals,
+        +overview?.proposalDeposit === 0 ||
+          +depositTokenBalance / 10 ** overview?.depositToken.decimals >
+            +overview?.proposalDeposit / 10 ** overview?.depositToken.decimals,
       );
     };
     if (overview?.depositToken && address) {

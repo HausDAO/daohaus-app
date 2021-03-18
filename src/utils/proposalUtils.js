@@ -502,9 +502,18 @@ export const searchProposals = (rawAddress, filterArr, proposals) => {
   );
 };
 
-export const pendingUberHausStakingProposal = (prop) => {
+export const pendingUberHausStakingProposalChildDao = (prop) => {
   return (
     prop.proposalType === PROPOSAL_TYPES.MINION_UBER_STAKE &&
+    !prop.cancelled &&
+    !prop.uberHausMinionExecuted
+  );
+};
+
+export const pendingUberHausStakingProposal = (prop, minionAddress) => {
+  return (
+    prop.applicant === minionAddress &&
+    prop.proposalType === 'Member Proposal' &&
     !prop.cancelled &&
     !prop.processed
   );

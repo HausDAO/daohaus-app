@@ -23,6 +23,8 @@ export const HOME_DAO = gql`
         minionType
         details
         uberHausAddress
+        uberHausDelegate
+        uberHausDelegateRewardFactor
       }
       depositToken {
         tokenAddress
@@ -98,6 +100,7 @@ export const DAO_ACTIVITIES = gql`
         molochAddress
         molochVersion
         minionAddress
+        uberHausMinionExecuted
         minion {
           minionType
         }

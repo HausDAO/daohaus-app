@@ -61,6 +61,28 @@ export const UberHausMinionService = ({ web3, chainID, uberHausMinion }) => {
           return error;
         }
       };
+    } else if (service === 'setInitialDelegate') {
+      return async ({ address, poll, onTxHash }) => {
+        try {
+          const tx = await contract.methods[service]();
+          console.log('tx', tx);
+          return tx
+            .send('eth_requestAccounts', { from: address })
+            .on('transactionHash', (txHash) => {
+              if (poll) {
+                onTxHash();
+                poll(txHash);
+              }
+            })
+            .on('error', (error) => {
+              console.error(error);
+            });
+        } catch (error) {
+          console.log('fired in service');
+          console.error(error);
+          return error;
+        }
+      };
     }
   };
 };
