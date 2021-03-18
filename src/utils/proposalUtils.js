@@ -100,7 +100,14 @@ const tryGetDetails = (details) => {
 
 const getMinionProposalType = (proposal, details) => {
   const getUberTypeFromDetails = (details) => {
-    if (details?.uberType === 'staking') {
+    // TODO - temp for bad prop
+    // if (
+    //   details?.uberType === 'staking'
+    // ) {
+    if (
+      details?.uberType === 'staking' ||
+      details?.uberType === PROPOSAL_TYPES.MINION_UBER_STAKE
+    ) {
       return PROPOSAL_TYPES.MINION_UBER_STAKE;
     } else if (details?.uberType === 'delegate') {
       return PROPOSAL_TYPES.MINION_UBER_DEL;
@@ -489,5 +496,13 @@ export const searchProposals = (rawAddress, filterArr, proposals) => {
     activeFilters.some(
       (filter) => proposal[filter.value] === address && proposal,
     ),
+  );
+};
+
+export const pendingUberHausStakingProposal = (prop) => {
+  return (
+    prop.proposalType === PROPOSAL_TYPES.MINION_UBER_STAKE &&
+    !prop.cancelled &&
+    !prop.processed
   );
 };

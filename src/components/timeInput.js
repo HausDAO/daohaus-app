@@ -35,6 +35,7 @@ const TimeInput = ({
   const amt = watch(inputName);
 
   useEffect(() => {
+    console.log('amt', amt);
     if (amt && isNaN(amt)) {
       setError('enforceNumber', {
         type: 'manual',
@@ -55,6 +56,8 @@ const TimeInput = ({
       setTotalSeconds(null);
     }
   }, [currentUnit, amt]);
+
+  console.log('unitDisplay', unitDisplay);
 
   const shouldDisplayTotalSeconds =
     totalSeconds > 0 && currentUnit !== 'seconds' && displayTotalSeconds;
