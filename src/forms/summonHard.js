@@ -120,6 +120,7 @@ const SummonHard = ({ daoData, handleSummon, networkName, isUberHaus }) => {
             setValue={setValue}
             clearErrors={clearErrors}
             setTimePeriod={setTimePeriod}
+            inputName='periodDuration'
           />
         </Box>
         <Box>

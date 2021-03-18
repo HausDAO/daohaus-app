@@ -4,6 +4,8 @@ import { Box, Button, Flex } from '@chakra-ui/react';
 // import Following from '../components/followingDaos';
 import MainViewLayout from '../components/mainViewLayout';
 import DaoToDaoManager from '../components/daoToDaoManager';
+// import DaoToDaoManagerAlt from '../components/daoToDaoManagerAlt';
+
 import DaoToDaoProposalModal from '../modals/daoToDaoProposalModal';
 import DaoToDaoProposalTypeModal from '../modals/daoToDaoProposalTypeModal';
 import { useOverlay } from '../contexts/OverlayContext';
@@ -15,7 +17,7 @@ import { useParams } from 'react-router-dom';
 import { bigGraphQuery } from '../utils/theGraph';
 import { UBERHAUS_ADDRESS } from '../utils/uberhaus';
 
-const Allies = ({ daoOverview, daoMetaData }) => {
+const Allies = ({ daoOverview, daoMetaData, isMember, proposals }) => {
   const { daoid, daochain } = useParams();
 
   const [uberProposals, setUberProposals] = useSessionStorage(
@@ -79,7 +81,7 @@ const Allies = ({ daoOverview, daoMetaData }) => {
         textAlign='center'
       >
         <Box fontSize='3xl' fontFamily='heading' fontWeight={700} mb={10}>
-          Connect your wallet to summon a DAO.
+          Connect your wallet.
         </Box>
 
         <Flex direction='column' align='center'>
@@ -108,6 +110,16 @@ const Allies = ({ daoOverview, daoMetaData }) => {
           daoMetaData={daoMetaData}
           setProposalType={setProposalType}
         />
+        {/* <DaoToDaoManagerAlt
+          daoOverview={daoOverview}
+          daoMetaData={daoMetaData}
+          setProposalType={setProposalType}
+          isMember={isMember}
+          uberProposals={uberProposals}
+          uberMembers={uberMembers}
+          uberOverview={uberOverview}
+          daoProposals={proposals}
+        /> */}
         {/* <Following /> */}
       </Box>
     </MainViewLayout>
