@@ -92,15 +92,23 @@ const DaoToDaoProposalFormModal = ({
       type: `New Uber Proposal`,
       heading: ``,
       subline: ``,
-      form: <WithdrawPullForm />,
+      form: (
+        <WithdrawPullForm
+          uberMembers={uberMembers}
+          uberHausMinion={uberHausMinion}
+          uberDelegate={uberDelegate}
+          // refreshAllies={refreshAllies}
+        />
+      ),
     },
   };
+  // console.log(uberHausMinion);
 
   useEffect(() => {
     if (proposalType) {
       setProposalForm(daoToDaoProposalForms[proposalType]);
     }
-  }, [proposalType]);
+  }, [proposalType, uberMembers, uberHausMinion]);
 
   const handleClose = () => {
     setLoading(false);

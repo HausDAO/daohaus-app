@@ -320,9 +320,12 @@ const collectTokenTest = (graphBalance, oldBalance, pollId) => {
   }
 };
 
-const withdrawTokenTest = (data, shouldEqual, pollId) => {
+const withdrawTokenTest = (data, shouldEqual = 0, pollId) => {
   if (data) {
-    return +data === 0;
+    console.log('AT TEST');
+    console.log('returned data', data);
+    console.log('shouldEqual', shouldEqual);
+    return +data === shouldEqual;
   } else {
     clearInterval(pollId);
     throw new Error(
@@ -357,6 +360,8 @@ export const createPoll = ({
     actions,
     txHash,
   }) => {
+    console.log('IN POLL');
+    console.log(`args`, args);
     let tryCount = 0;
     const pollId = setInterval(async () => {
       if (tryCount < tries) {
@@ -857,12 +862,19 @@ export const createPoll = ({
       }
     };
   } else if (action === 'withdrawBalance') {
-    return ({ tokenAddress, memberAddress, actions, chainID, daoID }) => (
-      txHash,
-    ) => {
+    return ({
+      tokenAddress,
+      memberAddress,
+      actions,
+      chainID,
+      daoID,
+      uber,
+      expectedBalance,
+    }) => (txHash) => {
       startPoll({
         pollFetch: withdrawTokenFetch,
         testFn: withdrawTokenTest,
+        shouldEqual: expectedBalance || 0,
         args: {
           chainID,
           daoID,
@@ -892,6 +904,7 @@ export const createPoll = ({
             daoID,
             memberAddress,
             tokenAddress,
+            shouldEqual: uber ? expectedBalance : 0,
           },
         });
       }

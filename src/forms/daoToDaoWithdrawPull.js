@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useForm } from 'react-hook-form';
+import { get, useForm } from 'react-hook-form';
 import {
   Button,
   FormControl,
@@ -12,36 +12,52 @@ import {
   InputGroup,
   Input,
   FormHelperText,
+  Spinner,
 } from '@chakra-ui/react';
 import { RiErrorWarningLine } from 'react-icons/ri';
 
 import { useOverlay } from '../contexts/OverlayContext';
+import { displayBalance, valToDecimalString } from '../utils/tokenValue';
 // import { detailsToJSON } from '../utils/general';
 import styled from '@emotion/styled';
 import {
+  UBERHAUS_ADDRESS,
   UBERHAUS_STAKING_TOKEN,
   UBERHAUS_STAKING_TOKEN_SYMBOL,
 } from '../utils/uberhaus';
 import TextBox from '../components/TextBox';
 import { useParams } from 'react-router-dom';
+import { createHash, detailsToJSON } from '../utils/general';
+import { createPoll } from '../services/pollService';
+import { createForumTopic } from '../utils/discourse';
+import { PROPOSAL_TYPES } from '../utils/proposalUtils';
+import { UberHausMinionService } from '../services/uberHausMinionService';
+import { useUser } from '../contexts/UserContext';
+import { useTX } from '../contexts/TXContext';
+import { useInjectedProvider } from '../contexts/InjectedProviderContext';
+import { useDao } from '../contexts/DaoContext';
+import { TokenService } from '../services/tokenService';
 
 const FormWrapper = styled.form`
   width: 100%;
 `;
 
-const getCurrentMobileForm = (currentView) => {
-  return currentView === 'withdraw' ? <WithdrawForm /> : <PullForm />;
-};
-
-const BothForms = () => (
-  <>
-    <WithdrawForm />
-    <PullForm />
-  </>
-);
-
-const WithdrawPullForm = () => {
+const WithdrawPullForm = ({ uberMembers, uberHausMinion, refreshAllies }) => {
   const [currentView, setCurrentView] = useState('withdraw');
+
+  const BothForms = () => (
+    <>
+      <WithdrawForm uberMembers={uberMembers} uberHausMinion={uberHausMinion} />
+      <PullForm uberMembers={uberMembers} uberHausMinion={uberHausMinion} />
+    </>
+  );
+  const getCurrentMobileForm = (currentView) => {
+    return currentView === 'withdraw' ? (
+      <WithdrawForm uberMembers={uberMembers} uberHausMinion={uberHausMinion} />
+    ) : (
+      <PullForm uberMembers={uberMembers} uberHausMinion={uberHausMinion} />
+    );
+  };
 
   const mobileForm = getCurrentMobileForm(currentView);
   const formLayout = useBreakpointValue({
@@ -80,7 +96,7 @@ const WithdrawPullForm = () => {
           _hover={{ scale: '1' }}
           outline='none'
         >
-          Pull
+          Pull Funds
         </Button>
       </Flex>
       {formLayout}
@@ -90,13 +106,22 @@ const WithdrawPullForm = () => {
 
 export default WithdrawPullForm;
 
-const WithdrawForm = () => {
+const WithdrawForm = ({ uberMembers, uberHausMinion, refreshAllies }) => {
+  const { successToast, errorToast, setTxInfoModal } = useOverlay();
+  const { cachePoll, resolvePoll } = useUser();
+  const { refreshDao } = useTX();
+  const { injectedProvider, address } = useInjectedProvider();
+  const { daochain } = useParams();
+  const { handleSubmit, errors, register, watch, setValue } = useForm();
+
   const [loading, setLoading] = useState(false);
   const [currentError, setCurrentError] = useState(null);
   const { setD2dProposalModal } = useOverlay();
-  const { daoid } = useParams();
+  const [selectedToken, setSelectedToken] = useState(null);
+  const [balance, setBalance] = useState(0);
+  const [uberTokens, setUberTokens] = useState(null);
 
-  const { handleSubmit, errors, register } = useForm();
+  const withdrawToken = watch('withdrawToken');
 
   useEffect(() => {
     if (Object.keys(errors).length > 0) {
@@ -111,12 +136,85 @@ const WithdrawForm = () => {
   }, [errors]);
 
   useEffect(() => {
-    // getMax value
-  }, [daoid]);
+    if (!uberMembers || !uberHausMinion || !withdrawToken) return;
+    const uberMinionMember = uberMembers.find(
+      (member) => member.memberAddress === uberHausMinion.minionAddress,
+    );
+    if (uberMinionMember) {
+      const tokenBalances = uberMinionMember.tokenBalances;
+      const token = tokenBalances.find(
+        ({ token }) => token.tokenAddress === withdrawToken.toLowerCase(),
+      );
+      const readableBalance = displayBalance(
+        token?.tokenBalance,
+        token?.token?.decimals,
+      );
+      setSelectedToken(token);
+      setBalance(readableBalance || 0);
+      setUberTokens(tokenBalances);
+    } else {
+      // do something when not found ?
+    }
+  }, [uberMembers, uberHausMinion, withdrawToken]);
 
-  const onSubmit = () => {
+  const onSubmit = async (values) => {
     setLoading(true);
+    console.log('formValues', values);
 
+    const tokenAddress = selectedToken?.token?.tokenAddress;
+    const currentBalance = selectedToken?.tokenBalance;
+    const withdrawAmt = values.withdraw
+      ? valToDecimalString(values.withdraw, tokenAddress, uberTokens)
+      : '0';
+    const args = [UBERHAUS_ADDRESS, tokenAddress, withdrawAmt];
+    const expectedBalance = +currentBalance - +withdrawAmt;
+
+    try {
+      const poll = createPoll({ action: 'withdrawBalance', cachePoll })({
+        tokenAddress,
+        memberAddress: uberHausMinion.minionAddress,
+        chainID: daochain,
+        uber: true,
+        expectedBalance,
+        daoID: UBERHAUS_ADDRESS,
+        actions: {
+          onError: (error, txHash) => {
+            errorToast({
+              title: `There was an error.`,
+            });
+            resolvePoll(txHash);
+            console.error(`Could not withdraw funds: ${error}`);
+          },
+          onSuccess: (txHash) => {
+            successToast({
+              title: 'Withdrew funds from UberHAUS!',
+            });
+            refreshDao();
+            // refreshAllies();
+            resolvePoll(txHash);
+          },
+        },
+      });
+
+      const onTxHash = () => {
+        setD2dProposalModal((prevState) => !prevState);
+        setTxInfoModal(true);
+      };
+
+      await UberHausMinionService({
+        web3: injectedProvider,
+        uberHausMinion: uberHausMinion.minionAddress,
+        chainID: daochain,
+      })('doWithdraw')({ args, address, poll, onTxHash });
+    } catch (err) {
+      setD2dProposalModal((prevState) => !prevState);
+      setLoading(false);
+      console.error('error: ', err);
+      errorToast({
+        title: `There was an error.`,
+        description: err.message || '',
+      });
+    }
     setD2dProposalModal((prevState) => !prevState);
   };
 
@@ -158,10 +256,13 @@ const WithdrawForm = () => {
           />
           <MaxOutInput
             register={register}
-            max='10'
+            max={balance}
             label='Withdraw'
             name='withdraw'
             id='withdraw'
+            disabled={!withdrawToken}
+            helperText={!withdrawToken && 'Select a token'}
+            setValue={setValue}
           />
           <Flex justify='center' mt={8}>
             <Button
@@ -185,12 +286,19 @@ const WithdrawForm = () => {
   );
 };
 
-const PullForm = () => {
+const PullForm = ({ uberMembers, uberHausMinion }) => {
   const [loading, setLoading] = useState(false);
   const [currentError, setCurrentError] = useState(null);
   // const { setD2dProposalModal } = useOverlay();
 
-  const { handleSubmit, errors, register } = useForm();
+  const [selectedToken, setSelectedToken] = useState(null);
+  const [loadToken, setLoadToken] = useState(false);
+  const [balance, setBalance] = useState({ readable: 0, real: 0 });
+  const { daoid, daochain } = useParams();
+  const { daoMembers } = useDao();
+
+  const { handleSubmit, errors, register, watch, setValue } = useForm();
+  const pullToken = watch('pullToken');
 
   useEffect(() => {
     if (Object.keys(errors).length > 0) {
@@ -203,6 +311,29 @@ const PullForm = () => {
       setCurrentError(null);
     }
   }, [errors]);
+
+  useEffect(() => {
+    if (!uberHausMinion || !pullToken) return;
+
+    const getTokenBalance = async () => {
+      try {
+        setLoadToken(true);
+        const balance = await TokenService({
+          chainID: daochain,
+          tokenAddress: pullToken,
+        })('balanceOf')(uberHausMinion.minionAddress);
+        console.log(balance.toString().length);
+        const readableBalance = displayBalance(balance, '18');
+        setBalance({ readable: readableBalance || 0, real: balance || 0 });
+        setLoadToken(false);
+      } catch (error) {
+        console.error(error);
+      }
+    };
+    if (uberHausMinion && pullToken) {
+      getTokenBalance();
+    }
+  }, [uberHausMinion, pullToken]);
 
   const onSubmit = (values) => {
     setLoading(true);
@@ -243,11 +374,15 @@ const PullForm = () => {
           />
           <MaxOutInput
             register={register}
-            max='10'
-            label='Withdraw'
-            name='withdraw'
-            id='withdraw'
+            max={loadToken ? <Spinner size='1.6rem' /> : balance.readable}
+            label='Pull'
+            name='pull'
+            id='pull'
+            disabled={!pullToken || loadToken}
+            helperText={!pullToken && 'Select a token'}
+            setValue={setValue}
           />
+
           <Flex justify='center' mt={8}>
             <Button
               type='submit'
@@ -305,7 +440,7 @@ const TokenSelect = ({
 
 const MaxOutInput = ({
   label = 'labelPlaceholder',
-  setMax,
+  setValue,
   register,
   name,
   helperText,
@@ -313,7 +448,11 @@ const MaxOutInput = ({
   id,
   containerProps = {},
   validationPattern = {},
+  disabled,
 }) => {
+  const setMax = () => {
+    setValue(name, max);
+  };
   return (
     <Box {...containerProps}>
       <TextBox as={FormLabel} size='xs' htmlFor={id} mb={2}>
@@ -327,6 +466,7 @@ const MaxOutInput = ({
           right='0'
           top='-30px'
           variant='outline'
+          disabled={disabled}
         >
           Max: {max}
         </Button>
@@ -339,6 +479,7 @@ const MaxOutInput = ({
           })}
           color='white'
           focusBorderColor='secondary.500'
+          disabled={disabled}
         />
       </InputGroup>
       <FormHelperText>{helperText}</FormHelperText>

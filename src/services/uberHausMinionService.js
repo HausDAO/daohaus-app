@@ -31,7 +31,8 @@ export const UberHausMinionService = ({ web3, chainID, uberHausMinion }) => {
       service === 'proposeAction' ||
       service === 'executeAction' ||
       service === 'executeAppointment' ||
-      service === 'nominateDelegate'
+      service === 'nominateDelegate' ||
+      service === 'doWithdraw'
     ) {
       return async ({ args, address, poll, onTxHash }) => {
         console.log('IN CONTRACT');

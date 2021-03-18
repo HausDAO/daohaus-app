@@ -131,14 +131,14 @@ const Allies = ({
           setProposalType={setProposalType}
         />
         <DaoToDaoProposalModal
-          isOpen={d2dProposalModal}
-          proposalType={proposalType}
+          isOpen={true}
+          proposalType='d2dWithdraw'
           daoMembers={daoMembers}
           uberMembers={uberMembers}
           uberDelegate={uberDelegate}
           uberHausMinion={uberHausMinion}
         />
-        <GenericModal closeOnOverlayClick={false} modalId='uberMinionLaunch'>
+        <GenericModal closeOnOverlayClick={true} modalId='uberMinionLaunch'>
           <NewUberHausMinion />
         </GenericModal>
         <DaoToDaoManager

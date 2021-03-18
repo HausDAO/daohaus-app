@@ -1,6 +1,6 @@
 import { TokenService } from '../services/tokenService';
 import { MolochService } from '../services/molochService';
-import { omit } from './general';
+import { numberWithCommas, omit } from './general';
 import { ethers } from 'ethers';
 
 const geckoURL = 'https://api.coingecko.com/api/v3/simple/token_price';
@@ -134,7 +134,7 @@ export const getTotalBankValue = (tokenBalances, prices) => {
 export const valToDecimalString = (value, tokenAddress, tokens) => {
   // get correct value of token with decimal places
   // returns a string
-  console.log(value, tokenAddress, tokens);
+
   const scaleFactor = 10;
   const perc = 10 ** scaleFactor;
 
@@ -156,5 +156,11 @@ export const valToDecimalString = (value, tokenAddress, tokens) => {
       .mul(exp)
       .div(ethers.BigNumber.from(perc))
       .toString();
+  }
+};
+
+export const displayBalance = (tokenBalance, decimals) => {
+  if (tokenBalance && decimals) {
+    return parseFloat(+tokenBalance / 10 ** +decimals).toFixed(4);
   }
 };

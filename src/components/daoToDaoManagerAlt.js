@@ -70,13 +70,13 @@ const DaoToDaoManager = ({
             );
           });
 
-          console.log('daoProposals', daoProposals);
+          // console.log('daoProposals', daoProposals);
 
           const hi = daoProposals.find((prop) =>
             pendingUberHausStakingProposal(prop),
           );
 
-          console.log('hi', hi);
+          // console.log('hi', hi);
 
           const activeMembershipProposal =
             (!uberHausMembership &&
@@ -126,7 +126,7 @@ const DaoToDaoManager = ({
     (ally) => ally.allyType === 'uberHausBurner' && !ally.isParent,
   );
 
-  console.log('uberHausMinion', uberHausMinion);
+  // console.log('uberHausMinion', uberHausMinion);
 
   return (
     <>
