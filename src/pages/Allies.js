@@ -4,7 +4,7 @@ import { Box, Button, Flex } from '@chakra-ui/react';
 // import Following from '../components/followingDaos';
 import MainViewLayout from '../components/mainViewLayout';
 import DaoToDaoManager from '../components/daoToDaoManager';
-import DaoToDaoManagerAlt from '../components/daoToDaoManagerAlt';
+// import DaoToDaoManagerAlt from '../components/daoToDaoManagerAlt';
 
 import DaoToDaoProposalModal from '../modals/daoToDaoProposalModal';
 import DaoToDaoProposalTypeModal from '../modals/daoToDaoProposalTypeModal';
@@ -110,7 +110,7 @@ const Allies = ({ daoOverview, daoMetaData, isMember, proposals }) => {
           daoMetaData={daoMetaData}
           setProposalType={setProposalType}
         />
-        <DaoToDaoManagerAlt
+        {/* <DaoToDaoManagerAlt
           daoOverview={daoOverview}
           daoMetaData={daoMetaData}
           setProposalType={setProposalType}
@@ -119,7 +119,7 @@ const Allies = ({ daoOverview, daoMetaData, isMember, proposals }) => {
           uberMembers={uberMembers}
           uberOverview={uberOverview}
           daoProposals={proposals}
-        />
+        /> */}
         {/* <Following /> */}
       </Box>
     </MainViewLayout>
