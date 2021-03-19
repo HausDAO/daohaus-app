@@ -26,6 +26,7 @@ export const HUB_MEMBERSHIPS = gql`
       moloch {
         id
         version
+        summoner
         proposals(orderBy: proposalId, orderDirection: desc, first: 10) {
           id
           createdAt
