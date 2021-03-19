@@ -128,7 +128,7 @@ const DaoContractSettings = ({ overview, customTerms }) => {
             </TextBox>
           </Skeleton>
         </Box>
-        <Text
+        {/* <Text
           fontFamily='mono'
           variant='value'
           fontSize='sm'
@@ -141,7 +141,7 @@ const DaoContractSettings = ({ overview, customTerms }) => {
             Summon a clone of this DAO
             <Icon as={RiFireLine} color='secondary.400' ml={1} />
           </Flex>
-        </Text>
+        </Text> */}
       </Flex>
     </ContentBox>
   );
