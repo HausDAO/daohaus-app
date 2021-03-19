@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { Box, Button, Flex } from '@chakra-ui/react';
 
 // import Following from '../components/followingDaos';
@@ -14,8 +14,15 @@ import { useSessionStorage } from '../hooks/useSessionStorage';
 import { useParams } from 'react-router-dom';
 import { bigGraphQuery } from '../utils/theGraph';
 import { UBERHAUS_ADDRESS } from '../utils/uberhaus';
+import { UberHausMinionService } from '../services/uberHausMinionService';
 
-const Allies = ({ daoOverview, daoMetaData, isMember, proposals }) => {
+const Allies = ({
+  daoOverview,
+  daoMetaData,
+  isMember,
+  proposals,
+  daoMembers,
+}) => {
   const { daoid, daochain } = useParams();
 
   const [uberProposals, setUberProposals] = useSessionStorage(
@@ -24,7 +31,7 @@ const Allies = ({ daoOverview, daoMetaData, isMember, proposals }) => {
   );
   const [uberOverview, setUberOveriew] = useSessionStorage(`U-overview`, null);
   const [uberMembers, setUberMembers] = useSessionStorage(`U-members`, null);
-
+  const [uberDelegate, setUberDelegate] = useState(null);
   const { d2dProposalModal } = useOverlay();
   const [proposalType, setProposalType] = useState(null);
   const { address, requestWallet } = useInjectedProvider();
@@ -37,8 +44,6 @@ const Allies = ({ daoOverview, daoMetaData, isMember, proposals }) => {
 
     // do not fetch without necessary data
     if (!daoid || !daochain || hasPerformedBatchQuery.current) return;
-    // fetch only after child dao's data loads
-    // if (!daoOverview || !daoMetaData) return;
 
     const bigQueryOptions = {
       args: {
@@ -65,6 +70,33 @@ const Allies = ({ daoOverview, daoMetaData, isMember, proposals }) => {
     uberOverview,
     uberProposals,
   ]);
+
+  const uberHausMinion = useMemo(() => {
+    return daoOverview
+      ? daoOverview.minions.find(
+          (minion) =>
+            minion.minionType === 'UberHaus minion' &&
+            minion.uberHausAddress === UBERHAUS_ADDRESS,
+        )
+      : null;
+  }, [daoOverview]);
+
+  useEffect(() => {
+    const getDelegate = async () => {
+      try {
+        const delegate = await UberHausMinionService({
+          chainID: daochain,
+          uberHausMinion: uberHausMinion.minionAddress,
+        })('currentDelegate')();
+        setUberDelegate(delegate);
+      } catch (error) {
+        console.error(error?.message);
+      }
+    };
+    if (uberHausMinion) {
+      getDelegate();
+    }
+  }, [uberHausMinion]);
 
   if (!address) {
     return (
@@ -99,11 +131,17 @@ const Allies = ({ daoOverview, daoMetaData, isMember, proposals }) => {
         <DaoToDaoProposalModal
           isOpen={d2dProposalModal}
           proposalType={proposalType}
+          daoMembers={daoMembers}
+          uberMembers={uberMembers}
+          uberDelegate={uberDelegate}
+          uberHausMinion={uberHausMinion}
+          uberOverview={uberOverview}
         />
-        <GenericModal closeOnOverlayClick={false} modalId='uberMinionLaunch'>
+        <GenericModal closeOnOverlayClick={true} modalId='uberMinionLaunch'>
           <NewUberHausMinion />
         </GenericModal>
         <DaoToDaoManager
+          uberDelegate={uberDelegate}
           daoOverview={daoOverview}
           daoMetaData={daoMetaData}
           setProposalType={setProposalType}

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 // import { useParams } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import {
@@ -38,12 +38,19 @@ import { useInjectedProvider } from '../contexts/InjectedProviderContext';
 import { UberHausMinionService } from '../services/uberHausMinionService';
 import { useTX } from '../contexts/TXContext';
 import TimeInput from '../components/timeInput';
+import AddressAvatar from '../components/addressAvatar';
+import { USER_MEMBERSHIPS } from '../graphQL/member-queries';
 
 // TODO pass delegate to delegate menu
 // TODO replace delegate with user avatar
 // TODO sort out term limits, emergency recall
 
-const DelegateProposalForm = () => {
+const DelegateProposalForm = ({
+  daoMembers,
+  uberMembers,
+  uberHausMinion,
+  uberDelegate,
+}) => {
   const [loading, setLoading] = useState(false);
   const { daoid, daochain } = useParams();
   const { daoMetaData } = useMetaData();
@@ -56,7 +63,6 @@ const DelegateProposalForm = () => {
     successToast,
     setTxInfoModal,
   } = useOverlay();
-  const { daoOverview } = useDao();
   const { refreshDao } = useTX();
   const { cachePoll, resolvePoll } = useUser();
   const {
@@ -68,6 +74,22 @@ const DelegateProposalForm = () => {
     setError,
     clearErrors,
   } = useForm();
+
+  const candidates = useMemo(() => {
+    if (!daoMembers || !uberHausMinion || !uberMembers || !uberDelegate) return;
+    return daoMembers.filter((member) => {
+      const hasShares = +member.shares > 0;
+      const isNotDelegate = member.memberAddress !== uberDelegate;
+      const isNotUberMemberOrDelegate = uberMembers.every(
+        (uberMember) =>
+          member.memberAddress !== uberMember.memberAddress &&
+          member.memberAddress !== uberMember.delegateKey,
+      );
+      if (hasShares && isNotDelegate && isNotUberMemberOrDelegate) {
+        return member;
+      }
+    });
+  }, [daoMembers, uberHausMinion, uberMembers, uberDelegate]);
 
   useEffect(() => {
     if (Object.keys(errors).length > 0) {
@@ -85,11 +107,7 @@ const DelegateProposalForm = () => {
     setLoading(true);
 
     const now = (new Date().getTime() / 1000).toFixed();
-    const uberHausMinionData = daoOverview.minions.find(
-      (minion) =>
-        minion.minionType === 'UberHaus minion' &&
-        minion.uberHausAddress === UBERHAUS_ADDRESS,
-    );
+
     const hash = createHash();
     const details = detailsToJSON({
       ...values,
@@ -104,12 +122,13 @@ const DelegateProposalForm = () => {
       timePeriod?.toString() || values.delegateTerm,
       details,
     ];
+
     try {
       const poll = createPoll({
         action: 'uberHausNominateDelegate',
         cachePoll,
       })({
-        minionAddress: uberHausMinionData.minionAddress,
+        minionAddress: uberHausMinion.minionAddress,
         chainID: daochain,
         newDelegateAddress: values?.memberApplicant,
         createdAt: now,
@@ -145,7 +164,7 @@ const DelegateProposalForm = () => {
       };
       await UberHausMinionService({
         web3: injectedProvider,
-        uberHausMinion: uberHausMinionData.minionAddress,
+        uberHausMinion: uberHausMinion.minionAddress,
         chainID: daochain,
       })('nominateDelegate')({ args, address, poll, onTxHash });
     } catch (err) {
@@ -176,20 +195,19 @@ const DelegateProposalForm = () => {
           <TextBox size='xs' htmlFor='name' mb={2}>
             Current Delegate
           </TextBox>
-          <Flex w='60%' align='center' justify='space-between' pb={3}>
-            <Image src={DAOHaus} w='40px' h='40px' />
-            <Box fontFamily='heading' fontWeight={900}>
-              takashi.eth
-            </Box>
+          <Flex w='100%' align='center' justify='space-between' pb={3} mb={2}>
+            <AddressAvatar addr={uberDelegate} />
             <DelegateMenu />
           </Flex>
           <AddressInput
             name='delegate'
-            formLabel='Delegate Address'
+            formLabel='Eligable Delegates'
             register={register}
             setValue={setValue}
             watch={watch}
             memberOnly={true}
+            overrideData={candidates}
+            memberOverride={true}
           />
           <TimeInput
             errors={errors}
@@ -207,24 +225,6 @@ const DelegateProposalForm = () => {
               </TextBox>
             }
           />
-
-          {/* <Input
-            name='delegateTerm'
-            placeholder='0'
-            mb={5}
-            ref={register({
-              required: {
-                value: true,
-                message: 'Delegate term is required for Delegate Proposals',
-              },
-              pattern: {
-                value: /[0-9]/,
-                message: 'Term must be a number in months',
-              },
-            })}
-            color='white'
-            focusBorderColor='secondary.500'
-          /> */}
         </Box>
       </FormControl>
       <Flex justify='flex-end' align='center' h='60px'>

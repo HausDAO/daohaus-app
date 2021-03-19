@@ -204,6 +204,22 @@ const pollUberHausDelegateSet = async ({
   }
 };
 
+export const pollGuildFunds = async ({
+  chainID,
+  uberMinionAddress,
+  tokenAddress,
+}) => {
+  try {
+    const newTokenBalance = TokenService({
+      chainID,
+      tokenAddress,
+    })('balanceOf')(uberMinionAddress);
+    return newTokenBalance;
+  } catch (error) {
+    return error;
+  }
+};
+
 /// //////////TESTS///////////////
 const submitProposalTest = (data, shouldEqual, pollId) => {
   if (data.proposals) {
@@ -341,9 +357,22 @@ const collectTokenTest = (graphBalance, oldBalance, pollId) => {
   }
 };
 
-const withdrawTokenTest = (data, shouldEqual, pollId) => {
+const withdrawTokenTest = (data, shouldEqual = 0, pollId) => {
   if (data) {
-    return +data === 0;
+    return +data === shouldEqual;
+  } else {
+    clearInterval(pollId);
+    throw new Error(
+      `Poll test did recieve the expected results from the graph: ${data}`,
+    );
+  }
+};
+const guildFundTest = (data, shouldEqual, pollId) => {
+  console.log(`data`, data);
+  console.log(`shouldEqual`, shouldEqual);
+  console.log(`pollId`, pollId);
+  if (data) {
+    return +data === shouldEqual;
   } else {
     clearInterval(pollId);
     throw new Error(
@@ -389,6 +418,8 @@ export const createPoll = ({
     actions,
     txHash,
   }) => {
+    console.log('IN POLL');
+    console.log(`args`, args);
     let tryCount = 0;
     const pollId = setInterval(async () => {
       if (tryCount < tries) {
@@ -889,17 +920,26 @@ export const createPoll = ({
       }
     };
   } else if (action === 'withdrawBalance') {
-    return ({ tokenAddress, memberAddress, actions, chainID, daoID }) => (
-      txHash,
-    ) => {
+    return ({
+      tokenAddress,
+      memberAddress,
+      actions,
+      chainID,
+      daoID,
+      uber,
+      expectedBalance,
+    }) => (txHash) => {
       startPoll({
         pollFetch: withdrawTokenFetch,
         testFn: withdrawTokenTest,
+        shouldEqual: expectedBalance || 0,
         args: {
+          tokenAddress,
+          memberAddress,
           chainID,
           daoID,
-          memberAddress,
-          tokenAddress,
+          uber,
+          expectedBalance,
         },
         actions,
         txHash,
@@ -923,6 +963,57 @@ export const createPoll = ({
             chainID,
             daoID,
             memberAddress,
+            tokenAddress,
+            shouldEqual: uber ? expectedBalance : 0,
+          },
+        });
+      }
+    };
+  } else if (action === 'pullGuildFunds') {
+    return ({
+      tokenAddress,
+      actions,
+      chainID,
+      uberMinionAddress,
+      expectedBalance,
+    }) => (txHash) => {
+      console.log('At fire poll');
+      console.log(`tokenAddress`, tokenAddress);
+      console.log(`actions`, actions);
+      console.log('uberMinionAddress', uberMinionAddress);
+      console.log(`chainID`, chainID);
+      console.log(`expectedBalance`, expectedBalance);
+      startPoll({
+        pollFetch: pollGuildFunds,
+        testFn: guildFundTest,
+        shouldEqual: expectedBalance,
+        args: {
+          chainID,
+          uberMinionAddress,
+          tokenAddress,
+        },
+        actions,
+        txHash,
+      });
+      if (cachePoll) {
+        cachePoll({
+          txHash,
+          action,
+          timeSent: Date.now(),
+          status: 'unresolved',
+          resolvedMsg: `Pulled Tokens to Guild Bank`,
+          unresolvedMsg: `Pulling tokens from UberHUAS Minion`,
+          successMsg: `Successfully pulled tokens!`,
+          errorMsg: `There was an error withdrawing tokens`,
+          pollData: {
+            action,
+            interval,
+            tries,
+          },
+          pollArgs: {
+            chainID,
+            uberMinionAddress,
+            expectedBalance,
             tokenAddress,
           },
         });
