@@ -15,7 +15,7 @@ const units = [
   { name: 'Hours', value: 'hours' },
   { name: 'Days', value: 'days' },
   { name: 'Weeks', value: 'weeks' },
-  { name: 'Months', value: 'months' },
+  // { name: 'Months', value: 'months' },
 ];
 
 const TimeInput = ({
@@ -29,13 +29,12 @@ const TimeInput = ({
   label,
   displayTotalSeconds = true,
 }) => {
-  const [unitDisplay, setUnitDisplay] = useState(null);
+  const [unitDisplay, setUnitDisplay] = useState('seconds');
   const [totalSeconds, setTotalSeconds] = useState(null);
   const currentUnit = watch('units');
   const amt = watch(inputName);
 
   useEffect(() => {
-    console.log('amt', amt);
     if (amt && isNaN(amt)) {
       setError('enforceNumber', {
         type: 'manual',
@@ -50,6 +49,7 @@ const TimeInput = ({
     if (currentUnit && amt && !errors.enforceNumber) {
       const seconds = calcSeconds(amt, currentUnit);
       setTimePeriod(seconds);
+      console.log(seconds);
       setTotalSeconds(seconds);
     } else {
       setTimePeriod(0);
@@ -57,14 +57,13 @@ const TimeInput = ({
     }
   }, [currentUnit, amt]);
 
-  console.log('unitDisplay', unitDisplay);
-
   const shouldDisplayTotalSeconds =
     totalSeconds > 0 && currentUnit !== 'seconds' && displayTotalSeconds;
-  console.log(shouldDisplayTotalSeconds);
+
+  const defaultLabel = `How many ${unitDisplay} per period?`;
   return (
     <Flex flexDir='column'>
-      {label || 'How many ' + { unitDisplay } + ' per period?'}
+      {label || defaultLabel}
       <InputGroup>
         <Input
           className='inline-field'
