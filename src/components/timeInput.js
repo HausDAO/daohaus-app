@@ -15,7 +15,6 @@ const units = [
   { name: 'Hours', value: 'hours' },
   { name: 'Days', value: 'days' },
   { name: 'Weeks', value: 'weeks' },
-  // { name: 'Months', value: 'months' },
 ];
 
 const TimeInput = ({
