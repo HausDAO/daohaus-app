@@ -129,8 +129,8 @@ const Allies = ({
           setProposalType={setProposalType}
         />
         <DaoToDaoProposalModal
-          isOpen={true}
-          proposalType='d2dWithdraw'
+          isOpen={d2dProposalModal}
+          proposalType={proposalType}
           daoMembers={daoMembers}
           uberMembers={uberMembers}
           uberDelegate={uberDelegate}

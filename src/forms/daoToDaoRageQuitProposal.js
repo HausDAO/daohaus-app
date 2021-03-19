@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { Button, FormControl, Flex, Icon, Box } from '@chakra-ui/react';
 import { RiErrorWarningLine } from 'react-icons/ri';
@@ -9,8 +9,6 @@ import { useOverlay } from '../contexts/OverlayContext';
 // import { createHash, detailsToJSON } from '../utils/general';
 import RageInput from './rageInput';
 // import { PROPOSAL_TYPES } from '../utils/proposalUtils';
-import { useDao } from '../contexts/DaoContext';
-import { MolochService } from '../services/molochService';
 import { createHash, detailsToJSON } from '../utils/general';
 import { useInjectedProvider } from '../contexts/InjectedProviderContext';
 import { createPoll } from '../services/pollService';

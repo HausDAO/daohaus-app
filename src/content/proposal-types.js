@@ -103,5 +103,12 @@ export const daoToDaoProposalTypes = () => {
       image: swordImg,
       show: true,
     },
+    {
+      name: 'Pull/Withdraw',
+      subhead: 'Pull or withdraw funds',
+      proposalType: 'd2dWithdraw',
+      image: swordImg,
+      show: true,
+    },
   ];
 };

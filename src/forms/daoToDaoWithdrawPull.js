@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { get, useForm } from 'react-hook-form';
+import { useForm } from 'react-hook-form';
 import {
   Button,
   FormControl,
@@ -27,15 +27,11 @@ import {
 } from '../utils/uberhaus';
 import TextBox from '../components/TextBox';
 import { useParams } from 'react-router-dom';
-import { createHash, detailsToJSON } from '../utils/general';
 import { createPoll } from '../services/pollService';
-import { createForumTopic } from '../utils/discourse';
-import { PROPOSAL_TYPES } from '../utils/proposalUtils';
 import { UberHausMinionService } from '../services/uberHausMinionService';
 import { useUser } from '../contexts/UserContext';
 import { useTX } from '../contexts/TXContext';
 import { useInjectedProvider } from '../contexts/InjectedProviderContext';
-import { useDao } from '../contexts/DaoContext';
 import { TokenService } from '../services/tokenService';
 
 const FormWrapper = styled.form`
@@ -308,9 +304,9 @@ const PullForm = ({
   uberOverview,
 }) => {
   const { injectedProvider, address } = useInjectedProvider();
-  const { daoid, daochain } = useParams();
+  const { daochain } = useParams();
   const { cachePoll, resolvePoll } = useUser();
-  const { daoMembers } = useDao();
+
   const {
     errorToast,
     successToast,
@@ -323,7 +319,6 @@ const PullForm = ({
 
   const [currentError, setCurrentError] = useState(null);
   const [loading, setLoading] = useState(false);
-  const [decimals, setDecimals] = useState(0);
   // const [selectedToken, setSelectedToken] = useState(null);
 
   const [loadToken, setLoadToken] = useState(false);
@@ -378,25 +373,23 @@ const PullForm = ({
 
   const onSubmit = async (values) => {
     setLoading(true);
-    console.log('formValues', values);
 
-    const tokenAddress = values.pullToken;
-    const currentBalance = balance.real;
+    const tokenAddress = values.pullToken.toLowerCase();
     const uberTokens = uberOverview.tokenBalances;
+
     const withdrawAmt = values.pull
       ? valToDecimalString(values.pull, tokenAddress, uberTokens)
       : '0';
+    console.log('withDrawAmt', withdrawAmt.length);
     const args = [tokenAddress, withdrawAmt];
-    const expectedBalance = +currentBalance - +withdrawAmt;
+    const expectedBalance = +balance.real - +withdrawAmt;
 
     try {
       const poll = createPoll({ action: 'pullGuildFunds', cachePoll })({
         tokenAddress,
-        memberAddress: uberHausMinion.minionAddress,
+        uberMinionAddress: uberHausMinion.minionAddress,
         chainID: daochain,
-        uber: true,
         expectedBalance,
-        daoID: UBERHAUS_ADDRESS,
         actions: {
           onError: (error, txHash) => {
             errorToast({
@@ -422,7 +415,7 @@ const PullForm = ({
         web3: injectedProvider,
         uberHausMinion: uberHausMinion.minionAddress,
         chainID: daochain,
-      })('doWithdraw')({ args, address, poll, onTxHash });
+      })('pullGuildFunds')({ args, address, poll, onTxHash });
     } catch (err) {
       setD2dProposalModal((prevState) => !prevState);
       setLoading(false);
