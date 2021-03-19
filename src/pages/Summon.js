@@ -4,9 +4,9 @@ import { Button, Flex, Box, Text } from '@chakra-ui/react';
 import Layout from '../components/layout';
 import { useInjectedProvider } from '../contexts/InjectedProviderContext';
 import {
-  cloneDaoPresets,
-  cloneMembers,
-  cloneTokens,
+  // cloneDaoPresets,
+  // cloneMembers,
+  // cloneTokens,
   daoConstants,
   daoPresets,
   parseSummonresAndShares,
@@ -23,10 +23,10 @@ import { getGraphEndpoint } from '../utils/chain';
 import { DAO_POLL } from '../graphQL/dao-queries';
 import MainViewLayout from '../components/mainViewLayout';
 import { capitalize } from '../utils/general';
-import TemporaryCloneSummon from '../components/temporaryCloneSummon';
+// import TemporaryCloneSummon from '../components/temporaryCloneSummon';
 
-const tokenMsg =
-  'Token addresses are different across chains. If you would like to clone the same tokens to a different network, you will need to manually add the equivalent token addresses here.';
+// const tokenMsg =
+//   'Token addresses are different across chains. If you would like to clone the same tokens to a different network, you will need to manually add the equivalent token addresses here.';
 
 const Summon = () => {
   const {
@@ -156,24 +156,24 @@ const Summon = () => {
     }
   };
 
-  const handleCloneDAO = (daoOverview, daoMembers, daoNetwork) => {
-    const cloneData = {
-      ...daoConstants(injectedChain.chain_id),
-      summoner: '',
-      summonerAndShares: cloneMembers(daoMembers),
-      approvedToken:
-        injectedChain.chainId === daoNetwork
-          ? cloneTokens(daoOverview)
-          : tokenMsg,
-      ...cloneDaoPresets(daoOverview, daoMembers),
-    };
+  // const handleCloneDAO = (daoOverview, daoMembers, daoNetwork) => {
+  //   const cloneData = {
+  //     ...daoConstants(injectedChain.chain_id),
+  //     summoner: '',
+  //     summonerAndShares: cloneMembers(daoMembers),
+  //     approvedToken:
+  //       injectedChain.chainId === daoNetwork
+  //         ? cloneTokens(daoOverview)
+  //         : tokenMsg,
+  //     ...cloneDaoPresets(daoOverview, daoMembers),
+  //   };
 
-    if (injectedChain.chainId !== daoNetwork) {
-      cloneData.proposalDeposit = '0';
-      cloneData.processingReward = '0';
-    }
-    setDaoData(cloneData);
-  };
+  //   if (injectedChain.chainId !== daoNetwork) {
+  //     cloneData.proposalDeposit = '0';
+  //     cloneData.processingReward = '0';
+  //   }
+  //   setDaoData(cloneData);
+  // };
 
   return (
     <Layout>
@@ -256,9 +256,9 @@ const Summon = () => {
             </Flex>
           </Box>
         )}
-        {hardMode && !isSummoning && (
+        {/* {hardMode && !isSummoning && (
           <TemporaryCloneSummon handleCloneDAO={handleCloneDAO} />
-        )}
+        )} */}
       </MainViewLayout>
     </Layout>
   );
