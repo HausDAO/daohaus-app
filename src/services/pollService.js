@@ -12,6 +12,7 @@ import { getGraphEndpoint } from '../utils/chain';
 import { hashMaker, memberVote, PROPOSAL_TYPES } from '../utils/proposalUtils';
 import { TokenService } from '../services/tokenService';
 import { MEMBERS_LIST, MEMBER_DELEGATE_KEY } from '../graphQL/member-queries';
+import { UBERHAUS_MEMBER_DELEGATE } from '../graphQL/uberhaus-queries';
 import { MinionService } from './minionService';
 import { UberHausMinionService } from './uberHausMinionService';
 
@@ -183,6 +184,42 @@ const updateDelegateFetch = async ({ daoID, chainID, memberAddress }) => {
   }
 };
 
+const pollUberHausDelegateSet = async ({
+  uberHausAddress,
+  minionAddress,
+  chainID,
+}) => {
+  try {
+    const res = await graphQuery({
+      endpoint: getGraphEndpoint(chainID, 'subgraph_url'),
+      query: UBERHAUS_MEMBER_DELEGATE,
+      variables: {
+        molochAddress: uberHausAddress,
+        memberAddress: minionAddress,
+      },
+    });
+    return res.members[0];
+  } catch (error) {
+    return error;
+  }
+};
+
+export const pollGuildFunds = async ({
+  chainID,
+  uberMinionAddress,
+  tokenAddress,
+}) => {
+  try {
+    const newTokenBalance = TokenService({
+      chainID,
+      tokenAddress,
+    })('balanceOf')(uberMinionAddress);
+    return newTokenBalance;
+  } catch (error) {
+    return error;
+  }
+};
+
 /// //////////TESTS///////////////
 const submitProposalTest = (data, shouldEqual, pollId) => {
   if (data.proposals) {
@@ -320,9 +357,22 @@ const collectTokenTest = (graphBalance, oldBalance, pollId) => {
   }
 };
 
-const withdrawTokenTest = (data, shouldEqual, pollId) => {
+const withdrawTokenTest = (data, shouldEqual = 0, pollId) => {
   if (data) {
-    return +data === 0;
+    return +data === shouldEqual;
+  } else {
+    clearInterval(pollId);
+    throw new Error(
+      `Poll test did recieve the expected results from the graph: ${data}`,
+    );
+  }
+};
+const guildFundTest = (data, shouldEqual, pollId) => {
+  console.log(`data`, data);
+  console.log(`shouldEqual`, shouldEqual);
+  console.log(`pollId`, pollId);
+  if (data) {
+    return +data === shouldEqual;
   } else {
     clearInterval(pollId);
     throw new Error(
@@ -332,6 +382,17 @@ const withdrawTokenTest = (data, shouldEqual, pollId) => {
 };
 
 const updateDelegateTest = (data, shouldEqual, pollId) => {
+  if (data) {
+    return data.delegateKey.toLowerCase() === shouldEqual.toLowerCase();
+  } else {
+    clearInterval(pollId);
+    throw new Error(
+      `Poll test did recieve the expected results from the graph: ${data}`,
+    );
+  }
+};
+
+const uberHausDelegateSetTest = (data, shouldEqual, pollId) => {
   if (data) {
     return data.delegateKey.toLowerCase() === shouldEqual.toLowerCase();
   } else {
@@ -357,6 +418,8 @@ export const createPoll = ({
     actions,
     txHash,
   }) => {
+    console.log('IN POLL');
+    console.log(`args`, args);
     let tryCount = 0;
     const pollId = setInterval(async () => {
       if (tryCount < tries) {
@@ -857,17 +920,26 @@ export const createPoll = ({
       }
     };
   } else if (action === 'withdrawBalance') {
-    return ({ tokenAddress, memberAddress, actions, chainID, daoID }) => (
-      txHash,
-    ) => {
+    return ({
+      tokenAddress,
+      memberAddress,
+      actions,
+      chainID,
+      daoID,
+      uber,
+      expectedBalance,
+    }) => (txHash) => {
       startPoll({
         pollFetch: withdrawTokenFetch,
         testFn: withdrawTokenTest,
+        shouldEqual: expectedBalance || 0,
         args: {
+          tokenAddress,
+          memberAddress,
           chainID,
           daoID,
-          memberAddress,
-          tokenAddress,
+          uber,
+          expectedBalance,
         },
         actions,
         txHash,
@@ -891,6 +963,57 @@ export const createPoll = ({
             chainID,
             daoID,
             memberAddress,
+            tokenAddress,
+            shouldEqual: uber ? expectedBalance : 0,
+          },
+        });
+      }
+    };
+  } else if (action === 'pullGuildFunds') {
+    return ({
+      tokenAddress,
+      actions,
+      chainID,
+      uberMinionAddress,
+      expectedBalance,
+    }) => (txHash) => {
+      console.log('At fire poll');
+      console.log(`tokenAddress`, tokenAddress);
+      console.log(`actions`, actions);
+      console.log('uberMinionAddress', uberMinionAddress);
+      console.log(`chainID`, chainID);
+      console.log(`expectedBalance`, expectedBalance);
+      startPoll({
+        pollFetch: pollGuildFunds,
+        testFn: guildFundTest,
+        shouldEqual: expectedBalance,
+        args: {
+          chainID,
+          uberMinionAddress,
+          tokenAddress,
+        },
+        actions,
+        txHash,
+      });
+      if (cachePoll) {
+        cachePoll({
+          txHash,
+          action,
+          timeSent: Date.now(),
+          status: 'unresolved',
+          resolvedMsg: `Pulled Tokens to Guild Bank`,
+          unresolvedMsg: `Pulling tokens from UberHUAS Minion`,
+          successMsg: `Successfully pulled tokens!`,
+          errorMsg: `There was an error withdrawing tokens`,
+          pollData: {
+            action,
+            interval,
+            tries,
+          },
+          pollArgs: {
+            chainID,
+            uberMinionAddress,
+            expectedBalance,
             tokenAddress,
           },
         });
@@ -1018,6 +1141,41 @@ export const createPoll = ({
           unresolvedMsg: `Creating proposal`,
           successMsg: `Created uberHAUS delegate proposal`,
           errorMsg: `Poll error on nominateDelegate`,
+          pollData: {
+            action,
+            interval,
+            tries,
+          },
+          pollArgs: { chainID, minionAddress },
+        });
+      }
+    };
+  } else if (action === 'setInitialDelegate') {
+    return ({
+      chainID,
+      minionAddress,
+      uberHausAddress,
+      delegateAddress,
+      actions,
+    }) => (txHash) => {
+      startPoll({
+        pollFetch: pollUberHausDelegateSet,
+        testFn: uberHausDelegateSetTest,
+        shouldEqual: delegateAddress,
+        args: { uberHausAddress, minionAddress, delegateAddress, chainID },
+        actions,
+        txHash,
+      });
+      if (cachePoll) {
+        cachePoll({
+          txHash,
+          action,
+          timeSent: Date.now(),
+          status: 'unresolved',
+          resolvedMsg: `UberHAUS delegate set`,
+          unresolvedMsg: `Setting UberHAUS delegate`,
+          successMsg: `Set UberHAUS delegate`,
+          errorMsg: `Poll error on setInitialDelegate`,
           pollData: {
             action,
             interval,

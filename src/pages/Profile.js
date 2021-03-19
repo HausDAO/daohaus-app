@@ -53,12 +53,16 @@ const Profile = ({ members, overview, daoTokens, daoMember, activities }) => {
   useEffect(() => {
     const lookupEns = async () => {
       if (userid) {
-        const ethersProvider = ethers.getDefaultProvider(
-          chainByID('0x1').rpc_url,
-        );
-        const result = await ethersProvider.lookupAddress(userid);
-        if (result) {
-          setEns(result);
+        try {
+          const ethersProvider = ethers.getDefaultProvider(
+            chainByID('0x1').rpc_url,
+          );
+          const result = await ethersProvider.lookupAddress(userid);
+          if (result) {
+            setEns(result);
+          }
+        } catch (error) {
+          console.error(error);
         }
       }
     };

@@ -134,7 +134,7 @@ export const getTotalBankValue = (tokenBalances, prices) => {
 export const valToDecimalString = (value, tokenAddress, tokens) => {
   // get correct value of token with decimal places
   // returns a string
-  console.log(value, tokenAddress, tokens);
+  console.log(tokens);
   const scaleFactor = 10;
   const perc = 10 ** scaleFactor;
 
@@ -153,6 +153,31 @@ export const valToDecimalString = (value, tokenAddress, tokens) => {
     value = value * perc;
 
     return ethers.BigNumber.from(value)
+      .mul(exp)
+      .div(ethers.BigNumber.from(perc))
+      .toString();
+  }
+};
+
+export const displayBalance = (tokenBalance, decimals) => {
+  if (tokenBalance && decimals) {
+    return parseFloat(+tokenBalance / 10 ** +decimals).toFixed(4);
+  }
+};
+
+export const addZeros = (roundedVal, decimals) => {
+  const scaleFactor = 10;
+  const perc = 10 ** scaleFactor;
+
+  const exp = ethers.BigNumber.from(10).pow(ethers.BigNumber.from(decimals));
+
+  if (roundedVal >= perc) {
+    return ethers.BigNumber.from(roundedVal)
+      .mul(exp)
+      .toString();
+  } else {
+    roundedVal = roundedVal * perc;
+    return ethers.BigNumber.from(roundedVal)
       .mul(exp)
       .div(ethers.BigNumber.from(perc))
       .toString();

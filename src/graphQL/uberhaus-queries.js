@@ -35,60 +35,14 @@ export const UBERHAUS_DATA = gql`
   }
 `;
 
-// id
-// aborted
-// applicant
-// cancelled
-// cancelledAt
-// createdAt
-// details
-// didPass
-// gracePeriodEnds
-// guildkick
-// isMinion
-// lootRequested
-// memberAddress
-// newMember
-// noShares
-// noVotes
-// paymentRequested
-// paymentTokenDecimals
-// paymentTokenSymbol
-// processed
-// processor
-// processedAt
-// proposer
-// proposalId
-// proposalIndex
-// sharesRequested
-// sponsored
-// sponsor
-// sponsoredAt
-// startingPeriod
-// trade
-// tributeOffered
-// tributeTokenDecimals
-// tributeTokenSymbol
-// tributeToken
-// votingPeriodStarts
-// votingPeriodEnds
-// whitelist
-// yesShares
-// yesVotes
-// molochAddress
-// molochVersion
-// minionAddress
-// moloch {
-//   gracePeriodLength
-//   periodDuration
-//   version
-//   votingPeriodLength
-// }
-// votes {
-//   id
-//   memberAddress
-//   memberPower
-//   uintVote
-//   createdAt
-//   molochAddress
-// }
+export const UBERHAUS_MEMBER_DELEGATE = gql`
+  query member($molochAddress: String!, $memberAddress: String!) {
+    members(
+      where: { molochAddress: $molochAddress, memberAddress: $memberAddress }
+    ) {
+      memberAddress
+      molochAddress
+      delegateKey
+    }
+  }
+`;

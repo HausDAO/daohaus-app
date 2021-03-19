@@ -125,7 +125,7 @@ const DaoToDaoManager = ({
     (ally) => ally.allyType === 'uberHausBurner' && !ally.isParent,
   );
 
-  console.log('uberHausMinion', uberHausMinion);
+  // console.log('uberHausMinion', uberHausMinion);
 
   return (
     <>

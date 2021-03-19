@@ -3,7 +3,7 @@ import makeBlockie from 'ethereum-blockies-base64';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
 import { FaCopy } from 'react-icons/fa';
 
-import { Flex, Avatar, Box, useToast, Icon } from '@chakra-ui/react';
+import { Flex, Avatar, Box, useToast, Icon, Text } from '@chakra-ui/react';
 import { truncateAddr } from '../utils/general';
 import { handleGetProfile } from '../utils/3box';
 
@@ -62,24 +62,24 @@ const AddressAvatar = React.memo(function AddrAvatar({
         {addr && hasFetched && (
           <Avatar name={addr} src={renderImage(addr)} size='sm' />
         )}
-        <Box
-          fontSize='sm'
-          fontFamily='heading'
-          ml={3}
-          d={[
-            !alwaysShowName ? 'none' : 'inline-block',
-            null,
-            null,
-            'inline-block',
-          ]}
+        <Flex
+        // d={[
+        //   !alwaysShowName ? 'none' : 'inline-block',
+        //   null,
+        //   null,
+        //   'inline-block',
+        // ]}
         >
-          {profile?.name || truncateAddr(addr)}
+          <Text fontSize='sm' fontFamily='heading' ml={3}>
+            {profile?.name || truncateAddr(addr)}
+          </Text>
           <Box as='span' ml={1}>
             {profile?.emoji && profile.emoji}{' '}
           </Box>
           {hideCopy || (
             <CopyToClipboard
               text={addr}
+              mr={4}
               onCopy={() =>
                 toast({
                   title: 'Copied Address',
@@ -91,6 +91,7 @@ const AddressAvatar = React.memo(function AddrAvatar({
               }
             >
               <Icon
+                transform='translateY(2px)'
                 as={FaCopy}
                 color='secondary.300'
                 ml={2}
@@ -98,7 +99,7 @@ const AddressAvatar = React.memo(function AddrAvatar({
               />
             </CopyToClipboard>
           )}
-        </Box>
+        </Flex>
       </Flex>
     </Flex>
   );

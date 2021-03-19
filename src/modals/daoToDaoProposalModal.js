@@ -30,7 +30,16 @@ const getModalWidth = (proposalType) => {
   }
 };
 
-const DaoToDaoProposalFormModal = ({ proposalType, isOpen, returnRoute }) => {
+const DaoToDaoProposalFormModal = ({
+  proposalType,
+  isOpen,
+  returnRoute,
+  daoMembers,
+  uberMembers,
+  uberHausMinion,
+  uberDelegate,
+  uberOverview,
+}) => {
   const [, setLoading] = useState(false);
   const [proposalForm, setProposalForm] = useState(null);
   const history = useHistory();
@@ -54,13 +63,25 @@ const DaoToDaoProposalFormModal = ({ proposalType, isOpen, returnRoute }) => {
       type: `New Uber Proposal`,
       heading: `Choose Champion`,
       subline: `Manage your delegate to UBERhaus`,
-      form: <DelegateProposalForm />,
+      form: (
+        <DelegateProposalForm
+          daoMembers={daoMembers}
+          uberMembers={uberMembers}
+          uberHausMinion={uberHausMinion}
+          uberDelegate={uberDelegate}
+        />
+      ),
     },
     d2dRageQuit: {
       type: `New Uber Proposal`,
       heading: `RageQuit`,
       subline: `Submit a proposal to RageQuit from UberHaus`,
-      form: <RageQuitProposalForm />,
+      form: (
+        <RageQuitProposalForm
+          uberHausMinion={uberHausMinion}
+          uberMembers={uberMembers}
+        />
+      ),
     },
     d2dDistroRewards: {
       type: `New Uber Proposal`,
@@ -72,15 +93,24 @@ const DaoToDaoProposalFormModal = ({ proposalType, isOpen, returnRoute }) => {
       type: `New Uber Proposal`,
       heading: ``,
       subline: ``,
-      form: <WithdrawPullForm />,
+      form: (
+        <WithdrawPullForm
+          uberMembers={uberMembers}
+          uberHausMinion={uberHausMinion}
+          uberDelegate={uberDelegate}
+          uberOverview={uberOverview}
+          // refreshAllies={refreshAllies}
+        />
+      ),
     },
   };
+  // console.log(uberHausMinion);
 
   useEffect(() => {
     if (proposalType) {
       setProposalForm(daoToDaoProposalForms[proposalType]);
     }
-  }, [proposalType]);
+  }, [proposalType, uberMembers, uberHausMinion, uberDelegate, uberOverview]);
 
   const handleClose = () => {
     setLoading(false);
