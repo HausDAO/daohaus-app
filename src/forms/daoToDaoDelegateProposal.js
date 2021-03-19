@@ -1,5 +1,4 @@
 import React, { useState, useEffect, useMemo } from 'react';
-// import { useParams } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import {
   Button,
@@ -7,27 +6,16 @@ import {
   FormControl,
   Flex,
   Icon,
-  Image,
   Box,
 } from '@chakra-ui/react';
-// import { utils } from 'web3';
 import { RiErrorWarningLine } from 'react-icons/ri';
-import DAOHaus from '../assets/img/Daohaus__Castle--Dark.svg';
 
-// import {
-//   useDao,
-//   useTxProcessor,
-//   useUser,
-//   useModals,
-// } from '../../../contexts/PokemolContext';
 import TextBox from '../components/TextBox';
 import DetailsFields from './detailFields';
 import AddressInput from './addressInput';
 import { createHash, detailsToJSON } from '../utils/general';
-// import { useInjectedProvider } from '../contexts/InjectedProviderContext';
 import { useOverlay } from '../contexts/OverlayContext';
 import DelegateMenu from '../components/DelegateMenu';
-import { useDao } from '../contexts/DaoContext';
 import { UBERHAUS_ADDRESS } from '../utils/uberhaus';
 import { useParams } from 'react-router-dom';
 import { useUser } from '../contexts/UserContext';
@@ -39,7 +27,6 @@ import { UberHausMinionService } from '../services/uberHausMinionService';
 import { useTX } from '../contexts/TXContext';
 import TimeInput from '../components/timeInput';
 import AddressAvatar from '../components/addressAvatar';
-import { USER_MEMBERSHIPS } from '../graphQL/member-queries';
 
 // TODO pass delegate to delegate menu
 // TODO replace delegate with user avatar
