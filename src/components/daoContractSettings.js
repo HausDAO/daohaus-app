@@ -1,5 +1,7 @@
 import React from 'react';
-import { useParams, Link as RouterLink } from 'react-router-dom';
+// import { useParams, Link as RouterLink } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
+
 import {
   Flex,
   Box,
@@ -10,7 +12,8 @@ import {
   useBreakpointValue,
 } from '@chakra-ui/react';
 import { format } from 'date-fns';
-import { RiExternalLinkLine, RiFireLine } from 'react-icons/ri';
+import { RiExternalLinkLine } from 'react-icons/ri';
+// import { RiExternalLinkLine, RiFireLine } from 'react-icons/ri';
 
 import ContentBox from './ContentBox';
 import TextBox from './TextBox';
