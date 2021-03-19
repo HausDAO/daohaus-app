@@ -38,7 +38,7 @@ import { truncateAddr } from '../utils/general';
 import DaoToDaoProposalCard from './daoToDaoProposalCard';
 import DaoToDaoMemberInfo from './daoToDaoMemberInfo';
 
-import ComingSoonOverlay from './comingSoonOverlay';
+// import ComingSoonOverlay from './comingSoonOverlay';
 
 const DaoToDaoManager = ({
   daoOverview,
@@ -231,7 +231,7 @@ const DaoToDaoManager = ({
             </>
           )}
         </Flex>
-        <ComingSoonOverlay message='👀 Check back soon!' />
+        {/* <ComingSoonOverlay message='👀 Check back soon!' /> */}
 
         {loading ? (
           <Spinner />
@@ -262,17 +262,6 @@ const DaoToDaoManager = ({
                           UberHAUS is on the {UBERHAUS_NETWORK_NAME} network.
                           You&apos;ll need to summon a clone of your DAO there
                           to join.
-                          <Box my={2}>
-                            <Link
-                              href='https://discord.gg/eJsBk3sf'
-                              target='_blank'
-                              rel='noreferrer noopener'
-                              color='secondary.500'
-                              my={3}
-                            >
-                              Get help in our Discord.
-                            </Link>
-                          </Box>
                         </Box>
                         <Button
                           w='50%'
@@ -376,10 +365,7 @@ const DaoToDaoManager = ({
                         </Box>
 
                         {!uberHausMinion.whitelistedStakingToken ? (
-                          <Flex
-                            justifyContent='space-between'
-                            alignItems='center'
-                          >
+                          <Flex justifyContent='flex-start' alignItems='center'>
                             <Icon
                               as={BiCheckbox}
                               color='secondary.500'
@@ -396,6 +382,7 @@ const DaoToDaoManager = ({
                             >
                               <Icon
                                 as={RiLoginBoxLine}
+                                ml={5}
                                 color='secondary.500'
                                 h='25px'
                                 w='25px'
@@ -403,10 +390,7 @@ const DaoToDaoManager = ({
                             </RouterLink>
                           </Flex>
                         ) : (
-                          <Flex
-                            justifyContent='space-between'
-                            alignItems='center'
-                          >
+                          <Flex justifyContent='flex-start' alignItems='center'>
                             <Icon
                               as={BiCheckboxChecked}
                               color='secondary.500'
@@ -424,7 +408,7 @@ const DaoToDaoManager = ({
                         {+uberHausMinion.balance <= 0 ? (
                           <>
                             <Flex
-                              justifyContent='space-between'
+                              justifyContent='flex-start'
                               alignItems='center'
                             >
                               <Icon
@@ -463,10 +447,7 @@ const DaoToDaoManager = ({
                             </Flex>
                           </>
                         ) : (
-                          <Flex
-                            justifyContent='space-between'
-                            alignItems='center'
-                          >
+                          <Flex justifyContent='flex-start' alignItems='center'>
                             <Icon
                               as={BiCheckboxChecked}
                               color='secondary.500'
@@ -569,6 +550,20 @@ const DaoToDaoManager = ({
             )}
           </>
         )}
+
+        {!isUberHausMember ? (
+          <Box mt={7} mb={2} fontSize='sm'>
+            <Link
+              href='https://discord.gg/eJsBk3sf'
+              target='_blank'
+              rel='noreferrer noopener'
+              color='secondary.500'
+              my={3}
+            >
+              Need a hand? Get help in our Discord.
+            </Link>
+          </Box>
+        ) : null}
       </ContentBox>
     </>
   );
