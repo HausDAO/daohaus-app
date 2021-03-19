@@ -91,6 +91,20 @@ const DaoToDaoManager = ({
             ),
           );
 
+        const openChildProposals = daoProposals
+          ? daoProposals.filter(
+              (p) =>
+                p.applicant.toLowerCase() ===
+                  uberHausMinionData.minionAddress.toLowerCase() &&
+                !p.cancelled &&
+                !p.processed,
+            )
+          : [];
+
+        const openUberProposals = uberProposals
+          ? uberProposals.filter((p) => !p.cancelled && !p.processed)
+          : [];
+
         const tokenBalance = await TokenService({
           chainID: daochain,
           tokenAddress: UBERHAUS_STAKING_TOKEN,
@@ -101,6 +115,8 @@ const DaoToDaoManager = ({
           balance: tokenBalance,
           uberHausMembership,
           activeMembershipProposal,
+          openChildProposals,
+          openUberProposals,
         });
         setLoading(false);
       } else {
@@ -370,13 +386,62 @@ const DaoToDaoManager = ({
                 ) : null}
 
                 {isUberHausMember ? (
-                  <DaoToDaoMemberInfo
-                    membership={uberHausMinion?.uberHausMembership}
-                    delegate={uberHausMinion?.uberHausDelegate}
-                    needDelegateKeySet={needDelegateKeySet}
-                    handleSetDelegate={handleSetDelegate}
-                    openModal={openModal}
-                  />
+                  <>
+                    <DaoToDaoMemberInfo
+                      membership={uberHausMinion?.uberHausMembership}
+                      delegate={uberHausMinion?.uberHausDelegate}
+                      needDelegateKeySet={needDelegateKeySet}
+                      handleSetDelegate={handleSetDelegate}
+                      openModal={openModal}
+                    />
+
+                    {uberHausMinion.openChildProposals.length ? (
+                      <Flex
+                        justifyContent='space-between'
+                        alignItems='center'
+                        mt={10}
+                      >
+                        <TextBox
+                          // as={RouterLink}
+                          // to={`/dao/${daochain}/${daoid}/proposals`}
+                          mb={2}
+                          size='sm'
+                        >
+                          {`${uberHausMinion.openChildProposals.length} Active Proposals for UberHAUS`}
+                        </TextBox>
+                        <RouterLink to={`/dao/${daochain}/${daoid}/proposals`}>
+                          <Icon
+                            as={RiLoginBoxLine}
+                            color='secondary.500'
+                            h='25px'
+                            w='25px'
+                          />
+                        </RouterLink>
+                      </Flex>
+                    ) : null}
+
+                    {uberHausMinion.openUberProposals.length ? (
+                      <Flex
+                        justifyContent='space-between'
+                        alignItems='center'
+                        mt={10}
+                      >
+                        <TextBox mb={2} size='sm'>
+                          {`${uberHausMinion.openUberProposals.length} Active Proposals in UberHAUS`}
+                        </TextBox>
+                        <RouterLink
+                          to={`/dao/${UBERHAUS_NETWORK}/${UBERHAUS_ADDRESS}/proposals`}
+                        >
+                          <Icon
+                            as={RiLoginBoxLine}
+                            color='secondary.500'
+                            h='25px'
+                            w='25px'
+                          />
+                        </RouterLink>
+                      </Flex>
+                    ) : null}
+                  </>
                 ) : null}
 
                 {uberParent ? (
