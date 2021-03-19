@@ -1,5 +1,7 @@
 import React from 'react';
-import { useParams, Link as RouterLink } from 'react-router-dom';
+// import { useParams, Link as RouterLink } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
+
 import {
   Flex,
   Box,
@@ -10,7 +12,8 @@ import {
   useBreakpointValue,
 } from '@chakra-ui/react';
 import { format } from 'date-fns';
-import { RiExternalLinkLine, RiFireLine } from 'react-icons/ri';
+import { RiExternalLinkLine } from 'react-icons/ri';
+// import { RiExternalLinkLine, RiFireLine } from 'react-icons/ri';
 
 import ContentBox from './ContentBox';
 import TextBox from './TextBox';
@@ -128,7 +131,7 @@ const DaoContractSettings = ({ overview, customTerms }) => {
             </TextBox>
           </Skeleton>
         </Box>
-        <Text
+        {/* <Text
           fontFamily='mono'
           variant='value'
           fontSize='sm'
@@ -141,7 +144,7 @@ const DaoContractSettings = ({ overview, customTerms }) => {
             Summon a clone of this DAO
             <Icon as={RiFireLine} color='secondary.400' ml={1} />
           </Flex>
-        </Text>
+        </Text> */}
       </Flex>
     </ContentBox>
   );

@@ -144,8 +144,8 @@ const StakeProposalForm = () => {
     );
 
     const args = [
-      UBERHAUS_ADDRESS,
       daoid,
+      UBERHAUS_ADDRESS,
       UBERHAUS_STAKING_TOKEN,
       '0',
       hexData,

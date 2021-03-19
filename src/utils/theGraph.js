@@ -232,7 +232,13 @@ export const hubChainQuery = async ({
             meta: daoMapLookup(dao?.moloch?.id, chain.apiMatch),
           };
         })
-        .filter((dao) => !dao.meta || !dao.meta.hide);
+        .filter((dao) => {
+          const notHiddenAndHasMetaOrIsUnregisteredSummoner =
+            (dao.meta && !dao.meta.hide) ||
+            (!dao.meta &&
+              variables.memberAddress.toLowerCase() === dao.moloch.summoner);
+          return notHiddenAndHasMetaOrIsUnregisteredSummoner;
+        });
 
       reactSetter((prevState) => [
         ...prevState,
