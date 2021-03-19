@@ -111,8 +111,11 @@ const getMinionProposalType = (proposal, details) => {
       return PROPOSAL_TYPES.MINION_UBER_STAKE;
     } else if (details?.uberType === 'delegate') {
       return PROPOSAL_TYPES.MINION_UBER_DEL;
+    } else if (details?.uberType === 'ragequit') {
+      return PROPOSAL_TYPES.MINION_UBER_RQ;
     } else {
-      console.error('Uberhaus Minion type not detected');
+      console.warn('Uberhaus Minion type not detected');
+      console.log(details);
       return PROPOSAL_TYPES.MINION_UBER_DEFAULT;
     }
   };
@@ -499,9 +502,18 @@ export const searchProposals = (rawAddress, filterArr, proposals) => {
   );
 };
 
-export const pendingUberHausStakingProposal = (prop) => {
+export const pendingUberHausStakingProposalChildDao = (prop) => {
   return (
     prop.proposalType === PROPOSAL_TYPES.MINION_UBER_STAKE &&
+    !prop.cancelled &&
+    !prop.uberHausMinionExecuted
+  );
+};
+
+export const pendingUberHausStakingProposal = (prop, minionAddress) => {
+  return (
+    prop.applicant === minionAddress &&
+    prop.proposalType === 'Member Proposal' &&
     !prop.cancelled &&
     !prop.processed
   );

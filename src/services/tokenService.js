@@ -29,6 +29,16 @@ export const TokenService = ({
         }
       };
     }
+    if (service === 'decimals') {
+      return async () => {
+        try {
+          const decimals = await contract.methods.decimals().call();
+          return decimals;
+        } catch (error) {
+          console.error(error);
+        }
+      };
+    }
     if (service === 'balanceOf') {
       return async (queryAddress) => {
         try {

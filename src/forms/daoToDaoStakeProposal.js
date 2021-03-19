@@ -201,6 +201,7 @@ const StakeProposalForm = () => {
       console.error('error: ', err);
       errorToast({
         title: `There was an error.`,
+        desciption: err?.desciption || '',
       });
     }
   };
