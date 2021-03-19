@@ -16,7 +16,7 @@ const SetInitialUberHausDelegate = ({
 }) => {
   console.log('props', uberHausAddress, delegateAddress, minionAddress);
   const [loading, setLoading] = useState(false);
-  const { daoid, daochain } = useParams();
+  const { daochain } = useParams();
   const { address, injectedProvider } = useInjectedProvider();
   const { cachePoll, resolvePoll } = useUser();
   const {
