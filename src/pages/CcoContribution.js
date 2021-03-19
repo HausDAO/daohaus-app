@@ -188,6 +188,8 @@ const CcoContribution = React.memo(function ccocontribution({
     ? roundData.claimPeriodStartTime > roundData.now
     : true;
 
+  console.log('');
+
   return (
     <MainViewLayout header='DAOhaus CCO' isDao={true}>
       <Box w='100%' position='relative'>

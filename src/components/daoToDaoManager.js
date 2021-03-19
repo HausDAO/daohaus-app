@@ -7,8 +7,6 @@ import {
   Icon,
   Image,
   Link,
-  ListItem,
-  OrderedList,
   Spinner,
   useToast,
 } from '@chakra-ui/react';
