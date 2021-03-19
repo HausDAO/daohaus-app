@@ -55,7 +55,7 @@ const SummonHard = ({ daoData, handleSummon, networkName, isUberHaus }) => {
   }, [daoData]);
 
   const onSubmit = (data) => {
-    handleSummon({ data, seconds: timePeriodInSeconds?.toString() });
+    handleSummon({ ...data, seconds: timePeriodInSeconds?.toString() });
   };
 
   return (
