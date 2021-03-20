@@ -176,7 +176,6 @@ const ProposalVote = ({
 
   const unlock = async (token) => {
     setLoading(true);
-    console.log(token);
 
     const args = [daoid, MaxUint256];
 
@@ -353,7 +352,6 @@ const ProposalVote = ({
   };
 
   const executeMinion = async (proposal) => {
-    console.log('proposal', proposal);
     if (!proposal?.minion) return;
 
     const args = [proposal.proposalId];
