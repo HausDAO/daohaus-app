@@ -74,7 +74,7 @@ export const MolochService = ({ web3, daoAddress, version, chainID }) => {
               return txHash;
             })
             .on('error', (error) => {
-              // console.error('This was not caught by component', error);
+              console.error('This was not caught by component', error);
               return error;
             });
         } catch (error) {
