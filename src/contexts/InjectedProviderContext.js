@@ -15,7 +15,6 @@ import {
   deriveSelectedAddress,
   getProviderOptions,
 } from '../utils/web3Modal';
-import { setPageState } from '../stores/currentPageStateStore';
 
 const defaultModal = new Web3Modal({
   providerOptions: getProviderOptions(),
@@ -63,7 +62,6 @@ export const InjectedProvider = ({ children }) => {
     const web3 = new Web3(provider);
     if (web3?.currentProvider?.selectedAddress) {
       setInjectedProvider(web3);
-      setPageState('injectedProvider', web3);
       setAddress(web3.currentProvider.selectedAddress);
       setInjectedChain(chain);
       setWeb3Modal(web3Modal);
