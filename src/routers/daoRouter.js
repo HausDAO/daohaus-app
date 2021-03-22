@@ -25,7 +25,7 @@ import ProposalTypes from '../pages/ProposalTypes';
 import MinionSafe from '../pages/MinionSafe';
 import CcoContribution from '../pages/CcoContribution';
 // Needed when cco is active
-import CcoHelper from '../pages/CcoHelper';
+// import CcoHelper from '../pages/CcoHelper';
 import Staking from '../pages/Staking';
 import Clone from '../pages/Clone';
 
@@ -236,7 +236,7 @@ const DaoRouter = () => {
             currentDaoTokens={currentDaoTokens}
             daoProposals={daoProposals}
           /> */}
-        </Route>
+        {/* </Route> */}
       </Switch>
     </Layout>
   );

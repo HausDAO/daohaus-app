@@ -392,7 +392,7 @@ const ProposalVote = ({
         })('executeAction')({ args, address, poll, onTxHash });
       } else if (
         proposal.proposalType === PROPOSAL_TYPES.MINION_UBER_STAKE ||
-        proposal.proposalType === PROPOSAL_TYPES.MINION_UBER_DEFAULT
+        proposal.proposalType === PROPOSAL_TYPES.MINION_UBER_RQ
       ) {
         await UberHausMinionService({
           web3: injectedProvider,
@@ -426,7 +426,7 @@ const ProposalVote = ({
           setMinionDeets(action);
         } else if (
           proposal.proposalType === PROPOSAL_TYPES.MINION_UBER_STAKE ||
-          proposal.proposalType === PROPOSAL_TYPES.MINION_UBER_DEFAULT
+          proposal.proposalType === PROPOSAL_TYPES.MINION_UBER_RQ
         ) {
           const action = await UberHausMinionService({
             web3: injectedProvider,
