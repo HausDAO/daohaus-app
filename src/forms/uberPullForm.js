@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import { useForm } from 'react-hook-form';
 import {
   Button,
@@ -7,6 +7,7 @@ import {
   Icon,
   Box,
   Spinner,
+  Checkbox,
 } from '@chakra-ui/react';
 import { RiErrorWarningLine } from 'react-icons/ri';
 
@@ -22,6 +23,7 @@ import { useInjectedProvider } from '../contexts/InjectedProviderContext';
 import { TokenService } from '../services/tokenService';
 import MaxOutInput from '../components/maxInput';
 import TokenSelect from './tokenSelect';
+import { UBERHAUS_NETWORK } from '../utils/uberhaus';
 
 const FormWrapper = styled.form`
   width: 100%;
@@ -31,7 +33,6 @@ const PullForm = ({ uberHausMinion, uberDelegate, uberOverview }) => {
   const { injectedProvider, address } = useInjectedProvider();
   const { daochain } = useParams();
   const { cachePoll, resolvePoll } = useUser();
-
   const {
     errorToast,
     successToast,
@@ -40,19 +41,21 @@ const PullForm = ({ uberHausMinion, uberDelegate, uberOverview }) => {
   } = useOverlay();
   const { refreshDao } = useTX();
 
-  // const { setD2dProposalModal } = useOverlay();
-
   const [currentError, setCurrentError] = useState(null);
   const [loading, setLoading] = useState(false);
-  // const [selectedToken, setSelectedToken] = useState(null);
-
+  const [pullDelegateRewards, setDelegateRewards] = useState(false);
+  const [delegateObj, setDelegateObj] = useState(null);
   const [loadToken, setLoadToken] = useState(false);
   const [balance, setBalance] = useState({ readable: 0, real: 0 });
 
   const { handleSubmit, errors, register, watch, setValue } = useForm();
   const pullToken = watch('pullToken');
 
-  const isDelegate = address === uberDelegate?.toLowerCase();
+  const isDelegate = useMemo(() => {
+    if (uberDelegate && address) {
+      return address === uberDelegate?.toLowerCase?.();
+    }
+  }, [address, uberDelegate]);
 
   useEffect(() => {
     if (Object.keys(errors).length > 0) {
@@ -67,14 +70,12 @@ const PullForm = ({ uberHausMinion, uberDelegate, uberOverview }) => {
   }, [errors]);
 
   useEffect(() => {
-    if (!uberHausMinion || !pullToken) return;
-
     const getTokenBalance = async () => {
       try {
         setLoadToken(true);
 
         const tokenService = TokenService({
-          chainID: daochain,
+          chainID: UBERHAUS_NETWORK,
           tokenAddress: pullToken,
         });
 
@@ -96,6 +97,65 @@ const PullForm = ({ uberHausMinion, uberDelegate, uberOverview }) => {
     }
   }, [uberHausMinion, pullToken]);
 
+  useEffect(() => {
+    const getDelegate = async () => {
+      try {
+        const delegate = await UberHausMinionService({
+          uberHausMinion: uberHausMinion.minionAddress,
+          chainID: UBERHAUS_NETWORK,
+        })('delegateByAddress')({ args: [uberDelegate] });
+        if (delegate) {
+          setDelegateObj(delegate);
+        } else {
+          setDelegateObj(null);
+        }
+        console.log(delegate);
+      } catch (error) {
+        console.error(error);
+      }
+    };
+    if (uberDelegate && uberHausMinion) {
+      getDelegate();
+    }
+  }, [uberDelegate, uberHausMinion]);
+
+  const submitPullRewards = async () => {
+    try {
+      const poll = createPoll({ action: 'claimDelegateReward', cachePoll })({
+        uberMinionAddress: uberHausMinion.minionAddress,
+        delegateAddress: uberDelegate,
+        chainID: daochain,
+        actions: {
+          onError: (error, txHash) => {
+            errorToast({
+              title: `There was an error.`,
+            });
+            resolvePoll(txHash);
+            console.error(`Could not pull delegate rewards: ${error}`);
+          },
+          onSuccess: (txHash) => {
+            successToast({
+              title: 'Pulled delegate rewards from UberHAUS Minion',
+            });
+            refreshDao();
+            resolvePoll(txHash);
+          },
+        },
+      });
+      await UberHausMinionService({
+        web3: injectedProvider,
+        uberHausMinion: uberHausMinion.minionAddress,
+        chainID: daochain,
+      })('claimDelegateReward')({ address, poll });
+    } catch (error) {
+      console.error('error: ', error);
+      errorToast({
+        title: `There was an error.`,
+        description: error.message || '',
+      });
+    }
+  };
+
   const onSubmit = async (values) => {
     setLoading(true);
 
@@ -105,10 +165,13 @@ const PullForm = ({ uberHausMinion, uberDelegate, uberOverview }) => {
     const withdrawAmt = values.pull
       ? valToDecimalString(values.pull, tokenAddress, uberTokens)
       : '0';
-    console.log('withDrawAmt', withdrawAmt.length);
+
     const args = [tokenAddress, withdrawAmt];
     const expectedBalance = +balance.real - +withdrawAmt;
 
+    if (pullDelegateRewards) {
+      submitPullRewards(tokenAddress);
+    }
     try {
       const poll = createPoll({ action: 'pullGuildFunds', cachePoll })({
         tokenAddress,
@@ -125,7 +188,7 @@ const PullForm = ({ uberHausMinion, uberDelegate, uberOverview }) => {
           },
           onSuccess: (txHash) => {
             successToast({
-              title: 'Pulled funds from UberHausMinion',
+              title: 'Pulled funds from UberHAUS Minion',
             });
             refreshDao();
             resolvePoll(txHash);
@@ -163,6 +226,10 @@ const PullForm = ({ uberHausMinion, uberDelegate, uberOverview }) => {
     } else {
       return null;
     }
+  };
+
+  const handleCheck = () => {
+    setDelegateRewards((prevState) => !prevState);
   };
 
   return (
@@ -210,8 +277,15 @@ const PullForm = ({ uberHausMinion, uberDelegate, uberOverview }) => {
             helperText={inputHelperText()}
             setValue={setValue}
           />
-
-          <Flex justify='center' mt={8} flexDir='column' alignItems='center'>
+          <Checkbox
+            onChange={handleCheck}
+            isChecked={pullDelegateRewards}
+            color={pullDelegateRewards ? 'whiteAlpha.700' : 'whiteAlpha.500'}
+            isDisabled={delegateObj?.impeached || delegateObj?.rewarded}
+          >
+            Pull delegate rewards
+          </Checkbox>
+          <Flex justify='center' mt={1} flexDir='column' alignItems='center'>
             <Button
               type='submit'
               loadingText='Submitting'

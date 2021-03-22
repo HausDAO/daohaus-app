@@ -1,4 +1,5 @@
 import {
+  pollDelegateRewards,
   pollGuildFunds,
   pollMinionExecute,
   pollMinionProposal,
@@ -14,6 +15,7 @@ import {
 } from '../polls/polls';
 import {
   cancelProposalTest,
+  checkDelRewardsTest,
   collectTokenTest,
   guildFundTest,
   minionExecuteTest,
@@ -794,6 +796,44 @@ export const createPoll = ({
             tries,
           },
           pollArgs: { chainID, minionAddress },
+        });
+      }
+    };
+  } else if (action === 'claimDelegateReward') {
+    return ({ chainID, minionAddress, delegateAddress, actions }) => (
+      txHash,
+    ) => {
+      console.log('In Start Poll');
+      console.log(`chainID`, chainID);
+      console.log(`minionAddress`, minionAddress);
+      console.log(`delegateAddres`, delegateAddress);
+      console.log(`actions`, actions);
+      console.log(`action`, action);
+      console.log(`txHash`, txHash);
+
+      startPoll({
+        pollFetch: pollDelegateRewards,
+        testFn: checkDelRewardsTest,
+        args: { minionAddress, delegateAddress, chainID },
+        actions,
+        txHash,
+      });
+      if (cachePoll) {
+        cachePoll({
+          txHash,
+          action,
+          timeSent: Date.now(),
+          status: 'unresolved',
+          resolvedMsg: `UberHAUS delegate rewards claimed`,
+          unresolvedMsg: `Claiming UberHAUS delegate rewards`,
+          successMsg: `UberHAUS delegate rewards claimed`,
+          errorMsg: `Poll error on claimDelegateReward`,
+          pollData: {
+            action,
+            interval,
+            tries,
+          },
+          pollArgs: { chainID, minionAddress, delegateAddress },
         });
       }
     };
