@@ -61,7 +61,6 @@ const CcoContribution = React.memo(function ccocontribution({
 
   useEffect(() => {
     const setup = async () => {
-      console.log('currentDaoTokens', currentDaoTokens);
       const ccoToken = currentDaoTokens.find(
         (token) =>
           token.tokenAddress.toLowerCase() ===
@@ -109,8 +108,8 @@ const CcoContribution = React.memo(function ccocontribution({
       });
     };
 
-    if (currentDaoTokens && daoMetaData?.boosts?.cco) {
-      // if (currentDaoTokens && daoMetaData?.boosts?.cco?.active) {
+    const someTokens = currentDaoTokens && currentDaoTokens[0];
+    if (someTokens && daoMetaData?.boosts?.cco) {
       setup();
     }
   }, [currentDaoTokens, daoMetaData]);
