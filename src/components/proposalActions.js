@@ -58,6 +58,7 @@ const ProposalVote = ({
   delegate,
 }) => {
   const [nextProposalToProcess, setNextProposal] = useState(null);
+  const [hasExectued, setHasExecuted] = useState(false);
   const [loading, setLoading] = useState(false);
   const { daochain, daoid } = useParams();
   const { address, injectedProvider, injectedChain } = useInjectedProvider();
@@ -375,6 +376,9 @@ const ProposalVote = ({
             successToast({
               title: 'Minion action executed.',
             });
+            // used to force an update on useEffect
+            setHasExecuted(true);
+
             refreshDao();
             resolvePoll(txHash);
             setLoading(false);
@@ -459,7 +463,7 @@ const ProposalVote = ({
     ) {
       getMinionDeets();
     }
-  }, [proposal, injectedProvider, daochain]);
+  }, [proposal, injectedProvider, daochain, hasExectued]);
 
   useEffect(() => {
     if (daoProposals) {
