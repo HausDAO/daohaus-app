@@ -1,7 +1,7 @@
 import { supportedChains } from './chain';
 import { utils } from 'web3';
 
-export const parseSummonresAndShares = (data) => {
+export const parseSummonersAndShares = (data) => {
   if (!data) {
     return [[], []];
   }
@@ -17,7 +17,7 @@ export const parseSummonresAndShares = (data) => {
 };
 
 export const validateSummonresAndShares = (data) => {
-  const [addrs, amounts] = parseSummonresAndShares(data);
+  const [addrs, amounts] = parseSummonersAndShares(data);
   let errMsg = true;
   if (!addrs.length || !amounts.length) {
     errMsg = 'Something went wrong with the summoner list';
