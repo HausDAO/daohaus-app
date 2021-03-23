@@ -170,3 +170,14 @@ export const uberHausDelegateSetTest = (data, shouldEqual, pollId) => {
     );
   }
 };
+
+export const checkDelRewardsTest = (data, shouldEqual, pollId) => {
+  if (data) {
+    return data?.rewarded === true;
+  } else {
+    clearInterval(pollId);
+    throw new Error(
+      `Poll test did recieve the expected results from the graph: ${data}`,
+    );
+  }
+};

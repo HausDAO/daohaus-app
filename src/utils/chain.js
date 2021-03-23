@@ -74,7 +74,7 @@ export const supportedChains = {
     minion_factory_addr: '0x80ec2dB292E7a6D1D5bECB80e6479b2bE048AC98',
     uberhaus_minion_factory_addr: '0x03042577463E3820F9cA6Ca3906BAad599ba9382',
     moloch_factory_addr: '0x9c5d087f912e7187D9c75e90999b03FB31Ee17f5',
-    dai_contract: '0xc4375b7de8af5a38a93548eb8453a498222c4ff2',
+    dai_contract: '0x4F96Fe3b7A6Cf9725f59d353F723c1bDb64CA6Aa',
     weth_contract: '0xd0a1e359811322d97991e03f863a0c30c2cf029c',
     block_explorer: 'https://kovan.etherscan.io',
   },

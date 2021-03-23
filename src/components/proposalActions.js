@@ -177,7 +177,8 @@ const ProposalVote = ({
   const unlock = async (token) => {
     setLoading(true);
 
-    const args = [daoid, MaxUint256];
+    const maxUnlock = MaxUint256.toString();
+    const args = [daoid, maxUnlock];
 
     try {
       const poll = createPoll({ action: 'unlockToken', cachePoll })({
@@ -185,7 +186,7 @@ const ProposalVote = ({
         chainID: daochain,
         tokenAddress: token,
         userAddress: address,
-        unlockAmount: MaxUint256,
+        unlockAmount: maxUnlock,
         actions: {
           onError: (error, txHash) => {
             errorToast({
@@ -392,7 +393,7 @@ const ProposalVote = ({
         })('executeAction')({ args, address, poll, onTxHash });
       } else if (
         proposal.proposalType === PROPOSAL_TYPES.MINION_UBER_STAKE ||
-        proposal.proposalType === PROPOSAL_TYPES.MINION_UBER_DEFAULT
+        proposal.proposalType === PROPOSAL_TYPES.MINION_UBER_RQ
       ) {
         await UberHausMinionService({
           web3: injectedProvider,
@@ -426,7 +427,7 @@ const ProposalVote = ({
           setMinionDeets(action);
         } else if (
           proposal.proposalType === PROPOSAL_TYPES.MINION_UBER_STAKE ||
-          proposal.proposalType === PROPOSAL_TYPES.MINION_UBER_DEFAULT
+          proposal.proposalType === PROPOSAL_TYPES.MINION_UBER_RQ
         ) {
           const action = await UberHausMinionService({
             web3: injectedProvider,
