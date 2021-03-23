@@ -177,7 +177,8 @@ const ProposalVote = ({
   const unlock = async (token) => {
     setLoading(true);
 
-    const args = [daoid, MaxUint256];
+    const maxUnlock = MaxUint256.toString();
+    const args = [daoid, maxUnlock];
 
     try {
       const poll = createPoll({ action: 'unlockToken', cachePoll })({
@@ -185,7 +186,7 @@ const ProposalVote = ({
         chainID: daochain,
         tokenAddress: token,
         userAddress: address,
-        unlockAmount: MaxUint256,
+        unlockAmount: maxUnlock,
         actions: {
           onError: (error, txHash) => {
             errorToast({
