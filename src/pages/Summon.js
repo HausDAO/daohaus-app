@@ -9,7 +9,7 @@ import {
   // cloneTokens,
   daoConstants,
   daoPresets,
-  parseSummonresAndShares,
+  parseSummonersAndShares,
 } from '../utils/summoning';
 import SummonHard from '../forms/summonHard';
 import SummonEasy from '../forms/summonEasy';
@@ -64,7 +64,7 @@ const Summon = () => {
       ...data,
     };
     setDaoData(newDaoData);
-    const [addrs, shares] = parseSummonresAndShares(
+    const [addrs, shares] = parseSummonersAndShares(
       newDaoData.summonerAndShares,
     );
 
@@ -83,7 +83,7 @@ const Summon = () => {
     const summonParams = [
       summonData.summoner,
       summonData.approvedToken.split(',').map((item) => item.trim()),
-      data.seconds || summonData.periodDuration,
+      data?.seconds || summonData.periodDuration,
       summonData.votingPeriod,
       summonData.gracePeriod,
       summonData.proposalDeposit,

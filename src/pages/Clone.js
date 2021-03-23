@@ -6,7 +6,7 @@ import {
   daoConstants,
   cloneMembers,
   cloneDaoPresets,
-  parseSummonresAndShares,
+  parseSummonersAndShares,
   cloneTokens,
 } from '../utils/summoning';
 import SummonHard from '../forms/summonHard';
@@ -73,7 +73,7 @@ const Clone = ({ daoOverview, daoMembers, isUberHaus = false }) => {
       ...data,
     };
     setDaoData(newDaoData);
-    const [addrs, shares] = parseSummonresAndShares(
+    const [addrs, shares] = parseSummonersAndShares(
       newDaoData.summonerAndShares,
     );
 
