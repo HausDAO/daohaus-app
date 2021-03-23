@@ -61,6 +61,7 @@ const CcoContribution = React.memo(function ccocontribution({
 
   useEffect(() => {
     const setup = async () => {
+      console.log('currentDaoTokens', currentDaoTokens);
       const ccoToken = currentDaoTokens.find(
         (token) =>
           token.tokenAddress.toLowerCase() ===
@@ -187,8 +188,10 @@ const CcoContribution = React.memo(function ccocontribution({
     ? roundData.claimPeriodStartTime > roundData.now
     : true;
 
+  // TODO test on a real balance
   const hasBalance =
     daoMember &&
+    roundData &&
     daoMember.tokenBalances.find((bal) => {
       const isRaiseToken =
         bal.token.tokenAddress.toLowerCase() ===
@@ -197,9 +200,6 @@ const CcoContribution = React.memo(function ccocontribution({
       return isRaiseToken && +bal.token.balance > 0;
     });
   const claimAmount = +daoMember?.loot / roundData?.claimTokenValue || 0;
-
-  // TODO test on a real balance
-  console.log('hasBalance', hasBalance);
 
   return (
     <MainViewLayout header='DAOhaus CCO' isDao={true}>
