@@ -6,9 +6,7 @@ import { UBERHAUS_ADDRESS, UBERHAUS_STAKING_TOKEN } from '../utils/uberhaus';
 import molochAbi from '../contracts/molochV2.json';
 
 import { useOverlay } from '../contexts/OverlayContext';
-// import { createHash, detailsToJSON } from '../utils/general';
 import RageInput from './rageInput';
-// import { PROPOSAL_TYPES } from '../utils/proposalUtils';
 import { createHash, detailsToJSON } from '../utils/general';
 import { useInjectedProvider } from '../contexts/InjectedProviderContext';
 import { createPoll } from '../services/pollService';
@@ -75,23 +73,25 @@ const RageQuitProposalForm = ({ uberHausMinion, uberMembers }) => {
 
     const hash = createHash();
     const now = (new Date().getTime() / 1000).toFixed();
-
+    const description = `This is a proposal to Rage Quit ${values.shares ||
+      '0'} Shares and ${values.loot || '0'} from UberHAUS`;
     const details = detailsToJSON({
       values,
       uberHaus: true,
       uberType: 'ragequit',
       hash,
+      title: 'Rage Quit Assets from UberHAUS',
+      description,
     });
 
     const RQargs = [
       values.shares?.toString() || '0',
       values.loot?.toString() || '0',
     ];
-    console.log(`RQargs`, RQargs);
     const submitRQAbiData = molochAbi.find(
       (f) => f.type === 'function' && f.name === 'ragequit',
     );
-    console.log(submitRQAbiData);
+
     const hexData = injectedProvider.eth.abi.encodeFunctionCall(
       submitRQAbiData,
       RQargs,
@@ -105,7 +105,6 @@ const RageQuitProposalForm = ({ uberHausMinion, uberMembers }) => {
       hexData,
       details,
     ];
-    console.log(`args`, args);
 
     try {
       const poll = createPoll({ action: 'uberHausProposeAction', cachePoll })({
