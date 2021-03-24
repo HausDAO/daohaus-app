@@ -38,7 +38,7 @@ import { truncateAddr } from '../utils/general';
 import DaoToDaoProposalCard from './daoToDaoProposalCard';
 import DaoToDaoMemberInfo from './daoToDaoMemberInfo';
 
-import ComingSoonOverlay from './comingSoonOverlay';
+// import ComingSoonOverlay from './comingSoonOverlay';
 
 const DaoToDaoManager = ({
   daoOverview,
@@ -231,7 +231,7 @@ const DaoToDaoManager = ({
             </>
           )}
         </Flex>
-        <ComingSoonOverlay message='👀 Check back soon!' />
+        {/* <ComingSoonOverlay message='👀 Check back soon!' /> */}
 
         {loading ? (
           <Spinner />
