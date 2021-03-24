@@ -72,13 +72,11 @@ const Allies = ({
   ]);
 
   const uberHausMinion = useMemo(() => {
-    return daoOverview
-      ? daoOverview.minions.find(
-          (minion) =>
-            minion.minionType === 'UberHaus minion' &&
-            minion.uberHausAddress === UBERHAUS_ADDRESS,
-        )
-      : null;
+    return daoOverview?.minions?.find(
+      (minion) =>
+        minion.minionType === 'UberHaus minion' &&
+        minion.uberHausAddress === UBERHAUS_ADDRESS,
+    );
   }, [daoOverview]);
 
   useEffect(() => {
@@ -138,7 +136,12 @@ const Allies = ({
           uberOverview={uberOverview}
         />
         <GenericModal closeOnOverlayClick={true} modalId='uberMinionLaunch'>
-          <NewUberHausMinion />
+          <NewUberHausMinion
+            daoMembers={daoMembers}
+            uberHausMinion={uberHausMinion}
+            uberMembers={uberMembers}
+            uberDelegate={uberDelegate}
+          />
         </GenericModal>
         <DaoToDaoManager
           uberDelegate={uberDelegate}

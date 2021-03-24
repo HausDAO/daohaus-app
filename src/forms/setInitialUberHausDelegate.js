@@ -49,7 +49,6 @@ const SetInitialUberHausDelegate = ({
             successToast({
               title: 'Delegate set submitted.',
             });
-
             refreshDao();
             resolvePoll(txHash);
             setLoading(false);

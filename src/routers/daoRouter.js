@@ -173,6 +173,7 @@ const DaoRouter = () => {
             daoMetaData={daoMetaData}
             proposals={daoActivities?.proposals}
             isMember={isMember}
+            daoMembers={daoMembers}
           />
         </Route>
         <Route exact path={`${path}/proposals/new/:proposalType`}>

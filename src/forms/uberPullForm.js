@@ -172,46 +172,48 @@ const PullForm = ({ uberHausMinion, uberDelegate, uberOverview }) => {
     if (pullDelegateRewards) {
       submitPullRewards(tokenAddress);
     }
-    try {
-      const poll = createPoll({ action: 'pullGuildFunds', cachePoll })({
-        tokenAddress,
-        uberMinionAddress: uberHausMinion.minionAddress,
-        chainID: daochain,
-        expectedBalance,
-        actions: {
-          onError: (error, txHash) => {
-            errorToast({
-              title: `There was an error.`,
-            });
-            resolvePoll(txHash);
-            console.error(`Could not pull funds: ${error}`);
+    if (withdrawAmt > 0) {
+      try {
+        const poll = createPoll({ action: 'pullGuildFunds', cachePoll })({
+          tokenAddress,
+          uberMinionAddress: uberHausMinion.minionAddress,
+          chainID: daochain,
+          expectedBalance,
+          actions: {
+            onError: (error, txHash) => {
+              errorToast({
+                title: `There was an error.`,
+              });
+              resolvePoll(txHash);
+              console.error(`Could not pull funds: ${error}`);
+            },
+            onSuccess: (txHash) => {
+              successToast({
+                title: 'Pulled funds from UberHAUS Minion',
+              });
+              refreshDao();
+              resolvePoll(txHash);
+            },
           },
-          onSuccess: (txHash) => {
-            successToast({
-              title: 'Pulled funds from UberHAUS Minion',
-            });
-            refreshDao();
-            resolvePoll(txHash);
-          },
-        },
-      });
-      const onTxHash = () => {
+        });
+        const onTxHash = () => {
+          setD2dProposalModal((prevState) => !prevState);
+          setTxInfoModal(true);
+        };
+        await UberHausMinionService({
+          web3: injectedProvider,
+          uberHausMinion: uberHausMinion.minionAddress,
+          chainID: daochain,
+        })('pullGuildFunds')({ args, address, poll, onTxHash });
+      } catch (err) {
         setD2dProposalModal((prevState) => !prevState);
-        setTxInfoModal(true);
-      };
-      await UberHausMinionService({
-        web3: injectedProvider,
-        uberHausMinion: uberHausMinion.minionAddress,
-        chainID: daochain,
-      })('pullGuildFunds')({ args, address, poll, onTxHash });
-    } catch (err) {
-      setD2dProposalModal((prevState) => !prevState);
-      setLoading(false);
-      console.error('error: ', err);
-      errorToast({
-        title: `There was an error.`,
-        description: err.message || '',
-      });
+        setLoading(false);
+        console.error('error: ', err);
+        errorToast({
+          title: `There was an error.`,
+          description: err.message || '',
+        });
+      }
     }
     setD2dProposalModal((prevState) => !prevState);
   };
