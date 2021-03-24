@@ -1,407 +1,37 @@
-import { BigNumber } from 'ethers';
-import { graphQuery } from '../utils/apollo';
-import { PROPOSALS_LIST } from '../graphQL/proposal-queries';
 import {
-  DAO_POLL,
-  MINION_POLL,
-  HOME_DAO,
-  RAGE_QUIT_POLL,
-  MINION_PROPOSAL_POLL,
-} from '../graphQL/dao-queries';
-import { getGraphEndpoint } from '../utils/chain';
-import { hashMaker, memberVote, PROPOSAL_TYPES } from '../utils/proposalUtils';
-import { TokenService } from '../services/tokenService';
-import { MEMBERS_LIST, MEMBER_DELEGATE_KEY } from '../graphQL/member-queries';
-import { UBERHAUS_MEMBER_DELEGATE } from '../graphQL/uberhaus-queries';
-import { MinionService } from './minionService';
-import { UberHausMinionService } from './uberHausMinionService';
-
-/// //////////CALLS///////////////
-const pollProposals = async ({ daoID, chainID }) =>
-  await graphQuery({
-    endpoint: getGraphEndpoint(chainID, 'subgraph_url'),
-    query: PROPOSALS_LIST,
-    variables: {
-      contractAddr: daoID,
-      skip: 0,
-    },
-  });
-
-const pollTokenAllowances = async ({
-  chainID,
-  daoID,
-  tokenAddress,
-  userAddress,
-}) => {
-  const tokenContract = TokenService({
-    chainID,
-    tokenAddress,
-  });
-
-  const amountApproved = await tokenContract('allowance')({
-    accountAddr: userAddress,
-    contractAddr: daoID,
-  });
-  return amountApproved;
-};
-
-const pollMolochSummon = async ({ chainID, summoner, createdAt }) => {
-  return await graphQuery({
-    endpoint: getGraphEndpoint(chainID, 'subgraph_url'),
-    query: DAO_POLL,
-    variables: {
-      summoner,
-      createdAt,
-    },
-  });
-};
-
-const pollMinionSummon = async ({ chainID, molochAddress, createdAt }) => {
-  return await graphQuery({
-    endpoint: getGraphEndpoint(chainID, 'subgraph_url'),
-    query: MINION_POLL,
-    variables: {
-      molochAddress,
-      createdAt,
-    },
-  });
-};
-
-const pollMinionProposal = async ({ chainID, minionAddress, createdAt }) => {
-  return await graphQuery({
-    endpoint: getGraphEndpoint(chainID, 'subgraph_url'),
-    query: MINION_PROPOSAL_POLL,
-    variables: {
-      minionAddress,
-      createdAt,
-    },
-  });
-};
-
-const pollMinionExecute = async ({
-  chainID,
-  minionAddress,
-  proposalId,
-  proposalType,
-}) => {
-  try {
-    if (proposalType === PROPOSAL_TYPES.MINION_VANILLA) {
-      const action = await MinionService({
-        minion: minionAddress,
-        chainID,
-      })('getAction')({ proposalId });
-      console.log(action);
-      return action.executed;
-    } else if (proposalType === PROPOSAL_TYPES.MINION_UBER_STAKE) {
-      const action = await UberHausMinionService({
-        minion: minionAddress,
-        chainID,
-      })('getAction')({ proposalId });
-      console.log(action);
-      return action.executed;
-    } else if (proposalType === PROPOSAL_TYPES.MINION_UBER_DEL) {
-      const action = await UberHausMinionService({
-        minion: minionAddress,
-        chainID,
-      })('getAppointment')({ proposalId });
-      console.log(action);
-      return action.executed;
-    }
-  } catch (error) {
-    console.log(chainID, minionAddress, proposalId, proposalType);
-    console.error('Error caught in Poll block of TX:', error);
-  }
-};
-
-const pollRageQuit = async ({ chainID, molochAddress, createdAt }) => {
-  return await graphQuery({
-    endpoint: getGraphEndpoint(chainID, 'subgraph_url'),
-    query: RAGE_QUIT_POLL,
-    variables: {
-      molochAddress,
-      createdAt,
-    },
-  });
-};
-
-const syncTokenPoll = async ({ chainID, daoID, tokenAddress }) => {
-  try {
-    const daoOverview = await graphQuery({
-      endpoint: getGraphEndpoint(chainID, 'subgraph_url'),
-      query: HOME_DAO,
-      variables: {
-        contractAddr: daoID,
-      },
-    });
-    const graphBalance = daoOverview?.moloch?.tokenBalances?.find(
-      (tokenObj) => tokenObj?.token?.tokenAddress === tokenAddress,
-    )?.tokenBalance;
-    return graphBalance;
-  } catch (error) {
-    return error;
-  }
-};
-
-const withdrawTokenFetch = async ({
-  chainID,
-  daoID,
-  memberAddress,
-  tokenAddress,
-}) => {
-  try {
-    const data = await graphQuery({
-      endpoint: getGraphEndpoint(chainID, 'subgraph_url'),
-      query: MEMBERS_LIST,
-      variables: {
-        contractAddr: daoID,
-      },
-    });
-    const member = data.daoMembers?.find(
-      (member) => member?.memberAddress?.toLowerCase() === memberAddress,
-    );
-    const newTokenBalance = member.tokenBalances.find(
-      (tokenObj) => tokenObj.token.tokenAddress === tokenAddress,
-    ).tokenBalance;
-    return newTokenBalance;
-  } catch (error) {
-    return error;
-  }
-};
-
-const updateDelegateFetch = async ({ daoID, chainID, memberAddress }) => {
-  try {
-    const res = await graphQuery({
-      endpoint: getGraphEndpoint(chainID, 'subgraph_url'),
-      query: MEMBER_DELEGATE_KEY,
-      variables: {
-        contractAddr: daoID,
-        memberAddr: memberAddress,
-      },
-    });
-    return res.members[0];
-  } catch (error) {
-    return error;
-  }
-};
-
-const pollUberHausDelegateSet = async ({
-  uberHausAddress,
-  minionAddress,
-  chainID,
-}) => {
-  try {
-    const res = await graphQuery({
-      endpoint: getGraphEndpoint(chainID, 'subgraph_url'),
-      query: UBERHAUS_MEMBER_DELEGATE,
-      variables: {
-        molochAddress: uberHausAddress,
-        memberAddress: minionAddress,
-      },
-    });
-    return res.members[0];
-  } catch (error) {
-    return error;
-  }
-};
-
-export const pollGuildFunds = async ({
-  chainID,
-  uberMinionAddress,
-  tokenAddress,
-}) => {
-  try {
-    const newTokenBalance = TokenService({
-      chainID,
-      tokenAddress,
-    })('balanceOf')(uberMinionAddress);
-    return newTokenBalance;
-  } catch (error) {
-    return error;
-  }
-};
-
-/// //////////TESTS///////////////
-const submitProposalTest = (data, shouldEqual, pollId) => {
-  if (data.proposals) {
-    const recentProposalHashes = data.proposals.map((proposal) =>
-      hashMaker(proposal),
-    );
-    console.log(recentProposalHashes);
-    return recentProposalHashes.includes(shouldEqual);
-  } else {
-    clearInterval(pollId);
-    throw new Error(
-      `Poll test did recieve the expected results from the graph: ${data}`,
-    );
-  }
-};
-
-const tokenAllowanceTest = (data, shouldEqual, pollId) => {
-  console.log('new allowance: ', data);
-  return BigNumber.from(data).gte(shouldEqual);
-};
-
-const molochSummonTest = (data, shouldEqual, pollId) => {
-  console.log('new moloch: ', data);
-  if (data.moloches) {
-    return data.moloches.length > 0;
-  } else {
-    console.log('no data.moloches');
-    clearInterval(pollId);
-    throw new Error(`Bad query, clearing poll: ${data}`);
-  }
-};
-
-const minonSummonTest = (data, shouldEqual, pollId) => {
-  console.log('new minion: ', data);
-  if (data.moloch) {
-    return data.moloch.minions.length > 0;
-  } else {
-    console.log('no data.moloch');
-    clearInterval(pollId);
-    throw new Error(`Bad query, clearing poll: ${data}`);
-  }
-};
-
-const minonProposalTest = (data, shouldEqual, pollId) => {
-  console.log('minions: ', data);
-  if (data.minions && data.minions[0]) {
-    return data.minions[0].proposals.length > 0;
-  } else {
-    console.log('no data.minions');
-    clearInterval(pollId);
-    throw new Error(`Bad query, clearing poll: ${data}`);
-  }
-};
-
-const rageQuitTest = (data, shouldEqual, pollId) => {
-  console.log('new rage quit: ', data);
-  if (data.moloch) {
-    return data.moloch.rageQuits.length > 0;
-  } else {
-    console.log('no data.moloch');
-    clearInterval(pollId);
-    throw new Error(`Bad query, clearing poll: ${data}`);
-  }
-};
-
-const sponsorProposalTest = (data, shouldEqual, pollId) => {
-  if (data.proposals) {
-    const proposal = data.proposals.find(
-      (proposal) => proposal.proposalId === shouldEqual,
-    );
-    return proposal?.sponsored;
-  } else {
-    clearInterval(pollId);
-    throw new Error(
-      `Poll test did recieve the expected results from the graph: ${data}`,
-    );
-  }
-};
-
-const submitVoteTest = (data, shouldEqual, pollId) => {
-  const [proposalId, userAddress] = shouldEqual;
-  if (data.proposals) {
-    const proposal = data.proposals.find(
-      (proposal) => proposal.proposalId === proposalId,
-    );
-    return memberVote(proposal, userAddress) !== null;
-  } else {
-    clearInterval(pollId);
-    throw new Error(
-      `Poll test did recieve the expected results from the graph: ${data}`,
-    );
-  }
-};
-
-const processProposalTest = (data, shouldEqual, pollId) => {
-  if (data.proposals) {
-    const proposal = data.proposals.find(
-      (proposal) => proposal.proposalIndex === shouldEqual,
-    );
-    return proposal?.processed;
-  } else {
-    clearInterval(pollId);
-    throw new Error(
-      `Poll test did recieve the expected results from the graph: ${data}`,
-    );
-  }
-};
-
-const cancelProposalTest = (data, shouldEqual, pollId) => {
-  if (data.proposals) {
-    const proposal = data.proposals.find(
-      (proposal) => proposal.proposalId === shouldEqual,
-    );
-    return proposal?.cancelled;
-  } else {
-    clearInterval(pollId);
-    throw new Error(
-      `Poll test did recieve the expected results from the graph: ${data}`,
-    );
-  }
-};
-
-const minionExecuteTest = async (executed, shouldEqual, pollId) => {
-  return executed === shouldEqual;
-};
-
-const collectTokenTest = (graphBalance, oldBalance, pollId) => {
-  if (graphBalance) {
-    return graphBalance !== oldBalance;
-  } else {
-    clearInterval(pollId);
-    throw new Error(
-      `Poll for collect tokens did not recieve new value from the graph`,
-    );
-  }
-};
-
-const withdrawTokenTest = (data, shouldEqual = 0, pollId) => {
-  if (data) {
-    return +data === shouldEqual;
-  } else {
-    clearInterval(pollId);
-    throw new Error(
-      `Poll test did recieve the expected results from the graph: ${data}`,
-    );
-  }
-};
-const guildFundTest = (data, shouldEqual, pollId) => {
-  console.log(`data`, data);
-  console.log(`shouldEqual`, shouldEqual);
-  console.log(`pollId`, pollId);
-  if (data) {
-    return +data === shouldEqual;
-  } else {
-    clearInterval(pollId);
-    throw new Error(
-      `Poll test did recieve the expected results from the graph: ${data}`,
-    );
-  }
-};
-
-const updateDelegateTest = (data, shouldEqual, pollId) => {
-  if (data) {
-    return data.delegateKey.toLowerCase() === shouldEqual.toLowerCase();
-  } else {
-    clearInterval(pollId);
-    throw new Error(
-      `Poll test did recieve the expected results from the graph: ${data}`,
-    );
-  }
-};
-
-const uberHausDelegateSetTest = (data, shouldEqual, pollId) => {
-  if (data) {
-    return data.delegateKey.toLowerCase() === shouldEqual.toLowerCase();
-  } else {
-    clearInterval(pollId);
-    throw new Error(
-      `Poll test did recieve the expected results from the graph: ${data}`,
-    );
-  }
-};
+  pollDelegateRewards,
+  pollGuildFunds,
+  pollMinionExecute,
+  pollMinionProposal,
+  pollMinionSummon,
+  pollMolochSummon,
+  pollProposals,
+  pollRageQuit,
+  pollTokenAllowances,
+  pollUberHausDelegateSet,
+  syncTokenPoll,
+  updateDelegateFetch,
+  withdrawTokenFetch,
+} from '../polls/polls';
+import {
+  cancelProposalTest,
+  checkDelRewardsTest,
+  collectTokenTest,
+  guildFundTest,
+  minionExecuteTest,
+  minonProposalTest,
+  minonSummonTest,
+  molochSummonTest,
+  processProposalTest,
+  rageQuitTest,
+  sponsorProposalTest,
+  submitProposalTest,
+  submitVoteTest,
+  tokenAllowanceTest,
+  uberHausDelegateSetTest,
+  updateDelegateTest,
+  withdrawTokenTest,
+} from '../polls/tests';
 
 export const createPoll = ({
   interval = 2000,
@@ -418,15 +48,15 @@ export const createPoll = ({
     actions,
     txHash,
   }) => {
-    console.log('IN POLL');
-    console.log(`args`, args);
     let tryCount = 0;
     const pollId = setInterval(async () => {
       if (tryCount < tries) {
         try {
           const res = await pollFetch(args);
+          console.log('Fetch Result', res);
+          console.log('ShouldEqual', shouldEqual || 'No value entered');
           const testResult = testFn(res, shouldEqual, pollId);
-          console.log(testResult);
+          console.log('Test Result', testResult);
           if (testResult) {
             clearInterval(pollId);
             actions.onSuccess(txHash);
@@ -446,7 +76,6 @@ export const createPoll = ({
     }, interval);
     return pollId;
   };
-
   /// /////////////////ACTIONS//////////////////////////
   if (!action) {
     throw new Error('User must submit an action argument');
@@ -734,7 +363,6 @@ export const createPoll = ({
         );
       if (!token?.moloch?.version)
         throw new Error(`token object does not contain .moloch.version`);
-
       startPoll({
         pollFetch: syncTokenPoll,
         testFn: collectTokenTest,
@@ -890,7 +518,6 @@ export const createPoll = ({
       }
     };
   } else if (action === 'summonMinion') {
-    console.log('action', action);
     return ({ chainID, molochAddress, createdAt, actions }) => (txHash) => {
       startPoll({
         pollFetch: pollMinionSummon,
@@ -977,12 +604,6 @@ export const createPoll = ({
       uberMinionAddress,
       expectedBalance,
     }) => (txHash) => {
-      console.log('At fire poll');
-      console.log(`tokenAddress`, tokenAddress);
-      console.log(`actions`, actions);
-      console.log('uberMinionAddress', uberMinionAddress);
-      console.log(`chainID`, chainID);
-      console.log(`expectedBalance`, expectedBalance);
       startPoll({
         pollFetch: pollGuildFunds,
         testFn: guildFundTest,
@@ -1020,7 +641,6 @@ export const createPoll = ({
       }
     };
   } else if (action === 'ragequit') {
-    console.log('action', action);
     return ({ chainID, molochAddress, createdAt, actions }) => (txHash) => {
       startPoll({
         pollFetch: pollRageQuit,
@@ -1050,7 +670,6 @@ export const createPoll = ({
       }
     };
   } else if (action === 'ragequitClaim') {
-    console.log('action', action);
     return ({ chainID, molochAddress, createdAt, actions }) => (txHash) => {
       startPoll({
         pollFetch: pollRageQuit,
@@ -1080,7 +699,6 @@ export const createPoll = ({
       }
     };
   } else if (action === 'updateDelegateKey') {
-    console.log('action', action);
     return ({ chainID, daoID, memberAddress, delegateAddress, actions }) => (
       txHash,
     ) => {
@@ -1119,10 +737,6 @@ export const createPoll = ({
       actions,
       createdAt,
     }) => (txHash) => {
-      console.log('newDelegateAddress', newDelegateAddress);
-      console.log('minionAddress', minionAddress);
-      console.log('chainID', chainID);
-
       startPoll({
         pollFetch: pollMinionProposal,
         testFn: minonProposalTest,
@@ -1182,6 +796,44 @@ export const createPoll = ({
             tries,
           },
           pollArgs: { chainID, minionAddress },
+        });
+      }
+    };
+  } else if (action === 'claimDelegateReward') {
+    return ({ chainID, minionAddress, delegateAddress, actions }) => (
+      txHash,
+    ) => {
+      console.log('In Start Poll');
+      console.log(`chainID`, chainID);
+      console.log(`minionAddress`, minionAddress);
+      console.log(`delegateAddres`, delegateAddress);
+      console.log(`actions`, actions);
+      console.log(`action`, action);
+      console.log(`txHash`, txHash);
+
+      startPoll({
+        pollFetch: pollDelegateRewards,
+        testFn: checkDelRewardsTest,
+        args: { minionAddress, delegateAddress, chainID },
+        actions,
+        txHash,
+      });
+      if (cachePoll) {
+        cachePoll({
+          txHash,
+          action,
+          timeSent: Date.now(),
+          status: 'unresolved',
+          resolvedMsg: `UberHAUS delegate rewards claimed`,
+          unresolvedMsg: `Claiming UberHAUS delegate rewards`,
+          successMsg: `UberHAUS delegate rewards claimed`,
+          errorMsg: `Poll error on claimDelegateReward`,
+          pollData: {
+            action,
+            interval,
+            tries,
+          },
+          pollArgs: { chainID, minionAddress, delegateAddress },
         });
       }
     };
