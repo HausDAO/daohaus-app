@@ -198,7 +198,9 @@ const CcoContribution = React.memo(function ccocontribution({
 
       return isRaiseToken && +bal.token.balance > 0;
     });
-  const claimAmount = +daoMember?.loot / roundData?.claimTokenValue || 0;
+  const claimAmount = (
+    +daoMember?.loot / roundData?.claimTokenValue || 0
+  ).toFixed(2);
 
   return (
     <MainViewLayout header='DAOhaus CCO' isDao={true}>
