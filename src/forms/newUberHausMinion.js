@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useMemo, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import {
   Box,
@@ -28,7 +28,12 @@ import {
 import AddressInput from './addressInput';
 import { isEthAddress } from '../utils/general';
 
-const NewUberHausMinion = () => {
+const NewUberHausMinion = ({
+  daoMembers,
+  uberHausMinion,
+  uberMembers,
+  uberDelegate,
+}) => {
   const [loading, setLoading] = useState(false);
   const { daochain, daoid } = useParams();
   const { address, injectedProvider, injectedChain } = useInjectedProvider();
@@ -41,6 +46,22 @@ const NewUberHausMinion = () => {
   const [missingDelegate, setMissingDelegate] = useState(false);
   const now = (new Date().getTime() / 1000).toFixed();
 
+  const candidates = useMemo(() => {
+    if (!daoMembers || !uberMembers) return;
+    return daoMembers.filter((member) => {
+      const hasShares = +member.shares > 0;
+      const isNotDelegate = member.memberAddress !== uberDelegate;
+      const isNotUberMemberOrDelegate = uberMembers.every(
+        (uberMember) =>
+          member.memberAddress !== uberMember.memberAddress &&
+          member.memberAddress !== uberMember.delegateKey,
+      );
+      if (hasShares && isNotDelegate && isNotUberMemberOrDelegate) {
+        return member;
+      }
+    });
+  }, [daoMembers, uberMembers, uberDelegate]);
+  console.log(candidates);
   const onSubmit = async (values) => {
     console.log('values', values, isEthAddress(values.memberApplicant));
     if (!isEthAddress(values.memberApplicant)) {
@@ -133,13 +154,14 @@ const NewUberHausMinion = () => {
           <form onSubmit={handleSubmit(onSubmit)}>
             <Box mb={3} fontSize='sm'>
               <AddressInput
-                name='applicant'
-                formLabel='delegate'
-                tipLabel='DAO member address that will be able to vote in UberHAUS. You can change this later through a proposal.'
+                name='delegate'
+                formLabel='Eligable Delegates'
                 register={register}
                 setValue={setValue}
                 watch={watch}
                 memberOnly={true}
+                overrideData={candidates}
+                memberOverride={true}
               />
               <FormControl mb={5}>
                 <FormHelperText fontSize='sm' id='name-helper-text' mb={3}>

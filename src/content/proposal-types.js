@@ -96,13 +96,13 @@ export const daoToDaoProposalTypes = () => {
       image: swordImg,
       show: true,
     },
-    {
-      name: 'Distro Rewards',
-      subhead: 'Get DAO Rewards from UBERhaus',
-      proposalType: 'd2dDistroRewards',
-      image: swordImg,
-      show: true,
-    },
+    // {
+    //   name: 'Distro Rewards',
+    //   subhead: 'Get DAO Rewards from UBERhaus',
+    //   proposalType: 'd2dDistroRewards',
+    //   image: swordImg,
+    //   show: true,
+    // },
     {
       name: 'Pull/Withdraw',
       subhead: 'Pull or withdraw funds',
