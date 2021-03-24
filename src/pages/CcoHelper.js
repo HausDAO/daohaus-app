@@ -230,7 +230,7 @@ const CcoHelper = React.memo(function ccohelper({
       <Tr key={proposal.proposalId}>
         <Td>{proposal.proposalId}</Td>
         <Td>{proposal.createdAt}</Td>
-        <Td>{proposal.details}</Td>
+        <Td>{JSON.parse(proposal.details)?.title}</Td>
         <Td>{proposal.status}</Td>
         <Td>
           <Link
@@ -239,6 +239,7 @@ const CcoHelper = React.memo(function ccohelper({
             View
           </Link>
         </Td>
+        <Td>{proposal.applicant}</Td>
       </Tr>
     );
   };
@@ -320,6 +321,7 @@ const CcoHelper = React.memo(function ccohelper({
                   <Th>details</Th>
                   <Th>status</Th>
                   <Th>link</Th>
+                  <Th>address</Th>
                 </Tr>
               </Thead>
               <Tbody>

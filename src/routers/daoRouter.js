@@ -24,8 +24,7 @@ import DiscourseSettings from '../pages/DiscourseSettings';
 import ProposalTypes from '../pages/ProposalTypes';
 import MinionSafe from '../pages/MinionSafe';
 import CcoContribution from '../pages/CcoContribution';
-// Needed when cco is active
-// import CcoHelper from '../pages/CcoHelper';
+import CcoHelper from '../pages/CcoHelper';
 import Staking from '../pages/Staking';
 import Clone from '../pages/Clone';
 
@@ -231,13 +230,13 @@ const DaoRouter = () => {
             daoProposals={daoProposals}
           />
         </Route>
-        {/* <Route exact path={`${path}/cco/spy`}>
+        <Route exact path={`${path}/cco/spy`}>
           <CcoHelper
             daoMetaData={daoMetaData}
             currentDaoTokens={currentDaoTokens}
             daoProposals={daoProposals}
-          /> */}
-        {/* </Route> */}
+          />
+        </Route>
       </Switch>
     </Layout>
   );

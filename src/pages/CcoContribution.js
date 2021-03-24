@@ -27,8 +27,9 @@ import { useInjectedProvider } from '../contexts/InjectedProviderContext';
 import CcoLootGrabForm from '../forms/ccoLootGrab';
 import CcoClaim from '../forms/ccoClaim';
 import { useTX } from '../contexts/TXContext';
-import ComingSoonOverlay from '../components/comingSoonOverlay';
+// import ComingSoonOverlay from '../components/comingSoonOverlay';
 import { MM_ADDCHAIN_DATA } from '../utils/chain';
+import { useDaoMember } from '../contexts/DaoMemberContext';
 
 const CcoContribution = React.memo(function ccocontribution({
   daoMetaData,
@@ -37,6 +38,7 @@ const CcoContribution = React.memo(function ccocontribution({
 }) {
   const { setGenericModal } = useOverlay();
   const { daochain, daoid } = useParams();
+  const { daoMember } = useDaoMember();
   const { address, injectedChain, requestWallet } = useInjectedProvider();
   const [roundData, setRoundData] = useState(null);
   const [isEligible, setIsEligible] = useState('unchecked');
@@ -106,8 +108,8 @@ const CcoContribution = React.memo(function ccocontribution({
       });
     };
 
-    // if (currentDaoTokens && daoMetaData?.boosts?.cco) {
-    if (currentDaoTokens && daoMetaData?.boosts?.cco?.active) {
+    const someTokens = currentDaoTokens && currentDaoTokens[0];
+    if (someTokens && daoMetaData?.boosts?.cco) {
       setup();
     }
   }, [currentDaoTokens, daoMetaData]);
@@ -120,12 +122,9 @@ const CcoContribution = React.memo(function ccocontribution({
         return isCcoProposal(proposal, roundData);
       });
 
-      console.log('contributionProposals', contributionProposals);
       const addressProposals = contributionProposals.filter((proposal) => {
         return isCcoProposalForAddress(proposal, address, roundData);
       });
-
-      console.log('addressProposals', addressProposals);
 
       const contributionTotal = contributionTotalValue(
         contributionProposals,
@@ -188,7 +187,20 @@ const CcoContribution = React.memo(function ccocontribution({
     ? roundData.claimPeriodStartTime > roundData.now
     : true;
 
-  console.log('');
+  // TODO test on a real balance
+  const hasBalance =
+    daoMember &&
+    roundData &&
+    daoMember.tokenBalances.find((bal) => {
+      const isRaiseToken =
+        bal.token.tokenAddress.toLowerCase() ===
+        roundData.ccoToken.tokenAddress.toLowerCase();
+
+      return isRaiseToken && +bal.token.balance > 0;
+    });
+  const claimAmount = (
+    +daoMember?.loot / roundData?.claimTokenValue || 0
+  ).toFixed(2);
 
   return (
     <MainViewLayout header='DAOhaus CCO' isDao={true}>
@@ -352,17 +364,14 @@ const CcoContribution = React.memo(function ccocontribution({
                             HAUS Available to Claim
                           </Text>
                           <TextBox variant='value' size='md' my={2}>
-                            {`${currentContributionData?.addressTotal /
-                              roundData.claimTokenValue || 0} ${
-                              roundData.claimTokenSymbol
-                            }`}
+                            {`${claimAmount} ${roundData.claimTokenSymbol}`}
                           </TextBox>
                         </Box>
                         {!beforeClaimPeriod ? (
                           <CcoClaim setClaimComplete={setClaimComplete} />
                         ) : null}
                       </Flex>
-                      {claimComplete ? (
+                      {claimComplete || hasBalance ? (
                         <Box mt={5} fontSize='lg'>
                           Your claim is complete. Withdraw your{' '}
                           {roundData.claimTokenSymbol} on the{' '}
@@ -668,14 +677,14 @@ const CcoContribution = React.memo(function ccocontribution({
           ) : (
             <>
               <Box>DAO does not have an active CCO</Box>
-              {daoMetaData?.boosts?.cco && !daoMetaData.boosts.cco.active ? (
+              {/* {daoMetaData?.boosts?.cco && !daoMetaData.boosts.cco.active ? (
                 <Box mt={500}>
                   <ComingSoonOverlay
                     message='Max target was hit and our community contribution opportunity is complete.'
                     fontSize='3xl'
                   />
                 </Box>
-              ) : null}
+              ) : null} */}
             </>
           )}
         </Flex>
