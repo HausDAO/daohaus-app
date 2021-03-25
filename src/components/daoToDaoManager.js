@@ -166,7 +166,7 @@ const DaoToDaoManager = ({
         <TextBox size='xs' mb={2}>
           DAO On DAO Memberships
         </TextBox>
-        <ContentBox w='40%' position='relative'>
+        <ContentBox w='100%' maxWidth='40rem' position='relative'>
           <Flex align='center'>
             <>
               <Image src={DAOHaus} w='50px' h='50px' mr={4} />
@@ -190,7 +190,7 @@ const DaoToDaoManager = ({
       <TextBox size='xs' mb={2}>
         DAO On DAO Memberships
       </TextBox>
-      <ContentBox w='40%' position='relative'>
+      <ContentBox w='100%' maxWidth='40rem' position='relative'>
         <Flex align='center'>
           {daoid === UBERHAUS_DATA.ADDRESS ? (
             <>

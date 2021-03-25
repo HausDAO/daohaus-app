@@ -25,7 +25,7 @@ import { chainByID } from '../utils/chain';
 import { UberHausMinionService } from '../services/uberHausMinionService';
 import { PROPOSAL_TYPES } from '../utils/proposalUtils';
 import UberHausAvatar from './uberHausAvatar';
-import { UBERHAUS_ADDRESS } from '../utils/uberhaus';
+import { UBERHAUS_DATA } from '../utils/uberhaus';
 
 const ProposalMinionCard = ({ proposal }) => {
   const { daochain } = useParams();
@@ -103,6 +103,14 @@ const ProposalMinionCard = ({ proposal }) => {
     setShowModal((prevState) => !prevState);
   };
 
+  const getAvatar = (addr) => {
+    if (addr?.toLowerCase() === UBERHAUS_DATA.ADDRESS.toLowerCase()) {
+      return <UberHausAvatar />;
+    } else {
+      return <AddressAvatar addr={minionDeets.to} alwaysShowName={true} />;
+    }
+  };
+
   const displayDecodedData = (data) => {
     return (
       <>
@@ -135,13 +143,6 @@ const ProposalMinionCard = ({ proposal }) => {
     );
   };
 
-  const getAvatar = (addr) => {
-    if (addr?.toLowerCase() === UBERHAUS_ADDRESS.toLowerCase()) {
-      return <UberHausAvatar />;
-    } else {
-      return <AddressAvatar addr={minionDeets.to} alwaysShowName={true} />;
-    }
-  };
   return (
     <>
       <Skeleton isLoaded={!loading}>

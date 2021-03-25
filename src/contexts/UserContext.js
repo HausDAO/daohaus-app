@@ -24,6 +24,7 @@ export const UserContextProvider = ({ children }) => {
   const { address } = useInjectedProvider();
   const { successToast, errorToast } = useOverlay();
 
+  const [apiData, setApiData] = useState(null);
   const [userHubDaos, setUserHubDaos] = useSessionStorage('userHubData', []);
   const [outstandingTXs, setOutstandingTXs] = useState([]);
 
@@ -38,6 +39,7 @@ export const UserContextProvider = ({ children }) => {
         endpointType: 'subgraph_url',
         apiFetcher: getApiMetadata,
         reactSetter: setUserHubDaos,
+        setApiData,
         variables: {
           memberAddress: address,
         },
@@ -126,6 +128,7 @@ export const UserContextProvider = ({ children }) => {
         resolvePoll,
         outstandingTXs,
         refetchUserHubDaos,
+        apiData,
       }}
     >
       {children}
@@ -137,6 +140,7 @@ export const useUser = () => {
     userHubDaos,
     hasLoadedHubData,
     cachePoll,
+    apiData,
     resolvePoll,
     outstandingTXs,
     refetchUserHubDaos,
@@ -144,6 +148,7 @@ export const useUser = () => {
   return {
     userHubDaos,
     hasLoadedHubData,
+    apiData,
     cachePoll,
     resolvePoll,
     outstandingTXs,

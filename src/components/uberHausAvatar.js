@@ -4,7 +4,7 @@ import { Flex, Icon, Image, Box, useToast } from '@chakra-ui/react';
 import { RiLoginBoxLine } from 'react-icons/ri';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
 
-import { UBERHAUS_ADDRESS, UBERHAUS_NETWORK } from '../utils/uberhaus';
+import { UBERHAUS_DATA } from '../utils/uberhaus';
 import DAOHaus from '../assets/img/Daohaus__Castle--Dark.svg';
 import { FaCopy } from 'react-icons/fa';
 
@@ -19,7 +19,7 @@ const UberHausAvatar = ({ enableCopy = true, enableLink = true }) => {
       <Flex alignItems='center' transform='translateY(-3px)'>
         {enableCopy && (
           <CopyToClipboard
-            text={UBERHAUS_ADDRESS}
+            text={UBERHAUS_DATA.ADDRESS}
             mr={2}
             onCopy={() =>
               toast({
@@ -41,7 +41,9 @@ const UberHausAvatar = ({ enableCopy = true, enableLink = true }) => {
           </CopyToClipboard>
         )}
         {enableLink && (
-          <RouterLink to={`/dao/${UBERHAUS_NETWORK}/${UBERHAUS_ADDRESS}`}>
+          <RouterLink
+            to={`/dao/${UBERHAUS_DATA.NETWORK}/${UBERHAUS_DATA.ADDRESS}`}
+          >
             <Icon as={RiLoginBoxLine} color='secondary.500' h='20px' w='20px' />
           </RouterLink>
         )}

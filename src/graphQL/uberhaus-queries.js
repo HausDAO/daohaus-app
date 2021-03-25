@@ -1,6 +1,6 @@
 import { gql } from 'apollo-boost';
 
-export const UBERHAUS_DATA = gql`
+export const UBERHAUS_QUERY = gql`
   query moloch(
     $molochAddress: String!
     $memberAddress: String!
@@ -43,6 +43,34 @@ export const UBERHAUS_MEMBER_DELEGATE = gql`
       memberAddress
       molochAddress
       delegateKey
+    }
+  }
+`;
+
+export const UBER_MINIONS = gql`
+  # query minions {
+  #   minionType
+  #   minionAddress
+  #   molochAddress
+  #   uberHausAddress
+  #   uberHausDelegate
+  # }
+  # query {
+  #   minions(where: { minionType: "UberHaus minion" }) {
+  #     minionType
+  #     minionAddress
+  #     molochAddress
+  #     uberHausAddress
+  #     uberHausDelegate
+  #   }
+  # }
+  query minion {
+    minions(where: { minionType: "UberHaus minion" }) {
+      minionType
+      minionAddress
+      molochAddress
+      uberHausAddress
+      uberHausDelegate
     }
   }
 `;
