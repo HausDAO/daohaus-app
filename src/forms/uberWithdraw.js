@@ -6,7 +6,7 @@ import { RiErrorWarningLine } from 'react-icons/ri';
 import { useOverlay } from '../contexts/OverlayContext';
 import { displayBalance, valToDecimalString } from '../utils/tokenValue';
 import styled from '@emotion/styled';
-import { UBERHAUS_ADDRESS } from '../utils/uberhaus';
+import { UBERHAUS_DATA } from '../utils/uberhaus';
 import { useParams } from 'react-router-dom';
 import { createPoll } from '../services/pollService';
 import { UberHausMinionService } from '../services/uberHausMinionService';
@@ -82,7 +82,7 @@ const WithdrawForm = ({ uberMembers, uberHausMinion }) => {
     const withdrawAmt = values.withdraw
       ? valToDecimalString(values.withdraw, tokenAddress, uberTokens)
       : '0';
-    const args = [UBERHAUS_ADDRESS, tokenAddress, withdrawAmt];
+    const args = [UBERHAUS_DATA.ADDRESS, tokenAddress, withdrawAmt];
     const expectedBalance = +currentBalance - +withdrawAmt;
 
     try {
@@ -92,7 +92,7 @@ const WithdrawForm = ({ uberMembers, uberHausMinion }) => {
         chainID: daochain,
         uber: true,
         expectedBalance,
-        daoID: UBERHAUS_ADDRESS,
+        daoID: UBERHAUS_DATA.ADDRESS,
         actions: {
           onError: (error, txHash) => {
             errorToast({

@@ -12,7 +12,7 @@ import ShogunCard from '../components/shogunCard';
 import { useOverlay } from '../contexts/OverlayContext';
 import MainViewLayout from '../components/mainViewLayout';
 import { FaCopy } from 'react-icons/fa';
-import { UBERHAUS_STAKING_TOKEN } from '../utils/uberhaus';
+import { UBERHAUS_DATA } from '../utils/uberhaus';
 
 const Staking = ({ daoMetaData }) => {
   const onStakeHaus = () => {};
@@ -80,7 +80,7 @@ const PriceBox = ({ tokenData }) => {
         <Flex fontFamily='mono' fontSize='lg' fontWeight={700}>
           HAUS
           <CopyToClipboard
-            text={UBERHAUS_STAKING_TOKEN}
+            text={UBERHAUS_DATA.STAKING_TOKEN}
             onCopy={handleCopy}
             ml={4}
           >
@@ -116,7 +116,7 @@ const PriceBox = ({ tokenData }) => {
         <Flex fontFamily='mono' fontSize='lg' fontWeight={700}>
           HAUS
           <CopyToClipboard
-            text={UBERHAUS_STAKING_TOKEN}
+            text={UBERHAUS_DATA.STAKING_TOKEN}
             onCopy={handleCopy}
             ml={4}
           >

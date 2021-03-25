@@ -1,14 +1,14 @@
 import React from 'react';
 import { Box, Select, FormLabel } from '@chakra-ui/react';
 
-import {
-  UBERHAUS_STAKING_TOKEN,
-  UBERHAUS_STAKING_TOKEN_SYMBOL,
-} from '../utils/uberhaus';
+import { UBERHAUS_DATA } from '../utils/uberhaus';
 import TextBox from '../components/TextBox';
 
 const temporaryTokenOptions = [
-  { name: UBERHAUS_STAKING_TOKEN_SYMBOL, value: UBERHAUS_STAKING_TOKEN },
+  {
+    name: UBERHAUS_DATA.STAKING_TOKEN_SYMBOL,
+    value: UBERHAUS_DATA.STAKING_TOKEN,
+  },
 ];
 
 const TokenSelect = ({

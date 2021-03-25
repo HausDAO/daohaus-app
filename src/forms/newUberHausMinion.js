@@ -21,10 +21,7 @@ import { createPoll } from '../services/pollService';
 import { useUser } from '../contexts/UserContext';
 import { useOverlay } from '../contexts/OverlayContext';
 import { useDao } from '../contexts/DaoContext';
-import {
-  UBERHAUS_ADDRESS,
-  UBERHAUS_MINION_REWARDS_FACTOR,
-} from '../utils/uberhaus';
+import { UBERHAUS_DATA } from '../utils/uberhaus';
 import AddressInput from './addressInput';
 import { isEthAddress } from '../utils/general';
 
@@ -75,10 +72,10 @@ const NewUberHausMinion = ({
     const ZERO_ADDRESS = '0x0000000000000000000000000000000000000000';
     const summonParams = [
       daoid,
-      UBERHAUS_ADDRESS,
+      UBERHAUS_DATA.ADDRESS,
       ZERO_ADDRESS,
       values.memberApplicant,
-      UBERHAUS_MINION_REWARDS_FACTOR,
+      UBERHAUS_DATA.MINION_REWARDS_FACTOR,
       values.details,
     ];
 

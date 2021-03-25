@@ -16,7 +16,7 @@ import AddressInput from './addressInput';
 import { createHash, detailsToJSON } from '../utils/general';
 import { useOverlay } from '../contexts/OverlayContext';
 import DelegateMenu from '../components/DelegateMenu';
-import { UBERHAUS_ADDRESS } from '../utils/uberhaus';
+import { UBERHAUS_DATA } from '../utils/uberhaus';
 import { useParams } from 'react-router-dom';
 import { useUser } from '../contexts/UserContext';
 import { createPoll } from '../services/pollService';
@@ -104,7 +104,7 @@ const DelegateProposalForm = ({
     });
 
     const args = [
-      UBERHAUS_ADDRESS,
+      UBERHAUS_DATA.ADDRESS,
       values.memberApplicant,
       timePeriod?.toString() || values.delegateTerm,
       details,

@@ -23,7 +23,7 @@ import { useInjectedProvider } from '../contexts/InjectedProviderContext';
 import { TokenService } from '../services/tokenService';
 import MaxOutInput from '../components/maxInput';
 import TokenSelect from './tokenSelect';
-import { UBERHAUS_NETWORK } from '../utils/uberhaus';
+import { UBERHAUS_DATA } from '../utils/uberhaus';
 
 const FormWrapper = styled.form`
   width: 100%;
@@ -75,7 +75,7 @@ const PullForm = ({ uberHausMinion, uberDelegate, uberOverview }) => {
         setLoadToken(true);
 
         const tokenService = TokenService({
-          chainID: UBERHAUS_NETWORK,
+          chainID: UBERHAUS_DATA.NETWORK,
           tokenAddress: pullToken,
         });
 
@@ -102,7 +102,7 @@ const PullForm = ({ uberHausMinion, uberDelegate, uberOverview }) => {
       try {
         const delegate = await UberHausMinionService({
           uberHausMinion: uberHausMinion.minionAddress,
-          chainID: UBERHAUS_NETWORK,
+          chainID: UBERHAUS_DATA.NETWORK,
         })('delegateByAddress')({ args: [uberDelegate] });
         if (delegate) {
           setDelegateObj(delegate);
