@@ -13,7 +13,7 @@ import { utils } from 'web3';
 import React, { useState, useEffect } from 'react';
 import TextBox from '../components/TextBox';
 import { useDao } from '../contexts/DaoContext';
-import { UBERHAUS_STAKING_TOKEN_SYMBOL } from '../utils/uberhaus';
+import { UBERHAUS_DATA } from '../utils/uberhaus';
 
 const DaoToDaoStakingTributeInput = ({ register, setValue, stakingToken }) => {
   const [balance, setBalance] = useState(0);
@@ -118,7 +118,7 @@ const DaoToDaoStakingTributeInput = ({ register, setValue, stakingToken }) => {
           disabled={noWhitelistOrBalance}
         />
         <InputRightAddon background='primary.500' p={2}>
-          {UBERHAUS_STAKING_TOKEN_SYMBOL}
+          {UBERHAUS_DATA.STAKING_TOKEN_SYMBOL}
         </InputRightAddon>
       </InputGroup>
       {noWhitelistOrBalance ? (

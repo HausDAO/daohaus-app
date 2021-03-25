@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { Button, FormControl, Flex, Icon, Box } from '@chakra-ui/react';
 import { RiErrorWarningLine } from 'react-icons/ri';
-import { UBERHAUS_ADDRESS, UBERHAUS_STAKING_TOKEN } from '../utils/uberhaus';
+import { UBERHAUS_DATA } from '../utils/uberhaus';
 import molochAbi from '../contracts/molochV2.json';
 
 import { useOverlay } from '../contexts/OverlayContext';
@@ -99,8 +99,8 @@ const RageQuitProposalForm = ({ uberHausMinion, uberMembers }) => {
 
     const args = [
       daoid,
-      UBERHAUS_ADDRESS,
-      UBERHAUS_STAKING_TOKEN,
+      UBERHAUS_DATA.ADDRESS,
+      UBERHAUS_DATA.STAKING_TOKEN,
       '0',
       hexData,
       details,

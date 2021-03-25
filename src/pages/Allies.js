@@ -13,7 +13,7 @@ import { useInjectedProvider } from '../contexts/InjectedProviderContext';
 import { useSessionStorage } from '../hooks/useSessionStorage';
 import { useParams } from 'react-router-dom';
 import { bigGraphQuery } from '../utils/theGraph';
-import { UBERHAUS_ADDRESS } from '../utils/uberhaus';
+import { UBERHAUS_DATA } from '../utils/uberhaus';
 import { UberHausMinionService } from '../services/uberHausMinionService';
 
 const Allies = ({
@@ -47,7 +47,7 @@ const Allies = ({
 
     const bigQueryOptions = {
       args: {
-        daoID: UBERHAUS_ADDRESS,
+        daoID: UBERHAUS_DATA.ADDRESS,
         chainID: '0x2a',
       },
       getSetters: [
@@ -75,7 +75,7 @@ const Allies = ({
     return daoOverview?.minions?.find(
       (minion) =>
         minion.minionType === 'UberHaus minion' &&
-        minion.uberHausAddress === UBERHAUS_ADDRESS,
+        minion.uberHausAddress === UBERHAUS_DATA.ADDRESS,
     );
   }, [daoOverview]);
 

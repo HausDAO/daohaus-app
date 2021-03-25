@@ -4,7 +4,7 @@ import { CopyToClipboard } from 'react-copy-to-clipboard';
 
 import ContentBox from '../components/ContentBox';
 import TextBox from '../components/TextBox';
-import StakingSnapshot from '../components/stakingSnapshot';
+// import StakingSnapshot from '../components/stakingSnapshot';
 import ClanCard from '../components/clanCard';
 import RonanCard from '../components/ronanCard';
 import ShogunCard from '../components/shogunCard';
@@ -12,8 +12,9 @@ import ShogunCard from '../components/shogunCard';
 import { useOverlay } from '../contexts/OverlayContext';
 import MainViewLayout from '../components/mainViewLayout';
 import { FaCopy } from 'react-icons/fa';
+import { UBERHAUS_DATA } from '../utils/uberhaus';
 
-const Staking = () => {
+const Staking = ({ daoMetaData }) => {
   const onStakeHaus = () => {};
 
   const StakeHausBtn = () => (
@@ -21,6 +22,10 @@ const Staking = () => {
       stake $haus
     </Button>
   );
+
+  if (!daoMetaData?.isUberHaus) {
+    return null;
+  }
 
   return (
     <MainViewLayout header='Stake' headerEl={<StakeHausBtn />} isDao={true}>
@@ -47,11 +52,11 @@ const Staking = () => {
           </Flex>
           <PriceBox />
         </Flex>
-        <TextBox size='sm' mb={3} textTransform='uppercase'>
+        {/* <TextBox size='sm' mb={3} textTransform='uppercase'>
           staking snapshot
-        </TextBox>
+        </TextBox> */}
       </Box>
-      <StakingSnapshot />
+      {/* <StakingSnapshot /> */}
     </MainViewLayout>
   );
 };
@@ -60,7 +65,6 @@ export default Staking;
 
 const PriceBox = ({ tokenData }) => {
   const { successToast } = useOverlay();
-  const addr = '0x1...';
 
   const handleCopy = () =>
     successToast({
@@ -75,7 +79,11 @@ const PriceBox = ({ tokenData }) => {
         </TextBox>
         <Flex fontFamily='mono' fontSize='lg' fontWeight={700}>
           HAUS
-          <CopyToClipboard text={addr} onCopy={handleCopy} ml={4}>
+          <CopyToClipboard
+            text={UBERHAUS_DATA.STAKING_TOKEN}
+            onCopy={handleCopy}
+            ml={4}
+          >
             <Icon as={FaCopy} _hover={{ cursor: 'pointer' }} />
           </CopyToClipboard>
         </Flex>
@@ -85,7 +93,7 @@ const PriceBox = ({ tokenData }) => {
           Price:
         </TextBox>
         <Box fontFamily='mono' fontSize='lg' fontWeight={700}>
-          $17.81
+          TBD
         </Box>
       </Flex>
     </ContentBox>
@@ -107,7 +115,11 @@ const PriceBox = ({ tokenData }) => {
         </TextBox>
         <Flex fontFamily='mono' fontSize='lg' fontWeight={700}>
           HAUS
-          <CopyToClipboard text={addr} onCopy={handleCopy} ml={4}>
+          <CopyToClipboard
+            text={UBERHAUS_DATA.STAKING_TOKEN}
+            onCopy={handleCopy}
+            ml={4}
+          >
             <Icon as={FaCopy} _hover={{ cursor: 'pointer' }} />
           </CopyToClipboard>
         </Flex>
@@ -117,7 +129,7 @@ const PriceBox = ({ tokenData }) => {
           Price:
         </TextBox>
         <Box fontFamily='mono' fontSize='lg' fontWeight={700}>
-          $17.81
+          TBD
         </Box>
       </Flex>
     </ContentBox>

@@ -21,12 +21,7 @@ import { createHash, detailsToJSON } from '../utils/general';
 import { useOverlay } from '../contexts/OverlayContext';
 import DaoToDaoStakingTributeInput from './daoToDaoStakingTributeInput';
 import { useDao } from '../contexts/DaoContext';
-import {
-  UBERHAUS_ADDRESS,
-  UBERHAUS_STAKING_TOKEN,
-  UBERHAUS_STAKING_TOKEN_DECIMALS,
-  UBERHAUS_STAKING_TOKEN_SYMBOL,
-} from '../utils/uberhaus';
+import { UBERHAUS_DATA } from '../utils/uberhaus';
 import { useParams } from 'react-router-dom';
 import { valToDecimalString } from '../utils/tokenValue';
 import { createPoll } from '../services/pollService';
@@ -75,20 +70,20 @@ const StakeProposalForm = () => {
       const uberHausMinionData = daoOverview.minions.find(
         (minion) =>
           minion.minionType === 'UberHaus minion' &&
-          minion.uberHausAddress === UBERHAUS_ADDRESS,
+          minion.uberHausAddress === UBERHAUS_DATA.ADDRESS,
       );
 
       const tokenBalance = await TokenService({
         chainID: daochain,
-        tokenAddress: UBERHAUS_STAKING_TOKEN,
+        tokenAddress: UBERHAUS_DATA.STAKING_TOKEN,
         is32: false,
       })('balanceOf')(uberHausMinionData.minionAddress);
 
       setStakingToken({
-        label: UBERHAUS_STAKING_TOKEN_SYMBOL,
-        symbol: UBERHAUS_STAKING_TOKEN_SYMBOL,
-        value: UBERHAUS_STAKING_TOKEN,
-        decimals: UBERHAUS_STAKING_TOKEN_DECIMALS,
+        label: UBERHAUS_DATA.STAKING_TOKEN_SYMBOL,
+        symbol: UBERHAUS_DATA.STAKING_TOKEN_SYMBOL,
+        value: UBERHAUS_DATA.STAKING_TOKEN,
+        decimals: UBERHAUS_DATA.STAKING_TOKEN_DECIMALS,
         balance: tokenBalance,
         uberHausMinionData,
       });
@@ -105,7 +100,7 @@ const StakeProposalForm = () => {
     const uberHausMinionData = daoOverview.minions.find(
       (minion) =>
         minion.minionType === 'UberHaus minion' &&
-        minion.uberHausAddress === UBERHAUS_ADDRESS,
+        minion.uberHausAddress === UBERHAUS_DATA.ADDRESS,
     );
     const hash = createHash();
     const details = detailsToJSON({
@@ -118,7 +113,7 @@ const StakeProposalForm = () => {
     const tributeOffered = values.tributeOffered
       ? valToDecimalString(
           values.tributeOffered,
-          UBERHAUS_STAKING_TOKEN.toLowerCase(),
+          UBERHAUS_DATA.STAKING_TOKEN.toLowerCase(),
           daoOverview.tokenBalances,
         )
       : '0';
@@ -128,7 +123,7 @@ const StakeProposalForm = () => {
       values.sharesRequested || '0',
       '0',
       tributeOffered,
-      UBERHAUS_STAKING_TOKEN,
+      UBERHAUS_DATA.STAKING_TOKEN,
       '0',
       daoOverview.depositToken.tokenAddress,
       details,
@@ -145,8 +140,8 @@ const StakeProposalForm = () => {
 
     const args = [
       daoid,
-      UBERHAUS_ADDRESS,
-      UBERHAUS_STAKING_TOKEN,
+      UBERHAUS_DATA.ADDRESS,
+      UBERHAUS_DATA.STAKING_TOKEN,
       '0',
       hexData,
       details,
@@ -263,8 +258,8 @@ const StakeProposalForm = () => {
           <Box color='secondary.300' fontSize='m' mr={5}>
             <Icon as={RiErrorWarningLine} color='secondary.300' mr={2} />
             You can&apos;t staking into UberHAUS until your UberHAUS minion has
-            a {UBERHAUS_STAKING_TOKEN_SYMBOL} balance. Send{' '}
-            {UBERHAUS_STAKING_TOKEN_SYMBOL} your minion&apos;s address:{' '}
+            a {UBERHAUS_DATA.STAKING_TOKEN_SYMBOL} balance. Send{' '}
+            {UBERHAUS_DATA.STAKING_TOKEN_SYMBOL} your minion&apos;s address:{' '}
             {stakingToken?.uberHausMinionData.minionAddress}
             <CopyToClipboard
               text={stakingToken?.uberHausMinionData.minionAddress}

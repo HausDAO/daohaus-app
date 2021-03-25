@@ -116,33 +116,6 @@ const StakeCard = (props) => {
           >
             {submitBtn?.label}
           </Button>
-          {/* <Flex align='center' mb={3}>
-            <TextBox size='xs' transform='translateY(2px)' mr={2}>
-              Earned:
-            </TextBox>
-            <Box fontFamily='mono' fontSize='lg' fontWeight={700}>
-              {amtEarned}
-            </Box>
-          </Flex>
-          <Flex>
-            <Button
-              size='sm'
-              variant='outline'
-              px='1.5rem'
-              mr={4}
-              onClick={onHarvest}
-            >
-              Harvest
-            </Button>
-            <Button
-              size='sm'
-              variant='outline'
-              px='1.5rem'
-              onClick={onWithdraw}
-            >
-              Withdraw All
-            </Button>
-          </Flex> */}
         </>
       )}
     </ContentBox>

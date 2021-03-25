@@ -21,11 +21,7 @@ import { DAO_POLL } from '../graphQL/dao-queries';
 import MainViewLayout from '../components/mainViewLayout';
 import { useParams } from 'react-router-dom';
 import { capitalize } from '../utils/general';
-import {
-  UBERHAUS_BURNER_TOKENS,
-  UBERHAUS_NETWORK,
-  UBERHAUS_NETWORK_NAME,
-} from '../utils/uberhaus';
+import { UBERHAUS_DATA } from '../utils/uberhaus';
 
 const tokenMsg =
   'Token addresses are different across chains. If you would like to clone the same tokens to a different network, you will need to manually add the equivalent token addresses here.';
@@ -51,7 +47,7 @@ const Clone = ({ daoOverview, daoMembers, isUberHaus = false }) => {
     if (injectedChain && daoOverview && daoMembers) {
       let tokens = tokenMsg;
       if (isUberHaus) {
-        tokens = UBERHAUS_BURNER_TOKENS;
+        tokens = UBERHAUS_DATA.BURNER_TOKENS;
       } else if (injectedChain.chainId === daochain) {
         tokens = cloneTokens(daoOverview);
       }
@@ -164,7 +160,9 @@ const Clone = ({ daoOverview, daoMembers, isUberHaus = false }) => {
   };
 
   const uberCloneWrongNetwork =
-    isUberHaus && injectedChain && injectedChain.chain_id !== UBERHAUS_NETWORK;
+    isUberHaus &&
+    injectedChain &&
+    injectedChain.chain_id !== UBERHAUS_DATA.NETWORK;
 
   if (!daoData) {
     return (
@@ -205,7 +203,7 @@ const Clone = ({ daoOverview, daoMembers, isUberHaus = false }) => {
           textAlign='center'
         >
           <Box fontSize='3xl' fontFamily='heading' fontWeight={700} mb={10}>
-            Switch your network to {UBERHAUS_NETWORK_NAME} to move forward
+            Switch your network to {UBERHAUS_DATA.NETWORK_NAME} to move forward
           </Box>
         </Box>
       </MainViewLayout>
