@@ -252,7 +252,7 @@ const DaoToDaoManager = ({
                   </Box>
                 ) : (
                   <>
-                    {!userNetworkMismatchOrNotMember ? (
+                    {userNetworkMismatchOrNotMember ? (
                       <Box fontSize='md' my={2}>
                         Are you a member of this DAO and on the correct network?
                       </Box>
