@@ -9,11 +9,14 @@ import { MetaDataProvider } from './MetaDataContext';
 import { TokenProvider } from './TokenContext';
 import { TXProvider } from './TXContext';
 import { DaoMemberProvider } from './DaoMemberContext';
+import { useUser } from './UserContext';
+// import { UBERHAUS_DATA } from '../utils/uberhaus';
 
 export const DaoContext = createContext();
 
 export const DaoProvider = ({ children }) => {
   const { daoid, daochain } = useParams();
+  const { apiData } = useUser();
   const { injectedChain, address } = useInjectedProvider();
 
   const daoNetworkData = supportedChains[daochain];
@@ -35,14 +38,27 @@ export const DaoProvider = ({ children }) => {
     `members-${daoid}`,
     null,
   );
+  const [uberMinionData, setUberMinionData] = useSessionStorage(
+    `uberMinionData`,
+    null,
+  );
+  // const [isUberHaus, setIsUberHaus] = useState(null);
 
   // const [currentDaoAddress, setCurrentDaoAddress] = useState(daoid);
   const hasPerformedBatchQuery = useRef(false);
+  const currentDao = useRef(null);
 
   useEffect(() => {
     // This condition is brittle. If one request passes, but the rest fail
     // this stops the app from fetching. We'll need something better later on.
-    if (daoProposals || daoActivities || daoOverview || daoMembers) return;
+    if (
+      daoProposals ||
+      daoActivities ||
+      daoOverview ||
+      daoMembers ||
+      uberMinionData
+    )
+      return;
     if (
       !daoid ||
       !daochain ||
@@ -63,11 +79,11 @@ export const DaoProvider = ({ children }) => {
           setter: { setDaoProposals, setDaoActivities },
         },
         { getter: 'getMembers', setter: setDaoMembers },
+        { getter: 'uberMinionData', setter: setUberMinionData },
       ],
     };
 
     bigGraphQuery(bigQueryOptions);
-
     hasPerformedBatchQuery.current = true;
   }, [
     daoid,
@@ -82,6 +98,7 @@ export const DaoProvider = ({ children }) => {
     setDaoOverview,
     setDaoProposals,
     isCorrectNetwork,
+    uberMinionData,
   ]);
 
   const refetch = () => {
@@ -97,11 +114,35 @@ export const DaoProvider = ({ children }) => {
           setter: { setDaoProposals, setDaoActivities },
         },
         { getter: 'getMembers', setter: setDaoMembers },
+        { getter: 'uberMinionData', setter: setUberMinionData },
       ],
     };
-
+    currentDao.current = null;
     bigGraphQuery(bigQueryOptions);
   };
+
+  useEffect(() => {
+    if (!apiData || !daoMembers || !uberMinionData) return;
+    if (currentDao.current === daoid) return;
+    const membersWithUberData = daoMembers.map((member) => {
+      const minionMember = uberMinionData.find(
+        (minion) => minion.minionAddress === member.memberAddress,
+      );
+      if (minionMember) {
+        return {
+          ...member,
+          uberMinion: minionMember,
+          uberMeta: apiData[minionMember.molochAddress][0],
+          isUberMinion: true,
+        };
+      } else {
+        return member;
+      }
+    });
+
+    setDaoMembers(membersWithUberData);
+    currentDao.current = daoid;
+  }, [daoMembers, daoid, apiData, uberMinionData]);
 
   return (
     <DaoContext.Provider
@@ -135,6 +176,7 @@ export const useDao = () => {
     daoProposals,
     daoActivities,
     daoMembers,
+
     daoOverview,
     isCorrectNetwork,
     refetch,
@@ -143,6 +185,7 @@ export const useDao = () => {
   return {
     daoProposals,
     daoActivities,
+
     daoMembers,
     daoOverview,
     isCorrectNetwork,

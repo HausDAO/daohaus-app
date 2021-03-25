@@ -1,13 +1,13 @@
 import { graphQuery } from './apollo';
 import { BANK_BALANCES } from '../graphQL/bank-queries';
-import { GET_TRANSMUTATION } from '../graphQL/boost-queries';
 import { DAO_ACTIVITIES, HOME_DAO } from '../graphQL/dao-queries';
 import { MEMBERS_LIST } from '../graphQL/member-queries';
 import { proposalResolver, daoResolver } from '../utils/resolvers';
 import { getGraphEndpoint } from '../utils/chain';
 import { fetchTokenData } from '../utils/tokenValue';
 import { omit } from './general';
-import { UBERHAUS_DATA } from '../graphQL/uberhaus-queries';
+import { UBERHAUS_QUERY, UBER_MINIONS } from '../graphQL/uberhaus-queries';
+import { UBERHAUS_DATA } from './uberhaus';
 
 export const graphFetchAll = async (args, items = [], skip = 0) => {
   try {
@@ -46,7 +46,7 @@ export const fetchBankValues = async (args) => {
 export const fetchUberHausData = async (args) => {
   return graphQuery({
     endpoint: getGraphEndpoint(args.chainID, 'subgraph_url'),
-    query: UBERHAUS_DATA,
+    query: UBERHAUS_QUERY,
     variables: {
       molochAddress: args.molochAddress,
       memberAddress: args.memberAddress,
@@ -112,6 +112,7 @@ const completeQueries = {
           }),
         ),
       };
+
       if (setter.setDaoActivities) {
         setter.setDaoActivities(resolvedActivity);
       }
@@ -144,18 +145,26 @@ const completeQueries = {
       console.error(error);
     }
   },
-  async getTransmutations(args, setter) {
-    try {
-      const transmutations = await graphQuery({
-        endpoint: getGraphEndpoint(args.chainID, 'boosts_graph_url'),
-        query: GET_TRANSMUTATION,
-        variables: {
-          contractAddress: args.daoID,
-        },
-      });
-      setter(transmutations);
-    } catch (error) {
-      console.error(error);
+  async uberMinionData(args, setter) {
+    console.log(args);
+    console.log(UBERHAUS_DATA.ADDRESS);
+    if (args.daoID === UBERHAUS_DATA.ADDRESS) {
+      try {
+        const uberMinions = await graphQuery({
+          endpoint: getGraphEndpoint(args.chainID, 'subgraph_url'),
+          query: UBER_MINIONS,
+          variables: {
+            minionType: 'UberHaus minion',
+            molochAddress: args.daoID,
+          },
+        });
+
+        setter(uberMinions?.minions);
+      } catch (error) {
+        console.error(error);
+      }
+    } else {
+      setter(null);
     }
   },
 };
@@ -171,7 +180,6 @@ const buildCrossChainQuery = (supportedChains, endpointType) => {
   let array = [];
 
   for (const chain in supportedChains) {
-    // console.log(chain);
     array = [
       ...array,
       {
@@ -194,8 +202,10 @@ export const hubChainQuery = async ({
   reactSetter,
   apiFetcher,
   variables,
+  setApiData,
 }) => {
   const metaDataMap = await apiFetcher();
+  setApiData(metaDataMap);
 
   const daoMapLookup = (address, chainName) => {
     const daoMatch = metaDataMap[address] || [];
