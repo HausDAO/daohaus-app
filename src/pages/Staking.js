@@ -13,8 +13,12 @@ import { useOverlay } from '../contexts/OverlayContext';
 import MainViewLayout from '../components/mainViewLayout';
 import { FaCopy } from 'react-icons/fa';
 import { UBERHAUS_DATA } from '../utils/uberhaus';
+import { useParams } from 'react-router';
 
-const Staking = ({ daoMetaData }) => {
+const Staking = () => {
+  const { daoid } = useParams();
+  const isUberHaus = daoid === UBERHAUS_DATA.ADDRESS;
+
   const onStakeHaus = () => {};
 
   const StakeHausBtn = () => (
@@ -23,7 +27,7 @@ const Staking = ({ daoMetaData }) => {
     </Button>
   );
 
-  if (!daoMetaData?.isUberHaus) {
+  if (!isUberHaus) {
     return null;
   }
 

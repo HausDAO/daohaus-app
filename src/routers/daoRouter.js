@@ -105,7 +105,7 @@ const DaoRouter = () => {
           />
         </Route>
         <Route exact path={`${path}/staking`}>
-          <Staking daoMetaData={daoMetaData} />
+          <Staking />
         </Route>
         <Route exact path={`${path}/settings/clone`}>
           <Clone daoMembers={daoMembers} daoOverview={daoOverview} />
