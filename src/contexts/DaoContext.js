@@ -16,6 +16,7 @@ import { TokenProvider } from './TokenContext';
 import { TXProvider } from './TXContext';
 import { DaoMemberProvider } from './DaoMemberContext';
 import { useUser } from './UserContext';
+import { UBERHAUS_DATA } from '../utils/uberhaus';
 // import { UBERHAUS_DATA } from '../utils/uberhaus';
 
 export const DaoContext = createContext();
@@ -44,7 +45,10 @@ export const DaoProvider = ({ children }) => {
     `members-${daoid}`,
     null,
   );
-  const [uberMinionData, setUberMinionData] = useState(null);
+  const [uberMinionData, setUberMinionData] = useSessionStorage(
+    `parentDaoData-${daoid}`,
+    null,
+  );
   const [isUberHaus, setIsUberHaus] = useState(false);
 
   // const [currentDaoAddress, setCurrentDaoAddress] = useState(daoid);
@@ -125,26 +129,32 @@ export const DaoProvider = ({ children }) => {
   };
 
   useEffect(() => {
-    if (!apiData || !daoMembers || !uberMinionData) return;
-    if (currentDao.current === daoid) return;
-    const membersWithUberData = daoMembers.map((member) => {
-      const minionMember = uberMinionData.find(
-        (minion) => minion.minionAddress === member.memberAddress,
-      );
-      if (minionMember) {
-        return {
-          ...member,
-          uberMinion: minionMember,
-          uberMeta: apiData[minionMember.molochAddress][0],
-          isUberMinion: true,
-        };
-      } else {
-        return member;
-      }
-    });
-    setIsUberHaus(true);
-    setDaoMembers(membersWithUberData);
-    currentDao.current = daoid;
+    if (apiData && daoMembers && uberMinionData) {
+      if (currentDao.current === daoid) return;
+      console.log(uberMinionData);
+      const membersWithUberData = daoMembers.map((member) => {
+        const minionMember = uberMinionData.find(
+          (minion) => minion.minionAddress === member.memberAddress,
+        );
+        if (minionMember) {
+          return {
+            ...member,
+            uberMinion: minionMember,
+            uberMeta: apiData[minionMember.molochAddress][0],
+            isUberMinion: true,
+          };
+        } else {
+          return member;
+        }
+      });
+      setIsUberHaus(true);
+      currentDao.current = daoid;
+      setDaoMembers(membersWithUberData);
+    } else if (apiData && daoMembers && daoid !== UBERHAUS_DATA.ADDRESS) {
+      currentDao.current = daoid;
+      setIsUberHaus(false);
+      console.log('fired');
+    }
   }, [daoMembers, daoid, apiData, uberMinionData]);
 
   console.log(`isUberhaus`, isUberHaus);
@@ -152,6 +162,7 @@ export const DaoProvider = ({ children }) => {
     <DaoContext.Provider
       value={{
         daoProposals,
+        isUberHaus,
         daoActivities,
         daoMembers,
         daoOverview,
@@ -182,6 +193,7 @@ export const useDao = () => {
     daoMembers,
     setIsUberHaus,
     daoOverview,
+    isUberHaus,
     isCorrectNetwork,
     refetch,
     hasPerformedBatchQuery, // Ref, not state
@@ -189,6 +201,7 @@ export const useDao = () => {
   return {
     daoProposals,
     daoActivities,
+    isUberHaus,
     setIsUberHaus,
     daoMembers,
     daoOverview,
