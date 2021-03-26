@@ -1,4 +1,10 @@
-import React, { useEffect, useContext, createContext, useRef } from 'react';
+import React, {
+  useEffect,
+  useContext,
+  createContext,
+  useRef,
+  useState,
+} from 'react';
 import { useParams } from 'react-router-dom';
 import { bigGraphQuery } from '../utils/theGraph';
 import { useSessionStorage } from '../hooks/useSessionStorage';
@@ -38,11 +44,8 @@ export const DaoProvider = ({ children }) => {
     `members-${daoid}`,
     null,
   );
-  const [uberMinionData, setUberMinionData] = useSessionStorage(
-    `uberMinionData`,
-    null,
-  );
-  // const [isUberHaus, setIsUberHaus] = useState(null);
+  const [uberMinionData, setUberMinionData] = useState(null);
+  const [isUberHaus, setIsUberHaus] = useState(false);
 
   // const [currentDaoAddress, setCurrentDaoAddress] = useState(daoid);
   const hasPerformedBatchQuery = useRef(false);
@@ -139,11 +142,12 @@ export const DaoProvider = ({ children }) => {
         return member;
       }
     });
-
+    setIsUberHaus(true);
     setDaoMembers(membersWithUberData);
     currentDao.current = daoid;
   }, [daoMembers, daoid, apiData, uberMinionData]);
 
+  console.log(`isUberhaus`, isUberHaus);
   return (
     <DaoContext.Provider
       value={{
@@ -151,6 +155,7 @@ export const DaoProvider = ({ children }) => {
         daoActivities,
         daoMembers,
         daoOverview,
+        setIsUberHaus,
         isCorrectNetwork,
         refetch,
         hasPerformedBatchQuery, // Ref, not state
@@ -170,13 +175,12 @@ export const DaoProvider = ({ children }) => {
     </DaoContext.Provider>
   );
 };
-
 export const useDao = () => {
   const {
     daoProposals,
     daoActivities,
     daoMembers,
-
+    setIsUberHaus,
     daoOverview,
     isCorrectNetwork,
     refetch,
@@ -185,7 +189,7 @@ export const useDao = () => {
   return {
     daoProposals,
     daoActivities,
-
+    setIsUberHaus,
     daoMembers,
     daoOverview,
     isCorrectNetwork,

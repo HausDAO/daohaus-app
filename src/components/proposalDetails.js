@@ -35,6 +35,8 @@ import { useInjectedProvider } from '../contexts/InjectedProviderContext';
 import DiscourseProposalTopic from './discourseProposalTopic';
 import { useMetaData } from '../contexts/MetaDataContext';
 import { UberHausMinionService } from '../services/uberHausMinionService';
+// import { useDao } from '../contexts/DaoContext';
+import { UBERHAUS_DATA } from '../utils/uberhaus';
 
 const UBER_LINK =
   '/dao/0x2a/0x96714523778e51b898b072089e5615d4db71078e/proposals';
@@ -59,6 +61,7 @@ const ProposalDetails = ({ proposal, daoMember }) => {
   const { address } = useInjectedProvider();
   const { customTerms } = useMetaData();
   const [status, setStatus] = useState(null);
+  const { daoid } = useParams();
 
   useEffect(() => {
     if (proposal) {
@@ -66,6 +69,34 @@ const ProposalDetails = ({ proposal, daoMember }) => {
       setStatus(statusStr);
     }
   }, [proposal]);
+
+  const handleRecipientUI = () => {
+    if (daoid === UBERHAUS_DATA.ADDRESS) {
+      return <UberDaoBox proposal={proposal} />;
+    } else if (proposal?.minion?.minionType !== MINION_TYPES.UBER) {
+      return <MinionBox proposal={proposal} />;
+    } else {
+      <Box key={proposal?.proposalType}>
+        <TextBox size='xs' mb={2}>
+          Recipient
+        </TextBox>
+        <Skeleton isLoaded={proposal}>
+          {proposal ? (
+            <AddressAvatar
+              addr={
+                proposal.applicant === AddressZero
+                  ? proposal.proposer
+                  : proposal.applicant
+              }
+              alwaysShowName={true}
+            />
+          ) : (
+            '--'
+          )}
+        </Skeleton>
+      </Box>;
+    }
+  };
 
   return (
     <Box pt={6}>
@@ -240,29 +271,7 @@ const ProposalDetails = ({ proposal, daoMember }) => {
               )}
             </Skeleton>
           </Box>
-          {proposal?.minion?.minionType !== MINION_TYPES.UBER ? (
-            <Box key={proposal?.proposalType}>
-              <TextBox size='xs' mb={2}>
-                Recipient
-              </TextBox>
-              <Skeleton isLoaded={proposal}>
-                {proposal ? (
-                  <AddressAvatar
-                    addr={
-                      proposal.applicant === AddressZero
-                        ? proposal.proposer
-                        : proposal.applicant
-                    }
-                    alwaysShowName={true}
-                  />
-                ) : (
-                  '--'
-                )}
-              </Skeleton>
-            </Box>
-          ) : (
-            <MinionBox proposal={proposal} />
-          )}
+          {handleRecipientUI()}
           <Flex align='center'>
             {memberVote(proposal, address) !== null &&
               (+memberVote(proposal, address) === 1 ? (
@@ -390,6 +399,36 @@ const DelegateBox = ({ proposal }) => {
           <Spinner />
         )}
       </Box>
+    </Box>
+  );
+};
+
+const UberDaoBox = ({ proposal }) => {
+  // const { daoMembers } = useDao();
+
+  // const useMemo(() => {
+  //   if(proposal && daoMembers)
+
+  // },[daoMembers, proposal])
+  return (
+    <Box key={proposal?.proposalType}>
+      <TextBox size='xs' mb={2}>
+        Recipient
+      </TextBox>
+      <Skeleton isLoaded={proposal}>
+        {proposal ? (
+          <AddressAvatar
+            addr={
+              proposal.applicant === AddressZero
+                ? proposal.proposer
+                : proposal.applicant
+            }
+            alwaysShowName={true}
+          />
+        ) : (
+          '--'
+        )}
+      </Skeleton>
     </Box>
   );
 };
