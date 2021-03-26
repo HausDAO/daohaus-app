@@ -23,7 +23,7 @@ const Allies = ({
   proposals,
   daoMembers,
 }) => {
-  const { daoid, daochain } = useParams();
+  const { daoid } = useParams();
 
   const [uberProposals, setUberProposals] = useSessionStorage(
     `U-proposals`,
@@ -43,12 +43,12 @@ const Allies = ({
     if (uberProposals || uberMembers || uberOverview) return;
 
     // do not fetch without necessary data
-    if (!daoid || !daochain || hasPerformedBatchQuery.current) return;
+    if (!daoid || hasPerformedBatchQuery.current) return;
 
     const bigQueryOptions = {
       args: {
         daoID: UBERHAUS_DATA.ADDRESS,
-        chainID: '0x2a',
+        chainID: UBERHAUS_DATA.NETWORK,
       },
       getSetters: [
         { getter: 'getOverview', setter: setUberOveriew },
@@ -62,14 +62,7 @@ const Allies = ({
     bigGraphQuery(bigQueryOptions);
 
     hasPerformedBatchQuery.current = true;
-  }, [
-    daoid,
-    daochain,
-    uberMembers,
-    uberProposals,
-    uberOverview,
-    uberProposals,
-  ]);
+  }, [daoid, uberMembers, uberProposals, uberOverview, uberProposals]);
 
   const uberHausMinion = useMemo(() => {
     return daoOverview?.minions?.find(
@@ -83,7 +76,7 @@ const Allies = ({
     const getDelegate = async () => {
       try {
         const delegate = await UberHausMinionService({
-          chainID: daochain,
+          chainID: UBERHAUS_DATA.NETWORK,
           uberHausMinion: uberHausMinion.minionAddress,
         })('currentDelegate')();
         setUberDelegate(delegate);

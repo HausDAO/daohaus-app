@@ -7,7 +7,7 @@ import { useOverlay } from '../contexts/OverlayContext';
 import { displayBalance, valToDecimalString } from '../utils/tokenValue';
 import styled from '@emotion/styled';
 import { UBERHAUS_DATA } from '../utils/uberhaus';
-import { useParams } from 'react-router-dom';
+// import { useParams } from 'react-router-dom';
 import { createPoll } from '../services/pollService';
 import { UberHausMinionService } from '../services/uberHausMinionService';
 import { useUser } from '../contexts/UserContext';
@@ -25,7 +25,6 @@ const WithdrawForm = ({ uberMembers, uberHausMinion }) => {
   const { cachePoll, resolvePoll } = useUser();
   const { refreshDao } = useTX();
   const { injectedProvider, address } = useInjectedProvider();
-  const { daochain } = useParams();
   const { handleSubmit, errors, register, watch, setValue } = useForm();
 
   const [loading, setLoading] = useState(false);
@@ -89,7 +88,7 @@ const WithdrawForm = ({ uberMembers, uberHausMinion }) => {
       const poll = createPoll({ action: 'withdrawBalance', cachePoll })({
         tokenAddress,
         memberAddress: uberHausMinion.minionAddress,
-        chainID: daochain,
+        chainID: UBERHAUS_DATA.NETWORK,
         uber: true,
         expectedBalance,
         daoID: UBERHAUS_DATA.ADDRESS,
@@ -120,7 +119,7 @@ const WithdrawForm = ({ uberMembers, uberHausMinion }) => {
       await UberHausMinionService({
         web3: injectedProvider,
         uberHausMinion: uberHausMinion.minionAddress,
-        chainID: daochain,
+        chainID: UBERHAUS_DATA.NETWORK,
       })('doWithdraw')({ args, address, poll, onTxHash });
     } catch (err) {
       setD2dProposalModal((prevState) => !prevState);

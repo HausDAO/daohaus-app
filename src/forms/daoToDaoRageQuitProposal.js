@@ -28,7 +28,7 @@ const RageQuitProposalForm = ({ uberHausMinion, uberMembers }) => {
 
   const { injectedProvider, address } = useInjectedProvider();
   const { cachePoll, resolvePoll } = useUser();
-  const { daoid, daochain } = useParams();
+  const { daoid } = useParams();
   const { refreshDao } = useTX();
 
   const { handleSubmit, errors, register, setValue } = useForm();
@@ -110,7 +110,7 @@ const RageQuitProposalForm = ({ uberHausMinion, uberMembers }) => {
       const poll = createPoll({ action: 'uberHausProposeAction', cachePoll })({
         minionAddress: uberHausMinion.minionAddress,
         createdAt: now,
-        chainID: daochain,
+        chainID: UBERHAUS_DATA.NETWORK,
         hash,
         actions: {
           onError: (error, txHash) => {
@@ -127,7 +127,7 @@ const RageQuitProposalForm = ({ uberHausMinion, uberMembers }) => {
             refreshDao();
             resolvePoll(txHash);
             createForumTopic({
-              chainID: daochain,
+              chainID: UBERHAUS_DATA.NETWORK,
               daoID: daoid,
               afterTime: now,
               proposalType: PROPOSAL_TYPES.MINION_UBER_RQ,
@@ -145,7 +145,7 @@ const RageQuitProposalForm = ({ uberHausMinion, uberMembers }) => {
       await UberHausMinionService({
         web3: injectedProvider,
         uberHausMinion: uberHausMinion.minionAddress,
-        chainID: daochain,
+        chainID: UBERHAUS_DATA.NETWORK,
       })('proposeAction')({ args, address, poll, onTxHash });
     } catch (err) {
       setD2dProposalModal((prevState) => !prevState);
