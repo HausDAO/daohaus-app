@@ -39,7 +39,7 @@ const DelegateProposalForm = ({
   uberDelegate,
 }) => {
   const [loading, setLoading] = useState(false);
-  const { daoid, daochain } = useParams();
+  const { daoid } = useParams();
   const { daoMetaData } = useMetaData();
   const { injectedProvider, address } = useInjectedProvider();
   const [timePeriod, setTimePeriod] = useState(0);
@@ -116,7 +116,7 @@ const DelegateProposalForm = ({
         cachePoll,
       })({
         minionAddress: uberHausMinion.minionAddress,
-        chainID: daochain,
+        chainID: UBERHAUS_DATA.NETWORK,
         newDelegateAddress: values?.memberApplicant,
         createdAt: now,
         actions: {
@@ -134,7 +134,7 @@ const DelegateProposalForm = ({
             refreshDao();
             resolvePoll(txHash);
             createForumTopic({
-              chainID: daochain,
+              chainID: UBERHAUS_DATA.NETWORK,
               daoID: daoid,
               afterTime: now,
               proposalType: 'UberHAUS Delegate Proposal',
@@ -152,7 +152,7 @@ const DelegateProposalForm = ({
       await UberHausMinionService({
         web3: injectedProvider,
         uberHausMinion: uberHausMinion.minionAddress,
-        chainID: daochain,
+        chainID: UBERHAUS_DATA.NETWORK,
       })('nominateDelegate')({ args, address, poll, onTxHash });
     } catch (err) {
       setLoading(false);

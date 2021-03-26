@@ -131,7 +131,6 @@ export const DaoProvider = ({ children }) => {
   useEffect(() => {
     if (apiData && daoMembers && uberMinionData) {
       if (currentDao.current === daoid) return;
-      console.log(uberMinionData);
       const membersWithUberData = daoMembers.map((member) => {
         const minionMember = uberMinionData.find(
           (minion) => minion.minionAddress === member.memberAddress,
@@ -153,11 +152,9 @@ export const DaoProvider = ({ children }) => {
     } else if (apiData && daoMembers && daoid !== UBERHAUS_DATA.ADDRESS) {
       currentDao.current = daoid;
       setIsUberHaus(false);
-      console.log('fired');
     }
   }, [daoMembers, daoid, apiData, uberMinionData]);
 
-  console.log(`isUberhaus`, isUberHaus);
   return (
     <DaoContext.Provider
       value={{

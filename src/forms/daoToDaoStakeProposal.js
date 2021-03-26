@@ -37,7 +37,7 @@ const StakeProposalForm = () => {
   const { injectedProvider, address } = useInjectedProvider();
   const { daoOverview } = useDao();
   const { daoMetaData } = useMetaData();
-  const { daoid, daochain } = useParams();
+  const { daoid } = useParams();
   const { cachePoll, resolvePoll } = useUser();
   const toast = useToast();
   const { refreshDao } = useTX();
@@ -74,7 +74,7 @@ const StakeProposalForm = () => {
       );
 
       const tokenBalance = await TokenService({
-        chainID: daochain,
+        chainID: UBERHAUS_DATA.NETWORK,
         tokenAddress: UBERHAUS_DATA.STAKING_TOKEN,
         is32: false,
       })('balanceOf')(uberHausMinionData.minionAddress);
@@ -153,7 +153,7 @@ const StakeProposalForm = () => {
       const poll = createPoll({ action: 'uberHausProposeAction', cachePoll })({
         minionAddress: uberHausMinionData.minionAddress,
         createdAt: now,
-        chainID: daochain,
+        chainID: UBERHAUS_DATA.NETWORK,
         hash,
         actions: {
           onError: (error, txHash) => {
@@ -170,7 +170,7 @@ const StakeProposalForm = () => {
             refreshDao();
             resolvePoll(txHash);
             createForumTopic({
-              chainID: daochain,
+              chainID: UBERHAUS_DATA.NETWORK,
               daoID: daoid,
               afterTime: now,
               proposalType: 'UberHAUS Membership Proposal',
@@ -188,7 +188,7 @@ const StakeProposalForm = () => {
       await UberHausMinionService({
         web3: injectedProvider,
         uberHausMinion: uberHausMinionData.minionAddress,
-        chainID: daochain,
+        chainID: UBERHAUS_DATA.NETWORK,
       })('proposeAction')({ args, address, poll, onTxHash });
     } catch (err) {
       setLoading(false);
