@@ -441,6 +441,7 @@ const DaoToDaoManager = ({
                       membership={uberHausMinion?.uberHausMembership}
                       delegate={uberHausMinion?.uberHausDelegate}
                       handleNominateDelegateClick={handleNominateDelegateClick}
+                      isMember={isMember}
                     />
                     <Box mt={10}>
                       <DaoToDaoProposalCard
@@ -458,6 +459,7 @@ const DaoToDaoManager = ({
                       needDelegateKeySet={needDelegateKeySet}
                       openModal={openModal}
                       handleNominateDelegateClick={handleNominateDelegateClick}
+                      isMember={isMember}
                     />
 
                     {uberHausMinion.openChildProposals.length ? (
