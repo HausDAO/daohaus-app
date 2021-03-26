@@ -89,7 +89,9 @@ export const supportedChains = {
     providers: ['walletconnect'],
     rpc_url: 'https://dai.poa.network',
     abi_api_url:
-      'https://blockscout.com/poa/xdai/api?module=contract&action=getabi&address=',
+      'https://blockscout.com/xdai/mainnet/api?module=contract&action=getabi&address=',
+    tokenlist_api_url:
+      'https://blockscout.com/xdai/mainnet/api?module=account&action=tokenlist&address=',
     metadata_api_url: 'https://data.daohaus.club',
     subgraph_url:
       'https://api.thegraph.com/subgraphs/name/odyssy-automaton/daohaus-xdai',
