@@ -7,6 +7,7 @@ import AddressAvatar from './addressAvatar';
 import UberHausMemberAvatar from './uberHausMemberAvatar';
 
 const UberHausMemberInfoGuts = ({ member, showMenu }) => {
+  console.log(member);
   return (
     <>
       {member && (
@@ -20,6 +21,14 @@ const UberHausMemberInfoGuts = ({ member, showMenu }) => {
             />
             {showMenu ? <ProfileMenu member={member} /> : null}
           </Flex>
+          <Box>
+            <TextBox size='xs' mt={6}>
+              Current Delegate
+            </TextBox>
+            <Flex justify='space-between' mt={3}>
+              <AddressAvatar addr={member.delegateKey} alwaysShowName={true} />
+            </Flex>
+          </Box>
           <Flex w='100%' justify='space-between' mt={6}>
             <Box>
               <TextBox size='xs'>Shares</TextBox>
