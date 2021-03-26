@@ -420,7 +420,7 @@ const UberDaoBox = ({ proposal }) => {
       (member) => member.memberAddress === proposal?.applicant,
     );
 
-    if (minion.isUberMinion) {
+    if (minion?.isUberMinion) {
       setDaoMinion(minion);
     } else {
       setDaoMinion(false);
@@ -429,11 +429,13 @@ const UberDaoBox = ({ proposal }) => {
   console.log(daoMinion);
   return (
     <Box key={proposal?.proposalType}>
-      <TextBox size='xs' mb={2}>
-        DAO
-      </TextBox>
+      {daoMinion?.isUberMinion && (
+        <TextBox size='xs' mb={2}>
+          DAO
+        </TextBox>
+      )}
       <Skeleton isLoaded={proposal}>
-        {daoMinion?.isUberMinion && (
+        {daoMinion?.isUberMinion ? (
           <Flex direction='row' alignItems='center'>
             <Avatar
               name={daoMinion?.uberMeta?.name}
@@ -472,6 +474,8 @@ const UberDaoBox = ({ proposal }) => {
               </CopyToClipboard>
             </Flex>
           </Flex>
+        ) : (
+          <MinionBox proposal={proposal} />
         )}
       </Skeleton>
     </Box>

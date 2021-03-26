@@ -105,10 +105,11 @@ const DaoToDaoManager = ({
           },
         );
         const tokenBalance = await TokenService({
-          chainID: UBERHAUS_DATA.NETWORK,
+          chainID: daochain,
           tokenAddress: UBERHAUS_DATA.STAKING_TOKEN,
           is32: false,
         })('balanceOf')(uberHausMinionData.minionAddress);
+
         setUberHausMinion({
           ...uberHausMinionData,
           balance: tokenBalance,
