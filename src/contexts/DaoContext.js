@@ -162,6 +162,7 @@ export const DaoProvider = ({ children }) => {
     <DaoContext.Provider
       value={{
         daoProposals,
+        isUberHaus,
         daoActivities,
         daoMembers,
         daoOverview,
@@ -192,6 +193,7 @@ export const useDao = () => {
     daoMembers,
     setIsUberHaus,
     daoOverview,
+    isUberHaus,
     isCorrectNetwork,
     refetch,
     hasPerformedBatchQuery, // Ref, not state
@@ -199,6 +201,7 @@ export const useDao = () => {
   return {
     daoProposals,
     daoActivities,
+    isUberHaus,
     setIsUberHaus,
     daoMembers,
     daoOverview,
