@@ -9,15 +9,17 @@ import {
   Link,
 } from '@chakra-ui/react';
 import makeBlockie from 'ethereum-blockies-base64';
-import { useParams } from 'react-router-dom';
+import { useParams, Link as RouterLink } from 'react-router-dom';
 import { format } from 'date-fns';
-import { RiQuestionLine } from 'react-icons/ri';
+import { RiQuestionLine, RiLoginBoxLine } from 'react-icons/ri';
 
 import { truncateAddr, numberWithCommas, isDelegating } from '../utils/general';
 import ProfileMenu from '../components/profileMenu';
 import ContentBox from '../components/ContentBox';
 import TextBox from '../components/TextBox';
 import { calcPower, calcValue } from '../utils/profile';
+import UberHausMemberAvatar from './uberHausMemberAvatar';
+import { UBERHAUS_DATA } from '../utils/uberhaus';
 
 const ProfileCard = ({ overview, daoTokens, ens, profile, memberEntity }) => {
   const { userid } = useParams();
@@ -169,6 +171,32 @@ const ProfileCard = ({ overview, daoTokens, ens, profile, memberEntity }) => {
                 {truncateAddr(memberEntity?.delegateKey)}
               </Link>
             </TextBox>
+          )}
+
+          {memberEntity && memberEntity.isUberMinion && (
+            <Flex direction='column' width='100%'>
+              <TextBox size='xs' mt={5} mb={3}>
+                This is the UberHaus Minion for
+              </TextBox>
+              <Flex direction='row' justifyContent='space-between'>
+                <UberHausMemberAvatar
+                  addr={memberEntity.uberMinion.molochAddress}
+                  metadata={memberEntity.uberMeta}
+                  hideCopy={true}
+                  alwaysShowName={true}
+                />
+                <RouterLink
+                  to={`/dao/${UBERHAUS_DATA.NETWORK}/${memberEntity.uberMinion.molochAddress}`}
+                >
+                  <Icon
+                    as={RiLoginBoxLine}
+                    color='secondary.500'
+                    h='25px'
+                    w='25px'
+                  />
+                </RouterLink>
+              </Flex>
+            </Flex>
           )}
         </Flex>
       ) : null}
