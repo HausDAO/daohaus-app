@@ -63,6 +63,7 @@ const AddressInput = ({
   };
 
   useEffect(async () => {
+    let shouldSet = true;
     if (daoMembers && !memberOverride) {
       const memberProfiles = Promise.all(
         daoMembers.map(async (member) => {
@@ -72,7 +73,9 @@ const AddressInput = ({
           };
         }),
       );
-      setLocalMembers(await memberProfiles);
+      if (shouldSet) {
+        setLocalMembers(await memberProfiles);
+      }
     } else if (memberOverride && overrideData) {
       const memberProfiles = Promise.all(
         overrideData.map(async (member) => {
@@ -82,10 +85,15 @@ const AddressInput = ({
           };
         }),
       );
-      setLocalMembers(await memberProfiles);
+      if (shouldSet) {
+        setLocalMembers(await memberProfiles);
+      }
     } else {
       console.warn('Address input did not recieve a valid members array');
     }
+    return () => {
+      shouldSet = false;
+    };
   }, [daoMembers, memberOverride, overrideData]);
 
   return (

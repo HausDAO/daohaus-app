@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import { utils } from 'web3';
 import { useParams } from 'react-router-dom';
 import {
@@ -35,6 +35,7 @@ import { useInjectedProvider } from '../contexts/InjectedProviderContext';
 import DiscourseProposalTopic from './discourseProposalTopic';
 import { useMetaData } from '../contexts/MetaDataContext';
 import { UberHausMinionService } from '../services/uberHausMinionService';
+import { useDao } from '../contexts/DaoContext';
 
 const UBER_LINK =
   '/dao/0x2a/0x96714523778e51b898b072089e5615d4db71078e/proposals';
@@ -311,6 +312,14 @@ const ProposalDetails = ({ proposal, daoMember }) => {
 export default ProposalDetails;
 
 const MinionBox = ({ proposal }) => {
+  const { daoMembers } = useDao();
+  const childDao = useMemo(() => {
+    if (daoMembers && proposal) console.log(proposal);
+    // return daoMembers.find(
+    //   (member) => member.memberAddress === proposal.minion.minionAddress,
+    // );
+  }, [daoMembers, proposal]);
+  console.log(childDao);
   return (
     <Tooltip
       hasArrow
