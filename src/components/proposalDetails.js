@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import { utils } from 'web3';
 import { useParams } from 'react-router-dom';
 import {
@@ -35,7 +35,7 @@ import { useInjectedProvider } from '../contexts/InjectedProviderContext';
 import DiscourseProposalTopic from './discourseProposalTopic';
 import { useMetaData } from '../contexts/MetaDataContext';
 import { UberHausMinionService } from '../services/uberHausMinionService';
-// import { useDao } from '../contexts/DaoContext';
+import { useDao } from '../contexts/DaoContext';
 import { UBERHAUS_DATA } from '../utils/uberhaus';
 
 const UBER_LINK =
@@ -60,6 +60,7 @@ const hasImage = (string) => {
 const ProposalDetails = ({ proposal, daoMember }) => {
   const { address } = useInjectedProvider();
   const { customTerms } = useMetaData();
+  const { isUberHaus } = useDao();
   const [status, setStatus] = useState(null);
   const { daoid } = useParams();
 
@@ -71,7 +72,7 @@ const ProposalDetails = ({ proposal, daoMember }) => {
   }, [proposal]);
 
   const handleRecipientUI = () => {
-    if (daoid === UBERHAUS_DATA.ADDRESS) {
+    if (daoid === UBERHAUS_DATA.ADDRESS && isUberHaus) {
       return <UberDaoBox proposal={proposal} />;
     } else if (proposal?.minion?.minionType !== MINION_TYPES.UBER) {
       return <MinionBox proposal={proposal} />;
@@ -404,12 +405,15 @@ const DelegateBox = ({ proposal }) => {
 };
 
 const UberDaoBox = ({ proposal }) => {
-  // const { daoMembers } = useDao();
+  const { daoMembers } = useDao();
 
-  // const useMemo(() => {
-  //   if(proposal && daoMembers)
-
-  // },[daoMembers, proposal])
+  const daoMinion = useMemo(() => {
+    if (!daoMembers && !proposal) return;
+    return daoMembers.find(
+      (member) => member.memberAddress === proposal?.minion?.minionAddress,
+    );
+  }, [proposal, daoMembers]);
+  console.log(daoMinion);
   return (
     <Box key={proposal?.proposalType}>
       <TextBox size='xs' mb={2}>
