@@ -14,7 +14,6 @@ const SetInitialUberHausDelegate = ({
   delegateAddress,
   minionAddress,
 }) => {
-  console.log('props', uberHausAddress, delegateAddress, minionAddress);
   const [loading, setLoading] = useState(false);
   const { daochain } = useParams();
   const { address, injectedProvider } = useInjectedProvider();
@@ -78,7 +77,7 @@ const SetInitialUberHausDelegate = ({
       disabled={loading}
       onClick={handleConfirm}
     >
-      Confirm Initial Delegate
+      Confirm Delegate
     </Button>
   );
 };

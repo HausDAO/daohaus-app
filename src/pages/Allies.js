@@ -48,7 +48,7 @@ const Allies = ({
     const bigQueryOptions = {
       args: {
         daoID: UBERHAUS_DATA.ADDRESS,
-        chainID: '0x2a',
+        chainID: UBERHAUS_DATA.NETWORK,
       },
       getSetters: [
         { getter: 'getOverview', setter: setUberOveriew },
