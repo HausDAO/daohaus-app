@@ -14,7 +14,7 @@ import { RiErrorWarningLine } from 'react-icons/ri';
 import { useOverlay } from '../contexts/OverlayContext';
 import { displayBalance, valToDecimalString } from '../utils/tokenValue';
 import styled from '@emotion/styled';
-import { useParams } from 'react-router-dom';
+// import { useParams } from 'react-router-dom';
 import { createPoll } from '../services/pollService';
 import { UberHausMinionService } from '../services/uberHausMinionService';
 import { useUser } from '../contexts/UserContext';
@@ -31,7 +31,6 @@ const FormWrapper = styled.form`
 
 const PullForm = ({ uberHausMinion, uberDelegate, uberOverview }) => {
   const { injectedProvider, address } = useInjectedProvider();
-  const { daochain } = useParams();
   const { cachePoll, resolvePoll } = useUser();
   const {
     errorToast,
@@ -124,7 +123,7 @@ const PullForm = ({ uberHausMinion, uberDelegate, uberOverview }) => {
       const poll = createPoll({ action: 'claimDelegateReward', cachePoll })({
         uberMinionAddress: uberHausMinion.minionAddress,
         delegateAddress: uberDelegate,
-        chainID: daochain,
+        chainID: UBERHAUS_DATA.NETWORK,
         actions: {
           onError: (error, txHash) => {
             errorToast({
@@ -145,7 +144,7 @@ const PullForm = ({ uberHausMinion, uberDelegate, uberOverview }) => {
       await UberHausMinionService({
         web3: injectedProvider,
         uberHausMinion: uberHausMinion.minionAddress,
-        chainID: daochain,
+        chainID: UBERHAUS_DATA.NETWORK,
       })('claimDelegateReward')({ address, poll });
     } catch (error) {
       console.error('error: ', error);
@@ -177,7 +176,7 @@ const PullForm = ({ uberHausMinion, uberDelegate, uberOverview }) => {
         const poll = createPoll({ action: 'pullGuildFunds', cachePoll })({
           tokenAddress,
           uberMinionAddress: uberHausMinion.minionAddress,
-          chainID: daochain,
+          chainID: UBERHAUS_DATA.NETWORK,
           expectedBalance,
           actions: {
             onError: (error, txHash) => {
@@ -203,7 +202,7 @@ const PullForm = ({ uberHausMinion, uberDelegate, uberOverview }) => {
         await UberHausMinionService({
           web3: injectedProvider,
           uberHausMinion: uberHausMinion.minionAddress,
-          chainID: daochain,
+          chainID: UBERHAUS_DATA.NETWORK,
         })('pullGuildFunds')({ args, address, poll, onTxHash });
       } catch (err) {
         setD2dProposalModal((prevState) => !prevState);
