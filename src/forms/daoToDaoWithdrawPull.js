@@ -8,27 +8,38 @@ const WithdrawPullForm = ({
   uberHausMinion,
   uberDelegate,
   uberOverview,
+  refetchAllies,
 }) => {
   const [currentView, setCurrentView] = useState('withdraw');
 
   const BothForms = () => (
     <>
-      <WithdrawForm uberMembers={uberMembers} uberHausMinion={uberHausMinion} />
+      <WithdrawForm
+        uberMembers={uberMembers}
+        uberHausMinion={uberHausMinion}
+        refetchAllies={refetchAllies}
+      />
       <PullForm
         uberDelegate={uberDelegate}
         uberHausMinion={uberHausMinion}
         uberOverview={uberOverview}
+        refetchAllies={refetchAllies}
       />
     </>
   );
   const getCurrentMobileForm = (currentView) => {
     return currentView === 'withdraw' ? (
-      <WithdrawForm uberMembers={uberMembers} uberHausMinion={uberHausMinion} />
+      <WithdrawForm
+        uberMembers={uberMembers}
+        uberHausMinion={uberHausMinion}
+        refetchAllies={refetchAllies}
+      />
     ) : (
       <PullForm
         uberDelegate={uberDelegate}
         uberHausMinion={uberHausMinion}
         uberOverview={uberOverview}
+        refetchAllies={refetchAllies}
       />
     );
   };

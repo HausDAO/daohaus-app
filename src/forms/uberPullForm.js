@@ -10,7 +10,6 @@ import {
   Checkbox,
 } from '@chakra-ui/react';
 import { RiErrorWarningLine } from 'react-icons/ri';
-
 import { useOverlay } from '../contexts/OverlayContext';
 import { displayBalance, valToDecimalString } from '../utils/tokenValue';
 import styled from '@emotion/styled';
@@ -29,7 +28,12 @@ const FormWrapper = styled.form`
   width: 100%;
 `;
 
-const PullForm = ({ uberHausMinion, uberDelegate, uberOverview }) => {
+const PullForm = ({
+  uberHausMinion,
+  uberDelegate,
+  uberOverview,
+  refetchAllies,
+}) => {
   const { injectedProvider, address } = useInjectedProvider();
   const { cachePoll, resolvePoll } = useUser();
   const {
@@ -85,7 +89,10 @@ const PullForm = ({ uberHausMinion, uberDelegate, uberOverview }) => {
         const tokenDecimals = await tokenService('decimals')();
         const readableBalance = displayBalance(balance, tokenDecimals);
 
-        setBalance({ readable: readableBalance || 0, real: balance || 0 });
+        setBalance({
+          readable: readableBalance || 0,
+          real: BigInt(balance) || 0,
+        });
         setLoadToken(false);
       } catch (error) {
         console.error(error);
@@ -102,7 +109,7 @@ const PullForm = ({ uberHausMinion, uberDelegate, uberOverview }) => {
         const delegate = await UberHausMinionService({
           uberHausMinion: uberHausMinion.minionAddress,
           chainID: UBERHAUS_DATA.NETWORK,
-        })('delegateByAddress')({ args: [uberDelegate] });
+        })('delegateByAddress')(uberDelegate);
         if (delegate) {
           setDelegateObj(delegate);
         } else {
@@ -136,6 +143,7 @@ const PullForm = ({ uberHausMinion, uberDelegate, uberOverview }) => {
             successToast({
               title: 'Pulled delegate rewards from UberHAUS Minion',
             });
+
             refreshDao();
             resolvePoll(txHash);
           },
@@ -157,16 +165,21 @@ const PullForm = ({ uberHausMinion, uberDelegate, uberOverview }) => {
 
   const onSubmit = async (values) => {
     setLoading(true);
-
     const tokenAddress = values.pullToken.toLowerCase();
     const uberTokens = uberOverview.tokenBalances;
 
-    const withdrawAmt = values.pull
+    const initialAmount = values.pull
       ? valToDecimalString(values.pull, tokenAddress, uberTokens)
       : '0';
+    console.log(initialAmount);
+    const withdrawAmt =
+      initialAmount > balance.real
+        ? BigInt(balance.real)
+        : BigInt(initialAmount);
+    const difference = BigInt(balance.real) - BigInt(initialAmount);
+    const expectedBalance = difference <= 0 ? 0 : difference;
 
-    const args = [tokenAddress, withdrawAmt];
-    const expectedBalance = +balance.real - +withdrawAmt;
+    const args = [tokenAddress, withdrawAmt.toString()];
 
     if (pullDelegateRewards) {
       submitPullRewards(tokenAddress);
@@ -177,7 +190,7 @@ const PullForm = ({ uberHausMinion, uberDelegate, uberOverview }) => {
           tokenAddress,
           uberMinionAddress: uberHausMinion.minionAddress,
           chainID: UBERHAUS_DATA.NETWORK,
-          expectedBalance,
+          expectedBalance: expectedBalance.toString(),
           actions: {
             onError: (error, txHash) => {
               errorToast({
@@ -191,6 +204,7 @@ const PullForm = ({ uberHausMinion, uberDelegate, uberOverview }) => {
                 title: 'Pulled funds from UberHAUS Minion',
               });
               refreshDao();
+              refetchAllies();
               resolvePoll(txHash);
             },
           },
@@ -214,7 +228,6 @@ const PullForm = ({ uberHausMinion, uberDelegate, uberOverview }) => {
         });
       }
     }
-    setD2dProposalModal((prevState) => !prevState);
   };
 
   const inputHelperText = () => {

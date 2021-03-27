@@ -141,7 +141,8 @@ export const collectTokenTest = (graphBalance, oldBalance, pollId) => {
 
 export const withdrawTokenTest = (data, shouldEqual = 0, pollId) => {
   if (data) {
-    return +data === shouldEqual;
+    // eslint-disable-next-line
+    return data == shouldEqual;
   } else {
     clearInterval(pollId);
     throw new Error(
@@ -152,7 +153,8 @@ export const withdrawTokenTest = (data, shouldEqual = 0, pollId) => {
 
 export const guildFundTest = (data, shouldEqual, pollId) => {
   if (data) {
-    return +data === shouldEqual;
+    // eslint-disable-next-line
+    return data == shouldEqual;
   } else {
     clearInterval(pollId);
     throw new Error(

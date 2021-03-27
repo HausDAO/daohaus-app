@@ -89,6 +89,25 @@ const Allies = ({
     }
   }, [uberHausMinion]);
 
+  const refetchAllies = () => {
+    const bigQueryOptions = {
+      args: {
+        daoID: UBERHAUS_DATA.ADDRESS,
+        chainID: UBERHAUS_DATA.NETWORK,
+      },
+      getSetters: [
+        { getter: 'getOverview', setter: setUberOveriew },
+        {
+          getter: 'getActivities',
+          setter: { setUberProposals },
+        },
+        { getter: 'getMembers', setter: setUberMembers },
+      ],
+    };
+    bigGraphQuery(bigQueryOptions);
+    hasPerformedBatchQuery.current = true;
+  };
+
   if (!address) {
     return (
       <Box
@@ -127,6 +146,7 @@ const Allies = ({
           uberDelegate={uberDelegate}
           uberHausMinion={uberHausMinion}
           uberOverview={uberOverview}
+          refetchAllies={refetchAllies}
         />
         <GenericModal closeOnOverlayClick={true} modalId='uberMinionLaunch'>
           <NewUberHausMinion

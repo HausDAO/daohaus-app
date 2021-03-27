@@ -43,7 +43,6 @@ const DaoRouter = () => {
 
   const { daoid, daochain } = useParams();
   const { daoMetaData, customTerms, refetchMetaData } = useMetaData();
-
   const dao = {
     daoID: daoid,
     chainID: daochain,

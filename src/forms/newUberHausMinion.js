@@ -3,6 +3,7 @@ import { useParams } from 'react-router-dom';
 import {
   Box,
   Button,
+  Flex,
   FormControl,
   FormHelperText,
   Heading,
@@ -10,8 +11,10 @@ import {
   Input,
   Link,
   Spinner,
+  Text,
+  Tooltip,
 } from '@chakra-ui/react';
-import { RiExternalLinkLine } from 'react-icons/ri';
+import { RiExternalLinkLine, RiInformationLine } from 'react-icons/ri';
 import { useForm } from 'react-hook-form';
 
 import { UberHausMinionFactoryService } from '../services/uberHausMinionFactoryService';
@@ -152,7 +155,40 @@ const NewUberHausMinion = ({
             <Box mb={3} fontSize='sm'>
               <AddressInput
                 name='delegate'
-                formLabel='Eligable Delegates'
+                formLabel={
+                  <Flex position='relative'>
+                    Eligable Delegates
+                    <Tooltip
+                      hasArrow={true}
+                      bg='primary.500'
+                      placement='right'
+                      p={2}
+                      label={
+                        <Flex direction='column'>
+                          <Text fontWeight='700' mb={2}>
+                            To be Eligable:
+                          </Text>
+                          <Text>- Delegate must be a share-holding member</Text>
+                          <Text>
+                            - Delegate must not be a member of UberHaus
+                          </Text>
+                          <Text>
+                            - Cannot be an UberHaus delegate in another Dao.
+                          </Text>
+                        </Flex>
+                      }
+                    >
+                      <Box>
+                        <Icon
+                          as={RiInformationLine}
+                          transform='translate(6px, -3px)'
+                          w={5}
+                          h={5}
+                        />
+                      </Box>
+                    </Tooltip>
+                  </Flex>
+                }
                 register={register}
                 setValue={setValue}
                 watch={watch}
