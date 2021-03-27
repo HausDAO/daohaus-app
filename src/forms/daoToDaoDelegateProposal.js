@@ -7,8 +7,10 @@ import {
   Flex,
   Icon,
   Box,
+  Tooltip,
+  Text,
 } from '@chakra-ui/react';
-import { RiErrorWarningLine } from 'react-icons/ri';
+import { RiErrorWarningLine, RiInformationLine } from 'react-icons/ri';
 
 import TextBox from '../components/TextBox';
 import DetailsFields from './detailFields';
@@ -188,7 +190,38 @@ const DelegateProposalForm = ({
           </Flex>
           <AddressInput
             name='delegate'
-            formLabel='Eligible Delegates'
+            formLabel={
+              <Flex position='relative'>
+                Eligable Delegates
+                <Tooltip
+                  hasArrow={true}
+                  bg='primary.500'
+                  placement='right'
+                  p={2}
+                  label={
+                    <Flex direction='column'>
+                      <Text fontWeight='700' mb={2}>
+                        To be Eligable:
+                      </Text>
+                      <Text>- Delegate must be a share-holding member</Text>
+                      <Text>- Delegate must not be a member of UberHaus</Text>
+                      <Text>
+                        - Cannot be an UberHaus delegate in another Dao.
+                      </Text>
+                    </Flex>
+                  }
+                >
+                  <Box>
+                    <Icon
+                      as={RiInformationLine}
+                      transform='translate(6px, -3px)'
+                      w={5}
+                      h={5}
+                    />
+                  </Box>
+                </Tooltip>
+              </Flex>
+            }
             register={register}
             setValue={setValue}
             watch={watch}

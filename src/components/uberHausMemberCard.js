@@ -1,7 +1,6 @@
 import React from 'react';
 import { Flex, Box, Badge } from '@chakra-ui/react';
 import { format } from 'date-fns';
-import AddressAvatar from './addressAvatar';
 import UberHausMemberAvatar from './uberHausMemberAvatar';
 
 const UberHausMemberCard = ({ member, selectMember, selectedMember }) => {
