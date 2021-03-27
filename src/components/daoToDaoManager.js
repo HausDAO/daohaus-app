@@ -54,9 +54,10 @@ const DaoToDaoManager = ({
   const [uberHausMinion, setUberHausMinion] = useState(null);
   const [loading, setLoading] = useState(true);
 
+  console.log('isMember', isMember);
+
   useEffect(() => {
     const setup = async () => {
-      console.log('daoOverview', daoOverview);
       const uberHausMinionData = daoOverview.minions.find(
         (minion) =>
           minion.minionType === 'UberHaus minion' &&
@@ -134,6 +135,11 @@ const DaoToDaoManager = ({
   const handleStakeClick = () => {
     setD2dProposalModal((prevState) => !prevState);
     setProposalType('d2dStake');
+  };
+
+  const handleNominateDelegateClick = () => {
+    setD2dProposalModal((prevState) => !prevState);
+    setProposalType('d2dDelegate');
   };
 
   const openModal = () => setD2dProposalTypeModal((prevState) => !prevState);
@@ -434,6 +440,8 @@ const DaoToDaoManager = ({
                     <DaoToDaoMemberInfo
                       membership={uberHausMinion?.uberHausMembership}
                       delegate={uberHausMinion?.uberHausDelegate}
+                      handleNominateDelegateClick={handleNominateDelegateClick}
+                      isMember={isMember}
                     />
                     <Box mt={10}>
                       <DaoToDaoProposalCard
@@ -450,6 +458,8 @@ const DaoToDaoManager = ({
                       delegate={uberHausMinion?.uberHausDelegate}
                       needDelegateKeySet={needDelegateKeySet}
                       openModal={openModal}
+                      handleNominateDelegateClick={handleNominateDelegateClick}
+                      isMember={isMember}
                     />
 
                     {uberHausMinion.openChildProposals.length ? (

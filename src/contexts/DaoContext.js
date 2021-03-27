@@ -76,7 +76,7 @@ export const DaoProvider = ({ children }) => {
 
     const bigQueryOptions = {
       args: {
-        daoID: daoid,
+        daoID: daoid.toLowerCase(),
         chainID: daochain,
       },
       getSetters: [
@@ -111,7 +111,7 @@ export const DaoProvider = ({ children }) => {
   const refetch = () => {
     const bigQueryOptions = {
       args: {
-        daoID: daoid,
+        daoID: daoid.toLowerCase(),
         chainID: daochain,
       },
       getSetters: [

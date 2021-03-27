@@ -95,6 +95,8 @@ const completeQueries = {
     try {
       const activity = await fetchAllActivity(args);
 
+      console.log('activity', activity);
+
       const resolvedActivity = {
         // manually copying to prevent unnecessary copies of proposals
         id: activity.id,
