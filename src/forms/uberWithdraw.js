@@ -82,10 +82,12 @@ const WithdrawForm = ({ uberMembers, uberHausMinion, refetchAllies }) => {
       ? valToDecimalString(values.withdraw, tokenAddress, uberTokens)
       : '0';
     const withdrawAmt =
-      initialWithdraw > currentBalance ? currentBalance : initialWithdraw;
+      initialWithdraw > currentBalance
+        ? BigInt(currentBalance)
+        : BigInt(initialWithdraw);
 
-    const args = [UBERHAUS_DATA.ADDRESS, tokenAddress, withdrawAmt];
-    const difference = +currentBalance - initialWithdraw;
+    const args = [UBERHAUS_DATA.ADDRESS, tokenAddress, withdrawAmt.toString()];
+    const difference = BigInt(currentBalance) - BigInt(initialWithdraw);
     const expectedBalance = difference <= 0 ? 0 : difference;
 
     try {
@@ -94,7 +96,7 @@ const WithdrawForm = ({ uberMembers, uberHausMinion, refetchAllies }) => {
         memberAddress: uberHausMinion.minionAddress,
         chainID: UBERHAUS_DATA.NETWORK,
         uber: true,
-        expectedBalance,
+        expectedBalance: expectedBalance.toString(),
         daoID: UBERHAUS_DATA.ADDRESS,
         actions: {
           onError: (error, txHash) => {
@@ -110,7 +112,7 @@ const WithdrawForm = ({ uberMembers, uberHausMinion, refetchAllies }) => {
             });
             refreshDao();
             refetchAllies();
-            // refreshAllies();
+
             resolvePoll(txHash);
           },
         },

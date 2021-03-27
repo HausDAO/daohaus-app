@@ -232,15 +232,15 @@ export const pollGuildFunds = async ({
 };
 
 export const pollDelegateRewards = async ({
-  minionAddress,
+  uberMinionAddress,
   chainID,
   delegateAddress,
 }) => {
   try {
     const delegate = await UberHausMinionService({
-      uberHausMinion: minionAddress,
+      uberMinionAddress,
       chainID,
-    })('delegateByAddress')({ args: [delegateAddress] });
+    })('delegateByAddress')(delegateAddress);
     return delegate;
   } catch (error) {
     console.error(error);
