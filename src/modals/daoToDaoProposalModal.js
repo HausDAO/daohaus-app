@@ -39,6 +39,7 @@ const DaoToDaoProposalFormModal = ({
   uberHausMinion,
   uberDelegate,
   uberOverview,
+  refetchAllies,
 }) => {
   const [, setLoading] = useState(false);
   const [proposalForm, setProposalForm] = useState(null);
@@ -69,6 +70,7 @@ const DaoToDaoProposalFormModal = ({
           uberMembers={uberMembers}
           uberHausMinion={uberHausMinion}
           uberDelegate={uberDelegate}
+          refetchAllies={refetchAllies}
         />
       ),
     },
@@ -80,6 +82,7 @@ const DaoToDaoProposalFormModal = ({
         <RageQuitProposalForm
           uberHausMinion={uberHausMinion}
           uberMembers={uberMembers}
+          refetchAllies={refetchAllies}
         />
       ),
     },
@@ -99,7 +102,7 @@ const DaoToDaoProposalFormModal = ({
           uberHausMinion={uberHausMinion}
           uberDelegate={uberDelegate}
           uberOverview={uberOverview}
-          // refreshAllies={refreshAllies}
+          refetchAllies={refetchAllies}
         />
       ),
     },

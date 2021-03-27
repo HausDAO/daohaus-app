@@ -54,7 +54,7 @@ export const createPoll = ({
         try {
           const res = await pollFetch(args);
           console.log('Fetch Result', res);
-          console.log('ShouldEqual', shouldEqual || 'No value entered');
+          console.log('ShouldEqual', shouldEqual);
           const testResult = testFn(res, shouldEqual, pollId);
           console.log('Test Result', testResult);
           if (testResult) {

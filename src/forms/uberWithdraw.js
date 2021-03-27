@@ -20,7 +20,7 @@ const FormWrapper = styled.form`
   width: 100%;
 `;
 
-const WithdrawForm = ({ uberMembers, uberHausMinion }) => {
+const WithdrawForm = ({ uberMembers, uberHausMinion, refetchAllies }) => {
   const { successToast, errorToast, setTxInfoModal } = useOverlay();
   const { cachePoll, resolvePoll } = useUser();
   const { refreshDao } = useTX();
@@ -78,11 +78,15 @@ const WithdrawForm = ({ uberMembers, uberHausMinion }) => {
 
     const tokenAddress = selectedToken?.token?.tokenAddress;
     const currentBalance = selectedToken?.tokenBalance;
-    const withdrawAmt = values.withdraw
+    const initialWithdraw = values.withdraw
       ? valToDecimalString(values.withdraw, tokenAddress, uberTokens)
       : '0';
+    const withdrawAmt =
+      initialWithdraw > currentBalance ? currentBalance : initialWithdraw;
+
     const args = [UBERHAUS_DATA.ADDRESS, tokenAddress, withdrawAmt];
-    const expectedBalance = +currentBalance - +withdrawAmt;
+    const difference = +currentBalance - initialWithdraw;
+    const expectedBalance = difference <= 0 ? 0 : difference;
 
     try {
       const poll = createPoll({ action: 'withdrawBalance', cachePoll })({
@@ -105,6 +109,7 @@ const WithdrawForm = ({ uberMembers, uberHausMinion }) => {
               title: 'Withdrew funds from UberHAUS!',
             });
             refreshDao();
+            refetchAllies();
             // refreshAllies();
             resolvePoll(txHash);
           },
@@ -130,7 +135,6 @@ const WithdrawForm = ({ uberMembers, uberHausMinion }) => {
         description: err.message || '',
       });
     }
-    setD2dProposalModal((prevState) => !prevState);
   };
 
   return (

@@ -157,16 +157,18 @@ const PullForm = ({ uberHausMinion, uberDelegate, uberOverview }) => {
 
   const onSubmit = async (values) => {
     setLoading(true);
-
     const tokenAddress = values.pullToken.toLowerCase();
     const uberTokens = uberOverview.tokenBalances;
 
-    const withdrawAmt = values.pull
+    const initialAmount = values.pull
       ? valToDecimalString(values.pull, tokenAddress, uberTokens)
       : '0';
+    const withdrawAmt =
+      initialAmount > balance.real ? balance.real : initialAmount;
+    const difference = +balance.real - initialAmount;
+    const expectedBalance = difference <= 0 ? 0 : difference;
 
     const args = [tokenAddress, withdrawAmt];
-    const expectedBalance = +balance.real - +withdrawAmt;
 
     if (pullDelegateRewards) {
       submitPullRewards(tokenAddress);
@@ -214,7 +216,6 @@ const PullForm = ({ uberHausMinion, uberDelegate, uberOverview }) => {
         });
       }
     }
-    setD2dProposalModal((prevState) => !prevState);
   };
 
   const inputHelperText = () => {

@@ -188,7 +188,7 @@ const DelegateProposalForm = ({
           </Flex>
           <AddressInput
             name='delegate'
-            formLabel='Eligable Delegates'
+            formLabel='Eligible Delegates'
             register={register}
             setValue={setValue}
             watch={watch}
