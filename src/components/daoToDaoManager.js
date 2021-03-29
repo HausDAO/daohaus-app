@@ -196,7 +196,7 @@ const DaoToDaoManager = ({
         DAO On DAO Memberships
       </TextBox>
       <ContentBox w='100%' maxWidth='40rem' position='relative'>
-        <ComingSoonOverlay message='👀 Check back soon!' />
+        {/* <ComingSoonOverlay message='👀 Check back soon!' /> */}
         <Flex align='center'>
           {daoid === UBERHAUS_DATA.ADDRESS ? (
             <>
