@@ -120,7 +120,7 @@ const SummonEasy = ({ daoData, setDaoData, handleSummon }) => {
                 Primary Token: <strong>{daoData.currency}</strong>
               </Text>
               <Text>
-                Proposal Velocty:{' '}
+                Proposal Velocity:{' '}
                 <strong>{periodsPerDayPreset(daoData.periodDuration)}</strong>
               </Text>
               <Text>
