@@ -51,7 +51,7 @@ const HubProfileCard = ({ address }) => {
 
             <Flex direction='column'>
               <Box fontSize='xl' fontFamily='heading'>
-                {profile?.name || truncateAddr(address)}{' '}
+                {profile?.name || profile?.ens || truncateAddr(address)}{' '}
                 <span>{profile?.emoji || ''} </span>
               </Box>
             </Flex>

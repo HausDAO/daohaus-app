@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import { Flex, Box } from '@chakra-ui/react';
-import { ethers } from 'ethers';
 import { useParams } from 'react-router-dom';
 
 import { handleGetProfile } from '../utils/3box';
@@ -11,7 +10,6 @@ import RageQuitForm from '../forms/rageQuit';
 import ActivitiesFeed from '../components/activitiesFeed';
 import ProfileCard from '../components/profileCard';
 import { getProfileActivites } from '../utils/activities';
-import { chainByID } from '../utils/chain';
 import MainViewLayout from '../components/mainViewLayout';
 import { useInjectedProvider } from '../contexts/InjectedProviderContext';
 import UpdateDelegate from '../forms/UpdateDelegate';
@@ -22,7 +20,6 @@ const Profile = ({ members, overview, daoTokens, daoMember, activities }) => {
   const [memberEntity, setMemberEntity] = useState(null);
   const [profile, setProfile] = useState(null);
   const [tokensReceivable, setTokensReceivable] = useState([]);
-  const [ens, setEns] = useState(null);
 
   useEffect(() => {
     if (members) {
@@ -49,25 +46,6 @@ const Profile = ({ members, overview, daoTokens, daoMember, activities }) => {
       getProfile();
     }
   }, [userid, profile]);
-
-  useEffect(() => {
-    const lookupEns = async () => {
-      if (userid) {
-        try {
-          const ethersProvider = ethers.getDefaultProvider(
-            chainByID('0x1').rpc_url,
-          );
-          const result = await ethersProvider.lookupAddress(userid);
-          if (result) {
-            setEns(result);
-          }
-        } catch (error) {
-          console.error(error);
-        }
-      }
-    };
-    lookupEns();
-  }, [daochain, userid]);
 
   useEffect(() => {
     const initMemberTokens = async (tokensWithBalance) => {
@@ -111,7 +89,7 @@ const Profile = ({ members, overview, daoTokens, daoMember, activities }) => {
           <ProfileCard
             overview={overview}
             daoTokens={daoTokens}
-            ens={ens}
+            ens={profile?.ens}
             profile={profile}
             memberEntity={memberEntity}
           />

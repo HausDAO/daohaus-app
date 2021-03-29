@@ -71,7 +71,7 @@ const AddressAvatar = React.memo(function AddrAvatar({
         // ]}
         >
           <Text fontSize='sm' fontFamily='heading' ml={3}>
-            {profile?.name || truncateAddr(addr)}
+            {profile?.name || profile?.ens || truncateAddr(addr)}
           </Text>
           <Box as='span' ml={1}>
             {profile?.emoji && profile.emoji}{' '}
