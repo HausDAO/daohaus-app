@@ -7,6 +7,8 @@ import { getDaoActivites } from '../utils/activities';
 import MainViewLayout from '../components/mainViewLayout';
 import StakingBanner from '../components/stakingBanner';
 import CcoBanner from '../components/ccoBanner';
+import { UBERHAUS_DATA } from '../utils/uberhaus';
+import { useParams } from 'react-router';
 // import { getActiveMembers } from '../utils/dao';
 
 const Overview = React.memo(function overview({
@@ -19,6 +21,9 @@ const Overview = React.memo(function overview({
   customTerms,
   daoMetaData,
 }) {
+  const { daoid } = useParams();
+  const isUberHaus = daoid === UBERHAUS_DATA.ADDRESS;
+
   return (
     <MainViewLayout header='Overview' customTerms={customTerms} isDao={true}>
       <Box w='100%'>
@@ -35,7 +40,7 @@ const Overview = React.memo(function overview({
                 members={members}
                 currentDaoTokens={currentDaoTokens}
               />
-              {daoMetaData?.isUberHaus ? <StakingBanner /> : null}
+              {isUberHaus ? <StakingBanner /> : null}
               {daoMetaData?.boosts?.cco?.active ? <CcoBanner /> : null}
             </Box>
           )}

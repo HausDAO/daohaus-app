@@ -1,48 +1,50 @@
-import React, { useState } from 'react';
-import { useParams } from 'react-router-dom';
-import { useForm } from 'react-hook-form';
-import StakeCard from '../components/stakeCard';
-import { isEthAddress } from '../utils/general';
-import { supportedChains } from '../utils/chain';
+import React from 'react';
+import { Link } from 'react-router-dom';
+import { Box } from '@chakra-ui/layout';
+import { Button } from '@chakra-ui/button';
+import { FaRegHandshake } from 'react-icons/fa';
+
+import ContentBox from './ContentBox';
+import Icon from '@chakra-ui/icon';
 
 const ClanCard = () => {
-  const { daochain } = useParams();
-  // const history = useHistory();
-  const [error, setError] = useState(null);
-  const { register, getValues } = useForm();
-  const handleConnect = () => {
-    const address = getValues('daoAddress');
-    if (!isEthAddress(address)) {
-      setError('invalid address');
-    } else {
-      setError(null);
-      // get the chain...
-      // this will break on
-      // history.push(`/dao/${daochain}/${address}`);
-      // actually summon an uber mininon
-    }
-  };
-  const handleHarvest = () => {};
-  const handleWithdraw = () => {};
-
-  const earnings = 'Pending';
-
   return (
-    <StakeCard
-      title='Clan'
-      description='Stake $Haus as a DAO'
-      reward='Get 3x Rewards + Uber Governance'
-      inputMax={false}
-      inputLabel={`${supportedChains[
-        daochain
-      ].network.toUpperCase()} DAO Address`}
-      amtEarned={earnings}
-      onHarvest={handleHarvest}
-      onWithdraw={handleWithdraw}
-      submitBtn={{ label: 'CONNECT', fn: handleConnect }}
-      register={register}
-      error={error}
-    />
+    <ContentBox
+      d='flex'
+      minWidth='280px'
+      width='100%'
+      maxWidth='400px'
+      mr={4}
+      mb={4}
+      flexDirection='column'
+      alignItems='center'
+      justifyContent='space-around'
+    >
+      <Box fontFamily='heading' fontSize='2xl' mb={3} fontWeight={700}>
+        Clan
+      </Box>
+      <Box fontSize='sm' textTransform='center'>
+        Stake $HAUS as a DAO
+      </Box>
+      <Box fontSize='sm' textAlign='center' mb={3}>
+        Get 3x Rewards + UberGovernance
+      </Box>
+      <Box fontSize='sm' textAlign='center' mb={3}>
+        Visit the Allies (<Icon as={FaRegHandshake} />) page in your DAO to
+        stake as a DAO
+      </Box>
+
+      <Button
+        as={Link}
+        to='/'
+        isExternal
+        px='2.5rem'
+        mb={5}
+        textTransform='uppercase'
+      >
+        Go to Hub
+      </Button>
+    </ContentBox>
   );
 };
 

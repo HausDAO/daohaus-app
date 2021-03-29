@@ -97,21 +97,26 @@ export const pollMinionExecute = async ({
         chainID,
       })('getAction')({ proposalId });
       return action.executed;
-    } else if (proposalType === PROPOSAL_TYPES.MINION_UBER_STAKE) {
+    } else if (
+      proposalType === PROPOSAL_TYPES.MINION_UBER_STAKE ||
+      proposalType === PROPOSAL_TYPES.MINION_UBER_RQ
+    ) {
       const action = await UberHausMinionService({
-        minion: minionAddress,
+        uberHausMinion: minionAddress,
         chainID,
       })('getAction')({ proposalId });
       return action.executed;
     } else if (proposalType === PROPOSAL_TYPES.MINION_UBER_DEL) {
+      console.log('POLLS UBER DEL');
       const action = await UberHausMinionService({
-        minion: minionAddress,
+        uberHausMinion: minionAddress,
         chainID,
       })('getAppointment')({ proposalId });
       return action.executed;
     }
   } catch (error) {
-    console.error('Error caught in Poll block of TX:', error);
+    console.error(error);
+    throw new Error('Error caught in Poll block of TX');
   }
 };
 
@@ -227,15 +232,15 @@ export const pollGuildFunds = async ({
 };
 
 export const pollDelegateRewards = async ({
-  minionAddress,
+  uberMinionAddress,
   chainID,
   delegateAddress,
 }) => {
   try {
     const delegate = await UberHausMinionService({
-      uberHausMinion: minionAddress,
+      uberMinionAddress,
       chainID,
-    })('delegateByAddress')({ args: [delegateAddress] });
+    })('delegateByAddress')(delegateAddress);
     return delegate;
   } catch (error) {
     console.error(error);

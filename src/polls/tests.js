@@ -112,8 +112,20 @@ export const cancelProposalTest = (data, shouldEqual, pollId) => {
   }
 };
 
-export const minionExecuteTest = async (executed, shouldEqual, pollId) => {
-  return executed === shouldEqual;
+export const minionExecuteTest = (data, shouldEqual, pollId) => {
+  console.log('****** IN TEST *******');
+  console.log(`data`, data);
+  console.log(`shouldEqual`, shouldEqual);
+  console.log(`pollId`, pollId);
+  if (data !== null || data !== undefined) {
+    return data === shouldEqual;
+  } else {
+    clearInterval(pollId);
+
+    console.error(
+      `Poll test did recieve the expected results from contract: ${data}`,
+    );
+  }
 };
 
 export const collectTokenTest = (graphBalance, oldBalance, pollId) => {
@@ -129,7 +141,8 @@ export const collectTokenTest = (graphBalance, oldBalance, pollId) => {
 
 export const withdrawTokenTest = (data, shouldEqual = 0, pollId) => {
   if (data) {
-    return +data === shouldEqual;
+    // eslint-disable-next-line
+    return data == shouldEqual;
   } else {
     clearInterval(pollId);
     throw new Error(
@@ -140,7 +153,8 @@ export const withdrawTokenTest = (data, shouldEqual = 0, pollId) => {
 
 export const guildFundTest = (data, shouldEqual, pollId) => {
   if (data) {
-    return +data === shouldEqual;
+    // eslint-disable-next-line
+    return data == shouldEqual;
   } else {
     clearInterval(pollId);
     throw new Error(

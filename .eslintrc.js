@@ -1,7 +1,7 @@
 module.exports = {
   env: {
     browser: true,
-    es6: true,
+    es2020: true,
   },
   extends: [
     'standard',
@@ -30,8 +30,8 @@ module.exports = {
   rules: {
     'no-console': 'off',
     'react/prop-types': 'off',
-    'no-unused-vars': 'error',
-    // 'no-unused-vars': 'warn',
+    // 'no-unused-vars': 'error',
+    'no-unused-vars': 'warn',
     'prettier/prettier': 'error',
   },
 };

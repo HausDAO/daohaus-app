@@ -7,8 +7,10 @@ import {
   Flex,
   Icon,
   Box,
+  Tooltip,
+  Text,
 } from '@chakra-ui/react';
-import { RiErrorWarningLine } from 'react-icons/ri';
+import { RiErrorWarningLine, RiInformationLine } from 'react-icons/ri';
 
 import TextBox from '../components/TextBox';
 import DetailsFields from './detailFields';
@@ -16,7 +18,7 @@ import AddressInput from './addressInput';
 import { createHash, detailsToJSON } from '../utils/general';
 import { useOverlay } from '../contexts/OverlayContext';
 import DelegateMenu from '../components/DelegateMenu';
-import { UBERHAUS_ADDRESS } from '../utils/uberhaus';
+import { UBERHAUS_DATA } from '../utils/uberhaus';
 import { useParams } from 'react-router-dom';
 import { useUser } from '../contexts/UserContext';
 import { createPoll } from '../services/pollService';
@@ -39,7 +41,7 @@ const DelegateProposalForm = ({
   uberDelegate,
 }) => {
   const [loading, setLoading] = useState(false);
-  const { daoid, daochain } = useParams();
+  const { daoid } = useParams();
   const { daoMetaData } = useMetaData();
   const { injectedProvider, address } = useInjectedProvider();
   const [timePeriod, setTimePeriod] = useState(0);
@@ -104,7 +106,7 @@ const DelegateProposalForm = ({
     });
 
     const args = [
-      UBERHAUS_ADDRESS,
+      UBERHAUS_DATA.ADDRESS,
       values.memberApplicant,
       timePeriod?.toString() || values.delegateTerm,
       details,
@@ -116,7 +118,7 @@ const DelegateProposalForm = ({
         cachePoll,
       })({
         minionAddress: uberHausMinion.minionAddress,
-        chainID: daochain,
+        chainID: UBERHAUS_DATA.NETWORK,
         newDelegateAddress: values?.memberApplicant,
         createdAt: now,
         actions: {
@@ -134,7 +136,7 @@ const DelegateProposalForm = ({
             refreshDao();
             resolvePoll(txHash);
             createForumTopic({
-              chainID: daochain,
+              chainID: UBERHAUS_DATA.NETWORK,
               daoID: daoid,
               afterTime: now,
               proposalType: 'UberHAUS Delegate Proposal',
@@ -152,7 +154,7 @@ const DelegateProposalForm = ({
       await UberHausMinionService({
         web3: injectedProvider,
         uberHausMinion: uberHausMinion.minionAddress,
-        chainID: daochain,
+        chainID: UBERHAUS_DATA.NETWORK,
       })('nominateDelegate')({ args, address, poll, onTxHash });
     } catch (err) {
       setLoading(false);
@@ -188,7 +190,38 @@ const DelegateProposalForm = ({
           </Flex>
           <AddressInput
             name='delegate'
-            formLabel='Eligable Delegates'
+            formLabel={
+              <Flex position='relative'>
+                Eligable Delegates
+                <Tooltip
+                  hasArrow={true}
+                  bg='primary.500'
+                  placement='right'
+                  p={2}
+                  label={
+                    <Flex direction='column'>
+                      <Text fontWeight='700' mb={2}>
+                        To be Eligable:
+                      </Text>
+                      <Text>- Delegate must be a share-holding member</Text>
+                      <Text>- Delegate must not be a member of UberHaus</Text>
+                      <Text>
+                        - Cannot be an UberHaus delegate in another Dao.
+                      </Text>
+                    </Flex>
+                  }
+                >
+                  <Box>
+                    <Icon
+                      as={RiInformationLine}
+                      transform='translate(6px, -3px)'
+                      w={5}
+                      h={5}
+                    />
+                  </Box>
+                </Tooltip>
+              </Flex>
+            }
             register={register}
             setValue={setValue}
             watch={watch}

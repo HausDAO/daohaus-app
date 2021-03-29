@@ -1,4 +1,6 @@
 import React, { useState, useEffect } from 'react';
+import { CopyToClipboard } from 'react-copy-to-clipboard';
+
 import { utils } from 'web3';
 import { useParams } from 'react-router-dom';
 import {
@@ -12,9 +14,11 @@ import {
   Tooltip,
   Spinner,
   Link,
+  Avatar,
+  useToast,
 } from '@chakra-ui/react';
 import { RiExternalLinkLine } from 'react-icons/ri';
-import { FaThumbsUp, FaThumbsDown } from 'react-icons/fa';
+import { FaThumbsUp, FaThumbsDown, FaCopy } from 'react-icons/fa';
 import ReactPlayer from 'react-player';
 import { AddressZero } from '@ethersproject/constants';
 
@@ -30,11 +34,14 @@ import {
   MINION_TYPES,
 } from '../utils/proposalUtils';
 import { numberWithCommas } from '../utils/general';
-import { getCustomProposalTerm } from '../utils/metadata';
+import { getCustomProposalTerm, themeImagePath } from '../utils/metadata';
 import { useInjectedProvider } from '../contexts/InjectedProviderContext';
 import DiscourseProposalTopic from './discourseProposalTopic';
 import { useMetaData } from '../contexts/MetaDataContext';
 import { UberHausMinionService } from '../services/uberHausMinionService';
+import { useDao } from '../contexts/DaoContext';
+import { UBERHAUS_DATA } from '../utils/uberhaus';
+import makeBlockie from 'ethereum-blockies-base64';
 
 const UBER_LINK =
   '/dao/0x2a/0x96714523778e51b898b072089e5615d4db71078e/proposals';
@@ -58,7 +65,9 @@ const hasImage = (string) => {
 const ProposalDetails = ({ proposal, daoMember }) => {
   const { address } = useInjectedProvider();
   const { customTerms } = useMetaData();
+  const { isUberHaus } = useDao();
   const [status, setStatus] = useState(null);
+  const { daoid } = useParams();
 
   useEffect(() => {
     if (proposal) {
@@ -66,6 +75,34 @@ const ProposalDetails = ({ proposal, daoMember }) => {
       setStatus(statusStr);
     }
   }, [proposal]);
+
+  const handleRecipientUI = () => {
+    if (daoid === UBERHAUS_DATA.ADDRESS && isUberHaus) {
+      return <UberDaoBox proposal={proposal} />;
+    } else if (proposal?.minion?.minionType !== MINION_TYPES.UBER) {
+      return <MinionBox proposal={proposal} />;
+    } else {
+      <Box key={proposal?.proposalType}>
+        <TextBox size='xs' mb={2}>
+          Recipient
+        </TextBox>
+        <Skeleton isLoaded={proposal}>
+          {proposal ? (
+            <AddressAvatar
+              addr={
+                proposal.applicant === AddressZero
+                  ? proposal.proposer
+                  : proposal.applicant
+              }
+              alwaysShowName={true}
+            />
+          ) : (
+            '--'
+          )}
+        </Skeleton>
+      </Box>;
+    }
+  };
 
   return (
     <Box pt={6}>
@@ -240,29 +277,7 @@ const ProposalDetails = ({ proposal, daoMember }) => {
               )}
             </Skeleton>
           </Box>
-          {proposal?.minion?.minionType !== MINION_TYPES.UBER ? (
-            <Box key={proposal?.proposalType}>
-              <TextBox size='xs' mb={2}>
-                Recipient
-              </TextBox>
-              <Skeleton isLoaded={proposal}>
-                {proposal ? (
-                  <AddressAvatar
-                    addr={
-                      proposal.applicant === AddressZero
-                        ? proposal.proposer
-                        : proposal.applicant
-                    }
-                    alwaysShowName={true}
-                  />
-                ) : (
-                  '--'
-                )}
-              </Skeleton>
-            </Box>
-          ) : (
-            <MinionBox proposal={proposal} />
-          )}
+          {handleRecipientUI()}
           <Flex align='center'>
             {memberVote(proposal, address) !== null &&
               (+memberVote(proposal, address) === 1 ? (
@@ -390,6 +405,79 @@ const DelegateBox = ({ proposal }) => {
           <Spinner />
         )}
       </Box>
+    </Box>
+  );
+};
+
+const UberDaoBox = ({ proposal }) => {
+  const { daoMembers } = useDao();
+  const toast = useToast();
+  const [daoMinion, setDaoMinion] = useState(null);
+
+  useEffect(() => {
+    if (!daoMembers && !proposal) return;
+    const minion = daoMembers.find(
+      (member) => member.memberAddress === proposal?.applicant,
+    );
+
+    if (minion?.isUberMinion) {
+      setDaoMinion(minion);
+    } else {
+      setDaoMinion(false);
+    }
+  }, [proposal, daoMembers]);
+  console.log(daoMinion);
+  return (
+    <Box key={proposal?.proposalType}>
+      {daoMinion?.isUberMinion && (
+        <TextBox size='xs' mb={2}>
+          DAO
+        </TextBox>
+      )}
+      <Skeleton isLoaded={proposal}>
+        {daoMinion?.isUberMinion ? (
+          <Flex direction='row' alignItems='center'>
+            <Avatar
+              name={daoMinion?.uberMeta?.name}
+              src={
+                daoMinion?.uberMeta?.avatarImg
+                  ? themeImagePath(daoMinion?.uberMeta?.avatarImg)
+                  : makeBlockie(daoMinion?.uberMinion?.molochAddress)
+              }
+              size='sm'
+            />
+
+            <Flex>
+              <Text fontSize='sm' fontFamily='heading' ml={3}>
+                {daoMinion?.uberMeta?.name}
+              </Text>
+              <CopyToClipboard
+                text={daoMinion.uberMinion.molochAddress}
+                mr={4}
+                onCopy={() =>
+                  toast({
+                    title: 'Copied Address',
+                    position: 'top-right',
+                    status: 'success',
+                    duration: 3000,
+                    isClosable: true,
+                  })
+                }
+              >
+                <Icon
+                  transform='translateY(2px)'
+                  as={FaCopy}
+                  color='secondary.300'
+                  ml={2}
+                  _hover={{ cursor: 'pointer' }}
+                />
+              </CopyToClipboard>
+            </Flex>
+          </Flex>
+        ) : (
+          <MinionBox proposal={proposal} />
+        )}
+      </Skeleton>
     </Box>
   );
 };
