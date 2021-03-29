@@ -93,7 +93,7 @@ const CcoClaim = ({ setClaimComplete }) => {
     }
   };
 
-  const hasSharesOrLoot = +daoMember?.loot > 0 || +daoMember.shares > 0;
+  const hasSharesOrLoot = +daoMember?.loot > 0 || +daoMember?.shares > 0;
 
   if (!daoMember || !hasSharesOrLoot) {
     return null;
