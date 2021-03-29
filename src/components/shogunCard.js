@@ -12,8 +12,8 @@ const ShogunCard = () => {
   return (
     <StakeCard
       title='Shogun'
-      description='Stake $Haus as a DAO'
-      reward='Get 3x Rewards + Uber Governance'
+      description='Stake $HAUS/wxDai Uni LP'
+      reward='Get 2x Rewards, Soft Signalling'
       inputMax={true}
       inputLabel={`My Wallet: ${walletHoldings} $HAUS`}
       amtEarned={earnings}

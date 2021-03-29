@@ -17,7 +17,11 @@ import ContentBox from './ContentBox';
 import { chainByName } from '../utils/chain';
 
 const handleName = (activity, profile) =>
-  profile?.name ? profile?.name : truncateAddr(activity?.memberAddress);
+  profile?.name
+    ? profile?.name
+    : profile?.ens
+    ? profile?.ens
+    : truncateAddr(activity?.memberAddress);
 
 const handleAvatar = (activity, profile) => {
   if (profile?.image?.length) {

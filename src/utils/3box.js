@@ -1,4 +1,42 @@
+import { gql } from 'apollo-boost';
+import { graphQuery } from './apollo';
+
+const ensClient =
+  'https://api.thegraph.com/subgraphs/name/ezynda3/ens-subgraph';
+
+const REVERSE_RESOLVER_QUERY = gql`
+  query reverseRegistrations($user: String!) {
+    reverseRegistrations(where: { registrant: $user }) {
+      name
+      block
+    }
+  }
+`;
+
+export const getENS = async (address) => {
+  const result = await graphQuery({
+    endpoint: ensClient,
+    query: REVERSE_RESOLVER_QUERY,
+    variables: {
+      user: address.toLowerCase(),
+    },
+  });
+  if (result.reverseRegistrations.length) {
+    // look into dealing with multiple. get most recent
+    return result.reverseRegistrations.sort((a, b) => b.block - a.block)[0]
+      .name;
+  }
+  return null;
+};
+
 export const fetchProfile = async (address) => {
+  let ens = null;
+  try {
+    ens = await getENS(address);
+  } catch (err) {
+    console.log(err);
+  }
+
   try {
     const response = await fetch(
       `https://ipfs.3box.io/profile?address=${address}`,
@@ -6,9 +44,12 @@ export const fetchProfile = async (address) => {
     if (response.status === 'error') {
       console.log('Profile does not exist');
     }
-    return response.json();
+    const boxProfile = await response.json();
+    console.log(ens);
+    return { ...boxProfile, ens: ens };
   } catch (error) {
     console.log(error);
+    return { ens };
   }
 };
 
