@@ -1,5 +1,5 @@
 import React from 'react';
-import { Box, Flex, Text } from '@chakra-ui/layout';
+import { Box, Flex } from '@chakra-ui/layout';
 
 import TextBox from './TextBox';
 import AddressAvatar from './addressAvatar';

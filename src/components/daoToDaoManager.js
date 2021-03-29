@@ -32,7 +32,7 @@ import { truncateAddr } from '../utils/general';
 import DaoToDaoProposalCard from './daoToDaoProposalCard';
 import DaoToDaoMemberInfo from './daoToDaoMemberInfo';
 
-// import ComingSoonOverlay from './comingSoonOverlay';
+import ComingSoonOverlay from './comingSoonOverlay';
 
 const DaoToDaoManager = ({
   daoOverview,
@@ -235,7 +235,6 @@ const DaoToDaoManager = ({
             </>
           )}
         </Flex>
-        {/* <ComingSoonOverlay message='👀 Check back soon!' /> */}
 
         {loading ? (
           <Spinner />
@@ -262,18 +261,21 @@ const DaoToDaoManager = ({
                       </Box>
                     ) : (
                       <>
-                        <Box fontSize='md' my={2}>
+                        <Box fontSize='md' my={2} position='relative'>
                           UberHAUS is on the {UBERHAUS_DATA.NETWORK_NAME}{' '}
                           network. You&apos;ll need to summon a clone of your
                           DAO there to join.
                         </Box>
-                        <Button
-                          w='50%'
-                          as={RouterLink}
-                          to={`/dao/${daochain}/${daoid}/uberhaus/clone`}
-                        >
-                          Summon Clone
-                        </Button>
+                        <Box my={2} h={100} position='relative'>
+                          <ComingSoonOverlay message='👀 Check back soon!' />
+                          <Button
+                            w='50%'
+                            as={RouterLink}
+                            to={`/dao/${daochain}/${daoid}/uberhaus/clone`}
+                          >
+                            Summon Clone
+                          </Button>
+                        </Box>
                       </>
                     )}
                   </>
@@ -295,14 +297,17 @@ const DaoToDaoManager = ({
                         Are you a member of this DAO and on the correct network?
                       </Box>
                     ) : (
-                      <Button
-                        w='50%'
-                        onClick={() =>
-                          setGenericModal({ uberMinionLaunch: true })
-                        }
-                      >
-                        Summon Minion
-                      </Button>
+                      <Box my={2} h={100} position='relative'>
+                        <ComingSoonOverlay message='👀 Check back soon!' />
+                        <Button
+                          w='50%'
+                          onClick={() =>
+                            setGenericModal({ uberMinionLaunch: true })
+                          }
+                        >
+                          Summon Minion
+                        </Button>
+                      </Box>
                     )}
                   </>
                 ) : null}
