@@ -43,7 +43,6 @@ const DaoRouter = () => {
 
   const { daoid, daochain } = useParams();
   const { daoMetaData, customTerms, refetchMetaData } = useMetaData();
-
   const dao = {
     daoID: daoid,
     chainID: daochain,
@@ -173,6 +172,7 @@ const DaoRouter = () => {
             daoMetaData={daoMetaData}
             proposals={daoActivities?.proposals}
             isMember={isMember}
+            daoMembers={daoMembers}
           />
         </Route>
         <Route exact path={`${path}/proposals/new/:proposalType`}>

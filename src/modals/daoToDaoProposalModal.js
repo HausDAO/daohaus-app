@@ -16,7 +16,7 @@ import StakeProposalForm from '../forms/daoToDaoStakeProposal';
 import DelegateProposalForm from '../forms/daoToDaoDelegateProposal';
 import RageQuitProposalForm from '../forms/daoToDaoRageQuitProposal';
 import WithdrawPullForm from '../forms/daoToDaoWithdrawPull';
-import DistributeRewardsProposalForm from '../forms/daoToDaoDistributeRewardsProposal';
+// import DistributeRewardsProposalForm from '../forms/daoToDaoDistributeRewardsProposal';
 import { useCustomTheme } from '../contexts/CustomThemeContext';
 import { useOverlay } from '../contexts/OverlayContext';
 
@@ -39,6 +39,7 @@ const DaoToDaoProposalFormModal = ({
   uberHausMinion,
   uberDelegate,
   uberOverview,
+  refetchAllies,
 }) => {
   const [, setLoading] = useState(false);
   const [proposalForm, setProposalForm] = useState(null);
@@ -69,6 +70,7 @@ const DaoToDaoProposalFormModal = ({
           uberMembers={uberMembers}
           uberHausMinion={uberHausMinion}
           uberDelegate={uberDelegate}
+          refetchAllies={refetchAllies}
         />
       ),
     },
@@ -80,15 +82,16 @@ const DaoToDaoProposalFormModal = ({
         <RageQuitProposalForm
           uberHausMinion={uberHausMinion}
           uberMembers={uberMembers}
+          refetchAllies={refetchAllies}
         />
       ),
     },
-    d2dDistroRewards: {
-      type: `New Uber Proposal`,
-      heading: `Trigger $HAUS Distro`,
-      subline: `Get DAO Rewards from UBERhaus`,
-      form: <DistributeRewardsProposalForm />,
-    },
+    // d2dDistroRewards: {
+    //   type: `New Uber Proposal`,
+    //   heading: `Trigger $HAUS Distro`,
+    //   subline: `Get DAO Rewards from UBERhaus`,
+    //   form: <DistributeRewardsProposalForm />,
+    // },
     d2dWithdraw: {
       type: `New Uber Proposal`,
       heading: ``,
@@ -99,7 +102,7 @@ const DaoToDaoProposalFormModal = ({
           uberHausMinion={uberHausMinion}
           uberDelegate={uberDelegate}
           uberOverview={uberOverview}
-          // refreshAllies={refreshAllies}
+          refetchAllies={refetchAllies}
         />
       ),
     },

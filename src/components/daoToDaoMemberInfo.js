@@ -11,6 +11,8 @@ const DaoToDaoMemberInfo = ({
   delegate,
   needDelegateKeySet,
   openModal,
+  handleNominateDelegateClick,
+  isMember,
 }) => {
   return (
     <>
@@ -34,7 +36,7 @@ const DaoToDaoMemberInfo = ({
         <TextBox mb={2} size='sm'>
           Delegate
         </TextBox>
-        <Flex justify='space-between'>
+        <Flex justify='space-between' flexWrap='wrap'>
           <Flex>
             <Box>
               {delegate ? (
@@ -49,15 +51,20 @@ const DaoToDaoMemberInfo = ({
               )}
             </Box>
           </Flex>
-          {delegate && needDelegateKeySet ? (
-            <SetInitialUberHausDelegate
-              minionAddress={membership.memberAddress}
-              delegateAddress={delegate}
-              uberHausAddress={membership.moloch.id}
-            />
+          {delegate && needDelegateKeySet && isMember ? (
+            <>
+              <SetInitialUberHausDelegate
+                minionAddress={membership.memberAddress}
+                delegateAddress={delegate}
+                uberHausAddress={membership.moloch.id}
+              />
+              <Button w='35%' onClick={handleNominateDelegateClick}>
+                Nominate New Delegate
+              </Button>
+            </>
           ) : null}
 
-          {membership && delegate && !needDelegateKeySet ? (
+          {membership && delegate && !needDelegateKeySet && isMember ? (
             <Button w='25%' onClick={openModal}>
               Manage
             </Button>

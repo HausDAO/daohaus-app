@@ -84,9 +84,11 @@ export const UberHausMinionService = ({ web3, chainID, uberHausMinion }) => {
         }
       };
     } else if (service === 'delegateByAddress') {
-      return async ({ args }) => {
+      return async (delegateAddress) => {
         try {
-          const delegate = await contract.methods.delegates(...args).call();
+          const delegate = await contract.methods
+            .delegates(delegateAddress)
+            .call();
           return delegate;
         } catch (error) {
           console.error(error);

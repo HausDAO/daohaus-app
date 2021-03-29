@@ -8,7 +8,6 @@ import {
   ModalBody,
   ModalCloseButton,
   ModalContent,
-  ModalFooter,
   ModalHeader,
   ModalOverlay,
   Skeleton,
@@ -25,6 +24,8 @@ import TextBox from './TextBox';
 import { chainByID } from '../utils/chain';
 import { UberHausMinionService } from '../services/uberHausMinionService';
 import { PROPOSAL_TYPES } from '../utils/proposalUtils';
+import UberHausAvatar from './uberHausAvatar';
+import { UBERHAUS_DATA } from '../utils/uberhaus';
 
 const ProposalMinionCard = ({ proposal }) => {
   const { daochain } = useParams();
@@ -43,7 +44,10 @@ const ProposalMinionCard = ({ proposal }) => {
             chainID: daochain,
           })('getAction')({ proposalId: proposal?.proposalId });
           setMinionDeets(action);
-        } else if (proposal.proposalType === PROPOSAL_TYPES.MINION_UBER_STAKE) {
+        } else if (
+          proposal.proposalType === PROPOSAL_TYPES.MINION_UBER_STAKE ||
+          proposal.proposalType === PROPOSAL_TYPES.MINION_UBER_RQ
+        ) {
           const action = await UberHausMinionService({
             uberHausMinion: proposal.minionAddress,
             chainID: daochain,
@@ -54,7 +58,7 @@ const ProposalMinionCard = ({ proposal }) => {
             uberHausMinion: proposal.minionAddress,
             chainID: daochain,
           })('getAppointment')({ proposalId: proposal?.proposalId });
-          console.log(action);
+
           setMinionDeets(action);
         }
       } catch (err) {
@@ -86,10 +90,26 @@ const ProposalMinionCard = ({ proposal }) => {
         console.log(err);
       }
     };
-    if (proposal && minionDeets?.bytes) {
+    if (
+      proposal &&
+      minionDeets?.data &&
+      proposal.proposalType !== PROPOSAL_TYPES.MINION_UBER_DEL
+    ) {
       getAbi();
     }
   }, [proposal, minionDeets]);
+
+  const toggleModal = () => {
+    setShowModal((prevState) => !prevState);
+  };
+
+  const getAvatar = (addr) => {
+    if (addr?.toLowerCase() === UBERHAUS_DATA.ADDRESS.toLowerCase()) {
+      return <UberHausAvatar />;
+    } else {
+      return <AddressAvatar addr={minionDeets.to} alwaysShowName={true} />;
+    }
+  };
 
   const displayDecodedData = (data) => {
     return (
@@ -98,7 +118,6 @@ const ProposalMinionCard = ({ proposal }) => {
           <TextBox size='xs'>Method</TextBox>
           <TextBox variant='value'>{data.name}</TextBox>
         </HStack>
-
         <Divider my={2} />
         <Box fontFamily='heading' mt={4}>
           Params
@@ -123,18 +142,17 @@ const ProposalMinionCard = ({ proposal }) => {
       </>
     );
   };
+
   return (
     <>
       <Skeleton isLoaded={!loading}>
         {minionDeets && (
-          <HStack mt={8} spacing={2}>
-            <Box>
+          <Flex mt={6}>
+            <Flex flexDir='column'>
               <TextBox size='xs' mb={3}>
                 {minionDeets?.nominee ? 'Delegate Nominee' : 'Target Address'}
               </TextBox>
-              {minionDeets?.to && (
-                <AddressAvatar addr={minionDeets.to} alwaysShowName={true} />
-              )}
+              {minionDeets?.to && getAvatar(minionDeets.to)}
               {minionDeets?.nominee && (
                 <Box>
                   <AddressAvatar
@@ -143,18 +161,27 @@ const ProposalMinionCard = ({ proposal }) => {
                   />
                 </Box>
               )}
-            </Box>
-            {minionDeets?.to && (
-              <Flex w={['25%', null, null, '15%']} align='center' m={0}>
-                <Button w='175px' onClick={() => setShowModal(true)}>
-                  More info
+
+              {minionDeets?.to && (
+                <Button
+                  mt={3}
+                  px={3}
+                  py={1}
+                  width='fit-content'
+                  color='secondary.300'
+                  onClick={toggleModal}
+                  size='xs'
+                  variant='outline'
+                  textTransform='capitalize'
+                >
+                  Details
                 </Button>
-              </Flex>
-            )}
-          </HStack>
+              )}
+            </Flex>
+          </Flex>
         )}
       </Skeleton>
-      <Modal isOpen={showModal} onClose={() => setShowModal(false)} isCentered>
+      <Modal isOpen={showModal} onClose={toggleModal} isCentered>
         <ModalOverlay bgColor={rgba(theme.colors.background[500], 0.8)} />
         <ModalContent
           rounded='lg'
@@ -182,8 +209,6 @@ const ProposalMinionCard = ({ proposal }) => {
           >
             {decodedData && displayDecodedData(decodedData)}
           </ModalBody>
-
-          <ModalFooter></ModalFooter>
         </ModalContent>
       </Modal>
     </>

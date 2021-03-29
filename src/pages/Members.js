@@ -17,6 +17,7 @@ import MainViewLayout from '../components/mainViewLayout';
 import { useInjectedProvider } from '../contexts/InjectedProviderContext';
 import { daoConnectedAndSameChain } from '../utils/general';
 import deepEqual from 'deep-eql';
+import UberHausMemberCard from '../components/uberHausMemberCard';
 
 const Members = React.memo(function MembersPage({
   members,
@@ -152,12 +153,23 @@ const Members = React.memo(function MembersPage({
             </Flex>
             {listMembers?.map((member) => {
               return (
-                <MemberCard
-                  key={member.id}
-                  member={member}
-                  selectMember={setSelectedMember}
-                  selectedMember={selectedMember}
-                />
+                <>
+                  {member.uberMinion ? (
+                    <UberHausMemberCard
+                      key={member.id}
+                      member={member}
+                      selectMember={setSelectedMember}
+                      selectedMember={selectedMember}
+                    />
+                  ) : (
+                    <MemberCard
+                      key={member.id}
+                      member={member}
+                      selectMember={setSelectedMember}
+                      selectedMember={selectedMember}
+                    />
+                  )}
+                </>
               );
             })}
           </ContentBox>

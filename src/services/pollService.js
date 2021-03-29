@@ -54,7 +54,7 @@ export const createPoll = ({
         try {
           const res = await pollFetch(args);
           console.log('Fetch Result', res);
-          console.log('ShouldEqual', shouldEqual || 'No value entered');
+          console.log('ShouldEqual', shouldEqual);
           const testResult = testFn(res, shouldEqual, pollId);
           console.log('Test Result', testResult);
           if (testResult) {
@@ -800,12 +800,12 @@ export const createPoll = ({
       }
     };
   } else if (action === 'claimDelegateReward') {
-    return ({ chainID, minionAddress, delegateAddress, actions }) => (
+    return ({ chainID, uberMinionAddress, delegateAddress, actions }) => (
       txHash,
     ) => {
       console.log('In Start Poll');
       console.log(`chainID`, chainID);
-      console.log(`minionAddress`, minionAddress);
+      console.log(`uberMinionAddress`, uberMinionAddress);
       console.log(`delegateAddres`, delegateAddress);
       console.log(`actions`, actions);
       console.log(`action`, action);
@@ -814,7 +814,7 @@ export const createPoll = ({
       startPoll({
         pollFetch: pollDelegateRewards,
         testFn: checkDelRewardsTest,
-        args: { minionAddress, delegateAddress, chainID },
+        args: { uberMinionAddress, delegateAddress, chainID },
         actions,
         txHash,
       });
@@ -833,7 +833,7 @@ export const createPoll = ({
             interval,
             tries,
           },
-          pollArgs: { chainID, minionAddress, delegateAddress },
+          pollArgs: { chainID, uberMinionAddress, delegateAddress },
         });
       }
     };

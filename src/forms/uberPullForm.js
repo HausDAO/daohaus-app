@@ -10,11 +10,10 @@ import {
   Checkbox,
 } from '@chakra-ui/react';
 import { RiErrorWarningLine } from 'react-icons/ri';
-
 import { useOverlay } from '../contexts/OverlayContext';
 import { displayBalance, valToDecimalString } from '../utils/tokenValue';
 import styled from '@emotion/styled';
-import { useParams } from 'react-router-dom';
+// import { useParams } from 'react-router-dom';
 import { createPoll } from '../services/pollService';
 import { UberHausMinionService } from '../services/uberHausMinionService';
 import { useUser } from '../contexts/UserContext';
@@ -23,15 +22,19 @@ import { useInjectedProvider } from '../contexts/InjectedProviderContext';
 import { TokenService } from '../services/tokenService';
 import MaxOutInput from '../components/maxInput';
 import TokenSelect from './tokenSelect';
-import { UBERHAUS_NETWORK } from '../utils/uberhaus';
+import { UBERHAUS_DATA } from '../utils/uberhaus';
 
 const FormWrapper = styled.form`
   width: 100%;
 `;
 
-const PullForm = ({ uberHausMinion, uberDelegate, uberOverview }) => {
+const PullForm = ({
+  uberHausMinion,
+  uberDelegate,
+  uberOverview,
+  refetchAllies,
+}) => {
   const { injectedProvider, address } = useInjectedProvider();
-  const { daochain } = useParams();
   const { cachePoll, resolvePoll } = useUser();
   const {
     errorToast,
@@ -75,7 +78,7 @@ const PullForm = ({ uberHausMinion, uberDelegate, uberOverview }) => {
         setLoadToken(true);
 
         const tokenService = TokenService({
-          chainID: UBERHAUS_NETWORK,
+          chainID: UBERHAUS_DATA.NETWORK,
           tokenAddress: pullToken,
         });
 
@@ -86,7 +89,10 @@ const PullForm = ({ uberHausMinion, uberDelegate, uberOverview }) => {
         const tokenDecimals = await tokenService('decimals')();
         const readableBalance = displayBalance(balance, tokenDecimals);
 
-        setBalance({ readable: readableBalance || 0, real: balance || 0 });
+        setBalance({
+          readable: readableBalance || 0,
+          real: BigInt(balance) || 0,
+        });
         setLoadToken(false);
       } catch (error) {
         console.error(error);
@@ -102,8 +108,8 @@ const PullForm = ({ uberHausMinion, uberDelegate, uberOverview }) => {
       try {
         const delegate = await UberHausMinionService({
           uberHausMinion: uberHausMinion.minionAddress,
-          chainID: UBERHAUS_NETWORK,
-        })('delegateByAddress')({ args: [uberDelegate] });
+          chainID: UBERHAUS_DATA.NETWORK,
+        })('delegateByAddress')(uberDelegate);
         if (delegate) {
           setDelegateObj(delegate);
         } else {
@@ -124,7 +130,7 @@ const PullForm = ({ uberHausMinion, uberDelegate, uberOverview }) => {
       const poll = createPoll({ action: 'claimDelegateReward', cachePoll })({
         uberMinionAddress: uberHausMinion.minionAddress,
         delegateAddress: uberDelegate,
-        chainID: daochain,
+        chainID: UBERHAUS_DATA.NETWORK,
         actions: {
           onError: (error, txHash) => {
             errorToast({
@@ -137,6 +143,7 @@ const PullForm = ({ uberHausMinion, uberDelegate, uberOverview }) => {
             successToast({
               title: 'Pulled delegate rewards from UberHAUS Minion',
             });
+
             refreshDao();
             resolvePoll(txHash);
           },
@@ -145,7 +152,7 @@ const PullForm = ({ uberHausMinion, uberDelegate, uberOverview }) => {
       await UberHausMinionService({
         web3: injectedProvider,
         uberHausMinion: uberHausMinion.minionAddress,
-        chainID: daochain,
+        chainID: UBERHAUS_DATA.NETWORK,
       })('claimDelegateReward')({ address, poll });
     } catch (error) {
       console.error('error: ', error);
@@ -158,62 +165,69 @@ const PullForm = ({ uberHausMinion, uberDelegate, uberOverview }) => {
 
   const onSubmit = async (values) => {
     setLoading(true);
-
     const tokenAddress = values.pullToken.toLowerCase();
     const uberTokens = uberOverview.tokenBalances;
 
-    const withdrawAmt = values.pull
+    const initialAmount = values.pull
       ? valToDecimalString(values.pull, tokenAddress, uberTokens)
       : '0';
+    console.log(initialAmount);
+    const withdrawAmt =
+      initialAmount > balance.real
+        ? BigInt(balance.real)
+        : BigInt(initialAmount);
+    const difference = BigInt(balance.real) - BigInt(initialAmount);
+    const expectedBalance = difference <= 0 ? 0 : difference;
 
-    const args = [tokenAddress, withdrawAmt];
-    const expectedBalance = +balance.real - +withdrawAmt;
+    const args = [tokenAddress, withdrawAmt.toString()];
 
     if (pullDelegateRewards) {
       submitPullRewards(tokenAddress);
     }
-    try {
-      const poll = createPoll({ action: 'pullGuildFunds', cachePoll })({
-        tokenAddress,
-        uberMinionAddress: uberHausMinion.minionAddress,
-        chainID: daochain,
-        expectedBalance,
-        actions: {
-          onError: (error, txHash) => {
-            errorToast({
-              title: `There was an error.`,
-            });
-            resolvePoll(txHash);
-            console.error(`Could not pull funds: ${error}`);
+    if (withdrawAmt > 0) {
+      try {
+        const poll = createPoll({ action: 'pullGuildFunds', cachePoll })({
+          tokenAddress,
+          uberMinionAddress: uberHausMinion.minionAddress,
+          chainID: UBERHAUS_DATA.NETWORK,
+          expectedBalance: expectedBalance.toString(),
+          actions: {
+            onError: (error, txHash) => {
+              errorToast({
+                title: `There was an error.`,
+              });
+              resolvePoll(txHash);
+              console.error(`Could not pull funds: ${error}`);
+            },
+            onSuccess: (txHash) => {
+              successToast({
+                title: 'Pulled funds from UberHAUS Minion',
+              });
+              refreshDao();
+              refetchAllies();
+              resolvePoll(txHash);
+            },
           },
-          onSuccess: (txHash) => {
-            successToast({
-              title: 'Pulled funds from UberHAUS Minion',
-            });
-            refreshDao();
-            resolvePoll(txHash);
-          },
-        },
-      });
-      const onTxHash = () => {
+        });
+        const onTxHash = () => {
+          setD2dProposalModal((prevState) => !prevState);
+          setTxInfoModal(true);
+        };
+        await UberHausMinionService({
+          web3: injectedProvider,
+          uberHausMinion: uberHausMinion.minionAddress,
+          chainID: UBERHAUS_DATA.NETWORK,
+        })('pullGuildFunds')({ args, address, poll, onTxHash });
+      } catch (err) {
         setD2dProposalModal((prevState) => !prevState);
-        setTxInfoModal(true);
-      };
-      await UberHausMinionService({
-        web3: injectedProvider,
-        uberHausMinion: uberHausMinion.minionAddress,
-        chainID: daochain,
-      })('pullGuildFunds')({ args, address, poll, onTxHash });
-    } catch (err) {
-      setD2dProposalModal((prevState) => !prevState);
-      setLoading(false);
-      console.error('error: ', err);
-      errorToast({
-        title: `There was an error.`,
-        description: err.message || '',
-      });
+        setLoading(false);
+        console.error('error: ', err);
+        errorToast({
+          title: `There was an error.`,
+          description: err.message || '',
+        });
+      }
     }
-    setD2dProposalModal((prevState) => !prevState);
   };
 
   const inputHelperText = () => {
