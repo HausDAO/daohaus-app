@@ -95,8 +95,6 @@ const completeQueries = {
     try {
       const activity = await fetchAllActivity(args);
 
-      console.log('activity', activity);
-
       const resolvedActivity = {
         // manually copying to prevent unnecessary copies of proposals
         id: activity.id,
@@ -148,8 +146,6 @@ const completeQueries = {
     }
   },
   async uberMinionData(args, setter) {
-    console.log(args);
-    console.log(UBERHAUS_DATA.ADDRESS);
     if (args.daoID === UBERHAUS_DATA.ADDRESS) {
       try {
         const uberMinions = await graphQuery({

@@ -54,8 +54,6 @@ const DaoToDaoManager = ({
   const [uberHausMinion, setUberHausMinion] = useState(null);
   const [loading, setLoading] = useState(true);
 
-  console.log('isMember', isMember);
-
   useEffect(() => {
     const setup = async () => {
       const uberHausMinionData = daoOverview.minions.find(
