@@ -11,6 +11,7 @@ import Register from './pages/Register';
 import DaoSwitcherModal from './modals/daoSwitcherModal';
 import TxInfoModal from './modals/TxInfoModal';
 import FourOhFour from './pages/404';
+import HubBalances from './pages/HubBalances';
 
 function App() {
   const AppScopedModals = () => (
@@ -45,6 +46,9 @@ function App() {
         </Route>
         <Route exact path='/register/:registerchain/:daoid'>
           <Register />
+        </Route>
+        <Route exact path='/hub-balances'>
+          <HubBalances />
         </Route>
         <Route
           path='/dao/:daochain/:daoid'
