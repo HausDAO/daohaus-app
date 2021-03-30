@@ -47,6 +47,21 @@ export const UBERHAUS_MEMBER_DELEGATE = gql`
   }
 `;
 
+export const UBERHAUS_DELEGATE = gql`
+  query member($molochAddress: String!, $delegateAddress: String!) {
+    members(
+      where: { molochAddress: $molochAddress, delegateKey: $delegateAddress }
+    ) {
+      memberAddress
+      molochAddress
+      delegateKey
+      moloch {
+        id
+      }
+    }
+  }
+`;
+
 export const UBER_MINIONS = gql`
   # query minions {
   #   minionType
