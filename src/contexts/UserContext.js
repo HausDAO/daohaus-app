@@ -26,6 +26,7 @@ export const UserContextProvider = ({ children }) => {
 
   const [apiData, setApiData] = useState(null);
   const [userHubDaos, setUserHubDaos] = useSessionStorage('userHubData', []);
+
   const [outstandingTXs, setOutstandingTXs] = useState([]);
 
   const hasLoadedHubData = userHubDaos?.length === numOfSupportedChains;
