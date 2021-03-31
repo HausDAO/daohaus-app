@@ -87,9 +87,9 @@ const HubProfileCard = ({ address }) => {
           </Box>
           <Box fontSize='sm' mt={4}>
             {location.pathname === '/hub-balances/' ? (
-              <Link to={`/`}>View my hub</Link>
+              <Link to={`/`}>View hub</Link>
             ) : (
-              <Link to={`/hub-balances/`}>View my internal DAO balances</Link>
+              <Link to={`/hub-balances/`}>View internal DAO balances</Link>
             )}
           </Box>
         </>
