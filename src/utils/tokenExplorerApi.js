@@ -69,6 +69,7 @@ const parseBlockScout = async (json, address) => {
       return t;
     });
   console.log('erc20serc20serc20s', erc20s);
+  console.log('erc721serc721serc721s', erc721s);
   return [...erc20s, ...erc721s];
 };
 
@@ -76,5 +77,4 @@ export const getBlockScoutTokenData = async (address) => {
   const json = await fetchBlockScoutAPIData(address);
   const tokenData = parseBlockScout(json, address);
   return tokenData;
-
-}
+};
