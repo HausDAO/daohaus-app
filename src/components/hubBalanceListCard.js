@@ -1,18 +1,13 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { Flex, Box, Skeleton, Image, useToast, Icon } from '@chakra-ui/react';
-import { CopyToClipboard } from 'react-copy-to-clipboard';
-import { FaCopy } from 'react-icons/fa';
+import { Flex, Box, Skeleton, Icon } from '@chakra-ui/react';
 import { RiLoginBoxLine } from 'react-icons/ri';
 
 import { numberWithCommas } from '../utils/general';
 import { useInjectedProvider } from '../contexts/InjectedProviderContext';
 
 const HubBalanceListCard = ({ token }) => {
-  const toast = useToast();
   const { address } = useInjectedProvider();
-
-  console.log('token', token);
 
   return (
     <Flex h='60px' align='center'>
