@@ -12,40 +12,27 @@ const HubBalanceListCard = ({ token }) => {
   const toast = useToast();
   const { address } = useInjectedProvider();
 
+  console.log('token', token);
+
   return (
     <Flex h='60px' align='center'>
       <Box w={'20%'} d={['none', null, null, 'inline-block']}>
-        <Skeleton isLoaded={token.token.symbol}>
-          <Flex align='center'>
-            {token?.logoUri && (
-              <Image src={token.logoUri} height='35px' mr='15px' />
-            )}
-
-            <Box fontFamily='mono'>{token.token.symbol}</Box>
-
-            <CopyToClipboard
-              text={token.token.tokenAddress}
-              onCopy={() =>
-                toast({
-                  title: 'Copied Address',
-                  position: 'top-right',
-                  status: 'success',
-                  duration: 3000,
-                  isClosable: true,
-                })
-              }
-            >
-              <Icon
-                as={FaCopy}
-                color='secondary.300'
-                ml={2}
-                _hover={{ cursor: 'pointer' }}
-              />
-            </CopyToClipboard>
-          </Flex>
-        </Skeleton>
+        <Flex align='center'>
+          <Box fontFamily='mono'>{token.network.data[0].meta.name}</Box>
+        </Flex>
       </Box>
-      <Box w={['45%', null, null, '45%']}>
+      <Box w={'20%'} d={['none', null, null, 'inline-block']}>
+        <Flex align='center'>
+          <Box fontFamily='mono'>{token.network.name}</Box>
+        </Flex>
+      </Box>
+      <Box w={'20%'} d={['none', null, null, 'inline-block']}>
+        <Flex align='center'>
+          <Box fontFamily='mono'>{token.token.symbol}</Box>
+        </Flex>
+      </Box>
+
+      <Box w={['25%', null, null, '25%']}>
         <Skeleton isLoaded={token.tokenBalance}>
           <Box fontFamily='mono'>
             {token.tokenBalance ? (
@@ -62,11 +49,11 @@ const HubBalanceListCard = ({ token }) => {
         </Skeleton>
       </Box>
 
-      <Box w={['25%', null, null, '20%']} d={'inline-block'}>
+      <Box w={['45%', null, null, '45%']} d={'inline-block'}>
         <Link
           to={`/dao/${token.network.networkID}/${token.moloch.id}/profile/${address}`}
         >
-          Withdraw
+          Withdraw on DAO profile page
           <Icon
             as={RiLoginBoxLine}
             ml={3}

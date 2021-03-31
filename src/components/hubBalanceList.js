@@ -7,16 +7,22 @@ import HubBalanceListCard from './hubBalanceListCard';
 
 const HubBalanceList = ({ tokens }) => {
   return (
-    <ContentBox mt={6} maxW='800px'>
+    <ContentBox mt={6}>
       <Flex>
+        <Box w={'20%'} d={['none', null, null, 'inline-block']}>
+          <TextBox size='xs'>DAO</TextBox>
+        </Box>
+        <Box w={'20%'} d={['none', null, null, 'inline-block']}>
+          <TextBox size='xs'>Network</TextBox>
+        </Box>
         <Box w={'20%'} d={['none', null, null, 'inline-block']}>
           <TextBox size='xs'>Asset</TextBox>
         </Box>
-        <Box w={['45%', null, null, '45%']}>
-          <TextBox size='xs'>Internal Balance</TextBox>
+        <Box w={['25%', null, null, '25%']}>
+          <TextBox size='xs'>Balance</TextBox>
         </Box>
 
-        <Box w={['25%', null, null, '20%']}></Box>
+        <Box w={['45%', null, null, '45%']}></Box>
       </Flex>
       {tokens ? (
         tokens

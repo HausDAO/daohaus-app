@@ -7,6 +7,7 @@ import MainViewLayout from '../components/mainViewLayout';
 import HubSignedOut from '../components/hubSignedOut';
 import HubProfileCard from '../components/hubProfileCard';
 import HubBalanceList from '../components/hubBalanceList';
+import { Box } from '@chakra-ui/layout';
 
 const HubBalances = () => {
   const { address } = useInjectedProvider();
@@ -33,6 +34,12 @@ const HubBalances = () => {
         {address ? (
           <>
             <HubProfileCard address={address} key={address} />
+            <Box my={5} maxW='800px'>
+              Internal DAO balances are the result of proposal deposits,
+              processing rewards, rage quits and cancelled tribute proposals.
+              These can be withdrawn into your wallet from the profile page in
+              the DAO.
+            </Box>
             <HubBalanceList tokens={balances} />
           </>
         ) : (
