@@ -2,6 +2,29 @@ import { NFTService } from '../services/nftService';
 import { chainByID } from './chain';
 import { fetchTokenData } from './tokenValue';
 
+const fetchEtherscanAPIData = async (address, daochain) => {
+  try {
+    const key = process.env.REACT_APP_ETHERSCAN_KEY;
+    const url = `${chainByID(daochain).tokenlist_api_url}${address}${key &&
+      '&apikey=' + key}`;
+    const response = await fetch(url);
+    const json = await response.json();
+    if (!json.result || json.status === '0') {
+      const msg = json.result;
+      throw new Error(msg);
+    }
+    return json;
+  } catch (error) {
+    throw new Error(error);
+  }
+};
+const parseEtherscan = async (json, address) => {};
+export const getEtherscanTokenData = async (address) => {
+  const json = await fetchEtherscanAPIData(address);
+  const tokenData = parseEtherscan(json, address);
+  return tokenData;
+};
+
 const fetchBlockScoutAPIData = async (address) => {
   try {
     const daochain = '0x64';

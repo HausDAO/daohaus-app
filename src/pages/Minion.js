@@ -84,7 +84,8 @@ const MinionDetails = ({ overview, members, currentDaoTokens }) => {
     const getContractBalance = async () => {
       try {
         if (daochain === '0x1' || daochain === '0x4' || daochain === '0x2a') {
-          // not supported yet
+          // eth chains not supported yet
+          // may need to do something different for matic too
           setContractBalances([]);
         } else {
           setContractBalances(await getBlockScoutTokenData(minion));
