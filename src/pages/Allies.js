@@ -13,7 +13,7 @@ import { useInjectedProvider } from '../contexts/InjectedProviderContext';
 import { useSessionStorage } from '../hooks/useSessionStorage';
 import { useParams } from 'react-router-dom';
 import { bigGraphQuery } from '../utils/theGraph';
-import { UBERHAUS_ADDRESS } from '../utils/uberhaus';
+import { UBERHAUS_DATA } from '../utils/uberhaus';
 import { UberHausMinionService } from '../services/uberHausMinionService';
 
 const Allies = ({
@@ -23,7 +23,7 @@ const Allies = ({
   proposals,
   daoMembers,
 }) => {
-  const { daoid, daochain } = useParams();
+  const { daoid } = useParams();
 
   const [uberProposals, setUberProposals] = useSessionStorage(
     `U-proposals`,
@@ -43,12 +43,12 @@ const Allies = ({
     if (uberProposals || uberMembers || uberOverview) return;
 
     // do not fetch without necessary data
-    if (!daoid || !daochain || hasPerformedBatchQuery.current) return;
+    if (!daoid || hasPerformedBatchQuery.current) return;
 
     const bigQueryOptions = {
       args: {
-        daoID: UBERHAUS_ADDRESS,
-        chainID: '0x2a',
+        daoID: UBERHAUS_DATA.ADDRESS,
+        chainID: UBERHAUS_DATA.NETWORK,
       },
       getSetters: [
         { getter: 'getOverview', setter: setUberOveriew },
@@ -62,30 +62,21 @@ const Allies = ({
     bigGraphQuery(bigQueryOptions);
 
     hasPerformedBatchQuery.current = true;
-  }, [
-    daoid,
-    daochain,
-    uberMembers,
-    uberProposals,
-    uberOverview,
-    uberProposals,
-  ]);
+  }, [daoid, uberMembers, uberProposals, uberOverview, uberProposals]);
 
   const uberHausMinion = useMemo(() => {
-    return daoOverview
-      ? daoOverview.minions.find(
-          (minion) =>
-            minion.minionType === 'UberHaus minion' &&
-            minion.uberHausAddress === UBERHAUS_ADDRESS,
-        )
-      : null;
+    return daoOverview?.minions?.find(
+      (minion) =>
+        minion.minionType === 'UberHaus minion' &&
+        minion.uberHausAddress === UBERHAUS_DATA.ADDRESS,
+    );
   }, [daoOverview]);
 
   useEffect(() => {
     const getDelegate = async () => {
       try {
         const delegate = await UberHausMinionService({
-          chainID: daochain,
+          chainID: UBERHAUS_DATA.NETWORK,
           uberHausMinion: uberHausMinion.minionAddress,
         })('currentDelegate')();
         setUberDelegate(delegate);
@@ -97,6 +88,25 @@ const Allies = ({
       getDelegate();
     }
   }, [uberHausMinion]);
+
+  const refetchAllies = () => {
+    const bigQueryOptions = {
+      args: {
+        daoID: UBERHAUS_DATA.ADDRESS,
+        chainID: UBERHAUS_DATA.NETWORK,
+      },
+      getSetters: [
+        { getter: 'getOverview', setter: setUberOveriew },
+        {
+          getter: 'getActivities',
+          setter: { setUberProposals },
+        },
+        { getter: 'getMembers', setter: setUberMembers },
+      ],
+    };
+    bigGraphQuery(bigQueryOptions);
+    hasPerformedBatchQuery.current = true;
+  };
 
   if (!address) {
     return (
@@ -136,9 +146,15 @@ const Allies = ({
           uberDelegate={uberDelegate}
           uberHausMinion={uberHausMinion}
           uberOverview={uberOverview}
+          refetchAllies={refetchAllies}
         />
         <GenericModal closeOnOverlayClick={true} modalId='uberMinionLaunch'>
-          <NewUberHausMinion />
+          <NewUberHausMinion
+            daoMembers={daoMembers}
+            uberHausMinion={uberHausMinion}
+            uberMembers={uberMembers}
+            uberDelegate={uberDelegate}
+          />
         </GenericModal>
         <DaoToDaoManager
           uberDelegate={uberDelegate}

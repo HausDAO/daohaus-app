@@ -1,7 +1,7 @@
 import { supportedChains } from './chain';
 import { utils } from 'web3';
 
-export const parseSummonresAndShares = (data) => {
+export const parseSummonersAndShares = (data) => {
   if (!data) {
     return [[], []];
   }
@@ -17,7 +17,7 @@ export const parseSummonresAndShares = (data) => {
 };
 
 export const validateSummonresAndShares = (data) => {
-  const [addrs, amounts] = parseSummonresAndShares(data);
+  const [addrs, amounts] = parseSummonersAndShares(data);
   let errMsg = true;
   if (!addrs.length || !amounts.length) {
     errMsg = 'Something went wrong with the summoner list';
@@ -163,8 +163,8 @@ export const daoPresets = (chainId) => {
     presets = presets.map((preset) => {
       preset.currency = 'WXDAI';
       preset.approvedToken = supportedChains[chainId].wxdai_contract;
-      preset.proposalDeposit = '100000000000000000';
-      preset.processingReward = '10000000000000000';
+      preset.proposalDeposit = '10000000000000000000';
+      preset.processingReward = '1000000000000000000';
 
       return preset;
     });
@@ -174,8 +174,8 @@ export const daoPresets = (chainId) => {
     presets = presets.map((preset) => {
       preset.currency = 'WMATIC';
       preset.approvedToken = supportedChains[chainId].weth_contract;
-      preset.proposalDeposit = '100000000000000000';
-      preset.processingReward = '10000000000000000';
+      preset.proposalDeposit = '10000000000000000000';
+      preset.processingReward = '1000000000000000000';
 
       return preset;
     });
@@ -185,8 +185,8 @@ export const daoPresets = (chainId) => {
     presets = presets.map((preset) => {
       preset.currency = 'WEIDI';
       preset.approvedToken = supportedChains[chainId].weth_contract;
-      preset.proposalDeposit = '100000000000000000';
-      preset.processingReward = '10000000000000000';
+      preset.proposalDeposit = '10000000000000000000';
+      preset.processingReward = '1000000000000000000';
 
       return preset;
     });

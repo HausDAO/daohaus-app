@@ -46,7 +46,7 @@ const AddressAvatar = React.memo(function AddrAvatar({
     };
   }, [addr]);
 
-  const renderImage = (addr) => {
+  const renderAvatarImage = (addr) => {
     if (profile?.image?.length) {
       return `https://ipfs.infura.io/ipfs/${profile?.image[0].contentUrl['/']}`;
     } else if (profile === false) {
@@ -60,7 +60,7 @@ const AddressAvatar = React.memo(function AddrAvatar({
     <Flex direction='row' alignItems='center'>
       <Flex direction='row' alignItems='center'>
         {addr && hasFetched && (
-          <Avatar name={addr} src={renderImage(addr)} size='sm' />
+          <Avatar name={addr} src={renderAvatarImage(addr)} size='sm' />
         )}
         <Flex
         // d={[
@@ -71,7 +71,7 @@ const AddressAvatar = React.memo(function AddrAvatar({
         // ]}
         >
           <Text fontSize='sm' fontFamily='heading' ml={3}>
-            {profile?.name || truncateAddr(addr)}
+            {profile?.name || profile?.ens || truncateAddr(addr)}
           </Text>
           <Box as='span' ml={1}>
             {profile?.emoji && profile.emoji}{' '}

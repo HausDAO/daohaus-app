@@ -66,6 +66,17 @@ export const HUB_MEMBERSHIPS = gql`
           molochAddress
         }
       }
+      tokenBalances {
+        tokenBalance
+        moloch {
+          id
+        }
+        token {
+          tokenAddress
+          symbol
+          decimals
+        }
+      }
     }
   }
 `;

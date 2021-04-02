@@ -7,6 +7,7 @@ import { getTerm } from '../utils/metadata';
 import MemberInfoGuts from './memberInfoGuts';
 import TextBox from './TextBox';
 import ContentBox from './ContentBox';
+import UberHausMemberInfoGuts from './uberHausMemberInfoGuts';
 
 const MemberInfoCard = ({ member, customTerms }) => {
   const { address } = useInjectedProvider();
@@ -31,7 +32,11 @@ const MemberInfoCard = ({ member, customTerms }) => {
             )}
           </Flex>
           <ContentBox mt={3}>
-            <MemberInfoGuts member={member} />
+            {member.isUberMinion ? (
+              <UberHausMemberInfoGuts member={member} />
+            ) : (
+              <MemberInfoGuts member={member} />
+            )}
           </ContentBox>
         </>
       )}

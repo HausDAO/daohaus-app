@@ -16,13 +16,7 @@ import { RiLoginBoxLine } from 'react-icons/ri';
 import { BiCheckbox, BiCheckboxChecked } from 'react-icons/bi';
 
 import TextBox from './TextBox';
-import {
-  UBERHAUS_ADDRESS,
-  UBERHAUS_NETWORK,
-  UBERHAUS_NETWORK_NAME,
-  UBERHAUS_STAKING_TOKEN,
-  UBERHAUS_STAKING_TOKEN_SYMBOL,
-} from '../utils/uberhaus';
+import { UBERHAUS_DATA } from '../utils/uberhaus';
 import ContentBox from './ContentBox';
 import DAOHaus from '../assets/img/Daohaus__Castle--Dark.svg';
 import DaoToDaoUberAlly from './daoToDaoUberAllyLink';
@@ -65,7 +59,7 @@ const DaoToDaoManager = ({
       const uberHausMinionData = daoOverview.minions.find(
         (minion) =>
           minion.minionType === 'UberHaus minion' &&
-          minion.uberHausAddress === UBERHAUS_ADDRESS,
+          minion.uberHausAddress === UBERHAUS_DATA.ADDRESS,
       );
       if (uberHausMinionData) {
         const uberHausMembership = uberMembers.find((member) => {
@@ -105,15 +99,16 @@ const DaoToDaoManager = ({
           (bal) => {
             return (
               bal.token.tokenAddress.toLowerCase() ===
-              UBERHAUS_STAKING_TOKEN.toLowerCase()
+              UBERHAUS_DATA.STAKING_TOKEN.toLowerCase()
             );
           },
         );
         const tokenBalance = await TokenService({
           chainID: daochain,
-          tokenAddress: UBERHAUS_STAKING_TOKEN,
+          tokenAddress: UBERHAUS_DATA.STAKING_TOKEN,
           is32: false,
         })('balanceOf')(uberHausMinionData.minionAddress);
+
         setUberHausMinion({
           ...uberHausMinionData,
           balance: tokenBalance,
@@ -140,12 +135,17 @@ const DaoToDaoManager = ({
     setProposalType('d2dStake');
   };
 
+  const handleNominateDelegateClick = () => {
+    setD2dProposalModal((prevState) => !prevState);
+    setProposalType('d2dDelegate');
+  };
+
   const openModal = () => setD2dProposalTypeModal((prevState) => !prevState);
 
   const userNetworkMismatchOrNotMember =
     injectedChain?.chain_id !== daochain || !isMember;
 
-  const daoNotOnUberNetwork = daochain !== UBERHAUS_NETWORK;
+  const daoNotOnUberNetwork = daochain !== UBERHAUS_DATA.NETWORK;
 
   const hasMinionNotMember =
     uberHausMinion && !uberHausMinion.uberHausMembership;
@@ -165,13 +165,13 @@ const DaoToDaoManager = ({
     (ally) => ally.allyType === 'uberHausBurner' && !ally.isParent,
   );
 
-  if (daoid === UBERHAUS_ADDRESS) {
+  if (daoid === UBERHAUS_DATA.ADDRESS) {
     return (
       <>
         <TextBox size='xs' mb={2}>
           DAO On DAO Memberships
         </TextBox>
-        <ContentBox w='40%' position='relative'>
+        <ContentBox w='100%' maxWidth='40rem' position='relative'>
           <Flex align='center'>
             <>
               <Image src={DAOHaus} w='50px' h='50px' mr={4} />
@@ -195,9 +195,10 @@ const DaoToDaoManager = ({
       <TextBox size='xs' mb={2}>
         DAO On DAO Memberships
       </TextBox>
-      <ContentBox w='40%' position='relative'>
+      <ContentBox w='100%' maxWidth='40rem' position='relative'>
+        {/* <ComingSoonOverlay message='👀 Check back soon!' /> */}
         <Flex align='center'>
-          {daoid === UBERHAUS_ADDRESS ? (
+          {daoid === UBERHAUS_DATA.ADDRESS ? (
             <>
               <Image src={DAOHaus} w='50px' h='50px' mr={4} />
               <Box
@@ -220,7 +221,9 @@ const DaoToDaoManager = ({
               >
                 UberHAUS
               </Box>
-              <RouterLink to={`/dao/${UBERHAUS_NETWORK}/${UBERHAUS_ADDRESS}`}>
+              <RouterLink
+                to={`/dao/${UBERHAUS_DATA.NETWORK}/${UBERHAUS_DATA.ADDRESS}`}
+              >
                 <Icon
                   as={RiLoginBoxLine}
                   color='secondary.500'
@@ -231,7 +234,6 @@ const DaoToDaoManager = ({
             </>
           )}
         </Flex>
-        <ComingSoonOverlay message='👀 Check back soon!' />
 
         {loading ? (
           <Spinner />
@@ -243,7 +245,7 @@ const DaoToDaoManager = ({
                   <Box mt={5}>
                     <DaoToDaoUberAlly
                       dao={{
-                        name: `Manange membership in the ${UBERHAUS_NETWORK_NAME} burner dao`,
+                        name: `Manange membership in the ${UBERHAUS_DATA.NETWORK_NAME} burner dao`,
                         link: `/dao/${
                           chainByName(uberAlly.allyNetwork).chain_id
                         }/${uberAlly.ally}/allies`,
@@ -252,35 +254,27 @@ const DaoToDaoManager = ({
                   </Box>
                 ) : (
                   <>
-                    {!userNetworkMismatchOrNotMember ? (
+                    {userNetworkMismatchOrNotMember ? (
                       <Box fontSize='md' my={2}>
                         Are you a member of this DAO and on the correct network?
                       </Box>
                     ) : (
                       <>
-                        <Box fontSize='md' my={2}>
-                          UberHAUS is on the {UBERHAUS_NETWORK_NAME} network.
-                          You&apos;ll need to summon a clone of your DAO there
-                          to join.
-                          <Box my={2}>
-                            <Link
-                              href='https://discord.gg/eJsBk3sf'
-                              target='_blank'
-                              rel='noreferrer noopener'
-                              color='secondary.500'
-                              my={3}
-                            >
-                              Get help in our Discord.
-                            </Link>
-                          </Box>
+                        <Box fontSize='md' my={2} position='relative'>
+                          UberHAUS is on the {UBERHAUS_DATA.NETWORK_NAME}{' '}
+                          network. You&apos;ll need to summon a clone of your
+                          DAO there to join.
                         </Box>
-                        <Button
-                          w='50%'
-                          as={RouterLink}
-                          to={`/dao/${daochain}/${daoid}/uberhaus/clone`}
-                        >
-                          Summon Clone
-                        </Button>
+                        <Box my={2} h={100} position='relative'>
+                          <ComingSoonOverlay message='👀 Check back soon!' />
+                          <Button
+                            w='50%'
+                            as={RouterLink}
+                            to={`/dao/${daochain}/${daoid}/uberhaus/clone`}
+                          >
+                            Summon Clone
+                          </Button>
+                        </Box>
                       </>
                     )}
                   </>
@@ -302,14 +296,17 @@ const DaoToDaoManager = ({
                         Are you a member of this DAO and on the correct network?
                       </Box>
                     ) : (
-                      <Button
-                        w='50%'
-                        onClick={() =>
-                          setGenericModal({ uberMinionLaunch: true })
-                        }
-                      >
-                        Summon Minion
-                      </Button>
+                      <Box my={2} h={100} position='relative'>
+                        <ComingSoonOverlay message='👀 Check back soon!' />
+                        <Button
+                          w='50%'
+                          onClick={() =>
+                            setGenericModal({ uberMinionLaunch: true })
+                          }
+                        >
+                          Summon Minion
+                        </Button>
+                      </Box>
                     )}
                   </>
                 ) : null}
@@ -322,45 +319,9 @@ const DaoToDaoManager = ({
                     </Box>
                     <Box fontSize='md' my={2}>
                       The 2nd step to join is to make a proposal to stake{' '}
-                      {UBERHAUS_STAKING_TOKEN_SYMBOL} into the UberHAUS DAO.
+                      {UBERHAUS_DATA.STAKING_TOKEN_SYMBOL} into the UberHAUS
+                      DAO.
                     </Box>
-
-                    {/* {+uberHausMinion.balance <= 0 ? (
-                        <>
-                          <Box fontSize='md' my={2}>
-                            Before you can make a proposal you&apos;ll need to
-                            send {UBERHAUS_STAKING_TOKEN_SYMBOL} to your
-                            minion&apos;s address
-                          </Box>
-                          <Flex>
-                            <>{truncateAddr(uberHausMinion.minionAddress)}</>
-
-                            <CopyToClipboard
-                              text={uberHausMinion.minionAddress}
-                              onCopy={() =>
-                                toast({
-                                  title: 'Copied Address',
-                                  position: 'top-right',
-                                  status: 'success',
-                                  duration: 3000,
-                                  isClosable: true,
-                                })
-                              }
-                            >
-                              <Icon
-                                as={FaCopy}
-                                color='secondary.300'
-                                ml={2}
-                                _hover={{ cursor: 'pointer' }}
-                              />
-                            </CopyToClipboard>
-                          </Flex>
-                          <Box fontSize='md' my={2}>
-                            Or create a funding proposal with HAUS from the dao
-                            to the minion address.
-                          </Box>
-                        </>
-                      ) : null} */}
 
                     {+uberHausMinion.balance > 0 &&
                     uberHausMinion.whitelistedStakingToken ? (
@@ -372,14 +333,11 @@ const DaoToDaoManager = ({
                         <Box fontSize='md' my={2}>
                           Before you can make a proposal your DAO and minion
                           need to be ready to work with{' '}
-                          {UBERHAUS_STAKING_TOKEN_SYMBOL}.
+                          {UBERHAUS_DATA.STAKING_TOKEN_SYMBOL}.
                         </Box>
 
                         {!uberHausMinion.whitelistedStakingToken ? (
-                          <Flex
-                            justifyContent='space-between'
-                            alignItems='center'
-                          >
+                          <Flex justifyContent='flex-start' alignItems='center'>
                             <Icon
                               as={BiCheckbox}
                               color='secondary.500'
@@ -388,14 +346,15 @@ const DaoToDaoManager = ({
                               mr={3}
                             />
                             <Box fontSize='md' my={2}>
-                              Approve {UBERHAUS_STAKING_TOKEN_SYMBOL} with a
-                              token proposal.
+                              Approve {UBERHAUS_DATA.STAKING_TOKEN_SYMBOL} with
+                              a token proposal.
                             </Box>
                             <RouterLink
                               to={`/dao/${daochain}/${daoid}/proposals/new`}
                             >
                               <Icon
                                 as={RiLoginBoxLine}
+                                ml={5}
                                 color='secondary.500'
                                 h='25px'
                                 w='25px'
@@ -403,10 +362,7 @@ const DaoToDaoManager = ({
                             </RouterLink>
                           </Flex>
                         ) : (
-                          <Flex
-                            justifyContent='space-between'
-                            alignItems='center'
-                          >
+                          <Flex justifyContent='flex-start' alignItems='center'>
                             <Icon
                               as={BiCheckboxChecked}
                               color='secondary.500'
@@ -415,8 +371,8 @@ const DaoToDaoManager = ({
                               mr={3}
                             />
                             <Box fontSize='md' my={2}>
-                              {UBERHAUS_STAKING_TOKEN_SYMBOL} is whitelisted.
-                              Your DAO is ready!
+                              {UBERHAUS_DATA.STAKING_TOKEN_SYMBOL} is
+                              whitelisted. Your DAO is ready!
                             </Box>
                           </Flex>
                         )}
@@ -424,7 +380,7 @@ const DaoToDaoManager = ({
                         {+uberHausMinion.balance <= 0 ? (
                           <>
                             <Flex
-                              justifyContent='space-between'
+                              justifyContent='flex-start'
                               alignItems='center'
                             >
                               <Icon
@@ -435,8 +391,8 @@ const DaoToDaoManager = ({
                                 mr={3}
                               />
                               <Box fontSize='md' my={2}>
-                                Send {UBERHAUS_STAKING_TOKEN_SYMBOL} to your
-                                minion&apos;s address
+                                Send {UBERHAUS_DATA.STAKING_TOKEN_SYMBOL} to
+                                your minion&apos;s address
                               </Box>
                             </Flex>
                             <Flex>
@@ -463,10 +419,7 @@ const DaoToDaoManager = ({
                             </Flex>
                           </>
                         ) : (
-                          <Flex
-                            justifyContent='space-between'
-                            alignItems='center'
-                          >
+                          <Flex justifyContent='flex-start' alignItems='center'>
                             <Icon
                               as={BiCheckboxChecked}
                               color='secondary.500'
@@ -475,8 +428,9 @@ const DaoToDaoManager = ({
                               mr={3}
                             />
                             <Box fontSize='md' my={2}>
-                              The minion has a {UBERHAUS_STAKING_TOKEN_SYMBOL}{' '}
-                              balance and is ready!
+                              The minion has a{' '}
+                              {UBERHAUS_DATA.STAKING_TOKEN_SYMBOL} balance and
+                              is ready!
                             </Box>
                           </Flex>
                         )}
@@ -490,6 +444,8 @@ const DaoToDaoManager = ({
                     <DaoToDaoMemberInfo
                       membership={uberHausMinion?.uberHausMembership}
                       delegate={uberHausMinion?.uberHausDelegate}
+                      handleNominateDelegateClick={handleNominateDelegateClick}
+                      isMember={isMember}
                     />
                     <Box mt={10}>
                       <DaoToDaoProposalCard
@@ -506,6 +462,8 @@ const DaoToDaoManager = ({
                       delegate={uberHausMinion?.uberHausDelegate}
                       needDelegateKeySet={needDelegateKeySet}
                       openModal={openModal}
+                      handleNominateDelegateClick={handleNominateDelegateClick}
+                      isMember={isMember}
                     />
 
                     {uberHausMinion.openChildProposals.length ? (
@@ -538,7 +496,7 @@ const DaoToDaoManager = ({
                           {`${uberHausMinion.openUberProposals.length} Active Proposals in UberHAUS`}
                         </TextBox>
                         <RouterLink
-                          to={`/dao/${UBERHAUS_NETWORK}/${UBERHAUS_ADDRESS}/proposals`}
+                          to={`/dao/${UBERHAUS_DATA.NETWORK}/${UBERHAUS_DATA.ADDRESS}/proposals`}
                         >
                           <Icon
                             as={RiLoginBoxLine}
@@ -556,7 +514,7 @@ const DaoToDaoManager = ({
                   <Box mt={10} borderTop='1px' py={5}>
                     <DaoToDaoUberAlly
                       dao={{
-                        bodyText: `Your UberHAUS membership is managed here in this ${UBERHAUS_NETWORK_NAME} clone DAO`,
+                        bodyText: `Your UberHAUS membership is managed here in this ${UBERHAUS_DATA.NETWORK_NAME} clone DAO`,
                         name: `Visit your home dao`,
                         link: `/dao/${
                           chainByName(uberParent.allyNetwork).chain_id
@@ -569,6 +527,20 @@ const DaoToDaoManager = ({
             )}
           </>
         )}
+
+        {!isUberHausMember ? (
+          <Box mt={7} mb={2} fontSize='sm'>
+            <Link
+              href='https://discord.gg/eJsBk3sf'
+              target='_blank'
+              rel='noreferrer noopener'
+              color='secondary.500'
+              my={3}
+            >
+              Need a hand? Get help in our Discord.
+            </Link>
+          </Box>
+        ) : null}
       </ContentBox>
     </>
   );

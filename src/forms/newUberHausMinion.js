@@ -1,8 +1,9 @@
-import React, { useState } from 'react';
+import React, { useMemo, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import {
   Box,
   Button,
+  Flex,
   FormControl,
   FormHelperText,
   Heading,
@@ -10,8 +11,10 @@ import {
   Input,
   Link,
   Spinner,
+  Text,
+  Tooltip,
 } from '@chakra-ui/react';
-import { RiExternalLinkLine } from 'react-icons/ri';
+import { RiExternalLinkLine, RiInformationLine } from 'react-icons/ri';
 import { useForm } from 'react-hook-form';
 
 import { UberHausMinionFactoryService } from '../services/uberHausMinionFactoryService';
@@ -21,14 +24,16 @@ import { createPoll } from '../services/pollService';
 import { useUser } from '../contexts/UserContext';
 import { useOverlay } from '../contexts/OverlayContext';
 import { useDao } from '../contexts/DaoContext';
-import {
-  UBERHAUS_ADDRESS,
-  UBERHAUS_MINION_REWARDS_FACTOR,
-} from '../utils/uberhaus';
+import { UBERHAUS_DATA } from '../utils/uberhaus';
 import AddressInput from './addressInput';
 import { isEthAddress } from '../utils/general';
 
-const NewUberHausMinion = () => {
+const NewUberHausMinion = ({
+  daoMembers,
+  uberHausMinion,
+  uberMembers,
+  uberDelegate,
+}) => {
   const [loading, setLoading] = useState(false);
   const { daochain, daoid } = useParams();
   const { address, injectedProvider, injectedChain } = useInjectedProvider();
@@ -41,6 +46,22 @@ const NewUberHausMinion = () => {
   const [missingDelegate, setMissingDelegate] = useState(false);
   const now = (new Date().getTime() / 1000).toFixed();
 
+  const candidates = useMemo(() => {
+    if (!daoMembers || !uberMembers) return;
+    return daoMembers.filter((member) => {
+      const hasShares = +member.shares > 0;
+      const isNotDelegate = member.memberAddress !== uberDelegate;
+      const isNotUberMemberOrDelegate = uberMembers.every(
+        (uberMember) =>
+          member.memberAddress !== uberMember.memberAddress &&
+          member.memberAddress !== uberMember.delegateKey,
+      );
+      if (hasShares && isNotDelegate && isNotUberMemberOrDelegate) {
+        return member;
+      }
+    });
+  }, [daoMembers, uberMembers, uberDelegate]);
+  console.log(candidates);
   const onSubmit = async (values) => {
     console.log('values', values, isEthAddress(values.memberApplicant));
     if (!isEthAddress(values.memberApplicant)) {
@@ -54,10 +75,10 @@ const NewUberHausMinion = () => {
     const ZERO_ADDRESS = '0x0000000000000000000000000000000000000000';
     const summonParams = [
       daoid,
-      UBERHAUS_ADDRESS,
+      UBERHAUS_DATA.ADDRESS,
       ZERO_ADDRESS,
       values.memberApplicant,
-      UBERHAUS_MINION_REWARDS_FACTOR,
+      UBERHAUS_DATA.MINION_REWARDS_FACTOR,
       values.details,
     ];
 
@@ -133,13 +154,47 @@ const NewUberHausMinion = () => {
           <form onSubmit={handleSubmit(onSubmit)}>
             <Box mb={3} fontSize='sm'>
               <AddressInput
-                name='applicant'
-                formLabel='delegate'
-                tipLabel='DAO member address that will be able to vote in UberHAUS. You can change this later through a proposal.'
+                name='delegate'
+                formLabel={
+                  <Flex position='relative'>
+                    Eligable Delegates
+                    <Tooltip
+                      hasArrow={true}
+                      bg='primary.500'
+                      placement='right'
+                      p={2}
+                      label={
+                        <Flex direction='column'>
+                          <Text fontWeight='700' mb={2}>
+                            To be Eligable:
+                          </Text>
+                          <Text>- Delegate must be a share-holding member</Text>
+                          <Text>
+                            - Delegate must not be a member of UberHaus
+                          </Text>
+                          <Text>
+                            - Cannot be an UberHaus delegate in another Dao.
+                          </Text>
+                        </Flex>
+                      }
+                    >
+                      <Box>
+                        <Icon
+                          as={RiInformationLine}
+                          transform='translate(6px, -3px)'
+                          w={5}
+                          h={5}
+                        />
+                      </Box>
+                    </Tooltip>
+                  </Flex>
+                }
                 register={register}
                 setValue={setValue}
                 watch={watch}
                 memberOnly={true}
+                overrideData={candidates}
+                memberOverride={true}
               />
               <FormControl mb={5}>
                 <FormHelperText fontSize='sm' id='name-helper-text' mb={3}>

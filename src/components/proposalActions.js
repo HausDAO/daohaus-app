@@ -16,7 +16,7 @@ import { createPoll } from '../services/pollService';
 import { MolochService } from '../services/molochService';
 import ContentBox from './ContentBox';
 import TextBox from './TextBox';
-import { memberVote, PROPOSAL_TYPES } from '../utils/proposalUtils';
+import { memberVote } from '../utils/proposalUtils';
 import { supportedChains } from '../utils/chain';
 import { getTerm } from '../utils/metadata';
 import {
@@ -25,8 +25,7 @@ import {
   isDelegating,
 } from '../utils/general';
 import { useMetaData } from '../contexts/MetaDataContext';
-import { UberHausMinionService } from '../services/uberHausMinionService';
-import { MinionService } from '../services/minionService';
+import MinionExecute from './minionExecute';
 
 const MotionBox = motion.custom(Box);
 
@@ -70,7 +69,7 @@ const ProposalVote = ({
   } = useOverlay();
   const { refreshDao } = useTX();
   const { customTerms } = useMetaData();
-  const [minionDeets, setMinionDeets] = useState();
+
   const [enoughDeposit, setEnoughDeposit] = useState(false);
 
   const currentlyVoting = (proposal) => {
@@ -176,9 +175,9 @@ const ProposalVote = ({
 
   const unlock = async (token) => {
     setLoading(true);
-    console.log(token);
 
-    const args = [daoid, MaxUint256];
+    const maxUnlock = MaxUint256.toString();
+    const args = [daoid, maxUnlock];
 
     try {
       const poll = createPoll({ action: 'unlockToken', cachePoll })({
@@ -186,7 +185,7 @@ const ProposalVote = ({
         chainID: daochain,
         tokenAddress: token,
         userAddress: address,
-        unlockAmount: MaxUint256,
+        unlockAmount: maxUnlock,
         actions: {
           onError: (error, txHash) => {
             errorToast({
@@ -351,116 +350,6 @@ const ProposalVote = ({
       userRejectedToast();
     }
   };
-
-  const executeMinion = async (proposal) => {
-    console.log('proposal', proposal);
-    if (!proposal?.minion) return;
-
-    const args = [proposal.proposalId];
-    try {
-      const poll = createPoll({ action: 'minionExecuteAction', cachePoll })({
-        minionAddress: proposal.minionAddress,
-        chainID: daochain,
-        proposalId: proposal.proposalId,
-        proposalType: proposal?.proposalType,
-        actions: {
-          onError: (error, txHash) => {
-            errorToast({
-              title: `There was an error.`,
-            });
-            resolvePoll(txHash);
-            console.error(`Could not find a matching proposal: ${error}`);
-            setLoading(false);
-          },
-          onSuccess: (txHash) => {
-            successToast({
-              title: 'Minion action executed.',
-            });
-            refreshDao();
-            resolvePoll(txHash);
-            setLoading(false);
-          },
-        },
-      });
-      const onTxHash = () => {
-        setProposalModal(false);
-        setTxInfoModal(true);
-      };
-      if (proposal.proposalType === PROPOSAL_TYPES.MINION_VANILLA) {
-        await MinionService({
-          web3: injectedProvider,
-          minion: proposal.minionAddress,
-          chainID: daochain,
-        })('executeAction')({ args, address, poll, onTxHash });
-      } else if (
-        proposal.proposalType === PROPOSAL_TYPES.MINION_UBER_STAKE ||
-        proposal.proposalType === PROPOSAL_TYPES.MINION_UBER_DEFAULT
-      ) {
-        await UberHausMinionService({
-          web3: injectedProvider,
-          uberHausMinion: proposal.minionAddress,
-          chainID: daochain,
-        })('executeAction')({ args, address, poll, onTxHash });
-      } else if (proposal.proposalType === PROPOSAL_TYPES.MINION_UBER_DEL) {
-        await UberHausMinionService({
-          web3: injectedProvider,
-          uberHausMinion: proposal.minionAddress,
-          chainID: daochain,
-        })('executeAppointment')({ args, address, poll, onTxHash });
-      } else {
-        console.error('Could not find minion type');
-      }
-    } catch (err) {
-      setLoading(false);
-      console.log('error: ', err);
-    }
-  };
-
-  useEffect(() => {
-    const getMinionDeets = async () => {
-      try {
-        if (proposal.proposalType === PROPOSAL_TYPES.MINION_VANILLA) {
-          const action = await MinionService({
-            minion: proposal?.minionAddress,
-            web3: injectedProvider,
-            chainID: daochain,
-          })('getAction')({ proposalId: proposal?.proposalId });
-          setMinionDeets(action);
-        } else if (
-          proposal.proposalType === PROPOSAL_TYPES.MINION_UBER_STAKE ||
-          proposal.proposalType === PROPOSAL_TYPES.MINION_UBER_DEFAULT
-        ) {
-          const action = await UberHausMinionService({
-            web3: injectedProvider,
-            uberHausMinion: proposal.minionAddress,
-            chainID: daochain,
-          })('getAction')({ proposalId: proposal?.proposalId });
-          setMinionDeets(action);
-        } else if (proposal.proposalType === PROPOSAL_TYPES.MINION_UBER_DEL) {
-          const action = await UberHausMinionService({
-            web3: injectedProvider,
-            uberHausMinion: proposal.minionAddress,
-            chainID: daochain,
-          })('getAppointment')({ proposalId: proposal?.proposalId });
-          setMinionDeets(action);
-        }
-      } catch (err) {
-        console.log('here');
-        console.log('error: ', err);
-        setMinionDeets(null);
-      } finally {
-        setLoading(false);
-      }
-    };
-    if (
-      proposal?.proposalId &&
-      proposal?.minionAddress &&
-      injectedProvider &&
-      daochain
-    ) {
-      getMinionDeets();
-    }
-  }, [proposal, injectedProvider, daochain]);
 
   useEffect(() => {
     if (daoProposals) {
@@ -769,17 +658,7 @@ const ProposalVote = ({
             </Flex>
           ))}
         {proposal?.status === 'Passed' && proposal?.minionAddress && (
-          <Flex justify='center' pt='10px'>
-            <Flex direction='column'>
-              {minionDeets?.executed ? (
-                <Box>Executed</Box>
-              ) : (
-                <Button onClick={() => executeMinion(proposal)}>
-                  Execute Minion
-                </Button>
-              )}
-            </Flex>
-          </Flex>
+          <MinionExecute proposal={proposal} />
         )}
       </ContentBox>
     </>

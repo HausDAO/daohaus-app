@@ -19,7 +19,7 @@ export const UberHausMinionService = ({ web3, chainID, uberHausMinion }) => {
     }
     if (service === 'currentDelegate') {
       return async () => {
-        const action = await contract.methods.currentDelegate().call();
+        const action = await contract.methods[service]().call();
         return action;
       };
     } else if (service === 'getAppointment') {
@@ -36,12 +36,6 @@ export const UberHausMinionService = ({ web3, chainID, uberHausMinion }) => {
       service === 'pullGuildFunds'
     ) {
       return async ({ args, address, poll, onTxHash }) => {
-        console.log('IN CONTRACT');
-        console.log('service', service);
-        console.log('args', args);
-        console.log('address', address);
-        console.log('poll', poll);
-        console.log('onTxHash', onTxHash);
         try {
           const tx = await contract.methods[service](...args);
           console.log('tx', tx);
@@ -62,7 +56,10 @@ export const UberHausMinionService = ({ web3, chainID, uberHausMinion }) => {
           return error;
         }
       };
-    } else if (service === 'setInitialDelegate') {
+    } else if (
+      service === 'setInitialDelegate' ||
+      service === 'claimDelegateReward'
+    ) {
       return async ({ address, poll, onTxHash }) => {
         try {
           const tx = await contract.methods[service]();
@@ -70,8 +67,10 @@ export const UberHausMinionService = ({ web3, chainID, uberHausMinion }) => {
           return tx
             .send('eth_requestAccounts', { from: address })
             .on('transactionHash', (txHash) => {
-              if (poll) {
+              if (onTxHash) {
                 onTxHash();
+              }
+              if (poll) {
                 poll(txHash);
               }
             })
@@ -80,6 +79,18 @@ export const UberHausMinionService = ({ web3, chainID, uberHausMinion }) => {
             });
         } catch (error) {
           console.log('fired in service');
+          console.error(error);
+          return error;
+        }
+      };
+    } else if (service === 'delegateByAddress') {
+      return async (delegateAddress) => {
+        try {
+          const delegate = await contract.methods
+            .delegates(delegateAddress)
+            .call();
+          return delegate;
+        } catch (error) {
           console.error(error);
           return error;
         }

@@ -2,13 +2,11 @@ import React, { useState, useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { Button, FormControl, Flex, Icon, Box } from '@chakra-ui/react';
 import { RiErrorWarningLine } from 'react-icons/ri';
-import { UBERHAUS_ADDRESS, UBERHAUS_STAKING_TOKEN } from '../utils/uberhaus';
+import { UBERHAUS_DATA } from '../utils/uberhaus';
 import molochAbi from '../contracts/molochV2.json';
 
 import { useOverlay } from '../contexts/OverlayContext';
-// import { createHash, detailsToJSON } from '../utils/general';
 import RageInput from './rageInput';
-// import { PROPOSAL_TYPES } from '../utils/proposalUtils';
 import { createHash, detailsToJSON } from '../utils/general';
 import { useInjectedProvider } from '../contexts/InjectedProviderContext';
 import { createPoll } from '../services/pollService';
@@ -30,7 +28,7 @@ const RageQuitProposalForm = ({ uberHausMinion, uberMembers }) => {
 
   const { injectedProvider, address } = useInjectedProvider();
   const { cachePoll, resolvePoll } = useUser();
-  const { daoid, daochain } = useParams();
+  const { daoid } = useParams();
   const { refreshDao } = useTX();
 
   const { handleSubmit, errors, register, setValue } = useForm();
@@ -75,23 +73,25 @@ const RageQuitProposalForm = ({ uberHausMinion, uberMembers }) => {
 
     const hash = createHash();
     const now = (new Date().getTime() / 1000).toFixed();
-
+    const description = `This is a proposal to Rage Quit ${values.shares ||
+      '0'} Shares and ${values.loot || '0'} from UberHAUS`;
     const details = detailsToJSON({
       values,
       uberHaus: true,
       uberType: 'ragequit',
       hash,
+      title: 'Rage Quit Assets from UberHAUS',
+      description,
     });
 
     const RQargs = [
       values.shares?.toString() || '0',
       values.loot?.toString() || '0',
     ];
-    console.log(`RQargs`, RQargs);
     const submitRQAbiData = molochAbi.find(
       (f) => f.type === 'function' && f.name === 'ragequit',
     );
-    console.log(submitRQAbiData);
+
     const hexData = injectedProvider.eth.abi.encodeFunctionCall(
       submitRQAbiData,
       RQargs,
@@ -99,19 +99,18 @@ const RageQuitProposalForm = ({ uberHausMinion, uberMembers }) => {
 
     const args = [
       daoid,
-      UBERHAUS_ADDRESS,
-      UBERHAUS_STAKING_TOKEN,
+      UBERHAUS_DATA.ADDRESS,
+      UBERHAUS_DATA.STAKING_TOKEN,
       '0',
       hexData,
       details,
     ];
-    console.log(`args`, args);
 
     try {
       const poll = createPoll({ action: 'uberHausProposeAction', cachePoll })({
         minionAddress: uberHausMinion.minionAddress,
         createdAt: now,
-        chainID: daochain,
+        chainID: UBERHAUS_DATA.NETWORK,
         hash,
         actions: {
           onError: (error, txHash) => {
@@ -128,7 +127,7 @@ const RageQuitProposalForm = ({ uberHausMinion, uberMembers }) => {
             refreshDao();
             resolvePoll(txHash);
             createForumTopic({
-              chainID: daochain,
+              chainID: UBERHAUS_DATA.NETWORK,
               daoID: daoid,
               afterTime: now,
               proposalType: PROPOSAL_TYPES.MINION_UBER_RQ,
@@ -146,7 +145,7 @@ const RageQuitProposalForm = ({ uberHausMinion, uberMembers }) => {
       await UberHausMinionService({
         web3: injectedProvider,
         uberHausMinion: uberHausMinion.minionAddress,
-        chainID: daochain,
+        chainID: UBERHAUS_DATA.NETWORK,
       })('proposeAction')({ args, address, poll, onTxHash });
     } catch (err) {
       setD2dProposalModal((prevState) => !prevState);
