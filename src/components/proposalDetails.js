@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
 
 import { utils } from 'web3';
-import { useParams } from 'react-router-dom';
+import { useParams, Link as RouterLink } from 'react-router-dom';
 import {
   Flex,
   Box,
@@ -17,6 +17,7 @@ import {
   Avatar,
   useToast,
 } from '@chakra-ui/react';
+
 import { RiExternalLinkLine } from 'react-icons/ri';
 import { FaThumbsUp, FaThumbsDown, FaCopy } from 'react-icons/fa';
 import ReactPlayer from 'react-player';
@@ -77,30 +78,34 @@ const ProposalDetails = ({ proposal, daoMember }) => {
   }, [proposal]);
 
   const handleRecipientUI = () => {
+    // IF current dao is uberHaus
     if (daoid === UBERHAUS_DATA.ADDRESS && isUberHaus) {
       return <UberDaoBox proposal={proposal} />;
-    } else if (proposal?.minion?.minionType !== MINION_TYPES.UBER) {
+      // if current proposal is an uberhaus proposal
+    } else if (proposal?.minion?.minionType === MINION_TYPES.UBER) {
       return <MinionBox proposal={proposal} />;
     } else {
-      <Box key={proposal?.proposalType}>
-        <TextBox size='xs' mb={2}>
-          Recipient
-        </TextBox>
-        <Skeleton isLoaded={proposal}>
-          {proposal ? (
-            <AddressAvatar
-              addr={
-                proposal.applicant === AddressZero
-                  ? proposal.proposer
-                  : proposal.applicant
-              }
-              alwaysShowName={true}
-            />
-          ) : (
-            '--'
-          )}
-        </Skeleton>
-      </Box>;
+      return (
+        <Box key={proposal?.proposalId}>
+          <TextBox size='xs' mb={2}>
+            Recipient
+          </TextBox>
+          <Skeleton isLoaded={proposal}>
+            {proposal ? (
+              <AddressAvatar
+                addr={
+                  proposal.applicant === AddressZero
+                    ? proposal.proposer
+                    : proposal.applicant
+                }
+                alwaysShowName={true}
+              />
+            ) : (
+              '--'
+            )}
+          </Skeleton>
+        </Box>
+      );
     }
   };
 
@@ -344,7 +349,7 @@ const MinionBox = ({ proposal }) => {
       bg='primary.500'
       placement='top'
     >
-      <Box as={Link} to={UBER_LINK}>
+      <Box as={RouterLink} to={UBER_LINK}>
         <TextBox size='xs' mb={2}>
           Minion
         </TextBox>
