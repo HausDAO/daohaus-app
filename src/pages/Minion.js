@@ -173,8 +173,11 @@ const MinionDetails = ({ overview, members, currentDaoTokens }) => {
                     profile={true}
                   />
                 ) : null}
+                <Stack spacing={2}>
+                  <Button>Withdraw to DAO</Button>
+                </Stack>
               </Box>
-              <Box>
+              <Box pt={6}>
                 <Stack spacing={6}>
                   <Stack spacing={2}>
                     <Button>Add Another DAO</Button>
