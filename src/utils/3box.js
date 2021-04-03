@@ -45,7 +45,7 @@ export const fetchProfile = async (address) => {
       console.log('Profile does not exist');
     }
     const boxProfile = await response.json();
-    console.log(ens);
+    // console.log(ens);
     return { ...boxProfile, ens: ens };
   } catch (error) {
     console.log(error);
