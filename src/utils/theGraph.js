@@ -1,13 +1,14 @@
 import { graphQuery } from './apollo';
-import { BANK_BALANCES } from '../graphQL/bank-queries';
+import { ADDRESS_BALANCES, BANK_BALANCES } from '../graphQL/bank-queries';
 import { DAO_ACTIVITIES, HOME_DAO } from '../graphQL/dao-queries';
 import { MEMBERS_LIST } from '../graphQL/member-queries';
 import { proposalResolver, daoResolver } from '../utils/resolvers';
-import { getGraphEndpoint } from '../utils/chain';
+import { getGraphEndpoint, supportedChains } from '../utils/chain';
 import { fetchTokenData } from '../utils/tokenValue';
 import { omit } from './general';
 import { UBERHAUS_QUERY, UBER_MINIONS } from '../graphQL/uberhaus-queries';
 import { UBERHAUS_DATA } from './uberhaus';
+import { getApiMetadata } from './metadata';
 
 export const graphFetchAll = async (args, items = [], skip = 0) => {
   try {
@@ -300,4 +301,43 @@ export const exploreChainQuery = async ({
       console.error(error);
     }
   });
+};
+
+export const balanceChainQuery = async ({ address, reactSetter }) => {
+  const metaDataMap = await getApiMetadata();
+
+  const daoMapLookup = (address, chainName) => {
+    const daoMatch = metaDataMap[address] || [];
+    return daoMatch.find((dao) => dao.network === chainName) || null;
+  };
+  buildCrossChainQuery(supportedChains, 'subgraph_url').forEach(
+    async (chain) => {
+      try {
+        const chainData = await graphFetchAll({
+          endpoint: chain.endpoint,
+          query: ADDRESS_BALANCES,
+          subfield: 'addressBalances',
+          variables: {
+            memberAddress: address,
+          },
+        });
+
+        const withMetaData = chainData.map((member) => {
+          return {
+            ...member,
+            meta: daoMapLookup(member.moloch?.id, chain.apiMatch),
+          };
+        });
+
+        reactSetter((prevState) => {
+          return {
+            chains: [...prevState.chains, chain],
+            data: [...prevState.data, ...withMetaData],
+          };
+        });
+      } catch (error) {
+        console.error(error);
+      }
+    },
+  );
 };
