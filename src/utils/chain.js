@@ -12,6 +12,8 @@ export const supportedChains = {
     rpc_url: `https://${process.env.REACT_APP_RPC_URI}.eth.rpc.rivet.cloud/`,
     abi_api_url:
       'https://api.etherscan.io/api?module=contract&action=getabi&address=',
+    tokenlist_api_url:
+      'https://api.etherscan.io/api?module=account&action=tokenlist&address=',
     metadata_api_url: 'https://data.daohaus.club',
     subgraph_url:
       'https://api.thegraph.com/subgraphs/name/odyssy-automaton/daohaus',
@@ -38,6 +40,8 @@ export const supportedChains = {
     rpc_url: `https://${process.env.REACT_APP_RPC_URI}.rinkeby.rpc.rivet.cloud/`,
     abi_api_url:
       'https://api-rinkeby.etherscan.io/api?module=contract&action=getabi&address=',
+    tokenlist_api_url:
+      'https://api-rinkeby.etherscan.io/api?module=account&action=tokenlist&address=',
     metadata_api_url: 'https://data.daohaus.club',
     subgraph_url:
       'https://api.thegraph.com/subgraphs/name/odyssy-automaton/daohaus-rinkeby',
@@ -64,6 +68,8 @@ export const supportedChains = {
     rpc_url: `https://kovan.infura.io/v3/${process.env.REACT_APP_INFURA_PROJECT_ID}`,
     abi_api_url:
       'https://api-kovan.etherscan.io/api?module=contract&action=getabi&address=',
+    tokenlist_api_url:
+      'https://api-kovan.etherscan.io/api?module=account&action=tokenlist&address=',
     metadata_api_url: 'https://data.daohaus.club',
     subgraph_url:
       'https://api.thegraph.com/subgraphs/name/odyssy-automaton/daohaus-kovan',
@@ -89,7 +95,9 @@ export const supportedChains = {
     providers: ['walletconnect'],
     rpc_url: 'https://dai.poa.network',
     abi_api_url:
-      'https://blockscout.com/poa/xdai/api?module=contract&action=getabi&address=',
+      'https://blockscout.com/xdai/mainnet/api?module=contract&action=getabi&address=',
+    tokenlist_api_url:
+      'https://blockscout.com/xdai/mainnet/api?module=account&action=tokenlist&address=',
     metadata_api_url: 'https://data.daohaus.club',
     subgraph_url:
       'https://api.thegraph.com/subgraphs/name/odyssy-automaton/daohaus-xdai',
@@ -115,6 +123,8 @@ export const supportedChains = {
     rpc_url: 'https://rpc-mainnet.maticvigil.com',
     metadata_api_url: 'https://data.daohaus.club',
     abi_api_url: 'https://mainnet.maticvigil.com/api/swagger/',
+    tokenlist_api_url:
+      'https://mainnet.maticvigil.com/api/swagger?module=account&action=tokenlist&address=',
     subgraph_url:
       'https://api.thegraph.com/subgraphs/name/odyssy-automaton/daohaus-matic',
     stats_graph_url:
