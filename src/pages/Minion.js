@@ -6,16 +6,10 @@ import {
   Heading,
   Icon,
   useToast,
-  // Button,
   Avatar,
-  // List,
-  // ListItem,
   Link,
   HStack,
   Stack,
-  Button,
-  // Stack,
-  // Text,
 } from '@chakra-ui/react';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
 import { RiArrowLeftLine } from 'react-icons/ri';
@@ -27,12 +21,14 @@ import { FaCopy } from 'react-icons/fa';
 
 import makeBlockie from 'ethereum-blockies-base64';
 import MainViewLayout from '../components/mainViewLayout';
-import BankList from '../components/BankList';
 import { initTokenData } from '../utils/tokenValue';
 
 import MinionTokenList from '../components/minionTokenList';
 
 import { getBlockScoutTokenData } from '../utils/tokenExplorerApi';
+import { supportedChains } from '../utils/chain';
+import { balanceChainQuery } from '../utils/theGraph';
+import HubBalanceList from '../components/hubBalanceList';
 
 const MinionDetails = ({ overview, members, currentDaoTokens }) => {
   // const [web3Connect] = useWeb3Connect();
@@ -41,7 +37,14 @@ const MinionDetails = ({ overview, members, currentDaoTokens }) => {
   const toast = useToast();
   const [minionData, setMinionData] = useState();
   const [minionBalances, setMinionBalances] = useState();
+  const [daoBalances, setDaoBalances] = useState();
   const [contractBalances, setContractBalances] = useState();
+  const [balancesGraphData, setBalanceGraphData] = useState({
+    chains: [],
+    data: [],
+  });
+  const hasLoadedBalanceData =
+    balancesGraphData.chains.length === Object.keys(supportedChains).length;
 
   useEffect(() => {
     if (!overview?.minions.length) {
@@ -97,6 +100,30 @@ const MinionDetails = ({ overview, members, currentDaoTokens }) => {
     getContractBalance();
   }, [minion]);
 
+  useEffect(() => {
+    console.log('get minion balance', minion);
+    if (minion) {
+      balanceChainQuery({
+        reactSetter: setBalanceGraphData,
+        address: minion,
+      });
+    }
+  }, [minion]);
+
+  useEffect(() => {
+    if (hasLoadedBalanceData) {
+      const tokenBalances = balancesGraphData.data
+        .flatMap((bal) => {
+          return bal.tokenBalances.map((b) => {
+            return { ...b, moloch: bal.moloch, meta: bal.meta };
+          });
+        })
+        .filter((bal) => +bal.tokenBalance > 0);
+
+      setDaoBalances(tokenBalances);
+    }
+  }, [hasLoadedBalanceData]);
+
   return (
     <MainViewLayout header='Minion' isDao={true}>
       <Box>
@@ -109,10 +136,6 @@ const MinionDetails = ({ overview, members, currentDaoTokens }) => {
               h='20px'
               w='20px'
             />
-            <TextBox size='md' align='center'>
-              {' '}
-              Settings (under construction ( ͡° ͜ʖ ͡°) )
-            </TextBox>
           </HStack>
         </Link>
         <ContentBox d='flex' flexDirection='column' position='relative' mt={2}>
@@ -166,23 +189,10 @@ const MinionDetails = ({ overview, members, currentDaoTokens }) => {
                 <TextBox size='md' align='center'>
                   Internal balances in DAOs (for withdraw)
                 </TextBox>
-                {minionBalances ? (
-                  <BankList
-                    tokens={minionBalances}
-                    hasBalance={false}
-                    profile={true}
-                  />
-                ) : null}
-                <Stack spacing={2}>
-                  <Button>Withdraw to DAO</Button>
-                </Stack>
+                <HubBalanceList tokens={daoBalances} minion />
               </Box>
               <Box pt={6}>
                 <Stack spacing={6}>
-                  <Stack spacing={2}>
-                    <Button>Add Another DAO</Button>
-                  </Stack>
-
                   <Box>
                     <TextBox size='md' align='center'>
                       Minion wallet
