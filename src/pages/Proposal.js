@@ -1,4 +1,4 @@
-import React, { lazy } from 'react';
+import React from 'react';
 import { useParams, Link as RouterLink } from 'react-router-dom';
 import { Flex, Box, Stack, Link, Icon, IconButton } from '@chakra-ui/react';
 import { RiArrowLeftLine, RiRefreshLine } from 'react-icons/ri';
