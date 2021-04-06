@@ -5,6 +5,7 @@ import { RiLoginBoxLine } from 'react-icons/ri';
 
 import { numberWithCommas } from '../utils/general';
 import { useInjectedProvider } from '../contexts/InjectedProviderContext';
+import { chainByName } from '../utils/chain';
 
 const HubBalanceListCard = ({ token }) => {
   const { address } = useInjectedProvider();
@@ -13,12 +14,12 @@ const HubBalanceListCard = ({ token }) => {
     <Flex h='60px' align='center'>
       <Box w={'20%'} d={['none', null, null, 'inline-block']}>
         <Flex align='center'>
-          <Box fontFamily='mono'>{token.network.data[0].meta.name}</Box>
+          <Box fontFamily='mono'>{token.meta?.name}</Box>
         </Flex>
       </Box>
       <Box w={'20%'} d={['none', null, null, 'inline-block']}>
         <Flex align='center'>
-          <Box fontFamily='mono'>{token.network.name}</Box>
+          <Box fontFamily='mono'>{chainByName(token.meta?.network).name}</Box>
         </Flex>
       </Box>
       <Box w={'20%'} d={['none', null, null, 'inline-block']}>
@@ -46,7 +47,9 @@ const HubBalanceListCard = ({ token }) => {
 
       <Box w={['45%', null, null, '45%']} d={'inline-block'}>
         <Link
-          to={`/dao/${token.network.networkID}/${token.moloch.id}/profile/${address}`}
+          to={`/dao/${chainByName(token.meta?.network).chainId}/${
+            token.moloch.id
+          }/profile/${address}`}
         >
           Withdraw on DAO profile page
           <Icon

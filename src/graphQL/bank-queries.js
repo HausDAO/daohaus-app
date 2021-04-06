@@ -23,3 +23,27 @@ export const BANK_BALANCES = gql`
     }
   }
 `;
+
+export const ADDRESS_BALANCES = gql`
+  query addressBalances($memberAddress: String!) {
+    addressBalances: members(where: { memberAddress: $memberAddress }) {
+      id
+      memberAddress
+      molochAddress
+      moloch {
+        id
+        version
+        summoner
+      }
+      tokenBalances {
+        id
+        tokenBalance
+        token {
+          tokenAddress
+          symbol
+          decimals
+        }
+      }
+    }
+  }
+`;

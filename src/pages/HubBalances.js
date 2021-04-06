@@ -1,32 +1,47 @@
 import React, { useEffect, useState } from 'react';
 
 import { useInjectedProvider } from '../contexts/InjectedProviderContext';
-import { useUser } from '../contexts/UserContext';
 import Layout from '../components/layout';
 import MainViewLayout from '../components/mainViewLayout';
 import HubSignedOut from '../components/hubSignedOut';
 import HubProfileCard from '../components/hubProfileCard';
 import HubBalanceList from '../components/hubBalanceList';
 import { Box } from '@chakra-ui/layout';
+import { balanceChainQuery } from '../utils/theGraph';
+import { supportedChains } from '../utils/chain';
 
 const HubBalances = () => {
   const { address } = useInjectedProvider();
-  const { userHubDaos } = useUser();
   const [balances, setBalances] = useState([]);
+  const [balancesGraphData, setBalanceGraphData] = useState({
+    chains: [],
+    data: [],
+  });
+  const hasLoadedBalanceData =
+    balancesGraphData.chains.length === Object.keys(supportedChains).length;
 
   useEffect(() => {
-    setBalances(
-      userHubDaos
-        .flatMap((network) => {
-          return network.data.flatMap((dao) => {
-            return dao.tokenBalances.map((bal) => {
-              return { ...bal, network };
-            });
+    if (address) {
+      balanceChainQuery({
+        reactSetter: setBalanceGraphData,
+        address,
+      });
+    }
+  }, [address]);
+
+  useEffect(() => {
+    if (hasLoadedBalanceData) {
+      const tokenBalances = balancesGraphData.data
+        .flatMap((bal) => {
+          return bal.tokenBalances.map((b) => {
+            return { ...b, moloch: bal.moloch, meta: bal.meta };
           });
         })
-        .filter((bal) => +bal.tokenBalance > 0),
-    );
-  }, [userHubDaos]);
+        .filter((bal) => +bal.tokenBalance > 0);
+
+      setBalances(tokenBalances);
+    }
+  }, [hasLoadedBalanceData]);
 
   return (
     <Layout>
