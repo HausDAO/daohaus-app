@@ -13,7 +13,7 @@ const HubBalanceListCard = ({ token }) => {
     <Flex h='60px' align='center'>
       <Box w={'20%'} d={['none', null, null, 'inline-block']}>
         <Flex align='center'>
-          <Box fontFamily='mono'>{token.network.data[0].meta.name}</Box>
+          <Box fontFamily='mono'>{token.network.data[0].meta?.name}</Box>
         </Flex>
       </Box>
       <Box w={'20%'} d={['none', null, null, 'inline-block']}>
