@@ -81,8 +81,10 @@ const ProposalDetails = ({ proposal, daoMember }) => {
     // IF current dao is uberHaus
     if (daoid === UBERHAUS_DATA.ADDRESS && isUberHaus) {
       return <UberDaoBox proposal={proposal} />;
-      // if current proposal is an uberhaus proposal
-    } else if (proposal?.minion?.minionType === MINION_TYPES.UBER) {
+    } else if (
+      proposal?.minion?.minionType !== MINION_TYPES.UBER &&
+      proposal?.minion?.minionType !== undefined
+    ) {
       return <MinionBox proposal={proposal} />;
     } else {
       return (
