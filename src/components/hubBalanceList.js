@@ -5,7 +5,7 @@ import TextBox from './TextBox';
 import ContentBox from './ContentBox';
 import HubBalanceListCard from './hubBalanceListCard';
 
-const HubBalanceList = ({ tokens, minion }) => {
+const HubBalanceList = ({ tokens, withdraw }) => {
   return (
     <ContentBox mt={6}>
       <Flex>
@@ -28,7 +28,13 @@ const HubBalanceList = ({ tokens, minion }) => {
         tokens
           .sort((a, b) => b.totalUSD - a.totalUSD)
           .map((token) => {
-            return <HubBalanceListCard key={token?.id} token={token} minion />;
+            return (
+              <HubBalanceListCard
+                key={token?.id}
+                token={token}
+                withdraw={withdraw}
+              />
+            );
           })
       ) : (
         <Text fontFamily='mono' mt='5'>

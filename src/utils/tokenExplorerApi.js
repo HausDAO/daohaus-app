@@ -74,10 +74,8 @@ const parseBlockScout = async (json, address) => {
       const uri = nftService('tokenURI')({
         tokenId: tid,
       });
-      console.log('add uri for', tid);
       promises2.push(uri);
     });
-    console.log(promises2);
     nft.tokenURIs = await Promise.all(promises2);
     return nft;
   });

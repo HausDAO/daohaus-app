@@ -1,13 +1,14 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
-import { Flex, Box, Skeleton, Icon } from '@chakra-ui/react';
+import { Link, useParams } from 'react-router-dom';
+import { Flex, Box, Skeleton, Icon, Button } from '@chakra-ui/react';
 import { RiLoginBoxLine } from 'react-icons/ri';
 
 import { numberWithCommas } from '../utils/general';
-import { useInjectedProvider } from '../contexts/InjectedProviderContext';
 import { chainByName } from '../utils/chain';
+import { useInjectedProvider } from '../contexts/InjectedProviderContext';
 
-const HubBalanceListCard = ({ token }) => {
+const HubBalanceListCard = ({ token, withdraw }) => {
+  const { minion } = useParams();
   const { address } = useInjectedProvider();
 
   return (
@@ -46,20 +47,29 @@ const HubBalanceListCard = ({ token }) => {
       </Box>
 
       <Box w={['45%', null, null, '45%']} d={'inline-block'}>
-        <Link
-          to={`/dao/${chainByName(token.meta?.network).chainId}/${
-            token.moloch.id
-          }/profile/${address}`}
-        >
-          Withdraw on DAO profile page
-          <Icon
-            as={RiLoginBoxLine}
-            ml={3}
-            color='secondary.500'
-            h='15px'
-            w='15px'
-          />
-        </Link>
+        {!minion ? (
+          <Link
+            to={`/dao/${chainByName(token.meta?.network).chainId}/${
+              token.moloch.id
+            }/profile/${address}`}
+          >
+            Withdraw on DAO profile page
+            <Icon
+              as={RiLoginBoxLine}
+              ml={3}
+              color='secondary.500'
+              h='15px'
+              w='15px'
+            />
+          </Link>
+        ) : (
+          <Box>
+            <Button m={6} onClick={() => withdraw(token, true)}>
+              Pull
+            </Button>
+            <Button onClick={() => withdraw(token, false)}>Withdraw</Button>
+          </Box>
+        )}
       </Box>
     </Flex>
   );

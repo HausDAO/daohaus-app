@@ -21,7 +21,7 @@ import { FaCopy } from 'react-icons/fa';
 
 import makeBlockie from 'ethereum-blockies-base64';
 import MainViewLayout from '../components/mainViewLayout';
-import { initTokenData } from '../utils/tokenValue';
+// import { initTokenData } from '../utils/tokenValue';
 
 import MinionTokenList from '../components/minionTokenList';
 
@@ -29,6 +29,12 @@ import { getBlockScoutTokenData } from '../utils/tokenExplorerApi';
 import { supportedChains } from '../utils/chain';
 import { balanceChainQuery } from '../utils/theGraph';
 import HubBalanceList from '../components/hubBalanceList';
+import { useOverlay } from '../contexts/OverlayContext';
+import { createPoll } from '../services/pollService';
+import { MinionService } from '../services/minionService';
+import { useInjectedProvider } from '../contexts/InjectedProviderContext';
+import { useUser } from '../contexts/UserContext';
+import { useTX } from '../contexts/TXContext';
 
 const MinionDetails = ({ overview, members, currentDaoTokens }) => {
   // const [web3Connect] = useWeb3Connect();
@@ -36,13 +42,23 @@ const MinionDetails = ({ overview, members, currentDaoTokens }) => {
   const { daochain, daoid, minion } = useParams();
   const toast = useToast();
   const [minionData, setMinionData] = useState();
-  const [minionBalances, setMinionBalances] = useState();
   const [daoBalances, setDaoBalances] = useState();
   const [contractBalances, setContractBalances] = useState();
   const [balancesGraphData, setBalanceGraphData] = useState({
     chains: [],
     data: [],
   });
+  const {
+    errorToast,
+    successToast,
+    setProposalModal,
+    setTxInfoModal,
+  } = useOverlay();
+  const { cachePoll, resolvePoll } = useUser();
+  const now = (new Date().getTime() / 1000).toFixed();
+  const { refreshDao } = useTX();
+  const { address, injectedProvider } = useInjectedProvider();
+
   const hasLoadedBalanceData =
     balancesGraphData.chains.length === Object.keys(supportedChains).length;
 
@@ -55,33 +71,6 @@ const MinionDetails = ({ overview, members, currentDaoTokens }) => {
     });
     setMinionData(_minionData);
   }, [overview, minion]);
-
-  useEffect(() => {
-    console.log('daoMembers', members);
-    console.log('minion', minion);
-    const setUpBalances = async () => {
-      const _minionBalances = members.find((member) => {
-        if (member.memberAddress === minion) {
-          return member.tokenBalances;
-        }
-      });
-      console.log('_minionBalances', _minionBalances);
-      let newTokenData;
-      if (_minionBalances) {
-        newTokenData = await initTokenData(_minionBalances.tokenBalances);
-      } else {
-        newTokenData = [];
-      }
-
-      console.log('newTokenData', newTokenData);
-      setMinionBalances(newTokenData);
-    };
-
-    if (members) {
-      setUpBalances();
-    }
-    // eslint-disable-next-line
-  }, [members, minion]);
 
   useEffect(() => {
     const getContractBalance = async () => {
@@ -123,6 +112,54 @@ const MinionDetails = ({ overview, members, currentDaoTokens }) => {
       setDaoBalances(tokenBalances);
     }
   }, [hasLoadedBalanceData]);
+
+  const withdraw = async (token, transfer) => {
+    const args = [
+      token.moloch.id,
+      token.token.tokenAddress,
+      token.tokenBalance,
+      transfer,
+    ];
+    try {
+      const poll = createPoll({ action: 'minionCrossWithdraw', cachePoll })({
+        tokenAddress: token.token.tokenAddress,
+        memberAddress: minion,
+        daoID: token.moloch.id,
+        expectedBalance: 0,
+        minionAddress: minion,
+        createdAt: now,
+        chainID: daochain,
+        actions: {
+          onError: (error, txHash) => {
+            errorToast({
+              title: `There was an error.`,
+            });
+            resolvePoll(txHash);
+            console.error(`Could not find a matching proposal: ${error}`);
+          },
+          onSuccess: (txHash) => {
+            successToast({
+              title: 'Minion proposal submitted.',
+            });
+            refreshDao();
+            resolvePoll(txHash);
+          },
+        },
+      });
+      const onTxHash = () => {
+        setProposalModal(false);
+        setTxInfoModal(true);
+      };
+      await MinionService({
+        web3: injectedProvider,
+        minion: minion,
+        chainID: daochain,
+      })('crossWithdraw')({ args, address, poll, onTxHash });
+    } catch (err) {
+      // setLoading(false);
+      console.log('error: ', err);
+    }
+  };
 
   return (
     <MainViewLayout header='Minion' isDao={true}>
@@ -187,9 +224,9 @@ const MinionDetails = ({ overview, members, currentDaoTokens }) => {
               </Flex>
               <Box>
                 <TextBox size='md' align='center'>
-                  Internal balances in DAOs (for withdraw)
+                  Unclaimed balances in DAOs (for withdraw)
                 </TextBox>
-                <HubBalanceList tokens={daoBalances} minion />
+                <HubBalanceList tokens={daoBalances} withdraw={withdraw} />
               </Box>
               <Box pt={6}>
                 <Stack spacing={6}>

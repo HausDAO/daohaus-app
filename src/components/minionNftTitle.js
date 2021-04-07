@@ -7,7 +7,7 @@ const MinionNftTile = ({ meta, tokenId }) => {
 
   useEffect(() => {
     const fetchNFTData = async () => {
-      console.log('meta WTF', meta);
+      // console.log('meta WTF', meta);
       if (meta.indexOf('ipfs://ipfs/') === 0) {
         meta = meta.replace('ipfs://ipfs/', 'https://ipfs.io/ipfs/');
       }
@@ -20,7 +20,6 @@ const MinionNftTile = ({ meta, tokenId }) => {
     };
     fetchNFTData();
   }, []);
-  console.log(tokenDetail);
 
   return (
     <Box w={'15%'} d={['none', null, null, 'inline-block']}>
