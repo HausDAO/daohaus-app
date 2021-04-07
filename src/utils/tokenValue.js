@@ -134,27 +134,25 @@ export const getTotalBankValue = (tokenBalances, prices) => {
 export const valToDecimalString = (value, tokenAddress, tokens) => {
   // get correct value of token with decimal places
   // returns a string
-  console.log(tokens);
-  const scaleFactor = 10;
-  const perc = 10 ** scaleFactor;
-
   const tdata = tokens.find(
     (token) => token.token.tokenAddress === tokenAddress,
   );
+
+  // is the value a float or int? set appropriate decimals buffer
+  const decimals = value.split('.')[1]?.length;
   const exp = ethers.BigNumber.from(10).pow(
-    ethers.BigNumber.from(tdata.token.decimals),
+    decimals ? tdata.token.decimals - decimals : tdata.token.decimals,
   );
 
-  if (value >= perc) {
-    return ethers.BigNumber.from(value)
+  if (decimals) {
+    return ethers.utils
+      .parseUnits(value, decimals)
       .mul(exp)
       .toString();
   } else {
-    value = value * perc;
-
-    return ethers.BigNumber.from(value)
+    return ethers.utils
+      .parseUnits(value, 0)
       .mul(exp)
-      .div(ethers.BigNumber.from(perc))
       .toString();
   }
 };
