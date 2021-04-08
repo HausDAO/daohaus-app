@@ -5,7 +5,7 @@ import TextBox from './TextBox';
 import ContentBox from './ContentBox';
 import HubBalanceListCard from './hubBalanceListCard';
 
-const HubBalanceList = ({ tokens, withdraw }) => {
+const HubBalanceList = ({ tokens, withdraw, currentDaoTokens }) => {
   return (
     <ContentBox mt={6}>
       <Flex>
@@ -33,6 +33,7 @@ const HubBalanceList = ({ tokens, withdraw }) => {
                 key={token?.id}
                 token={token}
                 withdraw={withdraw}
+                currentDaoTokens={currentDaoTokens}
               />
             );
           })

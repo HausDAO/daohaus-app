@@ -113,6 +113,17 @@ const MinionDetails = ({ overview, members, currentDaoTokens }) => {
     }
   }, [hasLoadedBalanceData]);
 
+  const refreshGraphBalances = () => {
+    setBalanceGraphData({
+      chains: [],
+      data: [],
+    });
+    balanceChainQuery({
+      reactSetter: setBalanceGraphData,
+      address: minion,
+    });
+  };
+
   const withdraw = async (token, transfer) => {
     const args = [
       token.moloch.id,
@@ -143,6 +154,7 @@ const MinionDetails = ({ overview, members, currentDaoTokens }) => {
             });
             refreshDao();
             resolvePoll(txHash);
+            refreshGraphBalances();
           },
         },
       });
@@ -226,7 +238,11 @@ const MinionDetails = ({ overview, members, currentDaoTokens }) => {
                 <TextBox size='md' align='center'>
                   Unclaimed balances in DAOs (for withdraw)
                 </TextBox>
-                <HubBalanceList tokens={daoBalances} withdraw={withdraw} />
+                <HubBalanceList
+                  tokens={daoBalances}
+                  withdraw={withdraw}
+                  currentDaoTokens={currentDaoTokens}
+                />
               </Box>
               <Box pt={6}>
                 <Stack spacing={6}>
