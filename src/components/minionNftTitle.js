@@ -16,8 +16,6 @@ const MinionNftTile = ({ meta, tokenId }) => {
       if (meta.indexOf('https://') !== 0) {
         meta = '';
       }
-      console.log('meta!!!!', meta);
-
       try {
         const jsonMeta = await getNftMeta(meta);
         setTokenDetail(jsonMeta);

@@ -7,10 +7,8 @@ const fetchEtherscanAPIData = async (address, daochain) => {
     const key = process.env.REACT_APP_ETHERSCAN_KEY;
     const url = `${chainByID(daochain).tokenlist_api_url}${address}${key &&
       '&apikey=' + key}`;
-    console.log('URL>>>>>>>>>>>>>>>>>>>>>>>.', url);
     const response = await fetch(url);
     const json = await response.json();
-    console.log('json???', json);
     if (!json.result || json.status === '0') {
       const msg = json.result;
       throw new Error(msg);
@@ -28,7 +26,6 @@ const parseEtherscan = async (json, address, daochain) => {
         acc[transaction.contractAddress] || []).push(transaction);
       return acc;
     }, {});
-    console.log('contractAddressObj', contractAddressObj);
     const balanceData = Object.entries(contractAddressObj).map(
       ([key, value]) => {
         const totalBalance = value.reduce((acc, transaction) => {
@@ -64,14 +61,10 @@ const parseEtherscan = async (json, address, daochain) => {
           });
           promises.push(tid);
         }
-        console.log('PPPPPPPPPPP', promises);
         b.tokenIds = await Promise.all(promises);
-        console.log(b.tokenIds);
         return b;
       });
-    console.log('number 1', erc721s);
     erc721s = await Promise.all(erc721s);
-    console.log('promises number 1', erc721s);
 
     erc721s.map(async (nft, idx) => {
       const promises2 = [];
@@ -80,7 +73,6 @@ const parseEtherscan = async (json, address, daochain) => {
         chainID: daochain,
       });
       nft.tokenIds.map((tid) => {
-        console.log('tid??????', tid);
         if (tid) {
           const uri = nftService('tokenURI')({
             tokenId: tid,
