@@ -399,6 +399,57 @@ export const createPoll = ({
         });
       }
     };
+  } else if (action === 'minionCrossWithdraw') {
+    return ({
+      tokenAddress,
+      memberAddress,
+      actions,
+      chainID,
+      daoID,
+      uber,
+      expectedBalance,
+    }) => (txHash) => {
+      console.log('Create Poll');
+      startPoll({
+        pollFetch: withdrawTokenFetch,
+        testFn: withdrawTokenTest,
+        shouldEqual: expectedBalance || 0,
+        args: {
+          tokenAddress,
+          memberAddress,
+          chainID,
+          daoID,
+          uber,
+          expectedBalance,
+        },
+        actions,
+        txHash,
+      });
+      if (cachePoll) {
+        cachePoll({
+          txHash,
+          action,
+          timeSent: Date.now(),
+          status: 'unresolved',
+          resolvedMsg: `Withdrew Tokens`,
+          unresolvedMsg: `Withdrawing tokens`,
+          successMsg: `Successfully withdrew tokens!`,
+          errorMsg: `There was an error withdrawing tokens`,
+          pollData: {
+            action,
+            interval,
+            tries,
+          },
+          pollArgs: {
+            chainID,
+            daoID,
+            memberAddress,
+            tokenAddress,
+            shouldEqual: uber ? expectedBalance : 0,
+          },
+        });
+      }
+    };
   } else if (action === 'minionProposeAction') {
     return ({ minionAddress, createdAt, chainID, actions }) => (txHash) => {
       startPoll({
