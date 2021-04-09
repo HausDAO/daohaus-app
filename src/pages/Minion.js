@@ -178,8 +178,6 @@ const MinionDetails = ({ overview, members, currentDaoTokens }) => {
     }
   };
 
-  const iframe = `<iframe src='https://opensea.io/accounts/${minion}?embed=true' width='100%' height='100%' frameborder='0' allowfullscreen></iframe>`;
-
   return (
     <MainViewLayout header='Minion' isDao={true}>
       <Box>
