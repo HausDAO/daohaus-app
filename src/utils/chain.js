@@ -13,7 +13,7 @@ export const supportedChains = {
     abi_api_url:
       'https://api.etherscan.io/api?module=contract&action=getabi&address=',
     tokenlist_api_url:
-      'https://api.etherscan.io/api?module=account&action=tokenlist&address=',
+      'https://api.etherscan.io/api?module=account&action=tokennfttx&address=',
     metadata_api_url: 'https://data.daohaus.club',
     subgraph_url:
       'https://api.thegraph.com/subgraphs/name/odyssy-automaton/daohaus',
@@ -41,7 +41,7 @@ export const supportedChains = {
     abi_api_url:
       'https://api-rinkeby.etherscan.io/api?module=contract&action=getabi&address=',
     tokenlist_api_url:
-      'https://api-rinkeby.etherscan.io/api?module=account&action=tokenlist&address=',
+      'https://api-rinkeby.etherscan.io/api?module=account&action=tokennfttx&address=',
     metadata_api_url: 'https://data.daohaus.club',
     subgraph_url:
       'https://api.thegraph.com/subgraphs/name/odyssy-automaton/daohaus-rinkeby',
@@ -69,7 +69,7 @@ export const supportedChains = {
     abi_api_url:
       'https://api-kovan.etherscan.io/api?module=contract&action=getabi&address=',
     tokenlist_api_url:
-      'https://api-kovan.etherscan.io/api?module=account&action=tokenlist&address=',
+      'https://api-kovan.etherscan.io/api?module=account&action=tokennfttx&address=',
     metadata_api_url: 'https://data.daohaus.club',
     subgraph_url:
       'https://api.thegraph.com/subgraphs/name/odyssy-automaton/daohaus-kovan',

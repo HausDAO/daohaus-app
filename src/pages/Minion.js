@@ -25,7 +25,10 @@ import MainViewLayout from '../components/mainViewLayout';
 
 import MinionTokenList from '../components/minionTokenList';
 
-import { getBlockScoutTokenData } from '../utils/tokenExplorerApi';
+import {
+  getBlockScoutTokenData,
+  getEtherscanTokenData,
+} from '../utils/tokenExplorerApi';
 import { supportedChains } from '../utils/chain';
 import { balanceChainQuery } from '../utils/theGraph';
 import HubBalanceList from '../components/hubBalanceList';
@@ -78,7 +81,12 @@ const MinionDetails = ({ overview, members, currentDaoTokens }) => {
         if (daochain === '0x1' || daochain === '0x4' || daochain === '0x2a') {
           // eth chains not supported yet
           // may need to do something different for matic too
-          setContractBalances([]);
+          setContractBalances(
+            await getEtherscanTokenData(
+              '0xCED608Aa29bB92185D9b6340Adcbfa263DAe075b',
+              daochain,
+            ),
+          );
         } else {
           setContractBalances(await getBlockScoutTokenData(minion));
         }
@@ -173,6 +181,8 @@ const MinionDetails = ({ overview, members, currentDaoTokens }) => {
     }
   };
 
+  const iframe = `<iframe src='https://opensea.io/accounts/${minion}?embed=true' width='100%' height='100%' frameborder='0' allowfullscreen></iframe>`;
+
   return (
     <MainViewLayout header='Minion' isDao={true}>
       <Box>
@@ -248,11 +258,14 @@ const MinionDetails = ({ overview, members, currentDaoTokens }) => {
                 <Stack spacing={6}>
                   <Box>
                     <TextBox size='md' align='center'>
-                      Minion wallet
+                      Minion wallet {daochain}
                     </TextBox>
 
-                    {contractBalances && (
+                    {daochain === '0x64' && contractBalances && (
                       <MinionTokenList tokens={contractBalances} />
+                    )}
+                    {daochain === '0x2a' && (
+                      <div dangerouslySetInnerHTML={{ __html: iframe }} />
                     )}
                   </Box>
                 </Stack>

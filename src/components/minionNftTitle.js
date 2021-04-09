@@ -7,10 +7,14 @@ const MinionNftTile = ({ meta, tokenId }) => {
 
   useEffect(() => {
     const fetchNFTData = async () => {
-      // console.log('meta WTF', meta);
+      console.log('meta WTF', meta);
+      if (!meta || meta.indexOf('https://') !== 0) {
+        meta = '';
+      }
       if (meta.indexOf('ipfs://ipfs/') === 0) {
         meta = meta.replace('ipfs://ipfs/', 'https://ipfs.io/ipfs/');
       }
+
       try {
         const jsonMeta = await getNftMeta(meta);
         setTokenDetail(jsonMeta);
@@ -20,10 +24,11 @@ const MinionNftTile = ({ meta, tokenId }) => {
     };
     fetchNFTData();
   }, []);
+  console.log(tokenDetail);
 
   return (
-    <Box w={'15%'} d={['none', null, null, 'inline-block']}>
-      {tokenDetail?.image ? (
+    <Box w={'15%'} d={['none', null, null, 'inline-block']} bg={'white'}>
+      {tokenDetail?.image || tokenDetail?.properties.image ? (
         <Tooltip
           hasArrow
           shouldWrapChildren
@@ -31,7 +36,11 @@ const MinionNftTile = ({ meta, tokenId }) => {
           label={'' + tokenDetail.name + ' id: ' + tokenId}
           bg='secondary.500'
         >
-          <Image src={tokenDetail.image} h='50px' w='50px' />
+          <Image
+            src={tokenDetail?.properties?.image?.description}
+            h='50px'
+            w='50px'
+          />
         </Tooltip>
       ) : (
         'NFT'
