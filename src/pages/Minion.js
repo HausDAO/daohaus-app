@@ -253,7 +253,7 @@ const MinionDetails = ({ overview, members, currentDaoTokens }) => {
                 <Stack spacing={6}>
                   <Box>
                     <TextBox size='md' align='center'>
-                      Minion wallet {daochain}
+                      Minion wallet
                     </TextBox>
                     {daochain !== '0x64' && (
                       <Flex>View token data on etherscan</Flex>
