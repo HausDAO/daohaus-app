@@ -23,7 +23,6 @@ const HubBalanceListCard = ({ token, withdraw, currentDaoTokens }) => {
       });
     setTokenWhitelisted(!isWhitelisted);
   }, [currentDaoTokens]);
-
   return (
     <Flex h='60px' align='center'>
       <Box w={'20%'} d={['none', null, null, 'inline-block']}>
@@ -62,7 +61,7 @@ const HubBalanceListCard = ({ token, withdraw, currentDaoTokens }) => {
       <Box w={['45%', null, null, '45%']} d={'inline-block'}>
         {!minion ? (
           <Link
-            to={`/dao/${chainByName(token.meta?.network).chainId}/${
+            to={`/dao/${chainByName(token.meta?.network).chain_id}/${
               token.moloch.id
             }/profile/${address}`}
           >
