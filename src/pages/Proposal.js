@@ -4,6 +4,7 @@ import { Flex, Box, Stack, Link, Icon, IconButton } from '@chakra-ui/react';
 import { RiArrowLeftLine, RiRefreshLine } from 'react-icons/ri';
 
 import ActivitiesFeed from '../components/activitiesFeed';
+
 import { getProposalHistories } from '../utils/activities';
 import TextBox from '../components/TextBox';
 import ProposalDetails from '../components/proposalDetails';

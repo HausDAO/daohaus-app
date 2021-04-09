@@ -5,7 +5,7 @@ import TextBox from './TextBox';
 import ContentBox from './ContentBox';
 import HubBalanceListCard from './hubBalanceListCard';
 
-const HubBalanceList = ({ tokens }) => {
+const HubBalanceList = ({ tokens, withdraw, currentDaoTokens }) => {
   return (
     <ContentBox mt={6}>
       <Flex>
@@ -28,7 +28,14 @@ const HubBalanceList = ({ tokens }) => {
         tokens
           .sort((a, b) => b.totalUSD - a.totalUSD)
           .map((token) => {
-            return <HubBalanceListCard key={token?.id} token={token} />;
+            return (
+              <HubBalanceListCard
+                key={token?.id}
+                token={token}
+                withdraw={withdraw}
+                currentDaoTokens={currentDaoTokens}
+              />
+            );
           })
       ) : (
         <Text fontFamily='mono' mt='5'>

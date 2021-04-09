@@ -6,14 +6,10 @@ import {
   Heading,
   Icon,
   useToast,
-  // Button,
   Avatar,
-  // List,
-  // ListItem,
   Link,
   HStack,
-  // Stack,
-  // Text,
+  Stack,
 } from '@chakra-ui/react';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
 import { RiArrowLeftLine } from 'react-icons/ri';
@@ -22,14 +18,26 @@ import ContentBox from '../components/ContentBox';
 import TextBox from '../components/TextBox';
 import { truncateAddr } from '../utils/general';
 import { FaCopy } from 'react-icons/fa';
-// import { TokenService } from '../../utils/token-service';
-// import ProposalFormModal from '../Modal/ProposalFormModal';
-// import GenericModal from '../Modal/GenericModal';
+
 import makeBlockie from 'ethereum-blockies-base64';
-import { TokenService } from '../services/tokenService';
 import MainViewLayout from '../components/mainViewLayout';
-import BankList from '../components/BankList';
-import { initTokenData } from '../utils/tokenValue';
+// import { initTokenData } from '../utils/tokenValue';
+
+import MinionTokenList from '../components/minionTokenList';
+
+import {
+  getBlockScoutTokenData,
+  getEtherscanTokenData,
+} from '../utils/tokenExplorerApi';
+import { supportedChains } from '../utils/chain';
+import { balanceChainQuery } from '../utils/theGraph';
+import HubBalanceList from '../components/hubBalanceList';
+import { useOverlay } from '../contexts/OverlayContext';
+import { createPoll } from '../services/pollService';
+import { MinionService } from '../services/minionService';
+import { useInjectedProvider } from '../contexts/InjectedProviderContext';
+import { useUser } from '../contexts/UserContext';
+import { useTX } from '../contexts/TXContext';
 
 const MinionDetails = ({ overview, members, currentDaoTokens }) => {
   // const [web3Connect] = useWeb3Connect();
@@ -37,27 +45,25 @@ const MinionDetails = ({ overview, members, currentDaoTokens }) => {
   const { daochain, daoid, minion } = useParams();
   const toast = useToast();
   const [minionData, setMinionData] = useState();
-  const [tokenBalances, setTokenBalances] = useState();
-  const [minionBalances, setMinionBalances] = useState();
-  // const [proposalType, setProposalType] = useState();
-  // const [proposalPresets, setProposalPresets] = useState();
-  // const [withdrawSetup, setWithdrawSetup] = useState();
+  const [daoBalances, setDaoBalances] = useState();
+  const [contractBalances, setContractBalances] = useState();
+  const [balancesGraphData, setBalanceGraphData] = useState({
+    chains: [],
+    data: [],
+  });
+  const {
+    errorToast,
+    successToast,
+    setProposalModal,
+    setTxInfoModal,
+  } = useOverlay();
+  const { cachePoll, resolvePoll } = useUser();
+  const now = (new Date().getTime() / 1000).toFixed();
+  const { refreshDao } = useTX();
+  const { address, injectedProvider } = useInjectedProvider();
 
-  // const formPresets = () => {
-  //   return {
-  //     deposit: {
-  //       heading: `New Deposit to Minion`,
-  //       subline: `A proposal to deposit funds into a minion`,
-  //       title: `Deposit funds to Minion (${minionData?.details})`,
-  //       applicant: minionData?.minionAddress,
-  //     },
-  //     minion: {
-  //       minionContract: minionData?.minionAddress,
-  //     },
-  //   };
-  // };
-
-  console.log('minionBalances', minionBalances, tokenBalances);
+  const hasLoadedBalanceData =
+    balancesGraphData.chains.length === Object.keys(supportedChains).length;
 
   useEffect(() => {
     if (!overview?.minions.length) {
@@ -70,82 +76,107 @@ const MinionDetails = ({ overview, members, currentDaoTokens }) => {
   }, [overview, minion]);
 
   useEffect(() => {
-    console.log('daoMembers', members);
-    console.log('minion', minion);
-    const setUpBalances = async () => {
-      const _minionBalances = members.find((member) => {
-        console.log(member.memberAddress);
-        if (member.memberAddress === minion) {
-          return member.tokenBalances;
+    const getContractBalance = async () => {
+      try {
+        if (daochain === '0x1' || daochain === '0x4' || daochain === '0x2a') {
+          // eth chains not supported yet
+          // may need to do something different for matic too
+          setContractBalances(await getEtherscanTokenData(minion, daochain));
+        } else {
+          setContractBalances(await getBlockScoutTokenData(minion));
         }
-      });
-      console.log('_minionBalances', _minionBalances);
-      let newTokenData;
-      if (_minionBalances) {
-        newTokenData = await initTokenData(_minionBalances.tokenBalances);
-      } else {
-        newTokenData = [];
+      } catch (err) {
+        console.log(err);
       }
-
-      console.log('newTokenData', newTokenData);
-      setMinionBalances(newTokenData);
     };
-
-    if (members) {
-      setUpBalances();
-    }
-    // eslint-disable-next-line
-  }, [members, minion]);
+    getContractBalance();
+  }, [minion]);
 
   useEffect(() => {
-    if (!currentDaoTokens) {
-      return;
+    console.log('get minion balance', minion);
+    if (minion) {
+      balanceChainQuery({
+        reactSetter: setBalanceGraphData,
+        address: minion,
+      });
     }
-    const getMinionBalances = async () => {
-      const _tokenBalances = {};
-      const promises = [];
+  }, [minion]);
 
-      const tokens = currentDaoTokens.map((b) => {
-        const tokenService = TokenService({
-          tokenAddress: b.tokenAddress,
-          chainID: daochain,
-        });
-        const tokenPromise = tokenService('balanceOf')(minion);
-        promises.push(tokenPromise);
-        return b.tokenAddress;
+  useEffect(() => {
+    if (hasLoadedBalanceData) {
+      console.log('resorting balances');
+      const tokenBalances = balancesGraphData.data
+        .flatMap((bal) => {
+          return bal.tokenBalances.map((b) => {
+            return { ...b, moloch: bal.moloch, meta: bal.meta };
+          });
+        })
+        .filter((bal) => +bal.tokenBalance > 0);
+
+      setDaoBalances(tokenBalances);
+    }
+  }, [hasLoadedBalanceData]);
+
+  const refreshGraphBalances = () => {
+    setBalanceGraphData({
+      chains: [],
+      data: [],
+    });
+    balanceChainQuery({
+      reactSetter: setBalanceGraphData,
+      address: minion,
+    });
+  };
+
+  const withdraw = async (token, transfer) => {
+    const args = [
+      token.moloch.id,
+      token.token.tokenAddress,
+      token.tokenBalance,
+      transfer,
+    ];
+    try {
+      const poll = createPoll({ action: 'minionCrossWithdraw', cachePoll })({
+        tokenAddress: token.token.tokenAddress,
+        memberAddress: minion,
+        daoID: token.moloch.id,
+        expectedBalance: 0,
+        minionAddress: minion,
+        createdAt: now,
+        chainID: daochain,
+        actions: {
+          onError: (error, txHash) => {
+            errorToast({
+              title: `There was an error.`,
+            });
+            resolvePoll(txHash);
+            console.error(`Could not find a matching proposal: ${error}`);
+          },
+          onSuccess: (txHash) => {
+            successToast({
+              title: 'Minion proposal submitted.',
+            });
+            refreshDao();
+            refreshGraphBalances();
+            resolvePoll(txHash);
+            refreshGraphBalances();
+          },
+        },
       });
-      const balances = await Promise.all(promises);
-      tokens.forEach((token, idx) => {
-        _tokenBalances[tokens[idx]] =
-          balances[idx] / 10 ** currentDaoTokens[idx].decimals;
-      });
-      setTokenBalances(_tokenBalances);
-    };
-
-    getMinionBalances();
-  }, [currentDaoTokens, minion]);
-
-  // const handleDeposit = () => {
-  //   // setProposalType('funding');
-  //   // setProposalPresets(formPresets().deposit);
-  //   // openModal('proposal');
-  // };
-
-  // const handleNewMinion = () => {
-  //   // console.log('open minion');
-  //   // setProposalType('minion');
-  //   // setProposalPresets(formPresets().minion);
-  //   // openModal('minion');
-  // };
-
-  // const handleMinionWithdraw = () => {
-  //   // const minionMember = members.find(
-  //   //   (member) => member.memberAddress === minion.minionAddress,
-  //   // );
-  //   // console.log(minionMember);
-  //   // setWithdrawSetup(minionMember);
-  //   // openModal('minionWithdraw');
-  // };
+      const onTxHash = () => {
+        setProposalModal(false);
+        setTxInfoModal(true);
+      };
+      await MinionService({
+        web3: injectedProvider,
+        minion: minion,
+        chainID: daochain,
+      })('crossWithdraw')({ args, address, poll, onTxHash });
+    } catch (err) {
+      // setLoading(false);
+      console.log('error: ', err);
+    }
+  };
 
   return (
     <MainViewLayout header='Minion' isDao={true}>
@@ -159,10 +190,6 @@ const MinionDetails = ({ overview, members, currentDaoTokens }) => {
               h='20px'
               w='20px'
             />
-            <TextBox size='md' align='center'>
-              {' '}
-              Settings (under construction ( ͡° ͜ʖ ͡°) )
-            </TextBox>
           </HStack>
         </Link>
         <ContentBox d='flex' flexDirection='column' position='relative' mt={2}>
@@ -213,75 +240,36 @@ const MinionDetails = ({ overview, members, currentDaoTokens }) => {
                 </Flex>
               </Flex>
               <Box>
-                {minionBalances ? (
-                  <BankList
-                    tokens={minionBalances}
-                    hasBalance={false}
-                    profile={true}
-                  />
-                ) : null}
+                <TextBox size='md' align='center'>
+                  Unclaimed balances in DAOs (for withdraw)
+                </TextBox>
+                <HubBalanceList
+                  tokens={daoBalances}
+                  withdraw={withdraw}
+                  currentDaoTokens={currentDaoTokens}
+                />
               </Box>
-              {/* <Box>
+              <Box pt={6}>
                 <Stack spacing={6}>
-                  <Stack spacing={2}>
-                    <Heading fontSize='xl'>Get Balances</Heading>
-                    {tokenBalances &&
-                      Object.keys(tokenBalances).map((token, idx) => {
-                        return (
-                          <Text key={idx}>
-                            {currentDaoTokens[idx].symbol}:{' '}
-                            {tokenBalances[token]}
-                            <Button ml={6}>send</Button>
-                          </Text>
-                        );
-                      })}
-                    <Button w='15%'>Add Token</Button>
-                  </Stack>
-
-                  <Stack spacing={2}>
-                    <Heading fontSize='xl'>Minion Internal Balances</Heading>
-                    <HStack spacing={4}>
-                      <Box>
-                        <TextBox>DAO:</TextBox>
-                        <TextBox variant='value' size='xl'>
-                          {minionBalances ? (
-                            <Button ml={6}>Withdraw</Button>
-                          ) : (
-                            <Text>nothing to withdraw</Text>
-                          )}
-                        </TextBox>
-                        <Button>Add Another DAO</Button>
-                      </Box>
-                    </HStack>
-                  </Stack>
+                  <Box>
+                    <TextBox size='md' align='center'>
+                      Minion wallet
+                    </TextBox>
+                    {daochain !== '0x64' && (
+                      <Flex>View token data on etherscan</Flex>
+                    )}
+                    {contractBalances && (
+                      <MinionTokenList tokens={contractBalances} />
+                    )}
+                  </Box>
                 </Stack>
-              </Box> */}
+              </Box>
             </>
           ) : (
             <Flex justify='center'>
               <Box fontFamily='heading'>No minion found</Box>
             </Flex>
           )}
-          {/* <ProposalFormModal
-        presets={proposalPresets}
-        isOpen={modals.proposal}
-        proposalType={proposalType}
-      />
-      <ProposalFormModal
-        presets={proposalPresets}
-        isOpen={modals.minion}
-        proposalType={proposalType}
-      /> */}
-          {/* <GenericModal isOpen={modals.minionWithdraw}>
-        <Flex align='center' direction='column'>
-          <TextBox>Withdraw</TextBox>
-          <TextBox>{withdrawSetup?.tokenBalances[0]}</TextBox>
-          <ButtonGroup>
-            <Button variant='outline'>Cancel</Button>
-            <Button>Confirm</Button>
-          </ButtonGroup>
-        </Flex>
-      </GenericModal> */}
         </ContentBox>
       </Box>
     </MainViewLayout>

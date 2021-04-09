@@ -81,8 +81,10 @@ const ProposalDetails = ({ proposal, daoMember }) => {
     // IF current dao is uberHaus
     if (daoid === UBERHAUS_DATA.ADDRESS && isUberHaus) {
       return <UberDaoBox proposal={proposal} />;
-      // if current proposal is an uberhaus proposal
-    } else if (proposal?.minion?.minionType === MINION_TYPES.UBER) {
+    } else if (
+      proposal?.minion?.minionType !== MINION_TYPES.UBER &&
+      proposal?.minion?.minionType !== undefined
+    ) {
       return <MinionBox proposal={proposal} />;
     } else {
       return (
@@ -422,16 +424,21 @@ const UberDaoBox = ({ proposal }) => {
   useEffect(() => {
     if (!daoMembers && !proposal) return;
     const minion = daoMembers.find(
-      (member) => member.memberAddress === proposal?.applicant,
+      (member) =>
+        member.memberAddress === proposal?.proposer ||
+        member.delegateKey === proposal?.proposer,
     );
 
+    console.log(daoMembers);
+    console.log(proposal);
+    console.log(minion);
     if (minion?.isUberMinion) {
       setDaoMinion(minion);
     } else {
       setDaoMinion(false);
     }
   }, [proposal, daoMembers]);
-  console.log(daoMinion);
+
   return (
     <Box key={proposal?.proposalType}>
       {daoMinion?.isUberMinion && (
@@ -440,7 +447,7 @@ const UberDaoBox = ({ proposal }) => {
         </TextBox>
       )}
       <Skeleton isLoaded={proposal}>
-        {daoMinion?.isUberMinion ? (
+        {daoMinion?.isUberMinion && (
           <Flex direction='row' alignItems='center'>
             <Avatar
               name={daoMinion?.uberMeta?.name}
@@ -479,8 +486,6 @@ const UberDaoBox = ({ proposal }) => {
               </CopyToClipboard>
             </Flex>
           </Flex>
-        ) : (
-          <MinionBox proposal={proposal} />
         )}
       </Skeleton>
     </Box>
