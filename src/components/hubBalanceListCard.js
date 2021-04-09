@@ -95,7 +95,14 @@ const HubBalanceListCard = ({ token, withdraw, currentDaoTokens }) => {
                 Pull
               </Button>
             </Tooltip>
-            <Button onClick={() => withdraw(token, false)}>Withdraw</Button>
+            <Tooltip
+              hasArrow
+              shouldWrapChildren
+              placement='bottom'
+              label={'Withdraw token into the minion'}
+            >
+              <Button onClick={() => withdraw(token, false)}>Withdraw</Button>
+            </Tooltip>
           </Box>
         )}
       </Box>
