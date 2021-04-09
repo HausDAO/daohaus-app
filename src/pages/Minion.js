@@ -81,12 +81,7 @@ const MinionDetails = ({ overview, members, currentDaoTokens }) => {
         if (daochain === '0x1' || daochain === '0x4' || daochain === '0x2a') {
           // eth chains not supported yet
           // may need to do something different for matic too
-          setContractBalances(
-            await getEtherscanTokenData(
-              '0xCED608Aa29bB92185D9b6340Adcbfa263DAe075b',
-              daochain,
-            ),
-          );
+          setContractBalances(await getEtherscanTokenData(minion, daochain));
         } else {
           setContractBalances(await getBlockScoutTokenData(minion));
         }
@@ -260,12 +255,11 @@ const MinionDetails = ({ overview, members, currentDaoTokens }) => {
                     <TextBox size='md' align='center'>
                       Minion wallet {daochain}
                     </TextBox>
-
-                    {daochain === '0x64' && contractBalances && (
-                      <MinionTokenList tokens={contractBalances} />
+                    {daochain !== '0x64' && (
+                      <Flex>View token data on etherscan</Flex>
                     )}
-                    {daochain === '0x2a' && (
-                      <div dangerouslySetInnerHTML={{ __html: iframe }} />
+                    {contractBalances && (
+                      <MinionTokenList tokens={contractBalances} />
                     )}
                   </Box>
                 </Stack>

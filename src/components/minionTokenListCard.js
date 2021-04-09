@@ -8,7 +8,6 @@ import MinionNftTile from './minionNftTitle';
 
 const MinionTokenListCard = ({ token }) => {
   const toast = useToast();
-  // const [tokenDetail, setTokenDetail] = useState();
 
   return (
     <>
