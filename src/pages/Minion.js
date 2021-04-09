@@ -104,6 +104,7 @@ const MinionDetails = ({ overview, members, currentDaoTokens }) => {
 
   useEffect(() => {
     if (hasLoadedBalanceData) {
+      console.log('resorting balances');
       const tokenBalances = balancesGraphData.data
         .flatMap((bal) => {
           return bal.tokenBalances.map((b) => {
@@ -156,6 +157,7 @@ const MinionDetails = ({ overview, members, currentDaoTokens }) => {
               title: 'Minion proposal submitted.',
             });
             refreshDao();
+            refreshGraphBalances();
             resolvePoll(txHash);
             refreshGraphBalances();
           },
