@@ -65,10 +65,7 @@ const NewProposal = ({ customTerms, daoMetaData, daoOverview }) => {
   }, [customTerms, daoMetaData, daoOverview]);
 
   return (
-    <MainViewLayout
-      header={`New ${getTerm(customTerms, 'Proposal')}`}
-      isDao={true}
-    >
+    <MainViewLayout header={`New ${getTerm(customTerms, 'Proposal')}`} isDao>
       <Box>
         <ProposalScopedModals proposalType={proposalType} />
         <Flex>

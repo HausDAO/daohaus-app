@@ -73,7 +73,7 @@ const Profile = ({ members, overview, daoTokens, daoMember, activities }) => {
   };
 
   return (
-    <MainViewLayout header='Profile' isDao={true}>
+    <MainViewLayout header='Profile' isDao>
       <Flex wrap='wrap'>
         <Box
           w={['100%', null, null, null, '60%']}

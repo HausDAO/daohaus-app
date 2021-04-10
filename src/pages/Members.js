@@ -112,7 +112,7 @@ const Members = React.memo(function MembersPage({
       header={'Members'}
       headerEl={ctaButton}
       customTerms={customTerms}
-      isDao={true}
+      isDao
     >
       <Flex
         wrap={['wrap', null, null, 'nowrap']}

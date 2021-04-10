@@ -1,15 +1,19 @@
 import React, { useState, useEffect } from 'react';
+import { useParams } from 'react-router-dom';
 import axios from 'axios';
-import { Flex } from '@chakra-ui/react';
+import { Flex, Button, Link } from '@chakra-ui/react';
 
 import MainViewLayout from '../components/mainViewLayout';
 import MintGateCard from '../components/mintGateCard';
+import { useInjectedProvider } from '../contexts/InjectedProviderContext';
+import { daoConnectedAndSameChain } from '../utils/general';
 
 const MINTGATE_URL = 'https://link.mintgate.app/api';
 
 const MintGate = ({ daoMetaData }) => {
   const [gates, setGates] = useState([]);
-  // const { daoid } = useParams();
+  const { address, injectedChain } = useInjectedProvider();
+  const { daochain, daoid } = useParams();
 
   useEffect(() => {
     const fetchGates = async () => {
@@ -28,8 +32,18 @@ const MintGate = ({ daoMetaData }) => {
   }, []);
   // console.log(gates);
 
+  const newGateButton = daoConnectedAndSameChain(
+    address,
+    injectedChain?.chainId,
+    daochain,
+  ) && (
+    <Button as={Link} to={`/dao/${daochain}/${daoid}/proposals/new/member`}>
+      New Gate
+    </Button>
+  );
+
   return (
-    <MainViewLayout header='MintGates' isDao={true}>
+    <MainViewLayout header='MintGates' headerEl={newGateButton} isDao>
       <Flex wrap='wrap' justify='space-around'>
         {gates.length > 0 &&
           gates.map((gate) => {

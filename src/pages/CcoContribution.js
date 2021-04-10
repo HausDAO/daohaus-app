@@ -203,7 +203,7 @@ const CcoContribution = React.memo(function ccocontribution({
   ).toFixed(2);
 
   return (
-    <MainViewLayout header='DAOhaus CCO' isDao={true}>
+    <MainViewLayout header='DAOhaus CCO' isDao>
       <Box w='100%' position='relative'>
         <Flex wrap='wrap'>
           {roundData ? (

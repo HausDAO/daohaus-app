@@ -80,7 +80,7 @@ const ThemeBuilder = ({ refetchMetaData }) => {
   };
 
   return (
-    <MainViewLayout header='Custom Theme' isDao={true}>
+    <MainViewLayout header='Custom Theme' isDao>
       <Box>
         <Flex justify='space-between' align='center'>
           <Flex

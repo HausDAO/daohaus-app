@@ -185,7 +185,7 @@ const Notifications = ({ daoMetaData, refetchMetaData }) => {
   };
 
   return (
-    <MainViewLayout header='Notifications' isDao={true}>
+    <MainViewLayout header='Notifications' isDao>
       {localMetadata ? (
         <>
           <Flex justify='space-around' mt='150px'>

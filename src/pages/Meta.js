@@ -32,7 +32,7 @@ const Meta = ({ isMember, daoMetaData, refetchMetaData }) => {
   };
 
   return (
-    <MainViewLayout header='DAO Metadata' isDao={true}>
+    <MainViewLayout header='DAO Metadata' isDao>
       <Flex wrap='wrap'>
         <Flex justify='space-between' align='center' w='100%'>
           <Flex
