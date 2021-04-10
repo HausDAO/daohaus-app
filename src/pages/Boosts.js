@@ -33,6 +33,7 @@ const Boosts = ({ customTerms, daoMember, daoOverview, daoMetaData }) => {
     console.log(daoMetaData.boosts, daoOverview);
     return boostData && boostData.active;
   };
+  console.log(daoMetaData.boosts);
 
   const renderBoostCard = (boost, i) => {
     const boostData = daoMetaData.boosts && daoMetaData.boosts[boost.key];

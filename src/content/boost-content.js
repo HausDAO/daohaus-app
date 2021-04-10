@@ -40,8 +40,16 @@ export const boostList = [
     description:
       'Customize the proposal types available for members to streamline onboarding or other DAO activities.',
     price: '0',
-    modalName: 'ProposalTypesLaunch',
+    modalName: 'proposalTypesLaunch',
     successRoute: 'proposals',
+  },
+  {
+    name: 'MintGate',
+    key: 'mintGate',
+    description: 'Gate content for your dao to allow private access',
+    price: '0',
+    modalName: 'genericBoostLaunch',
+    successRoute: '',
   },
   {
     name: 'Minion Safe',
