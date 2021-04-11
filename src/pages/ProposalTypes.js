@@ -192,7 +192,7 @@ const ProposalTypes = ({ daoMetaData, refetchMetaData }) => {
         customTerms,
         'settings',
       )}`}
-      isDao={true}
+      isDao
     >
       {localMetadata ? (
         <>

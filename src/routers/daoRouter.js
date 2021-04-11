@@ -27,6 +27,8 @@ import CcoContribution from '../pages/CcoContribution';
 import CcoHelper from '../pages/CcoHelper';
 import Staking from '../pages/Staking';
 import Clone from '../pages/Clone';
+import MintGate from '../pages/MintGate';
+import Snapshot from '../pages/Snapshot';
 
 const DaoRouter = () => {
   const { path } = useRouteMatch();
@@ -235,6 +237,12 @@ const DaoRouter = () => {
             currentDaoTokens={currentDaoTokens}
             daoProposals={daoProposals}
           />
+        </Route>
+        <Route exact path={`${path}/links`}>
+          <MintGate daoMetaData={daoMetaData} />
+        </Route>
+        <Route exact path={`${path}/snapshot`}>
+          <Snapshot isMember={isMember} />
         </Route>
       </Switch>
     </Layout>

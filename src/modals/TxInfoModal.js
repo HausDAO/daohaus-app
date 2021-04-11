@@ -167,44 +167,55 @@ const TxInfoModal = () => {
                       <TextBox size='sm'>Links</TextBox>
                     )}
                     <Stack spacing={3} mt={2}>
-                      {latestTx?.links.map((link, idx) =>
-                        link.external ? (
-                          <Flex align='center' key={`${link.href}-${link.idx}`}>
-                            <Icon as={RiLinksLine} mr={2} color='primary.200' />
-                            <Box
-                              as={Link}
-                              href={link.href}
-                              fontWeight={400}
-                              fontSize={['xs', null, null, 'sm']}
-                              mt={0}
+                      {latestTx?.links?.length > 0 &&
+                        latestTx?.links.map((link, idx) =>
+                          link.external ? (
+                            <Flex
+                              align='center'
+                              key={`${link.href}-${link.idx}`}
                             >
-                              {link.text}
-                            </Box>
-                            <Icon
-                              as={RiExternalLinkLine}
-                              color='secondary.500'
-                              ml={2}
-                            />
-                          </Flex>
-                        ) : (
-                          <Flex align='center' key={`${link.href}-${link.idx}`}>
-                            <Icon
-                              as={RiLinksLine}
-                              mr={2}
-                              color='secondary.500'
-                            />
-                            <Box
-                              as={RouterLink}
-                              to={link.href}
-                              fontFamily='mono'
-                              fontWeight={400}
-                              fontSize={('sm', null, null, 'md')}
+                              <Icon
+                                as={RiLinksLine}
+                                mr={2}
+                                color='primary.200'
+                              />
+                              <Box
+                                as={Link}
+                                href={link.href}
+                                fontWeight={400}
+                                fontSize={['xs', null, null, 'sm']}
+                                mt={0}
+                              >
+                                {link.text}
+                              </Box>
+                              <Icon
+                                as={RiExternalLinkLine}
+                                color='secondary.500'
+                                ml={2}
+                              />
+                            </Flex>
+                          ) : (
+                            <Flex
+                              align='center'
+                              key={`${link.href}-${link.idx}`}
                             >
-                              {link.text}
-                            </Box>
-                          </Flex>
-                        ),
-                      )}
+                              <Icon
+                                as={RiLinksLine}
+                                mr={2}
+                                color='secondary.500'
+                              />
+                              <Box
+                                as={RouterLink}
+                                to={link.href}
+                                fontFamily='mono'
+                                fontWeight={400}
+                                fontSize={('sm', null, null, 'md')}
+                              >
+                                {link.text}
+                              </Box>
+                            </Flex>
+                          ),
+                        )}
                     </Stack>
                   </Box>
                 ) : null}

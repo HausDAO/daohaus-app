@@ -32,7 +32,7 @@ const Staking = () => {
   }
 
   return (
-    <MainViewLayout header='Stake' headerEl={<StakeHausBtn />} isDao={true}>
+    <MainViewLayout header='Stake' headerEl={<StakeHausBtn />} isDao>
       <Box>
         <TextBox size='sm' mb={3} textTransform='uppercase'>
           stake $haus, earn $haus

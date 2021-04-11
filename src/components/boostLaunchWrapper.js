@@ -4,13 +4,15 @@ import { Box } from '@chakra-ui/react';
 import CustomThemeLaunch from './customThemeLaunch';
 import NewMinionForm from '../forms/newMinion';
 import NotificationsLaunch from './notificationsLaunch';
-import ProposalTypesLaunch from './ProposalTypesLaunch';
+import ProposalTypesLaunch from './proposalTypesLaunch';
 import { useParams } from 'react-router-dom';
 import { useInjectedProvider } from '../contexts/InjectedProviderContext';
 import { boostPost } from '../utils/metadata';
 import { useMetaData } from '../contexts/MetaDataContext';
 import DiscourseLaunch from './discourseLaunch';
 import NewMinionSafe from './newMinionSafe';
+import GenericBoostLaunch from './genericBoostLaunch';
+import SnapshotLaunch from './snapshotLaunch';
 
 const BoostLaunchWrapper = ({ boost }) => {
   const [loading, setLoading] = useState(false);
@@ -56,6 +58,29 @@ const BoostLaunchWrapper = ({ boost }) => {
       case 'proposalTypes': {
         return (
           <ProposalTypesLaunch
+            handleLaunch={handleLaunch}
+            loading={loading}
+            setLoading={setLoading}
+          />
+        );
+      }
+      case 'mintGate': {
+        return (
+          <GenericBoostLaunch
+            boostName='MintGate'
+            boostBody="Activate MintGate's powerful gates and unlock collaboration potential across shareholders."
+            boostInstructions='These are the instructions after activate'
+            boostCTA="It's gating time!"
+            boostLink='/links'
+            handleLaunch={handleLaunch}
+            loading={loading}
+            setLoading={setLoading}
+          />
+        );
+      }
+      case 'snapshot': {
+        return (
+          <SnapshotLaunch
             handleLaunch={handleLaunch}
             loading={loading}
             setLoading={setLoading}

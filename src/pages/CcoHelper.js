@@ -258,7 +258,7 @@ const CcoHelper = React.memo(function ccohelper({
     );
   };
   return (
-    <MainViewLayout header='DAOhaus CCO' isDao={true}>
+    <MainViewLayout header='DAOhaus CCO' isDao>
       <Box w='100%'>
         <Box w={'100%'} pr={[0, null, null, null, 6]} mb={6}>
           <ContentBox w='100%'>
