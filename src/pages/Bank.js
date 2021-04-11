@@ -54,7 +54,7 @@ const Bank = ({
       header='Bank'
       customTerms={customTerms}
       headerEl={ctaButton}
-      isDao={true}
+      isDao
     >
       <BankChart
         currentDaoTokens={currentDaoTokens}

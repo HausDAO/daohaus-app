@@ -116,7 +116,7 @@ const Boosts = ({ customTerms, daoMember, daoOverview, daoMetaData }) => {
   };
 
   return (
-    <MainViewLayout header='Boosts' customTerms={customTerms} isDao={true}>
+    <MainViewLayout header='Boosts' customTerms={customTerms} isDao>
       <Box>
         <TextBox size='sm' mb={3}>
           Available {getTerm(customTerms, 'boosts')}

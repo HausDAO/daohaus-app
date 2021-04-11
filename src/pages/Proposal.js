@@ -34,7 +34,7 @@ const Proposal = ({
   };
 
   return (
-    <MainViewLayout header='Proposal' isDao={true} customTerms={customTerms}>
+    <MainViewLayout header='Proposal' customTerms={customTerms} isDao>
       <Box>
         <Flex wrap='wrap'>
           <Flex

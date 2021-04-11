@@ -86,7 +86,7 @@ const DiscourseSettings = ({ daoMetaData, refetchMetaData }) => {
   };
 
   return (
-    <MainViewLayout header='Discourse Forum Settings' isDao={true}>
+    <MainViewLayout header='Discourse Forum Settings' isDao>
       {localMetadata ? (
         <>
           <Flex justify='space-around' mt='150px'>

@@ -179,7 +179,7 @@ const MinionDetails = ({ overview, members, currentDaoTokens }) => {
   };
 
   return (
-    <MainViewLayout header='Minion' isDao={true}>
+    <MainViewLayout header='Minion' isDao>
       <Box>
         <Link as={RouterLink} to={`/dao/${daochain}/${daoid}/settings`}>
           <HStack spacing={3}>

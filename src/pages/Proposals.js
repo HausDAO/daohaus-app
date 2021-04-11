@@ -37,7 +37,7 @@ const Proposals = React.memo(function Proposals({
       header='Proposals'
       headerEl={ctaButton}
       customTerms={customTerms}
-      isDao={true}
+      isDao
     >
       <Flex wrap='wrap'>
         <Box

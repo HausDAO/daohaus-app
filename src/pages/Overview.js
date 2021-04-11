@@ -25,7 +25,7 @@ const Overview = React.memo(function overview({
   const isUberHaus = daoid === UBERHAUS_DATA.ADDRESS;
 
   return (
-    <MainViewLayout header='Overview' customTerms={customTerms} isDao={true}>
+    <MainViewLayout header='Overview' customTerms={customTerms} isDao>
       <Box w='100%'>
         <Flex wrap='wrap'>
           {overview && (
