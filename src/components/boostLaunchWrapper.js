@@ -12,6 +12,7 @@ import { useMetaData } from '../contexts/MetaDataContext';
 import DiscourseLaunch from './discourseLaunch';
 import NewMinionSafe from './newMinionSafe';
 import GenericBoostLaunch from './genericBoostLaunch';
+import SnapshotLaunch from './snapshotLaunch';
 
 const BoostLaunchWrapper = ({ boost }) => {
   const [loading, setLoading] = useState(false);
@@ -71,6 +72,15 @@ const BoostLaunchWrapper = ({ boost }) => {
             boostInstructions='These are the instructions after activate'
             boostCTA="It's gating time!"
             boostLink='/links'
+            handleLaunch={handleLaunch}
+            loading={loading}
+            setLoading={setLoading}
+          />
+        );
+      }
+      case 'snapshot': {
+        return (
+          <SnapshotLaunch
             handleLaunch={handleLaunch}
             loading={loading}
             setLoading={setLoading}

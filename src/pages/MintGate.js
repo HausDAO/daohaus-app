@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import axios from 'axios';
 import { Flex, Button, Link } from '@chakra-ui/react';
+import { RiAddFill } from 'react-icons/ri';
 
 import MainViewLayout from '../components/mainViewLayout';
 import MintGateCard from '../components/mintGateCard';
@@ -37,7 +38,12 @@ const MintGate = ({ daoMetaData }) => {
     injectedChain?.chainId,
     daochain,
   ) && (
-    <Button as={Link} to={`/dao/${daochain}/${daoid}/proposals/new/member`}>
+    <Button
+      as={Link}
+      href={`https://mintgate.app/?token1=${daoid}&amount=1`}
+      rightIcon={<RiAddFill />}
+      isExternal
+    >
       New Gate
     </Button>
   );
@@ -46,10 +52,7 @@ const MintGate = ({ daoMetaData }) => {
     <MainViewLayout header='MintGates' headerEl={newGateButton} isDao>
       <Flex wrap='wrap' justify='space-around'>
         {gates.length > 0 &&
-          gates.map((gate) => {
-            console.log(gate);
-            return <MintGateCard key={gate.title} gate={gate} />;
-          })}
+          gates.map((gate) => <MintGateCard key={gate.title} gate={gate} />)}
       </Flex>
     </MainViewLayout>
   );

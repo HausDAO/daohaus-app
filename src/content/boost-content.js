@@ -46,9 +46,20 @@ export const boostList = [
   {
     name: 'MintGate',
     key: 'mintGate',
+    comingSoon: true,
     description: 'Gate content for your dao to allow private access',
     price: '0',
     modalName: 'genericBoostLaunch',
+    successRoute: '',
+  },
+  {
+    name: 'Snapshot Proposals',
+    key: 'snapshot',
+    comingSoon: true,
+    description:
+      'Gasless voting for quicker, smaller decisions or just collecting signal.',
+    price: '0',
+    modalName: 'snapshot',
     successRoute: '',
   },
   {
@@ -69,16 +80,6 @@ export const boostList = [
       'Bring Your Own Token or a Launch a new one and manage issuance as a DAO.',
     price: '1',
     modalName: 'tokenSupply',
-    successRoute: '',
-  },
-  {
-    name: 'Offchain Voting',
-    key: 'offchainVoting',
-    comingSoon: true,
-    description:
-      'Gasless voting for quicker, smaller decisions or just collecting signal.',
-    price: '1',
-    modalName: 'offchainVoting',
     successRoute: '',
   },
   {
