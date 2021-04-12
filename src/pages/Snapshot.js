@@ -10,7 +10,7 @@ const Snapshot = ({ isMember }) => {
   const space = 'raid-guild';
 
   useEffect(() => {
-    const getSnaphots = async () => {
+    const getSnaphots = () => {
       fetch(`https://hub.snapshot.page/api/${space}/proposals`).then(
         async (response) => {
           const result = await response.json();

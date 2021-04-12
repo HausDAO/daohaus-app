@@ -16,7 +16,7 @@ const MintGate = ({ daoMetaData }) => {
   const { daochain, daoid } = useParams();
 
   useEffect(() => {
-    const fetchGates = async () => {
+    const fetchGates = () => {
       fetch(
         // `${MINTGATE_URL}/links?tid=${daoid}`,
         `${MINTGATE_URL}/links?tid=${'0xef3d8c4fbb1860fceab16595db7e650cd5ad51c1'}`,
