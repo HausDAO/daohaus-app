@@ -11,12 +11,15 @@ const Snapshot = ({ isMember }) => {
 
   useEffect(() => {
     const getSnaphots = async () => {
-      const localSnapshots = await fetch(
-        `https://hub.snapshot.page/api/${space}/proposals`,
+      fetch(`https://hub.snapshot.page/api/${space}/proposals`).then(
+        async (response) => {
+          const result = await response.json();
+          console.log(result);
+          if (result) {
+            setSnapshots(result);
+          }
+        },
       );
-      if (localSnapshots.data) {
-        setSnapshots(localSnapshots.data);
-      }
     };
     getSnaphots();
   }, []);
