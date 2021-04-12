@@ -17,13 +17,16 @@ const MintGate = ({ daoMetaData }) => {
 
   useEffect(() => {
     const fetchGates = async () => {
-      const localGates = await fetch(
+      fetch(
         // `${MINTGATE_URL}/links?tid=${daoid}`,
         `${MINTGATE_URL}/links?tid=${'0xef3d8c4fbb1860fceab16595db7e650cd5ad51c1'}`,
-      );
-      if (localGates?.data?.links?.length > 0) {
-        setGates(localGates.data.links);
-      }
+      ).then(async (response) => {
+        const result = await response.json();
+        console.log(result);
+        if (result.links?.length > 0) {
+          setGates(result.links);
+        }
+      });
     };
     // if (daoid && daoMetaData && 'mintGate' in daoMetaData?.boosts) {
     fetchGates();
