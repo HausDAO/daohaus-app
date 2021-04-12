@@ -4,7 +4,7 @@ import { Box } from '@chakra-ui/react';
 import CustomThemeLaunch from './customThemeLaunch';
 import NewMinionForm from '../forms/newMinion';
 import NotificationsLaunch from './notificationsLaunch';
-import ProposalTypesLaunch from './proposalTypesLaunch';
+import ProposalTypesLaunch from './ProposalTypesLaunch';
 import { useParams } from 'react-router-dom';
 import { useInjectedProvider } from '../contexts/InjectedProviderContext';
 import { boostPost } from '../utils/metadata';
