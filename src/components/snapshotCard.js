@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react';
-import axios from 'axios';
 import { Flex, Box, HStack, Stack, Link } from '@chakra-ui/react';
 import { format } from 'date-fns';
 import ContentBox from '../components/ContentBox';
@@ -10,11 +9,13 @@ const SnapshotCard = ({ snapshotId, snapshot }) => {
 
   useEffect(() => {
     const getVotes = async () => {
-      const localVotes = await axios.get(
-        `https://hub.snapshot.page/api/${snapshot.msg.space}/proposal/${snapshotId}`,
-      );
-      if (localVotes.data) {
-        setVotes(localVotes.data);
+      const localVotes = await (
+        await fetch(
+          `https://hub.snapshot.page/api/${snapshot.msg.space}/proposal/${snapshotId}`,
+        )
+      ).json();
+      if (localVotes) {
+        setVotes(localVotes);
       }
     };
     getVotes();

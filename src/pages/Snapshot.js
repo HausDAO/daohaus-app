@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react';
-import axios from 'axios';
 import { Flex, Stack, Button, Link } from '@chakra-ui/react';
 import { RiAddFill } from 'react-icons/ri';
 import MainViewLayout from '../components/mainViewLayout';
@@ -12,11 +11,11 @@ const Snapshot = ({ isMember }) => {
 
   useEffect(() => {
     const getSnaphots = async () => {
-      const localSnapshots = await axios.get(
-        `https://hub.snapshot.page/api/${space}/proposals`,
-      );
-      if (localSnapshots.data) {
-        setSnapshots(localSnapshots.data);
+      const localSnapshots = await (
+        await fetch(`https://hub.snapshot.page/api/${space}/proposals`)
+      ).json();
+      if (localSnapshots) {
+        setSnapshots(localSnapshots);
       }
     };
     getSnaphots();
