@@ -9,6 +9,7 @@ import {
 } from '@chakra-ui/react';
 import { RiInformationLine } from 'react-icons/ri';
 import { utils } from 'web3';
+import { ethers } from 'ethers';
 import { MaxUint256 } from '@ethersproject/constants';
 
 import React, { useState, useEffect } from 'react';
@@ -204,7 +205,9 @@ const TributeInput = ({ register, setValue, getValues, setError }) => {
           right='0'
           top='-30px'
         >
-          Max: {balance && parseFloat(utils.fromWei(balance)).toFixed(4)}
+          Max:{' '}
+          {balance &&
+            ethers.utils.commify(parseFloat(utils.fromWei(balance)).toFixed(4))}
         </Button>
         <Input
           name='tributeOffered'
