@@ -8,17 +8,15 @@ const SnapshotCard = ({ snapshotId, snapshot }) => {
   const [votes, setVotes] = useState([]);
 
   useEffect(() => {
-    const getVotes = () => {
-      fetch(
-        `https://hub.snapshot.page/api/${snapshot.msg.space}/proposal/${snapshotId}`,
-      )
-        .then(async (response) => {
-          const result = await response.json();
-          if (result) {
-            setVotes(result);
-          }
-        })
-        .catch((err) => console.log(err));
+    const getVotes = async () => {
+      const localVotes = await (
+        await fetch(
+          `https://hub.snapshot.page/api/${snapshot.msg.space}/proposal/${snapshotId}`,
+        )
+      ).json();
+      if (localVotes) {
+        setVotes(localVotes);
+      }
     };
     getVotes();
   }, []);

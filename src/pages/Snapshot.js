@@ -10,16 +10,13 @@ const Snapshot = ({ isMember }) => {
   const space = 'raid-guild';
 
   useEffect(() => {
-    const getSnaphots = () => {
-      fetch(`https://hub.snapshot.page/api/${space}/proposals`)
-        .then(async (response) => {
-          const result = await response.json();
-          console.log(result);
-          if (result) {
-            setSnapshots(result);
-          }
-        })
-        .catch((err) => console.log(err));
+    const getSnaphots = async () => {
+      const localSnapshots = await (
+        await fetch(`https://hub.snapshot.page/api/${space}/proposals`)
+      ).json();
+      if (localSnapshots) {
+        setSnapshots(localSnapshots);
+      }
     };
     getSnaphots();
   }, []);

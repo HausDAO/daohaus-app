@@ -16,19 +16,16 @@ const MintGate = ({ daoMetaData }) => {
   const { daochain, daoid } = useParams();
 
   useEffect(() => {
-    const fetchGates = () => {
-      fetch(
-        // `${MINTGATE_URL}/links?tid=${daoid}`,
-        `${MINTGATE_URL}/links?tid=${'0xef3d8c4fbb1860fceab16595db7e650cd5ad51c1'}`,
-      )
-        .then(async (response) => {
-          const result = await response.json();
-          console.log(result);
-          if (result.links?.length > 0) {
-            setGates(result.links);
-          }
-        })
-        .catch((err) => console.log(err));
+    const fetchGates = async () => {
+      const localGates = await (
+        await fetch(
+          // `${MINTGATE_URL}/links?tid=${daoid}`,
+          `${MINTGATE_URL}/links?tid=${'0xef3d8c4fbb1860fceab16595db7e650cd5ad51c1'}`,
+        )
+      ).json();
+      if (localGates?.links?.length > 0) {
+        setGates(localGates.data.links);
+      }
     };
     // if (daoid && daoMetaData && 'mintGate' in daoMetaData?.boosts) {
     fetchGates();
