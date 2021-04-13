@@ -21,7 +21,7 @@ export const supportedChains = {
       'https://api.thegraph.com/subgraphs/name/odyssy-automaton/daohaus-stats',
     boosts_graph_url:
       'https://api.thegraph.com/subgraphs/name/odyssy-automaton/daohaus-transmutation',
-    minion_factory_addr: '0x2A0D29d0a9e5DE91512805c3E2B58c1e95700dDa',
+    minion_factory_addr: '0x88207Daf515e0da1A32399b3f92D128B1BF45294',
     moloch_factory_addr: '0x38064F40B20347d58b326E767791A6f79cdEddCe',
     dai_contract: '0x6b175474e89094c44da98b954eedeac495271d0f',
     weth_contract: '0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2',
@@ -49,7 +49,7 @@ export const supportedChains = {
       'https://api.thegraph.com/subgraphs/name/odyssy-automaton/daohaus-stats-rinkeby',
     boosts_graph_url:
       'https://api.thegraph.com/subgraphs/name/odyssy-automaton/daohaus-transmutation',
-    minion_factory_addr: '0x316eFCd421b0654B7aE8E806880D4AE88ecaE206',
+    minion_factory_addr: '0x313F02A44089150C9ff7011D4e87b52404A914A9',
     moloch_factory_addr: '0xC33a4EfecB11D2cAD8E7d8d2a6b5E7FEacCC521d',
     dai_contract: '0x8f2e097e79b1c51be9cba42658862f0192c3e487',
     weth_contract: '0xc778417e063141139fce010982780140aa0cd5ab',
@@ -77,7 +77,7 @@ export const supportedChains = {
       'https://api.thegraph.com/subgraphs/name/odyssy-automaton/daohaus-stats-kovan',
     boosts_graph_url:
       'https://api.thegraph.com/subgraphs/name/odyssy-automaton/daohaus-boosts-kovan',
-    minion_factory_addr: '0x80ec2dB292E7a6D1D5bECB80e6479b2bE048AC98',
+    minion_factory_addr: '0xCE63803E265617c55567a7A7b584fF2dbD76210B',
     uberhaus_minion_factory_addr: '0x03042577463E3820F9cA6Ca3906BAad599ba9382',
     moloch_factory_addr: '0x9c5d087f912e7187D9c75e90999b03FB31Ee17f5',
     dai_contract: '0x4F96Fe3b7A6Cf9725f59d353F723c1bDb64CA6Aa',
@@ -105,7 +105,7 @@ export const supportedChains = {
       'https://api.thegraph.com/subgraphs/name/odyssy-automaton/daohaus-stats-xdai',
     boosts_graph_url:
       'https://api.thegraph.com/subgraphs/name/odyssy-automaton/daohaus-boosts-xdai',
-    minion_factory_addr: '0x9610389d548Ca0224aCaC40eB3241c5ED88D2479',
+    minion_factory_addr: '0x53508D981439Ce6A3283597a4775F6f23504d4A2',
     moloch_factory_addr: '0x0F50B2F3165db96614fbB6E4262716acc9F9e098',
     wxdai_contract: '0xe91D153E0b41518A2Ce8Dd3D7944Fa863463a97d',
     block_explorer: 'https://blockscout.com/poa/xdai',
@@ -130,7 +130,7 @@ export const supportedChains = {
     stats_graph_url:
       'https://api.thegraph.com/subgraphs/name/odyssy-automaton/daohaus-stats-matic',
     boosts_graph_url: '',
-    minion_factory_addr: '0x52A67B01f029ED2EfEa7E17Dbb56397a612bf245',
+    minion_factory_addr: '0x02e458B5eEF8f23e78AefaC0F15f5d294C3762e9',
     moloch_factory_addr: '0x6690C139564144b27ebABA71F9126611a23A31C9',
     dai_contract: '0x8f3Cf7ad23Cd3CaDbD9735AFf958023239c6A063',
     weth_contract: '0x0d500b1d8e8ef31e21c99d1db9a6444d3adf1270',
