@@ -3,6 +3,7 @@ import { lighten, darken } from 'polished';
 // Custom Chakra Components
 import { ContentBoxComponent } from './content-box-component';
 import { TextBoxComponent } from './text-box-component';
+import { Button } from './core/button';
 import { defaultTheme } from './defaultTheme';
 
 export const getRandomTheme = async (images) => {
@@ -110,65 +111,7 @@ export const createTheme = (daoTheme) => {
     components: {
       ContentBoxComponent,
       TextBoxComponent,
-      Button: {
-        // 1. Update the base styles
-        baseStyle: {
-          fontWeight: 'medium', // Normally, it's "semibold"
-          _hover: { scale: '1.05' },
-        },
-        // 2. Add a new button size or extend existing
-        sizes: {},
-        // 3. Add a new visual variant
-        variants: {
-          primary: {
-            bg: 'primary.400',
-            _hover: { bg: 'primary.500' },
-          },
-          sideNav: {
-            bg: 'transparent',
-            color: 'whiteAlpha.900',
-            borderRadius: '9999px',
-            height: '56px',
-            alignItems: 'center',
-            justifyContent: 'flex-start',
-            _hover: { bg: 'transparent', color: 'secondary.500', scale: '1' },
-            _active: {
-              boxShadow: 'none',
-              borderColor: 'transparent',
-              outline: 'none',
-              backgroundColor: 'white',
-            },
-            _focus: {
-              boxShadow: 'none',
-              borderColor: 'transparent',
-              outline: 'none',
-            },
-          },
-          // 4. Override existing variants
-          solid: (props) => ({
-            bg: 'secondary.400',
-            color: 'white',
-            _hover: { bg: 'secondary.500', color: 'white' },
-            _focus: {
-              bg: 'secondary.500',
-              color: 'white',
-              boxShadow: '0 0 0 3px blackAlpha.600',
-            },
-            _active: { bg: 'inherit' },
-          }),
-          outline: (props) => ({
-            borderColor: 'secondary.400',
-            bg: 'transparent',
-            color: 'secondary.400',
-            _hover: {
-              borderColor: 'secondary.500',
-              color: 'secondary.500',
-              bg: 'transparent',
-            },
-            _active: { bg: 'inherit' },
-          }),
-        },
-      },
+      Button,
       IconButton: {
         // 1. Update the base styles
         baseStyle: {
@@ -369,6 +312,7 @@ export const createTheme = (daoTheme) => {
         variants: {
           label: {
             color: 'whiteAlpha.700',
+            fontFamily: 'heading',
             fontSize: 'xs',
             textTransform: 'uppercase',
             letterSpacing: '0.15em',
@@ -413,6 +357,10 @@ export const createTheme = (daoTheme) => {
           _hover: { textDecoration: 'none', color: 'secondary.500' },
         },
       },
+    },
+    config: {
+      initialColorMode: 'dark',
+      useSystemColorMode: false,
     },
   });
 };

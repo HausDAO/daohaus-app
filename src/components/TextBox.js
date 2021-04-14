@@ -2,12 +2,12 @@ import React from 'react';
 import { Box, useStyleConfig } from '@chakra-ui/react';
 
 const TextBox = (props) => {
-  const { size, variant, colorScheme, ...rest } = props;
+  const { size, variant, ...rest } = props;
 
   const styles = useStyleConfig('TextBoxComponent', {
     size,
     variant,
-    colorScheme,
+    ...rest,
   });
 
   return <Box sx={styles} {...rest} />;
