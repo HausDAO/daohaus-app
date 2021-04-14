@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { utils } from 'ethers';
 import { useParams, useHistory } from 'react-router-dom';
 import { Flex, Box, Skeleton, Button, Avatar } from '@chakra-ui/react';
 import makeBlockie from 'ethereum-blockies-base64';
@@ -13,8 +14,8 @@ const OverviewCard = ({ daoOverview, members, currentDaoTokens }) => {
   const { daochain, daoid } = useParams();
   const { daoMetaData, customTerms } = useMetaData();
   const [activeMembers, setActiveMembers] = useState(null);
-  const totalShares = daoOverview?.totalShares;
-  const totalLoot = daoOverview?.totalLoot;
+  const totalShares = utils.commify(daoOverview?.totalShares || 0);
+  const totalLoot = utils.commify(daoOverview?.totalLoot || 0);
   const history = useHistory();
 
   useEffect(() => {
