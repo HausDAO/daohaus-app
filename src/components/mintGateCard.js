@@ -20,7 +20,9 @@ const MintGateCard = ({ gate }) => (
           {gate.title}
         </TextBox>
         <TextBox size='xs' variant='value'>
-          {gate.desc.length > 100 ? `${gate.desc.slice(0, 100)}...` : gate.desc}
+          {gate?.desc?.length > 100
+            ? `${gate?.desc?.slice(0, 100)}...`
+            : gate.desc}
         </TextBox>
       </Flex>
       <Flex justify='space-between' w='100%'>
