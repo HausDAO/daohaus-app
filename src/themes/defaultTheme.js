@@ -2,7 +2,7 @@ import { rgba } from 'polished';
 import BrandImg from '../assets/img/Daohaus__Castle--Dark.svg';
 import BgImg from '../assets/img/daohaus__hero--falling.jpg';
 
-const defaultTheme = {
+export const defaultTheme = {
   primary500: '#10153d',
   primaryAlpha: rgba('#10153d', 0.9),
   secondary500: '#EB8A23',
@@ -34,5 +34,3 @@ const defaultTheme = {
     // f04cta: 'Start Over',
   },
 };
-
-export default defaultTheme;
