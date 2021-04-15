@@ -11,16 +11,16 @@ export const calcValue = (member, daoTokens, overview) => {
     const result = memberProportion * totalDaoVal;
 
     return result.toFixed(2);
-  } else {
+  } 
     return 0;
-  }
+  
 };
 
 export const calcPower = (member, overview) => {
   if (member?.shares && overview?.totalShares) {
     const total = (member.shares / overview.totalShares) * 100;
     return total.toFixed(1);
-  } else {
+  } 
     return 0;
-  }
+  
 };

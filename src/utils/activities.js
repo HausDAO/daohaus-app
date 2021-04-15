@@ -42,7 +42,7 @@ const handleProposal = (proposal) => {
       yesVotes: proposal.yesVotes,
       noVotes: proposal.noVotes,
     };
-  } else if (proposal.sponsored) {
+  } if (proposal.sponsored) {
     return {
       title: `sponsored ${proposal.proposalType}`,
       createdAt: proposal.sponsoredAt,
@@ -53,7 +53,7 @@ const handleProposal = (proposal) => {
       yesVotes: proposal.yesVotes,
       noVotes: proposal.noVotes,
     };
-  } else {
+  } 
     return {
       title: `submitted ${proposal.proposalType}`,
       createdAt: proposal.createdAt,
@@ -64,7 +64,7 @@ const handleProposal = (proposal) => {
       yesVotes: proposal.yesVotes,
       noVotes: proposal.noVotes,
     };
-  }
+  
 };
 
 const handleVote = (vote) => {

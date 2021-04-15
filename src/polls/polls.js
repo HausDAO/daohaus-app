@@ -16,7 +16,7 @@ import { MinionService } from '../services/minionService';
 import { UberHausMinionService } from '../services/uberHausMinionService';
 
 export const pollProposals = async ({ daoID, chainID }) =>
-  await graphQuery({
+  graphQuery({
     endpoint: getGraphEndpoint(chainID, 'subgraph_url'),
     query: PROPOSALS_LIST,
     variables: {
@@ -44,7 +44,7 @@ export const pollTokenAllowances = async ({
 };
 
 export const pollMolochSummon = async ({ chainID, summoner, createdAt }) => {
-  return await graphQuery({
+  return graphQuery({
     endpoint: getGraphEndpoint(chainID, 'subgraph_url'),
     query: DAO_POLL,
     variables: {
@@ -59,7 +59,7 @@ export const pollMinionSummon = async ({
   molochAddress,
   createdAt,
 }) => {
-  return await graphQuery({
+  return graphQuery({
     endpoint: getGraphEndpoint(chainID, 'subgraph_url'),
     query: MINION_POLL,
     variables: {
@@ -74,7 +74,7 @@ export const pollMinionProposal = async ({
   minionAddress,
   createdAt,
 }) => {
-  return await graphQuery({
+  return graphQuery({
     endpoint: getGraphEndpoint(chainID, 'subgraph_url'),
     query: MINION_PROPOSAL_POLL,
     variables: {
@@ -97,7 +97,7 @@ export const pollMinionExecute = async ({
         chainID,
       })('getAction')({ proposalId });
       return action.executed;
-    } else if (
+    } if (
       proposalType === PROPOSAL_TYPES.MINION_UBER_STAKE ||
       proposalType === PROPOSAL_TYPES.MINION_UBER_RQ
     ) {
@@ -106,7 +106,7 @@ export const pollMinionExecute = async ({
         chainID,
       })('getAction')({ proposalId });
       return action.executed;
-    } else if (proposalType === PROPOSAL_TYPES.MINION_UBER_DEL) {
+    } if (proposalType === PROPOSAL_TYPES.MINION_UBER_DEL) {
       console.log('POLLS UBER DEL');
       const action = await UberHausMinionService({
         uberHausMinion: minionAddress,
@@ -114,6 +114,7 @@ export const pollMinionExecute = async ({
       })('getAppointment')({ proposalId });
       return action.executed;
     }
+    return null;
   } catch (error) {
     console.error(error);
     throw new Error('Error caught in Poll block of TX');
@@ -121,7 +122,7 @@ export const pollMinionExecute = async ({
 };
 
 export const pollRageQuit = async ({ chainID, molochAddress, createdAt }) => {
-  return await graphQuery({
+  return graphQuery({
     endpoint: getGraphEndpoint(chainID, 'subgraph_url'),
     query: RAGE_QUIT_POLL,
     variables: {
@@ -245,4 +246,5 @@ export const pollDelegateRewards = async ({
   } catch (error) {
     console.error(error);
   }
+  return null;
 };

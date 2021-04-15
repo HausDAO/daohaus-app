@@ -1,5 +1,5 @@
-import { supportedChains } from './chain';
 import { utils } from 'web3';
+import { supportedChains } from './chain';
 
 export const parseSummonersAndShares = (data) => {
   if (!data) {
@@ -46,9 +46,9 @@ export const periodsPerDayPreset = (seconds) => {
 
   if (24 / hours < 1) {
     return `Less than ${perDay} per day`;
-  } else {
+  } 
     return `${perDay} per day`;
-  }
+  
 };
 
 export const formatPeriodLength = (periods, duration) => {
@@ -267,8 +267,8 @@ export const cloneMembers = (daoMembers) =>
     .reduce(
       (string, member) =>
         +member?.shares > 0
-          ? string +
-            `${member.memberAddress} ${member.shares}
+          ? `${string 
+            }${member.memberAddress} ${member.shares}
 `
           : string,
       '',

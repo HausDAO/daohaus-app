@@ -6,7 +6,7 @@ const fetchEtherscanAPIData = async (address, daochain) => {
   try {
     const key = process.env.REACT_APP_ETHERSCAN_KEY;
     const url = `${chainByID(daochain).tokenlist_api_url}${address}${key &&
-      '&apikey=' + key}`;
+      `&apikey=${key}`}`;
     const response = await fetch(url);
     const json = await response.json();
     if (!json.result || json.status === '0') {
@@ -54,7 +54,7 @@ const parseEtherscan = async (json, address, daochain) => {
           tokenAddress: b.contractAddress,
           chainID: daochain,
         });
-        for (let i = 0; i < b.balance; i++) {
+        for (let i = 0; i < b.balance; i =+ 1) {
           const tid = nftService('tokenOfOwnerByIndex')({
             accountAddr: address,
             index: i,
@@ -81,6 +81,7 @@ const parseEtherscan = async (json, address, daochain) => {
         } else {
           promises2.push(Promise.resolve());
         }
+        return null;
       });
       nft.tokenURIs = await Promise.all(promises2);
       return nft;
@@ -123,7 +124,7 @@ const parseBlockScout = async (json, address) => {
         tokenAddress: b.contractAddress,
         chainID: daochain,
       });
-      for (let i = 0; i < b.balance; i++) {
+      for (let i = 0; i < b.balance; i =+ 1) {
         const tid = nftService('tokenOfOwnerByIndex')({
           accountAddr: address,
           index: i,
@@ -146,6 +147,7 @@ const parseBlockScout = async (json, address) => {
         tokenId: tid,
       });
       promises2.push(uri);
+      return null;
     });
     nft.tokenURIs = await Promise.all(promises2);
     return nft;

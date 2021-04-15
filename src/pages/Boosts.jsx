@@ -1,0 +1,136 @@
+import React from 'react';
+import { Box, Flex, Button } from '@chakra-ui/react';
+import { Link as RouterLink, useParams } from 'react-router-dom';
+
+import ContentBox from '../components/ContentBox';
+import TextBox from '../components/TextBox';
+// import { useMetaData } from '../contexts/MetaDataContext';
+import { boostList } from '../content/boost-content';
+import GenericModal from '../modals/genericModal';
+import { useOverlay } from '../contexts/OverlayContext';
+import BoostLaunchWrapper from '../components/boostLaunchWrapper';
+import MainViewLayout from '../components/mainViewLayout';
+import { useInjectedProvider } from '../contexts/InjectedProviderContext';
+import { daoConnectedAndSameChain } from '../utils/general';
+import { getTerm } from '../utils/metadata';
+
+const Boosts = ({ customTerms, daoMember, daoOverview, daoMetaData }) => {
+  // const { daoMetaData } = useMetaData();
+  const { daochain, daoid } = useParams();
+  const { setGenericModal } = useOverlay();
+  const { address, injectedChain } = useInjectedProvider();
+
+  const canInteract =
+    daoConnectedAndSameChain(address, injectedChain?.chainId, daochain) &&
+    +daoMember?.shares > 0;
+
+  const hasDependentBoost = (boostKey) => {
+    if (boostKey === 'vanillaMinions') {
+      const minions = daoOverview.minions.length;
+      return minions;
+    }
+    const boostData = daoMetaData.boosts[boostKey];
+    console.log(daoMetaData.boosts, daoOverview);
+    return boostData && boostData.active;
+  };
+
+  const renderBoostCard = (boost, i) => {
+    const boostData = daoMetaData.boosts && daoMetaData.boosts[boost.key];
+    const hasBoost = boostData && boostData.active;
+
+    return (
+      <ContentBox
+        d='flex'
+        key={i}
+        w={['100%', '100%', '40%', '30%']}
+        h='370px'
+        m={3}
+        mb={6}
+        p={6}
+        flexDirection='column'
+        alignItems='center'
+        justifyContent='space-around'
+      >
+        <Box fontFamily='heading' fontSize='2xl' fontWeight={700}>
+          {boost.name}
+        </Box>
+        <Box textAlign='center'>{boost.description}</Box>
+        {boost.price === '0' ? (
+          <Box textAlign='center' fontFamily='heading'>
+            Cost
+          </Box>
+        ) : null}
+
+        <Box textAlign='center'>
+          {boost.price === '0' ? (
+            <Box fontFamily='heading' fontSize='xl' m={0}>
+              Free
+            </Box>
+          ) : null}
+        </Box>
+        {boost.comingSoon ? (
+          <Button textTransform='uppercase' disabled>
+            Coming Soon
+          </Button>
+        ) : (
+          <>
+            {hasBoost ? (
+              <Button
+                as={RouterLink}
+                to={`/dao/${daochain}/${daoid}/settings/${boost.successRoute}`}
+                textTransform='uppercase'
+                disabled={!canInteract}
+              >
+                Settings
+              </Button>
+            ) : (
+              <>
+                {boost.dependency && !hasDependentBoost(boost?.dependency) ? (
+                  <Button textTransform='uppercase' disabled>
+                    {`Needs ${boost.dependency}`}
+                  </Button>
+                ) : (
+                  <Button
+                    textTransform='uppercase'
+                    onClick={() => setGenericModal({ [boost.key]: true })}
+                    disabled={!canInteract}
+                  >
+                    Add This App
+                  </Button>
+                )}
+              </>
+            )}
+          </>
+        )}
+        <GenericModal closeOnOverlayClick={false} modalId={boost.key}>
+          <>
+            {!boost.comingSoon ? (
+              <>
+                <BoostLaunchWrapper boost={boost} />
+              </>
+            ) : null}
+          </>
+        </GenericModal>
+      </ContentBox>
+    );
+  };
+
+  return (
+    <MainViewLayout header='Boosts' customTerms={customTerms} isDao>
+      <Box>
+        <TextBox size='sm' mb={3}>
+          {`Available ${getTerm(customTerms, 'boosts')}`}
+        </TextBox>
+        <Flex wrap='wrap' justify='space-evenly'>
+          {daoMetaData
+            ? boostList.map((boost, i) => {
+                return renderBoostCard(boost, i);
+              })
+            : null}
+        </Flex>
+      </Box>
+    </MainViewLayout>
+  );
+};
+
+export default Boosts;

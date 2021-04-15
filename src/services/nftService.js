@@ -27,6 +27,7 @@ export const NFTService = ({
         } catch (error) {
           console.error('ERR:', error);
         }
+        return null;
       };
     }
     if (service === 'tokenURI') {
@@ -37,7 +38,9 @@ export const NFTService = ({
         } catch (error) {
           console.error('ERR:', error);
         }
+        return null;
       };
     }
+    return null;
   };
 };

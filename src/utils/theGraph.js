@@ -2,9 +2,9 @@ import { graphQuery } from './apollo';
 import { ADDRESS_BALANCES, BANK_BALANCES } from '../graphQL/bank-queries';
 import { DAO_ACTIVITIES, HOME_DAO } from '../graphQL/dao-queries';
 import { MEMBERS_LIST } from '../graphQL/member-queries';
-import { proposalResolver, daoResolver } from '../utils/resolvers';
-import { getGraphEndpoint, supportedChains } from '../utils/chain';
-import { fetchTokenData } from '../utils/tokenValue';
+import { proposalResolver, daoResolver } from "./resolvers";
+import { getGraphEndpoint, supportedChains } from "./chain";
+import { fetchTokenData } from "./tokenValue";
 import { omit } from './general';
 import { UBERHAUS_QUERY, UBER_MINIONS } from '../graphQL/uberhaus-queries';
 import { UBERHAUS_DATA } from './uberhaus';
@@ -25,9 +25,9 @@ export const graphFetchAll = async (args, items = [], skip = 0) => {
     const newItems = result[subfield];
     if (newItems.length === 100) {
       return graphFetchAll(args, [...newItems, ...items], skip + 100);
-    } else {
+    } 
       return [...items, ...newItems];
-    }
+    
   } catch (error) {
     console.error(error);
   }
@@ -69,9 +69,9 @@ const fetchAllActivity = async (args, items = [], skip = 0) => {
     const { proposals } = result.moloch;
     if (proposals.length === 100) {
       return fetchAllActivity(args, [...items, ...proposals], skip + 100);
-    } else {
+    } 
       return { ...result.moloch, proposals: [...items, ...proposals] };
-    }
+    
   } catch (error) {
     throw new Error(error);
   }
