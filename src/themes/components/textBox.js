@@ -1,4 +1,4 @@
-export const TextBoxComponent = {
+const TextBoxComponent = {
   baseStyle: (props) => ({
     color: props.colorScheme ? props.colorScheme : 'whiteAlpha.700',
     textAlign: props.textAlign ? props.textAlign : null,
@@ -56,3 +56,5 @@ export const TextBoxComponent = {
     }),
   },
 };
+
+export default TextBoxComponent;

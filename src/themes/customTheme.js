@@ -1,7 +1,7 @@
 import { extendTheme } from '@chakra-ui/react';
 import { lighten, darken, rgba } from 'polished';
-import { ContentBoxComponent } from './content-box-component';
-import { TextBoxComponent } from './text-box-component';
+import ContentBoxComponent from './components/contentBox';
+import TextBoxComponent from './components/textBox';
 
 const shadeTemplate = [
   { shade: 50, degree: 0.4 },
@@ -17,11 +17,10 @@ const shadeTemplate = [
 ];
 const getShade = (shade, degree, seedColor) => {
   if (shade < 500) return lighten(degree, seedColor);
-  else if (shade === 500) return seedColor;
-  else if (shade > 500) return darken(degree, seedColor);
-  else {
-    throw new Error(`Argument ${shade} is not a valid shade value`);
-  }
+  if (shade === 500) return seedColor;
+  if (shade > 500) return darken(degree, seedColor);
+
+  throw new Error(`Argument ${shade} is not a valid shade value`);
 };
 
 const getAllShades = (seedColor) =>
@@ -32,19 +31,6 @@ const getAllShades = (seedColor) =>
     }),
     {},
   );
-
-export const createNewTheme = (newTheme) => {
-  const newThemeData = {
-    // THEME_NAME: newTheme.daoMeta.daoName,
-    active: true,
-    colors: {
-      primary: getAllShades(newTheme.primary500),
-      secondary: getAllShades(newTheme.secondary500),
-      background: getAllShades(newTheme.bg500),
-    },
-  };
-  return extendTheme({ ...defaultTheme, ...newThemeData });
-};
 
 export const defaultThemeData = {
   styles: {
@@ -344,3 +330,16 @@ export const defaultThemeData = {
   // bgImg: BgImg,
 };
 export const defaultTheme = extendTheme(defaultThemeData);
+
+export const createNewTheme = (newTheme) => {
+  const newThemeData = {
+    // THEME_NAME: newTheme.daoMeta.daoName,
+    active: true,
+    colors: {
+      primary: getAllShades(newTheme.primary500),
+      secondary: getAllShades(newTheme.secondary500),
+      background: getAllShades(newTheme.bg500),
+    },
+  };
+  return extendTheme({ ...defaultTheme, ...newThemeData });
+};
