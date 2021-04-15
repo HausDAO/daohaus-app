@@ -1,36 +1,17 @@
-const Button = {
+const IconButton = {
   // 1. Update the base styles
   baseStyle: {
-    fontWeight: 'medium', // Normally, it's "semibold"
-    _hover: { scale: '1.05' },
+    borderRadius: '9999px',
+    _hover: { scale: '5' },
   },
   // 2. Add a new button size or extend existing
   sizes: {},
   // 3. Add a new visual variant
+  defaultProps: { isRound: 'true' },
   variants: {
     primary: {
       bg: 'primary.400',
       _hover: { bg: 'primary.500' },
-    },
-    sideNav: {
-      bg: 'transparent',
-      color: 'whiteAlpha.900',
-      borderRadius: '9999px',
-      height: '56px',
-      alignItems: 'center',
-      justifyContent: 'flex-start',
-      _hover: { bg: 'transparent', color: 'secondary.500', scale: '1' },
-      _active: {
-        boxShadow: 'none',
-        borderColor: 'transparent',
-        outline: 'none',
-        backgroundColor: 'white',
-      },
-      _focus: {
-        boxShadow: 'none',
-        borderColor: 'transparent',
-        outline: 'none',
-      },
     },
     // 4. Override existing variants
     solid: (props) => ({
@@ -55,7 +36,17 @@ const Button = {
       },
       _active: { bg: 'inherit' },
     }),
+    ghost: (props) => ({
+      bg: 'transparent',
+      color: 'whiteAlpha.900',
+      _hover: {
+        borderColor: 'secondary.500',
+        color: 'secondary.500',
+        bg: 'whiteAlpha.900',
+      },
+      _active: { bg: 'inherit' },
+    }),
   },
 };
 
-export default Button;
+export default IconButton;
