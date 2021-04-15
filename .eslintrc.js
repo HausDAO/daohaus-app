@@ -21,8 +21,6 @@ module.exports = {
     },
     ecmaVersion: 2020,
     sourceType: 'module',
-    failOnError: false,
-    emitWarning: true,
   },
   plugins: ['react', 'react-hooks', 'prettier'],
   settings: {
