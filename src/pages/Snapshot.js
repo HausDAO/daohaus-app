@@ -3,6 +3,7 @@ import { Flex, Stack, Button, Link } from '@chakra-ui/react';
 import { RiAddFill } from 'react-icons/ri';
 import MainViewLayout from '../components/mainViewLayout';
 import SnapshotCard from '../components/snapshotCard';
+import { getSnapshotProposals } from '../utils/requests';
 
 const Snapshot = ({ isMember }) => {
   const [snapshots, setSnapshots] = useState({});
@@ -11,12 +12,8 @@ const Snapshot = ({ isMember }) => {
 
   useEffect(() => {
     const getSnaphots = async () => {
-      const localSnapshots = await (
-        await fetch(`https://hub.snapshot.page/api/${space}/proposals`)
-      ).json();
-      if (localSnapshots) {
-        setSnapshots(localSnapshots);
-      }
+      const localSnapshots = await getSnapshotProposals(space);
+      setSnapshots(localSnapshots);
     };
     getSnaphots();
   }, []);

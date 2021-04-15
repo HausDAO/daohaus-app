@@ -7,8 +7,7 @@ import MainViewLayout from '../components/mainViewLayout';
 import MintGateCard from '../components/mintGateCard';
 import { useInjectedProvider } from '../contexts/InjectedProviderContext';
 import { daoConnectedAndSameChain } from '../utils/general';
-
-const MINTGATE_URL = 'https://link.mintgate.app/api';
+import { getMintGates } from '../utils/requests';
 
 const MintGate = ({ daoMetaData }) => {
   const [gates, setGates] = useState([]);
@@ -17,12 +16,8 @@ const MintGate = ({ daoMetaData }) => {
 
   useEffect(() => {
     const fetchGates = async () => {
-      const localGates = await (
-        await fetch(
-          // `${MINTGATE_URL}/links?tid=${daoid}`,
-          `${MINTGATE_URL}/links?tid=${'0xef3d8c4fbb1860fceab16595db7e650cd5ad51c1'}`,
-        )
-      ).json();
+      const daoAddress = '0xef3d8c4fbb1860fceab16595db7e650cd5ad51c1';
+      const localGates = await getMintGates(daoAddress);
       if (localGates?.links?.length > 0) {
         setGates(localGates.data.links);
       }
