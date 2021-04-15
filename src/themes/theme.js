@@ -1,7 +1,7 @@
 import { extendTheme } from '@chakra-ui/react';
 import { lighten, darken } from 'polished';
 // theme
-import defaultTheme from './defaultTheme';
+import { defaultTheme } from './defaultTheme';
 // core Chakra components
 import Badge from './core/badge';
 import Button from './core/button';

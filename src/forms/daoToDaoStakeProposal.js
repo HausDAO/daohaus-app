@@ -257,8 +257,8 @@ const StakeProposalForm = () => {
         {noBalance ? (
           <Box color='secondary.300' fontSize='m' mr={5}>
             <Icon as={RiErrorWarningLine} color='secondary.300' mr={2} />
-            You can&apos;t staking into UberHAUS until your UberHAUS minion has
-            a {UBERHAUS_DATA.STAKING_TOKEN_SYMBOL} balance. Send{' '}
+            You can&apos;t stake into UberHAUS until your UberHAUS minion has a{' '}
+            {UBERHAUS_DATA.STAKING_TOKEN_SYMBOL} balance. Send{' '}
             {UBERHAUS_DATA.STAKING_TOKEN_SYMBOL} your minion&apos;s address:{' '}
             {stakingToken?.uberHausMinionData.minionAddress}
             <CopyToClipboard
