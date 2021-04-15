@@ -1,4 +1,4 @@
-export const ContentBoxComponent = {
+const ContentBoxComponent = {
   baseStyle: {
     rounded: 'lg',
     bg: 'blackAlpha.700',
@@ -23,3 +23,5 @@ export const ContentBoxComponent = {
     },
   },
 };
+
+export default ContentBoxComponent;
