@@ -10,7 +10,7 @@ import { handleGetProfile } from '../utils/3box';
 const AddressAvatar = React.memo(function AddrAvatar({
   addr,
   hideCopy = false,
-  alwaysShowName,
+  // alwaysShowName,
 }) {
   const toast = useToast();
   const [profile, setProfile] = useState(null);

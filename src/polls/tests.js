@@ -15,7 +15,7 @@ export const submitProposalTest = (data, shouldEqual, pollId) => {
   
 };
 
-export const tokenAllowanceTest = (data, shouldEqual, pollId) => {
+export const tokenAllowanceTest = (data, shouldEqual) => {
   return BigNumber.from(data).gte(shouldEqual);
 };
 

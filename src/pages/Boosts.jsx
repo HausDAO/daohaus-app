@@ -117,6 +117,9 @@ const Boosts = ({ customTerms, daoMember, daoOverview, daoMetaData }) => {
 
   return (
     <MainViewLayout header='Boosts' customTerms={customTerms} isDao>
+      <GenericModal closeOnOverlayClick modalId='boostErrorModal'>
+        Error occurred!
+      </GenericModal>
       <Box>
         <TextBox size='sm' mb={3}>
           {`Available ${getTerm(customTerms, 'boosts')}`}

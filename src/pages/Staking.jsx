@@ -67,7 +67,7 @@ const Staking = () => {
 
 export default Staking;
 
-const PriceBox = ({ tokenData }) => {
+const PriceBox = () => {
   const { successToast } = useOverlay();
 
   const handleCopy = () =>

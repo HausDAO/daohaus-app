@@ -52,8 +52,7 @@ const DaoContractSettings = ({ overview, customTerms }) => {
       <Flex mt={3} wrap='wrap'>
         <Box w={['100%', null, null, '50%']}>
           <TextBox size='xs'>
-            {`{getTerm(customTerms, 'proposal')}
- Deposit`}
+            {`${getTerm(customTerms, 'proposal')} Deposit`}
           </TextBox>
           <Skeleton isLoaded={overview?.proposalDeposit}>
             <TextBox variant='value' size='xl' my={2}>

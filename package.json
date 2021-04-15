@@ -1,7 +1,7 @@
 {
   "name": "pokemol",
-  "version": "0.1.0",
-  "private": true,
+  "version": "2.0.1",
+  "private": false,
   "dependencies": {
     "@chakra-ui/react": "^1.1.6",
     "@emotion/react": "^11.1.4",

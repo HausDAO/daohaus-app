@@ -11,7 +11,7 @@ import { MinionSafeService } from '../services/minionSafeService';
 import { boostPost } from '../utils/requests';
 import { useInjectedProvider } from '../contexts/InjectedProviderContext';
 
-const NewMinionSafe = ({ daoOverview, daoMetaData }) => {
+const NewMinionSafe = ({ daoOverview }) => {
   const [loading, setLoading] = useState(false);
   const { daochain, daoid } = useParams();
   const { address, injectedProvider, injectedChain } = useInjectedProvider();

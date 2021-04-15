@@ -6,7 +6,7 @@ import {
   Flex,
   Icon,
   Box,
-  Link,
+  // Link,
   Tooltip,
   VisuallyHidden,
 } from '@chakra-ui/react';

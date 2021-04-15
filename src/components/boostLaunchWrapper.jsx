@@ -13,10 +13,12 @@ import DiscourseLaunch from './discourseLaunch';
 import NewMinionSafe from './newMinionSafe';
 import GenericBoostLaunch from './genericBoostLaunch';
 import SnapshotLaunch from './snapshotLaunch';
+import { useOverlay } from '../contexts/OverlayContext';
 
 const BoostLaunchWrapper = ({ boost }) => {
   const [loading, setLoading] = useState(false);
   const { address, injectedProvider, injectedChain } = useInjectedProvider();
+  const { setGenericModal } = useOverlay();
   const { daoid } = useParams();
   const { refetchMetaData } = useMetaData();
 
@@ -46,7 +48,7 @@ const BoostLaunchWrapper = ({ boost }) => {
         return true;
       }
       setLoading(false);
-      alert('forbidden, are you an active dao member?');
+      setGenericModal({ 'boostErrorModal': true });
       return false;
     } catch (err) {
       console.log('err', err);

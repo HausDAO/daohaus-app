@@ -33,7 +33,7 @@ const Button = {
       },
     },
     // 4. Override existing variants
-    solid: (props) => ({
+    solid: () => ({
       bg: 'secondary.400',
       color: 'white',
       _hover: { bg: 'secondary.500', color: 'white' },
@@ -44,7 +44,7 @@ const Button = {
       },
       _active: { bg: 'inherit' },
     }),
-    outline: (props) => ({
+    outline: () => ({
       borderColor: 'secondary.400',
       bg: 'transparent',
       color: 'secondary.400',

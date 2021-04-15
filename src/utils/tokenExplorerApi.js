@@ -66,7 +66,7 @@ const parseEtherscan = async (json, address, daochain) => {
       });
     erc721s = await Promise.all(erc721s);
 
-    erc721s.map(async (nft, idx) => {
+    erc721s.map(async (nft) => {
       const promises2 = [];
       const nftService = NFTService({
         tokenAddress: nft.contractAddress,
@@ -136,7 +136,7 @@ const parseBlockScout = async (json, address) => {
     });
   erc721s = await Promise.all(erc721s);
 
-  erc721s.map(async (nft, idx) => {
+  erc721s.map(async (nft) => {
     const promises2 = [];
     const nftService = NFTService({
       tokenAddress: nft.contractAddress,

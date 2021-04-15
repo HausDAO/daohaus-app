@@ -37,8 +37,8 @@ const AddressInput = ({
   memberOnly = false,
   memberOverride = false,
   overrideData,
-  newMember,
-  member,
+  // newMember,
+  // member,
 }) => {
   const { theme } = useCustomTheme();
   const { daoMembers } = useDao();

@@ -1,5 +1,5 @@
 import React from 'react';
-import { Link as RouterLink } from 'react-router-dom';
+// import { Link as RouterLink } from 'react-router-dom';
 import {
   Box,
   Modal,
@@ -12,7 +12,6 @@ import {
   Heading,
   List,
   ListItem,
-  Link,
   Spinner,
   Stack,
   Flex,
@@ -22,7 +21,6 @@ import { rgba } from 'polished';
 import {
   RiExternalLinkLine,
   RiInformationLine,
-  RiLinksLine,
   RiCheckLine,
 } from 'react-icons/ri';
 import TextBox from '../components/TextBox';

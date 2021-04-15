@@ -126,7 +126,7 @@ const DaoSwitcherModal = () => {
 
   const renderOtherNetworks = () =>
     filteredDaos?.otherNetworks &&
-    filteredDaos.otherNetworks.map((network, i) => {
+    filteredDaos.otherNetworks.map((network) => {
       return (
         <Box key={network.networkID} mb={3}>
           <Box fontSize='md' mr={5} as='i' fontWeight={200}>

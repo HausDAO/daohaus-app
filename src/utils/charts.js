@@ -38,7 +38,7 @@ export const subtractDays = (date, days = 1) => {
 };
 
 const groupBy = (xs, key) => {
-  return xs.reduce(function(rv, x) {
+  return xs.reduce((rv, x) => {
     (rv[x[key]] = rv[x[key]] || []).push(x);
     return rv;
   }, {});
@@ -72,7 +72,7 @@ export const balancesWithValue = (balances, prices) => {
 
 export const groupBalancesToDateRange = (balances, dates) => {
   const groupedByToken = groupBy(balances, 'tokenAddress');
-  let dateBalances = dates.map((date, i) => {
+  let dateBalances = dates.map((date) => {
     const value = Object.keys(groupedByToken).reduce((sum, tokenAddress) => {
       const nextBal = groupedByToken[tokenAddress].find(
         (bal) => +bal.timestamp >= date.getTime() / 1000,
@@ -98,7 +98,7 @@ export const groupBalancesToDateRange = (balances, dates) => {
 };
 
 export const groupBalancesMemberToDateRange = (balances, dates) => {
-  return dates.map((date, i) => {
+  return dates.map((date) => {
     const balance = balances.find(
       (bal) => +bal.timestamp >= date.getTime() / 1000,
     );

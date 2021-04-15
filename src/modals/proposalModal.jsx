@@ -24,7 +24,7 @@ import { useOverlay } from '../contexts/OverlayContext';
 import { useCustomTheme } from '../contexts/CustomThemeContext';
 import LootGrabForm from '../forms/lootGrab';
 
-const ProposalFormModal = ({ proposalType, returnRoute }) => {
+const ProposalFormModal = ({ proposalType }) => {
   const [, setLoading] = useState(false);
   const [proposalForm, setProposalForm] = useState(null);
   const { customTerms } = useMetaData();

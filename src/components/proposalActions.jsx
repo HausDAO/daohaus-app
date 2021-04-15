@@ -413,7 +413,7 @@ const ProposalVote = ({
               {canInteract(daoMember, delegate) ? (
                 <>
                   {getAllowance(daoMember, delegate) *
-                    10 ** overview?.depositToken?.decimals >
+                    10 ** overview?.depositToken?.decimals >=
                     +overview?.proposalDeposit ||
                   +overview?.proposalDeposit === 0 ? (
                     <Button

@@ -14,7 +14,7 @@ const IconButton = {
       _hover: { bg: 'primary.500' },
     },
     // 4. Override existing variants
-    solid: (props) => ({
+    solid: () => ({
       bg: 'secondary.400',
       color: 'white',
       _hover: { bg: 'secondary.500', color: 'white' },
@@ -25,7 +25,7 @@ const IconButton = {
       },
       _active: { bg: 'inherit' },
     }),
-    outline: (props) => ({
+    outline: () => ({
       borderColor: 'secondary.400',
       bg: 'transparent',
       color: 'secondary.400',
@@ -36,7 +36,7 @@ const IconButton = {
       },
       _active: { bg: 'inherit' },
     }),
-    ghost: (props) => ({
+    ghost: () => ({
       bg: 'transparent',
       color: 'whiteAlpha.900',
       _hover: {

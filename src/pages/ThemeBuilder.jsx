@@ -6,18 +6,21 @@ import { rgba } from 'polished';
 
 import { useCustomTheme } from '../contexts/CustomThemeContext';
 import { useInjectedProvider } from '../contexts/InjectedProviderContext';
+import { useOverlay } from '../contexts/OverlayContext';
 import defaultTheme from '../themes/defaultTheme';
 import { boostPost } from '../utils/requests';
 import CustomThemeForm from '../forms/customTheme';
 import ThemePreview from '../components/themePreview';
 import MainViewLayout from '../components/mainViewLayout';
 import { useMetaData } from '../contexts/MetaDataContext';
+import GenericModal from '../modals/genericModal';
 
 const ThemeBuilder = ({ refetchMetaData }) => {
   const { address, injectedProvider, injectedChain } = useInjectedProvider();
   const { daochain, daoid } = useParams();
   const { theme, updateTheme, tempTheme, updateTempTheme } = useCustomTheme();
   const { customTerms } = useMetaData();
+  const { setGenericModal } = useOverlay();
   const history = useHistory();
   const [previewTheme, setPreviewTheme] = useState();
 
@@ -75,12 +78,15 @@ const ThemeBuilder = ({ refetchMetaData }) => {
       refetchMetaData();
       history.push(`/dao/${daochain}/${daoid}/settings`);
     } else {
-      alert('error: forbidden');
+      setGenericModal({ 'errorModal': true });
     }
   };
 
   return (
     <MainViewLayout header='Custom Theme' isDao>
+      <GenericModal closeOnOverlayClick modalId='errorModal'>
+        Error occurred!
+      </GenericModal>
       <Box>
         <Flex justify='space-between' align='center'>
           <Flex

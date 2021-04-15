@@ -50,7 +50,7 @@ const UBER_LINK =
 
 const urlify = (text) => {
   const urlRegex = /(https?:\/\/[^\s]+)/g;
-  return text.replace(urlRegex, function(url) {
+  return text.replace(urlRegex, (url) => {
     return `<a rel="noopener noreferrer" target="_blank" href="${url}"> link </a>`;
   });
 };

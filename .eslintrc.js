@@ -12,6 +12,7 @@ module.exports = {
     window: true,
     sessionStorage: true,
     alert: true,
+    document: true,
   },
   parser: 'babel-eslint',
   parserOptions: {
@@ -41,6 +42,7 @@ module.exports = {
     'consistent-return': 'off', // priority 2, harder basically all the services
     'radix': 'off', // priority 1, parseInt ??
     'no-unused-expressions': 'off', // priority 2, formatPeriods() conditional appends
+    // import rules
     'import/prefer-default-export': 'off', // priority 2, med
     'import/no-named-as-default': 'off', // priority 1, easy
     'import/no-extraneous-dependencies': 'off', // priority 1, harder

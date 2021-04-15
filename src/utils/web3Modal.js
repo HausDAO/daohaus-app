@@ -62,7 +62,7 @@ export const deriveChainId = (provider) => {
   // else if (provider.isPortis) {
   //   return chainByNetworkId(provider._portis.config.network.chainId).chain_id;
   // }
-  return null;
+  return '0x1';
 };
 
 export const deriveSelectedAddress = (provider) => {
@@ -75,5 +75,5 @@ export const deriveSelectedAddress = (provider) => {
   // else if (provider.isPortis) {
   //   return provider._portis._selectedAddress;
   // }
-  return null;
+  return '0x';
 };

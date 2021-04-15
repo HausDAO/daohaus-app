@@ -12,7 +12,7 @@ import {
 } from '@chakra-ui/react';
 import { RiArrowDropDownFill } from 'react-icons/ri';
 
-import { getFilterOptions, sortOptions } from '../utils/proposalContent';
+import { getFilters, sortOptions } from '../utils/proposalContent';
 import { determineUnreadProposalList } from '../utils/proposalUtils';
 import { useDaoMember } from '../contexts/DaoMemberContext';
 
@@ -39,9 +39,9 @@ const ProposalFilters = ({ filter, setFilter, proposals, setSort }) => {
       setActionNeeded(action);
 
       const actionsCount = action ? action.length : 0;
-      options = getFilterOptions(daoMember.shares > 0, actionsCount);
+      options = getFilters(daoMember.shares > 0, actionsCount);
     } else {
-      options = getFilterOptions(false);
+      options = getFilters(false);
     }
     setFilterOptions(options);
     setFilter(options[0]);
@@ -90,7 +90,8 @@ const ProposalFilters = ({ filter, setFilter, proposals, setSort }) => {
             color='secondary.500'
             _hover={{ color: 'secondary.400' }}
           >
-            {buildFilterName()}{' '}
+            {buildFilterName()}
+            {' '}
             <Icon as={RiArrowDropDownFill} color='secondary.500' />
           </MenuButton>
           <MenuList bg='black'>

@@ -78,11 +78,11 @@ export const InjectedProvider = ({ children }) => {
   // https://eips.ethereum.org/EIPS/eip-1193
 
   useEffect(() => {
-    const handleChainChange = (chainId) => {
+    const handleChainChange = () => {
       console.log('CHAIN CHANGE');
       connectProvider();
     };
-    const accountsChanged = (account) => {
+    const accountsChanged = () => {
       console.log('ACCOUNT CHANGE');
       connectProvider();
     };

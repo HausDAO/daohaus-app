@@ -86,7 +86,7 @@ const BankChart = ({ overview, customTerms, currentDaoTokens }) => {
           dates,
         );
 
-        const data = groupedBalances.map((balance, i) => {
+        const data = groupedBalances.map((balance) => {
           return {
             x: balance.date,
             y: balance.value,

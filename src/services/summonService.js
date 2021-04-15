@@ -3,7 +3,11 @@ import Web3 from 'web3';
 import v21FactoryAbi from '../contracts/molochV21Factory.json';
 import { chainByID } from '../utils/chain';
 
-export const SummonService = ({ web3, chainID, atBlock = 'latest' }) => {
+export const SummonService = ({
+  web3,
+  chainID, 
+  // atBlock = 'latest' 
+}) => {
   if (!web3) {
     const rpcUrl = chainByID(chainID).rpc_url;
     web3 = new Web3(new Web3.providers.HttpProvider(rpcUrl));

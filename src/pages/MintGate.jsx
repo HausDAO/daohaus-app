@@ -16,17 +16,15 @@ const MintGate = ({ daoMetaData }) => {
 
   useEffect(() => {
     const fetchGates = async () => {
-      const daoAddress = '0xef3d8c4fbb1860fceab16595db7e650cd5ad51c1';
-      const localGates = await getMintGates(daoAddress);
+      const localGates = await getMintGates(daoid);
       if (localGates?.links?.length > 0) {
         setGates(localGates.data.links);
       }
     };
-    // if (daoid && daoMetaData && 'mintGate' in daoMetaData?.boosts) {
-    fetchGates();
-    // }
-    // }, [daoid, daoMetaData]);
-  }, []);
+    if (daoid && daoMetaData && 'mintGate' in daoMetaData?.boosts) {
+      fetchGates();
+    }
+  }, [daoid, daoMetaData]);
   // console.log(gates);
 
   const newGateButton = daoConnectedAndSameChain(

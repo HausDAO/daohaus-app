@@ -75,7 +75,7 @@ const MembersChart = ({ overview, daoMetaData, daoMembers }) => {
   }, [daoBalances, overview]);
 
   const setTypeData = (type, balances) => {
-    const data = balances.map((balance, i) => {
+    const data = balances.map((balance) => {
       return {
         x: balance.date,
         y: balance[type],

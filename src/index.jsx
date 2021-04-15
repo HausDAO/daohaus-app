@@ -8,7 +8,7 @@ import reportWebVitals from './reportWebVitals';
 import { InjectedProvider } from './contexts/InjectedProviderContext';
 import { CustomThemeProvider } from './contexts/CustomThemeContext';
 
-window.onunload = function() {
+window.onunload = () => {
   sessionStorage.clear();
 };
 

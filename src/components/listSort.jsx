@@ -36,7 +36,7 @@ const ListSort = ({ sort, setSort, options }) => {
           color='secondary.500'
           spacing={2}
         >
-          <Box>{sort?.name}</Box>
+          <Box>{sort?.name || 'newest'}</Box>
           <Icon as={RiArrowDropDownFill} color='secondary.500' />
         </MenuButton>
         <MenuList bg='black'>

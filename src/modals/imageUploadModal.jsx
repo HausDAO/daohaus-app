@@ -37,7 +37,7 @@ const ImageUploadModal = ({
     upload.click();
   };
 
-  const handleFileSet = async (event) => {
+  const handleFileSet = async () => {
     setImageUrl(URL.createObjectURL(upload.files[0]));
     const formData = new FormData();
     formData.append('file', upload.files[0]);

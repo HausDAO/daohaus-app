@@ -30,7 +30,7 @@ import { isEthAddress } from '../utils/general';
 
 const NewUberHausMinion = ({
   daoMembers,
-  uberHausMinion,
+  // uberHausMinion,
   uberMembers,
   uberDelegate,
 }) => {

@@ -4,8 +4,8 @@ const Badge = {
     fontWeight: '400',
   },
   variants: {
-    solid: (props) => ({}),
-    outline: (props) => ({
+    solid: () => ({}),
+    outline: () => ({
       color: 'whiteAlpha.700',
     }),
   },

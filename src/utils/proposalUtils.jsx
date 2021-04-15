@@ -489,7 +489,7 @@ export const handleListSort = (proposals, sort) => {
   } if (sort.value === 'voteCountDesc') {
     return proposals
       .sort((a, b) => b.votes.length - a.votes.length)
-      .sort((a, b) => (a.status === sort.value ? -1 : 1));
+      .sort((a) => (a.status === sort.value ? -1 : 1));
   } if (sort.value === 'submissionDateDesc') {
     return proposals.sort((a, b) => +b.createdAt - +a.createdAt);
   } 

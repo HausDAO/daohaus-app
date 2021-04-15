@@ -39,7 +39,7 @@ import { useInjectedProvider } from '../contexts/InjectedProviderContext';
 import { useUser } from '../contexts/UserContext';
 import { useTX } from '../contexts/TXContext';
 
-const MinionDetails = ({ overview, members, currentDaoTokens }) => {
+const MinionDetails = ({ overview, currentDaoTokens }) => {
   // const [web3Connect] = useWeb3Connect();
   // const { modals, openModal } = useModals();
   const { daochain, daoid, minion } = useParams();
