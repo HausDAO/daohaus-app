@@ -152,24 +152,23 @@ const Members = React.memo(function MembersPage({
               </TextBox>
             </Flex>
             {listMembers?.map((member) => {
+              console.log(member.id)
               return (
-                <>
+                <Box key={member.id}>
                   {member.uberMinion ? (
                     <UberHausMemberCard
-                      key={member.id}
                       member={member}
                       selectMember={setSelectedMember}
                       selectedMember={selectedMember}
                     />
                   ) : (
                     <MemberCard
-                      key={member.id}
                       member={member}
                       selectMember={setSelectedMember}
                       selectedMember={selectedMember}
                     />
                   )}
-                </>
+                </Box>
               );
             })}
           </ContentBox>

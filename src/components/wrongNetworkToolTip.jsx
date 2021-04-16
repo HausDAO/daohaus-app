@@ -83,21 +83,6 @@ const WrongNetworkToolTip = () => {
     );
   };
 
-  const notConnectedTip = () => (
-    <Flex
-      align='center'
-      mr={5}
-      background='secondary.500'
-      p='5px 12px'
-      borderRadius='20px'
-    >
-      <Icon as={RiInformationLine} mr={2} />
-      <Box fontSize='md' as='i' fontWeight={600}>
-        {injectedChain?.name}
-      </Box>
-    </Flex>
-  );
-
   return (
     <NetworkToolTip>
       {!address ? (
@@ -106,20 +91,36 @@ const WrongNetworkToolTip = () => {
             {injectedChain?.name}
           </Box>
         </Flex>
-      ) : !daoConnectedAndSameChain(
-          address,
-          injectedChain?.chainId,
-          daochain,
-        ) ? (
-        notConnectedTip
       ) : (
-        <Flex align='center' mr={5} p='5px 12px' borderRadius='20px'>
-          <Box fontSize='md' fontWeight={200}>
-            {injectedChain?.name}
-          </Box>
-        </Flex>
+        <>
+          {!daoConnectedAndSameChain(
+            address,
+            injectedChain?.chainId,
+            daochain
+          ) ? (
+            <Flex
+              align='center'
+              mr={5}
+              background='secondary.500'
+              p='5px 12px'
+              borderRadius='20px'
+            >
+              <Icon as={RiInformationLine} mr={2} />
+              <Box fontSize='md' as='i' fontWeight={600}>
+                {injectedChain?.name}
+              </Box>
+            </Flex>
+          ) : (
+            <Flex align='center' mr={5} p='5px 12px' borderRadius='20px'>
+              <Box fontSize='md' fontWeight={200}>
+                {injectedChain?.name}
+              </Box>
+            </Flex>
+          )}
+        </>
       )}
     </NetworkToolTip>
   );
 };
+
 export default WrongNetworkToolTip;
