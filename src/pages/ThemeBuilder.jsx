@@ -7,7 +7,7 @@ import { rgba } from 'polished';
 import { useCustomTheme } from '../contexts/CustomThemeContext';
 import { useInjectedProvider } from '../contexts/InjectedProviderContext';
 import { useOverlay } from '../contexts/OverlayContext';
-import defaultTheme from '../themes/defaultTheme';
+import { defaultTheme } from '../themes/defaultTheme';
 import { boostPost } from '../utils/requests';
 import CustomThemeForm from '../forms/customTheme';
 import ThemePreview from '../components/themePreview';

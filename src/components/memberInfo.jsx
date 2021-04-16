@@ -29,7 +29,7 @@ const MemberInfoCard = ({ member, customTerms }) => {
                 size='xs'
               >
                 {`View 
-                ${address?.toLowerCase() === member?.memberAddress && 'my'}
+                ${address?.toLowerCase() === member?.memberAddress ? 'my' : ""}
                 profile`}
               </TextBox>
             )}

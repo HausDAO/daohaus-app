@@ -9,9 +9,11 @@ import {
   Icon,
   Box,
   useToast,
+  Link,
 } from '@chakra-ui/react';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
-import { RiErrorWarningLine } from 'react-icons/ri';
+import { RiErrorWarningLine , RiLoginBoxLine } from 'react-icons/ri';
+
 import { FaCopy } from 'react-icons/fa';
 import { useParams } from 'react-router-dom';
 
@@ -214,27 +216,50 @@ const StakeProposalForm = () => {
   };
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)}>
-      <FormControl
-        isInvalid={errors.name}
-        display='flex'
-        flexDirection='row'
-        justifyContent='space-between'
-        mb={5}
-        flexWrap='wrap'
-      >
-        <Box w={['100%', null, '50%']} pr={[0, null, 5]}>
-          <DetailsFields register={register} />
+    <>
+      <Box mb={4}>
+        <Box variant='heading' fontWeight={900}>
+          Membership Requirements
         </Box>
-        <Box w={['100%', null, '50%']}>
-          <TextBox as={FormLabel} size='xs' htmlFor='name' mb={2}>
-            Shares Requested
-          </TextBox>
-          <Input
-            name='sharesRequested'
-            placeholder='0'
-            mb={5}
-            ref={register({
+        <Box>
+          Minimum tribute: 500 HAUS
+        </Box>
+        <Box>
+          Shares requested: Equal to tribute
+        </Box>
+        <Link href='https://docs.daohaus.club/uber_actions' isExternal fontSize='xs'>
+          More info 
+          <Icon
+            as={RiLoginBoxLine}
+            color='secondary.500'
+            h='15px'
+            w='15px'
+            ml={2}
+          />
+        </Link>
+      </Box>
+
+      <form onSubmit={handleSubmit(onSubmit)}>
+        <FormControl
+          isInvalid={errors.name}
+          display='flex'
+          flexDirection='row'
+          justifyContent='space-between'
+          mb={5}
+          flexWrap='wrap'
+        >
+          <Box w={['100%', null, '50%']} pr={[0, null, 5]}>
+            <DetailsFields register={register} />
+          </Box>
+          <Box w={['100%', null, '50%']}>
+            <TextBox as={FormLabel} size='xs' htmlFor='name' mb={2}>
+              Shares Requested
+            </TextBox>
+            <Input
+              name='sharesRequested'
+              placeholder='0'
+              mb={5}
+              ref={register({
               required: {
                 value: true,
                 message: 'Requested shares are required for Member Proposals',
@@ -244,58 +269,59 @@ const StakeProposalForm = () => {
                 message: 'Requested shares must be a number',
               },
             })}
-            color='white'
-            focusBorderColor='secondary.500'
-          />
-          <DaoToDaoStakingTributeInput
-            register={register}
-            setValue={setValue}
-            getValues={getValues}
-            setError={setCurrentError}
-            stakingToken={stakingToken}
-          />
-        </Box>
-      </FormControl>
-      <Flex justify='flex-end' align='center' h='60px'>
-        {currentError && (
+              color='white'
+              focusBorderColor='secondary.500'
+            />
+            <DaoToDaoStakingTributeInput
+              register={register}
+              setValue={setValue}
+              getValues={getValues}
+              setError={setCurrentError}
+              stakingToken={stakingToken}
+            />
+          </Box>
+        </FormControl>
+        <Flex justify='flex-end' align='center' h='60px'>
+          {currentError && (
           <Box color='secondary.300' fontSize='m' mr={5}>
             <Icon as={RiErrorWarningLine} color='secondary.300' mr={2} />
             {currentError.message}
           </Box>
         )}
 
-        {noBalance ? (
-          <Box color='secondary.300' fontSize='m' mr={5}>
-            <Icon as={RiErrorWarningLine} color='secondary.300' mr={2} />
-            {`You can&apos;t stake into UberHAUS until your UberHAUS minion has
+          {noBalance ? (
+            <Box color='secondary.300' fontSize='m' mr={5}>
+              <Icon as={RiErrorWarningLine} color='secondary.300' mr={2} />
+              {`You can&apos;t stake into UberHAUS until your UberHAUS minion has
             a ${UBERHAUS_DATA.STAKING_TOKEN_SYMBOL} balance. Send 
             ${UBERHAUS_DATA.STAKING_TOKEN_SYMBOL} your minion&apos;s address:
             ${stakingToken?.uberHausMinionData.minionAddress}`}
-            <CopyToClipboard
-              text={stakingToken?.uberHausMinionData.minionAddress}
-              onCopy={copiedToast}
-            >
-              <Icon
-                as={FaCopy}
-                color='secondary.300'
-                ml={2}
-                _hover={{ cursor: 'pointer' }}
-              />
-            </CopyToClipboard>
-          </Box>
+              <CopyToClipboard
+                text={stakingToken?.uberHausMinionData.minionAddress}
+                onCopy={copiedToast}
+              >
+                <Icon
+                  as={FaCopy}
+                  color='secondary.300'
+                  ml={2}
+                  _hover={{ cursor: 'pointer' }}
+                />
+              </CopyToClipboard>
+            </Box>
         ) : null}
-        <Box>
-          <Button
-            type='submit'
-            loadingText='Submitting'
-            isLoading={loading}
-            disabled={loading || noBalance}
-          >
-            Submit
-          </Button>
-        </Box>
-      </Flex>
-    </form>
+          <Box>
+            <Button
+              type='submit'
+              loadingText='Submitting'
+              isLoading={loading}
+              disabled={loading || noBalance}
+            >
+              Submit
+            </Button>
+          </Box>
+        </Flex>
+      </form>
+    </>
   );
 };
 
