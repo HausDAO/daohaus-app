@@ -7,16 +7,21 @@ import {
   RAGE_QUIT_POLL,
   MINION_PROPOSAL_POLL,
 } from '../graphQL/dao-queries';
+import {
+  RAGE_KICK_POLL,
+  MEMBERS_LIST,
+  MEMBER_DELEGATE_KEY,
+} from '../graphQL/member-queries';
 import { getGraphEndpoint } from '../utils/chain';
 import { PROPOSAL_TYPES } from '../utils/proposalUtils';
 import { TokenService } from '../services/tokenService';
-import { MEMBERS_LIST, MEMBER_DELEGATE_KEY } from '../graphQL/member-queries';
+
 import { UBERHAUS_MEMBER_DELEGATE } from '../graphQL/uberhaus-queries';
 import { MinionService } from '../services/minionService';
 import { UberHausMinionService } from '../services/uberHausMinionService';
 
 export const pollProposals = async ({ daoID, chainID }) =>
-  await graphQuery({
+  graphQuery({
     endpoint: getGraphEndpoint(chainID, 'subgraph_url'),
     query: PROPOSALS_LIST,
     variables: {
@@ -44,7 +49,7 @@ export const pollTokenAllowances = async ({
 };
 
 export const pollMolochSummon = async ({ chainID, summoner, createdAt }) => {
-  return await graphQuery({
+  return graphQuery({
     endpoint: getGraphEndpoint(chainID, 'subgraph_url'),
     query: DAO_POLL,
     variables: {
@@ -59,7 +64,7 @@ export const pollMinionSummon = async ({
   molochAddress,
   createdAt,
 }) => {
-  return await graphQuery({
+  return graphQuery({
     endpoint: getGraphEndpoint(chainID, 'subgraph_url'),
     query: MINION_POLL,
     variables: {
@@ -74,7 +79,7 @@ export const pollMinionProposal = async ({
   minionAddress,
   createdAt,
 }) => {
-  return await graphQuery({
+  return graphQuery({
     endpoint: getGraphEndpoint(chainID, 'subgraph_url'),
     query: MINION_PROPOSAL_POLL,
     variables: {
@@ -97,7 +102,8 @@ export const pollMinionExecute = async ({
         chainID,
       })('getAction')({ proposalId });
       return action.executed;
-    } else if (
+    }
+    if (
       proposalType === PROPOSAL_TYPES.MINION_UBER_STAKE ||
       proposalType === PROPOSAL_TYPES.MINION_UBER_RQ
     ) {
@@ -106,7 +112,8 @@ export const pollMinionExecute = async ({
         chainID,
       })('getAction')({ proposalId });
       return action.executed;
-    } else if (proposalType === PROPOSAL_TYPES.MINION_UBER_DEL) {
+    }
+    if (proposalType === PROPOSAL_TYPES.MINION_UBER_DEL) {
       console.log('POLLS UBER DEL');
       const action = await UberHausMinionService({
         uberHausMinion: minionAddress,
@@ -114,6 +121,7 @@ export const pollMinionExecute = async ({
       })('getAppointment')({ proposalId });
       return action.executed;
     }
+    return null;
   } catch (error) {
     console.error(error);
     throw new Error('Error caught in Poll block of TX');
@@ -121,7 +129,7 @@ export const pollMinionExecute = async ({
 };
 
 export const pollRageQuit = async ({ chainID, molochAddress, createdAt }) => {
-  return await graphQuery({
+  return graphQuery({
     endpoint: getGraphEndpoint(chainID, 'subgraph_url'),
     query: RAGE_QUIT_POLL,
     variables: {
@@ -141,7 +149,7 @@ export const syncTokenPoll = async ({ chainID, daoID, tokenAddress }) => {
       },
     });
     const graphBalance = daoOverview?.moloch?.tokenBalances?.find(
-      (tokenObj) => tokenObj?.token?.tokenAddress === tokenAddress,
+      tokenObj => tokenObj?.token?.tokenAddress === tokenAddress,
     )?.tokenBalance;
     return graphBalance;
   } catch (error) {
@@ -164,10 +172,10 @@ export const withdrawTokenFetch = async ({
       },
     });
     const member = data.daoMembers?.find(
-      (member) => member?.memberAddress?.toLowerCase() === memberAddress,
+      member => member?.memberAddress?.toLowerCase() === memberAddress,
     );
     const newTokenBalance = member.tokenBalances.find(
-      (tokenObj) => tokenObj.token.tokenAddress === tokenAddress,
+      tokenObj => tokenObj.token.tokenAddress === tokenAddress,
     ).tokenBalance;
     return newTokenBalance;
   } catch (error) {
@@ -244,5 +252,22 @@ export const pollDelegateRewards = async ({
     return delegate;
   } catch (error) {
     console.error(error);
+  }
+  return null;
+};
+
+export const pollRageKick = async ({ chainID, daoID, memberAddress }) => {
+  try {
+    const res = await graphQuery({
+      endpoint: getGraphEndpoint(chainID, 'subgraph_url'),
+      query: RAGE_KICK_POLL,
+      variables: {
+        contractAddr: daoID,
+        memberAddr: memberAddress,
+      },
+    });
+    return res;
+  } catch (error) {
+    return error;
   }
 };

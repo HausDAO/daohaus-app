@@ -70,48 +70,48 @@ export const getTerm = (customTerms, word) => {
   word = word?.toLowerCase();
   if (word === 'proposal') {
     return customTerms?.proposal || 'Proposal';
-  } else if (word === 'proposals') {
+  } if (word === 'proposals') {
     return customTerms?.proposals || 'Proposals';
-  } else if (word === 'bank') {
+  } if (word === 'bank') {
     return customTerms?.bank || 'Bank';
-  } else if (word === 'boost') {
+  } if (word === 'boost') {
     return customTerms?.boost || 'Boost';
-  } else if (word === 'boosts') {
+  } if (word === 'boosts') {
     return customTerms?.boosts || 'Boosts';
-  } else if (word === 'members') {
+  } if (word === 'members') {
     return customTerms?.members || 'Members';
-  } else if (word === 'member') {
+  } if (word === 'member') {
     return customTerms?.member || 'Member';
-  } else if (word === 'settings') {
+  } if (word === 'settings') {
     return customTerms?.settings || 'Settings';
-  } else if (word === 'profile') {
+  } if (word === 'profile') {
     return customTerms?.profile || 'Profile';
-  } else if (word === 'f04title') {
+  } if (word === 'f04title') {
     return customTerms?.f04title || "404 What's Lost Can Be Found";
-  } else if (word === 'f04heading') {
+  } if (word === 'f04heading') {
     return customTerms?.f04heading || 'You have been slain';
-  } else if (word === 'settings') {
+  } if (word === 'settings') {
     return customTerms?.settings || 'Settings';
-  } else if (word === 'rage quit' || word === 'ragequit') {
+  } if (word === 'rage quit' || word === 'ragequit') {
     return customTerms?.ragequit || 'Rage Quit';
-  } else if (word === 'guild kick' || word === 'guildkick') {
+  } if (word === 'guild kick' || word === 'guildkick') {
     return customTerms?.guildkick || 'Guild Kick';
-  } else if (word === 'minion') {
+  } if (word === 'minion') {
     return customTerms?.minion || 'minion';
-  } else if (word === 'minions') {
+  } if (word === 'minions') {
     return customTerms?.minions || 'Minions';
-  } else if (word === 'f04subhead') {
+  } if (word === 'f04subhead') {
     return (
       customTerms?.f04subhead ||
       'Please reload from the most recent save point.'
     );
-  } else if (word === 'f04cta') {
+  } if (word === 'f04cta') {
     return customTerms?.f04cta || 'Start Over.';
-  } else if (typeof word !== 'string') {
+  } if (typeof word !== 'string') {
     return 'Error';
-  } else {
+  } 
     return capitalize(word);
-  }
+  
 };
 
 export const getCustomProposalTerm = (customTerms, proposalTerm) => {
@@ -121,11 +121,11 @@ export const getCustomProposalTerm = (customTerms, proposalTerm) => {
     proposalTerm
   ) {
     return proposalTerm.replace('Proposal', customTerms.proposal);
-  } else if (proposalTerm) {
+  } if (proposalTerm) {
     return proposalTerm;
-  } else {
+  } 
     return 'Proposal';
-  }
+  
 };
 
 export const boostPost = async (endpoint, data) => {

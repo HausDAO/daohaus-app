@@ -37,5 +37,6 @@ export const MinionFactoryService = ({ web3, chainID }) => {
         }
       };
     }
+    return null;
   };
 };
