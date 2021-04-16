@@ -84,6 +84,7 @@ const ProposalVote = ({
       title: `User rejected transaction signature.`,
     });
   };
+
   const NetworkOverlay = () => (
     <Flex
       position='absolute'
