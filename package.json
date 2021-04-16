@@ -1,7 +1,7 @@
 {
   "name": "pokemol",
-  "version": "0.1.0",
-  "private": true,
+  "version": "2.0.1",
+  "private": false,
   "dependencies": {
     "@chakra-ui/react": "^1.1.6",
     "@emotion/react": "^11.1.4",
@@ -47,8 +47,7 @@
   },
   "eslintConfig": {
     "extends": [
-      "react-app",
-      "react-app/jest"
+      "react-app"
     ],
     "overrides": [
       {
@@ -85,6 +84,7 @@
     "@storybook/theming": "^6.1.20",
     "@types/deep-equal": "^1.0.1",
     "babel-loader": "8.1.0",
+    "eslint-config-airbnb": "^18.2.1",
     "eslint-config-prettier": "^6.10.0",
     "eslint-config-standard": "^14.1.0",
     "eslint-plugin-import": "^2.20.1",
@@ -93,6 +93,7 @@
     "eslint-plugin-promise": "^4.2.1",
     "eslint-plugin-react": "^7.18.3",
     "eslint-plugin-standard": "^4.0.1",
+    "eslint-plugin-react-hooks": "^4.2.0",
     "prettier": "^1.19.1"
   }
 }

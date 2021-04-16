@@ -15,18 +15,18 @@ export const calcSeconds = (val, unit) => {
   val = parseInt(val);
   if (unit === 'seconds' || unit === 'second') {
     return val;
-  } else if (unit === 'minutes' || unit === 'minute') {
+  } if (unit === 'minutes' || unit === 'minute') {
     return val * SECONDS.PER_MINUTE;
-  } else if (unit === 'hours' || unit === 'hour') {
+  } if (unit === 'hours' || unit === 'hour') {
     return val * SECONDS.PER_HOUR;
-  } else if (unit === 'days' || unit === 'day') {
+  } if (unit === 'days' || unit === 'day') {
     return val * SECONDS.PER_DAY;
-  } else if (unit === 'weeks' || unit === 'week') {
+  } if (unit === 'weeks' || unit === 'week') {
     return val * SECONDS.PER_WEEK;
-  } else {
+  } 
     console.error('Did not receive the corrent arguments to calculate time');
     return false;
-  }
+  
 };
 
 export const pipe = (...fns) => (x) =>
@@ -101,7 +101,7 @@ export const numberWithCommas = (num) => {
 };
 
 export const truncateAddr = (addr) => {
-  return addr ? addr.slice(0, 6) + '...' + addr.slice(-4) : null;
+  return addr ? `${addr.slice(0, 6)  }...${  addr.slice(-4)}` : null;
 };
 export const timeToNow = (time) => {
   return formatDistanceToNow(new Date(time * 1000), {
@@ -123,10 +123,10 @@ export const formatPeriods = (period, duration) => {
     const m = Math.floor(s / 60);
     s -= m * 60;
     const tmp = [];
-    d && tmp.push(d + 'd');
-    (d || h) && h && tmp.push(h + 'h');
-    (d || h || m) && m && tmp.push(m + 'm');
-    s && tmp.push(s + 's');
+    d && tmp.push(`${d  }d`);
+    (d || h) && h && tmp.push(`${h  }h`);
+    (d || h || m) && m && tmp.push(`${m  }m`);
+    s && tmp.push(`${s  }s`);
 
     return tmp.join(' ');
   }

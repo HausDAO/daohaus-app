@@ -83,5 +83,6 @@ export const MolochService = ({ web3, daoAddress, version, chainID }) => {
         }
       };
     }
+    return null;
   };
 };

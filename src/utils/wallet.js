@@ -1,5 +1,5 @@
-import { TokenService } from '../services/tokenService';
 import { utils } from 'web3';
+import { TokenService } from '../services/tokenService';
 
 export const initMemberWallet = async ({
   memberAddress,

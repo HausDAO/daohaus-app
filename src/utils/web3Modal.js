@@ -55,21 +55,25 @@ export const getProviderOptions = () =>
 export const deriveChainId = (provider) => {
   if (provider.isMetaMask) {
     return provider.chainId;
-  } else if (provider.wc) {
+  }
+  if (provider.wc) {
     return chainByNetworkId(provider.chainId).chain_id;
   }
   // else if (provider.isPortis) {
   //   return chainByNetworkId(provider._portis.config.network.chainId).chain_id;
   // }
+  return '0x1';
 };
 
 export const deriveSelectedAddress = (provider) => {
   if (provider.isMetaMask) {
     return provider.selectedAddress;
-  } else if (provider.wc) {
+  }
+  if (provider.wc) {
     return provider.accounts[0];
   }
   // else if (provider.isPortis) {
   //   return provider._portis._selectedAddress;
   // }
+  return '0x';
 };

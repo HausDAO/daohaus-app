@@ -1,7 +1,7 @@
+import { ethers } from 'ethers';
 import { TokenService } from '../services/tokenService';
 import { MolochService } from '../services/molochService';
 import { omit } from './general';
-import { ethers } from 'ethers';
 
 const geckoURL = 'https://api.coingecko.com/api/v3/simple/token_price';
 const uniSwapDataURL =
@@ -78,7 +78,7 @@ export const tallyUSDs = (tokenObj) => {
     // if (!tokenObj[token]?.totalUSD) {
     //   console.error('TokenError', tokenObj);
     // }
-    totalUSD = totalUSD + tokenObj[token].totalUSD;
+    totalUSD += tokenObj[token].totalUSD;
   }
   return Math.round((totalUSD + Number.EPSILON) * 100) / 100;
 };
@@ -125,9 +125,8 @@ export const getTotalBankValue = (tokenBalances, prices) => {
         (+balance.tokenBalance / 10 ** balance.token.decimals) * price;
 
       return (sum += value);
-    } else {
-      return sum;
     }
+    return sum;
   }, 0);
 };
 
@@ -149,12 +148,11 @@ export const valToDecimalString = (value, tokenAddress, tokens) => {
       .parseUnits(value, decimals)
       .mul(exp)
       .toString();
-  } else {
-    return ethers.utils
-      .parseUnits(value, 0)
-      .mul(exp)
-      .toString();
   }
+  return ethers.utils
+    .parseUnits(value, 0)
+    .mul(exp)
+    .toString();
 };
 
 export const displayBalance = (tokenBalance, decimals) => {
@@ -173,11 +171,10 @@ export const addZeros = (roundedVal, decimals) => {
     return ethers.BigNumber.from(roundedVal)
       .mul(exp)
       .toString();
-  } else {
-    roundedVal = roundedVal * perc;
-    return ethers.BigNumber.from(roundedVal)
-      .mul(exp)
-      .div(ethers.BigNumber.from(perc))
-      .toString();
   }
+  roundedVal *= perc;
+  return ethers.BigNumber.from(roundedVal)
+    .mul(exp)
+    .div(ethers.BigNumber.from(perc))
+    .toString();
 };

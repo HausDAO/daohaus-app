@@ -26,7 +26,7 @@ export const MinionService = ({ web3, minion, chainID }) => {
     // proposeAction args: [ target contract, ether value, function call data, details ]
     // executeAction args: [ proposal id ]
     // crossWithdraw args: [ target dao address, token address, amount, transfer (bool)]
-    else if (
+    if (
       service === 'proposeAction' ||
       service === 'executeAction' ||
       service === 'crossWithdraw'
@@ -50,5 +50,6 @@ export const MinionService = ({ web3, minion, chainID }) => {
           });
       };
     }
+    return null;
   };
 };
