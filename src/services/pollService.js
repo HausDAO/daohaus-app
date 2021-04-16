@@ -64,7 +64,7 @@ export const createPoll = ({
             actions.onSuccess(txHash);
             return res;
           }
-          tryCount = +1;
+          tryCount += 1;
         } catch (error) {
           console.error(error);
           actions.onError(error, txHash);

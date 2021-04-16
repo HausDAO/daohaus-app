@@ -128,24 +128,24 @@ const ProfileMenu = ({ member }) => {
 
         {daoConnectedAndSameChain(address, daochain, injectedChain?.chainId) ? (
           <>
-            {isMember && hasSharesOrloot ? (
+            {isMember && hasSharesOrloot && (
               <MenuItem onClick={() => setGenericModal({ rageQuit: true })}>
                 RageQuit
               </MenuItem>
-            ) : null}
-            {isMember && hasSharesOrloot ? (
+            )}
+            {isMember && hasSharesOrloot && (
               <MenuItem
                 onClick={() => setGenericModal({ updateDelegate: true })}
               >
                 Add Delegate Key
               </MenuItem>
-            ) : null}
-            {!isMember && member.exists && !member.jailed && hasSharesOrloot ? (
+            )}
+            {!isMember && member.exists && !member.jailed && hasSharesOrloot && (
               <MenuItem onClick={handleGuildkickClick}>GuildKick</MenuItem>
-            ) : null}
-            {!isMember && member.jailed && !member.kicked && hasSharesOrloot ? (
+            )}
+            {!isMember && member.jailed && !member.kicked && hasSharesOrloot && (
               <MenuItem onClick={handleRageKick}>RageKick</MenuItem>
-            ) : null}
+            )}
           </>
         ) : null}
       </MenuList>
