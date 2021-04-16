@@ -3,7 +3,8 @@ module.exports = {
     es2020: true,
     node: true,
   },
-  extends: ['plugin:react/recommended', 'airbnb', 'prettier'],
+  // extends: ['plugin:react/recommended', 'airbnb', 'prettier'],
+  extends: ['plugin:react/recommended', 'prettier'],
   globals: {
     Atomics: 'readonly',
     SharedArrayBuffer: 'readonly',
@@ -40,7 +41,7 @@ module.exports = {
     'guard-for-in': 'off', // priority 2, two instances
     'no-return-assign': 'off', // priority 1, easy
     'consistent-return': 'off', // priority 2, harder basically all the services
-    'radix': 'off', // priority 1, parseInt ??
+    radix: 'off', // priority 1, parseInt ??
     'no-unused-expressions': 'off', // priority 2, formatPeriods() conditional appends
     // import rules
     'import/prefer-default-export': 'off', // priority 2, med

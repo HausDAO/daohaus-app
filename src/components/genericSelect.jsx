@@ -29,7 +29,6 @@ const GenericSelect = ({
       w={['100%', null, null, '50%']}
       mb={[5, null, null, 0]}
       {...containerProps}
-      // zIndex='10'
     >
       <Text
         textTransform='uppercase'
@@ -47,7 +46,8 @@ const GenericSelect = ({
           color='secondary.500'
           _hover={{ color: 'secondary.400' }}
         >
-          {`${currentOption} ${showCount && `(${count})`}`}
+          {currentOption}
+          {showCount && ` (${count})`}
           <Icon as={RiArrowDropDownFill} color='secondary.500' />
         </MenuButton>
         <MenuList bg='black'>
