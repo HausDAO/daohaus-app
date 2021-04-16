@@ -9,9 +9,11 @@ import {
   Icon,
   Box,
   useToast,
+  Link,
 } from '@chakra-ui/react';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
-import { RiErrorWarningLine } from 'react-icons/ri';
+import { RiErrorWarningLine , RiLoginBoxLine } from 'react-icons/ri';
+
 import { FaCopy } from 'react-icons/fa';
 import { useParams } from 'react-router-dom';
 
@@ -216,7 +218,7 @@ const StakeProposalForm = () => {
   return (
     <>
       <Box mb={4}>
-        <Box variant='heading' fontWeight={500}>
+        <Box variant='heading' fontWeight={900}>
           Membership Requirements
         </Box>
         <Box>
@@ -225,6 +227,16 @@ const StakeProposalForm = () => {
         <Box>
           Shares requested: Equal to tribute
         </Box>
+        <Link href='https://docs.daohaus.club/uber_actions' isExternal fontSize='xs'>
+          More info 
+          <Icon
+            as={RiLoginBoxLine}
+            color='secondary.500'
+            h='15px'
+            w='15px'
+            ml={2}
+          />
+        </Link>
       </Box>
 
       <form onSubmit={handleSubmit(onSubmit)}>
