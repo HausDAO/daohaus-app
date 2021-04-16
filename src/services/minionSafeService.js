@@ -36,7 +36,7 @@ export const MinionSafeService = ({ web3, setupValues, chainID }) => {
     safeMasterCopyAbi,
     setupValues.safeMasterCopy,
   );
-  const moduleEnabler = setupValues.moduleEnabler;
+  const {moduleEnabler} = setupValues;
 
   return function getService(service) {
     // console.log('service', service);
@@ -67,6 +67,7 @@ export const MinionSafeService = ({ web3, setupValues, chainID }) => {
         } catch (err) {
           console.log(err);
         }
+        return null;
       };
     }
     if (service === 'setupModuleData') {
@@ -89,6 +90,7 @@ export const MinionSafeService = ({ web3, setupValues, chainID }) => {
         } catch (err) {
           console.log(err);
         }
+        return null;
       };
     }
     if (service === 'execTransactionFromModule') {
@@ -159,5 +161,6 @@ export const MinionSafeService = ({ web3, setupValues, chainID }) => {
           });
       };
     }
+    return null;
   };
 };

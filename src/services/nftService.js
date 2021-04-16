@@ -8,7 +8,7 @@ export const NFTService = ({
   web3,
   chainID,
   tokenAddress,
-  atBlock = 'latest',
+  // atBlock = 'latest',
 }) => {
   if (!web3) {
     const rpcUrl = chainByID(chainID).rpc_url;
@@ -27,6 +27,7 @@ export const NFTService = ({
         } catch (error) {
           console.error('ERR:', error);
         }
+        return null;
       };
     }
     if (service === 'tokenURI') {
@@ -37,7 +38,9 @@ export const NFTService = ({
         } catch (error) {
           console.error('ERR:', error);
         }
+        return null;
       };
     }
+    return null;
   };
 };

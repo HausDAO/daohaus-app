@@ -98,14 +98,14 @@ export const getFilters = (daoMember, unread) => {
       ...defaultFilterOptions,
       main: [actionNeededFilter, allFilter],
     };
-  } else if (!+daoMember?.shares && unread?.length) {
+  } if (!+daoMember?.shares && unread?.length) {
     return {
       ...defaultFilterOptions,
       main: [activeFilter, allFilter],
     };
-  } else {
+  } 
     return defaultFilterOptions;
-  }
+  
 };
 
 export const sortOptions = {

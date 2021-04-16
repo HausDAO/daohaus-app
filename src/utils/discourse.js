@@ -52,8 +52,8 @@ export const createForumTopic = async ({
       ...sigData,
     };
 
-    return await post('dao/discourse-topic', forumData);
-  } else {
-    return false;
-  }
+    return post('dao/discourse-topic', forumData);
+  } 
+  return false;
+  
 };
