@@ -40,7 +40,7 @@ export const combineDaoDataForHub = (userHubDaos) => {
           ...activities.rageQuits,
           ...dao.moloch.rageQuits
             .filter((rage) => {
-              const now = (new Date() / 1000) | 0;
+              const now = (new Date() / 1000) || 0;
               return +rage.createdAt >= now - 1209600;
             })
             .map((activity) => {

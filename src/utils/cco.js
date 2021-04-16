@@ -4,20 +4,20 @@ export const countDownText = (round, raiseOver) => {
   const now = new Date() / 1000;
   if (raiseOver) {
     return `Contribution period is complete`;
-  } else if (now < round.startTime) {
+  } if (now < round.startTime) {
     return `Round ${round.round} starts ${timeToNow(round.startTime)}`;
-  } else {
+  } 
     return `Round ${round.round} ends ${timeToNow(round.endTime)}`;
-  }
+  
 };
 
 export const claimCountDownText = (claimStartTime) => {
   const now = new Date() / 1000;
   if (now < claimStartTime) {
     return `Claiming begins ${timeToNow(claimStartTime)}`;
-  } else {
+  } 
     return `Claiming began ${timeToNow(claimStartTime)}`;
-  }
+  
 };
 
 export const isCcoProposal = (proposal, round) => {

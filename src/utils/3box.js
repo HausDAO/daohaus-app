@@ -46,7 +46,7 @@ export const fetchProfile = async (address) => {
     }
     const boxProfile = await response.json();
     // console.log(ens);
-    return { ...boxProfile, ens: ens };
+    return { ...boxProfile, ens };
   } catch (error) {
     console.log(error);
     return { ens };
@@ -82,14 +82,13 @@ export const ensureCacheExists = () => {
   const cacheExists = window.sessionStorage.getItem('3BoxProfiles');
   if (cacheExists) {
     return true;
-  } else {
-    try {
-      window.sessionStorage.setItem('3BoxProfiles', JSON.stringify({}));
-    } catch (error) {
-      console.log('Sessions storage is full');
-      console.log('clearing sessions storage');
-      sessionStorage.clear();
-    }
+  }
+  try {
+    window.sessionStorage.setItem('3BoxProfiles', JSON.stringify({}));
+  } catch (error) {
+    console.log('Sessions storage is full');
+    console.log('clearing sessions storage');
+    sessionStorage.clear();
   }
 };
 
@@ -98,9 +97,8 @@ export const handleGetProfile = async (memberAddress) => {
   const cachedProfile = getCachedProfile(memberAddress);
   if (cachedProfile) {
     return cachedProfile;
-  } else {
-    const newProfile = await fetchProfile(memberAddress);
-    cacheProfile(newProfile, memberAddress);
-    return newProfile;
   }
+  const newProfile = await fetchProfile(memberAddress);
+  cacheProfile(newProfile, memberAddress);
+  return newProfile;
 };

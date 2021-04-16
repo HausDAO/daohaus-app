@@ -12,6 +12,7 @@ import {
   syncTokenPoll,
   updateDelegateFetch,
   withdrawTokenFetch,
+  pollRageKick,
 } from '../polls/polls';
 import {
   cancelProposalTest,
@@ -31,6 +32,7 @@ import {
   uberHausDelegateSetTest,
   updateDelegateTest,
   withdrawTokenTest,
+  rageKickTest,
 } from '../polls/tests';
 
 export const createPoll = ({
@@ -61,9 +63,8 @@ export const createPoll = ({
             clearInterval(pollId);
             actions.onSuccess(txHash);
             return res;
-          } else {
-            tryCount++;
           }
+          tryCount += 1;
         } catch (error) {
           console.error(error);
           actions.onError(error, txHash);
@@ -84,7 +85,7 @@ export const createPoll = ({
     action === 'submitWhitelistProposal' ||
     action === 'submitGuildKickProposal'
   ) {
-    return ({ daoID, chainID, hash, actions }) => (txHash) => {
+    return ({ daoID, chainID, hash, actions }) => txHash => {
       startPoll({
         pollFetch: pollProposals,
         testFn: submitProposalTest,
@@ -117,7 +118,7 @@ export const createPoll = ({
       }
     };
   } else if (action === 'submitProposalCco') {
-    return ({ daoID, chainID, hash, actions }) => (txHash) => {
+    return ({ daoID, chainID, hash, actions }) => txHash => {
       startPoll({
         pollFetch: pollProposals,
         testFn: submitProposalTest,
@@ -157,7 +158,7 @@ export const createPoll = ({
       userAddress,
       unlockAmount,
       actions,
-    }) => (txHash) => {
+    }) => txHash => {
       startPoll({
         pollFetch: pollTokenAllowances,
         testFn: tokenAllowanceTest,
@@ -192,7 +193,7 @@ export const createPoll = ({
       }
     };
   } else if (action === 'sponsorProposal') {
-    return ({ daoID, chainID, proposalId, actions }) => (txHash) => {
+    return ({ daoID, chainID, proposalId, actions }) => txHash => {
       startPoll({
         pollFetch: pollProposals,
         testFn: sponsorProposalTest,
@@ -225,9 +226,7 @@ export const createPoll = ({
       }
     };
   } else if (action === 'submitVote') {
-    return ({ daoID, chainID, proposalId, userAddress, actions }) => (
-      txHash,
-    ) => {
+    return ({ daoID, chainID, proposalId, userAddress, actions }) => txHash => {
       startPoll({
         pollFetch: pollProposals,
         testFn: submitVoteTest,
@@ -261,7 +260,7 @@ export const createPoll = ({
       }
     };
   } else if (action === 'processProposal') {
-    return ({ daoID, chainID, proposalIndex, actions }) => (txHash) => {
+    return ({ daoID, chainID, proposalIndex, actions }) => txHash => {
       startPoll({
         pollFetch: pollProposals,
         testFn: processProposalTest,
@@ -294,7 +293,7 @@ export const createPoll = ({
       }
     };
   } else if (action === 'cancelProposal') {
-    return ({ daoID, chainID, proposalId, actions }) => (txHash) => {
+    return ({ daoID, chainID, proposalId, actions }) => txHash => {
       startPoll({
         pollFetch: pollProposals,
         testFn: cancelProposalTest,
@@ -327,7 +326,7 @@ export const createPoll = ({
       }
     };
   } else if (action === 'summonMoloch') {
-    return ({ chainID, summoner, createdAt, actions }) => (txHash) => {
+    return ({ chainID, summoner, createdAt, actions }) => txHash => {
       startPoll({
         pollFetch: pollMolochSummon,
         testFn: molochSummonTest,
@@ -356,7 +355,7 @@ export const createPoll = ({
       }
     };
   } else if (action === 'collectTokens') {
-    return ({ token, actions, chainID, daoID }) => (txHash) => {
+    return ({ token, actions, chainID, daoID }) => txHash => {
       if (!token?.contractBalances?.token)
         throw new Error(
           `token object does not contain .contractBalances.token`,
@@ -408,7 +407,7 @@ export const createPoll = ({
       daoID,
       uber,
       expectedBalance,
-    }) => (txHash) => {
+    }) => txHash => {
       console.log('Create Poll');
       startPoll({
         pollFetch: withdrawTokenFetch,
@@ -451,7 +450,7 @@ export const createPoll = ({
       }
     };
   } else if (action === 'minionProposeAction') {
-    return ({ minionAddress, createdAt, chainID, actions }) => (txHash) => {
+    return ({ minionAddress, createdAt, chainID, actions }) => txHash => {
       startPoll({
         pollFetch: pollMinionProposal,
         testFn: minonProposalTest,
@@ -480,7 +479,7 @@ export const createPoll = ({
       }
     };
   } else if (action === 'uberHausProposeAction') {
-    return ({ minionAddress, createdAt, chainID, actions }) => (txHash) => {
+    return ({ minionAddress, createdAt, chainID, actions }) => txHash => {
       startPoll({
         pollFetch: pollMinionProposal,
         testFn: minonProposalTest,
@@ -509,9 +508,13 @@ export const createPoll = ({
       }
     };
   } else if (action === 'minionExecuteAction') {
-    return ({ chainID, minionAddress, proposalId, actions, proposalType }) => (
-      txHash,
-    ) => {
+    return ({
+      chainID,
+      minionAddress,
+      proposalId,
+      actions,
+      proposalType,
+    }) => txHash => {
       startPoll({
         pollFetch: pollMinionExecute,
         testFn: minionExecuteTest,
@@ -540,7 +543,7 @@ export const createPoll = ({
       }
     };
   } else if (action === 'transmutationProposal') {
-    return ({ daoID, chainID, hash, actions }) => (txHash) => {
+    return ({ daoID, chainID, hash, actions }) => txHash => {
       startPoll({
         pollFetch: pollProposals,
         testFn: submitProposalTest,
@@ -569,7 +572,7 @@ export const createPoll = ({
       }
     };
   } else if (action === 'summonMinion') {
-    return ({ chainID, molochAddress, createdAt, actions }) => (txHash) => {
+    return ({ chainID, molochAddress, createdAt, actions }) => txHash => {
       startPoll({
         pollFetch: pollMinionSummon,
         testFn: minonSummonTest,
@@ -606,7 +609,7 @@ export const createPoll = ({
       daoID,
       uber,
       expectedBalance,
-    }) => (txHash) => {
+    }) => txHash => {
       startPoll({
         pollFetch: withdrawTokenFetch,
         testFn: withdrawTokenTest,
@@ -654,7 +657,7 @@ export const createPoll = ({
       chainID,
       uberMinionAddress,
       expectedBalance,
-    }) => (txHash) => {
+    }) => txHash => {
       startPoll({
         pollFetch: pollGuildFunds,
         testFn: guildFundTest,
@@ -692,7 +695,7 @@ export const createPoll = ({
       }
     };
   } else if (action === 'ragequit') {
-    return ({ chainID, molochAddress, createdAt, actions }) => (txHash) => {
+    return ({ chainID, molochAddress, createdAt, actions }) => txHash => {
       startPoll({
         pollFetch: pollRageQuit,
         testFn: rageQuitTest,
@@ -721,7 +724,7 @@ export const createPoll = ({
       }
     };
   } else if (action === 'ragequitClaim') {
-    return ({ chainID, molochAddress, createdAt, actions }) => (txHash) => {
+    return ({ chainID, molochAddress, createdAt, actions }) => txHash => {
       startPoll({
         pollFetch: pollRageQuit,
         testFn: rageQuitTest,
@@ -750,9 +753,13 @@ export const createPoll = ({
       }
     };
   } else if (action === 'updateDelegateKey') {
-    return ({ chainID, daoID, memberAddress, delegateAddress, actions }) => (
-      txHash,
-    ) => {
+    return ({
+      chainID,
+      daoID,
+      memberAddress,
+      delegateAddress,
+      actions,
+    }) => txHash => {
       startPoll({
         pollFetch: updateDelegateFetch,
         testFn: updateDelegateTest,
@@ -787,7 +794,7 @@ export const createPoll = ({
       newDelegateAddress,
       actions,
       createdAt,
-    }) => (txHash) => {
+    }) => txHash => {
       startPoll({
         pollFetch: pollMinionProposal,
         testFn: minonProposalTest,
@@ -822,7 +829,7 @@ export const createPoll = ({
       uberHausAddress,
       delegateAddress,
       actions,
-    }) => (txHash) => {
+    }) => txHash => {
       startPoll({
         pollFetch: pollUberHausDelegateSet,
         testFn: uberHausDelegateSetTest,
@@ -851,9 +858,12 @@ export const createPoll = ({
       }
     };
   } else if (action === 'claimDelegateReward') {
-    return ({ chainID, uberMinionAddress, delegateAddress, actions }) => (
-      txHash,
-    ) => {
+    return ({
+      chainID,
+      uberMinionAddress,
+      delegateAddress,
+      actions,
+    }) => txHash => {
       console.log('In Start Poll');
       console.log(`chainID`, chainID);
       console.log(`uberMinionAddress`, uberMinionAddress);
@@ -885,6 +895,35 @@ export const createPoll = ({
             tries,
           },
           pollArgs: { chainID, uberMinionAddress, delegateAddress },
+        });
+      }
+    };
+  } else if (action === 'ragekick') {
+    return ({ chainID, daoID, memberAddress, actions }) => txHash => {
+      startPoll({
+        pollFetch: pollRageKick,
+        testFn: rageKickTest,
+        shouldEqual: { daoID, memberAddress },
+        args: { chainID, daoID, memberAddress },
+        actions,
+        txHash,
+      });
+      if (cachePoll) {
+        cachePoll({
+          txHash,
+          action,
+          timeSent: Date.now(),
+          status: 'unresolved',
+          resolvedMsg: `Rage Kick Completed`,
+          unresolvedMsg: `Rage Kicking`,
+          successMsg: `You Rage Kicked`,
+          errorMsg: `Error Rage Kicking`,
+          pollData: {
+            action,
+            interval,
+            tries,
+          },
+          pollArgs: { chainID, daoID, memberAddress },
         });
       }
     };

@@ -43,7 +43,7 @@ export const TransmutationService = ({
           setupValues.exchangeRate * setupValues.paddingNumber,
         );
         const bnTributeOffered = web3.utils.toBN(
-          web3.utils.toWei('' + paymentRequested),
+          web3.utils.toWei(`${paymentRequested}`),
         );
         const tributeOffered = bnTributeOffered
           .mul(bnExchange)
