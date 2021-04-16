@@ -28,9 +28,9 @@ const MemberInfoCard = ({ member, customTerms }) => {
                 color='inherit'
                 size='xs'
               >
-                {`View 
-                ${address?.toLowerCase() === member?.memberAddress ? 'my' : ""}
-                profile`}
+                View
+                {address?.toLowerCase() === member?.memberAddress && ' my '}
+                profile
               </TextBox>
             )}
           </Flex>
