@@ -238,11 +238,11 @@ const DaoRouter = () => {
             daoProposals={daoProposals}
           />
         </Route>
-        <Route exact path={`${path}/links` || `${path}/gates`}>
+        <Route exact path={`${path}/boost/mintgate`}>
           <MintGate daoMetaData={daoMetaData} />
         </Route>
-        <Route exact path={`${path}/snapshot`}>
-          <Snapshot isMember={isMember} />
+        <Route exact path={`${path}/boost/snapshot`}>
+          <Snapshot isMember={isMember} daoMetaData={daoMetaData} />
         </Route>
       </Switch>
     </Layout>
