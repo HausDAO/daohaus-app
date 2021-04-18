@@ -24,7 +24,7 @@ const SnapshotCard = ({ snapshotId, snapshot }) => {
       isExternal
     >
       <Stack spacing={4}>
-        <TextBox size='lg' colorScheme='whiteAlpha.900' maxW='80%'>
+        <TextBox size='lg' color='whiteAlpha.900' maxW='80%'>
           {snapshot.msg.payload.name}
         </TextBox>
         <TextBox variant='value' size='sm'>

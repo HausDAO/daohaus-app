@@ -1,10 +1,10 @@
 import React from 'react';
-import { Box, Flex, Button } from '@chakra-ui/react';
+import { Box, Flex, Button, HStack } from '@chakra-ui/react';
 import { Link as RouterLink, useParams } from 'react-router-dom';
+import { RiArrowRightLine } from 'react-icons/ri';
 
 import ContentBox from '../components/ContentBox';
 import TextBox from '../components/TextBox';
-// import { useMetaData } from '../contexts/MetaDataContext';
 import { boostList } from '../content/boost-content';
 import GenericModal from '../modals/genericModal';
 import { useOverlay } from '../contexts/OverlayContext';
@@ -15,7 +15,6 @@ import { daoConnectedAndSameChain } from '../utils/general';
 import { getTerm } from '../utils/metadata';
 
 const Boosts = ({ customTerms, daoMember, daoOverview, daoMetaData }) => {
-  // const { daoMetaData } = useMetaData();
   const { daochain, daoid } = useParams();
   const { setGenericModal } = useOverlay();
   const { address, injectedChain } = useInjectedProvider();
@@ -75,14 +74,30 @@ const Boosts = ({ customTerms, daoMember, daoOverview, daoMetaData }) => {
         ) : (
           <>
             {hasBoost ? (
-              <Button
-                as={RouterLink}
-                to={`/dao/${daochain}/${daoid}/settings/${boost.successRoute}`}
-                textTransform='uppercase'
-                disabled={!canInteract}
-              >
-                Settings
-              </Button>
+              <HStack spacing={4}>
+                {boost.settings && (
+                  <Button
+                    as={RouterLink}
+                    variant={boost.link ? 'outline' : null}
+                    to={`/dao/${daochain}/${daoid}/settings/${boost.successRoute}`}
+                    textTransform='uppercase'
+                    disabled={!canInteract}
+                  >
+                    Settings
+                  </Button>
+                )}
+                {boost.link && (
+                  <Button
+                    as={RouterLink}
+                    to={`/dao/${daochain}/${daoid}/boost/${boost.link}`}
+                    textTransform='uppercase'
+                    disabled={!canInteract}
+                    rightIcon={<RiArrowRightLine />}
+                  >
+                    Go
+                  </Button>
+                )}
+              </HStack>
             ) : (
               <>
                 {boost.dependency && !hasDependentBoost(boost?.dependency) ? (
