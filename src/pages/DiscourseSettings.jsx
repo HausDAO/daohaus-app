@@ -101,7 +101,7 @@ const DiscourseSettings = ({ daoMetaData, refetchMetaData }) => {
         <>
           <Flex justify='space-around' mt='150px'>
             <Box w='35%'>
-              <TextBox colorScheme='white' size='sm' mb={8}>
+              <TextBox color='white' size='sm' mb={8}>
                 Discourse Forum URL
               </TextBox>
               <CopyToClipboard
@@ -131,7 +131,7 @@ const DiscourseSettings = ({ daoMetaData, refetchMetaData }) => {
             </Box>
             <Box w='55%'>
               <Stack spacing={6}>
-                <TextBox colorScheme='white' size='sm' mb={2}>
+                <TextBox color='white' size='sm' mb={2}>
                   Settings
                 </TextBox>
                 <Text fontSize='md' mt={6}>
@@ -170,7 +170,7 @@ const DiscourseSettings = ({ daoMetaData, refetchMetaData }) => {
         <Flex justify='space-around' mt='150px'>
           <Box w='45%'>
             <Flex justify='space-between'>
-              <TextBox colorScheme='white' size='sm' mb={2}>
+              <TextBox color='white' size='sm' mb={2}>
                 Boost not active
               </TextBox>
             </Flex>

@@ -482,7 +482,7 @@ const CcoContribution = React.memo(function ccocontribution({
                   </Box>
                   <TextBox
                     fontSize='sm'
-                    colorScheme='secondary.500'
+                    color='secondary.500'
                     onClick={() => setGenericModal({ ccoProcess: true })}
                     mb={5}
                     cursor='pointer'
@@ -491,7 +491,7 @@ const CcoContribution = React.memo(function ccocontribution({
                   </TextBox>
                   <TextBox
                     fontSize='sm'
-                    colorScheme='secondary.500'
+                    color='secondary.500'
                     onClick={() => setGenericModal({ xDaiHelp: true })}
                     mb={5}
                     cursor='pointer'
@@ -506,7 +506,7 @@ const CcoContribution = React.memo(function ccocontribution({
                     alignItems='center'
                     mb={5}
                   >
-                    <TextBox fontSize='sm' colorScheme='secondary.500'>
+                    <TextBox fontSize='sm' color='secondary.500'>
                       More About DAOhaus
                     </TextBox>
                   </Link>
@@ -518,7 +518,7 @@ const CcoContribution = React.memo(function ccocontribution({
                     alignItems='center'
                     mb={5}
                   >
-                    <TextBox fontSize='sm' colorScheme='secondary.500'>
+                    <TextBox fontSize='sm' color='secondary.500'>
                       More About CCOs
                     </TextBox>
                   </Link>
