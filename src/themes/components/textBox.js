@@ -1,6 +1,6 @@
 const TextBoxComponent = {
   baseStyle: (props) => ({
-    color: props.colorScheme ? props.colorScheme : 'whiteAlpha.700',
+    color: props.color ? props.color : 'whiteAlpha.700',
     textAlign: props.textAlign ? props.textAlign : null,
     fontFamily: 'heading',
     textTransform: 'uppercase',

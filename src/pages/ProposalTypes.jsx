@@ -219,7 +219,7 @@ const ProposalTypes = ({ daoMetaData, refetchMetaData }) => {
           <Flex justify='space-around' mt='100px'>
             <Box w={['90%', '80%', '60%', '45%']}>
               <Flex justify='space-between'>
-                <TextBox colorScheme='white' size='sm' mb={2}>
+                <TextBox color='white' size='sm' mb={2}>
                   {`${getTerm(customTerms, 'proposal')} Types`}
                 </TextBox>
               </Flex>
@@ -236,7 +236,7 @@ const ProposalTypes = ({ daoMetaData, refetchMetaData }) => {
         <Flex justify='space-around' mt='150px'>
           <Box w='45%'>
             <Flex justify='space-between'>
-              <TextBox colorScheme='white' size='sm' mb={2}>
+              <TextBox color='whiteAlpha.900' size='sm' mb={2}>
                 Boost not active
               </TextBox>
             </Flex>
