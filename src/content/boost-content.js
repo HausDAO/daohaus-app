@@ -6,6 +6,7 @@ export const boostList = [
     price: '0',
     modalName: 'customThemeLaunch',
     successRoute: 'theme',
+    settings: true,
   },
   {
     name: 'Minion',
@@ -14,6 +15,7 @@ export const boostList = [
     price: '0',
     modalName: 'vanillaMinionLaunch',
     successRoute: '',
+    settings: true,
   },
   {
     name: 'Discord Notificatons',
@@ -23,6 +25,7 @@ export const boostList = [
     price: '0',
     modalName: 'notificationsLevel1Launch',
     successRoute: 'notifications',
+    settings: true,
   },
   {
     name: 'Discourse Forum',
@@ -33,6 +36,7 @@ export const boostList = [
     price: '0',
     modalName: 'discourseLaunch',
     successRoute: '',
+    settings: true,
   },
   {
     name: 'Proposal Types',
@@ -42,25 +46,28 @@ export const boostList = [
     price: '0',
     modalName: 'proposalTypesLaunch',
     successRoute: 'proposals',
+    settings: true,
   },
   {
     name: 'MintGate',
     key: 'mintGate',
-    comingSoon: true,
     description: 'Gate content for your dao to allow private access',
     price: '0',
     modalName: 'genericBoostLaunch',
     successRoute: '',
+    link: 'mintgate',
+    settings: false,
   },
   {
     name: 'Snapshot Proposals',
     key: 'snapshot',
-    comingSoon: true,
     description:
       'Gasless voting for quicker, smaller decisions or just collecting signal.',
     price: '0',
     modalName: 'snapshot',
     successRoute: '',
+    link: 'snapshot',
+    settings: true,
   },
   {
     name: 'Minion Safe',
@@ -185,5 +192,10 @@ export const superpowerLinks = [
     boostKey: 'minionSafe',
     label: 'Minion Safe',
     link: 'settings/minion-safe',
+  },
+  {
+    boostKey: 'snapshot',
+    label: 'Snapshot',
+    modal: 'snapshot',
   },
 ];

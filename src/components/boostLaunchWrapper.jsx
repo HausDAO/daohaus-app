@@ -108,7 +108,7 @@ const BoostLaunchWrapper = ({ boost }) => {
             boostBody="Activate MintGate's powerful gates and unlock collaboration potential across shareholders."
             boostInstructions='These are the instructions after activate'
             boostCTA="It's gating time!"
-            boostLink='/links'
+            boostLink='boost/mintgate'
             handleLaunch={handleLaunch}
             loading={loading}
             setLoading={setLoading}
@@ -120,6 +120,7 @@ const BoostLaunchWrapper = ({ boost }) => {
           <SnapshotLaunch
             handleLaunch={handleLaunch}
             loading={loading}
+            space={boost?.metadata?.space}
             setLoading={setLoading}
           />
         );
