@@ -77,9 +77,8 @@ const MinionDetails = ({ overview, currentDaoTokens }) => {
   }, [overview, minion]);
 
   useEffect(() => {
-
     const getContractBalance = async () => {
-  console.log('minion', minion)
+      console.log('minion', minion);
 
       try {
         if (daochain === '0x1' || daochain === '0x4' || daochain === '0x2a') {
@@ -266,7 +265,9 @@ const MinionDetails = ({ overview, currentDaoTokens }) => {
                       Minion wallet
                     </TextBox>
                     <TextBox size='md' align='center'>
-                      balance: {nativeBalance}
+                      balance:
+                      {' '}
+                      {nativeBalance}
                     </TextBox>
                     {daochain !== '0x64' && (
                       <Flex>View token data on etherscan</Flex>
