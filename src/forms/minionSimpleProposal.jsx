@@ -53,27 +53,32 @@ const MinionProposalForm = () => {
   } = useOverlay();
   const { refreshDao } = useTX();
   const [currentError, setCurrentError] = useState(null);
-  const [abiFunctions, setAbiFunctions] = useState();
-  const [selectedFunction, setSelectedFunction] = useState();
-  const [abiParams, setAbiParams] = useState();
-  const [hexSwitch, setHexSwitch] = useState();
+  const [abiFunctions, setAbiFunctions] = useState(null);
+  const [selectedFunction, setSelectedFunction] = useState(null);
+  const [abiParams, setAbiParams] = useState(null);
+  const [hexSwitch, setHexSwitch] = useState(null);
   const [minions, setMinions] = useState([]);
   const now = (new Date().getTime() / 1000).toFixed();
 
-  const { handleSubmit, errors, register } = useForm();
+  const { handleSubmit, errors, register} = useForm();
 
   useEffect(() => {
     if (daoOverview?.minions) {
       const localMinions = daoOverview.minions.map(
-        (minion) => minion.minionAddress,
+        (minion) => ({
+          minionAdddress :minion.minionAddress,
+          minionName: minion.details
+        }),
       );
       setMinions(localMinions);
     }
-    // eslint-disable-next-line
-  }, [daoOverview?.minions]);
+  }, [daoOverview?.minions ]);
 
+
+  
   useEffect(() => {
-    if (Object.keys(errors).length > 0) {
+   const errArray = Object.keys(errors)
+    if (errArray.length > 0) {
       const newE = Object.keys(errors)[0];
       setCurrentError({
         field: newE,
@@ -84,10 +89,12 @@ const MinionProposalForm = () => {
     }
   }, [errors]);
 
+
+
   const onSubmit = async (values) => {
     console.log('values', values);
     setLoading(true);
-
+    const minionName = minions.find(minion => minion.minionAddress === values.minionAdddress)?.minionName
     const valueWei = injectedProvider.utils.toWei(values.value);
 
     const inputValues = [];
@@ -103,8 +110,7 @@ const MinionProposalForm = () => {
           }
         }
       });
-      console.log('inputs', inputValues);
-      console.log('selectedFunction', selectedFunction);
+     
       const aSelectedFunction = abiFunctions.find((func) => {
         return func.name === selectedFunction;
       });
@@ -122,6 +128,7 @@ const MinionProposalForm = () => {
       }
     }
     const details = detailsToJSON({
+      title: `Minion proposal from ${minionName}`,
       description: values.description,
     });
     const args = [
@@ -178,7 +185,7 @@ const MinionProposalForm = () => {
 
   const selectFunction = (e) => {
     const { value } = e.target;
-    console.log(value, abiFunctions);
+    
     const funcPrams = abiFunctions.find((func) => +func.id === +value);
     setAbiParams(funcPrams.inputs);
     setSelectedFunction(funcPrams.name);
@@ -242,7 +249,7 @@ const MinionProposalForm = () => {
     setSelectedFunction(null);
   };
 
-  return minions.length ? (
+  return minions?.length ? (
     <form onSubmit={handleSubmit(onSubmit)}>
       <FormControl
         isInvalid={errors.name}
@@ -270,9 +277,9 @@ const MinionProposalForm = () => {
             placeholder='Select Minion'
           >
             {' '}
-            {minions.map((minion, idx) => (
-              <option key={idx} value={minion}>
-                {minion}
+            {minions?.map((minion) => (
+              <option key={minion.minionAdddress } value={minion.minionAdddress}>
+                {minion.minionName || minion.minionAddress}
               </option>
             ))}
           </Select>
