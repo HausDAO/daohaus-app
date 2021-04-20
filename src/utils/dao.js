@@ -8,21 +8,19 @@ const orderDaosByNetwork = (userHubDaos, userNetwork) => ({
     ? [...userHubDaos.filter((dao) => dao.networkID !== userNetwork)]
     : [],
 });
-const excludeVersionsBelow = (daos, version) =>
-  daos.filter((dao) => dao.meta && dao.meta.version >= version);
-const excludeEmptyNetworks = (networks) =>
-  networks.filter((network) => network?.data?.length);
+const excludeVersionsBelow = (daos, version) => (
+  daos.filter((dao) => dao.meta && dao.meta.version >= version));
+const excludeEmptyNetworks = (networks) => networks.filter((network) => network?.data?.length);
 
-export const getDaosByNetwork = (userHubDaos, userNetwork, version = 2) =>
-  orderDaosByNetwork(
-    excludeEmptyNetworks(
-      userHubDaos.map((network) => ({
-        ...network,
-        data: excludeVersionsBelow(network.data, version),
-      })),
-    ),
-    userNetwork,
-  );
+export const getDaosByNetwork = (userHubDaos, userNetwork, version = 2) => orderDaosByNetwork(
+  excludeEmptyNetworks(
+    userHubDaos.map((network) => ({
+      ...network,
+      data: excludeVersionsBelow(network.data, version),
+    })),
+  ),
+  userNetwork,
+);
 
 export const combineDaoDataForHub = (userHubDaos) => {
   return userHubDaos.reduce(
@@ -58,11 +56,9 @@ export const combineDaoDataForHub = (userHubDaos) => {
 export const filterDAOsByName = (network, searchTerm) => ({
   ...network,
   data: network?.data?.length
-    ? network.data.filter((dao) =>
-        dao.meta.name.toLowerCase().includes(searchTerm.toLowerCase()),
-      )
+    ? network.data.filter((dao) => dao.meta.name.toLowerCase().includes(searchTerm.toLowerCase()))
     : [],
 });
 
-export const getActiveMembers = (members) =>
-  members.filter((member) => +member.shares > 0 || +member.loot > 0);
+export const getActiveMembers = (members) => (
+  members.filter((member) => +member.shares > 0 || +member.loot > 0));
