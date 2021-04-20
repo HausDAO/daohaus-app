@@ -28,7 +28,7 @@ const WrongNetworkToolTip = () => {
     }
   };
 
-  const toolTipLabel = () => (
+  const ToolTipLabel = () => (
     <Box fontFamily='heading'>
       {`Please update your network to
       ${capitalize(supportedChains[daochain]?.network)} to interact with
@@ -36,7 +36,7 @@ const WrongNetworkToolTip = () => {
     </Box>
   );
 
-  const metaMaskToolTipLabel = () => (
+  const MetaMaskToolTipLabel = () => (
     <Box fontFamily='heading' value={daochain}>
       {`Click to update your MetaMask provider to
       ${capitalize(supportedChains[daochain]?.network)} to interact with
@@ -58,7 +58,7 @@ const WrongNetworkToolTip = () => {
       return (
         <Tooltip
           hasArrow
-          label={toolTipLabel}
+          label={<ToolTipLabel />}
           bg='secondary.500'
           placement='left-start'
         >
@@ -69,7 +69,7 @@ const WrongNetworkToolTip = () => {
     return (
       <Tooltip
         hasArrow
-        label={metaMaskToolTipLabel}
+        label={<MetaMaskToolTipLabel />}
         bg='secondary.500'
         placement='left-start'
       >
