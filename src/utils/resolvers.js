@@ -43,9 +43,8 @@ export const daoResolver = (dao, context) => {
     const usdPrice = context.prices[dao.depositToken.tokenAddress] || {
       price: 0,
     };
-    dao.guildBankValue =
-      usdPrice.price *
-      (dao.guildBankBalanceV1 / 10 ** dao.depositToken.decimals);
+    dao.guildBankValue = usdPrice.price
+      * (dao.guildBankBalanceV1 / 10 ** dao.depositToken.decimals);
   } else {
     dao.guildBankValue = getTotalBankValue(dao.tokenBalances, context.prices);
   }

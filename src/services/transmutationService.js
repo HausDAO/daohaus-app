@@ -54,7 +54,9 @@ export const TransmutationService = ({
     }
 
     if (service === 'propose') {
-      return async ({ args, address, poll, onTxHash }) => {
+      return async ({
+        args, address, poll, onTxHash,
+      }) => {
         console.log('args', args);
         console.log('address', address);
         console.log('poll', poll);

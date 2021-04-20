@@ -147,9 +147,8 @@ const TransmutationProposal = () => {
         console.log('transmutationData', transmutationData);
         const getTokenAddress = transmutationData[0].capitalToken;
         const tokenArray = daoOverview?.tokenBalances.filter(
-          (token) =>
-            token.token.tokenAddress === getTokenAddress.toLowerCase() &&
-            token.guildBank,
+          (token) => token.token.tokenAddress === getTokenAddress.toLowerCase()
+            && token.guildBank,
         );
         if (!tokenArray) {
           setTokenData([]);
@@ -196,10 +195,10 @@ const TransmutationProposal = () => {
     const applicant = values?.applicantHidden?.startsWith('0x')
       ? values.applicantHidden
       : values?.applicant
-      ? values.applicant
-      : values?.memberApplicant
-      ? values.memberApplicant
-      : address;
+        ? values.applicant
+        : values?.memberApplicant
+          ? values.memberApplicant
+          : address;
 
     const args = [
       applicant,
@@ -215,7 +214,7 @@ const TransmutationProposal = () => {
         actions: {
           onError: (error, txHash) => {
             errorToast({
-              title: `There was an error creating the proposal.`,
+              title: 'There was an error creating the proposal.',
             });
             resolvePoll(txHash);
             console.error(`Could not find a matching proposal: ${error}`);
@@ -248,7 +247,9 @@ const TransmutationProposal = () => {
         transmutation: transmutationData[0].transmutation,
         setupValues: transmutationValues,
         chainID: daochain,
-      })('propose')({ args, address, poll, onTxHash });
+      })('propose')({
+        args, address, poll, onTxHash,
+      });
     } catch (err) {
       console.log(err);
     }

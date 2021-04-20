@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { useForm } from 'react-hook-form';
-import { Button, FormControl, Flex, Icon, Box } from '@chakra-ui/react';
+import {
+  Button, FormControl, Flex, Icon, Box,
+} from '@chakra-ui/react';
 import { RiErrorWarningLine } from 'react-icons/ri';
 import { useParams } from 'react-router-dom';
 
@@ -31,7 +33,9 @@ const RageQuitProposalForm = ({ uberHausMinion, uberMembers }) => {
   const { daoid } = useParams();
   const { refreshDao } = useTX();
 
-  const { handleSubmit, errors, register, setValue } = useForm();
+  const {
+    handleSubmit, errors, register, setValue,
+  } = useForm();
   const { daoMetaData } = useMetaData();
 
   const [loading, setLoading] = useState(false);
@@ -73,8 +77,8 @@ const RageQuitProposalForm = ({ uberHausMinion, uberMembers }) => {
 
     const hash = createHash();
     const now = (new Date().getTime() / 1000).toFixed();
-    const description = `This is a proposal to Rage Quit ${values.shares ||
-      '0'} Shares and ${values.loot || '0'} from UberHAUS`;
+    const description = `This is a proposal to Rage Quit ${values.shares
+      || '0'} Shares and ${values.loot || '0'} from UberHAUS`;
     const details = detailsToJSON({
       values,
       uberHaus: true,
@@ -115,7 +119,7 @@ const RageQuitProposalForm = ({ uberHausMinion, uberMembers }) => {
         actions: {
           onError: (error, txHash) => {
             errorToast({
-              title: `There was an error.`,
+              title: 'There was an error.',
             });
             resolvePoll(txHash);
             console.error(`Could not find a matching proposal: ${error}`);
@@ -146,13 +150,15 @@ const RageQuitProposalForm = ({ uberHausMinion, uberMembers }) => {
         web3: injectedProvider,
         uberHausMinion: uberHausMinion.minionAddress,
         chainID: UBERHAUS_DATA.NETWORK,
-      })('proposeAction')({ args, address, poll, onTxHash });
+      })('proposeAction')({
+        args, address, poll, onTxHash,
+      });
     } catch (err) {
       setD2dProposalModal((prevState) => !prevState);
       setLoading(false);
       console.error('error: ', err);
       errorToast({
-        title: `There was an error.`,
+        title: 'There was an error.',
         description: err.message || '',
       });
     }

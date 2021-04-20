@@ -32,7 +32,7 @@ const Withdraw = ({ token }) => {
         actions: {
           onError: (error, txHash) => {
             errorToast({
-              title: `There was an error.`,
+              title: 'There was an error.',
               description: error?.message || '',
             });
             resolvePoll(txHash);
@@ -61,12 +61,14 @@ const Withdraw = ({ token }) => {
         daoAddress: daoid,
         chainID: daochain,
         version: daoOverview.version,
-      })('withdrawBalance')({ args, address, poll, onTxHash });
+      })('withdrawBalance')({
+        args, address, poll, onTxHash,
+      });
     } catch (err) {
       setLoading(false);
       console.log('error: ', err);
       errorToast({
-        title: `There was an error.`,
+        title: 'There was an error.',
         description: err?.message || '',
       });
     }
@@ -86,19 +88,19 @@ const Withdraw = ({ token }) => {
             <Button size='sm' onClick={handleWithdraw}>
               Withdraw
             </Button>
-          ) : (
-            <Tooltip
-              hasArrow
-              shouldWrapChildren
-              placement='bottom'
-              label='Wrong network'
-              bg='secondary.500'
-            >
-              <Button size='sm' disabled>
-                Withdraw
-              </Button>
-            </Tooltip>
-          )}
+            ) : (
+              <Tooltip
+                hasArrow
+                shouldWrapChildren
+                placement='bottom'
+                label='Wrong network'
+                bg='secondary.500'
+              >
+                <Button size='sm' disabled>
+                  Withdraw
+                </Button>
+              </Tooltip>
+            )}
         </>
       )}
     </>

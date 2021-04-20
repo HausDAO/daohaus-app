@@ -22,8 +22,7 @@ import { handleGetProfile } from '../utils/3box';
 import { chainByID } from '../utils/chain';
 // import { useParams } from 'react-router-dom';
 
-const defaultTipLabel =
-  'Address to receive the Shares, Loot, and/or Funding requested in this proposal.';
+const defaultTipLabel = 'Address to receive the Shares, Loot, and/or Funding requested in this proposal.';
 
 const AddressInput = ({
   register,

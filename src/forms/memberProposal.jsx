@@ -107,10 +107,10 @@ const MemberProposalForm = () => {
     const applicant = values?.applicantHidden?.startsWith('0x')
       ? values.applicantHidden
       : values?.applicant
-      ? values.applicant
-      : values?.memberApplicant
-      ? values.memberApplicant
-      : address;
+        ? values.applicant
+        : values?.memberApplicant
+          ? values.memberApplicant
+          : address;
     const args = [
       applicant,
       values.sharesRequested || '0',
@@ -130,7 +130,7 @@ const MemberProposalForm = () => {
         actions: {
           onError: (error, txHash) => {
             errorToast({
-              title: `There was an error.`,
+              title: 'There was an error.',
             });
             resolvePoll(txHash);
             console.error(`Could not find a matching proposal: ${error}`);
@@ -162,7 +162,9 @@ const MemberProposalForm = () => {
         daoAddress: daoid,
         chainID: daochain,
         version: daoOverview.version,
-      })('submitProposal')({ args, address, poll, onTxHash });
+      })('submitProposal')({
+        args, address, poll, onTxHash,
+      });
     } catch (error) {
       const errMsg = error?.message || '';
       setLoading(false);
@@ -184,7 +186,7 @@ const MemberProposalForm = () => {
         },
       });
       errorToast({
-        title: `There was an error.`,
+        title: 'There was an error.',
         description: errMsg,
       });
     }
@@ -352,19 +354,19 @@ const MemberProposalForm = () => {
             >
               Submit
             </Button>
-          ) : (
-            <Button
-              onClick={requestWallet}
-              isDisabled={injectedChain && daochain !== injectedChain?.chainId}
-            >
-              {`Connect 
+            ) : (
+              <Button
+                onClick={requestWallet}
+                isDisabled={injectedChain && daochain !== injectedChain?.chainId}
+              >
+                {`Connect 
               ${
                 injectedChain && daochain !== injectedChain?.chainId
                   ? `to ${chainByID(daochain).name}`
                   : 'Wallet'
               }`}
-            </Button>
-          )}
+              </Button>
+            )}
         </Box>
       </Flex>
     </form>

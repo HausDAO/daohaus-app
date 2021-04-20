@@ -27,11 +27,13 @@ export const MinionService = ({ web3, minion, chainID }) => {
     // executeAction args: [ proposal id ]
     // crossWithdraw args: [ target dao address, token address, amount, transfer (bool)]
     if (
-      service === 'proposeAction' ||
-      service === 'executeAction' ||
-      service === 'crossWithdraw'
+      service === 'proposeAction'
+      || service === 'executeAction'
+      || service === 'crossWithdraw'
     ) {
-      return async ({ args, address, poll, onTxHash }) => {
+      return async ({
+        args, address, poll, onTxHash,
+      }) => {
         console.log(args);
         console.log(address);
         console.log(poll);

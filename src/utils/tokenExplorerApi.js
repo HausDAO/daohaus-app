@@ -5,8 +5,8 @@ import { fetchTokenData } from './tokenValue';
 const fetchEtherscanAPIData = async (address, daochain) => {
   try {
     const key = process.env.REACT_APP_ETHERSCAN_KEY;
-    const url = `${chainByID(daochain).tokenlist_api_url}${address}${key &&
-      `&apikey=${key}`}`;
+    const url = `${chainByID(daochain).tokenlist_api_url}${address}${key
+      && `&apikey=${key}`}`;
     const response = await fetch(url);
     const json = await response.json();
     if (!json.result || json.status === '0') {
@@ -22,16 +22,13 @@ const fetchEtherscanAPIData = async (address, daochain) => {
 const parseEtherscan = async (json, address, daochain) => {
   if (json) {
     const contractAddressObj = json.reduce((acc, transaction) => {
-      (acc[transaction.contractAddress] =
-        acc[transaction.contractAddress] || []).push(transaction);
+      (acc[transaction.contractAddress] = acc[transaction.contractAddress] || []).push(transaction);
       return acc;
     }, {});
     const balanceData = Object.entries(contractAddressObj).map(
       ([key, value]) => {
         const totalBalance = value.reduce((acc, transaction) => {
-          if (transaction.from === address)
-            acc -= parseInt(transaction.value || '1', 10);
-          else acc += parseInt(transaction.value || '1', 10);
+          if (transaction.from === address) { acc -= parseInt(transaction.value || '1', 10); } else acc += parseInt(transaction.value || '1', 10);
           return acc;
         }, 0);
 
@@ -54,7 +51,7 @@ const parseEtherscan = async (json, address, daochain) => {
           tokenAddress: b.contractAddress,
           chainID: daochain,
         });
-        for (let i = 0; i < b.balance; i =+ 1) {
+        for (let i = 0; i < b.balance; i = +1) {
           const tid = nftService('tokenOfOwnerByIndex')({
             accountAddr: address,
             index: i,
@@ -124,7 +121,7 @@ const parseBlockScout = async (json, address) => {
         tokenAddress: b.contractAddress,
         chainID: daochain,
       });
-      for (let i = 0; i < b.balance; i =+ 1) {
+      for (let i = 0; i < b.balance; i = +1) {
         const tid = nftService('tokenOfOwnerByIndex')({
           accountAddr: address,
           index: i,

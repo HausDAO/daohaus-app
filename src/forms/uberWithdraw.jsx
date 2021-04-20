@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { useForm } from 'react-hook-form';
-import { Button, FormControl, Flex, Icon, Box } from '@chakra-ui/react';
+import {
+  Button, FormControl, Flex, Icon, Box,
+} from '@chakra-ui/react';
 import { RiErrorWarningLine } from 'react-icons/ri';
 import styled from '@emotion/styled';
 
@@ -25,7 +27,9 @@ const WithdrawForm = ({ uberMembers, uberHausMinion, refetchAllies }) => {
   const { cachePoll, resolvePoll } = useUser();
   const { refreshDao } = useTX();
   const { injectedProvider, address } = useInjectedProvider();
-  const { handleSubmit, errors, register, watch, setValue } = useForm();
+  const {
+    handleSubmit, errors, register, watch, setValue,
+  } = useForm();
 
   const [loading, setLoading] = useState(false);
   const [currentError, setCurrentError] = useState(null);
@@ -81,10 +85,9 @@ const WithdrawForm = ({ uberMembers, uberHausMinion, refetchAllies }) => {
     const initialWithdraw = values.withdraw
       ? valToDecimalString(values.withdraw, tokenAddress, uberTokens)
       : '0';
-    const withdrawAmt =
-      initialWithdraw > currentBalance
-        ? BigInt(currentBalance)
-        : BigInt(initialWithdraw);
+    const withdrawAmt = initialWithdraw > currentBalance
+      ? BigInt(currentBalance)
+      : BigInt(initialWithdraw);
 
     const args = [UBERHAUS_DATA.ADDRESS, tokenAddress, withdrawAmt.toString()];
     const difference = BigInt(currentBalance) - BigInt(initialWithdraw);
@@ -101,7 +104,7 @@ const WithdrawForm = ({ uberMembers, uberHausMinion, refetchAllies }) => {
         actions: {
           onError: (error, txHash) => {
             errorToast({
-              title: `There was an error.`,
+              title: 'There was an error.',
             });
             resolvePoll(txHash);
             console.error(`Could not withdraw funds: ${error}`);
@@ -127,13 +130,15 @@ const WithdrawForm = ({ uberMembers, uberHausMinion, refetchAllies }) => {
         web3: injectedProvider,
         uberHausMinion: uberHausMinion.minionAddress,
         chainID: UBERHAUS_DATA.NETWORK,
-      })('doWithdraw')({ args, address, poll, onTxHash });
+      })('doWithdraw')({
+        args, address, poll, onTxHash,
+      });
     } catch (err) {
       setD2dProposalModal((prevState) => !prevState);
       setLoading(false);
       console.error('error: ', err);
       errorToast({
-        title: `There was an error.`,
+        title: 'There was an error.',
         description: err.message || '',
       });
     }

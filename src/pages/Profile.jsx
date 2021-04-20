@@ -14,7 +14,9 @@ import MainViewLayout from '../components/mainViewLayout';
 import { useInjectedProvider } from '../contexts/InjectedProviderContext';
 import UpdateDelegate from '../forms/updateDelegate';
 
-const Profile = ({ members, overview, daoTokens, daoMember, activities }) => {
+const Profile = ({
+  members, overview, daoTokens, daoMember, activities,
+}) => {
   const { userid, daochain } = useParams();
   const { address } = useInjectedProvider();
   const [memberEntity, setMemberEntity] = useState(null);
@@ -25,8 +27,7 @@ const Profile = ({ members, overview, daoTokens, daoMember, activities }) => {
     if (members) {
       setMemberEntity(
         members?.find(
-          (member) =>
-            member?.memberAddress?.toLowerCase() === userid?.toLowerCase(),
+          (member) => member?.memberAddress?.toLowerCase() === userid?.toLowerCase(),
         ),
       );
     }
@@ -66,9 +67,9 @@ const Profile = ({ members, overview, daoTokens, daoMember, activities }) => {
 
   const hasBalance = () => {
     return (
-      address &&
-      address.toLowerCase() === userid.toLowerCase() &&
-      tokensReceivable.length
+      address
+      && address.toLowerCase() === userid.toLowerCase()
+      && tokensReceivable.length
     );
   };
 

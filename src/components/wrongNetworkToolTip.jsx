@@ -1,6 +1,8 @@
 import React from 'react';
 import { RiInformationLine } from 'react-icons/ri';
-import { Box, Button, Flex, Icon, Tooltip } from '@chakra-ui/react';
+import {
+  Box, Button, Flex, Icon, Tooltip,
+} from '@chakra-ui/react';
 import { useParams } from 'react-router-dom';
 
 import { useInjectedProvider } from '../contexts/InjectedProviderContext';
@@ -44,14 +46,14 @@ const WrongNetworkToolTip = () => {
 
   const NetworkToolTip = ({ children }) => {
     if (
-      !address ||
-      daoConnectedAndSameChain(address, injectedChain?.chainId, daochain)
+      !address
+      || daoConnectedAndSameChain(address, injectedChain?.chainId, daochain)
     ) {
       return children;
     }
     if (
-      EIP3085.NOT_SUPPORTED[daochain] ||
-      !injectedProvider?.currentProvider?.isMetaMask
+      EIP3085.NOT_SUPPORTED[daochain]
+      || !injectedProvider?.currentProvider?.isMetaMask
     ) {
       return (
         <Tooltip
@@ -96,7 +98,7 @@ const WrongNetworkToolTip = () => {
           {!daoConnectedAndSameChain(
             address,
             injectedChain?.chainId,
-            daochain
+            daochain,
           ) ? (
             <Flex
               align='center'
@@ -110,13 +112,13 @@ const WrongNetworkToolTip = () => {
                 {injectedChain?.name}
               </Box>
             </Flex>
-          ) : (
-            <Flex align='center' mr={5} p='5px 12px' borderRadius='20px'>
-              <Box fontSize='md' fontWeight={200}>
-                {injectedChain?.name}
-              </Box>
-            </Flex>
-          )}
+            ) : (
+              <Flex align='center' mr={5} p='5px 12px' borderRadius='20px'>
+                <Box fontSize='md' fontWeight={200}>
+                  {injectedChain?.name}
+                </Box>
+              </Flex>
+            )}
         </>
       )}
     </NetworkToolTip>
