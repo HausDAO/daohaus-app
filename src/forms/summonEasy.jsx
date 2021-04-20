@@ -201,7 +201,7 @@ const SummonEasy = ({ daoData, setDaoData, handleSummon }) => {
         <Text mt={10}>
           Transaction fees got you down? Check our
           <Link
-            href='https://daohaus.club/help#xDAI'
+            href='https://daohaus.club/help#Summon'
             rel='noreferrer noopener'
             target='_blank'
             color='secondary.500'
