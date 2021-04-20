@@ -3,15 +3,17 @@ import makeBlockie from 'ethereum-blockies-base64';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
 import { FaCopy } from 'react-icons/fa';
 
-import { Flex, Avatar, Box, useToast, Icon, Text } from '@chakra-ui/react';
+import {
+  Flex, Avatar, Box, useToast, Icon, Text,
+} from '@chakra-ui/react';
 import { truncateAddr } from '../utils/general';
 import { handleGetProfile } from '../utils/3box';
 
-const AddressAvatar = React.memo(function AddrAvatar({
+const AddressAvatar = React.memo(({
   addr,
   hideCopy = false,
   // alwaysShowName,
-}) {
+}) => {
   const toast = useToast();
   const [profile, setProfile] = useState(null);
   // const [hasFetched, setHasFetched] = useState(false);

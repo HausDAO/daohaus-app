@@ -15,8 +15,12 @@ export const UberHausMinionFactoryService = ({ web3, chainID }) => {
   );
   return (service) => {
     if (service === 'summonUberHausMinion') {
-      return async ({ args, from, poll, onTxHash }) => {
-        console.log({ args, from, poll, onTxHash });
+      return async ({
+        args, from, poll, onTxHash,
+      }) => {
+        console.log({
+          args, from, poll, onTxHash,
+        });
         console.log(contract);
         try {
           console.log(args, from);

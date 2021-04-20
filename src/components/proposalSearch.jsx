@@ -84,13 +84,9 @@ const ProposalSearch = ({ performSearch, resetSearch }) => {
   const handleToggleFilter = (e) => {
     const filterType = e?.target?.value;
     if (filterType) {
-      setSearchFilters((prevState) =>
-        prevState.map((filter) =>
-          filter.value === filterType
-            ? { ...filter, active: !filter.active }
-            : filter,
-        ),
-      );
+      setSearchFilters((prevState) => prevState.map((filter) => (filter.value === filterType
+        ? { ...filter, active: !filter.active }
+        : filter)));
     }
   };
   const clearSearch = () => {

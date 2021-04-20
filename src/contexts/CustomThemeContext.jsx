@@ -22,7 +22,9 @@ export const CustomThemeProvider = ({ children }) => {
 
   return (
     <CustomThemeContext.Provider
-      value={{ theme, updateTheme, tempTheme, updateTempTheme, resetTheme }}
+      value={{
+        theme, updateTheme, tempTheme, updateTempTheme, resetTheme,
+      }}
     >
       <ChakraProvider theme={theme}>
         <OverlayProvider>{children}</OverlayProvider>
@@ -39,5 +41,7 @@ export const useCustomTheme = () => {
     updateTempTheme,
     resetTheme,
   } = useContext(CustomThemeContext);
-  return { theme, updateTheme, tempTheme, updateTempTheme, resetTheme };
+  return {
+    theme, updateTheme, tempTheme, updateTempTheme, resetTheme,
+  };
 };

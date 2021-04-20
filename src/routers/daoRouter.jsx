@@ -1,5 +1,7 @@
 import React from 'react';
-import { Switch, Route, useRouteMatch, useParams } from 'react-router-dom';
+import {
+  Switch, Route, useRouteMatch, useParams,
+} from 'react-router-dom';
 
 import { useDao } from '../contexts/DaoContext';
 import { useDaoMember } from '../contexts/DaoMemberContext';

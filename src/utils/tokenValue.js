@@ -4,11 +4,9 @@ import { MolochService } from '../services/molochService';
 import { omit } from './general';
 
 const geckoURL = 'https://api.coingecko.com/api/v3/simple/token_price';
-const uniSwapDataURL =
-  'https://raw.githubusercontent.com/Uniswap/default-token-list/master/src/tokens/mainnet.json';
+const uniSwapDataURL = 'https://raw.githubusercontent.com/Uniswap/default-token-list/master/src/tokens/mainnet.json';
 const babe = '0x000000000000000000000000000000000000baBe';
-const tokenAPI =
-  'https://daohaus-metadata.s3.amazonaws.com/daoTokenPrices.json';
+const tokenAPI = 'https://daohaus-metadata.s3.amazonaws.com/daoTokenPrices.json';
 
 const fetchUniswapData = async () => {
   try {
@@ -121,8 +119,7 @@ export const getTotalBankValue = (tokenBalances, prices) => {
       const price = prices[balance.token.tokenAddress.toLowerCase()]
         ? prices[balance.token.tokenAddress.toLowerCase()].price
         : 0;
-      const value =
-        (+balance.tokenBalance / 10 ** balance.token.decimals) * price;
+      const value = (+balance.tokenBalance / 10 ** balance.token.decimals) * price;
 
       return (sum += value);
     }

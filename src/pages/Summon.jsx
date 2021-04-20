@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from 'react';
-import { Button, Flex, Box, Text } from '@chakra-ui/react';
+import {
+  Button, Flex, Box, Text,
+} from '@chakra-ui/react';
 
 import Layout from '../components/layout';
 import { useInjectedProvider } from '../contexts/InjectedProviderContext';
@@ -26,7 +28,9 @@ import { capitalize } from '../utils/general';
 // import TemporaryCloneSummon from '../components/temporaryCloneSummon';
 
 // const tokenMsg =
-//   'Token addresses are different across chains. If you would like to clone the same tokens to a different network, you will need to manually add the equivalent token addresses here.';
+//   '''Token addresses are different across chains.
+//    If you would like to clone the same tokens to a different network,
+//    you will need to manually add the equivalent token addresses here.''';
 
 const Summon = () => {
   const {
@@ -120,7 +124,7 @@ const Summon = () => {
           onError: (error, txHash) => {
             console.error(`error: ${error}`);
             errorToast({
-              title: `There was an error.`,
+              title: 'There was an error.',
             });
             resolvePoll(txHash);
             setSummonError(error);
@@ -145,18 +149,18 @@ const Summon = () => {
       await SummonService({
         web3: injectedProvider,
         chainID: injectedChain.chain_id,
-      })('summonMoloch')({ args: summonParams, from: address, poll, onTxHash });
+      })('summonMoloch')({
+        args: summonParams, from: address, poll, onTxHash,
+      });
     } catch (err) {
       console.log('error in tx', err);
       setIsSummoning(false);
       errorToast({
-        title: `There was an error.`,
+        title: 'There was an error.',
         description: err?.message || '',
       });
     }
   };
-
-  
 
   // const handleCloneDAO = (daoOverview, daoMembers, daoNetwork) => {
   //   const cloneData = {

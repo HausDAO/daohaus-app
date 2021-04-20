@@ -2,7 +2,7 @@ import React from 'react';
 import { useParams, Link as RouterLink } from 'react-router-dom';
 import { Flex, Button, Icon } from '@chakra-ui/react';
 import { RiArrowRightSLine } from 'react-icons/ri';
-import TextBox from './TextBox'; 
+import TextBox from './TextBox';
 
 const BoostNotActive = () => {
   const { daochain, daoid } = useParams();
@@ -20,7 +20,7 @@ const BoostNotActive = () => {
         Head to Settings
       </Button>
     </Flex>
-  )
-}
+  );
+};
 
 export default BoostNotActive;

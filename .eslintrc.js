@@ -2,9 +2,10 @@ module.exports = {
   env: {
     es2020: true,
     node: true,
+    browser: true,
   },
-  // extends: ['plugin:react/recommended', 'airbnb', 'prettier'],
-  extends: ['plugin:react/recommended', 'prettier'],
+  // prettier should be last
+  extends: ['plugin:react/recommended', 'airbnb'],
   globals: {
     Atomics: 'readonly',
     SharedArrayBuffer: 'readonly',
@@ -15,15 +16,20 @@ module.exports = {
     alert: true,
     document: true,
   },
-  parser: 'babel-eslint',
+  parser: '@babel/eslint-parser',
   parserOptions: {
     ecmaFeatures: {
       jsx: true,
+      globalReturn: false,
     },
     ecmaVersion: 2020,
     sourceType: 'module',
+    babelOptions: {
+      configFile: './babel.config.json',
+    },
   },
-  plugins: ['react', 'react-hooks', 'prettier'],
+  // plugins: ['react', 'react-hooks', 'airbnb'],
+  plugins: ['react', 'react-hooks'],
   settings: {
     react: {
       version: 'detect',
@@ -38,7 +44,9 @@ module.exports = {
     'no-nested-ternary': 'off', // priority 2, med
     'no-restricted-globals': 'off', // priority 1, med
     'no-restricted-syntax': 'off', // priority 2, harder
+    'arrow-body-style': 'off',
     'guard-for-in': 'off', // priority 2, two instances
+    'max-len': 'off',
     'no-return-assign': 'off', // priority 1, easy
     'consistent-return': 'off', // priority 2, harder basically all the services
     radix: 'off', // priority 1, parseInt ??
@@ -55,7 +63,13 @@ module.exports = {
     'react/jsx-wrap-multilines': 'off', // priority 3, conflicting with prettier formatting only
     'react/jsx-curly-newline': 'off', // priority 2, harder conflicting with prettier
     'jsx-quotes': ['error', 'prefer-single'], // leave
-    // misc
-    // 'prettier/prettier': 'warn',
   },
+  overrides: [
+    {
+      files: ['**/*.stories.*'],
+      rules: {
+        'import/no-anonymous-default-export': 'off',
+      },
+    },
+  ],
 };

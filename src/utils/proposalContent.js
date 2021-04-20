@@ -103,9 +103,8 @@ export const getFilters = (daoMember, unread) => {
       ...defaultFilterOptions,
       main: [activeFilter, allFilter],
     };
-  } 
-    return defaultFilterOptions;
-  
+  }
+  return defaultFilterOptions;
 };
 
 export const sortOptions = {

@@ -72,8 +72,10 @@ const ExploreFilterList = () => {
           color='secondary.500'
           _hover={{ color: 'secondary.400' }}
         >
-          <Box>{`Filters (${filterCount})`}</Box>
-          <Icon as={RiArrowDropDownFill} color='secondary.500' />
+          <Box>
+            {`Filters (${filterCount})`}
+            <Icon as={RiArrowDropDownFill} color='secondary.500' />
+          </Box>
         </MenuButton>
         <MenuList bg='black'>
           <MenuGroup title='Network'>

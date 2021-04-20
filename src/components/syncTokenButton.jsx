@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
-import { Button, Flex, Spinner, Tooltip } from '@chakra-ui/react';
+import {
+  Button, Flex, Spinner, Tooltip,
+} from '@chakra-ui/react';
 import { RiQuestionLine } from 'react-icons/ri';
 import { useParams } from 'react-router-dom';
 
@@ -35,7 +37,7 @@ const SyncTokenButton = ({ token }) => {
     if (!token) {
       setLoading(false);
       errorToast({
-        title: `There was an error.`,
+        title: 'There was an error.',
         // description: error?.message || '',
       });
     }
@@ -48,7 +50,7 @@ const SyncTokenButton = ({ token }) => {
         actions: {
           onError: (error, txHash) => {
             errorToast({
-              title: `There was an error.`,
+              title: 'There was an error.',
               description: error?.message || '',
             });
             resolvePoll(txHash);
@@ -81,7 +83,7 @@ const SyncTokenButton = ({ token }) => {
       setLoading(false);
       console.error('error: ', err);
       errorToast({
-        title: `There was an error.`,
+        title: 'There was an error.',
         description: err?.message || '',
       });
     }

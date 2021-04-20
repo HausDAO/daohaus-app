@@ -1,5 +1,7 @@
 import React from 'react';
-import { Flex, Image, Box, Icon, HStack, Button } from '@chakra-ui/react';
+import {
+  Flex, Image, Box, Icon, HStack, Button,
+} from '@chakra-ui/react';
 import { RiArrowDropDownFill } from 'react-icons/ri';
 import { rgba } from 'polished';
 

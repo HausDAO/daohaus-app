@@ -21,16 +21,18 @@ const ExploreFilters = ({ daoCount }) => {
   return (
     <>
       <Flex align='center' justify='flex-start' wrap='wrap' ml={5}>
-      <Box
-        mr={5}
-        textTransform='uppercase'
-        fontFamily='heading'
-        fontSize={['sm', null, null, 'md']}
-      >
-        {daoCount} DAOS
-      </Box>
+        <Box
+          mr={5}
+          textTransform='uppercase'
+          fontFamily='heading'
+          fontSize={['sm', null, null, 'md']}
+        >
+          {daoCount}
+          {' '}
+          DAOS
+        </Box>
         <ExploreSearch />
-        <Box mr={1}>
+        <Box mr={6}>
           <ListSort sort={sort} setSort={setSort} options={SORT_OPTIONS} />
         </Box>
         <ExploreFilterList />

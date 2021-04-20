@@ -6,7 +6,6 @@ import {
   Flex,
   Icon,
   Box,
-  // Link,
   Tooltip,
   VisuallyHidden,
 } from '@chakra-ui/react';
@@ -108,8 +107,8 @@ const LootGrabForm = () => {
     const applicant = values?.applicantHidden?.startsWith('0x')
       ? values.applicantHidden
       : values?.applicant
-      ? values.applicant
-      : address;
+        ? values.applicant
+        : address;
     const args = [
       applicant,
       values.sharesRequested || '0',
@@ -129,7 +128,7 @@ const LootGrabForm = () => {
         actions: {
           onError: (error, txHash) => {
             errorToast({
-              title: `There was an error.`,
+              title: 'There was an error.',
             });
             resolvePoll(txHash);
             console.error(`Could not find a matching proposal: ${error}`);
@@ -161,12 +160,14 @@ const LootGrabForm = () => {
         daoAddress: daoid,
         chainID: daochain,
         version: daoOverview.version,
-      })('submitProposal')({ args, address, poll, onTxHash });
+      })('submitProposal')({
+        args, address, poll, onTxHash,
+      });
     } catch (err) {
       setLoading(false);
       console.error('error: ', err);
       errorToast({
-        title: `There was an error.`,
+        title: 'There was an error.',
         description: err?.message || '',
       });
     }
@@ -256,17 +257,17 @@ const LootGrabForm = () => {
             >
               Submit
             </Button>
-          ) : (
-            <Button
-              onClick={requestWallet}
-              isDisabled={injectedChain && daochain !== injectedChain?.chainId}
-            >
-              Connect
-              {injectedChain && daochain !== injectedChain?.chainId
-                ? `to ${chainByID(daochain).name}`
-                : 'Wallet'}
-            </Button>
-          )}
+            ) : (
+              <Button
+                onClick={requestWallet}
+                isDisabled={injectedChain && daochain !== injectedChain?.chainId}
+              >
+                Connect
+                {injectedChain && daochain !== injectedChain?.chainId
+                  ? `to ${chainByID(daochain).name}`
+                  : 'Wallet'}
+              </Button>
+            )}
         </Box>
       </Flex>
     </form>

@@ -1,5 +1,7 @@
 import React from 'react';
-import { Box, Flex, Button, HStack } from '@chakra-ui/react';
+import {
+  Box, Flex, Button, HStack,
+} from '@chakra-ui/react';
 import { Link as RouterLink, useParams } from 'react-router-dom';
 import { RiArrowRightLine } from 'react-icons/ri';
 
@@ -14,14 +16,15 @@ import { useInjectedProvider } from '../contexts/InjectedProviderContext';
 import { daoConnectedAndSameChain } from '../utils/general';
 import { getTerm } from '../utils/metadata';
 
-const Boosts = ({ customTerms, daoMember, daoOverview, daoMetaData }) => {
+const Boosts = ({
+  customTerms, daoMember, daoOverview, daoMetaData,
+}) => {
   const { daochain, daoid } = useParams();
   const { setGenericModal } = useOverlay();
   const { address, injectedChain } = useInjectedProvider();
 
-  const canInteract =
-    daoConnectedAndSameChain(address, injectedChain?.chainId, daochain) &&
-    +daoMember?.shares > 0;
+  const canInteract = daoConnectedAndSameChain(address, injectedChain?.chainId, daochain)
+    && +daoMember?.shares > 0;
 
   const hasDependentBoost = (boostKey) => {
     if (boostKey === 'vanillaMinions') {
@@ -79,7 +82,7 @@ const Boosts = ({ customTerms, daoMember, daoOverview, daoMetaData }) => {
                   <Button
                     as={RouterLink}
                     variant={boost.link ? 'outline' : null}
-                    to={`/dao/${daochain}/${daoid}/settings/${boost.successRoute}`}
+                    to={canInteract && `/dao/${daochain}/${daoid}/settings/${boost.successRoute}`}
                     textTransform='uppercase'
                     disabled={!canInteract}
                   >
@@ -91,7 +94,6 @@ const Boosts = ({ customTerms, daoMember, daoOverview, daoMetaData }) => {
                     as={RouterLink}
                     to={`/dao/${daochain}/${daoid}/boost/${boost.link}`}
                     textTransform='uppercase'
-                    disabled={!canInteract}
                     rightIcon={<RiArrowRightLine />}
                   >
                     Go
@@ -142,8 +144,8 @@ const Boosts = ({ customTerms, daoMember, daoOverview, daoMetaData }) => {
         <Flex wrap='wrap' justify='space-evenly'>
           {daoMetaData
             ? boostList.map((boost, i) => {
-                return renderBoostCard(boost, i);
-              })
+              return renderBoostCard(boost, i);
+            })
             : null}
         </Flex>
       </Box>

@@ -48,7 +48,7 @@ const BoostLaunchWrapper = ({ boost }) => {
         return true;
       }
       setLoading(false);
-      setGenericModal({ 'boostErrorModal': true });
+      setGenericModal({ boostErrorModal: true });
       return false;
     } catch (err) {
       console.log('err', err);

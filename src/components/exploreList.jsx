@@ -17,30 +17,27 @@ const ExploreList = ({ handleDaoCalculate }) => {
 
         let searchMatch = true;
         if (state.searchTerm) {
-          searchMatch =
-            dao.meta.name.toLowerCase().indexOf(state.searchTerm) > -1;
+          searchMatch = dao.meta.name.toLowerCase().indexOf(state.searchTerm) > -1;
         }
 
         let tagMatch = true;
         if (state.tags.length) {
-          tagMatch =
-            dao.meta?.tags.length &&
-            state.tags.some((tag) => dao.meta.tags.indexOf(tag) >= 0);
+          tagMatch = dao.meta?.tags.length
+            && state.tags.some((tag) => dao.meta.tags.indexOf(tag) >= 0);
         }
 
-        const memberCount =
-          dao.members.length > (state.filters.members[0] || 0);
+        const memberCount = dao.members.length > (state.filters.members[0] || 0);
         const versionMatch = state.filters.version.includes(dao.version);
         const purposeMatch = state.filters.purpose.includes(dao.meta.purpose);
         const networkMatch = state.filters.network.includes(dao.networkId);
 
         return (
-          searchMatch &&
-          tagMatch &&
-          memberCount &&
-          versionMatch &&
-          purposeMatch &&
-          networkMatch
+          searchMatch
+          && tagMatch
+          && memberCount
+          && versionMatch
+          && purposeMatch
+          && networkMatch
         );
       })
       .sort((a, b) => {
