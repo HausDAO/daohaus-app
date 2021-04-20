@@ -119,6 +119,7 @@ const Members = React.memo(({
         wrap={['wrap', null, null, 'nowrap']}
         justify='space-between'
         w={['100%', null, null, '50%']}
+
       >
         <ListSort sort={sort} setSort={setSort} options={membersSortOptions} />
         <MemberFilters filter={filter} setFilter={setFilter} />

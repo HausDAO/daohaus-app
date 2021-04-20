@@ -22,7 +22,7 @@ const ExploreFilters = () => {
     <>
       <Flex align='center' justify='flex-start' wrap='wrap'>
         <ExploreSearch />
-        <Box mr={1}>
+        <Box mr={6}>
           <ListSort sort={sort} setSort={setSort} options={SORT_OPTIONS} />
         </Box>
         <ExploreFilterList />
