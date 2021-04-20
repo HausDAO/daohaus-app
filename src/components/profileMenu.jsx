@@ -144,7 +144,7 @@ const ProfileMenu = ({ member }) => {
             {!isMember && member.exists && !member.jailed && hasSharesOrloot && (
               <MenuItem onClick={handleGuildkickClick}>GuildKick</MenuItem>
             )}
-            {!isMember && member.jailed && !member.kicked && hasSharesOrloot && (
+            {!isMember && member.jailed && hasSharesOrloot && (
               <MenuItem onClick={handleRageKick}>RageKick</MenuItem>
             )}
           </>
