@@ -51,7 +51,9 @@ const PullForm = ({
   const [loadToken, setLoadToken] = useState(false);
   const [balance, setBalance] = useState({ readable: 0, real: 0 });
 
-  const { handleSubmit, errors, register, watch, setValue } = useForm();
+  const {
+    handleSubmit, errors, register, watch, setValue,
+  } = useForm();
   const pullToken = watch('pullToken');
 
   const isDelegate = useMemo(() => {
@@ -135,7 +137,7 @@ const PullForm = ({
         actions: {
           onError: (error, txHash) => {
             errorToast({
-              title: `There was an error.`,
+              title: 'There was an error.',
             });
             resolvePoll(txHash);
             console.error(`Could not pull delegate rewards: ${error}`);
@@ -158,7 +160,7 @@ const PullForm = ({
     } catch (error) {
       console.error('error: ', error);
       errorToast({
-        title: `There was an error.`,
+        title: 'There was an error.',
         description: error.message || '',
       });
     }
@@ -173,10 +175,9 @@ const PullForm = ({
       ? valToDecimalString(values.pull, tokenAddress, uberTokens)
       : '0';
     console.log(initialAmount);
-    const withdrawAmt =
-      initialAmount > balance.real
-        ? BigInt(balance.real)
-        : BigInt(initialAmount);
+    const withdrawAmt = initialAmount > balance.real
+      ? BigInt(balance.real)
+      : BigInt(initialAmount);
     const difference = BigInt(balance.real) - BigInt(initialAmount);
     const expectedBalance = difference <= 0 ? 0 : difference;
 
@@ -195,7 +196,7 @@ const PullForm = ({
           actions: {
             onError: (error, txHash) => {
               errorToast({
-                title: `There was an error.`,
+                title: 'There was an error.',
               });
               resolvePoll(txHash);
               console.error(`Could not pull funds: ${error}`);
@@ -218,13 +219,15 @@ const PullForm = ({
           web3: injectedProvider,
           uberHausMinion: uberHausMinion.minionAddress,
           chainID: UBERHAUS_DATA.NETWORK,
-        })('pullGuildFunds')({ args, address, poll, onTxHash });
+        })('pullGuildFunds')({
+          args, address, poll, onTxHash,
+        });
       } catch (err) {
         setD2dProposalModal((prevState) => !prevState);
         setLoading(false);
         console.error('error: ', err);
         errorToast({
-          title: `There was an error.`,
+          title: 'There was an error.',
           description: err.message || '',
         });
       }

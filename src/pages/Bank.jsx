@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
-
 import { useParams, Link } from 'react-router-dom';
 import { Button } from '@chakra-ui/react';
 import { RiAddFill } from 'react-icons/ri';
+
 import BankList from '../components/BankList';
 import BankChart from '../components/bankChart';
 import MainViewLayout from '../components/mainViewLayout';
@@ -24,8 +24,8 @@ const Bank = ({
     address,
     injectedChain?.chainId,
     daochain,
-  ) &&
-    daoMember && (
+  )
+    && daoMember && (
       <Button
         as={Link}
         to={`/dao/${daochain}/${daoid}/proposals/new/whitelist`}
@@ -33,7 +33,7 @@ const Bank = ({
       >
         Add Asset
       </Button>
-    );
+  );
 
   useEffect(() => {
     const canSync = daoMember?.exists || delegate;
@@ -41,8 +41,8 @@ const Bank = ({
       setNeedsSync(
         currentDaoTokens.some((token) => {
           return (
-            token.contractBalances &&
-            token.contractBalances.token !== token.contractBalances.babe
+            token.contractBalances
+            && token.contractBalances.token !== token.contractBalances.babe
           );
         }),
       );

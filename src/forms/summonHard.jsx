@@ -17,7 +17,9 @@ import TextBox from '../components/TextBox';
 import { validateSummonresAndShares } from '../utils/summoning';
 import TimeInput from '../components/timeInput';
 
-const SummonHard = ({ daoData, handleSummon, networkName, isUberHaus }) => {
+const SummonHard = ({
+  daoData, handleSummon, networkName, isUberHaus,
+}) => {
   const [currentError, setCurrentError] = useState(null);
   const {
     register,
@@ -204,8 +206,7 @@ const SummonHard = ({ daoData, handleSummon, networkName, isUberHaus }) => {
                 required: true,
                 pattern: /^-?\d*\.?\d*$/,
                 validate: {
-                  lessThanDeposit: (val) =>
-                    val.length <= getValues('proposalDeposit').length,
+                  lessThanDeposit: (val) => val.length <= getValues('proposalDeposit').length,
                 },
               })}
             />

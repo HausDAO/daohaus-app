@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { useLocation, useParams } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
-import { Button, FormControl, Flex, Icon, Box } from '@chakra-ui/react';
+import {
+  Button, FormControl, Flex, Icon, Box,
+} from '@chakra-ui/react';
 import { RiErrorWarningLine } from 'react-icons/ri';
 
 import { useTX } from '../contexts/TXContext';
@@ -44,7 +46,9 @@ const GuildKickProposalForm = () => {
   const { daoMetaData } = useMetaData();
   const location = useLocation();
 
-  const { handleSubmit, errors, register, setValue, watch } = useForm();
+  const {
+    handleSubmit, errors, register, setValue, watch,
+  } = useForm();
 
   useEffect(() => {
     // TODO: expand to work for any search param on all forms
@@ -83,7 +87,7 @@ const GuildKickProposalForm = () => {
         actions: {
           onError: (error, txHash) => {
             errorToast({
-              title: `There was an error.`,
+              title: 'There was an error.',
             });
             resolvePoll(txHash);
             console.error(`Could not find a matching proposal: ${error}`);
@@ -115,7 +119,9 @@ const GuildKickProposalForm = () => {
         daoAddress: daoid,
         chainID: daochain,
         version: daoOverview.version,
-      })('submitGuildKickProposal')({ args, address, poll, onTxHash });
+      })('submitGuildKickProposal')({
+        args, address, poll, onTxHash,
+      });
     } catch (err) {
       setLoading(false);
       console.error('error: ', err);
@@ -169,19 +175,19 @@ const GuildKickProposalForm = () => {
             >
               Submit
             </Button>
-          ) : (
-            <Button
-              onClick={requestWallet}
-              isDisabled={injectedChain && daochain !== injectedChain?.chainId}
-            >
-              {`Connect
+            ) : (
+              <Button
+                onClick={requestWallet}
+                isDisabled={injectedChain && daochain !== injectedChain?.chainId}
+              >
+                {`Connect
               ${
                 injectedChain && daochain !== injectedChain?.chainId
                   ? `to ${chainByID(daochain).name}`
                   : 'Wallet'
               }`}
-            </Button>
-          )}
+              </Button>
+            )}
         </Box>
       </Flex>
     </form>

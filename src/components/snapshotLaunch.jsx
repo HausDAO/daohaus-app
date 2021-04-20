@@ -11,7 +11,9 @@ import {
 } from '@chakra-ui/react';
 import TextBox from './TextBox';
 
-const SnapshotLaunch = ({ handleLaunch, loading, setLoading, space }) => {
+const SnapshotLaunch = ({
+  handleLaunch, loading, setLoading, space,
+}) => {
   const { daochain, daoid } = useParams();
   const [snapshotSpace, setSnapshotSpace] = useState(null);
   const [step, setStep] = useState(1);
