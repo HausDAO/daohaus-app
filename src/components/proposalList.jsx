@@ -85,11 +85,14 @@ const ProposalsList = ({ proposals, customTerms }) => {
       );
       return;
     }
+    const isActiveFilter = option?.value === 'Active' || option?.value === 'Action Needed';
     searchMode.current = false;
     setFilter(option);
+    setSort({ name: isActiveFilter ? 'Oldest' : 'Newest', value: `submissionDate${isActiveFilter ? 'Asc' : 'Desc'}` });
   };
 
   const handleSort = (option) => {
+    console.log(option);
     if (!option?.value || !option?.name) {
       console.error(
         'Sort component did not update. Received incorrect data stucture',

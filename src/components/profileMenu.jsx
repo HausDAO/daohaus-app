@@ -103,6 +103,8 @@ const ProfileMenu = ({ member }) => {
 
   const hasSharesOrloot = +member.shares > 0 || +member.loot > 0;
 
+  console.log('member', member);
+
   return (
     <Menu>
       <MenuButton>
