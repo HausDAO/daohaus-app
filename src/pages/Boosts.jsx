@@ -79,7 +79,7 @@ const Boosts = ({ customTerms, daoMember, daoOverview, daoMetaData }) => {
                   <Button
                     as={RouterLink}
                     variant={boost.link ? 'outline' : null}
-                    to={`/dao/${daochain}/${daoid}/settings/${boost.successRoute}`}
+                    to={canInteract && `/dao/${daochain}/${daoid}/settings/${boost.successRoute}`}
                     textTransform='uppercase'
                     disabled={!canInteract}
                   >
@@ -91,7 +91,6 @@ const Boosts = ({ customTerms, daoMember, daoOverview, daoMetaData }) => {
                     as={RouterLink}
                     to={`/dao/${daochain}/${daoid}/boost/${boost.link}`}
                     textTransform='uppercase'
-                    disabled={!canInteract}
                     rightIcon={<RiArrowRightLine />}
                   >
                     Go

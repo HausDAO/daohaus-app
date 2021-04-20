@@ -6,23 +6,22 @@ export const getDateRange = (timeframe, balances, createdAt) => {
         : new Date(balances[0].timestamp * 1000),
       end: new Date(balances[balances.length - 1].timestamp * 1000),
     };
-  } 
-    let startDate = new Date();
-    startDate.setMonth(startDate.getMonth() - timeframe.value);
-    if (startDate.getTime() < +createdAt * 1000) {
-      startDate = new Date(createdAt * 1000);
-    }
+  }
+  let startDate = new Date();
+  startDate.setMonth(startDate.getMonth() - timeframe.value);
+  if (startDate.getTime() < +createdAt * 1000) {
+    startDate = new Date(createdAt * 1000);
+  }
 
-    let endDate = new Date(balances[balances.length - 1].timestamp * 1000);
-    if (endDate.getTime() < startDate.getTime()) {
-      endDate = new Date();
-    }
+  let endDate = new Date(balances[balances.length - 1].timestamp * 1000);
+  if (endDate.getTime() < startDate.getTime()) {
+    endDate = new Date();
+  }
 
-    return {
-      start: startDate,
-      end: endDate,
-    };
-  
+  return {
+    start: startDate,
+    end: endDate,
+  };
 };
 
 export const addDays = (date, days = 1) => {
@@ -56,9 +55,8 @@ export const getDatesArray = (start, end, range = []) => {
 export const balancesWithValue = (balances, prices) => {
   return balances.reduce((list, balance) => {
     if (prices[balance.tokenAddress]) {
-      const value =
-        (balance.balance / 10 ** balance.tokenDecimals) *
-        prices[balance.tokenAddress].usd;
+      const value = (balance.balance / 10 ** balance.tokenDecimals)
+        * prices[balance.tokenAddress].usd;
 
       list.push({
         ...balance,
@@ -110,5 +108,3 @@ export const groupBalancesMemberToDateRange = (balances, dates) => {
     };
   });
 };
-
-
