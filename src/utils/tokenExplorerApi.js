@@ -47,14 +47,14 @@ const parseEtherscan = async (json, address, daochain) => {
     );
 
     let erc721s = balanceData
-      .filter((token) => token.type === 'ERC-721')
-      .map(async (b) => {
+      .filter(token => token.type === 'ERC-721')
+      .map(async b => {
         const promises = [];
         const nftService = NFTService({
           tokenAddress: b.contractAddress,
           chainID: daochain,
         });
-        for (let i = 0; i < b.balance; i =+ 1) {
+        for (let i = 0; i < b.balance; i += 1) {
           const tid = nftService('tokenOfOwnerByIndex')({
             accountAddr: address,
             index: i,
@@ -66,13 +66,13 @@ const parseEtherscan = async (json, address, daochain) => {
       });
     erc721s = await Promise.all(erc721s);
 
-    erc721s.map(async (nft) => {
+    erc721s.map(async nft => {
       const promises2 = [];
       const nftService = NFTService({
         tokenAddress: nft.contractAddress,
         chainID: daochain,
       });
-      nft.tokenIds.map((tid) => {
+      nft.tokenIds.map(tid => {
         if (tid) {
           const uri = nftService('tokenURI')({
             tokenId: tid,
@@ -97,7 +97,7 @@ export const getEtherscanTokenData = async (address, daochain) => {
   return tokenData;
 };
 
-const fetchBlockScoutAPIData = async (address) => {
+const fetchBlockScoutAPIData = async address => {
   try {
     const daochain = '0x64';
     const url = `${chainByID(daochain).tokenlist_api_url}${address}`;
@@ -113,18 +113,33 @@ const fetchBlockScoutAPIData = async (address) => {
   }
 };
 
+export const fetchNativeBalance = async address => {
+  try {
+    const url = `https://blockscout.com/xdai/mainnet/api?module=account&action=balance&address=${address}`;
+    const response = await fetch(url);
+    const json = await response.json();
+    if (!json.result || json.status === '0') {
+      const msg = json.message;
+      throw new Error(msg);
+    }
+    return json;
+  } catch (error) {
+    throw new Error(error);
+  }
+};
 const parseBlockScout = async (json, address) => {
   const tokenData = await fetchTokenData();
   const daochain = '0x64';
+
   let erc721s = json.result
-    .filter((token) => token.type === 'ERC-721')
-    .map(async (b) => {
+    .filter(token => token.type === 'ERC-721')
+    .map(async b => {
       const promises = [];
       const nftService = NFTService({
         tokenAddress: b.contractAddress,
         chainID: daochain,
       });
-      for (let i = 0; i < b.balance; i =+ 1) {
+      for (let i = 0; i < +b.balance; i += 1) {
         const tid = nftService('tokenOfOwnerByIndex')({
           accountAddr: address,
           index: i,
@@ -136,13 +151,13 @@ const parseBlockScout = async (json, address) => {
     });
   erc721s = await Promise.all(erc721s);
 
-  erc721s.map(async (nft) => {
+  erc721s.map(async nft => {
     const promises2 = [];
     const nftService = NFTService({
       tokenAddress: nft.contractAddress,
       chainID: daochain,
     });
-    nft.tokenIds.map((tid) => {
+    nft.tokenIds.map(tid => {
       const uri = nftService('tokenURI')({
         tokenId: tid,
       });
@@ -155,8 +170,8 @@ const parseBlockScout = async (json, address) => {
   erc721s = await Promise.all(erc721s);
 
   const erc20s = json.result
-    .filter((token) => token.type === 'ERC-20')
-    .map((t) => {
+    .filter(token => token.type === 'ERC-20')
+    .map(t => {
       t.usd = tokenData[t.contractAddress.toLowerCase()]?.price || 0;
       t.totalUSD = parseFloat(+t.balance / 10 ** +t.decimals) * +t.usd;
 
@@ -167,7 +182,7 @@ const parseBlockScout = async (json, address) => {
   return [...erc20s, ...erc721s];
 };
 
-export const getBlockScoutTokenData = async (address) => {
+export const getBlockScoutTokenData = async address => {
   const json = await fetchBlockScoutAPIData(address);
   const tokenData = parseBlockScout(json, address);
   return tokenData;
