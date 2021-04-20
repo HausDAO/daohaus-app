@@ -12,8 +12,12 @@ const SnapshotCard = ({ snapshotId, snapshot }) => {
 
   useEffect(() => {
     const getVotes = async () => {
-      const localVotes = await getSnapshotVotes(snapshot.msg.space, snapshotId);
-      setVotes(localVotes);
+      try {
+        const localVotes = await getSnapshotVotes(snapshot.msg.space, snapshotId);
+        setVotes(localVotes);
+      } catch (err) {
+        console.log(err);
+      }
     };
     getVotes();
   }, []);

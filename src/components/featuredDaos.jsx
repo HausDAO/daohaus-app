@@ -17,7 +17,7 @@ const FeaturedDaos = () => (
   <>
     <Flex justify='space-between'>
       <TextBox mb={6}>Featured DAOs</TextBox>
-      <TextBox as={RouterLink} to='/explore' colorScheme='secondary.500'>
+      <TextBox as={RouterLink} to='/explore' color='secondary.500'>
         Explore
       </TextBox>
     </Flex>

@@ -159,3 +159,13 @@ export const getSnapshotVotes = async (space, snapshotId) => {
     throw new Error(err);
   }
 };
+
+export const getSnapshotSpaces = async () => {
+  const snapshotSpacesUrl = `${snapshotUrl}/spaces`;
+  try {
+    const response = await fetch(snapshotSpacesUrl);
+    return response.json();
+  } catch (err) {
+    throw new Error(err);
+  }
+};
