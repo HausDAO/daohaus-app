@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from 'react';
-import { Flex, Stack, Button, Link, Spinner } from '@chakra-ui/react';
+import {
+  Flex, Stack, Button, Link, Spinner,
+} from '@chakra-ui/react';
 import { RiAddFill } from 'react-icons/ri';
 import MainViewLayout from '../components/mainViewLayout';
 import SnapshotCard from '../components/snapshotCard';
@@ -36,18 +38,18 @@ const Snapshot = ({ isMember, daoMetaData }) => {
     <MainViewLayout header='Snapshots' headerEl={Object.keys(snapshots).length > 0 && newSnapshotButton} isDao>
       <Flex as={Stack} direction='column' spacing={4}>
         {!loading ? (
-          Object.keys(snapshots).length > 0 ?
-          Object.keys(snapshots).map((snapshot) => (
-            <SnapshotCard
-              key={snapshots[snapshot].sig}
-              snapshotId={snapshot}
-              snapshot={snapshots[snapshot]}
-            />
-          )) : (
-            <BoostNotActive />
-          )) : (
-            <Spinner size='xl' />
-          )}
+          Object.keys(snapshots).length > 0
+            ? Object.keys(snapshots).map((snapshot) => (
+              <SnapshotCard
+                key={snapshots[snapshot].sig}
+                snapshotId={snapshot}
+                snapshot={snapshots[snapshot]}
+              />
+            )) : (
+              <BoostNotActive />
+            )) : (
+              <Spinner size='xl' />
+        )}
       </Flex>
     </MainViewLayout>
   );

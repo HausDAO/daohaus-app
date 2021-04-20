@@ -12,7 +12,9 @@ import { getApiMetadata } from './metadata';
 
 export const graphFetchAll = async (args, items = [], skip = 0) => {
   try {
-    const { endpoint, query, variables, subfield } = args;
+    const {
+      endpoint, query, variables, subfield,
+    } = args;
     const result = await graphQuery({
       endpoint,
       query,
@@ -100,16 +102,14 @@ const completeQueries = {
         rageQuits: activity.rageQuits,
         title: activity.title,
         version: activity.version,
-        proposals: activity.proposals.map((proposal) =>
-          proposalResolver(proposal, {
-            status: true,
-            title: true,
-            description: true,
-            link: true,
-            hash: true,
-            proposalType: true,
-          }),
-        ),
+        proposals: activity.proposals.map((proposal) => proposalResolver(proposal, {
+          status: true,
+          title: true,
+          description: true,
+          link: true,
+          hash: true,
+          proposalType: true,
+        })),
       };
 
       if (setter.setDaoActivities) {
@@ -223,14 +223,12 @@ export const hubChainQuery = async ({
             ...dao,
             moloch: {
               ...omit('proposals', dao.moloch),
-              proposals: dao.moloch.proposals.map((proposal) =>
-                proposalResolver(proposal, {
-                  proposalType: true,
-                  description: true,
-                  title: true,
-                  activityFeed: true,
-                }),
-              ),
+              proposals: dao.moloch.proposals.map((proposal) => proposalResolver(proposal, {
+                proposalType: true,
+                description: true,
+                title: true,
+                activityFeed: true,
+              })),
             },
           };
 
@@ -240,10 +238,9 @@ export const hubChainQuery = async ({
           };
         })
         .filter((dao) => {
-          const notHiddenAndHasMetaOrIsUnregisteredSummoner =
-            (dao.meta && !dao.meta.hide) ||
-            (!dao.meta &&
-              variables.memberAddress.toLowerCase() === dao.moloch.summoner);
+          const notHiddenAndHasMetaOrIsUnregisteredSummoner = (dao.meta && !dao.meta.hide)
+            || (!dao.meta
+              && variables.memberAddress.toLowerCase() === dao.moloch.summoner);
           return notHiddenAndHasMetaOrIsUnregisteredSummoner;
         });
 

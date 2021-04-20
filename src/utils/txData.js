@@ -23,14 +23,13 @@ export const DISPLAY_NAMES = {
   summonMoloch: 'Summon Dao',
 };
 
-const addPopupModalData = (tx) =>
-  tx?.action
-    ? {
-        ...tx,
-        ...POPUP_CONTENT[tx.action],
-        displayName: DISPLAY_NAMES[tx.action],
-      }
-    : null;
+const addPopupModalData = (tx) => (tx?.action
+  ? {
+    ...tx,
+    ...POPUP_CONTENT[tx.action],
+    displayName: DISPLAY_NAMES[tx.action],
+  }
+  : null);
 export const getLastTx = (TXs) => {
   return TXs?.length ? addPopupModalData(TXs[0]) : null;
 };

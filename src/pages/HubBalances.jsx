@@ -17,8 +17,7 @@ const HubBalances = () => {
     chains: [],
     data: [],
   });
-  const hasLoadedBalanceData =
-    balancesGraphData.chains.length === Object.keys(supportedChains).length;
+  const hasLoadedBalanceData = balancesGraphData.chains.length === Object.keys(supportedChains).length;
 
   useEffect(() => {
     if (address) {

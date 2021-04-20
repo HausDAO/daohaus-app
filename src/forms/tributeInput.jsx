@@ -24,7 +24,9 @@ import { useTX } from '../contexts/TXContext';
 import { createPoll } from '../services/pollService';
 import { useUser } from '../contexts/UserContext';
 
-const TributeInput = ({ register, setValue, getValues, setError }) => {
+const TributeInput = ({
+  register, setValue, getValues, setError,
+}) => {
   const [unlocked, setUnlocked] = useState(true);
   const [balance, setBalance] = useState(0);
   const [loading, setLoading] = useState(false);
@@ -40,12 +42,10 @@ const TributeInput = ({ register, setValue, getValues, setError }) => {
     if (daoOverview && !tokenData.length) {
       const depositTokenAddress = daoOverview.depositToken?.tokenAddress;
       const depositToken = daoOverview.tokenBalances?.find(
-        (token) =>
-          token.guildBank && token.token.tokenAddress === depositTokenAddress,
+        (token) => token.guildBank && token.token.tokenAddress === depositTokenAddress,
       );
       const tokenArray = daoOverview.tokenBalances.filter(
-        (token) =>
-          token.guildBank && token.token.tokenAddress !== depositTokenAddress,
+        (token) => token.guildBank && token.token.tokenAddress !== depositTokenAddress,
       );
       tokenArray.unshift(depositToken);
       console.log('tokenArray', tokenArray);
@@ -85,7 +85,7 @@ const TributeInput = ({ register, setValue, getValues, setError }) => {
         actions: {
           onError: (error, txHash) => {
             errorToast({
-              title: `There was an error.`,
+              title: 'There was an error.',
             });
             resolvePoll(txHash);
             console.error(`Could not find a matching proposal: ${error}`);
@@ -117,10 +117,10 @@ const TributeInput = ({ register, setValue, getValues, setError }) => {
   const checkUnlocked = async (token, amount) => {
     // console.log('check', token, amount);
     if (
-      amount === '' ||
-      !token ||
-      typeof +amount !== 'number' ||
-      +amount === 0
+      amount === ''
+      || !token
+      || typeof +amount !== 'number'
+      || +amount === 0
     ) {
       setUnlocked(true);
       return;
@@ -208,8 +208,8 @@ const TributeInput = ({ register, setValue, getValues, setError }) => {
           top='-30px'
         >
           {`Max: 
-          ${balance &&
-            ethers.utils.commify(
+          ${balance
+            && ethers.utils.commify(
               parseFloat(utils.fromWei(balance)).toFixed(4),
             )}`}
         </Button>

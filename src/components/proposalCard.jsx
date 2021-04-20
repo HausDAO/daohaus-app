@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { utils } from 'web3';
-import { Flex, Box, Skeleton, Badge, Icon } from '@chakra-ui/react';
+import {
+  Flex, Box, Skeleton, Badge, Icon,
+} from '@chakra-ui/react';
 import { FaThumbsDown, FaThumbsUp } from 'react-icons/fa';
 import { format } from 'date-fns';
 
@@ -92,8 +94,8 @@ const ProposalCard = ({ proposal, customTerms }) => {
                       <Badge
                         colorScheme='green'
                         variant={
-                          +proposal.yesShares > +proposal.noShares &&
-                          status !== 'Failed'
+                          +proposal.yesShares > +proposal.noShares
+                          && status !== 'Failed'
                             ? 'solid'
                             : 'outline'
                         }
@@ -202,8 +204,8 @@ const ProposalCard = ({ proposal, customTerms }) => {
                   {`${
                     proposal?.paymentRequested
                       ? numberWithCommas(
-                          utils.fromWei(proposal.paymentRequested),
-                        )
+                        utils.fromWei(proposal.paymentRequested),
+                      )
                       : '--'
                   } ${proposal.paymentTokenSymbol || 'WETH'}`}
                 </Box>

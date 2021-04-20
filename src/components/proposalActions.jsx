@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useParams } from 'react-router-dom';
-import { Box, Button, Flex, Icon, Skeleton, Tooltip } from '@chakra-ui/react';
+import {
+  Box, Button, Flex, Icon, Skeleton, Tooltip,
+} from '@chakra-ui/react';
 import { FaThumbsUp, FaThumbsDown } from 'react-icons/fa';
 import { RiErrorWarningLine, RiQuestionLine } from 'react-icons/ri';
 import { isAfter, isBefore } from 'date-fns';
@@ -74,14 +76,14 @@ const ProposalVote = ({
 
   const currentlyVoting = (proposal) => {
     return (
-      isBefore(Date.now(), new Date(+proposal?.votingPeriodEnds * 1000)) &&
-      isAfter(Date.now(), new Date(+proposal?.votingPeriodStarts * 1000))
+      isBefore(Date.now(), new Date(+proposal?.votingPeriodEnds * 1000))
+      && isAfter(Date.now(), new Date(+proposal?.votingPeriodStarts * 1000))
     );
   };
 
   const userRejectedToast = () => {
     errorToast({
-      title: `User rejected transaction signature.`,
+      title: 'User rejected transaction signature.',
     });
   };
 
@@ -123,9 +125,9 @@ const ProposalVote = ({
         chainID: daochain,
       })('balanceOf')(address);
       setEnoughDeposit(
-        +overview?.proposalDeposit === 0 ||
-          +depositTokenBalance / 10 ** overview?.depositToken.decimals >
-            +overview?.proposalDeposit / 10 ** overview?.depositToken.decimals,
+        +overview?.proposalDeposit === 0
+          || +depositTokenBalance / 10 ** overview?.depositToken.decimals
+            > +overview?.proposalDeposit / 10 ** overview?.depositToken.decimals,
       );
     };
     if (overview?.depositToken && address) {
@@ -145,7 +147,7 @@ const ProposalVote = ({
         actions: {
           onError: (error, txHash) => {
             errorToast({
-              title: `There was an error.`,
+              title: 'There was an error.',
             });
             resolvePoll(txHash);
             console.error(`Could not find a matching proposal: ${error}`);
@@ -166,7 +168,9 @@ const ProposalVote = ({
         daoAddress: daoid,
         chainID: daochain,
         version: overview.version,
-      })('cancelProposal')({ args, address, poll, onTxHash });
+      })('cancelProposal')({
+        args, address, poll, onTxHash,
+      });
     } catch (err) {
       setLoading(false);
       console.log('error: ', err);
@@ -190,7 +194,7 @@ const ProposalVote = ({
         actions: {
           onError: (error, txHash) => {
             errorToast({
-              title: `Failed to unlock token`,
+              title: 'Failed to unlock token',
             });
             resolvePoll(txHash);
             console.error(`Could not unlock token: ${error}`);
@@ -211,7 +215,9 @@ const ProposalVote = ({
         web3: injectedProvider,
         chainID: daochain,
         tokenAddress: token,
-      })('approve')({ args, address, poll, onTxHash });
+      })('approve')({
+        args, address, poll, onTxHash,
+      });
     } catch (err) {
       console.log('error:', err);
       setLoading(false);
@@ -230,7 +236,7 @@ const ProposalVote = ({
         actions: {
           onError: (error, txHash) => {
             errorToast({
-              title: `There was an error.`,
+              title: 'There was an error.',
             });
             resolvePoll(txHash);
             console.error(`Could not find a matching proposal: ${error}`);
@@ -251,7 +257,9 @@ const ProposalVote = ({
         daoAddress: daoid,
         chainID: daochain,
         version: overview.version,
-      })('sponsorProposal')({ args, address, poll, onTxHash });
+      })('sponsorProposal')({
+        args, address, poll, onTxHash,
+      });
     } catch (err) {
       setLoading(false);
       console.log('error: ', err);
@@ -271,7 +279,7 @@ const ProposalVote = ({
         actions: {
           onError: (error, txHash) => {
             errorToast({
-              title: `There was an error.`,
+              title: 'There was an error.',
             });
             resolvePoll(txHash);
             console.error(`Could not find a matching proposal: ${error}`);
@@ -291,7 +299,9 @@ const ProposalVote = ({
         daoAddress: daoid,
         chainID: daochain,
         version: overview.version,
-      })('submitVote')({ args, address, poll, onTxHash });
+      })('submitVote')({
+        args, address, poll, onTxHash,
+      });
     } catch (err) {
       setLoading(false);
       console.log('error: ', err);
@@ -323,7 +333,7 @@ const ProposalVote = ({
         actions: {
           onError: (error, txHash) => {
             errorToast({
-              title: `There was an error.`,
+              title: 'There was an error.',
             });
             resolvePoll(txHash);
             console.error(`Could not find a matching proposal: ${error}`);
@@ -344,7 +354,9 @@ const ProposalVote = ({
         daoAddress: daoid,
         chainID: daochain,
         version: overview.version,
-      })(processFn)({ args, address, poll, onTxHash });
+      })(processFn)({
+        args, address, poll, onTxHash,
+      });
     } catch (err) {
       setLoading(false);
       console.log('error: ', err);
@@ -367,13 +379,13 @@ const ProposalVote = ({
   return (
     <>
       <ContentBox position='relative'>
-        {!daoConnectedAndSameChain(address, daochain, injectedChain?.chainId) &&
-          ((proposal?.status === 'Unsponsored' && !proposal?.proposalIndex) ||
-            proposal?.status === 'ReadyForProcessing') && <NetworkOverlay />}
-        {!daoConnectedAndSameChain(address, daochain, injectedChain?.chainId) &&
-          (proposal?.status !== 'Unsponsored' || proposal?.proposalIndex) &&
-          proposal?.status !== 'Cancelled' &&
-          !proposal?.status === 'ReadyForProcessing' && <NetworkOverlay />}
+        {!daoConnectedAndSameChain(address, daochain, injectedChain?.chainId)
+          && ((proposal?.status === 'Unsponsored' && !proposal?.proposalIndex)
+            || proposal?.status === 'ReadyForProcessing') && <NetworkOverlay />}
+        {!daoConnectedAndSameChain(address, daochain, injectedChain?.chainId)
+          && (proposal?.status !== 'Unsponsored' || proposal?.proposalIndex)
+          && proposal?.status !== 'Cancelled'
+          && !proposal?.status === 'ReadyForProcessing' && <NetworkOverlay />}
         {proposal?.status === 'Unsponsored' && !proposal?.proposalIndex && (
           <Flex justify='center' direction='column'>
             <Flex justify='center' mb={4}>
@@ -390,8 +402,8 @@ const ProposalVote = ({
                   </Tooltip>
                 </TextBox>
                 <TextBox variant='value' size='xl' textAlign='center'>
-                  {`${overview?.proposalDeposit /
-                    10 ** overview?.depositToken.decimals}
+                  {`${overview?.proposalDeposit
+                    / 10 ** overview?.depositToken.decimals}
                   ${overview?.depositToken?.symbol}`}
                   {!enoughDeposit ? (
                     <Tooltip
@@ -413,10 +425,10 @@ const ProposalVote = ({
             <Flex justify='space-around'>
               {canInteract(daoMember, delegate) ? (
                 <>
-                  {getAllowance(daoMember, delegate) *
-                    10 ** overview?.depositToken?.decimals >=
-                    +overview?.proposalDeposit ||
-                  +overview?.proposalDeposit === 0 ? (
+                  {getAllowance(daoMember, delegate)
+                    * 10 ** overview?.depositToken?.decimals
+                    >= +overview?.proposalDeposit
+                  || +overview?.proposalDeposit === 0 ? (
                     <Button
                       onClick={() => sponsorProposal(proposal?.proposalId)}
                       isDisabled={!enoughDeposit}
@@ -424,14 +436,14 @@ const ProposalVote = ({
                     >
                       Sponsor
                     </Button>
-                  ) : (
-                    <Button
-                      onClick={() => unlock(overview.depositToken.tokenAddress)}
-                      isLoading={loading}
-                    >
-                      Unlock
-                    </Button>
-                  )}
+                    ) : (
+                      <Button
+                        onClick={() => unlock(overview.depositToken.tokenAddress)}
+                        isLoading={loading}
+                      >
+                        Unlock
+                      </Button>
+                    )}
                 </>
               ) : (
                 <Tooltip
@@ -456,8 +468,8 @@ const ProposalVote = ({
             </Flex>
           </Flex>
         )}
-        {(proposal?.status !== 'Unsponsored' || proposal?.proposalIndex) &&
-          proposal?.status !== 'Cancelled' && (
+        {(proposal?.status !== 'Unsponsored' || proposal?.proposalIndex)
+          && proposal?.status !== 'Cancelled' && (
             <>
               <Flex mb={6} w='100%'>
                 <Skeleton
@@ -472,9 +484,9 @@ const ProposalVote = ({
                         address,
                         daochain,
                         injectedChain?.chainId,
-                      ) &&
-                        canInteract(daoMember, delegate) &&
-                        memberVote(proposal, address) === null && (
+                      )
+                        && canInteract(daoMember, delegate)
+                        && memberVote(proposal, address) === null && (
                           <Flex w='48%' justify='space-around'>
                             <Flex
                               p={3}
@@ -514,7 +526,7 @@ const ProposalVote = ({
                               />
                             </Flex>
                           </Flex>
-                        )}
+                      )}
                       <Flex
                         justify={
                           daoMember && memberVote(proposal, address) === null
@@ -536,13 +548,13 @@ const ProposalVote = ({
                               : 'md'
                           }
                         >
-                          {+proposal?.noShares > +proposal?.yesShares &&
-                            'Not Passing'}
-                          {+proposal?.yesShares > +proposal?.noShares &&
-                            'Currently Passing'}
-                          {+proposal?.yesShares === 0 &&
-                            +proposal?.noShares === 0 &&
-                            'Awaiting Votes'}
+                          {+proposal?.noShares > +proposal?.yesShares
+                            && 'Not Passing'}
+                          {+proposal?.yesShares > +proposal?.noShares
+                            && 'Currently Passing'}
+                          {+proposal?.yesShares === 0
+                            && +proposal?.noShares === 0
+                            && 'Awaiting Votes'}
                         </Box>
                       </Flex>
                     </>
@@ -552,14 +564,14 @@ const ProposalVote = ({
                         <TextBox size='xl' variant='value'>
                           {proposal?.status === 'Failed' && 'Failed'}
                           {proposal?.status === 'Passed' && 'Passed'}
-                          {(proposal?.status === 'GracePeriod' ||
-                            proposal?.status === 'ReadyForProcessing') &&
-                            proposal.yesShares > proposal.noShares &&
-                            'Passed'}
-                          {(proposal?.status === 'GracePeriod' ||
-                            proposal?.status === 'ReadyForProcessing') &&
-                            proposal.noShares > proposal.yesShares &&
-                            'Failed'}
+                          {(proposal?.status === 'GracePeriod'
+                            || proposal?.status === 'ReadyForProcessing')
+                            && proposal.yesShares > proposal.noShares
+                            && 'Passed'}
+                          {(proposal?.status === 'GracePeriod'
+                            || proposal?.status === 'ReadyForProcessing')
+                            && proposal.noShares > proposal.yesShares
+                            && 'Failed'}
                         </TextBox>
                       </Flex>
                     </>
@@ -586,9 +598,9 @@ const ProposalVote = ({
                     animate={{
                       width: [
                         '0%',
-                        `${(+proposal?.yesShares /
-                          (+proposal.yesShares + +proposal.noShares)) *
-                          100}%`,
+                        `${(+proposal?.yesShares
+                          / (+proposal.yesShares + +proposal.noShares))
+                          * 100}%`,
                       ],
                     }}
                     transition={{ duration: 0.5 }}
@@ -601,9 +613,9 @@ const ProposalVote = ({
                     animate={{
                       width: [
                         '0%',
-                        `${(+proposal?.noShares /
-                          (+proposal.yesShares + +proposal.noShares)) *
-                          100}%`,
+                        `${(+proposal?.noShares
+                          / (+proposal.yesShares + +proposal.noShares))
+                          * 100}%`,
                       ],
                     }}
                     transition={{ duration: 0.5 }}
@@ -623,11 +635,11 @@ const ProposalVote = ({
                 </Skeleton>
               </Flex>
             </>
-          )}
+        )}
 
-        {daoConnectedAndSameChain(address, daochain, injectedChain?.chainId) &&
-          proposal?.status === 'ReadyForProcessing' &&
-          (nextProposalToProcess?.proposalId === proposal?.proposalId ? (
+        {daoConnectedAndSameChain(address, daochain, injectedChain?.chainId)
+          && proposal?.status === 'ReadyForProcessing'
+          && (nextProposalToProcess?.proposalId === proposal?.proposalId ? (
             <Flex justify='center' pt='10px'>
               <Flex direction='column'>
                 <Button

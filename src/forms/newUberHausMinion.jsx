@@ -40,7 +40,9 @@ const NewUberHausMinion = ({
   const { refetch } = useDao();
   const { cachePoll, resolvePoll } = useUser();
   const { errorToast, successToast, setGenericModal } = useOverlay();
-  const { handleSubmit, register, setValue, watch } = useForm();
+  const {
+    handleSubmit, register, setValue, watch,
+  } = useForm();
   const [step, setStep] = useState(1);
   const [pendingTx, setPendingTx] = useState(null);
   const [missingDelegate, setMissingDelegate] = useState(false);
@@ -52,9 +54,8 @@ const NewUberHausMinion = ({
       const hasShares = +member.shares > 0;
       const isNotDelegate = member.memberAddress !== uberDelegate;
       const isNotUberMemberOrDelegate = uberMembers.every(
-        (uberMember) =>
-          member.memberAddress !== uberMember.memberAddress &&
-          member.memberAddress !== uberMember.delegateKey,
+        (uberMember) => member.memberAddress !== uberMember.memberAddress
+          && member.memberAddress !== uberMember.delegateKey,
       );
       if (hasShares && isNotDelegate && isNotUberMemberOrDelegate) {
         return member;
@@ -94,7 +95,7 @@ const NewUberHausMinion = ({
           onError: (error, txHash) => {
             console.error(`error: ${error}`);
             errorToast({
-              title: `There was an error.`,
+              title: 'There was an error.',
             });
             resolvePoll(txHash);
             setStep(1);
@@ -132,7 +133,7 @@ const NewUberHausMinion = ({
       setLoading(false);
       setStep(1);
       errorToast({
-        title: `There was an error.`,
+        title: 'There was an error.',
         description: err?.message || '',
       });
     }

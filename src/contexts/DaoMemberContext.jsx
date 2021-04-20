@@ -87,12 +87,12 @@ export const DaoMemberProvider = ({
 
     const canVote = daoMember || delegate;
     if (
-      canVote &&
-      memberWalletRef.current !== address &&
-      overview &&
-      daochain &&
-      daoid &&
-      address
+      canVote
+      && memberWalletRef.current !== address
+      && overview
+      && daochain
+      && daoid
+      && address
     ) {
       assembleMemberWallet();
     }

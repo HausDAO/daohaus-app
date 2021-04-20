@@ -1,4 +1,6 @@
-import { Button, Input, InputGroup, InputRightAddon } from '@chakra-ui/react';
+import {
+  Button, Input, InputGroup, InputRightAddon,
+} from '@chakra-ui/react';
 import { utils } from 'web3';
 import { MaxUint256 } from '@ethersproject/constants';
 
@@ -32,12 +34,10 @@ const CcoTributeInput = ({
     if (daoOverview && !tokenData.length) {
       const depositTokenAddress = daoOverview.depositToken?.tokenAddress;
       const depositToken = daoOverview.tokenBalances?.find(
-        (token) =>
-          token.guildBank && token.token.tokenAddress === depositTokenAddress,
+        (token) => token.guildBank && token.token.tokenAddress === depositTokenAddress,
       );
       const tokenArray = daoOverview.tokenBalances.filter(
-        (token) =>
-          token.guildBank && token.token.tokenAddress !== depositTokenAddress,
+        (token) => token.guildBank && token.token.tokenAddress !== depositTokenAddress,
       );
       tokenArray.unshift(depositToken);
       setTokenData(
@@ -75,7 +75,7 @@ const CcoTributeInput = ({
         actions: {
           onError: (error, txHash) => {
             errorToast({
-              title: `There was an error.`,
+              title: 'There was an error.',
             });
             resolvePoll(txHash);
             console.error(`Could not find a matching proposal: ${error}`);
@@ -104,10 +104,10 @@ const CcoTributeInput = ({
 
   const checkUnlocked = async (token, amount) => {
     if (
-      amount === '' ||
-      !token ||
-      typeof +amount !== 'number' ||
-      +amount === 0
+      amount === ''
+      || !token
+      || typeof +amount !== 'number'
+      || +amount === 0
     ) {
       setUnlocked(true);
       return;

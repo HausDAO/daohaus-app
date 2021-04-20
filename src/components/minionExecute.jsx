@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
-import { Box, Button, Flex, Spinner } from '@chakra-ui/react';
+import {
+  Box, Button, Flex, Spinner,
+} from '@chakra-ui/react';
 
 import { useInjectedProvider } from '../contexts/InjectedProviderContext';
 import { useUser } from '../contexts/UserContext';
@@ -40,8 +42,8 @@ const MinionExecute = ({ proposal }) => {
           setShouldFetch(false);
           setLoading(false);
         } else if (
-          proposal.proposalType === PROPOSAL_TYPES.MINION_UBER_STAKE ||
-          proposal.proposalType === PROPOSAL_TYPES.MINION_UBER_RQ
+          proposal.proposalType === PROPOSAL_TYPES.MINION_UBER_STAKE
+          || proposal.proposalType === PROPOSAL_TYPES.MINION_UBER_RQ
         ) {
           const action = await UberHausMinionService({
             uberHausMinion: proposal.minionAddress,
@@ -66,10 +68,10 @@ const MinionExecute = ({ proposal }) => {
       }
     };
     if (
-      proposal?.proposalId &&
-      proposal?.minionAddress &&
-      daochain &&
-      shouldFetch
+      proposal?.proposalId
+      && proposal?.minionAddress
+      && daochain
+      && shouldFetch
     ) {
       getMinionDetails();
     }
@@ -89,7 +91,7 @@ const MinionExecute = ({ proposal }) => {
         actions: {
           onError: (error, txHash) => {
             errorToast({
-              title: `There was an error.`,
+              title: 'There was an error.',
             });
             resolvePoll(txHash);
             console.error(`Could not find a matching proposal: ${error}`);
@@ -114,22 +116,28 @@ const MinionExecute = ({ proposal }) => {
           web3: injectedProvider,
           minion: proposal.minionAddress,
           chainID: daochain,
-        })('executeAction')({ args, address, poll, onTxHash });
+        })('executeAction')({
+          args, address, poll, onTxHash,
+        });
       } else if (
-        proposal.proposalType === PROPOSAL_TYPES.MINION_UBER_STAKE ||
-        proposal.proposalType === PROPOSAL_TYPES.MINION_UBER_RQ
+        proposal.proposalType === PROPOSAL_TYPES.MINION_UBER_STAKE
+        || proposal.proposalType === PROPOSAL_TYPES.MINION_UBER_RQ
       ) {
         await UberHausMinionService({
           web3: injectedProvider,
           uberHausMinion: proposal.minionAddress,
           chainID: daochain,
-        })('executeAction')({ args, address, poll, onTxHash });
+        })('executeAction')({
+          args, address, poll, onTxHash,
+        });
       } else if (proposal.proposalType === PROPOSAL_TYPES.MINION_UBER_DEL) {
         await UberHausMinionService({
           web3: injectedProvider,
           uberHausMinion: proposal.minionAddress,
           chainID: daochain,
-        })('executeAppointment')({ args, address, poll, onTxHash });
+        })('executeAppointment')({
+          args, address, poll, onTxHash,
+        });
       } else {
         console.error('Could not find minion type');
       }
@@ -142,8 +150,8 @@ const MinionExecute = ({ proposal }) => {
   const getMinionAction = () => {
     if (minionDetails?.executed) return <Box>Executed</Box>;
     if (
-      !minionDetails?.executed &&
-      proposal.proposalType === PROPOSAL_TYPES.MINION_UBER_RQ
+      !minionDetails?.executed
+      && proposal.proposalType === PROPOSAL_TYPES.MINION_UBER_RQ
     ) {
       return (
         <Flex alignItems='center' flexDir='column'>

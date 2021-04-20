@@ -7,22 +7,22 @@
       "source.fixAll.eslint": true
   },
   "[javascript]": {
-      "editor.defaultFormatter": "dbaeumer.vscode-eslint",
-      "editor.formatOnSave": true,
+    "editor.defaultFormatter": "dbaeumer.vscode-eslint",
+    "editor.formatOnSave": true
   },
   "[typescript]": {
-      "editor.formatOnSave": true,
+    "editor.formatOnSave": true
   },
   "[javascriptreact]": {
-      "editor.defaultFormatter": "dbaeumer.vscode-eslint",
-      "editor.formatOnSave": true,
+    "editor.defaultFormatter": "dbaeumer.vscode-eslint",
+    "editor.formatOnSave": true
   },
   "[typescriptreact]": {
-      "editor.formatOnSave": true,
+    "editor.formatOnSave": true
   },
   "[json]": {
-      "editor.defaultFormatter": "esbenp.prettier-vscode",
-      "editor.formatOnSave": true,
-      "editor.formatOnPaste": true,
+    "editor.defaultFormatter": "esbenp.prettier-vscode",
+    "editor.formatOnSave": true,
+    "editor.formatOnPaste": true
   },
 }

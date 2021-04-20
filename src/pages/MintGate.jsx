@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
-import { Flex, Button, Link, Spinner, Box } from '@chakra-ui/react';
+import {
+  Flex, Button, Link, Spinner, Box,
+} from '@chakra-ui/react';
 import { RiAddFill } from 'react-icons/ri';
 
 import MainViewLayout from '../components/mainViewLayout';
@@ -31,7 +33,7 @@ const MintGate = ({ daoMetaData }) => {
     }
   }, [daoid, daoMetaData]);
   console.log(gates);
-  console.log(daoMetaData)
+  console.log(daoMetaData);
 
   const newGateButton = daoConnectedAndSameChain(
     address,

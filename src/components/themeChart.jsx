@@ -88,7 +88,9 @@ const ThemeChart = ({ previewValues }) => {
             </Flex>
             <FlexibleWidthXYPlot
               height={300}
-              margin={{ left: 0, right: 0, top: 40, bottom: 40 }}
+              margin={{
+                left: 0, right: 0, top: 40, bottom: 40,
+              }}
             >
               {gradient}
               <LineSeries

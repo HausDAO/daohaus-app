@@ -45,6 +45,7 @@ module.exports = {
     'no-restricted-syntax': 'off', // priority 2, harder
     'arrow-body-style': 'off',
     'guard-for-in': 'off', // priority 2, two instances
+    'max-len': 'off',
     'no-return-assign': 'off', // priority 1, easy
     'consistent-return': 'off', // priority 2, harder basically all the services
     radix: 'off', // priority 1, parseInt ??

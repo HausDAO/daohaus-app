@@ -28,14 +28,16 @@ export const UberHausMinionService = ({ web3, chainID, uberHausMinion }) => {
         return action;
       };
     } if (
-      service === 'proposeAction' ||
-      service === 'executeAction' ||
-      service === 'executeAppointment' ||
-      service === 'nominateDelegate' ||
-      service === 'doWithdraw' ||
-      service === 'pullGuildFunds'
+      service === 'proposeAction'
+      || service === 'executeAction'
+      || service === 'executeAppointment'
+      || service === 'nominateDelegate'
+      || service === 'doWithdraw'
+      || service === 'pullGuildFunds'
     ) {
-      return async ({ args, address, poll, onTxHash }) => {
+      return async ({
+        args, address, poll, onTxHash,
+      }) => {
         try {
           const tx = await contract.methods[service](...args);
           console.log('tx', tx);
@@ -57,8 +59,8 @@ export const UberHausMinionService = ({ web3, chainID, uberHausMinion }) => {
         }
       };
     } if (
-      service === 'setInitialDelegate' ||
-      service === 'claimDelegateReward'
+      service === 'setInitialDelegate'
+      || service === 'claimDelegateReward'
     ) {
       return async ({ address, poll, onTxHash }) => {
         try {
