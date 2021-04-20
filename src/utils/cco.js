@@ -3,21 +3,19 @@ import { IsJsonString, timeToNow } from './general';
 export const countDownText = (round, raiseOver) => {
   const now = new Date() / 1000;
   if (raiseOver) {
-    return `Contribution period is complete`;
+    return 'Contribution period is complete';
   } if (now < round.startTime) {
     return `Round ${round.round} starts ${timeToNow(round.startTime)}`;
-  } 
-    return `Round ${round.round} ends ${timeToNow(round.endTime)}`;
-  
+  }
+  return `Round ${round.round} ends ${timeToNow(round.endTime)}`;
 };
 
 export const claimCountDownText = (claimStartTime) => {
   const now = new Date() / 1000;
   if (now < claimStartTime) {
     return `Claiming begins ${timeToNow(claimStartTime)}`;
-  } 
-    return `Claiming began ${timeToNow(claimStartTime)}`;
-  
+  }
+  return `Claiming began ${timeToNow(claimStartTime)}`;
 };
 
 export const isCcoProposal = (proposal, round) => {
@@ -27,15 +25,15 @@ export const isCcoProposal = (proposal, round) => {
     : { cco: false };
   const failed = proposal.processed && !proposal.didPass;
   return (
-    !proposal.cancelled &&
-    proposal.sponsored &&
-    parsedDetails.cco &&
-    +proposal.createdAt >= +round.raiseStartTime &&
+    !proposal.cancelled
+    && proposal.sponsored
+    && parsedDetails.cco
+    && +proposal.createdAt >= +round.raiseStartTime
     // +proposal.createdAt >= START_TIME_OVERRIDE &&
-    proposal.tributeToken === round.ccoToken.tokenAddress &&
-    proposal.sharesRequested === '0' &&
-    +proposal.lootRequested > 0 &&
-    !failed
+    && proposal.tributeToken === round.ccoToken.tokenAddress
+    && proposal.sharesRequested === '0'
+    && +proposal.lootRequested > 0
+    && !failed
   );
 };
 
@@ -45,13 +43,13 @@ export const isCcoProposalForAddress = (proposal, address, round) => {
     : { cco: false };
   const failed = proposal.processed && !proposal.didPass;
   return (
-    !proposal.cancelled &&
-    parsedDetails.cco &&
-    address.toLowerCase() === proposal.applicant.toLowerCase() &&
-    proposal.tributeToken === round.ccoToken.tokenAddress &&
-    proposal.sharesRequested === '0' &&
-    +proposal.lootRequested > 0 &&
-    !failed
+    !proposal.cancelled
+    && parsedDetails.cco
+    && address.toLowerCase() === proposal.applicant.toLowerCase()
+    && proposal.tributeToken === round.ccoToken.tokenAddress
+    && proposal.sharesRequested === '0'
+    && +proposal.lootRequested > 0
+    && !failed
   );
 };
 

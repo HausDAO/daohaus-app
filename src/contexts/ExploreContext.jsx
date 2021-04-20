@@ -78,8 +78,7 @@ export const ExploreContextProvider = ({ children }) => {
   });
   const [state, dispatch] = React.useReducer(reducer, initialState);
 
-  const hasLoadedExploreData =
-    exploreDaos.chains.length === Object.keys(supportedChains).length;
+  const hasLoadedExploreData = exploreDaos.chains.length === Object.keys(supportedChains).length;
 
   useEffect(() => {
     if (!exploreDaos.chains.length) {
@@ -95,7 +94,9 @@ export const ExploreContextProvider = ({ children }) => {
 
   return (
     <ExploreContext.Provider
-      value={{ state, dispatch, exploreDaos, hasLoadedExploreData }}
+      value={{
+        state, dispatch, exploreDaos, hasLoadedExploreData,
+      }}
     >
       {children}
     </ExploreContext.Provider>

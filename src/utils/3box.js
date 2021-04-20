@@ -1,8 +1,7 @@
 import { gql } from 'apollo-boost';
 import { graphQuery } from './apollo';
 
-const ensClient =
-  'https://api.thegraph.com/subgraphs/name/ezynda3/ens-subgraph';
+const ensClient = 'https://api.thegraph.com/subgraphs/name/ezynda3/ens-subgraph';
 
 const REVERSE_RESOLVER_QUERY = gql`
   query reverseRegistrations($user: String!) {

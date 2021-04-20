@@ -197,9 +197,7 @@ const Notifications = ({ daoMetaData, refetchMetaData }) => {
               </Flex>
 
               <Stack spacing={6}>
-                {notificationBoostContent.actions.map((message) =>
-                  renderAction(message),
-                )}
+                {notificationBoostContent.actions.map((message) => renderAction(message))}
               </Stack>
             </Box>
             <Box w='45%'>
@@ -210,9 +208,7 @@ const Notifications = ({ daoMetaData, refetchMetaData }) => {
               </Flex>
 
               <Stack spacing={6}>
-                {notificationBoostContent.channels.map((channel) =>
-                  renderChannel(channel),
-                )}
+                {notificationBoostContent.channels.map((channel) => renderChannel(channel))}
               </Stack>
             </Box>
           </Flex>

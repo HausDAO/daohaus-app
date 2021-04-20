@@ -9,7 +9,7 @@ import { useOverlay } from '../contexts/OverlayContext';
 import { daoConnectedAndSameChain } from '../utils/general';
 import { superpowerLinks, boostList } from '../content/boost-content';
 import GenericModal from '../modals/genericModal';
-import BoostLaunchWrapper from '../components/boostLaunchWrapper';
+import BoostLaunchWrapper from './boostLaunchWrapper';
 
 const Superpowers = ({ daoMember, daoMetaData }) => {
   const { daochain, daoid } = useParams();
@@ -55,12 +55,12 @@ const Superpowers = ({ daoMember, daoMetaData }) => {
                       _hover={{ cursor: 'pointer' }}
                     >
                       <Icon
-                          as={VscGear}
-                          color='secondary.500'
-                          w='25px'
-                          h='25px'
-                          mr={3}
-                        />
+                        as={VscGear}
+                        color='secondary.500'
+                        w='25px'
+                        h='25px'
+                        mr={3}
+                      />
                     </Box>
                   ) : (
                     <RouterLink to={`/dao/${daochain}/${daoid}/${link.link}`}>
