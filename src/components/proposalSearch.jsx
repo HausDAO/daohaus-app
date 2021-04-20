@@ -11,7 +11,6 @@ import {
 } from '@chakra-ui/react';
 import styled from '@emotion/styled';
 import {
-  RiArrowDropDownFill,
   RiCheckboxCircleLine,
   RiCloseCircleLine,
   RiErrorWarningLine,
@@ -118,15 +117,14 @@ const ProposalSearch = ({ performSearch, resetSearch }) => {
             textTransform='uppercase'
             fontFamily='heading'
             mr={3}
-            fontSize={['sm', null, null, 'md']}
+            fontSize={['md', null, null, 'lg']}
             variant='text'
             p='0'
             h='inherit'
             zIndex='15'
             leftIcon={isEnabled && <RiSearchLine />}
           >
-            Search
-            <Icon as={RiArrowDropDownFill} color='white' />
+            <Icon fontSize={20} title='Search' as={RiSearchLine} color='white' />
           </Button>
         </PopoverTrigger>
         <TemporaryPopoverFix>

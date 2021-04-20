@@ -120,7 +120,7 @@ const Members = React.memo(function MembersPage({
         w={['100%', null, null, '55%']}
       >
         <Box
-          flex={.25}
+          flex={0.25}
           mr={5}
           textTransform='uppercase'
           fontFamily='heading'
