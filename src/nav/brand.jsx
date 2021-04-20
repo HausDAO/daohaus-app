@@ -6,12 +6,11 @@ import BrandImg from '../assets/img/Daohaus__Castle--Dark.svg';
 import { useCustomTheme } from '../contexts/CustomThemeContext';
 import { themeImagePath } from '../utils/metadata';
 
-const Brand = React.memo(function Brand({ dao }) {
+const Brand = React.memo(({ dao }) => {
   const brandImg = dao?.daoMetaData?.avatarImg
     ? themeImagePath(dao?.daoMetaData?.avatarImg)
     : themeImagePath(BrandImg);
-  const brandLink =
-    dao?.daoID && dao?.chainID ? `/dao/${dao?.chainID}/${dao?.daoID}` : '/';
+  const brandLink = dao?.daoID && dao?.chainID ? `/dao/${dao?.chainID}/${dao?.daoID}` : '/';
   const { theme } = useCustomTheme();
 
   return (

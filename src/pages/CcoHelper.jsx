@@ -1,17 +1,19 @@
 import React, { useEffect, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
-import { Box, Table, Thead, Tr, Th, Tbody, Td } from '@chakra-ui/react';
+import {
+  Box, Table, Thead, Tr, Th, Tbody, Td,
+} from '@chakra-ui/react';
 import MainViewLayout from '../components/mainViewLayout';
 import { isCcoProposal, contributionTotalValue } from '../utils/cco';
 import { useTX } from '../contexts/TXContext';
 import ContentBox from '../components/ContentBox';
 import { groupByKey, timeToNow } from '../utils/general';
 
-const CcoHelper = React.memo(function ccohelper({
+const CcoHelper = React.memo(({
   daoMetaData,
   currentDaoTokens,
   daoProposals,
-}) {
+}) => {
   const { daoid, daochain } = useParams();
   const [roundData, setRoundData] = useState(null);
   const [currentContributionData, setCurrentContributionData] = useState(null);
@@ -37,9 +39,8 @@ const CcoHelper = React.memo(function ccohelper({
   useEffect(() => {
     if (currentDaoTokens && daoMetaData?.boosts?.cco) {
       const ccoToken = currentDaoTokens.find(
-        (token) =>
-          token.tokenAddress.toLowerCase() ===
-          daoMetaData.boosts.cco.metadata.tributeToken.toLowerCase(),
+        (token) => token.tokenAddress.toLowerCase()
+          === daoMetaData.boosts.cco.metadata.tributeToken.toLowerCase(),
       );
 
       const now = new Date() / 1000;
@@ -48,9 +49,8 @@ const CcoHelper = React.memo(function ccohelper({
         [round] = daoMetaData.boosts.cco.metadata.rounds;
       } else {
         round = daoMetaData.boosts.cco.metadata.rounds.find((round, i) => {
-          const inRound =
-            +round.startTime < now &&
-            +`${+round.startTime + +round.duration}` > now;
+          const inRound = +round.startTime < now
+            && +`${+round.startTime + +round.duration}` > now;
           return (
             i === daoMetaData.boosts.cco.metadata.rounds.length - 1 || inRound
           );
@@ -61,8 +61,8 @@ const CcoHelper = React.memo(function ccohelper({
         ...round,
         endTime: `${+round.startTime + +round.duration}`,
         roundOpen:
-          +round.startTime < now &&
-          +`${+round.startTime + +round.duration}` > now,
+          +round.startTime < now
+          && +`${+round.startTime + +round.duration}` > now,
         roundOver: +`${+round.startTime + +round.duration}` < now,
       };
 
@@ -119,8 +119,8 @@ const CcoHelper = React.memo(function ccohelper({
 
   useEffect(() => {
     if (
-      currentContributionData &&
-      currentContributionData.contributionProposals.length
+      currentContributionData
+      && currentContributionData.contributionProposals.length
     ) {
       const needsSponsor = [];
       const sponsoredInQueue = [];
@@ -146,17 +146,17 @@ const CcoHelper = React.memo(function ccohelper({
           }
 
           if (
-            prop.sponsored &&
-            now > +prop.votingPeriodStarts &&
-            now < +prop.votingPeriodEnds
+            prop.sponsored
+            && now > +prop.votingPeriodStarts
+            && now < +prop.votingPeriodEnds
           ) {
             coll.inVoting.push(prop);
           }
 
           if (
-            prop.sponsored &&
-            now > +prop.votingPeriodEnds &&
-            !prop.processed
+            prop.sponsored
+            && now > +prop.votingPeriodEnds
+            && !prop.processed
           ) {
             coll.afterVoting.push(prop);
           }
@@ -181,9 +181,8 @@ const CcoHelper = React.memo(function ccohelper({
   }, [currentContributionData]);
 
   const renderRow = (proposal) => {
-    const voteWarning =
-      proposal.status === 'VotingPeriod' &&
-      +proposal.yesShares <= proposal.noShares;
+    const voteWarning = proposal.status === 'VotingPeriod'
+      && +proposal.yesShares <= proposal.noShares;
     return (
       <Tr
         key={proposal.proposalId}

@@ -36,7 +36,7 @@ export const MinionSafeService = ({ web3, setupValues, chainID }) => {
     safeMasterCopyAbi,
     setupValues.safeMasterCopy,
   );
-  const {moduleEnabler} = setupValues;
+  const { moduleEnabler } = setupValues;
 
   return function getService(service) {
     // console.log('service', service);
@@ -94,7 +94,9 @@ export const MinionSafeService = ({ web3, setupValues, chainID }) => {
       };
     }
     if (service === 'execTransactionFromModule') {
-      return ({ to, value, data, operation }) => {
+      return ({
+        to, value, data, operation,
+      }) => {
         /**
          * Encodes a transaction from the Gnosis API into a module transaction
          * @returns ABI encoded function call to `execTransactionFromModule`
@@ -143,7 +145,9 @@ export const MinionSafeService = ({ web3, setupValues, chainID }) => {
       };
     }
     if (service === 'createProxy') {
-      return async ({ args, address, poll, onTxHash }) => {
+      return async ({
+        args, address, poll, onTxHash,
+      }) => {
         console.log(args);
         console.log(address);
         console.log(poll);

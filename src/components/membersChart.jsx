@@ -8,7 +8,9 @@ import {
   AreaSeries,
   GradientDefs,
 } from 'react-vis';
-import { Box, Flex, Spinner, RadioGroup, Stack, Radio } from '@chakra-ui/react';
+import {
+  Box, Flex, Spinner, RadioGroup, Stack, Radio,
+} from '@chakra-ui/react';
 import { useSessionStorage } from '../hooks/useSessionStorage';
 
 import { useCustomTheme } from '../contexts/CustomThemeContext';
@@ -159,7 +161,9 @@ const MembersChart = ({ overview, daoMetaData, daoMembers }) => {
               {chartData.length ? (
                 <FlexibleXYPlot
                   yDomain={[0, chartData[chartData.length - 1].y || 10]}
-                  margin={{ left: 0, right: 0, top: 40, bottom: 40 }}
+                  margin={{
+                    left: 0, right: 0, top: 40, bottom: 40,
+                  }}
                 >
                   <XAxis xType='time' tickTotal={0} />
                   <YAxis tickTotal={0} />

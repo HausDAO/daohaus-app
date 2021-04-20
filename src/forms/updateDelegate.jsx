@@ -76,7 +76,7 @@ const UpdateDelegate = ({ overview }) => {
         actions: {
           onError: (error, txHash) => {
             errorToast({
-              title: `There was an error.`,
+              title: 'There was an error.',
               details: error?.message || '',
             });
             resolvePoll(txHash);
@@ -102,7 +102,9 @@ const UpdateDelegate = ({ overview }) => {
         daoAddress: daoid,
         version: overview.version,
         chainID: daochain,
-      })('updateDelegateKey')({ args, address, poll, onTxHash });
+      })('updateDelegateKey')({
+        args, address, poll, onTxHash,
+      });
     } catch (err) {
       setLoading(false);
       errorToast({

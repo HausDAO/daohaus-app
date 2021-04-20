@@ -47,10 +47,10 @@ const MinionList = () => {
               key={minion.minionAddress}
             >
               <HStack spacing={2}>
-                <TextBox size='xs' colorScheme='whiteAlpha.500'>
+                <TextBox size='xs' color='whiteAlpha.500'>
                   {`${minionType}:`}
                 </TextBox>
-                <TextBox colorScheme='secondary.500'>{minion.details}</TextBox>
+                <TextBox color='secondary.500'>{minion.details}</TextBox>
 
                 <TextBox
                   variant='value'

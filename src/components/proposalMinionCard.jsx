@@ -45,8 +45,8 @@ const ProposalMinionCard = ({ proposal }) => {
           })('getAction')({ proposalId: proposal?.proposalId });
           setMinionDeets(action);
         } else if (
-          proposal.proposalType === PROPOSAL_TYPES.MINION_UBER_STAKE ||
-          proposal.proposalType === PROPOSAL_TYPES.MINION_UBER_RQ
+          proposal.proposalType === PROPOSAL_TYPES.MINION_UBER_STAKE
+          || proposal.proposalType === PROPOSAL_TYPES.MINION_UBER_RQ
         ) {
           const action = await UberHausMinionService({
             uberHausMinion: proposal.minionAddress,
@@ -76,10 +76,9 @@ const ProposalMinionCard = ({ proposal }) => {
   useEffect(() => {
     const getAbi = async () => {
       try {
-        const key =
-          daochain === '0x64' ? '' : process.env.REACT_APP_ETHERSCAN_KEY;
-        const url = `${chainByID(daochain).abi_api_url}${minionDeets.to}${key &&
-          `&apikey=${key}`}`;
+        const key = daochain === '0x64' ? '' : process.env.REACT_APP_ETHERSCAN_KEY;
+        const url = `${chainByID(daochain).abi_api_url}${minionDeets.to}${key
+          && `&apikey=${key}`}`;
         const response = await fetch(url);
         const json = await response.json();
         const parsed = JSON.parse(json.result);
@@ -91,9 +90,9 @@ const ProposalMinionCard = ({ proposal }) => {
       }
     };
     if (
-      proposal &&
-      minionDeets?.data &&
-      proposal.proposalType !== PROPOSAL_TYPES.MINION_UBER_DEL
+      proposal
+      && minionDeets?.data
+      && proposal.proposalType !== PROPOSAL_TYPES.MINION_UBER_DEL
     ) {
       getAbi();
     }

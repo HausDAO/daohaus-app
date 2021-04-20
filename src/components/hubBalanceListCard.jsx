@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
-import { Flex, Box, Skeleton, Icon, Button, Tooltip } from '@chakra-ui/react';
+import {
+  Flex, Box, Skeleton, Icon, Button, Tooltip,
+} from '@chakra-ui/react';
 import { RiLoginBoxLine } from 'react-icons/ri';
 
 import { numberWithCommas } from '../utils/general';
@@ -13,16 +15,16 @@ const HubBalanceListCard = ({ token, withdraw, currentDaoTokens }) => {
   const [tokenWhitelisted, setTokenWhitelisted] = useState();
 
   useEffect(() => {
-    const isWhitelisted =
-      currentDaoTokens &&
-      currentDaoTokens.find((daoToken) => {
+    const isWhitelisted = currentDaoTokens
+      && currentDaoTokens.find((daoToken) => {
         return (
-          token.token.tokenAddress.toLowerCase() ===
-          daoToken.tokenAddress.toLowerCase()
+          token.token.tokenAddress.toLowerCase()
+          === daoToken.tokenAddress.toLowerCase()
         );
       });
     setTokenWhitelisted(!isWhitelisted);
   }, [currentDaoTokens]);
+
   return (
     <Flex h='60px' align='center'>
       <Box w='20%' d={['none', null, null, 'inline-block']}>
@@ -50,7 +52,7 @@ const HubBalanceListCard = ({ token, withdraw, currentDaoTokens }) => {
                   parseFloat(
                     +token.tokenBalance / 10 ** +token.token.decimals,
                   ).toFixed(4),
-                )} ${token.symbol}`}
+                )} ${token.token.symbol}`}
               </>
             ) : null}
           </Box>

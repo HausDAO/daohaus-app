@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useParams } from 'react-router-dom';
-import { Flex, Box, Stack, Button } from '@chakra-ui/react';
+import {
+  Flex, Box, Stack, Button,
+} from '@chakra-ui/react';
 import deepEqual from 'deep-eql';
 
 import ActivitiesFeed from '../components/activitiesFeed';
@@ -19,7 +21,7 @@ import { useInjectedProvider } from '../contexts/InjectedProviderContext';
 import { daoConnectedAndSameChain } from '../utils/general';
 import UberHausMemberCard from '../components/uberHausMemberCard';
 
-const Members = React.memo(function MembersPage({
+const Members = React.memo(({
   members,
   activities,
   overview,
@@ -27,7 +29,7 @@ const Members = React.memo(function MembersPage({
   daoMembers,
   customTerms,
   daoMetaData,
-}) {
+}) => {
   const { daoid, daochain } = useParams();
   const { address, injectedChain } = useInjectedProvider();
 
@@ -59,8 +61,7 @@ const Members = React.memo(function MembersPage({
   useEffect(() => {
     const sortMembers = () => {
       const sortedMembers = members.filter((member) => {
-        const active =
-          +member.shares > 0 || (+member.loot > 0 && !member.jailed);
+        const active = +member.shares > 0 || (+member.loot > 0 && !member.jailed);
         switch (filter?.value) {
           case 'active': {
             return member.exists && active;
@@ -118,6 +119,7 @@ const Members = React.memo(function MembersPage({
         wrap={['wrap', null, null, 'nowrap']}
         justify='space-between'
         w={['100%', null, null, '50%']}
+
       >
         <ListSort sort={sort} setSort={setSort} options={membersSortOptions} />
         <MemberFilters filter={filter} setFilter={setFilter} />
@@ -152,7 +154,7 @@ const Members = React.memo(function MembersPage({
               </TextBox>
             </Flex>
             {listMembers?.map((member) => {
-              console.log(member.id)
+              console.log(member.id);
               return (
                 <Box key={member.id}>
                   {member.uberMinion ? (
@@ -188,14 +190,14 @@ const Members = React.memo(function MembersPage({
                     <TextBox size='xs'>Snapshot</TextBox>
                     <TextBox
                       as={Link}
-                      to={`/dao/${daochain}/${daoid}/profile/${daoMember?.memberAddress ||
-                        address}`}
+                      to={`/dao/${daochain}/${daoid}/profile/${daoMember?.memberAddress
+                        || address}`}
                       color='inherit'
                       size='xs'
                     >
                       {`View 
-                      ${!daoMember ||
-                        (daoMember.memberAddress === address && 'My')}
+                      ${!daoMember
+                        || (daoMember.memberAddress === address && 'My')}
                       Profile`}
                     </TextBox>
                   </Flex>

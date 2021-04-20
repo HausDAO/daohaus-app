@@ -5,8 +5,8 @@ import { chainByID } from '../utils/chain';
 
 export const SummonService = ({
   web3,
-  chainID, 
-  // atBlock = 'latest' 
+  chainID,
+  // atBlock = 'latest'
 }) => {
   if (!web3) {
     const rpcUrl = chainByID(chainID).rpc_url;
@@ -19,7 +19,9 @@ export const SummonService = ({
   );
   return (service) => {
     if (service === 'summonMoloch') {
-      return async ({ args, from, poll, onTxHash }) => {
+      return async ({
+        args, from, poll, onTxHash,
+      }) => {
         try {
           const tx = await contract.methods[service](...args);
           return tx
