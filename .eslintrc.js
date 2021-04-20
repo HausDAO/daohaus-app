@@ -28,7 +28,8 @@ module.exports = {
       configFile: './babel.config.json',
     },
   },
-  plugins: ['react', 'react-hooks', 'airbnb'],
+  // plugins: ['react', 'react-hooks', 'airbnb'],
+  plugins: ['react', 'react-hooks'],
   settings: {
     react: {
       version: 'detect',

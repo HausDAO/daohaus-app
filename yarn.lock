@@ -7861,17 +7861,6 @@ eslint-module-utils@^2.6.0:
     debug "^2.6.9"
     pkg-dir "^2.0.0"
 
-eslint-plugin-airbnb-git@daemonsec637/eslint-plugin-airbnb:
-  version "200.0.6"
-  resolved "https://codeload.github.com/daemonsec637/eslint-plugin-airbnb/tar.gz/3117b84999654942f84c8032c3117b43e84b3416"
-
-eslint-plugin-airbnb@^15.0.17:
-  version "15.0.17"
-  resolved "https://registry.yarnpkg.com/eslint-plugin-airbnb/-/eslint-plugin-airbnb-15.0.17.tgz#dbb1cf0ff978b1467fc837bf0b43daefdd78d2e9"
-  integrity sha512-YNrs7Y5NXYTm1nkmrkAR2ylMd5ZXF1n1m08U2HAEVL2XCBSiqv1PTJW8fECmN727u4mFeJvS9pqvp7PttmGtpg==
-  dependencies:
-    eslint-plugin-airbnb-git daemonsec637/eslint-plugin-airbnb
-
 eslint-plugin-es@^3.0.0:
   version "3.0.1"
   resolved "https://registry.yarnpkg.com/eslint-plugin-es/-/eslint-plugin-es-3.0.1.tgz#75a7cdfdccddc0589934aeeb384175f221c57893"
