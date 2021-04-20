@@ -32,8 +32,6 @@ const MintGate = ({ daoMetaData }) => {
       fetchGates();
     }
   }, [daoid, daoMetaData]);
-  console.log(gates);
-  console.log(daoMetaData);
 
   const newGateButton = daoConnectedAndSameChain(
     address,
