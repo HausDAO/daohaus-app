@@ -1,6 +1,8 @@
 import React, { useContext } from 'react';
 import makeBlockie from 'ethereum-blockies-base64';
-import { Avatar, Box, Flex, Button, Badge, Link, Text } from '@chakra-ui/react';
+import {
+  Avatar, Box, Flex, Button, Badge, Link, Text,
+} from '@chakra-ui/react';
 import { Link as RouterLink } from 'react-router-dom';
 import ContentBox from './ContentBox';
 import { ExploreContext } from '../contexts/ExploreContext';

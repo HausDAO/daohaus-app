@@ -56,8 +56,7 @@ const TimeInput = ({
     }
   }, [currentUnit, amt]);
 
-  const shouldDisplayTotalSeconds =
-    totalSeconds > 0 && currentUnit !== 'seconds' && displayTotalSeconds;
+  const shouldDisplayTotalSeconds = totalSeconds > 0 && currentUnit !== 'seconds' && displayTotalSeconds;
 
   const defaultLabel = `How many ${unitDisplay} per period?`;
   return (

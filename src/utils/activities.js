@@ -53,18 +53,17 @@ const handleProposal = (proposal) => {
       yesVotes: proposal.yesVotes,
       noVotes: proposal.noVotes,
     };
-  } 
-    return {
-      title: `submitted ${proposal.proposalType}`,
-      createdAt: proposal.createdAt,
-      statusBadge: 'submitted',
-      memberAddress: proposal.proposer,
-      proposalId: proposal.proposalId,
-      daoData: proposal.daoData,
-      yesVotes: proposal.yesVotes,
-      noVotes: proposal.noVotes,
-    };
-  
+  }
+  return {
+    title: `submitted ${proposal.proposalType}`,
+    createdAt: proposal.createdAt,
+    statusBadge: 'submitted',
+    memberAddress: proposal.proposer,
+    proposalId: proposal.proposalId,
+    daoData: proposal.daoData,
+    yesVotes: proposal.yesVotes,
+    noVotes: proposal.noVotes,
+  };
 };
 
 const handleVote = (vote) => {
@@ -126,8 +125,8 @@ const buildProposalHistory = (proposal) => {
 const voteHistoryData = (record, proposal) => {
   const totalVotesShares = +proposal.yesShares + +proposal.noShares;
   const memberPercentageOfVote = (
-    (+record.memberPower / totalVotesShares) *
-    100
+    (+record.memberPower / totalVotesShares)
+    * 100
   ).toFixed(2);
   const operator = record.uintVote ? '+' : '-';
   return {
@@ -185,11 +184,10 @@ export const getMembersActivites = (daoData) => {
 export const getMemberActivites = (memberAddress) => (daoData) => {
   const proposals = daoData.proposals
     .filter((prop) => {
-      const memberRelated =
-        memberAddress?.toLowerCase() === prop.proposer?.toLowerCase() ||
-        memberAddress?.toLowerCase() === prop.sponser?.toLowerCase() ||
-        memberAddress?.toLowerCase() === prop.memberAddress?.toLowerCase() ||
-        memberAddress?.toLowerCase() === prop.applicant?.toLowerCase();
+      const memberRelated = memberAddress?.toLowerCase() === prop.proposer?.toLowerCase()
+        || memberAddress?.toLowerCase() === prop.sponser?.toLowerCase()
+        || memberAddress?.toLowerCase() === prop.memberAddress?.toLowerCase()
+        || memberAddress?.toLowerCase() === prop.applicant?.toLowerCase();
       return !prop.cancelled && memberRelated;
     })
     .map((proposal) => handleProposal(proposal));
@@ -197,8 +195,8 @@ export const getMemberActivites = (memberAddress) => (daoData) => {
   const votes = getVotes(daoData.proposals)
     .filter((vote) => {
       return (
-        vote.proposalType === 'Member Proposal' &&
-        memberAddress === vote.memberAddress
+        vote.proposalType === 'Member Proposal'
+        && memberAddress === vote.memberAddress
       );
     })
     .map((vote) => handleVote(vote));
@@ -218,11 +216,10 @@ export const getMemberActivites = (memberAddress) => (daoData) => {
 export const getProfileActivites = (memberAddress) => (daoData) => {
   const proposals = daoData.proposals
     .filter((prop) => {
-      const memberRelated =
-        memberAddress?.toLowerCase() === prop.proposer?.toLowerCase() ||
-        memberAddress?.toLowerCase() === prop.sponsor?.toLowerCase() ||
-        memberAddress?.toLowerCase() === prop.memberAddress?.toLowerCase() ||
-        memberAddress?.toLowerCase() === prop.applicant?.toLowerCase();
+      const memberRelated = memberAddress?.toLowerCase() === prop.proposer?.toLowerCase()
+        || memberAddress?.toLowerCase() === prop.sponsor?.toLowerCase()
+        || memberAddress?.toLowerCase() === prop.memberAddress?.toLowerCase()
+        || memberAddress?.toLowerCase() === prop.applicant?.toLowerCase();
       return !prop.cancelled && memberRelated;
     })
     .map((proposal) => handleProposal(proposal));
@@ -233,8 +230,7 @@ export const getProfileActivites = (memberAddress) => (daoData) => {
 
   const rageActivities = daoData.rageQuits
     .filter(
-      (rage) =>
-        rage.memberAddress.toLowerCase() === memberAddress.toLowerCase(),
+      (rage) => rage.memberAddress.toLowerCase() === memberAddress.toLowerCase(),
     )
     .map((rq) => handleRQ(rq));
 

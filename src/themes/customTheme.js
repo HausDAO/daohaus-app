@@ -23,14 +23,14 @@ const getShade = (shade, degree, seedColor) => {
   throw new Error(`Argument ${shade} is not a valid shade value`);
 };
 
-const getAllShades = (seedColor) =>
+const getAllShades = (seedColor) => (
   shadeTemplate.reduce(
     (obj, { shade, degree }) => ({
       ...obj,
       [shade]: getShade(shade, degree, seedColor),
     }),
     {},
-  );
+  ));
 
 export const defaultThemeData = {
   styles: {
@@ -101,7 +101,7 @@ export const defaultThemeData = {
           },
         },
         // 4. Override existing variants
-        solid: (props) => ({
+        solid: () => ({
           bg: 'secondary.400',
           color: 'white',
           _hover: { bg: 'secondary.500', color: 'white' },
@@ -112,7 +112,7 @@ export const defaultThemeData = {
           },
           _active: { bg: 'inherit' },
         }),
-        outline: (props) => ({
+        outline: () => ({
           borderColor: 'secondary.400',
           bg: 'transparent',
           color: 'secondary.400',
@@ -141,7 +141,7 @@ export const defaultThemeData = {
           _hover: { bg: 'primary.500' },
         },
         // 4. Override existing variants
-        solid: (props) => ({
+        solid: () => ({
           bg: 'secondary.400',
           color: 'white',
           _hover: { bg: 'secondary.500', color: 'white' },
@@ -152,7 +152,7 @@ export const defaultThemeData = {
           },
           _active: { bg: 'inherit' },
         }),
-        outline: (props) => ({
+        outline: () => ({
           borderColor: 'secondary.400',
           bg: 'transparent',
           color: 'secondary.400',
@@ -163,7 +163,7 @@ export const defaultThemeData = {
           },
           _active: { bg: 'inherit' },
         }),
-        ghost: (props) => ({
+        ghost: () => ({
           bg: 'transparent',
           color: 'whiteAlpha.900',
           _hover: {
@@ -279,8 +279,8 @@ export const defaultThemeData = {
         fontWeight: '400',
       },
       variants: {
-        solid: (props) => ({}),
-        outline: (props) => ({
+        solid: () => ({}),
+        outline: () => ({
           color: 'whiteAlpha.700',
         }),
       },

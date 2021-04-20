@@ -31,11 +31,11 @@ import { useTX } from '../contexts/TXContext';
 import { MM_ADDCHAIN_DATA } from '../utils/chain';
 import { useDaoMember } from '../contexts/DaoMemberContext';
 
-const CcoContribution = React.memo(function ccocontribution({
+const CcoContribution = React.memo(({
   daoMetaData,
   currentDaoTokens,
   daoProposals,
-}) {
+}) => {
   const { setGenericModal } = useOverlay();
   const { daochain, daoid } = useParams();
   const { daoMember } = useDaoMember();
@@ -62,9 +62,8 @@ const CcoContribution = React.memo(function ccocontribution({
   useEffect(() => {
     const setup = async () => {
       const ccoToken = currentDaoTokens.find(
-        (token) =>
-          token.tokenAddress.toLowerCase() ===
-          daoMetaData.boosts.cco.metadata.tributeToken.toLowerCase(),
+        (token) => token.tokenAddress.toLowerCase()
+          === daoMetaData.boosts.cco.metadata.tributeToken.toLowerCase(),
       );
 
       const date = await getDateTime();
@@ -74,9 +73,8 @@ const CcoContribution = React.memo(function ccocontribution({
         [round] = daoMetaData.boosts.cco.metadata.rounds;
       } else {
         round = daoMetaData.boosts.cco.metadata.rounds.find((round, i) => {
-          const inRound =
-            +round.startTime < now &&
-            +`${+round.startTime + +round.duration}` > now;
+          const inRound = +round.startTime < now
+            && +`${+round.startTime + +round.duration}` > now;
           return (
             i === daoMetaData.boosts.cco.metadata.rounds.length - 1 || inRound
           );
@@ -87,8 +85,8 @@ const CcoContribution = React.memo(function ccocontribution({
         ...round,
         endTime: `${+round.startTime + +round.duration}`,
         roundOpen:
-          +round.startTime < now &&
-          +`${+round.startTime + +round.duration}` > now,
+          +round.startTime < now
+          && +`${+round.startTime + +round.duration}` > now,
         roundOver: +`${+round.startTime + +round.duration}` < now,
       };
 
@@ -178,23 +176,20 @@ const CcoContribution = React.memo(function ccocontribution({
 
   const eligibleBlock = isEligible === 'denied' || isEligible === 'unchecked';
   const raiseAtMax = currentContributionData?.remaining <= 0;
-  const contributionClosed =
-    roundData?.raiseOver ||
-    currentContributionData?.addressRemaining <= 0 ||
-    raiseAtMax;
+  const contributionClosed = roundData?.raiseOver
+    || currentContributionData?.addressRemaining <= 0
+    || raiseAtMax;
   // const now = new Date() / 1000;
   const beforeClaimPeriod = roundData
     ? roundData.claimPeriodStartTime > roundData.now
     : true;
 
   // TODO test on a real balance
-  const hasBalance =
-    daoMember &&
-    roundData &&
-    daoMember.tokenBalances.find((bal) => {
-      const isRaiseToken =
-        bal.token.tokenAddress.toLowerCase() ===
-        roundData.ccoToken.tokenAddress.toLowerCase();
+  const hasBalance = daoMember
+    && roundData
+    && daoMember.tokenBalances.find((bal) => {
+      const isRaiseToken = bal.token.tokenAddress.toLowerCase()
+        === roundData.ccoToken.tokenAddress.toLowerCase();
 
       return isRaiseToken && +bal.token.balance > 0;
     });
@@ -223,9 +218,9 @@ const CcoContribution = React.memo(function ccocontribution({
                         <Button
                           onClick={checkEligibility}
                           disabled={
-                            checkingEligibility ||
-                            roundData.raiseOver ||
-                            raiseAtMax
+                            checkingEligibility
+                            || roundData.raiseOver
+                            || raiseAtMax
                           }
                         >
                           {!checkingEligibility ? (
@@ -321,8 +316,8 @@ const CcoContribution = React.memo(function ccocontribution({
                                         color='whiteAlpha.700'
                                         as='i'
                                       >
-                                        {`You contributed ${prop.tributeOffered /
-                                          10 ** roundData.ccoToken.decimals} ${
+                                        {`You contributed ${prop.tributeOffered
+                                          / 10 ** roundData.ccoToken.decimals} ${
                                           roundData.ccoToken.symbol
                                         } ${timeToNow(prop.createdAt)}`}
                                       </Text>
@@ -482,7 +477,7 @@ const CcoContribution = React.memo(function ccocontribution({
                   </Box>
                   <TextBox
                     fontSize='sm'
-                    colorScheme='secondary.500'
+                    color='secondary.500'
                     onClick={() => setGenericModal({ ccoProcess: true })}
                     mb={5}
                     cursor='pointer'
@@ -491,7 +486,7 @@ const CcoContribution = React.memo(function ccocontribution({
                   </TextBox>
                   <TextBox
                     fontSize='sm'
-                    colorScheme='secondary.500'
+                    color='secondary.500'
                     onClick={() => setGenericModal({ xDaiHelp: true })}
                     mb={5}
                     cursor='pointer'
@@ -506,7 +501,7 @@ const CcoContribution = React.memo(function ccocontribution({
                     alignItems='center'
                     mb={5}
                   >
-                    <TextBox fontSize='sm' colorScheme='secondary.500'>
+                    <TextBox fontSize='sm' color='secondary.500'>
                       More About DAOhaus
                     </TextBox>
                   </Link>
@@ -518,7 +513,7 @@ const CcoContribution = React.memo(function ccocontribution({
                     alignItems='center'
                     mb={5}
                   >
-                    <TextBox fontSize='sm' colorScheme='secondary.500'>
+                    <TextBox fontSize='sm' color='secondary.500'>
                       More About CCOs
                     </TextBox>
                   </Link>

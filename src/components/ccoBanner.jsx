@@ -26,7 +26,7 @@ const CcoBanner = () => {
         value='staking'
         mt={6}
       >
-        {`Go to CCO ->`}
+        {'Go to CCO ->'}
       </Button>
     </ContentBox>
   );

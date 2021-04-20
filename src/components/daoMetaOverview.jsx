@@ -1,5 +1,7 @@
 import React from 'react';
-import { Flex, Image, Link, Icon, Stack, Badge } from '@chakra-ui/react';
+import {
+  Flex, Image, Link, Icon, Stack, Badge,
+} from '@chakra-ui/react';
 import {
   RiDiscordFill,
   RiTelegramFill,

@@ -49,7 +49,7 @@ const NewMinionForm = () => {
           onError: (error, txHash) => {
             console.error(`error: ${error}`);
             errorToast({
-              title: `There was an error.`,
+              title: 'There was an error.',
             });
             resolvePoll(txHash);
             setStep(1);
@@ -76,13 +76,15 @@ const NewMinionForm = () => {
       await MinionFactoryService({
         web3: injectedProvider,
         chainID: injectedChain.chain_id,
-      })('summonMinion')({ args: summonParams, from: address, poll, onTxHash });
+      })('summonMinion')({
+        args: summonParams, from: address, poll, onTxHash,
+      });
     } catch (err) {
       console.log('error in tx', err);
       setLoading(false);
       setStep(1);
       errorToast({
-        title: `There was an error.`,
+        title: 'There was an error.',
         description: err?.message || '',
       });
     }

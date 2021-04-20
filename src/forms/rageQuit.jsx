@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
-import { Button, FormControl, Flex, Icon, Box, Text } from '@chakra-ui/react';
+import {
+  Button, FormControl, Flex, Icon, Box, Text,
+} from '@chakra-ui/react';
 import { RiErrorWarningLine } from 'react-icons/ri';
 
 import { useInjectedProvider } from '../contexts/InjectedProviderContext';
@@ -68,8 +70,8 @@ const RageQuitForm = ({ overview, daoMember }) => {
 
   const onSubmit = async (values) => {
     if (
-      (values.shares === '' || values.shares === '0') &&
-      (values.loot === '' || values.loot === '0')
+      (values.shares === '' || values.shares === '0')
+      && (values.loot === '' || values.loot === '0')
     ) {
       setError('loot or shares', { message: 'Set loot or shares to RageQuit' });
       setLoading(false);
@@ -90,7 +92,7 @@ const RageQuitForm = ({ overview, daoMember }) => {
         actions: {
           onError: (error, txHash) => {
             errorToast({
-              title: `There was an error.`,
+              title: 'There was an error.',
             });
             resolvePoll(txHash);
             console.error(`Could not find a matching proposal: ${error}`);
@@ -115,7 +117,9 @@ const RageQuitForm = ({ overview, daoMember }) => {
         daoAddress: daoid,
         version: overview.version,
         chainID: daochain,
-      })('ragequit')({ args, address, poll, onTxHash });
+      })('ragequit')({
+        args, address, poll, onTxHash,
+      });
     } catch (err) {
       setLoading(false);
       console.log(err);

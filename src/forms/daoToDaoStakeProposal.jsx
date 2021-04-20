@@ -12,7 +12,7 @@ import {
   Link,
 } from '@chakra-ui/react';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
-import { RiErrorWarningLine , RiLoginBoxLine } from 'react-icons/ri';
+import { RiErrorWarningLine, RiLoginBoxLine } from 'react-icons/ri';
 
 import { FaCopy } from 'react-icons/fa';
 import { useParams } from 'react-router-dom';
@@ -53,7 +53,9 @@ const StakeProposalForm = () => {
   const [currentError, setCurrentError] = useState(null);
   const [stakingToken, setStakingToken] = useState(null);
 
-  const { handleSubmit, errors, register, setValue, getValues } = useForm();
+  const {
+    handleSubmit, errors, register, setValue, getValues,
+  } = useForm();
 
   useEffect(() => {
     if (Object.keys(errors).length > 0) {
@@ -70,9 +72,8 @@ const StakeProposalForm = () => {
   useEffect(() => {
     const setupTokenData = async () => {
       const uberHausMinionData = daoOverview.minions.find(
-        (minion) =>
-          minion.minionType === 'UberHaus minion' &&
-          minion.uberHausAddress === UBERHAUS_DATA.ADDRESS,
+        (minion) => minion.minionType === 'UberHaus minion'
+          && minion.uberHausAddress === UBERHAUS_DATA.ADDRESS,
       );
 
       const tokenBalance = await TokenService({
@@ -100,9 +101,8 @@ const StakeProposalForm = () => {
 
     const now = (new Date().getTime() / 1000).toFixed();
     const uberHausMinionData = daoOverview.minions.find(
-      (minion) =>
-        minion.minionType === 'UberHaus minion' &&
-        minion.uberHausAddress === UBERHAUS_DATA.ADDRESS,
+      (minion) => minion.minionType === 'UberHaus minion'
+        && minion.uberHausAddress === UBERHAUS_DATA.ADDRESS,
     );
     const hash = createHash();
     const details = detailsToJSON({
@@ -114,10 +114,10 @@ const StakeProposalForm = () => {
 
     const tributeOffered = values.tributeOffered
       ? valToDecimalString(
-          values.tributeOffered,
-          UBERHAUS_DATA.STAKING_TOKEN.toLowerCase(),
-          daoOverview.tokenBalances,
-        )
+        values.tributeOffered,
+        UBERHAUS_DATA.STAKING_TOKEN.toLowerCase(),
+        daoOverview.tokenBalances,
+      )
       : '0';
 
     const submitProposalArgs = [
@@ -160,7 +160,7 @@ const StakeProposalForm = () => {
         actions: {
           onError: (error, txHash) => {
             errorToast({
-              title: `There was an error.`,
+              title: 'There was an error.',
             });
             resolvePoll(txHash);
             console.error(`Could not find a matching proposal: ${error}`);
@@ -191,13 +191,15 @@ const StakeProposalForm = () => {
         web3: injectedProvider,
         uberHausMinion: uberHausMinionData.minionAddress,
         chainID: UBERHAUS_DATA.NETWORK,
-      })('proposeAction')({ args, address, poll, onTxHash });
+      })('proposeAction')({
+        args, address, poll, onTxHash,
+      });
     } catch (err) {
       setLoading(false);
       setD2dProposalModal((prevState) => !prevState);
       console.error('error: ', err);
       errorToast({
-        title: `There was an error.`,
+        title: 'There was an error.',
         desciption: err?.desciption || '',
       });
     }
@@ -228,7 +230,7 @@ const StakeProposalForm = () => {
           Shares requested: Equal to tribute
         </Box>
         <Link href='https://docs.daohaus.club/uber_actions' isExternal fontSize='xs'>
-          More info 
+          More info
           <Icon
             as={RiLoginBoxLine}
             color='secondary.500'
@@ -260,15 +262,15 @@ const StakeProposalForm = () => {
               placeholder='0'
               mb={5}
               ref={register({
-              required: {
-                value: true,
-                message: 'Requested shares are required for Member Proposals',
-              },
-              pattern: {
-                value: /^[0-9]+$/,
-                message: 'Requested shares must be a number',
-              },
-            })}
+                required: {
+                  value: true,
+                  message: 'Requested shares are required for Member Proposals',
+                },
+                pattern: {
+                  value: /^[0-9]+$/,
+                  message: 'Requested shares must be a number',
+                },
+              })}
               color='white'
               focusBorderColor='secondary.500'
             />
@@ -287,7 +289,7 @@ const StakeProposalForm = () => {
             <Icon as={RiErrorWarningLine} color='secondary.300' mr={2} />
             {currentError.message}
           </Box>
-        )}
+          )}
 
           {noBalance ? (
             <Box color='secondary.300' fontSize='m' mr={5}>
@@ -308,7 +310,7 @@ const StakeProposalForm = () => {
                 />
               </CopyToClipboard>
             </Box>
-        ) : null}
+          ) : null}
           <Box>
             <Button
               type='submit'

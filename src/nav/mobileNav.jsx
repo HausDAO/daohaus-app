@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 
-import { Flex, Box, Button, Icon } from '@chakra-ui/react';
+import {
+  Flex, Box, Button, Icon,
+} from '@chakra-ui/react';
 import { RiMenu3Line, RiCloseLine } from 'react-icons/ri';
 import ChangeDao from './changeDao';
 

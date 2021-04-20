@@ -62,8 +62,7 @@ const MinionDetails = ({ overview, currentDaoTokens }) => {
   const { refreshDao } = useTX();
   const { address, injectedProvider } = useInjectedProvider();
 
-  const hasLoadedBalanceData =
-    balancesGraphData.chains.length === Object.keys(supportedChains).length;
+  const hasLoadedBalanceData = balancesGraphData.chains.length === Object.keys(supportedChains).length;
 
   useEffect(() => {
     if (!overview?.minions.length) {
@@ -147,7 +146,7 @@ const MinionDetails = ({ overview, currentDaoTokens }) => {
         actions: {
           onError: (error, txHash) => {
             errorToast({
-              title: `There was an error.`,
+              title: 'There was an error.',
             });
             resolvePoll(txHash);
             console.error(`Could not find a matching proposal: ${error}`);
@@ -171,7 +170,9 @@ const MinionDetails = ({ overview, currentDaoTokens }) => {
         web3: injectedProvider,
         minion,
         chainID: daochain,
-      })('crossWithdraw')({ args, address, poll, onTxHash });
+      })('crossWithdraw')({
+        args, address, poll, onTxHash,
+      });
     } catch (err) {
       // setLoading(false);
       console.log('error: ', err);
@@ -222,7 +223,7 @@ const MinionDetails = ({ overview, currentDaoTokens }) => {
                   </Flex>
                 </Box>
                 <Flex align='center'>
-                  <TextBox size='md' colorScheme='whiteAlpha.900'>
+                  <TextBox size='md' color='whiteAlpha.900'>
                     {`${minionData.minionType}: `}
                     <Box as='span' color='primary.100'>
                       {truncateAddr(minionData.minionAddress)}

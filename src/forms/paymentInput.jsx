@@ -15,7 +15,9 @@ import { RiInformationLine } from 'react-icons/ri';
 import TextBox from '../components/TextBox';
 import { useDao } from '../contexts/DaoContext';
 
-const PaymentInput = ({ register, setValue, getValues, errors }) => {
+const PaymentInput = ({
+  register, setValue, getValues, errors,
+}) => {
   const [balance, setBalance] = useState(0);
 
   const [tokenData, setTokenData] = useState([]);
@@ -27,12 +29,10 @@ const PaymentInput = ({ register, setValue, getValues, errors }) => {
     if (daoOverview && !tokenData.length) {
       const depositTokenAddress = daoOverview.depositToken.tokenAddress;
       const depositToken = daoOverview.tokenBalances.find(
-        (token) =>
-          token.guildBank && token.token.tokenAddress === depositTokenAddress,
+        (token) => token.guildBank && token.token.tokenAddress === depositTokenAddress,
       );
       const tokenArray = daoOverview.tokenBalances.filter(
-        (token) =>
-          token.guildBank && token.token.tokenAddress !== depositTokenAddress,
+        (token) => token.guildBank && token.token.tokenAddress !== depositTokenAddress,
       );
       tokenArray.unshift(depositToken);
       setTokenData(

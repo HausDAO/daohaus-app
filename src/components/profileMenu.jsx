@@ -51,7 +51,7 @@ const ProfileMenu = ({ member }) => {
 
   const userRejectedToast = () => {
     errorToast({
-      title: `User rejected transaction signature.`,
+      title: 'User rejected transaction signature.',
     });
   };
 
@@ -70,7 +70,7 @@ const ProfileMenu = ({ member }) => {
         actions: {
           onError: (error, txHash) => {
             errorToast({
-              title: `There was an error.`,
+              title: 'There was an error.',
             });
             resolvePoll(txHash);
             console.error(`Could not ragekick member: ${error}`);
@@ -88,19 +88,22 @@ const ProfileMenu = ({ member }) => {
         daoAddress: daoid,
         chainID: daochain,
         version: daoOverview?.version,
-      })('ragekick')({ args, address, poll, onTxHash });
+      })('ragekick')({
+        args, address, poll, onTxHash,
+      });
     } catch (err) {
       console.log('error: ', err);
       userRejectedToast();
     }
   };
 
-  const isMember =
-    address &&
-    member?.memberAddress &&
-    address.toLowerCase() === member?.memberAddress.toLowerCase();
-    
+  const isMember = address
+    && member?.memberAddress
+    && address.toLowerCase() === member?.memberAddress.toLowerCase();
+
   const hasSharesOrloot = +member.shares > 0 || +member.loot > 0;
+
+  console.log('member', member);
 
   return (
     <Menu>
@@ -143,7 +146,7 @@ const ProfileMenu = ({ member }) => {
             {!isMember && member.exists && !member.jailed && hasSharesOrloot && (
               <MenuItem onClick={handleGuildkickClick}>GuildKick</MenuItem>
             )}
-            {!isMember && member.jailed && !member.kicked && hasSharesOrloot && (
+            {!isMember && member.jailed && hasSharesOrloot && (
               <MenuItem onClick={handleRageKick}>RageKick</MenuItem>
             )}
           </>

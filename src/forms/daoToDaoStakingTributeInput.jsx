@@ -25,12 +25,10 @@ const DaoToDaoStakingTributeInput = ({ register, setValue, stakingToken }) => {
     if (daoOverview && !tokenData.length) {
       const depositTokenAddress = daoOverview.depositToken?.tokenAddress;
       const depositToken = daoOverview.tokenBalances?.find(
-        (token) =>
-          token.guildBank && token.token.tokenAddress === depositTokenAddress,
+        (token) => token.guildBank && token.token.tokenAddress === depositTokenAddress,
       );
       const tokenArray = daoOverview.tokenBalances.filter(
-        (token) =>
-          token.guildBank && token.token.tokenAddress !== depositTokenAddress,
+        (token) => token.guildBank && token.token.tokenAddress !== depositTokenAddress,
       );
 
       tokenArray.unshift(depositToken);

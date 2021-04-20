@@ -18,7 +18,9 @@ import makeBlockie from 'ethereum-blockies-base64';
 import { FiAlertOctagon } from 'react-icons/fi';
 import { pokemolUrlHubList, themeImagePath } from '../utils/metadata';
 
-const LinkForVersion = ({ children, dao, unReadCount, network }) => {
+const LinkForVersion = ({
+  children, dao, unReadCount, network,
+}) => {
   const getDaoLink = (unReadCount, dao) => {
     if (!dao.meta) {
       return `/register/${network.networkID}/${dao.molochAddress}`;
@@ -58,7 +60,9 @@ const LinkForVersion = ({ children, dao, unReadCount, network }) => {
   );
 };
 
-const NetworkDaoList = ({ data, network, searchTerm, index }) => {
+const NetworkDaoList = ({
+  data, network, searchTerm, index,
+}) => {
   const [sortedDaoList, setSortedDaoList] = useState([]);
 
   useEffect(() => {
@@ -66,8 +70,8 @@ const NetworkDaoList = ({ data, network, searchTerm, index }) => {
       data
         ?.filter((dao) => {
           return searchTerm
-            ? dao.meta?.name.toLowerCase().indexOf(searchTerm.toLowerCase()) >
-                -1
+            ? dao.meta?.name.toLowerCase().indexOf(searchTerm.toLowerCase())
+                > -1
             : true;
         })
         .sort((a, b) => {
@@ -147,10 +151,9 @@ const NetworkDaoList = ({ data, network, searchTerm, index }) => {
     );
   };
 
-  const defaultOpen =
-    !index || network.networkID === '0x1' || network.networkID === '0x64'
-      ? 0
-      : null;
+  const defaultOpen = !index || network.networkID === '0x1' || network.networkID === '0x64'
+    ? 0
+    : null;
 
   return (
     <>

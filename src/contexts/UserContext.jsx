@@ -60,11 +60,9 @@ export const UserContextProvider = ({ children }) => {
       console.error("User address wasn't found. Cannot cache Poll.");
       return;
     }
-    const oldCache = JSON.parse(localStorage.getItem(`TXs`)) || {};
+    const oldCache = JSON.parse(localStorage.getItem('TXs')) || {};
     const userSpecificCache = oldCache[address] ? oldCache[address] : [];
-    const newUserCache = userSpecificCache.map((tx) =>
-      tx.txHash === txHash ? { ...tx, status: 'resolved' } : tx,
-    );
+    const newUserCache = userSpecificCache.map((tx) => (tx.txHash === txHash ? { ...tx, status: 'resolved' } : tx));
     const newCache = {
       ...oldCache,
       [address]: newUserCache,
@@ -104,7 +102,7 @@ export const UserContextProvider = ({ children }) => {
       console.error("User address wasn't found. Cannot cache Poll.");
       return;
     }
-    const oldCache = JSON.parse(localStorage.getItem(`TXs`)) || {};
+    const oldCache = JSON.parse(localStorage.getItem('TXs')) || {};
     const userSpecificCache = oldCache[address] ? oldCache[address] : [];
     const newUserCache = [pollData, ...userSpecificCache];
     const newCache = {

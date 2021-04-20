@@ -38,7 +38,7 @@ const SetInitialUberHausDelegate = ({
         actions: {
           onError: (error, txHash) => {
             errorToast({
-              title: `There was an error.`,
+              title: 'There was an error.',
             });
             resolvePoll(txHash);
             console.error(`poll error: ${error}`);

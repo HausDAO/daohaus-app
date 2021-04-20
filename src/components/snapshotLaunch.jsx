@@ -11,7 +11,9 @@ import {
 } from '@chakra-ui/react';
 import TextBox from './TextBox';
 
-const SnapshotLaunch = ({ handleLaunch, loading, setLoading }) => {
+const SnapshotLaunch = ({
+  handleLaunch, loading, setLoading, space,
+}) => {
   const { daochain, daoid } = useParams();
   const [snapshotSpace, setSnapshotSpace] = useState(null);
   const [step, setStep] = useState(1);
@@ -56,7 +58,7 @@ const SnapshotLaunch = ({ handleLaunch, loading, setLoading }) => {
           </Text>
           <Stack mb={6} spacing={2}>
             <TextBox size=''>Snapshot Space</TextBox>
-            <Input type='text' onChange={(e) => handleChange(e)} />
+            <Input type='text' onChange={(e) => handleChange(e)} defaultValue={space} />
             <Text fontSize='xs'>
               (no spaces or special characters, dash (-) and period (.) allowed)
             </Text>

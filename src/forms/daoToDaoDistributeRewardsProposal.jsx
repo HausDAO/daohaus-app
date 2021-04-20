@@ -71,26 +71,26 @@ const DistributeRewardsProposalForm = () => {
     <form onSubmit={handleSubmit(onSubmit)}>
       <Flex justify='space-between'>
         <Box>
-          <TextBox colorScheme='secondary.500' size='xs'>
+          <TextBox color='secondary.500' size='xs'>
             DAO Rewards
           </TextBox>
-          <TextBox variant='data' colorScheme='whiteAlpha.900' size='2xl'>
+          <TextBox variant='data' color='whiteAlpha.900' size='2xl'>
             420 $HAUS
           </TextBox>
         </Box>
         <Box>
-          <TextBox colorScheme='secondary.500' size='xs'>
+          <TextBox color='secondary.500' size='xs'>
             Delegate Rewards
           </TextBox>
-          <TextBox variant='data' colorScheme='whiteAlpha.900' size='2xl'>
+          <TextBox variant='data' color='whiteAlpha.900' size='2xl'>
             69 $HAUS
           </TextBox>
         </Box>
         <Box>
-          <TextBox colorScheme='secondary.500' size='xs'>
+          <TextBox color='secondary.500' size='xs'>
             Pending Rewards
           </TextBox>
-          <TextBox variant='data' colorScheme='whiteAlpha.900' size='2xl'>
+          <TextBox variant='data' color='whiteAlpha.900' size='2xl'>
             42.0 $HAUS
           </TextBox>
         </Box>

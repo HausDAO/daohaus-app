@@ -1,5 +1,7 @@
 import React from 'react';
-import { Box, Text, Spinner, Flex, Icon } from '@chakra-ui/react';
+import {
+  Box, Text, Spinner, Flex, Icon,
+} from '@chakra-ui/react';
 import { RiCheckboxCircleLine } from 'react-icons/ri';
 
 import { useUser } from '../contexts/UserContext';

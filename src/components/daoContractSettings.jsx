@@ -13,7 +13,6 @@ import {
 } from '@chakra-ui/react';
 import { format } from 'date-fns';
 import { RiExternalLinkLine } from 'react-icons/ri';
-// import { RiExternalLinkLine, RiFireLine } from 'react-icons/ri';
 
 import ContentBox from './ContentBox';
 import TextBox from './TextBox';
@@ -57,10 +56,10 @@ const DaoContractSettings = ({ overview, customTerms }) => {
           <Skeleton isLoaded={overview?.proposalDeposit}>
             <TextBox variant='value' size='xl' my={2}>
               {overview?.proposalDeposit
-                ? `${overview?.proposalDeposit /
-                    10 ** overview?.depositToken.decimals} ${
-                    overview?.depositToken.symbol
-                  }`
+                ? `${overview?.proposalDeposit
+                    / 10 ** overview?.depositToken.decimals} ${
+                  overview?.depositToken.symbol
+                }`
                 : '--'}
             </TextBox>
           </Skeleton>
@@ -70,10 +69,10 @@ const DaoContractSettings = ({ overview, customTerms }) => {
           <Skeleton isLoaded={overview?.processingReward}>
             <TextBox variant='value' size='xl' my={2}>
               {overview?.processingReward
-                ? `${overview.processingReward /
-                    10 ** overview?.depositToken.decimals} ${
-                    overview.depositToken.symbol
-                  }`
+                ? `${overview.processingReward
+                    / 10 ** overview?.depositToken.decimals} ${
+                  overview.depositToken.symbol
+                }`
                 : '--'}
             </TextBox>
           </Skeleton>
@@ -86,9 +85,9 @@ const DaoContractSettings = ({ overview, customTerms }) => {
             <TextBox variant='value' size='xl' my={2}>
               {overview
                 ? `${formatPeriods(
-                    +overview?.votingPeriodLength,
-                    +overview?.periodDuration,
-                  )}`
+                  +overview?.votingPeriodLength,
+                  +overview?.periodDuration,
+                )}`
                 : '--'}
             </TextBox>
           </Skeleton>
@@ -99,9 +98,9 @@ const DaoContractSettings = ({ overview, customTerms }) => {
             <TextBox variant='value' size='xl' my={2}>
               {overview
                 ? `${formatPeriods(
-                    +overview.gracePeriodLength,
-                    +overview.periodDuration,
-                  )}`
+                  +overview.gracePeriodLength,
+                  +overview.periodDuration,
+                )}`
                 : '--'}
             </TextBox>
           </Skeleton>
@@ -114,9 +113,9 @@ const DaoContractSettings = ({ overview, customTerms }) => {
             <TextBox variant='value' size='xl' my={2}>
               {overview
                 ? format(
-                    new Date(+overview?.summoningTime * 1000),
-                    'MMMM d, yyyy',
-                  )
+                  new Date(+overview?.summoningTime * 1000),
+                  'MMMM d, yyyy',
+                )
                 : '--'}
             </TextBox>
           </Skeleton>

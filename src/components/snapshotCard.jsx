@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from 'react';
-import { Flex, Box, HStack, Stack, Link } from '@chakra-ui/react';
+import {
+  Flex, Box, HStack, Stack, Link,
+} from '@chakra-ui/react';
 import { format } from 'date-fns';
 import ContentBox from './ContentBox';
 import TextBox from './TextBox';
@@ -24,7 +26,7 @@ const SnapshotCard = ({ snapshotId, snapshot }) => {
       isExternal
     >
       <Stack spacing={4}>
-        <TextBox size='lg' colorScheme='whiteAlpha.900' maxW='80%'>
+        <TextBox size='lg' color='whiteAlpha.900' maxW='80%'>
           {snapshot.msg.payload.name}
         </TextBox>
         <TextBox variant='value' size='sm'>

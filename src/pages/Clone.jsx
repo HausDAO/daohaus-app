@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from 'react';
-import { Button, Flex, Box, Text } from '@chakra-ui/react';
+import {
+  Button, Flex, Box, Text,
+} from '@chakra-ui/react';
 
 import { useParams } from 'react-router-dom';
 import { useInjectedProvider } from '../contexts/InjectedProviderContext';
@@ -23,8 +25,7 @@ import MainViewLayout from '../components/mainViewLayout';
 import { capitalize } from '../utils/general';
 import { UBERHAUS_DATA } from '../utils/uberhaus';
 
-const tokenMsg =
-  'Token addresses are different across chains. If you would like to clone the same tokens to a different network, you will need to manually add the equivalent token addresses here.';
+const tokenMsg = 'Token addresses are different across chains. If you would like to clone the same tokens to a different network, you will need to manually add the equivalent token addresses here.';
 
 const Clone = ({ daoOverview, daoMembers, isUberHaus = false }) => {
   const {
@@ -123,7 +124,7 @@ const Clone = ({ daoOverview, daoMembers, isUberHaus = false }) => {
           onError: (error, txHash) => {
             console.error(`error: ${error}`);
             errorToast({
-              title: `There was an error.`,
+              title: 'There was an error.',
             });
             resolvePoll(txHash);
             setSummonError(error);
@@ -148,21 +149,22 @@ const Clone = ({ daoOverview, daoMembers, isUberHaus = false }) => {
       await SummonService({
         web3: injectedProvider,
         chainID: injectedChain.chain_id,
-      })('summonMoloch')({ args: summonParams, from: address, poll, onTxHash });
+      })('summonMoloch')({
+        args: summonParams, from: address, poll, onTxHash,
+      });
     } catch (err) {
       console.log('error in tx', err);
       setIsSummoning(false);
       errorToast({
-        title: `There was an error.`,
+        title: 'There was an error.',
         description: err?.message || '',
       });
     }
   };
 
-  const uberCloneWrongNetwork =
-    isUberHaus &&
-    injectedChain &&
-    injectedChain.chain_id !== UBERHAUS_DATA.NETWORK;
+  const uberCloneWrongNetwork = isUberHaus
+    && injectedChain
+    && injectedChain.chain_id !== UBERHAUS_DATA.NETWORK;
 
   if (!daoData) {
     return (
