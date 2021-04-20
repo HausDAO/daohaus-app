@@ -5,7 +5,7 @@ export const POPUP_CONTENT = {
     images: [],
     bodyText: [
       'A proposal will pass if there are more votes for "yes" (👍️) than "no" (👎️).',
-      'There is no minumum quorum (number of votes).'
+      'There is no minumum quorum (number of votes).',
       'After a proposal passes, there is a short grace period before the proposal can be processed.',
       'If you voted "yes" (👍️), you can not ragequit until the proposal has been processed',
     ],
