@@ -26,7 +26,9 @@ export const postError = async (data, id) => {
 };
 
 const createError = (errData, id) => {
-  const { caughtAt, errMsg, daoAddress, type, priority, userAddress } = errData;
+  const {
+    caughtAt, errMsg, daoAddress, type, priority, userAddress,
+  } = errData;
 
   const firestoreError = {
     fields: {

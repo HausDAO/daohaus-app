@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
-import { Flex, Button, Link } from '@chakra-ui/react';
+import {
+  Flex, Button, Link, Spinner, Box,
+} from '@chakra-ui/react';
 import { RiAddFill } from 'react-icons/ri';
 
 import MainViewLayout from '../components/mainViewLayout';
@@ -8,24 +10,30 @@ import MintGateCard from '../components/mintGateCard';
 import { useInjectedProvider } from '../contexts/InjectedProviderContext';
 import { daoConnectedAndSameChain } from '../utils/general';
 import { getMintGates } from '../utils/requests';
+import BoostNotActive from '../components/boostNotActive';
+import TextBox from '../components/TextBox';
+import { chainByID } from '../utils/chain';
 
 const MintGate = ({ daoMetaData }) => {
   const [gates, setGates] = useState([]);
   const { address, injectedChain } = useInjectedProvider();
   const { daochain, daoid } = useParams();
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetchGates = async () => {
       const localGates = await getMintGates(daoid);
       if (localGates?.links?.length > 0) {
-        setGates(localGates.data.links);
+        setGates(localGates.links);
       }
+      setLoading(false);
     };
     if (daoid && daoMetaData && 'mintGate' in daoMetaData?.boosts) {
       fetchGates();
     }
   }, [daoid, daoMetaData]);
-  // console.log(gates);
+  console.log(gates);
+  console.log(daoMetaData);
 
   const newGateButton = daoConnectedAndSameChain(
     address,
@@ -34,7 +42,7 @@ const MintGate = ({ daoMetaData }) => {
   ) && (
     <Button
       as={Link}
-      href={`https://mintgate.app/?token1=${daoid}&amount=1`}
+      href={`https://www.mintgate.app/create_link?url&token1=${daoid}&amount1=1&type1=2&network1=${chainByID(daochain).network_id}`}
       rightIcon={<RiAddFill />}
       isExternal
     >
@@ -45,8 +53,21 @@ const MintGate = ({ daoMetaData }) => {
   return (
     <MainViewLayout header='MintGates' headerEl={newGateButton} isDao>
       <Flex wrap='wrap' justify='space-around'>
-        {gates.length > 0 &&
-          gates.map((gate) => <MintGateCard key={gate.title} gate={gate} />)}
+        {!loading ? (
+          daoMetaData && 'mintGate' in daoMetaData?.boosts ? (
+            gates.length > 0 ? (
+              gates.map((gate) => <MintGateCard key={gate.title} gate={gate} />)
+            ) : (
+              <Box mt='100px'>
+                <TextBox variant='value' size='lg'>No Gates Found. Get started by creating your first gate!</TextBox>
+              </Box>
+            )
+          ) : (
+            <BoostNotActive />
+          )
+        ) : (
+          <Spinner size='xl' mt='100px' />
+        )}
       </Flex>
     </MainViewLayout>
   );

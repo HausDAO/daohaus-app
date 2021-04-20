@@ -9,7 +9,9 @@ import {
 } from '@chakra-ui/react';
 import TextBox from '../components/TextBox';
 
-const RageInput = ({ register, setValue, label, type, max, mb = 2 }) => {
+const RageInput = ({
+  register, setValue, label, type, max, mb = 2,
+}) => {
   const setMax = () => {
     setValue(type, max);
   };

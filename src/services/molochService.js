@@ -4,7 +4,9 @@ import DaoAbi from '../contracts/mcdao.json';
 import DaoAbiV2 from '../contracts/molochV2.json';
 import { chainByID } from '../utils/chain';
 
-export const MolochService = ({ web3, daoAddress, version, chainID }) => {
+export const MolochService = ({
+  web3, daoAddress, version, chainID,
+}) => {
   if (!web3) {
     const rpcUrl = chainByID(chainID).rpc_url;
     web3 = new Web3(new Web3.providers.HttpProvider(rpcUrl));
@@ -44,22 +46,24 @@ export const MolochService = ({ web3, daoAddress, version, chainID }) => {
       };
     }
     if (
-      service === 'submitProposal' ||
-      service === 'sponsorProposal' ||
-      service === 'cancelProposal' ||
-      service === 'submitVote' ||
-      service === 'processProposal' ||
-      service === 'processWhitelistProposal' ||
-      service === 'processGuildKickProposal' ||
-      service === 'submitWhitelistProposal' ||
-      service === 'submitGuildKickProposal' ||
-      service === 'collectTokens' ||
-      service === 'withdrawBalance' ||
-      service === 'ragequit' ||
-      service === 'ragekick' ||
-      service === 'updateDelegateKey'
+      service === 'submitProposal'
+      || service === 'sponsorProposal'
+      || service === 'cancelProposal'
+      || service === 'submitVote'
+      || service === 'processProposal'
+      || service === 'processWhitelistProposal'
+      || service === 'processGuildKickProposal'
+      || service === 'submitWhitelistProposal'
+      || service === 'submitGuildKickProposal'
+      || service === 'collectTokens'
+      || service === 'withdrawBalance'
+      || service === 'ragequit'
+      || service === 'ragekick'
+      || service === 'updateDelegateKey'
     ) {
-      return async ({ args, address, poll, onTxHash }) => {
+      return async ({
+        args, address, poll, onTxHash,
+      }) => {
         try {
           const tx = await contract.methods[service](...args);
           return tx

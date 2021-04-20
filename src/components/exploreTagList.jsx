@@ -1,5 +1,7 @@
 import React, { useContext } from 'react';
-import { Badge, Flex, Icon, Box } from '@chakra-ui/react';
+import {
+  Badge, Flex, Icon, Box,
+} from '@chakra-ui/react';
 import { FaRegWindowClose } from 'react-icons/fa';
 
 import TextBox from './TextBox';

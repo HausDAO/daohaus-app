@@ -138,7 +138,7 @@ const MinionProposalForm = () => {
         actions: {
           onError: (error, txHash) => {
             errorToast({
-              title: `There was an error.`,
+              title: 'There was an error.',
             });
             resolvePoll(txHash);
             console.error(`Could not find a matching proposal: ${error}`);
@@ -169,7 +169,9 @@ const MinionProposalForm = () => {
         web3: injectedProvider,
         minion: values.minionContract,
         chainID: daochain,
-      })('proposeAction')({ args, address, poll, onTxHash });
+      })('proposeAction')({
+        args, address, poll, onTxHash,
+      });
     } catch (err) {
       setLoading(false);
       console.log('error: ', err);
@@ -211,10 +213,9 @@ const MinionProposalForm = () => {
     const { value } = e.target;
     setAbiLoading(true);
     try {
-      const key =
-        daochain === '0x64' ? '' : process.env.REACT_APP_ETHERSCAN_KEY;
-      const url = `${chainByID(daochain).abi_api_url}${value}${key &&
-        `&apikey=${key}`}`;
+      const key = daochain === '0x64' ? '' : process.env.REACT_APP_ETHERSCAN_KEY;
+      const url = `${chainByID(daochain).abi_api_url}${value}${key
+        && `&apikey=${key}`}`;
       const response = await fetch(url);
       const json = await response.json();
 
@@ -363,8 +364,8 @@ const MinionProposalForm = () => {
                 ref={register}
                 onChange={selectFunction}
               >
-                {abiFunctions &&
-                  abiFunctions.map((funct) => {
+                {abiFunctions
+                  && abiFunctions.map((funct) => {
                     return (
                       <option key={funct.id} value={funct.id}>
                         {funct.name}
@@ -386,8 +387,8 @@ const MinionProposalForm = () => {
                     ABI Params
                   </FormLabel>
                   <Stack spacing={3}>
-                    {abiParams &&
-                      abiParams.map((param, idx) => {
+                    {abiParams
+                      && abiParams.map((param, idx) => {
                         return (
                           <Stack key={idx} spacing={1}>
                             <TextBox size='xs'>{param.name}</TextBox>
@@ -435,19 +436,19 @@ const MinionProposalForm = () => {
             >
               Submit
             </Button>
-          ) : (
-            <Button
-              onClick={requestWallet}
-              isDisabled={injectedChain && daochain !== injectedChain?.chainId}
-            >
-              {`Connect 
+            ) : (
+              <Button
+                onClick={requestWallet}
+                isDisabled={injectedChain && daochain !== injectedChain?.chainId}
+              >
+                {`Connect 
               ${
                 injectedChain && daochain !== injectedChain?.chainId
                   ? `to ${chainByID(daochain).name}`
                   : 'Wallet'
               }`}
-            </Button>
-          )}
+              </Button>
+            )}
         </Box>
       </Flex>
     </form>

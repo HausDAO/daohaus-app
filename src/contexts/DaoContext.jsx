@@ -59,20 +59,18 @@ export const DaoProvider = ({ children }) => {
     // This condition is brittle. If one request passes, but the rest fail
     // this stops the app from fetching. We'll need something better later on.
     if (
-      daoProposals ||
-      daoActivities ||
-      daoOverview ||
-      daoMembers ||
-      uberMinionData
-    )
-      return;
+      daoProposals
+      || daoActivities
+      || daoOverview
+      || daoMembers
+      || uberMinionData
+    ) { return; }
     if (
-      !daoid ||
-      !daochain ||
-      !daoNetworkData ||
-      hasPerformedBatchQuery.current
-    )
-      return;
+      !daoid
+      || !daochain
+      || !daoNetworkData
+      || hasPerformedBatchQuery.current
+    ) { return; }
 
     const bigQueryOptions = {
       args: {

@@ -59,7 +59,7 @@ const CcoClaim = ({ setClaimComplete }) => {
         actions: {
           onError: (error, txHash) => {
             errorToast({
-              title: `There was an error.`,
+              title: 'There was an error.',
             });
             resolvePoll(txHash);
             console.error(`poll error: ${error}`);
@@ -86,7 +86,9 @@ const CcoClaim = ({ setClaimComplete }) => {
         daoAddress: daoid,
         version: daoOverview.version,
         chainID: daochain,
-      })('ragequit')({ args, address, poll, onTxHash });
+      })('ragequit')({
+        args, address, poll, onTxHash,
+      });
     } catch (err) {
       setLoading(false);
       console.log(err);

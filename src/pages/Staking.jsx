@@ -1,5 +1,7 @@
 import React from 'react';
-import { Box, Flex, Button, useBreakpointValue, Icon } from '@chakra-ui/react';
+import {
+  Box, Flex, Button, useBreakpointValue, Icon,
+} from '@chakra-ui/react';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
 import { FaCopy } from 'react-icons/fa';
 import { useParams } from 'react-router';
@@ -70,10 +72,9 @@ export default Staking;
 const PriceBox = () => {
   const { successToast } = useOverlay();
 
-  const handleCopy = () =>
-    successToast({
-      title: 'Copied Address',
-    });
+  const handleCopy = () => successToast({
+    title: 'Copied Address',
+  });
 
   const WideBox = () => (
     <ContentBox d='flex' width='100%' justifyContent='space-around' mb={6}>
