@@ -117,10 +117,21 @@ const Members = React.memo(function MembersPage({
       <Flex
         wrap={['wrap', null, null, 'nowrap']}
         justify='space-between'
-        w={['100%', null, null, '50%']}
+        w={['100%', null, null, '55%']}
       >
-        <ListSort sort={sort} setSort={setSort} options={membersSortOptions} />
-        <MemberFilters filter={filter} setFilter={setFilter} />
+        <Box
+          flex={.25}
+          mr={5}
+          textTransform='uppercase'
+          fontFamily='heading'
+          fontSize={['sm', null, null, 'md']}
+        >
+          {listMembers?.length || 0} MEMBERS
+        </Box>
+        <Flex flex={1} justifyContent='flex-end' alignItems='flex-start'>
+          <ListSort sort={sort} setSort={setSort} options={membersSortOptions} />
+          <MemberFilters filter={filter} setFilter={setFilter} />
+        </Flex>
       </Flex>
       <Flex wrap='wrap'>
         <Box
