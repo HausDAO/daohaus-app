@@ -12,6 +12,7 @@ import { createPoll } from '../services/pollService';
 import { PROPOSAL_TYPES } from '../utils/proposalUtils';
 import { UberHausMinionService } from '../services/uberHausMinionService';
 import { MinionService } from '../services/minionService';
+import { attemptInjectedChainData } from '../utils/web3Modal';
 
 const MinionExecute = ({ proposal }) => {
   const { daochain } = useParams();
@@ -146,7 +147,9 @@ const MinionExecute = ({ proposal }) => {
       setLoading(false);
     }
   };
-
+  console.log(injectedProvider);
+  const isCorrectChain = daochain === injectedProvider?.currentProvider?.chainId;
+  console.log(isCorrectChain);
   const getMinionAction = () => {
     if (minionDetails?.executed) return <Box>Executed</Box>;
     if (
