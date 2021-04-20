@@ -26,6 +26,7 @@ import MainViewLayout from '../components/mainViewLayout';
 import MinionTokenList from '../components/minionTokenList';
 
 import {
+  fetchNativeBalance,
   getBlockScoutTokenData,
   getEtherscanTokenData,
 } from '../utils/tokenExplorerApi';
@@ -47,6 +48,7 @@ const MinionDetails = ({ overview, currentDaoTokens }) => {
   const [minionData, setMinionData] = useState();
   const [daoBalances, setDaoBalances] = useState();
   const [contractBalances, setContractBalances] = useState();
+  const [nativeBalance, setNativeBalance] = useState();
   const [balancesGraphData, setBalanceGraphData] = useState({
     chains: [],
     data: [],
@@ -75,7 +77,10 @@ const MinionDetails = ({ overview, currentDaoTokens }) => {
   }, [overview, minion]);
 
   useEffect(() => {
+
     const getContractBalance = async () => {
+  console.log('minion', minion)
+
       try {
         if (daochain === '0x1' || daochain === '0x4' || daochain === '0x2a') {
           // eth chains not supported yet
@@ -83,6 +88,8 @@ const MinionDetails = ({ overview, currentDaoTokens }) => {
           setContractBalances(await getEtherscanTokenData(minion, daochain));
         } else {
           setContractBalances(await getBlockScoutTokenData(minion));
+          const native = await fetchNativeBalance(minion);
+          setNativeBalance(native.result / 10 ** 18);
         }
       } catch (err) {
         console.log(err);
@@ -257,6 +264,9 @@ const MinionDetails = ({ overview, currentDaoTokens }) => {
                   <Box>
                     <TextBox size='md' align='center'>
                       Minion wallet
+                    </TextBox>
+                    <TextBox size='md' align='center'>
+                      balance: {nativeBalance}
                     </TextBox>
                     {daochain !== '0x64' && (
                       <Flex>View token data on etherscan</Flex>
