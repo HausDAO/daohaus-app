@@ -5,7 +5,8 @@ module.exports = {
     browser: true,
   },
   // prettier should be last
-  extends: ['plugin:react/recommended', 'airbnb'],
+  // extends: ['plugin:react/recommended', 'airbnb'],
+  extends: ['plugin:react/recommended'],
   globals: {
     Atomics: 'readonly',
     SharedArrayBuffer: 'readonly',
@@ -28,7 +29,9 @@ module.exports = {
       configFile: './babel.config.json',
     },
   },
-  plugins: ['react', 'react-hooks', 'airbnb'],
+  // plugins: ['react', 'react-hooks', 'airbnb'],
+  plugins: ['react', 'react-hooks'],
+
   settings: {
     react: {
       version: 'detect',
