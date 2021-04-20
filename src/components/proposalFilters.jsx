@@ -16,7 +16,9 @@ import { getFilters, sortOptions } from '../utils/proposalContent';
 import { determineUnreadProposalList } from '../utils/proposalUtils';
 import { useDaoMember } from '../contexts/DaoMemberContext';
 
-const ProposalFilters = ({ filter, setFilter, proposals, setSort }) => {
+const ProposalFilters = ({
+  filter, setFilter, proposals, setSort,
+}) => {
   // const [memberWallet] = useMemberWallet();
   const { daoMember } = useDaoMember();
   const [filterOptions, setFilterOptions] = useState();
@@ -25,9 +27,8 @@ const ProposalFilters = ({ filter, setFilter, proposals, setSort }) => {
   useEffect(() => {
     let options;
     if (daoMember && daoMember.shares > 0) {
-      const action =
-        proposals &&
-        proposals.filter((prop) => {
+      const action = proposals
+        && proposals.filter((prop) => {
           const unread = determineUnreadProposalList(
             prop,
             daoMember.shares > 0,
