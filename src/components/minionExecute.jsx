@@ -147,7 +147,7 @@ const MinionExecute = ({ proposal }) => {
       setLoading(false);
     }
   };
-  console.log(injectedProvider);
+
   const isCorrectChain = daochain === injectedProvider?.currentProvider?.chainId;
   console.log(isCorrectChain);
   const getMinionAction = () => {
@@ -158,7 +158,7 @@ const MinionExecute = ({ proposal }) => {
     ) {
       return (
         <Flex alignItems='center' flexDir='column'>
-          <Button onClick={executeMinion} mb={4}>
+          <Button onClick={executeMinion} mb={4} disabled={!isCorrectChain}>
             Execute Minion
           </Button>
           <Box>
@@ -168,7 +168,7 @@ const MinionExecute = ({ proposal }) => {
         </Flex>
       );
     }
-    return <Button onClick={executeMinion}>Execute Minion</Button>;
+    return <Button onClick={executeMinion} disabled={!isCorrectChain}>Execute Minion</Button>;
   };
 
   return (
