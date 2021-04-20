@@ -8,7 +8,7 @@ import { ExploreContext } from '../contexts/ExploreContext';
 import ListSort from './listSort';
 import { SORT_OPTIONS } from '../utils/exploreContent';
 
-const ExploreFilters = () => {
+const ExploreFilters = ({ daoCount }) => {
   const [sort, setSort] = useState();
   const { dispatch } = useContext(ExploreContext);
 
@@ -20,7 +20,15 @@ const ExploreFilters = () => {
 
   return (
     <>
-      <Flex align='center' justify='flex-start' wrap='wrap'>
+      <Flex align='center' justify='flex-start' wrap='wrap' ml={5}>
+      <Box
+        mr={5}
+        textTransform='uppercase'
+        fontFamily='heading'
+        fontSize={['sm', null, null, 'md']}
+      >
+        {daoCount} DAOS
+      </Box>
         <ExploreSearch />
         <Box mr={1}>
           <ListSort sort={sort} setSort={setSort} options={SORT_OPTIONS} />

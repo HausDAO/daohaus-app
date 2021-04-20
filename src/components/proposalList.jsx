@@ -94,7 +94,6 @@ const ProposalsList = ({ proposals, customTerms }) => {
   };
 
   const handleSort = (option) => {
-    console.log(option)
     if (!option?.value || !option?.name) {
       console.error(
         'Sort component did not update. Received incorrect data stucture',

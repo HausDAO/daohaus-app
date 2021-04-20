@@ -3,7 +3,7 @@ import { Flex } from '@chakra-ui/react';
 import { ExploreContext } from '../contexts/ExploreContext';
 import ExploreCard from './exploreCard';
 
-const ExploreList = () => {
+const ExploreList = ({ handleDaoCalculate }) => {
   const [daos, setDaos] = useState([]);
   const { state, exploreDaos } = useContext(ExploreContext);
 
@@ -51,6 +51,7 @@ const ExploreList = () => {
       });
 
     setDaos(filteredAndSortedDaos);
+    handleDaoCalculate(filteredAndSortedDaos.length);
   }, [state.sort, state.filters, state.searchTerm, state.tags]);
 
   const daoList = daos.map((dao, i) => {
