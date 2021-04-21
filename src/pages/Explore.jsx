@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React, { useState, useContext } from 'react';
 import { Spinner } from '@chakra-ui/react';
 import ExploreFilters from '../components/exploreFilters';
 import ExploreList from '../components/exploreList';
@@ -8,14 +8,15 @@ import MainViewLayout from '../components/mainViewLayout';
 
 const Explore = () => {
   const { hasLoadedExploreData } = useContext(ExploreContext);
+  const [daoCount, setDaoCount] = useState(0);
 
   return (
     <Layout>
       <MainViewLayout header='Explore DAOs'>
         {hasLoadedExploreData ? (
           <>
-            <ExploreFilters />
-            <ExploreList />
+            <ExploreFilters daoCount={daoCount} />
+            <ExploreList handleDaoCalculate={setDaoCount} />
           </>
         ) : (
           <Spinner />

@@ -80,9 +80,9 @@ const Boosts = ({
               <HStack spacing={4}>
                 {boost.settings && (
                   <Button
-                    as={RouterLink}
+                    as={canInteract && RouterLink}
                     variant={boost.link ? 'outline' : null}
-                    to={canInteract && `/dao/${daochain}/${daoid}/settings/${boost.successRoute}`}
+                    to={`/dao/${daochain}/${daoid}/settings/${boost.successRoute}`}
                     textTransform='uppercase'
                     disabled={!canInteract}
                   >

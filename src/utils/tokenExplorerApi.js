@@ -51,7 +51,8 @@ const parseEtherscan = async (json, address, daochain) => {
           tokenAddress: b.contractAddress,
           chainID: daochain,
         });
-        for (let i = 0; i < b.balance; i = +1) {
+
+        for (let i = 0; i < b.balance; i += 1) {
           const tid = nftService('tokenOfOwnerByIndex')({
             accountAddr: address,
             index: i,
@@ -110,9 +111,24 @@ const fetchBlockScoutAPIData = async (address) => {
   }
 };
 
+export const fetchNativeBalance = async (address) => {
+  try {
+    const url = `https://blockscout.com/xdai/mainnet/api?module=account&action=balance&address=${address}`;
+    const response = await fetch(url);
+    const json = await response.json();
+    if (!json.result || json.status === '0') {
+      const msg = json.message;
+      throw new Error(msg);
+    }
+    return json;
+  } catch (error) {
+    throw new Error(error);
+  }
+};
 const parseBlockScout = async (json, address) => {
   const tokenData = await fetchTokenData();
   const daochain = '0x64';
+
   let erc721s = json.result
     .filter((token) => token.type === 'ERC-721')
     .map(async (b) => {
@@ -121,7 +137,8 @@ const parseBlockScout = async (json, address) => {
         tokenAddress: b.contractAddress,
         chainID: daochain,
       });
-      for (let i = 0; i < b.balance; i = +1) {
+
+      for (let i = 0; i < +b.balance; i += 1) {
         const tid = nftService('tokenOfOwnerByIndex')({
           accountAddr: address,
           index: i,
