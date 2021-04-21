@@ -12,7 +12,6 @@ import { createPoll } from '../services/pollService';
 import { PROPOSAL_TYPES } from '../utils/proposalUtils';
 import { UberHausMinionService } from '../services/uberHausMinionService';
 import { MinionService } from '../services/minionService';
-import { attemptInjectedChainData } from '../utils/web3Modal';
 
 const MinionExecute = ({ proposal }) => {
   const { daochain } = useParams();
