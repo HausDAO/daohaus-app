@@ -28,7 +28,7 @@ const MinionNftTile = ({ meta, tokenId }) => {
 
   return (
     <Box m={6} d={['none', null, null, 'inline-block']} bg='#E2E8F0'>
-      {tokenDetail?.image || tokenDetail?.properties.image ? (
+      {tokenDetail?.image || tokenDetail?.properties?.image ? (
         <Tooltip
           hasArrow
           shouldWrapChildren

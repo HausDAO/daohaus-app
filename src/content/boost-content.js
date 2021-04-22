@@ -68,6 +68,7 @@ export const boostList = [
     successRoute: '',
     link: 'snapshot',
     settings: true,
+    comingSoon: true,
   },
   {
     name: 'Minion Safe',
