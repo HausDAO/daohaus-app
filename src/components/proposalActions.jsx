@@ -566,11 +566,11 @@ const ProposalVote = ({
                           {proposal?.status === 'Passed' && 'Passed'}
                           {(proposal?.status === 'GracePeriod'
                             || proposal?.status === 'ReadyForProcessing')
-                            && proposal.yesShares > proposal.noShares
+                            && +proposal?.yesShares > +proposal?.noShares
                             && 'Passed'}
                           {(proposal?.status === 'GracePeriod'
                             || proposal?.status === 'ReadyForProcessing')
-                            && proposal.noShares > proposal.yesShares
+                            && +proposal?.noShares > +proposal?.yesShares
                             && 'Failed'}
                         </TextBox>
                       </Flex>
