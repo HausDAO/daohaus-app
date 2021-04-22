@@ -14,7 +14,6 @@ const DaoToDaoMemberInfo = ({
   isMember,
   userNetworkMismatchOrNotMember,
 }) => {
-  console.log('userNetworkMismatchOrNotMember', userNetworkMismatchOrNotMember);
   return (
     <>
       <Flex justify='space-between' py={4}>
@@ -52,7 +51,7 @@ const DaoToDaoMemberInfo = ({
               )}
             </Box>
           </Flex>
-          {delegate && needDelegateKeySet && isMember ? (
+          {delegate && needDelegateKeySet && isMember && (
             <>
               <SetInitialUberHausDelegate
                 minionAddress={membership.memberAddress}
@@ -63,13 +62,13 @@ const DaoToDaoMemberInfo = ({
                 Nominate New Delegate
               </Button>
             </>
-          ) : null}
+          )}
 
-          {membership && delegate && !needDelegateKeySet && isMember && !userNetworkMismatchOrNotMember ? (
+          {membership && delegate && !needDelegateKeySet && isMember && !userNetworkMismatchOrNotMember && (
             <Button w='25%' onClick={openModal}>
               Manage
             </Button>
-          ) : null}
+          )}
         </Flex>
       </Box>
     </>

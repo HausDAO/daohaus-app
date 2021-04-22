@@ -6,13 +6,10 @@ import {
 
 const DaoToDaoProposalCard = ({ proposal }) => {
   const { daochain, daoid } = useParams();
-
   const inChildDao = daoid === proposal?.molochAddress;
   const status = inChildDao && proposal?.processed
     ? `${proposal.status}, unexecuted`
     : proposal.status;
-
-  console.log('proposal', proposal);
 
   return (
     <>

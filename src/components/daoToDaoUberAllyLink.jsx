@@ -6,7 +6,7 @@ import { RiLoginBoxLine } from 'react-icons/ri';
 const DaoToDaoUberAlly = ({ dao }) => {
   return (
     <>
-      {dao.bodyText ? <Box fontSize='sm'>{dao.bodyText}</Box> : null}
+      {dao.bodyText && <Box fontSize='sm'>{dao.bodyText}</Box>}
       <Flex align='center' justifyContent='space-between'>
         <Box fontSize='lg' fontFamily='heading' fontWeight={700} pb={2}>
           {dao.name}
