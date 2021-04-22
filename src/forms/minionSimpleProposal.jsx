@@ -60,24 +60,22 @@ const MinionProposalForm = () => {
   const [minions, setMinions] = useState([]);
   const now = (new Date().getTime() / 1000).toFixed();
 
-  const { handleSubmit, errors, register} = useForm();
+  const { handleSubmit, errors, register } = useForm();
 
   useEffect(() => {
     if (daoOverview?.minions) {
       const localMinions = daoOverview.minions.map(
         (minion) => ({
-          minionAdddress :minion.minionAddress,
-          minionName: minion.details
+          minionAdddress: minion.minionAddress,
+          minionName: minion.details,
         }),
       );
       setMinions(localMinions);
     }
-  }, [daoOverview?.minions ]);
+  }, [daoOverview?.minions]);
 
-
-  
   useEffect(() => {
-   const errArray = Object.keys(errors)
+    const errArray = Object.keys(errors);
     if (errArray.length > 0) {
       const newE = Object.keys(errors)[0];
       setCurrentError({
@@ -89,12 +87,10 @@ const MinionProposalForm = () => {
     }
   }, [errors]);
 
-
-
   const onSubmit = async (values) => {
     console.log('values', values);
     setLoading(true);
-    const minionName = minions.find(minion => minion.minionAddress === values.minionAdddress)?.minionName
+    const minionName = minions.find((minion) => minion.minionAddress === values.minionAdddress)?.minionName;
     const valueWei = injectedProvider.utils.toWei(values.value);
 
     const inputValues = [];
@@ -110,7 +106,7 @@ const MinionProposalForm = () => {
           }
         }
       });
-     
+
       const aSelectedFunction = abiFunctions.find((func) => {
         return func.name === selectedFunction;
       });
@@ -187,7 +183,7 @@ const MinionProposalForm = () => {
 
   const selectFunction = (e) => {
     const { value } = e.target;
-    
+
     const funcPrams = abiFunctions.find((func) => +func.id === +value);
     setAbiParams(funcPrams.inputs);
     setSelectedFunction(funcPrams.name);
@@ -279,7 +275,7 @@ const MinionProposalForm = () => {
           >
             {' '}
             {minions?.map((minion) => (
-              <option key={minion.minionAdddress } value={minion.minionAdddress}>
+              <option key={minion.minionAdddress} value={minion.minionAdddress}>
                 {minion.minionName || minion.minionAddress}
               </option>
             ))}

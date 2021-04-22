@@ -147,8 +147,8 @@ const ProposalDetails = ({ proposal, daoMember }) => {
 
           {proposal?.minionAddress ? (
             <>
-            <Box w='100%'>{proposal?.description}</Box>
-            <ProposalMinionCard proposal={proposal} />
+              <Box w='100%'>{proposal?.description}</Box>
+              <ProposalMinionCard proposal={proposal} />
             </>
           ) : (
             <Skeleton isLoaded={proposal?.description}>

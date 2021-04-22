@@ -20,14 +20,7 @@ const BoostNotActive = () => {
         Head to Settings
       </Button>
     </Flex>
-<<<<<<< HEAD
-  )
-}
-
-export default BoostNotActive;
-=======
   );
 };
 
 export default BoostNotActive;
->>>>>>> c7f1d525c3f5bdde31e60664a0647aba4aeb8722
