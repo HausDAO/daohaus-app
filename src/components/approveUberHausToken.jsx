@@ -5,13 +5,12 @@ import { Button } from '@chakra-ui/react';
 import { useInjectedProvider } from '../contexts/InjectedProviderContext';
 import { useOverlay } from '../contexts/OverlayContext';
 import { useUser } from '../contexts/UserContext';
-import { useTX } from '../contexts/TXContext';
 import { createPoll } from '../services/pollService';
 import { UberHausMinionService } from '../services/uberHausMinionService';
 import { UBERHAUS_DATA } from '../utils/uberhaus';
 
-const ApproveUberHausToken = ({ minionAddress, minionBalance }) => {
-  const { daochain, daoid } = useParams();
+const ApproveUberHausToken = ({ minionAddress, minionBalance, setShouldFetch }) => {
+  const { daochain } = useParams();
   const { cachePoll, resolvePoll } = useUser();
   const { address, injectedProvider } = useInjectedProvider();
   const {
@@ -21,7 +20,6 @@ const ApproveUberHausToken = ({ minionAddress, minionBalance }) => {
     setTxInfoModal,
   } = useOverlay();
   const [loading, setLoading] = useState(false);
-  const { refreshDao } = useTX();
 
   const unlock = async () => {
     setLoading(true);
@@ -31,7 +29,7 @@ const ApproveUberHausToken = ({ minionAddress, minionBalance }) => {
         chainID: daochain,
         minionAddress,
         uberHausAddress: UBERHAUS_DATA.ADDRESS,
-        daoID: daoid,
+        daoID: UBERHAUS_DATA.ADDRESS,
         tokenAddress: UBERHAUS_DATA.STAKING_TOKEN,
         userAddress: minionAddress,
         unlockAmount: minionBalance,
@@ -42,14 +40,15 @@ const ApproveUberHausToken = ({ minionAddress, minionBalance }) => {
             });
             resolvePoll(txHash);
             console.error(`poll error: ${error}`);
+            setShouldFetch(true);
             setLoading(false);
           },
           onSuccess: (txHash) => {
             successToast({
               title: 'HAUS unlocked.',
             });
-            refreshDao();
             resolvePoll(txHash);
+            setShouldFetch(true);
             setLoading(false);
           },
         },
@@ -67,8 +66,6 @@ const ApproveUberHausToken = ({ minionAddress, minionBalance }) => {
       setLoading(false);
       console.log(err);
     }
-
-    // need poll and test
   };
 
   return (

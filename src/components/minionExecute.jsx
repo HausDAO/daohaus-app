@@ -95,6 +95,7 @@ const MinionExecute = ({ proposal }) => {
         setMinionDetails(null);
       }
     };
+
     if (
       proposal?.proposalId
       && proposal?.minionAddress
@@ -180,7 +181,11 @@ const MinionExecute = ({ proposal }) => {
 
     if (needsHausApproval) {
       return (
-        <ApproveUberHausToken minionAddress={proposal.minionAddress} minionBalance={minionBalance} />
+        <ApproveUberHausToken
+          minionAddress={proposal.minionAddress}
+          minionBalance={minionBalance}
+          setShouldFetch={setShouldFetch}
+        />
       );
     }
 
