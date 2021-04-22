@@ -12,7 +12,9 @@ const DaoToDaoMemberInfo = ({
   openModal,
   handleNominateDelegateClick,
   isMember,
+  userNetworkMismatchOrNotMember,
 }) => {
+  console.log('userNetworkMismatchOrNotMember', userNetworkMismatchOrNotMember);
   return (
     <>
       <Flex justify='space-between' py={4}>
@@ -63,7 +65,7 @@ const DaoToDaoMemberInfo = ({
             </>
           ) : null}
 
-          {membership && delegate && !needDelegateKeySet && isMember ? (
+          {membership && delegate && !needDelegateKeySet && isMember && !userNetworkMismatchOrNotMember ? (
             <Button w='25%' onClick={openModal}>
               Manage
             </Button>

@@ -22,12 +22,14 @@ export const UberHausMinionService = ({ web3, chainID, uberHausMinion }) => {
         const action = await contract.methods[service]().call();
         return action;
       };
-    } if (service === 'getAppointment') {
+    }
+    if (service === 'getAppointment') {
       return async ({ proposalId }) => {
         const action = await contract.methods.appointments(proposalId).call();
         return action;
       };
-    } if (
+    }
+    if (
       service === 'proposeAction'
       || service === 'executeAction'
       || service === 'executeAppointment'
@@ -58,9 +60,11 @@ export const UberHausMinionService = ({ web3, chainID, uberHausMinion }) => {
           return error;
         }
       };
-    } if (
+    }
+    if (
       service === 'setInitialDelegate'
       || service === 'claimDelegateReward'
+      || service === 'approveUberHaus'
     ) {
       return async ({ address, poll, onTxHash }) => {
         try {
@@ -85,7 +89,8 @@ export const UberHausMinionService = ({ web3, chainID, uberHausMinion }) => {
           return error;
         }
       };
-    } if (service === 'delegateByAddress') {
+    }
+    if (service === 'delegateByAddress') {
       return async (delegateAddress) => {
         try {
           const delegate = await contract.methods

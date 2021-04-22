@@ -133,7 +133,7 @@ const Allies = ({
   }
 
   return (
-    <MainViewLayout header='Allies'>
+    <MainViewLayout header='Allies' isDao>
       <Box>
         <DaoToDaoProposalTypeModal isOpen setProposalType={setProposalType} />
         <DaoToDaoProposalModal

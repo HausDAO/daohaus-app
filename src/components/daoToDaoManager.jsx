@@ -15,8 +15,8 @@ import { FaCopy } from 'react-icons/fa';
 import { RiLoginBoxLine } from 'react-icons/ri';
 import { BiCheckbox, BiCheckboxChecked } from 'react-icons/bi';
 
-import TextBox from './TextBox';
 import { UBERHAUS_DATA } from '../utils/uberhaus';
+import TextBox from './TextBox';
 import ContentBox from './ContentBox';
 import DAOHaus from '../assets/img/Daohaus__Castle--Dark.svg';
 import DaoToDaoUberAlly from './daoToDaoUberAllyLink';
@@ -133,6 +133,20 @@ const DaoToDaoManager = ({
     setProposalType('d2dDelegate');
   };
 
+  const openUberMinionModal = () => {
+    setGenericModal({ uberMinionLaunch: true });
+  };
+
+  const copiedToast = () => {
+    toast({
+      title: 'Copied Address',
+      position: 'top-right',
+      status: 'success',
+      duration: 3000,
+      isClosable: true,
+    });
+  };
+
   const openModal = () => setD2dProposalTypeModal((prevState) => !prevState);
 
   const userNetworkMismatchOrNotMember = injectedChain?.chain_id !== daochain || !isMember;
@@ -171,7 +185,7 @@ const DaoToDaoManager = ({
                 fontWeight={900}
                 flexGrow='2'
               >
-                YOUR ARE UberHAUS
+                This is UberHAUS
               </Box>
             </>
           </Flex>
@@ -180,69 +194,41 @@ const DaoToDaoManager = ({
     );
   }
 
-  const openUberMinionModal = () => {
-    setGenericModal({ uberMinionLaunch: true });
-  };
-
-  const copiedToast = () => {
-    toast({
-      title: 'Copied Address',
-      position: 'top-right',
-      status: 'success',
-      duration: 3000,
-      isClosable: true,
-    });
-  };
-
   return (
     <>
       <TextBox size='xs' mb={2}>
         DAO On DAO Memberships
       </TextBox>
       <ContentBox w='100%' maxWidth='40rem' position='relative'>
-        {/* <ComingSoonOverlay message='👀 Check back soon!' /> */}
         <Flex align='center'>
-          {daoid === UBERHAUS_DATA.ADDRESS ? (
-            <>
-              <Image src={DAOHaus} w='50px' h='50px' mr={4} />
-              <Box
-                fontFamily='heading'
-                fontSize='xl'
-                fontWeight={900}
-                flexGrow='2'
-              >
-                YOUR ARE UberHAUS
-              </Box>
-            </>
-          ) : (
-            <>
-              <Image src={DAOHaus} w='50px' h='50px' mr={4} />
-              <Box
-                fontFamily='heading'
-                fontSize='xl'
-                fontWeight={900}
-                flexGrow='2'
-              >
-                UberHAUS
-              </Box>
-              <RouterLink
-                to={`/dao/${UBERHAUS_DATA.NETWORK}/${UBERHAUS_DATA.ADDRESS}`}
-              >
-                <Icon
-                  as={RiLoginBoxLine}
-                  color='secondary.500'
-                  h='25px'
-                  w='25px'
-                />
-              </RouterLink>
-            </>
-          )}
+          <>
+            <Image src={DAOHaus} w='50px' h='50px' mr={4} />
+            <Box
+              fontFamily='heading'
+              fontSize='xl'
+              fontWeight={900}
+              flexGrow='2'
+            >
+              UberHAUS
+            </Box>
+            <RouterLink
+              to={`/dao/${UBERHAUS_DATA.NETWORK}/${UBERHAUS_DATA.ADDRESS}`}
+            >
+              <Icon
+                as={RiLoginBoxLine}
+                color='secondary.500'
+                h='25px'
+                w='25px'
+              />
+            </RouterLink>
+          </>
         </Flex>
 
         {loading ? (
           <Spinner />
         ) : (
           <>
+            {/* not on uber network */}
             {daoNotOnUberNetwork ? (
               <Box>
                 {uberAlly ? (
@@ -258,19 +244,12 @@ const DaoToDaoManager = ({
                   </Box>
                 ) : (
                   <>
-                    {userNetworkMismatchOrNotMember ? (
-                      <Box fontSize='md' my={2}>
-                        Are you a member of this DAO and on the correct network?
-                      </Box>
-                    ) : (
+                    {!userNetworkMismatchOrNotMember ? (
                       <>
                         <Box fontSize='md' my={2} position='relative'>
-                          {`UberHAUS is on the ${UBERHAUS_DATA.NETWORK_NAME}
-                          network. You&apos;ll need to summon a clone of your
-                          DAO there to join.`}
+                          {`UberHAUS is on the ${UBERHAUS_DATA.NETWORK_NAME} network. You&apos;ll need to summon a clone of your DAO there to join.`}
                         </Box>
                         <Box my={2} h={100} position='relative'>
-                          <ComingSoonOverlay message='👀 Check back soon!' />
                           <Button
                             w='50%'
                             as={RouterLink}
@@ -280,6 +259,11 @@ const DaoToDaoManager = ({
                           </Button>
                         </Box>
                       </>
+
+                    ) : (
+                      <Box fontSize='md' my={2}>
+                        Are you a member of this DAO and on the correct network?
+                      </Box>
                     )}
                   </>
                 )}
@@ -433,6 +417,7 @@ const DaoToDaoManager = ({
                       membership={uberHausMinion?.uberHausMembership}
                       delegate={uberHausMinion?.uberHausDelegate}
                       handleNominateDelegateClick={handleNominateDelegateClick}
+                      userNetworkMismatchOrNotMember={userNetworkMismatchOrNotMember}
                       isMember={isMember}
                     />
                     <Box mt={10}>
@@ -451,6 +436,7 @@ const DaoToDaoManager = ({
                       needDelegateKeySet={needDelegateKeySet}
                       openModal={openModal}
                       handleNominateDelegateClick={handleNominateDelegateClick}
+                      userNetworkMismatchOrNotMember={userNetworkMismatchOrNotMember}
                       isMember={isMember}
                     />
 
