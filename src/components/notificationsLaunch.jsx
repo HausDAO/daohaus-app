@@ -22,7 +22,9 @@ const NotificationsLaunch = ({
   setLoading,
   stepOverride,
 }) => {
-  const { handleSubmit, register, getValues, watch } = useForm();
+  const {
+    handleSubmit, register, getValues, watch,
+  } = useForm();
   const { daoid, daochain } = useParams();
   const [connectionError, setConnectionError] = useState();
   const [isConnected, setIsConnected] = useState();

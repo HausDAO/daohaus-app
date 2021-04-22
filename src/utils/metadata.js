@@ -26,19 +26,18 @@ export const getApiMetadata = async () => {
   }
 };
 
-export const formatBoosts = (boostsArr) =>
-  boostsArr.reduce((obj, boost) => {
-    return {
-      ...obj,
-      [boost.boostKey[0]]: omit('boostKey', boost),
-    };
-  }, {});
+export const formatBoosts = (boostsArr) => boostsArr.reduce((obj, boost) => {
+  return {
+    ...obj,
+    [boost.boostKey[0]]: omit('boostKey', boost),
+  };
+}, {});
 
 export const themeImagePath = (imageValue) => {
   if (
-    !imageValue ||
-    imageValue.slice(0, 1) === '/' ||
-    imageValue.slice(0, 4) === 'http'
+    !imageValue
+    || imageValue.slice(0, 1) === '/'
+    || imageValue.slice(0, 4) === 'http'
   ) {
     return imageValue;
   }
@@ -49,17 +48,15 @@ export const themeImagePath = (imageValue) => {
 };
 
 export const pokemolUrlHubList = (dao) => {
-  const domain =
-    dao.meta.network === 'mainnet'
-      ? 'pokemol.com'
-      : `${dao.meta.network}.pokemol.com`;
+  const domain = dao.meta.network === 'mainnet'
+    ? 'pokemol.com'
+    : `${dao.meta.network}.pokemol.com`;
   return `https://${domain}/dao/${dao.moloch.id}`;
 };
 
 export const pokemolUrlExplore = (dao) => {
   const networkName = chainByNetworkId(+dao.networkId).network;
-  const domain =
-    networkName === 'mainnet' ? 'pokemol.com' : `${networkName}.pokemol.com`;
+  const domain = networkName === 'mainnet' ? 'pokemol.com' : `${networkName}.pokemol.com`;
   return `https://${domain}/dao/${dao.id}`;
 };
 
@@ -102,30 +99,28 @@ export const getTerm = (customTerms, word) => {
     return customTerms?.minions || 'Minions';
   } if (word === 'f04subhead') {
     return (
-      customTerms?.f04subhead ||
-      'Please reload from the most recent save point.'
+      customTerms?.f04subhead
+      || 'Please reload from the most recent save point.'
     );
   } if (word === 'f04cta') {
     return customTerms?.f04cta || 'Start Over.';
   } if (typeof word !== 'string') {
     return 'Error';
-  } 
-    return capitalize(word);
-  
+  }
+  return capitalize(word);
 };
 
 export const getCustomProposalTerm = (customTerms, proposalTerm) => {
   if (
-    customTerms?.proposal &&
-    customTerms?.proposal !== 'Proposal' &&
-    proposalTerm
+    customTerms?.proposal
+    && customTerms?.proposal !== 'Proposal'
+    && proposalTerm
   ) {
     return proposalTerm.replace('Proposal', customTerms.proposal);
   } if (proposalTerm) {
     return proposalTerm;
-  } 
-    return 'Proposal';
-  
+  }
+  return 'Proposal';
 };
 
 export const boostPost = async (endpoint, data) => {
@@ -163,7 +158,7 @@ export const ipfsPrePost = async (endpoint, data) => {
 };
 
 export const ipfsPost = async (creds, file) => {
-  const url = `https://api.pinata.cloud/pinning/pinFileToIPFS`;
+  const url = 'https://api.pinata.cloud/pinning/pinFileToIPFS';
   try {
     const response = await fetch(url, {
       method: 'POST',
@@ -238,7 +233,7 @@ export const getEligibility = async (address) => {
 
 export const getDateTime = async () => {
   try {
-    const response = await fetch(`https://data.daohaus.club/dao/get-utc`);
+    const response = await fetch('https://data.daohaus.club/dao/get-utc');
     return response.json();
   } catch (err) {
     throw new Error(err);

@@ -84,7 +84,7 @@ const WhitelistProposalForm = () => {
           actions: {
             onError: (error, txHash) => {
               errorToast({
-                title: `There was an error.`,
+                title: 'There was an error.',
               });
               resolvePoll(txHash);
               console.error(`Could not find a matching proposal: ${error}`);
@@ -118,12 +118,14 @@ const WhitelistProposalForm = () => {
         daoAddress: daoid,
         chainID: daochain,
         version: daoOverview.version,
-      })('submitWhitelistProposal')({ args, address, poll, onTxHash });
+      })('submitWhitelistProposal')({
+        args, address, poll, onTxHash,
+      });
     } catch (err) {
       setLoading(false);
       console.error('error: ', err);
       errorToast({
-        title: `There was an error.`,
+        title: 'There was an error.',
       });
     }
   };
@@ -176,19 +178,19 @@ const WhitelistProposalForm = () => {
             >
               Submit
             </Button>
-          ) : (
-            <Button
-              onClick={requestWallet}
-              isDisabled={injectedChain && daochain !== injectedChain?.chainId}
-            >
-              {`Connect
+            ) : (
+              <Button
+                onClick={requestWallet}
+                isDisabled={injectedChain && daochain !== injectedChain?.chainId}
+              >
+                {`Connect
               ${
                 injectedChain && daochain !== injectedChain?.chainId
                   ? `to ${chainByID(daochain).name}`
                   : 'Wallet'
               }`}
-            </Button>
-          )}
+              </Button>
+            )}
         </Box>
       </Flex>
     </form>

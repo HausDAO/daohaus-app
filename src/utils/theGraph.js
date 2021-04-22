@@ -2,9 +2,9 @@ import { graphQuery } from './apollo';
 import { ADDRESS_BALANCES, BANK_BALANCES } from '../graphQL/bank-queries';
 import { DAO_ACTIVITIES, HOME_DAO } from '../graphQL/dao-queries';
 import { MEMBERS_LIST } from '../graphQL/member-queries';
-import { proposalResolver, daoResolver } from "./resolvers";
-import { getGraphEndpoint, supportedChains } from "./chain";
-import { fetchTokenData } from "./tokenValue";
+import { proposalResolver, daoResolver } from './resolvers';
+import { getGraphEndpoint, supportedChains } from './chain';
+import { fetchTokenData } from './tokenValue';
 import { omit } from './general';
 import { UBERHAUS_QUERY, UBER_MINIONS } from '../graphQL/uberhaus-queries';
 import { UBERHAUS_DATA } from './uberhaus';
@@ -12,7 +12,9 @@ import { getApiMetadata } from './metadata';
 
 export const graphFetchAll = async (args, items = [], skip = 0) => {
   try {
-    const { endpoint, query, variables, subfield } = args;
+    const {
+      endpoint, query, variables, subfield,
+    } = args;
     const result = await graphQuery({
       endpoint,
       query,
@@ -25,9 +27,8 @@ export const graphFetchAll = async (args, items = [], skip = 0) => {
     const newItems = result[subfield];
     if (newItems.length === 100) {
       return graphFetchAll(args, [...newItems, ...items], skip + 100);
-    } 
-      return [...items, ...newItems];
-    
+    }
+    return [...items, ...newItems];
   } catch (error) {
     console.error(error);
   }
@@ -69,9 +70,8 @@ const fetchAllActivity = async (args, items = [], skip = 0) => {
     const { proposals } = result.moloch;
     if (proposals.length === 100) {
       return fetchAllActivity(args, [...items, ...proposals], skip + 100);
-    } 
-      return { ...result.moloch, proposals: [...items, ...proposals] };
-    
+    }
+    return { ...result.moloch, proposals: [...items, ...proposals] };
   } catch (error) {
     throw new Error(error);
   }
@@ -102,16 +102,14 @@ const completeQueries = {
         rageQuits: activity.rageQuits,
         title: activity.title,
         version: activity.version,
-        proposals: activity.proposals.map((proposal) =>
-          proposalResolver(proposal, {
-            status: true,
-            title: true,
-            description: true,
-            link: true,
-            hash: true,
-            proposalType: true,
-          }),
-        ),
+        proposals: activity.proposals.map((proposal) => proposalResolver(proposal, {
+          status: true,
+          title: true,
+          description: true,
+          link: true,
+          hash: true,
+          proposalType: true,
+        })),
       };
 
       if (setter.setDaoActivities) {
@@ -225,14 +223,12 @@ export const hubChainQuery = async ({
             ...dao,
             moloch: {
               ...omit('proposals', dao.moloch),
-              proposals: dao.moloch.proposals.map((proposal) =>
-                proposalResolver(proposal, {
-                  proposalType: true,
-                  description: true,
-                  title: true,
-                  activityFeed: true,
-                }),
-              ),
+              proposals: dao.moloch.proposals.map((proposal) => proposalResolver(proposal, {
+                proposalType: true,
+                description: true,
+                title: true,
+                activityFeed: true,
+              })),
             },
           };
 
@@ -242,10 +238,9 @@ export const hubChainQuery = async ({
           };
         })
         .filter((dao) => {
-          const notHiddenAndHasMetaOrIsUnregisteredSummoner =
-            (dao.meta && !dao.meta.hide) ||
-            (!dao.meta &&
-              variables.memberAddress.toLowerCase() === dao.moloch.summoner);
+          const notHiddenAndHasMetaOrIsUnregisteredSummoner = (dao.meta && !dao.meta.hide)
+            || (!dao.meta
+              && variables.memberAddress.toLowerCase() === dao.moloch.summoner);
           return notHiddenAndHasMetaOrIsUnregisteredSummoner;
         });
 

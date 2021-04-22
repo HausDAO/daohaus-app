@@ -23,14 +23,12 @@ export const calcSeconds = (val, unit) => {
     return val * SECONDS.PER_DAY;
   } if (unit === 'weeks' || unit === 'week') {
     return val * SECONDS.PER_WEEK;
-  } 
-    console.error('Did not receive the corrent arguments to calculate time');
-    return false;
-  
+  }
+  console.error('Did not receive the corrent arguments to calculate time');
+  return false;
 };
 
-export const pipe = (...fns) => (x) =>
-  fns.reduce((prev, func) => func(prev), x);
+export const pipe = (...fns) => (x) => fns.reduce((prev, func) => func(prev), x);
 
 export const parseIfJSON = (data) => {
   try {
@@ -86,22 +84,20 @@ export const detailsToJSON = (values) => {
 };
 
 // omits key/pairs from objects
-export const omit = (keys, obj) =>
-  Object.fromEntries(Object.entries(obj).filter(([k]) => !keys.includes(k)));
+export const omit = (keys, obj) => Object.fromEntries(Object.entries(obj).filter(([k]) => !keys.includes(k)));
 
 export const numberWithCommas = (num) => {
   const localNum = typeof num !== 'string' ? num.toString() : num;
   // drop zero after decimal
-  const noZeroDec =
-    parseInt(localNum.split('.')[1]) === 0
-      ? localNum.split('.')[0]
-      : parseInt(localNum);
+  const noZeroDec = parseInt(localNum.split('.')[1]) === 0
+    ? localNum.split('.')[0]
+    : parseInt(localNum);
 
   return noZeroDec ? utils.commify(noZeroDec) : num;
 };
 
 export const truncateAddr = (addr) => {
-  return addr ? `${addr.slice(0, 6)  }...${  addr.slice(-4)}` : null;
+  return addr ? `${addr.slice(0, 6)}...${addr.slice(-4)}` : null;
 };
 export const timeToNow = (time) => {
   return formatDistanceToNow(new Date(time * 1000), {
@@ -123,10 +119,10 @@ export const formatPeriods = (period, duration) => {
     const m = Math.floor(s / 60);
     s -= m * 60;
     const tmp = [];
-    d && tmp.push(`${d  }d`);
-    (d || h) && h && tmp.push(`${h  }h`);
-    (d || h || m) && m && tmp.push(`${m  }m`);
-    s && tmp.push(`${s  }s`);
+    d && tmp.push(`${d}d`);
+    (d || h) && h && tmp.push(`${h}h`);
+    (d || h || m) && m && tmp.push(`${m}m`);
+    s && tmp.push(`${s}s`);
 
     return tmp.join(' ');
   }
@@ -159,10 +155,9 @@ export const daoConnectedAndSameChain = (
   return address && daochain && injectedChainID === daochain;
 };
 
-export const isEthAddress = (string) =>
-  typeof string === 'string' && /^0x[a-fA-F0-9]{40}$/.test(string)
-    ? string
-    : false;
+export const isEthAddress = (string) => (typeof string === 'string' && /^0x[a-fA-F0-9]{40}$/.test(string)
+  ? string
+  : false);
 
 export const isDelegating = (member) => {
   if (member?.memberAddress && member?.delegateKey) {
@@ -179,14 +174,14 @@ export const checkIfUserIsDelegate = (address, daoMembers) => {
 export const getQueryStringParams = (query) => {
   return query
     ? (/^[?#]/.test(query) ? query.slice(1) : query)
-        .split('&')
-        .reduce((params, param) => {
-          const [key, value] = param.split('=');
-          params[key] = value
-            ? decodeURIComponent(value.replace(/\+/g, ' '))
-            : '';
-          return params;
-        }, {})
+      .split('&')
+      .reduce((params, param) => {
+        const [key, value] = param.split('=');
+        params[key] = value
+          ? decodeURIComponent(value.replace(/\+/g, ' '))
+          : '';
+        return params;
+      }, {})
     : {};
 };
 

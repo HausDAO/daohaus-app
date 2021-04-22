@@ -26,6 +26,7 @@ import MainViewLayout from '../components/mainViewLayout';
 import MinionTokenList from '../components/minionTokenList';
 
 import {
+  fetchNativeBalance,
   getBlockScoutTokenData,
   getEtherscanTokenData,
 } from '../utils/tokenExplorerApi';
@@ -47,6 +48,7 @@ const MinionDetails = ({ overview, currentDaoTokens }) => {
   const [minionData, setMinionData] = useState();
   const [daoBalances, setDaoBalances] = useState();
   const [contractBalances, setContractBalances] = useState();
+  const [nativeBalance, setNativeBalance] = useState();
   const [balancesGraphData, setBalanceGraphData] = useState({
     chains: [],
     data: [],
@@ -62,8 +64,7 @@ const MinionDetails = ({ overview, currentDaoTokens }) => {
   const { refreshDao } = useTX();
   const { address, injectedProvider } = useInjectedProvider();
 
-  const hasLoadedBalanceData =
-    balancesGraphData.chains.length === Object.keys(supportedChains).length;
+  const hasLoadedBalanceData = balancesGraphData.chains.length === Object.keys(supportedChains).length;
 
   useEffect(() => {
     if (!overview?.minions.length) {
@@ -77,6 +78,8 @@ const MinionDetails = ({ overview, currentDaoTokens }) => {
 
   useEffect(() => {
     const getContractBalance = async () => {
+      console.log('minion', minion);
+
       try {
         if (daochain === '0x1' || daochain === '0x4' || daochain === '0x2a') {
           // eth chains not supported yet
@@ -84,6 +87,8 @@ const MinionDetails = ({ overview, currentDaoTokens }) => {
           setContractBalances(await getEtherscanTokenData(minion, daochain));
         } else {
           setContractBalances(await getBlockScoutTokenData(minion));
+          const native = await fetchNativeBalance(minion);
+          setNativeBalance(native.result / 10 ** 18);
         }
       } catch (err) {
         console.log(err);
@@ -147,7 +152,7 @@ const MinionDetails = ({ overview, currentDaoTokens }) => {
         actions: {
           onError: (error, txHash) => {
             errorToast({
-              title: `There was an error.`,
+              title: 'There was an error.',
             });
             resolvePoll(txHash);
             console.error(`Could not find a matching proposal: ${error}`);
@@ -171,7 +176,9 @@ const MinionDetails = ({ overview, currentDaoTokens }) => {
         web3: injectedProvider,
         minion,
         chainID: daochain,
-      })('crossWithdraw')({ args, address, poll, onTxHash });
+      })('crossWithdraw')({
+        args, address, poll, onTxHash,
+      });
     } catch (err) {
       // setLoading(false);
       console.log('error: ', err);
@@ -222,7 +229,7 @@ const MinionDetails = ({ overview, currentDaoTokens }) => {
                   </Flex>
                 </Box>
                 <Flex align='center'>
-                  <TextBox size='md' colorScheme='whiteAlpha.900'>
+                  <TextBox size='md' color='whiteAlpha.900'>
                     {`${minionData.minionType}: `}
                     <Box as='span' color='primary.100'>
                       {truncateAddr(minionData.minionAddress)}
@@ -256,6 +263,11 @@ const MinionDetails = ({ overview, currentDaoTokens }) => {
                   <Box>
                     <TextBox size='md' align='center'>
                       Minion wallet
+                    </TextBox>
+                    <TextBox size='md' align='center'>
+                      balance:
+                      {' '}
+                      {nativeBalance}
                     </TextBox>
                     {daochain !== '0x64' && (
                       <Flex>View token data on etherscan</Flex>

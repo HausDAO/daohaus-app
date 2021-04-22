@@ -164,8 +164,7 @@ const CustomThemeForm = ({ previewTheme, setPreviewTheme }) => {
                       />
                       <SketchPicker
                         color={previewTheme?.primary500}
-                        onChangeComplete={(color) =>
-                          handleColorChange(color, 'primary500')}
+                        onChangeComplete={(color) => handleColorChange(color, 'primary500')}
                         disableAlpha
                       />
                     </Box>
@@ -196,8 +195,7 @@ const CustomThemeForm = ({ previewTheme, setPreviewTheme }) => {
                       />
                       <SketchPicker
                         color={previewTheme?.secondary500}
-                        onChange={(color) =>
-                          handleColorChange(color, 'secondary500')}
+                        onChange={(color) => handleColorChange(color, 'secondary500')}
                         disableAlpha
                       />
                     </Box>
@@ -355,8 +353,8 @@ const CustomThemeForm = ({ previewTheme, setPreviewTheme }) => {
                     <>
                       <Image
                         src={
-                          themeImagePath(ipfsHash) ||
-                          themeImagePath(previewTheme.bgImg)
+                          themeImagePath(ipfsHash)
+                          || themeImagePath(previewTheme.bgImg)
                         }
                         alt='background image'
                         w='50px'

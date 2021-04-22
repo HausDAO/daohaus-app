@@ -49,9 +49,9 @@ const DaoToDaoProposalFormModal = ({
 
   const daoToDaoProposalForms = {
     d2dStake: {
-      type: `New Uber Quest`,
-      heading: `Stake in UBERhaus`,
-      subline: `Submit your DAO's membership proposal here.`,
+      type: 'New Uber Quest',
+      heading: 'Stake in UBERhaus',
+      subline: 'Submit your DAO\'s membership proposal here.',
       form: <StakeProposalForm />,
     },
     // d2dVote: {
@@ -61,9 +61,9 @@ const DaoToDaoProposalFormModal = ({
     //   form: <VoteProposalForm />,
     // },
     d2dDelegate: {
-      type: `New Uber Proposal`,
-      heading: `Choose Champion`,
-      subline: `Manage your delegate to UBERhaus`,
+      type: 'New Uber Proposal',
+      heading: 'Choose Champion',
+      subline: 'Manage your delegate to UBERhaus',
       form: (
         <DelegateProposalForm
           daoMembers={daoMembers}
@@ -75,9 +75,9 @@ const DaoToDaoProposalFormModal = ({
       ),
     },
     d2dRageQuit: {
-      type: `New Uber Proposal`,
-      heading: `RageQuit`,
-      subline: `Submit a proposal to RageQuit from UberHaus`,
+      type: 'New Uber Proposal',
+      heading: 'RageQuit',
+      subline: 'Submit a proposal to RageQuit from UberHaus',
       form: (
         <RageQuitProposalForm
           uberHausMinion={uberHausMinion}
@@ -93,9 +93,9 @@ const DaoToDaoProposalFormModal = ({
     //   form: <DistributeRewardsProposalForm />,
     // },
     d2dWithdraw: {
-      type: `New Uber Proposal`,
-      heading: ``,
-      subline: ``,
+      type: 'New Uber Proposal',
+      heading: '',
+      subline: '',
       form: (
         <WithdrawPullForm
           uberMembers={uberMembers}

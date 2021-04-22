@@ -72,9 +72,8 @@ const DelegateProposalForm = ({
       const hasShares = +member.shares > 0;
       const isNotDelegate = member.memberAddress !== uberDelegate;
       const isNotUberMemberOrDelegate = uberMembers.every(
-        (uberMember) =>
-          member.memberAddress !== uberMember.memberAddress &&
-          member.memberAddress !== uberMember.delegateKey,
+        (uberMember) => member.memberAddress !== uberMember.memberAddress
+          && member.memberAddress !== uberMember.delegateKey,
       );
       if (hasShares && isNotDelegate && isNotUberMemberOrDelegate) {
         return member;
@@ -127,7 +126,7 @@ const DelegateProposalForm = ({
         actions: {
           onError: (error, txHash) => {
             errorToast({
-              title: `There was an error.`,
+              title: 'There was an error.',
             });
             resolvePoll(txHash);
             console.error(`Could not find a matching proposal: ${error}`);
@@ -158,13 +157,15 @@ const DelegateProposalForm = ({
         web3: injectedProvider,
         uberHausMinion: uberHausMinion.minionAddress,
         chainID: UBERHAUS_DATA.NETWORK,
-      })('nominateDelegate')({ args, address, poll, onTxHash });
+      })('nominateDelegate')({
+        args, address, poll, onTxHash,
+      });
     } catch (err) {
       setLoading(false);
       setD2dProposalModal((prevState) => !prevState);
       console.error('error: ', err);
       errorToast({
-        title: `There was an error.`,
+        title: 'There was an error.',
         details: err?.message || '',
       });
     }

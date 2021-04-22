@@ -45,8 +45,7 @@ import { UberHausMinionService } from '../services/uberHausMinionService';
 import { useDao } from '../contexts/DaoContext';
 import { UBERHAUS_DATA } from '../utils/uberhaus';
 
-const UBER_LINK =
-  '/dao/0x2a/0x96714523778e51b898b072089e5615d4db71078e/proposals';
+const UBER_LINK = '/dao/0x2a/0x96714523778e51b898b072089e5615d4db71078e/proposals';
 
 const urlify = (text) => {
   const urlRegex = /(https?:\/\/[^\s]+)/g;
@@ -80,8 +79,8 @@ const ProposalDetails = ({ proposal, daoMember }) => {
       return <UberDaoBox proposal={proposal} />;
     }
     if (
-      proposal?.minion?.minionType !== MINION_TYPES.UBER &&
-      proposal?.minion?.minionType !== undefined
+      proposal?.minion?.minionType !== MINION_TYPES.UBER
+      && proposal?.minion?.minionType !== undefined
     ) {
       return <MinionBox proposal={proposal} />;
     }
@@ -153,8 +152,8 @@ const ProposalDetails = ({ proposal, daoMember }) => {
             </>
           ) : (
             <Skeleton isLoaded={proposal?.description}>
-              {proposal?.description &&
-                (proposal?.description.indexOf('http') > -1 ? (
+              {proposal?.description
+                && (proposal?.description.indexOf('http') > -1 ? (
                   <Box
                     w='100%'
                     dangerouslySetInnerHTML={{
@@ -168,9 +167,9 @@ const ProposalDetails = ({ proposal, daoMember }) => {
           )}
 
           <Box mt={proposal?.link || proposal?.minionAddress ? 6 : 2}>
-            {proposal?.link &&
-              !ReactPlayer.canPlay(proposal?.link) &&
-              !hasImage(proposal?.link) && <TextBox size='xs'>Link</TextBox>}
+            {proposal?.link
+              && !ReactPlayer.canPlay(proposal?.link)
+              && !hasImage(proposal?.link) && <TextBox size='xs'>Link</TextBox>}
             {proposal?.link !== '' && (
               <Skeleton isLoaded={proposal?.link || proposal?.minionAddress}>
                 {proposal?.link ? (
@@ -223,8 +222,8 @@ const ProposalDetails = ({ proposal, daoMember }) => {
                 <TextBox size='lg' variant='value'>
                   {proposal?.tributeOffered
                     ? `${numberWithCommas(
-                        utils.fromWei(proposal.tributeOffered.toString()),
-                      )} ${proposal.tributeTokenSymbol || 'WETH'}`
+                      utils.fromWei(proposal.tributeOffered.toString()),
+                    )} ${proposal.tributeTokenSymbol || 'WETH'}`
                     : '--'}
                 </TextBox>
               </Skeleton>
@@ -237,8 +236,8 @@ const ProposalDetails = ({ proposal, daoMember }) => {
                 <TextBox size='lg' variant='value'>
                   {proposal?.paymentRequested
                     ? `${numberWithCommas(
-                        utils.fromWei(proposal.paymentRequested.toString()),
-                      )} ${proposal.paymentTokenSymbol || 'WETH'}`
+                      utils.fromWei(proposal.paymentRequested.toString()),
+                    )} ${proposal.paymentTokenSymbol || 'WETH'}`
                     : '--'}
                 </TextBox>
               </Skeleton>
@@ -291,8 +290,8 @@ const ProposalDetails = ({ proposal, daoMember }) => {
           </Box>
           {handleRecipientUI()}
           <Flex align='center'>
-            {memberVote(proposal, address) !== null &&
-              (+memberVote(proposal, address) === 1 ? (
+            {memberVote(proposal, address) !== null
+              && (+memberVote(proposal, address) === 1 ? (
                 <Flex
                   pl={6}
                   w='40px'
@@ -426,9 +425,8 @@ const UberDaoBox = ({ proposal }) => {
   useEffect(() => {
     if (!daoMembers && !proposal) return;
     const minion = daoMembers.find(
-      (member) =>
-        member.memberAddress === proposal?.proposer ||
-        member.delegateKey === proposal?.proposer,
+      (member) => member.memberAddress === proposal?.proposer
+        || member.delegateKey === proposal?.proposer,
     );
 
     console.log(daoMembers);

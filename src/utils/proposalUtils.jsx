@@ -75,9 +75,8 @@ export function determineProposalStatus(proposal) {
     return ProposalStatus.GracePeriod;
   } if (afterGracePeriod(proposal)) {
     return ProposalStatus.ReadyForProcessing;
-  } 
-    return ProposalStatus.Unknown;
-  
+  }
+  return ProposalStatus.Unknown;
 }
 
 const tryGetDetails = (details) => {
@@ -86,13 +85,12 @@ const tryGetDetails = (details) => {
     if (!parsedDetails) {
       return '';
     } if (
-      typeof parsedDetails === 'string' ||
-      typeof parsedDetails === 'number'
+      typeof parsedDetails === 'string'
+      || typeof parsedDetails === 'number'
     ) {
       return parsedDetails;
-    } 
-      return parsedDetails;
-    
+    }
+    return parsedDetails;
   } catch (error) {
     return '';
   }
@@ -105,34 +103,31 @@ const getMinionProposalType = (proposal, details) => {
     //   details?.uberType === 'staking'
     // ) {
     if (
-      details?.uberType === 'staking' ||
-      details?.uberType === PROPOSAL_TYPES.MINION_UBER_STAKE
+      details?.uberType === 'staking'
+      || details?.uberType === PROPOSAL_TYPES.MINION_UBER_STAKE
     ) {
       return PROPOSAL_TYPES.MINION_UBER_STAKE;
     } if (details?.uberType === 'delegate') {
       return PROPOSAL_TYPES.MINION_UBER_DEL;
     } if (details?.uberType === 'ragequit') {
       return PROPOSAL_TYPES.MINION_UBER_RQ;
-    } 
-      console.warn('Uberhaus Minion type not detected');
-      console.log(details);
-      return PROPOSAL_TYPES.MINION_UBER_DEFAULT;
-    
+    }
+    console.warn('Uberhaus Minion type not detected');
+    console.log(details);
+    return PROPOSAL_TYPES.MINION_UBER_DEFAULT;
   };
   const getUberTypeFromGraphData = (proposal) => {
     if (proposal?.minion?.minionType === MINION_TYPES.VANILLA) {
       return PROPOSAL_TYPES.MINION_VANILLA;
-    } 
-      console.error('Minion type not detected');
-      return PROPOSAL_TYPES.MINION_DEFAULT;
-    
+    }
+    console.error('Minion type not detected');
+    return PROPOSAL_TYPES.MINION_DEFAULT;
   };
 
   if (proposal?.minion?.minionType === MINION_TYPES.UBER) {
     return getUberTypeFromDetails(details);
-  } 
-    return getUberTypeFromGraphData(proposal);
-  
+  }
+  return getUberTypeFromGraphData(proposal);
 };
 
 export const determineProposalType = (proposal) => {
@@ -152,9 +147,8 @@ export const determineProposalType = (proposal) => {
     return PROPOSAL_TYPES.TRADE;
   } if (proposal.isMinion) {
     return getMinionProposalType(proposal, parsedDetails);
-  } 
-    return PROPOSAL_TYPES.FUNDING;
-  
+  }
+  return PROPOSAL_TYPES.FUNDING;
 };
 
 export const titleMaker = (proposal) => {
@@ -170,17 +164,16 @@ export const titleMaker = (proposal) => {
         : '';
       return parsedDetails.title || 'Whoops! Could not parse JSON data';
     } catch {
-      console.log(`Couldn't parse JSON from metadata`);
-      return `Proposal`;
+      console.log('Couldn\'t parse JSON from metadata');
+      return 'Proposal';
     }
   } else {
-    return proposal.details ? proposal.details : `Proposal`;
+    return proposal.details ? proposal.details : 'Proposal';
   }
 };
 export const hashMaker = (proposal) => {
   try {
-    const parsed =
-      IsJsonString(proposal.details) && JSON.parse(proposal.details);
+    const parsed = IsJsonString(proposal.details) && JSON.parse(proposal.details);
     return parsed.hash || '';
   } catch (e) {
     return '';
@@ -200,8 +193,7 @@ export const descriptionMaker = (proposal) => {
 
 export const linkMaker = (proposal) => {
   try {
-    const parsed =
-      IsJsonString(proposal.details) && JSON.parse(proposal.details);
+    const parsed = IsJsonString(proposal.details) && JSON.parse(proposal.details);
     return parsed.link || '';
   } catch (e) {
     return '';
@@ -211,11 +203,9 @@ export const linkMaker = (proposal) => {
 export const determineUnreadActivityFeed = (proposal) => {
   const abortedOrCancelled = proposal.aborted || proposal.cancelled;
   const now = (new Date() / 1000) || 0;
-  const inVotingPeriod =
-    now >= +proposal.votingPeriodStarts && now <= +proposal.votingPeriodEnds;
+  const inVotingPeriod = now >= +proposal.votingPeriodStarts && now <= +proposal.votingPeriodEnds;
   const needsMemberVote = inVotingPeriod && !proposal.votes.length;
-  const needsProcessing =
-    now >= +proposal.gracePeriodEnds && !proposal.processed;
+  const needsProcessing = now >= +proposal.gracePeriodEnds && !proposal.processed;
 
   let message;
   if (!proposal.sponsored) {
@@ -230,8 +220,8 @@ export const determineUnreadActivityFeed = (proposal) => {
 
   return {
     unread:
-      !abortedOrCancelled &&
-      (needsMemberVote || needsProcessing || !proposal.sponsored),
+      !abortedOrCancelled
+      && (needsMemberVote || needsProcessing || !proposal.sponsored),
     message,
   };
 };
@@ -243,27 +233,22 @@ export const determineUnreadProposalList = (
 ) => {
   const abortedOrCancelled = proposal.aborted || proposal.cancelled;
   const now = (new Date() / 1000) || 0;
-  const inVotingPeriod =
-    now >= +proposal.votingPeriodStarts && now <= +proposal.votingPeriodEnds;
+  const inVotingPeriod = now >= +proposal.votingPeriodStarts && now <= +proposal.votingPeriodEnds;
 
   let memberVoted = false;
   if (memberAddress) {
     memberVoted = proposal.votes.some(
-      (vote) =>
-        vote.memberAddress.toLowerCase() === memberAddress.toLowerCase(),
+      (vote) => vote.memberAddress.toLowerCase() === memberAddress.toLowerCase(),
     );
   }
-  const needsMemberVote =
-    proposal.sponsored && activeMember && inVotingPeriod && !memberVoted;
+  const needsMemberVote = proposal.sponsored && activeMember && inVotingPeriod && !memberVoted;
 
-  const needsProcessing =
-    proposal.sponsored &&
-    now >= +proposal.gracePeriodEnds &&
-    !proposal.processed;
+  const needsProcessing = proposal.sponsored
+    && now >= +proposal.gracePeriodEnds
+    && !proposal.processed;
 
   const twoWeeksAgo = ((new Date() / 1000) || 0) - 1.21e6;
-  const unsponsoredAndNotExpired =
-    !proposal.sponsored && +proposal.createdAt > twoWeeksAgo;
+  const unsponsoredAndNotExpired = !proposal.sponsored && +proposal.createdAt > twoWeeksAgo;
 
   let message;
   if (!proposal.sponsored) {
@@ -278,8 +263,8 @@ export const determineUnreadProposalList = (
 
   return {
     unread:
-      !abortedOrCancelled &&
-      (needsMemberVote || needsProcessing || unsponsoredAndNotExpired),
+      !abortedOrCancelled
+      && (needsMemberVote || needsProcessing || unsponsoredAndNotExpired),
     message,
   };
 };
@@ -290,7 +275,7 @@ export function getProposalCountdownText(proposal, status) {
       return (
         <>
           <Box textTransform='uppercase' fontSize='0.8em' fontWeight={700}>
-            Voting Begins 
+            Voting Begins
             {' '}
             {timeToNow(proposal.votingPeriodStarts)}
           </Box>
@@ -300,7 +285,7 @@ export function getProposalCountdownText(proposal, status) {
       return (
         <>
           <Box textTransform='uppercase' fontSize='0.8em' fontWeight={700}>
-            Voting Ends 
+            Voting Ends
             {' '}
             {timeToNow(proposal.votingPeriodEnds)}
           </Box>
@@ -311,7 +296,7 @@ export function getProposalCountdownText(proposal, status) {
         <>
           <Box textTransform='uppercase' fontSize='0.8em' fontWeight={700}>
             <Box as='span' fontWeight={900}>
-              Grace Period Ends 
+              Grace Period Ends
               {' '}
               {timeToNow(proposal.gracePeriodEnds)}
             </Box>
@@ -357,24 +342,24 @@ export const getProposalCardDetailStatus = (proposal, status) => {
   switch (status) {
     case ProposalStatus.InQueue:
       return (
-        `Voting Begins ${ 
-        formatDistanceToNow(new Date(+proposal?.votingPeriodStarts * 1000), {
-          addSuffix: true,
-        })}`
+        `Voting Begins ${
+          formatDistanceToNow(new Date(+proposal?.votingPeriodStarts * 1000), {
+            addSuffix: true,
+          })}`
       );
     case ProposalStatus.VotingPeriod:
       return (
-        `Ends ${ 
-        formatDistanceToNow(new Date(+proposal?.votingPeriodEnds * 1000), {
-          addSuffix: true,
-        })}`
+        `Ends ${
+          formatDistanceToNow(new Date(+proposal?.votingPeriodEnds * 1000), {
+            addSuffix: true,
+          })}`
       );
     case ProposalStatus.GracePeriod:
       return (
-        `Ends ${ 
-        formatDistanceToNow(new Date(+proposal?.gracePeriodEnds * 1000), {
-          addSuffix: true,
-        })}`
+        `Ends ${
+          formatDistanceToNow(new Date(+proposal?.gracePeriodEnds * 1000), {
+            addSuffix: true,
+          })}`
       );
     case ProposalStatus.Failed:
     case ProposalStatus.Passed:
@@ -457,8 +442,8 @@ export const getProposalDetailStatus = (proposal, status) => {
 export const memberVote = (proposal, userAddress) => {
   const vote = proposal
     ? proposal?.votes?.find(
-        (vote) => vote.memberAddress === userAddress?.toLowerCase(),
-      )
+      (vote) => vote.memberAddress === userAddress?.toLowerCase(),
+    )
     : null;
   return vote ? vote.uintVote : null;
 };
@@ -472,15 +457,13 @@ export const handleListFilter = (proposals, filter, daoMember) => {
     return updatedProposals;
   } if (filter.value === 'Action Needed' || filter.value === 'Active') {
     return updatedProposals.filter(
-      (proposal) =>
-        determineUnreadProposalList(proposal, true, daoMember?.memberAddress)
-          ?.unread,
+      (proposal) => determineUnreadProposalList(proposal, true, daoMember?.memberAddress)
+        ?.unread,
     );
-  } 
-    return updatedProposals.filter(
-      (proposal) => proposal[filter.type] === filter.value,
-    );
-  
+  }
+  return updatedProposals.filter(
+    (proposal) => proposal[filter.type] === filter.value,
+  );
 };
 
 export const handleListSort = (proposals, sort) => {
@@ -492,35 +475,32 @@ export const handleListSort = (proposals, sort) => {
       .sort((a) => (a.status === sort.value ? -1 : 1));
   } if (sort.value === 'submissionDateDesc') {
     return proposals.sort((a, b) => +b.createdAt - +a.createdAt);
-  } 
-    console.error('Received incorrect sort data type');
-    return proposals;
-  
+  }
+  console.error('Received incorrect sort data type');
+  return proposals;
 };
 
 export const searchProposals = (rawAddress, filterArr, proposals) => {
   const activeFilters = filterArr.filter((f) => f.active);
   const address = rawAddress.toLowerCase();
-  return proposals.filter((proposal) =>
-    activeFilters.some(
-      (filter) => proposal[filter.value] === address && proposal,
-    ),
-  );
+  return proposals.filter((proposal) => activeFilters.some(
+    (filter) => proposal[filter.value] === address && proposal,
+  ));
 };
 
 export const pendingUberHausStakingProposalChildDao = (prop) => {
   return (
-    prop.proposalType === PROPOSAL_TYPES.MINION_UBER_STAKE &&
-    !prop.cancelled &&
-    !prop.uberHausMinionExecuted
+    prop.proposalType === PROPOSAL_TYPES.MINION_UBER_STAKE
+    && !prop.cancelled
+    && !prop.uberHausMinionExecuted
   );
 };
 
 export const pendingUberHausStakingProposal = (prop, minionAddress) => {
   return (
-    prop.applicant === minionAddress &&
-    prop.proposalType === 'Member Proposal' &&
-    !prop.cancelled &&
-    !prop.processed
+    prop.applicant === minionAddress
+    && prop.proposalType === 'Member Proposal'
+    && !prop.cancelled
+    && !prop.processed
   );
 };

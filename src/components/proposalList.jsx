@@ -1,5 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Flex, Text, Spinner } from '@chakra-ui/react';
+import {
+  Flex, Text, Spinner, Box,
+} from '@chakra-ui/react';
 import { useParams } from 'react-router-dom';
 
 import ProposalCard from './proposalCard';
@@ -52,16 +54,14 @@ const ProposalsList = ({ proposals, customTerms }) => {
     //  Later on, create functionality to only call the assigment below if daoMember is true or false
     //  This would require setting that functionality in the context
     const unread = proposals.filter(
-      (proposal) =>
-        determineUnreadProposalList(proposal, true, daoMember?.memberAddress)
-          ?.unread,
+      (proposal) => determineUnreadProposalList(proposal, true, daoMember?.memberAddress)
+        ?.unread,
     );
 
     const newOptions = getFilters(daoMember, unread);
     setFilterOptions(newOptions);
 
-    const hasSavedChanges =
-      prevMember.current === 'No Address' && filter && sort;
+    const hasSavedChanges = prevMember.current === 'No Address' && filter && sort;
     if (!hasSavedChanges) {
       setFilter(newOptions?.main?.[0] || allFilter);
       setSort(
@@ -87,8 +87,10 @@ const ProposalsList = ({ proposals, customTerms }) => {
       );
       return;
     }
+    const isActiveFilter = option?.value === 'Active' || option?.value === 'Action Needed';
     searchMode.current = false;
     setFilter(option);
+    setSort({ name: isActiveFilter ? 'Oldest' : 'Newest', value: `submissionDate${isActiveFilter ? 'Asc' : 'Desc'}` });
   };
 
   const handleSort = (option) => {
@@ -115,29 +117,44 @@ const ProposalsList = ({ proposals, customTerms }) => {
   };
   return (
     <>
-      <Flex wrap='wrap' position='relative'>
-        <GenericSelect
-          currentOption={filter?.name}
-          options={filterOptions}
-          handleSelect={handleFilter}
-          label='Filter By'
-          count={listProposals?.length}
-        />
-        <GenericSelect
-          label='Sort By'
-          currentOption={sort?.name}
-          options={sortOptions}
-          handleSelect={handleSort}
-          // uses custom props to prevent overlap with search button
-          containerProps={{ width: ['100%', null, null, '38%'], zIndex: '10' }}
-        />
-        <ProposalSearch
-          performSearch={performSearch}
-          resetSearch={resetSearch}
-        />
+
+      <Flex wrap='wrap' position='relative' justifyContent='space-between'>
+        <Box
+          mr={5}
+          textTransform='uppercase'
+          fontFamily='heading'
+          fontSize={['sm', null, null, 'md']}
+        >
+          {listProposals?.length || 0}
+          {' '}
+          PROPOSALS
+        </Box>
+        <Flex flex={1} justifyContent='flex-end'>
+          <GenericSelect
+            currentOption={filter?.name}
+            options={filterOptions}
+            handleSelect={handleFilter}
+            label='Filter By'
+            count={listProposals?.length}
+          />
+          <GenericSelect
+            label='Sort By'
+            currentOption={sort?.name}
+            options={sortOptions}
+            handleSelect={handleSort}
+            // uses custom props to prevent overlap with search button
+            containerProps={{
+              width: ['100%', null, null, '38%'], zIndex: '10', marginRight: '10%', marginLeft: '5%',
+            }}
+          />
+          <ProposalSearch
+            performSearch={performSearch}
+            resetSearch={resetSearch}
+          />
+        </Flex>
       </Flex>
-      {isLoaded &&
-        paginatedProposals?.map((proposal) => {
+      {isLoaded
+        && paginatedProposals?.map((proposal) => {
           return (
             <ProposalCard
               key={proposal.id}

@@ -100,8 +100,8 @@ const DiscourseProposalTopic = ({ proposal, daoMember }) => {
                     address,
                     daochain,
                     injectedChain?.chainId,
-                  ) &&
-                    +daoMember?.shares > 0 && (
+                  )
+                    && +daoMember?.shares > 0 && (
                       <Button
                         as={HStack}
                         size='sm'
@@ -111,7 +111,7 @@ const DiscourseProposalTopic = ({ proposal, daoMember }) => {
                         <Icon as={FaDiscourse} w={4} mr={1} />
                         <Box>Add a Discourse Topic for this proposal</Box>
                       </Button>
-                    )}
+                  )}
 
                   {error && <Text>{error}</Text>}
                 </>

@@ -46,9 +46,8 @@ export const periodsPerDayPreset = (seconds) => {
 
   if (24 / hours < 1) {
     return `Less than ${perDay} per day`;
-  } 
-    return `${perDay} per day`;
-  
+  }
+  return `${perDay} per day`;
 };
 
 export const formatPeriodLength = (periods, duration) => {
@@ -262,18 +261,16 @@ export const cloneDaoPresets = (daoOverview) => {
   };
 };
 
-export const cloneMembers = (daoMembers) =>
-  daoMembers
-    .reduce(
-      (string, member) =>
-        +member?.shares > 0
-          ? `${string 
-            }${member.memberAddress} ${member.shares}
+export const cloneMembers = (daoMembers) => daoMembers
+  .reduce(
+    (string, member) => (+member?.shares > 0
+      ? `${string
+      }${member.memberAddress} ${member.shares}
 `
-          : string,
-      '',
-    )
-    .trim();
+      : string),
+    '',
+  )
+  .trim();
 
 export const cloneTokens = (daoOverview) => {
   const primaryTokenAddress = daoOverview.depositToken.tokenAddress;

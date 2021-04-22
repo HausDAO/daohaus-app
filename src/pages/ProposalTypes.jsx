@@ -108,10 +108,9 @@ const ProposalTypes = ({ daoMetaData, refetchMetaData }) => {
   };
 
   const renderProposalType = (proposal) => {
-    const isActive =
-      proposal.key in localMetadata
-        ? localMetadata[proposal.key].active === true
-        : false;
+    const isActive = proposal.key in localMetadata
+      ? localMetadata[proposal.key].active === true
+      : false;
     return (
       <ContentBox key={proposal.label}>
         <Flex justify='space-between'>
@@ -126,16 +125,16 @@ const ProposalTypes = ({ daoMetaData, refetchMetaData }) => {
                 isChecked={isActive}
                 onChange={(e) => handleChange(proposal, e)}
                 isDisabled={
-                  loading ||
-                  (!proposal.default && !(proposal?.key in daoMetaData.boosts))
+                  loading
+                  || (!proposal.default && !(proposal?.key in daoMetaData.boosts))
                 }
               />
             )}
           </Flex>
         </Flex>
-        {isActive &&
-          proposal.options?.length &&
-          proposal.options.map((option) => {
+        {isActive
+          && proposal.options?.length
+          && proposal.options.map((option) => {
             return localMetadata?.[proposal.key][option.id] ? (
               <Flex
                 mt={3}
@@ -163,14 +162,13 @@ const ProposalTypes = ({ daoMetaData, refetchMetaData }) => {
                     type={option.type}
                     id={option.id}
                     defaultValue={
-                      localMetadata[proposal.key][option.id] ||
-                      option?.default ||
-                      0
+                      localMetadata[proposal.key][option.id]
+                      || option?.default
+                      || 0
                     }
                     border={error ? '1px solid red' : '1px solid white'}
                     textAlign='right'
-                    onChange={(e) =>
-                      handleOptionChange(proposal.key, option, e)
+                    onChange={(e) => handleOptionChange(proposal.key, option, e)
                     }
                   />
                   {error ? (
@@ -219,15 +217,13 @@ const ProposalTypes = ({ daoMetaData, refetchMetaData }) => {
           <Flex justify='space-around' mt='100px'>
             <Box w={['90%', '80%', '60%', '45%']}>
               <Flex justify='space-between'>
-                <TextBox colorScheme='white' size='sm' mb={2}>
+                <TextBox color='white' size='sm' mb={2}>
                   {`${getTerm(customTerms, 'proposal')} Types`}
                 </TextBox>
               </Flex>
 
               <Stack spacing={6}>
-                {proposalTypesContent.map((proposal) =>
-                  renderProposalType(proposal),
-                )}
+                {proposalTypesContent.map((proposal) => renderProposalType(proposal))}
               </Stack>
             </Box>
           </Flex>
@@ -236,7 +232,7 @@ const ProposalTypes = ({ daoMetaData, refetchMetaData }) => {
         <Flex justify='space-around' mt='150px'>
           <Box w='45%'>
             <Flex justify='space-between'>
-              <TextBox colorScheme='white' size='sm' mb={2}>
+              <TextBox color='whiteAlpha.900' size='sm' mb={2}>
                 Boost not active
               </TextBox>
             </Flex>

@@ -191,28 +191,24 @@ const Notifications = ({ daoMetaData, refetchMetaData }) => {
           <Flex justify='space-around' mt='150px'>
             <Box w='45%'>
               <Flex justify='space-between'>
-                <TextBox colorScheme='white' size='sm' mb={2}>
+                <TextBox color='white' size='sm' mb={2}>
                   Messages
                 </TextBox>
               </Flex>
 
               <Stack spacing={6}>
-                {notificationBoostContent.actions.map((message) =>
-                  renderAction(message),
-                )}
+                {notificationBoostContent.actions.map((message) => renderAction(message))}
               </Stack>
             </Box>
             <Box w='45%'>
               <Flex justify='space-between'>
-                <TextBox colorScheme='white' size='sm' mb={2}>
+                <TextBox color='white' size='sm' mb={2}>
                   Channels
                 </TextBox>
               </Flex>
 
               <Stack spacing={6}>
-                {notificationBoostContent.channels.map((channel) =>
-                  renderChannel(channel),
-                )}
+                {notificationBoostContent.channels.map((channel) => renderChannel(channel))}
               </Stack>
             </Box>
           </Flex>
@@ -231,7 +227,7 @@ const Notifications = ({ daoMetaData, refetchMetaData }) => {
         <Flex justify='space-around' mt='150px'>
           <Box w='45%'>
             <Flex justify='space-between'>
-              <TextBox colorScheme='white' size='sm' mb={2}>
+              <TextBox color='white' size='sm' mb={2}>
                 Boost not active
               </TextBox>
             </Flex>
