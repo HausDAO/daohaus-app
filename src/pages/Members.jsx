@@ -21,15 +21,17 @@ import { useInjectedProvider } from '../contexts/InjectedProviderContext';
 import { daoConnectedAndSameChain } from '../utils/general';
 import UberHausMemberCard from '../components/uberHausMemberCard';
 
-const Members = React.memo(({
-  members,
-  activities,
-  overview,
-  daoMember,
-  daoMembers,
-  customTerms,
-  daoMetaData,
-}) => {
+const Members = React.memo((
+  {
+    members,
+    activities,
+    overview,
+    daoMember,
+    daoMembers,
+    customTerms,
+    daoMetaData,
+  },
+) => {
   const { daoid, daochain } = useParams();
   const { address, injectedChain } = useInjectedProvider();
 
