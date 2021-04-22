@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useMemo, useState } from 'react';
 import { Link as RouterLink, useParams } from 'react-router-dom';
 import {
   Box,
@@ -6,30 +6,33 @@ import {
   FormControl,
   FormHelperText,
   Heading,
-  Icon,
   Input,
+  Icon,
   Link,
+  Select,
   Spinner,
 } from '@chakra-ui/react';
 import { RiExternalLinkLine } from 'react-icons/ri';
 import { useForm } from 'react-hook-form';
 
-import { MinionFactoryService } from '../services/minionFactoryService';
-import { supportedChains } from '../utils/chain';
+import { SuperfluidMinionFactoryService } from '../services/superfluidMinionFactoryService';
+import { chainByID, supportedChains } from '../utils/chain';
+import { MINION_TYPES } from '../utils/proposalUtils';
 import { useInjectedProvider } from '../contexts/InjectedProviderContext';
 import { createPoll } from '../services/pollService';
 import { useUser } from '../contexts/UserContext';
 import { useOverlay } from '../contexts/OverlayContext';
 import { useDao } from '../contexts/DaoContext';
 
-const NewMinionForm = () => {
+const NewSuperfluidMinionForm = () => {
   const [loading, setLoading] = useState(false);
+  const [agreementType, setAgreementType] = useState('cfa');
   const { daochain, daoid } = useParams();
   const { address, injectedProvider, injectedChain } = useInjectedProvider();
   const { daoOverview, refetch } = useDao();
   const { cachePoll, resolvePoll } = useUser();
   const { errorToast, successToast } = useOverlay();
-  const { handleSubmit, register } = useForm();
+  const { handleSubmit, register, getValues } = useForm();
   const [step, setStep] = useState(1);
   const [pendingTx, setPendingTx] = useState(null);
   const now = (new Date().getTime() / 1000).toFixed();
@@ -38,13 +41,22 @@ const NewMinionForm = () => {
     setLoading(true);
     setStep(2);
 
-    const summonParams = [daoid, values.details];
+    const summonParams = [
+      daoid,
+      values.details,
+      values.agreement,
+      values.version,
+    ];
 
     try {
+      const chainParams = chainByID(injectedChain.chain_id);
+      const factoryAddr = chainParams.superfluid_minion_factory_addr;
       const poll = createPoll({ action: 'summonMinion', cachePoll })({
         chainID: injectedChain.chain_id,
         molochAddress: daoid,
+        factoryAddress: factoryAddr,
         createdAt: now,
+        web3: injectedProvider,
         actions: {
           onError: (error, txHash) => {
             console.error(`error: ${error}`);
@@ -55,11 +67,8 @@ const NewMinionForm = () => {
             setStep(1);
           },
           onSuccess: (txHash) => {
-            const title = values.details
-              ? `${values.details} Lives!`
-              : 'Minion Lives!';
             successToast({
-              title,
+              title: 'Superfluid Minion Lives!',
             });
             refetch();
             resolvePoll(txHash);
@@ -73,11 +82,14 @@ const NewMinionForm = () => {
         setPendingTx(txHash);
       };
 
-      await MinionFactoryService({
+      await SuperfluidMinionFactoryService({
         web3: injectedProvider,
         chainID: injectedChain.chain_id,
-      })('summonMinion')({
-        args: summonParams, from: address, poll, onTxHash,
+      })('summonSuperfluidMinion')({
+        args: summonParams,
+        from: address,
+        poll,
+        onTxHash,
       });
     } catch (err) {
       console.log('error in tx', err);
@@ -90,19 +102,32 @@ const NewMinionForm = () => {
     }
   };
 
+  const updateAgreementType = () => {
+    const newAgreementType = getValues('agreement');
+    setAgreementType(newAgreementType);
+  };
+
+  const minions = useMemo(() => (
+    daoOverview?.minions.length > 0
+      ? daoOverview.minions.filter(
+        (minion) => minion.minionType === MINION_TYPES.SUPERFLUID,
+      )
+      : []
+  ), [daoOverview]);
+
   return (
     <Box w='90%'>
       {step === 1 ? (
         <>
           <Heading as='h4' size='md' fontWeight='100' mb={10}>
-            Deploy Your Minion
+            Deploy Your Superfluid Minion
           </Heading>
-          {daoOverview?.minions.length > 0 && (
+          {minions.length > 0 && (
             <>
               <Box mb={5} fontSize='md'>
-                {`You have ${daoOverview.minions.length} minion
-                ${daoOverview.minions.length > 1 ? 's' : ''} already. Are you
-                looking for the `}
+                {`You have ${minions.length} Superfluid minion
+                ${minions.length > 1 ? 's' : ''} already. Are you looking for
+                the `}
                 <Link
                   as={RouterLink}
                   to={`/dao/${daochain}/${daoid}/settings`}
@@ -114,10 +139,38 @@ const NewMinionForm = () => {
             </>
           )}
           <Box mb={3} fontSize='sm'>
-            Deploying a Minion will allow the DAO to interact with external
-            contracts through proposals
+            A Superfuild Minion will allow the DAO to start streaming tokens in
+            real-time or to schedule an instant distribution to different
+            recipients (coming soon)
           </Box>
           <form onSubmit={handleSubmit(onSubmit)}>
+            <Box mb={3} fontSize='sm'>
+              <FormControl mb={5}>
+                <FormHelperText fontSize='sm' id='agreement-helper-text' mb={3}>
+                  Which kind of Superfluid agreement you want to use?
+                </FormHelperText>
+                <Select
+                  name='agreement'
+                  w='70%'
+                  ref={register}
+                  defaultValue={agreementType}
+                  onChange={() => updateAgreementType()}
+                >
+                  <option value='cfa'>Constant Flow (CFA)</option>
+                  {/* <option value='ida'>Instant Distribution (IDA)</option> */}
+                </Select>
+              </FormControl>
+            </Box>
+            <Box mb={3} fontSize='sm'>
+              <FormControl mb={5}>
+                <FormHelperText fontSize='sm' id='version-helper-text' mb={3}>
+                  Which version of Superfluid you want to use?
+                </FormHelperText>
+                <Select name='version' w='70%' ref={register}>
+                  <option value='v1'>v1</option>
+                </Select>
+              </FormControl>
+            </Box>
             <Box mb={3} fontSize='sm'>
               <FormControl mb={5}>
                 <FormHelperText fontSize='sm' id='name-helper-text' mb={3}>
@@ -125,9 +178,14 @@ const NewMinionForm = () => {
                 </FormHelperText>
                 <Input
                   name='details'
-                  placeholder='Frank'
+                  placeholder={agreementType.toLocaleUpperCase()}
                   w='60%'
-                  ref={register}
+                  ref={register({
+                    required: {
+                      value: true,
+                      message: 'Minion name is required',
+                    },
+                  })}
                 />
               </FormControl>
             </Box>
@@ -138,15 +196,15 @@ const NewMinionForm = () => {
         </>
       ) : null}
 
-      {step === 2 ? (
+      {step === 2 && (
         <>
           <Heading as='h4' size='md' fontWeight='100' mb={10}>
-            Deploying Your Minion
+            Deploying Your Superfluid Minion
           </Heading>
           <Spinner />
 
-          <Box my={10}>
-            {pendingTx ? (
+          {pendingTx && (
+            <Box my={10}>
               <Link
                 href={`${supportedChains[daochain].block_explorer}/tx/${pendingTx}`}
                 isExternal
@@ -154,25 +212,25 @@ const NewMinionForm = () => {
                 color='secondary.500'
               >
                 View Transaction
-                <Icon as={RiExternalLinkLine} ml={2} />
+                <Icon as={RiExternalLinkLine} />
               </Link>
-            ) : null}
-          </Box>
+            </Box>
+          )}
         </>
-      ) : null}
+      )}
 
-      {step === 'success' ? (
+      {step === 'success' && (
         <>
           <Heading as='h4' size='md' fontWeight='100' mb={10}>
-            A Minion is at your service
+            A Superfluid Minion is ready at your service
           </Heading>
           <Button as={RouterLink} to={`/dao/${daochain}/${daoid}/settings`}>
             Settings
           </Button>
         </>
-      ) : null}
+      )}
     </Box>
   );
 };
 
-export default NewMinionForm;
+export default NewSuperfluidMinionForm;

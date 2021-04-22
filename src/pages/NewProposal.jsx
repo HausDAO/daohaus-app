@@ -20,6 +20,7 @@ const validProposalType = (type) => {
     'trade',
     'lootgrab',
     'minion',
+    'superfluidMinion',
     'transmutation',
   ].includes(type);
 };

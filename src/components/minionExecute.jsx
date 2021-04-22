@@ -10,6 +10,7 @@ import { useTX } from '../contexts/TXContext';
 import { useOverlay } from '../contexts/OverlayContext';
 import { createPoll } from '../services/pollService';
 import { PROPOSAL_TYPES } from '../utils/proposalUtils';
+import { SuperfluidMinionService } from '../services/superfluidMinionService';
 import { UberHausMinionService } from '../services/uberHausMinionService';
 import { MinionService } from '../services/minionService';
 
@@ -38,6 +39,14 @@ const MinionExecute = ({ proposal }) => {
             minion: proposal?.minionAddress,
             chainID: daochain,
           })('getAction')({ proposalId: proposal?.proposalId });
+          setMinionDetails(action);
+          setShouldFetch(false);
+          setLoading(false);
+        } else if (proposal.proposalType === PROPOSAL_TYPES.MINION_SUPERFLUID) {
+          const action = await SuperfluidMinionService({
+            minion: proposal?.minionAddress,
+            chainID: daochain,
+          })('getStream')({ proposalId: proposal?.proposalId });
           setMinionDetails(action);
           setShouldFetch(false);
           setLoading(false);
@@ -113,6 +122,14 @@ const MinionExecute = ({ proposal }) => {
       };
       if (proposal.proposalType === PROPOSAL_TYPES.MINION_VANILLA) {
         await MinionService({
+          web3: injectedProvider,
+          minion: proposal.minionAddress,
+          chainID: daochain,
+        })('executeAction')({
+          args, address, poll, onTxHash,
+        });
+      } else if (proposal.proposalType === PROPOSAL_TYPES.MINION_SUPERFLUID) {
+        await SuperfluidMinionService({
           web3: injectedProvider,
           minion: proposal.minionAddress,
           chainID: daochain,
