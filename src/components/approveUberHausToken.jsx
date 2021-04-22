@@ -10,7 +10,7 @@ import { createPoll } from '../services/pollService';
 import { UberHausMinionService } from '../services/uberHausMinionService';
 import { UBERHAUS_DATA } from '../utils/uberhaus';
 
-const ApproveUberHausToken = ({ minionAddress }) => {
+const ApproveUberHausToken = ({ minionAddress, minionBalance }) => {
   const { daochain, daoid } = useParams();
   const { cachePoll, resolvePoll } = useUser();
   const { address, injectedProvider } = useInjectedProvider();
@@ -27,10 +27,14 @@ const ApproveUberHausToken = ({ minionAddress }) => {
     setLoading(true);
 
     try {
-      const poll = createPoll({ action: 'setInitialDelegate', cachePoll })({
+      const poll = createPoll({ action: 'approveUberHaus', cachePoll })({
         chainID: daochain,
         minionAddress,
         uberHausAddress: UBERHAUS_DATA.ADDRESS,
+        daoID: daoid,
+        tokenAddress: UBERHAUS_DATA.STAKING_TOKEN,
+        userAddress: minionAddress,
+        unlockAmount: minionBalance,
         actions: {
           onError: (error, txHash) => {
             errorToast({
@@ -42,7 +46,7 @@ const ApproveUberHausToken = ({ minionAddress }) => {
           },
           onSuccess: (txHash) => {
             successToast({
-              title: 'Delegate set submitted.',
+              title: 'HAUS unlocked.',
             });
             refreshDao();
             resolvePoll(txHash);

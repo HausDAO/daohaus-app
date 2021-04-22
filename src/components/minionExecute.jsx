@@ -32,6 +32,7 @@ const MinionExecute = ({ proposal }) => {
   const [minionDetails, setMinionDetails] = useState(null);
   const [shouldFetch, setShouldFetch] = useState(true);
   const [needsHausApproval, setNeedsHausApproval] = useState(false);
+  const [minionBalance, setMinionBalance] = useState(null);
 
   useEffect(() => {
     const getMinionDetails = async () => {
@@ -72,6 +73,7 @@ const MinionExecute = ({ proposal }) => {
               proposal.minionAddress,
             );
 
+            setMinionBalance(minionBalance);
             setNeedsHausApproval(+amountApproved < +minionBalance);
           }
 
@@ -178,7 +180,7 @@ const MinionExecute = ({ proposal }) => {
 
     if (needsHausApproval) {
       return (
-        <ApproveUberHausToken minionAddress={proposal.minionAddress} />
+        <ApproveUberHausToken minionAddress={proposal.minionAddress} minionBalance={minionBalance} />
       );
     }
 
