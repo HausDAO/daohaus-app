@@ -23,13 +23,12 @@ const SnapshotLaunch = ({
 
   const onSubmit = async () => {
     setLoading(true);
-    console.log(snapshotSpace);
     const snapshotMeta = {
       space: snapshotSpace,
     };
     try {
       const spaces = await getSnapshotSpaces();
-      if (!(snapshotSpace in Object.keys(spaces))) {
+      if (Object.keys(spaces).filter((s) => s === snapshotSpace)?.length < 1) {
         errorToast({
           title: 'No space found!',
           description: 'Please verify the space name with the official snapshot name.',
