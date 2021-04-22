@@ -11,7 +11,7 @@ const MemberInfoGuts = ({ member, showMenu }) => {
       {member && (
         <>
           <Flex justify='space-between'>
-            <AddressAvatar addr={member.memberAddress} hideCopy />
+            <AddressAvatar addr={member.memberAddress} />
             {showMenu ? <ProfileMenu member={member} /> : null}
           </Flex>
           <Flex w='100%' justify='space-between' mt={6}>

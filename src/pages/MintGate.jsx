@@ -13,18 +13,27 @@ import { getMintGates } from '../utils/requests';
 import BoostNotActive from '../components/boostNotActive';
 import TextBox from '../components/TextBox';
 import { chainByID } from '../utils/chain';
+import { useOverlay } from '../contexts/OverlayContext';
 
 const MintGate = ({ daoMetaData }) => {
   const [gates, setGates] = useState([]);
   const { address, injectedChain } = useInjectedProvider();
   const { daochain, daoid } = useParams();
   const [loading, setLoading] = useState(true);
+  const { errorToast } = useOverlay();
 
   useEffect(() => {
     const fetchGates = async () => {
-      const localGates = await getMintGates(daoid);
-      if (localGates?.links?.length > 0) {
-        setGates(localGates.links);
+      try {
+        const localGates = await getMintGates(daoid);
+        if (localGates?.links?.length > 0) {
+          setGates(localGates.links);
+        }
+      } catch (err) {
+        console.log(err);
+        errorToast({
+          title: 'Fetching MintGate gates failed.',
+        });
       }
       setLoading(false);
     };
