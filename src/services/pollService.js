@@ -154,7 +154,7 @@ export const createPoll = ({
         });
       }
     };
-  } else if (action === 'unlockToken') {
+  } else if (action === 'unlockToken' || action === 'approveUberHaus') {
     return ({
       daoID,
       chainID,

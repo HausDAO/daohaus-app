@@ -30,7 +30,6 @@ import { isEthAddress } from '../utils/general';
 
 const NewUberHausMinion = ({
   daoMembers,
-  // uberHausMinion,
   uberMembers,
   uberDelegate,
 }) => {
@@ -63,9 +62,9 @@ const NewUberHausMinion = ({
       return null;
     });
   }, [daoMembers, uberMembers, uberDelegate]);
-  console.log(candidates);
+
   const onSubmit = async (values) => {
-    console.log('values', values, isEthAddress(values.memberApplicant));
+    console.log(values);
     if (!isEthAddress(values.memberApplicant)) {
       setMissingDelegate(true);
       return;
@@ -83,8 +82,6 @@ const NewUberHausMinion = ({
       UBERHAUS_DATA.MINION_REWARDS_FACTOR,
       values.details,
     ];
-
-    console.log('summonParams', summonParams);
 
     try {
       const poll = createPoll({ action: 'summonMinion', cachePoll })({
@@ -140,7 +137,7 @@ const NewUberHausMinion = ({
   };
 
   const delegateEligibilityLabel = () => (
-    <Flex direction='column'>
+    <Flex direction='column' color='white'>
       <Text fontWeight='700' mb={2}>
         To be Eligible:
       </Text>
@@ -158,7 +155,7 @@ const NewUberHausMinion = ({
         bg='primary.500'
         placement='right'
         p={2}
-        label={delegateEligibilityLabel}
+        label={delegateEligibilityLabel()}
       >
         <Box>
           <Icon
@@ -172,9 +169,11 @@ const NewUberHausMinion = ({
     </Flex>
   );
 
+  console.log('candidates', candidates, missingDelegate);
+
   return (
     <Box w='90%'>
-      {step === 1 ? (
+      {step === 1 && (
         <>
           <Heading as='h4' size='md' fontWeight='100' mb={10}>
             Step 1: Deploy UberHAUS Minion
@@ -186,48 +185,75 @@ const NewUberHausMinion = ({
             proposal.
           </Box>
 
-          <form onSubmit={handleSubmit(onSubmit)}>
-            <Box mb={3} fontSize='sm'>
-              <AddressInput
-                name='delegate'
-                formLabel={eligibleDelegatesLabel}
-                register={register}
-                setValue={setValue}
-                watch={watch}
-                memberOnly
-                overrideData={candidates}
-                memberOverride
-              />
-              <FormControl mb={5}>
-                <FormHelperText fontSize='sm' id='name-helper-text' mb={3}>
-                  A Minion needs a name
-                </FormHelperText>
-                <Input
-                  name='details'
-                  placeholder='Frank'
-                  w='60%'
-                  ref={register}
+          {candidates.length === 0 ? (
+            <Flex justifyContent='flex-start'>
+              <Box fontSize='sm'>There aren&apos;t any eligible delegates in your DAO.</Box>
+              <Tooltip
+                hasArrow
+                bg='primary.500'
+                placement='right'
+                p={2}
+                label={delegateEligibilityLabel()}
+              >
+                <Box>
+                  <Icon
+                    as={RiInformationLine}
+                    transform='translate(6px, -3px)'
+                    w={5}
+                    h={5}
+                  />
+                </Box>
+              </Tooltip>
+            </Flex>
+          ) : (
+            <form onSubmit={handleSubmit(onSubmit)}>
+              <Box mb={3} fontSize='sm'>
+
+                <AddressInput
+                  name='delegate'
+                  formLabel={eligibleDelegatesLabel()}
+                  register={register}
+                  setValue={setValue}
+                  watch={watch}
+                  memberOnly
+                  overrideData={candidates}
+                  memberOverride
                 />
-              </FormControl>
-            </Box>
-            {missingDelegate ? (
-              <FormHelperText
+
+                <FormControl mb={5}>
+                  <FormHelperText fontSize='sm' id='name-helper-text' mb={3}>
+                    A Minion needs a name
+                  </FormHelperText>
+                  <Input
+                    name='details'
+                    placeholder='Frank'
+                    w='60%'
+                    ref={register}
+                  />
+                </FormControl>
+              </Box>
+
+              <Button type='submit' isLoading={loading} disabled={loading}>
+                Deploy
+              </Button>
+
+              {missingDelegate && (
+              <Box
                 fontSize='xs'
-                id='applicant-helper-text'
+                id='delegate-helper-text'
                 my={3}
                 color='red.500'
               >
                 A delegate is required
-              </FormHelperText>
-            ) : null}
-            <Button type='submit' isLoading={loading} disabled={loading}>
-              Deploy
-            </Button>
-          </form>
-        </>
-      ) : null}
+              </Box>
+              )}
 
-      {step === 2 ? (
+            </form>
+          )}
+        </>
+      )}
+
+      {step === 2 && (
         <>
           <Heading as='h4' size='md' fontWeight='100' mb={10}>
             Deploying
@@ -248,16 +274,16 @@ const NewUberHausMinion = ({
             ) : null}
           </Box>
         </>
-      ) : null}
+      )}
 
-      {step === 'success' ? (
+      {step === 'success' && (
         <>
           <Heading as='h4' size='md' fontWeight='100' mb={10}>
             The Minion is ready.
           </Heading>
           <Button onClick={() => setGenericModal({})}>Close</Button>
         </>
-      ) : null}
+      )}
     </Box>
   );
 };

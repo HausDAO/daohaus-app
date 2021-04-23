@@ -15,12 +15,10 @@ import { RiInformationLine } from 'react-icons/ri';
 import { AiOutlineCaretDown } from 'react-icons/ai';
 import TextBox from '../components/TextBox';
 import { useDao } from '../contexts/DaoContext';
-// import { useEns, useMembers, useUser } from '../../../contexts/PokemolContext';
 import { useCustomTheme } from '../contexts/CustomThemeContext';
 import { truncateAddr } from '../utils/general';
 import { handleGetProfile } from '../utils/3box';
 import { chainByID } from '../utils/chain';
-// import { useParams } from 'react-router-dom';
 
 const defaultTipLabel = 'Address to receive the Shares, Loot, and/or Funding requested in this proposal.';
 
@@ -36,8 +34,6 @@ const AddressInput = ({
   memberOnly = false,
   memberOverride = false,
   overrideData,
-  // newMember,
-  // member,
 }) => {
   const { theme } = useCustomTheme();
   const { daoMembers } = useDao();
@@ -142,7 +138,6 @@ const AddressInput = ({
           <Input
             name='applicant'
             placeholder='0x'
-            // defaultValue={newMember ? user.username : null}
             ref={register({
               required: {
                 value: true,
