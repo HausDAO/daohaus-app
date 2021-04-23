@@ -207,6 +207,7 @@ const MinionExecute = ({ proposal }) => {
         </Flex>
       );
     }
+
     return <Button onClick={executeMinion} disabled={!isCorrectChain}>Execute Minion</Button>;
   };
 
