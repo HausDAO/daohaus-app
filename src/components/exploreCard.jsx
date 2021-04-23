@@ -142,7 +142,10 @@ const ExploreCard = ({ dao }) => {
           |
         </Box>
         <Box fontSize='sm'>
-          {`${dao.tokens.length} Token ${dao.tokens.length > 1 ? 's' : ''}`}
+          {dao.tokens.length}
+          {' '}
+          Token
+          {dao.tokens.length > 1 && 's'}
         </Box>
       </Flex>
       <Flex direction='row' align='center' mt={3}>
