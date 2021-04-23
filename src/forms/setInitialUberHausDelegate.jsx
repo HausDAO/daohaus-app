@@ -13,6 +13,7 @@ const SetInitialUberHausDelegate = ({
   uberHausAddress,
   delegateAddress,
   minionAddress,
+  refetchAllies,
 }) => {
   const [loading, setLoading] = useState(false);
   const { daochain } = useParams();
@@ -49,6 +50,7 @@ const SetInitialUberHausDelegate = ({
               title: 'Delegate set submitted.',
             });
             refreshDao();
+            refetchAllies();
             resolvePoll(txHash);
             setLoading(false);
           },

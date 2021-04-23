@@ -13,6 +13,7 @@ const DaoToDaoMemberInfo = ({
   handleNominateDelegateClick,
   isMember,
   userNetworkMismatchOrNotMember,
+  refetchAllies,
 }) => {
   return (
     <>
@@ -57,6 +58,7 @@ const DaoToDaoMemberInfo = ({
                 minionAddress={membership.memberAddress}
                 delegateAddress={delegate}
                 uberHausAddress={membership.moloch.id}
+                refetchAllies={refetchAllies}
               />
               <Button w='35%' onClick={handleNominateDelegateClick}>
                 Nominate New Delegate

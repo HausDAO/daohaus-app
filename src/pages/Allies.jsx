@@ -164,6 +164,7 @@ const Allies = ({
           uberMembers={uberMembers}
           uberOverview={uberOverview}
           daoProposals={proposals}
+          refetchAllies={refetchAllies}
         />
         {/* <Following /> */}
       </Box>

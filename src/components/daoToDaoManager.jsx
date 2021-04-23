@@ -40,6 +40,7 @@ const DaoToDaoManager = ({
   uberProposals,
   uberMembers,
   daoProposals,
+  refetchAllies,
 }) => {
   const toast = useToast();
   const { daochain, daoid } = useParams();
@@ -410,6 +411,7 @@ const DaoToDaoManager = ({
                       handleNominateDelegateClick={handleNominateDelegateClick}
                       userNetworkMismatchOrNotMember={userNetworkMismatchOrNotMember}
                       isMember={isMember}
+                      refetchAllies={refetchAllies}
                     />
                     <Box mt={10}>
                       <DaoToDaoProposalCard
@@ -448,6 +450,7 @@ const DaoToDaoManager = ({
                       handleNominateDelegateClick={handleNominateDelegateClick}
                       userNetworkMismatchOrNotMember={userNetworkMismatchOrNotMember}
                       isMember={isMember}
+                      refetchAllies={refetchAllies}
                     />
 
                     {uberHausMinion.openChildProposals.length ? (
