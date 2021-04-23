@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import {
-  Flex, Text, Spinner, Box,
+  Flex, Text, Spinner,
 } from '@chakra-ui/react';
 import { useParams } from 'react-router-dom';
 
@@ -119,16 +119,6 @@ const ProposalsList = ({ proposals, customTerms }) => {
     <>
 
       <Flex wrap='wrap' position='relative' justifyContent='space-between'>
-        <Box
-          mr={5}
-          textTransform='uppercase'
-          fontFamily='heading'
-          fontSize={['sm', null, null, 'md']}
-        >
-          {listProposals?.length || 0}
-          {' '}
-          PROPOSALS
-        </Box>
         <Flex flex={1} justifyContent='flex-end'>
           <GenericSelect
             currentOption={filter?.name}

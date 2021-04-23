@@ -1,41 +1,38 @@
 import React, { useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams } from 'react-router';
 import { Button } from '@chakra-ui/react';
 
 import { useInjectedProvider } from '../contexts/InjectedProviderContext';
 import { useOverlay } from '../contexts/OverlayContext';
 import { useUser } from '../contexts/UserContext';
-import { useTX } from '../contexts/TXContext';
 import { createPoll } from '../services/pollService';
 import { UberHausMinionService } from '../services/uberHausMinionService';
+import { UBERHAUS_DATA } from '../utils/uberhaus';
 
-const SetInitialUberHausDelegate = ({
-  uberHausAddress,
-  delegateAddress,
-  minionAddress,
-  refetchAllies,
-}) => {
-  const [loading, setLoading] = useState(false);
+const ApproveUberHausToken = ({ minionAddress, minionBalance, setShouldFetch }) => {
   const { daochain } = useParams();
-  const { address, injectedProvider } = useInjectedProvider();
   const { cachePoll, resolvePoll } = useUser();
+  const { address, injectedProvider } = useInjectedProvider();
   const {
     errorToast,
     successToast,
     setGenericModal,
     setTxInfoModal,
   } = useOverlay();
-  const { refreshDao } = useTX();
+  const [loading, setLoading] = useState(false);
 
-  const handleConfirm = async () => {
+  const unlock = async () => {
     setLoading(true);
 
     try {
-      const poll = createPoll({ action: 'setInitialDelegate', cachePoll })({
+      const poll = createPoll({ action: 'approveUberHaus', cachePoll })({
         chainID: daochain,
         minionAddress,
-        delegateAddress,
-        uberHausAddress,
+        uberHausAddress: UBERHAUS_DATA.ADDRESS,
+        daoID: UBERHAUS_DATA.ADDRESS,
+        tokenAddress: UBERHAUS_DATA.STAKING_TOKEN,
+        userAddress: minionAddress,
+        unlockAmount: minionBalance,
         actions: {
           onError: (error, txHash) => {
             errorToast({
@@ -43,15 +40,15 @@ const SetInitialUberHausDelegate = ({
             });
             resolvePoll(txHash);
             console.error(`poll error: ${error}`);
+            setShouldFetch(true);
             setLoading(false);
           },
           onSuccess: (txHash) => {
             successToast({
-              title: 'Delegate set submitted.',
+              title: 'HAUS unlocked.',
             });
-            refreshDao();
-            refetchAllies();
             resolvePoll(txHash);
+            setShouldFetch(true);
             setLoading(false);
           },
         },
@@ -64,7 +61,7 @@ const SetInitialUberHausDelegate = ({
         web3: injectedProvider,
         uberHausMinion: minionAddress,
         chainID: daochain,
-      })('setInitialDelegate')({ address, poll, onTxHash });
+      })('approveUberHaus')({ address, poll, onTxHash });
     } catch (err) {
       setLoading(false);
       console.log(err);
@@ -72,16 +69,18 @@ const SetInitialUberHausDelegate = ({
   };
 
   return (
-    <Button
-      type='submit'
-      loadingText='Submitting'
-      isLoading={loading}
-      disabled={loading}
-      onClick={handleConfirm}
-    >
-      Confirm Delegate
-    </Button>
+    <>
+      <Button
+        onClick={unlock}
+        loadingText='Submitting'
+        isLoading={loading}
+        disabled={loading}
+        mb={4}
+      >
+        Unlock HAUS
+      </Button>
+    </>
   );
 };
 
-export default SetInitialUberHausDelegate;
+export default ApproveUberHausToken;

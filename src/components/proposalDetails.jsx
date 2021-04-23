@@ -146,7 +146,10 @@ const ProposalDetails = ({ proposal, daoMember }) => {
           </Box>
 
           {proposal?.minionAddress ? (
-            <ProposalMinionCard proposal={proposal} />
+            <>
+              <Box w='100%'>{proposal?.description}</Box>
+              <ProposalMinionCard proposal={proposal} />
+            </>
           ) : (
             <Skeleton isLoaded={proposal?.description}>
               {proposal?.description
@@ -333,22 +336,27 @@ const ProposalDetails = ({ proposal, daoMember }) => {
 
 export default ProposalDetails;
 
-const minionLabelTip = () => (
+const MinionLabelTip = () => (
   <Box fontFamily='heading' p={5}>
     <TextBox mb={2}>Uber Proposal</TextBox>
-    <Flex mb={2}>
+    <Box mb={2} color='whiteAlpha.700'>
       This UberHAUS Staking Proposal is delegated through a Minion.
-    </Flex>
-    <Flex>
+    </Box>
+    <Box color='whiteAlpha.700'>
       Once the proposal is executed, it is voted on in the uberHAUS DAO. (Click
       to visit)
-    </Flex>
+    </Box>
   </Box>
 );
 
 const MinionBox = ({ proposal }) => {
   return (
-    <Tooltip hasArrow label={minionLabelTip} bg='primary.500' placement='top'>
+    <Tooltip
+      hasArrow
+      label={<MinionLabelTip />}
+      bg='primary.500'
+      placement='top'
+    >
       <Box as={RouterLink} to={UBER_LINK}>
         <TextBox size='xs' mb={2}>
           Minion

@@ -4,14 +4,17 @@ import {
   Box, Button, Flex, Spinner,
 } from '@chakra-ui/react';
 
-import { useInjectedProvider } from '../contexts/InjectedProviderContext';
 import { useUser } from '../contexts/UserContext';
-import { useTX } from '../contexts/TXContext';
+import { useInjectedProvider } from '../contexts/InjectedProviderContext';
 import { useOverlay } from '../contexts/OverlayContext';
-import { createPoll } from '../services/pollService';
-import { PROPOSAL_TYPES } from '../utils/proposalUtils';
+import { useTX } from '../contexts/TXContext';
+import ApproveUberHausToken from './approveUberHausToken';
+import { TokenService } from '../services/tokenService';
 import { UberHausMinionService } from '../services/uberHausMinionService';
+import { createPoll } from '../services/pollService';
 import { MinionService } from '../services/minionService';
+import { PROPOSAL_TYPES } from '../utils/proposalUtils';
+import { UBERHAUS_DATA } from '../utils/uberhaus';
 
 const MinionExecute = ({ proposal }) => {
   const { daochain } = useParams();
@@ -28,6 +31,8 @@ const MinionExecute = ({ proposal }) => {
   const [loading, setLoading] = useState(false);
   const [minionDetails, setMinionDetails] = useState(null);
   const [shouldFetch, setShouldFetch] = useState(true);
+  const [needsHausApproval, setNeedsHausApproval] = useState(false);
+  const [minionBalance, setMinionBalance] = useState(null);
 
   useEffect(() => {
     const getMinionDetails = async () => {
@@ -49,6 +54,29 @@ const MinionExecute = ({ proposal }) => {
             uberHausMinion: proposal.minionAddress,
             chainID: daochain,
           })('getAction')({ proposalId: proposal?.proposalId });
+
+          console.log(proposal.proposalType === PROPOSAL_TYPES.MINION_UBER_STAKE);
+
+          if (proposal.proposalType === PROPOSAL_TYPES.MINION_UBER_STAKE) {
+            const hausService = await TokenService({
+              chainID: daochain,
+              tokenAddress: UBERHAUS_DATA.STAKING_TOKEN,
+              is32: false,
+            });
+
+            const amountApproved = await hausService('allowance')({
+              accountAddr: proposal?.minionAddress,
+              contractAddr: UBERHAUS_DATA.ADDRESS,
+            });
+
+            const minionBalance = await hausService('balanceOf')(
+              proposal.minionAddress,
+            );
+
+            setMinionBalance(minionBalance);
+            setNeedsHausApproval(+amountApproved < +minionBalance);
+          }
+
           setMinionDetails(action);
           setShouldFetch(false);
           setLoading(false);
@@ -67,6 +95,7 @@ const MinionExecute = ({ proposal }) => {
         setMinionDetails(null);
       }
     };
+
     if (
       proposal?.proposalId
       && proposal?.minionAddress
@@ -147,15 +176,28 @@ const MinionExecute = ({ proposal }) => {
     }
   };
 
+  const isCorrectChain = daochain === injectedProvider?.currentProvider?.chainId;
+  console.log(isCorrectChain);
   const getMinionAction = () => {
     if (minionDetails?.executed) return <Box>Executed</Box>;
+
+    if (needsHausApproval) {
+      return (
+        <ApproveUberHausToken
+          minionAddress={proposal.minionAddress}
+          minionBalance={minionBalance}
+          setShouldFetch={setShouldFetch}
+        />
+      );
+    }
+
     if (
       !minionDetails?.executed
       && proposal.proposalType === PROPOSAL_TYPES.MINION_UBER_RQ
     ) {
       return (
         <Flex alignItems='center' flexDir='column'>
-          <Button onClick={executeMinion} mb={4}>
+          <Button onClick={executeMinion} mb={4} disabled={!isCorrectChain}>
             Execute Minion
           </Button>
           <Box>
@@ -165,7 +207,8 @@ const MinionExecute = ({ proposal }) => {
         </Flex>
       );
     }
-    return <Button onClick={executeMinion}>Execute Minion</Button>;
+
+    return <Button onClick={executeMinion} disabled={!isCorrectChain}>Execute Minion</Button>;
   };
 
   return (
