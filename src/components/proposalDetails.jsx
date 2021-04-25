@@ -46,7 +46,7 @@ import { UberHausMinionService } from '../services/uberHausMinionService';
 import { useDao } from '../contexts/DaoContext';
 import { UBERHAUS_DATA } from '../utils/uberhaus';
 
-import { TIP_LABELS } from '../utils/toolTipLabels';
+import { generateSFLabels, TIP_LABELS } from '../utils/toolTipLabels';
 import MemberIndicator from './memberIndicator';
 
 const UBER_LINK = '/dao/0x2a/0x96714523778e51b898b072089e5615d4db71078e/proposals';
@@ -349,6 +349,7 @@ const MinionBox = ({ proposal }) => {
       tooltip
       tooltipText={TIP_LABELS.UBER_PROPOSAL}
       link='/'
+      shouldFetchProfile={false}
     />;
   }
   if (minionType === MINION_TYPES.VANILLA) {
@@ -356,8 +357,9 @@ const MinionBox = ({ proposal }) => {
       address={proposal?.minionAddress}
       label='minion'
       tooltip
-      tooltipText={TIP_LABELS.UBER_PROPOSAL}
+      tooltipText={TIP_LABELS.MINION_PROPOSAL}
       link='/'
+      shouldFetchProfile={false}
     />;
   }
   if (minionType === MINION_TYPES.SUPERFLUID) {
@@ -365,8 +367,9 @@ const MinionBox = ({ proposal }) => {
       address={proposal?.minionAddress}
       label='super fluid minion'
       tooltip
-      tooltipText={TIP_LABELS.UBER_PROPOSAL}
+      tooltipText={generateSFLabels(proposal)}
       link='/'
+      shouldFetchProfile={false}
     />;
   }
 

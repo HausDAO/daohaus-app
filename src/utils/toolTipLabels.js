@@ -1,25 +1,23 @@
-// TOOLTIP MODEL
-
-// {
-// title: String,
-// pars: Array of strings,
-// body: String
-// }
-
 export const TIP_LABELS = {
   UBER_PROPOSAL: {
     title: 'Uber Proposal',
     pars: [
-      'This UberHAUS Staking Proposal is delegated through a Minion.',
-      'Once the proposal is executed, it is voted on in the uberHAUS DAO. (Click to visit)',
+      'This Proposal was created by an UberHaus Minion.',
+      'To perform the minion\'s action, hit the \'Execute\' button after processing the proposal',
+    ],
+  },
+  MINION_PROPOSAL: {
+    title: 'Minion Proposal',
+    pars: [
+      'This Proposal was created by a minion.',
+      'To perform the minion\'s action, hit the \'Execute\' button after processing the proposal',
     ],
   },
 };
 
-export const generateSFLabels = (proposalDetails) => {
+export const generateSFLabels = (proposal) => {
   try {
-    const tokenRate = JSON.parse(proposalDetails)?.tokenRate;
-
+    const tokenRate = JSON.parse(proposal?.details)?.tokenRate;
     return {
       title: 'Superfluid Proposal',
       pars: [

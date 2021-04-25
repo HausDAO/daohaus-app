@@ -7,45 +7,58 @@ import {
   Flex, Avatar, Box, useToast, Icon, Text,
 } from '@chakra-ui/react';
 import { truncateAddr } from '../utils/general';
+
+import { handleGetENS } from '../utils/ens';
 import { handleGetProfile } from '../utils/3box';
 
 const AddressAvatar = React.memo(({
   addr,
-  hideCopy = false,
-  // alwaysShowName,
+  hideCopy,
 }) => {
   const toast = useToast();
   const [profile, setProfile] = useState(null);
-  // const [hasFetched, setHasFetched] = useState(false);
 
-  const hasFetched = useRef(false);
+  const shouldFetchENS = useRef(false);
+
   useEffect(() => {
     let shouldUpdate = true;
     const getProfile = async () => {
+      console.log(addr);
       try {
-        hasFetched.current = true;
-        // console.log('fired');
         const localProfile = await handleGetProfile(addr);
         if (shouldUpdate) {
-          if (profile.status === 'error') {
+          if (localProfile.status === 'error') {
             setProfile(false);
+            shouldFetchENS.current = true;
             return;
           }
           setProfile(localProfile);
         }
       } catch (error) {
         console.log("Member doesn't have a profile");
-        hasFetched.current = true;
       }
     };
-
-    if (addr && !hasFetched.current) {
+    if (addr) {
       getProfile();
     }
     return () => {
       shouldUpdate = false;
     };
   }, [addr]);
+
+  useEffect(() => {
+    const tryENS = async () => {
+      shouldFetchENS.current = false;
+      const result = await handleGetENS(addr);
+      if (result) {
+        setProfile({ name: result });
+      }
+    };
+
+    if (profile === false && shouldFetchENS.current) {
+      tryENS();
+    }
+  }, [profile, addr]);
 
   const renderAvatarImage = (renderAddr) => {
     if (profile?.image?.length) {
@@ -70,7 +83,7 @@ const AddressAvatar = React.memo(({
   return (
     <Flex direction='row' alignItems='center'>
       <Flex direction='row' alignItems='center'>
-        {addr && hasFetched && (
+        {addr && (
           <Avatar name={addr} src={renderAvatarImage(addr)} size='sm' />
         )}
         <Flex>

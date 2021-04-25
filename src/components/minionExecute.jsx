@@ -195,7 +195,7 @@ const MinionExecute = ({ proposal }) => {
   };
 
   const isCorrectChain = daochain === injectedProvider?.currentProvider?.chainId;
-  console.log(isCorrectChain);
+
   const getMinionAction = () => {
     if (minionDetails?.executed) return <Box>Executed</Box>;
 
