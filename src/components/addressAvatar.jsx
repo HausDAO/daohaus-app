@@ -1,13 +1,8 @@
-import React, { useEffect, useRef, useState } from 'react';
-import makeBlockie from 'ethereum-blockies-base64';
-import { CopyToClipboard } from 'react-copy-to-clipboard';
-import { FaCopy } from 'react-icons/fa';
+import React, {
+  useEffect, useMemo, useRef, useState,
+} from 'react';
 
-import {
-  Flex, Avatar, Box, useToast, Icon, Text,
-} from '@chakra-ui/react';
-import { truncateAddr } from '../utils/general';
-
+import StaticAvatar from './staticAvatar';
 import { handleGetENS } from '../utils/ens';
 import { handleGetProfile } from '../utils/3box';
 
@@ -15,7 +10,6 @@ const AddressAvatar = React.memo(({
   addr,
   hideCopy,
 }) => {
-  const toast = useToast();
   const [profile, setProfile] = useState(null);
 
   const shouldFetchENS = useRef(false);
@@ -60,53 +54,15 @@ const AddressAvatar = React.memo(({
     }
   }, [profile, addr]);
 
-  const renderAvatarImage = (renderAddr) => {
+  const avatarImage = useMemo(() => {
     if (profile?.image?.length) {
       return `https://ipfs.infura.io/ipfs/${profile?.image[0].contentUrl['/']}`;
     }
-    if (profile === false) {
-      return makeBlockie(renderAddr);
-    }
     return null;
-  };
-
-  const copiedToast = () => {
-    toast({
-      title: 'Copied Address',
-      position: 'top-right',
-      status: 'success',
-      duration: 3000,
-      isClosable: true,
-    });
-  };
+  }, [profile, addr]);
 
   return (
-    <Flex direction='row' alignItems='center'>
-      <Flex direction='row' alignItems='center'>
-        {addr && (
-          <Avatar name={addr} src={renderAvatarImage(addr)} size='sm' />
-        )}
-        <Flex>
-          <Text fontSize='sm' fontFamily='heading' ml={3}>
-            {profile?.name || profile?.ens || truncateAddr(addr)}
-          </Text>
-          <Box as='span' mx={1}>
-            {profile?.emoji && profile.emoji}
-          </Box>
-          {hideCopy || (
-            <CopyToClipboard text={addr} mr={4} onCopy={copiedToast}>
-              <Icon
-                transform='translateY(2px)'
-                as={FaCopy}
-                color='secondary.300'
-                ml={2}
-                _hover={{ cursor: 'pointer' }}
-              />
-            </CopyToClipboard>
-          )}
-        </Flex>
-      </Flex>
-    </Flex>
+    <StaticAvatar address={addr} avatarImg={avatarImage} name={profile?.name} hideCopy={hideCopy} />
   );
 });
 

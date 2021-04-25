@@ -11,17 +11,16 @@ import { truncateAddr } from '../utils/general';
 const StaticAvatar = ({
   address,
   avatarImg,
-  waitForFetch,
   name,
   hideCopy,
   emoji,
 }) => {
   const toast = useToast();
   const blockie = useMemo(() => {
-    if (address && !avatarImg && !waitForFetch) {
+    if (address) {
       return makeBlockie(address);
     }
-  }, [address, avatarImg, waitForFetch]);
+  }, [address]);
   const copiedToast = () => {
     toast({
       title: 'Copied Address',
