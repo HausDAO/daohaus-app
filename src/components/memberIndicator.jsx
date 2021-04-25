@@ -1,13 +1,14 @@
 import React from 'react';
+import { Box } from '@chakra-ui/react';
 import AddressAvatar from './addressAvatar';
 import TextBox from './TextBox';
-import { LinkWrapper, ToolTipWrapper } from '../staticElements/wrappers';
+import { ToolTipWrapper } from '../staticElements/wrappers';
 
 const MemberIndicator = ({
   address, label, tooltip, tooltipText, link,
 }) => (
-  <ToolTipWrapper tooltip={tooltip} tooltipText={tooltipText}>
-    <LinkWrapper link={link}>
+  <ToolTipWrapper tooltip={tooltip} tooltipText={tooltipText} link={link}>
+    <Box>
       <TextBox size='xs' mb={2}>
         {label}
       </TextBox>
@@ -16,7 +17,7 @@ const MemberIndicator = ({
         addr={address}
         alwaysShowName
       />)}
-    </LinkWrapper>
+    </Box>
   </ToolTipWrapper>
 );
 

@@ -35,6 +35,7 @@ import {
   getProposalDetailStatus,
   memberVote,
   MINION_TYPES,
+  PROPOSAL_TYPES,
 } from '../utils/proposalUtils';
 import { numberWithCommas } from '../utils/general';
 import { getCustomProposalTerm, themeImagePath } from '../utils/metadata';
@@ -337,13 +338,39 @@ const ProposalDetails = ({ proposal, daoMember }) => {
 export default ProposalDetails;
 
 const MinionBox = ({ proposal }) => {
-  return <MemberIndicator
-    address={proposal?.minionAddress}
-    label='Minion'
-    tooltip
-    toolTipText={TIP_LABELS.UBER_PROPOSAL}
-    link='/'
-  />;
+  if (!proposal?.minion?.minionType) {
+    return null;
+  }
+  const { minionType } = proposal.minion;
+  if (minionType === MINION_TYPES.UBER) {
+    return <MemberIndicator
+      address={proposal?.minionAddress}
+      label='uberhaus minion'
+      tooltip
+      tooltipText={TIP_LABELS.UBER_PROPOSAL}
+      link='/'
+    />;
+  }
+  if (minionType === MINION_TYPES.VANILLA) {
+    return <MemberIndicator
+      address={proposal?.minionAddress}
+      label='minion'
+      tooltip
+      tooltipText={TIP_LABELS.UBER_PROPOSAL}
+      link='/'
+    />;
+  }
+  if (minionType === MINION_TYPES.SUPERFLUID) {
+    return <MemberIndicator
+      address={proposal?.minionAddress}
+      label='super fluid minion'
+      tooltip
+      tooltipText={TIP_LABELS.UBER_PROPOSAL}
+      link='/'
+    />;
+  }
+
+  return null;
 };
 
 const DelegateBox = ({ proposal }) => {
