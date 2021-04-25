@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
 
 import { utils } from 'web3';
@@ -66,7 +66,7 @@ const hasImage = (string) => {
 const ProposalDetails = ({ proposal, daoMember }) => {
   const { address } = useInjectedProvider();
   const { customTerms } = useMetaData();
-  const { isUberHaus } = useDao();
+  const { isUberHaus, daoOverview } = useDao();
   const [status, setStatus] = useState(null);
   const { daoid } = useParams();
 
@@ -83,7 +83,7 @@ const ProposalDetails = ({ proposal, daoMember }) => {
       return <UberDaoBox proposal={proposal} />;
     }
     if (proposal?.minion) {
-      return <MinionBox proposal={proposal} />;
+      return <MinionBox proposal={proposal} daoOverview={daoOverview} />;
     }
     return (
       <Box key={proposal?.proposalId}>
@@ -337,10 +337,19 @@ const ProposalDetails = ({ proposal, daoMember }) => {
 
 export default ProposalDetails;
 
-const MinionBox = ({ proposal }) => {
-  if (!proposal?.minion?.minionType) {
-    return null;
+const MinionBox = ({ proposal, daoOverview }) => {
+  const { daoid, daochain } = useParams();
+
+  const minionName = useMemo(() => {
+    return daoOverview.minions.find((minion) => {
+      return minion.minionAddress === proposal.minionAddress;
+    })?.details;
+  }, [daoOverview, proposal]);
+
+  if (!daoOverview || !proposal) {
+    return <Spinner />;
   }
+
   const { minionType } = proposal.minion;
   if (minionType === MINION_TYPES.UBER) {
     return <MemberIndicator
@@ -348,8 +357,9 @@ const MinionBox = ({ proposal }) => {
       label='uberhaus minion'
       tooltip
       tooltipText={TIP_LABELS.UBER_PROPOSAL}
-      link='/'
+      link={UBER_LINK}
       shouldFetchProfile={false}
+      name={minionName}
     />;
   }
   if (minionType === MINION_TYPES.VANILLA) {
@@ -360,6 +370,7 @@ const MinionBox = ({ proposal }) => {
       tooltipText={TIP_LABELS.MINION_PROPOSAL}
       link='/'
       shouldFetchProfile={false}
+      name={minionName}
     />;
   }
   if (minionType === MINION_TYPES.SUPERFLUID) {
@@ -368,8 +379,9 @@ const MinionBox = ({ proposal }) => {
       label='super fluid minion'
       tooltip
       tooltipText={generateSFLabels(proposal)}
-      link='/'
+      link={`/dao/${daochain}/${daoid}/settings/superfluid-minion/${proposal.minionAddress}`}
       shouldFetchProfile={false}
+      name={minionName}
     />;
   }
 
@@ -409,7 +421,7 @@ const DelegateBox = ({ proposal }) => {
           Current Delegate
         </TextBox>
         {minionDelegate ? (
-          <AddressAvatar addr={minionDelegate} alwaysShowName />
+          <AddressAvatar addr={minionDelegate} />
         ) : (
           <Spinner />
         )}
@@ -486,66 +498,6 @@ const UberDaoBox = ({ proposal }) => {
           </Flex>
         )}
       </Skeleton>
-    </Box>
-  );
-};
-
-const SFMinionBox = ({ proposal }) => {
-  const details = JSON.parse(proposal.details);
-  return (
-    <Box>
-      <Tooltip
-        hasArrow
-        label={
-          <Box fontFamily='heading' p={5}>
-            <TextBox mb={2}>Superfluid Proposal</TextBox>
-            <Flex mb={2}>
-              This Minion will execute an agreement using Superfluid Protocol.
-            </Flex>
-            <Flex mb={2}>Constant Flow Agreement</Flex>
-            <Flex mb={2}>
-              {details.tokenRate && `\nRate: ${details.tokenRate}`}
-            </Flex>
-
-          </Box>
-          }
-        bg='primary.500'
-        placement='top'
-      >
-        <Box key={proposal?.proposalId} mb={5}>
-          <TextBox size='xs' mb={2}>
-            Minion
-          </TextBox>
-          <Skeleton isLoaded={proposal}>
-            {proposal ? (
-              <AddressAvatar
-                addr={
-                    proposal.applicant === AddressZero
-                      ? proposal.proposer
-                      : proposal.applicant
-                  }
-                alwaysShowName
-              />
-            ) : (
-              '--'
-            )}
-          </Skeleton>
-        </Box>
-      </Tooltip>
-      {details?.recipient && (
-      <Box key={details.recipient}>
-        <TextBox size='xs' mb={2}>
-          Recipient
-        </TextBox>
-        <Skeleton isLoaded={details.recipient}>
-          {details.recipient ? (
-            <AddressAvatar addr={details.recipient} alwaysShowName />
-          ) : (
-            '--'
-          )}
-        </Skeleton>
-      </Box>
-      )}
     </Box>
   );
 };

@@ -22,6 +22,7 @@ export const ToolTipWrapper = ({
   if (!tooltip) {
     return children;
   }
+  console.log('link', link);
   return (
     <Tooltip
       hasArrow

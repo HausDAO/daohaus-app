@@ -1,7 +1,7 @@
 import React, { useMemo } from 'react';
+import { FaCopy } from 'react-icons/fa';
 import makeBlockie from 'ethereum-blockies-base64';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
-import { FaCopy } from 'react-icons/fa';
 
 import {
   Flex, Avatar, Box, useToast, Icon, Text,
