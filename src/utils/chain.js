@@ -37,9 +37,7 @@ export const supportedChains = {
     hub_sort_order: 6,
     providers: ['walletconnect'],
     // , 'portis', 'fortmatic'
-    rpc_url:
-      process.env.REACT_APP_RPC_URI ||
-      `https://${process.env.REACT_APP_RPC_URI}.rinkeby.rpc.rivet.cloud/`,
+    rpc_url: `https://${process.env.REACT_APP_RPC_URI}.rinkeby.rpc.rivet.cloud/`,
     abi_api_url:
       'https://api-rinkeby.etherscan.io/api?module=contract&action=getabi&address=',
     tokenlist_api_url:

@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
 
 import { utils } from 'web3';
-import { useParams, Link as RouterLink } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import {
   Flex,
   Box,
@@ -44,6 +44,9 @@ import { useMetaData } from '../contexts/MetaDataContext';
 import { UberHausMinionService } from '../services/uberHausMinionService';
 import { useDao } from '../contexts/DaoContext';
 import { UBERHAUS_DATA } from '../utils/uberhaus';
+
+import { TIP_LABELS } from '../utils/toolTipLabels';
+import MemberIndicator from './memberIndicator';
 
 const UBER_LINK = '/dao/0x2a/0x96714523778e51b898b072089e5615d4db71078e/proposals';
 
@@ -333,48 +336,14 @@ const ProposalDetails = ({ proposal, daoMember }) => {
 
 export default ProposalDetails;
 
-const MinionLabelTip = () => (
-  <Box fontFamily='heading' p={5}>
-    <TextBox mb={2}>Uber Proposal</TextBox>
-    <Box mb={2} color='whiteAlpha.700'>
-      This UberHAUS Staking Proposal is delegated through a Minion.
-    </Box>
-    <Box color='whiteAlpha.700'>
-      Once the proposal is executed, it is voted on in the uberHAUS DAO. (Click
-      to visit)
-    </Box>
-  </Box>
-);
-
 const MinionBox = ({ proposal }) => {
-  return (
-    <Tooltip
-      hasArrow
-      label={<MinionLabelTip />}
-      bg='primary.500'
-      placement='top'
-    >
-      <Box as={RouterLink} to={UBER_LINK}>
-        <TextBox size='xs' mb={2}>
-          Minion
-        </TextBox>
-        <Skeleton isLoaded={proposal}>
-          {proposal ? (
-            <AddressAvatar
-              addr={
-                proposal.applicant === AddressZero
-                  ? proposal.proposer
-                  : proposal.applicant
-              }
-              alwaysShowName
-            />
-          ) : (
-            '--'
-          )}
-        </Skeleton>
-      </Box>
-    </Tooltip>
-  );
+  return <MemberIndicator
+    address={proposal?.minionAddress}
+    label='Minion'
+    tooltip
+    toolTipText={TIP_LABELS.UBER_PROPOSAL}
+    link='/'
+  />;
 };
 
 const DelegateBox = ({ proposal }) => {
@@ -430,10 +399,6 @@ const UberDaoBox = ({ proposal }) => {
       (member) => member.memberAddress === proposal?.proposer
         || member.delegateKey === proposal?.proposer,
     );
-
-    console.log(daoMembers);
-    console.log(proposal);
-    console.log(minion);
     if (minion?.isUberMinion) {
       setDaoMinion(minion);
     } else {
@@ -470,7 +435,6 @@ const UberDaoBox = ({ proposal }) => {
               }
               size='sm'
             />
-
             <Flex>
               <Text fontSize='sm' fontFamily='heading' ml={3}>
                 {daoMinion?.uberMeta?.name}

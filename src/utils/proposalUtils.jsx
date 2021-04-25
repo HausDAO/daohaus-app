@@ -1,4 +1,4 @@
-import React, { Fragment } from 'react';
+import React from 'react';
 import { Box } from '@chakra-ui/react';
 import { formatDistanceToNow } from 'date-fns';
 import { IsJsonString, timeToNow } from './general';
