@@ -15,8 +15,16 @@ import { RiInformationLine } from 'react-icons/ri';
 import TextBox from '../components/TextBox';
 import { useDao } from '../contexts/DaoContext';
 
+const defaultTipLabel = 'Request funds from the DAO';
+
 const PaymentInput = ({
-  register, setValue, getValues, errors,
+  errors,
+  formLabel = 'Payment Requested',
+  getValues,
+  register,
+  setValue,
+  tipLabel = defaultTipLabel,
+  validateGtZero = false,
 }) => {
   const [balance, setBalance] = useState(0);
 
@@ -75,23 +83,20 @@ const PaymentInput = ({
   };
 
   const validateBalance = (value) => {
-    let error;
-    if (value > balance) {
-      error = 'Payment Requested is more than the dao has';
+    if (validateGtZero && value <= 0) {
+      return 'Payment Requested must be greater than zero';
     }
-    return error || true;
+    if (value > balance) {
+      return 'Payment Requested is more than the dao has';
+    }
+    return true;
   };
 
   return (
     <>
-      <Tooltip
-        hasArrow
-        shouldWrapChildren
-        label='Request funds from the DAO'
-        placement='top'
-      >
+      <Tooltip hasArrow shouldWrapChildren label={tipLabel} placement='top'>
         <TextBox as={FormLabel} size='xs' d='flex' alignItems='center'>
-          Payment Requested
+          {formLabel}
           <Icon as={RiInformationLine} ml={2} />
         </TextBox>
       </Tooltip>

@@ -17,6 +17,7 @@ import WhitelistProposalForm from '../forms/whitelistProposal';
 import GuildKickProposalForm from '../forms/guildKickProposal';
 import TradeProposalForm from '../forms/tradeProposal';
 import MinionSimpleProposalForm from '../forms/minionSimpleProposal';
+import SuperfluidMinionProposalForm from '../forms/superfluidMinionProposal';
 import TransmutationProposal from '../forms/transmutationProposal';
 import { getTerm } from '../utils/metadata';
 import { useMetaData } from '../contexts/MetaDataContext';
@@ -76,6 +77,12 @@ const ProposalFormModal = ({ proposalType }) => {
       heading: `New Minion ${getTerm(customTerms, 'proposal')}`,
       subline: 'Submit a Minion proposal here.',
       form: <MinionSimpleProposalForm />,
+    },
+    superfluidMinion: {
+      type: `New ${getTerm(customTerms, 'proposal')}`,
+      heading: `New Superfluid Minion ${getTerm(customTerms, 'proposal')}`,
+      subline: 'Submit a Superfluid Minion proposal here.',
+      form: <SuperfluidMinionProposalForm />,
     },
     transmutation: {
       type: `New ${getTerm(customTerms, 'proposal')}`,

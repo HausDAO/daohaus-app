@@ -74,6 +74,13 @@ export const detailsToJSON = (values) => {
   if (values.uberType) {
     details.uberType = values.uberType;
   }
+  if (values.ratePerSec) {
+    details.recipient = values.recipient;
+    details.token = values.token;
+    details.tokenRate = values.tokenRate;
+    details.ratePerSec = values.ratePerSec;
+    details.minDeposit = values.minDeposit;
+  }
   if (values.cco) {
     details.cco = values.cco;
   }

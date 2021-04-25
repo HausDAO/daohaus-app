@@ -25,6 +25,7 @@ import Notifications from '../pages/Notifications';
 import DiscourseSettings from '../pages/DiscourseSettings';
 import ProposalTypes from '../pages/ProposalTypes';
 import MinionSafe from '../pages/MinionSafe';
+import SuperfluidMinion from '../pages/SuperfluidMinion';
 import CcoContribution from '../pages/CcoContribution';
 import CcoHelper from '../pages/CcoHelper';
 import Staking from '../pages/Staking';
@@ -157,6 +158,17 @@ const DaoRouter = () => {
             overview={daoOverview}
             members={daoMembers}
             currentDaoTokens={currentDaoTokens}
+          />
+        </Route>
+        <Route
+          exact
+          path={`${path}/settings/superfluid-minion/:minion`} // path={`${path}/settings/superfluid-minion/:minion(\b0x[0-9a-f]{10,40}\b)`}
+        >
+          <SuperfluidMinion
+            activities={daoActivities}
+            overview={daoOverview}
+            daoMember={daoMember}
+            members={daoMembers}
           />
         </Route>
         <Route

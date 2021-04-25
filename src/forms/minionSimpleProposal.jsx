@@ -31,6 +31,7 @@ import { chainByID } from '../utils/chain';
 import { detailsToJSON, daoConnectedAndSameChain } from '../utils/general';
 import { useMetaData } from '../contexts/MetaDataContext';
 import { createForumTopic } from '../utils/discourse';
+import { MINION_TYPES } from '../utils/proposalUtils';
 
 const MinionProposalForm = () => {
   const [loading, setLoading] = useState(false);
@@ -64,12 +65,14 @@ const MinionProposalForm = () => {
 
   useEffect(() => {
     if (daoOverview?.minions) {
-      const localMinions = daoOverview.minions.map(
-        (minion) => ({
-          minionAdddress: minion.minionAddress,
-          minionName: minion.details,
-        }),
-      );
+      const localMinions = daoOverview.minions
+        .filter((minion) => minion.minionType === MINION_TYPES.VANILLA)
+        .map(
+          (minion) => ({
+            minionAdddress: minion.minionAddress,
+            minionName: minion.details,
+          }),
+        );
       setMinions(localMinions);
     }
   }, [daoOverview?.minions]);

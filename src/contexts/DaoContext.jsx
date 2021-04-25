@@ -46,7 +46,7 @@ export const DaoProvider = ({ children }) => {
     null,
   );
   const [uberMinionData, setUberMinionData] = useSessionStorage(
-    `parentDaoData-${daoid}`,
+    `uber-minions-${daoid}`,
     null,
   );
   const [isUberHaus, setIsUberHaus] = useState(false);
