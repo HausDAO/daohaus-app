@@ -11,7 +11,6 @@ import {
   Text,
   Image,
   Icon,
-  Tooltip,
   Spinner,
   Link,
   Avatar,
@@ -35,7 +34,7 @@ import {
   getProposalDetailStatus,
   memberVote,
   MINION_TYPES,
-  PROPOSAL_TYPES,
+
 } from '../utils/proposalUtils';
 import { numberWithCommas } from '../utils/general';
 import { getCustomProposalTerm, themeImagePath } from '../utils/metadata';
@@ -98,7 +97,7 @@ const ProposalDetails = ({ proposal, daoMember }) => {
                   ? proposal.proposer
                   : proposal.applicant
               }
-              alwaysShowName
+
             />
           ) : (
             '--'
@@ -341,9 +340,11 @@ const MinionBox = ({ proposal, daoOverview }) => {
   const { daoid, daochain } = useParams();
 
   const minionName = useMemo(() => {
-    return daoOverview.minions.find((minion) => {
-      return minion.minionAddress === proposal.minionAddress;
-    })?.details;
+    if (daoOverview && proposal) {
+      return daoOverview.minions.find((minion) => {
+        return minion.minionAddress === proposal.minionAddress;
+      })?.details;
+    }
   }, [daoOverview, proposal]);
 
   if (!daoOverview || !proposal) {
@@ -376,7 +377,7 @@ const MinionBox = ({ proposal, daoOverview }) => {
   if (minionType === MINION_TYPES.SUPERFLUID) {
     return <MemberIndicator
       address={proposal?.minionAddress}
-      label='super fluid minion'
+      label='superfluid minion'
       tooltip
       tooltipText={generateSFLabels(proposal)}
       link={`/dao/${daochain}/${daoid}/settings/superfluid-minion/${proposal.minionAddress}`}

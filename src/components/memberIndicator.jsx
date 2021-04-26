@@ -1,5 +1,4 @@
 import React from 'react';
-import { Box } from '@chakra-ui/react';
 import AddressAvatar from './addressAvatar';
 import TextBox from './TextBox';
 import { ToolTipWrapper } from '../staticElements/wrappers';

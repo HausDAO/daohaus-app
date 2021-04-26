@@ -17,7 +17,6 @@ const AddressAvatar = React.memo(({
   useEffect(() => {
     let shouldUpdate = true;
     const getProfile = async () => {
-      console.log(addr);
       try {
         const localProfile = await handleGetProfile(addr);
         if (shouldUpdate) {
