@@ -95,7 +95,7 @@ const AddressInput = ({
   return (
     <>
       {!anyApplicant ? (
-        <FormControl mb={5}>
+        <FormControl>
           <Flex justify='space-between'>
             <Tooltip
               hasArrow
@@ -144,8 +144,6 @@ const AddressInput = ({
                 message: `${formLabel} is required`,
               },
             })}
-            color='white'
-            focusBorderColor='secondary.500'
             onChange={handleChange}
           />
           <FormHelperText fontSize='xs' id='applicant-helper-text' mb={1}>
@@ -154,7 +152,7 @@ const AddressInput = ({
           <Input type='hidden' name='applicantHidden' ref={register} />
         </FormControl>
       ) : (
-        <FormControl mb={5}>
+        <FormControl>
           <Flex justify='space-between'>
             <TextBox as={FormLabel} size='xs' htmlFor='memberApplicant'>
               {formLabel}

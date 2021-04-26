@@ -5,6 +5,7 @@ import { defaultTheme } from './defaultTheme';
 // core Chakra components
 import Badge from './core/badge';
 import Button from './core/button';
+import FormLabel from './core/formLabel';
 import Heading from './core/heading';
 import IconButton from './core/iconButton';
 import Input from './core/input';
@@ -125,6 +126,7 @@ export const createTheme = (daoTheme) => {
       // core components
       Badge,
       Button,
+      FormLabel,
       Heading,
       IconButton,
       Input,

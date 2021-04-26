@@ -38,10 +38,8 @@ const TransmutationProposal = () => {
     handleSubmit,
     errors,
     register,
-    // reset,
     setValue,
     watch,
-    // formState
   } = useForm();
 
   const [loading, setLoading] = useState(false);

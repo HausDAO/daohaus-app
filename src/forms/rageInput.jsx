@@ -41,8 +41,6 @@ const RageInput = ({
               message: `${type} must be a number`,
             },
           })}
-          color='white'
-          focusBorderColor='secondary.500'
         />
       </InputGroup>
       <FormHelperText>

@@ -226,7 +226,6 @@ const MemberProposalForm = () => {
           </Tooltip>
           <Input
             name='sharesRequested'
-            placeholder='0'
             defaultValue='0'
             mb={5}
             ref={register({
@@ -270,7 +269,6 @@ const MemberProposalForm = () => {
               </Tooltip>
               <Input
                 name='lootRequested'
-                placeholder='0'
                 defaultValue='0'
                 mb={5}
                 ref={register({
@@ -279,8 +277,6 @@ const MemberProposalForm = () => {
                     message: 'Loot must be a number',
                   },
                 })}
-                color='white'
-                focusBorderColor='secondary.500'
               />
             </>
           )}
