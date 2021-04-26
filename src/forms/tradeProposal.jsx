@@ -12,6 +12,7 @@ import {
   MenuButton,
   MenuList,
   MenuItem,
+  Stack,
 } from '@chakra-ui/react';
 import { RiAddFill, RiErrorWarningLine } from 'react-icons/ri';
 import { useParams } from 'react-router-dom';
@@ -62,8 +63,6 @@ const TradeProposalForm = () => {
   const [showLoot, setShowLoot] = useState(false);
   const [showApplicant, setShowApplicant] = useState(false);
   const [currentError, setCurrentError] = useState(null);
-
-  // console.log(dao);
 
   const {
     handleSubmit,
@@ -186,7 +185,7 @@ const TradeProposalForm = () => {
         <Box w={['100%', null, '50%']} pr={[0, null, 5]}>
           <DetailsFields register={register} />
         </Box>
-        <Box w={['100%', null, '50%']}>
+        <Box as={Stack} w={['100%', null, '50%']} spacing={4}>
           <TributeInput
             register={register}
             setValue={setValue}
@@ -233,7 +232,6 @@ const TradeProposalForm = () => {
               <Input
                 name='lootRequested'
                 placeholder='0'
-                mb={5}
                 ref={register({
                   pattern: {
                     value: /[0-9]/,
@@ -257,7 +255,7 @@ const TradeProposalForm = () => {
               <MenuButton
                 as={Button}
                 variant='outline'
-                rightIcon={<Icon as={RiAddFill} color='primary.500' />}
+                rightIcon={<Icon as={RiAddFill} />}
               >
                 Additional Options
               </MenuButton>
