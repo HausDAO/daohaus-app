@@ -152,8 +152,6 @@ const WhitelistProposalForm = () => {
             placeholder='0x'
             mb={3}
             ref={register}
-            color='white'
-            focusBorderColor='secondary.500'
           />
         </Box>
       </FormControl>

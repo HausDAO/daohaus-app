@@ -294,7 +294,6 @@ const MinionProposalForm = () => {
                 message: 'Target contract is required',
               },
             })}
-            focusBorderColor='secondary.500'
             onBlur={handleBlur}
           />
           <TextBox as={FormLabel} size='xs' htmlFor='value'>
@@ -310,14 +309,11 @@ const MinionProposalForm = () => {
                 message: 'Value is required',
               },
             })}
-            color='white'
-            focusBorderColor='secondary.500'
           />
           <Stack spacing={4}>
             <Textarea
               name='description'
               placeholder='Short Description'
-              type='textarea'
               mb={5}
               h={10}
               ref={register({
@@ -340,7 +336,6 @@ const MinionProposalForm = () => {
               <Textarea
                 name='dataValue'
                 placeholder='Raw Hex Data'
-                type='textarea'
                 mb={5}
                 rows={13}
                 ref={register({
@@ -349,8 +344,6 @@ const MinionProposalForm = () => {
                     message: 'Data hex value is required',
                   },
                 })}
-                color='white'
-                focusBorderColor='secondary.500'
               />
             </>
           ) : (
@@ -399,8 +392,6 @@ const MinionProposalForm = () => {
                               name={`xparam${param.name}`}
                               ref={register}
                               placeholder={param.type}
-                              color='white'
-                              focusBorderColor='secondary.500'
                             />
                           </Stack>
                         );

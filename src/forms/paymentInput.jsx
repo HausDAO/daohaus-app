@@ -117,8 +117,6 @@ const PaymentInput = ({
             },
             validate: validateBalance,
           })}
-          color='white'
-          focusBorderColor='secondary.500'
         />
         <InputRightAddon background='primary.500' p={0}>
           <Select

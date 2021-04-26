@@ -142,8 +142,6 @@ const UpdateDelegate = ({ overview }) => {
                 validate: (addr) => !!isEthAddress(addr),
               })}
               width='100%'
-              color='white'
-              focusBorderColor='secondary.500'
             />
 
             <Box

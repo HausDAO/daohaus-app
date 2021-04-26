@@ -53,8 +53,6 @@ const DetailsFields = ({ register, defaultTitle }) => {
           })}
           onChange={handleChange}
           value={values.title}
-          color='white'
-          focusBorderColor='secondary.500'
         />
       </Box>
       <Box>
@@ -62,16 +60,13 @@ const DetailsFields = ({ register, defaultTitle }) => {
           Description
         </TextBox>
         <Textarea
-          name='description'
           placeholder='Short Description'
-          type='textarea'
           mb={0}
           h={10}
-          ref={register()}
+          ref={register}
+          name='description'
           onChange={handleChange}
           value={values.description}
-          color='white'
-          focusBorderColor='secondary.500'
         />
       </Box>
       <Box>
@@ -83,15 +78,13 @@ const DetailsFields = ({ register, defaultTitle }) => {
           <Input
             name='link'
             placeholder='daolink.club'
-            color='white'
-            focusBorderColor='secondary.500'
             onChange={handleChange}
             value={values.link}
-            ref={register()}
+            ref={register}
           />
         </InputGroup>
         <FormHelperText fontSize='sm' color='whiteAlpha.700'>
-          We&apos;ll remove the https://
+          Try a gif or png! We&apos;ll remove the https://
         </FormHelperText>
       </Box>
     </Stack>

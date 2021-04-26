@@ -221,8 +221,6 @@ const TradeProposalForm = () => {
                     message: 'Requested shares must be a whole number',
                   },
                 })}
-                color='white'
-                focusBorderColor='secondary.500'
               />
             </>
           )}
@@ -242,8 +240,6 @@ const TradeProposalForm = () => {
                     message: 'Loot must be a number',
                   },
                 })}
-                color='white'
-                focusBorderColor='secondary.500'
               />
             </>
           )}
