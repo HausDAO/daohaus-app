@@ -84,8 +84,6 @@ const TradeProposalForm = () => {
     } else {
       setCurrentError(null);
     }
-
-    // eslint-disable-next-line
   }, [errors]);
 
   const onSubmit = async (values) => {

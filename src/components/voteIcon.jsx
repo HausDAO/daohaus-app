@@ -3,7 +3,7 @@ import { Flex, Icon } from '@chakra-ui/react';
 import { FaThumbsDown, FaThumbsUp } from 'react-icons/fa';
 
 const Vote = ({
-  thumbsUp, thumbsDown, isButton,
+  thumbsUp, thumbsDown,
   //  Will also be responsible for proposal actions vote button in the future
 }) => {
   return (

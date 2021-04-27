@@ -40,6 +40,7 @@ import { supportedChains } from '../utils/chain';
 import { numberWithCommas, truncateAddr } from '../utils/general';
 import { PROPOSAL_TYPES } from '../utils/proposalUtils';
 import { initTokenData } from '../utils/tokenValue';
+import { useDao } from '../contexts/DaoContext';
 
 const cancelButtonTooltip = (stream) => {
   if (stream.active && !stream.liquidated) {
@@ -111,65 +112,6 @@ const SuperfluidMinionDetails = ({
   } = useOverlay();
   const { refreshDao } = useTX();
   const { cachePoll, resolvePoll } = useUser();
-
-  const network = supportedChains[daochain]?.network;
-
-  const cancelStream = async (proposalId, isActive) => {
-    const pollAction = isActive ? 'minionCancelAction' : 'cancelProposal';
-    const action = isActive ? 'cancelStream' : 'cancelAction';
-
-    setLoading({
-      active: true,
-      condition: proposalId,
-    });
-    try {
-      const poll = createPoll({ action: pollAction, cachePoll })({
-        minionAddress: minion,
-        proposalId,
-        daoID: daoid,
-        chainID: daochain,
-        proposalType: PROPOSAL_TYPES.MINION_SUPERFLUID,
-        actions: {
-          onError: (error, txHash) => {
-            errorToast({
-              title: 'There was an error.',
-            });
-            resolvePoll(txHash);
-            console.error(`Could not find a matching stream: ${error}`);
-          },
-          onSuccess: (txHash) => {
-            successToast({
-              title: 'Superfluid stream successfully cancelled.',
-            });
-            refreshDao();
-            resolvePoll(txHash);
-          },
-        },
-      });
-      const onTxHash = () => {
-        setProposalModal(false);
-        setTxInfoModal(true);
-      };
-      const args = [proposalId];
-      await SuperfluidMinionService({
-        web3: injectedProvider,
-        minion,
-        chainID: daochain,
-      })(action)({
-        args, address, poll, onTxHash,
-      });
-      setLoading({
-        active: false,
-        condition: null,
-      });
-    } catch (err) {
-      setLoading({
-        active: false,
-        condition: null,
-      });
-      console.log('error: ', err);
-    }
-  };
 
   const withdrawSupertoken = async (tokenAddress) => {
     setLoading({
@@ -296,7 +238,7 @@ const SuperfluidMinionDetails = ({
             />
             <TextBox size='md' align='center'>
               {' '}
-              Settings
+              Super Fluid Settings
             </TextBox>
           </HStack>
         </Link>
@@ -351,13 +293,13 @@ const SuperfluidMinionDetails = ({
                 <Flex pt={4}>
                   <TextBox size='md'>Token Balances</TextBox>
                 </Flex>
-                {minionBalances ? (
+                {minionBalances && (
                   <BankList
                     tokens={minionBalances}
                     hasBalance={false}
                     profile
                   />
-                ) : null}
+                )}
               </Box>
               <Box>
                 <Flex pt={4}>
@@ -511,137 +453,11 @@ const SuperfluidMinionDetails = ({
                   </Skeleton>
                 </ContentBox>
               </Box>
-              <Box>
-                <Flex pt={4}>
-                  <TextBox size='md'>Streams History</TextBox>
-                </Flex>
-                <ContentBox mt={6}>
-                  <Flex>
-                    <Box w='15%' d={['none', null, null, 'inline-block']}>
-                      <TextBox size='xs'>Created At</TextBox>
-                    </Box>
-                    <Box w={['17%', null, null, '33%']}>
-                      <TextBox size='xs'>To</TextBox>
-                    </Box>
-                    <Box w='15%' d={['none', null, null, 'inline-block']}>
-                      <TextBox size='xs'>Rate</TextBox>
-                    </Box>
-                    <Box w='15%' d={['none', null, null, 'inline-block']}>
-                      <TextBox size='xs'>Streamed</TextBox>
-                    </Box>
-                    <Box w={['30%', null, null, '15%']}>
-                      <TextBox size='xs'>Actions</TextBox>
-                    </Box>
-                  </Flex>
-                  <Skeleton isLoaded={!loadingStreams}>
-                    {streamList?.length
-                      ? streamList
-                        .map((stream, i) => {
-                          return (
-                            <Flex h='60px' align='center' key={i}>
-                              <Box
-                                w='15%'
-                                d={['none', null, null, 'inline-block']}
-                                fontFamily='mono'
-                              >
-                                {format(
-                                  new Date(+stream?.createdAt * 1000),
-                                  'MMM. d, yyyy',
-                                ) || '--'}
-                              </Box>
-                              <Box w='33%'>
-                                <AddressAvatar
-                                  addr={stream.to}
-                                  hideCopy
-                                  alwaysShowName
-                                />
-                              </Box>
-                              <Box w='15%' fontFamily='mono'>
-                                {stream.rateStr
-                                  ? `${stream.rateStr}`
-                                  : `${numberWithCommas(
-                                    parseFloat(
-                                      +stream.rate / 10 ** superTokenBalances[stream.superTokenAddress].decimals,
-                                    ).toFixed(10),
-                                  )} per sec`}
-                              </Box>
-                              <Box w='15%'>
-                                {stream.executed ? (
-                                  <Box fontFamily='mono'>
-                                    {superTokenBalances[stream.superTokenAddress] ? (
-                                      <>
-                                        {stream.netFlow.toFixed(4)}
-                                        {' '}
-                                        {
-                                          superTokenBalances[
-                                            stream.superTokenAddress
-                                          ].symbol
-                                        }
-                                      </>
-                                    ) : null}
-                                  </Box>
-                                ) : (
-                                  <Box fontFamily='mono'>
-                                    <Text fontFamily='mono'>Not started</Text>
-                                  </Box>
-                                )}
-                              </Box>
-                              <Stack direction='row' spacing={4}>
-                                {daoMember && (
-                                  <Tooltip
-                                    hasArrow
-                                    shouldWrapChildren
-                                    placement='top'
-                                    label={cancelButtonTooltip(stream)}
-                                  >
-                                    <Button
-                                      rightIcon={<RiQuestionLine />}
-                                      variant='solid'
-                                      onClick={() => cancelStream(stream.proposalId,
-                                        stream.active || stream.executed)}
-                                      loadingText={
-                                        !stream.executed
-                                          ? 'Cancelling'
-                                          : 'Stoppping'
-                                      }
-                                      isLoading={
-                                        loading.active && loading.condition === stream.proposalId
-                                      }
-                                      disabled={
-                                        !daoMember || (stream.executed && !stream.active) || (loading.active && loading.condition === stream.proposalId)
-                                      }
-                                    >
-                                      Cancel
-                                    </Button>
-                                  </Tooltip>
-                                )}
-                                <Button
-                                  leftIcon={<Icon as={VscLinkExternal} />}
-                                  variant='outline'
-                                >
-                                  <Link
-                                    as={!stream.executed && RouterLink}
-                                    to={!stream.executed && `/dao/${daochain}/${daoid}/proposals/${stream.proposalId}`}
-                                    href={stream.executed
-                                      && `https://app.superfluid.finance/streams/${network}/${stream.execTxHash}`
-                                    }
-                                    isExternal={stream.executed}
-                                  >
-                                    View
-                                  </Link>
-                                </Button>
-                              </Stack>
-                            </Flex>
-                          );
-                        }) : null}
-                    {!streamList?.length && (
-                      <Text fontFamily='mono' mt='5'>
-                        No streams have been created
-                      </Text>
-                    )}
-                  </Skeleton>
-                </ContentBox>
-              </Box>
+              <StreamList
+                list={streamList}
+                loadingStreams={loadingStreams}
+                balances={superTokenBalances}
+              />
             </>
           ) : (
             <Flex justify='center'>
@@ -655,3 +471,220 @@ const SuperfluidMinionDetails = ({
 };
 
 export default SuperfluidMinionDetails;
+
+const StreamList = ({ list, loadingStreams, balances }) => {
+  const [loading, setLoading] = useState({
+    active: false,
+    proposalId: null,
+  });
+  const { daoMember } = useDao();
+  const { daochain, daoid, minion } = useParams();
+  const { address, injectedProvider } = useInjectedProvider();
+  const {
+    errorToast,
+    successToast,
+    setProposalModal,
+    setTxInfoModal,
+  } = useOverlay();
+  const { refreshDao } = useTX();
+  const { cachePoll, resolvePoll } = useUser();
+  const network = supportedChains[daochain]?.network;
+
+  const cancelStream = async (proposalId, isActive) => {
+    const pollAction = isActive ? 'minionCancelAction' : 'cancelProposal';
+    const action = isActive ? 'cancelStream' : 'cancelAction';
+
+    setLoading({
+      active: true,
+      condition: proposalId,
+    });
+    try {
+      const poll = createPoll({ action: pollAction, cachePoll })({
+        minionAddress: minion,
+        proposalId,
+        daoID: daoid,
+        chainID: daochain,
+        proposalType: PROPOSAL_TYPES.MINION_SUPERFLUID,
+        actions: {
+          onError: (error, txHash) => {
+            errorToast({
+              title: 'There was an error.',
+            });
+            resolvePoll(txHash);
+            console.error(`Could not find a matching stream: ${error}`);
+          },
+          onSuccess: (txHash) => {
+            successToast({
+              title: 'Superfluid stream successfully cancelled.',
+            });
+            refreshDao();
+            resolvePoll(txHash);
+          },
+        },
+      });
+      const onTxHash = () => {
+        setProposalModal(false);
+        setTxInfoModal(true);
+      };
+      const args = [proposalId];
+      await SuperfluidMinionService({
+        web3: injectedProvider,
+        minion,
+        chainID: daochain,
+      })(action)({
+        args, address, poll, onTxHash,
+      });
+      setLoading({
+        active: false,
+        condition: null,
+      });
+    } catch (err) {
+      setLoading({
+        active: false,
+        condition: null,
+      });
+      console.log('error: ', err);
+    }
+  };
+
+  return (
+    <Box>
+      <Flex pt={4}>
+        <TextBox size='md'>Streams History</TextBox>
+      </Flex>
+      <ContentBox mt={6}>
+        <Flex>
+          <Box w='15%' d={['none', null, null, 'inline-block']}>
+            <TextBox size='xs'>Created At</TextBox>
+          </Box>
+          <Box w={['17%', null, null, '33%']}>
+            <TextBox size='xs'>To</TextBox>
+          </Box>
+          <Box w='15%' d={['none', null, null, 'inline-block']}>
+            <TextBox size='xs'>Rate</TextBox>
+          </Box>
+          <Box w='15%' d={['none', null, null, 'inline-block']}>
+            <TextBox size='xs'>Streamed</TextBox>
+          </Box>
+          <Box w={['30%', null, null, '15%']}>
+            <TextBox size='xs'>Actions</TextBox>
+          </Box>
+        </Flex>
+        <Skeleton isLoaded={!loadingStreams}>
+          {list?.length > 0
+            ? list.map((stream) => (
+              <StreamListItem
+                stream={stream}
+                key={stream.createdAt}
+                loading={loading}
+                cancelStream={cancelStream}
+                balances={balances}
+                daoMember={daoMember}
+                network={network}
+              />
+            ))
+            : (
+              <Text fontFamily='mono' mt='5'>
+                No streams have been created
+              </Text>
+            )}
+        </Skeleton>
+      </ContentBox>
+    </Box>
+  );
+};
+
+const StreamListItem = ({
+  stream, balances, cancelStream, loading, daoMember, network,
+}) => {
+  const { daoid, daochain } = useParams();
+  const handleCancelStream = () => {
+    const isActive = stream?.active || stream?.executed;
+    cancelStream(stream.proposalId, isActive);
+  };
+
+  return (
+    <Flex h='60px' align='center'>
+      <Box
+        w='15%'
+        d={['none', null, null, 'inline-block']}
+        fontFamily='mono'
+      >
+        {format(
+          new Date(+stream?.createdAt * 1000),
+          'MMM. d, yyyy',
+        ) || '--'}
+      </Box>
+      <Box w='33%'>
+        <AddressAvatar
+          addr={stream.to}
+          hideCopy
+          alwaysShowName
+        />
+      </Box>
+      <Box w='15%' fontFamily='mono'>
+        {stream.rateStr
+          ? `${stream.rateStr}`
+          : `${numberWithCommas(
+            parseFloat(
+              +stream.rate / 10 ** balances[stream.superTokenAddress].decimals,
+            ).toFixed(10),
+          )} per sec`}
+      </Box>
+      <Box w='15%'>
+        {stream.executed ? (
+          <Box fontFamily='mono'>
+            {balances[stream.superTokenAddress] && (
+            <>
+              {stream.netFlow.toFixed(4)}
+              {' '}
+              {balances[
+                stream.superTokenAddress
+              ].symbol
+            }
+            </>
+            )}
+          </Box>
+        ) : (
+          <Box fontFamily='mono'>
+            <Text fontFamily='mono'>Not started</Text>
+          </Box>
+        )}
+      </Box>
+      <Stack direction='row' spacing={4}>
+        {daoMember && (
+        <Tooltip
+          hasArrow
+          shouldWrapChildren
+          placement='top'
+          label={cancelButtonTooltip(stream)}
+        >
+          <Button
+            rightIcon={<RiQuestionLine />}
+            variant='solid'
+            onClick={handleCancelStream}
+            loadingText={!stream.executed ? 'Cancelling' : 'Stoppping'}
+            isLoading={loading.active && loading.condition === stream.proposalId}
+            disabled={!daoMember || (stream.executed && !stream.active) || (loading.active && loading.condition === stream.proposalId)}
+          >
+            Cancel
+          </Button>
+        </Tooltip>
+        )}
+        <Button
+          leftIcon={<Icon as={VscLinkExternal} />}
+          variant='outline'
+        >
+          <Link
+            as={!stream.executed && RouterLink}
+            to={!stream.executed && `/dao/${daochain}/${daoid}/proposals/${stream.proposalId}`}
+            href={stream.executed && `https://app.superfluid.finance/streams/${network}/${stream.execTxHash}`}
+            isExternal={stream.executed}
+          >
+            View
+          </Link>
+        </Button>
+      </Stack>
+    </Flex>
+  );
+};

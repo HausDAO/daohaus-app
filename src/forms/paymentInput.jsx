@@ -16,7 +16,7 @@ import { RiInformationLine } from 'react-icons/ri';
 import TextBox from '../components/TextBox';
 import { useDao } from '../contexts/DaoContext';
 
-const defaultTipLabel = 'Request funds from the DAO';
+// const defaultTipLabel = 'Request funds from the DAO';
 
 const PaymentInput = ({
   errors,
@@ -24,7 +24,7 @@ const PaymentInput = ({
   getValues,
   register,
   setValue,
-  tipLabel = defaultTipLabel,
+  // tipLabel = defaultTipLabel,
   validateGtZero = false,
 }) => {
   const [balance, setBalance] = useState(0);

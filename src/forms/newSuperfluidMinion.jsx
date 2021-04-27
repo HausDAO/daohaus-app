@@ -117,7 +117,7 @@ const NewSuperfluidMinionForm = () => {
 
   return (
     <Box w='90%'>
-      {step === 1 ? (
+      {step === 1 && (
         <>
           <Heading as='h4' size='md' fontWeight='100' mb={10}>
             Deploy Your Superfluid Minion
@@ -154,7 +154,7 @@ const NewSuperfluidMinionForm = () => {
                   w='70%'
                   ref={register}
                   defaultValue={agreementType}
-                  onChange={() => updateAgreementType()}
+                  onChange={updateAgreementType}
                 >
                   <option value='cfa'>Constant Flow (CFA)</option>
                   {/* <option value='ida'>Instant Distribution (IDA)</option> */}
@@ -194,7 +194,7 @@ const NewSuperfluidMinionForm = () => {
             </Button>
           </form>
         </>
-      ) : null}
+      )}
 
       {step === 2 && (
         <>

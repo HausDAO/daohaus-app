@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import { Link as RouterLink, useParams } from 'react-router-dom';
 import {
   Flex,
@@ -22,7 +22,12 @@ const MinionList = () => {
   const { daoOverview } = useDao();
   const { daochain, daoid } = useParams();
   const toast = useToast();
-  const minions = daoOverview?.minions.sort((minionA, minionB) => (minionA.createdAt > minionB.createdAt ? 1 : -1));
+
+  const minions = useMemo(() => {
+    if (daoOverview?.minions) {
+      return daoOverview?.minions.sort((minionA, minionB) => (minionA.createdAt > minionB.createdAt ? 1 : -1));
+    }
+  }, [daoOverview]);
 
   const copiedToast = () => {
     toast({
@@ -42,14 +47,7 @@ const MinionList = () => {
             base: minion.minionType?.split(' ')[0],
             md: minion.minionType,
           });
-          let minionUrlType;
-          switch (minionType) {
-            case MINION_TYPES.SUPERFLUID:
-              minionUrlType = 'superfluid-minion';
-              break;
-            default:
-              minionUrlType = 'minion';
-          }
+          const minionUrlType = minionType === MINION_TYPES.SUPERFLUID ? 'superfluid-minion' : 'minion';
 
           return (
             <Flex

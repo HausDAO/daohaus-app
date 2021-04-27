@@ -66,7 +66,7 @@ const SuperfluidMinionProposalForm = () => {
     getValues,
     watch,
   } = useForm();
-
+  watch('paymentToken', '');
   useEffect(() => {
     if (daoOverview?.minions) {
       const sfMinions = daoOverview.minions
@@ -81,7 +81,6 @@ const SuperfluidMinionProposalForm = () => {
         });
       setMinions(sfMinions);
     }
-    // eslint-disable-next-line
   }, [daoOverview?.minions]);
 
   useEffect(() => {
@@ -175,8 +174,6 @@ const SuperfluidMinionProposalForm = () => {
       console.log('error: ', err);
     }
   };
-
-  watch('paymentToken', '');
 
   return minions.length ? (
     <form onSubmit={handleSubmit(onSubmit)}>

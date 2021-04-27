@@ -9,13 +9,13 @@ import { useInjectedProvider } from '../contexts/InjectedProviderContext';
 import { useOverlay } from '../contexts/OverlayContext';
 import { useTX } from '../contexts/TXContext';
 import ApproveUberHausToken from './approveUberHausToken';
+
 import { TokenService } from '../services/tokenService';
 import { createPoll } from '../services/pollService';
-import { PROPOSAL_TYPES } from '../utils/proposalUtils';
 import { SuperfluidMinionService } from '../services/superfluidMinionService';
 import { UberHausMinionService } from '../services/uberHausMinionService';
-
 import { MinionService } from '../services/minionService';
+import { PROPOSAL_TYPES } from '../utils/proposalUtils';
 import { UBERHAUS_DATA } from '../utils/uberhaus';
 
 const MinionExecute = ({ proposal }) => {
