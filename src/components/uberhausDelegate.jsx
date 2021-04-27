@@ -8,7 +8,7 @@ import { UberHausMinionService } from '../services/uberHausMinionService';
 
 //  For QA.
 //  This won't be refactored until we know the specs of
-//  an UberHaus proposal.
+//  UberHaus proposals.
 
 const UberHausDelegate = ({ proposal }) => {
   const { daochain, daoid } = useParams();
