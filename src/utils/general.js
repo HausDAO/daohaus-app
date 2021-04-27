@@ -94,11 +94,14 @@ export const detailsToJSON = (values) => {
 export const omit = (keys, obj) => Object.fromEntries(Object.entries(obj).filter(([k]) => !keys.includes(k)));
 
 export const numberWithCommas = (num) => {
+  if (num === 0) return 0;
+  if (!num) return;
   const localNum = typeof num !== 'string' ? num.toString() : num;
   // drop zero after decimal
   const noZeroDec = parseInt(localNum.split('.')[1]) === 0
     ? localNum.split('.')[0]
     : parseInt(localNum);
+  console.log(noZeroDec);
 
   return noZeroDec ? utils.commify(noZeroDec) : num;
 };
