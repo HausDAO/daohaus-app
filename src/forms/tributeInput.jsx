@@ -237,8 +237,6 @@ const TributeInput = ({
               message: 'Tribute must be a number',
             },
           })}
-          color='white'
-          focusBorderColor='secondary.500'
           onChange={handleChange}
         />
         <InputRightAddon background='primary.500' p={0}>
