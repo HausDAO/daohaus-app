@@ -56,7 +56,7 @@ const DaoAccountModal = () => {
           overflowY='scroll'
         >
           {isMember ? (
-            <MemberInfoGuts member={daoMember} showMenu={false} />
+            <MemberInfoGuts member={daoMember} showMenu={false} hideCopy />
           ) : (
             <HubProfileCard />
           )}
