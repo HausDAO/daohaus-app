@@ -8,7 +8,6 @@ const MemberIndicator = ({
   address, label, tooltip, tooltipText, link, shouldFetchProfile, name,
 }) => (
   <ToolTipWrapper tooltip={tooltip} tooltipText={tooltipText} link={link}>
-
     <TextBox size='xs' mb={2}>
       {label}
     </TextBox>

@@ -1,5 +1,6 @@
 import { formatDistanceToNow } from 'date-fns';
 import { utils } from 'ethers';
+import Web3 from 'web3';
 
 export const SECONDS = {
   PER_MINUTE: 60,
@@ -202,4 +203,10 @@ export const groupByKey = (array, key) => {
       [obj[key]]: (hash[obj[key]] || []).concat(obj),
     });
   }, {});
+};
+
+export const deriveValFromWei = (amt) => {
+  if (amt === 0) return 0;
+  if (!amt) return;
+  return Web3.utils.fromWei(amt.toString());
 };

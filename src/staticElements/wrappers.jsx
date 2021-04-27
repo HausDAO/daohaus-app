@@ -20,7 +20,9 @@ export const ToolTipWrapper = ({
   children, tooltipText, tooltip, bg = 'primary.500', placement = 'top', link,
 }) => {
   if (!tooltip) {
-    return children;
+    return link
+      ? <Box as={Link} to={link}>{children}</Box>
+      : <Box>{children}</Box>;
   }
   return (
     <Tooltip

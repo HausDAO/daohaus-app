@@ -439,7 +439,7 @@ export const getProposalDetailStatus = (proposal, status) => {
         </>
       );
     default:
-      return <></>;
+      return '--';
   }
 };
 
