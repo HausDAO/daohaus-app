@@ -34,3 +34,31 @@ export const generateSFLabels = (proposal) => {
     };
   }
 };
+
+export const SF_LABEL = {
+  GUILDKICK: {
+    title: 'GUILDKICK ALERT',
+    body: 'An unexpected cancelation of a stream would be punished with you being removed from the DAO.',
+  },
+  LIQUIDATED: {
+    title: 'LIQUIDATED',
+    body: 'This stream has been liquidated due as the minion run out of funds.',
+  },
+  PROPOSAL: {
+    title: 'STREAM PROPOSAL',
+    body: 'You can cancel this stream before the proposal voting period ends.',
+  },
+  WITHDRAW: {
+    body: 'Outstanding balance will be downgraded and sent back to the DAO',
+  },
+  UPGRADE: {
+    body: '(Coming Soon) This action will upgrade balance from the uderlying token',
+  },
+  REGISTER: {
+    title: 'IMPORTANT',
+    pars: [
+      'Token is not yet registered.',
+      'Please do it by following this link, otherwise stream recipients will not be able to view/withdraw their funds through the Superflud Dashboard.',
+    ],
+  },
+};

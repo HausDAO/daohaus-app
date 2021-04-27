@@ -30,6 +30,7 @@ export const ToolTipWrapper = ({
       label={<ToolTipLabel text={tooltipText} />}
       bg={bg}
       placement={placement}
+      shouldWrapChildren
     >
       {link
         ? <Box as={Link} to={link}>{children}</Box>
