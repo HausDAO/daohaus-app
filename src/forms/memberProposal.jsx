@@ -13,6 +13,7 @@ import {
   MenuList,
   MenuItem,
   Tooltip,
+  Stack,
 } from '@chakra-ui/react';
 import {
   RiAddFill,
@@ -205,42 +206,44 @@ const MemberProposalForm = () => {
         <Box w={['100%', null, '50%']} pr={[0, null, 5]}>
           <DetailsFields register={register} />
         </Box>
-        <Box w={['100%', null, '50%']}>
-          <Tooltip
-            hasArrow
-            shouldWrapChildren
-            label='Shares provide voting power and exposure to assets. Only whole numbers accepted here, no decimals plz'
-            placement='top'
-          >
-            <TextBox
-              as={FormLabel}
-              size='xs'
-              htmlFor='name'
-              mb={2}
-              d='flex'
-              alignItems='center'
+        <Box as={Stack} w={['100%', null, '50%']} spacing={6}>
+          <Box>
+            <Tooltip
+              hasArrow
+              shouldWrapChildren
+              label='Shares provide voting power and exposure to assets. Only whole numbers accepted here, no decimals plz'
+              placement='top'
             >
-              Shares Requested
-              <Icon as={RiInformationLine} ml={2} />
-            </TextBox>
-          </Tooltip>
-          <Input
-            name='sharesRequested'
-            defaultValue='0'
-            mb={5}
-            ref={register({
-              required: {
-                value: true,
-                message: 'Requested shares are required for Member Proposals',
-              },
-              pattern: {
-                value: /^[0-9]+$/,
-                message: 'Requested shares must be a whole number',
-              },
-            })}
-            color='white'
-            focusBorderColor='secondary.500'
-          />
+              <TextBox
+                as={FormLabel}
+                size='xs'
+                htmlFor='name'
+                mb={2}
+                d='flex'
+                alignItems='center'
+              >
+                Shares Requested
+                <Icon as={RiInformationLine} ml={2} />
+              </TextBox>
+            </Tooltip>
+            <Input
+              name='sharesRequested'
+              placeholder='0'
+              ref={register({
+                required: {
+                  value: true,
+                  message: 'Requested shares are required for Member Proposals',
+                },
+                pattern: {
+                  value: /^[0-9]+$/,
+                  message: 'Requested shares must be a whole number',
+                },
+              })}
+              color='white'
+              focusBorderColor='secondary.500'
+            />
+          </Box>
+
           <TributeInput
             register={register}
             setValue={setValue}
@@ -248,7 +251,7 @@ const MemberProposalForm = () => {
             setError={setError}
           />
           {showLoot && (
-            <>
+            <Box>
               <Tooltip
                 hasArrow
                 shouldWrapChildren
@@ -270,7 +273,6 @@ const MemberProposalForm = () => {
               <Input
                 name='lootRequested'
                 defaultValue='0'
-                mb={5}
                 ref={register({
                   pattern: {
                     value: /[0-9]/,
@@ -278,7 +280,7 @@ const MemberProposalForm = () => {
                   },
                 })}
               />
-            </>
+            </Box>
           )}
           {showPaymentRequest && (
             <PaymentInput
@@ -300,32 +302,34 @@ const MemberProposalForm = () => {
             />
           )}
           {(!showApplicant || !showLoot || !showPaymentRequest) && (
-            <Menu color='white' textTransform='uppercase'>
-              <MenuButton
-                as={Button}
-                variant='outline'
-                rightIcon={<Icon as={RiAddFill} />}
-              >
-                Additional Options
-              </MenuButton>
-              <MenuList>
-                {!showApplicant && (
+            <Box>
+              <Menu color='white' textTransform='uppercase'>
+                <MenuButton
+                  as={Button}
+                  variant='outline'
+                  rightIcon={<Icon as={RiAddFill} />}
+                >
+                  Additional Options
+                </MenuButton>
+                <MenuList>
+                  {!showApplicant && (
                   <MenuItem onClick={() => setShowApplicant(true)}>
                     Applicant
                   </MenuItem>
-                )}
-                {!showLoot && (
+                  )}
+                  {!showLoot && (
                   <MenuItem onClick={() => setShowLoot(true)}>
                     Request Loot
                   </MenuItem>
-                )}
-                {!showPaymentRequest && (
+                  )}
+                  {!showPaymentRequest && (
                   <MenuItem onClick={() => setShowPaymentRequest(true)}>
                     Request Payment
                   </MenuItem>
-                )}
-              </MenuList>
-            </Menu>
+                  )}
+                </MenuList>
+              </Menu>
+            </Box>
           )}
         </Box>
       </FormControl>
