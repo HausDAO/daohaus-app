@@ -6,6 +6,10 @@ import AddressAvatar from './addressAvatar';
 import TextBox from './TextBox';
 import { UberHausMinionService } from '../services/uberHausMinionService';
 
+//  For QA.
+//  This won't be refactored until we know the specs of
+//  an UberHaus proposal.
+
 const UberHausDelegate = ({ proposal }) => {
   const { daochain, daoid } = useParams();
   const [minionDelegate, setMinionDelegate] = useState(null);
