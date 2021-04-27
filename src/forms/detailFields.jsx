@@ -52,10 +52,7 @@ const DetailsFields = ({ register }) => (
           name='link'
           placeholder='daolink.club'
           ref={register({
-            setValueAs: (value) => {
-              console.log(stripHttpProtocol(value));
-              return stripHttpProtocol(value);
-            },
+            setValueAs: (value) => { return stripHttpProtocol(value); },
           })}
         />
       </InputGroup>
