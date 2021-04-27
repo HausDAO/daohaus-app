@@ -1,6 +1,6 @@
 import React from 'react';
 import {
-  Box, Text, Spinner, Flex, Icon,
+  Box, Text, Spinner, Flex, Icon, Stack,
 } from '@chakra-ui/react';
 import { RiCheckboxCircleLine } from 'react-icons/ri';
 
@@ -15,10 +15,10 @@ const TxList = ({ limit = 5 }) => {
   //  as well.
 
   return (
-    <>
+    <Stack spacing={4}>
       {outstandingTXs?.slice(0, limit)?.map((tx) => {
         return (
-          <Box key={tx.txHash} mb={6} _last={{ mb: 0 }}>
+          <Box key={tx.txHash}>
             <Flex direction='row' justifyContent='start' alignItems='center'>
               {tx.status === 'unresolved' ? (
                 <>
@@ -46,7 +46,7 @@ const TxList = ({ limit = 5 }) => {
           </Box>
         );
       })}
-    </>
+    </Stack>
   );
 };
 
