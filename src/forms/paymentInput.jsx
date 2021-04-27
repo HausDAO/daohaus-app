@@ -9,6 +9,7 @@ import {
   Select,
   Tooltip,
   Icon,
+  FormControl,
 } from '@chakra-ui/react';
 import { RiInformationLine } from 'react-icons/ri';
 
@@ -83,7 +84,7 @@ const PaymentInput = ({
   };
 
   return (
-    <>
+    <FormControl>
       <Tooltip
         hasArrow
         shouldWrapChildren
@@ -109,7 +110,6 @@ const PaymentInput = ({
         <Input
           name='paymentRequested'
           placeholder='0'
-          mb={5}
           ref={register({
             pattern: {
               value: /[0-9]/,
@@ -117,8 +117,6 @@ const PaymentInput = ({
             },
             validate: validateBalance,
           })}
-          color='white'
-          focusBorderColor='secondary.500'
         />
         <InputRightAddon background='primary.500' p={0}>
           <Select
@@ -142,7 +140,7 @@ const PaymentInput = ({
       <FormErrorMessage>
         {errors.paymentToken && errors.paymentToken.message}
       </FormErrorMessage>
-    </>
+    </FormControl>
   );
 };
 

@@ -3,7 +3,7 @@ import { useForm } from 'react-hook-form';
 import {
   Button,
   FormLabel,
-  FormControl,
+  Stack,
   Flex,
   Input,
   Icon,
@@ -180,18 +180,19 @@ const FundingProposalForm = () => {
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
-      <FormControl
+      {/* <FormControl
         isInvalid={errors.name}
         display='flex'
         flexDirection='row'
         justifyContent='space-between'
         mb={5}
         flexWrap='wrap'
-      >
+      > */}
+      <Flex justify='space-between' wrap='wrap'>
         <Box w={['100%', null, '50%']} pr={[0, null, 5]}>
           <DetailsFields register={register} />
         </Box>
-        <Box w={['100%', null, '50%']}>
+        <Box as={Stack} w={['100%', null, '50%']} spacing={5}>
           <AddressInput
             name='applicant'
             register={register}
@@ -206,116 +207,116 @@ const FundingProposalForm = () => {
           />
 
           {showShares && (
-            <>
-              <Tooltip
-                hasArrow
-                shouldWrapChildren
-                label='Shares provide voting power and exposure to assets. Only whole numbers accepted here, no decimals plz'
-                placement='top'
+          <>
+            <Tooltip
+              hasArrow
+              shouldWrapChildren
+              label='Shares provide voting power and exposure to assets. Only whole numbers accepted here, no decimals plz'
+              placement='top'
+            >
+              <TextBox
+                as={FormLabel}
+                size='xs'
+                htmlFor='name'
+                mb={2}
+                d='flex'
+                alignItems='center'
               >
-                <TextBox
-                  as={FormLabel}
-                  size='xs'
-                  htmlFor='name'
-                  mb={2}
-                  d='flex'
-                  alignItems='center'
-                >
-                  Shares Requested
-                  <Icon as={RiInformationLine} ml={5} />
-                </TextBox>
-              </Tooltip>
-              <Input
-                name='sharesRequested'
-                placeholder='0'
-                defaultValue='0'
-                mb={5}
-                ref={register({
-                  required: {
-                    value: true,
-                    message:
+                Shares Requested
+                <Icon as={RiInformationLine} ml={5} />
+              </TextBox>
+            </Tooltip>
+            <Input
+              name='sharesRequested'
+              placeholder='0'
+              defaultValue='0'
+              mb={5}
+              ref={register({
+                required: {
+                  value: true,
+                  message:
                       'Requested shares are required. Set to zero for no shares.',
-                  },
-                  pattern: {
-                    value: /^[0-9]+$/,
-                    message: 'Requested shares must be a whole number',
-                  },
-                })}
-              />
-            </>
+                },
+                pattern: {
+                  value: /^[0-9]+$/,
+                  message: 'Requested shares must be a whole number',
+                },
+              })}
+            />
+          </>
           )}
           {showLoot && (
-            <>
-              <Tooltip
-                hasArrow
-                shouldWrapChildren
-                label='Loot provides exposure to assets but no voting power. Only whole numbers accepted here, no decimals plz'
-                placement='top'
+          <>
+            <Tooltip
+              hasArrow
+              shouldWrapChildren
+              label='Loot provides exposure to assets but no voting power. Only whole numbers accepted here, no decimals plz'
+              placement='top'
+            >
+              <TextBox
+                as={FormLabel}
+                size='xs'
+                htmlFor='lootRequested'
+                mb={2}
+                d='flex'
+                alignItems='center'
               >
-                <TextBox
-                  as={FormLabel}
-                  size='xs'
-                  htmlFor='lootRequested'
-                  mb={2}
-                  d='flex'
-                  alignItems='center'
-                >
-                  Loot Requested
-                </TextBox>
-              </Tooltip>
-              <Input
-                name='lootRequested'
-                placeholder='0'
-                defaultValue='0'
-                mb={5}
-                ref={register({
-                  pattern: {
-                    value: /^[0-9]+$/,
-                    message: 'Loot must be a whole number',
-                  },
-                })}
-              />
-            </>
+                Loot Requested
+              </TextBox>
+            </Tooltip>
+            <Input
+              name='lootRequested'
+              placeholder='0'
+              mb={5}
+              ref={register({
+                pattern: {
+                  value: /^[0-9]+$/,
+                  message: 'Loot must be a whole number',
+                },
+              })}
+            />
+          </>
           )}
           {showTribute && (
-            <TributeInput
-              register={register}
-              setValue={setValue}
-              getValues={getValues}
-              setError={setError}
-            />
+          <TributeInput
+            register={register}
+            setValue={setValue}
+            getValues={getValues}
+            setError={setError}
+          />
           )}
           {(!showShares || !showLoot || !showTribute) && (
-            <Menu textTransform='uppercase'>
-              <MenuButton
-                as={Button}
-                variant='outline'
-                rightIcon={<Icon as={RiAddFill} />}
-              >
-                Additional Options
-              </MenuButton>
-              <MenuList>
-                {!showShares && (
+            <Box>
+              <Menu textTransform='uppercase'>
+                <MenuButton
+                  as={Button}
+                  variant='outline'
+                  rightIcon={<Icon as={RiAddFill} />}
+                >
+                  Additional Options
+                </MenuButton>
+                <MenuList>
+                  {!showShares && (
                   <MenuItem onClick={() => setShowShares(true)}>
                     Request Shares
                   </MenuItem>
-                )}
-                {!showLoot && (
+                  )}
+                  {!showLoot && (
                   <MenuItem onClick={() => setShowLoot(true)}>
                     Request Loot
                   </MenuItem>
-                )}
-                {!showTribute && (
+                  )}
+                  {!showTribute && (
                   <MenuItem onClick={() => setShowTribute(true)}>
                     Give Tribute
                   </MenuItem>
-                )}
-              </MenuList>
-            </Menu>
+                  )}
+                </MenuList>
+              </Menu>
+            </Box>
           )}
         </Box>
-      </FormControl>
-
+      </Flex>
       <Flex justify='flex-end' align='center' h='60px'>
         {currentError && (
           <Box color='red.500' fontSize='m' mr={5}>

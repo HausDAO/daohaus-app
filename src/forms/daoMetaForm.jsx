@@ -193,7 +193,7 @@ const DaoMetaForm = ({ metadata, handleUpdate }) => {
                 <TextBox size='xs' mb={2}>
                   Community Links
                 </TextBox>
-                <Stack spacing='2px'>
+                <Stack spacing={2}>
                   <FormControl id='website' mb={4}>
                     <InputGroup>
                       <InputLeftAddon bg='transparent'>
@@ -279,7 +279,7 @@ const DaoMetaForm = ({ metadata, handleUpdate }) => {
                   </FormControl>
                 </Stack>
 
-                <Button type='submit' disabled={loading}>
+                <Button type='submit' disabled={loading} my={4}>
                   Save
                 </Button>
               </Flex>
