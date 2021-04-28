@@ -23,7 +23,6 @@ export const MinionFactoryService = ({ web3, chainID }) => {
         });
         console.log(contract);
         try {
-          console.log(args, from);
           const tx = await contract.methods[service](...args);
           return tx
             .send({ from })

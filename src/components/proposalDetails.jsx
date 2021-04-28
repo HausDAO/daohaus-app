@@ -78,10 +78,7 @@ const ProposalDetails = ({ proposal, daoMember }) => {
     if (daoid === UBERHAUS_DATA.ADDRESS && isUberHaus) {
       return <UberDaoBox proposal={proposal} />;
     }
-    if (
-      proposal?.minion?.minionType !== MINION_TYPES.UBER
-      && proposal?.minion?.minionType !== undefined
-    ) {
+    if (proposal?.minion) {
       return <MinionBox proposal={proposal} />;
     }
     return (
@@ -336,7 +333,7 @@ const ProposalDetails = ({ proposal, daoMember }) => {
 
 export default ProposalDetails;
 
-const MinionLabelTip = () => (
+const UberMinionLabelTip = () => (
   <Box fontFamily='heading' p={5}>
     <TextBox mb={2}>Uber Proposal</TextBox>
     <Box mb={2} color='whiteAlpha.700'>
@@ -349,34 +346,117 @@ const MinionLabelTip = () => (
   </Box>
 );
 
+const SuperfluidMinionLabelTip = ({ details }) => (
+  <Box fontFamily='heading' p={5}>
+    <TextBox mb={2}>Superfluid Proposal</TextBox>
+    <Flex mb={2}>
+      This Minion will execute an agreement using Superfluid Protocol.
+    </Flex>
+    <Flex mb={2}>Constant Flow Agreement</Flex>
+    <Flex mb={2}>
+      {details.tokenRate && `\nRate: ${details.tokenRate}`}
+    </Flex>
+  </Box>
+);
+
 const MinionBox = ({ proposal }) => {
-  return (
-    <Tooltip
-      hasArrow
-      label={<MinionLabelTip />}
-      bg='primary.500'
-      placement='top'
-    >
-      <Box as={RouterLink} to={UBER_LINK}>
-        <TextBox size='xs' mb={2}>
-          Minion
-        </TextBox>
-        <Skeleton isLoaded={proposal}>
-          {proposal ? (
-            <AddressAvatar
-              addr={
-                proposal.applicant === AddressZero
-                  ? proposal.proposer
-                  : proposal.applicant
-              }
-              alwaysShowName
-            />
-          ) : (
-            '--'
-          )}
-        </Skeleton>
+  if (proposal?.minion?.minionType === MINION_TYPES.UBER) {
+    return (
+      <Tooltip
+        hasArrow
+        label={<UberMinionLabelTip />}
+        bg='primary.500'
+        placement='top'
+      >
+        <Box as={RouterLink} to={UBER_LINK}>
+          <TextBox size='xs' mb={2}>
+            Minion
+          </TextBox>
+          <Skeleton isLoaded={proposal}>
+            {proposal ? (
+              <AddressAvatar
+                addr={
+                  proposal.applicant === AddressZero
+                    ? proposal.proposer
+                    : proposal.applicant
+                }
+                alwaysShowName
+              />
+            ) : (
+              '--'
+            )}
+          </Skeleton>
+        </Box>
+      </Tooltip>
+    );
+  }
+  if (proposal?.minion?.minionType === MINION_TYPES.SUPERFLUID) {
+    const details = JSON.parse(proposal.details);
+    return (
+      <Box>
+        <Tooltip
+          hasArrow
+          label={<SuperfluidMinionLabelTip details={details} />}
+          bg='primary.500'
+          placement='top'
+        >
+          <Box key={proposal?.proposalId} mb={5}>
+            <TextBox size='xs' mb={2}>
+              Minion
+            </TextBox>
+            <Skeleton isLoaded={proposal}>
+              {proposal ? (
+                <AddressAvatar
+                  addr={
+                    proposal.applicant === AddressZero
+                      ? proposal.proposer
+                      : proposal.applicant
+                  }
+                  alwaysShowName
+                />
+              ) : (
+                '--'
+              )}
+            </Skeleton>
+          </Box>
+        </Tooltip>
+        {details?.recipient && (
+          <Box key={details.recipient}>
+            <TextBox size='xs' mb={2}>
+              Recipient
+            </TextBox>
+            <Skeleton isLoaded={details.recipient}>
+              {details.recipient ? (
+                <AddressAvatar addr={details.recipient} alwaysShowName />
+              ) : (
+                '--'
+              )}
+            </Skeleton>
+          </Box>
+        )}
       </Box>
-    </Tooltip>
+    );
+  }
+  return (
+    <Box key={proposal?.proposalId}>
+      <TextBox size='xs' mb={2}>
+        Minion
+      </TextBox>
+      <Skeleton isLoaded={proposal}>
+        {proposal ? (
+          <AddressAvatar
+            addr={
+              proposal.applicant === AddressZero
+                ? proposal.proposer
+                : proposal.applicant
+            }
+            alwaysShowName
+          />
+        ) : (
+          '--'
+        )}
+      </Skeleton>
+    </Box>
   );
 };
 
