@@ -177,3 +177,7 @@ export const checkDelRewardsTest = (data, shouldEqual, pollId) => {
 export const rageKickTest = (data) => {
   return data.members[0].loot === '0';
 };
+
+export const wrapNZapSummonTest = (data) => {
+  return data?.wrapNZaps?.length > 0;
+};

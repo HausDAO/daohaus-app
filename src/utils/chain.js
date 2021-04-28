@@ -25,6 +25,7 @@ export const supportedChains = {
     moloch_factory_addr: '0x38064F40B20347d58b326E767791A6f79cdEddCe',
     dai_contract: '0x6b175474e89094c44da98b954eedeac495271d0f',
     weth_contract: '0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2',
+    wrap_n_zap_factory_addr: '0x',
     block_explorer: 'https://etherscan.io',
   },
   '0x4': {
@@ -54,6 +55,7 @@ export const supportedChains = {
     moloch_factory_addr: '0xC33a4EfecB11D2cAD8E7d8d2a6b5E7FEacCC521d',
     dai_contract: '0x8f2e097e79b1c51be9cba42658862f0192c3e487',
     weth_contract: '0xc778417e063141139fce010982780140aa0cd5ab',
+    wrap_n_zap_factory_addr: '0x',
     block_explorer: 'https://rinkeby.etherscan.io',
     superfluid: {
       minion_factory_addr: '0xc4fe30611474Aa737b5B1DBC81aB4Eb9E8959DE1',
@@ -93,6 +95,7 @@ export const supportedChains = {
     moloch_factory_addr: '0x9c5d087f912e7187D9c75e90999b03FB31Ee17f5',
     dai_contract: '0x4F96Fe3b7A6Cf9725f59d353F723c1bDb64CA6Aa',
     weth_contract: '0xd0a1e359811322d97991e03f863a0c30c2cf029c',
+    wrap_n_zap_factory_addr: '0x',
     block_explorer: 'https://kovan.etherscan.io',
   },
   '0x64': {
@@ -119,6 +122,7 @@ export const supportedChains = {
     minion_factory_addr: '0x53508D981439Ce6A3283597a4775F6f23504d4A2',
     moloch_factory_addr: '0x0F50B2F3165db96614fbB6E4262716acc9F9e098',
     wxdai_contract: '0xe91D153E0b41518A2Ce8Dd3D7944Fa863463a97d',
+    wrap_n_zap_factory_addr: '0x8464135c8F25Da09e49BC8782676a84730C318bC',
     block_explorer: 'https://blockscout.com/poa/xdai',
     uberhaus_minion_factory_addr: '0xf5106077892992B84c33C35CA8763895eb80B298',
   },
@@ -145,6 +149,7 @@ export const supportedChains = {
     moloch_factory_addr: '0x6690C139564144b27ebABA71F9126611a23A31C9',
     dai_contract: '0x8f3Cf7ad23Cd3CaDbD9735AFf958023239c6A063',
     weth_contract: '0x0d500b1d8e8ef31e21c99d1db9a6444d3adf1270',
+    wrap_n_zap_factory_addr: '0x',
     block_explorer: 'https://explorer-mainnet.maticvigil.com',
   },
   '0x4a': {
@@ -169,6 +174,7 @@ export const supportedChains = {
     moloch_factory_addr: '0x99B4525D6d6F6c3161D0abd6A58B482f46ad5Cd0',
     dai_contract: '0xE1A400f340bf4eeDbc4Bbb553f1BFf7Ec4656E3e',
     weth_contract: '0x2b309226500ADc5956a422950A2AD6E6333Bb315',
+    wrap_n_zap_factory_addr: '0x',
     block_explorer: 'https://explorer.idchain.one',
   },
 };

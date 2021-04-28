@@ -70,6 +70,16 @@ export const boostList = [
     settings: true,
   },
   {
+    name: 'Wrap-N-Zap',
+    key: 'wrapNZap',
+    description:
+      'Allow users to send native ETH or xDai that will be wrapped and zapped to the DAO',
+    price: '0',
+    modalName: 'wrapNZap',
+    successRoute: '',
+    settings: true,
+  },
+  {
     name: 'Minion Safe',
     key: 'minionSafe',
     description: 'Launch and interact with a Gnosis Safe multisig',

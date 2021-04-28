@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   Box, Flex, Button, HStack,
 } from '@chakra-ui/react';
@@ -15,6 +15,7 @@ import MainViewLayout from '../components/mainViewLayout';
 import { useInjectedProvider } from '../contexts/InjectedProviderContext';
 import { daoConnectedAndSameChain } from '../utils/general';
 import { getTerm } from '../utils/metadata';
+import { getWrapNZap } from '../utils/requests';
 
 const Boosts = ({
   customTerms, daoMember, daoOverview, daoMetaData,
@@ -22,6 +23,7 @@ const Boosts = ({
   const { daochain, daoid } = useParams();
   const { setGenericModal } = useOverlay();
   const { address, injectedChain } = useInjectedProvider();
+  const [wrapNZap, setWrapNZap] = useState(null);
 
   const canInteract = daoConnectedAndSameChain(address, injectedChain?.chainId, daochain)
     && +daoMember?.shares > 0;
@@ -36,9 +38,17 @@ const Boosts = ({
     return boostData && boostData.active;
   };
 
+  // move to contexts??
+  useEffect(() => {
+    const getWNZ = async () => {
+      setWrapNZap(await getWrapNZap(daochain, daoid));
+    };
+    getWNZ();
+  }, [daoid]);
+
   const renderBoostCard = (boost, i) => {
     const boostData = daoMetaData.boosts && daoMetaData.boosts[boost.key];
-    const hasBoost = boostData && boostData.active;
+    const hasBoost = (boostData && boostData.active) || (boost.key === 'wrapNZap' && wrapNZap);
 
     return (
       <ContentBox

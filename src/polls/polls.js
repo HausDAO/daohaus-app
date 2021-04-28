@@ -12,6 +12,7 @@ import {
   MEMBERS_LIST,
   MEMBER_DELEGATE_KEY,
 } from '../graphQL/member-queries';
+import { GET_WRAP_N_ZAPS } from '../graphQL/boost-queries';
 import { getGraphEndpoint } from '../utils/chain';
 import { PROPOSAL_TYPES } from '../utils/proposalUtils';
 import { TokenService } from '../services/tokenService';
@@ -291,6 +292,21 @@ export const pollRageKick = async ({ chainID, daoID, memberAddress }) => {
       variables: {
         contractAddr: daoID,
         memberAddr: memberAddress,
+      },
+    });
+    return res;
+  } catch (error) {
+    return error;
+  }
+};
+
+export const pollWrapNZapSummon = async ({ chainID, daoID }) => {
+  try {
+    const res = await graphQuery({
+      endpoint: getGraphEndpoint(chainID, 'boosts_graph_url'),
+      query: GET_WRAP_N_ZAPS,
+      variables: {
+        contractAddress: daoID,
       },
     });
     return res;
