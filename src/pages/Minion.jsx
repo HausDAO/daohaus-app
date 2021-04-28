@@ -58,6 +58,7 @@ const MinionDetails = ({ overview, currentDaoTokens }) => {
     successToast,
     setProposalModal,
     setTxInfoModal,
+    setGenericModal,
   } = useOverlay();
   const { cachePoll, resolvePoll } = useUser();
   const now = (new Date().getTime() / 1000).toFixed();
@@ -195,6 +196,10 @@ const MinionDetails = ({ overview, currentDaoTokens }) => {
     });
   };
 
+  const action = {
+    send: (args) => setGenericModal({ Erc20end: true, args }),
+  };
+
   return (
     <MainViewLayout header='Minion' isDao>
       <Box>
@@ -273,7 +278,7 @@ const MinionDetails = ({ overview, currentDaoTokens }) => {
                       <Flex>View token data on etherscan</Flex>
                     )}
                     {contractBalances && (
-                      <MinionTokenList tokens={contractBalances} />
+                      <MinionTokenList tokens={contractBalances} action={action} />
                     )}
                   </Box>
                 </Stack>

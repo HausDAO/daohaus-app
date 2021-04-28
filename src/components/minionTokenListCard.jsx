@@ -7,8 +7,9 @@ import { FaCopy } from 'react-icons/fa';
 
 import { numberWithCommas } from '../utils/general';
 import MinionNftTile from './minionNftTitle';
+import { actionNeededFilter } from '../utils/proposalContent';
 
-const MinionTokenListCard = ({ token }) => {
+const MinionTokenListCard = ({ token, action }) => {
   const toast = useToast();
 
   const copiedToast = () => {
@@ -75,7 +76,7 @@ const MinionTokenListCard = ({ token }) => {
             </Skeleton>
           )}
         </Box>
-        <Box w={['40%', null, null, '20%']}>
+        <Box w={['20%', null, null, '20%']}>
           {token?.type !== 'ERC-721' && (
             <Skeleton isLoaded={token?.totalUSD >= 0}>
               <Box fontFamily='mono'>
@@ -88,6 +89,19 @@ const MinionTokenListCard = ({ token }) => {
                 )}
               </Box>
             </Skeleton>
+          )}
+        </Box>
+        <Box w={['20%', null, null, '20%']}>
+          {token?.type !== 'ERC-721' && (
+
+          <Box fontFamily='mono'>
+
+            <Box>
+              <Button onClick={() => action.send()} />
+            </Box>
+
+          </Box>
+
           )}
         </Box>
       </Flex>

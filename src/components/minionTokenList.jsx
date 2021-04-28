@@ -4,7 +4,7 @@ import TextBox from './TextBox';
 import ContentBox from './ContentBox';
 import MinionTokenListCard from './minionTokenListCard';
 
-const MinionTokenList = ({ tokens }) => {
+const MinionTokenList = ({ tokens, action }) => {
   return (
     <ContentBox mt={6}>
       <Flex>
@@ -17,8 +17,11 @@ const MinionTokenList = ({ tokens }) => {
         <Box w='20%' d={['none', null, null, 'inline-block']}>
           <TextBox size='xs'>Price</TextBox>
         </Box>
-        <Box w={['40%', null, null, '20%']}>
+        <Box w={['20%', null, null, '20%']}>
           <TextBox size='xs'>Value</TextBox>
+        </Box>
+        <Box w={['20%', null, null, '20%']}>
+          <TextBox size='xs'>Actions</TextBox>
         </Box>
       </Flex>
       {tokens ? (
@@ -26,7 +29,7 @@ const MinionTokenList = ({ tokens }) => {
           .sort((a, b) => b.balance - a.balance)
           .map((token) => {
             return (
-              <MinionTokenListCard key={token?.contractAddress} token={token} />
+              <MinionTokenListCard key={token?.contractAddress} token={token} action={action} />
             );
           })
       ) : (
