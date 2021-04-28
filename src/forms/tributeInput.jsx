@@ -7,6 +7,7 @@ import {
   Select,
   Tooltip,
   Icon,
+  Box,
 } from '@chakra-ui/react';
 import { RiInformationLine } from 'react-icons/ri';
 import { utils } from 'web3';
@@ -174,7 +175,7 @@ const TributeInput = ({
   };
 
   return (
-    <>
+    <Box>
       <Tooltip
         hasArrow
         shouldWrapChildren
@@ -216,7 +217,6 @@ const TributeInput = ({
         <Input
           name='tributeOffered'
           placeholder='0'
-          mb={5}
           ref={register({
             validate: {
               inefficienFunds: (value) => {
@@ -257,7 +257,7 @@ const TributeInput = ({
           </Select>
         </InputRightAddon>
       </InputGroup>
-    </>
+    </Box>
   );
 };
 

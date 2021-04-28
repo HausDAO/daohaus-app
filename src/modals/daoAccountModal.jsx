@@ -2,7 +2,6 @@ import React from 'react';
 import { Link as RouterLink, useParams } from 'react-router-dom';
 import {
   Modal,
-  Text,
   Flex,
   Link,
   Box,
@@ -10,6 +9,7 @@ import {
   ModalOverlay,
   ModalCloseButton,
   ModalBody,
+  Divider,
 } from '@chakra-ui/react';
 import { rgba } from 'polished';
 
@@ -56,18 +56,12 @@ const DaoAccountModal = () => {
           overflowY='scroll'
         >
           {isMember ? (
-            <MemberInfoGuts member={daoMember} showMenu={false} />
+            <MemberInfoGuts member={daoMember} showMenu={false} hideCopy />
           ) : (
             <HubProfileCard />
           )}
-          <Box
-            mx={-6}
-            mt={6}
-            mb={0}
-            borderTopWidth='1px'
-            borderTopColor='whiteAlpha.200'
-          />
-          <Box pt={6}>
+          <Divider color='primary.300' my={6} />
+          <Box>
             <Flex direction='row' justify='space-between' align='flex-start'>
               <Flex direction='column'>
                 {address && daochain && daoid && (
@@ -102,21 +96,13 @@ const DaoAccountModal = () => {
               </Link>
             </Flex>
           </Box>
-          <Box
-            mx={-6}
-            my={6}
-            borderTopWidth='1px'
-            borderTopColor='whiteAlpha.200'
-          />
-          <Box mb={6}>
-            <Text fontSize='l' fontFamily='heading'>
-              Transactions
-              <Box as='span' ml={1}>
-                will show here
-              </Box>
-            </Text>
+          <Divider color='primary.300' my={6} />
+          <Box>
+            <Box fontSize='l' fontFamily='heading' mb={6}>
+              Transactions will show here
+            </Box>
+            <TxList />
           </Box>
-          <TxList />
         </ModalBody>
       </ModalContent>
     </Modal>

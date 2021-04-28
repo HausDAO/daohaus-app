@@ -94,7 +94,7 @@ const LootGrabForm = () => {
     setLoading(true);
     const now = (new Date().getTime() / 1000).toFixed();
     const hash = createHash();
-    const details = detailsToJSON({ ...values, hash });
+    const details = detailsToJSON({ ...values, title: values.title || 'Loot Grab', hash });
     const { tokenBalances, depositToken } = daoOverview;
     const tributeToken = values.tributeToken || depositToken.tokenAddress;
     const paymentToken = values.paymentToken || depositToken.tokenAddress;
@@ -185,12 +185,12 @@ const LootGrabForm = () => {
       >
         {editDetails ? (
           <Box w={['100%', null, '50%']} pr={[0, null, 5]}>
-            <DetailsFields register={register} defaultTitle='Loot Grab' />
+            <DetailsFields register={register} />
           </Box>
         ) : (
           <VisuallyHidden>
             <Box w={['100%', null, '50%']} pr={[0, null, 5]}>
-              <DetailsFields register={register} defaultTitle='Loot Grab' />
+              <DetailsFields register={register} />
             </Box>
           </VisuallyHidden>
         )}

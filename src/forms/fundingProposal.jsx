@@ -180,14 +180,6 @@ const FundingProposalForm = () => {
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
-      {/* <FormControl
-        isInvalid={errors.name}
-        display='flex'
-        flexDirection='row'
-        justifyContent='space-between'
-        mb={5}
-        flexWrap='wrap'
-      > */}
       <Flex justify='space-between' wrap='wrap'>
         <Box w={['100%', null, '50%']} pr={[0, null, 5]}>
           <DetailsFields register={register} />
@@ -207,83 +199,81 @@ const FundingProposalForm = () => {
           />
 
           {showShares && (
-          <>
-            <Tooltip
-              hasArrow
-              shouldWrapChildren
-              label='Shares provide voting power and exposure to assets. Only whole numbers accepted here, no decimals plz'
-              placement='top'
-            >
-              <TextBox
-                as={FormLabel}
-                size='xs'
-                htmlFor='name'
-                mb={2}
-                d='flex'
-                alignItems='center'
+            <Box>
+              <Tooltip
+                hasArrow
+                shouldWrapChildren
+                label='Shares provide voting power and exposure to assets. Only whole numbers accepted here, no decimals plz'
+                placement='top'
               >
-                Shares Requested
-                <Icon as={RiInformationLine} ml={5} />
-              </TextBox>
-            </Tooltip>
-            <Input
-              name='sharesRequested'
-              placeholder='0'
-              defaultValue='0'
-              mb={5}
-              ref={register({
-                required: {
-                  value: true,
-                  message:
-                      'Requested shares are required. Set to zero for no shares.',
-                },
-                pattern: {
-                  value: /^[0-9]+$/,
-                  message: 'Requested shares must be a whole number',
-                },
-              })}
-            />
-          </>
+                <TextBox
+                  as={FormLabel}
+                  size='xs'
+                  htmlFor='name'
+                  mb={2}
+                  d='flex'
+                  alignItems='center'
+                >
+                  Shares Requested
+                  <Icon as={RiInformationLine} ml={5} />
+                </TextBox>
+              </Tooltip>
+              <Input
+                name='sharesRequested'
+                placeholder='0'
+                defaultValue='0'
+                ref={register({
+                  required: {
+                    value: true,
+                    message:
+                        'Requested shares are required. Set to zero for no shares.',
+                  },
+                  pattern: {
+                    value: /^[0-9]+$/,
+                    message: 'Requested shares must be a whole number',
+                  },
+                })}
+              />
+            </Box>
           )}
           {showLoot && (
-          <>
-            <Tooltip
-              hasArrow
-              shouldWrapChildren
-              label='Loot provides exposure to assets but no voting power. Only whole numbers accepted here, no decimals plz'
-              placement='top'
-            >
-              <TextBox
-                as={FormLabel}
-                size='xs'
-                htmlFor='lootRequested'
-                mb={2}
-                d='flex'
-                alignItems='center'
+            <Box>
+              <Tooltip
+                hasArrow
+                shouldWrapChildren
+                label='Loot provides exposure to assets but no voting power. Only whole numbers accepted here, no decimals plz'
+                placement='top'
               >
-                Loot Requested
-              </TextBox>
-            </Tooltip>
-            <Input
-              name='lootRequested'
-              placeholder='0'
-              mb={5}
-              ref={register({
-                pattern: {
-                  value: /^[0-9]+$/,
-                  message: 'Loot must be a whole number',
-                },
-              })}
-            />
-          </>
+                <TextBox
+                  as={FormLabel}
+                  size='xs'
+                  htmlFor='lootRequested'
+                  mb={2}
+                  d='flex'
+                  alignItems='center'
+                >
+                  Loot Requested
+                </TextBox>
+              </Tooltip>
+              <Input
+                name='lootRequested'
+                placeholder='0'
+                ref={register({
+                  pattern: {
+                    value: /^[0-9]+$/,
+                    message: 'Loot must be a whole number',
+                  },
+                })}
+              />
+            </Box>
           )}
           {showTribute && (
-          <TributeInput
-            register={register}
-            setValue={setValue}
-            getValues={getValues}
-            setError={setError}
-          />
+            <TributeInput
+              register={register}
+              setValue={setValue}
+              getValues={getValues}
+              setError={setError}
+            />
           )}
           {(!showShares || !showLoot || !showTribute) && (
             <Box>
