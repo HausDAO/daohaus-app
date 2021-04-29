@@ -24,10 +24,6 @@ import MainViewLayout from '../components/mainViewLayout';
 
 import MinionTokenList from '../components/minionTokenList';
 
-import {
-  getBlockScoutTokenData,
-  getEtherscanTokenData,
-} from '../utils/tokenExplorerApi';
 import { supportedChains } from '../utils/chain';
 import { balanceChainQuery } from '../utils/theGraph';
 import HubBalanceList from '../components/hubBalanceList';
@@ -41,13 +37,10 @@ import { TokenService } from '../services/tokenService';
 import MinionNativeToken from '../components/minionNativeToken';
 
 const MinionDetails = ({ overview, currentDaoTokens }) => {
-  // const [web3Connect] = useWeb3Connect();
-  // const { modals, openModal } = useModals();
   const { daochain, daoid, minion } = useParams();
   const toast = useToast();
   const [minionData, setMinionData] = useState();
   const [daoBalances, setDaoBalances] = useState();
-  const [contractBalances, setContractBalances] = useState();
   const [balancesGraphData, setBalanceGraphData] = useState({
     chains: [],
     data: [],
@@ -76,23 +69,6 @@ const MinionDetails = ({ overview, currentDaoTokens }) => {
     });
     setMinionData(localMinionData);
   }, [overview, minion]);
-
-  useEffect(() => {
-    const getContractBalance = async () => {
-      try {
-        if (daochain === '0x1' || daochain === '0x4' || daochain === '0x2a') {
-          // eth chains not supported yet
-          // may need to do something different for matic too
-          setContractBalances(await getEtherscanTokenData(minion, daochain));
-        } else {
-          setContractBalances(await getBlockScoutTokenData(minion));
-        }
-      } catch (err) {
-        console.log(err);
-      }
-    };
-    getContractBalance();
-  }, [minion]);
 
   useEffect(() => {
     console.log('get minion balance', minion);
@@ -391,9 +367,9 @@ const MinionDetails = ({ overview, currentDaoTokens }) => {
                     {daochain !== '0x64' && (
                       <Flex>View token data on etherscan</Flex>
                     )}
-                    {contractBalances && (
-                      <MinionTokenList tokens={contractBalances} action={action} />
-                    )}
+
+                    <MinionTokenList minion={minion} action={action} />
+
                   </Box>
                 </Stack>
               </Box>

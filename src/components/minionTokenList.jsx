@@ -1,10 +1,32 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Flex, Text, Box } from '@chakra-ui/react';
+import { useParams } from 'react-router';
 import TextBox from './TextBox';
 import ContentBox from './ContentBox';
 import MinionTokenListCard from './minionTokenListCard';
+import { getBlockScoutTokenData, getEtherscanTokenData } from '../utils/tokenExplorerApi';
 
-const MinionTokenList = ({ tokens, action }) => {
+const MinionTokenList = ({ minion, action }) => {
+  const [tokens, setTokens] = useState();
+  const { daochain } = useParams();
+
+  useEffect(() => {
+    const getContractBalance = async () => {
+      try {
+        if (daochain === '0x1' || daochain === '0x4' || daochain === '0x2a') {
+          // eth chains not supported yet
+          // may need to do something different for matic too
+          setTokens(await getEtherscanTokenData(minion, daochain));
+        } else {
+          setTokens(await getBlockScoutTokenData(minion));
+        }
+      } catch (err) {
+        console.log(err);
+      }
+    };
+    getContractBalance();
+  }, [minion]);
+
   return (
     <ContentBox mt={6}>
       <Flex>
