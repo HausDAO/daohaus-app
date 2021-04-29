@@ -47,7 +47,7 @@ const Overview = React.memo(function overview({
           )}
           {isMember && (
             <Box w={['100%', null, null, null, '50%']}>
-              <MemberInfoCard member={daoMember} />
+              <MemberInfoCard member={daoMember} hideCopy />
               <Box mt={6}>
                 <ActivitiesFeed
                   activities={activities}
