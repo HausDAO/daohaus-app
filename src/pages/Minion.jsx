@@ -10,6 +10,7 @@ import {
   Link,
   HStack,
   Stack,
+  Button,
 } from '@chakra-ui/react';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
 import { RiArrowLeftLine } from 'react-icons/ri';
@@ -40,6 +41,7 @@ import { useInjectedProvider } from '../contexts/InjectedProviderContext';
 import { useUser } from '../contexts/UserContext';
 import { useTX } from '../contexts/TXContext';
 import { TokenService } from '../services/tokenService';
+import MinionNativeToken from '../components/minionNativeToken';
 
 const MinionDetails = ({ overview, currentDaoTokens }) => {
   // const [web3Connect] = useWeb3Connect();
@@ -49,7 +51,6 @@ const MinionDetails = ({ overview, currentDaoTokens }) => {
   const [minionData, setMinionData] = useState();
   const [daoBalances, setDaoBalances] = useState();
   const [contractBalances, setContractBalances] = useState();
-  const [nativeBalance, setNativeBalance] = useState();
   const [balancesGraphData, setBalanceGraphData] = useState({
     chains: [],
     data: [],
@@ -88,8 +89,6 @@ const MinionDetails = ({ overview, currentDaoTokens }) => {
           setContractBalances(await getEtherscanTokenData(minion, daochain));
         } else {
           setContractBalances(await getBlockScoutTokenData(minion));
-          const native = await fetchNativeBalance(minion);
-          setNativeBalance(native.result / 10 ** 18);
         }
       } catch (err) {
         console.log(err);
@@ -196,6 +195,59 @@ const MinionDetails = ({ overview, currentDaoTokens }) => {
     });
   };
 
+  const sendNativeToken = async (values) => {
+    const details = detailsToJSON({
+      title: `${minionData.details} sends native token`,
+      description: `Send ${values.amount} `,
+      // link: (link to block explorer)
+      type: 'nativeTokenSend',
+    });
+    const amountInWei = injectedProvider.eth.utils.toWei(values.amount);
+    const args = [
+      values.destination,
+      amountInWei,
+      '0x0',
+      details,
+    ];
+    try {
+      const poll = createPoll({ action: 'minionProposeAction', cachePoll })({
+        minionAddress: minionData.minionAddress,
+        createdAt: now,
+        chainID: daochain,
+        actions: {
+          onError: (error, txHash) => {
+            errorToast({
+              title: 'There was an error.',
+            });
+            resolvePoll(txHash);
+            console.error(`Could not find a matching proposal: ${error}`);
+          },
+          onSuccess: (txHash) => {
+            successToast({
+              title: 'Minion proposal submitted.',
+            });
+            refreshDao();
+            resolvePoll(txHash);
+          },
+        },
+      });
+      const onTxHash = () => {
+        setGenericModal(false);
+        setTxInfoModal(true);
+      };
+      await MinionService({
+        web3: injectedProvider,
+        minion,
+        chainID: daochain,
+      })('proposeAction')({
+        args, address, poll, onTxHash,
+      });
+    } catch (err) {
+      setLoading(false);
+      console.log('error: ', err);
+    }
+  };
+
   const sendToken = async (values, token) => {
     setLoading(true);
     const tokenService = TokenService({
@@ -263,6 +315,7 @@ const MinionDetails = ({ overview, currentDaoTokens }) => {
 
   const action = {
     sendToken,
+    sendNativeToken,
   };
 
   return (
@@ -334,11 +387,7 @@ const MinionDetails = ({ overview, currentDaoTokens }) => {
                     <TextBox size='md' align='center'>
                       Minion wallet
                     </TextBox>
-                    <TextBox size='md' align='center'>
-                      balance:
-                      {' '}
-                      {nativeBalance}
-                    </TextBox>
+                    <MinionNativeToken action={action} />
                     {daochain !== '0x64' && (
                       <Flex>View token data on etherscan</Flex>
                     )}

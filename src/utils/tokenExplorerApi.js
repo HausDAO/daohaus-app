@@ -111,18 +111,24 @@ const fetchBlockScoutAPIData = async (address) => {
   }
 };
 
-export const fetchNativeBalance = async (address) => {
-  try {
-    const url = `https://blockscout.com/xdai/mainnet/api?module=account&action=balance&address=${address}`;
-    const response = await fetch(url);
-    const json = await response.json();
-    if (!json.result || json.status === '0') {
-      const msg = json.message;
-      throw new Error(msg);
+export const fetchNativeBalance = async (address, daochain) => {
+  if (daochain === '0x1' || daochain === '0x4' || daochain === '0x2a') {
+    // eth chains not supported yet
+    // may need to do something different for matic too
+
+  } else {
+    try {
+      const url = `https://blockscout.com/xdai/mainnet/api?module=account&action=balance&address=${address}`;
+      const response = await fetch(url);
+      const json = await response.json();
+      if (!json.result || json.status === '0') {
+        const msg = json.message;
+        throw new Error(msg);
+      }
+      return json;
+    } catch (error) {
+      throw new Error(error);
     }
-    return json;
-  } catch (error) {
-    throw new Error(error);
   }
 };
 const parseBlockScout = async (json, address) => {
