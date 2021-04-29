@@ -55,78 +55,86 @@ export const SuperfluidMinionService = ({ web3, minion, chainID }) => {
   return function getService(service) {
     if (service === 'fetchStreams') {
       return async ({ molochAddress }) => {
-        const superfluidConfig = chainConfig.superfluid;
-        if (!superfluidConfig) {
-          throw Error(`Superfluid minion not available in ${chainID} network`);
-        }
-        const sfResolver = new web3.eth.Contract(SuperfluidResolverAbi, superfluidConfig?.resolver);
-        const sfVersion = superfluidConfig.version;
-        const streams = await graphFetchAll({
-          endpoint: getGraphEndpoint(chainID, 'subgraph_url'),
-          query: MINION_STREAMS,
-          variables: {
-            minionId: `${molochAddress}-minion-${minion}`,
-          },
-          subfield: 'minionStreams',
-        });
-        if (!streams.length) {
-          return {
-            flows: [],
-            superTokens: null,
-          };
-        }
-        const sfAccount = await graphQuery({
-          endpoint: superfluidConfig.subgraph_url,
-          query: SF_OUTGOING_STREAMS,
-          variables: {
-            ownerAddress: minion,
-          },
-        });
-        const sfStreams = sfAccount?.account?.flowsOwned;
+        try {
+          const superfluidConfig = chainConfig.superfluid;
+          if (!superfluidConfig) {
+            throw Error(`Superfluid minion not available in ${chainID} network`);
+          }
+          const sfResolver = new web3.eth.Contract(SuperfluidResolverAbi, superfluidConfig?.resolver);
+          const sfVersion = superfluidConfig.version;
+          const streams = await graphFetchAll({
+            endpoint: getGraphEndpoint(chainID, 'subgraph_url'),
+            query: MINION_STREAMS,
+            variables: {
+              minionId: `${molochAddress}-minion-${minion}`,
+            },
+            subfield: 'minionStreams',
+          });
 
-        const superTokens = await getSuperTokenBalances(
-          chainID,
-          minion,
-          sfResolver,
-          sfVersion,
-          Array(
-            ...new Set(
-              streams.filter((s) => s.executed).map((s) => s.superTokenAddress),
+          if (!streams.length) {
+            return {
+              flows: [],
+              superTokens: null,
+            };
+          }
+
+          const sfAccount = await graphQuery({
+            endpoint: superfluidConfig.subgraph_url,
+            query: SF_OUTGOING_STREAMS,
+            variables: {
+              ownerAddress: minion,
+            },
+          });
+          const sfStreams = sfAccount?.account?.flowsOwned;
+
+          const superTokens = await getSuperTokenBalances(
+            chainID,
+            minion,
+            sfResolver,
+            sfVersion,
+            Array(
+              ...new Set(
+                streams.filter((s) => s.executed).map((s) => s.superTokenAddress),
+              ),
             ),
-          ),
-        );
-        const now = new Date();
-        const flows = await Promise.all(
-          streams.map(async (stream) => {
-            if (stream.executed) {
-              const decimals = superTokens[stream.superTokenAddress]?.decimals;
-              const sfStream = sfStreams.find((s) => s.recipient.id === stream.to && s.token.id === stream.superTokenAddress);
-              const nextFUEvent = sfStream.events.find((e, i) => i > 0 && sfStream.events[i - 1].transaction.blockNumber === stream.executedBlock);
-              if (nextFUEvent) {
+          );
+          const now = new Date();
+          const flows = await Promise.all(
+            streams.map(async (stream) => {
+              if (stream.executed) {
+                const decimals = superTokens[stream.superTokenAddress]?.decimals;
+                const sfStream = sfStreams.find((s) => s.recipient.id === stream.to && s.token.id === stream.superTokenAddress);
+                const nextFUEvent = sfStream.events.find((e, i) => i > 0 && sfStream.events[i - 1].transaction.blockNumber === stream.executedBlock);
+                if (nextFUEvent) {
                 // Stream was stopped or liquidated
-                const netFlow = +nextFUEvent.sum / (10 ** decimals);
+                  const netFlow = +nextFUEvent.sum / (10 ** decimals);
+                  return {
+                    ...stream,
+                    liquidated: stream.active,
+                    netFlow,
+                  };
+                }
+                const netFlow = stream.active ? (+stream.rate * ((now - new Date(stream.executedAt * 1000)) / 1000)) / (10 ** decimals)
+                  : (+stream.rate * (+stream.canceledAt - +stream.executedAt)) / (10 ** decimals);
                 return {
                   ...stream,
-                  liquidated: stream.active,
                   netFlow,
                 };
               }
-              const netFlow = stream.active ? (+stream.rate * ((now - new Date(stream.executedAt * 1000)) / 1000)) / (10 ** decimals)
-                : (+stream.rate * (+stream.canceledAt - +stream.executedAt)) / (10 ** decimals);
-              return {
-                ...stream,
-                netFlow,
-              };
-            }
-            return stream;
-          }),
-        );
-        return {
-          flows: flows.sort((a, b) => b.createdAt - a.createdAt),
-          superTokens,
-        };
+              return stream;
+            }),
+
+          );
+          return {
+            flows: flows.sort((a, b) => b.createdAt - a.createdAt),
+            superTokens,
+          };
+        } catch (error) {
+          console.error(error);
+        }
       };
     }
+
     if (service === 'hasActiveStreams') {
       return async ({ to, tokenAddress }) => {
         const superfluidConfig = chainConfig.superfluid;

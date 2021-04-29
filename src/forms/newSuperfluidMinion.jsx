@@ -122,7 +122,7 @@ const NewSuperfluidMinionForm = () => {
           <Heading as='h4' size='md' fontWeight='100' mb={10}>
             Deploy Your Superfluid Minion
           </Heading>
-          {minions.length > 0 && (
+          {minions?.length > 0 && (
             <>
               <Box mb={5} fontSize='md'>
                 {`You have ${minions.length} Superfluid minion
@@ -139,7 +139,7 @@ const NewSuperfluidMinionForm = () => {
             </>
           )}
           <Box mb={3} fontSize='sm'>
-            A Superfuild Minion will allow the DAO to start streaming tokens in
+            A Superfluid Minion will allow the DAO to start streaming tokens in
             real-time or to schedule an instant distribution to different
             recipients (coming soon)
           </Box>
@@ -154,7 +154,7 @@ const NewSuperfluidMinionForm = () => {
                   w='70%'
                   ref={register}
                   defaultValue={agreementType}
-                  onChange={() => updateAgreementType()}
+                  onChange={updateAgreementType}
                 >
                   <option value='cfa'>Constant Flow (CFA)</option>
                   {/* <option value='ida'>Instant Distribution (IDA)</option> */}
@@ -206,7 +206,7 @@ const NewSuperfluidMinionForm = () => {
           {pendingTx && (
             <Box my={10}>
               <Link
-                href={`${supportedChains[daochain].block_explorer}/tx/${pendingTx}`}
+                href={`${supportedChains[daochain]?.block_explorer}/tx/${pendingTx}`}
                 isExternal
                 fontSize='2xl'
                 color='secondary.500'

@@ -102,8 +102,6 @@ export const numberWithCommas = (num) => {
   const noZeroDec = parseInt(localNum.split('.')[1]) === 0
     ? localNum.split('.')[0]
     : parseInt(localNum);
-  console.log(noZeroDec);
-
   return noZeroDec ? utils.commify(noZeroDec) : num;
 };
 

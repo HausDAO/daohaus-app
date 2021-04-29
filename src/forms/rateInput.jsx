@@ -60,6 +60,28 @@ const RateInput = ({
     }
   }, [daoOverview, tokenAddress, tokenData]);
 
+  useEffect(() => {
+    //  This is deliberately duplicated to prevent
+    //  any issue with stale state.
+
+    const handleTokenRate = () => {
+      const tokenRate = getValues('tokenRate');
+      if (tokenRate && tokenRate > 0) {
+        const baseRate = getValues('baseRate');
+        const decimals = +tokenData.decimals;
+        const weiRatePerSec = parseInt(
+          (tokenRate * 10 ** decimals) / rates[baseRate],
+        );
+        const newRate = parseFloat(tokenRate / rates[baseRate]).toFixed(10);
+        setRatePerSec(newRate);
+        setValue('weiRatePerSec', weiRatePerSec);
+      }
+    };
+    if (tokenData) {
+      handleTokenRate();
+    }
+  }, [tokenData]);
+
   const getTokenRate = () => {
     const tokenRate = getValues('tokenRate');
     if (tokenRate && tokenRate > 0) {
@@ -73,12 +95,6 @@ const RateInput = ({
       setValue('weiRatePerSec', weiRatePerSec);
     }
   };
-
-  useEffect(() => {
-    if (tokenData) {
-      getTokenRate();
-    }
-  }, [tokenData]);
 
   const handleChange = () => {
     if (tokenData) {
@@ -96,13 +112,14 @@ const RateInput = ({
   return (
     <>
       <Tooltip hasArrow shouldWrapChildren label={tipLabel} placement='top'>
-        <TextBox as={FormLabel} size='xs' d='flex' alignItems='center'>
+        <TextBox as={FormLabel} size='xs' d='flex' alignItems='center' htmlFor='tokenRate'>
           {formLabel}
           <RiInformationLine style={{ marginLeft: 5 }} />
         </TextBox>
       </Tooltip>
       <InputGroup>
         <Input
+          id='tokenRate'
           name='tokenRate'
           placeholder='0'
           mb={5}

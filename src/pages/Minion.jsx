@@ -91,7 +91,7 @@ const MinionDetails = ({ overview, currentDaoTokens }) => {
           setNativeBalance(native.result / 10 ** 18);
         }
       } catch (err) {
-        console.log(err);
+        console.error(err);
       }
     };
     getContractBalance();
@@ -134,13 +134,13 @@ const MinionDetails = ({ overview, currentDaoTokens }) => {
   };
 
   const withdraw = async (token, transfer) => {
-    const args = [
-      token.moloch.id,
-      token.token.tokenAddress,
-      token.tokenBalance,
-      transfer,
-    ];
     try {
+      const args = [
+        token.moloch.id,
+        token.token.tokenAddress,
+        token.tokenBalance,
+        transfer,
+      ];
       const poll = createPoll({ action: 'minionCrossWithdraw', cachePoll })({
         tokenAddress: token.token.tokenAddress,
         memberAddress: minion,
