@@ -2,20 +2,21 @@ import { IsJsonString, timeToNow } from './general';
 
 export const CCO_CONSTANTS = {
   NETWORK: 'xdai',
-  METADATA_FIELDS: [
-    'tributeToken',
-    'claimTokenAddress',
-    'claimTokenSymbol',
-    'claimTokenValue',
-    'ratio',
-    'raiseStartTime',
-    'duration',
-    'claimPeriodStartTime',
-    'minTarget',
-    'maxTarget',
-    'maxContribution',
-    'minContribution',
-  ],
+  WHITELIST_HOST: 'https://daohaus-metadata.s3.amazonaws.com',
+  METADATA_FIELDS: {
+    tributeToken: '',
+    claimTokenAddress: '',
+    claimTokenSymbol: '',
+    claimTokenValue: '',
+    ratio: '',
+    raiseStartTime: '',
+    duration: '',
+    claimPeriodStartTime: '',
+    minTarget: '',
+    maxTarget: '',
+    maxContribution: '',
+    minContribution: '',
+  },
 };
 
 export const countDownText = (round, raiseOver) => {
