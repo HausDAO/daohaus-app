@@ -1,5 +1,23 @@
 import { IsJsonString, timeToNow } from './general';
 
+export const CCO_CONSTANTS = {
+  NETWORK: 'xdai',
+  METADATA_FIELDS: [
+    'tributeToken',
+    'claimTokenAddress',
+    'claimTokenSymbol',
+    'claimTokenValue',
+    'ratio',
+    'raiseStartTime',
+    'duration',
+    'claimPeriodStartTime',
+    'minTarget',
+    'maxTarget',
+    'maxContribution',
+    'minContribution',
+  ],
+};
+
 export const countDownText = (round, raiseOver) => {
   const now = new Date() / 1000;
   if (raiseOver) {
@@ -61,3 +79,5 @@ export const contributionTotalValue = (proposals, round) => {
 
   return total / 10 ** +round.ccoToken.decimals;
 };
+
+// export const isCcoAdmin()

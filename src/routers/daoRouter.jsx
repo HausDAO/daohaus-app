@@ -31,6 +31,7 @@ import Staking from '../pages/Staking';
 import Clone from '../pages/Clone';
 import MintGate from '../pages/MintGate';
 import Snapshot from '../pages/Snapshot';
+import CcoAdmin from '../pages/CcoAdmin';
 
 const DaoRouter = () => {
   const { path } = useRouteMatch();
@@ -238,6 +239,12 @@ const DaoRouter = () => {
             daoMetaData={daoMetaData}
             currentDaoTokens={currentDaoTokens}
             daoProposals={daoProposals}
+          />
+        </Route>
+        <Route exact path={`${path}/cco/admin`}>
+          <CcoAdmin
+            daoMetaData={daoMetaData}
+            isCorrectNetwork={isCorrectNetwork}
           />
         </Route>
         <Route exact path={`${path}/boost/mintgate`}>
