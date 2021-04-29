@@ -170,6 +170,7 @@ const parseBlockScout = async (json, address) => {
 
   const erc20s = json.result
     .filter((token) => token.type === 'ERC-20')
+    .sort((a, b) => b.balance - a.balance)
     .map((t) => {
       t.usd = tokenData[t.contractAddress.toLowerCase()]?.price || 0;
       t.totalUSD = parseFloat(+t.balance / 10 ** +t.decimals) * +t.usd;

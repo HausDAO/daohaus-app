@@ -18,7 +18,7 @@ import { FaCopy } from 'react-icons/fa';
 import makeBlockie from 'ethereum-blockies-base64';
 import ContentBox from '../components/ContentBox';
 import TextBox from '../components/TextBox';
-import { truncateAddr } from '../utils/general';
+import { detailsToJSON, truncateAddr } from '../utils/general';
 
 import MainViewLayout from '../components/mainViewLayout';
 // import { initTokenData } from '../utils/tokenValue';
@@ -39,6 +39,7 @@ import { MinionService } from '../services/minionService';
 import { useInjectedProvider } from '../contexts/InjectedProviderContext';
 import { useUser } from '../contexts/UserContext';
 import { useTX } from '../contexts/TXContext';
+import { TokenService } from '../services/tokenService';
 
 const MinionDetails = ({ overview, currentDaoTokens }) => {
   // const [web3Connect] = useWeb3Connect();
@@ -53,6 +54,7 @@ const MinionDetails = ({ overview, currentDaoTokens }) => {
     chains: [],
     data: [],
   });
+  const [loading, setLoading] = useState();
   const {
     errorToast,
     successToast,
@@ -79,8 +81,6 @@ const MinionDetails = ({ overview, currentDaoTokens }) => {
 
   useEffect(() => {
     const getContractBalance = async () => {
-      console.log('minion', minion);
-
       try {
         if (daochain === '0x1' || daochain === '0x4' || daochain === '0x2a') {
           // eth chains not supported yet
@@ -196,8 +196,73 @@ const MinionDetails = ({ overview, currentDaoTokens }) => {
     });
   };
 
+  const sendToken = async (values, token) => {
+    setLoading(true);
+    const tokenService = TokenService({
+      tokenAddress: token.contractAddress,
+      chainID: daochain,
+    });
+
+    const amountWithDecimal = +values.amount * 10 ** +token.decimals;
+
+    const hexData = tokenService('transferNoop')({
+      to: values.destination,
+      amount: amountWithDecimal.toString(),
+    });
+
+    const details = detailsToJSON({
+      title: `${minionData.details} sends a token`,
+      description: `Send ${values.amount} ${token.symbol}`,
+      // link: (link to block explorer)
+      type: 'tokenSend',
+    });
+    const args = [
+      token.contractAddress,
+      '0',
+      hexData,
+      details,
+    ];
+    try {
+      const poll = createPoll({ action: 'minionProposeAction', cachePoll })({
+        minionAddress: minionData.minionAddress,
+        createdAt: now,
+        chainID: daochain,
+        actions: {
+          onError: (error, txHash) => {
+            errorToast({
+              title: 'There was an error.',
+            });
+            resolvePoll(txHash);
+            console.error(`Could not find a matching proposal: ${error}`);
+          },
+          onSuccess: (txHash) => {
+            successToast({
+              title: 'Minion proposal submitted.',
+            });
+            refreshDao();
+            resolvePoll(txHash);
+          },
+        },
+      });
+      const onTxHash = () => {
+        setGenericModal(false);
+        setTxInfoModal(true);
+      };
+      await MinionService({
+        web3: injectedProvider,
+        minion,
+        chainID: daochain,
+      })('proposeAction')({
+        args, address, poll, onTxHash,
+      });
+    } catch (err) {
+      setLoading(false);
+      console.log('error: ', err);
+    }
+  };
+
   const action = {
-    send: (args) => setGenericModal({ Erc20end: true, args }),
+    sendToken,
   };
 
   return (

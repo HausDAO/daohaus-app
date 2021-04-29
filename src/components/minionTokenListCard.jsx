@@ -1,16 +1,20 @@
 import React from 'react';
 import {
-  Flex, Box, Skeleton, Image, useToast, Icon,
+  Flex, Box, Skeleton, Image, useToast, Icon, Button, Input, FormLabel,
 } from '@chakra-ui/react';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
 import { FaCopy } from 'react-icons/fa';
-
+import { useForm } from 'react-hook-form';
 import { numberWithCommas } from '../utils/general';
 import MinionNftTile from './minionNftTitle';
-import { actionNeededFilter } from '../utils/proposalContent';
+import { useOverlay } from '../contexts/OverlayContext';
+import TextBox from './TextBox';
+import GenericModal from '../modals/genericModal';
 
 const MinionTokenListCard = ({ token, action }) => {
   const toast = useToast();
+  const { setGenericModal } = useOverlay();
+  const { handleSubmit, errors, register } = useForm();
 
   const copiedToast = () => {
     toast({
@@ -20,6 +24,14 @@ const MinionTokenListCard = ({ token, action }) => {
       duration: 3000,
       isClosable: true,
     });
+  };
+
+  const handleSend = async () => {
+    setGenericModal({ [token.contractAddress]: true });
+  };
+
+  const sendToken = async (values) => {
+    action.sendToken(values, token);
   };
 
   return (
@@ -97,7 +109,7 @@ const MinionTokenListCard = ({ token, action }) => {
           <Box fontFamily='mono'>
 
             <Box>
-              <Button onClick={() => action.send()} />
+              <Button onClick={handleSend}>SEND</Button>
             </Box>
 
           </Box>
@@ -106,7 +118,7 @@ const MinionTokenListCard = ({ token, action }) => {
         </Box>
       </Flex>
       {token?.type === 'ERC-721' && (
-        <Flex>
+        <Flex flexWrap='wrap'>
           {token.tokenURIs
             && token.tokenURIs.map((meta, idx) => (
               <MinionNftTile
@@ -117,6 +129,46 @@ const MinionTokenListCard = ({ token, action }) => {
             ))}
         </Flex>
       )}
+      <GenericModal closeOnOverlayClick modalId={`${token.contractAddress}`}>
+        <form onSubmit={handleSubmit(sendToken)}>
+
+          <TextBox as={FormLabel} size='xs' htmlFor='amount'>
+            Amount
+            {' '}
+            <Button>
+              Max
+              {' '}
+              {`$${numberWithCommas(+token?.balance / 10 ** token.decimals)}`}
+            </Button>
+          </TextBox>
+          <Input
+            name='amount'
+            mb={5}
+            ref={register({
+              required: {
+                value: true,
+                message: 'amount is required',
+              },
+            })}
+            focusBorderColor='secondary.500'
+          />
+          <TextBox as={FormLabel} size='xs' htmlFor='destination'>
+            Destination
+          </TextBox>
+          <Input
+            name='destination'
+            mb={5}
+            ref={register({
+              required: {
+                value: true,
+                message: 'destination is required',
+              },
+            })}
+            focusBorderColor='secondary.500'
+          />
+          <Button type='submit'>Propose Transfer</Button>
+        </form>
+      </GenericModal>
     </>
   );
 };

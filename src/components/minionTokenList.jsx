@@ -26,7 +26,6 @@ const MinionTokenList = ({ tokens, action }) => {
       </Flex>
       {tokens ? (
         tokens
-          .sort((a, b) => b.balance - a.balance)
           .map((token) => {
             return (
               <MinionTokenListCard key={token?.contractAddress} token={token} action={action} />
