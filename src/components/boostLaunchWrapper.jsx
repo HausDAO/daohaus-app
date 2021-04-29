@@ -180,7 +180,7 @@ const BoostLaunchWrapper = ({ boost }) => {
         return (
           <GenericBoostLaunch
             boostName='Wrap-N-Zap'
-            boostBody='Allow users to send native ETH or xDai that will be wrapped and zapped to the DAO.'
+            boostBody={`Allow users to send native ${supportedChains[daochain].nativeCurrency} that will be wrapped and zapped to the DAO.`}
             boostInstructions='Get started zapping now!'
             boostCTA="It's zapping time!"
             boostLink='settings'

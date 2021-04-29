@@ -33,7 +33,7 @@ const DaoContractSettings = ({ overview, customTerms, wrapNZap }) => {
   const copiedToast = () => {
     successToast({
       title: 'Copied Wrap-N-Zap address!',
-      description: `ONLY SEND ${supportedChains[daochain].chain.toUpperCase()} TO THIS ADDRESS!`,
+      description: `ONLY SEND ${supportedChains[daochain].nativeCurrency} TO THIS ADDRESS!`,
     });
   };
 
