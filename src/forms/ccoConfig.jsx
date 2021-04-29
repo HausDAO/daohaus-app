@@ -1,29 +1,29 @@
 import React, { useState, useEffect } from 'react';
+import { useParams } from 'react-router';
 import {
   Box, FormControl, Input, Button,
 } from '@chakra-ui/react';
 
-import { useParams } from 'react-router';
+import { useInjectedProvider } from '../contexts/InjectedProviderContext';
+import { useOverlay } from '../contexts/OverlayContext';
+import { useMetaData } from '../contexts/MetaDataContext';
 import { CCO_CONSTANTS } from '../utils/cco';
 import { ccoPost } from '../utils/metadata';
-import { useInjectedProvider } from '../contexts/InjectedProviderContext';
-import { useTX } from '../contexts/TXContext';
-import { useOverlay } from '../contexts/OverlayContext';
 
-const CcoConfig = ({ daoMetaData }) => {
+const CcoConfig = ({ daoMetaData, ccoType }) => {
   const [ccoConfiguration, setCcoConfiguration] = useState(CCO_CONSTANTS.METADATA_FIELDS);
   const [loading, setLoading] = useState(false);
   const { daoid } = useParams();
   const { address, injectedProvider, injectedChain } = useInjectedProvider();
-  const { refreshDao } = useTX();
+  const { refetchMetaData } = useMetaData();
   const {
     errorToast,
     successToast,
   } = useOverlay();
 
   useEffect(() => {
-    if (daoMetaData?.boosts?.daosquarecco) {
-      setCcoConfiguration(daoMetaData.boosts.daosquarecco.metadata);
+    if (daoMetaData?.boosts && daoMetaData.boosts[ccoType]) {
+      setCcoConfiguration(daoMetaData.boosts[ccoType].metadata);
     }
   }, [daoMetaData]);
 
@@ -37,10 +37,6 @@ const CcoConfig = ({ daoMetaData }) => {
   const handleUpdate = async () => {
     setLoading(true);
 
-    if (!ccoConfiguration.ccoId) {
-      ccoConfiguration.network = CCO_CONSTANTS.NETWORK;
-    }
-
     try {
       const messageHash = injectedProvider.utils.sha3(daoid);
       const signature = await injectedProvider.eth.personal.sign(
@@ -50,26 +46,32 @@ const CcoConfig = ({ daoMetaData }) => {
 
       const ccoUpdate = {
         contractAddress: daoid,
-        boostKey: 'daosquarecco',
+        boostKey: ccoType,
         metadata: ccoConfiguration,
         network: injectedChain.network,
         signature,
       };
 
-      const result = await ccoPost('cco/meta', ccoUpdate);
+      // hardcoding new new cco boost configurations to daosquare types for now
+      if (!ccoConfiguration.ccoId) {
+        ccoUpdate.metadata.network = injectedChain.network;
+        ccoUpdate.boostKey = 'daosquarecco';
+      }
 
-      setLoading(false);
+      const result = await ccoPost('cco/meta', ccoUpdate);
 
       if (result === 'success') {
         successToast({
           title: 'CCO Config Updated',
         });
-        refreshDao();
+        refetchMetaData();
       } else {
         errorToast({
           title: 'There was an error.',
         });
       }
+
+      setLoading(false);
     } catch (err) {
       console.log('err', err);
       setLoading(false);
@@ -100,8 +102,8 @@ const CcoConfig = ({ daoMetaData }) => {
   return (
     <>
       <Box fontSize='xl' mb={5}>CCO Config</Box>
-      <Button mb={5} onClick={handleUpdate} disabled={loading}>Update Config</Button>
       {renderFields()}
+      <Button mt={5} onClick={handleUpdate} isLoading={loading}>Update Config</Button>
     </>
   );
 };

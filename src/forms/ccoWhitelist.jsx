@@ -1,21 +1,20 @@
 import React, { useState } from 'react';
+import { useParams } from 'react-router';
 import {
   Box, FormControl, Button, Textarea, Link,
 } from '@chakra-ui/react';
 
-import { useParams } from 'react-router';
+import { BiBorderBottom } from 'react-icons/bi';
+import { useOverlay } from '../contexts/OverlayContext';
+import { useInjectedProvider } from '../contexts/InjectedProviderContext';
 import { CCO_CONSTANTS } from '../utils/cco';
 import { ccoPost } from '../utils/metadata';
-import { useInjectedProvider } from '../contexts/InjectedProviderContext';
-import { useTX } from '../contexts/TXContext';
-import { useOverlay } from '../contexts/OverlayContext';
 
-const CcoWhitelist = ({ daoMetaData }) => {
+const CcoWhitelist = ({ daoMetaData, ccoType }) => {
   const [ccoWhitelistJson, setCcoWhitelistJson] = useState('');
   const [loading, setLoading] = useState(false);
   const { daoid } = useParams();
   const { address, injectedProvider, injectedChain } = useInjectedProvider();
-  const { refreshDao } = useTX();
   const {
     errorToast,
     successToast,
@@ -25,7 +24,6 @@ const CcoWhitelist = ({ daoMetaData }) => {
     setCcoWhitelistJson(event.target.value.replace(/(\r\n|\n|\r)/gm, ''));
   };
 
-  console.log('ccoWhitelistJson', ccoWhitelistJson);
   const handleUpdate = async () => {
     setLoading(true);
 
@@ -38,26 +36,25 @@ const CcoWhitelist = ({ daoMetaData }) => {
 
       const ccoUpdate = {
         contractAddress: daoid,
-        boostKey: 'daosquarecco',
+        boostKey: ccoType,
         network: injectedChain.network,
         list: ccoWhitelistJson,
         signature,
       };
 
-      const result = await ccoPost(`cco/whitelist/${daoMetaData.boosts.daosquarecco.metadata.ccoId}`, ccoUpdate);
-
-      setLoading(false);
+      const result = await ccoPost(`cco/whitelist/${daoMetaData.boosts[ccoType].metadata.ccoId}`, ccoUpdate);
 
       if (result === 'success') {
         successToast({
           title: 'CCO Whitelist uploaded',
         });
-        refreshDao();
       } else {
         errorToast({
           title: 'There was an error.',
         });
       }
+
+      setLoading(false);
     } catch (err) {
       console.log('err', err);
       setLoading(false);
@@ -68,15 +65,14 @@ const CcoWhitelist = ({ daoMetaData }) => {
   };
 
   return (
-    <>
+    <Box mb={10} pb={5} borderBottomWidth={1}>
       <Box fontSize='xl' mb={5}>Address Whitelist</Box>
       <Box mb={5}>
-        <Link isExternal href={`${CCO_CONSTANTS.WHITELIST_HOST}/${daoMetaData.boosts.daosquarecco.metadata.ccoId}.json`}>
+        <Link isExternal href={`${CCO_CONSTANTS.WHITELIST_HOST}/${daoMetaData.boosts[ccoType].metadata.ccoId}.json`}>
           Check list here
         </Link>
       </Box>
 
-      <Button mb={5} onClick={handleUpdate} disabled={loading}>Update WhiteList</Button>
       <FormControl mb={4}>
         <Box size='xs' mb={1}>
           New Whitelist JSON
@@ -88,7 +84,8 @@ const CcoWhitelist = ({ daoMetaData }) => {
           value={ccoWhitelistJson}
         />
       </FormControl>
-    </>
+      <Button onClick={handleUpdate} isLoading={loading}>Update WhiteList</Button>
+    </Box>
   );
 };
 

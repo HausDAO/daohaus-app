@@ -241,7 +241,7 @@ const DaoRouter = () => {
             daoProposals={daoProposals}
           />
         </Route>
-        <Route exact path={`${path}/cco/admin`}>
+        <Route exact path={`${path}/cco/admin/`}>
           <CcoAdmin
             daoMetaData={daoMetaData}
             isCorrectNetwork={isCorrectNetwork}

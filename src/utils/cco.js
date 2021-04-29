@@ -1,8 +1,7 @@
 import { IsJsonString, timeToNow } from './general';
 
 export const CCO_CONSTANTS = {
-  NETWORK: 'xdai',
-  WHITELIST_HOST: 'https://daohaus-metadata.s3.amazonaws.com',
+  WHITELIST_HOST: 'https://daohaus-cco.s3.amazonaws.com',
   METADATA_FIELDS: {
     tributeToken: '',
     claimTokenAddress: '',
