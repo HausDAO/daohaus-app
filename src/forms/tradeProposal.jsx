@@ -3,7 +3,6 @@ import { useForm } from 'react-hook-form';
 import {
   Button,
   FormLabel,
-  FormControl,
   Flex,
   Input,
   Icon,
@@ -172,32 +171,29 @@ const TradeProposalForm = () => {
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
-      <FormControl
-        isInvalid={errors.name}
-        display='flex'
-        flexDirection='row'
-        justifyContent='space-between'
+      <Flex
+        direction='row'
+        justify='space-between'
         mb={5}
-        flexWrap='wrap'
+        wrap='wrap'
       >
         <Box w={['100%', null, '50%']} pr={[0, null, 5]}>
           <DetailsFields register={register} />
         </Box>
-        <Box as={Stack} w={['100%', null, '50%']} spacing={4}>
+        <Box as={Stack} w={['100%', null, '50%']} spacing={6}>
           <TributeInput
             register={register}
             setValue={setValue}
             getValues={getValues}
             setError={setError}
           />
-          <TextBox size='xs'>Trade For</TextBox>
           <PaymentInput
             register={register}
             setValue={setValue}
             getValues={getValues}
             errors={errors}
+            isTrade
           />
-
           {showShares && (
             <>
               <TextBox as={FormLabel} size='xs' htmlFor='sharesRequested'>
@@ -206,7 +202,6 @@ const TradeProposalForm = () => {
               <Input
                 name='sharesRequested'
                 placeholder='0'
-                mb={5}
                 ref={register({
                   required: {
                     value: true,
@@ -249,35 +244,37 @@ const TradeProposalForm = () => {
             />
           )}
           {(!showApplicant || !showLoot || !showShares) && (
-            <Menu color='white' textTransform='uppercase'>
-              <MenuButton
-                as={Button}
-                variant='outline'
-                rightIcon={<Icon as={RiAddFill} />}
-              >
-                Additional Options
-              </MenuButton>
-              <MenuList>
-                {!showApplicant && (
+            <Box>
+              <Menu color='white' textTransform='uppercase'>
+                <MenuButton
+                  as={Button}
+                  variant='outline'
+                  rightIcon={<Icon as={RiAddFill} />}
+                >
+                  Additional Options
+                </MenuButton>
+                <MenuList>
+                  {!showApplicant && (
                   <MenuItem onClick={() => setShowApplicant(true)}>
                     Applicant
                   </MenuItem>
-                )}
-                {!showLoot && (
+                  )}
+                  {!showLoot && (
                   <MenuItem onClick={() => setShowLoot(true)}>
                     Request Loot
                   </MenuItem>
-                )}
-                {!showShares && (
+                  )}
+                  {!showShares && (
                   <MenuItem onClick={() => setShowShares(true)}>
                     Request Shares
                   </MenuItem>
-                )}
-              </MenuList>
-            </Menu>
+                  )}
+                </MenuList>
+              </Menu>
+            </Box>
           )}
         </Box>
-      </FormControl>
+      </Flex>
       <Flex justify='flex-end' align='center' h='60px'>
         {currentError && (
           <Box color='secondary.300' fontSize='m' mr={5}>

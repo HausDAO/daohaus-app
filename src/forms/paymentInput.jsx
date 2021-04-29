@@ -20,11 +20,11 @@ import { useDao } from '../contexts/DaoContext';
 
 const PaymentInput = ({
   errors,
+  setValue,
+  isTrade,
   formLabel = 'Payment Requested',
   getValues,
   register,
-  setValue,
-  // tipLabel = defaultTipLabel,
   validateGtZero = false,
 }) => {
   const [balance, setBalance] = useState(0);
@@ -101,7 +101,8 @@ const PaymentInput = ({
         label='Request funds from the DAO'
         placement='top'
       >
-        <TextBox as={FormLabel} size='xs' d='flex' alignItems='center'>
+        {isTrade && <TextBox size='xs'>Trade For</TextBox>}
+        <TextBox as={FormLabel} size='xs' d='flex' alignItems='center' mt={1}>
           {formLabel}
           <Icon as={RiInformationLine} ml={2} />
         </TextBox>
