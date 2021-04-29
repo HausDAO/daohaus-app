@@ -37,7 +37,8 @@ export const supportedChains = {
     hub_sort_order: 6,
     providers: ['walletconnect'],
     // , 'portis', 'fortmatic'
-    rpc_url: `https://${process.env.REACT_APP_RPC_URI}.rinkeby.rpc.rivet.cloud/`,
+    rpc_url:
+      `https://${process.env.REACT_APP_RPC_URI}.rinkeby.rpc.rivet.cloud/`,
     abi_api_url:
       'https://api-rinkeby.etherscan.io/api?module=contract&action=getabi&address=',
     tokenlist_api_url:
@@ -55,9 +56,10 @@ export const supportedChains = {
     weth_contract: '0xc778417e063141139fce010982780140aa0cd5ab',
     block_explorer: 'https://rinkeby.etherscan.io',
     superfluid: {
-      host_addr: '0xeD5B5b32110c3Ded02a07c8b8e97513FAfb883B6',
-      resolver: '0x659635Fab0A0cef1293f7eb3c7934542B6A6B31A',
       minion_factory_addr: '0xc4fe30611474Aa737b5B1DBC81aB4Eb9E8959DE1',
+      resolver: '0x659635Fab0A0cef1293f7eb3c7934542B6A6B31A',
+      subgraph_url:
+        'https://api.thegraph.com/subgraphs/name/superfluid-finance/superfluid-rinkeby',
       superapp_addr: {
         v1: '0xcf7ce0023C4dA08c6b8065BB52032bC7951f2D43',
       },

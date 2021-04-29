@@ -19,7 +19,7 @@ const baseListFields = `
   canceledBy
 `;
 
-export const SUPERFLUID_MINION_STREAMS = gql`
+export const MINION_STREAMS = gql`
   query minionStream($minionId: String!) {
     minionStreams(where: { minion: $minionId }, orderBy: createdAt, orderDirection: asc) {
       ${baseListFields}
@@ -27,10 +27,48 @@ export const SUPERFLUID_MINION_STREAMS = gql`
   }
 `;
 
-export const SUPERFLUID_ACTIVE_STREAMS_TO = gql`
-  query minionStream($minionId: String!, $tokenAddress: String!, $to: String!) {
-    minionStreams(where: { minion: $minionId, tokenAddress: $tokenAddress, to: $to, active: true }) {
-      ${baseListFields}
+export const SF_OUTGOING_STREAMS = gql`
+  query outStreams($ownerAddress: String!) {
+    account(id: $ownerAddress) {
+      flowsOwned {
+        id
+        events {
+          oldFlowRate
+          flowRate
+          sum
+          transaction {
+            blockNumber
+            timestamp
+          }
+          
+        }
+        flowRate
+        lastUpdate
+        recipient {
+          id
+        }
+        sum
+        token {
+          id
+          underlyingAddress
+        }
+      }
+    }
+  } 
+`;
+
+export const SF_ACTIVE_STREAMS = gql`
+  query activeStreams($ownerAddress: String!, $recipientAddress: String!) {
+    account(id: $ownerAddress) {
+      flowsOwned(where: { recipient: $recipientAddress, flowRate_gt: 0 }) {
+        id
+        flowRate
+        lastUpdate
+        token {
+          id
+          underlyingAddress
+        }
+      }
     }
   }
 `;

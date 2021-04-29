@@ -39,7 +39,7 @@ import { MINION_TYPES } from '../utils/proposalUtils';
 const SuperfluidMinionProposalForm = () => {
   const [loading, setLoading] = useState(false);
   const { daoOverview } = useDao();
-  const { daochain, daoid } = useParams();
+  const { daochain } = useParams();
   const {
     address,
     injectedChain,
@@ -105,14 +105,24 @@ const SuperfluidMinionProposalForm = () => {
         chainID: daochain,
       });
 
+      const minDeposit = injectedProvider.utils.toWei(values.paymentRequested);
+      const ratePerSec = values.weiRatePerSec;
+      // TODO: check if Minion already has enough funds to cover the minimum deposit
+      if (+minDeposit < (+ratePerSec * 3600)) {
+        setCurrentError({
+          field: 'paymentRequested',
+          message: 'Funds requested must be at least one-hour stream value',
+        });
+        setLoading(false);
+        return;
+      }
+
       const hasActiveStreams = await minionService('hasActiveStreams')({
-        molochAddress: daoid,
-        tokenAddress: values.paymentToken,
         to: values.memberApplicant || values.applicant,
+        tokenAddress: values.paymentToken,
       });
 
       if (!hasActiveStreams) {
-        const valueWei = injectedProvider.utils.toWei(values.paymentRequested);
         const details = detailsToJSON({
           title: values.title,
           description: values.description,
@@ -120,14 +130,14 @@ const SuperfluidMinionProposalForm = () => {
           recipient: values.memberApplicant || values.applicant,
           token: values.paymentToken,
           tokenRate: `${values.tokenRate} ${values.baseRate}`,
-          ratePerSec: values.weiRatePerSec,
-          minDeposit: valueWei,
+          ratePerSec,
+          minDeposit,
         });
         const args = [
           values.memberApplicant || values.applicant,
           values.paymentToken,
           values.weiRatePerSec,
-          valueWei,
+          minDeposit,
           '0x',
           details,
         ];
@@ -226,7 +236,6 @@ const SuperfluidMinionProposalForm = () => {
           />
           <PaymentInput
             formLabel='Funds Requested'
-            tipLabel='Select a token & minimum deposit to be sent to the Minion for streaming'
             validateGtZero
             register={register}
             setValue={setValue}
@@ -244,8 +253,8 @@ const SuperfluidMinionProposalForm = () => {
       </FormControl>
       <Flex justify='flex-end' align='center' h='60px'>
         {currentError && (
-          <Box color='secondary.300' fontSize='m' mr={5}>
-            <Icon as={RiErrorWarningLine} color='secondary.300' mr={2} />
+          <Box color='red.500' fontSize='m' mr={5}>
+            <Icon as={RiErrorWarningLine} color='red.500' mr={2} />
             {currentError.message}
           </Box>
         )}
@@ -254,26 +263,26 @@ const SuperfluidMinionProposalForm = () => {
             address,
             daochain,
             injectedChain?.chainId,
-          )
-            ? (
-              <Button
-                type='submit'
-                loadingText='Submitting'
-                isLoading={loading}
-                disabled={loading}
-              >
-                Submit
-              </Button>
+          ) ? (
+            <Button
+              type='submit'
+              loadingText='Submitting'
+              isLoading={loading}
+              disabled={loading}
+            >
+              Submit
+            </Button>
             ) : (
               <Button
                 onClick={requestWallet}
                 isDisabled={injectedChain && daochain !== injectedChain?.chainId}
               >
-                Connect
-                {' '}
-                {injectedChain && daochain !== injectedChain?.chainId
-                  ? `to ${chainByID(daochain).name}`
-                  : 'Wallet'}
+                {`Connect
+                ${
+                  injectedChain && daochain !== injectedChain?.chainId
+                    ? `to ${chainByID(daochain).name}`
+                    : 'Wallet'
+                }`}
               </Button>
             )
           }

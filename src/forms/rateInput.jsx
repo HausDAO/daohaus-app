@@ -75,20 +75,6 @@ const RateInput = ({
   };
 
   useEffect(() => {
-    //  Refactor this to useCallback once solid pattern is established.
-    const getTokenRate = () => {
-      const tokenRate = getValues('tokenRate');
-      if (tokenRate && tokenRate > 0) {
-        const baseRate = getValues('baseRate');
-        const decimals = +tokenData.decimals;
-        const weiRatePerSec = parseInt(
-          (tokenRate * 10 ** decimals) / rates[baseRate],
-        );
-        const newRate = parseFloat(tokenRate / rates[baseRate]).toFixed(10);
-        setRatePerSec(newRate);
-        setValue('weiRatePerSec', weiRatePerSec);
-      }
-    };
     if (tokenData) {
       getTokenRate();
     }

@@ -27,7 +27,7 @@ export const ToolTipWrapper = ({
   return (
     <Tooltip
       hasArrow
-      label={<ToolTipLabel text={tooltipText} />}
+      label={tooltipText && <ToolTipLabel text={tooltipText} />}
       bg={bg}
       placement={placement}
       shouldWrapChildren

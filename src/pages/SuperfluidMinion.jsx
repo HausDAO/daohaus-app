@@ -15,7 +15,6 @@ import makeBlockie from 'ethereum-blockies-base64';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
 import { FaCopy } from 'react-icons/fa';
 import { RiArrowLeftLine } from 'react-icons/ri';
-
 import BankList from '../components/BankList';
 import ContentBox from '../components/ContentBox';
 import MainViewLayout from '../components/mainViewLayout';
