@@ -16,15 +16,14 @@ import { RiInformationLine } from 'react-icons/ri';
 import TextBox from '../components/TextBox';
 import { useDao } from '../contexts/DaoContext';
 
-// const defaultTipLabel = 'Request funds from the DAO';
 
 const PaymentInput = ({
   errors,
   formLabel = 'Payment Requested',
   getValues,
+  isTrade,
   register,
   setValue,
-  // tipLabel = defaultTipLabel,
   validateGtZero = false,
 }) => {
   const [balance, setBalance] = useState(0);
@@ -53,7 +52,6 @@ const PaymentInput = ({
         })),
       );
     }
-    // eslint-disable-next-line
   }, [daoOverview]);
 
   const getMax = async (token) => {
@@ -73,7 +71,6 @@ const PaymentInput = ({
       getMax(depositToken.value);
       setMax();
     }
-    // eslint-disable-next-line
   }, [tokenData]);
 
   const handleChange = async () => {
@@ -98,10 +95,11 @@ const PaymentInput = ({
       <Tooltip
         hasArrow
         shouldWrapChildren
-        label='Request funds from the DAO'
+        label={tipLabel}
         placement='top'
       >
-        <TextBox as={FormLabel} size='xs' d='flex' alignItems='center'>
+        {isTrade && <TextBox size='xs'>Trade For</TextBox>}
+        <TextBox as={FormLabel} size='xs' d='flex' alignItems='center' mt={1}>
           {formLabel}
           <Icon as={RiInformationLine} ml={2} />
         </TextBox>

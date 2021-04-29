@@ -154,7 +154,7 @@ const NewSuperfluidMinionForm = () => {
                   w='70%'
                   ref={register}
                   defaultValue={agreementType}
-                  onChange={updateAgreementType}
+                  onChange={() => updateAgreementType()}
                 >
                   <option value='cfa'>Constant Flow (CFA)</option>
                   {/* <option value='ida'>Instant Distribution (IDA)</option> */}
