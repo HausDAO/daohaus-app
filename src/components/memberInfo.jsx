@@ -9,7 +9,7 @@ import TextBox from './TextBox';
 import ContentBox from './ContentBox';
 import UberHausMemberInfoGuts from './uberHausMemberInfoGuts';
 
-const MemberInfoCard = ({ member, customTerms }) => {
+const MemberInfoCard = ({ member, customTerms, hideCopy }) => {
   const { address } = useInjectedProvider();
   const { daoid, daochain } = useParams();
 
@@ -38,7 +38,7 @@ const MemberInfoCard = ({ member, customTerms }) => {
             {member.isUberMinion ? (
               <UberHausMemberInfoGuts member={member} />
             ) : (
-              <MemberInfoGuts member={member} />
+              <MemberInfoGuts member={member} hideCopy={hideCopy} />
             )}
           </ContentBox>
         </>

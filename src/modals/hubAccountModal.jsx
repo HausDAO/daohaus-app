@@ -7,6 +7,8 @@ import {
   Text,
   ModalCloseButton,
   ModalBody,
+  Stack,
+  Divider,
 } from '@chakra-ui/react';
 import { rgba } from 'polished';
 
@@ -53,24 +55,17 @@ const HubAccountModal = () => {
             onClick={handleSwitchWallet}
             color='secondary.400'
             _hover={{ color: 'secondary.600', cursor: 'pointer' }}
+            my={6}
           >
             Connect a different wallet
           </Box>
-          <Box
-            mx={-6}
-            mt={6}
-            mb={0}
-            borderTopWidth='1px'
-            borderTopColor='whiteAlpha.200'
-          />
-          <Box mb={6} />
-          <Text fontSize='l' fontFamily='heading'>
-            Transactions
-            <Box as='span' ml={1}>
-              will show here
-            </Box>
-          </Text>
-          <TxList />
+          <Divider color='primary.300' />
+          <Box as={Stack} spacing={4} my={6}>
+            <Text fontSize='l' fontFamily='heading'>
+              Transactions will show here
+            </Text>
+            <TxList />
+          </Box>
         </ModalBody>
       </ModalContent>
     </Modal>

@@ -1,7 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
-
-import { utils } from 'web3';
 import { useParams, Link as RouterLink } from 'react-router-dom';
 import {
   Flex,
@@ -65,6 +63,7 @@ const ProposalDetails = ({ proposal, daoMember }) => {
   const { isUberHaus } = useDao();
   const [status, setStatus] = useState(null);
   const { daoid } = useParams();
+  console.log(proposal);
 
   useEffect(() => {
     if (proposal) {
@@ -222,7 +221,7 @@ const ProposalDetails = ({ proposal, daoMember }) => {
                 <TextBox size='lg' variant='value'>
                   {proposal?.tributeOffered
                     ? `${numberWithCommas(
-                      utils.fromWei(proposal.tributeOffered.toString()),
+                      Number(proposal.tributeOffered) / 10 ** Number(proposal.tributeTokenDecimals),
                     )} ${proposal.tributeTokenSymbol || 'WETH'}`
                     : '--'}
                 </TextBox>
@@ -236,7 +235,7 @@ const ProposalDetails = ({ proposal, daoMember }) => {
                 <TextBox size='lg' variant='value'>
                   {proposal?.paymentRequested
                     ? `${numberWithCommas(
-                      utils.fromWei(proposal.paymentRequested.toString()),
+                      Number(proposal.paymentRequested) / 10 ** Number(proposal.paymentTokenDecimals),
                     )} ${proposal.paymentTokenSymbol || 'WETH'}`
                     : '--'}
                 </TextBox>
