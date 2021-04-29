@@ -236,7 +236,6 @@ const SuperfluidMinionProposalForm = () => {
           />
           <PaymentInput
             formLabel='Funds Requested'
-            tipLabel='Select a token & minimum deposit to be sent to the Minion for streaming'
             validateGtZero
             register={register}
             setValue={setValue}

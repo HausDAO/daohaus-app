@@ -22,7 +22,6 @@ const MinionList = () => {
   const { daoOverview } = useDao();
   const { daochain, daoid } = useParams();
   const toast = useToast();
-  const minions = daoOverview?.minions.sort((minionA, minionB) => (minionA.createdAt > minionB.createdAt ? 1 : -1));
 
   const minions = useMemo(() => {
     if (daoOverview?.minions) {

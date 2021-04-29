@@ -16,7 +16,6 @@ import { RiInformationLine } from 'react-icons/ri';
 import TextBox from '../components/TextBox';
 import { useDao } from '../contexts/DaoContext';
 
-
 const PaymentInput = ({
   errors,
   formLabel = 'Payment Requested',
@@ -95,7 +94,7 @@ const PaymentInput = ({
       <Tooltip
         hasArrow
         shouldWrapChildren
-        label={tipLabel}
+        label='Request funds from the DAO'
         placement='top'
       >
         {isTrade && <TextBox size='xs'>Trade For</TextBox>}

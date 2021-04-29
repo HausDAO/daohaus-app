@@ -10,8 +10,6 @@ import { useOverlay } from '../contexts/OverlayContext';
 import { useTX } from '../contexts/TXContext';
 import ApproveUberHausToken from './approveUberHausToken';
 import { createPoll } from '../services/pollService';
-import { SuperfluidMinionService } from '../services/superfluidMinionService';
-import { UberHausMinionService } from '../services/uberHausMinionService';
 import { MinionService } from '../services/minionService';
 import { SuperfluidMinionService } from '../services/superfluidMinionService';
 import { TokenService } from '../services/tokenService';
