@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
-import { utils } from 'web3';
 import {
   Flex, Box, Skeleton, Badge, Icon,
 } from '@chakra-ui/react';
@@ -180,7 +179,7 @@ const ProposalCard = ({ proposal, customTerms }) => {
                 <Box fontSize='lg' fontFamily='space' fontWeight={700}>
                   {`${
                     proposal?.tributeOffered
-                      ? numberWithCommas(utils.fromWei(proposal.tributeOffered))
+                      ? numberWithCommas(Number(proposal.tributeOffered) / 10 ** Number(proposal.tributeTokenDecimals))
                       : '--'
                   } ${proposal.tributeTokenSymbol || 'WETH'}`}
                 </Box>
@@ -204,7 +203,7 @@ const ProposalCard = ({ proposal, customTerms }) => {
                   {`${
                     proposal?.paymentRequested
                       ? numberWithCommas(
-                        utils.fromWei(proposal.paymentRequested),
+                        Number(proposal.paymentRequested) / 10 ** Number(proposal.paymentTokenDecimals),
                       )
                       : '--'
                   } ${proposal.paymentTokenSymbol || 'WETH'}`}
