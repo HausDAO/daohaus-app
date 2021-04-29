@@ -68,7 +68,7 @@ const BoostLaunchWrapper = ({ boost }) => {
   };
 
   const handleWrapNZapLaunch = async () => {
-    const args = [daoid, supportedChains[daochain].wxdai_contract]; // weth_contract on some networks
+    const args = [daoid, supportedChains[daochain].wrapper_contract];
     const poll = createPoll({ action: 'wrapNZapSummon', cachePoll })({
       daoID: daoid,
       chainID: daochain,
