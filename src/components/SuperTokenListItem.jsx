@@ -24,6 +24,9 @@ const SuperTokenListItem = ({
   loading,
   successToast,
 }) => {
+  const isLoading = loading?.active && loading?.condition === tokenAddress;
+  const shouldDisableWithdraw = token?.tokenBalance <= 0 || (loading?.active && loading?.condition === tokenAddress);
+
   const handleWithdraw = () => {
     withdrawSupertoken(tokenAddress);
   };
@@ -31,8 +34,7 @@ const SuperTokenListItem = ({
   const displayComingSoon = () => {
     successToast({ title: 'Coming Soon' });
   };
-  const isLoading = loading?.active && loading?.condition === tokenAddress;
-  const shouldDisableWithdraw = token?.tokenBalance <= 0 || (loading?.active && loading?.condition === tokenAddress);
+
   return (
     <Flex h='60px' align='center' key={tokenAddress}>
       <Box

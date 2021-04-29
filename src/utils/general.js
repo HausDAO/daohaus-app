@@ -208,3 +208,8 @@ export const deriveValFromWei = (amt) => {
   if (!amt) return;
   return Web3.utils.fromWei(amt.toString());
 };
+
+export const handleDecimals = (balance, decimals, fallback = '--') => {
+  if (!balance || !decimals) return fallback;
+  return Number(balance) / 10 ** Number(decimals);
+};

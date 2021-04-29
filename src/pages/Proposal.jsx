@@ -59,7 +59,7 @@ const Proposal = ({
                 </TextBox>
               </Flex>
             </Link>
-            <ProposalDetails proposal={currentProposal} daoMember={daoMember} />
+            <ProposalDetails proposal={currentProposal} daoMember={daoMember} overview={overview} />
           </Flex>
           <Flex
             direction='column'

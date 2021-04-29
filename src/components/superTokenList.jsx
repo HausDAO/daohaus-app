@@ -10,13 +10,12 @@ import { useInjectedProvider } from '../contexts/InjectedProviderContext';
 import { useOverlay } from '../contexts/OverlayContext';
 import { useTX } from '../contexts/TXContext';
 import { useUser } from '../contexts/UserContext';
-
 import ContentBox from './ContentBox';
 import TextBox from './TextBox';
+import SuperTokenListItem from './SuperTokenListItem';
 
 import { createPoll } from '../services/pollService';
 import { SuperfluidMinionService } from '../services/superfluidMinionService';
-import SuperTokenListItem from './SuperTokenListItem';
 
 const SuperTokenList = ({
   superTokenBalances, loadingStreams, handleCopyToast, daoMember, loading, setLoading,
@@ -113,8 +112,8 @@ const SuperTokenList = ({
         </Flex>
 
         <Skeleton isLoaded={!loadingStreams}>
-          {superTokenBalances && balanceArr.length > 0
-        && balanceArr?.map(
+          {superTokenBalances && balanceArr?.length > 0
+        && balanceArr.map(
           (tokenAddress) => {
             const token = superTokenBalances[tokenAddress];
             if (token) {

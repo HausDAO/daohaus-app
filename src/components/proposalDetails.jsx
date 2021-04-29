@@ -33,7 +33,7 @@ import {
 } from '../utils/proposalUtils';
 import { getCustomProposalTerm } from '../utils/metadata';
 import { UBERHAUS_DATA } from '../utils/uberhaus';
-import { deriveValFromWei } from '../utils/general';
+import { handleDecimals } from '../utils/general';
 import UberHausDelegate from './uberhausDelegate';
 import DiscourseProposalTopic from './discourseProposalTopic';
 
@@ -52,6 +52,7 @@ const ProposalDetails = ({ proposal, daoMember }) => {
   const { isUberHaus, daoOverview } = useDao();
   const [status, setStatus] = useState(null);
   const { daoid } = useParams();
+  console.log(proposal);
 
   useEffect(() => {
     if (proposal) {
@@ -139,8 +140,8 @@ const ProposalDetails = ({ proposal, daoMember }) => {
                 ? 'Transmuting'
                 : 'Tribute offered'}
               comma
-              value={deriveValFromWei(proposal?.tributeOffered)}
-              append={proposal?.paymentTokenSymbol}
+              value={handleDecimals(proposal?.tributeOffered, proposal?.tributeTokenDecimals)}
+              append={proposal?.tributeTokenSymbol || 'WETH'}
             />
           )
           }
@@ -148,8 +149,8 @@ const ProposalDetails = ({ proposal, daoMember }) => {
           <TextIndicator
             label='Payment Requested'
             comma
-            value={deriveValFromWei(proposal?.paymentRequested)}
-            append={proposal?.paymentTokenSymbol || 'ETH'}
+            value={handleDecimals(proposal?.paymentRequested, proposal?.paymentTokenDecimals)}
+            append={proposal?.paymentTokenSymbol || 'WETH'}
           />
           )}
           {(proposal?.sharesRequested > 0 || !proposal?.sharesRequested) && (
