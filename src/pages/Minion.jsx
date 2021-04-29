@@ -106,59 +106,6 @@ const MinionDetails = ({ overview, currentDaoTokens }) => {
     });
   };
 
-  const withdraw = async (token, transfer) => {
-    setLoading(true);
-    const args = [
-      token.moloch.id,
-      token.token.tokenAddress,
-      token.tokenBalance,
-      transfer,
-    ];
-    try {
-      const poll = createPoll({ action: 'minionCrossWithdraw', cachePoll })({
-        tokenAddress: token.token.tokenAddress,
-        memberAddress: minion,
-        daoID: token.moloch.id,
-        expectedBalance: 0,
-        minionAddress: minion,
-        createdAt: now,
-        chainID: daochain,
-        actions: {
-          onError: (error, txHash) => {
-            errorToast({
-              title: 'There was an error.',
-            });
-            resolvePoll(txHash);
-            console.error(`Could not find a matching proposal: ${error}`);
-          },
-          onSuccess: (txHash) => {
-            successToast({
-              title: 'Minion proposal submitted.',
-            });
-            refreshDao();
-            refreshGraphBalances();
-            resolvePoll(txHash);
-            refreshGraphBalances();
-          },
-        },
-      });
-      const onTxHash = () => {
-        setProposalModal(false);
-        setTxInfoModal(true);
-      };
-      await MinionService({
-        web3: injectedProvider,
-        minion,
-        chainID: daochain,
-      })('crossWithdraw')({
-        args, address, poll, onTxHash,
-      });
-    } catch (err) {
-      // setLoading(false);
-      console.log('error: ', err);
-    }
-  };
-
   const copiedToast = () => {
     toast({
       title: 'Copied Minion Address',
@@ -169,20 +116,7 @@ const MinionDetails = ({ overview, currentDaoTokens }) => {
     });
   };
 
-  const sendNativeToken = async (values) => {
-    const details = detailsToJSON({
-      title: `${minionData.details} sends native token`,
-      description: `Send ${values.amount} `,
-      // link: (link to block explorer)
-      type: 'nativeTokenSend',
-    });
-    const amountInWei = injectedProvider.utils.toWei(values.amount);
-    const args = [
-      values.destination,
-      amountInWei,
-      '0x0',
-      details,
-    ];
+  const submitMinion = async (args) => {
     try {
       const poll = createPoll({ action: 'minionProposeAction', cachePoll })({
         minionAddress: minionData.minionAddress,
@@ -202,11 +136,13 @@ const MinionDetails = ({ overview, currentDaoTokens }) => {
             });
             refreshDao();
             resolvePoll(txHash);
+            refreshGraphBalances();
           },
         },
       });
       const onTxHash = () => {
         setGenericModal(false);
+        setProposalModal(false);
         setTxInfoModal(true);
       };
       await MinionService({
@@ -220,6 +156,34 @@ const MinionDetails = ({ overview, currentDaoTokens }) => {
       setLoading(false);
       console.log('error: ', err);
     }
+  };
+
+  const withdraw = async (token, transfer) => {
+    setLoading(true);
+    const args = [
+      token.moloch.id,
+      token.token.tokenAddress,
+      token.tokenBalance,
+      transfer,
+    ];
+    submitMinion(args);
+  };
+
+  const sendNativeToken = async (values) => {
+    const details = detailsToJSON({
+      title: `${minionData.details} sends native token`,
+      description: `Send ${values.amount} `,
+      // link: (link to block explorer)
+      type: 'nativeTokenSend',
+    });
+    const amountInWei = injectedProvider.utils.toWei(values.amount);
+    const args = [
+      values.destination,
+      amountInWei,
+      '0x0',
+      details,
+    ];
+    submitMinion(args);
   };
 
   const sendToken = async (values, token) => {
@@ -248,43 +212,7 @@ const MinionDetails = ({ overview, currentDaoTokens }) => {
       hexData,
       details,
     ];
-    try {
-      const poll = createPoll({ action: 'minionProposeAction', cachePoll })({
-        minionAddress: minionData.minionAddress,
-        createdAt: now,
-        chainID: daochain,
-        actions: {
-          onError: (error, txHash) => {
-            errorToast({
-              title: 'There was an error.',
-            });
-            resolvePoll(txHash);
-            console.error(`Could not find a matching proposal: ${error}`);
-          },
-          onSuccess: (txHash) => {
-            successToast({
-              title: 'Minion proposal submitted.',
-            });
-            refreshDao();
-            resolvePoll(txHash);
-          },
-        },
-      });
-      const onTxHash = () => {
-        setGenericModal(false);
-        setTxInfoModal(true);
-      };
-      await MinionService({
-        web3: injectedProvider,
-        minion,
-        chainID: daochain,
-      })('proposeAction')({
-        args, address, poll, onTxHash,
-      });
-    } catch (err) {
-      setLoading(false);
-      console.log('error: ', err);
-    }
+    submitMinion(args);
   };
 
   const action = {
