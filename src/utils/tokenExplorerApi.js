@@ -99,6 +99,7 @@ const fetchBlockScoutAPIData = async (address) => {
   try {
     const daochain = '0x64';
     const url = `${chainByID(daochain).tokenlist_api_url}${address}`;
+    console.log('url', url);
     const response = await fetch(url);
     const json = await response.json();
     if (!json.result || json.status === '0') {
@@ -173,7 +174,6 @@ const parseBlockScout = async (json, address) => {
     return nft;
   });
   erc721s = await Promise.all(erc721s);
-
   const erc20s = json.result
     .filter((token) => token.type === 'ERC-20')
     .sort((a, b) => b.balance - a.balance)
@@ -190,6 +190,8 @@ const parseBlockScout = async (json, address) => {
 
 export const getBlockScoutTokenData = async (address) => {
   const json = await fetchBlockScoutAPIData(address);
+  console.log('results', json.result);
+
   const tokenData = parseBlockScout(json, address);
   return tokenData;
 };

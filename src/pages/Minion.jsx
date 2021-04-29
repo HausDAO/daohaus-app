@@ -10,7 +10,6 @@ import {
   Link,
   HStack,
   Stack,
-  Button,
 } from '@chakra-ui/react';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
 import { RiArrowLeftLine } from 'react-icons/ri';
@@ -22,12 +21,10 @@ import TextBox from '../components/TextBox';
 import { detailsToJSON, truncateAddr } from '../utils/general';
 
 import MainViewLayout from '../components/mainViewLayout';
-// import { initTokenData } from '../utils/tokenValue';
 
 import MinionTokenList from '../components/minionTokenList';
 
 import {
-  fetchNativeBalance,
   getBlockScoutTokenData,
   getEtherscanTokenData,
 } from '../utils/tokenExplorerApi';
@@ -134,6 +131,7 @@ const MinionDetails = ({ overview, currentDaoTokens }) => {
   };
 
   const withdraw = async (token, transfer) => {
+    setLoading(true);
     const args = [
       token.moloch.id,
       token.token.tokenAddress,
@@ -202,7 +200,7 @@ const MinionDetails = ({ overview, currentDaoTokens }) => {
       // link: (link to block explorer)
       type: 'nativeTokenSend',
     });
-    const amountInWei = injectedProvider.eth.utils.toWei(values.amount);
+    const amountInWei = injectedProvider.utils.toWei(values.amount);
     const args = [
       values.destination,
       amountInWei,
@@ -374,10 +372,12 @@ const MinionDetails = ({ overview, currentDaoTokens }) => {
               <Box>
                 <TextBox size='md' align='center'>
                   Unclaimed balances in DAOs (for withdraw)
+                  {' '}
                 </TextBox>
                 <HubBalanceList
                   tokens={daoBalances}
                   withdraw={withdraw}
+                  loading={loading}
                   currentDaoTokens={currentDaoTokens}
                 />
               </Box>

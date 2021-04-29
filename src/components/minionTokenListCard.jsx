@@ -14,7 +14,9 @@ import GenericModal from '../modals/genericModal';
 const MinionTokenListCard = ({ token, action }) => {
   const toast = useToast();
   const { setGenericModal } = useOverlay();
-  const { handleSubmit, errors, register } = useForm();
+  const {
+    handleSubmit, register, setValue,
+  } = useForm();
 
   const copiedToast = () => {
     toast({
@@ -135,7 +137,7 @@ const MinionTokenListCard = ({ token, action }) => {
           <TextBox as={FormLabel} size='xs' htmlFor='amount'>
             Amount
             {' '}
-            <Button>
+            <Button onClick={() => setValue('amount', +token?.balance / 10 ** token.decimals)}>
               Max
               {' '}
               {`$${numberWithCommas(+token?.balance / 10 ** token.decimals)}`}

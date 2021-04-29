@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import {
-  Flex, Text, Box, Button, FormLabel, Input,
+  Box, Button, FormLabel, Input,
 } from '@chakra-ui/react';
 import { useParams } from 'react-router';
 import { useForm } from 'react-hook-form';
@@ -8,15 +8,16 @@ import TextBox from './TextBox';
 import { fetchNativeBalance } from '../utils/tokenExplorerApi';
 import GenericModal from '../modals/genericModal';
 import { numberWithCommas } from '../utils/general';
+import { useOverlay } from '../contexts/OverlayContext';
 
 const MinionNativeToken = ({ action }) => {
   const [nativeBalance, setNativeBalance] = useState();
-  const { daochain, daoid, minion } = useParams();
-  const { handleSubmit, errors, register } = useForm();
+  const { daochain, minion } = useParams();
+  const {
+    handleSubmit, register, setValue,
+  } = useForm();
+  const { setGenericModal } = useOverlay();
 
-  const handleClick = () => {
-    action.sendNativeToken();
-  };
   useEffect(() => {
     const getContractBalance = async () => {
       try {
@@ -28,13 +29,18 @@ const MinionNativeToken = ({ action }) => {
     };
     getContractBalance();
   }, [minion]);
+
+  const openSendModal = () => {
+    setGenericModal({ nativeTokenSend: true });
+  };
+
   return (
     <Box>
       <TextBox size='md' align='center'>
         balance:
         {' '}
         {nativeBalance}
-        <Button onClick={handleClick}>Send</Button>
+        <Button onClick={openSendModal}>Send</Button>
       </TextBox>
       <GenericModal closeOnOverlayClick modalId='nativeTokenSend'>
         <form onSubmit={handleSubmit(action.sendNativeToken)}>
@@ -42,7 +48,7 @@ const MinionNativeToken = ({ action }) => {
           <TextBox as={FormLabel} size='xs' htmlFor='amount'>
             Amount
             {' '}
-            <Button>
+            <Button onClick={() => { setValue('amount', nativeBalance); }}>
               Max
               {' '}
               {`$${numberWithCommas(+nativeBalance)}`}
