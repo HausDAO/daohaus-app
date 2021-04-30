@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   Box, Flex, Link, Stack,
 } from '@chakra-ui/react';
@@ -13,12 +13,22 @@ import Minions from '../components/minionList';
 import MainViewLayout from '../components/mainViewLayout';
 import { useInjectedProvider } from '../contexts/InjectedProviderContext';
 import { daoConnectedAndSameChain } from '../utils/general';
+import { getWrapNZap } from '../utils/requests';
 
 const Settings = ({
   overview, daoMember, daoMetaData, customTerms,
 }) => {
   const { daochain, daoid } = useParams();
   const { address, injectedChain } = useInjectedProvider();
+  const [wrapNZap, setWrapNZap] = useState(null);
+
+  // move to contexts??
+  useEffect(() => {
+    const getWNZ = async () => {
+      setWrapNZap(await getWrapNZap(daochain, daoid));
+    };
+    getWNZ();
+  }, [daoid]);
 
   return (
     <MainViewLayout header='Settings' customTerms={customTerms} isDao>
@@ -29,7 +39,7 @@ const Settings = ({
           pb={6}
         >
           <TextBox size='xs'>Dao Contract Settings</TextBox>
-          <DaoContractSettings overview={overview} customTerms={customTerms} />
+          <DaoContractSettings overview={overview} customTerms={customTerms} wrapNZap={wrapNZap} />
           <Flex justify='space-between' mt={6}>
             <TextBox size='xs'>DAO Metadata</TextBox>
             {daoConnectedAndSameChain(

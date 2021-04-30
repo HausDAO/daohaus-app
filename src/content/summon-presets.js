@@ -13,7 +13,7 @@ export const daoConstants = (networkId) => {
   };
 
   if (networkId === 100) {
-    constants.approvedToken = supportedChains[100].wxdai_contract;
+    constants.approvedToken = supportedChains[100].wrapper_contract;
   }
 
   return constants;
@@ -63,7 +63,7 @@ export const daoPresets = (networkId) => {
       presetDescription:
         'Invest on chain with a venture fund at your fingertips.',
       currency: 'WETH',
-      approvedToken: supportedChains[networkId].weth_contract,
+      approvedToken: supportedChains[networkId].wrapper_contract,
       minimumTribute: '50',
       votingPeriod: '7',
       gracePeriod: '7',
@@ -80,7 +80,7 @@ export const daoPresets = (networkId) => {
       presetSubtitle: 'Distribute wealth together',
       presetDescription: 'Spread around the wealth and accelerate good stuff.',
       currency: 'WETH',
-      approvedToken: supportedChains[networkId].weth_contract,
+      approvedToken: supportedChains[networkId].wrapper_contract,
       minimumTribute: '10',
       votingPeriod: '168',
       gracePeriod: '72',
@@ -116,7 +116,7 @@ export const daoPresets = (networkId) => {
   if (networkId === 100) {
     presets = presets.map((preset) => {
       preset.currency = 'WXDAI';
-      preset.approvedToken = supportedChains[networkId].wxdai_contract;
+      preset.approvedToken = supportedChains[networkId].wrapper_contract;
       preset.proposalDeposit = '100000000000000000';
       preset.processingReward = '10000000000000000';
 
@@ -125,7 +125,7 @@ export const daoPresets = (networkId) => {
   } else if (networkId === 137) {
     presets = presets.map((preset) => {
       preset.currency = 'WMATIC';
-      preset.approvedToken = supportedChains[networkId].weth_contract;
+      preset.approvedToken = supportedChains[networkId].wrapper_contract;
       preset.proposalDeposit = '100000000000000000';
       preset.processingReward = '10000000000000000';
 
@@ -143,7 +143,7 @@ export const currencyOptions = (networkId) => {
       {
         value: 'WXDAI',
         label: 'WXDAI',
-        address: supportedChains[networkId].wxdai_contract,
+        address: supportedChains[networkId].wrapper_contract,
       },
     ];
   } else {
@@ -156,7 +156,7 @@ export const currencyOptions = (networkId) => {
       {
         value: 'WETH',
         label: 'WETH',
-        address: supportedChains[networkId].weth_contract,
+        address: supportedChains[networkId].wrapper_contract,
       },
     ];
   }

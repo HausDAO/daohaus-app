@@ -15,13 +15,23 @@ import NewMinionSafe from './newMinionSafe';
 import GenericBoostLaunch from './genericBoostLaunch';
 import SnapshotLaunch from './snapshotLaunch';
 import { useOverlay } from '../contexts/OverlayContext';
+import { useTX } from '../contexts/TXContext';
+import { useUser } from '../contexts/UserContext';
+import { createPoll } from '../services/pollService';
+import { WrapNZapFactoryService } from '../services/wrapNZapFactoryService';
+import { supportedChains } from '../utils/chain';
 
 const BoostLaunchWrapper = ({ boost }) => {
   const [loading, setLoading] = useState(false);
+  const [boostStep, setBoostStep] = useState(1);
   const { address, injectedProvider, injectedChain } = useInjectedProvider();
-  const { setGenericModal } = useOverlay();
-  const { daoid } = useParams();
+  const {
+    setGenericModal, errorToast, successToast, setTxInfoModal,
+  } = useOverlay();
+  const { cachePoll, resolvePoll } = useUser();
+  const { daoid, daochain } = useParams();
   const { refetchMetaData } = useMetaData();
+  const { refreshDao } = useTX();
 
   const handleLaunch = async (boostMetadata) => {
     setLoading(true);
@@ -56,6 +66,45 @@ const BoostLaunchWrapper = ({ boost }) => {
       setLoading(false);
       return false;
     }
+  };
+
+  const handleWrapNZapLaunch = async () => {
+    const args = [daoid, supportedChains[daochain].wrapper_contract];
+    const poll = createPoll({ action: 'wrapNZapSummon', cachePoll })({
+      daoID: daoid,
+      chainID: daochain,
+      actions: {
+        onError: (error, txHash) => {
+          errorToast({
+            title: 'Failed to create Wrap-N-Zap',
+          });
+          resolvePoll(txHash);
+          console.error(`Error creating Wrap-N-Zap: ${error}`);
+          setLoading(false);
+        },
+        onSuccess: (txHash) => {
+          successToast({
+            title: 'Wrap-N-Zap added!',
+          });
+          refreshDao();
+          resolvePoll(txHash);
+          setBoostStep('success');
+          setLoading(false);
+        },
+      },
+    });
+    const onTxHash = () => {
+      setGenericModal(false);
+      setTxInfoModal(true);
+    };
+    const WNZFactory = WrapNZapFactoryService({
+      web3: injectedProvider,
+      chainID: daochain,
+      factoryAddress: supportedChains[daochain].wrap_n_zap_factory_addr,
+    });
+    await WNZFactory('create')({
+      args, address, poll, onTxHash,
+    });
   };
 
   const renderBoostBody = () => {
@@ -113,6 +162,8 @@ const BoostLaunchWrapper = ({ boost }) => {
             boostInstructions='These are the instructions after activate'
             boostCTA="It's gating time!"
             boostLink='boost/mintgate'
+            boostStep={boostStep}
+            setBoostStep={setBoostStep}
             handleLaunch={handleLaunch}
             loading={loading}
             setLoading={setLoading}
@@ -125,6 +176,22 @@ const BoostLaunchWrapper = ({ boost }) => {
             handleLaunch={handleLaunch}
             loading={loading}
             space={boost?.metadata?.space}
+            setLoading={setLoading}
+          />
+        );
+      }
+      case 'wrapNZap': {
+        return (
+          <GenericBoostLaunch
+            boostName='Wrap-N-Zap'
+            boostBody={`Allow users to send native ${supportedChains[daochain].nativeCurrency} that will be wrapped and zapped to the DAO.`}
+            boostInstructions='Get started zapping now!'
+            boostCTA="It's zapping time!"
+            boostLink='settings'
+            boostStep={boostStep}
+            setBoostStep={setBoostStep}
+            handleLaunch={handleWrapNZapLaunch}
+            loading={loading}
             setLoading={setLoading}
           />
         );
