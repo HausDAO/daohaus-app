@@ -22,6 +22,7 @@ const GenericBoostLaunch = ({
     setLoading(true);
 
     const success = await handleLaunch({});
+
     if (success) {
       setBoostStep('success');
     }

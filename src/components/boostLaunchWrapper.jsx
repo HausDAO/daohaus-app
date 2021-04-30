@@ -88,6 +88,7 @@ const BoostLaunchWrapper = ({ boost }) => {
           });
           refreshDao();
           resolvePoll(txHash);
+          setBoostStep('success');
           setLoading(false);
         },
       },
@@ -104,7 +105,6 @@ const BoostLaunchWrapper = ({ boost }) => {
     await WNZFactory('create')({
       args, address, poll, onTxHash,
     });
-    setBoostStep('success');
   };
 
   const renderBoostBody = () => {
