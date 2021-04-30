@@ -3,14 +3,14 @@ import makeBlockie from 'ethereum-blockies-base64';
 import {
   Avatar, Box, Flex, Button, Badge, Link, Text,
 } from '@chakra-ui/react';
-import { Link as RouterLink } from 'react-router-dom';
+import { Link as RouterLink, withRouter } from 'react-router-dom';
 import ContentBox from './ContentBox';
 import { ExploreContext } from '../contexts/ExploreContext';
 import { pokemolUrlExplore, themeImagePath } from '../utils/metadata';
 import { numberWithCommas } from '../utils/general';
 import { chainByNetworkId } from '../utils/chain';
 
-const ExploreCard = ({ dao }) => {
+const ExploreCard = ({ dao, history }) => {
   const { state, dispatch } = useContext(ExploreContext);
 
   const handleTagSelect = (tag) => {
@@ -20,6 +20,8 @@ const ExploreCard = ({ dao }) => {
       dispatch({ type: 'updateTags', payload: tagUpdate });
     }
   };
+
+  const handleClick = () => history.push(`/dao/${chainByNetworkId(dao.networkId).chain_id}/${dao.id}`);
 
   const renderTags = () => {
     if (dao.meta?.tags) {
@@ -72,7 +74,6 @@ const ExploreCard = ({ dao }) => {
             minWidth='80px'
             as={RouterLink}
             variant='outline'
-            to={`/dao/${chainByNetworkId(dao.networkId).chain_id}/${dao.id}`}
           >
             Go
           </Button>
@@ -89,7 +90,8 @@ const ExploreCard = ({ dao }) => {
       h='340px'
       mt={5}
       style={{ transition: 'all .15s linear' }}
-      _hover={{ transform: 'scale(1.05)' }}
+      _hover={{ transform: 'scale(1.05)', cursor: 'pointer' }}
+      onClick={handleClick}
     >
       <Flex direction='row' align='center' w='100%'>
         <Avatar
@@ -165,4 +167,4 @@ const ExploreCard = ({ dao }) => {
   );
 };
 
-export default ExploreCard;
+export default withRouter(ExploreCard);

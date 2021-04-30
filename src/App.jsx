@@ -36,11 +36,14 @@ function App() {
         <Route exact path='/'>
           <Hub />
         </Route>
-        <Route exact path='/explore'>
-          <ExploreContextProvider>
-            <Explore />
-          </ExploreContextProvider>
-        </Route>
+        <Route
+          exact
+          path='/explore'
+          render={(rProps) => (
+            <ExploreContextProvider>
+              <Explore {...rProps} />
+            </ExploreContextProvider>)}
+        />
         <Route exact path='/summon'>
           <Summon />
         </Route>
