@@ -13,6 +13,7 @@ import MainViewLayout from '../components/mainViewLayout';
 
 const validProposalType = (type) => {
   return [
+    'lego',
     'member',
     'funding',
     'whitelist',

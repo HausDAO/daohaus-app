@@ -24,6 +24,9 @@ import { useMetaData } from '../contexts/MetaDataContext';
 import { useOverlay } from '../contexts/OverlayContext';
 import { useCustomTheme } from '../contexts/CustomThemeContext';
 import LootGrabForm from '../forms/lootGrab';
+import ProposalForm from '../components/proposalForm';
+import { PROPOSAL_FORMS } from '../staticElements/proposalFormData';
+import { PROPOSAL_TYPES } from '../utils/proposalUtils';
 
 const ProposalFormModal = ({ proposalType }) => {
   const [, setLoading] = useState(false);
@@ -33,6 +36,12 @@ const ProposalFormModal = ({ proposalType }) => {
   const { proposalModal, setProposalModal } = useOverlay();
 
   const proposalForms = {
+    lego: {
+      type: 'Generic Proposal',
+      heading: 'Real Fake Forms!',
+      subline: 'Come on and get your real fake forms',
+      form: <ProposalForm {...PROPOSAL_FORMS.MEMBER} />,
+    },
     member: {
       type: `New ${getTerm(customTerms, 'proposal')}`,
       heading: `New ${getTerm(customTerms, 'member')} ${getTerm(

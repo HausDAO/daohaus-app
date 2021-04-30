@@ -5,6 +5,13 @@ export const proposalTypes = (customTerms, boosts, minions) => {
   const daoPropTypes = boosts?.proposalTypes?.metadata;
   return [
     {
+      name: 'Generic',
+      subhead: 'Real Fake Proposal',
+      proposalType: 'lego',
+      image: swordImg,
+      show: daoPropTypes ? daoPropTypes?.member?.active : true,
+    },
+    {
       name: 'Membership',
       subhead: 'Request Shares and/or Loot',
       proposalType: 'member',
