@@ -1,4 +1,4 @@
-import React, { Fragment } from 'react';
+import React from 'react';
 import { Box } from '@chakra-ui/react';
 import { formatDistanceToNow } from 'date-fns';
 import { IsJsonString, timeToNow } from './general';
@@ -27,6 +27,7 @@ export const PROPOSAL_TYPES = {
   MINION_UBER_DEFAULT: 'UberHAUS Minion Proposal',
   MINION_DEFAULT: 'Minion Proposal',
   MINION_VANILLA: 'Vanilla Minion',
+  MINION_SUPERFLUID: 'Superfluid Proposal',
   TRANSMUTATION: 'Transmutation Proposal',
   FUNDING: 'Funding Proposal',
 };
@@ -34,6 +35,7 @@ export const PROPOSAL_TYPES = {
 export const MINION_TYPES = {
   VANILLA: 'vanilla minion',
   UBER: 'UberHaus minion',
+  SUPERFLUID: 'Superfluid minion',
 };
 
 export const inQueue = (proposal) => {
@@ -119,6 +121,9 @@ const getMinionProposalType = (proposal, details) => {
   const getUberTypeFromGraphData = (proposal) => {
     if (proposal?.minion?.minionType === MINION_TYPES.VANILLA) {
       return PROPOSAL_TYPES.MINION_VANILLA;
+    }
+    if (proposal?.minion?.minionType === MINION_TYPES.SUPERFLUID) {
+      return PROPOSAL_TYPES.MINION_SUPERFLUID;
     }
     console.error('Minion type not detected');
     return PROPOSAL_TYPES.MINION_DEFAULT;
@@ -434,7 +439,7 @@ export const getProposalDetailStatus = (proposal, status) => {
         </>
       );
     default:
-      return <></>;
+      return '--';
   }
 };
 

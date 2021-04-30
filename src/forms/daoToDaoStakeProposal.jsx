@@ -229,7 +229,7 @@ const StakeProposalForm = () => {
         <Box>
           Shares requested: Equal to tribute
         </Box>
-        <Link href='https://docs.daohaus.club/uber_actions' isExternal fontSize='xs'>
+        <Link href='https://daohaus.club/docs/uber_actions/' isExternal fontSize='xs'>
           More info
           <Icon
             as={RiLoginBoxLine}

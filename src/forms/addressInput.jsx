@@ -137,6 +137,7 @@ const AddressInput = ({
           </Flex>
           <Input
             name='applicant'
+            id='applicant'
             placeholder='0x'
             ref={register({
               required: {
