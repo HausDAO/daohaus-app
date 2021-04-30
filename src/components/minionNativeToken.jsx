@@ -11,7 +11,7 @@ import { numberWithCommas } from '../utils/general';
 import { useOverlay } from '../contexts/OverlayContext';
 
 const MinionNativeToken = ({ action }) => {
-  const [nativeBalance, setNativeBalance] = useState();
+  const [nativeBalance, setNativeBalance] = useState(null);
   const { daochain, minion } = useParams();
   const {
     handleSubmit, register, setValue,
@@ -24,10 +24,12 @@ const MinionNativeToken = ({ action }) => {
         const native = await fetchNativeBalance(minion, daochain);
         setNativeBalance(native.result / 10 ** 18);
       } catch (err) {
-        console.log(err);
+        console.error(err);
       }
     };
-    getContractBalance();
+    if (minion) {
+      getContractBalance();
+    }
   }, [minion]);
 
   const openSendModal = () => {
@@ -43,7 +45,7 @@ const MinionNativeToken = ({ action }) => {
         <Button onClick={openSendModal}>Send</Button>
       </TextBox>
       <GenericModal closeOnOverlayClick modalId='nativeTokenSend'>
-        <form onSubmit={handleSubmit(action.sendNativeToken)}>
+        <form onSubmit={handleSubmit(action)}>
 
           <TextBox as={FormLabel} size='xs' htmlFor='amount'>
             Amount

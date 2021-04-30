@@ -178,13 +178,13 @@ const parseBlockScout = async (json, address) => {
     .filter((token) => token.type === 'ERC-20')
     .sort((a, b) => b.balance - a.balance)
     .map((t) => {
-      t.usd = tokenData[t.contractAddress.toLowerCase()]?.price || 0;
-      t.totalUSD = parseFloat(+t.balance / 10 ** +t.decimals) * +t.usd;
+      const usd = tokenData[t.contractAddress.toLowerCase()]?.price || 0;
+      const totalUSD = parseFloat(+t.balance / 10 ** +t.decimals) * +t.usd;
 
-      return t;
+      return { ...t, ...{ usd, totalUSD } };
     });
-  console.log('erc20serc20serc20s', erc20s);
-  console.log('erc721serc721serc721s', erc721s);
+  console.log('erc20s', erc20s);
+  console.log('erc721s', erc721s);
   return [...erc20s, ...erc721s];
 };
 

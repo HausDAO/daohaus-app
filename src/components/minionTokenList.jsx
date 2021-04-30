@@ -21,7 +21,7 @@ const MinionTokenList = ({ minion, action }) => {
           setTokens(await getBlockScoutTokenData(minion));
         }
       } catch (err) {
-        console.log(err);
+        console.error(err);
       }
     };
     getContractBalance();

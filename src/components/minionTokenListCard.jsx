@@ -33,7 +33,7 @@ const MinionTokenListCard = ({ token, action }) => {
   };
 
   const sendToken = async (values) => {
-    action.sendToken(values, token);
+    action(values, token);
   };
 
   return (
@@ -121,7 +121,7 @@ const MinionTokenListCard = ({ token, action }) => {
       </Flex>
       {token?.type === 'ERC-721' && (
         <Flex flexWrap='wrap'>
-          {token.tokenURIs
+          {token?.tokenURIs
             && token.tokenURIs.map((meta, idx) => (
               <MinionNftTile
                 key={idx}

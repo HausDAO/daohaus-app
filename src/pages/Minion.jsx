@@ -215,11 +215,6 @@ const MinionDetails = ({ overview, currentDaoTokens }) => {
     submitMinion(args);
   };
 
-  const action = {
-    sendToken,
-    sendNativeToken,
-  };
-
   return (
     <MainViewLayout header='Minion' isDao>
       <Box>
@@ -291,12 +286,12 @@ const MinionDetails = ({ overview, currentDaoTokens }) => {
                     <TextBox size='md' align='center'>
                       Minion wallet
                     </TextBox>
-                    <MinionNativeToken action={action} />
+                    <MinionNativeToken action={sendNativeToken} />
                     {daochain !== '0x64' && (
                       <Flex>View token data on etherscan</Flex>
                     )}
 
-                    <MinionTokenList minion={minion} action={action} />
+                    <MinionTokenList minion={minion} action={sendToken} />
 
                   </Box>
                 </Stack>
