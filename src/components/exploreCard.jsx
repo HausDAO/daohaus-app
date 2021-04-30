@@ -1,9 +1,9 @@
 import React, { useContext } from 'react';
 import makeBlockie from 'ethereum-blockies-base64';
 import {
-  Avatar, Box, Flex, Button, Badge, Link, Text,
+  Avatar, Box, Flex, Button, Badge, Text, Link,
 } from '@chakra-ui/react';
-import { Link as RouterLink, withRouter } from 'react-router-dom';
+import { withRouter } from 'react-router-dom';
 import ContentBox from './ContentBox';
 import { ExploreContext } from '../contexts/ExploreContext';
 import { pokemolUrlExplore, themeImagePath } from '../utils/metadata';
@@ -21,7 +21,7 @@ const ExploreCard = ({ dao, history }) => {
     }
   };
 
-  const handleClick = () => history.push(`/dao/${chainByNetworkId(dao.networkId).chain_id}/${dao.id}`);
+  const handleClick = () => history.push(dao.meta.version === '1' ? pokemolUrlExplore(dao) : `/dao/${chainByNetworkId(dao.networkId).chain_id}/${dao.id}`);
 
   const renderTags = () => {
     if (dao.meta?.tags) {
@@ -72,7 +72,6 @@ const ExploreCard = ({ dao, history }) => {
         return (
           <Button
             minWidth='80px'
-            as={RouterLink}
             variant='outline'
           >
             Go
