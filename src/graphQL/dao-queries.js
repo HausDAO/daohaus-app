@@ -19,6 +19,7 @@ export const HOME_DAO = gql`
       processingReward
       guildBankAddress
       minions {
+        createdAt
         minionAddress
         minionType
         details

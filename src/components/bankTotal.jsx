@@ -4,13 +4,13 @@ import { tallyUSDs } from '../utils/tokenValue';
 import { numberWithCommas } from '../utils/general';
 
 const BankTotal = ({ tokenBalances }) => {
-  const bankTotal = tokenBalances ? tallyUSDs(tokenBalances) : 'Loading';
+  const bankTotal = tokenBalances != null ? tallyUSDs(tokenBalances) : 'loading';
 
   return (
     <>
       <Skeleton isLoaded={tokenBalances?.length > 0}>
         <Text fontFamily='mono' fontSize='3xl' variant='value'>
-          {`$${bankTotal !== 'Loading' && numberWithCommas(bankTotal)}`}
+          {bankTotal !== 'loading' && numberWithCommas(bankTotal)}
         </Text>
       </Skeleton>
       <Box>

@@ -17,7 +17,13 @@ import TextBox from '../components/TextBox';
 import { useDao } from '../contexts/DaoContext';
 
 const PaymentInput = ({
-  register, setValue, getValues, errors, isTrade,
+  errors,
+  setValue,
+  formLabel = 'Payment Requested',
+  getValues,
+  isTrade,
+  register,
+  validateGtZero = false,
 }) => {
   const [balance, setBalance] = useState(0);
 
@@ -45,7 +51,6 @@ const PaymentInput = ({
         })),
       );
     }
-    // eslint-disable-next-line
   }, [daoOverview]);
 
   const getMax = async (token) => {
@@ -65,7 +70,6 @@ const PaymentInput = ({
       getMax(depositToken.value);
       setMax();
     }
-    // eslint-disable-next-line
   }, [tokenData]);
 
   const handleChange = async () => {
@@ -76,11 +80,13 @@ const PaymentInput = ({
   };
 
   const validateBalance = (value) => {
-    let error;
-    if (value > balance) {
-      error = 'Payment Requested is more than the dao has';
+    if (validateGtZero && value <= 0) {
+      return 'Payment Requested must be greater than zero';
     }
-    return error || true;
+    if (value > balance) {
+      return 'Payment Requested is more than the dao has';
+    }
+    return true;
   };
 
   return (
@@ -93,7 +99,7 @@ const PaymentInput = ({
       >
         {isTrade && <TextBox size='xs'>Trade For</TextBox>}
         <TextBox as={FormLabel} size='xs' d='flex' alignItems='center' mt={1}>
-          Payment Requested
+          {formLabel}
           <Icon as={RiInformationLine} ml={2} />
         </TextBox>
       </Tooltip>
