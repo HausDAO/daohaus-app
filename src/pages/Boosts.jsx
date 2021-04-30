@@ -153,7 +153,7 @@ const Boosts = ({
         </TextBox>
         <Flex wrap='wrap' justify='space-evenly'>
           {daoMetaData
-            ? boostList.map((boost, i) => {
+            ? boostList.filter((boost) => boost?.networks?.all || boost?.networks?.[daochain]).map((boost, i) => {
               return renderBoostCard(boost, i);
             })
             : null}

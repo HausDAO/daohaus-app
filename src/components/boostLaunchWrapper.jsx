@@ -23,6 +23,7 @@ import { supportedChains } from '../utils/chain';
 
 const BoostLaunchWrapper = ({ boost }) => {
   const [loading, setLoading] = useState(false);
+  const [boostStep, setBoostStep] = useState(1);
   const { address, injectedProvider, injectedChain } = useInjectedProvider();
   const {
     setGenericModal, errorToast, successToast, setTxInfoModal,
@@ -103,6 +104,7 @@ const BoostLaunchWrapper = ({ boost }) => {
     await WNZFactory('create')({
       args, address, poll, onTxHash,
     });
+    setBoostStep('success');
   };
 
   const renderBoostBody = () => {
@@ -160,6 +162,8 @@ const BoostLaunchWrapper = ({ boost }) => {
             boostInstructions='These are the instructions after activate'
             boostCTA="It's gating time!"
             boostLink='boost/mintgate'
+            boostStep={boostStep}
+            setBoostStep={setBoostStep}
             handleLaunch={handleLaunch}
             loading={loading}
             setLoading={setLoading}
@@ -184,6 +188,8 @@ const BoostLaunchWrapper = ({ boost }) => {
             boostInstructions='Get started zapping now!'
             boostCTA="It's zapping time!"
             boostLink='settings'
+            boostStep={boostStep}
+            setBoostStep={setBoostStep}
             handleLaunch={handleWrapNZapLaunch}
             loading={loading}
             setLoading={setLoading}

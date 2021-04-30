@@ -7,6 +7,9 @@ export const boostList = [
     modalName: 'customThemeLaunch',
     successRoute: 'theme',
     settings: true,
+    networks: {
+      all: true,
+    },
   },
   {
     name: 'Minion',
@@ -16,6 +19,9 @@ export const boostList = [
     modalName: 'vanillaMinionLaunch',
     successRoute: '',
     settings: true,
+    networks: {
+      all: true,
+    },
   },
   {
     name: 'Discord Notificatons',
@@ -26,6 +32,9 @@ export const boostList = [
     modalName: 'notificationsLevel1Launch',
     successRoute: 'notifications',
     settings: true,
+    networks: {
+      all: true,
+    },
   },
   {
     name: 'Discourse Forum',
@@ -37,6 +46,9 @@ export const boostList = [
     modalName: 'discourseLaunch',
     successRoute: '',
     settings: true,
+    networks: {
+      all: true,
+    },
   },
   {
     name: 'Proposal Types',
@@ -47,6 +59,9 @@ export const boostList = [
     modalName: 'proposalTypesLaunch',
     successRoute: 'proposals',
     settings: true,
+    networks: {
+      all: true,
+    },
   },
   {
     name: 'MintGate',
@@ -57,6 +72,9 @@ export const boostList = [
     successRoute: '',
     link: 'mintgate',
     settings: false,
+    networks: {
+      all: true,
+    },
   },
   {
     name: 'Snapshot Proposals',
@@ -68,6 +86,9 @@ export const boostList = [
     successRoute: '',
     link: 'snapshot',
     settings: true,
+    networks: {
+      all: true,
+    },
   },
   {
     name: 'Wrap-N-Zap',
@@ -78,6 +99,13 @@ export const boostList = [
     modalName: 'wrapNZap',
     successRoute: '',
     settings: true,
+    networks: {
+      all: false,
+      '0x4': true,
+      '0x2a': true,
+      '0x64': true,
+      '0x89': true,
+    },
   },
   {
     name: 'Minion Safe',
@@ -88,6 +116,11 @@ export const boostList = [
     modalName: 'minionSafeLaunch',
     dependency: 'vanillaMinions',
     successRoute: '',
+    networks: {
+      all: false,
+      '0x1': true,
+      '0x64': true,
+    },
   },
   {
     name: 'Superfluid Minion',
@@ -97,6 +130,11 @@ export const boostList = [
     comingSoon: true,
     modalName: 'superfluidMinionLaunch',
     successRoute: '',
+    networks: {
+      all: false,
+      '0x1': true,
+      '0x64': true,
+    },
   },
   {
     name: 'Token Supply',
@@ -107,6 +145,9 @@ export const boostList = [
     price: '1',
     modalName: 'tokenSupply',
     successRoute: '',
+    networks: {
+      all: true,
+    },
   },
   {
     name: 'Manage Liquidity',
@@ -116,6 +157,9 @@ export const boostList = [
     price: '1',
     modalName: 'manageLiquidity',
     successRoute: '',
+    networks: {
+      all: true,
+    },
   },
   {
     name: 'NFT Banks',
@@ -125,6 +169,9 @@ export const boostList = [
     price: '1',
     modalName: 'nftBank',
     successRoute: '',
+    networks: {
+      all: true,
+    },
   },
 ];
 
