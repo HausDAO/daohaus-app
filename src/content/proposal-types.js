@@ -48,6 +48,14 @@ export const proposalTypes = (customTerms, boosts, minions) => {
       show: minions > 0,
     },
     {
+      name: 'Superfluid',
+      subhead: 'Streaming money minion',
+      proposalType: 'superfluidMinion',
+      image: swordImg,
+      comingSoon: false,
+      show: minions > 0,
+    },
+    {
       name: 'Transmutation',
       subhead: 'Transmutation',
       proposalType: 'transmutation',

@@ -9,10 +9,11 @@ import { useInjectedProvider } from '../contexts/InjectedProviderContext';
 import { useOverlay } from '../contexts/OverlayContext';
 import { useTX } from '../contexts/TXContext';
 import ApproveUberHausToken from './approveUberHausToken';
-import { TokenService } from '../services/tokenService';
-import { UberHausMinionService } from '../services/uberHausMinionService';
 import { createPoll } from '../services/pollService';
 import { MinionService } from '../services/minionService';
+import { SuperfluidMinionService } from '../services/superfluidMinionService';
+import { TokenService } from '../services/tokenService';
+import { UberHausMinionService } from '../services/uberHausMinionService';
 import { PROPOSAL_TYPES } from '../utils/proposalUtils';
 import { UBERHAUS_DATA } from '../utils/uberhaus';
 
@@ -43,6 +44,14 @@ const MinionExecute = ({ proposal }) => {
             minion: proposal?.minionAddress,
             chainID: daochain,
           })('getAction')({ proposalId: proposal?.proposalId });
+          setMinionDetails(action);
+          setShouldFetch(false);
+          setLoading(false);
+        } else if (proposal.proposalType === PROPOSAL_TYPES.MINION_SUPERFLUID) {
+          const action = await SuperfluidMinionService({
+            minion: proposal?.minionAddress,
+            chainID: daochain,
+          })('getStream')({ proposalId: proposal?.proposalId });
           setMinionDetails(action);
           setShouldFetch(false);
           setLoading(false);
@@ -148,6 +157,14 @@ const MinionExecute = ({ proposal }) => {
         })('executeAction')({
           args, address, poll, onTxHash,
         });
+      } else if (proposal.proposalType === PROPOSAL_TYPES.MINION_SUPERFLUID) {
+        await SuperfluidMinionService({
+          web3: injectedProvider,
+          minion: proposal.minionAddress,
+          chainID: daochain,
+        })('executeAction')({
+          args, address, poll, onTxHash,
+        });
       } else if (
         proposal.proposalType === PROPOSAL_TYPES.MINION_UBER_STAKE
         || proposal.proposalType === PROPOSAL_TYPES.MINION_UBER_RQ
@@ -177,7 +194,7 @@ const MinionExecute = ({ proposal }) => {
   };
 
   const isCorrectChain = daochain === injectedProvider?.currentProvider?.chainId;
-  console.log(isCorrectChain);
+
   const getMinionAction = () => {
     if (minionDetails?.executed) return <Box>Executed</Box>;
 

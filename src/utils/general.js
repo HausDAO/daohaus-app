@@ -1,5 +1,6 @@
 import { formatDistanceToNow } from 'date-fns';
 import { utils } from 'ethers';
+import Web3 from 'web3';
 
 export const SECONDS = {
   PER_MINUTE: 60,
@@ -74,6 +75,13 @@ export const detailsToJSON = (values) => {
   if (values.uberType) {
     details.uberType = values.uberType;
   }
+  if (values.ratePerSec) {
+    details.recipient = values.recipient;
+    details.token = values.token;
+    details.tokenRate = values.tokenRate;
+    details.ratePerSec = values.ratePerSec;
+    details.minDeposit = values.minDeposit;
+  }
   if (values.cco) {
     details.cco = values.cco;
   }
@@ -87,12 +95,13 @@ export const detailsToJSON = (values) => {
 export const omit = (keys, obj) => Object.fromEntries(Object.entries(obj).filter(([k]) => !keys.includes(k)));
 
 export const numberWithCommas = (num) => {
+  if (num === 0) return 0;
+  if (!num) return;
   const localNum = typeof num !== 'string' ? num.toString() : num;
   // drop zero after decimal
   const noZeroDec = parseInt(localNum.split('.')[1]) === 0
     ? localNum.split('.')[0]
     : parseInt(localNum);
-
   return noZeroDec ? utils.commify(noZeroDec) : num;
 };
 
@@ -192,4 +201,15 @@ export const groupByKey = (array, key) => {
       [obj[key]]: (hash[obj[key]] || []).concat(obj),
     });
   }, {});
+};
+
+export const deriveValFromWei = (amt) => {
+  if (amt === 0) return 0;
+  if (!amt) return;
+  return Web3.utils.fromWei(amt.toString());
+};
+
+export const handleDecimals = (balance, decimals, fallback = '--') => {
+  if (!balance || !decimals) return fallback;
+  return Number(balance) / 10 ** Number(decimals);
 };

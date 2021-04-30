@@ -2,6 +2,7 @@ import {
   pollDelegateRewards,
   pollGuildFunds,
   pollMinionExecute,
+  pollMinionCancel,
   pollMinionProposal,
   pollMinionSummon,
   pollMolochSummon,
@@ -531,6 +532,81 @@ export const createPoll = ({
         });
       }
     };
+  } else if (action === 'superfluidProposeAction') {
+    return ({
+      minionAddress, createdAt, chainID, actions,
+    }) => (txHash) => {
+      startPoll({
+        pollFetch: pollMinionProposal,
+        testFn: minonProposalTest,
+        shouldEqual: createdAt,
+        args: { minionAddress, chainID, createdAt },
+        actions,
+        txHash,
+      });
+      if (cachePoll) {
+        cachePoll({
+          txHash,
+          action,
+          timeSent: Date.now(),
+          status: 'unresolved',
+          resolvedMsg: 'Superfluid proposal submitted',
+          unresolvedMsg: 'Submitting Superfluid proposal',
+          successMsg: `Superfluid proposal submitted for ${minionAddress} on ${chainID}`,
+          errorMsg: `Error submitting minion proposal for ${minionAddress} on ${chainID}`,
+          pollData: {
+            action,
+            interval,
+            tries,
+          },
+          pollArgs: { minionAddress, createdAt, chainID },
+        });
+      }
+    };
+  } else if (action === 'superfluidWithdrawBalance') {
+    return ({
+      minionAddress,
+      superTokenAddress,
+      expectedBalance,
+      chainID,
+      actions,
+    }) => (txHash) => {
+      startPoll({
+        pollFetch: pollGuildFunds,
+        testFn: guildFundTest,
+        shouldEqual: expectedBalance,
+        args: {
+          chainID,
+          uberMinionAddress: minionAddress,
+          tokenAddress: superTokenAddress,
+        },
+        actions,
+        txHash,
+      });
+      if (cachePoll) {
+        cachePoll({
+          txHash,
+          action,
+          timeSent: Date.now(),
+          status: 'unresolved',
+          resolvedMsg: 'Token outstanding balance returned to your DAO',
+          unresolvedMsg: 'Withdrawing token balance',
+          successMsg: `Token balance withdrawn from ${minionAddress} on ${chainID}`,
+          errorMsg: `Error withdrawing token balance from ${minionAddress} on ${chainID}`,
+          pollData: {
+            action,
+            interval,
+            tries,
+          },
+          pollArgs: {
+            minionAddress,
+            superTokenAddress,
+            expectedBalance,
+            chainID,
+          },
+        });
+      }
+    };
   } else if (action === 'minionExecuteAction') {
     return ({
       chainID,
@@ -559,6 +635,41 @@ export const createPoll = ({
           unresolvedMsg: 'Executing minion proposal',
           successMsg: `Executed minion proposal on ${chainID}`,
           errorMsg: `Error executing minion proposal on ${chainID}`,
+          pollData: {
+            action,
+            interval,
+            tries,
+          },
+          pollArgs: { chainID, minionAddress, proposalId },
+        });
+      }
+    };
+  } else if (action === 'minionCancelAction') {
+    return ({
+      chainID, minionAddress, proposalId, actions, proposalType,
+    }) => (
+      txHash,
+    ) => {
+      startPoll({
+        pollFetch: pollMinionCancel,
+        testFn: minionExecuteTest,
+        shouldEqual: true,
+        args: {
+          chainID, minionAddress, proposalId, proposalType,
+        },
+        actions,
+        txHash,
+      });
+      if (cachePoll) {
+        cachePoll({
+          txHash,
+          action,
+          timeSent: Date.now(),
+          status: 'unresolved',
+          resolvedMsg: 'Minion action canceled',
+          unresolvedMsg: 'Canceling minion action',
+          successMsg: `Canceled minion proposal on ${chainID}`,
+          errorMsg: `Error canceling minion proposal on ${chainID}`,
           pollData: {
             action,
             interval,

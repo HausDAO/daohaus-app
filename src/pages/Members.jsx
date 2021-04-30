@@ -168,7 +168,6 @@ const Members = React.memo((
               </TextBox>
             </Flex>
             {listMembers?.map((member) => {
-              console.log(member.id);
               return (
                 <Box key={member.id}>
                   {member.uberMinion ? (

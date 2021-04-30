@@ -80,6 +80,15 @@ export const boostList = [
     successRoute: '',
   },
   {
+    name: 'Superfluid Minion',
+    key: 'superfluidMinion',
+    description: 'Stream/distribute tokens using Superfluid Protocol',
+    price: '0',
+    comingSoon: true,
+    modalName: 'superfluidMinionLaunch',
+    successRoute: '',
+  },
+  {
     name: 'Token Supply',
     key: 'tokenSupply',
     comingSoon: true,
