@@ -68,7 +68,7 @@ export const daoConstants = (chainId) => {
   };
 
   if (chainId === '0x64') {
-    constants.approvedToken = supportedChains['0x64'].wxdai_contract;
+    constants.approvedToken = supportedChains['0x64'].wrapper_contract;
   }
 
   return constants;
@@ -114,7 +114,7 @@ export const daoPresets = (chainId) => {
       presetDescription:
         'Invest on chain with a venture fund at your fingertips.',
       currency: 'WETH',
-      approvedToken: supportedChains[chainId].weth_contract,
+      approvedToken: supportedChains[chainId].wrapper_contract,
       votingPeriod: '7',
       gracePeriod: '7',
       proposalDeposit: '100000000000000000',
@@ -129,7 +129,7 @@ export const daoPresets = (chainId) => {
       presetSubtitle: 'Distribute wealth together',
       presetDescription: 'Spread around the wealth and accelerate good stuff.',
       currency: 'WETH',
-      approvedToken: supportedChains[chainId].weth_contract,
+      approvedToken: supportedChains[chainId].wrapper_contract,
       votingPeriod: '168',
       gracePeriod: '72',
       proposalDeposit: '10000000000000000',
@@ -161,7 +161,7 @@ export const daoPresets = (chainId) => {
   if (chainId === '0x64') {
     presets = presets.map((preset) => {
       preset.currency = 'WXDAI';
-      preset.approvedToken = supportedChains[chainId].wxdai_contract;
+      preset.approvedToken = supportedChains[chainId].wrapper_contract;
       preset.proposalDeposit = '10000000000000000000';
       preset.processingReward = '1000000000000000000';
 
@@ -172,7 +172,7 @@ export const daoPresets = (chainId) => {
   if (chainId === '0x89') {
     presets = presets.map((preset) => {
       preset.currency = 'WMATIC';
-      preset.approvedToken = supportedChains[chainId].weth_contract;
+      preset.approvedToken = supportedChains[chainId].wrapper_contract;
       preset.proposalDeposit = '10000000000000000000';
       preset.processingReward = '1000000000000000000';
 
@@ -183,7 +183,7 @@ export const daoPresets = (chainId) => {
   if (chainId === '0x4a') {
     presets = presets.map((preset) => {
       preset.currency = 'WEIDI';
-      preset.approvedToken = supportedChains[chainId].weth_contract;
+      preset.approvedToken = supportedChains[chainId].wrapper_contract;
       preset.proposalDeposit = '10000000000000000000';
       preset.processingReward = '1000000000000000000';
 
@@ -201,7 +201,7 @@ export const currencyOptions = (chainId) => {
       {
         value: 'WXDAI',
         label: 'WXDAI',
-        address: supportedChains[chainId].wxdai_contract,
+        address: supportedChains[chainId].wrapper_contract,
       },
     ];
   } else if (chainId === '0x89') {
@@ -240,7 +240,7 @@ export const currencyOptions = (chainId) => {
       {
         value: 'WETH',
         label: 'WETH',
-        address: supportedChains[chainId].weth_contract,
+        address: supportedChains[chainId].wrapper_contract,
       },
     ];
   }

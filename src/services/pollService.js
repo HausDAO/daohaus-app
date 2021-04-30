@@ -14,6 +14,7 @@ import {
   updateDelegateFetch,
   withdrawTokenFetch,
   pollRageKick,
+  pollWrapNZapSummon,
 } from '../polls/polls';
 import {
   cancelProposalTest,
@@ -34,6 +35,7 @@ import {
   updateDelegateTest,
   withdrawTokenTest,
   rageKickTest,
+  wrapNZapSummonTest,
 } from '../polls/tests';
 
 export const createPoll = ({
@@ -1075,6 +1077,37 @@ export const createPoll = ({
             tries,
           },
           pollArgs: { chainID, daoID, memberAddress },
+        });
+      }
+    };
+  } else if (action === 'wrapNZapSummon') {
+    return ({
+      chainID, daoID, actions,
+    }) => (txHash) => {
+      startPoll({
+        pollFetch: pollWrapNZapSummon,
+        testFn: wrapNZapSummonTest,
+        shouldEqual: { daoID },
+        args: { chainID, daoID },
+        actions,
+        txHash,
+      });
+      if (cachePoll) {
+        cachePoll({
+          txHash,
+          action,
+          timeSent: Date.now(),
+          status: 'unresolved',
+          resolvedMsg: 'Successfully summoned Wrap-n-Zap',
+          unresolvedMsg: 'Summoning Wrap-N-Zap',
+          successMsg: 'Summoned Wrap-N-Zap',
+          errorMsg: 'Error summoning Wrap-N-Zap',
+          pollData: {
+            action,
+            interval,
+            tries,
+          },
+          pollArgs: { chainID, daoID },
         });
       }
     };

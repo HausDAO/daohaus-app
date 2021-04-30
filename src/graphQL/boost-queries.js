@@ -13,3 +13,11 @@ export const GET_TRANSMUTATION = gql`
     }
   }
 `;
+
+export const GET_WRAP_N_ZAPS = gql`
+  query wrapNZaps($contractAddress: String!) {
+    wrapNZaps(where: { moloch: $contractAddress }) {
+      id
+    }
+  }
+`;
