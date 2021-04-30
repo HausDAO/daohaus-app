@@ -87,7 +87,7 @@ const SuperTokenListItem = ({
             isLoading={isLoading}
             disabled={shouldDisableWithdraw}
           >
-            Withdraw
+            Return Balance
           </Button>
         </ToolTipWrapper>
         <ToolTipWrapper
@@ -116,13 +116,12 @@ const SuperTokenListItem = ({
               leftIcon={<Icon as={VscLinkExternal} />}
               rightIcon={<RiQuestionLine />}
               variant='outline'
+              as={Link}
+              href='https://www.notion.so/Add-New-Tokens-to-Superfluid-8464f8c116c24cd6a0c5cb4f4174bb2d'
+              isExternal
             >
-              <Link
-                href='https://www.notion.so/Add-New-Tokens-to-Superfluid-8464f8c116c24cd6a0c5cb4f4174bb2d'
-                isExternal
-              >
-                Register Token
-              </Link>
+
+              Register Token
             </Button>
           </ToolTipWrapper>
         )}

@@ -507,7 +507,7 @@ const CcoContribution = React.memo(({
                   </Link>
 
                   <Link
-                    href='https://docs.daohaus.club/cco '
+                    href='https://daohaus.club/docs/cco'
                     isExternal
                     display='flex'
                     alignItems='center'

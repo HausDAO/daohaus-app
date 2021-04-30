@@ -33,7 +33,7 @@ export const defaultHubData = [
   {
     icon: RiQuestionLine,
     label: 'Help',
-    href: 'https://docs.daohaus.club',
+    href: 'https://daohaus.club/docs',
   },
   // {
   //   icon: GiCastle,

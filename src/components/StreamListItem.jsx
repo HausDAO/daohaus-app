@@ -101,19 +101,19 @@ const StreamListItem = ({
           </Button>
         </ToolTipWrapper>
         )}
-        <Button
-          leftIcon={<Icon as={VscLinkExternal} />}
-          variant='outline'
+        <Link
+          as={!stream.executed && RouterLink}
+          to={!stream.executed && `/dao/${daochain}/${daoid}/proposals/${stream.proposalId}`}
+          href={stream.executed && `https://app.superfluid.finance/streams/${network}/${stream.execTxHash}`}
+          isExternal={stream.executed}
         >
-          <Link
-            as={!stream.executed && RouterLink}
-            to={!stream.executed && `/dao/${daochain}/${daoid}/proposals/${stream.proposalId}`}
-            href={stream.executed && `https://app.superfluid.finance/streams/${network}/${stream.execTxHash}`}
-            isExternal={stream.executed}
+          <Button
+            leftIcon={<Icon as={VscLinkExternal} />}
+            variant='outline'
           >
             View
-          </Link>
-        </Button>
+          </Button>
+        </Link>
       </Stack>
     </Flex>
   );

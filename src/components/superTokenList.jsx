@@ -124,7 +124,7 @@ const SuperTokenList = ({
                   handleCopyToast={handleCopyToast}
                   tokenAddress={tokenAddress}
                   daoMember={daoMember}
-                  withdrawToken={withdrawSupertoken}
+                  withdrawSupertoken={withdrawSupertoken}
                   successToast={successToast}
                 />
               );
