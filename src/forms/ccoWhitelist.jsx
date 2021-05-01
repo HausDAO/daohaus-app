@@ -4,7 +4,6 @@ import {
   Box, FormControl, Button, Textarea, Link,
 } from '@chakra-ui/react';
 
-import { BiBorderBottom } from 'react-icons/bi';
 import { useOverlay } from '../contexts/OverlayContext';
 import { useInjectedProvider } from '../contexts/InjectedProviderContext';
 import { CCO_CONSTANTS } from '../utils/cco';
