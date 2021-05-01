@@ -3,14 +3,14 @@ import makeBlockie from 'ethereum-blockies-base64';
 import {
   Avatar, Box, Flex, Button, Badge, Text, Link,
 } from '@chakra-ui/react';
-import { withRouter } from 'react-router-dom';
+import { Link as RouterLink } from 'react-router-dom';
 import ContentBox from './ContentBox';
 import { ExploreContext } from '../contexts/ExploreContext';
 import { pokemolUrlExplore, themeImagePath } from '../utils/metadata';
 import { numberWithCommas } from '../utils/general';
 import { chainByNetworkId } from '../utils/chain';
 
-const ExploreCard = ({ dao, history }) => {
+const ExploreCard = ({ dao }) => {
   const { state, dispatch } = useContext(ExploreContext);
 
   const handleTagSelect = (tag) => {
@@ -20,8 +20,6 @@ const ExploreCard = ({ dao, history }) => {
       dispatch({ type: 'updateTags', payload: tagUpdate });
     }
   };
-
-  const handleClick = () => history.push(dao.meta.version === '1' ? pokemolUrlExplore(dao) : `/dao/${chainByNetworkId(dao.networkId).chain_id}/${dao.id}`);
 
   const renderTags = () => {
     if (dao.meta?.tags) {
@@ -52,45 +50,17 @@ const ExploreCard = ({ dao, history }) => {
     return null;
   };
 
-  const renderLink = (daoData) => {
-    switch (daoData.meta.version) {
-      case '1': {
-        return (
-          <Button
-            minWidth='80px'
-            as={Link}
-            variant='outline'
-            href={pokemolUrlExplore(dao)}
-            isExternal
-          >
-            Go
-          </Button>
-        );
-      }
-      case '2':
-      case '2.1': {
-        return (
-          <Button
-            minWidth='80px'
-            variant='outline'
-          >
-            Go
-          </Button>
-        );
-      }
-      default: {
-        return null;
-      }
-    }
-  };
   return (
     <ContentBox
+      as={dao.meta.version === '1' ? Link : RouterLink}
+      to={dao.meta.version.startsWith('2') ? `/dao/${chainByNetworkId(dao.networkId).chain_id}/${dao.id}` : null}
+      href={dao.meta.version === '1' ? pokemolUrlExplore(dao) : null}
       w={['100%', '100%', '100%', '340px', '340px']}
       h='340px'
       mt={5}
       style={{ transition: 'all .15s linear' }}
       _hover={{ transform: 'scale(1.05)', cursor: 'pointer' }}
-      onClick={handleClick}
+      // onClick={handleClick}
     >
       <Flex direction='row' align='center' w='100%'>
         <Avatar
@@ -160,10 +130,18 @@ const ExploreCard = ({ dao, history }) => {
 
       {renderTags()}
       <Flex justify='flex-end' w='100%'>
-        <Box mt={5}>{renderLink(dao)}</Box>
+        <Box mt={5}>
+          <Button
+            minWidth='80px'
+            variant='outline'
+          >
+            Go
+          </Button>
+
+        </Box>
       </Flex>
     </ContentBox>
   );
 };
 
-export default withRouter(ExploreCard);
+export default ExploreCard;

@@ -39,11 +39,11 @@ function App() {
         <Route
           exact
           path='/explore'
-          render={(rProps) => (
-            <ExploreContextProvider>
-              <Explore {...rProps} />
-            </ExploreContextProvider>)}
-        />
+        >
+          <ExploreContextProvider>
+            <Explore />
+          </ExploreContextProvider>
+        </Route>
         <Route exact path='/summon'>
           <Summon />
         </Route>
