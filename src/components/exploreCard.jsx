@@ -60,7 +60,6 @@ const ExploreCard = ({ dao }) => {
       mt={5}
       style={{ transition: 'all .15s linear' }}
       _hover={{ transform: 'scale(1.05)', cursor: 'pointer' }}
-      // onClick={handleClick}
     >
       <Flex direction='row' align='center' w='100%'>
         <Avatar
