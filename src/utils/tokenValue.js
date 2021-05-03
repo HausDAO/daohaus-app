@@ -137,7 +137,6 @@ export const valToDecimalString = (value, tokenAddress, tokens) => {
 
   // is the value a float or int? set appropriate decimals buffer
   const decimals = value.split('.')[1]?.length;
-  console.log(decimals);
   const exp = ethers.BigNumber.from(10).pow(
     decimals ? tdata.token.decimals - decimals : tdata.token.decimals,
   );
