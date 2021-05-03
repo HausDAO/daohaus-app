@@ -75,13 +75,23 @@ const DaosquareCcoCard = ({ dao }) => {
           <Box>
             <TextBox size='xs'>Funding Goal</TextBox>
             <TextBox size='lg' variant='value'>
-              250,000
+              {dao.meta.boosts.daosquarecco.metadata.maxTarget}
+              {' '}
               USDT
             </TextBox>
           </Box>
           <Box>
             <TextBox size='lg' variant='value'>
-              1 owl = 1.25 USDT
+              1
+              {' '}
+              {dao.meta.boosts.daosquarecco.metadata.claimTokenSymbol}
+              {' '}
+              =
+              {' '}
+              {dao.meta.boosts.daosquarecco.metadata.ratio}
+              {' '}
+              {/* {dao.meta.boosts.daosquarecco.metadata.contributionTokenSymbol} */}
+              {tempContributionTokenSymbol}
             </TextBox>
           </Box>
         </Flex>
