@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import { Box, Flex } from '@chakra-ui/react';
+import { Link as RouterLink } from 'react-router-dom';
+import { Box, Flex, Link } from '@chakra-ui/react';
 import { useInjectedProvider } from '../contexts/InjectedProviderContext';
 
 // TODO: if address get rice balance/need rice addy/token service/getBalance
@@ -16,9 +17,9 @@ const DaosquareHeader = () => {
 
   return (
     <Flex direction='row' justify='space-between' w='100%' p={6}>
-      <Box>CCOs</Box>
-      <Box>About</Box>
-      <Box>Apply</Box>
+      <Link as={RouterLink} to='/daosquare-incubator'>CCOs</Link>
+      <Link href='https://www.daosquare.io/' isExternal>About</Link>
+      <Link href='https://www.daosquare.io/' isExternal>Apply</Link>
       {address && (
         <Box border='1px' borderColor='gray.200' borderRadius='3'>
           {riceBalance}
