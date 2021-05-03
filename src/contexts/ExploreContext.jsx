@@ -13,15 +13,15 @@ export const ExploreContext = createContext();
 const initialState = {
   filters: {
     members: ['1'],
-    purpose: EXPLORE_FILTER_OPTIONS.filter((o) => o.type === 'purpose').map(
-      (o) => o.value,
+    purpose: EXPLORE_FILTER_OPTIONS.filter(o => o.type === 'purpose').map(
+      o => o.value,
     ),
-    version: EXPLORE_FILTER_OPTIONS.filter((o) => o.type === 'version').map(
-      (o) => o.value,
+    version: EXPLORE_FILTER_OPTIONS.filter(o => o.type === 'version').map(
+      o => o.value,
     ),
-    network: EXPLORE_FILTER_OPTIONS.filter((o) => o.type === 'network')
-      .filter((o) => o.default)
-      .map((o) => o.value),
+    network: EXPLORE_FILTER_OPTIONS.filter(o => o.type === 'network')
+      .filter(o => o.default)
+      .map(o => o.value),
   },
   searchTerm: null,
   sort: SORT_OPTIONS[0],
@@ -78,7 +78,8 @@ export const ExploreContextProvider = ({ children }) => {
   });
   const [state, dispatch] = React.useReducer(reducer, initialState);
 
-  const hasLoadedExploreData = exploreDaos.chains.length === Object.keys(supportedChains).length;
+  const hasLoadedExploreData =
+    exploreDaos.chains.length === Object.keys(supportedChains).length;
 
   useEffect(() => {
     if (!exploreDaos.chains.length) {
@@ -95,7 +96,10 @@ export const ExploreContextProvider = ({ children }) => {
   return (
     <ExploreContext.Provider
       value={{
-        state, dispatch, exploreDaos, hasLoadedExploreData,
+        state,
+        dispatch,
+        exploreDaos,
+        hasLoadedExploreData,
       }}
     >
       {children}

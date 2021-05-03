@@ -94,9 +94,7 @@ export const MinionSafeService = ({ web3, setupValues, chainID }) => {
       };
     }
     if (service === 'execTransactionFromModule') {
-      return ({
-        to, value, data, operation,
-      }) => {
+      return ({ to, value, data, operation }) => {
         /**
          * Encodes a transaction from the Gnosis API into a module transaction
          * @returns ABI encoded function call to `execTransactionFromModule`
@@ -145,22 +143,20 @@ export const MinionSafeService = ({ web3, setupValues, chainID }) => {
       };
     }
     if (service === 'createProxy') {
-      return async ({
-        args, address, poll, onTxHash,
-      }) => {
+      return async ({ args, address, poll, onTxHash }) => {
         console.log(args);
         console.log(address);
         console.log(poll);
         const tx = await safeProxyFactoryContract.methods[service](...args);
         return tx
           .send('eth_requestAccounts', { from: address })
-          .on('transactionHash', (txHash) => {
+          .on('transactionHash', txHash => {
             if (poll) {
               onTxHash();
               poll(txHash);
             }
           })
-          .on('error', (error) => {
+          .on('error', error => {
             console.error(error);
           });
       };

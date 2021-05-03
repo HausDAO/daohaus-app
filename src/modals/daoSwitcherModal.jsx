@@ -61,13 +61,15 @@ const DaoSwitcherModal = () => {
             daosByNetwork.currentNetwork,
             searchTerm,
           ),
-          otherNetworks: daosByNetwork.otherNetworks.map((network) => filterDAOsByName(network, searchTerm)),
+          otherNetworks: daosByNetwork.otherNetworks.map(network =>
+            filterDAOsByName(network, searchTerm),
+          ),
         });
       }
     }
   }, [searchTerm, daosByNetwork]);
 
-  const handleChange = (event) => {
+  const handleChange = event => {
     setSearchTerm(event.target.value);
   };
 
@@ -75,12 +77,13 @@ const DaoSwitcherModal = () => {
     setDaoSwitcherModal(false);
   };
 
-  const renderDaoList = (network) => network?.data
-    && network.data.map((dao) => (
+  const renderDaoList = network =>
+    network?.data &&
+    network.data.map(dao => (
       <Link
         key={dao.id}
-        to={`/dao/${network.networkID}/${dao.meta?.contractAddress
-          || dao.moloch?.id}`}
+        to={`/dao/${network.networkID}/${dao.meta?.contractAddress ||
+          dao.moloch?.id}`}
         onClick={handleClose}
       >
         <Flex
@@ -121,8 +124,9 @@ const DaoSwitcherModal = () => {
     return null;
   };
 
-  const renderOtherNetworks = () => filteredDaos?.otherNetworks
-    && filteredDaos.otherNetworks.map((network) => {
+  const renderOtherNetworks = () =>
+    filteredDaos?.otherNetworks &&
+    filteredDaos.otherNetworks.map(network => {
       return (
         <Box key={network.networkID} mb={3}>
           <Box fontSize='md' mr={5} as='i' fontWeight={200}>
@@ -160,7 +164,7 @@ const DaoSwitcherModal = () => {
                 className='input'
                 placeholder='Search My Daos'
                 maxW={200}
-                onChange={(e) => handleChange(e)}
+                onChange={e => handleChange(e)}
               />
             </FormControl>
           </Flex>

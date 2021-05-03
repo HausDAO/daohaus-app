@@ -9,12 +9,12 @@ export const CustomThemeProvider = ({ children }) => {
   const [theme, setTheme] = useState(useDefault);
   const [tempTheme, setTempTheme] = useState(null);
 
-  const updateTheme = (themeData) => {
+  const updateTheme = themeData => {
     const newTheme = createTheme(themeData);
     setTheme(newTheme);
   };
 
-  const updateTempTheme = (updatedTheme) => {
+  const updateTempTheme = updatedTheme => {
     setTempTheme(updatedTheme);
   };
 
@@ -23,7 +23,11 @@ export const CustomThemeProvider = ({ children }) => {
   return (
     <CustomThemeContext.Provider
       value={{
-        theme, updateTheme, tempTheme, updateTempTheme, resetTheme,
+        theme,
+        updateTheme,
+        tempTheme,
+        updateTempTheme,
+        resetTheme,
       }}
     >
       <ChakraProvider theme={theme}>
@@ -42,6 +46,10 @@ export const useCustomTheme = () => {
     resetTheme,
   } = useContext(CustomThemeContext);
   return {
-    theme, updateTheme, tempTheme, updateTempTheme, resetTheme,
+    theme,
+    updateTheme,
+    tempTheme,
+    updateTempTheme,
+    resetTheme,
   };
 };

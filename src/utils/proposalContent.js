@@ -98,7 +98,8 @@ export const getFilters = (daoMember, unread) => {
       ...defaultFilterOptions,
       main: [actionNeededFilter, allFilter],
     };
-  } if (!+daoMember?.shares && unread?.length) {
+  }
+  if (!+daoMember?.shares && unread?.length) {
     return {
       ...defaultFilterOptions,
       main: [activeFilter, allFilter],

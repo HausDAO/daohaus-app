@@ -56,10 +56,10 @@ const NewMinionSafe = ({ daoOverview }) => {
     console.log(updateRes);
   };
 
-  const onSubmitExistingSafe = (values) => {
+  const onSubmitExistingSafe = values => {
     console.log(values);
   };
-  const onSubmitNewSafe = async (values) => {
+  const onSubmitNewSafe = async values => {
     setLoading(true);
 
     console.log(values);

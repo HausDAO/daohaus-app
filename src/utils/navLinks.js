@@ -33,7 +33,7 @@ export const defaultHubData = [
   {
     icon: RiQuestionLine,
     label: 'Help',
-    href: 'https://docs.daohaus.club',
+    href: 'https://daohaus.club/docs',
   },
   // {
   //   icon: GiCastle,
@@ -48,7 +48,7 @@ export const defaultHubData = [
 ];
 
 export const generateDaoLinks = (chainID, daoID, proposals) => {
-  return defaultDaoData.map((link) => {
+  return defaultDaoData.map(link => {
     let path = `/dao/${chainID}/${daoID}/${link.path}`;
     if (link.path === 'proposals' && !proposals.length) {
       path = `${path}/new`;
@@ -79,14 +79,14 @@ export const defaultSocialLinks = [
   },
 ];
 
-export const generateDaoSocials = (linksMetaObj) => {
+export const generateDaoSocials = linksMetaObj => {
   if (!linksMetaObj) return;
   return defaultSocialLinks
-    .filter((link) => linksMetaObj[link.label.toLowerCase()])
-    .map((link) => ({ ...link, href: linksMetaObj[link.label.toLowerCase()] }));
+    .filter(link => linksMetaObj[link.label.toLowerCase()])
+    .map(link => ({ ...link, href: linksMetaObj[link.label.toLowerCase()] }));
 };
 
-export const generateDiscourseLink = (metadata) => {
+export const generateDiscourseLink = metadata => {
   return {
     ...metadata,
     href: `https://forum.daohaus.club/c/${metadata.slug}/${metadata.categoryId}`,

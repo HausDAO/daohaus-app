@@ -10,9 +10,9 @@ export const Web3SignIn = ({ isDao }) => {
 
   const toggleAccountModal = () => {
     if (!isDao) {
-      setHubAccountModal((prevState) => !prevState);
+      setHubAccountModal(prevState => !prevState);
     } else {
-      setDaoAccountModal((prevState) => !prevState);
+      setDaoAccountModal(prevState => !prevState);
     }
   };
 

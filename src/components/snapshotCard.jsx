@@ -1,7 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import {
-  Flex, Box, HStack, Stack, Link,
-} from '@chakra-ui/react';
+import { Flex, Box, HStack, Stack, Link } from '@chakra-ui/react';
 import { format } from 'date-fns';
 import ContentBox from './ContentBox';
 import TextBox from './TextBox';
@@ -13,7 +11,10 @@ const SnapshotCard = ({ snapshotId, snapshot }) => {
   useEffect(() => {
     const getVotes = async () => {
       try {
-        const localVotes = await getSnapshotVotes(snapshot.msg.space, snapshotId);
+        const localVotes = await getSnapshotVotes(
+          snapshot.msg.space,
+          snapshotId,
+        );
         setVotes(localVotes);
       } catch (err) {
         console.log(err);

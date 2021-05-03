@@ -1,10 +1,6 @@
 import React, { useMemo } from 'react';
 import { useParams } from 'react-router-dom';
-import {
-  Flex,
-  Box,
-  Skeleton,
-} from '@chakra-ui/react';
+import { Flex, Box, Skeleton } from '@chakra-ui/react';
 
 import { useInjectedProvider } from '../contexts/InjectedProviderContext';
 import { useOverlay } from '../contexts/OverlayContext';
@@ -18,7 +14,12 @@ import { createPoll } from '../services/pollService';
 import { SuperfluidMinionService } from '../services/superfluidMinionService';
 
 const SuperTokenList = ({
-  superTokenBalances, loadingStreams, handleCopyToast, daoMember, loading, setLoading,
+  superTokenBalances,
+  loadingStreams,
+  handleCopyToast,
+  daoMember,
+  loading,
+  setLoading,
 }) => {
   const { daochain, minion } = useParams();
 
@@ -39,7 +40,7 @@ const SuperTokenList = ({
     return [];
   }, [superTokenBalances]);
 
-  const withdrawSupertoken = async (tokenAddress) => {
+  const withdrawSupertoken = async tokenAddress => {
     setLoading({
       active: true,
       condition: tokenAddress,
@@ -61,7 +62,7 @@ const SuperTokenList = ({
             resolvePoll(txHash);
             console.error(`Could not withdraw the balance: ${error}`);
           },
-          onSuccess: (txHash) => {
+          onSuccess: txHash => {
             successToast({
               title: 'Outstanding balance has been withdrawn.',
             });
@@ -80,7 +81,10 @@ const SuperTokenList = ({
         minion,
         chainID: daochain,
       })('withdrawRemainingFunds')({
-        args, address, poll, onTxHash,
+        args,
+        address,
+        poll,
+        onTxHash,
       });
       setLoading({
         active: false,
@@ -97,7 +101,9 @@ const SuperTokenList = ({
 
   return (
     <Box>
-      <Flex pt={4}><TextBox size='md'>Supertoken Balances</TextBox></Flex>
+      <Flex pt={4}>
+        <TextBox size='md'>Supertoken Balances</TextBox>
+      </Flex>
       <ContentBox mt={6}>
         <Flex>
           <Box w='15%' d={['none', null, null, 'inline-block']}>
@@ -112,26 +118,25 @@ const SuperTokenList = ({
         </Flex>
 
         <Skeleton isLoaded={!loadingStreams}>
-          {superTokenBalances && balanceArr?.length > 0
-        && balanceArr.map(
-          (tokenAddress) => {
-            const token = superTokenBalances[tokenAddress];
-            if (token) {
-              return (
-                <SuperTokenListItem
-                  token={token}
-                  loading={loading}
-                  handleCopyToast={handleCopyToast}
-                  tokenAddress={tokenAddress}
-                  daoMember={daoMember}
-                  withdrawToken={withdrawSupertoken}
-                  successToast={successToast}
-                />
-              );
-            }
-            return null;
-          },
-        )}
+          {superTokenBalances &&
+            balanceArr?.length > 0 &&
+            balanceArr.map(tokenAddress => {
+              const token = superTokenBalances[tokenAddress];
+              if (token) {
+                return (
+                  <SuperTokenListItem
+                    token={token}
+                    loading={loading}
+                    handleCopyToast={handleCopyToast}
+                    tokenAddress={tokenAddress}
+                    daoMember={daoMember}
+                    withdrawSupertoken={withdrawSupertoken}
+                    successToast={successToast}
+                  />
+                );
+              }
+              return null;
+            })}
         </Skeleton>
       </ContentBox>
     </Box>

@@ -27,7 +27,7 @@ const HubBalanceList = ({ tokens, withdraw, currentDaoTokens }) => {
       {tokens ? (
         tokens
           .sort((a, b) => b.totalUSD - a.totalUSD)
-          .map((token) => {
+          .map(token => {
             return (
               <HubBalanceListCard
                 key={token?.id}

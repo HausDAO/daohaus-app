@@ -26,8 +26,8 @@ export const DaoMemberProvider = ({
   const memberWalletRef = useRef(false);
 
   useEffect(() => {
-    const checkForMember = (daoMembers) => {
-      return daoMembers.find((member) => member.memberAddress === address);
+    const checkForMember = daoMembers => {
+      return daoMembers.find(member => member.memberAddress === address);
     };
 
     if (daoMembers) {
@@ -65,13 +65,13 @@ export const DaoMemberProvider = ({
 
         if (wallet) {
           if (daoMember) {
-            setDaoMember((prevState) => ({
+            setDaoMember(prevState => ({
               ...prevState,
               ...wallet,
               hasWallet: true,
             }));
           } else if (delegate) {
-            setDelegate((prevState) => ({
+            setDelegate(prevState => ({
               ...prevState,
               ...wallet,
               hasWallet: true,
@@ -87,12 +87,12 @@ export const DaoMemberProvider = ({
 
     const canVote = daoMember || delegate;
     if (
-      canVote
-      && memberWalletRef.current !== address
-      && overview
-      && daochain
-      && daoid
-      && address
+      canVote &&
+      memberWalletRef.current !== address &&
+      overview &&
+      daochain &&
+      daoid &&
+      address
     ) {
       assembleMemberWallet();
     }

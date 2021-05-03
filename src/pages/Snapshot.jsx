@@ -1,7 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import {
-  Flex, Stack, Button, Link, Spinner,
-} from '@chakra-ui/react';
+import { Flex, Stack, Button, Link, Spinner } from '@chakra-ui/react';
 import { RiAddFill } from 'react-icons/ri';
 import MainViewLayout from '../components/mainViewLayout';
 import SnapshotCard from '../components/snapshotCard';
@@ -18,7 +16,9 @@ const Snapshot = ({ isMember, daoMetaData }) => {
   useEffect(() => {
     const getSnaphots = async () => {
       try {
-        const localSnapshots = await getSnapshotProposals(daoMetaData?.boosts?.snapshot.metadata.space);
+        const localSnapshots = await getSnapshotProposals(
+          daoMetaData?.boosts?.snapshot.metadata.space,
+        );
         setSnapshots(localSnapshots);
         setLoading(false);
       } catch (err) {
@@ -29,7 +29,11 @@ const Snapshot = ({ isMember, daoMetaData }) => {
         });
       }
     };
-    if (daoMetaData && 'snapshot' in daoMetaData?.boosts && daoMetaData?.boosts?.snapshot.active) {
+    if (
+      daoMetaData &&
+      'snapshot' in daoMetaData?.boosts &&
+      daoMetaData?.boosts?.snapshot.active
+    ) {
       getSnaphots();
     }
   }, [daoMetaData?.boosts]);
@@ -46,25 +50,37 @@ const Snapshot = ({ isMember, daoMetaData }) => {
   );
 
   return (
-    <MainViewLayout header='Snapshots' headerEl={Object.keys(snapshots).length > 0 && newSnapshotButton} isDao>
+    <MainViewLayout
+      header='Snapshots'
+      headerEl={Object.keys(snapshots).length > 0 && newSnapshotButton}
+      isDao
+    >
       <Flex as={Stack} direction='column' spacing={4} w='100%'>
         {!loading ? (
           daoMetaData && 'snapshot' in daoMetaData?.boosts ? (
-            Object.keys(snapshots).length > 0
-              ? Object.keys(snapshots).slice(0, 10).map((snapshot) => (
-                <SnapshotCard
-                  key={snapshots[snapshot].sig}
-                  snapshotId={snapshot}
-                  snapshot={snapshots[snapshot]}
-                />
-              )) : (
-                <Flex mt='100px' w='100%' justify='center'>
-                  <TextBox variant='value' size='lg'>No Proposals Found. Get started by creating your first snapshot!</TextBox>
-                </Flex>
-              )) : (
-                <BoostNotActive />
-          )) : (
-            <Spinner size='xl' />
+            Object.keys(snapshots).length > 0 ? (
+              Object.keys(snapshots)
+                .slice(0, 10)
+                .map(snapshot => (
+                  <SnapshotCard
+                    key={snapshots[snapshot].sig}
+                    snapshotId={snapshot}
+                    snapshot={snapshots[snapshot]}
+                  />
+                ))
+            ) : (
+              <Flex mt='100px' w='100%' justify='center'>
+                <TextBox variant='value' size='lg'>
+                  No Proposals Found. Get started by creating your first
+                  snapshot!
+                </TextBox>
+              </Flex>
+            )
+          ) : (
+            <BoostNotActive />
+          )
+        ) : (
+          <Spinner size='xl' />
         )}
       </Flex>
     </MainViewLayout>

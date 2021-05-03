@@ -1,7 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import {
-  Flex, Box, Skeleton, Image, useToast, Icon,
-} from '@chakra-ui/react';
+import { Flex, Box, Skeleton, Image, useToast, Icon } from '@chakra-ui/react';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
 import { FaCopy } from 'react-icons/fa';
 
@@ -25,17 +23,19 @@ const TokenListCard = ({
     if (token?.contractBalances) {
       if (version === '2.1') {
         const wallet = daoMember?.hasWallet || delegate?.hasWallet;
-        const isAccurateBalance = wallet
-          && isBank
-          && token.contractBalances.token !== token.contractBalances.babe;
+        const isAccurateBalance =
+          wallet &&
+          isBank &&
+          token.contractBalances.token !== token.contractBalances.babe;
 
         setNeedsSync(isAccurateBalance);
       } else {
         const canInteract = !!(daoMember || delegate);
-        const isAccurateBalance = canInteract
-          && isBank
-          && +token.tokenBalance
-          && token.contractBalances.token !== token.contractBalances.babe;
+        const isAccurateBalance =
+          canInteract &&
+          isBank &&
+          +token.tokenBalance &&
+          token.contractBalances.token !== token.contractBalances.babe;
         setNeedsSync(isAccurateBalance);
       }
     }

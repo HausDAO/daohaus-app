@@ -1,8 +1,6 @@
 import React, { useContext } from 'react';
 import makeBlockie from 'ethereum-blockies-base64';
-import {
-  Avatar, Box, Flex, Button, Badge, Link, Text,
-} from '@chakra-ui/react';
+import { Avatar, Box, Flex, Button, Badge, Link, Text } from '@chakra-ui/react';
 import { Link as RouterLink } from 'react-router-dom';
 import ContentBox from './ContentBox';
 import { ExploreContext } from '../contexts/ExploreContext';
@@ -13,7 +11,7 @@ import { chainByNetworkId } from '../utils/chain';
 const ExploreCard = ({ dao }) => {
   const { state, dispatch } = useContext(ExploreContext);
 
-  const handleTagSelect = (tag) => {
+  const handleTagSelect = tag => {
     console.log('state.tags', state.tags, tag);
     if (!state.tags.includes(tag)) {
       const tagUpdate = [...state.tags, tag];
@@ -25,7 +23,7 @@ const ExploreCard = ({ dao }) => {
     if (dao.meta?.tags) {
       return (
         <Flex direction='row' wrap='wrap'>
-          {dao.meta.tags.map((tag) => {
+          {dao.meta.tags.map(tag => {
             return (
               <Badge
                 key={tag}
@@ -50,7 +48,7 @@ const ExploreCard = ({ dao }) => {
     return null;
   };
 
-  const renderLink = (daoData) => {
+  const renderLink = daoData => {
     switch (daoData.meta.version) {
       case '1': {
         return (
@@ -142,9 +140,7 @@ const ExploreCard = ({ dao }) => {
           |
         </Box>
         <Box fontSize='sm'>
-          {dao.tokens.length}
-          {' '}
-          Token
+          {dao.tokens.length} Token
           {dao.tokens.length > 1 && 's'}
         </Box>
       </Flex>

@@ -1,8 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
-import {
-  Flex, Box, Skeleton, Badge, Icon,
-} from '@chakra-ui/react';
+import { Flex, Box, Skeleton, Badge, Icon } from '@chakra-ui/react';
 import { FaThumbsDown, FaThumbsUp } from 'react-icons/fa';
 import { format } from 'date-fns';
 
@@ -17,7 +15,7 @@ import ContentBox from './ContentBox';
 import { useInjectedProvider } from '../contexts/InjectedProviderContext';
 import { getCustomProposalTerm } from '../utils/metadata';
 
-const formatStatus = (status) => {
+const formatStatus = status => {
   return status.split(/(?=[A-Z])/).join(' ');
 };
 const ProposalCard = ({ proposal, customTerms }) => {
@@ -93,8 +91,8 @@ const ProposalCard = ({ proposal, customTerms }) => {
                       <Badge
                         colorScheme='green'
                         variant={
-                          +proposal.yesShares > +proposal.noShares
-                          && status !== 'Failed'
+                          +proposal.yesShares > +proposal.noShares &&
+                          status !== 'Failed'
                             ? 'solid'
                             : 'outline'
                         }
@@ -179,7 +177,10 @@ const ProposalCard = ({ proposal, customTerms }) => {
                 <Box fontSize='lg' fontFamily='space' fontWeight={700}>
                   {`${
                     proposal?.tributeOffered
-                      ? numberWithCommas(Number(proposal.tributeOffered) / 10 ** Number(proposal.tributeTokenDecimals))
+                      ? numberWithCommas(
+                          Number(proposal.tributeOffered) /
+                            10 ** Number(proposal.tributeTokenDecimals),
+                        )
                       : '--'
                   } ${proposal.tributeTokenSymbol || 'WETH'}`}
                 </Box>
@@ -203,8 +204,9 @@ const ProposalCard = ({ proposal, customTerms }) => {
                   {`${
                     proposal?.paymentRequested
                       ? numberWithCommas(
-                        Number(proposal.paymentRequested) / 10 ** Number(proposal.paymentTokenDecimals),
-                      )
+                          Number(proposal.paymentRequested) /
+                            10 ** Number(proposal.paymentTokenDecimals),
+                        )
                       : '--'
                   } ${proposal.paymentTokenSymbol || 'WETH'}`}
                 </Box>

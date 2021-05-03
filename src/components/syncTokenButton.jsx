@@ -1,7 +1,5 @@
 import React, { useState } from 'react';
-import {
-  Button, Flex, Spinner, Tooltip,
-} from '@chakra-ui/react';
+import { Button, Flex, Spinner, Tooltip } from '@chakra-ui/react';
 import { RiQuestionLine } from 'react-icons/ri';
 import { useParams } from 'react-router-dom';
 
@@ -59,7 +57,7 @@ const SyncTokenButton = ({ token }) => {
               `Could not find a matching proposal: ${error?.message}`,
             );
           },
-          onSuccess: (txHash) => {
+          onSuccess: txHash => {
             successToast({
               title: 'Synced Token!',
             });

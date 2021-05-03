@@ -5,7 +5,11 @@ module.exports = {
     browser: true,
   },
   // prettier should be last
-  extends: ['plugin:react/recommended', 'airbnb'],
+  extends: [
+    'eslint:recommended',
+    'plugin:prettier/recommended',
+    'plugin:react/recommended',
+  ],
   globals: {
     Atomics: 'readonly',
     SharedArrayBuffer: 'readonly',
@@ -62,7 +66,9 @@ module.exports = {
     'react/no-array-index-key': 'off', // priority 1, easy-ish
     'react/jsx-wrap-multilines': 'off', // priority 3, conflicting with prettier formatting only
     'react/jsx-curly-newline': 'off', // priority 2, harder conflicting with prettier
+    'react/display-name': 'off',
     'jsx-quotes': ['error', 'prefer-single'], // leave
+    'prettier/prettier': 'error',
   },
   overrides: [
     {

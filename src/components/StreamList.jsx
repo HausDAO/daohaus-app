@@ -1,11 +1,6 @@
 import React, { useState } from 'react';
 import { useParams } from 'react-router-dom';
-import {
-  Flex,
-  Box,
-  Skeleton,
-  Text,
-} from '@chakra-ui/react';
+import { Flex, Box, Skeleton, Text } from '@chakra-ui/react';
 
 import { useInjectedProvider } from '../contexts/InjectedProviderContext';
 import { useOverlay } from '../contexts/OverlayContext';
@@ -62,7 +57,7 @@ const StreamList = ({ list, loadingStreams, balances }) => {
             resolvePoll(txHash);
             console.error(`Could not find a matching stream: ${error}`);
           },
-          onSuccess: (txHash) => {
+          onSuccess: txHash => {
             successToast({
               title: 'Superfluid stream successfully cancelled.',
             });
@@ -81,7 +76,10 @@ const StreamList = ({ list, loadingStreams, balances }) => {
         minion,
         chainID: daochain,
       })(action)({
-        args, address, poll, onTxHash,
+        args,
+        address,
+        poll,
+        onTxHash,
       });
       setLoading({
         active: false,
@@ -120,8 +118,8 @@ const StreamList = ({ list, loadingStreams, balances }) => {
           </Box>
         </Flex>
         <Skeleton isLoaded={!loadingStreams}>
-          {list?.length > 0
-            ? list.map((stream) => (
+          {list?.length > 0 ? (
+            list.map(stream => (
               <StreamListItem
                 stream={stream}
                 key={stream.createdAt}
@@ -132,11 +130,11 @@ const StreamList = ({ list, loadingStreams, balances }) => {
                 network={network}
               />
             ))
-            : (
-              <Text fontFamily='mono' mt='5'>
-                No streams have been created
-              </Text>
-            )}
+          ) : (
+            <Text fontFamily='mono' mt='5'>
+              No streams have been created
+            </Text>
+          )}
         </Skeleton>
       </ContentBox>
     </Box>
