@@ -27,7 +27,7 @@ import {
 import { useMetaData } from '../contexts/MetaDataContext';
 import MinionExecute from './minionExecute';
 
-const MotionBox = motion.custom(Box);
+const MotionBox = motion(Box);
 
 const getAllowance = (daoMember, delegate) => {
   if (daoMember?.hasWallet && daoMember?.allowance) {
