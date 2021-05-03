@@ -8,13 +8,13 @@ import { themeImagePath } from '../utils/metadata';
 
 import '../global.css';
 
-const Layout = ({ children, dao }) => {
+const Layout = ({ children, dao, daosquarecco }) => {
   const { theme } = useCustomTheme();
   const mainNav = useBreakpointValue({
-    lg: <DesktopNav dao={dao} />,
-    md: <MobileNav dao={dao} />,
-    sm: <MobileNav dao={dao} />,
-    base: <MobileNav dao={dao} />,
+    lg: <DesktopNav dao={dao} daosquarecco={daosquarecco} />,
+    md: <MobileNav dao={dao} daosquarecco={daosquarecco} />,
+    sm: <MobileNav dao={dao} daosquarecco={daosquarecco} />,
+    base: <MobileNav dao={dao} daosquarecco={daosquarecco} />,
   });
 
   return (

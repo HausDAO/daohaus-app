@@ -27,7 +27,7 @@ const TemporaryPopoverFix = styled.span`
   }
 `;
 
-const DesktopNav = ({ dao }) => {
+const DesktopNav = ({ dao, daosquarecco }) => {
   return (
     <Flex
       p={5}
@@ -57,51 +57,57 @@ const DesktopNav = ({ dao }) => {
           wrap='wrap'
         >
           <Brand dao={dao} />
-          <Box
-            w={['auto', null, null, '100%']}
-            order={[3, null, null, 3]}
-            mt={[0, null, null, 6]}
-          >
-            <ChangeDao />
-          </Box>
+          {!daosquarecco && (
+            <Box
+              w={['auto', null, null, '100%']}
+              order={[3, null, null, 3]}
+              mt={[0, null, null, 6]}
+            >
+              <ChangeDao />
+            </Box>
+          )}
         </Flex>
       </Flex>
       <Flex direction='column' wrap='wrap'>
-        <NavLinkList dao={dao} view='desktop' />
-        <Box>
-          <Popover placement='right' w='auto'>
-            <Tooltip
-              label='Community Links'
-              aria-label='Community Links'
-              placement='right'
-              hasArrow
-              shouldWrapChildren
-            >
-              <PopoverTrigger>
-                <Button
-                  variant='sideNav'
-                  _hover={{ backgroundColor: 'white' }}
-                  mt={3}
+        {!daosquarecco && (
+          <>
+            <NavLinkList dao={dao} view='desktop' />
+            <Box>
+              <Popover placement='right' w='auto'>
+                <Tooltip
+                  label='Community Links'
+                  aria-label='Community Links'
+                  placement='right'
+                  hasArrow
+                  shouldWrapChildren
                 >
-                  <Icon as={RiLinksLine} w={6} h={6} />
-                </Button>
-              </PopoverTrigger>
-            </Tooltip>
-            <Portal>
-              <TemporaryPopoverFix>
-                <PopoverContent width='fit-content'>
-                  <PopoverArrow />
-                  <PopoverCloseButton />
-                  <PopoverBody w='auto'>
-                    <Flex direction='row' align='center' justify='start'>
-                      <SocialsLinkList dao={dao} view='desktop' />
-                    </Flex>
-                  </PopoverBody>
-                </PopoverContent>
-              </TemporaryPopoverFix>
-            </Portal>
-          </Popover>
-        </Box>
+                  <PopoverTrigger>
+                    <Button
+                      variant='sideNav'
+                      _hover={{ backgroundColor: 'white' }}
+                      mt={3}
+                    >
+                      <Icon as={RiLinksLine} w={6} h={6} />
+                    </Button>
+                  </PopoverTrigger>
+                </Tooltip>
+                <Portal>
+                  <TemporaryPopoverFix>
+                    <PopoverContent width='fit-content'>
+                      <PopoverArrow />
+                      <PopoverCloseButton />
+                      <PopoverBody w='auto'>
+                        <Flex direction='row' align='center' justify='start'>
+                          <SocialsLinkList dao={dao} view='desktop' />
+                        </Flex>
+                      </PopoverBody>
+                    </PopoverContent>
+                  </TemporaryPopoverFix>
+                </Portal>
+              </Popover>
+            </Box>
+          </>
+        )}
       </Flex>
     </Flex>
   );

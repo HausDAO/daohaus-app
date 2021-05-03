@@ -15,7 +15,7 @@ import { useOverlay } from '../contexts/OverlayContext';
 import SocialsLinkList from './socialsLinkList';
 import AddressAvatar from '../components/addressAvatar';
 
-const MobileNav = ({ dao }) => {
+const MobileNav = ({ dao, daosquarecco }) => {
   const { address, requestWallet } = useInjectedProvider();
   const { setHubAccountModal, setDaoAccountModal } = useOverlay();
   const [isOpen, setIsOpen] = useState(
@@ -57,15 +57,17 @@ const MobileNav = ({ dao }) => {
           wrap='wrap'
         >
           <Brand dao={dao} />
-          <Box
-            order={2}
-            ml={3}
-            borderWidth='thin'
-            borderColor='whiteAlpha.400'
-            borderRadius='25px'
-          >
-            <ChangeDao />
-          </Box>
+          {!daosquarecco && (
+            <Box
+              order={2}
+              ml={3}
+              borderWidth='thin'
+              borderColor='whiteAlpha.400'
+              borderRadius='25px'
+            >
+              <ChangeDao />
+            </Box>
+          )}
           <Box
             d={['inline-block', null, null, 'none']}
             order='3'
@@ -82,6 +84,7 @@ const MobileNav = ({ dao }) => {
               </Button>
             )}
           </Box>
+          {!daosquarecco && (
           <Button
             onClick={toggleNav}
             order='4'
@@ -90,8 +93,10 @@ const MobileNav = ({ dao }) => {
           >
             <Icon as={isOpen ? RiCloseLine : RiMenu3Line} />
           </Button>
+          )}
         </Flex>
       </Flex>
+
       <Flex
         direction='column'
         wrap='wrap'
