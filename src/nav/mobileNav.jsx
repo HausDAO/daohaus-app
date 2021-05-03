@@ -1,19 +1,19 @@
 import React, { useState } from 'react';
-
 import {
   Flex, Box, Button, Icon,
 } from '@chakra-ui/react';
 import { RiMenu3Line, RiCloseLine } from 'react-icons/ri';
+
 import ChangeDao from './changeDao';
-
-import '../global.css';
-
 import NavLinkList from './navLinkList';
+import SocialsLinkList from './socialsLinkList';
+import AddressAvatar from '../components/addressAvatar';
+import DaosquareBrand from './daosquareBrand';
 import Brand from './brand';
 import { useInjectedProvider } from '../contexts/InjectedProviderContext';
 import { useOverlay } from '../contexts/OverlayContext';
-import SocialsLinkList from './socialsLinkList';
-import AddressAvatar from '../components/addressAvatar';
+
+import '../global.css';
 
 const MobileNav = ({ dao, daosquarecco }) => {
   const { address, requestWallet } = useInjectedProvider();
@@ -56,18 +56,23 @@ const MobileNav = ({ dao, daosquarecco }) => {
           w='100%'
           wrap='wrap'
         >
-          <Brand dao={dao} />
-          {!daosquarecco && (
-            <Box
-              order={2}
-              ml={3}
-              borderWidth='thin'
-              borderColor='whiteAlpha.400'
-              borderRadius='25px'
-            >
-              <ChangeDao />
-            </Box>
+          {!daosquarecco ? (
+            <>
+              <Brand dao={dao} />
+              <Box
+                order={2}
+                ml={3}
+                borderWidth='thin'
+                borderColor='whiteAlpha.400'
+                borderRadius='25px'
+              >
+                <ChangeDao />
+              </Box>
+            </>
+          ) : (
+            <DaosquareBrand />
           )}
+
           <Box
             d={['inline-block', null, null, 'none']}
             order='3'

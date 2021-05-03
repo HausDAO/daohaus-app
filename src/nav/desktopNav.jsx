@@ -14,12 +14,13 @@ import {
   Portal,
 } from '@chakra-ui/react';
 import { RiLinksLine } from 'react-icons/ri';
-
 import styled from '@emotion/styled';
+
 import Brand from './brand';
 import NavLinkList from './navLinkList';
 import SocialsLinkList from './socialsLinkList';
 import ChangeDao from './changeDao';
+import DaosquareBrand from './daosquareBrand';
 
 const TemporaryPopoverFix = styled.span`
   .css-n0uled {
@@ -56,15 +57,19 @@ const DesktopNav = ({ dao, daosquarecco }) => {
           w='100%'
           wrap='wrap'
         >
-          <Brand dao={dao} />
-          {!daosquarecco && (
-            <Box
-              w={['auto', null, null, '100%']}
-              order={[3, null, null, 3]}
-              mt={[0, null, null, 6]}
-            >
-              <ChangeDao />
-            </Box>
+          {!daosquarecco ? (
+            <>
+              <Brand dao={dao} />
+              <Box
+                w={['auto', null, null, '100%']}
+                order={[3, null, null, 3]}
+                mt={[0, null, null, 6]}
+              >
+                <ChangeDao />
+              </Box>
+            </>
+          ) : (
+            <DaosquareBrand />
           )}
         </Flex>
       </Flex>
