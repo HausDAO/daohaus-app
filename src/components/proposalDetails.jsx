@@ -1,14 +1,7 @@
 import React, { useState, useEffect, useMemo } from 'react';
 
 import { useParams } from 'react-router-dom';
-import {
-  Flex,
-  Box,
-  Skeleton,
-  Badge,
-  Text,
-  Spinner,
-} from '@chakra-ui/react';
+import { Flex, Box, Skeleton, Badge, Text, Spinner } from '@chakra-ui/react';
 import { AddressZero } from '@ethersproject/constants';
 
 import { useInjectedProvider } from '../contexts/InjectedProviderContext';
@@ -37,11 +30,12 @@ import { handleDecimals } from '../utils/general';
 import UberHausDelegate from './uberhausDelegate';
 import DiscourseProposalTopic from './discourseProposalTopic';
 
-const UBER_LINK = '/dao/0x2a/0x96714523778e51b898b072089e5615d4db71078e/proposals';
+const UBER_LINK =
+  '/dao/0x2a/0x96714523778e51b898b072089e5615d4db71078e/proposals';
 
-const urlify = (text) => {
+const urlify = text => {
   const urlRegex = /(https?:\/\/[^\s]+)/g;
-  return text.replace(urlRegex, (url) => {
+  return text.replace(urlRegex, url => {
     return `<a rel="noopener noreferrer" target="_blank" href="${url}"> link </a>`;
   });
 };
@@ -70,9 +64,11 @@ const ProposalDetails = ({ proposal, daoMember }) => {
     }
     return (
       <MemberIndicator
-        address={proposal?.applicant === AddressZero
-          ? proposal?.proposer
-          : proposal?.applicant}
+        address={
+          proposal?.applicant === AddressZero
+            ? proposal?.proposer
+            : proposal?.applicant
+        }
         label='recipient'
         shouldFetchProfile
       />
@@ -90,9 +86,7 @@ const ProposalDetails = ({ proposal, daoMember }) => {
               </TextBox>
               <Box fontSize={['sm', null, null, 'md']}>
                 {proposal?.proposalIndex ? (
-                  <>
-                    {status && getProposalDetailStatus(proposal, status)}
-                  </>
+                  <>{status && getProposalDetailStatus(proposal, status)}</>
                 ) : (
                   <Skeleton isLoaded={status}>
                     <Badge>
@@ -103,9 +97,7 @@ const ProposalDetails = ({ proposal, daoMember }) => {
               </Box>
             </Flex>
             <Skeleton isLoaded={proposal?.title}>
-              {proposal?.title && (
-                <Text fontSize='3xl'>{proposal?.title}</Text>
-              )}
+              {proposal?.title && <Text fontSize='3xl'>{proposal?.title}</Text>}
             </Skeleton>
           </Box>
           {proposal?.minionAddress ? (
@@ -115,8 +107,8 @@ const ProposalDetails = ({ proposal, daoMember }) => {
             </>
           ) : (
             <Skeleton isLoaded={proposal?.description}>
-              {proposal?.description
-                && (proposal?.description.indexOf('http') > -1 ? (
+              {proposal?.description &&
+                (proposal?.description.indexOf('http') > -1 ? (
                   <Box
                     w='100%'
                     dangerouslySetInnerHTML={{
@@ -136,35 +128,44 @@ const ProposalDetails = ({ proposal, daoMember }) => {
         <Flex w='100%' justify='space-between' mt={6} wrap='wrap'>
           {(proposal?.tributeOffered > 0 || !proposal?.tributeOffered) && (
             <TextIndicator
-              label={proposal?.proposalType === 'Transmutation Proposal'
-                ? 'Transmuting'
-                : 'Tribute offered'}
+              label={
+                proposal?.proposalType === 'Transmutation Proposal'
+                  ? 'Transmuting'
+                  : 'Tribute offered'
+              }
               comma
-              value={handleDecimals(proposal?.tributeOffered, proposal?.tributeTokenDecimals)}
+              value={handleDecimals(
+                proposal?.tributeOffered,
+                proposal?.tributeTokenDecimals,
+              )}
               append={proposal?.tributeTokenSymbol || 'WETH'}
             />
-          )
-          }
+          )}
           {proposal?.paymentRequested > 0 && ( // don't show during loading
-          <TextIndicator
-            label='Payment Requested'
-            comma
-            value={handleDecimals(proposal?.paymentRequested, proposal?.paymentTokenDecimals)}
-            append={proposal?.paymentTokenSymbol || 'WETH'}
-          />
+            <TextIndicator
+              label='Payment Requested'
+              comma
+              value={handleDecimals(
+                proposal?.paymentRequested,
+                proposal?.paymentTokenDecimals,
+              )}
+              append={proposal?.paymentTokenSymbol || 'WETH'}
+            />
           )}
           {(proposal?.sharesRequested > 0 || !proposal?.sharesRequested) && (
-          <TextIndicator
-            label='shares requested'
-            comma
-            value={proposal?.sharesRequested}
-          />)}
+            <TextIndicator
+              label='shares requested'
+              comma
+              value={proposal?.sharesRequested}
+            />
+          )}
           {proposal?.lootRequested > 0 && ( // don't show during loading
             <TextIndicator
               label='loot requested'
               comma
               value={proposal?.lootRequested}
-            />)}
+            />
+          )}
         </Flex>
         <Flex
           mt={3}
@@ -181,8 +182,8 @@ const ProposalDetails = ({ proposal, daoMember }) => {
           />
           {handleRecipient()}
           <Flex align='center'>
-            {memberVote(proposal, address) !== null
-              && (+memberVote(proposal, address) === 1 ? (
+            {memberVote(proposal, address) !== null &&
+              (+memberVote(proposal, address) === 1 ? (
                 <Vote thumbsUp />
               ) : (
                 <Vote thumbsDown />
@@ -204,7 +205,7 @@ const MinionBox = ({ proposal, daoOverview }) => {
 
   const minionName = useMemo(() => {
     if (daoOverview && proposal) {
-      return daoOverview.minions.find((minion) => {
+      return daoOverview.minions.find(minion => {
         return minion.minionAddress === proposal.minionAddress;
       })?.details;
     }
@@ -216,37 +217,43 @@ const MinionBox = ({ proposal, daoOverview }) => {
 
   const { minionType } = proposal.minion;
   if (minionType === MINION_TYPES.UBER) {
-    return <MemberIndicator
-      address={proposal?.minionAddress}
-      label='uberhaus minion'
-      tooltip
-      tooltipText={TIP_LABELS.UBER_PROPOSAL}
-      link={UBER_LINK}
-      shouldFetchProfile={false}
-      name={minionName}
-    />;
+    return (
+      <MemberIndicator
+        address={proposal?.minionAddress}
+        label='uberhaus minion'
+        tooltip
+        tooltipText={TIP_LABELS.UBER_PROPOSAL}
+        link={UBER_LINK}
+        shouldFetchProfile={false}
+        name={minionName}
+      />
+    );
   }
   if (minionType === MINION_TYPES.VANILLA) {
-    return <MemberIndicator
-      address={proposal?.minionAddress}
-      label='minion'
-      tooltip
-      tooltipText={TIP_LABELS.MINION_PROPOSAL}
-      link='/'
-      shouldFetchProfile={false}
-      name={minionName}
-    />;
+    return (
+      <MemberIndicator
+        address={proposal?.minionAddress}
+        label='minion'
+        tooltip
+        tooltipText={TIP_LABELS.MINION_PROPOSAL}
+        link='/'
+        shouldFetchProfile={false}
+        name={minionName}
+      />
+    );
   }
   if (minionType === MINION_TYPES.SUPERFLUID) {
-    return <MemberIndicator
-      address={proposal?.minionAddress}
-      label='superfluid minion'
-      tooltip
-      tooltipText={generateSFLabels(proposal)}
-      link={`/dao/${daochain}/${daoid}/settings/superfluid-minion/${proposal.minionAddress}`}
-      shouldFetchProfile={false}
-      name={minionName}
-    />;
+    return (
+      <MemberIndicator
+        address={proposal?.minionAddress}
+        label='superfluid minion'
+        tooltip
+        tooltipText={generateSFLabels(proposal)}
+        link={`/dao/${daochain}/${daoid}/settings/superfluid-minion/${proposal.minionAddress}`}
+        shouldFetchProfile={false}
+        name={minionName}
+      />
+    );
   }
 
   return null;

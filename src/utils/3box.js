@@ -1,4 +1,4 @@
-export const fetchProfile = async (address) => {
+export const fetchProfile = async address => {
   try {
     const response = await fetch(
       `https://ipfs.3box.io/profile?address=${address}`,
@@ -33,7 +33,7 @@ export const cacheProfile = (newProfile, memberAddress) => {
   }
 };
 
-export const getCachedProfile = (memberAddress) => {
+export const getCachedProfile = memberAddress => {
   const profileData = JSON.parse(window.sessionStorage.getItem('3BoxProfiles'));
   return profileData[memberAddress] ? profileData[memberAddress] : false;
 };
@@ -52,7 +52,7 @@ export const ensureCacheExists = () => {
   }
 };
 
-export const handleGetProfile = async (memberAddress) => {
+export const handleGetProfile = async memberAddress => {
   ensureCacheExists();
   const cachedProfile = getCachedProfile(memberAddress);
   if (cachedProfile) {

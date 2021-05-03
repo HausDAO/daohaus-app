@@ -51,9 +51,7 @@ const PullForm = ({
   const [loadToken, setLoadToken] = useState(false);
   const [balance, setBalance] = useState({ readable: 0, real: 0 });
 
-  const {
-    handleSubmit, errors, register, watch, setValue,
-  } = useForm();
+  const { handleSubmit, errors, register, watch, setValue } = useForm();
   const pullToken = watch('pullToken');
 
   const isDelegate = useMemo(() => {
@@ -142,7 +140,7 @@ const PullForm = ({
             resolvePoll(txHash);
             console.error(`Could not pull delegate rewards: ${error}`);
           },
-          onSuccess: (txHash) => {
+          onSuccess: txHash => {
             successToast({
               title: 'Pulled delegate rewards from UberHAUS Minion',
             });
@@ -166,7 +164,7 @@ const PullForm = ({
     }
   };
 
-  const onSubmit = async (values) => {
+  const onSubmit = async values => {
     setLoading(true);
     const tokenAddress = values.pullToken.toLowerCase();
     const uberTokens = uberOverview.tokenBalances;
@@ -175,9 +173,10 @@ const PullForm = ({
       ? valToDecimalString(values.pull, tokenAddress, uberTokens)
       : '0';
     console.log(initialAmount);
-    const withdrawAmt = initialAmount > balance.real
-      ? BigInt(balance.real)
-      : BigInt(initialAmount);
+    const withdrawAmt =
+      initialAmount > balance.real
+        ? BigInt(balance.real)
+        : BigInt(initialAmount);
     const difference = BigInt(balance.real) - BigInt(initialAmount);
     const expectedBalance = difference <= 0 ? 0 : difference;
 
@@ -201,7 +200,7 @@ const PullForm = ({
               resolvePoll(txHash);
               console.error(`Could not pull funds: ${error}`);
             },
-            onSuccess: (txHash) => {
+            onSuccess: txHash => {
               successToast({
                 title: 'Pulled funds from UberHAUS Minion',
               });
@@ -212,7 +211,7 @@ const PullForm = ({
           },
         });
         const onTxHash = () => {
-          setD2dProposalModal((prevState) => !prevState);
+          setD2dProposalModal(prevState => !prevState);
           setTxInfoModal(true);
         };
         await UberHausMinionService({
@@ -220,10 +219,13 @@ const PullForm = ({
           uberHausMinion: uberHausMinion.minionAddress,
           chainID: UBERHAUS_DATA.NETWORK,
         })('pullGuildFunds')({
-          args, address, poll, onTxHash,
+          args,
+          address,
+          poll,
+          onTxHash,
         });
       } catch (err) {
-        setD2dProposalModal((prevState) => !prevState);
+        setD2dProposalModal(prevState => !prevState);
         setLoading(false);
         console.error('error: ', err);
         errorToast({
@@ -248,7 +250,7 @@ const PullForm = ({
   };
 
   const handleCheck = () => {
-    setDelegateRewards((prevState) => !prevState);
+    setDelegateRewards(prevState => !prevState);
   };
 
   return (

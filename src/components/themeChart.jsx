@@ -80,7 +80,7 @@ const ThemeChart = ({ previewValues }) => {
                   <Icon as={FaChevronDown} h='12px' w='12px' />
                 </MenuButton>
                 <MenuList>
-                  {bankChartTimeframes.map((time) => {
+                  {bankChartTimeframes.map(time => {
                     return <MenuItem key={time.value}>{time.name}</MenuItem>;
                   })}
                 </MenuList>
@@ -89,7 +89,10 @@ const ThemeChart = ({ previewValues }) => {
             <FlexibleWidthXYPlot
               height={300}
               margin={{
-                left: 0, right: 0, top: 40, bottom: 40,
+                left: 0,
+                right: 0,
+                top: 40,
+                bottom: 40,
               }}
             >
               {gradient}

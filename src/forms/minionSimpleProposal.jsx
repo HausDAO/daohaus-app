@@ -66,13 +66,11 @@ const MinionProposalForm = () => {
   useEffect(() => {
     if (daoOverview?.minions) {
       const localMinions = daoOverview.minions
-        .filter((minion) => minion.minionType === MINION_TYPES.VANILLA)
-        .map(
-          (minion) => ({
-            minionAdddress: minion.minionAddress,
-            minionName: minion.details,
-          }),
-        );
+        .filter(minion => minion.minionType === MINION_TYPES.VANILLA)
+        .map(minion => ({
+          minionAdddress: minion.minionAddress,
+          minionName: minion.details,
+        }));
       setMinions(localMinions);
     }
   }, [daoOverview?.minions]);
@@ -90,16 +88,18 @@ const MinionProposalForm = () => {
     }
   }, [errors]);
 
-  const onSubmit = async (values) => {
+  const onSubmit = async values => {
     console.log('values', values);
     setLoading(true);
-    const minionName = minions.find((minion) => minion.minionAddress === values.minionAdddress)?.minionName;
+    const minionName = minions.find(
+      minion => minion.minionAddress === values.minionAdddress,
+    )?.minionName;
     const valueWei = injectedProvider.utils.toWei(values.value);
 
     const inputValues = [];
     let hexData;
     if (selectedFunction) {
-      Object.keys(values).forEach((param) => {
+      Object.keys(values).forEach(param => {
         if (param.indexOf('xparam') > -1) {
           console.log(param);
           try {
@@ -110,7 +110,7 @@ const MinionProposalForm = () => {
         }
       });
 
-      const aSelectedFunction = abiFunctions.find((func) => {
+      const aSelectedFunction = abiFunctions.find(func => {
         return func.name === selectedFunction;
       });
       console.log('aSelectedFunction', aSelectedFunction);
@@ -149,7 +149,7 @@ const MinionProposalForm = () => {
             resolvePoll(txHash);
             console.error(`Could not find a matching proposal: ${error}`);
           },
-          onSuccess: (txHash) => {
+          onSuccess: txHash => {
             successToast({
               title: 'Minion proposal submitted.',
             });
@@ -176,7 +176,10 @@ const MinionProposalForm = () => {
         minion: values.minionContract,
         chainID: daochain,
       })('proposeAction')({
-        args, address, poll, onTxHash,
+        args,
+        address,
+        poll,
+        onTxHash,
       });
     } catch (err) {
       setLoading(false);
@@ -184,15 +187,15 @@ const MinionProposalForm = () => {
     }
   };
 
-  const selectFunction = (e) => {
+  const selectFunction = e => {
     const { value } = e.target;
 
-    const funcPrams = abiFunctions.find((func) => +func.id === +value);
+    const funcPrams = abiFunctions.find(func => +func.id === +value);
     setAbiParams(funcPrams.inputs);
     setSelectedFunction(funcPrams.name);
   };
 
-  const getFunctions = (abiParam) => {
+  const getFunctions = abiParam => {
     let abi;
 
     if (typeof abiParam === 'object') {
@@ -215,13 +218,14 @@ const MinionProposalForm = () => {
     return localAbiFunctions;
   };
 
-  const handleBlur = async (e) => {
+  const handleBlur = async e => {
     const { value } = e.target;
     setAbiLoading(true);
     try {
-      const key = daochain === '0x64' ? '' : process.env.REACT_APP_ETHERSCAN_KEY;
-      const url = `${chainByID(daochain).abi_api_url}${value}${key
-        && `&apikey=${key}`}`;
+      const key =
+        daochain === '0x64' ? '' : process.env.REACT_APP_ETHERSCAN_KEY;
+      const url = `${chainByID(daochain).abi_api_url}${value}${key &&
+        `&apikey=${key}`}`;
       const response = await fetch(url);
       const json = await response.json();
 
@@ -277,7 +281,7 @@ const MinionProposalForm = () => {
             placeholder='Select Minion'
           >
             {' '}
-            {minions?.map((minion) => (
+            {minions?.map(minion => (
               <option key={minion.minionAdddress} value={minion.minionAdddress}>
                 {minion.minionName || minion.minionAddress}
               </option>
@@ -363,8 +367,8 @@ const MinionProposalForm = () => {
                 ref={register}
                 onChange={selectFunction}
               >
-                {abiFunctions
-                  && abiFunctions.map((funct) => {
+                {abiFunctions &&
+                  abiFunctions.map(funct => {
                     return (
                       <option key={funct.id} value={funct.id}>
                         {funct.name}
@@ -386,8 +390,8 @@ const MinionProposalForm = () => {
                     ABI Params
                   </FormLabel>
                   <Stack spacing={3}>
-                    {abiParams
-                      && abiParams.map((param, idx) => {
+                    {abiParams &&
+                      abiParams.map((param, idx) => {
                         return (
                           <Stack key={idx} spacing={1}>
                             <TextBox size='xs'>{param.name}</TextBox>
@@ -433,19 +437,19 @@ const MinionProposalForm = () => {
             >
               Submit
             </Button>
-            ) : (
-              <Button
-                onClick={requestWallet}
-                isDisabled={injectedChain && daochain !== injectedChain?.chainId}
-              >
-                {`Connect 
+          ) : (
+            <Button
+              onClick={requestWallet}
+              isDisabled={injectedChain && daochain !== injectedChain?.chainId}
+            >
+              {`Connect 
               ${
                 injectedChain && daochain !== injectedChain?.chainId
                   ? `to ${chainByID(daochain).name}`
                   : 'Wallet'
               }`}
-              </Button>
-            )}
+            </Button>
+          )}
         </Box>
       </Flex>
     </form>

@@ -18,7 +18,7 @@ const ChangeDao = () => {
     lg: <RiMenu3Line />,
   });
 
-  const toggleModal = () => setDaoSwitcherModal((prevState) => !prevState);
+  const toggleModal = () => setDaoSwitcherModal(prevState => !prevState);
   return (
     <>
       <Tooltip

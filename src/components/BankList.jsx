@@ -4,9 +4,7 @@ import TextBox from './TextBox';
 import ContentBox from './ContentBox';
 import BankListCard from './bankListCard';
 
-const BankList = ({
-  tokens, profile, hasBalance, needsSync,
-}) => {
+const BankList = ({ tokens, profile, hasBalance, needsSync }) => {
   const hasAction = hasBalance || needsSync;
 
   return (
@@ -40,7 +38,7 @@ const BankList = ({
       {tokens ? (
         tokens
           .sort((a, b) => b.totalUSD - a.totalUSD)
-          .map((token) => {
+          .map(token => {
             return (
               <BankListCard
                 key={token?.id}

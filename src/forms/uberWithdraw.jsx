@@ -1,8 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useForm } from 'react-hook-form';
-import {
-  Button, FormControl, Flex, Icon, Box,
-} from '@chakra-ui/react';
+import { Button, FormControl, Flex, Icon, Box } from '@chakra-ui/react';
 import { RiErrorWarningLine } from 'react-icons/ri';
 import styled from '@emotion/styled';
 
@@ -27,9 +25,7 @@ const WithdrawForm = ({ uberMembers, uberHausMinion, refetchAllies }) => {
   const { cachePoll, resolvePoll } = useUser();
   const { refreshDao } = useTX();
   const { injectedProvider, address } = useInjectedProvider();
-  const {
-    handleSubmit, errors, register, watch, setValue,
-  } = useForm();
+  const { handleSubmit, errors, register, watch, setValue } = useForm();
 
   const [loading, setLoading] = useState(false);
   const [currentError, setCurrentError] = useState(null);
@@ -56,7 +52,7 @@ const WithdrawForm = ({ uberMembers, uberHausMinion, refetchAllies }) => {
     if (!uberMembers || !uberHausMinion || !withdrawToken) return;
 
     const uberMinionMember = uberMembers.find(
-      (member) => member.memberAddress === uberHausMinion.minionAddress,
+      member => member.memberAddress === uberHausMinion.minionAddress,
     );
     if (uberMinionMember) {
       const { tokenBalances } = uberMinionMember;
@@ -76,7 +72,7 @@ const WithdrawForm = ({ uberMembers, uberHausMinion, refetchAllies }) => {
     }
   }, [uberMembers, uberHausMinion, withdrawToken]);
 
-  const onSubmit = async (values) => {
+  const onSubmit = async values => {
     setLoading(true);
     console.log('formValues', values);
 
@@ -85,9 +81,10 @@ const WithdrawForm = ({ uberMembers, uberHausMinion, refetchAllies }) => {
     const initialWithdraw = values.withdraw
       ? valToDecimalString(values.withdraw, tokenAddress, uberTokens)
       : '0';
-    const withdrawAmt = initialWithdraw > currentBalance
-      ? BigInt(currentBalance)
-      : BigInt(initialWithdraw);
+    const withdrawAmt =
+      initialWithdraw > currentBalance
+        ? BigInt(currentBalance)
+        : BigInt(initialWithdraw);
 
     const args = [UBERHAUS_DATA.ADDRESS, tokenAddress, withdrawAmt.toString()];
     const difference = BigInt(currentBalance) - BigInt(initialWithdraw);
@@ -109,7 +106,7 @@ const WithdrawForm = ({ uberMembers, uberHausMinion, refetchAllies }) => {
             resolvePoll(txHash);
             console.error(`Could not withdraw funds: ${error}`);
           },
-          onSuccess: (txHash) => {
+          onSuccess: txHash => {
             successToast({
               title: 'Withdrew funds from UberHAUS!',
             });
@@ -122,7 +119,7 @@ const WithdrawForm = ({ uberMembers, uberHausMinion, refetchAllies }) => {
       });
 
       const onTxHash = () => {
-        setD2dProposalModal((prevState) => !prevState);
+        setD2dProposalModal(prevState => !prevState);
         setTxInfoModal(true);
       };
 
@@ -131,10 +128,13 @@ const WithdrawForm = ({ uberMembers, uberHausMinion, refetchAllies }) => {
         uberHausMinion: uberHausMinion.minionAddress,
         chainID: UBERHAUS_DATA.NETWORK,
       })('doWithdraw')({
-        args, address, poll, onTxHash,
+        args,
+        address,
+        poll,
+        onTxHash,
       });
     } catch (err) {
-      setD2dProposalModal((prevState) => !prevState);
+      setD2dProposalModal(prevState => !prevState);
       setLoading(false);
       console.error('error: ', err);
       errorToast({

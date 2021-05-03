@@ -74,8 +74,8 @@ const DiscourseSettings = ({ daoMetaData, refetchMetaData }) => {
     }
   };
 
-  const handleActionChange = (e) => {
-    setLocalMetadata((prevState) => {
+  const handleActionChange = e => {
+    setLocalMetadata(prevState => {
       return {
         ...prevState,
         autoProposal: e.target.checked,
@@ -147,7 +147,7 @@ const DiscourseSettings = ({ daoMetaData, refetchMetaData }) => {
                       id='autoProposal'
                       colorScheme='green'
                       isChecked={localMetadata.autoProposal}
-                      onChange={(e) => handleActionChange(e)}
+                      onChange={e => handleActionChange(e)}
                       disabled={loading}
                     />
                   </Flex>

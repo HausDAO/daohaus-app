@@ -27,13 +27,11 @@ export const MinionService = ({ web3, minion, chainID }) => {
     // executeAction args: [ proposal id ]
     // crossWithdraw args: [ target dao address, token address, amount, transfer (bool)]
     if (
-      service === 'proposeAction'
-      || service === 'executeAction'
-      || service === 'crossWithdraw'
+      service === 'proposeAction' ||
+      service === 'executeAction' ||
+      service === 'crossWithdraw'
     ) {
-      return async ({
-        args, address, poll, onTxHash,
-      }) => {
+      return async ({ args, address, poll, onTxHash }) => {
         console.log(args);
         console.log(address);
         console.log(poll);
@@ -41,13 +39,13 @@ export const MinionService = ({ web3, minion, chainID }) => {
         const tx = await contract.methods[service](...args);
         return tx
           .send('eth_requestAccounts', { from: address })
-          .on('transactionHash', (txHash) => {
+          .on('transactionHash', txHash => {
             if (poll) {
               onTxHash();
               poll(txHash);
             }
           })
-          .on('error', (error) => {
+          .on('error', error => {
             console.error(error);
           });
       };

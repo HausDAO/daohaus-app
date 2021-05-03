@@ -1,7 +1,5 @@
 import React from 'react';
-import {
-  Flex, Box, Skeleton, Image, useToast, Icon,
-} from '@chakra-ui/react';
+import { Flex, Box, Skeleton, Image, useToast, Icon } from '@chakra-ui/react';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
 import { FaCopy } from 'react-icons/fa';
 
@@ -93,8 +91,8 @@ const MinionTokenListCard = ({ token }) => {
       </Flex>
       {token?.type === 'ERC-721' && (
         <Flex>
-          {token.tokenURIs
-            && token.tokenURIs.map((meta, idx) => (
+          {token.tokenURIs &&
+            token.tokenURIs.map((meta, idx) => (
               <MinionNftTile
                 key={idx}
                 tokenId={token.tokenIds[idx]}

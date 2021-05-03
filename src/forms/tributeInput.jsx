@@ -25,9 +25,7 @@ import { useTX } from '../contexts/TXContext';
 import { createPoll } from '../services/pollService';
 import { useUser } from '../contexts/UserContext';
 
-const TributeInput = ({
-  register, setValue, getValues, setError,
-}) => {
+const TributeInput = ({ register, setValue, getValues, setError }) => {
   const [unlocked, setUnlocked] = useState(true);
   const [balance, setBalance] = useState(0);
   const [loading, setLoading] = useState(false);
@@ -43,15 +41,17 @@ const TributeInput = ({
     if (daoOverview && !tokenData.length) {
       const depositTokenAddress = daoOverview.depositToken?.tokenAddress;
       const depositToken = daoOverview.tokenBalances?.find(
-        (token) => token.guildBank && token.token.tokenAddress === depositTokenAddress,
+        token =>
+          token.guildBank && token.token.tokenAddress === depositTokenAddress,
       );
       const tokenArray = daoOverview.tokenBalances.filter(
-        (token) => token.guildBank && token.token.tokenAddress !== depositTokenAddress,
+        token =>
+          token.guildBank && token.token.tokenAddress !== depositTokenAddress,
       );
       tokenArray.unshift(depositToken);
       console.log('tokenArray', tokenArray);
       setTokenData(
-        tokenArray.map((token) => ({
+        tokenArray.map(token => ({
           label: token.token.symbol || token.tokenAddress,
           value: token.token.tokenAddress,
           decimals: token.token.decimals,
@@ -92,7 +92,7 @@ const TributeInput = ({
             console.error(`Could not find a matching proposal: ${error}`);
             setLoading(false);
           },
-          onSuccess: (txHash) => {
+          onSuccess: txHash => {
             successToast({
               // ? update to token symbol or name
               title: 'Tribute token unlocked',
@@ -118,10 +118,10 @@ const TributeInput = ({
   const checkUnlocked = async (token, amount) => {
     // console.log('check', token, amount);
     if (
-      amount === ''
-      || !token
-      || typeof +amount !== 'number'
-      || +amount === 0
+      amount === '' ||
+      !token ||
+      typeof +amount !== 'number' ||
+      +amount === 0
     ) {
       setUnlocked(true);
       return;
@@ -140,7 +140,7 @@ const TributeInput = ({
     setUnlocked(isUnlocked);
   };
 
-  const getMax = async (token) => {
+  const getMax = async token => {
     const tokenContract = TokenService({
       chainID: daochain,
       tokenAddress: token,
@@ -169,7 +169,7 @@ const TributeInput = ({
     const tributeToken = getValues('tributeToken');
     setValue(
       'tributeOffered',
-      balance / 10 ** tokenData.find((t) => t.value === tributeToken).decimals,
+      balance / 10 ** tokenData.find(t => t.value === tributeToken).decimals,
     );
     handleChange();
   };
@@ -209,8 +209,8 @@ const TributeInput = ({
           top='-30px'
         >
           {`Max: 
-          ${balance
-            && ethers.utils.commify(
+          ${balance &&
+            ethers.utils.commify(
               parseFloat(utils.fromWei(balance)).toFixed(4),
             )}`}
         </Button>
@@ -219,7 +219,7 @@ const TributeInput = ({
           placeholder='0'
           ref={register({
             validate: {
-              inefficienFunds: (value) => {
+              inefficienFunds: value => {
                 if (+value > +utils.fromWei(balance)) {
                   return 'Insufficient Funds';
                 }

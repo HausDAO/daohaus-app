@@ -1,7 +1,5 @@
 import React from 'react';
-import {
-  Box, Text, Spinner, Flex, Icon, Stack,
-} from '@chakra-ui/react';
+import { Box, Text, Spinner, Flex, Icon, Stack } from '@chakra-ui/react';
 import { RiCheckboxCircleLine } from 'react-icons/ri';
 
 import { useUser } from '../contexts/UserContext';
@@ -16,7 +14,7 @@ const TxList = ({ limit = 5 }) => {
 
   return (
     <Stack spacing={4}>
-      {outstandingTXs?.slice(0, limit)?.map((tx) => {
+      {outstandingTXs?.slice(0, limit)?.map(tx => {
         return (
           <Box key={tx.txHash}>
             <Flex direction='row' justifyContent='start' alignItems='center'>

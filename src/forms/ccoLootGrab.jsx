@@ -1,8 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useForm } from 'react-hook-form';
-import {
-  Button, FormControl, Flex, Icon, Box, Text,
-} from '@chakra-ui/react';
+import { Button, FormControl, Flex, Icon, Box, Text } from '@chakra-ui/react';
 import { RiErrorWarningLine } from 'react-icons/ri';
 import { useParams } from 'react-router-dom';
 
@@ -77,7 +75,7 @@ const CcoLootGrabForm = ({
     }
   });
 
-  const onSubmit = async (values) => {
+  const onSubmit = async values => {
     setLoading(true);
     const hash = createHash();
     const details = detailsToJSON({
@@ -117,7 +115,7 @@ const CcoLootGrabForm = ({
             resolvePoll(txHash);
             console.error(`Could not find a matching proposal: ${error}`);
           },
-          onSuccess: (txHash) => {
+          onSuccess: txHash => {
             successToast({
               title: 'Contribution Submitted!',
             });
@@ -137,7 +135,10 @@ const CcoLootGrabForm = ({
         chainID: daochain,
         version: daoOverview.version,
       })('submitProposal')({
-        args, address, poll, onTxHash,
+        args,
+        address,
+        poll,
+        onTxHash,
       });
     } catch (err) {
       setLoading(false);
@@ -153,8 +154,8 @@ const CcoLootGrabForm = ({
     <form onSubmit={handleSubmit(onSubmit)}>
       <Flex justifyContent='space-between' my={3}>
         <Text fontSize='sm' color='whiteAlpha.700' as='i'>
-          {`${currentContributionData?.addressRemaining
-            || roundData.currentRound.maxContribution}`}
+          {`${currentContributionData?.addressRemaining ||
+            roundData.currentRound.maxContribution}`}
           /
           {`${roundData.currentRound.maxContribution} ${roundData.ccoToken.symbol} remaining`}
         </Text>

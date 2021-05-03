@@ -24,7 +24,7 @@ const MinionTokenList = ({ tokens }) => {
       {tokens ? (
         tokens
           .sort((a, b) => b.balance - a.balance)
-          .map((token) => {
+          .map(token => {
             return (
               <MinionTokenListCard key={token?.contractAddress} token={token} />
             );

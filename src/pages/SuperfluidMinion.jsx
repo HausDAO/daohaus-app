@@ -48,7 +48,7 @@ const SuperfluidMinionDetails = ({
     if (!overview?.minions.length) {
       return;
     }
-    const minionDetails = overview?.minions.find((m) => {
+    const minionDetails = overview?.minions.find(m => {
       return m.minionAddress === minion;
     });
     setMinionData(minionDetails);
@@ -63,9 +63,9 @@ const SuperfluidMinionDetails = ({
             minion,
             chainID: daochain,
           })('fetchStreams')({ molochAddress: daoid });
-          const streams = cfaStreams.flows.map((s) => {
+          const streams = cfaStreams.flows.map(s => {
             const proposal = activities?.proposals?.find(
-              (p) => p.proposalId === s.proposalId,
+              p => p.proposalId === s.proposalId,
             );
             if (proposal) {
               const details = JSON.parse(proposal.details);
@@ -89,8 +89,10 @@ const SuperfluidMinionDetails = ({
 
   useEffect(() => {
     const setUpBalances = async () => {
-      const balances = members.find((member) => (member.memberAddress === minion));
-      const newTokenData = balances ? await initTokenData(balances.tokenBalances) : [];
+      const balances = members.find(member => member.memberAddress === minion);
+      const newTokenData = balances
+        ? await initTokenData(balances.tokenBalances)
+        : [];
       setMinionBalances(newTokenData);
     };
 
@@ -147,9 +149,7 @@ const SuperfluidMinionDetails = ({
                 </Box>
                 <Flex align='center'>
                   <TextBox size='md' colorScheme='whiteAlpha.900'>
-                    {minionData.minionType}
-                    :
-                    {' '}
+                    {minionData.minionType}:{' '}
                     <Box as='span' color='primary.100'>
                       {truncateAddr(minionData.minionAddress)}
                     </Box>

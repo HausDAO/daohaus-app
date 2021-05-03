@@ -16,22 +16,26 @@ export const calcSeconds = (val, unit) => {
   val = parseInt(val);
   if (unit === 'seconds' || unit === 'second') {
     return val;
-  } if (unit === 'minutes' || unit === 'minute') {
+  }
+  if (unit === 'minutes' || unit === 'minute') {
     return val * SECONDS.PER_MINUTE;
-  } if (unit === 'hours' || unit === 'hour') {
+  }
+  if (unit === 'hours' || unit === 'hour') {
     return val * SECONDS.PER_HOUR;
-  } if (unit === 'days' || unit === 'day') {
+  }
+  if (unit === 'days' || unit === 'day') {
     return val * SECONDS.PER_DAY;
-  } if (unit === 'weeks' || unit === 'week') {
+  }
+  if (unit === 'weeks' || unit === 'week') {
     return val * SECONDS.PER_WEEK;
   }
   console.error('Did not receive the corrent arguments to calculate time');
   return false;
 };
 
-export const pipe = (...fns) => (x) => fns.reduce((prev, func) => func(prev), x);
+export const pipe = (...fns) => x => fns.reduce((prev, func) => func(prev), x);
 
-export const parseIfJSON = (data) => {
+export const parseIfJSON = data => {
   try {
     const JSONdata = JSON.parse(data);
     return JSONdata;
@@ -40,7 +44,7 @@ export const parseIfJSON = (data) => {
   }
 };
 
-export const IsJsonString = (str) => {
+export const IsJsonString = str => {
   try {
     JSON.parse(str);
   } catch (e) {
@@ -55,7 +59,7 @@ export const createHash = () => {
     .slice(2);
 };
 
-export const detailsToJSON = (values) => {
+export const detailsToJSON = values => {
   const details = {};
   details.title = values.title;
   // random string
@@ -92,23 +96,26 @@ export const detailsToJSON = (values) => {
 };
 
 // omits key/pairs from objects
-export const omit = (keys, obj) => Object.fromEntries(Object.entries(obj).filter(([k]) => !keys.includes(k)));
+export const omit = (keys, obj) =>
+  Object.fromEntries(Object.entries(obj).filter(([k]) => !keys.includes(k)));
 
-export const numberWithCommas = (num) => {
+export const numberWithCommas = num => {
   if (num === 0) return 0;
   if (!num) return;
   const localNum = typeof num !== 'string' ? num.toString() : num;
+  console.log(parseInt(localNum.split('.')[1]) === 0);
   // drop zero after decimal
-  const noZeroDec = parseInt(localNum.split('.')[1]) === 0
-    ? localNum.split('.')[0]
-    : parseInt(localNum);
+  const noZeroDec =
+    parseInt(localNum.split('.')[1]) === 0
+      ? localNum.split('.')[0]
+      : parseInt(localNum);
   return noZeroDec ? utils.commify(noZeroDec) : num;
 };
 
-export const truncateAddr = (addr) => {
+export const truncateAddr = addr => {
   return addr ? `${addr.slice(0, 6)}...${addr.slice(-4)}` : null;
 };
-export const timeToNow = (time) => {
+export const timeToNow = time => {
   return formatDistanceToNow(new Date(time * 1000), {
     addSuffix: true,
   });
@@ -138,7 +145,7 @@ export const formatPeriods = (period, duration) => {
   return 0;
 };
 
-export const stripHttpProtocol = (string) => {
+export const stripHttpProtocol = string => {
   // regex? var tarea_regex = /(http|https)/;
   let newString = '';
   if (string.toLowerCase().indexOf('http://') === 0) {
@@ -150,7 +157,7 @@ export const stripHttpProtocol = (string) => {
   return newString === '' ? string : newString;
 };
 
-export const capitalize = (string) => {
+export const capitalize = string => {
   if (string) {
     return string[0].toUpperCase() + string.slice(1);
   }
@@ -164,11 +171,12 @@ export const daoConnectedAndSameChain = (
   return address && daochain && injectedChainID === daochain;
 };
 
-export const isEthAddress = (string) => (typeof string === 'string' && /^0x[a-fA-F0-9]{40}$/.test(string)
-  ? string
-  : false);
+export const isEthAddress = string =>
+  typeof string === 'string' && /^0x[a-fA-F0-9]{40}$/.test(string)
+    ? string
+    : false;
 
-export const isDelegating = (member) => {
+export const isDelegating = member => {
   if (member?.memberAddress && member?.delegateKey) {
     return member?.memberAddress !== member?.delegateKey;
   }
@@ -176,21 +184,21 @@ export const isDelegating = (member) => {
 export const checkIfUserIsDelegate = (address, daoMembers) => {
   if (address && daoMembers) {
     const lowCaseAddress = address?.toLowerCase();
-    return daoMembers.filter((member) => member.delegateKey === lowCaseAddress);
+    return daoMembers.filter(member => member.delegateKey === lowCaseAddress);
   }
 };
 
-export const getQueryStringParams = (query) => {
+export const getQueryStringParams = query => {
   return query
     ? (/^[?#]/.test(query) ? query.slice(1) : query)
-      .split('&')
-      .reduce((params, param) => {
-        const [key, value] = param.split('=');
-        params[key] = value
-          ? decodeURIComponent(value.replace(/\+/g, ' '))
-          : '';
-        return params;
-      }, {})
+        .split('&')
+        .reduce((params, param) => {
+          const [key, value] = param.split('=');
+          params[key] = value
+            ? decodeURIComponent(value.replace(/\+/g, ' '))
+            : '';
+          return params;
+        }, {})
     : {};
 };
 
@@ -203,7 +211,7 @@ export const groupByKey = (array, key) => {
   }, {});
 };
 
-export const deriveValFromWei = (amt) => {
+export const deriveValFromWei = amt => {
   if (amt === 0) return 0;
   if (!amt) return;
   return Web3.utils.fromWei(amt.toString());
