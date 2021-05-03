@@ -16,6 +16,8 @@ export const CCO_CONSTANTS = {
     maxContribution: '',
     minContribution: '',
   },
+  // DAOSQUARE_NETWORK: '0x2a',
+  DAOSQUARE_NETWORK: '0x64',
 };
 
 export const countDownText = (round, raiseOver) => {
