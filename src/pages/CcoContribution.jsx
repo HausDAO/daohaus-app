@@ -208,8 +208,8 @@ const CcoContribution = React.memo(({
                 pr={[0, null, null, null, 6]}
                 mb={6}
               >
-                <ContentBox mt={2} w='100%'>
-                  <TextBox size='sm' color='whiteAlpha.900' mb={7}>
+                <ContentBox variant='d2' mt={2} w='100%'>
+                  <TextBox size='sm' color='blackAlpha.900' mb={7}>
                     1. Check eligibility
                   </TextBox>
                   {networkMatch() ? (
@@ -232,23 +232,23 @@ const CcoContribution = React.memo(({
                       ) : null}
                       {isEligible === 'checked' ? (
                         <>
-                          <TextBox variant='value' size='md' my={2}>
+                          <Box size='md' my={2} color='blackAlpha.900'>
                             You&apos;re eligible. Kudos for interacting with
                             DAOs!
-                          </TextBox>
+                          </Box>
 
                           {roundData.beforeRaise ? (
-                            <TextBox variant='value' size='md' my={2}>
+                            <Box size='md' my={2} color='blackAlpha.900'>
                               Come back when the contribution round begins.
-                            </TextBox>
+                            </Box>
                           ) : null}
                         </>
                       ) : null}
                       {isEligible === 'denied' ? (
-                        <TextBox variant='value' size='md' my={2}>
+                        <Box size='md' my={2} color='blackAlpha.900'>
                           Address is not eligible. Try again with another
                           address that has interacted with a DAO.
-                        </TextBox>
+                        </Box>
                       ) : null}
                     </>
                   ) : (
@@ -268,27 +268,27 @@ const CcoContribution = React.memo(({
 
                 {networkMatch() ? (
                   <>
-                    <ContentBox mt={2} w='100%'>
+                    <ContentBox variant='d2' mt={2} w='100%'>
                       <Flex direction='column'>
-                        <TextBox size='sm' color='whiteAlpha.900' mb={7}>
+                        <TextBox size='sm' color='blackAlpha.900' mb={7}>
                           2. Contribute
                         </TextBox>
                         {!raiseAtMax ? (
-                          <Text fontSize='sm' color='whiteAlpha.700' as='i'>
+                          <Text fontSize='sm' color='blackAlpha.700' as='i'>
                             {countDownText(
                               roundData.currentRound,
                               roundData.raiseOver,
                             )}
                           </Text>
                         ) : null}
-                        <Text fontSize='sm' color='whiteAlpha.700' mt={2}>
+                        <Text fontSize='sm' color='blackAlpha.700' mt={2}>
                           {`${roundData.claimTokenValue} ${roundData.ccoToken.symbol} = 1 ${roundData.claimTokenSymbol} | ${roundData.currentRound.maxContribution} ${roundData.ccoToken.symbol} max per person`}
                         </Text>
                       </Flex>
                       {raiseAtMax ? (
-                        <TextBox variant='value' size='md' my={2}>
+                        <Box size='md' my={2} color='blackAlpha.900'>
                           Max target reached. Contributions are closed.
-                        </TextBox>
+                        </Box>
                       ) : null}
 
                       {!eligibleBlock && !roundData.beforeRaise ? (
@@ -313,7 +313,7 @@ const CcoContribution = React.memo(({
                                     >
                                       <Text
                                         fontSize='sm'
-                                        color='whiteAlpha.700'
+                                        color='blackAlpha.700'
                                         as='i'
                                       >
                                         {`You contributed ${prop.tributeOffered
@@ -336,16 +336,16 @@ const CcoContribution = React.memo(({
                       ) : null}
                     </ContentBox>
 
-                    <ContentBox mt={2} w='100%'>
+                    <ContentBox variant='d2' mt={2} w='100%'>
                       <Flex
                         justifyContent='space-between'
                         alignItems='center'
                         mt={5}
                       >
-                        <TextBox size='sm' color='whiteAlpha.900'>
+                        <TextBox size='sm' color='blackAlpha.900'>
                           3. Claim
                         </TextBox>
-                        <Text fontSize='sm' color='whiteAlpha.700' as='i'>
+                        <Text fontSize='sm' color='blackAlpha.700' as='i'>
                           {claimCountDownText(roundData.claimPeriodStartTime)}
                         </Text>
                       </Flex>
@@ -355,7 +355,7 @@ const CcoContribution = React.memo(({
                         mt={5}
                       >
                         <Box>
-                          <Text fontSize='sm' color='whiteAlpha.700' as='i'>
+                          <Text fontSize='sm' color='blackAlpha.700' as='i'>
                             HAUS Available to Claim
                           </Text>
                           <TextBox variant='value' size='md' my={2}>
@@ -384,12 +384,13 @@ const CcoContribution = React.memo(({
                 ) : null}
               </Box>
               <Box w={['100%', null, null, null, '50%']}>
-                <ContentBox mt={2} w='100%'>
+                <ContentBox variant='d2' mt={2} w='100%'>
                   <Box
                     fontSize='xl'
                     fontWeight={700}
                     fontFamily='heading'
                     mb={7}
+                    color='blackAlpha.900'
                   >
                     Status
                   </Box>
@@ -405,7 +406,7 @@ const CcoContribution = React.memo(({
                   />
                   <Flex direction='row' justifyContent='space-between'>
                     <Box>
-                      <TextBox size='sm' color='whiteAlpha.900'>
+                      <TextBox size='sm' color='blackAlpha.900'>
                         Min target
                       </TextBox>
                       <TextBox variant='value' size='xl' my={2}>
@@ -415,7 +416,7 @@ const CcoContribution = React.memo(({
                       </TextBox>
                     </Box>
                     <Box>
-                      <TextBox size='sm' color='whiteAlpha.900'>
+                      <TextBox size='sm' color='blackAlpha.900'>
                         Max target
                       </TextBox>
                       <TextBox variant='value' size='xl' my={2}>
@@ -427,7 +428,7 @@ const CcoContribution = React.memo(({
                   </Flex>
                   <Flex direction='row' justifyContent='space-between' mb={5}>
                     <Box>
-                      <TextBox size='sm' color='whiteAlpha.900'>
+                      <TextBox size='sm' color='blackAlpha.900'>
                         Contributed
                       </TextBox>
                       <TextBox variant='value' size='xl' my={2}>
@@ -439,7 +440,7 @@ const CcoContribution = React.memo(({
                       </TextBox>
                     </Box>
                     <Box>
-                      <TextBox size='sm' color='whiteAlpha.900'>
+                      <TextBox size='sm' color='blackAlpha.900'>
                         Room Left
                       </TextBox>
                       {!raiseAtMax ? (
@@ -458,7 +459,7 @@ const CcoContribution = React.memo(({
                     </Box>
                   </Flex>
                   {!raiseAtMax ? (
-                    <TextBox size='sm' color='whiteAlpha.900'>
+                    <TextBox size='sm' color='blackAlpha.900'>
                       {countDownText(
                         roundData.currentRound,
                         roundData.raiseOver,
@@ -466,12 +467,13 @@ const CcoContribution = React.memo(({
                     </TextBox>
                   ) : null}
                 </ContentBox>
-                <ContentBox mt={2} w='100%'>
+                <ContentBox variant='d2' mt={2} w='100%'>
                   <Box
                     fontSize='xl'
                     fontWeight={700}
                     fontFamily='heading'
                     mb={7}
+                    color='blackAlpha.900'
                   >
                     Resources
                   </Box>
