@@ -20,33 +20,6 @@ import Textarea from './core/textarea';
 import ContentBoxComponent from './components/contentBox';
 import TextBoxComponent from './components/textBox';
 
-// export const getRandomTheme = async (images) => {
-//   const theme = {
-//     primary500: `#${((Math.random() * 0xffffff) << 0)
-//       .toString(16)
-//       .padStart(6, '0')}`,
-//     secondary500: `#${((Math.random() * 0xffffff) << 0)
-//       .toString(16)
-//       .padStart(6, '0')}`,
-//     bg500: `#${((Math.random() * 0xffffff) << 0)
-//       .toString(16)
-//       .padStart(6, '0')}`,
-//   };
-
-//   if (images) {
-//     const request = new Request('https://source.unsplash.com/random/200x200');
-//     const avatarImg = await fetch(request);
-
-//     const requestBg = new Request('https://source.unsplash.com/random/800x800');
-//     const bgImg = await fetch(requestBg);
-
-//     theme.avatarImg = avatarImg.url;
-//     theme.bgImg = bgImg.url;
-//   }
-
-//   return theme;
-// };
-
 export const createTheme = (daoTheme) => {
   const themeOverrides = { ...defaultTheme, ...daoTheme };
 

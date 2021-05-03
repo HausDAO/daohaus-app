@@ -34,3 +34,18 @@ export const defaultTheme = {
     // f04cta: 'Start Over',
   },
 };
+
+export const daosquareCcoTheme = {
+  primary500: '#4C965A',
+  primaryAlpha: rgba('#4C965A', 0.9),
+  secondary500: '#417505',
+  secondaryAlpha: rgba('#10153d', 0.75),
+  bg500: '#9B9B9B',
+  bgAlpha: '#9B9B9B',
+  bgOverlayOpacity: 0.75,
+  headingFont: 'Inknut Antiqua',
+  bodyFont: 'Rubik',
+  monoFont: 'Space Mono',
+  avatarImg: BrandImg,
+  bgImg: BgImg,
+};

@@ -1,21 +1,30 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Box, Flex, Spinner } from '@chakra-ui/react';
 
 import Layout from '../components/layout';
 import MainViewLayout from '../components/mainViewLayout';
 import DaosquareCcoOverall from '../components/daosquareCcoOverall';
 import DaosquareCcoCard from '../components/daosquareCcoCard';
-import { DaosquareContext } from '../contexts/DaosquareCcoContext';
+import { useDaosquareCco } from '../contexts/DaosquareCcoContext';
+import { useCustomTheme } from '../contexts/CustomThemeContext';
+import { daosquareCcoTheme } from '../themes/defaultTheme';
 
 // TODO: helper functions to create totals
 
 const DaosquareCco = () => {
-  const { d2CcoDaos } = useContext(DaosquareContext);
+  const { d2CcoDaos } = useDaosquareCco();
+  const { updateTheme } = useCustomTheme();
   const [totals, setTotals] = useState({
     raised: 0,
     funded: 0,
     projects: 0,
   });
+
+  // updateTheme(daosquareCcoTheme);
+  useEffect(() => {
+    console.log('updating theme');
+    updateTheme(daosquareCcoTheme);
+  }, []);
 
   useEffect(() => {
     if (d2CcoDaos?.length) {
