@@ -6,7 +6,7 @@ import TextBox from './TextBox';
 const DaosquareCcoOverall = ({ totals }) => {
   return (
     <>
-      <Box fontSize='xl'>Overall Stats</Box>
+      <Box fontSize='xl' mb={5}>Overall Stats</Box>
       <ContentBox>
         <TextBox size='xs'>Raised</TextBox>
         <TextBox size='lg' variant='value'>
