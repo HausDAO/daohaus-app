@@ -86,4 +86,6 @@ export const contributionTotalValue = (proposals, round) => {
   return total / 10 ** +round.ccoToken.decimals;
 };
 
-// export const isCcoAdmin()
+export const isDaosquareCcoPath = (daoMetaData, location) => {
+  return daoMetaData?.daosquarecco && location.pathname.split('/')[4] === 'cco';
+};

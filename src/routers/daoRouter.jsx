@@ -1,5 +1,11 @@
 import React from 'react';
-import { Switch, Route, useRouteMatch, useParams } from 'react-router-dom';
+import {
+  Switch,
+  Route,
+  useRouteMatch,
+  useParams,
+  useLocation,
+} from 'react-router-dom';
 
 import { useDao } from '../contexts/DaoContext';
 import { useDaoMember } from '../contexts/DaoMemberContext';
@@ -31,9 +37,11 @@ import Clone from '../pages/Clone';
 import MintGate from '../pages/MintGate';
 import Snapshot from '../pages/Snapshot';
 import CcoAdmin from '../pages/CcoAdmin';
+import { isDaosquareCcoPath } from '../utils/cco';
 
 const DaoRouter = () => {
   const { path } = useRouteMatch();
+  const location = useLocation();
   const { currentDaoTokens } = useToken();
 
   const {
@@ -57,7 +65,7 @@ const DaoRouter = () => {
   };
 
   return (
-    <Layout dao={dao} daosquarecco={daoMetaData?.daosquarecco}>
+    <Layout dao={dao} daosquarecco={isDaosquareCcoPath(daoMetaData, location)}>
       <Switch>
         <Route exact path={`${path}/`}>
           <Overview
