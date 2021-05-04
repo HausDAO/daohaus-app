@@ -1,6 +1,8 @@
 import { rgba } from 'polished';
 import BrandImg from '../assets/img/Daohaus__Castle--Dark.svg';
 import BgImg from '../assets/img/daohaus__hero--falling.jpg';
+import D2BgImg from '../assets/img/d2_bgImg.png';
+import D2Avatar from '../assets/img/d2_avatar.png';
 
 export const defaultTheme = {
   primary500: '#10153d',
@@ -36,16 +38,16 @@ export const defaultTheme = {
 };
 
 export const daosquareCcoTheme = {
-  primary500: '#4C965A',
-  primaryAlpha: rgba('#4C965A', 0.9),
-  secondary500: '#417505',
-  secondaryAlpha: rgba('#10153d', 0.75),
-  bg500: '#9B9B9B',
-  bgAlpha: '#9B9B9B',
-  bgOverlayOpacity: 0.75,
-  headingFont: 'Inknut Antiqua',
-  bodyFont: 'Rubik',
+  primary500: '#D361E8',
+  primaryAlpha: rgba('#D361E8', 0.9),
+  secondary500: '#FAC22E',
+  secondaryAlpha: rgba('#FAC22E', 0.75),
+  bg500: '#FFD3FF',
+  bgAlpha: '#FFD3FF',
+  bgOverlayOpacity: 0.0,
+  headingFont: 'Impact',
+  bodyFont: 'Mulish',
   monoFont: 'Space Mono',
-  avatarImg: BrandImg,
-  bgImg: BgImg,
+  avatarImg: D2Avatar,
+  bgImg: D2BgImg,
 };
