@@ -29,7 +29,6 @@ const CcoContribution = ({ daoMetaData, currentDaoTokens, daoProposals }) => {
   const [claimComplete, setClaimComplete] = useState(false);
 
   const networkMatch = injectedChain?.network === roundData?.network;
-  const raiseAtMax = currentContributionData?.remaining <= 0;
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -98,16 +97,18 @@ const CcoContribution = ({ daoMetaData, currentDaoTokens, daoProposals }) => {
         roundData,
       );
       const addressTotal = contributionTotalValue(addressProposals, roundData);
+      const remaining = Number(roundData.maxTarget) - contributionTotal;
 
       setCurrentContributionData({
         contributionProposals,
         addressProposals,
         contributionTotal,
         addressTotal,
+        remaining,
         statusPercentage:
           (contributionTotal / Number(roundData.maxTarget)) * 100,
-        remaining: Number(roundData.maxTarget) - contributionTotal,
         addressRemaining: Number(roundData.maxContribution) - addressTotal,
+        raiseAtMax: remaining <= 0,
       });
 
       if (isEligible === 'unchecked') {
@@ -170,7 +171,7 @@ const CcoContribution = ({ daoMetaData, currentDaoTokens, daoProposals }) => {
               networkMatch={networkMatch}
               isEligible={isEligible}
               roundData={roundData}
-              raiseAtMax={raiseAtMax}
+              raiseAtMax={currentContributionData?.raiseAtMax}
               handleSwitchNetwork={handleSwitchNetwork}
               setIsEligible={setIsEligible}
             />
@@ -178,7 +179,7 @@ const CcoContribution = ({ daoMetaData, currentDaoTokens, daoProposals }) => {
             {networkMatch && (
               <>
                 <CcoContributionCard
-                  raiseAtMax={raiseAtMax}
+                  raiseAtMax={currentContributionData?.raiseAtMax}
                   roundData={roundData}
                   daoMetaData={daoMetaData}
                   currentContributionData={currentContributionData}
