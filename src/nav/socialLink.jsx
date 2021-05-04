@@ -1,9 +1,7 @@
 import React from 'react';
 import { Link, IconButton, Tooltip } from '@chakra-ui/react';
 
-const SocialLink = ({
-  icon, href, label, view, onClick,
-}) => {
+const SocialLink = ({ icon, href, label, view, onClick }) => {
   if (view === 'mobile') {
     return (
       <IconButton

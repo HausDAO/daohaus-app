@@ -11,19 +11,21 @@ export const SuperfluidMinionFactoryService = ({ web3, chainID }) => {
 
   const chainParams = chainByID(chainID);
 
-  return (service) => {
+  return service => {
     if (service === 'summonSuperfluidMinion') {
-      return async ({
-        args, from, poll, onTxHash,
-      }) => {
+      return async ({ args, from, poll, onTxHash }) => {
         try {
           // const agreementType = args[2]; // TODO: cfa or ida
           const version = args[3];
           const superfluidConfig = chainParams.superfluid;
           if (!superfluidConfig) {
-            throw Error(`Superfluid minion not available in ${chainID} network`);
+            throw Error(
+              `Superfluid minion not available in ${chainID} network`,
+            );
           }
-          const superAppAddress = superfluidConfig?.superapp_addr && superfluidConfig?.superapp_addr[version];
+          const superAppAddress =
+            superfluidConfig?.superapp_addr &&
+            superfluidConfig?.superapp_addr[version];
           const minionFactoryAddress = superfluidConfig?.minion_factory_addr;
           const factory = new web3.eth.Contract(
             SuperfluidMinionFactory,
@@ -34,13 +36,13 @@ export const SuperfluidMinionFactoryService = ({ web3, chainID }) => {
           const tx = await factory.methods.summonMinion(...params);
           return tx
             .send({ from })
-            .on('transactionHash', (txHash) => {
+            .on('transactionHash', txHash => {
               if (poll) {
                 onTxHash(txHash);
                 poll(txHash);
               }
             })
-            .on('error', (error) => {
+            .on('error', error => {
               console.error(error);
             });
         } catch (error) {

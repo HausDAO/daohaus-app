@@ -10,7 +10,8 @@ const Brand = React.memo(({ dao }) => {
   const brandImg = dao?.daoMetaData?.avatarImg
     ? themeImagePath(dao?.daoMetaData?.avatarImg)
     : themeImagePath(BrandImg);
-  const brandLink = dao?.daoID && dao?.chainID ? `/dao/${dao?.chainID}/${dao?.daoID}` : '/';
+  const brandLink =
+    dao?.daoID && dao?.chainID ? `/dao/${dao?.chainID}/${dao?.daoID}` : '/';
   const { theme } = useCustomTheme();
 
   return (

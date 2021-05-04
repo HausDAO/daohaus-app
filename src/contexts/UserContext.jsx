@@ -55,14 +55,16 @@ export const UserContextProvider = ({ children }) => {
     }
   }, [address, userHubDaos, setUserHubDaos]);
 
-  const resolvePoll = (txHash) => {
+  const resolvePoll = txHash => {
     if (!address) {
       console.error("User address wasn't found. Cannot cache Poll.");
       return;
     }
     const oldCache = JSON.parse(localStorage.getItem('TXs')) || {};
     const userSpecificCache = oldCache[address] ? oldCache[address] : [];
-    const newUserCache = userSpecificCache.map((tx) => (tx.txHash === txHash ? { ...tx, status: 'resolved' } : tx));
+    const newUserCache = userSpecificCache.map(tx =>
+      tx.txHash === txHash ? { ...tx, status: 'resolved' } : tx,
+    );
     const newCache = {
       ...oldCache,
       [address]: newUserCache,
@@ -76,7 +78,7 @@ export const UserContextProvider = ({ children }) => {
     const cachedTXs = JSON.parse(localStorage.getItem('TXs')) || {};
     const userTXs = cachedTXs[address];
     if (userTXs?.length) {
-      userTXs.forEach((tx) => {
+      userTXs.forEach(tx => {
         if (tx.status === 'unresolved') {
           createPoll(tx.pollData)({
             ...tx.pollArgs,
@@ -97,7 +99,7 @@ export const UserContextProvider = ({ children }) => {
     }
   }, [address]);
 
-  const cachePoll = (pollData) => {
+  const cachePoll = pollData => {
     if (!address) {
       console.error("User address wasn't found. Cannot cache Poll.");
       return;

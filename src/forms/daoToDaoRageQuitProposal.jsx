@@ -1,8 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useForm } from 'react-hook-form';
-import {
-  Button, FormControl, Flex, Icon, Box,
-} from '@chakra-ui/react';
+import { Button, FormControl, Flex, Icon, Box } from '@chakra-ui/react';
 import { RiErrorWarningLine } from 'react-icons/ri';
 import { useParams } from 'react-router-dom';
 
@@ -33,9 +31,7 @@ const RageQuitProposalForm = ({ uberHausMinion, uberMembers }) => {
   const { daoid } = useParams();
   const { refreshDao } = useTX();
 
-  const {
-    handleSubmit, errors, register, setValue,
-  } = useForm();
+  const { handleSubmit, errors, register, setValue } = useForm();
   const { daoMetaData } = useMetaData();
 
   const [loading, setLoading] = useState(false);
@@ -46,7 +42,7 @@ const RageQuitProposalForm = ({ uberHausMinion, uberMembers }) => {
   useEffect(() => {
     if (!uberHausMinion && !uberMembers) return;
     const uberMinionMember = uberMembers.find(
-      (member) => member.memberAddress === uberHausMinion.minionAddress,
+      member => member.memberAddress === uberHausMinion.minionAddress,
     );
 
     if (+uberMinionMember.shares) {
@@ -71,14 +67,14 @@ const RageQuitProposalForm = ({ uberHausMinion, uberMembers }) => {
     }
   }, [errors]);
 
-  const onSubmit = async (values) => {
+  const onSubmit = async values => {
     setLoading(true);
     console.log('formValues', values);
 
     const hash = createHash();
     const now = (new Date().getTime() / 1000).toFixed();
-    const description = `This is a proposal to Rage Quit ${values.shares
-      || '0'} Shares and ${values.loot || '0'} from UberHAUS`;
+    const description = `This is a proposal to Rage Quit ${values.shares ||
+      '0'} Shares and ${values.loot || '0'} from UberHAUS`;
     const details = detailsToJSON({
       values,
       uberHaus: true,
@@ -93,7 +89,7 @@ const RageQuitProposalForm = ({ uberHausMinion, uberMembers }) => {
       values.loot?.toString() || '0',
     ];
     const submitRQAbiData = molochAbi.find(
-      (f) => f.type === 'function' && f.name === 'ragequit',
+      f => f.type === 'function' && f.name === 'ragequit',
     );
 
     const hexData = injectedProvider.eth.abi.encodeFunctionCall(
@@ -124,7 +120,7 @@ const RageQuitProposalForm = ({ uberHausMinion, uberMembers }) => {
             resolvePoll(txHash);
             console.error(`Could not find a matching proposal: ${error}`);
           },
-          onSuccess: (txHash) => {
+          onSuccess: txHash => {
             successToast({
               title: 'Rage Quit proposal Submitted to the DAO!',
             });
@@ -143,7 +139,7 @@ const RageQuitProposalForm = ({ uberHausMinion, uberMembers }) => {
         },
       });
       const onTxHash = () => {
-        setD2dProposalModal((prevState) => !prevState);
+        setD2dProposalModal(prevState => !prevState);
         setTxInfoModal(true);
       };
       await UberHausMinionService({
@@ -151,10 +147,13 @@ const RageQuitProposalForm = ({ uberHausMinion, uberMembers }) => {
         uberHausMinion: uberHausMinion.minionAddress,
         chainID: UBERHAUS_DATA.NETWORK,
       })('proposeAction')({
-        args, address, poll, onTxHash,
+        args,
+        address,
+        poll,
+        onTxHash,
       });
     } catch (err) {
-      setD2dProposalModal((prevState) => !prevState);
+      setD2dProposalModal(prevState => !prevState);
       setLoading(false);
       console.error('error: ', err);
       errorToast({

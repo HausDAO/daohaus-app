@@ -75,7 +75,7 @@ const ProfileMenu = ({ member }) => {
             resolvePoll(txHash);
             console.error(`Could not ragekick member: ${error}`);
           },
-          onSuccess: (txHash) => {
+          onSuccess: txHash => {
             successToast({
               title: 'Member kicked',
             });
@@ -89,7 +89,10 @@ const ProfileMenu = ({ member }) => {
         chainID: daochain,
         version: daoOverview?.version,
       })('ragekick')({
-        args, address, poll, onTxHash,
+        args,
+        address,
+        poll,
+        onTxHash,
       });
     } catch (err) {
       console.log('error: ', err);
@@ -97,9 +100,10 @@ const ProfileMenu = ({ member }) => {
     }
   };
 
-  const isMember = address
-    && member?.memberAddress
-    && address.toLowerCase() === member?.memberAddress.toLowerCase();
+  const isMember =
+    address &&
+    member?.memberAddress &&
+    address.toLowerCase() === member?.memberAddress.toLowerCase();
 
   const hasSharesOrloot = +member.shares > 0 || +member.loot > 0;
 
@@ -143,9 +147,12 @@ const ProfileMenu = ({ member }) => {
                 Add Delegate Key
               </MenuItem>
             )}
-            {!isMember && member.exists && !member.jailed && hasSharesOrloot && (
-              <MenuItem onClick={handleGuildkickClick}>GuildKick</MenuItem>
-            )}
+            {!isMember &&
+              member.exists &&
+              !member.jailed &&
+              hasSharesOrloot && (
+                <MenuItem onClick={handleGuildkickClick}>GuildKick</MenuItem>
+              )}
             {!isMember && member.jailed && hasSharesOrloot && (
               <MenuItem onClick={handleRageKick}>RageKick</MenuItem>
             )}

@@ -62,23 +62,18 @@ const DaoContractSettings = ({ overview, customTerms, wrapNZap }) => {
         {wrapNZap && (
           <Flex justify='space-between'>
             <TextBox size='xs'>
-              Wrap-N-Zap
-              {' '}
-              {supportedChains[daochain].chain}
+              Wrap-N-Zap {supportedChains[daochain].chain}
             </TextBox>
-            <Text
-              fontFamily='mono'
-              variant='value'
-              fontSize='sm'
-            >
-              <CopyToClipboard text={wrapNZap} mx={2} onCopy={copiedToast} _hover={{ cursor: 'pointer' }}>
+            <Text fontFamily='mono' variant='value' fontSize='sm'>
+              <CopyToClipboard
+                text={wrapNZap}
+                mx={2}
+                onCopy={copiedToast}
+                _hover={{ cursor: 'pointer' }}
+              >
                 <Flex color='secondary.400' align='center'>
                   <Box>{wrapNZap}</Box>
-                  <Icon
-                    as={FaCopy}
-                    color='secondary.300'
-                    ml={2}
-                  />
+                  <Icon as={FaCopy} color='secondary.300' ml={2} />
                 </Flex>
               </CopyToClipboard>
             </Text>
@@ -91,10 +86,10 @@ const DaoContractSettings = ({ overview, customTerms, wrapNZap }) => {
             </TextBox>
             <TextBox variant='value' size='xl'>
               {overview?.proposalDeposit
-                ? `${overview?.proposalDeposit
-                    / 10 ** overview?.depositToken.decimals} ${
-                  overview?.depositToken.symbol
-                }`
+                ? `${overview?.proposalDeposit /
+                    10 ** overview?.depositToken.decimals} ${
+                    overview?.depositToken.symbol
+                  }`
                 : '--'}
             </TextBox>
           </Box>
@@ -102,10 +97,10 @@ const DaoContractSettings = ({ overview, customTerms, wrapNZap }) => {
             <TextBox size='xs'>Processing Reward</TextBox>
             <TextBox variant='value' size='xl'>
               {overview?.processingReward
-                ? `${overview.processingReward
-                    / 10 ** overview?.depositToken.decimals} ${
-                  overview.depositToken.symbol
-                }`
+                ? `${overview.processingReward /
+                    10 ** overview?.depositToken.decimals} ${
+                    overview.depositToken.symbol
+                  }`
                 : '--'}
             </TextBox>
           </Stack>
@@ -116,9 +111,9 @@ const DaoContractSettings = ({ overview, customTerms, wrapNZap }) => {
             <TextBox variant='value' size='xl' my={2}>
               {overview
                 ? `${formatPeriods(
-                  +overview?.votingPeriodLength,
-                  +overview?.periodDuration,
-                )}`
+                    +overview?.votingPeriodLength,
+                    +overview?.periodDuration,
+                  )}`
                 : '--'}
             </TextBox>
           </Box>
@@ -127,9 +122,9 @@ const DaoContractSettings = ({ overview, customTerms, wrapNZap }) => {
             <TextBox variant='value' size='xl'>
               {overview
                 ? `${formatPeriods(
-                  +overview.gracePeriodLength,
-                  +overview.periodDuration,
-                )}`
+                    +overview.gracePeriodLength,
+                    +overview.periodDuration,
+                  )}`
                 : '--'}
             </TextBox>
           </Stack>
@@ -140,9 +135,9 @@ const DaoContractSettings = ({ overview, customTerms, wrapNZap }) => {
             <TextBox variant='value' size='xl'>
               {overview
                 ? format(
-                  new Date(+overview?.summoningTime * 1000),
-                  'MMMM d, yyyy',
-                )
+                    new Date(+overview?.summoningTime * 1000),
+                    'MMMM d, yyyy',
+                  )
                 : '--'}
             </TextBox>
           </Box>
@@ -170,7 +165,6 @@ const DaoContractSettings = ({ overview, customTerms, wrapNZap }) => {
         </Text> */}
         </Flex>
       </Stack>
-
     </ContentBox>
   );
 };

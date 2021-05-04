@@ -26,14 +26,17 @@ const BoostLaunchWrapper = ({ boost }) => {
   const [boostStep, setBoostStep] = useState(1);
   const { address, injectedProvider, injectedChain } = useInjectedProvider();
   const {
-    setGenericModal, errorToast, successToast, setTxInfoModal,
+    setGenericModal,
+    errorToast,
+    successToast,
+    setTxInfoModal,
   } = useOverlay();
   const { cachePoll, resolvePoll } = useUser();
   const { daoid, daochain } = useParams();
   const { refetchMetaData } = useMetaData();
   const { refreshDao } = useTX();
 
-  const handleLaunch = async (boostMetadata) => {
+  const handleLaunch = async boostMetadata => {
     setLoading(true);
 
     try {
@@ -82,7 +85,7 @@ const BoostLaunchWrapper = ({ boost }) => {
           console.error(`Error creating Wrap-N-Zap: ${error}`);
           setLoading(false);
         },
-        onSuccess: (txHash) => {
+        onSuccess: txHash => {
           successToast({
             title: 'Wrap-N-Zap added!',
           });
@@ -103,7 +106,10 @@ const BoostLaunchWrapper = ({ boost }) => {
       factoryAddress: supportedChains[daochain].wrap_n_zap_factory_addr,
     });
     await WNZFactory('create')({
-      args, address, poll, onTxHash,
+      args,
+      address,
+      poll,
+      onTxHash,
     });
   };
 

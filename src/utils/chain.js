@@ -40,8 +40,7 @@ export const supportedChains = {
     hub_sort_order: 6,
     providers: ['walletconnect'],
     // , 'portis', 'fortmatic'
-    rpc_url:
-      `https://${process.env.REACT_APP_RPC_URI}.rinkeby.rpc.rivet.cloud/`,
+    rpc_url: `https://${process.env.REACT_APP_RPC_URI}.rinkeby.rpc.rivet.cloud/`,
     abi_api_url:
       'https://api-rinkeby.etherscan.io/api?module=contract&action=getabi&address=',
     tokenlist_api_url:
@@ -149,7 +148,8 @@ export const supportedChains = {
       'https://api.thegraph.com/subgraphs/name/odyssy-automaton/daohaus-matic',
     stats_graph_url:
       'https://api.thegraph.com/subgraphs/name/odyssy-automaton/daohaus-stats-matic',
-    boosts_graph_url: 'https://api.thegraph.com/subgraphs/name/odyssy-automaton/daohaus-boosts-matic',
+    boosts_graph_url:
+      'https://api.thegraph.com/subgraphs/name/odyssy-automaton/daohaus-boosts-matic',
     minion_factory_addr: '0x02e458B5eEF8f23e78AefaC0F15f5d294C3762e9',
     moloch_factory_addr: '0x6690C139564144b27ebABA71F9126611a23A31C9',
     dai_contract: '0x8f3Cf7ad23Cd3CaDbD9735AFf958023239c6A063',
@@ -185,11 +185,11 @@ export const supportedChains = {
   },
 };
 
-export const chainByID = (chainID) => supportedChains[chainID];
-export const getGraphEndpoint = (chainID, endpointType) => (
-  chainByID(chainID)[endpointType]);
+export const chainByID = chainID => supportedChains[chainID];
+export const getGraphEndpoint = (chainID, endpointType) =>
+  chainByID(chainID)[endpointType];
 
-export const chainByNetworkId = (networkId) => {
+export const chainByNetworkId = networkId => {
   const idMapping = {
     1: supportedChains['0x1'],
     4: supportedChains['0x4'],
@@ -202,8 +202,8 @@ export const chainByNetworkId = (networkId) => {
   return idMapping[networkId];
 };
 
-export const chainByName = (networkName) => {
-  const networkKey = Object.keys(supportedChains).find((chainId) => {
+export const chainByName = networkName => {
+  const networkKey = Object.keys(supportedChains).find(chainId => {
     return supportedChains[chainId].network === networkName;
   });
 

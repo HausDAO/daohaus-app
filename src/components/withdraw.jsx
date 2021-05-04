@@ -41,7 +41,7 @@ const Withdraw = ({ token }) => {
               `Could not find a matching proposal: ${error?.message}`,
             );
           },
-          onSuccess: (txHash) => {
+          onSuccess: txHash => {
             successToast({
               title: 'Withdrew Tokens!',
             });
@@ -62,7 +62,10 @@ const Withdraw = ({ token }) => {
         chainID: daochain,
         version: daoOverview.version,
       })('withdrawBalance')({
-        args, address, poll, onTxHash,
+        args,
+        address,
+        poll,
+        onTxHash,
       });
     } catch (err) {
       setLoading(false);
@@ -88,19 +91,19 @@ const Withdraw = ({ token }) => {
             <Button size='sm' onClick={handleWithdraw}>
               Withdraw
             </Button>
-            ) : (
-              <Tooltip
-                hasArrow
-                shouldWrapChildren
-                placement='bottom'
-                label='Wrong network'
-                bg='secondary.500'
-              >
-                <Button size='sm' disabled>
-                  Withdraw
-                </Button>
-              </Tooltip>
-            )}
+          ) : (
+            <Tooltip
+              hasArrow
+              shouldWrapChildren
+              placement='bottom'
+              label='Wrong network'
+              bg='secondary.500'
+            >
+              <Button size='sm' disabled>
+                Withdraw
+              </Button>
+            </Tooltip>
+          )}
         </>
       )}
     </>

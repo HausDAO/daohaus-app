@@ -64,13 +64,14 @@ const MinionDetails = ({ overview, currentDaoTokens }) => {
   const { refreshDao } = useTX();
   const { address, injectedProvider } = useInjectedProvider();
 
-  const hasLoadedBalanceData = balancesGraphData.chains.length === Object.keys(supportedChains).length;
+  const hasLoadedBalanceData =
+    balancesGraphData.chains.length === Object.keys(supportedChains).length;
 
   useEffect(() => {
     if (!overview?.minions.length) {
       return;
     }
-    const localMinionData = overview?.minions.find((m) => {
+    const localMinionData = overview?.minions.find(m => {
       return m.minionAddress === minion;
     });
     setMinionData(localMinionData);
@@ -111,12 +112,12 @@ const MinionDetails = ({ overview, currentDaoTokens }) => {
     if (hasLoadedBalanceData) {
       console.log('resorting balances');
       const tokenBalances = balancesGraphData.data
-        .flatMap((bal) => {
-          return bal.tokenBalances.map((b) => {
+        .flatMap(bal => {
+          return bal.tokenBalances.map(b => {
             return { ...b, moloch: bal.moloch, meta: bal.meta };
           });
         })
-        .filter((bal) => +bal.tokenBalance > 0);
+        .filter(bal => +bal.tokenBalance > 0);
 
       setDaoBalances(tokenBalances);
     }
@@ -157,7 +158,7 @@ const MinionDetails = ({ overview, currentDaoTokens }) => {
             resolvePoll(txHash);
             console.error(`Could not find a matching proposal: ${error}`);
           },
-          onSuccess: (txHash) => {
+          onSuccess: txHash => {
             successToast({
               title: 'Minion proposal submitted.',
             });
@@ -177,7 +178,10 @@ const MinionDetails = ({ overview, currentDaoTokens }) => {
         minion,
         chainID: daochain,
       })('crossWithdraw')({
-        args, address, poll, onTxHash,
+        args,
+        address,
+        poll,
+        onTxHash,
       });
     } catch (err) {
       // setLoading(false);
@@ -265,9 +269,7 @@ const MinionDetails = ({ overview, currentDaoTokens }) => {
                       Minion wallet
                     </TextBox>
                     <TextBox size='md' align='center'>
-                      balance:
-                      {' '}
-                      {nativeBalance}
+                      balance: {nativeBalance}
                     </TextBox>
                     {daochain !== '0x64' && (
                       <Flex>View token data on etherscan</Flex>

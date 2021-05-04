@@ -20,7 +20,8 @@ import { truncateAddr } from '../utils/general';
 import { handleGetProfile } from '../utils/3box';
 import { chainByID } from '../utils/chain';
 
-const defaultTipLabel = 'Address to receive the Shares, Loot, and/or Funding requested in this proposal.';
+const defaultTipLabel =
+  'Address to receive the Shares, Loot, and/or Funding requested in this proposal.';
 
 const AddressInput = ({
   register,
@@ -42,7 +43,7 @@ const AddressInput = ({
 
   const ensAddr = watch('applicantHidden', '');
 
-  const handleChange = async (e) => {
+  const handleChange = async e => {
     if (e.target.value.endsWith('.eth')) {
       const ethersProvider = ethers.getDefaultProvider(
         chainByID('0x1').rpc_url,
@@ -62,7 +63,7 @@ const AddressInput = ({
     let shouldSet = true;
     if (daoMembers && !memberOverride) {
       const memberProfiles = Promise.all(
-        daoMembers.map(async (member) => {
+        daoMembers.map(async member => {
           return {
             ...member,
             ...(await handleGetProfile(member.memberAddress)),
@@ -74,7 +75,7 @@ const AddressInput = ({
       }
     } else if (memberOverride && overrideData) {
       const memberProfiles = Promise.all(
-        overrideData.map(async (member) => {
+        overrideData.map(async member => {
           return {
             ...member,
             ...(await handleGetProfile(member.memberAddress)),
@@ -186,7 +187,7 @@ const AddressInput = ({
             ref={register}
             color='whiteAlpha.900'
           >
-            {localMembers?.map((member) => {
+            {localMembers?.map(member => {
               return (
                 <option
                   key={member.memberAddress}

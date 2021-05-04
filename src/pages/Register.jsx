@@ -1,7 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import {
-  Flex, Icon, Box, Button,
-} from '@chakra-ui/react';
+import { Flex, Icon, Box, Button } from '@chakra-ui/react';
 import { useHistory, useParams, Link as RouterLink } from 'react-router-dom';
 import { BiArrowBack } from 'react-icons/bi';
 

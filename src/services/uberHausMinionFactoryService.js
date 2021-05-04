@@ -13,13 +13,14 @@ export const UberHausMinionFactoryService = ({ web3, chainID }) => {
     abi,
     chainByID(chainID).uberhaus_minion_factory_addr,
   );
-  return (service) => {
+  return service => {
     if (service === 'summonUberHausMinion') {
-      return async ({
-        args, from, poll, onTxHash,
-      }) => {
+      return async ({ args, from, poll, onTxHash }) => {
         console.log({
-          args, from, poll, onTxHash,
+          args,
+          from,
+          poll,
+          onTxHash,
         });
         console.log(contract);
         try {
@@ -27,13 +28,13 @@ export const UberHausMinionFactoryService = ({ web3, chainID }) => {
           const tx = await contract.methods[service](...args);
           return tx
             .send({ from })
-            .on('transactionHash', (txHash) => {
+            .on('transactionHash', txHash => {
               if (poll) {
                 onTxHash(txHash);
                 poll(txHash);
               }
             })
-            .on('error', (error) => {
+            .on('error', error => {
               console.error(error);
             });
         } catch (error) {

@@ -1,7 +1,5 @@
 import React from 'react';
-import {
-  Flex, Image, Link, Icon, Stack, Badge,
-} from '@chakra-ui/react';
+import { Flex, Image, Link, Icon, Stack, Badge } from '@chakra-ui/react';
 import {
   RiDiscordFill,
   RiTelegramFill,
@@ -40,7 +38,7 @@ const DaoMetaOverview = ({ daoMetaData }) => {
             <>
               <Flex mt={5}>
                 <Stack direction='row'>
-                  {daoMetaData.tags.map((tag) => {
+                  {daoMetaData.tags.map(tag => {
                     return <Badge key={tag}>{tag}</Badge>;
                   })}
                 </Stack>

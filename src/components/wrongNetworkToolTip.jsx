@@ -1,8 +1,6 @@
 import React from 'react';
 import { RiInformationLine } from 'react-icons/ri';
-import {
-  Box, Button, Flex, Icon, Tooltip,
-} from '@chakra-ui/react';
+import { Box, Button, Flex, Icon, Tooltip } from '@chakra-ui/react';
 import { useParams } from 'react-router-dom';
 
 import { useInjectedProvider } from '../contexts/InjectedProviderContext';
@@ -33,50 +31,27 @@ const WrongNetworkToolTip = () => {
     return null;
   }
 
-  if (daoConnectedAndSameChain(address,
-    injectedChain?.chainId,
-    daochain)
-    || !injectedProvider?.currentProvider?.isMetaMask) {
+  if (
+    daoConnectedAndSameChain(address, injectedChain?.chainId, daochain) ||
+    !injectedProvider?.currentProvider?.isMetaMask
+  ) {
     return <NetworkTextBox name={daoChainName} />;
   }
 
   return (
     <>
-      {
-      EIP3085.SUPPORTED[daochain]
-        ? (
-          <Tooltip
-            hasArrow
-            label={<MetaMaskToolTipLabel daoChainName={daoChainName} />}
-            bg='secondary.500'
-            placement='left-start'
-          >
-            <Button
-              variant='text'
-              px={0}
-              onClick={handleSwitchNetwork}
-              value={daochain}
-            >
-              <Flex
-                align='center'
-                mr={5}
-                background='secondary.500'
-                p='5px 12px'
-                borderRadius='20px'
-              >
-                <Icon as={RiInformationLine} mr={2} />
-                <Box fontSize='md' as='i' fontWeight={600}>
-                  {daoChainName}
-                </Box>
-              </Flex>
-            </Button>
-          </Tooltip>
-        ) : (
-          <Tooltip
-            hasArrow
-            label={<ToolTipLabel daoChainName={daoChainName} />}
-            bg='secondary.500'
-            placement='left-start'
+      {EIP3085.SUPPORTED[daochain] ? (
+        <Tooltip
+          hasArrow
+          label={<MetaMaskToolTipLabel daoChainName={daoChainName} />}
+          bg='secondary.500'
+          placement='left-start'
+        >
+          <Button
+            variant='text'
+            px={0}
+            onClick={handleSwitchNetwork}
+            value={daochain}
           >
             <Flex
               align='center'
@@ -90,9 +65,29 @@ const WrongNetworkToolTip = () => {
                 {daoChainName}
               </Box>
             </Flex>
-          </Tooltip>
-        )
-    }
+          </Button>
+        </Tooltip>
+      ) : (
+        <Tooltip
+          hasArrow
+          label={<ToolTipLabel daoChainName={daoChainName} />}
+          bg='secondary.500'
+          placement='left-start'
+        >
+          <Flex
+            align='center'
+            mr={5}
+            background='secondary.500'
+            p='5px 12px'
+            borderRadius='20px'
+          >
+            <Icon as={RiInformationLine} mr={2} />
+            <Box fontSize='md' as='i' fontWeight={600}>
+              {daoChainName}
+            </Box>
+          </Flex>
+        </Tooltip>
+      )}
     </>
   );
 };

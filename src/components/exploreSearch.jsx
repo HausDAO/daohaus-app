@@ -5,7 +5,7 @@ import { ExploreContext } from '../contexts/ExploreContext';
 const ExploreSearch = () => {
   const { dispatch } = useContext(ExploreContext);
 
-  const handleChange = (event) => {
+  const handleChange = event => {
     if (event.target.value) {
       dispatch({
         type: 'setSearchTerm',
@@ -23,7 +23,7 @@ const ExploreSearch = () => {
       type='search'
       className='input'
       placeholder='Search Daos'
-      onChange={(e) => handleChange(e)}
+      onChange={e => handleChange(e)}
     />
   );
 };

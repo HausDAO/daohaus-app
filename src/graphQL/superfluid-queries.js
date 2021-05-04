@@ -40,7 +40,6 @@ export const SF_OUTGOING_STREAMS = gql`
             blockNumber
             timestamp
           }
-          
         }
         flowRate
         lastUpdate
@@ -54,7 +53,7 @@ export const SF_OUTGOING_STREAMS = gql`
         }
       }
     }
-  } 
+  }
 `;
 
 export const SF_ACTIVE_STREAMS = gql`

@@ -3,7 +3,11 @@ import Web3 from 'web3';
 
 import SuperfluidMinionAbi from '../contracts/superfluidMinion.json';
 import SuperfluidResolverAbi from '../contracts/iSuperfluidResolver.json';
-import { MINION_STREAMS, SF_ACTIVE_STREAMS, SF_OUTGOING_STREAMS } from '../graphQL/superfluid-queries';
+import {
+  MINION_STREAMS,
+  SF_ACTIVE_STREAMS,
+  SF_OUTGOING_STREAMS,
+} from '../graphQL/superfluid-queries';
 import { TokenService } from './tokenService';
 import { chainByID, getGraphEndpoint } from '../utils/chain';
 import { graphFetchAll } from '../utils/theGraph';
@@ -17,15 +21,15 @@ const getSuperTokenBalances = async (
   superTokens,
 ) => {
   try {
-    const tokenBalances = superTokens.map(async (tokenAddress) => {
+    const tokenBalances = superTokens.map(async tokenAddress => {
       const tokenService = TokenService({
         tokenAddress,
         chainID,
       });
       const tokenSymbol = await tokenService('symbol')();
-      const sToken = await sfResolver.methods.get(
-        `supertokens.${sfVersion}.${tokenSymbol}`,
-      ).call();
+      const sToken = await sfResolver.methods
+        .get(`supertokens.${sfVersion}.${tokenSymbol}`)
+        .call();
       return {
         [tokenAddress]: {
           tokenBalance: await tokenService('balanceOf')(minion),
@@ -58,9 +62,14 @@ export const SuperfluidMinionService = ({ web3, minion, chainID }) => {
         try {
           const superfluidConfig = chainConfig.superfluid;
           if (!superfluidConfig) {
-            throw Error(`Superfluid minion not available in ${chainID} network`);
+            throw Error(
+              `Superfluid minion not available in ${chainID} network`,
+            );
           }
-          const sfResolver = new web3.eth.Contract(SuperfluidResolverAbi, superfluidConfig?.resolver);
+          const sfResolver = new web3.eth.Contract(
+            SuperfluidResolverAbi,
+            superfluidConfig?.resolver,
+          );
           const sfVersion = superfluidConfig.version;
           const streams = await graphFetchAll({
             endpoint: getGraphEndpoint(chainID, 'subgraph_url'),
@@ -94,28 +103,42 @@ export const SuperfluidMinionService = ({ web3, minion, chainID }) => {
             sfVersion,
             Array(
               ...new Set(
-                streams.filter((s) => s.executed).map((s) => s.superTokenAddress),
+                streams.filter(s => s.executed).map(s => s.superTokenAddress),
               ),
             ),
           );
           const now = new Date();
           const flows = await Promise.all(
-            streams.map(async (stream) => {
+            streams.map(async stream => {
               if (stream.executed) {
-                const decimals = superTokens[stream.superTokenAddress]?.decimals;
-                const sfStream = sfStreams.find((s) => s.recipient.id === stream.to && s.token.id === stream.superTokenAddress);
-                const nextFUEvent = sfStream.events.find((e, i) => i > 0 && sfStream.events[i - 1].transaction.blockNumber === stream.executedBlock);
+                const decimals =
+                  superTokens[stream.superTokenAddress]?.decimals;
+                const sfStream = sfStreams.find(
+                  s =>
+                    s.recipient.id === stream.to &&
+                    s.token.id === stream.superTokenAddress,
+                );
+                const nextFUEvent = sfStream.events.find(
+                  (e, i) =>
+                    i > 0 &&
+                    sfStream.events[i - 1].transaction.blockNumber ===
+                      stream.executedBlock,
+                );
                 if (nextFUEvent) {
-                // Stream was stopped or liquidated
-                  const netFlow = +nextFUEvent.sum / (10 ** decimals);
+                  // Stream was stopped or liquidated
+                  const netFlow = +nextFUEvent.sum / 10 ** decimals;
                   return {
                     ...stream,
                     liquidated: stream.active,
                     netFlow,
                   };
                 }
-                const netFlow = stream.active ? (+stream.rate * ((now - new Date(stream.executedAt * 1000)) / 1000)) / (10 ** decimals)
-                  : (+stream.rate * (+stream.canceledAt - +stream.executedAt)) / (10 ** decimals);
+                const netFlow = stream.active
+                  ? (+stream.rate *
+                      ((now - new Date(stream.executedAt * 1000)) / 1000)) /
+                    10 ** decimals
+                  : (+stream.rate * (+stream.canceledAt - +stream.executedAt)) /
+                    10 ** decimals;
                 return {
                   ...stream,
                   netFlow,
@@ -123,7 +146,6 @@ export const SuperfluidMinionService = ({ web3, minion, chainID }) => {
               }
               return stream;
             }),
-
           );
           return {
             flows: flows.sort((a, b) => b.createdAt - a.createdAt),
@@ -150,7 +172,9 @@ export const SuperfluidMinionService = ({ web3, minion, chainID }) => {
           },
         });
         const activeStreams = accountStreams?.account?.flowsOwned;
-        return !!activeStreams?.find((s) => s.token?.underlyingAddress === tokenAddress);
+        return !!activeStreams?.find(
+          s => s.token?.underlyingAddress === tokenAddress,
+        );
       };
     }
     if (service === 'getStream') {
@@ -165,25 +189,23 @@ export const SuperfluidMinionService = ({ web3, minion, chainID }) => {
     // cancelStream args: [ proposal id ]
     // withdrawRemainingFunds args: | superToken |
     if (
-      service === 'proposeStream'
-      || service === 'executeAction'
-      || service === 'cancelAction'
-      || service === 'cancelStream'
-      || service === 'withdrawRemainingFunds'
+      service === 'proposeStream' ||
+      service === 'executeAction' ||
+      service === 'cancelAction' ||
+      service === 'cancelStream' ||
+      service === 'withdrawRemainingFunds'
     ) {
-      return async ({
-        args, address, poll, onTxHash,
-      }) => {
+      return async ({ args, address, poll, onTxHash }) => {
         const tx = await minionContract.methods[service](...args);
         return tx
           .send('eth_requestAccounts', { from: address })
-          .on('transactionHash', (txHash) => {
+          .on('transactionHash', txHash => {
             if (poll) {
               onTxHash();
               poll(txHash);
             }
           })
-          .on('error', (error) => {
+          .on('error', error => {
             console.error(error);
           });
       };

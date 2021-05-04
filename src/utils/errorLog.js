@@ -26,9 +26,7 @@ export const postError = async (data, id) => {
 };
 
 const createError = (errData, id) => {
-  const {
-    caughtAt, errMsg, daoAddress, type, priority, userAddress,
-  } = errData;
+  const { caughtAt, errMsg, daoAddress, type, priority, userAddress } = errData;
 
   const firestoreError = {
     fields: {
@@ -64,7 +62,7 @@ const createError = (errData, id) => {
   return firestoreError;
 };
 
-export const LogError = async (data) => {
+export const LogError = async data => {
   const id = uuidv4();
   try {
     const errData = createError(data, id);

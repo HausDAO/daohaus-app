@@ -24,15 +24,15 @@ const ActivitiesFeed = ({
       <TextBox>{heading}</TextBox>
       {pagedActivities
         ? pagedActivities.map((activity, index) => {
-          return (
-            <ActivityCard
-              key={`${activity.id}-${index}`}
-              activity={activity}
-              displayAvatar
-              isLink={isLink}
-            />
-          );
-        })
+            return (
+              <ActivityCard
+                key={`${activity.id}-${index}`}
+                activity={activity}
+                displayAvatar
+                isLink={isLink}
+              />
+            );
+          })
         : null}
       {!allActivities?.length ? (
         <TextBox variant='value'>Not much happening yet</TextBox>
