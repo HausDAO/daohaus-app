@@ -16,11 +16,17 @@ import {
   Icon,
   MenuList,
   MenuItem,
+  FormHelperText,
 } from '@chakra-ui/react';
 import { useForm } from 'react-hook-form';
 
-import { RiAddFill, RiErrorWarningLine } from 'react-icons/ri';
+import {
+  RiAddFill,
+  RiErrorWarningLine,
+  RiInformationLine,
+} from 'react-icons/ri';
 import TextBox from './TextBox';
+import { ToolTipWrapper } from '../staticElements/wrappers';
 
 // const getHeight = (fields) => {
 //   if (!fields.length > 0) {
@@ -111,16 +117,20 @@ const GenericInput = ({
   valOnType = [],
   valOnSubmit = [],
   localForm,
+  helperText,
   append,
+  info,
   prepend,
 }) => {
   const { register } = localForm;
 
   return (
-    <FieldWrapper>
-      <TextBox as={FormLabel} size='xs' htmlFor={htmlFor}>
-        {label}
-      </TextBox>
+    <FieldWrapper
+      label={label}
+      htmlFor={htmlFor}
+      info={info}
+      helperText={helperText}
+    >
       <InputGroup>
         {prepend && (
           <InputLeftAddon background='primary.600'>{prepend}</InputLeftAddon>
@@ -173,29 +183,34 @@ const GenericTextarea = ({
   name,
   valOnType = [],
   valOnSubmit = [],
+  helperText,
   localForm,
+  info,
   h = 10,
 }) => {
   const { register } = localForm;
 
   return (
-    <FieldWrapper>
-      <TextBox as={FormLabel} size='xs' htmlFor={htmlFor}>
-        {label}
-      </TextBox>
-      <Textarea
-        id={htmlFor}
-        name={name}
-        placeholder={placeholder || label || htmlFor}
-        mb={2}
-        h={h}
-        ref={register({
-          required: {
-            value: true,
-            message: 'Required',
-          },
-        })}
-      />
+    <FieldWrapper
+      label={label}
+      htmlFor={htmlFor}
+      info={info}
+      helperText={helperText}
+    >
+      <Box>
+        <Textarea
+          id={htmlFor}
+          name={name}
+          placeholder={placeholder || label || htmlFor}
+          h={h}
+          ref={register({
+            required: {
+              value: true,
+              message: 'Required',
+            },
+          })}
+        />
+      </Box>
     </FieldWrapper>
   );
 };
@@ -204,11 +219,26 @@ const LinkInput = props => {
   return <GenericInput {...props} prepend='https://' />;
 };
 
-const FieldWrapper = ({ children }) => {
+const FieldWrapper = ({ children, label, info, htmlFor, helperText }) => {
   return (
-    <Box w={['100%', null, '48%']} mb={2}>
+    <Flex w={['100%', null, '48%']} mb={3} flexDir='column'>
+      <Flex>
+        <TextBox as={FormLabel} size='xs' htmlFor={htmlFor}>
+          {label}
+          {info && (
+            <ToolTipWrapper
+              tooltip
+              tooltipText={{ body: info }}
+              placement='right'
+            >
+              <Icon as={RiInformationLine} ml={2} />
+            </ToolTipWrapper>
+          )}
+        </TextBox>
+      </Flex>
       {children}
-    </Box>
+      {helperText && <FormHelperText mt={-1}>{helperText}</FormHelperText>}
+    </Flex>
   );
 };
 
@@ -244,7 +274,7 @@ const AdditionalOptions = ({ options = [], addOption }) => {
   );
 };
 
-const FormFooter = ({ options, loading, addOption }) => {
+const FormFooter = ({ options, loading, addOption, errors }) => {
   if (options?.length) {
     return (
       <Box>
@@ -266,9 +296,7 @@ const FormFooter = ({ options, loading, addOption }) => {
               Submit
             </Button>
           </Flex>
-          <Flex flexDirection='column' alignItems='flex-start'>
-            <SubmitFormError message='Must be 8-12 characters' />
-          </Flex>
+          <SubmitErrList errors={errors} />
         </Flex>
       </Box>
     );
@@ -287,16 +315,25 @@ const FormFooter = ({ options, loading, addOption }) => {
   );
 };
 
-const SubmitFormError = ({ message }) => {
+const SubmitErrList = ({ errors = [] }) => {
+  //  determine which errors are submit errors
   return (
-    <Flex color='secondary.300' fontSize='m' alignItems='flex-start'>
-      <Icon
-        as={RiErrorWarningLine}
-        color='secondary.300'
-        mr={2}
-        transform='translateY(2px)'
-      />
-      {message}
+    <Flex flexDirection='column' alignItems='flex-start'>
+      {errors.map((error, index) => (
+        <SubmitFormError message={error.msg} key={`${error.msg}-${index}`} />
+      ))}
     </Flex>
   );
 };
+
+const SubmitFormError = ({ message }) => (
+  <Flex color='secondary.300' fontSize='m' alignItems='flex-start'>
+    <Icon
+      as={RiErrorWarningLine}
+      color='secondary.300'
+      mr={1}
+      transform='translateY(2px)'
+    />
+    {message}
+  </Flex>
+);

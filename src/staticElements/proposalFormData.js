@@ -1,6 +1,18 @@
 import { PROPOSAL_TYPES } from '../utils/proposalUtils';
 
-export const FIELD_TYPES = {
+const INFO_TEXT = {
+  SHARES_REQUEST:
+    'Shares provide voting power and exposure to assets. Whole numbers only please.',
+  LOOT_REQUEST:
+    'Loot provides exposure to assets but not voting power. Only whole numbers accepted here, no decimals plz',
+  APPLICANT:
+    'Address to receive the Shares, Loot, and/or Funding requested in this proposal.',
+  TOKEN_TRIBUTE:
+    'Only tokens approved by the DAO are allowed here. Members can add more approved tokens with Token proposals',
+  PAYMENT_REQUEST: 'Request Funds from the DAO',
+};
+
+export const FIELD = {
   TITLE: {
     type: 'input',
     label: 'Title',
@@ -21,6 +33,7 @@ export const FIELD_TYPES = {
     name: 'shares',
     htmlFor: 'shares',
     placeholder: '0',
+    info: INFO_TEXT.SHARES_REQUEST,
   },
   LINK: {
     type: 'linkInput',
@@ -40,9 +53,9 @@ export const PROPOSAL_FORMS = {
       action: 'submitProposal',
     },
     fields: [
-      FIELD_TYPES.TITLE,
-      FIELD_TYPES.SHARES_REQUEST,
-      FIELD_TYPES.DESCRIPTION,
+      FIELD.TITLE,
+      FIELD.SHARES_REQUEST,
+      FIELD.DESCRIPTION,
       {
         type: 'inputSelect',
         selectLabel: 'Tests',
@@ -55,8 +68,8 @@ export const PROPOSAL_FORMS = {
           { name: 'Test 3', value: 'test 3' },
         ],
       },
-      FIELD_TYPES.LINK,
+      FIELD.LINK,
     ],
-    additionalOptions: [FIELD_TYPES.TITLE, FIELD_TYPES.SHARES_REQUEST],
+    additionalOptions: [FIELD.TITLE, FIELD.SHARES_REQUEST],
   },
 };
