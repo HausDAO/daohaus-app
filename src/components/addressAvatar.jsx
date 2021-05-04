@@ -1,15 +1,10 @@
-import React, {
-  useEffect, useMemo, useRef, useState,
-} from 'react';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
 
 import StaticAvatar from './staticAvatar';
 import { handleGetENS } from '../utils/ens';
 import { handleGetProfile } from '../utils/3box';
 
-const AddressAvatar = React.memo(({
-  addr,
-  hideCopy,
-}) => {
+const AddressAvatar = React.memo(({ addr, hideCopy }) => {
   const [profile, setProfile] = useState(null);
 
   const shouldFetchENS = useRef(false);
@@ -61,7 +56,12 @@ const AddressAvatar = React.memo(({
   }, [profile, addr]);
 
   return (
-    <StaticAvatar address={addr} avatarImg={avatarImage} name={profile?.name} hideCopy={hideCopy} />
+    <StaticAvatar
+      address={addr}
+      avatarImg={avatarImage}
+      name={profile?.name}
+      hideCopy={hideCopy}
+    />
   );
 });
 

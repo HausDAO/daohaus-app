@@ -1,17 +1,12 @@
 import React from 'react';
-import {
-  Box, Flex,
-} from '@chakra-ui/react';
+import { Box, Flex } from '@chakra-ui/react';
 
 import MainViewLayout from '../components/mainViewLayout';
 import CcoActivate from './CcoActivate';
 import CcoWhitelist from '../forms/ccoWhitelist';
 import CcoConfig from '../forms/ccoConfig';
 
-const CcoAdmin = React.memo(({
-  daoMetaData,
-  isCorrectNetwork,
-}) => {
+const CcoAdmin = React.memo(({ daoMetaData, isCorrectNetwork }) => {
   const isDaosquareCco = daoMetaData?.daosquarecco > 0;
   const ccoType = isDaosquareCco ? 'daosquarecco' : 'cco';
   const isCco = daoMetaData?.boosts && daoMetaData.boosts[ccoType];
@@ -19,7 +14,6 @@ const CcoAdmin = React.memo(({
   return (
     <MainViewLayout header='DAOhaus CCO' isDao>
       <Box w='100%'>
-
         {isCorrectNetwork && (
           <Flex wrap='wrap'>
             <Box
@@ -28,7 +22,6 @@ const CcoAdmin = React.memo(({
               mb={6}
             >
               <CcoConfig daoMetaData={daoMetaData} ccoType={ccoType} />
-
             </Box>
             <Box w={['100%', null, null, null, '50%']}>
               {isCco && (
@@ -37,7 +30,6 @@ const CcoAdmin = React.memo(({
                   <CcoActivate daoMetaData={daoMetaData} ccoType={ccoType} />
                 </>
               )}
-
             </Box>
           </Flex>
         )}

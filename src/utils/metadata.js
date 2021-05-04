@@ -4,7 +4,7 @@ import { capitalize, omit } from './general';
 const metadataApiUrl = 'https://data.daohaus.club';
 const ccoApiUrl = 'https://cco.daohaus.club';
 
-export const fetchMetaData = async (endpoint) => {
+export const fetchMetaData = async endpoint => {
   const url = `${metadataApiUrl}/dao/${endpoint}`;
 
   try {
@@ -27,18 +27,19 @@ export const getApiMetadata = async () => {
   }
 };
 
-export const formatBoosts = (boostsArr) => boostsArr.reduce((obj, boost) => {
-  return {
-    ...obj,
-    [boost.boostKey[0]]: omit('boostKey', boost),
-  };
-}, {});
+export const formatBoosts = boostsArr =>
+  boostsArr.reduce((obj, boost) => {
+    return {
+      ...obj,
+      [boost.boostKey[0]]: omit('boostKey', boost),
+    };
+  }, {});
 
-export const themeImagePath = (imageValue) => {
+export const themeImagePath = imageValue => {
   if (
-    !imageValue
-    || imageValue.slice(0, 1) === '/'
-    || imageValue.slice(0, 4) === 'http'
+    !imageValue ||
+    imageValue.slice(0, 1) === '/' ||
+    imageValue.slice(0, 4) === 'http'
   ) {
     return imageValue;
   }
@@ -48,16 +49,18 @@ export const themeImagePath = (imageValue) => {
   }
 };
 
-export const pokemolUrlHubList = (dao) => {
-  const domain = dao.meta.network === 'mainnet'
-    ? 'pokemol.com'
-    : `${dao.meta.network}.pokemol.com`;
+export const pokemolUrlHubList = dao => {
+  const domain =
+    dao.meta.network === 'mainnet'
+      ? 'pokemol.com'
+      : `${dao.meta.network}.pokemol.com`;
   return `https://${domain}/dao/${dao.moloch.id}`;
 };
 
-export const pokemolUrlExplore = (dao) => {
+export const pokemolUrlExplore = dao => {
   const networkName = chainByNetworkId(+dao.networkId).network;
-  const domain = networkName === 'mainnet' ? 'pokemol.com' : `${networkName}.pokemol.com`;
+  const domain =
+    networkName === 'mainnet' ? 'pokemol.com' : `${networkName}.pokemol.com`;
   return `https://${domain}/dao/${dao.id}`;
 };
 
@@ -68,44 +71,62 @@ export const getTerm = (customTerms, word) => {
   word = word?.toLowerCase();
   if (word === 'proposal') {
     return customTerms?.proposal || 'Proposal';
-  } if (word === 'proposals') {
+  }
+  if (word === 'proposals') {
     return customTerms?.proposals || 'Proposals';
-  } if (word === 'bank') {
+  }
+  if (word === 'bank') {
     return customTerms?.bank || 'Bank';
-  } if (word === 'boost') {
+  }
+  if (word === 'boost') {
     return customTerms?.boost || 'Boost';
-  } if (word === 'boosts') {
+  }
+  if (word === 'boosts') {
     return customTerms?.boosts || 'Boosts';
-  } if (word === 'members') {
+  }
+  if (word === 'members') {
     return customTerms?.members || 'Members';
-  } if (word === 'member') {
+  }
+  if (word === 'member') {
     return customTerms?.member || 'Member';
-  } if (word === 'settings') {
+  }
+  if (word === 'settings') {
     return customTerms?.settings || 'Settings';
-  } if (word === 'profile') {
+  }
+  if (word === 'profile') {
     return customTerms?.profile || 'Profile';
-  } if (word === 'f04title') {
+  }
+  if (word === 'f04title') {
     return customTerms?.f04title || "404 What's Lost Can Be Found";
-  } if (word === 'f04heading') {
+  }
+  if (word === 'f04heading') {
     return customTerms?.f04heading || 'You have been slain';
-  } if (word === 'settings') {
+  }
+  if (word === 'settings') {
     return customTerms?.settings || 'Settings';
-  } if (word === 'rage quit' || word === 'ragequit') {
+  }
+  if (word === 'rage quit' || word === 'ragequit') {
     return customTerms?.ragequit || 'Rage Quit';
-  } if (word === 'guild kick' || word === 'guildkick') {
+  }
+  if (word === 'guild kick' || word === 'guildkick') {
     return customTerms?.guildkick || 'Guild Kick';
-  } if (word === 'minion') {
+  }
+  if (word === 'minion') {
     return customTerms?.minion || 'minion';
-  } if (word === 'minions') {
+  }
+  if (word === 'minions') {
     return customTerms?.minions || 'Minions';
-  } if (word === 'f04subhead') {
+  }
+  if (word === 'f04subhead') {
     return (
-      customTerms?.f04subhead
-      || 'Please reload from the most recent save point.'
+      customTerms?.f04subhead ||
+      'Please reload from the most recent save point.'
     );
-  } if (word === 'f04cta') {
+  }
+  if (word === 'f04cta') {
     return customTerms?.f04cta || 'Start Over.';
-  } if (typeof word !== 'string') {
+  }
+  if (typeof word !== 'string') {
     return 'Error';
   }
   return capitalize(word);
@@ -113,12 +134,13 @@ export const getTerm = (customTerms, word) => {
 
 export const getCustomProposalTerm = (customTerms, proposalTerm) => {
   if (
-    customTerms?.proposal
-    && customTerms?.proposal !== 'Proposal'
-    && proposalTerm
+    customTerms?.proposal &&
+    customTerms?.proposal !== 'Proposal' &&
+    proposalTerm
   ) {
     return proposalTerm.replace('Proposal', customTerms.proposal);
-  } if (proposalTerm) {
+  }
+  if (proposalTerm) {
     return proposalTerm;
   }
   return 'Proposal';
@@ -226,7 +248,7 @@ export const put = async (endpoint, data) => {
   }
 };
 
-export const getForumTopics = async (categoryId) => {
+export const getForumTopics = async categoryId => {
   const url = `${metadataApiUrl}/dao/discourse-topics/${categoryId}`;
 
   try {
@@ -238,7 +260,7 @@ export const getForumTopics = async (categoryId) => {
   }
 };
 
-export const getEligibility = async (address) => {
+export const getEligibility = async address => {
   try {
     const response = await fetch(
       `https://data.daohaus.club/dao/know-your-dao/${address}`,
@@ -258,7 +280,7 @@ export const getDateTime = async () => {
   }
 };
 
-export const getNftMeta = async (url) => {
+export const getNftMeta = async url => {
   try {
     const response = await fetch(url);
     return response.json();

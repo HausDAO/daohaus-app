@@ -5,9 +5,7 @@ import { getTerm } from '../utils/metadata';
 import Web3SignIn from './web3SignIn';
 import DaosquareHeader from './daoSquareHeader';
 
-const PageHeader = ({
-  isDao, isDaosquare, header, headerEl, customTerms,
-}) => {
+const PageHeader = ({ isDao, isDaosquare, header, headerEl, customTerms }) => {
   return (
     <Flex direction='row' justify='space-between' p={6}>
       <Flex
@@ -26,9 +24,7 @@ const PageHeader = ({
           {customTerms ? getTerm(customTerms, header) : header}
         </Box>
         {headerEl}
-        {isDaosquare && (
-          <DaosquareHeader />
-        )}
+        {isDaosquare && <DaosquareHeader />}
       </Flex>
       <Flex
         direction='row'

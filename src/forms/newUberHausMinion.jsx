@@ -28,20 +28,14 @@ import { UBERHAUS_DATA } from '../utils/uberhaus';
 import AddressInput from './addressInput';
 import { isEthAddress } from '../utils/general';
 
-const NewUberHausMinion = ({
-  daoMembers,
-  uberMembers,
-  uberDelegate,
-}) => {
+const NewUberHausMinion = ({ daoMembers, uberMembers, uberDelegate }) => {
   const [loading, setLoading] = useState(false);
   const { daochain, daoid } = useParams();
   const { address, injectedProvider, injectedChain } = useInjectedProvider();
   const { refetch } = useDao();
   const { cachePoll, resolvePoll } = useUser();
   const { errorToast, successToast, setGenericModal } = useOverlay();
-  const {
-    handleSubmit, register, setValue, watch,
-  } = useForm();
+  const { handleSubmit, register, setValue, watch } = useForm();
   const [step, setStep] = useState(1);
   const [pendingTx, setPendingTx] = useState(null);
   const [missingDelegate, setMissingDelegate] = useState(false);
@@ -49,12 +43,13 @@ const NewUberHausMinion = ({
 
   const candidates = useMemo(() => {
     if (!daoMembers || !uberMembers) return null;
-    return daoMembers.filter((member) => {
+    return daoMembers.filter(member => {
       const hasShares = +member.shares > 0;
       const isNotDelegate = member.memberAddress !== uberDelegate;
       const isNotUberMemberOrDelegate = uberMembers.every(
-        (uberMember) => member.memberAddress !== uberMember.memberAddress
-          && member.memberAddress !== uberMember.delegateKey,
+        uberMember =>
+          member.memberAddress !== uberMember.memberAddress &&
+          member.memberAddress !== uberMember.delegateKey,
       );
       if (hasShares && isNotDelegate && isNotUberMemberOrDelegate) {
         return member;
@@ -63,7 +58,7 @@ const NewUberHausMinion = ({
     });
   }, [daoMembers, uberMembers, uberDelegate]);
 
-  const onSubmit = async (values) => {
+  const onSubmit = async values => {
     console.log(values);
     if (!isEthAddress(values.memberApplicant)) {
       setMissingDelegate(true);
@@ -97,7 +92,7 @@ const NewUberHausMinion = ({
             resolvePoll(txHash);
             setStep(1);
           },
-          onSuccess: (txHash) => {
+          onSuccess: txHash => {
             const title = values.details
               ? `${values.details} Lives!`
               : 'Minion Lives!';
@@ -111,7 +106,7 @@ const NewUberHausMinion = ({
         },
       });
 
-      const onTxHash = (txHash) => {
+      const onTxHash = txHash => {
         console.log('tx', txHash);
         setPendingTx(txHash);
       };
@@ -187,7 +182,9 @@ const NewUberHausMinion = ({
 
           {candidates.length === 0 ? (
             <Flex justifyContent='flex-start'>
-              <Box fontSize='sm'>There aren&apos;t any eligible delegates in your DAO.</Box>
+              <Box fontSize='sm'>
+                There aren&apos;t any eligible delegates in your DAO.
+              </Box>
               <Tooltip
                 hasArrow
                 bg='primary.500'
@@ -208,7 +205,6 @@ const NewUberHausMinion = ({
           ) : (
             <form onSubmit={handleSubmit(onSubmit)}>
               <Box mb={3} fontSize='sm'>
-
                 <AddressInput
                   name='delegate'
                   formLabel={eligibleDelegatesLabel()}
@@ -238,16 +234,15 @@ const NewUberHausMinion = ({
               </Button>
 
               {missingDelegate && (
-              <Box
-                fontSize='xs'
-                id='delegate-helper-text'
-                my={3}
-                color='red.500'
-              >
-                A delegate is required
-              </Box>
+                <Box
+                  fontSize='xs'
+                  id='delegate-helper-text'
+                  my={3}
+                  color='red.500'
+                >
+                  A delegate is required
+                </Box>
               )}
-
             </form>
           )}
         </>

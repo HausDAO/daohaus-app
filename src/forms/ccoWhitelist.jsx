@@ -1,8 +1,6 @@
 import React, { useState } from 'react';
 import { useParams } from 'react-router';
-import {
-  Box, FormControl, Button, Textarea, Link,
-} from '@chakra-ui/react';
+import { Box, FormControl, Button, Textarea, Link } from '@chakra-ui/react';
 
 import { useOverlay } from '../contexts/OverlayContext';
 import { useInjectedProvider } from '../contexts/InjectedProviderContext';
@@ -14,12 +12,9 @@ const CcoWhitelist = ({ daoMetaData, ccoType }) => {
   const [loading, setLoading] = useState(false);
   const { daoid } = useParams();
   const { address, injectedProvider, injectedChain } = useInjectedProvider();
-  const {
-    errorToast,
-    successToast,
-  } = useOverlay();
+  const { errorToast, successToast } = useOverlay();
 
-  const handleChange = (event) => {
+  const handleChange = event => {
     setCcoWhitelistJson(event.target.value.replace(/(\r\n|\n|\r)/gm, ''));
   };
 
@@ -41,7 +36,10 @@ const CcoWhitelist = ({ daoMetaData, ccoType }) => {
         signature,
       };
 
-      const result = await ccoPost(`cco/whitelist/${daoMetaData.boosts[ccoType].metadata.ccoId}`, ccoUpdate);
+      const result = await ccoPost(
+        `cco/whitelist/${daoMetaData.boosts[ccoType].metadata.ccoId}`,
+        ccoUpdate,
+      );
 
       if (result === 'success') {
         successToast({
@@ -65,9 +63,14 @@ const CcoWhitelist = ({ daoMetaData, ccoType }) => {
 
   return (
     <Box mb={10} pb={5} borderBottomWidth={1}>
-      <Box fontSize='xl' mb={5}>Address Whitelist</Box>
+      <Box fontSize='xl' mb={5}>
+        Address Whitelist
+      </Box>
       <Box mb={5}>
-        <Link isExternal href={`${CCO_CONSTANTS.WHITELIST_HOST}/${daoMetaData.boosts[ccoType].metadata.ccoId}.json`}>
+        <Link
+          isExternal
+          href={`${CCO_CONSTANTS.WHITELIST_HOST}/${daoMetaData.boosts[ccoType].metadata.ccoId}.json`}
+        >
           Check list here
         </Link>
       </Box>
@@ -83,7 +86,9 @@ const CcoWhitelist = ({ daoMetaData, ccoType }) => {
           value={ccoWhitelistJson}
         />
       </FormControl>
-      <Button onClick={handleUpdate} isLoading={loading}>Update WhiteList</Button>
+      <Button onClick={handleUpdate} isLoading={loading}>
+        Update WhiteList
+      </Button>
     </Box>
   );
 };

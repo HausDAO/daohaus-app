@@ -1,8 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
-import {
-  Flex, Button, Link, Spinner, Box,
-} from '@chakra-ui/react';
+import { Flex, Button, Link, Spinner, Box } from '@chakra-ui/react';
 import { RiAddFill } from 'react-icons/ri';
 
 import MainViewLayout from '../components/mainViewLayout';
@@ -49,7 +47,9 @@ const MintGate = ({ daoMetaData }) => {
   ) && (
     <Button
       as={Link}
-      href={`https://www.mintgate.app/create_link?url&token1=${daoid}&amount1=1&type1=2&network1=${chainByID(daochain).network_id}`}
+      href={`https://www.mintgate.app/create_link?url&token1=${daoid}&amount1=1&type1=2&network1=${
+        chainByID(daochain).network_id
+      }`}
       rightIcon={<RiAddFill />}
       isExternal
     >
@@ -63,10 +63,12 @@ const MintGate = ({ daoMetaData }) => {
         {!loading ? (
           daoMetaData && 'mintGate' in daoMetaData?.boosts ? (
             gates.length > 0 ? (
-              gates.map((gate) => <MintGateCard key={gate.title} gate={gate} />)
+              gates.map(gate => <MintGateCard key={gate.title} gate={gate} />)
             ) : (
               <Box mt='100px'>
-                <TextBox variant='value' size='lg'>No Gates Found. Get started by creating your first gate!</TextBox>
+                <TextBox variant='value' size='lg'>
+                  No Gates Found. Get started by creating your first gate!
+                </TextBox>
               </Box>
             )
           ) : (

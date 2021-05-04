@@ -2,9 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Link } from '@chakra-ui/react';
 import Pagination from 'rc-pagination';
 
-const Paginator = ({
-  perPage, setRecords, allRecords, reset,
-}) => {
+const Paginator = ({ perPage, setRecords, allRecords, reset }) => {
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(0);
 
@@ -30,7 +28,7 @@ const Paginator = ({
     return acts.slice(start, end);
   };
 
-  const handlePageChange = (page) => {
+  const handlePageChange = page => {
     setCurrentPage(page);
     setRecords(filterVisibleRecords(allRecords, page));
   };

@@ -68,12 +68,13 @@ const DelegateProposalForm = ({
     if (!daoMembers || !uberHausMinion || !uberMembers || !uberDelegate) {
       return null;
     }
-    return daoMembers.filter((member) => {
+    return daoMembers.filter(member => {
       const hasShares = +member.shares > 0;
       const isNotDelegate = member.memberAddress !== uberDelegate;
       const isNotUberMemberOrDelegate = uberMembers.every(
-        (uberMember) => member.memberAddress !== uberMember.memberAddress
-          && member.memberAddress !== uberMember.delegateKey,
+        uberMember =>
+          member.memberAddress !== uberMember.memberAddress &&
+          member.memberAddress !== uberMember.delegateKey,
       );
       if (hasShares && isNotDelegate && isNotUberMemberOrDelegate) {
         return member;
@@ -94,7 +95,7 @@ const DelegateProposalForm = ({
     }
   }, [errors]);
 
-  const onSubmit = async (values) => {
+  const onSubmit = async values => {
     setLoading(true);
 
     const now = (new Date().getTime() / 1000).toFixed();
@@ -131,7 +132,7 @@ const DelegateProposalForm = ({
             resolvePoll(txHash);
             console.error(`Could not find a matching proposal: ${error}`);
           },
-          onSuccess: (txHash) => {
+          onSuccess: txHash => {
             successToast({
               title: 'UberHAUS Membership Proposal Submitted to the DAO!',
             });
@@ -150,7 +151,7 @@ const DelegateProposalForm = ({
         },
       });
       const onTxHash = () => {
-        setD2dProposalModal((prevState) => !prevState);
+        setD2dProposalModal(prevState => !prevState);
         setTxInfoModal(true);
       };
       await UberHausMinionService({
@@ -158,11 +159,14 @@ const DelegateProposalForm = ({
         uberHausMinion: uberHausMinion.minionAddress,
         chainID: UBERHAUS_DATA.NETWORK,
       })('nominateDelegate')({
-        args, address, poll, onTxHash,
+        args,
+        address,
+        poll,
+        onTxHash,
       });
     } catch (err) {
       setLoading(false);
-      setD2dProposalModal((prevState) => !prevState);
+      setD2dProposalModal(prevState => !prevState);
       console.error('error: ', err);
       errorToast({
         title: 'There was an error.',

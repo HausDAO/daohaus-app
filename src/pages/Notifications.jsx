@@ -35,7 +35,7 @@ const Notifications = ({ daoMetaData, refetchMetaData }) => {
     }
   }, [daoMetaData]);
 
-  const handleSave = async (newChannelMetadata) => {
+  const handleSave = async newChannelMetadata => {
     setLoading(true);
 
     try {
@@ -80,14 +80,14 @@ const Notifications = ({ daoMetaData, refetchMetaData }) => {
   const handleActionChange = (message, e) => {
     if (e.target.checked) {
       setLocalMetadata(
-        localMetadata.map((channel) => {
+        localMetadata.map(channel => {
           channel.actions.push(message.id);
           return channel;
         }),
       );
     } else {
       setLocalMetadata(
-        localMetadata.map((channel) => {
+        localMetadata.map(channel => {
           channel.actions.splice(channel.actions.indexOf(message.id), 1);
           return channel;
         }),
@@ -99,7 +99,7 @@ const Notifications = ({ daoMetaData, refetchMetaData }) => {
 
   const handleChannelChange = (channel, e) => {
     setLocalMetadata(
-      localMetadata.map((channelMeta) => {
+      localMetadata.map(channelMeta => {
         if (channel.name === channelMeta.type) {
           channelMeta.active = e.target.checked;
         }
@@ -110,11 +110,11 @@ const Notifications = ({ daoMetaData, refetchMetaData }) => {
     setHasChanges(true);
   };
 
-  const openChannelIdModal = (channel) => {
+  const openChannelIdModal = channel => {
     setGenericModal({ [`notificationBoostChannelForm-${channel.name}`]: true });
   };
 
-  const renderAction = (message) => {
+  const renderAction = message => {
     const isActive = localMetadata[0].actions.includes(message.id);
 
     return (
@@ -128,7 +128,7 @@ const Notifications = ({ daoMetaData, refetchMetaData }) => {
               id={message.id}
               colorScheme='green'
               isChecked={isActive}
-              onChange={(e) => handleActionChange(message, e)}
+              onChange={e => handleActionChange(message, e)}
               disabled={loading}
             />
           )}
@@ -137,9 +137,9 @@ const Notifications = ({ daoMetaData, refetchMetaData }) => {
     );
   };
 
-  const renderChannel = (channel) => {
+  const renderChannel = channel => {
     const isActive = localMetadata.some(
-      (meta) => meta.type === channel.name && meta.active,
+      meta => meta.type === channel.name && meta.active,
     );
 
     return (
@@ -163,7 +163,7 @@ const Notifications = ({ daoMetaData, refetchMetaData }) => {
                 id={channel.id}
                 colorScheme='green'
                 isChecked={isActive}
-                onChange={(e) => handleChannelChange(channel, e)}
+                onChange={e => handleChannelChange(channel, e)}
                 disabled={loading}
               />
             </>
@@ -197,7 +197,9 @@ const Notifications = ({ daoMetaData, refetchMetaData }) => {
               </Flex>
 
               <Stack spacing={6}>
-                {notificationBoostContent.actions.map((message) => renderAction(message))}
+                {notificationBoostContent.actions.map(message =>
+                  renderAction(message),
+                )}
               </Stack>
             </Box>
             <Box w='45%'>
@@ -208,7 +210,9 @@ const Notifications = ({ daoMetaData, refetchMetaData }) => {
               </Flex>
 
               <Stack spacing={6}>
-                {notificationBoostContent.channels.map((channel) => renderChannel(channel))}
+                {notificationBoostContent.channels.map(channel =>
+                  renderChannel(channel),
+                )}
               </Stack>
             </Box>
           </Flex>

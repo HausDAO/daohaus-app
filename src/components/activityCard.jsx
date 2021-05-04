@@ -81,13 +81,15 @@ const ActivityCard = ({ activity, displayAvatar, isLink = true }) => {
   const chain = daochain || chainByName(activity?.daoData?.network)?.chain_id;
   const daoAddress = daoid || activity?.daoData?.contractAddress;
 
-  const profileLink = chain && daoAddress && activity?.memberAddress
-    ? `/dao/${chain}/${daoAddress}/profile/${activity.memberAddress}`
-    : null;
+  const profileLink =
+    chain && daoAddress && activity?.memberAddress
+      ? `/dao/${chain}/${daoAddress}/profile/${activity.memberAddress}`
+      : null;
 
-  const proposalLink = chain && daoAddress && activity?.proposalId
-    ? `/dao/${chain}/${daoAddress}/proposals/${activity.proposalId}`
-    : null;
+  const proposalLink =
+    chain && daoAddress && activity?.proposalId
+      ? `/dao/${chain}/${daoAddress}/proposals/${activity.proposalId}`
+      : null;
 
   return (
     <ContentBox mt={3}>
@@ -104,8 +106,8 @@ const ActivityCard = ({ activity, displayAvatar, isLink = true }) => {
         )}
         <Flex direction='row' justifyContent='space-between'>
           <Flex direction='column'>
-            {activity?.title
-              && (isLink && proposalLink ? (
+            {activity?.title &&
+              (isLink && proposalLink ? (
                 <RouterLink to={proposalLink}>
                   <Heading as='h4' size='sm'>
                     {`${name} ${activity.title}`}
@@ -142,8 +144,8 @@ const ActivityCard = ({ activity, displayAvatar, isLink = true }) => {
                 <Badge
                   colorScheme='green'
                   variant={
-                    +activity.yesVotes > +activity.noVotes
-                    && activity.status !== 'Failed'
+                    +activity.yesVotes > +activity.noVotes &&
+                    activity.status !== 'Failed'
                       ? 'solid'
                       : 'outline'
                   }

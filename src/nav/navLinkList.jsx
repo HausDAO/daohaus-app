@@ -13,9 +13,10 @@ const NavLinkList = ({ dao, view, toggleNav = null }) => {
   // const { daoMetaData } = useMetaData();
 
   const { address } = useInjectedProvider();
-  const navLinks = dao?.chainID && dao?.daoID && dao.daoProposals
-    ? generateDaoLinks(dao.chainID, dao.daoID, dao.daoProposals)
-    : defaultHubData;
+  const navLinks =
+    dao?.chainID && dao?.daoID && dao.daoProposals
+      ? generateDaoLinks(dao.chainID, dao.daoID, dao.daoProposals)
+      : defaultHubData;
   const inDao = dao?.daoID && address;
 
   return (
@@ -25,8 +26,8 @@ const NavLinkList = ({ dao, view, toggleNav = null }) => {
       mt={[3, null, null, 12]}
       flexDirection='column'
     >
-      {navLinks
-        && navLinks.map((link) => {
+      {navLinks &&
+        navLinks.map(link => {
           return (
             <NavLink
               key={link.path || link.href}

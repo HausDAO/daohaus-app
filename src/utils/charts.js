@@ -55,8 +55,9 @@ export const getDatesArray = (start, end, range = []) => {
 export const balancesWithValue = (balances, prices) => {
   return balances.reduce((list, balance) => {
     if (prices[balance.tokenAddress]) {
-      const value = (balance.balance / 10 ** balance.tokenDecimals)
-        * prices[balance.tokenAddress].usd;
+      const value =
+        (balance.balance / 10 ** balance.tokenDecimals) *
+        prices[balance.tokenAddress].usd;
 
       list.push({
         ...balance,
@@ -70,10 +71,10 @@ export const balancesWithValue = (balances, prices) => {
 
 export const groupBalancesToDateRange = (balances, dates) => {
   const groupedByToken = groupBy(balances, 'tokenAddress');
-  let dateBalances = dates.map((date) => {
+  let dateBalances = dates.map(date => {
     const value = Object.keys(groupedByToken).reduce((sum, tokenAddress) => {
       const nextBal = groupedByToken[tokenAddress].find(
-        (bal) => +bal.timestamp >= date.getTime() / 1000,
+        bal => +bal.timestamp >= date.getTime() / 1000,
       );
       sum += nextBal ? nextBal.value : 0;
       return sum;
@@ -85,8 +86,8 @@ export const groupBalancesToDateRange = (balances, dates) => {
     };
   });
 
-  if (!dateBalances.some((bal) => bal.value > 0)) {
-    dateBalances = dateBalances.map((bal) => {
+  if (!dateBalances.some(bal => bal.value > 0)) {
+    dateBalances = dateBalances.map(bal => {
       bal.value = balances[balances.length - 1].value;
       return bal;
     });
@@ -96,9 +97,9 @@ export const groupBalancesToDateRange = (balances, dates) => {
 };
 
 export const groupBalancesMemberToDateRange = (balances, dates) => {
-  return dates.map((date) => {
+  return dates.map(date => {
     const balance = balances.find(
-      (bal) => +bal.timestamp >= date.getTime() / 1000,
+      bal => +bal.timestamp >= date.getTime() / 1000,
     );
 
     return {

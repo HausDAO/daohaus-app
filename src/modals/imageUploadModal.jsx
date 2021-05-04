@@ -79,8 +79,8 @@ const ImageUploadModal = ({
         accept='image/gif, image/jpeg, image/png'
         multiple={false}
         style={{ display: 'none' }}
-        ref={(ref) => (upload = ref)}
-        onChange={(e) => handleFileSet(e)}
+        ref={ref => (upload = ref)}
+        onChange={e => handleFileSet(e)}
       />
       <Modal isOpen={imageUploadModal} onClose={handleClose} isCentered>
         <ModalOverlay bgColor={rgba(theme.colors.background[500], 0.8)} />

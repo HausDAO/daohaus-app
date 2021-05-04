@@ -70,9 +70,11 @@ const SuperfluidMinionProposalForm = () => {
   useEffect(() => {
     if (daoOverview?.minions) {
       const sfMinions = daoOverview.minions
-        .filter((minion) => minion.minionType === MINION_TYPES.SUPERFLUID)
-        .sort((minionA, minionB) => (parseInt(minionA.createdAt) > parseInt(minionB.createdAt) ? 1 : -1))
-        .map((minion) => {
+        .filter(minion => minion.minionType === MINION_TYPES.SUPERFLUID)
+        .sort((minionA, minionB) =>
+          parseInt(minionA.createdAt) > parseInt(minionB.createdAt) ? 1 : -1,
+        )
+        .map(minion => {
           return {
             // TODO: include agreement type
             address: minion.minionAddress,
@@ -95,7 +97,7 @@ const SuperfluidMinionProposalForm = () => {
     }
   }, [errors]);
 
-  const onSubmit = async (values) => {
+  const onSubmit = async values => {
     setLoading(true);
 
     try {
@@ -108,7 +110,7 @@ const SuperfluidMinionProposalForm = () => {
       const minDeposit = injectedProvider.utils.toWei(values.paymentRequested);
       const ratePerSec = values.weiRatePerSec;
       // TODO: check if Minion already has enough funds to cover the minimum deposit
-      if (+minDeposit < (+ratePerSec * 3600)) {
+      if (+minDeposit < +ratePerSec * 3600) {
         setCurrentError({
           field: 'paymentRequested',
           message: 'Funds requested must be at least one-hour stream value',
@@ -142,40 +144,45 @@ const SuperfluidMinionProposalForm = () => {
           details,
         ];
 
-        const poll = createPoll({ action: 'superfluidProposeAction', cachePoll })(
-          {
-            minionAddress: values.minionContract,
-            createdAt: now,
-            chainID: daochain,
-            actions: {
-              onError: (error, txHash) => {
-                errorToast({
-                  title: 'There was an error.',
-                });
-                resolvePoll(txHash);
-                console.error(`Could not find a matching proposal: ${error}`);
-              },
-              onSuccess: (txHash) => {
-                successToast({
-                  title: 'Minion proposal submitted.',
-                });
-                refreshDao();
-                resolvePoll(txHash);
-              },
+        const poll = createPoll({
+          action: 'superfluidProposeAction',
+          cachePoll,
+        })({
+          minionAddress: values.minionContract,
+          createdAt: now,
+          chainID: daochain,
+          actions: {
+            onError: (error, txHash) => {
+              errorToast({
+                title: 'There was an error.',
+              });
+              resolvePoll(txHash);
+              console.error(`Could not find a matching proposal: ${error}`);
+            },
+            onSuccess: txHash => {
+              successToast({
+                title: 'Minion proposal submitted.',
+              });
+              refreshDao();
+              resolvePoll(txHash);
             },
           },
-        );
+        });
         const onTxHash = () => {
           setProposalModal(false);
           setTxInfoModal(true);
         };
         await minionService('proposeStream')({
-          args, address, poll, onTxHash,
+          args,
+          address,
+          poll,
+          onTxHash,
         });
       } else {
         setCurrentError({
           field: 'paymentToken',
-          message: "There's an active stream for the selected recipient and token",
+          message:
+            "There's an active stream for the selected recipient and token",
         });
       }
       setLoading(false);
@@ -215,7 +222,7 @@ const SuperfluidMinionProposalForm = () => {
                 placeholder='Select A Superfluid Agreement'
               >
                 {' '}
-                {minions.map((minion) => (
+                {minions.map(minion => (
                   <option key={minion.address} value={minion.address}>
                     {`${truncateAddr(minion.address)} (${minion.details})`}
                   </option>
@@ -272,20 +279,19 @@ const SuperfluidMinionProposalForm = () => {
             >
               Submit
             </Button>
-            ) : (
-              <Button
-                onClick={requestWallet}
-                isDisabled={injectedChain && daochain !== injectedChain?.chainId}
-              >
-                {`Connect
+          ) : (
+            <Button
+              onClick={requestWallet}
+              isDisabled={injectedChain && daochain !== injectedChain?.chainId}
+            >
+              {`Connect
                 ${
                   injectedChain && daochain !== injectedChain?.chainId
                     ? `to ${chainByID(daochain).name}`
                     : 'Wallet'
                 }`}
-              </Button>
-            )
-          }
+            </Button>
+          )}
         </Box>
       </Flex>
     </form>

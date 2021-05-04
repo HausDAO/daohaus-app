@@ -40,14 +40,16 @@ const RateInput = ({
     if (daoOverview && (!tokenData || tokenData.value !== tokenAddress)) {
       const depositTokenAddress = daoOverview.depositToken.tokenAddress;
       const depositToken = daoOverview.tokenBalances.find(
-        (token) => token.guildBank && token.token.tokenAddress === depositTokenAddress,
+        token =>
+          token.guildBank && token.token.tokenAddress === depositTokenAddress,
       );
       const tokenArray = daoOverview.tokenBalances.filter(
-        (token) => token.guildBank && token.token.tokenAddress !== depositTokenAddress,
+        token =>
+          token.guildBank && token.token.tokenAddress !== depositTokenAddress,
       );
       tokenArray.unshift(depositToken);
       const activeToken = tokenArray.find(
-        (token) => token.token.tokenAddress === tokenAddress,
+        token => token.token.tokenAddress === tokenAddress,
       );
       if (activeToken) {
         setTokenData({
@@ -102,7 +104,7 @@ const RateInput = ({
     }
   };
 
-  const validateRate = (value) => {
+  const validateRate = value => {
     if (value <= 0) {
       return 'Rate must be greater than zero';
     }
@@ -112,7 +114,13 @@ const RateInput = ({
   return (
     <>
       <Tooltip hasArrow shouldWrapChildren label={tipLabel} placement='top'>
-        <TextBox as={FormLabel} size='xs' d='flex' alignItems='center' htmlFor='tokenRate'>
+        <TextBox
+          as={FormLabel}
+          size='xs'
+          d='flex'
+          alignItems='center'
+          htmlFor='tokenRate'
+        >
           {formLabel}
           <RiInformationLine style={{ marginLeft: 5 }} />
         </TextBox>

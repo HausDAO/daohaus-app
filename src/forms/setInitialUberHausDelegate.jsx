@@ -45,7 +45,7 @@ const SetInitialUberHausDelegate = ({
             console.error(`poll error: ${error}`);
             setLoading(false);
           },
-          onSuccess: (txHash) => {
+          onSuccess: txHash => {
             successToast({
               title: 'Delegate set submitted.',
             });

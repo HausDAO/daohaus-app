@@ -7,20 +7,18 @@ import { numberWithCommas } from '../utils/general';
 const DaosquareCcoOverall = ({ totals }) => {
   return (
     <>
-      <Box fontSize='xl' mb={5}>Overall Stats</Box>
+      <Box fontSize='xl' mb={5}>
+        Overall Stats
+      </Box>
       <ContentBox>
         <TextBox size='xs'>Raised</TextBox>
         <TextBox size='lg' variant='value'>
-          {numberWithCommas(totals.raised)}
-          {' '}
-          USDT
+          {numberWithCommas(totals.raised)} USDT
         </TextBox>
 
         <TextBox size='xs'>Funded</TextBox>
         <TextBox size='lg' variant='value'>
-          {numberWithCommas(totals.funded)}
-          {' '}
-          USDT
+          {numberWithCommas(totals.funded)} USDT
         </TextBox>
 
         <TextBox size='xs'>Projects Funded</TextBox>
@@ -28,7 +26,6 @@ const DaosquareCcoOverall = ({ totals }) => {
           {totals.projects}
         </TextBox>
       </ContentBox>
-
     </>
   );
 };

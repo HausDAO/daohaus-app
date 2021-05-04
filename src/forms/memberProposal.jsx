@@ -91,7 +91,7 @@ const MemberProposalForm = () => {
     }
   }, [errors]);
 
-  const onSubmit = async (values) => {
+  const onSubmit = async values => {
     setLoading(true);
     const now = (new Date().getTime() / 1000).toFixed();
     const hash = createHash();
@@ -108,10 +108,10 @@ const MemberProposalForm = () => {
     const applicant = values?.applicantHidden?.startsWith('0x')
       ? values.applicantHidden
       : values?.applicant
-        ? values.applicant
-        : values?.memberApplicant
-          ? values.memberApplicant
-          : address;
+      ? values.applicant
+      : values?.memberApplicant
+      ? values.memberApplicant
+      : address;
     const args = [
       applicant,
       values.sharesRequested || '0',
@@ -136,7 +136,7 @@ const MemberProposalForm = () => {
             resolvePoll(txHash);
             console.error(`Could not find a matching proposal: ${error}`);
           },
-          onSuccess: (txHash) => {
+          onSuccess: txHash => {
             successToast({
               title: 'Member Proposal Submitted to the Dao!',
             });
@@ -164,7 +164,10 @@ const MemberProposalForm = () => {
         chainID: daochain,
         version: daoOverview.version,
       })('submitProposal')({
-        args, address, poll, onTxHash,
+        args,
+        address,
+        poll,
+        onTxHash,
       });
     } catch (error) {
       const errMsg = error?.message || '';
@@ -313,19 +316,19 @@ const MemberProposalForm = () => {
                 </MenuButton>
                 <MenuList>
                   {!showApplicant && (
-                  <MenuItem onClick={() => setShowApplicant(true)}>
-                    Applicant
-                  </MenuItem>
+                    <MenuItem onClick={() => setShowApplicant(true)}>
+                      Applicant
+                    </MenuItem>
                   )}
                   {!showLoot && (
-                  <MenuItem onClick={() => setShowLoot(true)}>
-                    Request Loot
-                  </MenuItem>
+                    <MenuItem onClick={() => setShowLoot(true)}>
+                      Request Loot
+                    </MenuItem>
                   )}
                   {!showPaymentRequest && (
-                  <MenuItem onClick={() => setShowPaymentRequest(true)}>
-                    Request Payment
-                  </MenuItem>
+                    <MenuItem onClick={() => setShowPaymentRequest(true)}>
+                      Request Payment
+                    </MenuItem>
                   )}
                 </MenuList>
               </Menu>
@@ -354,19 +357,19 @@ const MemberProposalForm = () => {
             >
               Submit
             </Button>
-            ) : (
-              <Button
-                onClick={requestWallet}
-                isDisabled={injectedChain && daochain !== injectedChain?.chainId}
-              >
-                {`Connect 
+          ) : (
+            <Button
+              onClick={requestWallet}
+              isDisabled={injectedChain && daochain !== injectedChain?.chainId}
+            >
+              {`Connect 
               ${
                 injectedChain && daochain !== injectedChain?.chainId
                   ? `to ${chainByID(daochain).name}`
                   : 'Wallet'
               }`}
-              </Button>
-            )}
+            </Button>
+          )}
         </Box>
       </Flex>
     </form>

@@ -13,7 +13,7 @@ import {
 
 import ContentBox from './ContentBox';
 
-const StakeCard = (props) => {
+const StakeCard = props => {
   const {
     title,
     description,

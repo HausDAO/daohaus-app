@@ -25,15 +25,17 @@ const DaoToDaoStakingTributeInput = ({ register, setValue, stakingToken }) => {
     if (daoOverview && !tokenData.length) {
       const depositTokenAddress = daoOverview.depositToken?.tokenAddress;
       const depositToken = daoOverview.tokenBalances?.find(
-        (token) => token.guildBank && token.token.tokenAddress === depositTokenAddress,
+        token =>
+          token.guildBank && token.token.tokenAddress === depositTokenAddress,
       );
       const tokenArray = daoOverview.tokenBalances.filter(
-        (token) => token.guildBank && token.token.tokenAddress !== depositTokenAddress,
+        token =>
+          token.guildBank && token.token.tokenAddress !== depositTokenAddress,
       );
 
       tokenArray.unshift(depositToken);
       setTokenData(
-        tokenArray.map((token) => ({
+        tokenArray.map(token => ({
           label: token.token.symbol || token.tokenAddress,
           value: token.token.tokenAddress,
           decimals: token.token.decimals,
@@ -100,7 +102,7 @@ const DaoToDaoStakingTributeInput = ({ register, setValue, stakingToken }) => {
           mb={5}
           ref={register({
             validate: {
-              inefficienFunds: (value) => {
+              inefficienFunds: value => {
                 if (+value > +utils.fromWei(balance)) {
                   return 'Insufficient Funds';
                 }

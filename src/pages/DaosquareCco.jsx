@@ -4,7 +4,7 @@ import { Box, Flex, Spinner } from '@chakra-ui/react';
 import Layout from '../components/layout';
 import MainViewLayout from '../components/mainViewLayout';
 import DaosquareCcoOverall from '../components/daosquareCcoOverall';
-import DaosquareCcoCard from '../components/daosquareCcoCard';
+import CcoCard from '../components/ccoCard';
 import { useDaosquareCco } from '../contexts/DaosquareCcoContext';
 import { useCustomTheme } from '../contexts/CustomThemeContext';
 import { daosquareCcoTheme } from '../themes/defaultTheme';
@@ -49,8 +49,8 @@ const DaosquareCco = () => {
               pb={6}
             >
               <Box fontSize='xl'>CCOs</Box>
-              {d2CcoDaos.map((dao) => {
-                return <DaosquareCcoCard dao={dao} key={dao.id} />;
+              {d2CcoDaos.map(dao => {
+                return <CcoCard daoMetaData={dao.meta} key={dao.id} isLink />;
               })}
             </Box>
             <Box w={['100%', null, null, null, '40%']}>

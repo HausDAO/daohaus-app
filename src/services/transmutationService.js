@@ -54,9 +54,7 @@ export const TransmutationService = ({
     }
 
     if (service === 'propose') {
-      return async ({
-        args, address, poll, onTxHash,
-      }) => {
+      return async ({ args, address, poll, onTxHash }) => {
         console.log('args', args);
         console.log('address', address);
         console.log('poll', poll);
@@ -64,13 +62,13 @@ export const TransmutationService = ({
         const tx = await contract.methods[service](...args);
         return tx
           .send('eth_requestAccounts', { from: address })
-          .on('transactionHash', (txHash) => {
+          .on('transactionHash', txHash => {
             if (poll) {
               poll(txHash);
               onTxHash();
             }
           })
-          .on('error', (error) => {
+          .on('error', error => {
             console.error(error);
           });
       };

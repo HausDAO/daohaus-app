@@ -28,8 +28,9 @@ const UberDaoInfo = ({ proposal }) => {
   useEffect(() => {
     if (!daoMembers && !proposal) return;
     const minion = daoMembers.find(
-      (member) => member.memberAddress === proposal?.proposer
-        || member.delegateKey === proposal?.proposer,
+      member =>
+        member.memberAddress === proposal?.proposer ||
+        member.delegateKey === proposal?.proposer,
     );
     if (minion?.isUberMinion) {
       setDaoMinion(minion);

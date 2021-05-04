@@ -1,7 +1,5 @@
 import React, { useState } from 'react';
-import {
-  Flex, Box, Button, Icon,
-} from '@chakra-ui/react';
+import { Flex, Box, Button, Icon } from '@chakra-ui/react';
 import { RiMenu3Line, RiCloseLine } from 'react-icons/ri';
 
 import ChangeDao from './changeDao';
@@ -24,14 +22,14 @@ const MobileNav = ({ dao, daosquarecco }) => {
 
   const toggleNav = () => {
     localStorage.setItem('sideNavOpen', `${!isOpen}`);
-    setIsOpen((prevState) => !prevState);
+    setIsOpen(prevState => !prevState);
   };
 
   const toggleAccountModal = () => {
     if (!dao) {
-      setHubAccountModal((prevState) => !prevState);
+      setHubAccountModal(prevState => !prevState);
     } else {
-      setDaoAccountModal((prevState) => !prevState);
+      setDaoAccountModal(prevState => !prevState);
     }
   };
 
@@ -90,14 +88,14 @@ const MobileNav = ({ dao, daosquarecco }) => {
             )}
           </Box>
           {!daosquarecco && (
-          <Button
-            onClick={toggleNav}
-            order='4'
-            variant='ghost'
-            color='secondary.500'
-          >
-            <Icon as={isOpen ? RiCloseLine : RiMenu3Line} />
-          </Button>
+            <Button
+              onClick={toggleNav}
+              order='4'
+              variant='ghost'
+              color='secondary.500'
+            >
+              <Icon as={isOpen ? RiCloseLine : RiMenu3Line} />
+            </Button>
           )}
         </Flex>
       </Flex>

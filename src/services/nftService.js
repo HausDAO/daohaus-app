@@ -16,7 +16,7 @@ export const NFTService = ({
   }
   const abi = NFTAbi;
   const contract = new web3.eth.Contract(abi, tokenAddress);
-  return (service) => {
+  return service => {
     if (service === 'tokenOfOwnerByIndex') {
       return async ({ accountAddr, index }) => {
         try {
