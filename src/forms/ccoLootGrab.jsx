@@ -24,7 +24,6 @@ const CcoLootGrabForm = ({
   roundData,
   currentContributionData,
   contributionClosed,
-  daoMetaData,
 }) => {
   const {
     injectedProvider,
@@ -54,8 +53,6 @@ const CcoLootGrabForm = ({
 
   const currentTribute = watch('tributeOffered');
 
-  // console.log('currentTribute')
-
   useEffect(() => {
     if (Object.keys(errors).length > 0) {
       const newE = Object.keys(errors)[0];
@@ -68,9 +65,11 @@ const CcoLootGrabForm = ({
     }
   }, [errors]);
 
+  console.log('roundData', roundData);
+
   useEffect(() => {
-    if (daoMetaData?.boosts?.cco?.active) {
-      const daoRatio = +daoMetaData.boosts.cco.metadata.ratio;
+    if (roundData.active) {
+      const daoRatio = Number(roundData.ratio);
       setRatio(daoRatio);
     }
   });
@@ -155,9 +154,9 @@ const CcoLootGrabForm = ({
       <Flex justifyContent='space-between' my={3}>
         <Text fontSize='sm' color='whiteAlpha.700' as='i'>
           {`${currentContributionData?.addressRemaining ||
-            roundData.currentRound.maxContribution}`}
+            roundData.maxContribution}`}
           /
-          {`${roundData.currentRound.maxContribution} ${roundData.ccoToken.symbol} remaining`}
+          {`${roundData.maxContribution} ${roundData.ccoToken.symbol} remaining`}
         </Text>
       </Flex>
       <FormControl

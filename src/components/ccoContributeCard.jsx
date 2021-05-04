@@ -46,7 +46,6 @@ const CcoContributionCard = ({
       {!eligibleBlock && !roundData.beforeRaise ? (
         <Box borderTopWidth='1px' mt={3}>
           <CcoLootGrabForm
-            daoMetaData={daoMetaData}
             roundData={roundData}
             currentContributionData={currentContributionData}
             contributionClosed={contributionClosed}
