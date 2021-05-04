@@ -7,8 +7,10 @@ import ContentBox from './ContentBox';
 import TextBox from './TextBox';
 import GenericModal from '../modals/genericModal';
 
-const CcoResources = ({ daoMetaData, ccoData, handleSwitchNetwork }) => {
+const CcoResources = ({ daoMetaData, ccoData }) => {
   const { setGenericModal } = useOverlay();
+
+  console.log('ccoData', ccoData);
 
   return (
     <>
@@ -31,7 +33,6 @@ const CcoResources = ({ daoMetaData, ccoData, handleSwitchNetwork }) => {
         >
           About {daoMetaData.name}
         </TextBox>
-
         <Link
           href='https://daohaus.club/docs/cco'
           isExternal
@@ -43,7 +44,6 @@ const CcoResources = ({ daoMetaData, ccoData, handleSwitchNetwork }) => {
             About CCOs
           </TextBox>
         </Link>
-
         <TextBox
           fontSize='sm'
           color='secondary.500'
@@ -54,6 +54,7 @@ const CcoResources = ({ daoMetaData, ccoData, handleSwitchNetwork }) => {
           FAQ
         </TextBox>
       </ContentBox>
+
       <GenericModal modalId='aboutCcoDao'>
         <Box>
           <Text mb={3} fontFamily='heading'>
@@ -62,7 +63,6 @@ const CcoResources = ({ daoMetaData, ccoData, handleSwitchNetwork }) => {
           <Text mb={5}>some text</Text>
         </Box>
       </GenericModal>
-
       <GenericModal modalId='ccoFaq'>
         <Box>
           <Text mb={3} fontFamily='heading'>
