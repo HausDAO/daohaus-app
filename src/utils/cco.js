@@ -22,14 +22,14 @@ export const CCO_CONSTANTS = {
   DAOSQUARE_TOKEN_NETWORK: '0x1',
 };
 
-export const countDownText = (round, raiseOver) => {
+export const countDownText = (raiseData) => {
   const now = new Date() / 1000;
-  if (raiseOver) {
+  if (raiseData.raiseOver) {
     return 'Contribution period is complete';
-  } if (now < round.startTime) {
-    return `Round ${round.round} starts ${timeToNow(round.startTime)}`;
+  } if (now < raiseData.startTime) {
+    return `Raise starts ${timeToNow(raiseData.startTime)}`;
   }
-  return `Round ${round.round} ends ${timeToNow(round.endTime)}`;
+  return `Raise ends ${timeToNow(raiseData.endTime)}`;
 };
 
 export const claimCountDownText = (claimStartTime) => {
@@ -42,6 +42,7 @@ export const claimCountDownText = (claimStartTime) => {
 
 export const isCcoProposal = (proposal, round) => {
   // const START_TIME_OVERRIDE = 1615809574;
+
   const parsedDetails = IsJsonString(proposal.details)
     ? JSON.parse(proposal.details)
     : { cco: false };
