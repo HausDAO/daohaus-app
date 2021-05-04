@@ -28,24 +28,6 @@ import {
 import TextBox from './TextBox';
 import { ToolTipWrapper } from '../staticElements/wrappers';
 
-// const getHeight = (fields) => {
-//   if (!fields.length > 0) {
-//     throw new Error('Proposal form has zero fields, please input data into the component correctly');
-//   }
-//   if (fields.length > 8) {
-//     return '28rem';
-//   }
-//   if (fields.length > 6) {
-//     return '24rem';
-//   }
-//   if (fields.legth > 4) {
-//     return '22rem';
-//   }
-//   if (fields.length > 0) {
-//     return '18rem';
-//   }
-// };
-
 const ProposalForm = ({ fields, tx, onTx, additionalOptions = null }) => {
   const [loading, setLoading] = useState(false);
   const [formFields, setFields] = useState(fields);
@@ -118,6 +100,7 @@ const GenericInput = ({
   valOnSubmit = [],
   localForm,
   helperText,
+  btn,
   append,
   info,
   prepend,
@@ -130,6 +113,7 @@ const GenericInput = ({
       htmlFor={htmlFor}
       info={info}
       helperText={helperText}
+      btn={btn}
     >
       <InputGroup>
         {prepend && (
@@ -183,6 +167,7 @@ const GenericTextarea = ({
   name,
   valOnType = [],
   valOnSubmit = [],
+  btn,
   helperText,
   localForm,
   info,
@@ -196,6 +181,7 @@ const GenericTextarea = ({
       htmlFor={htmlFor}
       info={info}
       helperText={helperText}
+      btn={btn}
     >
       <Box>
         <Textarea
@@ -219,7 +205,7 @@ const LinkInput = props => {
   return <GenericInput {...props} prepend='https://' />;
 };
 
-const FieldWrapper = ({ children, label, info, htmlFor, helperText }) => {
+const FieldWrapper = ({ children, label, info, htmlFor, helperText, btn }) => {
   return (
     <Flex w={['100%', null, '48%']} mb={3} flexDir='column'>
       <Flex>
@@ -230,12 +216,15 @@ const FieldWrapper = ({ children, label, info, htmlFor, helperText }) => {
               tooltip
               tooltipText={{ body: info }}
               placement='right'
+              layoutProps={{ transform: 'translateY(-2px)' }}
             >
               <Icon as={RiInformationLine} ml={2} />
             </ToolTipWrapper>
           )}
         </TextBox>
+        {btn && <Flex ml='auto'>{btn}</Flex>}
       </Flex>
+
       {children}
       {helperText && <FormHelperText mt={-1}>{helperText}</FormHelperText>}
     </Flex>
@@ -336,4 +325,10 @@ const SubmitFormError = ({ message }) => (
     />
     {message}
   </Flex>
+);
+
+const ModButton = ({ label, callback, selected = true }) => (
+  <Button onClick={callback} variant='outline' size='xs'>
+    {label}
+  </Button>
 );
