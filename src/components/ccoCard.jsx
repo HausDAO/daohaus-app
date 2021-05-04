@@ -1,8 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import {
-  Avatar, Box, Flex, Progress,
-} from '@chakra-ui/react';
+import { Avatar, Box, Flex, Progress } from '@chakra-ui/react';
 import makeBlockie from 'ethereum-blockies-base64';
 
 import ContentBox from './ContentBox';
@@ -25,16 +23,23 @@ const CcoCard = ({ daoMetaData, isLink }) => {
       style={{ transition: 'all .15s linear' }}
       _hover={{ transform: 'scale(1.05)' }}
     >
-      <Box as={isLink && Link} to={isLink && `/dao/${supportedChains[CCO_CONSTANTS.DAOSQUARE_NETWORK].chain_id}/${daoMetaData.contractAddress}/cco`}>
-
+      <Box
+        as={isLink && Link}
+        to={
+          isLink &&
+          `/dao/${supportedChains[CCO_CONSTANTS.DAOSQUARE_NETWORK].chain_id}/${
+            daoMetaData.contractAddress
+          }/cco`
+        }
+      >
         <Flex direction='row' justify='space-between' w='100%'>
           <Flex direction='row' align='center' w='100%'>
             <Avatar
               src={
-            daoMetaData?.avatarImg
-              ? themeImagePath(daoMetaData.avatarImg)
-              : makeBlockie(daoMetaData.contractAddress)
-          }
+                daoMetaData?.avatarImg
+                  ? themeImagePath(daoMetaData.avatarImg)
+                  : makeBlockie(daoMetaData.contractAddress)
+              }
               mr='10px'
               bg='primary'
             />
@@ -57,39 +62,24 @@ const CcoCard = ({ daoMetaData, isLink }) => {
           mb={3}
         />
         <Flex direction='row' justify='space-between' w='100%'>
+          <Box>{numberWithCommas(tempFunded)} Funded</Box>
           <Box>
-            {numberWithCommas(tempFunded)}
-            {' '}
-            Funded
-          </Box>
-          <Box>
-            {numberWithCommas(tempRaiseLeft)}
-            {' '}
+            {numberWithCommas(tempRaiseLeft)}{' '}
             {/* {daoMetaData.boosts.daosquarecco.metadata.contributionTokenSymbol} */}
-            {tempContributionTokenSymbol}
-            {' '}
-            Left
+            {tempContributionTokenSymbol} Left
           </Box>
         </Flex>
         <Flex mt={5} direction='row' justify='space-between' w='100%'>
           <Box>
             <TextBox size='xs'>Funding Goal</TextBox>
             <TextBox size='lg' variant='value'>
-              {daoMetaData.boosts.daosquarecco.metadata.maxTarget}
-              {' '}
-              USDT
+              {daoMetaData.boosts.daosquarecco.metadata.maxTarget} USDT
             </TextBox>
           </Box>
           <Box>
             <TextBox size='lg' variant='value'>
-              1
-              {' '}
-              {daoMetaData.boosts.daosquarecco.metadata.claimTokenSymbol}
-              {' '}
-              =
-              {' '}
-              {daoMetaData.boosts.daosquarecco.metadata.ratio}
-              {' '}
+              1 {daoMetaData.boosts.daosquarecco.metadata.claimTokenSymbol} ={' '}
+              {daoMetaData.boosts.daosquarecco.metadata.ratio}{' '}
               {/* {daoMetaData.boosts.daosquarecco.metadata.contributionTokenSymbol} */}
               {tempContributionTokenSymbol}
             </TextBox>

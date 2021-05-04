@@ -339,17 +339,13 @@ export const balanceChainQuery = async ({ address, reactSetter }) => {
   });
 };
 
-export const daosqaureCcoQuery = async ({
-  query,
-  reactSetter,
-  apiFetcher,
-}) => {
+export const daosqaureCcoQuery = async ({ query, reactSetter, apiFetcher }) => {
   const chain = supportedChains[CCO_CONSTANTS.DAOSQUARE_NETWORK];
   const metaDataMap = await apiFetcher();
 
   const daoMapLookup = (address, chainName) => {
     const daoMatch = metaDataMap[address] || [];
-    return daoMatch.find((dao) => dao.network === chainName) || null;
+    return daoMatch.find(dao => dao.network === chainName) || null;
   };
   try {
     const chainData = await graphFetchAll({
@@ -359,7 +355,7 @@ export const daosqaureCcoQuery = async ({
     });
 
     const withMetaData = chainData
-      .map((dao) => {
+      .map(dao => {
         // const withResolvedDao = daoResolver(dao, { prices, chain });
         // TODO: maybe we resolve the data here - all cco calcs based on matching proposals
         return {
@@ -368,7 +364,7 @@ export const daosqaureCcoQuery = async ({
           meta: daoMapLookup(dao?.id, chain.network),
         };
       })
-      .filter((dao) => {
+      .filter(dao => {
         return dao?.meta?.daosquarecco;
       });
 

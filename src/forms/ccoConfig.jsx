@@ -1,8 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router';
-import {
-  Box, FormControl, Input, Button,
-} from '@chakra-ui/react';
+import { Box, FormControl, Input, Button } from '@chakra-ui/react';
 
 import { useInjectedProvider } from '../contexts/InjectedProviderContext';
 import { useOverlay } from '../contexts/OverlayContext';
@@ -11,15 +9,14 @@ import { CCO_CONSTANTS } from '../utils/cco';
 import { ccoPost } from '../utils/metadata';
 
 const CcoConfig = ({ daoMetaData, ccoType }) => {
-  const [ccoConfiguration, setCcoConfiguration] = useState(CCO_CONSTANTS.METADATA_FIELDS);
+  const [ccoConfiguration, setCcoConfiguration] = useState(
+    CCO_CONSTANTS.METADATA_FIELDS,
+  );
   const [loading, setLoading] = useState(false);
   const { daoid } = useParams();
   const { address, injectedProvider, injectedChain } = useInjectedProvider();
   const { refetchMetaData } = useMetaData();
-  const {
-    errorToast,
-    successToast,
-  } = useOverlay();
+  const { errorToast, successToast } = useOverlay();
 
   useEffect(() => {
     if (daoMetaData?.boosts && daoMetaData.boosts[ccoType]) {
@@ -27,7 +24,7 @@ const CcoConfig = ({ daoMetaData, ccoType }) => {
     }
   }, [daoMetaData]);
 
-  const handleChange = (event) => {
+  const handleChange = event => {
     setCcoConfiguration({
       ...ccoConfiguration,
       [event.target.name]: event.target.value,
@@ -82,7 +79,7 @@ const CcoConfig = ({ daoMetaData, ccoType }) => {
   };
 
   const renderFields = () => {
-    return Object.keys(CCO_CONSTANTS.METADATA_FIELDS).map((fieldName) => {
+    return Object.keys(CCO_CONSTANTS.METADATA_FIELDS).map(fieldName => {
       return (
         <FormControl mb={4} key={fieldName}>
           <Box size='xs' mb={1}>
@@ -101,9 +98,13 @@ const CcoConfig = ({ daoMetaData, ccoType }) => {
 
   return (
     <>
-      <Box fontSize='xl' mb={5}>CCO Config</Box>
+      <Box fontSize='xl' mb={5}>
+        CCO Config
+      </Box>
       {renderFields()}
-      <Button mt={5} onClick={handleUpdate} isLoading={loading}>Update Config</Button>
+      <Button mt={5} onClick={handleUpdate} isLoading={loading}>
+        Update Config
+      </Button>
     </>
   );
 };

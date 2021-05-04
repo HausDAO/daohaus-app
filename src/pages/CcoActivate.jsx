@@ -12,10 +12,7 @@ const CcoActivate = ({ daoMetaData, ccoType }) => {
   const { daoid } = useParams();
   const { address, injectedProvider, injectedChain } = useInjectedProvider();
   const { refetchMetaData } = useMetaData();
-  const {
-    errorToast,
-    successToast,
-  } = useOverlay();
+  const { errorToast, successToast } = useOverlay();
 
   const isActive = daoMetaData.boosts[ccoType].active;
 
@@ -72,7 +69,7 @@ const CcoActivate = ({ daoMetaData, ccoType }) => {
         isLoading={loading}
         backgroundColor='red.500'
       >
-        {isActive ? 'Deactivate' : 'Activate' }
+        {isActive ? 'Deactivate' : 'Activate'}
       </Button>
     </>
   );

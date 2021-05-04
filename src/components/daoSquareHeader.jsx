@@ -17,14 +17,18 @@ const DaosquareHeader = () => {
 
   return (
     <Flex direction='row' justify='space-between' w='100%' p={6}>
-      <Link as={RouterLink} to='/daosquare-incubator'>CCOs</Link>
-      <Link href='https://www.daosquare.io/' isExternal>About</Link>
-      <Link href='https://www.daosquare.io/' isExternal>Apply</Link>
+      <Link as={RouterLink} to='/daosquare-incubator'>
+        CCOs
+      </Link>
+      <Link href='https://www.daosquare.io/' isExternal>
+        About
+      </Link>
+      <Link href='https://www.daosquare.io/' isExternal>
+        Apply
+      </Link>
       {address && (
         <Box border='1px' borderColor='gray.200' borderRadius='3'>
-          {riceBalance}
-          {' '}
-          Rice
+          {riceBalance} Rice
         </Box>
       )}
     </Flex>

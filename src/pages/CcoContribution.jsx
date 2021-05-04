@@ -178,15 +178,7 @@ const CcoContribution = React.memo(
     ).toFixed(2);
 
     if (!roundData) {
-      return (
-        <MainViewLayout header={daoMetaData?.name} isDao>
-          <Box w='100%' position='relative'>
-            <Flex wrap='wrap'>
-              <Box>DAO does not have an active CCO</Box>
-            </Flex>
-          </Box>
-        </MainViewLayout>
-      );
+      return <MainViewLayout header={daoMetaData?.name} isDao />;
     }
 
     if (roundData && roundData.active) {

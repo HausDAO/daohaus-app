@@ -49,7 +49,7 @@ const DaosquareCco = () => {
               pb={6}
             >
               <Box fontSize='xl'>CCOs</Box>
-              {d2CcoDaos.map((dao) => {
+              {d2CcoDaos.map(dao => {
                 return <CcoCard daoMetaData={dao.meta} key={dao.id} isLink />;
               })}
             </Box>
