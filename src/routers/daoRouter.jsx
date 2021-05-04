@@ -57,7 +57,7 @@ const DaoRouter = () => {
   };
 
   return (
-    <Layout dao={dao}>
+    <Layout dao={dao} daosquarecco={daoMetaData?.daosquarecco}>
       <Switch>
         <Route exact path={`${path}/`}>
           <Overview

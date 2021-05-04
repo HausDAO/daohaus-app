@@ -140,7 +140,7 @@ const CcoContribution = ({ daoMetaData, currentDaoTokens, daoProposals }) => {
     return (
       <MainViewLayout
         header={daoMetaData?.name}
-        isDao
+        isDao={!daoMetaData.daosquarecco}
         isDaosquare={daoMetaData.daosquarecco}
       >
         <Box w='100%' position='relative'>
