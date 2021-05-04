@@ -19,7 +19,7 @@ import {
 } from '@chakra-ui/react';
 import { useForm } from 'react-hook-form';
 
-import { RiAddFill } from 'react-icons/ri';
+import { RiAddFill, RiErrorWarningLine } from 'react-icons/ri';
 import TextBox from './TextBox';
 
 // const getHeight = (fields) => {
@@ -40,29 +40,45 @@ import TextBox from './TextBox';
 //   }
 // };
 
-const ProposalForm = ({
-  fields, tx, onSubmit, onTx, additionalOptions,
-}) => {
+const ProposalForm = ({ fields, tx, onTx, additionalOptions = null }) => {
   const [loading, setLoading] = useState(false);
+  const [formFields, setFields] = useState(fields);
+  const [options, setOptions] = useState(additionalOptions);
   // const { newDaoProposal } = useTX();
-  const localForm = useForm;
+  const localForm = useForm();
+  const { handleSubmit } = localForm;
 
+  const addOption = e => {
+    const selectedOption = options.find(
+      option => option.htmlFor === e.target.value,
+    );
+    setOptions(options.filter(option => option.htmlFor !== e.target.value));
+    setFields([...formFields, selectedOption]);
+  };
+  const onSubmit = values => {
+    console.log('values', values);
+  };
   return (
-    <form>
+    <form onSubmit={handleSubmit(onSubmit)}>
       <Flex flexDir='column'>
         <FormControl
-        // isInvalid={errors.name}
+          // isInvalid={errors.name}
           display='flex'
           mb={5}
-
         >
           <Flex w='100%' flexWrap='wrap' justifyContent='space-between'>
-            {fields?.map((field) => {
-              return <InputFactory key={field?.htmlFor || field?.name} {...field} localForm={localForm} />;
+            {formFields?.map(field => {
+              return (
+                <InputFactory
+                  key={field?.htmlFor || field?.name}
+                  {...field}
+                  localForm={localForm}
+                />
+              );
             })}
           </Flex>
         </FormControl>
-        <FormFooter additionalOptions={additionalOptions} />
+        <FormFooter options={options} addOption={addOption} />
       </Flex>
     </form>
   );
@@ -70,7 +86,7 @@ const ProposalForm = ({
 
 export default ProposalForm;
 
-const InputFactory = (props) => {
+const InputFactory = props => {
   const { type } = props;
   if (type === 'input') {
     return <GenericInput {...props} />;
@@ -88,10 +104,17 @@ const InputFactory = (props) => {
 };
 
 const GenericInput = ({
-  label, htmlFor, placeholder, name, valOnType = [], valOnSubmit = [], localForm, append, prepend,
+  label,
+  htmlFor,
+  placeholder,
+  name,
+  valOnType = [],
+  valOnSubmit = [],
+  localForm,
+  append,
+  prepend,
 }) => {
-  console.log(label);
-  const { register } = localForm();
+  const { register } = localForm;
 
   return (
     <FieldWrapper>
@@ -99,7 +122,9 @@ const GenericInput = ({
         {label}
       </TextBox>
       <InputGroup>
-        {prepend && <InputLeftAddon background='primary.600'>{prepend}</InputLeftAddon>}
+        {prepend && (
+          <InputLeftAddon background='primary.600'>{prepend}</InputLeftAddon>
+        )}
         <Input
           id={htmlFor}
           name={name}
@@ -112,13 +137,17 @@ const GenericInput = ({
             },
           })}
         />
-        {append && <InputRightAddon background='primary.600' p={0}>{append}</InputRightAddon>}
+        {append && (
+          <InputRightAddon background='primary.600' p={0}>
+            {append}
+          </InputRightAddon>
+        )}
       </InputGroup>
     </FieldWrapper>
   );
 };
 
-const InputSelect = (props) => {
+const InputSelect = props => {
   const { options } = props;
 
   return (
@@ -127,23 +156,27 @@ const InputSelect = (props) => {
       append={
         <Select>
           {options?.map((option, index) => (
-            <option
-              key={`${option?.value}-${index}`}
-              value={option.value}
-            >
+            <option key={`${option?.value}-${index}`} value={option.value}>
               {option.name}
-            </option>))}
+            </option>
+          ))}
         </Select>
-        }
+      }
     />
-
   );
 };
 
 const GenericTextarea = ({
-  label, htmlFor, placeholder, name, valOnType = [], valOnSubmit = [], localForm, h = 10,
+  label,
+  htmlFor,
+  placeholder,
+  name,
+  valOnType = [],
+  valOnSubmit = [],
+  localForm,
+  h = 10,
 }) => {
-  const { register } = localForm();
+  const { register } = localForm;
 
   return (
     <FieldWrapper>
@@ -163,19 +196,23 @@ const GenericTextarea = ({
           },
         })}
       />
-    </FieldWrapper>);
-};
-
-const LinkInput = (props) => {
-  return (
-    <GenericInput {...props} prepend='https://' />
+    </FieldWrapper>
   );
 };
-const FieldWrapper = ({ children }) => {
-  return <Box w={['100%', null, '48%']} mb={2}>{children}</Box>;
+
+const LinkInput = props => {
+  return <GenericInput {...props} prepend='https://' />;
 };
 
-const AdditionalOptions = ({ options }) => {
+const FieldWrapper = ({ children }) => {
+  return (
+    <Box w={['100%', null, '48%']} mb={2}>
+      {children}
+    </Box>
+  );
+};
+
+const AdditionalOptions = ({ options = [], addOption }) => {
   return (
     <Box>
       <Menu color='white' textTransform='uppercase'>
@@ -190,47 +227,76 @@ const AdditionalOptions = ({ options }) => {
           Additional Options
         </MenuButton>
         <MenuList>
-          <MenuItem>
-            Applicant
-          </MenuItem>
-          <MenuItem>
-            Request Loot
-          </MenuItem>
-          <MenuItem>
-            Request Payment
-          </MenuItem>
+          {options.map(option => {
+            return (
+              <MenuItem
+                key={option.htmlFor}
+                onClick={addOption}
+                value={option.htmlFor}
+              >
+                {option.label}
+              </MenuItem>
+            );
+          })}
         </MenuList>
       </Menu>
     </Box>
   );
 };
 
-const FormFooter = ({ additionalOptions, loading }) => {
-  if (additionalOptions?.length) {
+const FormFooter = ({ options, loading, addOption }) => {
+  if (options?.length) {
     return (
-      <Flex justifyContent='flex-end'>
-        <AdditionalOptions mr='auto' />
-        <Button
-          // type='submit'
-          loadingText='Submitting'
-          isLoading={loading}
-          disabled={loading}
-          borderBottomLeftRadius='0'
-          borderTopLeftRadius='0'
-        >
-          Submit
-        </Button>
-      </Flex>
+      <Box>
+        <Flex alignItems='flex-end' flexDir='column'>
+          <Flex mb={2}>
+            <AdditionalOptions
+              mr='auto'
+              options={options}
+              addOption={addOption}
+            />
+            <Button
+              type='submit'
+              loadingText='Submitting'
+              isLoading={loading}
+              disabled={loading}
+              borderBottomLeftRadius='0'
+              borderTopLeftRadius='0'
+            >
+              Submit
+            </Button>
+          </Flex>
+          <Flex flexDirection='column' alignItems='flex-start'>
+            <SubmitFormError message='Must be 8-12 characters' />
+          </Flex>
+        </Flex>
+      </Box>
     );
   }
   return (
-    <Button
-      type='submit'
-      loadingText='Submitting'
-      isLoading={loading}
-      disabled={loading}
-    >
-      Submit
-    </Button>
+    <Flex justifyContent='flex-end'>
+      <Button
+        type='submit'
+        loadingText='Submitting'
+        isLoading={loading}
+        disabled={loading}
+      >
+        Submit
+      </Button>
+    </Flex>
+  );
+};
+
+const SubmitFormError = ({ message }) => {
+  return (
+    <Flex color='secondary.300' fontSize='m' alignItems='flex-start'>
+      <Icon
+        as={RiErrorWarningLine}
+        color='secondary.300'
+        mr={2}
+        transform='translateY(2px)'
+      />
+      {message}
+    </Flex>
   );
 };

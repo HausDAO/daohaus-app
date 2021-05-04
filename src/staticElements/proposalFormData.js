@@ -57,9 +57,6 @@ export const PROPOSAL_FORMS = {
       },
       FIELD_TYPES.LINK,
     ],
-    additionalOptions: [
-      FIELD_TYPES.TITLE,
-      FIELD_TYPES.SHARES_REQUEST,
-    ],
+    additionalOptions: [FIELD_TYPES.TITLE, FIELD_TYPES.SHARES_REQUEST],
   },
 };
