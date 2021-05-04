@@ -15,7 +15,7 @@ export const OverlayProvider = ({ children }) => {
   const [d2dProposalModal, setD2dProposalModal] = useState(false);
   const [genericModal, setGenericModal] = useState({});
 
-  const errorToast = (content) => {
+  const errorToast = content => {
     toast({
       title: content.title,
       description: content.description,
@@ -25,7 +25,7 @@ export const OverlayProvider = ({ children }) => {
       isClosable: true,
     });
   };
-  const successToast = (content) => {
+  const successToast = content => {
     toast({
       title: content.title,
       description: content.description,
@@ -35,7 +35,7 @@ export const OverlayProvider = ({ children }) => {
       isClosable: true,
     });
   };
-  const warningToast = (content) => {
+  const warningToast = content => {
     toast({
       title: content.title,
       description: content.description,

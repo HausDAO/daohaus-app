@@ -5,7 +5,8 @@ export const calcValue = (member, daoTokens, overview) => {
     const { loot, shares } = member;
     const { totalShares, totalLoot } = overview;
     const totalDaoVal = tallyUSDs(daoTokens);
-    const memberProportion = (+shares + +loot) / (+totalShares + +totalLoot) || 0;
+    const memberProportion =
+      (+shares + +loot) / (+totalShares + +totalLoot) || 0;
 
     const result = memberProportion * totalDaoVal;
 

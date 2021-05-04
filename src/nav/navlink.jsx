@@ -1,12 +1,8 @@
 import React from 'react';
 import { Link as RouterLink } from 'react-router-dom';
-import {
-  Tooltip, Button, Icon, Link,
-} from '@chakra-ui/react';
+import { Tooltip, Button, Icon, Link } from '@chakra-ui/react';
 
-const Navlink = ({
-  label, path, icon, href, view, onClick,
-}) => {
+const Navlink = ({ label, path, icon, href, view, onClick }) => {
   if (view === 'mobile') {
     return (
       <>

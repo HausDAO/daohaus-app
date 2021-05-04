@@ -3,9 +3,14 @@ import { Link } from 'react-router-dom';
 import { Box, Tooltip } from '@chakra-ui/react';
 import ToolTipLabel from '../components/toolTipLabel';
 
-export const LinkWrapper = ({ children, link }) => (link
-  ? <Box as={Link} to={link}>{children}</Box>
-  : <Box>{children}</Box>);
+export const LinkWrapper = ({ children, link }) =>
+  link ? (
+    <Box as={Link} to={link}>
+      {children}
+    </Box>
+  ) : (
+    <Box>{children}</Box>
+  );
 
 //  CHAKRA BUG
 //  Tooltips and likely other React.portal elements like popover
@@ -17,12 +22,21 @@ export const LinkWrapper = ({ children, link }) => (link
 //  wrapper and instead will need to be defined here.
 
 export const ToolTipWrapper = ({
-  children, tooltipText, tooltip, bg = 'primary.500', placement = 'top', link,
+  children,
+  tooltipText,
+  tooltip,
+  bg = 'primary.500',
+  placement = 'top',
+  link,
 }) => {
   if (!tooltip) {
-    return link
-      ? <Box as={Link} to={link}>{children}</Box>
-      : <Box>{children}</Box>;
+    return link ? (
+      <Box as={Link} to={link}>
+        {children}
+      </Box>
+    ) : (
+      <Box>{children}</Box>
+    );
   }
   return (
     <Tooltip
@@ -32,8 +46,13 @@ export const ToolTipWrapper = ({
       placement={placement}
       shouldWrapChildren
     >
-      {link
-        ? <Box as={Link} to={link}>{children}</Box>
-        : <Box>{children}</Box>}
-    </Tooltip>);
+      {link ? (
+        <Box as={Link} to={link}>
+          {children}
+        </Box>
+      ) : (
+        <Box>{children}</Box>
+      )}
+    </Tooltip>
+  );
 };

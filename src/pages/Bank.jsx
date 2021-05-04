@@ -24,8 +24,8 @@ const Bank = ({
     address,
     injectedChain?.chainId,
     daochain,
-  )
-    && daoMember && (
+  ) &&
+    daoMember && (
       <Button
         as={Link}
         to={`/dao/${daochain}/${daoid}/proposals/new/whitelist`}
@@ -33,16 +33,16 @@ const Bank = ({
       >
         Add Asset
       </Button>
-  );
+    );
 
   useEffect(() => {
     const canSync = daoMember?.exists || delegate;
     if (currentDaoTokens && canSync) {
       setNeedsSync(
-        currentDaoTokens.some((token) => {
+        currentDaoTokens.some(token => {
           return (
-            token.contractBalances
-            && token.contractBalances.token !== token.contractBalances.babe
+            token.contractBalances &&
+            token.contractBalances.token !== token.contractBalances.babe
           );
         }),
       );

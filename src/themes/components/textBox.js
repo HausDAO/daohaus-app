@@ -1,5 +1,5 @@
 const TextBoxComponent = {
-  baseStyle: (props) => ({
+  baseStyle: props => ({
     color: props.color ? props.color : 'whiteAlpha.700',
     textAlign: props.textAlign ? props.textAlign : null,
     fontFamily: 'heading',
@@ -40,14 +40,14 @@ const TextBoxComponent = {
     },
   },
   variants: {
-    label: (props) => ({
+    label: props => ({
       color: props.colorScheme ? props.colorScheme : 'whiteAlpha.700',
       textAlign: props.textAlign ? props.textAlign : null,
       fontFamily: 'heading',
       textTransform: 'uppercase',
       letterSpacing: '0.15em',
     }),
-    value: (props) => ({
+    value: props => ({
       color: props.colorScheme ? props.colorScheme : 'whiteAlpha.900',
       textAlign: props.textAlign ? props.textAlign : null,
       fontFamily: 'mono',

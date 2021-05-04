@@ -42,7 +42,7 @@ const ListSort = ({ sort, setSort, options }) => {
           </Box>
         </MenuButton>
         <MenuList bg='black'>
-          {options.map((option) => (
+          {options.map(option => (
             <MenuItem
               key={option.value}
               onClick={() => setSort(option)}

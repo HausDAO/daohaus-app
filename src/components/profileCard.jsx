@@ -21,9 +21,7 @@ import { calcPower, calcValue } from '../utils/profile';
 import UberHausMemberAvatar from './uberHausMemberAvatar';
 import { UBERHAUS_DATA } from '../utils/uberhaus';
 
-const ProfileCard = ({
-  overview, daoTokens, ens, profile, memberEntity,
-}) => {
+const ProfileCard = ({ overview, daoTokens, ens, profile, memberEntity }) => {
   const { userid } = useParams();
   const handleAvatar = (member, profile) => {
     if (profile?.image?.length) {
@@ -49,7 +47,7 @@ const ProfileCard = ({
     );
   };
 
-  const handleName = (profile) => {
+  const handleName = profile => {
     return profile?.name ? profile.name : truncateAddr(userid);
   };
 
@@ -73,9 +71,9 @@ const ProfileCard = ({
                     ${
                       memberEntity?.createdAt
                         ? format(
-                          new Date(+memberEntity?.createdAt * 1000),
-                          'MMM. d, yyyy',
-                        )
+                            new Date(+memberEntity?.createdAt * 1000),
+                            'MMM. d, yyyy',
+                          )
                         : '--'
                     }`}
                   </>
@@ -126,9 +124,9 @@ const ProfileCard = ({
                 </TextBox>
                 <TextBox fontSize={['xl', null, null, '4xl']} variant='value'>
                   $
-                  {daoTokens
-                    && overview
-                    && numberWithCommas(
+                  {daoTokens &&
+                    overview &&
+                    numberWithCommas(
                       calcValue(memberEntity, daoTokens, overview),
                     )}
                 </TextBox>

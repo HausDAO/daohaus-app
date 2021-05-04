@@ -1,7 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import {
-  Button, Flex, Box, Text,
-} from '@chakra-ui/react';
+import { Button, Flex, Box, Text } from '@chakra-ui/react';
 
 import { useParams } from 'react-router-dom';
 import { useInjectedProvider } from '../contexts/InjectedProviderContext';
@@ -25,7 +23,8 @@ import MainViewLayout from '../components/mainViewLayout';
 import { capitalize } from '../utils/general';
 import { UBERHAUS_DATA } from '../utils/uberhaus';
 
-const tokenMsg = 'Token addresses are different across chains. If you would like to clone the same tokens to a different network, you will need to manually add the equivalent token addresses here.';
+const tokenMsg =
+  'Token addresses are different across chains. If you would like to clone the same tokens to a different network, you will need to manually add the equivalent token addresses here.';
 
 const Clone = ({ daoOverview, daoMembers, isUberHaus = false }) => {
   const {
@@ -78,7 +77,7 @@ const Clone = ({ daoOverview, daoMembers, isUberHaus = false }) => {
     }
   };
 
-  const handleSummon = async (data) => {
+  const handleSummon = async data => {
     console.log(data);
     setIsSummoning(true);
     const newDaoData = {
@@ -104,7 +103,7 @@ const Clone = ({ daoOverview, daoMembers, isUberHaus = false }) => {
 
     const summonParams = [
       summonData.summoner,
-      summonData.approvedToken.split(',').map((item) => item.trim()),
+      summonData.approvedToken.split(',').map(item => item.trim()),
       data.seconds || summonData.periodDuration,
       summonData.votingPeriod,
       summonData.gracePeriod,
@@ -129,7 +128,7 @@ const Clone = ({ daoOverview, daoMembers, isUberHaus = false }) => {
             resolvePoll(txHash);
             setSummonError(error);
           },
-          onSuccess: (txHash) => {
+          onSuccess: txHash => {
             successToast({
               title: 'A new DAO has Risen!',
             });
@@ -141,7 +140,7 @@ const Clone = ({ daoOverview, daoMembers, isUberHaus = false }) => {
         },
       });
 
-      const onTxHash = (txHash) => {
+      const onTxHash = txHash => {
         console.log('tx', txHash);
         setPendingTx(txHash);
       };
@@ -150,7 +149,10 @@ const Clone = ({ daoOverview, daoMembers, isUberHaus = false }) => {
         web3: injectedProvider,
         chainID: injectedChain.chain_id,
       })('summonMoloch')({
-        args: summonParams, from: address, poll, onTxHash,
+        args: summonParams,
+        from: address,
+        poll,
+        onTxHash,
       });
     } catch (err) {
       console.log('error in tx', err);
@@ -162,9 +164,10 @@ const Clone = ({ daoOverview, daoMembers, isUberHaus = false }) => {
     }
   };
 
-  const uberCloneWrongNetwork = isUberHaus
-    && injectedChain
-    && injectedChain.chain_id !== UBERHAUS_DATA.NETWORK;
+  const uberCloneWrongNetwork =
+    isUberHaus &&
+    injectedChain &&
+    injectedChain.chain_id !== UBERHAUS_DATA.NETWORK;
 
   if (!daoData) {
     return (

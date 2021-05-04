@@ -16,7 +16,7 @@ import { truncateAddr } from '../utils/general';
 const MinionSafeHardMode = ({ minions, submitAction, loading }) => {
   const { handleSubmit, register } = useForm();
 
-  const onSubmit = (values) => {
+  const onSubmit = values => {
     console.log(values);
     submitAction(values);
   };

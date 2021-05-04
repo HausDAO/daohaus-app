@@ -34,7 +34,7 @@ const NewMinionForm = () => {
   const [pendingTx, setPendingTx] = useState(null);
   const now = (new Date().getTime() / 1000).toFixed();
 
-  const onSubmit = async (values) => {
+  const onSubmit = async values => {
     setLoading(true);
     setStep(2);
 
@@ -54,7 +54,7 @@ const NewMinionForm = () => {
             resolvePoll(txHash);
             setStep(1);
           },
-          onSuccess: (txHash) => {
+          onSuccess: txHash => {
             const title = values.details
               ? `${values.details} Lives!`
               : 'Minion Lives!';
@@ -68,7 +68,7 @@ const NewMinionForm = () => {
         },
       });
 
-      const onTxHash = (txHash) => {
+      const onTxHash = txHash => {
         console.log('tx', txHash);
         setPendingTx(txHash);
       };
@@ -77,7 +77,10 @@ const NewMinionForm = () => {
         web3: injectedProvider,
         chainID: injectedChain.chain_id,
       })('summonMinion')({
-        args: summonParams, from: address, poll, onTxHash,
+        args: summonParams,
+        from: address,
+        poll,
+        onTxHash,
       });
     } catch (err) {
       console.log('error in tx', err);

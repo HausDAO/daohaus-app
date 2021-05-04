@@ -21,9 +21,7 @@ import TextBox from './TextBox';
 import { POPUP_CONTENT } from '../content/pending-tx-modal';
 import { supportedChains } from '../utils/chain';
 
-const SummonPending = ({
-  txHash, success, chainId, isUberHaus = false,
-}) => {
+const SummonPending = ({ txHash, success, chainId, isUberHaus = false }) => {
   const { daoid, daochain } = useParams();
   return (
     <ContentBox
@@ -118,17 +116,19 @@ const SummonPending = ({
             ))}
 
             <Stack spacing={3} mt={5}>
-              {POPUP_CONTENT.summonMoloch.links.map((link, idx) => (link.external ? (
-                <TextBox as={Link} key={idx} href={link.href}>
-                  {link.text}
-                  <Icon as={RiExternalLinkLine} ml={1} />
-                </TextBox>
-              ) : (
-                <TextBox as={RouterLink} key={idx} to={link.href}>
-                  {link.text}
-                  <Icon as={RiErrorWarningLine} ml={1} />
-                </TextBox>
-              )))}
+              {POPUP_CONTENT.summonMoloch.links.map((link, idx) =>
+                link.external ? (
+                  <TextBox as={Link} key={idx} href={link.href}>
+                    {link.text}
+                    <Icon as={RiExternalLinkLine} ml={1} />
+                  </TextBox>
+                ) : (
+                  <TextBox as={RouterLink} key={idx} to={link.href}>
+                    {link.text}
+                    <Icon as={RiErrorWarningLine} ml={1} />
+                  </TextBox>
+                ),
+              )}
             </Stack>
             {!isUberHaus ? (
               <>

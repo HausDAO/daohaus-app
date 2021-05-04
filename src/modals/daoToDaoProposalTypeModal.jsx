@@ -52,7 +52,7 @@ const DaoToDaoProposalTypeModal = ({ setProposalType }) => {
   // }, [params]);
 
   const handleClose = () => {
-    setD2dProposalTypeModal((prevState) => !prevState);
+    setD2dProposalTypeModal(prevState => !prevState);
   };
 
   return (
@@ -89,7 +89,7 @@ const DaoToDaoProposalTypeModal = ({ setProposalType }) => {
             justify='space-around'
             align='center'
           >
-            {daoToDaoProposalTypes().map((p) => {
+            {daoToDaoProposalTypes().map(p => {
               return (
                 p?.show && (
                   <Box
@@ -110,8 +110,8 @@ const DaoToDaoProposalTypeModal = ({ setProposalType }) => {
                         return;
                       }
                       setProposalType(p.proposalType);
-                      setD2dProposalModal((prevState) => !prevState);
-                      setD2dProposalTypeModal((prevState) => !prevState);
+                      setD2dProposalModal(prevState => !prevState);
+                      setD2dProposalTypeModal(prevState => !prevState);
                     }}
                   >
                     <Image src={p.image} width='50px' mb={15} />

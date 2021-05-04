@@ -5,7 +5,15 @@ import { numberWithCommas } from '../utils/general';
 import TextBox from './TextBox';
 
 const TextIndicator = ({
-  value, label, fallback = '--', link, tooltip, tooltipText, size, comma, append,
+  value,
+  label,
+  fallback = '--',
+  link,
+  tooltip,
+  tooltipText,
+  size,
+  comma,
+  append,
 }) => {
   const numberText = comma ? numberWithCommas(value) : value;
   return (
@@ -14,9 +22,7 @@ const TextIndicator = ({
         <TextBox size={size === 'lg' ? 'sm' : 'xs'}>{label}</TextBox>
         <Skeleton isLoaded={value}>
           <TextBox size={size === 'lg' ? '3xl' : 'lg'} variant='value'>
-            {numberText || fallback}
-            {' '}
-            {append}
+            {numberText || fallback} {append}
           </TextBox>
         </Skeleton>
       </Box>

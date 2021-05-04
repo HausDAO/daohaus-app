@@ -3,19 +3,19 @@ export const TIP_LABELS = {
     title: 'Uber Proposal',
     pars: [
       'This Proposal was created by an UberHaus Minion.',
-      'To perform the minion\'s action, hit the \'Execute\' button after processing the proposal',
+      "To perform the minion's action, hit the 'Execute' button after processing the proposal",
     ],
   },
   MINION_PROPOSAL: {
     title: 'Minion Proposal',
     pars: [
       'This Proposal was created by a minion.',
-      'To perform the minion\'s action, hit the \'Execute\' button after processing the proposal',
+      "To perform the minion's action, hit the 'Execute' button after processing the proposal",
     ],
   },
 };
 
-export const generateSFLabels = (proposal) => {
+export const generateSFLabels = proposal => {
   try {
     const tokenRate = JSON.parse(proposal?.details)?.tokenRate;
     return {
@@ -38,7 +38,8 @@ export const generateSFLabels = (proposal) => {
 export const SF_LABEL = {
   GUILDKICK: {
     title: 'GUILDKICK ALERT',
-    body: 'An unexpected cancelation of a stream would be punished with you being removed from the DAO.',
+    body:
+      'An unexpected cancelation of a stream would be punished with you being removed from the DAO.',
   },
   LIQUIDATED: {
     title: 'LIQUIDATED',
@@ -52,7 +53,8 @@ export const SF_LABEL = {
     body: 'Outstanding balance will be downgraded and sent back to the DAO',
   },
   UPGRADE: {
-    body: '(Coming Soon) This action will upgrade balance from the underlying token',
+    body:
+      '(Coming Soon) This action will upgrade balance from the underlying token',
   },
   REGISTER: {
     title: 'IMPORTANT',

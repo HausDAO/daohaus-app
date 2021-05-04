@@ -1,8 +1,6 @@
 import React, { useContext } from 'react';
 import makeBlockie from 'ethereum-blockies-base64';
-import {
-  Avatar, Box, Flex, Button, Badge, Text, Link,
-} from '@chakra-ui/react';
+import { Avatar, Box, Flex, Button, Badge, Link, Text } from '@chakra-ui/react';
 import { Link as RouterLink } from 'react-router-dom';
 import ContentBox from './ContentBox';
 import { ExploreContext } from '../contexts/ExploreContext';
@@ -13,7 +11,7 @@ import { chainByNetworkId } from '../utils/chain';
 const ExploreCard = ({ dao }) => {
   const { state, dispatch } = useContext(ExploreContext);
 
-  const handleTagSelect = (tag) => {
+  const handleTagSelect = tag => {
     console.log('state.tags', state.tags, tag);
     if (!state.tags.includes(tag)) {
       const tagUpdate = [...state.tags, tag];
@@ -25,7 +23,7 @@ const ExploreCard = ({ dao }) => {
     if (dao.meta?.tags) {
       return (
         <Flex direction='row' wrap='wrap'>
-          {dao.meta.tags.map((tag) => {
+          {dao.meta.tags.map(tag => {
             return (
               <Badge
                 key={tag}
@@ -53,7 +51,11 @@ const ExploreCard = ({ dao }) => {
   return (
     <ContentBox
       as={dao.meta.version === '1' ? Link : RouterLink}
-      to={dao.meta.version.startsWith('2') ? `/dao/${chainByNetworkId(dao.networkId).chain_id}/${dao.id}` : null}
+      to={
+        dao.meta.version.startsWith('2')
+          ? `/dao/${chainByNetworkId(dao.networkId).chain_id}/${dao.id}`
+          : null
+      }
       href={dao.meta.version === '1' ? pokemolUrlExplore(dao) : null}
       w={['100%', '100%', '100%', '340px', '340px']}
       h='340px'
@@ -112,9 +114,7 @@ const ExploreCard = ({ dao }) => {
           |
         </Box>
         <Box fontSize='sm'>
-          {dao.tokens.length}
-          {' '}
-          Token
+          {dao.tokens.length} Token
           {dao.tokens.length > 1 && 's'}
         </Box>
       </Flex>
@@ -130,13 +130,9 @@ const ExploreCard = ({ dao }) => {
       {renderTags()}
       <Flex justify='flex-end' w='100%'>
         <Box mt={5}>
-          <Button
-            minWidth='80px'
-            variant='outline'
-          >
+          <Button minWidth='80px' variant='outline'>
             Go
           </Button>
-
         </Box>
       </Flex>
     </ContentBox>

@@ -47,7 +47,7 @@ import TextBoxComponent from './components/textBox';
 //   return theme;
 // };
 
-export const createTheme = (daoTheme) => {
+export const createTheme = daoTheme => {
   const themeOverrides = { ...defaultTheme, ...daoTheme };
 
   return extendTheme({
