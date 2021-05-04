@@ -1,9 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { utils } from 'ethers';
 import { useParams, useHistory } from 'react-router-dom';
-import {
-  Flex, Box, Skeleton, Button, Avatar,
-} from '@chakra-ui/react';
+import { Flex, Box, Skeleton, Button, Avatar } from '@chakra-ui/react';
 import makeBlockie from 'ethereum-blockies-base64';
 import { useMetaData } from '../contexts/MetaDataContext';
 import { getTerm, themeImagePath } from '../utils/metadata';

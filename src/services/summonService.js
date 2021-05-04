@@ -17,22 +17,20 @@ export const SummonService = ({
     abi,
     chainByID(chainID).moloch_factory_addr,
   );
-  return (service) => {
+  return service => {
     if (service === 'summonMoloch') {
-      return async ({
-        args, from, poll, onTxHash,
-      }) => {
+      return async ({ args, from, poll, onTxHash }) => {
         try {
           const tx = await contract.methods[service](...args);
           return tx
             .send({ from })
-            .on('transactionHash', (txHash) => {
+            .on('transactionHash', txHash => {
               if (poll) {
                 onTxHash(txHash);
                 poll(txHash);
               }
             })
-            .on('error', (error) => {
+            .on('error', error => {
               console.error(error);
             });
         } catch (error) {

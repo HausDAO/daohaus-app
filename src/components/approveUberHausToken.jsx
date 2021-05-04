@@ -9,7 +9,11 @@ import { createPoll } from '../services/pollService';
 import { UberHausMinionService } from '../services/uberHausMinionService';
 import { UBERHAUS_DATA } from '../utils/uberhaus';
 
-const ApproveUberHausToken = ({ minionAddress, minionBalance, setShouldFetch }) => {
+const ApproveUberHausToken = ({
+  minionAddress,
+  minionBalance,
+  setShouldFetch,
+}) => {
   const { daochain } = useParams();
   const { cachePoll, resolvePoll } = useUser();
   const { address, injectedProvider } = useInjectedProvider();
@@ -43,7 +47,7 @@ const ApproveUberHausToken = ({ minionAddress, minionBalance, setShouldFetch }) 
             setShouldFetch(true);
             setLoading(false);
           },
-          onSuccess: (txHash) => {
+          onSuccess: txHash => {
             successToast({
               title: 'HAUS unlocked.',
             });

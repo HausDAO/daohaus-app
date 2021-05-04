@@ -1,7 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import {
-  Flex, Box, Button, Icon, HStack,
-} from '@chakra-ui/react';
+import { Flex, Box, Button, Icon, HStack } from '@chakra-ui/react';
 import { Link as RouterLink, useHistory, useParams } from 'react-router-dom';
 import { BiArrowBack } from 'react-icons/bi';
 import { rgba } from 'polished';
@@ -20,9 +18,7 @@ import GenericModal from '../modals/genericModal';
 const ThemeBuilder = ({ refetchMetaData }) => {
   const { address, injectedProvider, injectedChain } = useInjectedProvider();
   const { daochain, daoid } = useParams();
-  const {
-    theme, updateTheme, tempTheme, updateTempTheme,
-  } = useCustomTheme();
+  const { theme, updateTheme, tempTheme, updateTempTheme } = useCustomTheme();
   const { customTerms } = useMetaData();
   const { setGenericModal } = useOverlay();
   const history = useHistory();
@@ -44,7 +40,7 @@ const ThemeBuilder = ({ refetchMetaData }) => {
     }
   }, [theme, customTerms]);
 
-  const handleThemeUpdate = (update) => {
+  const handleThemeUpdate = update => {
     const currentValues = tempTheme || defaultTheme;
     const themeUpdate = { ...currentValues, ...update };
 

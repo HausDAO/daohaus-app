@@ -1,7 +1,5 @@
 import React from 'react';
-import {
-  Switch, Route, useRouteMatch, useParams,
-} from 'react-router-dom';
+import { Switch, Route, useRouteMatch, useParams } from 'react-router-dom';
 
 import { useDao } from '../contexts/DaoContext';
 import { useDaoMember } from '../contexts/DaoMemberContext';
@@ -226,11 +224,7 @@ const DaoRouter = () => {
           />
         </Route>
         <Route exact path={`${path}/uberhaus/clone`}>
-          <Clone
-            daoMembers={daoMembers}
-            daoOverview={daoOverview}
-            isUberHaus
-          />
+          <Clone daoMembers={daoMembers} daoOverview={daoOverview} isUberHaus />
         </Route>
         <Route exact path={`${path}/uberhaus/proposals/new`}>
           <NewProposal

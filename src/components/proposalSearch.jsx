@@ -51,7 +51,7 @@ const ProposalSearch = ({ performSearch, resetSearch }) => {
   const inputENS = watch('applicantHidden');
   const selectAddr = watch('memberApplicant');
 
-  const handleSearch = (string) => {
+  const handleSearch = string => {
     performSearch(string, searchFilters);
   };
 
@@ -68,7 +68,7 @@ const ProposalSearch = ({ performSearch, resetSearch }) => {
     }
   }, [inputAddr, inputENS, selectAddr, searchFilters]);
 
-  const onSubmit = (values) => {
+  const onSubmit = values => {
     if (isEthAddress(values.applicant)) {
       handleSearch(values.applicant);
     } else if (isEthAddress(values.applicantHidden)) {
@@ -81,12 +81,16 @@ const ProposalSearch = ({ performSearch, resetSearch }) => {
     }
   };
 
-  const handleToggleFilter = (e) => {
+  const handleToggleFilter = e => {
     const filterType = e?.target?.value;
     if (filterType) {
-      setSearchFilters((prevState) => prevState.map((filter) => (filter.value === filterType
-        ? { ...filter, active: !filter.active }
-        : filter)));
+      setSearchFilters(prevState =>
+        prevState.map(filter =>
+          filter.value === filterType
+            ? { ...filter, active: !filter.active }
+            : filter,
+        ),
+      );
     }
   };
   const clearSearch = () => {
@@ -120,7 +124,12 @@ const ProposalSearch = ({ performSearch, resetSearch }) => {
             zIndex='15'
             leftIcon={isEnabled && <RiSearchLine />}
           >
-            <Icon fontSize={20} title='Search' as={RiSearchLine} color='white' />
+            <Icon
+              fontSize={20}
+              title='Search'
+              as={RiSearchLine}
+              color='white'
+            />
           </Button>
         </PopoverTrigger>
         <TemporaryPopoverFix>
@@ -174,7 +183,7 @@ export default ProposalSearch;
 
 const AddressFilterOptions = ({ filters, handleToggleFilter }) => (
   <>
-    {filters.map((filter) => (
+    {filters.map(filter => (
       <Flex key={filter.value}>
         <Button
           textTransform='uppercase'

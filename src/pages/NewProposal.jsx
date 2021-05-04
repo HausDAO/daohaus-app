@@ -11,7 +11,7 @@ import { getTerm } from '../utils/metadata';
 import ComingSoonOverlay from '../components/comingSoonOverlay';
 import MainViewLayout from '../components/mainViewLayout';
 
-const validProposalType = (type) => {
+const validProposalType = type => {
   return [
     'member',
     'funding',
@@ -82,7 +82,7 @@ const NewProposal = ({ customTerms, daoMetaData, daoOverview }) => {
             justify='space-around'
             align='center'
           >
-            {activeProposalTypes?.map((p) => {
+            {activeProposalTypes?.map(p => {
               return (
                 p.show && (
                   <Box

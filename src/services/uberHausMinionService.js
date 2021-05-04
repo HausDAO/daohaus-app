@@ -30,28 +30,26 @@ export const UberHausMinionService = ({ web3, chainID, uberHausMinion }) => {
       };
     }
     if (
-      service === 'proposeAction'
-      || service === 'executeAction'
-      || service === 'executeAppointment'
-      || service === 'nominateDelegate'
-      || service === 'doWithdraw'
-      || service === 'pullGuildFunds'
+      service === 'proposeAction' ||
+      service === 'executeAction' ||
+      service === 'executeAppointment' ||
+      service === 'nominateDelegate' ||
+      service === 'doWithdraw' ||
+      service === 'pullGuildFunds'
     ) {
-      return async ({
-        args, address, poll, onTxHash,
-      }) => {
+      return async ({ args, address, poll, onTxHash }) => {
         try {
           const tx = await contract.methods[service](...args);
           console.log('tx', tx);
           return tx
             .send('eth_requestAccounts', { from: address })
-            .on('transactionHash', (txHash) => {
+            .on('transactionHash', txHash => {
               if (poll) {
                 onTxHash();
                 poll(txHash);
               }
             })
-            .on('error', (error) => {
+            .on('error', error => {
               console.error(error);
             });
         } catch (error) {
@@ -62,9 +60,9 @@ export const UberHausMinionService = ({ web3, chainID, uberHausMinion }) => {
       };
     }
     if (
-      service === 'setInitialDelegate'
-      || service === 'claimDelegateReward'
-      || service === 'approveUberHaus'
+      service === 'setInitialDelegate' ||
+      service === 'claimDelegateReward' ||
+      service === 'approveUberHaus'
     ) {
       return async ({ address, poll, onTxHash }) => {
         try {
@@ -72,7 +70,7 @@ export const UberHausMinionService = ({ web3, chainID, uberHausMinion }) => {
           console.log('tx', tx);
           return tx
             .send('eth_requestAccounts', { from: address })
-            .on('transactionHash', (txHash) => {
+            .on('transactionHash', txHash => {
               if (onTxHash) {
                 onTxHash();
               }
@@ -80,7 +78,7 @@ export const UberHausMinionService = ({ web3, chainID, uberHausMinion }) => {
                 poll(txHash);
               }
             })
-            .on('error', (error) => {
+            .on('error', error => {
               console.error(error);
             });
         } catch (error) {
@@ -91,7 +89,7 @@ export const UberHausMinionService = ({ web3, chainID, uberHausMinion }) => {
       };
     }
     if (service === 'delegateByAddress') {
-      return async (delegateAddress) => {
+      return async delegateAddress => {
         try {
           const delegate = await contract.methods
             .delegates(delegateAddress)

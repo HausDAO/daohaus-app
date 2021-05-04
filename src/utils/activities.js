@@ -11,9 +11,9 @@
 //   voteStatus: String
 // }
 
-const getVotes = (proposals) => {
-  return proposals.flatMap((prop) => {
-    const votes = prop.votes.map((vote) => {
+const getVotes = proposals => {
+  return proposals.flatMap(prop => {
+    const votes = prop.votes.map(vote => {
       return {
         ...vote,
         proposalType: prop.proposalType,
@@ -24,13 +24,13 @@ const getVotes = (proposals) => {
   });
 };
 
-const handleVoteTitle = (activity) => {
+const handleVoteTitle = activity => {
   return ` voted ${+activity?.uintVote === 1 ? 'Yes' : 'No'} on ${
     activity?.proposalType
   }`;
 };
 
-const handleProposal = (proposal) => {
+const handleProposal = proposal => {
   if (proposal.processed) {
     return {
       title: `processed ${proposal.proposalType}`,
@@ -42,7 +42,8 @@ const handleProposal = (proposal) => {
       yesVotes: proposal.yesVotes,
       noVotes: proposal.noVotes,
     };
-  } if (proposal.sponsored) {
+  }
+  if (proposal.sponsored) {
     return {
       title: `sponsored ${proposal.proposalType}`,
       createdAt: proposal.sponsoredAt,
@@ -66,7 +67,7 @@ const handleProposal = (proposal) => {
   };
 };
 
-const handleVote = (vote) => {
+const handleVote = vote => {
   return {
     proposalId: vote.proposalId,
     memberAddress: vote.memberAddress,
@@ -76,7 +77,7 @@ const handleVote = (vote) => {
   };
 };
 
-const handleRQ = (rq) => ({
+const handleRQ = rq => ({
   memberAddress: rq.memberAddress,
   title: `quit ${rq.shares} shares and ${rq.loot} loot`,
   rageBadge: 'Rage Quit',
@@ -84,7 +85,7 @@ const handleRQ = (rq) => ({
   daoData: rq.daoData,
 });
 
-const buildProposalHistory = (proposal) => {
+const buildProposalHistory = proposal => {
   const histories = [
     {
       title: 'Submitted',
@@ -125,8 +126,8 @@ const buildProposalHistory = (proposal) => {
 const voteHistoryData = (record, proposal) => {
   const totalVotesShares = +proposal.yesShares + +proposal.noShares;
   const memberPercentageOfVote = (
-    (+record.memberPower / totalVotesShares)
-    * 100
+    (+record.memberPower / totalVotesShares) *
+    100
   ).toFixed(2);
   const operator = record.uintVote ? '+' : '-';
   return {
@@ -138,13 +139,13 @@ const voteHistoryData = (record, proposal) => {
   };
 };
 
-export const getDaoActivites = (daoData) => {
+export const getDaoActivites = daoData => {
   const proposals = daoData.proposals
-    .filter((prop) => !prop.cancelled)
-    .map((proposal) => handleProposal(proposal));
+    .filter(prop => !prop.cancelled)
+    .map(proposal => handleProposal(proposal));
 
-  const votes = getVotes(daoData.proposals).map((vote) => handleVote(vote));
-  const rageActivities = daoData.rageQuits.map((rq) => handleRQ(rq));
+  const votes = getVotes(daoData.proposals).map(vote => handleVote(vote));
+  const rageActivities = daoData.rageQuits.map(rq => handleRQ(rq));
   const allActivites = proposals
     .concat(votes)
     .concat(rageActivities)
@@ -152,28 +153,28 @@ export const getDaoActivites = (daoData) => {
   return allActivites;
 };
 
-export const getProposalsActivites = (daoData) => {
+export const getProposalsActivites = daoData => {
   const proposals = daoData.proposals
-    .filter((prop) => !prop.cancelled)
-    .map((proposal) => handleProposal(proposal));
-  const votes = getVotes(daoData.proposals).map((vote) => handleVote(vote));
+    .filter(prop => !prop.cancelled)
+    .map(proposal => handleProposal(proposal));
+  const votes = getVotes(daoData.proposals).map(vote => handleVote(vote));
   const allActivites = proposals
     .concat(votes)
     .sort((a, b) => +b.createdAt - +a.createdAt);
   return allActivites;
 };
 
-export const getMembersActivites = (daoData) => {
+export const getMembersActivites = daoData => {
   const proposals = daoData.proposals
-    .filter((prop) => {
+    .filter(prop => {
       return !prop.cancelled && prop.proposalType === 'Member Proposal';
     })
-    .map((proposal) => handleProposal(proposal));
+    .map(proposal => handleProposal(proposal));
   const votes = getVotes(daoData.proposals)
-    .filter((vote) => vote.proposalType === 'Member Proposal')
-    .map((vote) => handleVote(vote));
+    .filter(vote => vote.proposalType === 'Member Proposal')
+    .map(vote => handleVote(vote));
 
-  const rageActivities = daoData.rageQuits.map((rq) => handleRQ(rq));
+  const rageActivities = daoData.rageQuits.map(rq => handleRQ(rq));
   const allActivites = proposals
     .concat(votes)
     .concat(rageActivities)
@@ -181,29 +182,30 @@ export const getMembersActivites = (daoData) => {
   return allActivites;
 };
 
-export const getMemberActivites = (memberAddress) => (daoData) => {
+export const getMemberActivites = memberAddress => daoData => {
   const proposals = daoData.proposals
-    .filter((prop) => {
-      const memberRelated = memberAddress?.toLowerCase() === prop.proposer?.toLowerCase()
-        || memberAddress?.toLowerCase() === prop.sponser?.toLowerCase()
-        || memberAddress?.toLowerCase() === prop.memberAddress?.toLowerCase()
-        || memberAddress?.toLowerCase() === prop.applicant?.toLowerCase();
+    .filter(prop => {
+      const memberRelated =
+        memberAddress?.toLowerCase() === prop.proposer?.toLowerCase() ||
+        memberAddress?.toLowerCase() === prop.sponser?.toLowerCase() ||
+        memberAddress?.toLowerCase() === prop.memberAddress?.toLowerCase() ||
+        memberAddress?.toLowerCase() === prop.applicant?.toLowerCase();
       return !prop.cancelled && memberRelated;
     })
-    .map((proposal) => handleProposal(proposal));
+    .map(proposal => handleProposal(proposal));
 
   const votes = getVotes(daoData.proposals)
-    .filter((vote) => {
+    .filter(vote => {
       return (
-        vote.proposalType === 'Member Proposal'
-        && memberAddress === vote.memberAddress
+        vote.proposalType === 'Member Proposal' &&
+        memberAddress === vote.memberAddress
       );
     })
-    .map((vote) => handleVote(vote));
+    .map(vote => handleVote(vote));
 
   const rageActivities = daoData.rageQuits
-    .filter((rage) => rage.memberAddress === memberAddress)
-    .map((rq) => handleRQ(rq));
+    .filter(rage => rage.memberAddress === memberAddress)
+    .map(rq => handleRQ(rq));
 
   const allActivites = proposals
     .concat(votes)
@@ -213,26 +215,27 @@ export const getMemberActivites = (memberAddress) => (daoData) => {
   return allActivites;
 };
 
-export const getProfileActivites = (memberAddress) => (daoData) => {
+export const getProfileActivites = memberAddress => daoData => {
   const proposals = daoData.proposals
-    .filter((prop) => {
-      const memberRelated = memberAddress?.toLowerCase() === prop.proposer?.toLowerCase()
-        || memberAddress?.toLowerCase() === prop.sponsor?.toLowerCase()
-        || memberAddress?.toLowerCase() === prop.memberAddress?.toLowerCase()
-        || memberAddress?.toLowerCase() === prop.applicant?.toLowerCase();
+    .filter(prop => {
+      const memberRelated =
+        memberAddress?.toLowerCase() === prop.proposer?.toLowerCase() ||
+        memberAddress?.toLowerCase() === prop.sponsor?.toLowerCase() ||
+        memberAddress?.toLowerCase() === prop.memberAddress?.toLowerCase() ||
+        memberAddress?.toLowerCase() === prop.applicant?.toLowerCase();
       return !prop.cancelled && memberRelated;
     })
-    .map((proposal) => handleProposal(proposal));
+    .map(proposal => handleProposal(proposal));
 
   const votes = getVotes(daoData.proposals)
-    .filter((vote) => memberAddress === vote.memberAddress)
-    .map((vote) => handleVote(vote));
+    .filter(vote => memberAddress === vote.memberAddress)
+    .map(vote => handleVote(vote));
 
   const rageActivities = daoData.rageQuits
     .filter(
-      (rage) => rage.memberAddress.toLowerCase() === memberAddress.toLowerCase(),
+      rage => rage.memberAddress.toLowerCase() === memberAddress.toLowerCase(),
     )
-    .map((rq) => handleRQ(rq));
+    .map(rq => handleRQ(rq));
 
   const allActivites = proposals
     .concat(votes)
@@ -242,8 +245,8 @@ export const getProfileActivites = (memberAddress) => (daoData) => {
   return allActivites;
 };
 
-export const getProposalHistories = (proposal) => {
-  const votes = proposal.votes.map((vote) => voteHistoryData(vote, proposal));
+export const getProposalHistories = proposal => {
+  const votes = proposal.votes.map(vote => voteHistoryData(vote, proposal));
   const proposalStates = buildProposalHistory(proposal);
   const allActivites = proposalStates
     .concat(votes)

@@ -66,11 +66,15 @@ const DaoToDaoMemberInfo = ({
             </>
           )}
 
-          {membership && delegate && !needDelegateKeySet && isMember && !userNetworkMismatchOrNotMember && (
-            <Button w='25%' onClick={openModal}>
-              Manage
-            </Button>
-          )}
+          {membership &&
+            delegate &&
+            !needDelegateKeySet &&
+            isMember &&
+            !userNetworkMismatchOrNotMember && (
+              <Button w='25%' onClick={openModal}>
+                Manage
+              </Button>
+            )}
         </Flex>
       </Box>
     </>

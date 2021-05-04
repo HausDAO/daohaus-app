@@ -25,7 +25,9 @@ const MinionList = () => {
 
   const minions = useMemo(() => {
     if (daoOverview?.minions) {
-      return daoOverview?.minions.sort((minionA, minionB) => (minionA.createdAt > minionB.createdAt ? 1 : -1));
+      return daoOverview?.minions.sort((minionA, minionB) =>
+        minionA.createdAt > minionB.createdAt ? 1 : -1,
+      );
     }
   }, [daoOverview]);
 
@@ -42,12 +44,15 @@ const MinionList = () => {
   return (
     <ContentBox d='flex' flexDirection='column' position='relative'>
       <Stack spacing={3}>
-        {minions.map((minion) => {
+        {minions.map(minion => {
           const minionType = useBreakpointValue({
             base: minion.minionType?.split(' ')[0],
             md: minion.minionType,
           });
-          const minionUrlType = minionType === MINION_TYPES.SUPERFLUID ? 'superfluid-minion' : 'minion';
+          const minionUrlType =
+            minionType === MINION_TYPES.SUPERFLUID
+              ? 'superfluid-minion'
+              : 'minion';
 
           return (
             <Flex

@@ -68,7 +68,7 @@ const CustomThemeForm = ({ previewTheme, setPreviewTheme }) => {
     }
   }, [ipfsHash]);
 
-  const handleChange = (event) => {
+  const handleChange = event => {
     setPreviewTheme({
       ...previewTheme,
       [event.target.id]: event.target.value,
@@ -97,7 +97,7 @@ const CustomThemeForm = ({ previewTheme, setPreviewTheme }) => {
     });
   };
 
-  const handleWordsChange = (event) => {
+  const handleWordsChange = event => {
     const { name, value } = event.target;
     const updatedThemeWords = {
       ...previewTheme.daoMeta,
@@ -110,7 +110,7 @@ const CustomThemeForm = ({ previewTheme, setPreviewTheme }) => {
   };
 
   const renderWordsFields = () => {
-    return Object.keys(previewTheme.daoMeta).map((themeKey) => {
+    return Object.keys(previewTheme.daoMeta).map(themeKey => {
       return (
         <FormControl mb={4} key={themeKey}>
           <TextBox size='xs' mb={1}>
@@ -164,7 +164,9 @@ const CustomThemeForm = ({ previewTheme, setPreviewTheme }) => {
                       />
                       <SketchPicker
                         color={previewTheme?.primary500}
-                        onChangeComplete={(color) => handleColorChange(color, 'primary500')}
+                        onChangeComplete={color =>
+                          handleColorChange(color, 'primary500')
+                        }
                         disableAlpha
                       />
                     </Box>
@@ -195,7 +197,9 @@ const CustomThemeForm = ({ previewTheme, setPreviewTheme }) => {
                       />
                       <SketchPicker
                         color={previewTheme?.secondary500}
-                        onChange={(color) => handleColorChange(color, 'secondary500')}
+                        onChange={color =>
+                          handleColorChange(color, 'secondary500')
+                        }
                         disableAlpha
                       />
                     </Box>
@@ -226,7 +230,7 @@ const CustomThemeForm = ({ previewTheme, setPreviewTheme }) => {
                       />
                       <SketchPicker
                         color={previewTheme?.bg500}
-                        onChange={(color) => handleColorChange(color, 'bg500')}
+                        onChange={color => handleColorChange(color, 'bg500')}
                         disableAlpha
                       />
                     </Box>
@@ -277,7 +281,7 @@ const CustomThemeForm = ({ previewTheme, setPreviewTheme }) => {
                   name='headingFont'
                   id='headingFont'
                 >
-                  {headingFonts.map((value) => (
+                  {headingFonts.map(value => (
                     <Box as='option' key={value}>
                       {value}
                     </Box>
@@ -301,7 +305,7 @@ const CustomThemeForm = ({ previewTheme, setPreviewTheme }) => {
                   name='bodyFont'
                   id='bodyFont'
                 >
-                  {bodyFonts.map((value) => (
+                  {bodyFonts.map(value => (
                     <Box as='option' key={value}>
                       {value}
                     </Box>
@@ -325,7 +329,7 @@ const CustomThemeForm = ({ previewTheme, setPreviewTheme }) => {
                   name='monoFont'
                   id='monoFont'
                 >
-                  {monoFonts.map((value) => (
+                  {monoFonts.map(value => (
                     <Box as='option' key={value} id={value}>
                       {value}
                     </Box>
@@ -353,8 +357,8 @@ const CustomThemeForm = ({ previewTheme, setPreviewTheme }) => {
                     <>
                       <Image
                         src={
-                          themeImagePath(ipfsHash)
-                          || themeImagePath(previewTheme.bgImg)
+                          themeImagePath(ipfsHash) ||
+                          themeImagePath(previewTheme.bgImg)
                         }
                         alt='background image'
                         w='50px'

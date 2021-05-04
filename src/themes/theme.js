@@ -20,7 +20,7 @@ import Textarea from './core/textarea';
 import ContentBoxComponent from './components/contentBox';
 import TextBoxComponent from './components/textBox';
 
-export const createTheme = (daoTheme) => {
+export const createTheme = daoTheme => {
   const themeOverrides = { ...defaultTheme, ...daoTheme };
 
   return extendTheme({

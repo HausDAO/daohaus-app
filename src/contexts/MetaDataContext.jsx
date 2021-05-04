@@ -34,8 +34,8 @@ export const MetaDataProvider = ({ children }) => {
   useEffect(() => {
     if (userHubDaos) {
       const daoMeta = userHubDaos
-        ?.find((network) => network.networkID === daochain)
-        ?.data.find((dao) => {
+        ?.find(network => network.networkID === daochain)
+        ?.data.find(dao => {
           return dao.meta?.contractAddress === daoid;
         })?.meta;
 

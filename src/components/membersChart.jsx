@@ -8,9 +8,7 @@ import {
   AreaSeries,
   GradientDefs,
 } from 'react-vis';
-import {
-  Box, Flex, Spinner, RadioGroup, Stack, Radio,
-} from '@chakra-ui/react';
+import { Box, Flex, Spinner, RadioGroup, Stack, Radio } from '@chakra-ui/react';
 import { useSessionStorage } from '../hooks/useSessionStorage';
 
 import { useCustomTheme } from '../contexts/CustomThemeContext';
@@ -77,7 +75,7 @@ const MembersChart = ({ overview, daoMetaData, daoMembers }) => {
   }, [daoBalances, overview]);
 
   const setTypeData = (type, balances) => {
-    const data = balances.map((balance) => {
+    const data = balances.map(balance => {
       return {
         x: balance.date,
         y: balance[type],
@@ -162,7 +160,10 @@ const MembersChart = ({ overview, daoMetaData, daoMembers }) => {
                 <FlexibleXYPlot
                   yDomain={[0, chartData[chartData.length - 1].y || 10]}
                   margin={{
-                    left: 0, right: 0, top: 40, bottom: 40,
+                    left: 0,
+                    right: 0,
+                    top: 40,
+                    bottom: 40,
                   }}
                 >
                   <XAxis xType='time' tickTotal={0} />

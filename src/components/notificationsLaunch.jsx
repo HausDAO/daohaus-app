@@ -22,16 +22,14 @@ const NotificationsLaunch = ({
   setLoading,
   stepOverride,
 }) => {
-  const {
-    handleSubmit, register, getValues, watch,
-  } = useForm();
+  const { handleSubmit, register, getValues, watch } = useForm();
   const { daoid, daochain } = useParams();
   const [connectionError, setConnectionError] = useState();
   const [isConnected, setIsConnected] = useState();
   const [step, setStep] = useState(stepOverride || 'intro');
   const watchChannel = watch('channelId');
 
-  const onSubmit = async (values) => {
+  const onSubmit = async values => {
     setLoading(true);
     const boostMetadata = [
       {

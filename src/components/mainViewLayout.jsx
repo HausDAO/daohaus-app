@@ -3,7 +3,12 @@ import React from 'react';
 import PageHeader from './pageHeader';
 
 const MainViewLayout = ({
-  children, header, headerEl, customTerms, isDao, isDaosquare,
+  children,
+  header,
+  headerEl,
+  customTerms,
+  isDao,
+  isDaosquare,
 }) => {
   return (
     <>

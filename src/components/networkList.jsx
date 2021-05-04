@@ -24,7 +24,7 @@ const NetworkList = () => {
     setSortedDaos({ networkDaos, count });
   }, [userHubDaos]);
 
-  const handleChange = (event) => {
+  const handleChange = event => {
     setSearchTerm(event.target.value);
   };
 
@@ -41,7 +41,7 @@ const NetworkList = () => {
             className='input'
             placeholder='Search My Daos'
             maxW={300}
-            onChange={(e) => handleChange(e)}
+            onChange={e => handleChange(e)}
           />
         </Flex>
       ) : (

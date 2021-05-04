@@ -36,14 +36,16 @@ const PaymentInput = ({
     if (daoOverview && !tokenData.length) {
       const depositTokenAddress = daoOverview.depositToken.tokenAddress;
       const depositToken = daoOverview.tokenBalances.find(
-        (token) => token.guildBank && token.token.tokenAddress === depositTokenAddress,
+        token =>
+          token.guildBank && token.token.tokenAddress === depositTokenAddress,
       );
       const tokenArray = daoOverview.tokenBalances.filter(
-        (token) => token.guildBank && token.token.tokenAddress !== depositTokenAddress,
+        token =>
+          token.guildBank && token.token.tokenAddress !== depositTokenAddress,
       );
       tokenArray.unshift(depositToken);
       setTokenData(
-        tokenArray.map((token) => ({
+        tokenArray.map(token => ({
           label: token.token.symbol || token.tokenAddress,
           value: token.token.tokenAddress,
           decimals: token.token.decimals,
@@ -53,8 +55,8 @@ const PaymentInput = ({
     }
   }, [daoOverview]);
 
-  const getMax = async (token) => {
-    const selected = tokenData.find((item) => item.value === token);
+  const getMax = async token => {
+    const selected = tokenData.find(item => item.value === token);
     if (selected) {
       setBalance(selected.balance / 10 ** selected.decimals);
     }
@@ -79,7 +81,7 @@ const PaymentInput = ({
     }
   };
 
-  const validateBalance = (value) => {
+  const validateBalance = value => {
     if (validateGtZero && value <= 0) {
       return 'Payment Requested must be greater than zero';
     }

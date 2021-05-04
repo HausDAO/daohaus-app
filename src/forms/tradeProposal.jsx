@@ -85,7 +85,7 @@ const TradeProposalForm = () => {
     }
   }, [errors]);
 
-  const onSubmit = async (values) => {
+  const onSubmit = async values => {
     setLoading(true);
     const now = (new Date().getTime() / 1000).toFixed();
     const hash = createHash();
@@ -102,10 +102,10 @@ const TradeProposalForm = () => {
     const applicant = values?.applicantHidden?.startsWith('0x')
       ? values.applicantHidden
       : values?.applicant
-        ? values.applicant
-        : values?.memberApplicant
-          ? values.memberApplicant
-          : address;
+      ? values.applicant
+      : values?.memberApplicant
+      ? values.memberApplicant
+      : address;
     const args = [
       applicant,
       values.sharesRequested || '0',
@@ -130,7 +130,7 @@ const TradeProposalForm = () => {
             resolvePoll(txHash);
             console.error(`Could not find a matching proposal: ${error}`);
           },
-          onSuccess: (txHash) => {
+          onSuccess: txHash => {
             successToast({
               title: 'Trade Proposal Submitted to the Dao!',
             });
@@ -158,7 +158,10 @@ const TradeProposalForm = () => {
         chainID: daochain,
         version: daoOverview.version,
       })('submitProposal')({
-        args, address, poll, onTxHash,
+        args,
+        address,
+        poll,
+        onTxHash,
       });
     } catch (err) {
       setLoading(false);
@@ -171,12 +174,7 @@ const TradeProposalForm = () => {
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
-      <Flex
-        direction='row'
-        justify='space-between'
-        mb={5}
-        wrap='wrap'
-      >
+      <Flex direction='row' justify='space-between' mb={5} wrap='wrap'>
         <Box w={['100%', null, '50%']} pr={[0, null, 5]}>
           <DetailsFields register={register} />
         </Box>
@@ -255,19 +253,19 @@ const TradeProposalForm = () => {
                 </MenuButton>
                 <MenuList>
                   {!showApplicant && (
-                  <MenuItem onClick={() => setShowApplicant(true)}>
-                    Applicant
-                  </MenuItem>
+                    <MenuItem onClick={() => setShowApplicant(true)}>
+                      Applicant
+                    </MenuItem>
                   )}
                   {!showLoot && (
-                  <MenuItem onClick={() => setShowLoot(true)}>
-                    Request Loot
-                  </MenuItem>
+                    <MenuItem onClick={() => setShowLoot(true)}>
+                      Request Loot
+                    </MenuItem>
                   )}
                   {!showShares && (
-                  <MenuItem onClick={() => setShowShares(true)}>
-                    Request Shares
-                  </MenuItem>
+                    <MenuItem onClick={() => setShowShares(true)}>
+                      Request Shares
+                    </MenuItem>
                   )}
                 </MenuList>
               </Menu>
@@ -296,19 +294,19 @@ const TradeProposalForm = () => {
             >
               Submit
             </Button>
-            ) : (
-              <Button
-                onClick={requestWallet}
-                isDisabled={injectedChain && daochain !== injectedChain?.chainId}
-              >
-                {`Connect 
+          ) : (
+            <Button
+              onClick={requestWallet}
+              isDisabled={injectedChain && daochain !== injectedChain?.chainId}
+            >
+              {`Connect 
               ${
                 injectedChain && daochain !== injectedChain?.chainId
                   ? `to ${chainByID(daochain).name}`
                   : 'Wallet'
               }`}
-              </Button>
-            )}
+            </Button>
+          )}
         </Box>
       </Flex>
     </form>

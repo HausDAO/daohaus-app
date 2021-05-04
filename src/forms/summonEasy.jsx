@@ -25,13 +25,13 @@ const SummonEasy = ({ daoData, setDaoData, handleSummon }) => {
   const [multiSummoners, setMultiSummoners] = useState(false);
   const [currentError, setCurrentError] = useState(false);
 
-  const selectPreset = (preset) => {
-    setDaoData((prevState) => {
+  const selectPreset = preset => {
+    setDaoData(prevState => {
       return { ...prevState, ...preset };
     });
   };
 
-  const handleMultiSummonerChange = (e) => {
+  const handleMultiSummonerChange = e => {
     const { value } = e.target;
     const isValid = validateSummonresAndShares(value);
 
@@ -41,13 +41,13 @@ const SummonEasy = ({ daoData, setDaoData, handleSummon }) => {
     }
     setCurrentError(false);
 
-    setDaoData((prevState) => {
+    setDaoData(prevState => {
       return { ...prevState, summonerAndShares: value };
     });
   };
 
   const renderPresets = () => {
-    return daoPresets(injectedChain.chain_id).map((preset) => {
+    return daoPresets(injectedChain.chain_id).map(preset => {
       const isSelected = daoData.presetName === preset.presetName;
       return (
         <Flex
@@ -168,7 +168,7 @@ const SummonEasy = ({ daoData, setDaoData, handleSummon }) => {
                     className='inline-field'
                     name='summonerAndShares'
                     placeholder={`${daoData.summoner} 1`}
-                    onChange={(e) => handleMultiSummonerChange(e)}
+                    onChange={e => handleMultiSummonerChange(e)}
                   />
                 </Text>
               ) : null}

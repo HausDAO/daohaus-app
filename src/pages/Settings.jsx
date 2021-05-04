@@ -1,7 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import {
-  Box, Flex, Link, Stack,
-} from '@chakra-ui/react';
+import { Box, Flex, Link, Stack } from '@chakra-ui/react';
 import { Link as RouterLink, useParams } from 'react-router-dom';
 
 import BoostStatus from '../components/boostStatus';
@@ -15,9 +13,7 @@ import { useInjectedProvider } from '../contexts/InjectedProviderContext';
 import { daoConnectedAndSameChain } from '../utils/general';
 import { getWrapNZap } from '../utils/requests';
 
-const Settings = ({
-  overview, daoMember, daoMetaData, customTerms,
-}) => {
+const Settings = ({ overview, daoMember, daoMetaData, customTerms }) => {
   const { daochain, daoid } = useParams();
   const { address, injectedChain } = useInjectedProvider();
   const [wrapNZap, setWrapNZap] = useState(null);
@@ -39,7 +35,11 @@ const Settings = ({
           pb={6}
         >
           <TextBox size='xs'>Dao Contract Settings</TextBox>
-          <DaoContractSettings overview={overview} customTerms={customTerms} wrapNZap={wrapNZap} />
+          <DaoContractSettings
+            overview={overview}
+            customTerms={customTerms}
+            wrapNZap={wrapNZap}
+          />
           <Flex justify='space-between' mt={6}>
             <TextBox size='xs'>DAO Metadata</TextBox>
             {daoConnectedAndSameChain(
@@ -58,18 +58,18 @@ const Settings = ({
               >
                 Edit
               </Link>
-              ) : null}
+            ) : null}
           </Flex>
           <DaoMetaOverview daoMetaData={daoMetaData} />
         </Box>
         <Stack w={['100%', null, null, null, '50%']} spacing={4}>
-          {daoMetaData?.boosts
-          && Object.keys(daoMetaData?.boosts).length > 0 ? (
+          {daoMetaData?.boosts &&
+          Object.keys(daoMetaData?.boosts).length > 0 ? (
             <Stack spacing={2}>
               <TextBox size='xs'>Superpowers</TextBox>
               <Superpowers daoMetaData={daoMetaData} daoMember={daoMember} />
             </Stack>
-            ) : null}
+          ) : null}
           {overview?.minions?.length > 0 && (
             <Stack spacing={2}>
               <TextBox size='xs'>Minions</TextBox>

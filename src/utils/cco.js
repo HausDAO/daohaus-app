@@ -22,17 +22,18 @@ export const CCO_CONSTANTS = {
   DAOSQUARE_TOKEN_NETWORK: '0x1',
 };
 
-export const countDownText = (raiseData) => {
+export const countDownText = raiseData => {
   const now = new Date() / 1000;
   if (raiseData.raiseOver) {
     return 'Contribution period is complete';
-  } if (now < raiseData.startTime) {
+  }
+  if (now < raiseData.startTime) {
     return `Raise starts ${timeToNow(raiseData.startTime)}`;
   }
   return `Raise ends ${timeToNow(raiseData.endTime)}`;
 };
 
-export const claimCountDownText = (claimStartTime) => {
+export const claimCountDownText = claimStartTime => {
   const now = new Date() / 1000;
   if (now < claimStartTime) {
     return `Claiming begins ${timeToNow(claimStartTime)}`;
@@ -48,15 +49,15 @@ export const isCcoProposal = (proposal, round) => {
     : { cco: false };
   const failed = proposal.processed && !proposal.didPass;
   return (
-    !proposal.cancelled
-    && proposal.sponsored
-    && parsedDetails.cco
-    && +proposal.createdAt >= +round.raiseStartTime
+    !proposal.cancelled &&
+    proposal.sponsored &&
+    parsedDetails.cco &&
+    +proposal.createdAt >= +round.raiseStartTime &&
     // +proposal.createdAt >= START_TIME_OVERRIDE &&
-    && proposal.tributeToken === round.ccoToken.tokenAddress
-    && proposal.sharesRequested === '0'
-    && +proposal.lootRequested > 0
-    && !failed
+    proposal.tributeToken === round.ccoToken.tokenAddress &&
+    proposal.sharesRequested === '0' &&
+    +proposal.lootRequested > 0 &&
+    !failed
   );
 };
 
@@ -66,13 +67,13 @@ export const isCcoProposalForAddress = (proposal, address, round) => {
     : { cco: false };
   const failed = proposal.processed && !proposal.didPass;
   return (
-    !proposal.cancelled
-    && parsedDetails.cco
-    && address.toLowerCase() === proposal.applicant.toLowerCase()
-    && proposal.tributeToken === round.ccoToken.tokenAddress
-    && proposal.sharesRequested === '0'
-    && +proposal.lootRequested > 0
-    && !failed
+    !proposal.cancelled &&
+    parsedDetails.cco &&
+    address.toLowerCase() === proposal.applicant.toLowerCase() &&
+    proposal.tributeToken === round.ccoToken.tokenAddress &&
+    proposal.sharesRequested === '0' &&
+    +proposal.lootRequested > 0 &&
+    !failed
   );
 };
 

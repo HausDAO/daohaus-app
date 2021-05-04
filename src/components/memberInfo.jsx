@@ -29,7 +29,9 @@ const MemberInfoCard = ({ member, customTerms, hideCopy }) => {
                 size='xs'
               >
                 View
-                {address?.toLowerCase() === member?.memberAddress ? ' my ' : ' '}
+                {address?.toLowerCase() === member?.memberAddress
+                  ? ' my '
+                  : ' '}
                 profile
               </TextBox>
             )}

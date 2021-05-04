@@ -4,9 +4,10 @@ import { chainByID, chainByNetworkId } from './chain';
 
 const isInjected = () => window.ethereum?.chainId;
 
-export const attemptInjectedChainData = () => (isInjected() ? chainByID(window.ethereum.chainId) : chainByID('0x1'));
+export const attemptInjectedChainData = () =>
+  isInjected() ? chainByID(window.ethereum.chainId) : chainByID('0x1');
 
-const addNetworkProviders = (chainData) => {
+const addNetworkProviders = chainData => {
   const allProviders = {};
   if (!chainData) {
     // this will fire if window.ethererum exists, but the user is on the wrong chain
@@ -48,9 +49,10 @@ const addNetworkProviders = (chainData) => {
   return allProviders;
 };
 
-export const getProviderOptions = () => addNetworkProviders(attemptInjectedChainData());
+export const getProviderOptions = () =>
+  addNetworkProviders(attemptInjectedChainData());
 
-export const deriveChainId = (provider) => {
+export const deriveChainId = provider => {
   if (provider.isMetaMask) {
     return provider.chainId;
   }
@@ -63,7 +65,7 @@ export const deriveChainId = (provider) => {
   return '0x1';
 };
 
-export const deriveSelectedAddress = (provider) => {
+export const deriveSelectedAddress = provider => {
   if (provider.isMetaMask) {
     return provider.selectedAddress;
   }
