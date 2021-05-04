@@ -15,13 +15,11 @@ const CcoCard = ({ daoMetaData, isLink }) => {
   const tempRaiseLeft = 661661;
   const tempContributionTokenSymbol = 'xDai';
 
-  console.log('daoMetaData', daoMetaData);
-
   return (
     <ContentBox
       mt={5}
       style={{ transition: 'all .15s linear' }}
-      _hover={{ transform: 'scale(1.05)' }}
+      _hover={isLink && { transform: 'scale(1.05)' }}
     >
       <Box
         as={isLink && Link}

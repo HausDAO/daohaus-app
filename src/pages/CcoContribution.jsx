@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Link as RouterLink, useParams } from 'react-router-dom';
-import { Box, Flex, Link, Button, Spinner, Text } from '@chakra-ui/react';
+import { Box, Flex, Text } from '@chakra-ui/react';
 import MainViewLayout from '../components/mainViewLayout';
 import ContentBox from '../components/ContentBox';
 import TextBox from '../components/TextBox';
@@ -11,34 +11,52 @@ import {
   contributionTotalValue,
   claimCountDownText,
 } from '../utils/cco';
-import { getEligibility, getDateTime } from '../utils/metadata';
+import { getDateTime } from '../utils/metadata';
 import { timeToNow } from '../utils/general';
-import GenericModal from '../modals/genericModal';
-import { useOverlay } from '../contexts/OverlayContext';
+
 import { useInjectedProvider } from '../contexts/InjectedProviderContext';
 import CcoLootGrabForm from '../forms/ccoLootGrab';
 import CcoClaim from '../forms/ccoClaim';
 import { useTX } from '../contexts/TXContext';
-// import ComingSoonOverlay from '../components/comingSoonOverlay';
 import { MM_ADDCHAIN_DATA } from '../utils/chain';
 import { useDaoMember } from '../contexts/DaoMemberContext';
 import CcoCard from '../components/ccoCard';
+import CcoEligibility from '../components/ccoElibility';
+import CcoResources from '../components/ccoResources';
 
 const CcoContribution = React.memo(
   ({ daoMetaData, currentDaoTokens, daoProposals }) => {
-    const { setGenericModal } = useOverlay();
     const { daochain, daoid } = useParams();
     const { daoMember } = useDaoMember();
     const { refreshDao } = useTX();
-    const { address, injectedChain, requestWallet } = useInjectedProvider();
+    const { address, injectedChain } = useInjectedProvider();
 
     const [roundData, setRoundData] = useState(null);
     const [isEligible, setIsEligible] = useState('unchecked');
-    const [checkingEligibility, setCheckingEligibility] = useState(false);
     const [currentContributionData, setCurrentContributionData] = useState(
       null,
     );
     const [claimComplete, setClaimComplete] = useState(false);
+
+    const networkMatch = injectedChain?.network === roundData?.network;
+    const eligibleBlock = isEligible === 'denied' || isEligible === 'unchecked';
+    const raiseAtMax = currentContributionData?.remaining <= 0;
+    const contributionClosed =
+      roundData?.raiseOver ||
+      currentContributionData?.addressRemaining <= 0 ||
+      raiseAtMax;
+    const hasBalance =
+      daoMember &&
+      roundData &&
+      daoMember.tokenBalances.find(bal => {
+        const isRaiseToken =
+          bal.token.tokenAddress.toLowerCase() ===
+          roundData.ccoToken.tokenAddress.toLowerCase();
+        return isRaiseToken && +bal.token.balance > 0;
+      });
+    const claimAmount = (
+      +daoMember?.loot / roundData?.claimTokenValue || 0
+    ).toFixed(2);
 
     useEffect(() => {
       const interval = setInterval(() => {
@@ -69,6 +87,8 @@ const CcoContribution = React.memo(
           ccoType,
           now,
           ccoToken,
+          active: daoMetaData.boosts[ccoType].active,
+          ...configData,
           endTime: `${Number(configData.raiseStartTime) +
             Number(configData.duration)}`,
           beforeRaise:
@@ -80,11 +100,8 @@ const CcoContribution = React.memo(
           raiseOver:
             `${Number(configData.startTime) + Number(configData.duration)}` <
             now,
-          claimPeriodStartTime:
-            daoMetaData.boosts[ccoType].metadata.claimPeriodStartTime,
-          claimOpen:
-            Number(daoMetaData.boosts[ccoType].metadata.claimPeriodStartTime) <
-            now,
+          claimPeriodStartTime: configData.claimPeriodStartTime,
+          claimOpen: Number(configData.claimPeriodStartTime) < now,
         });
       };
 
@@ -147,41 +164,11 @@ const CcoContribution = React.memo(
       }
     };
 
-    const checkEligibility = async () => {
-      setCheckingEligibility(true);
-      const eligibleRes = await getEligibility(address);
-      setIsEligible(eligibleRes ? 'checked' : 'denied');
-      setCheckingEligibility(false);
-    };
-
-    const networkMatch = () => {
-      return injectedChain?.network === roundData.network;
-    };
-
-    const eligibleBlock = isEligible === 'denied' || isEligible === 'unchecked';
-    const raiseAtMax = currentContributionData?.remaining <= 0;
-    const contributionClosed =
-      roundData?.raiseOver ||
-      currentContributionData?.addressRemaining <= 0 ||
-      raiseAtMax;
-    const hasBalance =
-      daoMember &&
-      roundData &&
-      daoMember.tokenBalances.find(bal => {
-        const isRaiseToken =
-          bal.token.tokenAddress.toLowerCase() ===
-          roundData.ccoToken.tokenAddress.toLowerCase();
-        return isRaiseToken && +bal.token.balance > 0;
-      });
-    const claimAmount = (
-      +daoMember?.loot / roundData?.claimTokenValue || 0
-    ).toFixed(2);
-
     if (!roundData) {
       return <MainViewLayout header={daoMetaData?.name} isDao />;
     }
 
-    if (roundData && roundData.active) {
+    if (roundData && !roundData.active) {
       return (
         <MainViewLayout
           header={daoMetaData?.name}
@@ -212,64 +199,16 @@ const CcoContribution = React.memo(
             >
               <CcoCard daoMetaData={daoMetaData} />
 
-              <ContentBox variant='d2' mt={2} w='100%'>
-                <TextBox size='sm' color='blackAlpha.900' mb={7}>
-                  1. Check eligibility
-                </TextBox>
-                {networkMatch() ? (
-                  <>
-                    {isEligible === 'unchecked' ? (
-                      <Button
-                        onClick={checkEligibility}
-                        disabled={
-                          checkingEligibility ||
-                          roundData.raiseOver ||
-                          raiseAtMax
-                        }
-                      >
-                        {!checkingEligibility ? (
-                          <>Check Eligibility</>
-                        ) : (
-                          <Spinner />
-                        )}
-                      </Button>
-                    ) : null}
-                    {isEligible === 'checked' ? (
-                      <>
-                        <Box size='md' my={2} color='blackAlpha.900'>
-                          You&apos;re eligible. Kudos for interacting with DAOs!
-                        </Box>
+              <CcoEligibility
+                networkMatch={networkMatch}
+                isEligible={isEligible}
+                roundData={roundData}
+                raiseAtMax={raiseAtMax}
+                handleSwitchNetwork={handleSwitchNetwork}
+                setIsEligible={setIsEligible}
+              />
 
-                        {roundData.beforeRaise ? (
-                          <Box size='md' my={2} color='blackAlpha.900'>
-                            Come back when the contribution round begins.
-                          </Box>
-                        ) : null}
-                      </>
-                    ) : null}
-                    {isEligible === 'denied' ? (
-                      <Box size='md' my={2} color='blackAlpha.900'>
-                        Address is not eligible. Try again with another address
-                        that has interacted with a DAO.
-                      </Box>
-                    ) : null}
-                  </>
-                ) : (
-                  <>
-                    {address ? (
-                      <Button onClick={handleSwitchNetwork}>
-                        {`Switch to the ${roundData.network} network`}
-                      </Button>
-                    ) : (
-                      <Button onClick={requestWallet} mb={6}>
-                        Connect Wallet
-                      </Button>
-                    )}
-                  </>
-                )}
-              </ContentBox>
-
-              {networkMatch() ? (
+              {networkMatch && (
                 <>
                   <ContentBox variant='d2' mt={2} w='100%'>
                     <Flex direction='column'>
@@ -278,14 +217,11 @@ const CcoContribution = React.memo(
                       </TextBox>
                       {!raiseAtMax ? (
                         <Text fontSize='sm' color='blackAlpha.700' as='i'>
-                          {countDownText(
-                            roundData.currentRound,
-                            roundData.raiseOver,
-                          )}
+                          {countDownText(roundData)}
                         </Text>
                       ) : null}
                       <Text fontSize='sm' color='blackAlpha.700' mt={2}>
-                        {`${roundData.claimTokenValue} ${roundData.ccoToken.symbol} = 1 ${roundData.claimTokenSymbol} | ${roundData.currentRound.maxContribution} ${roundData.ccoToken.symbol} max per person`}
+                        {`${roundData.claimTokenValue} ${roundData.ccoToken.symbol} = 1 ${roundData.claimTokenSymbol} | ${roundData.maxContribution} ${roundData.ccoToken.symbol} max per person`}
                       </Text>
                     </Flex>
                     {raiseAtMax ? (
@@ -384,210 +320,14 @@ const CcoContribution = React.memo(
                     ) : null}
                   </ContentBox>
                 </>
-              ) : null}
+              )}
             </Box>
             <Box w={['100%', null, null, null, '40%']}>
-              <ContentBox variant='d2' mt={2} w='100%'>
-                <Box
-                  fontSize='xl'
-                  fontWeight={700}
-                  fontFamily='heading'
-                  mb={7}
-                  color='blackAlpha.900'
-                >
-                  Resources
-                </Box>
-                <TextBox
-                  fontSize='sm'
-                  color='secondary.500'
-                  onClick={() => setGenericModal({ ccoProcess: true })}
-                  mb={5}
-                  cursor='pointer'
-                >
-                  CCO Overview
-                </TextBox>
-                <TextBox
-                  fontSize='sm'
-                  color='secondary.500'
-                  onClick={() => setGenericModal({ xDaiHelp: true })}
-                  mb={5}
-                  cursor='pointer'
-                >
-                  How to get wxDAI
-                </TextBox>
-
-                <Link
-                  href='https://daohaus.club/ '
-                  isExternal
-                  display='flex'
-                  alignItems='center'
-                  mb={5}
-                >
-                  <TextBox fontSize='sm' color='secondary.500'>
-                    More About DAOhaus
-                  </TextBox>
-                </Link>
-
-                <Link
-                  href='https://daohaus.club/docs/cco'
-                  isExternal
-                  display='flex'
-                  alignItems='center'
-                  mb={5}
-                >
-                  <TextBox fontSize='sm' color='secondary.500'>
-                    More About CCOs
-                  </TextBox>
-                </Link>
-              </ContentBox>
+              <CcoResources
+                daoMetaData={daoMetaData}
+                handleSwitchNetwork={handleSwitchNetwork}
+              />
             </Box>
-            <GenericModal modalId='ccoProcess'>
-              <Box>
-                <Text mb={3} fontFamily='heading'>
-                  Overview of this CCO
-                </Text>
-                <TextBox>1. Check Eligibility</TextBox>
-                <Text mb={5}>
-                  We have scraped a ton of dao contracts, including &apos;The
-                  DAO&apos;, Ethereum&apos;s first major attempt at a DAO. There
-                  are ~122k addresses that have ‘proven’ eligible for HAUS
-                  distribution, all of the below actions demonstrate a
-                  willingness to govern within the Ethereum ecosystem and
-                  therefore are included:
-                  <ul>
-                    <li>
-                      All addresses that have ever sent or received TheDAO
-                      tokens
-                    </li>
-                    <li>All members of Snapshot Spaces</li>
-                    <li>
-                      All vote creators and voters from Aragon Voting module
-                    </li>
-                    <li>
-                      All addresses with VoteCast or DelegateChanged from
-                      Compound
-                    </li>
-                    <li>
-                      All stakers scraped from the Yearn Staked Event Emitted
-                    </li>
-                    <li>
-                      All addresses with VoteCast or DelegateChanged from
-                      Uniswap
-                    </li>
-                    <li>
-                      All addresses that were in the ‘to or from’ fields from
-                      DXDAO
-                    </li>
-                    <li>All addresses with VoteEmitted events from Aave</li>
-                    <li>All Moloch DAO users</li>
-                  </ul>
-                </Text>
-                <TextBox>2. Contribute</TextBox>
-                <Text>Contributions are open until max target is reached.</Text>
-                <TextBox variant='value' mb={3}>
-                  1 HAUS = 8.88 wxDAI
-                </TextBox>
-                <TextBox size='xs'>Round 1</TextBox>
-                <Text mb={5}>
-                  Starts at 8am EST March 15th
-                  <br />
-                  Runs for 4 Days or until max target is reached
-                  <br />
-                  Ends 8am EST March 19th
-                  <br />
-                  min contribution per person: 50 wxDAI
-                  <br />
-                  max contribution per person: 5,000 wxDAI
-                  <br />
-                  min target: 500,000 wxDAI
-                  <br />
-                  max target: 1,111,110 wxDAI
-                </Text>
-                <TextBox size='xs'>Round 2 (IF needed)</TextBox>
-                <Text mb={5}>
-                  IF max target is not reached by the end of Round 1, then Round
-                  2 begins.
-                  <br />
-                  Max contribution per person is raised to 50,000 wxDAI
-                  <br />
-                  Starts 8am EST March 19th
-                  <br />
-                  Runs for 3 Days or until max target is reached.
-                </Text>
-                <TextBox>3. Claim</TextBox>
-                <Text>
-                  Claiming opens Tuesday, Mar 23 at 12pm EST
-                  <br />
-                  IF min target is reached, contributors will be able to claim
-                  their proportionate HAUS tokens.
-                  <br />
-                  IF min target is not reached after Round 2, contributors will
-                  be able to withdraw their original wxDAI contributions.
-                </Text>
-              </Box>
-            </GenericModal>
-            <GenericModal modalId='xDaiHelp'>
-              <TextBox>xDAI Quick Start</TextBox>
-              <TextBox size='sm' my={5} onClick={handleSwitchNetwork}>
-                Add xDAI network to Metamask
-              </TextBox>
-              <TextBox size='xs' mb={5}>
-                Magic
-              </TextBox>
-              <Button variant='outline'>Add xDAI to Metamask</Button>
-              <TextBox size='xs' my={5}>
-                Manual
-              </TextBox>
-              <Text fontFamily='mono'>
-                Network Name: xDai
-                <br />
-                New RPC URL: https://rpc.xdaichain.com/
-                <br />
-                Chain ID: 0x64 (100)
-                <br />
-                Symbol: xDai
-                <br />
-                Block Explorer URL: https://blockscout.com/xdai/mainnet
-              </Text>
-              <TextBox size='sm' my={5}>
-                Get some wxDAI
-              </TextBox>
-              <Text mb={3}>
-                1. Swap to DAI on a DEX.
-                <Link
-                  color='secondary.500'
-                  isExternal
-                  href='https://uniswap.exchange'
-                >
-                  Go to Uniswap
-                </Link>
-              </Text>
-              <Text mb={3}>
-                2. On Mainnet: Use the Bridge to send the DAI to yourself on the
-                xDAI network
-                <Link
-                  isExternal
-                  color='secondary.500'
-                  href='http://bridge.xdaichain.com/'
-                >
-                  Go to Bridge
-                </Link>
-              </Text>
-              <Text mb={3}>
-                3. Switch to xDAI network in Metamask, and you should see your
-                xDAI balance.
-              </Text>
-              <Text>
-                4. Still on xDAI, wrap the xDAI into wxDAI at
-                <Link
-                  color='secondary.500'
-                  isExternal
-                  href='https://wrapeth.com'
-                >
-                  Wrapeth
-                </Link>
-              </Text>
-            </GenericModal>
           </Flex>
         </Box>
       </MainViewLayout>
