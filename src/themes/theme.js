@@ -119,7 +119,10 @@ export const createTheme = daoTheme => {
       global: {
         'html, body': {
           fontSize: 'm',
-          color: 'whiteAlpha.900',
+          color:
+            themeOverrides.initialColorMode === 'light'
+              ? 'blackAlpha.900'
+              : 'whiteAlpha.900',
           lineHeight: 'tall',
         },
         a: {
@@ -129,7 +132,7 @@ export const createTheme = daoTheme => {
       },
     },
     config: {
-      initialColorMode: 'dark',
+      initialColorMode: themeOverrides.initialColorMode || 'dark',
       useSystemColorMode: false,
     },
   });
