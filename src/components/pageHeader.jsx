@@ -16,7 +16,6 @@ const PageHeader = ({ isDao, isDaosquare, header, headerEl, customTerms }) => {
       >
         <Box
           fontSize={['lg', null, null, '3xl']}
-          color='#ffffff'
           fontFamily='heading'
           fontWeight={700}
           mr={10}

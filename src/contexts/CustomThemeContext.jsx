@@ -1,5 +1,5 @@
 import React, { useContext, createContext, useState } from 'react';
-import { ChakraProvider } from '@chakra-ui/react';
+import { ChakraProvider, ColorModeScript } from '@chakra-ui/react';
 import { createTheme, useDefault } from '../themes/theme';
 import { OverlayProvider } from './OverlayContext';
 
@@ -31,6 +31,7 @@ export const CustomThemeProvider = ({ children }) => {
       }}
     >
       <ChakraProvider theme={theme}>
+        <ColorModeScript initialColorMode={theme.config.initialColorMode} />
         <OverlayProvider>{children}</OverlayProvider>
       </ChakraProvider>
     </CustomThemeContext.Provider>
