@@ -10,20 +10,34 @@ import {
   Stack,
 } from '@chakra-ui/react';
 import TextBox from './TextBox';
+import { getSnapshotSpaces } from '../utils/requests';
+import { useOverlay } from '../contexts/OverlayContext';
 
-const SnapshotLaunch = ({
-  handleLaunch, loading, setLoading, space,
-}) => {
+const SnapshotLaunch = ({ handleLaunch, loading, setLoading, space }) => {
   const { daochain, daoid } = useParams();
   const [snapshotSpace, setSnapshotSpace] = useState(null);
   const [step, setStep] = useState(1);
+  const { errorToast } = useOverlay();
 
   const onSubmit = async () => {
     setLoading(true);
-    console.log(snapshotSpace);
     const snapshotMeta = {
       space: snapshotSpace,
     };
+    try {
+      const spaces = await getSnapshotSpaces();
+      if (Object.keys(spaces).filter(s => s === snapshotSpace)?.length < 1) {
+        errorToast({
+          title: 'No space found!',
+          description:
+            'Please verify the space name with the official snapshot name.',
+        });
+        setLoading(false);
+        return false;
+      }
+    } catch (err) {
+      console.log(err);
+    }
 
     const success = await handleLaunch(snapshotMeta);
     if (success) {
@@ -31,7 +45,7 @@ const SnapshotLaunch = ({
     }
   };
 
-  const handleChange = (event) => {
+  const handleChange = event => {
     if (event.target.value) {
       setSnapshotSpace(event.target.value);
     }
@@ -58,9 +72,13 @@ const SnapshotLaunch = ({
           </Text>
           <Stack mb={6} spacing={2}>
             <TextBox size=''>Snapshot Space</TextBox>
-            <Input type='text' onChange={(e) => handleChange(e)} defaultValue={space} />
+            <Input
+              type='text'
+              onChange={e => handleChange(e)}
+              defaultValue={space}
+            />
             <Text fontSize='xs'>
-              (no spaces or special characters, dash (-) and period (.) allowed)
+              No special characters. Dashes and periods allowed.
             </Text>
           </Stack>
 
@@ -78,7 +96,10 @@ const SnapshotLaunch = ({
           <Text my={6}>
             You can now view your snapshot proposals in DAOhaus
           </Text>
-          <Button as={RouterLink} to={`/dao/${daochain}/${daoid}/snapshot`}>
+          <Button
+            as={RouterLink}
+            to={`/dao/${daochain}/${daoid}/boost/snapshot`}
+          >
             Go!
           </Button>
         </>

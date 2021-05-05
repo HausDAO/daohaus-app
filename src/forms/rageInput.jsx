@@ -9,9 +9,7 @@ import {
 } from '@chakra-ui/react';
 import TextBox from '../components/TextBox';
 
-const RageInput = ({
-  register, setValue, label, type, max, mb = 2,
-}) => {
+const RageInput = ({ register, setValue, label, type, max, mb = 2 }) => {
   const setMax = () => {
     setValue(type, max);
   };
@@ -41,8 +39,6 @@ const RageInput = ({
               message: `${type} must be a number`,
             },
           })}
-          color='white'
-          focusBorderColor='secondary.500'
         />
       </InputGroup>
       <FormHelperText>

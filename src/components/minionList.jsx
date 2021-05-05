@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import { Link as RouterLink, useParams } from 'react-router-dom';
 import {
   Flex,
@@ -16,11 +16,20 @@ import { useDao } from '../contexts/DaoContext';
 import ContentBox from './ContentBox';
 import TextBox from './TextBox';
 import { truncateAddr } from '../utils/general';
+import { MINION_TYPES } from '../utils/proposalUtils';
 
 const MinionList = () => {
   const { daoOverview } = useDao();
   const { daochain, daoid } = useParams();
   const toast = useToast();
+
+  const minions = useMemo(() => {
+    if (daoOverview?.minions) {
+      return daoOverview?.minions.sort((minionA, minionB) =>
+        minionA.createdAt > minionB.createdAt ? 1 : -1,
+      );
+    }
+  }, [daoOverview]);
 
   const copiedToast = () => {
     toast({
@@ -35,11 +44,16 @@ const MinionList = () => {
   return (
     <ContentBox d='flex' flexDirection='column' position='relative'>
       <Stack spacing={3}>
-        {daoOverview?.minions.map((minion) => {
+        {minions.map(minion => {
           const minionType = useBreakpointValue({
             base: minion.minionType?.split(' ')[0],
             md: minion.minionType,
           });
+          const minionUrlType =
+            minionType === MINION_TYPES.SUPERFLUID
+              ? 'superfluid-minion'
+              : 'minion';
+
           return (
             <Flex
               justify='space-between'
@@ -73,7 +87,7 @@ const MinionList = () => {
 
               <Flex align='center'>
                 <RouterLink
-                  to={`/dao/${daochain}/${daoid}/settings/minion/${minion.minionAddress}`}
+                  to={`/dao/${daochain}/${daoid}/settings/${minionUrlType}/${minion.minionAddress}`}
                 >
                   <Icon
                     as={VscGear}

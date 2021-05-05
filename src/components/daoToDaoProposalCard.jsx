@@ -1,18 +1,14 @@
 import React from 'react';
 import { Link, useParams } from 'react-router-dom';
-import {
-  Badge, Box, Flex, Button,
-} from '@chakra-ui/react';
+import { Badge, Box, Flex, Button } from '@chakra-ui/react';
 
 const DaoToDaoProposalCard = ({ proposal }) => {
   const { daochain, daoid } = useParams();
-
   const inChildDao = daoid === proposal?.molochAddress;
-  const status = inChildDao && proposal?.processed
-    ? `${proposal.status}, unexecuted`
-    : proposal.status;
-
-  console.log('proposal', proposal);
+  const status =
+    inChildDao && proposal?.processed
+      ? `${proposal.status}, unexecuted`
+      : proposal.status;
 
   return (
     <>

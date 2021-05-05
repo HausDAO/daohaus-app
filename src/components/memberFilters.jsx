@@ -21,7 +21,7 @@ const MemberFilters = ({ filter, setFilter }) => {
     setFilter(membersFilterOptions[0]);
   }, []);
 
-  const handleFilterSelect = (option) => {
+  const handleFilterSelect = option => {
     setFilter(option);
   };
 
@@ -54,7 +54,7 @@ const MemberFilters = ({ filter, setFilter }) => {
             <Icon as={RiArrowDropDownFill} color='secondary.500' />
           </MenuButton>
           <MenuList bg='black'>
-            {filterOptions?.map((option) => {
+            {filterOptions?.map(option => {
               if (option.type === 'main') {
                 return (
                   <MenuItem

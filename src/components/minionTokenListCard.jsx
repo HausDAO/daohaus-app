@@ -1,6 +1,14 @@
 import React from 'react';
 import {
-  Flex, Box, Skeleton, Image, useToast, Icon, Button, Input, FormLabel,
+  Flex,
+  Box,
+  Skeleton,
+  Image,
+  useToast,
+  Icon,
+  Button,
+  Input,
+  FormLabel,
 } from '@chakra-ui/react';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
 import { FaCopy } from 'react-icons/fa';
@@ -15,9 +23,7 @@ const MinionTokenListCard = ({ token, action }) => {
   console.log('token', token);
   const toast = useToast();
   const { setGenericModal } = useOverlay();
-  const {
-    handleSubmit, register, setValue,
-  } = useForm();
+  const { handleSubmit, register, setValue } = useForm();
 
   const copiedToast = () => {
     toast({
@@ -33,7 +39,7 @@ const MinionTokenListCard = ({ token, action }) => {
     setGenericModal({ [token.contractAddress]: true });
   };
 
-  const sendToken = async (values) => {
+  const sendToken = async values => {
     action(values, token);
   };
 
@@ -108,22 +114,20 @@ const MinionTokenListCard = ({ token, action }) => {
         </Box>
         <Box w={['20%', null, null, '20%']}>
           {token?.type !== 'ERC-721' && (
-
-          <Box fontFamily='mono'>
-
-            <Box>
-              <Button size='xs' onClick={handleSend}>SEND</Button>
+            <Box fontFamily='mono'>
+              <Box>
+                <Button size='xs' onClick={handleSend}>
+                  SEND
+                </Button>
+              </Box>
             </Box>
-
-          </Box>
-
           )}
         </Box>
       </Flex>
       {token?.type === 'ERC-721' && (
         <Flex flexWrap='wrap'>
-          {token?.tokenURIs
-            && token.tokenURIs.map((meta, idx) => (
+          {token?.tokenURIs &&
+            token.tokenURIs.map((meta, idx) => (
               <MinionNftTile
                 key={idx}
                 tokenId={token.tokenIds[idx]}
@@ -134,13 +138,15 @@ const MinionTokenListCard = ({ token, action }) => {
       )}
       <GenericModal closeOnOverlayClick modalId={`${token.contractAddress}`}>
         <form onSubmit={handleSubmit(sendToken)}>
-
           <TextBox as={FormLabel} size='xs' htmlFor='amount'>
-            Amount
-            {' '}
-            <Button onClick={() => setValue('amount', +token?.balance / 10 ** token.decimals)}>
-              Max
-              {' '}
+            Amount{' '}
+            <Button
+              onClick={() =>
+                setValue('amount', +token?.balance / 10 ** token.decimals)
+              }
+              size='xs'
+            >
+              Max{' '}
               {`$${numberWithCommas(+token?.balance / 10 ** token.decimals)}`}
             </Button>
           </TextBox>

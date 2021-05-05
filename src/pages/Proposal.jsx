@@ -1,8 +1,6 @@
 import React from 'react';
 import { useParams, Link as RouterLink } from 'react-router-dom';
-import {
-  Flex, Box, Stack, Link, Icon, IconButton,
-} from '@chakra-ui/react';
+import { Flex, Box, Stack, Link, Icon, IconButton } from '@chakra-ui/react';
 import { RiArrowLeftLine, RiRefreshLine } from 'react-icons/ri';
 
 import ActivitiesFeed from '../components/activitiesFeed';
@@ -27,7 +25,7 @@ const Proposal = ({
   const { refreshDao } = useTX();
 
   const currentProposal = activities
-    ? activities?.proposals?.find((proposal) => proposal.proposalId === propid)
+    ? activities?.proposals?.find(proposal => proposal.proposalId === propid)
     : null;
   // console.log(currentProposal);
 
@@ -59,7 +57,11 @@ const Proposal = ({
                 </TextBox>
               </Flex>
             </Link>
-            <ProposalDetails proposal={currentProposal} daoMember={daoMember} />
+            <ProposalDetails
+              proposal={currentProposal}
+              daoMember={daoMember}
+              overview={overview}
+            />
           </Flex>
           <Flex
             direction='column'

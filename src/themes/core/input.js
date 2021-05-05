@@ -1,22 +1,32 @@
 const Input = {
   parts: ['field', 'addon'],
-  baseStyle: {
-    field: {
-      borderColor: 'whiteAlpha.50',
-      color: 'whiteAlpha.900',
-      focusBorderColor: 'secondary.500',
-    },
-    addon: {
-      color: 'whiteAlpha.900',
-      bg: 'transparent',
-      focusBorderColor: 'secondary.500',
+  baseStyle: {},
+  variants: {
+    outline: {
+      field: {
+        borderColor: 'whiteAlpha.400',
+        color: 'whiteAlpha.900',
+        _focus: {
+          borderColor: 'secondary.500',
+          boxShadow: '0 0 0 2px var(--chakra-colors-secondary-500)',
+        },
+      },
+      addon: {
+        borderColor: 'whiteAlpha.400',
+        color: 'whiteAlpha.900',
+        bg: 'transparent',
+        _focus: {
+          borderColor: 'secondary.500',
+        },
+      },
     },
   },
-  variants: {},
   sizes: {},
   defaultProps: {
     size: 'md',
-    focusBorderColor: 'secondary.500',
+    _focus: {
+      borderColor: 'secondary.500',
+    },
   },
 };
 

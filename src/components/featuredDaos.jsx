@@ -1,8 +1,6 @@
 import React from 'react';
 import { Link as RouterLink } from 'react-router-dom';
-import {
-  Avatar, Badge, Flex, SimpleGrid, Text,
-} from '@chakra-ui/react';
+import { Avatar, Badge, Flex, SimpleGrid, Text } from '@chakra-ui/react';
 import ContentBox from './ContentBox';
 import TextBox from './TextBox';
 
@@ -17,7 +15,7 @@ const FeaturedDaos = () => (
   <>
     <Flex justify='space-between'>
       <TextBox mb={6}>Featured DAOs</TextBox>
-      <TextBox as={RouterLink} to='/explore' colorScheme='secondary.500'>
+      <TextBox as={RouterLink} to='/explore' color='secondary.500'>
         Explore
       </TextBox>
     </Flex>

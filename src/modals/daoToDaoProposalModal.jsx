@@ -20,7 +20,7 @@ import WithdrawPullForm from '../forms/daoToDaoWithdrawPull';
 import { useCustomTheme } from '../contexts/CustomThemeContext';
 import { useOverlay } from '../contexts/OverlayContext';
 
-const getModalWidth = (proposalType) => {
+const getModalWidth = proposalType => {
   if (proposalType === 'd2dRageQuit') {
     return '400px';
   }
@@ -51,7 +51,7 @@ const DaoToDaoProposalFormModal = ({
     d2dStake: {
       type: 'New Uber Quest',
       heading: 'Stake in UBERhaus',
-      subline: 'Submit your DAO\'s membership proposal here.',
+      subline: "Submit your DAO's membership proposal here.",
       form: <StakeProposalForm />,
     },
     // d2dVote: {
@@ -117,7 +117,7 @@ const DaoToDaoProposalFormModal = ({
 
   const handleClose = () => {
     setLoading(false);
-    setD2dProposalModal((prevState) => !prevState);
+    setD2dProposalModal(prevState => !prevState);
     if (returnRoute) {
       history.push(returnRoute);
     }

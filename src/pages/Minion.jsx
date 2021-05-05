@@ -58,13 +58,14 @@ const MinionDetails = ({ overview, currentDaoTokens }) => {
   const { refreshDao } = useTX();
   const { address, injectedProvider } = useInjectedProvider();
 
-  const hasLoadedBalanceData = balancesGraphData.chains.length === Object.keys(supportedChains).length;
+  const hasLoadedBalanceData =
+    balancesGraphData.chains.length === Object.keys(supportedChains).length;
 
   useEffect(() => {
     if (!overview?.minions.length) {
       return;
     }
-    const localMinionData = overview?.minions.find((m) => {
+    const localMinionData = overview?.minions.find(m => {
       return m.minionAddress === minion;
     });
     setMinionData(localMinionData);
@@ -84,12 +85,12 @@ const MinionDetails = ({ overview, currentDaoTokens }) => {
     if (hasLoadedBalanceData) {
       console.log('resorting balances');
       const tokenBalances = balancesGraphData.data
-        .flatMap((bal) => {
-          return bal.tokenBalances.map((b) => {
+        .flatMap(bal => {
+          return bal.tokenBalances.map(b => {
             return { ...b, moloch: bal.moloch, meta: bal.meta };
           });
         })
-        .filter((bal) => +bal.tokenBalance > 0);
+        .filter(bal => +bal.tokenBalance > 0);
 
       setDaoBalances(tokenBalances);
     }
@@ -116,7 +117,7 @@ const MinionDetails = ({ overview, currentDaoTokens }) => {
     });
   };
 
-  const submitMinion = async (args) => {
+  const submitMinion = async args => {
     try {
       const poll = createPoll({ action: 'minionProposeAction', cachePoll })({
         minionAddress: minionData.minionAddress,
@@ -130,7 +131,7 @@ const MinionDetails = ({ overview, currentDaoTokens }) => {
             resolvePoll(txHash);
             console.error(`Could not find a matching proposal: ${error}`);
           },
-          onSuccess: (txHash) => {
+          onSuccess: txHash => {
             successToast({
               title: 'Minion proposal submitted.',
             });
@@ -150,7 +151,10 @@ const MinionDetails = ({ overview, currentDaoTokens }) => {
         minion,
         chainID: daochain,
       })('proposeAction')({
-        args, address, poll, onTxHash,
+        args,
+        address,
+        poll,
+        onTxHash,
       });
     } catch (err) {
       setLoading(false);
@@ -169,7 +173,7 @@ const MinionDetails = ({ overview, currentDaoTokens }) => {
     submitMinion(args);
   };
 
-  const sendNativeToken = async (values) => {
+  const sendNativeToken = async values => {
     const details = detailsToJSON({
       title: `${minionData.details} sends native token`,
       description: `Send ${values.amount} `,
@@ -177,12 +181,7 @@ const MinionDetails = ({ overview, currentDaoTokens }) => {
       type: 'nativeTokenSend',
     });
     const amountInWei = injectedProvider.utils.toWei(values.amount);
-    const args = [
-      values.destination,
-      amountInWei,
-      '0x0',
-      details,
-    ];
+    const args = [values.destination, amountInWei, '0x0', details];
     submitMinion(args);
   };
 
@@ -206,12 +205,7 @@ const MinionDetails = ({ overview, currentDaoTokens }) => {
       // link: (link to block explorer)
       type: 'tokenSend',
     });
-    const args = [
-      token.contractAddress,
-      '0',
-      hexData,
-      details,
-    ];
+    const args = [token.contractAddress, '0', hexData, details];
     submitMinion(args);
   };
 
@@ -270,8 +264,7 @@ const MinionDetails = ({ overview, currentDaoTokens }) => {
               </Flex>
               <Box>
                 <TextBox size='md' align='center'>
-                  Unclaimed balances in DAOs (for withdraw)
-                  {' '}
+                  Unclaimed balances in DAOs (for withdraw){' '}
                 </TextBox>
                 <HubBalanceList
                   tokens={daoBalances}
@@ -292,7 +285,6 @@ const MinionDetails = ({ overview, currentDaoTokens }) => {
                     )}
 
                     <MinionTokenList minion={minion} action={sendToken} />
-
                   </Box>
                 </Stack>
               </Box>

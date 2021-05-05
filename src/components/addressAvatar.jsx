@@ -1,45 +1,32 @@
-import React, { useEffect, useRef, useState } from 'react';
-import makeBlockie from 'ethereum-blockies-base64';
-import { CopyToClipboard } from 'react-copy-to-clipboard';
-import { FaCopy } from 'react-icons/fa';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
 
-import {
-  Flex, Avatar, Box, useToast, Icon, Text,
-} from '@chakra-ui/react';
-import { truncateAddr } from '../utils/general';
+import StaticAvatar from './staticAvatar';
+import { handleGetENS } from '../utils/ens';
 import { handleGetProfile } from '../utils/3box';
 
-const AddressAvatar = React.memo(({
-  addr,
-  hideCopy = false,
-  // alwaysShowName,
-}) => {
-  const toast = useToast();
+const AddressAvatar = React.memo(({ addr, hideCopy }) => {
   const [profile, setProfile] = useState(null);
-  // const [hasFetched, setHasFetched] = useState(false);
 
-  const hasFetched = useRef(false);
+  const shouldFetchENS = useRef(false);
+
   useEffect(() => {
     let shouldUpdate = true;
     const getProfile = async () => {
       try {
-        hasFetched.current = true;
-        // console.log('fired');
         const localProfile = await handleGetProfile(addr);
         if (shouldUpdate) {
-          if (profile.status === 'error') {
+          if (localProfile.status === 'error') {
             setProfile(false);
+            shouldFetchENS.current = true;
             return;
           }
           setProfile(localProfile);
         }
       } catch (error) {
         console.log("Member doesn't have a profile");
-        hasFetched.current = true;
       }
     };
-
-    if (addr && !hasFetched.current) {
+    if (addr) {
       getProfile();
     }
     return () => {
@@ -47,53 +34,34 @@ const AddressAvatar = React.memo(({
     };
   }, [addr]);
 
-  const renderAvatarImage = (renderAddr) => {
+  useEffect(() => {
+    const tryENS = async () => {
+      shouldFetchENS.current = false;
+      const result = await handleGetENS(addr);
+      if (result) {
+        setProfile({ name: result });
+      }
+    };
+
+    if (profile === false && shouldFetchENS.current) {
+      tryENS();
+    }
+  }, [profile, addr]);
+
+  const avatarImage = useMemo(() => {
     if (profile?.image?.length) {
       return `https://ipfs.infura.io/ipfs/${profile?.image[0].contentUrl['/']}`;
     }
-    if (profile === false) {
-      return makeBlockie(renderAddr);
-    }
     return null;
-  };
-
-  const copiedToast = () => {
-    toast({
-      title: 'Copied Address',
-      position: 'top-right',
-      status: 'success',
-      duration: 3000,
-      isClosable: true,
-    });
-  };
+  }, [profile, addr]);
 
   return (
-    <Flex direction='row' alignItems='center'>
-      <Flex direction='row' alignItems='center'>
-        {addr && hasFetched && (
-          <Avatar name={addr} src={renderAvatarImage(addr)} size='sm' />
-        )}
-        <Flex>
-          <Text fontSize='sm' fontFamily='heading' ml={3}>
-            {profile?.name || profile?.ens || truncateAddr(addr)}
-          </Text>
-          <Box as='span' mx={1}>
-            {profile?.emoji && profile.emoji}
-          </Box>
-          {hideCopy || (
-            <CopyToClipboard text={addr} mr={4} onCopy={copiedToast}>
-              <Icon
-                transform='translateY(2px)'
-                as={FaCopy}
-                color='secondary.300'
-                ml={2}
-                _hover={{ cursor: 'pointer' }}
-              />
-            </CopyToClipboard>
-          )}
-        </Flex>
-      </Flex>
-    </Flex>
+    <StaticAvatar
+      address={addr}
+      avatarImg={avatarImage}
+      name={profile?.name}
+      hideCopy={hideCopy}
+    />
   );
 });
 

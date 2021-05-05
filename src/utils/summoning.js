@@ -1,14 +1,14 @@
 import { utils } from 'web3';
 import { supportedChains } from './chain';
 
-export const parseSummonersAndShares = (data) => {
+export const parseSummonersAndShares = data => {
   if (!data) {
     return [[], []];
   }
   const lines = data.split(/\r?\n/);
   const addrs = [];
   const amounts = [];
-  lines.forEach((line) => {
+  lines.forEach(line => {
     const summoner = line.split(/\s+/);
     addrs.push(summoner[0]);
     amounts.push(summoner[1]);
@@ -16,14 +16,14 @@ export const parseSummonersAndShares = (data) => {
   return [addrs, amounts];
 };
 
-export const validateSummonresAndShares = (data) => {
+export const validateSummonresAndShares = data => {
   const [addrs, amounts] = parseSummonersAndShares(data);
   let errMsg = true;
   if (!addrs.length || !amounts.length) {
     errMsg = 'Something went wrong with the summoner list';
     return errMsg;
   }
-  addrs.forEach((addr) => {
+  addrs.forEach(addr => {
     try {
       utils.toChecksumAddress(addr);
     } catch (err) {
@@ -31,7 +31,7 @@ export const validateSummonresAndShares = (data) => {
     }
   });
 
-  amounts.forEach((amount) => {
+  amounts.forEach(amount => {
     if (amount % 1 !== 0) {
       errMsg = 'Only whole share amounts allowed';
     }
@@ -39,7 +39,7 @@ export const validateSummonresAndShares = (data) => {
   return errMsg;
 };
 
-export const periodsPerDayPreset = (seconds) => {
+export const periodsPerDayPreset = seconds => {
   const hours = +seconds / 60 / 60;
 
   const perDay = Math.ceil(24 / hours);
@@ -56,11 +56,11 @@ export const formatPeriodLength = (periods, duration) => {
   return `${days} day${days > 1 ? 's' : ''}`;
 };
 
-export const formatDepositWei = (amount) => {
+export const formatDepositWei = amount => {
   return utils.fromWei(amount.toString(), 'ether');
 };
 
-export const daoConstants = (chainId) => {
+export const daoConstants = chainId => {
   const constants = {
     abortWindow: '1',
     dilutionBound: '3',
@@ -68,13 +68,13 @@ export const daoConstants = (chainId) => {
   };
 
   if (chainId === '0x64') {
-    constants.approvedToken = supportedChains['0x64'].wxdai_contract;
+    constants.approvedToken = supportedChains['0x64'].wrapper_contract;
   }
 
   return constants;
 };
 
-export const daoPresets = (chainId) => {
+export const daoPresets = chainId => {
   let presets = [
     {
       presetName: 'Guilds',
@@ -114,7 +114,7 @@ export const daoPresets = (chainId) => {
       presetDescription:
         'Invest on chain with a venture fund at your fingertips.',
       currency: 'WETH',
-      approvedToken: supportedChains[chainId].weth_contract,
+      approvedToken: supportedChains[chainId].wrapper_contract,
       votingPeriod: '7',
       gracePeriod: '7',
       proposalDeposit: '100000000000000000',
@@ -129,7 +129,7 @@ export const daoPresets = (chainId) => {
       presetSubtitle: 'Distribute wealth together',
       presetDescription: 'Spread around the wealth and accelerate good stuff.',
       currency: 'WETH',
-      approvedToken: supportedChains[chainId].weth_contract,
+      approvedToken: supportedChains[chainId].wrapper_contract,
       votingPeriod: '168',
       gracePeriod: '72',
       proposalDeposit: '10000000000000000',
@@ -159,9 +159,9 @@ export const daoPresets = (chainId) => {
   ];
 
   if (chainId === '0x64') {
-    presets = presets.map((preset) => {
+    presets = presets.map(preset => {
       preset.currency = 'WXDAI';
-      preset.approvedToken = supportedChains[chainId].wxdai_contract;
+      preset.approvedToken = supportedChains[chainId].wrapper_contract;
       preset.proposalDeposit = '10000000000000000000';
       preset.processingReward = '1000000000000000000';
 
@@ -170,9 +170,9 @@ export const daoPresets = (chainId) => {
   }
 
   if (chainId === '0x89') {
-    presets = presets.map((preset) => {
+    presets = presets.map(preset => {
       preset.currency = 'WMATIC';
-      preset.approvedToken = supportedChains[chainId].weth_contract;
+      preset.approvedToken = supportedChains[chainId].wrapper_contract;
       preset.proposalDeposit = '10000000000000000000';
       preset.processingReward = '1000000000000000000';
 
@@ -181,9 +181,9 @@ export const daoPresets = (chainId) => {
   }
 
   if (chainId === '0x4a') {
-    presets = presets.map((preset) => {
+    presets = presets.map(preset => {
       preset.currency = 'WEIDI';
-      preset.approvedToken = supportedChains[chainId].weth_contract;
+      preset.approvedToken = supportedChains[chainId].wrapper_contract;
       preset.proposalDeposit = '10000000000000000000';
       preset.processingReward = '1000000000000000000';
 
@@ -193,7 +193,7 @@ export const daoPresets = (chainId) => {
   return presets;
 };
 
-export const currencyOptions = (chainId) => {
+export const currencyOptions = chainId => {
   let options;
 
   if (chainId === '0x64') {
@@ -201,7 +201,7 @@ export const currencyOptions = (chainId) => {
       {
         value: 'WXDAI',
         label: 'WXDAI',
-        address: supportedChains[chainId].wxdai_contract,
+        address: supportedChains[chainId].wrapper_contract,
       },
     ];
   } else if (chainId === '0x89') {
@@ -240,7 +240,7 @@ export const currencyOptions = (chainId) => {
       {
         value: 'WETH',
         label: 'WETH',
-        address: supportedChains[chainId].weth_contract,
+        address: supportedChains[chainId].wrapper_contract,
       },
     ];
   }
@@ -248,7 +248,7 @@ export const currencyOptions = (chainId) => {
   return options;
 };
 
-export const cloneDaoPresets = (daoOverview) => {
+export const cloneDaoPresets = daoOverview => {
   return {
     votingPeriod: daoOverview.votingPeriodLength,
     gracePeriod: daoOverview.gracePeriodLength,
@@ -261,22 +261,23 @@ export const cloneDaoPresets = (daoOverview) => {
   };
 };
 
-export const cloneMembers = (daoMembers) => daoMembers
-  .reduce(
-    (string, member) => (+member?.shares > 0
-      ? `${string
-      }${member.memberAddress} ${member.shares}
+export const cloneMembers = daoMembers =>
+  daoMembers
+    .reduce(
+      (string, member) =>
+        +member?.shares > 0
+          ? `${string}${member.memberAddress} ${member.shares}
 `
-      : string),
-    '',
-  )
-  .trim();
+          : string,
+      '',
+    )
+    .trim();
 
-export const cloneTokens = (daoOverview) => {
+export const cloneTokens = daoOverview => {
   const primaryTokenAddress = daoOverview.depositToken.tokenAddress;
   const otherTokensAddress = daoOverview.tokenBalances
     .map(({ token }) => token.tokenAddress)
-    .filter((address) => address !== primaryTokenAddress);
+    .filter(address => address !== primaryTokenAddress);
   const allAddresses = [primaryTokenAddress, ...otherTokensAddress];
   return allAddresses.join(', ');
 };

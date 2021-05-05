@@ -88,13 +88,17 @@ const LootGrabForm = () => {
     }
   });
 
-  const onSubmit = async (values) => {
+  const onSubmit = async values => {
     console.log(values);
 
     setLoading(true);
     const now = (new Date().getTime() / 1000).toFixed();
     const hash = createHash();
-    const details = detailsToJSON({ ...values, hash });
+    const details = detailsToJSON({
+      ...values,
+      title: values.title || 'Loot Grab',
+      hash,
+    });
     const { tokenBalances, depositToken } = daoOverview;
     const tributeToken = values.tributeToken || depositToken.tokenAddress;
     const paymentToken = values.paymentToken || depositToken.tokenAddress;
@@ -107,8 +111,8 @@ const LootGrabForm = () => {
     const applicant = values?.applicantHidden?.startsWith('0x')
       ? values.applicantHidden
       : values?.applicant
-        ? values.applicant
-        : address;
+      ? values.applicant
+      : address;
     const args = [
       applicant,
       values.sharesRequested || '0',
@@ -133,7 +137,7 @@ const LootGrabForm = () => {
             resolvePoll(txHash);
             console.error(`Could not find a matching proposal: ${error}`);
           },
-          onSuccess: (txHash) => {
+          onSuccess: txHash => {
             successToast({
               title: 'Loot Grab Proposal Submitted to the Dao!',
             });
@@ -161,7 +165,10 @@ const LootGrabForm = () => {
         chainID: daochain,
         version: daoOverview.version,
       })('submitProposal')({
-        args, address, poll, onTxHash,
+        args,
+        address,
+        poll,
+        onTxHash,
       });
     } catch (err) {
       setLoading(false);
@@ -185,12 +192,12 @@ const LootGrabForm = () => {
       >
         {editDetails ? (
           <Box w={['100%', null, '50%']} pr={[0, null, 5]}>
-            <DetailsFields register={register} defaultTitle='Loot Grab' />
+            <DetailsFields register={register} />
           </Box>
         ) : (
           <VisuallyHidden>
             <Box w={['100%', null, '50%']} pr={[0, null, 5]}>
-              <DetailsFields register={register} defaultTitle='Loot Grab' />
+              <DetailsFields register={register} />
             </Box>
           </VisuallyHidden>
         )}
@@ -257,17 +264,17 @@ const LootGrabForm = () => {
             >
               Submit
             </Button>
-            ) : (
-              <Button
-                onClick={requestWallet}
-                isDisabled={injectedChain && daochain !== injectedChain?.chainId}
-              >
-                Connect
-                {injectedChain && daochain !== injectedChain?.chainId
-                  ? `to ${chainByID(daochain).name}`
-                  : 'Wallet'}
-              </Button>
-            )}
+          ) : (
+            <Button
+              onClick={requestWallet}
+              isDisabled={injectedChain && daochain !== injectedChain?.chainId}
+            >
+              Connect
+              {injectedChain && daochain !== injectedChain?.chainId
+                ? `to ${chainByID(daochain).name}`
+                : 'Wallet'}
+            </Button>
+          )}
         </Box>
       </Flex>
     </form>

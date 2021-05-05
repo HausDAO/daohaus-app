@@ -3,7 +3,7 @@ import { useForm } from 'react-hook-form';
 import {
   Button,
   FormLabel,
-  FormControl,
+  Stack,
   Flex,
   Input,
   Icon,
@@ -91,7 +91,7 @@ const FundingProposalForm = () => {
     }
   }, [errors]);
 
-  const onSubmit = async (values) => {
+  const onSubmit = async values => {
     setLoading(true);
     const now = (new Date().getTime() / 1000).toFixed();
     const hash = createHash();
@@ -110,10 +110,10 @@ const FundingProposalForm = () => {
     const applicant = values?.applicantHidden?.startsWith('0x')
       ? values.applicantHidden
       : values?.applicant
-        ? values.applicant
-        : values?.memberApplicant
-          ? values.memberApplicant
-          : address;
+      ? values.applicant
+      : values?.memberApplicant
+      ? values.memberApplicant
+      : address;
 
     const args = [
       applicant,
@@ -139,7 +139,7 @@ const FundingProposalForm = () => {
             resolvePoll(txHash);
             console.error(`Could not find a matching proposal: ${error}`);
           },
-          onSuccess: (txHash) => {
+          onSuccess: txHash => {
             successToast({
               title: 'Funding Proposal Submitted to the Dao!',
             });
@@ -167,7 +167,10 @@ const FundingProposalForm = () => {
         chainID: daochain,
         version: daoOverview.version,
       })('submitProposal')({
-        args, address, poll, onTxHash,
+        args,
+        address,
+        poll,
+        onTxHash,
       });
     } catch (err) {
       setLoading(false);
@@ -180,18 +183,11 @@ const FundingProposalForm = () => {
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
-      <FormControl
-        isInvalid={errors.name}
-        display='flex'
-        flexDirection='row'
-        justifyContent='space-between'
-        mb={5}
-        flexWrap='wrap'
-      >
+      <Flex justify='space-between' wrap='wrap'>
         <Box w={['100%', null, '50%']} pr={[0, null, 5]}>
           <DetailsFields register={register} />
         </Box>
-        <Box w={['100%', null, '50%']}>
+        <Box as={Stack} w={['100%', null, '50%']} spacing={5}>
           <AddressInput
             name='applicant'
             register={register}
@@ -206,7 +202,7 @@ const FundingProposalForm = () => {
           />
 
           {showShares && (
-            <>
+            <Box>
               <Tooltip
                 hasArrow
                 shouldWrapChildren
@@ -229,7 +225,6 @@ const FundingProposalForm = () => {
                 name='sharesRequested'
                 placeholder='0'
                 defaultValue='0'
-                mb={5}
                 ref={register({
                   required: {
                     value: true,
@@ -242,10 +237,10 @@ const FundingProposalForm = () => {
                   },
                 })}
               />
-            </>
+            </Box>
           )}
           {showLoot && (
-            <>
+            <Box>
               <Tooltip
                 hasArrow
                 shouldWrapChildren
@@ -266,8 +261,6 @@ const FundingProposalForm = () => {
               <Input
                 name='lootRequested'
                 placeholder='0'
-                defaultValue='0'
-                mb={5}
                 ref={register({
                   pattern: {
                     value: /^[0-9]+$/,
@@ -275,7 +268,7 @@ const FundingProposalForm = () => {
                   },
                 })}
               />
-            </>
+            </Box>
           )}
           {showTribute && (
             <TributeInput
@@ -286,36 +279,37 @@ const FundingProposalForm = () => {
             />
           )}
           {(!showShares || !showLoot || !showTribute) && (
-            <Menu textTransform='uppercase'>
-              <MenuButton
-                as={Button}
-                variant='outline'
-                rightIcon={<Icon as={RiAddFill} />}
-              >
-                Additional Options
-              </MenuButton>
-              <MenuList>
-                {!showShares && (
-                  <MenuItem onClick={() => setShowShares(true)}>
-                    Request Shares
-                  </MenuItem>
-                )}
-                {!showLoot && (
-                  <MenuItem onClick={() => setShowLoot(true)}>
-                    Request Loot
-                  </MenuItem>
-                )}
-                {!showTribute && (
-                  <MenuItem onClick={() => setShowTribute(true)}>
-                    Give Tribute
-                  </MenuItem>
-                )}
-              </MenuList>
-            </Menu>
+            <Box>
+              <Menu textTransform='uppercase'>
+                <MenuButton
+                  as={Button}
+                  variant='outline'
+                  rightIcon={<Icon as={RiAddFill} />}
+                >
+                  Additional Options
+                </MenuButton>
+                <MenuList>
+                  {!showShares && (
+                    <MenuItem onClick={() => setShowShares(true)}>
+                      Request Shares
+                    </MenuItem>
+                  )}
+                  {!showLoot && (
+                    <MenuItem onClick={() => setShowLoot(true)}>
+                      Request Loot
+                    </MenuItem>
+                  )}
+                  {!showTribute && (
+                    <MenuItem onClick={() => setShowTribute(true)}>
+                      Give Tribute
+                    </MenuItem>
+                  )}
+                </MenuList>
+              </Menu>
+            </Box>
           )}
         </Box>
-      </FormControl>
-
+      </Flex>
       <Flex justify='flex-end' align='center' h='60px'>
         {currentError && (
           <Box color='red.500' fontSize='m' mr={5}>
@@ -337,19 +331,19 @@ const FundingProposalForm = () => {
             >
               Submit
             </Button>
-            ) : (
-              <Button
-                onClick={requestWallet}
-                isDisabled={injectedChain && daochain !== injectedChain?.chainId}
-              >
-                {`Connect
+          ) : (
+            <Button
+              onClick={requestWallet}
+              isDisabled={injectedChain && daochain !== injectedChain?.chainId}
+            >
+              {`Connect
               ${
                 injectedChain && daochain !== injectedChain?.chainId
                   ? `to ${chainByID(daochain).name}`
                   : 'Wallet'
               }`}
-              </Button>
-            )}
+            </Button>
+          )}
         </Box>
       </Flex>
     </form>

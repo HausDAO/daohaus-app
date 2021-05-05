@@ -63,7 +63,7 @@ const UpdateDelegate = ({ overview }) => {
     }
   }, [errors]);
 
-  const onSubmit = async (values) => {
+  const onSubmit = async values => {
     setLoading(true);
     console.log(values);
     const args = [values.delegateAddress];
@@ -83,7 +83,7 @@ const UpdateDelegate = ({ overview }) => {
             console.error(`Could not find a matching proposal: ${error}`);
             setLoading(false);
           },
-          onSuccess: (txHash) => {
+          onSuccess: txHash => {
             successToast({
               title: 'Updated delegate address.',
             });
@@ -103,7 +103,10 @@ const UpdateDelegate = ({ overview }) => {
         version: overview.version,
         chainID: daochain,
       })('updateDelegateKey')({
-        args, address, poll, onTxHash,
+        args,
+        address,
+        poll,
+        onTxHash,
       });
     } catch (err) {
       setLoading(false);
@@ -139,11 +142,9 @@ const UpdateDelegate = ({ overview }) => {
               name='delegateAddress'
               ref={register({
                 required: true,
-                validate: (addr) => !!isEthAddress(addr),
+                validate: addr => !!isEthAddress(addr),
               })}
               width='100%'
-              color='white'
-              focusBorderColor='secondary.500'
             />
 
             <Box

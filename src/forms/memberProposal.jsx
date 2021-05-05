@@ -13,6 +13,7 @@ import {
   MenuList,
   MenuItem,
   Tooltip,
+  Stack,
 } from '@chakra-ui/react';
 import {
   RiAddFill,
@@ -90,7 +91,7 @@ const MemberProposalForm = () => {
     }
   }, [errors]);
 
-  const onSubmit = async (values) => {
+  const onSubmit = async values => {
     setLoading(true);
     const now = (new Date().getTime() / 1000).toFixed();
     const hash = createHash();
@@ -107,10 +108,10 @@ const MemberProposalForm = () => {
     const applicant = values?.applicantHidden?.startsWith('0x')
       ? values.applicantHidden
       : values?.applicant
-        ? values.applicant
-        : values?.memberApplicant
-          ? values.memberApplicant
-          : address;
+      ? values.applicant
+      : values?.memberApplicant
+      ? values.memberApplicant
+      : address;
     const args = [
       applicant,
       values.sharesRequested || '0',
@@ -135,7 +136,7 @@ const MemberProposalForm = () => {
             resolvePoll(txHash);
             console.error(`Could not find a matching proposal: ${error}`);
           },
-          onSuccess: (txHash) => {
+          onSuccess: txHash => {
             successToast({
               title: 'Member Proposal Submitted to the Dao!',
             });
@@ -163,7 +164,10 @@ const MemberProposalForm = () => {
         chainID: daochain,
         version: daoOverview.version,
       })('submitProposal')({
-        args, address, poll, onTxHash,
+        args,
+        address,
+        poll,
+        onTxHash,
       });
     } catch (error) {
       const errMsg = error?.message || '';
@@ -205,43 +209,44 @@ const MemberProposalForm = () => {
         <Box w={['100%', null, '50%']} pr={[0, null, 5]}>
           <DetailsFields register={register} />
         </Box>
-        <Box w={['100%', null, '50%']}>
-          <Tooltip
-            hasArrow
-            shouldWrapChildren
-            label='Shares provide voting power and exposure to assets. Only whole numbers accepted here, no decimals plz'
-            placement='top'
-          >
-            <TextBox
-              as={FormLabel}
-              size='xs'
-              htmlFor='name'
-              mb={2}
-              d='flex'
-              alignItems='center'
+        <Box as={Stack} w={['100%', null, '50%']} spacing={6}>
+          <Box>
+            <Tooltip
+              hasArrow
+              shouldWrapChildren
+              label='Shares provide voting power and exposure to assets. Only whole numbers accepted here, no decimals plz'
+              placement='top'
             >
-              Shares Requested
-              <Icon as={RiInformationLine} ml={2} />
-            </TextBox>
-          </Tooltip>
-          <Input
-            name='sharesRequested'
-            placeholder='0'
-            defaultValue='0'
-            mb={5}
-            ref={register({
-              required: {
-                value: true,
-                message: 'Requested shares are required for Member Proposals',
-              },
-              pattern: {
-                value: /^[0-9]+$/,
-                message: 'Requested shares must be a whole number',
-              },
-            })}
-            color='white'
-            focusBorderColor='secondary.500'
-          />
+              <TextBox
+                as={FormLabel}
+                size='xs'
+                htmlFor='name'
+                mb={2}
+                d='flex'
+                alignItems='center'
+              >
+                Shares Requested
+                <Icon as={RiInformationLine} ml={2} />
+              </TextBox>
+            </Tooltip>
+            <Input
+              name='sharesRequested'
+              placeholder='0'
+              ref={register({
+                required: {
+                  value: true,
+                  message: 'Requested shares are required for Member Proposals',
+                },
+                pattern: {
+                  value: /^[0-9]+$/,
+                  message: 'Requested shares must be a whole number',
+                },
+              })}
+              color='white'
+              focusBorderColor='secondary.500'
+            />
+          </Box>
+
           <TributeInput
             register={register}
             setValue={setValue}
@@ -249,7 +254,7 @@ const MemberProposalForm = () => {
             setError={setError}
           />
           {showLoot && (
-            <>
+            <Box>
               <Tooltip
                 hasArrow
                 shouldWrapChildren
@@ -270,19 +275,15 @@ const MemberProposalForm = () => {
               </Tooltip>
               <Input
                 name='lootRequested'
-                placeholder='0'
                 defaultValue='0'
-                mb={5}
                 ref={register({
                   pattern: {
                     value: /[0-9]/,
                     message: 'Loot must be a number',
                   },
                 })}
-                color='white'
-                focusBorderColor='secondary.500'
               />
-            </>
+            </Box>
           )}
           {showPaymentRequest && (
             <PaymentInput
@@ -304,32 +305,34 @@ const MemberProposalForm = () => {
             />
           )}
           {(!showApplicant || !showLoot || !showPaymentRequest) && (
-            <Menu color='white' textTransform='uppercase'>
-              <MenuButton
-                as={Button}
-                variant='outline'
-                rightIcon={<Icon as={RiAddFill} />}
-              >
-                Additional Options
-              </MenuButton>
-              <MenuList>
-                {!showApplicant && (
-                  <MenuItem onClick={() => setShowApplicant(true)}>
-                    Applicant
-                  </MenuItem>
-                )}
-                {!showLoot && (
-                  <MenuItem onClick={() => setShowLoot(true)}>
-                    Request Loot
-                  </MenuItem>
-                )}
-                {!showPaymentRequest && (
-                  <MenuItem onClick={() => setShowPaymentRequest(true)}>
-                    Request Payment
-                  </MenuItem>
-                )}
-              </MenuList>
-            </Menu>
+            <Box>
+              <Menu color='white' textTransform='uppercase'>
+                <MenuButton
+                  as={Button}
+                  variant='outline'
+                  rightIcon={<Icon as={RiAddFill} />}
+                >
+                  Additional Options
+                </MenuButton>
+                <MenuList>
+                  {!showApplicant && (
+                    <MenuItem onClick={() => setShowApplicant(true)}>
+                      Applicant
+                    </MenuItem>
+                  )}
+                  {!showLoot && (
+                    <MenuItem onClick={() => setShowLoot(true)}>
+                      Request Loot
+                    </MenuItem>
+                  )}
+                  {!showPaymentRequest && (
+                    <MenuItem onClick={() => setShowPaymentRequest(true)}>
+                      Request Payment
+                    </MenuItem>
+                  )}
+                </MenuList>
+              </Menu>
+            </Box>
           )}
         </Box>
       </FormControl>
@@ -354,19 +357,19 @@ const MemberProposalForm = () => {
             >
               Submit
             </Button>
-            ) : (
-              <Button
-                onClick={requestWallet}
-                isDisabled={injectedChain && daochain !== injectedChain?.chainId}
-              >
-                {`Connect 
+          ) : (
+            <Button
+              onClick={requestWallet}
+              isDisabled={injectedChain && daochain !== injectedChain?.chainId}
+            >
+              {`Connect 
               ${
                 injectedChain && daochain !== injectedChain?.chainId
                   ? `to ${chainByID(daochain).name}`
                   : 'Wallet'
               }`}
-              </Button>
-            )}
+            </Button>
+          )}
         </Box>
       </Flex>
     </form>

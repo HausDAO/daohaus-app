@@ -34,7 +34,7 @@ import ImageUploadModal from '../modals/imageUploadModal';
 import { getQueryStringParams } from '../utils/general';
 import { supportedChains } from '../utils/chain';
 
-const puposes = daoPresets('0x1').map((preset) => preset.presetName);
+const puposes = daoPresets('0x1').map(preset => preset.presetName);
 
 const DaoMetaForm = ({ metadata, handleUpdate }) => {
   const { address, injectedProvider, injectedChain } = useInjectedProvider();
@@ -44,7 +44,7 @@ const DaoMetaForm = ({ metadata, handleUpdate }) => {
   const { register, handleSubmit } = useForm();
   const location = useLocation();
 
-  const onSubmit = async (data) => {
+  const onSubmit = async data => {
     setLoading(true);
 
     try {
@@ -169,7 +169,7 @@ const DaoMetaForm = ({ metadata, handleUpdate }) => {
                     icon={<AiOutlineCaretDown />}
                     name='purpose'
                   >
-                    {puposes.map((value) => (
+                    {puposes.map(value => (
                       <Box as='option' key={value}>
                         {value}
                       </Box>
@@ -193,7 +193,7 @@ const DaoMetaForm = ({ metadata, handleUpdate }) => {
                 <TextBox size='xs' mb={2}>
                   Community Links
                 </TextBox>
-                <Stack spacing='2px'>
+                <Stack spacing={2}>
                   <FormControl id='website' mb={4}>
                     <InputGroup>
                       <InputLeftAddon bg='transparent'>
@@ -279,7 +279,7 @@ const DaoMetaForm = ({ metadata, handleUpdate }) => {
                   </FormControl>
                 </Stack>
 
-                <Button type='submit' disabled={loading}>
+                <Button type='submit' disabled={loading} my={4}>
                   Save
                 </Button>
               </Flex>

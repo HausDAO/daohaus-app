@@ -1,7 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import {
-  Box, Button, FormLabel, Input,
-} from '@chakra-ui/react';
+import { Box, Button, FormLabel, Input } from '@chakra-ui/react';
 import { useParams } from 'react-router';
 import { useForm } from 'react-hook-form';
 import TextBox from './TextBox';
@@ -13,9 +11,7 @@ import { useOverlay } from '../contexts/OverlayContext';
 const MinionNativeToken = ({ action }) => {
   const [nativeBalance, setNativeBalance] = useState(null);
   const { daochain, minion } = useParams();
-  const {
-    handleSubmit, register, setValue,
-  } = useForm();
+  const { handleSubmit, register, setValue } = useForm();
   const { setGenericModal } = useOverlay();
 
   useEffect(() => {
@@ -39,21 +35,24 @@ const MinionNativeToken = ({ action }) => {
   return (
     <Box>
       <TextBox size='md' align='center'>
-        balance:
-        {' '}
-        {nativeBalance}
-        <Button size='xs' ml={6} onClick={openSendModal}>Send</Button>
+        balance: {nativeBalance || 0}
+        {nativeBalance && (
+          <Button size='xs' ml={6} onClick={openSendModal}>
+            Send
+          </Button>
+        )}
       </TextBox>
       <GenericModal closeOnOverlayClick modalId='nativeTokenSend'>
         <form onSubmit={handleSubmit(action)}>
-
           <TextBox as={FormLabel} size='xs' htmlFor='amount'>
-            Amount
-            {' '}
-            <Button onClick={() => { setValue('amount', nativeBalance); }}>
-              Max
-              {' '}
-              {`$${numberWithCommas(+nativeBalance)}`}
+            Amount{' '}
+            <Button
+              onClick={() => {
+                setValue('amount', nativeBalance);
+              }}
+              size='xs'
+            >
+              Max {`$${numberWithCommas(+nativeBalance)}`}
             </Button>
           </TextBox>
           <Input

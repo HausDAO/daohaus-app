@@ -12,22 +12,25 @@ import {
   MEMBERS_LIST,
   MEMBER_DELEGATE_KEY,
 } from '../graphQL/member-queries';
+import { GET_WRAP_N_ZAPS } from '../graphQL/boost-queries';
 import { getGraphEndpoint } from '../utils/chain';
 import { PROPOSAL_TYPES } from '../utils/proposalUtils';
 import { TokenService } from '../services/tokenService';
 
 import { UBERHAUS_MEMBER_DELEGATE } from '../graphQL/uberhaus-queries';
 import { MinionService } from '../services/minionService';
+import { SuperfluidMinionService } from '../services/superfluidMinionService';
 import { UberHausMinionService } from '../services/uberHausMinionService';
 
-export const pollProposals = async ({ daoID, chainID }) => graphQuery({
-  endpoint: getGraphEndpoint(chainID, 'subgraph_url'),
-  query: PROPOSALS_LIST,
-  variables: {
-    contractAddr: daoID,
-    skip: 0,
-  },
-});
+export const pollProposals = async ({ daoID, chainID }) =>
+  graphQuery({
+    endpoint: getGraphEndpoint(chainID, 'subgraph_url'),
+    query: PROPOSALS_LIST,
+    variables: {
+      contractAddr: daoID,
+      skip: 0,
+    },
+  });
 
 export const pollTokenAllowances = async ({
   chainID,
@@ -102,9 +105,16 @@ export const pollMinionExecute = async ({
       })('getAction')({ proposalId });
       return action.executed;
     }
+    if (proposalType === PROPOSAL_TYPES.MINION_SUPERFLUID) {
+      const action = await SuperfluidMinionService({
+        minion: minionAddress,
+        chainID,
+      })('getStream')({ proposalId });
+      return action.executed;
+    }
     if (
-      proposalType === PROPOSAL_TYPES.MINION_UBER_STAKE
-      || proposalType === PROPOSAL_TYPES.MINION_UBER_RQ
+      proposalType === PROPOSAL_TYPES.MINION_UBER_STAKE ||
+      proposalType === PROPOSAL_TYPES.MINION_UBER_RQ
     ) {
       const action = await UberHausMinionService({
         uberHausMinion: minionAddress,
@@ -121,6 +131,26 @@ export const pollMinionExecute = async ({
       return action.executed;
     }
     return null;
+  } catch (error) {
+    console.error(error);
+    throw new Error('Error caught in Poll block of TX');
+  }
+};
+
+export const pollMinionCancel = async ({
+  chainID,
+  minionAddress,
+  proposalId,
+  proposalType,
+}) => {
+  try {
+    if (proposalType === PROPOSAL_TYPES.MINION_SUPERFLUID) {
+      const action = await SuperfluidMinionService({
+        minion: minionAddress,
+        chainID,
+      })('getStream')({ proposalId });
+      return !action.active;
+    }
   } catch (error) {
     console.error(error);
     throw new Error('Error caught in Poll block of TX');
@@ -148,7 +178,7 @@ export const syncTokenPoll = async ({ chainID, daoID, tokenAddress }) => {
       },
     });
     const graphBalance = daoOverview?.moloch?.tokenBalances?.find(
-      (tokenObj) => tokenObj?.token?.tokenAddress === tokenAddress,
+      tokenObj => tokenObj?.token?.tokenAddress === tokenAddress,
     )?.tokenBalance;
     return graphBalance;
   } catch (error) {
@@ -171,10 +201,10 @@ export const withdrawTokenFetch = async ({
       },
     });
     const member = data.daoMembers?.find(
-      (member) => member?.memberAddress?.toLowerCase() === memberAddress,
+      member => member?.memberAddress?.toLowerCase() === memberAddress,
     );
     const newTokenBalance = member.tokenBalances.find(
-      (tokenObj) => tokenObj.token.tokenAddress === tokenAddress,
+      tokenObj => tokenObj.token.tokenAddress === tokenAddress,
     ).tokenBalance;
     return newTokenBalance;
   } catch (error) {
@@ -263,6 +293,21 @@ export const pollRageKick = async ({ chainID, daoID, memberAddress }) => {
       variables: {
         contractAddr: daoID,
         memberAddr: memberAddress,
+      },
+    });
+    return res;
+  } catch (error) {
+    return error;
+  }
+};
+
+export const pollWrapNZapSummon = async ({ chainID, daoID }) => {
+  try {
+    const res = await graphQuery({
+      endpoint: getGraphEndpoint(chainID, 'boosts_graph_url'),
+      query: GET_WRAP_N_ZAPS,
+      variables: {
+        contractAddress: daoID,
       },
     });
     return res;

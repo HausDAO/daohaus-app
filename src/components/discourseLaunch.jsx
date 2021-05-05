@@ -1,8 +1,6 @@
 import React, { useState } from 'react';
 import { Link as RouterLink, useParams } from 'react-router-dom';
-import {
-  Box, Button, Flex, Heading, Spinner, Text,
-} from '@chakra-ui/react';
+import { Box, Button, Flex, Heading, Spinner, Text } from '@chakra-ui/react';
 import { SketchPicker } from 'react-color';
 
 import { useMetaData } from '../contexts/MetaDataContext';
@@ -35,7 +33,7 @@ const DiscourseLaunch = ({ handleLaunch, loading, setLoading }) => {
   };
 
   const handleChange = (color, item) => {
-    setColors((prevState) => {
+    setColors(prevState => {
       return {
         ...prevState,
         [item]: color.hex,
@@ -80,7 +78,7 @@ const DiscourseLaunch = ({ handleLaunch, loading, setLoading }) => {
                   />
                   <SketchPicker
                     color={colors.color}
-                    onChangeComplete={(color) => handleChange(color, 'color')}
+                    onChangeComplete={color => handleChange(color, 'color')}
                     disableAlpha
                   />
                 </Box>

@@ -34,15 +34,7 @@ import { useSessionStorage } from '../hooks/useSessionStorage';
 import AddressInput from './addressInput';
 
 const TransmutationProposal = () => {
-  const {
-    handleSubmit,
-    errors,
-    register,
-    // reset,
-    setValue,
-    watch,
-    // formState
-  } = useForm();
+  const { handleSubmit, errors, register, setValue, watch } = useForm();
 
   const [loading, setLoading] = useState(false);
   const { daochain, daoid } = useParams();
@@ -147,8 +139,9 @@ const TransmutationProposal = () => {
         console.log('transmutationData', transmutationData);
         const getTokenAddress = transmutationData[0].capitalToken;
         const tokenArray = daoOverview?.tokenBalances.filter(
-          (token) => token.token.tokenAddress === getTokenAddress.toLowerCase()
-            && token.guildBank,
+          token =>
+            token.token.tokenAddress === getTokenAddress.toLowerCase() &&
+            token.guildBank,
         );
         if (!tokenArray) {
           setTokenData([]);
@@ -157,7 +150,7 @@ const TransmutationProposal = () => {
         setTokenData(
           tokenArray
             // .filter((token) => token)
-            .map((token) => ({
+            .map(token => ({
               label: token.token.symbol || token.token.tokenAddress,
               value: token.token.tokenAddress,
               decimals: token.token.decimals,
@@ -174,14 +167,14 @@ const TransmutationProposal = () => {
     }
   }, [transmutationData, daoOverview]);
 
-  const displayTribute = (val) => {
+  const displayTribute = val => {
     if (val) {
       return injectedProvider?.utils.fromWei(`${val}`).toString();
     }
     return null;
   };
 
-  const onSubmit = async (values) => {
+  const onSubmit = async values => {
     console.log(values);
     setLoading(true);
     const now = (new Date().getTime() / 1000).toFixed();
@@ -195,10 +188,10 @@ const TransmutationProposal = () => {
     const applicant = values?.applicantHidden?.startsWith('0x')
       ? values.applicantHidden
       : values?.applicant
-        ? values.applicant
-        : values?.memberApplicant
-          ? values.memberApplicant
-          : address;
+      ? values.applicant
+      : values?.memberApplicant
+      ? values.memberApplicant
+      : address;
 
     const args = [
       applicant,
@@ -219,7 +212,7 @@ const TransmutationProposal = () => {
             resolvePoll(txHash);
             console.error(`Could not find a matching proposal: ${error}`);
           },
-          onSuccess: (txHash) => {
+          onSuccess: txHash => {
             successToast({
               title: 'Transmutation proposal created.',
             });
@@ -248,7 +241,10 @@ const TransmutationProposal = () => {
         setupValues: transmutationValues,
         chainID: daochain,
       })('propose')({
-        args, address, poll, onTxHash,
+        args,
+        address,
+        poll,
+        onTxHash,
       });
     } catch (err) {
       console.log(err);

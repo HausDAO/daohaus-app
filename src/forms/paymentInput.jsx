@@ -9,6 +9,7 @@ import {
   Select,
   Tooltip,
   Icon,
+  FormControl,
 } from '@chakra-ui/react';
 import { RiInformationLine } from 'react-icons/ri';
 
@@ -16,7 +17,13 @@ import TextBox from '../components/TextBox';
 import { useDao } from '../contexts/DaoContext';
 
 const PaymentInput = ({
-  register, setValue, getValues, errors,
+  errors,
+  setValue,
+  formLabel = 'Payment Requested',
+  getValues,
+  isTrade,
+  register,
+  validateGtZero = false,
 }) => {
   const [balance, setBalance] = useState(0);
 
@@ -29,14 +36,16 @@ const PaymentInput = ({
     if (daoOverview && !tokenData.length) {
       const depositTokenAddress = daoOverview.depositToken.tokenAddress;
       const depositToken = daoOverview.tokenBalances.find(
-        (token) => token.guildBank && token.token.tokenAddress === depositTokenAddress,
+        token =>
+          token.guildBank && token.token.tokenAddress === depositTokenAddress,
       );
       const tokenArray = daoOverview.tokenBalances.filter(
-        (token) => token.guildBank && token.token.tokenAddress !== depositTokenAddress,
+        token =>
+          token.guildBank && token.token.tokenAddress !== depositTokenAddress,
       );
       tokenArray.unshift(depositToken);
       setTokenData(
-        tokenArray.map((token) => ({
+        tokenArray.map(token => ({
           label: token.token.symbol || token.tokenAddress,
           value: token.token.tokenAddress,
           decimals: token.token.decimals,
@@ -44,11 +53,10 @@ const PaymentInput = ({
         })),
       );
     }
-    // eslint-disable-next-line
   }, [daoOverview]);
 
-  const getMax = async (token) => {
-    const selected = tokenData.find((item) => item.value === token);
+  const getMax = async token => {
+    const selected = tokenData.find(item => item.value === token);
     if (selected) {
       setBalance(selected.balance / 10 ** selected.decimals);
     }
@@ -64,7 +72,6 @@ const PaymentInput = ({
       getMax(depositToken.value);
       setMax();
     }
-    // eslint-disable-next-line
   }, [tokenData]);
 
   const handleChange = async () => {
@@ -74,24 +81,27 @@ const PaymentInput = ({
     }
   };
 
-  const validateBalance = (value) => {
-    let error;
-    if (value > balance) {
-      error = 'Payment Requested is more than the dao has';
+  const validateBalance = value => {
+    if (validateGtZero && value <= 0) {
+      return 'Payment Requested must be greater than zero';
     }
-    return error || true;
+    if (value > balance) {
+      return 'Payment Requested is more than the dao has';
+    }
+    return true;
   };
 
   return (
-    <>
+    <FormControl>
       <Tooltip
         hasArrow
         shouldWrapChildren
         label='Request funds from the DAO'
         placement='top'
       >
-        <TextBox as={FormLabel} size='xs' d='flex' alignItems='center'>
-          Payment Requested
+        {isTrade && <TextBox size='xs'>Trade For</TextBox>}
+        <TextBox as={FormLabel} size='xs' d='flex' alignItems='center' mt={1}>
+          {formLabel}
           <Icon as={RiInformationLine} ml={2} />
         </TextBox>
       </Tooltip>
@@ -109,7 +119,6 @@ const PaymentInput = ({
         <Input
           name='paymentRequested'
           placeholder='0'
-          mb={5}
           ref={register({
             pattern: {
               value: /[0-9]/,
@@ -117,8 +126,6 @@ const PaymentInput = ({
             },
             validate: validateBalance,
           })}
-          color='white'
-          focusBorderColor='secondary.500'
         />
         <InputRightAddon background='primary.500' p={0}>
           <Select
@@ -142,7 +149,7 @@ const PaymentInput = ({
       <FormErrorMessage>
         {errors.paymentToken && errors.paymentToken.message}
       </FormErrorMessage>
-    </>
+    </FormControl>
   );
 };
 

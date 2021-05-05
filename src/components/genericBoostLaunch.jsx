@@ -1,8 +1,6 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { Link as RouterLink, useParams } from 'react-router-dom';
-import {
-  Box, Button, Heading, Spinner, Text,
-} from '@chakra-ui/react';
+import { Box, Button, Heading, Spinner, Text } from '@chakra-ui/react';
 
 const GenericBoostLaunch = ({
   handleLaunch,
@@ -11,18 +9,20 @@ const GenericBoostLaunch = ({
   boostInstructions,
   boostLink,
   boostCTA,
+  boostStep,
+  setBoostStep,
   loading,
   setLoading,
 }) => {
   const { daochain, daoid } = useParams();
-  const [step, setStep] = useState(1);
 
   const onSubmit = async () => {
     setLoading(true);
 
     const success = await handleLaunch({});
+
     if (success) {
-      setStep('success');
+      setBoostStep('success');
     }
   };
 
@@ -36,7 +36,7 @@ const GenericBoostLaunch = ({
 
   return (
     <Box w='90%'>
-      {step === 1 ? (
+      {boostStep === 1 ? (
         <>
           <Heading as='h4' size='md' fontWeight='100'>
             {boostName || null}
@@ -49,7 +49,7 @@ const GenericBoostLaunch = ({
         </>
       ) : null}
 
-      {step === 'success' ? (
+      {boostStep === 'success' ? (
         <>
           <Heading as='h4' size='md' fontWeight='100'>
             {`${boostName || 'Boost'} unlocked`}

@@ -53,9 +53,7 @@ const StakeProposalForm = () => {
   const [currentError, setCurrentError] = useState(null);
   const [stakingToken, setStakingToken] = useState(null);
 
-  const {
-    handleSubmit, errors, register, setValue, getValues,
-  } = useForm();
+  const { handleSubmit, errors, register, setValue, getValues } = useForm();
 
   useEffect(() => {
     if (Object.keys(errors).length > 0) {
@@ -72,8 +70,9 @@ const StakeProposalForm = () => {
   useEffect(() => {
     const setupTokenData = async () => {
       const uberHausMinionData = daoOverview.minions.find(
-        (minion) => minion.minionType === 'UberHaus minion'
-          && minion.uberHausAddress === UBERHAUS_DATA.ADDRESS,
+        minion =>
+          minion.minionType === 'UberHaus minion' &&
+          minion.uberHausAddress === UBERHAUS_DATA.ADDRESS,
       );
 
       const tokenBalance = await TokenService({
@@ -96,13 +95,14 @@ const StakeProposalForm = () => {
     }
   }, [daoOverview]);
 
-  const onSubmit = async (values) => {
+  const onSubmit = async values => {
     setLoading(true);
 
     const now = (new Date().getTime() / 1000).toFixed();
     const uberHausMinionData = daoOverview.minions.find(
-      (minion) => minion.minionType === 'UberHaus minion'
-        && minion.uberHausAddress === UBERHAUS_DATA.ADDRESS,
+      minion =>
+        minion.minionType === 'UberHaus minion' &&
+        minion.uberHausAddress === UBERHAUS_DATA.ADDRESS,
     );
     const hash = createHash();
     const details = detailsToJSON({
@@ -114,10 +114,10 @@ const StakeProposalForm = () => {
 
     const tributeOffered = values.tributeOffered
       ? valToDecimalString(
-        values.tributeOffered,
-        UBERHAUS_DATA.STAKING_TOKEN.toLowerCase(),
-        daoOverview.tokenBalances,
-      )
+          values.tributeOffered,
+          UBERHAUS_DATA.STAKING_TOKEN.toLowerCase(),
+          daoOverview.tokenBalances,
+        )
       : '0';
 
     const submitProposalArgs = [
@@ -132,7 +132,7 @@ const StakeProposalForm = () => {
     ];
 
     const submitProposalAbiData = molochAbi.find(
-      (f) => f.type === 'function' && f.name === 'submitProposal',
+      f => f.type === 'function' && f.name === 'submitProposal',
     );
 
     const hexData = injectedProvider.eth.abi.encodeFunctionCall(
@@ -165,7 +165,7 @@ const StakeProposalForm = () => {
             resolvePoll(txHash);
             console.error(`Could not find a matching proposal: ${error}`);
           },
-          onSuccess: (txHash) => {
+          onSuccess: txHash => {
             successToast({
               title: 'UberHAUS Membership Proposal Submitted to the DAO!',
             });
@@ -184,7 +184,7 @@ const StakeProposalForm = () => {
         },
       });
       const onTxHash = () => {
-        setD2dProposalModal((prevState) => !prevState);
+        setD2dProposalModal(prevState => !prevState);
         setTxInfoModal(true);
       };
       await UberHausMinionService({
@@ -192,11 +192,14 @@ const StakeProposalForm = () => {
         uberHausMinion: uberHausMinionData.minionAddress,
         chainID: UBERHAUS_DATA.NETWORK,
       })('proposeAction')({
-        args, address, poll, onTxHash,
+        args,
+        address,
+        poll,
+        onTxHash,
       });
     } catch (err) {
       setLoading(false);
-      setD2dProposalModal((prevState) => !prevState);
+      setD2dProposalModal(prevState => !prevState);
       console.error('error: ', err);
       errorToast({
         title: 'There was an error.',
@@ -223,13 +226,13 @@ const StakeProposalForm = () => {
         <Box variant='heading' fontWeight={900}>
           Membership Requirements
         </Box>
-        <Box>
-          Minimum tribute: 500 HAUS
-        </Box>
-        <Box>
-          Shares requested: Equal to tribute
-        </Box>
-        <Link href='https://docs.daohaus.club/uber_actions' isExternal fontSize='xs'>
+        <Box>Minimum tribute: 500 HAUS</Box>
+        <Box>Shares requested: Equal to tribute</Box>
+        <Link
+          href='https://daohaus.club/docs/uber_actions/'
+          isExternal
+          fontSize='xs'
+        >
           More info
           <Icon
             as={RiLoginBoxLine}
@@ -285,10 +288,10 @@ const StakeProposalForm = () => {
         </FormControl>
         <Flex justify='flex-end' align='center' h='60px'>
           {currentError && (
-          <Box color='secondary.300' fontSize='m' mr={5}>
-            <Icon as={RiErrorWarningLine} color='secondary.300' mr={2} />
-            {currentError.message}
-          </Box>
+            <Box color='secondary.300' fontSize='m' mr={5}>
+              <Icon as={RiErrorWarningLine} color='secondary.300' mr={2} />
+              {currentError.message}
+            </Box>
           )}
 
           {noBalance ? (

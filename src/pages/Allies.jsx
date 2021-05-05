@@ -1,6 +1,4 @@
-import React, {
-  useEffect, useMemo, useRef, useState,
-} from 'react';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { Box, Button, Flex } from '@chakra-ui/react';
 
 // import Following from '../components/followingDaos';
@@ -68,8 +66,9 @@ const Allies = ({
 
   const uberHausMinion = useMemo(() => {
     return daoOverview?.minions?.find(
-      (minion) => minion.minionType === 'UberHaus minion'
-        && minion.uberHausAddress === UBERHAUS_DATA.ADDRESS,
+      minion =>
+        minion.minionType === 'UberHaus minion' &&
+        minion.uberHausAddress === UBERHAUS_DATA.ADDRESS,
     );
   }, [daoOverview]);
 
@@ -133,7 +132,7 @@ const Allies = ({
   }
 
   return (
-    <MainViewLayout header='Allies'>
+    <MainViewLayout header='Allies' isDao>
       <Box>
         <DaoToDaoProposalTypeModal isOpen setProposalType={setProposalType} />
         <DaoToDaoProposalModal
@@ -164,6 +163,7 @@ const Allies = ({
           uberMembers={uberMembers}
           uberOverview={uberOverview}
           daoProposals={proposals}
+          refetchAllies={refetchAllies}
         />
         {/* <Following /> */}
       </Box>

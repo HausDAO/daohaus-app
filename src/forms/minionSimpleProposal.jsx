@@ -31,6 +31,7 @@ import { chainByID } from '../utils/chain';
 import { detailsToJSON, daoConnectedAndSameChain } from '../utils/general';
 import { useMetaData } from '../contexts/MetaDataContext';
 import { createForumTopic } from '../utils/discourse';
+import { MINION_TYPES } from '../utils/proposalUtils';
 
 const MinionProposalForm = () => {
   const [loading, setLoading] = useState(false);
@@ -53,10 +54,10 @@ const MinionProposalForm = () => {
   } = useOverlay();
   const { refreshDao } = useTX();
   const [currentError, setCurrentError] = useState(null);
-  const [abiFunctions, setAbiFunctions] = useState();
-  const [selectedFunction, setSelectedFunction] = useState();
-  const [abiParams, setAbiParams] = useState();
-  const [hexSwitch, setHexSwitch] = useState();
+  const [abiFunctions, setAbiFunctions] = useState(null);
+  const [selectedFunction, setSelectedFunction] = useState(null);
+  const [abiParams, setAbiParams] = useState(null);
+  const [hexSwitch, setHexSwitch] = useState(null);
   const [minions, setMinions] = useState([]);
   const now = (new Date().getTime() / 1000).toFixed();
 
@@ -64,16 +65,19 @@ const MinionProposalForm = () => {
 
   useEffect(() => {
     if (daoOverview?.minions) {
-      const localMinions = daoOverview.minions.map(
-        (minion) => minion.minionAddress,
-      );
+      const localMinions = daoOverview.minions
+        .filter(minion => minion.minionType === MINION_TYPES.VANILLA)
+        .map(minion => ({
+          minionAdddress: minion.minionAddress,
+          minionName: minion.details,
+        }));
       setMinions(localMinions);
     }
-    // eslint-disable-next-line
   }, [daoOverview?.minions]);
 
   useEffect(() => {
-    if (Object.keys(errors).length > 0) {
+    const errArray = Object.keys(errors);
+    if (errArray.length > 0) {
       const newE = Object.keys(errors)[0];
       setCurrentError({
         field: newE,
@@ -84,16 +88,18 @@ const MinionProposalForm = () => {
     }
   }, [errors]);
 
-  const onSubmit = async (values) => {
+  const onSubmit = async values => {
     console.log('values', values);
     setLoading(true);
-
+    const minionName = minions.find(
+      minion => minion.minionAddress === values.minionAdddress,
+    )?.minionName;
     const valueWei = injectedProvider.utils.toWei(values.value);
 
     const inputValues = [];
     let hexData;
     if (selectedFunction) {
-      Object.keys(values).forEach((param) => {
+      Object.keys(values).forEach(param => {
         if (param.indexOf('xparam') > -1) {
           console.log(param);
           try {
@@ -103,9 +109,8 @@ const MinionProposalForm = () => {
           }
         }
       });
-      console.log('inputs', inputValues);
-      console.log('selectedFunction', selectedFunction);
-      const aSelectedFunction = abiFunctions.find((func) => {
+
+      const aSelectedFunction = abiFunctions.find(func => {
         return func.name === selectedFunction;
       });
       console.log('aSelectedFunction', aSelectedFunction);
@@ -122,6 +127,7 @@ const MinionProposalForm = () => {
       }
     }
     const details = detailsToJSON({
+      title: `Minion proposal from ${minionName}`,
       description: values.description,
     });
     const args = [
@@ -143,7 +149,7 @@ const MinionProposalForm = () => {
             resolvePoll(txHash);
             console.error(`Could not find a matching proposal: ${error}`);
           },
-          onSuccess: (txHash) => {
+          onSuccess: txHash => {
             successToast({
               title: 'Minion proposal submitted.',
             });
@@ -170,7 +176,10 @@ const MinionProposalForm = () => {
         minion: values.minionContract,
         chainID: daochain,
       })('proposeAction')({
-        args, address, poll, onTxHash,
+        args,
+        address,
+        poll,
+        onTxHash,
       });
     } catch (err) {
       setLoading(false);
@@ -178,15 +187,15 @@ const MinionProposalForm = () => {
     }
   };
 
-  const selectFunction = (e) => {
+  const selectFunction = e => {
     const { value } = e.target;
-    console.log(value, abiFunctions);
-    const funcPrams = abiFunctions.find((func) => +func.id === +value);
+
+    const funcPrams = abiFunctions.find(func => +func.id === +value);
     setAbiParams(funcPrams.inputs);
     setSelectedFunction(funcPrams.name);
   };
 
-  const getFunctions = (abiParam) => {
+  const getFunctions = abiParam => {
     let abi;
 
     if (typeof abiParam === 'object') {
@@ -209,13 +218,14 @@ const MinionProposalForm = () => {
     return localAbiFunctions;
   };
 
-  const handleBlur = async (e) => {
+  const handleBlur = async e => {
     const { value } = e.target;
     setAbiLoading(true);
     try {
-      const key = daochain === '0x64' ? '' : process.env.REACT_APP_ETHERSCAN_KEY;
-      const url = `${chainByID(daochain).abi_api_url}${value}${key
-        && `&apikey=${key}`}`;
+      const key =
+        daochain === '0x64' ? '' : process.env.REACT_APP_ETHERSCAN_KEY;
+      const url = `${chainByID(daochain).abi_api_url}${value}${key &&
+        `&apikey=${key}`}`;
       const response = await fetch(url);
       const json = await response.json();
 
@@ -243,7 +253,7 @@ const MinionProposalForm = () => {
     setSelectedFunction(null);
   };
 
-  return minions.length ? (
+  return minions?.length ? (
     <form onSubmit={handleSubmit(onSubmit)}>
       <FormControl
         isInvalid={errors.name}
@@ -271,9 +281,9 @@ const MinionProposalForm = () => {
             placeholder='Select Minion'
           >
             {' '}
-            {minions.map((minion, idx) => (
-              <option key={idx} value={minion}>
-                {minion}
+            {minions?.map(minion => (
+              <option key={minion.minionAdddress} value={minion.minionAdddress}>
+                {minion.minionName || minion.minionAddress}
               </option>
             ))}
           </Select>
@@ -291,7 +301,6 @@ const MinionProposalForm = () => {
                 message: 'Target contract is required',
               },
             })}
-            focusBorderColor='secondary.500'
             onBlur={handleBlur}
           />
           <TextBox as={FormLabel} size='xs' htmlFor='value'>
@@ -307,14 +316,11 @@ const MinionProposalForm = () => {
                 message: 'Value is required',
               },
             })}
-            color='white'
-            focusBorderColor='secondary.500'
           />
           <Stack spacing={4}>
             <Textarea
               name='description'
               placeholder='Short Description'
-              type='textarea'
               mb={5}
               h={10}
               ref={register({
@@ -337,7 +343,6 @@ const MinionProposalForm = () => {
               <Textarea
                 name='dataValue'
                 placeholder='Raw Hex Data'
-                type='textarea'
                 mb={5}
                 rows={13}
                 ref={register({
@@ -346,8 +351,6 @@ const MinionProposalForm = () => {
                     message: 'Data hex value is required',
                   },
                 })}
-                color='white'
-                focusBorderColor='secondary.500'
               />
             </>
           ) : (
@@ -364,8 +367,8 @@ const MinionProposalForm = () => {
                 ref={register}
                 onChange={selectFunction}
               >
-                {abiFunctions
-                  && abiFunctions.map((funct) => {
+                {abiFunctions &&
+                  abiFunctions.map(funct => {
                     return (
                       <option key={funct.id} value={funct.id}>
                         {funct.name}
@@ -387,8 +390,8 @@ const MinionProposalForm = () => {
                     ABI Params
                   </FormLabel>
                   <Stack spacing={3}>
-                    {abiParams
-                      && abiParams.map((param, idx) => {
+                    {abiParams &&
+                      abiParams.map((param, idx) => {
                         return (
                           <Stack key={idx} spacing={1}>
                             <TextBox size='xs'>{param.name}</TextBox>
@@ -396,8 +399,6 @@ const MinionProposalForm = () => {
                               name={`xparam${param.name}`}
                               ref={register}
                               placeholder={param.type}
-                              color='white'
-                              focusBorderColor='secondary.500'
                             />
                           </Stack>
                         );
@@ -436,19 +437,19 @@ const MinionProposalForm = () => {
             >
               Submit
             </Button>
-            ) : (
-              <Button
-                onClick={requestWallet}
-                isDisabled={injectedChain && daochain !== injectedChain?.chainId}
-              >
-                {`Connect 
+          ) : (
+            <Button
+              onClick={requestWallet}
+              isDisabled={injectedChain && daochain !== injectedChain?.chainId}
+            >
+              {`Connect 
               ${
                 injectedChain && daochain !== injectedChain?.chainId
                   ? `to ${chainByID(daochain).name}`
                   : 'Wallet'
               }`}
-              </Button>
-            )}
+            </Button>
+          )}
         </Box>
       </Flex>
     </form>

@@ -12,6 +12,8 @@ const DaoToDaoMemberInfo = ({
   openModal,
   handleNominateDelegateClick,
   isMember,
+  userNetworkMismatchOrNotMember,
+  refetchAllies,
 }) => {
   return (
     <>
@@ -50,24 +52,29 @@ const DaoToDaoMemberInfo = ({
               )}
             </Box>
           </Flex>
-          {delegate && needDelegateKeySet && isMember ? (
+          {delegate && needDelegateKeySet && isMember && (
             <>
               <SetInitialUberHausDelegate
                 minionAddress={membership.memberAddress}
                 delegateAddress={delegate}
                 uberHausAddress={membership.moloch.id}
+                refetchAllies={refetchAllies}
               />
               <Button w='35%' onClick={handleNominateDelegateClick}>
                 Nominate New Delegate
               </Button>
             </>
-          ) : null}
+          )}
 
-          {membership && delegate && !needDelegateKeySet && isMember ? (
-            <Button w='25%' onClick={openModal}>
-              Manage
-            </Button>
-          ) : null}
+          {membership &&
+            delegate &&
+            !needDelegateKeySet &&
+            isMember &&
+            !userNetworkMismatchOrNotMember && (
+              <Button w='25%' onClick={openModal}>
+                Manage
+              </Button>
+            )}
         </Flex>
       </Box>
     </>

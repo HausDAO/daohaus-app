@@ -1,4 +1,4 @@
-import React, { Fragment } from 'react';
+import React from 'react';
 import { Box } from '@chakra-ui/react';
 import { formatDistanceToNow } from 'date-fns';
 import { IsJsonString, timeToNow } from './general';
@@ -27,6 +27,7 @@ export const PROPOSAL_TYPES = {
   MINION_UBER_DEFAULT: 'UberHAUS Minion Proposal',
   MINION_DEFAULT: 'Minion Proposal',
   MINION_VANILLA: 'Vanilla Minion',
+  MINION_SUPERFLUID: 'Superfluid Proposal',
   TRANSMUTATION: 'Transmutation Proposal',
   FUNDING: 'Funding Proposal',
 };
@@ -34,59 +35,68 @@ export const PROPOSAL_TYPES = {
 export const MINION_TYPES = {
   VANILLA: 'vanilla minion',
   UBER: 'UberHaus minion',
+  SUPERFLUID: 'Superfluid minion',
 };
 
-export const inQueue = (proposal) => {
-  const now = (new Date() / 1000) || 0;
+export const inQueue = proposal => {
+  const now = new Date() / 1000 || 0;
   return now < +proposal.votingPeriodStarts;
 };
 
-export const inVotingPeriod = (proposal) => {
-  const now = (new Date() / 1000) || 0;
+export const inVotingPeriod = proposal => {
+  const now = new Date() / 1000 || 0;
   return (
     now >= +proposal.votingPeriodStarts && now <= +proposal.votingPeriodEnds
   );
 };
 
-export const inGracePeriod = (proposal) => {
-  const now = (new Date() / 1000) || 0;
+export const inGracePeriod = proposal => {
+  const now = new Date() / 1000 || 0;
   return now >= +proposal.votingPeriodEnds && now <= +proposal.gracePeriodEnds;
 };
 
-export const afterGracePeriod = (proposal) => {
-  const now = (new Date() / 1000) || 0;
+export const afterGracePeriod = proposal => {
+  const now = new Date() / 1000 || 0;
   return now > +proposal.gracePeriodEnds;
 };
 
 export function determineProposalStatus(proposal) {
   if (proposal.cancelled) {
     return ProposalStatus.Cancelled;
-  } if (!proposal.sponsored) {
+  }
+  if (!proposal.sponsored) {
     return ProposalStatus.Unsponsored;
-  } if (proposal.processed && proposal.didPass) {
+  }
+  if (proposal.processed && proposal.didPass) {
     return ProposalStatus.Passed;
-  } if (proposal.processed && !proposal.didPass) {
+  }
+  if (proposal.processed && !proposal.didPass) {
     return ProposalStatus.Failed;
-  } if (inVotingPeriod(proposal)) {
+  }
+  if (inVotingPeriod(proposal)) {
     return ProposalStatus.VotingPeriod;
-  } if (inQueue(proposal)) {
+  }
+  if (inQueue(proposal)) {
     return ProposalStatus.InQueue;
-  } if (inGracePeriod(proposal)) {
+  }
+  if (inGracePeriod(proposal)) {
     return ProposalStatus.GracePeriod;
-  } if (afterGracePeriod(proposal)) {
+  }
+  if (afterGracePeriod(proposal)) {
     return ProposalStatus.ReadyForProcessing;
   }
   return ProposalStatus.Unknown;
 }
 
-const tryGetDetails = (details) => {
+const tryGetDetails = details => {
   try {
     const parsedDetails = JSON.parse(details);
     if (!parsedDetails) {
       return '';
-    } if (
-      typeof parsedDetails === 'string'
-      || typeof parsedDetails === 'number'
+    }
+    if (
+      typeof parsedDetails === 'string' ||
+      typeof parsedDetails === 'number'
     ) {
       return parsedDetails;
     }
@@ -97,28 +107,33 @@ const tryGetDetails = (details) => {
 };
 
 const getMinionProposalType = (proposal, details) => {
-  const getUberTypeFromDetails = (details) => {
+  const getUberTypeFromDetails = details => {
     // TODO - temp for bad prop
     // if (
     //   details?.uberType === 'staking'
     // ) {
     if (
-      details?.uberType === 'staking'
-      || details?.uberType === PROPOSAL_TYPES.MINION_UBER_STAKE
+      details?.uberType === 'staking' ||
+      details?.uberType === PROPOSAL_TYPES.MINION_UBER_STAKE
     ) {
       return PROPOSAL_TYPES.MINION_UBER_STAKE;
-    } if (details?.uberType === 'delegate') {
+    }
+    if (details?.uberType === 'delegate') {
       return PROPOSAL_TYPES.MINION_UBER_DEL;
-    } if (details?.uberType === 'ragequit') {
+    }
+    if (details?.uberType === 'ragequit') {
       return PROPOSAL_TYPES.MINION_UBER_RQ;
     }
     console.warn('Uberhaus Minion type not detected');
     console.log(details);
     return PROPOSAL_TYPES.MINION_UBER_DEFAULT;
   };
-  const getUberTypeFromGraphData = (proposal) => {
+  const getUberTypeFromGraphData = proposal => {
     if (proposal?.minion?.minionType === MINION_TYPES.VANILLA) {
       return PROPOSAL_TYPES.MINION_VANILLA;
+    }
+    if (proposal?.minion?.minionType === MINION_TYPES.SUPERFLUID) {
+      return PROPOSAL_TYPES.MINION_SUPERFLUID;
     }
     console.error('Minion type not detected');
     return PROPOSAL_TYPES.MINION_DEFAULT;
@@ -130,32 +145,38 @@ const getMinionProposalType = (proposal, details) => {
   return getUberTypeFromGraphData(proposal);
 };
 
-export const determineProposalType = (proposal) => {
+export const determineProposalType = proposal => {
   // can return a wide array of data types and structures. Be very defensive when dealing with
   // anything returned from tryGetDetails.
   const parsedDetails = tryGetDetails(proposal.details);
 
   if (proposal.newMember) {
     return PROPOSAL_TYPES.MEMBER;
-  } if (proposal.whitelist) {
+  }
+  if (proposal.whitelist) {
     return PROPOSAL_TYPES.WHITELIST;
-  } if (proposal.guildkick) {
+  }
+  if (proposal.guildkick) {
     return PROPOSAL_TYPES.GUILDKICK;
-  } if (parsedDetails?.isTransmutation) {
+  }
+  if (parsedDetails?.isTransmutation) {
     return PROPOSAL_TYPES.TRANSMUTATION;
-  } if (proposal.trade) {
+  }
+  if (proposal.trade) {
     return PROPOSAL_TYPES.TRADE;
-  } if (proposal.isMinion) {
+  }
+  if (proposal.isMinion) {
     return getMinionProposalType(proposal, parsedDetails);
   }
   return PROPOSAL_TYPES.FUNDING;
 };
 
-export const titleMaker = (proposal) => {
+export const titleMaker = proposal => {
   const details = proposal.details.split('~');
   if (details[0] === 'id') {
     return details[3];
-  } if (details[0][0] === '{') {
+  }
+  if (details[0][0] === '{') {
     let parsedDetails;
 
     try {
@@ -164,23 +185,24 @@ export const titleMaker = (proposal) => {
         : '';
       return parsedDetails.title || 'Whoops! Could not parse JSON data';
     } catch {
-      console.log('Couldn\'t parse JSON from metadata');
+      console.log("Couldn't parse JSON from metadata");
       return 'Proposal';
     }
   } else {
     return proposal.details ? proposal.details : 'Proposal';
   }
 };
-export const hashMaker = (proposal) => {
+export const hashMaker = proposal => {
   try {
-    const parsed = IsJsonString(proposal.details) && JSON.parse(proposal.details);
+    const parsed =
+      IsJsonString(proposal.details) && JSON.parse(proposal.details);
     return parsed.hash || '';
   } catch (e) {
     return '';
   }
 };
 
-export const descriptionMaker = (proposal) => {
+export const descriptionMaker = proposal => {
   try {
     const parsed = IsJsonString(proposal.details)
       ? JSON.parse(proposal.details.replace(/(\r\n|\n|\r)/gm, ''))
@@ -191,21 +213,24 @@ export const descriptionMaker = (proposal) => {
   }
 };
 
-export const linkMaker = (proposal) => {
+export const linkMaker = proposal => {
   try {
-    const parsed = IsJsonString(proposal.details) && JSON.parse(proposal.details);
+    const parsed =
+      IsJsonString(proposal.details) && JSON.parse(proposal.details);
     return parsed.link || '';
   } catch (e) {
     return '';
   }
 };
 
-export const determineUnreadActivityFeed = (proposal) => {
+export const determineUnreadActivityFeed = proposal => {
   const abortedOrCancelled = proposal.aborted || proposal.cancelled;
-  const now = (new Date() / 1000) || 0;
-  const inVotingPeriod = now >= +proposal.votingPeriodStarts && now <= +proposal.votingPeriodEnds;
+  const now = new Date() / 1000 || 0;
+  const inVotingPeriod =
+    now >= +proposal.votingPeriodStarts && now <= +proposal.votingPeriodEnds;
   const needsMemberVote = inVotingPeriod && !proposal.votes.length;
-  const needsProcessing = now >= +proposal.gracePeriodEnds && !proposal.processed;
+  const needsProcessing =
+    now >= +proposal.gracePeriodEnds && !proposal.processed;
 
   let message;
   if (!proposal.sponsored) {
@@ -220,8 +245,8 @@ export const determineUnreadActivityFeed = (proposal) => {
 
   return {
     unread:
-      !abortedOrCancelled
-      && (needsMemberVote || needsProcessing || !proposal.sponsored),
+      !abortedOrCancelled &&
+      (needsMemberVote || needsProcessing || !proposal.sponsored),
     message,
   };
 };
@@ -232,23 +257,27 @@ export const determineUnreadProposalList = (
   memberAddress,
 ) => {
   const abortedOrCancelled = proposal.aborted || proposal.cancelled;
-  const now = (new Date() / 1000) || 0;
-  const inVotingPeriod = now >= +proposal.votingPeriodStarts && now <= +proposal.votingPeriodEnds;
+  const now = new Date() / 1000 || 0;
+  const inVotingPeriod =
+    now >= +proposal.votingPeriodStarts && now <= +proposal.votingPeriodEnds;
 
   let memberVoted = false;
   if (memberAddress) {
     memberVoted = proposal.votes.some(
-      (vote) => vote.memberAddress.toLowerCase() === memberAddress.toLowerCase(),
+      vote => vote.memberAddress.toLowerCase() === memberAddress.toLowerCase(),
     );
   }
-  const needsMemberVote = proposal.sponsored && activeMember && inVotingPeriod && !memberVoted;
+  const needsMemberVote =
+    proposal.sponsored && activeMember && inVotingPeriod && !memberVoted;
 
-  const needsProcessing = proposal.sponsored
-    && now >= +proposal.gracePeriodEnds
-    && !proposal.processed;
+  const needsProcessing =
+    proposal.sponsored &&
+    now >= +proposal.gracePeriodEnds &&
+    !proposal.processed;
 
-  const twoWeeksAgo = ((new Date() / 1000) || 0) - 1.21e6;
-  const unsponsoredAndNotExpired = !proposal.sponsored && +proposal.createdAt > twoWeeksAgo;
+  const twoWeeksAgo = (new Date() / 1000 || 0) - 1.21e6;
+  const unsponsoredAndNotExpired =
+    !proposal.sponsored && +proposal.createdAt > twoWeeksAgo;
 
   let message;
   if (!proposal.sponsored) {
@@ -263,8 +292,8 @@ export const determineUnreadProposalList = (
 
   return {
     unread:
-      !abortedOrCancelled
-      && (needsMemberVote || needsProcessing || unsponsoredAndNotExpired),
+      !abortedOrCancelled &&
+      (needsMemberVote || needsProcessing || unsponsoredAndNotExpired),
     message,
   };
 };
@@ -275,9 +304,7 @@ export function getProposalCountdownText(proposal, status) {
       return (
         <>
           <Box textTransform='uppercase' fontSize='0.8em' fontWeight={700}>
-            Voting Begins
-            {' '}
-            {timeToNow(proposal.votingPeriodStarts)}
+            Voting Begins {timeToNow(proposal.votingPeriodStarts)}
           </Box>
         </>
       );
@@ -285,9 +312,7 @@ export function getProposalCountdownText(proposal, status) {
       return (
         <>
           <Box textTransform='uppercase' fontSize='0.8em' fontWeight={700}>
-            Voting Ends
-            {' '}
-            {timeToNow(proposal.votingPeriodEnds)}
+            Voting Ends {timeToNow(proposal.votingPeriodEnds)}
           </Box>
         </>
       );
@@ -296,9 +321,7 @@ export function getProposalCountdownText(proposal, status) {
         <>
           <Box textTransform='uppercase' fontSize='0.8em' fontWeight={700}>
             <Box as='span' fontWeight={900}>
-              Grace Period Ends
-              {' '}
-              {timeToNow(proposal.gracePeriodEnds)}
+              Grace Period Ends {timeToNow(proposal.gracePeriodEnds)}
             </Box>
           </Box>
         </>
@@ -341,26 +364,26 @@ export function getProposalCountdownText(proposal, status) {
 export const getProposalCardDetailStatus = (proposal, status) => {
   switch (status) {
     case ProposalStatus.InQueue:
-      return (
-        `Voting Begins ${
-          formatDistanceToNow(new Date(+proposal?.votingPeriodStarts * 1000), {
-            addSuffix: true,
-          })}`
-      );
+      return `Voting Begins ${formatDistanceToNow(
+        new Date(+proposal?.votingPeriodStarts * 1000),
+        {
+          addSuffix: true,
+        },
+      )}`;
     case ProposalStatus.VotingPeriod:
-      return (
-        `Ends ${
-          formatDistanceToNow(new Date(+proposal?.votingPeriodEnds * 1000), {
-            addSuffix: true,
-          })}`
-      );
+      return `Ends ${formatDistanceToNow(
+        new Date(+proposal?.votingPeriodEnds * 1000),
+        {
+          addSuffix: true,
+        },
+      )}`;
     case ProposalStatus.GracePeriod:
-      return (
-        `Ends ${
-          formatDistanceToNow(new Date(+proposal?.gracePeriodEnds * 1000), {
-            addSuffix: true,
-          })}`
-      );
+      return `Ends ${formatDistanceToNow(
+        new Date(+proposal?.gracePeriodEnds * 1000),
+        {
+          addSuffix: true,
+        },
+      )}`;
     case ProposalStatus.Failed:
     case ProposalStatus.Passed:
     case ProposalStatus.ReadyForProcessing:
@@ -434,7 +457,7 @@ export const getProposalDetailStatus = (proposal, status) => {
         </>
       );
     default:
-      return <></>;
+      return '--';
   }
 };
 
@@ -442,38 +465,42 @@ export const getProposalDetailStatus = (proposal, status) => {
 export const memberVote = (proposal, userAddress) => {
   const vote = proposal
     ? proposal?.votes?.find(
-      (vote) => vote.memberAddress === userAddress?.toLowerCase(),
-    )
+        vote => vote.memberAddress === userAddress?.toLowerCase(),
+      )
     : null;
   return vote ? vote.uintVote : null;
 };
 
 export const handleListFilter = (proposals, filter, daoMember) => {
-  const updatedProposals = proposals.map((proposal) => ({
+  const updatedProposals = proposals.map(proposal => ({
     ...proposal,
     status: determineProposalStatus(proposal),
   }));
   if (filter.value === 'All') {
     return updatedProposals;
-  } if (filter.value === 'Action Needed' || filter.value === 'Active') {
+  }
+  if (filter.value === 'Action Needed' || filter.value === 'Active') {
     return updatedProposals.filter(
-      (proposal) => determineUnreadProposalList(proposal, true, daoMember?.memberAddress)
-        ?.unread,
+      proposal =>
+        determineUnreadProposalList(proposal, true, daoMember?.memberAddress)
+          ?.unread,
     );
   }
   return updatedProposals.filter(
-    (proposal) => proposal[filter.type] === filter.value,
+    proposal => proposal[filter.type] === filter.value,
   );
 };
 
 export const handleListSort = (proposals, sort) => {
   if (sort.value === 'submissionDateAsc') {
     return proposals.sort((a, b) => +a.createdAt - +b.createdAt);
-  } if (sort.value === 'voteCountDesc') {
+  }
+  if (sort.value === 'voteCountDesc') {
     return proposals
       .sort((a, b) => b.votes.length - a.votes.length)
-      .sort((a) => (a.status === sort.value ? -1 : 1));
-  } if (sort.value === 'submissionDateDesc') {
+      .sort(a => (a.status === sort.value ? -1 : 1));
+  }
+  if (sort.value === 'submissionDateDesc') {
     return proposals.sort((a, b) => +b.createdAt - +a.createdAt);
   }
   console.error('Received incorrect sort data type');
@@ -481,26 +508,28 @@ export const handleListSort = (proposals, sort) => {
 };
 
 export const searchProposals = (rawAddress, filterArr, proposals) => {
-  const activeFilters = filterArr.filter((f) => f.active);
+  const activeFilters = filterArr.filter(f => f.active);
   const address = rawAddress.toLowerCase();
-  return proposals.filter((proposal) => activeFilters.some(
-    (filter) => proposal[filter.value] === address && proposal,
-  ));
+  return proposals.filter(proposal =>
+    activeFilters.some(
+      filter => proposal[filter.value] === address && proposal,
+    ),
+  );
 };
 
-export const pendingUberHausStakingProposalChildDao = (prop) => {
+export const pendingUberHausStakingProposalChildDao = prop => {
   return (
-    prop.proposalType === PROPOSAL_TYPES.MINION_UBER_STAKE
-    && !prop.cancelled
-    && !prop.uberHausMinionExecuted
+    prop.proposalType === PROPOSAL_TYPES.MINION_UBER_STAKE &&
+    !prop.cancelled &&
+    !prop.uberHausMinionExecuted
   );
 };
 
 export const pendingUberHausStakingProposal = (prop, minionAddress) => {
   return (
-    prop.applicant === minionAddress
-    && prop.proposalType === 'Member Proposal'
-    && !prop.cancelled
-    && !prop.processed
+    prop.applicant === minionAddress &&
+    prop.proposalType === 'Member Proposal' &&
+    !prop.cancelled &&
+    !prop.processed
   );
 };

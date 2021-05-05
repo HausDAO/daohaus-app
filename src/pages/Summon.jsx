@@ -1,7 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import {
-  Button, Flex, Box, Text,
-} from '@chakra-ui/react';
+import { Button, Flex, Box, Text } from '@chakra-ui/react';
 
 import Layout from '../components/layout';
 import { useInjectedProvider } from '../contexts/InjectedProviderContext';
@@ -76,7 +74,7 @@ const Summon = () => {
     }
   };
 
-  const handleSummon = async (data) => {
+  const handleSummon = async data => {
     const now = (new Date().getTime() / 1000).toFixed();
     setIsSummoning(true);
 
@@ -103,7 +101,7 @@ const Summon = () => {
 
     const summonParams = [
       summonData.summoner,
-      summonData.approvedToken.split(',').map((item) => item.trim()),
+      summonData.approvedToken.split(',').map(item => item.trim()),
       data?.seconds || summonData.periodDuration,
       summonData.votingPeriod,
       summonData.gracePeriod,
@@ -129,7 +127,7 @@ const Summon = () => {
             resolvePoll(txHash);
             setSummonError(error);
           },
-          onSuccess: (txHash) => {
+          onSuccess: txHash => {
             successToast({
               title: 'A new DAO has Risen!',
             });
@@ -141,7 +139,7 @@ const Summon = () => {
         },
       });
 
-      const onTxHash = (txHash) => {
+      const onTxHash = txHash => {
         console.log('tx', txHash);
         setPendingTx(txHash);
       };
@@ -150,7 +148,10 @@ const Summon = () => {
         web3: injectedProvider,
         chainID: injectedChain.chain_id,
       })('summonMoloch')({
-        args: summonParams, from: address, poll, onTxHash,
+        args: summonParams,
+        from: address,
+        poll,
+        onTxHash,
       });
     } catch (err) {
       console.log('error in tx', err);

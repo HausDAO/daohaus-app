@@ -4,7 +4,10 @@ import { useParams } from 'react-router';
 import TextBox from './TextBox';
 import ContentBox from './ContentBox';
 import MinionTokenListCard from './minionTokenListCard';
-import { getBlockScoutTokenData, getEtherscanTokenData } from '../utils/tokenExplorerApi';
+import {
+  getBlockScoutTokenData,
+  getEtherscanTokenData,
+} from '../utils/tokenExplorerApi';
 
 const MinionTokenList = ({ minion, action }) => {
   const [tokens, setTokens] = useState();
@@ -47,12 +50,15 @@ const MinionTokenList = ({ minion, action }) => {
         </Box>
       </Flex>
       {tokens ? (
-        tokens
-          .map((token) => {
-            return (
-              <MinionTokenListCard key={token?.contractAddress} token={token} action={action} />
-            );
-          })
+        tokens.map(token => {
+          return (
+            <MinionTokenListCard
+              key={token?.contractAddress}
+              token={token}
+              action={action}
+            />
+          );
+        })
       ) : (
         <Text fontFamily='mono' mt='5'>
           No unclaimed balances

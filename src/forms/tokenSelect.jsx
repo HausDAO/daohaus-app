@@ -33,7 +33,7 @@ const TokenSelect = ({
         color='whiteAlpha.900'
         disabled={disabled}
       >
-        {temporaryTokenOptions.map((token) => (
+        {temporaryTokenOptions.map(token => (
           <option key={token.value} value={token.value}>
             {token.name}
           </option>

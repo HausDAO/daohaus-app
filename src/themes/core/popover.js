@@ -1,6 +1,6 @@
 const Popover = {
   parts: ['popper'],
-  baseStyle: (props) => ({
+  baseStyle: props => ({
     popper: {
       zIndex: 10,
       maxW: props.width ? props.width : 'xs',

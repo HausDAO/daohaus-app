@@ -1,10 +1,15 @@
+import { getGraphEndpoint } from './chain';
+import { graphQuery } from './apollo';
+import { GET_WRAP_N_ZAPS } from '../graphQL/boost-queries';
+
 const metadataApiUrl = 'https://data.daohaus.club';
 const apiMetadataUrl = 'https://daohaus-metadata.s3.amazonaws.com/daoMeta.json';
-const apiPricedataUrl = 'https://daohaus-metadata.s3.amazonaws.com/daoTokenPrices.json';
+const apiPricedataUrl =
+  'https://daohaus-metadata.s3.amazonaws.com/daoTokenPrices.json';
 const mintGateUrl = 'https://link.mintgate.app/api';
 const snapshotUrl = 'https://hub.snapshot.page/api';
 
-export const get = async (endpoint) => {
+export const get = async endpoint => {
   const url = `${metadataApiUrl}/${endpoint}`;
   try {
     const response = await fetch(url);
@@ -130,7 +135,7 @@ export const getApiGnosis = async (networkName, endpoint) => {
   }
 };
 
-export const getMintGates = async (tokenAddress) => {
+export const getMintGates = async tokenAddress => {
   const mintGatesUrl = `${mintGateUrl}/links?tid=${tokenAddress}`;
   try {
     const response = await fetch(mintGatesUrl);
@@ -140,7 +145,7 @@ export const getMintGates = async (tokenAddress) => {
   }
 };
 
-export const getSnapshotProposals = async (space) => {
+export const getSnapshotProposals = async space => {
   const snapshotProposalUrl = `${snapshotUrl}/${space}/proposals`;
   try {
     const response = await fetch(snapshotProposalUrl);
@@ -158,4 +163,28 @@ export const getSnapshotVotes = async (space, snapshotId) => {
   } catch (err) {
     throw new Error(err);
   }
+};
+
+export const getSnapshotSpaces = async () => {
+  const snapshotSpacesUrl = `${snapshotUrl}/spaces`;
+  try {
+    const response = await fetch(snapshotSpacesUrl);
+    return response.json();
+  } catch (err) {
+    throw new Error(err);
+  }
+};
+
+export const getWrapNZap = async (daochain, daoid) => {
+  const records = await graphQuery({
+    endpoint: getGraphEndpoint(daochain, 'boosts_graph_url'),
+    query: GET_WRAP_N_ZAPS,
+    variables: {
+      contractAddress: daoid,
+    },
+  });
+  if (records.wrapNZaps?.length > 0) {
+    return records.wrapNZaps[0].id;
+  }
+  return null;
 };

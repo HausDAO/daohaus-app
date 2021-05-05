@@ -1,7 +1,5 @@
 import React from 'react';
-import {
-  Link, Flex, Image, HStack, Box, Tooltip,
-} from '@chakra-ui/react';
+import { Link, Flex, Image, HStack, Box, Tooltip } from '@chakra-ui/react';
 import ContentBox from './ContentBox';
 import TextBox from './TextBox';
 

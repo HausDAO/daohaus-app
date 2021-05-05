@@ -46,7 +46,7 @@ export const DaoProvider = ({ children }) => {
     null,
   );
   const [uberMinionData, setUberMinionData] = useSessionStorage(
-    `parentDaoData-${daoid}`,
+    `uber-minions-${daoid}`,
     null,
   );
   const [isUberHaus, setIsUberHaus] = useState(false);
@@ -59,18 +59,22 @@ export const DaoProvider = ({ children }) => {
     // This condition is brittle. If one request passes, but the rest fail
     // this stops the app from fetching. We'll need something better later on.
     if (
-      daoProposals
-      || daoActivities
-      || daoOverview
-      || daoMembers
-      || uberMinionData
-    ) { return; }
+      daoProposals ||
+      daoActivities ||
+      daoOverview ||
+      daoMembers ||
+      uberMinionData
+    ) {
+      return;
+    }
     if (
-      !daoid
-      || !daochain
-      || !daoNetworkData
-      || hasPerformedBatchQuery.current
-    ) { return; }
+      !daoid ||
+      !daochain ||
+      !daoNetworkData ||
+      hasPerformedBatchQuery.current
+    ) {
+      return;
+    }
 
     const bigQueryOptions = {
       args: {
@@ -129,9 +133,9 @@ export const DaoProvider = ({ children }) => {
   useEffect(() => {
     if (apiData && daoMembers && uberMinionData) {
       if (currentDao.current === daoid) return;
-      const membersWithUberData = daoMembers.map((member) => {
+      const membersWithUberData = daoMembers.map(member => {
         const minionMember = uberMinionData.find(
-          (minion) => minion.minionAddress === member.memberAddress,
+          minion => minion.minionAddress === member.memberAddress,
         );
         if (minionMember) {
           return {

@@ -3,7 +3,9 @@ import { hashMaker, memberVote } from '../utils/proposalUtils';
 
 export const submitProposalTest = (data, shouldEqual, pollId) => {
   if (data.proposals) {
-    const recentProposalHashes = data.proposals.map((proposal) => hashMaker(proposal));
+    const recentProposalHashes = data.proposals.map(proposal =>
+      hashMaker(proposal),
+    );
     return recentProposalHashes.includes(shouldEqual);
   }
   clearInterval(pollId);
@@ -51,7 +53,7 @@ export const rageQuitTest = (data, shouldEqual, pollId) => {
 export const sponsorProposalTest = (data, shouldEqual, pollId) => {
   if (data.proposals) {
     const proposal = data.proposals.find(
-      (proposal) => proposal.proposalId === shouldEqual,
+      proposal => proposal.proposalId === shouldEqual,
     );
     return proposal?.sponsored;
   }
@@ -65,7 +67,7 @@ export const submitVoteTest = (data, shouldEqual, pollId) => {
   const [proposalId, userAddress] = shouldEqual;
   if (data.proposals) {
     const proposal = data.proposals.find(
-      (proposal) => proposal.proposalId === proposalId,
+      proposal => proposal.proposalId === proposalId,
     );
     return memberVote(proposal, userAddress) !== null;
   }
@@ -78,7 +80,7 @@ export const submitVoteTest = (data, shouldEqual, pollId) => {
 export const processProposalTest = (data, shouldEqual, pollId) => {
   if (data.proposals) {
     const proposal = data.proposals.find(
-      (proposal) => proposal.proposalIndex === shouldEqual,
+      proposal => proposal.proposalIndex === shouldEqual,
     );
     return proposal?.processed;
   }
@@ -91,7 +93,7 @@ export const processProposalTest = (data, shouldEqual, pollId) => {
 export const cancelProposalTest = (data, shouldEqual, pollId) => {
   if (data.proposals) {
     const proposal = data.proposals.find(
-      (proposal) => proposal.proposalId === shouldEqual,
+      proposal => proposal.proposalId === shouldEqual,
     );
     return proposal?.cancelled;
   }
@@ -174,6 +176,10 @@ export const checkDelRewardsTest = (data, shouldEqual, pollId) => {
   );
 };
 
-export const rageKickTest = (data) => {
+export const rageKickTest = data => {
   return data.members[0].loot === '0';
+};
+
+export const wrapNZapSummonTest = data => {
+  return data?.wrapNZaps?.length > 0;
 };

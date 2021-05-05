@@ -13,6 +13,7 @@ const SetInitialUberHausDelegate = ({
   uberHausAddress,
   delegateAddress,
   minionAddress,
+  refetchAllies,
 }) => {
   const [loading, setLoading] = useState(false);
   const { daochain } = useParams();
@@ -44,11 +45,12 @@ const SetInitialUberHausDelegate = ({
             console.error(`poll error: ${error}`);
             setLoading(false);
           },
-          onSuccess: (txHash) => {
+          onSuccess: txHash => {
             successToast({
               title: 'Delegate set submitted.',
             });
             refreshDao();
+            refetchAllies();
             resolvePoll(txHash);
             setLoading(false);
           },

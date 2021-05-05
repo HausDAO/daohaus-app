@@ -69,7 +69,7 @@ const WhitelistProposalForm = () => {
 
   console.log(address);
 
-  const onSubmit = async (values) => {
+  const onSubmit = async values => {
     const now = (new Date().getTime() / 1000).toFixed();
     const hash = createHash();
     const details = detailsToJSON({ ...values, hash });
@@ -89,7 +89,7 @@ const WhitelistProposalForm = () => {
               resolvePoll(txHash);
               console.error(`Could not find a matching proposal: ${error}`);
             },
-            onSuccess: (txHash) => {
+            onSuccess: txHash => {
               successToast({
                 title: 'Whitelist Proposal Submitted to the Dao!',
               });
@@ -119,7 +119,10 @@ const WhitelistProposalForm = () => {
         chainID: daochain,
         version: daoOverview.version,
       })('submitWhitelistProposal')({
-        args, address, poll, onTxHash,
+        args,
+        address,
+        poll,
+        onTxHash,
       });
     } catch (err) {
       setLoading(false);
@@ -147,14 +150,7 @@ const WhitelistProposalForm = () => {
           <TextBox as={FormLabel} size='xs' htmlFor='tokenAddress' mb={2}>
             Token Address
           </TextBox>
-          <Input
-            name='tokenAddress'
-            placeholder='0x'
-            mb={3}
-            ref={register}
-            color='white'
-            focusBorderColor='secondary.500'
-          />
+          <Input name='tokenAddress' placeholder='0x' mb={3} ref={register} />
         </Box>
       </FormControl>
       <Flex justify='flex-end' align='center' h='60px'>
@@ -178,19 +174,19 @@ const WhitelistProposalForm = () => {
             >
               Submit
             </Button>
-            ) : (
-              <Button
-                onClick={requestWallet}
-                isDisabled={injectedChain && daochain !== injectedChain?.chainId}
-              >
-                {`Connect
+          ) : (
+            <Button
+              onClick={requestWallet}
+              isDisabled={injectedChain && daochain !== injectedChain?.chainId}
+            >
+              {`Connect
               ${
                 injectedChain && daochain !== injectedChain?.chainId
                   ? `to ${chainByID(daochain).name}`
                   : 'Wallet'
               }`}
-              </Button>
-            )}
+            </Button>
+          )}
         </Box>
       </Flex>
     </form>
