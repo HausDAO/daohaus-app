@@ -13,7 +13,7 @@ import {
 } from '@chakra-ui/react';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
 import { RiArrowLeftLine } from 'react-icons/ri';
-
+import { BigNumber } from 'ethers';
 import { FaCopy } from 'react-icons/fa';
 import makeBlockie from 'ethereum-blockies-base64';
 import ContentBox from '../components/ContentBox';
@@ -192,7 +192,10 @@ const MinionDetails = ({ overview, currentDaoTokens }) => {
       chainID: daochain,
     });
 
-    const amountWithDecimal = +values.amount * 10 ** +token.decimals;
+    const amountWithDecimal = BigNumber.from(values.amount).mul(
+      BigNumber.from(10).pow(+token.decimals),
+    );
+    console.log(amountWithDecimal.toString());
 
     const hexData = tokenService('transferNoop')({
       to: values.destination,
