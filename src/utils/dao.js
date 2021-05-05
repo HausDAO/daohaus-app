@@ -67,7 +67,6 @@ export const getActiveMembers = members =>
   members.filter(member => +member.shares > 0 || +member.loot > 0);
 
 export const hasMinion = (minions, minionType) => {
-  console.log(minions);
   if (Object.values(MINION_TYPES).includes(minionType)) {
     const filteredMinions = minions?.filter(
       minion => minion.minionType === minionType,
