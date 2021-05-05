@@ -42,6 +42,14 @@ export const FIELD = {
     htmlFor: 'link',
     placeholder: 'daolink.club',
   },
+  APPLICANT: {
+    type: 'applicantInput',
+    htmlFor: 'applicant',
+    name: 'applicant',
+    placeholder: '0x',
+    label: 'Applicant',
+    info: INFO_TEXT.APPLICANT,
+  },
 };
 
 export const PROPOSAL_FORMS = {
@@ -56,20 +64,9 @@ export const PROPOSAL_FORMS = {
       FIELD.TITLE,
       FIELD.SHARES_REQUEST,
       FIELD.DESCRIPTION,
-      {
-        type: 'inputSelect',
-        selectLabel: 'Tests',
-        label: 'Sample Input Select',
-        name: 'generic-input-select',
-        htmlFor: 'generic-input-select',
-        options: [
-          { name: 'Test 1', value: 'test 1' },
-          { name: 'Test 2', value: 'test 2' },
-          { name: 'Test 3', value: 'test 3' },
-        ],
-      },
+      FIELD.APPLICANT,
       FIELD.LINK,
     ],
-    additionalOptions: [FIELD.TITLE, FIELD.SHARES_REQUEST],
+    additionalOptions: [FIELD.APPLICANT, FIELD.SHARES_REQUEST],
   },
 };

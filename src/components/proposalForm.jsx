@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   Button,
   Box,
@@ -17,6 +17,7 @@ import {
   MenuList,
   MenuItem,
   FormHelperText,
+  Spinner,
 } from '@chakra-ui/react';
 import { useForm } from 'react-hook-form';
 
@@ -27,6 +28,11 @@ import {
 } from 'react-icons/ri';
 import TextBox from './TextBox';
 import { ToolTipWrapper } from '../staticElements/wrappers';
+import { useDao } from '../contexts/DaoContext';
+import { handleGetProfile } from '../utils/3box';
+import { isEthAddress, truncateAddr } from '../utils/general';
+import { getActiveMembers } from '../utils/dao';
+import { lookupENS } from '../utils/ens';
 
 const ProposalForm = ({ fields, tx, onTx, additionalOptions = null }) => {
   const [loading, setLoading] = useState(false);
@@ -85,11 +91,115 @@ const InputFactory = props => {
   if (type === 'linkInput') {
     return <LinkInput {...props} />;
   }
+  if (type === 'applicantInput') {
+    return <AddressInput {...props} />;
+  }
   if (type === 'inputSelect') {
     return <InputSelect {...props} />;
   }
   return null;
 };
+
+//  COMBOS
+const FieldWrapper = ({ children, label, info, htmlFor, helperText, btn }) => {
+  return (
+    <Flex w={['100%', null, '48%']} mb={3} flexDir='column'>
+      <Flex>
+        <TextBox as={FormLabel} size='xs' htmlFor={htmlFor}>
+          {label}
+          {info && (
+            <ToolTipWrapper
+              tooltip
+              tooltipText={{ body: info }}
+              placement='right'
+              layoutProps={{ transform: 'translateY(-2px)' }}
+            >
+              <Icon as={RiInformationLine} ml={2} />
+            </ToolTipWrapper>
+          )}
+        </TextBox>
+        {btn && <Flex ml='auto'>{btn}</Flex>}
+      </Flex>
+
+      {children}
+      {helperText && <FormHelperText>{helperText}</FormHelperText>}
+    </Flex>
+  );
+};
+
+const FormFooter = ({ options, loading, addOption, errors }) => {
+  if (options?.length) {
+    return (
+      <Box>
+        <Flex alignItems='flex-end' flexDir='column'>
+          <Flex mb={2}>
+            <AdditionalOptions
+              mr='auto'
+              options={options}
+              addOption={addOption}
+            />
+            <Button
+              type='submit'
+              loadingText='Submitting'
+              isLoading={loading}
+              disabled={loading}
+              borderBottomLeftRadius='0'
+              borderTopLeftRadius='0'
+            >
+              Submit
+            </Button>
+          </Flex>
+          <SubmitErrList errors={errors} />
+        </Flex>
+      </Box>
+    );
+  }
+  return (
+    <Flex justifyContent='flex-end'>
+      <Button
+        type='submit'
+        loadingText='Submitting'
+        isLoading={loading}
+        disabled={loading}
+      >
+        Submit
+      </Button>
+    </Flex>
+  );
+};
+
+const SubmitErrList = ({ errors = [] }) => {
+  //  determine which errors are submit errors
+  return (
+    <Flex flexDirection='column' alignItems='flex-start'>
+      {errors.map((error, index) => (
+        <SubmitFormError message={error.msg} key={`${error.msg}-${index}`} />
+      ))}
+    </Flex>
+  );
+};
+
+//  PRIMITIVES
+
+const SubmitFormError = ({ message }) => (
+  <Flex color='secondary.300' fontSize='m' alignItems='flex-start'>
+    <Icon
+      as={RiErrorWarningLine}
+      color='secondary.300'
+      mr={1}
+      transform='translateY(2px)'
+    />
+    {message}
+  </Flex>
+);
+
+const ModButton = ({ label, callback, selected = true }) => (
+  <Button onClick={callback} variant='outline' size='xs'>
+    {label}
+  </Button>
+);
+
+//  GENERICS
 
 const GenericInput = ({
   label,
@@ -104,6 +214,7 @@ const GenericInput = ({
   append,
   info,
   prepend,
+  onChange = null,
 }) => {
   const { register } = localForm;
 
@@ -122,8 +233,8 @@ const GenericInput = ({
         <Input
           id={htmlFor}
           name={name}
+          onChange={onChange}
           placeholder={placeholder || label || htmlFor}
-          mb={2}
           ref={register({
             required: {
               value: true,
@@ -183,51 +294,54 @@ const GenericTextarea = ({
       helperText={helperText}
       btn={btn}
     >
-      <Box>
-        <Textarea
-          id={htmlFor}
-          name={name}
-          placeholder={placeholder || label || htmlFor}
-          h={h}
-          ref={register({
-            required: {
-              value: true,
-              message: 'Required',
-            },
-          })}
-        />
-      </Box>
+      <Textarea
+        id={htmlFor}
+        name={name}
+        placeholder={placeholder || label || htmlFor}
+        h={h}
+        ref={register({
+          required: {
+            value: true,
+            message: 'Required',
+          },
+        })}
+      />
     </FieldWrapper>
   );
 };
 
-const LinkInput = props => {
-  return <GenericInput {...props} prepend='https://' />;
-};
-
-const FieldWrapper = ({ children, label, info, htmlFor, helperText, btn }) => {
+const GenericSelect = ({
+  label,
+  htmlFor,
+  placeholder,
+  name,
+  valOnType = [],
+  valOnSubmit = [],
+  localForm,
+  helperText,
+  btn,
+  append,
+  info,
+  prepend,
+  options = [],
+}) => {
+  const { register } = localForm;
   return (
-    <Flex w={['100%', null, '48%']} mb={3} flexDir='column'>
-      <Flex>
-        <TextBox as={FormLabel} size='xs' htmlFor={htmlFor}>
-          {label}
-          {info && (
-            <ToolTipWrapper
-              tooltip
-              tooltipText={{ body: info }}
-              placement='right'
-              layoutProps={{ transform: 'translateY(-2px)' }}
-            >
-              <Icon as={RiInformationLine} ml={2} />
-            </ToolTipWrapper>
-          )}
-        </TextBox>
-        {btn && <Flex ml='auto'>{btn}</Flex>}
-      </Flex>
-
-      {children}
-      {helperText && <FormHelperText mt={-1}>{helperText}</FormHelperText>}
-    </Flex>
+    <FieldWrapper
+      label={label}
+      htmlFor={htmlFor}
+      info={info}
+      helperText={helperText}
+      btn={btn}
+    >
+      <Select placeholder={placeholder} ref={register} id={htmlFor} name={name}>
+        {options?.map(option => (
+          <option value={option.value} key={option.value}>
+            {option.name}
+          </option>
+        ))}
+      </Select>
+    </FieldWrapper>
   );
 };
 
@@ -246,7 +360,7 @@ const AdditionalOptions = ({ options = [], addOption }) => {
           Additional Options
         </MenuButton>
         <MenuList>
-          {options.map(option => {
+          {options?.map(option => {
             return (
               <MenuItem
                 key={option.htmlFor}
@@ -263,72 +377,88 @@ const AdditionalOptions = ({ options = [], addOption }) => {
   );
 };
 
-const FormFooter = ({ options, loading, addOption, errors }) => {
-  if (options?.length) {
-    return (
-      <Box>
-        <Flex alignItems='flex-end' flexDir='column'>
-          <Flex mb={2}>
-            <AdditionalOptions
-              mr='auto'
-              options={options}
-              addOption={addOption}
-            />
-            <Button
-              type='submit'
-              loadingText='Submitting'
-              isLoading={loading}
-              disabled={loading}
-              borderBottomLeftRadius='0'
-              borderTopLeftRadius='0'
-            >
-              Submit
-            </Button>
-          </Flex>
-          <SubmitErrList errors={errors} />
-        </Flex>
-      </Box>
-    );
-  }
-  return (
-    <Flex justifyContent='flex-end'>
-      <Button
-        type='submit'
-        loadingText='Submitting'
-        isLoading={loading}
-        disabled={loading}
-      >
-        Submit
-      </Button>
-    </Flex>
-  );
+//  Specialized Fields
+const LinkInput = props => {
+  return <GenericInput {...props} prepend='https://' />;
 };
 
-const SubmitErrList = ({ errors = [] }) => {
-  //  determine which errors are submit errors
+const AddressInput = props => {
+  const { name, localForm } = props;
+  const [textMode, setTextMode] = useState(true);
+  const [userAddresses, setAddresses] = useState([]);
+  const [helperText, setHelperText] = useState('Use ETH address or ENS');
+  const { daoMembers } = useDao();
+
+  const { setValue } = localForm;
+
+  useEffect(async () => {
+    let shouldSet = true;
+    if (daoMembers) {
+      const memberProfiles = Promise.all(
+        getActiveMembers(daoMembers)?.map(async member => {
+          const profile = await handleGetProfile(member.memberAddress);
+          if (profile?.status !== 'error') {
+            return { name: profile.name, value: member.memberAddress };
+          }
+          return {
+            name: truncateAddr(member.memberAddress),
+            value: member.memberAddress,
+          };
+        }),
+      );
+      if (shouldSet) {
+        setAddresses(await memberProfiles);
+      }
+    }
+    return () => {
+      shouldSet = false;
+    };
+  }, [daoMembers]);
+
+  const switchElement = () => {
+    setTextMode(prevState => !prevState);
+  };
+
+  const handleLookupENS = async ens => {
+    setHelperText(<Spinner />);
+    const result = await lookupENS(ens);
+    if (result) {
+      setHelperText(ens);
+      setValue(name, result);
+    } else {
+      setHelperText('No ENS Set');
+    }
+  };
+
+  const checkApplicant = e => {
+    if (e?.target?.value == null) return;
+    const input = e.target.value;
+    if (isEthAddress(input)) {
+      setHelperText('Valid Address');
+    } else if (input.endsWith('.eth')) {
+      handleLookupENS(input);
+    } else {
+      setHelperText('Use ETH address or ENS');
+    }
+  };
+
   return (
-    <Flex flexDirection='column' alignItems='flex-start'>
-      {errors.map((error, index) => (
-        <SubmitFormError message={error.msg} key={`${error.msg}-${index}`} />
-      ))}
-    </Flex>
+    <>
+      {textMode ? (
+        <GenericInput
+          {...props}
+          btn={<ModButton label='Select' callback={switchElement} />}
+          onChange={checkApplicant}
+          helperText={helperText}
+        />
+      ) : (
+        <GenericSelect
+          {...props}
+          placeholder='Select an Address'
+          options={userAddresses}
+          btn={<ModButton label='Input' callback={switchElement} />}
+        />
+      )}
+    </>
   );
 };
-
-const SubmitFormError = ({ message }) => (
-  <Flex color='secondary.300' fontSize='m' alignItems='flex-start'>
-    <Icon
-      as={RiErrorWarningLine}
-      color='secondary.300'
-      mr={1}
-      transform='translateY(2px)'
-    />
-    {message}
-  </Flex>
-);
-
-const ModButton = ({ label, callback, selected = true }) => (
-  <Button onClick={callback} variant='outline' size='xs'>
-    {label}
-  </Button>
-);
