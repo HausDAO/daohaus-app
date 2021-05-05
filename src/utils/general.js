@@ -91,7 +91,7 @@ export const numberWithCommas = (num) => {
   // drop zero after decimal
   const noZeroDec = parseInt(localNum.split('.')[1]) === 0
     ? localNum.split('.')[0]
-    : parseInt(localNum);
+    : parseFloat(localNum);
 
   return noZeroDec ? utils.commify(noZeroDec) : num;
 };

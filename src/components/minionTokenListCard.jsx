@@ -12,6 +12,7 @@ import TextBox from './TextBox';
 import GenericModal from '../modals/genericModal';
 
 const MinionTokenListCard = ({ token, action }) => {
+  console.log('token', token);
   const toast = useToast();
   const { setGenericModal } = useOverlay();
   const {
@@ -111,7 +112,7 @@ const MinionTokenListCard = ({ token, action }) => {
           <Box fontFamily='mono'>
 
             <Box>
-              <Button onClick={handleSend}>SEND</Button>
+              <Button size='xs' onClick={handleSend}>SEND</Button>
             </Box>
 
           </Box>

@@ -42,7 +42,7 @@ const MinionNativeToken = ({ action }) => {
         balance:
         {' '}
         {nativeBalance}
-        <Button onClick={openSendModal}>Send</Button>
+        <Button size='xs' ml={6} onClick={openSendModal}>Send</Button>
       </TextBox>
       <GenericModal closeOnOverlayClick modalId='nativeTokenSend'>
         <form onSubmit={handleSubmit(action)}>
