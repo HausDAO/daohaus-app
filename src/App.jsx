@@ -36,10 +36,7 @@ function App() {
         <Route exact path='/'>
           <Hub />
         </Route>
-        <Route
-          exact
-          path='/explore'
-        >
+        <Route exact path='/explore'>
           <ExploreContextProvider>
             <Explore />
           </ExploreContextProvider>

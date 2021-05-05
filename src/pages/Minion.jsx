@@ -18,18 +18,12 @@ import { FaCopy } from 'react-icons/fa';
 import makeBlockie from 'ethereum-blockies-base64';
 import ContentBox from '../components/ContentBox';
 import TextBox from '../components/TextBox';
-import { truncateAddr } from '../utils/general';
+import { detailsToJSON, truncateAddr } from '../utils/general';
 
 import MainViewLayout from '../components/mainViewLayout';
-// import { initTokenData } from '../utils/tokenValue';
 
 import MinionTokenList from '../components/minionTokenList';
 
-import {
-  fetchNativeBalance,
-  getBlockScoutTokenData,
-  getEtherscanTokenData,
-} from '../utils/tokenExplorerApi';
 import { supportedChains } from '../utils/chain';
 import { balanceChainQuery } from '../utils/theGraph';
 import HubBalanceList from '../components/hubBalanceList';
@@ -39,25 +33,25 @@ import { MinionService } from '../services/minionService';
 import { useInjectedProvider } from '../contexts/InjectedProviderContext';
 import { useUser } from '../contexts/UserContext';
 import { useTX } from '../contexts/TXContext';
+import { TokenService } from '../services/tokenService';
+import MinionNativeToken from '../components/minionNativeToken';
 
 const MinionDetails = ({ overview, currentDaoTokens }) => {
-  // const [web3Connect] = useWeb3Connect();
-  // const { modals, openModal } = useModals();
   const { daochain, daoid, minion } = useParams();
   const toast = useToast();
   const [minionData, setMinionData] = useState();
   const [daoBalances, setDaoBalances] = useState();
-  const [contractBalances, setContractBalances] = useState();
-  const [nativeBalance, setNativeBalance] = useState();
   const [balancesGraphData, setBalanceGraphData] = useState({
     chains: [],
     data: [],
   });
+  const [loading, setLoading] = useState();
   const {
     errorToast,
     successToast,
     setProposalModal,
     setTxInfoModal,
+    setGenericModal,
   } = useOverlay();
   const { cachePoll, resolvePoll } = useUser();
   const now = (new Date().getTime() / 1000).toFixed();
@@ -76,27 +70,6 @@ const MinionDetails = ({ overview, currentDaoTokens }) => {
     });
     setMinionData(localMinionData);
   }, [overview, minion]);
-
-  useEffect(() => {
-    const getContractBalance = async () => {
-      console.log('minion', minion);
-
-      try {
-        if (daochain === '0x1' || daochain === '0x4' || daochain === '0x2a') {
-          // eth chains not supported yet
-          // may need to do something different for matic too
-          setContractBalances(await getEtherscanTokenData(minion, daochain));
-        } else {
-          setContractBalances(await getBlockScoutTokenData(minion));
-          const native = await fetchNativeBalance(minion);
-          setNativeBalance(native.result / 10 ** 18);
-        }
-      } catch (err) {
-        console.error(err);
-      }
-    };
-    getContractBalance();
-  }, [minion]);
 
   useEffect(() => {
     console.log('get minion balance', minion);
@@ -134,20 +107,20 @@ const MinionDetails = ({ overview, currentDaoTokens }) => {
     });
   };
 
-  const withdraw = async (token, transfer) => {
+  const copiedToast = () => {
+    toast({
+      title: 'Copied Minion Address',
+      position: 'top-right',
+      status: 'success',
+      duration: 3000,
+      isClosable: true,
+    });
+  };
+
+  const submitMinion = async args => {
     try {
-      const args = [
-        token.moloch.id,
-        token.token.tokenAddress,
-        token.tokenBalance,
-        transfer,
-      ];
-      const poll = createPoll({ action: 'minionCrossWithdraw', cachePoll })({
-        tokenAddress: token.token.tokenAddress,
-        memberAddress: minion,
-        daoID: token.moloch.id,
-        expectedBalance: 0,
-        minionAddress: minion,
+      const poll = createPoll({ action: 'minionProposeAction', cachePoll })({
+        minionAddress: minionData.minionAddress,
         createdAt: now,
         chainID: daochain,
         actions: {
@@ -163,13 +136,13 @@ const MinionDetails = ({ overview, currentDaoTokens }) => {
               title: 'Minion proposal submitted.',
             });
             refreshDao();
-            refreshGraphBalances();
             resolvePoll(txHash);
             refreshGraphBalances();
           },
         },
       });
       const onTxHash = () => {
+        setGenericModal(false);
         setProposalModal(false);
         setTxInfoModal(true);
       };
@@ -177,26 +150,63 @@ const MinionDetails = ({ overview, currentDaoTokens }) => {
         web3: injectedProvider,
         minion,
         chainID: daochain,
-      })('crossWithdraw')({
+      })('proposeAction')({
         args,
         address,
         poll,
         onTxHash,
       });
     } catch (err) {
-      // setLoading(false);
+      setLoading(false);
       console.log('error: ', err);
     }
   };
 
-  const copiedToast = () => {
-    toast({
-      title: 'Copied Minion Address',
-      position: 'top-right',
-      status: 'success',
-      duration: 3000,
-      isClosable: true,
+  const withdraw = async (token, transfer) => {
+    setLoading(true);
+    const args = [
+      token.moloch.id,
+      token.token.tokenAddress,
+      token.tokenBalance,
+      transfer,
+    ];
+    submitMinion(args);
+  };
+
+  const sendNativeToken = async values => {
+    const details = detailsToJSON({
+      title: `${minionData.details} sends native token`,
+      description: `Send ${values.amount} `,
+      // link: (link to block explorer)
+      type: 'nativeTokenSend',
     });
+    const amountInWei = injectedProvider.utils.toWei(values.amount);
+    const args = [values.destination, amountInWei, '0x0', details];
+    submitMinion(args);
+  };
+
+  const sendToken = async (values, token) => {
+    setLoading(true);
+    const tokenService = TokenService({
+      tokenAddress: token.contractAddress,
+      chainID: daochain,
+    });
+
+    const amountWithDecimal = +values.amount * 10 ** +token.decimals;
+
+    const hexData = tokenService('transferNoop')({
+      to: values.destination,
+      amount: amountWithDecimal.toString(),
+    });
+
+    const details = detailsToJSON({
+      title: `${minionData.details} sends a token`,
+      description: `Send ${values.amount} ${token.symbol}`,
+      // link: (link to block explorer)
+      type: 'tokenSend',
+    });
+    const args = [token.contractAddress, '0', hexData, details];
+    submitMinion(args);
   };
 
   return (
@@ -254,11 +264,12 @@ const MinionDetails = ({ overview, currentDaoTokens }) => {
               </Flex>
               <Box>
                 <TextBox size='md' align='center'>
-                  Unclaimed balances in DAOs (for withdraw)
+                  Unclaimed balances in DAOs (for withdraw){' '}
                 </TextBox>
                 <HubBalanceList
                   tokens={daoBalances}
                   withdraw={withdraw}
+                  loading={loading}
                   currentDaoTokens={currentDaoTokens}
                 />
               </Box>
@@ -268,15 +279,12 @@ const MinionDetails = ({ overview, currentDaoTokens }) => {
                     <TextBox size='md' align='center'>
                       Minion wallet
                     </TextBox>
-                    <TextBox size='md' align='center'>
-                      balance: {nativeBalance}
-                    </TextBox>
+                    <MinionNativeToken action={sendNativeToken} />
                     {daochain !== '0x64' && (
                       <Flex>View token data on etherscan</Flex>
                     )}
-                    {contractBalances && (
-                      <MinionTokenList tokens={contractBalances} />
-                    )}
+
+                    <MinionTokenList minion={minion} action={sendToken} />
                   </Box>
                 </Stack>
               </Box>

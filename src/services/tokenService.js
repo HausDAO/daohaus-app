@@ -78,5 +78,13 @@ export const TokenService = ({
           });
       };
     }
+    if (service === 'transferNoop') {
+      return ({ to, amount }) => {
+        console.log('args', to, amount);
+
+        const tx = contract.methods.transfer(to, amount);
+        return tx.encodeABI();
+      };
+    }
   };
 };
