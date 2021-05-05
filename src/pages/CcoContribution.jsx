@@ -52,6 +52,8 @@ const CcoContribution = ({ daoMetaData, currentDaoTokens, daoProposals }) => {
       const date = await getDateTime();
       const now = Number(date.seconds);
       const configData = daoMetaData.boosts[ccoType].metadata;
+      const duration =
+        Number(configData.raiseEndTime) - Number(configData.raiseStartTime);
 
       setRoundData({
         ccoType,
@@ -59,15 +61,12 @@ const CcoContribution = ({ daoMetaData, currentDaoTokens, daoProposals }) => {
         ccoToken,
         active: daoMetaData.boosts[ccoType].active,
         ...configData,
-        endTime: `${Number(configData.raiseStartTime) +
-          Number(configData.duration)}`,
         beforeRaise:
           Number(daoMetaData.boosts[ccoType].metadata.raiseStartTime) > now,
         raiseOpen:
           Number(configData.raiseStartTime) < now &&
-          Number(`${+configData.raiseStartTime + +configData.duration}`) > now,
-        raiseOver:
-          `${Number(configData.startTime) + Number(configData.duration)}` < now,
+          Number(`${+configData.raiseStartTime + duration}`) > now,
+        raiseOver: `${Number(configData.startTime) + duration}` < now,
         claimPeriodStartTime: configData.claimPeriodStartTime,
         claimOpen: Number(configData.claimPeriodStartTime) < now,
       });
@@ -75,7 +74,7 @@ const CcoContribution = ({ daoMetaData, currentDaoTokens, daoProposals }) => {
 
     const someTokens = currentDaoTokens && currentDaoTokens[0];
     const ccoType = daoMetaData?.daosquarecco ? 'daosquarecco' : 'cco';
-    if (someTokens && daoMetaData && daoMetaData.boosts[ccoType]) {
+    if (someTokens && daoMetaData?.boosts && daoMetaData.boosts[ccoType]) {
       setup(ccoType);
     }
   }, [currentDaoTokens, daoMetaData]);

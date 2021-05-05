@@ -14,9 +14,9 @@ const CcoClaimCard = ({ roundData, setClaimComplete, claimComplete }) => {
   const { address } = useInjectedProvider();
   const { daoMember } = useDaoMember();
 
-  const claimAmount = (
-    Number(daoMember?.loot) / roundData?.claimTokenValue || 0
-  ).toFixed(2);
+  const claimAmount = (Number(daoMember?.loot) / roundData?.ratio || 0).toFixed(
+    2,
+  );
   const hasBalance =
     daoMember &&
     roundData &&

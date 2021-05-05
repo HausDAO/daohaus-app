@@ -69,7 +69,6 @@ const CcoHelper = React.memo(
           ccoToken,
           currentRound,
           network: daoMetaData.boosts.cco.metadata.network,
-          claimTokenValue: daoMetaData.boosts.cco.metadata.claimTokenValue,
           claimTokenSymbol: daoMetaData.boosts.cco.metadata.claimTokenSymbol,
           raiseStartTime: daoMetaData.boosts.cco.metadata.raiseStartTime,
           beforeRaise: +daoMetaData.boosts.cco.metadata.raiseStartTime > now,

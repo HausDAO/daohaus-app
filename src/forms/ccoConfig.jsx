@@ -1,6 +1,15 @@
 import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router';
-import { Box, FormControl, Input, Button } from '@chakra-ui/react';
+import {
+  Box,
+  FormControl,
+  Input,
+  Button,
+  Textarea,
+  RadioGroup,
+  Stack,
+  Radio,
+} from '@chakra-ui/react';
 
 import { useInjectedProvider } from '../contexts/InjectedProviderContext';
 import { useOverlay } from '../contexts/OverlayContext';
@@ -31,7 +40,14 @@ const CcoConfig = ({ daoMetaData, ccoType }) => {
     });
   };
 
-  const handleUpdate = async () => {
+  const handleBotChange = e => {
+    setCcoConfiguration({
+      ...ccoConfiguration,
+      bot: e,
+    });
+  };
+
+  const handleUpdate = async newCcoType => {
     setLoading(true);
 
     try {
@@ -52,7 +68,7 @@ const CcoConfig = ({ daoMetaData, ccoType }) => {
       // hardcoding new new cco boost configurations to daosquare types for now
       if (!ccoConfiguration.ccoId) {
         ccoUpdate.metadata.network = injectedChain.network;
-        ccoUpdate.boostKey = 'daosquarecco';
+        ccoUpdate.boostKey = newCcoType;
       }
 
       const result = await ccoPost('cco/meta', ccoUpdate);
@@ -96,15 +112,69 @@ const CcoConfig = ({ daoMetaData, ccoType }) => {
     });
   };
 
+  const renderTextAreas = () => {
+    return Object.keys(CCO_CONSTANTS.METADATA_TEXTAREA_FIELDS).map(
+      fieldName => {
+        return (
+          <FormControl mb={4} key={fieldName}>
+            <Box size='xs' mb={1}>
+              {fieldName}
+            </Box>
+            <Textarea
+              name={fieldName}
+              onChange={handleChange}
+              value={ccoConfiguration[fieldName]}
+            />
+          </FormControl>
+        );
+      },
+    );
+  };
+
   return (
     <>
       <Box fontSize='xl' mb={5}>
         CCO Config
       </Box>
       {renderFields()}
-      <Button mt={5} onClick={handleUpdate} isLoading={loading}>
-        Update Config
-      </Button>
+      {renderTextAreas()}
+
+      <Box mb={5}>Bot (must be a member of the dao)</Box>
+      <RadioGroup onChange={handleBotChange} value={ccoConfiguration.bot}>
+        <Stack direction='column'>
+          {CCO_CONSTANTS.BOTS.map(bot => {
+            return (
+              <Radio value={bot} key={bot}>
+                {bot}
+              </Radio>
+            );
+          })}
+        </Stack>
+      </RadioGroup>
+
+      {!ccoConfiguration.ccoId ? (
+        <>
+          <Button
+            mt={5}
+            mr={5}
+            onClick={() => handleUpdate('cco')}
+            isLoading={loading}
+          >
+            Create CCO
+          </Button>
+          <Button
+            mt={5}
+            onClick={() => handleUpdate('daosquarecco')}
+            isLoading={loading}
+          >
+            Create Daosqaure CCO
+          </Button>
+        </>
+      ) : (
+        <Button mt={5} onClick={() => handleUpdate()} isLoading={loading}>
+          Update
+        </Button>
+      )}
     </>
   );
 };

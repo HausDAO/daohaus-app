@@ -1,7 +1,6 @@
 import { Box, Link, Text } from '@chakra-ui/layout';
 import React from 'react';
 
-import { Button } from '@chakra-ui/button';
 import { useOverlay } from '../contexts/OverlayContext';
 import ContentBox from './ContentBox';
 import TextBox from './TextBox';
@@ -9,8 +8,6 @@ import GenericModal from '../modals/genericModal';
 
 const CcoResources = ({ daoMetaData, ccoData }) => {
   const { setGenericModal } = useOverlay();
-
-  console.log('ccoData', ccoData);
 
   return (
     <>
@@ -60,7 +57,7 @@ const CcoResources = ({ daoMetaData, ccoData }) => {
           <Text mb={3} fontFamily='heading'>
             About {daoMetaData.name}
           </Text>
-          <Text mb={5}>some text</Text>
+          <Text mb={5}>{ccoData.projectDescription}</Text>
         </Box>
       </GenericModal>
       <GenericModal modalId='ccoFaq'>
@@ -68,7 +65,7 @@ const CcoResources = ({ daoMetaData, ccoData }) => {
           <Text mb={3} fontFamily='heading'>
             FAQ
           </Text>
-          <Text mb={5}>some text</Text>
+          <Text mb={5}>{ccoData.faqs}</Text>
         </Box>
       </GenericModal>
     </>

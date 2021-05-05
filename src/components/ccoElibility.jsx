@@ -3,6 +3,7 @@ import { Box } from '@chakra-ui/layout';
 import { Spinner } from '@chakra-ui/spinner';
 import { Button } from '@chakra-ui/button';
 
+import { Tooltip } from '@chakra-ui/tooltip';
 import { useInjectedProvider } from '../contexts/InjectedProviderContext';
 import ContentBox from './ContentBox';
 import TextBox from './TextBox';
@@ -28,9 +29,16 @@ const CcoEligibility = ({
 
   return (
     <ContentBox variant='d2' mt={2} w='100%'>
-      <TextBox size='sm' color='blackAlpha.900' mb={7}>
-        1. Check eligibility
-      </TextBox>
+      <Tooltip
+        hasArrow
+        shouldWrapChildren
+        label={roundData.whitelistReqs}
+        placement='top'
+      >
+        <TextBox size='sm' color='blackAlpha.900' mb={7}>
+          1. Check eligibility
+        </TextBox>
+      </Tooltip>
       {networkMatch ? (
         <>
           {isEligible === 'unchecked' && (

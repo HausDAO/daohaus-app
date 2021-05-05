@@ -12,7 +12,7 @@ const CcoAdmin = React.memo(({ daoMetaData, isCorrectNetwork }) => {
   const isCco = daoMetaData?.boosts && daoMetaData.boosts[ccoType];
 
   return (
-    <MainViewLayout header='DAOhaus CCO' isDao>
+    <MainViewLayout header='CCO Admin' isDao>
       <Box w='100%'>
         {isCorrectNetwork && (
           <Flex wrap='wrap'>

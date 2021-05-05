@@ -13,7 +13,6 @@ import { CCO_CONSTANTS } from '../utils/cco';
 const CcoCard = ({ daoMetaData, isLink }) => {
   const tempFunded = 115005;
   const tempRaiseLeft = 661661;
-  const tempContributionTokenSymbol = 'xDai';
 
   return (
     <ContentBox
@@ -63,8 +62,8 @@ const CcoCard = ({ daoMetaData, isLink }) => {
           <Box>{numberWithCommas(tempFunded)} Funded</Box>
           <Box>
             {numberWithCommas(tempRaiseLeft)}{' '}
-            {/* {daoMetaData.boosts.daosquarecco.metadata.contributionTokenSymbol} */}
-            {tempContributionTokenSymbol} Left
+            {daoMetaData.boosts.daosquarecco.metadata.contributionTokenSymbol}
+            Left
           </Box>
         </Flex>
         <Flex mt={5} direction='row' justify='space-between' w='100%'>
@@ -76,10 +75,7 @@ const CcoCard = ({ daoMetaData, isLink }) => {
           </Box>
           <Box>
             <TextBox size='lg' variant='value'>
-              1 {daoMetaData.boosts.daosquarecco.metadata.claimTokenSymbol} ={' '}
-              {daoMetaData.boosts.daosquarecco.metadata.ratio}{' '}
-              {/* {daoMetaData.boosts.daosquarecco.metadata.contributionTokenSymbol} */}
-              {tempContributionTokenSymbol}
+              {`${daoMetaData.boosts.daosquarecco.metadata.ratio} ${daoMetaData.boosts.daosquarecco.metadata.claimTokenSymbol} = 1 ${daoMetaData.boosts.daosquarecco.metadata.tributeTokenSymbol}`}
             </TextBox>
           </Box>
         </Flex>

@@ -63,9 +63,10 @@ const DaoRouter = () => {
     customTerms,
     daoProposals,
   };
+  const daosquarecco = isDaosquareCcoPath(daoMetaData, location);
 
   return (
-    <Layout dao={dao} daosquarecco={isDaosquareCcoPath(daoMetaData, location)}>
+    <Layout dao={dao} daosquarecco={daosquarecco}>
       <Switch>
         <Route exact path={`${path}/`}>
           <Overview

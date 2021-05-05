@@ -10,7 +10,6 @@ import TextBox from './TextBox';
 const CcoContributionCard = ({
   raiseAtMax,
   roundData,
-  daoMetaData,
   currentContributionData,
   isEligible,
 }) => {
@@ -34,7 +33,7 @@ const CcoContributionCard = ({
           </Text>
         ) : null}
         <Text fontSize='sm' color='blackAlpha.700' mt={2}>
-          {`${roundData.claimTokenValue} ${roundData.ccoToken.symbol} = 1 ${roundData.claimTokenSymbol} | ${roundData.maxContribution} ${roundData.ccoToken.symbol} max per person`}
+          {`${roundData.maxContribution} ${roundData.ccoToken.symbol} max per person`}
         </Text>
       </Flex>
       {raiseAtMax ? (

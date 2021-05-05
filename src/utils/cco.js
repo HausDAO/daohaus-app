@@ -4,20 +4,29 @@ export const CCO_CONSTANTS = {
   WHITELIST_HOST: 'https://daohaus-cco.s3.amazonaws.com',
   METADATA_FIELDS: {
     tributeToken: '',
+    tributeTokenSymbol: '',
     claimTokenAddress: '',
     claimTokenSymbol: '',
-    claimTokenValue: '',
     ratio: '',
     raiseStartTime: '',
-    duration: '',
+    raiseEndTime: '',
     claimPeriodStartTime: '',
     minTarget: '',
     maxTarget: '',
     maxContribution: '',
     minContribution: '',
   },
-  // DAOSQUARE_NETWORK: '0x2a',
-  DAOSQUARE_NETWORK: '0x64',
+  METADATA_TEXTAREA_FIELDS: {
+    whitelistReqs: '',
+    projectDescription: '',
+    faqs: '',
+  },
+  BOTS: [
+    '0x9166a0bc06Dbf63b8a6f68808060D550c31AefD6',
+    '0xC2207416886eF70E2E8e12515EFf83230489384B',
+  ],
+  DAOSQUARE_NETWORK: '0x2a',
+  // DAOSQUARE_NETWORK: '0x64',
   DAOSQUARE_TOKEN_ADDRESS: '0xbd9908b0cdd50386f92efcc8e1d71766c2782df0',
   DAOSQUARE_TOKEN_NETWORK: '0x1',
 };
@@ -27,10 +36,10 @@ export const countDownText = raiseData => {
   if (raiseData.raiseOver) {
     return 'Contribution period is complete';
   }
-  if (now < raiseData.startTime) {
-    return `Raise starts ${timeToNow(raiseData.startTime)}`;
+  if (now < raiseData.raiseStartTime) {
+    return `Raise starts ${timeToNow(raiseData.raiseStartTime)}`;
   }
-  return `Raise ends ${timeToNow(raiseData.endTime)}`;
+  return `Raise ends ${timeToNow(raiseData.raiseEndTime)}`;
 };
 
 export const claimCountDownText = claimStartTime => {
