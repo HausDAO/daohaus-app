@@ -5,8 +5,8 @@ import { fetchTokenData } from './tokenValue';
 const fetchEtherscanAPIData = async (address, daochain) => {
   try {
     const key = process.env.REACT_APP_ETHERSCAN_KEY;
-    const url = `${chainByID(daochain).tokenlist_api_url}${address}${key
-      && `&apikey=${key}`}`;
+    const url = `${chainByID(daochain).tokenlist_api_url}${address}${key &&
+      `&apikey=${key}`}`;
     const response = await fetch(url);
     const json = await response.json();
     if (!json.result || json.status === '0') {
@@ -22,13 +22,16 @@ const fetchEtherscanAPIData = async (address, daochain) => {
 const parseEtherscan = async (json, address, daochain) => {
   if (json) {
     const contractAddressObj = json.reduce((acc, transaction) => {
-      (acc[transaction.contractAddress] = acc[transaction.contractAddress] || []).push(transaction);
+      (acc[transaction.contractAddress] =
+        acc[transaction.contractAddress] || []).push(transaction);
       return acc;
     }, {});
     const balanceData = Object.entries(contractAddressObj).map(
       ([key, value]) => {
         const totalBalance = value.reduce((acc, transaction) => {
-          if (transaction.from === address) { acc -= parseInt(transaction.value || '1', 10); } else acc += parseInt(transaction.value || '1', 10);
+          if (transaction.from === address) {
+            acc -= parseInt(transaction.value || '1', 10);
+          } else acc += parseInt(transaction.value || '1', 10);
           return acc;
         }, 0);
 
@@ -44,8 +47,8 @@ const parseEtherscan = async (json, address, daochain) => {
     );
 
     let erc721s = balanceData
-      .filter((token) => token.type === 'ERC-721')
-      .map(async (b) => {
+      .filter(token => token.type === 'ERC-721')
+      .map(async b => {
         const promises = [];
         const nftService = NFTService({
           tokenAddress: b.contractAddress,
@@ -64,13 +67,13 @@ const parseEtherscan = async (json, address, daochain) => {
       });
     erc721s = await Promise.all(erc721s);
 
-    erc721s.map(async (nft) => {
+    erc721s.map(async nft => {
       const promises2 = [];
       const nftService = NFTService({
         tokenAddress: nft.contractAddress,
         chainID: daochain,
       });
-      nft.tokenIds.map((tid) => {
+      nft.tokenIds.map(tid => {
         if (tid) {
           const uri = nftService('tokenURI')({
             tokenId: tid,
@@ -95,10 +98,11 @@ export const getEtherscanTokenData = async (address, daochain) => {
   return tokenData;
 };
 
-const fetchBlockScoutAPIData = async (address) => {
+const fetchBlockScoutAPIData = async address => {
   try {
     const daochain = '0x64';
     const url = `${chainByID(daochain).tokenlist_api_url}${address}`;
+    console.log('url', url);
     const response = await fetch(url);
     const json = await response.json();
     if (!json.result || json.status === '0') {
@@ -111,18 +115,23 @@ const fetchBlockScoutAPIData = async (address) => {
   }
 };
 
-export const fetchNativeBalance = async (address) => {
-  try {
-    const url = `https://blockscout.com/xdai/mainnet/api?module=account&action=balance&address=${address}`;
-    const response = await fetch(url);
-    const json = await response.json();
-    if (!json.result || json.status === '0') {
-      const msg = json.message;
-      throw new Error(msg);
+export const fetchNativeBalance = async (address, daochain) => {
+  if (daochain === '0x1' || daochain === '0x4' || daochain === '0x2a') {
+    // eth chains not supported yet
+    // may need to do something different for matic too
+  } else {
+    try {
+      const url = `https://blockscout.com/xdai/mainnet/api?module=account&action=balance&address=${address}`;
+      const response = await fetch(url);
+      const json = await response.json();
+      if (!json.result || json.status === '0') {
+        const msg = json.message;
+        throw new Error(msg);
+      }
+      return json;
+    } catch (error) {
+      throw new Error(error);
     }
-    return json;
-  } catch (error) {
-    throw new Error(error);
   }
 };
 const parseBlockScout = async (json, address) => {
@@ -130,8 +139,8 @@ const parseBlockScout = async (json, address) => {
   const daochain = '0x64';
 
   let erc721s = json.result
-    .filter((token) => token.type === 'ERC-721')
-    .map(async (b) => {
+    .filter(token => token.type === 'ERC-721')
+    .map(async b => {
       const promises = [];
       const nftService = NFTService({
         tokenAddress: b.contractAddress,
@@ -150,13 +159,13 @@ const parseBlockScout = async (json, address) => {
     });
   erc721s = await Promise.all(erc721s);
 
-  erc721s.map(async (nft) => {
+  erc721s.map(async nft => {
     const promises2 = [];
     const nftService = NFTService({
       tokenAddress: nft.contractAddress,
       chainID: daochain,
     });
-    nft.tokenIds.map((tid) => {
+    nft.tokenIds.map(tid => {
       const uri = nftService('tokenURI')({
         tokenId: tid,
       });
@@ -167,22 +176,23 @@ const parseBlockScout = async (json, address) => {
     return nft;
   });
   erc721s = await Promise.all(erc721s);
-
   const erc20s = json.result
-    .filter((token) => token.type === 'ERC-20')
-    .map((t) => {
-      t.usd = tokenData[t.contractAddress.toLowerCase()]?.price || 0;
-      t.totalUSD = parseFloat(+t.balance / 10 ** +t.decimals) * +t.usd;
-
-      return t;
+    .filter(token => token.type === 'ERC-20')
+    .sort((a, b) => b.balance - a.balance)
+    .map(t => {
+      const usd = tokenData[t.contractAddress.toLowerCase()]?.price || 0;
+      const totalUSD = parseFloat(+t.balance / 10 ** +t.decimals) * +usd;
+      return { ...t, ...{ usd, totalUSD } };
     });
-  console.log('erc20serc20serc20s', erc20s);
-  console.log('erc721serc721serc721s', erc721s);
+  console.log('erc20s', erc20s);
+  console.log('erc721s', erc721s);
   return [...erc20s, ...erc721s];
 };
 
-export const getBlockScoutTokenData = async (address) => {
+export const getBlockScoutTokenData = async address => {
   const json = await fetchBlockScoutAPIData(address);
+  console.log('results', json.result);
+
   const tokenData = parseBlockScout(json, address);
   return tokenData;
 };

@@ -47,7 +47,7 @@ import TextBoxComponent from './components/textBox';
 //   return theme;
 // };
 
-export const createTheme = (daoTheme) => {
+export const createTheme = daoTheme => {
   const themeOverrides = { ...defaultTheme, ...daoTheme };
 
   return extendTheme({
@@ -117,10 +117,10 @@ export const createTheme = (daoTheme) => {
       guildKick: themeOverrides.daoMeta.guildKick,
       minion: themeOverrides.daoMeta.minion,
       minions: themeOverrides.daoMeta.minions,
-      f04title: themeOverrides.daoMeta.f04title,
-      f04heading: themeOverrides.daoMeta.f04heading,
-      f04subhead: themeOverrides.daoMeta.f04subhead,
-      f04cta: themeOverrides.daoMeta.f04cta,
+      // f04title: themeOverrides.daoMeta.f04title,
+      // f04heading: themeOverrides.daoMeta.f04heading,
+      // f04subhead: themeOverrides.daoMeta.f04subhead,
+      // f04cta: themeOverrides.daoMeta.f04cta,
     },
     components: {
       // core components

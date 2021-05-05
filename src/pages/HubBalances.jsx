@@ -17,7 +17,8 @@ const HubBalances = () => {
     chains: [],
     data: [],
   });
-  const hasLoadedBalanceData = balancesGraphData.chains.length === Object.keys(supportedChains).length;
+  const hasLoadedBalanceData =
+    balancesGraphData.chains.length === Object.keys(supportedChains).length;
 
   useEffect(() => {
     if (address) {
@@ -31,12 +32,12 @@ const HubBalances = () => {
   useEffect(() => {
     if (hasLoadedBalanceData) {
       const tokenBalances = balancesGraphData.data
-        .flatMap((bal) => {
-          return bal.tokenBalances.map((b) => {
+        .flatMap(bal => {
+          return bal.tokenBalances.map(b => {
             return { ...b, moloch: bal.moloch, meta: bal.meta };
           });
         })
-        .filter((bal) => +bal.tokenBalance > 0);
+        .filter(bal => +bal.tokenBalance > 0);
 
       setBalances(tokenBalances);
     }

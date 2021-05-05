@@ -56,7 +56,8 @@ const TimeInput = ({
     }
   }, [currentUnit, amt]);
 
-  const shouldDisplayTotalSeconds = totalSeconds > 0 && currentUnit !== 'seconds' && displayTotalSeconds;
+  const shouldDisplayTotalSeconds =
+    totalSeconds > 0 && currentUnit !== 'seconds' && displayTotalSeconds;
 
   const defaultLabel = `How many ${unitDisplay} per period?`;
   return (
@@ -73,7 +74,7 @@ const TimeInput = ({
         />
         <InputRightAddon background='primaryAlpha' p={0}>
           <Select width='100%' ref={register} border='none' name='units'>
-            {units.map((unit) => (
+            {units.map(unit => (
               <option key={unit.value} value={unit.value}>
                 {unit.name}
               </option>

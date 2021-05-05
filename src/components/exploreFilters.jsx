@@ -27,9 +27,7 @@ const ExploreFilters = ({ daoCount }) => {
           fontFamily='heading'
           fontSize={['sm', null, null, 'md']}
         >
-          {daoCount}
-          {' '}
-          DAOS
+          {daoCount} DAOS
         </Box>
         <ExploreSearch />
         <Box mr={6}>

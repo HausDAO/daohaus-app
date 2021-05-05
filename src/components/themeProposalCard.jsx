@@ -1,7 +1,5 @@
 import React from 'react';
-import {
-  Flex, Box, Badge, Icon,
-} from '@chakra-ui/react';
+import { Flex, Box, Badge, Icon } from '@chakra-ui/react';
 import { FaThumbsUp } from 'react-icons/fa';
 import { format } from 'date-fns';
 import ContentBox from './ContentBox';

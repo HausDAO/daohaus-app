@@ -37,7 +37,7 @@ const NewSuperfluidMinionForm = () => {
   const [pendingTx, setPendingTx] = useState(null);
   const now = (new Date().getTime() / 1000).toFixed();
 
-  const onSubmit = async (values) => {
+  const onSubmit = async values => {
     setLoading(true);
     setStep(2);
 
@@ -66,7 +66,7 @@ const NewSuperfluidMinionForm = () => {
             resolvePoll(txHash);
             setStep(1);
           },
-          onSuccess: (txHash) => {
+          onSuccess: txHash => {
             successToast({
               title: 'Superfluid Minion Lives!',
             });
@@ -77,7 +77,7 @@ const NewSuperfluidMinionForm = () => {
         },
       });
 
-      const onTxHash = (txHash) => {
+      const onTxHash = txHash => {
         console.log('tx', txHash);
         setPendingTx(txHash);
       };
@@ -107,13 +107,15 @@ const NewSuperfluidMinionForm = () => {
     setAgreementType(newAgreementType);
   };
 
-  const minions = useMemo(() => (
-    daoOverview?.minions.length > 0
-      ? daoOverview.minions.filter(
-        (minion) => minion.minionType === MINION_TYPES.SUPERFLUID,
-      )
-      : []
-  ), [daoOverview]);
+  const minions = useMemo(
+    () =>
+      daoOverview?.minions.length > 0
+        ? daoOverview.minions.filter(
+            minion => minion.minionType === MINION_TYPES.SUPERFLUID,
+          )
+        : [],
+    [daoOverview],
+  );
 
   return (
     <Box w='90%'>

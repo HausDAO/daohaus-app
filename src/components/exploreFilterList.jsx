@@ -24,7 +24,7 @@ const ExploreFilterList = () => {
     let updatedFilterValues;
     if (!e.target.checked) {
       updatedFilterValues = state.filters[category].filter(
-        (f) => f !== option.value,
+        f => f !== option.value,
       );
     } else {
       updatedFilterValues = [...state.filters[category], option.value];
@@ -45,7 +45,7 @@ const ExploreFilterList = () => {
           colorScheme='secondary'
           mr={3}
           isChecked={state.filters[category].includes(option.value)}
-          onChange={(e) => handleFilterSelect(option, category, e)}
+          onChange={e => handleFilterSelect(option, category, e)}
         />
         <FormLabel htmlFor={option.name} mb='0'>
           {option.name}
@@ -79,7 +79,7 @@ const ExploreFilterList = () => {
         </MenuButton>
         <MenuList bg='black'>
           <MenuGroup title='Network'>
-            {EXPLORE_FILTER_OPTIONS.map((option) => {
+            {EXPLORE_FILTER_OPTIONS.map(option => {
               if (option.type === 'network') {
                 return renderOption(option, 'network');
               }
@@ -88,7 +88,7 @@ const ExploreFilterList = () => {
           </MenuGroup>
           <MenuDivider />
           <MenuGroup title='Purpose'>
-            {EXPLORE_FILTER_OPTIONS.map((option) => {
+            {EXPLORE_FILTER_OPTIONS.map(option => {
               if (option.type === 'purpose') {
                 return renderOption(option, 'purpose');
               }
@@ -97,7 +97,7 @@ const ExploreFilterList = () => {
           </MenuGroup>
           <MenuDivider />
           <MenuGroup title='Version'>
-            {EXPLORE_FILTER_OPTIONS.map((option) => {
+            {EXPLORE_FILTER_OPTIONS.map(option => {
               if (option.type === 'version') {
                 return renderOption(option, 'version');
               }
@@ -106,7 +106,7 @@ const ExploreFilterList = () => {
           </MenuGroup>
           <MenuDivider />
           <MenuGroup title='Member Count'>
-            {EXPLORE_FILTER_OPTIONS.map((option) => {
+            {EXPLORE_FILTER_OPTIONS.map(option => {
               if (option.type === 'members') {
                 return renderOption(option, 'members');
               }

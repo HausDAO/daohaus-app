@@ -18,7 +18,7 @@ export const TokenService = ({
   const abi = is32 ? Erc20Bytes32Abi : Erc20Abi;
 
   const contract = new web3.eth.Contract(abi, tokenAddress);
-  return (service) => {
+  return service => {
     if (service === 'symbol') {
       return async () => {
         try {
@@ -40,7 +40,7 @@ export const TokenService = ({
       };
     }
     if (service === 'balanceOf') {
-      return async (queryAddress) => {
+      return async queryAddress => {
         try {
           const balance = await contract.methods
             .balanceOf(queryAddress)
@@ -68,14 +68,22 @@ export const TokenService = ({
         const tx = await contract.methods[service](...args);
         return tx
           .send('eth_requestAccounts', { from: address })
-          .on('transactionHash', (txHash) => {
+          .on('transactionHash', txHash => {
             if (poll) {
               poll(txHash);
             }
           })
-          .on('error', (error) => {
+          .on('error', error => {
             console.error(error);
           });
+      };
+    }
+    if (service === 'transferNoop') {
+      return ({ to, amount }) => {
+        console.log('args', to, amount);
+
+        const tx = contract.methods.transfer(to, amount);
+        return tx.encodeABI();
       };
     }
   };

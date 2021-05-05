@@ -107,7 +107,10 @@ const MinionSafe = ({ daoOverview, daoMetaData }) => {
         minion,
         chainID: daochain,
       })('proposeAction')({
-        args, address, poll, onTxHash,
+        args,
+        address,
+        poll,
+        onTxHash,
       });
     } catch (err) {
       setLoading(false);
@@ -165,7 +168,9 @@ const MinionSafe = ({ daoOverview, daoMetaData }) => {
       )}/`;
       promises.push(getApiGnosis(networkName, minionEndpoint));
       const responses = await Promise.all(promises);
-      const intersection = responses[0].safes.filter((element) => responses[1].safes.includes(element));
+      const intersection = responses[0].safes.filter(element =>
+        responses[1].safes.includes(element),
+      );
       setSafes(intersection);
     };
     console.log(daochain, pendingMinionSafe, daoOverview?.minions);
@@ -188,7 +193,7 @@ const MinionSafe = ({ daoOverview, daoMetaData }) => {
       setLoading(true);
       const networkName = chainByID(daochain).short_name;
       const promises = [];
-      safes.forEach((safe) => {
+      safes.forEach(safe => {
         const endpoint = `safes/${safe}/`;
         const res = getApiGnosis(networkName, endpoint);
         promises.push(res);
@@ -209,22 +214,23 @@ const MinionSafe = ({ daoOverview, daoMetaData }) => {
         {safes && safes.length ? (
           <List>
             {' '}
-            {safesDetails.map((safe) => (
+            {safesDetails.map(safe => (
               <ListItem key={safe.address}>
                 <TextBox>
                   {safe.address}
                   <Button
-                    onClick={() => saveBoostMeta(
-                      JSON.parse(pendingMinionSafe).delegateAddress,
-                      safe.address,
-                    )
+                    onClick={() =>
+                      saveBoostMeta(
+                        JSON.parse(pendingMinionSafe).delegateAddress,
+                        safe.address,
+                      )
                     }
                   >
                     Finish Setup
                   </Button>
                 </TextBox>
                 <List>
-                  {safe.owners.map((owner) => (
+                  {safe.owners.map(owner => (
                     <ListItem key={owner}>
                       <ListIcon as={MdCheckCircle} color='green.500' />
                       {owner}
@@ -243,8 +249,8 @@ const MinionSafe = ({ daoOverview, daoMetaData }) => {
                     <Stack spacing={3}>
                       <TextBox>Transactions</TextBox>
                       <Stack spacing={4} pl={4}>
-                        {currentSafeDetails.allTransactions
-                          && currentSafeDetails.allTransactions
+                        {currentSafeDetails.allTransactions &&
+                          currentSafeDetails.allTransactions
                             .reverse()
                             .map((tx, idx) => (
                               <Flex key={tx.txHash || tx.safeTxHash || idx}>
@@ -291,12 +297,13 @@ const MinionSafe = ({ daoOverview, daoMetaData }) => {
 
                                     <Button
                                       variant='outline'
-                                      onClick={() => submitProposal(
-                                        daoOverview.minions[0].minionAddress,
-                                        daoMetaData.boosts.minionSafe.metadata
-                                          .safeAddress,
-                                        tx,
-                                      )
+                                      onClick={() =>
+                                        submitProposal(
+                                          daoOverview.minions[0].minionAddress,
+                                          daoMetaData.boosts.minionSafe.metadata
+                                            .safeAddress,
+                                          tx,
+                                        )
                                       }
                                     >
                                       Submit Proposal
@@ -311,12 +318,12 @@ const MinionSafe = ({ daoOverview, daoMetaData }) => {
                     <Stack spacing={3}>
                       <TextBox>Balances</TextBox>
                       <Stack spacing={2} pl={4}>
-                        {currentSafeDetails.balances
-                          && currentSafeDetails.balances.map((token, idx) => (
+                        {currentSafeDetails.balances &&
+                          currentSafeDetails.balances.map((token, idx) => (
                             <Box key={idx}>
                               <TextBox variant='value' size='lg'>
-                                {`${token.token
-                                  || chainByID(daochain).short_name} 
+                                {`${token.token ||
+                                  chainByID(daochain).short_name} 
                                 ${utils.fromWei(token.balance)}`}
                               </TextBox>
                             </Box>

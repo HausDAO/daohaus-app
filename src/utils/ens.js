@@ -1,7 +1,8 @@
 import { gql } from 'apollo-boost';
 import { graphQuery } from './apollo';
 
-const ensClient = 'https://api.thegraph.com/subgraphs/name/ezynda3/ens-subgraph';
+const ensClient =
+  'https://api.thegraph.com/subgraphs/name/ezynda3/ens-subgraph';
 
 const REVERSE_RESOLVER_QUERY = gql`
   query reverseRegistrations($user: String!) {
@@ -12,7 +13,7 @@ const REVERSE_RESOLVER_QUERY = gql`
   }
 `;
 
-const fetchENS = async (address) => {
+const fetchENS = async address => {
   try {
     const result = await graphQuery({
       endpoint: ensClient,
@@ -34,7 +35,7 @@ const fetchENS = async (address) => {
   }
 };
 
-export const getCachedENS = (address) => {
+export const getCachedENS = address => {
   const ensData = JSON.parse(window.sessionStorage.getItem('ensCache'));
   return ensData[address] ? ensData[address] : false;
 };
@@ -65,7 +66,7 @@ export const ensureENSCacheExists = () => {
   }
 };
 
-export const handleGetENS = async (address) => {
+export const handleGetENS = async address => {
   ensureENSCacheExists();
   const cachedENS = getCachedENS(address);
   if (cachedENS) {

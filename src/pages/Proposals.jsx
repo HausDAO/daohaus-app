@@ -11,11 +11,7 @@ import { daoConnectedAndSameChain } from '../utils/general';
 import { useInjectedProvider } from '../contexts/InjectedProviderContext';
 import { getTerm } from '../utils/metadata';
 
-const Proposals = React.memo(({
-  proposals,
-  activities,
-  customTerms,
-}) => {
+const Proposals = React.memo(({ proposals, activities, customTerms }) => {
   const { daoid, daochain } = useParams();
   const { address, injectedChain } = useInjectedProvider();
 
@@ -29,9 +25,7 @@ const Proposals = React.memo(({
       to={`/dao/${daochain}/${daoid}/proposals/new`}
       rightIcon={<RiAddFill />}
     >
-      New
-      {' '}
-      {getTerm(customTerms, 'proposal')}
+      New {getTerm(customTerms, 'proposal')}
     </Button>
   );
   return (

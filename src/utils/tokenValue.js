@@ -4,9 +4,11 @@ import { MolochService } from '../services/molochService';
 import { omit } from './general';
 
 const geckoURL = 'https://api.coingecko.com/api/v3/simple/token_price';
-const uniSwapDataURL = 'https://raw.githubusercontent.com/Uniswap/default-token-list/master/src/tokens/mainnet.json';
+const uniSwapDataURL =
+  'https://raw.githubusercontent.com/Uniswap/default-token-list/master/src/tokens/mainnet.json';
 const babe = '0x000000000000000000000000000000000000baBe';
-const tokenAPI = 'https://daohaus-metadata.s3.amazonaws.com/daoTokenPrices.json';
+const tokenAPI =
+  'https://daohaus-metadata.s3.amazonaws.com/daoTokenPrices.json';
 
 const fetchUniswapData = async () => {
   try {
@@ -26,7 +28,7 @@ export const fetchTokenData = async () => {
   }
 };
 
-export const getUsd = async (tokenAddress) => {
+export const getUsd = async tokenAddress => {
   const url = `${geckoURL}/ethereum?contract_addresses=${tokenAddress}&vs_currencies=usd`;
   try {
     const response = await fetch(url);
@@ -40,7 +42,7 @@ export const calcTotalUSD = (decimals, tokenBalance, usdVal) => {
   return (+tokenBalance / 10 ** decimals) * +usdVal;
 };
 
-export const initTokenData = async (graphTokenData) => {
+export const initTokenData = async graphTokenData => {
   const tokenData = await fetchTokenData();
   const uniswapData = await fetchUniswapData();
   const uniswapDataMap = uniswapData.reduce((map, token) => {
@@ -49,7 +51,7 @@ export const initTokenData = async (graphTokenData) => {
   }, {});
 
   return graphTokenData
-    .map((tokenObj) => {
+    .map(tokenObj => {
       const { token, tokenBalance } = tokenObj;
 
       const usdVal = tokenData[token.tokenAddress]?.price || 0;
@@ -66,10 +68,10 @@ export const initTokenData = async (graphTokenData) => {
 
       return tokenDataObj;
     })
-    .filter((t) => t.symbol !== null);
+    .filter(t => t.symbol !== null);
 };
 
-export const tallyUSDs = (tokenObj) => {
+export const tallyUSDs = tokenObj => {
   let totalUSD = 0;
 
   for (const token in tokenObj) {
@@ -83,7 +85,7 @@ export const tallyUSDs = (tokenObj) => {
 
 export const addContractVals = (tokens, chainID) => {
   return Promise.all(
-    tokens.map(async (token) => {
+    tokens.map(async token => {
       try {
         const tokenBalance = await TokenService({
           chainID,
@@ -119,7 +121,8 @@ export const getTotalBankValue = (tokenBalances, prices) => {
       const price = prices[balance.token.tokenAddress.toLowerCase()]
         ? prices[balance.token.tokenAddress.toLowerCase()].price
         : 0;
-      const value = (+balance.tokenBalance / 10 ** balance.token.decimals) * price;
+      const value =
+        (+balance.tokenBalance / 10 ** balance.token.decimals) * price;
 
       return (sum += value);
     }
@@ -130,9 +133,7 @@ export const getTotalBankValue = (tokenBalances, prices) => {
 export const valToDecimalString = (value, tokenAddress, tokens) => {
   // get correct value of token with decimal places
   // returns a string
-  const tdata = tokens.find(
-    (token) => token.token.tokenAddress === tokenAddress,
-  );
+  const tdata = tokens.find(token => token.token.tokenAddress === tokenAddress);
 
   // is the value a float or int? set appropriate decimals buffer
   const decimals = value.split('.')[1]?.length;

@@ -4,9 +4,7 @@ import WrongNetworkToolTip from './wrongNetworkToolTip';
 import { getTerm } from '../utils/metadata';
 import Web3SignIn from './web3SignIn';
 
-const PageHeader = ({
-  isDao, header, headerEl, customTerms,
-}) => {
+const PageHeader = ({ isDao, header, headerEl, customTerms }) => {
   return (
     <Flex direction='row' justify='space-between' p={6}>
       <Flex

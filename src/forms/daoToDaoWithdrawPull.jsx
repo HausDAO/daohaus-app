@@ -27,7 +27,7 @@ const WithdrawPullForm = ({
       />
     </>
   );
-  const getCurrentMobileForm = (currentView) => {
+  const getCurrentMobileForm = currentView => {
     return currentView === 'withdraw' ? (
       <WithdrawForm
         uberMembers={uberMembers}
@@ -52,7 +52,7 @@ const WithdrawPullForm = ({
     base: mobileForm,
   });
 
-  const switchView = (e) => {
+  const switchView = e => {
     if (e?.target?.value) {
       setCurrentView(e.target.value);
     }

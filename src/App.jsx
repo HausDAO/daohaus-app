@@ -52,7 +52,7 @@ function App() {
         </Route>
         <Route
           path='/dao/:daochain/:daoid'
-          render={(routeProps) => {
+          render={routeProps => {
             return <Dao key={routeProps.match.params.daoid} {...routeProps} />;
           }}
         />

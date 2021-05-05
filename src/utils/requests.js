@@ -4,11 +4,12 @@ import { GET_WRAP_N_ZAPS } from '../graphQL/boost-queries';
 
 const metadataApiUrl = 'https://data.daohaus.club';
 const apiMetadataUrl = 'https://daohaus-metadata.s3.amazonaws.com/daoMeta.json';
-const apiPricedataUrl = 'https://daohaus-metadata.s3.amazonaws.com/daoTokenPrices.json';
+const apiPricedataUrl =
+  'https://daohaus-metadata.s3.amazonaws.com/daoTokenPrices.json';
 const mintGateUrl = 'https://link.mintgate.app/api';
 const snapshotUrl = 'https://hub.snapshot.page/api';
 
-export const get = async (endpoint) => {
+export const get = async endpoint => {
   const url = `${metadataApiUrl}/${endpoint}`;
   try {
     const response = await fetch(url);
@@ -134,7 +135,7 @@ export const getApiGnosis = async (networkName, endpoint) => {
   }
 };
 
-export const getMintGates = async (tokenAddress) => {
+export const getMintGates = async tokenAddress => {
   const mintGatesUrl = `${mintGateUrl}/links?tid=${tokenAddress}`;
   try {
     const response = await fetch(mintGatesUrl);
@@ -144,7 +145,7 @@ export const getMintGates = async (tokenAddress) => {
   }
 };
 
-export const getSnapshotProposals = async (space) => {
+export const getSnapshotProposals = async space => {
   const snapshotProposalUrl = `${snapshotUrl}/${space}/proposals`;
   try {
     const response = await fetch(snapshotProposalUrl);

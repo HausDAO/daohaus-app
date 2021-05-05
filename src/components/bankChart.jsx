@@ -86,7 +86,7 @@ const BankChart = ({ overview, customTerms, currentDaoTokens }) => {
           dates,
         );
 
-        const data = groupedBalances.map((balance) => {
+        const data = groupedBalances.map(balance => {
           return {
             x: balance.date,
             y: balance.value,
@@ -102,9 +102,9 @@ const BankChart = ({ overview, customTerms, currentDaoTokens }) => {
           });
         }
 
-        if (data.every((bal) => bal.y === 0)) {
+        if (data.every(bal => bal.y === 0)) {
           setChartData(
-            data.map((b) => {
+            data.map(b => {
               return { ...b, y0: -100 };
             }),
           );
@@ -117,7 +117,7 @@ const BankChart = ({ overview, customTerms, currentDaoTokens }) => {
     }
   }, [daoBalances, currentDaoTokens, timeframe]);
 
-  const handleTimeChange = (time) => {
+  const handleTimeChange = time => {
     setChartData([]);
     setTimeframe({
       ...time,
@@ -162,7 +162,7 @@ const BankChart = ({ overview, customTerms, currentDaoTokens }) => {
                           <Icon as={FaChevronDown} h='12px' w='12px' />
                         </MenuButton>
                         <MenuList>
-                          {bankChartTimeframes.map((time) => {
+                          {bankChartTimeframes.map(time => {
                             return (
                               <MenuItem
                                 key={time.value}
@@ -178,7 +178,10 @@ const BankChart = ({ overview, customTerms, currentDaoTokens }) => {
                     <FlexibleWidthXYPlot
                       height={300}
                       margin={{
-                        left: 0, right: 0, top: 40, bottom: 40,
+                        left: 0,
+                        right: 0,
+                        top: 40,
+                        bottom: 40,
                       }}
                     >
                       {gradient}

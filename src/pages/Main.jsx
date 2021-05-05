@@ -15,7 +15,7 @@ const Main = () => {
   const { userHubDaos } = useUser();
 
   const hasDaos = () => {
-    return userHubDaos.some((network) => network.data.length);
+    return userHubDaos.some(network => network.data.length);
   };
 
   const ctaButton = (

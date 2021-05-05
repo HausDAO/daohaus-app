@@ -42,11 +42,7 @@ const UberHausDelegate = ({ proposal }) => {
         <TextBox size='xs' mb={2}>
           Current Delegate
         </TextBox>
-        {minionDelegate ? (
-          <AddressAvatar addr={minionDelegate} />
-        ) : (
-          <Spinner />
-        )}
+        {minionDelegate ? <AddressAvatar addr={minionDelegate} /> : <Spinner />}
       </Box>
     </Box>
   );
