@@ -35,6 +35,14 @@ export const FIELD = {
     placeholder: '0',
     info: INFO_TEXT.SHARES_REQUEST,
   },
+  LOOT_REQUEST: {
+    type: 'input',
+    label: 'Loot Requested',
+    name: 'loot',
+    htmlFor: 'loot',
+    placeholder: '0',
+    info: INFO_TEXT.LOOT_REQUEST,
+  },
   LINK: {
     type: 'linkInput',
     label: 'Link',
@@ -58,15 +66,22 @@ export const FIELD = {
     label: 'Token Tribute',
     info: INFO_TEXT.TOKEN_TRIBUTE,
   },
+  PAYMENT_REQUEST: {
+    type: 'paymentInput',
+    htmlFor: 'paymentRequested',
+    name: 'paymentRequested',
+    placeholder: '0',
+    label: 'Payment Requested',
+    info: INFO_TEXT.PAYMENT_REQUEST,
+  },
 };
 
 export const PROPOSAL_FORMS = {
   MEMBER: {
     type: PROPOSAL_TYPES.MEMBER,
+    formValidation: { required: ['title', 'shares'] },
     tx: {
-      poll: 'submitProposal',
-      service: 'moloch',
-      action: 'submitProposal',
+      type: 'proposal',
     },
     fields: [
       FIELD.TITLE,
@@ -75,7 +90,11 @@ export const PROPOSAL_FORMS = {
       FIELD.TRIBUTE,
       FIELD.LINK,
     ],
-    additionalOptions: [FIELD.APPLICANT, FIELD.SHARES_REQUEST],
+    additionalOptions: [
+      FIELD.APPLICANT,
+      FIELD.LOOT_REQUEST,
+      FIELD.PAYMENT_REQUEST,
+    ],
   },
   SIGNAL: {
     type: PROPOSAL_TYPES.SIGNAL,
