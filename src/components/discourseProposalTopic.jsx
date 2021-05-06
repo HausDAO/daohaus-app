@@ -65,6 +65,7 @@ const DiscourseProposalTopic = ({ proposal, daoMember }) => {
         network: injectedChain.network,
         signature,
       },
+      autoOverride: true,
     });
 
     if (discourseRes.error) {
