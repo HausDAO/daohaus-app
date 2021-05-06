@@ -50,6 +50,14 @@ export const FIELD = {
     label: 'Applicant',
     info: INFO_TEXT.APPLICANT,
   },
+  TRIBUTE: {
+    type: 'tributeInput',
+    htmlFor: 'tribute',
+    name: 'tributeOffered',
+    placeholder: '0',
+    label: 'Token Tribute',
+    info: INFO_TEXT.TOKEN_TRIBUTE,
+  },
 };
 
 export const PROPOSAL_FORMS = {
@@ -64,9 +72,18 @@ export const PROPOSAL_FORMS = {
       FIELD.TITLE,
       FIELD.SHARES_REQUEST,
       FIELD.DESCRIPTION,
-      FIELD.APPLICANT,
+      FIELD.TRIBUTE,
       FIELD.LINK,
     ],
     additionalOptions: [FIELD.APPLICANT, FIELD.SHARES_REQUEST],
+  },
+  SIGNAL: {
+    type: PROPOSAL_TYPES.SIGNAL,
+    tx: {
+      poll: 'submitProposal',
+      service: 'moloch',
+      action: 'submitProposal',
+    },
+    fields: [FIELD.TITLE, FIELD.DESCRIPTION, FIELD.LINK],
   },
 };

@@ -14,6 +14,7 @@ import MainViewLayout from '../components/mainViewLayout';
 const validProposalType = type => {
   return [
     'lego',
+    'signal',
     'member',
     'funding',
     'whitelist',

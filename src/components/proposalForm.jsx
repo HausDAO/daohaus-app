@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import {
   Button,
   Box,
@@ -33,6 +33,13 @@ import { handleGetProfile } from '../utils/3box';
 import { isEthAddress, truncateAddr } from '../utils/general';
 import { getActiveMembers } from '../utils/dao';
 import { lookupENS } from '../utils/ens';
+import { useTX } from '../contexts/TXContext';
+import { fetchBalance } from '../utils/tokenValue';
+import { useInjectedProvider } from '../contexts/InjectedProviderContext';
+import { useParams } from 'react-router-dom';
+import { ethers } from 'ethers';
+import { utils } from 'web3';
+import { TokenService } from '../services/tokenService';
 
 const ProposalForm = ({ fields, tx, onTx, additionalOptions = null }) => {
   const [loading, setLoading] = useState(false);
@@ -91,11 +98,14 @@ const InputFactory = props => {
   if (type === 'linkInput') {
     return <LinkInput {...props} />;
   }
+  if (type === 'inputSelect') {
+    return <InputSelect {...props} />;
+  }
   if (type === 'applicantInput') {
     return <AddressInput {...props} />;
   }
-  if (type === 'inputSelect') {
-    return <InputSelect {...props} />;
+  if (type === 'tributeInput') {
+    return <TributeInput {...props} />;
   }
   return null;
 };
@@ -253,13 +263,18 @@ const GenericInput = ({
 };
 
 const InputSelect = props => {
-  const { options } = props;
-
+  const { options, selectName, localForm, onChange } = props;
+  const { register } = localForm;
+  console.log(selectName);
   return (
     <GenericInput
       {...props}
       append={
-        <Select>
+        <Select
+          name={selectName || 'select'}
+          onChange={onChange}
+          ref={register}
+        >
           {options?.map((option, index) => (
             <option key={`${option?.value}-${index}`} value={option.value}>
               {option.name}
@@ -460,5 +475,151 @@ const AddressInput = props => {
         />
       )}
     </>
+  );
+};
+
+const TributeInput = props => {
+  const { unlockToken } = useTX();
+  const { address } = useInjectedProvider();
+  const { daochain, daoid } = useParams();
+  const { daoOverview } = useDao();
+  const { localForm } = props;
+  const { getValues, setValue } = localForm;
+
+  const [daoTokens, setDaoTokens] = useState([]);
+  const [unlocked, setUnlocked] = useState(true);
+  const [balance, setBalance] = useState('loading');
+  const [loading, setLoading] = useState(false);
+
+  const maxBtnDisplay = useMemo(() => {
+    if (balance === 'loading') {
+      return <Spinner size='sm' />;
+    }
+    if (balance) {
+      const commified = ethers.utils.commify(
+        Number(utils.fromWei(balance)).toFixed(4),
+      );
+      return `Max: ${commified}`;
+    }
+  }, [balance]);
+
+  const unlockBtnDisplay = loading ? <Spinner size='sm' /> : 'Unlock';
+
+  useEffect(() => {
+    if (daoOverview) {
+      const depTokenAddress = daoOverview.depositToken?.tokenAddress;
+      const depositToken = daoOverview.tokenBalances?.find(
+        token =>
+          token.guildBank && token.token.tokenAddress === depTokenAddress,
+      );
+      const nonDepTokens = daoOverview.tokenBalances.filter(
+        token =>
+          token.guildBank && token.token.tokenAddress !== depTokenAddress,
+      );
+      setDaoTokens(
+        [depositToken, ...nonDepTokens].map(token => ({
+          value: token.token.tokenAddress,
+          name: token.token.symbol || token.token.tokenAddress,
+          decimals: token.token.decimals,
+          balance: token.tokenBalance,
+        })),
+      );
+    }
+  }, [daoOverview]);
+
+  useEffect(() => {
+    let shouldUpdate = true;
+    const setInitialBalance = async () => {
+      const tokenAddress = daoTokens[0]?.value;
+      const result = await fetchBalance({
+        tokenAddress,
+        address,
+        chainID: daochain,
+      });
+      if (shouldUpdate) {
+        setBalance(result);
+      }
+    };
+    if (daoTokens?.length) {
+      setInitialBalance();
+    }
+    return () => {
+      shouldUpdate = false;
+    };
+  }, [daoTokens, address, daochain]);
+
+  const updateBalance = async tokenAddress => {
+    const result = await fetchBalance({
+      tokenAddress,
+      address,
+      chainID: daochain,
+    });
+    setBalance(result);
+  };
+
+  const handleUnlock = async () => {
+    const tokenAddress = getValues('tributeToken');
+    setLoading(true);
+    const result = await unlockToken(tokenAddress);
+    setLoading(false);
+    setUnlocked(result);
+  };
+
+  const setMax = () => {
+    const tributeToken = getValues('tributeToken');
+    setValue(
+      'tributeOffered',
+      balance / 10 ** daoTokens.find(t => t.value === tributeToken)?.decimals,
+    );
+    handleChange();
+  };
+
+  const checkUnlocked = async (token, amount) => {
+    if (
+      amount === '' ||
+      !token ||
+      typeof +amount !== 'number' ||
+      +amount === 0
+    ) {
+      setUnlocked(true);
+      return;
+    }
+    const amountApproved = await TokenService({
+      chainID: daochain,
+      tokenAddress: token,
+    })('allowance')({
+      accountAddr: address,
+      contractAddr: daoid,
+    });
+    const isUnlocked = +amountApproved > +amount;
+    setUnlocked(isUnlocked);
+  };
+
+  const handleChange = async () => {
+    const tributeToken = getValues('tributeToken');
+    const tributeOffered = getValues('tributeOffered');
+
+    checkUnlocked(tributeToken, tributeOffered);
+    updateBalance(tributeToken);
+  };
+
+  return (
+    <InputSelect
+      {...props}
+      selectName='tributeToken'
+      options={daoTokens}
+      onChange={handleChange}
+      helperText={unlocked || 'Unlock to tokens to submit proposal'}
+      btn={
+        unlocked ? (
+          <ModButton label={maxBtnDisplay} callback={setMax} />
+        ) : (
+          <>
+            <ModButton label={unlockBtnDisplay} callback={handleUnlock} />
+            <ModButton label={maxBtnDisplay} callback={setMax} />
+          </>
+        )
+      }
+    />
   );
 };

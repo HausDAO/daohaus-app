@@ -176,3 +176,15 @@ export const addZeros = (roundedVal, decimals) => {
     .div(ethers.BigNumber.from(perc))
     .toString();
 };
+
+export const fetchBalance = ({ address, chainID, tokenAddress }) => {
+  try {
+    const max = TokenService({
+      chainID,
+      tokenAddress,
+    })('balanceOf')(address);
+    return max;
+  } catch (error) {
+    console.log(error);
+  }
+};

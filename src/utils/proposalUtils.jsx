@@ -18,6 +18,7 @@ export const ProposalStatus = {
 
 export const PROPOSAL_TYPES = {
   MEMBER: 'Member Proposal',
+  SIGNAL: 'Signal Proposal',
   WHITELIST: 'Whitelist Token Proposal',
   GUILDKICK: 'Guild Kick Proposal',
   TRADE: 'Trade Proposal',

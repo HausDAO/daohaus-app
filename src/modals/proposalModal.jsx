@@ -42,6 +42,12 @@ const ProposalFormModal = ({ proposalType }) => {
       subline: 'Come on and get your real fake forms',
       form: <ProposalForm {...PROPOSAL_FORMS.MEMBER} />,
     },
+    signal: {
+      type: 'Signal Proposal',
+      heading: 'Signal That!',
+      subline: 'Signal! Signal! Signal!',
+      form: <ProposalForm {...PROPOSAL_FORMS.SIGNAL} />,
+    },
     member: {
       type: `New ${getTerm(customTerms, 'proposal')}`,
       heading: `New ${getTerm(customTerms, 'member')} ${getTerm(
