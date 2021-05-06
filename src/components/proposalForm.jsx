@@ -40,13 +40,27 @@ import { useParams } from 'react-router-dom';
 import { ethers } from 'ethers';
 import { utils } from 'web3';
 import { TokenService } from '../services/tokenService';
+import { validateRequired } from '../utils/validation';
 
 /// UTILS
 
-const ProposalForm = ({ fields, tx, onTx, additionalOptions = null }) => {
+const getRequiredFields = (fields, required) => {
+  return fields.filter(field => {
+    return required.includes(field.name);
+  });
+};
+
+const ProposalForm = ({
+  fields,
+  tx,
+  onTx,
+  additionalOptions = null,
+  required,
+}) => {
   const [loading, setLoading] = useState(false);
   const [formFields, setFields] = useState(fields);
   const [options, setOptions] = useState(additionalOptions);
+
   // const { newDaoProposal } = useTX();
   const localForm = useForm();
   const { handleSubmit } = localForm;
@@ -58,8 +72,37 @@ const ProposalForm = ({ fields, tx, onTx, additionalOptions = null }) => {
     setOptions(options.filter(option => option.htmlFor !== e.target.value));
     setFields([...formFields, selectedOption]);
   };
+
+  const updateErrors = errors => {
+    setFields(prevFields =>
+      prevFields.map(field => {
+        const error = errors.find(error => error.name === field.name);
+        if (error) {
+          return { ...field, error };
+        } else {
+          return { ...field, error: false };
+        }
+      }),
+    );
+  };
+  const clearErrors = () => {
+    setFields(prevFields =>
+      prevFields.map(field => ({ ...field, error: false })),
+    );
+  };
   const onSubmit = values => {
-    console.log('values', values);
+    clearErrors();
+    setLoading(true);
+    const missingVals = validateRequired(
+      values,
+      getRequiredFields(fields, required),
+    );
+
+    if (missingVals) {
+      updateErrors(missingVals);
+      setLoading(false);
+      return;
+    }
   };
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
@@ -81,7 +124,7 @@ const ProposalForm = ({ fields, tx, onTx, additionalOptions = null }) => {
             })}
           </Flex>
         </FormControl>
-        <FormFooter options={options} addOption={addOption} />
+        <FormFooter options={options} addOption={addOption} loading={loading} />
       </Flex>
     </form>
   );
@@ -97,11 +140,11 @@ const InputFactory = props => {
   if (type === 'textarea') {
     return <GenericTextarea {...props} />;
   }
-  if (type === 'linkInput') {
-    return <LinkInput {...props} />;
-  }
   if (type === 'inputSelect') {
     return <InputSelect {...props} />;
+  }
+  if (type === 'linkInput') {
+    return <LinkInput {...props} />;
   }
   if (type === 'applicantInput') {
     return <AddressInput {...props} />;
@@ -116,7 +159,15 @@ const InputFactory = props => {
 };
 
 //  COMBOS
-const FieldWrapper = ({ children, label, info, htmlFor, helperText, btn }) => {
+const FieldWrapper = ({
+  children,
+  label,
+  info,
+  htmlFor,
+  helperText,
+  btn,
+  error,
+}) => {
   return (
     <Flex w={['100%', null, '48%']} mb={3} flexDir='column'>
       <Flex>
@@ -138,6 +189,7 @@ const FieldWrapper = ({ children, label, info, htmlFor, helperText, btn }) => {
 
       {children}
       {helperText && <FormHelperText>{helperText}</FormHelperText>}
+      {error && <SubmitFormError message={error.message} />}
     </Flex>
   );
 };
@@ -188,7 +240,10 @@ const SubmitErrList = ({ errors = [] }) => {
   return (
     <Flex flexDirection='column' alignItems='flex-start'>
       {errors.map((error, index) => (
-        <SubmitFormError message={error.msg} key={`${error.msg}-${index}`} />
+        <SubmitFormError
+          message={error.message}
+          key={`${error.message}-${index}`}
+        />
       ))}
     </Flex>
   );
@@ -221,8 +276,6 @@ const GenericInput = ({
   htmlFor,
   placeholder,
   name,
-  valOnType = [],
-  valOnSubmit = [],
   localForm,
   helperText,
   btn,
@@ -230,6 +283,7 @@ const GenericInput = ({
   info,
   prepend,
   onChange = null,
+  error,
 }) => {
   const { register } = localForm;
 
@@ -240,6 +294,7 @@ const GenericInput = ({
       info={info}
       helperText={helperText}
       btn={btn}
+      error={error}
     >
       <InputGroup>
         {prepend && (
@@ -250,12 +305,7 @@ const GenericInput = ({
           name={name}
           onChange={onChange}
           placeholder={placeholder || label || htmlFor}
-          ref={register({
-            required: {
-              value: true,
-              message: 'Required',
-            },
-          })}
+          ref={register}
         />
         {append && (
           <InputRightAddon background='primary.600' p={0}>
@@ -303,6 +353,7 @@ const GenericTextarea = ({
   localForm,
   info,
   h = 10,
+  error,
 }) => {
   const { register } = localForm;
 
@@ -313,18 +364,14 @@ const GenericTextarea = ({
       info={info}
       helperText={helperText}
       btn={btn}
+      error={error}
     >
       <Textarea
         id={htmlFor}
         name={name}
         placeholder={placeholder || label || htmlFor}
         h={h}
-        ref={register({
-          required: {
-            value: true,
-            message: 'Required',
-          },
-        })}
+        ref={register}
       />
     </FieldWrapper>
   );
@@ -344,6 +391,7 @@ const GenericSelect = ({
   info,
   prepend,
   options = [],
+  error,
 }) => {
   const { register } = localForm;
   return (
@@ -353,6 +401,7 @@ const GenericSelect = ({
       info={info}
       helperText={helperText}
       btn={btn}
+      error={error}
     >
       <Select placeholder={placeholder} ref={register} id={htmlFor} name={name}>
         {options?.map(option => (

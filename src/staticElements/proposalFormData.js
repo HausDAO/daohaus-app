@@ -29,7 +29,7 @@ export const FIELD = {
   },
   SHARES_REQUEST: {
     type: 'input',
-    label: 'shares requested',
+    label: 'Shares Requested',
     name: 'shares',
     htmlFor: 'shares',
     placeholder: '0',
@@ -79,9 +79,9 @@ export const FIELD = {
 export const PROPOSAL_FORMS = {
   MEMBER: {
     type: PROPOSAL_TYPES.MEMBER,
-    formValidation: { required: ['title', 'shares'] },
+    required: ['title', 'shares'], // Use name key from proposal type object
     tx: {
-      type: 'proposal',
+      type: 'submitProposal',
     },
     fields: [
       FIELD.TITLE,
