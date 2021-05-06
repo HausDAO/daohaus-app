@@ -90,10 +90,10 @@ export const createTheme = daoTheme => {
       guildKick: themeOverrides.daoMeta.guildKick,
       minion: themeOverrides.daoMeta.minion,
       minions: themeOverrides.daoMeta.minions,
-      f04title: themeOverrides.daoMeta.f04title,
-      f04heading: themeOverrides.daoMeta.f04heading,
-      f04subhead: themeOverrides.daoMeta.f04subhead,
-      f04cta: themeOverrides.daoMeta.f04cta,
+      // f04title: themeOverrides.daoMeta.f04title,
+      // f04heading: themeOverrides.daoMeta.f04heading,
+      // f04subhead: themeOverrides.daoMeta.f04subhead,
+      // f04cta: themeOverrides.daoMeta.f04cta,
     },
     components: {
       // core components

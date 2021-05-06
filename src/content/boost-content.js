@@ -94,7 +94,7 @@ export const boostList = [
     name: 'Wrap-N-Zap',
     key: 'wrapNZap',
     description:
-      'Allow users to send native ETH or xDai that will be wrapped and zapped to the DAO',
+      'Allow your DAO to receive native ETH, xDAI, or Polygon without senders needing to wrap it first.',
     price: '0',
     modalName: 'wrapNZap',
     successRoute: '',

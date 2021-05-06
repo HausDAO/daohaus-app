@@ -1,8 +1,7 @@
 import React, { memo } from 'react';
-import { Box, HStack, Icon, Image } from '@chakra-ui/react';
+import { Box, HStack, Icon, Image, Link } from '@chakra-ui/react';
 import { RiExternalLinkLine } from 'react-icons/ri';
 import ReactPlayer from 'react-player';
-import { Link } from 'react-router-dom';
 
 import TextBox from './TextBox';
 
