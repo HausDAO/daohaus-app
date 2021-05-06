@@ -18,6 +18,8 @@ import CcoResources from '../components/ccoResources';
 import CcoContributionCard from '../components/ccoContributeCard';
 import CcoClaimCard from '../components/ccoClaimCard';
 
+// TODO: filter out proposal after max limit is hit
+
 const CcoContribution = ({ daoMetaData, currentDaoTokens, daoProposals }) => {
   const { daochain } = useParams();
   const { refreshDao } = useTX();
@@ -82,15 +84,11 @@ const CcoContribution = ({ daoMetaData, currentDaoTokens, daoProposals }) => {
   useEffect(() => {
     if (roundData && address && daoProposals && daoProposals.length) {
       const contributionProposals = daoProposals.filter(proposal => {
-        // TODO: right now this is checking on sponsored, will need to adjust
-        // to look at unsponsored and stop at max limit
         return isCcoProposal(proposal, roundData);
       });
-
       const addressProposals = contributionProposals.filter(proposal => {
         return isCcoProposalForAddress(proposal, address, roundData);
       });
-
       const contributionTotal = contributionTotalValue(
         contributionProposals,
         roundData,

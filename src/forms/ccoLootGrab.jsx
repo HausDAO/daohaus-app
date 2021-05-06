@@ -179,7 +179,7 @@ const CcoLootGrabForm = ({
           />
         </Box>
         <Text fontSize='sm' color='whiteAlpha.700' as='i' ml={5}>
-          {`will return -> ${+currentTribute / +roundData.ratio} ${
+          {`will return -> ${+currentTribute * Number(roundData.ratio)} ${
             roundData.claimTokenSymbol
           } `}
         </Text>
