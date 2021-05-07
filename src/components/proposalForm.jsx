@@ -40,7 +40,7 @@ import { useParams } from 'react-router-dom';
 import { ethers } from 'ethers';
 import { utils } from 'web3';
 import { TokenService } from '../services/tokenService';
-import { validateRequired } from '../utils/validation';
+import { checkFormTypes, validateRequired } from '../utils/validation';
 
 /// UTILS
 
@@ -61,7 +61,6 @@ const ProposalForm = ({
   const [formFields, setFields] = useState(fields);
   const [options, setOptions] = useState(additionalOptions);
 
-  // const { newDaoProposal } = useTX();
   const localForm = useForm();
   const { handleSubmit } = localForm;
 
@@ -95,11 +94,17 @@ const ProposalForm = ({
     setLoading(true);
     const missingVals = validateRequired(
       values,
-      getRequiredFields(fields, required),
+      getRequiredFields(formFields, required),
     );
-
     if (missingVals) {
       updateErrors(missingVals);
+      setLoading(false);
+      return;
+    }
+    const typeErrors = checkFormTypes(values, formFields);
+    console.log(`typeErrors`, typeErrors);
+    if (typeErrors) {
+      updateErrors(typeErrors);
       setLoading(false);
       return;
     }

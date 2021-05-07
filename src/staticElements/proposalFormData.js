@@ -19,6 +19,7 @@ export const FIELD = {
     name: 'title',
     htmlFor: 'title',
     placeholder: 'Proposal Title',
+    expectType: 'any',
   },
   DESCRIPTION: {
     type: 'textarea',
@@ -26,6 +27,7 @@ export const FIELD = {
     name: 'description',
     htmlFor: 'description',
     placeholder: 'How does that make you feel, champ',
+    expectType: 'any',
   },
   SHARES_REQUEST: {
     type: 'input',
@@ -34,6 +36,7 @@ export const FIELD = {
     htmlFor: 'shares',
     placeholder: '0',
     info: INFO_TEXT.SHARES_REQUEST,
+    expectType: 'integer',
   },
   LOOT_REQUEST: {
     type: 'input',
@@ -42,6 +45,7 @@ export const FIELD = {
     htmlFor: 'loot',
     placeholder: '0',
     info: INFO_TEXT.LOOT_REQUEST,
+    expectType: 'integer',
   },
   LINK: {
     type: 'linkInput',
@@ -49,6 +53,7 @@ export const FIELD = {
     name: 'link',
     htmlFor: 'link',
     placeholder: 'daolink.club',
+    expectType: 'urlNoHTTP',
   },
   APPLICANT: {
     type: 'applicantInput',
@@ -57,6 +62,7 @@ export const FIELD = {
     placeholder: '0x',
     label: 'Applicant',
     info: INFO_TEXT.APPLICANT,
+    expectType: 'publicKey',
   },
   TRIBUTE: {
     type: 'tributeInput',
@@ -65,6 +71,7 @@ export const FIELD = {
     placeholder: '0',
     label: 'Token Tribute',
     info: INFO_TEXT.TOKEN_TRIBUTE,
+    expectType: 'number',
   },
   PAYMENT_REQUEST: {
     type: 'paymentInput',
@@ -73,6 +80,7 @@ export const FIELD = {
     placeholder: '0',
     label: 'Payment Requested',
     info: INFO_TEXT.PAYMENT_REQUEST,
+    expectType: 'number',
   },
 };
 
