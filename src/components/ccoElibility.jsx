@@ -30,9 +30,13 @@ const CcoEligibility = ({
 
   return (
     <ContentBox variant='d2' mt={2} w='100%'>
-      <Flex>
-        <Box fontSize='3xl' fontFamily='heading'>
+      <Flex justifyContent='flex-start'>
+        <Box fontSize='3xl' fontFamily='heading' pr={5}>
           1
+        </Box>
+        <Box>
+          Only approved addresses can participate. Click the button to check
+          your eligibility.
         </Box>
         {networkMatch ? (
           <Box>
@@ -69,8 +73,7 @@ const CcoEligibility = ({
             )}
             {isEligible === 'denied' && (
               <Box size='md' my={2} color='blackAlpha.900'>
-                Address is not eligible. Try again with another address that has
-                interacted with a DAO.
+                Address is not eligible.
               </Box>
             )}
           </Box>
