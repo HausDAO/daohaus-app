@@ -18,7 +18,7 @@ import CcoResources from '../components/ccoResources';
 import CcoContributionCard from '../components/ccoContributeCard';
 import CcoClaimCard from '../components/ccoClaimCard';
 
-// TODO: filter out proposal after max limit is hit
+// TODO: filter out proposals after max limit is hit
 
 const CcoContribution = ({ daoMetaData, currentDaoTokens, daoProposals }) => {
   const { daochain } = useParams();
