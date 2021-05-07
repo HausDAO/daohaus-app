@@ -11,14 +11,25 @@ import { useInjectedProvider } from './InjectedProviderContext';
 import { createPoll } from '../services/pollService';
 import { useUser } from './UserContext';
 import { useOverlay } from './OverlayContext';
+import { createHash, detailsToJSON } from '../utils/general';
+import { valToDecimalString } from '../utils/tokenValue';
+import { createForumTopic } from '../utils/discourse';
+import { MolochService } from '../services/molochService';
+import { LogError } from '../utils/errorLog';
 
 export const TXContext = createContext();
 
 export const TXProvider = ({ children }) => {
   const { injectedProvider, address } = useInjectedProvider();
   const { resolvePoll, cachePoll } = useUser();
-  const { hasPerformedBatchQuery, refetch } = useDao();
-  const { errorToast, successToast } = useOverlay();
+  const { hasPerformedBatchQuery, refetch, daoOverview } = useDao();
+  const { daoMetaData } = useMetaData();
+  const {
+    errorToast,
+    successToast,
+    setTxInfoModal,
+    setProposalModal,
+  } = useOverlay();
   const { hasFetchedMetadata, shouldUpdateTheme } = useMetaData();
   const { shouldFetchInit, shouldFetchContract } = useToken();
   const { currentMemberRef, memberWalletRef } = useDaoMember();
@@ -87,14 +98,114 @@ export const TXProvider = ({ children }) => {
     }
   };
 
+  const submitProposal = async (values, proposalLoading) => {
+    proposalLoading(true);
+    const now = (new Date().getTime() / 1000).toFixed();
+    const hash = createHash();
+    const details = detailsToJSON({ ...values, hash });
+    const { tokenBalances, depositToken } = daoOverview;
+    const tributeToken = values.tributeToken || depositToken.tokenAddress;
+    const paymentToken = values.paymentToken || depositToken.tokenAddress;
+    const tributeOffered = values.tributeOffered
+      ? valToDecimalString(values.tributeOffered, tributeToken, tokenBalances)
+      : '0';
+    const paymentRequested = values.paymentRequested
+      ? valToDecimalString(values.paymentRequested, paymentToken, tokenBalances)
+      : '0';
+    const applicant = values?.applicant || address;
+    const args = [
+      applicant,
+      values.sharesRequested || '0',
+      values.lootRequested || '0',
+      tributeOffered,
+      tributeToken,
+      paymentRequested,
+      paymentToken,
+      details,
+    ];
+    console.log(args);
+    try {
+      const poll = createPoll({ action: 'submitProposal', cachePoll })({
+        daoID: daoid,
+        chainID: daochain,
+        hash,
+        actions: {
+          onError: (error, txHash) => {
+            errorToast({
+              title: 'There was an error.',
+              description: error?.message || '',
+            });
+            resolvePoll(txHash);
+            console.error(`Could not find a matching proposal: ${error}`);
+          },
+          onSuccess: txHash => {
+            successToast({
+              title: 'Proposal Submitted to the Dao!',
+            });
+            refreshDao();
+            resolvePoll(txHash);
+            createForumTopic({
+              chainID: daochain,
+              daoID: daoid,
+              afterTime: now,
+              proposalType: 'Member Proposal',
+              values,
+              applicant,
+              daoMetaData,
+            });
+          },
+        },
+      });
+      const onTxHash = () => {
+        setTxInfoModal(true);
+        setProposalModal(false);
+      };
+      await MolochService({
+        web3: injectedProvider,
+        daoAddress: daoid,
+        chainID: daochain,
+        version: daoOverview.version,
+      })('submitProposal')({
+        args,
+        address,
+        poll,
+        onTxHash,
+      });
+    } catch (error) {
+      const errMsg = error?.message || '';
+      proposalLoading(false);
+
+      LogError({
+        caughtAt: 'Needs data',
+        errMsg,
+        type: 'Contract TX: Member Proposal',
+        userAddress: address,
+        daoAddress: daoid,
+        priority: 1,
+        formData: values,
+        TxArgs: args,
+        contextData: {
+          address,
+          daoOverview,
+          daoid,
+          daochain,
+        },
+      });
+      errorToast({
+        title: 'There was an error.',
+        description: errMsg,
+      });
+    }
+  };
+
   return (
-    <TXContext.Provider value={{ refreshDao, unlockToken }}>
+    <TXContext.Provider value={{ refreshDao, unlockToken, submitProposal }}>
       {children}
     </TXContext.Provider>
   );
 };
 
 export const useTX = () => {
-  const { refreshDao, unlockToken } = useContext(TXContext);
-  return { refreshDao, unlockToken };
+  const { refreshDao, unlockToken, submitProposal } = useContext(TXContext);
+  return { refreshDao, unlockToken, submitProposal };
 };

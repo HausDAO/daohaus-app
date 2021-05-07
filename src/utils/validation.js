@@ -34,8 +34,6 @@ export const validate = {
 };
 
 export const checkFormTypes = (values, fields) => {
-  console.log(`values`, values);
-  console.log(`fields`, fields);
   if (!values || !fields) {
     throw new Error(
       `Did not recieve truthy 'values' and/or 'fields' arguments in Function 'checkRequired`,

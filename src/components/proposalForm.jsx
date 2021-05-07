@@ -57,6 +57,7 @@ const ProposalForm = ({
   additionalOptions = null,
   required,
 }) => {
+  const { submitProposal } = useTX();
   const [loading, setLoading] = useState(false);
   const [formFields, setFields] = useState(fields);
   const [options, setOptions] = useState(additionalOptions);
@@ -89,24 +90,25 @@ const ProposalForm = ({
       prevFields.map(field => ({ ...field, error: false })),
     );
   };
-  const onSubmit = values => {
+  const onSubmit = async values => {
     clearErrors();
-    setLoading(true);
     const missingVals = validateRequired(
       values,
       getRequiredFields(formFields, required),
     );
     if (missingVals) {
       updateErrors(missingVals);
-      setLoading(false);
       return;
     }
     const typeErrors = checkFormTypes(values, formFields);
-    console.log(`typeErrors`, typeErrors);
     if (typeErrors) {
       updateErrors(typeErrors);
-      setLoading(false);
       return;
+    }
+    try {
+      await submitProposal(values, setLoading);
+    } catch (error) {
+      console.error(error);
     }
   };
   return (
@@ -521,7 +523,7 @@ const AddressInput = props => {
       {textMode ? (
         <GenericInput
           {...props}
-          btn={<ModButton label='Select' callback={switchElement} />}
+          btn={<ModButton label='Members' callback={switchElement} />}
           onChange={checkApplicant}
           helperText={helperText}
         />
@@ -530,7 +532,7 @@ const AddressInput = props => {
           {...props}
           placeholder='Select an Address'
           options={userAddresses}
-          btn={<ModButton label='Input' callback={switchElement} />}
+          btn={<ModButton label='Address' callback={switchElement} />}
         />
       )}
     </>

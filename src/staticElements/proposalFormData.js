@@ -32,7 +32,7 @@ export const FIELD = {
   SHARES_REQUEST: {
     type: 'input',
     label: 'Shares Requested',
-    name: 'shares',
+    name: 'sharesRequested',
     htmlFor: 'shares',
     placeholder: '0',
     info: INFO_TEXT.SHARES_REQUEST,
@@ -41,7 +41,7 @@ export const FIELD = {
   LOOT_REQUEST: {
     type: 'input',
     label: 'Loot Requested',
-    name: 'loot',
+    name: 'lootRequested',
     htmlFor: 'loot',
     placeholder: '0',
     info: INFO_TEXT.LOOT_REQUEST,
