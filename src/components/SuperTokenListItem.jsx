@@ -97,7 +97,7 @@ const SuperTokenListItem = ({
                 loadingText='Upgrading'
                 isLoading={isLoading && loadingCond === 'upgrade'}
               >
-                Upgrade
+                Convert
               </Button>
             </ToolTipWrapper>
           )}

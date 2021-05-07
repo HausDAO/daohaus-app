@@ -205,6 +205,7 @@ const SuperTokenList = ({
                     daoMember={daoMember}
                     withdrawSupertoken={withdrawSupertoken}
                     upgradeSupertoken={upgradeSupertoken}
+                    key={tokenAddress}
                   />
                 );
               }
