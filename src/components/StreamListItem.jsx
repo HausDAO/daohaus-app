@@ -97,8 +97,9 @@ const StreamListItem = ({
         <Link
           as={!stream.executed && RouterLink}
           to={
-            !stream.executed &&
-            `/dao/${daochain}/${daoid}/proposals/${stream.proposalId}`
+            !stream.executed
+              ? `/dao/${daochain}/${daoid}/proposals/${stream.proposalId}`
+              : null
           }
           href={
             stream.executed &&

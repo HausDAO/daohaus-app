@@ -65,17 +65,17 @@ const DaoContractSettings = ({ overview, customTerms, wrapNZap }) => {
               Unwrapped {supportedChains[daochain].chain} receiver (Wrap-N-Zap)
             </TextBox>
             <Text fontFamily='mono' variant='value' fontSize='sm'>
-              <CopyToClipboard
-                text={wrapNZap}
-                mx={2}
-                onCopy={copiedToast}
-                _hover={{ cursor: 'pointer' }}
-              >
-                <Flex color='secondary.400' align='center'>
-                  <Box>{wrapNZap}</Box>
+              <Flex color='secondary.400' align='center'>
+                <Box>{wrapNZap}</Box>
+                <CopyToClipboard
+                  text={wrapNZap}
+                  mx={2}
+                  onCopy={copiedToast}
+                  _hover={{ cursor: 'pointer' }}
+                >
                   <Icon as={FaCopy} color='secondary.300' ml={2} />
-                </Flex>
-              </CopyToClipboard>
+                </CopyToClipboard>
+              </Flex>
             </Text>
           </Flex>
         )}
