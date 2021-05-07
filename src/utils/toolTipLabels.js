@@ -53,8 +53,7 @@ export const SF_LABEL = {
     body: 'Outstanding balance will be downgraded and sent back to the DAO',
   },
   UPGRADE: {
-    body:
-      '(Coming Soon) This action will upgrade balance from the underlying token',
+    body: 'This action will convert the token balance into supertoken balance',
   },
   REGISTER: {
     title: 'IMPORTANT',

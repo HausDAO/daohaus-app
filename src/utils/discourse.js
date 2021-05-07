@@ -13,11 +13,13 @@ export const createForumTopic = async ({
   applicant,
   daoMetaData,
   sigData,
+  autoOverride,
 }) => {
-  if (
-    daoMetaData?.boosts?.discourse?.active &&
-    daoMetaData?.boosts?.discourse?.metadata?.autoProposal
-  ) {
+  const canPost =
+    autoOverride ||
+    (daoMetaData?.boosts?.discourse?.active &&
+      daoMetaData?.boosts?.discourse?.metadata?.autoProposal);
+  if (canPost) {
     let title;
     let isAuto = false;
     if (!proposalId) {

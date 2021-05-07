@@ -141,9 +141,9 @@ const NewSuperfluidMinionForm = () => {
             </>
           )}
           <Box mb={3} fontSize='sm'>
-            A Superfluid Minion will allow the DAO to start streaming tokens in
-            real-time or to schedule an instant distribution to different
-            recipients (coming soon)
+            A Superfluid Minion will allow the DAO to send/receive streaming
+            tokens in real-time or to schedule an instant distribution to
+            different recipients (coming soon)
           </Box>
           <form onSubmit={handleSubmit(onSubmit)}>
             <Box mb={3} fontSize='sm'>

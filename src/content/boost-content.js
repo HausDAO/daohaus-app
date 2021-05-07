@@ -127,13 +127,13 @@ export const boostList = [
     key: 'superfluidMinion',
     description: 'Stream/distribute tokens using Superfluid Protocol',
     price: '0',
-    comingSoon: true,
     modalName: 'superfluidMinionLaunch',
     successRoute: '',
     networks: {
       all: false,
-      '0x1': true,
       '0x64': true,
+      '0x4': true,
+      '0x89': true,
     },
   },
   {

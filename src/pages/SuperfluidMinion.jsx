@@ -148,7 +148,7 @@ const SuperfluidMinionDetails = ({
                   </Flex>
                 </Box>
                 <Flex align='center'>
-                  <TextBox size='md' colorScheme='whiteAlpha.900'>
+                  <TextBox size='md' color='whiteAlpha.900'>
                     {minionData.minionType}:{' '}
                     <Box as='span' color='primary.100'>
                       {truncateAddr(minionData.minionAddress)}
@@ -186,6 +186,7 @@ const SuperfluidMinionDetails = ({
                 loading={loading}
                 setLoading={setLoading}
                 daoMember={daoMember}
+                minionBalances={minionBalances}
               />
               <StreamList
                 list={streamList}
