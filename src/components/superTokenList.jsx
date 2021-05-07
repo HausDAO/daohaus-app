@@ -160,7 +160,9 @@ const SuperTokenList = ({
         });
       } else {
         errorToast({
-          title: `No ${underlyingTokenBalance.symbol} token balance available in the Minion`,
+          title: `No ${
+            underlyingTokenBalance ? `${underlyingTokenBalance.symbol}` : ''
+          } token balance available in the Minion`,
         });
       }
     } catch (err) {
