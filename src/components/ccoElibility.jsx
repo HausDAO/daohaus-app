@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Box } from '@chakra-ui/layout';
+import { Box, Flex } from '@chakra-ui/layout';
 import { Spinner } from '@chakra-ui/spinner';
 import { Button } from '@chakra-ui/button';
 
@@ -30,62 +30,67 @@ const CcoEligibility = ({
 
   return (
     <ContentBox variant='d2' mt={2} w='100%'>
-      <Tooltip
-        hasArrow
-        shouldWrapChildren
-        label={roundData.whitelistReqs}
-        placement='top'
-      >
-        <TextBox size='sm' mb={7}>
-          1. Check eligibility
-        </TextBox>
-      </Tooltip>
-      {networkMatch ? (
-        <>
-          {isEligible === 'unchecked' && (
-            <Button
-              variant='primary'
-              onClick={checkEligibility}
-              disabled={
-                checkingEligibility || roundData.raiseOver || raiseAtMax
-              }
-            >
-              {!checkingEligibility ? <>Check Eligibility</> : <Spinner />}
-            </Button>
-          )}
-          {isEligible === 'checked' && (
-            <>
-              <Box size='md' my={2} color='blackAlpha.900'>
-                You are eligible to contribute.
-              </Box>
-
-              {roundData.beforeRaise ? (
+      <Flex justifyContent='flex-start'>
+        <Box fontSize='3xl' fontFamily='heading' pr={5}>
+          1
+        </Box>
+        <Box>
+          Only approved addresses can participate. Click the button to check
+          your eligibility.
+        </Box>
+        {networkMatch ? (
+          <Box>
+            {isEligible === 'unchecked' && (
+              <Tooltip
+                hasArrow
+                shouldWrapChildren
+                label={roundData.whitelistReqs}
+                placement='top'
+              >
+                <Button
+                  variant='primary'
+                  onClick={checkEligibility}
+                  disabled={
+                    checkingEligibility || roundData.raiseOver || raiseAtMax
+                  }
+                >
+                  {!checkingEligibility ? <>Check Eligibility</> : <Spinner />}
+                </Button>
+              </Tooltip>
+            )}
+            {isEligible === 'checked' && (
+              <>
                 <Box size='md' my={2} color='blackAlpha.900'>
-                  Come back when the contribution round begins.
+                  You are eligible to contribute.
                 </Box>
-              ) : null}
-            </>
-          )}
-          {isEligible === 'denied' && (
-            <Box size='md' my={2} color='blackAlpha.900'>
-              Address is not eligible. Try again with another address that has
-              interacted with a DAO.
-            </Box>
-          )}
-        </>
-      ) : (
-        <>
-          {address ? (
-            <Button onClick={handleSwitchNetwork}>
-              {`Switch to the ${roundData.network} network`}
-            </Button>
-          ) : (
-            <Button onClick={requestWallet} mb={6}>
-              Connect Wallet
-            </Button>
-          )}
-        </>
-      )}
+
+                {roundData.beforeRaise ? (
+                  <Box size='md' my={2} color='blackAlpha.900'>
+                    Come back when the contribution round begins.
+                  </Box>
+                ) : null}
+              </>
+            )}
+            {isEligible === 'denied' && (
+              <Box size='md' my={2} color='blackAlpha.900'>
+                Address is not eligible.
+              </Box>
+            )}
+          </Box>
+        ) : (
+          <Box>
+            {address ? (
+              <Button onClick={handleSwitchNetwork}>
+                {`Switch to the ${roundData.network} network`}
+              </Button>
+            ) : (
+              <Button onClick={requestWallet} mb={6}>
+                Connect Wallet
+              </Button>
+            )}
+          </Box>
+        )}
+      </Flex>
     </ContentBox>
   );
 };

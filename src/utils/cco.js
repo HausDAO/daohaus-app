@@ -43,9 +43,9 @@ export const countDownText = raiseData => {
     return 'Contribution period is complete';
   }
   if (now < raiseData.raiseStartTime) {
-    return `Raise starts ${timeToNow(raiseData.raiseStartTime)}`;
+    return `CCO starts ${timeToNow(raiseData.raiseStartTime)}`;
   }
-  return `Raise ends ${timeToNow(raiseData.raiseEndTime)}`;
+  return `CCO ends ${timeToNow(raiseData.raiseEndTime)}`;
 };
 
 export const claimCountDownText = claimStartTime => {

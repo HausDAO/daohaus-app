@@ -16,10 +16,10 @@ const CcoCard = ({ daoMetaData, isLink }) => {
 
   return (
     <ContentBox
-      mt={5}
       variant='d2'
       style={{ transition: 'all .15s linear' }}
       _hover={isLink && { transform: 'scale(1.01)' }}
+      my={5}
     >
       <Box
         as={isLink && Link}
@@ -60,8 +60,10 @@ const CcoCard = ({ daoMetaData, isLink }) => {
           mb={3}
         />
         <Flex direction='row' justify='space-between' w='100%'>
-          <Box>{numberWithCommas(tempFunded)} Funded</Box>
-          <Box>
+          <Box fontFamily='heading' fontSize='xl'>
+            {numberWithCommas(tempFunded)} Funded
+          </Box>
+          <Box fontFamily='heading' fontSize='xl'>
             {numberWithCommas(tempRaiseLeft)}{' '}
             {daoMetaData.boosts.daosquarecco.metadata.contributionTokenSymbol}
             Left
