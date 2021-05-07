@@ -1,13 +1,20 @@
-import { Box, Link, Text } from '@chakra-ui/layout';
 import React from 'react';
+import { useHistory, useParams } from 'react-router-dom';
+import { Box, Link, Text } from '@chakra-ui/layout';
 
 import { useOverlay } from '../contexts/OverlayContext';
 import ContentBox from './ContentBox';
-import TextBox from './TextBox';
 import GenericModal from '../modals/genericModal';
 
 const CcoResources = ({ daoMetaData, ccoData }) => {
   const { setGenericModal } = useOverlay();
+  const { daoid, daochain } = useParams();
+  const history = useHistory();
+
+  const handleNav = () => {
+    setGenericModal({});
+    history.push(`/dao/${daochain}/${daoid}`);
+  };
 
   return (
     <>
@@ -44,7 +51,7 @@ const CcoResources = ({ daoMetaData, ccoData }) => {
           mb={5}
           cursor='pointer'
         >
-          FAQ
+          Rewards
         </Box>
       </ContentBox>
 
@@ -54,6 +61,12 @@ const CcoResources = ({ daoMetaData, ccoData }) => {
             About {daoMetaData.name}
           </Text>
           <Text mb={5}>{ccoData.projectDescription}</Text>
+          <Text
+            onClick={handleNav}
+            _hover={{ color: 'secondary.400', cursor: 'pointer' }}
+          >
+            Visit DAO Interface
+          </Text>
         </Box>
       </GenericModal>
       <GenericModal modalId='ccoFaq'>

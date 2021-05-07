@@ -31,6 +31,12 @@ export const CCO_CONSTANTS = {
   DAOSQUARE_TOKEN_NETWORK: '0x1',
 };
 
+const parsedCcoDetails = proposal => {
+  return IsJsonString(proposal.details)
+    ? JSON.parse(proposal.details)
+    : { cco: false };
+};
+
 export const countDownText = raiseData => {
   const now = new Date() / 1000;
   if (raiseData.raiseOver) {
@@ -51,33 +57,24 @@ export const claimCountDownText = claimStartTime => {
 };
 
 export const isCcoProposal = (proposal, round) => {
-  // const START_TIME_OVERRIDE = 1615809574;
-
-  const parsedDetails = IsJsonString(proposal.details)
-    ? JSON.parse(proposal.details)
-    : { cco: false };
   const failed = proposal.processed && !proposal.didPass;
   return (
     !proposal.cancelled &&
-    proposal.sponsored &&
-    parsedDetails.cco &&
-    +proposal.createdAt >= +round.raiseStartTime &&
-    // +proposal.createdAt >= START_TIME_OVERRIDE &&
+    parsedCcoDetails(proposal).cco === round.ccoId &&
+    Number(proposal.createdAt) >= Number(round.raiseStartTime) &&
+    Number(proposal.createdAt) <= Number(round.raiseEndTime) &&
     proposal.tributeToken === round.ccoToken.tokenAddress &&
     proposal.sharesRequested === '0' &&
-    +proposal.lootRequested > 0 &&
+    Number(proposal.lootRequested) > 0 &&
     !failed
   );
 };
 
 export const isCcoProposalForAddress = (proposal, address, round) => {
-  const parsedDetails = IsJsonString(proposal.details)
-    ? JSON.parse(proposal.details)
-    : { cco: false };
   const failed = proposal.processed && !proposal.didPass;
   return (
     !proposal.cancelled &&
-    parsedDetails.cco &&
+    parsedCcoDetails(proposal).cco === round.ccoId &&
     address.toLowerCase() === proposal.applicant.toLowerCase() &&
     proposal.tributeToken === round.ccoToken.tokenAddress &&
     proposal.sharesRequested === '0' &&
@@ -96,5 +93,7 @@ export const contributionTotalValue = (proposals, round) => {
 };
 
 export const isDaosquareCcoPath = (daoMetaData, location) => {
-  return daoMetaData?.daosquarecco && location.pathname.split('/')[4] === 'cco';
+  return (
+    daoMetaData?.daosquarecco === 1 && location.pathname.split('/')[4] === 'cco'
+  );
 };

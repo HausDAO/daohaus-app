@@ -62,7 +62,7 @@ const DaoContractSettings = ({ overview, customTerms, wrapNZap }) => {
         {wrapNZap && (
           <Flex justify='space-between'>
             <TextBox size='xs'>
-              Wrap-N-Zap {supportedChains[daochain].chain}
+              Unwrapped {supportedChains[daochain].chain} receiver (Wrap-N-Zap)
             </TextBox>
             <Text fontFamily='mono' variant='value' fontSize='sm'>
               <CopyToClipboard

@@ -34,50 +34,36 @@ const CcoHelper = React.memo(
     }, []);
 
     useEffect(() => {
-      if (currentDaoTokens && daoMetaData?.boosts?.cco) {
+      const setUp = ccoType => {
         const ccoToken = currentDaoTokens.find(
           token =>
             token.tokenAddress.toLowerCase() ===
-            daoMetaData.boosts.cco.metadata.tributeToken.toLowerCase(),
+            daoMetaData.boosts[ccoType].metadata.tributeToken.toLowerCase(),
         );
 
         const now = new Date() / 1000;
-        let round;
-        if (now < daoMetaData.boosts.cco.metadata.raiseStartTime) {
-          [round] = daoMetaData.boosts.cco.metadata.rounds;
-        } else {
-          round = daoMetaData.boosts.cco.metadata.rounds.find((round, i) => {
-            const inRound =
-              +round.startTime < now &&
-              +`${+round.startTime + +round.duration}` > now;
-            return (
-              i === daoMetaData.boosts.cco.metadata.rounds.length - 1 || inRound
-            );
-          });
-        }
-
-        const currentRound = {
-          ...round,
-          endTime: `${+round.startTime + +round.duration}`,
-          roundOpen:
-            +round.startTime < now &&
-            +`${+round.startTime + +round.duration}` > now,
-          roundOver: +`${+round.startTime + +round.duration}` < now,
-        };
+        const configData = daoMetaData.boosts[ccoType].metadata;
+        const duration =
+          Number(configData.raiseEndTime) - Number(configData.raiseStartTime);
 
         setRoundData({
+          ccoType,
           ccoToken,
-          currentRound,
-          network: daoMetaData.boosts.cco.metadata.network,
-          claimTokenSymbol: daoMetaData.boosts.cco.metadata.claimTokenSymbol,
-          raiseStartTime: daoMetaData.boosts.cco.metadata.raiseStartTime,
-          beforeRaise: +daoMetaData.boosts.cco.metadata.raiseStartTime > now,
-          raiseOver: +`${+round.startTime + +round.duration}` < now,
-          claimPeriodStartTime:
-            daoMetaData.boosts.cco.metadata.claimPeriodStartTime,
-          claimOpen:
-            +daoMetaData.boosts.cco.metadata.claimPeriodStartTime < now,
+          active: daoMetaData.boosts[ccoType].active,
+          ...configData,
+          beforeRaise: Number(configData.raiseStartTime) > now,
+          raiseOver: `${Number(configData.startTime) + duration}` < now,
+          claimOpen: +configData.claimPeriodStartTime < now,
         });
+      };
+
+      const ccoType = daoMetaData?.daosquarecco ? 'daosquarecco' : 'cco';
+      if (
+        currentDaoTokens &&
+        daoMetaData?.boosts &&
+        daoMetaData.boosts[ccoType]
+      ) {
+        setUp(ccoType);
       }
     }, [currentDaoTokens, daoMetaData]);
 
@@ -109,9 +95,8 @@ const CcoHelper = React.memo(
         setCurrentContributionData({
           contributionProposals: propSplit.contributionProposals,
           contributionTotal,
-          statusPercentage:
-            (contributionTotal / +roundData.currentRound.maxTarget) * 100,
-          remaining: +roundData.currentRound.maxTarget - contributionTotal,
+          statusPercentage: (contributionTotal / +roundData.maxTarget) * 100,
+          remaining: +roundData.maxTarget - contributionTotal,
         });
       }
     }, [roundData, daoProposals]);
@@ -190,7 +175,11 @@ const CcoHelper = React.memo(
         >
           <Td>{proposal.proposalId}</Td>
           {/* <Td>{timeToNow(proposal.createdAt)}</Td> */}
-          <Td>{new Date(+proposal.createdAt * 1000).toISOString()}</Td>
+          <Td>
+            {new Date(+proposal.createdAt * 1000).toISOString()}
+            <br />
+            epochTime: {proposal.createdAt}
+          </Td>
           <Td>
             {proposal.status === 'VotingPeriod'
               ? `${proposal.status} ends ${timeToNow(
@@ -217,7 +206,7 @@ const CcoHelper = React.memo(
 
           <Td>
             <a
-              href={`https://data.daohaus.club/dao/know-your-dao/${proposal.applicant}`}
+              href={`https://cco.daohaus.club/cco/eligibility/${roundData.ccoId}/${proposal.applicant}`}
               target='_blank'
               rel='noreferrer'
             >
@@ -263,8 +252,20 @@ const CcoHelper = React.memo(
       );
     };
     return (
-      <MainViewLayout header='DAOhaus CCO' isDao>
+      <MainViewLayout header='CCO Admin' isDao>
         <Box w='100%'>
+          {daoProposals ? (
+            <Box my={10} w='100%'>
+              <ContentBox w='100%' fontSize='xl'>
+                {`current total sponsored: 
+              ${daoProposals.reduce((s, p) => {
+                s += p.sponsored ? +p.tributeOffered / 10 ** 18 : 0;
+                return s;
+              }, 0)}`}
+              </ContentBox>
+            </Box>
+          ) : null}
+
           <Box w='100%' pr={[0, null, null, null, 6]} mb={6}>
             <ContentBox w='100%'>
               {Object.keys(proposals).map(section => {
@@ -283,7 +284,6 @@ const CcoHelper = React.memo(
                       <Thead>
                         <Tr>
                           <Th>proposal ID</Th>
-                          {/* <Th>created At</Th> */}
                           <Th>timestamp</Th>
                           <Th>status</Th>
                           <Th>loot</Th>
@@ -304,20 +304,10 @@ const CcoHelper = React.memo(
               })}
             </ContentBox>
           </Box>
-          {daoProposals ? (
-            <Box my={10} w='100%'>
-              <ContentBox w='100%' fontSize='xl'>
-                {`current total sponsored: 
-              ${daoProposals.reduce((s, p) => {
-                s += p.sponsored ? +p.tributeOffered / 10 ** 18 : 0;
-                return s;
-              }, 0)}`}
-              </ContentBox>
-            </Box>
-          ) : null}
+
           <Box w='100%'>
             <ContentBox w='100%'>
-              <Box mt={10}>nonCcoProposals</Box>
+              <Box>nonCcoProposals</Box>
               <Table size='sm' variant='simple'>
                 <Thead>
                   <Tr>
@@ -338,9 +328,9 @@ const CcoHelper = React.memo(
             </ContentBox>
           </Box>
 
-          <Box w='100%'>
+          <Box w='100%' mt={10}>
             <ContentBox w='100%'>
-              <Box mt={10}>grouped by applicant</Box>
+              <Box>grouped by applicant</Box>
 
               {Object.keys(groupedByApplicant).map(key => {
                 if (groupedByApplicant[key].length > 1) {

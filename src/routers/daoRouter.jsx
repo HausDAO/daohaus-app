@@ -249,7 +249,7 @@ const DaoRouter = () => {
             daoProposals={daoProposals}
           />
         </Route>
-        <Route exact path={`${path}/cco/spy`}>
+        <Route exact path={`${path}/cco/watcher`}>
           <CcoHelper
             daoMetaData={daoMetaData}
             currentDaoTokens={currentDaoTokens}

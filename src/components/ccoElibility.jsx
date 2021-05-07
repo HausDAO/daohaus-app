@@ -22,8 +22,9 @@ const CcoEligibility = ({
 
   const checkEligibility = async () => {
     setCheckingEligibility(true);
-    const eligibleRes = await getEligibility(address);
-    setIsEligible(eligibleRes ? 'checked' : 'denied');
+    const eligibleRes = await getEligibility(roundData.ccoId, address);
+    const validRes = eligibleRes && !eligibleRes.error;
+    setIsEligible(validRes ? 'checked' : 'denied');
     setCheckingEligibility(false);
   };
 
