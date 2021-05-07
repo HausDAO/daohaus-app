@@ -17,6 +17,7 @@ import CcoEligibility from '../components/ccoElibility';
 import CcoResources from '../components/ccoResources';
 import CcoContributionCard from '../components/ccoContributeCard';
 import CcoClaimCard from '../components/ccoClaimCard';
+import { daosqaureCcoDaoResolver } from '../utils/resolvers';
 
 // TODO: filter out proposals after max limit is hit
 
@@ -31,6 +32,9 @@ const CcoContribution = ({ daoMetaData, currentDaoTokens, daoProposals }) => {
   const [claimComplete, setClaimComplete] = useState(false);
 
   const networkMatch = injectedChain?.network === roundData?.network;
+
+  // TODO: make this work
+  const dao = daosqaureCcoDaoResolver({});
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -92,6 +96,8 @@ const CcoContribution = ({ daoMetaData, currentDaoTokens, daoProposals }) => {
         contributionProposals,
         roundData,
       );
+
+      console.log('contributionTotal', contributionTotal);
       const addressTotal = contributionTotalValue(addressProposals, roundData);
       const remaining = Number(roundData.maxTarget) - contributionTotal;
 
@@ -161,7 +167,7 @@ const CcoContribution = ({ daoMetaData, currentDaoTokens, daoProposals }) => {
             pr={[0, null, null, null, 6]}
             mb={6}
           >
-            <CcoCard daoMetaData={daoMetaData} />
+            <CcoCard daoMetaData={daoMetaData} dao={dao} />
 
             <CcoEligibility
               networkMatch={networkMatch}

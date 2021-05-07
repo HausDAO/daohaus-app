@@ -10,14 +10,11 @@ export const DaosquareContextProvider = ({ children }) => {
   const [d2CcoDaos, setD2CcoDaos] = useSessionStorage('daosquareCco', null);
 
   useEffect(() => {
-    // if (!exploreDaos.chains.length) {
     daosqaureCcoQuery({
       query: EXPLORER_DAOS,
       apiFetcher: getApiMetadata,
       reactSetter: setD2CcoDaos,
     });
-    // }
-    // }, [d2CcoDaos, setD2CcoDaos]);
   }, []);
 
   const resetD2CcoDaos = () => {

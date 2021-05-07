@@ -10,9 +10,10 @@ import { numberWithCommas } from '../utils/general';
 import { supportedChains } from '../utils/chain';
 import { CCO_CONSTANTS } from '../utils/cco';
 
-const CcoCard = ({ daoMetaData, isLink }) => {
-  const tempFunded = 115005;
-  const tempRaiseLeft = 661661;
+const CcoCard = ({ daoMetaData, isLink, dao }) => {
+  const raiseLeft =
+    Number(daoMetaData.boosts.daosquarecco.metadata.maxTarget) -
+    dao.ccoFundedAmount;
 
   return (
     <ContentBox
@@ -60,11 +61,15 @@ const CcoCard = ({ daoMetaData, isLink }) => {
           mb={3}
         />
         <Flex direction='row' justify='space-between' w='100%'>
-          <Box>{numberWithCommas(tempFunded)} Funded</Box>
           <Box>
-            {numberWithCommas(tempRaiseLeft)}{' '}
-            {daoMetaData.boosts.daosquarecco.metadata.contributionTokenSymbol}
-            Left
+            {`${numberWithCommas(dao.ccoFundedAmount)} ${
+              daoMetaData.boosts.daosquarecco.metadata.tributeTokenSymbol
+            } Funded`}
+          </Box>
+          <Box>
+            {`${numberWithCommas(raiseLeft)} ${
+              daoMetaData.boosts.daosquarecco.metadata.tributeTokenSymbol
+            } Left`}
           </Box>
         </Flex>
         <Flex mt={5} direction='row' justify='space-between' w='100%'>
@@ -73,7 +78,7 @@ const CcoCard = ({ daoMetaData, isLink }) => {
               Funding Goal
             </TextBox>
             <TextBox size='lg' variant='value'>
-              {daoMetaData.boosts.daosquarecco.metadata.maxTarget} USDT
+              {`${daoMetaData.boosts.daosquarecco.metadata.maxTarget} ${daoMetaData.boosts.daosquarecco.metadata.tributeTokenSymbol}`}
             </TextBox>
           </Box>
           <Box>

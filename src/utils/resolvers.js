@@ -1,3 +1,4 @@
+import { ccoStatus, currentFunded } from './cco';
 import {
   determineProposalStatus,
   determineProposalType,
@@ -51,6 +52,21 @@ export const daoResolver = (dao, context) => {
   }
 
   dao.networkId = context.chain.network_id;
+
+  return dao;
+};
+
+export const daosqaureCcoDaoResolver = dao => {
+  const fundedWei = currentFunded(
+    dao.meta.boosts.daosquarecco.metadata,
+    dao.proposals,
+  );
+  const ccoFundedAmount = fundedWei / 10 ** 18;
+  dao.ccoFundedAmount = ccoFundedAmount;
+  dao.ccoStatus = ccoStatus(
+    dao.meta.boosts.daosquarecco.metadata,
+    ccoFundedAmount,
+  );
 
   return dao;
 };

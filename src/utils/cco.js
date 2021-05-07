@@ -63,7 +63,7 @@ export const isCcoProposal = (proposal, round) => {
     parsedCcoDetails(proposal).cco === round.ccoId &&
     Number(proposal.createdAt) >= Number(round.raiseStartTime) &&
     Number(proposal.createdAt) <= Number(round.raiseEndTime) &&
-    proposal.tributeToken === round.ccoToken.tokenAddress &&
+    proposal.tributeToken === round.tributeToken &&
     proposal.sharesRequested === '0' &&
     Number(proposal.lootRequested) > 0 &&
     !failed
@@ -76,7 +76,7 @@ export const isCcoProposalForAddress = (proposal, address, round) => {
     !proposal.cancelled &&
     parsedCcoDetails(proposal).cco === round.ccoId &&
     address.toLowerCase() === proposal.applicant.toLowerCase() &&
-    proposal.tributeToken === round.ccoToken.tokenAddress &&
+    proposal.tributeToken === round.tributeToken &&
     proposal.sharesRequested === '0' &&
     +proposal.lootRequested > 0 &&
     !failed
@@ -84,10 +84,15 @@ export const isCcoProposalForAddress = (proposal, address, round) => {
 };
 
 export const contributionTotalValue = (proposals, round) => {
-  const total = proposals.reduce((sum, prop) => {
-    sum += +prop.tributeOffered;
-    return sum;
-  }, 0);
+  // compare total each time here and skip if we are over
+  const total = proposals
+    .sort((a, b) => {
+      return +b.createdAt - +a.createdAt;
+    })
+    .reduce((sum, prop) => {
+      sum += +prop.tributeOffered;
+      return sum;
+    }, 0);
 
   return total / 10 ** +round.ccoToken.decimals;
 };
@@ -97,3 +102,40 @@ export const isDaosquareCcoPath = (daoMetaData, location) => {
     daoMetaData?.daosquarecco === 1 && location.pathname.split('/')[4] === 'cco'
   );
 };
+
+export const currentFunded = (ccoData, proposals) => {
+  const totalMaxWei = Number(ccoData.maxTarget) * 10 ** 18;
+
+  console.log('ccoData', ccoData);
+  return proposals.reduce((sum, prop) => {
+    const nextSum = Number(prop.tributeOffered) + sum;
+    if (isCcoProposal(prop, ccoData) && nextSum < totalMaxWei) {
+      sum = nextSum;
+    }
+    return sum;
+  }, 0);
+};
+
+export const totalFundedDaosquare = daos => {
+  return daos.reduce((sum, dao) => {
+    if (dao.ccoStatus === 'Funded') {
+      sum += dao.ccoFundedAmount;
+    }
+    return sum;
+  }, 0);
+};
+
+export const ccoStatus = (ccoData, ccoFundedAmount) => {
+  console.log('ccoData, ccoFundedAmount', ccoData, ccoFundedAmount);
+  return 'Active';
+};
+
+// export const totalFund
+
+// statuses
+// coming soon
+// active
+// funded
+// failed
+// ++ can claim badge
+// egg if claim is open and they have loot

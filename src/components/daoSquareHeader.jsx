@@ -26,11 +26,11 @@ const DaosquareHeader = () => {
       <Link href='https://www.daosquare.io/' isExternal>
         Apply
       </Link>
-      {address && (
+      {/* {address && (
         <Box border='1px' borderColor='gray.200' borderRadius='3'>
           {riceBalance} Rice
         </Box>
-      )}
+      )} */}
     </Flex>
   );
 };

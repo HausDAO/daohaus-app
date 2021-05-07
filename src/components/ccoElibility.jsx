@@ -1,13 +1,15 @@
 import React, { useState } from 'react';
-import { Box } from '@chakra-ui/layout';
+import { Box, Flex } from '@chakra-ui/layout';
 import { Spinner } from '@chakra-ui/spinner';
 import { Button } from '@chakra-ui/button';
 
 import { Tooltip } from '@chakra-ui/tooltip';
+import { RiQuestionLine } from 'react-icons/ri';
 import { useInjectedProvider } from '../contexts/InjectedProviderContext';
 import ContentBox from './ContentBox';
 import TextBox from './TextBox';
 import { getEligibility } from '../utils/metadata';
+import { ToolTipWrapper } from '../staticElements/wrappers';
 
 const CcoEligibility = ({
   networkMatch,
@@ -30,16 +32,29 @@ const CcoEligibility = ({
 
   return (
     <ContentBox variant='d2' mt={2} w='100%'>
-      <Tooltip
+      {/* <Tooltip
         hasArrow
         shouldWrapChildren
         label={roundData.whitelistReqs}
         placement='top'
       >
-        <TextBox size='sm' mb={7}>
+      </Tooltip> */}
+      <Flex justify='flex-start'>
+        <TextBox size='sm' mb={7} mr={1}>
           1. Check eligibility
         </TextBox>
-      </Tooltip>
+        <ToolTipWrapper
+          placement='right'
+          tooltip
+          tooltipText={{
+            title: 'Whitelist Requirements',
+            body: roundData.whitelistReqs,
+          }}
+        >
+          <RiQuestionLine />
+        </ToolTipWrapper>
+      </Flex>
+
       {networkMatch ? (
         <>
           {isEligible === 'unchecked' && (

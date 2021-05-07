@@ -12,13 +12,6 @@ const DaosquareCcoOverall = ({ totals }) => {
       </Box>
       <ContentBox variant='d2'>
         <TextBox size='xs' variant='label'>
-          Raised
-        </TextBox>
-        <TextBox size='lg' variant='value' mb={7}>
-          {numberWithCommas(totals.raised)} USDT
-        </TextBox>
-
-        <TextBox size='xs' variant='label'>
           Funded
         </TextBox>
         <TextBox size='lg' variant='value' mb={7}>
