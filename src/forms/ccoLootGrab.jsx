@@ -199,6 +199,7 @@ const CcoLootGrabForm = ({
             loadingText='Submitting'
             isLoading={loading}
             disabled={loading || contributionClosed}
+            variant='primary'
           >
             Submit
           </Button>

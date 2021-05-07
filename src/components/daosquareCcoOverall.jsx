@@ -11,17 +11,23 @@ const DaosquareCcoOverall = ({ totals }) => {
         Overall Stats
       </Box>
       <ContentBox variant='d2'>
-        <TextBox size='xs'>Raised</TextBox>
-        <TextBox size='lg' variant='value'>
+        <TextBox size='xs' variant='label'>
+          Raised
+        </TextBox>
+        <TextBox size='lg' variant='value' mb={7}>
           {numberWithCommas(totals.raised)} USDT
         </TextBox>
 
-        <TextBox size='xs'>Funded</TextBox>
-        <TextBox size='lg' variant='value'>
+        <TextBox size='xs' variant='label'>
+          Funded
+        </TextBox>
+        <TextBox size='lg' variant='value' mb={7}>
           {numberWithCommas(totals.funded)} USDT
         </TextBox>
 
-        <TextBox size='xs'>Projects Funded</TextBox>
+        <TextBox size='xs' variant='label'>
+          Projects Funded
+        </TextBox>
         <TextBox size='lg' variant='value'>
           {totals.projects}
         </TextBox>

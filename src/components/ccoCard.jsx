@@ -69,12 +69,17 @@ const CcoCard = ({ daoMetaData, isLink }) => {
         </Flex>
         <Flex mt={5} direction='row' justify='space-between' w='100%'>
           <Box>
-            <TextBox size='xs'>Funding Goal</TextBox>
+            <TextBox variant='label' size='xs'>
+              Funding Goal
+            </TextBox>
             <TextBox size='lg' variant='value'>
               {daoMetaData.boosts.daosquarecco.metadata.maxTarget} USDT
             </TextBox>
           </Box>
           <Box>
+            <TextBox variant='label' size='xs'>
+              Rewards
+            </TextBox>
             <TextBox size='lg' variant='value'>
               {`${daoMetaData.boosts.daosquarecco.metadata.ratio} ${daoMetaData.boosts.daosquarecco.metadata.claimTokenSymbol} = 1 ${daoMetaData.boosts.daosquarecco.metadata.tributeTokenSymbol}`}
             </TextBox>
