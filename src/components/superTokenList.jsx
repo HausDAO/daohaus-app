@@ -18,10 +18,11 @@ const SuperTokenList = ({
   loadingStreams,
   handleCopyToast,
   daoMember,
+  minionBalances,
   loading,
   setLoading,
 }) => {
-  const { daochain, minion } = useParams();
+  const { daochain, daoid, minion } = useParams();
 
   const { address, injectedProvider } = useInjectedProvider();
   const {
@@ -40,7 +41,7 @@ const SuperTokenList = ({
     return [];
   }, [superTokenBalances]);
 
-  const withdrawSupertoken = async tokenAddress => {
+  const withdrawSupertoken = async (tokenAddress, downgrade) => {
     setLoading({
       active: true,
       condition: tokenAddress,
@@ -51,7 +52,7 @@ const SuperTokenList = ({
         cachePoll,
       })({
         minionAddress: minion,
-        superTokenAddress: tokenAddress,
+        tokenAddress,
         expectedBalance: 0,
         chainID: daochain,
         actions: {
@@ -75,7 +76,7 @@ const SuperTokenList = ({
         setProposalModal(false);
         setTxInfoModal(true);
       };
-      const args = [tokenAddress];
+      const args = [tokenAddress, downgrade];
       await SuperfluidMinionService({
         web3: injectedProvider,
         minion,
@@ -90,6 +91,78 @@ const SuperTokenList = ({
         active: false,
         condition: null,
       });
+    } catch (err) {
+      setLoading({
+        active: false,
+        condition: null,
+      });
+      console.log('error: ', err);
+    }
+  };
+
+  const upgradeSupertoken = async (superToken, superTokenAddress) => {
+    try {
+      const underlyingTokenBalance = minionBalances.find(
+        b => b.tokenAddress === superToken.underlyingTokenAddress,
+      );
+      if (underlyingTokenBalance && +underlyingTokenBalance.tokenBalance > 0) {
+        setLoading({
+          active: true,
+          condition: superTokenAddress,
+        });
+        const poll = createPoll({
+          action: 'withdrawBalance',
+          cachePoll,
+        })({
+          memberAddress: minion,
+          tokenAddress: superToken.underlyingTokenAddress,
+          expectedBalance: 0,
+          chainID: daochain,
+          daoID: daoid,
+          actions: {
+            onError: (error, txHash) => {
+              errorToast({
+                title: 'There was an error.',
+              });
+              resolvePoll(txHash);
+              console.error(`Could not upgrade the token balance: ${error}`);
+            },
+            onSuccess: txHash => {
+              successToast({
+                title: 'Token balance has been upgraded.',
+              });
+              refreshDao();
+              resolvePoll(txHash);
+            },
+          },
+        });
+        const onTxHash = () => {
+          setProposalModal(false);
+          setTxInfoModal(true);
+        };
+        const args = [
+          superToken.underlyingTokenAddress,
+          underlyingTokenBalance.tokenBalance,
+        ];
+        await SuperfluidMinionService({
+          web3: injectedProvider,
+          minion,
+          chainID: daochain,
+        })('upgradeToken')({
+          args,
+          address,
+          poll,
+          onTxHash,
+        });
+        setLoading({
+          active: false,
+          condition: null,
+        });
+      } else {
+        errorToast({
+          title: `No ${underlyingTokenBalance.symbol} token balance available in the Minion`,
+        });
+      }
     } catch (err) {
       setLoading({
         active: false,
@@ -131,7 +204,7 @@ const SuperTokenList = ({
                     tokenAddress={tokenAddress}
                     daoMember={daoMember}
                     withdrawSupertoken={withdrawSupertoken}
-                    successToast={successToast}
+                    upgradeSupertoken={upgradeSupertoken}
                   />
                 );
               }

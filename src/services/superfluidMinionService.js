@@ -18,12 +18,12 @@ const getSuperTokenBalances = async (
   minion,
   sfResolver,
   sfVersion,
-  superTokens,
+  tokens,
 ) => {
   try {
-    const tokenBalances = superTokens.map(async tokenAddress => {
+    const tokenBalances = tokens.map(async token => {
       const tokenService = TokenService({
-        tokenAddress,
+        tokenAddress: token.superTokenAddress,
         chainID,
       });
       const tokenSymbol = await tokenService('symbol')();
@@ -31,11 +31,14 @@ const getSuperTokenBalances = async (
         .get(`supertokens.${sfVersion}.${tokenSymbol}`)
         .call();
       return {
-        [tokenAddress]: {
+        [token.superTokenAddress]: {
           tokenBalance: await tokenService('balanceOf')(minion),
           symbol: tokenSymbol,
           decimals: await tokenService('decimals')(),
           registeredToken: sToken !== constants.AddressZero,
+          underlyingTokenAddress:
+            token.tokenAddress !== token.superTokenAddress &&
+            token.tokenAddress,
           _service: tokenService,
         },
       };
@@ -101,11 +104,11 @@ export const SuperfluidMinionService = ({ web3, minion, chainID }) => {
             minion,
             sfResolver,
             sfVersion,
-            Array(
-              ...new Set(
+            Array.from(
+              new Set(
                 streams.filter(s => s.executed).map(s => s.superTokenAddress),
               ),
-            ),
+            ).map(token => streams.find(s => s.superTokenAddress === token)),
           );
           const now = new Date();
           const flows = await Promise.all(
@@ -187,12 +190,14 @@ export const SuperfluidMinionService = ({ web3, minion, chainID }) => {
     // executeAction args: [ proposal id ]
     // cancelAction args: [ proposal id ]
     // cancelStream args: [ proposal id ]
-    // withdrawRemainingFunds args: | superToken |
+    // upgradeToken args: [ token, value ]
+    // withdrawRemainingFunds args: [ superToken, downgrade ]
     if (
-      service === 'proposeStream' ||
+      service === 'proposeAction' ||
       service === 'executeAction' ||
       service === 'cancelAction' ||
       service === 'cancelStream' ||
+      service === 'upgradeToken' ||
       service === 'withdrawRemainingFunds'
     ) {
       return async ({ args, address, poll, onTxHash }) => {
