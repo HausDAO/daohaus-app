@@ -186,6 +186,7 @@ const SuperfluidMinionDetails = ({
                 loading={loading}
                 setLoading={setLoading}
                 daoMember={daoMember}
+                minionBalances={minionBalances}
               />
               <StreamList
                 list={streamList}

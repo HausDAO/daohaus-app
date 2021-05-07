@@ -59,13 +59,7 @@
 		"anonymous": false,
 		"inputs": [
 			{
-				"indexed": false,
-				"internalType": "address",
-				"name": "moloch",
-				"type": "address"
-			},
-			{
-				"indexed": false,
+				"indexed": true,
 				"internalType": "address",
 				"name": "token",
 				"type": "address"
@@ -103,15 +97,21 @@
 		"anonymous": false,
 		"inputs": [
 			{
-				"indexed": false,
+				"indexed": true,
 				"internalType": "address",
 				"name": "superToken",
 				"type": "address"
 			},
 			{
-				"indexed": false,
+				"indexed": true,
 				"internalType": "address",
 				"name": "underlyingToken",
+				"type": "address"
+			},
+			{
+				"indexed": true,
+				"internalType": "address",
+				"name": "withdrawnBy",
 				"type": "address"
 			},
 			{
@@ -119,6 +119,12 @@
 				"internalType": "uint256",
 				"name": "amount",
 				"type": "uint256"
+			},
+			{
+				"indexed": false,
+				"internalType": "bool",
+				"name": "downgraded",
+				"type": "bool"
 			}
 		],
 		"name": "WithdrawBalance",
@@ -154,31 +160,7 @@
 		"inputs": [
 			{
 				"internalType": "uint256",
-				"name": "proposalId",
-				"type": "uint256"
-			}
-		],
-		"name": "currentTokenBalance",
-		"outputs": [
-			{
-				"internalType": "uint256",
-				"name": "deposit",
-				"type": "uint256"
-			},
-			{
-				"internalType": "uint256",
-				"name": "owedDeposit",
-				"type": "uint256"
-			}
-		],
-		"stateMutability": "view",
-		"type": "function"
-	},
-	{
-		"inputs": [
-			{
-				"internalType": "uint256",
-				"name": "proposalId",
+				"name": "_proposalId",
 				"type": "uint256"
 			}
 		],
@@ -214,8 +196,13 @@
 	{
 		"inputs": [
 			{
+				"internalType": "contract IMOLOCH",
+				"name": "_moloch",
+				"type": "address"
+			},
+			{
 				"internalType": "address",
-				"name": "user",
+				"name": "_user",
 				"type": "address"
 			}
 		],
@@ -276,7 +263,7 @@
 				"type": "string"
 			}
 		],
-		"name": "proposeStream",
+		"name": "proposeAction",
 		"outputs": [
 			{
 				"internalType": "uint256",
@@ -292,7 +279,7 @@
 		"name": "sfApp",
 		"outputs": [
 			{
-				"internalType": "contract SuperApp",
+				"internalType": "contract IBaseApp",
 				"name": "",
 				"type": "address"
 			}
@@ -362,9 +349,32 @@
 	{
 		"inputs": [
 			{
+				"internalType": "contract ERC20WithTokenInfo",
+				"name": "_token",
+				"type": "address"
+			},
+			{
+				"internalType": "uint256",
+				"name": "value",
+				"type": "uint256"
+			}
+		],
+		"name": "upgradeToken",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
 				"internalType": "contract ISuperToken",
 				"name": "superToken",
 				"type": "address"
+			},
+			{
+				"internalType": "bool",
+				"name": "_downgrade",
+				"type": "bool"
 			}
 		],
 		"name": "withdrawRemainingFunds",

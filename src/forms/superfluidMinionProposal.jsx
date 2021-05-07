@@ -172,7 +172,7 @@ const SuperfluidMinionProposalForm = () => {
           setProposalModal(false);
           setTxInfoModal(true);
         };
-        await minionService('proposeStream')({
+        await minionService('proposeAction')({
           args,
           address,
           poll,
