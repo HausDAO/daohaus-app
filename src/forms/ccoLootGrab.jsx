@@ -39,7 +39,7 @@ const CcoLootGrabForm = ({
 
   const [loading, setLoading] = useState(false);
   const [currentError, setCurrentError] = useState(null);
-  const [ratio, setRatio] = useState(1);
+  const lootRatio = 1;
 
   const {
     handleSubmit,
@@ -67,19 +67,12 @@ const CcoLootGrabForm = ({
 
   console.log('roundData', roundData);
 
-  useEffect(() => {
-    if (roundData.active) {
-      const daoRatio = Number(roundData.ratio);
-      setRatio(daoRatio);
-    }
-  });
-
   const onSubmit = async values => {
     setLoading(true);
     const hash = createHash();
     const details = detailsToJSON({
       title: 'CCO contribution!',
-      cco: true,
+      cco: roundData.ccoId,
       hash,
     });
     const { tokenBalances, depositToken } = daoOverview;
@@ -93,7 +86,7 @@ const CcoLootGrabForm = ({
     const args = [
       applicant,
       values.sharesRequested || '0',
-      Math.floor(values.tributeOffered * ratio || '0').toString(),
+      Math.floor(values.tributeOffered * lootRatio || '0').toString(),
       tributeOffered,
       tributeToken,
       paymentRequested,
