@@ -1,7 +1,7 @@
 const TextBoxComponent = {
   baseStyle: props => ({
-    color: props.colorMode === 'light' ? 'blackAlpha.900' : 'whiteAlpha.900',
-    textAlign: props.textAlign ? props.textAlign : null,
+    color: props.colorMode === 'light' ? 'blackAlpha.700' : 'whiteAlpha.700',
+    // textAlign: props.textAlign ? props.textAlign : null,
     fontFamily: 'heading',
     textTransform: 'uppercase',
     letterSpacing: '0.15em',
@@ -41,15 +41,15 @@ const TextBoxComponent = {
   },
   variants: {
     label: props => ({
-      color: props.colorMode === 'light' ? 'blackAlpha.900' : 'whiteAlpha.700',
-      textAlign: props.textAlign ? props.textAlign : null,
+      color: props.colorMode === 'light' ? 'blackAlpha.700' : 'whiteAlpha.700',
+      // textAlign: props.textAlign ? props.textAlign : null,
       fontFamily: 'heading',
       textTransform: 'uppercase',
       letterSpacing: '0.15em',
     }),
     value: props => ({
-      color: props.colorMode === 'light' ? 'blackAlpha.900' : 'whiteAlpha.700',
-      textAlign: props.textAlign ? props.textAlign : null,
+      color: props.colorMode === 'light' ? 'blackAlpha.700' : 'whiteAlpha.700',
+      // textAlign: props.textAlign ? props.textAlign : null,
       fontFamily: 'mono',
       textTransform: 'none',
       mt: '9px',

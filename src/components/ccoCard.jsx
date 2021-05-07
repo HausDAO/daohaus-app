@@ -17,8 +17,9 @@ const CcoCard = ({ daoMetaData, isLink }) => {
   return (
     <ContentBox
       mt={5}
+      variant='d2'
       style={{ transition: 'all .15s linear' }}
-      _hover={isLink && { transform: 'scale(1.05)' }}
+      _hover={isLink && { transform: 'scale(1.01)' }}
     >
       <Box
         as={isLink && Link}

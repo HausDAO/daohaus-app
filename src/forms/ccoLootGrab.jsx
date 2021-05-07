@@ -152,7 +152,7 @@ const CcoLootGrabForm = ({
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
       <Flex justifyContent='space-between' my={3}>
-        <Text fontSize='sm' color='whiteAlpha.700' as='i'>
+        <Text fontSize='sm' color='blackAlpha.700' as='i'>
           {`${currentContributionData?.addressRemaining ||
             roundData.maxContribution}`}
           /

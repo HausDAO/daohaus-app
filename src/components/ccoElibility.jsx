@@ -35,7 +35,7 @@ const CcoEligibility = ({
         label={roundData.whitelistReqs}
         placement='top'
       >
-        <TextBox size='sm' color='blackAlpha.900' mb={7}>
+        <TextBox size='sm' mb={7}>
           1. Check eligibility
         </TextBox>
       </Tooltip>

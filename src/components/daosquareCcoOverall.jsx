@@ -10,7 +10,7 @@ const DaosquareCcoOverall = ({ totals }) => {
       <Box fontSize='xl' mb={5}>
         Overall Stats
       </Box>
-      <ContentBox>
+      <ContentBox variant='d2'>
         <TextBox size='xs'>Raised</TextBox>
         <TextBox size='lg' variant='value'>
           {numberWithCommas(totals.raised)} USDT

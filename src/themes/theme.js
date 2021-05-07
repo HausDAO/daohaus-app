@@ -28,6 +28,10 @@ export const createTheme = daoTheme => {
     colors: {
       secondaryAlpha: themeOverrides.secondaryAlpha,
       primaryAlpha: themeOverrides.primaryAlpha,
+      modeColor:
+        themeOverrides.initialColorMode === 'light'
+          ? 'blackAlpha.900'
+          : 'whiteAlpha.900',
       primary: {
         50: lighten(0.4, themeOverrides.primary500),
         100: lighten(0.3, themeOverrides.primary500),
@@ -119,20 +123,18 @@ export const createTheme = daoTheme => {
       global: {
         'html, body': {
           fontSize: 'm',
-          color:
-            themeOverrides.initialColorMode === 'light'
-              ? 'blackAlpha.900'
-              : 'whiteAlpha.900',
+          color: 'modeColor',
           lineHeight: 'tall',
         },
         a: {
           transition: 'all 0.15s linear',
+          color: 'secondary.400',
           _hover: { textDecoration: 'none', color: 'secondary.500' },
         },
       },
     },
     config: {
-      initialColorMode: themeOverrides.initialColorMode || 'dark',
+      initialColorMode: themeOverrides.initialColorMode,
       useSystemColorMode: false,
     },
   });
