@@ -112,6 +112,7 @@ const CcoClaim = ({ setClaimComplete }) => {
         isLoading={loading}
         disabled={loading}
         onClick={handleClaim}
+        variant='primary'
       >
         CLAIM
       </Button>

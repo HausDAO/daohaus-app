@@ -4,7 +4,6 @@ import { Box, Link, Text } from '@chakra-ui/layout';
 
 import { useOverlay } from '../contexts/OverlayContext';
 import ContentBox from './ContentBox';
-import TextBox from './TextBox';
 import GenericModal from '../modals/genericModal';
 
 const CcoResources = ({ daoMetaData, ccoData }) => {
@@ -20,24 +19,19 @@ const CcoResources = ({ daoMetaData, ccoData }) => {
   return (
     <>
       <ContentBox variant='d2' mt={2} w='100%'>
-        <Box
-          fontSize='xl'
-          fontWeight={700}
-          fontFamily='heading'
-          mb={7}
-          color='blackAlpha.900'
-        >
+        <Box fontSize='xl' fontWeight={700} fontFamily='heading' mb={7}>
           Resources
         </Box>
-        <TextBox
-          fontSize='sm'
+        <Box
+          fontSize='lg'
           color='secondary.500'
+          fontFamily='heading'
           onClick={() => setGenericModal({ aboutCcoDao: true })}
           mb={5}
           cursor='pointer'
         >
           About {daoMetaData.name}
-        </TextBox>
+        </Box>
         <Link
           href='https://daohaus.club/docs/cco'
           isExternal
@@ -45,19 +39,20 @@ const CcoResources = ({ daoMetaData, ccoData }) => {
           alignItems='center'
           mb={5}
         >
-          <TextBox fontSize='sm' color='secondary.500'>
+          <Box fontSize='lg' color='secondary.500' fontFamily='heading'>
             About CCOs
-          </TextBox>
+          </Box>
         </Link>
-        <TextBox
-          fontSize='sm'
+        <Box
+          fontSize='lg'
           color='secondary.500'
+          fontFamily='heading'
           onClick={() => setGenericModal({ ccoFaq: true })}
           mb={5}
           cursor='pointer'
         >
           Rewards
-        </TextBox>
+        </Box>
       </ContentBox>
 
       <GenericModal modalId='aboutCcoDao'>
