@@ -62,4 +62,8 @@ export const SF_LABEL = {
       'Please do it by following this link, otherwise stream recipients will not be able to view/withdraw their funds through the Superflud Dashboard.',
     ],
   },
+  TOKEN_BALANCES: {
+    body:
+      'To fund the Superfluid Minion you need to make a funding proposal from the DAO to the minion. Do not send tokens directly.',
+  },
 };
