@@ -19,6 +19,26 @@ const baseListFields = `
   canceledBy
 `;
 
+const baseFlowFields = `
+  id
+  events {
+    oldFlowRate
+    flowRate
+    sum
+    transaction {
+      blockNumber
+      timestamp
+    }
+  }
+  flowRate
+  lastUpdate
+  sum
+  token {
+    id
+    underlyingAddress
+  }
+`;
+
 export const MINION_STREAMS = gql`
   query minionStream($minionId: String!) {
     minionStreams(where: { minion: $minionId }, orderBy: createdAt, orderDirection: asc) {
@@ -27,29 +47,19 @@ export const MINION_STREAMS = gql`
   }
 `;
 
-export const SF_OUTGOING_STREAMS = gql`
+export const SF_STREAMS = gql`
   query outStreams($ownerAddress: String!) {
     account(id: $ownerAddress) {
       flowsOwned {
-        id
-        events {
-          oldFlowRate
-          flowRate
-          sum
-          transaction {
-            blockNumber
-            timestamp
-          }
-        }
-        flowRate
-        lastUpdate
+        ${baseFlowFields}
         recipient {
           id
         }
-        sum
-        token {
+      }
+      flowsReceived {
+        ${baseFlowFields}
+        owner {
           id
-          underlyingAddress
         }
       }
     }

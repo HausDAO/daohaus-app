@@ -6,7 +6,7 @@ import SuperfluidResolverAbi from '../contracts/iSuperfluidResolver.json';
 import {
   MINION_STREAMS,
   SF_ACTIVE_STREAMS,
-  SF_OUTGOING_STREAMS,
+  SF_STREAMS,
 } from '../graphQL/superfluid-queries';
 import { TokenService } from './tokenService';
 import { chainByID, getGraphEndpoint } from '../utils/chain';
@@ -37,8 +37,8 @@ const getSuperTokenBalances = async (
           decimals: await tokenService('decimals')(),
           registeredToken: sToken !== constants.AddressZero,
           underlyingTokenAddress:
-            token.tokenAddress !== token.superTokenAddress &&
-            token.tokenAddress,
+            token.underlyingTokenAddress !== token.superTokenAddress &&
+            token.underlyingTokenAddress,
           _service: tokenService,
         },
       };
@@ -83,40 +83,51 @@ export const SuperfluidMinionService = ({ web3, minion, chainID }) => {
             subfield: 'minionStreams',
           });
 
-          if (!streams.length) {
-            return {
-              flows: [],
-              superTokens: null,
-            };
-          }
-
           const sfAccount = await graphQuery({
             endpoint: superfluidConfig.subgraph_url,
-            query: SF_OUTGOING_STREAMS,
+            query: SF_STREAMS,
             variables: {
               ownerAddress: minion,
             },
           });
-          const sfStreams = sfAccount?.account?.flowsOwned;
+          const sfInStreams = sfAccount?.account?.flowsReceived;
+          const sfOutStreams = sfAccount?.account?.flowsOwned;
+          const tokens = Array.from(
+            new Set([
+              ...sfInStreams.map(s => s.token.id),
+              ...sfOutStreams.map(s => s.token.id),
+            ]),
+          ).map(token => {
+            const s =
+              sfOutStreams.find(s => s.token.id === token) ||
+              sfInStreams.find(s => s.token.id === token);
+            return {
+              superTokenAddress: s.token.id,
+              underlyingTokenAddress: s.token.underlyingAddress,
+            };
+          });
 
           const superTokens = await getSuperTokenBalances(
             chainID,
             minion,
             sfResolver,
             sfVersion,
-            Array.from(
-              new Set(
-                streams.filter(s => s.executed).map(s => s.superTokenAddress),
-              ),
-            ).map(token => streams.find(s => s.superTokenAddress === token)),
+            tokens,
           );
+
+          if (!streams.length) {
+            return {
+              flows: [],
+              superTokens,
+            };
+          }
           const now = new Date();
           const flows = await Promise.all(
             streams.map(async stream => {
               if (stream.executed) {
                 const decimals =
                   superTokens[stream.superTokenAddress]?.decimals;
-                const sfStream = sfStreams.find(
+                const sfStream = sfOutStreams.find(
                   s =>
                     s.recipient.id === stream.to &&
                     s.token.id === stream.superTokenAddress,
