@@ -36,7 +36,7 @@ const CcoEligibility = ({
         label={roundData.whitelistReqs}
         placement='top'
       >
-        <TextBox size='sm' color='blackAlpha.900' mb={7}>
+        <TextBox size='sm' mb={7}>
           1. Check eligibility
         </TextBox>
       </Tooltip>
@@ -44,6 +44,7 @@ const CcoEligibility = ({
         <>
           {isEligible === 'unchecked' && (
             <Button
+              variant='primary'
               onClick={checkEligibility}
               disabled={
                 checkingEligibility || roundData.raiseOver || raiseAtMax
@@ -55,7 +56,7 @@ const CcoEligibility = ({
           {isEligible === 'checked' && (
             <>
               <Box size='md' my={2} color='blackAlpha.900'>
-                You&apos;re eligible. Kudos for interacting with DAOs!
+                You are eligible to contribute.
               </Box>
 
               {roundData.beforeRaise ? (

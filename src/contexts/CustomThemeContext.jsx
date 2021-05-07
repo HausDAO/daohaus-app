@@ -31,8 +31,8 @@ export const CustomThemeProvider = ({ children }) => {
       }}
     >
       <ChakraProvider theme={theme}>
-        <ColorModeScript initialColorMode={theme.config.initialColorMode} />
         <OverlayProvider>{children}</OverlayProvider>
+        <ColorModeScript initialColorMode={theme.config.initialColorMode} />
       </ChakraProvider>
     </CustomThemeContext.Provider>
   );

@@ -35,7 +35,7 @@ export const defaultTheme = {
     // f04subhead: 'Please reload from the most recent save point.',
     // f04cta: 'Start Over',
   },
-  initialColorMode: 'dark',
+  modeAlpha500: '#fff',
 };
 
 export const daosquareCcoTheme = {
@@ -51,5 +51,5 @@ export const daosquareCcoTheme = {
   monoFont: 'Space Mono',
   avatarImg: D2Avatar,
   bgImg: D2BgImg,
-  initialColorMode: 'light',
+  modeAlpha500: '#000',
 };

@@ -1,10 +1,11 @@
 const TextBoxComponent = {
   baseStyle: props => ({
-    color: props.colorMode === 'light' ? 'blackAlpha.900' : 'whiteAlpha.900',
+    color: 'mode.900',
     textAlign: props.textAlign ? props.textAlign : null,
     fontFamily: 'heading',
     textTransform: 'uppercase',
     letterSpacing: '0.15em',
+    opacity: 1.0,
   }),
 
   sizes: {
@@ -41,14 +42,15 @@ const TextBoxComponent = {
   },
   variants: {
     label: props => ({
-      color: props.colorMode === 'light' ? 'blackAlpha.900' : 'whiteAlpha.700',
+      color: 'mode.900',
       textAlign: props.textAlign ? props.textAlign : null,
       fontFamily: 'heading',
       textTransform: 'uppercase',
       letterSpacing: '0.15em',
+      opacity: 0.7,
     }),
     value: props => ({
-      color: props.colorMode === 'light' ? 'blackAlpha.900' : 'whiteAlpha.700',
+      color: 'mode.900',
       textAlign: props.textAlign ? props.textAlign : null,
       fontFamily: 'mono',
       textTransform: 'none',

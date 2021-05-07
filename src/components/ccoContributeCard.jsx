@@ -24,7 +24,7 @@ const CcoContributionCard = ({
   return (
     <ContentBox variant='d2' mt={2} w='100%'>
       <Flex direction='column'>
-        <TextBox size='sm' color='blackAlpha.900' mb={7}>
+        <TextBox size='sm' mb={7}>
           2. Contribute
         </TextBox>
         {!raiseAtMax ? (

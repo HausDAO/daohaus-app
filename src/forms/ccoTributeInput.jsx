@@ -201,7 +201,6 @@ const CcoTributeInput = ({
               message: 'Contribution required',
             },
           })}
-          color='white'
           focusBorderColor='secondary.500'
           onChange={handleChange}
           disabled={contributionClosed}
