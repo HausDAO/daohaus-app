@@ -172,7 +172,7 @@ const SuperfluidMinionProposalForm = () => {
           setProposalModal(false);
           setTxInfoModal(true);
         };
-        await minionService('proposeStream')({
+        await minionService('proposeAction')({
           args,
           address,
           poll,
@@ -236,7 +236,7 @@ const SuperfluidMinionProposalForm = () => {
           <AddressInput
             formLabel='recipient'
             name='recipient'
-            tipLabel='Address where tokens will be streamed'
+            tipLabel='Address where tokens will be streamed. A DAO address cannot be the recepient on a stream proposal.'
             register={register}
             setValue={setValue}
             watch={watch}

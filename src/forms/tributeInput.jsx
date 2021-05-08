@@ -193,7 +193,7 @@ const TributeInput = ({ register, setValue, getValues, setError }) => {
             size='xs'
             position='absolute'
             right='0'
-            bottom='-10px'
+            bottom='-32px'
           >
             Unlock
           </Button>
@@ -206,18 +206,16 @@ const TributeInput = ({ register, setValue, getValues, setError }) => {
           right='0'
           top='-30px'
         >
-          {`Max: 
-          ${balance &&
-            ethers.utils.commify(
-              parseFloat(utils.fromWei(balance)).toFixed(4),
-            )}`}
+          Max:{' '}
+          {balance &&
+            ethers.utils.commify(parseFloat(utils.fromWei(balance)).toFixed(4))}
         </Button>
         <Input
           name='tributeOffered'
           placeholder='0'
           ref={register({
             validate: {
-              inefficienFunds: value => {
+              insufficientFunds: value => {
                 if (+value > +utils.fromWei(balance)) {
                   return 'Insufficient Funds';
                 }

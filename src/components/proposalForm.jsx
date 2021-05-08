@@ -26,6 +26,9 @@ import {
   RiErrorWarningLine,
   RiInformationLine,
 } from 'react-icons/ri';
+import { useParams } from 'react-router-dom';
+import { ethers } from 'ethers';
+import { utils } from 'web3';
 import TextBox from './TextBox';
 import { ToolTipWrapper } from '../staticElements/wrappers';
 import { useDao } from '../contexts/DaoContext';
@@ -36,9 +39,6 @@ import { lookupENS } from '../utils/ens';
 import { useTX } from '../contexts/TXContext';
 import { fetchBalance } from '../utils/tokenValue';
 import { useInjectedProvider } from '../contexts/InjectedProviderContext';
-import { useParams } from 'react-router-dom';
-import { ethers } from 'ethers';
-import { utils } from 'web3';
 import { TokenService } from '../services/tokenService';
 import { checkFormTypes, validateRequired } from '../utils/validation';
 
@@ -79,9 +79,8 @@ const ProposalForm = ({
         const error = errors.find(error => error.name === field.name);
         if (error) {
           return { ...field, error };
-        } else {
-          return { ...field, error: false };
         }
+        return { ...field, error: false };
       }),
     );
   };
@@ -626,15 +625,6 @@ const TributeInput = props => {
     setUnlocked(result);
   };
 
-  const setMax = () => {
-    const tributeToken = getValues('tributeToken');
-    setValue(
-      'tributeOffered',
-      balance / 10 ** daoTokens.find(t => t.value === tributeToken)?.decimals,
-    );
-    handleChange();
-  };
-
   const checkUnlocked = async (token, amount) => {
     if (
       amount === '' ||
@@ -662,6 +652,14 @@ const TributeInput = props => {
 
     checkUnlocked(tributeToken, tributeOffered);
     updateBalance(tributeToken);
+  };
+  const setMax = () => {
+    const tributeToken = getValues('tributeToken');
+    setValue(
+      'tributeOffered',
+      balance / 10 ** daoTokens.find(t => t.value === tributeToken)?.decimals,
+    );
+    handleChange();
   };
 
   return (

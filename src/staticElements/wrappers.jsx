@@ -32,13 +32,11 @@ export const ToolTipWrapper = ({
 }) => {
   if (!tooltip) {
     return link ? (
-      <Box as={Link} to={link} display='inline-block' {...layoutProps}>
+      <Box as={Link} to={link} {...layoutProps}>
         {children}
       </Box>
     ) : (
-      <Box display='inline-block' {...layoutProps}>
-        {children}
-      </Box>
+      <Box>{children}</Box>
     );
   }
   return (
@@ -51,13 +49,11 @@ export const ToolTipWrapper = ({
       {...layoutProps}
     >
       {link ? (
-        <Box as={Link} to={link} display='inline-block' {...layoutProps}>
+        <Box as={Link} to={link}>
           {children}
         </Box>
       ) : (
-        <Box display='inline-block' {...layoutProps}>
-          {children}
-        </Box>
+        <Box>{children}</Box>
       )}
     </Tooltip>
   );

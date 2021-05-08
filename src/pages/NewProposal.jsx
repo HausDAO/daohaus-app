@@ -52,18 +52,10 @@ const NewProposal = ({ customTerms, daoMetaData, daoOverview }) => {
 
   useEffect(() => {
     if (daoMetaData?.boosts?.proposalTypes?.active) {
-      proposalTypes(
-        customTerms,
-        daoMetaData?.boosts,
-        daoOverview?.minions?.length,
-      );
+      proposalTypes(customTerms, daoMetaData?.boosts, daoOverview?.minions);
     }
     setActiveProposalTypes(
-      proposalTypes(
-        customTerms,
-        daoMetaData?.boosts,
-        daoOverview?.minions?.length,
-      ),
+      proposalTypes(customTerms, daoMetaData?.boosts, daoOverview?.minions),
     );
   }, [customTerms, daoMetaData, daoOverview]);
 
@@ -99,7 +91,8 @@ const NewProposal = ({ customTerms, daoMetaData, daoOverview }) => {
                       border: '1px solid #7579C5',
                       cursor: 'pointer',
                     }}
-                    w='160px'
+                    border='1px solid transparent'
+                    minW='160px'
                     h='200px'
                     p={2}
                     m={1}
@@ -126,6 +119,7 @@ const NewProposal = ({ customTerms, daoMetaData, daoOverview }) => {
                       fontFamily='heading'
                       color='white'
                       textAlign='center'
+                      maxW='150px'
                     >
                       {p.subhead}
                     </Box>

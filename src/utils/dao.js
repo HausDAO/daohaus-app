@@ -1,4 +1,4 @@
-// import { act } from 'react-dom/test-utils';
+import { MINION_TYPES } from './proposalUtils';
 
 const orderDaosByNetwork = (userHubDaos, userNetwork) => ({
   currentNetwork: userHubDaos.find(dao => dao.networkID === userNetwork) || [],
@@ -65,3 +65,13 @@ export const filterDAOsByName = (network, searchTerm) => ({
 
 export const getActiveMembers = members =>
   members.filter(member => +member.shares > 0 || +member.loot > 0);
+
+export const hasMinion = (minions, minionType) => {
+  if (Object.values(MINION_TYPES).includes(minionType)) {
+    const filteredMinions = minions?.filter(
+      minion => minion.minionType === minionType,
+    );
+    return filteredMinions?.length > 0;
+  }
+  return false;
+};

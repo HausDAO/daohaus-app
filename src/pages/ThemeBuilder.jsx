@@ -20,12 +20,16 @@ const ThemeBuilder = ({ refetchMetaData }) => {
   const { daochain, daoid } = useParams();
   const { theme, updateTheme, tempTheme, updateTempTheme } = useCustomTheme();
   const { customTerms } = useMetaData();
+  const [tempCustomTerms, setTempCustomTerms] = useState();
   const { setGenericModal } = useOverlay();
   const history = useHistory();
   const [previewTheme, setPreviewTheme] = useState();
 
   useEffect(() => {
     if (theme) {
+      if (!tempCustomTerms) {
+        setTempCustomTerms(customTerms);
+      }
       setPreviewTheme({
         primary500: theme.colors.primary[500],
         secondary500: theme.colors.secondary[500],
@@ -35,15 +39,15 @@ const ThemeBuilder = ({ refetchMetaData }) => {
         headingFont: theme.fonts.heading,
         bodyFont: theme.fonts.body,
         monoFont: theme.fonts.mono,
-        daoMeta: customTerms,
+        daoMeta: tempCustomTerms,
       });
     }
-  }, [theme, customTerms]);
+  }, [theme, tempCustomTerms]);
 
   const handleThemeUpdate = update => {
     const currentValues = tempTheme || defaultTheme;
     const themeUpdate = { ...currentValues, ...update };
-
+    setTempCustomTerms(update.daoMeta);
     updateTempTheme(themeUpdate);
     updateTheme(themeUpdate);
   };

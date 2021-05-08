@@ -48,46 +48,20 @@ const ExploreCard = ({ dao }) => {
     return null;
   };
 
-  const renderLink = daoData => {
-    switch (daoData.meta.version) {
-      case '1': {
-        return (
-          <Button
-            minWidth='80px'
-            as={Link}
-            variant='outline'
-            href={pokemolUrlExplore(dao)}
-            isExternal
-          >
-            Go
-          </Button>
-        );
-      }
-      case '2':
-      case '2.1': {
-        return (
-          <Button
-            minWidth='80px'
-            as={RouterLink}
-            variant='outline'
-            to={`/dao/${chainByNetworkId(dao.networkId).chain_id}/${dao.id}`}
-          >
-            Go
-          </Button>
-        );
-      }
-      default: {
-        return null;
-      }
-    }
-  };
   return (
     <ContentBox
+      as={dao.meta.version === '1' ? Link : RouterLink}
+      to={
+        dao.meta.version.startsWith('2')
+          ? `/dao/${chainByNetworkId(dao.networkId).chain_id}/${dao.id}`
+          : null
+      }
+      href={dao.meta.version === '1' ? pokemolUrlExplore(dao) : null}
       w={['100%', '100%', '100%', '340px', '340px']}
       h='340px'
       mt={5}
       style={{ transition: 'all .15s linear' }}
-      _hover={{ transform: 'scale(1.05)' }}
+      _hover={{ transform: 'scale(1.05)', cursor: 'pointer' }}
     >
       <Flex direction='row' align='center' w='100%'>
         <Avatar
@@ -155,7 +129,11 @@ const ExploreCard = ({ dao }) => {
 
       {renderTags()}
       <Flex justify='flex-end' w='100%'>
-        <Box mt={5}>{renderLink(dao)}</Box>
+        <Box mt={5}>
+          <Button minWidth='80px' variant='outline'>
+            Go
+          </Button>
+        </Box>
       </Flex>
     </ContentBox>
   );
