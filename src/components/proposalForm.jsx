@@ -50,6 +50,12 @@ const getRequiredFields = (fields, required) => {
   });
 };
 
+const mapInRequired = (fields, required) => {
+  return fields.map(field =>
+    required.includes(field.name) ? { ...field, required: true } : field,
+  );
+};
+
 const ProposalForm = ({
   fields,
   tx,
@@ -59,9 +65,9 @@ const ProposalForm = ({
 }) => {
   const { submitProposal } = useTX();
   const [loading, setLoading] = useState(false);
-  const [formFields, setFields] = useState(fields);
+  const [formFields, setFields] = useState(mapInRequired(fields, required));
   const [options, setOptions] = useState(additionalOptions);
-
+  console.log(formFields);
   const localForm = useForm();
   const { handleSubmit } = localForm;
 
@@ -173,11 +179,17 @@ const FieldWrapper = ({
   helperText,
   btn,
   error,
+  required,
 }) => {
   return (
     <Flex w={['100%', null, '48%']} mb={3} flexDir='column'>
       <Flex>
-        <TextBox as={FormLabel} size='xs' htmlFor={htmlFor}>
+        <TextBox as={FormLabel} size='xs' htmlFor={htmlFor} position='relative'>
+          {required && (
+            <Box display='inline' position='absolute' left='-1rem'>
+              {'* '}
+            </Box>
+          )}
           {label}
           {info && (
             <ToolTipWrapper
@@ -290,6 +302,7 @@ const GenericInput = ({
   btn,
   append,
   info,
+  required,
   prepend,
   onChange = null,
   error,
@@ -304,6 +317,7 @@ const GenericInput = ({
       helperText={helperText}
       btn={btn}
       error={error}
+      required={required}
     >
       <InputGroup>
         {prepend && (
