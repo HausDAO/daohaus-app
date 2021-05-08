@@ -36,7 +36,7 @@ export const ToolTipWrapper = ({
         {children}
       </Box>
     ) : (
-      <Box>{children}</Box>
+      <Box {...layoutProps}>{children}</Box>
     );
   }
   return (
@@ -49,11 +49,11 @@ export const ToolTipWrapper = ({
       {...layoutProps}
     >
       {link ? (
-        <Box as={Link} to={link}>
+        <Box as={Link} to={link} {...layoutProps}>
           {children}
         </Box>
       ) : (
-        <Box>{children}</Box>
+        <Box {...layoutProps}>{children}</Box>
       )}
     </Tooltip>
   );

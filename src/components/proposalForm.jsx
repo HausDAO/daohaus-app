@@ -184,7 +184,10 @@ const FieldWrapper = ({
               tooltip
               tooltipText={{ body: info }}
               placement='right'
-              layoutProps={{ transform: 'translateY(-2px)' }}
+              layoutProps={{
+                transform: 'translateY(-2px)',
+                display: 'inline-block',
+              }}
             >
               <Icon as={RiInformationLine} ml={2} />
             </ToolTipWrapper>

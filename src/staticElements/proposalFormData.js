@@ -87,7 +87,7 @@ export const FIELD = {
 export const PROPOSAL_FORMS = {
   MEMBER: {
     type: PROPOSAL_TYPES.MEMBER,
-    required: ['title', 'shares'], // Use name key from proposal type object
+    required: ['title', 'sharesRequested'], // Use name key from proposal type object
     tx: {
       type: 'submitProposal',
     },
