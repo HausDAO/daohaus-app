@@ -69,7 +69,7 @@ export const FIELD = {
     htmlFor: 'tribute',
     name: 'tributeOffered',
     placeholder: '0',
-    label: 'Token Tribute',
+    label: 'Tribute Offered',
     info: INFO_TEXT.TOKEN_TRIBUTE,
     expectType: 'number',
   },

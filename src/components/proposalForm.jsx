@@ -44,12 +44,6 @@ import { checkFormTypes, validateRequired } from '../utils/validation';
 
 /// UTILS
 
-const getRequiredFields = (fields, required) => {
-  return fields.filter(field => {
-    return required.includes(field.name);
-  });
-};
-
 const mapInRequired = (fields, required) => {
   return fields.map(field =>
     required.includes(field.name) ? { ...field, required: true } : field,
@@ -99,7 +93,7 @@ const ProposalForm = ({
     clearErrors();
     const missingVals = validateRequired(
       values,
-      getRequiredFields(formFields, required),
+      formFields.filter(field => field.required),
     );
     if (missingVals) {
       updateErrors(missingVals);
