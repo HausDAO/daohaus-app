@@ -19,7 +19,7 @@ import { useOverlay } from '../contexts/OverlayContext';
 import TextBox from './TextBox';
 import GenericModal from '../modals/genericModal';
 
-const MinionTokenListCard = ({ token, action }) => {
+const MinionTokenListCard = ({ token, action, boost }) => {
   console.log('token', token);
   const toast = useToast();
   const { setGenericModal } = useOverlay();
@@ -132,6 +132,8 @@ const MinionTokenListCard = ({ token, action }) => {
                 key={idx}
                 tokenId={token.tokenIds[idx]}
                 meta={meta}
+                boost={boost}
+                action={action}
               />
             ))}
         </Flex>

@@ -202,6 +202,9 @@ const BoostLaunchWrapper = ({ boost }) => {
           />
         );
       }
+      case 'niftyInk': {
+        return <NewMinionForm />;
+      }
       default: {
         return null;
       }

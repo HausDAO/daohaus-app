@@ -6,7 +6,7 @@ import ReactPlayer from 'react-player';
 import TextBox from './TextBox';
 
 const hasImage = string => {
-  const imageExtensions = ['.jpg', '.png', '.gif'];
+  const imageExtensions = ['.jpg', '.png', '.gif', '/Qm'];
   return imageExtensions.some(o => string.includes(o));
 };
 

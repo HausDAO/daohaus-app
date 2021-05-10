@@ -30,6 +30,7 @@ import Staking from '../pages/Staking';
 import Clone from '../pages/Clone';
 import MintGate from '../pages/MintGate';
 import Snapshot from '../pages/Snapshot';
+import NiftInk from '../pages/NiftyInk';
 
 const DaoRouter = () => {
   const { path } = useRouteMatch();
@@ -251,6 +252,9 @@ const DaoRouter = () => {
         </Route>
         <Route exact path={`${path}/boost/snapshot`}>
           <Snapshot isMember={isMember} daoMetaData={daoMetaData} />
+        </Route>
+        <Route exact path={`${path}/settings/nifty-ink`}>
+          <NiftInk overview={daoOverview} members={daoMembers} />
         </Route>
       </Switch>
     </Layout>

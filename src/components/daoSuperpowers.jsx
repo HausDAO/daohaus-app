@@ -16,6 +16,13 @@ const Superpowers = ({ daoMember, daoMetaData }) => {
   const { address, injectedChain } = useInjectedProvider();
   const { setGenericModal } = useOverlay();
 
+  const isActive = link => {
+    return (
+      daoMetaData?.boosts?.[link.boostKey]?.active ||
+      link.boostKey === 'niftyInk'
+    );
+  };
+
   const getBoostData = key => {
     const boostData = boostList.find(boost => boost.key === key);
     const withMetaData = {
@@ -29,7 +36,7 @@ const Superpowers = ({ daoMember, daoMetaData }) => {
     <ContentBox d='flex' flexDirection='column' position='relative'>
       <Stack spacing={3}>
         {superpowerLinks.map(link => {
-          return daoMetaData?.boosts?.[link.boostKey]?.active ? (
+          return isActive(link) ? (
             <Flex justify='space-between' align='center' key={link.label}>
               <GenericModal closeOnOverlayClick modalId={link.modal}>
                 <BoostLaunchWrapper boost={getBoostData(link.boostKey)} />
