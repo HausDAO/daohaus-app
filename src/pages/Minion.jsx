@@ -14,6 +14,7 @@ import {
 import { CopyToClipboard } from 'react-copy-to-clipboard';
 import { RiArrowLeftLine } from 'react-icons/ri';
 import { BigNumber } from 'ethers';
+import { utils } from 'web3';
 import { FaCopy } from 'react-icons/fa';
 import makeBlockie from 'ethereum-blockies-base64';
 import ContentBox from '../components/ContentBox';
@@ -191,15 +192,14 @@ const MinionDetails = ({ overview, currentDaoTokens, isMember }) => {
       tokenAddress: token.contractAddress,
       chainID: daochain,
     });
-
-    const amountWithDecimal = BigNumber.from(values.amount).mul(
+    const parsed = utils.toWei(values.amount);
+    const amountWithDecimal = BigNumber.from(parsed).mul(
       BigNumber.from(10).pow(+token.decimals),
     );
-    console.log(amountWithDecimal.toString());
 
     const hexData = tokenService('transferNoop')({
       to: values.destination,
-      amount: amountWithDecimal.toString(),
+      amount: utils.fromWei(amountWithDecimal.toString()).toString(),
     });
 
     const details = detailsToJSON({
