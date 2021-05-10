@@ -13,15 +13,19 @@ import {
 import { CopyToClipboard } from 'react-copy-to-clipboard';
 import { FaCopy } from 'react-icons/fa';
 import { useForm } from 'react-hook-form';
-import { numberWithCommas } from '../utils/general';
+import { useParams } from 'react-router';
+import { numberWithCommas, daoConnectedAndSameChain } from '../utils/general';
 import MinionNftTile from './minionNftTitle';
 import { useOverlay } from '../contexts/OverlayContext';
 import TextBox from './TextBox';
 import GenericModal from '../modals/genericModal';
 
-const MinionTokenListCard = ({ token, action }) => {
-  console.log('token', token);
+import { useInjectedProvider } from '../contexts/InjectedProviderContext';
+
+const MinionTokenListCard = ({ token, action, isMember }) => {
+  const { address, injectedChain } = useInjectedProvider();
   const toast = useToast();
+  const { daochain } = useParams();
   const { setGenericModal } = useOverlay();
   const { handleSubmit, register, setValue } = useForm();
 
@@ -113,15 +117,21 @@ const MinionTokenListCard = ({ token, action }) => {
           )}
         </Box>
         <Box w={['20%', null, null, '20%']}>
-          {token?.type !== 'ERC-721' && (
-            <Box fontFamily='mono'>
-              <Box>
-                <Button size='xs' onClick={handleSend}>
-                  SEND
-                </Button>
+          {token?.type !== 'ERC-721' &&
+            isMember &&
+            daoConnectedAndSameChain(
+              address,
+              daochain,
+              injectedChain?.chainId,
+            ) && (
+              <Box fontFamily='mono'>
+                <Box>
+                  <Button size='xs' onClick={handleSend}>
+                    SEND
+                  </Button>
+                </Box>
               </Box>
-            </Box>
-          )}
+            )}
         </Box>
       </Flex>
       {token?.type === 'ERC-721' && (
@@ -138,6 +148,9 @@ const MinionTokenListCard = ({ token, action }) => {
       )}
       <GenericModal closeOnOverlayClick modalId={`${token.contractAddress}`}>
         <form onSubmit={handleSubmit(sendToken)}>
+          <TextBox as={FormLabel} size='xs'>
+            Creates a Proposal to send tokens
+          </TextBox>
           <TextBox as={FormLabel} size='xs' htmlFor='amount'>
             Amount{' '}
             <Button
@@ -172,7 +185,20 @@ const MinionTokenListCard = ({ token, action }) => {
                 value: true,
                 message: 'destination is required',
               },
+              pattern: {
+                value: /0x[a-fA-F0-9]{40}$/,
+                message: 'Payment must be a number',
+              },
             })}
+            focusBorderColor='secondary.500'
+          />
+          <TextBox as={FormLabel} size='xs' htmlFor='description'>
+            Short Description
+          </TextBox>
+          <Input
+            name='description'
+            mb={5}
+            ref={register()}
             focusBorderColor='secondary.500'
           />
           <Button type='submit'>Propose Transfer</Button>
