@@ -50,18 +50,13 @@ const mapInRequired = (fields, required) => {
   );
 };
 
-const ProposalForm = ({
-  fields,
-  tx,
-  onTx,
-  additionalOptions = null,
-  required,
-}) => {
-  const { submitProposal } = useTX();
+const ProposalForm = props => {
+  const { submitTransaction } = useTX();
+  const { fields, tx, onTx, additionalOptions = null, required = [] } = props;
+
   const [loading, setLoading] = useState(false);
   const [formFields, setFields] = useState(mapInRequired(fields, required));
   const [options, setOptions] = useState(additionalOptions);
-  console.log(formFields);
   const localForm = useForm();
   const { handleSubmit } = localForm;
 
@@ -105,7 +100,11 @@ const ProposalForm = ({
       return;
     }
     try {
-      await submitProposal(values, setLoading);
+      await submitTransaction({
+        values,
+        proposalLoading: setLoading,
+        formData: props,
+      });
     } catch (error) {
       console.error(error);
     }
@@ -335,8 +334,12 @@ const GenericInput = ({
 };
 
 const InputSelect = props => {
-  const { options, selectName, localForm, onChange } = props;
+  const { options, selectName, localForm, selectChange } = props;
   const { register } = localForm;
+
+  const handleSelectChange = e => {
+    selectChange?.(e);
+  };
 
   return (
     <GenericInput
@@ -344,7 +347,7 @@ const InputSelect = props => {
       append={
         <Select
           name={selectName || 'select'}
-          onChange={onChange}
+          onChange={handleSelectChange}
           ref={register}
         >
           {options?.map((option, index) => (
@@ -564,7 +567,11 @@ const TributeInput = props => {
 
   const maxBtnDisplay = useMemo(() => {
     if (balance === 'loading') {
-      return <Spinner size='sm' />;
+      return (
+        <>
+          Max: <Spinner size='sm' />
+        </>
+      );
     }
     if (balance) {
       const commified = ethers.utils.commify(
@@ -620,6 +627,7 @@ const TributeInput = props => {
   }, [daoTokens, address, daochain]);
 
   const updateBalance = async tokenAddress => {
+    setBalance('loading');
     const result = await fetchBalance({
       tokenAddress,
       address,
@@ -678,7 +686,7 @@ const TributeInput = props => {
       {...props}
       selectName='tributeToken'
       options={daoTokens}
-      onChange={handleChange}
+      selectChange={handleChange}
       helperText={unlocked || 'Unlock to tokens to submit proposal'}
       btn={
         unlocked ? (

@@ -16,6 +16,8 @@ import { valToDecimalString } from '../utils/tokenValue';
 import { createForumTopic } from '../utils/discourse';
 import { MolochService } from '../services/molochService';
 import { LogError } from '../utils/errorLog';
+import { submitProposalTest } from '../polls/tests';
+import { PROPOSAL_TYPES } from '../utils/proposalUtils';
 
 export const TXContext = createContext();
 
@@ -98,7 +100,7 @@ export const TXProvider = ({ children }) => {
     }
   };
 
-  const submitProposal = async (values, proposalLoading) => {
+  const submitProposal = async ({ values, proposalLoading, formData }) => {
     proposalLoading(true);
     const now = (new Date().getTime() / 1000).toFixed();
     const hash = createHash();
@@ -198,14 +200,97 @@ export const TXProvider = ({ children }) => {
     }
   };
 
+  const whiteListToken = ({ values, proposalLoading, formData }) => {
+    proposalLoading(true);
+    const now = (new Date().getTime() / 1000).toFixed();
+    const hash = createHash();
+    const details = detailsToJSON({ ...values, hash });
+    const args = [values.tokenAddress, details];
+    console.log(`values`, values);
+    console.log(`args`, args);
+    try {
+      const poll = createPoll({ action: 'submitWhitelistProposal', cachePoll })(
+        {
+          daoID: daoid,
+          chainID: daochain,
+          hash,
+          actions: {
+            onError: (error, txHash) => {
+              errorToast({
+                title: 'There was an error.',
+              });
+              resolvePoll(txHash);
+              console.error(`Could not find a matching proposal: ${error}`);
+            },
+            onSuccess: txHash => {
+              successToast({
+                title: 'Whitelist Proposal Submitted to the Dao!',
+              });
+              refreshDao();
+              resolvePoll(txHash);
+              createForumTopic({
+                chainID: daochain,
+                daoID: daoid,
+                afterTime: now,
+                proposalType: PROPOSAL_TYPES.WHITELIST,
+                values,
+                applicant: address,
+                daoMetaData,
+              });
+            },
+          },
+        },
+      );
+      const onTxHash = () => {
+        setProposalModal(false);
+        setTxInfoModal(true);
+      };
+      MolochService({
+        web3: injectedProvider,
+        daoAddress: daoid,
+        chainID: daochain,
+        version: daoOverview.version,
+      })('submitWhitelistProposal')({
+        args,
+        address,
+        poll,
+        onTxHash,
+      });
+    } catch (err) {
+      proposalLoading(false);
+      console.error('error: ', err);
+      errorToast({
+        title: 'There was an error.',
+      });
+    }
+  };
+
+  const submitTransaction = ({ values, proposalLoading, formData }) => {
+    const txType = formData?.tx?.txType;
+    if (!txType) {
+      throw new Error(
+        'DEV NOTICE: Transaction data corrupt or not specified in proposalFormData.js',
+      );
+    }
+    //  check special validation here
+    if (txType === 'submitProposal') {
+      return submitProposal({ values, proposalLoading, formData });
+    }
+    if (txType === 'submitWhitelistProposal') {
+      return whiteListToken({ values, proposalLoading, formData });
+    }
+    console.log('did');
+    throw new Error('DEV NOTICE: TX Type not found');
+  };
+
   return (
-    <TXContext.Provider value={{ refreshDao, unlockToken, submitProposal }}>
+    <TXContext.Provider value={{ refreshDao, unlockToken, submitTransaction }}>
       {children}
     </TXContext.Provider>
   );
 };
 
 export const useTX = () => {
-  const { refreshDao, unlockToken, submitProposal } = useContext(TXContext);
-  return { refreshDao, unlockToken, submitProposal };
+  const { refreshDao, unlockToken, submitTransaction } = useContext(TXContext);
+  return { refreshDao, unlockToken, submitTransaction };
 };

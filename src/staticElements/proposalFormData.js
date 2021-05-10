@@ -82,14 +82,24 @@ export const FIELD = {
     info: INFO_TEXT.PAYMENT_REQUEST,
     expectType: 'number',
   },
+  TOKEN_ADDRESS: {
+    type: 'input',
+    label: 'Token Address',
+    name: 'tokenAddress',
+    htmlFor: 'tokenAddress',
+    placeholder: '0x',
+    expectType: 'publicKey',
+  },
 };
 
 export const PROPOSAL_FORMS = {
   MEMBER: {
+    title: 'Membership',
+    subtitle: 'Request Shares and/or Loot',
     type: PROPOSAL_TYPES.MEMBER,
     required: ['title', 'sharesRequested'], // Use name key from proposal type object
     tx: {
-      type: 'submitProposal',
+      txType: 'submitProposal',
     },
     fields: [
       FIELD.TITLE,
@@ -103,6 +113,37 @@ export const PROPOSAL_FORMS = {
       FIELD.LOOT_REQUEST,
       FIELD.PAYMENT_REQUEST,
     ],
+  },
+  FUNDING: {
+    title: 'Funding',
+    subtitle: 'Request or distribute funds',
+    type: PROPOSAL_TYPES.FUNDING,
+    required: ['title', 'applicant'], // Use name key from proposal type object
+    tx: {
+      txType: 'submitProposal',
+    },
+    fields: [
+      FIELD.TITLE,
+      FIELD.APPLICANT,
+      FIELD.DESCRIPTION,
+      FIELD.PAYMENT_REQUEST,
+      FIELD.LINK,
+    ],
+    additionalOptions: [
+      FIELD.SHARES_REQUEST,
+      FIELD.LOOT_REQUEST,
+      FIELD.TRIBUTE,
+    ],
+  },
+  TOKEN: {
+    title: 'Token',
+    subtitle: 'Approve a new token.',
+    type: PROPOSAL_TYPES.WHITELIST,
+    required: ['title', 'tokenAddress'], // Use name key from proposal type object
+    tx: {
+      txType: 'submitWhitelistProposal',
+    },
+    fields: [FIELD.TITLE, FIELD.TOKEN_ADDRESS, FIELD.LINK, FIELD.DESCRIPTION],
   },
   SIGNAL: {
     type: PROPOSAL_TYPES.SIGNAL,

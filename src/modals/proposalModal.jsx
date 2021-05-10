@@ -36,12 +36,6 @@ const ProposalFormModal = ({ proposalType }) => {
   const { proposalModal, setProposalModal } = useOverlay();
 
   const proposalForms = {
-    lego: {
-      type: 'Generic Proposal',
-      heading: 'Real Fake Forms!',
-      subline: 'Come on and get your real fake forms',
-      form: <ProposalForm {...PROPOSAL_FORMS.MEMBER} />,
-    },
     signal: {
       type: 'Signal Proposal',
       heading: 'Signal That!',
@@ -49,20 +43,17 @@ const ProposalFormModal = ({ proposalType }) => {
       form: <ProposalForm {...PROPOSAL_FORMS.SIGNAL} />,
     },
     member: {
-      type: `New ${getTerm(customTerms, 'proposal')}`,
       heading: `New ${getTerm(customTerms, 'member')} ${getTerm(
         customTerms,
         'proposal',
       )}`,
-      subline: 'Submit your membership proposal here.',
-      form: <MemberProposalForm />,
+      form: <ProposalForm {...PROPOSAL_FORMS.MEMBER} />,
     },
     funding: {
-      type: `New ${getTerm(customTerms, 'proposal')}`,
       heading: `New Funding ${getTerm(customTerms, 'proposal')}`,
-      subline: 'Submit a funding proposal here.',
-      form: <FundingProposalForm />,
+      form: <ProposalForm {...PROPOSAL_FORMS.FUNDING} />,
     },
+    //  Are we using lootgrab anymore?
     lootgrab: {
       type: `New ${getTerm(customTerms, 'proposal')}`,
       heading: `New Loot Grab ${getTerm(customTerms, 'proposal')}`,
@@ -73,7 +64,7 @@ const ProposalFormModal = ({ proposalType }) => {
       type: `New ${getTerm(customTerms, 'proposal')}`,
       heading: `New Whitelist ${getTerm(customTerms, 'proposal')}`,
       subline: 'Whitelist a token here.',
-      form: <WhitelistProposalForm />,
+      form: <ProposalForm {...PROPOSAL_FORMS.TOKEN} />,
     },
     guildkick: {
       type: `New ${getTerm(customTerms, 'proposal')}`,
@@ -111,7 +102,6 @@ const ProposalFormModal = ({ proposalType }) => {
     if (proposalType) {
       setProposalForm(proposalForms[proposalType]);
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [proposalType]);
 
   const handleClose = () => {
