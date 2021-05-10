@@ -152,7 +152,7 @@ const MinionTokenListCard = ({ token, action, isMember }) => {
             Creates a Proposal to send tokens
           </TextBox>
           <TextBox as={FormLabel} size='xs' htmlFor='amount'>
-            Amount{' '}
+            Amount*{' '}
             <Button
               onClick={() =>
                 setValue('amount', +token?.balance / 10 ** token.decimals)
@@ -175,7 +175,7 @@ const MinionTokenListCard = ({ token, action, isMember }) => {
             focusBorderColor='secondary.500'
           />
           <TextBox as={FormLabel} size='xs' htmlFor='destination'>
-            Destination
+            Destination*
           </TextBox>
           <Input
             name='destination'
