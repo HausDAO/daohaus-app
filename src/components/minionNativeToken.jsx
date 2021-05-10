@@ -56,7 +56,7 @@ const MinionNativeToken = ({ action, isMember }) => {
             Creates a Proposal to send
           </TextBox>
           <TextBox as={FormLabel} size='xs' htmlFor='amount'>
-            Amount{' '}
+            Amount*{' '}
             <Button
               onClick={() => {
                 setValue('amount', nativeBalance);
@@ -74,15 +74,11 @@ const MinionNativeToken = ({ action, isMember }) => {
                 value: true,
                 message: 'amount is required',
               },
-              pattern: {
-                value: /0x[a-fA-F0-9]{40}$/,
-                message: 'Payment must be a number',
-              },
             })}
             focusBorderColor='secondary.500'
           />
           <TextBox as={FormLabel} size='xs' htmlFor='destination'>
-            Destination
+            Destination*
           </TextBox>
           <Input
             name='destination'
@@ -91,6 +87,10 @@ const MinionNativeToken = ({ action, isMember }) => {
               required: {
                 value: true,
                 message: 'destination is required',
+              },
+              pattern: {
+                value: /0x[a-fA-F0-9]{40}$/,
+                message: 'Payment must be a number',
               },
             })}
             focusBorderColor='secondary.500'
