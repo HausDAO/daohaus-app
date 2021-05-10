@@ -7,7 +7,6 @@ import { Tooltip } from '@chakra-ui/tooltip';
 import { RiQuestionLine } from 'react-icons/ri';
 import { useInjectedProvider } from '../contexts/InjectedProviderContext';
 import ContentBox from './ContentBox';
-import TextBox from './TextBox';
 import { getEligibility } from '../utils/metadata';
 import { ToolTipWrapper } from '../staticElements/wrappers';
 
@@ -32,75 +31,77 @@ const CcoEligibility = ({
 
   return (
     <ContentBox variant='d2' mt={2} w='100%'>
-      {/* <Tooltip
-        hasArrow
-        shouldWrapChildren
-        label={roundData.whitelistReqs}
-        placement='top'
-      >
-      </Tooltip> */}
-      <Flex justify='flex-start'>
-        <TextBox size='sm' mb={7} mr={1}>
-          1. Check eligibility
-        </TextBox>
-        <ToolTipWrapper
-          placement='right'
-          tooltip
-          tooltipText={{
-            title: 'Whitelist Requirements',
-            body: roundData.whitelistReqs,
-          }}
-        >
-          <RiQuestionLine />
-        </ToolTipWrapper>
-      </Flex>
-
-      {networkMatch ? (
-        <>
-          {isEligible === 'unchecked' && (
-            <Button
-              variant='primary'
-              onClick={checkEligibility}
-              disabled={
-                checkingEligibility || roundData.raiseOver || raiseAtMax
-              }
-            >
-              {!checkingEligibility ? <>Check Eligibility</> : <Spinner />}
-            </Button>
-          )}
-          {isEligible === 'checked' && (
-            <>
-              <Box size='md' my={2} color='blackAlpha.900'>
-                You are eligible to contribute.
-              </Box>
-
-              {roundData.beforeRaise ? (
+      <Flex justifyContent='flex-start'>
+        <Box fontSize='3xl' fontFamily='heading' pr={5}>
+          1
+        </Box>
+        <Box>
+          Only approved addresses can participate. Click the button to check
+          your eligibility.
+          <ToolTipWrapper
+            placement='right'
+            tooltip
+            tooltipText={{
+              title: 'Whitelist Requirements',
+              body: roundData.whitelistReqs,
+            }}
+          >
+            <RiQuestionLine />
+          </ToolTipWrapper>
+        </Box>
+        {networkMatch ? (
+          <Box>
+            {isEligible === 'unchecked' && (
+              <Tooltip
+                hasArrow
+                shouldWrapChildren
+                label={roundData.whitelistReqs}
+                placement='top'
+              >
+                <Button
+                  variant='primary'
+                  onClick={checkEligibility}
+                  disabled={
+                    checkingEligibility || roundData.raiseOver || raiseAtMax
+                  }
+                >
+                  {!checkingEligibility ? <>Check Eligibility</> : <Spinner />}
+                </Button>
+              </Tooltip>
+            )}
+            {isEligible === 'checked' && (
+              <>
                 <Box size='md' my={2} color='blackAlpha.900'>
-                  Come back when the contribution round begins.
+                  You are eligible to contribute.
                 </Box>
-              ) : null}
-            </>
-          )}
-          {isEligible === 'denied' && (
-            <Box size='md' my={2} color='blackAlpha.900'>
-              Address is not eligible. Try again with another address that has
-              interacted with a DAO.
-            </Box>
-          )}
-        </>
-      ) : (
-        <>
-          {address ? (
-            <Button onClick={handleSwitchNetwork}>
-              {`Switch to the ${roundData.network} network`}
-            </Button>
-          ) : (
-            <Button onClick={requestWallet} mb={6}>
-              Connect Wallet
-            </Button>
-          )}
-        </>
-      )}
+
+                {roundData.beforeRaise ? (
+                  <Box size='md' my={2} color='blackAlpha.900'>
+                    Come back when the contribution round begins.
+                  </Box>
+                ) : null}
+              </>
+            )}
+            {isEligible === 'denied' && (
+              <Box size='md' my={2} color='blackAlpha.900'>
+                Address is not eligible.
+              </Box>
+            )}
+          </Box>
+        ) : (
+          <Box>
+            {address ? (
+              <Button onClick={handleSwitchNetwork}>
+                {`Switch to the ${roundData.network} network`}
+              </Button>
+            ) : (
+              <Button onClick={requestWallet} mb={6}>
+                Connect Wallet
+              </Button>
+            )}
+          </Box>
+        )}
+      </Flex>
     </ContentBox>
   );
 };

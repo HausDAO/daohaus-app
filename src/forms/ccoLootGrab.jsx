@@ -65,8 +65,6 @@ const CcoLootGrabForm = ({
     }
   }, [errors]);
 
-  console.log('roundData', roundData);
-
   const onSubmit = async values => {
     setLoading(true);
     const hash = createHash();

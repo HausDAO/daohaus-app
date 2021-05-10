@@ -20,7 +20,6 @@ const DaosquareCco = () => {
   });
 
   useEffect(() => {
-    console.log('updating theme');
     updateTheme(daosquareCcoTheme);
   }, []);
 
@@ -28,12 +27,11 @@ const DaosquareCco = () => {
     if (d2CcoDaos?.length) {
       setTotals({
         funded: totalFundedDaosquare(d2CcoDaos),
-        projects: d2CcoDaos.filter(dao => dao.ccoStatus === 'Funded').length,
+        projects: d2CcoDaos.filter(dao => dao.ccoStatus.label === 'Funded')
+          .length,
       });
     }
   }, [d2CcoDaos]);
-
-  console.log('d2CcoDaos', d2CcoDaos);
 
   return (
     <Layout daosquarecco>

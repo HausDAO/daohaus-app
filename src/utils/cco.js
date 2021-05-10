@@ -43,9 +43,9 @@ export const countDownText = raiseData => {
     return 'Contribution period is complete';
   }
   if (now < raiseData.raiseStartTime) {
-    return `Raise starts ${timeToNow(raiseData.raiseStartTime)}`;
+    return `CCO starts ${timeToNow(raiseData.raiseStartTime)}`;
   }
-  return `Raise ends ${timeToNow(raiseData.raiseEndTime)}`;
+  return `CCO ends ${timeToNow(raiseData.raiseEndTime)}`;
 };
 
 export const claimCountDownText = claimStartTime => {
@@ -83,18 +83,33 @@ export const isCcoProposalForAddress = (proposal, address, round) => {
   );
 };
 
-export const contributionTotalValue = (proposals, round) => {
-  // compare total each time here and skip if we are over
-  const total = proposals
+export const contributionTotalValue = args => {
+  let overTime = null;
+  const totalMaxWei = Number(args.round.maxTarget) * 10 ** 18;
+  const total = args.proposals
     .sort((a, b) => {
       return +b.createdAt - +a.createdAt;
     })
     .reduce((sum, prop) => {
-      sum += +prop.tributeOffered;
+      const nextSum = Number(prop.tributeOffered) + sum;
+      const isUnder = args.allProposals
+        ? nextSum < totalMaxWei
+        : !args.overTime;
+      if (isUnder) {
+        sum = nextSum;
+      } else {
+        overTime = !overTime ? prop.createdAt : overTime;
+      }
       return sum;
     }, 0);
 
-  return total / 10 ** +round.ccoToken.decimals;
+  if (args.allProposals) {
+    return {
+      contributionTotal: total / 10 ** Number(args.round.ccoToken.decimals),
+      overTime,
+    };
+  }
+  return total / 10 ** Number(args.round.ccoToken.decimals);
 };
 
 export const isDaosquareCcoPath = (daoMetaData, location) => {
@@ -105,8 +120,6 @@ export const isDaosquareCcoPath = (daoMetaData, location) => {
 
 export const currentFunded = (ccoData, proposals) => {
   const totalMaxWei = Number(ccoData.maxTarget) * 10 ** 18;
-
-  console.log('ccoData', ccoData);
   return proposals.reduce((sum, prop) => {
     const nextSum = Number(prop.tributeOffered) + sum;
     if (isCcoProposal(prop, ccoData) && nextSum < totalMaxWei) {
@@ -118,24 +131,37 @@ export const currentFunded = (ccoData, proposals) => {
 
 export const totalFundedDaosquare = daos => {
   return daos.reduce((sum, dao) => {
-    if (dao.ccoStatus === 'Funded') {
+    if (dao.ccoStatus.label === 'Funded') {
       sum += dao.ccoFundedAmount;
     }
     return sum;
   }, 0);
 };
 
-export const ccoStatus = (ccoData, ccoFundedAmount) => {
-  console.log('ccoData, ccoFundedAmount', ccoData, ccoFundedAmount);
-  return 'Active';
+export const ccoStatus = (ccoData, ccoFundedAmount, now) => {
+  if (Number(ccoData.raiseStartTime) > now) {
+    return {
+      label: 'Coming Soon',
+    };
+  }
+  if (ccoFundedAmount >= Number(ccoData.maxTarget)) {
+    return {
+      label: 'Funded',
+      claimOpen: now >= Number(ccoData.claimPeriodStartTime),
+    };
+  }
+  if (
+    Number(ccoData.raiseStartTime) < now &&
+    Number(ccoData.raiseEndTime) > now
+  ) {
+    return { label: 'Active' };
+  }
+  if (
+    Number(ccoData.raiseEndTime) > now &&
+    ccoFundedAmount < Number(ccoData.maxTarget)
+  ) {
+    return { label: 'Failed' };
+  }
+
+  return null;
 };
-
-// export const totalFund
-
-// statuses
-// coming soon
-// active
-// funded
-// failed
-// ++ can claim badge
-// egg if claim is open and they have loot

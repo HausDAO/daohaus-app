@@ -2,6 +2,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { Avatar, Box, Flex, Progress } from '@chakra-ui/react';
 import makeBlockie from 'ethereum-blockies-base64';
+import { BsEggFill } from 'react-icons/bs';
 
 import ContentBox from './ContentBox';
 import TextBox from './TextBox';
@@ -14,13 +15,15 @@ const CcoCard = ({ daoMetaData, isLink, dao }) => {
   const raiseLeft =
     Number(daoMetaData.boosts.daosquarecco.metadata.maxTarget) -
     dao.ccoFundedAmount;
+  const canClaim =
+    dao?.ccoStatus?.label === 'Funded' && dao?.ccoStatus?.claimOpen;
 
   return (
     <ContentBox
-      mt={5}
       variant='d2'
       style={{ transition: 'all .15s linear' }}
       _hover={isLink && { transform: 'scale(1.01)' }}
+      my={5}
     >
       <Box
         as={isLink && Link}
@@ -51,7 +54,12 @@ const CcoCard = ({ daoMetaData, isLink, dao }) => {
               {daoMetaData?.name}
             </Box>
           </Flex>
-          <Box ml={5}>Active</Box>
+          <Box ml={5}>
+            <Flex align='center'>
+              {canClaim && <BsEggFill />}
+              {dao?.ccoStatus?.label}
+            </Flex>
+          </Box>
         </Flex>
         <Progress
           colorScheme='secondary'
@@ -61,12 +69,12 @@ const CcoCard = ({ daoMetaData, isLink, dao }) => {
           mb={3}
         />
         <Flex direction='row' justify='space-between' w='100%'>
-          <Box>
+          <Box fontFamily='heading' fontSize='xl'>
             {`${numberWithCommas(dao.ccoFundedAmount)} ${
               daoMetaData.boosts.daosquarecco.metadata.tributeTokenSymbol
             } Funded`}
           </Box>
-          <Box>
+          <Box fontFamily='heading' fontSize='xl'>
             {`${numberWithCommas(raiseLeft)} ${
               daoMetaData.boosts.daosquarecco.metadata.tributeTokenSymbol
             } Left`}

@@ -56,7 +56,7 @@ export const daoResolver = (dao, context) => {
   return dao;
 };
 
-export const daosqaureCcoDaoResolver = dao => {
+export const daosqaureCcoDaoResolver = (dao, now) => {
   const fundedWei = currentFunded(
     dao.meta.boosts.daosquarecco.metadata,
     dao.proposals,
@@ -66,6 +66,7 @@ export const daosqaureCcoDaoResolver = dao => {
   dao.ccoStatus = ccoStatus(
     dao.meta.boosts.daosquarecco.metadata,
     ccoFundedAmount,
+    now,
   );
 
   return dao;

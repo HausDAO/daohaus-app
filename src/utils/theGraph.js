@@ -12,7 +12,7 @@ import { fetchTokenData } from './tokenValue';
 import { omit } from './general';
 import { UBERHAUS_QUERY, UBER_MINIONS } from '../graphQL/uberhaus-queries';
 import { UBERHAUS_DATA } from './uberhaus';
-import { getApiMetadata } from './metadata';
+import { getApiMetadata, getDateTime } from './metadata';
 import { CCO_CONSTANTS } from './cco';
 
 export const graphFetchAll = async (args, items = [], skip = 0) => {
@@ -369,8 +369,11 @@ export const daosqaureCcoQuery = async ({ query, reactSetter, apiFetcher }) => {
         return dao?.meta?.daosquarecco;
       });
 
+    const date = await getDateTime();
+    const now = Number(date.seconds);
+
     const withCcoMeta = withMetaData.map(dao => {
-      return daosqaureCcoDaoResolver(dao);
+      return daosqaureCcoDaoResolver(dao, now);
     });
 
     reactSetter(withCcoMeta);

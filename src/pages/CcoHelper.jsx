@@ -6,6 +6,7 @@ import { isCcoProposal, contributionTotalValue } from '../utils/cco';
 import { useTX } from '../contexts/TXContext';
 import ContentBox from '../components/ContentBox';
 import { groupByKey, timeToNow } from '../utils/general';
+import { getDateTime } from '../utils/metadata';
 
 const CcoHelper = React.memo(
   ({ daoMetaData, currentDaoTokens, daoProposals }) => {
@@ -34,14 +35,15 @@ const CcoHelper = React.memo(
     }, []);
 
     useEffect(() => {
-      const setUp = ccoType => {
+      const setUp = async ccoType => {
         const ccoToken = currentDaoTokens.find(
           token =>
             token.tokenAddress.toLowerCase() ===
             daoMetaData.boosts[ccoType].metadata.tributeToken.toLowerCase(),
         );
 
-        const now = new Date() / 1000;
+        const date = await getDateTime();
+        const now = Number(date.seconds);
         const configData = daoMetaData.boosts[ccoType].metadata;
         const duration =
           Number(configData.raiseEndTime) - Number(configData.raiseStartTime);
@@ -49,6 +51,7 @@ const CcoHelper = React.memo(
         setRoundData({
           ccoType,
           ccoToken,
+          now,
           active: daoMetaData.boosts[ccoType].active,
           ...configData,
           beforeRaise: Number(configData.raiseStartTime) > now,
