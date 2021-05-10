@@ -156,6 +156,7 @@ const DaoRouter = () => {
             overview={daoOverview}
             members={daoMembers}
             currentDaoTokens={currentDaoTokens}
+            isMember={isMember}
           />
         </Route>
         <Route

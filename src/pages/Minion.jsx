@@ -14,6 +14,7 @@ import {
 import { CopyToClipboard } from 'react-copy-to-clipboard';
 import { RiArrowLeftLine } from 'react-icons/ri';
 import { BigNumber } from 'ethers';
+import { utils } from 'web3';
 import { FaCopy } from 'react-icons/fa';
 import makeBlockie from 'ethereum-blockies-base64';
 import ContentBox from '../components/ContentBox';
@@ -36,7 +37,7 @@ import { useTX } from '../contexts/TXContext';
 import { TokenService } from '../services/tokenService';
 import MinionNativeToken from '../components/minionNativeToken';
 
-const MinionDetails = ({ overview, currentDaoTokens }) => {
+const MinionDetails = ({ overview, currentDaoTokens, isMember }) => {
   const { daochain, daoid, minion } = useParams();
   const toast = useToast();
   const [minionData, setMinionData] = useState();
@@ -176,7 +177,7 @@ const MinionDetails = ({ overview, currentDaoTokens }) => {
   const sendNativeToken = async values => {
     const details = detailsToJSON({
       title: `${minionData.details} sends native token`,
-      description: `Send ${values.amount} `,
+      description: values.description || `Send ${values.amount} `,
       // link: (link to block explorer)
       type: 'nativeTokenSend',
     });
@@ -191,20 +192,20 @@ const MinionDetails = ({ overview, currentDaoTokens }) => {
       tokenAddress: token.contractAddress,
       chainID: daochain,
     });
-
-    const amountWithDecimal = BigNumber.from(values.amount).mul(
+    const parsed = utils.toWei(values.amount);
+    const amountWithDecimal = BigNumber.from(parsed).mul(
       BigNumber.from(10).pow(+token.decimals),
     );
-    console.log(amountWithDecimal.toString());
 
     const hexData = tokenService('transferNoop')({
       to: values.destination,
-      amount: amountWithDecimal.toString(),
+      amount: utils.fromWei(amountWithDecimal.toString()).toString(),
     });
 
     const details = detailsToJSON({
       title: `${minionData.details} sends a token`,
-      description: `Send ${values.amount} ${token.symbol}`,
+      description:
+        values.description || `Send ${values.amount} ${token.symbol}`,
       // link: (link to block explorer)
       type: 'tokenSend',
     });
@@ -282,12 +283,19 @@ const MinionDetails = ({ overview, currentDaoTokens }) => {
                     <TextBox size='md' align='center'>
                       Minion wallet
                     </TextBox>
-                    <MinionNativeToken action={sendNativeToken} />
+                    <MinionNativeToken
+                      action={sendNativeToken}
+                      isMember={isMember}
+                    />
                     {daochain !== '0x64' && (
                       <Flex>View token data on etherscan</Flex>
                     )}
 
-                    <MinionTokenList minion={minion} action={sendToken} />
+                    <MinionTokenList
+                      minion={minion}
+                      action={sendToken}
+                      isMember={isMember}
+                    />
                   </Box>
                 </Stack>
               </Box>
