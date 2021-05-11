@@ -27,8 +27,6 @@ const CcoClaimCard = ({ roundData, setClaimComplete, claimComplete }) => {
       return isRaiseToken && Number(bal.token.balance) > 0;
     });
 
-  console.log('roudnData', roundData);
-
   return (
     <ContentBox variant='d2' mt={2} w='100%'>
       <Flex alignItems='flex-end' wrap='wrap'>

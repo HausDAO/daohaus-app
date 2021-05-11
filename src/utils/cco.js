@@ -93,7 +93,9 @@ export const contributionTotalValue = args => {
       const nextSum = Number(prop.tributeOffered) + sum;
       const isUnder = args.allProposals
         ? nextSum <= totalMaxWei
-        : args.overTime && Number(args.overTime) >= Number(prop.createdAt);
+        : args.overTime
+        ? Number(args.overTime) >= Number(prop.createdAt)
+        : true;
       if (isUnder) {
         sum = nextSum;
       } else {
@@ -108,6 +110,8 @@ export const contributionTotalValue = args => {
       overTime,
     };
   }
+
+  console.log('total', total);
   return total / 10 ** Number(args.round.ccoToken.decimals);
 };
 

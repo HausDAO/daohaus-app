@@ -112,8 +112,6 @@ const CcoContribution = ({ daoMetaData, currentDaoTokens, daoProposals }) => {
         allProposals: true,
       });
 
-      console.log('addressProposals', addressProposals, overTime);
-
       const addressTotal = contributionTotalValue({
         proposals: addressProposals,
         round: roundData,

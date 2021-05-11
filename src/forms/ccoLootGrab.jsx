@@ -141,17 +141,12 @@ const CcoLootGrabForm = ({
     }
   };
 
-  console.log('currentContributionData', currentContributionData);
-
   return (
     <Flex wrap='wrap'>
       <form onSubmit={handleSubmit(onSubmit)}>
         <Flex justifyContent='space-between' my={3}>
           <Text fontSize='sm' color='blackAlpha.700' as='i'>
-            {`${currentContributionData?.addressRemaining ||
-              roundData.maxContribution}`}
-            /
-            {`${roundData.maxContribution} ${roundData.ccoToken.symbol} remaining`}
+            {`${currentContributionData?.addressRemaining} / ${roundData.maxContribution} ${roundData.ccoToken.symbol} remaining`}
           </Text>
         </Flex>
         <FormControl
@@ -170,7 +165,7 @@ const CcoLootGrabForm = ({
               getValues={getValues}
               setError={setError}
               roundData={roundData}
-              contributionClosed={contributionClosed}
+              contributionClosed={contributionClosed || !openContribution}
             />
           </Box>
           <Text fontSize='sm' color='whiteAlpha.700' as='i' ml={5}>
