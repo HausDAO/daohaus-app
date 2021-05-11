@@ -11,9 +11,9 @@ import { numberWithCommas } from '../utils/general';
 import { supportedChains } from '../utils/chain';
 import { CCO_CONSTANTS } from '../utils/cco';
 
-const CcoCard = ({ daoMetaData, isLink, dao }) => {
+const CcoCard = ({ daoMetaData, isLink, dao, ccoType }) => {
   const raiseLeft =
-    Number(daoMetaData.boosts.daosquarecco.metadata.maxTarget) -
+    Number(daoMetaData.boosts[ccoType].metadata.maxTarget) -
     dao.ccoFundedAmount;
   const canClaim =
     dao?.ccoStatus?.label === 'Funded' && dao?.ccoStatus?.claimOpen;
@@ -58,7 +58,9 @@ const CcoCard = ({ daoMetaData, isLink, dao }) => {
           <Box ml={5}>
             <Flex align='center'>
               {canClaim && <BsEggFill />}
-              {dao?.ccoStatus?.label}
+              {daoMetaData.boosts[ccoType].active
+                ? dao?.ccoStatus?.label
+                : 'Paused'}
             </Flex>
           </Box>
         </Flex>
@@ -72,12 +74,12 @@ const CcoCard = ({ daoMetaData, isLink, dao }) => {
         <Flex direction='row' justify='space-between' w='100%'>
           <Box fontFamily='heading' fontSize='xl'>
             {`${numberWithCommas(dao.ccoFundedAmount)} ${
-              daoMetaData.boosts.daosquarecco.metadata.tributeTokenSymbol
+              daoMetaData.boosts[ccoType].metadata.tributeTokenSymbol
             } Funded`}
           </Box>
           <Box fontFamily='heading' fontSize='xl'>
             {`${numberWithCommas(raiseLeft)} ${
-              daoMetaData.boosts.daosquarecco.metadata.tributeTokenSymbol
+              daoMetaData.boosts[ccoType].metadata.tributeTokenSymbol
             } Left`}
           </Box>
         </Flex>
@@ -87,7 +89,7 @@ const CcoCard = ({ daoMetaData, isLink, dao }) => {
               Funding Goal
             </TextBox>
             <TextBox size='lg' variant='value'>
-              {`${daoMetaData.boosts.daosquarecco.metadata.maxTarget} ${daoMetaData.boosts.daosquarecco.metadata.tributeTokenSymbol}`}
+              {`${daoMetaData.boosts[ccoType].metadata.maxTarget} ${daoMetaData.boosts[ccoType].metadata.tributeTokenSymbol}`}
             </TextBox>
           </Box>
           <Box>
@@ -95,7 +97,7 @@ const CcoCard = ({ daoMetaData, isLink, dao }) => {
               Rewards
             </TextBox>
             <TextBox size='lg' variant='value'>
-              {`${daoMetaData.boosts.daosquarecco.metadata.ratio} ${daoMetaData.boosts.daosquarecco.metadata.claimTokenSymbol} = 1 ${daoMetaData.boosts.daosquarecco.metadata.tributeTokenSymbol}`}
+              {`${daoMetaData.boosts[ccoType].metadata.ratio} ${daoMetaData.boosts[ccoType].metadata.claimTokenSymbol} = 1 ${daoMetaData.boosts[ccoType].metadata.tributeTokenSymbol}`}
             </TextBox>
           </Box>
         </Flex>

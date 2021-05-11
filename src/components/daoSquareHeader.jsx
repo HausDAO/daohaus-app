@@ -12,7 +12,7 @@ const DaosquareHeader = () => {
   useEffect(() => {
     if (address) {
       setRiceBalance('420');
-      console.log('riceBalance', riceBalance);
+      console.log('rb', riceBalance);
     }
   }, [address]);
 

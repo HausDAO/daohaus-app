@@ -186,7 +186,11 @@ const CcoContribution = ({ daoMetaData, currentDaoTokens, daoProposals }) => {
             mb={6}
           >
             {daoCardData && (
-              <CcoCard daoMetaData={daoMetaData} dao={daoCardData} />
+              <CcoCard
+                daoMetaData={daoMetaData}
+                dao={daoCardData}
+                ccoType={daoMetaData.daosquarecco ? 'daosquarecco' : 'cco'}
+              />
             )}
 
             <CcoEligibility

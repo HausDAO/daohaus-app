@@ -111,7 +111,6 @@ export const contributionTotalValue = args => {
     };
   }
 
-  console.log('total', total);
   return total / 10 ** Number(args.round.ccoToken.decimals);
 };
 

@@ -50,6 +50,7 @@ const DaosquareCco = () => {
                     daoMetaData={dao.meta}
                     dao={dao}
                     key={dao.id}
+                    ccoType='daosquarecco'
                     isLink
                   />
                 );
