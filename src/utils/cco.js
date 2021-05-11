@@ -87,13 +87,13 @@ export const contributionTotalValue = args => {
   const totalMaxWei = Number(args.round.maxTarget) * 10 ** 18;
   const total = args.proposals
     .sort((a, b) => {
-      return +b.createdAt - +a.createdAt;
+      return +a.createdAt - +b.createdAt;
     })
     .reduce((sum, prop) => {
       const nextSum = Number(prop.tributeOffered) + sum;
       const isUnder = args.allProposals
-        ? nextSum < totalMaxWei
-        : !args.overTime;
+        ? nextSum <= totalMaxWei
+        : args.overTime && Number(args.overTime) >= Number(prop.createdAt);
       if (isUnder) {
         sum = nextSum;
       } else {
@@ -121,7 +121,7 @@ export const currentFunded = (ccoData, proposals) => {
   const totalMaxWei = Number(ccoData.maxTarget) * 10 ** 18;
   return proposals.reduce((sum, prop) => {
     const nextSum = Number(prop.tributeOffered) + sum;
-    if (isCcoProposal(prop, ccoData) && nextSum < totalMaxWei) {
+    if (isCcoProposal(prop, ccoData) && nextSum <= totalMaxWei) {
       sum = nextSum;
     }
     return sum;

@@ -105,18 +105,15 @@ const CcoContribution = ({ daoMetaData, currentDaoTokens, daoProposals }) => {
       const addressProposals = contributionProposals.filter(proposal => {
         return isCcoProposalForAddress(proposal, address, roundData);
       });
+
       const { contributionTotal, overTime } = contributionTotalValue({
         proposals: contributionProposals,
         round: roundData,
         allProposals: true,
       });
 
-      console.log('contributionTotal', contributionTotal, overTime);
-      // how do we stop this if over limit?
-      // one prop in on time, one not
-      // need a last prop created at...
+      console.log('addressProposals', addressProposals, overTime);
 
-      // get total of all, if over limit, filter
       const addressTotal = contributionTotalValue({
         proposals: addressProposals,
         round: roundData,

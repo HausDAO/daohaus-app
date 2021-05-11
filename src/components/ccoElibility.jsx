@@ -52,22 +52,35 @@ const CcoEligibility = ({
         {networkMatch ? (
           <Box>
             {isEligible === 'unchecked' && (
-              <Tooltip
-                hasArrow
-                shouldWrapChildren
-                label={roundData.whitelistReqs}
-                placement='top'
-              >
-                <Button
-                  variant='primary'
-                  onClick={checkEligibility}
-                  disabled={
-                    checkingEligibility || roundData.raiseOver || raiseAtMax
-                  }
+              <>
+                <Tooltip
+                  hasArrow
+                  shouldWrapChildren
+                  label={roundData.whitelistReqs}
+                  placement='top'
                 >
-                  {!checkingEligibility ? <>Check Eligibility</> : <Spinner />}
-                </Button>
-              </Tooltip>
+                  <Button
+                    variant='primary'
+                    onClick={checkEligibility}
+                    disabled={
+                      checkingEligibility || roundData.raiseOver || raiseAtMax
+                    }
+                  >
+                    {!checkingEligibility ? (
+                      <>Check Eligibility</>
+                    ) : (
+                      <Spinner />
+                    )}
+                  </Button>
+                </Tooltip>
+
+                {roundData.raiseOver ||
+                  (raiseAtMax && (
+                    <Box size='xs' my={2} color='blackAlpha.900'>
+                      Contributions are closed
+                    </Box>
+                  ))}
+              </>
             )}
             {isEligible === 'checked' && (
               <>

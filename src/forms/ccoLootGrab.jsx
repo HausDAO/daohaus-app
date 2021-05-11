@@ -141,6 +141,8 @@ const CcoLootGrabForm = ({
     }
   };
 
+  console.log('currentContributionData', currentContributionData);
+
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
       <Flex justifyContent='space-between' my={3}>
