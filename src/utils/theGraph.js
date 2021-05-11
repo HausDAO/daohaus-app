@@ -2,13 +2,17 @@ import { graphQuery } from './apollo';
 import { ADDRESS_BALANCES, BANK_BALANCES } from '../graphQL/bank-queries';
 import { DAO_ACTIVITIES, HOME_DAO } from '../graphQL/dao-queries';
 import { MEMBERS_LIST } from '../graphQL/member-queries';
-import { proposalResolver, daoResolver } from './resolvers';
+import {
+  proposalResolver,
+  daoResolver,
+  daosqaureCcoDaoResolver,
+} from './resolvers';
 import { getGraphEndpoint, supportedChains } from './chain';
 import { fetchTokenData } from './tokenValue';
 import { omit } from './general';
 import { UBERHAUS_QUERY, UBER_MINIONS } from '../graphQL/uberhaus-queries';
 import { UBERHAUS_DATA } from './uberhaus';
-import { getApiMetadata } from './metadata';
+import { getApiMetadata, getDateTime } from './metadata';
 import { CCO_CONSTANTS } from './cco';
 
 export const graphFetchAll = async (args, items = [], skip = 0) => {
@@ -356,10 +360,7 @@ export const daosqaureCcoQuery = async ({ query, reactSetter, apiFetcher }) => {
 
     const withMetaData = chainData
       .map(dao => {
-        // const withResolvedDao = daoResolver(dao, { prices, chain });
-        // TODO: maybe we resolve the data here - all cco calcs based on matching proposals
         return {
-          // ...withResolvedDao,
           ...dao,
           meta: daoMapLookup(dao?.id, chain.network),
         };
@@ -368,7 +369,14 @@ export const daosqaureCcoQuery = async ({ query, reactSetter, apiFetcher }) => {
         return dao?.meta?.daosquarecco;
       });
 
-    reactSetter(withMetaData);
+    const date = await getDateTime();
+    const now = Number(date.seconds);
+
+    const withCcoMeta = withMetaData.map(dao => {
+      return daosqaureCcoDaoResolver(dao, now);
+    });
+
+    reactSetter(withCcoMeta);
   } catch (error) {
     console.error(error);
   }

@@ -2,6 +2,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { Avatar, Box, Flex, Progress } from '@chakra-ui/react';
 import makeBlockie from 'ethereum-blockies-base64';
+import { BsEggFill } from 'react-icons/bs';
 
 import ContentBox from './ContentBox';
 import TextBox from './TextBox';
@@ -10,9 +11,12 @@ import { numberWithCommas } from '../utils/general';
 import { supportedChains } from '../utils/chain';
 import { CCO_CONSTANTS } from '../utils/cco';
 
-const CcoCard = ({ daoMetaData, isLink }) => {
-  const tempFunded = 115005;
-  const tempRaiseLeft = 661661;
+const CcoCard = ({ daoMetaData, isLink, dao }) => {
+  const raiseLeft =
+    Number(daoMetaData.boosts.daosquarecco.metadata.maxTarget) -
+    dao.ccoFundedAmount;
+  const canClaim =
+    dao?.ccoStatus?.label === 'Funded' && dao?.ccoStatus?.claimOpen;
 
   return (
     <ContentBox
@@ -50,7 +54,12 @@ const CcoCard = ({ daoMetaData, isLink }) => {
               {daoMetaData?.name}
             </Box>
           </Flex>
-          <Box ml={5}>Active</Box>
+          <Box ml={5}>
+            <Flex align='center'>
+              {canClaim && <BsEggFill />}
+              {dao?.ccoStatus?.label}
+            </Flex>
+          </Box>
         </Flex>
         <Progress
           colorScheme='secondary'
@@ -61,12 +70,14 @@ const CcoCard = ({ daoMetaData, isLink }) => {
         />
         <Flex direction='row' justify='space-between' w='100%'>
           <Box fontFamily='heading' fontSize='xl'>
-            {numberWithCommas(tempFunded)} Funded
+            {`${numberWithCommas(dao.ccoFundedAmount)} ${
+              daoMetaData.boosts.daosquarecco.metadata.tributeTokenSymbol
+            } Funded`}
           </Box>
           <Box fontFamily='heading' fontSize='xl'>
-            {numberWithCommas(tempRaiseLeft)}{' '}
-            {daoMetaData.boosts.daosquarecco.metadata.contributionTokenSymbol}
-            Left
+            {`${numberWithCommas(raiseLeft)} ${
+              daoMetaData.boosts.daosquarecco.metadata.tributeTokenSymbol
+            } Left`}
           </Box>
         </Flex>
         <Flex mt={5} direction='row' justify='space-between' w='100%'>
@@ -75,7 +86,7 @@ const CcoCard = ({ daoMetaData, isLink }) => {
               Funding Goal
             </TextBox>
             <TextBox size='lg' variant='value'>
-              {daoMetaData.boosts.daosquarecco.metadata.maxTarget} USDT
+              {`${daoMetaData.boosts.daosquarecco.metadata.maxTarget} ${daoMetaData.boosts.daosquarecco.metadata.tributeTokenSymbol}`}
             </TextBox>
           </Box>
           <Box>

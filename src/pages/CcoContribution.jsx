@@ -17,6 +17,7 @@ import CcoEligibility from '../components/ccoElibility';
 import CcoResources from '../components/ccoResources';
 import CcoContributionCard from '../components/ccoContributeCard';
 import CcoClaimCard from '../components/ccoClaimCard';
+import { daosqaureCcoDaoResolver } from '../utils/resolvers';
 
 // TODO: filter out proposals after max limit is hit
 
@@ -26,11 +27,15 @@ const CcoContribution = ({ daoMetaData, currentDaoTokens, daoProposals }) => {
   const { address, injectedChain } = useInjectedProvider();
 
   const [roundData, setRoundData] = useState(null);
+  const [daoCardData, setDaoCardData] = useState(null);
   const [isEligible, setIsEligible] = useState('unchecked');
   const [currentContributionData, setCurrentContributionData] = useState(null);
   const [claimComplete, setClaimComplete] = useState(false);
 
   const networkMatch = injectedChain?.network === roundData?.network;
+
+  // TODO: make this work
+  // const dao = daosqaureCcoDaoResolver({meta: daoMetaData, });
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -71,28 +76,52 @@ const CcoContribution = ({ daoMetaData, currentDaoTokens, daoProposals }) => {
         raiseOver: `${Number(configData.startTime) + duration}` < now,
         claimOpen: Number(configData.claimPeriodStartTime) < now,
       });
+
+      setDaoCardData(
+        daosqaureCcoDaoResolver({
+          meta: daoMetaData,
+          proposals: daoProposals,
+        }),
+      );
     };
 
     const someTokens = currentDaoTokens && currentDaoTokens[0];
     const ccoType = daoMetaData?.daosquarecco ? 'daosquarecco' : 'cco';
-    if (someTokens && daoMetaData?.boosts && daoMetaData.boosts[ccoType]) {
+    if (
+      someTokens &&
+      daoMetaData?.boosts &&
+      daoMetaData.boosts[ccoType] &&
+      daoProposals
+    ) {
       setup(ccoType);
     }
-  }, [currentDaoTokens, daoMetaData]);
+  }, [currentDaoTokens, daoMetaData, daoProposals]);
 
   useEffect(() => {
     if (roundData && address && daoProposals && daoProposals.length) {
       const contributionProposals = daoProposals.filter(proposal => {
-        return isCcoProposal(proposal, roundData);
+        return isCcoProposal(proposal, roundData, true);
       });
       const addressProposals = contributionProposals.filter(proposal => {
         return isCcoProposalForAddress(proposal, address, roundData);
       });
-      const contributionTotal = contributionTotalValue(
-        contributionProposals,
-        roundData,
-      );
-      const addressTotal = contributionTotalValue(addressProposals, roundData);
+      const { contributionTotal, overTime } = contributionTotalValue({
+        proposals: contributionProposals,
+        round: roundData,
+        allProposals: true,
+      });
+
+      console.log('contributionTotal', contributionTotal, overTime);
+      // how do we stop this if over limit?
+      // one prop in on time, one not
+      // need a last prop created at...
+
+      // get total of all, if over limit, filter
+      const addressTotal = contributionTotalValue({
+        proposals: addressProposals,
+        round: roundData,
+        overTime,
+      });
       const remaining = Number(roundData.maxTarget) - contributionTotal;
 
       setCurrentContributionData({
@@ -161,7 +190,9 @@ const CcoContribution = ({ daoMetaData, currentDaoTokens, daoProposals }) => {
             pr={[0, null, null, null, 6]}
             mb={6}
           >
-            <CcoCard daoMetaData={daoMetaData} />
+            {daoCardData && (
+              <CcoCard daoMetaData={daoMetaData} dao={daoCardData} />
+            )}
 
             <CcoEligibility
               networkMatch={networkMatch}

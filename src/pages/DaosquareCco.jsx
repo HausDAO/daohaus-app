@@ -8,8 +8,7 @@ import CcoCard from '../components/ccoCard';
 import { useDaosquareCco } from '../contexts/DaosquareCcoContext';
 import { useCustomTheme } from '../contexts/CustomThemeContext';
 import { daosquareCcoTheme } from '../themes/defaultTheme';
-
-// TODO: helper functions to create totals
+import { totalFundedDaosquare } from '../utils/cco';
 
 const DaosquareCco = () => {
   const { d2CcoDaos } = useDaosquareCco();
@@ -20,23 +19,19 @@ const DaosquareCco = () => {
     projects: 0,
   });
 
-  // updateTheme(daosquareCcoTheme);
   useEffect(() => {
-    console.log('updating theme');
     updateTheme(daosquareCcoTheme);
   }, []);
 
   useEffect(() => {
     if (d2CcoDaos?.length) {
       setTotals({
-        raised: 500000,
-        funded: 730000,
-        projects: 2,
+        funded: totalFundedDaosquare(d2CcoDaos),
+        projects: d2CcoDaos.filter(dao => dao.ccoStatus.label === 'Funded')
+          .length,
       });
     }
   }, [d2CcoDaos]);
-
-  console.log('d2CcoDaos', d2CcoDaos);
 
   return (
     <Layout daosquarecco>
@@ -50,7 +45,14 @@ const DaosquareCco = () => {
             >
               <Box fontSize='xl'>CCOs</Box>
               {d2CcoDaos.map(dao => {
-                return <CcoCard daoMetaData={dao.meta} key={dao.id} isLink />;
+                return (
+                  <CcoCard
+                    daoMetaData={dao.meta}
+                    dao={dao}
+                    key={dao.id}
+                    isLink
+                  />
+                );
               })}
             </Box>
             <Box w={['100%', null, null, null, '40%']}>

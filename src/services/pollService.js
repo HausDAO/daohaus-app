@@ -555,7 +555,7 @@ export const createPoll = ({
   } else if (action === 'superfluidWithdrawBalance') {
     return ({
       minionAddress,
-      superTokenAddress,
+      tokenAddress,
       expectedBalance,
       chainID,
       actions,
@@ -567,7 +567,7 @@ export const createPoll = ({
         args: {
           chainID,
           uberMinionAddress: minionAddress,
-          tokenAddress: superTokenAddress,
+          tokenAddress,
         },
         actions,
         txHash,
@@ -589,7 +589,7 @@ export const createPoll = ({
           },
           pollArgs: {
             minionAddress,
-            superTokenAddress,
+            tokenAddress,
             expectedBalance,
             chainID,
           },

@@ -5,7 +5,6 @@ import CcoLootGrabForm from '../forms/ccoLootGrab';
 import { countDownText } from '../utils/cco';
 import { timeToNow } from '../utils/general';
 import ContentBox from './ContentBox';
-import TextBox from './TextBox';
 
 const CcoContributionCard = ({
   raiseAtMax,

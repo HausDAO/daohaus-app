@@ -21,7 +21,7 @@ import { handleGetProfile } from '../utils/3box';
 import { chainByID } from '../utils/chain';
 
 const defaultTipLabel =
-  'Address to receive the Shares, Loot, and/or Funding requested in this proposal.';
+  'Address to receive the Shares, Loot, and/or Funding requested in this proposal. A DAO address cannot be the applicant on a proposal.';
 
 const AddressInput = ({
   register,

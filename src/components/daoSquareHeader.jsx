@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Link as RouterLink } from 'react-router-dom';
-import { Box, Flex, Link } from '@chakra-ui/react';
+import { Flex, Link } from '@chakra-ui/react';
 import { useInjectedProvider } from '../contexts/InjectedProviderContext';
 
 // TODO: if address get rice balance/need rice addy/token service/getBalance
@@ -12,6 +12,7 @@ const DaosquareHeader = () => {
   useEffect(() => {
     if (address) {
       setRiceBalance('420');
+      console.log('riceBalance', riceBalance);
     }
   }, [address]);
 

@@ -32,6 +32,16 @@ const CcoResources = ({ daoMetaData, ccoData }) => {
         >
           About {daoMetaData.name}
         </Box>
+        <Box
+          fontSize='lg'
+          color='secondary.500'
+          fontFamily='heading'
+          onClick={() => setGenericModal({ ccoFaq: true })}
+          mb={5}
+          cursor='pointer'
+        >
+          Rewards
+        </Box>
         <Link
           href='https://daohaus.club/docs/cco'
           isExternal
@@ -43,16 +53,6 @@ const CcoResources = ({ daoMetaData, ccoData }) => {
             About CCOs
           </Box>
         </Link>
-        <Box
-          fontSize='lg'
-          color='secondary.500'
-          fontFamily='heading'
-          onClick={() => setGenericModal({ ccoFaq: true })}
-          mb={5}
-          cursor='pointer'
-        >
-          Rewards
-        </Box>
       </ContentBox>
 
       <GenericModal modalId='aboutCcoDao'>
@@ -72,7 +72,7 @@ const CcoResources = ({ daoMetaData, ccoData }) => {
       <GenericModal modalId='ccoFaq'>
         <Box>
           <Text mb={3} fontFamily='heading'>
-            FAQ
+            Rewards
           </Text>
           <Text mb={5}>{ccoData.faqs}</Text>
         </Box>
