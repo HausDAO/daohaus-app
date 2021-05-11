@@ -29,42 +29,43 @@ const CcoClaimCard = ({ roundData, setClaimComplete, claimComplete }) => {
 
   return (
     <ContentBox variant='d2' mt={2} w='100%'>
-      <Flex alignItems='start'>
-        <Box fontSize='3xl' fontFamily='heading' pr={5}>
-          3
-        </Box>
-
-        <Flex justifyContent='space-between' alignItems='start'>
-          <Text fontSize='sm' color='blackAlpha.700' as='i'>
+      <Flex alignItems='flex-end' wrap='wrap'>
+        <Flex w='100%' justify='space-between' align='flex-end' wrap='wrap'>
+          <Text fontSize='sm' color='blackAlpha.700' as='i' marginLeft='auto'>
             {claimCountDownText(roundData.claimPeriodStartTime)}
           </Text>
         </Flex>
-        <Flex justifyContent='space-between' alignItems='start'>
-          <Box>
-            <Text fontSize='sm' color='blackAlpha.700' as='i'>
-              HAUS Available to Claim
-            </Text>
-            <TextBox variant='value' size='md' my={2}>
-              {`${claimAmount} ${roundData.claimTokenSymbol}`}
-            </TextBox>
+        <Flex alignItems='start'>
+          <Box fontSize='3xl' fontFamily='heading' pr={5}>
+            3
           </Box>
-          {!roundData.claimOpen ? (
-            <CcoClaim setClaimComplete={setClaimComplete} />
+          <Flex justifyContent='space-between' alignItems='start'>
+            <Box>
+              <TextBox variant='label' fontSize='sm' mb={-2}>
+                {roundData.claimTokenSymbol} Available to Claim
+              </TextBox>
+              <TextBox variant='value' size='md'>
+                {`${claimAmount} ${roundData.claimTokenSymbol}`}
+              </TextBox>
+            </Box>
+            {!roundData.claimOpen ? (
+              <CcoClaim setClaimComplete={setClaimComplete} />
+            ) : null}
+          </Flex>
+          {claimComplete || hasBalance ? (
+            <Box fontSize='lg'>
+              {`Your claim is complete. Withdraw your
+          ${roundData.claimTokenSymbol} on the `}
+              <Text
+                as={RouterLink}
+                color='secondary.500'
+                to={`/dao/${daochain}/${daoid}/profile/${address}`}
+              >
+                Profile page
+              </Text>
+            </Box>
           ) : null}
         </Flex>
-        {claimComplete || hasBalance ? (
-          <Box fontSize='lg'>
-            {`Your claim is complete. Withdraw your
-          ${roundData.claimTokenSymbol} on the `}
-            <Text
-              as={RouterLink}
-              color='secondary.500'
-              to={`/dao/${daochain}/${daoid}/profile/${address}`}
-            >
-              Profile page
-            </Text>
-          </Box>
-        ) : null}
       </Flex>
     </ContentBox>
   );

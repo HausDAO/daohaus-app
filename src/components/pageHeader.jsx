@@ -14,14 +14,26 @@ const PageHeader = ({ isDao, isDaosquare, header, headerEl, customTerms }) => {
         align='center'
         w={['100%', null, null, 'auto']}
       >
-        <Box
-          fontSize={['lg', null, null, '3xl']}
-          fontFamily='heading'
-          fontWeight={700}
-          mr={10}
-        >
-          {customTerms ? getTerm(customTerms, header) : header}
-        </Box>
+        {isDaosquare ? (
+          <Box
+            fontSize={['lg', null, null, 'xl']}
+            fontFamily='heading'
+            fontWeight={700}
+            mr={0}
+            w='100%'
+          >
+            {customTerms ? getTerm(customTerms, header) : header}
+          </Box>
+        ) : (
+          <Box
+            fontSize={['lg', null, null, '3xl']}
+            fontFamily='heading'
+            fontWeight={700}
+            mr={10}
+          >
+            {customTerms ? getTerm(customTerms, header) : header}
+          </Box>
+        )}
         {headerEl}
         {isDaosquare && <DaosquareHeader />}
       </Flex>
