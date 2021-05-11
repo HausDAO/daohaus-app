@@ -82,6 +82,10 @@ const ProposalMinionCard = ({ proposal }) => {
           `&apikey=${key}`}`;
         const response = await fetch(url);
         const json = await response.json();
+        if (json.status === '0') {
+          // contract is not verified
+          return;
+        }
         const parsed = JSON.parse(json.result);
         abiDecoder.addABI(parsed);
         const localDecodedData = abiDecoder.decodeMethod(minionDeets.data);
@@ -203,6 +207,7 @@ const ProposalMinionCard = ({ proposal }) => {
             maxH='300px'
             overflowY='scroll'
           >
+            <TextBox size='xs'>VALUE: {minionDeets?.value}</TextBox>
             {decodedData && displayDecodedData(decodedData)}
           </ModalBody>
         </ModalContent>
