@@ -2,6 +2,7 @@ import React, { useContext, createContext } from 'react';
 import { MaxUint256 } from '@ethersproject/constants';
 
 import { useParams } from 'react-router-dom';
+import { v4 as uuidv4 } from 'uuid';
 import { TokenService } from '../services/tokenService';
 import { useDao } from './DaoContext';
 import { useDaoMember } from './DaoMemberContext';
@@ -11,20 +12,29 @@ import { useInjectedProvider } from './InjectedProviderContext';
 import { createPoll } from '../services/pollService';
 import { useUser } from './UserContext';
 import { useOverlay } from './OverlayContext';
-import { createHash, detailsToJSON } from '../utils/general';
-import { valToDecimalString } from '../utils/tokenValue';
+
 import { createForumTopic } from '../utils/discourse';
-import { MolochService } from '../services/molochService';
-import { LogError } from '../utils/errorLog';
-import { submitProposalTest } from '../polls/tests';
-import { PROPOSAL_TYPES } from '../utils/proposalUtils';
+
+import { getArgs, handleFormError, Transaction } from '../utils/txHelpers';
 
 export const TXContext = createContext();
 
 export const TXProvider = ({ children }) => {
   const { injectedProvider, address } = useInjectedProvider();
-  const { resolvePoll, cachePoll } = useUser();
-  const { hasPerformedBatchQuery, refetch, daoOverview } = useDao();
+  const {
+    resolvePoll,
+    cachePoll,
+    userHubDaos,
+    apiData,
+    outstandingTXs,
+  } = useUser();
+  const {
+    hasPerformedBatchQuery,
+    refetch,
+    daoOverview,
+    daoMembers,
+    daoProposals,
+  } = useDao();
   const { daoMetaData } = useMetaData();
   const {
     errorToast,
@@ -33,9 +43,31 @@ export const TXProvider = ({ children }) => {
     setProposalModal,
   } = useOverlay();
   const { hasFetchedMetadata, shouldUpdateTheme } = useMetaData();
-  const { shouldFetchInit, shouldFetchContract } = useToken();
-  const { currentMemberRef, memberWalletRef } = useDaoMember();
+  const { shouldFetchInit, shouldFetchContract, currentDaoTokens } = useToken();
+  const {
+    currentMemberRef,
+    memberWalletRef,
+    isMember,
+    daoMember,
+  } = useDaoMember();
+
   const { daoid, daochain } = useParams();
+
+  const contextData = {
+    address,
+    daoOverview,
+    daoid,
+    daochain,
+    daoMetaData,
+    daoMembers,
+    daoProposals,
+    currentDaoTokens,
+    isMember,
+    daoMember,
+    userHubDaos,
+    // apiData,
+    outstandingTXs,
+  };
 
   const refreshDao = () => {
     // I use useRef to stop excessive rerenders in most of the contexts
@@ -59,33 +91,65 @@ export const TXProvider = ({ children }) => {
     refetch();
   };
 
+  const buildTXPoll = ({
+    hash,
+    tx,
+    values,
+    formData,
+    discourse,
+    additionalArgs = {},
+  }) => {
+    return createPoll({ action: tx.txType, cachePoll })({
+      daoID: daoid,
+      chainID: daochain,
+      hash: hash || uuidv4(),
+      ...additionalArgs,
+      actions: {
+        onError: (error, txHash) => {
+          errorToast({
+            title: tx.errMsg || 'Transaction Error',
+            desciption: error?.message || '',
+          });
+          resolvePoll(txHash);
+          console.error(`${tx.errMsg}: ${error}`);
+        },
+        onSuccess: txHash => {
+          successToast({
+            title: tx.successMsg || 'Transaction Successful',
+          });
+          refreshDao();
+          resolvePoll(txHash);
+          if (discourse) {
+            createForumTopic({
+              chainID: daochain,
+              daoID: daoid,
+              afterTime: (new Date().getTime() / 1000).toFixed(),
+              proposalType: formData.type,
+              values,
+              applicant: values?.applicant || address,
+              daoMetaData,
+            });
+          }
+        },
+      },
+    });
+  };
+
   const unlockToken = async token => {
     // const token = getValues('tributeToken');
     const args = [daoid, MaxUint256];
 
     try {
-      const poll = createPoll({ action: 'unlockToken', cachePoll })({
-        daoID: daoid,
-        chainID: daochain,
-        tokenAddress: token,
-        userAddress: address,
-        unlockAmount: MaxUint256,
-        actions: {
-          onError: (error, txHash) => {
-            errorToast({
-              title: 'Error unlocking token.',
-            });
-            resolvePoll(txHash);
-            console.error(`Could not unlock: ${error}`);
-          },
-          onSuccess: txHash => {
-            successToast({
-              // ? update to token symbol or name
-              title: 'Tribute token unlocked',
-            });
-            refreshDao();
-            resolvePoll(txHash);
-          },
+      const poll = buildTXPoll({
+        tx: {
+          txType: 'unlockToken',
+          errMsg: 'Error unlocking token.',
+          successMsg: 'Tribute Token Unlocked',
+        },
+        additionalArgs: {
+          tokenAddress: token,
+          userAddress: address,
+          unlockAmount: MaxUint256,
         },
       });
       await TokenService({
@@ -100,186 +164,60 @@ export const TXProvider = ({ children }) => {
     }
   };
 
-  const submitProposal = async ({ values, proposalLoading, formData }) => {
+  //  handles submitProposal
+  //  whitelisttokenProposal
+  const createProposal = async ({ values, proposalLoading, formData }) => {
     proposalLoading(true);
-    const now = (new Date().getTime() / 1000).toFixed();
-    const hash = createHash();
-    const details = detailsToJSON({ ...values, hash });
-    const { tokenBalances, depositToken } = daoOverview;
-    const tributeToken = values.tributeToken || depositToken.tokenAddress;
-    const paymentToken = values.paymentToken || depositToken.tokenAddress;
-    const tributeOffered = values.tributeOffered
-      ? valToDecimalString(values.tributeOffered, tributeToken, tokenBalances)
-      : '0';
-    const paymentRequested = values.paymentRequested
-      ? valToDecimalString(values.paymentRequested, paymentToken, tokenBalances)
-      : '0';
-    const applicant = values?.applicant || address;
-    const args = [
-      applicant,
-      values.sharesRequested || '0',
-      values.lootRequested || '0',
-      tributeOffered,
-      tributeToken,
-      paymentRequested,
-      paymentToken,
-      details,
-    ];
-    console.log(args);
+    const { txType } = formData.tx;
+    const hash = uuidv4();
+    const args = getArgs({
+      values,
+      txType,
+      contextData,
+      hash,
+    });
     try {
-      const poll = createPoll({ action: 'submitProposal', cachePoll })({
-        daoID: daoid,
-        chainID: daochain,
-        hash,
-        actions: {
-          onError: (error, txHash) => {
-            errorToast({
-              title: 'There was an error.',
-              description: error?.message || '',
-            });
-            resolvePoll(txHash);
-            console.error(`Could not find a matching proposal: ${error}`);
-          },
-          onSuccess: txHash => {
-            successToast({
-              title: 'Proposal Submitted to the Dao!',
-            });
-            refreshDao();
-            resolvePoll(txHash);
-            createForumTopic({
-              chainID: daochain,
-              daoID: daoid,
-              afterTime: now,
-              proposalType: 'Member Proposal',
-              values,
-              applicant,
-              daoMetaData,
-            });
-          },
-        },
-      });
-      const onTxHash = () => {
-        setTxInfoModal(true);
-        setProposalModal(false);
-      };
-      await MolochService({
-        web3: injectedProvider,
-        daoAddress: daoid,
-        chainID: daochain,
-        version: daoOverview.version,
-      })('submitProposal')({
+      await Transaction({
         args,
-        address,
-        poll,
-        onTxHash,
+        poll: buildTXPoll({
+          hash,
+          tx: formData.tx,
+          values,
+          formData,
+          discourse: true,
+        }),
+        onTxHash() {
+          setProposalModal(false);
+          setTxInfoModal(true);
+        },
+        contextData,
+        injectedProvider,
+        tx: formData.tx,
       });
     } catch (error) {
-      const errMsg = error?.message || '';
-      proposalLoading(false);
-
-      LogError({
-        caughtAt: 'Needs data',
-        errMsg,
-        type: 'Contract TX: Member Proposal',
-        userAddress: address,
-        daoAddress: daoid,
-        priority: 1,
-        formData: values,
-        TxArgs: args,
-        contextData: {
-          address,
-          daoOverview,
-          daoid,
-          daochain,
-        },
-      });
-      errorToast({
-        title: 'There was an error.',
-        description: errMsg,
-      });
-    }
-  };
-
-  const whiteListToken = ({ values, proposalLoading, formData }) => {
-    proposalLoading(true);
-    const now = (new Date().getTime() / 1000).toFixed();
-    const hash = createHash();
-    const details = detailsToJSON({ ...values, hash });
-    const args = [values.tokenAddress, details];
-    console.log(`values`, values);
-    console.log(`args`, args);
-    try {
-      const poll = createPoll({ action: 'submitWhitelistProposal', cachePoll })(
-        {
-          daoID: daoid,
-          chainID: daochain,
-          hash,
-          actions: {
-            onError: (error, txHash) => {
-              errorToast({
-                title: 'There was an error.',
-              });
-              resolvePoll(txHash);
-              console.error(`Could not find a matching proposal: ${error}`);
-            },
-            onSuccess: txHash => {
-              successToast({
-                title: 'Whitelist Proposal Submitted to the Dao!',
-              });
-              refreshDao();
-              resolvePoll(txHash);
-              createForumTopic({
-                chainID: daochain,
-                daoID: daoid,
-                afterTime: now,
-                proposalType: PROPOSAL_TYPES.WHITELIST,
-                values,
-                applicant: address,
-                daoMetaData,
-              });
-            },
-          },
-        },
-      );
-      const onTxHash = () => {
-        setProposalModal(false);
-        setTxInfoModal(true);
-      };
-      MolochService({
-        web3: injectedProvider,
-        daoAddress: daoid,
-        chainID: daochain,
-        version: daoOverview.version,
-      })('submitWhitelistProposal')({
+      handleFormError({
+        contextData,
+        formData,
         args,
-        address,
-        poll,
-        onTxHash,
-      });
-    } catch (err) {
-      proposalLoading(false);
-      console.error('error: ', err);
-      errorToast({
-        title: 'There was an error.',
+        values,
+        error,
+        errorToast,
+        loading: proposalLoading,
       });
     }
   };
 
   const submitTransaction = ({ values, proposalLoading, formData }) => {
     const txType = formData?.tx?.txType;
-    if (!txType) {
+    if (!txType || !values || !proposalLoading || !formData) {
       throw new Error(
-        'DEV NOTICE: Transaction data corrupt or not specified in proposalFormData.js',
+        'DEV NOTICE: One of the required args (values, txType, formData, loading) not specified in proposalFormData.js',
       );
     }
     //  check special validation here
-    if (txType === 'submitProposal') {
-      return submitProposal({ values, proposalLoading, formData });
+    if (txType === 'submitProposal' || txType === 'submitWhitelistProposal') {
+      return createProposal({ values, proposalLoading, formData });
     }
-    if (txType === 'submitWhitelistProposal') {
-      return whiteListToken({ values, proposalLoading, formData });
-    }
-    console.log('did');
     throw new Error('DEV NOTICE: TX Type not found');
   };
 

@@ -1,3 +1,4 @@
+import { ValuesOfCorrectTypeRule } from 'graphql';
 import { v4 as uuidv4 } from 'uuid';
 
 const projectId = 'daohaus-err-log';
@@ -71,4 +72,24 @@ export const LogError = async data => {
   } catch (error) {
     console.error('ERROR LOG FAILED: ', error);
   }
+};
+
+export const logFormError = ({
+  contextData,
+  formData,
+  errMsg,
+  args,
+  values,
+}) => {
+  LogError({
+    caughtAt: formData.type,
+    errMsg,
+    type: formData.type,
+    userAddress: contextData.address,
+    daoAddress: contextData.daoid,
+    formData,
+    formState: values,
+    TxArgs: args,
+    contextData,
+  });
 };

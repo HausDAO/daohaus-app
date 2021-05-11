@@ -61,9 +61,7 @@ const ProposalFormModal = ({ proposalType }) => {
       form: <LootGrabForm />,
     },
     whitelist: {
-      type: `New ${getTerm(customTerms, 'proposal')}`,
       heading: `New Whitelist ${getTerm(customTerms, 'proposal')}`,
-      subline: 'Whitelist a token here.',
       form: <ProposalForm {...PROPOSAL_FORMS.TOKEN} />,
     },
     guildkick: {
@@ -73,10 +71,8 @@ const ProposalFormModal = ({ proposalType }) => {
       form: <GuildKickProposalForm />,
     },
     trade: {
-      type: `New ${getTerm(customTerms, 'proposal')}`,
       heading: `New Trade ${getTerm(customTerms, 'proposal')}`,
-      subline: 'Submit a trade proposal here.',
-      form: <TradeProposalForm />,
+      form: <ProposalForm {...PROPOSAL_FORMS.TRADE} />,
     },
     minion: {
       type: `New ${getTerm(customTerms, 'proposal')}`,

@@ -100,6 +100,9 @@ export const PROPOSAL_FORMS = {
     required: ['title', 'sharesRequested'], // Use name key from proposal type object
     tx: {
       txType: 'submitProposal',
+      contract: 'Moloch',
+      errMsg: 'Error submitting proposal',
+      successMsg: 'Membership Proposal submitted!',
     },
     fields: [
       FIELD.TITLE,
@@ -121,6 +124,9 @@ export const PROPOSAL_FORMS = {
     required: ['title', 'applicant'], // Use name key from proposal type object
     tx: {
       txType: 'submitProposal',
+      contract: 'Moloch',
+      errMsg: 'Error submitting proposal',
+      successMsg: 'Funding Proposal submitted!',
     },
     fields: [
       FIELD.TITLE,
@@ -142,15 +148,41 @@ export const PROPOSAL_FORMS = {
     required: ['title', 'tokenAddress'], // Use name key from proposal type object
     tx: {
       txType: 'submitWhitelistProposal',
+      contract: 'Moloch',
+      errMsg: 'Error submitting proposal',
+      successMsg: 'Token Proposal submitted!',
     },
     fields: [FIELD.TITLE, FIELD.TOKEN_ADDRESS, FIELD.LINK, FIELD.DESCRIPTION],
+  },
+  TRADE: {
+    title: 'Trade',
+    subtitle: 'Remove a Member',
+    type: PROPOSAL_TYPES.TRADE,
+    required: ['title'],
+    tx: {
+      txType: 'submitProposal',
+      contract: 'Moloch',
+      errMsg: 'Error submitting proposal',
+      successMsg: 'Trade Proposal submitted!',
+    },
+    fields: [
+      FIELD.TITLE,
+      FIELD.TRIBUTE,
+      FIELD.DESCRIPTION,
+      FIELD.PAYMENT_REQUEST,
+      FIELD.LINK,
+    ],
+    additionalOptions: [
+      FIELD.APPLICANT,
+      FIELD.LOOT_REQUEST,
+      FIELD.SHARES_REQUEST,
+    ],
   },
   SIGNAL: {
     type: PROPOSAL_TYPES.SIGNAL,
     tx: {
-      poll: 'submitProposal',
-      service: 'moloch',
-      action: 'submitProposal',
+      txType: 'submitProposal',
+      contract: 'Moloch',
     },
     fields: [FIELD.TITLE, FIELD.DESCRIPTION, FIELD.LINK],
   },
