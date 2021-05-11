@@ -30,57 +30,60 @@ const CcoContributionCard = ({
             </Text>
           ) : null}
         </Flex>
-        <Flex>
-          <Box fontSize='3xl' fontFamily='heading' pr={5}>
-            2
-          </Box>
+        <Flex w='100%' align='flex-start'>
           <Flex direction='column'>
-            <Text fontSize='sm' color='blackAlpha.700' mt={2}>
-              {`${roundData.maxContribution} ${roundData.ccoToken.symbol} max per person`}
-            </Text>
+            <Box fontSize='3xl' fontFamily='heading' pr={5}>
+              2
+            </Box>
           </Flex>
-          {raiseAtMax ? (
-            <Box size='md' my={2} color='blackAlpha.900'>
-              Max target reached. Contributions are closed.
-            </Box>
-          ) : null}
+          <Flex direction='column'>
+            {/* <Text fontSize='sm' color='blackAlpha.700' mt={2}>
+              {`${roundData.maxContribution} ${roundData.ccoToken.symbol} max per person`}
+            </Text> */}
 
-          {!eligibleBlock && !roundData.beforeRaise ? (
-            <Box borderTopWidth='1px' mt={3}>
-              <CcoLootGrabForm
-                roundData={roundData}
-                currentContributionData={currentContributionData}
-                contributionClosed={contributionClosed}
-              />
+            {raiseAtMax ? (
+              <Box size='md' my={2} color='blackAlpha.900'>
+                Max target reached. Contributions are closed.
+              </Box>
+            ) : null}
 
-              {currentContributionData ? (
-                <Box borderTopWidth='1px' mt={5}>
-                  {currentContributionData.addressProposals.map(prop => {
-                    return (
-                      <Flex
-                        justifyContent='space-between'
-                        alignContent='center'
-                        key={prop.id}
-                        mt={5}
-                      >
-                        <Text fontSize='sm' color='blackAlpha.700' as='i'>
-                          {`You contributed ${prop.tributeOffered /
-                            10 ** roundData.ccoToken.decimals} ${
-                            roundData.ccoToken.symbol
-                          } ${timeToNow(prop.createdAt)}`}
-                        </Text>
-                        <RouterLink
-                          to={`/dao/${daochain}/${daoid}/proposals/${prop.proposalId}`}
+            {!eligibleBlock && !roundData.beforeRaise ? (
+              <Box borderTopWidth='1px' mt={3}>
+                <CcoLootGrabForm
+                  roundData={roundData}
+                  currentContributionData={currentContributionData}
+                  contributionClosed={contributionClosed}
+                />
+
+                {currentContributionData ? (
+                  <Box borderTopWidth='1px' mt={5}>
+                    {currentContributionData.addressProposals.map(prop => {
+                      return (
+                        <Flex
+                          justifyContent='space-between'
+                          alignContent='center'
+                          key={prop.id}
+                          mt={5}
                         >
-                          View contribution
-                        </RouterLink>
-                      </Flex>
-                    );
-                  })}
-                </Box>
-              ) : null}
-            </Box>
-          ) : null}
+                          <Text fontSize='sm' color='blackAlpha.700' as='i'>
+                            {`You contributed ${prop.tributeOffered /
+                              10 ** roundData.ccoToken.decimals} ${
+                              roundData.ccoToken.symbol
+                            } ${timeToNow(prop.createdAt)}`}
+                          </Text>
+                          <RouterLink
+                            to={`/dao/${daochain}/${daoid}/proposals/${prop.proposalId}`}
+                          >
+                            View contribution
+                          </RouterLink>
+                        </Flex>
+                      );
+                    })}
+                  </Box>
+                ) : null}
+              </Box>
+            ) : null}
+          </Flex>
         </Flex>
       </Flex>
     </ContentBox>

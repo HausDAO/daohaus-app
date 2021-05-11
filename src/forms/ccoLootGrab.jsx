@@ -141,42 +141,41 @@ const CcoLootGrabForm = ({
   };
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)}>
-      <Flex justifyContent='space-between' my={3}>
-        <Text fontSize='sm' color='blackAlpha.700' as='i'>
-          {`${currentContributionData?.addressRemaining ||
-            roundData.maxContribution}`}
-          /
-          {`${roundData.maxContribution} ${roundData.ccoToken.symbol} remaining`}
-        </Text>
-      </Flex>
-      <FormControl
-        isInvalid={errors.name}
-        display='flex'
-        flexDirection='row'
-        justifyContent='flex-start'
-        alignItems='baseline'
-        mb={0}
-        flexWrap='wrap'
-      >
-        <Box w={['100%', null, '70%']}>
-          <CcoTributeInput
-            register={register}
-            setValue={setValue}
-            getValues={getValues}
-            setError={setError}
-            roundData={roundData}
-            contributionClosed={contributionClosed}
-          />
-        </Box>
-        <Text fontSize='sm' color='whiteAlpha.700' as='i' ml={5}>
-          {`will return -> ${+currentTribute * Number(roundData.ratio)} ${
-            roundData.claimTokenSymbol
-          } `}
-        </Text>
-      </FormControl>
-
-      <Flex justifyContent='flex-end'>
+    <Flex wrap='wrap'>
+      <form onSubmit={handleSubmit(onSubmit)}>
+        <Flex justifyContent='space-between' my={3}>
+          <Text fontSize='sm' color='blackAlpha.700' as='i'>
+            {`${currentContributionData?.addressRemaining ||
+              roundData.maxContribution}`}
+            /
+            {`${roundData.maxContribution} ${roundData.ccoToken.symbol} remaining`}
+          </Text>
+        </Flex>
+        <FormControl
+          isInvalid={errors.name}
+          display='flex'
+          flexDirection='row'
+          justifyContent='flex-start'
+          alignItems='baseline'
+          mb={0}
+          flexWrap='wrap'
+        >
+          <Box w={['100%', null, '70%']}>
+            <CcoTributeInput
+              register={register}
+              setValue={setValue}
+              getValues={getValues}
+              setError={setError}
+              roundData={roundData}
+              contributionClosed={contributionClosed}
+            />
+          </Box>
+          <Text fontSize='sm' color='whiteAlpha.700' as='i' ml={5}>
+            {`will return -> ${+currentTribute * Number(roundData.ratio)} ${
+              roundData.claimTokenSymbol
+            } `}
+          </Text>
+        </FormControl>
         {currentError && (
           <Flex color='red.500' fontSize='m' mr={5} align='center'>
             <Icon as={RiErrorWarningLine} color='red.500' mr={2} />
@@ -205,8 +204,8 @@ const CcoLootGrabForm = ({
               : 'Wallet'}
           </Button>
         )}
-      </Flex>
-    </form>
+      </form>
+    </Flex>
   );
 };
 
