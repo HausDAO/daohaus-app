@@ -1,23 +1,19 @@
 const Input = {
   parts: ['field', 'addon'],
-  baseStyle: {
-    color: 'mode.900',
-    bg: 'transparent',
-  },
+  baseStyle: {},
   variants: {
     outline: {
       field: {
-        color: 'mode.900',
-        bg: 'transparent',
-        borderColor: 'mode.900',
+        borderColor: 'whiteAlpha.400',
+        color: 'whiteAlpha.900',
         _focus: {
           borderColor: 'secondary.500',
           boxShadow: '0 0 0 2px var(--chakra-colors-secondary-500)',
         },
       },
       addon: {
-        borderColor: 'mode.900',
-        color: 'white',
+        borderColor: 'whiteAlpha.400',
+        color: 'whiteAlpha.900',
         bg: 'transparent',
         _focus: {
           borderColor: 'secondary.500',

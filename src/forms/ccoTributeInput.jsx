@@ -189,18 +189,19 @@ const CcoTributeInput = ({
               message: 'CCO Contribution must be a whole number',
             },
             max: {
-              value: +roundData.maxContribution,
-              message: `${roundData.maxContribution} ${roundData.ccoToken.symbol} per person max`,
+              value: +roundData.currentRound.maxContribution,
+              message: `${roundData.currentRound.maxContribution} ${roundData.ccoToken.symbol} per person max`,
             },
             min: {
-              value: +roundData.minContribution,
-              message: `${roundData.minContribution} ${roundData.ccoToken.symbol} per person min`,
+              value: +roundData.currentRound.minContribution,
+              message: `${roundData.currentRound.minContribution} ${roundData.ccoToken.symbol} per person min`,
             },
             required: {
               value: true,
               message: 'Contribution required',
             },
           })}
+          color='white'
           focusBorderColor='secondary.500'
           onChange={handleChange}
           disabled={contributionClosed}
