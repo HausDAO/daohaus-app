@@ -30,56 +30,59 @@ const CcoContributionCard = ({
             </Text>
           ) : null}
         </Flex>
-        <Flex>
-          <Box fontSize='3xl' fontFamily='heading' pr={5}>
-            2
-          </Box>
+        <Flex w='100%' align='flex-start'>
           <Flex direction='column'>
+            <Box fontSize='3xl' fontFamily='heading' pr={5}>
+              2
+            </Box>
+          </Flex>
+          <Flex direction='row'>
             <Text fontSize='sm' color='blackAlpha.700' mt={2}>
               {`${roundData.maxContribution} ${roundData.ccoToken.symbol} max per person`}
             </Text>
-          </Flex>
-          {raiseAtMax ? (
-            <Box size='md' my={2} color='blackAlpha.900'>
-              Max target reached. Contributions are closed.
-            </Box>
-          ) : null}
 
-          <Box borderTopWidth='1px' mt={3}>
-            <CcoLootGrabForm
-              roundData={roundData}
-              currentContributionData={currentContributionData}
-              contributionClosed={contributionClosed}
-              openContribution={!eligibleBlock && !roundData.beforeRaise}
-            />
-
-            {currentContributionData && (
-              <Box borderTopWidth='1px' mt={5}>
-                {currentContributionData.addressProposals.map(prop => {
-                  return (
-                    <Flex
-                      justifyContent='space-between'
-                      alignContent='center'
-                      key={prop.id}
-                      mt={5}
-                    >
-                      <Text fontSize='sm' color='blackAlpha.700' as='i'>
-                        {`You contributed ${prop.tributeOffered /
-                          10 ** roundData.ccoToken.decimals} ${
-                          roundData.ccoToken.symbol
-                        } ${timeToNow(prop.createdAt)}`}
-                      </Text>
-                      <RouterLink
-                        to={`/dao/${daochain}/${daoid}/proposals/${prop.proposalId}`}
-                      >
-                        View contribution
-                      </RouterLink>
-                    </Flex>
-                  );
-                })}
+            {raiseAtMax ? (
+              <Box size='md' my={2} color='blackAlpha.900'>
+                Max target reached. Contributions are closed.
               </Box>
-            )}
-          </Box>
+            ) : null}
+
+            <Box borderTopWidth='1px' mt={3}>
+              <CcoLootGrabForm
+                roundData={roundData}
+                currentContributionData={currentContributionData}
+                contributionClosed={contributionClosed}
+                openContribution={!eligibleBlock && !roundData.beforeRaise}
+              />
+
+              {currentContributionData && (
+                <Box borderTopWidth='1px' mt={5}>
+                  {currentContributionData.addressProposals.map(prop => {
+                    return (
+                      <Flex
+                        justifyContent='space-between'
+                        alignContent='center'
+                        key={prop.id}
+                        mt={5}
+                      >
+                        <Text fontSize='sm' color='blackAlpha.700' as='i'>
+                          {`You contributed ${prop.tributeOffered /
+                            10 ** roundData.ccoToken.decimals} ${
+                            roundData.ccoToken.symbol
+                          } ${timeToNow(prop.createdAt)}`}
+                        </Text>
+                        <RouterLink
+                          to={`/dao/${daochain}/${daoid}/proposals/${prop.proposalId}`}
+                        >
+                          View contribution
+                        </RouterLink>
+                      </Flex>
+                    );
+                  })}
+                </Box>
+              )}
+            </Box>
+          </Flex>
         </Flex>
       </Flex>
     </ContentBox>
