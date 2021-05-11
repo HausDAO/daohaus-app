@@ -27,6 +27,8 @@ const CcoClaimCard = ({ roundData, setClaimComplete, claimComplete }) => {
       return isRaiseToken && Number(bal.token.balance) > 0;
     });
 
+  console.log('roudnData', roundData);
+
   return (
     <ContentBox variant='d2' mt={2} w='100%'>
       <Flex alignItems='flex-end' wrap='wrap'>
@@ -42,15 +44,16 @@ const CcoClaimCard = ({ roundData, setClaimComplete, claimComplete }) => {
           <Flex justifyContent='space-between' alignItems='start'>
             <Box>
               <TextBox variant='label' fontSize='sm' mb={-2}>
-                {roundData.claimTokenSymbol} Available to Claim
+                Pending {roundData.claimTokenSymbol}
               </TextBox>
               <TextBox variant='value' size='md'>
                 {`${claimAmount} ${roundData.claimTokenSymbol}`}
               </TextBox>
             </Box>
-            {!roundData.claimOpen ? (
-              <CcoClaim setClaimComplete={setClaimComplete} />
-            ) : null}
+            <CcoClaim
+              setClaimComplete={setClaimComplete}
+              claimOpen={roundData.claimOpen}
+            />
           </Flex>
           {claimComplete || hasBalance ? (
             <Box fontSize='lg'>

@@ -12,7 +12,7 @@ import { useDaoMember } from '../contexts/DaoMemberContext';
 import { useDao } from '../contexts/DaoContext';
 
 // TODO: get overview and member from somewhere
-const CcoClaim = ({ setClaimComplete }) => {
+const CcoClaim = ({ setClaimComplete, claimOpen }) => {
   const { daoMember } = useDaoMember();
   const { daoOverview } = useDao();
   const [loading, setLoading] = useState(false);
@@ -110,7 +110,7 @@ const CcoClaim = ({ setClaimComplete }) => {
         type='submit'
         loadingText='Submitting'
         isLoading={loading}
-        disabled={loading}
+        disabled={loading || !claimOpen}
         onClick={handleClaim}
         variant='primary'
       >

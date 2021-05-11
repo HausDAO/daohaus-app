@@ -45,42 +45,41 @@ const CcoContributionCard = ({
             </Box>
           ) : null}
 
-          {!eligibleBlock && !roundData.beforeRaise ? (
-            <Box borderTopWidth='1px' mt={3}>
-              <CcoLootGrabForm
-                roundData={roundData}
-                currentContributionData={currentContributionData}
-                contributionClosed={contributionClosed}
-              />
+          <Box borderTopWidth='1px' mt={3}>
+            <CcoLootGrabForm
+              roundData={roundData}
+              currentContributionData={currentContributionData}
+              contributionClosed={contributionClosed}
+              openContribution={!eligibleBlock && !roundData.beforeRaise}
+            />
 
-              {currentContributionData ? (
-                <Box borderTopWidth='1px' mt={5}>
-                  {currentContributionData.addressProposals.map(prop => {
-                    return (
-                      <Flex
-                        justifyContent='space-between'
-                        alignContent='center'
-                        key={prop.id}
-                        mt={5}
+            {currentContributionData && (
+              <Box borderTopWidth='1px' mt={5}>
+                {currentContributionData.addressProposals.map(prop => {
+                  return (
+                    <Flex
+                      justifyContent='space-between'
+                      alignContent='center'
+                      key={prop.id}
+                      mt={5}
+                    >
+                      <Text fontSize='sm' color='blackAlpha.700' as='i'>
+                        {`You contributed ${prop.tributeOffered /
+                          10 ** roundData.ccoToken.decimals} ${
+                          roundData.ccoToken.symbol
+                        } ${timeToNow(prop.createdAt)}`}
+                      </Text>
+                      <RouterLink
+                        to={`/dao/${daochain}/${daoid}/proposals/${prop.proposalId}`}
                       >
-                        <Text fontSize='sm' color='blackAlpha.700' as='i'>
-                          {`You contributed ${prop.tributeOffered /
-                            10 ** roundData.ccoToken.decimals} ${
-                            roundData.ccoToken.symbol
-                          } ${timeToNow(prop.createdAt)}`}
-                        </Text>
-                        <RouterLink
-                          to={`/dao/${daochain}/${daoid}/proposals/${prop.proposalId}`}
-                        >
-                          View contribution
-                        </RouterLink>
-                      </Flex>
-                    );
-                  })}
-                </Box>
-              ) : null}
-            </Box>
-          ) : null}
+                        View contribution
+                      </RouterLink>
+                    </Flex>
+                  );
+                })}
+              </Box>
+            )}
+          </Box>
         </Flex>
       </Flex>
     </ContentBox>

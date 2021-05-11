@@ -24,6 +24,7 @@ const CcoLootGrabForm = ({
   roundData,
   currentContributionData,
   contributionClosed,
+  openContribution,
 }) => {
   const {
     injectedProvider,
@@ -189,10 +190,10 @@ const CcoLootGrabForm = ({
             type='submit'
             loadingText='Submitting'
             isLoading={loading}
-            disabled={loading || contributionClosed}
+            disabled={loading || contributionClosed || !openContribution}
             variant='primary'
           >
-            Submit
+            Contribute
           </Button>
         ) : (
           <Button
