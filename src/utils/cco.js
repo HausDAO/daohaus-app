@@ -18,8 +18,7 @@ export const CCO_CONSTANTS = {
   },
   METADATA_TEXTAREA_FIELDS: {
     whitelistReqs: '',
-    projectDescription: '',
-    faqs: '',
+    rewards: '',
   },
   BOTS: [
     '0x9166a0bc06Dbf63b8a6f68808060D550c31AefD6',

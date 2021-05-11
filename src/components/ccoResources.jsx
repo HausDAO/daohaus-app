@@ -60,7 +60,7 @@ const CcoResources = ({ daoMetaData, ccoData }) => {
           <Text mb={3} fontFamily='heading'>
             About {daoMetaData.name}
           </Text>
-          <Text mb={5}>{ccoData.projectDescription}</Text>
+          <Text mb={5}>{daoMetaData.description}</Text>
           <Text
             onClick={handleNav}
             _hover={{ color: 'secondary.400', cursor: 'pointer' }}
@@ -74,7 +74,7 @@ const CcoResources = ({ daoMetaData, ccoData }) => {
           <Text mb={3} fontFamily='heading'>
             Rewards
           </Text>
-          <Text mb={5}>{ccoData.faqs}</Text>
+          <Text mb={5}>{ccoData.rewards}</Text>
         </Box>
       </GenericModal>
     </>

@@ -159,6 +159,8 @@ const CcoConfig = ({ daoMetaData, ccoType }) => {
             mr={5}
             onClick={() => handleUpdate('cco')}
             isLoading={loading}
+            disabled
+            variant='outline'
           >
             Create CCO
           </Button>
