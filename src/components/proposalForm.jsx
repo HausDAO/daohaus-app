@@ -40,7 +40,11 @@ import { useTX } from '../contexts/TXContext';
 import { fetchBalance } from '../utils/tokenValue';
 import { useInjectedProvider } from '../contexts/InjectedProviderContext';
 import { TokenService } from '../services/tokenService';
-import { checkFormTypes, validateRequired } from '../utils/validation';
+import {
+  checkFormTypes,
+  customValidations,
+  validateRequired,
+} from '../utils/validation';
 
 /// UTILS
 
@@ -51,7 +55,7 @@ const mapInRequired = (fields, required) => {
 };
 
 const ProposalForm = props => {
-  const { submitTransaction } = useTX();
+  const { submitTransaction, handleCustomValidation } = useTX();
   const { fields, tx, onTx, additionalOptions = null, required = [] } = props;
 
   const [loading, setLoading] = useState(false);
@@ -97,6 +101,11 @@ const ProposalForm = props => {
     const typeErrors = checkFormTypes(values, formFields);
     if (typeErrors) {
       updateErrors(typeErrors);
+      return;
+    }
+    const customValErrors = handleCustomValidation({ values, formData: props });
+    if (customValErrors) {
+      updateErrors(customValErrors);
       return;
     }
     try {

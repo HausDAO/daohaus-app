@@ -16,6 +16,7 @@ import { useOverlay } from './OverlayContext';
 import { createForumTopic } from '../utils/discourse';
 
 import { getArgs, handleFormError, Transaction } from '../utils/txHelpers';
+import { customValidations } from '../utils/validation';
 
 export const TXContext = createContext();
 
@@ -135,6 +136,17 @@ export const TXProvider = ({ children }) => {
     });
   };
 
+  const handleCustomValidation = ({ values, formData }) => {
+    console.log('firecustomV');
+    return formData.customValidations.map(rule => {
+      return customValidations[rule]?.({
+        values,
+        formData,
+        appState: { ...contextData, apiData },
+      });
+    });
+  };
+
   const unlockToken = async token => {
     // const token = getValues('tributeToken');
     const args = [daoid, MaxUint256];
@@ -222,13 +234,25 @@ export const TXProvider = ({ children }) => {
   };
 
   return (
-    <TXContext.Provider value={{ refreshDao, unlockToken, submitTransaction }}>
+    <TXContext.Provider
+      value={{
+        refreshDao,
+        unlockToken,
+        submitTransaction,
+        handleCustomValidation,
+      }}
+    >
       {children}
     </TXContext.Provider>
   );
 };
 
 export const useTX = () => {
-  const { refreshDao, unlockToken, submitTransaction } = useContext(TXContext);
-  return { refreshDao, unlockToken, submitTransaction };
+  const {
+    refreshDao,
+    unlockToken,
+    submitTransaction,
+    handleCustomValidation,
+  } = useContext(TXContext);
+  return { refreshDao, unlockToken, submitTransaction, handleCustomValidation };
 };

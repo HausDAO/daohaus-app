@@ -140,6 +140,7 @@ export const PROPOSAL_FORMS = {
       FIELD.LOOT_REQUEST,
       FIELD.TRIBUTE,
     ],
+    customValidations: ['nonDaoApplicant'],
   },
   TOKEN: {
     title: 'Token',

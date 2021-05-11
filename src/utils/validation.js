@@ -89,3 +89,15 @@ export const validateRequired = (values, required) => {
   }
   return errors;
 };
+
+export const customValidations = {
+  nonDaoApplicant({ appState, values }) {
+    const { apiData } = appState;
+    const { applicant } = values;
+
+    if (apiData[applicant] || apiData[applicant.toLowerCase()]) {
+      return { name: 'applicant', message: 'Applicant cannot be another DAO.' };
+    }
+    return false;
+  },
+};
