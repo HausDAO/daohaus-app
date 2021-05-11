@@ -17,20 +17,38 @@ const DaosquareHeader = () => {
 
   return (
     <Flex direction='row' justify='space-between' w='100%' p={6}>
-      <Link as={RouterLink} to='/daosquare-incubator'>
+      <Link
+        as={RouterLink}
+        color='mode.900'
+        to='/daosquare-incubator'
+        fontWeight='700'
+        pr={6}
+      >
         CCOs
       </Link>
-      <Link href='https://www.daosquare.io/' isExternal>
+      <Link
+        href='https://www.daosquare.io/'
+        isExternal
+        color='mode.900'
+        fontWeight='700'
+        pr={6}
+      >
         About
       </Link>
-      <Link href='https://www.daosquare.io/' isExternal>
+      <Link
+        href='https://www.daosquare.io/'
+        isExternal
+        color='mode.900'
+        fontWeight='700'
+        pr={6}
+      >
         Apply
       </Link>
-      {address && (
+      {/* {address && (
         <Box border='1px' borderColor='gray.200' borderRadius='3'>
           {riceBalance} Rice
         </Box>
-      )}
+      )} */}
     </Flex>
   );
 };
