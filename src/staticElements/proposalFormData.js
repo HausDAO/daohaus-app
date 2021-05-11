@@ -10,6 +10,7 @@ const INFO_TEXT = {
   TOKEN_TRIBUTE:
     'Only tokens approved by the DAO are allowed here. Members can add more approved tokens with Token proposals',
   PAYMENT_REQUEST: 'Request Funds from the DAO',
+  ADDR_KICK: 'Enter the public key of the member you would like to kick.',
 };
 
 export const FIELD = {
@@ -177,6 +178,29 @@ export const PROPOSAL_FORMS = {
       FIELD.APPLICANT,
       FIELD.LOOT_REQUEST,
       FIELD.SHARES_REQUEST,
+    ],
+  },
+  GUILDKICK: {
+    title: 'Guild Kick',
+    subtitle: 'Remove a Member.',
+    type: PROPOSAL_TYPES.GUILDKICK,
+    required: ['title', 'applicant'], // Use name key from proposal type object
+    tx: {
+      txType: 'submitGuildKickProposal',
+      pollType: 'submitProposal', //  Overwrites standard txType in cases where txType isn't used for Poll Action
+      contract: 'Moloch',
+      errMsg: 'Error submitting proposal',
+      successMsg: 'Guild Kick Proposal submitted!',
+    },
+    fields: [
+      FIELD.TITLE,
+      {
+        ...FIELD.APPLICANT,
+        label: 'Member to Kick',
+        info: INFO_TEXT.ADDR_KICK,
+      },
+      FIELD.DESCRIPTION,
+      FIELD.LINK,
     ],
   },
   SIGNAL: {

@@ -11,11 +11,6 @@ import {
 } from '@chakra-ui/react';
 import { rgba } from 'polished';
 
-import MemberProposalForm from '../forms/memberProposal';
-import FundingProposalForm from '../forms/fundingProposal';
-import WhitelistProposalForm from '../forms/whitelistProposal';
-import GuildKickProposalForm from '../forms/guildKickProposal';
-import TradeProposalForm from '../forms/tradeProposal';
 import MinionSimpleProposalForm from '../forms/minionSimpleProposal';
 import SuperfluidMinionProposalForm from '../forms/superfluidMinionProposal';
 import TransmutationProposal from '../forms/transmutationProposal';
@@ -24,9 +19,8 @@ import { useMetaData } from '../contexts/MetaDataContext';
 import { useOverlay } from '../contexts/OverlayContext';
 import { useCustomTheme } from '../contexts/CustomThemeContext';
 import LootGrabForm from '../forms/lootGrab';
-import ProposalForm from '../components/proposalForm';
+import ProposalForm from '../formBuilder/proposalForm';
 import { PROPOSAL_FORMS } from '../staticElements/proposalFormData';
-import { PROPOSAL_TYPES } from '../utils/proposalUtils';
 
 const ProposalFormModal = ({ proposalType }) => {
   const [, setLoading] = useState(false);
@@ -37,9 +31,7 @@ const ProposalFormModal = ({ proposalType }) => {
 
   const proposalForms = {
     signal: {
-      type: 'Signal Proposal',
       heading: 'Signal That!',
-      subline: 'Signal! Signal! Signal!',
       form: <ProposalForm {...PROPOSAL_FORMS.SIGNAL} />,
     },
     member: {
@@ -65,10 +57,8 @@ const ProposalFormModal = ({ proposalType }) => {
       form: <ProposalForm {...PROPOSAL_FORMS.TOKEN} />,
     },
     guildkick: {
-      type: `New ${getTerm(customTerms, 'proposal')}`,
       heading: `New GuildKick ${getTerm(customTerms, 'proposal')}`,
-      subline: 'Kick a perpetrator here.',
-      form: <GuildKickProposalForm />,
+      form: <ProposalForm {...PROPOSAL_FORMS.GUILDKICK} />,
     },
     trade: {
       heading: `New Trade ${getTerm(customTerms, 'proposal')}`,
@@ -103,9 +93,6 @@ const ProposalFormModal = ({ proposalType }) => {
   const handleClose = () => {
     setLoading(false);
     setProposalModal(false);
-    // if (returnRoute) {
-    //   history.push(returnRoute);
-    // }
   };
 
   return (
@@ -139,13 +126,7 @@ const ProposalFormModal = ({ proposalType }) => {
           </Box>
         </ModalHeader>
         <ModalCloseButton />
-        <ModalBody>
-          {/* <Box color='#C4C4C4' mb={6}>
-              {proposalForm.subline}
-            </Box> */}
-          {proposalForm?.form}
-        </ModalBody>
-
+        <ModalBody>{proposalForm?.form}</ModalBody>
         <ModalFooter />
       </ModalContent>
     </Modal>

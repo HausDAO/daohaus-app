@@ -137,7 +137,7 @@ export const TXProvider = ({ children }) => {
   };
 
   const handleCustomValidation = ({ values, formData }) => {
-    console.log('firecustomV');
+    if (!formData?.customValidations?.length) return false;
     return formData.customValidations.map(rule => {
       return customValidations[rule]?.({
         values,
@@ -178,6 +178,7 @@ export const TXProvider = ({ children }) => {
 
   //  handles submitProposal
   //  whitelisttokenProposal
+  //  guildkickProposal
   const createProposal = async ({ values, proposalLoading, formData }) => {
     proposalLoading(true);
     const { txType } = formData.tx;
@@ -193,7 +194,7 @@ export const TXProvider = ({ children }) => {
         args,
         poll: buildTXPoll({
           hash,
-          tx: formData.tx,
+          tx: formData.pollType || formData.tx,
           values,
           formData,
           discourse: true,
@@ -226,8 +227,11 @@ export const TXProvider = ({ children }) => {
         'DEV NOTICE: One of the required args (values, txType, formData, loading) not specified in proposalFormData.js',
       );
     }
-    //  check special validation here
-    if (txType === 'submitProposal' || txType === 'submitWhitelistProposal') {
+    if (
+      txType === 'submitProposal' ||
+      txType === 'submitWhitelistProposal' ||
+      txType === 'submitGuildKickProposal'
+    ) {
       return createProposal({ values, proposalLoading, formData });
     }
     throw new Error('DEV NOTICE: TX Type not found');

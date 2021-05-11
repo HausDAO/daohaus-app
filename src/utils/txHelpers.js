@@ -1,6 +1,6 @@
 import { MolochService } from '../services/molochService';
 import { logFormError } from './errorLog';
-import { createHash, detailsToJSON } from './general';
+import { detailsToJSON } from './general';
 import { valToDecimalString } from './tokenValue';
 
 export const handleFormError = ({
@@ -83,6 +83,10 @@ export const getArgs = ({ values, txType, contextData, hash }) => {
       paymentToken,
       details,
     ];
+  }
+  if (txType === 'submitGuildKickProposal') {
+    const details = detailsToJSON({ ...values, hash });
+    return [values.applicant, details];
   }
   if (txType === 'submitWhitelistProposal') {
     const details = detailsToJSON({ ...values, hash });
