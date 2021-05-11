@@ -14,7 +14,7 @@ const ChainDisplay = () => {
   }, [injectedChain]);
 
   return (
-    <Box fontSize='md' mr={5} as='i' fontWeight={200}>
+    <Box fontSize='md' mr={5} as='i' fontWeight={200} color='black'>
       {chainName}
     </Box>
   );

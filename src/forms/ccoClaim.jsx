@@ -112,13 +112,14 @@ const CcoClaim = ({ setClaimComplete }) => {
         isLoading={loading}
         disabled={loading}
         onClick={handleClaim}
+        variant='primary'
       >
         CLAIM
       </Button>
     </Box>
   ) : (
     <Text fontSize='xs'>
-      Sorry you can not claim at this time. You have a &apos;Yes&apos; vote on a
+      Sorry you cannot claim at this time. You have a &apos;Yes&apos; vote on a
       pending proposal. All proposals with a &apos;Yes&apos; vote must be
       completed and processed before you can rage.
     </Text>

@@ -1,5 +1,11 @@
 import React from 'react';
-import { Switch, Route, useRouteMatch, useParams } from 'react-router-dom';
+import {
+  Switch,
+  Route,
+  useRouteMatch,
+  useParams,
+  useLocation,
+} from 'react-router-dom';
 
 import { useDao } from '../contexts/DaoContext';
 import { useDaoMember } from '../contexts/DaoMemberContext';
@@ -30,9 +36,12 @@ import Staking from '../pages/Staking';
 import Clone from '../pages/Clone';
 import MintGate from '../pages/MintGate';
 import Snapshot from '../pages/Snapshot';
+import CcoAdmin from '../pages/CcoAdmin';
+import { isDaosquareCcoPath } from '../utils/cco';
 
 const DaoRouter = () => {
   const { path } = useRouteMatch();
+  const location = useLocation();
   const { currentDaoTokens } = useToken();
 
   const {
@@ -54,9 +63,10 @@ const DaoRouter = () => {
     customTerms,
     daoProposals,
   };
+  const daosquarecco = isDaosquareCcoPath(daoMetaData, location);
 
   return (
-    <Layout dao={dao}>
+    <Layout dao={dao} daosquarecco={daosquarecco}>
       <Switch>
         <Route exact path={`${path}/`}>
           <Overview
@@ -240,11 +250,17 @@ const DaoRouter = () => {
             daoProposals={daoProposals}
           />
         </Route>
-        <Route exact path={`${path}/cco/spy`}>
+        <Route exact path={`${path}/cco/watcher`}>
           <CcoHelper
             daoMetaData={daoMetaData}
             currentDaoTokens={currentDaoTokens}
             daoProposals={daoProposals}
+          />
+        </Route>
+        <Route exact path={`${path}/cco/admin/`}>
+          <CcoAdmin
+            daoMetaData={daoMetaData}
+            isCorrectNetwork={isCorrectNetwork}
           />
         </Route>
         <Route exact path={`${path}/boost/mintgate`}>
