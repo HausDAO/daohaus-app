@@ -1,6 +1,6 @@
 const Textarea = {
   baseStyle: {
-    color: 'mode.900',
+    color: 'whiteAlpha.900',
   },
   defaultProps: {
     focusBorderColor: 'secondary.500',

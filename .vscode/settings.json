@@ -1,8 +1,7 @@
 {
-  "editor.formatOnSave": true,
-  "eslint.alwaysShowStatus": true,  
   "editor.defaultFormatter": "dbaeumer.vscode-eslint",
-  "eslint.format.enable": true,
+  "editor.formatOnSave": true,
+  "eslint.enable": true,
   "editor.codeActionsOnSave": {
     "source.fixAll.eslint": true
   },

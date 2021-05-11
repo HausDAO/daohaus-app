@@ -1,19 +1,19 @@
 import React, { useState } from 'react';
+
 import { Flex, Box, Button, Icon } from '@chakra-ui/react';
 import { RiMenu3Line, RiCloseLine } from 'react-icons/ri';
-
 import ChangeDao from './changeDao';
-import NavLinkList from './navLinkList';
-import SocialsLinkList from './socialsLinkList';
-import AddressAvatar from '../components/addressAvatar';
-import DaosquareBrand from './daosquareBrand';
-import Brand from './brand';
-import { useInjectedProvider } from '../contexts/InjectedProviderContext';
-import { useOverlay } from '../contexts/OverlayContext';
 
 import '../global.css';
 
-const MobileNav = ({ dao, daosquarecco }) => {
+import NavLinkList from './navLinkList';
+import Brand from './brand';
+import { useInjectedProvider } from '../contexts/InjectedProviderContext';
+import { useOverlay } from '../contexts/OverlayContext';
+import SocialsLinkList from './socialsLinkList';
+import AddressAvatar from '../components/addressAvatar';
+
+const MobileNav = ({ dao }) => {
   const { address, requestWallet } = useInjectedProvider();
   const { setHubAccountModal, setDaoAccountModal } = useOverlay();
   const [isOpen, setIsOpen] = useState(
@@ -54,23 +54,16 @@ const MobileNav = ({ dao, daosquarecco }) => {
           w='100%'
           wrap='wrap'
         >
-          {!daosquarecco ? (
-            <>
-              <Brand dao={dao} />
-              <Box
-                order={2}
-                ml={3}
-                borderWidth='thin'
-                borderColor='whiteAlpha.400'
-                borderRadius='25px'
-              >
-                <ChangeDao />
-              </Box>
-            </>
-          ) : (
-            <DaosquareBrand />
-          )}
-
+          <Brand dao={dao} />
+          <Box
+            order={2}
+            ml={3}
+            borderWidth='thin'
+            borderColor='whiteAlpha.400'
+            borderRadius='25px'
+          >
+            <ChangeDao />
+          </Box>
           <Box
             d={['inline-block', null, null, 'none']}
             order='3'
@@ -87,19 +80,16 @@ const MobileNav = ({ dao, daosquarecco }) => {
               </Button>
             )}
           </Box>
-          {!daosquarecco && (
-            <Button
-              onClick={toggleNav}
-              order='4'
-              variant='ghost'
-              color='secondary.500'
-            >
-              <Icon as={isOpen ? RiCloseLine : RiMenu3Line} />
-            </Button>
-          )}
+          <Button
+            onClick={toggleNav}
+            order='4'
+            variant='ghost'
+            color='secondary.500'
+          >
+            <Icon as={isOpen ? RiCloseLine : RiMenu3Line} />
+          </Button>
         </Flex>
       </Flex>
-
       <Flex
         direction='column'
         wrap='wrap'

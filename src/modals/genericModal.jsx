@@ -29,9 +29,9 @@ const GenericModal = ({ children, modalId, closeOnOverlayClick = true }) => {
       />
       <ModalContent
         rounded='lg'
-        bg={rgba(theme.colors.background[200], 0.8)}
+        bg='blackAlpha.800'
         borderWidth='1px'
-        borderColor='mode.900'
+        borderColor='whiteAlpha.200'
         py={6}
       >
         <ModalCloseButton />

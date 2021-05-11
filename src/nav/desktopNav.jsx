@@ -14,13 +14,12 @@ import {
   Portal,
 } from '@chakra-ui/react';
 import { RiLinksLine } from 'react-icons/ri';
-import styled from '@emotion/styled';
 
+import styled from '@emotion/styled';
 import Brand from './brand';
 import NavLinkList from './navLinkList';
 import SocialsLinkList from './socialsLinkList';
 import ChangeDao from './changeDao';
-import DaosquareBrand from './daosquareBrand';
 
 const TemporaryPopoverFix = styled.span`
   .css-n0uled {
@@ -28,7 +27,7 @@ const TemporaryPopoverFix = styled.span`
   }
 `;
 
-const DesktopNav = ({ dao, daosquarecco }) => {
+const DesktopNav = ({ dao }) => {
   return (
     <Flex
       p={5}
@@ -57,62 +56,52 @@ const DesktopNav = ({ dao, daosquarecco }) => {
           w='100%'
           wrap='wrap'
         >
-          {!daosquarecco ? (
-            <>
-              <Brand dao={dao} />
-              <Box
-                w={['auto', null, null, '100%']}
-                order={[3, null, null, 3]}
-                mt={[0, null, null, 6]}
-              >
-                <ChangeDao />
-              </Box>
-            </>
-          ) : (
-            <DaosquareBrand />
-          )}
+          <Brand dao={dao} />
+          <Box
+            w={['auto', null, null, '100%']}
+            order={[3, null, null, 3]}
+            mt={[0, null, null, 6]}
+          >
+            <ChangeDao />
+          </Box>
         </Flex>
       </Flex>
       <Flex direction='column' wrap='wrap'>
-        {!daosquarecco && (
-          <>
-            <NavLinkList dao={dao} view='desktop' />
-            <Box>
-              <Popover placement='right' w='auto'>
-                <Tooltip
-                  label='Community Links'
-                  aria-label='Community Links'
-                  placement='right'
-                  hasArrow
-                  shouldWrapChildren
+        <NavLinkList dao={dao} view='desktop' />
+        <Box>
+          <Popover placement='right' w='auto'>
+            <Tooltip
+              label='Community Links'
+              aria-label='Community Links'
+              placement='right'
+              hasArrow
+              shouldWrapChildren
+            >
+              <PopoverTrigger>
+                <Button
+                  variant='sideNav'
+                  _hover={{ backgroundColor: 'white' }}
+                  mt={3}
                 >
-                  <PopoverTrigger>
-                    <Button
-                      variant='sideNav'
-                      _hover={{ backgroundColor: 'white' }}
-                      mt={3}
-                    >
-                      <Icon as={RiLinksLine} w={6} h={6} />
-                    </Button>
-                  </PopoverTrigger>
-                </Tooltip>
-                <Portal>
-                  <TemporaryPopoverFix>
-                    <PopoverContent width='fit-content'>
-                      <PopoverArrow />
-                      <PopoverCloseButton />
-                      <PopoverBody w='auto'>
-                        <Flex direction='row' align='center' justify='start'>
-                          <SocialsLinkList dao={dao} view='desktop' />
-                        </Flex>
-                      </PopoverBody>
-                    </PopoverContent>
-                  </TemporaryPopoverFix>
-                </Portal>
-              </Popover>
-            </Box>
-          </>
-        )}
+                  <Icon as={RiLinksLine} w={6} h={6} />
+                </Button>
+              </PopoverTrigger>
+            </Tooltip>
+            <Portal>
+              <TemporaryPopoverFix>
+                <PopoverContent width='fit-content'>
+                  <PopoverArrow />
+                  <PopoverCloseButton />
+                  <PopoverBody w='auto'>
+                    <Flex direction='row' align='center' justify='start'>
+                      <SocialsLinkList dao={dao} view='desktop' />
+                    </Flex>
+                  </PopoverBody>
+                </PopoverContent>
+              </TemporaryPopoverFix>
+            </Portal>
+          </Popover>
+        </Box>
       </Flex>
     </Flex>
   );
