@@ -27,6 +27,7 @@ const WrongNetworkToolTip = () => {
     }
   };
 
+
   if (!address) {
     return null;
   }
@@ -37,6 +38,7 @@ const WrongNetworkToolTip = () => {
   ) {
     return <NetworkTextBox name={daoChainName} />;
   }
+
 
   return (
     <>

@@ -200,6 +200,7 @@ const ProposalDetails = ({ proposal, daoMember }) => {
 
 export default ProposalDetails;
 
+
 const MinionBox = ({ proposal, daoOverview }) => {
   const { daoid, daochain } = useParams();
 

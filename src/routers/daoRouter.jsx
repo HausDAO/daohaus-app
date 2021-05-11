@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { lazy } from 'react';
 import {
   Switch,
   Route,
@@ -11,10 +11,10 @@ import { useDao } from '../contexts/DaoContext';
 import { useDaoMember } from '../contexts/DaoMemberContext';
 import { useToken } from '../contexts/TokenContext';
 import { useMetaData } from '../contexts/MetaDataContext';
-import Bank from '../pages/Bank';
-import Members from '../pages/Members';
+// import Bank from '../pages/Bank';
+// import Members from '../pages/Members';
 import Overview from '../pages/Overview';
-import Proposals from '../pages/Proposals';
+// import Proposals from '../pages/Proposals';
 import Profile from '../pages/Profile';
 import Proposal from '../pages/Proposal';
 import NewProposal from '../pages/NewProposal';
@@ -38,6 +38,10 @@ import MintGate from '../pages/MintGate';
 import Snapshot from '../pages/Snapshot';
 import CcoAdmin from '../pages/CcoAdmin';
 import { isDaosquareCcoPath } from '../utils/cco';
+
+const Proposals = lazy(() => import('../pages/Proposals'));
+const Bank = lazy(() => import('../pages/Bank'));
+const Members = lazy(() => import('../pages/Members'));
 
 const DaoRouter = () => {
   const { path } = useRouteMatch();
@@ -63,10 +67,12 @@ const DaoRouter = () => {
     customTerms,
     daoProposals,
   };
+
   const daosquarecco = isDaosquareCcoPath(daoMetaData, location);
 
   return (
     <Layout dao={dao} daosquarecco={daosquarecco}>
+
       <Switch>
         <Route exact path={`${path}/`}>
           <Overview
@@ -81,6 +87,7 @@ const DaoRouter = () => {
           />
         </Route>
         <Route exact path={`${path}/proposals`}>
+
           <Proposals
             proposals={daoActivities?.proposals}
             overview={daoOverview}
@@ -160,7 +167,7 @@ const DaoRouter = () => {
         </Route>
         <Route
           exact
-          path={`${path}/settings/minion/:minion`} // path={`${path}/settings/minion/:minion(\b0x[0-9a-f]{10,40}\b)`}
+          path={`${path}/settings/minion/:minion`}
         >
           <Minion
             overview={daoOverview}
@@ -182,6 +189,7 @@ const DaoRouter = () => {
         <Route
           exact
           path={`${path}/settings/minion-safe`} // path={`${path}/settings/minion/:minion(\b0x[0-9a-f]{10,40}\b)`}
+
         >
           <MinionSafe
             daoOverview={daoOverview}

@@ -205,6 +205,7 @@ const MinionExecute = ({ proposal }) => {
     }
   };
 
+
   const isCorrectChain =
     daochain === injectedProvider?.currentProvider?.chainId;
 
@@ -237,12 +238,12 @@ const MinionExecute = ({ proposal }) => {
         </Flex>
       );
     }
-
     return (
       <Button onClick={executeMinion} disabled={!isCorrectChain}>
         Execute Minion
       </Button>
     );
+
   };
 
   return (

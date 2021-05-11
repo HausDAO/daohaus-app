@@ -1,12 +1,12 @@
-import React from 'react';
+import React, { lazy, Suspense } from 'react';
 import { Switch, Route, Redirect } from 'react-router-dom';
 
 import { UserContextProvider } from './contexts/UserContext';
 import { ExploreContextProvider } from './contexts/ExploreContext';
 import Hub from './pages/Hub';
-import Dao from './pages/Dao';
-import Explore from './pages/Explore';
-import Summon from './pages/Summon';
+// import Dao from './pages/Dao';
+// import Explore from './pages/Explore';
+// import Summon from './pages/Summon';
 import Register from './pages/Register';
 import DaoSwitcherModal from './modals/daoSwitcherModal';
 import TxInfoModal from './modals/TxInfoModal';
@@ -14,6 +14,10 @@ import FourOhFour from './pages/404';
 import HubBalances from './pages/HubBalances';
 import DaosquareCco from './pages/DaosquareCco';
 import { DaosquareContextProvider } from './contexts/DaosquareCcoContext';
+
+const Dao = lazy(() => import('./pages/Dao'));
+const Explore = lazy(() => import('./pages/Explore'));
+const Summon = lazy(() => import('./pages/Summon'));
 
 function App() {
   const AppScopedModals = () => (
