@@ -27,6 +27,7 @@ const CcoCard = ({ daoMetaData, isLink, dao }) => {
     >
       <Box
         as={isLink && Link}
+        color='inherit'
         to={
           isLink &&
           `/dao/${supportedChains[CCO_CONSTANTS.DAOSQUARE_NETWORK].chain_id}/${

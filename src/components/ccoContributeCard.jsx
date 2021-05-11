@@ -36,7 +36,7 @@ const CcoContributionCard = ({
               2
             </Box>
           </Flex>
-          <Flex direction='column'>
+          <Flex direction='row'>
             {/* <Text fontSize='sm' color='blackAlpha.700' mt={2}>
               {`${roundData.maxContribution} ${roundData.ccoToken.symbol} max per person`}
             </Text> */}
