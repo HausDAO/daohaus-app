@@ -28,7 +28,11 @@ const CcoContributionCard = ({
             <Text fontSize='sm' color='blackAlpha.700' as='i' marginLeft='auto'>
               {countDownText(roundData)}
             </Text>
-          ) : null}
+          ) : (
+            <Text fontSize='sm' color='blackAlpha.700' as='i' marginLeft='auto'>
+              Max target reached. Contributions are closed.
+            </Text>
+          )}
         </Flex>
         <Flex w='100%' align='flex-start'>
           <Flex direction='column'>
@@ -36,18 +40,8 @@ const CcoContributionCard = ({
               2
             </Box>
           </Flex>
-          <Flex direction='row'>
-            <Text fontSize='sm' color='blackAlpha.700' mt={2}>
-              {`${roundData.maxContribution} ${roundData.ccoToken.symbol} max per person`}
-            </Text>
-
-            {raiseAtMax ? (
-              <Box size='md' my={2} color='blackAlpha.900'>
-                Max target reached. Contributions are closed.
-              </Box>
-            ) : null}
-
-            <Box borderTopWidth='1px' mt={3}>
+          <Flex direction='column'>
+            <Box>
               <CcoLootGrabForm
                 roundData={roundData}
                 currentContributionData={currentContributionData}
@@ -56,7 +50,7 @@ const CcoContributionCard = ({
               />
 
               {currentContributionData && (
-                <Box borderTopWidth='1px' mt={5}>
+                <Box borderTopWidth='1px' mt={5} borderColor='mode.900'>
                   {currentContributionData.addressProposals.map(prop => {
                     return (
                       <Flex

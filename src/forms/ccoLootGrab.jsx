@@ -144,64 +144,71 @@ const CcoLootGrabForm = ({
   return (
     <Flex wrap='wrap'>
       <form onSubmit={handleSubmit(onSubmit)}>
-        <Flex justifyContent='space-between' my={3}>
-          <Text fontSize='sm' color='blackAlpha.700' as='i'>
+        <Flex wrap='wrap' w='100%'>
+          <Text fontSize='sm' color='blackAlpha.700' as='i' w='100%'>
             {`${currentContributionData?.addressRemaining} / ${roundData.maxContribution} ${roundData.ccoToken.symbol} remaining`}
           </Text>
-        </Flex>
-        <FormControl
-          isInvalid={errors.name}
-          display='flex'
-          flexDirection='row'
-          justifyContent='flex-start'
-          alignItems='baseline'
-          mb={0}
-          flexWrap='wrap'
-        >
-          <Box w={['100%', null, '70%']}>
-            <CcoTributeInput
-              register={register}
-              setValue={setValue}
-              getValues={getValues}
-              setError={setError}
-              roundData={roundData}
-              contributionClosed={contributionClosed || !openContribution}
-            />
-          </Box>
-          <Text fontSize='sm' color='whiteAlpha.700' as='i' ml={5}>
-            {`will return -> ${+currentTribute * Number(roundData.ratio)} ${
-              roundData.claimTokenSymbol
-            } `}
-          </Text>
-        </FormControl>
-        {currentError && (
-          <Flex color='red.500' fontSize='m' mr={5} align='center'>
-            <Icon as={RiErrorWarningLine} color='red.500' mr={2} />
-            {currentError.message}
-          </Flex>
-        )}
+          <Flex w='100%' align='space-between' justify='space-between'>
+            <FormControl
+              isInvalid={errors.name}
+              display='flex'
+              flexDirection='row'
+              justifyContent='space-between'
+              alignItems='space-between'
+              mb={0}
+              flexWrap='wrap'
+              pr={6}
+            >
+              <CcoTributeInput
+                register={register}
+                setValue={setValue}
+                getValues={getValues}
+                setError={setError}
+                roundData={roundData}
+                contributionClosed={contributionClosed || !openContribution}
+              />
+              <Text fontSize='sm' color='whiteAlpha.700' as='i' ml={5}>
+                {`will return -> ${+currentTribute * Number(roundData.ratio)} ${
+                  roundData.claimTokenSymbol
+                } `}
+              </Text>
+            </FormControl>
+            {currentError && (
+              <Flex color='red.500' fontSize='m' mr={5} align='center'>
+                <Icon as={RiErrorWarningLine} color='red.500' mr={2} />
+                {currentError.message}
+              </Flex>
+            )}
 
-        {daoConnectedAndSameChain(address, daochain, injectedChain?.chainId) ? (
-          <Button
-            type='submit'
-            loadingText='Submitting'
-            isLoading={loading}
-            disabled={loading || contributionClosed || !openContribution}
-            variant='primary'
-          >
-            Contribute
-          </Button>
-        ) : (
-          <Button
-            onClick={requestWallet}
-            isDisabled={injectedChain && daochain !== injectedChain?.chainId}
-          >
-            Connect
-            {injectedChain && daochain !== injectedChain?.chainId
-              ? `to ${chainByID(daochain).name}`
-              : 'Wallet'}
-          </Button>
-        )}
+            {daoConnectedAndSameChain(
+              address,
+              daochain,
+              injectedChain?.chainId,
+            ) ? (
+              <Button
+                type='submit'
+                loadingText='Submitting'
+                isLoading={loading}
+                disabled={loading || contributionClosed || !openContribution}
+                variant='primary'
+              >
+                Contribute
+              </Button>
+            ) : (
+              <Button
+                onClick={requestWallet}
+                isDisabled={
+                  injectedChain && daochain !== injectedChain?.chainId
+                }
+              >
+                Connect
+                {injectedChain && daochain !== injectedChain?.chainId
+                  ? `to ${chainByID(daochain).name}`
+                  : 'Wallet'}
+              </Button>
+            )}
+          </Flex>
+        </Flex>
       </form>
     </Flex>
   );
