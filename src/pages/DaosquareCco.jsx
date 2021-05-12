@@ -44,17 +44,19 @@ const DaosquareCco = () => {
               pb={6}
             >
               <Box fontSize='xl'>CCOs</Box>
-              {d2CcoDaos.map(dao => {
-                return (
-                  <CcoCard
-                    daoMetaData={dao.meta}
-                    dao={dao}
-                    key={dao.id}
-                    ccoType='daosquarecco'
-                    isLink
-                  />
-                );
-              })}
+              {d2CcoDaos
+                .sort((a, b) => a.ccoStatus.sort - b.ccoStatus.sort)
+                .map(dao => {
+                  return (
+                    <CcoCard
+                      daoMetaData={dao.meta}
+                      dao={dao}
+                      key={dao.id}
+                      ccoType='daosquarecco'
+                      isLink
+                    />
+                  );
+                })}
             </Box>
             <Box w={['100%', null, null, null, '40%']}>
               <DaosquareCcoOverall totals={totals} />

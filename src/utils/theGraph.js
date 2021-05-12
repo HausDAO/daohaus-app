@@ -2,11 +2,7 @@ import { graphQuery } from './apollo';
 import { ADDRESS_BALANCES, BANK_BALANCES } from '../graphQL/bank-queries';
 import { DAO_ACTIVITIES, HOME_DAO } from '../graphQL/dao-queries';
 import { MEMBERS_LIST } from '../graphQL/member-queries';
-import {
-  proposalResolver,
-  daoResolver,
-  daosqaureCcoDaoResolver,
-} from './resolvers';
+import { proposalResolver, daoResolver, ccoDaoResolver } from './resolvers';
 import { getGraphEndpoint, supportedChains } from './chain';
 import { fetchTokenData } from './tokenValue';
 import { omit } from './general';
@@ -373,7 +369,7 @@ export const daosqaureCcoQuery = async ({ query, reactSetter, apiFetcher }) => {
     const now = Number(date.seconds);
 
     const withCcoMeta = withMetaData.map(dao => {
-      return daosqaureCcoDaoResolver(dao, now);
+      return ccoDaoResolver(dao, now, 'daosquarecco');
     });
 
     reactSetter(withCcoMeta);

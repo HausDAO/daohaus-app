@@ -141,29 +141,49 @@ export const totalFundedDaosquare = daos => {
 };
 
 export const ccoStatus = (ccoData, ccoFundedAmount, now) => {
-  if (Number(ccoData.raiseStartTime) > now) {
+  if (!ccoData.active) {
+    return {
+      label: 'Paused',
+      sort: 4,
+    };
+  }
+  if (Number(ccoData.metadata.raiseStartTime) > now) {
     return {
       label: 'Coming Soon',
+      sort: 2,
     };
   }
-  if (ccoFundedAmount >= Number(ccoData.maxTarget)) {
+  if (ccoFundedAmount >= Number(ccoData.metadata.maxTarget)) {
     return {
       label: 'Funded',
-      claimOpen: now >= Number(ccoData.claimPeriodStartTime),
+      claimOpen: now >= Number(ccoData.metadata.claimPeriodStartTime),
+      sort: 3,
     };
   }
   if (
-    Number(ccoData.raiseStartTime) < now &&
-    Number(ccoData.raiseEndTime) > now
+    Number(ccoData.metadata.raiseStartTime) < now &&
+    Number(ccoData.metadata.raiseEndTime) > now
   ) {
-    return { label: 'Active' };
+    return { label: 'Active', sort: 1 };
   }
   if (
-    Number(ccoData.raiseEndTime) > now &&
-    ccoFundedAmount < Number(ccoData.maxTarget)
+    Number(ccoData.metadata.raiseEndTime) > now &&
+    ccoFundedAmount < Number(ccoData.metadata.maxTarget)
   ) {
-    return { label: 'Failed' };
+    return { label: 'Failed', sort: 5 };
   }
 
   return null;
+};
+
+export const ccoProgressBarData = (metadata, ccoFundedAmount) => {
+  const minBarWidth = Number(metadata.minTarget) / Number(metadata.maxTarget);
+  const maxBarWidth = 1.0 - minBarWidth;
+  const minBarValue = ccoFundedAmount / Number(metadata.minTarget);
+  const maxCurrentContributions = ccoFundedAmount - Number(metadata.minTarget);
+  const maxBarValue =
+    (maxCurrentContributions >= 0 ? maxCurrentContributions : 0) /
+    (Number(metadata.maxTarget) - Number(metadata.minTarget));
+
+  return { minBarWidth, maxBarWidth, minBarValue, maxBarValue };
 };

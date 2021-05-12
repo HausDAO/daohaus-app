@@ -17,7 +17,7 @@ import CcoEligibility from '../components/ccoElibility';
 import CcoResources from '../components/ccoResources';
 import CcoContributionCard from '../components/ccoContributeCard';
 import CcoClaimCard from '../components/ccoClaimCard';
-import { daosqaureCcoDaoResolver } from '../utils/resolvers';
+import { ccoDaoResolver } from '../utils/resolvers';
 
 // TODO: filter out proposals after max limit is hit
 
@@ -33,9 +33,6 @@ const CcoContribution = ({ daoMetaData, currentDaoTokens, daoProposals }) => {
   const [claimComplete, setClaimComplete] = useState(false);
 
   const networkMatch = injectedChain?.network === roundData?.network;
-
-  // TODO: make this work
-  // const dao = daosqaureCcoDaoResolver({meta: daoMetaData, });
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -78,10 +75,14 @@ const CcoContribution = ({ daoMetaData, currentDaoTokens, daoProposals }) => {
       });
 
       setDaoCardData(
-        daosqaureCcoDaoResolver({
-          meta: daoMetaData,
-          proposals: daoProposals,
-        }),
+        ccoDaoResolver(
+          {
+            meta: daoMetaData,
+            proposals: daoProposals,
+          },
+          now,
+          ccoType,
+        ),
       );
     };
 

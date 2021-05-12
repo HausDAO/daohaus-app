@@ -9,7 +9,7 @@ import TextBox from './TextBox';
 import { themeImagePath } from '../utils/metadata';
 import { numberWithCommas } from '../utils/general';
 import { supportedChains } from '../utils/chain';
-import { CCO_CONSTANTS } from '../utils/cco';
+import { ccoProgressBarData, CCO_CONSTANTS } from '../utils/cco';
 
 const CcoCard = ({ daoMetaData, isLink, dao, ccoType }) => {
   const raiseLeft =
@@ -17,6 +17,10 @@ const CcoCard = ({ daoMetaData, isLink, dao, ccoType }) => {
     dao.ccoFundedAmount;
   const canClaim =
     dao?.ccoStatus?.label === 'Funded' && dao?.ccoStatus?.claimOpen;
+  const barData = ccoProgressBarData(
+    daoMetaData.boosts[ccoType].metadata,
+    dao.ccoFundedAmount,
+  );
 
   return (
     <ContentBox
@@ -58,19 +62,30 @@ const CcoCard = ({ daoMetaData, isLink, dao, ccoType }) => {
           <Box ml={5}>
             <Flex align='center'>
               {canClaim && <BsEggFill />}
-              {daoMetaData.boosts[ccoType].active
-                ? dao?.ccoStatus?.label
-                : 'Paused'}
+              {dao?.ccoStatus?.label}
             </Flex>
           </Box>
         </Flex>
-        <Progress
-          colorScheme='secondary'
-          height='24px'
-          value={100}
-          mt={7}
-          mb={3}
-        />
+        <Flex>
+          <Progress
+            colorScheme='secondary'
+            height='24px'
+            value={barData.minBarValue * 100}
+            width={`${barData.minBarWidth * 100}%`}
+            mt={7}
+            mb={3}
+            mr={1}
+          />
+          <Progress
+            colorScheme='secondary'
+            height='24px'
+            value={barData.maxBarValue * 100}
+            width={`${barData.maxBarWidth * 100}%`}
+            mt={7}
+            mb={3}
+          />
+        </Flex>
+
         <Flex direction='row' justify='space-between' w='100%'>
           <Box fontFamily='heading' fontSize='xl'>
             {`${numberWithCommas(dao.ccoFundedAmount)} ${
@@ -89,7 +104,7 @@ const CcoCard = ({ daoMetaData, isLink, dao, ccoType }) => {
               Funding Goal
             </TextBox>
             <TextBox size='lg' variant='value'>
-              {`${daoMetaData.boosts[ccoType].metadata.maxTarget} ${daoMetaData.boosts[ccoType].metadata.tributeTokenSymbol}`}
+              {`Min ${daoMetaData.boosts[ccoType].metadata.minTarget} ${daoMetaData.boosts[ccoType].metadata.tributeTokenSymbol} | Max ${daoMetaData.boosts[ccoType].metadata.maxTarget} ${daoMetaData.boosts[ccoType].metadata.tributeTokenSymbol}`}
             </TextBox>
           </Box>
           <Box>
