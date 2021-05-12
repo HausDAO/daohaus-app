@@ -1,20 +1,19 @@
 import React, { useContext, createContext } from 'react';
 import { MaxUint256 } from '@ethersproject/constants';
-
 import { useParams } from 'react-router-dom';
 import { v4 as uuidv4 } from 'uuid';
-import { TokenService } from '../services/tokenService';
+
 import { useDao } from './DaoContext';
 import { useDaoMember } from './DaoMemberContext';
 import { useMetaData } from './MetaDataContext';
 import { useToken } from './TokenContext';
 import { useInjectedProvider } from './InjectedProviderContext';
-import { createPoll } from '../services/pollService';
 import { useUser } from './UserContext';
 import { useOverlay } from './OverlayContext';
 
+import { createPoll } from '../services/pollService';
+import { TokenService } from '../services/tokenService';
 import { createForumTopic } from '../utils/discourse';
-
 import { getArgs, handleFormError, Transaction } from '../utils/txHelpers';
 import { customValidations } from '../utils/validation';
 

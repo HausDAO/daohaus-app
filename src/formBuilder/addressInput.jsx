@@ -2,8 +2,8 @@ import React, { useEffect, useState } from 'react';
 import { Spinner } from '@chakra-ui/react';
 
 import { useDao } from '../contexts/DaoContext';
-import GenericSelect from './genericSelect';
 import GenericInput from './genericInput';
+import GenericSelect from './genericSelect';
 import { ModButton } from './staticElements';
 
 import { handleGetProfile } from '../utils/3box';
@@ -12,11 +12,12 @@ import { getActiveMembers } from '../utils/dao';
 import { lookupENS } from '../utils/ens';
 
 const AddressInput = props => {
+  const { daoMembers } = useDao();
   const { name, localForm } = props;
+
   const [textMode, setTextMode] = useState(true);
   const [userAddresses, setAddresses] = useState([]);
   const [helperText, setHelperText] = useState('Use ETH address or ENS');
-  const { daoMembers } = useDao();
 
   const { setValue } = localForm;
 

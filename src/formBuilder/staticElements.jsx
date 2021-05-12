@@ -9,7 +9,6 @@ import {
   MenuList,
   MenuItem,
 } from '@chakra-ui/react';
-
 import { RiAddFill, RiErrorWarningLine } from 'react-icons/ri';
 
 export const SubmitErrList = ({ errors = [] }) => {

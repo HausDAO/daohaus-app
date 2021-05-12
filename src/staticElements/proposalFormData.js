@@ -209,6 +209,7 @@ export const PROPOSAL_FORMS = {
       txType: 'submitProposal',
       contract: 'Moloch',
     },
+    required: ['title'], // Use name key from proposal type object
     fields: [FIELD.TITLE, FIELD.DESCRIPTION, FIELD.LINK],
   },
 };

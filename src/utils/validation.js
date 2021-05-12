@@ -68,7 +68,7 @@ export const validateRequired = (values, required) => {
   //  takes in array of required fields
   if (!values || !required?.length) {
     throw new Error(
-      `Did not recieve truthy 'values' and/or 'required' in Function 'checkRequired`,
+      `Did not recieve 'values' and/or 'required' in Function 'checkRequired`,
     );
   }
   const errors = required.reduce((arr, field) => {
