@@ -35,20 +35,40 @@ const CcoEligibility = ({
         <Box fontSize='3xl' fontFamily='heading' pr={5}>
           1
         </Box>
-        <Box>
-          Only approved addresses can participate. Click the button to check
-          your eligibility.
-          <ToolTipWrapper
-            placement='right'
-            tooltip
-            tooltipText={{
-              title: 'Whitelist Requirements',
-              body: roundData.whitelistReqs,
-            }}
-          >
-            <RiQuestionLine />
-          </ToolTipWrapper>
-        </Box>
+        {isEligible === 'unchecked' && (
+          <Box>
+            Only approved addresses can participate. Click the button to check
+            your eligibility.
+            <ToolTipWrapper
+              placement='right'
+              tooltip
+              tooltipText={{
+                title: 'Whitelist Requirements',
+                body: roundData.whitelistReqs,
+              }}
+            >
+              <RiQuestionLine />
+            </ToolTipWrapper>
+          </Box>
+        )}
+        {isEligible === 'checked' && (
+          <>
+            <Box size='md' my={2} color='blackAlpha.900'>
+              You are eligible to contribute.
+            </Box>
+
+            {roundData.beforeRaise ? (
+              <Box size='md' my={2} color='blackAlpha.900'>
+                Come back when the contribution round begins.
+              </Box>
+            ) : null}
+          </>
+        )}
+        {isEligible === 'denied' && (
+          <Box size='md' my={2} color='blackAlpha.900'>
+            Address is not eligible.
+          </Box>
+        )}
         {networkMatch ? (
           <Box>
             {isEligible === 'unchecked' && (
@@ -81,24 +101,6 @@ const CcoEligibility = ({
                     </Box>
                   ))}
               </>
-            )}
-            {isEligible === 'checked' && (
-              <>
-                <Box size='md' my={2} color='blackAlpha.900'>
-                  You are eligible to contribute.
-                </Box>
-
-                {roundData.beforeRaise ? (
-                  <Box size='md' my={2} color='blackAlpha.900'>
-                    Come back when the contribution round begins.
-                  </Box>
-                ) : null}
-              </>
-            )}
-            {isEligible === 'denied' && (
-              <Box size='md' my={2} color='blackAlpha.900'>
-                Address is not eligible.
-              </Box>
             )}
           </Box>
         ) : (
