@@ -138,13 +138,18 @@ export const TXProvider = ({ children }) => {
 
   const handleCustomValidation = ({ values, formData }) => {
     if (!formData?.customValidations?.length) return false;
-    return formData.customValidations.map(rule => {
-      return customValidations[rule]?.({
+    const errors = formData.customValidations.reduce((arr, rule) => {
+      const isError = customValidations[rule]?.({
         values,
         formData,
         appState: { ...contextData, apiData },
       });
-    });
+      if (isError) {
+        return [...arr, isError];
+      }
+      return arr;
+    }, []);
+    return errors?.length ? errors : false;
   };
 
   const unlockToken = async token => {
@@ -209,11 +214,11 @@ export const TXProvider = ({ children }) => {
       });
     } catch (error) {
       handleFormError({
+        error,
         contextData,
         formData,
         args,
         values,
-        error,
         errorToast,
         loading: proposalLoading,
       });

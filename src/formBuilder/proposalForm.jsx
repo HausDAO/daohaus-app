@@ -64,6 +64,7 @@ const ProposalForm = props => {
       return;
     }
     const customValErrors = handleCustomValidation({ values, formData: props });
+    console.log('customValErrors :>> ', customValErrors);
     if (customValErrors) {
       updateErrors(customValErrors);
       return;
