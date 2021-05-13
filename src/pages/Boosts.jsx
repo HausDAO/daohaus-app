@@ -13,7 +13,7 @@ import MainViewLayout from '../components/mainViewLayout';
 import { useInjectedProvider } from '../contexts/InjectedProviderContext';
 import { daoConnectedAndSameChain } from '../utils/general';
 import { getTerm } from '../utils/metadata';
-import { getWrapNZap } from '../utils/requests';
+import { getWrapNZap } from '../utils/theGraph';
 
 const Boosts = ({ customTerms, daoMember, daoOverview, daoMetaData }) => {
   const { daochain, daoid } = useParams();

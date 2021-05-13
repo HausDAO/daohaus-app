@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link as RouterLink, useParams } from 'react-router-dom';
 import {
   Box,
@@ -21,20 +21,50 @@ import { createPoll } from '../services/pollService';
 import { useUser } from '../contexts/UserContext';
 import { useOverlay } from '../contexts/OverlayContext';
 import { useDao } from '../contexts/DaoContext';
+import { useMetaData } from '../contexts/MetaDataContext';
 
-const NewTransmutation = () => {
+const NewTransmutation = ({ ccoType, ccoVanillaMinion }) => {
   const [loading, setLoading] = useState(false);
   const { daochain, daoid } = useParams();
   const { address, injectedProvider, injectedChain } = useInjectedProvider();
   const { daoOverview, refetch } = useDao();
+  const { daoMetaData } = useMetaData();
   const { cachePoll, resolvePoll } = useUser();
   const { errorToast, successToast } = useOverlay();
-  const { handleSubmit, register } = useForm();
+  const { handleSubmit, register, setValue } = useForm();
   const [step, setStep] = useState(1);
   const [pendingTx, setPendingTx] = useState(null);
   const now = (new Date().getTime() / 1000).toFixed();
 
+  useEffect(() => {
+    const setUp = async () => {
+      setValue('moloch', daoid);
+      setValue(
+        'distributionToken',
+        daoMetaData.boosts[ccoType].metadata.claimTokenAddress,
+      );
+      setValue(
+        'capitalToken',
+        daoMetaData.boosts[ccoType].metadata.tributeToken,
+      );
+      setValue('owner', ccoVanillaMinion.minionAddress);
+      setValue('exchangeRate', daoMetaData.boosts[ccoType].metadata.ratio);
+      setValue('burnRate', '1');
+      setValue('paddingNumber', '10000');
+    };
+
+    if (ccoType && daoMetaData && daoOverview) {
+      setUp();
+    }
+  }, [daoOverview, daoMetaData, ccoType]);
+
   const onSubmit = async values => {
+    // if cco - we need to make a boost post with the new values
+    // after the contract goes in onsuccess i guess
+    // {"exchangeRate": 0.25,"paddingNumber": 10000,"burnRate": 1}
+    // this rate is how many distro tokens you get for a single claim token
+    // pull from cco data
+
     setLoading(true);
     setStep(2);
 
@@ -98,40 +128,68 @@ const NewTransmutation = () => {
       {step === 1 ? (
         <>
           <Heading as='h4' size='md' fontWeight='100' mb={10}>
-            Deploy Your Minion
+            Deploy Transmutation Contract
           </Heading>
-          {daoOverview?.minions.length > 0 && (
-            <>
-              <Box mb={5} fontSize='md'>
-                {`You have ${daoOverview.minions.length} minion
-                ${daoOverview.minions.length > 1 ? 's' : ''} already. Are you
-                looking for the `}
-                <Link
-                  as={RouterLink}
-                  to={`/dao/${daochain}/${daoid}/settings`}
-                  color='secondary.500'
-                >
-                  Settings?
-                </Link>
-              </Box>
-            </>
-          )}
-          <Box mb={3} fontSize='sm'>
-            Deploying a Minion will allow the DAO to interact with external
-            contracts through proposals
-          </Box>
           <form onSubmit={handleSubmit(onSubmit)}>
             <Box mb={3} fontSize='sm'>
               <FormControl mb={5}>
-                <FormHelperText fontSize='sm' id='name-helper-text' mb={3}>
-                  A Minion needs a name
+                <FormHelperText fontSize='sm' id='moloch-helper-text' mb={3}>
+                  Moloch Address
                 </FormHelperText>
-                <Input
-                  name='details'
-                  placeholder='Frank'
-                  w='60%'
-                  ref={register}
-                />
+                <Input name='moloch' w='60%' ref={register} />
+              </FormControl>
+              <FormControl mb={5}>
+                <FormHelperText
+                  fontSize='sm'
+                  id='distributionToken-helper-text'
+                  mb={3}
+                >
+                  Distribution Token
+                </FormHelperText>
+                <Input name='distributionToken' w='60%' ref={register} />
+              </FormControl>
+              <FormControl mb={5}>
+                <FormHelperText
+                  fontSize='sm'
+                  id='capitalToken-helper-text'
+                  mb={3}
+                >
+                  Capital Token
+                </FormHelperText>
+                <Input name='capitalToken' w='60%' ref={register} />
+              </FormControl>
+              <FormControl mb={5}>
+                <FormHelperText fontSize='sm' id='owner-helper-text' mb={3}>
+                  Vanilla Minion
+                </FormHelperText>
+                <Input name='owner' w='60%' ref={register} />
+              </FormControl>
+
+              <FormControl mb={5}>
+                <FormHelperText
+                  fontSize='sm'
+                  id='exchangeRate-helper-text'
+                  mb={3}
+                >
+                  Exchange Rate
+                </FormHelperText>
+                <Input name='exchangeRate' w='60%' ref={register} />
+              </FormControl>
+              <FormControl mb={5}>
+                <FormHelperText fontSize='sm' id='burnRate-helper-text' mb={3}>
+                  Burn Rate
+                </FormHelperText>
+                <Input name='burnRate' w='60%' ref={register} />
+              </FormControl>
+              <FormControl mb={5}>
+                <FormHelperText
+                  fontSize='sm'
+                  id='paddingNumber-helper-text'
+                  mb={3}
+                >
+                  Padding Number
+                </FormHelperText>
+                <Input name='paddingNumber' w='60%' ref={register} />
               </FormControl>
             </Box>
             <Button type='submit' isLoading={loading}>

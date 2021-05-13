@@ -1,7 +1,3 @@
-import { getGraphEndpoint } from './chain';
-import { graphQuery } from './apollo';
-import { GET_WRAP_N_ZAPS } from '../graphQL/boost-queries';
-
 const metadataApiUrl = 'https://data.daohaus.club';
 const apiMetadataUrl = 'https://daohaus-metadata.s3.amazonaws.com/daoMeta.json';
 const apiPricedataUrl =
@@ -175,16 +171,16 @@ export const getSnapshotSpaces = async () => {
   }
 };
 
-export const getWrapNZap = async (daochain, daoid) => {
-  const records = await graphQuery({
-    endpoint: getGraphEndpoint(daochain, 'boosts_graph_url'),
-    query: GET_WRAP_N_ZAPS,
-    variables: {
-      contractAddress: daoid,
-    },
-  });
-  if (records.wrapNZaps?.length > 0) {
-    return records.wrapNZaps[0].id;
-  }
-  return null;
-};
+// export const getWrapNZap = async (daochain, daoid) => {
+//   const records = await graphQuery({
+//     endpoint: getGraphEndpoint(daochain, 'boosts_graph_url'),
+//     query: GET_WRAP_N_ZAPS,
+//     variables: {
+//       contractAddress: daoid,
+//     },
+//   });
+//   if (records.wrapNZaps?.length > 0) {
+//     return records.wrapNZaps[0].id;
+//   }
+//   return null;
+// };

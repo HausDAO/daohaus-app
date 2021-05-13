@@ -10,6 +10,7 @@ import { UBERHAUS_QUERY, UBER_MINIONS } from '../graphQL/uberhaus-queries';
 import { UBERHAUS_DATA } from './uberhaus';
 import { getApiMetadata, getDateTime } from './metadata';
 import { CCO_CONSTANTS } from './cco';
+import { GET_TRANSMUTATION, GET_WRAP_N_ZAPS } from '../graphQL/boost-queries';
 
 export const graphFetchAll = async (args, items = [], skip = 0) => {
   try {
@@ -52,6 +53,30 @@ export const fetchUberHausData = async args => {
       molochAddress: args.molochAddress,
       memberAddress: args.memberAddress,
       minionId: args.minionId,
+    },
+  });
+};
+
+export const getWrapNZap = async (daochain, daoid) => {
+  const records = await graphQuery({
+    endpoint: getGraphEndpoint(daochain, 'boosts_graph_url'),
+    query: GET_WRAP_N_ZAPS,
+    variables: {
+      contractAddress: daoid,
+    },
+  });
+  if (records.wrapNZaps?.length > 0) {
+    return records.wrapNZaps[0].id;
+  }
+  return null;
+};
+
+export const fetchTransmutation = async args => {
+  return graphQuery({
+    endpoint: getGraphEndpoint(args.chainID, 'boosts_graph_url'),
+    query: GET_TRANSMUTATION,
+    variables: {
+      contractAddress: args.molochAddress,
     },
   });
 };
