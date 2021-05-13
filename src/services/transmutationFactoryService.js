@@ -11,10 +11,10 @@ export const TransmutationFactoryService = ({ web3, chainID }) => {
   const abi = TransmutationFactoryAbi;
   const contract = new web3.eth.Contract(
     abi,
-    chainByID(chainID).uberhaus_minion_factory_addr,
+    chainByID(chainID).transmutation_factory_addr,
   );
   return service => {
-    if (service === 'summonUberHausMinion') {
+    if (service === 'summonTransmutation') {
       return async ({ args, from, poll, onTxHash }) => {
         console.log({
           args,

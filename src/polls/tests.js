@@ -183,3 +183,7 @@ export const rageKickTest = data => {
 export const wrapNZapSummonTest = data => {
   return data?.wrapNZaps?.length > 0;
 };
+
+export const transmutationSummonTest = data => {
+  return data?.transmutations?.length > 0;
+};

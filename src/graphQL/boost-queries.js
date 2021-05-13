@@ -21,3 +21,11 @@ export const GET_WRAP_N_ZAPS = gql`
     }
   }
 `;
+
+export const GET_TRANSMUTATIONS = gql`
+  query transmutations($contractAddress: String!) {
+    transmutations(where: { moloch: $contractAddress }) {
+      id
+    }
+  }
+`;

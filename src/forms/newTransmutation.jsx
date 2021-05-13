@@ -14,7 +14,7 @@ import {
 import { RiExternalLinkLine } from 'react-icons/ri';
 import { useForm } from 'react-hook-form';
 
-import { MinionFactoryService } from '../services/minionFactoryService';
+import { TransmutationFactoryService } from '../services/transmutationFactoryService';
 import { supportedChains } from '../utils/chain';
 import { useInjectedProvider } from '../contexts/InjectedProviderContext';
 import { createPoll } from '../services/pollService';
@@ -22,6 +22,7 @@ import { useUser } from '../contexts/UserContext';
 import { useOverlay } from '../contexts/OverlayContext';
 import { useDao } from '../contexts/DaoContext';
 import { useMetaData } from '../contexts/MetaDataContext';
+import { boostPost } from '../utils/metadata';
 
 const NewTransmutation = ({ ccoType, ccoVanillaMinion }) => {
   const [loading, setLoading] = useState(false);
@@ -59,20 +60,21 @@ const NewTransmutation = ({ ccoType, ccoVanillaMinion }) => {
   }, [daoOverview, daoMetaData, ccoType]);
 
   const onSubmit = async values => {
-    // if cco - we need to make a boost post with the new values
-    // after the contract goes in onsuccess i guess
-    // {"exchangeRate": 0.25,"paddingNumber": 10000,"burnRate": 1}
-    // this rate is how many distro tokens you get for a single claim token
-    // pull from cco data
-
     setLoading(true);
     setStep(2);
 
-    const summonParams = [daoid, values.details];
+    const summonParams = [
+      values.moloch,
+      'CCO',
+      values.distributionToken,
+      values.capitalToken,
+      values.owner,
+    ];
 
     try {
-      const poll = createPoll({ action: 'summonMinion', cachePoll })({
+      const poll = createPoll({ action: 'summonTransmutation', cachePoll })({
         chainID: injectedChain.chain_id,
+        daoID: daoid,
         molochAddress: daoid,
         createdAt: now,
         actions: {
@@ -84,16 +86,40 @@ const NewTransmutation = ({ ccoType, ccoVanillaMinion }) => {
             resolvePoll(txHash);
             setStep(1);
           },
-          onSuccess: txHash => {
+          onSuccess: async txHash => {
             const title = values.details
               ? `${values.details} Lives!`
               : 'Minion Lives!';
             successToast({
               title,
             });
-            refetch();
-            resolvePoll(txHash);
-            setStep('success');
+
+            const messageHash = injectedProvider.utils.sha3(daoid);
+            const signature = await injectedProvider.eth.personal.sign(
+              messageHash,
+              address,
+            );
+
+            const updateThemeObject = {
+              contractAddress: daoid,
+              boostKey: 'transmutation',
+              metadata: {
+                paddingNumber: values.paddingNumber,
+                burnRate: values.burnRate,
+                exchangeRate: values.exchangeRate,
+              },
+              network: injectedChain.network,
+              signature,
+            };
+
+            const result = await boostPost('dao/boost', updateThemeObject);
+
+            if (result === 'success') {
+              setLoading(false);
+              refetch();
+              resolvePoll(txHash);
+              setStep('success');
+            }
           },
         },
       });
@@ -103,10 +129,10 @@ const NewTransmutation = ({ ccoType, ccoVanillaMinion }) => {
         setPendingTx(txHash);
       };
 
-      await MinionFactoryService({
+      await TransmutationFactoryService({
         web3: injectedProvider,
         chainID: injectedChain.chain_id,
-      })('summonMinion')({
+      })('summonTransmutation')({
         args: summonParams,
         from: address,
         poll,
@@ -202,8 +228,9 @@ const NewTransmutation = ({ ccoType, ccoVanillaMinion }) => {
       {step === 2 ? (
         <>
           <Heading as='h4' size='md' fontWeight='100' mb={10}>
-            Deploying Your Minion
+            Deploying Transmutation
           </Heading>
+          <Box>You will need to sign once more</Box>
           <Spinner />
 
           <Box my={10}>
@@ -225,11 +252,8 @@ const NewTransmutation = ({ ccoType, ccoVanillaMinion }) => {
       {step === 'success' ? (
         <>
           <Heading as='h4' size='md' fontWeight='100' mb={10}>
-            A Minion is at your service
+            Success
           </Heading>
-          <Button as={RouterLink} to={`/dao/${daochain}/${daoid}/settings`}>
-            Settings
-          </Button>
         </>
       ) : null}
     </Box>
