@@ -10,6 +10,7 @@ import {
   Link,
   HStack,
   Stack,
+  Button,
 } from '@chakra-ui/react';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
 import { RiArrowLeftLine } from 'react-icons/ri';
@@ -36,7 +37,7 @@ import { useTX } from '../contexts/TXContext';
 import { TokenService } from '../services/tokenService';
 import MinionNativeToken from '../components/minionNativeToken';
 
-const MinionDetails = ({ overview, currentDaoTokens }) => {
+const MinionDetails = ({ overview, currentDaoTokens, minionType }) => {
   const { daochain, daoid, minion } = useParams();
   const toast = useToast();
   const [minionData, setMinionData] = useState();
@@ -213,7 +214,7 @@ const MinionDetails = ({ overview, currentDaoTokens }) => {
   };
 
   return (
-    <MainViewLayout header='Minion' isDao>
+    <MainViewLayout header={minionType || 'Minion'} isDao>
       <Box>
         <Link as={RouterLink} to={`/dao/${daochain}/${daoid}/settings`}>
           <HStack spacing={3}>
@@ -242,7 +243,10 @@ const MinionDetails = ({ overview, currentDaoTokens }) => {
                       src={makeBlockie(minionData.minionAddress)}
                       mr={3}
                     />
-                    <Heading>{minionData.details}</Heading>
+                    <Heading>
+                      {minionType || null}
+                      {minionData.details}
+                    </Heading>
                   </Flex>
                 </Box>
                 <Flex align='center'>
@@ -289,6 +293,17 @@ const MinionDetails = ({ overview, currentDaoTokens }) => {
 
                     <MinionTokenList minion={minion} action={sendToken} />
                   </Box>
+                  {minionType === 'niftyInk' && (
+                    <Box>
+                      <Button
+                        onClick={() =>
+                          setGenericModal({ [minionData.minionAddress]: true })
+                        }
+                      >
+                        Buy Ink
+                      </Button>
+                    </Box>
+                  )}
                 </Stack>
               </Box>
             </>

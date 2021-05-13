@@ -254,7 +254,11 @@ const DaoRouter = () => {
           <Snapshot isMember={isMember} daoMetaData={daoMetaData} />
         </Route>
         <Route exact path={`${path}/settings/nifty-ink`}>
-          <NiftInk overview={daoOverview} members={daoMembers} />
+          <Minion
+            overview={daoOverview}
+            members={daoMembers}
+            minionType='niftyInk'
+          />
         </Route>
       </Switch>
     </Layout>
