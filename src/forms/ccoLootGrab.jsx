@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useForm } from 'react-hook-form';
-import { Button, FormControl, Flex, Icon, Box, Text } from '@chakra-ui/react';
+import { Button, FormControl, Flex, Icon, Text } from '@chakra-ui/react';
 import { RiErrorWarningLine } from 'react-icons/ri';
 import { useParams } from 'react-router-dom';
 
