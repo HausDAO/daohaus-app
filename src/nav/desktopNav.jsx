@@ -36,7 +36,7 @@ const DesktopNav = ({ dao, daosquarecco }) => {
       direction='column'
       align='start'
       justifyContent='start'
-      bg='primary.500'
+      bg={daosquarecco ? '#FFD3FF' : 'primary.500'}
       zIndex='1'
       w='100px'
       minH='100vh'
