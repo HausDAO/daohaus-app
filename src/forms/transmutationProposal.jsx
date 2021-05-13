@@ -168,6 +168,7 @@ const TransmutationProposal = () => {
   }, [transmutationData, daoOverview]);
 
   const displayTribute = val => {
+    console.log('val', val);
     if (val) {
       return injectedProvider?.utils.fromWei(`${val}`).toString();
     }
@@ -384,7 +385,7 @@ const TransmutationProposal = () => {
             <Flex flexDir='column'>
               <Box>
                 <Text>
-                  {`Exchange Rate: 1 ${tokenData[0] && tokenData[0].label} =&gt;
+                  {`Exchange Rate: 1 ${tokenData[0] && tokenData[0].label} =
                   ${
                     daoMetaData?.boosts.transmutation.metadata.exchangeRate
                   } ${symbol}`}

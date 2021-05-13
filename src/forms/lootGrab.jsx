@@ -83,7 +83,6 @@ const LootGrabForm = () => {
     if (daoMetaData?.boosts?.proposalTypes?.active) {
       const daoRatio = +daoMetaData?.boosts?.proposalTypes?.metadata?.lootGrab
         ?.ratio;
-      // console.log(options);
       setRatio(daoRatio);
     }
   });
@@ -116,7 +115,7 @@ const LootGrabForm = () => {
     const args = [
       applicant,
       values.sharesRequested || '0',
-      Math.floor(values.tributeOffered * ratio || '0').toString(),
+      Math.floor(values.tributeOffered || '0').toString(),
       tributeOffered,
       tributeToken,
       paymentRequested,

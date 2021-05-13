@@ -22,7 +22,12 @@ import { getTerm } from '../utils/metadata';
 import { supportedChains } from '../utils/chain';
 import { useOverlay } from '../contexts/OverlayContext';
 
-const DaoContractSettings = ({ overview, customTerms, wrapNZap }) => {
+const DaoContractSettings = ({
+  overview,
+  customTerms,
+  wrapNZap,
+  transmutation,
+}) => {
   const { daochain, daoid } = useParams();
   const daoAddress = useBreakpointValue({
     base: truncateAddr(daoid),
@@ -30,12 +35,30 @@ const DaoContractSettings = ({ overview, customTerms, wrapNZap }) => {
   });
   const { successToast } = useOverlay();
 
-  const copiedToast = () => {
-    successToast({
-      title: 'Copied Wrap-N-Zap address!',
-      description: `ONLY SEND ${supportedChains[daochain].nativeCurrency} TO THIS ADDRESS!`,
-    });
+  const copiedToast = toastType => {
+    switch (toastType) {
+      case 'wrapNZap': {
+        successToast({
+          title: 'Copied Wrap-N-Zap address!',
+          description: `ONLY SEND ${supportedChains[daochain].nativeCurrency} TO THIS ADDRESS!`,
+        });
+        break;
+      }
+      case 'transmutation': {
+        successToast({
+          title: 'Copied transmutation address!',
+        });
+        break;
+      }
+      default: {
+        successToast({
+          title: 'Copied address',
+        });
+      }
+    }
   };
+
+  console.log('wrapNZap', wrapNZap, transmutation);
 
   return (
     <ContentBox d='flex' w='100%' mt={2} flexDirection='column'>
@@ -70,7 +93,25 @@ const DaoContractSettings = ({ overview, customTerms, wrapNZap }) => {
                 <CopyToClipboard
                   text={wrapNZap}
                   mx={2}
-                  onCopy={copiedToast}
+                  onCopy={() => copiedToast('wrapNZap')}
+                  _hover={{ cursor: 'pointer' }}
+                >
+                  <Icon as={FaCopy} color='secondary.300' ml={2} />
+                </CopyToClipboard>
+              </Flex>
+            </Text>
+          </Flex>
+        )}
+        {transmutation && (
+          <Flex justify='space-between'>
+            <TextBox size='xs'>Transmutation Contract</TextBox>
+            <Text fontFamily='mono' variant='value' fontSize='sm'>
+              <Flex color='secondary.400' align='center'>
+                <Box>{transmutation.transmutation}</Box>
+                <CopyToClipboard
+                  text={transmutation.transmutation}
+                  mx={2}
+                  onCopy={() => copiedToast('transmutation')}
                   _hover={{ cursor: 'pointer' }}
                 >
                   <Icon as={FaCopy} color='secondary.300' ml={2} />

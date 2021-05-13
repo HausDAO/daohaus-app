@@ -1,8 +1,8 @@
+import React, { useState, useEffect } from 'react';
 import { Button, Input, InputGroup, InputRightAddon } from '@chakra-ui/react';
 import { utils } from 'web3';
 import { MaxUint256 } from '@ethersproject/constants';
 
-import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import { useDao } from '../contexts/DaoContext';
 import { useInjectedProvider } from '../contexts/InjectedProviderContext';

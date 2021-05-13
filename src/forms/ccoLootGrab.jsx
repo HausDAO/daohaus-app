@@ -49,10 +49,11 @@ const CcoLootGrabForm = ({
     setValue,
     setError,
     getValues,
-    watch,
+    // watch,
   } = useForm({ reValidateMode: 'onSubmit' });
 
-  const currentTribute = watch('tributeOffered');
+  // watch not updating enough
+  // const currentTribute = watch('tributeOffered');
 
   useEffect(() => {
     if (Object.keys(errors).length > 0) {
@@ -145,9 +146,6 @@ const CcoLootGrabForm = ({
     <Flex wrap='wrap'>
       <form onSubmit={handleSubmit(onSubmit)}>
         <Flex wrap='wrap' w='100%'>
-          <Text fontSize='sm' color='blackAlpha.700' as='i' w='100%'>
-            {`${currentContributionData?.addressRemaining} / ${roundData.maxContribution} ${roundData.ccoToken.symbol} remaining`}
-          </Text>
           <Flex w='100%' align='space-between' justify='space-between'>
             <FormControl
               isInvalid={errors.name}
@@ -166,12 +164,17 @@ const CcoLootGrabForm = ({
                 setError={setError}
                 roundData={roundData}
                 contributionClosed={contributionClosed || !openContribution}
+                currentContributionData={currentContributionData}
               />
-              <Text fontSize='sm' color='whiteAlpha.700' as='i' ml={5}>
-                {`will return -> ${+currentTribute * Number(roundData.ratio)} ${
-                  roundData.claimTokenSymbol
-                } `}
-              </Text>
+              <Flex justify='space-between'>
+                <Text fontSize='sm' color='blackAlpha.700' as='i' w='100%'>
+                  {`${currentContributionData?.addressRemaining} / ${roundData.maxContribution} ${roundData.ccoToken.symbol} max contribution remaining`}
+                </Text>{' '}
+                {/* <Text fontSize='sm' color='whiteAlpha.700' as='i' ml={5}>
+                  {`will return -> ${+currentTribute *
+                    Number(roundData.ratio)} ${roundData.claimTokenSymbol} `}
+                </Text> */}
+              </Flex>
             </FormControl>
             {currentError && (
               <Flex color='red.500' fontSize='m' mr={5} align='center'>

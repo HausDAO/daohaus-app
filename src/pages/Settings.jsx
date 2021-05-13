@@ -11,20 +11,33 @@ import Minions from '../components/minionList';
 import MainViewLayout from '../components/mainViewLayout';
 import { useInjectedProvider } from '../contexts/InjectedProviderContext';
 import { daoConnectedAndSameChain } from '../utils/general';
-import { getWrapNZap } from '../utils/theGraph';
+import { fetchTransmutation, getWrapNZap } from '../utils/theGraph';
 
 const Settings = ({ overview, daoMember, daoMetaData, customTerms }) => {
   const { daochain, daoid } = useParams();
   const { address, injectedChain } = useInjectedProvider();
   const [wrapNZap, setWrapNZap] = useState(null);
+  const [transmutation, setTransmutation] = useState(null);
 
   // move to contexts??
   useEffect(() => {
-    const getWNZ = async () => {
+    const getBoostContractAddresses = async () => {
       setWrapNZap(await getWrapNZap(daochain, daoid));
+
+      console.log('daoMetaData', daoMetaData);
+      if (daoMetaData.boosts.transmutation) {
+        const transmutationRes = await fetchTransmutation({
+          chainID: daochain,
+          molochAddress: daoid,
+        });
+        setTransmutation(transmutationRes.transmutations[0]);
+      }
     };
-    getWNZ();
-  }, [daoid]);
+
+    if (daoMetaData) {
+      getBoostContractAddresses();
+    }
+  }, [daoid, daoMetaData]);
 
   return (
     <MainViewLayout header='Settings' customTerms={customTerms} isDao>
@@ -39,6 +52,7 @@ const Settings = ({ overview, daoMember, daoMetaData, customTerms }) => {
             overview={overview}
             customTerms={customTerms}
             wrapNZap={wrapNZap}
+            transmutation={transmutation}
           />
           <Flex justify='space-between' mt={6}>
             <TextBox size='xs'>DAO Metadata</TextBox>
