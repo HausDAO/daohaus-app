@@ -2,7 +2,7 @@ import React from 'react';
 import { Link as RouterLink } from 'react-router-dom';
 
 import { Avatar } from '@chakra-ui/react';
-import BrandImg from '../assets/img/Daohaus__Castle--Dark.svg';
+import D2Avatar from '../assets/img/d2_avatar.png';
 import { useCustomTheme } from '../contexts/CustomThemeContext';
 import { themeImagePath } from '../utils/metadata';
 
@@ -17,7 +17,7 @@ const DaosquareBrand = React.memo(() => {
       size='md'
       cursor='pointer'
       border='none'
-      src={themeImagePath(BrandImg)}
+      src={themeImagePath(D2Avatar)}
       bg={theme.colors.primary}
       borderWidth='2px'
       borderStyle='solid'
