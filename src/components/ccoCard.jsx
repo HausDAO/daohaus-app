@@ -69,6 +69,7 @@ const CcoCard = ({ daoMetaData, isLink, dao, ccoType }) => {
         <Flex>
           <Progress
             colorScheme='secondary'
+            bg='primary.100'
             height='24px'
             value={barData.minBarValue * 100}
             width={`${barData.minBarWidth * 100}%`}
@@ -78,6 +79,7 @@ const CcoCard = ({ daoMetaData, isLink, dao, ccoType }) => {
           />
           <Progress
             colorScheme='secondary'
+            bg='primary.100'
             height='24px'
             value={barData.maxBarValue * 100}
             width={`${barData.maxBarWidth * 100}%`}
