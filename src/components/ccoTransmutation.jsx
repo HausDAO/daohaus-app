@@ -34,7 +34,7 @@ const CcoTransmutation = ({ ccoType, transmutation }) => {
             variant='value'
             fontSize='sm'
             as={Link}
-            href={`${supportedChains[daochain].block_explorer}/address/${daoid}`}
+            href={`${supportedChains[daochain].block_explorer}/address/${transmutation.transmutation}`}
             target='_blank'
             rel='noreferrer noopener'
           >

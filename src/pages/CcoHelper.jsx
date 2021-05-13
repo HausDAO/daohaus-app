@@ -90,10 +90,13 @@ const CcoHelper = React.memo(
           { contributionProposals, otherProps },
         );
 
-        const contributionTotal = contributionTotalValue(
-          propSplit.contributionProposals,
-          roundData,
-        );
+        console.log('roundData', roundData);
+
+        const contributionTotal = contributionTotalValue({
+          proposals: propSplit.contributionProposals,
+          round: roundData,
+        });
+
         setOtherProposals(propSplit.otherProps);
         setCurrentContributionData({
           contributionProposals: propSplit.contributionProposals,
