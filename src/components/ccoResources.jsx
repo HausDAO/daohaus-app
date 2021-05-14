@@ -1,7 +1,9 @@
 import React from 'react';
-import { useHistory, useParams } from 'react-router-dom';
-import { Box, Link, Text } from '@chakra-ui/layout';
+import { useHistory, useParams, Link as RouterLink } from 'react-router-dom';
+import { Box, Flex, Link, Text } from '@chakra-ui/layout';
 
+import Icon from '@chakra-ui/icon';
+import { RiDiscordFill, RiLoginBoxLine } from 'react-icons/ri';
 import { useOverlay } from '../contexts/OverlayContext';
 import ContentBox from './ContentBox';
 import GenericModal from '../modals/genericModal';
@@ -61,12 +63,51 @@ const CcoResources = ({ daoMetaData, ccoData }) => {
             About {daoMetaData.name}
           </Text>
           <Text mb={5}>{daoMetaData.description}</Text>
-          <Text
+          <Link href={ccoData.faqLink} onClick={handleNav} isExternal>
+            <Flex>
+              <Text _hover={{ color: 'secondary.400', cursor: 'pointer' }}>
+                FAQ
+              </Text>
+              <Icon
+                as={RiLoginBoxLine}
+                color='secondary.500'
+                h='25px'
+                w='25px'
+              />
+            </Flex>
+          </Link>
+
+          <RouterLink
+            to={`/dao/${daochain}/${daoid}`}
             onClick={handleNav}
             _hover={{ color: 'secondary.400', cursor: 'pointer' }}
           >
-            Visit DAO Interface
-          </Text>
+            <Flex>
+              <Text color='black.500'>Visit DAO Interface</Text>
+              <Icon
+                as={RiLoginBoxLine}
+                color='secondary.500'
+                h='25px'
+                w='25px'
+              />
+            </Flex>
+          </RouterLink>
+          <Link
+            href={daoMetaData.links.discord}
+            target='_blank'
+            rel='noreferrer noopener'
+            m={3}
+          >
+            <Flex>
+              <Icon
+                as={RiDiscordFill}
+                h='30px'
+                w='30px'
+                color='secondary.500'
+              />
+              <Text>Join the DAOsquare Discord for help</Text>
+            </Flex>
+          </Link>
         </Box>
       </GenericModal>
       <GenericModal modalId='ccoFaq'>

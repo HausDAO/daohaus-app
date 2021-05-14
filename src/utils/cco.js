@@ -19,6 +19,7 @@ export const CCO_CONSTANTS = {
   METADATA_TEXTAREA_FIELDS: {
     whitelistReqs: '',
     rewards: '',
+    faqLink: '',
   },
   BOTS: [
     '0x9166a0bc06Dbf63b8a6f68808060D550c31AefD6',
@@ -167,11 +168,13 @@ export const ccoStatus = (ccoData, ccoFundedAmount, now) => {
     return { label: 'Active', sort: 1 };
   }
   if (
-    Number(ccoData.metadata.raiseEndTime) > now &&
+    Number(ccoData.metadata.raiseEndTime) < now &&
     ccoFundedAmount < Number(ccoData.metadata.maxTarget)
   ) {
     return { label: 'Failed', sort: 5 };
   }
+
+  console.log(ccoData, ccoFundedAmount, now);
 
   return null;
 };
