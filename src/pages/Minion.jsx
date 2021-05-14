@@ -118,7 +118,7 @@ const MinionDetails = ({ overview, currentDaoTokens, isMember }) => {
     });
   };
 
-  const submitMinion = async args => {
+  const submitMinion = async (args, serviceName = null) => {
     try {
       const poll = createPoll({ action: 'minionProposeAction', cachePoll })({
         minionAddress: minionData.minionAddress,
@@ -151,7 +151,7 @@ const MinionDetails = ({ overview, currentDaoTokens, isMember }) => {
         web3: injectedProvider,
         minion,
         chainID: daochain,
-      })('proposeAction')({
+      })(serviceName || 'proposeAction')({
         args,
         address,
         poll,
@@ -171,7 +171,7 @@ const MinionDetails = ({ overview, currentDaoTokens, isMember }) => {
       token.tokenBalance,
       transfer,
     ];
-    submitMinion(args);
+    submitMinion(args, 'crossWithdraw');
   };
 
   const sendNativeToken = async values => {

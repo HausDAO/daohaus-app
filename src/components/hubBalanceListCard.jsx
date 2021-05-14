@@ -3,13 +3,13 @@ import { Link, useParams } from 'react-router-dom';
 import { Flex, Box, Skeleton, Icon, Button, Tooltip } from '@chakra-ui/react';
 import { RiLoginBoxLine } from 'react-icons/ri';
 
-import { numberWithCommas } from '../utils/general';
+import { daoConnectedAndSameChain, numberWithCommas } from '../utils/general';
 import { chainByName } from '../utils/chain';
 import { useInjectedProvider } from '../contexts/InjectedProviderContext';
 
 const HubBalanceListCard = ({ token, withdraw, currentDaoTokens }) => {
-  const { minion } = useParams();
-  const { address } = useInjectedProvider();
+  const { minion, daochain } = useParams();
+  const { address, injectedChain } = useInjectedProvider();
   const [tokenWhitelisted, setTokenWhitelisted] = useState();
 
   useEffect(() => {
@@ -89,7 +89,14 @@ const HubBalanceListCard = ({ token, withdraw, currentDaoTokens }) => {
               <Button
                 m={6}
                 onClick={() => withdraw(token, true)}
-                disabled={tokenWhitelisted}
+                disabled={
+                  tokenWhitelisted ||
+                  !daoConnectedAndSameChain(
+                    address,
+                    daochain,
+                    injectedChain?.chainId,
+                  )
+                }
               >
                 Pull
               </Button>
@@ -100,7 +107,18 @@ const HubBalanceListCard = ({ token, withdraw, currentDaoTokens }) => {
               placement='bottom'
               label='Withdraw token into the minion'
             >
-              <Button onClick={() => withdraw(token, false)}>Withdraw</Button>
+              <Button
+                onClick={() => withdraw(token, false)}
+                disabled={
+                  !daoConnectedAndSameChain(
+                    address,
+                    daochain,
+                    injectedChain?.chainId,
+                  )
+                }
+              >
+                Withdraw
+              </Button>
             </Tooltip>
           </Box>
         )}
