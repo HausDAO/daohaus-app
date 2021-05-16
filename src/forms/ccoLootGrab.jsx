@@ -143,8 +143,8 @@ const CcoLootGrabForm = ({
   };
 
   return (
-    <Flex wrap='wrap'>
-      <form onSubmit={handleSubmit(onSubmit)}>
+    <Flex wrap='wrap' w='100%'>
+      <form onSubmit={handleSubmit(onSubmit)} style={{ width: '100%' }}>
         <Flex wrap='wrap' w='100%'>
           <Flex w='100%' align='space-between' justify='space-between'>
             <FormControl

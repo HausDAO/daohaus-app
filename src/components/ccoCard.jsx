@@ -61,7 +61,9 @@ const CcoCard = ({ daoMetaData, isLink, dao, ccoType }) => {
           </Flex>
           <Box ml={5}>
             <Flex align='center'>
-              {canClaim && <BsEggFill />}
+              {canClaim && (
+                <BsEggFill style={{ marginRight: '5px', fill: '#F49C32' }} />
+              )}
               {dao?.ccoStatus?.label}
             </Flex>
           </Box>

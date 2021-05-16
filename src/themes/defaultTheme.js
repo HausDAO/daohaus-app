@@ -41,8 +41,8 @@ export const defaultTheme = {
 export const daosquareCcoTheme = {
   primary500: '#D361E8',
   primaryAlpha: rgba('#D361E8', 0.9),
-  secondary500: '#FAC22E',
-  secondaryAlpha: rgba('#FAC22E', 0.75),
+  secondary500: '#F49C32',
+  secondaryAlpha: rgba('#F49C32', 0.75),
   bg500: '#FFD3FF',
   bgAlpha: '#FFD3FF',
   bgOverlayOpacity: 0.0,
