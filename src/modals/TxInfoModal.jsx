@@ -161,7 +161,7 @@ const TxInfoModal = () => {
                 ) : null}
                 {latestTx?.links ? (
                   <Box m={2}>
-                    {latestTx?.links.length && (
+                    {latestTx?.links.length > 0 && (
                       <TextBox size='sm'>Links</TextBox>
                     )}
                     <Stack spacing={3} mt={2}>
