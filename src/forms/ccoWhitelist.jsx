@@ -1,6 +1,13 @@
 import React, { useRef, useState } from 'react';
 import { useParams } from 'react-router';
-import { Box, FormControl, Button, Textarea, Link } from '@chakra-ui/react';
+import {
+  Box,
+  FormControl,
+  Button,
+  Textarea,
+  Link,
+  Flex,
+} from '@chakra-ui/react';
 
 import { useOverlay } from '../contexts/OverlayContext';
 import { useInjectedProvider } from '../contexts/InjectedProviderContext';
@@ -16,7 +23,7 @@ const CcoWhitelist = ({ daoMetaData, ccoType }) => {
   let upload = useRef();
 
   const handleChange = event => {
-    setCcoWhitelistJson(event.target.value.replace(/(\r\n|\n|\r)/gm, ''));
+    setCcoWhitelistJson(event.target.value);
   };
 
   const handleUpdate = async () => {
@@ -33,7 +40,7 @@ const CcoWhitelist = ({ daoMetaData, ccoType }) => {
         contractAddress: daoid,
         boostKey: ccoType,
         network: injectedChain.network,
-        list: ccoWhitelistJson,
+        list: ccoWhitelistJson.replace(/(\r\n|\n|\r)/gm, ''),
         signature,
       };
 
@@ -68,11 +75,9 @@ const CcoWhitelist = ({ daoMetaData, ccoType }) => {
   };
 
   const handleFileSet = async () => {
-    console.log('upload.files[0]', upload.files[0]);
-  };
-
-  const handleUpload = async () => {
-    setLoading(true);
+    const file = upload.files[0];
+    const text = await file.text();
+    setCcoWhitelistJson(text);
   };
 
   return (
@@ -88,8 +93,7 @@ const CcoWhitelist = ({ daoMetaData, ccoType }) => {
           Check list here
         </Link>
       </Box>
-
-      {/* <FormControl mb={4}>
+      <FormControl mb={4}>
         <Box size='xs' mb={1}>
           New Whitelist JSON
         </Box>
@@ -99,29 +103,32 @@ const CcoWhitelist = ({ daoMetaData, ccoType }) => {
           onChange={handleChange}
           value={ccoWhitelistJson}
         />
-      </FormControl> */}
+      </FormControl>
 
-      <Button
-        id='avatarImg'
-        variant='outline'
-        onClick={() => {
-          handleBrowse();
-        }}
-      >
-        {ipfsHash || matchMeta ? changeLabel : setLabel}
-      </Button>
-      <input
-        type='file'
-        id='avatarImg'
-        accept='image/gif, image/jpeg, image/png'
-        multiple={false}
-        style={{ display: 'none' }}
-        ref={ref => (upload = ref)}
-        onChange={e => handleFileSet(e)}
-      />
-      <Button onClick={handleUpdate} isLoading={loading}>
-        Update WhiteList
-      </Button>
+      <Flex direction='column' width='30%'>
+        <Button
+          id='whitelist'
+          variant='outline'
+          onClick={() => {
+            handleBrowse();
+          }}
+          mb={3}
+        >
+          Select file
+        </Button>
+        <input
+          type='file'
+          id='whitelist'
+          accept='.csv'
+          multiple={false}
+          style={{ display: 'none' }}
+          ref={ref => (upload = ref)}
+          onChange={e => handleFileSet(e)}
+        />
+        <Button onClick={handleUpdate} isLoading={loading}>
+          Update WhiteList
+        </Button>
+      </Flex>
     </Box>
   );
 };
