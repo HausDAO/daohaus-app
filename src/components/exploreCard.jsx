@@ -99,7 +99,7 @@ const ExploreCard = ({ dao }) => {
       </Text>
 
       <Box fontSize='md' mt={2} fontFamily='heading'>
-        {`${numberWithCommas(dao.guildBankValue.toFixed(2))}`}
+        ${numberWithCommas(dao.guildBankValue.toFixed(2))}
       </Box>
       <Flex direction='row' align='center'>
         <Box fontSize='sm' mr={3}>

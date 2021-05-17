@@ -12,7 +12,7 @@ import BoostLaunchWrapper from '../components/boostLaunchWrapper';
 import MainViewLayout from '../components/mainViewLayout';
 import { useInjectedProvider } from '../contexts/InjectedProviderContext';
 import { daoConnectedAndSameChain } from '../utils/general';
-import { getTerm } from '../utils/metadata';
+import { getTerm, getTitle } from '../utils/metadata';
 import { getWrapNZap } from '../utils/requests';
 
 const Boosts = ({ customTerms, daoMember, daoOverview, daoMetaData }) => {
@@ -27,7 +27,7 @@ const Boosts = ({ customTerms, daoMember, daoOverview, daoMetaData }) => {
 
   const hasDependentBoost = boostKey => {
     if (boostKey === 'vanillaMinions') {
-      const minions = daoOverview.minions.length;
+      const minions = daoOverview?.minions.length;
       return minions;
     }
     const boostData = daoMetaData.boosts[boostKey];
@@ -146,7 +146,7 @@ const Boosts = ({ customTerms, daoMember, daoOverview, daoMetaData }) => {
         Error occurred!
       </GenericModal>
       <Box>
-        <TextBox size='sm' mb={3}>
+        <TextBox size='sm' mb={3} title={getTitle(customTerms, 'Boosts')}>
           {`Available ${getTerm(customTerms, 'boosts')}`}
         </TextBox>
         <Flex wrap='wrap' justify='space-evenly'>

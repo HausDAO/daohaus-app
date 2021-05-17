@@ -7,7 +7,7 @@ import TextBox from '../components/TextBox';
 import ProposalModal from '../modals/proposalModal';
 import { proposalTypes } from '../content/proposal-types';
 import { useOverlay } from '../contexts/OverlayContext';
-import { getTerm } from '../utils/metadata';
+import { getTerm, getTitle } from '../utils/metadata';
 import ComingSoonOverlay from '../components/comingSoonOverlay';
 import MainViewLayout from '../components/mainViewLayout';
 
@@ -64,7 +64,11 @@ const NewProposal = ({ customTerms, daoMetaData, daoOverview }) => {
       <Box>
         <ProposalScopedModals proposalType={proposalType} />
         <Flex>
-          <TextBox size={['md', null, null, 'xl']} fontWeight={700}>
+          <TextBox
+            title={getTitle(customTerms, 'Proposal')}
+            size={['md', null, null, 'xl']}
+            fontWeight={700}
+          >
             {`Select ${getTerm(customTerms, 'proposal')} Type`}
           </TextBox>
         </Flex>
