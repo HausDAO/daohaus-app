@@ -36,11 +36,11 @@ const CcoClaimCard = ({ roundData, setClaimComplete, claimComplete }) => {
             {claimCountDownText(roundData.claimPeriodStartTime)}
           </Text>
         </Flex>
-        <Flex alignItems='start'>
+        <Flex align='center' w='100%' wrap='wrap'>
           <Box fontSize='3xl' fontFamily='heading' pr={5}>
             3
           </Box>
-          <Flex justifyContent='space-between' alignItems='start'>
+          <Flex justify='space-between' align='start'>
             <Box>
               <Box
                 fontSize='sm'
@@ -54,15 +54,15 @@ const CcoClaimCard = ({ roundData, setClaimComplete, claimComplete }) => {
                 {`${claimAmount} ${roundData.claimTokenSymbol}`}
               </TextBox>
             </Box>
-            <CcoClaim
-              setClaimComplete={setClaimComplete}
-              claimOpen={roundData.claimOpen}
-            />
           </Flex>
+          <CcoClaim
+            setClaimComplete={setClaimComplete}
+            claimOpen={roundData.claimOpen}
+          />
           {claimComplete || hasBalance ? (
-            <Box fontSize='md'>
+            <Box fontSize='sm' marginLeft='auto'>
               {`Your claim is complete. Withdraw your
-          ${roundData.claimTokenSymbol} on the `}
+          ${roundData.claimTokenSymbol} on your `}
               <Text
                 as={RouterLink}
                 color='secondary.500'
