@@ -35,37 +35,33 @@ const CcoEligibility = ({
 
   return (
     <ContentBox variant='d2' mt={2} w='100%'>
-      <Flex justifyContent='flex-start'>
+      <Flex justify='start' align='center'>
         <Box fontSize='3xl' fontFamily='heading' pr={5}>
           1
         </Box>
         {isEligible === 'unchecked' && (
-          <Box mr='auto'>
-            Only approved addresses can participate.
-            <ToolTipWrapper
-              placement='right'
-              tooltip
-              tooltipText={{
-                title: 'Whitelist Requirements',
-                body: roundData.whitelistReqs,
-              }}
-            >
-              <RiQuestionLine />
-            </ToolTipWrapper>
-          </Box>
+          <Box mr='auto'>Only approved addresses can participate.</Box>
         )}
         {networkMatch ? (
           <Box>
             {isEligible === 'unchecked' && (
               <>
-                <Tooltip
+                <ToolTipWrapper
                   hasArrow
                   shouldWrapChildren
                   label={roundData.whitelistReqs}
+                  tooltip
+                  tooltipText={{
+                    title: 'Whitelist Requirements',
+                    body: roundData.whitelistReqs,
+                  }}
                   placement='top'
                 >
                   <Button
                     variant='primary'
+                    fontFamily='heading'
+                    letterSpacing='0.1em'
+                    textTransform='uppercase'
                     onClick={checkEligibility}
                     disabled={
                       checkingEligibility || roundData.raiseOver || raiseAtMax
@@ -77,7 +73,7 @@ const CcoEligibility = ({
                       <Spinner />
                     )}
                   </Button>
-                </Tooltip>
+                </ToolTipWrapper>
 
                 {roundData.raiseOver ||
                   (raiseAtMax && (
