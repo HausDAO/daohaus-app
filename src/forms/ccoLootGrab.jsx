@@ -176,12 +176,6 @@ const CcoLootGrabForm = ({
                 </Text> */}
               </Flex>
             </FormControl>
-            {currentError && (
-              <Flex color='red.500' fontSize='m' mr={5} align='center'>
-                <Icon as={RiErrorWarningLine} color='red.500' mr={2} />
-                {currentError.message}
-              </Flex>
-            )}
 
             {daoConnectedAndSameChain(
               address,
@@ -217,6 +211,12 @@ const CcoLootGrabForm = ({
               </Button>
             )}
           </Flex>
+          {currentError && (
+            <Flex color='red.500' fontSize='m' mr={5} align='center'>
+              <Icon as={RiErrorWarningLine} color='red.500' mr={2} />
+              {currentError.message}
+            </Flex>
+          )}
         </Flex>
       </form>
     </Flex>

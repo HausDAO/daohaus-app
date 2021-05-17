@@ -5,7 +5,6 @@ import makeBlockie from 'ethereum-blockies-base64';
 import { BsEggFill } from 'react-icons/bs';
 
 import ContentBox from './ContentBox';
-import TextBox from './TextBox';
 import { themeImagePath } from '../utils/metadata';
 import { numberWithCommas } from '../utils/general';
 import { supportedChains } from '../utils/chain';

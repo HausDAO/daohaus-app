@@ -3,12 +3,7 @@ import { Box, Flex } from '@chakra-ui/layout';
 import { Spinner } from '@chakra-ui/spinner';
 import { Button } from '@chakra-ui/button';
 
-import { Tooltip } from '@chakra-ui/tooltip';
-import {
-  RiQuestionLine,
-  RiCloseCircleLine,
-  RiCheckboxCircleLine,
-} from 'react-icons/ri';
+import { RiCloseCircleLine, RiCheckboxCircleLine } from 'react-icons/ri';
 import { useInjectedProvider } from '../contexts/InjectedProviderContext';
 import ContentBox from './ContentBox';
 import { getEligibility } from '../utils/metadata';
