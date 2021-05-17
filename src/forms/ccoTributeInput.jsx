@@ -1,8 +1,8 @@
+import React, { useState, useEffect } from 'react';
 import { Button, Input, InputGroup, InputRightAddon } from '@chakra-ui/react';
 import { utils } from 'web3';
 import { MaxUint256 } from '@ethersproject/constants';
 
-import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import { useDao } from '../contexts/DaoContext';
 import { useInjectedProvider } from '../contexts/InjectedProviderContext';
@@ -169,6 +169,9 @@ const CcoTributeInput = ({
           name='tributeOffered'
           placeholder='0'
           mb={5}
+          fontFamily='heading'
+          letterSpacing='0.1em'
+          textTransform='uppercase'
           ref={register({
             validate: {
               inefficienFunds: value => {
@@ -189,25 +192,31 @@ const CcoTributeInput = ({
               message: 'CCO Contribution must be a whole number',
             },
             max: {
-              value: +roundData.currentRound.maxContribution,
-              message: `${roundData.currentRound.maxContribution} ${roundData.ccoToken.symbol} per person max`,
+              value: +roundData.maxContribution,
+              message: `${roundData.maxContribution} ${roundData.ccoToken.symbol} per person max`,
             },
             min: {
-              value: +roundData.currentRound.minContribution,
-              message: `${roundData.currentRound.minContribution} ${roundData.ccoToken.symbol} per person min`,
+              value: +roundData.minContribution,
+              message: `${roundData.minContribution} ${roundData.ccoToken.symbol} per person min`,
             },
             required: {
               value: true,
               message: 'Contribution required',
             },
           })}
-          color='white'
           focusBorderColor='secondary.500'
           onChange={handleChange}
           disabled={contributionClosed}
         />
 
-        <InputRightAddon background='primary.500' p={2}>
+        <InputRightAddon
+          background=''
+          p={2}
+          color='#919191'
+          fontFamily='heading'
+          letterSpacing='0.1em'
+          textTransform='uppercase'
+        >
           {roundData.ccoToken.symbol}
         </InputRightAddon>
       </InputGroup>

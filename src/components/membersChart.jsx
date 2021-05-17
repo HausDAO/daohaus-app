@@ -119,7 +119,7 @@ const MembersChart = ({ overview, daoMetaData, daoMembers }) => {
           <Flex justify='space-between'>
             <Box>
               <TextBox size='xs'>
-                {`Active ${getTerm(daoMetaData, 'members')}`}
+                {`Active ${getTerm(daoMetaData?.customTerms, 'members')}`}
               </TextBox>
               <TextBox variant='value' size='lg'>
                 {activeMembers?.length ? activeMembers.length : 0}
