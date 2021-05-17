@@ -9,6 +9,7 @@ const Button = {
   // 3. Add a new visual variant
   variants: {
     primary: {
+      color: 'white',
       bg: 'primary.400',
       _hover: { bg: 'primary.500' },
     },

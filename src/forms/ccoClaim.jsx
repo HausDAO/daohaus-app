@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
-import { Button, Box, Text } from '@chakra-ui/react';
+import { Button, Box } from '@chakra-ui/react';
 
 import { useInjectedProvider } from '../contexts/InjectedProviderContext';
 import { useOverlay } from '../contexts/OverlayContext';
@@ -12,7 +12,7 @@ import { useDaoMember } from '../contexts/DaoMemberContext';
 import { useDao } from '../contexts/DaoContext';
 
 // TODO: get overview and member from somewhere
-const CcoClaim = ({ setClaimComplete }) => {
+const CcoClaim = ({ setClaimComplete, claimOpen }) => {
   const { daoMember } = useDaoMember();
   const { daoOverview } = useDao();
   const [loading, setLoading] = useState(false);
@@ -110,18 +110,22 @@ const CcoClaim = ({ setClaimComplete }) => {
         type='submit'
         loadingText='Submitting'
         isLoading={loading}
-        disabled={loading}
+        disabled={loading || !claimOpen}
         onClick={handleClaim}
+        variant='primary'
+        fontFamily='heading'
+        letterSpacing='0.1em'
+        textTransform='uppercase'
       >
         CLAIM
       </Button>
     </Box>
   ) : (
-    <Text fontSize='xs'>
-      Sorry you can not claim at this time. You have a &apos;Yes&apos; vote on a
+    <Box fontSize='xs'>
+      Sorry you cannot claim at this time. You have a &apos;Yes&apos; vote on a
       pending proposal. All proposals with a &apos;Yes&apos; vote must be
       completed and processed before you can rage.
-    </Text>
+    </Box>
   );
 };
 
