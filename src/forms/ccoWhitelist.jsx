@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useRef, useState } from 'react';
 import { useParams } from 'react-router';
 import { Box, FormControl, Button, Textarea, Link } from '@chakra-ui/react';
 
@@ -13,6 +13,7 @@ const CcoWhitelist = ({ daoMetaData, ccoType }) => {
   const { daoid } = useParams();
   const { address, injectedProvider, injectedChain } = useInjectedProvider();
   const { errorToast, successToast } = useOverlay();
+  let upload = useRef();
 
   const handleChange = event => {
     setCcoWhitelistJson(event.target.value.replace(/(\r\n|\n|\r)/gm, ''));
@@ -61,6 +62,19 @@ const CcoWhitelist = ({ daoMetaData, ccoType }) => {
     }
   };
 
+  const handleBrowse = () => {
+    upload.value = null;
+    upload.click();
+  };
+
+  const handleFileSet = async () => {
+    console.log('upload.files[0]', upload.files[0]);
+  };
+
+  const handleUpload = async () => {
+    setLoading(true);
+  };
+
   return (
     <Box mb={10} pb={5} borderBottomWidth={1}>
       <Box fontSize='xl' mb={5}>
@@ -75,7 +89,7 @@ const CcoWhitelist = ({ daoMetaData, ccoType }) => {
         </Link>
       </Box>
 
-      <FormControl mb={4}>
+      {/* <FormControl mb={4}>
         <Box size='xs' mb={1}>
           New Whitelist JSON
         </Box>
@@ -85,7 +99,26 @@ const CcoWhitelist = ({ daoMetaData, ccoType }) => {
           onChange={handleChange}
           value={ccoWhitelistJson}
         />
-      </FormControl>
+      </FormControl> */}
+
+      <Button
+        id='avatarImg'
+        variant='outline'
+        onClick={() => {
+          handleBrowse();
+        }}
+      >
+        {ipfsHash || matchMeta ? changeLabel : setLabel}
+      </Button>
+      <input
+        type='file'
+        id='avatarImg'
+        accept='image/gif, image/jpeg, image/png'
+        multiple={false}
+        style={{ display: 'none' }}
+        ref={ref => (upload = ref)}
+        onChange={e => handleFileSet(e)}
+      />
       <Button onClick={handleUpdate} isLoading={loading}>
         Update WhiteList
       </Button>
