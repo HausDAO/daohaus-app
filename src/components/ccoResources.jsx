@@ -20,14 +20,13 @@ const CcoResources = ({ daoMetaData, ccoData }) => {
 
   return (
     <>
-      <ContentBox variant='d2' mt={2} w='100%'>
-        <Box fontSize='xl' fontWeight={700} fontFamily='heading' mb={7}>
+      <ContentBox variant='d2' mt={5} w='100%'>
+        <Box fontSize='xl' fontWeight={700} mb={7}>
           Resources
         </Box>
         <Box
           fontSize='lg'
           color='secondary.500'
-          fontFamily='heading'
           onClick={() => setGenericModal({ aboutCcoDao: true })}
           mb={5}
           cursor='pointer'
@@ -37,7 +36,6 @@ const CcoResources = ({ daoMetaData, ccoData }) => {
         <Box
           fontSize='lg'
           color='secondary.500'
-          fontFamily='heading'
           onClick={() => setGenericModal({ ccoFaq: true })}
           mb={5}
           cursor='pointer'
@@ -51,7 +49,7 @@ const CcoResources = ({ daoMetaData, ccoData }) => {
           alignItems='center'
           mb={5}
         >
-          <Box fontSize='lg' color='secondary.500' fontFamily='heading'>
+          <Box fontSize='lg' color='secondary.500'>
             About CCOs
           </Box>
         </Link>

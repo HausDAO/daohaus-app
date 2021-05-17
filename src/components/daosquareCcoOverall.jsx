@@ -1,7 +1,6 @@
 import React from 'react';
 import { Box } from '@chakra-ui/react';
 import ContentBox from './ContentBox';
-import TextBox from './TextBox';
 import { numberWithCommas } from '../utils/general';
 
 const DaosquareCcoOverall = ({ totals }) => {
@@ -11,19 +10,30 @@ const DaosquareCcoOverall = ({ totals }) => {
         Overall Stats
       </Box>
       <ContentBox variant='d2'>
-        <TextBox size='xs' variant='label'>
+        <Box fontSize='xs' fontFamily='body' color='#919191'>
           Funded
-        </TextBox>
-        <TextBox size='lg' variant='value' mb={7}>
+        </Box>
+        <Box
+          fontSize='lg'
+          fontFamily='heading'
+          letterSpacing='0.1em'
+          color='#353535'
+          mb={7}
+        >
           {numberWithCommas(totals.funded)} xDAI
-        </TextBox>
+        </Box>
 
-        <TextBox size='xs' variant='label'>
+        <Box fontSize='xs' fontFamily='body' color='#919191'>
           Projects Funded
-        </TextBox>
-        <TextBox size='lg' variant='value'>
+        </Box>
+        <Box
+          fontSize='lg'
+          fontFamily='heading'
+          letterSpacing='0.1em'
+          color='#353535'
+        >
           {totals.projects}
-        </TextBox>
+        </Box>
       </ContentBox>
     </>
   );
