@@ -62,7 +62,7 @@ const ThemeChart = ({ previewValues }) => {
       <ContentBox minH='360px'>
         <Flex wrap='wrap' align='center' position='relative'>
           <Box position='absolute' top='0px' left='10px'>
-            <TextBox size='sm'>{getTerm(customTerms, 'bank')}</TextBox>
+            <TextBox size='sm' title={customTerms ? 'bank' : null}>{getTerm(customTerms, 'bank')}</TextBox>
             <Box fontFamily='heading' fontSize='2xl' fontWeight={800}>
               $1337.42
             </Box>

@@ -104,6 +104,7 @@ const ProposalVote = ({
         fontWeight={700}
         textAlign='center'
         zIndex='2'
+        title={customTerms ? 'proposal' : null}
       >
         {`Connect to ${capitalize(supportedChains[daochain]?.network)}
       for ${getTerm(customTerms, 'proposal')} actions`}

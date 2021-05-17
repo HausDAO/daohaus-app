@@ -146,7 +146,11 @@ const Members = React.memo(
           >
             <ContentBox mt={6}>
               <Flex justify='space-between'>
-                <TextBox w={['50%', null, null, '43%']} size='xs'>
+                <TextBox
+                  w={['50%', null, null, '43%']}
+                  size='xs'
+                  title={customTerms ? 'member' : null}
+                >
                   {getTerm(customTerms, 'member')}
                 </TextBox>
                 <TextBox

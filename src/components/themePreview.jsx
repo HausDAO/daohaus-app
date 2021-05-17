@@ -70,10 +70,11 @@ const ThemePreview = ({ previewValues }) => {
                 color={previewValues?.secondary500}
                 borderColor={previewValues?.secondary500}
                 variant='outline'
+                title={customTerms ? 'bank' : null}
               >
                 {getTerm(customTerms, 'bank')}
               </Button>
-              <Button color='whiteAlpha500' bg={previewValues?.secondary500}>
+              <Button color='whiteAlpha500' bg={previewValues?.secondary500} title={customTerms ? 'proposals' : null}>
                 {getTerm(customTerms, 'proposals')}
               </Button>
             </HStack>

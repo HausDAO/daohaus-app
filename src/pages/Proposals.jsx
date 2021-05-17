@@ -24,6 +24,7 @@ const Proposals = React.memo(({ proposals, activities, customTerms }) => {
       as={RouterLink}
       to={`/dao/${daochain}/${daoid}/proposals/new`}
       rightIcon={<RiAddFill />}
+      title={customTerms ? 'proposal' : null}
     >
       New {getTerm(customTerms, 'proposal')}
     </Button>

@@ -62,7 +62,7 @@ const NewProposal = ({ customTerms, daoMetaData, daoOverview }) => {
       <Box>
         <ProposalScopedModals proposalType={proposalType} />
         <Flex>
-          <TextBox size={['md', null, null, 'xl']} fontWeight={700}>
+          <TextBox title={customTerms ? 'proposal' : null} size={['md', null, null, 'xl']} fontWeight={700}>
             {`Select ${getTerm(customTerms, 'proposal')} Type`}
           </TextBox>
         </Flex>

@@ -55,7 +55,7 @@ const OverviewCard = ({ daoOverview, members, currentDaoTokens }) => {
 
         <Flex direction='row' w='100%' justify='space-between' mt={6}>
           <Box>
-            <TextBox size='xs'>
+            <TextBox size='xs' title={customTerms ? 'members' : null}>
               {`Active ${getTerm(customTerms, 'members')}`}
             </TextBox>
             {/* <Skeleton isLoaded={members}> */}
@@ -82,7 +82,7 @@ const OverviewCard = ({ daoOverview, members, currentDaoTokens }) => {
           </Box>
         </Flex>
         <Box mt={6}>
-          <TextBox size='sm'>{getTerm(customTerms, 'bank')}</TextBox>
+          <TextBox size='sm' title={customTerms ? 'bank' : null}>{getTerm(customTerms, 'bank')}</TextBox>
           <BankTotal tokenBalances={currentDaoTokens} />
         </Box>
         <Flex mt={6}>
@@ -91,12 +91,14 @@ const OverviewCard = ({ daoOverview, members, currentDaoTokens }) => {
             mr={6}
             onClick={() => history.push(`/dao/${daochain}/${daoid}/bank`)}
             value='bank'
+            title={customTerms ? 'bank' : null}
           >
             {`View ${getTerm(customTerms, 'bank')}`}
           </Button>
           <Button
             onClick={() => history.push(`/dao/${daochain}/${daoid}/proposals`)}
             value='proposals'
+            title={customTerms ? 'proposals' : null}
           >
             {`View ${getTerm(customTerms, 'proposals')}`}
           </Button>

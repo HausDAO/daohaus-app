@@ -41,7 +41,7 @@ const ProposalTypesLaunch = ({ handleLaunch, loading, setLoading }) => {
     <Box w='90%'>
       {step === 1 ? (
         <>
-          <Heading as='h4' size='md' fontWeight='100'>
+          <Heading as='h4' size='md' fontWeight='100' title={customTerms ? 'proposal' : null}>
             {`Configure ${getTerm(customTerms, 'proposal')} Types`}
           </Heading>
           <Text my={6}>

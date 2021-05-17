@@ -146,7 +146,7 @@ const Boosts = ({ customTerms, daoMember, daoOverview, daoMetaData }) => {
         Error occurred!
       </GenericModal>
       <Box>
-        <TextBox size='sm' mb={3}>
+        <TextBox size='sm' mb={3} title={customTerms ? 'boosts' : null}>
           {`Available ${getTerm(customTerms, 'boosts')}`}
         </TextBox>
         <Flex wrap='wrap' justify='space-evenly'>

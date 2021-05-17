@@ -217,7 +217,7 @@ const ProposalTypes = ({ daoMetaData, refetchMetaData }) => {
           <Flex justify='space-around' mt='100px'>
             <Box w={['90%', '80%', '60%', '45%']}>
               <Flex justify='space-between'>
-                <TextBox color='white' size='sm' mb={2}>
+                <TextBox color='white' size='sm' mb={2} title={customTerms ? 'proposal' : null}>
                   {`${getTerm(customTerms, 'proposal')} Types`}
                 </TextBox>
               </Flex>

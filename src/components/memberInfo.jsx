@@ -18,7 +18,7 @@ const MemberInfoCard = ({ member, customTerms, hideCopy }) => {
       {member && (
         <>
           <Flex justify='space-between'>
-            <TextBox size='sm'>
+            <TextBox size='sm' title={customTerms ? 'member' : null}>
               {`${getTerm(customTerms, 'member')} Info`}
             </TextBox>
             {member && (

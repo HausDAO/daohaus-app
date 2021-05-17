@@ -81,7 +81,7 @@ const DaoContractSettings = ({ overview, customTerms, wrapNZap }) => {
         )}
         <Flex wrap='wrap'>
           <Box as={Stack} w={['100%', null, null, '50%']} spacing={2}>
-            <TextBox size='xs'>
+            <TextBox size='xs' title={customTerms ? 'proposal' : null}>
               {`${getTerm(customTerms, 'proposal')} Deposit`}
             </TextBox>
             <TextBox variant='value' size='xl'>

@@ -144,7 +144,7 @@ const BankChart = ({ overview, customTerms, currentDaoTokens }) => {
           <ContentBox minH='360px'>
             <Flex wrap='wrap' align='center' position='relative'>
               <Box position='absolute' top='0px' left='10px'>
-                <TextBox size='sm'>{getTerm(customTerms, 'bank')}</TextBox>
+                <TextBox size='sm' title={customTerms ? 'bank' : null}>{getTerm(customTerms, 'bank')}</TextBox>
                 <BankTotal tokenBalances={currentDaoTokens} />
               </Box>
 
