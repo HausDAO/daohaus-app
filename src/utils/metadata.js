@@ -131,6 +131,17 @@ export const getTerm = (customTerms, word) => {
   return capitalize(word);
 };
 
+export const getTitle = (customTerms, word) => {
+  if (!customTerms) {
+    return capitalize(word);
+  }
+
+  if (getTerm(customTerms, word).toLowerCase() !== word.toLowerCase()) {
+    return word;
+  }
+  return null;
+};
+
 export const getCustomProposalTerm = (customTerms, proposalTerm) => {
   if (
     customTerms?.proposal &&
