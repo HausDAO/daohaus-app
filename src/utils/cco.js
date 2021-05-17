@@ -27,8 +27,6 @@ export const CCO_CONSTANTS = {
   ],
   DAOSQUARE_NETWORK: '0x2a',
   // DAOSQUARE_NETWORK: '0x64',
-  DAOSQUARE_TOKEN_ADDRESS: '0xbd9908b0cdd50386f92efcc8e1d71766c2782df0',
-  DAOSQUARE_TOKEN_NETWORK: '0x1',
 };
 
 const parsedCcoDetails = proposal => {

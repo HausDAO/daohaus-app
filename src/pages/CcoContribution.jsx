@@ -53,12 +53,6 @@ const CcoContribution = ({ daoMetaData, currentDaoTokens, daoProposals }) => {
           daoMetaData.boosts[ccoType].metadata.tributeToken.toLowerCase(),
       );
 
-      console.log(
-        'ccoToken',
-        currentDaoTokens,
-        daoMetaData.boosts[ccoType].metadata.tributeToken,
-      );
-
       const date = await getDateTime();
       const now = Number(date.seconds);
       const configData = daoMetaData.boosts[ccoType].metadata;
