@@ -3,7 +3,11 @@ import { Box, Flex } from '@chakra-ui/layout';
 import { Spinner } from '@chakra-ui/spinner';
 import { Button } from '@chakra-ui/button';
 
-import { RiCloseCircleLine, RiCheckboxCircleLine } from 'react-icons/ri';
+import {
+  RiCloseCircleLine,
+  RiCheckboxCircleLine,
+  RiQuestionLine,
+} from 'react-icons/ri';
 import { useInjectedProvider } from '../contexts/InjectedProviderContext';
 import ContentBox from './ContentBox';
 import { getEligibility } from '../utils/metadata';
@@ -35,40 +39,38 @@ const CcoEligibility = ({
           1
         </Box>
         {isEligible === 'unchecked' && (
-          <Box mr='auto'>Only approved addresses can participate.</Box>
+          <Flex mr='auto' align='center'>
+            <Box>Only approved addresses can participate.</Box>
+            <ToolTipWrapper
+              hasArrow
+              label={roundData.whitelistReqs}
+              tooltip
+              tooltipText={{
+                title: 'Whitelist Requirements',
+                body: roundData.whitelistReqs,
+              }}
+              placement='top'
+            >
+              <RiQuestionLine style={{ marginLeft: '5px' }} />
+            </ToolTipWrapper>
+          </Flex>
         )}
         {networkMatch ? (
           <Box>
             {isEligible === 'unchecked' && (
               <>
-                <ToolTipWrapper
-                  hasArrow
-                  shouldWrapChildren
-                  label={roundData.whitelistReqs}
-                  tooltip
-                  tooltipText={{
-                    title: 'Whitelist Requirements',
-                    body: roundData.whitelistReqs,
-                  }}
-                  placement='top'
+                <Button
+                  variant='primary'
+                  fontFamily='heading'
+                  letterSpacing='0.1em'
+                  textTransform='uppercase'
+                  onClick={checkEligibility}
+                  disabled={
+                    checkingEligibility || roundData.raiseOver || raiseAtMax
+                  }
                 >
-                  <Button
-                    variant='primary'
-                    fontFamily='heading'
-                    letterSpacing='0.1em'
-                    textTransform='uppercase'
-                    onClick={checkEligibility}
-                    disabled={
-                      checkingEligibility || roundData.raiseOver || raiseAtMax
-                    }
-                  >
-                    {!checkingEligibility ? (
-                      <>Check Eligibility</>
-                    ) : (
-                      <Spinner />
-                    )}
-                  </Button>
-                </ToolTipWrapper>
+                  {!checkingEligibility ? <>Check Eligibility</> : <Spinner />}
+                </Button>
 
                 {roundData.raiseOver ||
                   (raiseAtMax && (
