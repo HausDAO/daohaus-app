@@ -69,8 +69,8 @@ const CcoContribution = ({ daoMetaData, currentDaoTokens, daoProposals }) => {
           Number(daoMetaData.boosts[ccoType].metadata.raiseStartTime) > now,
         raiseOpen:
           Number(configData.raiseStartTime) < now &&
-          Number(`${+configData.raiseStartTime + duration}`) > now,
-        raiseOver: `${Number(configData.startTime) + duration}` < now,
+          Number(configData.raiseStartTime + duration) > now,
+        raiseOver: Number(configData.startTime + duration) < now,
         claimOpen: Number(configData.claimPeriodStartTime) < now,
       });
 

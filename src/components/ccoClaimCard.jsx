@@ -24,7 +24,7 @@ const CcoClaimCard = ({ roundData, setClaimComplete, claimComplete }) => {
     daoMember.tokenBalances.find(bal => {
       const isRaiseToken =
         bal.token.tokenAddress.toLowerCase() ===
-        roundData.ccoToken.tokenAddress.toLowerCase();
+        roundData.claimTokenAddress.toLowerCase();
       return isRaiseToken && Number(bal.tokenBalance) > 0;
     });
 
