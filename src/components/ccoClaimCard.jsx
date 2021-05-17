@@ -17,6 +17,7 @@ const CcoClaimCard = ({ roundData, setClaimComplete, claimComplete }) => {
   const claimAmount = (Number(daoMember?.loot) * roundData?.ratio || 0).toFixed(
     2,
   );
+
   const hasBalance =
     daoMember &&
     roundData &&
@@ -24,7 +25,7 @@ const CcoClaimCard = ({ roundData, setClaimComplete, claimComplete }) => {
       const isRaiseToken =
         bal.token.tokenAddress.toLowerCase() ===
         roundData.ccoToken.tokenAddress.toLowerCase();
-      return isRaiseToken && Number(bal.token.balance) > 0;
+      return isRaiseToken && Number(bal.tokenBalance) > 0;
     });
 
   return (
@@ -59,7 +60,7 @@ const CcoClaimCard = ({ roundData, setClaimComplete, claimComplete }) => {
             />
           </Flex>
           {claimComplete || hasBalance ? (
-            <Box fontSize='lg'>
+            <Box fontSize='md'>
               {`Your claim is complete. Withdraw your
           ${roundData.claimTokenSymbol} on the `}
               <Text

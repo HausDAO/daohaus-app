@@ -1,6 +1,13 @@
-import React, { useState } from 'react';
+import React, { useRef, useState } from 'react';
 import { useParams } from 'react-router';
-import { Box, FormControl, Button, Textarea, Link } from '@chakra-ui/react';
+import {
+  Box,
+  FormControl,
+  Button,
+  Textarea,
+  Link,
+  Flex,
+} from '@chakra-ui/react';
 
 import { useOverlay } from '../contexts/OverlayContext';
 import { useInjectedProvider } from '../contexts/InjectedProviderContext';
@@ -13,9 +20,10 @@ const CcoWhitelist = ({ daoMetaData, ccoType }) => {
   const { daoid } = useParams();
   const { address, injectedProvider, injectedChain } = useInjectedProvider();
   const { errorToast, successToast } = useOverlay();
+  let upload = useRef();
 
   const handleChange = event => {
-    setCcoWhitelistJson(event.target.value.replace(/(\r\n|\n|\r)/gm, ''));
+    setCcoWhitelistJson(event.target.value);
   };
 
   const handleUpdate = async () => {
@@ -32,7 +40,7 @@ const CcoWhitelist = ({ daoMetaData, ccoType }) => {
         contractAddress: daoid,
         boostKey: ccoType,
         network: injectedChain.network,
-        list: ccoWhitelistJson,
+        list: ccoWhitelistJson.replace(/(\r\n|\n|\r)/gm, ''),
         signature,
       };
 
@@ -61,6 +69,19 @@ const CcoWhitelist = ({ daoMetaData, ccoType }) => {
     }
   };
 
+  const handleBrowse = () => {
+    upload.value = null;
+    upload.click();
+  };
+
+  const handleFileSet = async () => {
+    const file = upload.files[0];
+    const text = await file.text();
+
+    console.log(text);
+    setCcoWhitelistJson(text.replace(/(\r\n|\n|\r)/gm, ',\n'));
+  };
+
   return (
     <Box mb={10} pb={5} borderBottomWidth={1}>
       <Box fontSize='xl' mb={5}>
@@ -74,7 +95,6 @@ const CcoWhitelist = ({ daoMetaData, ccoType }) => {
           Check list here
         </Link>
       </Box>
-
       <FormControl mb={4}>
         <Box size='xs' mb={1}>
           New Whitelist JSON
@@ -86,9 +106,31 @@ const CcoWhitelist = ({ daoMetaData, ccoType }) => {
           value={ccoWhitelistJson}
         />
       </FormControl>
-      <Button onClick={handleUpdate} isLoading={loading}>
-        Update WhiteList
-      </Button>
+
+      <Flex direction='column' width='30%'>
+        <Button
+          id='whitelist'
+          variant='outline'
+          onClick={() => {
+            handleBrowse();
+          }}
+          mb={3}
+        >
+          Select file
+        </Button>
+        <input
+          type='file'
+          id='whitelist'
+          accept='.csv'
+          multiple={false}
+          style={{ display: 'none' }}
+          ref={ref => (upload = ref)}
+          onChange={e => handleFileSet(e)}
+        />
+        <Button onClick={handleUpdate} isLoading={loading}>
+          Update WhiteList
+        </Button>
+      </Flex>
     </Box>
   );
 };
