@@ -23,14 +23,14 @@ const getShade = (shade, degree, seedColor) => {
   throw new Error(`Argument ${shade} is not a valid shade value`);
 };
 
-const getAllShades = (seedColor) => (
+const getAllShades = seedColor =>
   shadeTemplate.reduce(
     (obj, { shade, degree }) => ({
       ...obj,
       [shade]: getShade(shade, degree, seedColor),
     }),
     {},
-  ));
+  );
 
 export const defaultThemeData = {
   styles: {
@@ -227,7 +227,11 @@ export const defaultThemeData = {
           focusBorderColor: 'secondary.500',
         },
       },
-      variants: {},
+      variants: {
+        d2: {
+          color: 'blackAlpha.900',
+        },
+      },
       sizes: {},
       defaultProps: {
         size: 'md',
@@ -331,7 +335,7 @@ export const defaultThemeData = {
 };
 export const defaultTheme = extendTheme(defaultThemeData);
 
-export const createNewTheme = (newTheme) => {
+export const createNewTheme = newTheme => {
   const newThemeData = {
     // THEME_NAME: newTheme.daoMeta.daoName,
     active: true,

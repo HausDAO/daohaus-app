@@ -2,6 +2,7 @@ import { chainByNetworkId } from './chain';
 import { capitalize, omit } from './general';
 
 const metadataApiUrl = 'https://data.daohaus.club';
+const ccoApiUrl = 'https://cco.daohaus.club';
 
 export const fetchMetaData = async endpoint => {
   const url = `${metadataApiUrl}/dao/${endpoint}`;
@@ -158,6 +159,23 @@ export const getCustomProposalTerm = (customTerms, proposalTerm) => {
 
 export const boostPost = async (endpoint, data) => {
   const url = `${metadataApiUrl}/${endpoint}`;
+  try {
+    const response = await fetch(url, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Haus-Key': process.env.REACT_APP_HAUS_KEY,
+      },
+      body: JSON.stringify(data),
+    });
+    return response.json();
+  } catch (err) {
+    throw new Error(err);
+  }
+};
+
+export const ccoPost = async (endpoint, data) => {
+  const url = `${ccoApiUrl}/${endpoint}`;
   try {
     const response = await fetch(url, {
       method: 'POST',

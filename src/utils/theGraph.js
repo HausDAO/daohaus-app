@@ -2,13 +2,15 @@ import { graphQuery } from './apollo';
 import { ADDRESS_BALANCES, BANK_BALANCES } from '../graphQL/bank-queries';
 import { DAO_ACTIVITIES, HOME_DAO } from '../graphQL/dao-queries';
 import { MEMBERS_LIST } from '../graphQL/member-queries';
-import { proposalResolver, daoResolver } from './resolvers';
+import { proposalResolver, daoResolver, ccoDaoResolver } from './resolvers';
 import { getGraphEndpoint, supportedChains } from './chain';
 import { fetchTokenData } from './tokenValue';
 import { omit } from './general';
 import { UBERHAUS_QUERY, UBER_MINIONS } from '../graphQL/uberhaus-queries';
 import { UBERHAUS_DATA } from './uberhaus';
-import { getApiMetadata } from './metadata';
+import { getApiMetadata, getDateTime } from './metadata';
+import { CCO_CONSTANTS } from './cco';
+import { GET_TRANSMUTATION, GET_WRAP_N_ZAPS } from '../graphQL/boost-queries';
 
 export const graphFetchAll = async (args, items = [], skip = 0) => {
   try {
@@ -51,6 +53,30 @@ export const fetchUberHausData = async args => {
       molochAddress: args.molochAddress,
       memberAddress: args.memberAddress,
       minionId: args.minionId,
+    },
+  });
+};
+
+export const getWrapNZap = async (daochain, daoid) => {
+  const records = await graphQuery({
+    endpoint: getGraphEndpoint(daochain, 'boosts_graph_url'),
+    query: GET_WRAP_N_ZAPS,
+    variables: {
+      contractAddress: daoid,
+    },
+  });
+  if (records.wrapNZaps?.length > 0) {
+    return records.wrapNZaps[0].id;
+  }
+  return null;
+};
+
+export const fetchTransmutation = async args => {
+  return graphQuery({
+    endpoint: getGraphEndpoint(args.chainID, 'boosts_graph_url'),
+    query: GET_TRANSMUTATION,
+    variables: {
+      contractAddress: args.molochAddress,
     },
   });
 };
@@ -336,4 +362,43 @@ export const balanceChainQuery = async ({ address, reactSetter }) => {
       console.error(error);
     }
   });
+};
+
+export const daosqaureCcoQuery = async ({ query, reactSetter, apiFetcher }) => {
+  const chain = supportedChains[CCO_CONSTANTS.DAOSQUARE_NETWORK];
+  const metaDataMap = await apiFetcher();
+
+  const daoMapLookup = (address, chainName) => {
+    const daoMatch = metaDataMap[address] || [];
+    return daoMatch.find(dao => dao.network === chainName) || null;
+  };
+  try {
+    const chainData = await graphFetchAll({
+      endpoint: chain.subgraph_url,
+      query,
+      subfield: 'moloches',
+    });
+
+    const withMetaData = chainData
+      .map(dao => {
+        return {
+          ...dao,
+          meta: daoMapLookup(dao?.id, chain.network),
+        };
+      })
+      .filter(dao => {
+        return dao?.meta?.daosquarecco;
+      });
+
+    const date = await getDateTime();
+    const now = Number(date.seconds);
+
+    const withCcoMeta = withMetaData.map(dao => {
+      return ccoDaoResolver(dao, now, 'daosquarecco');
+    });
+
+    reactSetter(withCcoMeta);
+  } catch (error) {
+    console.error(error);
+  }
 };
