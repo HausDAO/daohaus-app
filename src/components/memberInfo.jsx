@@ -3,7 +3,7 @@ import { Link, useParams } from 'react-router-dom';
 import { Flex } from '@chakra-ui/react';
 
 import { useInjectedProvider } from '../contexts/InjectedProviderContext';
-import { getTerm } from '../utils/metadata';
+import { getTerm, getTitle } from '../utils/metadata';
 import MemberInfoGuts from './memberInfoGuts';
 import TextBox from './TextBox';
 import ContentBox from './ContentBox';
@@ -18,8 +18,8 @@ const MemberInfoCard = ({ member, customTerms, hideCopy }) => {
       {member && (
         <>
           <Flex justify='space-between'>
-            <TextBox size='sm' title={customTerms ? 'member' : null}>
-              {`${getTerm(customTerms, 'member')} Info`}
+            <TextBox size='sm' title={getTitle(customTerms, 'Member')}>
+              {getTerm(customTerms, 'member')} Info
             </TextBox>
             {member && (
               <TextBox

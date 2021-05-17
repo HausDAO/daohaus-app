@@ -9,7 +9,7 @@ import ProposalsList from '../components/proposalList';
 import MainViewLayout from '../components/mainViewLayout';
 import { daoConnectedAndSameChain } from '../utils/general';
 import { useInjectedProvider } from '../contexts/InjectedProviderContext';
-import { getTerm } from '../utils/metadata';
+import { getTerm, getTitle } from '../utils/metadata';
 
 const Proposals = React.memo(({ proposals, activities, customTerms }) => {
   const { daoid, daochain } = useParams();
@@ -24,7 +24,7 @@ const Proposals = React.memo(({ proposals, activities, customTerms }) => {
       as={RouterLink}
       to={`/dao/${daochain}/${daoid}/proposals/new`}
       rightIcon={<RiAddFill />}
-      title={customTerms ? 'proposal' : null}
+      title={getTitle(customTerms, 'Proposal')}
     >
       New {getTerm(customTerms, 'proposal')}
     </Button>

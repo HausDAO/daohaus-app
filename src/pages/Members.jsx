@@ -9,7 +9,7 @@ import MemberInfo from '../components/memberInfo';
 import ContentBox from '../components/ContentBox';
 import TextBox from '../components/TextBox';
 import { getMemberActivites, getMembersActivites } from '../utils/activities';
-import { getTerm } from '../utils/metadata';
+import { getTerm, getTitle } from '../utils/metadata';
 import MembersChart from '../components/membersChart';
 import ListSort from '../components/listSort';
 import { membersSortOptions } from '../utils/memberContent';
@@ -149,7 +149,10 @@ const Members = React.memo(
                 <TextBox
                   w={['50%', null, null, '43%']}
                   size='xs'
-                  title={customTerms ? 'member' : null}
+                  title={`${listMembers?.length || 0} ${getTitle(
+                    customTerms,
+                    'Members',
+                  )}`}
                 >
                   {getTerm(customTerms, 'member')}
                 </TextBox>

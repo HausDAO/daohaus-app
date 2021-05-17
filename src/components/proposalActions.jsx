@@ -18,7 +18,7 @@ import ContentBox from './ContentBox';
 import TextBox from './TextBox';
 import { memberVote } from '../utils/proposalUtils';
 import { supportedChains } from '../utils/chain';
-import { getTerm } from '../utils/metadata';
+import { getTerm, getTitle } from '../utils/metadata';
 import {
   capitalize,
   daoConnectedAndSameChain,
@@ -104,7 +104,7 @@ const ProposalVote = ({
         fontWeight={700}
         textAlign='center'
         zIndex='2'
-        title={customTerms ? 'proposal' : null}
+        title={getTitle(customTerms, 'Proposal')}
       >
         {`Connect to ${capitalize(supportedChains[daochain]?.network)}
       for ${getTerm(customTerms, 'proposal')} actions`}

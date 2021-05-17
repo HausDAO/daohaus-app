@@ -4,7 +4,7 @@ import { useParams, useHistory } from 'react-router-dom';
 import { Flex, Box, Skeleton, Button, Avatar } from '@chakra-ui/react';
 import makeBlockie from 'ethereum-blockies-base64';
 import { useMetaData } from '../contexts/MetaDataContext';
-import { getTerm, themeImagePath } from '../utils/metadata';
+import { getTerm, getTitle, themeImagePath } from '../utils/metadata';
 import BankTotal from './bankTotal';
 import TextBox from './TextBox';
 import ContentBox from './ContentBox';
@@ -55,7 +55,7 @@ const OverviewCard = ({ daoOverview, members, currentDaoTokens }) => {
 
         <Flex direction='row' w='100%' justify='space-between' mt={6}>
           <Box>
-            <TextBox size='xs' title={customTerms ? 'members' : null}>
+            <TextBox size='xs' title={getTitle(customTerms, 'Members')}>
               {`Active ${getTerm(customTerms, 'members')}`}
             </TextBox>
             {/* <Skeleton isLoaded={members}> */}
@@ -82,7 +82,9 @@ const OverviewCard = ({ daoOverview, members, currentDaoTokens }) => {
           </Box>
         </Flex>
         <Box mt={6}>
-          <TextBox size='sm' title={customTerms ? 'bank' : null}>{getTerm(customTerms, 'bank')}</TextBox>
+          <TextBox size='sm' title={getTitle(customTerms, 'Bank')}>
+            {getTerm(customTerms, 'bank')}
+          </TextBox>
           <BankTotal tokenBalances={currentDaoTokens} />
         </Box>
         <Flex mt={6}>
@@ -91,14 +93,14 @@ const OverviewCard = ({ daoOverview, members, currentDaoTokens }) => {
             mr={6}
             onClick={() => history.push(`/dao/${daochain}/${daoid}/bank`)}
             value='bank'
-            title={customTerms ? 'bank' : null}
+            title={getTitle(customTerms, 'Bank')}
           >
             {`View ${getTerm(customTerms, 'bank')}`}
           </Button>
           <Button
             onClick={() => history.push(`/dao/${daochain}/${daoid}/proposals`)}
             value='proposals'
-            title={customTerms ? 'proposals' : null}
+            title={getTitle(customTerms, 'Proposals')}
           >
             {`View ${getTerm(customTerms, 'proposals')}`}
           </Button>

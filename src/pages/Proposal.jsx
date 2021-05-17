@@ -9,7 +9,7 @@ import { getProposalHistories } from '../utils/activities';
 import TextBox from '../components/TextBox';
 import ProposalDetails from '../components/proposalDetails';
 import ProposalActions from '../components/proposalActions';
-import { getTerm } from '../utils/metadata';
+import { getTerm, getTitle } from '../utils/metadata';
 import MainViewLayout from '../components/mainViewLayout';
 import { useTX } from '../contexts/TXContext';
 
@@ -52,7 +52,10 @@ const Proposal = ({
                   w='20px'
                   mr={2}
                 />
-                <TextBox size={['sm', null, null, 'md']} title={customTerms ? 'proposals' : null}>
+                <TextBox
+                  size={['sm', null, null, 'md']}
+                  title={getTitle(customTerms, 'Proposals')}
+                >
                   {`All ${getTerm(customTerms, 'proposals')}`}
                 </TextBox>
               </Flex>

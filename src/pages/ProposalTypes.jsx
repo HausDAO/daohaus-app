@@ -14,7 +14,7 @@ import { BiArrowBack } from 'react-icons/bi';
 import { RiQuestionLine } from 'react-icons/ri';
 import { useParams, Link as RouterLink } from 'react-router-dom';
 import { useInjectedProvider } from '../contexts/InjectedProviderContext';
-import { boostPost, getTerm } from '../utils/metadata';
+import { boostPost, getTerm, getTitle } from '../utils/metadata';
 import { useOverlay } from '../contexts/OverlayContext';
 import ContentBox from '../components/ContentBox';
 import TextBox from '../components/TextBox';
@@ -217,7 +217,12 @@ const ProposalTypes = ({ daoMetaData, refetchMetaData }) => {
           <Flex justify='space-around' mt='100px'>
             <Box w={['90%', '80%', '60%', '45%']}>
               <Flex justify='space-between'>
-                <TextBox color='white' size='sm' mb={2} title={customTerms ? 'proposal' : null}>
+                <TextBox
+                  color='white'
+                  size='sm'
+                  mb={2}
+                  title={getTitle(customTerms, 'Proposal')}
+                >
                   {`${getTerm(customTerms, 'proposal')} Types`}
                 </TextBox>
               </Flex>
