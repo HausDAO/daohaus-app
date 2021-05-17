@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
-import { Button, Box, Text } from '@chakra-ui/react';
+import { Button, Box } from '@chakra-ui/react';
 
 import { useInjectedProvider } from '../contexts/InjectedProviderContext';
 import { useOverlay } from '../contexts/OverlayContext';
@@ -121,11 +121,11 @@ const CcoClaim = ({ setClaimComplete, claimOpen }) => {
       </Button>
     </Box>
   ) : (
-    <Text fontSize='xs'>
+    <Box fontSize='xs'>
       Sorry you cannot claim at this time. You have a &apos;Yes&apos; vote on a
       pending proposal. All proposals with a &apos;Yes&apos; vote must be
       completed and processed before you can rage.
-    </Text>
+    </Box>
   );
 };
 

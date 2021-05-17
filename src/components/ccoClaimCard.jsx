@@ -55,10 +55,12 @@ const CcoClaimCard = ({ roundData, setClaimComplete, claimComplete }) => {
               </TextBox>
             </Box>
           </Flex>
-          <CcoClaim
-            setClaimComplete={setClaimComplete}
-            claimOpen={roundData.claimOpen}
-          />
+          <Box marginLeft='auto'>
+            <CcoClaim
+              setClaimComplete={setClaimComplete}
+              claimOpen={roundData.claimOpen}
+            />
+          </Box>
           {claimComplete || hasBalance ? (
             <Box fontSize='sm' marginLeft='auto'>
               {`Your claim is complete. Withdraw your
