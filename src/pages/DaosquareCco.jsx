@@ -33,8 +33,6 @@ const DaosquareCco = () => {
     }
   }, [d2CcoDaos]);
 
-  console.log('d2CcoDaos', d2CcoDaos);
-
   return (
     <Layout daosquarecco>
       <MainViewLayout header='DAOSquare Incubator' isDaosquare>
