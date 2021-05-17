@@ -176,12 +176,6 @@ const CcoLootGrabForm = ({
                 </Text> */}
               </Flex>
             </FormControl>
-            {currentError && (
-              <Flex color='red.500' fontSize='m' mr={5} align='center'>
-                <Icon as={RiErrorWarningLine} color='red.500' mr={2} />
-                {currentError.message}
-              </Flex>
-            )}
 
             {daoConnectedAndSameChain(
               address,
@@ -194,6 +188,9 @@ const CcoLootGrabForm = ({
                 isLoading={loading}
                 disabled={loading || contributionClosed || !openContribution}
                 variant='primary'
+                fontFamily='heading'
+                letterSpacing='0.1em'
+                textTransform='uppercase'
               >
                 Contribute
               </Button>
@@ -203,6 +200,9 @@ const CcoLootGrabForm = ({
                 isDisabled={
                   injectedChain && daochain !== injectedChain?.chainId
                 }
+                fontFamily='heading'
+                letterSpacing='0.1em'
+                textTransform='uppercase'
               >
                 Connect
                 {injectedChain && daochain !== injectedChain?.chainId
@@ -211,6 +211,12 @@ const CcoLootGrabForm = ({
               </Button>
             )}
           </Flex>
+          {currentError && (
+            <Flex color='red.500' fontSize='m' mr={5} align='center'>
+              <Icon as={RiErrorWarningLine} color='red.500' mr={2} />
+              {currentError.message}
+            </Flex>
+          )}
         </Flex>
       </form>
     </Flex>

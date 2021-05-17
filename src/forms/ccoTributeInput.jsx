@@ -169,6 +169,9 @@ const CcoTributeInput = ({
           name='tributeOffered'
           placeholder='0'
           mb={5}
+          fontFamily='heading'
+          letterSpacing='0.1em'
+          textTransform='uppercase'
           ref={register({
             validate: {
               inefficienFunds: value => {
@@ -206,7 +209,14 @@ const CcoTributeInput = ({
           disabled={contributionClosed}
         />
 
-        <InputRightAddon background='primary.500' p={2}>
+        <InputRightAddon
+          background=''
+          p={2}
+          color='#919191'
+          fontFamily='heading'
+          letterSpacing='0.1em'
+          textTransform='uppercase'
+        >
           {roundData.ccoToken.symbol}
         </InputRightAddon>
       </InputGroup>

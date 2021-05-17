@@ -28,7 +28,7 @@ const StaticAvatar = ({ address, avatarImg, name, hideCopy, emoji }) => {
       <Flex direction='row' alignItems='center'>
         <Avatar name={name || address} src={avatarImg || blockie} size='sm' />
         <Flex>
-          <Text fontSize='sm' fontFamily='heading' ml={3}>
+          <Text fontSize='sm' fontFamily='body' fontWeight={600} ml={3}>
             {name || truncateAddr(address)}
           </Text>
           <Box as='span' mx={1}>

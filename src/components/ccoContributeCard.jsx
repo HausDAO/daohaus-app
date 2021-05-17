@@ -73,6 +73,7 @@ const CcoContributionCard = ({
                         </Text>
                         <RouterLink
                           to={`/dao/${daochain}/${daoid}/proposals/${prop.proposalId}`}
+                          style={{ color: '#919191', fontSize: '13px' }}
                         >
                           View contribution
                         </RouterLink>

@@ -3,12 +3,7 @@ import { Box, Flex } from '@chakra-ui/layout';
 import { Spinner } from '@chakra-ui/spinner';
 import { Button } from '@chakra-ui/button';
 
-import { Tooltip } from '@chakra-ui/tooltip';
-import {
-  RiQuestionLine,
-  RiCloseCircleLine,
-  RiCheckboxCircleLine,
-} from 'react-icons/ri';
+import { RiCloseCircleLine, RiCheckboxCircleLine } from 'react-icons/ri';
 import { useInjectedProvider } from '../contexts/InjectedProviderContext';
 import ContentBox from './ContentBox';
 import { getEligibility } from '../utils/metadata';
@@ -35,37 +30,33 @@ const CcoEligibility = ({
 
   return (
     <ContentBox variant='d2' mt={2} w='100%'>
-      <Flex justifyContent='flex-start'>
+      <Flex justify='start' align='center'>
         <Box fontSize='3xl' fontFamily='heading' pr={5}>
           1
         </Box>
         {isEligible === 'unchecked' && (
-          <Box mr='auto'>
-            Only approved addresses can participate.
-            <ToolTipWrapper
-              placement='right'
-              tooltip
-              tooltipText={{
-                title: 'Whitelist Requirements',
-                body: roundData.whitelistReqs,
-              }}
-            >
-              <RiQuestionLine />
-            </ToolTipWrapper>
-          </Box>
+          <Box mr='auto'>Only approved addresses can participate.</Box>
         )}
         {networkMatch ? (
           <Box>
             {isEligible === 'unchecked' && (
               <>
-                <Tooltip
+                <ToolTipWrapper
                   hasArrow
                   shouldWrapChildren
                   label={roundData.whitelistReqs}
+                  tooltip
+                  tooltipText={{
+                    title: 'Whitelist Requirements',
+                    body: roundData.whitelistReqs,
+                  }}
                   placement='top'
                 >
                   <Button
                     variant='primary'
+                    fontFamily='heading'
+                    letterSpacing='0.1em'
+                    textTransform='uppercase'
                     onClick={checkEligibility}
                     disabled={
                       checkingEligibility || roundData.raiseOver || raiseAtMax
@@ -77,7 +68,7 @@ const CcoEligibility = ({
                       <Spinner />
                     )}
                   </Button>
-                </Tooltip>
+                </ToolTipWrapper>
 
                 {roundData.raiseOver ||
                   (raiseAtMax && (
@@ -91,11 +82,22 @@ const CcoEligibility = ({
         ) : (
           <Box>
             {address ? (
-              <Button onClick={handleSwitchNetwork}>
+              <Button
+                onClick={handleSwitchNetwork}
+                fontFamily='heading'
+                letterSpacing='0.1em'
+                textTransform='uppercase'
+              >
                 {`Switch to the ${roundData.network} network`}
               </Button>
             ) : (
-              <Button onClick={requestWallet} mb={6}>
+              <Button
+                onClick={requestWallet}
+                mb={6}
+                fontFamily='heading'
+                letterSpacing='0.1em'
+                textTransform='uppercase'
+              >
                 Connect Wallet
               </Button>
             )}
@@ -106,7 +108,7 @@ const CcoEligibility = ({
             <Box
               size='md'
               my={2}
-              color='blackAlpha.900'
+              color='#919191'
               display='flex'
               alignItems='center'
               fontWeight='700'
