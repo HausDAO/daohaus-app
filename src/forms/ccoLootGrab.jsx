@@ -194,6 +194,9 @@ const CcoLootGrabForm = ({
                 isLoading={loading}
                 disabled={loading || contributionClosed || !openContribution}
                 variant='primary'
+                fontFamily='heading'
+                letterSpacing='0.1em'
+                textTransform='uppercase'
               >
                 Contribute
               </Button>
@@ -203,6 +206,9 @@ const CcoLootGrabForm = ({
                 isDisabled={
                   injectedChain && daochain !== injectedChain?.chainId
                 }
+                fontFamily='heading'
+                letterSpacing='0.1em'
+                textTransform='uppercase'
               >
                 Connect
                 {injectedChain && daochain !== injectedChain?.chainId

@@ -91,11 +91,22 @@ const CcoEligibility = ({
         ) : (
           <Box>
             {address ? (
-              <Button onClick={handleSwitchNetwork}>
+              <Button
+                onClick={handleSwitchNetwork}
+                fontFamily='heading'
+                letterSpacing='0.1em'
+                textTransform='uppercase'
+              >
                 {`Switch to the ${roundData.network} network`}
               </Button>
             ) : (
-              <Button onClick={requestWallet} mb={6}>
+              <Button
+                onClick={requestWallet}
+                mb={6}
+                fontFamily='heading'
+                letterSpacing='0.1em'
+                textTransform='uppercase'
+              >
                 Connect Wallet
               </Button>
             )}
@@ -106,7 +117,7 @@ const CcoEligibility = ({
             <Box
               size='md'
               my={2}
-              color='blackAlpha.900'
+              color='#919191'
               display='flex'
               alignItems='center'
               fontWeight='700'

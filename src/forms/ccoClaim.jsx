@@ -113,6 +113,9 @@ const CcoClaim = ({ setClaimComplete, claimOpen }) => {
         disabled={loading || !claimOpen}
         onClick={handleClaim}
         variant='primary'
+        fontFamily='heading'
+        letterSpacing='0.1em'
+        textTransform='uppercase'
       >
         CLAIM
       </Button>

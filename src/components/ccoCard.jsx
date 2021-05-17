@@ -52,14 +52,19 @@ const CcoCard = ({ daoMetaData, isLink, dao, ccoType }) => {
             />
             <Box
               fontSize='xl'
-              fontWeight={300}
-              fontFamily='heading'
+              fontWeight={900}
+              fontFamily='body'
               lineHeight='1.125'
             >
               {daoMetaData?.name}
             </Box>
           </Flex>
-          <Box ml={5}>
+          <Box
+            ml={5}
+            fontWeight={500}
+            fontFamily='heading'
+            letterSpacing='0.1em'
+          >
             <Flex align='center'>
               {canClaim && (
                 <BsEggFill style={{ marginRight: '5px', fill: '#F49C32' }} />
@@ -91,12 +96,12 @@ const CcoCard = ({ daoMetaData, isLink, dao, ccoType }) => {
         </Flex>
 
         <Flex direction='row' justify='space-between' w='100%'>
-          <Box fontFamily='heading' fontSize='xl'>
+          <Box fontFamily='heading' fontSize='xl' letterSpacing='0.1em'>
             {`${numberWithCommas(dao.ccoFundedAmount)} ${
               daoMetaData.boosts[ccoType].metadata.tributeTokenSymbol
             } Funded`}
           </Box>
-          <Box fontFamily='heading' fontSize='xl'>
+          <Box fontFamily='heading' fontSize='xl' letterSpacing='0.1em'>
             {`${numberWithCommas(raiseLeft)} ${
               daoMetaData.boosts[ccoType].metadata.tributeTokenSymbol
             } Left`}
@@ -104,20 +109,38 @@ const CcoCard = ({ daoMetaData, isLink, dao, ccoType }) => {
         </Flex>
         <Flex mt={5} direction='row' justify='space-between' w='100%'>
           <Box>
-            <TextBox variant='label' size='xs'>
+            <Box
+              fontSize='xs'
+              fontFamily='body'
+              color='#919191'
+              textTransform='uppercase'
+            >
               Funding Goal
-            </TextBox>
-            <TextBox size='lg' variant='value'>
-              {`Min ${daoMetaData.boosts[ccoType].metadata.minTarget} ${daoMetaData.boosts[ccoType].metadata.tributeTokenSymbol} | Max ${daoMetaData.boosts[ccoType].metadata.maxTarget} ${daoMetaData.boosts[ccoType].metadata.tributeTokenSymbol}`}
-            </TextBox>
+            </Box>
+            <Box fontSize='lg' fontFamily='body' color='#353535'>
+              <Box as='span' color='#919191'>
+                Min{' '}
+              </Box>
+              {`${daoMetaData.boosts[ccoType].metadata.minTarget} ${daoMetaData.boosts[ccoType].metadata.tributeTokenSymbol}`}
+              <Box as='span' color='#919191'>
+                {' '}
+                | Max{' '}
+              </Box>
+              {`${daoMetaData.boosts[ccoType].metadata.maxTarget} ${daoMetaData.boosts[ccoType].metadata.tributeTokenSymbol}`}
+            </Box>
           </Box>
           <Box>
-            <TextBox variant='label' size='xs'>
+            <Box
+              fontSize='xs'
+              fontFamily='body'
+              color='#919191'
+              textTransform='uppercase'
+            >
               Rewards
-            </TextBox>
-            <TextBox size='lg' variant='value'>
+            </Box>
+            <Box fontSize='lg' fontFamily='body'>
               {`${daoMetaData.boosts[ccoType].metadata.ratio} ${daoMetaData.boosts[ccoType].metadata.claimTokenSymbol} = 1 ${daoMetaData.boosts[ccoType].metadata.tributeTokenSymbol}`}
-            </TextBox>
+            </Box>
           </Box>
         </Flex>
       </Box>

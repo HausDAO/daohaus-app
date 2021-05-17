@@ -3,6 +3,10 @@ const Input = {
   baseStyle: {
     color: 'mode.900',
     bg: 'transparent',
+    colorScheme: 'mode',
+    _focus: {
+      borderColor: 'mode.900',
+    },
   },
   variants: {
     outline: {

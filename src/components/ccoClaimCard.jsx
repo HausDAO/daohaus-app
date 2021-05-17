@@ -41,9 +41,14 @@ const CcoClaimCard = ({ roundData, setClaimComplete, claimComplete }) => {
           </Box>
           <Flex justifyContent='space-between' alignItems='start'>
             <Box>
-              <TextBox variant='label' fontSize='sm' mb={-2}>
+              <Box
+                fontSize='sm'
+                color='#919191'
+                mb={-2}
+                textTransform='uppercase'
+              >
                 Pending {roundData.claimTokenSymbol}
-              </TextBox>
+              </Box>
               <TextBox variant='value' size='md'>
                 {`${claimAmount} ${roundData.claimTokenSymbol}`}
               </TextBox>
