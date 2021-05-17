@@ -77,7 +77,9 @@ const CcoWhitelist = ({ daoMetaData, ccoType }) => {
   const handleFileSet = async () => {
     const file = upload.files[0];
     const text = await file.text();
-    setCcoWhitelistJson(text);
+
+    console.log(text);
+    setCcoWhitelistJson(text.replace(/(\r\n|\n|\r)/gm, ',\n'));
   };
 
   return (
