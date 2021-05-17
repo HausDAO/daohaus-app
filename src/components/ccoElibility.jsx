@@ -4,7 +4,11 @@ import { Spinner } from '@chakra-ui/spinner';
 import { Button } from '@chakra-ui/button';
 
 import { Tooltip } from '@chakra-ui/tooltip';
-import { RiQuestionLine } from 'react-icons/ri';
+import {
+  RiQuestionLine,
+  RiCloseCircleLine,
+  RiCheckboxCircleLine,
+} from 'react-icons/ri';
 import { useInjectedProvider } from '../contexts/InjectedProviderContext';
 import ContentBox from './ContentBox';
 import { getEligibility } from '../utils/metadata';
@@ -36,9 +40,8 @@ const CcoEligibility = ({
           1
         </Box>
         {isEligible === 'unchecked' && (
-          <Box>
-            Only approved addresses can participate. Click the button to check
-            your eligibility.
+          <Box mr='auto'>
+            Only approved addresses can participate.
             <ToolTipWrapper
               placement='right'
               tooltip
@@ -49,24 +52,6 @@ const CcoEligibility = ({
             >
               <RiQuestionLine />
             </ToolTipWrapper>
-          </Box>
-        )}
-        {isEligible === 'checked' && (
-          <>
-            <Box size='md' my={2} color='blackAlpha.900'>
-              You are eligible to contribute.
-            </Box>
-
-            {roundData.beforeRaise ? (
-              <Box size='md' my={2} color='blackAlpha.900'>
-                Come back when the contribution round begins.
-              </Box>
-            ) : null}
-          </>
-        )}
-        {isEligible === 'denied' && (
-          <Box size='md' my={2} color='blackAlpha.900'>
-            Address is not eligible.
           </Box>
         )}
         {networkMatch ? (
@@ -114,6 +99,56 @@ const CcoEligibility = ({
                 Connect Wallet
               </Button>
             )}
+          </Box>
+        )}
+        {isEligible === 'checked' && (
+          <>
+            <Box
+              size='md'
+              my={2}
+              color='blackAlpha.900'
+              display='flex'
+              alignItems='center'
+              fontWeight='700'
+              w='100%'
+            >
+              <Box>You are eligible to contribute.</Box>
+              <RiCheckboxCircleLine
+                style={{
+                  fill: '#F49C32',
+                  marginLeft: 'auto',
+                  width: '36px',
+                  height: '36px',
+                }}
+              />
+            </Box>
+
+            {roundData.beforeRaise ? (
+              <Box size='md' my={2} color='blackAlpha.900'>
+                Come back when the contribution round begins.
+              </Box>
+            ) : null}
+          </>
+        )}
+        {isEligible === 'denied' && (
+          <Box
+            size='md'
+            my={2}
+            color='red'
+            display='flex'
+            alignItems='center'
+            fontWeight='700'
+            w='100%'
+          >
+            Address is not eligible.
+            <RiCloseCircleLine
+              style={{
+                fill: 'red',
+                marginLeft: 'auto',
+                width: '36px',
+                height: '36px',
+              }}
+            />{' '}
           </Box>
         )}
       </Flex>

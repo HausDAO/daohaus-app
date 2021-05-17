@@ -23,7 +23,13 @@ const CcoContributionCard = ({
   return (
     <ContentBox variant='d2' mt={2} w='100%'>
       <Flex alignItems='flex-end' wrap='wrap'>
-        <Flex w='100%' justify='space-between' align='flex-end' wrap='wrap'>
+        <Flex
+          w='100%'
+          justify='space-between'
+          align='flex-end'
+          wrap='wrap'
+          mb={3}
+        >
           {!raiseAtMax ? (
             <Text fontSize='sm' color='blackAlpha.700' as='i' marginLeft='auto'>
               {countDownText(roundData)}
@@ -40,8 +46,8 @@ const CcoContributionCard = ({
               2
             </Box>
           </Flex>
-          <Flex direction='column'>
-            <Box>
+          <Flex direction='column' w='100%'>
+            <Box w='100%'>
               <CcoLootGrabForm
                 roundData={roundData}
                 currentContributionData={currentContributionData}
