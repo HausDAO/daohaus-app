@@ -25,8 +25,8 @@ export const CCO_CONSTANTS = {
     '0x9166a0bc06Dbf63b8a6f68808060D550c31AefD6',
     '0xC2207416886eF70E2E8e12515EFf83230489384B',
   ],
-  DAOSQUARE_NETWORK: '0x2a',
-  // DAOSQUARE_NETWORK: '0x64',
+  // DAOSQUARE_NETWORK: '0x2a',
+  DAOSQUARE_NETWORK: '0x64',
 };
 
 const parsedCcoDetails = proposal => {
@@ -152,7 +152,7 @@ export const ccoStatus = (ccoData, ccoFundedAmount, now) => {
       sort: 2,
     };
   }
-  if (ccoFundedAmount >= Number(ccoData.metadata.maxTarget)) {
+  if (ccoFundedAmount >= Number(ccoData.metadata.minTarget)) {
     return {
       label: 'Funded',
       claimOpen: now >= Number(ccoData.metadata.claimPeriodStartTime),
@@ -167,7 +167,7 @@ export const ccoStatus = (ccoData, ccoFundedAmount, now) => {
   }
   if (
     Number(ccoData.metadata.raiseEndTime) < now &&
-    ccoFundedAmount < Number(ccoData.metadata.maxTarget)
+    ccoFundedAmount < Number(ccoData.metadata.minTarget)
   ) {
     return { label: 'Failed', sort: 5 };
   }

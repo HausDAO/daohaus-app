@@ -63,19 +63,21 @@ const CcoResources = ({ daoMetaData, ccoData }) => {
             About {daoMetaData.name}
           </Text>
           <Text mb={5}>{daoMetaData.description}</Text>
-          <Link href={ccoData.faqLink} onClick={handleNav} isExternal>
-            <Flex>
-              <Text _hover={{ color: 'secondary.400', cursor: 'pointer' }}>
-                FAQ
-              </Text>
-              <Icon
-                as={RiLoginBoxLine}
-                color='secondary.500'
-                h='25px'
-                w='25px'
-              />
-            </Flex>
-          </Link>
+          {ccoData.faqLink && (
+            <Link href={ccoData.faqLink} onClick={handleNav} isExternal>
+              <Flex>
+                <Text _hover={{ color: 'secondary.400', cursor: 'pointer' }}>
+                  FAQ
+                </Text>
+                <Icon
+                  as={RiLoginBoxLine}
+                  color='secondary.500'
+                  h='25px'
+                  w='25px'
+                />
+              </Flex>
+            </Link>
+          )}
 
           <RouterLink
             to={`/dao/${daochain}/${daoid}`}
