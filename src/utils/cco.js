@@ -61,7 +61,7 @@ export const isCcoProposal = (proposal, round) => {
     parsedCcoDetails(proposal).cco === round.ccoId &&
     Number(proposal.createdAt) >= Number(round.raiseStartTime) &&
     Number(proposal.createdAt) <= Number(round.raiseEndTime) &&
-    proposal.tributeToken === round.tributeToken &&
+    proposal.tributeToken.toLowerCase() === round.tributeToken.toLowerCase() &&
     proposal.sharesRequested === '0' &&
     Number(proposal.lootRequested) > 0 &&
     !failed
