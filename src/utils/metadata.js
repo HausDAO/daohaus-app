@@ -271,10 +271,10 @@ export const getForumTopics = async categoryId => {
   }
 };
 
-export const getEligibility = async address => {
+export const getEligibility = async (ccoId, address) => {
   try {
     const response = await fetch(
-      `https://data.daohaus.club/dao/know-your-dao/${address}`,
+      `${ccoApiUrl}/cco/eligibility/${ccoId}/${address}`,
     );
     return response.json();
   } catch (err) {
