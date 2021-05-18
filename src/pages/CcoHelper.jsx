@@ -77,6 +77,10 @@ const CcoHelper = React.memo(
         const sortedByPropId = daoProposals.sort((a, b) => {
           return +b.proposalId - +a.proposalId;
         });
+
+        console.log('roundData', roundData);
+
+        console.log('sortedByPropId', sortedByPropId);
         const propSplit = sortedByPropId.reduce(
           (coll, proposal) => {
             if (isCcoProposal(proposal, roundData)) {
