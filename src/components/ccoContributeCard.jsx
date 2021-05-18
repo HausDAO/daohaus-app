@@ -77,6 +77,21 @@ const CcoContributionCard = ({
                         >
                           View contribution
                         </RouterLink>
+                        {Number(prop.proposalId) > 157 && (
+                          <Flex
+                            justifyContent='space-between'
+                            alignContent='center'
+                            key={prop.id}
+                            mt={5}
+                          >
+                            <Text fontSize='sm' color='blackAlpha.700' as='i'>
+                              Unsponsored proposals did not make it into the CCO
+                              prior to the max target acheivement. Cancel the
+                              proposal and withdraw fund from the DAO propfile
+                              page.
+                            </Text>
+                          </Flex>
+                        )}
                       </Flex>
                     );
                   })}
