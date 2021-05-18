@@ -55,8 +55,8 @@ const CcoHelper = React.memo(
           active: daoMetaData.boosts[ccoType].active,
           ...configData,
           beforeRaise: Number(configData.raiseStartTime) > now,
-          raiseOver: `${Number(configData.startTime) + duration}` < now,
-          claimOpen: +configData.claimPeriodStartTime < now,
+          raiseOver: Number(configData.startTime) + duration < now,
+          claimOpen: Number(configData.claimPeriodStartTime) < now,
         });
       };
 
@@ -103,7 +103,11 @@ const CcoHelper = React.memo(
 
         setOtherProposals(propSplit.otherProps);
         setCurrentContributionData({
-          contributionProposals: propSplit.contributionProposals,
+          contributionProposals: propSplit.contributionProposals.sort(
+            (a, b) => {
+              return +b.proposalId - +a.proposalId;
+            },
+          ),
           contributionTotal,
           statusPercentage: (contributionTotal / +roundData.maxTarget) * 100,
           remaining: +roundData.maxTarget - contributionTotal,
