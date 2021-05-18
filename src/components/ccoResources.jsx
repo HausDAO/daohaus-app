@@ -1,5 +1,5 @@
 import React from 'react';
-import { useHistory, useParams, Link as RouterLink } from 'react-router-dom';
+import { useParams, Link as RouterLink } from 'react-router-dom';
 import { Box, Flex, Link, Text } from '@chakra-ui/layout';
 
 import Icon from '@chakra-ui/icon';
@@ -11,11 +11,9 @@ import GenericModal from '../modals/genericModal';
 const CcoResources = ({ daoMetaData, ccoData }) => {
   const { setGenericModal } = useOverlay();
   const { daoid, daochain } = useParams();
-  const history = useHistory();
 
   const handleNav = () => {
     setGenericModal({});
-    history.push(`/dao/${daochain}/${daoid}`);
   };
 
   return (
