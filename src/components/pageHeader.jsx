@@ -6,7 +6,6 @@ import Web3SignIn from './web3SignIn';
 import DaosquareHeader from './daoSquareHeader';
 
 const PageHeader = ({ isDao, isDaosquare, header, headerEl, customTerms }) => {
-  console.log('isDaosquare', isDaosquare);
   return (
     <Flex direction='row' justify='space-between' p={6}>
       <Flex

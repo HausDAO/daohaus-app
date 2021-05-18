@@ -52,7 +52,7 @@ const CcoContributionCard = ({
                 roundData={roundData}
                 currentContributionData={currentContributionData}
                 contributionClosed={contributionClosed}
-                openContribution={!eligibleBlock && !roundData.beforeRaise}
+                openContribution={!eligibleBlock && roundData.raiseOpen}
               />
 
               {currentContributionData && (

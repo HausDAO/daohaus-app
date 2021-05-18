@@ -19,8 +19,6 @@ import CcoContributionCard from '../components/ccoContributeCard';
 import CcoClaimCard from '../components/ccoClaimCard';
 import { ccoDaoResolver } from '../utils/resolvers';
 
-// TODO: filter out proposals after max limit is hit
-
 const CcoContribution = ({ daoMetaData, currentDaoTokens, daoProposals }) => {
   const { daochain } = useParams();
   const { refreshDao } = useTX();
@@ -56,8 +54,6 @@ const CcoContribution = ({ daoMetaData, currentDaoTokens, daoProposals }) => {
       const date = await getDateTime();
       const now = Number(date.seconds);
       const configData = daoMetaData.boosts[ccoType].metadata;
-      const duration =
-        Number(configData.raiseEndTime) - Number(configData.raiseStartTime);
 
       setRoundData({
         ccoType,
@@ -65,12 +61,11 @@ const CcoContribution = ({ daoMetaData, currentDaoTokens, daoProposals }) => {
         ccoToken,
         active: daoMetaData.boosts[ccoType].active,
         ...configData,
-        beforeRaise:
-          Number(daoMetaData.boosts[ccoType].metadata.raiseStartTime) > now,
+        beforeRaise: Number(configData.raiseStartTime) > now,
         raiseOpen:
           Number(configData.raiseStartTime) < now &&
-          Number(configData.raiseStartTime + duration) > now,
-        raiseOver: Number(configData.startTime + duration) < now,
+          Number(configData.raiseEndTime) > now,
+        raiseOver: Number(configData.raiseEndTime) < now,
         claimOpen: Number(configData.claimPeriodStartTime) < now,
       });
 
