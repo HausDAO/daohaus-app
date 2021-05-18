@@ -141,15 +141,6 @@ export const currentFunded = (ccoData, proposals) => {
     }, 0);
 };
 
-export const totalFundedDaosquare = daos => {
-  return daos.reduce((sum, dao) => {
-    if (dao.ccoStatus.label === 'Funded') {
-      sum += dao.ccoFundedAmount;
-    }
-    return sum;
-  }, 0);
-};
-
 export const ccoStatus = (ccoData, ccoFundedAmount, now) => {
   if (!ccoData.active) {
     return {
