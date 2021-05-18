@@ -152,21 +152,21 @@ const CcoContribution = ({ daoMetaData, currentDaoTokens, daoProposals }) => {
     return <MainViewLayout header={daoMetaData?.name} isDao />;
   }
 
-  if (roundData && !roundData.active) {
-    return (
-      <MainViewLayout
-        header={daoMetaData?.name}
-        isDao={!daoMetaData.daosquarecco}
-        isDaosquare={daoMetaData.daosquarecco}
-      >
-        <Box w='100%' position='relative'>
-          <Flex wrap='wrap'>
-            <Box>CCO is paused</Box>
-          </Flex>
-        </Box>
-      </MainViewLayout>
-    );
-  }
+  // if (roundData && !roundData.active) {
+  //   return (
+  //     <MainViewLayout
+  //       header={daoMetaData?.name}
+  //       isDao={!daoMetaData.daosquarecco}
+  //       isDaosquare={daoMetaData.daosquarecco}
+  //     >
+  //       <Box w='100%' position='relative'>
+  //         <Flex wrap='wrap'>
+  //           <Box>CCO is paused</Box>
+  //         </Flex>
+  //       </Box>
+  //     </MainViewLayout>
+  //   );
+  // }
 
   return (
     <MainViewLayout

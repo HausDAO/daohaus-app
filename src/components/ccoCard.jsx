@@ -1,25 +1,75 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Avatar, Box, Flex, Progress } from '@chakra-ui/react';
 import makeBlockie from 'ethereum-blockies-base64';
 import { BsEggFill } from 'react-icons/bs';
 
 import ContentBox from './ContentBox';
-import { themeImagePath } from '../utils/metadata';
+import { getDateTime, themeImagePath } from '../utils/metadata';
 import { numberWithCommas } from '../utils/general';
 import { supportedChains } from '../utils/chain';
 import { ccoProgressBarData, CCO_CONSTANTS } from '../utils/cco';
+import { PROPOSALS_LIST } from '../graphQL/proposal-queries';
+import { graphFetchAll } from '../utils/theGraph';
+import { ccoDaoResolver } from '../utils/resolvers';
 
 const CcoCard = ({ daoMetaData, isLink, dao, ccoType }) => {
-  const raiseLeft =
-    Number(daoMetaData.boosts[ccoType].metadata.maxTarget) -
-    dao.ccoFundedAmount;
-  const canClaim =
-    dao?.ccoStatus?.label === 'Funded' && dao?.ccoStatus?.claimOpen;
-  const barData = ccoProgressBarData(
-    daoMetaData.boosts[ccoType].metadata,
-    dao.ccoFundedAmount,
-  );
+  const [cardData, setCardData] = useState({
+    raiseLeft:
+      Number(daoMetaData.boosts[ccoType].metadata.maxTarget) -
+      dao.ccoFundedAmount,
+    canClaim: dao?.ccoStatus?.label === 'Funded' && dao?.ccoStatus?.claimOpen,
+    barData: ccoProgressBarData(
+      daoMetaData.boosts[ccoType].metadata,
+      dao.ccoFundedAmount,
+    ),
+    fundedAmount: dao.ccoFundedAmount,
+  });
+  // const raiseLeft =
+  //   Number(daoMetaData.boosts[ccoType].metadata.maxTarget) -
+  //   dao.ccoFundedAmount;
+  // const canClaim =
+  //   dao?.ccoStatus?.label === 'Funded' && dao?.ccoStatus?.claimOpen;
+  // const barData = ccoProgressBarData(
+  //   daoMetaData.boosts[ccoType].metadata,
+  //   dao.ccoFundedAmount,
+  // );
+
+  useEffect(() => {
+    const getProposals = async () => {
+      const proposalData = await graphFetchAll({
+        endpoint: supportedChains[CCO_CONSTANTS.DAOSQUARE_NETWORK].subgraph_url,
+        query: PROPOSALS_LIST,
+        subfield: 'proposals',
+        variables: {
+          contractAddr: dao.id,
+        },
+      });
+
+      const date = await getDateTime();
+      const now = Number(date.seconds);
+      const hydratedDao = ccoDaoResolver(dao, now, ccoType, proposalData);
+
+      setCardData({
+        raiseLeft:
+          Number(daoMetaData.boosts[ccoType].metadata.maxTarget) -
+          hydratedDao.ccoFundedAmount,
+        canClaim:
+          hydratedDao?.ccoStatus?.label === 'Funded' &&
+          hydratedDao?.ccoStatus?.claimOpen,
+        barData: ccoProgressBarData(
+          daoMetaData.boosts[ccoType].metadata,
+          hydratedDao.ccoFundedAmount,
+        ),
+        fundedAmount: hydratedDao.ccoFundedAmount,
+      });
+
+      // console.log('proposalData', proposalData, dao);
+    };
+    if (isLink) {
+      getProposals();
+    }
+  }, [isLink]);
 
   return (
     <ContentBox
@@ -65,7 +115,7 @@ const CcoCard = ({ daoMetaData, isLink, dao, ccoType }) => {
             letterSpacing='0.1em'
           >
             <Flex align='center'>
-              {canClaim && (
+              {cardData.canClaim && (
                 <BsEggFill style={{ marginRight: '5px', fill: '#F49C32' }} />
               )}
               {dao?.ccoStatus?.label}
@@ -77,8 +127,8 @@ const CcoCard = ({ daoMetaData, isLink, dao, ccoType }) => {
             colorScheme='secondary'
             bg='primary.100'
             height='24px'
-            value={barData.minBarValue * 100}
-            width={`${barData.minBarWidth * 100}%`}
+            value={cardData.barData.minBarValue * 100}
+            width={`${cardData.barData.minBarWidth * 100}%`}
             mt={7}
             mb={3}
             mr={1}
@@ -87,8 +137,8 @@ const CcoCard = ({ daoMetaData, isLink, dao, ccoType }) => {
             colorScheme='secondary'
             bg='primary.100'
             height='24px'
-            value={barData.maxBarValue * 100}
-            width={`${barData.maxBarWidth * 100}%`}
+            value={cardData.barData.maxBarValue * 100}
+            width={`${cardData.barData.maxBarWidth * 100}%`}
             mt={7}
             mb={3}
           />
@@ -96,12 +146,12 @@ const CcoCard = ({ daoMetaData, isLink, dao, ccoType }) => {
 
         <Flex direction='row' justify='space-between' w='100%'>
           <Box fontFamily='heading' fontSize='xl' letterSpacing='0.1em'>
-            {`${numberWithCommas(dao.ccoFundedAmount)} ${
+            {`${numberWithCommas(cardData.fundedAmount.toFixed(0))} ${
               daoMetaData.boosts[ccoType].metadata.tributeTokenSymbol
             } Funded`}
           </Box>
           <Box fontFamily='heading' fontSize='xl' letterSpacing='0.1em'>
-            {`${numberWithCommas(raiseLeft)} ${
+            {`${numberWithCommas(cardData.raiseLeft.toFixed(0))} ${
               daoMetaData.boosts[ccoType].metadata.tributeTokenSymbol
             } Left`}
           </Box>
