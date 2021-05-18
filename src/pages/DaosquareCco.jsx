@@ -8,11 +8,11 @@ import CcoCard from '../components/ccoCard';
 import { useDaosquareCco } from '../contexts/DaosquareCcoContext';
 import { useCustomTheme } from '../contexts/CustomThemeContext';
 import { daosquareCcoTheme } from '../themes/defaultTheme';
-import { totalFundedDaosquare } from '../utils/cco';
 
 const DaosquareCco = () => {
   const { d2CcoDaos } = useDaosquareCco();
   const { updateTheme } = useCustomTheme();
+  const [fundedDaoTotals, setFundedDaoTotals] = useState({});
   const [totals, setTotals] = useState({
     raised: 0,
     funded: 0,
@@ -24,14 +24,18 @@ const DaosquareCco = () => {
   }, []);
 
   useEffect(() => {
+    console.log('fundedDaoTotals', fundedDaoTotals);
     if (d2CcoDaos?.length) {
       setTotals({
-        funded: totalFundedDaosquare(d2CcoDaos),
+        funded: Object.keys(fundedDaoTotals).reduce((sum, dao) => {
+          sum += fundedDaoTotals[dao];
+          return sum;
+        }, 0),
         projects: d2CcoDaos.filter(dao => dao.ccoStatus.label === 'Funded')
           .length,
       });
     }
-  }, [d2CcoDaos]);
+  }, [d2CcoDaos, fundedDaoTotals]);
 
   return (
     <Layout daosquarecco>
@@ -52,6 +56,8 @@ const DaosquareCco = () => {
                       daoMetaData={dao.meta}
                       dao={dao}
                       key={dao.id}
+                      setFundedDaoTotals={setFundedDaoTotals}
+                      fundedDaoTotals={fundedDaoTotals}
                       ccoType='daosquarecco'
                       isLink
                     />

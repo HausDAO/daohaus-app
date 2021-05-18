@@ -20,7 +20,7 @@ const DaosquareCcoOverall = ({ totals }) => {
           color='#353535'
           mb={7}
         >
-          {numberWithCommas(totals.funded)} xDAI
+          {numberWithCommas(totals.funded.toFixed())} xDAI
         </Box>
 
         <Box fontSize='xs' fontFamily='body' color='#919191'>

@@ -13,7 +13,14 @@ import { PROPOSALS_LIST } from '../graphQL/proposal-queries';
 import { graphFetchAll } from '../utils/theGraph';
 import { ccoDaoResolver } from '../utils/resolvers';
 
-const CcoCard = ({ daoMetaData, isLink, dao, ccoType }) => {
+const CcoCard = ({
+  daoMetaData,
+  isLink,
+  dao,
+  ccoType,
+  fundedDaoTotals,
+  setFundedDaoTotals,
+}) => {
   const [cardData, setCardData] = useState({
     raiseLeft:
       Number(daoMetaData.boosts[ccoType].metadata.maxTarget) -
@@ -64,7 +71,12 @@ const CcoCard = ({ daoMetaData, isLink, dao, ccoType }) => {
         fundedAmount: hydratedDao.ccoFundedAmount,
       });
 
-      // console.log('proposalData', proposalData, dao);
+      if (hydratedDao?.ccoStatus?.label === 'Funded') {
+        setFundedDaoTotals({
+          ...fundedDaoTotals,
+          [dao.id]: hydratedDao.ccoFundedAmount,
+        });
+      }
     };
     if (isLink) {
       getProposals();
