@@ -1,5 +1,6 @@
 import React, { useContext, createContext, useEffect } from 'react';
 import { EXPLORER_DAOS } from '../graphQL/explore-queries';
+import { PROPOSALS_LIST } from '../graphQL/proposal-queries';
 import { useSessionStorage } from '../hooks/useSessionStorage';
 import { getApiMetadata } from '../utils/metadata';
 import { daosqaureCcoQuery } from '../utils/theGraph';

@@ -56,12 +56,15 @@ export const claimCountDownText = claimStartTime => {
 
 export const isCcoProposal = (proposal, round) => {
   const failed = proposal.processed && !proposal.didPass;
+  const maxWei = round.maxContribution * 10 ** 18;
+
   return (
     !proposal.cancelled &&
     parsedCcoDetails(proposal).cco === round.ccoId &&
     Number(proposal.createdAt) >= Number(round.raiseStartTime) &&
     Number(proposal.createdAt) <= Number(round.raiseEndTime) &&
     proposal.tributeToken.toLowerCase() === round.tributeToken.toLowerCase() &&
+    proposal.tributeOffered <= maxWei &&
     proposal.sharesRequested === '0' &&
     Number(proposal.lootRequested) > 0 &&
     !failed
@@ -121,13 +124,21 @@ export const isDaosquareCcoPath = (daoMetaData, location) => {
 
 export const currentFunded = (ccoData, proposals) => {
   const totalMaxWei = Number(ccoData.maxTarget) * 10 ** 18;
-  return proposals.reduce((sum, prop) => {
-    const nextSum = Number(prop.tributeOffered) + sum;
-    if (isCcoProposal(prop, ccoData) && nextSum <= totalMaxWei) {
-      sum = nextSum;
-    }
-    return sum;
-  }, 0);
+  return proposals
+    .sort((a, b) => {
+      return Number(b.createdAt) - Number(a.createdAt);
+    })
+    .reduce((sum, prop) => {
+      const nextSum = Number(prop.tributeOffered) + sum;
+      if (isCcoProposal(prop, ccoData) && nextSum <= totalMaxWei) {
+        sum = nextSum;
+      }
+
+      // if (nextSum <= totalMaxWei) {
+      //   console.log(prop);
+      // }
+      return sum;
+    }, 0);
 };
 
 export const totalFundedDaosquare = daos => {
