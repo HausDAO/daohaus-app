@@ -14,6 +14,7 @@ import Vote from './voteIcon';
 import MediaBox from './mediaBox';
 import TextIndicator from './textIndicator';
 import MemberIndicator from './memberIndicator';
+import TokenIndicator from './tokenIndicator';
 import UberDaoInfo from './uberDaoInfo';
 
 import { generateSFLabels, TIP_LABELS } from '../utils/toolTipLabels';
@@ -23,6 +24,7 @@ import {
   getProposalDetailStatus,
   memberVote,
   MINION_TYPES,
+  PROPOSAL_TYPES,
 } from '../utils/proposalUtils';
 import { getCustomProposalTerm } from '../utils/metadata';
 import { UBERHAUS_DATA } from '../utils/uberhaus';
@@ -119,6 +121,9 @@ const ProposalDetails = ({ proposal, daoMember }) => {
                   <Box w='100%'>{proposal?.description}</Box>
                 ))}
             </Skeleton>
+          )}
+          {proposal?.proposalType === PROPOSAL_TYPES.WHITELIST && (
+            <TokenIndicator tokenAddress={proposal.tributeToken} />
           )}
           <Box mt={proposal?.link || proposal?.minionAddress ? 6 : 2}>
             {proposal?.link && <MediaBox link={proposal.link} />}

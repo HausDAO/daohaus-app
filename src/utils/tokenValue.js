@@ -4,6 +4,7 @@ import { MolochService } from '../services/molochService';
 import { omit } from './general';
 
 const geckoURL = 'https://api.coingecko.com/api/v3/simple/token_price';
+
 const uniSwapDataURL =
   'https://raw.githubusercontent.com/Uniswap/default-token-list/master/src/tokens/mainnet.json';
 const babe = '0x000000000000000000000000000000000000baBe';
@@ -38,6 +39,19 @@ export const getUsd = async tokenAddress => {
   }
 };
 
+export const getTokenData = async (
+  tokenAddress = '0x1f9840a85d5af5bf1d1762f925bdaddc4201f984',
+) => {
+  const url = `https://api.coingecko.com/api/v3/coins/ethereum?contract_address=${tokenAddress}`;
+
+  try {
+    const response = await fetch(url);
+    return response.json();
+  } catch (err) {
+    throw new Error(err);
+  }
+};
+getTokenData();
 export const calcTotalUSD = (decimals, tokenBalance, usdVal) => {
   return (+tokenBalance / 10 ** decimals) * +usdVal;
 };
