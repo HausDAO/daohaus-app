@@ -103,6 +103,7 @@ export const numberWithCommas = num => {
   if (num === 0) return 0;
   if (!num) return;
   const localNum = typeof num !== 'string' ? num.toString() : num;
+  if (localNum.includes(`e-`)) return localNum;
   // drop zero after decimal
   const noZeroDec =
     parseInt(localNum.split('.')[1]) === 0

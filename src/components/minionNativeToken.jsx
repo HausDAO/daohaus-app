@@ -5,10 +5,12 @@ import { useForm } from 'react-hook-form';
 import TextBox from './TextBox';
 import { fetchNativeBalance } from '../utils/tokenExplorerApi';
 import GenericModal from '../modals/genericModal';
-import { numberWithCommas } from '../utils/general';
+import { numberWithCommas, daoConnectedAndSameChain } from '../utils/general';
 import { useOverlay } from '../contexts/OverlayContext';
+import { useInjectedProvider } from '../contexts/InjectedProviderContext';
 
-const MinionNativeToken = ({ action }) => {
+const MinionNativeToken = ({ action, isMember }) => {
+  const { address, injectedChain } = useInjectedProvider();
   const [nativeBalance, setNativeBalance] = useState(null);
   const { daochain, minion } = useParams();
   const { handleSubmit, register, setValue } = useForm();
@@ -36,16 +38,25 @@ const MinionNativeToken = ({ action }) => {
     <Box>
       <TextBox size='md' align='center'>
         balance: {nativeBalance || 0}
-        {nativeBalance && (
-          <Button size='xs' ml={6} onClick={openSendModal}>
-            Send
-          </Button>
-        )}
+        {nativeBalance &&
+          isMember &&
+          daoConnectedAndSameChain(
+            address,
+            daochain,
+            injectedChain?.chainId,
+          ) && (
+            <Button size='xs' ml={6} onClick={openSendModal}>
+              Send
+            </Button>
+          )}
       </TextBox>
       <GenericModal closeOnOverlayClick modalId='nativeTokenSend'>
         <form onSubmit={handleSubmit(action)}>
+          <TextBox as={FormLabel} size='xs'>
+            Creates a Proposal to send
+          </TextBox>
           <TextBox as={FormLabel} size='xs' htmlFor='amount'>
-            Amount{' '}
+            Amount*{' '}
             <Button
               onClick={() => {
                 setValue('amount', nativeBalance);
@@ -67,7 +78,7 @@ const MinionNativeToken = ({ action }) => {
             focusBorderColor='secondary.500'
           />
           <TextBox as={FormLabel} size='xs' htmlFor='destination'>
-            Destination
+            Destination*
           </TextBox>
           <Input
             name='destination'
@@ -77,7 +88,20 @@ const MinionNativeToken = ({ action }) => {
                 value: true,
                 message: 'destination is required',
               },
+              pattern: {
+                value: /0x[a-fA-F0-9]{40}$/,
+                message: 'Payment must be a number',
+              },
             })}
+            focusBorderColor='secondary.500'
+          />
+          <TextBox as={FormLabel} size='xs' htmlFor='description'>
+            Short Description
+          </TextBox>
+          <Input
+            name='description'
+            mb={5}
+            ref={register()}
             focusBorderColor='secondary.500'
           />
           <Button type='submit'>Propose Transfer</Button>

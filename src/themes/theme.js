@@ -20,33 +20,6 @@ import Textarea from './core/textarea';
 import ContentBoxComponent from './components/contentBox';
 import TextBoxComponent from './components/textBox';
 
-// export const getRandomTheme = async (images) => {
-//   const theme = {
-//     primary500: `#${((Math.random() * 0xffffff) << 0)
-//       .toString(16)
-//       .padStart(6, '0')}`,
-//     secondary500: `#${((Math.random() * 0xffffff) << 0)
-//       .toString(16)
-//       .padStart(6, '0')}`,
-//     bg500: `#${((Math.random() * 0xffffff) << 0)
-//       .toString(16)
-//       .padStart(6, '0')}`,
-//   };
-
-//   if (images) {
-//     const request = new Request('https://source.unsplash.com/random/200x200');
-//     const avatarImg = await fetch(request);
-
-//     const requestBg = new Request('https://source.unsplash.com/random/800x800');
-//     const bgImg = await fetch(requestBg);
-
-//     theme.avatarImg = avatarImg.url;
-//     theme.bgImg = bgImg.url;
-//   }
-
-//   return theme;
-// };
-
 export const createTheme = daoTheme => {
   const themeOverrides = { ...defaultTheme, ...daoTheme };
 
@@ -90,6 +63,18 @@ export const createTheme = daoTheme => {
         700: darken(0.1, themeOverrides.secondary500),
         800: darken(0.15, themeOverrides.secondary500),
         900: darken(0.2, themeOverrides.secondary500),
+      },
+      mode: {
+        50: themeOverrides.modeAlpha500,
+        100: themeOverrides.modeAlpha500,
+        200: themeOverrides.modeAlpha500,
+        300: themeOverrides.modeAlpha500,
+        400: themeOverrides.modeAlpha500,
+        500: themeOverrides.modeAlpha500,
+        600: themeOverrides.modeAlpha500,
+        700: themeOverrides.modeAlpha500,
+        800: themeOverrides.modeAlpha500,
+        900: themeOverrides.modeAlpha500,
       },
     },
     images: {
@@ -146,11 +131,12 @@ export const createTheme = daoTheme => {
       global: {
         'html, body': {
           fontSize: 'm',
-          color: 'whiteAlpha.900',
+          color: 'mode.900',
           lineHeight: 'tall',
         },
         a: {
           transition: 'all 0.15s linear',
+          color: 'secondary.400',
           _hover: { textDecoration: 'none', color: 'secondary.500' },
         },
       },

@@ -18,7 +18,7 @@ import { FaCopy } from 'react-icons/fa';
 import ContentBox from './ContentBox';
 import TextBox from './TextBox';
 import { formatPeriods, truncateAddr } from '../utils/general';
-import { getTerm } from '../utils/metadata';
+import { getTerm, getTitle } from '../utils/metadata';
 import { supportedChains } from '../utils/chain';
 import { useOverlay } from '../contexts/OverlayContext';
 
@@ -36,6 +36,7 @@ const DaoContractSettings = ({ overview, customTerms, wrapNZap }) => {
       description: `ONLY SEND ${supportedChains[daochain].nativeCurrency} TO THIS ADDRESS!`,
     });
   };
+  console.log(customTerms);
 
   return (
     <ContentBox d='flex' w='100%' mt={2} flexDirection='column'>
@@ -81,7 +82,7 @@ const DaoContractSettings = ({ overview, customTerms, wrapNZap }) => {
         )}
         <Flex wrap='wrap'>
           <Box as={Stack} w={['100%', null, null, '50%']} spacing={2}>
-            <TextBox size='xs'>
+            <TextBox size='xs' title={getTitle(customTerms, 'Proposal')}>
               {`${getTerm(customTerms, 'proposal')} Deposit`}
             </TextBox>
             <TextBox variant='value' size='xl'>

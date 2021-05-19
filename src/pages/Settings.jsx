@@ -11,7 +11,7 @@ import Minions from '../components/minionList';
 import MainViewLayout from '../components/mainViewLayout';
 import { useInjectedProvider } from '../contexts/InjectedProviderContext';
 import { daoConnectedAndSameChain } from '../utils/general';
-import { getWrapNZap } from '../utils/requests';
+import { getWrapNZap } from '../utils/theGraph';
 
 const Settings = ({ overview, daoMember, daoMetaData, customTerms }) => {
   const { daochain, daoid } = useParams();

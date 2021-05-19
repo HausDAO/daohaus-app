@@ -2,6 +2,7 @@ import { chainByNetworkId } from './chain';
 import { capitalize, omit } from './general';
 
 const metadataApiUrl = 'https://data.daohaus.club';
+const ccoApiUrl = 'https://cco.daohaus.club';
 
 export const fetchMetaData = async endpoint => {
   const url = `${metadataApiUrl}/dao/${endpoint}`;
@@ -131,6 +132,17 @@ export const getTerm = (customTerms, word) => {
   return capitalize(word);
 };
 
+export const getTitle = (customTerms, word) => {
+  if (!customTerms) {
+    return capitalize(word);
+  }
+
+  if (getTerm(customTerms, word).toLowerCase() !== word.toLowerCase()) {
+    return word;
+  }
+  return null;
+};
+
 export const getCustomProposalTerm = (customTerms, proposalTerm) => {
   if (
     customTerms?.proposal &&
@@ -147,6 +159,23 @@ export const getCustomProposalTerm = (customTerms, proposalTerm) => {
 
 export const boostPost = async (endpoint, data) => {
   const url = `${metadataApiUrl}/${endpoint}`;
+  try {
+    const response = await fetch(url, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Haus-Key': process.env.REACT_APP_HAUS_KEY,
+      },
+      body: JSON.stringify(data),
+    });
+    return response.json();
+  } catch (err) {
+    throw new Error(err);
+  }
+};
+
+export const ccoPost = async (endpoint, data) => {
+  const url = `${ccoApiUrl}/${endpoint}`;
   try {
     const response = await fetch(url, {
       method: 'POST',
@@ -242,10 +271,10 @@ export const getForumTopics = async categoryId => {
   }
 };
 
-export const getEligibility = async address => {
+export const getEligibility = async (ccoId, address) => {
   try {
     const response = await fetch(
-      `https://data.daohaus.club/dao/know-your-dao/${address}`,
+      `${ccoApiUrl}/cco/eligibility/${ccoId}/${address}`,
     );
     return response.json();
   } catch (err) {

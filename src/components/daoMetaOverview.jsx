@@ -15,7 +15,7 @@ import { themeImagePath } from '../utils/metadata';
 
 const DaoMetaOverview = ({ daoMetaData }) => {
   return (
-    <Flex as={ContentBox} mt={2} direction='column' w='100%%'>
+    <Flex as={ContentBox} mt={2} direction='column' w='100%'>
       {daoMetaData && (
         <>
           <Flex>
