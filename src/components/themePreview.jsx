@@ -6,7 +6,7 @@ import { rgba } from 'polished';
 import { useCustomTheme } from '../contexts/CustomThemeContext';
 import ThemeChart from './themeChart';
 import ThemeProposalCard from './themeProposalCard';
-import { themeImagePath, getTerm } from '../utils/metadata';
+import { themeImagePath, getTerm, getTitle } from '../utils/metadata';
 import { useMetaData } from '../contexts/MetaDataContext';
 
 const ThemePreview = ({ previewValues }) => {
@@ -70,10 +70,15 @@ const ThemePreview = ({ previewValues }) => {
                 color={previewValues?.secondary500}
                 borderColor={previewValues?.secondary500}
                 variant='outline'
+                title={getTitle(customTerms, 'Bank')}
               >
                 {getTerm(customTerms, 'bank')}
               </Button>
-              <Button color='whiteAlpha500' bg={previewValues?.secondary500}>
+              <Button
+                color='whiteAlpha500'
+                bg={previewValues?.secondary500}
+                title={getTitle(customTerms, 'Proposals')}
+              >
                 {getTerm(customTerms, 'proposals')}
               </Button>
             </HStack>

@@ -15,6 +15,7 @@ import {
   withdrawTokenFetch,
   pollRageKick,
   pollWrapNZapSummon,
+  pollTransmutationSummon,
 } from '../polls/polls';
 import {
   cancelProposalTest,
@@ -36,6 +37,7 @@ import {
   withdrawTokenTest,
   rageKickTest,
   wrapNZapSummonTest,
+  transmutationSummonTest,
 } from '../polls/tests';
 
 export const createPoll = ({
@@ -555,7 +557,7 @@ export const createPoll = ({
   } else if (action === 'superfluidWithdrawBalance') {
     return ({
       minionAddress,
-      superTokenAddress,
+      tokenAddress,
       expectedBalance,
       chainID,
       actions,
@@ -567,7 +569,7 @@ export const createPoll = ({
         args: {
           chainID,
           uberMinionAddress: minionAddress,
-          tokenAddress: superTokenAddress,
+          tokenAddress,
         },
         actions,
         txHash,
@@ -589,7 +591,7 @@ export const createPoll = ({
           },
           pollArgs: {
             minionAddress,
-            superTokenAddress,
+            tokenAddress,
             expectedBalance,
             chainID,
           },
@@ -1091,6 +1093,35 @@ export const createPoll = ({
           unresolvedMsg: 'Summoning Wrap-N-Zap',
           successMsg: 'Summoned Wrap-N-Zap',
           errorMsg: 'Error summoning Wrap-N-Zap',
+          pollData: {
+            action,
+            interval,
+            tries,
+          },
+          pollArgs: { chainID, daoID },
+        });
+      }
+    };
+  } else if (action === 'summonTransmutation') {
+    return ({ chainID, daoID, actions }) => txHash => {
+      startPoll({
+        pollFetch: pollTransmutationSummon,
+        testFn: transmutationSummonTest,
+        shouldEqual: { daoID },
+        args: { chainID, daoID },
+        actions,
+        txHash,
+      });
+      if (cachePoll) {
+        cachePoll({
+          txHash,
+          action,
+          timeSent: Date.now(),
+          status: 'unresolved',
+          resolvedMsg: 'Successfully summoned Transmutation',
+          unresolvedMsg: 'Summoning Transmutation',
+          successMsg: 'Summoned Transmutation',
+          errorMsg: 'Error summoning Transmutation',
           pollData: {
             action,
             interval,

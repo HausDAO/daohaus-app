@@ -59,12 +59,12 @@ export const supportedChains = {
     wrap_n_zap_factory_addr: '0x4e521FF388c83b4c945a33984ba42Efb73Cc04e6',
     block_explorer: 'https://rinkeby.etherscan.io',
     superfluid: {
-      minion_factory_addr: '0xc4fe30611474Aa737b5B1DBC81aB4Eb9E8959DE1',
+      minion_factory_addr: '0x4b168c1a1E729F4c8e3ae81d09F02d350fc905ca',
       resolver: '0x659635Fab0A0cef1293f7eb3c7934542B6A6B31A',
       subgraph_url:
         'https://api.thegraph.com/subgraphs/name/superfluid-finance/superfluid-rinkeby',
       superapp_addr: {
-        v1: '0xcf7ce0023C4dA08c6b8065BB52032bC7951f2D43',
+        v1: '0x7d8151FAB5D6742F1c574fff472B6794062C2D0C',
       },
       version: 'v1',
     },
@@ -94,6 +94,7 @@ export const supportedChains = {
       'https://api.thegraph.com/subgraphs/name/odyssy-automaton/daohaus-boosts-kovan',
     minion_factory_addr: '0xCE63803E265617c55567a7A7b584fF2dbD76210B',
     uberhaus_minion_factory_addr: '0x03042577463E3820F9cA6Ca3906BAad599ba9382',
+    transmutation_factory_addr: '0xbca622291fFe797C77a8Bc6D000584b22877e971',
     moloch_factory_addr: '0x9c5d087f912e7187D9c75e90999b03FB31Ee17f5',
     dai_contract: '0x4F96Fe3b7A6Cf9725f59d353F723c1bDb64CA6Aa',
     wrapper_contract: '0xd0a1e359811322d97991e03f863a0c30c2cf029c',
@@ -128,6 +129,17 @@ export const supportedChains = {
     wrap_n_zap_factory_addr: '0x8464135c8F25Da09e49BC8782676a84730C318bC',
     block_explorer: 'https://blockscout.com/poa/xdai',
     uberhaus_minion_factory_addr: '0xf5106077892992B84c33C35CA8763895eb80B298',
+    transmutation_factory_addr: '0x7F94ec015665743fE84A7f59297eD86A0470e069',
+    superfluid: {
+      minion_factory_addr: '0xfC86DfDd3b2e560729c78b51dF200384cfe87438',
+      resolver: '0xD2009765189164b495c110D61e4D301729079911',
+      subgraph_url:
+        'https://thegraph.com/explorer/subgraph/superfluid-finance/superfluid-xdai',
+      superapp_addr: {
+        v1: '0x9fc9420F277b7C25E17B67008b35CCB01c5c9B63',
+      },
+      version: 'v1',
+    },
   },
   '0x89': {
     name: 'Matic',
@@ -156,6 +168,16 @@ export const supportedChains = {
     wrapper_contract: '0x0d500b1d8e8ef31e21c99d1db9a6444d3adf1270',
     wrap_n_zap_factory_addr: '0xbf9e327d465A4A160fA7805282Fb8C7aB892770a',
     block_explorer: 'https://explorer-mainnet.maticvigil.com',
+    superfluid: {
+      minion_factory_addr: '0x52acf023d38A31f7e7bC92cCe5E68d36cC9752d6',
+      resolver: '0xE0cc76334405EE8b39213E620587d815967af39C',
+      subgraph_url:
+        'https://thegraph.com/explorer/subgraph/superfluid-finance/superfluid-matic',
+      superapp_addr: {
+        v1: '0xdb4D89F2199b9Cf451B7Ff4bdC94b1c96De4bdD0',
+      },
+      version: 'v1',
+    },
   },
   '0x4a': {
     name: 'IDChain',

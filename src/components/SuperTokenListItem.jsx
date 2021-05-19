@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Flex, Box, Icon, Button, Link, Stack } from '@chakra-ui/react';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
 import { FaCopy } from 'react-icons/fa';
@@ -14,20 +14,29 @@ const SuperTokenListItem = ({
   handleCopyToast,
   daoMember,
   withdrawSupertoken,
+  upgradeSupertoken,
   loading,
-  successToast,
 }) => {
+  const [loadingCond, setLoadingCond] = useState();
+
   const isLoading = loading?.active && loading?.condition === tokenAddress;
   const shouldDisableWithdraw =
     token?.tokenBalance <= 0 ||
-    (loading?.active && loading?.condition === tokenAddress);
+    (loading?.active &&
+      loading?.condition === tokenAddress &&
+      loadingCond === 'withdraw');
 
-  const handleWithdraw = () => {
-    withdrawSupertoken(tokenAddress);
+  const handleWithdraw = async () => {
+    const downgrade = true; // TODO: opt-in to downgrade or just withdraw supertoken
+    setLoadingCond('withdraw');
+    await withdrawSupertoken(tokenAddress, downgrade);
+    setLoadingCond(null);
   };
 
-  const displayComingSoon = () => {
-    successToast({ title: 'Coming Soon' });
+  const handleUpgrade = async () => {
+    setLoadingCond('upgrade');
+    await upgradeSupertoken(token, tokenAddress);
+    setLoadingCond(null);
   };
 
   return (
@@ -69,28 +78,29 @@ const SuperTokenListItem = ({
               variant='solid'
               onClick={handleWithdraw}
               loadingText='Withdrawing'
-              isLoading={isLoading}
+              isLoading={isLoading && loadingCond === 'withdraw'}
               disabled={shouldDisableWithdraw}
             >
               Return Balance
             </Button>
           </ToolTipWrapper>
-          <ToolTipWrapper
-            placement='right'
-            tooltip
-            tooltipText={SF_LABEL.UPGRADE}
-          >
-            <Button
-              rightIcon={<RiQuestionLine />}
-              variant='solid'
-              onClick={displayComingSoon}
-              loadingText='Upgrading'
-              isLoading={isLoading}
-              disabled
+          {token.underlyingTokenAddress && (
+            <ToolTipWrapper
+              placement='right'
+              tooltip
+              tooltipText={SF_LABEL.UPGRADE}
             >
-              Upgrade
-            </Button>
-          </ToolTipWrapper>
+              <Button
+                rightIcon={<RiQuestionLine />}
+                variant='solid'
+                onClick={handleUpgrade}
+                loadingText='Upgrading'
+                isLoading={isLoading && loadingCond === 'upgrade'}
+              >
+                Convert
+              </Button>
+            </ToolTipWrapper>
+          )}
           {!token.registeredToken && (
             <ToolTipWrapper
               placement='right'
