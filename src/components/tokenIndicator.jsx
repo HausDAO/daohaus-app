@@ -1,4 +1,7 @@
 import React, { useEffect, useState } from 'react';
+import { Flex, Link } from '@chakra-ui/layout';
+import Icon from '@chakra-ui/icon';
+import { RiExternalLinkLine } from 'react-icons/ri';
 
 import TextBox from './TextBox';
 import StaticAvatar from './staticAvatar';
@@ -10,20 +13,21 @@ import { truncateAddr } from '../utils/general';
 const TokenIndicator = ({
   tooltip = true,
   tooltipText,
-  parentLink,
+  link,
   tokenAddress,
-  tokenDataFromParent,
-  label,
+  parentData,
+  label = 'Token',
+  href,
+  explorerLink,
 }) => {
-  const [tokenData, setTokenData] = useState(tokenDataFromParent || null);
-
+  const [tokenData, setTokenData] = useState(null);
   const name =
-    tokenData?.name || tokenData?.symbol || truncateAddr(tokenAddress);
-  const avatarImg = tokenData?.image?.thumb || null;
-  const link =
-    parentLink || tokenData?.id
-      ? `https://www.coingecko.com/en/coins/${tokenData?.id}`
-      : null;
+    parentData?.name ||
+    tokenData?.name ||
+    tokenData?.symbol ||
+    truncateAddr(tokenAddress);
+  const avatarImg = parentData?.image?.thumb || null;
+
   useEffect(() => {
     const fetchTokenData = async () => {
       try {
@@ -34,17 +38,39 @@ const TokenIndicator = ({
         console.error(error);
       }
     };
-    if (tokenAddress && !tokenDataFromParent) {
+    if (tokenAddress && !parentData) {
       fetchTokenData();
     }
   }, [tokenAddress]);
+
   return (
-    <ToolTipWrapper tooltip={tooltip} tooltipText={tooltipText} link={link}>
+    <ToolTipWrapper
+      tooltip={tooltip}
+      tooltipText={tooltipText}
+      href={href}
+      link={link}
+    >
       <TextBox size='xs' mb={2}>
         {label}
       </TextBox>
-
-      <StaticAvatar name={name} address={tokenAddress} avatarImg={avatarImg} />
+      <Flex>
+        <StaticAvatar
+          name={name}
+          address={tokenAddress}
+          avatarImg={avatarImg}
+        />
+        {explorerLink && (
+          <Link href={explorerLink} isExternal>
+            <Icon
+              as={RiExternalLinkLine}
+              name='explorer link'
+              // transform='translateY(2px)'
+              color='secondary.300'
+              _hover={{ cursor: 'pointer' }}
+            />
+          </Link>
+        )}
+      </Flex>
     </ToolTipWrapper>
   );
 };

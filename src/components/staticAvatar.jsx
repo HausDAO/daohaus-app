@@ -2,8 +2,8 @@ import React, { useMemo } from 'react';
 import { FaCopy } from 'react-icons/fa';
 import makeBlockie from 'ethereum-blockies-base64';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
-
 import { Flex, Avatar, Box, useToast, Icon, Text } from '@chakra-ui/react';
+
 import { truncateAddr } from '../utils/general';
 
 const StaticAvatar = ({ address, avatarImg, name, hideCopy, emoji }) => {
@@ -13,6 +13,7 @@ const StaticAvatar = ({ address, avatarImg, name, hideCopy, emoji }) => {
       return makeBlockie(address);
     }
   }, [address]);
+  const avImg = avatarImg || blockie;
   const copiedToast = () => {
     toast({
       title: 'Copied Address',
@@ -22,11 +23,10 @@ const StaticAvatar = ({ address, avatarImg, name, hideCopy, emoji }) => {
       isClosable: true,
     });
   };
-
   return (
     <Flex direction='row' alignItems='center'>
       <Flex direction='row' alignItems='center'>
-        <Avatar name={name || address} src={avatarImg || blockie} size='sm' />
+        <Avatar name={name || address} src={avImg} size='sm' />
         <Flex>
           <Text fontSize='sm' fontFamily='heading' ml={3}>
             {name || truncateAddr(address)}

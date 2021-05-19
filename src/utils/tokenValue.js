@@ -46,7 +46,11 @@ export const getTokenData = async (
 
   try {
     const response = await fetch(url);
-    return response.json();
+    const data = await response.json();
+
+    if (!data.error) {
+      return data;
+    }
   } catch (err) {
     throw new Error(err);
   }

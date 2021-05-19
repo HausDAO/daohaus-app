@@ -14,7 +14,6 @@ import Vote from './voteIcon';
 import MediaBox from './mediaBox';
 import TextIndicator from './textIndicator';
 import MemberIndicator from './memberIndicator';
-import TokenIndicator from './tokenIndicator';
 import UberDaoInfo from './uberDaoInfo';
 
 import { generateSFLabels, TIP_LABELS } from '../utils/toolTipLabels';
@@ -31,6 +30,7 @@ import { UBERHAUS_DATA } from '../utils/uberhaus';
 import { handleDecimals } from '../utils/general';
 import UberHausDelegate from './uberhausDelegate';
 import DiscourseProposalTopic from './discourseProposalTopic';
+import TokenDisplay from './tokenDisplay';
 
 const UBER_LINK =
   '/dao/0x2a/0x96714523778e51b898b072089e5615d4db71078e/proposals';
@@ -48,7 +48,6 @@ const ProposalDetails = ({ proposal, daoMember }) => {
   const { isUberHaus, daoOverview } = useDao();
   const [status, setStatus] = useState(null);
   const { daoid } = useParams();
-  console.log(proposal);
 
   useEffect(() => {
     if (proposal) {
@@ -123,7 +122,7 @@ const ProposalDetails = ({ proposal, daoMember }) => {
             </Skeleton>
           )}
           {proposal?.proposalType === PROPOSAL_TYPES.WHITELIST && (
-            <TokenIndicator tokenAddress={proposal.tributeToken} />
+            <TokenDisplay tokenAddress={proposal.tributeToken} />
           )}
           <Box mt={proposal?.link || proposal?.minionAddress ? 6 : 2}>
             {proposal?.link && <MediaBox link={proposal.link} />}
