@@ -21,6 +21,11 @@ const ContentBoxComponent = {
     superBig: {
       fontSize: '100px',
     },
+    d2: {
+      bg: 'linear-gradient(to bottom, #FFF7FD 0%, #F2F7FF 100%)',
+      rounded: 'xl',
+      boxShadow: '0px 5px 25px rgba(114,86,147,0.16)',
+    },
   },
 };
 

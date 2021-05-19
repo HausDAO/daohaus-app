@@ -94,6 +94,7 @@ export const supportedChains = {
       'https://api.thegraph.com/subgraphs/name/odyssy-automaton/daohaus-boosts-kovan',
     minion_factory_addr: '0xCE63803E265617c55567a7A7b584fF2dbD76210B',
     uberhaus_minion_factory_addr: '0x03042577463E3820F9cA6Ca3906BAad599ba9382',
+    transmutation_factory_addr: '0xbca622291fFe797C77a8Bc6D000584b22877e971',
     moloch_factory_addr: '0x9c5d087f912e7187D9c75e90999b03FB31Ee17f5',
     dai_contract: '0x4F96Fe3b7A6Cf9725f59d353F723c1bDb64CA6Aa',
     wrapper_contract: '0xd0a1e359811322d97991e03f863a0c30c2cf029c',
@@ -128,6 +129,7 @@ export const supportedChains = {
     wrap_n_zap_factory_addr: '0x8464135c8F25Da09e49BC8782676a84730C318bC',
     block_explorer: 'https://blockscout.com/poa/xdai',
     uberhaus_minion_factory_addr: '0xf5106077892992B84c33C35CA8763895eb80B298',
+    transmutation_factory_addr: '0x7F94ec015665743fE84A7f59297eD86A0470e069',
     superfluid: {
       minion_factory_addr: '0xfC86DfDd3b2e560729c78b51dF200384cfe87438',
       resolver: '0xD2009765189164b495c110D61e4D301729079911',
