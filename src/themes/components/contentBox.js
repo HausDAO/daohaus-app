@@ -5,6 +5,7 @@ const ContentBoxComponent = {
     borderWidth: '1px',
     borderColor: 'whiteAlpha.200',
     p: 6,
+    color: 'mode.900',
   },
 
   sizes: {

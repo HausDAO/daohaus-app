@@ -106,18 +106,11 @@ const ActivityCard = ({ activity, displayAvatar, isLink = true }) => {
         )}
         <Flex direction='row' justifyContent='space-between'>
           <Flex direction='column'>
-            {activity?.title &&
-              (isLink && proposalLink ? (
-                <RouterLink to={proposalLink}>
-                  <Heading as='h4' size='sm'>
-                    {`${name} ${activity.title}`}
-                  </Heading>
-                </RouterLink>
-              ) : (
-                <Heading as='h4' size='sm'>
-                  {`${name} ${activity.title}`}
-                </Heading>
-              ))}
+            {activity?.title && (
+              <Heading as='h4' size='sm'>
+                {`${name} ${activity.title}`}
+              </Heading>
+            )}
             <Flex direction='row' align='center' mt={3}>
               {activity?.voteBadge && (
                 <Badge
@@ -167,6 +160,11 @@ const ActivityCard = ({ activity, displayAvatar, isLink = true }) => {
               <Text as='i' fontSize='xs' ml={3}>
                 {activity?.createdAt ? timeToNow(activity.createdAt) : '--'}
               </Text>
+              {isLink && proposalLink ? (
+                <Box as={RouterLink} to={proposalLink} fontSize='xs' ml={3}>
+                  View Proposal
+                </Box>
+              ) : null}
             </Flex>
           </Flex>
           {isLink && profileLink ? (
