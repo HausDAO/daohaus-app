@@ -52,7 +52,7 @@ export const getTokenData = async (
       return data;
     }
   } catch (err) {
-    throw new Error(err);
+    console.throw(err);
   }
 };
 getTokenData();
@@ -62,7 +62,7 @@ export const calcTotalUSD = (decimals, tokenBalance, usdVal) => {
 
 export const initTokenData = async (graphTokenData, tokenPriceSetter) => {
   const tokenData = await fetchTokenData();
-  if (tokenData) {
+  if (tokenData && tokenPriceSetter) {
     tokenPriceSetter(tokenData);
   }
   const uniswapData = await fetchUniswapData();
