@@ -60,8 +60,11 @@ export const calcTotalUSD = (decimals, tokenBalance, usdVal) => {
   return (+tokenBalance / 10 ** decimals) * +usdVal;
 };
 
-export const initTokenData = async graphTokenData => {
+export const initTokenData = async (graphTokenData, tokenPriceSetter) => {
   const tokenData = await fetchTokenData();
+  if (tokenData) {
+    tokenPriceSetter(tokenData);
+  }
   const uniswapData = await fetchUniswapData();
   const uniswapDataMap = uniswapData.reduce((map, token) => {
     map[token.symbol] = token.logoURI;

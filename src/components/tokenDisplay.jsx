@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router';
 import { Box, Flex } from '@chakra-ui/layout';
 
+import { useToken } from '../contexts/TokenContext';
 import TokenIndicator from './tokenIndicator';
 import TextIndicator from './textIndicator';
 
@@ -9,8 +10,10 @@ import { TokenService } from '../services/tokenService';
 
 const TokenDisplay = ({ tokenAddress }) => {
   const { daochain } = useParams();
+  const { getTokenPrice } = useToken();
 
   const [tokenData, setTokenData] = useState(null);
+  const usdPrice = getTokenPrice(tokenAddress);
 
   useEffect(() => {
     const fetchTokenData = async () => {
@@ -38,7 +41,7 @@ const TokenDisplay = ({ tokenAddress }) => {
           <TextIndicator label='Symbol' value={tokenData.symbol} />
         )}
         {/* Will occasionally botch decimals. Should be fixed with ProposalLegos merge */}
-        {/* {price && <TextIndicator label='USD Price' value={price} />} */}
+        {usdPrice && <TextIndicator label='USD Price' value={usdPrice} />}
         {tokenData?.decimals && (
           <TextIndicator label='decimals' value={tokenData?.decimals} />
         )}
