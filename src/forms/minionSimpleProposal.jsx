@@ -92,7 +92,7 @@ const MinionProposalForm = () => {
     console.log('values', values);
     setLoading(true);
     const minionName = minions.find(
-      minion => minion.minionAddress === values.minionAdddress,
+      minion => minion.minionAddress === values.minionContract,
     )?.minionName;
     const valueWei = injectedProvider.utils.toWei(values.value);
 

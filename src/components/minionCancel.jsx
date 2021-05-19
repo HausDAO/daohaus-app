@@ -10,7 +10,7 @@ import { createPoll } from '../services/pollService';
 import { MinionService } from '../services/minionService';
 
 const MinionCancel = ({ proposal }) => {
-  const { daochain } = useParams();
+  const { daochain, daoid } = useParams();
   const {
     errorToast,
     successToast,
@@ -30,10 +30,9 @@ const MinionCancel = ({ proposal }) => {
     const args = [proposal.proposalId];
     try {
       const poll = createPoll({ action: 'cancelProposal', cachePoll })({
-        minionAddress: proposal.minionAddress,
+        daoID: daoid,
         chainID: daochain,
         proposalId: proposal.proposalId,
-        proposalType: proposal?.proposalType,
         actions: {
           onError: (error, txHash) => {
             errorToast({
@@ -45,10 +44,11 @@ const MinionCancel = ({ proposal }) => {
           },
           onSuccess: txHash => {
             successToast({
-              title: 'Minion action canceled.',
+              title: 'Cancelled proposal!',
             });
-            resolvePoll(txHash);
             refreshDao();
+            resolvePoll(txHash);
+            setLoading(false);
           },
         },
       });
