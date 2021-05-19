@@ -3,43 +3,57 @@ import { Flex, Link } from '@chakra-ui/layout';
 import Icon from '@chakra-ui/icon';
 import { RiExternalLinkLine } from 'react-icons/ri';
 
+import { useParams } from 'react-router';
 import TextBox from './TextBox';
 import StaticAvatar from './staticAvatar';
 import { ToolTipWrapper } from '../staticElements/wrappers';
 
 import { getTokenData } from '../utils/tokenValue';
 import { truncateAddr } from '../utils/general';
+import { TokenService } from '../services/tokenService';
+import { getExplorerLink } from '../utils/tokenExplorerApi';
 
 const TokenIndicator = ({
   tooltip = true,
   tooltipText,
   link,
   tokenAddress,
-  parentData,
   label = 'Token',
   href,
-  explorerLink,
 }) => {
-  const [tokenData, setTokenData] = useState(null);
+  const { daochain } = useParams();
+  const [geckoData, setGeckoData] = useState(null);
+  const [chainName, setChainName] = useState(null);
   const name =
-    parentData?.name ||
-    tokenData?.name ||
-    tokenData?.symbol ||
+    geckoData?.name ||
+    chainName ||
+    geckoData?.symbol ||
     truncateAddr(tokenAddress);
-  const avatarImg = parentData?.image?.thumb || null;
+  const avatarImg = geckoData?.image?.thumb || null;
+  const explorerLink = getExplorerLink(tokenAddress, daochain);
 
   useEffect(() => {
-    const fetchTokenData = async () => {
+    const fetchName = async () => {
       try {
-        const data = await getTokenData(tokenAddress);
-        console.log(data);
-        setTokenData(data);
+        const name = await TokenService({ chainID: daochain, tokenAddress })(
+          'name',
+        )();
+        setChainName(name);
       } catch (error) {
         console.error(error);
       }
     };
-    if (tokenAddress && !parentData) {
+    const fetchTokenData = async () => {
+      try {
+        const data = await getTokenData(tokenAddress);
+        setGeckoData(data);
+      } catch (error) {
+        console.error(error);
+      }
+    };
+    if (tokenAddress) {
       fetchTokenData();
+      fetchName();
     }
   }, [tokenAddress]);
 
