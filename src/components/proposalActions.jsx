@@ -26,6 +26,7 @@ import {
 } from '../utils/general';
 import { useMetaData } from '../contexts/MetaDataContext';
 import MinionExecute from './minionExecute';
+import MinionCancel from './minionCancel';
 
 const MotionBox = motion(Box);
 
@@ -134,8 +135,9 @@ const ProposalVote = ({
     }
   }, [overview]);
 
-  const cancelProposal = async id => {
+  const cancelProposal = async () => {
     setLoading(true);
+    const id = proposal.proposalId;
     const args = [id];
     try {
       console.log(id);
@@ -470,15 +472,18 @@ const ProposalVote = ({
                   <Button isDisabled>Sponsor</Button>
                 </Tooltip>
               )}
-              {proposal?.proposer === address?.toLowerCase() && (
-                <Button
-                  variant='outline'
-                  onClick={() => cancelProposal(proposal?.proposalId)}
-                  isLoading={loading}
-                >
-                  Cancel
-                </Button>
-              )}
+              {proposal?.proposer === address?.toLowerCase() &&
+                !proposal?.minionAddress && (
+                  <Button
+                    variant='outline'
+                    onClick={cancelProposal}
+                    isLoading={loading}
+                  >
+                    Cancel
+                  </Button>
+                )}
+              {proposal?.proposer === address?.toLowerCase() &&
+                proposal?.minionAddress && <MinionCancel proposal={proposal} />}
             </Flex>
           </Flex>
         )}

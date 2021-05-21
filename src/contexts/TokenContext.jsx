@@ -17,6 +17,7 @@ export const TokenProvider = ({ children }) => {
   const { daoOverview } = useDao();
 
   const { daochain } = useParams();
+  const [tokenPrices, setTokenPrices] = useState(null);
   const [currentDaoTokens, setCurrentDaoTokens] = useState(null);
 
   const shouldFetchInit = useRef(true);
@@ -25,12 +26,15 @@ export const TokenProvider = ({ children }) => {
   // first fetch API USD values to get fast bank balance
   useEffect(() => {
     const initDaoTokens = async () => {
-      const newDaoData = await initTokenData(daoOverview.tokenBalances);
+      const newDaoData = await initTokenData(
+        daoOverview.tokenBalances,
+        setTokenPrices,
+      );
       setCurrentDaoTokens(newDaoData);
       shouldFetchInit.current = false;
     };
     if (daoOverview?.tokenBalances && daochain && shouldFetchInit.current) {
-      initDaoTokens(daochain);
+      initDaoTokens();
     }
   }, [daoOverview, daochain]);
 
@@ -55,13 +59,22 @@ export const TokenProvider = ({ children }) => {
     shouldFetchContract.current = true;
   };
 
+  const getTokenPrice = tokenAddress => {
+    if (tokenPrices && tokenAddress) {
+      console.log(tokenPrices);
+      return tokenPrices[tokenAddress]?.price || null;
+    }
+  };
+
   return (
     <TokenContext.Provider
       value={{
         currentDaoTokens,
         shouldFetchInit,
         shouldFetchContract,
+        tokenPrices,
         refetchTokens,
+        getTokenPrice,
       }}
     >
       {children}
@@ -70,12 +83,16 @@ export const TokenProvider = ({ children }) => {
 };
 
 export const useToken = () => {
-  const { currentDaoTokens, shouldFetchInit, shouldFetchContract } = useContext(
-    TokenContext,
-  );
+  const {
+    currentDaoTokens,
+    shouldFetchInit,
+    shouldFetchContract,
+    getTokenPrice,
+  } = useContext(TokenContext);
   return {
     currentDaoTokens,
     shouldFetchInit,
     shouldFetchContract,
+    getTokenPrice,
   };
 };
