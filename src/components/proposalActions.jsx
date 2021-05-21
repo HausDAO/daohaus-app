@@ -135,8 +135,9 @@ const ProposalVote = ({
     }
   }, [overview]);
 
-  const cancelProposal = async id => {
+  const cancelProposal = async () => {
     setLoading(true);
+    const id = proposal.proposalId;
     const args = [id];
     try {
       console.log(id);
@@ -475,7 +476,7 @@ const ProposalVote = ({
                 !proposal?.minionAddress && (
                   <Button
                     variant='outline'
-                    onClick={() => cancelProposal(proposal?.proposalId)}
+                    onClick={cancelProposal}
                     isLoading={loading}
                   >
                     Cancel
