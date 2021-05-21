@@ -37,6 +37,7 @@ import { useUser } from '../contexts/UserContext';
 import { useTX } from '../contexts/TXContext';
 import { TokenService } from '../services/tokenService';
 import MinionNativeToken from '../components/minionNativeToken';
+import { NiftyService } from '../services/niftyService';
 
 const MinionDetails = ({
   overview,
@@ -69,24 +70,34 @@ const MinionDetails = ({
     balancesGraphData.chains.length === Object.keys(supportedChains).length;
 
   useEffect(() => {
+    console.log('overview', minionType, overview);
     if (!overview?.minions.length) {
       return;
     }
-    const localMinionData = overview?.minions.find(m => {
-      return m.minionAddress === minion;
-    });
+    let localMinionData = {};
+    if (minionType === 'niftyInk') {
+      // TODO: check if a special boost is active?
+      // or special nft boost
+      // is this really needed? the buy will be a proposal type
+      localMinionData = overview?.minions[0];
+    } else {
+      localMinionData = overview?.minions.find(m => {
+        return m.minionAddress === minion;
+      });
+    }
+
     setMinionData(localMinionData);
   }, [overview, minion]);
 
   useEffect(() => {
-    console.log('get minion balance', minion);
-    if (minion) {
+    console.log('get minion balance', minionData);
+    if (minionData) {
       balanceChainQuery({
         reactSetter: setBalanceGraphData,
-        address: minion,
+        address: minionData.minionAddress,
       });
     }
-  }, [minion]);
+  }, [minionData]);
 
   useEffect(() => {
     if (hasLoadedBalanceData) {
@@ -110,7 +121,7 @@ const MinionDetails = ({
     });
     balanceChainQuery({
       reactSetter: setBalanceGraphData,
-      address: minion,
+      address: minionData.minionAddress,
     });
   };
 
@@ -155,7 +166,7 @@ const MinionDetails = ({
       };
       await MinionService({
         web3: injectedProvider,
-        minion,
+        minion: minionData.minionAddress,
         chainID: daochain,
       })(serviceName || 'proposeAction')({
         args,
@@ -192,7 +203,7 @@ const MinionDetails = ({
     submitMinion(args);
   };
 
-  const sendToken = async (values, token) => {
+  const sendErc20Action = async (values, token) => {
     setLoading(true);
     const tokenService = TokenService({
       tokenAddress: token.contractAddress,
@@ -214,6 +225,59 @@ const MinionDetails = ({
         values.description || `Send ${values.amount} ${token.symbol}`,
       // link: (link to block explorer)
       type: 'tokenSend',
+    });
+    const args = [token.contractAddress, '0', hexData, details];
+    submitMinion(args);
+  };
+
+  const sendErc721Action = async (values, token, tokenId) => {
+    setLoading(true);
+    console.log(values);
+
+    const niftyService = NiftyService({
+      tokenAddress: token.contractAddress,
+      chainID: daochain,
+    });
+
+    const hexData = await niftyService('safeTransferFromNoop')({
+      tokenId,
+      destination: values.destination,
+      from: overview.minions[0].minionAddress,
+    });
+
+    const details = detailsToJSON({
+      title: `${minionData.details} Sends a Nifty`,
+      description: `Send NFT to ${values.destination}`,
+      // link: nftImage || null,
+      type: 'niftyInk',
+    });
+    const args = [token.contractAddress, '0', hexData, details];
+    submitMinion(args);
+  };
+
+  // niftyink only
+  const sellNiftyAction = async (values, token, tokenId) => {
+    setLoading(true);
+
+    console.log(values);
+
+    const niftyService = NiftyService({
+      tokenAddress: token.contractAddress,
+      chainID: daochain,
+    });
+
+    const priceInWei = injectedProvider.utils.toWei(values.price);
+    console.log('priceInWei', priceInWei);
+    const hexData = await niftyService('setTokenPriceNoop')({
+      tokenId,
+      price: priceInWei,
+    });
+
+    const details = detailsToJSON({
+      title: `${minionData.details} Sells a Nifty`,
+      description: 'Sell NFT',
+      // link: nftImage || null,
+      type: 'niftyInk',
     });
     const args = [token.contractAddress, '0', hexData, details];
     submitMinion(args);
@@ -250,8 +314,7 @@ const MinionDetails = ({
                       mr={3}
                     />
                     <Heading>
-                      {minionType || null}
-                      {minionData.details}
+                      {minionType || null} {minionData.details}
                     </Heading>
                   </Flex>
                 </Box>
@@ -301,11 +364,14 @@ const MinionDetails = ({
                     )}
 
                     <MinionTokenList
-                      minion={minion}
-                      action={sendToken}
+                      minion={minionData.minionAddress}
+                      sendErc20Action={sendErc20Action}
+                      sendErc721Action={sendErc721Action}
+                      sellNiftyAction={sellNiftyAction}
                       isMember={isMember}
                     />
                   </Box>
+                  {/* spcial minion actions. needed? */}
                   {minionType === 'niftyInk' && (
                     <Box>
                       <Button

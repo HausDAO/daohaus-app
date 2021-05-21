@@ -9,7 +9,14 @@ import {
   getEtherscanTokenData,
 } from '../utils/tokenExplorerApi';
 
-const MinionTokenList = ({ minion, action, boost, isMember }) => {
+const MinionTokenList = ({
+  minion,
+  sendErc20Action,
+  sendErc721Action,
+  sellNiftyAction,
+  boost,
+  isMember,
+}) => {
   const [tokens, setTokens] = useState();
   const { daochain } = useParams();
 
@@ -55,7 +62,9 @@ const MinionTokenList = ({ minion, action, boost, isMember }) => {
             <MinionTokenListCard
               key={token?.contractAddress}
               token={token}
-              action={action}
+              sendErc20Action={sendErc20Action}
+              sendErc721Action={sendErc721Action}
+              sellNiftyAction={sellNiftyAction}
               boost={boost}
               isMember={isMember}
             />

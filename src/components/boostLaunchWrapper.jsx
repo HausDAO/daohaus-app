@@ -130,6 +130,9 @@ const BoostLaunchWrapper = ({ boost }) => {
       case 'superfluidMinion': {
         return <NewSuperfluidMinionForm />;
       }
+      case 'niftyMinion': {
+        return <NewMinionForm />;
+      }
       case 'minionSafe': {
         return <NewMinionSafe />;
       }
@@ -201,9 +204,6 @@ const BoostLaunchWrapper = ({ boost }) => {
             setLoading={setLoading}
           />
         );
-      }
-      case 'niftyInk': {
-        return <NewMinionForm />;
       }
       default: {
         return null;
