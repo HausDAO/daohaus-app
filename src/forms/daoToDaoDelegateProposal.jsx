@@ -42,7 +42,6 @@ const DelegateProposalForm = ({
   const { daoid } = useParams();
   const { daoMetaData } = useMetaData();
   const { injectedProvider, address } = useInjectedProvider();
-  const [timePeriod, setTimePeriod] = useState(0);
   const [currentError, setCurrentError] = useState(null);
   const {
     setD2dProposalModal,
