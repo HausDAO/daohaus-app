@@ -29,6 +29,16 @@ export const TokenService = ({
         }
       };
     }
+    if (service === 'name') {
+      return async () => {
+        try {
+          const name = await contract.methods.name().call();
+          return name;
+        } catch (error) {
+          console.error(error);
+        }
+      };
+    }
     if (service === 'decimals') {
       return async () => {
         try {

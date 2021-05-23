@@ -227,7 +227,11 @@ export const defaultThemeData = {
           focusBorderColor: 'secondary.500',
         },
       },
-      variants: {},
+      variants: {
+        d2: {
+          color: 'blackAlpha.900',
+        },
+      },
       sizes: {},
       defaultProps: {
         size: 'md',
