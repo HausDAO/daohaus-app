@@ -1,4 +1,4 @@
-import { PROPOSAL_TYPES } from '../utils/proposalUtils';
+import { MINION_TYPES, PROPOSAL_TYPES } from '../utils/proposalUtils';
 
 const INFO_TEXT = {
   SHARES_REQUEST:
@@ -91,6 +91,14 @@ export const FIELD = {
     placeholder: '0x',
     expectType: 'publicKey',
   },
+  MINION_SELECT: {
+    type: 'minionSelect',
+    label: 'Select a minion',
+    name: 'selectedMinion',
+    htmlFor: 'selectedMinion',
+    placeholder: 'Choose a DAO minion',
+    expectType: 'publicKey',
+  },
 };
 
 export const PROPOSAL_FORMS = {
@@ -118,6 +126,7 @@ export const PROPOSAL_FORMS = {
       FIELD.PAYMENT_REQUEST,
     ],
   },
+
   FUNDING: {
     title: 'Funding',
     subtitle: 'Request or distribute funds',
@@ -211,5 +220,24 @@ export const PROPOSAL_FORMS = {
     },
     required: ['title'], // Use name key from proposal type object
     fields: [FIELD.TITLE, FIELD.DESCRIPTION, FIELD.LINK],
+  },
+  MINION: {
+    title: 'Minion Proposal',
+    subtitle: 'Extend DAO proposals to external contracts',
+    type: PROPOSAL_TYPES.MINION_DEFAULT,
+    required: ['targetContract', 'title', 'selectedMinion'], // Use name key from proposal type object
+    minionType: MINION_TYPES.VANILLA,
+    tx: {
+      txType: 'submitProposal',
+      contract: 'Moloch',
+      errMsg: 'Error submitting proposal',
+      successMsg: 'Membership Proposal submitted!',
+    },
+    fields: [
+      FIELD.TITLE,
+      FIELD.MINION_SELECT,
+      FIELD.SHARES_REQUEST,
+      FIELD.DESCRIPTION,
+    ],
   },
 };

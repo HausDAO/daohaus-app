@@ -68,7 +68,7 @@ const ProposalFormModal = ({ proposalType }) => {
       type: `New ${getTerm(customTerms, 'proposal')}`,
       heading: `New Minion ${getTerm(customTerms, 'proposal')}`,
       subline: 'Submit a Minion proposal here.',
-      form: <MinionSimpleProposalForm />,
+      form: <ProposalForm {...PROPOSAL_FORMS.MINION} />,
     },
     superfluidMinion: {
       type: `New ${getTerm(customTerms, 'proposal')}`,

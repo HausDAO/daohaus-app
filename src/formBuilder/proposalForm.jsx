@@ -89,6 +89,7 @@ const ProposalForm = props => {
                 <InputFactory
                   key={field?.htmlFor || field?.name}
                   {...field}
+                  minionType={props.minionType}
                   localForm={localForm}
                 />
               );

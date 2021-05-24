@@ -34,19 +34,19 @@ export const ToolTipWrapper = ({
   const getLinkBox = () => {
     if (href) {
       return (
-        <Box as={Link} href={href}>
+        <Box as={Link} href={href} {...layoutProps}>
           {children}
         </Box>
       );
     }
     if (link) {
       return (
-        <Box as={RouterLink} to={link}>
+        <Box as={RouterLink} to={link} {...layoutProps}>
           {children}
         </Box>
       );
     }
-    return <Box>{children}</Box>;
+    return <Box {...layoutProps}>{children}</Box>;
   };
   if (!tooltip) {
     return getLinkBox();
@@ -58,7 +58,6 @@ export const ToolTipWrapper = ({
       bg={bg}
       placement={placement}
       shouldWrapChildren
-      {...layoutProps}
     >
       {getLinkBox()}
     </Tooltip>
