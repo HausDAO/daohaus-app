@@ -15,7 +15,7 @@ import { useParams } from 'react-router-dom';
 import TextBox from '../components/TextBox';
 import DetailsFields from './detailFields';
 import AddressInput from './addressInput';
-import { createHash, detailsToJSON } from '../utils/general';
+import { createHash, detailsToJSON, JANUARY_2024 } from '../utils/general';
 import { useOverlay } from '../contexts/OverlayContext';
 import DelegateMenu from '../components/delegateMenu';
 import { UBERHAUS_DATA } from '../utils/uberhaus';
@@ -100,7 +100,7 @@ const DelegateProposalForm = ({
     const args = [
       UBERHAUS_DATA.ADDRESS,
       values.memberApplicant,
-      '1705936544',
+      JANUARY_2024.toString(),
       details,
     ];
 
