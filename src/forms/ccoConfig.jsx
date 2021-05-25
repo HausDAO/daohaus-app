@@ -65,7 +65,6 @@ const CcoConfig = ({ daoMetaData, ccoType }) => {
         signature,
       };
 
-      // hardcoding new new cco boost configurations to daosquare types for now
       if (!ccoConfiguration.ccoId) {
         ccoUpdate.metadata.network = injectedChain.network;
         ccoUpdate.boostKey = newCcoType;

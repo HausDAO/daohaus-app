@@ -17,15 +17,10 @@ export const DaosquareContextProvider = ({ children }) => {
     });
   }, []);
 
-  const resetD2CcoDaos = () => {
-    console.log('reset');
-  };
-
   return (
     <DaosquareContext.Provider
       value={{
         d2CcoDaos,
-        resetD2CcoDaos,
       }}
     >
       {children}
@@ -34,9 +29,8 @@ export const DaosquareContextProvider = ({ children }) => {
 };
 
 export const useDaosquareCco = () => {
-  const { d2CcoDaos, resetD2CcoDaos } = useContext(DaosquareContext);
+  const { d2CcoDaos } = useContext(DaosquareContext);
   return {
     d2CcoDaos,
-    resetD2CcoDaos,
   };
 };

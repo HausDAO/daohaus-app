@@ -32,15 +32,6 @@ const CcoCard = ({
     ),
     fundedAmount: dao.ccoFundedAmount,
   });
-  // const raiseLeft =
-  //   Number(daoMetaData.boosts[ccoType].metadata.maxTarget) -
-  //   dao.ccoFundedAmount;
-  // const canClaim =
-  //   dao?.ccoStatus?.label === 'Funded' && dao?.ccoStatus?.claimOpen;
-  // const barData = ccoProgressBarData(
-  //   daoMetaData.boosts[ccoType].metadata,
-  //   dao.ccoFundedAmount,
-  // );
 
   useEffect(() => {
     const getProposals = async () => {

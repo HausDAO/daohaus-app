@@ -22,10 +22,6 @@ const CcoWhitelist = ({ daoMetaData, ccoType }) => {
   const { errorToast, successToast } = useOverlay();
   let upload = useRef();
 
-  const handleChange = event => {
-    setCcoWhitelistJson(event.target.value);
-  };
-
   const handleUpdate = async () => {
     setLoading(true);
 
@@ -69,6 +65,10 @@ const CcoWhitelist = ({ daoMetaData, ccoType }) => {
     }
   };
 
+  const handleChange = event => {
+    setCcoWhitelistJson(event.target.value);
+  };
+
   const handleBrowse = () => {
     upload.value = null;
     upload.click();
@@ -77,8 +77,6 @@ const CcoWhitelist = ({ daoMetaData, ccoType }) => {
   const handleFileSet = async () => {
     const file = upload.files[0];
     const text = await file.text();
-
-    console.log(text);
     setCcoWhitelistJson(text.replace(/(\r\n|\n|\r)/gm, ',\n'));
   };
 

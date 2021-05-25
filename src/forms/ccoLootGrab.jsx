@@ -49,11 +49,7 @@ const CcoLootGrabForm = ({
     setValue,
     setError,
     getValues,
-    // watch,
   } = useForm({ reValidateMode: 'onSubmit' });
-
-  // watch not updating enough
-  // const currentTribute = watch('tributeOffered');
 
   useEffect(() => {
     if (Object.keys(errors).length > 0) {
@@ -169,11 +165,7 @@ const CcoLootGrabForm = ({
               <Flex justify='space-between'>
                 <Text fontSize='sm' color='blackAlpha.700' as='i' w='100%'>
                   {`${currentContributionData?.addressRemaining} / ${roundData.maxContribution} ${roundData.ccoToken.symbol} max contribution remaining`}
-                </Text>{' '}
-                {/* <Text fontSize='sm' color='whiteAlpha.700' as='i' ml={5}>
-                  {`will return -> ${+currentTribute *
-                    Number(roundData.ratio)} ${roundData.claimTokenSymbol} `}
-                </Text> */}
+                </Text>
               </Flex>
             </FormControl>
 

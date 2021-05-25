@@ -11,7 +11,6 @@ import { MolochService } from '../services/molochService';
 import { useDaoMember } from '../contexts/DaoMemberContext';
 import { useDao } from '../contexts/DaoContext';
 
-// TODO: get overview and member from somewhere
 const CcoClaim = ({ setClaimComplete, claimOpen }) => {
   const { daoMember } = useDaoMember();
   const { daoOverview } = useDao();
