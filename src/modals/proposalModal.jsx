@@ -11,7 +11,6 @@ import {
 } from '@chakra-ui/react';
 import { rgba } from 'polished';
 
-import MinionSimpleProposalForm from '../forms/minionSimpleProposal';
 import SuperfluidMinionProposalForm from '../forms/superfluidMinionProposal';
 import TransmutationProposal from '../forms/transmutationProposal';
 import { getTerm } from '../utils/metadata';

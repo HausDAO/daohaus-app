@@ -5,6 +5,7 @@ import GenericInput from './genericInput';
 import GenericTextarea from './genericTextArea';
 import InputSelect from './inputSelect';
 import LinkInput from './linkInput';
+import MinionPayment from './minionPayment';
 import MinionSelect from './minionSelect';
 import PaymentInput from './paymentInput';
 import TributeInput from './tributeInput';
@@ -34,6 +35,9 @@ export const InputFactory = props => {
   }
   if (type === 'minionSelect') {
     return <MinionSelect {...props} />;
+  }
+  if (type === 'minionPayment') {
+    return <MinionPayment {...props} />;
   }
   return null;
 };

@@ -11,6 +11,7 @@ const INFO_TEXT = {
     'Only tokens approved by the DAO are allowed here. Members can add more approved tokens with Token proposals',
   PAYMENT_REQUEST: 'Request Funds from the DAO',
   ADDR_KICK: 'Enter the public key of the member you would like to kick.',
+  MINION_TYPES: 'Minion funds to be used for this transaction',
 };
 
 export const FIELD = {
@@ -27,7 +28,7 @@ export const FIELD = {
     label: 'Description',
     name: 'description',
     htmlFor: 'description',
-    placeholder: 'How does that make you feel, champ',
+    placeholder: 'Your description here.',
     expectType: 'any',
   },
   SHARES_REQUEST: {
@@ -90,6 +91,15 @@ export const FIELD = {
     htmlFor: 'tokenAddress',
     placeholder: '0x',
     expectType: 'publicKey',
+  },
+  MINION_PAYMENT: {
+    type: 'minionPayment',
+    htmlFor: 'minionPayment',
+    name: 'minionPayment',
+    placeholder: '0',
+    label: 'Minion Balance',
+    info: INFO_TEXT.MINION_PAYMENT,
+    expectType: 'number',
   },
   MINION_SELECT: {
     type: 'minionSelect',
@@ -236,7 +246,7 @@ export const PROPOSAL_FORMS = {
     fields: [
       FIELD.TITLE,
       FIELD.MINION_SELECT,
-      FIELD.SHARES_REQUEST,
+      FIELD.MINION_PAYMENT,
       FIELD.DESCRIPTION,
     ],
   },
