@@ -17,10 +17,7 @@ const Superpowers = ({ daoMember, daoMetaData }) => {
   const { setGenericModal } = useOverlay();
 
   const isActive = link => {
-    return (
-      daoMetaData?.boosts?.[link.boostKey]?.active ||
-      link.boostKey === 'niftyInk'
-    );
+    return daoMetaData?.boosts?.[link.boostKey]?.active;
   };
 
   const getBoostData = key => {

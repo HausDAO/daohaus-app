@@ -174,15 +174,15 @@ export const boostList = [
     },
   },
   {
-    name: 'NiftyInk',
-    key: 'niftyInk',
+    name: 'NiftyMinion',
+    key: 'niftyMinion',
     description: 'Collect and sell nifty inks',
     price: '0',
-    modalName: 'niftInkLaunch',
+    modalName: 'niftyMinionLaunch',
     successRoute: '',
     settings: true,
     networks: {
-      xdai: true,
+      '0x64': true,
     },
   },
 ];
@@ -277,8 +277,8 @@ export const superpowerLinks = [
     modal: 'snapshot',
   },
   {
-    boostKey: 'niftyInk',
+    boostKey: 'niftyMinion',
     label: 'Nifty Ink',
-    link: 'settings/nifty-ink',
+    // link: 'settings/nifty-ink',
   },
 ];

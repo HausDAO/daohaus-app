@@ -267,7 +267,7 @@ const DaoRouter = () => {
           <Minion
             overview={daoOverview}
             members={daoMembers}
-            minionType='niftyInk'
+            minionType='niftyMinion'
           />
         </Route>
       </Switch>

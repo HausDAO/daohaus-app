@@ -131,7 +131,7 @@ const BoostLaunchWrapper = ({ boost }) => {
         return <NewSuperfluidMinionForm />;
       }
       case 'niftyMinion': {
-        return <NewMinionForm />;
+        return <NewMinionForm minionType='niftyMinion' />;
       }
       case 'minionSafe': {
         return <NewMinionSafe />;

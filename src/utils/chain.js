@@ -140,6 +140,10 @@ export const supportedChains = {
       },
       version: 'v1',
     },
+    niftyMinion: {
+      minion_factory_addr: '0xF2525bBa4b465e6d852c1783850b4967F5534236',
+      version: 'v1',
+    },
   },
   '0x89': {
     name: 'Matic',

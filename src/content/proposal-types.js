@@ -57,7 +57,7 @@ export const proposalTypes = (customTerms, boosts, minions) => {
       show: hasMinion(minions, 'Superfluid minion'),
     },
     {
-      name: 'NiftyInk',
+      name: 'NiftyMinion',
       subhead: 'Buy A NiftyInk',
       proposalType: 'niftyMinion',
       image: swordImg,

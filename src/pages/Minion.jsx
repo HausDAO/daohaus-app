@@ -75,7 +75,7 @@ const MinionDetails = ({
       return;
     }
     let localMinionData = {};
-    if (minionType === 'niftyInk') {
+    if (minionType === 'niftyMinion') {
       // TODO: check if a special boost is active?
       // or special nft boost
       // is this really needed? the buy will be a proposal type
@@ -249,7 +249,7 @@ const MinionDetails = ({
       title: `${minionData.details} Sends a Nifty`,
       description: `Send NFT to ${values.destination}`,
       // link: nftImage || null,
-      type: 'niftyInk',
+      type: 'niftyMinion',
     });
     const args = [token.contractAddress, '0', hexData, details];
     submitMinion(args);
@@ -277,7 +277,7 @@ const MinionDetails = ({
       title: `${minionData.details} Sells a Nifty`,
       description: 'Sell NFT',
       // link: nftImage || null,
-      type: 'niftyInk',
+      type: 'niftyMinion',
     });
     const args = [token.contractAddress, '0', hexData, details];
     submitMinion(args);
@@ -372,7 +372,7 @@ const MinionDetails = ({
                     />
                   </Box>
                   {/* spcial minion actions. needed? */}
-                  {minionType === 'niftyInk' && (
+                  {minionType === 'niftyMinion' && (
                     <Box>
                       <Button
                         onClick={() =>

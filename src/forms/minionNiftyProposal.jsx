@@ -98,7 +98,7 @@ const NiftyProposalForm = () => {
       title: `${selectedMinion.details} buys a Nifty`,
       description: `${nftMeta?.name} - ${nftMeta?.description}`,
       link: nftImage || null,
-      type: 'niftyInk',
+      type: 'niftyMinion',
     });
     const args = [
       '0xCF964c89f509a8c0Ac36391c5460dF94B91daba5',
