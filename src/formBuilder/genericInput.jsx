@@ -21,6 +21,7 @@ const GenericInput = ({
   required,
   prepend,
   onChange = null,
+  disabled,
   error,
 }) => {
   const { register } = localForm;
@@ -45,6 +46,7 @@ const GenericInput = ({
           onChange={onChange}
           placeholder={placeholder || label || htmlFor}
           ref={register}
+          disabled={disabled}
         />
         {append && (
           <InputRightAddon background='primary.600' p={0}>

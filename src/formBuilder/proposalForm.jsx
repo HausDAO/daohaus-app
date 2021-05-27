@@ -20,6 +20,7 @@ const ProposalForm = props => {
 
   const [loading, setLoading] = useState(false);
   const [formFields, setFields] = useState(mapInRequired(fields, required));
+
   const [options, setOptions] = useState(additionalOptions);
   const localForm = useForm();
   const { handleSubmit } = localForm;

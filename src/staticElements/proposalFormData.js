@@ -12,6 +12,7 @@ const INFO_TEXT = {
   PAYMENT_REQUEST: 'Request Funds from the DAO',
   ADDR_KICK: 'Enter the public key of the member you would like to kick.',
   MINION_TYPES: 'Minion funds to be used for this transaction',
+  MINION_PAYMENT: `This is the amount of value to be sent from the selected minion's balance`,
 };
 
 export const FIELD = {
@@ -23,6 +24,7 @@ export const FIELD = {
     placeholder: 'Proposal Title',
     expectType: 'any',
   },
+
   DESCRIPTION: {
     type: 'textarea',
     label: 'Description',
@@ -92,12 +94,13 @@ export const FIELD = {
     placeholder: '0x',
     expectType: 'publicKey',
   },
+  //  Plain old input until token price API can be built
   MINION_PAYMENT: {
-    type: 'minionPayment',
+    type: 'input',
     htmlFor: 'minionPayment',
     name: 'minionPayment',
     placeholder: '0',
-    label: 'Minion Balance',
+    label: 'Minion Payment',
     info: INFO_TEXT.MINION_PAYMENT,
     expectType: 'number',
   },
@@ -107,6 +110,22 @@ export const FIELD = {
     name: 'selectedMinion',
     htmlFor: 'selectedMinion',
     placeholder: 'Choose a DAO minion',
+    expectType: 'publicKey',
+  },
+  ABI_INPUT: {
+    type: 'abiInput',
+    label: 'Contract Function',
+    name: 'abiInput',
+    htmlFor: 'abiInput',
+    placeholder: '0x',
+    expectType: 'publicKey',
+  },
+  TARGET_CONTRACT: {
+    type: 'targetContract',
+    label: 'Contract Address',
+    name: 'targetContract',
+    htmlFor: 'targetContract',
+    placeholder: '0x',
     expectType: 'publicKey',
   },
 };
@@ -246,8 +265,8 @@ export const PROPOSAL_FORMS = {
     fields: [
       FIELD.TITLE,
       FIELD.MINION_SELECT,
-      FIELD.MINION_PAYMENT,
-      FIELD.DESCRIPTION,
+      FIELD.TARGET_CONTRACT,
+      FIELD.ABI_INPUT,
     ],
   },
 };

@@ -14,6 +14,7 @@ const GenericSelect = ({
   info,
   options = [],
   error,
+  disabled,
 }) => {
   const { register } = localForm;
   return (
@@ -25,7 +26,13 @@ const GenericSelect = ({
       btn={btn}
       error={error}
     >
-      <Select placeholder={placeholder} ref={register} id={htmlFor} name={name}>
+      <Select
+        placeholder={placeholder}
+        ref={register}
+        id={htmlFor}
+        name={name}
+        disabled={disabled}
+      >
         {options?.map(option => (
           <option value={option.value} key={option.value}>
             {option.name}
