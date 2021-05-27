@@ -230,7 +230,7 @@ const DaoMetaForm = ({ metadata, handleUpdate }) => {
                       <Input
                         ref={register}
                         defaultValue={metadata.links?.discord}
-                        placeholder='https://discord.gg/k7CDCqaRSY'
+                        placeholder='https://discord.gg/daohaus'
                         name='links.discord'
                       />
                     </InputGroup>

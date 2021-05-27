@@ -61,7 +61,7 @@ export const generateDaoLinks = (chainID, daoID, proposals) => {
 };
 
 export const defaultSocialLinks = [
-  { icon: RiDiscordFill, label: 'Discord', href: 'https://discord.gg/NPEJysW' },
+  { icon: RiDiscordFill, label: 'Discord', href: 'https://discord.gg/daohaus' },
   {
     icon: RiMediumFill,
     label: 'Blog',
