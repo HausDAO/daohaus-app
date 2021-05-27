@@ -2,7 +2,6 @@ import React, { useState, useEffect, useMemo } from 'react';
 import { useForm } from 'react-hook-form';
 import {
   Button,
-  FormLabel,
   FormControl,
   Flex,
   Icon,
@@ -16,7 +15,7 @@ import { useParams } from 'react-router-dom';
 import TextBox from '../components/TextBox';
 import DetailsFields from './detailFields';
 import AddressInput from './addressInput';
-import { createHash, detailsToJSON } from '../utils/general';
+import { createHash, detailsToJSON, JANUARY_2024 } from '../utils/general';
 import { useOverlay } from '../contexts/OverlayContext';
 import DelegateMenu from '../components/delegateMenu';
 import { UBERHAUS_DATA } from '../utils/uberhaus';
@@ -27,7 +26,6 @@ import { useMetaData } from '../contexts/MetaDataContext';
 import { useInjectedProvider } from '../contexts/InjectedProviderContext';
 import { UberHausMinionService } from '../services/uberHausMinionService';
 import { useTX } from '../contexts/TXContext';
-import TimeInput from '../components/timeInput';
 import AddressAvatar from '../components/addressAvatar';
 
 // TODO pass delegate to delegate menu
@@ -44,7 +42,6 @@ const DelegateProposalForm = ({
   const { daoid } = useParams();
   const { daoMetaData } = useMetaData();
   const { injectedProvider, address } = useInjectedProvider();
-  const [timePeriod, setTimePeriod] = useState(0);
   const [currentError, setCurrentError] = useState(null);
   const {
     setD2dProposalModal,
@@ -54,15 +51,7 @@ const DelegateProposalForm = ({
   } = useOverlay();
   const { refreshDao } = useTX();
   const { cachePoll, resolvePoll } = useUser();
-  const {
-    handleSubmit,
-    errors,
-    register,
-    setValue,
-    watch,
-    setError,
-    clearErrors,
-  } = useForm();
+  const { handleSubmit, errors, register, setValue, watch } = useForm();
 
   const candidates = useMemo(() => {
     if (!daoMembers || !uberHausMinion || !uberMembers || !uberDelegate) {
@@ -111,7 +100,7 @@ const DelegateProposalForm = ({
     const args = [
       UBERHAUS_DATA.ADDRESS,
       values.memberApplicant,
-      timePeriod?.toString() || values.delegateTerm,
+      JANUARY_2024.toString(),
       details,
     ];
 
@@ -208,12 +197,6 @@ const DelegateProposalForm = ({
     </Flex>
   );
 
-  const timeInputLabel = () => (
-    <TextBox as={FormLabel} size='xs' htmlFor='name' mb={2}>
-      Delegation period length
-    </TextBox>
-  );
-
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
       <FormControl
@@ -244,18 +227,6 @@ const DelegateProposalForm = ({
             memberOnly
             overrideData={candidates}
             memberOverride
-          />
-          <TimeInput
-            errors={errors}
-            register={register}
-            setValue={setValue}
-            watch={watch}
-            setError={setError}
-            clearErrors={clearErrors}
-            inputName='delegateTerm'
-            setTimePeriod={setTimePeriod}
-            displayTotalSeconds={false}
-            label={timeInputLabel}
           />
         </Box>
       </FormControl>
