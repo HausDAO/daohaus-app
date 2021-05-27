@@ -34,7 +34,7 @@ export const PROPOSAL_TYPES = {
 
 export const MINION_TYPES = {
   VANILLA: 'vanilla minion',
-  NIFTY: 'Nifty minion',
+  NIFTY: 'nifty minion',
   UBER: 'UberHaus minion',
   SUPERFLUID: 'Superfluid minion',
 };

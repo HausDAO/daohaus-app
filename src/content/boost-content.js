@@ -181,6 +181,7 @@ export const boostList = [
     modalName: 'niftyMinionLaunch',
     successRoute: '',
     settings: true,
+    dependency: 'wrapperWhitelisted',
     networks: {
       '0x64': true,
     },

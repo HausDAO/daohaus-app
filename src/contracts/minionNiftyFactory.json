@@ -1,134 +1,82 @@
 [
   {
-    "inputs": [
-      {
-        "internalType": "address",
-        "name": "moloch",
-        "type": "address"
-      },
-      {
-        "internalType": "address",
-        "name": "wrapper",
-        "type": "address"
-      },
-      {
-        "internalType": "string",
-        "name": "details",
-        "type": "string"
-      },
-      {
-        "internalType": "uint256",
-        "name": "minQuorum",
-        "type": "uint256"
-      }
-    ],
-    "name": "summonMinion",
-    "outputs": [
-      {
-        "internalType": "address",
-        "name": "",
-        "type": "address"
-      }
-    ],
+    "type": "constructor",
     "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
     "inputs": [
       {
-        "internalType": "address payable",
+        "type": "address",
         "name": "_template",
-        "type": "address"
+        "internalType": "address payable"
       }
-    ],
-    "stateMutability": "nonpayable",
-    "type": "constructor"
+    ]
   },
   {
-    "anonymous": false,
-    "inputs": [
-      {
-        "indexed": true,
-        "internalType": "address",
-        "name": "minion",
-        "type": "address"
-      },
-      {
-        "indexed": true,
-        "internalType": "address",
-        "name": "moloch",
-        "type": "address"
-      },
-      {
-        "indexed": false,
-        "internalType": "string",
-        "name": "details",
-        "type": "string"
-      },
-      {
-        "indexed": false,
-        "internalType": "string",
-        "name": "minionType",
-        "type": "string"
-      }
-    ],
+    "type": "event",
     "name": "SummonMinion",
-    "type": "event"
-  },
-  {
     "inputs": [
       {
-        "internalType": "uint256",
-        "name": "",
-        "type": "uint256"
-      }
-    ],
-    "name": "minionList",
-    "outputs": [
-      {
+        "type": "address",
+        "name": "minion",
         "internalType": "address",
-        "name": "",
-        "type": "address"
+        "indexed": true
+      },
+      {
+        "type": "address",
+        "name": "moloch",
+        "internalType": "address",
+        "indexed": true
+      },
+      {
+        "type": "string",
+        "name": "details",
+        "internalType": "string",
+        "indexed": false
+      },
+      {
+        "type": "string",
+        "name": "minionType",
+        "internalType": "string",
+        "indexed": false
       }
     ],
+    "anonymous": false
+  },
+  {
+    "type": "function",
     "stateMutability": "view",
-    "type": "function"
+    "outputs": [{ "type": "address", "name": "", "internalType": "address" }],
+    "name": "minionList",
+    "inputs": [{ "type": "uint256", "name": "", "internalType": "uint256" }]
   },
   {
-    "inputs": [
-      {
-        "internalType": "address",
-        "name": "",
-        "type": "address"
-      }
+    "type": "function",
+    "stateMutability": "view",
+    "outputs": [
+      { "type": "address", "name": "moloch", "internalType": "address" },
+      { "type": "string", "name": "details", "internalType": "string" }
     ],
     "name": "minions",
-    "outputs": [
-      {
-        "internalType": "address",
-        "name": "moloch",
-        "type": "address"
-      },
-      {
-        "internalType": "string",
-        "name": "details",
-        "type": "string"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function"
+    "inputs": [{ "type": "address", "name": "", "internalType": "address" }]
   },
   {
-    "inputs": [],
-    "name": "template",
-    "outputs": [
-      {
-        "internalType": "address payable",
-        "name": "",
-        "type": "address"
-      }
-    ],
+    "type": "function",
+    "stateMutability": "nonpayable",
+    "outputs": [{ "type": "address", "name": "", "internalType": "address" }],
+    "name": "summonMinion",
+    "inputs": [
+      { "type": "address", "name": "moloch", "internalType": "address" },
+      { "type": "address", "name": "wrapper", "internalType": "address" },
+      { "type": "string", "name": "details", "internalType": "string" },
+      { "type": "uint256", "name": "minQuorum", "internalType": "uint256" }
+    ]
+  },
+  {
+    "type": "function",
     "stateMutability": "view",
-    "type": "function"
+    "outputs": [
+      { "type": "address", "name": "", "internalType": "address payable" }
+    ],
+    "name": "template",
+    "inputs": []
   }
 ]

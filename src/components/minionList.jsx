@@ -22,7 +22,7 @@ const MinionList = () => {
   const { daoOverview } = useDao();
   const { daochain, daoid } = useParams();
   const toast = useToast();
-
+  console.log('daoOverview', daoOverview);
   const minions = useMemo(() => {
     if (daoOverview?.minions) {
       return daoOverview?.minions.sort((minionA, minionB) =>

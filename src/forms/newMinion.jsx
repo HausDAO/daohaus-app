@@ -39,7 +39,7 @@ const NewMinionForm = ({ minionType }) => {
     setStep(2);
     let summonParams;
     if (minionType === 'niftyMinion') {
-      summonParams = [daoid, values.details, values.wrapper, values.minQuorum];
+      summonParams = [daoid, values.wrapper, values.details, values.minQuorum];
     } else {
       summonParams = [daoid, values.details];
     }

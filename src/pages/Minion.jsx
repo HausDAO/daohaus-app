@@ -74,17 +74,9 @@ const MinionDetails = ({
     if (!overview?.minions.length) {
       return;
     }
-    let localMinionData = {};
-    if (minionType === 'niftyMinion') {
-      // TODO: check if a special boost is active?
-      // or special nft boost
-      // is this really needed? the buy will be a proposal type
-      localMinionData = overview?.minions[0];
-    } else {
-      localMinionData = overview?.minions.find(m => {
-        return m.minionAddress === minion;
-      });
-    }
+    const localMinionData = overview?.minions.find(m => {
+      return m.minionAddress === minion;
+    });
 
     setMinionData(localMinionData);
   }, [overview, minion]);

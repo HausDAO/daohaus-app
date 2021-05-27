@@ -62,7 +62,7 @@ export const proposalTypes = (customTerms, boosts, minions) => {
       proposalType: 'niftyMinion',
       image: swordImg,
       comingSoon: false,
-      show: true,
+      show: hasMinion(minions, 'nifty minion'),
     },
     {
       name: 'Transmutation',

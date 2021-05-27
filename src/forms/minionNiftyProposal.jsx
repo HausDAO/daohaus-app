@@ -52,7 +52,7 @@ const NiftyProposalForm = () => {
     if (daoOverview?.minions) {
       const localMinions = daoOverview.minions
         // TODO: change to NIFTY type
-        .filter(minion => minion.minionType === MINION_TYPES.VANILLA)
+        .filter(minion => minion.minionType === MINION_TYPES.NIFTY)
         .map(minion => ({
           minionAdddress: minion.minionAddress,
           minionName: minion.details,
@@ -100,11 +100,15 @@ const NiftyProposalForm = () => {
       link: nftImage || null,
       type: 'niftyMinion',
     });
+
     const args = [
-      '0xCF964c89f509a8c0Ac36391c5460dF94B91daba5',
+      '0xCF964c89f509a8c0Ac36391c5460dF94B91daba5', // nifty target
       injectedProvider.utils.toWei(values.price),
       hexData,
       details,
+      '0xe91D153E0b41518A2Ce8Dd3D7944Fa863463a97d', // wxdai
+      injectedProvider.utils.toWei(values.price), // wxdai amount
+      false, // unwrap
     ];
     try {
       const poll = createPoll({ action: 'minionProposeAction', cachePoll })({
@@ -145,6 +149,7 @@ const NiftyProposalForm = () => {
         web3: injectedProvider,
         minion: selectedMinion.minionAdddress,
         chainID: daochain,
+        minionType: 'niftyMinion',
       })('proposeAction')({
         args,
         address,

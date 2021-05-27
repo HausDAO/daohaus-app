@@ -141,7 +141,7 @@ export const supportedChains = {
       version: 'v1',
     },
     niftyMinion: {
-      minion_factory_addr: '0xF2525bBa4b465e6d852c1783850b4967F5534236',
+      minion_factory_addr: '0x09FC3E4b1e8015290180Dc2C14E3CC2E8eF28941',
       version: 'v1',
     },
   },

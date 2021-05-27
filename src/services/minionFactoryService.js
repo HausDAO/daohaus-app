@@ -5,6 +5,7 @@ import MinionNiftyFactoryAbi from '../contracts/minionNiftyFactory.json';
 import { chainByID } from '../utils/chain';
 
 export const MinionFactoryService = ({ web3, chainID, minionType }) => {
+  console.log('chainId', chainID);
   if (!web3) {
     const rpcUrl = chainByID(chainID).rpc_url;
     web3 = new Web3(new Web3.providers.HttpProvider(rpcUrl));
@@ -19,19 +20,21 @@ export const MinionFactoryService = ({ web3, chainID, minionType }) => {
     abi = MinionFactoryAbi;
     factoryAddr = chainByID(chainID).minion_factory_addr;
   }
+
   const contract = new web3.eth.Contract(abi, factoryAddr);
   return service => {
     if (service === 'summonMinion') {
       return async ({ args, from, poll, onTxHash }) => {
-        console.log({
+        console.log('args order matter', {
           args,
           from,
           poll,
           onTxHash,
         });
-        console.log(contract);
+
         try {
           const tx = await contract.methods[service](...args);
+
           return tx
             .send({ from })
             .on('transactionHash', txHash => {
