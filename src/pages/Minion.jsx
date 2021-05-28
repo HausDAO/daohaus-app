@@ -185,7 +185,7 @@ const MinionDetails = ({
 
   const sendNativeToken = async values => {
     const details = detailsToJSON({
-      title: `${minionData.details} sends native token`,
+      title: `${minionData.details || 'Minion'} sends native token`,
       description: values.description || `Send ${values.amount} `,
       // link: (link to block explorer)
       type: 'nativeTokenSend',
@@ -212,7 +212,7 @@ const MinionDetails = ({
     });
 
     const details = detailsToJSON({
-      title: `${minionData.details} sends a token`,
+      title: `${minionData.details || 'Minion'} sends a token`,
       description:
         values.description || `Send ${values.amount} ${token.symbol}`,
       // link: (link to block explorer)
@@ -238,7 +238,7 @@ const MinionDetails = ({
     });
 
     const details = detailsToJSON({
-      title: `${minionData.details} Sends a Nifty`,
+      title: `${minionData.details || 'Minion'} Sends a Nifty`,
       description: `Send NFT to ${values.destination}`,
       // link: nftImage || null,
       type: 'niftyMinion',
@@ -266,7 +266,7 @@ const MinionDetails = ({
     });
 
     const details = detailsToJSON({
-      title: `${minionData.details} Sells a Nifty`,
+      title: `${minionData.details || 'Minion'} Sells a Nifty`,
       description: 'Sell NFT',
       // link: nftImage || null,
       type: 'niftyMinion',

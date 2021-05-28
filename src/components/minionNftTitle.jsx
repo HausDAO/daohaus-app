@@ -15,6 +15,8 @@ import { getNftMeta } from '../utils/metadata';
 import { useOverlay } from '../contexts/OverlayContext';
 import GenericModal from '../modals/genericModal';
 import TextBox from './TextBox';
+import { hasMinion } from '../utils/dao';
+import { useDao } from '../contexts/DaoContext';
 
 const MinionNftTile = ({
   meta,
@@ -26,6 +28,7 @@ const MinionNftTile = ({
   const [tokenDetail, setTokenDetail] = useState();
   const { setGenericModal } = useOverlay();
   const { handleSubmit, register } = useForm();
+  const { daoOverview } = useDao();
 
   useEffect(() => {
     const fetchNFTData = async () => {
@@ -43,7 +46,7 @@ const MinionNftTile = ({
         const jsonMeta = await getNftMeta(meta);
         setTokenDetail(jsonMeta);
       } catch (err) {
-        console.log('error with meta URI', meta);
+        console.log('error with meta URI', err);
       }
     };
     fetchNFTData();
@@ -79,7 +82,7 @@ const MinionNftTile = ({
           bg='secondary.500'
         >
           <Link href={tokenDetail?.external_url} isExternal>
-            <Image src={tokenDetail?.image} h='150px' w='150px' />
+            <Image src={tokenDetail?.image} h='230px' w='230px' />
           </Link>
         </Tooltip>
       ) : (
@@ -87,7 +90,11 @@ const MinionNftTile = ({
       )}
 
       <Flex>
-        <Button onClick={handleSell}>Sell</Button>
+        {hasMinion(daoOverview.minions, 'nifty minion') &&
+          token.contractAddress ===
+            '0xcf964c89f509a8c0ac36391c5460df94b91daba5' && (
+            <Button onClick={handleSell}>Sell on Nifty Ink</Button>
+          )}
         <Button onClick={handleSend}>Send</Button>
       </Flex>
 

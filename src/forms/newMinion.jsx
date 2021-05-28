@@ -39,7 +39,7 @@ const NewMinionForm = ({ minionType }) => {
     setStep(2);
     let summonParams;
     if (minionType === 'niftyMinion') {
-      summonParams = [daoid, values.wrapper, values.details, values.minQuorum];
+      summonParams = [daoid, values.details, values.minQuorum];
     } else {
       summonParams = [daoid, values.details];
     }
@@ -141,18 +141,6 @@ const NewMinionForm = ({ minionType }) => {
             </Box>
             {minionType === 'niftyMinion' && (
               <Box mb={3} fontSize='sm'>
-                <FormControl mb={5}>
-                  <FormHelperText fontSize='sm' id='wrapper-helper-text' mb={3}>
-                    Wrapper Contract
-                  </FormHelperText>
-                  <Input
-                    name='wrapper'
-                    placeholder='0xe91d153e0b41518a2ce8dd3d7944fa863463a97d'
-                    defaultValue='0xe91d153e0b41518a2ce8dd3d7944fa863463a97d'
-                    w='60%'
-                    ref={register}
-                  />
-                </FormControl>
                 <FormControl mb={5}>
                   <FormHelperText
                     fontSize='sm'

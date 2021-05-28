@@ -26,6 +26,7 @@ import {
 } from '../utils/general';
 import { useMetaData } from '../contexts/MetaDataContext';
 import MinionExecute from './minionExecute';
+import { hasMinion } from '../utils/dao';
 
 const MotionBox = motion(Box);
 
@@ -69,7 +70,6 @@ const ProposalVote = ({
   } = useOverlay();
   const { refreshDao } = useTX();
   const { customTerms } = useMetaData();
-
   const [enoughDeposit, setEnoughDeposit] = useState(false);
 
   const currentlyVoting = proposal => {
@@ -322,6 +322,7 @@ const ProposalVote = ({
 
   const processProposal = async proposal => {
     setLoading(true);
+
     let proposalType = 'other';
     let processFn = 'processProposal';
 
@@ -564,8 +565,14 @@ const ProposalVote = ({
                         >
                           {+proposal?.noShares > +proposal?.yesShares &&
                             'Not Passing'}
-                          {+proposal?.yesShares > +proposal?.noShares &&
-                            'Currently Passing'}
+                          {+proposal?.yesShares > +proposal?.noShares && (
+                            <Box>
+                              Currently Passing
+                              {hasMinion(overview?.minions, 'nifty minion') && (
+                                <MinionExecute proposal={proposal} early />
+                              )}
+                            </Box>
+                          )}
                           {+proposal?.yesShares === 0 &&
                             +proposal?.noShares === 0 &&
                             'Awaiting Votes'}

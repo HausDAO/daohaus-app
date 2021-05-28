@@ -15,7 +15,7 @@ import { UberHausMinionService } from '../services/uberHausMinionService';
 import { PROPOSAL_TYPES } from '../utils/proposalUtils';
 import { UBERHAUS_DATA } from '../utils/uberhaus';
 
-const MinionExecute = ({ proposal }) => {
+const MinionExecute = ({ proposal, early }) => {
   const { daochain } = useParams();
   const {
     errorToast,
@@ -37,7 +37,10 @@ const MinionExecute = ({ proposal }) => {
     const getMinionDetails = async () => {
       setLoading(true);
       try {
-        if (proposal.proposalType === PROPOSAL_TYPES.MINION_VANILLA) {
+        if (
+          proposal.proposalType === PROPOSAL_TYPES.MINION_VANILLA ||
+          proposal.proposalType === PROPOSAL_TYPES.MINION
+        ) {
           const action = await MinionService({
             minion: proposal?.minionAddress,
             chainID: daochain,
@@ -240,7 +243,7 @@ const MinionExecute = ({ proposal }) => {
 
     return (
       <Button onClick={executeMinion} disabled={!isCorrectChain}>
-        Execute Minion
+        {early && 'Early '}Execute Minion
       </Button>
     );
   };

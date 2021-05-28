@@ -95,7 +95,7 @@ const NiftyProposalForm = () => {
     const nftImage = nftMeta?.image && nftMeta?.image.replace('https://', '');
 
     const details = detailsToJSON({
-      title: `${selectedMinion.details} buys a Nifty`,
+      title: `${selectedMinion.details || 'Minion'} buys a Nifty`,
       description: `${nftMeta?.name} - ${nftMeta?.description}`,
       link: nftImage || null,
       type: 'niftyMinion',
@@ -108,7 +108,6 @@ const NiftyProposalForm = () => {
       details,
       '0xe91D153E0b41518A2Ce8Dd3D7944Fa863463a97d', // wxdai
       injectedProvider.utils.toWei(values.price), // wxdai amount
-      false, // unwrap
     ];
     try {
       const poll = createPoll({ action: 'minionProposeAction', cachePoll })({

@@ -123,8 +123,7 @@
       { "type": "bool", "name": "executed", "internalType": "bool" },
       { "type": "bytes", "name": "data", "internalType": "bytes" },
       { "type": "address", "name": "token", "internalType": "address" },
-      { "type": "uint256", "name": "amount", "internalType": "uint256" },
-      { "type": "bool", "name": "unwrap", "internalType": "bool" }
+      { "type": "uint256", "name": "amount", "internalType": "uint256" }
     ],
     "name": "actions",
     "inputs": [{ "type": "uint256", "name": "", "internalType": "uint256" }]
@@ -172,35 +171,10 @@
   {
     "type": "function",
     "stateMutability": "nonpayable",
-    "outputs": [{ "type": "bool", "name": "", "internalType": "bool" }],
-    "name": "hasQuorum",
-    "inputs": [
-      { "type": "uint256", "name": "_proposalId", "internalType": "uint256" },
-      {
-        "type": "tuple",
-        "name": "_action",
-        "internalType": "struct Minion.Action",
-        "components": [
-          { "type": "uint256", "name": "value", "internalType": "uint256" },
-          { "type": "address", "name": "to", "internalType": "address" },
-          { "type": "address", "name": "proposer", "internalType": "address" },
-          { "type": "bool", "name": "executed", "internalType": "bool" },
-          { "type": "bytes", "name": "data", "internalType": "bytes" },
-          { "type": "address", "name": "token", "internalType": "address" },
-          { "type": "uint256", "name": "amount", "internalType": "uint256" },
-          { "type": "bool", "name": "unwrap", "internalType": "bool" }
-        ]
-      }
-    ]
-  },
-  {
-    "type": "function",
-    "stateMutability": "nonpayable",
     "outputs": [],
     "name": "init",
     "inputs": [
       { "type": "address", "name": "_moloch", "internalType": "address" },
-      { "type": "address", "name": "_wrapper", "internalType": "address" },
       { "type": "uint256", "name": "_minQuorum", "internalType": "uint256" }
     ]
   },
@@ -283,20 +257,8 @@
       { "type": "bytes", "name": "actionData", "internalType": "bytes" },
       { "type": "string", "name": "details", "internalType": "string" },
       { "type": "address", "name": "withdrawToken", "internalType": "address" },
-      {
-        "type": "uint256",
-        "name": "withdrawAmount",
-        "internalType": "uint256"
-      },
-      { "type": "bool", "name": "unwrap", "internalType": "bool" }
+      { "type": "uint256", "name": "withdrawAmount", "internalType": "uint256" }
     ]
-  },
-  {
-    "type": "function",
-    "stateMutability": "view",
-    "outputs": [{ "type": "address", "name": "", "internalType": "address" }],
-    "name": "wrapper",
-    "inputs": []
   },
   { "type": "receive", "stateMutability": "payable" }
 ]

@@ -127,7 +127,7 @@ const MinionProposalForm = () => {
       }
     }
     const details = detailsToJSON({
-      title: `Minion proposal from ${minionName}`,
+      title: `Minion proposal`,
       description: values.description,
     });
     const args = [
