@@ -65,6 +65,7 @@ const MinionProposalForm = () => {
 
   useEffect(() => {
     if (daoOverview?.minions) {
+      console.log('local minions', daoOverview?.minions);
       const localMinions = daoOverview.minions
         .filter(
           minion =>
@@ -72,8 +73,9 @@ const MinionProposalForm = () => {
             minion.minionType === MINION_TYPES.NIFTY,
         )
         .map(minion => ({
-          minionAdddress: minion.minionAddress,
+          minionAddress: minion.minionAddress,
           minionName: minion.details,
+          minionType: minion.minionType,
         }));
       setMinions(localMinions);
     }
@@ -94,10 +96,18 @@ const MinionProposalForm = () => {
 
   const onSubmit = async values => {
     console.log('values', values);
+    console.log('minions', minions);
+
+    console.log('values.minionContract', values.minionContract);
     setLoading(true);
-    const minionName = minions.find(
-      minion => minion.minionAddress === values.minionAdddress,
-    )?.minionName;
+    const minion = minions.find(
+      minion =>
+        minion.minionAddress.toLowerCase() ===
+        values.minionContract.toLowerCase(),
+    );
+    console.log('minion??', minion);
+    console.log('values.minionContract', values.minionContract);
+    const minionName = minion?.minionName;
     const valueWei = injectedProvider.utils.toWei(values.value);
 
     const inputValues = [];
@@ -134,12 +144,25 @@ const MinionProposalForm = () => {
       title: minionName || `Minion proposal`,
       description: values.description,
     });
-    const args = [
-      values.targetContract,
-      valueWei || '0',
-      values.dataValue || hexData,
-      details,
-    ];
+    let args;
+    if (minion.minionType === MINION_TYPES.NIFTY) {
+      args = [
+        values.targetContract,
+        valueWei || '0',
+        values.dataValue || hexData,
+        details,
+        '0xe91D153E0b41518A2Ce8Dd3D7944Fa863463a97d', // TODO: wxdai but should be any whitelisted token
+        0,
+      ];
+    } else {
+      args = [
+        values.targetContract,
+        valueWei || '0',
+        values.dataValue || hexData,
+        details,
+      ];
+    }
+
     try {
       const poll = createPoll({ action: 'minionProposeAction', cachePoll })({
         minionAddress: values.minionContract,
@@ -286,7 +309,7 @@ const MinionProposalForm = () => {
           >
             {' '}
             {minions?.map(minion => (
-              <option key={minion.minionAdddress} value={minion.minionAdddress}>
+              <option key={minion.minionAddress} value={minion.minionAddress}>
                 {minion.minionName || minion.minionAddress}
               </option>
             ))}

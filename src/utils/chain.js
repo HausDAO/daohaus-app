@@ -134,7 +134,7 @@ export const supportedChains = {
       minion_factory_addr: '0xfC86DfDd3b2e560729c78b51dF200384cfe87438',
       resolver: '0xD2009765189164b495c110D61e4D301729079911',
       subgraph_url:
-        'https://thegraph.com/explorer/subgraph/superfluid-finance/superfluid-xdai',
+        'https://api.thegraph.com/subgraphs/name/superfluid-finance/superfluid-xdai',
       superapp_addr: {
         v1: '0x9fc9420F277b7C25E17B67008b35CCB01c5c9B63',
       },
@@ -176,7 +176,7 @@ export const supportedChains = {
       minion_factory_addr: '0x52acf023d38A31f7e7bC92cCe5E68d36cC9752d6',
       resolver: '0xE0cc76334405EE8b39213E620587d815967af39C',
       subgraph_url:
-        'https://thegraph.com/explorer/subgraph/superfluid-finance/superfluid-matic',
+        'https://api.thegraph.com/subgraphs/name/superfluid-finance/superfluid-matic',
       superapp_addr: {
         v1: '0xdb4D89F2199b9Cf451B7Ff4bdC94b1c96De4bdD0',
       },

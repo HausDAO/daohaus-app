@@ -535,7 +535,7 @@ const DaoToDaoManager = ({
         {!isUberHausMember ? (
           <Box mt={7} mb={2} fontSize='sm'>
             <Link
-              href='https://discord.gg/Fxwfj7t3Kt'
+              href='https://discord.gg/daohaus'
               target='_blank'
               rel='noreferrer noopener'
               color='secondary.500'

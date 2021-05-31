@@ -54,7 +54,7 @@ const NiftyProposalForm = () => {
         // TODO: change to NIFTY type
         .filter(minion => minion.minionType === MINION_TYPES.NIFTY)
         .map(minion => ({
-          minionAdddress: minion.minionAddress,
+          minionAddress: minion.minionAddress,
           minionName: minion.details,
         }));
       setMinions(localMinions);
@@ -147,7 +147,7 @@ const NiftyProposalForm = () => {
       };
       await MinionService({
         web3: injectedProvider,
-        minion: selectedMinion.minionAdddress,
+        minion: selectedMinion.minionAddress,
         chainID: daochain,
         minionType: 'niftyMinion',
       })('proposeAction')({
@@ -228,7 +228,7 @@ const NiftyProposalForm = () => {
   const onChange = e => {
     const { value } = e.target;
     console.log('change dropdown', value);
-    const minion = minions.find(m => m.minionAdddress === value);
+    const minion = minions.find(m => m.minionAddress === value);
     console.log('minion', minion);
     setSelectedMinion(minion);
   };
@@ -255,7 +255,7 @@ const NiftyProposalForm = () => {
       >
         {' '}
         {minions?.map(minion => (
-          <option key={minion.minionAdddress} value={minion.minionAdddress}>
+          <option key={minion.minionAddress} value={minion.minionAddress}>
             {minion.minionName || minion.minionAddress}
           </option>
         ))}

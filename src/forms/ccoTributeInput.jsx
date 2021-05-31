@@ -206,7 +206,7 @@ const CcoTributeInput = ({
           })}
           focusBorderColor='secondary.500'
           onChange={handleChange}
-          disabled={contributionClosed || true}
+          disabled={contributionClosed}
         />
 
         <InputRightAddon

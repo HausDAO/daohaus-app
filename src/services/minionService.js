@@ -38,7 +38,8 @@ export const MinionService = ({ web3, minion, chainID, minionType }) => {
     if (
       service === 'proposeAction' ||
       service === 'executeAction' ||
-      service === 'crossWithdraw'
+      service === 'crossWithdraw' ||
+      service === 'cancelAction'
     ) {
       return async ({ args, address, poll, onTxHash }) => {
         console.log(args);

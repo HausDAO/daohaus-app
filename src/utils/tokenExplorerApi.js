@@ -196,3 +196,14 @@ export const getBlockScoutTokenData = async address => {
   const tokenData = parseBlockScout(json, address);
   return tokenData;
 };
+
+export const getExplorerLink = (tokenAddress, chainID) => {
+  const slugStart = chainByID(chainID)?.block_explorer;
+  if (chainID === '0x1' || chainID === '0x4' || chainID === '0x2a') {
+    return `${slugStart}/token/${tokenAddress}`;
+  }
+  if (chainID === '0x64' || chainID === '0x89') {
+    return `${slugStart}/tokens/${tokenAddress}`;
+  }
+  return null;
+};
