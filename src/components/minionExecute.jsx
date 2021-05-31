@@ -39,7 +39,7 @@ const MinionExecute = ({ proposal, early }) => {
       try {
         if (
           proposal.proposalType === PROPOSAL_TYPES.MINION_VANILLA ||
-          proposal.proposalType === PROPOSAL_TYPES.MINION
+          proposal.proposalType === PROPOSAL_TYPES.MINION_NIFTY
         ) {
           const action = await MinionService({
             minion: proposal?.minionAddress,
@@ -120,13 +120,13 @@ const MinionExecute = ({ proposal, early }) => {
 
   const executeMinion = async () => {
     if (!proposal?.minion) return;
-
+    console.log('execute!!', proposal?.minion);
     setLoading(true);
     const args = [proposal.proposalId];
     try {
       const poll = createPoll({ action: 'minionExecuteAction', cachePoll })({
-        minionAddress: proposal.minionAddress,
         chainID: daochain,
+        minionAddress: proposal.minionAddress,
         proposalId: proposal.proposalId,
         proposalType: proposal?.proposalType,
         actions: {
@@ -152,7 +152,10 @@ const MinionExecute = ({ proposal, early }) => {
         setProposalModal(false);
         setTxInfoModal(true);
       };
-      if (proposal.proposalType === PROPOSAL_TYPES.MINION_VANILLA) {
+      if (
+        proposal.proposalType === PROPOSAL_TYPES.MINION_VANILLA ||
+        proposal.proposalType === PROPOSAL_TYPES.MINION_NIFTY
+      ) {
         await MinionService({
           web3: injectedProvider,
           minion: proposal.minionAddress,

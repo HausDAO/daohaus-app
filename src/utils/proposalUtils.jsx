@@ -134,6 +134,9 @@ const getMinionProposalType = (proposal, details) => {
     if (proposal?.minion?.minionType === MINION_TYPES.VANILLA) {
       return PROPOSAL_TYPES.MINION_VANILLA;
     }
+    if (proposal?.minion?.minionType === MINION_TYPES.NIFTY) {
+      return PROPOSAL_TYPES.MINION_NIFTY;
+    }
     if (proposal?.minion?.minionType === MINION_TYPES.SUPERFLUID) {
       return PROPOSAL_TYPES.MINION_SUPERFLUID;
     }

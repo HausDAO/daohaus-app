@@ -216,6 +216,7 @@ const MinionBox = ({ proposal, daoOverview }) => {
   }
 
   const { minionType } = proposal.minion;
+  console.log('minionType', minionType, MINION_TYPES.NIFTY);
   if (minionType === MINION_TYPES.UBER) {
     return (
       <MemberIndicator

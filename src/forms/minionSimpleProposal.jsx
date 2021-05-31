@@ -66,7 +66,11 @@ const MinionProposalForm = () => {
   useEffect(() => {
     if (daoOverview?.minions) {
       const localMinions = daoOverview.minions
-        .filter(minion => minion.minionType === MINION_TYPES.VANILLA)
+        .filter(
+          minion =>
+            minion.minionType === MINION_TYPES.VANILLA ||
+            minion.minionType === MINION_TYPES.NIFTY,
+        )
         .map(minion => ({
           minionAdddress: minion.minionAddress,
           minionName: minion.details,
@@ -127,7 +131,7 @@ const MinionProposalForm = () => {
       }
     }
     const details = detailsToJSON({
-      title: `Minion proposal`,
+      title: minionName || `Minion proposal`,
       description: values.description,
     });
     const args = [

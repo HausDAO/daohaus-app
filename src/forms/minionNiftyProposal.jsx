@@ -42,7 +42,7 @@ const NiftyProposalForm = () => {
   const [selectedMinion, setSelectedMinion] = useState(null);
   const now = (new Date().getTime() / 1000).toFixed();
 
-  const { handleSubmit, errors, register } = useForm();
+  const { handleSubmit, errors, register, setValue } = useForm();
 
   const [nftLoading, setNftLoading] = useState(null);
   const [nftMeta, setNftMeta] = useState(null);
@@ -95,7 +95,7 @@ const NiftyProposalForm = () => {
     const nftImage = nftMeta?.image && nftMeta?.image.replace('https://', '');
 
     const details = detailsToJSON({
-      title: `${selectedMinion.details || 'Minion'} buys a Nifty`,
+      title: `${selectedMinion.minionName || 'Minion'} buys a Nifty`,
       description: `${nftMeta?.name} - ${nftMeta?.description}`,
       link: nftImage || null,
       type: 'niftyMinion',
@@ -109,6 +109,7 @@ const NiftyProposalForm = () => {
       '0xe91D153E0b41518A2Ce8Dd3D7944Fa863463a97d', // wxdai
       injectedProvider.utils.toWei(values.price), // wxdai amount
     ];
+    console.log('for poll', selectedMinion.minionAddress);
     try {
       const poll = createPoll({ action: 'minionProposeAction', cachePoll })({
         minionAddress: selectedMinion.minionAddress,
@@ -165,6 +166,11 @@ const NiftyProposalForm = () => {
     let ipfsHash;
     const { value } = e.target;
 
+    if (value.indexOf('https://nifty.ink/') === -1) {
+      setValue('targetInk', '');
+      return;
+    }
+
     setNftLoading(true);
     try {
       const niftyService = NiftyService({
@@ -181,26 +187,35 @@ const NiftyProposalForm = () => {
         throw Error();
       }
 
-      const tid = await niftyService('inkTokenByIndex')({
-        inkUrl: ipfsHash,
-        index: 0,
-      });
-      console.log(tid);
-      const uri = await niftyService('tokenURI')({
-        tokenId: tid,
-      });
-      const price = await niftyService('tokenPrice')({
-        tokenId: tid,
-      });
-      setNftPrice(price);
+      try {
+        const tid = await niftyService('inkTokenByIndex')({
+          inkUrl: ipfsHash,
+          index: 0,
+        });
+        console.log(tid);
+        const uri = await niftyService('tokenURI')({
+          tokenId: tid,
+        });
+        // TODO: this is not getting the price
+        // will need to use thegraph
+        const price = await niftyService('tokenPrice')({
+          tokenId: tid,
+        });
+        setNftPrice(price);
 
-      const url = `https://gateway.pinata.cloud/ipfs/${uri.match(
-        /Qm[a-zA-Z0-9]+/,
-      )}`;
-      console.log('url', url);
-      const response = await getNftMeta(url);
-      console.log('response', response);
-      setNftMeta(response);
+        const url = `https://gateway.pinata.cloud/ipfs/${uri.match(
+          /Qm[a-zA-Z0-9]+/,
+        )}`;
+        console.log('url', url);
+        const response = await getNftMeta(url);
+        console.log('response', response);
+        setNftMeta(response);
+      } catch (err) {
+        setValue('targetInk', '');
+        setNftLoading(false);
+
+        return;
+      }
 
       setNftLoading(false);
     } catch (err) {
@@ -212,7 +227,9 @@ const NiftyProposalForm = () => {
 
   const onChange = e => {
     const { value } = e.target;
+    console.log('change dropdown', value);
     const minion = minions.find(m => m.minionAdddress === value);
+    console.log('minion', minion);
     setSelectedMinion(minion);
   };
 
@@ -275,6 +292,9 @@ const NiftyProposalForm = () => {
         focusBorderColor='secondary.500'
       />
       <Text>{nftPrice}</Text>
+      <Text>
+        you must have xDAI in your Minion, un/wrap from the Minion page
+      </Text>
       <Button
         type='submit'
         loadingText='Submitting'

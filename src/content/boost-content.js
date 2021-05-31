@@ -176,7 +176,7 @@ export const boostList = [
   {
     name: 'NiftyMinion',
     key: 'niftyMinion',
-    description: 'Collect and sell nifty inks',
+    description: 'Early execution and fund deposits',
     price: '0',
     modalName: 'niftyMinionLaunch',
     successRoute: '',

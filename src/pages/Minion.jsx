@@ -10,7 +10,6 @@ import {
   Link,
   HStack,
   Stack,
-  Button,
 } from '@chakra-ui/react';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
 import { RiArrowLeftLine } from 'react-icons/ri';
@@ -363,18 +362,6 @@ const MinionDetails = ({
                       isMember={isMember}
                     />
                   </Box>
-                  {/* spcial minion actions. needed? */}
-                  {minionType === 'niftyMinion' && (
-                    <Box>
-                      <Button
-                        onClick={() =>
-                          setGenericModal({ [minionData.minionAddress]: true })
-                        }
-                      >
-                        Buy Ink
-                      </Button>
-                    </Box>
-                  )}
                 </Stack>
               </Box>
             </>
