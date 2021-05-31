@@ -17,7 +17,7 @@ const ListSort = ({ sort, setSort, options }) => {
   }, []);
 
   return (
-    <Flex direction='row' mb={[4, null, null, 0]} justifyContent='flex-end'>
+    <Flex direction='row' mb={[3, null, null, 0]} justifyContent='flex-end'>
       <Box
         mr={3}
         textTransform='uppercase'
@@ -35,11 +35,10 @@ const ListSort = ({ sort, setSort, options }) => {
           fontSize={['sm', null, null, 'md']}
           color='secondary.500'
           spacing={2}
+          _hover={{ cursor: 'pointer' }}
         >
-          <Box>
-            {sort?.name || 'newest'}
-            <Icon as={RiArrowDropDownFill} color='secondary.500' />
-          </Box>
+          {sort?.name || 'newest'}
+          <Icon as={RiArrowDropDownFill} color='secondary.500' />
         </MenuButton>
         <MenuList bg='black'>
           {options.map(option => (
