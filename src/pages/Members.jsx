@@ -139,7 +139,7 @@ const Members = React.memo(
             />
             <MemberFilters filter={filter} setFilter={setFilter} />
           </Flex>
-          <Box>
+          <Box ml='auto'>
             <CsvDownloadButton entityList={listMembers} typename='Members' />
           </Box>
         </Flex>
