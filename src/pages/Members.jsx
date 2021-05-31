@@ -18,6 +18,7 @@ import MainViewLayout from '../components/mainViewLayout';
 import { useInjectedProvider } from '../contexts/InjectedProviderContext';
 import { daoConnectedAndSameChain } from '../utils/general';
 import UberHausMemberCard from '../components/uberHausMemberCard';
+import CsvDownloadButton from '../components/csvDownloadButton';
 
 const Members = React.memo(
   ({
@@ -118,6 +119,7 @@ const Members = React.memo(
         <Flex
           wrap={['wrap', null, null, 'nowrap']}
           justify='space-between'
+          align='center'
           w={['100%', null, null, '50%']}
         >
           <Box
@@ -137,6 +139,9 @@ const Members = React.memo(
             />
             <MemberFilters filter={filter} setFilter={setFilter} />
           </Flex>
+          <Box>
+            <CsvDownloadButton entityList={listMembers} typename='Members' />
+          </Box>
         </Flex>
         <Flex wrap='wrap'>
           <Box
