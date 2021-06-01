@@ -17,7 +17,7 @@ export const MinionService = ({ web3, minion, chainID, minionType }) => {
   let abi;
 
   if (minionType === 'niftyMinion') {
-    console.log('minion nift abi');
+    console.log('minion nifty abi');
     abi = MinionNiftyAbi;
   } else {
     abi = MinionAbi;
@@ -42,6 +42,7 @@ export const MinionService = ({ web3, minion, chainID, minionType }) => {
       service === 'cancelAction'
     ) {
       return async ({ args, address, poll, onTxHash }) => {
+        console.log('minion async');
         console.log(args);
         console.log(address);
         console.log(poll);

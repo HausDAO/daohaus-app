@@ -40,6 +40,19 @@ const MinionList = () => {
       isClosable: true,
     });
   };
+  const getMinionUrlType = minionType => {
+    switch (minionType) {
+      case MINION_TYPES.SUPERFLUID: {
+        return 'superfluid-minion';
+      }
+      case MINION_TYPES.NIFTY: {
+        return 'nifty-minion';
+      }
+      default: {
+        return 'minion';
+      }
+    }
+  };
 
   return (
     <ContentBox d='flex' flexDirection='column' position='relative'>
@@ -49,10 +62,11 @@ const MinionList = () => {
             base: minion.minionType?.split(' ')[0],
             md: minion.minionType,
           });
-          const minionUrlType =
-            minionType === MINION_TYPES.SUPERFLUID
-              ? 'superfluid-minion'
-              : 'minion';
+          // const minionUrlType =
+          //   minionType === MINION_TYPES.SUPERFLUID
+          //     ? 'superfluid-minion'
+          //     : 'minion';
+          const minionUrlType = getMinionUrlType(minionType);
 
           return (
             <Flex

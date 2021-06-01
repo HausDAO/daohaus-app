@@ -27,7 +27,6 @@ import {
 import { useMetaData } from '../contexts/MetaDataContext';
 import MinionExecute from './minionExecute';
 import MinionCancel from './minionCancel';
-import { hasMinion } from '../utils/dao';
 
 const MotionBox = motion(Box);
 
@@ -573,7 +572,9 @@ const ProposalVote = ({
                           {+proposal?.yesShares > +proposal?.noShares && (
                             <Box>
                               Currently Passing
-                              {hasMinion(overview?.minions, 'nifty minion') && (
+                              {/* TODO use const */}
+                              {proposal.minion.minionType ===
+                                'nifty minion' && (
                                 <MinionExecute proposal={proposal} early />
                               )}
                             </Box>
@@ -598,6 +599,13 @@ const ProposalVote = ({
                             proposal?.status === 'ReadyForProcessing') &&
                             +proposal?.noShares > +proposal?.yesShares &&
                             'Failed'}
+                          {/* TODO use const */}
+                          {(proposal?.status === 'GracePeriod' ||
+                            proposal?.status === 'ReadyForProcessing') &&
+                            +proposal?.yesShares > +proposal?.noShares &&
+                            proposal.minion.minionType === 'nifty minion' && (
+                              <MinionExecute proposal={proposal} early />
+                            )}
                         </TextBox>
                       </Flex>
                     </>

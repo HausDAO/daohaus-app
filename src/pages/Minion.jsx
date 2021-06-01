@@ -127,6 +127,15 @@ const MinionDetails = ({
   };
 
   const submitMinion = async (args, serviceName = null) => {
+    // TODO: this should be handled different probably
+    // add extra args for special minion type
+    console.log('minionType', minionType);
+    if (minionType === 'niftyMinion') {
+      console.log('push');
+      // this should be the moloch deposit token
+      args.push(overview.depositToken.tokenAddress, 0);
+    }
+    console.log('args', args);
     try {
       const poll = createPoll({ action: 'minionProposeAction', cachePoll })({
         minionAddress: minionData.minionAddress,
@@ -159,6 +168,7 @@ const MinionDetails = ({
         web3: injectedProvider,
         minion: minionData.minionAddress,
         chainID: daochain,
+        minionType,
       })(serviceName || 'proposeAction')({
         args,
         address,
@@ -235,6 +245,14 @@ const MinionDetails = ({
       destination: values.destination,
       from: overview.minions[0].minionAddress,
     });
+    // TODO: should this be nifty minion only?
+    // const hexData = await niftyService('safeTransferFromNoop')({
+    //   tokenId,
+    //   destination: values.destination,
+    //   from: overview?.minions.find(m => {
+    //     return m.minionType === 'nifty minion';
+    //   })?.minionAddress,
+    // });
 
     const details = detailsToJSON({
       title: `${minionData.details || 'Minion'} Sends a Nifty`,
