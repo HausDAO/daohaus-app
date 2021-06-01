@@ -102,6 +102,27 @@ export const detailsToJSON = values => {
 export const omit = (keys, obj) =>
   Object.fromEntries(Object.entries(obj).filter(([k]) => !keys.includes(k)));
 
+export const mapObject = (object, callback) => {
+  const newObj = {};
+  let index = 0;
+  for (const key in object) {
+    newObj[key] = callback(object[key], key, index, object);
+    index += 1;
+  }
+  return newObj;
+};
+export const filterObject = (object, callback) => {
+  const newObj = {};
+  let index = 0;
+  for (const key in object) {
+    if (callback(object[key], index, object)) {
+      newObj[key] = object[key];
+      index += 1;
+    }
+  }
+  return newObj;
+};
+
 export const numberWithCommas = num => {
   if (num === 0) return 0;
   if (!num) return;
