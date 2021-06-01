@@ -11,17 +11,29 @@ import Minions from '../components/minionList';
 import MainViewLayout from '../components/mainViewLayout';
 import { useInjectedProvider } from '../contexts/InjectedProviderContext';
 import { daoConnectedAndSameChain } from '../utils/general';
-import { getWrapNZap } from '../utils/theGraph';
+import { fetchTransmutation, getWrapNZap } from '../utils/theGraph';
 
 const Settings = ({ overview, daoMember, daoMetaData, customTerms }) => {
   const { daochain, daoid } = useParams();
   const { address, injectedChain } = useInjectedProvider();
   const [wrapNZap, setWrapNZap] = useState(null);
+  const [transmutationContract, setTransmutationContract] = useState(null);
 
-  // move to contexts??
   useEffect(() => {
     const getWNZ = async () => {
       setWrapNZap(await getWrapNZap(daochain, daoid));
+      const transmutationRes = await fetchTransmutation({
+        chainID: daochain,
+        molochAddress: daoid,
+      });
+
+      console.log('transmutationRes', transmutationRes);
+      if (transmutationRes.transmutations[0]) {
+        setTransmutationContract(
+          transmutationRes.transmutations[0].transmutation,
+        );
+      }
+      // setTransmutationContract();
     };
     getWNZ();
   }, [daoid]);
@@ -39,6 +51,7 @@ const Settings = ({ overview, daoMember, daoMetaData, customTerms }) => {
             overview={overview}
             customTerms={customTerms}
             wrapNZap={wrapNZap}
+            transmutationContract={transmutationContract}
           />
           <Flex justify='space-between' mt={6}>
             <TextBox size='xs'>DAO Metadata</TextBox>

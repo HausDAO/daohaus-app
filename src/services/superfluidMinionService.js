@@ -94,8 +94,8 @@ export const SuperfluidMinionService = ({ web3, minion, chainID }) => {
           const sfOutStreams = sfAccount?.account?.flowsOwned;
           const tokens = Array.from(
             new Set([
-              ...sfInStreams.map(s => s.token.id),
-              ...sfOutStreams.map(s => s.token.id),
+              ...(sfInStreams?.map(s => s.token.id) || []),
+              ...(sfOutStreams?.map(s => s.token.id) || []),
             ]),
           ).map(token => {
             const s =
