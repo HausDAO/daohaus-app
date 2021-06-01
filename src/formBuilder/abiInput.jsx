@@ -5,7 +5,11 @@ import { validate } from '../utils/validation';
 import GenericSelect from './genericSelect';
 import GenericTextarea from './genericTextArea';
 import { ModButton } from './staticElements';
-import { fetchABI } from '../utils/abi';
+import {
+  fetchABI,
+  getABIfunctions,
+  formatFNsAsSelectOptions,
+} from '../utils/abi';
 
 const AbiInput = props => {
   const { localForm } = props;
@@ -13,32 +17,43 @@ const AbiInput = props => {
   const [isRawHex, setRawHex] = useState(false);
   const [isDisabled, setIsDisabled] = useState(false);
   const [loading, setLoading] = useState(false);
-  const [functions, setFunctions] = useState(null);
+  const [options, setOptions] = useState(null);
 
   const targetContract = localForm.watch('targetContract');
-
+  const abiInput = localForm.watch('abiInput');
   const helperText = isDisabled && 'Please enter a target contract';
 
   useEffect(() => {
     const getABI = async () => {
       try {
-        const abi = await fetchABI(targetContract, daochain);
+        setLoading(true);
         setIsDisabled(false);
-        console.log(abi);
+        const abi = await fetchABI(targetContract, daochain);
+        const fns = formatFNsAsSelectOptions(getABIfunctions(abi));
+        setOptions(fns);
+        setLoading(false);
       } catch (error) {
         console.error(error);
       }
     };
-    if (targetContract && validate.publicKey(targetContract)) {
-      setLoading(true);
+    if (targetContract && validate.address(targetContract)) {
       getABI();
     } else {
       setIsDisabled(true);
     }
   }, [targetContract]);
 
+  useEffect(() => {
+    if (abiInput) {
+      props.buildABIOptions(abiInput);
+    } else {
+      props.buildABIOptions('clear');
+    }
+  }, [abiInput]);
+
   const switchElement = () => {
     setRawHex(prevState => !prevState);
+    props.buildABIOptions('clear');
   };
 
   return (
@@ -55,7 +70,7 @@ const AbiInput = props => {
         <GenericSelect
           {...props}
           placeholder='Select function'
-          options={[]}
+          options={options}
           disabled={isDisabled}
           helperText={helperText}
           btn={

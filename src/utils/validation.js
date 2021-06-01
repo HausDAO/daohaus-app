@@ -9,7 +9,7 @@ const TYPE_ERR_MSGS = {
   number: 'Must be a valid number',
   integer: 'Must be a valid integer',
   string: 'Must be a valid string',
-  publicKey: 'Must be a valid Ethereum Address',
+  address: 'Must be a valid Ethereum Address',
   urlNoHTTP: 'Must be a URL. Http not needed.',
 };
 
@@ -25,7 +25,7 @@ export const validate = {
   string(val) {
     return typeof val === 'string';
   },
-  publicKey(val) {
+  address(val) {
     return /^0x[a-fA-F0-9]{40}$/.test(val);
   },
   urlNoHTTP(val) {

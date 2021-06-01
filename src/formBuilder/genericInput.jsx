@@ -23,6 +23,8 @@ const GenericInput = ({
   onChange = null,
   disabled,
   error,
+  containerProps,
+  w,
 }) => {
   const { register } = localForm;
 
@@ -35,6 +37,8 @@ const GenericInput = ({
       btn={btn}
       error={error}
       required={required}
+      containerProps={containerProps}
+      w={w}
     >
       <InputGroup>
         {prepend && (

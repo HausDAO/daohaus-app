@@ -13,7 +13,6 @@ const MinionSelect = props => {
         name: minion.details,
       }));
   }, []);
-  console.log(`daoOverview.minions`, daoOverview.minions);
 
   return <GenericSelect {...props} options={minions} />;
 };

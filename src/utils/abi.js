@@ -30,3 +30,29 @@ export const fetchABI = async (contractAddress, chainID, parseJSON = true) => {
     console.error(error);
   }
 };
+
+export const getABIfunctions = abi => {
+  if (!abi || !Array.isArray(abi) || !abi.length) return null;
+  return abi.filter(({ type, constant }) => type === 'function' && !constant);
+};
+export const formatFNsAsSelectOptions = abi => {
+  if (!abi || !Array.isArray(abi) || !abi.length) return null;
+  return abi.map(fn => ({
+    name: fn.name,
+    value: JSON.stringify(fn),
+    key: fn.name,
+  }));
+};
+
+export const paramsToProposalForm = abiInputs => {
+  if (!abiInputs || !Array.isArray(abiInputs)) return null;
+
+  return abiInputs.map(input => ({
+    type: 'input',
+    label: input.name,
+    name: `*abiInput*${input.name}`,
+    htmlFor: `*abiInput*${input.name}`,
+    placeholder: input.type,
+    expectType: 'any',
+  }));
+};

@@ -11,6 +11,7 @@ import MinionSelect from './minionSelect';
 import PaymentInput from './paymentInput';
 import TributeInput from './tributeInput';
 import TargetContract from './targetContract';
+import MultiInput from './multiInput';
 
 export const InputFactory = props => {
   const { type } = props;
@@ -46,6 +47,9 @@ export const InputFactory = props => {
   }
   if (type === 'targetContract') {
     return <TargetContract {...props} />;
+  }
+  if (type === 'multiInput') {
+    return <MultiInput {...props} />;
   }
   return null;
 };

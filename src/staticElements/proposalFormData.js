@@ -24,7 +24,14 @@ export const FIELD = {
     placeholder: 'Proposal Title',
     expectType: 'any',
   },
-
+  TOKENS: {
+    type: 'multiInput',
+    label: 'Tokens',
+    name: 'tokens',
+    htmlFor: 'tokens',
+    placeholder: 'tokenAddress',
+    expectType: 'arrayStrings',
+  },
   DESCRIPTION: {
     type: 'textarea',
     label: 'Description',
@@ -66,7 +73,7 @@ export const FIELD = {
     placeholder: '0x',
     label: 'Applicant',
     info: INFO_TEXT.APPLICANT,
-    expectType: 'publicKey',
+    expectType: 'address',
   },
   TRIBUTE: {
     type: 'tributeInput',
@@ -92,7 +99,7 @@ export const FIELD = {
     name: 'tokenAddress',
     htmlFor: 'tokenAddress',
     placeholder: '0x',
-    expectType: 'publicKey',
+    expectType: 'address',
   },
   //  Plain old input until token price API can be built
   MINION_PAYMENT: {
@@ -110,7 +117,7 @@ export const FIELD = {
     name: 'selectedMinion',
     htmlFor: 'selectedMinion',
     placeholder: 'Choose a DAO minion',
-    expectType: 'publicKey',
+    expectType: 'address',
   },
   ABI_INPUT: {
     type: 'abiInput',
@@ -118,7 +125,7 @@ export const FIELD = {
     name: 'abiInput',
     htmlFor: 'abiInput',
     placeholder: '0x',
-    expectType: 'publicKey',
+    expectType: 'string',
   },
   TARGET_CONTRACT: {
     type: 'targetContract',
@@ -126,7 +133,7 @@ export const FIELD = {
     name: 'targetContract',
     htmlFor: 'targetContract',
     placeholder: '0x',
-    expectType: 'publicKey',
+    expectType: 'address',
   },
 };
 

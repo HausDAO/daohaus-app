@@ -6,7 +6,7 @@ const TargetContract = props => {
   const { localForm } = props;
 
   const selectedMinion = localForm.watch('selectedMinion');
-  const isDisabled = !validate.publicKey(selectedMinion);
+  const isDisabled = !validate.address(selectedMinion);
   const helperText = isDisabled && 'Must select a minion first';
 
   return (

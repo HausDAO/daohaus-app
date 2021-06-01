@@ -34,7 +34,7 @@ const GenericSelect = ({
         disabled={disabled}
       >
         {options?.map(option => (
-          <option value={option.value} key={option.value}>
+          <option value={option.value} key={option.key || option.value}>
             {option.name}
           </option>
         ))}

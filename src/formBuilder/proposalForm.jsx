@@ -14,16 +14,56 @@ const mapInRequired = (fields, required) => {
   );
 };
 
+export const inputDataFromABI = inputs => {
+  const getType = type => {
+    if (type === 'string' || type === 'address') {
+      return type;
+    }
+    if (type.includes('int')) {
+      return 'integer';
+    }
+    if (type === 'fixed' || type === 'ufixed') {
+      return 'number';
+    }
+    return 'any';
+  };
+
+  const labels = {
+    string: 'Enter text here',
+    number: 'Numbers only',
+    integer: 'Whole numbers only',
+    address: '0x',
+    urlNoHttp: 'www.example.fake',
+  };
+
+  return inputs.map(input => {
+    const localType = getType(input.type);
+    return {
+      type: input.type.includes('[]') ? 'multiInput' : 'input',
+      label: input.name,
+      name: `*abiInput*${input.name}`,
+      htmlFor: `*abiInput*${input.name}`,
+      placeholder: labels[localType] || input.type,
+      expectType: getType(localType),
+      required: true,
+    };
+  });
+};
+
 const ProposalForm = props => {
   const { submitTransaction, handleCustomValidation } = useTX();
   const { fields, additionalOptions = null, required = [] } = props;
 
   const [loading, setLoading] = useState(false);
   const [formFields, setFields] = useState(mapInRequired(fields, required));
+  const [abiOptions, setABIOptions] = useState(null);
 
   const [options, setOptions] = useState(additionalOptions);
   const localForm = useForm();
   const { handleSubmit } = localForm;
+
+  const watching = localForm.watch();
+  console.log(watching);
 
   const addOption = e => {
     const selectedOption = options.find(
@@ -31,6 +71,16 @@ const ProposalForm = props => {
     );
     setOptions(options.filter(option => option.htmlFor !== e.target.value));
     setFields([...formFields, selectedOption]);
+  };
+
+  const buildABIOptions = abiString => {
+    if (!abiString || typeof abiString !== 'string') return;
+    if (abiString === 'clear') {
+      setFields(mapInRequired(fields, required));
+    } else {
+      const abiInputs = JSON.parse(abiString)?.inputs;
+      setFields(prevState => [...prevState, ...inputDataFromABI(abiInputs)]);
+    }
   };
 
   const updateErrors = errors => {
@@ -65,7 +115,7 @@ const ProposalForm = props => {
       return;
     }
     const customValErrors = handleCustomValidation({ values, formData: props });
-    console.log('customValErrors :>> ', customValErrors);
+
     if (customValErrors) {
       updateErrors(customValErrors);
       return;
@@ -92,9 +142,21 @@ const ProposalForm = props => {
                   {...field}
                   minionType={props.minionType}
                   localForm={localForm}
+                  buildABIOptions={buildABIOptions}
                 />
               );
             })}
+            {/* {abiOptions?.map(field => {
+              return (
+                <InputFactory
+                  key={field?.htmlFor || field?.name}
+                  {...field}
+                  minionType={props.minionType}
+                  localForm={localForm}
+                  buildABIOptions={buildABIOptions}
+                />
+              );
+            })} */}
           </Flex>
         </FormControl>
         <FormFooter options={options} addOption={addOption} loading={loading} />
