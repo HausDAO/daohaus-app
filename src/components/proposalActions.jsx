@@ -573,7 +573,7 @@ const ProposalVote = ({
                             <Box>
                               Currently Passing
                               {/* TODO use const */}
-                              {proposal.minion.minionType ===
+                              {proposal?.minion?.minionType ===
                                 'nifty minion' && (
                                 <MinionExecute proposal={proposal} early />
                               )}
@@ -603,7 +603,7 @@ const ProposalVote = ({
                           {(proposal?.status === 'GracePeriod' ||
                             proposal?.status === 'ReadyForProcessing') &&
                             +proposal?.yesShares > +proposal?.noShares &&
-                            proposal.minion.minionType === 'nifty minion' && (
+                            proposal?.minion?.minionType === 'nifty minion' && (
                               <MinionExecute proposal={proposal} early />
                             )}
                         </TextBox>
