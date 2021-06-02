@@ -72,3 +72,23 @@ export const LogError = async data => {
     console.error('ERROR LOG FAILED: ', error);
   }
 };
+
+export const logFormError = ({
+  contextData,
+  formData,
+  errMsg,
+  args,
+  values,
+}) => {
+  LogError({
+    caughtAt: formData.type,
+    errMsg,
+    type: formData.type,
+    userAddress: contextData.address,
+    daoAddress: contextData.daoid,
+    formData,
+    formState: values,
+    TxArgs: args,
+    contextData,
+  });
+};

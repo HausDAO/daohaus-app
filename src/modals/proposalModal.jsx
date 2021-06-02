@@ -11,11 +11,6 @@ import {
 } from '@chakra-ui/react';
 import { rgba } from 'polished';
 
-import MemberProposalForm from '../forms/memberProposal';
-import FundingProposalForm from '../forms/fundingProposal';
-import WhitelistProposalForm from '../forms/whitelistProposal';
-import GuildKickProposalForm from '../forms/guildKickProposal';
-import TradeProposalForm from '../forms/tradeProposal';
 import MinionSimpleProposalForm from '../forms/minionSimpleProposal';
 import SuperfluidMinionProposalForm from '../forms/superfluidMinionProposal';
 import TransmutationProposal from '../forms/transmutationProposal';
@@ -24,6 +19,8 @@ import { useMetaData } from '../contexts/MetaDataContext';
 import { useOverlay } from '../contexts/OverlayContext';
 import { useCustomTheme } from '../contexts/CustomThemeContext';
 import LootGrabForm from '../forms/lootGrab';
+import ProposalForm from '../formBuilder/proposalForm';
+import { PROPOSAL_FORMS } from '../staticElements/proposalFormData';
 
 const ProposalFormModal = ({ proposalType }) => {
   const [, setLoading] = useState(false);
@@ -33,21 +30,22 @@ const ProposalFormModal = ({ proposalType }) => {
   const { proposalModal, setProposalModal } = useOverlay();
 
   const proposalForms = {
+    signal: {
+      heading: 'Signal That!',
+      form: <ProposalForm {...PROPOSAL_FORMS.SIGNAL} />,
+    },
     member: {
-      type: `New ${getTerm(customTerms, 'proposal')}`,
       heading: `New ${getTerm(customTerms, 'member')} ${getTerm(
         customTerms,
         'proposal',
       )}`,
-      subline: 'Submit your membership proposal here.',
-      form: <MemberProposalForm />,
+      form: <ProposalForm {...PROPOSAL_FORMS.MEMBER} />,
     },
     funding: {
-      type: `New ${getTerm(customTerms, 'proposal')}`,
       heading: `New Funding ${getTerm(customTerms, 'proposal')}`,
-      subline: 'Submit a funding proposal here.',
-      form: <FundingProposalForm />,
+      form: <ProposalForm {...PROPOSAL_FORMS.FUNDING} />,
     },
+    //  Are we using lootgrab anymore?
     lootgrab: {
       type: `New ${getTerm(customTerms, 'proposal')}`,
       heading: `New Loot Grab ${getTerm(customTerms, 'proposal')}`,
@@ -55,22 +53,16 @@ const ProposalFormModal = ({ proposalType }) => {
       form: <LootGrabForm />,
     },
     whitelist: {
-      type: `New ${getTerm(customTerms, 'proposal')}`,
       heading: `New Whitelist ${getTerm(customTerms, 'proposal')}`,
-      subline: 'Whitelist a token here.',
-      form: <WhitelistProposalForm />,
+      form: <ProposalForm {...PROPOSAL_FORMS.TOKEN} />,
     },
     guildkick: {
-      type: `New ${getTerm(customTerms, 'proposal')}`,
       heading: `New GuildKick ${getTerm(customTerms, 'proposal')}`,
-      subline: 'Kick a perpetrator here.',
-      form: <GuildKickProposalForm />,
+      form: <ProposalForm {...PROPOSAL_FORMS.GUILDKICK} />,
     },
     trade: {
-      type: `New ${getTerm(customTerms, 'proposal')}`,
       heading: `New Trade ${getTerm(customTerms, 'proposal')}`,
-      subline: 'Submit a trade proposal here.',
-      form: <TradeProposalForm />,
+      form: <ProposalForm {...PROPOSAL_FORMS.TRADE} />,
     },
     minion: {
       type: `New ${getTerm(customTerms, 'proposal')}`,
@@ -96,15 +88,11 @@ const ProposalFormModal = ({ proposalType }) => {
     if (proposalType) {
       setProposalForm(proposalForms[proposalType]);
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [proposalType]);
 
   const handleClose = () => {
     setLoading(false);
     setProposalModal(false);
-    // if (returnRoute) {
-    //   history.push(returnRoute);
-    // }
   };
 
   return (
@@ -138,13 +126,7 @@ const ProposalFormModal = ({ proposalType }) => {
           </Box>
         </ModalHeader>
         <ModalCloseButton />
-        <ModalBody>
-          {/* <Box color='#C4C4C4' mb={6}>
-              {proposalForm.subline}
-            </Box> */}
-          {proposalForm?.form}
-        </ModalBody>
-
+        <ModalBody>{proposalForm?.form}</ModalBody>
         <ModalFooter />
       </ModalContent>
     </Modal>
