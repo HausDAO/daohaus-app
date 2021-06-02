@@ -6,13 +6,6 @@ export const proposalTypes = (customTerms, boosts, minions) => {
   const daoPropTypes = boosts?.proposalTypes?.metadata;
   return [
     {
-      name: 'Signal',
-      subhead: 'Signal',
-      proposalType: 'signal',
-      image: swordImg,
-      show: daoPropTypes ? daoPropTypes?.member?.active : true,
-    },
-    {
       name: 'Membership',
       subhead: 'Request Shares and/or Loot',
       proposalType: 'member',
@@ -39,6 +32,13 @@ export const proposalTypes = (customTerms, boosts, minions) => {
       proposalType: 'trade',
       image: swordImg,
       show: daoPropTypes ? daoPropTypes?.trade?.active : true,
+    },
+    {
+      name: 'Signal',
+      subhead: 'Signal',
+      proposalType: 'signal',
+      image: swordImg,
+      show: daoPropTypes ? daoPropTypes?.member?.active : true,
     },
     {
       name: 'Guild Kick',
