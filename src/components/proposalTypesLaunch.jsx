@@ -3,7 +3,7 @@ import { Link as RouterLink, useParams } from 'react-router-dom';
 import { Box, Button, Heading, Spinner, Text } from '@chakra-ui/react';
 
 import { useMetaData } from '../contexts/MetaDataContext';
-import { getTerm } from '../utils/metadata';
+import { getTerm, getTitle } from '../utils/metadata';
 
 const ProposalTypesLaunch = ({ handleLaunch, loading, setLoading }) => {
   const { daochain, daoid } = useParams();
@@ -41,7 +41,12 @@ const ProposalTypesLaunch = ({ handleLaunch, loading, setLoading }) => {
     <Box w='90%'>
       {step === 1 ? (
         <>
-          <Heading as='h4' size='md' fontWeight='100'>
+          <Heading
+            as='h4'
+            size='md'
+            fontWeight='100'
+            title={getTitle(customTerms, 'Proposal')}
+          >
             {`Configure ${getTerm(customTerms, 'proposal')} Types`}
           </Heading>
           <Text my={6}>

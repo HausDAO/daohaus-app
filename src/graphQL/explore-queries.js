@@ -16,6 +16,15 @@ export const EXPLORER_DAOS = gql`
       }
       proposals {
         id
+        cancelled
+        createdAt
+        details
+        didPass
+        lootRequested
+        processed
+        sharesRequested
+        tributeOffered
+        tributeToken
       }
       tokens {
         id

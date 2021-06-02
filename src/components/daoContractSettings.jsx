@@ -7,7 +7,6 @@ import {
   Skeleton,
   Link,
   Icon,
-  Text,
   useBreakpointValue,
   Stack,
 } from '@chakra-ui/react';
@@ -18,11 +17,16 @@ import { FaCopy } from 'react-icons/fa';
 import ContentBox from './ContentBox';
 import TextBox from './TextBox';
 import { formatPeriods, truncateAddr } from '../utils/general';
-import { getTerm } from '../utils/metadata';
+import { getTerm, getTitle } from '../utils/metadata';
 import { supportedChains } from '../utils/chain';
 import { useOverlay } from '../contexts/OverlayContext';
 
-const DaoContractSettings = ({ overview, customTerms, wrapNZap }) => {
+const DaoContractSettings = ({
+  overview,
+  customTerms,
+  wrapNZap,
+  transmutationContract,
+}) => {
   const { daochain, daoid } = useParams();
   const daoAddress = useBreakpointValue({
     base: truncateAddr(daoid),
@@ -43,7 +47,7 @@ const DaoContractSettings = ({ overview, customTerms, wrapNZap }) => {
         <Flex justify='space-between'>
           <TextBox size='xs'>Dao Contract</TextBox>
           <Skeleton isLoaded={daoid}>
-            <Text
+            <Box
               fontFamily='mono'
               variant='value'
               fontSize='sm'
@@ -56,7 +60,7 @@ const DaoContractSettings = ({ overview, customTerms, wrapNZap }) => {
                 <Box>{daoAddress}</Box>
                 <Icon as={RiExternalLinkLine} color='secondary.400' mx={2} />
               </Flex>
-            </Text>
+            </Box>
           </Skeleton>
         </Flex>
         {wrapNZap && (
@@ -64,7 +68,7 @@ const DaoContractSettings = ({ overview, customTerms, wrapNZap }) => {
             <TextBox size='xs'>
               Unwrapped {supportedChains[daochain].chain} receiver (Wrap-N-Zap)
             </TextBox>
-            <Text fontFamily='mono' variant='value' fontSize='sm'>
+            <Box fontFamily='mono' variant='value' fontSize='sm'>
               <Flex color='secondary.400' align='center'>
                 <Box>{wrapNZap}</Box>
                 <CopyToClipboard
@@ -73,15 +77,37 @@ const DaoContractSettings = ({ overview, customTerms, wrapNZap }) => {
                   onCopy={copiedToast}
                   _hover={{ cursor: 'pointer' }}
                 >
+                  <Icon
+                    as={FaCopy}
+                    color='secondarytransmutationRes.transmutations[0].300'
+                    ml={2}
+                  />
+                </CopyToClipboard>
+              </Flex>
+            </Box>
+          </Flex>
+        )}
+        {transmutationContract && (
+          <Flex justify='space-between'>
+            <TextBox size='xs'>Transmutation Contract</TextBox>
+            <Box fontFamily='mono' variant='value' fontSize='sm'>
+              <Flex color='secondary.400' align='center'>
+                <Box>{transmutationContract}</Box>
+                <CopyToClipboard
+                  text={transmutationContract}
+                  mx={2}
+                  onCopy={copiedToast}
+                  _hover={{ cursor: 'pointer' }}
+                >
                   <Icon as={FaCopy} color='secondary.300' ml={2} />
                 </CopyToClipboard>
               </Flex>
-            </Text>
+            </Box>
           </Flex>
         )}
         <Flex wrap='wrap'>
           <Box as={Stack} w={['100%', null, null, '50%']} spacing={2}>
-            <TextBox size='xs'>
+            <TextBox size='xs' title={getTitle(customTerms, 'Proposal')}>
               {`${getTerm(customTerms, 'proposal')} Deposit`}
             </TextBox>
             <TextBox variant='value' size='xl'>

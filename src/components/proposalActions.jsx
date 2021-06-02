@@ -18,7 +18,7 @@ import ContentBox from './ContentBox';
 import TextBox from './TextBox';
 import { memberVote } from '../utils/proposalUtils';
 import { supportedChains } from '../utils/chain';
-import { getTerm } from '../utils/metadata';
+import { getTerm, getTitle } from '../utils/metadata';
 import {
   capitalize,
   daoConnectedAndSameChain,
@@ -26,6 +26,7 @@ import {
 } from '../utils/general';
 import { useMetaData } from '../contexts/MetaDataContext';
 import MinionExecute from './minionExecute';
+import MinionCancel from './minionCancel';
 
 const MotionBox = motion(Box);
 
@@ -104,6 +105,7 @@ const ProposalVote = ({
         fontWeight={700}
         textAlign='center'
         zIndex='2'
+        title={getTitle(customTerms, 'Proposal')}
       >
         {`Connect to ${capitalize(supportedChains[daochain]?.network)}
       for ${getTerm(customTerms, 'proposal')} actions`}
@@ -133,8 +135,9 @@ const ProposalVote = ({
     }
   }, [overview]);
 
-  const cancelProposal = async id => {
+  const cancelProposal = async () => {
     setLoading(true);
+    const id = proposal.proposalId;
     const args = [id];
     try {
       console.log(id);
@@ -469,15 +472,18 @@ const ProposalVote = ({
                   <Button isDisabled>Sponsor</Button>
                 </Tooltip>
               )}
-              {proposal?.proposer === address?.toLowerCase() && (
-                <Button
-                  variant='outline'
-                  onClick={() => cancelProposal(proposal?.proposalId)}
-                  isLoading={loading}
-                >
-                  Cancel
-                </Button>
-              )}
+              {proposal?.proposer === address?.toLowerCase() &&
+                !proposal?.minionAddress && (
+                  <Button
+                    variant='outline'
+                    onClick={cancelProposal}
+                    isLoading={loading}
+                  >
+                    Cancel
+                  </Button>
+                )}
+              {proposal?.proposer === address?.toLowerCase() &&
+                proposal?.minionAddress && <MinionCancel proposal={proposal} />}
             </Flex>
           </Flex>
         )}

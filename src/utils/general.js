@@ -10,6 +10,8 @@ export const SECONDS = {
   PER_WEEK: 604800,
 };
 
+export const JANUARY_2024 = 1705936544;
+
 export const calcSeconds = (val, unit) => {
   if (!unit || !val) return;
 
