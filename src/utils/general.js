@@ -1,6 +1,7 @@
 import { formatDistanceToNow } from 'date-fns';
 import { utils } from 'ethers';
 import Web3 from 'web3';
+import { validate } from './validation';
 
 export const SECONDS = {
   PER_MINUTE: 60,
@@ -222,4 +223,21 @@ export const deriveValFromWei = amt => {
 export const handleDecimals = (balance, decimals, fallback = '--') => {
   if (!balance || !decimals) return fallback;
   return Number(balance) / 10 ** Number(decimals);
+};
+
+export const handlePossibleNumber = (val, comma = true, roundAmt = 4) => {
+  if (val == null) return;
+  if (validate.number(val)) {
+    const number = Number(val);
+    if (comma && roundAmt) {
+      return numberWithCommas(number.toFixed(roundAmt));
+    }
+    if (comma) {
+      return numberWithCommas(number);
+    }
+    if (roundAmt === 0 || roundAmt) {
+      return numberWithCommas.toFixed(4);
+    }
+  }
+  return val;
 };
