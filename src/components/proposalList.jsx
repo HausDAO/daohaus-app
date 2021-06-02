@@ -123,7 +123,6 @@ const ProposalsList = ({ proposals, customTerms }) => {
   return (
     <>
       <Flex wrap='wrap' position='relative' justifyContent='space-between'>
-        {/* <CsvDownloadButton entityList={listProposals} typename='Proposals' /> */}
         <Flex flex={1} justifyContent='flex-end'>
           <GenericSelect
             currentOption={filter?.name}
@@ -149,6 +148,7 @@ const ProposalsList = ({ proposals, customTerms }) => {
             performSearch={performSearch}
             resetSearch={resetSearch}
           />
+          <CsvDownloadButton entityList={listProposals} typename='Proposals' />
         </Flex>
       </Flex>
       {isLoaded &&
