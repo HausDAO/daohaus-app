@@ -7,6 +7,41 @@ import { InputFactory } from './inputFactory';
 import { FormFooter } from './staticElements';
 
 import { checkFormTypes, validateRequired } from '../utils/validation';
+import { FIELD } from '../staticElements/proposalFormData';
+import { filterObject, isObjectEmpty } from '../utils/general';
+
+const splitMulti = (key, value) => {
+  const splitKey = key.split('*MULTI*');
+  return { key: splitKey[0], value, order: splitKey[1] };
+};
+const collapseMultis = multis => {
+  const newObj = {};
+  for (const multi in multis) {
+    const data = splitMulti(multi, multis[multi]);
+    if (data.value) {
+      if (newObj[data.key]) {
+        newObj[data.key][data.order] = data.value;
+      } else {
+        newObj[data.key] = [data.value];
+      }
+    }
+  }
+  return newObj;
+};
+
+const convertMultiInputData = values => {
+  const multis = filterObject(
+    values,
+    (value, key) => key.includes('*MULTI*') && value,
+  );
+  if (isObjectEmpty(multis)) return values;
+  const noMultis = filterObject(
+    values,
+    (value, key) => !key.includes('*MULTI*') && value,
+  );
+  const organizedMultis = collapseMultis(multis);
+  return { ...noMultis, ...organizedMultis };
+};
 
 const mapInRequired = (fields, required) => {
   return fields.map(field =>
@@ -36,16 +71,17 @@ export const inputDataFromABI = inputs => {
     urlNoHttp: 'www.example.fake',
   };
 
-  return inputs.map(input => {
+  return inputs.map((input, index) => {
     const localType = getType(input.type);
+    const isMulti = input.type.includes('[]');
     return {
-      type: input.type.includes('[]') ? 'multiInput' : 'input',
+      type: isMulti ? 'multiInput' : 'input',
       label: input.name,
-      name: `*abiInput*${input.name}`,
-      htmlFor: `*abiInput*${input.name}`,
+      name: `${index}*ARG*${input.name}`,
+      htmlFor: `${index}*ARG*${input.name}`,
       placeholder: labels[localType] || input.type,
-      expectType: getType(localType),
-      required: true,
+      expectType: isMulti ? 'any' : getType(localType),
+      required: false,
     };
   });
 };
@@ -56,7 +92,6 @@ const ProposalForm = props => {
 
   const [loading, setLoading] = useState(false);
   const [formFields, setFields] = useState(mapInRequired(fields, required));
-  const [abiOptions, setABIOptions] = useState(null);
 
   const [options, setOptions] = useState(additionalOptions);
   const localForm = useForm();
@@ -75,11 +110,22 @@ const ProposalForm = props => {
 
   const buildABIOptions = abiString => {
     if (!abiString || typeof abiString !== 'string') return;
+    const originalFields = mapInRequired(fields, required);
+    const appendingFields = [
+      FIELD.MINION_PAYMENT,
+      { ...FIELD.DESCRIPTION, h: '10' },
+    ];
     if (abiString === 'clear') {
-      setFields(mapInRequired(fields, required));
+      setFields(originalFields);
+    } else if (abiString === 'hex') {
+      setFields([...originalFields, ...appendingFields]);
     } else {
       const abiInputs = JSON.parse(abiString)?.inputs;
-      setFields(prevState => [...prevState, ...inputDataFromABI(abiInputs)]);
+      setFields([
+        ...originalFields,
+        ...inputDataFromABI(abiInputs),
+        ...appendingFields,
+      ]);
     }
   };
 
@@ -111,10 +157,14 @@ const ProposalForm = props => {
     }
     const typeErrors = checkFormTypes(values, formFields);
     if (typeErrors) {
+      console.log(`formFields`, formFields);
+      console.log('isUpdating errors');
       updateErrors(typeErrors);
       return;
     }
     const customValErrors = handleCustomValidation({ values, formData: props });
+    const collapsedValues = convertMultiInputData(values);
+    console.log(`collapsedValues`, collapsedValues);
 
     if (customValErrors) {
       updateErrors(customValErrors);
@@ -146,17 +196,6 @@ const ProposalForm = props => {
                 />
               );
             })}
-            {/* {abiOptions?.map(field => {
-              return (
-                <InputFactory
-                  key={field?.htmlFor || field?.name}
-                  {...field}
-                  minionType={props.minionType}
-                  localForm={localForm}
-                  buildABIOptions={buildABIOptions}
-                />
-              );
-            })} */}
           </Flex>
         </FormControl>
         <FormFooter options={options} addOption={addOption} loading={loading} />

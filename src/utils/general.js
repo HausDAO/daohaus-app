@@ -106,7 +106,7 @@ export const mapObject = (object, callback) => {
   const newObj = {};
   let index = 0;
   for (const key in object) {
-    newObj[key] = callback(object[key], key, index, object);
+    newObj[key] = callback(object[key], key, index, newObj);
     index += 1;
   }
   return newObj;
@@ -115,13 +115,15 @@ export const filterObject = (object, callback) => {
   const newObj = {};
   let index = 0;
   for (const key in object) {
-    if (callback(object[key], index, object)) {
+    if (callback(object[key], key, index, newObj)) {
       newObj[key] = object[key];
       index += 1;
     }
   }
   return newObj;
 };
+export const getObjectLength = object => Object.keys(object).length;
+export const isObjectEmpty = object => getObjectLength(object) === 0;
 
 export const numberWithCommas = num => {
   if (num === 0) return 0;

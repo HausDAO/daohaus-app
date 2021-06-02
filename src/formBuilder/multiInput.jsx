@@ -5,14 +5,21 @@ import React, { useState } from 'react';
 import GenericInput from './genericInput';
 
 const MultiInput = props => {
-  const [inputs, setInputs] = useState([props]);
+  const { name } = props;
+  const [inputs, setInputs] = useState([
+    {
+      ...props,
+      name: `${name}*MULTI*${0}`,
+      htmlFor: `${name}*MULTI*${0}`,
+    },
+  ]);
 
   const addCopy = () => {
     const nextIndex = inputs.length;
     const nextInput = {
       ...props,
-      name: `${props.name}<<MULTI>>${nextIndex}`,
-      htmlFor: `${props.name}-${nextIndex}`,
+      name: `${name}*MULTI*${nextIndex}`,
+      htmlFor: `${name}-${nextIndex}`,
     };
     setInputs([...inputs, nextInput]);
   };

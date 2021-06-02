@@ -46,14 +46,21 @@ const AbiInput = props => {
   useEffect(() => {
     if (abiInput) {
       props.buildABIOptions(abiInput);
+    } else if (isRawHex) {
+      props.buildABIOptions('hex');
     } else {
       props.buildABIOptions('clear');
     }
   }, [abiInput]);
 
   const switchElement = () => {
-    setRawHex(prevState => !prevState);
-    props.buildABIOptions('clear');
+    if (isRawHex) {
+      setRawHex(false);
+      props.buildABIOptions('clear');
+    } else {
+      setRawHex(true);
+      props.buildABIOptions('hex');
+    }
   };
 
   return (
