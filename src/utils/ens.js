@@ -1,5 +1,7 @@
 import { gql } from 'apollo-boost';
+import { ethers } from 'ethers';
 import { graphQuery } from './apollo';
+import { chainByID } from './chain';
 
 const ensClient =
   'https://api.thegraph.com/subgraphs/name/ezynda3/ens-subgraph';
@@ -75,4 +77,14 @@ export const handleGetENS = async address => {
   const ens = await fetchENS(address);
   cacheENS(ens, address);
   return ens;
+};
+
+export const lookupENS = async ens => {
+  try {
+    const ethersProvider = ethers.getDefaultProvider(chainByID('0x1').rpc_url);
+    const address = await ethersProvider.resolveName(ens);
+    return address;
+  } catch (error) {
+    console.error(error);
+  }
 };

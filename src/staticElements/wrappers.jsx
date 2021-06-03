@@ -28,6 +28,7 @@ export const ToolTipWrapper = ({
   bg = 'primary.500',
   placement = 'top',
   link,
+  layoutProps,
   href,
 }) => {
   const getLinkBox = () => {
@@ -57,6 +58,7 @@ export const ToolTipWrapper = ({
       bg={bg}
       placement={placement}
       shouldWrapChildren
+      {...layoutProps}
     >
       {getLinkBox()}
     </Tooltip>

@@ -15,6 +15,7 @@ import { FaCopy } from 'react-icons/fa';
 import { useDao } from '../contexts/DaoContext';
 import TextBox from './TextBox';
 import { themeImagePath } from '../utils/metadata';
+import MemberIndicator from './memberIndicator';
 
 //  For QA.
 //  This won't be refactored until we know the specs of
@@ -57,7 +58,7 @@ const UberDaoInfo = ({ proposal }) => {
         </TextBox>
       )}
       <Skeleton isLoaded={proposal}>
-        {daoMinion?.isUberMinion && (
+        {daoMinion?.isUberMinion ? (
           <Flex direction='row' alignItems='center'>
             <Avatar
               name={daoMinion?.uberMeta?.name}
@@ -87,6 +88,8 @@ const UberDaoInfo = ({ proposal }) => {
               </CopyToClipboard>
             </Flex>
           </Flex>
+        ) : (
+          <MemberIndicator address={proposal?.applicant} label='recipient' />
         )}
       </Skeleton>
     </Box>

@@ -34,6 +34,13 @@ export const proposalTypes = (customTerms, boosts, minions) => {
       show: daoPropTypes ? daoPropTypes?.trade?.active : true,
     },
     {
+      name: 'Signal',
+      subhead: 'Signal',
+      proposalType: 'signal',
+      image: swordImg,
+      show: daoPropTypes ? daoPropTypes?.member?.active : true,
+    },
+    {
       name: 'Guild Kick',
       subhead: `Remove a ${getTerm(customTerms, 'member')}`,
       proposalType: 'guildkick',
