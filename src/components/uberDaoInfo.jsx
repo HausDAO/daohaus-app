@@ -36,7 +36,6 @@ const UberDaoInfo = ({ proposal }) => {
     if (minion?.isUberMinion) {
       setDaoMinion(minion);
     } else {
-      console.log('minion', minion);
       setDaoMinion(false);
     }
   }, [proposal, daoMembers]);
