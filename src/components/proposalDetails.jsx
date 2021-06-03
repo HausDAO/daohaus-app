@@ -23,11 +23,13 @@ import {
   getProposalDetailStatus,
   memberVote,
   MINION_TYPES,
+  PROPOSAL_TYPES,
 } from '../utils/proposalUtils';
 import { getCustomProposalTerm } from '../utils/metadata';
 import { UBERHAUS_DATA } from '../utils/uberhaus';
 import { handleDecimals } from '../utils/general';
 import UberHausDelegate from './uberhausDelegate';
+import TokenDisplay from './tokenDisplay';
 import DiscourseProposalTopic from './discourseProposalTopic';
 
 const UBER_LINK =
@@ -118,6 +120,9 @@ const ProposalDetails = ({ proposal, daoMember }) => {
                   <Box w='100%'>{proposal?.description}</Box>
                 ))}
             </Skeleton>
+          )}
+          {proposal?.proposalType === PROPOSAL_TYPES.WHITELIST && (
+            <TokenDisplay tokenAddress={proposal.tributeToken} />
           )}
           <Box mt={proposal?.link || proposal?.minionAddress ? 6 : 2}>
             {proposal?.link && <MediaBox link={proposal.link} />}

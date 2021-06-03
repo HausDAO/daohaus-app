@@ -15,7 +15,6 @@ import { FaCopy } from 'react-icons/fa';
 import { useDao } from '../contexts/DaoContext';
 import TextBox from './TextBox';
 import { themeImagePath } from '../utils/metadata';
-import { truncateAddr } from '../utils/general';
 import MemberIndicator from './memberIndicator';
 
 //  For QA.
