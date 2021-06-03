@@ -91,11 +91,7 @@ const UberDaoInfo = ({ proposal }) => {
             </Flex>
           </Flex>
         ) : (
-          <MemberIndicator
-            address={proposal?.applicant}
-            label='recipient'
-            shouldFetchProfile
-          />
+          <MemberIndicator address={proposal?.applicant} label='recipient' />
         )}
       </Skeleton>
     </Box>
