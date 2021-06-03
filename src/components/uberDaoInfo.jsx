@@ -15,6 +15,8 @@ import { FaCopy } from 'react-icons/fa';
 import { useDao } from '../contexts/DaoContext';
 import TextBox from './TextBox';
 import { themeImagePath } from '../utils/metadata';
+import { truncateAddr } from '../utils/general';
+import MemberIndicator from './memberIndicator';
 
 //  For QA.
 //  This won't be refactored until we know the specs of
@@ -35,6 +37,7 @@ const UberDaoInfo = ({ proposal }) => {
     if (minion?.isUberMinion) {
       setDaoMinion(minion);
     } else {
+      console.log('minion', minion);
       setDaoMinion(false);
     }
   }, [proposal, daoMembers]);
@@ -57,7 +60,7 @@ const UberDaoInfo = ({ proposal }) => {
         </TextBox>
       )}
       <Skeleton isLoaded={proposal}>
-        {daoMinion?.isUberMinion && (
+        {daoMinion?.isUberMinion ? (
           <Flex direction='row' alignItems='center'>
             <Avatar
               name={daoMinion?.uberMeta?.name}
@@ -87,6 +90,12 @@ const UberDaoInfo = ({ proposal }) => {
               </CopyToClipboard>
             </Flex>
           </Flex>
+        ) : (
+          <MemberIndicator
+            address={proposal?.applicant}
+            label='recipient'
+            shouldFetchProfile
+          />
         )}
       </Skeleton>
     </Box>
