@@ -10,8 +10,8 @@ import { useInjectedProvider } from '../contexts/InjectedProviderContext';
 import InputSelect from './inputSelect';
 import { ModButton } from './staticElements';
 
-import { fetchBalance } from '../utils/tokenValue';
 import { TokenService } from '../services/tokenService';
+import { validate } from '../utils/validation';
 
 const TributeInput = props => {
   const { unlockToken } = useTX();
@@ -19,30 +19,50 @@ const TributeInput = props => {
   const { daochain, daoid } = useParams();
   const { daoOverview } = useDao();
   const { localForm } = props;
-  const { getValues, setValue } = localForm;
+  const { setValue, watch } = localForm;
 
   const [daoTokens, setDaoTokens] = useState([]);
-  const [unlocked, setUnlocked] = useState(true);
-  const [balance, setBalance] = useState('loading');
+  // const [unlocked, setUnlocked] = useState(true);
+  const [balance, setBalance] = useState(null);
+  const [allowance, setAllowance] = useState(null);
   const [loading, setLoading] = useState(false);
+  const [needsUnlock, setNeedsUnlock] = useState(false);
 
-  const maxBtnDisplay = useMemo(() => {
-    if (balance === 'loading') {
-      return (
-        <>
-          Max: <Spinner size='sm' />
-        </>
-      );
-    }
-    if (balance) {
+  const tributeToken = watch('tributeToken');
+
+  // console.log(tributeToken);
+  const tributeOffered = watch('tributeOffered');
+
+  const truncatedBalance = useMemo(() => {
+    if (validate.number(balance)) {
       const commified = ethers.utils.commify(
         Number(utils.fromWei(balance)).toFixed(4),
       );
-      return `Max: ${commified}`;
+      return commified;
     }
+    return 'Error';
   }, [balance]);
+  const balanceExceeded =
+    allowance &&
+    truncatedBalance &&
+    Number(truncatedBalance) < Number(tributeOffered);
 
-  const unlockBtnDisplay = loading ? <Spinner size='sm' /> : 'Unlock';
+  const btnDisplay = () => {
+    if (loading) return <Spinner size='sm' />;
+    if (needsUnlock) return 'Unlock Token';
+    if (!loading && truncatedBalance) return `Max: ${truncatedBalance}`;
+    return '0';
+  };
+
+  const helperText = () => {
+    if (needsUnlock) {
+      return `Amount enterred exceeds token allowance.`;
+    }
+    if (balanceExceeded) {
+      return 'Amount enterred exceeds balance';
+    }
+    return '';
+  };
 
   useEffect(() => {
     if (daoOverview) {
@@ -55,6 +75,7 @@ const TributeInput = props => {
         token =>
           token.guildBank && token.token.tokenAddress !== depTokenAddress,
       );
+
       setDaoTokens(
         [depositToken, ...nonDepTokens].map(token => ({
           value: token.token.tokenAddress,
@@ -68,78 +89,58 @@ const TributeInput = props => {
 
   useEffect(() => {
     let shouldUpdate = true;
-    const setInitialBalance = async () => {
-      const tokenAddress = daoTokens[0]?.value;
-      const result = await fetchBalance({
-        tokenAddress,
-        address,
+
+    const getInitial = async () => {
+      setLoading(true);
+      const tokenService = TokenService({
         chainID: daochain,
+        tokenAddress: tributeToken,
       });
+      const allowanceRes = await tokenService('allowance')({
+        accountAddr: address,
+        contractAddr: daoid,
+      });
+      const balanceRes = await tokenService('balanceOf')(address);
       if (shouldUpdate) {
-        setBalance(result);
+        setBalance(balanceRes);
+        setAllowance(allowanceRes);
+        setLoading(false);
       }
     };
-    if (daoTokens?.length) {
-      setInitialBalance();
+    if (tributeToken) {
+      getInitial();
     }
     return () => {
       shouldUpdate = false;
     };
-  }, [daoTokens, address, daochain]);
+  }, [tributeToken, address, daochain]);
 
-  const updateBalance = async tokenAddress => {
-    setBalance('loading');
-    const result = await fetchBalance({
-      tokenAddress,
-      address,
-      chainID: daochain,
-    });
-    setBalance(result);
-  };
+  useEffect(() => {
+    if (
+      !tributeOffered ||
+      !tributeToken ||
+      tributeOffered === '0' ||
+      !validate.number(tributeOffered)
+    ) {
+      console.log('fired');
+      setNeedsUnlock(false);
+    } else {
+      setNeedsUnlock(Number(allowance) < Number(tributeOffered));
+    }
+  }, [tributeOffered, balance, allowance, tributeToken]);
 
   const handleUnlock = async () => {
-    const tokenAddress = getValues('tributeToken');
     setLoading(true);
-    const result = await unlockToken(tokenAddress);
+    const result = await unlockToken(tributeToken);
     setLoading(false);
-    setUnlocked(result);
-  };
-
-  const checkUnlocked = async (token, amount) => {
-    if (
-      amount === '' ||
-      !token ||
-      typeof +amount !== 'number' ||
-      +amount === 0
-    ) {
-      setUnlocked(true);
-      return;
-    }
-    const amountApproved = await TokenService({
-      chainID: daochain,
-      tokenAddress: token,
-    })('allowance')({
-      accountAddr: address,
-      contractAddr: daoid,
-    });
-    const isUnlocked = +amountApproved > +amount;
-    setUnlocked(isUnlocked);
-  };
-
-  const handleChange = async () => {
-    const tributeToken = getValues('tributeToken');
-    const tributeOffered = getValues('tributeOffered');
-
-    checkUnlocked(tributeToken, tributeOffered);
-    updateBalance(tributeToken);
+    console.log(unlockToken);
+    setNeedsUnlock(!result);
   };
   const setMax = () => {
-    const tributeToken = getValues('tributeToken');
     setValue(
       'tributeOffered',
       balance / 10 ** daoTokens.find(t => t.value === tributeToken)?.decimals,
     );
-    handleChange();
   };
 
   return (
@@ -147,17 +148,12 @@ const TributeInput = props => {
       {...props}
       selectName='tributeToken'
       options={daoTokens}
-      selectChange={handleChange}
-      helperText={unlocked || 'Unlock to tokens to submit proposal'}
+      helperText={helperText()}
       btn={
-        unlocked ? (
-          <ModButton label={maxBtnDisplay} callback={setMax} />
-        ) : (
-          <>
-            <ModButton label={unlockBtnDisplay} callback={handleUnlock} />
-            <ModButton label={maxBtnDisplay} callback={setMax} />
-          </>
-        )
+        <ModButton
+          label={btnDisplay()}
+          callback={needsUnlock ? handleUnlock : setMax}
+        />
       }
     />
   );
