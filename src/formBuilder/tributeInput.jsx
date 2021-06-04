@@ -42,10 +42,6 @@ const TributeInput = props => {
     }
     return 'Error';
   }, [balance]);
-  const balanceExceeded =
-    allowance &&
-    truncatedBalance &&
-    Number(truncatedBalance) < Number(tributeOffered);
 
   const btnDisplay = () => {
     if (loading) return <Spinner size='sm' />;
@@ -54,15 +50,8 @@ const TributeInput = props => {
     return '0';
   };
 
-  const helperText = () => {
-    if (needsUnlock) {
-      return `Amount enterred exceeds token allowance.`;
-    }
-    if (balanceExceeded) {
-      return 'Amount enterred exceeds balance';
-    }
-    return '';
-  };
+  const helperText = () =>
+    needsUnlock && `Amount enterred exceeds token allowance.`;
 
   useEffect(() => {
     if (daoOverview) {
