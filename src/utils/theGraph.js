@@ -393,9 +393,11 @@ export const daosqaureCcoQuery = async ({ query, reactSetter, apiFetcher }) => {
     const date = await getDateTime();
     const now = Number(date.seconds);
 
-    const withCcoMeta = withMetaData.map(dao => {
-      return ccoDaoResolver(dao, now, 'daosquarecco');
-    });
+    const withCcoMeta = withMetaData
+      .map(dao => {
+        return ccoDaoResolver(dao, now, 'daosquarecco');
+      })
+      .sort((a, b) => a.ccoStatus.sort - b.ccoStatus.sort);
 
     reactSetter(withCcoMeta);
   } catch (error) {

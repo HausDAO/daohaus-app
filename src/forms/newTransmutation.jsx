@@ -14,18 +14,17 @@ import {
 import { RiExternalLinkLine } from 'react-icons/ri';
 import { useForm } from 'react-hook-form';
 
-import { TransmutationFactoryService } from '../services/transmutationFactoryService';
-import { supportedChains } from '../utils/chain';
 import { useInjectedProvider } from '../contexts/InjectedProviderContext';
-import { createPoll } from '../services/pollService';
 import { useUser } from '../contexts/UserContext';
 import { useOverlay } from '../contexts/OverlayContext';
 import { useDao } from '../contexts/DaoContext';
 import { useMetaData } from '../contexts/MetaDataContext';
+import { TransmutationFactoryService } from '../services/transmutationFactoryService';
+import { createPoll } from '../services/pollService';
+import { supportedChains } from '../utils/chain';
 import { boostPost } from '../utils/metadata';
 
 const NewTransmutation = ({ ccoType, ccoVanillaMinion }) => {
-  const [loading, setLoading] = useState(false);
   const { daochain, daoid } = useParams();
   const { address, injectedProvider, injectedChain } = useInjectedProvider();
   const { daoOverview, refetch } = useDao();
@@ -33,12 +32,13 @@ const NewTransmutation = ({ ccoType, ccoVanillaMinion }) => {
   const { cachePoll, resolvePoll } = useUser();
   const { errorToast, successToast } = useOverlay();
   const { handleSubmit, register, setValue } = useForm();
+  const [loading, setLoading] = useState(false);
   const [step, setStep] = useState(1);
   const [pendingTx, setPendingTx] = useState(null);
   const now = (new Date().getTime() / 1000).toFixed();
 
   useEffect(() => {
-    const setUp = async () => {
+    const setUp = () => {
       setValue('moloch', daoid);
       setValue(
         'distributionToken',
@@ -151,7 +151,7 @@ const NewTransmutation = ({ ccoType, ccoVanillaMinion }) => {
 
   return (
     <Box w='90%'>
-      {step === 1 ? (
+      {step === 1 && (
         <>
           <Heading as='h4' size='md' fontWeight='100' mb={10}>
             Deploy Transmutation Contract
@@ -223,9 +223,9 @@ const NewTransmutation = ({ ccoType, ccoVanillaMinion }) => {
             </Button>
           </form>
         </>
-      ) : null}
+      )}
 
-      {step === 2 ? (
+      {step === 2 && (
         <>
           <Heading as='h4' size='md' fontWeight='100' mb={10}>
             Deploying Transmutation
@@ -247,15 +247,15 @@ const NewTransmutation = ({ ccoType, ccoVanillaMinion }) => {
             ) : null}
           </Box>
         </>
-      ) : null}
+      )}
 
-      {step === 'success' ? (
+      {step === 'success' && (
         <>
           <Heading as='h4' size='md' fontWeight='100' mb={10}>
             Success
           </Heading>
         </>
-      ) : null}
+      )}
     </Box>
   );
 };

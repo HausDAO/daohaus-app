@@ -1,6 +1,7 @@
 import React, { useContext, createContext, useEffect } from 'react';
-import { EXPLORER_DAOS } from '../graphQL/explore-queries';
+
 import { useSessionStorage } from '../hooks/useSessionStorage';
+import { EXPLORER_DAOS } from '../graphQL/explore-queries';
 import { getApiMetadata } from '../utils/metadata';
 import { daosqaureCcoQuery } from '../utils/theGraph';
 
@@ -17,15 +18,10 @@ export const DaosquareContextProvider = ({ children }) => {
     });
   }, []);
 
-  const resetD2CcoDaos = () => {
-    console.log('reset');
-  };
-
   return (
     <DaosquareContext.Provider
       value={{
         d2CcoDaos,
-        resetD2CcoDaos,
       }}
     >
       {children}
@@ -34,9 +30,8 @@ export const DaosquareContextProvider = ({ children }) => {
 };
 
 export const useDaosquareCco = () => {
-  const { d2CcoDaos, resetD2CcoDaos } = useContext(DaosquareContext);
+  const { d2CcoDaos } = useContext(DaosquareContext);
   return {
     d2CcoDaos,
-    resetD2CcoDaos,
   };
 };

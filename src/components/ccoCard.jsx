@@ -5,11 +5,11 @@ import makeBlockie from 'ethereum-blockies-base64';
 import { BsEggFill } from 'react-icons/bs';
 
 import ContentBox from './ContentBox';
+import { PROPOSALS_LIST } from '../graphQL/proposal-queries';
 import { getDateTime, themeImagePath } from '../utils/metadata';
 import { numberWithCommas } from '../utils/general';
 import { supportedChains } from '../utils/chain';
 import { ccoProgressBarData, CCO_CONSTANTS } from '../utils/cco';
-import { PROPOSALS_LIST } from '../graphQL/proposal-queries';
 import { graphFetchAll } from '../utils/theGraph';
 import { ccoDaoResolver } from '../utils/resolvers';
 
@@ -32,15 +32,6 @@ const CcoCard = ({
     ),
     fundedAmount: dao.ccoFundedAmount,
   });
-  // const raiseLeft =
-  //   Number(daoMetaData.boosts[ccoType].metadata.maxTarget) -
-  //   dao.ccoFundedAmount;
-  // const canClaim =
-  //   dao?.ccoStatus?.label === 'Funded' && dao?.ccoStatus?.claimOpen;
-  // const barData = ccoProgressBarData(
-  //   daoMetaData.boosts[ccoType].metadata,
-  //   dao.ccoFundedAmount,
-  // );
 
   useEffect(() => {
     const getProposals = async () => {

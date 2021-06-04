@@ -1,17 +1,16 @@
 import React, { useState } from 'react';
 import { Box, Flex } from '@chakra-ui/layout';
-import { Spinner } from '@chakra-ui/spinner';
-import { Button } from '@chakra-ui/button';
-
 import {
   RiCloseCircleLine,
   RiCheckboxCircleLine,
   RiQuestionLine,
 } from 'react-icons/ri';
+
 import { useInjectedProvider } from '../contexts/InjectedProviderContext';
 import ContentBox from './ContentBox';
-import { getEligibility } from '../utils/metadata';
 import { ToolTipWrapper } from '../staticElements/wrappers';
+import { getEligibility } from '../utils/metadata';
+import CcoEligibilityButton from './ccoEligibilityButton';
 
 const CcoEligibility = ({
   networkMatch,
@@ -38,6 +37,7 @@ const CcoEligibility = ({
         <Box fontSize='3xl' fontFamily='heading' pr={5}>
           1
         </Box>
+
         {isEligible === 'unchecked' && (
           <Flex mr='auto' align='center'>
             <Box>Only approved addresses can participate.</Box>
@@ -55,56 +55,19 @@ const CcoEligibility = ({
             </ToolTipWrapper>
           </Flex>
         )}
-        {networkMatch ? (
-          <Box>
-            {isEligible === 'unchecked' && (
-              <>
-                <Button
-                  variant='primary'
-                  fontFamily='heading'
-                  letterSpacing='0.1em'
-                  textTransform='uppercase'
-                  onClick={checkEligibility}
-                  disabled={
-                    checkingEligibility || roundData.raiseOver || raiseAtMax
-                  }
-                >
-                  {!checkingEligibility ? <>Check Eligibility</> : <Spinner />}
-                </Button>
 
-                {roundData.raiseOver ||
-                  (raiseAtMax && (
-                    <Box size='xs' my={2} color='blackAlpha.900'>
-                      Contributions are closed
-                    </Box>
-                  ))}
-              </>
-            )}
-          </Box>
-        ) : (
-          <Box>
-            {address ? (
-              <Button
-                onClick={handleSwitchNetwork}
-                fontFamily='heading'
-                letterSpacing='0.1em'
-                textTransform='uppercase'
-              >
-                {`Switch to the ${roundData.network} network`}
-              </Button>
-            ) : (
-              <Button
-                onClick={requestWallet}
-                mb={6}
-                fontFamily='heading'
-                letterSpacing='0.1em'
-                textTransform='uppercase'
-              >
-                Connect Wallet
-              </Button>
-            )}
-          </Box>
-        )}
+        <CcoEligibilityButton
+          networkMatch={networkMatch}
+          isEligible={isEligible}
+          checkEligibility={checkEligibility}
+          checkingEligibility={checkingEligibility}
+          roundData={roundData}
+          raiseAtMax={raiseAtMax}
+          handleSwitchNetwork={handleSwitchNetwork}
+          address={address}
+          requestWallet={requestWallet}
+        />
+
         {isEligible === 'checked' && (
           <>
             <Box
@@ -127,11 +90,11 @@ const CcoEligibility = ({
               />
             </Box>
 
-            {roundData.beforeRaise ? (
+            {roundData.beforeRaise && (
               <Box size='md' my={2} color='blackAlpha.900'>
                 Come back when the contribution round begins.
               </Box>
-            ) : null}
+            )}
           </>
         )}
         {isEligible === 'denied' && (

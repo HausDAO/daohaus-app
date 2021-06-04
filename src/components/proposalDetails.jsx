@@ -29,8 +29,8 @@ import { getCustomProposalTerm } from '../utils/metadata';
 import { UBERHAUS_DATA } from '../utils/uberhaus';
 import { handleDecimals } from '../utils/general';
 import UberHausDelegate from './uberhausDelegate';
-import DiscourseProposalTopic from './discourseProposalTopic';
 import TokenDisplay from './tokenDisplay';
+import DiscourseProposalTopic from './discourseProposalTopic';
 
 const UBER_LINK =
   '/dao/0x2a/0x96714523778e51b898b072089e5615d4db71078e/proposals';
