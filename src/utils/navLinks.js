@@ -82,8 +82,8 @@ export const defaultSocialLinks = [
 const socialLinksBaseUrls = {
   twitter: 'https://twitter.com/',
   discord: 'https://discord.gg/',
-  telegram: '',
-  medium: '',
+  telegram: 'https://t.me/',
+  medium: 'https://medium.com/',
 };
 
 export const generateDaoSocials = linksMetaObj => {
