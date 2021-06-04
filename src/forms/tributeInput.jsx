@@ -49,7 +49,7 @@ const TributeInput = ({ register, setValue, getValues, setError }) => {
           token.guildBank && token.token.tokenAddress !== depositTokenAddress,
       );
       tokenArray.unshift(depositToken);
-      console.log('tokenArray', tokenArray);
+
       setTokenData(
         tokenArray.map(token => ({
           label: token.token.symbol || token.tokenAddress,
@@ -59,7 +59,6 @@ const TributeInput = ({ register, setValue, getValues, setError }) => {
         })),
       );
     }
-    // eslint-disable-next-line;
   }, [daoOverview]);
 
   useEffect(() => {
@@ -154,7 +153,6 @@ const TributeInput = ({ register, setValue, getValues, setError }) => {
       const depositToken = tokenData[0];
       getMax(depositToken.value);
     }
-    // eslint-disable-next-line
   }, [tokenData]);
 
   const handleChange = async () => {
