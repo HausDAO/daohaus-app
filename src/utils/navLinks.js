@@ -79,11 +79,32 @@ export const defaultSocialLinks = [
   },
 ];
 
+const socialLinksBaseUrls = {
+  twitter: 'https://twitter.com/',
+  discord: 'https://discord.gg/',
+  telegram: '',
+  medium: '',
+};
+
 export const generateDaoSocials = linksMetaObj => {
   if (!linksMetaObj) return;
+
+  const fixedSocials = Object.keys(linksMetaObj).reduce(
+    (acc, metaObjKey) => ({
+      ...acc,
+      [metaObjKey]:
+        linksMetaObj[metaObjKey] &&
+        socialLinksBaseUrls[metaObjKey] &&
+        !linksMetaObj[metaObjKey].includes(socialLinksBaseUrls[metaObjKey])
+          ? `${socialLinksBaseUrls[metaObjKey]}${linksMetaObj[metaObjKey]}`
+          : linksMetaObj[metaObjKey],
+    }),
+    {},
+  );
+
   return defaultSocialLinks
-    .filter(link => linksMetaObj[link.label.toLowerCase()])
-    .map(link => ({ ...link, href: linksMetaObj[link.label.toLowerCase()] }));
+    .filter(link => fixedSocials[link.label.toLowerCase()])
+    .map(link => ({ ...link, href: fixedSocials[link.label.toLowerCase()] }));
 };
 
 export const generateDiscourseLink = metadata => {
