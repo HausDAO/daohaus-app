@@ -1,13 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import { Box, Flex, Spinner } from '@chakra-ui/react';
 
+import { useDaosquareCco } from '../contexts/DaosquareCcoContext';
+import { useCustomTheme } from '../contexts/CustomThemeContext';
+import { daosquareCcoTheme } from '../themes/defaultTheme';
 import Layout from '../components/layout';
 import MainViewLayout from '../components/mainViewLayout';
 import DaosquareCcoOverall from '../components/daosquareCcoOverall';
 import CcoCard from '../components/ccoCard';
-import { useDaosquareCco } from '../contexts/DaosquareCcoContext';
-import { useCustomTheme } from '../contexts/CustomThemeContext';
-import { daosquareCcoTheme } from '../themes/defaultTheme';
 
 const DaosquareCco = () => {
   const { d2CcoDaos } = useDaosquareCco();
@@ -24,7 +24,6 @@ const DaosquareCco = () => {
   }, []);
 
   useEffect(() => {
-    console.log('fundedDaoTotals', fundedDaoTotals);
     if (d2CcoDaos?.length) {
       setTotals({
         funded: Object.keys(fundedDaoTotals).reduce((sum, dao) => {
@@ -48,21 +47,19 @@ const DaosquareCco = () => {
               pb={6}
             >
               <Box fontSize='xl'>CCOs</Box>
-              {d2CcoDaos
-                .sort((a, b) => a.ccoStatus.sort - b.ccoStatus.sort)
-                .map(dao => {
-                  return (
-                    <CcoCard
-                      daoMetaData={dao.meta}
-                      dao={dao}
-                      key={dao.id}
-                      setFundedDaoTotals={setFundedDaoTotals}
-                      fundedDaoTotals={fundedDaoTotals}
-                      ccoType='daosquarecco'
-                      isLink
-                    />
-                  );
-                })}
+              {d2CcoDaos.map(dao => {
+                return (
+                  <CcoCard
+                    daoMetaData={dao.meta}
+                    dao={dao}
+                    key={dao.id}
+                    setFundedDaoTotals={setFundedDaoTotals}
+                    fundedDaoTotals={fundedDaoTotals}
+                    ccoType='daosquarecco'
+                    isLink
+                  />
+                );
+              })}
             </Box>
             <Box w={['100%', null, null, null, '40%']}>
               <DaosquareCcoOverall totals={totals} />

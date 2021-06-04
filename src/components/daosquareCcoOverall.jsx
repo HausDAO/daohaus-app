@@ -1,5 +1,6 @@
 import React from 'react';
 import { Box } from '@chakra-ui/react';
+
 import ContentBox from './ContentBox';
 import { numberWithCommas } from '../utils/general';
 

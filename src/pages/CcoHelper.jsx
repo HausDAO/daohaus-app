@@ -78,9 +78,6 @@ const CcoHelper = React.memo(
           return +b.proposalId - +a.proposalId;
         });
 
-        console.log('roundData', roundData);
-
-        console.log('sortedByPropId', sortedByPropId);
         const propSplit = sortedByPropId.reduce(
           (coll, proposal) => {
             if (isCcoProposal(proposal, roundData)) {
@@ -93,8 +90,6 @@ const CcoHelper = React.memo(
           },
           { contributionProposals, otherProps },
         );
-
-        console.log('roundData', roundData);
 
         const contributionTotal = contributionTotalValue({
           proposals: propSplit.contributionProposals,

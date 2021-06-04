@@ -18,12 +18,16 @@ const CcoAdmin = React.memo(({ daoMetaData, isCorrectNetwork }) => {
 
   useEffect(() => {
     const setUp = async () => {
-      const transmuationData = await fetchTransmutation({
-        chainID: daochain,
-        molochAddress: daoid,
-      });
+      try {
+        const transmuationData = await fetchTransmutation({
+          chainID: daochain,
+          molochAddress: daoid,
+        });
 
-      setTransmutation(transmuationData.transmutations[0]);
+        setTransmutation(transmuationData.transmutations[0]);
+      } catch (err) {
+        console.log('err', err);
+      }
     };
 
     setUp();
