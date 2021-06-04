@@ -22,6 +22,7 @@ import { useDaoMember } from '../contexts/DaoMemberContext';
 import { useSessionStorage } from '../hooks/useSessionStorage';
 import { useInjectedProvider } from '../contexts/InjectedProviderContext';
 import ProposalSearch from './proposalSearch';
+import CsvDownloadButton from './csvDownloadButton';
 
 const ProposalsList = ({ proposals, customTerms }) => {
   const { daoMember } = useDaoMember();
@@ -147,6 +148,7 @@ const ProposalsList = ({ proposals, customTerms }) => {
             performSearch={performSearch}
             resetSearch={resetSearch}
           />
+          <CsvDownloadButton entityList={listProposals} typename='Proposals' />
         </Flex>
       </Flex>
       {isLoaded &&
