@@ -2,8 +2,8 @@ import React from 'react';
 import { Box, Icon, useToast } from '@chakra-ui/react';
 import { BsDownload } from 'react-icons/bs';
 
-import { ToolTipWrapper } from '../staticElements/wrappers';
 import { useMetaData } from '../contexts/MetaDataContext';
+import { ToolTipWrapper } from '../staticElements/wrappers';
 import { downloadFromBrowser, prepCsvData } from '../utils/csv';
 
 const CsvDownloadButton = ({ entityList, typename }) => {
@@ -26,14 +26,14 @@ const CsvDownloadButton = ({ entityList, typename }) => {
   };
 
   if (!daoMetaData) {
-    return;
+    return null;
   }
 
   return (
     <Box onClick={handleDownload}>
       <ToolTipWrapper
         tooltip
-        tooltipText={{ body: `Download CSV file` }}
+        tooltipText={{ body: `Export to csv` }}
         placement='right'
         layoutProps={{
           transform: 'translateY(-2px)',
@@ -41,7 +41,6 @@ const CsvDownloadButton = ({ entityList, typename }) => {
         }}
       >
         <Icon
-          transform='translateY(2px)'
           as={BsDownload}
           color='secondary.300'
           ml={2}
