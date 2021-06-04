@@ -5,7 +5,6 @@ export const USER_MEMBERSHIPS = gql`
     members(where: { memberAddress: $memberAddress, exists: true }) {
       id
       memberAddress
-      # hubSort @client
       moloch {
         id
         title

@@ -24,12 +24,7 @@ const GenericSelect = ({
   const showCount = count != null;
 
   return (
-    <Flex
-      direction='row'
-      w={['100%', null, null, '50%']}
-      mb={[5, null, null, 0]}
-      {...containerProps}
-    >
+    <Flex direction='row' mb={[5, null, null, 0]} {...containerProps}>
       <Text
         textTransform='uppercase'
         fontFamily='heading'
@@ -45,6 +40,7 @@ const GenericSelect = ({
           fontSize={['sm', null, null, 'md']}
           color='secondary.500'
           _hover={{ color: 'secondary.400' }}
+          display='inline-block'
         >
           {currentOption}
           {showCount && ` (${count})`}

@@ -107,7 +107,7 @@ const ProposalSearch = ({ performSearch, resetSearch }) => {
       mb={[5, null, null, 0]}
       justifyContent={['flex-start', null, null, 'flex-end']}
       position={['relative', null, null, 'absolute']}
-      right='0'
+      right='7'
       mt='1'
       zIndex='5'
     >
