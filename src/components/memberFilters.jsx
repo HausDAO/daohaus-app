@@ -26,12 +26,7 @@ const MemberFilters = ({ filter, setFilter }) => {
   };
 
   return (
-    <Flex
-      direction='row'
-      justifyContent='flex-end'
-      w={['100%', null, null, '50%']}
-      mb={[5, null, null, 0]}
-    >
+    <Flex direction='row'>
       <Text
         textTransform='uppercase'
         fontFamily='heading'

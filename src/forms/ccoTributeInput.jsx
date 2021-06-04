@@ -1,15 +1,14 @@
 import React, { useState, useEffect } from 'react';
+import { useParams } from 'react-router-dom';
 import { Button, Input, InputGroup, InputRightAddon } from '@chakra-ui/react';
 import { utils } from 'web3';
 import { MaxUint256 } from '@ethersproject/constants';
 
-import { useParams } from 'react-router-dom';
-import { useDao } from '../contexts/DaoContext';
 import { useInjectedProvider } from '../contexts/InjectedProviderContext';
 import { useOverlay } from '../contexts/OverlayContext';
+import { useUser } from '../contexts/UserContext';
 import { TokenService } from '../services/tokenService';
 import { createPoll } from '../services/pollService';
-import { useUser } from '../contexts/UserContext';
 
 const CcoTributeInput = ({
   register,
@@ -21,35 +20,25 @@ const CcoTributeInput = ({
   const [unlocked, setUnlocked] = useState(true);
   const [balance, setBalance] = useState(0);
   const [loading, setLoading] = useState(false);
-  const [tokenData, setTokenData] = useState([]);
-  const { daoOverview } = useDao();
   const { daochain, daoid } = useParams();
   const { injectedProvider, address } = useInjectedProvider();
   const { errorToast, successToast } = useOverlay();
   const { cachePoll, resolvePoll } = useUser();
 
+  const getMax = async token => {
+    const tokenContract = TokenService({
+      chainID: daochain,
+      tokenAddress: token,
+    });
+    const max = await tokenContract('balanceOf')(address);
+    setBalance(max);
+  };
+
   useEffect(() => {
-    if (daoOverview && !tokenData.length) {
-      const depositTokenAddress = daoOverview.depositToken?.tokenAddress;
-      const depositToken = daoOverview.tokenBalances?.find(
-        token =>
-          token.guildBank && token.token.tokenAddress === depositTokenAddress,
-      );
-      const tokenArray = daoOverview.tokenBalances.filter(
-        token =>
-          token.guildBank && token.token.tokenAddress !== depositTokenAddress,
-      );
-      tokenArray.unshift(depositToken);
-      setTokenData(
-        tokenArray.map(token => ({
-          label: token.token.symbol || token.tokenAddress,
-          value: token.token.tokenAddress,
-          decimals: token.token.decimals,
-          balance: token.tokenBalance,
-        })),
-      );
+    if (roundData.ccoToken.tokenAddress) {
+      getMax(roundData.ccoToken.tokenAddress);
     }
-  }, [daoOverview]);
+  }, [roundData.ccoToken.tokenAddress]);
 
   useEffect(() => {
     if (!unlocked) {
@@ -126,22 +115,6 @@ const CcoTributeInput = ({
     setUnlocked(isUnlocked);
   };
 
-  const getMax = async token => {
-    const tokenContract = TokenService({
-      chainID: daochain,
-      tokenAddress: token,
-    });
-    const max = await tokenContract('balanceOf')(address);
-    setBalance(max);
-  };
-
-  useEffect(() => {
-    if (tokenData.length) {
-      const depositToken = tokenData[0];
-      getMax(depositToken.value);
-    }
-  }, [tokenData]);
-
   const handleChange = async () => {
     const tributeToken = roundData.ccoToken.tokenAddress;
     const tributeOffered = getValues('tributeOffered');
@@ -175,7 +148,7 @@ const CcoTributeInput = ({
           ref={register({
             validate: {
               inefficienFunds: value => {
-                if (+value > +utils.fromWei(balance)) {
+                if (Number(value) > Number(utils.fromWei(balance))) {
                   return 'Insufficient Funds';
                 }
                 return true;
@@ -192,11 +165,11 @@ const CcoTributeInput = ({
               message: 'CCO Contribution must be a whole number',
             },
             max: {
-              value: +roundData.maxContribution,
+              value: Number(roundData.maxContribution),
               message: `${roundData.maxContribution} ${roundData.ccoToken.symbol} per person max`,
             },
             min: {
-              value: +roundData.minContribution,
+              value: Number(roundData.minContribution),
               message: `${roundData.minContribution} ${roundData.ccoToken.symbol} per person min`,
             },
             required: {

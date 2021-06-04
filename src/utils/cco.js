@@ -35,6 +35,10 @@ const parsedCcoDetails = proposal => {
     : { cco: false };
 };
 
+const handleCcoDecimals = (balance, decimals) => {
+  return Number(balance) / 10 ** Number(decimals);
+};
+
 export const countDownText = raiseData => {
   const now = new Date() / 1000;
   if (raiseData.raiseOver) {
@@ -84,6 +88,9 @@ export const isCcoProposalForAddress = (proposal, address, round) => {
   );
 };
 
+// TODO: reafactor at next cco with testing opportunity
+// Nested ternary
+// side effect on overTime: Would probably be best to find overTime separately without reassigning.
 export const contributionTotalValue = args => {
   let overTime = null;
   const totalMaxWei = Number(args.round.maxTarget) * 10 ** 18;
@@ -108,12 +115,12 @@ export const contributionTotalValue = args => {
 
   if (args.allProposals) {
     return {
-      contributionTotal: total / 10 ** Number(args.round.ccoToken.decimals),
+      contributionTotal: handleCcoDecimals(total, args.round.ccoToken.decimals),
       overTime,
     };
   }
 
-  return total / 10 ** Number(args.round.ccoToken.decimals);
+  return handleCcoDecimals(total, args.round.ccoToken.decimals);
 };
 
 export const isDaosquareCcoPath = (daoMetaData, location) => {
@@ -133,10 +140,6 @@ export const currentFunded = (ccoData, proposals) => {
       if (isCcoProposal(prop, ccoData) && nextSum <= totalMaxWei) {
         sum = nextSum;
       }
-
-      // if (nextSum <= totalMaxWei) {
-      //   console.log(prop);
-      // }
       return sum;
     }, 0);
 };

@@ -1,13 +1,13 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import { Link as RouterLink, useParams } from 'react-router-dom';
 import { Box, Flex, Text } from '@chakra-ui/layout';
 
+import { useInjectedProvider } from '../contexts/InjectedProviderContext';
+import { useDaoMember } from '../contexts/DaoMemberContext';
 import CcoClaim from '../forms/ccoClaim';
 import ContentBox from './ContentBox';
 import TextBox from './TextBox';
-import { useInjectedProvider } from '../contexts/InjectedProviderContext';
 import { claimCountDownText } from '../utils/cco';
-import { useDaoMember } from '../contexts/DaoMemberContext';
 
 const CcoClaimCard = ({ roundData, setClaimComplete, claimComplete }) => {
   const { daochain, daoid } = useParams();
@@ -17,16 +17,18 @@ const CcoClaimCard = ({ roundData, setClaimComplete, claimComplete }) => {
   const claimAmount = (Number(daoMember?.loot) * roundData?.ratio || 0).toFixed(
     2,
   );
-
-  const hasBalance =
-    daoMember &&
-    roundData &&
-    daoMember.tokenBalances.find(bal => {
-      const isRaiseToken =
-        bal.token.tokenAddress.toLowerCase() ===
-        roundData.claimTokenAddress.toLowerCase();
-      return isRaiseToken && Number(bal.tokenBalance) > 0;
-    });
+  const hasBalance = useMemo(() => {
+    return (
+      daoMember &&
+      roundData &&
+      daoMember.tokenBalances.find(bal => {
+        const isRaiseToken =
+          bal.token.tokenAddress.toLowerCase() ===
+          roundData.claimTokenAddress.toLowerCase();
+        return isRaiseToken && Number(bal.tokenBalance) > 0;
+      })
+    );
+  }, [daoMember, roundData]);
 
   return (
     <ContentBox variant='d2' mt={2} w='100%'>
@@ -61,19 +63,19 @@ const CcoClaimCard = ({ roundData, setClaimComplete, claimComplete }) => {
               claimOpen={roundData.claimOpen}
             />
           </Box>
-          {claimComplete || hasBalance ? (
-            <Box fontSize='sm' marginLeft='auto'>
-              {`Your claim is complete. Withdraw your
-          ${roundData.claimTokenSymbol} on your `}
-              <Text
-                as={RouterLink}
-                color='secondary.500'
-                to={`/dao/${daochain}/${daoid}/profile/${address}`}
-              >
-                Profile page
-              </Text>
-            </Box>
-          ) : null}
+          {claimComplete ||
+            (hasBalance && (
+              <Box fontSize='sm' marginLeft='auto'>
+                {`Your claim is complete. Withdraw your ${roundData.claimTokenSymbol} on your `}
+                <Text
+                  as={RouterLink}
+                  color='secondary.500'
+                  to={`/dao/${daochain}/${daoid}/profile/${address}`}
+                >
+                  Profile page
+                </Text>
+              </Box>
+            ))}
         </Flex>
       </Flex>
     </ContentBox>

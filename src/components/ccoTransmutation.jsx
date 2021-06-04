@@ -9,9 +9,9 @@ import { useDao } from '../contexts/DaoContext';
 import NewTransmutation from '../forms/newTransmutation';
 
 const CcoTransmutation = ({ ccoType, transmutation }) => {
-  const [vanillaMinion, setVanillaMinion] = useState(null);
   const { daochain, daoid } = useParams();
   const { daoOverview } = useDao();
+  const [vanillaMinion, setVanillaMinion] = useState(null);
 
   useEffect(() => {
     const minion = daoOverview?.minions.find(
@@ -26,8 +26,7 @@ const CcoTransmutation = ({ ccoType, transmutation }) => {
       <Box fontSize='xl' mb={5}>
         Transmutation Contract
       </Box>
-
-      {transmutation ? (
+      {transmutation && (
         <Box mb={5}>
           <Text
             fontFamily='mono'
@@ -44,18 +43,20 @@ const CcoTransmutation = ({ ccoType, transmutation }) => {
             </Flex>
           </Text>
         </Box>
-      ) : (
+      )}
+      {!transmutation && !vanillaMinion && (
         <Box mb={5}>
-          {!vanillaMinion ? (
-            <RouterLink to={`/dao/${daochain}/${daoid}/settings/boosts`}>
-              Launch a vanilla minion before transmutation contracts
-            </RouterLink>
-          ) : (
-            <NewTransmutation
-              ccoType={ccoType}
-              ccoVanillaMinion={vanillaMinion}
-            />
-          )}
+          <RouterLink to={`/dao/${daochain}/${daoid}/settings/boosts`}>
+            Launch a vanilla minion before transmutation contracts
+          </RouterLink>
+        </Box>
+      )}
+      {!transmutation && vanillaMinion && (
+        <Box mb={5}>
+          <NewTransmutation
+            ccoType={ccoType}
+            ccoVanillaMinion={vanillaMinion}
+          />
         </Box>
       )}
     </Box>
