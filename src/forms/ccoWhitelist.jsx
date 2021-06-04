@@ -15,12 +15,12 @@ import { CCO_CONSTANTS } from '../utils/cco';
 import { ccoPost } from '../utils/metadata';
 
 const CcoWhitelist = ({ daoMetaData, ccoType }) => {
+  const { daoid } = useParams();
+  const { errorToast, successToast } = useOverlay();
+  const { address, injectedProvider, injectedChain } = useInjectedProvider();
+  let upload = useRef();
   const [ccoWhitelistJson, setCcoWhitelistJson] = useState('');
   const [loading, setLoading] = useState(false);
-  const { daoid } = useParams();
-  const { address, injectedProvider, injectedChain } = useInjectedProvider();
-  const { errorToast, successToast } = useOverlay();
-  let upload = useRef();
 
   const handleUpdate = async () => {
     setLoading(true);
@@ -106,14 +106,7 @@ const CcoWhitelist = ({ daoMetaData, ccoType }) => {
       </FormControl>
 
       <Flex direction='column' width='30%'>
-        <Button
-          id='whitelist'
-          variant='outline'
-          onClick={() => {
-            handleBrowse();
-          }}
-          mb={3}
-        >
+        <Button id='whitelist' variant='outline' onClick={handleBrowse} mb={3}>
           Select file
         </Button>
         <input
@@ -123,7 +116,7 @@ const CcoWhitelist = ({ daoMetaData, ccoType }) => {
           multiple={false}
           style={{ display: 'none' }}
           ref={ref => (upload = ref)}
-          onChange={e => handleFileSet(e)}
+          onChange={handleFileSet}
         />
         <Button onClick={handleUpdate} isLoading={loading}>
           Update WhiteList

@@ -47,7 +47,8 @@ const CcoConfig = ({ daoMetaData, ccoType }) => {
     });
   };
 
-  const handleUpdate = async newCcoType => {
+  const handleUpdate = async e => {
+    const newCcoType = e.target.value;
     setLoading(true);
 
     try {
@@ -156,16 +157,17 @@ const CcoConfig = ({ daoMetaData, ccoType }) => {
           <Button
             mt={5}
             mr={5}
-            onClick={() => handleUpdate('cco')}
+            value='cco'
+            onClick={handleUpdate}
             isLoading={loading}
-            disabled
             variant='outline'
           >
             Create CCO
           </Button>
           <Button
             mt={5}
-            onClick={() => handleUpdate('daosquarecco')}
+            value='daosquarecco'
+            onClick={handleUpdate}
             isLoading={loading}
           >
             Create Daosqaure CCO

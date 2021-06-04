@@ -1,24 +1,24 @@
 import React, { useState, useEffect } from 'react';
+import { useParams } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import { Button, FormControl, Flex, Icon, Text } from '@chakra-ui/react';
 import { RiErrorWarningLine } from 'react-icons/ri';
-import { useParams } from 'react-router-dom';
 
 import { useInjectedProvider } from '../contexts/InjectedProviderContext';
 import { useOverlay } from '../contexts/OverlayContext';
 import { useTX } from '../contexts/TXContext';
 import { useUser } from '../contexts/UserContext';
+import { useDao } from '../contexts/DaoContext';
+import CcoTributeInput from './ccoTributeInput';
+import { createPoll } from '../services/pollService';
+import { MolochService } from '../services/molochService';
 import {
   createHash,
   daoConnectedAndSameChain,
   detailsToJSON,
 } from '../utils/general';
-import { createPoll } from '../services/pollService';
-import { MolochService } from '../services/molochService';
-import { useDao } from '../contexts/DaoContext';
 import { valToDecimalString } from '../utils/tokenValue';
 import { chainByID } from '../utils/chain';
-import CcoTributeInput from './ccoTributeInput';
 
 const CcoLootGrabForm = ({
   roundData,
@@ -40,6 +40,7 @@ const CcoLootGrabForm = ({
 
   const [loading, setLoading] = useState(false);
   const [currentError, setCurrentError] = useState(null);
+  const networkMismatch = injectedChain && daochain !== injectedChain?.chainId;
   const lootRatio = 1;
 
   const {
@@ -173,7 +174,7 @@ const CcoLootGrabForm = ({
               address,
               daochain,
               injectedChain?.chainId,
-            ) ? (
+            ) && (
               <Button
                 type='submit'
                 loadingText='Submitting'
@@ -186,20 +187,22 @@ const CcoLootGrabForm = ({
               >
                 Contribute
               </Button>
-            ) : (
+            )}
+
+            {!daoConnectedAndSameChain(
+              address,
+              daochain,
+              injectedChain?.chainId,
+            ) && (
               <Button
                 onClick={requestWallet}
-                isDisabled={
-                  injectedChain && daochain !== injectedChain?.chainId
-                }
+                isDisabled={networkMismatch}
                 fontFamily='heading'
                 letterSpacing='0.1em'
                 textTransform='uppercase'
               >
                 Connect
-                {injectedChain && daochain !== injectedChain?.chainId
-                  ? `to ${chainByID(daochain).name}`
-                  : 'Wallet'}
+                {networkMismatch ? `to ${chainByID(daochain).name}` : 'Wallet'}
               </Button>
             )}
           </Flex>

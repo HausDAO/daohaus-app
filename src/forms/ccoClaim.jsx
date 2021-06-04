@@ -27,6 +27,8 @@ const CcoClaim = ({ setClaimComplete, claimOpen }) => {
   } = useOverlay();
   const { refreshDao } = useTX();
 
+  const hasSharesOrLoot = +daoMember?.loot > 0 || +daoMember?.shares > 0;
+
   useEffect(() => {
     const getCanRage = async () => {
       if (daoMember?.highestIndexYesVote?.proposalIndex) {
@@ -36,12 +38,12 @@ const CcoClaim = ({ setClaimComplete, claimOpen }) => {
           chainID: daochain,
         })('canRagequit')(daoMember?.highestIndexYesVote?.proposalIndex);
         setCanRage(localCanRage);
-      } else {
+      } else if (daoMember) {
         setCanRage(true);
       }
     };
     getCanRage();
-  }, [address]);
+  }, [address, daoMember]);
 
   const handleClaim = async () => {
     const now = (new Date().getTime() / 1000).toFixed();
@@ -96,8 +98,6 @@ const CcoClaim = ({ setClaimComplete, claimOpen }) => {
       console.log(err);
     }
   };
-
-  const hasSharesOrLoot = +daoMember?.loot > 0 || +daoMember?.shares > 0;
 
   if (!daoMember || !hasSharesOrLoot) {
     return null;
