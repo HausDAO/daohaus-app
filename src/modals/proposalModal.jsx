@@ -19,7 +19,7 @@ import { useOverlay } from '../contexts/OverlayContext';
 import { useCustomTheme } from '../contexts/CustomThemeContext';
 import LootGrabForm from '../forms/lootGrab';
 import ProposalForm from '../formBuilder/proposalForm';
-import { PROPOSAL_FORMS } from '../staticElements/proposalFormData';
+import { PROPOSAL_FORMS } from '../data/proposalForms';
 
 const ProposalFormModal = ({ proposalType }) => {
   const [, setLoading] = useState(false);

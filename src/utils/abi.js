@@ -1,3 +1,4 @@
+import Web3 from 'web3';
 import { chainByID } from './chain';
 import { IsJsonString } from './general';
 
@@ -55,4 +56,17 @@ export const paramsToProposalForm = abiInputs => {
     placeholder: input.type,
     expectType: 'any',
   }));
+};
+
+export const safeEncodeHexFunction = (selectedFunction, inputVals) => {
+  try {
+    const web3 = new Web3();
+    return web3.eth.abi.encodeFunctionCall(selectedFunction, inputVals);
+  } catch (error) {
+    return {
+      encodingError: true,
+      message:
+        'Could not encode transaction data with the values enterred into this form',
+    };
+  }
 };

@@ -7,7 +7,6 @@ import { InputFactory } from './inputFactory';
 import { FormFooter } from './staticElements';
 
 import { checkFormTypes, validateRequired } from '../utils/validation';
-import { FIELD } from '../staticElements/proposalFormData';
 import { filterObject, isObjectEmpty } from '../utils/general';
 
 const splitMulti = (key, value) => {
@@ -43,6 +42,8 @@ const convertMultiInputData = values => {
   return { ...noMultis, ...organizedMultis };
 };
 
+const convertABIInputData = values => {};
+
 const mapInRequired = (fields, required) => {
   return fields.map(field =>
     required.includes(field.name) ? { ...field, required: true } : field,
@@ -77,8 +78,8 @@ export const inputDataFromABI = inputs => {
     return {
       type: isMulti ? 'multiInput' : 'input',
       label: input.name,
-      name: `${index}*ARG*${input.name}`,
-      htmlFor: `${index}*ARG*${input.name}`,
+      name: `${input.name}*ARG*${index}`,
+      htmlFor: `${input.name}*ARG*${index}`,
       placeholder: labels[localType] || input.type,
       expectType: isMulti ? 'any' : getType(localType),
       required: false,
@@ -98,7 +99,7 @@ const ProposalForm = props => {
   const { handleSubmit } = localForm;
 
   const watching = localForm.watch();
-  console.log(watching);
+  console.table(watching);
 
   const addOption = e => {
     const selectedOption = options.find(
@@ -111,21 +112,11 @@ const ProposalForm = props => {
   const buildABIOptions = abiString => {
     if (!abiString || typeof abiString !== 'string') return;
     const originalFields = mapInRequired(fields, required);
-    const appendingFields = [
-      FIELD.MINION_PAYMENT,
-      { ...FIELD.DESCRIPTION, h: '10' },
-    ];
-    if (abiString === 'clear') {
+    if (abiString === 'clear' || abiString === 'hex') {
       setFields(originalFields);
-    } else if (abiString === 'hex') {
-      setFields([...originalFields, ...appendingFields]);
     } else {
       const abiInputs = JSON.parse(abiString)?.inputs;
-      setFields([
-        ...originalFields,
-        ...inputDataFromABI(abiInputs),
-        ...appendingFields,
-      ]);
+      setFields([...originalFields, ...inputDataFromABI(abiInputs)]);
     }
   };
 
@@ -157,14 +148,14 @@ const ProposalForm = props => {
     }
     const typeErrors = checkFormTypes(values, formFields);
     if (typeErrors) {
-      console.log(`formFields`, formFields);
-      console.log('isUpdating errors');
       updateErrors(typeErrors);
       return;
     }
-    const customValErrors = handleCustomValidation({ values, formData: props });
     const collapsedValues = convertMultiInputData(values);
-    console.log(`collapsedValues`, collapsedValues);
+    const customValErrors = handleCustomValidation({
+      values: collapsedValues,
+      formData: props,
+    });
 
     if (customValErrors) {
       updateErrors(customValErrors);
@@ -172,9 +163,10 @@ const ProposalForm = props => {
     }
     try {
       await submitTransaction({
-        values,
-        proposalLoading: setLoading,
+        values: collapsedValues,
+        loading: setLoading,
         formData: props,
+        tx: props.tx,
       });
     } catch (error) {
       console.error(error);

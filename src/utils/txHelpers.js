@@ -1,7 +1,10 @@
 import { MolochService } from '../services/molochService';
+import { MinionService } from '../services/minionService';
+
 import { logFormError } from './errorLog';
 import { detailsToJSON } from './general';
 import { valToDecimalString } from './tokenValue';
+import { handleEncodeHex } from './abi';
 
 export const handleFormError = ({
   contextData,
@@ -42,7 +45,29 @@ export const MolochTransaction = async ({
     daoAddress: daoid,
     chainID: daochain,
     version: daoOverview.version,
-  })(tx.txType)({
+  })(tx.name)({
+    args,
+    address,
+    poll,
+    onTxHash,
+  });
+};
+export const MinionTransaction = async ({
+  args,
+  poll,
+  onTxHash,
+  contextData,
+  injectedProvider,
+  minionAddress,
+  tx,
+}) => {
+  const { daochain, daoOverview, address } = contextData;
+  return MinionService({
+    web3: injectedProvider,
+    minion: minionAddress,
+    chainID: daochain,
+    version: daoOverview.version,
+  })(tx.name)({
     args,
     address,
     poll,
@@ -55,11 +80,14 @@ export const Transaction = async data => {
   if (contract === 'Moloch') {
     return MolochTransaction(data);
   }
+  if (contract === 'Minion') {
+    return MinionTransaction(data);
+  }
   return null;
 };
 
-export const getArgs = ({ values, txType, contextData, hash }) => {
-  if (txType === 'submitProposal') {
+export const getArgs = ({ values, name, contextData, hash }) => {
+  if (name === 'submitProposal') {
     // TODO create details conformity utility
     const details = detailsToJSON({ ...values, hash });
     const { tokenBalances, depositToken } = contextData.daoOverview;
@@ -84,12 +112,17 @@ export const getArgs = ({ values, txType, contextData, hash }) => {
       details,
     ];
   }
-  if (txType === 'submitGuildKickProposal') {
+  if (name === 'submitGuildKickProposal') {
     const details = detailsToJSON({ ...values, hash });
     return [values.applicant, details];
   }
-  if (txType === 'submitWhitelistProposal') {
+  if (name === 'submitWhitelistProposal') {
     const details = detailsToJSON({ ...values, hash });
     return [values.tokenAddress, details];
+  }
+  if (name === 'proposeAction') {
+    const hexData = handleEncodeHex();
+
+    return [];
   }
 };

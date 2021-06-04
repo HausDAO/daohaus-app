@@ -1,4 +1,5 @@
 import { MINION_TYPES, PROPOSAL_TYPES } from '../utils/proposalUtils';
+import { TX } from './contractTX';
 
 const INFO_TEXT = {
   SHARES_REQUEST:
@@ -143,12 +144,7 @@ export const PROPOSAL_FORMS = {
     subtitle: 'Request Shares and/or Loot',
     type: PROPOSAL_TYPES.MEMBER,
     required: ['title', 'sharesRequested'], // Use name key from proposal type object
-    tx: {
-      txType: 'submitProposal',
-      contract: 'Moloch',
-      errMsg: 'Error submitting proposal',
-      successMsg: 'Membership Proposal submitted!',
-    },
+    tx: TX.SUBMIT_PROPOSAL,
     fields: [
       FIELD.TITLE,
       FIELD.SHARES_REQUEST,
@@ -162,18 +158,12 @@ export const PROPOSAL_FORMS = {
       FIELD.PAYMENT_REQUEST,
     ],
   },
-
   FUNDING: {
     title: 'Funding',
     subtitle: 'Request or distribute funds',
     type: PROPOSAL_TYPES.FUNDING,
     required: ['title', 'applicant'], // Use name key from proposal type object
-    tx: {
-      txType: 'submitProposal',
-      contract: 'Moloch',
-      errMsg: 'Error submitting proposal',
-      successMsg: 'Funding Proposal submitted!',
-    },
+    tx: TX.SUBMIT_PROPOSAL,
     fields: [
       FIELD.TITLE,
       FIELD.APPLICANT,
@@ -193,12 +183,7 @@ export const PROPOSAL_FORMS = {
     subtitle: 'Approve a new token.',
     type: PROPOSAL_TYPES.WHITELIST,
     required: ['title', 'tokenAddress'], // Use name key from proposal type object
-    tx: {
-      txType: 'submitWhitelistProposal',
-      contract: 'Moloch',
-      errMsg: 'Error submitting proposal',
-      successMsg: 'Token Proposal submitted!',
-    },
+    tx: TX.WHITELIST_TOKEN_PROPOSAL,
     fields: [FIELD.TITLE, FIELD.TOKEN_ADDRESS, FIELD.LINK, FIELD.DESCRIPTION],
   },
   TRADE: {
@@ -206,12 +191,7 @@ export const PROPOSAL_FORMS = {
     subtitle: 'Remove a Member',
     type: PROPOSAL_TYPES.TRADE,
     required: ['title'],
-    tx: {
-      txType: 'submitProposal',
-      contract: 'Moloch',
-      errMsg: 'Error submitting proposal',
-      successMsg: 'Trade Proposal submitted!',
-    },
+    tx: TX.SUBMIT_PROPOSAL,
     fields: [
       FIELD.TITLE,
       FIELD.TRIBUTE,
@@ -230,13 +210,7 @@ export const PROPOSAL_FORMS = {
     subtitle: 'Remove a Member.',
     type: PROPOSAL_TYPES.GUILDKICK,
     required: ['title', 'applicant'], // Use name key from proposal type object
-    tx: {
-      txType: 'submitGuildKickProposal',
-      pollType: 'submitProposal', //  Overwrites standard txType in cases where txType isn't used for Poll Action
-      contract: 'Moloch',
-      errMsg: 'Error submitting proposal',
-      successMsg: 'Guild Kick Proposal submitted!',
-    },
+    tx: TX.GUILDKICK_PROPOSAL,
     fields: [
       FIELD.TITLE,
       {
@@ -250,10 +224,7 @@ export const PROPOSAL_FORMS = {
   },
   SIGNAL: {
     type: PROPOSAL_TYPES.SIGNAL,
-    tx: {
-      txType: 'submitProposal',
-      contract: 'Moloch',
-    },
+    tx: TX.SUBMIT_PROPOSAL,
     required: ['title'], // Use name key from proposal type object
     fields: [FIELD.TITLE, FIELD.DESCRIPTION, FIELD.LINK],
   },
@@ -263,17 +234,16 @@ export const PROPOSAL_FORMS = {
     type: PROPOSAL_TYPES.MINION_DEFAULT,
     required: ['targetContract', 'title', 'selectedMinion'], // Use name key from proposal type object
     minionType: MINION_TYPES.VANILLA,
-    tx: {
-      txType: 'submitProposal',
-      contract: 'Moloch',
-      errMsg: 'Error submitting proposal',
-      successMsg: 'Membership Proposal submitted!',
-    },
+    tx: TX.MINION_PROPOSE_ACTION,
     fields: [
       FIELD.TITLE,
       FIELD.MINION_SELECT,
       FIELD.TARGET_CONTRACT,
       FIELD.ABI_INPUT,
+    ],
+    additionalOptions: [
+      FIELD.MINION_PAYMENT,
+      { ...FIELD.DESCRIPTION, h: '10' },
     ],
   },
 };

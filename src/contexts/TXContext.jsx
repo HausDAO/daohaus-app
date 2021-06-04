@@ -16,6 +16,7 @@ import { TokenService } from '../services/tokenService';
 import { createForumTopic } from '../utils/discourse';
 import { getArgs, handleFormError, Transaction } from '../utils/txHelpers';
 import { customValidations } from '../utils/validation';
+import { TX } from '../data/contractTX';
 
 export const TXContext = createContext();
 
@@ -69,6 +70,11 @@ export const TXProvider = ({ children }) => {
     outstandingTXs,
   };
 
+  const uiActions = {
+    errorToast,
+    successToast,
+  };
+
   const refreshDao = () => {
     // I use useRef to stop excessive rerenders in most of the contexts
     // I need to reset them in order to prevent them from locking up
@@ -91,15 +97,10 @@ export const TXProvider = ({ children }) => {
     refetch();
   };
 
-  const buildTXPoll = ({
-    hash,
-    tx,
-    values,
-    formData,
-    discourse,
-    additionalArgs = {},
-  }) => {
-    return createPoll({ action: tx.txType, cachePoll })({
+  const buildTXPoll = data => {
+    const { hash, tx, values, formData, discourse, additionalArgs = {} } = data;
+    console.log(`tx`, tx);
+    return createPoll({ action: tx.pollName || tx.name, cachePoll })({
       daoID: daoid,
       chainID: daochain,
       hash: hash || uuidv4(),
@@ -158,7 +159,7 @@ export const TXProvider = ({ children }) => {
     try {
       const poll = buildTXPoll({
         tx: {
-          txType: 'unlockToken',
+          name: 'unlockToken',
           errMsg: 'Error unlocking token.',
           successMsg: 'Tribute Token Unlocked',
         },
@@ -183,22 +184,26 @@ export const TXProvider = ({ children }) => {
   //  handles submitProposal
   //  whitelisttokenProposal
   //  guildkickProposal
-  const createProposal = async ({ values, proposalLoading, formData }) => {
-    proposalLoading(true);
-    const { txType } = formData.tx;
+  const createTX = async data => {
+    const { values, loading, formData, tx, onTxHash } = data;
+    loading(true);
+    const { name } = tx;
     const hash = uuidv4();
+    //  Create way to make args from TX data
     const args = getArgs({
       values,
-      txType,
+      name,
       contextData,
       hash,
     });
+
     try {
       await Transaction({
         args,
+        //  here
         poll: buildTXPoll({
           hash,
-          tx: formData.pollType || formData.tx,
+          tx,
           values,
           formData,
           discourse: true,
@@ -212,33 +217,25 @@ export const TXProvider = ({ children }) => {
         tx: formData.tx,
       });
     } catch (error) {
-      handleFormError({
-        error,
-        contextData,
-        formData,
-        args,
-        values,
-        errorToast,
-        loading: proposalLoading,
-      });
+      console.error(error);
+      handleFormError({ ...data, contextData });
     }
   };
 
-  const submitTransaction = ({ values, proposalLoading, formData }) => {
-    const txType = formData?.tx?.txType;
-    if (!txType || !values || !proposalLoading || !formData) {
-      throw new Error(
-        'DEV NOTICE: One of the required args (values, txType, formData, loading) not specified in proposalFormData.js',
-      );
+  const submitTransaction = data => {
+    const {
+      tx: { name },
+    } = data;
+    if (!name) {
+      throw new Error('TX CONTEXT: TX data or name not found');
     }
-    if (
-      txType === 'submitProposal' ||
-      txType === 'submitWhitelistProposal' ||
-      txType === 'submitGuildKickProposal'
-    ) {
-      return createProposal({ values, proposalLoading, formData });
+    const txExists = Object.values(TX)
+      .map(tx => tx.name)
+      .includes(name);
+    if (!txExists) {
+      throw new Error('TX CONTEXT: TX does not exist');
     }
-    throw new Error('DEV NOTICE: TX Type not found');
+    return createTX(data);
   };
 
   return (
