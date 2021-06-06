@@ -236,10 +236,15 @@ const ProposalVote = ({
     setLoading(true);
     const args = [id];
     try {
-      const poll = createPoll({ action: 'sponsorProposal', cachePoll })({
+      const poll = createPoll({
+        action: 'sponsorProposal',
+        cachePoll,
+        interval: 3000,
+      })({
         daoID: daoid,
         chainID: daochain,
         proposalId: id,
+        fetchAll: true,
         actions: {
           onError: (error, txHash) => {
             errorToast({
