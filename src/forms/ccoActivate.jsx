@@ -8,11 +8,11 @@ import { useInjectedProvider } from '../contexts/InjectedProviderContext';
 import { ccoPost } from '../utils/metadata';
 
 const CcoActivate = ({ daoMetaData, ccoType }) => {
-  const [loading, setLoading] = useState(false);
   const { daoid } = useParams();
   const { address, injectedProvider, injectedChain } = useInjectedProvider();
   const { refetchMetaData } = useMetaData();
   const { errorToast, successToast } = useOverlay();
+  const [loading, setLoading] = useState(false);
 
   const isActive = daoMetaData.boosts[ccoType].active;
 

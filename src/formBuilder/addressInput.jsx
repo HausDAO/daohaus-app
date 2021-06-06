@@ -24,20 +24,24 @@ const AddressInput = props => {
   useEffect(async () => {
     let shouldSet = true;
     if (daoMembers) {
-      const memberProfiles = Promise.all(
+      const memberProfiles = await Promise.all(
         getActiveMembers(daoMembers)?.map(async member => {
           const profile = await handleGetProfile(member.memberAddress);
           if (profile?.status !== 'error') {
-            return { name: profile.name, value: member.memberAddress };
+            return {
+              name: profile.name || truncateAddr(member.memberAddress),
+              value: member.memberAddress,
+            };
           }
           return {
-            name: truncateAddr(member.memberAddress),
+            name: truncateAddr(member.memberAddress) || member.memberAddress,
             value: member.memberAddress,
           };
         }),
       );
       if (shouldSet) {
-        setAddresses(await memberProfiles);
+        console.log(`memberProfiles`, memberProfiles);
+        setAddresses(memberProfiles);
       }
     }
     return () => {
