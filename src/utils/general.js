@@ -95,6 +95,9 @@ export const detailsToJSON = values => {
   if (values.isTransmutation) {
     details.isTransmutation = true;
   }
+  if (values.minionType) {
+    details.minionType = values.minionType;
+  }
   return JSON.stringify(details);
 };
 

@@ -7,85 +7,11 @@ import { InputFactory } from './inputFactory';
 import { FormFooter } from './staticElements';
 
 import { checkFormTypes, validateRequired } from '../utils/validation';
-import { filterObject, isObjectEmpty } from '../utils/general';
-
-const splitMulti = (key, value) => {
-  const splitKey = key.split('*MULTI*');
-  return { key: splitKey[0], value, order: splitKey[1] };
-};
-const collapseMultis = multis => {
-  const newObj = {};
-  for (const multi in multis) {
-    const data = splitMulti(multi, multis[multi]);
-    if (data.value) {
-      if (newObj[data.key]) {
-        newObj[data.key][data.order] = data.value;
-      } else {
-        newObj[data.key] = [data.value];
-      }
-    }
-  }
-  return newObj;
-};
-
-const convertMultiInputData = values => {
-  const multis = filterObject(
-    values,
-    (value, key) => key.includes('*MULTI*') && value,
-  );
-  if (isObjectEmpty(multis)) return values;
-  const noMultis = filterObject(
-    values,
-    (value, key) => !key.includes('*MULTI*') && value,
-  );
-  const organizedMultis = collapseMultis(multis);
-  return { ...noMultis, ...organizedMultis };
-};
-
-const convertABIInputData = values => {};
-
-const mapInRequired = (fields, required) => {
-  return fields.map(field =>
-    required.includes(field.name) ? { ...field, required: true } : field,
-  );
-};
-
-export const inputDataFromABI = inputs => {
-  const getType = type => {
-    if (type === 'string' || type === 'address') {
-      return type;
-    }
-    if (type.includes('int')) {
-      return 'integer';
-    }
-    if (type === 'fixed' || type === 'ufixed') {
-      return 'number';
-    }
-    return 'any';
-  };
-
-  const labels = {
-    string: 'Enter text here',
-    number: 'Numbers only',
-    integer: 'Whole numbers only',
-    address: '0x',
-    urlNoHttp: 'www.example.fake',
-  };
-
-  return inputs.map((input, index) => {
-    const localType = getType(input.type);
-    const isMulti = input.type.includes('[]');
-    return {
-      type: isMulti ? 'multiInput' : 'input',
-      label: input.name,
-      name: `${input.name}*ARG*${index}`,
-      htmlFor: `${input.name}*ARG*${index}`,
-      placeholder: labels[localType] || input.type,
-      expectType: isMulti ? 'any' : getType(localType),
-      required: false,
-    };
-  });
-};
+import {
+  collapse,
+  inputDataFromABI,
+  mapInRequired,
+} from '../utils/formBuilder';
 
 const ProposalForm = props => {
   const { submitTransaction, handleCustomValidation } = useTX();
@@ -151,7 +77,7 @@ const ProposalForm = props => {
       updateErrors(typeErrors);
       return;
     }
-    const collapsedValues = convertMultiInputData(values);
+    const collapsedValues = collapse(values, '*MULTI*');
     const customValErrors = handleCustomValidation({
       values: collapsedValues,
       formData: props,

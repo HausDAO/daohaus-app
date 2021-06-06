@@ -4,7 +4,9 @@ import { MinionService } from '../services/minionService';
 import { logFormError } from './errorLog';
 import { detailsToJSON } from './general';
 import { valToDecimalString } from './tokenValue';
-import { handleEncodeHex } from './abi';
+import { safeEncodeHexFunction } from './abi';
+import { collapse } from './formBuilder';
+import TargetContract from '../formBuilder/targetContract';
 
 export const handleFormError = ({
   contextData,
@@ -86,7 +88,9 @@ export const Transaction = async data => {
   return null;
 };
 
-export const getArgs = ({ values, name, contextData, hash }) => {
+export const getArgs = ({ values, tx, contextData, hash, formData }) => {
+  //  Moloch
+  const { name } = tx;
   if (name === 'submitProposal') {
     // TODO create details conformity utility
     const details = detailsToJSON({ ...values, hash });
@@ -121,8 +125,13 @@ export const getArgs = ({ values, name, contextData, hash }) => {
     return [values.tokenAddress, details];
   }
   if (name === 'proposeAction') {
-    const hexData = handleEncodeHex();
-
-    return [];
+    const collapsedABIInputs = collapse(values, '*ABI_ARGS*');
+    const hexData = safeEncodeHexFunction(values.abiInput, collapsedABIInputs);
+    const details = detailsToJSON({
+      ...values,
+      hash,
+      minionType: formData.minionType,
+    });
+    return [values.targetContract, values.minionPayment, hexData, details];
   }
 };

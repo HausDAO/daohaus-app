@@ -187,15 +187,10 @@ export const TXProvider = ({ children }) => {
   const createTX = async data => {
     const { values, loading, formData, tx, onTxHash } = data;
     loading(true);
-    const { name } = tx;
+
     const hash = uuidv4();
     //  Create way to make args from TX data
-    const args = getArgs({
-      values,
-      name,
-      contextData,
-      hash,
-    });
+    const args = getArgs({ ...data, hash });
 
     try {
       await Transaction({

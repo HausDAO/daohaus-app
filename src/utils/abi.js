@@ -59,6 +59,10 @@ export const paramsToProposalForm = abiInputs => {
 };
 
 export const safeEncodeHexFunction = (selectedFunction, inputVals) => {
+  if (!selectedFunction || Array.isArray(inputVals))
+    throw new Error(
+      'Incorrect params passed to safeEncodeHexFunction in abi.js',
+    );
   try {
     const web3 = new Web3();
     return web3.eth.abi.encodeFunctionCall(selectedFunction, inputVals);
