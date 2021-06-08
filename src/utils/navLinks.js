@@ -86,6 +86,12 @@ const socialLinksBaseUrls = {
   medium: 'https://medium.com/',
 };
 
+export const fixSocialLink = (type, unfixed) => {
+  return !unfixed.includes(socialLinksBaseUrls[type])
+    ? `${socialLinksBaseUrls[type]}${unfixed}`
+    : unfixed;
+};
+
 export const generateDaoSocials = linksMetaObj => {
   if (!linksMetaObj) return;
 
@@ -95,9 +101,7 @@ export const generateDaoSocials = linksMetaObj => {
       [metaObjKey]:
         linksMetaObj[metaObjKey] &&
         socialLinksBaseUrls[metaObjKey] &&
-        !linksMetaObj[metaObjKey].includes(socialLinksBaseUrls[metaObjKey])
-          ? `${socialLinksBaseUrls[metaObjKey]}${linksMetaObj[metaObjKey]}`
-          : linksMetaObj[metaObjKey],
+        fixSocialLink(metaObjKey, linksMetaObj[metaObjKey]),
     }),
     {},
   );
