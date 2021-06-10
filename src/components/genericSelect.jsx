@@ -24,7 +24,7 @@ const GenericSelect = ({
   const showCount = count != null;
 
   return (
-    <Flex direction='row' mb={[5, null, null, 0]} {...containerProps}>
+    <Flex mb={[5, null, null, 0]} {...containerProps}>
       <Text
         textTransform='uppercase'
         fontFamily='heading'
