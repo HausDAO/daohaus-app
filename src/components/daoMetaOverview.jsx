@@ -12,6 +12,7 @@ import {
 import ContentBox from './ContentBox';
 import TextBox from './TextBox';
 import { themeImagePath } from '../utils/metadata';
+import { fixSocialLink } from '../utils/navLinks';
 
 const DaoMetaOverview = ({ daoMetaData }) => {
   return (
@@ -65,7 +66,7 @@ const DaoMetaOverview = ({ daoMetaData }) => {
               ) : null}
               {daoMetaData.links?.discord ? (
                 <Link
-                  href={daoMetaData.links.discord}
+                  href={fixSocialLink('discord', daoMetaData.links.discord)}
                   target='_blank'
                   rel='noreferrer noopener'
                   m={3}
@@ -80,7 +81,7 @@ const DaoMetaOverview = ({ daoMetaData }) => {
               ) : null}
               {daoMetaData.links?.telegram ? (
                 <Link
-                  href={daoMetaData.links.telegram}
+                  href={fixSocialLink('telegram', daoMetaData.links.telegram)}
                   target='_blank'
                   rel='noreferrer noopener'
                   m={3}
@@ -95,7 +96,7 @@ const DaoMetaOverview = ({ daoMetaData }) => {
               ) : null}
               {daoMetaData.links?.twitter ? (
                 <Link
-                  href={daoMetaData.links.twitter}
+                  href={fixSocialLink('twitter', daoMetaData.links.twitter)}
                   target='_blank'
                   rel='noreferrer noopener'
                   m={3}
@@ -110,7 +111,7 @@ const DaoMetaOverview = ({ daoMetaData }) => {
               ) : null}
               {daoMetaData.links?.medium ? (
                 <Link
-                  href={daoMetaData.links.medium}
+                  href={fixSocialLink('medium', daoMetaData.links.medium)}
                   target='_blank'
                   rel='noreferrer noopener'
                   m={3}

@@ -133,7 +133,7 @@ const ProposalVote = ({
     if (overview?.depositToken && address) {
       getDepositTokenBalance();
     }
-  }, [overview]);
+  }, [overview, address, injectedChain]);
 
   const cancelProposal = async () => {
     setLoading(true);
