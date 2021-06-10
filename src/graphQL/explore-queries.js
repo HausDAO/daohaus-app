@@ -2,7 +2,7 @@ import { gql } from 'apollo-boost';
 
 export const EXPLORER_DAOS = gql`
   query moloches($skip: Int) {
-    moloches(orderBy: summoningTime, first: 100, skip: $skip) {
+    moloches(orderBy: summoningTime, first: 1000, skip: $skip) {
       id
       title
       version
