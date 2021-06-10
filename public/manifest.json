@@ -1,11 +1,17 @@
 {
   "name": "DAOhaus",
   "short_name": "DAOhaus",
+  "description": "This is the Safe app description.",
+  "providedBy": {
+    "name": "DAOhaus",
+    "url": "https://daohaus.club"
+  },
   "theme_color": "#10153d",
   "background_color": "#ef497b",
   "display": "minimal-ui",
   "Scope": "/",
   "start_url": "/",
+  "iconPath": "images/icons/icon-512x512.png",
   "icons": [
     {
       "src": "images/icons/icon-72x72.png",
