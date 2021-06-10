@@ -1,7 +1,7 @@
 {
   "name": "DAOhaus",
   "short_name": "DAOhaus",
-  "description": "This is the Safe app description.",
+  "description": "DAOhaus is a no code platform for Moloch DAOs.",
   "providedBy": {
     "name": "DAOhaus",
     "url": "https://daohaus.club"
