@@ -24,8 +24,8 @@ export const graphFetchAll = async (args, items = [], skip = 0) => {
       },
     });
     const newItems = result[subfield];
-    if (newItems.length === 100) {
-      return graphFetchAll(args, [...newItems, ...items], skip + 100);
+    if (newItems.length === 1000) {
+      return graphFetchAll(args, [...newItems, ...items], skip + 1000);
     }
     return [...items, ...newItems];
   } catch (error) {

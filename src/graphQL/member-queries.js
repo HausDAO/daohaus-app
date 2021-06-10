@@ -85,7 +85,7 @@ export const MEMBERS_LIST = gql`
       where: { molochAddress: $contractAddr }
       orderBy: shares
       orderDirection: desc
-      first: 100
+      first: 1000
       skip: $skip
     ) {
       id
