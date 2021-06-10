@@ -7,6 +7,7 @@ import React, {
 } from 'react';
 import Web3 from 'web3';
 import Web3Modal from 'web3modal';
+import { SafeAppWeb3Modal } from '@gnosis.pm/safe-apps-web3modal';
 import { OverlayContext } from './OverlayContext';
 
 import { supportedChains } from '../utils/chain';
@@ -16,7 +17,7 @@ import {
   getProviderOptions,
 } from '../utils/web3Modal';
 
-const defaultModal = new Web3Modal({
+const defaultModal = new SafeAppWeb3Modal({
   providerOptions: getProviderOptions(),
   cacheProvider: true,
   theme: 'dark',
