@@ -6,7 +6,6 @@ import React, {
   useRef,
 } from 'react';
 import Web3 from 'web3';
-import Web3Modal from 'web3modal';
 import { SafeAppWeb3Modal } from '@gnosis.pm/safe-apps-web3modal';
 import { OverlayContext } from './OverlayContext';
 
