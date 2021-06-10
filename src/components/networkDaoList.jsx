@@ -91,7 +91,7 @@ const NetworkDaoList = ({ data, network, searchTerm, index }) => {
               name={dao.meta ? dao.meta.name.substr(0, 1) : 'no title'}
               src={
                 dao.meta?.avatarImg
-                  ? themeImagePath(dao.meta.avatarImg)
+                  ? themeImagePath(dao.meta.avatarImg, true)
                   : makeBlockie(dao.molochAddress)
               }
               mb={3}
