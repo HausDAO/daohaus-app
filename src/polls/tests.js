@@ -10,7 +10,7 @@ export const submitProposalTest = (data, shouldEqual, pollId) => {
   }
   clearInterval(pollId);
   throw new Error(
-    `Poll test did recieve the expected results from the graph: ${data}`,
+    `Poll test did not recieve the expected results from the graph: ${data}`,
   );
 };
 
@@ -51,15 +51,12 @@ export const rageQuitTest = (data, shouldEqual, pollId) => {
 };
 
 export const sponsorProposalTest = (data, shouldEqual, pollId) => {
-  if (data.proposals) {
-    const proposal = data.proposals.find(
-      proposal => proposal.proposalId === shouldEqual,
-    );
-    return proposal?.sponsored;
+  if (data.proposals.length === 1) {
+    return data.proposals[0].sponsored;
   }
   clearInterval(pollId);
   throw new Error(
-    `Poll test did recieve the expected results from the graph: ${data}`,
+    `Poll test did not recieve the expected results from the graph: ${data}`,
   );
 };
 
@@ -73,7 +70,7 @@ export const submitVoteTest = (data, shouldEqual, pollId) => {
   }
   clearInterval(pollId);
   throw new Error(
-    `Poll test did recieve the expected results from the graph: ${data}`,
+    `Poll test did not recieve the expected results from the graph: ${data}`,
   );
 };
 
@@ -86,7 +83,7 @@ export const processProposalTest = (data, shouldEqual, pollId) => {
   }
   clearInterval(pollId);
   throw new Error(
-    `Poll test did recieve the expected results from the graph: ${data}`,
+    `Poll test did not recieve the expected results from the graph: ${data}`,
   );
 };
 
@@ -99,7 +96,7 @@ export const cancelProposalTest = (data, shouldEqual, pollId) => {
   }
   clearInterval(pollId);
   throw new Error(
-    `Poll test did recieve the expected results from the graph: ${data}`,
+    `Poll test did not recieve the expected results from the graph: ${data}`,
   );
 };
 
@@ -131,7 +128,7 @@ export const withdrawTokenTest = (data, shouldEqual = 0, pollId) => {
   }
   clearInterval(pollId);
   throw new Error(
-    `Poll test did recieve the expected results from the graph: ${data}`,
+    `Poll test did not recieve the expected results from the graph: ${data}`,
   );
 };
 
@@ -142,7 +139,7 @@ export const guildFundTest = (data, shouldEqual, pollId) => {
   }
   clearInterval(pollId);
   throw new Error(
-    `Poll test did recieve the expected results from the graph: ${data}`,
+    `Poll test did not recieve the expected results from the graph: ${data}`,
   );
 };
 
@@ -152,7 +149,7 @@ export const updateDelegateTest = (data, shouldEqual, pollId) => {
   }
   clearInterval(pollId);
   throw new Error(
-    `Poll test did recieve the expected results from the graph: ${data}`,
+    `Poll test did not recieve the expected results from the graph: ${data}`,
   );
 };
 
@@ -162,7 +159,7 @@ export const uberHausDelegateSetTest = (data, shouldEqual, pollId) => {
   }
   clearInterval(pollId);
   throw new Error(
-    `Poll test did recieve the expected results from the graph: ${data}`,
+    `Poll test did not recieve the expected results from the graph: ${data}`,
   );
 };
 
@@ -172,7 +169,7 @@ export const checkDelRewardsTest = (data, shouldEqual, pollId) => {
   }
   clearInterval(pollId);
   throw new Error(
-    `Poll test did recieve the expected results from the graph: ${data}`,
+    `Poll test did not recieve the expected results from the graph: ${data}`,
   );
 };
 

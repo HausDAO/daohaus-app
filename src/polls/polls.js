@@ -1,5 +1,5 @@
 import { graphQuery } from '../utils/apollo';
-import { PROPOSALS_LIST } from '../graphQL/proposal-queries';
+import { PROPOSALS_LIST, PROPOSAL_BY_ID } from '../graphQL/proposal-queries';
 import {
   DAO_POLL,
   MINION_POLL,
@@ -22,8 +22,8 @@ import { MinionService } from '../services/minionService';
 import { SuperfluidMinionService } from '../services/superfluidMinionService';
 import { UberHausMinionService } from '../services/uberHausMinionService';
 
-export const pollProposals = async ({ daoID, chainID }) =>
-  graphQuery({
+export const pollProposals = async ({ daoID, chainID }) => {
+  return graphQuery({
     endpoint: getGraphEndpoint(chainID, 'subgraph_url'),
     query: PROPOSALS_LIST,
     variables: {
@@ -31,6 +31,18 @@ export const pollProposals = async ({ daoID, chainID }) =>
       skip: 0,
     },
   });
+};
+
+export const pollProposal = async ({ proposalId, chainID, daoID }) => {
+  return graphQuery({
+    endpoint: getGraphEndpoint(chainID, 'subgraph_url'),
+    query: PROPOSAL_BY_ID,
+    variables: {
+      contractAddr: daoID,
+      id: proposalId,
+    },
+  });
+};
 
 export const pollTokenAllowances = async ({
   chainID,

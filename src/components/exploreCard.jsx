@@ -67,7 +67,7 @@ const ExploreCard = ({ dao }) => {
         <Avatar
           src={
             dao.meta?.avatarImg
-              ? themeImagePath(dao.meta.avatarImg)
+              ? themeImagePath(dao.meta.avatarImg, true)
               : makeBlockie(dao.id)
           }
           mr='10px'

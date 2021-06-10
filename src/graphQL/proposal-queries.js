@@ -75,6 +75,16 @@ export const PROPOSALS_LIST = gql`
   }
 `;
 
+export const PROPOSAL_BY_ID = gql`
+query proposals($contractAddr: String!, $skip: Int, $id: String ) {
+    proposals(
+      where: { molochAddress: $contractAddr, proposalId: $id }
+    ) {
+      ${baseListFields}
+    }
+  }
+`;
+
 export const PROPOSALS_LIST_IS_MEMBER = gql`
   query proposalsMember($contractAddr: String!, $skip: Int, $memberAddress: String!) {
     proposals(

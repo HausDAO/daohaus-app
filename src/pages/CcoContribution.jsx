@@ -13,7 +13,7 @@ import { useInjectedProvider } from '../contexts/InjectedProviderContext';
 import { useTX } from '../contexts/TXContext';
 import { MM_ADDCHAIN_DATA } from '../utils/chain';
 import CcoCard from '../components/ccoCard';
-import CcoEligibility from '../components/ccoElibility';
+import CcoEligibility from '../components/ccoEligibility';
 import CcoResources from '../components/ccoResources';
 import CcoContributionCard from '../components/ccoContributeCard';
 import CcoClaimCard from '../components/ccoClaimCard';

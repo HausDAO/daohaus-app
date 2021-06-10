@@ -13,9 +13,10 @@ import {
 } from '@chakra-ui/react';
 import { RiInformationLine } from 'react-icons/ri';
 import { AiOutlineCaretDown } from 'react-icons/ai';
+
+import { useCustomTheme } from '../contexts/CustomThemeContext';
 import TextBox from '../components/TextBox';
 import { useDao } from '../contexts/DaoContext';
-import { useCustomTheme } from '../contexts/CustomThemeContext';
 import { truncateAddr } from '../utils/general';
 import { handleGetProfile } from '../utils/3box';
 import { chainByID } from '../utils/chain';

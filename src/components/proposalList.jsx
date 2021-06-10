@@ -22,6 +22,7 @@ import { useDaoMember } from '../contexts/DaoMemberContext';
 import { useSessionStorage } from '../hooks/useSessionStorage';
 import { useInjectedProvider } from '../contexts/InjectedProviderContext';
 import ProposalSearch from './proposalSearch';
+import CsvDownloadButton from './csvDownloadButton';
 
 const ProposalsList = ({ proposals, customTerms }) => {
   const { daoMember } = useDaoMember();
@@ -122,32 +123,31 @@ const ProposalsList = ({ proposals, customTerms }) => {
   return (
     <>
       <Flex wrap='wrap' position='relative' justifyContent='space-between'>
-        <Flex flex={1} justifyContent='flex-end'>
-          <GenericSelect
-            currentOption={filter?.name}
-            options={filterOptions}
-            handleSelect={handleFilter}
-            label='Filter By'
-            count={listProposals?.length}
-          />
-          <GenericSelect
-            label='Sort By'
-            currentOption={sort?.name}
-            options={sortOptions}
-            handleSelect={handleSort}
-            // uses custom props to prevent overlap with search button
-            containerProps={{
-              width: ['100%', null, null, '38%'],
-              zIndex: '10',
-              marginRight: '10%',
-              marginLeft: '5%',
-            }}
-          />
-          <ProposalSearch
-            performSearch={performSearch}
-            resetSearch={resetSearch}
-          />
-        </Flex>
+        <GenericSelect
+          currentOption={filter?.name}
+          options={filterOptions}
+          handleSelect={handleFilter}
+          label='Filter By'
+          count={listProposals?.length}
+        />
+        <GenericSelect
+          label='Sort By'
+          currentOption={sort?.name}
+          options={sortOptions}
+          handleSelect={handleSort}
+          // uses custom props to prevent overlap with search button
+          containerProps={{
+            // width: ['100%', null, null, '38%'],
+            zIndex: '10',
+            marginRight: '10%',
+            marginLeft: '5%',
+          }}
+        />
+        <ProposalSearch
+          performSearch={performSearch}
+          resetSearch={resetSearch}
+        />
+        <CsvDownloadButton entityList={listProposals} typename='Proposals' />
       </Flex>
       {isLoaded &&
         paginatedProposals?.map(proposal => {
