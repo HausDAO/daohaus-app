@@ -1,5 +1,4 @@
 import React, { useContext, createContext } from 'react';
-import { MaxUint256 } from '@ethersproject/constants';
 import { useParams } from 'react-router-dom';
 import { v4 as uuidv4 } from 'uuid';
 
@@ -12,9 +11,13 @@ import { useUser } from './UserContext';
 import { useOverlay } from './OverlayContext';
 
 import { createPoll } from '../services/pollService';
-import { TokenService } from '../services/tokenService';
 import { createForumTopic } from '../utils/discourse';
-import { getArgs, handleFormError, Transaction } from '../utils/txHelpers';
+import {
+  exposeValues,
+  getArgs,
+  // handleFormError,
+  Transaction,
+} from '../utils/txHelpers';
 import { customValidations } from '../utils/validation';
 import { TX } from '../data/contractTX';
 
@@ -66,13 +69,7 @@ export const TXProvider = ({ children }) => {
     isMember,
     daoMember,
     userHubDaos,
-    // apiData,
     outstandingTXs,
-  };
-
-  const uiActions = {
-    errorToast,
-    successToast,
   };
 
   const refreshDao = () => {
@@ -98,18 +95,20 @@ export const TXProvider = ({ children }) => {
   };
 
   const buildTXPoll = data => {
-    const { hash, tx, values, formData, discourse, additionalArgs = {} } = data;
-    console.log(`tx`, tx);
+    const { hash, tx, values, formData, now } = data;
+
     return createPoll({ action: tx.pollName || tx.name, cachePoll })({
       daoID: daoid,
       chainID: daochain,
-      hash: hash || uuidv4(),
-      ...additionalArgs,
+      hash,
+      createdAt: now,
+      ...values,
+      address,
       actions: {
         onError: (error, txHash) => {
           errorToast({
             title: tx.errMsg || 'Transaction Error',
-            desciption: error?.message || '',
+            description: error?.message || '',
           });
           resolvePoll(txHash);
           console.error(`${tx.errMsg}: ${error}`);
@@ -120,12 +119,12 @@ export const TXProvider = ({ children }) => {
           });
           refreshDao();
           resolvePoll(txHash);
-          if (discourse) {
+          if (tx.createDiscourse) {
             createForumTopic({
               chainID: daochain,
               daoID: daoid,
-              afterTime: (new Date().getTime() / 1000).toFixed(),
-              proposalType: formData.type,
+              afterTime: now,
+              proposalType: formData?.type,
               values,
               applicant: values?.applicant || address,
               daoMetaData,
@@ -152,68 +151,39 @@ export const TXProvider = ({ children }) => {
     return errors?.length ? errors : false;
   };
 
-  const unlockToken = async token => {
-    // const token = getValues('tributeToken');
-    const args = [daoid, MaxUint256];
-
-    try {
-      const poll = buildTXPoll({
-        tx: {
-          name: 'unlockToken',
-          errMsg: 'Error unlocking token.',
-          successMsg: 'Tribute Token Unlocked',
-        },
-        additionalArgs: {
-          tokenAddress: token,
-          userAddress: address,
-          unlockAmount: MaxUint256,
-        },
-      });
-      await TokenService({
-        web3: injectedProvider,
-        chainID: daochain,
-        tokenAddress: token,
-      })('approve')({ args, address, poll });
-      return true;
-    } catch (err) {
-      console.log('error:', err);
-      return false;
-    }
-  };
-
-  //  handles submitProposal
-  //  whitelisttokenProposal
-  //  guildkickProposal
   const createTX = async data => {
-    const { values, loading, formData, tx, onTxHash } = data;
-    loading(true);
-
     const hash = uuidv4();
-    //  Create way to make args from TX data
-    const args = getArgs({ ...data, hash });
+    const now = (new Date().getTime() / 1000).toFixed();
+    const consolidatedData = {
+      ...data,
+      contextData,
+      injectedProvider,
+      hash,
+      now,
+    };
 
     try {
-      await Transaction({
+      const args = getArgs({ ...consolidatedData });
+      console.log(`TX ARGS:`, args);
+      const poll = buildTXPoll({
+        ...consolidatedData,
+      });
+      return await Transaction({
         args,
-        //  here
-        poll: buildTXPoll({
-          hash,
-          tx,
-          values,
-          formData,
-          discourse: true,
-        }),
+        ...consolidatedData,
+        poll,
         onTxHash() {
+          //  Temporary. Needs utils to handle differenct actions
           setProposalModal(false);
           setTxInfoModal(true);
         },
-        contextData,
-        injectedProvider,
-        tx: formData.tx,
       });
     } catch (error) {
       console.error(error);
-      handleFormError({ ...data, contextData });
+      errorToast({
+        title: data?.tx?.errMsg || 'There was an error',
+        description: error.message || '',
+      });
     }
   };
 
@@ -230,6 +200,10 @@ export const TXProvider = ({ children }) => {
     if (!txExists) {
       throw new Error('TX CONTEXT: TX does not exist');
     }
+
+    if (data?.tx?.exposeValues) {
+      return createTX(exposeValues({ ...data, contextData, injectedProvider }));
+    }
     return createTX(data);
   };
 
@@ -237,7 +211,7 @@ export const TXProvider = ({ children }) => {
     <TXContext.Provider
       value={{
         refreshDao,
-        unlockToken,
+        // unlockToken,
         submitTransaction,
         handleCustomValidation,
       }}
@@ -248,11 +222,8 @@ export const TXProvider = ({ children }) => {
 };
 
 export const useTX = () => {
-  const {
-    refreshDao,
-    unlockToken,
-    submitTransaction,
-    handleCustomValidation,
-  } = useContext(TXContext);
-  return { refreshDao, unlockToken, submitTransaction, handleCustomValidation };
+  const { refreshDao, submitTransaction, handleCustomValidation } = useContext(
+    TXContext,
+  );
+  return { refreshDao, submitTransaction, handleCustomValidation };
 };

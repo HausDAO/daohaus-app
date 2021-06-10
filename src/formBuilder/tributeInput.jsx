@@ -1,3 +1,5 @@
+import { MaxUint256 } from '@ethersproject/constants';
+
 import React, { useEffect, useMemo, useState } from 'react';
 import { Spinner } from '@chakra-ui/react';
 import { useParams } from 'react-router-dom';
@@ -12,9 +14,10 @@ import { ModButton } from './staticElements';
 
 import { TokenService } from '../services/tokenService';
 import { validate } from '../utils/validation';
+import { TX } from '../data/contractTX';
 
 const TributeInput = props => {
-  const { unlockToken } = useTX();
+  const { submitTransaction } = useTX();
   const { address } = useInjectedProvider();
   const { daochain, daoid } = useParams();
   const { daoOverview } = useDao();
@@ -111,7 +114,6 @@ const TributeInput = props => {
       tributeOffered === '0' ||
       !validate.number(tributeOffered)
     ) {
-      console.log('fired');
       setNeedsUnlock(false);
     } else {
       setNeedsUnlock(Number(allowance) < Number(tributeOffered));
@@ -120,9 +122,13 @@ const TributeInput = props => {
 
   const handleUnlock = async () => {
     setLoading(true);
-    const result = await unlockToken(tributeToken);
+    const unlockAmount = MaxUint256.toString();
+    const result = await submitTransaction({
+      args: [daoid, unlockAmount],
+      tx: TX.UNLOCK_TOKEN,
+      values: { tokenAddress: tributeToken, unlockAmount },
+    });
     setLoading(false);
-    console.log(unlockToken);
     setNeedsUnlock(!result);
   };
   const setMax = () => {

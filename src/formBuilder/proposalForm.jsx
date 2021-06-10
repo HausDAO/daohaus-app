@@ -24,9 +24,6 @@ const ProposalForm = props => {
   const localForm = useForm();
   const { handleSubmit } = localForm;
 
-  const watching = localForm.watch();
-  console.table(watching);
-
   const addOption = e => {
     const selectedOption = options.find(
       option => option.htmlFor === e.target.value,
@@ -77,7 +74,7 @@ const ProposalForm = props => {
       updateErrors(typeErrors);
       return;
     }
-    const collapsedValues = collapse(values, '*MULTI*');
+    const collapsedValues = collapse(values, '*MULTI*', 'objOfArrays');
     const customValErrors = handleCustomValidation({
       values: collapsedValues,
       formData: props,
@@ -88,14 +85,15 @@ const ProposalForm = props => {
       return;
     }
     try {
+      setLoading(true);
       await submitTransaction({
         values: collapsedValues,
-        loading: setLoading,
         formData: props,
         tx: props.tx,
       });
     } catch (error) {
       console.error(error);
+      setLoading(false);
     }
   };
   return (

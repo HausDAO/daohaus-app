@@ -11,6 +11,10 @@ export const TokenService = ({
   is32 = false,
   atBlock = 'latest',
 }) => {
+  if (!tokenAddress)
+    throw new Error(
+      'Token Service did not recieve a token address. If you are using submitTransaction(), please include a tokenAddress value in the values object',
+    );
   if (!web3) {
     const rpcUrl = chainByID(chainID).rpc_url;
     web3 = new Web3(new Web3.providers.HttpProvider(rpcUrl));

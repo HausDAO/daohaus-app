@@ -1,14 +1,14 @@
 import { filterObject, isObjectEmpty } from './general';
 
-export const splitMulti = (key, value) => {
-  const splitKey = key.split('*MULTI*');
+export const splitMulti = (key, value, flag) => {
+  const splitKey = key.split(flag);
   return { key: splitKey[0], value, order: splitKey[1] };
 };
 
-export const collapseToObjOfArrays = multis => {
+export const collapseToObjOfArrays = (multis, flag) => {
   const newObj = {};
   for (const multi in multis) {
-    const data = splitMulti(multi, multis[multi]);
+    const data = splitMulti(multi, multis[multi], flag);
     if (data.value) {
       if (newObj[data.key]) {
         newObj[data.key][data.order] = data.value;
@@ -25,16 +25,25 @@ export const collapse = (values, flag, collapseType) => {
     values,
     (value, key) => key.includes(flag) && value,
   );
+
   if (isObjectEmpty(groupedItems)) return values;
   const nonGrouped = filterObject(
     values,
     (value, key) => !key.includes(flag) && value,
   );
-  if (collapseType === 'multi') {
+  if (collapseType === 'objOfArrays') {
     return { ...collapseToObjOfArrays(groupedItems), ...nonGrouped };
   }
+  const orderedArray = Object.entries(groupedItems)
+    .map(([key, value]) => splitMulti(key, value, flag))
+    .sort((a, b) => a.order - b.order)
+    .map(obj => obj.value);
+
   if (collapseType === 'singleField') {
-    return { [flag]: Object.values(groupedItems), ...nonGrouped };
+    return { [flag]: orderedArray, ...nonGrouped };
+  }
+  if (collapseType === 'array') {
+    return orderedArray;
   }
   throw new Error('did not recieve collapseType');
 };
