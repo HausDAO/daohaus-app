@@ -16,6 +16,7 @@ import {
   pollRageKick,
   pollWrapNZapSummon,
   pollTransmutationSummon,
+  pollProposal,
 } from '../polls/polls';
 import {
   cancelProposalTest,
@@ -205,12 +206,12 @@ export const createPoll = ({
       }
     };
   } else if (action === 'sponsorProposal') {
-    return ({ daoID, chainID, proposalId, actions }) => txHash => {
+    return ({ daoID, chainID, proposalId, actions, fetchAll }) => txHash => {
       startPoll({
-        pollFetch: pollProposals,
+        pollFetch: pollProposal,
         testFn: sponsorProposalTest,
         shouldEqual: proposalId,
-        args: { daoID, chainID, proposalId },
+        args: { daoID, chainID, proposalId, fetchAll },
         actions,
         txHash,
       });
@@ -295,7 +296,7 @@ export const createPoll = ({
           resolvedMsg: 'Processed proposal',
           unresolvedMsg: 'Processing proposal',
           successMsg: `Proposal #${proposalIndex} Processed for ${daoID} on ${chainID}`,
-          errorMsg: `Error Sponsoring proposal #${proposalIndex} for ${daoID} on ${chainID}`,
+          errorMsg: `Error Processing proposal #${proposalIndex} for ${daoID} on ${chainID}`,
           pollData: {
             action,
             interval,

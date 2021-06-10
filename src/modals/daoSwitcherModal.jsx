@@ -97,7 +97,7 @@ const DaoSwitcherModal = () => {
               name={dao.meta?.name.substr(0, 1)}
               src={
                 dao.meta?.avatarImg
-                  ? themeImagePath(dao.meta?.avatarImg)
+                  ? themeImagePath(dao.meta?.avatarImg, true)
                   : makeBlockie(dao.id)
               }
               mr='10px'
