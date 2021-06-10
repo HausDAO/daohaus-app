@@ -46,13 +46,13 @@ export const InjectedProvider = ({ children }) => {
       return;
     }
 
-    const web3Modal = new Web3Modal({
+    const web3Modal = new SafeAppWeb3Modal({
       providerOptions,
       cacheProvider: true,
       theme: 'dark',
     });
 
-    const provider = await web3Modal.connect();
+    const provider = await web3Modal.requestProvider();
     provider.selectedAddress = deriveSelectedAddress(provider);
     const chainId = deriveChainId(provider);
 
