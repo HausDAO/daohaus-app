@@ -6,7 +6,7 @@ export const fetchProfile = async address => {
     if (response.status === 'error') {
       console.log('Profile does not exist');
     }
-    console.log(response);
+
     const boxProfile = response.json();
     return boxProfile;
   } catch (error) {
