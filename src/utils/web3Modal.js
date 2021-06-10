@@ -59,6 +59,9 @@ export const deriveChainId = provider => {
   if (provider.wc) {
     return chainByNetworkId(provider.chainId).chain_id;
   }
+  if (provider.safe) {
+    return chainByNetworkId(provider.safe.chainId).chain_id;
+  }
   // else if (provider.isPortis) {
   //   return chainByNetworkId(provider._portis.config.network.chainId).chain_id;
   // }
@@ -71,6 +74,9 @@ export const deriveSelectedAddress = provider => {
   }
   if (provider.wc) {
     return provider.accounts[0];
+  }
+  if (provider.safe) {
+    return provider.safe.safeAddress;
   }
   // else if (provider.isPortis) {
   //   return provider._portis._selectedAddress;
