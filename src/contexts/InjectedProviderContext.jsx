@@ -61,6 +61,7 @@ export const InjectedProvider = ({ children }) => {
     };
     const web3 = new Web3(provider);
     if (web3?.currentProvider?.selectedAddress) {
+      console.log(web3?.currentProvider);
       setInjectedProvider(web3);
       setAddress(web3.currentProvider.selectedAddress);
       setInjectedChain(chain);
@@ -100,7 +101,13 @@ export const InjectedProvider = ({ children }) => {
       }
     };
 
-    if (injectedProvider?.currentProvider && !hasListeners.current) {
+    console.log(injectedProvider.currentProvider);
+    if (
+      injectedProvider?.currentProvider &&
+      !hasListeners.current &&
+      (injectedProvider?.currentProvider?.isMetaMask ||
+        injectedProvider?.currentProvider?.wc)
+    ) {
       injectedProvider.currentProvider
         .on('accountsChanged', accountsChanged)
         .on('chainChanged', handleChainChange);
