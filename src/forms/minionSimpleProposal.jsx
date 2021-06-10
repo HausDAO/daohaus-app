@@ -313,7 +313,9 @@ const MinionProposalForm = () => {
             {' '}
             {minions?.map(minion => (
               <option key={minion.minionAddress} value={minion.minionAddress}>
-                {minion.minionName || minion.minionAddress}
+                {minion.minionName || minion.minionAddress}{' '}
+                {minion.minionType === MINION_TYPES.NIFTY &&
+                  '(BETA - battle testing)'}
               </option>
             ))}
           </Select>

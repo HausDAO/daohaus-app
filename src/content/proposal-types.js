@@ -66,7 +66,7 @@ export const proposalTypes = (customTerms, boosts, minions) => {
     },
     {
       name: 'NiftyMinion',
-      subhead: 'Buy A NiftyInk',
+      subhead: 'Buy A NiftyInk (Beta)',
       proposalType: 'niftyMinion',
       image: swordImg,
       comingSoon: false,
