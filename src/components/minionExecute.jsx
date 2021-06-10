@@ -120,7 +120,6 @@ const MinionExecute = ({ proposal, early }) => {
 
   const executeMinion = async () => {
     if (!proposal?.minion) return;
-    console.log('execute!!', proposal?.minion);
     setLoading(true);
     const args = [proposal.proposalId];
     try {

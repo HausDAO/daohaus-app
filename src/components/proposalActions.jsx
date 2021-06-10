@@ -16,7 +16,7 @@ import { createPoll } from '../services/pollService';
 import { MolochService } from '../services/molochService';
 import ContentBox from './ContentBox';
 import TextBox from './TextBox';
-import { memberVote } from '../utils/proposalUtils';
+import { memberVote, MINION_TYPES } from '../utils/proposalUtils';
 import { supportedChains } from '../utils/chain';
 import { getTerm, getTitle } from '../utils/metadata';
 import {
@@ -579,7 +579,7 @@ const ProposalVote = ({
                               Currently Passing
                               {/* TODO use const */}
                               {proposal?.minion?.minionType ===
-                                'nifty minion' && (
+                                MINION_TYPES.NIFTY && (
                                 <MinionExecute proposal={proposal} early />
                               )}
                             </Box>
@@ -608,7 +608,8 @@ const ProposalVote = ({
                           {(proposal?.status === 'GracePeriod' ||
                             proposal?.status === 'ReadyForProcessing') &&
                             +proposal?.yesShares > +proposal?.noShares &&
-                            proposal?.minion?.minionType === 'nifty minion' && (
+                            proposal?.minion?.minionType ===
+                              MINION_TYPES.NIFTY && (
                               <MinionExecute proposal={proposal} early />
                             )}
                         </TextBox>

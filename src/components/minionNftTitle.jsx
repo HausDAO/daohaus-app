@@ -11,12 +11,15 @@ import {
   Text,
 } from '@chakra-ui/react';
 import { useForm } from 'react-hook-form';
-import { getNftMeta } from '../utils/metadata';
-import { useOverlay } from '../contexts/OverlayContext';
-import GenericModal from '../modals/genericModal';
-import TextBox from './TextBox';
-import { hasMinion } from '../utils/dao';
+
 import { useDao } from '../contexts/DaoContext';
+import { useOverlay } from '../contexts/OverlayContext';
+import TextBox from './TextBox';
+import GenericModal from '../modals/genericModal';
+import { hasMinion } from '../utils/dao';
+import { getNftMeta } from '../utils/metadata';
+import { NIFTYINK_ADDRESS } from '../services/niftyService';
+import { MINION_TYPES } from '../utils/proposalUtils';
 
 const MinionNftTile = ({
   meta,
@@ -25,10 +28,11 @@ const MinionNftTile = ({
   sendErc721Action,
   sellNiftyAction,
 }) => {
-  const [tokenDetail, setTokenDetail] = useState();
+  const { daoOverview } = useDao();
   const { setGenericModal } = useOverlay();
   const { handleSubmit, register } = useForm();
-  const { daoOverview } = useDao();
+
+  const [tokenDetail, setTokenDetail] = useState();
 
   useEffect(() => {
     const fetchNFTData = async () => {
@@ -90,9 +94,8 @@ const MinionNftTile = ({
       )}
 
       <Flex>
-        {hasMinion(daoOverview.minions, 'nifty minion') &&
-          token.contractAddress ===
-            '0xcf964c89f509a8c0ac36391c5460df94b91daba5' && (
+        {hasMinion(daoOverview.minions, MINION_TYPES.NIFTY) &&
+          token.contractAddress === NIFTYINK_ADDRESS && (
             <Button onClick={handleSell}>Sell on Nifty Ink</Button>
           )}
         <Button onClick={handleSend}>Send</Button>

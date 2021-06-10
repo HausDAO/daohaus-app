@@ -9,19 +9,20 @@ import {
   Text,
 } from '@chakra-ui/react';
 import { useParams } from 'react-router-dom';
-
 import { AiOutlineCaretDown } from 'react-icons/ai';
+
 import { useInjectedProvider } from '../contexts/InjectedProviderContext';
 import { useDao } from '../contexts/DaoContext';
 import { useUser } from '../contexts/UserContext';
 import { useTX } from '../contexts/TXContext';
 import { useOverlay } from '../contexts/OverlayContext';
 import TextBox from '../components/TextBox';
+import PaymentInput from './paymentInput';
 import { MinionService } from '../services/minionService';
 import { createPoll } from '../services/pollService';
+import { NIFTYINK_ADDRESS, NiftyService } from '../services/niftyService';
 import { detailsToJSON } from '../utils/general';
 import { MINION_TYPES } from '../utils/proposalUtils';
-import { NiftyService } from '../services/niftyService';
 import { getNftMeta } from '../utils/metadata';
 
 const NiftyProposalForm = () => {
@@ -42,16 +43,14 @@ const NiftyProposalForm = () => {
   const [selectedMinion, setSelectedMinion] = useState(null);
   const now = (new Date().getTime() / 1000).toFixed();
 
-  const { handleSubmit, errors, register, setValue } = useForm();
+  const { handleSubmit, errors, register, setValue, getValues } = useForm();
 
   const [nftLoading, setNftLoading] = useState(null);
   const [nftMeta, setNftMeta] = useState(null);
-  const [nftPrice, setNftPrice] = useState(null);
 
   useEffect(() => {
     if (daoOverview?.minions) {
       const localMinions = daoOverview.minions
-        // TODO: change to NIFTY type
         .filter(minion => minion.minionType === MINION_TYPES.NIFTY)
         .map(minion => ({
           minionAddress: minion.minionAddress,
@@ -80,17 +79,13 @@ const NiftyProposalForm = () => {
     console.log('minion', values.minionAddress);
 
     const niftyService = NiftyService({
-      // TODO: fix hardcoded
-      tokenAddress: '0xCF964c89f509a8c0Ac36391c5460dF94B91daba5',
+      tokenAddress: NIFTYINK_ADDRESS,
       chainID: daochain,
     });
 
     const hexData = await niftyService('buyInkNoop')({
       inkUrl: values.targetInk.match(/Qm[a-zA-Z0-9]+/)[0],
     });
-    // TODO: add title and link (image)
-    // add type
-    // nftMeta
     console.log('nftMeta');
     const nftImage = nftMeta?.image && nftMeta?.image.replace('https://', '');
 
@@ -102,12 +97,12 @@ const NiftyProposalForm = () => {
     });
 
     const args = [
-      '0xCF964c89f509a8c0Ac36391c5460dF94B91daba5', // nifty target
-      injectedProvider.utils.toWei(values.price),
+      NIFTYINK_ADDRESS, // nifty target
+      injectedProvider.utils.toWei(values.paymentRequested),
       hexData,
       details,
-      '0xe91D153E0b41518A2Ce8Dd3D7944Fa863463a97d', // wxdai
-      injectedProvider.utils.toWei(values.price), // wxdai amount
+      values.paymentToken,
+      injectedProvider.utils.toWei(values.paymentRequested),
     ];
     console.log('for poll', selectedMinion.minionAddress);
     try {
@@ -174,8 +169,7 @@ const NiftyProposalForm = () => {
     setNftLoading(true);
     try {
       const niftyService = NiftyService({
-        // TODO fix hardcoded
-        tokenAddress: '0xCF964c89f509a8c0Ac36391c5460dF94B91daba5',
+        tokenAddress: NIFTYINK_ADDRESS,
         chainID: daochain,
       });
       console.log('niftyService', niftyService);
@@ -198,10 +192,10 @@ const NiftyProposalForm = () => {
         });
         // TODO: this is not getting the price
         // will need to use thegraph
-        const price = await niftyService('tokenPrice')({
-          tokenId: tid,
-        });
-        setNftPrice(price);
+        // const price = await niftyService('tokenPrice')({
+        //   tokenId: tid,
+        // });
+        // setNftPrice(price);
 
         const url = `https://gateway.pinata.cloud/ipfs/${uri.match(
           /Qm[a-zA-Z0-9]+/,
@@ -276,25 +270,14 @@ const NiftyProposalForm = () => {
         focusBorderColor='secondary.500'
         onBlur={handleBlur}
       />
-      <TextBox as={FormLabel} size='xs' htmlFor='price'>
-        price
-      </TextBox>
-      <Input
-        name='price'
-        placeholder='4.9'
-        mb={5}
-        ref={register({
-          required: {
-            value: true,
-            message: 'price is required',
-          },
-        })}
-        focusBorderColor='secondary.500'
+      <PaymentInput
+        formLabel='Price'
+        register={register}
+        setValue={setValue}
+        getValues={getValues}
+        errors={errors}
       />
-      <Text>{nftPrice}</Text>
-      <Text>
-        you must have xDAI in your Minion, un/wrap from the Minion page
-      </Text>
+      <Text>you must have xDAI in your Minion for nifty ink.</Text>
       <Button
         type='submit'
         loadingText='Submitting'

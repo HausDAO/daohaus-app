@@ -107,6 +107,7 @@ const MinionProposalForm = () => {
     );
     console.log('minion??', minion);
     console.log('values.minionContract', values.minionContract);
+    console.log('overview', daoOverview);
     const minionName = minion?.minionName;
     const valueWei = injectedProvider.utils.toWei(values.value);
 
@@ -151,7 +152,7 @@ const MinionProposalForm = () => {
         valueWei || '0',
         values.dataValue || hexData,
         details,
-        '0xe91D153E0b41518A2Ce8Dd3D7944Fa863463a97d', // TODO: wxdai but should be any whitelisted token
+        daoOverview.depositToken.tokenAddress, // TODO: should add selection to form
         0,
       ];
     } else {
@@ -202,6 +203,8 @@ const MinionProposalForm = () => {
         web3: injectedProvider,
         minion: values.minionContract,
         chainID: daochain,
+        minionType:
+          minion.minionType === MINION_TYPES.NIFTY ? 'niftyMinion' : null,
       })('proposeAction')({
         args,
         address,

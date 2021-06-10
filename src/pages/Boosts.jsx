@@ -14,7 +14,6 @@ import { useInjectedProvider } from '../contexts/InjectedProviderContext';
 import { daoConnectedAndSameChain } from '../utils/general';
 import { getTerm, getTitle } from '../utils/metadata';
 import { getWrapNZap } from '../utils/theGraph';
-import { supportedChains } from '../utils/chain';
 
 const Boosts = ({ customTerms, daoMember, daoOverview, daoMetaData }) => {
   const { daochain, daoid } = useParams();
@@ -31,19 +30,7 @@ const Boosts = ({ customTerms, daoMember, daoOverview, daoMetaData }) => {
       const minions = daoOverview?.minions.length;
       return minions;
     }
-    if (boostKey === 'wrapperWhitelisted') {
-      console.log('dep', daoOverview);
-      const token = daoOverview?.tokenBalances.find(token => {
-        return (
-          token.token.tokenAddress.toLowerCase() ===
-          supportedChains[daochain].wrapper_contract.toLowerCase()
-        );
-      });
-      console.log('token', token, supportedChains[daochain].wrapper_contract);
-      return token;
-    }
     const boostData = daoMetaData.boosts[boostKey];
-    console.log(daoMetaData.boosts, daoOverview);
     return boostData && boostData.active;
   };
 

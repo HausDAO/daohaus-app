@@ -176,12 +176,11 @@ export const boostList = [
   {
     name: 'NiftyMinion',
     key: 'niftyMinion',
-    description: 'Early execution and fund deposits',
+    description: 'Early execution and fund deposits. beta, nifty ink',
     price: '0',
     modalName: 'niftyMinionLaunch',
     successRoute: '',
     settings: true,
-    dependency: 'wrapperWhitelisted',
     networks: {
       '0x64': true,
     },
@@ -276,10 +275,5 @@ export const superpowerLinks = [
     boostKey: 'snapshot',
     label: 'Snapshot',
     modal: 'snapshot',
-  },
-  {
-    boostKey: 'niftyMinion',
-    label: 'Nifty Ink',
-    // link: 'settings/nifty-ink',
   },
 ];

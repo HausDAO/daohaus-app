@@ -200,7 +200,7 @@ const MinionDetails = ({
       type: 'nativeTokenSend',
     });
     const amountInWei = injectedProvider.utils.toWei(values.amount);
-    const args = [values.destination, amountInWei, '0x0', details];
+    const args = [values.destination, amountInWei, '0x00', details];
     submitMinion(args);
   };
 
