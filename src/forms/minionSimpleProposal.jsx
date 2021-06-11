@@ -32,6 +32,7 @@ import { detailsToJSON, daoConnectedAndSameChain } from '../utils/general';
 import { useMetaData } from '../contexts/MetaDataContext';
 import { createForumTopic } from '../utils/discourse';
 import { MINION_TYPES } from '../utils/proposalUtils';
+import PaymentInput from './paymentInput';
 
 const MinionProposalForm = () => {
   const [loading, setLoading] = useState(false);
@@ -62,7 +63,7 @@ const MinionProposalForm = () => {
   const [selectedMinion, setSelectedMinion] = useState(null);
   const now = (new Date().getTime() / 1000).toFixed();
 
-  const { handleSubmit, errors, register } = useForm();
+  const { handleSubmit, errors, register, setValue, getValues } = useForm();
 
   useEffect(() => {
     if (daoOverview?.minions) {
@@ -96,19 +97,13 @@ const MinionProposalForm = () => {
   }, [errors]);
 
   const onSubmit = async values => {
-    console.log('values', values);
-    console.log('minions', minions);
-
-    console.log('values.minionContract', values.minionContract);
     setLoading(true);
     const minion = minions.find(
       minion =>
         minion.minionAddress.toLowerCase() ===
         values.minionContract.toLowerCase(),
     );
-    console.log('minion??', minion);
-    console.log('values.minionContract', values.minionContract);
-    console.log('overview', daoOverview);
+
     const minionName = minion?.minionName;
     const valueWei = injectedProvider.utils.toWei(values.value);
 
@@ -153,8 +148,8 @@ const MinionProposalForm = () => {
         valueWei || '0',
         values.dataValue || hexData,
         details,
-        daoOverview.depositToken.tokenAddress, // TODO: should add selection to form
-        0,
+        values.paymentToken,
+        injectedProvider.utils.toWei(values.paymentRequested),
       ];
     } else {
       args = [
@@ -345,7 +340,16 @@ const MinionProposalForm = () => {
             })}
             onBlur={handleBlur}
           />
-          <TextBox as={FormLabel} size='xs' htmlFor='value'>
+          {selectedMinion?.minionType === 'nifty minion' && (
+            <PaymentInput
+              formLabel='Forward Funds'
+              register={register}
+              setValue={setValue}
+              getValues={getValues}
+              errors={errors}
+            />
+          )}
+          <TextBox as={FormLabel} size='xs' pt={3} htmlFor='value'>
             Value
           </TextBox>
           <Input
@@ -359,7 +363,6 @@ const MinionProposalForm = () => {
               },
             })}
           />
-          {}
           <Stack spacing={4}>
             <Textarea
               name='description'
