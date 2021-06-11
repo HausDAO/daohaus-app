@@ -13,6 +13,7 @@ import { useOverlay } from './OverlayContext';
 import { createPoll } from '../services/pollService';
 import { createForumTopic } from '../utils/discourse';
 import {
+  createActions,
   exposeValues,
   getArgs,
   // handleFormError,
@@ -72,6 +73,16 @@ export const TXProvider = ({ children }) => {
     outstandingTXs,
   };
 
+  const uiControl = {
+    errorToast,
+    successToast,
+    resolvePoll,
+    cachePoll,
+    refetch,
+    setTxInfoModal,
+    setProposalModal,
+  };
+
   const refreshDao = () => {
     // I use useRef to stop excessive rerenders in most of the contexts
     // I need to reset them in order to prevent them from locking up
@@ -95,11 +106,15 @@ export const TXProvider = ({ children }) => {
   };
 
   const buildTXPoll = data => {
-    const { hash, tx, values, formData, now } = data;
+    const { hash, tx, values, formData, now, uiActions } = data;
 
-    return createPoll({ action: tx.pollName || tx.name, cachePoll })({
+    return createPoll({
+      action: tx.poll || tx.specialPoll || tx.name,
+      cachePoll,
+    })({
       daoID: daoid,
       chainID: daochain,
+      tx,
       hash,
       createdAt: now,
       ...values,
@@ -110,6 +125,7 @@ export const TXProvider = ({ children }) => {
             title: tx.errMsg || 'Transaction Error',
             description: error?.message || '',
           });
+          uiActions?.onPollError();
           resolvePoll(txHash);
           console.error(`${tx.errMsg}: ${error}`);
         },
@@ -118,6 +134,7 @@ export const TXProvider = ({ children }) => {
             title: tx.successMsg || 'Transaction Successful',
           });
           refreshDao();
+          uiActions?.onPollSuccess();
           resolvePoll(txHash);
           if (tx.createDiscourse) {
             createForumTopic({
@@ -161,6 +178,12 @@ export const TXProvider = ({ children }) => {
       hash,
       now,
     };
+    const onTxHash = createActions({
+      tx: data.tx,
+      uiControl,
+      stage: 'onTxHash',
+      uiActions: data.uiActions,
+    });
 
     try {
       const args = getArgs({ ...consolidatedData });
@@ -171,11 +194,7 @@ export const TXProvider = ({ children }) => {
         args,
         ...consolidatedData,
         poll,
-        onTxHash() {
-          //  Temporary. Needs utils to handle differenct actions
-          setProposalModal(false);
-          setTxInfoModal(true);
-        },
+        onTxHash,
       });
     } catch (error) {
       console.error(error);

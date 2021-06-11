@@ -1,15 +1,15 @@
 // TX = {
 //   contract: String
-//   pollName: String (Optional)(Defaults to name)
+//   poll: String (Optional)(Defaults to name)
 //   name: String
 //   display: String  (Optional)(Defaults to name)
 //   errMsg: String
-//   onTXHash: {}Strings
+//   onTxHash: {}Strings
 //   successMsg: String
 // }
 
-const ON_TX = {
-  PROPOSAL: ['closeProposalModal', 'openTxInfoModal'],
+const ACTIONS = {
+  PROPOSAL: ['closeProposalModal', 'openTxModal'],
 };
 
 export const DETAILS = {
@@ -28,8 +28,8 @@ export const TX = {
   SUBMIT_PROPOSAL: {
     contract: 'Moloch',
     name: 'submitProposal',
-    onTXHash: ON_TX.PROPOSAL,
-    poll: 'daoHausGraph',
+    onTxHash: ACTIONS.PROPOSAL,
+    poll: 'subgraph',
     display: 'Submit Proposal',
     errMsg: 'Error submitting proposal',
     successMsg: 'Funding Proposal submitted!',
@@ -40,8 +40,8 @@ export const TX = {
   GUILDKICK_PROPOSAL: {
     contract: 'Moloch',
     name: 'submitGuildKickProposal',
-    pollName: 'submitProposal',
-    onTXHash: ON_TX.PROPOSAL,
+    poll: 'subgraph',
+    onTxHash: ACTIONS.PROPOSAL,
     display: 'Submit GuildKick Proposal',
     errMsg: 'Error submitting proposal',
     successMsg: 'Guild Kick Proposal submitted!',
@@ -52,7 +52,8 @@ export const TX = {
   WHITELIST_TOKEN_PROPOSAL: {
     contract: 'Moloch',
     name: 'submitWhitelistProposal',
-    onTXHash: ON_TX.PROPOSAL,
+    poll: 'subgraph',
+    onTxHash: ACTIONS.PROPOSAL,
     display: 'Whitelist Token Proposal',
     errMsg: 'Error submitting proposal',
     successMsg: 'Token Proposal submitted!',
@@ -63,8 +64,8 @@ export const TX = {
   UNLOCK_TOKEN: {
     contract: 'Token',
     name: 'approve',
-    pollName: 'unlockToken',
-    onTXHash: null,
+    specialPoll: 'unlockToken',
+    onTxHash: null,
     display: 'Approve Spend Token',
     errMsg: 'Approve Token Failed',
     successMsg: 'Approved Token!',
@@ -72,8 +73,8 @@ export const TX = {
   MINION_PROPOSE_ACTION: {
     contract: 'Minion',
     name: 'proposeAction',
-    pollName: 'minionProposeAction',
-    onTXHash: ON_TX.PROPOSAL,
+    poll: 'subgraph',
+    onTxHash: ACTIONS.PROPOSAL,
     display: 'Propose Minion Action',
     errMsg: 'Error submitting action to minion',
     successMsg: 'Minion Proposal Created!',

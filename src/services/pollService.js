@@ -17,6 +17,7 @@ import {
   pollWrapNZapSummon,
   pollTransmutationSummon,
   pollProposal,
+  pollTXHash,
 } from '../polls/polls';
 import {
   cancelProposalTest,
@@ -39,6 +40,7 @@ import {
   rageKickTest,
   wrapNZapSummonTest,
   transmutationSummonTest,
+  testTXHash,
 } from '../polls/tests';
 
 export const createPoll = ({
@@ -87,6 +89,34 @@ export const createPoll = ({
   /// /////////////////ACTIONS//////////////////////////
   if (!action) {
     throw new Error('User must submit an action argument');
+  } else if (action === 'subgraph') {
+    return ({ chainID, actions, now, tx }) => txHash => {
+      const args = { txHash, chainID };
+      startPoll({
+        pollFetch: pollTXHash,
+        testFn: testTXHash,
+        shouldEqual: txHash,
+        args,
+        actions,
+        txHash,
+      });
+      cachePoll({
+        txHash,
+        action,
+        timeSent: now,
+        status: 'unresolved',
+        resolvedMsg: tx.successMsg,
+        unresolvedMsg: 'Processing',
+        successMsg: tx.successMsg,
+        errorMsg: tx.errMsg,
+        pollData: {
+          action,
+          interval,
+          tries,
+        },
+        pollArgs: args,
+      });
+    };
   } else if (
     action === 'submitProposal' ||
     action === 'submitWhitelistProposal' ||

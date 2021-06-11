@@ -23,7 +23,7 @@ import { SuperfluidMinionService } from '../services/superfluidMinionService';
 import { UberHausMinionService } from '../services/uberHausMinionService';
 import { TX_HASH } from '../graphQL/general';
 
-export const basicGraphPoll = async ({ chainID, txHash }) => {
+export const pollTXHash = async ({ chainID, txHash }) => {
   return graphQuery({
     endpoint: getGraphEndpoint(chainID, 'subgraph_url'),
     query: TX_HASH,
@@ -32,6 +32,16 @@ export const basicGraphPoll = async ({ chainID, txHash }) => {
     },
   });
 };
+
+const test = async () => {
+  const res = await pollTXHash({
+    chainID: '0x4',
+    txHash: 'sdf',
+  });
+  console.log(res);
+};
+
+test();
 
 export const pollProposals = async ({ daoID, chainID }) => {
   return graphQuery({

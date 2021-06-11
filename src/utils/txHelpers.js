@@ -145,7 +145,6 @@ export const MinionTransaction = async ({
 }) => {
   const { daochain, daoOverview, address } = contextData;
   const minionAddress = values.minionAddress || values.selectedMinion;
-  console.log(minionAddress);
   return MinionService({
     web3: injectedProvider,
     minion: minionAddress,
@@ -209,4 +208,43 @@ export const exposeValues = data => {
     return { ...data, values: { ...foundData, ...existingValues } };
   }
   throw new Error('Could not find data with given queries');
+};
+
+export const createActions = ({ tx, uiControl, stage, uiActions }) => {
+  if (!tx[stage]) return;
+  console.log(`tx`, tx);
+  console.log(`uiControl`, uiControl);
+  console.log(`stage`, stage);
+  console.log(`uiActions`, uiActions);
+  // FOR REFERENCE:
+  // const uiControl = {
+  //   errorToast,
+  //   successToast,
+  //   resolvePoll,
+  //   cachePoll,
+  //   refetch,
+  //   setTxInfoModal,
+  //   setProposalModal,
+  // };
+  const actions = {
+    closeProposalModal() {
+      uiControl.setProposalModal(false);
+    },
+    openTxModal() {
+      uiControl.setTxInfoModal(true);
+    },
+  };
+
+  const availableActions = Object.keys(actions);
+  if (!tx[stage].every(action => availableActions.includes(action))) {
+    throw new Error(
+      `createActions => txHelpers.js: One of the values inside of ${stage} does not match the list of available actions`,
+    );
+  }
+  return () => {
+    if (uiActions?.[stage] && typeof uiActions?.[stage] === 'function') {
+      uiActions[stage]();
+    }
+    tx[stage].forEach(action => actions[action]());
+  };
 };
