@@ -245,14 +245,6 @@ const MinionDetails = ({
       destination: values.destination,
       from: overview.minions[0].minionAddress,
     });
-    // TODO: should this be nifty minion only?
-    // const hexData = await niftyService('safeTransferFromNoop')({
-    //   tokenId,
-    //   destination: values.destination,
-    //   from: overview?.minions.find(m => {
-    //     return m.minionType === 'nifty minion';
-    //   })?.minionAddress,
-    // });
 
     const details = detailsToJSON({
       title: `${minionData.details || 'Minion'} Sends a Nifty`,

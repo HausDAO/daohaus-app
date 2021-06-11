@@ -141,7 +141,7 @@ export const supportedChains = {
       version: 'v1',
     },
     niftyMinion: {
-      minion_factory_addr: '0x166171416d3Cb5a23F719f23c62633e454A32A1b',
+      minion_factory_addr: '0xA6B75C3EBfA5a5F801F634812ABCb6Fd7055fd6d',
       version: 'v1',
     },
   },
@@ -180,6 +180,10 @@ export const supportedChains = {
       superapp_addr: {
         v1: '0xdb4D89F2199b9Cf451B7Ff4bdC94b1c96De4bdD0',
       },
+      version: 'v1',
+    },
+    niftyMinion: {
+      minion_factory_addr: '0x4CCaDF3f5734436B28869c27A11B6D0F4776bc8E',
       version: 'v1',
     },
   },

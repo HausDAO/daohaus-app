@@ -59,6 +59,7 @@ const MinionProposalForm = () => {
   const [abiParams, setAbiParams] = useState(null);
   const [hexSwitch, setHexSwitch] = useState(null);
   const [minions, setMinions] = useState([]);
+  const [selectedMinion, setSelectedMinion] = useState(null);
   const now = (new Date().getTime() / 1000).toFixed();
 
   const { handleSubmit, errors, register } = useForm();
@@ -283,6 +284,15 @@ const MinionProposalForm = () => {
     setSelectedFunction(null);
   };
 
+  const handleMinionChange = event => {
+    const { value } = event.target;
+    console.log('daoOverview.minions', daoOverview.minions);
+    console.log('value', value);
+    const minion = daoOverview.minions.find(m => m.minionAddress === value);
+    console.log('selectedminion', minion);
+    setSelectedMinion(minion);
+  };
+
   return minions?.length ? (
     <form onSubmit={handleSubmit(onSubmit)}>
       <FormControl
@@ -309,6 +319,7 @@ const MinionProposalForm = () => {
               },
             })}
             placeholder='Select Minion'
+            onChange={handleMinionChange}
           >
             {' '}
             {minions?.map(minion => (
@@ -319,7 +330,6 @@ const MinionProposalForm = () => {
               </option>
             ))}
           </Select>
-
           <TextBox as={FormLabel} size='xs' htmlFor='targetContract'>
             Target Contract
           </TextBox>
@@ -349,6 +359,7 @@ const MinionProposalForm = () => {
               },
             })}
           />
+          {}
           <Stack spacing={4}>
             <Textarea
               name='description'
@@ -467,7 +478,8 @@ const MinionProposalForm = () => {
               isLoading={loading}
               disabled={loading}
             >
-              Submit
+              Submit{' '}
+              {selectedMinion?.minionType === 'nifty minion' && '*Nifty Minion'}
             </Button>
           ) : (
             <Button

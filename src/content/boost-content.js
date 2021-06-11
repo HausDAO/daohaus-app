@@ -176,13 +176,14 @@ export const boostList = [
   {
     name: 'NiftyMinion',
     key: 'niftyMinion',
-    description: 'Early execution and fund deposits. beta, nifty ink',
+    description: 'Early Execution and Fund and Execute. (beta)',
     price: '0',
     modalName: 'niftyMinionLaunch',
     successRoute: '',
     settings: true,
     networks: {
       '0x64': true,
+      '0x89': true,
     },
   },
 ];
