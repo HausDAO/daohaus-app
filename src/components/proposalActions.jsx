@@ -397,6 +397,8 @@ const ProposalVote = ({
     }
   }, [daoProposals]);
 
+  console.log(proposal);
+
   return (
     <>
       <ContentBox position='relative'>
@@ -577,10 +579,12 @@ const ProposalVote = ({
                           {+proposal?.yesShares > +proposal?.noShares && (
                             <Box>
                               Currently Passing
-                              {/* TODO use const */}
                               {proposal?.minion?.minionType ===
                                 MINION_TYPES.NIFTY && (
-                                <MinionExecute proposal={proposal} early />
+                                <>
+                                  {` Quorum Needed ${proposal?.minion?.minQuroum}% `}
+                                  <MinionExecute proposal={proposal} early />
+                                </>
                               )}
                             </Box>
                           )}
@@ -610,7 +614,10 @@ const ProposalVote = ({
                             +proposal?.yesShares > +proposal?.noShares &&
                             proposal?.minion?.minionType ===
                               MINION_TYPES.NIFTY && (
-                              <MinionExecute proposal={proposal} early />
+                              <>
+                                {` Quorum Needed ${proposal?.minion?.minQuroum}% `}
+                                <MinionExecute proposal={proposal} early />
+                              </>
                             )}
                         </TextBox>
                       </Flex>

@@ -281,10 +281,7 @@ const MinionProposalForm = () => {
 
   const handleMinionChange = event => {
     const { value } = event.target;
-    console.log('daoOverview.minions', daoOverview.minions);
-    console.log('value', value);
     const minion = daoOverview.minions.find(m => m.minionAddress === value);
-    console.log('selectedminion', minion);
     setSelectedMinion(minion);
   };
 
@@ -463,6 +460,11 @@ const MinionProposalForm = () => {
         <Switch id='hexSwitch' onChange={toggleSwitch} />
       </FormControl>
       <Flex justify='flex-end' align='center' h='60px'>
+        {selectedMinion?.minionType === 'nifty minion' && (
+          <Box color='secondary.300' fontSize='m' mr={5}>
+            {`*Nifty Minion, Early Execution Quorum ${selectedMinion?.minQuroum}%`}
+          </Box>
+        )}
         {currentError && (
           <Box color='secondary.300' fontSize='m' mr={5}>
             <Icon as={RiErrorWarningLine} color='secondary.300' mr={2} />
@@ -481,8 +483,7 @@ const MinionProposalForm = () => {
               isLoading={loading}
               disabled={loading}
             >
-              Submit{' '}
-              {selectedMinion?.minionType === 'nifty minion' && '*Nifty Minion'}
+              Submit
             </Button>
           ) : (
             <Button
