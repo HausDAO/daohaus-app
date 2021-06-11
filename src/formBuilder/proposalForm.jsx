@@ -59,8 +59,11 @@ const ProposalForm = props => {
       prevFields.map(field => ({ ...field, error: false })),
     );
   };
+
   const onSubmit = async values => {
     clearErrors();
+
+    //  Checks for required values
     const missingVals = validateRequired(
       values,
       formFields.filter(field => field.required),
@@ -69,21 +72,27 @@ const ProposalForm = props => {
       updateErrors(missingVals);
       return;
     }
+
+    //  Checks for type errors
     const typeErrors = checkFormTypes(values, formFields);
     if (typeErrors) {
       updateErrors(typeErrors);
       return;
     }
+
+    // Collapses multiInput strings into an array
     const collapsedValues = collapse(values, '*MULTI*', 'objOfArrays');
+
+    //  Checks for custom validation
     const customValErrors = handleCustomValidation({
       values: collapsedValues,
       formData: props,
     });
-
     if (customValErrors) {
       updateErrors(customValErrors);
       return;
     }
+
     try {
       setLoading(true);
       await submitTransaction({

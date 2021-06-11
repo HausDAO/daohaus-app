@@ -1,6 +1,5 @@
 import { MolochService } from '../services/molochService';
 import { MinionService } from '../services/minionService';
-import { logFormError } from './errorLog';
 import { detailsToJSON } from './general';
 import { valToDecimalString } from './tokenValue';
 import { safeEncodeHexFunction } from './abi';
@@ -101,7 +100,7 @@ export const getArgs = data => {
       //  defaults to the name of the transaction
       return argBuilderCallback[tx.name](data);
     }
-    //  Otherwise we search custom callbacks based on the name passed in
+    //  Otherwise search custom callbacks based on the name passed in
     //  through the transaction data
     return argBuilderCallback[tx.argsFromCallback](data);
   }
@@ -112,31 +111,6 @@ export const getArgs = data => {
   throw new Error(
     'Error at getArgs() in txHelpers.js. TX data did not include a method to collect arguments. Check transaction data in contractTX.js.',
   );
-};
-
-export const handleFormError = ({
-  contextData,
-  formData,
-  args,
-  values,
-  error,
-  errorToast,
-  loading,
-}) => {
-  const errMsg = error?.message || '';
-  console.error(error);
-  loading?.(false);
-  logFormError({
-    contextData,
-    formData,
-    args,
-    values,
-    errMsg,
-  });
-  errorToast?.({
-    title: 'Error Submitting Proposal',
-    description: errMsg,
-  });
 };
 
 export const MolochTransaction = async ({

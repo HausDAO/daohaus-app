@@ -29,6 +29,7 @@ export const TX = {
     contract: 'Moloch',
     name: 'submitProposal',
     onTXHash: ON_TX.PROPOSAL,
+    poll: 'daoHausGraph',
     display: 'Submit Proposal',
     errMsg: 'Error submitting proposal',
     successMsg: 'Funding Proposal submitted!',

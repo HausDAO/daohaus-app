@@ -164,7 +164,6 @@ export const TXProvider = ({ children }) => {
 
     try {
       const args = getArgs({ ...consolidatedData });
-      console.log(`TX ARGS:`, args);
       const poll = buildTXPoll({
         ...consolidatedData,
       });
@@ -191,6 +190,9 @@ export const TXProvider = ({ children }) => {
     const {
       tx: { name },
     } = data;
+
+    //  Checks that this TX has a name and that the name is in the
+    //  list of existing Transactions
     if (!name) {
       throw new Error('TX CONTEXT: TX data or name not found');
     }
@@ -201,6 +203,7 @@ export const TXProvider = ({ children }) => {
       throw new Error('TX CONTEXT: TX does not exist');
     }
 
+    //  Searches for items within the data tree and adds them to {values}
     if (data?.tx?.exposeValues) {
       return createTX(exposeValues({ ...data, contextData, injectedProvider }));
     }

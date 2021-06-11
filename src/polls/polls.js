@@ -21,6 +21,17 @@ import { UBERHAUS_MEMBER_DELEGATE } from '../graphQL/uberhaus-queries';
 import { MinionService } from '../services/minionService';
 import { SuperfluidMinionService } from '../services/superfluidMinionService';
 import { UberHausMinionService } from '../services/uberHausMinionService';
+import { TX_HASH } from '../graphQL/general';
+
+export const basicGraphPoll = async ({ chainID, txHash }) => {
+  return graphQuery({
+    endpoint: getGraphEndpoint(chainID, 'subgraph_url'),
+    query: TX_HASH,
+    variables: {
+      id: txHash,
+    },
+  });
+};
 
 export const pollProposals = async ({ daoID, chainID }) => {
   return graphQuery({

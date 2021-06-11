@@ -1,4 +1,5 @@
 import { filterObject, isObjectEmpty } from './general';
+import { logFormError } from './errorLog';
 
 export const splitMulti = (key, value, flag) => {
   const splitKey = key.split(flag);
@@ -88,5 +89,30 @@ export const inputDataFromABI = inputs => {
       expectType: isMulti ? 'any' : getType(localType),
       required: false,
     };
+  });
+};
+
+export const handleFormError = ({
+  contextData,
+  formData,
+  args,
+  values,
+  error,
+  errorToast,
+  loading,
+}) => {
+  const errMsg = error?.message || '';
+  console.error(error);
+  loading?.(false);
+  logFormError({
+    contextData,
+    formData,
+    args,
+    values,
+    errMsg,
+  });
+  errorToast?.({
+    title: 'Error Submitting Proposal',
+    description: errMsg,
   });
 };
