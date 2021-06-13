@@ -8,12 +8,8 @@ import { motion } from 'framer-motion';
 import { MaxUint256 } from '@ethersproject/constants';
 
 import { useInjectedProvider } from '../contexts/InjectedProviderContext';
-import { useUser } from '../contexts/UserContext';
 import { TokenService } from '../services/tokenService';
 import { useTX } from '../contexts/TXContext';
-import { useOverlay } from '../contexts/OverlayContext';
-import { createPoll } from '../services/pollService';
-import { MolochService } from '../services/molochService';
 import ContentBox from './ContentBox';
 import TextBox from './TextBox';
 import { memberVote } from '../utils/proposalUtils';
@@ -27,6 +23,7 @@ import {
 import { useMetaData } from '../contexts/MetaDataContext';
 import MinionExecute from './minionExecute';
 import MinionCancel from './minionCancel';
+import { TX } from '../data/contractTX';
 
 const MotionBox = motion(Box);
 
@@ -60,15 +57,8 @@ const ProposalVote = ({
   const [nextProposalToProcess, setNextProposal] = useState(null);
   const [loading, setLoading] = useState(false);
   const { daochain, daoid } = useParams();
-  const { address, injectedProvider, injectedChain } = useInjectedProvider();
-  const { cachePoll, resolvePoll } = useUser();
-  const {
-    errorToast,
-    successToast,
-    setProposalModal,
-    setTxInfoModal,
-  } = useOverlay();
-  const { refreshDao } = useTX();
+  const { address, injectedChain } = useInjectedProvider();
+  const { submitTransaction } = useTX();
   const { customTerms } = useMetaData();
 
   const [enoughDeposit, setEnoughDeposit] = useState(false);
@@ -78,12 +68,6 @@ const ProposalVote = ({
       isBefore(Date.now(), new Date(+proposal?.votingPeriodEnds * 1000)) &&
       isAfter(Date.now(), new Date(+proposal?.votingPeriodStarts * 1000))
     );
-  };
-
-  const userRejectedToast = () => {
-    errorToast({
-      title: 'User rejected transaction signature.',
-    });
   };
 
   const NetworkOverlay = () => (
@@ -113,277 +97,29 @@ const ProposalVote = ({
     </Flex>
   );
 
-  const onTxHash = () => {
-    setProposalModal(false);
-    setTxInfoModal(true);
-  };
-
   useEffect(() => {
+    let shouldUpdate = true;
     const getDepositTokenBalance = async () => {
       const depositTokenBalance = await TokenService({
         tokenAddress: overview?.depositToken.tokenAddress,
         chainID: daochain,
       })('balanceOf')(address);
-      setEnoughDeposit(
-        +overview?.proposalDeposit === 0 ||
-          +depositTokenBalance / 10 ** overview?.depositToken.decimals >
-            +overview?.proposalDeposit / 10 ** overview?.depositToken.decimals,
-      );
+      if (shouldUpdate) {
+        setEnoughDeposit(
+          +overview?.proposalDeposit === 0 ||
+            +depositTokenBalance / 10 ** overview?.depositToken.decimals >
+              +overview?.proposalDeposit /
+                10 ** overview?.depositToken.decimals,
+        );
+      }
     };
     if (overview?.depositToken && address) {
       getDepositTokenBalance();
     }
+    () => {
+      shouldUpdate = false;
+    };
   }, [overview, address, injectedChain]);
-
-  const cancelProposal = async () => {
-    setLoading(true);
-    const id = proposal.proposalId;
-    const args = [id];
-    try {
-      console.log(id);
-      const poll = createPoll({ action: 'cancelProposal', cachePoll })({
-        daoID: daoid,
-        chainID: daochain,
-        proposalId: id,
-        actions: {
-          onError: (error, txHash) => {
-            errorToast({
-              title: 'There was an error.',
-            });
-            resolvePoll(txHash);
-            console.error(`Could not find a matching proposal: ${error}`);
-            setLoading(false);
-          },
-          onSuccess: txHash => {
-            successToast({
-              title: 'Cancelled proposal!',
-            });
-            refreshDao();
-            resolvePoll(txHash);
-            setLoading(false);
-          },
-        },
-      });
-      await MolochService({
-        web3: injectedProvider,
-        daoAddress: daoid,
-        chainID: daochain,
-        version: overview.version,
-      })('cancelProposal')({
-        args,
-        address,
-        poll,
-        onTxHash,
-      });
-    } catch (err) {
-      setLoading(false);
-      console.log('error: ', err);
-      userRejectedToast();
-    }
-  };
-
-  const unlock = async token => {
-    setLoading(true);
-
-    const maxUnlock = MaxUint256.toString();
-    const args = [daoid, maxUnlock];
-
-    try {
-      const poll = createPoll({ action: 'unlockToken', cachePoll })({
-        daoID: daoid,
-        chainID: daochain,
-        tokenAddress: token,
-        userAddress: address,
-        unlockAmount: maxUnlock,
-        actions: {
-          onError: (error, txHash) => {
-            errorToast({
-              title: 'Failed to unlock token',
-            });
-            resolvePoll(txHash);
-            console.error(`Could not unlock token: ${error}`);
-            setLoading(false);
-          },
-          onSuccess: txHash => {
-            successToast({
-              // ? update to token symbol or name
-              title: `Tribute token ${overview?.depositToken?.symbol} unlocked`,
-            });
-            refreshDao();
-            resolvePoll(txHash);
-            setLoading(false);
-          },
-        },
-      });
-      await TokenService({
-        web3: injectedProvider,
-        chainID: daochain,
-        tokenAddress: token,
-      })('approve')({
-        args,
-        address,
-        poll,
-        onTxHash,
-      });
-    } catch (err) {
-      console.log('error:', err);
-      setLoading(false);
-      userRejectedToast();
-    }
-  };
-
-  const sponsorProposal = async id => {
-    setLoading(true);
-    const args = [id];
-    try {
-      const poll = createPoll({
-        action: 'sponsorProposal',
-        cachePoll,
-        interval: 3000,
-      })({
-        daoID: daoid,
-        chainID: daochain,
-        proposalId: id,
-        fetchAll: true,
-        actions: {
-          onError: (error, txHash) => {
-            errorToast({
-              title: 'There was an error.',
-            });
-            resolvePoll(txHash);
-            console.error(`Could not find a matching proposal: ${error}`);
-            setLoading(false);
-          },
-          onSuccess: txHash => {
-            successToast({
-              title: 'Sponsored proposal. Queued for voting!',
-            });
-            refreshDao();
-            resolvePoll(txHash);
-            setLoading(false);
-          },
-        },
-      });
-      await MolochService({
-        web3: injectedProvider,
-        daoAddress: daoid,
-        chainID: daochain,
-        version: overview.version,
-      })('sponsorProposal')({
-        args,
-        address,
-        poll,
-        onTxHash,
-      });
-    } catch (err) {
-      setLoading(false);
-      console.log('error: ', err);
-      userRejectedToast();
-    }
-  };
-
-  const submitVote = async (proposal, vote) => {
-    setLoading(true);
-    const args = [proposal.proposalIndex, vote];
-    try {
-      const poll = createPoll({ action: 'submitVote', cachePoll })({
-        daoID: daoid,
-        chainID: daochain,
-        proposalId: proposal.proposalId,
-        userAddress: address,
-        actions: {
-          onError: (error, txHash) => {
-            errorToast({
-              title: 'There was an error.',
-            });
-            resolvePoll(txHash);
-            console.error(`Could not find a matching proposal: ${error}`);
-          },
-          onSuccess: txHash => {
-            successToast({
-              title: 'Vote submitted. Your community appreciates you.',
-            });
-            refreshDao();
-            resolvePoll(txHash);
-            setLoading(false);
-          },
-        },
-      });
-      await MolochService({
-        web3: injectedProvider,
-        daoAddress: daoid,
-        chainID: daochain,
-        version: overview.version,
-      })('submitVote')({
-        args,
-        address,
-        poll,
-        onTxHash,
-      });
-    } catch (err) {
-      setLoading(false);
-      console.log('error: ', err);
-      userRejectedToast();
-    }
-  };
-
-  const processProposal = async proposal => {
-    setLoading(true);
-    let proposalType = 'other';
-    let processFn = 'processProposal';
-
-    if (proposal.whitelist) {
-      proposalType = 'whitelist';
-      processFn = 'processWhitelistProposal';
-    } else if (proposal.guildkick) {
-      proposalType = 'guildkick';
-      processFn = 'processGuildKickProposal';
-    }
-
-    const args = [proposal.proposalIndex];
-
-    try {
-      const poll = createPoll({ action: 'processProposal', cachePoll })({
-        daoID: daoid,
-        chainID: daochain,
-        proposalType,
-        proposalIndex: proposal.proposalIndex,
-        actions: {
-          onError: (error, txHash) => {
-            errorToast({
-              title: 'There was an error.',
-            });
-            resolvePoll(txHash);
-            console.error(`Could not find a matching proposal: ${error}`);
-            setLoading(false);
-          },
-          onSuccess: txHash => {
-            successToast({
-              title: 'Proposal processed. Get that money!',
-            });
-            refreshDao();
-            resolvePoll(txHash);
-            setLoading(false);
-          },
-        },
-      });
-      await MolochService({
-        web3: injectedProvider,
-        daoAddress: daoid,
-        chainID: daochain,
-        version: overview.version,
-      })(processFn)({
-        args,
-        address,
-        poll,
-        onTxHash,
-      });
-    } catch (err) {
-      setLoading(false);
-      console.log('error: ', err);
-      userRejectedToast();
-    }
-  };
 
   useEffect(() => {
     if (daoProposals) {
@@ -396,6 +132,62 @@ const ProposalVote = ({
       }
     }
   }, [daoProposals]);
+
+  const cancelProposal = async () => {
+    setLoading(true);
+    await submitTransaction({
+      args: [proposal.proposalId],
+      tx: TX.CANCEL_PROPOSAL,
+    });
+    setLoading(false);
+  };
+
+  const unlock = async token => {
+    setLoading(true);
+    const unlockAmount = MaxUint256.toString();
+    await submitTransaction({
+      args: [daoid, unlockAmount],
+      tx: TX.UNLOCK_TOKEN,
+      values: { tokenAddress: token, unlockAmount },
+    });
+    setLoading(false);
+  };
+
+  const sponsorProposal = async id => {
+    setLoading(true);
+    await submitTransaction({
+      args: [id],
+      tx: TX.SPONSOR_PROPOSAL,
+    });
+    setLoading(false);
+  };
+
+  const submitVote = async (proposal, vote) => {
+    setLoading(true);
+    await submitTransaction({
+      args: [proposal.proposalIndex, vote],
+      tx: TX.SUBMIT_VOTE,
+    });
+    setLoading(false);
+  };
+
+  const processProposal = async proposal => {
+    setLoading(true);
+    const getTx = proposal => {
+      if (proposal.whitelist) {
+        return TX.PROCESS_WL_PROPOSAL;
+      }
+      if (proposal.guildkick) {
+        return TX.PROCESS_GK_PROPOSAL;
+      }
+      return TX.PROCESS_PROPOSAL;
+    };
+    await submitTransaction({
+      args: [proposal.proposalIndex],
+      tx: getTx(proposal),
+    });
+    setLoading(false);
+  };
 
   return (
     <>

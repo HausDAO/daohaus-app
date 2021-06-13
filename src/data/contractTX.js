@@ -8,8 +8,9 @@
 //   successMsg: String
 // }
 
-const ACTIONS = {
+export const ACTIONS = {
   PROPOSAL: ['closeProposalModal', 'openTxModal'],
+  BASIC: ['openTxModal'],
 };
 
 export const DETAILS = {
@@ -81,5 +82,59 @@ export const TX = {
     argsFromCallback: true,
     createDiscourse: true,
     detailsJSON: DETAILS.MINION_PROPOSAL,
+  },
+  CANCEL_PROPOSAL: {
+    contract: 'Moloch',
+    name: 'cancelProposal',
+    poll: 'subgraph',
+    onTxHash: ACTIONS.BASIC,
+    display: 'Cancel Proposal',
+    errMsg: 'Error cancelling proposal',
+    successMsg: 'Proposal Cancelled!',
+  },
+  SPONSOR_PROPOSAL: {
+    contract: 'Moloch',
+    name: 'sponsorProposal',
+    poll: 'subgraph',
+    onTxHash: ACTIONS.BASIC,
+    display: 'Sponsor Proposal',
+    errMsg: 'Error sponsoring proposal',
+    successMsg: 'Proposal Sponsored!',
+  },
+  SUBMIT_VOTE: {
+    contract: 'Moloch',
+    name: 'submitVote',
+    poll: 'subgraph',
+    onTxHash: ACTIONS.BASIC,
+    display: 'Submit Vote',
+    errMsg: 'Error Submitting Vote',
+    successMsg: 'Vote Submitted!',
+  },
+  PROCESS_PROPOSAL: {
+    contract: 'Moloch',
+    name: 'processProposal',
+    poll: 'subgraph',
+    onTxHash: ACTIONS.BASIC,
+    display: 'Process Proposal',
+    errMsg: 'Error Processing Proposal',
+    successMsg: 'Proposal Processed!',
+  },
+  PROCESS_GK_PROPOSAL: {
+    contract: 'Moloch',
+    name: 'processGuildKickProposal',
+    poll: 'subgraph',
+    onTxHash: ACTIONS.BASIC,
+    display: 'Process Proposal',
+    errMsg: 'Error Processing Proposal',
+    successMsg: 'Proposal Processed!',
+  },
+  PROCESS_WL_PROPOSAL: {
+    contract: 'Moloch',
+    name: 'processWhitelistProposal',
+    poll: 'subgraph',
+    onTxHash: ACTIONS.BASIC,
+    display: 'Process Proposal',
+    errMsg: 'Error Processing Proposal',
+    successMsg: 'Proposal Processed!',
   },
 };

@@ -195,6 +195,7 @@ export const Transaction = async data => {
       `Contract Type ${contractType} not found in 'Transaction' function in txHelpers.js. Check transaction data (contractTX.js).`,
     );
   }
+  data.lifeCycleFns?.onTxFire?.(data);
   return TX(data);
 };
 
@@ -210,12 +211,12 @@ export const exposeValues = data => {
   throw new Error('Could not find data with given queries');
 };
 
-export const createActions = ({ tx, uiControl, stage, uiActions }) => {
+export const createActions = ({ tx, uiControl, stage, lifeCycleFns }) => {
   if (!tx[stage]) return;
   console.log(`tx`, tx);
   console.log(`uiControl`, uiControl);
   console.log(`stage`, stage);
-  console.log(`uiActions`, uiActions);
+  console.log(`lifeCycleFns`, lifeCycleFns);
   // FOR REFERENCE:
   // const uiControl = {
   //   errorToast,
@@ -241,10 +242,5 @@ export const createActions = ({ tx, uiControl, stage, uiActions }) => {
       `createActions => txHelpers.js: One of the values inside of ${stage} does not match the list of available actions`,
     );
   }
-  return () => {
-    if (uiActions?.[stage] && typeof uiActions?.[stage] === 'function') {
-      uiActions[stage]();
-    }
-    tx[stage].forEach(action => actions[action]());
-  };
+  return () => tx[stage].forEach(action => actions[action]());
 };

@@ -106,7 +106,7 @@ export const TXProvider = ({ children }) => {
   };
 
   const buildTXPoll = data => {
-    const { hash, tx, values, formData, now, uiActions } = data;
+    const { hash, tx, values, formData, now, lifeCycleFns } = data;
 
     return createPoll({
       action: tx.poll || tx.specialPoll || tx.name,
@@ -125,7 +125,7 @@ export const TXProvider = ({ children }) => {
             title: tx.errMsg || 'Transaction Error',
             description: error?.message || '',
           });
-          uiActions?.onPollError();
+          lifeCycleFns?.onPollError?.(txHash, error, data);
           resolvePoll(txHash);
           console.error(`${tx.errMsg}: ${error}`);
         },
@@ -134,7 +134,7 @@ export const TXProvider = ({ children }) => {
             title: tx.successMsg || 'Transaction Successful',
           });
           refreshDao();
-          uiActions?.onPollSuccess();
+          lifeCycleFns?.onPollSuccess?.(txHash, data);
           resolvePoll(txHash);
           if (tx.createDiscourse) {
             createForumTopic({
@@ -169,6 +169,8 @@ export const TXProvider = ({ children }) => {
   };
 
   const createTX = async data => {
+    data.lifeCycleFns?.beforeTx?.(data);
+
     const hash = uuidv4();
     const now = (new Date().getTime() / 1000).toFixed();
     const consolidatedData = {
@@ -182,7 +184,7 @@ export const TXProvider = ({ children }) => {
       tx: data.tx,
       uiControl,
       stage: 'onTxHash',
-      uiActions: data.uiActions,
+      lifeCycleFns: data.lifeCycleFns,
     });
 
     try {
@@ -198,6 +200,7 @@ export const TXProvider = ({ children }) => {
       });
     } catch (error) {
       console.error(error);
+      data.lifeCycleFns?.onCatch?.();
       errorToast({
         title: data?.tx?.errMsg || 'There was an error',
         description: error.message || '',
