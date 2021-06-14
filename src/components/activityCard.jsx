@@ -57,7 +57,6 @@ const ActivityCard = ({ activity, displayAvatar, isLink = true }) => {
     const getProfile = async () => {
       try {
         const newProfile = await handleGetProfile(activity.memberAddress);
-
         if (newProfile.status === 'error') {
           setProfile(null);
           return;

@@ -6,7 +6,8 @@ export const fetchProfile = async address => {
     if (response.status === 'error') {
       console.log('Profile does not exist');
     }
-    const boxProfile = await response.json();
+
+    const boxProfile = response.json();
     return boxProfile;
   } catch (error) {
     console.log(error);
@@ -14,9 +15,6 @@ export const fetchProfile = async address => {
 };
 
 export const cacheProfile = (newProfile, memberAddress) => {
-  if (!newProfile) {
-    throw new Error('Did not recieve a profile to cache');
-  }
   const profileCache = JSON.parse(
     window.sessionStorage.getItem('3BoxProfiles'),
   );
@@ -59,6 +57,8 @@ export const handleGetProfile = async memberAddress => {
     return cachedProfile;
   }
   const newProfile = await fetchProfile(memberAddress);
-  cacheProfile(newProfile, memberAddress);
+  if (newProfile) {
+    cacheProfile(newProfile, memberAddress);
+  }
   return newProfile;
 };

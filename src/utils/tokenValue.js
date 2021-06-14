@@ -97,7 +97,7 @@ export const tallyUSDs = tokenObj => {
 
   for (const token in tokenObj) {
     // if (!tokenObj[token]?.totalUSD) {
-    //   console.error('TokenError', tokenObj);
+    //   // console.error('TokenError', tokenObj);
     // }
     totalUSD += tokenObj[token].totalUSD;
   }

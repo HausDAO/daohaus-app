@@ -133,7 +133,7 @@ const ProposalVote = ({
     if (overview?.depositToken && address) {
       getDepositTokenBalance();
     }
-  }, [overview]);
+  }, [overview, address, injectedChain]);
 
   const cancelProposal = async () => {
     setLoading(true);
@@ -663,6 +663,7 @@ const ProposalVote = ({
 
         {daoConnectedAndSameChain(address, daochain, injectedChain?.chainId) &&
           proposal?.status === 'ReadyForProcessing' &&
+          !injectedProvider.currentProvider.safe &&
           (nextProposalToProcess?.proposalId === proposal?.proposalId ? (
             <Flex justify='center' pt='10px'>
               <Flex direction='column'>
