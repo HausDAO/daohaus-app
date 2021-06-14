@@ -663,6 +663,7 @@ const ProposalVote = ({
 
         {daoConnectedAndSameChain(address, daochain, injectedChain?.chainId) &&
           proposal?.status === 'ReadyForProcessing' &&
+          !injectedProvider.currentProvider.safe &&
           (nextProposalToProcess?.proposalId === proposal?.proposalId ? (
             <Flex justify='center' pt='10px'>
               <Flex direction='column'>
