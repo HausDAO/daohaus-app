@@ -582,7 +582,7 @@ const ProposalVote = ({
                               {proposal?.minion?.minionType ===
                                 MINION_TYPES.NIFTY && (
                                 <>
-                                  {` Quorum Needed ${proposal?.minion?.minQuroum}% `}
+                                  {` Quorum Needed ${proposal?.minion?.minQuorum}% `}
                                   <MinionExecute proposal={proposal} early />
                                 </>
                               )}
@@ -615,7 +615,7 @@ const ProposalVote = ({
                             proposal?.minion?.minionType ===
                               MINION_TYPES.NIFTY && (
                               <>
-                                {` Quorum Needed ${proposal?.minion?.minQuroum}% `}
+                                {` Quorum Needed ${proposal?.minion?.minQuorum}% `}
                                 <MinionExecute proposal={proposal} early />
                               </>
                             )}

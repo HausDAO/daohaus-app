@@ -462,7 +462,7 @@ const MinionProposalForm = () => {
       <Flex justify='flex-end' align='center' h='60px'>
         {selectedMinion?.minionType === 'nifty minion' && (
           <Box color='secondary.300' fontSize='m' mr={5}>
-            {`*Nifty Minion, Early Execution Quorum ${selectedMinion?.minQuroum}%`}
+            {`*Nifty Minion, Early Execution Quorum ${selectedMinion?.minQuorum}%`}
           </Box>
         )}
         {currentError && (
