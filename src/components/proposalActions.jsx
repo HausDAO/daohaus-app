@@ -8,21 +8,22 @@ import { motion } from 'framer-motion';
 import { MaxUint256 } from '@ethersproject/constants';
 
 import { useInjectedProvider } from '../contexts/InjectedProviderContext';
-import { TokenService } from '../services/tokenService';
+import { useMetaData } from '../contexts/MetaDataContext';
 import { useTX } from '../contexts/TXContext';
 import ContentBox from './ContentBox';
 import TextBox from './TextBox';
-import { memberVote } from '../utils/proposalUtils';
-import { supportedChains } from '../utils/chain';
-import { getTerm, getTitle } from '../utils/metadata';
+
 import {
   capitalize,
   daoConnectedAndSameChain,
   isDelegating,
 } from '../utils/general';
-import { useMetaData } from '../contexts/MetaDataContext';
 import MinionExecute from './minionExecute';
 import MinionCancel from './minionCancel';
+import { TokenService } from '../services/tokenService';
+import { memberVote } from '../utils/proposalUtils';
+import { supportedChains } from '../utils/chain';
+import { getTerm, getTitle } from '../utils/metadata';
 import { TX } from '../data/contractTX';
 
 const MotionBox = motion(Box);

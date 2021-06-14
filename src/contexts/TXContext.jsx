@@ -192,12 +192,14 @@ export const TXProvider = ({ children }) => {
       const poll = buildTXPoll({
         ...consolidatedData,
       });
-      return await Transaction({
+      const tx = await Transaction({
         args,
         ...consolidatedData,
         poll,
         onTxHash,
       });
+      data.lifeCycleFns?.afterTx?.();
+      return tx;
     } catch (error) {
       console.error(error);
       data.lifeCycleFns?.onCatch?.();

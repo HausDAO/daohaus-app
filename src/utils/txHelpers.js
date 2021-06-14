@@ -1,10 +1,10 @@
 import { MolochService } from '../services/molochService';
 import { MinionService } from '../services/minionService';
+import { TokenService } from '../services/tokenService';
 import { detailsToJSON } from './general';
 import { valToDecimalString } from './tokenValue';
 import { safeEncodeHexFunction } from './abi';
 import { collapse } from './formBuilder';
-import { TokenService } from '../services/tokenService';
 
 const buildJSONdetails = (data, fields) =>
   JSON.stringify(

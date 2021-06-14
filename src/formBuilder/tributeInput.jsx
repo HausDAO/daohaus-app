@@ -1,8 +1,7 @@
-import { MaxUint256 } from '@ethersproject/constants';
-
 import React, { useEffect, useMemo, useState } from 'react';
-import { Spinner } from '@chakra-ui/react';
 import { useParams } from 'react-router-dom';
+import { MaxUint256 } from '@ethersproject/constants';
+import { Spinner } from '@chakra-ui/react';
 import { ethers } from 'ethers';
 import { utils } from 'web3';
 
