@@ -5,3 +5,7 @@ export const vaultTypeDisplayName = {
   raribleMinion: 'Boost Minion',
   nftInkMinion: 'Boost Minion',
 };
+
+export const vaultUrlPart = vault => {
+  return vault.type === 'treasury' ? `treasury` : `minion/${vault.address}`;
+};

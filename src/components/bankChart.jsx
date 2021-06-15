@@ -161,7 +161,7 @@ const BankChart = ({ overview, customTerms, currentDaoTokens }) => {
                           _hover={{ color: 'secondary.400' }}
                         >
                           {`Time Frame: ${timeframe.name}`}
-                          <Icon as={FaChevronDown} h='12px' w='12px' />
+                          <Icon as={FaChevronDown} h='12px' w='12px' ml={1} />
                         </MenuButton>
                         <MenuList>
                           {bankChartTimeframes.map(time => {

@@ -33,6 +33,7 @@ export const tempVaultData = [
         currentBalance: '0',
       },
     ],
+    nfts: [],
   },
   {
     type: 'minion',
@@ -49,8 +50,7 @@ export const tempVaultData = [
       {
         address: '0xd0a1e359811322d97991e03f863a0c30c2cf029c',
         symbol: 'WETH',
-        icon:
-          'https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2/logo.png',
+        icon: '',
         currentBalance: '0',
       },
     ],
@@ -78,6 +78,13 @@ export const tempVaultData = [
     name: 'Rarible Minion',
     currentBalance: '100',
     address: '0x6856e912b7c79508c347ee702e1716d6578e1a6f',
-    nfts: [],
+    tokens: [],
+    nfts: [
+      {
+        address: '0x6641a0d8c1624edd32d9cbbe4e1b66b0',
+        imageUrl:
+          'https://storage.opensea.io/0x162d3e80d51f96240ae0a44ab3a5b1ea23920ce4/135922017224535324231229674010892265136-1557852625.png',
+      },
+    ],
   },
 ];
