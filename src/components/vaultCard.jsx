@@ -36,7 +36,9 @@ const VaultCard = ({ vault }) => {
           </TextBox>
           <CopyButton text={vault.address} iconProps={{ color: 'grey' }} />
         </Flex>
-        <RouterLink to={`/${daochain}/${daoid}/vaults/${vaultUrlPart(vault)}`}>
+        <RouterLink
+          to={`/dao/${daochain}/${daoid}/vaults/${vaultUrlPart(vault)}`}
+        >
           <Text fontSize='sm'>Open</Text>
         </RouterLink>
       </Flex>
@@ -57,7 +59,7 @@ const VaultCard = ({ vault }) => {
 
         {vault.type !== 'treasury' && vault.nfts.length > 0 && (
           <Box fontSize='sm' mr={3}>
-            {vault.nfts.length} nfts
+            {vault.nfts.length} nft{vault.nfts.length > 1 ? 's' : ''}
           </Box>
         )}
       </Flex>

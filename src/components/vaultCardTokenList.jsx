@@ -23,9 +23,9 @@ const VaultCardTokenList = ({ tokens }) => {
     }
   }, [tokens]);
 
-  const renderTokenIcon = token => {
+  const renderTokenIcon = (token, i) => {
     return (
-      <Flex key={token.address} align='center'>
+      <Flex key={i} align='center'>
         <Image src={token.icon} height='35px' mr='15px' />
       </Flex>
     );
@@ -33,8 +33,8 @@ const VaultCardTokenList = ({ tokens }) => {
 
   return (
     <Flex direction='row' alignItems='center'>
-      {formattedTokenData.tokensWithIcons.map(token => {
-        return renderTokenIcon(token);
+      {formattedTokenData.tokensWithIcons.map((token, i) => {
+        return renderTokenIcon(token, i);
       })}
 
       {formattedTokenData.leftoverCount > 0 && (

@@ -3,22 +3,19 @@ import {
   Menu,
   MenuButton,
   MenuList,
-  // MenuGroup,
   MenuItem,
   Flex,
   Icon,
-  // MenuDivider,
   Text,
 } from '@chakra-ui/react';
 import { RiArrowDropDownFill } from 'react-icons/ri';
-import { membersFilterOptions } from '../utils/memberContent';
 
-const MemberFilters = ({ filter, setFilter }) => {
+const ListFilter = ({ filter, setFilter, options, labelText }) => {
   const [filterOptions, setFilterOptions] = useState();
 
   useEffect(() => {
-    setFilterOptions(membersFilterOptions);
-    setFilter(membersFilterOptions[0]);
+    setFilterOptions(options);
+    setFilter(options[0]);
   }, []);
 
   const handleFilterSelect = option => {
@@ -33,7 +30,7 @@ const MemberFilters = ({ filter, setFilter }) => {
         fontSize={['sm', null, null, 'md']}
         mr={3}
       >
-        Filter By
+        {labelText}
       </Text>
 
       {filterOptions ? (
@@ -50,18 +47,15 @@ const MemberFilters = ({ filter, setFilter }) => {
           </MenuButton>
           <MenuList bg='black'>
             {filterOptions?.map(option => {
-              if (option.type === 'main') {
-                return (
-                  <MenuItem
-                    key={option.value}
-                    onClick={() => handleFilterSelect(option)}
-                    value={option.value}
-                  >
-                    {option.name}
-                  </MenuItem>
-                );
-              }
-              return null;
+              return (
+                <MenuItem
+                  key={option.value}
+                  onClick={() => handleFilterSelect(option)}
+                  value={option.value}
+                >
+                  {option.name}
+                </MenuItem>
+              );
             })}
           </MenuList>
         </Menu>
@@ -70,4 +64,4 @@ const MemberFilters = ({ filter, setFilter }) => {
   );
 };
 
-export default MemberFilters;
+export default ListFilter;

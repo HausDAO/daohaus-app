@@ -60,7 +60,7 @@ export const tempVaultData = [
     type: 'minionSafe',
     name: 'Payroll',
     currentBalance: '22876.26',
-    address: '0x6856e912b7c79508c347ee702e1716d6578e1a6f',
+    address: '0x6856e912b7c79508c347ee702e1716d6578e1a6g',
     tokens: [
       {
         address: '0xd0a1e359811322d97991e03f863a0c30c2cf029c',
@@ -77,11 +77,14 @@ export const tempVaultData = [
     type: 'raribleMinion',
     name: 'Rarible Minion',
     currentBalance: '100',
-    address: '0x6856e912b7c79508c347ee702e1716d6578e1a6f',
+    address: '0x6856e912b7c79508c347ee702e1716d6578e1a6h',
     tokens: [],
     nfts: [
       {
         address: '0x6641a0d8c1624edd32d9cbbe4e1b66b0',
+        name: 'Gittron',
+        creator: '0xd26a3f686d43f2a62ba9eae2ff77e9f516d945b9',
+        lastPrice: '0.25',
         imageUrl:
           'https://storage.opensea.io/0x162d3e80d51f96240ae0a44ab3a5b1ea23920ce4/135922017224535324231229674010892265136-1557852625.png',
       },

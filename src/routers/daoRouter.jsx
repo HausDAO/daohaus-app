@@ -31,8 +31,10 @@ import Snapshot from '../pages/Snapshot';
 import CcoContribution from '../pages/CcoContribution';
 import CcoHelper from '../pages/CcoHelper';
 import CcoAdmin from '../pages/CcoAdmin';
-import { isDaosquareCcoPath } from '../utils/cco';
 import Vaults from '../pages/Vaults';
+import MinionVault from '../pages/MinionVault';
+import Treasury from '../pages/Treasury';
+import { isDaosquareCcoPath } from '../utils/cco';
 
 const DaoRouter = () => {
   const { path } = useRouteMatch();
@@ -94,6 +96,24 @@ const DaoRouter = () => {
         </Route>
         <Route exact path={`${path}/vaults`}>
           <Vaults
+            currentDaoTokens={currentDaoTokens}
+            overview={daoOverview}
+            customTerms={customTerms}
+            daoMember={daoMember}
+            daoVaults={daoVaults}
+          />
+        </Route>
+        <Route exact path={`${path}/vaults/treasury`}>
+          <Treasury
+            currentDaoTokens={currentDaoTokens}
+            overview={daoOverview}
+            customTerms={customTerms}
+            daoMember={daoMember}
+            daoVaults={daoVaults}
+          />
+        </Route>
+        <Route exact path={`${path}/vaults/minion/:minion`}>
+          <MinionVault
             currentDaoTokens={currentDaoTokens}
             overview={daoOverview}
             customTerms={customTerms}
