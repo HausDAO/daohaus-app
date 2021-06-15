@@ -17,6 +17,7 @@ import { TXProvider } from './TXContext';
 import { DaoMemberProvider } from './DaoMemberContext';
 import { useUser } from './UserContext';
 import { UBERHAUS_DATA } from '../utils/uberhaus';
+import { tempVaultData } from '../content/temp-vault-data';
 // import { UBERHAUS_DATA } from '../utils/uberhaus';
 
 export const DaoContext = createContext();
@@ -50,6 +51,9 @@ export const DaoProvider = ({ children }) => {
     null,
   );
   const [isUberHaus, setIsUberHaus] = useState(false);
+
+  // TODO: temp balance data, use session storage here when we have a real fetch
+  const [daoVaults] = useState(tempVaultData);
 
   // const [currentDaoAddress, setCurrentDaoAddress] = useState(daoid);
   const hasPerformedBatchQuery = useRef(false);
@@ -164,6 +168,7 @@ export const DaoProvider = ({ children }) => {
         daoActivities,
         daoMembers,
         daoOverview,
+        daoVaults,
         setIsUberHaus,
         isCorrectNetwork,
         refetch,
@@ -191,6 +196,7 @@ export const useDao = () => {
     daoMembers,
     setIsUberHaus,
     daoOverview,
+    daoVaults,
     isUberHaus,
     isCorrectNetwork,
     refetch,
@@ -203,6 +209,7 @@ export const useDao = () => {
     setIsUberHaus,
     daoMembers,
     daoOverview,
+    daoVaults,
     isCorrectNetwork,
     refetch,
     hasPerformedBatchQuery,

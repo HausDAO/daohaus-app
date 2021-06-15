@@ -32,6 +32,7 @@ import CcoContribution from '../pages/CcoContribution';
 import CcoHelper from '../pages/CcoHelper';
 import CcoAdmin from '../pages/CcoAdmin';
 import { isDaosquareCcoPath } from '../utils/cco';
+import Vaults from '../pages/Vaults';
 
 const DaoRouter = () => {
   const { path } = useRouteMatch();
@@ -43,6 +44,7 @@ const DaoRouter = () => {
     daoOverview,
     daoMembers,
     daoProposals,
+    daoVaults,
   } = useDao();
   const { isMember, daoMember, delegate } = useDaoMember();
 
@@ -88,6 +90,15 @@ const DaoRouter = () => {
             overview={daoOverview}
             customTerms={customTerms}
             daoMember={daoMember}
+          />
+        </Route>
+        <Route exact path={`${path}/vaults`}>
+          <Vaults
+            currentDaoTokens={currentDaoTokens}
+            overview={daoOverview}
+            customTerms={customTerms}
+            daoMember={daoMember}
+            daoVaults={daoVaults}
           />
         </Route>
         <Route exact path={`${path}/members`}>
