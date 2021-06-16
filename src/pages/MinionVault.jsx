@@ -8,6 +8,7 @@ import BankChart from '../components/bankChart';
 import MainViewLayout from '../components/mainViewLayout';
 import TextBox from '../components/TextBox';
 import VaultNftCard from '../components/vaultNftCard';
+import MinionTokenList from '../components/minionTokenList';
 
 // TODO: will rework with new data
 // nft list can be latest 3
@@ -19,11 +20,16 @@ const MinionVault = ({
   daoMember,
   delegate,
   daoVaults,
+  isMember,
 }) => {
   const { daoid, minion } = useParams();
   const toast = useToast();
   const [needsSync, setNeedsSync] = useState(false);
   const [vault, setVault] = useState(null);
+
+  const sendToken = () => {
+    console.log('sendToken');
+  };
 
   const handleCopy = () => {
     toast({
@@ -85,6 +91,12 @@ const MinionVault = ({
               customTerms={customTerms}
             />
             <BankList tokens={currentDaoTokens} needsSync={needsSync} />
+
+            <MinionTokenList
+              minion={minion}
+              action={sendToken}
+              isMember={isMember}
+            />
           </Box>
           <Box
             w={['100%', null, null, null, '30%']}

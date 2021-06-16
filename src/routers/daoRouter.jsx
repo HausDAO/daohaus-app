@@ -119,6 +119,7 @@ const DaoRouter = () => {
             customTerms={customTerms}
             daoMember={daoMember}
             daoVaults={daoVaults}
+            isMember={isMember}
           />
         </Route>
         <Route exact path={`${path}/members`}>

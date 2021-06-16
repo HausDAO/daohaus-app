@@ -21,7 +21,7 @@ const VaultCard = ({ vault }) => {
       w={['100%', '100%', '100%', '340px', '340px']}
       h='220px'
       mt={5}
-      bgImage={bgImgUrl ? `url(${bgImgUrl})` : null}
+      bgImg={bgImgUrl ? `url(${bgImgUrl})` : null}
     >
       <Flex
         direction='row'
