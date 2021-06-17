@@ -36,8 +36,8 @@ export const tempVaultData = [
     nfts: [],
   },
   {
-    type: 'raribleMinion',
-    name: 'Rarible Minion',
+    type: 'nftInkMinion',
+    name: 'Nifty Ink Minion',
     currentBalance: '100',
     address: '0x6856e912b7c79508c347ee702e1716d6578e1a6h',
     tokens: [],
