@@ -37,7 +37,6 @@ import { isDaosquareCcoPath } from '../utils/cco';
 const DaoRouter = () => {
   const { path } = useRouteMatch();
   const { currentDaoTokens } = useToken();
-
   const {
     daoActivities,
     isCorrectNetwork,

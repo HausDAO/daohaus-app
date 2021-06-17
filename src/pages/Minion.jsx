@@ -360,9 +360,6 @@ const MinionDetails = ({
                       action={sendNativeToken}
                       isMember={isMember}
                     />
-                    {daochain !== '0x64' && (
-                      <Flex>View token data on etherscan</Flex>
-                    )}
 
                     <MinionTokenList
                       minion={minionData.minionAddress}

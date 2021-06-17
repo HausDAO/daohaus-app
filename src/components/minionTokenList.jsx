@@ -23,9 +23,13 @@ const MinionTokenList = ({
   useEffect(() => {
     const getContractBalance = async () => {
       try {
-        if (daochain === '0x1' || daochain === '0x4' || daochain === '0x2a') {
+        if (
+          daochain === '0x1' ||
+          daochain === '0x4' ||
+          daochain === '0x2a' ||
+          daochain === '0x89'
+        ) {
           // eth chains not supported yet
-          // may need to do something different for matic too
           setTokens(await getEtherscanTokenData(minion, daochain));
         } else {
           setTokens(await getBlockScoutTokenData(minion));

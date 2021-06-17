@@ -2,24 +2,34 @@ import { NFTService } from '../services/nftService';
 import { chainByID } from './chain';
 import { fetchTokenData } from './tokenValue';
 
-const fetchEtherscanAPIData = async (address, daochain) => {
+const fetchEtherscanAPIData = async (address, daochain, module) => {
+  console.log('fetch', address, daochain);
   try {
-    const key = process.env.REACT_APP_ETHERSCAN_KEY;
-    const url = `${chainByID(daochain).tokenlist_api_url}${address}${key &&
-      `&apikey=${key}`}`;
+    let key;
+    if (daochain === '0x84') {
+      key = process.env.REACT_APP_POLYGONSCAN_KEY;
+    } else {
+      key = process.env.REACT_APP_ETHERSCAN_KEY;
+    }
+    const url = `${
+      chainByID(daochain).tokenlist_api_url
+    }${module}${address}${key && `&apikey=${key}`}`;
     const response = await fetch(url);
     const json = await response.json();
+    console.log('json.result', json.result);
     if (!json.result || json.status === '0') {
       const msg = json.result;
-      throw new Error(msg);
+      console.warn('error', msg);
+      return null;
     }
     return json.result;
   } catch (error) {
-    throw new Error(error);
+    return null;
   }
 };
 
-const parseEtherscan = async (json, address, daochain) => {
+const parseEtherscan = async (json, address, type) => {
+  const tokenData = await fetchTokenData();
   if (json) {
     const contractAddressObj = json.reduce((acc, transaction) => {
       (acc[transaction.contractAddress] =
@@ -35,99 +45,160 @@ const parseEtherscan = async (json, address, daochain) => {
           return acc;
         }, 0);
 
+        const usd = tokenData[key]?.price || 0;
+        const totalUSD =
+          parseFloat(+totalBalance / 10 ** +value[0].tokenDecimal) * +usd;
+
         return {
           contractAddress: key,
           balance: totalBalance,
           tokenName: value[0].tokenName,
-          type: 'ERC-721',
+          type,
           decimals: value[0].tokenDecimal,
           symbol: value[0].tokenSymbol,
+          usd,
+          totalUSD,
         };
       },
     );
 
-    let erc721s = balanceData
-      .filter(token => token.type === 'ERC-721')
-      .map(async b => {
-        const promises = [];
-        const nftService = NFTService({
-          tokenAddress: b.contractAddress,
-          chainID: daochain,
-        });
-
-        for (let i = 0; i < b.balance; i += 1) {
-          const tid = nftService('tokenOfOwnerByIndex')({
-            accountAddr: address,
-            index: i,
-          });
-          promises.push(tid);
-        }
-        b.tokenIds = await Promise.all(promises);
-        return b;
-      });
-    erc721s = await Promise.all(erc721s);
-
-    erc721s.map(async nft => {
-      const promises2 = [];
-      const nftService = NFTService({
-        tokenAddress: nft.contractAddress,
-        chainID: daochain,
-      });
-      nft.tokenIds.map(tid => {
-        if (tid) {
-          const uri = nftService('tokenURI')({
-            tokenId: tid,
-          });
-          promises2.push(uri);
-        } else {
-          promises2.push(Promise.resolve());
-        }
-        return null;
-      });
-      nft.tokenURIs = await Promise.all(promises2);
-      return nft;
-    });
-    erc721s = await Promise.all(erc721s);
-    return erc721s;
+    console.log('balanceData', balanceData);
+    return balanceData;
   }
 };
 
-export const getEtherscanTokenData = async (address, daochain) => {
-  const json = await fetchEtherscanAPIData(address, daochain);
-  const tokenData = parseEtherscan(json, address, daochain);
-  return tokenData;
+export const fetchNFTMetaData = async (balanceData, address, daochain) => {
+  if (!balanceData) {
+    return [];
+  }
+  let erc721s = balanceData
+    .filter(token => token.type === 'ERC-721')
+    .map(async b => {
+      const promises = [];
+      const nftService = NFTService({
+        tokenAddress: b.contractAddress,
+        chainID: daochain,
+      });
+
+      for (let i = 0; i < b.balance; i += 1) {
+        const tid = nftService('tokenOfOwnerByIndex')({
+          accountAddr: address,
+          index: i,
+        });
+        promises.push(tid);
+      }
+      b.tokenIds = await Promise.all(promises);
+      return b;
+    });
+  erc721s = await Promise.all(erc721s);
+
+  erc721s.map(async nft => {
+    const promises2 = [];
+    const nftService = NFTService({
+      tokenAddress: nft.contractAddress,
+      chainID: daochain,
+    });
+    nft.tokenIds.map(tid => {
+      if (tid) {
+        const uri = nftService('tokenURI')({
+          tokenId: tid,
+        });
+        promises2.push(uri);
+      } else {
+        promises2.push(Promise.resolve());
+      }
+      return null;
+    });
+    nft.tokenURIs = await Promise.all(promises2);
+    return nft;
+  });
+  erc721s = await Promise.all(erc721s);
+  return erc721s;
 };
 
-const fetchBlockScoutAPIData = async address => {
+export const getEtherscanTokenData = async (address, daochain) => {
+  const erc20Json = await fetchEtherscanAPIData(
+    address,
+    daochain,
+    '?module=account&action=tokentx&address=',
+  );
+  const erc721Json = await fetchEtherscanAPIData(
+    address,
+    daochain,
+    '?module=account&action=tokennfttx&address=',
+  );
+
+  console.log('erc721Json', erc721Json);
+  console.log('erc20Json', erc20Json);
+
+  let erc20tokenData;
+  if (erc20Json) {
+    console.log('erc20Json', erc20Json);
+
+    erc20tokenData = (await parseEtherscan(erc20Json, address, 'ERC-20')) || [];
+  }
+  let erc721tokenData;
+  let erc721withMeta = [];
+  if (erc721Json) {
+    erc721tokenData =
+      (await parseEtherscan(erc721Json, address, 'ERC-721')) || [];
+    console.log('erc721tokenData????', erc721tokenData);
+
+    erc721withMeta =
+      (await fetchNFTMetaData(erc721tokenData, address, daochain)) || [];
+  }
+  console.log('erc721withMeta????', erc721withMeta);
+  return [...erc20tokenData, ...erc721withMeta];
+};
+
+const fetchBlockScoutAPIData = async (address, module) => {
   try {
     const daochain = '0x64';
-    const url = `${chainByID(daochain).tokenlist_api_url}${address}`;
-    console.log('url', url);
+
+    const url = `${chainByID(daochain).tokenlist_api_url}${module}${address}`;
+    console.log('url?????????', url);
     const response = await fetch(url);
     const json = await response.json();
     if (!json.result || json.status === '0') {
       const msg = json.message;
       throw new Error(msg);
     }
-    return json;
+    return json.result;
   } catch (error) {
     throw new Error(error);
   }
 };
 
 export const fetchNativeBalance = async (address, daochain) => {
-  if (daochain === '0x1' || daochain === '0x4' || daochain === '0x2a') {
-    // eth chains not supported yet
-    // may need to do something different for matic too
-  } else {
+  console.log('address native balance', address, daochain);
+
+  if (
+    daochain === '0x1' ||
+    daochain === '0x4' ||
+    daochain === '0x2a' ||
+    daochain === '0x89'
+  ) {
+    console.log('etherscan native');
     try {
-      const url = `https://blockscout.com/xdai/mainnet/api?module=account&action=balance&address=${address}`;
-      const response = await fetch(url);
-      const json = await response.json();
-      if (!json.result || json.status === '0') {
-        const msg = json.message;
-        throw new Error(msg);
-      }
+      const json = await fetchEtherscanAPIData(
+        address,
+        daochain,
+        '?module=account&action=balance&address=',
+      );
+
+      return json;
+    } catch (error) {
+      throw new Error(error);
+    }
+  } else {
+    console.log('blockscout native');
+
+    try {
+      const json = await fetchBlockScoutAPIData(
+        address,
+        '?module=account&action=balance&address=',
+      );
+
       return json;
     } catch (error) {
       throw new Error(error);
@@ -138,7 +209,7 @@ const parseBlockScout = async (json, address) => {
   const tokenData = await fetchTokenData();
   const daochain = '0x64';
 
-  let erc721s = json.result
+  let erc721s = json
     .filter(token => token.type === 'ERC-721')
     .map(async b => {
       const promises = [];
@@ -176,7 +247,7 @@ const parseBlockScout = async (json, address) => {
     return nft;
   });
   erc721s = await Promise.all(erc721s);
-  const erc20s = json.result
+  const erc20s = json
     .filter(token => token.type === 'ERC-20')
     .sort((a, b) => b.balance - a.balance)
     .map(t => {
@@ -190,7 +261,8 @@ const parseBlockScout = async (json, address) => {
 };
 
 export const getBlockScoutTokenData = async address => {
-  const json = await fetchBlockScoutAPIData(address);
+  const module = '?module=account&action=tokenlist&address=';
+  const json = await fetchBlockScoutAPIData(address, module);
   console.log('results', json.result);
 
   const tokenData = parseBlockScout(json, address);

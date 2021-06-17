@@ -13,8 +13,7 @@ export const supportedChains = {
     rpc_url: `https://${process.env.REACT_APP_RPC_URI}.eth.rpc.rivet.cloud/`,
     abi_api_url:
       'https://api.etherscan.io/api?module=contract&action=getabi&address=',
-    tokenlist_api_url:
-      'https://api.etherscan.io/api?module=account&action=tokennfttx&address=',
+    tokenlist_api_url: 'https://api.etherscan.io/api',
     metadata_api_url: 'https://data.daohaus.club',
     subgraph_url:
       'https://api.thegraph.com/subgraphs/name/odyssy-automaton/daohaus',
@@ -43,8 +42,7 @@ export const supportedChains = {
     rpc_url: `https://${process.env.REACT_APP_RPC_URI}.rinkeby.rpc.rivet.cloud/`,
     abi_api_url:
       'https://api-rinkeby.etherscan.io/api?module=contract&action=getabi&address=',
-    tokenlist_api_url:
-      'https://api-rinkeby.etherscan.io/api?module=account&action=tokennfttx&address=',
+    tokenlist_api_url: 'https://api-rinkeby.etherscan.io/api',
     metadata_api_url: 'https://data.daohaus.club',
     subgraph_url:
       'https://api.thegraph.com/subgraphs/name/odyssy-automaton/daohaus-rinkeby',
@@ -83,8 +81,7 @@ export const supportedChains = {
     rpc_url: `https://kovan.infura.io/v3/${process.env.REACT_APP_INFURA_PROJECT_ID}`,
     abi_api_url:
       'https://api-kovan.etherscan.io/api?module=contract&action=getabi&address=',
-    tokenlist_api_url:
-      'https://api-kovan.etherscan.io/api?module=account&action=tokennfttx&address=',
+    tokenlist_api_url: 'https://api-kovan.etherscan.io/api',
     metadata_api_url: 'https://data.daohaus.club',
     subgraph_url:
       'https://api.thegraph.com/subgraphs/name/odyssy-automaton/daohaus-kovan',
@@ -114,8 +111,7 @@ export const supportedChains = {
     rpc_url: 'https://dai.poa.network',
     abi_api_url:
       'https://blockscout.com/xdai/mainnet/api?module=contract&action=getabi&address=',
-    tokenlist_api_url:
-      'https://blockscout.com/xdai/mainnet/api?module=account&action=tokenlist&address=',
+    tokenlist_api_url: 'https://blockscout.com/xdai/mainnet/api',
     metadata_api_url: 'https://data.daohaus.club',
     subgraph_url:
       'https://api.thegraph.com/subgraphs/name/odyssy-automaton/daohaus-xdai',
@@ -157,9 +153,9 @@ export const supportedChains = {
     providers: ['walletconnect'],
     rpc_url: 'https://rpc-mainnet.maticvigil.com',
     metadata_api_url: 'https://data.daohaus.club',
-    abi_api_url: 'https://mainnet.maticvigil.com/api/swagger/',
-    tokenlist_api_url:
-      'https://mainnet.maticvigil.com/api/swagger?module=account&action=tokenlist&address=',
+    abi_api_url:
+      'https://api.polygonscan.com/api?module=contract&action=getabi&address=',
+    tokenlist_api_url: 'https://api.polygonscan.com/api',
     subgraph_url:
       'https://api.thegraph.com/subgraphs/name/odyssy-automaton/daohaus-matic',
     stats_graph_url:
@@ -171,7 +167,7 @@ export const supportedChains = {
     dai_contract: '0x8f3Cf7ad23Cd3CaDbD9735AFf958023239c6A063',
     wrapper_contract: '0x0d500b1d8e8ef31e21c99d1db9a6444d3adf1270',
     wrap_n_zap_factory_addr: '0xbf9e327d465A4A160fA7805282Fb8C7aB892770a',
-    block_explorer: 'https://explorer-mainnet.maticvigil.com',
+    block_explorer: 'https://polygonscan.com/',
     superfluid: {
       minion_factory_addr: '0x52acf023d38A31f7e7bC92cCe5E68d36cC9752d6',
       resolver: '0xE0cc76334405EE8b39213E620587d815967af39C',
