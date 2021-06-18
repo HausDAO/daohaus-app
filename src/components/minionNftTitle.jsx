@@ -43,11 +43,21 @@ const MinionNftTile = ({
       if (meta.indexOf('ipfs://ipfs/') === 0) {
         meta = meta.replace('ipfs://ipfs/', 'https://ipfs.io/ipfs/');
       }
+
       if (meta.indexOf('https://') !== 0) {
         meta = '';
       }
       try {
         const jsonMeta = await getNftMeta(meta);
+        if (jsonMeta?.image.indexOf('ipfs://ipfs/') === 0) {
+          jsonMeta.image = jsonMeta.image.replace(
+            'ipfs://ipfs/',
+            'https://ipfs.io/ipfs/',
+          );
+        }
+        if (jsonMeta?.image.indexOf('https://') !== 0) {
+          jsonMeta.image = '';
+        }
         setTokenDetail(jsonMeta);
       } catch (err) {
         console.log('error with meta URI', err);

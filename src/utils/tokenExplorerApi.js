@@ -3,7 +3,6 @@ import { chainByID } from './chain';
 import { fetchTokenData } from './tokenValue';
 
 const fetchEtherscanAPIData = async (address, daochain, module) => {
-  console.log('fetch', address, daochain);
   try {
     let key;
     if (daochain === '0x84') {
@@ -16,7 +15,6 @@ const fetchEtherscanAPIData = async (address, daochain, module) => {
     }${module}${address}${key && `&apikey=${key}`}`;
     const response = await fetch(url);
     const json = await response.json();
-    console.log('json.result', json.result);
     if (!json.result || json.status === '0') {
       const msg = json.result;
       console.warn('error', msg);
@@ -131,23 +129,18 @@ export const getEtherscanTokenData = async (address, daochain) => {
   console.log('erc721Json', erc721Json);
   console.log('erc20Json', erc20Json);
 
-  let erc20tokenData;
+  let erc20tokenData = [];
   if (erc20Json) {
-    console.log('erc20Json', erc20Json);
-
     erc20tokenData = (await parseEtherscan(erc20Json, address, 'ERC-20')) || [];
   }
-  let erc721tokenData;
+  let erc721tokenData = [];
   let erc721withMeta = [];
   if (erc721Json) {
     erc721tokenData =
       (await parseEtherscan(erc721Json, address, 'ERC-721')) || [];
-    console.log('erc721tokenData????', erc721tokenData);
-
     erc721withMeta =
       (await fetchNFTMetaData(erc721tokenData, address, daochain)) || [];
   }
-  console.log('erc721withMeta????', erc721withMeta);
   return [...erc20tokenData, ...erc721withMeta];
 };
 
@@ -156,7 +149,6 @@ const fetchBlockScoutAPIData = async (address, module) => {
     const daochain = '0x64';
 
     const url = `${chainByID(daochain).tokenlist_api_url}${module}${address}`;
-    console.log('url?????????', url);
     const response = await fetch(url);
     const json = await response.json();
     if (!json.result || json.status === '0') {
@@ -170,15 +162,12 @@ const fetchBlockScoutAPIData = async (address, module) => {
 };
 
 export const fetchNativeBalance = async (address, daochain) => {
-  console.log('address native balance', address, daochain);
-
   if (
     daochain === '0x1' ||
     daochain === '0x4' ||
     daochain === '0x2a' ||
     daochain === '0x89'
   ) {
-    console.log('etherscan native');
     try {
       const json = await fetchEtherscanAPIData(
         address,
@@ -191,8 +180,6 @@ export const fetchNativeBalance = async (address, daochain) => {
       throw new Error(error);
     }
   } else {
-    console.log('blockscout native');
-
     try {
       const json = await fetchBlockScoutAPIData(
         address,
@@ -255,15 +242,13 @@ const parseBlockScout = async (json, address) => {
       const totalUSD = parseFloat(+t.balance / 10 ** +t.decimals) * +usd;
       return { ...t, ...{ usd, totalUSD } };
     });
-  console.log('erc20s', erc20s);
-  console.log('erc721s', erc721s);
+
   return [...erc20s, ...erc721s];
 };
 
 export const getBlockScoutTokenData = async address => {
   const module = '?module=account&action=tokenlist&address=';
   const json = await fetchBlockScoutAPIData(address, module);
-  console.log('results', json.result);
 
   const tokenData = parseBlockScout(json, address);
   return tokenData;
