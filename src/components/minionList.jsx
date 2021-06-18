@@ -42,13 +42,6 @@ const MinionList = () => {
           badgeTextColor: 'white',
           badgeName: 'SF',
         };
-      case MINION_TYPES.ENS:
-        return {
-          minionUrlType: 'ens-minion',
-          badgeColor: 'blue',
-          badgeTextColor: 'white',
-          badgeName: 'ENS',
-        };
       case MINION_TYPES.UBER:
         return {
           minionUrlType: minionType,
