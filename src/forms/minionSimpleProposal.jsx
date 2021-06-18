@@ -1,4 +1,6 @@
 import React, { useState, useEffect } from 'react';
+import Web3 from 'web3';
+
 import { useForm } from 'react-hook-form';
 import {
   Button,
@@ -259,7 +261,32 @@ const MinionProposalForm = () => {
         const msg = daochain === '0x64' ? json.message : json.result;
         throw new Error(msg);
       }
-      const localAbiFunctions = getFunctions(JSON.parse(json.result));
+      let parsed = JSON.parse(json.result);
+      const imp = parsed.find(p => p.name === 'implementation');
+      if (imp) {
+        console.log('imp', imp);
+
+        const rpcUrl = chainByID(daochain).rpc_url;
+        const web3 = new Web3(new Web3.providers.HttpProvider(rpcUrl));
+        const abi = parsed;
+        const contract = new web3.eth.Contract(abi, value);
+        const newaddr = await contract.methods.implementation().call();
+
+        const url2 = `${chainByID(daochain).abi_api_url}${newaddr}${key &&
+          `&apikey=${key}`}`;
+
+        console.log(newaddr);
+
+        const response2 = await fetch(url2);
+        const json2 = await response2.json();
+
+        if (!json2.result || json2.status === '0') {
+          const msg = daochain === '0x64' ? json2.message : json2.result;
+          throw new Error(msg);
+        }
+        parsed = JSON.parse(json2.result);
+      }
+      const localAbiFunctions = getFunctions(parsed);
       setCurrentError(null);
       setAbiParams(null);
       setAbiFunctions(localAbiFunctions);
