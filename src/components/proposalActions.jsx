@@ -16,7 +16,7 @@ import { createPoll } from '../services/pollService';
 import { MolochService } from '../services/molochService';
 import ContentBox from './ContentBox';
 import TextBox from './TextBox';
-import { memberVote } from '../utils/proposalUtils';
+import { memberVote, MINION_TYPES } from '../utils/proposalUtils';
 import { supportedChains } from '../utils/chain';
 import { getTerm, getTitle } from '../utils/metadata';
 import {
@@ -70,7 +70,6 @@ const ProposalVote = ({
   } = useOverlay();
   const { refreshDao } = useTX();
   const { customTerms } = useMetaData();
-
   const [enoughDeposit, setEnoughDeposit] = useState(false);
 
   const currentlyVoting = proposal => {
@@ -329,6 +328,7 @@ const ProposalVote = ({
 
   const processProposal = async proposal => {
     setLoading(true);
+
     let proposalType = 'other';
     let processFn = 'processProposal';
 
@@ -396,6 +396,8 @@ const ProposalVote = ({
       }
     }
   }, [daoProposals]);
+
+  console.log(proposal);
 
   return (
     <>
@@ -574,8 +576,18 @@ const ProposalVote = ({
                         >
                           {+proposal?.noShares > +proposal?.yesShares &&
                             'Not Passing'}
-                          {+proposal?.yesShares > +proposal?.noShares &&
-                            'Currently Passing'}
+                          {+proposal?.yesShares > +proposal?.noShares && (
+                            <Box>
+                              Currently Passing
+                              {proposal?.minion?.minionType ===
+                                MINION_TYPES.NIFTY && (
+                                <>
+                                  {` Quorum Needed ${proposal?.minion?.minQuorum}% `}
+                                  <MinionExecute proposal={proposal} early />
+                                </>
+                              )}
+                            </Box>
+                          )}
                           {+proposal?.yesShares === 0 &&
                             +proposal?.noShares === 0 &&
                             'Awaiting Votes'}
@@ -596,6 +608,17 @@ const ProposalVote = ({
                             proposal?.status === 'ReadyForProcessing') &&
                             +proposal?.noShares > +proposal?.yesShares &&
                             'Failed'}
+                          {/* TODO use const */}
+                          {(proposal?.status === 'GracePeriod' ||
+                            proposal?.status === 'ReadyForProcessing') &&
+                            +proposal?.yesShares > +proposal?.noShares &&
+                            proposal?.minion?.minionType ===
+                              MINION_TYPES.NIFTY && (
+                              <>
+                                {` Quorum Needed ${proposal?.minion?.minQuorum}% `}
+                                <MinionExecute proposal={proposal} early />
+                              </>
+                            )}
                         </TextBox>
                       </Flex>
                     </>

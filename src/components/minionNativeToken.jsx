@@ -20,7 +20,8 @@ const MinionNativeToken = ({ action, isMember }) => {
     const getContractBalance = async () => {
       try {
         const native = await fetchNativeBalance(minion, daochain);
-        setNativeBalance(native.result / 10 ** 18);
+        console.log('native data', native);
+        setNativeBalance(native / 10 ** 18);
       } catch (err) {
         console.error(err);
       }

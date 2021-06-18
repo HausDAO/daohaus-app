@@ -1,4 +1,6 @@
 import React, { useEffect, useState } from 'react';
+import Web3 from 'web3';
+
 import {
   Box,
   Flex,
@@ -75,6 +77,7 @@ const ProposalMinionCard = ({ proposal }) => {
 
   useEffect(() => {
     const getAbi = async () => {
+      console.log('getABI', minionDeets);
       try {
         const key =
           daochain === '0x64' ? '' : process.env.REACT_APP_ETHERSCAN_KEY;
@@ -87,6 +90,22 @@ const ProposalMinionCard = ({ proposal }) => {
           return;
         }
         const parsed = JSON.parse(json.result);
+        console.log('parsed', parsed);
+        const imp = parsed.find(p => p.name === 'implementation');
+        if (imp) {
+          console.log('imp', imp);
+
+          const rpcUrl = chainByID(daochain).rpc_url;
+          const web3 = new Web3(new Web3.providers.HttpProvider(rpcUrl));
+
+          const abi = parsed;
+          const contract = new web3.eth.Contract(abi, minionDeets.to);
+          const newaddr = await contract.methods.implementation().call();
+          console.log(newaddr);
+          setMinionDeets({ ...minionDeets, ...{ to: newaddr } });
+          console.log({ ...minionDeets, ...{ to: newaddr } });
+          return null;
+        }
         abiDecoder.addABI(parsed);
         const localDecodedData = abiDecoder.decodeMethod(minionDeets.data);
         setDecodedData(localDecodedData);

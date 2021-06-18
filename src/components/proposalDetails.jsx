@@ -220,6 +220,7 @@ const MinionBox = ({ proposal, daoOverview }) => {
   }
 
   const { minionType } = proposal.minion;
+
   if (minionType === MINION_TYPES.UBER) {
     return (
       <MemberIndicator
@@ -233,14 +234,17 @@ const MinionBox = ({ proposal, daoOverview }) => {
       />
     );
   }
-  if (minionType === MINION_TYPES.VANILLA) {
+  if (
+    minionType === MINION_TYPES.VANILLA ||
+    minionType === MINION_TYPES.NIFTY
+  ) {
     return (
       <MemberIndicator
         address={proposal?.minionAddress}
         label='minion'
         tooltip
         tooltipText={TIP_LABELS.MINION_PROPOSAL}
-        link='/'
+        link={`/dao/${daochain}/${daoid}/settings/minion/${proposal.minionAddress}`}
         shouldFetchProfile={false}
         name={minionName}
       />
