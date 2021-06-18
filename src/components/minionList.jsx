@@ -23,7 +23,7 @@ const MinionList = () => {
   const { daoOverview } = useDao();
   const { daochain, daoid } = useParams();
   const toast = useToast();
-
+  console.log('daoOverview', daoOverview);
   const minions = useMemo(() => {
     if (daoOverview?.minions) {
       return daoOverview?.minions.sort((minionA, minionB) =>
@@ -41,13 +41,6 @@ const MinionList = () => {
           badgeColor: 'green',
           badgeTextColor: 'white',
           badgeName: 'SF',
-        };
-      case MINION_TYPES.ENS:
-        return {
-          minionUrlType: 'ens-minion',
-          badgeColor: 'blue',
-          badgeTextColor: 'white',
-          badgeName: 'ENS',
         };
       case MINION_TYPES.UBER:
         return {
