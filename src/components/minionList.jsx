@@ -69,20 +69,6 @@ const MinionList = () => {
     });
   };
 
-  const getMinionUrlType = minionType => {
-    switch (minionType) {
-      case MINION_TYPES.SUPERFLUID: {
-        return 'superfluid-minion';
-      }
-      case MINION_TYPES.NIFTY: {
-        return 'nifty-minion';
-      }
-      default: {
-        return 'minion';
-      }
-    }
-  };
-
   return (
     <ContentBox d='flex' flexDirection='column' position='relative'>
       <Stack spacing={3}>
@@ -97,7 +83,7 @@ const MinionList = () => {
             badgeColor,
             badgeTextColor,
             badgeName,
-          } = getMinionUrlType(minionType);
+          } = getMinionData(minionType);
 
           return (
             <Flex
