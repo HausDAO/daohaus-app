@@ -19,10 +19,16 @@ import MinionNftTile from './minionNftTitle';
 import { useOverlay } from '../contexts/OverlayContext';
 import TextBox from './TextBox';
 import GenericModal from '../modals/genericModal';
-
 import { useInjectedProvider } from '../contexts/InjectedProviderContext';
 
-const MinionTokenListCard = ({ token, action, isMember }) => {
+const MinionTokenListCard = ({
+  token,
+  sendErc20Action,
+  sendErc721Action,
+  sellNiftyAction,
+  boost,
+  isMember,
+}) => {
   const { address, injectedChain } = useInjectedProvider();
   const toast = useToast();
   const { daochain } = useParams();
@@ -44,7 +50,7 @@ const MinionTokenListCard = ({ token, action, isMember }) => {
   };
 
   const sendToken = async values => {
-    action(values, token);
+    sendErc20Action(values, token);
   };
 
   return (
@@ -141,7 +147,11 @@ const MinionTokenListCard = ({ token, action, isMember }) => {
               <MinionNftTile
                 key={idx}
                 tokenId={token.tokenIds[idx]}
+                token={token}
                 meta={meta}
+                boost={boost}
+                sendErc721Action={sendErc721Action}
+                sellNiftyAction={sellNiftyAction}
               />
             ))}
         </Flex>

@@ -32,6 +32,7 @@ import { detailsToJSON, daoConnectedAndSameChain } from '../utils/general';
 import { useMetaData } from '../contexts/MetaDataContext';
 import { createForumTopic } from '../utils/discourse';
 import { MINION_TYPES } from '../utils/proposalUtils';
+import PaymentInput from './paymentInput';
 
 const MinionProposalForm = () => {
   const [loading, setLoading] = useState(false);
@@ -59,17 +60,24 @@ const MinionProposalForm = () => {
   const [abiParams, setAbiParams] = useState(null);
   const [hexSwitch, setHexSwitch] = useState(null);
   const [minions, setMinions] = useState([]);
+  const [selectedMinion, setSelectedMinion] = useState(null);
   const now = (new Date().getTime() / 1000).toFixed();
 
-  const { handleSubmit, errors, register } = useForm();
+  const { handleSubmit, errors, register, setValue, getValues } = useForm();
 
   useEffect(() => {
     if (daoOverview?.minions) {
+      console.log('local minions', daoOverview?.minions);
       const localMinions = daoOverview.minions
-        .filter(minion => minion.minionType === MINION_TYPES.VANILLA)
+        .filter(
+          minion =>
+            minion.minionType === MINION_TYPES.VANILLA ||
+            minion.minionType === MINION_TYPES.NIFTY,
+        )
         .map(minion => ({
-          minionAdddress: minion.minionAddress,
+          minionAddress: minion.minionAddress,
           minionName: minion.details,
+          minionType: minion.minionType,
         }));
       setMinions(localMinions);
     }
@@ -89,11 +97,14 @@ const MinionProposalForm = () => {
   }, [errors]);
 
   const onSubmit = async values => {
-    console.log('values', values);
     setLoading(true);
-    const minionName = minions.find(
-      minion => minion.minionAddress === values.minionContract,
-    )?.minionName;
+    const minion = minions.find(
+      minion =>
+        minion.minionAddress.toLowerCase() ===
+        values.minionContract.toLowerCase(),
+    );
+
+    const minionName = minion?.minionName;
     const valueWei = injectedProvider.utils.toWei(values.value);
 
     const inputValues = [];
@@ -127,15 +138,28 @@ const MinionProposalForm = () => {
       }
     }
     const details = detailsToJSON({
-      title: `Minion proposal from ${minionName}`,
+      title: minionName || `Minion proposal`,
       description: values.description,
     });
-    const args = [
-      values.targetContract,
-      valueWei || '0',
-      values.dataValue || hexData,
-      details,
-    ];
+    let args;
+    if (minion.minionType === MINION_TYPES.NIFTY) {
+      args = [
+        values.targetContract,
+        valueWei || '0',
+        values.dataValue || hexData,
+        details,
+        values.paymentToken,
+        injectedProvider.utils.toWei(values.paymentRequested),
+      ];
+    } else {
+      args = [
+        values.targetContract,
+        valueWei || '0',
+        values.dataValue || hexData,
+        details,
+      ];
+    }
+
     try {
       const poll = createPoll({ action: 'minionProposeAction', cachePoll })({
         minionAddress: values.minionContract,
@@ -175,6 +199,8 @@ const MinionProposalForm = () => {
         web3: injectedProvider,
         minion: values.minionContract,
         chainID: daochain,
+        minionType:
+          minion.minionType === MINION_TYPES.NIFTY ? 'niftyMinion' : null,
       })('proposeAction')({
         args,
         address,
@@ -253,6 +279,12 @@ const MinionProposalForm = () => {
     setSelectedFunction(null);
   };
 
+  const handleMinionChange = event => {
+    const { value } = event.target;
+    const minion = daoOverview.minions.find(m => m.minionAddress === value);
+    setSelectedMinion(minion);
+  };
+
   return minions?.length ? (
     <form onSubmit={handleSubmit(onSubmit)}>
       <FormControl
@@ -279,15 +311,17 @@ const MinionProposalForm = () => {
               },
             })}
             placeholder='Select Minion'
+            onChange={handleMinionChange}
           >
             {' '}
             {minions?.map(minion => (
-              <option key={minion.minionAdddress} value={minion.minionAdddress}>
-                {minion.minionName || minion.minionAddress}
+              <option key={minion.minionAddress} value={minion.minionAddress}>
+                {minion.minionName || minion.minionAddress}{' '}
+                {minion.minionType === MINION_TYPES.NIFTY &&
+                  '(BETA - battle testing)'}
               </option>
             ))}
           </Select>
-
           <TextBox as={FormLabel} size='xs' htmlFor='targetContract'>
             Target Contract
           </TextBox>
@@ -303,7 +337,16 @@ const MinionProposalForm = () => {
             })}
             onBlur={handleBlur}
           />
-          <TextBox as={FormLabel} size='xs' htmlFor='value'>
+          {selectedMinion?.minionType === 'nifty minion' && (
+            <PaymentInput
+              formLabel='Forward Funds'
+              register={register}
+              setValue={setValue}
+              getValues={getValues}
+              errors={errors}
+            />
+          )}
+          <TextBox as={FormLabel} size='xs' pt={3} htmlFor='value'>
             Value
           </TextBox>
           <Input
@@ -417,6 +460,11 @@ const MinionProposalForm = () => {
         <Switch id='hexSwitch' onChange={toggleSwitch} />
       </FormControl>
       <Flex justify='flex-end' align='center' h='60px'>
+        {selectedMinion?.minionType === 'nifty minion' && (
+          <Box color='secondary.300' fontSize='m' mr={5}>
+            {`*Nifty Minion, Early Execution Quorum ${selectedMinion?.minQuorum}%`}
+          </Box>
+        )}
         {currentError && (
           <Box color='secondary.300' fontSize='m' mr={5}>
             <Icon as={RiErrorWarningLine} color='secondary.300' mr={2} />

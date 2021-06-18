@@ -12,9 +12,10 @@ export const boostList = [
     },
   },
   {
-    name: 'Minion',
+    name: 'Minion Vault',
     key: 'vanillaMinion',
-    description: 'Create and vote on execution of external contracts',
+    description:
+      'Store funds outside ragequit and create and vote on execution of external contracts',
     price: '0',
     modalName: 'vanillaMinionLaunch',
     successRoute: '',
@@ -171,6 +172,19 @@ export const boostList = [
     successRoute: '',
     networks: {
       all: true,
+    },
+  },
+  {
+    name: 'NiftyMinion Vault',
+    key: 'niftyMinion',
+    description: 'Early Execution and Fund and Execute. (beta)',
+    price: '0',
+    modalName: 'niftyMinionLaunch',
+    successRoute: '',
+    settings: true,
+    networks: {
+      '0x64': true,
+      '0x89': true,
     },
   },
 ];

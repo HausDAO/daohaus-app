@@ -52,10 +52,20 @@ const NewProposal = ({ customTerms, daoMetaData, daoOverview }) => {
 
   useEffect(() => {
     if (daoMetaData?.boosts?.proposalTypes?.active) {
-      proposalTypes(customTerms, daoMetaData?.boosts, daoOverview?.minions);
+      proposalTypes(
+        customTerms,
+        daoMetaData?.boosts,
+        daoOverview?.minions,
+        params.daochain,
+      );
     }
     setActiveProposalTypes(
-      proposalTypes(customTerms, daoMetaData?.boosts, daoOverview?.minions),
+      proposalTypes(
+        customTerms,
+        daoMetaData?.boosts,
+        daoOverview?.minions,
+        params.daochain,
+      ),
     );
   }, [customTerms, daoMetaData, daoOverview]);
 
