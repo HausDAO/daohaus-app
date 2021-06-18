@@ -7,7 +7,7 @@ export const BANK_BALANCES = gql`
   query balances($molochAddress: String!, $skip: Int) {
     balances(
       where: { molochAddress: $molochAddress }
-      first: 100
+      first: 1000
       orderBy: timestamp
       orderDirection: asc
       skip: $skip

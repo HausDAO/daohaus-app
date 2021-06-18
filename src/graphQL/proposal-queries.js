@@ -67,7 +67,7 @@ export const PROPOSALS_LIST = gql`
       where: { molochAddress: $contractAddr }
       orderBy: proposalId
       orderDirection: desc
-      first: 100
+      first: 1000
       skip: $skip
     ) {
       ${baseListFields}
@@ -91,7 +91,7 @@ export const PROPOSALS_LIST_IS_MEMBER = gql`
       where: { molochAddress: $contractAddr }
       orderBy: proposalId
       orderDirection: desc
-      first: 100
+      first: 1000
       skip: $skip
     ) {
       ${baseListFields}

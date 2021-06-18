@@ -218,9 +218,9 @@ export const withdrawTokenFetch = async ({
     const member = data.daoMembers?.find(
       member => member?.memberAddress?.toLowerCase() === memberAddress,
     );
-    const newTokenBalance = member.tokenBalances.find(
+    const newTokenBalance = member?.tokenBalances?.find(
       tokenObj => tokenObj.token.tokenAddress === tokenAddress,
-    ).tokenBalance;
+    )?.tokenBalance;
     return newTokenBalance;
   } catch (error) {
     return error;

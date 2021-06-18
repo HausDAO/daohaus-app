@@ -3,22 +3,9 @@ import { TokenService } from '../services/tokenService';
 import { MolochService } from '../services/molochService';
 import { omit } from './general';
 
-const geckoURL = 'https://api.coingecko.com/api/v3/simple/token_price';
-
-const uniSwapDataURL =
-  'https://raw.githubusercontent.com/Uniswap/default-token-list/master/src/tokens/mainnet.json';
 const babe = '0x000000000000000000000000000000000000baBe';
 const tokenAPI =
   'https://daohaus-metadata.s3.amazonaws.com/daoTokenPrices.json';
-
-const fetchUniswapData = async () => {
-  try {
-    const response = await fetch(uniSwapDataURL);
-    return response.json();
-  } catch (error) {
-    throw new Error(error);
-  }
-};
 
 export const fetchTokenData = async () => {
   try {
@@ -29,33 +16,6 @@ export const fetchTokenData = async () => {
   }
 };
 
-export const getUsd = async tokenAddress => {
-  const url = `${geckoURL}/ethereum?contract_addresses=${tokenAddress}&vs_currencies=usd`;
-  try {
-    const response = await fetch(url);
-    return response.json();
-  } catch (err) {
-    throw new Error(err);
-  }
-};
-
-export const getTokenData = async (
-  tokenAddress = '0x1f9840a85d5af5bf1d1762f925bdaddc4201f984',
-) => {
-  const url = `https://api.coingecko.com/api/v3/coins/ethereum?contract_address=${tokenAddress}`;
-
-  try {
-    const response = await fetch(url);
-    const data = await response.json();
-
-    if (!data.error) {
-      return data;
-    }
-  } catch (err) {
-    console.throw(err);
-  }
-};
-getTokenData();
 export const calcTotalUSD = (decimals, tokenBalance, usdVal) => {
   return (+tokenBalance / 10 ** decimals) * +usdVal;
 };
@@ -65,11 +25,6 @@ export const initTokenData = async (graphTokenData, tokenPriceSetter) => {
   if (tokenData && tokenPriceSetter) {
     tokenPriceSetter(tokenData);
   }
-  const uniswapData = await fetchUniswapData();
-  const uniswapDataMap = uniswapData.reduce((map, token) => {
-    map[token.symbol] = token.logoURI;
-    return map;
-  }, {});
 
   return graphTokenData
     .map(tokenObj => {
@@ -77,7 +32,8 @@ export const initTokenData = async (graphTokenData, tokenPriceSetter) => {
 
       const usdVal = tokenData[token.tokenAddress]?.price || 0;
       const symbol = tokenData[token.tokenAddress]?.symbol || null;
-      const logoUri = uniswapDataMap[symbol] || null;
+      const logoUri = tokenData[token.tokenAddress]?.logoURI || null;
+      const tokenName = tokenData[token.tokenAddress]?.name || null;
       const tokenDataObj = {
         ...omit('token', tokenObj),
         ...token,
@@ -85,6 +41,7 @@ export const initTokenData = async (graphTokenData, tokenPriceSetter) => {
         usd: usdVal,
         totalUSD: calcTotalUSD(token.decimals, tokenBalance, usdVal),
         logoUri,
+        tokenName,
       };
 
       return tokenDataObj;
@@ -96,9 +53,6 @@ export const tallyUSDs = tokenObj => {
   let totalUSD = 0;
 
   for (const token in tokenObj) {
-    // if (!tokenObj[token]?.totalUSD) {
-    //   console.error('TokenError', tokenObj);
-    // }
     totalUSD += tokenObj[token].totalUSD;
   }
   return Math.round((totalUSD + Number.EPSILON) * 100) / 100;
