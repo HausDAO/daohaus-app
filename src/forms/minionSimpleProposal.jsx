@@ -39,6 +39,7 @@ import PaymentInput from './paymentInput';
 const MinionProposalForm = () => {
   const [loading, setLoading] = useState(false);
   const [abiLoading, setAbiLoading] = useState(false);
+  const [toggleCustomAbi, setToggleCustomAbi] = useState(false);
   const { daoOverview } = useDao();
   const { daoMetaData } = useMetaData();
   const { daochain, daoid } = useParams();
@@ -246,8 +247,27 @@ const MinionProposalForm = () => {
     return localAbiFunctions;
   };
 
+  const handleABIDataBlur = e => {
+    try {
+      const { value } = e.target;
+      if (!value) return;
+      const abiFunctions = getFunctions(JSON.parse(value));
+      console.log(abiFunctions);
+      setCurrentError(null);
+      setAbiParams(null);
+      setAbiFunctions(abiFunctions);
+    } catch (err) {
+      setAbiParams(null);
+      setAbiFunctions(null);
+      setCurrentError(
+        err.name === 'SyntaxError' ? new Error('Invalid ABI Data') : err,
+      );
+    }
+  };
+
   const handleBlur = async e => {
     const { value } = e.target;
+    setToggleCustomAbi(false);
     setAbiLoading(true);
     try {
       const key =
@@ -259,6 +279,7 @@ const MinionProposalForm = () => {
 
       if (!json.result || json.status === '0') {
         const msg = daochain === '0x64' ? json.message : json.result;
+        setToggleCustomAbi(true);
         throw new Error(msg);
       }
       let parsed = JSON.parse(json.result);
@@ -282,6 +303,7 @@ const MinionProposalForm = () => {
 
         if (!json2.result || json2.status === '0') {
           const msg = daochain === '0x64' ? json2.message : json2.result;
+          setToggleCustomAbi(false);
           throw new Error(msg);
         }
         parsed = JSON.parse(json2.result);
@@ -425,6 +447,28 @@ const MinionProposalForm = () => {
             </>
           ) : (
             <>
+              {toggleCustomAbi && (
+                <>
+                  <TextBox as={FormLabel} size='xs' htmlFor='abiData'>
+                    Contract ABI
+                  </TextBox>
+                  <Textarea
+                    name='abiData'
+                    placeholder='Raw Hex Data'
+                    mb={5}
+                    h='8rem'
+                    ref={register({
+                      required: {
+                        value: true,
+                        message: 'Contract ABI is required',
+                      },
+                    })}
+                    color='white'
+                    focusBorderColor='secondary.500'
+                    onBlur={handleABIDataBlur}
+                  />
+                </>
+              )}
               <TextBox as={FormLabel} size='xs' htmlFor='abiFunctions'>
                 <Box mr={2}>ABI Functions</Box>
                 {abiLoading && <Spinner />}
