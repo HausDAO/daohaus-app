@@ -68,6 +68,7 @@ const MinionList = () => {
       isClosable: true,
     });
   };
+
   const getMinionUrlType = minionType => {
     switch (minionType) {
       case MINION_TYPES.SUPERFLUID: {
@@ -96,7 +97,7 @@ const MinionList = () => {
             badgeColor,
             badgeTextColor,
             badgeName,
-          } = getMinionData(minionType);
+          } = getMinionUrlType(minionType);
 
           return (
             <Flex
