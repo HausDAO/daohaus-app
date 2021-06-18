@@ -22,7 +22,7 @@ import { useUser } from '../contexts/UserContext';
 import { useOverlay } from '../contexts/OverlayContext';
 import { useDao } from '../contexts/DaoContext';
 
-const NewMinionForm = () => {
+const NewMinionForm = ({ minionType }) => {
   const [loading, setLoading] = useState(false);
   const { daochain, daoid } = useParams();
   const { address, injectedProvider, injectedChain } = useInjectedProvider();
@@ -37,8 +37,12 @@ const NewMinionForm = () => {
   const onSubmit = async values => {
     setLoading(true);
     setStep(2);
-
-    const summonParams = [daoid, values.details];
+    let summonParams;
+    if (minionType === 'niftyMinion') {
+      summonParams = [daoid, values.details, values.minQuorum];
+    } else {
+      summonParams = [daoid, values.details];
+    }
 
     try {
       const poll = createPoll({ action: 'summonMinion', cachePoll })({
@@ -76,6 +80,7 @@ const NewMinionForm = () => {
       await MinionFactoryService({
         web3: injectedProvider,
         chainID: injectedChain.chain_id,
+        minionType,
       })('summonMinion')({
         args: summonParams,
         from: address,
@@ -134,6 +139,26 @@ const NewMinionForm = () => {
                 />
               </FormControl>
             </Box>
+            {minionType === 'niftyMinion' && (
+              <Box mb={3} fontSize='sm'>
+                <FormControl mb={5}>
+                  <FormHelperText
+                    fontSize='sm'
+                    id='min-quorum-helper-text'
+                    mb={3}
+                  >
+                    Min Quorum
+                  </FormHelperText>
+                  <Input
+                    name='minQuorum'
+                    placeholder='20'
+                    defaultValue='20'
+                    w='60%'
+                    ref={register}
+                  />
+                </FormControl>
+              </Box>
+            )}
             <Button type='submit' isLoading={loading}>
               Deploy
             </Button>

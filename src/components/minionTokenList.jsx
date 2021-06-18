@@ -9,16 +9,27 @@ import {
   getEtherscanTokenData,
 } from '../utils/tokenExplorerApi';
 
-const MinionTokenList = ({ minion, action, isMember }) => {
+const MinionTokenList = ({
+  minion,
+  sendErc20Action,
+  sendErc721Action,
+  sellNiftyAction,
+  boost,
+  isMember,
+}) => {
   const [tokens, setTokens] = useState();
   const { daochain } = useParams();
 
   useEffect(() => {
     const getContractBalance = async () => {
       try {
-        if (daochain === '0x1' || daochain === '0x4' || daochain === '0x2a') {
+        if (
+          daochain === '0x1' ||
+          daochain === '0x4' ||
+          daochain === '0x2a' ||
+          daochain === '0x89'
+        ) {
           // eth chains not supported yet
-          // may need to do something different for matic too
           setTokens(await getEtherscanTokenData(minion, daochain));
         } else {
           setTokens(await getBlockScoutTokenData(minion));
@@ -55,7 +66,10 @@ const MinionTokenList = ({ minion, action, isMember }) => {
             <MinionTokenListCard
               key={token?.contractAddress}
               token={token}
-              action={action}
+              sendErc20Action={sendErc20Action}
+              sendErc721Action={sendErc721Action}
+              sellNiftyAction={sellNiftyAction}
+              boost={boost}
               isMember={isMember}
             />
           );

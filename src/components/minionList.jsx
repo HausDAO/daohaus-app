@@ -23,7 +23,7 @@ const MinionList = () => {
   const { daoOverview } = useDao();
   const { daochain, daoid } = useParams();
   const toast = useToast();
-
+  console.log('daoOverview', daoOverview);
   const minions = useMemo(() => {
     if (daoOverview?.minions) {
       return daoOverview?.minions.sort((minionA, minionB) =>
@@ -67,6 +67,19 @@ const MinionList = () => {
       duration: 3000,
       isClosable: true,
     });
+  };
+  const getMinionUrlType = minionType => {
+    switch (minionType) {
+      case MINION_TYPES.SUPERFLUID: {
+        return 'superfluid-minion';
+      }
+      case MINION_TYPES.NIFTY: {
+        return 'nifty-minion';
+      }
+      default: {
+        return 'minion';
+      }
+    }
   };
 
   return (

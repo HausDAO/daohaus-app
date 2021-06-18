@@ -28,6 +28,7 @@ export const PROPOSAL_TYPES = {
   MINION_UBER_DEFAULT: 'UberHAUS Minion Proposal',
   MINION_DEFAULT: 'Minion Proposal',
   MINION_VANILLA: 'Vanilla Minion',
+  MINION_NIFTY: 'Nifty Minion',
   MINION_SUPERFLUID: 'Superfluid Proposal',
   TRANSMUTATION: 'Transmutation Proposal',
   FUNDING: 'Funding Proposal',
@@ -35,6 +36,7 @@ export const PROPOSAL_TYPES = {
 
 export const MINION_TYPES = {
   VANILLA: 'vanilla minion',
+  NIFTY: 'nifty minion',
   UBER: 'UberHaus minion',
   SUPERFLUID: 'Superfluid minion',
   ENS: 'ENS minion',
@@ -133,6 +135,9 @@ const getMinionProposalType = (proposal, details) => {
   const getUberTypeFromGraphData = proposal => {
     if (proposal?.minion?.minionType === MINION_TYPES.VANILLA) {
       return PROPOSAL_TYPES.MINION_VANILLA;
+    }
+    if (proposal?.minion?.minionType === MINION_TYPES.NIFTY) {
+      return PROPOSAL_TYPES.MINION_NIFTY;
     }
     if (proposal?.minion?.minionType === MINION_TYPES.SUPERFLUID) {
       return PROPOSAL_TYPES.MINION_SUPERFLUID;
