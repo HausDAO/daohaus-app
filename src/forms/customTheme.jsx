@@ -14,6 +14,10 @@ import {
   TabPanel,
   FormControl,
   Input,
+  Slider,
+  SliderTrack,
+  SliderFilledTrack,
+  SliderThumb,
 } from '@chakra-ui/react';
 import { AiOutlineCaretDown } from 'react-icons/ai';
 import { SketchPicker } from 'react-color';
@@ -82,18 +86,17 @@ const CustomThemeForm = ({ previewTheme, setPreviewTheme }) => {
     });
   };
 
-  // const handleBgChange = (val) => {
-  //   console.log(val);
-  //   setPreviewTheme({
-  //     ...previewTheme,
-  //     bgOverlayOpacity: val / 100,
-  //   });
-  // };
-
   const handleClearImage = () => {
     setPreviewTheme({
       ...previewTheme,
       bgImg: '',
+    });
+  };
+
+  const handleBgOpacity = val => {
+    setPreviewTheme({
+      ...previewTheme,
+      bgOverlayOpacity: val / 100,
     });
   };
 
@@ -240,26 +243,20 @@ const CustomThemeForm = ({ previewTheme, setPreviewTheme }) => {
               <Stack spacing={2}>
                 <TextBox size='sm'>Background Opacity</TextBox>
                 <Box>
-                  {/* <Slider
+                  <Slider
                     aria-label='bg-opacity-slider'
                     colorScheme='secondary.500'
                     min={0}
                     max={100}
-                    step={5}
+                    step={1}
                     defaultValue={previewTheme.bgOverlayOpacity * 100}
-                    onChangeEnd={(val) => handleBgChange(val)}
+                    onChange={handleBgOpacity}
                   >
                     <SliderTrack>
                       <SliderFilledTrack />
                     </SliderTrack>
                     <SliderThumb />
-                  </Slider> */}
-                  <Input
-                    type='text'
-                    id='bgOverlayOpacity'
-                    defaultValue={previewTheme.bgOverlayOpacity}
-                    onChange={handleChange}
-                  />
+                  </Slider>
                 </Box>
               </Stack>
 
