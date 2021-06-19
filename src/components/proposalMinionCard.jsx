@@ -40,7 +40,10 @@ const ProposalMinionCard = ({ proposal }) => {
   useEffect(() => {
     const getMinionDeets = async () => {
       try {
-        if (proposal.proposalType === PROPOSAL_TYPES.MINION_VANILLA) {
+        if (
+          proposal.proposalType === PROPOSAL_TYPES.MINION_VANILLA ||
+          proposal.proposalType === PROPOSAL_TYPES.MINION_NIFTY
+        ) {
           const action = await MinionService({
             minion: proposal?.minionAddress,
             chainID: daochain,
