@@ -60,7 +60,9 @@ export const proposalTypes = (
       proposalType: 'minion',
       image: swordImg,
       comingSoon: false,
-      show: hasMinion(minions, 'vanilla minion'),
+      show:
+        hasMinion(minions, 'vanilla minion') ||
+        hasMinion(minions, MINION_TYPES.NIFTY),
     },
     {
       name: 'Superfluid',
