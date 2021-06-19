@@ -252,7 +252,6 @@ const MinionProposalForm = () => {
       const { value } = e.target;
       if (!value) return;
       const abiFunctions = getFunctions(JSON.parse(value));
-      console.log(abiFunctions);
       setCurrentError(null);
       setAbiParams(null);
       setAbiFunctions(abiFunctions);
