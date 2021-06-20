@@ -13,7 +13,7 @@ const SocialsLinkList = ({
 
   return (
     <>
-      {socialLinks.length > 0
+      {socialLinks?.length > 0
         ? socialLinks?.map((link, index) => {
             return (
               <SocialLink
