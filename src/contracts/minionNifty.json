@@ -1,0 +1,264 @@
+[
+  {
+    "type": "event",
+    "name": "ActionCanceled",
+    "inputs": [
+      {
+        "type": "uint256",
+        "name": "proposalId",
+        "internalType": "uint256",
+        "indexed": false
+      }
+    ],
+    "anonymous": false
+  },
+  {
+    "type": "event",
+    "name": "CrossWithdraw",
+    "inputs": [
+      {
+        "type": "address",
+        "name": "target",
+        "internalType": "address",
+        "indexed": false
+      },
+      {
+        "type": "address",
+        "name": "token",
+        "internalType": "address",
+        "indexed": false
+      },
+      {
+        "type": "uint256",
+        "name": "amount",
+        "internalType": "uint256",
+        "indexed": false
+      }
+    ],
+    "anonymous": false
+  },
+  {
+    "type": "event",
+    "name": "DoWithdraw",
+    "inputs": [
+      {
+        "type": "address",
+        "name": "token",
+        "internalType": "address",
+        "indexed": false
+      },
+      {
+        "type": "uint256",
+        "name": "amount",
+        "internalType": "uint256",
+        "indexed": false
+      }
+    ],
+    "anonymous": false
+  },
+  {
+    "type": "event",
+    "name": "ExecuteAction",
+    "inputs": [
+      {
+        "type": "uint256",
+        "name": "proposalId",
+        "internalType": "uint256",
+        "indexed": false
+      },
+      {
+        "type": "address",
+        "name": "executor",
+        "internalType": "address",
+        "indexed": false
+      }
+    ],
+    "anonymous": false
+  },
+  {
+    "type": "event",
+    "name": "ProposeAction",
+    "inputs": [
+      {
+        "type": "uint256",
+        "name": "proposalId",
+        "internalType": "uint256",
+        "indexed": false
+      },
+      {
+        "type": "address",
+        "name": "proposer",
+        "internalType": "address",
+        "indexed": false
+      }
+    ],
+    "anonymous": false
+  },
+  {
+    "type": "event",
+    "name": "PulledFunds",
+    "inputs": [
+      {
+        "type": "address",
+        "name": "moloch",
+        "internalType": "address",
+        "indexed": false
+      },
+      {
+        "type": "uint256",
+        "name": "amount",
+        "internalType": "uint256",
+        "indexed": false
+      }
+    ],
+    "anonymous": false
+  },
+  {
+    "type": "function",
+    "stateMutability": "view",
+    "outputs": [
+      { "type": "uint256", "name": "value", "internalType": "uint256" },
+      { "type": "address", "name": "to", "internalType": "address" },
+      { "type": "address", "name": "proposer", "internalType": "address" },
+      { "type": "bool", "name": "executed", "internalType": "bool" },
+      { "type": "bytes", "name": "data", "internalType": "bytes" },
+      { "type": "address", "name": "token", "internalType": "address" },
+      { "type": "uint256", "name": "amount", "internalType": "uint256" }
+    ],
+    "name": "actions",
+    "inputs": [{ "type": "uint256", "name": "", "internalType": "uint256" }]
+  },
+  {
+    "type": "function",
+    "stateMutability": "nonpayable",
+    "outputs": [],
+    "name": "cancelAction",
+    "inputs": [
+      { "type": "uint256", "name": "_proposalId", "internalType": "uint256" }
+    ]
+  },
+  {
+    "type": "function",
+    "stateMutability": "nonpayable",
+    "outputs": [],
+    "name": "crossWithdraw",
+    "inputs": [
+      { "type": "address", "name": "target", "internalType": "address" },
+      { "type": "address", "name": "token", "internalType": "address" },
+      { "type": "uint256", "name": "amount", "internalType": "uint256" },
+      { "type": "bool", "name": "transfer", "internalType": "bool" }
+    ]
+  },
+  {
+    "type": "function",
+    "stateMutability": "nonpayable",
+    "outputs": [],
+    "name": "doWithdraw",
+    "inputs": [
+      { "type": "address", "name": "token", "internalType": "address" },
+      { "type": "uint256", "name": "amount", "internalType": "uint256" }
+    ]
+  },
+  {
+    "type": "function",
+    "stateMutability": "nonpayable",
+    "outputs": [{ "type": "bytes", "name": "", "internalType": "bytes" }],
+    "name": "executeAction",
+    "inputs": [
+      { "type": "uint256", "name": "proposalId", "internalType": "uint256" }
+    ]
+  },
+  {
+    "type": "function",
+    "stateMutability": "nonpayable",
+    "outputs": [],
+    "name": "init",
+    "inputs": [
+      { "type": "address", "name": "_moloch", "internalType": "address" },
+      { "type": "uint256", "name": "_minQuorum", "internalType": "uint256" }
+    ]
+  },
+  {
+    "type": "function",
+    "stateMutability": "view",
+    "outputs": [{ "type": "bool", "name": "", "internalType": "bool" }],
+    "name": "isMember",
+    "inputs": [{ "type": "address", "name": "user", "internalType": "address" }]
+  },
+  {
+    "type": "function",
+    "stateMutability": "view",
+    "outputs": [{ "type": "uint256", "name": "", "internalType": "uint256" }],
+    "name": "minQuorum",
+    "inputs": []
+  },
+  {
+    "type": "function",
+    "stateMutability": "view",
+    "outputs": [
+      { "type": "address", "name": "", "internalType": "contract IMOLOCH" }
+    ],
+    "name": "moloch",
+    "inputs": []
+  },
+  {
+    "type": "function",
+    "stateMutability": "view",
+    "outputs": [{ "type": "address", "name": "", "internalType": "address" }],
+    "name": "molochDepositToken",
+    "inputs": []
+  },
+  {
+    "type": "function",
+    "stateMutability": "pure",
+    "outputs": [{ "type": "bytes4", "name": "", "internalType": "bytes4" }],
+    "name": "onERC1155BatchReceived",
+    "inputs": [
+      { "type": "address", "name": "", "internalType": "address" },
+      { "type": "address", "name": "", "internalType": "address" },
+      { "type": "uint256[]", "name": "", "internalType": "uint256[]" },
+      { "type": "uint256[]", "name": "", "internalType": "uint256[]" },
+      { "type": "bytes", "name": "", "internalType": "bytes" }
+    ]
+  },
+  {
+    "type": "function",
+    "stateMutability": "pure",
+    "outputs": [{ "type": "bytes4", "name": "", "internalType": "bytes4" }],
+    "name": "onERC1155Received",
+    "inputs": [
+      { "type": "address", "name": "", "internalType": "address" },
+      { "type": "address", "name": "", "internalType": "address" },
+      { "type": "uint256", "name": "", "internalType": "uint256" },
+      { "type": "uint256", "name": "", "internalType": "uint256" },
+      { "type": "bytes", "name": "", "internalType": "bytes" }
+    ]
+  },
+  {
+    "type": "function",
+    "stateMutability": "pure",
+    "outputs": [{ "type": "bytes4", "name": "", "internalType": "bytes4" }],
+    "name": "onERC721Received",
+    "inputs": [
+      { "type": "address", "name": "", "internalType": "address" },
+      { "type": "address", "name": "", "internalType": "address" },
+      { "type": "uint256", "name": "", "internalType": "uint256" },
+      { "type": "bytes", "name": "", "internalType": "bytes" }
+    ]
+  },
+  {
+    "type": "function",
+    "stateMutability": "nonpayable",
+    "outputs": [{ "type": "uint256", "name": "", "internalType": "uint256" }],
+    "name": "proposeAction",
+    "inputs": [
+      { "type": "address", "name": "actionTo", "internalType": "address" },
+      { "type": "uint256", "name": "actionValue", "internalType": "uint256" },
+      { "type": "bytes", "name": "actionData", "internalType": "bytes" },
+      { "type": "string", "name": "details", "internalType": "string" },
+      { "type": "address", "name": "withdrawToken", "internalType": "address" },
+      { "type": "uint256", "name": "withdrawAmount", "internalType": "uint256" }
+    ]
+  },
+  { "type": "receive", "stateMutability": "payable" }
+]

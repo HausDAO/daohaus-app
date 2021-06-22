@@ -21,7 +21,15 @@ import ContentBoxComponent from './components/contentBox';
 import TextBoxComponent from './components/textBox';
 
 export const createTheme = daoTheme => {
-  const themeOverrides = { ...defaultTheme, ...daoTheme };
+  const daoThemeKeys = Object.keys(daoTheme);
+
+  const themeOverrides = {
+    ...defaultTheme,
+    ...daoThemeKeys.reduce((acc, prop) => {
+      acc[prop] = daoTheme[prop] || defaultTheme[prop];
+      return acc;
+    }, {}),
+  };
 
   return extendTheme({
     active: true,

@@ -31,7 +31,6 @@ const Boosts = ({ customTerms, daoMember, daoOverview, daoMetaData }) => {
       return minions;
     }
     const boostData = daoMetaData.boosts[boostKey];
-    console.log(daoMetaData.boosts, daoOverview);
     return boostData && boostData.active;
   };
 

@@ -16,6 +16,10 @@ const Superpowers = ({ daoMember, daoMetaData }) => {
   const { address, injectedChain } = useInjectedProvider();
   const { setGenericModal } = useOverlay();
 
+  const isActive = link => {
+    return daoMetaData?.boosts?.[link.boostKey]?.active;
+  };
+
   const getBoostData = key => {
     const boostData = boostList.find(boost => boost.key === key);
     const withMetaData = {
@@ -29,63 +33,65 @@ const Superpowers = ({ daoMember, daoMetaData }) => {
     <ContentBox d='flex' flexDirection='column' position='relative'>
       <Stack spacing={3}>
         {superpowerLinks.map(link => {
-          return daoMetaData?.boosts?.[link.boostKey]?.active ? (
-            <Flex justify='space-between' align='center' key={link.label}>
-              <GenericModal closeOnOverlayClick modalId={link.modal}>
-                <BoostLaunchWrapper boost={getBoostData(link.boostKey)} />
-              </GenericModal>
-              <Box
-                fontSize={['xs', null, null, 'md']}
-                fontFamily='heading'
-                fontWeight={800}
-                textTransform='uppercase'
-                color='whiteAlpha.900'
-              >
-                {link.label}
-              </Box>
-              <Flex align='center'>
-                {daoConnectedAndSameChain(
-                  address,
-                  daochain,
-                  injectedChain?.chainId,
-                ) && daoMember?.shares > 0 ? (
-                  link.modal ? (
-                    <Box
-                      onClick={() => setGenericModal({ [link.modal]: true })}
-                      _hover={{ cursor: 'pointer' }}
-                    >
-                      <Icon
-                        as={VscGear}
-                        color='secondary.500'
-                        w='25px'
-                        h='25px'
-                        mr={3}
-                      />
-                    </Box>
+          return (
+            isActive(link) && (
+              <Flex justify='space-between' align='center' key={link.label}>
+                <GenericModal closeOnOverlayClick modalId={link.modal}>
+                  <BoostLaunchWrapper boost={getBoostData(link.boostKey)} />
+                </GenericModal>
+                <Box
+                  fontSize={['xs', null, null, 'md']}
+                  fontFamily='heading'
+                  fontWeight={800}
+                  textTransform='uppercase'
+                  color='whiteAlpha.900'
+                >
+                  {link.label}
+                </Box>
+                <Flex align='center'>
+                  {daoConnectedAndSameChain(
+                    address,
+                    daochain,
+                    injectedChain?.chainId,
+                  ) && daoMember?.shares > 0 ? (
+                    link.modal ? (
+                      <Box
+                        onClick={() => setGenericModal({ [link.modal]: true })}
+                        _hover={{ cursor: 'pointer' }}
+                      >
+                        <Icon
+                          as={VscGear}
+                          color='secondary.500'
+                          w='25px'
+                          h='25px'
+                          mr={3}
+                        />
+                      </Box>
+                    ) : (
+                      <RouterLink to={`/dao/${daochain}/${daoid}/${link.link}`}>
+                        <Icon
+                          as={VscGear}
+                          color='secondary.500'
+                          w='25px'
+                          h='25px'
+                          mr={3}
+                        />
+                      </RouterLink>
+                    )
                   ) : (
-                    <RouterLink to={`/dao/${daochain}/${daoid}/${link.link}`}>
-                      <Icon
-                        as={VscGear}
-                        color='secondary.500'
-                        w='25px'
-                        h='25px'
-                        mr={3}
-                      />
-                    </RouterLink>
-                  )
-                ) : (
-                  <Box
-                    color='whiteAlpha.900'
-                    fontSize={['xs', null, null, 'sm']}
-                    fontFamily='mono'
-                    maxW={['auto', null, null, '250px']}
-                  >
-                    Active Members only
-                  </Box>
-                )}
+                    <Box
+                      color='whiteAlpha.900'
+                      fontSize={['xs', null, null, 'sm']}
+                      fontFamily='mono'
+                      maxW={['auto', null, null, '250px']}
+                    >
+                      Active Members only
+                    </Box>
+                  )}
+                </Flex>
               </Flex>
-            </Flex>
-          ) : null;
+            )
+          );
         })}
       </Stack>
     </ContentBox>

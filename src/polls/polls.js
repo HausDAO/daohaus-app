@@ -131,7 +131,10 @@ export const pollMinionExecute = async ({
   proposalType,
 }) => {
   try {
-    if (proposalType === PROPOSAL_TYPES.MINION_VANILLA) {
+    if (
+      proposalType === PROPOSAL_TYPES.MINION_VANILLA ||
+      proposalType === PROPOSAL_TYPES.MINION_NIFTY
+    ) {
       const action = await MinionService({
         minion: minionAddress,
         chainID,
@@ -236,9 +239,9 @@ export const withdrawTokenFetch = async ({
     const member = data.daoMembers?.find(
       member => member?.memberAddress?.toLowerCase() === memberAddress,
     );
-    const newTokenBalance = member.tokenBalances.find(
+    const newTokenBalance = member?.tokenBalances?.find(
       tokenObj => tokenObj.token.tokenAddress === tokenAddress,
-    ).tokenBalance;
+    )?.tokenBalance;
     return newTokenBalance;
   } catch (error) {
     return error;

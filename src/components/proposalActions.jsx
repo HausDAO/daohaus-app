@@ -12,7 +12,9 @@ import { useMetaData } from '../contexts/MetaDataContext';
 import { useTX } from '../contexts/TXContext';
 import ContentBox from './ContentBox';
 import TextBox from './TextBox';
-
+import { memberVote, MINION_TYPES } from '../utils/proposalUtils';
+import { supportedChains } from '../utils/chain';
+import { getTerm, getTitle } from '../utils/metadata';
 import {
   capitalize,
   daoConnectedAndSameChain,
@@ -21,9 +23,7 @@ import {
 import MinionExecute from './minionExecute';
 import MinionCancel from './minionCancel';
 import { TokenService } from '../services/tokenService';
-import { memberVote } from '../utils/proposalUtils';
-import { supportedChains } from '../utils/chain';
-import { getTerm, getTitle } from '../utils/metadata';
+
 import { TX } from '../data/contractTX';
 
 const MotionBox = motion(Box);
@@ -58,10 +58,9 @@ const ProposalVote = ({
   const [nextProposalToProcess, setNextProposal] = useState(null);
   const [loading, setLoading] = useState(false);
   const { daochain, daoid } = useParams();
-  const { address, injectedChain } = useInjectedProvider();
+  const { address, injectedChain, injectedProvider } = useInjectedProvider();
   const { submitTransaction } = useTX();
   const { customTerms } = useMetaData();
-
   const [enoughDeposit, setEnoughDeposit] = useState(false);
 
   const currentlyVoting = proposal => {
@@ -367,8 +366,18 @@ const ProposalVote = ({
                         >
                           {+proposal?.noShares > +proposal?.yesShares &&
                             'Not Passing'}
-                          {+proposal?.yesShares > +proposal?.noShares &&
-                            'Currently Passing'}
+                          {+proposal?.yesShares > +proposal?.noShares && (
+                            <Box>
+                              Currently Passing
+                              {proposal?.minion?.minionType ===
+                                MINION_TYPES.NIFTY && (
+                                <>
+                                  {` Quorum Needed ${proposal?.minion?.minQuorum}% `}
+                                  <MinionExecute proposal={proposal} early />
+                                </>
+                              )}
+                            </Box>
+                          )}
                           {+proposal?.yesShares === 0 &&
                             +proposal?.noShares === 0 &&
                             'Awaiting Votes'}
@@ -389,6 +398,17 @@ const ProposalVote = ({
                             proposal?.status === 'ReadyForProcessing') &&
                             +proposal?.noShares > +proposal?.yesShares &&
                             'Failed'}
+                          {/* TODO use const */}
+                          {(proposal?.status === 'GracePeriod' ||
+                            proposal?.status === 'ReadyForProcessing') &&
+                            +proposal?.yesShares > +proposal?.noShares &&
+                            proposal?.minion?.minionType ===
+                              MINION_TYPES.NIFTY && (
+                              <>
+                                {` Quorum Needed ${proposal?.minion?.minQuorum}% `}
+                                <MinionExecute proposal={proposal} early />
+                              </>
+                            )}
                         </TextBox>
                       </Flex>
                     </>
@@ -456,6 +476,7 @@ const ProposalVote = ({
 
         {daoConnectedAndSameChain(address, daochain, injectedChain?.chainId) &&
           proposal?.status === 'ReadyForProcessing' &&
+          !injectedProvider?.currentProvider?.safe &&
           (nextProposalToProcess?.proposalId === proposal?.proposalId ? (
             <Flex justify='center' pt='10px'>
               <Flex direction='column'>

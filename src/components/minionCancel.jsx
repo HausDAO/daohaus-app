@@ -85,7 +85,7 @@ const MinionCancel = ({ proposal }) => {
   };
 
   return (
-    <Flex justify='center' pt='10px'>
+    <Flex justify='center'>
       <Flex direction='column'>
         {loading ? <Spinner /> : getMinionAction()}
       </Flex>

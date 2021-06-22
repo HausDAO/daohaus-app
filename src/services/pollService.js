@@ -648,12 +648,13 @@ export const createPoll = ({
       }
     };
   } else if (action === 'minionExecuteAction') {
+    console.log('set poll');
     return ({
       chainID,
       minionAddress,
       proposalId,
-      actions,
       proposalType,
+      actions,
     }) => txHash => {
       startPoll({
         pollFetch: pollMinionExecute,
@@ -697,7 +698,7 @@ export const createPoll = ({
     }) => txHash => {
       startPoll({
         pollFetch: pollMinionCancel,
-        testFn: minionExecuteTest,
+        testFn: minionExecuteTest, // TODO: wrong test
         shouldEqual: true,
         args: {
           chainID,
