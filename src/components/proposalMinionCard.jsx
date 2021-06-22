@@ -84,8 +84,8 @@ const ProposalMinionCard = ({ proposal }) => {
       try {
         const key =
           daochain === '0x64' ? '' : process.env.REACT_APP_ETHERSCAN_KEY;
-        const url = `${chainByID(daochain).abi_api_url}${minionDeets.to}${key &&
-          `&apikey=${key}`}`;
+        const url = `${chainByID(daochain).abi_api_url}${minionDeets.proxyTo ||
+          minionDeets.to}${key && `&apikey=${key}`}`;
         const response = await fetch(url);
         const json = await response.json();
         if (json.status === '0') {
@@ -105,8 +105,7 @@ const ProposalMinionCard = ({ proposal }) => {
           const contract = new web3.eth.Contract(abi, minionDeets.to);
           const newaddr = await contract.methods.implementation().call();
           console.log(newaddr);
-          setMinionDeets({ ...minionDeets, ...{ to: newaddr } });
-          console.log({ ...minionDeets, ...{ to: newaddr } });
+          setMinionDeets({ ...minionDeets, proxyTo: newaddr });
           return null;
         }
         abiDecoder.addABI(parsed);
@@ -229,6 +228,9 @@ const ProposalMinionCard = ({ proposal }) => {
             maxH='300px'
             overflowY='scroll'
           >
+            {minionDeets?.proxyTo && (
+              <TextBox size='xs'>Proxy: {minionDeets?.proxyTo}</TextBox>
+            )}
             <TextBox size='xs'>VALUE: {minionDeets?.value}</TextBox>
             {decodedData && displayDecodedData(decodedData)}
           </ModalBody>
