@@ -105,7 +105,7 @@ const ProposalMinionCard = ({ proposal }) => {
           const contract = new web3.eth.Contract(abi, minionDeets.to);
           const newaddr = await contract.methods.implementation().call();
           console.log(newaddr);
-          setMinionDeets({ ...minionDeets, ...{ proxyTo: newaddr } });
+          setMinionDeets({ ...minionDeets, proxyTo: newaddr });
           return null;
         }
         abiDecoder.addABI(parsed);
