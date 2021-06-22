@@ -11,15 +11,16 @@ import {
 } from '@chakra-ui/react';
 import { rgba } from 'polished';
 
-import SuperfluidMinionProposalForm from '../forms/superfluidMinionProposal';
-import TransmutationProposal from '../forms/transmutationProposal';
-import { getTerm } from '../utils/metadata';
 import { useMetaData } from '../contexts/MetaDataContext';
 import { useOverlay } from '../contexts/OverlayContext';
 import { useCustomTheme } from '../contexts/CustomThemeContext';
+import ProposalForm from '../formBuilder/proposalForm';
+import SuperfluidMinionProposalForm from '../forms/superfluidMinionProposal';
+import TransmutationProposal from '../forms/transmutationProposal';
 import LootGrabForm from '../forms/lootGrab';
 import NiftyProposalForm from '../forms/minionNiftyProposal';
-import ProposalForm from '../formBuilder/proposalForm';
+
+import { getTerm } from '../utils/metadata';
 import { PROPOSAL_FORMS } from '../data/proposalForms';
 
 const ProposalFormModal = ({ proposalType }) => {

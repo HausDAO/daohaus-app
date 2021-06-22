@@ -1,6 +1,5 @@
 import React, { useContext, createContext } from 'react';
 import { useParams } from 'react-router-dom';
-import { v4 as uuidv4 } from 'uuid';
 
 import { useDao } from './DaoContext';
 import { useDaoMember } from './DaoMemberContext';
@@ -106,7 +105,7 @@ export const TXProvider = ({ children }) => {
   };
 
   const buildTXPoll = data => {
-    const { hash, tx, values, formData, now, lifeCycleFns } = data;
+    const { tx, values, formData, now, lifeCycleFns } = data;
 
     return createPoll({
       action: tx.poll || tx.specialPoll || tx.name,
@@ -115,7 +114,6 @@ export const TXProvider = ({ children }) => {
       daoID: daoid,
       chainID: daochain,
       tx,
-      hash,
       createdAt: now,
       ...values,
       address,
@@ -171,13 +169,11 @@ export const TXProvider = ({ children }) => {
   const createTX = async data => {
     data.lifeCycleFns?.beforeTx?.(data);
 
-    const hash = uuidv4();
     const now = (new Date().getTime() / 1000).toFixed();
     const consolidatedData = {
       ...data,
       contextData,
       injectedProvider,
-      hash,
       now,
     };
     const onTxHash = createActions({

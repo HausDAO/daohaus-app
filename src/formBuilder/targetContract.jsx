@@ -1,6 +1,7 @@
 import React from 'react';
-import { validate } from '../utils/validation';
+
 import GenericInput from './genericInput';
+import { validate } from '../utils/validation';
 
 const TargetContract = props => {
   const { localForm } = props;

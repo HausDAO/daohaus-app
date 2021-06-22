@@ -33,16 +33,6 @@ export const pollTXHash = async ({ chainID, txHash }) => {
   });
 };
 
-const test = async () => {
-  const res = await pollTXHash({
-    chainID: '0x4',
-    txHash: 'sdf',
-  });
-  console.log(res);
-};
-
-test();
-
 export const pollProposals = async ({ daoID, chainID }) => {
   return graphQuery({
     endpoint: getGraphEndpoint(chainID, 'subgraph_url'),

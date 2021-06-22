@@ -20,9 +20,8 @@ const searchData = (data, fields) => {
 };
 
 const argBuilderCallback = Object.freeze({
-  submitProposal({ values, tx, contextData, hash }) {
-    console.log(`hash`, hash);
-    const details = buildJSONdetails({ ...values, hash }, tx.detailsJSON);
+  submitProposal({ values, tx, contextData }) {
+    const details = buildJSONdetails({ ...values }, tx.detailsJSON);
     const { tokenBalances, depositToken } = contextData.daoOverview;
     const tributeToken = values.tributeToken || depositToken.tokenAddress;
     const paymentToken = values.paymentToken || depositToken.tokenAddress;

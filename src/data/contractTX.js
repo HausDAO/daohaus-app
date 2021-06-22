@@ -14,11 +14,10 @@ export const ACTIONS = {
 };
 
 export const DETAILS = {
-  STANDARD_PROPOSAL: ['title', 'description', 'hash', 'link'],
+  STANDARD_PROPOSAL: ['title', 'description', 'link'],
   MINION_PROPOSAL: [
     'title',
     'description',
-    'hash',
     'link',
     'minionType',
     'selectedMinion',

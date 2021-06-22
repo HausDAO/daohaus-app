@@ -1,10 +1,11 @@
-import { Spinner } from '@chakra-ui/spinner';
 import React, { useEffect, useState } from 'react';
+import { Spinner } from '@chakra-ui/spinner';
 import { useParams } from 'react-router';
-import { validate } from '../utils/validation';
+
 import GenericSelect from './genericSelect';
 import GenericTextarea from './genericTextArea';
 import { ModButton } from './staticElements';
+import { validate } from '../utils/validation';
 import {
   fetchABI,
   getABIfunctions,
