@@ -106,7 +106,6 @@ const MinionProposalForm = () => {
         values.minionContract.toLowerCase(),
     );
 
-    const minionName = minion?.minionName;
     const valueWei = injectedProvider.utils.toWei(values.value);
 
     const inputValues = [];
@@ -140,7 +139,7 @@ const MinionProposalForm = () => {
       }
     }
     const details = detailsToJSON({
-      title: minionName || `Minion proposal`,
+      title: values.title,
       description: values.description,
     });
     let args;
@@ -373,7 +372,7 @@ const MinionProposalForm = () => {
               errors={errors}
             />
           )}
-          <TextBox as={FormLabel} size='xs' pt={3} htmlFor='value'>
+          <TextBox as={FormLabel} size='xs' htmlFor='value'>
             Value
           </TextBox>
           <Input
@@ -387,11 +386,26 @@ const MinionProposalForm = () => {
               },
             })}
           />
+          <TextBox as={FormLabel} size='xs' htmlFor='title'>
+            Details
+          </TextBox>
+          <Input
+            name='title'
+            placeholder='Title'
+            ref={register({
+              required: {
+                value: true,
+                message: 'Title is required',
+              },
+            })}
+          />
+
           <Stack spacing={4}>
             <Textarea
               name='description'
               placeholder='Short Description'
               mb={5}
+              mt={5}
               h={10}
               ref={register({
                 required: {
