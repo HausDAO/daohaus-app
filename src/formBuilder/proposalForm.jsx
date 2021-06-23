@@ -99,6 +99,11 @@ const ProposalForm = props => {
         values: collapsedValues,
         formData: props,
         tx: props.tx,
+        lifeCycleFns: {
+          onCatch() {
+            setLoading(false);
+          },
+        },
       });
     } catch (error) {
       console.error(error);
