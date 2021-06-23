@@ -32,7 +32,7 @@ export const TX = {
     poll: 'subgraph',
     display: 'Submit Proposal',
     errMsg: 'Error submitting proposal',
-    successMsg: 'Funding Proposal submitted!',
+    successMsg: 'Proposal submitted!',
     detailsJSON: DETAILS.STANDARD_PROPOSAL,
     argsFromCallback: true,
     createDiscourse: true,
