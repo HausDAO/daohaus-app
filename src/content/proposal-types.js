@@ -1,9 +1,16 @@
 import { getTerm } from '../utils/metadata';
 import swordImg from '../assets/img/swords-white.svg';
 import { hasMinion } from '../utils/dao';
+import { MINION_TYPES } from '../utils/proposalUtils';
 
-export const proposalTypes = (customTerms, boosts, minions) => {
+export const proposalTypes = (
+  customTerms,
+  boosts,
+  minions,
+  daochain = null,
+) => {
   const daoPropTypes = boosts?.proposalTypes?.metadata;
+
   return [
     {
       name: 'Membership',
@@ -62,6 +69,14 @@ export const proposalTypes = (customTerms, boosts, minions) => {
       image: swordImg,
       comingSoon: false,
       show: hasMinion(minions, 'Superfluid minion'),
+    },
+    {
+      name: 'NiftyMinion',
+      subhead: 'Buy A NiftyInk (Beta)',
+      proposalType: 'niftyMinion',
+      image: swordImg,
+      comingSoon: false,
+      show: hasMinion(minions, MINION_TYPES.NIFTY) && daochain === '0x64',
     },
     {
       name: 'Transmutation',

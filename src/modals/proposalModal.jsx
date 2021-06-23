@@ -19,6 +19,7 @@ import { useMetaData } from '../contexts/MetaDataContext';
 import { useOverlay } from '../contexts/OverlayContext';
 import { useCustomTheme } from '../contexts/CustomThemeContext';
 import LootGrabForm from '../forms/lootGrab';
+import NiftyProposalForm from '../forms/minionNiftyProposal';
 import ProposalForm from '../formBuilder/proposalForm';
 import { PROPOSAL_FORMS } from '../staticElements/proposalFormData';
 
@@ -69,6 +70,12 @@ const ProposalFormModal = ({ proposalType }) => {
       heading: `New Minion ${getTerm(customTerms, 'proposal')}`,
       subline: 'Submit a Minion proposal here.',
       form: <MinionSimpleProposalForm />,
+    },
+    niftyMinion: {
+      type: `New ${getTerm(customTerms, 'proposal')}`,
+      heading: `New Minion ${getTerm(customTerms, 'proposal')}`,
+      subline: 'Submit a Minion proposal here.',
+      form: <NiftyProposalForm />,
     },
     superfluidMinion: {
       type: `New ${getTerm(customTerms, 'proposal')}`,

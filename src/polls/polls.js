@@ -110,7 +110,10 @@ export const pollMinionExecute = async ({
   proposalType,
 }) => {
   try {
-    if (proposalType === PROPOSAL_TYPES.MINION_VANILLA) {
+    if (
+      proposalType === PROPOSAL_TYPES.MINION_VANILLA ||
+      proposalType === PROPOSAL_TYPES.MINION_NIFTY
+    ) {
       const action = await MinionService({
         minion: minionAddress,
         chainID,

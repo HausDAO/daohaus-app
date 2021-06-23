@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+import React, { useCallback, useMemo } from 'react';
 import { Link as RouterLink, useParams } from 'react-router-dom';
 import {
   Flex,
@@ -7,6 +7,7 @@ import {
   HStack,
   Stack,
   useBreakpointValue,
+  Badge,
 } from '@chakra-ui/react';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
 import { VscGear } from 'react-icons/vsc';
@@ -22,7 +23,7 @@ const MinionList = () => {
   const { daoOverview } = useDao();
   const { daochain, daoid } = useParams();
   const toast = useToast();
-
+  console.log('daoOverview', daoOverview);
   const minions = useMemo(() => {
     if (daoOverview?.minions) {
       return daoOverview?.minions.sort((minionA, minionB) =>
@@ -30,6 +31,33 @@ const MinionList = () => {
       );
     }
   }, [daoOverview]);
+
+  const getMinionData = useCallback(minionType => {
+    if (!minionType) return 'minon';
+    switch (minionType) {
+      case MINION_TYPES.SUPERFLUID:
+        return {
+          minionUrlType: 'superfluid-minon',
+          badgeColor: 'green',
+          badgeTextColor: 'white',
+          badgeName: 'SF',
+        };
+      case MINION_TYPES.UBER:
+        return {
+          minionUrlType: minionType,
+          badgeColor: 'purple',
+          badgeTextColor: 'white',
+          badgeName: 'UHS',
+        };
+      default:
+        return {
+          minionUrlType: 'minion',
+          badgeColor: 'white',
+          badgeTextColor: 'black',
+          badgeName: 'Vanilla',
+        };
+    }
+  }, []);
 
   const copiedToast = () => {
     toast({
@@ -49,10 +77,13 @@ const MinionList = () => {
             base: minion.minionType?.split(' ')[0],
             md: minion.minionType,
           });
-          const minionUrlType =
-            minionType === MINION_TYPES.SUPERFLUID
-              ? 'superfluid-minion'
-              : 'minion';
+
+          const {
+            minionUrlType,
+            badgeColor,
+            badgeTextColor,
+            badgeName,
+          } = getMinionData(minionType);
 
           return (
             <Flex
@@ -61,31 +92,37 @@ const MinionList = () => {
               key={minion.minionAddress}
             >
               <HStack spacing={2}>
-                <TextBox size='xs' color='whiteAlpha.500'>
-                  {`${minionType}:`}
-                </TextBox>
                 <TextBox color='secondary.500'>{minion.details}</TextBox>
 
                 <TextBox
                   variant='value'
                   size='sm'
-                  d={['none', null, null, 'inline-block']}
+                  d={[
+                    'none',
+                    null,
+                    null,
+                    minion.details.length > 15 ? 'none' : 'inline-block',
+                  ]}
                 >
                   {truncateAddr(minion.minionAddress)}
                 </TextBox>
 
+                <Badge variant='' bg={badgeColor} color={badgeTextColor}>
+                  {badgeName}
+                </Badge>
+              </HStack>
+
+              <Flex align='center'>
                 <CopyToClipboard
                   text={minion.minionAddress}
                   onCopy={copiedToast}
                   _hover={{
                     cursor: 'pointer',
                   }}
+                  mr='1rem'
                 >
                   <Icon as={FaCopy} color='primary.100' ml={2} />
                 </CopyToClipboard>
-              </HStack>
-
-              <Flex align='center'>
                 <RouterLink
                   to={`/dao/${daochain}/${daoid}/settings/${minionUrlType}/${minion.minionAddress}`}
                 >

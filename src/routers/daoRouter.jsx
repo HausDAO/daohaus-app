@@ -28,6 +28,7 @@ import Staking from '../pages/Staking';
 import Clone from '../pages/Clone';
 import MintGate from '../pages/MintGate';
 import Snapshot from '../pages/Snapshot';
+// import NiftInk from '../pages/NiftyInk';
 import CcoContribution from '../pages/CcoContribution';
 import CcoHelper from '../pages/CcoHelper';
 import CcoAdmin from '../pages/CcoAdmin';
@@ -39,7 +40,6 @@ import { isDaosquareCcoPath } from '../utils/cco';
 const DaoRouter = () => {
   const { path } = useRouteMatch();
   const { currentDaoTokens } = useToken();
-
   const {
     daoActivities,
     isCorrectNetwork,
@@ -293,6 +293,15 @@ const DaoRouter = () => {
         </Route>
         <Route exact path={`${path}/boost/snapshot`}>
           <Snapshot isMember={isMember} daoMetaData={daoMetaData} />
+        </Route>
+        <Route exact path={`${path}/settings/nifty-minion/:minion`}>
+          <Minion
+            overview={daoOverview}
+            members={daoMembers}
+            minionType='niftyMinion'
+            currentDaoTokens={currentDaoTokens}
+            isMember={isMember}
+          />
         </Route>
       </Switch>
     </Layout>
