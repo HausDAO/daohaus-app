@@ -1,7 +1,5 @@
 import React, { useContext, createContext } from 'react';
-import { MaxUint256 } from '@ethersproject/constants';
 import { useParams } from 'react-router-dom';
-import { v4 as uuidv4 } from 'uuid';
 
 import { useDao } from './DaoContext';
 import { useDaoMember } from './DaoMemberContext';
@@ -12,10 +10,16 @@ import { useUser } from './UserContext';
 import { useOverlay } from './OverlayContext';
 
 import { createPoll } from '../services/pollService';
-import { TokenService } from '../services/tokenService';
 import { createForumTopic } from '../utils/discourse';
-import { getArgs, handleFormError, Transaction } from '../utils/txHelpers';
+import {
+  createActions,
+  exposeValues,
+  getArgs,
+  // handleFormError,
+  Transaction,
+} from '../utils/txHelpers';
 import { customValidations } from '../utils/validation';
+import { TX } from '../data/contractTX';
 
 export const TXContext = createContext();
 
@@ -65,8 +69,17 @@ export const TXProvider = ({ children }) => {
     isMember,
     daoMember,
     userHubDaos,
-    // apiData,
     outstandingTXs,
+  };
+
+  const uiControl = {
+    errorToast,
+    successToast,
+    resolvePoll,
+    cachePoll,
+    refetch,
+    setTxInfoModal,
+    setProposalModal,
   };
 
   const refreshDao = () => {
@@ -91,25 +104,26 @@ export const TXProvider = ({ children }) => {
     refetch();
   };
 
-  const buildTXPoll = ({
-    hash,
-    tx,
-    values,
-    formData,
-    discourse,
-    additionalArgs = {},
-  }) => {
-    return createPoll({ action: tx.txType, cachePoll })({
+  const buildTXPoll = data => {
+    const { tx, values, formData, now, lifeCycleFns } = data;
+
+    return createPoll({
+      action: tx.poll || tx.specialPoll || tx.name,
+      cachePoll,
+    })({
       daoID: daoid,
       chainID: daochain,
-      hash: hash || uuidv4(),
-      ...additionalArgs,
+      tx,
+      createdAt: now,
+      ...values,
+      address,
       actions: {
         onError: (error, txHash) => {
           errorToast({
             title: tx.errMsg || 'Transaction Error',
-            desciption: error?.message || '',
+            description: error?.message || '',
           });
+          lifeCycleFns?.onPollError?.(txHash, error, data);
           resolvePoll(txHash);
           console.error(`${tx.errMsg}: ${error}`);
         },
@@ -118,13 +132,14 @@ export const TXProvider = ({ children }) => {
             title: tx.successMsg || 'Transaction Successful',
           });
           refreshDao();
+          lifeCycleFns?.onPollSuccess?.(txHash, data);
           resolvePoll(txHash);
-          if (discourse) {
+          if (tx.createDiscourse) {
             createForumTopic({
               chainID: daochain,
               daoID: daoid,
-              afterTime: (new Date().getTime() / 1000).toFixed(),
-              proposalType: formData.type,
+              afterTime: now,
+              proposalType: formData?.type,
               values,
               applicant: values?.applicant || address,
               daoMetaData,
@@ -151,101 +166,75 @@ export const TXProvider = ({ children }) => {
     return errors?.length ? errors : false;
   };
 
-  const unlockToken = async token => {
-    // const token = getValues('tributeToken');
-    const args = [daoid, MaxUint256];
+  const createTX = async data => {
+    data.lifeCycleFns?.beforeTx?.(data);
 
-    try {
-      const poll = buildTXPoll({
-        tx: {
-          txType: 'unlockToken',
-          errMsg: 'Error unlocking token.',
-          successMsg: 'Tribute Token Unlocked',
-        },
-        additionalArgs: {
-          tokenAddress: token,
-          userAddress: address,
-          unlockAmount: MaxUint256,
-        },
-      });
-      await TokenService({
-        web3: injectedProvider,
-        chainID: daochain,
-        tokenAddress: token,
-      })('approve')({ args, address, poll });
-      return true;
-    } catch (err) {
-      console.log('error:', err);
-      return false;
-    }
-  };
-
-  //  handles submitProposal
-  //  whitelisttokenProposal
-  //  guildkickProposal
-  const createProposal = async ({ values, proposalLoading, formData }) => {
-    proposalLoading(true);
-    const { txType } = formData.tx;
-    const hash = uuidv4();
-    const args = getArgs({
-      values,
-      txType,
+    const now = (new Date().getTime() / 1000).toFixed();
+    const consolidatedData = {
+      ...data,
       contextData,
-      hash,
+      injectedProvider,
+      now,
+    };
+    const onTxHash = createActions({
+      tx: data.tx,
+      uiControl,
+      stage: 'onTxHash',
+      lifeCycleFns: data.lifeCycleFns,
     });
+
     try {
-      await Transaction({
-        args,
-        poll: buildTXPoll({
-          hash,
-          tx: formData.pollType || formData.tx,
-          values,
-          formData,
-          discourse: true,
-        }),
-        onTxHash() {
-          setProposalModal(false);
-          setTxInfoModal(true);
-        },
-        contextData,
-        injectedProvider,
-        tx: formData.tx,
+      const args = getArgs({ ...consolidatedData });
+      const poll = buildTXPoll({
+        ...consolidatedData,
       });
-    } catch (error) {
-      handleFormError({
-        error,
-        contextData,
-        formData,
+      const tx = await Transaction({
         args,
-        values,
-        errorToast,
-        loading: proposalLoading,
+        ...consolidatedData,
+        poll,
+        onTxHash,
+      });
+      data.lifeCycleFns?.afterTx?.();
+      return tx;
+    } catch (error) {
+      console.error(error);
+      data.lifeCycleFns?.onCatch?.();
+      errorToast({
+        title: data?.tx?.errMsg || 'There was an error',
+        description: error.message || '',
       });
     }
   };
 
-  const submitTransaction = ({ values, proposalLoading, formData }) => {
-    const txType = formData?.tx?.txType;
-    if (!txType || !values || !proposalLoading || !formData) {
-      throw new Error(
-        'DEV NOTICE: One of the required args (values, txType, formData, loading) not specified in proposalFormData.js',
-      );
+  const submitTransaction = data => {
+    const {
+      tx: { name },
+    } = data;
+
+    //  Checks that this TX has a name and that the name is in the
+    //  list of existing Transactions
+    if (!name) {
+      throw new Error('TX CONTEXT: TX data or name not found');
     }
-    if (
-      txType === 'submitProposal' ||
-      txType === 'submitWhitelistProposal' ||
-      txType === 'submitGuildKickProposal'
-    ) {
-      return createProposal({ values, proposalLoading, formData });
+    const txExists = Object.values(TX)
+      .map(tx => tx.name)
+      .includes(name);
+    if (!txExists) {
+      throw new Error('TX CONTEXT: TX does not exist');
     }
-    throw new Error('DEV NOTICE: TX Type not found');
+
+    //  Searches for items within the data tree and adds them to {values}
+    if (data?.tx?.exposeValues) {
+      return createTX(exposeValues({ ...data, contextData, injectedProvider }));
+    }
+    return createTX(data);
   };
 
   return (
     <TXContext.Provider
       value={{
         refreshDao,
-        unlockToken,
+        // unlockToken,
         submitTransaction,
         handleCustomValidation,
       }}
@@ -256,11 +245,8 @@ export const TXProvider = ({ children }) => {
 };
 
 export const useTX = () => {
-  const {
-    refreshDao,
-    unlockToken,
-    submitTransaction,
-    handleCustomValidation,
-  } = useContext(TXContext);
-  return { refreshDao, unlockToken, submitTransaction, handleCustomValidation };
+  const { refreshDao, submitTransaction, handleCustomValidation } = useContext(
+    TXContext,
+  );
+  return { refreshDao, submitTransaction, handleCustomValidation };
 };

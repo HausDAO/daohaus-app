@@ -15,9 +15,17 @@ const FieldWrapper = ({
   btn,
   error,
   required,
+  containerProps,
+  mb,
+  w,
 }) => {
   return (
-    <Flex w={['100%', null, '48%']} mb={3} flexDir='column'>
+    <Flex
+      w={w || ['100%', null, '48%']}
+      mb={mb || 3}
+      flexDir='column'
+      {...containerProps}
+    >
       <Flex>
         <TextBox as={FormLabel} size='xs' htmlFor={htmlFor} position='relative'>
           {required && (

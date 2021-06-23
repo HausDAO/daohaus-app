@@ -1,12 +1,16 @@
 import React from 'react';
+import AbiInput from './abiInput';
 
 import AddressInput from './addressInput';
 import GenericInput from './genericInput';
 import GenericTextarea from './genericTextArea';
 import InputSelect from './inputSelect';
 import LinkInput from './linkInput';
+import MinionSelect from './minionSelect';
 import PaymentInput from './paymentInput';
 import TributeInput from './tributeInput';
+import TargetContract from './targetContract';
+import MultiInput from './multiInput';
 
 export const InputFactory = props => {
   const { type } = props;
@@ -30,6 +34,18 @@ export const InputFactory = props => {
   }
   if (type === 'paymentInput') {
     return <PaymentInput {...props} />;
+  }
+  if (type === 'minionSelect') {
+    return <MinionSelect {...props} />;
+  }
+  if (type === 'abiInput') {
+    return <AbiInput {...props} />;
+  }
+  if (type === 'targetContract') {
+    return <TargetContract {...props} />;
+  }
+  if (type === 'multiInput') {
+    return <MultiInput {...props} />;
   }
   return null;
 };
