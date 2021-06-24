@@ -16,7 +16,7 @@ const Withdraw = ({ token }) => {
   const handleWithdraw = async () => {
     setLoading(true);
     await submitTransaction({
-      tx: TX.WITHDRAW_PROPOSAL,
+      tx: TX.WITHDRAW,
       args: [token.tokenAddress, token.tokenBalance],
     });
     setLoading(false);
