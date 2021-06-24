@@ -74,7 +74,7 @@ const gatherArgs = data => {
     if (arg === 'detailsToJSON') {
       if (!Array.isArray(tx.detailsJSON))
         throw new Error(
-          'details to JSON requires an Array of selected fields definied in the TX data at contractTX.js, under the field "detailsToJSON"',
+          'details to JSON requires an Array of selected fields defined in the TX data at contractTX.js, under the field "detailsToJSON"',
         );
       return buildJSONdetails({ ...values, hash }, tx.detailsJSON);
     }
