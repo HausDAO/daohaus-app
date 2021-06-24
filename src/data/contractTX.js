@@ -136,4 +136,13 @@ export const TX = {
     errMsg: 'Error Processing Proposal',
     successMsg: 'Proposal Processed!',
   },
+  COLLECT_TOKENS: {
+    contract: 'Moloch',
+    name: 'collectTokens',
+    poll: 'subgraph',
+    onTxHash: ACTIONS.BASIC,
+    display: 'Sync Token Balances',
+    errMsg: 'Error Syncing Token Balances',
+    successMsg: 'Token Balances Synced!',
+  },
 };

@@ -53,7 +53,7 @@ const TributeInput = props => {
   };
 
   const helperText = () =>
-    needsUnlock && `Amount enterred exceeds token allowance.`;
+    needsUnlock && `Amount entered exceeds token allowance.`;
 
   useEffect(() => {
     if (daoOverview) {
