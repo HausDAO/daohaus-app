@@ -14,6 +14,7 @@ import {
 } from '../utils/formBuilder';
 
 const ProposalForm = props => {
+  console.log('props', props);
   const { submitTransaction, handleCustomValidation } = useTX();
   const { fields, additionalOptions = null, required = [] } = props;
 

@@ -11,6 +11,7 @@
 export const ACTIONS = {
   PROPOSAL: ['closeProposalModal', 'openTxModal'],
   BASIC: ['openTxModal'],
+  GENERIC_MODAL: ['closeGenericModal', 'openTxModal'],
 };
 
 export const DETAILS = {
@@ -144,5 +145,15 @@ export const TX = {
     display: 'Sync Token Balances',
     errMsg: 'Error Syncing Token Balances',
     successMsg: 'Token Balances Synced!',
+  },
+  UPDATE_DELEGATE: {
+    contract: 'Moloch',
+    name: 'updateDelegateKey',
+    poll: 'subgraph',
+    onTxHash: ACTIONS.GENERIC_MODAL,
+    display: 'Update Delegate Key',
+    errMsg: 'Error Updating Delegate Key',
+    successMsg: 'Delegate Key Updated!',
+    gatherArgs: ['delegateAddress'],
   },
 };
