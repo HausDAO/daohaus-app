@@ -17,6 +17,7 @@ import {
   pollWrapNZapSummon,
   pollTransmutationSummon,
   pollProposal,
+  pollTXHash,
 } from '../polls/polls';
 import {
   cancelProposalTest,
@@ -39,6 +40,7 @@ import {
   rageKickTest,
   wrapNZapSummonTest,
   transmutationSummonTest,
+  testTXHash,
 } from '../polls/tests';
 
 export const createPoll = ({
@@ -56,6 +58,7 @@ export const createPoll = ({
     actions,
     txHash,
   }) => {
+    console.log(`txHash`, txHash);
     let tryCount = 0;
     const pollId = setInterval(async () => {
       if (tryCount < tries) {
@@ -86,6 +89,34 @@ export const createPoll = ({
   /// /////////////////ACTIONS//////////////////////////
   if (!action) {
     throw new Error('User must submit an action argument');
+  } else if (action === 'subgraph') {
+    return ({ chainID, actions, now, tx }) => txHash => {
+      const args = { txHash, chainID };
+      startPoll({
+        pollFetch: pollTXHash,
+        testFn: testTXHash,
+        shouldEqual: txHash,
+        args,
+        actions,
+        txHash,
+      });
+      cachePoll({
+        txHash,
+        action,
+        timeSent: now,
+        status: 'unresolved',
+        resolvedMsg: tx.successMsg,
+        unresolvedMsg: 'Processing',
+        successMsg: tx.successMsg,
+        errorMsg: tx.errMsg,
+        pollData: {
+          action,
+          interval,
+          tries,
+        },
+        pollArgs: args,
+      });
+    };
   } else if (
     action === 'submitProposal' ||
     action === 'submitWhitelistProposal' ||
@@ -163,6 +194,7 @@ export const createPoll = ({
       tokenAddress,
       userAddress,
       unlockAmount,
+      address,
       actions,
     }) => txHash => {
       startPoll({
@@ -173,7 +205,7 @@ export const createPoll = ({
           daoID,
           chainID,
           tokenAddress,
-          userAddress,
+          userAddress: userAddress || address,
           unlockAmount,
         },
         actions,
@@ -198,7 +230,7 @@ export const createPoll = ({
             daoID,
             tokenAddress,
             chainID,
-            userAddress,
+            userAddress: userAddress || address,
             unlockAmount,
           },
         });
@@ -469,12 +501,22 @@ export const createPoll = ({
       }
     };
   } else if (action === 'minionProposeAction') {
-    return ({ minionAddress, createdAt, chainID, actions }) => txHash => {
+    return ({
+      minionAddress,
+      selectedMinion,
+      createdAt,
+      chainID,
+      actions,
+    }) => txHash => {
       startPoll({
         pollFetch: pollMinionProposal,
         testFn: minonProposalTest,
         shouldEqual: createdAt,
-        args: { minionAddress, chainID, createdAt },
+        args: {
+          minionAddress: minionAddress || selectedMinion,
+          chainID,
+          createdAt,
+        },
         actions,
         txHash,
       });
@@ -486,14 +528,20 @@ export const createPoll = ({
           status: 'unresolved',
           resolvedMsg: 'Minion proposal submitted',
           unresolvedMsg: 'Submitting minion proposal',
-          successMsg: `Minion proposal submitted for ${minionAddress} on ${chainID}`,
-          errorMsg: `Error submitting minion proposal for ${minionAddress} on ${chainID}`,
+          successMsg: `Minion proposal submitted for ${minionAddress ||
+            selectedMinion} on ${chainID}`,
+          errorMsg: `Error submitting minion proposal for ${minionAddress ||
+            selectedMinion} on ${chainID}`,
           pollData: {
             action,
             interval,
             tries,
           },
-          pollArgs: { minionAddress, createdAt, chainID },
+          pollArgs: {
+            minionAddress: minionAddress || selectedMinion,
+            createdAt,
+            chainID,
+          },
         });
       }
     };

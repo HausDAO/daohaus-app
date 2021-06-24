@@ -16,8 +16,6 @@ const getMaxBalance = (tokenData, tokenAddress) => {
 };
 
 const PaymentInput = props => {
-  // const { address } = useInjectedProvider();
-  // const { daochain, daoid } = useParams();
   const { daoOverview } = useDao();
   const { localForm } = props;
   const { getValues, setValue, watch } = localForm;
@@ -32,7 +30,6 @@ const PaymentInput = props => {
       : 'Error: Not found.';
 
   useEffect(() => {
-    //  REFACTOR
     if (daoOverview) {
       const depTokenAddress = daoOverview.depositToken?.tokenAddress;
       const depositToken = daoOverview.tokenBalances?.find(
@@ -43,14 +40,16 @@ const PaymentInput = props => {
         token =>
           token.guildBank && token.token.tokenAddress !== depTokenAddress,
       );
-      // setValue('paymentToken', depositToken?.token?.tokenAddress);
+
       setDaoTokens(
-        [depositToken, ...nonDepTokens].map(token => ({
-          value: token.token.tokenAddress,
-          name: token.token.symbol || token.token.tokenAddress,
-          decimals: token.token.decimals,
-          balance: token.tokenBalance,
-        })),
+        [depositToken, ...nonDepTokens]
+          .filter(token => token.token.symbol)
+          .map(token => ({
+            value: token.token.tokenAddress,
+            name: token.token.symbol || token.token.tokenAddress,
+            decimals: token.token.decimals,
+            balance: token.tokenBalance,
+          })),
       );
     }
   }, [daoOverview]);

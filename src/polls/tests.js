@@ -1,6 +1,16 @@
 import { BigNumber } from 'ethers';
 import { hashMaker, memberVote } from '../utils/proposalUtils';
 
+export const testTXHash = (data, shouldEqual, pollId) => {
+  if (data) {
+    return data?.molochTransaction?.id === shouldEqual;
+  }
+  clearInterval(pollId);
+  throw new Error(
+    'Did not receive results from the graph based on the given transaction hash',
+  );
+};
+
 export const submitProposalTest = (data, shouldEqual, pollId) => {
   if (data.proposals) {
     const recentProposalHashes = data.proposals.map(proposal =>
