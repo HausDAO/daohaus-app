@@ -11,17 +11,17 @@ import {
 } from '@chakra-ui/react';
 import { rgba } from 'polished';
 
-import MinionSimpleProposalForm from '../forms/minionSimpleProposal';
-import SuperfluidMinionProposalForm from '../forms/superfluidMinionProposal';
-import TransmutationProposal from '../forms/transmutationProposal';
-import { getTerm } from '../utils/metadata';
 import { useMetaData } from '../contexts/MetaDataContext';
 import { useOverlay } from '../contexts/OverlayContext';
 import { useCustomTheme } from '../contexts/CustomThemeContext';
+import ProposalForm from '../formBuilder/proposalForm';
+import SuperfluidMinionProposalForm from '../forms/superfluidMinionProposal';
+import TransmutationProposal from '../forms/transmutationProposal';
 import LootGrabForm from '../forms/lootGrab';
 import NiftyProposalForm from '../forms/minionNiftyProposal';
-import ProposalForm from '../formBuilder/proposalForm';
-import { PROPOSAL_FORMS } from '../staticElements/proposalFormData';
+
+import { getTerm } from '../utils/metadata';
+import { PROPOSAL_FORMS } from '../data/proposalForms';
 
 const ProposalFormModal = ({ proposalType }) => {
   const [, setLoading] = useState(false);
@@ -69,7 +69,7 @@ const ProposalFormModal = ({ proposalType }) => {
       type: `New ${getTerm(customTerms, 'proposal')}`,
       heading: `New Minion ${getTerm(customTerms, 'proposal')}`,
       subline: 'Submit a Minion proposal here.',
-      form: <MinionSimpleProposalForm />,
+      form: <ProposalForm {...PROPOSAL_FORMS.MINION} />,
     },
     niftyMinion: {
       type: `New ${getTerm(customTerms, 'proposal')}`,

@@ -63,7 +63,6 @@ export const TokenProvider = ({ children }) => {
 
   const getTokenPrice = tokenAddress => {
     if (tokenPrices && tokenAddress) {
-      console.log(tokenPrices);
       return tokenPrices[tokenAddress]?.price || null;
     }
   };

@@ -1,4 +1,5 @@
-import { PROPOSAL_TYPES } from '../utils/proposalUtils';
+import { MINION_TYPES, PROPOSAL_TYPES } from '../utils/proposalUtils';
+import { TX } from './contractTX';
 
 const INFO_TEXT = {
   SHARES_REQUEST:
@@ -11,6 +12,8 @@ const INFO_TEXT = {
     'Only tokens approved by the DAO are allowed here. Members can add more approved tokens with Token proposals',
   PAYMENT_REQUEST: 'Request Funds from the DAO',
   ADDR_KICK: 'Enter the public key of the member you would like to kick.',
+  MINION_TYPES: 'Minion funds to be used for this transaction',
+  MINION_PAYMENT: `This is the amount of value to be sent from the selected minion's balance`,
 };
 
 export const FIELD = {
@@ -22,12 +25,20 @@ export const FIELD = {
     placeholder: 'Proposal Title',
     expectType: 'any',
   },
+  TOKENS: {
+    type: 'multiInput',
+    label: 'Tokens',
+    name: 'tokens',
+    htmlFor: 'tokens',
+    placeholder: 'tokenAddress',
+    expectType: 'arrayStrings',
+  },
   DESCRIPTION: {
     type: 'textarea',
     label: 'Description',
     name: 'description',
     htmlFor: 'description',
-    placeholder: 'How does that make you feel, champ',
+    placeholder: 'Your description here.',
     expectType: 'any',
   },
   SHARES_REQUEST: {
@@ -63,7 +74,7 @@ export const FIELD = {
     placeholder: '0x',
     label: 'Applicant',
     info: INFO_TEXT.APPLICANT,
-    expectType: 'publicKey',
+    expectType: 'address',
   },
   TRIBUTE: {
     type: 'tributeInput',
@@ -89,7 +100,41 @@ export const FIELD = {
     name: 'tokenAddress',
     htmlFor: 'tokenAddress',
     placeholder: '0x',
-    expectType: 'publicKey',
+    expectType: 'address',
+  },
+  //  Plain old input until token price API can be built
+  MINION_PAYMENT: {
+    type: 'input',
+    htmlFor: 'minionPayment',
+    name: 'minionPayment',
+    placeholder: '0',
+    label: 'Minion Payment',
+    info: INFO_TEXT.MINION_PAYMENT,
+    expectType: 'number',
+  },
+  MINION_SELECT: {
+    type: 'minionSelect',
+    label: 'Select a minion',
+    name: 'selectedMinion',
+    htmlFor: 'selectedMinion',
+    placeholder: 'Choose a DAO minion',
+    expectType: 'address',
+  },
+  ABI_INPUT: {
+    type: 'abiInput',
+    label: 'Contract Function',
+    name: 'abiInput',
+    htmlFor: 'abiInput',
+    placeholder: '0x',
+    expectType: 'string',
+  },
+  TARGET_CONTRACT: {
+    type: 'targetContract',
+    label: 'Contract Address',
+    name: 'targetContract',
+    htmlFor: 'targetContract',
+    placeholder: '0x',
+    expectType: 'address',
   },
 };
 
@@ -99,12 +144,7 @@ export const PROPOSAL_FORMS = {
     subtitle: 'Request Shares and/or Loot',
     type: PROPOSAL_TYPES.MEMBER,
     required: ['title', 'sharesRequested'], // Use name key from proposal type object
-    tx: {
-      txType: 'submitProposal',
-      contract: 'Moloch',
-      errMsg: 'Error submitting proposal',
-      successMsg: 'Membership Proposal submitted!',
-    },
+    tx: TX.SUBMIT_PROPOSAL,
     fields: [
       FIELD.TITLE,
       FIELD.SHARES_REQUEST,
@@ -123,12 +163,7 @@ export const PROPOSAL_FORMS = {
     subtitle: 'Request or distribute funds',
     type: PROPOSAL_TYPES.FUNDING,
     required: ['title', 'applicant'], // Use name key from proposal type object
-    tx: {
-      txType: 'submitProposal',
-      contract: 'Moloch',
-      errMsg: 'Error submitting proposal',
-      successMsg: 'Funding Proposal submitted!',
-    },
+    tx: TX.SUBMIT_PROPOSAL,
     fields: [
       FIELD.TITLE,
       FIELD.APPLICANT,
@@ -148,12 +183,7 @@ export const PROPOSAL_FORMS = {
     subtitle: 'Approve a new token.',
     type: PROPOSAL_TYPES.WHITELIST,
     required: ['title', 'tokenAddress'], // Use name key from proposal type object
-    tx: {
-      txType: 'submitWhitelistProposal',
-      contract: 'Moloch',
-      errMsg: 'Error submitting proposal',
-      successMsg: 'Token Proposal submitted!',
-    },
+    tx: TX.WHITELIST_TOKEN_PROPOSAL,
     fields: [FIELD.TITLE, FIELD.TOKEN_ADDRESS, FIELD.LINK, FIELD.DESCRIPTION],
   },
   TRADE: {
@@ -161,12 +191,7 @@ export const PROPOSAL_FORMS = {
     subtitle: 'Remove a Member',
     type: PROPOSAL_TYPES.TRADE,
     required: ['title'],
-    tx: {
-      txType: 'submitProposal',
-      contract: 'Moloch',
-      errMsg: 'Error submitting proposal',
-      successMsg: 'Trade Proposal submitted!',
-    },
+    tx: TX.SUBMIT_PROPOSAL,
     fields: [
       FIELD.TITLE,
       FIELD.TRIBUTE,
@@ -185,13 +210,7 @@ export const PROPOSAL_FORMS = {
     subtitle: 'Remove a Member.',
     type: PROPOSAL_TYPES.GUILDKICK,
     required: ['title', 'applicant'], // Use name key from proposal type object
-    tx: {
-      txType: 'submitGuildKickProposal',
-      pollType: 'submitProposal', //  Overwrites standard txType in cases where txType isn't used for Poll Action
-      contract: 'Moloch',
-      errMsg: 'Error submitting proposal',
-      successMsg: 'Guild Kick Proposal submitted!',
-    },
+    tx: TX.GUILDKICK_PROPOSAL,
     fields: [
       FIELD.TITLE,
       {
@@ -205,11 +224,26 @@ export const PROPOSAL_FORMS = {
   },
   SIGNAL: {
     type: PROPOSAL_TYPES.SIGNAL,
-    tx: {
-      txType: 'submitProposal',
-      contract: 'Moloch',
-    },
+    tx: TX.SUBMIT_PROPOSAL,
     required: ['title'], // Use name key from proposal type object
     fields: [FIELD.TITLE, FIELD.DESCRIPTION, FIELD.LINK],
+  },
+  MINION: {
+    title: 'Minion Proposal',
+    subtitle: 'Extend DAO proposals to external contracts',
+    type: PROPOSAL_TYPES.MINION_DEFAULT,
+    required: ['targetContract', 'title', 'selectedMinion'], // Use name key from proposal type object
+    minionType: MINION_TYPES.VANILLA,
+    tx: TX.MINION_PROPOSE_ACTION,
+    fields: [
+      FIELD.TITLE,
+      FIELD.MINION_SELECT,
+      FIELD.TARGET_CONTRACT,
+      FIELD.ABI_INPUT,
+    ],
+    additionalOptions: [
+      FIELD.MINION_PAYMENT,
+      { ...FIELD.DESCRIPTION, h: '10' },
+    ],
   },
 };
