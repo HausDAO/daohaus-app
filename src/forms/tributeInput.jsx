@@ -49,14 +49,15 @@ const TributeInput = ({ register, setValue, getValues, setError }) => {
           token.guildBank && token.token.tokenAddress !== depositTokenAddress,
       );
       tokenArray.unshift(depositToken);
-
       setTokenData(
-        tokenArray.map(token => ({
-          label: token.token.symbol || token.tokenAddress,
-          value: token.token.tokenAddress,
-          decimals: token.token.decimals,
-          balance: token.tokenBalance,
-        })),
+        tokenArray
+          .filter(token => token.token.symbol === '')
+          .map(token => ({
+            label: token.token.symbol || token.tokenAddress,
+            value: token.token.tokenAddress,
+            decimals: token.token.decimals,
+            balance: token.tokenBalance,
+          })),
       );
     }
   }, [daoOverview]);
