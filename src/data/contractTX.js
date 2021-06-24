@@ -137,7 +137,7 @@ export const TX = {
     errMsg: 'Error Processing Proposal',
     successMsg: 'Proposal Processed!',
   },
-  WITHDRAW_PROPOSAL: {
+  WITHDRAW: {
     contract: 'Moloch',
     name: 'withdrawBalance',
     poll: 'subgraph',
@@ -146,7 +146,7 @@ export const TX = {
     errMsg: 'Error Withdrawing Balance',
     successMsg: 'Balance Withdrawn!',
   },
-  RAGE_QUIT_PROPOSAL: {
+  RAGE_QUIT: {
     contract: 'Moloch',
     name: 'ragequit',
     poll: 'subgraph',
