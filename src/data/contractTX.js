@@ -11,6 +11,7 @@
 export const ACTIONS = {
   PROPOSAL: ['closeProposalModal', 'openTxModal'],
   BASIC: ['openTxModal'],
+  RAGE_QUIT: ['closeGenericModal', 'openTxModal'],
 };
 
 export const DETAILS = {
@@ -135,5 +136,23 @@ export const TX = {
     display: 'Process Proposal',
     errMsg: 'Error Processing Proposal',
     successMsg: 'Proposal Processed!',
+  },
+  WITHDRAW_PROPOSAL: {
+    contract: 'Moloch',
+    name: 'withdrawBalance',
+    poll: 'subgraph',
+    onTxHash: ACTIONS.BASIC,
+    display: 'Withdraw Balance',
+    errMsg: 'Error Withdrawing Balance',
+    successMsg: 'Balance Withdrawn!',
+  },
+  RAGE_QUIT_PROPOSAL: {
+    contract: 'Moloch',
+    name: 'ragequit',
+    poll: 'subgraph',
+    onTxHash: ACTIONS.RAGE_QUIT,
+    display: 'Rage Quit',
+    errMsg: 'Error Rage Quitting',
+    successMsg: 'Rage quit processed!',
   },
 };

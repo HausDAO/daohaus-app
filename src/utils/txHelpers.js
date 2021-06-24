@@ -225,6 +225,7 @@ export const createActions = ({ tx, uiControl, stage, lifeCycleFns }) => {
   //   refetch,
   //   setTxInfoModal,
   //   setProposalModal,
+  //   setGenericModal
   // };
   const actions = {
     closeProposalModal() {
@@ -232,6 +233,9 @@ export const createActions = ({ tx, uiControl, stage, lifeCycleFns }) => {
     },
     openTxModal() {
       uiControl.setTxInfoModal(true);
+    },
+    closeGenericModal() {
+      uiControl.setGenericModal({});
     },
   };
 
