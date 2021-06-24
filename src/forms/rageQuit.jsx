@@ -71,7 +71,7 @@ const RageQuitForm = ({ overview, daoMember }) => {
 
     setLoading(true);
     await submitTransaction({
-      tx: TX.RAGE_QUIT_PROPOSAL,
+      tx: TX.RAGE_QUIT,
       args: [values.shares || '0', values.loot || '0'],
       values,
     });
