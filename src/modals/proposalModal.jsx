@@ -22,6 +22,7 @@ import NiftyProposalForm from '../forms/minionNiftyProposal';
 
 import { getTerm } from '../utils/metadata';
 import { PROPOSAL_FORMS } from '../data/proposalForms';
+import MinionProposalForm from '../forms/minionSimpleProposal';
 
 const ProposalFormModal = ({ proposalType }) => {
   const [, setLoading] = useState(false);
@@ -69,7 +70,8 @@ const ProposalFormModal = ({ proposalType }) => {
       type: `New ${getTerm(customTerms, 'proposal')}`,
       heading: `New Minion ${getTerm(customTerms, 'proposal')}`,
       subline: 'Submit a Minion proposal here.',
-      form: <ProposalForm {...PROPOSAL_FORMS.MINION} />,
+      form: <MinionProposalForm />,
+      // form: <ProposalForm {...PROPOSAL_FORMS.MINION} />,
     },
     niftyMinion: {
       type: `New ${getTerm(customTerms, 'proposal')}`,

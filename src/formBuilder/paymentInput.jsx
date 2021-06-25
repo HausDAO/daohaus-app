@@ -42,12 +42,14 @@ const PaymentInput = props => {
       );
 
       setDaoTokens(
-        [depositToken, ...nonDepTokens].map(token => ({
-          value: token.token.tokenAddress,
-          name: token.token.symbol || token.token.tokenAddress,
-          decimals: token.token.decimals,
-          balance: token.tokenBalance,
-        })),
+        [depositToken, ...nonDepTokens]
+          .filter(token => token.token.symbol)
+          .map(token => ({
+            value: token.token.tokenAddress,
+            name: token.token.symbol || token.token.tokenAddress,
+            decimals: token.token.decimals,
+            balance: token.tokenBalance,
+          })),
       );
     }
   }, [daoOverview]);
