@@ -12,10 +12,9 @@ const GatedInput = props => {
   const [isCorrect, setIsCorrect] = useState(null);
   const [loading, setLoading] = useState(false);
 
-  const { localForm, only } = props;
+  const { localForm, only, name } = props;
   const { watch } = localForm;
-  console.log(only);
-  const tokenAddress = watch('tokenAddress');
+  const contractAddress = watch(name);
 
   useEffect(() => {
     let shouldUpdate = true;
@@ -24,7 +23,7 @@ const GatedInput = props => {
       //  TODO add ability to disable form
       setLoading(true);
       const isCorrectContractType = await checkContractType(
-        tokenAddress,
+        contractAddress,
         daochain,
         only.model,
       );
@@ -38,7 +37,7 @@ const GatedInput = props => {
       }
     };
 
-    if (tokenAddress && validate.address(tokenAddress) && only.model) {
+    if (contractAddress && validate.address(contractAddress) && only.model) {
       checkIsCorrect();
     } else {
       setLoading(false);
@@ -47,10 +46,10 @@ const GatedInput = props => {
     return () => {
       shouldUpdate = false;
     };
-  }, [tokenAddress, only]);
+  }, [contractAddress, only]);
 
   const getHelperText = () => {
-    if (loading) return <Spinner />;
+    if (loading) return <Spinner size='xs' />;
     if (isCorrect) return `Valid ${only.name}`;
     if (isCorrect === false) return `Not a valid ${only.name}`;
     if (isCorrect === null) return '';

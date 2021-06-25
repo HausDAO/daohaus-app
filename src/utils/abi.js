@@ -24,6 +24,7 @@ export const fetchABI = async (contractAddress, chainID, parseJSON = true) => {
     const response = await fetch(url);
     const data = await response.json();
     if (data.message === 'OK' && IsJsonString(data?.result) && parseJSON) {
+      console.log(data);
       return JSON.parse(data.result);
     }
     return data;
