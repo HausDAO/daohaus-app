@@ -1,17 +1,17 @@
 // SAVE FOR LATER
 
-// import Web3 from 'web3';
+import Web3 from 'web3';
 
 // import Erc20Abi from '../contracts/erc20a.json';
-// import { chainByID } from './chain';
+import { chainByID } from './chain';
 
-// export const createContract = ({ address, abi, chainID, web3 }) => {
-//   if (!web3) {
-//     const rpcUrl = chainByID(chainID).rpc_url;
-//     web3 = new Web3(new Web3.providers.HttpProvider(rpcUrl));
-//   }
-//   return new web3.eth.Contract(abi, address);
-// };
+export const createContract = ({ address, abi, chainID, web3 }) => {
+  if (!web3) {
+    const rpcUrl = chainByID(chainID).rpc_url;
+    web3 = new Web3(new Web3.providers.HttpProvider(rpcUrl));
+  }
+  return new web3.eth.Contract(abi, address);
+};
 
 // const compareAttributes = (comparisonType, { contract, abi }) => {
 //   console.log(contract);

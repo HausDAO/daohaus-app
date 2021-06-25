@@ -264,7 +264,7 @@ const MinionProposalForm = () => {
       const imp = parsed.find(p => p.name === 'implementation');
       if (imp) {
         console.log('imp', imp);
-
+        console.log(daochain);
         const rpcUrl = chainByID(daochain).rpc_url;
         const web3 = new Web3(new Web3.providers.HttpProvider(rpcUrl));
         const abi = parsed;
@@ -273,7 +273,7 @@ const MinionProposalForm = () => {
 
         const url2 = `${chainByID(daochain).abi_api_url}${newaddr}${key &&
           `&apikey=${key}`}`;
-
+        console.log(url2);
         console.log(newaddr);
 
         const response2 = await fetch(url2);

@@ -1,5 +1,6 @@
 import Web3 from 'web3';
 import { chainByID } from './chain';
+import { createContract } from './contract';
 import { IsJsonString } from './general';
 
 const isEtherScan = chainID => {
@@ -15,6 +16,18 @@ const getABIurl = (contractAddress, chainID) => {
     : `${chainByID(chainID).abi_api_url}${contractAddress}`;
 };
 
+const isProxyABI = response => {
+  if (response?.length) {
+    return response.some(fn => fn.name === 'implementation');
+  }
+};
+
+const getImplementationOf = async (address, chainID, abi) => {
+  const web3Contract = createContract({ address, abi, chainID });
+  const newAddress = await web3Contract.methods.implementation().call();
+  return newAddress;
+};
+
 export const fetchABI = async (contractAddress, chainID, parseJSON = true) => {
   const url = getABIurl(contractAddress, chainID);
   if (!url) {
@@ -24,14 +37,32 @@ export const fetchABI = async (contractAddress, chainID, parseJSON = true) => {
     const response = await fetch(url);
     const data = await response.json();
     if (data.message === 'OK' && IsJsonString(data?.result) && parseJSON) {
-      console.log(data);
-      return JSON.parse(data.result);
+      const abiData = JSON.parse(data.result);
+      if (isProxyABI(abiData)) {
+        const originalAddress = await getImplementationOf(
+          contractAddress,
+          chainID,
+          abiData,
+        );
+        const newData = await fetchABI(originalAddress, chainID, parseJSON);
+        return newData;
+      }
+      return abiData;
     }
     return data;
   } catch (error) {
     console.error(error);
   }
 };
+const test = async () => {
+  const result = await fetchABI(
+    '0xf8D1677c8a0c961938bf2f9aDc3F3CFDA759A9d9',
+    '0x64',
+  );
+  console.log(result);
+};
+
+test();
 
 export const getABIfunctions = abi => {
   if (!abi || !Array.isArray(abi) || !abi.length) return null;
