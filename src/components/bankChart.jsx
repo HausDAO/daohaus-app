@@ -32,7 +32,6 @@ import { useSessionStorage } from '../hooks/useSessionStorage';
 import { useCustomTheme } from '../contexts/CustomThemeContext';
 import ContentBox from './ContentBox';
 import TextBox from './TextBox';
-import { getTerm, getTitle } from '../utils/metadata';
 import BankTotal from './bankTotal';
 
 const bankChartTimeframes = [
@@ -42,7 +41,7 @@ const bankChartTimeframes = [
   { name: '6 months', value: 6 },
 ];
 
-const BankChart = ({ overview, customTerms, currentDaoTokens }) => {
+const BankChart = ({ overview, currentDaoTokens }) => {
   const { daochain, daoid } = useParams();
   const [daoBalances, setDaoBalances] = useSessionStorage(
     `balances-${daoid}`,
