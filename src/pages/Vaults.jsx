@@ -23,8 +23,6 @@ const Vaults = ({
   const [filter, setFilter] = useState('all');
   const [listVaults, setListVaults] = useState(null);
 
-  console.log('daoVaults', daoVaults);
-
   useEffect(() => {
     const filterVaults = () => {
       if (filter.value === 'all') {
@@ -82,7 +80,13 @@ const Vaults = ({
       <Flex wrap='wrap' align='start' justify='space-between' w='100%'>
         {listVaults &&
           listVaults.map((vault, i) => {
-            return <VaultCard key={i} vault={vault} />;
+            return (
+              <VaultCard
+                key={i}
+                vault={vault}
+                currentDaoTokens={currentDaoTokens}
+              />
+            );
           })}
       </Flex>
     </MainViewLayout>

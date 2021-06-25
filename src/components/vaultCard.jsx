@@ -8,13 +8,16 @@ import VaultCardTokenList from './vaultCardTokenList';
 import { numberWithCommas } from '../utils/general';
 import { vaultTypeDisplayName, vaultUrlPart } from '../utils/vault';
 import CopyButton from './copyButton';
+import { tallyUSDs } from '../utils/tokenValue';
 
-const VaultCard = ({ vault }) => {
+const VaultCard = ({ vault, currentDaoTokens }) => {
   const { daoid, daochain } = useParams();
 
-  // TODO: obscured by the bg color on contentbox
-  // maybe adjust this with a helper and grab the newest nft the vault has
   const bgImgUrl = vault.nfts[0]?.imageUrl;
+  const currentVaultBalance =
+    vault.type === 'treasury'
+      ? tallyUSDs(currentDaoTokens)
+      : vault.currentBalance;
 
   return (
     <ContentBox
@@ -51,7 +54,7 @@ const VaultCard = ({ vault }) => {
         {vault.name}
       </Box>
       <Box fontSize='3xl' fontWeight={700} fontFamily='mono'>
-        ${numberWithCommas(vault.currentBalance)}
+        ${numberWithCommas(currentVaultBalance)}
       </Box>
 
       <Flex direction='column' align='start'>
