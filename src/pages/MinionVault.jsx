@@ -107,7 +107,7 @@ const MinionVault = ({
               <>
                 <Flex direction='row' justify='space-between'>
                   <TextBox w='100%'>NFTS</TextBox>
-                  <TextBox w='100%' fontColor='secondary'>
+                  <TextBox w='100%' fontcolor='secondary'>
                     View Gallery
                   </TextBox>
                 </Flex>

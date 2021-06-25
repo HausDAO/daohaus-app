@@ -125,9 +125,16 @@ const completeQueries = {
           minionAddresses,
         );
 
-        console.log('vaultApiData', vaultApiData);
+        const guildBank = {
+          type: 'treasury',
+          name: 'DAO Treasury',
+          address: args.daoID,
+          currentBalance: '',
+          erc20s: graphOverview.moloch.tokenBalances,
+          nfts: [],
+        };
 
-        setter.setDaoVaults(vaultApiData);
+        setter.setDaoVaults([guildBank, ...vaultApiData]);
       }
     } catch (error) {
       console.error(error);
