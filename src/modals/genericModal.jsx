@@ -5,13 +5,20 @@ import {
   ModalCloseButton,
   ModalBody,
   ModalOverlay,
+  ModalHeader,
+  Box,
 } from '@chakra-ui/react';
 import { rgba } from 'polished';
 
 import { useOverlay } from '../contexts/OverlayContext';
 import { useCustomTheme } from '../contexts/CustomThemeContext';
 
-const GenericModal = ({ children, modalId, closeOnOverlayClick = true }) => {
+const GenericModal = ({
+  children,
+  modalId,
+  title,
+  closeOnOverlayClick = true,
+}) => {
   const { genericModal, setGenericModal } = useOverlay();
   const { theme } = useCustomTheme();
 
@@ -34,6 +41,19 @@ const GenericModal = ({ children, modalId, closeOnOverlayClick = true }) => {
         borderColor='whiteAlpha.200'
         py={6}
       >
+        {title && (
+          <ModalHeader>
+            <Box
+              fontFamily='heading'
+              textTransform='uppercase'
+              fontSize='sm'
+              fontWeight={700}
+              color='white'
+            >
+              {title}
+            </Box>
+          </ModalHeader>
+        )}
         <ModalCloseButton />
         <ModalBody
           flexDirection='column'

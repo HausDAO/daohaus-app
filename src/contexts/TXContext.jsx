@@ -45,6 +45,7 @@ export const TXProvider = ({ children }) => {
     successToast,
     setTxInfoModal,
     setProposalModal,
+    setGenericModal,
   } = useOverlay();
   const { hasFetchedMetadata, shouldUpdateTheme } = useMetaData();
   const { shouldFetchInit, shouldFetchContract, currentDaoTokens } = useToken();
@@ -80,6 +81,7 @@ export const TXProvider = ({ children }) => {
     refetch,
     setTxInfoModal,
     setProposalModal,
+    setGenericModal,
   };
 
   const refreshDao = () => {

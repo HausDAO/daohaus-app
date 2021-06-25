@@ -104,7 +104,7 @@ export const safeEncodeHexFunction = (selectedFunction, inputVals) => {
     return {
       encodingError: true,
       message:
-        'Could not encode transaction data with the values enterred into this form',
+        'Could not encode transaction data with the values entered into this form',
     };
   }
 };

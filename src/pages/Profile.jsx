@@ -12,7 +12,8 @@ import ProfileCard from '../components/profileCard';
 import { getProfileActivites } from '../utils/activities';
 import MainViewLayout from '../components/mainViewLayout';
 import { useInjectedProvider } from '../contexts/InjectedProviderContext';
-import UpdateDelegate from '../forms/updateDelegate';
+import ProposalForm from '../formBuilder/proposalForm';
+import { PROPOSAL_FORMS } from '../data/proposalForms';
 
 const Profile = ({ members, overview, daoTokens, daoMember, activities }) => {
   const { userid, daochain } = useParams();
@@ -83,8 +84,12 @@ const Profile = ({ members, overview, daoTokens, daoMember, activities }) => {
           <GenericModal modalId='rageQuit' closeOnOverlayClick>
             <RageQuitForm overview={overview} daoMember={daoMember} />
           </GenericModal>
-          <GenericModal modalId='updateDelegate' closeOnOverlayClick>
-            <UpdateDelegate overview={overview} />
+          <GenericModal
+            modalId='updateDelegate'
+            title='Update Delegate Address'
+            closeOnOverlayClick
+          >
+            <ProposalForm {...PROPOSAL_FORMS.UPDATE_DELEGATE} />
           </GenericModal>
           <ProfileCard
             overview={overview}

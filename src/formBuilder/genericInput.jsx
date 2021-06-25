@@ -28,6 +28,8 @@ const GenericInput = ({
 }) => {
   const { register } = localForm;
 
+  console.log('w', w);
+
   return (
     <FieldWrapper
       label={label}

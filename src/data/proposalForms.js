@@ -15,6 +15,8 @@ const INFO_TEXT = {
   ADDR_KICK: 'Enter the public key of the member you would like to kick.',
   MINION_TYPES: 'Minion funds to be used for this transaction',
   MINION_PAYMENT: `This is the amount of value to be sent from the selected minion's balance`,
+  DELEGATE_ADDRESS:
+    'Warning: By switching your address to a delegate, you are giving that delegate address the right to act on your behalf.',
 };
 
 export const FIELD = {
@@ -147,6 +149,16 @@ export const FIELD = {
     placeholder: '0x',
     expectType: 'address',
   },
+  DELEGATE_ADDRESS: {
+    type: 'input',
+    htmlFor: 'delegateAddress',
+    name: 'delegateAddress',
+    placeholder: '0x',
+    label: 'Address',
+    info: INFO_TEXT.DELEGATE_ADDRESS,
+    expectType: 'address',
+    w: '100%',
+  },
 };
 
 export const PROPOSAL_FORMS = {
@@ -261,5 +273,11 @@ export const PROPOSAL_FORMS = {
       FIELD.MINION_PAYMENT,
       { ...FIELD.DESCRIPTION, h: '10' },
     ],
+  },
+  UPDATE_DELEGATE: {
+    title: 'UPDATE DELEGATE ADDRESS',
+    required: ['delegateAddress'],
+    tx: TX.UPDATE_DELEGATE,
+    fields: [FIELD.DELEGATE_ADDRESS],
   },
 };
