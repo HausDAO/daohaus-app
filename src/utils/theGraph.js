@@ -8,7 +8,7 @@ import { fetchTokenData } from './tokenValue';
 import { omit } from './general';
 import { UBERHAUS_QUERY, UBER_MINIONS } from '../graphQL/uberhaus-queries';
 import { UBERHAUS_DATA } from './uberhaus';
-import { getApiMetadata, getDateTime } from './metadata';
+import { getApiMetadata, getDateTime, fetchApiVaultData } from './metadata';
 import { CCO_CONSTANTS } from './cco';
 import { GET_TRANSMUTATION, GET_WRAP_N_ZAPS } from '../graphQL/boost-queries';
 
@@ -110,7 +110,25 @@ const completeQueries = {
           contractAddr: args.daoID,
         },
       });
-      setter(graphOverview.moloch);
+
+      if (setter.setDaoOverview) {
+        setter.setDaoOverview(graphOverview.moloch);
+      }
+
+      if (setter.setDaoVaults) {
+        const minionAddresses = graphOverview.moloch.minions.map(
+          minion => minion.minionAddress,
+        );
+
+        const vaultApiData = await fetchApiVaultData(
+          supportedChains[args.chainID].network,
+          minionAddresses,
+        );
+
+        console.log('vaultApiData', vaultApiData);
+
+        setter.setDaoVaults(vaultApiData);
+      }
     } catch (error) {
       console.error(error);
     }
@@ -145,9 +163,6 @@ const completeQueries = {
       }
       if (setter.setUberProposals) {
         setter.setUberProposals(resolvedActivity.proposals);
-      }
-      if (setter.setUberActivities) {
-        setter.setUberActivities(resolvedActivity.proposals);
       }
     } catch (error) {
       console.error(error);

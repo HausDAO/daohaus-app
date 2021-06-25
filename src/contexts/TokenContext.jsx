@@ -31,7 +31,6 @@ export const TokenProvider = ({ children }) => {
         setTokenPrices,
       );
 
-      console.log('newDaoData', newDaoData);
       setCurrentDaoTokens(newDaoData);
       shouldFetchInit.current = false;
     };
