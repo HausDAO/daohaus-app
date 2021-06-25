@@ -1,6 +1,39 @@
 import { NFTService } from '../services/nftService';
+import { fetchABI } from './abi';
 import { chainByID } from './chain';
 import { fetchTokenData } from './tokenValue';
+
+export const CONTRACT_MODELS = {
+  //  SRC https://ethereum.org/en/developers/docs/standards/tokens/erc-20/
+  ERC20: {
+    name: 'ERC-20',
+    model: [
+      'name',
+      'symbol',
+      'decimals',
+      'totalSupply',
+      'balanceOf',
+      'transfer',
+      'transferFrom',
+      'approve',
+      'allowance',
+    ],
+  },
+  // SRC https://ethereum.org/en/developers/docs/standards/tokens/erc-721/
+  ERC721: {
+    name: 'ERC-721',
+    model: [
+      'balanceOf',
+      'ownerOf',
+      'safeTransferFrom',
+      'transferFrom',
+      'approve',
+      'setApprovalForAll',
+      'getApproved',
+      'isApprovedForAll',
+    ],
+  },
+};
 
 const fetchEtherscanAPIData = async (address, daochain, module) => {
   try {
@@ -264,3 +297,69 @@ export const getExplorerLink = (tokenAddress, chainID) => {
   }
   return null;
 };
+
+export const checkContractType = async (address, chainID, model) => {
+  const abi = await fetchABI(address, chainID);
+  if (abi.status === '0') {
+    console.log(abi);
+    return false;
+  }
+  const names = abi.filter(fn => fn.name).map(fn => fn.name);
+  return model.every(name => names.includes(name));
+};
+
+// const test = async tokenType => {
+//   console.log(`tokenType`, tokenType);
+//   const misfitUniversity = await checkContractType(
+//     '0x74a69df3adc7235392374f728601e49807de4b30',
+//     '0x1',
+//     tokenType,
+//   );
+//   const spunksNFT = await checkContractType(
+//     '0x9a604220d37b69c09effccd2e8475740773e3daf',
+//     '0x1',
+//     tokenType,
+//   );
+//   const niftyInk = await checkContractType(
+//     '0xc02697c417ddacfbe5edbf23edad956bc883f4fb',
+//     '0x1',
+//     tokenType,
+//   );
+//   const dai = await checkContractType(
+//     '0x6B175474E89094C44Da98b954EedeAC495271d0F',
+//     '0x1',
+//     tokenType,
+//   );
+//   const uni = await checkContractType(
+//     '0x1f9840a85d5af5bf1d1762f925bdaddc4201f984',
+//     '0x1',
+//     tokenType,
+//   );
+//   const jordansTestMoloch = await checkContractType(
+//     '0x39f002fb6f98111ea6e8b5c157fddec50d18f278',
+//     '0x4',
+//     tokenType,
+//   );
+//   const hausOnMainnet = await checkContractType(
+//     '0xf2051511B9b121394FA75B8F7d4E7424337af687',
+//     '0x1',
+//     tokenType,
+//   );
+//   const hausOnXdai = await checkContractType(
+//     '0xb0c5f3100a4d9d9532a4cfd68c55f1ae8da987eb',
+//     '0x64',
+//     tokenType,
+//   );
+
+//   console.log(`misfitUniversity`, misfitUniversity);
+//   console.log('spunksNFT', spunksNFT);
+//   console.log(`niftyInk`, niftyInk);
+//   console.log(`dai`, dai);
+//   console.log(`uni`, uni);
+//   console.log(`jordansTestMoloch`, jordansTestMoloch);
+//   console.log(`hausOnMainnet`, hausOnMainnet);
+//   console.log(`hausOnXdai`, hausOnXdai);
+// };
+
+// // test(CONTRACT_MODELS.ERC20);
+// test(CONTRACT_MODELS.ERC721);

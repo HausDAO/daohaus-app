@@ -1,4 +1,5 @@
 import { MINION_TYPES, PROPOSAL_TYPES } from '../utils/proposalUtils';
+import { CONTRACT_MODELS } from '../utils/tokenExplorerApi';
 import { TX } from './contractTX';
 
 const INFO_TEXT = {
@@ -94,11 +95,21 @@ export const FIELD = {
     info: INFO_TEXT.PAYMENT_REQUEST,
     expectType: 'number',
   },
-  TOKEN_ADDRESS: {
-    type: 'input',
-    label: 'Token Address',
-    name: 'tokenAddress',
-    htmlFor: 'tokenAddress',
+  ONLY_ERC20: {
+    type: 'gatedInput',
+    only: CONTRACT_MODELS.ERC20,
+    label: 'ERC-20 Address',
+    name: 'erc20TokenAddress',
+    htmlFor: 'erc20TokenAddress',
+    placeholder: '0x',
+    expectType: 'address',
+  },
+  ONLY_ERC721: {
+    type: 'gatedInput',
+    only: CONTRACT_MODELS.ERC721,
+    label: 'ERC-721 Address',
+    name: 'erc721TokenAddress',
+    htmlFor: 'erc20TokenAddress',
     placeholder: '0x',
     expectType: 'address',
   },
@@ -184,7 +195,12 @@ export const PROPOSAL_FORMS = {
     type: PROPOSAL_TYPES.WHITELIST,
     required: ['title', 'tokenAddress'], // Use name key from proposal type object
     tx: TX.WHITELIST_TOKEN_PROPOSAL,
-    fields: [FIELD.TITLE, FIELD.TOKEN_ADDRESS, FIELD.LINK, FIELD.DESCRIPTION],
+    fields: [
+      FIELD.TITLE,
+      { ...FIELD.ONLY_ERC20, name: 'tokenAddress' },
+      FIELD.LINK,
+      FIELD.DESCRIPTION,
+    ],
   },
   TRADE: {
     title: 'Trade',
