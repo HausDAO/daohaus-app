@@ -156,4 +156,22 @@ export const TX = {
     successMsg: 'Delegate Key Updated!',
     gatherArgs: ['delegateAddress'],
   },
+  WITHDRAW: {
+    contract: 'Moloch',
+    name: 'withdrawBalance',
+    poll: 'subgraph',
+    onTxHash: ACTIONS.BASIC,
+    display: 'Withdraw Balance',
+    errMsg: 'Error Withdrawing Balance',
+    successMsg: 'Balance Withdrawn!',
+  },
+  RAGE_QUIT: {
+    contract: 'Moloch',
+    name: 'ragequit',
+    poll: 'subgraph',
+    onTxHash: ACTIONS.RAGE_QUIT,
+    display: 'Rage Quit',
+    errMsg: 'Error Rage Quitting',
+    successMsg: 'Rage quit processed!',
+  },
 };
