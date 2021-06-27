@@ -12,8 +12,8 @@ import ProfileCard from '../components/profileCard';
 import { getProfileActivites } from '../utils/activities';
 import MainViewLayout from '../components/mainViewLayout';
 import { useInjectedProvider } from '../contexts/InjectedProviderContext';
-import ProposalForm from '../formBuilder/proposalForm';
-import { PROPOSAL_FORMS } from '../data/proposalForms';
+import FormBuider from '../formBuilder/proposalForm';
+import { FORM } from '../data/proposalForms';
 
 const Profile = ({ members, overview, daoTokens, daoMember, activities }) => {
   const { userid, daochain } = useParams();
@@ -86,11 +86,9 @@ const Profile = ({ members, overview, daoTokens, daoMember, activities }) => {
           </GenericModal>
           <GenericModal
             modalId='updateDelegate'
-            title='Update Delegate Address'
+            formLego={FORM.UPDATE_DELEGATE}
             closeOnOverlayClick
-          >
-            <ProposalForm {...PROPOSAL_FORMS.UPDATE_DELEGATE} />
-          </GenericModal>
+          />
           <ProfileCard
             overview={overview}
             daoTokens={daoTokens}

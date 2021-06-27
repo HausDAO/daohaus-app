@@ -12,22 +12,26 @@ import { rgba } from 'polished';
 
 import { useOverlay } from '../contexts/OverlayContext';
 import { useCustomTheme } from '../contexts/CustomThemeContext';
+import FormBuilder from '../formBuilder/proposalForm';
 
 const GenericModal = ({
   children,
   modalId,
   title,
+  formLego,
   closeOnOverlayClick = true,
 }) => {
   const { genericModal, setGenericModal } = useOverlay();
   const { theme } = useCustomTheme();
+
+  const closeModal = () => setGenericModal({});
 
   return (
     <Modal
       isOpen={genericModal[modalId]}
       closeOnEsc={false}
       closeOnOverlayClick={closeOnOverlayClick}
-      onClose={() => setGenericModal({})}
+      onClose={closeModal}
       isCentered
     >
       <ModalOverlay
@@ -41,19 +45,17 @@ const GenericModal = ({
         borderColor='whiteAlpha.200'
         py={6}
       >
-        {title && (
-          <ModalHeader>
-            <Box
-              fontFamily='heading'
-              textTransform='uppercase'
-              fontSize='sm'
-              fontWeight={700}
-              color='white'
-            >
-              {title}
-            </Box>
-          </ModalHeader>
-        )}
+        <ModalHeader>
+          <Box
+            fontFamily='heading'
+            textTransform='uppercase'
+            fontSize='sm'
+            fontWeight={700}
+            color='white'
+          >
+            {formLego?.title || title}
+          </Box>
+        </ModalHeader>
         <ModalCloseButton />
         <ModalBody
           flexDirection='column'
@@ -61,7 +63,7 @@ const GenericModal = ({
           maxH='600px'
           overflow='auto'
         >
-          {children}
+          {formLego ? <FormBuilder {...formLego} /> : children}
         </ModalBody>
       </ModalContent>
     </Modal>

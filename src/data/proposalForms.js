@@ -157,11 +157,10 @@ export const FIELD = {
     label: 'Address',
     info: INFO_TEXT.DELEGATE_ADDRESS,
     expectType: 'address',
-    w: '100%',
   },
 };
 
-export const PROPOSAL_FORMS = {
+export const FORM = {
   MEMBER: {
     title: 'Membership',
     subtitle: 'Request Shares and/or Loot',
@@ -276,6 +275,7 @@ export const PROPOSAL_FORMS = {
   },
   UPDATE_DELEGATE: {
     title: 'UPDATE DELEGATE ADDRESS',
+    layout: 'singleRow',
     required: ['delegateAddress'],
     tx: TX.UPDATE_DELEGATE,
     fields: [FIELD.DELEGATE_ADDRESS],
