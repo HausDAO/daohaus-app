@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, Link } from 'react-router-dom';
 import { Box, Button, Flex, useToast } from '@chakra-ui/react';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
 
@@ -22,7 +22,7 @@ const MinionVault = ({
   daoVaults,
   isMember,
 }) => {
-  const { daoid, minion } = useParams();
+  const { daochain, daoid, minion } = useParams();
   const toast = useToast();
   const [needsSync, setNeedsSync] = useState(false);
   const [vault, setVault] = useState(null);
@@ -108,7 +108,11 @@ const MinionVault = ({
                 <Flex direction='row' justify='space-between'>
                   <TextBox w='100%'>NFTS</TextBox>
                   <TextBox w='100%' fontcolor='secondary'>
-                    View Gallery
+                    <Link
+                      to={`/dao/${daochain}/${daoid}/gallery/minion/${minion}`}
+                    >
+                      View Gallery
+                    </Link>
                   </TextBox>
                 </Flex>
                 {vault.nfts.map((nft, i) => (
