@@ -8,60 +8,6 @@ import NftFilter from '../components/nftFilter';
 import NftSort from '../components/nftSort';
 import { nftFilterOptions, nftSortOptions } from '../utils/nftContent';
 
-const DUMMY_DATA = [
-  {
-    title: 'NFT 1',
-    description: 'Blah',
-    creator: 'Twisted',
-    last_price: '110',
-    collection: 'Rarible',
-    link: 'https://rarible.com/something',
-    list_price: '1',
-  },
-  {
-    title: 'NFT 2',
-    description: 'Blah',
-    creator: 'Twisted',
-    last_price: '1000',
-    collection: 'Nifty',
-    link: 'https://rarible.com/something',
-    list_price: '20000',
-    auction: {
-      start: '100',
-      end: '10',
-      start_price: '100',
-      end_price: '100',
-    },
-    offers: [
-      {
-        offeror: '0x',
-        price: '10',
-      },
-    ],
-  },
-  {
-    title: 'NFT 3',
-    description: 'Blah',
-    creator: 'Twisted',
-    last_price: '100',
-    collection: 'Rarible',
-    link: 'https://rarible.com/something',
-    list_price: '3',
-    auction: {
-      start: '100',
-      end: '1',
-      start_price: '100',
-      end_price: '100',
-    },
-    offers: [
-      {
-        offeror: '0x',
-        price: '10',
-      },
-    ],
-  },
-];
-
 const MinionGallery = ({ daoVaults, customTerms }) => {
   const { minion } = useParams();
   const [vault, setVault] = useState(null);
@@ -85,8 +31,8 @@ const MinionGallery = ({ daoVaults, customTerms }) => {
   // Grab NFTs
   useEffect(() => {
     if (vault && vault.nfts) {
-      setNftData(DUMMY_DATA);
-      setNfts(DUMMY_DATA);
+      setNftData(vault.nfts);
+      setNfts(vault.nfts);
     }
   }, [vault]);
 

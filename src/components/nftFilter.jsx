@@ -5,7 +5,6 @@ import {
   MenuButton,
   MenuList,
   MenuItem,
-  Text,
   Input,
   Select,
   Icon,
@@ -21,7 +20,6 @@ export default function NftFilter({
   setCollection,
   allCollections,
   options,
-  labelText,
 }) {
   const [filterOptions, setFilterOptions] = useState();
 

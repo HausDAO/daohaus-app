@@ -9,7 +9,7 @@ import {
   Flex,
   Icon,
 } from '@chakra-ui/react';
-import { RiArrowDropDownFill, RiCheckboxCircleLine } from 'react-icons/ri';
+import { RiCheckboxCircleLine } from 'react-icons/ri';
 
 const ListSort = ({ sort, setSort, options }) => {
   useEffect(() => {
