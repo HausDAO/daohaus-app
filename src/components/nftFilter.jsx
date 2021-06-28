@@ -47,14 +47,6 @@ export default function NftFilter({
 
   return (
     <Flex direction='row'>
-      <Text
-        textTransform='uppercase'
-        fontFamily='heading'
-        fontSize={['sm', null, null, 'md']}
-        mr={3}
-      >
-        {labelText}
-      </Text>
       {filterOptions && (
         <Menu isLazy autoSelect={false}>
           <MenuButton
@@ -69,7 +61,7 @@ export default function NftFilter({
               (collection !== 'all' ? 1 : 0)}
             )
           </MenuButton>
-          <MenuList bg='black' w='100%' p={5}>
+          <MenuList bg='blackAlpha.900' w={300} maxWidth='90vw' p={5} ml={-5}>
             <Input
               placeholder='Keyword'
               value={searchText}
@@ -100,10 +92,11 @@ export default function NftFilter({
                 {option.name}
                 {filters.indexOf(option.value) !== -1 && (
                   <Icon
+                    fill='secondary.400'
                     as={RiCheckboxCircleLine}
                     ml='auto'
-                    w={5}
-                    h={5}
+                    w={6}
+                    h={6}
                     mr={-6}
                   />
                 )}

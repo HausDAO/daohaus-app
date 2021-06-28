@@ -6,19 +6,19 @@ import AddressAvatar from './addressAvatar';
 
 const VaultNftCard = ({ nft }) => {
   return (
-    <ContentBox w='100%'>
+    <ContentBox w={['90vw', 350, 350, 350]}>
       <Flex direction='row' align='center' justify='flex-start' w='100%' mb={5}>
         <Box size='s'>{nft.title}</Box>
 
         <Box size='s' color='secondary.500' ml='auto' mr={5}>
           View
         </Box>
-        <Button pl={5} pr={5} lineHeight='50%'>
+        <Button pl={5} pr={5} lineHeight='50%' h={8}>
           ···
         </Button>
       </Flex>
       <Flex justify='center' w='100%' mb={5}>
-        <Image src={nft.imageUrl} height={[150, 200, 200, 300]} />
+        <Image src={nft.imageUrl} height={[200, null, null, 300]} />
       </Flex>
 
       <Flex

@@ -1,12 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import deepEqual from 'deep-eql';
 import { useParams } from 'react-router-dom';
-import { Grid, Flex, Button, Box } from '@chakra-ui/react';
+import { Wrap, WrapItem, Flex, Button, Box } from '@chakra-ui/react';
 import MainViewLayout from '../components/mainViewLayout';
 import GalleryNftCard from '../components/galleryNftCard';
-import ListFilter from '../components/listFilter';
 import NftFilter from '../components/nftFilter';
-import ListSort from '../components/listSort';
+import NftSort from '../components/nftSort';
 import { nftFilterOptions, nftSortOptions } from '../utils/nftContent';
 
 const DUMMY_DATA = [
@@ -69,7 +68,7 @@ const MinionGallery = ({ daoVaults, customTerms }) => {
   const [sort, setSort] = useState(null);
   const [filters, setFilters] = useState([]);
   const [searchText, setSearchText] = useState('');
-  const [collection, setCollection] = useState();
+  const [collection, setCollection] = useState('all');
   const [allCollections, setAllCollections] = useState([]);
   const [nfts, setNfts] = useState(null);
   const [nftData, setNftData] = useState(null);
@@ -86,8 +85,8 @@ const MinionGallery = ({ daoVaults, customTerms }) => {
   // Grab NFTs
   useEffect(() => {
     if (vault && vault.nfts) {
-      setNfts(DUMMY_DATA);
       setNftData(DUMMY_DATA);
+      setNfts(DUMMY_DATA);
     }
   }, [vault]);
 
@@ -181,33 +180,29 @@ const MinionGallery = ({ daoVaults, customTerms }) => {
       isDao
     >
       {vault && (
-        <>
+        <Flex d='column'>
           <Flex
             wrap={['wrap', null, null, 'nowrap']}
-            justify='flex-start'
+            justify={['space-between', null, null, 'flex-start']}
             align='center'
             w='100%'
-            mt={10}
+            mt={[0, null, null, 10]}
             mb={10}
           >
             <Box
-              mr={5}
+              mr={[0, 5, null, 5]}
               textTransform='uppercase'
               fontFamily='heading'
               fontSize={['sm', null, null, 'md']}
-              mb={[3, null, null, 0]}
             >
               {nfts?.length || 0} NFTs
             </Box>
-            <Box ml={10}>
-              <ListSort
-                sort={sort}
-                setSort={setSort}
-                options={nftSortOptions}
-              />
+            <Box ml={[0, 5, null, 10]}>
+              <NftSort sort={sort} setSort={setSort} options={nftSortOptions} />
             </Box>
-            <Box ml={10}>
+            <Box ml={[0, 5, null, 10]} mt={[5, 0, null, 0]}>
               <NftFilter
+                ml={0}
                 filters={filters}
                 setFilters={setFilters}
                 searchText={searchText}
@@ -220,7 +215,8 @@ const MinionGallery = ({ daoVaults, customTerms }) => {
             </Box>
             <Box
               ml='auto'
-              mr={5}
+              mt={[5, 0, null, 0]}
+              mr={[0, 5, null, 5]}
               textTransform='uppercase'
               fontFamily='heading'
               fontSize={['sm', null, null, 'md']}
@@ -228,23 +224,16 @@ const MinionGallery = ({ daoVaults, customTerms }) => {
               View Balances
             </Box>
           </Flex>
-          <Flex>
-            <Grid
-              templateColumns={[
-                'repeat(1, 1fr)',
-                'repeat(2, 1fr)',
-                'repeat(3, 1fr)',
-                'repeat(4, 1fr)',
-              ]}
-              gap={5}
-              flex={1}
-            >
-              {nfts &&
-                nfts.length > 0 &&
-                nfts.map((nft, i) => <GalleryNftCard nft={nft} key={i} />)}
-            </Grid>
-          </Flex>
-        </>
+          <Wrap flex={1} spacing={4} w='90%'>
+            {nfts &&
+              nfts.length > 0 &&
+              nfts.map((nft, i) => (
+                <WrapItem key={i}>
+                  <GalleryNftCard nft={nft} />
+                </WrapItem>
+              ))}
+          </Wrap>
+        </Flex>
       )}
     </MainViewLayout>
   );
