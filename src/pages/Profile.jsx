@@ -12,7 +12,6 @@ import ProfileCard from '../components/profileCard';
 import { getProfileActivites } from '../utils/activities';
 import MainViewLayout from '../components/mainViewLayout';
 import { useInjectedProvider } from '../contexts/InjectedProviderContext';
-import FormBuider from '../formBuilder/proposalForm';
 import { FORM } from '../data/proposalForms';
 
 const Profile = ({ members, overview, daoTokens, daoMember, activities }) => {

@@ -24,6 +24,14 @@ import { getTerm } from '../utils/metadata';
 import { FORM } from '../data/proposalForms';
 import MinionProposalForm from '../forms/minionSimpleProposal';
 
+// TODO Refactor this logic with new UX
+const getMaxWidth = proposalForm => {
+  if (!proposalForm?.form?.props?.layout) return '800px';
+  if (proposalForm?.form?.propos?.layout === 'singleRow') {
+    return '500px';
+  }
+};
+
 const ProposalFormModal = ({ proposalType }) => {
   const [, setLoading] = useState(false);
   const [proposalForm, setProposalForm] = useState(null);
@@ -52,7 +60,7 @@ const ProposalFormModal = ({ proposalType }) => {
       type: `New ${getTerm(customTerms, 'proposal')}`,
       heading: `New Loot Grab ${getTerm(customTerms, 'proposal')}`,
       subline: 'Submit a loot grab proposal here.',
-      form: <LootGrabForm />,
+      form: <FormBuilder {...FORM.LOOT_GRAB} />,
     },
     whitelist: {
       heading: `New Whitelist ${getTerm(customTerms, 'proposal')}`,
@@ -120,7 +128,7 @@ const ProposalFormModal = ({ proposalType }) => {
         bg='blackAlpha.600'
         borderWidth='1px'
         borderColor='whiteAlpha.200'
-        maxWidth='800px'
+        maxWidth={getMaxWidth(proposalForm)}
       >
         <ModalHeader>
           <Box
