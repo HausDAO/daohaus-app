@@ -8,11 +8,11 @@ import { validate } from '../utils/validation';
 import { checkContractType } from '../utils/tokenExplorerApi';
 
 const GatedInput = props => {
+  const { localForm, only, name } = props;
   const { daochain } = useParams();
   const [isCorrect, setIsCorrect] = useState(null);
   const [loading, setLoading] = useState(false);
 
-  const { localForm, only, name } = props;
   const { watch } = localForm;
   const contractAddress = watch(name);
 

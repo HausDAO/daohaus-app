@@ -101,7 +101,7 @@ const gatherArgs = data => {
     if (arg === 'detailsToJSON') {
       if (!Array.isArray(tx.detailsJSON))
         throw new Error(
-          'details to JSON requires an Array of selected fields definied in the TX data at contractTX.js, under the field "detailsToJSON"',
+          'details to JSON requires an Array of selected fields defined in the TX data at contractTX.js, under the field "detailsToJSON"',
         );
       return buildJSONdetails({ ...values, hash }, tx.detailsJSON);
     }
@@ -148,7 +148,6 @@ export const MolochTransaction = async ({
   tx,
 }) => {
   const { daoid, daochain, daoOverview, address } = contextData;
-
   return MolochService({
     web3: injectedProvider,
     daoAddress: daoid,
