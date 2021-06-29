@@ -74,7 +74,7 @@ const gatherArgs = data => {
     if (arg === 'detailsToJSON') {
       if (!Array.isArray(tx.detailsJSON))
         throw new Error(
-          'details to JSON requires an Array of selected fields definied in the TX data at contractTX.js, under the field "detailsToJSON"',
+          'details to JSON requires an Array of selected fields defined in the TX data at contractTX.js, under the field "detailsToJSON"',
         );
       return buildJSONdetails({ ...values, hash }, tx.detailsJSON);
     }
@@ -225,6 +225,7 @@ export const createActions = ({ tx, uiControl, stage, lifeCycleFns }) => {
   //   refetch,
   //   setTxInfoModal,
   //   setProposalModal,
+  //   setGenericModal
   // };
   const actions = {
     closeProposalModal() {
@@ -232,6 +233,9 @@ export const createActions = ({ tx, uiControl, stage, lifeCycleFns }) => {
     },
     openTxModal() {
       uiControl.setTxInfoModal(true);
+    },
+    closeGenericModal() {
+      uiControl.setGenericModal({});
     },
   };
 
