@@ -10,7 +10,6 @@ import { nftFilterOptions, nftSortOptions } from '../utils/nftContent';
 
 const MinionGallery = ({ daoVaults, customTerms }) => {
   const { minion } = useParams();
-  const [vault, setVault] = useState(null);
   const [sort, setSort] = useState(null);
   const [filters, setFilters] = useState([]);
   const [searchText, setSearchText] = useState('');
@@ -19,22 +18,21 @@ const MinionGallery = ({ daoVaults, customTerms }) => {
   const [nfts, setNfts] = useState(null);
   const [nftData, setNftData] = useState(null);
 
-  // Grab Vault
+  // Grab Vault NFTs
   useEffect(() => {
-    setVault(
-      daoVaults?.find(vault => {
-        return vault.address === minion;
-      }),
-    );
-  }, [daoVaults, minion]);
-
-  // Grab NFTs
-  useEffect(() => {
-    if (vault && vault.nfts) {
-      setNftData(vault.nfts);
-      setNfts(vault.nfts);
+    if (daoVaults) {
+      let nfts = [];
+      if (minion) {
+        nfts = daoVaults?.find(vault => {
+          return vault.address === minion;
+        })?.nfts;
+      } else {
+        nfts = daoVaults?.reduce((acc, item) => [...acc, ...item.nfts], []);
+      }
+      setNftData(nfts);
+      setNfts(nfts);
     }
-  }, [vault]);
+  }, [daoVaults, minion]);
 
   // Get All Collections
   useEffect(() => {
@@ -125,62 +123,60 @@ const MinionGallery = ({ daoVaults, customTerms }) => {
       headerEl={addButton}
       isDao
     >
-      {vault && (
-        <Flex d='column'>
-          <Flex
-            wrap={['wrap', null, null, 'nowrap']}
-            justify={['space-between', null, null, 'flex-start']}
-            align='center'
-            w='100%'
-            mt={[0, null, null, 10]}
-            mb={10}
+      <Flex d='column'>
+        <Flex
+          wrap={['wrap', null, null, 'nowrap']}
+          justify={['space-between', null, null, 'flex-start']}
+          align='center'
+          w='100%'
+          mt={[0, null, null, 10]}
+          mb={10}
+        >
+          <Box
+            mr={[0, 5, null, 5]}
+            textTransform='uppercase'
+            fontFamily='heading'
+            fontSize={['sm', null, null, 'md']}
           >
-            <Box
-              mr={[0, 5, null, 5]}
-              textTransform='uppercase'
-              fontFamily='heading'
-              fontSize={['sm', null, null, 'md']}
-            >
-              {nfts?.length || 0} NFTs
-            </Box>
-            <Box ml={[0, 5, null, 10]}>
-              <NftSort sort={sort} setSort={setSort} options={nftSortOptions} />
-            </Box>
-            <Box ml={[0, 5, null, 10]} mt={[5, 0, null, 0]}>
-              <NftFilter
-                ml={0}
-                filters={filters}
-                setFilters={setFilters}
-                searchText={searchText}
-                setSearchText={setSearchText}
-                collection={collection}
-                setCollection={setCollection}
-                allCollections={allCollections}
-                options={nftFilterOptions}
-              />
-            </Box>
-            <Box
-              ml='auto'
-              mt={[5, 0, null, 0]}
-              mr={[0, 5, null, 5]}
-              textTransform='uppercase'
-              fontFamily='heading'
-              fontSize={['sm', null, null, 'md']}
-            >
-              View Balances
-            </Box>
-          </Flex>
-          <Wrap flex={1} spacing={4} w='90%'>
-            {nfts &&
-              nfts.length > 0 &&
-              nfts.map((nft, i) => (
-                <WrapItem key={i}>
-                  <GalleryNftCard nft={nft} />
-                </WrapItem>
-              ))}
-          </Wrap>
+            {nfts?.length || 0} NFTs
+          </Box>
+          <Box ml={[0, 5, null, 10]}>
+            <NftSort sort={sort} setSort={setSort} options={nftSortOptions} />
+          </Box>
+          <Box ml={[0, 5, null, 10]} mt={[5, 0, null, 0]}>
+            <NftFilter
+              ml={0}
+              filters={filters}
+              setFilters={setFilters}
+              searchText={searchText}
+              setSearchText={setSearchText}
+              collection={collection}
+              setCollection={setCollection}
+              allCollections={allCollections}
+              options={nftFilterOptions}
+            />
+          </Box>
+          <Box
+            ml='auto'
+            mt={[5, 0, null, 0]}
+            mr={[0, 5, null, 5]}
+            textTransform='uppercase'
+            fontFamily='heading'
+            fontSize={['sm', null, null, 'md']}
+          >
+            View Balances
+          </Box>
         </Flex>
-      )}
+        <Wrap flex={1} spacing={4} w='90%'>
+          {nfts &&
+            nfts.length > 0 &&
+            nfts.map((nft, i) => (
+              <WrapItem key={i}>
+                <GalleryNftCard nft={nft} />
+              </WrapItem>
+            ))}
+        </Wrap>
+      </Flex>
     </MainViewLayout>
   );
 };

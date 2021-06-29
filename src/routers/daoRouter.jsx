@@ -123,7 +123,10 @@ const DaoRouter = () => {
             isMember={isMember}
           />
         </Route>
-        <Route exact path={`${path}/gallery/minion/:minion`}>
+        <Route
+          exact
+          path={[`${path}/gallery/minion/:minion`, `${path}/gallery/`]}
+        >
           <MinionGallery daoVaults={daoVaults} customTerms={customTerms} />
         </Route>
         <Route exact path={`${path}/members`}>
