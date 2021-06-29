@@ -48,6 +48,13 @@ const MinionList = () => {
           badgeTextColor: 'white',
           badgeName: 'UHS',
         };
+      case MINION_TYPES.NIFTY:
+        return {
+          minionUrlType: 'minion',
+          badgeColor: 'orange',
+          badgeTextColor: 'white',
+          badgeName: 'NIFTY',
+        };
       default:
         return {
           minionUrlType: 'minion',
