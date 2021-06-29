@@ -5,7 +5,7 @@ import { Wrap, WrapItem, Flex, Button, Box } from '@chakra-ui/react';
 import MainViewLayout from '../components/mainViewLayout';
 import GalleryNftCard from '../components/galleryNftCard';
 import NftFilter from '../components/nftFilter';
-import NftSort from '../components/nftSort';
+import ListSort from '../components/listSort';
 import { nftFilterOptions, nftSortOptions } from '../utils/nftContent';
 
 const MinionGallery = ({ daoVaults, customTerms }) => {
@@ -141,7 +141,7 @@ const MinionGallery = ({ daoVaults, customTerms }) => {
             {nfts?.length || 0} NFTs
           </Box>
           <Box ml={[0, 5, null, 10]}>
-            <NftSort sort={sort} setSort={setSort} options={nftSortOptions} />
+            <ListSort sort={sort} setSort={setSort} options={nftSortOptions} />
           </Box>
           <Box ml={[0, 5, null, 10]} mt={[5, 0, null, 0]}>
             <NftFilter

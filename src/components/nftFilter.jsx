@@ -81,21 +81,17 @@ export default function NftFilter({
                 fontSize='xs'
                 key={option.value}
                 onClick={() => handleFilterSelect(option)}
-                _hover={{ bg: 'none', color: 'secondary.400' }}
-                _focus={{ bg: 'none', color: 'secondary.400' }}
                 value={option.value}
                 mb={2}
-                ml={-2}
               >
                 {option.name}
                 {filters.indexOf(option.value) !== -1 && (
                   <Icon
-                    fill='secondary.400'
                     as={RiCheckboxCircleLine}
                     ml='auto'
                     w={6}
                     h={6}
-                    mr={-6}
+                    mr={-2}
                   />
                 )}
               </MenuItem>
