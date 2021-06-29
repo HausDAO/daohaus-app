@@ -34,6 +34,7 @@ import CcoHelper from '../pages/CcoHelper';
 import CcoAdmin from '../pages/CcoAdmin';
 import Vaults from '../pages/Vaults';
 import MinionVault from '../pages/MinionVault';
+import MinionGallery from '../pages/MinionGallery';
 import Treasury from '../pages/Treasury';
 import { isDaosquareCcoPath } from '../utils/cco';
 
@@ -121,6 +122,12 @@ const DaoRouter = () => {
             daoVaults={daoVaults}
             isMember={isMember}
           />
+        </Route>
+        <Route
+          exact
+          path={[`${path}/gallery/minion/:minion`, `${path}/gallery/`]}
+        >
+          <MinionGallery daoVaults={daoVaults} customTerms={customTerms} />
         </Route>
         <Route exact path={`${path}/members`}>
           <Members
