@@ -121,8 +121,6 @@ export const MolochTransaction = async ({
   tx,
 }) => {
   const { daoid, daochain, daoOverview, address } = contextData;
-  console.log('contextData', contextData);
-  console.log('args', args);
   return MolochService({
     web3: injectedProvider,
     daoAddress: daoid,

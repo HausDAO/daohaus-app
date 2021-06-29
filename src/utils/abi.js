@@ -54,20 +54,12 @@ export const fetchABI = async (contractAddress, chainID, parseJSON = true) => {
     console.error(error);
   }
 };
-const test = async () => {
-  const result = await fetchABI(
-    '0xf8D1677c8a0c961938bf2f9aDc3F3CFDA759A9d9',
-    '0x64',
-  );
-  console.log(result);
-};
-
-test();
 
 export const getABIfunctions = abi => {
   if (!abi || !Array.isArray(abi) || !abi.length) return null;
   return abi.filter(({ type, constant }) => type === 'function' && !constant);
 };
+
 export const formatFNsAsSelectOptions = abi => {
   if (!abi || !Array.isArray(abi) || !abi.length) return null;
   return abi.map(fn => ({
