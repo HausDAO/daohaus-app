@@ -295,8 +295,8 @@ export const FORM = {
     title: 'Loot Grab proposal',
     layout: 'singleRow',
     subtitle: 'Request loot with a tribute',
-    required: ['tributeInput'],
-    tx: TX.SUBMIT_PROPOSAL,
+    required: ['tributeOffered'],
+    tx: TX.LOOT_GRAB_PROPOSAL,
     fields: [FORM_DISPLAY.LOOT_REQUEST, FIELD.TRIBUTE],
   },
 };

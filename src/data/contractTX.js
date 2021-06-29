@@ -8,6 +8,11 @@
 //   successMsg: String
 // }
 
+const temporaryDetails = JSON.stringify({
+  title: 'Loot Grab Proposal',
+  descrption: 'Trade Tokens for Loot',
+});
+console.log(`temporaryDetails`, temporaryDetails);
 export const ACTIONS = {
   PROPOSAL: ['closeProposalModal', 'openTxModal'],
   BASIC: ['openTxModal'],
@@ -37,6 +42,33 @@ export const TX = {
     detailsJSON: DETAILS.STANDARD_PROPOSAL,
     argsFromCallback: true,
     createDiscourse: true,
+  },
+  LOOT_GRAB_PROPOSAL: {
+    contract: 'Moloch',
+    name: 'lootGrab',
+    onTxHash: ACTIONS.PROPOSAL,
+    poll: 'subgraph',
+    display: 'Submit Loot Grab Proposal',
+    errMsg: 'Error submitting proposal',
+    successMsg: 'Loot Grab submitted!',
+    // detailsJSON: DETAILS.STANDARD_PROPOSAL,
+    argsFromCallback: true,
+    gatherArgs: [
+      { type: 'search', fields: ['contextData', 'address'] },
+      { type: 'static', value: 0 },
+      'lootRequested',
+      'tributeOffered',
+      'tributeToken',
+      { type: 'static', value: 0 },
+      {
+        type: 'search',
+        fields: ['contextData', 'daoOverview', 'depositToken', 'tokenAddress'],
+      },
+      {
+        type: 'static',
+        value: temporaryDetails,
+      },
+    ],
   },
   GUILDKICK_PROPOSAL: {
     contract: 'Moloch',

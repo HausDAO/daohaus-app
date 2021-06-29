@@ -21,10 +21,12 @@ const GenericFormDisplay = props => {
   const { register, watch } = localForm;
   const localWatch = listenTo && watch(listenTo);
   const value = override || localWatch;
-  console.log(`override`, override);
-  console.log(`value`, value);
   const display = useMemo(() => {
-    if (expectType && value && !validate[expectType]?.(value)) {
+    if (
+      expectType &&
+      value != null &&
+      validate[expectType]?.(value) === false
+    ) {
       return TYPE_ERR_MSGS[expectType];
     }
     return value;

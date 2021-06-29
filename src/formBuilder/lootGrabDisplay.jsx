@@ -4,12 +4,16 @@ import GenericFormDisplay from './genericFormDisplay';
 
 const LootGrabDisplay = props => {
   const { daoMetaData } = useMetaData();
-  const { localForm } = props;
-  const { watch } = localForm;
+  const { localForm, fallback } = props;
+  const { watch, setValue } = localForm;
   const [daoRatio, setDaoRatio] = useState('loading');
   const [lootRequested, setLootRequested] = useState(null);
 
   const tributeOffered = watch('tributeOffered');
+
+  useEffect(() => {
+    setValue('title', 'Loot grab proposal');
+  }, []);
 
   useEffect(() => {
     const ratio = daoMetaData?.boosts?.proposalTypes?.metadata?.lootGrab?.ratio;
@@ -22,7 +26,13 @@ const LootGrabDisplay = props => {
 
   useEffect(() => {
     if (tributeOffered && daoRatio) {
-      setLootRequested(Number(tributeOffered) * daoRatio);
+      const value = Math.floor(
+        Number(tributeOffered) * Number(daoRatio),
+      ).toString();
+      setLootRequested(value);
+      setValue('lootRequested', value);
+    } else if (tributeOffered === '') {
+      setLootRequested(fallback);
     }
   }, [tributeOffered, daoRatio]);
   return (
@@ -34,7 +44,12 @@ const LootGrabDisplay = props => {
         name='daoRatio'
         variant='value'
       />
-      <GenericFormDisplay {...props} override={lootRequested} variant='value' />
+      <GenericFormDisplay
+        {...props}
+        override={lootRequested}
+        variant='value'
+        helperText='Can only be whole numbers'
+      />
     </>
   );
 };
