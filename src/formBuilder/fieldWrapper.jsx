@@ -25,7 +25,6 @@ const FieldWrapper = ({
     if (layout === 'singleRow') return '100%';
     return ['100%', null, '48%'];
   }, [w, layout]);
-  console.log(`layout`, layout);
   return (
     <Flex w={width} mb={mb || 3} flexDir='column' {...containerProps}>
       <Flex>

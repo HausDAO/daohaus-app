@@ -19,6 +19,17 @@ const INFO_TEXT = {
     'Warning: By switching your address to a delegate, you are giving that delegate address the right to act on your behalf.',
 };
 
+export const FORM_DISPLAY = {
+  LOOT_REQUEST: {
+    type: 'lootGrabDisplay',
+    name: 'lootRequested',
+    listenTo: 'tributeOffered',
+    label: 'Loot Requested',
+    fallback: '0',
+    expectType: 'number',
+  },
+};
+
 export const FIELD = {
   TITLE: {
     type: 'input',
@@ -279,5 +290,13 @@ export const FORM = {
     required: ['delegateAddress'],
     tx: TX.UPDATE_DELEGATE,
     fields: [FIELD.DELEGATE_ADDRESS],
+  },
+  LOOT_GRAB: {
+    title: 'Loot Grab proposal',
+    layout: 'singleRow',
+    subtitle: 'Request loot with a tribute',
+    required: ['tributeInput'],
+    tx: TX.SUBMIT_PROPOSAL,
+    fields: [FORM_DISPLAY.LOOT_REQUEST, FIELD.TRIBUTE],
   },
 };

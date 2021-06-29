@@ -5,7 +5,7 @@
 //   details: String
 //
 
-const TYPE_ERR_MSGS = {
+export const TYPE_ERR_MSGS = {
   number: 'Must be a valid number',
   integer: 'Must be a valid integer',
   string: 'Must be a valid string',
