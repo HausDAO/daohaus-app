@@ -14,14 +14,14 @@ import { rgba } from 'polished';
 import { useMetaData } from '../contexts/MetaDataContext';
 import { useOverlay } from '../contexts/OverlayContext';
 import { useCustomTheme } from '../contexts/CustomThemeContext';
-import ProposalForm from '../formBuilder/proposalForm';
+import FormBuilder from '../formBuilder/proposalForm';
 import SuperfluidMinionProposalForm from '../forms/superfluidMinionProposal';
 import TransmutationProposal from '../forms/transmutationProposal';
 import LootGrabForm from '../forms/lootGrab';
 import NiftyProposalForm from '../forms/minionNiftyProposal';
 
 import { getTerm } from '../utils/metadata';
-import { PROPOSAL_FORMS } from '../data/proposalForms';
+import { FORM } from '../data/proposalForms';
 import MinionProposalForm from '../forms/minionSimpleProposal';
 
 const ProposalFormModal = ({ proposalType }) => {
@@ -34,18 +34,18 @@ const ProposalFormModal = ({ proposalType }) => {
   const proposalForms = {
     signal: {
       heading: 'Signal That!',
-      form: <ProposalForm {...PROPOSAL_FORMS.SIGNAL} />,
+      form: <FormBuilder {...FORM.SIGNAL} />,
     },
     member: {
       heading: `New ${getTerm(customTerms, 'member')} ${getTerm(
         customTerms,
         'proposal',
       )}`,
-      form: <ProposalForm {...PROPOSAL_FORMS.MEMBER} />,
+      form: <FormBuilder {...FORM.MEMBER} />,
     },
     funding: {
       heading: `New Funding ${getTerm(customTerms, 'proposal')}`,
-      form: <ProposalForm {...PROPOSAL_FORMS.FUNDING} />,
+      form: <FormBuilder {...FORM.FUNDING} />,
     },
     //  Are we using lootgrab anymore?
     lootgrab: {
@@ -56,22 +56,22 @@ const ProposalFormModal = ({ proposalType }) => {
     },
     whitelist: {
       heading: `New Whitelist ${getTerm(customTerms, 'proposal')}`,
-      form: <ProposalForm {...PROPOSAL_FORMS.TOKEN} />,
+      form: <FormBuilder {...FORM.TOKEN} />,
     },
     guildkick: {
       heading: `New GuildKick ${getTerm(customTerms, 'proposal')}`,
-      form: <ProposalForm {...PROPOSAL_FORMS.GUILDKICK} />,
+      form: <FormBuilder {...FORM.GUILDKICK} />,
     },
     trade: {
       heading: `New Trade ${getTerm(customTerms, 'proposal')}`,
-      form: <ProposalForm {...PROPOSAL_FORMS.TRADE} />,
+      form: <FormBuilder {...FORM.TRADE} />,
     },
     minion: {
       type: `New ${getTerm(customTerms, 'proposal')}`,
       heading: `New Minion ${getTerm(customTerms, 'proposal')}`,
       subline: 'Submit a Minion proposal here.',
       form: <MinionProposalForm />,
-      // form: <ProposalForm {...PROPOSAL_FORMS.MINION} />,
+      // form: <ProposalForm {...FORM.MINION} />,
     },
     niftyMinion: {
       type: `New ${getTerm(customTerms, 'proposal')}`,

@@ -11,11 +11,15 @@ import PaymentInput from './paymentInput';
 import TributeInput from './tributeInput';
 import TargetContract from './targetContract';
 import MultiInput from './multiInput';
+import GatedInput from './gatedInput';
 
 export const InputFactory = props => {
   const { type } = props;
   if (type === 'input') {
     return <GenericInput {...props} />;
+  }
+  if (type === 'gatedInput') {
+    return <GatedInput {...props} />;
   }
   if (type === 'textarea') {
     return <GenericTextarea {...props} />;

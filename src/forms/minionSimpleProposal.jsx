@@ -26,15 +26,15 @@ import { useDao } from '../contexts/DaoContext';
 import { useUser } from '../contexts/UserContext';
 import { useTX } from '../contexts/TXContext';
 import { useOverlay } from '../contexts/OverlayContext';
+import { useMetaData } from '../contexts/MetaDataContext';
 import TextBox from '../components/TextBox';
+import PaymentInput from './paymentInput';
 import { MinionService } from '../services/minionService';
 import { createPoll } from '../services/pollService';
 import { chainByID } from '../utils/chain';
 import { detailsToJSON, daoConnectedAndSameChain } from '../utils/general';
-import { useMetaData } from '../contexts/MetaDataContext';
 import { createForumTopic } from '../utils/discourse';
 import { MINION_TYPES } from '../utils/proposalUtils';
-import PaymentInput from './paymentInput';
 
 const MinionProposalForm = () => {
   const [loading, setLoading] = useState(false);
@@ -69,7 +69,6 @@ const MinionProposalForm = () => {
 
   useEffect(() => {
     if (daoOverview?.minions) {
-      console.log('local minions', daoOverview?.minions);
       const localMinions = daoOverview.minions
         .filter(
           minion =>
@@ -125,13 +124,11 @@ const MinionProposalForm = () => {
       const aSelectedFunction = abiFunctions.find(func => {
         return func.name === selectedFunction;
       });
-      console.log('aSelectedFunction', aSelectedFunction);
       try {
         hexData = injectedProvider.eth.abi.encodeFunctionCall(
           aSelectedFunction,
           inputValues,
         );
-        console.log('hexData', hexData);
       } catch (err) {
         console.log('ERR', err);
         setLoading(false);
@@ -264,7 +261,7 @@ const MinionProposalForm = () => {
       const imp = parsed.find(p => p.name === 'implementation');
       if (imp) {
         console.log('imp', imp);
-
+        console.log(daochain);
         const rpcUrl = chainByID(daochain).rpc_url;
         const web3 = new Web3(new Web3.providers.HttpProvider(rpcUrl));
         const abi = parsed;
@@ -273,7 +270,7 @@ const MinionProposalForm = () => {
 
         const url2 = `${chainByID(daochain).abi_api_url}${newaddr}${key &&
           `&apikey=${key}`}`;
-
+        console.log(url2);
         console.log(newaddr);
 
         const response2 = await fetch(url2);
