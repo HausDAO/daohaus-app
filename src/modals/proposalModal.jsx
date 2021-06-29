@@ -17,7 +17,6 @@ import { useCustomTheme } from '../contexts/CustomThemeContext';
 import FormBuilder from '../formBuilder/proposalForm';
 import SuperfluidMinionProposalForm from '../forms/superfluidMinionProposal';
 import TransmutationProposal from '../forms/transmutationProposal';
-import LootGrabForm from '../forms/lootGrab';
 import NiftyProposalForm from '../forms/minionNiftyProposal';
 
 import { getTerm } from '../utils/metadata';
