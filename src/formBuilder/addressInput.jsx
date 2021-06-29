@@ -21,9 +21,9 @@ const AddressInput = props => {
 
   const { setValue } = localForm;
 
-  useEffect(async () => {
+  useEffect(() => {
     let shouldSet = true;
-    if (daoMembers) {
+    const fetchMembers = async () => {
       const memberProfiles = await Promise.all(
         getActiveMembers(daoMembers)?.map(async member => {
           const profile = await handleGetProfile(member.memberAddress);
@@ -43,6 +43,9 @@ const AddressInput = props => {
         console.log(`memberProfiles`, memberProfiles);
         setAddresses(memberProfiles);
       }
+    };
+    if (daoMembers) {
+      fetchMembers();
     }
     return () => {
       shouldSet = false;
