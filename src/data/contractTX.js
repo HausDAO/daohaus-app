@@ -53,6 +53,7 @@ export const TX = {
     successMsg: 'Loot Grab submitted!',
     // detailsJSON: DETAILS.STANDARD_PROPOSAL,
     argsFromCallback: true,
+    createDiscourse: true,
     gatherArgs: [
       { type: 'search', fields: ['contextData', 'address'] },
       { type: 'static', value: 0 },
