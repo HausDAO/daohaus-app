@@ -1,9 +1,13 @@
+export const vaultType = () => {
+  //
+};
+
 export const vaultTypeDisplayName = {
   treasury: 'Treasury',
-  minion: 'Minion',
+  'vanilla minion': 'Minion',
   minionSafe: 'Minion Safe',
-  raribleMinion: 'Boost Minion',
-  nftInkMinion: 'Boost Minion',
+  'rarible minion': 'Boost Minion',
+  'nifty minion': 'Boost Minion',
 };
 
 export const vaultUrlPart = vault => {

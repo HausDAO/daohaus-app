@@ -27,6 +27,19 @@ export const getApiMetadata = async () => {
   }
 };
 
+export const fetchApiVaultData = async (network, minions) => {
+  try {
+    const response = await fetch(`${metadataApiUrl}/dao/vaults`, {
+      method: 'POST',
+      body: JSON.stringify({ network, minions }),
+    });
+
+    return response.json();
+  } catch (err) {
+    throw new Error(err);
+  }
+};
+
 export const formatBoosts = boostsArr =>
   boostsArr.reduce((obj, boost) => {
     return {
