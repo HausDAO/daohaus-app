@@ -68,8 +68,8 @@ export default function NftFilter({
             />
             <Select mb={5} value={collection} onChange={handleCollectionSelect}>
               <option value='all'>Collections (All)</option>
-              {allCollections.map(option => (
-                <option value={option} key={option}>
+              {allCollections.map((option, i) => (
+                <option value={option} key={i}>
                   {option}
                 </option>
               ))}
