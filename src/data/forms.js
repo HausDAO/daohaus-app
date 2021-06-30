@@ -130,7 +130,7 @@ export const FORM = {
     tx: TX.LOOT_GRAB_PROPOSAL,
     fields: [
       FORM_DISPLAY.LOOT_REQUEST,
-      { ...FIELD.TRIBUTE, modifier: ['valToDecimalString'] },
+      { ...FIELD.TRIBUTE, modifiers: ['addTributeDecimals'] },
     ],
   },
 };

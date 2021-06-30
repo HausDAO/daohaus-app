@@ -274,3 +274,32 @@ export const createActions = ({ tx, uiControl, stage, lifeCycleFns }) => {
   }
   return () => tx[stage].forEach(action => actions[action]());
 };
+
+export const fieldModifiers = Object.freeze({
+  addTributeDecimals(fieldValue, data) {
+    return valToDecimalString(
+      fieldValue,
+      data.values.tributeToken,
+      data.contextData.daoOverview.tokenBalances,
+    );
+  },
+});
+
+export const handleFieldModifiers = appData => {
+  const { activeFields, values } = appData;
+  const newValues = { ...values };
+  activeFields?.forEach(field => {
+    if (field.modifiers) {
+      //  check to see that all modifiers are valid
+      field.modifiers.forEach(mod => {
+        console.log(`mod`, mod);
+        const modifiedVal = fieldModifiers[mod](newValues[field.name], appData);
+        newValues[field.name] = modifiedVal;
+      });
+      //  modify
+    } else {
+      return field;
+    }
+  });
+  return newValues;
+};
