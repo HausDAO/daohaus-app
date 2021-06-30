@@ -30,6 +30,7 @@ export const PROPOSAL_TYPES = {
   MINION_VANILLA: 'Vanilla Minion',
   MINION_NIFTY: 'Nifty Minion',
   MINION_SUPERFLUID: 'Superfluid Proposal',
+  MINION_RARIBLE: 'Rarible Proposal',
   TRANSMUTATION: 'Transmutation Proposal',
   FUNDING: 'Funding Proposal',
 };
@@ -39,6 +40,7 @@ export const MINION_TYPES = {
   NIFTY: 'nifty minion',
   UBER: 'UberHaus minion',
   SUPERFLUID: 'Superfluid minion',
+  RARIBLE: 'Rarible minion',
 };
 
 export const inQueue = proposal => {

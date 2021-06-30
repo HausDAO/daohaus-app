@@ -91,6 +91,12 @@ const ProposalFormModal = ({ proposalType }) => {
       subline: 'Submit a Transmutation proposal here.',
       form: <TransmutationProposal />,
     },
+    sellNft: {
+      type: `New ${getTerm(customTerms, 'proposal')}`,
+      heading: `New NFT Sale ${getTerm(customTerms, 'proposal')}`,
+      subline: 'Submit new NFT Sell proposal here.',
+      form: <ProposalForm {...PROPOSAL_FORMS.SELL_NFT} />,
+    },
   };
 
   useEffect(() => {

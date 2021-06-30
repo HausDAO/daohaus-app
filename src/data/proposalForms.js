@@ -14,6 +14,7 @@ const INFO_TEXT = {
   ADDR_KICK: 'Enter the public key of the member you would like to kick.',
   MINION_TYPES: 'Minion funds to be used for this transaction',
   MINION_PAYMENT: `This is the amount of value to be sent from the selected minion's balance`,
+  SET_PRICE: 'Service fee 2.5%',
 };
 
 export const FIELD = {
@@ -136,6 +137,15 @@ export const FIELD = {
     placeholder: '0x',
     expectType: 'address',
   },
+  SET_PRICE: {
+    type: 'paymentInput',
+    htmlFor: 'sellPrice',
+    name: 'sellPrice',
+    placeholder: '0',
+    label: 'Set Price (Take)',
+    info: INFO_TEXT.SET_PRICE,
+    expectType: 'number',
+  },
 };
 
 export const PROPOSAL_FORMS = {
@@ -245,5 +255,13 @@ export const PROPOSAL_FORMS = {
       FIELD.MINION_PAYMENT,
       { ...FIELD.DESCRIPTION, h: '10' },
     ],
+  },
+  SELL_NFT: {
+    title: 'Sell NFT on Rarible',
+    subtitle: 'Post an NFT for sale on Rarible',
+    type: PROPOSAL_TYPES.MINION_RARIBLE,
+    minionType: MINION_TYPES.RARIBLE,
+    tx: null,
+    fields: [FIELD.SET_PRICE],
   },
 };

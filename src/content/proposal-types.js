@@ -96,6 +96,15 @@ export const proposalTypes = (
       comingSoon: false,
       show: daoPropTypes ? daoPropTypes?.lootGrab?.active : false,
     },
+    {
+      name: 'Sell NFT',
+      subhead: 'Sell an NFT',
+      proposalType: 'sellNft',
+      image: swordImg,
+      comingSoon: false,
+      show: true,
+      // show: hasMinion(minions, MINION_TYPES.RARIBLE),
+    },
   ];
 };
 
