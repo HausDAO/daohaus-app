@@ -8,11 +8,6 @@
 //   successMsg: String
 // }
 
-const temporaryDetails = JSON.stringify({
-  title: 'Loot Grab Proposal',
-  descrption: 'Trade Tokens for Loot',
-});
-console.log(`temporaryDetails`, temporaryDetails);
 export const ACTIONS = {
   PROPOSAL: ['closeProposalModal', 'openTxModal'],
   BASIC: ['openTxModal'],
@@ -51,8 +46,8 @@ export const TX = {
     display: 'Submit Loot Grab Proposal',
     errMsg: 'Error submitting proposal',
     successMsg: 'Loot Grab submitted!',
+    // argsFromCallback: true,
     // detailsJSON: DETAILS.STANDARD_PROPOSAL,
-    argsFromCallback: true,
     gatherArgs: [
       { type: 'search', fields: ['contextData', 'address'] },
       { type: 'static', value: 0 },
@@ -66,7 +61,10 @@ export const TX = {
       },
       {
         type: 'static',
-        value: temporaryDetails,
+        value: JSON.stringify({
+          title: 'Loot Grab Proposal',
+          descrption: 'Trade Tokens for Loot',
+        }),
       },
     ],
   },
