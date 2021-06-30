@@ -40,14 +40,12 @@ export const TX = {
   },
   LOOT_GRAB_PROPOSAL: {
     contract: 'Moloch',
-    name: 'lootGrab',
+    name: 'submitProposal',
     onTxHash: ACTIONS.PROPOSAL,
     poll: 'subgraph',
     display: 'Submit Loot Grab Proposal',
     errMsg: 'Error submitting proposal',
     successMsg: 'Loot Grab submitted!',
-    // argsFromCallback: true,
-    // detailsJSON: DETAILS.STANDARD_PROPOSAL,
     gatherArgs: [
       { type: 'search', fields: ['contextData', 'address'] },
       { type: 'static', value: 0 },

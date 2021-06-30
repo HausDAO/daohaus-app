@@ -43,33 +43,6 @@ const argBuilderCallback = Object.freeze({
       details,
     ];
   },
-  lootGrab({ values, contextData }) {
-    // const details = buildJSONdetails({ title }, tx.detailsJSON);
-    const { tokenBalances, depositToken } = contextData.daoOverview;
-    const tributeToken = values.tributeToken || depositToken.tokenAddress;
-    const paymentToken = values.paymentToken || depositToken.tokenAddress;
-    const tributeOffered = values.tributeOffered
-      ? valToDecimalString(values.tributeOffered, tributeToken, tokenBalances)
-      : '0';
-    const paymentRequested = values.paymentRequested
-      ? valToDecimalString(values.paymentRequested, paymentToken, tokenBalances)
-      : '0';
-    const applicant = values?.applicant || contextData.address;
-    const temporaryDetails = JSON.stringify({
-      title: 'Loot Grab Proposal',
-      descrption: 'Trade Tokens for Loot',
-    });
-    return [
-      applicant,
-      values.sharesRequested || '0',
-      values.lootRequested || '0',
-      tributeOffered,
-      tributeToken,
-      paymentRequested,
-      paymentToken,
-      temporaryDetails,
-    ];
-  },
   proposeAction({ values, hash, formData }) {
     const hexData = safeEncodeHexFunction(
       JSON.parse(values.abiInput),
