@@ -13,7 +13,7 @@ import {
   mapInRequired,
 } from '../utils/formBuilder';
 
-const ProposalForm = props => {
+const FormBuilder = props => {
   const { submitTransaction, handleCustomValidation } = useTX();
   const { fields, additionalOptions = null, required = [] } = props;
 
@@ -99,6 +99,11 @@ const ProposalForm = props => {
         values: collapsedValues,
         formData: props,
         tx: props.tx,
+        lifeCycleFns: {
+          onCatch() {
+            setLoading(false);
+          },
+        },
       });
     } catch (error) {
       console.error(error);
@@ -116,6 +121,7 @@ const ProposalForm = props => {
                   key={field?.htmlFor || field?.name}
                   {...field}
                   minionType={props.minionType}
+                  layout={props.layout}
                   localForm={localForm}
                   buildABIOptions={buildABIOptions}
                 />
@@ -129,4 +135,4 @@ const ProposalForm = props => {
   );
 };
 
-export default ProposalForm;
+export default FormBuilder;

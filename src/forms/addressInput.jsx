@@ -60,10 +60,10 @@ const AddressInput = ({
     }
   };
 
-  useEffect(async () => {
+  useEffect(() => {
     let shouldSet = true;
-    if (daoMembers && !memberOverride) {
-      const memberProfiles = Promise.all(
+    const fetchDaoMembers = async () => {
+      const memberProfiles = await Promise.all(
         daoMembers.map(async member => {
           return {
             ...member,
@@ -72,23 +72,30 @@ const AddressInput = ({
         }),
       );
       if (shouldSet) {
-        setLocalMembers(await memberProfiles);
+        setLocalMembers(memberProfiles);
       }
-    } else if (memberOverride && overrideData) {
-      const memberProfiles = Promise.all(
+    };
+    const fetchOverride = async () => {
+      const memberProfiles = await Promise.all(
         overrideData.map(async member => {
           return {
             ...member,
-            ...(await handleGetProfile(member.memberAddress)),
+            ...handleGetProfile(member.memberAddress),
           };
         }),
       );
       if (shouldSet) {
         setLocalMembers(await memberProfiles);
       }
+    };
+    if (daoMembers && !memberOverride) {
+      fetchDaoMembers();
+    } else if (memberOverride && overrideData) {
+      fetchOverride();
     } else {
       console.warn('Address input did not recieve a valid members array');
     }
+
     return () => {
       shouldSet = false;
     };

@@ -11,11 +11,17 @@ import PaymentInput from './paymentInput';
 import TributeInput from './tributeInput';
 import TargetContract from './targetContract';
 import MultiInput from './multiInput';
+import GatedInput from './gatedInput';
+import GenericFormDisplay from './genericFormDisplay';
+import LootGrabDisplay from './lootGrabDisplay';
 
 export const InputFactory = props => {
   const { type } = props;
   if (type === 'input') {
     return <GenericInput {...props} />;
+  }
+  if (type === 'gatedInput') {
+    return <GatedInput {...props} />;
   }
   if (type === 'textarea') {
     return <GenericTextarea {...props} />;
@@ -46,6 +52,13 @@ export const InputFactory = props => {
   }
   if (type === 'multiInput') {
     return <MultiInput {...props} />;
+  }
+
+  if (type === 'genericDisplay') {
+    return <GenericFormDisplay {...props} />;
+  }
+  if (type === 'lootGrabDisplay') {
+    return <LootGrabDisplay {...props} />;
   }
   return null;
 };

@@ -86,7 +86,7 @@ const TokenListCard = ({
       >
         <Skeleton isLoaded={token?.tokenBalance}>
           <Box fontFamily='mono'>
-            {token.tokenBalance ? (
+            {token?.tokenBalance ? (
               <>
                 {`${numberWithCommas(
                   parseFloat(
