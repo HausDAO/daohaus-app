@@ -5,28 +5,18 @@ import { Button, FormControl, Flex, Icon, Box, Text } from '@chakra-ui/react';
 import { RiErrorWarningLine } from 'react-icons/ri';
 
 import { useInjectedProvider } from '../contexts/InjectedProviderContext';
-import { useOverlay } from '../contexts/OverlayContext';
-import { useUser } from '../contexts/UserContext';
 import { useTX } from '../contexts/TXContext';
 import RageInput from './rageInput';
-import { createPoll } from '../services/pollService';
 import { MolochService } from '../services/molochService';
+import { TX } from '../data/contractTX';
 
 const RageQuitForm = ({ overview, daoMember }) => {
   const [loading, setLoading] = useState(false);
   const [canRage, setCanRage] = useState(false);
-  const { address, injectedProvider } = useInjectedProvider();
+  const { address } = useInjectedProvider();
   const { daochain, daoid } = useParams();
   const [currentError, setCurrentError] = useState(null);
-  const { cachePoll, resolvePoll } = useUser();
-  const {
-    errorToast,
-    successToast,
-    setGenericModal,
-    setTxInfoModal,
-  } = useOverlay();
-  const { refreshDao } = useTX();
-  const now = (new Date().getTime() / 1000).toFixed();
+  const { submitTransaction } = useTX();
 
   const {
     handleSubmit,
@@ -78,53 +68,13 @@ const RageQuitForm = ({ overview, daoMember }) => {
         setLoading(false);
       }, 500);
     }
-
     setLoading(true);
-    console.log(values);
-    const args = [values.shares || '0', values.loot || '0'];
-    try {
-      const poll = createPoll({ action: 'ragequit', cachePoll })({
-        chainID: daochain,
-        molochAddress: daoid,
-        createdAt: now,
-        actions: {
-          onError: (error, txHash) => {
-            errorToast({
-              title: 'There was an error.',
-            });
-            resolvePoll(txHash);
-            console.error(`Could not find a matching proposal: ${error}`);
-            setLoading(false);
-          },
-          onSuccess: txHash => {
-            successToast({
-              title: 'Rage Quit submitted.',
-            });
-            refreshDao();
-            resolvePoll(txHash);
-            setLoading(false);
-          },
-        },
-      });
-      const onTxHash = () => {
-        setGenericModal({});
-        setTxInfoModal(true);
-      };
-      await MolochService({
-        web3: injectedProvider,
-        daoAddress: daoid,
-        version: overview.version,
-        chainID: daochain,
-      })('ragequit')({
-        args,
-        address,
-        poll,
-        onTxHash,
-      });
-    } catch (err) {
-      setLoading(false);
-      console.log(err);
-    }
+    await submitTransaction({
+      tx: TX.RAGE_QUIT,
+      args: [values.shares || '0', values.loot || '0'],
+      values,
+    });
+    setLoading(false);
   };
 
   return canRage ? (

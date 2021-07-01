@@ -5,7 +5,7 @@
 //   details: String
 //
 
-const TYPE_ERR_MSGS = {
+export const TYPE_ERR_MSGS = {
   number: 'Must be a valid number',
   integer: 'Must be a valid integer',
   string: 'Must be a valid string',
@@ -65,6 +65,8 @@ export const checkFormTypes = (values, fields) => {
 };
 
 export const validateRequired = (values, required) => {
+  console.log(`values`, values);
+  console.log(`required`, required);
   //  takes in array of required fields
   if (!values || !required?.length) {
     throw new Error(
@@ -92,10 +94,11 @@ export const validateRequired = (values, required) => {
 
 export const customValidations = {
   nonDaoApplicant({ appState, values }) {
+    console.log('appState', appState);
     const { apiData } = appState;
     const { applicant } = values;
 
-    if (apiData[applicant] || apiData[applicant.toLowerCase()]) {
+    if (apiData?.[applicant] || apiData?.[applicant.toLowerCase()]) {
       return { name: 'applicant', message: 'Applicant cannot be another DAO.' };
     }
     return false;

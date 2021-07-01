@@ -43,6 +43,33 @@ const argBuilderCallback = Object.freeze({
       details,
     ];
   },
+  lootGrab({ values, contextData }) {
+    // const details = buildJSONdetails({ title }, tx.detailsJSON);
+    const { tokenBalances, depositToken } = contextData.daoOverview;
+    const tributeToken = values.tributeToken || depositToken.tokenAddress;
+    const paymentToken = values.paymentToken || depositToken.tokenAddress;
+    const tributeOffered = values.tributeOffered
+      ? valToDecimalString(values.tributeOffered, tributeToken, tokenBalances)
+      : '0';
+    const paymentRequested = values.paymentRequested
+      ? valToDecimalString(values.paymentRequested, paymentToken, tokenBalances)
+      : '0';
+    const applicant = values?.applicant || contextData.address;
+    const temporaryDetails = JSON.stringify({
+      title: 'Loot Grab Proposal',
+      descrption: 'Trade Tokens for Loot',
+    });
+    return [
+      applicant,
+      values.sharesRequested || '0',
+      values.lootRequested || '0',
+      tributeOffered,
+      tributeToken,
+      paymentRequested,
+      paymentToken,
+      temporaryDetails,
+    ];
+  },
   proposeAction({ values, hash, formData }) {
     const hexData = safeEncodeHexFunction(
       JSON.parse(values.abiInput),
@@ -74,7 +101,7 @@ const gatherArgs = data => {
     if (arg === 'detailsToJSON') {
       if (!Array.isArray(tx.detailsJSON))
         throw new Error(
-          'details to JSON requires an Array of selected fields definied in the TX data at contractTX.js, under the field "detailsToJSON"',
+          'details to JSON requires an Array of selected fields defined in the TX data at contractTX.js, under the field "detailsToJSON"',
         );
       return buildJSONdetails({ ...values, hash }, tx.detailsJSON);
     }
@@ -225,6 +252,7 @@ export const createActions = ({ tx, uiControl, stage, lifeCycleFns }) => {
   //   refetch,
   //   setTxInfoModal,
   //   setProposalModal,
+  //   setGenericModal
   // };
   const actions = {
     closeProposalModal() {
@@ -232,6 +260,9 @@ export const createActions = ({ tx, uiControl, stage, lifeCycleFns }) => {
     },
     openTxModal() {
       uiControl.setTxInfoModal(true);
+    },
+    closeGenericModal() {
+      uiControl.setGenericModal({});
     },
   };
 

@@ -150,7 +150,7 @@ const BankChart = ({ overview, currentDaoTokens }) => {
                 {chartData.length ? (
                   <>
                     <Flex justify='flex-end'>
-                      <Menu>
+                      <Menu placement='bottom-end'>
                         <MenuButton
                           color='secondary.500'
                           fontFamily='heading'

@@ -8,9 +8,15 @@
 //   successMsg: String
 // }
 
+const temporaryDetails = JSON.stringify({
+  title: 'Loot Grab Proposal',
+  descrption: 'Trade Tokens for Loot',
+});
+console.log(`temporaryDetails`, temporaryDetails);
 export const ACTIONS = {
   PROPOSAL: ['closeProposalModal', 'openTxModal'],
   BASIC: ['openTxModal'],
+  GENERIC_MODAL: ['closeGenericModal', 'openTxModal'],
 };
 
 export const DETAILS = {
@@ -32,10 +38,37 @@ export const TX = {
     poll: 'subgraph',
     display: 'Submit Proposal',
     errMsg: 'Error submitting proposal',
-    successMsg: 'Funding Proposal submitted!',
+    successMsg: 'Proposal submitted!',
     detailsJSON: DETAILS.STANDARD_PROPOSAL,
     argsFromCallback: true,
     createDiscourse: true,
+  },
+  LOOT_GRAB_PROPOSAL: {
+    contract: 'Moloch',
+    name: 'lootGrab',
+    onTxHash: ACTIONS.PROPOSAL,
+    poll: 'subgraph',
+    display: 'Submit Loot Grab Proposal',
+    errMsg: 'Error submitting proposal',
+    successMsg: 'Loot Grab submitted!',
+    // detailsJSON: DETAILS.STANDARD_PROPOSAL,
+    argsFromCallback: true,
+    gatherArgs: [
+      { type: 'search', fields: ['contextData', 'address'] },
+      { type: 'static', value: 0 },
+      'lootRequested',
+      'tributeOffered',
+      'tributeToken',
+      { type: 'static', value: 0 },
+      {
+        type: 'search',
+        fields: ['contextData', 'daoOverview', 'depositToken', 'tokenAddress'],
+      },
+      {
+        type: 'static',
+        value: temporaryDetails,
+      },
+    ],
   },
   GUILDKICK_PROPOSAL: {
     contract: 'Moloch',
@@ -135,5 +168,42 @@ export const TX = {
     display: 'Process Proposal',
     errMsg: 'Error Processing Proposal',
     successMsg: 'Proposal Processed!',
+  },
+  COLLECT_TOKENS: {
+    contract: 'Moloch',
+    name: 'collectTokens',
+    poll: 'subgraph',
+    onTxHash: ACTIONS.BASIC,
+    display: 'Sync Token Balances',
+    errMsg: 'Error Syncing Token Balances',
+    successMsg: 'Token Balances Synced!',
+  },
+  UPDATE_DELEGATE: {
+    contract: 'Moloch',
+    name: 'updateDelegateKey',
+    poll: 'subgraph',
+    onTxHash: ACTIONS.GENERIC_MODAL,
+    display: 'Update Delegate Key',
+    errMsg: 'Error Updating Delegate Key',
+    successMsg: 'Delegate Key Updated!',
+    gatherArgs: ['delegateAddress'],
+  },
+  WITHDRAW: {
+    contract: 'Moloch',
+    name: 'withdrawBalance',
+    poll: 'subgraph',
+    onTxHash: ACTIONS.BASIC,
+    display: 'Withdraw Balance',
+    errMsg: 'Error Withdrawing Balance',
+    successMsg: 'Balance Withdrawn!',
+  },
+  RAGE_QUIT: {
+    contract: 'Moloch',
+    name: 'ragequit',
+    poll: 'subgraph',
+    onTxHash: ACTIONS.RAGE_QUIT,
+    display: 'Rage Quit',
+    errMsg: 'Error Rage Quitting',
+    successMsg: 'Rage quit processed!',
   },
 };
