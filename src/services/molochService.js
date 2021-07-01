@@ -84,32 +84,6 @@ export const MolochService = ({ web3, daoAddress, version, chainID }) => {
         }
       };
     }
-    if (service === 'lootGrab') {
-      return async ({ args, address, poll, onTxHash }) => {
-        try {
-          const tx = await contract.methods.submitProposal(...args);
-          return tx
-            .send('eth_requestAccounts', { from: address })
-            .on('transactionHash', txHash => {
-              console.log('transactionHash');
-              if (poll) {
-                poll(txHash);
-              }
-              if (onTxHash) {
-                onTxHash();
-              }
-              return txHash;
-            })
-            .on('error', error => {
-              console.error('This was not caught by component', error);
-              return error;
-            });
-        } catch (error) {
-          console.error(error);
-          return error;
-        }
-      };
-    }
     console.error('TX NOT FOUND');
     return null;
   };

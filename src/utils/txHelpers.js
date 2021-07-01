@@ -43,33 +43,6 @@ const argBuilderCallback = Object.freeze({
       details,
     ];
   },
-  lootGrab({ values, contextData }) {
-    // const details = buildJSONdetails({ title }, tx.detailsJSON);
-    const { tokenBalances, depositToken } = contextData.daoOverview;
-    const tributeToken = values.tributeToken || depositToken.tokenAddress;
-    const paymentToken = values.paymentToken || depositToken.tokenAddress;
-    const tributeOffered = values.tributeOffered
-      ? valToDecimalString(values.tributeOffered, tributeToken, tokenBalances)
-      : '0';
-    const paymentRequested = values.paymentRequested
-      ? valToDecimalString(values.paymentRequested, paymentToken, tokenBalances)
-      : '0';
-    const applicant = values?.applicant || contextData.address;
-    const temporaryDetails = JSON.stringify({
-      title: 'Loot Grab Proposal',
-      descrption: 'Trade Tokens for Loot',
-    });
-    return [
-      applicant,
-      values.sharesRequested || '0',
-      values.lootRequested || '0',
-      tributeOffered,
-      tributeToken,
-      paymentRequested,
-      paymentToken,
-      temporaryDetails,
-    ];
-  },
   proposeAction({ values, hash, formData }) {
     const hexData = safeEncodeHexFunction(
       JSON.parse(values.abiInput),
@@ -273,4 +246,33 @@ export const createActions = ({ tx, uiControl, stage, lifeCycleFns }) => {
     );
   }
   return () => tx[stage].forEach(action => actions[action]());
+};
+
+export const fieldModifiers = Object.freeze({
+  addTributeDecimals(fieldValue, data) {
+    return valToDecimalString(
+      fieldValue,
+      data.values.tributeToken,
+      data.contextData.daoOverview.tokenBalances,
+    );
+  },
+});
+
+export const handleFieldModifiers = appData => {
+  const { activeFields, values } = appData;
+  const newValues = { ...values };
+  activeFields?.forEach(field => {
+    if (field.modifiers) {
+      //  check to see that all modifiers are valid
+      field.modifiers.forEach(mod => {
+        console.log(`mod`, mod);
+        const modifiedVal = fieldModifiers[mod](newValues[field.name], appData);
+        newValues[field.name] = modifiedVal;
+      });
+      //  modify
+    } else {
+      return field;
+    }
+  });
+  return newValues;
 };

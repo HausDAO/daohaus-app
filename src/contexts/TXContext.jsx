@@ -15,6 +15,7 @@ import {
   createActions,
   exposeValues,
   getArgs,
+  handleFieldModifiers,
   // handleFormError,
   Transaction,
 } from '../utils/txHelpers';
@@ -231,13 +232,17 @@ export const TXProvider = ({ children }) => {
     return createTX(data);
   };
 
+  const modifyFields = formState => {
+    return handleFieldModifiers({ ...formState, contextData });
+  };
+
   return (
     <TXContext.Provider
       value={{
         refreshDao,
-        // unlockToken,
         submitTransaction,
         handleCustomValidation,
+        modifyFields,
       }}
     >
       {children}
@@ -246,8 +251,16 @@ export const TXProvider = ({ children }) => {
 };
 
 export const useTX = () => {
-  const { refreshDao, submitTransaction, handleCustomValidation } = useContext(
-    TXContext,
-  );
-  return { refreshDao, submitTransaction, handleCustomValidation };
+  const {
+    refreshDao,
+    submitTransaction,
+    handleCustomValidation,
+    modifyFields,
+  } = useContext(TXContext);
+  return {
+    refreshDao,
+    submitTransaction,
+    handleCustomValidation,
+    modifyFields,
+  };
 };

@@ -8,11 +8,6 @@
 //   successMsg: String
 // }
 
-const temporaryDetails = JSON.stringify({
-  title: 'Loot Grab Proposal',
-  descrption: 'Trade Tokens for Loot',
-});
-console.log(`temporaryDetails`, temporaryDetails);
 export const ACTIONS = {
   PROPOSAL: ['closeProposalModal', 'openTxModal'],
   BASIC: ['openTxModal'],
@@ -45,14 +40,12 @@ export const TX = {
   },
   LOOT_GRAB_PROPOSAL: {
     contract: 'Moloch',
-    name: 'lootGrab',
+    name: 'submitProposal',
     onTxHash: ACTIONS.PROPOSAL,
     poll: 'subgraph',
     display: 'Submit Loot Grab Proposal',
     errMsg: 'Error submitting proposal',
     successMsg: 'Loot Grab submitted!',
-    // detailsJSON: DETAILS.STANDARD_PROPOSAL,
-    argsFromCallback: true,
     gatherArgs: [
       { type: 'search', fields: ['contextData', 'address'] },
       { type: 'static', value: 0 },
@@ -66,7 +59,10 @@ export const TX = {
       },
       {
         type: 'static',
-        value: temporaryDetails,
+        value: JSON.stringify({
+          title: 'Loot Grab Proposal',
+          descrption: 'Trade Tokens for Loot',
+        }),
       },
     ],
   },
