@@ -197,7 +197,7 @@ const NiftyProposalForm = () => {
         // });
         // setNftPrice(price);
 
-        const url = `https://gateway.pinata.cloud/ipfs/${uri.match(
+        const url = `https://daohaus.mypinata.cloud/ipfs/${uri.match(
           /Qm[a-zA-Z0-9]+/,
         )}`;
         console.log('url', url);

@@ -183,32 +183,32 @@ export const supportedChains = {
       version: 'v1',
     },
   },
-  '0x4a': {
-    name: 'IDChain',
-    short_name: 'idchain',
-    chain: 'IDChain',
-    nativeCurrency: 'EIDI',
-    network: 'idchain',
-    network_id: 74,
-    chain_id: '0x4a',
-    hub_sort_order: 4,
-    providers: ['walletconnect'],
-    rpc_url: 'https://idchain.one/rpc/',
-    metadata_api_url: 'https://data.daohaus.club',
-    abi_api_url:
-      'https://explorer.idchain.one/api?module=contract&action=getabi&address=',
-    subgraph_url:
-      'https://graph.idchain.one/subgraphs/name/idchain/daohaus-supergraph',
-    stats_graph_url:
-      'https://graph.idchain.one/subgraphs/name/idchain/daohaus-stats',
-    boosts_graph_url: '',
-    minion_factory_addr: '0x90253955D4066eE27C183B4644089a5A04A888F1',
-    moloch_factory_addr: '0x99B4525D6d6F6c3161D0abd6A58B482f46ad5Cd0',
-    dai_contract: '0xE1A400f340bf4eeDbc4Bbb553f1BFf7Ec4656E3e',
-    wrapper_contract: '0x2b309226500ADc5956a422950A2AD6E6333Bb315',
-    wrap_n_zap_factory_addr: '0x',
-    block_explorer: 'https://explorer.idchain.one',
-  },
+  // '0x4a': {
+  //   name: 'IDChain',
+  //   short_name: 'idchain',
+  //   chain: 'IDChain',
+  //   nativeCurrency: 'EIDI',
+  //   network: 'idchain',
+  //   network_id: 74,
+  //   chain_id: '0x4a',
+  //   hub_sort_order: 4,
+  //   providers: ['walletconnect'],
+  //   rpc_url: 'https://idchain.one/rpc/',
+  //   metadata_api_url: 'https://data.daohaus.club',
+  //   abi_api_url:
+  //     'https://explorer.idchain.one/api?module=contract&action=getabi&address=',
+  //   subgraph_url:
+  //     'https://graph.idchain.one/subgraphs/name/idchain/daohaus-supergraph',
+  //   stats_graph_url:
+  //     'https://graph.idchain.one/subgraphs/name/idchain/daohaus-stats',
+  //   boosts_graph_url: '',
+  //   minion_factory_addr: '0x90253955D4066eE27C183B4644089a5A04A888F1',
+  //   moloch_factory_addr: '0x99B4525D6d6F6c3161D0abd6A58B482f46ad5Cd0',
+  //   dai_contract: '0xE1A400f340bf4eeDbc4Bbb553f1BFf7Ec4656E3e',
+  //   wrapper_contract: '0x2b309226500ADc5956a422950A2AD6E6333Bb315',
+  //   wrap_n_zap_factory_addr: '0x',
+  //   block_explorer: 'https://explorer.idchain.one',
+  // },
 };
 
 export const chainByID = chainID => supportedChains[chainID];
