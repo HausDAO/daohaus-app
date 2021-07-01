@@ -35,9 +35,9 @@ const TributeInput = props => {
   // console.log(tributeToken);
   const tributeOffered = watch('tributeOffered');
 
-  const truncatedBalance = useMemo(() => {
+  const displayBalance = useMemo(() => {
     if (balance && decimals) {
-      const commified = handleDecimals(balance, decimals);
+      const commified = handleDecimals(balance, decimals)?.toFixed(4);
       return commified;
     }
     return 'Error';
@@ -46,7 +46,7 @@ const TributeInput = props => {
   const btnDisplay = () => {
     if (loading) return <Spinner size='sm' />;
     if (needsUnlock) return 'Unlock Token';
-    if (!loading && truncatedBalance) return `Max: ${truncatedBalance}`;
+    if (!loading && displayBalance) return `Max: ${displayBalance}`;
     return '0';
   };
 
