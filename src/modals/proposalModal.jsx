@@ -14,13 +14,13 @@ import { rgba } from 'polished';
 import { useMetaData } from '../contexts/MetaDataContext';
 import { useOverlay } from '../contexts/OverlayContext';
 import { useCustomTheme } from '../contexts/CustomThemeContext';
-import FormBuilder from '../formBuilder/proposalForm';
+import FormBuilder from '../formBuilder/formBuilder';
 import SuperfluidMinionProposalForm from '../forms/superfluidMinionProposal';
 import TransmutationProposal from '../forms/transmutationProposal';
 import NiftyProposalForm from '../forms/minionNiftyProposal';
 
 import { getTerm } from '../utils/metadata';
-import { FORM } from '../data/proposalForms';
+import { FORM } from '../data/forms';
 import MinionProposalForm from '../forms/minionSimpleProposal';
 
 // TODO Refactor this logic with new UX
