@@ -11,6 +11,7 @@ import PaymentInput from './paymentInput';
 import TributeInput from './tributeInput';
 import TargetContract from './targetContract';
 import MultiInput from './multiInput';
+import NftSelect from './nftSelect';
 
 export const InputFactory = props => {
   const { type } = props;
@@ -46,6 +47,9 @@ export const InputFactory = props => {
   }
   if (type === 'multiInput') {
     return <MultiInput {...props} />;
+  }
+  if (type === 'nftSelect') {
+    return <NftSelect {...props} />;
   }
   return null;
 };

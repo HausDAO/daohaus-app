@@ -146,6 +146,13 @@ export const FIELD = {
     info: INFO_TEXT.SET_PRICE,
     expectType: 'number',
   },
+  NFT_SELECT: {
+    type: 'nftSelect',
+    htmlFor: 'nftSelect',
+    name: 'nftSelect',
+    label: 'Select an NFT',
+    expectType: 'address',
+  },
 };
 
 export const PROPOSAL_FORMS = {
@@ -262,6 +269,6 @@ export const PROPOSAL_FORMS = {
     type: PROPOSAL_TYPES.MINION_RARIBLE,
     minionType: MINION_TYPES.RARIBLE,
     tx: null,
-    fields: [FIELD.SET_PRICE],
+    fields: [FIELD.NFT_SELECT, FIELD.SET_PRICE],
   },
 };
