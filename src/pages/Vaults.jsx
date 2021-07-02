@@ -99,7 +99,7 @@ const Vaults = ({
         )}
       </Flex>
 
-      <Flex wrap='wrap' align='start' justify='space-between' w='100%'>
+      <Flex wrap='wrap' align='start' justify='flex-start' w='100%'>
         {listVaults &&
           listVaults.map((vault, i) => {
             return (

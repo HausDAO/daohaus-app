@@ -24,6 +24,7 @@ const VaultCard = ({ vault, currentDaoTokens }) => {
       w={['100%', '100%', '100%', '340px', '340px']}
       h='220px'
       mt={5}
+      mr={10}
       bgImg={bgImgUrl ? `url(${bgImgUrl})` : null}
     >
       <Flex
