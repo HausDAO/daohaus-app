@@ -12,7 +12,7 @@ import { rgba } from 'polished';
 
 import { useOverlay } from '../contexts/OverlayContext';
 import { useCustomTheme } from '../contexts/CustomThemeContext';
-import FormBuilder from '../formBuilder/proposalForm';
+import FormBuilder from '../formBuilder/formBuilder';
 
 const GenericModal = ({
   children,

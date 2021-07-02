@@ -14,7 +14,7 @@ import {
 } from '../utils/formBuilder';
 
 const FormBuilder = props => {
-  const { submitTransaction, handleCustomValidation } = useTX();
+  const { submitTransaction, handleCustomValidation, modifyFields } = useTX();
   const { fields, additionalOptions = null, required = [] } = props;
 
   const [loading, setLoading] = useState(false);
@@ -79,13 +79,17 @@ const FormBuilder = props => {
       updateErrors(typeErrors);
       return;
     }
-
-    // Collapses multiInput strings into an array
     const collapsedValues = collapse(values, '*MULTI*', 'objOfArrays');
 
+    const modifiedValues = modifyFields({
+      values: collapsedValues,
+      activeFields: formFields,
+      formData: props,
+      tx: props.tx,
+    });
     //  Checks for custom validation
     const customValErrors = handleCustomValidation({
-      values: collapsedValues,
+      values: modifiedValues,
       formData: props,
     });
     if (customValErrors) {
@@ -96,7 +100,7 @@ const FormBuilder = props => {
     try {
       setLoading(true);
       await submitTransaction({
-        values: collapsedValues,
+        values: modifiedValues,
         formData: props,
         tx: props.tx,
         lifeCycleFns: {

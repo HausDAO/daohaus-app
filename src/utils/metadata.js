@@ -48,7 +48,7 @@ export const formatBoosts = boostsArr =>
     };
   }, {});
 
-export const themeImagePath = (imageValue, listView = false) => {
+export const themeImagePath = imageValue => {
   if (
     !imageValue ||
     imageValue.slice(0, 1) === '/' ||
@@ -58,10 +58,7 @@ export const themeImagePath = (imageValue, listView = false) => {
   }
 
   if (imageValue.slice(0, 2) === 'Qm') {
-    const hostName = listView
-      ? 'https://ipfs.io/ipfs'
-      : 'https://gateway.pinata.cloud/ipfs';
-    return `${hostName}/${imageValue}`;
+    return `https://daohaus.mypinata.cloud/ipfs/${imageValue}`;
   }
 };
 
