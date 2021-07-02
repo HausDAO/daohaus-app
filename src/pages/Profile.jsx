@@ -12,7 +12,7 @@ import ProfileCard from '../components/profileCard';
 import { getProfileActivites } from '../utils/activities';
 import MainViewLayout from '../components/mainViewLayout';
 import { useInjectedProvider } from '../contexts/InjectedProviderContext';
-import { FORM } from '../data/proposalForms';
+import { FORM } from '../data/forms';
 
 const Profile = ({ members, overview, daoTokens, daoMember, activities }) => {
   const { userid, daochain } = useParams();
