@@ -133,4 +133,13 @@ export const FORM = {
       { ...FIELD.TRIBUTE, modifiers: ['addTributeDecimals'] },
     ],
   },
+  PAYROLL: {
+    title: 'Payroll Proposal',
+    layout: 'singleRow',
+    subtitle: 'Pay Members with a minion',
+    minionType: MINION_TYPES.VANILLA,
+    tx: TX.PAYROLL,
+    required: [],
+    fields: [FIELD.MINION_SELECT, FIELD.MINION_PAYMENT, FIELD.APPLICANT],
+  },
 };

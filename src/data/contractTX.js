@@ -1,3 +1,4 @@
+import Erc20Abi from '../contracts/erc20a.json';
 // TX = {
 //   contract: String
 //   poll: String (Optional)(Defaults to name)
@@ -197,9 +198,27 @@ export const TX = {
     contract: 'Moloch',
     name: 'ragequit',
     poll: 'subgraph',
-    onTxHash: ACTIONS.RAGE_QUIT,
+    onTxHash: ACTIONS.GENERIC_MODAL,
     display: 'Rage Quit',
     errMsg: 'Error Rage Quitting',
     successMsg: 'Rage quit processed!',
+  },
+  PAYROLL: {
+    contract: 'Minion',
+    name: 'proposeAction',
+    poll: 'subgraph',
+    onTxHash: ACTIONS.PROPOSAL,
+    display: 'Sending Token',
+    errMsg: 'Error Submitting Proposal',
+    successMsg: 'Proposal Submitted!',
+    encodeHex: {
+      abiFunction: { type: 'local', abiName: 'erc20', fnName: 'transfer' },
+      /*
+      Fetch Example: 
+      abiFunction: {type: 'fetch', contactAddress: '...', fnName: 'name'}
+      */
+      gatherArgs: ['applicant', 'minionPayment'],
+    },
+    gatherArgs: ['minionToken', '0', 'encodeHex', 'detailsToJSON'],
   },
 };

@@ -1,3 +1,4 @@
+import { MINION_TYPES } from '../utils/proposalUtils';
 import { CONTRACT_MODELS } from '../utils/tokenExplorerApi';
 
 export const INFO_TEXT = {
@@ -115,9 +116,10 @@ export const FIELD = {
   },
   //  Plain old input until token price API can be built
   MINION_PAYMENT: {
-    type: 'input',
-    htmlFor: 'minionPayment',
-    name: 'minionPayment',
+    type: 'minionToken',
+    htmlFor: 'minionToken',
+    name: 'minionToken',
+    selectName: 'tokenAddress',
     placeholder: '0',
     label: 'Minion Payment',
     info: INFO_TEXT.MINION_PAYMENT,
@@ -130,6 +132,7 @@ export const FIELD = {
     htmlFor: 'selectedMinion',
     placeholder: 'Choose a DAO minion',
     expectType: 'address',
+    minionType: MINION_TYPES.VANILLA,
   },
   ABI_INPUT: {
     type: 'abiInput',
