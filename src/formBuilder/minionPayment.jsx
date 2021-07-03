@@ -14,6 +14,7 @@ import { validate } from '../utils/validation';
 import { TX } from '../data/contractTX';
 import { handleDecimals } from '../utils/general';
 import { fetchApiVaultData } from '../utils/metadata';
+import { supportedChains } from '../utils/chain';
 
 const MinionToken = props => {
   const { submitTransaction } = useTX();
@@ -22,8 +23,9 @@ const MinionToken = props => {
   const { localForm, listenTo = 'selectedMinion' } = props;
   const { setValue, watch } = localForm;
 
-  const [minionTokens, setMinionTokens] = useState([]);
-  // const [unlocked, setUnlocked] = useState(true);
+  const [minionTokenData, setMinionTokenData] = useState(null);
+  const [minionTokenDisplay, setMinionTokenDisplay] = useState(null);
+  const [unlocked, setUnlocked] = useState(true);
   const [balance, setBalance] = useState(null);
   const [decimals, setDecimals] = useState(null);
   const [allowance, setAllowance] = useState(null);
@@ -57,13 +59,27 @@ const MinionToken = props => {
   useEffect(() => {
     const shouldUpdate = true;
     const getMinionVault = async () => {
-      const result = await fetchApiVaultData(daochain, [selectedMinion]);
-      if (shouldUpdate) {
-        console.log(result);
+      setLoading(true);
+      const result = await fetchApiVaultData(
+        supportedChains[daochain].network,
+        [selectedMinion],
+      );
+      if (shouldUpdate && result) {
+        const [minion] = result;
+        if (minion?.erc20s?.length) {
+          const displayable = minion.erc20s?.map(token => ({
+            value: token.contractAddress,
+            name: token.symbol,
+          }));
+          setLoading(false);
+          setMinionTokenData(minion.erc20s);
+          setMinionTokenDisplay(displayable);
+        }
       }
     };
-
-    getMinionVault;
+    if (daochain && selectedMinion) {
+      getMinionVault();
+    }
   }, [daochain, selectedMinion]);
 
   useEffect(() => {
@@ -71,6 +87,7 @@ const MinionToken = props => {
 
     const getInitial = async () => {
       setLoading(true);
+      console.log(minionToken);
       const tokenService = TokenService({
         chainID: daochain,
         tokenAddress: minionToken,
@@ -128,7 +145,7 @@ const MinionToken = props => {
     <InputSelect
       {...props}
       selectName='minionToken'
-      options={minionTokens}
+      options={minionTokenDisplay || []}
       helperText={helperText()}
       btn={
         <ModButton

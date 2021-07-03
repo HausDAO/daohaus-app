@@ -116,10 +116,10 @@ export const FIELD = {
   },
   //  Plain old input until token price API can be built
   MINION_PAYMENT: {
-    type: 'minionToken',
-    htmlFor: 'minionToken',
-    name: 'minionToken',
-    selectName: 'tokenAddress',
+    type: 'minionPayment',
+    htmlFor: 'minionPayment',
+    name: 'minionPayment',
+    selectName: 'minionToken',
     placeholder: '0',
     label: 'Minion Payment',
     info: INFO_TEXT.MINION_PAYMENT,
