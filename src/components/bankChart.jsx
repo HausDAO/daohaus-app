@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
 import {
   FlexibleWidthXYPlot,
   XAxis,
@@ -20,7 +19,6 @@ import {
 } from '@chakra-ui/react';
 import { FaChevronDown } from 'react-icons/fa';
 
-import { fetchBankValues } from '../utils/theGraph';
 import {
   getDateRange,
   balancesWithValue,
@@ -28,11 +26,11 @@ import {
   groupBalancesToDateRange,
   subtractDays,
 } from '../utils/charts';
-import { useSessionStorage } from '../hooks/useSessionStorage';
 import { useCustomTheme } from '../contexts/CustomThemeContext';
 import ContentBox from './ContentBox';
 import TextBox from './TextBox';
-import BankTotal from './bankTotal';
+import VaultTotal from './vaultTotal';
+import { getCurrentPrices } from '../utils/vault';
 
 const bankChartTimeframes = [
   { name: 'Lifetime', value: 'lifetime' },
@@ -41,37 +39,23 @@ const bankChartTimeframes = [
   { name: '6 months', value: 6 },
 ];
 
-const BankChart = ({ overview, currentDaoTokens }) => {
-  const { daochain, daoid } = useParams();
-  const [daoBalances, setDaoBalances] = useSessionStorage(
-    `balances-${daoid}`,
-    null,
-  );
+const BankChart = ({ overview, daoVaults, balanceData, visibleVaults }) => {
+  const [daoBalances, setDaoBalances] = useState(null);
   const { theme } = useCustomTheme();
   const [chartData, setChartData] = useState([]);
   const [timeframe, setTimeframe] = useState(bankChartTimeframes[0]);
 
   useEffect(() => {
-    const fetchBalances = async () => {
-      const data = await fetchBankValues({
-        daoID: daoid,
-        chainID: daochain,
-      });
-      setDaoBalances(data);
-    };
-    if (!daoBalances && daochain && daoid) {
-      fetchBalances();
+    if (balanceData) {
+      setDaoBalances(balanceData);
     }
-  }, [daoBalances, setDaoBalances, daochain, daoid]);
+  }, [balanceData]);
 
   useEffect(() => {
-    if (daoBalances?.length && currentDaoTokens) {
-      const prices = currentDaoTokens.reduce((priceMap, token) => {
-        priceMap[token.tokenAddress] = token;
-        return priceMap;
-      }, {});
+    if (daoBalances?.length && visibleVaults) {
+      const currentPrices = getCurrentPrices(daoVaults);
+      const filteredBalances = balancesWithValue(daoBalances, currentPrices);
 
-      const filteredBalances = balancesWithValue(daoBalances, prices);
       if (filteredBalances[0]) {
         const dateRange = getDateRange(
           timeframe,
@@ -114,7 +98,7 @@ const BankChart = ({ overview, currentDaoTokens }) => {
         setChartData([]);
       }
     }
-  }, [daoBalances, currentDaoTokens, timeframe]);
+  }, [daoBalances, timeframe, daoVaults]);
 
   const handleTimeChange = time => {
     setChartData([]);
@@ -143,7 +127,7 @@ const BankChart = ({ overview, currentDaoTokens }) => {
           <ContentBox minH='360px'>
             <Flex wrap='wrap' align='center' position='relative'>
               <Box position='absolute' top='0px' left='10px'>
-                <BankTotal tokenBalances={currentDaoTokens} />
+                <VaultTotal vaults={visibleVaults} />
               </Box>
 
               <Box w='100%'>

@@ -4,13 +4,11 @@ import { Button, Flex, useToast } from '@chakra-ui/react';
 import { RiAddFill } from 'react-icons/ri';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
 
+import { useInjectedProvider } from '../contexts/InjectedProviderContext';
 import BankList from '../components/BankList';
 import BankChart from '../components/bankChart';
 import MainViewLayout from '../components/mainViewLayout';
-import { useInjectedProvider } from '../contexts/InjectedProviderContext';
 import { daoConnectedAndSameChain } from '../utils/general';
-
-// TODO: will rework with new data
 
 const Treasury = ({
   overview,
@@ -25,7 +23,7 @@ const Treasury = ({
   const toast = useToast();
   const [needsSync, setNeedsSync] = useState(false);
 
-  console.log('daoVaults', daoVaults);
+  const treasuryVaultData = daoVaults?.find(vault => vault.type === 'treasury');
 
   const handleCopy = () => {
     toast({
@@ -77,9 +75,11 @@ const Treasury = ({
       isDao
     >
       <BankChart
-        currentDaoTokens={currentDaoTokens}
         overview={overview}
         customTerms={customTerms}
+        daoVaults={daoVaults}
+        balanceData={treasuryVaultData?.balanceHistory}
+        visibleVaults={[treasuryVaultData]}
       />
       <BankList tokens={currentDaoTokens} needsSync={needsSync} />
     </MainViewLayout>
