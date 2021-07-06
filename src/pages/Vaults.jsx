@@ -10,6 +10,7 @@ import { daoConnectedAndSameChain } from '../utils/general';
 import VaultCard from '../components/vaultCard';
 import ListFilter from '../components/listFilter';
 import { vaultFilterOptions } from '../utils/vault';
+import { vaultConfigByType } from '../data/vaults';
 
 const Vaults = ({
   overview,
@@ -44,7 +45,6 @@ const Vaults = ({
       }
     };
     if (daoVaults) {
-      console.log('filter', filter);
       filterVaults();
     }
   }, [daoVaults, filter]);
@@ -64,6 +64,13 @@ const Vaults = ({
       </Button>
     );
 
+  // TODO: maybe these gather the bank data for the chart and pass on
+  // - here we put it all in sessionstorage
+  // one odd bit here is the balance history isn't with vault data yet - requires the extra query
+  // should that be up in context? - yes
+  // - here we mash treasury and erc20s
+  // vault page becomes one and mashes based on config
+
   return (
     <MainViewLayout
       header='Vaults'
@@ -75,6 +82,7 @@ const Vaults = ({
         currentDaoTokens={currentDaoTokens}
         overview={overview}
         customTerms={customTerms}
+        daoVaults={daoVaults}
       />
       <Flex justify='space-between'>
         <Box mt={5}>
@@ -107,6 +115,7 @@ const Vaults = ({
                 key={i}
                 vault={vault}
                 currentDaoTokens={currentDaoTokens}
+                vaultConfig={vaultConfigByType[vault.type]}
               />
             );
           })}

@@ -120,6 +120,7 @@ const completeQueries = {
           minion => minion.minionAddress,
         );
 
+        const prices = await fetchTokenData();
         const vaultApiData = await fetchApiVaultData(
           supportedChains[args.chainID].network,
           minionAddresses,
@@ -130,7 +131,9 @@ const completeQueries = {
           name: 'DAO Treasury',
           address: args.daoID,
           currentBalance: '',
-          erc20s: graphOverview.moloch.tokenBalances,
+          erc20s: graphOverview.moloch.tokenBalances.map(token => {
+            return { ...token, ...prices[token.token.tokenAddress] };
+          }),
           nfts: [],
         };
 

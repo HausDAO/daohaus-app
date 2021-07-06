@@ -80,6 +80,7 @@ const Treasury = ({
         currentDaoTokens={currentDaoTokens}
         overview={overview}
         customTerms={customTerms}
+        isGuildBank
       />
       <BankList tokens={currentDaoTokens} needsSync={needsSync} />
     </MainViewLayout>

@@ -41,28 +41,73 @@ const bankChartTimeframes = [
   { name: '6 months', value: 6 },
 ];
 
-const BankChart = ({ overview, currentDaoTokens }) => {
+const BankChart = ({
+  overview,
+  currentDaoTokens,
+  isGuildBank,
+  daoVaults,
+  minionVault,
+}) => {
   const { daochain, daoid } = useParams();
-  const [daoBalances, setDaoBalances] = useSessionStorage(
-    `balances-${daoid}`,
-    null,
-  );
+  // const [daoBalances, setDaoBalances] = useSessionStorage(
+  //   `balances-${daoid}`,
+  //   null,
+  // );
+
+  const [daoBalances, setDaoBalances] = useState(null);
   const { theme } = useCustomTheme();
   const [chartData, setChartData] = useState([]);
   const [timeframe, setTimeframe] = useState(bankChartTimeframes[0]);
 
+  // console.log('daoBalances', daoBalances);
+  // console.log('daoVaults', daoVaults);
+
   useEffect(() => {
     const fetchBalances = async () => {
+      // if (isGuildBank) {
+      //   const data = await fetchBankValues({
+      //     daoID: daoid,
+      //     chainID: daochain,
+      //   });
+      //   setDaoBalances(data);
+      // }
+
+      // if (daoVaults) {
+      console.log('daoVaults', daoVaults);
       const data = await fetchBankValues({
         daoID: daoid,
         chainID: daochain,
       });
-      setDaoBalances(data);
+
+      // get all balances
+      // this now needs to react to the filter too
+      const vaultData = daoVaults
+        .filter(v => v.type !== 'treasury')
+        .flatMap(vault => vault.balanceHistory);
+
+      // console.log('vaultData', vaultData);
+      setDaoBalances(data.concat(vaultData));
+      // }
+      // else {
+      //   setDaoBalances(minionVault.balanceHistory);
+      // }
+
+      // const minionBalanceData =
+      // console.log('minionVault', minionVault);
+      // setDaoBalances(minionVault.balanceHistory);
     };
-    if (!daoBalances && daochain && daoid) {
+
+    /// need to rework for all the possible things
+    // - aggregate
+    // - jsut minion
+    // - just gb
+    // ned dep on daoVaults
+
+    if (!daoBalances && daochain && daoid && daoVaults) {
+      console.log('FETCHING');
       fetchBalances();
     }
-  }, [daoBalances, setDaoBalances, daochain, daoid]);
+  }, [daoBalances, setDaoBalances, daochain, daoid, daoVaults]);
 
   useEffect(() => {
     if (daoBalances?.length && currentDaoTokens) {

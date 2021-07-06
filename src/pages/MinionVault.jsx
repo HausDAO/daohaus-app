@@ -50,11 +50,13 @@ const MinionVault = ({
   );
 
   useEffect(() => {
-    setVault(
-      daoVaults.find(vault => {
-        return vault.address === minion;
-      }),
-    );
+    if (daoVaults && minion) {
+      setVault(
+        daoVaults.find(vault => {
+          return vault.address === minion;
+        }),
+      );
+    }
   }, [daoVaults, minion]);
 
   useEffect(() => {
@@ -89,6 +91,7 @@ const MinionVault = ({
               currentDaoTokens={currentDaoTokens}
               overview={overview}
               customTerms={customTerms}
+              minionVault={vault}
             />
             <BankList tokens={currentDaoTokens} needsSync={needsSync} />
 

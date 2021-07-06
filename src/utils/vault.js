@@ -10,6 +10,7 @@ export const vaultTypeDisplayName = {
   'nifty minion': 'Boost Minion',
 };
 
+// TODO: Move to legos functions?
 export const vaultUrlPart = vault => {
   return vault.type === 'treasury' ? `treasury` : `minion/${vault.address}`;
 };

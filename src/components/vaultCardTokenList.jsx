@@ -11,7 +11,7 @@ const VaultCardTokenList = ({ tokens }) => {
   useEffect(() => {
     if (tokens) {
       const tokensWithIcons = tokens.reduce((icons, token) => {
-        if (icons.length < 3 && token.icon) {
+        if (icons.length < 3 && token.logoURI) {
           icons.push(token);
         }
         return icons;
@@ -26,7 +26,7 @@ const VaultCardTokenList = ({ tokens }) => {
   const renderTokenIcon = (token, i) => {
     return (
       <Flex key={i} align='center'>
-        <Image src={token.icon} height='35px' mr='15px' />
+        <Image src={token.logoURI} height='35px' mr='15px' />
       </Flex>
     );
   };
