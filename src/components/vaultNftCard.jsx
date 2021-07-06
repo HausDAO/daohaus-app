@@ -1,16 +1,10 @@
 import React from 'react';
-import { Link as RouterLink, useParams } from 'react-router-dom';
 import { Box, Flex, Image } from '@chakra-ui/react';
 
 import ContentBox from './ContentBox';
-import { numberWithCommas } from '../utils/general';
-import { vaultTypeDisplayName, vaultUrlPart } from '../utils/vault';
-import CopyButton from './copyButton';
 import AddressAvatar from './addressAvatar';
 
 const VaultNftCard = ({ nft }) => {
-  const { daoid, daochain } = useParams();
-
   return (
     <ContentBox w='100%' mt={5}>
       <Flex

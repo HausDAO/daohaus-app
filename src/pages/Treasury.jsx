@@ -10,8 +10,6 @@ import MainViewLayout from '../components/mainViewLayout';
 import { useInjectedProvider } from '../contexts/InjectedProviderContext';
 import { daoConnectedAndSameChain } from '../utils/general';
 
-// TODO: will rework with new data
-
 const Treasury = ({
   overview,
   customTerms,
@@ -25,7 +23,7 @@ const Treasury = ({
   const toast = useToast();
   const [needsSync, setNeedsSync] = useState(false);
 
-  console.log('daoVaults', daoVaults);
+  const treasuryVaultData = daoVaults?.find(vault => vault.type === 'treasury');
 
   const handleCopy = () => {
     toast({
@@ -77,10 +75,11 @@ const Treasury = ({
       isDao
     >
       <BankChart
-        currentDaoTokens={currentDaoTokens}
         overview={overview}
         customTerms={customTerms}
-        isGuildBank
+        daoVaults={daoVaults}
+        balanceData={treasuryVaultData?.balanceHistory}
+        visibleVaults={[treasuryVaultData]}
       />
       <BankList tokens={currentDaoTokens} needsSync={needsSync} />
     </MainViewLayout>

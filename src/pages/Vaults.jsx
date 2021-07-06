@@ -9,8 +9,7 @@ import { useInjectedProvider } from '../contexts/InjectedProviderContext';
 import { daoConnectedAndSameChain } from '../utils/general';
 import VaultCard from '../components/vaultCard';
 import ListFilter from '../components/listFilter';
-import { vaultFilterOptions } from '../utils/vault';
-import { vaultConfigByType } from '../data/vaults';
+import { vaultFilterOptions, vaultConfigByType } from '../data/vaults';
 
 const Vaults = ({
   overview,
@@ -23,6 +22,7 @@ const Vaults = ({
   const { address, injectedChain } = useInjectedProvider();
   const [filter, setFilter] = useState('all');
   const [listVaults, setListVaults] = useState(null);
+  const [chartBalances, setChartBalances] = useState([]);
   const [hasNfts, setHasNfts] = useState(false);
 
   useEffect(() => {
@@ -35,6 +35,7 @@ const Vaults = ({
     const filterVaults = () => {
       if (filter.value === 'all') {
         setListVaults(daoVaults);
+        setChartBalances(daoVaults.flatMap(vault => vault.balanceHistory));
       } else {
         const filteredVaults = daoVaults.filter(vault => {
           return filter.valueMatches
@@ -42,6 +43,7 @@ const Vaults = ({
             : vault.type === filter.value;
         });
         setListVaults(filteredVaults);
+        setChartBalances(filteredVaults.flatMap(vault => vault.balanceHistory));
       }
     };
     if (daoVaults) {
@@ -64,13 +66,6 @@ const Vaults = ({
       </Button>
     );
 
-  // TODO: maybe these gather the bank data for the chart and pass on
-  // - here we put it all in sessionstorage
-  // one odd bit here is the balance history isn't with vault data yet - requires the extra query
-  // should that be up in context? - yes
-  // - here we mash treasury and erc20s
-  // vault page becomes one and mashes based on config
-
   return (
     <MainViewLayout
       header='Vaults'
@@ -79,10 +74,11 @@ const Vaults = ({
       isDao
     >
       <BankChart
-        currentDaoTokens={currentDaoTokens}
         overview={overview}
         customTerms={customTerms}
         daoVaults={daoVaults}
+        balanceData={chartBalances}
+        visibleVaults={listVaults}
       />
       <Flex justify='space-between'>
         <Box mt={5}>

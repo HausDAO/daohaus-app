@@ -26,7 +26,7 @@ const VaultCardTokenList = ({ tokens }) => {
   const renderTokenIcon = (token, i) => {
     return (
       <Flex key={i} align='center'>
-        <Image src={token.logoURI} height='35px' mr='15px' />
+        <Image src={token.logoURI} height='30px' mr='15px' />
       </Flex>
     );
   };

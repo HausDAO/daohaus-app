@@ -88,10 +88,12 @@ const MinionVault = ({
             pb={6}
           >
             <BankChart
-              currentDaoTokens={currentDaoTokens}
               overview={overview}
               customTerms={customTerms}
               minionVault={vault}
+              balanceData={vault.balanceHistory}
+              daoVaults={daoVaults}
+              visibleVaults={[vault]}
             />
             <BankList tokens={currentDaoTokens} needsSync={needsSync} />
 

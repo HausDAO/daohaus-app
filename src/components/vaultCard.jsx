@@ -21,7 +21,6 @@ const VaultCard = ({ vault, currentDaoTokens, vaultConfig }) => {
       ? tallyUSDs(currentDaoTokens)
       : vault.currentBalance;
 
-  console.log('vault', vault);
   return (
     <ContentBox
       w={['100%', '100%', '100%', '340px', '340px']}
