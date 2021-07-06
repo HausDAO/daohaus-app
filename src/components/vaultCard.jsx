@@ -57,7 +57,7 @@ const VaultCard = ({ vault, currentDaoTokens, vaultConfig }) => {
         {vault.name}
       </Box>
       <Box fontSize='3xl' fontWeight={700} fontFamily='mono'>
-        ${numberWithCommas(currentVaultBalance)}
+        ${numberWithCommas(currentVaultBalance.toFixed(2))}
       </Box>
 
       <Flex direction='column' align='start'>

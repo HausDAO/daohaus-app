@@ -4,10 +4,10 @@ import { Button, Flex, useToast } from '@chakra-ui/react';
 import { RiAddFill } from 'react-icons/ri';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
 
+import { useInjectedProvider } from '../contexts/InjectedProviderContext';
 import BankList from '../components/BankList';
 import BankChart from '../components/bankChart';
 import MainViewLayout from '../components/mainViewLayout';
-import { useInjectedProvider } from '../contexts/InjectedProviderContext';
 import { daoConnectedAndSameChain } from '../utils/general';
 
 const Treasury = ({
