@@ -5,22 +5,33 @@ import {
   ModalCloseButton,
   ModalBody,
   ModalOverlay,
+  ModalHeader,
+  Box,
 } from '@chakra-ui/react';
 import { rgba } from 'polished';
 
 import { useOverlay } from '../contexts/OverlayContext';
 import { useCustomTheme } from '../contexts/CustomThemeContext';
+import FormBuilder from '../formBuilder/formBuilder';
 
-const GenericModal = ({ children, modalId, closeOnOverlayClick = true }) => {
+const GenericModal = ({
+  children,
+  modalId,
+  title,
+  formLego,
+  closeOnOverlayClick = true,
+}) => {
   const { genericModal, setGenericModal } = useOverlay();
   const { theme } = useCustomTheme();
+
+  const closeModal = () => setGenericModal({});
 
   return (
     <Modal
       isOpen={genericModal[modalId]}
       closeOnEsc={false}
       closeOnOverlayClick={closeOnOverlayClick}
-      onClose={() => setGenericModal({})}
+      onClose={closeModal}
       isCentered
     >
       <ModalOverlay
@@ -34,6 +45,17 @@ const GenericModal = ({ children, modalId, closeOnOverlayClick = true }) => {
         borderColor='whiteAlpha.200'
         py={6}
       >
+        <ModalHeader>
+          <Box
+            fontFamily='heading'
+            textTransform='uppercase'
+            fontSize='sm'
+            fontWeight={700}
+            color='white'
+          >
+            {formLego?.title || title}
+          </Box>
+        </ModalHeader>
         <ModalCloseButton />
         <ModalBody
           flexDirection='column'
@@ -41,7 +63,7 @@ const GenericModal = ({ children, modalId, closeOnOverlayClick = true }) => {
           maxH='600px'
           overflow='auto'
         >
-          {children}
+          {formLego ? <FormBuilder {...formLego} /> : children}
         </ModalBody>
       </ModalContent>
     </Modal>

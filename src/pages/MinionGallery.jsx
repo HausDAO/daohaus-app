@@ -29,6 +29,7 @@ const MinionGallery = ({ daoVaults, customTerms }) => {
       } else {
         nfts = daoVaults?.reduce((acc, item) => [...acc, ...item.nfts], []);
       }
+      console.log(nfts);
       setNftData(nfts);
       setNfts(nfts);
     }
@@ -38,8 +39,8 @@ const MinionGallery = ({ daoVaults, customTerms }) => {
   useEffect(() => {
     if (nftData) {
       const collections = nftData.reduce((acc, item) => {
-        if (acc.indexOf(item.collection) === -1) {
-          return [...acc, item.collection];
+        if (acc.indexOf(item.name) === -1) {
+          return [...acc, item.name];
         }
         return acc;
       }, []);
@@ -69,7 +70,7 @@ const MinionGallery = ({ daoVaults, customTerms }) => {
           }
         }
         if (collection !== 'all') {
-          result = result && collection === item.collection;
+          result = result && collection === item.name;
         }
         return result;
       });

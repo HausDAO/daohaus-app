@@ -13,8 +13,8 @@ import {
   mapInRequired,
 } from '../utils/formBuilder';
 
-const ProposalForm = props => {
-  const { submitTransaction, handleCustomValidation } = useTX();
+const FormBuilder = props => {
+  const { submitTransaction, handleCustomValidation, modifyFields } = useTX();
   const { fields, additionalOptions = null, required = [] } = props;
 
   const [loading, setLoading] = useState(false);
@@ -79,13 +79,17 @@ const ProposalForm = props => {
       updateErrors(typeErrors);
       return;
     }
-
-    // Collapses multiInput strings into an array
     const collapsedValues = collapse(values, '*MULTI*', 'objOfArrays');
 
+    const modifiedValues = modifyFields({
+      values: collapsedValues,
+      activeFields: formFields,
+      formData: props,
+      tx: props.tx,
+    });
     //  Checks for custom validation
     const customValErrors = handleCustomValidation({
-      values: collapsedValues,
+      values: modifiedValues,
       formData: props,
     });
     if (customValErrors) {
@@ -96,9 +100,14 @@ const ProposalForm = props => {
     try {
       setLoading(true);
       await submitTransaction({
-        values: collapsedValues,
+        values: modifiedValues,
         formData: props,
         tx: props.tx,
+        lifeCycleFns: {
+          onCatch() {
+            setLoading(false);
+          },
+        },
       });
     } catch (error) {
       console.error(error);
@@ -116,6 +125,7 @@ const ProposalForm = props => {
                   key={field?.htmlFor || field?.name}
                   {...field}
                   minionType={props.minionType}
+                  layout={props.layout}
                   localForm={localForm}
                   buildABIOptions={buildABIOptions}
                 />
@@ -129,4 +139,4 @@ const ProposalForm = props => {
   );
 };
 
-export default ProposalForm;
+export default FormBuilder;

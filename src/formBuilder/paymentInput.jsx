@@ -9,7 +9,7 @@ import { handleDecimals } from '../utils/general';
 const getMaxBalance = (tokenData, tokenAddress) => {
   //  Uses token select data structure
   const token = tokenData.find(t => t.value === tokenAddress);
-  console.log(token);
+
   if (token) {
     return handleDecimals(token.balance, token.decimals);
   }

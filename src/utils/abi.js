@@ -1,5 +1,6 @@
 import Web3 from 'web3';
 import { chainByID } from './chain';
+import { createContract } from './contract';
 import { IsJsonString } from './general';
 
 const isEtherScan = chainID => {
@@ -15,6 +16,18 @@ const getABIurl = (contractAddress, chainID) => {
     : `${chainByID(chainID).abi_api_url}${contractAddress}`;
 };
 
+const isProxyABI = response => {
+  if (response?.length) {
+    return response.some(fn => fn.name === 'implementation');
+  }
+};
+
+const getImplementationOf = async (address, chainID, abi) => {
+  const web3Contract = createContract({ address, abi, chainID });
+  const newAddress = await web3Contract.methods.implementation().call();
+  return newAddress;
+};
+
 export const fetchABI = async (contractAddress, chainID, parseJSON = true) => {
   const url = getABIurl(contractAddress, chainID);
   if (!url) {
@@ -24,7 +37,17 @@ export const fetchABI = async (contractAddress, chainID, parseJSON = true) => {
     const response = await fetch(url);
     const data = await response.json();
     if (data.message === 'OK' && IsJsonString(data?.result) && parseJSON) {
-      return JSON.parse(data.result);
+      const abiData = JSON.parse(data.result);
+      if (isProxyABI(abiData)) {
+        const originalAddress = await getImplementationOf(
+          contractAddress,
+          chainID,
+          abiData,
+        );
+        const newData = await fetchABI(originalAddress, chainID, parseJSON);
+        return newData;
+      }
+      return abiData;
     }
     return data;
   } catch (error) {
@@ -36,6 +59,7 @@ export const getABIfunctions = abi => {
   if (!abi || !Array.isArray(abi) || !abi.length) return null;
   return abi.filter(({ type, constant }) => type === 'function' && !constant);
 };
+
 export const formatFNsAsSelectOptions = abi => {
   if (!abi || !Array.isArray(abi) || !abi.length) return null;
   return abi.map(fn => ({
@@ -72,7 +96,7 @@ export const safeEncodeHexFunction = (selectedFunction, inputVals) => {
     return {
       encodingError: true,
       message:
-        'Could not encode transaction data with the values enterred into this form',
+        'Could not encode transaction data with the values entered into this form',
     };
   }
 };

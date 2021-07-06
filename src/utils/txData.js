@@ -31,6 +31,7 @@ const addPopupModalData = tx =>
         displayName: DISPLAY_NAMES[tx.action],
       }
     : null;
+
 export const getLastTx = TXs => {
   return TXs?.length ? addPopupModalData(TXs[0]) : null;
 };

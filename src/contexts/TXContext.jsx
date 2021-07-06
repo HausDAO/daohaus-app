@@ -15,6 +15,7 @@ import {
   createActions,
   exposeValues,
   getArgs,
+  handleFieldModifiers,
   // handleFormError,
   Transaction,
 } from '../utils/txHelpers';
@@ -45,6 +46,7 @@ export const TXProvider = ({ children }) => {
     successToast,
     setTxInfoModal,
     setProposalModal,
+    setGenericModal,
   } = useOverlay();
   const { hasFetchedMetadata, shouldUpdateTheme } = useMetaData();
   const { shouldFetchInit, shouldFetchContract, currentDaoTokens } = useToken();
@@ -80,6 +82,7 @@ export const TXProvider = ({ children }) => {
     refetch,
     setTxInfoModal,
     setProposalModal,
+    setGenericModal,
   };
 
   const refreshDao = () => {
@@ -197,7 +200,6 @@ export const TXProvider = ({ children }) => {
       data.lifeCycleFns?.afterTx?.();
       return tx;
     } catch (error) {
-      console.error(error);
       data.lifeCycleFns?.onCatch?.();
       errorToast({
         title: data?.tx?.errMsg || 'There was an error',
@@ -230,13 +232,17 @@ export const TXProvider = ({ children }) => {
     return createTX(data);
   };
 
+  const modifyFields = formState => {
+    return handleFieldModifiers({ ...formState, contextData });
+  };
+
   return (
     <TXContext.Provider
       value={{
         refreshDao,
-        // unlockToken,
         submitTransaction,
         handleCustomValidation,
+        modifyFields,
       }}
     >
       {children}
@@ -245,8 +251,16 @@ export const TXProvider = ({ children }) => {
 };
 
 export const useTX = () => {
-  const { refreshDao, submitTransaction, handleCustomValidation } = useContext(
-    TXContext,
-  );
-  return { refreshDao, submitTransaction, handleCustomValidation };
+  const {
+    refreshDao,
+    submitTransaction,
+    handleCustomValidation,
+    modifyFields,
+  } = useContext(TXContext);
+  return {
+    refreshDao,
+    submitTransaction,
+    handleCustomValidation,
+    modifyFields,
+  };
 };

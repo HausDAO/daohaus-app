@@ -22,6 +22,13 @@ const Vaults = ({
   const { address, injectedChain } = useInjectedProvider();
   const [filter, setFilter] = useState('all');
   const [listVaults, setListVaults] = useState(null);
+  const [hasNfts, setHasNfts] = useState(false);
+
+  useEffect(() => {
+    if (daoVaults) {
+      setHasNfts(daoVaults.flatMap(vault => vault.nfts).length > 0);
+    }
+  }, [daoVaults]);
 
   useEffect(() => {
     const filterVaults = () => {
@@ -69,15 +76,30 @@ const Vaults = ({
         overview={overview}
         customTerms={customTerms}
       />
-      <Box mt={5}>
-        <ListFilter
-          filter={filter}
-          setFilter={setFilter}
-          options={vaultFilterOptions}
-          labelText='Showing'
-        />
-      </Box>
-      <Flex wrap='wrap' align='start' justify='space-between' w='100%'>
+      <Flex justify='space-between'>
+        <Box mt={5}>
+          <ListFilter
+            filter={filter}
+            setFilter={setFilter}
+            options={vaultFilterOptions}
+            labelText='Showing'
+          />
+        </Box>
+        {hasNfts && (
+          <Box
+            mt={5}
+            texttransform='uppercase'
+            fontFamily='heading'
+            fontSize={['sm', null, null, 'md']}
+          >
+            <Link to={`/dao/${daochain}/${daoid}/gallery`}>
+              View NFT Gallery
+            </Link>
+          </Box>
+        )}
+      </Flex>
+
+      <Flex wrap='wrap' align='start' justify='flex-start' w='100%'>
         {listVaults &&
           listVaults.map((vault, i) => {
             return (
