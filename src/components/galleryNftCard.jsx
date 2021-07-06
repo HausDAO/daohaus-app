@@ -1,16 +1,29 @@
 import React from 'react';
 import { Box, Flex, Image, Button } from '@chakra-ui/react';
 
+import { useOverlay } from '../contexts/OverlayContext';
 import ContentBox from './ContentBox';
 import AddressAvatar from './addressAvatar';
 
 const VaultNftCard = ({ nft }) => {
+  const { setNftViewModal } = useOverlay();
+
+  const setModal = () => {
+    setNftViewModal(nft);
+  };
+
   return (
     <ContentBox w={['90vw', 350, 350, 350]}>
       <Flex direction='row' align='center' justify='flex-start' w='100%' mb={5}>
         <Box size='s'>{nft.metadata.name}</Box>
-
-        <Box size='s' color='secondary.500' ml='auto' mr={5}>
+        <Box
+          size='s'
+          color='secondary.500'
+          ml='auto'
+          mr={5}
+          onClick={setModal}
+          _hover={{ cursor: 'pointer' }}
+        >
           View
         </Box>
         <Button pl={5} pr={5} lineHeight='50%' h={8}>

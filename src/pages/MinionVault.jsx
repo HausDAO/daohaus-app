@@ -10,9 +10,6 @@ import TextBox from '../components/TextBox';
 import VaultNftCard from '../components/vaultNftCard';
 import MinionTokenList from '../components/minionTokenList';
 
-// TODO: will rework with new data
-// nft list can be latest 3
-
 const MinionVault = ({
   overview,
   customTerms,
@@ -50,26 +47,14 @@ const MinionVault = ({
   );
 
   useEffect(() => {
-    setVault(
-      daoVaults.find(vault => {
-        return vault.address === minion;
-      }),
-    );
-  }, [daoVaults, minion]);
-
-  useEffect(() => {
-    const canSync = daoMember?.exists || delegate;
-    if (currentDaoTokens && canSync) {
-      setNeedsSync(
-        currentDaoTokens.some(token => {
-          return (
-            token.contractBalances &&
-            token.contractBalances.token !== token.contractBalances.babe
-          );
+    if (daoVaults && minion) {
+      setVault(
+        daoVaults.find(vault => {
+          return vault.address === minion;
         }),
       );
     }
-  }, [currentDaoTokens, daoMember, delegate]);
+  }, [daoVaults, minion]);
 
   return (
     <MainViewLayout
@@ -86,11 +71,14 @@ const MinionVault = ({
             pb={6}
           >
             <BankChart
-              currentDaoTokens={currentDaoTokens}
               overview={overview}
               customTerms={customTerms}
+              minionVault={vault}
+              balanceData={vault.balanceHistory}
+              daoVaults={daoVaults}
+              visibleVaults={[vault]}
             />
-            <BankList tokens={currentDaoTokens} needsSync={needsSync} />
+            {/* <BankList tokens={currentDaoTokens} needsSync={needsSync} /> */}
 
             <MinionTokenList
               minion={minion}

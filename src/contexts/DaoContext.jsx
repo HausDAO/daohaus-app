@@ -17,8 +17,6 @@ import { TXProvider } from './TXContext';
 import { DaoMemberProvider } from './DaoMemberContext';
 import { useUser } from './UserContext';
 import { UBERHAUS_DATA } from '../utils/uberhaus';
-import { tempVaultData } from '../content/temp-vault-data';
-// import { UBERHAUS_DATA } from '../utils/uberhaus';
 
 export const DaoContext = createContext();
 
@@ -50,8 +48,6 @@ export const DaoProvider = ({ children }) => {
   const [uberMinionData, setUberMinionData] = useState(null);
   const [isUberHaus, setIsUberHaus] = useState(false);
 
-  // TODO: temp balance data, use session storage here when we have a real fetch
-  // const [daoVaults] = useState(tempVaultData);
   const [daoVaults, setDaoVaults] = useSessionStorage(`vaults-${daoid}`, null);
 
   const hasPerformedBatchQuery = useRef(false);

@@ -9,7 +9,7 @@ import { useInjectedProvider } from '../contexts/InjectedProviderContext';
 import { daoConnectedAndSameChain } from '../utils/general';
 import VaultCard from '../components/vaultCard';
 import ListFilter from '../components/listFilter';
-import { vaultFilterOptions } from '../utils/vault';
+import { vaultFilterOptions, vaultConfigByType } from '../data/vaults';
 
 const Vaults = ({
   overview,
@@ -22,6 +22,7 @@ const Vaults = ({
   const { address, injectedChain } = useInjectedProvider();
   const [filter, setFilter] = useState('all');
   const [listVaults, setListVaults] = useState(null);
+  const [chartBalances, setChartBalances] = useState([]);
   const [hasNfts, setHasNfts] = useState(false);
 
   useEffect(() => {
@@ -34,6 +35,7 @@ const Vaults = ({
     const filterVaults = () => {
       if (filter.value === 'all') {
         setListVaults(daoVaults);
+        setChartBalances(daoVaults.flatMap(vault => vault.balanceHistory));
       } else {
         const filteredVaults = daoVaults.filter(vault => {
           return filter.valueMatches
@@ -41,10 +43,10 @@ const Vaults = ({
             : vault.type === filter.value;
         });
         setListVaults(filteredVaults);
+        setChartBalances(filteredVaults.flatMap(vault => vault.balanceHistory));
       }
     };
     if (daoVaults) {
-      console.log('filter', filter);
       filterVaults();
     }
   }, [daoVaults, filter]);
@@ -72,9 +74,11 @@ const Vaults = ({
       isDao
     >
       <BankChart
-        currentDaoTokens={currentDaoTokens}
         overview={overview}
         customTerms={customTerms}
+        daoVaults={daoVaults}
+        balanceData={chartBalances}
+        visibleVaults={listVaults}
       />
       <Flex justify='space-between'>
         <Box mt={5}>
@@ -107,6 +111,7 @@ const Vaults = ({
                 key={i}
                 vault={vault}
                 currentDaoTokens={currentDaoTokens}
+                vaultConfig={vaultConfigByType[vault.type]}
               />
             );
           })}

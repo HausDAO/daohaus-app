@@ -4,7 +4,7 @@ import { DAO_ACTIVITIES, HOME_DAO } from '../graphQL/dao-queries';
 import { MEMBERS_LIST } from '../graphQL/member-queries';
 import { proposalResolver, daoResolver, ccoDaoResolver } from './resolvers';
 import { getGraphEndpoint, supportedChains } from './chain';
-import { fetchTokenData } from './tokenValue';
+import { calcTotalUSD, fetchTokenData } from './tokenValue';
 import { omit } from './general';
 import { UBERHAUS_QUERY, UBER_MINIONS } from '../graphQL/uberhaus-queries';
 import { UBERHAUS_DATA } from './uberhaus';
@@ -120,18 +120,36 @@ const completeQueries = {
           minion => minion.minionAddress,
         );
 
+        const prices = await fetchTokenData();
         const vaultApiData = await fetchApiVaultData(
           supportedChains[args.chainID].network,
           minionAddresses,
         );
+        const balanceData = await fetchBankValues({
+          daoID: args.daoID,
+          chainID: args.chainID,
+        });
 
         const guildBank = {
           type: 'treasury',
           name: 'DAO Treasury',
           address: args.daoID,
           currentBalance: '',
-          erc20s: graphOverview.moloch.tokenBalances,
+          erc20s: graphOverview.moloch.tokenBalances.map(token => {
+            const priceData = prices[token.token.tokenAddress];
+            return {
+              ...token,
+              ...priceData,
+              usd: priceData?.price,
+              totalUSD: calcTotalUSD(
+                token.token.decimals,
+                token.tokenBalance,
+                priceData.price || 0,
+              ),
+            };
+          }),
           nfts: [],
+          balanceHistory: balanceData,
         };
 
         setter.setDaoVaults([guildBank, ...vaultApiData]);

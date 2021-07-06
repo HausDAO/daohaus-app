@@ -7,6 +7,7 @@ import GalleryNftCard from '../components/galleryNftCard';
 import NftFilter from '../components/nftFilter';
 import ListSort from '../components/listSort';
 import { nftFilterOptions, nftSortOptions } from '../utils/nftContent';
+import NftViewModal from '../modals/nftViewModal';
 
 const MinionGallery = ({ daoVaults, customTerms }) => {
   const { minion } = useParams();
@@ -178,6 +179,7 @@ const MinionGallery = ({ daoVaults, customTerms }) => {
             ))}
         </Wrap>
       </Flex>
+      <NftViewModal />
     </MainViewLayout>
   );
 };

@@ -13,6 +13,7 @@ export const OverlayProvider = ({ children }) => {
   const [imageUploadModal, setImageUploadModal] = useState(false);
   const [d2dProposalTypeModal, setD2dProposalTypeModal] = useState(false);
   const [d2dProposalModal, setD2dProposalModal] = useState(false);
+  const [nftViewModal, setNftViewModal] = useState(false);
   const [genericModal, setGenericModal] = useState({});
 
   const errorToast = content => {
@@ -70,6 +71,8 @@ export const OverlayProvider = ({ children }) => {
         setD2dProposalModal,
         genericModal,
         setGenericModal,
+        nftViewModal,
+        setNftViewModal,
       }}
     >
       {children}
@@ -102,6 +105,8 @@ export const useOverlay = () => {
     setD2dProposalModal,
     genericModal,
     setGenericModal,
+    nftViewModal,
+    setNftViewModal,
   } = useContext(OverlayContext);
   return {
     daoSwitcherModal,
@@ -125,5 +130,7 @@ export const useOverlay = () => {
     setD2dProposalModal,
     genericModal,
     setGenericModal,
+    nftViewModal,
+    setNftViewModal,
   };
 };

@@ -55,6 +55,7 @@ export const tallyUSDs = tokenObj => {
   for (const token in tokenObj) {
     totalUSD += tokenObj[token]?.totalUSD || 0;
   }
+
   return Math.round((totalUSD + Number.EPSILON) * 100) / 100;
 };
 
