@@ -52,7 +52,7 @@ const handleConditionalPaths = (data, paths) => {
   }
   if (nextString) return nextString;
   throw new Error(
-    `txHelpers => handleFallback: dead end. No values found for given conditional paths`,
+    `txHelpers => handleFallback: Dead end, bruh. No values found for given conditional paths`,
   );
 };
 
@@ -76,29 +76,29 @@ const buildJSONdetails = (data, fields) => {
 // );
 
 const argBuilderCallback = Object.freeze({
-  submitProposal({ values, tx, contextData }) {
-    const details = buildJSONdetails({ ...values }, tx.detailsJSON);
-    const { tokenBalances, depositToken } = contextData.daoOverview;
-    const tributeToken = values.tributeToken || depositToken.tokenAddress;
-    const paymentToken = values.paymentToken || depositToken.tokenAddress;
-    const tributeOffered = values.tributeOffered
-      ? valToDecimalString(values.tributeOffered, tributeToken, tokenBalances)
-      : '0';
-    const paymentRequested = values.paymentRequested
-      ? valToDecimalString(values.paymentRequested, paymentToken, tokenBalances)
-      : '0';
-    const applicant = values?.applicant || contextData.address;
-    return [
-      applicant,
-      values.sharesRequested || '0',
-      values.lootRequested || '0',
-      tributeOffered,
-      tributeToken,
-      paymentRequested,
-      paymentToken,
-      details,
-    ];
-  },
+  // submitProposal({ values, tx, contextData }) {
+  //   const details = buildJSONdetails({ ...values }, tx.detailsJSON);
+  //   const { tokenBalances, depositToken } = contextData.daoOverview;
+  //   const tributeToken = values.tributeToken || depositToken.tokenAddress;
+  //   const paymentToken = values.paymentToken || depositToken.tokenAddress;
+  //   const tributeOffered = values.tributeOffered
+  //     ? valToDecimalString(values.tributeOffered, tributeToken, tokenBalances)
+  //     : '0';
+  //   const paymentRequested = values.paymentRequested
+  //     ? valToDecimalString(values.paymentRequested, paymentToken, tokenBalances)
+  //     : '0';
+  //   const applicant = values?.applicant || contextData.address;
+  //   return [
+  //     applicant,
+  //     values.sharesRequested || '0',
+  //     values.lootRequested || '0',
+  //     tributeOffered,
+  //     tributeToken,
+  //     paymentRequested,
+  //     paymentToken,
+  //     details,
+  //   ];
+  // },
   proposeAction({ values, hash, formData }) {
     const hexData = safeEncodeHexFunction(
       JSON.parse(values.abiInput),
@@ -320,6 +320,14 @@ export const fieldModifiers = Object.freeze({
     return valToDecimalString(
       fieldValue,
       data.values.tributeToken,
+      data.contextData.daoOverview.tokenBalances,
+    );
+  },
+  addPaymentDecimals(fieldValue, data) {
+    if (!fieldValue) return null;
+    return valToDecimalString(
+      fieldValue,
+      data.values.paymentToken,
       data.contextData.daoOverview.tokenBalances,
     );
   },

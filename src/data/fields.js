@@ -96,6 +96,7 @@ export const FIELD = {
     label: 'Payment Requested',
     info: INFO_TEXT.PAYMENT_REQUEST,
     expectType: 'number',
+    modifiers: ['addPaymentDecimals'],
   },
   ONLY_ERC20: {
     type: 'gatedInput',
