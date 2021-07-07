@@ -1,7 +1,20 @@
 import Web3 from 'web3';
+
 import { chainByID } from './chain';
 import { createContract } from './contract';
 import { IsJsonString } from './general';
+
+import MOLOCH_V2 from '../contracts/molochV2.json';
+import ERC_20 from '../contracts/erc20a.json';
+import VANILLA_MINION from '../contracts/nft.json';
+import ERC_721 from '../contracts/minion.json';
+
+export const LOCAL_ABI = Object.freeze({
+  MOLOCH_V2,
+  ERC_20,
+  VANILLA_MINION,
+  ERC_721,
+});
 
 const isEtherScan = chainID => {
   if (chainID === '0x1' || chainID === '0x4' || chainID === '0x2a') {
@@ -99,4 +112,22 @@ export const safeEncodeHexFunction = (selectedFunction, inputVals) => {
         'Could not encode transaction data with the values entered into this form',
     };
   }
+};
+
+const getLocalSnippet = params =>
+  LOCAL_ABI[params.abiName].find(fn => fn.name === params.fnName);
+
+const getRemoteSnippet = async (params, data) => {
+  const chainID = data.contextData.daochain;
+  const abi = await fetchABI(params.contractAddress, chainID);
+  return abi.find(fn => fn.name === params.fnName);
+};
+
+export const getABIsnippet = (params, data) => {
+  if (params.type === 'local') return getLocalSnippet(params);
+  if (params.type === 'fetch') return getRemoteSnippet(params, data);
+  if (params.type === 'static') return params.value;
+  throw new Error(
+    'Did not recieve a correct ABI snippet type. Check tx data in contractTx.js',
+  );
 };

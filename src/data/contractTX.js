@@ -1,4 +1,3 @@
-import Erc20Abi from '../contracts/erc20a.json';
 // TX = {
 //   contract: String
 //   poll: String (Optional)(Defaults to name)
@@ -48,23 +47,23 @@ export const TX = {
     errMsg: 'Error submitting proposal',
     successMsg: 'Loot Grab submitted!',
     gatherArgs: [
-      { type: 'search', fields: ['contextData', 'address'] },
-      { type: 'static', value: 0 },
-      'lootRequested',
-      'tributeOffered',
-      'tributeToken',
-      { type: 'static', value: 0 },
-      {
-        type: 'search',
-        fields: ['contextData', 'daoOverview', 'depositToken', 'tokenAddress'],
-      },
-      {
-        type: 'static',
-        value: JSON.stringify({
-          title: 'Loot Grab Proposal',
-          descrption: 'Trade Tokens for Loot',
-        }),
-      },
+      '/contextData/address',
+      // { type: 'search', fields: ['contextData', 'address'] },
+      // { type: 'static', value: 0 },
+      0,
+      '/values/lootRequested',
+      '/values/tributeOffered',
+      '/values/tributeToken',
+      0,
+      '/contextData/daoOverview/depositToken/tokenAddress',
+      // {
+      //   type: 'search',
+      //   fields: ['contextData', 'daoOverview', 'depositToken', 'tokenAddress'],
+      // },
+      JSON.stringify({
+        title: 'Loot Grab Proposal',
+        descrption: 'Trade Tokens for Loot',
+      }),
     ],
   },
   GUILDKICK_PROPOSAL: {
@@ -212,7 +211,7 @@ export const TX = {
     errMsg: 'Error Submitting Proposal',
     successMsg: 'Proposal Submitted!',
     encodeHex: {
-      abiFunction: { type: 'local', abiName: 'erc20', fnName: 'transfer' },
+      abiSnippet: { type: 'local', abiName: 'ERC_20', fnName: 'transfer' },
       /*
       Fetch Example: 
       abiFunction: {type: 'fetch', contactAddress: '...', fnName: 'name'}

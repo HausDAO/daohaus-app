@@ -3,7 +3,7 @@ import { MinionService } from '../services/minionService';
 import { TokenService } from '../services/tokenService';
 import { detailsToJSON } from './general';
 import { valToDecimalString } from './tokenValue';
-import { safeEncodeHexFunction } from './abi';
+import { safeEncodeHexFunction, getABIsnippet } from './abi';
 import { collapse } from './formBuilder';
 
 const buildJSONdetails = (data, fields) =>
@@ -66,9 +66,13 @@ const gatherArgs = data => {
   const { tx, values, hash } = data;
   return tx.gatherArgs.map(arg => {
     //  takes in search notation. Performs recursive search for application data
-    if (arg.type === 'search') return searchData(data, arg.fields);
-    //  returns a static value defined in contractTX.js
-    if (arg.type === 'static') return arg.value;
+    if (arg[0] === '/') {
+      const path = arg.slice(1).split('/');
+      console.log(`path`, path);
+      if (!path.length)
+        throw new Error('txHelpers.js => gatherArgs(): Incorrect Path string');
+      return searchData(data, path);
+    }
     //  builds a details JSON string from values. Reindexes bases on a
     //  given set of params defined in tx.detailsJSON
     if (arg === 'detailsToJSON') {
@@ -78,11 +82,21 @@ const gatherArgs = data => {
         );
       return buildJSONdetails({ ...values, hash }, tx.detailsJSON);
     }
+    if (arg === 'encodeHex') {
+      if (!tx.encodeHex)
+        throw new Error(
+          'encodeHex needs a configuration object on the tx with the same name. ',
+        );
+      return safeEncodeHexFunction(
+        getABIsnippet(tx.encodeHex.abiSnippet),
+        gatherArgs({
+          ...data,
+          tx: { ...tx, gatherArgs: tx.encodeHex.gatherArgs },
+        }),
+      );
+    }
     //  for convenience, will search the values object for a field with the given string.
-    if (typeof arg === 'string') return values[arg];
-    throw new Error(
-      'Could not find args with the given TX config data: Check contractTX.js to make sure data conforms with getArgs() in txHelpers.js',
-    );
+    return arg;
   });
 };
 
