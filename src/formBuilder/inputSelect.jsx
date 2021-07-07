@@ -10,6 +10,7 @@ const InputSelect = props => {
     localForm,
     selectChange,
     selectPlaceholder,
+    disabled,
   } = props;
 
   const { register, watch, setValue } = localForm;
@@ -35,6 +36,7 @@ const InputSelect = props => {
           name={selectName || 'select'}
           onChange={handleSelectChange}
           ref={register}
+          disabled={disabled}
         >
           {options?.map((option, index) => (
             <option key={`${option?.value}-${index}`} value={option.value}>
