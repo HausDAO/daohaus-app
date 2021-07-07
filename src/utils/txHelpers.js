@@ -6,28 +6,43 @@ import { valToDecimalString } from './tokenValue';
 import { safeEncodeHexFunction, getABIsnippet } from './abi';
 import { collapse } from './formBuilder';
 
-const getPath = pathString => pathString.slice(1).split('/');
+const getPath = pathString =>
+  pathString
+    .slice(1)
+    .split('/')
+    .filter(str => str !== '');
 
 const searchData = (data, fields) => {
-  if (!data || !fields) throw new Error('Fn searchData in txHelpers');
+  if (data == null || fields == null) {
+    console.log('EMPTY DATA ERROR:');
+    console.log(`data`, data);
+    console.log(`fields`, fields);
+    throw new Error('txHelpers => searchData(): data or fields is empty');
+  }
   if (!fields?.length) return data;
   const newData = data[fields[0]];
-  if (!newData) throw new Error('Could not find data with given queries');
+  if (newData == null) {
+    console.log('SEARCH ERROR DATA:');
+    console.log(`newData`, newData);
+    console.log('data', data);
+    console.log(`fields`, fields);
+    throw new Error(`txHelpers => searchData()`);
+  }
   return searchData(newData, fields.slice(1));
 };
 
 const buildJSONdetails = (data, fields) => {
   const newObj = {};
-
   for (const key in fields) {
     const isSearchPath = fields[key][0] === '/';
     if (isSearchPath) {
-      newObj[key] = searchData(data, getPath(fields[key]));
+      const path = getPath(fields[key]);
+      newObj[key] = searchData(data, path);
     } else {
       newObj[key] = fields[key];
     }
   }
-  return newObj;
+  return JSON.stringify(newObj);
 };
 // JSON.stringify(
 //   fields.reduce((obj, field) => ({ ...obj, [field]: data[field] }), {}),
@@ -77,7 +92,7 @@ const argBuilderCallback = Object.freeze({
 });
 
 const gatherArgs = data => {
-  const { tx, values } = data;
+  const { tx } = data;
   return tx.gatherArgs.map(arg => {
     //  takes in search notation. Performs recursive search for application data
     if (arg[0] === '/') {
@@ -89,18 +104,14 @@ const gatherArgs = data => {
     //  builds a details JSON string from values. Reindexes bases on a
     //  given set of params defined in tx.detailsJSON
     if (arg.type === 'detailsToJSON') {
-      return buildJSONdetails({ ...values }, tx.detailsJSON);
+      return buildJSONdetails(data, arg.gatherFields);
     }
-    if (arg === 'encodeHex') {
-      if (!tx.encodeHex)
-        throw new Error(
-          'encodeHex needs a configuration object on the tx with the same name. ',
-        );
+    if (arg.type === 'encodeHex') {
       return safeEncodeHexFunction(
-        getABIsnippet(tx.encodeHex.abiSnippet),
+        getABIsnippet(arg),
         gatherArgs({
           ...data,
-          tx: { ...tx, gatherArgs: tx.encodeHex.gatherArgs },
+          tx: { ...tx, gatherArgs: arg.gatherArgs },
         }),
       );
     }
@@ -235,10 +246,7 @@ export const exposeValues = data => {
 
 export const createActions = ({ tx, uiControl, stage, lifeCycleFns }) => {
   if (!tx[stage]) return;
-  console.log(`tx`, tx);
-  console.log(`uiControl`, uiControl);
-  console.log(`stage`, stage);
-  console.log(`lifeCycleFns`, lifeCycleFns);
+
   // FOR REFERENCE:
   // const uiControl = {
   //   errorToast,

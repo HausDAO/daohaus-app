@@ -26,7 +26,13 @@ export const DETAILS = {
   VANILLA_MINION_PROPOSAL: {
     title: '/values/title',
     description: '/values/description',
-    link: '/values/link/',
+    proposalType: '/formData/type',
+    minionType: MINION_TYPES.VANILLA,
+  },
+  PAYROLL_PROPOSAL: {
+    title: '{minionName} sends a token',
+    description:
+      '{minionName} would like to send {tokenAmount} {tokenName} to {recipient}',
     proposalType: '/formData/type',
     minionType: MINION_TYPES.VANILLA,
   },
@@ -63,7 +69,7 @@ export const TX = {
       '/contextData/daoOverview/depositToken/tokenAddress',
       JSON.stringify({
         title: 'Loot Grab Proposal',
-        descrption: 'Trade Tokens for Loot',
+        description: 'Trade Tokens for Loot',
       }),
     ],
   },
@@ -75,9 +81,11 @@ export const TX = {
     display: 'Submit GuildKick Proposal',
     errMsg: 'Error submitting proposal',
     successMsg: 'Guild Kick Proposal submitted!',
-    detailsJSON: DETAILS.STANDARD_PROPOSAL,
     createDiscourse: true,
-    gatherArgs: ['/values/applicant', '/values/detailsToJSON'],
+    gatherArgs: [
+      '/values/applicant',
+      { type: 'detailsToJSON', gatherFields: DETAILS.STANDARD_PROPOSAL },
+    ],
   },
   WHITELIST_TOKEN_PROPOSAL: {
     contract: 'Moloch',
@@ -87,9 +95,11 @@ export const TX = {
     display: 'Whitelist Token Proposal',
     errMsg: 'Error submitting proposal',
     successMsg: 'Token Proposal submitted!',
-    detailsJSON: DETAILS.STANDARD_PROPOSAL,
     createDiscourse: true,
-    gatherArgs: ['/values/tokenAddress', '/values/detailsToJSON'],
+    gatherArgs: [
+      '/values/tokenAddress',
+      { type: 'detailsToJSON', gatherFields: DETAILS.STANDARD_PROPOSAL },
+    ],
   },
   UNLOCK_TOKEN: {
     contract: 'Token',
@@ -110,7 +120,6 @@ export const TX = {
     successMsg: 'Minion Proposal Created!',
     argsFromCallback: true,
     createDiscourse: true,
-    detailsJSON: DETAILS.VANILLA_MINION_PROPOSAL,
   },
   CANCEL_PROPOSAL: {
     contract: 'Moloch',
