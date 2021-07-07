@@ -9,7 +9,7 @@ import { collapse } from './formBuilder';
 const getPath = pathString =>
   pathString
     .slice(1)
-    .split('/')
+    .split('.')
     .filter(str => str !== '');
 
 const searchData = (data, fields) => {
@@ -33,8 +33,9 @@ const searchData = (data, fields) => {
 
 const buildJSONdetails = (data, fields) => {
   const newObj = {};
+  console.log(`data`, data);
   for (const key in fields) {
-    const isSearchPath = fields[key][0] === '/';
+    const isSearchPath = fields[key][0] === '.';
     if (isSearchPath) {
       const path = getPath(fields[key]);
       newObj[key] = searchData(data, path);
@@ -42,6 +43,7 @@ const buildJSONdetails = (data, fields) => {
       newObj[key] = fields[key];
     }
   }
+
   return JSON.stringify(newObj);
 };
 // JSON.stringify(
@@ -95,7 +97,7 @@ const gatherArgs = data => {
   const { tx } = data;
   return tx.gatherArgs.map(arg => {
     //  takes in search notation. Performs recursive search for application data
-    if (arg[0] === '/') {
+    if (arg[0] === '.') {
       const path = getPath(arg);
       if (!path.length)
         throw new Error('txHelpers.js => gatherArgs(): Incorrect Path string');
@@ -107,13 +109,12 @@ const gatherArgs = data => {
       return buildJSONdetails(data, arg.gatherFields);
     }
     if (arg.type === 'encodeHex') {
-      return safeEncodeHexFunction(
-        getABIsnippet(arg),
-        gatherArgs({
-          ...data,
-          tx: { ...tx, gatherArgs: arg.gatherArgs },
-        }),
-      );
+      const args = gatherArgs({
+        ...data,
+        tx: { ...tx, gatherArgs: arg.gatherArgs },
+      });
+      console.log(args);
+      return safeEncodeHexFunction(getABIsnippet(arg), args);
     }
     //  for convenience, will search the values object for a field with the given string.
     return arg;
@@ -244,7 +245,7 @@ export const exposeValues = data => {
   throw new Error('Could not find data with given queries');
 };
 
-export const createActions = ({ tx, uiControl, stage, lifeCycleFns }) => {
+export const createActions = ({ tx, uiControl, stage }) => {
   if (!tx[stage]) return;
 
   // FOR REFERENCE:

@@ -86,6 +86,7 @@ export const FIELD = {
     label: 'Tribute Offered',
     info: INFO_TEXT.TOKEN_TRIBUTE,
     expectType: 'number',
+    modifiers: ['addTributeDecimals'],
   },
   PAYMENT_REQUEST: {
     type: 'paymentInput',

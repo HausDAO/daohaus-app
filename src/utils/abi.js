@@ -124,10 +124,12 @@ const getRemoteSnippet = async (params, data) => {
 };
 
 export const getABIsnippet = (params, data) => {
-  if (params.type === 'local') return getLocalSnippet(params);
-  if (params.type === 'fetch') return getRemoteSnippet(params, data);
-  if (params.type === 'static') return params.value;
+  console.log(params);
+  if (params.location === 'local') return getLocalSnippet(params);
+  if (params.location === 'fetch') return getRemoteSnippet(params, data);
+  if (params.location === 'static') return params.value;
   throw new Error(
-    'Did not recieve a correct ABI snippet type. Check tx data in contractTx.js',
+    `abi.js => getABIsnippet():
+     Did not recieve a correct ABI snippet location. Check tx data in contractTx.js`,
   );
 };

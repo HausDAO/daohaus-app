@@ -130,7 +130,7 @@ export const valToDecimalString = (value, tokenAddress, tokens) => {
 
 export const displayBalance = (tokenBalance, decimals) => {
   if (tokenBalance && decimals) {
-    return parseFloat(+tokenBalance / 10 ** +decimals).toFixed(4);
+    return parseFloat(Number(tokenBalance) / 10 ** Number(decimals)).toFixed(4);
   }
 };
 
