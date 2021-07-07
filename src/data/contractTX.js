@@ -8,6 +8,8 @@
 //   successMsg: String
 // }
 
+import { MINION_TYPES } from '../utils/proposalUtils';
+
 export const ACTIONS = {
   PROPOSAL: ['closeProposalModal', 'openTxModal'],
   BASIC: ['openTxModal'],
@@ -15,14 +17,19 @@ export const ACTIONS = {
 };
 
 export const DETAILS = {
-  STANDARD_PROPOSAL: ['title', 'description', 'link'],
-  MINION_PROPOSAL: [
-    'title',
-    'description',
-    'link',
-    'minionType',
-    'selectedMinion',
-  ],
+  STANDARD_PROPOSAL: {
+    title: '/values/title',
+    description: '/values/description',
+    link: '/values/link/',
+    proposalType: '/formData/type',
+  },
+  VANILLA_MINION_PROPOSAL: {
+    title: '/values/title',
+    description: '/values/description',
+    link: '/values/link/',
+    proposalType: '/formData/type',
+    minionType: MINION_TYPES.VANILLA,
+  },
 };
 
 export const TX = {
@@ -48,18 +55,12 @@ export const TX = {
     successMsg: 'Loot Grab submitted!',
     gatherArgs: [
       '/contextData/address',
-      // { type: 'search', fields: ['contextData', 'address'] },
-      // { type: 'static', value: 0 },
       0,
       '/values/lootRequested',
       '/values/tributeOffered',
       '/values/tributeToken',
       0,
       '/contextData/daoOverview/depositToken/tokenAddress',
-      // {
-      //   type: 'search',
-      //   fields: ['contextData', 'daoOverview', 'depositToken', 'tokenAddress'],
-      // },
       JSON.stringify({
         title: 'Loot Grab Proposal',
         descrption: 'Trade Tokens for Loot',
@@ -76,7 +77,7 @@ export const TX = {
     successMsg: 'Guild Kick Proposal submitted!',
     detailsJSON: DETAILS.STANDARD_PROPOSAL,
     createDiscourse: true,
-    gatherArgs: ['applicant', 'detailsToJSON'],
+    gatherArgs: ['/values/applicant', '/values/detailsToJSON'],
   },
   WHITELIST_TOKEN_PROPOSAL: {
     contract: 'Moloch',
@@ -88,7 +89,7 @@ export const TX = {
     successMsg: 'Token Proposal submitted!',
     detailsJSON: DETAILS.STANDARD_PROPOSAL,
     createDiscourse: true,
-    gatherArgs: ['tokenAddress', 'detailsToJSON'],
+    gatherArgs: ['/values/tokenAddress', '/values/detailsToJSON'],
   },
   UNLOCK_TOKEN: {
     contract: 'Token',
@@ -109,7 +110,7 @@ export const TX = {
     successMsg: 'Minion Proposal Created!',
     argsFromCallback: true,
     createDiscourse: true,
-    detailsJSON: DETAILS.MINION_PROPOSAL,
+    detailsJSON: DETAILS.VANILLA_MINION_PROPOSAL,
   },
   CANCEL_PROPOSAL: {
     contract: 'Moloch',
@@ -182,7 +183,7 @@ export const TX = {
     display: 'Update Delegate Key',
     errMsg: 'Error Updating Delegate Key',
     successMsg: 'Delegate Key Updated!',
-    gatherArgs: ['delegateAddress'],
+    gatherArgs: ['/values/delegateAddress'],
   },
   WITHDRAW: {
     contract: 'Moloch',
@@ -210,14 +211,19 @@ export const TX = {
     display: 'Sending Token',
     errMsg: 'Error Submitting Proposal',
     successMsg: 'Proposal Submitted!',
-    encodeHex: {
-      abiSnippet: { type: 'local', abiName: 'ERC_20', fnName: 'transfer' },
-      /*
-      Fetch Example: 
-      abiFunction: {type: 'fetch', contactAddress: '...', fnName: 'name'}
-      */
-      gatherArgs: ['applicant', 'minionPayment'],
-    },
-    gatherArgs: ['minionToken', '0', 'encodeHex', 'detailsToJSON'],
+    gatherArgs: [
+      '/values/minionToken',
+      0,
+      {
+        type: 'encodeHex',
+        abiName: 'ERC_20',
+        fnName: 'transfer',
+        gatherArgs: ['/values/applicant', '/values/minionPayment'],
+      },
+      {
+        type: 'detailsToJSON',
+        gatherArgs: DETAILS.VANILLA_MINION_PROPOSAL,
+      },
+    ],
   },
 };

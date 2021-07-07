@@ -6,10 +6,7 @@ import { valToDecimalString } from './tokenValue';
 import { safeEncodeHexFunction, getABIsnippet } from './abi';
 import { collapse } from './formBuilder';
 
-const buildJSONdetails = (data, fields) =>
-  JSON.stringify(
-    fields.reduce((obj, field) => ({ ...obj, [field]: data[field] }), {}),
-  );
+const getPath = pathString => pathString.slice(1).split('/');
 
 const searchData = (data, fields) => {
   if (!data || !fields) throw new Error('Fn searchData in txHelpers');
@@ -18,6 +15,23 @@ const searchData = (data, fields) => {
   if (!newData) throw new Error('Could not find data with given queries');
   return searchData(newData, fields.slice(1));
 };
+
+const buildJSONdetails = (data, fields) => {
+  const newObj = {};
+
+  for (const key in fields) {
+    const isSearchPath = fields[key][0] === '/';
+    if (isSearchPath) {
+      newObj[key] = searchData(data, getPath(fields[key]));
+    } else {
+      newObj[key] = fields[key];
+    }
+  }
+  return newObj;
+};
+// JSON.stringify(
+//   fields.reduce((obj, field) => ({ ...obj, [field]: data[field] }), {}),
+// );
 
 const argBuilderCallback = Object.freeze({
   submitProposal({ values, tx, contextData }) {
@@ -63,24 +77,19 @@ const argBuilderCallback = Object.freeze({
 });
 
 const gatherArgs = data => {
-  const { tx, values, hash } = data;
+  const { tx, values } = data;
   return tx.gatherArgs.map(arg => {
     //  takes in search notation. Performs recursive search for application data
     if (arg[0] === '/') {
-      const path = arg.slice(1).split('/');
-      console.log(`path`, path);
+      const path = getPath(arg);
       if (!path.length)
         throw new Error('txHelpers.js => gatherArgs(): Incorrect Path string');
       return searchData(data, path);
     }
     //  builds a details JSON string from values. Reindexes bases on a
     //  given set of params defined in tx.detailsJSON
-    if (arg === 'detailsToJSON') {
-      if (!Array.isArray(tx.detailsJSON))
-        throw new Error(
-          'details to JSON requires an Array of selected fields defined in the TX data at contractTX.js, under the field "detailsToJSON"',
-        );
-      return buildJSONdetails({ ...values, hash }, tx.detailsJSON);
+    if (arg.type === 'detailsToJSON') {
+      return buildJSONdetails({ ...values }, tx.detailsJSON);
     }
     if (arg === 'encodeHex') {
       if (!tx.encodeHex)
