@@ -12,7 +12,10 @@ const getPath = pathString =>
     .split('.')
     .filter(str => str !== '');
 
-const searchData = (data, fields) => {
+const getConditions = pathString =>
+  pathString.split(' || ').filter(str => str !== '' || str !== ' ');
+
+const searchData = (data, fields, shouldThrow = true) => {
   if (data == null || fields == null) {
     console.log('EMPTY DATA ERROR:');
     console.log(`data`, data);
@@ -26,9 +29,31 @@ const searchData = (data, fields) => {
     console.log(`newData`, newData);
     console.log('data', data);
     console.log(`fields`, fields);
-    throw new Error(`txHelpers => searchData()`);
+    if (shouldThrow) {
+      throw new Error(`txHelpers => searchData()`);
+    } else {
+      return false;
+    }
   }
-  return searchData(newData, fields.slice(1));
+  return searchData(newData, fields.slice(1), shouldThrow);
+};
+
+const handleConditionalPaths = (data, paths) => {
+  if (!paths.length)
+    throw new Error(
+      `txHelpers => handleFallback: conditional paths failed to produce truthy data`,
+    );
+  const nextString = paths[0];
+  const isSearchPath = nextString[0] === '.';
+  if (isSearchPath) {
+    const searchResult = searchData(data, getPath(nextString), false);
+    if (searchResult) return searchResult;
+    return handleConditionalPaths(data, paths.slice(1));
+  }
+  if (nextString) return nextString;
+  throw new Error(
+    `txHelpers => handleFallback: dead end. No values found for given conditional paths`,
+  );
 };
 
 const buildJSONdetails = (data, fields) => {
@@ -96,6 +121,15 @@ const argBuilderCallback = Object.freeze({
 const gatherArgs = data => {
   const { tx } = data;
   return tx.gatherArgs.map(arg => {
+    // checks if dev used two pipe operators to denote an OR condition.
+    // Splits the string into separate paths, then performs recursive search until
+    // a truthy result first.
+    if (typeof arg === 'string' && arg.includes('||')) {
+      const paths = getConditions(arg);
+      if (!paths.length)
+        throw new Error('txHelpers.js => gatherArgs(): Incorrect Path string');
+      return handleConditionalPaths(data, paths);
+    }
     //  takes in search notation. Performs recursive search for application data
     if (arg[0] === '.') {
       const path = getPath(arg);
@@ -282,6 +316,7 @@ export const createActions = ({ tx, uiControl, stage }) => {
 
 export const fieldModifiers = Object.freeze({
   addTributeDecimals(fieldValue, data) {
+    if (!fieldValue) return null;
     return valToDecimalString(
       fieldValue,
       data.values.tributeToken,

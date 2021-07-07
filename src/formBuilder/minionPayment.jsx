@@ -20,6 +20,7 @@ const MinionToken = props => {
   // const { submitTransaction } = useTX();
   // const { address } = useInjectedProvider();
   const { daochain } = useParams();
+  const { daoVaults } = useDao();
   const {
     localForm,
     listenTo = 'selectedMinion',
@@ -55,17 +56,18 @@ const MinionToken = props => {
   }, [minionTokens]);
 
   const displayableBalance = useMemo(() => {
-    if (validate.address(minionToken)) {
-      const tokenData = minionTokens.find(
-        token => token.contractAddress === minionToken,
-      );
-      const commified = handleDecimals(
-        tokenData.balance,
-        tokenData.decimals,
-      )?.toFixed(4);
-      return commified;
-    }
-    return null;
+    return 'temp';
+    // if (validate.address(minionToken)) {
+    //   const tokenData = minionTokens.find(
+    //     token => token.contractAddress === minionToken,
+    //   );
+    //   const commified = handleDecimals(
+    //     tokenData.balance,
+    //     tokenData.decimals,
+    //   )?.toFixed(4);
+    //   return commified;
+    // }
+    // return null;
   }, [minionToken]);
 
   const btnDisplay = () => {
@@ -75,29 +77,7 @@ const MinionToken = props => {
   };
 
   useEffect(() => {
-    const shouldUpdate = true;
-    const getMinionVault = async () => {
-      setLoading(true);
-      const result = await fetchApiVaultData(
-        supportedChains[daochain].network,
-        [selectedMinion],
-      );
-      console.log(result);
-      if (shouldUpdate && result) {
-        const [minion] = result;
-        console.log(`fired`, minion);
-        if (minion?.erc20s?.length) {
-          setLoading(false);
-          setMinionTokens(minion.erc20s);
-        }
-      }
-    };
-    if (daochain && selectedMinion) {
-      getMinionVault();
-    } else {
-      setMinionTokens(null);
-      setLoading(false);
-    }
+    console.log(daoVaults);
   }, [daochain, selectedMinion]);
 
   // useEffect(() => {
