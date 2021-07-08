@@ -267,3 +267,7 @@ export const handlePossibleNumber = (val, comma = true, roundAmt = 4) => {
   }
   return val;
 };
+export const isSameAddress = (addr1, addr2) => {
+  if (typeof addr1 !== 'string' || typeof addr2 !== 'string') return null;
+  return addr1.toLowerCase() === addr2.toLowerCase();
+};
