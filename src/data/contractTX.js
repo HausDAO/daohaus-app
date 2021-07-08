@@ -32,7 +32,13 @@ export const DETAILS = {
   PAYROLL_PROPOSAL: {
     title: '{minionName} sends a token',
     description:
-      '{minionName} would like to send {tokenAmount} {tokenName} to {recipient}',
+      '{minionName} would like to send {tokenAmount} {tokenSymbol} to {recipient}',
+    proposalType: '.formData.type',
+    minionType: MINION_TYPES.VANILLA,
+  },
+  PAYROLL_PROPOSAL_TEMPORARY: {
+    title: 'Minion sends a token',
+    description: 'Click check details to see more.',
     proposalType: '.formData.type',
     minionType: MINION_TYPES.VANILLA,
   },
@@ -240,7 +246,7 @@ export const TX = {
       },
       {
         type: 'detailsToJSON',
-        gatherFields: DETAILS.PAYROLL,
+        gatherFields: DETAILS.PAYROLL_PROPOSAL_TEMPORARY,
       },
     ],
   },

@@ -39,6 +39,7 @@ export const TXProvider = ({ children }) => {
     daoOverview,
     daoMembers,
     daoProposals,
+    daoVaults,
   } = useDao();
   const { daoMetaData } = useMetaData();
   const {
@@ -72,6 +73,7 @@ export const TXProvider = ({ children }) => {
     daoMember,
     userHubDaos,
     outstandingTXs,
+    daoVaults,
   };
 
   const uiControl = {

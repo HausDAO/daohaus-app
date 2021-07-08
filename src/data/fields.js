@@ -126,6 +126,7 @@ export const FIELD = {
     label: 'Minion Payment',
     info: INFO_TEXT.MINION_PAYMENT,
     expectType: 'number',
+    modifiers: ['addMinionVaultDecimals'],
   },
   MINION_SELECT: {
     type: 'minionSelect',

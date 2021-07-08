@@ -5,6 +5,7 @@ import { detailsToJSON } from './general';
 import { valToDecimalString } from './tokenValue';
 import { safeEncodeHexFunction, getABIsnippet } from './abi';
 import { collapse } from './formBuilder';
+import { getContractBalance, getTokenData } from './vaults';
 
 const getPath = pathString =>
   pathString
@@ -331,6 +332,15 @@ export const fieldModifiers = Object.freeze({
       data.contextData.daoOverview.tokenBalances,
     );
   },
+  addMinionVaultDecimals(fieldValue, data) {
+    if (!fieldValue) return null;
+    const { daoVaults } = data.contextData;
+    const { minionToken, selectedMinion } = data.values;
+    return getContractBalance(
+      fieldValue,
+      getTokenData(daoVaults, selectedMinion, minionToken).decimals,
+    );
+  },
 });
 
 export const handleFieldModifiers = appData => {
@@ -344,7 +354,6 @@ export const handleFieldModifiers = appData => {
         const modifiedVal = fieldModifiers[mod](newValues[field.name], appData);
         newValues[field.name] = modifiedVal;
       });
-      //  modify
     } else {
       return field;
     }
