@@ -128,10 +128,17 @@ export const FORM = {
     subtitle: 'Request loot with a tribute',
     required: ['tributeOffered'],
     tx: TX.LOOT_GRAB_PROPOSAL,
-    fields: [
-      FORM_DISPLAY.LOOT_REQUEST,
-      { ...FIELD.TRIBUTE, modifiers: ['addTributeDecimals'] },
-    ],
+    fields: [FORM_DISPLAY.LOOT_REQUEST, FIELD.TRIBUTE],
+  },
+  PAYROLL: {
+    title: 'Payroll Proposal',
+    layout: 'singleRow',
+    type: PROPOSAL_TYPES.PAYROLL,
+    subtitle: 'Pay Members with a minion',
+    required: ['selectedMinion', 'minionPayment', 'applicant'],
+    minionType: MINION_TYPES.VANILLA,
+    tx: TX.PAYROLL,
+    fields: [FIELD.MINION_SELECT, FIELD.MINION_PAYMENT, FIELD.APPLICANT],
   },
   SELL_NFT: {
     title: 'Sell NFT on Rarible',

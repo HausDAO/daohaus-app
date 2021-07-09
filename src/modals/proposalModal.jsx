@@ -104,6 +104,10 @@ const ProposalFormModal = ({ proposalType }) => {
       subline: 'Submit new NFT Sell proposal here.',
       form: <FormBuilder {...FORM.SELL_NFT} />,
     },
+    payroll: {
+      heading: `Payroll`,
+      form: <FormBuilder {...FORM.PAYROLL} />,
+    },
   };
 
   useEffect(() => {

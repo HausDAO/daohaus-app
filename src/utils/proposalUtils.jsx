@@ -33,6 +33,7 @@ export const PROPOSAL_TYPES = {
   MINION_RARIBLE: 'Rarible Proposal',
   TRANSMUTATION: 'Transmutation Proposal',
   FUNDING: 'Funding Proposal',
+  PAYROLL: 'Payroll Proposal',
 };
 
 export const MINION_TYPES = {

@@ -1,3 +1,4 @@
+import { MINION_TYPES } from '../utils/proposalUtils';
 import { CONTRACT_MODELS } from '../utils/tokenExplorerApi';
 
 export const INFO_TEXT = {
@@ -86,6 +87,7 @@ export const FIELD = {
     label: 'Tribute Offered',
     info: INFO_TEXT.TOKEN_TRIBUTE,
     expectType: 'number',
+    modifiers: ['addTributeDecimals'],
   },
   PAYMENT_REQUEST: {
     type: 'paymentInput',
@@ -95,6 +97,7 @@ export const FIELD = {
     label: 'Payment Requested',
     info: INFO_TEXT.PAYMENT_REQUEST,
     expectType: 'number',
+    modifiers: ['addPaymentDecimals'],
   },
   ONLY_ERC20: {
     type: 'gatedInput',
@@ -116,13 +119,15 @@ export const FIELD = {
   },
   //  Plain old input until token price API can be built
   MINION_PAYMENT: {
-    type: 'input',
+    type: 'minionPayment',
     htmlFor: 'minionPayment',
     name: 'minionPayment',
+    selectName: 'minionToken',
     placeholder: '0',
     label: 'Minion Payment',
     info: INFO_TEXT.MINION_PAYMENT,
     expectType: 'number',
+    modifiers: ['addMinionVaultDecimals'],
   },
   MINION_SELECT: {
     type: 'minionSelect',
@@ -131,6 +136,7 @@ export const FIELD = {
     htmlFor: 'selectedMinion',
     placeholder: 'Choose a DAO minion',
     expectType: 'address',
+    minionType: MINION_TYPES.VANILLA,
   },
   ABI_INPUT: {
     type: 'abiInput',

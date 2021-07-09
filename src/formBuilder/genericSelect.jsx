@@ -3,29 +3,18 @@ import { Select } from '@chakra-ui/react';
 
 import FieldWrapper from './fieldWrapper';
 
-const GenericSelect = ({
-  label,
-  htmlFor,
-  placeholder,
-  name,
-  localForm,
-  helperText,
-  btn,
-  info,
-  options = [],
-  error,
-  disabled,
-}) => {
+const GenericSelect = props => {
+  const {
+    htmlFor,
+    placeholder,
+    name,
+    localForm,
+    options = [],
+    disabled,
+  } = props;
   const { register } = localForm;
   return (
-    <FieldWrapper
-      label={label}
-      htmlFor={htmlFor}
-      info={info}
-      helperText={helperText}
-      btn={btn}
-      error={error}
-    >
+    <FieldWrapper {...props}>
       <Select
         placeholder={placeholder}
         ref={register}

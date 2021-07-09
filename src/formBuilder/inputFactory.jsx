@@ -15,6 +15,7 @@ import NftSelect from './nftSelect';
 import GatedInput from './gatedInput';
 import GenericFormDisplay from './genericFormDisplay';
 import LootGrabDisplay from './lootGrabDisplay';
+import MinionPayment from './minionPayment';
 
 export const InputFactory = props => {
   const { type } = props;
@@ -44,6 +45,9 @@ export const InputFactory = props => {
   }
   if (type === 'minionSelect') {
     return <MinionSelect {...props} />;
+  }
+  if (type === 'minionPayment') {
+    return <MinionPayment {...props} />;
   }
   if (type === 'abiInput') {
     return <AbiInput {...props} />;
