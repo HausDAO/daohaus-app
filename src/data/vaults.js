@@ -3,29 +3,47 @@ export const VAULT = {
     typeDisplay: 'Treasury',
     canHoldNft: false,
     canHaveInternalBalances: false,
+    canHoldToken: false,
   },
   MINION: {
     typeDisplay: 'Minion',
     canHoldNft: true,
     canHaveInternalBalances: true,
+    canHoldToken: true,
     cardActions: [],
   },
   RARIBLE_MINION: {
     typeDisplay: 'Boost Minion',
     canHoldNft: true,
     canHaveInternalBalances: true,
+    canHoldToken: true,
     cardActions: [],
   },
   NIFTY_MINION: {
     typeDisplay: 'Minion',
-    canHoldNft: true,
     canHaveInternalBalances: true,
+    canHoldToken: true,
+    // these could map to actions in an bank action factory
     cardActions: ['sell'],
+    // replace with nft object
+    canHoldNft: true,
+    nft: {
+      marketplaceContract: '0x0',
+      // or marketplaceConnector maybe
+      actions: ['sendErc721Action', 'sellNiftyAction'],
+      // could also point at txnames?
+      actionsOpt2: {
+        sendErc721Action: {
+          dropDownLabel: 'Send NFT',
+        },
+      },
+    },
   },
   MINION_SAFE: {
     typeDisplay: 'Minion Safe',
     canHoldNft: true,
     canHaveInternalBalances: true,
+    canHoldToken: true,
     cardActions: [],
   },
 };

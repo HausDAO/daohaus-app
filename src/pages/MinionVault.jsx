@@ -9,6 +9,8 @@ import MainViewLayout from '../components/mainViewLayout';
 import TextBox from '../components/TextBox';
 import VaultNftCard from '../components/vaultNftCard';
 import MinionTokenList from '../components/minionTokenList';
+import HubBalanceList from '../components/hubBalanceList';
+import { fetchMinionInternalBalances } from '../utils/theGraph';
 
 const MinionVault = ({
   overview,
@@ -21,7 +23,6 @@ const MinionVault = ({
 }) => {
   const { daochain, daoid, minion } = useParams();
   const toast = useToast();
-  const [needsSync, setNeedsSync] = useState(false);
   const [vault, setVault] = useState(null);
 
   const sendToken = () => {
@@ -56,6 +57,21 @@ const MinionVault = ({
     }
   }, [daoVaults, minion]);
 
+  useEffect(() => {
+    const fetchInternalBalances = async () => {
+      const res = await fetchMinionInternalBalances({
+        chainID: daochain,
+        minionAddress: minion,
+      });
+
+      console.log('res', res);
+    };
+
+    if (minion) {
+      fetchInternalBalances();
+    }
+  }, [minion]);
+
   return (
     <MainViewLayout
       header='Minion Vault'
@@ -79,6 +95,13 @@ const MinionVault = ({
               visibleVaults={[vault]}
             />
             {/* <BankList tokens={currentDaoTokens} needsSync={needsSync} /> */}
+
+            {/* <HubBalanceList
+              tokens={daoBalances}
+              withdraw={withdraw}
+              loading={loading}
+              currentDaoTokens={currentDaoTokens}
+            /> */}
 
             <MinionTokenList
               minion={minion}
