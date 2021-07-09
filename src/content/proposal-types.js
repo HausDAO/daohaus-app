@@ -19,6 +19,7 @@ export const proposalTypes = (
       image: swordImg,
       show: daoPropTypes ? daoPropTypes?.member?.active : true,
     },
+
     {
       name: 'Funding',
       subhead: 'Request or distribute funds',
@@ -95,6 +96,13 @@ export const proposalTypes = (
       image: swordImg,
       comingSoon: false,
       show: daoPropTypes ? daoPropTypes?.lootGrab?.active : false,
+    },
+    {
+      name: 'Payroll',
+      subhead: 'Pay members with a minion',
+      proposalType: 'payroll',
+      image: swordImg,
+      show: daoPropTypes ? daoPropTypes?.member?.active : true,
     },
   ];
 };
