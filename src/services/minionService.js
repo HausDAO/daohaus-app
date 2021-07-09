@@ -42,7 +42,7 @@ export const MinionService = ({ web3, minion, chainID, minionType }) => {
       service === 'cancelAction'
     ) {
       return async ({ args, address, poll, onTxHash }) => {
-        console.log('minion async');
+        console.log('MINION ASYNC');
         console.log(args);
         console.log(address);
         console.log(poll);

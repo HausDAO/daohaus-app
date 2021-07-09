@@ -80,6 +80,23 @@ export const fetchTransmutation = async args => {
   });
 };
 
+export const fetchMinionInternalBalances = async args => {
+  const metadata = await getApiMetadata();
+  const internalBalances = await graphQuery({
+    endpoint: getGraphEndpoint(args.chainID, 'subgraph_url'),
+    query: ADDRESS_BALANCES,
+    subfield: 'addressBalances',
+    variables: {
+      memberAddress: args.minionAddress,
+    },
+  });
+
+  return internalBalances.addressBalances.map(bal => {
+    const meta = metadata[bal.moloch.id] ? metadata[bal.moloch.id][0] : {};
+    return { ...bal, ...meta };
+  });
+};
+
 const fetchAllActivity = async (args, items = [], skip = 0) => {
   try {
     const result = await graphQuery({

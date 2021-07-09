@@ -18,7 +18,7 @@ const VaultTotal = ({ vaults }) => {
     <>
       <Skeleton isLoaded={vaults?.length > 0}>
         <Text fontFamily='mono' fontSize='3xl' variant='value'>
-          ${bankTotal !== 'loading' && numberWithCommas(bankTotal)}
+          ${bankTotal !== 'loading' && numberWithCommas(bankTotal.toFixed(2))}
         </Text>
       </Skeleton>
       <Box>

@@ -24,6 +24,7 @@ const validProposalType = type => {
     'minion',
     'superfluidMinion',
     'transmutation',
+    'payroll',
   ].includes(type);
 };
 
