@@ -106,7 +106,7 @@ const ProposalVote = ({
       if (shouldUpdate) {
         setEnoughDeposit(
           +overview?.proposalDeposit === 0 ||
-            +depositTokenBalance / 10 ** overview?.depositToken.decimals >
+            +depositTokenBalance / 10 ** overview?.depositToken.decimals >=
               +overview?.proposalDeposit /
                 10 ** overview?.depositToken.decimals,
         );
@@ -221,7 +221,7 @@ const ProposalVote = ({
                     <Tooltip
                       shouldWrapChildren
                       placement='bottom'
-                      label='Insufficient Funds'
+                      label={`Insufficient Funds: You only have ${daoMember?.depositTokenBalance} ${overview?.depositToken?.symbol}`}
                     >
                       <Icon
                         color='red.500'
