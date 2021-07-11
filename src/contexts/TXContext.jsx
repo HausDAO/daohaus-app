@@ -39,6 +39,7 @@ export const TXProvider = ({ children }) => {
     daoOverview,
     daoMembers,
     daoProposals,
+    daoVaults,
   } = useDao();
   const { daoMetaData } = useMetaData();
   const {
@@ -72,6 +73,7 @@ export const TXProvider = ({ children }) => {
     daoMember,
     userHubDaos,
     outstandingTXs,
+    daoVaults,
   };
 
   const uiControl = {
@@ -200,6 +202,7 @@ export const TXProvider = ({ children }) => {
       data.lifeCycleFns?.afterTx?.();
       return tx;
     } catch (error) {
+      console.error(error);
       data.lifeCycleFns?.onCatch?.();
       errorToast({
         title: data?.tx?.errMsg || 'There was an error',

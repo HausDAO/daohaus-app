@@ -91,7 +91,8 @@ export const createPoll = ({
     throw new Error('User must submit an action argument');
   } else if (action === 'subgraph') {
     return ({ chainID, actions, now, tx }) => txHash => {
-      const args = { txHash, chainID };
+      if (!tx) return;
+      const args = { txHash, chainID, now, tx };
       startPoll({
         pollFetch: pollTXHash,
         testFn: testTXHash,
@@ -100,7 +101,7 @@ export const createPoll = ({
         actions,
         txHash,
       });
-      cachePoll({
+      cachePoll?.({
         txHash,
         action,
         timeSent: now,

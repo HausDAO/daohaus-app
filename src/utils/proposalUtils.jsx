@@ -32,6 +32,7 @@ export const PROPOSAL_TYPES = {
   MINION_SUPERFLUID: 'Superfluid Proposal',
   TRANSMUTATION: 'Transmutation Proposal',
   FUNDING: 'Funding Proposal',
+  PAYROLL: 'Payroll Proposal',
 };
 
 export const MINION_TYPES = {
