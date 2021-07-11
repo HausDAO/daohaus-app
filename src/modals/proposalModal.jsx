@@ -98,6 +98,10 @@ const ProposalFormModal = ({ proposalType }) => {
       subline: 'Submit a Transmutation proposal here.',
       form: <TransmutationProposal />,
     },
+    payroll: {
+      heading: `Payroll`,
+      form: <FormBuilder {...FORM.PAYROLL} />,
+    },
   };
 
   useEffect(() => {

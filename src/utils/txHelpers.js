@@ -1,48 +1,72 @@
-import { MolochService } from '../services/molochService';
-import { MinionService } from '../services/minionService';
-import { TokenService } from '../services/tokenService';
 import { detailsToJSON } from './general';
 import { valToDecimalString } from './tokenValue';
-import { safeEncodeHexFunction } from './abi';
+import { safeEncodeHexFunction, getABIsnippet, getContractABI } from './abi';
 import { collapse } from './formBuilder';
+import { getContractBalance, getTokenData } from './vaults';
+import { createContract } from './contract';
+import { validate } from './validation';
 
-const buildJSONdetails = (data, fields) =>
-  JSON.stringify(
-    fields.reduce((obj, field) => ({ ...obj, [field]: data[field] }), {}),
-  );
+// const isSearchPath = string => string[0] === '.';
 
-const searchData = (data, fields) => {
-  if (!data || !fields) throw new Error('Fn searchData in txHelpers');
+const getPath = pathString =>
+  pathString
+    .slice(1)
+    .split('.')
+    .filter(str => str !== '');
+
+const getConditions = pathString =>
+  pathString.split(' || ').filter(str => str !== '' || str !== ' ');
+
+const searchData = (data, fields, shouldThrow = true) => {
+  if (data == null || fields == null) {
+    throw new Error('txHelpers => searchData(): data or fields is empty');
+  }
   if (!fields?.length) return data;
   const newData = data[fields[0]];
-  if (!newData) throw new Error('Could not find data with given queries');
-  return searchData(newData, fields.slice(1));
+  if (newData == null) {
+    if (shouldThrow) {
+      throw new Error(`txHelpers => searchData()`);
+    } else {
+      return false;
+    }
+  }
+  return searchData(newData, fields.slice(1), shouldThrow);
+};
+
+const handleConditionalPaths = (data, paths) => {
+  if (!paths.length)
+    throw new Error(
+      `txHelpers => handleFallback: conditional paths failed to produce truthy data`,
+    );
+  const nextString = paths[0];
+  const isSearchPath = nextString[0] === '.';
+  if (isSearchPath) {
+    const searchResult = searchData(data, getPath(nextString), false);
+    if (searchResult) return searchResult;
+    return handleConditionalPaths(data, paths.slice(1));
+  }
+  if (nextString) return nextString;
+  throw new Error(
+    `txHelpers => handleFallback: Dead end, bruh. No values found for given conditional paths`,
+  );
+};
+
+const buildJSONdetails = (data, fields) => {
+  const newObj = {};
+  for (const key in fields) {
+    const isSearchPath = fields[key][0] === '.';
+    if (isSearchPath) {
+      const path = getPath(fields[key]);
+      newObj[key] = searchData(data, path);
+    } else {
+      newObj[key] = fields[key];
+    }
+  }
+
+  return JSON.stringify(newObj);
 };
 
 const argBuilderCallback = Object.freeze({
-  submitProposal({ values, tx, contextData }) {
-    const details = buildJSONdetails({ ...values }, tx.detailsJSON);
-    const { tokenBalances, depositToken } = contextData.daoOverview;
-    const tributeToken = values.tributeToken || depositToken.tokenAddress;
-    const paymentToken = values.paymentToken || depositToken.tokenAddress;
-    const tributeOffered = values.tributeOffered
-      ? valToDecimalString(values.tributeOffered, tributeToken, tokenBalances)
-      : '0';
-    const paymentRequested = values.paymentRequested
-      ? valToDecimalString(values.paymentRequested, paymentToken, tokenBalances)
-      : '0';
-    const applicant = values?.applicant || contextData.address;
-    return [
-      applicant,
-      values.sharesRequested || '0',
-      values.lootRequested || '0',
-      tributeOffered,
-      tributeToken,
-      paymentRequested,
-      paymentToken,
-      details,
-    ];
-  },
   proposeAction({ values, hash, formData }) {
     const hexData = safeEncodeHexFunction(
       JSON.parse(values.abiInput),
@@ -63,26 +87,39 @@ const argBuilderCallback = Object.freeze({
 });
 
 const gatherArgs = data => {
-  const { tx, values, hash } = data;
+  const { tx } = data;
   return tx.gatherArgs.map(arg => {
+    // checks if dev used two pipe operators to denote an OR condition.
+    // Splits the string into separate paths, then performs recursive search until
+    // a truthy result first.
+    if (typeof arg === 'string' && arg.includes('||')) {
+      const paths = getConditions(arg);
+      if (!paths.length)
+        throw new Error('txHelpers.js => gatherArgs(): Incorrect Path string');
+      return handleConditionalPaths(data, paths);
+    }
     //  takes in search notation. Performs recursive search for application data
-    if (arg.type === 'search') return searchData(data, arg.fields);
-    //  returns a static value defined in contractTX.js
-    if (arg.type === 'static') return arg.value;
+    if (arg[0] === '.') {
+      const path = getPath(arg);
+      if (!path.length)
+        throw new Error('txHelpers.js => gatherArgs(): Incorrect Path string');
+      return searchData(data, path);
+    }
     //  builds a details JSON string from values. Reindexes bases on a
     //  given set of params defined in tx.detailsJSON
-    if (arg === 'detailsToJSON') {
-      if (!Array.isArray(tx.detailsJSON))
-        throw new Error(
-          'details to JSON requires an Array of selected fields defined in the TX data at contractTX.js, under the field "detailsToJSON"',
-        );
-      return buildJSONdetails({ ...values, hash }, tx.detailsJSON);
+    if (arg.type === 'detailsToJSON') {
+      return buildJSONdetails(data, arg.gatherFields);
+    }
+    if (arg.type === 'encodeHex') {
+      const args = gatherArgs({
+        ...data,
+        tx: { ...tx, gatherArgs: arg.gatherArgs },
+      });
+      console.log(args);
+      return safeEncodeHexFunction(getABIsnippet(arg), args);
     }
     //  for convenience, will search the values object for a field with the given string.
-    if (typeof arg === 'string') return values[arg];
-    throw new Error(
-      'Could not find args with the given TX config data: Check contractTX.js to make sure data conforms with getArgs() in txHelpers.js',
-    );
+    return arg;
   });
 };
 
@@ -112,90 +149,110 @@ export const getArgs = data => {
   );
 };
 
-export const MolochTransaction = async ({
-  args,
-  poll,
-  onTxHash,
-  contextData,
-  injectedProvider,
-  tx,
-}) => {
-  const { daoid, daochain, daoOverview, address } = contextData;
-  return MolochService({
-    web3: injectedProvider,
-    daoAddress: daoid,
-    chainID: daochain,
-    version: daoOverview.version,
-  })(tx.name)({
-    args,
-    address,
-    poll,
-    onTxHash,
-  });
-};
-export const MinionTransaction = async ({
-  args,
-  poll,
-  onTxHash,
-  contextData,
-  injectedProvider,
-  values,
-  tx,
-}) => {
-  const { daochain, daoOverview, address } = contextData;
-  const minionAddress = values.minionAddress || values.selectedMinion;
-  return MinionService({
-    web3: injectedProvider,
-    minion: minionAddress,
-    chainID: daochain,
-    version: daoOverview.version,
-  })(tx.name)({
-    args,
-    address,
-    poll,
-    onTxHash,
-  });
-};
+// export const MolochTransaction = async ({
+//   args,
+//   poll,
+//   onTxHash,
+//   contextData,
+//   injectedProvider,
+//   tx,
+// }) => {
+//   const { daoid, daochain, daoOverview, address } = contextData;
+//   return MolochService({
+//     web3: injectedProvider,
+//     daoAddress: daoid,
+//     chainID: daochain,
+//     version: daoOverview.version,
+//   })(tx.name)({
+//     args,
+//     address,
+//     poll,
+//     onTxHash,
+//   });
+// };
+// export const MinionTransaction = async ({
+//   args,
+//   poll,
+//   onTxHash,
+//   contextData,
+//   injectedProvider,
+//   values,
+//   tx,
+// }) => {
+//   const { daochain, daoOverview, address } = contextData;
+//   const minionAddress = values.minionAddress || values.selectedMinion;
+//   return MinionService({
+//     web3: injectedProvider,
+//     minion: minionAddress,
+//     chainID: daochain,
+//     version: daoOverview.version,
+//   })(tx.name)({
+//     args,
+//     address,
+//     poll,
+//     onTxHash,
+//   });
+// };
 
-export const TokenTransaction = async ({
-  args,
-  poll,
-  onTxHash,
-  contextData,
-  injectedProvider,
-  values,
-  tx,
-}) => {
-  const { daochain, daoOverview, address } = contextData;
-  const { tokenAddress } = values;
-  return TokenService({
-    web3: injectedProvider,
-    tokenAddress,
-    chainID: daochain,
-    version: daoOverview.version,
-  })(tx.name)({
-    args,
-    address,
-    poll,
-    onTxHash,
-  });
-};
+// export const TokenTransaction = async ({
+//   args,
+//   poll,
+//   onTxHash,
+//   contextData,
+//   injectedProvider,
+//   values,
+//   tx,
+// }) => {
+//   const { daochain, daoOverview, address } = contextData;
+//   const { tokenAddress } = values;
+//   return TokenService({
+//     web3: injectedProvider,
+//     tokenAddress,
+//     chainID: daochain,
+//     version: daoOverview.version,
+//   })(tx.name)({
+//     args,
+//     address,
+//     poll,
+//     onTxHash,
+//   });
+// };
 
-export const Transaction = async data => {
-  const contractType = data?.tx?.contract;
-  const txMap = {
-    Moloch: MolochTransaction,
-    Minion: MinionTransaction,
-    Token: TokenTransaction,
-  };
-  const TX = txMap[contractType];
-  if (!TX) {
-    throw new Error(
-      `Contract Type ${contractType} not found in 'Transaction' function in txHelpers.js. Check transaction data (contractTX.js).`,
-    );
+const getContractAddress = data => {
+  const { contractAddress } = data.tx.contract;
+  if (contractAddress[0] === '.') {
+    const path = getPath(contractAddress);
+    const address = searchData(data, path);
+    return address;
   }
+  if (validate.address(contractAddress)) return contractAddress;
+  throw new Error(
+    'txHelpers => getContactAddress(): Did not receive a valid contract address',
+  );
+};
+export const Transaction = async data => {
+  const { args, tx, poll, onTxHash, contextData, injectedProvider } = data;
+
+  const web3Contract = await createContract({
+    address: getContractAddress(data),
+    abi: await getContractABI(data),
+    chainID: contextData.daochain,
+    web3: injectedProvider,
+  });
+  console.log(web3Contract);
+  const transaction = await web3Contract.methods[tx.name](...args);
   data.lifeCycleFns?.onTxFire?.(data);
-  return TX(data);
+  return transaction
+    .send('eth_requestAccounts', { from: contextData.address })
+    .on('transactionHash', txHash => {
+      poll?.(txHash, data);
+      onTxHash?.(txHash, data);
+      return txHash;
+    })
+    .on('error', error => {
+      console.error(error);
+      return error;
+    });
 };
 
 //  Seaches application state for values
@@ -210,12 +267,9 @@ export const exposeValues = data => {
   throw new Error('Could not find data with given queries');
 };
 
-export const createActions = ({ tx, uiControl, stage, lifeCycleFns }) => {
+export const createActions = ({ tx, uiControl, stage }) => {
   if (!tx[stage]) return;
-  console.log(`tx`, tx);
-  console.log(`uiControl`, uiControl);
-  console.log(`stage`, stage);
-  console.log(`lifeCycleFns`, lifeCycleFns);
+
   // FOR REFERENCE:
   // const uiControl = {
   //   errorToast,
@@ -250,10 +304,28 @@ export const createActions = ({ tx, uiControl, stage, lifeCycleFns }) => {
 
 export const fieldModifiers = Object.freeze({
   addTributeDecimals(fieldValue, data) {
+    if (!fieldValue) return null;
     return valToDecimalString(
       fieldValue,
       data.values.tributeToken,
       data.contextData.daoOverview.tokenBalances,
+    );
+  },
+  addPaymentDecimals(fieldValue, data) {
+    if (!fieldValue) return null;
+    return valToDecimalString(
+      fieldValue,
+      data.values.paymentToken,
+      data.contextData.daoOverview.tokenBalances,
+    );
+  },
+  addMinionVaultDecimals(fieldValue, data) {
+    if (!fieldValue) return null;
+    const { daoVaults } = data.contextData;
+    const { minionToken, selectedMinion } = data.values;
+    return getContractBalance(
+      fieldValue,
+      getTokenData(daoVaults, selectedMinion, minionToken).decimals,
     );
   },
 });
@@ -269,7 +341,6 @@ export const handleFieldModifiers = appData => {
         const modifiedVal = fieldModifiers[mod](newValues[field.name], appData);
         newValues[field.name] = modifiedVal;
       });
-      //  modify
     } else {
       return field;
     }
