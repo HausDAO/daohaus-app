@@ -99,7 +99,7 @@ const ActivityCard = ({ activity, displayAvatar, isLink = true }) => {
               {activity.daoData.name}
             </Heading>
             <Badge mr={2} variant='outline'>
-              {chainByName(activity.daoData.network).network}
+              {chainByName(activity.daoData.network).name}
             </Badge>
           </Flex>
         )}

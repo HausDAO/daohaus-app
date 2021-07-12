@@ -42,7 +42,7 @@ const ThemeBuilder = ({ refetchMetaData }) => {
         daoMeta: tempCustomTerms,
       });
     }
-  }, [theme, tempCustomTerms]);
+  }, [theme, tempCustomTerms, customTerms]);
 
   const handleThemeUpdate = update => {
     const currentValues = tempTheme || defaultTheme;
