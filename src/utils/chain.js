@@ -151,7 +151,7 @@ export const supportedChains = {
     chain_id: '0x89',
     hub_sort_order: 3,
     providers: ['walletconnect'],
-    rpc_url: 'https://rpc-mainnet.matic.network',
+    rpc_url: 'https://rpc-mainnet.maticvigil.com/',
     metadata_api_url: 'https://data.daohaus.club',
     abi_api_url:
       'https://api.polygonscan.com/api?module=contract&action=getabi&address=',
