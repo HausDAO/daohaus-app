@@ -69,7 +69,6 @@ const ProposalVote = ({
       isAfter(Date.now(), new Date(+proposal?.votingPeriodStarts * 1000))
     );
   };
-
   const NetworkOverlay = () => (
     <Flex
       position='absolute'
@@ -222,7 +221,7 @@ const ProposalVote = ({
                     <Tooltip
                       shouldWrapChildren
                       placement='bottom'
-                      label={`Insufficient Funds: You only have ${daoMember?.depositTokenBalance} ${overview?.depositToken?.symbol}`}
+                      label='Insufficient Funds'
                     >
                       <Icon
                         color='red.500'

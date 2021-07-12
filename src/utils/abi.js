@@ -6,8 +6,8 @@ import { IsJsonString } from './general';
 
 import MOLOCH_V2 from '../contracts/molochV2.json';
 import ERC_20 from '../contracts/erc20a.json';
-import VANILLA_MINION from '../contracts/nft.json';
-import ERC_721 from '../contracts/minion.json';
+import VANILLA_MINION from '../contracts/minion.json';
+import ERC_721 from '../contracts/nft.json';
 
 export const LOCAL_ABI = Object.freeze({
   MOLOCH_V2,
@@ -114,22 +114,45 @@ export const safeEncodeHexFunction = (selectedFunction, inputVals) => {
   }
 };
 
-const getLocalSnippet = params =>
-  LOCAL_ABI[params.abiName].find(fn => fn.name === params.fnName);
+export const getLocalABI = contract => LOCAL_ABI[contract.abiName];
+const getLocalSnippet = ({ contract, fnName }) => {
+  console.log(`contract`, contract);
+  const abi = getLocalABI(contract);
+  console.log(`abi`, abi);
+  const snippet = abi?.find(fn => fn.name === fnName);
+  console.log(`snippet`, snippet);
+  return snippet;
+};
 
-const getRemoteSnippet = async (params, data) => {
+export const getRemoteABI = async (contract, data) => {
   const chainID = data.contextData.daochain;
-  const abi = await fetchABI(params.contractAddress, chainID);
-  return abi.find(fn => fn.name === params.fnName);
+  const abi = await fetchABI(contract.contractAddress, chainID);
+  return abi;
+};
+const getRemoteSnippet = async ({ contract, fnName }, data) => {
+  const remoteSnippet = await getRemoteABI(contract, data)?.find(
+    fn => fn.name === fnName,
+  );
+  return remoteSnippet;
 };
 
 export const getABIsnippet = (params, data) => {
-  console.log(params);
-  if (params.location === 'local') return getLocalSnippet(params);
-  if (params.location === 'fetch') return getRemoteSnippet(params, data);
-  if (params.location === 'static') return params.value;
+  const { contract } = params;
+  if (contract.location === 'local') return getLocalSnippet(params);
+  if (contract.location === 'fetch') return getRemoteSnippet(params, data);
+  if (contract.location === 'static') return contract.value;
   throw new Error(
     `abi.js => getABIsnippet():
      Did not recieve a correct ABI snippet location. Check tx data in contractTx.js`,
+  );
+};
+export const getContractABI = async data => {
+  const { contract } = data.tx;
+  if (contract.location === 'local') return getLocalABI(contract);
+  if (contract.location === 'fetch') return getRemoteABI(contract, data);
+  if (contract.location === 'static') return contract.value;
+  throw new Error(
+    `abi.js => getABI():
+    Did not recieve a correct ABI location. Check tx data in contractTx.js`,
   );
 };
