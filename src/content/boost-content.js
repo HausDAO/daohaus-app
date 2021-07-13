@@ -249,6 +249,7 @@ export const proposalTypesContent = [
   },
   { key: 'transmutation', label: 'Transmutation', default: false },
   { key: 'minion', label: 'Minion', default: false },
+  { key: 'payroll', label: 'Payroll', default: false },
 ];
 
 export const superpowerLinks = [
