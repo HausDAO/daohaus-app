@@ -1,22 +1,21 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
-import { Box, Button, Flex, useToast } from '@chakra-ui/react';
+import { Box, Button, Flex, Spinner, useToast } from '@chakra-ui/react';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
 
+import { useToken } from '../contexts/TokenContext';
 import BankChart from '../components/bankChart';
 import BalanceList from '../components/balanceList';
 import MainViewLayout from '../components/mainViewLayout';
 import TextBox from '../components/TextBox';
 import VaultNftCard from '../components/vaultNftCard';
-import MinionTokenList from '../components/minionTokenList';
 import HubBalanceList from '../components/crossDaoInternalBalanceList';
 import { fetchMinionInternalBalances } from '../utils/theGraph';
-import { vaultConfigByType } from '../data/vaults';
 import { fetchNativeBalance } from '../utils/tokenExplorerApi';
 import { supportedChains } from '../utils/chain';
-import { useToken } from '../contexts/TokenContext';
+import { vaultConfigByType } from '../data/vaults';
 
-const MinionVault = ({ overview, customTerms, daoVaults, isMember }) => {
+const MinionVault = ({ overview, customTerms, daoVaults }) => {
   const { daochain, daoid, minion } = useParams();
   const { currentDaoTokens } = useToken();
   const toast = useToast();
@@ -24,10 +23,6 @@ const MinionVault = ({ overview, customTerms, daoVaults, isMember }) => {
   const [erc20Balances, setErc20Balances] = useState(null);
   const [nativeBalance, setNativeBalance] = useState(null);
   const [internalBalances, setInternalBalances] = useState(null);
-
-  const sendToken = () => {
-    console.log('sendToken');
-  };
 
   const withdraw = () => {
     console.log('withdraw');
@@ -53,11 +48,10 @@ const MinionVault = ({ overview, customTerms, daoVaults, isMember }) => {
 
   useEffect(() => {
     const setupBalanceData = async () => {
-      // setup minion erc20 list data (native token and erc20s)
+      // setup minion erc20 list data (native token, erc20s, internal balances)
       const vaultMatch = daoVaults.find(vault => {
         return vault.address === minion;
       });
-
       // TODO: shape this on the api side and remove formatting here
       const tempFormattedVaultData = vaultMatch.erc20s.map(token => {
         return {
@@ -95,11 +89,13 @@ const MinionVault = ({ overview, customTerms, daoVaults, isMember }) => {
         minionAddress: minion,
       });
 
-      const internalBalanceData = internalBalanceRes.flatMap(dao => {
-        return dao.tokenBalances.map(b => {
-          return { ...b, moloch: dao.moloch, meta: dao.meta };
-        });
-      });
+      const internalBalanceData = internalBalanceRes
+        .flatMap(dao => {
+          return dao.tokenBalances.map(b => {
+            return { ...b, moloch: dao.moloch, meta: dao.meta };
+          });
+        })
+        .filter(bal => +bal.tokenBalance > 0);
 
       setVault({
         ...vaultMatch,
@@ -120,6 +116,7 @@ const MinionVault = ({ overview, customTerms, daoVaults, isMember }) => {
       headerEl={vault ? ctaButton : null}
       isDao
     >
+      {!vault && <Spinner />}
       {vault && (
         <Flex wrap='wrap'>
           <Box
@@ -140,6 +137,9 @@ const MinionVault = ({ overview, customTerms, daoVaults, isMember }) => {
               withdraw={withdraw}
               currentDaoTokens={currentDaoTokens}
             />
+
+            <BalanceList vaultConfig={vault.config} balances={erc20Balances} />
+
             {nativeBalance && (
               <BalanceList
                 vaultConfig={vault.config}
@@ -147,13 +147,6 @@ const MinionVault = ({ overview, customTerms, daoVaults, isMember }) => {
                 isNativeToken
               />
             )}
-            <BalanceList vaultConfig={vault.config} balances={erc20Balances} />
-
-            {/* <MinionTokenList
-              minion={minion}
-              action={sendToken}
-              isMember={isMember}
-            /> */}
           </Box>
           <Box
             w={['100%', null, null, null, '30%']}

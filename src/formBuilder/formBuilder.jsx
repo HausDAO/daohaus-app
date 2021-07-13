@@ -15,7 +15,9 @@ import {
 
 const FormBuilder = props => {
   const { submitTransaction, handleCustomValidation, modifyFields } = useTX();
-  const { fields, additionalOptions = null, required = [] } = props;
+  const { fields, additionalOptions = null, required = [], formData } = props;
+
+  console.log('contexData', formData);
 
   const [loading, setLoading] = useState(false);
   const [formFields, setFields] = useState(mapInRequired(fields, required));

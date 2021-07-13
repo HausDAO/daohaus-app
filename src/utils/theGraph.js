@@ -142,6 +142,8 @@ const completeQueries = {
           supportedChains[args.chainID].network,
           minionAddresses,
         );
+
+        console.log('vaultApiData', vaultApiData);
         const balanceData = await fetchBankValues({
           daoID: args.daoID,
           chainID: args.chainID,

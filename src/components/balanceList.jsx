@@ -16,11 +16,11 @@ const BalanceList = ({
     <ContentBox mt={6}>
       <TextBox size='xs' mb={6}>
         {isNativeToken
-          ? `Native Token Balance`
+          ? `Network Token Balance`
           : `${vaultConfig.balanceListTitle}`}
       </TextBox>
       <Flex>
-        <Box w='20%' d={['none', null, null, 'inline-block']}>
+        <Box w='25%' d={['none', null, null, 'inline-block']}>
           <TextBox size='xs'>Asset</TextBox>
         </Box>
         <Box w={['25%', null, null, '40%']}>
@@ -29,7 +29,7 @@ const BalanceList = ({
 
         {!isNativeToken && (
           <>
-            <Box w='20%' d={['none', null, null, 'inline-block']}>
+            <Box w='15%' d={['none', null, null, 'inline-block']}>
               <TextBox size='xs'>Price</TextBox>
             </Box>
             <Box w={['20%', null, null, '30%']}>

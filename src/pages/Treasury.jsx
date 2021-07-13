@@ -58,7 +58,6 @@ const Treasury = ({
   useEffect(() => {
     const canSync = daoMember?.exists || delegate;
     if (currentDaoTokens && canSync) {
-      console.log('currentDaoTokens', currentDaoTokens);
       setNeedsSync(
         currentDaoTokens.some(token => {
           return (

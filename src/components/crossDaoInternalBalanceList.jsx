@@ -16,10 +16,10 @@ const CrossDaoInternalBalanceList = ({
         Internal Balances
       </TextBox>
       <Flex>
-        <Box w='20%' d={['none', null, null, 'inline-block']}>
+        <Box w='30%' d={['none', null, null, 'inline-block']}>
           <TextBox size='xs'>DAO</TextBox>
         </Box>
-        <Box w='20%' d={['none', null, null, 'inline-block']}>
+        <Box w='15%' d={['none', null, null, 'inline-block']}>
           <TextBox size='xs'>Network</TextBox>
         </Box>
         <Box w='20%' d={['none', null, null, 'inline-block']}>
@@ -29,7 +29,7 @@ const CrossDaoInternalBalanceList = ({
           <TextBox size='xs'>Balance</TextBox>
         </Box>
 
-        <Box w={['45%', null, null, '45%']} />
+        <Box w={['35%', null, null, '35%']} />
       </Flex>
       {tokens ? (
         tokens
@@ -46,7 +46,7 @@ const CrossDaoInternalBalanceList = ({
           })
       ) : (
         <Text fontFamily='mono' mt='5'>
-          No unclaimed balances
+          No unclaimed internal balances
         </Text>
       )}
     </ContentBox>

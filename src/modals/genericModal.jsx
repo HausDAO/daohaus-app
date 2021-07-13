@@ -19,6 +19,7 @@ const GenericModal = ({
   modalId,
   title,
   formLego,
+  formData,
   closeOnOverlayClick = true,
 }) => {
   const { genericModal, setGenericModal } = useOverlay();
@@ -63,7 +64,11 @@ const GenericModal = ({
           maxH='600px'
           overflow='auto'
         >
-          {formLego ? <FormBuilder {...formLego} /> : children}
+          {formLego ? (
+            <FormBuilder {...formLego} formData={formData} />
+          ) : (
+            children
+          )}
         </ModalBody>
       </ModalContent>
     </Modal>
