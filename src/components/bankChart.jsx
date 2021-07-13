@@ -30,7 +30,7 @@ import { useCustomTheme } from '../contexts/CustomThemeContext';
 import ContentBox from './ContentBox';
 import TextBox from './TextBox';
 import VaultTotal from './vaultTotal';
-import { getCurrentPrices } from '../utils/vault';
+import { getCurrentPrices } from '../utils/vaults';
 
 const bankChartTimeframes = [
   { name: 'Lifetime', value: 'lifetime' },

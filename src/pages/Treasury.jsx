@@ -5,10 +5,11 @@ import { RiAddFill } from 'react-icons/ri';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
 
 import { useInjectedProvider } from '../contexts/InjectedProviderContext';
-import BankList from '../components/BankList';
+import BalanceList from '../components/balanceList';
 import BankChart from '../components/bankChart';
 import MainViewLayout from '../components/mainViewLayout';
 import { daoConnectedAndSameChain } from '../utils/general';
+import { VAULT } from '../data/vaults';
 
 const Treasury = ({
   overview,
@@ -24,6 +25,7 @@ const Treasury = ({
   const [needsSync, setNeedsSync] = useState(false);
 
   const treasuryVaultData = daoVaults?.find(vault => vault.type === 'treasury');
+  const vaultConfig = VAULT.TREASURY;
 
   const handleCopy = () => {
     toast({
@@ -47,7 +49,7 @@ const Treasury = ({
             to={`/dao/${daochain}/${daoid}/proposals/new/whitelist`}
             rightIcon={<RiAddFill />}
           >
-            Add Asset
+            Whitelist Asset
           </Button>
         )}
     </Flex>
@@ -69,7 +71,7 @@ const Treasury = ({
 
   return (
     <MainViewLayout
-      header='DAO Treasury'
+      header='Treasury'
       customTerms={customTerms}
       headerEl={ctaButton}
       isDao
@@ -81,7 +83,11 @@ const Treasury = ({
         balanceData={treasuryVaultData?.balanceHistory}
         visibleVaults={[treasuryVaultData]}
       />
-      <BankList tokens={currentDaoTokens} needsSync={needsSync} />
+      <BalanceList
+        vaultConfig={vaultConfig}
+        balances={currentDaoTokens}
+        needsSync={needsSync}
+      />
     </MainViewLayout>
   );
 };

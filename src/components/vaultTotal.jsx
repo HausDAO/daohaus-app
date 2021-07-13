@@ -3,7 +3,7 @@ import { Skeleton, Text, Box } from '@chakra-ui/react';
 
 import { tallyUSDs } from '../utils/tokenValue';
 import { numberWithCommas } from '../utils/general';
-import { vaultTokenCount } from '../utils/vault';
+import { vaultTokenCount } from '../utils/vaults';
 
 const VaultTotal = ({ vaults }) => {
   const treasury = vaults.find(v => v.type === 'treasury');

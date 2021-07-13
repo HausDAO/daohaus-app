@@ -3,14 +3,23 @@ import { Link, useParams } from 'react-router-dom';
 import { Flex, Box, Skeleton, Icon, Button, Tooltip } from '@chakra-ui/react';
 import { RiLoginBoxLine } from 'react-icons/ri';
 
+import { useTX } from '../contexts/TXContext';
+import { useInjectedProvider } from '../contexts/InjectedProviderContext';
+import MinionInternalBalanceActionMenu from './minionInternalBalanceActionMenu';
 import { daoConnectedAndSameChain, numberWithCommas } from '../utils/general';
 import { chainByName } from '../utils/chain';
-import { useInjectedProvider } from '../contexts/InjectedProviderContext';
+import { TX } from '../data/contractTX';
 
-const HubBalanceListCard = ({ token, withdraw, currentDaoTokens }) => {
+const CrossDaoInternalBalanceListCard = ({ token, currentDaoTokens }) => {
   const { minion, daochain } = useParams();
   const { address, injectedChain } = useInjectedProvider();
+
+  // TODO: maybe make 2 different components for in/outside daos
+  const { submitTransaction } = daochain
+    ? useTX()
+    : { submitTransaction: null };
   const [tokenWhitelisted, setTokenWhitelisted] = useState();
+  const [loading, setLoading] = useState();
 
   useEffect(() => {
     const isWhitelisted =
@@ -24,16 +33,37 @@ const HubBalanceListCard = ({ token, withdraw, currentDaoTokens }) => {
     setTokenWhitelisted(!isWhitelisted);
   }, [currentDaoTokens]);
 
+  const handleWithdraw = async options => {
+    setLoading(true);
+    await submitTransaction({
+      tx: TX.MINION_WITHDRAW,
+      args: [
+        token.moloch.id,
+        token.token.tokenAddress,
+        token.tokenBalance,
+        options.transfer,
+      ],
+      localData: {
+        minionAddress: minion,
+      },
+    });
+
+    // TODO: handle the after effects - refresh dao
+    setLoading(false);
+  };
+
   return (
     <Flex h='60px' align='center'>
-      <Box w='20%' d={['none', null, null, 'inline-block']}>
+      <Box w='30%' d={['none', null, null, 'inline-block']}>
         <Flex align='center'>
           <Box fontFamily='mono'>{token.meta?.name}</Box>
         </Flex>
       </Box>
-      <Box w='20%' d={['none', null, null, 'inline-block']}>
+      <Box w='15%' d={['none', null, null, 'inline-block']}>
         <Flex align='center'>
-          <Box fontFamily='mono'>{chainByName(token.meta?.network).name}</Box>
+          <Box fontFamily='mono'>
+            {chainByName(token.meta?.network).short_name}
+          </Box>
         </Flex>
       </Box>
       <Box w='20%' d={['none', null, null, 'inline-block']}>
@@ -58,14 +88,14 @@ const HubBalanceListCard = ({ token, withdraw, currentDaoTokens }) => {
         </Skeleton>
       </Box>
 
-      <Box w={['45%', null, null, '45%']} d='inline-block'>
+      <Box w={['35%', null, null, '35%']} d='inline-block'>
         {!minion ? (
           <Link
             to={`/dao/${chainByName(token.meta?.network).chain_id}/${
               token.moloch.id
             }/profile/${address}`}
           >
-            Withdraw on DAO profile page
+            Withdraw
             <Icon
               as={RiLoginBoxLine}
               ml={3}
@@ -75,51 +105,20 @@ const HubBalanceListCard = ({ token, withdraw, currentDaoTokens }) => {
             />
           </Link>
         ) : (
-          <Box>
-            <Tooltip
-              hasArrow
-              shouldWrapChildren
-              placement='bottom'
-              label={
-                tokenWhitelisted
-                  ? 'Token must be whitelisted in the dao'
-                  : 'Pull token into dao'
+          <Box textAlign='right'>
+            <MinionInternalBalanceActionMenu
+              targetDao={token}
+              tokenWhitelisted={tokenWhitelisted}
+              handleWithdraw={handleWithdraw}
+              loading={loading}
+              daoConnectedAndSameChain={
+                !daoConnectedAndSameChain(
+                  address,
+                  daochain,
+                  injectedChain?.chainId,
+                )
               }
-            >
-              <Button
-                m={6}
-                onClick={() => withdraw(token, true)}
-                disabled={
-                  tokenWhitelisted ||
-                  !daoConnectedAndSameChain(
-                    address,
-                    daochain,
-                    injectedChain?.chainId,
-                  )
-                }
-              >
-                Pull
-              </Button>
-            </Tooltip>
-            <Tooltip
-              hasArrow
-              shouldWrapChildren
-              placement='bottom'
-              label='Withdraw token into the minion'
-            >
-              <Button
-                onClick={() => withdraw(token, false)}
-                disabled={
-                  !daoConnectedAndSameChain(
-                    address,
-                    daochain,
-                    injectedChain?.chainId,
-                  )
-                }
-              >
-                Withdraw
-              </Button>
-            </Tooltip>
+            />
           </Box>
         )}
       </Box>
@@ -127,4 +126,4 @@ const HubBalanceListCard = ({ token, withdraw, currentDaoTokens }) => {
   );
 };
 
-export default HubBalanceListCard;
+export default CrossDaoInternalBalanceListCard;

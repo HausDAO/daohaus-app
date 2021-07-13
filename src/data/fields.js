@@ -162,6 +162,23 @@ export const FIELD = {
     info: INFO_TEXT.DELEGATE_ADDRESS,
     expectType: 'address',
   },
+  MINION_TOKEN_SEND_AMOUNT: {
+    type: 'minionTokenSendAmount',
+    htmlFor: 'minionTokenSendAmount',
+    name: 'minionTokenSendAmount',
+    placeholder: '0',
+    label: 'Amount',
+    expectType: 'number',
+    // modifiers: ['addPaymentDecimals'],
+  },
+  DESTINATION_ADDRESS: {
+    type: 'input',
+    htmlFor: 'destination',
+    name: 'destination',
+    placeholder: '0x',
+    label: 'Destination',
+    expectType: 'address',
+  },
 };
 
 export const FORM_DISPLAY = {

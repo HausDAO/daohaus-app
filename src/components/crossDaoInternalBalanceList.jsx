@@ -3,16 +3,23 @@ import { Flex, Text, Box } from '@chakra-ui/react';
 
 import TextBox from './TextBox';
 import ContentBox from './ContentBox';
-import HubBalanceListCard from './hubBalanceListCard';
+import CrossDaoInternalBalanceListCard from './crossDaoInternalBalanceListCard';
 
-const HubBalanceList = ({ tokens, withdraw, currentDaoTokens }) => {
+const CrossDaoInternalBalanceList = ({
+  tokens,
+  withdraw,
+  currentDaoTokens,
+}) => {
   return (
     <ContentBox mt={6}>
+      <TextBox size='xs' mb={6}>
+        Internal Balances
+      </TextBox>
       <Flex>
-        <Box w='20%' d={['none', null, null, 'inline-block']}>
+        <Box w='30%' d={['none', null, null, 'inline-block']}>
           <TextBox size='xs'>DAO</TextBox>
         </Box>
-        <Box w='20%' d={['none', null, null, 'inline-block']}>
+        <Box w='15%' d={['none', null, null, 'inline-block']}>
           <TextBox size='xs'>Network</TextBox>
         </Box>
         <Box w='20%' d={['none', null, null, 'inline-block']}>
@@ -22,14 +29,14 @@ const HubBalanceList = ({ tokens, withdraw, currentDaoTokens }) => {
           <TextBox size='xs'>Balance</TextBox>
         </Box>
 
-        <Box w={['45%', null, null, '45%']} />
+        <Box w={['35%', null, null, '35%']} />
       </Flex>
       {tokens ? (
         tokens
           .sort((a, b) => b.totalUSD - a.totalUSD)
           .map(token => {
             return (
-              <HubBalanceListCard
+              <CrossDaoInternalBalanceListCard
                 key={token?.id}
                 token={token}
                 withdraw={withdraw}
@@ -39,11 +46,11 @@ const HubBalanceList = ({ tokens, withdraw, currentDaoTokens }) => {
           })
       ) : (
         <Text fontFamily='mono' mt='5'>
-          No unclaimed balances
+          No unclaimed internal balances
         </Text>
       )}
     </ContentBox>
   );
 };
 
-export default HubBalanceList;
+export default CrossDaoInternalBalanceList;

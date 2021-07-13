@@ -138,6 +138,26 @@ export const FORM = {
     required: ['selectedMinion', 'minionPayment', 'applicant'],
     minionType: MINION_TYPES.VANILLA,
     tx: TX.PAYROLL,
-    fields: [FIELD.MINION_SELECT, FIELD.MINION_PAYMENT, FIELD.APPLICANT],
+    fields: [
+      FIELD.MINION_SELECT,
+      FIELD.MINION_PAYMENT,
+      FIELD.APPLICANT,
+      FIELD.DESCRIPTION,
+    ],
+  },
+  MINION_SEND_NATIVE_TOKEN: {
+    title: 'Send Network Token',
+    layout: 'singleRow',
+    required: ['minionTokenSendAmount', 'destination', 'description'],
+    // could be multiple types
+    minionType: MINION_TYPES.VANILLA,
+    tx: TX.MINION_SEND_NATIVE_TOKEN,
+    fields: [
+      FIELD.MINION_TOKEN_SEND_AMOUNT,
+      FIELD.DESTINATION_ADDRESS,
+      FIELD.DESCRIPTION,
+    ],
+    // not sure how we'll pass this data down for balance/minionaddress/minion type
+    hiddenFields: ['balance'],
   },
 };

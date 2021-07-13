@@ -14,7 +14,7 @@ export const CONTRACTS = {
   CURRENT_MOLOCH: {
     location: 'local',
     abiName: 'MOLOCH_V2',
-    contractAddress: '.contextData.daoid',
+    contractAddress: '.args.0',
   },
   SELECTED_MINION: {
     location: 'local',
@@ -30,6 +30,11 @@ export const CONTRACTS = {
     location: 'local',
     abiName: 'ERC_721',
     contractAddress: '.values.nftAddress',
+  },
+  VANILLA_MINION: {
+    location: 'local',
+    abiName: 'VANILLA_MINION',
+    contractAddress: '.localData.minionAddress',
   },
 };
 
@@ -61,7 +66,7 @@ export const DETAILS = {
   },
   PAYROLL_PROPOSAL_TEMPORARY: {
     title: 'Minion sends a token',
-    description: 'Click check details to see more.',
+    description: '.values.description',
     proposalType: '.formData.type',
     minionType: MINION_TYPES.VANILLA,
   },
@@ -271,5 +276,24 @@ export const TX = {
         gatherFields: DETAILS.PAYROLL_PROPOSAL_TEMPORARY,
       },
     ],
+  },
+  MINION_WITHDRAW: {
+    contract: CONTRACTS.VANILLA_MINION,
+    name: 'crossWithdraw',
+    poll: 'subgraph',
+    onTxHash: ACTIONS.GENERIC_MODAL,
+    display: 'Transfer Balance',
+    errMsg: 'Error Transferring Balance',
+    successMsg: 'Balance Transferred!',
+  },
+  MINION_SEND_NATIVE_TOKEN: {
+    contract: CONTRACTS.SELECTED_MINION,
+    name: 'proposeAction',
+    poll: 'subgraph',
+    onTxHash: ACTIONS.PROPOSAL,
+    display: 'Sending Token',
+    errMsg: 'Error Submitting Proposal',
+    successMsg: 'Proposal Submitted!',
+    gatherArgs: [],
   },
 };
