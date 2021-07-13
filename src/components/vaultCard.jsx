@@ -6,7 +6,7 @@ import ContentBox from './ContentBox';
 import TextBox from './TextBox';
 import VaultCardTokenList from './vaultCardTokenList';
 import { numberWithCommas } from '../utils/general';
-import { vaultUrlPart } from '../utils/vault';
+import { vaultUrlPart } from '../utils/vaults';
 import CopyButton from './copyButton';
 import { tallyUSDs } from '../utils/tokenValue';
 
@@ -15,7 +15,6 @@ const VaultCard = ({ vault, currentDaoTokens, vaultConfig }) => {
 
   const bgImgUrl = vault.nfts[0]?.imageUrl;
 
-  // TODO: Move to legos functions?
   const currentVaultBalance =
     vault.type === 'treasury'
       ? tallyUSDs(currentDaoTokens)

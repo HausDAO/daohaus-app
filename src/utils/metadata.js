@@ -125,7 +125,7 @@ export const getTerm = (customTerms, word) => {
     return customTerms?.guildkick || 'Guild Kick';
   }
   if (word === 'minion') {
-    return customTerms?.minion || 'minion';
+    return customTerms?.minion || 'Minion';
   }
   if (word === 'minions') {
     return customTerms?.minions || 'Minions';

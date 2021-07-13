@@ -2,27 +2,24 @@ export const VAULT = {
   TREASURY: {
     typeDisplay: 'Treasury',
     canHoldNft: false,
-    canHaveInternalBalances: false,
-    canHoldToken: false,
+    balanceListTitle: 'Whitelisted Token Balances',
+    // try to tell it how to get token list from context?
+    cardActions: ['collectTokens'],
   },
+  // could profile balance list work off this?
   MINION: {
     typeDisplay: 'Minion',
     canHoldNft: true,
-    canHaveInternalBalances: true,
-    canHoldToken: true,
+    balanceListTitle: 'Internal Balances',
     cardActions: [],
   },
   RARIBLE_MINION: {
     typeDisplay: 'Boost Minion',
     canHoldNft: true,
-    canHaveInternalBalances: true,
-    canHoldToken: true,
     cardActions: [],
   },
   NIFTY_MINION: {
     typeDisplay: 'Minion',
-    canHaveInternalBalances: true,
-    canHoldToken: true,
     // these could map to actions in an bank action factory
     cardActions: ['sell'],
     // replace with nft object

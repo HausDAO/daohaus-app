@@ -2,40 +2,44 @@ import React from 'react';
 import { Flex, Text, Box } from '@chakra-ui/react';
 import TextBox from './TextBox';
 import ContentBox from './ContentBox';
-import BankListCard from './bankListCard';
+import BalanceCard from './balanceCard';
 
-const BankList = ({ tokens, profile, hasBalance, needsSync }) => {
-  const hasAction = hasBalance || needsSync;
+const BalanceList = ({
+  balances,
+  profile,
+  hasBalance,
+  needsSync,
+  vaultConfig,
+}) => {
+  console.log('vaultConfig', vaultConfig);
 
+  console.log('balances', balances);
   return (
     <ContentBox mt={6}>
+      <TextBox size='xs' mb={6}>
+        {vaultConfig.balanceListTitle}
+      </TextBox>
       <Flex>
         <Box w='20%' d={['none', null, null, 'inline-block']}>
           <TextBox size='xs'>Asset</TextBox>
         </Box>
-        <Box w={['45%', null, null, '45%']}>
+        <Box w={['25%', null, null, '40%']}>
           <TextBox size='xs'>{profile ? 'Internal Bal.' : 'Balance'}</TextBox>
         </Box>
-        <Box
-          w={hasAction ? '15%' : '20%'}
-          d={['none', null, null, 'inline-block']}
-        >
+        <Box w='20%' d={['none', null, null, 'inline-block']}>
           <TextBox size='xs'>Price</TextBox>
         </Box>
-        <Box
-          w={[hasAction ? '30%' : '40%', null, null, hasAction ? '15%' : '20%']}
-        >
+        <Box w={['20%', null, null, '30%']}>
           <TextBox size='xs'>Value</TextBox>
         </Box>
-
-        {hasAction ? <Box w={['25%', null, null, '20%']} /> : null}
+        <Box w={['15%', null, null, '30%']} />
       </Flex>
-      {tokens ? (
-        tokens
+      {balances ? (
+        balances
           .sort((a, b) => b.totalUSD - a.totalUSD)
           .map(token => {
             return (
-              <BankListCard
+              <BalanceCard
                 key={token?.id}
                 token={token}
                 hasBalance={hasBalance}
@@ -52,4 +56,4 @@ const BankList = ({ tokens, profile, hasBalance, needsSync }) => {
   );
 };
 
-export default BankList;
+export default BalanceList;

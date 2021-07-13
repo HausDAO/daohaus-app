@@ -3,24 +3,17 @@ import { useParams, Link } from 'react-router-dom';
 import { Box, Button, Flex, useToast } from '@chakra-ui/react';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
 
-import BankList from '../components/BankList';
 import BankChart from '../components/bankChart';
+import BalanceList from '../components/balanceList';
 import MainViewLayout from '../components/mainViewLayout';
 import TextBox from '../components/TextBox';
 import VaultNftCard from '../components/vaultNftCard';
 import MinionTokenList from '../components/minionTokenList';
 import HubBalanceList from '../components/hubBalanceList';
 import { fetchMinionInternalBalances } from '../utils/theGraph';
+import { vaultConfigByType } from '../data/vaults';
 
-const MinionVault = ({
-  overview,
-  customTerms,
-  currentDaoTokens,
-  daoMember,
-  delegate,
-  daoVaults,
-  isMember,
-}) => {
+const MinionVault = ({ overview, customTerms, daoVaults, isMember }) => {
   const { daochain, daoid, minion } = useParams();
   const toast = useToast();
   const [vault, setVault] = useState(null);
@@ -31,7 +24,7 @@ const MinionVault = ({
 
   const handleCopy = () => {
     toast({
-      title: 'Treasury Address Copied',
+      title: 'Vault Address Copied',
       position: 'top-right',
       status: 'success',
       duration: 3000,
@@ -41,7 +34,7 @@ const MinionVault = ({
 
   const ctaButton = (
     <Flex>
-      <CopyToClipboard text={daoid} mr={2} onCopy={handleCopy}>
+      <CopyToClipboard text={vault?.address} mr={2} onCopy={handleCopy}>
         <Button>Copy Address</Button>
       </CopyToClipboard>
     </Flex>
@@ -49,11 +42,13 @@ const MinionVault = ({
 
   useEffect(() => {
     if (daoVaults && minion) {
-      setVault(
-        daoVaults.find(vault => {
-          return vault.address === minion;
-        }),
-      );
+      const vaultMatch = daoVaults.find(vault => {
+        return vault.address === minion;
+      });
+      setVault({
+        ...vaultMatch,
+        config: vaultConfigByType[vaultMatch.type],
+      });
     }
   }, [daoVaults, minion]);
 
@@ -72,11 +67,13 @@ const MinionVault = ({
     }
   }, [minion]);
 
+  console.log('vault', vault);
+
   return (
     <MainViewLayout
-      header='Minion Vault'
+      header={vault?.config?.typeDisplay || ''}
       customTerms={customTerms}
-      headerEl={ctaButton}
+      headerEl={vault ? ctaButton : null}
       isDao
     >
       {vault && (
@@ -102,6 +99,12 @@ const MinionVault = ({
               loading={loading}
               currentDaoTokens={currentDaoTokens}
             /> */}
+
+            <BalanceList
+              vaultConfig={vault.config}
+              // balances={currentDaoTokens}
+              // needsSync={needsSync}
+            />
 
             <MinionTokenList
               minion={minion}
