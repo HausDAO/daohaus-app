@@ -3,11 +3,18 @@ import { Flex, Text, Box } from '@chakra-ui/react';
 
 import TextBox from './TextBox';
 import ContentBox from './ContentBox';
-import HubBalanceListCard from './hubBalanceListCard';
+import CrossDaoInternalBalanceListCard from './crossDaoInternalBalanceListCard';
 
-const HubBalanceList = ({ tokens, withdraw, currentDaoTokens }) => {
+const CrossDaoInternalBalanceList = ({
+  tokens,
+  withdraw,
+  currentDaoTokens,
+}) => {
   return (
     <ContentBox mt={6}>
+      <TextBox size='xs' mb={6}>
+        Internal Balances
+      </TextBox>
       <Flex>
         <Box w='20%' d={['none', null, null, 'inline-block']}>
           <TextBox size='xs'>DAO</TextBox>
@@ -29,7 +36,7 @@ const HubBalanceList = ({ tokens, withdraw, currentDaoTokens }) => {
           .sort((a, b) => b.totalUSD - a.totalUSD)
           .map(token => {
             return (
-              <HubBalanceListCard
+              <CrossDaoInternalBalanceListCard
                 key={token?.id}
                 token={token}
                 withdraw={withdraw}
@@ -46,4 +53,4 @@ const HubBalanceList = ({ tokens, withdraw, currentDaoTokens }) => {
   );
 };
 
-export default HubBalanceList;
+export default CrossDaoInternalBalanceList;

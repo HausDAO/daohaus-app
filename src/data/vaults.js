@@ -10,7 +10,7 @@ export const VAULT = {
   MINION: {
     typeDisplay: 'Minion',
     canHoldNft: true,
-    balanceListTitle: 'Internal Balances',
+    balanceListTitle: 'ERC20 Token Balances',
     cardActions: [],
   },
   RARIBLE_MINION: {

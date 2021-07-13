@@ -7,7 +7,11 @@ import { daoConnectedAndSameChain, numberWithCommas } from '../utils/general';
 import { chainByName } from '../utils/chain';
 import { useInjectedProvider } from '../contexts/InjectedProviderContext';
 
-const HubBalanceListCard = ({ token, withdraw, currentDaoTokens }) => {
+const CrossDaoInternalBalanceListCard = ({
+  token,
+  withdraw,
+  currentDaoTokens,
+}) => {
   const { minion, daochain } = useParams();
   const { address, injectedChain } = useInjectedProvider();
   const [tokenWhitelisted, setTokenWhitelisted] = useState();
@@ -82,8 +86,8 @@ const HubBalanceListCard = ({ token, withdraw, currentDaoTokens }) => {
               placement='bottom'
               label={
                 tokenWhitelisted
-                  ? 'Token must be whitelisted in the dao'
-                  : 'Pull token into dao'
+                  ? 'Token must be whitelisted in the DAO'
+                  : 'Pull token into this DAO'
               }
             >
               <Button
@@ -127,4 +131,4 @@ const HubBalanceListCard = ({ token, withdraw, currentDaoTokens }) => {
   );
 };
 
-export default HubBalanceListCard;
+export default CrossDaoInternalBalanceListCard;

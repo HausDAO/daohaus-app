@@ -8,7 +8,7 @@ import SyncTokenButton from './syncTokenButton';
 import Withdraw from './withdraw';
 import { useDaoMember } from '../contexts/DaoMemberContext';
 
-const balanceCard = ({ token, isBank = true, hasBalance }) => {
+const balanceCard = ({ token, isBank = true, hasBalance, isNativeToken }) => {
   const toast = useToast();
   const { daoMember, delegate } = useDaoMember();
   const [needsSync, setNeedsSync] = useState(null);
@@ -46,14 +46,16 @@ const balanceCard = ({ token, isBank = true, hasBalance }) => {
 
             <Box fontFamily='mono'>{token?.symbol}</Box>
 
-            <CopyToClipboard text={token?.tokenAddress} onCopy={copiedToast}>
-              <Icon
-                as={FaCopy}
-                color='secondary.300'
-                ml={2}
-                _hover={{ cursor: 'pointer' }}
-              />
-            </CopyToClipboard>
+            {!isNativeToken && (
+              <CopyToClipboard text={token?.tokenAddress} onCopy={copiedToast}>
+                <Icon
+                  as={FaCopy}
+                  color='secondary.300'
+                  ml={2}
+                  _hover={{ cursor: 'pointer' }}
+                />
+              </CopyToClipboard>
+            )}
           </Flex>
         </Skeleton>
       </Box>
@@ -72,28 +74,34 @@ const balanceCard = ({ token, isBank = true, hasBalance }) => {
           </Box>
         </Skeleton>
       </Box>
-      <Box w='20%' d={['none', null, null, 'inline-block']}>
-        <Skeleton isLoaded={token?.usd >= 0}>
-          <Box fontFamily='mono'>
-            {token?.usd ? (
-              <Box>{`$${numberWithCommas(token?.usd.toFixed(2))}`}</Box>
-            ) : (
-              '--'
-            )}
+      {!isNativeToken && (
+        <>
+          <Box w='20%' d={['none', null, null, 'inline-block']}>
+            <Skeleton isLoaded={token?.usd >= 0}>
+              <Box fontFamily='mono'>
+                {token?.usd ? (
+                  <Box>{`$${numberWithCommas(token?.usd.toFixed(2))}`}</Box>
+                ) : (
+                  '--'
+                )}
+              </Box>
+            </Skeleton>
           </Box>
-        </Skeleton>
-      </Box>
-      <Box w={['20%', null, null, '30%']}>
-        <Skeleton isLoaded={token?.totalUSD >= 0}>
-          <Box fontFamily='mono'>
-            {token?.tokenBalance ? (
-              <Box>{`$${numberWithCommas(token?.totalUSD.toFixed(2))}`}</Box>
-            ) : (
-              '--'
-            )}
+          <Box w={['20%', null, null, '30%']}>
+            <Skeleton isLoaded={token?.totalUSD >= 0}>
+              <Box fontFamily='mono'>
+                {token?.tokenBalance ? (
+                  <Box>
+                    {`$${numberWithCommas(token?.totalUSD.toFixed(2))}`}
+                  </Box>
+                ) : (
+                  '--'
+                )}
+              </Box>
+            </Skeleton>
           </Box>
-        </Skeleton>
-      </Box>
+        </>
+      )}
 
       <Box w={['15%', null, null, '30%']} d='inline-block'>
         {hasBalance && <Withdraw token={token} />}

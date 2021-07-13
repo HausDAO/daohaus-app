@@ -93,7 +93,7 @@ export const fetchMinionInternalBalances = async args => {
 
   return internalBalances.addressBalances.map(bal => {
     const meta = metadata[bal.moloch.id] ? metadata[bal.moloch.id][0] : {};
-    return { ...bal, ...meta };
+    return { ...bal, meta };
   });
 };
 

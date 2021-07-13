@@ -10,14 +10,14 @@ const BalanceList = ({
   hasBalance,
   needsSync,
   vaultConfig,
+  isNativeToken,
 }) => {
-  console.log('vaultConfig', vaultConfig);
-
-  console.log('balances', balances);
   return (
     <ContentBox mt={6}>
       <TextBox size='xs' mb={6}>
-        {vaultConfig.balanceListTitle}
+        {isNativeToken
+          ? `Native Token Balance`
+          : `${vaultConfig.balanceListTitle}`}
       </TextBox>
       <Flex>
         <Box w='20%' d={['none', null, null, 'inline-block']}>
@@ -26,12 +26,17 @@ const BalanceList = ({
         <Box w={['25%', null, null, '40%']}>
           <TextBox size='xs'>{profile ? 'Internal Bal.' : 'Balance'}</TextBox>
         </Box>
-        <Box w='20%' d={['none', null, null, 'inline-block']}>
-          <TextBox size='xs'>Price</TextBox>
-        </Box>
-        <Box w={['20%', null, null, '30%']}>
-          <TextBox size='xs'>Value</TextBox>
-        </Box>
+
+        {!isNativeToken && (
+          <>
+            <Box w='20%' d={['none', null, null, 'inline-block']}>
+              <TextBox size='xs'>Price</TextBox>
+            </Box>
+            <Box w={['20%', null, null, '30%']}>
+              <TextBox size='xs'>Value</TextBox>
+            </Box>
+          </>
+        )}
         <Box w={['15%', null, null, '30%']} />
       </Flex>
       {balances ? (
@@ -44,6 +49,7 @@ const BalanceList = ({
                 token={token}
                 hasBalance={hasBalance}
                 hasSync={needsSync}
+                isNativeToken={isNativeToken}
               />
             );
           })

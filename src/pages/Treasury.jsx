@@ -72,7 +72,7 @@ const Treasury = ({
 
   return (
     <MainViewLayout
-      header={vaultConfig.typeDisplay}
+      header='Treasury'
       customTerms={customTerms}
       headerEl={ctaButton}
       isDao
