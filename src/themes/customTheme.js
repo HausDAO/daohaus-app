@@ -56,7 +56,7 @@ export const defaultThemeData = {
     secondaryAlpha: rgba('#EB8A23', 0.75),
   },
   fonts: {
-    heading: 'Inknut Antiqua',
+    heading: 'Mulish',
     body: 'Rubik',
     mono: 'Space Mono',
     hub: 'Mirza',
