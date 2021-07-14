@@ -299,6 +299,10 @@ export const hubChainQuery = async ({
             },
           };
 
+          if (chain.network_id === 137) {
+            console.log('chain', dao?.moloch?.id, chain.apiMatch);
+          }
+
           return {
             ...withResolvedProposals,
             meta: daoMapLookup(dao?.moloch?.id, chain.apiMatch),
