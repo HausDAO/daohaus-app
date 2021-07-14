@@ -290,10 +290,9 @@ export const TX = {
     contract: CONTRACTS.SELECTED_MINION,
     name: 'proposeAction',
     poll: 'subgraph',
-    onTxHash: ACTIONS.PROPOSAL,
+    onTxHash: ACTIONS.GENERIC_MODAL,
     display: 'Sending Token',
     errMsg: 'Error Submitting Proposal',
     successMsg: 'Proposal Submitted!',
-    gatherArgs: [],
   },
 };

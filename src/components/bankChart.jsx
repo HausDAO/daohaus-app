@@ -46,6 +46,7 @@ const BankChart = ({ overview, daoVaults, balanceData, visibleVaults }) => {
   const [timeframe, setTimeframe] = useState(bankChartTimeframes[0]);
 
   useEffect(() => {
+    console.log('balanceData', balanceData);
     if (balanceData) {
       setDaoBalances(balanceData);
     }

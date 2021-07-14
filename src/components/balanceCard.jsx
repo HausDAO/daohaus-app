@@ -61,7 +61,7 @@ const balanceCard = ({ token, isBank = true, hasBalance, isNativeToken }) => {
       <GenericModal
         modalId='minionSendNativeToken'
         formLego={FORM.MINION_SEND_NATIVE_TOKEN}
-        formData={{
+        local={{
           tokenAddress: '0x00',
           // minionAddress: '',
           balance: token?.tokenBalance,
