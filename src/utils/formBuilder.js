@@ -50,7 +50,6 @@ export const collapse = (values, flag, collapseType) => {
 };
 
 export const mapInRequired = (fields, required) => {
-  console.log('fields', fields);
   if (!required?.length || !fields) return fields;
   return fields.map(field =>
     required.includes(field.name) ? { ...field, required: true } : field,

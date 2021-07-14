@@ -14,7 +14,7 @@ export const CONTRACTS = {
   CURRENT_MOLOCH: {
     location: 'local',
     abiName: 'MOLOCH_V2',
-    contractAddress: '.args.0',
+    contractAddress: '.contextData.daoid',
   },
   SELECTED_MINION: {
     location: 'local',
@@ -31,10 +31,10 @@ export const CONTRACTS = {
     abiName: 'ERC_721',
     contractAddress: '.values.nftAddress',
   },
-  VANILLA_MINION: {
+  LOCAL_VANILLA_MINION: {
     location: 'local',
     abiName: 'VANILLA_MINION',
-    contractAddress: '.localData.minionAddress',
+    contractAddress: '.formData.localValues.minionAddress',
   },
 };
 
@@ -286,13 +286,22 @@ export const TX = {
     errMsg: 'Error Transferring Balance',
     successMsg: 'Balance Transferred!',
   },
-  MINION_SEND_NATIVE_TOKEN: {
-    contract: CONTRACTS.SELECTED_MINION,
+  MINION_SEND_TOKEN: {
+    contract: CONTRACTS.LOCAL_VANILLA_MINION,
     name: 'proposeAction',
     poll: 'subgraph',
     onTxHash: ACTIONS.GENERIC_MODAL,
     display: 'Sending Token',
     errMsg: 'Error Submitting Proposal',
     successMsg: 'Proposal Submitted!',
+    gatherArgs: [
+      '.values.destination',
+      '.values.minionPayment',
+      '.formData.localValues.tokenAddress',
+      {
+        type: 'detailsToJSON',
+        gatherFields: DETAILS.PAYROLL_PROPOSAL_TEMPORARY,
+      },
+    ],
   },
 };

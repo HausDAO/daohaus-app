@@ -15,7 +15,6 @@ import GatedInput from './gatedInput';
 import GenericFormDisplay from './genericFormDisplay';
 import LootGrabDisplay from './lootGrabDisplay';
 import MinionPayment from './minionPayment';
-import MinonTokenSendInput from './minionTokenSendInput';
 
 export const InputFactory = props => {
   const { type } = props;
@@ -63,9 +62,6 @@ export const InputFactory = props => {
   }
   if (type === 'lootGrabDisplay') {
     return <LootGrabDisplay {...props} />;
-  }
-  if (type === 'minionTokenSendAmount') {
-    return <MinonTokenSendInput {...props} />;
   }
   return null;
 };

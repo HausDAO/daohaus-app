@@ -15,9 +15,12 @@ import {
 
 const FormBuilder = props => {
   const { submitTransaction, handleCustomValidation, modifyFields } = useTX();
-  const { fields, additionalOptions = null, required = [], formData } = props;
-
-  console.log('contexData', formData);
+  const {
+    fields,
+    additionalOptions = null,
+    required = [],
+    localValues,
+  } = props;
 
   const [loading, setLoading] = useState(false);
   const [formFields, setFields] = useState(mapInRequired(fields, required));
@@ -129,6 +132,7 @@ const FormBuilder = props => {
                   minionType={props.minionType}
                   layout={props.layout}
                   localForm={localForm}
+                  localValues={localValues}
                   buildABIOptions={buildABIOptions}
                 />
               );

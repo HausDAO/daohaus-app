@@ -1,4 +1,5 @@
 import React, { useEffect, useMemo, useState } from 'react';
+import { useParams } from 'react-router';
 import {
   Flex,
   Box,
@@ -21,6 +22,7 @@ import { FORM } from '../data/forms';
 
 const balanceCard = ({ token, isBank = true, hasBalance, isNativeToken }) => {
   const toast = useToast();
+  const { minion } = useParams();
   const { daoMember, delegate } = useDaoMember();
   const { setGenericModal } = useOverlay();
   const [needsSync, setNeedsSync] = useState(null);
@@ -56,16 +58,25 @@ const balanceCard = ({ token, isBank = true, hasBalance, isNativeToken }) => {
     });
   };
 
+  const openSendModal = () => {
+    const modalName = isNativeToken
+      ? 'minionSendNativeToken'
+      : 'minionSendToken';
+    setGenericModal({ [modalName]: true });
+  };
+
   return (
     <>
       <GenericModal
-        modalId='minionSendNativeToken'
-        formLego={FORM.MINION_SEND_NATIVE_TOKEN}
-        local={{
-          tokenAddress: '0x00',
-          // minionAddress: '',
-          balance: token?.tokenBalance,
-          // need type and minion address
+        modalId={isNativeToken ? 'minionSendNativeToken' : 'minionSendToken'}
+        formLego={{
+          ...FORM.MINION_SEND_TOKEN,
+          localValues: {
+            tokenAddress: isNativeToken ? '0x00' : token.tokenAddress,
+            minionAddress: minion,
+            balance: token.tokenBalance,
+            tokenDecimals: isNativeToken ? '18' : token.decimals,
+          },
         }}
         closeOnOverlayClick
       />
@@ -115,7 +126,7 @@ const balanceCard = ({ token, isBank = true, hasBalance, isNativeToken }) => {
         </Box>
         {!isNativeToken && (
           <>
-            <Box w='15%' d={['none', null, null, 'inline-block']}>
+            <Box w='20%' d={['none', null, null, 'inline-block']}>
               <Skeleton isLoaded={token?.usd >= 0}>
                 <Box fontFamily='mono'>
                   {token?.usd ? (
@@ -142,17 +153,12 @@ const balanceCard = ({ token, isBank = true, hasBalance, isNativeToken }) => {
           </>
         )}
 
-        <Box w={['15%', null, null, '30%']} d='inline-block'>
+        <Box w={['10%', null, null, '30%']} d='inline-block' textAlign='right'>
           {hasBalance && <Withdraw token={token} />}
           {needsSync && <SyncTokenButton token={token} />}
-          {isNativeToken && token?.tokenBalance > 0 && (
-            <Button
-              size='md'
-              variant='outline'
-              ml={6}
-              onClick={() => setGenericModal({ minionSendNativeToken: true })}
-            >
-              Send
+          {minion && token?.tokenBalance > 0 && (
+            <Button size='md' variant='outline' ml={6} onClick={openSendModal}>
+              Transfer
             </Button>
           )}
         </Box>

@@ -19,6 +19,7 @@ const MinionInternalBalanceActionMenu = ({
   daoConnectedAndSameChain,
   handleWithdraw,
   loading,
+  isMember,
 }) => {
   return (
     <Menu isDisabled>
@@ -43,7 +44,7 @@ const MinionInternalBalanceActionMenu = ({
       </MenuButton>
       <MenuList>
         <MenuItem
-          isDisabled={tokenWhitelisted || daoConnectedAndSameChain}
+          isDisabled={tokenWhitelisted || daoConnectedAndSameChain || !isMember}
           onClick={() => handleWithdraw({ transfer: false })}
         >
           <Tooltip
@@ -56,7 +57,7 @@ const MinionInternalBalanceActionMenu = ({
           </Tooltip>{' '}
         </MenuItem>
         <MenuItem
-          isDisabled={tokenWhitelisted || daoConnectedAndSameChain}
+          isDisabled={tokenWhitelisted || daoConnectedAndSameChain || !isMember}
           onClick={() => handleWithdraw({ transfer: true })}
         >
           <Tooltip
