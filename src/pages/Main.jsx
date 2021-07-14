@@ -18,8 +18,6 @@ const Main = () => {
     return userHubDaos.some(network => network.data.length);
   };
 
-  console.log('userHubDaos', userHubDaos);
-
   const ctaButton = (
     <Button as='a' href='https://3box.io/hub' target='_blank' variant='outline'>
       Edit 3Box Profile
