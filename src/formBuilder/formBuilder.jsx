@@ -104,9 +104,12 @@ const FormBuilder = props => {
 
     try {
       setLoading(true);
+
+      console.log('localValues', localValues);
       await submitTransaction({
         values: modifiedValues,
         formData: props,
+        localValues,
         tx: props.tx,
         lifeCycleFns: {
           onCatch() {
@@ -119,6 +122,7 @@ const FormBuilder = props => {
       setLoading(false);
     }
   };
+
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
       <Flex flexDir='column'>

@@ -297,7 +297,7 @@ export const TX = {
     gatherArgs: [
       '.values.destination',
       '.values.minionPayment',
-      '.formData.localValues.tokenAddress',
+      '.localValues.tokenAddress',
       {
         type: 'detailsToJSON',
         gatherFields: DETAILS.PAYROLL_PROPOSAL_TEMPORARY,
