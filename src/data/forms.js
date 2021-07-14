@@ -138,6 +138,11 @@ export const FORM = {
     required: ['selectedMinion', 'minionPayment', 'applicant'],
     minionType: MINION_TYPES.VANILLA,
     tx: TX.PAYROLL,
-    fields: [FIELD.MINION_SELECT, FIELD.MINION_PAYMENT, FIELD.APPLICANT],
+    fields: [
+      FIELD.MINION_SELECT,
+      FIELD.MINION_PAYMENT,
+      FIELD.APPLICANT,
+      FIELD.DESCRIPTION,
+    ],
   },
 };

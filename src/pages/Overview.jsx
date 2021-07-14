@@ -1,15 +1,12 @@
 import React from 'react';
 import { Box, Flex } from '@chakra-ui/react';
-import { useParams } from 'react-router';
 
 import ActivitiesFeed from '../components/activitiesFeed';
 import MemberInfoCard from '../components/memberInfo';
 import OverviewCard from '../components/overviewCard';
 import { getDaoActivites } from '../utils/activities';
 import MainViewLayout from '../components/mainViewLayout';
-import StakingBanner from '../components/stakingBanner';
 import CcoBanner from '../components/ccoBanner';
-import { UBERHAUS_DATA } from '../utils/uberhaus';
 // import { getActiveMembers } from '../utils/dao';
 
 const Overview = React.memo(function overview({
@@ -22,9 +19,6 @@ const Overview = React.memo(function overview({
   customTerms,
   daoMetaData,
 }) {
-  const { daoid } = useParams();
-  const isUberHaus = daoid === UBERHAUS_DATA.ADDRESS;
-
   return (
     <MainViewLayout header='Overview' customTerms={customTerms} isDao>
       <Box w='100%'>
@@ -41,7 +35,6 @@ const Overview = React.memo(function overview({
                 members={members}
                 currentDaoTokens={currentDaoTokens}
               />
-              {isUberHaus ? <StakingBanner /> : null}
               {daoMetaData?.boosts?.cco?.active ? <CcoBanner /> : null}
             </Box>
           )}

@@ -61,7 +61,7 @@ export const DETAILS = {
   },
   PAYROLL_PROPOSAL_TEMPORARY: {
     title: 'Minion sends a token',
-    description: 'Click check details to see more.',
+    description: '.values.description',
     proposalType: '.formData.type',
     minionType: MINION_TYPES.VANILLA,
   },

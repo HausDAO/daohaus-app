@@ -1,5 +1,11 @@
 import React from 'react';
-import { Switch, Route, useRouteMatch, useParams } from 'react-router-dom';
+import {
+  Switch,
+  Route,
+  Redirect,
+  useRouteMatch,
+  useParams,
+} from 'react-router-dom';
 
 import { useDao } from '../contexts/DaoContext';
 import { useDaoMember } from '../contexts/DaoMemberContext';
@@ -24,7 +30,7 @@ import DiscourseSettings from '../pages/DiscourseSettings';
 import ProposalTypes from '../pages/ProposalTypes';
 import MinionSafe from '../pages/MinionSafe';
 import SuperfluidMinion from '../pages/SuperfluidMinion';
-import Staking from '../pages/Staking';
+// import Staking from '../pages/Staking';
 import Clone from '../pages/Clone';
 import MintGate from '../pages/MintGate';
 import Snapshot from '../pages/Snapshot';
@@ -110,7 +116,8 @@ const DaoRouter = () => {
           />
         </Route>
         <Route exact path={`${path}/staking`}>
-          <Staking />
+          <Redirect to='/' />
+          {/* <Staking /> */}
         </Route>
         <Route exact path={`${path}/settings/clone`}>
           <Clone daoMembers={daoMembers} daoOverview={daoOverview} />

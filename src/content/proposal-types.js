@@ -62,7 +62,7 @@ export const proposalTypes = (
       image: swordImg,
       comingSoon: false,
       show:
-        hasMinion(minions, 'vanilla minion') ||
+        hasMinion(minions, MINION_TYPES.VANILLA) ||
         hasMinion(minions, MINION_TYPES.NIFTY),
     },
     {
@@ -102,7 +102,7 @@ export const proposalTypes = (
       subhead: 'Pay members with a minion',
       proposalType: 'payroll',
       image: swordImg,
-      show: daoPropTypes ? daoPropTypes?.member?.active : true,
+      show: hasMinion(minions, MINION_TYPES.VANILLA),
     },
   ];
 };
