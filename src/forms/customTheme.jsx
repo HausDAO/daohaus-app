@@ -34,10 +34,12 @@ const bodyFonts = [
   'Montserrat',
   'Playfair Display',
   'Rokkitt',
+  'Mulish',
 ];
 
 const headingFonts = [
   'Inknut Antiqua',
+  'Mulish',
   'Bungee',
   'Abril Fatface',
   ...bodyFonts,
@@ -269,7 +271,7 @@ const CustomThemeForm = ({ previewTheme, setPreviewTheme }) => {
                   defaultValue={
                     previewTheme.headingFont
                       ? previewTheme.headingFont
-                      : 'Inknut Antiqua'
+                      : 'Mulish'
                   }
                   onChange={handleChange}
                   w='80%'
@@ -291,9 +293,7 @@ const CustomThemeForm = ({ previewTheme, setPreviewTheme }) => {
                 </TextBox>
                 <Select
                   defaultValue={
-                    previewTheme.bodyFont
-                      ? previewTheme.bodyFont
-                      : 'Inknut Antiqua'
+                    previewTheme.bodyFont ? previewTheme.bodyFont : 'Mulish'
                   }
                   onChange={handleChange}
                   w='80%'
@@ -315,9 +315,7 @@ const CustomThemeForm = ({ previewTheme, setPreviewTheme }) => {
                 </TextBox>
                 <Select
                   defaultValue={
-                    previewTheme.monoFont
-                      ? previewTheme.monoFont
-                      : 'Inknut Antiqua'
+                    previewTheme.monoFont ? previewTheme.monoFont : 'Mulish'
                   }
                   onChange={handleChange}
                   w='80%'
