@@ -39,6 +39,7 @@ import CcoContribution from '../pages/CcoContribution';
 import CcoHelper from '../pages/CcoHelper';
 import CcoAdmin from '../pages/CcoAdmin';
 import { isDaosquareCcoPath } from '../utils/cco';
+import NewerProposals from '../pages/NewerProposals';
 
 const DaoRouter = () => {
   const { path } = useRouteMatch();
@@ -200,15 +201,15 @@ const DaoRouter = () => {
             daoMembers={daoMembers}
           />
         </Route>
-        <Route exact path={`${path}/proposals/new/:proposalType`}>
+        {/* <Route exact path={`${path}/proposals/new/:proposalType`}>
           <NewProposal
             customTerms={customTerms}
             daoMetaData={daoMetaData}
             daoOverview={daoOverview}
           />
-        </Route>
+        </Route> */}
         <Route exact path={`${path}/proposals/new`}>
-          <NewProposal
+          <NewerProposals
             customTerms={customTerms}
             daoMetaData={daoMetaData}
             daoOverview={daoOverview}

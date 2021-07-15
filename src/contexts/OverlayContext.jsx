@@ -9,6 +9,7 @@ export const OverlayProvider = ({ children }) => {
   const [hubAccountModal, setHubAccountModal] = useState(false);
   const [daoAccountModal, setDaoAccountModal] = useState(false);
   const [proposalModal, setProposalModal] = useState(false);
+  const [proposalSelector, setProposalSelector] = useState(false);
   const [txInfoModal, setTxInfoModal] = useState(false);
   const [imageUploadModal, setImageUploadModal] = useState(false);
   const [d2dProposalTypeModal, setD2dProposalTypeModal] = useState(false);
@@ -70,6 +71,8 @@ export const OverlayProvider = ({ children }) => {
         setD2dProposalModal,
         genericModal,
         setGenericModal,
+        proposalSelector,
+        setProposalSelector,
       }}
     >
       {children}
@@ -102,6 +105,8 @@ export const useOverlay = () => {
     setD2dProposalModal,
     genericModal,
     setGenericModal,
+    proposalSelector,
+    setProposalSelector,
   } = useContext(OverlayContext);
   return {
     daoSwitcherModal,
@@ -125,5 +130,7 @@ export const useOverlay = () => {
     setD2dProposalModal,
     genericModal,
     setGenericModal,
+    proposalSelector,
+    setProposalSelector,
   };
 };
