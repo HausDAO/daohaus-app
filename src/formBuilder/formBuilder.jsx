@@ -104,8 +104,6 @@ const FormBuilder = props => {
 
     try {
       setLoading(true);
-
-      console.log('localValues', localValues);
       await submitTransaction({
         values: modifiedValues,
         formData: props,

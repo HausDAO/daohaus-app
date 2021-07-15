@@ -18,6 +18,7 @@ const getConditions = pathString =>
   pathString.split(' || ').filter(str => str !== '' || str !== ' ');
 
 const searchData = (data, fields, shouldThrow = true) => {
+  console.log('data', data, fields);
   if (data == null || fields == null) {
     throw new Error('txHelpers => searchData(): data or fields is empty');
   }
@@ -322,7 +323,7 @@ export const fieldModifiers = Object.freeze({
   addMinionVaultDecimals(fieldValue, data) {
     if (!fieldValue) return null;
 
-    if (data.formData.localValues.tokenAddress) {
+    if (data.formData.localValues?.tokenAddress) {
       return getContractBalance(
         fieldValue,
         data.formData.localValues.tokenDecimals,

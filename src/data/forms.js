@@ -145,18 +145,24 @@ export const FORM = {
       FIELD.DESCRIPTION,
     ],
   },
-  MINION_SEND_TOKEN: {
-    title: 'Token Transfer',
+  MINION_SEND_NETWORK_TOKEN: {
+    title: 'Network Token Transfer',
     subtitle: 'Make a proposal to transfer tokens out of the minion',
     layout: 'singleRow',
     type: PROPOSAL_TYPES.MINION_NATIVE,
-    required: ['minionPayment', 'destination', 'description'],
+    required: ['minionPayment', 'applicant', 'description'],
     minionType: MINION_TYPES.VANILLA,
-    tx: TX.MINION_SEND_TOKEN,
-    fields: [
-      FIELD.MINION_PAYMENT,
-      FIELD.DESTINATION_ADDRESS,
-      FIELD.DESCRIPTION,
-    ],
+    tx: TX.MINION_SEND_NETWORK_TOKEN,
+    fields: [FIELD.MINION_PAYMENT, FIELD.APPLICANT, FIELD.DESCRIPTION],
+  },
+  MINION_SEND_ERC20_TOKEN: {
+    title: 'ERC20 Token Transfer',
+    subtitle: 'Make a proposal to transfer tokens out of the minion',
+    layout: 'singleRow',
+    type: PROPOSAL_TYPES.MINION_ERC20,
+    required: ['minionPayment', 'applicant'],
+    minionType: MINION_TYPES.VANILLA,
+    tx: TX.MINION_SEND_ERC20_TOKEN,
+    fields: [FIELD.MINION_PAYMENT, FIELD.APPLICANT, FIELD.DESCRIPTION],
   },
 };

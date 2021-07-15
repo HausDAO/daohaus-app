@@ -36,6 +36,11 @@ export const CONTRACTS = {
     abiName: 'VANILLA_MINION',
     contractAddress: '.formData.localValues.minionAddress',
   },
+  LOCAL_ERC_20: {
+    location: 'local',
+    abiName: 'ERC_20',
+    contractAddress: '.localValues.tokenAddress',
+  },
 };
 
 export const ACTIONS = {
@@ -277,6 +282,29 @@ export const TX = {
       },
     ],
   },
+  MINION_SEND_ERC20_TOKEN: {
+    contract: CONTRACTS.LOCAL_VANILLA_MINION,
+    name: 'proposeAction',
+    poll: 'subgraph',
+    onTxHash: ACTIONS.GENERIC_MODAL,
+    display: 'Transferring Tokens',
+    errMsg: 'Error Submitting Proposal',
+    successMsg: 'Proposal Submitted!',
+    gatherArgs: [
+      '.localValues.tokenAddress',
+      0,
+      {
+        type: 'encodeHex',
+        contract: CONTRACTS.LOCAL_ERC_20,
+        fnName: 'transfer',
+        gatherArgs: ['.values.applicant', '.values.minionPayment'],
+      },
+      {
+        type: 'detailsToJSON',
+        gatherFields: DETAILS.PAYROLL_PROPOSAL_TEMPORARY,
+      },
+    ],
+  },
   MINION_WITHDRAW: {
     contract: CONTRACTS.VANILLA_MINION,
     name: 'crossWithdraw',
@@ -286,16 +314,16 @@ export const TX = {
     errMsg: 'Error Transferring Balance',
     successMsg: 'Balance Transferred!',
   },
-  MINION_SEND_TOKEN: {
+  MINION_SEND_NETWORK_TOKEN: {
     contract: CONTRACTS.LOCAL_VANILLA_MINION,
     name: 'proposeAction',
     poll: 'subgraph',
     onTxHash: ACTIONS.GENERIC_MODAL,
-    display: 'Sending Token',
+    display: 'Transferring Tokens',
     errMsg: 'Error Submitting Proposal',
     successMsg: 'Proposal Submitted!',
     gatherArgs: [
-      '.values.destination',
+      '.values.applicant',
       '.values.minionPayment',
       '.localValues.tokenAddress',
       {
