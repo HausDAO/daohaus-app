@@ -322,6 +322,13 @@ export const fieldModifiers = Object.freeze({
   },
   addMinionVaultDecimals(fieldValue, data) {
     if (!fieldValue) return null;
+
+    if (data.formData.localValues?.tokenAddress) {
+      return getContractBalance(
+        fieldValue,
+        data.formData.localValues.tokenDecimals,
+      );
+    }
     const { daoVaults } = data.contextData;
     const { minionToken, selectedMinion } = data.values;
     return getContractBalance(

@@ -38,12 +38,7 @@ import { TokenService } from '../services/tokenService';
 import MinionNativeToken from '../components/minionNativeToken';
 import { NiftyService } from '../services/niftyService';
 
-const MinionDetails = ({
-  overview,
-  currentDaoTokens,
-  minionType,
-  isMember,
-}) => {
+const MinionDetails = ({ overview, minionType, isMember }) => {
   const { daochain, daoid, minion } = useParams();
   const toast = useToast();
   const [minionData, setMinionData] = useState();

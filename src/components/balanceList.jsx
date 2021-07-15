@@ -29,7 +29,7 @@ const BalanceList = ({
 
         {!isNativeToken && (
           <>
-            <Box w='15%' d={['none', null, null, 'inline-block']}>
+            <Box w='20%' d={['none', null, null, 'inline-block']}>
               <TextBox size='xs'>Price</TextBox>
             </Box>
             <Box w={['20%', null, null, '30%']}>
@@ -37,7 +37,7 @@ const BalanceList = ({
             </Box>
           </>
         )}
-        <Box w={['15%', null, null, '30%']} />
+        <Box w={['10%', null, null, '30%']} />
       </Flex>
       {balances ? (
         balances

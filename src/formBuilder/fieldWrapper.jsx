@@ -21,7 +21,6 @@ const FieldWrapper = ({
   w,
 }) => {
   const width = useMemo(() => {
-    console.log('fieldwrapper', w, layout);
     if (w) return w;
     if (layout === 'singleRow') return '100%';
     return ['100%', null, '48%'];

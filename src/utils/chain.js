@@ -137,6 +137,7 @@ export const supportedChains = {
     name: 'Matic',
     short_name: 'matic',
     nativeCurrency: 'MATIC',
+    network: 'matic',
     network_id: 137,
     chain_id: '0x89',
     hub_sort_order: 3,

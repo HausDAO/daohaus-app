@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
-import { Flex, Box, Skeleton, Icon, Button, Tooltip } from '@chakra-ui/react';
+import { Flex, Box, Skeleton, Icon } from '@chakra-ui/react';
 import { RiLoginBoxLine } from 'react-icons/ri';
 
 import { useTX } from '../contexts/TXContext';
@@ -9,10 +9,12 @@ import MinionInternalBalanceActionMenu from './minionInternalBalanceActionMenu';
 import { daoConnectedAndSameChain, numberWithCommas } from '../utils/general';
 import { chainByName } from '../utils/chain';
 import { TX } from '../data/contractTX';
+import { useDaoMember } from '../contexts/DaoMemberContext';
 
 const CrossDaoInternalBalanceListCard = ({ token, currentDaoTokens }) => {
   const { minion, daochain } = useParams();
   const { address, injectedChain } = useInjectedProvider();
+  const { isMember } = useDaoMember();
 
   // TODO: maybe make 2 different components for in/outside daos
   const { submitTransaction } = daochain
@@ -35,6 +37,13 @@ const CrossDaoInternalBalanceListCard = ({ token, currentDaoTokens }) => {
 
   const handleWithdraw = async options => {
     setLoading(true);
+
+    console.log('args', [
+      token.moloch.id,
+      token.token.tokenAddress,
+      token.tokenBalance,
+      options.transfer,
+    ]);
     await submitTransaction({
       tx: TX.MINION_WITHDRAW,
       args: [
@@ -43,7 +52,7 @@ const CrossDaoInternalBalanceListCard = ({ token, currentDaoTokens }) => {
         token.tokenBalance,
         options.transfer,
       ],
-      localData: {
+      localValues: {
         minionAddress: minion,
       },
     });
@@ -111,6 +120,7 @@ const CrossDaoInternalBalanceListCard = ({ token, currentDaoTokens }) => {
               tokenWhitelisted={tokenWhitelisted}
               handleWithdraw={handleWithdraw}
               loading={loading}
+              isMember={isMember}
               daoConnectedAndSameChain={
                 !daoConnectedAndSameChain(
                   address,

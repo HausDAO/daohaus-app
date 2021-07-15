@@ -148,6 +148,8 @@ export const getABIsnippet = (params, data) => {
 };
 export const getContractABI = async data => {
   const { contract } = data.tx;
+
+  console.log('contract', contract);
   if (contract.location === 'local') return getLocalABI(contract);
   if (contract.location === 'fetch') return getRemoteABI(contract, data);
   if (contract.location === 'static') return contract.value;

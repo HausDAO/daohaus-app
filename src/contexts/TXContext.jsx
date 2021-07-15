@@ -199,6 +199,7 @@ export const TXProvider = ({ children }) => {
         poll,
         onTxHash,
       });
+
       data.lifeCycleFns?.afterTx?.();
       return tx;
     } catch (error) {

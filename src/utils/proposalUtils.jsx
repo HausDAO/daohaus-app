@@ -33,6 +33,8 @@ export const PROPOSAL_TYPES = {
   TRANSMUTATION: 'Transmutation Proposal',
   FUNDING: 'Funding Proposal',
   PAYROLL: 'Payroll Proposal',
+  MINION_NATIVE: 'Minion Native Token Transfer Proposal',
+  MINION_ERC20: 'Minion Erc20 Token Transfer Proposal',
 };
 
 export const MINION_TYPES = {

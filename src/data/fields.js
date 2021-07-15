@@ -7,7 +7,7 @@ export const INFO_TEXT = {
   LOOT_REQUEST:
     'Loot provides exposure to assets but not voting power. Only whole numbers accepted here, no decimals plz',
   APPLICANT:
-    'Address to receive the Shares, Loot, and/or Funding requested in this proposal.',
+    'Address to receive the Tokens, Shares, Loot, and/or Funding requested in this proposal.',
   TOKEN_TRIBUTE:
     'Only tokens approved by the DAO are allowed here. Members can add more approved tokens with Token proposals',
   PAYMENT_REQUEST: 'Request Funds from the DAO',
@@ -161,15 +161,6 @@ export const FIELD = {
     label: 'Address',
     info: INFO_TEXT.DELEGATE_ADDRESS,
     expectType: 'address',
-  },
-  MINION_TOKEN_SEND_AMOUNT: {
-    type: 'minionTokenSendAmount',
-    htmlFor: 'minionTokenSendAmount',
-    name: 'minionTokenSendAmount',
-    placeholder: '0',
-    label: 'Amount',
-    expectType: 'number',
-    // modifiers: ['addPaymentDecimals'],
   },
   DESTINATION_ADDRESS: {
     type: 'input',
