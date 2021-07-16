@@ -63,7 +63,7 @@ const GenericModal = ({
           maxH='600px'
           overflow='auto'
         >
-          {formLego.subtitle && (
+          {formLego?.subtitle && (
             <Box fontSize='sm' mb={6}>
               {formLego.subtitle}
             </Box>
