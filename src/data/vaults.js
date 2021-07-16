@@ -20,9 +20,6 @@ export const VAULT = {
   },
   NIFTY_MINION: {
     typeDisplay: 'Minion',
-    // these could map to actions in an bank action factory
-    cardActions: ['sell'],
-    // replace with nft object
     canHoldNft: true,
     nft: {
       marketplaceContract: '0x0',

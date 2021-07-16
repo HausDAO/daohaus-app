@@ -55,7 +55,7 @@ const VaultCard = ({ vault, currentDaoTokens, vaultConfig }) => {
       >
         {vault.name}
       </Box>
-      <Box fontSize='3xl' fontWeight={700} fontFamily='mono'>
+      <Box fontSize='3xl' fontWeight={700} fontFamily='mono' my={2}>
         ${numberWithCommas(currentVaultBalance.toFixed(2))}
       </Box>
 
@@ -63,7 +63,7 @@ const VaultCard = ({ vault, currentDaoTokens, vaultConfig }) => {
         <VaultCardTokenList tokens={vault.erc20s} />
 
         {vaultConfig.canHoldNft && vault.nfts.length > 0 && (
-          <Box fontSize='sm' mr={3}>
+          <Box fontSize='sm' mr={3} mt={2}>
             {vault.nfts.length} nft{vault.nfts.length > 1 ? 's' : ''}
           </Box>
         )}
