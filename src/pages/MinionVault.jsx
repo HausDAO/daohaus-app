@@ -9,7 +9,7 @@ import BalanceList from '../components/balanceList';
 import MainViewLayout from '../components/mainViewLayout';
 import TextBox from '../components/TextBox';
 import VaultNftCard from '../components/vaultNftCard';
-import HubBalanceList from '../components/crossDaoInternalBalanceList';
+import CrossDaoInternalBalanceList from '../components/crossDaoInternalBalanceList';
 import { fetchMinionInternalBalances } from '../utils/theGraph';
 import { fetchNativeBalance } from '../utils/tokenExplorerApi';
 import { supportedChains } from '../utils/chain';
@@ -23,10 +23,6 @@ const MinionVault = ({ overview, customTerms, daoVaults }) => {
   const [erc20Balances, setErc20Balances] = useState(null);
   const [nativeBalance, setNativeBalance] = useState(null);
   const [internalBalances, setInternalBalances] = useState(null);
-
-  const withdraw = () => {
-    console.log('withdraw');
-  };
 
   const handleCopy = () => {
     toast({
@@ -132,14 +128,11 @@ const MinionVault = ({ overview, customTerms, daoVaults }) => {
               daoVaults={daoVaults}
               visibleVaults={[vault]}
             />
-            <HubBalanceList
+            <CrossDaoInternalBalanceList
               tokens={internalBalances}
-              withdraw={withdraw}
               currentDaoTokens={currentDaoTokens}
             />
-
             <BalanceList vaultConfig={vault.config} balances={erc20Balances} />
-
             {nativeBalance && (
               <BalanceList
                 vaultConfig={vault.config}

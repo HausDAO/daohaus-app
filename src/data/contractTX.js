@@ -75,6 +75,12 @@ export const DETAILS = {
     proposalType: '.formData.type',
     minionType: MINION_TYPES.VANILLA,
   },
+  MINION_ERC721_TRANSFER: {
+    title: 'Minion sends a NFT',
+    description: '.values.description',
+    proposalType: '.formData.type',
+    minionType: MINION_TYPES.VANILLA,
+  },
 };
 
 export const TX = {
@@ -326,6 +332,34 @@ export const TX = {
       '.values.applicant',
       '.values.minionPayment',
       '.localValues.tokenAddress',
+      {
+        type: 'detailsToJSON',
+        gatherFields: DETAILS.PAYROLL_PROPOSAL_TEMPORARY,
+      },
+    ],
+  },
+  MINION_SEND_NIFTY_ERC721_TOKEN: {
+    contract: CONTRACTS.LOCAL_VANILLA_MINION,
+    name: 'proposeAction',
+    poll: 'subgraph',
+    onTxHash: ACTIONS.GENERIC_MODAL,
+    display: 'Transferring NFT',
+    errMsg: 'Error Submitting Proposal',
+    successMsg: 'Proposal Submitted!',
+    gatherArgs: [
+      '.localValues.contractAddress',
+      0,
+      {
+        type: 'encodeHex',
+        // change to nifty an this hard codes the address
+        contract: CONTRACTS.LOCAL_ERC_20,
+        fnName: 'safeTransferFromNoop',
+        gatherArgs: [
+          '.localValues.minionAddress',
+          '.values.applicant',
+          '.localValues.tokenId',
+        ],
+      },
       {
         type: 'detailsToJSON',
         gatherFields: DETAILS.PAYROLL_PROPOSAL_TEMPORARY,

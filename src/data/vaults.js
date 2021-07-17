@@ -1,3 +1,4 @@
+// TODO: just playing with this sor far - for real legos these should power some factory components to build the page
 export const VAULT = {
   TREASURY: {
     typeDisplay: 'Treasury',
