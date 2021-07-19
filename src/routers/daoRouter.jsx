@@ -1,5 +1,11 @@
 import React from 'react';
-import { Switch, Route, useRouteMatch, useParams } from 'react-router-dom';
+import {
+  Switch,
+  Route,
+  Redirect,
+  useRouteMatch,
+  useParams,
+} from 'react-router-dom';
 
 import { useDao } from '../contexts/DaoContext';
 import { useDaoMember } from '../contexts/DaoMemberContext';
@@ -24,25 +30,30 @@ import DiscourseSettings from '../pages/DiscourseSettings';
 import ProposalTypes from '../pages/ProposalTypes';
 import MinionSafe from '../pages/MinionSafe';
 import SuperfluidMinion from '../pages/SuperfluidMinion';
-import Staking from '../pages/Staking';
+// import Staking from '../pages/Staking';
 import Clone from '../pages/Clone';
 import MintGate from '../pages/MintGate';
 import Snapshot from '../pages/Snapshot';
+// import NiftInk from '../pages/NiftyInk';
 import CcoContribution from '../pages/CcoContribution';
 import CcoHelper from '../pages/CcoHelper';
 import CcoAdmin from '../pages/CcoAdmin';
+import Vaults from '../pages/Vaults';
+import MinionVault from '../pages/MinionVault';
+import MinionGallery from '../pages/MinionGallery';
+import Treasury from '../pages/Treasury';
 import { isDaosquareCcoPath } from '../utils/cco';
 
 const DaoRouter = () => {
   const { path } = useRouteMatch();
   const { currentDaoTokens } = useToken();
-
   const {
     daoActivities,
     isCorrectNetwork,
     daoOverview,
     daoMembers,
     daoProposals,
+    daoVaults,
   } = useDao();
   const { isMember, daoMember, delegate } = useDaoMember();
 
@@ -90,6 +101,40 @@ const DaoRouter = () => {
             daoMember={daoMember}
           />
         </Route>
+        <Route exact path={`${path}/vaults`}>
+          <Vaults
+            currentDaoTokens={currentDaoTokens}
+            overview={daoOverview}
+            customTerms={customTerms}
+            daoMember={daoMember}
+            daoVaults={daoVaults}
+          />
+        </Route>
+        <Route exact path={`${path}/vaults/treasury`}>
+          <Treasury
+            currentDaoTokens={currentDaoTokens}
+            overview={daoOverview}
+            customTerms={customTerms}
+            daoMember={daoMember}
+            daoVaults={daoVaults}
+          />
+        </Route>
+        <Route exact path={`${path}/vaults/minion/:minion`}>
+          <MinionVault
+            currentDaoTokens={currentDaoTokens}
+            overview={daoOverview}
+            customTerms={customTerms}
+            daoMember={daoMember}
+            daoVaults={daoVaults}
+            isMember={isMember}
+          />
+        </Route>
+        <Route
+          exact
+          path={[`${path}/gallery/minion/:minion`, `${path}/gallery/`]}
+        >
+          <MinionGallery daoVaults={daoVaults} customTerms={customTerms} />
+        </Route>
         <Route exact path={`${path}/members`}>
           <Members
             members={daoMembers}
@@ -110,7 +155,8 @@ const DaoRouter = () => {
           />
         </Route>
         <Route exact path={`${path}/staking`}>
-          <Staking />
+          <Redirect to='/' />
+          {/* <Staking /> */}
         </Route>
         <Route exact path={`${path}/settings/clone`}>
           <Clone daoMembers={daoMembers} daoOverview={daoOverview} />
@@ -261,6 +307,15 @@ const DaoRouter = () => {
         </Route>
         <Route exact path={`${path}/boost/snapshot`}>
           <Snapshot isMember={isMember} daoMetaData={daoMetaData} />
+        </Route>
+        <Route exact path={`${path}/settings/nifty-minion/:minion`}>
+          <Minion
+            overview={daoOverview}
+            members={daoMembers}
+            minionType='niftyMinion'
+            currentDaoTokens={currentDaoTokens}
+            isMember={isMember}
+          />
         </Route>
       </Switch>
     </Layout>

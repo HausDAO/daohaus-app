@@ -17,7 +17,6 @@ import { TXProvider } from './TXContext';
 import { DaoMemberProvider } from './DaoMemberContext';
 import { useUser } from './UserContext';
 import { UBERHAUS_DATA } from '../utils/uberhaus';
-// import { UBERHAUS_DATA } from '../utils/uberhaus';
 
 export const DaoContext = createContext();
 
@@ -45,13 +44,12 @@ export const DaoProvider = ({ children }) => {
     `members-${daoid}`,
     null,
   );
-  const [uberMinionData, setUberMinionData] = useSessionStorage(
-    `uber-minions-${daoid}`,
-    null,
-  );
+
+  const [uberMinionData, setUberMinionData] = useState(null);
   const [isUberHaus, setIsUberHaus] = useState(false);
 
-  // const [currentDaoAddress, setCurrentDaoAddress] = useState(daoid);
+  const [daoVaults, setDaoVaults] = useSessionStorage(`vaults-${daoid}`, null);
+
   const hasPerformedBatchQuery = useRef(false);
   const currentDao = useRef(null);
 
@@ -82,7 +80,7 @@ export const DaoProvider = ({ children }) => {
         chainID: daochain,
       },
       getSetters: [
-        { getter: 'getOverview', setter: setDaoOverview },
+        { getter: 'getOverview', setter: { setDaoOverview, setDaoVaults } },
         {
           getter: 'getActivities',
           setter: { setDaoProposals, setDaoActivities },
@@ -102,10 +100,12 @@ export const DaoProvider = ({ children }) => {
     daoMembers,
     daoOverview,
     daoProposals,
+    daoVaults,
     setDaoActivities,
     setDaoMembers,
     setDaoOverview,
     setDaoProposals,
+    setDaoVaults,
     isCorrectNetwork,
     uberMinionData,
   ]);
@@ -129,6 +129,8 @@ export const DaoProvider = ({ children }) => {
     currentDao.current = null;
     bigGraphQuery(bigQueryOptions);
   };
+
+  // TODO: refetch vaults - either add above or a new one that can trigger a api rerun on a specific dao
 
   useEffect(() => {
     if (apiData && daoMembers && uberMinionData) {
@@ -164,6 +166,7 @@ export const DaoProvider = ({ children }) => {
         daoActivities,
         daoMembers,
         daoOverview,
+        daoVaults,
         setIsUberHaus,
         isCorrectNetwork,
         refetch,
@@ -191,6 +194,7 @@ export const useDao = () => {
     daoMembers,
     setIsUberHaus,
     daoOverview,
+    daoVaults,
     isUberHaus,
     isCorrectNetwork,
     refetch,
@@ -203,6 +207,7 @@ export const useDao = () => {
     setIsUberHaus,
     daoMembers,
     daoOverview,
+    daoVaults,
     isCorrectNetwork,
     refetch,
     hasPerformedBatchQuery,

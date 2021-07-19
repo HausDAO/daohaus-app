@@ -60,8 +60,10 @@ export const MolochService = ({ web3, daoAddress, version, chainID }) => {
       service === 'updateDelegateKey'
     ) {
       return async ({ args, address, poll, onTxHash }) => {
-        console.log('CORRECT');
         try {
+          console.log(`args`, args);
+          console.log(`address`, address);
+          console.log(`poll`, poll);
           const tx = await contract.methods[service](...args);
           return tx
             .send('eth_requestAccounts', { from: address })

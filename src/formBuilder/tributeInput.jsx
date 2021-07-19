@@ -1,8 +1,7 @@
 import React, { useEffect, useMemo, useState } from 'react';
-import { Spinner } from '@chakra-ui/react';
 import { useParams } from 'react-router-dom';
-import { ethers } from 'ethers';
-import { utils } from 'web3';
+import { MaxUint256 } from '@ethersproject/constants';
+import { Spinner } from '@chakra-ui/react';
 
 import { useDao } from '../contexts/DaoContext';
 import { useTX } from '../contexts/TXContext';
@@ -12,9 +11,11 @@ import { ModButton } from './staticElements';
 
 import { TokenService } from '../services/tokenService';
 import { validate } from '../utils/validation';
+import { TX } from '../data/contractTX';
+import { handleDecimals } from '../utils/general';
 
 const TributeInput = props => {
-  const { unlockToken } = useTX();
+  const { submitTransaction } = useTX();
   const { address } = useInjectedProvider();
   const { daochain, daoid } = useParams();
   const { daoOverview } = useDao();
@@ -24,6 +25,7 @@ const TributeInput = props => {
   const [daoTokens, setDaoTokens] = useState([]);
   // const [unlocked, setUnlocked] = useState(true);
   const [balance, setBalance] = useState(null);
+  const [decimals, setDecimals] = useState(null);
   const [allowance, setAllowance] = useState(null);
   const [loading, setLoading] = useState(false);
   const [needsUnlock, setNeedsUnlock] = useState(false);
@@ -33,25 +35,23 @@ const TributeInput = props => {
   // console.log(tributeToken);
   const tributeOffered = watch('tributeOffered');
 
-  const truncatedBalance = useMemo(() => {
-    if (validate.number(balance)) {
-      const commified = ethers.utils.commify(
-        Number(utils.fromWei(balance)).toFixed(4),
-      );
+  const displayBalance = useMemo(() => {
+    if (balance && decimals) {
+      const commified = handleDecimals(balance, decimals)?.toFixed(4);
       return commified;
     }
     return 'Error';
-  }, [balance]);
+  }, [balance, decimals]);
 
   const btnDisplay = () => {
     if (loading) return <Spinner size='sm' />;
     if (needsUnlock) return 'Unlock Token';
-    if (!loading && truncatedBalance) return `Max: ${truncatedBalance}`;
+    if (!loading && displayBalance) return `Max: ${displayBalance}`;
     return '0';
   };
 
   const helperText = () =>
-    needsUnlock && `Amount enterred exceeds token allowance.`;
+    needsUnlock && `Amount entered exceeds token allowance.`;
 
   useEffect(() => {
     if (daoOverview) {
@@ -66,12 +66,14 @@ const TributeInput = props => {
       );
 
       setDaoTokens(
-        [depositToken, ...nonDepTokens].map(token => ({
-          value: token.token.tokenAddress,
-          name: token.token.symbol || token.token.tokenAddress,
-          decimals: token.token.decimals,
-          balance: token.tokenBalance,
-        })),
+        [depositToken, ...nonDepTokens]
+          .filter(token => token.token.symbol)
+          .map(token => ({
+            value: token.token.tokenAddress,
+            name: token.token.symbol || token.token.tokenAddress,
+            decimals: token.token.decimals,
+            balance: token.tokenBalance,
+          })),
       );
     }
   }, [daoOverview]);
@@ -89,10 +91,12 @@ const TributeInput = props => {
         accountAddr: address,
         contractAddr: daoid,
       });
+      const decimalRes = await tokenService('decimals')();
       const balanceRes = await tokenService('balanceOf')(address);
       if (shouldUpdate) {
         setBalance(balanceRes);
         setAllowance(allowanceRes);
+        setDecimals(decimalRes);
         setLoading(false);
       }
     };
@@ -111,7 +115,6 @@ const TributeInput = props => {
       tributeOffered === '0' ||
       !validate.number(tributeOffered)
     ) {
-      console.log('fired');
       setNeedsUnlock(false);
     } else {
       setNeedsUnlock(Number(allowance) < Number(tributeOffered));
@@ -120,16 +123,17 @@ const TributeInput = props => {
 
   const handleUnlock = async () => {
     setLoading(true);
-    const result = await unlockToken(tributeToken);
+    const unlockAmount = MaxUint256.toString();
+    const result = await submitTransaction({
+      args: [daoid, unlockAmount],
+      tx: TX.UNLOCK_TOKEN,
+      values: { tokenAddress: tributeToken, unlockAmount },
+    });
     setLoading(false);
-    console.log(unlockToken);
     setNeedsUnlock(!result);
   };
   const setMax = () => {
-    setValue(
-      'tributeOffered',
-      balance / 10 ** daoTokens.find(t => t.value === tributeToken)?.decimals,
-    );
+    setValue('tributeOffered', balance / 10 ** decimals);
   };
 
   return (

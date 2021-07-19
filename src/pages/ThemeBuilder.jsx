@@ -34,7 +34,7 @@ const ThemeBuilder = ({ refetchMetaData }) => {
         primary500: theme.colors.primary[500],
         secondary500: theme.colors.secondary[500],
         bg500: theme.colors.background[500],
-        bgOverlayOpacity: 0.75,
+        bgOverlayOpacity: theme.styles.bgOverlayOpacity,
         bgImg: theme.images.bgImg,
         headingFont: theme.fonts.heading,
         bodyFont: theme.fonts.body,
@@ -42,7 +42,7 @@ const ThemeBuilder = ({ refetchMetaData }) => {
         daoMeta: tempCustomTerms,
       });
     }
-  }, [theme, tempCustomTerms]);
+  }, [theme, tempCustomTerms, customTerms]);
 
   const handleThemeUpdate = update => {
     const currentValues = tempTheme || defaultTheme;

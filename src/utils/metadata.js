@@ -27,6 +27,19 @@ export const getApiMetadata = async () => {
   }
 };
 
+export const fetchApiVaultData = async (network, minions) => {
+  try {
+    const response = await fetch(`${metadataApiUrl}/dao/vaults`, {
+      method: 'POST',
+      body: JSON.stringify({ network, minions }),
+    });
+
+    return response.json();
+  } catch (err) {
+    throw new Error(err);
+  }
+};
+
 export const formatBoosts = boostsArr =>
   boostsArr.reduce((obj, boost) => {
     return {
@@ -35,7 +48,7 @@ export const formatBoosts = boostsArr =>
     };
   }, {});
 
-export const themeImagePath = (imageValue, listView = false) => {
+export const themeImagePath = imageValue => {
   if (
     !imageValue ||
     imageValue.slice(0, 1) === '/' ||
@@ -45,10 +58,7 @@ export const themeImagePath = (imageValue, listView = false) => {
   }
 
   if (imageValue.slice(0, 2) === 'Qm') {
-    const hostName = listView
-      ? 'https://ipfs.io/ipfs'
-      : 'https://gateway.pinata.cloud/ipfs';
-    return `${hostName}/${imageValue}`;
+    return `https://daohaus.mypinata.cloud/ipfs/${imageValue}`;
   }
 };
 
@@ -115,7 +125,7 @@ export const getTerm = (customTerms, word) => {
     return customTerms?.guildkick || 'Guild Kick';
   }
   if (word === 'minion') {
-    return customTerms?.minion || 'minion';
+    return customTerms?.minion || 'Minion';
   }
   if (word === 'minions') {
     return customTerms?.minions || 'Minions';
@@ -297,6 +307,7 @@ export const getDateTime = async () => {
 export const getNftMeta = async url => {
   try {
     const response = await fetch(url);
+
     return response.json();
   } catch (error) {
     throw new Error(error);

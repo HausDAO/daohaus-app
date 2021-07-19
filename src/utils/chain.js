@@ -2,7 +2,6 @@ export const supportedChains = {
   '0x1': {
     name: 'Ethereum Mainnet',
     short_name: 'eth',
-    chain: 'ETH',
     nativeCurrency: 'ETH',
     network: 'mainnet',
     network_id: 1,
@@ -13,9 +12,7 @@ export const supportedChains = {
     rpc_url: `https://${process.env.REACT_APP_RPC_URI}.eth.rpc.rivet.cloud/`,
     abi_api_url:
       'https://api.etherscan.io/api?module=contract&action=getabi&address=',
-    tokenlist_api_url:
-      'https://api.etherscan.io/api?module=account&action=tokennfttx&address=',
-    metadata_api_url: 'https://data.daohaus.club',
+    tokenlist_api_url: 'https://api.etherscan.io/api',
     subgraph_url:
       'https://api.thegraph.com/subgraphs/name/odyssy-automaton/daohaus',
     stats_graph_url:
@@ -31,8 +28,7 @@ export const supportedChains = {
   },
   '0x4': {
     name: 'Ethereum Rinkeby',
-    short_name: 'rin',
-    chain: 'ETH',
+    short_name: 'rinkeby',
     nativeCurrency: 'ETH',
     network: 'rinkeby',
     network_id: 4,
@@ -43,9 +39,7 @@ export const supportedChains = {
     rpc_url: `https://${process.env.REACT_APP_RPC_URI}.rinkeby.rpc.rivet.cloud/`,
     abi_api_url:
       'https://api-rinkeby.etherscan.io/api?module=contract&action=getabi&address=',
-    tokenlist_api_url:
-      'https://api-rinkeby.etherscan.io/api?module=account&action=tokennfttx&address=',
-    metadata_api_url: 'https://data.daohaus.club',
+    tokenlist_api_url: 'https://api-rinkeby.etherscan.io/api',
     subgraph_url:
       'https://api.thegraph.com/subgraphs/name/odyssy-automaton/daohaus-rinkeby',
     stats_graph_url:
@@ -71,8 +65,7 @@ export const supportedChains = {
   },
   '0x2a': {
     name: 'Ethereum Kovan',
-    short_name: 'kov',
-    chain: 'ETH',
+    short_name: 'kovan',
     nativeCurrency: 'ETH',
     network: 'kovan',
     network_id: 42,
@@ -83,9 +76,7 @@ export const supportedChains = {
     rpc_url: `https://kovan.infura.io/v3/${process.env.REACT_APP_INFURA_PROJECT_ID}`,
     abi_api_url:
       'https://api-kovan.etherscan.io/api?module=contract&action=getabi&address=',
-    tokenlist_api_url:
-      'https://api-kovan.etherscan.io/api?module=account&action=tokennfttx&address=',
-    metadata_api_url: 'https://data.daohaus.club',
+    tokenlist_api_url: 'https://api-kovan.etherscan.io/api',
     subgraph_url:
       'https://api.thegraph.com/subgraphs/name/odyssy-automaton/daohaus-kovan',
     stats_graph_url:
@@ -104,7 +95,6 @@ export const supportedChains = {
   '0x64': {
     name: 'xDAI Chain',
     short_name: 'xdai',
-    chain: 'xDAI',
     nativeCurrency: 'xDai',
     network: 'xdai',
     network_id: 100,
@@ -114,9 +104,7 @@ export const supportedChains = {
     rpc_url: 'https://dai.poa.network',
     abi_api_url:
       'https://blockscout.com/xdai/mainnet/api?module=contract&action=getabi&address=',
-    tokenlist_api_url:
-      'https://blockscout.com/xdai/mainnet/api?module=account&action=tokenlist&address=',
-    metadata_api_url: 'https://data.daohaus.club',
+    tokenlist_api_url: 'https://blockscout.com/xdai/mainnet/api',
     subgraph_url:
       'https://api.thegraph.com/subgraphs/name/odyssy-automaton/daohaus-xdai',
     stats_graph_url:
@@ -140,22 +128,24 @@ export const supportedChains = {
       },
       version: 'v1',
     },
+    niftyMinion: {
+      minion_factory_addr: '0xA6B75C3EBfA5a5F801F634812ABCb6Fd7055fd6d',
+      version: 'v1',
+    },
   },
   '0x89': {
     name: 'Matic',
     short_name: 'matic',
-    chain: 'MATIC',
     nativeCurrency: 'MATIC',
     network: 'matic',
     network_id: 137,
     chain_id: '0x89',
     hub_sort_order: 3,
     providers: ['walletconnect'],
-    rpc_url: 'https://rpc-mainnet.matic.network',
-    metadata_api_url: 'https://data.daohaus.club',
-    abi_api_url: 'https://mainnet.maticvigil.com/api/swagger/',
-    tokenlist_api_url:
-      'https://mainnet.maticvigil.com/api/swagger?module=account&action=tokenlist&address=',
+    rpc_url: 'https://rpc-mainnet.maticvigil.com/',
+    abi_api_url:
+      'https://api.polygonscan.com/api?module=contract&action=getabi&address=',
+    tokenlist_api_url: 'https://api.polygonscan.com/api',
     subgraph_url:
       'https://api.thegraph.com/subgraphs/name/odyssy-automaton/daohaus-matic',
     stats_graph_url:
@@ -178,33 +168,34 @@ export const supportedChains = {
       },
       version: 'v1',
     },
+    niftyMinion: {
+      minion_factory_addr: '0x4CCaDF3f5734436B28869c27A11B6D0F4776bc8E',
+      version: 'v1',
+    },
   },
-  '0x4a': {
-    name: 'IDChain',
-    short_name: 'idchain',
-    chain: 'IDChain',
-    nativeCurrency: 'EIDI',
-    network: 'idchain',
-    network_id: 74,
-    chain_id: '0x4a',
-    hub_sort_order: 4,
-    providers: ['walletconnect'],
-    rpc_url: 'https://idchain.one/rpc/',
-    metadata_api_url: 'https://data.daohaus.club',
-    abi_api_url:
-      'https://explorer.idchain.one/api?module=contract&action=getabi&address=',
-    subgraph_url:
-      'https://graph.idchain.one/subgraphs/name/idchain/daohaus-supergraph',
-    stats_graph_url:
-      'https://graph.idchain.one/subgraphs/name/idchain/daohaus-stats',
-    boosts_graph_url: '',
-    minion_factory_addr: '0x90253955D4066eE27C183B4644089a5A04A888F1',
-    moloch_factory_addr: '0x99B4525D6d6F6c3161D0abd6A58B482f46ad5Cd0',
-    dai_contract: '0xE1A400f340bf4eeDbc4Bbb553f1BFf7Ec4656E3e',
-    wrapper_contract: '0x2b309226500ADc5956a422950A2AD6E6333Bb315',
-    wrap_n_zap_factory_addr: '0x',
-    block_explorer: 'https://explorer.idchain.one',
-  },
+  // '0x4a': {
+  //   name: 'IDChain',
+  //   short_name: 'idchain',
+  //   nativeCurrency: 'EIDI',
+  //   network_id: 74,
+  //   chain_id: '0x4a',
+  //   hub_sort_order: 4,
+  //   providers: ['walletconnect'],
+  //   rpc_url: 'https://idchain.one/rpc/',
+  //   abi_api_url:
+  //     'https://explorer.idchain.one/api?module=contract&action=getabi&address=',
+  //   subgraph_url:
+  //     'https://graph.idchain.one/subgraphs/name/idchain/daohaus-supergraph',
+  //   stats_graph_url:
+  //     'https://graph.idchain.one/subgraphs/name/idchain/daohaus-stats',
+  //   boosts_graph_url: '',
+  //   minion_factory_addr: '0x90253955D4066eE27C183B4644089a5A04A888F1',
+  //   moloch_factory_addr: '0x99B4525D6d6F6c3161D0abd6A58B482f46ad5Cd0',
+  //   dai_contract: '0xE1A400f340bf4eeDbc4Bbb553f1BFf7Ec4656E3e',
+  //   wrapper_contract: '0x2b309226500ADc5956a422950A2AD6E6333Bb315',
+  //   wrap_n_zap_factory_addr: '0x',
+  //   block_explorer: 'https://explorer.idchain.one',
+  // },
 };
 
 export const chainByID = chainID => supportedChains[chainID];

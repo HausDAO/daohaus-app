@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import { Box, Flex, FormHelperText, FormLabel, Icon } from '@chakra-ui/react';
 import { RiInformationLine } from 'react-icons/ri';
 
@@ -15,9 +15,18 @@ const FieldWrapper = ({
   btn,
   error,
   required,
+  containerProps,
+  mb,
+  layout,
+  w,
 }) => {
+  const width = useMemo(() => {
+    if (w) return w;
+    if (layout === 'singleRow') return '100%';
+    return ['100%', null, '48%'];
+  }, [w, layout]);
   return (
-    <Flex w={['100%', null, '48%']} mb={3} flexDir='column'>
+    <Flex w={width} mb={mb || 3} flexDir='column' {...containerProps}>
       <Flex>
         <TextBox as={FormLabel} size='xs' htmlFor={htmlFor} position='relative'>
           {required && (

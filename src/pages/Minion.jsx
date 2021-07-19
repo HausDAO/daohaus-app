@@ -27,7 +27,7 @@ import MinionTokenList from '../components/minionTokenList';
 
 import { supportedChains } from '../utils/chain';
 import { balanceChainQuery } from '../utils/theGraph';
-import HubBalanceList from '../components/hubBalanceList';
+// import HubBalanceList from '../components/crossDaoInternalBalanceList';
 import { useOverlay } from '../contexts/OverlayContext';
 import { createPoll } from '../services/pollService';
 import { MinionService } from '../services/minionService';
@@ -36,8 +36,9 @@ import { useUser } from '../contexts/UserContext';
 import { useTX } from '../contexts/TXContext';
 import { TokenService } from '../services/tokenService';
 import MinionNativeToken from '../components/minionNativeToken';
+import { NiftyService } from '../services/niftyService';
 
-const MinionDetails = ({ overview, currentDaoTokens, isMember }) => {
+const MinionDetails = ({ overview, minionType, isMember }) => {
   const { daochain, daoid, minion } = useParams();
   const toast = useToast();
   const [minionData, setMinionData] = useState();
@@ -62,25 +63,29 @@ const MinionDetails = ({ overview, currentDaoTokens, isMember }) => {
   const hasLoadedBalanceData =
     balancesGraphData.chains.length === Object.keys(supportedChains).length;
 
+  console.log('not needed', daoBalances, loading);
+
   useEffect(() => {
+    console.log('overview', minionType, overview);
     if (!overview?.minions.length) {
       return;
     }
     const localMinionData = overview?.minions.find(m => {
       return m.minionAddress === minion;
     });
+
     setMinionData(localMinionData);
   }, [overview, minion]);
 
   useEffect(() => {
-    console.log('get minion balance', minion);
-    if (minion) {
+    console.log('get minion balance', minionData);
+    if (minionData) {
       balanceChainQuery({
         reactSetter: setBalanceGraphData,
-        address: minion,
+        address: minionData.minionAddress,
       });
     }
-  }, [minion]);
+  }, [minionData]);
 
   useEffect(() => {
     if (hasLoadedBalanceData) {
@@ -104,7 +109,7 @@ const MinionDetails = ({ overview, currentDaoTokens, isMember }) => {
     });
     balanceChainQuery({
       reactSetter: setBalanceGraphData,
-      address: minion,
+      address: minionData.minionAddress,
     });
   };
 
@@ -119,6 +124,15 @@ const MinionDetails = ({ overview, currentDaoTokens, isMember }) => {
   };
 
   const submitMinion = async (args, serviceName = null) => {
+    // TODO: this should be handled different probably
+    // add extra args for special minion type
+    console.log('minionType', minionType);
+    if (minionType === 'niftyMinion') {
+      console.log('push');
+      // this should be the moloch deposit token
+      args.push(overview.depositToken.tokenAddress, 0);
+    }
+    console.log('args', args);
     try {
       const poll = createPoll({ action: 'minionProposeAction', cachePoll })({
         minionAddress: minionData.minionAddress,
@@ -149,8 +163,9 @@ const MinionDetails = ({ overview, currentDaoTokens, isMember }) => {
       };
       await MinionService({
         web3: injectedProvider,
-        minion,
+        minion: minionData.minionAddress,
         chainID: daochain,
+        minionType,
       })(serviceName || 'proposeAction')({
         args,
         address,
@@ -163,30 +178,30 @@ const MinionDetails = ({ overview, currentDaoTokens, isMember }) => {
     }
   };
 
-  const withdraw = async (token, transfer) => {
-    setLoading(true);
-    const args = [
-      token.moloch.id,
-      token.token.tokenAddress,
-      token.tokenBalance,
-      transfer,
-    ];
-    submitMinion(args, 'crossWithdraw');
-  };
+  // const withdraw = async (token, transfer) => {
+  //   setLoading(true);
+  //   const args = [
+  //     token.moloch.id,
+  //     token.token.tokenAddress,
+  //     token.tokenBalance,
+  //     transfer,
+  //   ];
+  //   submitMinion(args, 'crossWithdraw');
+  // };
 
   const sendNativeToken = async values => {
     const details = detailsToJSON({
-      title: `${minionData.details} sends native token`,
+      title: `${minionData.details || 'Minion'} sends native token`,
       description: values.description || `Send ${values.amount} `,
       // link: (link to block explorer)
       type: 'nativeTokenSend',
     });
     const amountInWei = injectedProvider.utils.toWei(values.amount);
-    const args = [values.destination, amountInWei, '0x0', details];
+    const args = [values.destination, amountInWei, '0x00', details];
     submitMinion(args);
   };
 
-  const sendToken = async (values, token) => {
+  const sendErc20Action = async (values, token) => {
     setLoading(true);
     const tokenService = TokenService({
       tokenAddress: token.contractAddress,
@@ -203,7 +218,7 @@ const MinionDetails = ({ overview, currentDaoTokens, isMember }) => {
     });
 
     const details = detailsToJSON({
-      title: `${minionData.details} sends a token`,
+      title: `${minionData.details || 'Minion'} sends a token`,
       description:
         values.description || `Send ${values.amount} ${token.symbol}`,
       // link: (link to block explorer)
@@ -213,8 +228,61 @@ const MinionDetails = ({ overview, currentDaoTokens, isMember }) => {
     submitMinion(args);
   };
 
+  const sendErc721Action = async (values, token, tokenId) => {
+    setLoading(true);
+    console.log(values);
+
+    const niftyService = NiftyService({
+      tokenAddress: token.contractAddress,
+      chainID: daochain,
+    });
+
+    const hexData = await niftyService('safeTransferFromNoop')({
+      tokenId,
+      destination: values.destination,
+      from: overview.minions[0].minionAddress,
+    });
+
+    const details = detailsToJSON({
+      title: `${minionData.details || 'Minion'} Sends a Nifty`,
+      description: `Send NFT to ${values.destination}`,
+      // link: nftImage || null,
+      type: 'niftyMinion',
+    });
+    const args = [token.contractAddress, '0', hexData, details];
+    submitMinion(args);
+  };
+
+  // niftyink only
+  const sellNiftyAction = async (values, token, tokenId) => {
+    setLoading(true);
+
+    console.log(values);
+
+    const niftyService = NiftyService({
+      tokenAddress: token.contractAddress,
+      chainID: daochain,
+    });
+
+    const priceInWei = injectedProvider.utils.toWei(values.price);
+    console.log('priceInWei', priceInWei);
+    const hexData = await niftyService('setTokenPriceNoop')({
+      tokenId,
+      price: priceInWei,
+    });
+
+    const details = detailsToJSON({
+      title: `${minionData.details || 'Minion'} Sells a Nifty`,
+      description: 'Sell NFT',
+      // link: nftImage || null,
+      type: 'niftyMinion',
+    });
+    const args = [token.contractAddress, '0', hexData, details];
+    submitMinion(args);
+  };
+
   return (
-    <MainViewLayout header='Minion' isDao>
+    <MainViewLayout header={minionType || 'Minion'} isDao>
       <Box>
         <Link as={RouterLink} to={`/dao/${daochain}/${daoid}/settings`}>
           <HStack spacing={3}>
@@ -243,7 +311,9 @@ const MinionDetails = ({ overview, currentDaoTokens, isMember }) => {
                       src={makeBlockie(minionData.minionAddress)}
                       mr={3}
                     />
-                    <Heading>{minionData.details}</Heading>
+                    <Heading>
+                      {minionType || null} {minionData.details}
+                    </Heading>
                   </Flex>
                 </Box>
                 <Flex align='center'>
@@ -270,12 +340,12 @@ const MinionDetails = ({ overview, currentDaoTokens, isMember }) => {
                 <TextBox size='md' align='center'>
                   Unclaimed balances in DAOs (for withdraw){' '}
                 </TextBox>
-                <HubBalanceList
+                {/* <HubBalanceList
                   tokens={daoBalances}
                   withdraw={withdraw}
                   loading={loading}
                   currentDaoTokens={currentDaoTokens}
-                />
+                /> */}
               </Box>
               <Box pt={6}>
                 <Stack spacing={6}>
@@ -287,13 +357,12 @@ const MinionDetails = ({ overview, currentDaoTokens, isMember }) => {
                       action={sendNativeToken}
                       isMember={isMember}
                     />
-                    {daochain !== '0x64' && (
-                      <Flex>View token data on etherscan</Flex>
-                    )}
 
                     <MinionTokenList
-                      minion={minion}
-                      action={sendToken}
+                      minion={minionData.minionAddress}
+                      sendErc20Action={sendErc20Action}
+                      sendErc721Action={sendErc721Action}
+                      sellNiftyAction={sellNiftyAction}
                       isMember={isMember}
                     />
                   </Box>

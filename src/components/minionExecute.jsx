@@ -15,7 +15,7 @@ import { UberHausMinionService } from '../services/uberHausMinionService';
 import { PROPOSAL_TYPES } from '../utils/proposalUtils';
 import { UBERHAUS_DATA } from '../utils/uberhaus';
 
-const MinionExecute = ({ proposal }) => {
+const MinionExecute = ({ proposal, early }) => {
   const { daochain } = useParams();
   const {
     errorToast,
@@ -37,7 +37,10 @@ const MinionExecute = ({ proposal }) => {
     const getMinionDetails = async () => {
       setLoading(true);
       try {
-        if (proposal.proposalType === PROPOSAL_TYPES.MINION_VANILLA) {
+        if (
+          proposal.proposalType === PROPOSAL_TYPES.MINION_VANILLA ||
+          proposal.proposalType === PROPOSAL_TYPES.MINION_NIFTY
+        ) {
           const action = await MinionService({
             minion: proposal?.minionAddress,
             chainID: daochain,
@@ -117,13 +120,12 @@ const MinionExecute = ({ proposal }) => {
 
   const executeMinion = async () => {
     if (!proposal?.minion) return;
-
     setLoading(true);
     const args = [proposal.proposalId];
     try {
       const poll = createPoll({ action: 'minionExecuteAction', cachePoll })({
-        minionAddress: proposal.minionAddress,
         chainID: daochain,
+        minionAddress: proposal.minionAddress,
         proposalId: proposal.proposalId,
         proposalType: proposal?.proposalType,
         actions: {
@@ -149,7 +151,10 @@ const MinionExecute = ({ proposal }) => {
         setProposalModal(false);
         setTxInfoModal(true);
       };
-      if (proposal.proposalType === PROPOSAL_TYPES.MINION_VANILLA) {
+      if (
+        proposal.proposalType === PROPOSAL_TYPES.MINION_VANILLA ||
+        proposal.proposalType === PROPOSAL_TYPES.MINION_NIFTY
+      ) {
         await MinionService({
           web3: injectedProvider,
           minion: proposal.minionAddress,
@@ -240,7 +245,7 @@ const MinionExecute = ({ proposal }) => {
 
     return (
       <Button onClick={executeMinion} disabled={!isCorrectChain}>
-        Execute Minion
+        {early && 'Early '}Execute Minion
       </Button>
     );
   };

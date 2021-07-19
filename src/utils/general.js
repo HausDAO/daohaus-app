@@ -95,12 +95,38 @@ export const detailsToJSON = values => {
   if (values.isTransmutation) {
     details.isTransmutation = true;
   }
+  if (values.minionType) {
+    details.minionType = values.minionType;
+  }
   return JSON.stringify(details);
 };
 
 // omits key/pairs from objects
 export const omit = (keys, obj) =>
   Object.fromEntries(Object.entries(obj).filter(([k]) => !keys.includes(k)));
+
+export const mapObject = (object, callback) => {
+  const newObj = {};
+  let index = 0;
+  for (const key in object) {
+    newObj[key] = callback(object[key], key, index, newObj);
+    index += 1;
+  }
+  return newObj;
+};
+export const filterObject = (object, callback) => {
+  const newObj = {};
+  let index = 0;
+  for (const key in object) {
+    if (callback(object[key], key, index, newObj)) {
+      newObj[key] = object[key];
+      index += 1;
+    }
+  }
+  return newObj;
+};
+export const getObjectLength = object => Object.keys(object).length;
+export const isObjectEmpty = object => getObjectLength(object) === 0;
 
 export const numberWithCommas = num => {
   if (num === 0) return 0;
@@ -240,4 +266,8 @@ export const handlePossibleNumber = (val, comma = true, roundAmt = 4) => {
     }
   }
   return val;
+};
+export const isSameAddress = (addr1, addr2) => {
+  if (typeof addr1 !== 'string' || typeof addr2 !== 'string') return null;
+  return addr1.toLowerCase() === addr2.toLowerCase();
 };

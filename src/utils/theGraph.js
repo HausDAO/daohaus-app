@@ -4,11 +4,11 @@ import { DAO_ACTIVITIES, HOME_DAO } from '../graphQL/dao-queries';
 import { MEMBERS_LIST } from '../graphQL/member-queries';
 import { proposalResolver, daoResolver, ccoDaoResolver } from './resolvers';
 import { getGraphEndpoint, supportedChains } from './chain';
-import { fetchTokenData } from './tokenValue';
+import { calcTotalUSD, fetchTokenData } from './tokenValue';
 import { omit } from './general';
 import { UBERHAUS_QUERY, UBER_MINIONS } from '../graphQL/uberhaus-queries';
 import { UBERHAUS_DATA } from './uberhaus';
-import { getApiMetadata, getDateTime } from './metadata';
+import { getApiMetadata, getDateTime, fetchApiVaultData } from './metadata';
 import { CCO_CONSTANTS } from './cco';
 import { GET_TRANSMUTATION, GET_WRAP_N_ZAPS } from '../graphQL/boost-queries';
 
@@ -80,6 +80,23 @@ export const fetchTransmutation = async args => {
   });
 };
 
+export const fetchMinionInternalBalances = async args => {
+  const metadata = await getApiMetadata();
+  const internalBalances = await graphQuery({
+    endpoint: getGraphEndpoint(args.chainID, 'subgraph_url'),
+    query: ADDRESS_BALANCES,
+    subfield: 'addressBalances',
+    variables: {
+      memberAddress: args.minionAddress,
+    },
+  });
+
+  return internalBalances.addressBalances.map(bal => {
+    const meta = metadata[bal.moloch.id] ? metadata[bal.moloch.id][0] : {};
+    return { ...bal, meta };
+  });
+};
+
 const fetchAllActivity = async (args, items = [], skip = 0) => {
   try {
     const result = await graphQuery({
@@ -110,7 +127,51 @@ const completeQueries = {
           contractAddr: args.daoID,
         },
       });
-      setter(graphOverview.moloch);
+
+      if (setter.setDaoOverview) {
+        setter.setDaoOverview(graphOverview.moloch);
+      }
+
+      if (setter.setDaoVaults) {
+        const minionAddresses = graphOverview.moloch.minions.map(
+          minion => minion.minionAddress,
+        );
+
+        const prices = await fetchTokenData();
+        const vaultApiData = await fetchApiVaultData(
+          supportedChains[args.chainID].network,
+          minionAddresses,
+        );
+
+        const balanceData = await fetchBankValues({
+          daoID: args.daoID,
+          chainID: args.chainID,
+        });
+
+        const guildBank = {
+          type: 'treasury',
+          name: 'DAO Treasury',
+          address: args.daoID,
+          currentBalance: '',
+          erc20s: graphOverview.moloch.tokenBalances.map(token => {
+            const priceData = prices[token.token.tokenAddress];
+            return {
+              ...token,
+              ...priceData,
+              usd: priceData?.price,
+              totalUSD: calcTotalUSD(
+                token.token.decimals,
+                token.tokenBalance,
+                priceData.price || 0,
+              ),
+            };
+          }),
+          nfts: [],
+          balanceHistory: balanceData,
+        };
+
+        setter.setDaoVaults([guildBank, ...vaultApiData]);
+      }
     } catch (error) {
       console.error(error);
     }
@@ -145,9 +206,6 @@ const completeQueries = {
       }
       if (setter.setUberProposals) {
         setter.setUberProposals(resolvedActivity.proposals);
-      }
-      if (setter.setUberActivities) {
-        setter.setUberActivities(resolvedActivity.proposals);
       }
     } catch (error) {
       console.error(error);
