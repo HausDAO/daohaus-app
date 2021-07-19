@@ -6,7 +6,7 @@ import Layout from '../components/layout';
 import MainViewLayout from '../components/mainViewLayout';
 import HubSignedOut from '../components/hubSignedOut';
 import HubProfileCard from '../components/hubProfileCard';
-import HubBalanceList from '../components/hubBalanceList';
+import CrossDaoInternalBalanceList from '../components/crossDaoInternalBalanceList';
 import { balanceChainQuery } from '../utils/theGraph';
 import { supportedChains } from '../utils/chain';
 
@@ -55,7 +55,7 @@ const HubBalances = () => {
               These can be withdrawn into your wallet from the profile page in
               the DAO.
             </Box>
-            <HubBalanceList tokens={balances} />
+            <CrossDaoInternalBalanceList tokens={balances} />
           </>
         ) : (
           <HubSignedOut />

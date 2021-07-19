@@ -27,7 +27,7 @@ import MinionTokenList from '../components/minionTokenList';
 
 import { supportedChains } from '../utils/chain';
 import { balanceChainQuery } from '../utils/theGraph';
-import HubBalanceList from '../components/hubBalanceList';
+// import HubBalanceList from '../components/crossDaoInternalBalanceList';
 import { useOverlay } from '../contexts/OverlayContext';
 import { createPoll } from '../services/pollService';
 import { MinionService } from '../services/minionService';
@@ -38,12 +38,7 @@ import { TokenService } from '../services/tokenService';
 import MinionNativeToken from '../components/minionNativeToken';
 import { NiftyService } from '../services/niftyService';
 
-const MinionDetails = ({
-  overview,
-  currentDaoTokens,
-  minionType,
-  isMember,
-}) => {
+const MinionDetails = ({ overview, minionType, isMember }) => {
   const { daochain, daoid, minion } = useParams();
   const toast = useToast();
   const [minionData, setMinionData] = useState();
@@ -343,12 +338,12 @@ const MinionDetails = ({
                 <TextBox size='md' align='center'>
                   Unclaimed balances in DAOs (for withdraw){' '}
                 </TextBox>
-                <HubBalanceList
+                {/* <HubBalanceList
                   tokens={daoBalances}
                   withdraw={withdraw}
                   loading={loading}
                   currentDaoTokens={currentDaoTokens}
-                />
+                /> */}
               </Box>
               <Box pt={6}>
                 <Stack spacing={6}>

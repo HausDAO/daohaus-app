@@ -69,7 +69,6 @@ const ProposalVote = ({
       isAfter(Date.now(), new Date(+proposal?.votingPeriodStarts * 1000))
     );
   };
-
   const NetworkOverlay = () => (
     <Flex
       position='absolute'
@@ -107,7 +106,7 @@ const ProposalVote = ({
       if (shouldUpdate) {
         setEnoughDeposit(
           +overview?.proposalDeposit === 0 ||
-            +depositTokenBalance / 10 ** overview?.depositToken.decimals >
+            +depositTokenBalance / 10 ** overview?.depositToken.decimals >=
               +overview?.proposalDeposit /
                 10 ** overview?.depositToken.decimals,
         );

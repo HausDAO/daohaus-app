@@ -5,6 +5,9 @@ import ContentBox from './ContentBox';
 import AddressAvatar from './addressAvatar';
 
 const VaultNftCard = ({ nft }) => {
+  console.log('nft', nft);
+  // maybe we format based on the contractadress
+  // we have nifty now & default - rarible soon
   return (
     <ContentBox w='100%' mt={5}>
       <Flex
@@ -21,7 +24,7 @@ const VaultNftCard = ({ nft }) => {
         </Box>
       </Flex>
       <Flex justify='center' w='100%' mb={5}>
-        <Image src={nft.imageUrl} height='200px' />
+        <Image src={nft?.metadata?.image} height='200px' />
       </Flex>
 
       <Flex

@@ -10,6 +10,39 @@
 
 import { MINION_TYPES } from '../utils/proposalUtils';
 
+export const CONTRACTS = {
+  CURRENT_MOLOCH: {
+    location: 'local',
+    abiName: 'MOLOCH_V2',
+    contractAddress: '.contextData.daoid',
+  },
+  SELECTED_MINION: {
+    location: 'local',
+    abiName: 'VANILLA_MINION',
+    contractAddress: '.values.selectedMinion',
+  },
+  ERC_20: {
+    location: 'local',
+    abiName: 'ERC_20',
+    contractAddress: '.values.tokenAddress',
+  },
+  ERC_721: {
+    location: 'local',
+    abiName: 'ERC_721',
+    contractAddress: '.values.nftAddress',
+  },
+  LOCAL_VANILLA_MINION: {
+    location: 'local',
+    abiName: 'VANILLA_MINION',
+    contractAddress: '.formData.localValues.minionAddress',
+  },
+  LOCAL_ERC_20: {
+    location: 'local',
+    abiName: 'ERC_20',
+    contractAddress: '.localValues.tokenAddress',
+  },
+};
+
 export const ACTIONS = {
   PROPOSAL: ['closeProposalModal', 'openTxModal'],
   BASIC: ['openTxModal'],
@@ -38,7 +71,7 @@ export const DETAILS = {
   },
   PAYROLL_PROPOSAL_TEMPORARY: {
     title: 'Minion sends a token',
-    description: 'Click check details to see more.',
+    description: '.values.description',
     proposalType: '.formData.type',
     minionType: MINION_TYPES.VANILLA,
   },
@@ -46,7 +79,7 @@ export const DETAILS = {
 
 export const TX = {
   SUBMIT_PROPOSAL: {
-    contract: 'Moloch',
+    contract: CONTRACTS.CURRENT_MOLOCH,
     name: 'submitProposal',
     onTxHash: ACTIONS.PROPOSAL,
     poll: 'subgraph',
@@ -66,7 +99,7 @@ export const TX = {
     createDiscourse: true,
   },
   LOOT_GRAB_PROPOSAL: {
-    contract: 'Moloch',
+    contract: CONTRACTS.CURRENT_MOLOCH,
     name: 'submitProposal',
     onTxHash: ACTIONS.PROPOSAL,
     poll: 'subgraph',
@@ -88,7 +121,7 @@ export const TX = {
     ],
   },
   GUILDKICK_PROPOSAL: {
-    contract: 'Moloch',
+    contract: CONTRACTS.CURRENT_MOLOCH,
     name: 'submitGuildKickProposal',
     poll: 'subgraph',
     onTxHash: ACTIONS.PROPOSAL,
@@ -102,7 +135,7 @@ export const TX = {
     ],
   },
   WHITELIST_TOKEN_PROPOSAL: {
-    contract: 'Moloch',
+    contract: CONTRACTS.CURRENT_MOLOCH,
     name: 'submitWhitelistProposal',
     poll: 'subgraph',
     onTxHash: ACTIONS.PROPOSAL,
@@ -116,7 +149,7 @@ export const TX = {
     ],
   },
   UNLOCK_TOKEN: {
-    contract: 'Token',
+    contract: CONTRACTS.ERC_20,
     name: 'approve',
     specialPoll: 'unlockToken',
     onTxHash: null,
@@ -125,7 +158,7 @@ export const TX = {
     successMsg: 'Approved Token!',
   },
   MINION_PROPOSE_ACTION: {
-    contract: 'Minion',
+    contract: CONTRACTS.SELECTED_MINION,
     name: 'proposeAction',
     poll: 'subgraph',
     onTxHash: ACTIONS.PROPOSAL,
@@ -136,7 +169,7 @@ export const TX = {
     createDiscourse: true,
   },
   CANCEL_PROPOSAL: {
-    contract: 'Moloch',
+    contract: CONTRACTS.CURRENT_MOLOCH,
     name: 'cancelProposal',
     poll: 'subgraph',
     onTxHash: ACTIONS.BASIC,
@@ -145,7 +178,7 @@ export const TX = {
     successMsg: 'Proposal Cancelled!',
   },
   SPONSOR_PROPOSAL: {
-    contract: 'Moloch',
+    contract: CONTRACTS.CURRENT_MOLOCH,
     name: 'sponsorProposal',
     poll: 'subgraph',
     onTxHash: ACTIONS.BASIC,
@@ -154,7 +187,7 @@ export const TX = {
     successMsg: 'Proposal Sponsored!',
   },
   SUBMIT_VOTE: {
-    contract: 'Moloch',
+    contract: CONTRACTS.CURRENT_MOLOCH,
     name: 'submitVote',
     poll: 'subgraph',
     onTxHash: ACTIONS.BASIC,
@@ -163,7 +196,7 @@ export const TX = {
     successMsg: 'Vote Submitted!',
   },
   PROCESS_PROPOSAL: {
-    contract: 'Moloch',
+    contract: CONTRACTS.CURRENT_MOLOCH,
     name: 'processProposal',
     poll: 'subgraph',
     onTxHash: ACTIONS.BASIC,
@@ -172,7 +205,7 @@ export const TX = {
     successMsg: 'Proposal Processed!',
   },
   PROCESS_GK_PROPOSAL: {
-    contract: 'Moloch',
+    contract: CONTRACTS.CURRENT_MOLOCH,
     name: 'processGuildKickProposal',
     poll: 'subgraph',
     onTxHash: ACTIONS.BASIC,
@@ -181,7 +214,7 @@ export const TX = {
     successMsg: 'Proposal Processed!',
   },
   PROCESS_WL_PROPOSAL: {
-    contract: 'Moloch',
+    contract: CONTRACTS.CURRENT_MOLOCH,
     name: 'processWhitelistProposal',
     poll: 'subgraph',
     onTxHash: ACTIONS.BASIC,
@@ -190,7 +223,7 @@ export const TX = {
     successMsg: 'Proposal Processed!',
   },
   COLLECT_TOKENS: {
-    contract: 'Moloch',
+    contract: CONTRACTS.CURRENT_MOLOCH,
     name: 'collectTokens',
     poll: 'subgraph',
     onTxHash: ACTIONS.BASIC,
@@ -199,7 +232,7 @@ export const TX = {
     successMsg: 'Token Balances Synced!',
   },
   UPDATE_DELEGATE: {
-    contract: 'Moloch',
+    contract: CONTRACTS.CURRENT_MOLOCH,
     name: 'updateDelegateKey',
     poll: 'subgraph',
     onTxHash: ACTIONS.GENERIC_MODAL,
@@ -209,7 +242,7 @@ export const TX = {
     gatherArgs: ['.values.delegateAddress'],
   },
   WITHDRAW: {
-    contract: 'Moloch',
+    contract: CONTRACTS.CURRENT_MOLOCH,
     name: 'withdrawBalance',
     poll: 'subgraph',
     onTxHash: ACTIONS.BASIC,
@@ -218,7 +251,7 @@ export const TX = {
     successMsg: 'Balance Withdrawn!',
   },
   RAGE_QUIT: {
-    contract: 'Moloch',
+    contract: CONTRACTS.CURRENT_MOLOCH,
     name: 'ragequit',
     poll: 'subgraph',
     onTxHash: ACTIONS.GENERIC_MODAL,
@@ -227,7 +260,7 @@ export const TX = {
     successMsg: 'Rage quit processed!',
   },
   PAYROLL: {
-    contract: 'Minion',
+    contract: CONTRACTS.SELECTED_MINION,
     name: 'proposeAction',
     poll: 'subgraph',
     onTxHash: ACTIONS.PROPOSAL,
@@ -239,11 +272,60 @@ export const TX = {
       0,
       {
         type: 'encodeHex',
-        location: 'local',
-        abiName: 'ERC_20',
+        contract: CONTRACTS.ERC_20,
         fnName: 'transfer',
         gatherArgs: ['.values.applicant', '.values.minionPayment'],
       },
+      {
+        type: 'detailsToJSON',
+        gatherFields: DETAILS.PAYROLL_PROPOSAL_TEMPORARY,
+      },
+    ],
+  },
+  MINION_SEND_ERC20_TOKEN: {
+    contract: CONTRACTS.LOCAL_VANILLA_MINION,
+    name: 'proposeAction',
+    poll: 'subgraph',
+    onTxHash: ACTIONS.GENERIC_MODAL,
+    display: 'Transferring Tokens',
+    errMsg: 'Error Submitting Proposal',
+    successMsg: 'Proposal Submitted!',
+    gatherArgs: [
+      '.localValues.tokenAddress',
+      0,
+      {
+        type: 'encodeHex',
+        contract: CONTRACTS.LOCAL_ERC_20,
+        fnName: 'transfer',
+        gatherArgs: ['.values.applicant', '.values.minionPayment'],
+      },
+      {
+        type: 'detailsToJSON',
+        gatherFields: DETAILS.PAYROLL_PROPOSAL_TEMPORARY,
+      },
+    ],
+  },
+  MINION_WITHDRAW: {
+    contract: CONTRACTS.VANILLA_MINION,
+    name: 'crossWithdraw',
+    poll: 'subgraph',
+    onTxHash: ACTIONS.GENERIC_MODAL,
+    display: 'Transfer Balance',
+    errMsg: 'Error Transferring Balance',
+    successMsg: 'Balance Transferred!',
+  },
+  MINION_SEND_NETWORK_TOKEN: {
+    contract: CONTRACTS.LOCAL_VANILLA_MINION,
+    name: 'proposeAction',
+    poll: 'subgraph',
+    onTxHash: ACTIONS.GENERIC_MODAL,
+    display: 'Transferring Tokens',
+    errMsg: 'Error Submitting Proposal',
+    successMsg: 'Proposal Submitted!',
+    gatherArgs: [
+      '.values.applicant',
+      '.values.minionPayment',
+      '.localValues.tokenAddress',
       {
         type: 'detailsToJSON',
         gatherFields: DETAILS.PAYROLL_PROPOSAL_TEMPORARY,

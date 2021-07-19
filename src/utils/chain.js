@@ -2,7 +2,6 @@ export const supportedChains = {
   '0x1': {
     name: 'Ethereum Mainnet',
     short_name: 'eth',
-    chain: 'ETH',
     nativeCurrency: 'ETH',
     network: 'mainnet',
     network_id: 1,
@@ -14,7 +13,6 @@ export const supportedChains = {
     abi_api_url:
       'https://api.etherscan.io/api?module=contract&action=getabi&address=',
     tokenlist_api_url: 'https://api.etherscan.io/api',
-    metadata_api_url: 'https://data.daohaus.club',
     subgraph_url:
       'https://api.thegraph.com/subgraphs/name/odyssy-automaton/daohaus',
     stats_graph_url:
@@ -30,8 +28,7 @@ export const supportedChains = {
   },
   '0x4': {
     name: 'Ethereum Rinkeby',
-    short_name: 'rin',
-    chain: 'ETH',
+    short_name: 'rinkeby',
     nativeCurrency: 'ETH',
     network: 'rinkeby',
     network_id: 4,
@@ -43,7 +40,6 @@ export const supportedChains = {
     abi_api_url:
       'https://api-rinkeby.etherscan.io/api?module=contract&action=getabi&address=',
     tokenlist_api_url: 'https://api-rinkeby.etherscan.io/api',
-    metadata_api_url: 'https://data.daohaus.club',
     subgraph_url:
       'https://api.thegraph.com/subgraphs/name/odyssy-automaton/daohaus-rinkeby',
     stats_graph_url:
@@ -69,8 +65,7 @@ export const supportedChains = {
   },
   '0x2a': {
     name: 'Ethereum Kovan',
-    short_name: 'kov',
-    chain: 'ETH',
+    short_name: 'kovan',
     nativeCurrency: 'ETH',
     network: 'kovan',
     network_id: 42,
@@ -82,7 +77,6 @@ export const supportedChains = {
     abi_api_url:
       'https://api-kovan.etherscan.io/api?module=contract&action=getabi&address=',
     tokenlist_api_url: 'https://api-kovan.etherscan.io/api',
-    metadata_api_url: 'https://data.daohaus.club',
     subgraph_url:
       'https://api.thegraph.com/subgraphs/name/odyssy-automaton/daohaus-kovan',
     stats_graph_url:
@@ -101,7 +95,6 @@ export const supportedChains = {
   '0x64': {
     name: 'xDAI Chain',
     short_name: 'xdai',
-    chain: 'xDAI',
     nativeCurrency: 'xDai',
     network: 'xdai',
     network_id: 100,
@@ -112,7 +105,6 @@ export const supportedChains = {
     abi_api_url:
       'https://blockscout.com/xdai/mainnet/api?module=contract&action=getabi&address=',
     tokenlist_api_url: 'https://blockscout.com/xdai/mainnet/api',
-    metadata_api_url: 'https://data.daohaus.club',
     subgraph_url:
       'https://api.thegraph.com/subgraphs/name/odyssy-automaton/daohaus-xdai',
     stats_graph_url:
@@ -144,15 +136,13 @@ export const supportedChains = {
   '0x89': {
     name: 'Matic',
     short_name: 'matic',
-    chain: 'MATIC',
     nativeCurrency: 'MATIC',
     network: 'matic',
     network_id: 137,
     chain_id: '0x89',
     hub_sort_order: 3,
     providers: ['walletconnect'],
-    rpc_url: 'https://rpc-mainnet.matic.network',
-    metadata_api_url: 'https://data.daohaus.club',
+    rpc_url: 'https://rpc-mainnet.maticvigil.com/',
     abi_api_url:
       'https://api.polygonscan.com/api?module=contract&action=getabi&address=',
     tokenlist_api_url: 'https://api.polygonscan.com/api',
@@ -186,15 +176,12 @@ export const supportedChains = {
   // '0x4a': {
   //   name: 'IDChain',
   //   short_name: 'idchain',
-  //   chain: 'IDChain',
   //   nativeCurrency: 'EIDI',
-  //   network: 'idchain',
   //   network_id: 74,
   //   chain_id: '0x4a',
   //   hub_sort_order: 4,
   //   providers: ['walletconnect'],
   //   rpc_url: 'https://idchain.one/rpc/',
-  //   metadata_api_url: 'https://data.daohaus.club',
   //   abi_api_url:
   //     'https://explorer.idchain.one/api?module=contract&action=getabi&address=',
   //   subgraph_url:

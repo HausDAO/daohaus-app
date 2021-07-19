@@ -101,7 +101,7 @@ export const createPoll = ({
         actions,
         txHash,
       });
-      cachePoll({
+      cachePoll?.({
         txHash,
         action,
         timeSent: now,

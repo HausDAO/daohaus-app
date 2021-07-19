@@ -1,11 +1,12 @@
-import { MolochService } from '../services/molochService';
-import { MinionService } from '../services/minionService';
-import { TokenService } from '../services/tokenService';
 import { detailsToJSON } from './general';
 import { valToDecimalString } from './tokenValue';
-import { safeEncodeHexFunction, getABIsnippet } from './abi';
+import { safeEncodeHexFunction, getABIsnippet, getContractABI } from './abi';
 import { collapse } from './formBuilder';
 import { getContractBalance, getTokenData } from './vaults';
+import { createContract } from './contract';
+import { validate } from './validation';
+
+// const isSearchPath = string => string[0] === '.';
 
 const getPath = pathString =>
   pathString
@@ -18,18 +19,11 @@ const getConditions = pathString =>
 
 const searchData = (data, fields, shouldThrow = true) => {
   if (data == null || fields == null) {
-    console.log('EMPTY DATA ERROR:');
-    console.log(`data`, data);
-    console.log(`fields`, fields);
     throw new Error('txHelpers => searchData(): data or fields is empty');
   }
   if (!fields?.length) return data;
   const newData = data[fields[0]];
   if (newData == null) {
-    console.log('SEARCH ERROR DATA:');
-    console.log(`newData`, newData);
-    console.log('data', data);
-    console.log(`fields`, fields);
     if (shouldThrow) {
       throw new Error(`txHelpers => searchData()`);
     } else {
@@ -59,7 +53,6 @@ const handleConditionalPaths = (data, paths) => {
 
 const buildJSONdetails = (data, fields) => {
   const newObj = {};
-  console.log(`data`, data);
   for (const key in fields) {
     const isSearchPath = fields[key][0] === '.';
     if (isSearchPath) {
@@ -72,34 +65,8 @@ const buildJSONdetails = (data, fields) => {
 
   return JSON.stringify(newObj);
 };
-// JSON.stringify(
-//   fields.reduce((obj, field) => ({ ...obj, [field]: data[field] }), {}),
-// );
 
 const argBuilderCallback = Object.freeze({
-  // submitProposal({ values, tx, contextData }) {
-  //   const details = buildJSONdetails({ ...values }, tx.detailsJSON);
-  //   const { tokenBalances, depositToken } = contextData.daoOverview;
-  //   const tributeToken = values.tributeToken || depositToken.tokenAddress;
-  //   const paymentToken = values.paymentToken || depositToken.tokenAddress;
-  //   const tributeOffered = values.tributeOffered
-  //     ? valToDecimalString(values.tributeOffered, tributeToken, tokenBalances)
-  //     : '0';
-  //   const paymentRequested = values.paymentRequested
-  //     ? valToDecimalString(values.paymentRequested, paymentToken, tokenBalances)
-  //     : '0';
-  //   const applicant = values?.applicant || contextData.address;
-  //   return [
-  //     applicant,
-  //     values.sharesRequested || '0',
-  //     values.lootRequested || '0',
-  //     tributeOffered,
-  //     tributeToken,
-  //     paymentRequested,
-  //     paymentToken,
-  //     details,
-  //   ];
-  // },
   proposeAction({ values, hash, formData }) {
     const hexData = safeEncodeHexFunction(
       JSON.parse(values.abiInput),
@@ -182,90 +149,110 @@ export const getArgs = data => {
   );
 };
 
-export const MolochTransaction = async ({
-  args,
-  poll,
-  onTxHash,
-  contextData,
-  injectedProvider,
-  tx,
-}) => {
-  const { daoid, daochain, daoOverview, address } = contextData;
-  return MolochService({
-    web3: injectedProvider,
-    daoAddress: daoid,
-    chainID: daochain,
-    version: daoOverview.version,
-  })(tx.name)({
-    args,
-    address,
-    poll,
-    onTxHash,
-  });
-};
-export const MinionTransaction = async ({
-  args,
-  poll,
-  onTxHash,
-  contextData,
-  injectedProvider,
-  values,
-  tx,
-}) => {
-  const { daochain, daoOverview, address } = contextData;
-  const minionAddress = values.minionAddress || values.selectedMinion;
-  return MinionService({
-    web3: injectedProvider,
-    minion: minionAddress,
-    chainID: daochain,
-    version: daoOverview.version,
-  })(tx.name)({
-    args,
-    address,
-    poll,
-    onTxHash,
-  });
-};
+// export const MolochTransaction = async ({
+//   args,
+//   poll,
+//   onTxHash,
+//   contextData,
+//   injectedProvider,
+//   tx,
+// }) => {
+//   const { daoid, daochain, daoOverview, address } = contextData;
+//   return MolochService({
+//     web3: injectedProvider,
+//     daoAddress: daoid,
+//     chainID: daochain,
+//     version: daoOverview.version,
+//   })(tx.name)({
+//     args,
+//     address,
+//     poll,
+//     onTxHash,
+//   });
+// };
+// export const MinionTransaction = async ({
+//   args,
+//   poll,
+//   onTxHash,
+//   contextData,
+//   injectedProvider,
+//   values,
+//   tx,
+// }) => {
+//   const { daochain, daoOverview, address } = contextData;
+//   const minionAddress = values.minionAddress || values.selectedMinion;
+//   return MinionService({
+//     web3: injectedProvider,
+//     minion: minionAddress,
+//     chainID: daochain,
+//     version: daoOverview.version,
+//   })(tx.name)({
+//     args,
+//     address,
+//     poll,
+//     onTxHash,
+//   });
+// };
 
-export const TokenTransaction = async ({
-  args,
-  poll,
-  onTxHash,
-  contextData,
-  injectedProvider,
-  values,
-  tx,
-}) => {
-  const { daochain, daoOverview, address } = contextData;
-  const { tokenAddress } = values;
-  return TokenService({
-    web3: injectedProvider,
-    tokenAddress,
-    chainID: daochain,
-    version: daoOverview.version,
-  })(tx.name)({
-    args,
-    address,
-    poll,
-    onTxHash,
-  });
-};
+// export const TokenTransaction = async ({
+//   args,
+//   poll,
+//   onTxHash,
+//   contextData,
+//   injectedProvider,
+//   values,
+//   tx,
+// }) => {
+//   const { daochain, daoOverview, address } = contextData;
+//   const { tokenAddress } = values;
+//   return TokenService({
+//     web3: injectedProvider,
+//     tokenAddress,
+//     chainID: daochain,
+//     version: daoOverview.version,
+//   })(tx.name)({
+//     args,
+//     address,
+//     poll,
+//     onTxHash,
+//   });
+// };
 
-export const Transaction = async data => {
-  const contractType = data?.tx?.contract;
-  const txMap = {
-    Moloch: MolochTransaction,
-    Minion: MinionTransaction,
-    Token: TokenTransaction,
-  };
-  const TX = txMap[contractType];
-  if (!TX) {
-    throw new Error(
-      `Contract Type ${contractType} not found in 'Transaction' function in txHelpers.js. Check transaction data (contractTX.js).`,
-    );
+const getContractAddress = data => {
+  const { contractAddress } = data.tx.contract;
+  if (contractAddress[0] === '.') {
+    const path = getPath(contractAddress);
+    const address = searchData(data, path);
+    return address;
   }
+  if (validate.address(contractAddress)) return contractAddress;
+  throw new Error(
+    'txHelpers => getContactAddress(): Did not receive a valid contract address',
+  );
+};
+export const Transaction = async data => {
+  const { args, tx, poll, onTxHash, contextData, injectedProvider } = data;
+
+  const web3Contract = await createContract({
+    address: getContractAddress(data),
+    abi: await getContractABI(data),
+    chainID: contextData.daochain,
+    web3: injectedProvider,
+  });
+  console.log(web3Contract);
+  const transaction = await web3Contract.methods[tx.name](...args);
   data.lifeCycleFns?.onTxFire?.(data);
-  return TX(data);
+  return transaction
+    .send('eth_requestAccounts', { from: contextData.address })
+    .on('transactionHash', txHash => {
+      poll?.(txHash, data);
+      onTxHash?.(txHash, data);
+      return txHash;
+    })
+    .on('error', error => {
+      console.error(error);
+      return error;
+    });
 };
 
 //  Seaches application state for values
@@ -334,6 +321,13 @@ export const fieldModifiers = Object.freeze({
   },
   addMinionVaultDecimals(fieldValue, data) {
     if (!fieldValue) return null;
+
+    if (data.formData.localValues?.tokenAddress) {
+      return getContractBalance(
+        fieldValue,
+        data.formData.localValues.tokenDecimals,
+      );
+    }
     const { daoVaults } = data.contextData;
     const { minionToken, selectedMinion } = data.values;
     return getContractBalance(

@@ -93,7 +93,7 @@ export const fetchMinionInternalBalances = async args => {
 
   return internalBalances.addressBalances.map(bal => {
     const meta = metadata[bal.moloch.id] ? metadata[bal.moloch.id][0] : {};
-    return { ...bal, ...meta };
+    return { ...bal, meta };
   });
 };
 
@@ -142,6 +142,7 @@ const completeQueries = {
           supportedChains[args.chainID].network,
           minionAddresses,
         );
+
         const balanceData = await fetchBankValues({
           daoID: args.daoID,
           chainID: args.chainID,
