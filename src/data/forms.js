@@ -146,6 +146,6 @@ export const FORM = {
     type: PROPOSAL_TYPES.SELL_NFT,
     minionType: MINION_TYPES.RARIBLE,
     tx: null,
-    fields: [FIELD.NFT_SELECT, FIELD.SET_PRICE],
+    fields: [FIELD.NFT_SELECT, FIELD.DATE_RANGE, FIELD.SET_PRICE],
   },
 };

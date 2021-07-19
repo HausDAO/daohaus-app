@@ -14,7 +14,6 @@ export const INFO_TEXT = {
   ADDR_KICK: 'Enter the public key of the member you would like to kick.',
   MINION_TYPES: 'Minion funds to be used for this transaction',
   MINION_PAYMENT: `This is the amount of value to be sent from the selected minion's balance`,
-  SET_PRICE: 'Service fee 2.5%',
   DELEGATE_ADDRESS:
     'Warning: By switching your address to a delegate, you are giving that delegate address the right to act on your behalf.',
 };
@@ -155,12 +154,11 @@ export const FIELD = {
     expectType: 'address',
   },
   SET_PRICE: {
-    type: 'paymentInput',
+    type: 'priceInput',
     htmlFor: 'sellPrice',
     name: 'sellPrice',
     placeholder: '0',
     label: 'Set Price (Take)',
-    info: INFO_TEXT.SET_PRICE,
     expectType: 'number',
   },
   NFT_SELECT: {
@@ -168,6 +166,12 @@ export const FIELD = {
     htmlFor: 'nftSelect',
     name: 'nftSelect',
     label: 'Select an NFT',
+  },
+  DATE_RANGE: {
+    type: 'dateRange',
+    htmlFor: 'dateRange',
+    name: 'dateRange',
+    label: 'Set Auction Duration',
   },
   DELEGATE_ADDRESS: {
     type: 'input',

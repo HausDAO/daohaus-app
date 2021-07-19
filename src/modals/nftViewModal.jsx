@@ -130,7 +130,7 @@ const NftViewModal = () => {
                       color='secondary.500'
                       _hover={{ cursor: 'pointer' }}
                     >
-                      View on OpenSea
+                      View on Rarible
                     </Box>
                     <Box
                       mt={2}
