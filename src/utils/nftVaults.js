@@ -9,8 +9,7 @@ import { FORM } from '../data/forms';
 
 const defaultConfig = {
   platform: 'unknown',
-  creator: null,
-  lastPrice: null,
+  fields: {},
   actions: {
     transfer721: {
       menuLabel: 'Transfer NFT',
@@ -26,8 +25,10 @@ const defaultConfig = {
 const nftConfig = {
   '0xcf964c89f509a8c0ac36391c5460df94b91daba5': {
     platform: 'nifty ink',
-    creator: 'getNiftyCreator',
-    lastPrice: () => null,
+    fields: {
+      creator: 'getNiftyCreator',
+      // lastPrice: null,
+    },
     actions: {
       ...defaultConfig.actions,
       sellNifty: {
@@ -68,10 +69,19 @@ export const hydrateNftCard = nft => {
       localValues,
     };
   });
+
+  const hydratedFields = Object.keys(config.fields).reduce((fieldObj, key) => {
+    const mod = config.fields[key];
+    if (!mod) {
+      return fieldObj;
+    }
+    fieldObj[key] = attributeModifiers[mod](nft);
+    return fieldObj;
+  }, {});
+
   return {
     ...nft,
-    creator: attributeModifiers[config.creator](nft),
-    lastPrice: config.lastPrice(nft),
     actions: hydratedActions,
+    ...hydratedFields,
   };
 };

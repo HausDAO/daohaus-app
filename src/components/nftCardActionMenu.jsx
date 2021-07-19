@@ -20,7 +20,6 @@ const NftCardActionMenu = ({ nft, loading }) => {
   const [modalData, setModalData] = useState(null);
 
   const handleActionClick = action => {
-    console.log('action', action);
     setModalData({
       id: action.modalName,
       formLego: {
