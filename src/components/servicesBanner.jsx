@@ -12,7 +12,7 @@ const ServicesBanner = () => {
     <ContentBox
       mt={6}
       w='100%'
-      style={{ background: theme.colors.secondary[500] }}
+      style={{ background: theme.colors.primary[500] }}
     >
       <Flex align='center' justify='space-between'>
         <Box fontSize='lg' fontWeight={700} fontFamily='heading'>
@@ -25,7 +25,7 @@ const ServicesBanner = () => {
           variant='outline'
           color='white'
           borderColor='white'
-          _hover={{ background: theme.colors.secondary[600], color: 'white' }}
+          _hover={{ background: theme.colors.primary[600], color: 'white' }}
         >
           Hire Us
         </Button>
