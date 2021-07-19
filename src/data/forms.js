@@ -165,14 +165,24 @@ export const FORM = {
     tx: TX.MINION_SEND_ERC20_TOKEN,
     fields: [FIELD.MINION_PAYMENT, FIELD.APPLICANT, FIELD.DESCRIPTION],
   },
-  MINION_SEND_NIFTY_ERC721_TOKEN: {
-    title: 'Nifty ERC721 Token Transfer',
+  MINION_SEND_ERC721_TOKEN: {
+    title: 'ERC721 Token Transfer',
     subtitle: 'Make a proposal to transfer the nft out of the minion',
     layout: 'singleRow',
     type: PROPOSAL_TYPES.MINION_ERC721,
     required: ['applicant'],
     minionType: MINION_TYPES.VANILLA,
-    tx: TX.MINION_SEND_ERC20_TOKEN,
+    tx: TX.MINION_SEND_ERC721_TOKEN,
     fields: [FIELD.APPLICANT, FIELD.DESCRIPTION],
+  },
+  MINION_SELL_NIFTY: {
+    title: 'Sell Nifty ERC721',
+    subtitle: 'Make a proposal to set the price of the nft on nifty.ink',
+    layout: 'singleRow',
+    type: PROPOSAL_TYPES.MINION_NIFTY_SELL,
+    required: ['price'],
+    minionType: MINION_TYPES.VANILLA,
+    tx: TX.MINION_NIFTY_SET_PRICE,
+    fields: [FIELD.NFT_PRICE, FIELD.DESCRIPTION],
   },
 };

@@ -25,7 +25,11 @@ const NftCardActionMenu = ({ nft, loading }) => {
       id: action.modalName,
       formLego: {
         ...action.formLego,
-        localValues: { ...action.localValues, minonAddress: minion },
+        localValues: {
+          ...action.localValues,
+          minionAddress: minion,
+          nftImage: nft.metadata?.image,
+        },
       },
     });
     setGenericModal({ [action.modalName]: true });
@@ -40,7 +44,6 @@ const NftCardActionMenu = ({ nft, loading }) => {
           closeOnOverlayClick
         />
       )}
-
       <Menu isDisabled>
         <MenuButton
           as={Button}
@@ -58,7 +61,6 @@ const NftCardActionMenu = ({ nft, loading }) => {
             _hover={{ cursor: 'pointer' }}
           />
         </MenuButton>
-
         <MenuList>
           {nft.actions.map(action => {
             return (

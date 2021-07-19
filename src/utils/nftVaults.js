@@ -1,37 +1,44 @@
 import { FORM } from '../data/forms';
 
-// todo: deafult transfer added to all - sale and transfer
-// - sell through daohaus - new sale contract and UI for the -- NEXT
-// - will need approve for all step
-// 1155 is a differnt send
-// standard 721 functions:
+// TODO: example without a form modal - just fire  transaction
+// TODO: example with a link out to platform
 
-// need to override defaults if the menuLabel matches?
+// NEXT STEPS:
+// - Rarible default actions - added if on mainnet?
+// - daohaus marketplace
 
-// rarible will be just if on rarible supported network then we add some defaults
+const defaultConfig = {
+  platform: 'unknown',
+  creator: null,
+  lastPrice: null,
+  actions: {
+    transfer721: {
+      menuLabel: 'Transfer NFT',
+      tooltTipLabel:
+        'Make a proposal to tranfer this nft to the applicant address',
+      modalName: 'transfer721',
+      formLego: FORM.MINION_SEND_ERC721_TOKEN,
+      localValues: ['tokenId', 'contractAddress'],
+    },
+  },
+};
 
 const nftConfig = {
   '0xcf964c89f509a8c0ac36391c5460df94b91daba5': {
     platform: 'nifty ink',
     creator: 'getNiftyCreator',
     lastPrice: () => null,
-    actions: [
-      {
-        menuLabel: 'Transfer Nifty',
+    actions: {
+      ...defaultConfig.actions,
+      sellNifty: {
+        menuLabel: 'Sell Nifty',
         tooltTipLabel:
-          'Make a proposal to tranfer this nft to the applicant address',
-        // if needs a form it gets a modal name, otherwise just a tx and the component calls submitTransaction
-        modalName: 'transferNifty',
-        formLego: FORM.MINION_SEND_NIFTY_ERC721_TOKEN,
+          'Make a proposal to set the price of the nft on nifty.ink',
+        modalName: 'sellNifty',
+        formLego: FORM.MINION_SELL_NIFTY,
         localValues: ['tokenId', 'contractAddress'],
       },
-      {
-        menuLabel: 'Sell Nifty',
-        tooltTipLabel: 'Make a proposal to set a sale price for this nft',
-        modalName: 'sellNifty',
-        formLego: FORM.LOOT_GRAB,
-      },
-    ],
+    },
   },
 };
 
@@ -43,11 +50,13 @@ export const attributeModifiers = Object.freeze({
 });
 
 export const hydrateNftCard = nft => {
-  const config = nftConfig[nft.contractAddress];
-  // TODO: need a better way to do this if it's deeper than 1 level on nft object
+  const config = nftConfig[nft.contractAddress] || defaultConfig;
+
+  // TODO: need a better way to get passed in values if it's deeper than 1 level on nft object
   // - maybe searchTerm like in tx gather args?
-  // also adding some from the component so this is hard to reason about
-  const hydratedActions = config.actions.map(action => {
+  // - also now adding one from the component so this is hard to reason about
+  const hydratedActions = Object.keys(config.actions).map(key => {
+    const action = config.actions[key];
     const localValues =
       action.localValues &&
       action.localValues.reduce((vals, field) => {

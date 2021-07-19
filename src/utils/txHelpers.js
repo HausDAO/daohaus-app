@@ -1,5 +1,5 @@
 import { detailsToJSON } from './general';
-import { valToDecimalString } from './tokenValue';
+import { addZeros, valToDecimalString } from './tokenValue';
 import { safeEncodeHexFunction, getABIsnippet, getContractABI } from './abi';
 import { collapse } from './formBuilder';
 import { getContractBalance, getTokenData } from './vaults';
@@ -25,6 +25,7 @@ const searchData = (data, fields, shouldThrow = true) => {
   const newData = data[fields[0]];
   if (newData == null) {
     if (shouldThrow) {
+      console.log('searchData error', data, fields);
       throw new Error(`txHelpers => searchData()`);
     } else {
       return false;
@@ -334,6 +335,10 @@ export const fieldModifiers = Object.freeze({
       fieldValue,
       getTokenData(daoVaults, selectedMinion, minionToken).decimals,
     );
+  },
+  addWeiDecimals(fieldValue) {
+    if (!fieldValue) return null;
+    return addZeros(fieldValue, 18);
   },
 });
 

@@ -31,6 +31,11 @@ export const CONTRACTS = {
     abiName: 'ERC_721',
     contractAddress: '.values.nftAddress',
   },
+  LOCAL_ERC_721: {
+    location: 'local',
+    abiName: 'ERC_721',
+    contractAddress: '.localValues.contractAddress',
+  },
   LOCAL_VANILLA_MINION: {
     location: 'local',
     abiName: 'VANILLA_MINION',
@@ -82,6 +87,12 @@ export const DETAILS = {
   },
   MINION_ERC721_TRANSFER: {
     title: 'Minion sends a NFT',
+    description: '.values.description',
+    proposalType: '.formData.type',
+    minionType: MINION_TYPES.VANILLA,
+  },
+  MINION_SELL_NIFTY: {
+    title: 'Minion sets Nifty price',
     description: '.values.description',
     proposalType: '.formData.type',
     minionType: MINION_TYPES.VANILLA,
@@ -343,7 +354,7 @@ export const TX = {
       },
     ],
   },
-  MINION_SEND_NIFTY_ERC721_TOKEN: {
+  MINION_SEND_ERC721_TOKEN: {
     contract: CONTRACTS.LOCAL_VANILLA_MINION,
     name: 'proposeAction',
     poll: 'subgraph',
@@ -356,8 +367,8 @@ export const TX = {
       0,
       {
         type: 'encodeHex',
-        contract: CONTRACTS.NIFTY_INK,
-        fnName: 'safeTransferFromNoop',
+        contract: CONTRACTS.LOCAL_ERC_721,
+        fnName: 'safeTransferFrom',
         gatherArgs: [
           '.localValues.minionAddress',
           '.values.applicant',
@@ -366,7 +377,30 @@ export const TX = {
       },
       {
         type: 'detailsToJSON',
-        gatherFields: DETAILS.PAYROLL_PROPOSAL_TEMPORARY,
+        gatherFields: DETAILS.MINION_ERC721_TRANSFER,
+      },
+    ],
+  },
+  MINION_NIFTY_SET_PRICE: {
+    contract: CONTRACTS.LOCAL_VANILLA_MINION,
+    name: 'proposeAction',
+    poll: 'subgraph',
+    onTxHash: ACTIONS.GENERIC_MODAL,
+    display: 'Sell Nifty',
+    errMsg: 'Error Submitting Proposal',
+    successMsg: 'Proposal Submitted!',
+    gatherArgs: [
+      '.localValues.contractAddress',
+      0,
+      {
+        type: 'encodeHex',
+        contract: CONTRACTS.NIFTY_INK,
+        fnName: 'setTokenPrice',
+        gatherArgs: ['.localValues.tokenId', '.values.price'],
+      },
+      {
+        type: 'detailsToJSON',
+        gatherFields: DETAILS.MINION_SELL_NIFTY,
       },
     ],
   },

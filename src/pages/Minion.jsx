@@ -63,6 +63,8 @@ const MinionDetails = ({ overview, minionType, isMember }) => {
   const hasLoadedBalanceData =
     balancesGraphData.chains.length === Object.keys(supportedChains).length;
 
+  console.log('not needed', daoBalances, loading);
+
   useEffect(() => {
     console.log('overview', minionType, overview);
     if (!overview?.minions.length) {
@@ -176,16 +178,16 @@ const MinionDetails = ({ overview, minionType, isMember }) => {
     }
   };
 
-  const withdraw = async (token, transfer) => {
-    setLoading(true);
-    const args = [
-      token.moloch.id,
-      token.token.tokenAddress,
-      token.tokenBalance,
-      transfer,
-    ];
-    submitMinion(args, 'crossWithdraw');
-  };
+  // const withdraw = async (token, transfer) => {
+  //   setLoading(true);
+  //   const args = [
+  //     token.moloch.id,
+  //     token.token.tokenAddress,
+  //     token.tokenBalance,
+  //     transfer,
+  //   ];
+  //   submitMinion(args, 'crossWithdraw');
+  // };
 
   const sendNativeToken = async values => {
     const details = detailsToJSON({

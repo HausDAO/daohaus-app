@@ -7,17 +7,12 @@ import { hydrateNftCard } from '../utils/nftVaults';
 import NftCardActionMenu from './nftCardActionMenu';
 
 const VaultNftCard = ({ nft }) => {
-  console.log('nft', nft);
-  // maybe we format based on the contractadress
-  // we have nifty now & default - rarible soon
-
   const hydratedNft = useMemo(() => {
     if (nft) {
       return hydrateNftCard(nft);
     }
   }, [nft]);
 
-  console.log('hydratedNft', hydratedNft);
   return (
     <ContentBox w='100%' mt={5}>
       <Flex
