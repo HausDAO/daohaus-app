@@ -16,6 +16,7 @@ export const INFO_TEXT = {
   MINION_PAYMENT: `This is the amount of value to be sent from the selected minion's balance`,
   DELEGATE_ADDRESS:
     'Warning: By switching your address to a delegate, you are giving that delegate address the right to act on your behalf.',
+  NFT_PRICE: 'Price in xDai',
 };
 
 export const FIELD = {
@@ -169,6 +170,16 @@ export const FIELD = {
     placeholder: '0x',
     label: 'Destination',
     expectType: 'address',
+  },
+  NFT_PRICE: {
+    type: 'input',
+    label: 'Price',
+    name: 'price',
+    htmlFor: 'price',
+    placeholder: '0',
+    info: INFO_TEXT.NFT_PRICE,
+    expectType: 'number',
+    modifiers: ['addWeiDecimals'],
   },
 };
 
