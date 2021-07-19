@@ -41,6 +41,11 @@ export const CONTRACTS = {
     abiName: 'ERC_20',
     contractAddress: '.localValues.tokenAddress',
   },
+  NIFTY_INK: {
+    location: 'local',
+    abiName: 'NIFTY_INK',
+    contractAddress: '0xcf964c89f509a8c0ac36391c5460df94b91daba5',
+  },
 };
 
 export const ACTIONS = {
@@ -351,8 +356,7 @@ export const TX = {
       0,
       {
         type: 'encodeHex',
-        // change to nifty an this hard codes the address
-        contract: CONTRACTS.LOCAL_ERC_20,
+        contract: CONTRACTS.NIFTY_INK,
         fnName: 'safeTransferFromNoop',
         gatherArgs: [
           '.localValues.minionAddress',
