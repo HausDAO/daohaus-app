@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link as RouterLink, useParams } from 'react-router-dom';
-import { Box, Flex, Text } from '@chakra-ui/react';
+import { Box, Flex, Text, Badge } from '@chakra-ui/react';
 
 import ContentBox from './ContentBox';
 import TextBox from './TextBox';
@@ -39,6 +39,17 @@ const VaultCard = ({ vault, currentDaoTokens, vaultConfig }) => {
           <TextBox size='xs' color='whiteAlpha.900'>
             {vaultConfig.typeDisplay}
           </TextBox>
+          {vaultConfig?.badge && (
+            <Badge
+              ml={2}
+              variant=''
+              bg={vaultConfig.badge.badgeColor}
+              color={vaultConfig.badge.badgeTextColor}
+            >
+              {vaultConfig.badge.badgeName}
+            </Badge>
+          )}
+
           <CopyButton text={vault.address} iconProps={{ color: 'grey' }} />
         </Flex>
         <RouterLink

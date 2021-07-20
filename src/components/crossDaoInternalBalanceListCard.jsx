@@ -15,12 +15,13 @@ import { displayBalance } from '../utils/tokenValue';
 const CrossDaoInternalBalanceListCard = ({ token, currentDaoTokens }) => {
   const { minion, daochain } = useParams();
   const { address, injectedChain } = useInjectedProvider();
-  const { isMember } = useDaoMember();
 
-  // TODO: maybe make 2 different components for in/outside daos
+  // TODO: this is not great. maybe make 2 different components for in/outside daos
   const { submitTransaction } = daochain
     ? useTX()
     : { submitTransaction: null };
+  const { isMember } = daochain ? useDaoMember() : { isMember: null };
+
   const [tokenWhitelisted, setTokenWhitelisted] = useState();
   const [loading, setLoading] = useState();
 
