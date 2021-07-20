@@ -95,18 +95,28 @@ const NftViewModal = () => {
                       w='100%'
                       mt={5}
                     >
-                      <Box size='xs' fontFamily='mono'>
-                        Creator
-                        <AddressAvatar
-                          addr={nftViewModal.creator}
-                          hideCopy
-                          alwaysShowName
-                        />
-                      </Box>
-                      <Box size='xs' fontFamily='mono'>
-                        Last Price
-                        <Box>{nftViewModal.last_price} ETH</Box>
-                      </Box>
+                      {nftViewModal.creator && (
+                        <Box size='xs' fontFamily='mono'>
+                          Creator
+                          <AddressAvatar
+                            addr={nftViewModal.creator}
+                            hideCopy
+                            alwaysShowName
+                          />
+                        </Box>
+                      )}
+                      {nftViewModal.lastPrice && (
+                        <Box size='xs' fontFamily='mono'>
+                          Last Price
+                          <Box>{nftViewModal.lastPrice} ETH</Box>
+                        </Box>
+                      )}
+                      {!nftViewModal.lastPrice && nftViewModal.name && (
+                        <Box size='xs' fontFamily='mono'>
+                          Created on
+                          <Box>{nftViewModal.name}</Box>
+                        </Box>
+                      )}
                     </Flex>
                     <Box
                       mt={5}
