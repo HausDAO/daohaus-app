@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 import { Box, Button, Flex, Spinner, useToast } from '@chakra-ui/react';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
 
@@ -16,7 +16,7 @@ import { supportedChains } from '../utils/chain';
 import { vaultConfigByType } from '../data/vaults';
 
 const MinionVault = ({ overview, customTerms, daoVaults }) => {
-  const { daochain, minion } = useParams();
+  const { daoid, daochain, minion } = useParams();
   const { currentDaoTokens } = useToken();
   const toast = useToast();
   const [vault, setVault] = useState(null);
@@ -150,13 +150,13 @@ const MinionVault = ({ overview, customTerms, daoVaults }) => {
               <>
                 <Flex direction='row' justify='space-between'>
                   <TextBox w='100%'>NFTS</TextBox>
-                  {/* <TextBox w='100%' fontcolor='secondary'>
+                  <TextBox w='100%' fontcolor='secondary'>
                     <Link
                       to={`/dao/${daochain}/${daoid}/gallery/minion/${minion}`}
                     >
                       View Gallery
                     </Link>
-                  </TextBox> */}
+                  </TextBox>
                 </Flex>
                 {vault.nfts.map((nft, i) => (
                   <VaultNftCard nft={nft} key={i} />

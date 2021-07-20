@@ -96,9 +96,9 @@ const Vaults = ({
             fontFamily='heading'
             fontSize={['sm', null, null, 'md']}
           >
-            {/* <Link to={`/dao/${daochain}/${daoid}/gallery`}>
+            <Link to={`/dao/${daochain}/${daoid}/gallery`}>
               View NFT Gallery
-            </Link> */}
+            </Link>
           </Box>
         )}
       </Flex>
