@@ -7,6 +7,7 @@ import {
   ModalOverlay,
   ModalHeader,
   Box,
+  Image,
 } from '@chakra-ui/react';
 import { rgba } from 'polished';
 
@@ -57,6 +58,9 @@ const GenericModal = ({
           </Box>
         </ModalHeader>
         <ModalCloseButton />
+        {formLego?.localValues?.nftImage && (
+          <Image src={formLego?.localValues?.nftImage} />
+        )}
         <ModalBody
           flexDirection='column'
           display='flex'

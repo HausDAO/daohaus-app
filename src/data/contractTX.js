@@ -31,6 +31,11 @@ export const CONTRACTS = {
     abiName: 'ERC_721',
     contractAddress: '.values.nftAddress',
   },
+  LOCAL_ERC_721: {
+    location: 'local',
+    abiName: 'ERC_721',
+    contractAddress: '.localValues.contractAddress',
+  },
   LOCAL_VANILLA_MINION: {
     location: 'local',
     abiName: 'VANILLA_MINION',
@@ -40,6 +45,11 @@ export const CONTRACTS = {
     location: 'local',
     abiName: 'ERC_20',
     contractAddress: '.localValues.tokenAddress',
+  },
+  NIFTY_INK: {
+    location: 'local',
+    abiName: 'NIFTY_INK',
+    contractAddress: '0xcf964c89f509a8c0ac36391c5460df94b91daba5',
   },
 };
 
@@ -71,6 +81,18 @@ export const DETAILS = {
   },
   PAYROLL_PROPOSAL_TEMPORARY: {
     title: 'Minion sends a token',
+    description: '.values.description',
+    proposalType: '.formData.type',
+    minionType: MINION_TYPES.VANILLA,
+  },
+  MINION_ERC721_TRANSFER: {
+    title: 'Minion sends a NFT',
+    description: '.values.description',
+    proposalType: '.formData.type',
+    minionType: MINION_TYPES.VANILLA,
+  },
+  MINION_SELL_NIFTY: {
+    title: 'Minion sets Nifty price',
     description: '.values.description',
     proposalType: '.formData.type',
     minionType: MINION_TYPES.VANILLA,
@@ -329,6 +351,56 @@ export const TX = {
       {
         type: 'detailsToJSON',
         gatherFields: DETAILS.PAYROLL_PROPOSAL_TEMPORARY,
+      },
+    ],
+  },
+  MINION_SEND_ERC721_TOKEN: {
+    contract: CONTRACTS.LOCAL_VANILLA_MINION,
+    name: 'proposeAction',
+    poll: 'subgraph',
+    onTxHash: ACTIONS.GENERIC_MODAL,
+    display: 'Transferring NFT',
+    errMsg: 'Error Submitting Proposal',
+    successMsg: 'Proposal Submitted!',
+    gatherArgs: [
+      '.localValues.contractAddress',
+      0,
+      {
+        type: 'encodeHex',
+        contract: CONTRACTS.LOCAL_ERC_721,
+        fnName: 'safeTransferFrom',
+        gatherArgs: [
+          '.localValues.minionAddress',
+          '.values.applicant',
+          '.localValues.tokenId',
+        ],
+      },
+      {
+        type: 'detailsToJSON',
+        gatherFields: DETAILS.MINION_ERC721_TRANSFER,
+      },
+    ],
+  },
+  MINION_NIFTY_SET_PRICE: {
+    contract: CONTRACTS.LOCAL_VANILLA_MINION,
+    name: 'proposeAction',
+    poll: 'subgraph',
+    onTxHash: ACTIONS.GENERIC_MODAL,
+    display: 'Sell Nifty',
+    errMsg: 'Error Submitting Proposal',
+    successMsg: 'Proposal Submitted!',
+    gatherArgs: [
+      '.localValues.contractAddress',
+      0,
+      {
+        type: 'encodeHex',
+        contract: CONTRACTS.NIFTY_INK,
+        fnName: 'setTokenPrice',
+        gatherArgs: ['.localValues.tokenId', '.values.price'],
+      },
+      {
+        type: 'detailsToJSON',
+        gatherFields: DETAILS.MINION_SELL_NIFTY,
       },
     ],
   },

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { useParams, Link } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 import { Box, Button, Flex, Spinner, useToast } from '@chakra-ui/react';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
 
@@ -9,24 +9,20 @@ import BalanceList from '../components/balanceList';
 import MainViewLayout from '../components/mainViewLayout';
 import TextBox from '../components/TextBox';
 import VaultNftCard from '../components/vaultNftCard';
-import HubBalanceList from '../components/crossDaoInternalBalanceList';
+import CrossDaoInternalBalanceList from '../components/crossDaoInternalBalanceList';
 import { fetchMinionInternalBalances } from '../utils/theGraph';
 import { fetchNativeBalance } from '../utils/tokenExplorerApi';
 import { supportedChains } from '../utils/chain';
 import { vaultConfigByType } from '../data/vaults';
 
 const MinionVault = ({ overview, customTerms, daoVaults }) => {
-  const { daochain, daoid, minion } = useParams();
+  const { daoid, daochain, minion } = useParams();
   const { currentDaoTokens } = useToken();
   const toast = useToast();
   const [vault, setVault] = useState(null);
   const [erc20Balances, setErc20Balances] = useState(null);
   const [nativeBalance, setNativeBalance] = useState(null);
   const [internalBalances, setInternalBalances] = useState(null);
-
-  const withdraw = () => {
-    console.log('withdraw');
-  };
 
   const handleCopy = () => {
     toast({
@@ -132,14 +128,11 @@ const MinionVault = ({ overview, customTerms, daoVaults }) => {
               daoVaults={daoVaults}
               visibleVaults={[vault]}
             />
-            <HubBalanceList
+            <CrossDaoInternalBalanceList
               tokens={internalBalances}
-              withdraw={withdraw}
               currentDaoTokens={currentDaoTokens}
             />
-
             <BalanceList vaultConfig={vault.config} balances={erc20Balances} />
-
             {nativeBalance && (
               <BalanceList
                 vaultConfig={vault.config}

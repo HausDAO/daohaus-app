@@ -14,11 +14,7 @@ import TextBox from './TextBox';
 import ContentBox from './ContentBox';
 import CrossDaoInternalBalanceListCard from './crossDaoInternalBalanceListCard';
 
-const CrossDaoInternalBalanceList = ({
-  tokens,
-  withdraw,
-  currentDaoTokens,
-}) => {
+const CrossDaoInternalBalanceList = ({ tokens, currentDaoTokens }) => {
   return (
     <ContentBox mt={6}>
       <Accordion allowToggle defaultIndex={0} border='none' borderWidth='0'>
@@ -56,7 +52,6 @@ const CrossDaoInternalBalanceList = ({
                     <CrossDaoInternalBalanceListCard
                       key={token?.id}
                       token={token}
-                      withdraw={withdraw}
                       currentDaoTokens={currentDaoTokens}
                     />
                   );
