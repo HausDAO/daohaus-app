@@ -47,14 +47,14 @@ const NftCardActionMenu = ({ nft, loading }) => {
         <MenuButton
           as={Button}
           size='sm'
-          variant='outline'
+          /* variant='outline' */
           color='secondary.400'
           _hover={{ cursor: 'pointer' }}
           isDisabled={loading}
         >
           <Icon
             as={BsThreeDots}
-            color='secondary.400'
+            color='white'
             h='20px'
             w='20px'
             _hover={{ cursor: 'pointer' }}
