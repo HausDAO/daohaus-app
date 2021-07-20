@@ -151,11 +151,13 @@ const MinionVault = ({ overview, customTerms, daoVaults }) => {
                 <Flex direction='row' justify='space-between'>
                   <TextBox w='100%'>NFTS</TextBox>
                   <TextBox w='100%' fontcolor='secondary'>
-                    <Link
-                      to={`/dao/${daochain}/${daoid}/gallery/minion/${minion}`}
-                    >
-                      View Gallery
-                    </Link>
+                    {false && (
+                      <Link
+                        to={`/dao/${daochain}/${daoid}/gallery/minion/${minion}`}
+                      >
+                        View Gallery
+                      </Link>
+                    )}
                   </TextBox>
                 </Flex>
                 {vault.nfts.map((nft, i) => (
