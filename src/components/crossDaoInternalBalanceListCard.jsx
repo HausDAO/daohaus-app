@@ -4,12 +4,13 @@ import { Flex, Box, Skeleton, Icon } from '@chakra-ui/react';
 import { RiLoginBoxLine } from 'react-icons/ri';
 
 import { useTX } from '../contexts/TXContext';
+import { useDaoMember } from '../contexts/DaoMemberContext';
 import { useInjectedProvider } from '../contexts/InjectedProviderContext';
 import MinionInternalBalanceActionMenu from './minionInternalBalanceActionMenu';
-import { daoConnectedAndSameChain, numberWithCommas } from '../utils/general';
+import { daoConnectedAndSameChain } from '../utils/general';
 import { chainByName } from '../utils/chain';
 import { TX } from '../data/contractTX';
-import { useDaoMember } from '../contexts/DaoMemberContext';
+import { displayBalance } from '../utils/tokenValue';
 
 const CrossDaoInternalBalanceListCard = ({ token, currentDaoTokens }) => {
   const { minion, daochain } = useParams();
@@ -38,12 +39,6 @@ const CrossDaoInternalBalanceListCard = ({ token, currentDaoTokens }) => {
   const handleWithdraw = async options => {
     setLoading(true);
 
-    console.log('args', [
-      token.moloch.id,
-      token.token.tokenAddress,
-      token.tokenBalance,
-      options.transfer,
-    ]);
     await submitTransaction({
       tx: TX.MINION_WITHDRAW,
       args: [
@@ -86,11 +81,9 @@ const CrossDaoInternalBalanceListCard = ({ token, currentDaoTokens }) => {
           <Box fontFamily='mono'>
             {token.tokenBalance ? (
               <>
-                {`${numberWithCommas(
-                  parseFloat(
-                    +token.tokenBalance / 10 ** +token.token.decimals,
-                  ).toFixed(4),
-                )} ${token.token.symbol}`}
+                {`${displayBalance(token.tokenBalance, token.token.decimals)} ${
+                  token.token.symbol
+                }`}
               </>
             ) : null}
           </Box>
