@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { useParams, Link } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 import { Box, Button, Flex, Spinner, useToast } from '@chakra-ui/react';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
 
@@ -16,7 +16,7 @@ import { supportedChains } from '../utils/chain';
 import { vaultConfigByType } from '../data/vaults';
 
 const MinionVault = ({ overview, customTerms, daoVaults }) => {
-  const { daochain, daoid, minion } = useParams();
+  const { daoid, daochain, minion } = useParams();
   const { currentDaoTokens } = useToken();
   const toast = useToast();
   const [vault, setVault] = useState(null);

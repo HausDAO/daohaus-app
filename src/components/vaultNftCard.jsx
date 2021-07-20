@@ -22,7 +22,7 @@ const VaultNftCard = ({ nft }) => {
         w='100%'
         mb={5}
       >
-        <Box size='xs'>{hydratedNft.name}</Box>
+        <Box size='xs'>{hydratedNft?.metadata?.name || hydratedNft.name}</Box>
 
         {/* <Box size='xs' color='secondary.500'>
           View
@@ -50,6 +50,12 @@ const VaultNftCard = ({ nft }) => {
           <Box size='xs' fontFamily='mono'>
             Last Price
             <Box>{hydratedNft.lastPrice} ETH</Box>
+          </Box>
+        )}
+        {!hydratedNft.lastPrice && hydratedNft.name && (
+          <Box size='xs' fontFamily='mono'>
+            Created on
+            <Box>{hydratedNft.name}</Box>
           </Box>
         )}
       </Flex>
