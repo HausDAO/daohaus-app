@@ -95,59 +95,73 @@ const NftViewModal = () => {
                       w='100%'
                       mt={5}
                     >
-                      <Box size='xs' fontFamily='mono'>
-                        Creator
-                        <AddressAvatar
-                          addr={nftViewModal.creator}
-                          hideCopy
-                          alwaysShowName
-                        />
-                      </Box>
-                      <Box size='xs' fontFamily='mono'>
-                        Last Price
-                        <Box>{nftViewModal.last_price} ETH</Box>
-                      </Box>
+                      {nftViewModal.creator && (
+                        <Box size='xs' fontFamily='mono'>
+                          Creator
+                          <AddressAvatar
+                            addr={nftViewModal.creator}
+                            hideCopy
+                            alwaysShowName
+                          />
+                        </Box>
+                      )}
+                      {nftViewModal.lastPrice && (
+                        <Box size='xs' fontFamily='mono'>
+                          Last Price
+                          <Box>{nftViewModal.lastPrice} ETH</Box>
+                        </Box>
+                      )}
+                      {!nftViewModal.lastPrice && nftViewModal.name && (
+                        <Box size='xs' fontFamily='mono'>
+                          Created on
+                          <Box>{nftViewModal.name}</Box>
+                        </Box>
+                      )}
                     </Flex>
-                    <Box
-                      mt={5}
-                      size='xl'
-                      color='secondary.500'
-                      _hover={{ cursor: 'pointer' }}
-                    >
-                      Sell
-                    </Box>
-                    <Box
-                      mt={2}
-                      size='xl'
-                      color='secondary.500'
-                      _hover={{ cursor: 'pointer' }}
-                    >
-                      Send
-                    </Box>
-                    <Box
-                      mt={2}
-                      size='s'
-                      color='secondary.500'
-                      _hover={{ cursor: 'pointer' }}
-                    >
-                      View on OpenSea
-                    </Box>
-                    <Box
-                      mt={2}
-                      size='s'
-                      color='secondary.500'
-                      _hover={{ cursor: 'pointer' }}
-                    >
-                      Share Link
-                    </Box>
-                    <Box
-                      mt={2}
-                      size='s'
-                      color='secondary.500'
-                      _hover={{ cursor: 'pointer' }}
-                    >
-                      buy
-                    </Box>
+                    {false && (
+                      <>
+                        <Box
+                          mt={5}
+                          size='xl'
+                          color='secondary.500'
+                          _hover={{ cursor: 'pointer' }}
+                        >
+                          Sell
+                        </Box>
+                        <Box
+                          mt={2}
+                          size='xl'
+                          color='secondary.500'
+                          _hover={{ cursor: 'pointer' }}
+                        >
+                          Send
+                        </Box>
+                        <Box
+                          mt={2}
+                          size='s'
+                          color='secondary.500'
+                          _hover={{ cursor: 'pointer' }}
+                        >
+                          View on OpenSea
+                        </Box>
+                        <Box
+                          mt={2}
+                          size='s'
+                          color='secondary.500'
+                          _hover={{ cursor: 'pointer' }}
+                        >
+                          Share Link
+                        </Box>
+                        <Box
+                          mt={2}
+                          size='s'
+                          color='secondary.500'
+                          _hover={{ cursor: 'pointer' }}
+                        >
+                          buy
+                        </Box>
+                      </>
+                    )}
                   </Box>
                 </Flex>
               </Flex>

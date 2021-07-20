@@ -9,6 +9,7 @@ import MinionTransfer from './minionTransfer';
 import SyncTokenButton from './syncTokenButton';
 import Withdraw from './withdraw';
 import { numberWithCommas } from '../utils/general';
+import { displayBalance } from '../utils/tokenValue';
 
 const balanceCard = ({ token, isBank = true, hasBalance, isNativeToken }) => {
   const toast = useToast();
@@ -16,7 +17,7 @@ const balanceCard = ({ token, isBank = true, hasBalance, isNativeToken }) => {
   const { daoMember, delegate, isMember } = useDaoMember();
   const [needsSync, setNeedsSync] = useState(null);
 
-  const displayBalance = useMemo(() => {
+  const formattedBalance = useMemo(() => {
     if (token) {
       const balanceFromWei = +token.tokenBalance / 10 ** +token.decimals;
       return numberWithCommas(
@@ -76,14 +77,14 @@ const balanceCard = ({ token, isBank = true, hasBalance, isNativeToken }) => {
           <Box fontFamily='mono'>
             {token?.tokenBalance && isNativeToken && (
               <>
-                {`${numberWithCommas(
-                  +token.tokenBalance / 10 ** +token.decimals,
-                )} ${token.symbol}`}
+                {`${displayBalance(token.tokenBalance, token.decimals)} ${
+                  token.symbol
+                }`}
               </>
             )}
 
-            {displayBalance && !isNativeToken && (
-              <>{`${displayBalance} ${token.symbol}`}</>
+            {formattedBalance && !isNativeToken && (
+              <>{`${formattedBalance} ${token.symbol}`}</>
             )}
           </Box>
         </Skeleton>
