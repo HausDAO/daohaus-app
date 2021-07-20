@@ -169,7 +169,7 @@ const MinionGallery = ({ daoVaults, customTerms }) => {
         <Wrap flex={1} spacing={4} w='90%'>
           {nfts &&
             nfts.length > 0 &&
-            [...nfts, ...nfts, ...nfts, ...nfts].map((nft, i) => (
+            nfts.map((nft, i) => (
               <WrapItem key={i}>
                 <NftCard nft={nft} />
               </WrapItem>
