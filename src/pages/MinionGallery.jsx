@@ -3,11 +3,10 @@ import deepEqual from 'deep-eql';
 import { useParams } from 'react-router-dom';
 import { Wrap, WrapItem, Flex, Button, Box } from '@chakra-ui/react';
 import MainViewLayout from '../components/mainViewLayout';
-import GalleryNftCard from '../components/galleryNftCard';
 import NftFilter from '../components/nftFilter';
 import ListSort from '../components/listSort';
 import { nftFilterOptions, nftSortOptions } from '../utils/nftContent';
-import NftViewModal from '../modals/nftViewModal';
+import NftCard from '../components/nftCard';
 
 const MinionGallery = ({ daoVaults, customTerms }) => {
   const { minion } = useParams();
@@ -17,9 +16,7 @@ const MinionGallery = ({ daoVaults, customTerms }) => {
   const [collection, setCollection] = useState('all');
   const [allCollections, setAllCollections] = useState([]);
   const [nfts, setNfts] = useState(null);
-  const [nftData, setNftData] = useState(null);
-
-  // Grab Vault NFTs
+  const [nftData, setNftData] = useState(null); // Grab Vault NFTs
   useEffect(() => {
     if (daoVaults) {
       let nfts = [];
@@ -172,14 +169,13 @@ const MinionGallery = ({ daoVaults, customTerms }) => {
         <Wrap flex={1} spacing={4} w='90%'>
           {nfts &&
             nfts.length > 0 &&
-            nfts.map((nft, i) => (
+            [...nfts, ...nfts, ...nfts, ...nfts].map((nft, i) => (
               <WrapItem key={i}>
-                <GalleryNftCard nft={nft} />
+                <NftCard nft={nft} />
               </WrapItem>
             ))}
         </Wrap>
       </Flex>
-      <NftViewModal />
     </MainViewLayout>
   );
 };

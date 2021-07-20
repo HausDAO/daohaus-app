@@ -8,7 +8,7 @@ import BankChart from '../components/bankChart';
 import BalanceList from '../components/balanceList';
 import MainViewLayout from '../components/mainViewLayout';
 import TextBox from '../components/TextBox';
-import VaultNftCard from '../components/vaultNftCard';
+import NftCard from '../components/nftCard';
 import CrossDaoInternalBalanceList from '../components/crossDaoInternalBalanceList';
 import { fetchMinionInternalBalances } from '../utils/theGraph';
 import { fetchNativeBalance } from '../utils/tokenExplorerApi';
@@ -159,7 +159,7 @@ const MinionVault = ({ overview, customTerms, daoVaults }) => {
                   </TextBox>
                 </Flex>
                 {vault.nfts.map((nft, i) => (
-                  <VaultNftCard nft={nft} key={i} />
+                  <NftCard nft={nft} key={i} />
                 ))}
               </>
             )}
