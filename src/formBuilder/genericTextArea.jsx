@@ -15,6 +15,7 @@ const GenericTextarea = ({
   h = 10,
   error,
   disabled,
+  layout,
 }) => {
   const { register } = localForm;
 
@@ -26,6 +27,7 @@ const GenericTextarea = ({
       helperText={helperText}
       btn={btn}
       error={error}
+      layout={layout}
     >
       <Textarea
         id={htmlFor}

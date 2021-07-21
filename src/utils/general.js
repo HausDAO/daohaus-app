@@ -271,3 +271,15 @@ export const isSameAddress = (addr1, addr2) => {
   if (typeof addr1 !== 'string' || typeof addr2 !== 'string') return null;
   return addr1.toLowerCase() === addr2.toLowerCase();
 };
+
+export const getKeyedArray = (obj, keyName = 'field') => {
+  if (!obj) {
+    console.error('Receieved falsy value for object in getKeyedArray');
+    return null;
+  }
+  if (isObjectEmpty(obj)) {
+    console.warn('Object passed to getKeyedArray is Empty');
+    return [];
+  }
+  return Object.entries(obj).map(item => ({ ...item[1], [keyName]: item[0] }));
+};

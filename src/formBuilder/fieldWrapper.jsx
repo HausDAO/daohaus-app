@@ -22,7 +22,7 @@ const FieldWrapper = ({
 }) => {
   const width = useMemo(() => {
     if (w) return w;
-    if (layout === 'singleRow') return '100%';
+    if (layout === 'singleColumn') return '100%';
     return ['100%', null, '48%'];
   }, [w, layout]);
   return (

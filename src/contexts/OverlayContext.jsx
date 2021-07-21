@@ -8,7 +8,7 @@ export const OverlayProvider = ({ children }) => {
   const [daoSwitcherModal, setDaoSwitcherModal] = useState(false);
   const [hubAccountModal, setHubAccountModal] = useState(false);
   const [daoAccountModal, setDaoAccountModal] = useState(false);
-  const [proposalModal, setProposalModal] = useState(false);
+  const [formModal, setFormModal] = useState(null);
   const [proposalSelector, setProposalSelector] = useState(false);
   const [txInfoModal, setTxInfoModal] = useState(false);
   const [imageUploadModal, setImageUploadModal] = useState(false);
@@ -47,6 +47,10 @@ export const OverlayProvider = ({ children }) => {
     });
   };
 
+  const displayFormModal = params => {
+    setFormModal(params);
+  };
+
   return (
     <OverlayContext.Provider
       value={{
@@ -56,8 +60,8 @@ export const OverlayProvider = ({ children }) => {
         setHubAccountModal,
         daoAccountModal,
         setDaoAccountModal,
-        proposalModal,
-        setProposalModal,
+        formModal,
+        setFormModal,
         errorToast,
         successToast,
         warningToast,
@@ -73,6 +77,7 @@ export const OverlayProvider = ({ children }) => {
         setGenericModal,
         proposalSelector,
         setProposalSelector,
+        displayFormModal,
       }}
     >
       {children}
@@ -90,8 +95,8 @@ export const useOverlay = () => {
     setHubAccountModal,
     daoAccountModal,
     setDaoAccountModal,
-    proposalModal,
-    setProposalModal,
+    formModal,
+    setFormModal,
     errorToast,
     successToast,
     warningToast,
@@ -107,6 +112,7 @@ export const useOverlay = () => {
     setGenericModal,
     proposalSelector,
     setProposalSelector,
+    displayFormModal,
   } = useContext(OverlayContext);
   return {
     daoSwitcherModal,
@@ -115,8 +121,8 @@ export const useOverlay = () => {
     setDaoAccountModal,
     hubAccountModal,
     setHubAccountModal,
-    proposalModal,
-    setProposalModal,
+    formModal,
+    setFormModal,
     errorToast,
     successToast,
     warningToast,
@@ -132,5 +138,6 @@ export const useOverlay = () => {
     setGenericModal,
     proposalSelector,
     setProposalSelector,
+    displayFormModal,
   };
 };
