@@ -27,7 +27,6 @@ const Settings = ({ overview, daoMember, daoMetaData, customTerms }) => {
         molochAddress: daoid,
       });
 
-      console.log('transmutationRes', transmutationRes);
       if (transmutationRes.transmutations[0]) {
         setTransmutationContract(
           transmutationRes.transmutations[0].transmutation,

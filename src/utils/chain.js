@@ -18,7 +18,7 @@ export const supportedChains = {
     stats_graph_url:
       'https://api.thegraph.com/subgraphs/name/odyssy-automaton/daohaus-stats',
     boosts_graph_url:
-      'https://api.thegraph.com/subgraphs/name/odyssy-automaton/daohaus-transmutation',
+      'https://api.thegraph.com/subgraphs/name/odyssy-automaton/daohaus-boosts',
     minion_factory_addr: '0x88207Daf515e0da1A32399b3f92D128B1BF45294',
     moloch_factory_addr: '0x38064F40B20347d58b326E767791A6f79cdEddCe',
     dai_contract: '0x6b175474e89094c44da98b954eedeac495271d0f',
