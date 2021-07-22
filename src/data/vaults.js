@@ -1,13 +1,11 @@
 // TODO: just playing with this sor far - for real legos these should power some factory components to build the page
+// the legos to build out nft card actions are a better pattern right now.
 export const VAULT = {
   TREASURY: {
     typeDisplay: 'Treasury',
     canHoldNft: false,
     balanceListTitle: 'Whitelisted Token Balances',
-    // try to tell it how to get token list from context?
-    cardActions: ['collectTokens'],
   },
-  // could profile balance list work off this?
   MINION: {
     typeDisplay: 'Minion',
     canHoldNft: true,

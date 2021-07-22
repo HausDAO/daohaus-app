@@ -1,6 +1,6 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router';
-import { Flex, Box, Skeleton, Image, useToast, Icon } from '@chakra-ui/react';
+import { Flex, Box, Image, useToast, Icon } from '@chakra-ui/react';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
 import { FaCopy } from 'react-icons/fa';
 
@@ -38,8 +38,6 @@ const balanceCard = ({ token, isBank = true, hasBalance, isNativeToken }) => {
       isClosable: true,
     });
   };
-
-  console.log('token', token);
 
   return (
     <Flex h='60px' align='center'>

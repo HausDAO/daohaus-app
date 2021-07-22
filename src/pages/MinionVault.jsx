@@ -48,6 +48,12 @@ const MinionVault = ({ overview, customTerms, daoVaults }) => {
       const vaultMatch = daoVaults.find(vault => {
         return vault.address === minion;
       });
+
+      if (!vaultMatch) {
+        console.log('no vault found');
+        return;
+      }
+
       // TODO: shape this on the api side and remove formatting here
       const tempFormattedVaultData = vaultMatch.erc20s.map(token => {
         return {
@@ -151,11 +157,13 @@ const MinionVault = ({ overview, customTerms, daoVaults }) => {
                 <Flex direction='row' justify='space-between'>
                   <TextBox w='100%'>NFTS</TextBox>
                   <TextBox w='100%' fontcolor='secondary'>
-                    <Link
-                      to={`/dao/${daochain}/${daoid}/gallery/minion/${minion}`}
-                    >
-                      View Gallery
-                    </Link>
+                    {false && (
+                      <Link
+                        to={`/dao/${daochain}/${daoid}/gallery/minion/${minion}`}
+                      >
+                        View Gallery
+                      </Link>
+                    )}
                   </TextBox>
                 </Flex>
                 {vault.nfts.map((nft, i) => (

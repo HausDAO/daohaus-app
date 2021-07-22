@@ -110,7 +110,7 @@ export const TXProvider = ({ children }) => {
   };
 
   const buildTXPoll = data => {
-    const { tx, values, formData, now, lifeCycleFns } = data;
+    const { tx, values, formData, now, lifeCycleFns, localValues } = data;
 
     return createPoll({
       action: tx.poll || tx.specialPoll || tx.name,
@@ -121,6 +121,7 @@ export const TXProvider = ({ children }) => {
       tx,
       createdAt: now,
       ...values,
+      ...localValues,
       address,
       actions: {
         onError: (error, txHash) => {
