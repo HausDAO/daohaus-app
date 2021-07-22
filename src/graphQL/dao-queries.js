@@ -4,7 +4,6 @@ export const HOME_DAO = gql`
   query moloch($contractAddr: String!) {
     moloch(id: $contractAddr) {
       id
-      title
       summoner
       summoningTime
       newContract
@@ -56,7 +55,6 @@ export const DAO_ACTIVITIES = gql`
   query molochActivities($contractAddr: String!, $skip: Int) {
     moloch(id: $contractAddr) {
       id
-      title
       version
       proposals(orderBy: createdAt, orderDirection: desc, skip: $skip) {
         id
