@@ -76,7 +76,7 @@ const ProposalSelector = () => {
             </TextBox>
           </Flex>
         </ModalHeader>
-        <SetSelector
+        <PlaylistSelect
           sets={PLAYLISTS}
           selectPlaylist={selectPlaylist}
           handleClose={handleClose}
@@ -103,7 +103,7 @@ const ProposalSelector = () => {
 
 export default ProposalSelector;
 
-const SetSelector = ({ sets, selectPlaylist, handleClose }) => {
+const PlaylistSelect = ({ sets, selectPlaylist, handleClose }) => {
   const { daochain, daoid } = useParams();
   const handleChange = e => {
     if (!e?.target?.value) return;

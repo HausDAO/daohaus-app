@@ -3,6 +3,25 @@ import { FIELD, INFO_TEXT, FORM_DISPLAY } from './fields';
 import { TX } from './contractTX';
 import swordImg from '../assets/img/swords-white.svg';
 
+export const CORE_FORMS = {
+  EDIT_PLAYLIST: {
+    id: 'EDIT_PLAYLIST',
+    title: 'Edit Proposal Playlist',
+    layout: 'singleColumn',
+    type: PROPOSAL_TYPES.CORE,
+    required: ['title'],
+    fields: [{ ...FIELD.TITLE, helperText: 'Max 100 characters' }],
+  },
+  ADD_PLAYLIST: {
+    id: 'ADD_PLAYLIST',
+    title: 'Add a Proposal Playlist',
+    layout: 'singleColumn',
+    type: PROPOSAL_TYPES.CORE,
+    required: ['selectedMinion'],
+    fields: [{ ...FIELD.TITLE, helperText: 'Max 100 characters' }],
+  },
+};
+
 export const FORM = {
   BUY_SHARES: {
     id: 'BUY_SHARES',
@@ -233,3 +252,8 @@ export const CLASSIC_FORMS = {
 };
 
 export const PLAYLISTS = [COMMON_FORMS, CLASSIC_FORMS];
+export const ALL_FORMS = {
+  name: 'All Proposals',
+  value: 'all',
+  forms: Object.values(FORM),
+};

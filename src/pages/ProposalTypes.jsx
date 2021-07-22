@@ -1,253 +1,178 @@
-import React, { useEffect, useState } from 'react';
-import {
-  Flex,
-  Stack,
-  Switch,
-  Box,
-  Button,
-  Spinner,
-  Input,
-  Icon,
-  Tooltip,
-} from '@chakra-ui/react';
-import { BiArrowBack } from 'react-icons/bi';
-import { RiQuestionLine } from 'react-icons/ri';
-import { useParams, Link as RouterLink } from 'react-router-dom';
-import { useInjectedProvider } from '../contexts/InjectedProviderContext';
-import { boostPost, getTerm, getTitle } from '../utils/metadata';
-import { useOverlay } from '../contexts/OverlayContext';
+import React, { useState } from 'react';
+
+import { Box, Icon, Flex, Button, Text } from '@chakra-ui/react';
+import { VscGear } from 'react-icons/vsc';
+import { FiTrash2 } from 'react-icons/fi';
+import { add } from 'date-fns/esm';
 import ContentBox from '../components/ContentBox';
-import TextBox from '../components/TextBox';
-import { proposalTypesContent } from '../content/boost-content';
 import MainViewLayout from '../components/mainViewLayout';
-import { useMetaData } from '../contexts/MetaDataContext';
+import TextBox from '../components/TextBox';
+import { ALL_FORMS, CORE_FORMS, PLAYLISTS } from '../data/forms';
+import { submitVoteTest } from '../polls/tests';
+import { useOverlay } from '../contexts/OverlayContext';
 
-const ProposalTypes = ({ daoMetaData, refetchMetaData }) => {
-  const { injectedProvider, injectedChain, address } = useInjectedProvider();
-  const { daochain, daoid } = useParams();
-  const { customTerms } = useMetaData();
-  const { setGenericModal, successToast, errorToast } = useOverlay();
-  const [localMetadata, setLocalMetadata] = useState();
-  const [hasChanges, setHasChanges] = useState();
-  const [loading, setLoading] = useState();
-  const [error, setError] = useState(null);
+const playlistActions = {
+  edit() {},
+  delete() {},
+  add() {},
+  // async submit() {},
+};
 
-  useEffect(() => {
-    if (daoMetaData?.boosts?.proposalTypes?.active) {
-      setLocalMetadata(daoMetaData.boosts.proposalTypes.metadata);
-    }
-  }, [daoMetaData]);
+const ProposalTypes = ({ customTerms }) => {
+  const { displayFormModal } = useOverlay();
+  const [playLists, setPlaylists] = useState(PLAYLISTS);
+  const [selectedList, setSelectedList] = useState(ALL_FORMS);
 
-  const handleSave = async () => {
-    setLoading(true);
-
-    try {
-      const metaUpdate = localMetadata;
-      console.log(metaUpdate);
-
-      const messageHash = injectedProvider.utils.sha3(daoid);
-      const signature = await injectedProvider.eth.personal.sign(
-        messageHash,
-        address,
-      );
-
-      const updateNotifications = {
-        contractAddress: daoid,
-        boostKey: 'proposalTypes',
-        metadata: metaUpdate,
-        network: injectedChain.network,
-        signature,
-      };
-
-      const updateRes = await boostPost('dao/boost', updateNotifications);
-      console.log('updateRes', updateRes);
-      setLoading(false);
-      setHasChanges(false);
-      setGenericModal({});
-      refetchMetaData();
-      successToast({
-        title: 'Notification Settings Updated',
-        description: 'You DAOd it!',
-      });
-    } catch (err) {
-      console.log('update error', err);
-      setLoading(false);
-      errorToast({
-        title: 'Something went wrong',
-        description: 'Are you an active member of this DAO?',
-      });
-    }
-  };
-
-  const handleChange = (proposal, e) => {
-    const updateData = {
-      ...localMetadata,
-      [proposal.key]: {
-        ...localMetadata[proposal.key],
-        active: e.target.checked,
-      },
-    };
-    setLocalMetadata(updateData);
-    setHasChanges(true);
-  };
-
-  const handleOptionChange = (key, option, e) => {
-    if (option?.validation(e.target.value)) {
-      setLocalMetadata({
-        ...localMetadata,
-        [key]: {
-          ...localMetadata[key],
-          [option.id]: e.target.value,
-        },
-      });
-      setHasChanges(true);
-      setError(null);
+  const selectList = value => {
+    if (!value) return;
+    if (value === 'all') {
+      setSelectedList(ALL_FORMS);
+    } else if (value === selectedList?.value) {
+      setSelectedList(null);
     } else {
-      setError({ error: option.validationText });
+      setSelectedList(PLAYLISTS.find(list => list.value === value));
     }
   };
 
-  const renderProposalType = proposal => {
-    const isActive =
-      proposal.key in localMetadata
-        ? localMetadata[proposal.key].active === true
-        : false;
-    return (
-      <ContentBox key={proposal.label}>
-        <Flex justify='space-between'>
-          <TextBox size='sm'>{proposal.label}</TextBox>
-          <Flex align='center'>
-            {proposal.comingSoon ? (
-              <TextBox size='xs'>Coming Soon</TextBox>
-            ) : (
-              <Switch
-                id={proposal.key}
-                colorScheme='blue'
-                isChecked={isActive}
-                onChange={e => handleChange(proposal, e)}
-                isDisabled={
-                  loading ||
-                  (!proposal.default && !(proposal?.key in daoMetaData.boosts))
-                }
-              />
-            )}
-          </Flex>
-        </Flex>
-        {isActive &&
-          proposal.options?.length &&
-          proposal.options.map(option => {
-            return localMetadata?.[proposal.key][option.id] ? (
-              <Flex
-                mt={3}
-                key={`${proposal.key}-${option.id}`}
-                justify='space-around'
-                align='center'
-                wrap='wrap'
-              >
-                <Flex align='center'>
-                  <TextBox size='xs'>{option.label}</TextBox>
-                  {option.validationText ? (
-                    <Tooltip
-                      hasArrow
-                      shouldWrapChildren
-                      placement='top'
-                      label={option.validationText}
-                    >
-                      <Icon ml={2} as={RiQuestionLine} color='whiteAlpha.800' />
-                    </Tooltip>
-                  ) : null}
-                </Flex>
-
-                <Box maxW='50%'>
-                  <Input
-                    type={option.type}
-                    id={option.id}
-                    defaultValue={
-                      localMetadata[proposal.key][option.id] ||
-                      option?.default ||
-                      0
-                    }
-                    border={error ? '1px solid red' : '1px solid white'}
-                    textAlign='right'
-                    onChange={e => handleOptionChange(proposal.key, option, e)}
-                  />
-                  {error ? (
-                    <Box mt={2} fontSize='sm' color='red'>
-                      {option.validationText}
-                    </Box>
-                  ) : null}
-                </Box>
-              </Flex>
-            ) : null;
-          })}
-      </ContentBox>
-    );
+  const handleEditPlaylist = (e, value, params) => {
+    e.stopPropagation();
+    displayFormModal(CORE_FORMS.EDIT_PLAYLIST);
+  };
+  const handleDeletePlaylist = (e, value) => {
+    e.stopPropagation();
+    // displayFormModal(CONFIRMATION.DELETE_PLAYLIST);
+  };
+  const handleAddPlaylist = value => {
+    console.log('fired');
+    displayFormModal(CORE_FORMS.ADD_PLAYLIST);
   };
 
   return (
-    <MainViewLayout
-      header={`${getTerm(customTerms, 'proposal')} ${getTerm(
-        customTerms,
-        'settings',
-      )}`}
-      isDao
-    >
-      {localMetadata ? (
-        <>
-          <Flex justify='space-between' align='center' w='100%'>
-            <Flex
-              as={RouterLink}
-              to={`/dao/${daochain}/${daoid}/settings`}
-              align='center'
-            >
-              <Icon as={BiArrowBack} color='secondary.500' mr={2} />
-              Back
-            </Flex>
-            <Flex align='center'>
-              {loading ? <Spinner mr={4} /> : null}
-              <Button
-                mx='2.5%'
-                disabled={!hasChanges || loading}
-                onClick={() => handleSave()}
-              >
-                Save Changes
-              </Button>
-            </Flex>
-          </Flex>
-          <Flex justify='space-around' mt='100px'>
-            <Box w={['90%', '80%', '60%', '45%']}>
-              <Flex justify='space-between'>
-                <TextBox
-                  color='white'
-                  size='sm'
-                  mb={2}
-                  title={getTitle(customTerms, 'Proposal')}
-                >
-                  {`${getTerm(customTerms, 'proposal')} Types`}
-                </TextBox>
-              </Flex>
-
-              <Stack spacing={6}>
-                {proposalTypesContent.map(proposal =>
-                  renderProposalType(proposal),
-                )}
-              </Stack>
-            </Box>
-          </Flex>
-        </>
-      ) : (
-        <Flex justify='space-around' mt='150px'>
-          <Box w='45%'>
-            <Flex justify='space-between'>
-              <TextBox color='whiteAlpha.900' size='sm' mb={2}>
-                Boost not active
-              </TextBox>
-            </Flex>
-          </Box>
-        </Flex>
-      )}
+    <MainViewLayout isDao header='Proposal Types'>
+      <Flex w='100%'>
+        <PlaylistSelector
+          allForms={ALL_FORMS}
+          playlists={playLists}
+          selectedList={selectedList}
+          selectList={selectList}
+          handleAddPlaylist={handleAddPlaylist}
+          handleEditPlaylist={handleEditPlaylist}
+          handleDeletePlaylist={handleDeletePlaylist}
+        />
+      </Flex>
     </MainViewLayout>
   );
 };
 
 export default ProposalTypes;
+
+const PlaylistSelector = ({
+  allForms,
+  playlists,
+  selectedList,
+  selectList,
+  handleAddPlaylist,
+  handleEditPlaylist,
+  handleDeletePlaylist,
+}) => {
+  return (
+    <ContentBox p='0' minW='250px' maxW='400px' w='100%' border='none' mb={6}>
+      <Flex flexDir='column'>
+        <PlaylistItem
+          {...allForms}
+          selectList={selectList}
+          isSelected={selectedList?.value === 'all'}
+          isMutable={false}
+        />
+        <TextBox ml={6} my={6}>
+          Playlists
+        </TextBox>
+        {playlists.map(list => (
+          <PlaylistItem
+            key={list.value}
+            {...list}
+            isMutable
+            isSelected={selectedList?.value === list.value}
+            selectList={selectList}
+            handleEditPlaylist={handleEditPlaylist}
+            handleDeletePlaylist={handleDeletePlaylist}
+          />
+        ))}
+        <Button variant='outline' m={6}>
+          <TextBox color='secondary.400'>create new list</TextBox>
+        </Button>
+      </Flex>
+    </ContentBox>
+  );
+};
+
+const PlaylistItem = ({
+  name,
+  forms,
+  value,
+  isMutable,
+  isSelected,
+  selectList,
+  handleEditPlaylist,
+  handleDeletePlaylist,
+}) => {
+  const displayActions = isSelected && isMutable;
+  const handleClick = () => {
+    selectList(value);
+  };
+
+  return (
+    <Flex
+      position='relative'
+      p={6}
+      flexDir='column'
+      onClick={handleClick}
+      transition='.2s all'
+    >
+      <Box
+        position='absolute'
+        top='0'
+        right='0'
+        left='0'
+        bottom='0'
+        zIndex='0'
+        opacity='0.7'
+        // rounded='lg'
+        bg={isSelected ? 'primary.600' : 'transparent'}
+        _hover={{ bg: 'primary.600' }}
+      />
+      <Flex
+        justifyContent='space-between'
+        mb={displayActions ? 2 : 0}
+        zIndex='10'
+        pointerEvents='none'
+      >
+        <TextBox textTransform='none' size='lg'>
+          {name}
+        </TextBox>
+        <TextBox size='lg'>{forms?.length}</TextBox>
+      </Flex>
+      {displayActions && (
+        <Flex zIndex='10'>
+          <Icon
+            as={VscGear}
+            color='primary.100'
+            w='20px'
+            h='20px'
+            mr={4}
+            cursor='pointer'
+            onClick={handleEditPlaylist}
+          />
+          <Icon
+            as={FiTrash2}
+            color='primary.100'
+            w='20px'
+            h='20px'
+            cursor='pointer'
+            onClick={handleDeletePlaylist}
+          />
+        </Flex>
+      )}
+    </Flex>
+  );
+};

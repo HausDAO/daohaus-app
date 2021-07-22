@@ -1,9 +1,9 @@
 const TextBoxComponent = {
   baseStyle: props => ({
-    color: 'mode.900',
-    textAlign: props.textAlign ? props.textAlign : null,
+    color: props.color || 'mode.900',
+    textAlign: props.textAlign || null,
     fontFamily: 'heading',
-    textTransform: 'uppercase',
+    textTransform: props.textTransform || 'uppercase',
     letterSpacing: '0.15em',
     opacity: 1.0,
   }),
@@ -43,7 +43,7 @@ const TextBoxComponent = {
   variants: {
     label: props => ({
       color: 'mode.900',
-      textAlign: props.textAlign ? props.textAlign : null,
+      textAlign: props.textAlign || null,
       fontFamily: 'heading',
       textTransform: 'uppercase',
       letterSpacing: '0.15em',
@@ -51,10 +51,17 @@ const TextBoxComponent = {
     }),
     value: props => ({
       color: 'mode.900',
-      textAlign: props.textAlign ? props.textAlign : null,
+      textAlign: props.textAlign || null,
       fontFamily: 'mono',
       textTransform: 'none',
       mt: '9px',
+    }),
+    body: props => ({
+      color: 'mode.900',
+      textAlign: props.textAlign || null,
+      fontFamily: 'body',
+      textTransform: 'none',
+      fontWeight: 400,
     }),
   },
 };
