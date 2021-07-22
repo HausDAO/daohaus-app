@@ -89,19 +89,18 @@ const Vaults = ({
             labelText='Showing'
           />
         </Box>
-        {hasNfts &&
-          false(
-            <Box
-              mt={5}
-              texttransform='uppercase'
-              fontFamily='heading'
-              fontSize={['sm', null, null, 'md']}
-            >
-              <Link to={`/dao/${daochain}/${daoid}/gallery`}>
-                View NFT Gallery
-              </Link>
-            </Box>,
-          )}
+        {hasNfts && false && (
+          <Box
+            mt={5}
+            texttransform='uppercase'
+            fontFamily='heading'
+            fontSize={['sm', null, null, 'md']}
+          >
+            <Link to={`/dao/${daochain}/${daoid}/gallery`}>
+              View NFT Gallery
+            </Link>
+          </Box>
+        )}
       </Flex>
 
       <Flex wrap='wrap' align='start' justify='flex-start' w='100%'>
