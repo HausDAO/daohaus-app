@@ -1,14 +1,6 @@
-import React, { useCallback, useMemo } from 'react';
+import React, { useMemo } from 'react';
 import { Link as RouterLink, useParams } from 'react-router-dom';
-import {
-  Flex,
-  Icon,
-  useToast,
-  HStack,
-  Stack,
-  useBreakpointValue,
-  Badge,
-} from '@chakra-ui/react';
+import { Flex, Icon, useToast, HStack, Stack, Badge } from '@chakra-ui/react';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
 import { VscGear } from 'react-icons/vsc';
 import { FaCopy } from 'react-icons/fa';
@@ -31,39 +23,51 @@ const MinionList = () => {
     }
   }, [daoOverview]);
 
-  const getMinionData = useCallback(minionType => {
-    if (!minionType) return 'minon';
-    switch (minionType) {
+  const getMinionData = minion => {
+    if (!minion?.minionType) return 'minon';
+    switch (minion.minionType) {
       case MINION_TYPES.SUPERFLUID:
         return {
-          minionUrlType: 'superfluid-minion',
           badgeColor: 'green',
           badgeTextColor: 'white',
           badgeName: 'SF',
+          badgeVariant: 'solid',
+          url: `/dao/${daochain}/${daoid}/settings/superfluid-minion/${minion.minionAddress}`,
         };
       case MINION_TYPES.UBER:
         return {
-          minionUrlType: 'minion',
           badgeColor: 'purple',
           badgeTextColor: 'white',
           badgeName: 'UHS',
+          badgeVariant: 'solid',
+          url: `/dao/${daochain}/${daoid}/allies`,
         };
       case MINION_TYPES.NIFTY:
         return {
-          minionUrlType: 'minion',
           badgeColor: 'orange',
           badgeTextColor: 'white',
           badgeName: 'NIFTY',
+          badgeVariant: 'solid',
+          url: `/dao/${daochain}/${daoid}/vaults/minion/${minion.minionAddress}`,
+        };
+      case MINION_TYPES.NEAPOLITAN:
+        return {
+          badgeColor: 'pink',
+          badgeTextColor: '#632b16',
+          badgeName: 'NEAPOLITAN',
+          badgeVariant: 'outline',
+          url: `/dao/${daochain}/${daoid}/vaults/minion/${minion.minionAddress}`,
         };
       default:
         return {
-          minionUrlType: 'minion',
           badgeColor: 'white',
           badgeTextColor: 'black',
           badgeName: 'Vanilla',
+          badgeVariant: 'solid',
+          url: `/dao/${daochain}/${daoid}/vaults/minion/${minion.minionAddress}`,
         };
     }
-  }, []);
+  };
 
   const copiedToast = () => {
     toast({
@@ -75,21 +79,19 @@ const MinionList = () => {
     });
   };
 
+  console.log('minions', minions);
+
   return (
     <ContentBox d='flex' flexDirection='column' position='relative'>
       <Stack spacing={3}>
         {minions.map(minion => {
-          const minionType = useBreakpointValue({
-            base: minion.minionType?.split(' ')[0],
-            md: minion.minionType,
-          });
-
           const {
-            minionUrlType,
             badgeColor,
             badgeTextColor,
             badgeName,
-          } = getMinionData(minionType);
+            badgeVariant,
+            url,
+          } = getMinionData(minion);
 
           return (
             <Flex
@@ -113,7 +115,12 @@ const MinionList = () => {
                   {truncateAddr(minion.minionAddress)}
                 </TextBox>
 
-                <Badge variant='' bg={badgeColor} color={badgeTextColor}>
+                <Badge
+                  variant={badgeVariant}
+                  bg={badgeColor}
+                  color={badgeTextColor}
+                  borderColor='brown'
+                >
                   {badgeName}
                 </Badge>
               </HStack>
@@ -129,9 +136,7 @@ const MinionList = () => {
                 >
                   <Icon as={FaCopy} color='primary.100' ml={2} />
                 </CopyToClipboard>
-                <RouterLink
-                  to={`/dao/${daochain}/${daoid}/settings/${minionUrlType}/${minion.minionAddress}`}
-                >
+                <RouterLink to={url}>
                   <Icon
                     as={VscGear}
                     color='secondary.500'

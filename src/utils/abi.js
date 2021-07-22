@@ -9,6 +9,8 @@ import ERC_20 from '../contracts/erc20a.json';
 import VANILLA_MINION from '../contracts/minion.json';
 import ERC_721 from '../contracts/nft.json';
 import NIFTY_INK from '../contracts/niftyInk.json';
+import UBERHAUS_MINION from '../contracts/uberHausMinion.json';
+import SUPERFLUID_MINION from '../contracts/superfluidMinion.json';
 
 export const LOCAL_ABI = Object.freeze({
   MOLOCH_V2,
@@ -16,6 +18,8 @@ export const LOCAL_ABI = Object.freeze({
   VANILLA_MINION,
   ERC_721,
   NIFTY_INK,
+  UBERHAUS_MINION,
+  SUPERFLUID_MINION,
 });
 
 const isEtherScan = chainID => {

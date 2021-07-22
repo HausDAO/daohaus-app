@@ -51,6 +51,21 @@ export const CONTRACTS = {
     abiName: 'NIFTY_INK',
     contractAddress: '0xcf964c89f509a8c0ac36391c5460df94b91daba5',
   },
+  MINION_SIMPLE_EXECUTE: {
+    location: 'local',
+    abiName: 'VANILLA_MINION',
+    contractAddress: '.localValues.minionAddress',
+  },
+  UBERHAUS_MINION: {
+    location: 'local',
+    abiName: 'UBERHAUS_MINION',
+    contractAddress: '.localValues.minionAddress',
+  },
+  SUPERFLUID_MINION: {
+    location: 'local',
+    abiName: 'SUPERFLUID_MINION',
+    contractAddress: '.localValues.minionAddress',
+  },
 };
 
 export const ACTIONS = {
@@ -403,5 +418,32 @@ export const TX = {
         gatherFields: DETAILS.MINION_SELL_NIFTY,
       },
     ],
+  },
+  MINION_SIMPLE_EXECUTE: {
+    contract: CONTRACTS.MINION_SIMPLE_EXECUTE,
+    name: 'executeAction',
+    specialPoll: 'executeAction',
+    onTxHash: ACTIONS.GENERIC_MODAL,
+    display: 'Executing Minion Proposal',
+    errMsg: 'Error Executing Minion Proposal',
+    successMsg: 'Minion Proposal Executed!',
+  },
+  SUPERFLUID_MINION_EXECUTE: {
+    contract: CONTRACTS.SUPERFLUID_MINION,
+    name: 'executeAction',
+    specialPoll: 'executeAction',
+    onTxHash: ACTIONS.GENERIC_MODAL,
+    display: 'Executing Minion Proposal',
+    errMsg: 'Error Executing Minion Proposal',
+    successMsg: 'Minion Proposal Executed!',
+  },
+  UBERHAUS_MINION_EXECUTE_APPOINTMENT: {
+    contract: CONTRACTS.UBERHAUS_MINION,
+    name: 'executeAppointment',
+    specialPoll: 'executeAction',
+    onTxHash: ACTIONS.GENERIC_MODAL,
+    display: 'Executing Minion Proposal',
+    errMsg: 'Error Executing Minion Proposal',
+    successMsg: 'Minion Proposal Executed!',
   },
 };

@@ -48,6 +48,12 @@ const MinionVault = ({ overview, customTerms, daoVaults }) => {
       const vaultMatch = daoVaults.find(vault => {
         return vault.address === minion;
       });
+
+      if (!vaultMatch) {
+        console.log('no vault found');
+        return;
+      }
+
       // TODO: shape this on the api side and remove formatting here
       const tempFormattedVaultData = vaultMatch.erc20s.map(token => {
         return {

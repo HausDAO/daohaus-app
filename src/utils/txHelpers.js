@@ -219,7 +219,7 @@ export const getArgs = data => {
 //   });
 // };
 
-const getContractAddress = data => {
+export const getContractAddress = data => {
   const { contractAddress } = data.tx.contract;
   if (contractAddress[0] === '.') {
     const path = getPath(contractAddress);
