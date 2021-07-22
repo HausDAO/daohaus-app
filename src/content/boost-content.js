@@ -101,11 +101,7 @@ export const boostList = [
     successRoute: '',
     settings: true,
     networks: {
-      all: false,
-      '0x4': true,
-      '0x2a': true,
-      '0x64': true,
-      '0x89': true,
+      all: true,
     },
   },
   {
