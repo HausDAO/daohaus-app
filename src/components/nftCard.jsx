@@ -21,6 +21,8 @@ const NftCard = ({ nft }) => {
     setNftViewModal(hydratedNft || nft);
   };
 
+  console.log('hydratedNft', hydratedNft);
+
   return (
     <ContentBox w='100%' mt={5}>
       <Flex

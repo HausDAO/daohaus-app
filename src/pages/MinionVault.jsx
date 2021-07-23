@@ -90,8 +90,6 @@ const MinionVault = ({ overview, customTerms, daoVaults }) => {
     }
   }, [daoVaults, minion]);
 
-  console.log('vault', vault);
-
   return (
     <MainViewLayout
       header={`${vault?.name || ''}`}

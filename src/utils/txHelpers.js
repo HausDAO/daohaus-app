@@ -1,5 +1,7 @@
+import Web3 from 'web3';
+
 import { detailsToJSON } from './general';
-import { addZeros, valToDecimalString } from './tokenValue';
+import { valToDecimalString } from './tokenValue';
 import { safeEncodeHexFunction, getABIsnippet, getContractABI } from './abi';
 import { collapse } from './formBuilder';
 import { getContractBalance, getTokenData } from './vaults';
@@ -340,7 +342,7 @@ export const fieldModifiers = Object.freeze({
   },
   addWeiDecimals(fieldValue) {
     if (!fieldValue) return null;
-    return addZeros(fieldValue, 18);
+    return Web3.utils.toWei(fieldValue);
   },
 });
 
