@@ -23,7 +23,9 @@ const BalanceList = ({
             ? `Network Token Balance`
             : `${vaultConfig.balanceListTitle}`}
         </TextBox>
-        {!isNativeToken && !isTreasury && <MinionVaultRefreshButton />}
+        {!isNativeToken && !isTreasury && balances?.length && (
+          <MinionVaultRefreshButton />
+        )}
       </Flex>
       <Flex w='100%'>
         <Box w='25%' d={['none', null, null, 'inline-block']}>

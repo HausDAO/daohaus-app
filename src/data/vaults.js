@@ -11,9 +11,9 @@ export const VAULT = {
     canHoldNft: true,
     balanceListTitle: 'ERC20 Token Balances',
     badge: {
-      badgeColor: 'orange',
-      badgeTextColor: 'white',
-      badgeName: 'NIFTY',
+      badgeColor: 'white',
+      badgeTextColor: 'black',
+      badgeName: 'Vanilla',
     },
   },
   NIFTY_MINION: {
@@ -21,9 +21,9 @@ export const VAULT = {
     canHoldNft: true,
     balanceListTitle: 'ERC20 Token Balances',
     badge: {
-      badgeColor: 'white',
-      badgeTextColor: 'black',
-      badgeName: 'Vanilla',
+      badgeColor: 'orange',
+      badgeTextColor: 'white',
+      badgeName: 'Nifty',
     },
   },
 };

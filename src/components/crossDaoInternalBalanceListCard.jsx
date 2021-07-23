@@ -11,17 +11,19 @@ import { daoConnectedAndSameChain } from '../utils/general';
 import { chainByName } from '../utils/chain';
 import { displayBalance } from '../utils/tokenValue';
 import { TX } from '../data/contractTX';
+import { useDao } from '../contexts/DaoContext';
 
 const CrossDaoInternalBalanceListCard = ({ token, currentDaoTokens }) => {
   const { minion, daochain } = useParams();
   const { address, injectedChain } = useInjectedProvider();
+  const { refreshMinionVault } = useDao();
 
   // TODO: refactor so we're not hijacking the context.
   // - maybe make 2 different components for in/outside daos
   // - note: the tx is not used outside of the dao context right now
-  const { submitTransaction } = daochain
+  const { submitTransaction, refreshDao } = daochain
     ? useTX()
-    : { submitTransaction: null };
+    : { submitTransaction: null, refreshDao: null };
   const { isMember } = daochain ? useDaoMember() : { isMember: null };
 
   const [tokenWhitelisted, setTokenWhitelisted] = useState();
@@ -54,6 +56,11 @@ const CrossDaoInternalBalanceListCard = ({ token, currentDaoTokens }) => {
         minionAddress: minion,
       },
     });
+
+    if (!options.transfer) {
+      await refreshMinionVault(minion);
+      refreshDao();
+    }
 
     setLoading(false);
   };
