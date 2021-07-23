@@ -82,10 +82,14 @@ const OverviewCard = ({ daoOverview, members, daoVaults }) => {
           </Box>
         </Flex>
         <Box mt={6}>
-          <TextBox size='sm' title={getTitle(customTerms, 'Bank')}>
-            {getTerm(customTerms, 'vault total')}
-          </TextBox>
-          <VaultTotal vaults={daoVaults} />
+          {daoVaults && (
+            <>
+              <TextBox size='sm' title={getTitle(customTerms, 'Bank')}>
+                {getTerm(customTerms, 'vault total')}
+              </TextBox>
+              <VaultTotal vaults={daoVaults} />
+            </>
+          )}
         </Box>
         <Flex mt={6}>
           <Button
