@@ -12,8 +12,8 @@ import NftCard from '../components/nftCard';
 import CrossDaoInternalBalanceList from '../components/crossDaoInternalBalanceList';
 import { fetchMinionInternalBalances } from '../utils/theGraph';
 import { fetchNativeBalance } from '../utils/tokenExplorerApi';
-import { supportedChains } from '../utils/chain';
 import { vaultConfigByType } from '../data/vaults';
+import { formatNativeData } from '../utils/vaults';
 
 const MinionVault = ({ overview, customTerms, daoVaults }) => {
   const { daoid, daochain, minion } = useParams();
@@ -44,7 +44,7 @@ const MinionVault = ({ overview, customTerms, daoVaults }) => {
 
   useEffect(() => {
     const setupBalanceData = async () => {
-      // setup minion erc20 list data (native token, erc20s, internal balances)
+      // setup minion erc20 list data: native token, erc20s, internal balances
       const vaultMatch = daoVaults.find(vault => {
         return vault.address === minion;
       });
@@ -53,44 +53,22 @@ const MinionVault = ({ overview, customTerms, daoVaults }) => {
         console.log('no vault found');
         return;
       }
-
-      // TODO: shape this on the api side and remove formatting here
-      const tempFormattedVaultData = vaultMatch.erc20s.map(token => {
+      const erc20sWithTotalUsd = vaultMatch.erc20s.map(token => {
         return {
           ...token,
-          id: token.contractAddress,
-          logoUri: token.logoURI,
-          tokenAddress: token.contractAddress,
-          tokenBalance: token.balance,
-          tokenName: token.name,
           totalUSD: token.usd * (+token.balance / 10 ** +token.decimals),
         };
       });
 
       const nativeBalance = await fetchNativeBalance(minion, daochain);
       if (+nativeBalance > 0) {
-        // TODO: need better native data and move to a helper/maybe up in context
-        setNativeBalance([
-          {
-            isNative: true,
-            totalUSD: 0,
-            usd: 0,
-            id: daochain,
-            logoUri: '',
-            tokenAddress: daochain,
-            tokenBalance: nativeBalance,
-            decimals: '18',
-            tokenName: supportedChains[daochain].nativeCurrency,
-            symbol: supportedChains[daochain].nativeCurrency,
-          },
-        ]);
+        setNativeBalance(formatNativeData(daochain, nativeBalance));
       }
 
       const internalBalanceRes = await fetchMinionInternalBalances({
         chainID: daochain,
         minionAddress: minion,
       });
-
       const internalBalanceData = internalBalanceRes
         .flatMap(dao => {
           return dao.tokenBalances.map(b => {
@@ -103,7 +81,7 @@ const MinionVault = ({ overview, customTerms, daoVaults }) => {
         ...vaultMatch,
         config: vaultConfigByType[vaultMatch.type],
       });
-      setErc20Balances(tempFormattedVaultData);
+      setErc20Balances(erc20sWithTotalUsd);
       setInternalBalances(internalBalanceData);
     };
     if (daoVaults && minion) {

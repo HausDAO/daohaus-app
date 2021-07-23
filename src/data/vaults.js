@@ -30,6 +30,7 @@ export const VAULT = {
 export const vaultConfigByType = {
   treasury: VAULT.TREASURY,
   'vanilla minion': VAULT.MINION,
+  'Neapolitan minion': VAULT.MINION,
   'nifty minion': VAULT.NIFTY_MINION,
 };
 
@@ -45,6 +46,6 @@ export const vaultFilterOptions = [
   {
     name: 'Minion',
     value: 'minion',
-    valueMatches: ['vanilla minion', 'nifty minion'],
+    valueMatches: ['vanilla minion', 'nifty minion', 'Neapolitan minion'],
   },
 ];

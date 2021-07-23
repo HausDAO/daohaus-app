@@ -14,7 +14,10 @@ import {
 } from '../graphQL/member-queries';
 import { GET_TRANSMUTATIONS, GET_WRAP_N_ZAPS } from '../graphQL/boost-queries';
 import { getGraphEndpoint } from '../utils/chain';
-import { PROPOSAL_TYPES } from '../utils/proposalUtils';
+import {
+  MINION_ACTION_FUNCTION_NAMES,
+  PROPOSAL_TYPES,
+} from '../utils/proposalUtils';
 import { TokenService } from '../services/tokenService';
 
 import { UBERHAUS_MEMBER_DELEGATE } from '../graphQL/uberhaus-queries';
@@ -128,23 +131,11 @@ export const pollMinionExecuteAction = async ({
       abi: await getContractABI({ tx }),
       chainID,
     });
-    console.log(web3Contract);
 
-    if (tx.contract.abiName === 'VANILLA_MINION') {
-      const actionValue = await web3Contract.methods.actions(proposalId).call();
-      return actionValue.executed;
-    }
-    if (tx.contract.abiName === 'UBERHAUS_MINION') {
-      const actionValue = await web3Contract.methods
-        .appointments(proposalId)
-        .call();
-      return actionValue.executed;
-    }
-    if (tx.contract.abiName === 'SUPERFLUID_MINION') {
-      const actionValue = await web3Contract.methods.streams(proposalId).call();
-      return actionValue.executed;
-    }
-    return null;
+    const actionValue = await web3Contract.methods[
+      MINION_ACTION_FUNCTION_NAMES[tx.contract.abiName]
+    ](proposalId).call();
+    return actionValue.executed;
   } catch (error) {
     console.error(error);
     throw new Error('Error caught in Poll block of TX');

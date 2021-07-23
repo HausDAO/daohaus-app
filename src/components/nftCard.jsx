@@ -1,12 +1,12 @@
 import React, { useMemo } from 'react';
 import { Box, Flex, Image } from '@chakra-ui/react';
 
+import { useOverlay } from '../contexts/OverlayContext';
 import ContentBox from './ContentBox';
 import AddressAvatar from './addressAvatar';
 import NftViewModal from '../modals/nftViewModal';
-import { useOverlay } from '../contexts/OverlayContext';
-import { hydrateNftCard } from '../utils/nftVaults';
 import NftCardActionMenu from './nftCardActionMenu';
+import { hydrateNftCard } from '../utils/nftVaults';
 
 const NftCard = ({ nft }) => {
   const { setNftViewModal } = useOverlay();

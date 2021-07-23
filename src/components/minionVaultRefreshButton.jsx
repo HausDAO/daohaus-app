@@ -24,10 +24,8 @@ const MinionVaultRefreshButton = () => {
   }, [hideRefresh]);
 
   const handleRefreshMinion = async () => {
-    console.log('refreshing');
     setHideRefresh(true);
     await refreshMinionVault(minion);
-    console.log('vault refreshed');
     refreshDao();
   };
 

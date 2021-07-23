@@ -38,7 +38,6 @@ import Vaults from '../pages/Vaults';
 import MinionVault from '../pages/MinionVault';
 import MinionGallery from '../pages/MinionGallery';
 import Treasury from '../pages/Treasury';
-import { isDaosquareCcoPath } from '../utils/cco';
 
 const DaoRouter = () => {
   const { path } = useRouteMatch();
@@ -63,10 +62,9 @@ const DaoRouter = () => {
     customTerms,
     daoProposals,
   };
-  const daosquarecco = isDaosquareCcoPath(daoMetaData, location);
 
   return (
-    <Layout dao={dao} daosquarecco={daosquarecco}>
+    <Layout dao={dao}>
       <Switch>
         <Route exact path={`${path}/`}>
           <Overview

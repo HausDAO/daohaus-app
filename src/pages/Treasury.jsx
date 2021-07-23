@@ -87,6 +87,7 @@ const Treasury = ({
         vaultConfig={vaultConfig}
         balances={currentDaoTokens}
         needsSync={needsSync}
+        isTreasury
       />
     </MainViewLayout>
   );

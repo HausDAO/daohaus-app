@@ -7,16 +7,19 @@ import { useDao } from '../contexts/DaoContext';
 import { useTX } from '../contexts/TXContext';
 import ApproveUberHausToken from './approveUberHausToken';
 import { TokenService } from '../services/tokenService';
-import { PROPOSAL_TYPES } from '../utils/proposalUtils';
+import {
+  PROPOSAL_TYPES,
+  MINION_ACTION_FUNCTION_NAMES,
+} from '../utils/proposalUtils';
 import { UBERHAUS_DATA } from '../utils/uberhaus';
-import { createContract } from '../utils/contract';
 import { LOCAL_ABI } from '../utils/abi';
-import { TX } from '../data/contractTX';
+import { createContract } from '../utils/contract';
+import { transactionByProposalType } from '../utils/txHelpers';
 
 const MinionExecute = ({ proposal, early }) => {
   const { daochain } = useParams();
   const { injectedProvider } = useInjectedProvider();
-  const { submitTransaction } = useTX();
+  const { submitTransaction, refreshDao } = useTX();
   const { refreshMinionVault } = useDao();
 
   const [loading, setLoading] = useState(false);
@@ -27,16 +30,6 @@ const MinionExecute = ({ proposal, early }) => {
 
   const isCorrectChain =
     daochain === injectedProvider?.currentProvider?.chainId;
-
-  const transactionByProposalType = () => {
-    if (proposal.proposalType === PROPOSAL_TYPES.MINION_UBER_DEL) {
-      return TX.UBERHAUS_MINION_EXECUTE_APPOINTMENT;
-    }
-    if (proposal.proposalType === PROPOSAL_TYPES.MINION_SUPERFLUID) {
-      return TX.SUPERFLUID_MINION_EXECUTE;
-    }
-    return TX.MINION_SIMPLE_EXECUTE;
-  };
 
   useEffect(() => {
     const getMinionDetails = async () => {
@@ -51,27 +44,11 @@ const MinionExecute = ({ proposal, early }) => {
           web3: injectedProvider,
         });
 
-        let action;
-        if (tx.contract.abiName === 'VANILLA_MINION') {
-          action = await web3Contract.methods
-            .actions(proposal.proposalId)
-            .call();
-
-          console.log('action', action);
-        }
-        if (tx.contract.abiName === 'UBERHAUS_MINION') {
-          action = await web3Contract.methods
-            .appointments(proposal.proposalId)
-            .call();
-        }
-        if (tx.contract.abiName === 'SUPERFLUID_MINION') {
-          action = await web3Contract.methods
-            .streams(proposal.proposalId)
-            .call();
-        }
+        const action = await web3Contract.methods[
+          MINION_ACTION_FUNCTION_NAMES[tx.contract.abiName]
+        ](proposal.proposalId).call();
 
         if (proposal.proposalType === PROPOSAL_TYPES.MINION_UBER_STAKE) {
-          // TODO: Might be able to get rid of tokenservice - but is32 might be an issue
           const hausService = await TokenService({
             chainID: daochain,
             tokenAddress: UBERHAUS_DATA.STAKING_TOKEN,
@@ -111,15 +88,11 @@ const MinionExecute = ({ proposal, early }) => {
     }
   }, [proposal, daochain, shouldFetch]);
 
-  console.log('minionDetails', minionDetails);
-
   const handleExecute = async () => {
     if (!proposal?.minion) return;
     setLoading(true);
 
-    // TODO: args by minion type once we have escrow/neapolitan
     const args = [proposal.proposalId];
-
     await submitTransaction({
       tx: transactionByProposalType(proposal.proposalType),
       args,
@@ -128,14 +101,10 @@ const MinionExecute = ({ proposal, early }) => {
         proposalId: proposal.proposalId,
         proposalType: proposal.proposalType,
       },
-      lifeCycleFns: {
-        onPollSuccess() {
-          // TODO: More testing on this to check that it resolves before refreshdao
-          // - posible to make async?
-          refreshMinionVault(proposal.minionAddress);
-        },
-      },
     });
+    await refreshMinionVault(proposal.minionAddress);
+    refreshDao();
+    setShouldFetch(true);
     setLoading(false);
   };
 

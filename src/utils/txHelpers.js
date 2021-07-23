@@ -5,6 +5,8 @@ import { collapse } from './formBuilder';
 import { getContractBalance, getTokenData } from './vaults';
 import { createContract } from './contract';
 import { validate } from './validation';
+import { PROPOSAL_TYPES } from './proposalUtils';
+import { TX } from '../data/contractTX';
 
 // const isSearchPath = string => string[0] === '.';
 
@@ -358,4 +360,14 @@ export const handleFieldModifiers = appData => {
     }
   });
   return newValues;
+};
+
+export const transactionByProposalType = proposal => {
+  if (proposal.proposalType === PROPOSAL_TYPES.MINION_UBER_DEL) {
+    return TX.UBERHAUS_MINION_EXECUTE_APPOINTMENT;
+  }
+  if (proposal.proposalType === PROPOSAL_TYPES.MINION_SUPERFLUID) {
+    return TX.SUPERFLUID_MINION_EXECUTE;
+  }
+  return TX.MINION_SIMPLE_EXECUTE;
 };

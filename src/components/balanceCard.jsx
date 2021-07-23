@@ -46,9 +46,7 @@ const balanceCard = ({ token, isBank = true, hasBalance, isNativeToken }) => {
           {token?.logoUri && (
             <Image src={token.logoUri} height='35px' mr='15px' />
           )}
-
           <Box fontFamily='mono'>{token?.symbol}</Box>
-
           {!isNativeToken && (
             <CopyToClipboard text={token?.tokenAddress} onCopy={copiedToast}>
               <Icon
