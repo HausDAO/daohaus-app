@@ -16,9 +16,9 @@ const Overview = React.memo(function overview({
   isMember,
   members,
   daoMember,
-  currentDaoTokens,
   customTerms,
   daoMetaData,
+  daoVaults,
 }) {
   return (
     <MainViewLayout header='Overview' customTerms={customTerms} isDao>
@@ -34,7 +34,7 @@ const Overview = React.memo(function overview({
                 daoOverview={daoOverview}
                 isMember={isMember}
                 members={members}
-                currentDaoTokens={currentDaoTokens}
+                daoVaults={daoVaults}
               />
               {daoMetaData?.boosts?.cco?.active ? <CcoBanner /> : null}
               {daoMetaData?.servicesUrl ? <ServicesBanner /> : null}
