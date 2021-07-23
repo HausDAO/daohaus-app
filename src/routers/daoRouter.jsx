@@ -74,8 +74,8 @@ const DaoRouter = () => {
             isCorrectNetwork={isCorrectNetwork}
             daoOverview={daoOverview}
             members={daoMembers}
-            currentDaoTokens={currentDaoTokens}
             daoMetaData={daoMetaData}
+            daoVaults={daoVaults}
           />
         </Route>
         <Route exact path={`${path}/proposals`}>
