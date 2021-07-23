@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
-import { Box, Button, Flex, Spinner, useToast } from '@chakra-ui/react';
+import { Box, Button, Flex, Icon, Spinner, useToast } from '@chakra-ui/react';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
 
+import { BiArrowBack } from 'react-icons/bi';
 import { useToken } from '../contexts/TokenContext';
 import BankChart from '../components/bankChart';
 import BalanceList from '../components/balanceList';
@@ -89,6 +90,8 @@ const MinionVault = ({ overview, customTerms, daoVaults }) => {
     }
   }, [daoVaults, minion]);
 
+  console.log('vault', vault);
+
   return (
     <MainViewLayout
       header={`${vault?.name || ''}`}
@@ -96,6 +99,15 @@ const MinionVault = ({ overview, customTerms, daoVaults }) => {
       headerEl={vault ? ctaButton : null}
       isDao
     >
+      <Flex
+        as={Link}
+        to={`/dao/${daochain}/${daoid}/vaults`}
+        align='center'
+        mb={3}
+      >
+        <Icon as={BiArrowBack} color='secondary.500' mr={2} />
+        All Vaults
+      </Flex>
       {!vault && <Spinner />}
       {vault && (
         <Flex wrap='wrap'>

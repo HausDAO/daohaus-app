@@ -19,6 +19,7 @@ export const VAULT = {
   NIFTY_MINION: {
     typeDisplay: 'Minion',
     canHoldNft: true,
+    balanceListTitle: 'ERC20 Token Balances',
     badge: {
       badgeColor: 'white',
       badgeTextColor: 'black',
