@@ -44,6 +44,9 @@ const nftConfig = {
 export const attributeModifiers = Object.freeze({
   getNiftyCreator(nft) {
     const { description } = nft.metadata;
+    if (!description) {
+      return null;
+    }
     return description.split(' ')[4];
   },
 });
