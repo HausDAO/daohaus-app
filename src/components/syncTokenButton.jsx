@@ -54,7 +54,7 @@ const SyncTokenButton = ({ token }) => {
                     the balance.'
         >
           <Button onClick={handleSync} rightIcon={<RiQuestionLine />}>
-            Sync
+            Sync Pending Deposit
           </Button>
         </Tooltip>
       ) : (
@@ -65,7 +65,7 @@ const SyncTokenButton = ({ token }) => {
           label='Unable to sync token. Check that you are connected to correct network. Note, members who have delegated their voting power cannot sync tokens'
           bg='secondary.500'
         >
-          <Button disabled>Sync</Button>
+          <Button disabled>Sync Pending Deposit</Button>
         </Tooltip>
       )}
     </Flex>

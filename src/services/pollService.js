@@ -18,6 +18,7 @@ import {
   pollTransmutationSummon,
   pollProposal,
   pollTXHash,
+  pollMinionExecuteAction,
 } from '../polls/polls';
 import {
   cancelProposalTest,
@@ -117,6 +118,42 @@ export const createPoll = ({
         },
         pollArgs: args,
       });
+    };
+    // NEW TX specialPoll
+  } else if (action === 'executeAction') {
+    console.log('set poll');
+    return ({ chainID, minionAddress, proposalId, actions, tx }) => txHash => {
+      startPoll({
+        pollFetch: pollMinionExecuteAction,
+        testFn: minionExecuteTest,
+        shouldEqual: true,
+        args: {
+          chainID,
+          minionAddress,
+          proposalId,
+          tx,
+        },
+        actions,
+        txHash,
+      });
+      if (cachePoll) {
+        cachePoll({
+          txHash,
+          action,
+          timeSent: Date.now(),
+          status: 'unresolved',
+          resolvedMsg: 'Minion proposal executed',
+          unresolvedMsg: 'Executing minion proposal',
+          successMsg: `Executed minion proposal on ${chainID}`,
+          errorMsg: `Error executing minion proposal on ${chainID}`,
+          pollData: {
+            action,
+            interval,
+            tries,
+          },
+          pollArgs: { chainID, minionAddress, proposalId },
+        });
+      }
     };
   } else if (
     action === 'submitProposal' ||
@@ -648,6 +685,7 @@ export const createPoll = ({
         });
       }
     };
+    // legacy execute
   } else if (action === 'minionExecuteAction') {
     console.log('set poll');
     return ({

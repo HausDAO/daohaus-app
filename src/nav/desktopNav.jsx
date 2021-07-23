@@ -20,7 +20,6 @@ import Brand from './brand';
 import NavLinkList from './navLinkList';
 import SocialsLinkList from './socialsLinkList';
 import ChangeDao from './changeDao';
-import DaosquareBrand from './daosquareBrand';
 
 import {
   defaultSocialLinks,
@@ -34,7 +33,7 @@ const TemporaryPopoverFix = styled.span`
   }
 `;
 
-const DesktopNav = ({ dao, daosquarecco }) => {
+const DesktopNav = ({ dao }) => {
   const { socialLinks, discourseLinkData } = useMemo(() => {
     return {
       socialLinks: dao?.daoMetaData?.links
@@ -58,7 +57,7 @@ const DesktopNav = ({ dao, daosquarecco }) => {
       direction='column'
       align='start'
       justifyContent='start'
-      bg={daosquarecco ? '#FFD3FF' : 'primary.500'}
+      bg='primary.500'
       zIndex='1'
       w='100px'
       minH='100vh'
@@ -79,76 +78,68 @@ const DesktopNav = ({ dao, daosquarecco }) => {
           w='100%'
           wrap='wrap'
         >
-          {!daosquarecco ? (
-            <>
-              <Brand dao={dao} />
-              <Box
-                w={['auto', null, null, '100%']}
-                order={[3, null, null, 3]}
-                mt={[0, null, null, 6]}
-              >
-                <ChangeDao />
-              </Box>
-            </>
-          ) : (
-            <DaosquareBrand />
-          )}
+          <Brand dao={dao} />
+          <Box
+            w={['auto', null, null, '100%']}
+            order={[3, null, null, 3]}
+            mt={[0, null, null, 6]}
+          >
+            <ChangeDao />
+          </Box>
         </Flex>
       </Flex>
       <Flex direction='column' wrap='wrap'>
-        {!daosquarecco && (
-          <>
-            <NavLinkList dao={dao} view='desktop' />
-            <Box>
-              <Popover placement='right' w='auto' enabled={false}>
-                <Tooltip
-                  label='Community Links'
-                  aria-label='Community Links'
-                  placement='right'
-                  hasArrow
-                  shouldWrapChildren
-                >
-                  <PopoverTrigger>
-                    <Button
-                      variant='sideNav'
-                      _hover={{
-                        backgroundColor: isCommunityLinkProvided
-                          ? 'white'
-                          : 'transparent',
-                        cursor: isCommunityLinkProvided
-                          ? 'pointed'
-                          : 'not-allowed',
-                      }}
-                      mt={3}
-                    >
-                      <Icon as={RiLinksLine} w={6} h={6} />
-                    </Button>
-                  </PopoverTrigger>
-                </Tooltip>
-                {isCommunityLinkProvided && (
-                  <Portal>
-                    <TemporaryPopoverFix>
-                      <PopoverContent width='fit-content' pr='1rem'>
-                        <PopoverArrow />
-                        <PopoverCloseButton />
-                        <PopoverBody w='auto'>
-                          <Flex direction='row' align='center' justify='start'>
-                            <SocialsLinkList
-                              socialLinks={socialLinks}
-                              discourseLinkData={discourseLinkData}
-                              dao={dao}
-                              view='desktop'
-                            />
-                          </Flex>
-                        </PopoverBody>
-                      </PopoverContent>
-                    </TemporaryPopoverFix>
-                  </Portal>
-                )}
-              </Popover>
-            </Box>
-          </>
-        )}
+        <>
+          <NavLinkList dao={dao} view='desktop' />
+          <Box>
+            <Popover placement='right' w='auto' enabled={false}>
+              <Tooltip
+                label='Community Links'
+                aria-label='Community Links'
+                placement='right'
+                hasArrow
+                shouldWrapChildren
+              >
+                <PopoverTrigger>
+                  <Button
+                    variant='sideNav'
+                    _hover={{
+                      backgroundColor: isCommunityLinkProvided
+                        ? 'white'
+                        : 'transparent',
+                      cursor: isCommunityLinkProvided
+                        ? 'pointed'
+                        : 'not-allowed',
+                    }}
+                    mt={3}
+                  >
+                    <Icon as={RiLinksLine} w={6} h={6} />
+                  </Button>
+                </PopoverTrigger>
+              </Tooltip>
+              {isCommunityLinkProvided && (
+                <Portal>
+                  <TemporaryPopoverFix>
+                    <PopoverContent width='fit-content' pr='1rem'>
+                      <PopoverArrow />
+                      <PopoverCloseButton />
+                      <PopoverBody w='auto'>
+                        <Flex direction='row' align='center' justify='start'>
+                          <SocialsLinkList
+                            socialLinks={socialLinks}
+                            discourseLinkData={discourseLinkData}
+                            dao={dao}
+                            view='desktop'
+                          />
+                        </Flex>
+                      </PopoverBody>
+                    </PopoverContent>
+                  </TemporaryPopoverFix>
+                </Portal>
+              )}
+            </Popover>
+          </Box>
+        </>
       </Flex>
     </Flex>
   );

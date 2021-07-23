@@ -80,7 +80,6 @@ const ProposalMinionCard = ({ proposal }) => {
 
   useEffect(() => {
     const getAbi = async () => {
-      console.log('getABI', minionDeets);
       try {
         const key =
           daochain === '0x64' ? '' : process.env.REACT_APP_ETHERSCAN_KEY;
@@ -93,11 +92,8 @@ const ProposalMinionCard = ({ proposal }) => {
           return;
         }
         const parsed = JSON.parse(json.result);
-        console.log('parsed', parsed);
         const imp = parsed.find(p => p.name === 'implementation');
         if (imp) {
-          console.log('imp', imp);
-
           const rpcUrl = chainByID(daochain).rpc_url;
           const web3 = new Web3(new Web3.providers.HttpProvider(rpcUrl));
 

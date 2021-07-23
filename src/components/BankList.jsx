@@ -10,15 +10,10 @@ const BankList = ({ tokens, profile, hasBalance, needsSync }) => {
   return (
     <ContentBox mt={6}>
       <Flex>
-        <Box
-          w={hasAction ? '20%' : '15%'}
-          d={['none', null, null, 'inline-block']}
-        >
+        <Box w='20%' d={['none', null, null, 'inline-block']}>
           <TextBox size='xs'>Asset</TextBox>
         </Box>
-        <Box
-          w={[hasAction ? '45%' : '60%', null, null, hasAction ? '45%' : '50%']}
-        >
+        <Box w={['45%', null, null, '45%']}>
           <TextBox size='xs'>{profile ? 'Internal Bal.' : 'Balance'}</TextBox>
         </Box>
         <Box

@@ -14,7 +14,10 @@ import {
 } from '../graphQL/member-queries';
 import { GET_TRANSMUTATIONS, GET_WRAP_N_ZAPS } from '../graphQL/boost-queries';
 import { getGraphEndpoint } from '../utils/chain';
-import { PROPOSAL_TYPES } from '../utils/proposalUtils';
+import {
+  MINION_ACTION_FUNCTION_NAMES,
+  PROPOSAL_TYPES,
+} from '../utils/proposalUtils';
 import { TokenService } from '../services/tokenService';
 
 import { UBERHAUS_MEMBER_DELEGATE } from '../graphQL/uberhaus-queries';
@@ -22,6 +25,8 @@ import { MinionService } from '../services/minionService';
 import { SuperfluidMinionService } from '../services/superfluidMinionService';
 import { UberHausMinionService } from '../services/uberHausMinionService';
 import { TX_HASH } from '../graphQL/general';
+import { createContract } from '../utils/contract';
+import { getContractABI } from '../utils/abi';
 
 export const pollTXHash = async ({ chainID, txHash }) => {
   return graphQuery({
@@ -112,6 +117,29 @@ export const pollMinionProposal = async ({
       createdAt,
     },
   });
+};
+
+export const pollMinionExecuteAction = async ({
+  chainID,
+  minionAddress,
+  proposalId,
+  tx,
+}) => {
+  try {
+    const web3Contract = createContract({
+      address: minionAddress,
+      abi: await getContractABI({ tx }),
+      chainID,
+    });
+
+    const actionValue = await web3Contract.methods[
+      MINION_ACTION_FUNCTION_NAMES[tx.contract.abiName]
+    ](proposalId).call();
+    return actionValue.executed;
+  } catch (error) {
+    console.error(error);
+    throw new Error('Error caught in Poll block of TX');
+  }
 };
 
 export const pollMinionExecute = async ({

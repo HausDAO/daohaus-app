@@ -57,7 +57,6 @@ export const InputFactory = props => {
   if (type === 'multiInput') {
     return <MultiInput {...props} />;
   }
-
   if (type === 'genericDisplay') {
     return <GenericFormDisplay {...props} />;
   }
