@@ -59,7 +59,7 @@ const balanceCard = ({ token, isBank = true, hasBalance, isNativeToken }) => {
           )}
         </Flex>
       </Box>
-      <Box w={['25%', null, null, '40%']}>
+      <Box w={['40%', null, null, '40%']}>
         <Box fontFamily='mono'>
           {`${displayBalance(token.tokenBalance, token.decimals) || 0} ${
             token.symbol
@@ -73,7 +73,7 @@ const balanceCard = ({ token, isBank = true, hasBalance, isNativeToken }) => {
               <Box>{`$${numberWithCommas(token?.usd.toFixed(2)) || 0}`}</Box>
             </Box>
           </Box>
-          <Box w={['20%', null, null, '30%']}>
+          <Box w={['25%', null, null, '30%']}>
             <Box fontFamily='mono'>
               <Box>
                 {`$${numberWithCommas(token?.totalUSD.toFixed(2)) || 0}`}

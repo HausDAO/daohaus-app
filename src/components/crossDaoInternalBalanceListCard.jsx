@@ -78,7 +78,7 @@ const CrossDaoInternalBalanceListCard = ({ token, currentDaoTokens }) => {
         </Flex>
       </Box>
 
-      <Box w={['25%', null, null, '25%']}>
+      <Box w={['40%', null, null, '25%']}>
         <Skeleton isLoaded={token.tokenBalance}>
           <Box fontFamily='mono'>
             {token.tokenBalance ? (

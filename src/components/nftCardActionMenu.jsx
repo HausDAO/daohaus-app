@@ -12,15 +12,13 @@ import {
 import { BsThreeDots } from 'react-icons/bs';
 
 import { useOverlay } from '../contexts/OverlayContext';
-import { useDaoMember } from '../contexts/DaoMemberContext';
 import { useInjectedProvider } from '../contexts/InjectedProviderContext';
 import GenericModal from '../modals/genericModal';
 import { daoConnectedAndSameChain } from '../utils/general';
 
-const NftCardActionMenu = ({ nft, loading }) => {
-  const { daochain, minion } = useParams();
+const NftCardActionMenu = ({ nft, loading, isMember }) => {
+  const { minion, daochain } = useParams();
   const { address, injectedChain } = useInjectedProvider();
-  const { isMember } = useDaoMember();
   const { setGenericModal } = useOverlay();
   const [modalData, setModalData] = useState(null);
 
@@ -71,11 +69,14 @@ const NftCardActionMenu = ({ nft, loading }) => {
                 key={action.menuLabel}
                 onClick={() => handleActionClick(action)}
                 isDisabled={
-                  !daoConnectedAndSameChain(
-                    address,
-                    daochain,
-                    injectedChain?.chainId,
-                  ) || !isMember
+                  !(
+                    isMember &&
+                    daoConnectedAndSameChain(
+                      address,
+                      daochain,
+                      injectedChain?.chainId,
+                    )
+                  )
                 }
               >
                 <Tooltip
