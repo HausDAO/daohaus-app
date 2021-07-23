@@ -15,7 +15,12 @@ import {
 
 const FormBuilder = props => {
   const { submitTransaction, handleCustomValidation, modifyFields } = useTX();
-  const { fields, additionalOptions = null, required = [] } = props;
+  const {
+    fields,
+    additionalOptions = null,
+    required = [],
+    localValues,
+  } = props;
 
   const [loading, setLoading] = useState(false);
   const [formFields, setFields] = useState(mapInRequired(fields, required));
@@ -102,6 +107,7 @@ const FormBuilder = props => {
       await submitTransaction({
         values: modifiedValues,
         formData: props,
+        localValues,
         tx: props.tx,
         lifeCycleFns: {
           onCatch() {
@@ -114,6 +120,7 @@ const FormBuilder = props => {
       setLoading(false);
     }
   };
+
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
       <Flex flexDir='column'>
@@ -127,6 +134,7 @@ const FormBuilder = props => {
                   minionType={props.minionType}
                   layout={props.layout}
                   localForm={localForm}
+                  localValues={localValues}
                   buildABIOptions={buildABIOptions}
                 />
               );

@@ -1,12 +1,12 @@
 const ContentBoxComponent = {
-  baseStyle: {
+  baseStyle: props => ({
     rounded: 'lg',
-    bg: 'blackAlpha.700',
+    bg: props.bgImg ? '' : 'blackAlpha.700',
     borderWidth: '1px',
     borderColor: 'whiteAlpha.200',
     p: 6,
     color: 'mode.900',
-  },
+  }),
 
   sizes: {
     sm: {

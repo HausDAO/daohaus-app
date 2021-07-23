@@ -12,13 +12,16 @@ import { getMemberActivites, getMembersActivites } from '../utils/activities';
 import { getTerm, getTitle } from '../utils/metadata';
 import MembersChart from '../components/membersChart';
 import ListSort from '../components/listSort';
-import { membersSortOptions } from '../utils/memberContent';
-import MemberFilters from '../components/memberFilters';
+import {
+  membersFilterOptions,
+  membersSortOptions,
+} from '../utils/memberContent';
 import MainViewLayout from '../components/mainViewLayout';
 import { useInjectedProvider } from '../contexts/InjectedProviderContext';
 import { daoConnectedAndSameChain } from '../utils/general';
 import UberHausMemberCard from '../components/uberHausMemberCard';
 import CsvDownloadButton from '../components/csvDownloadButton';
+import ListFilter from '../components/listFilter';
 
 const Members = React.memo(
   ({
@@ -139,7 +142,12 @@ const Members = React.memo(
             />
           </Box>
           <Box>
-            <MemberFilters filter={filter} setFilter={setFilter} />
+            <ListFilter
+              filter={filter}
+              setFilter={setFilter}
+              options={membersFilterOptions}
+              labelText='Filter By'
+            />
           </Box>
           <Box>
             <CsvDownloadButton entityList={listMembers} typename='Members' />

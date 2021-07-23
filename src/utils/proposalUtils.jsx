@@ -33,6 +33,10 @@ export const PROPOSAL_TYPES = {
   TRANSMUTATION: 'Transmutation Proposal',
   FUNDING: 'Funding Proposal',
   PAYROLL: 'Payroll Proposal',
+  MINION_NATIVE: 'Minion Native Token Transfer Proposal',
+  MINION_ERC20: 'Minion Erc20 Token Transfer Proposal',
+  MINION_ERC721: 'Minion Erc721 Token Transfer Proposal',
+  MINION_NIFTY_SELL: 'Minion Nifty Sell Proposal',
 };
 
 export const MINION_TYPES = {
@@ -40,6 +44,13 @@ export const MINION_TYPES = {
   NIFTY: 'nifty minion',
   UBER: 'UberHaus minion',
   SUPERFLUID: 'Superfluid minion',
+  NEAPOLITAN: 'Neapolitan minion',
+};
+
+export const MINION_ACTION_FUNCTION_NAMES = {
+  VANILLA_MINION: 'actions',
+  UBERHAUS_MINION: 'appointments',
+  SUPERFLUID_MINION: 'streams',
 };
 
 export const inQueue = proposal => {

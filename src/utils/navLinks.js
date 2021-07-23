@@ -1,7 +1,6 @@
 import {
   RiBookMarkLine,
   RiDiscordFill,
-  // RiTelegramFill,
   RiMediumFill,
   RiTwitterFill,
   RiGlobeLine,
@@ -12,16 +11,13 @@ import {
   RiFireLine,
   RiRocket2Line,
   RiSearch2Line,
-  // RiLinksLine,
-  // RiHeartsLine,
 } from 'react-icons/ri';
 import { FaDiscourse, FaRegHandshake } from 'react-icons/fa';
-// import { GiCastle } from 'react-icons/gi';
 
 // no slash on the path
 export const defaultDaoData = [
   { icon: RiBookMarkLine, label: 'Proposals', path: 'proposals' },
-  { icon: RiBankLine, label: 'Bank', path: 'bank' },
+  { icon: RiBankLine, label: 'Vaults', path: 'vaults' },
   { icon: RiTeamLine, label: 'Members', path: 'members' },
   { icon: RiSettings3Line, label: 'Settings', path: 'settings' },
   { icon: RiRocket2Line, label: 'Boosts', path: 'settings/boosts' },
@@ -35,16 +31,6 @@ export const defaultHubData = [
     label: 'Help',
     href: 'https://daohaus.club/docs',
   },
-  // {
-  //   icon: GiCastle,
-  //   label: 'About DaoHaus',
-  //   href: 'https://daohaus.club/',
-  // },
-  // {
-  //   icon: RiTeamLine,
-  //   label: 'UberHaus',
-  //   path: '/dao/0x64/???',
-  // },
 ];
 
 export const generateDaoLinks = (chainID, daoID, proposals) => {

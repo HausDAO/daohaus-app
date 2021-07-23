@@ -2,30 +2,25 @@ import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import { Box, Button, Flex, Spinner } from '@chakra-ui/react';
 
-import { useUser } from '../contexts/UserContext';
 import { useInjectedProvider } from '../contexts/InjectedProviderContext';
-import { useOverlay } from '../contexts/OverlayContext';
+import { useDao } from '../contexts/DaoContext';
 import { useTX } from '../contexts/TXContext';
 import ApproveUberHausToken from './approveUberHausToken';
-import { createPoll } from '../services/pollService';
-import { MinionService } from '../services/minionService';
-import { SuperfluidMinionService } from '../services/superfluidMinionService';
 import { TokenService } from '../services/tokenService';
-import { UberHausMinionService } from '../services/uberHausMinionService';
-import { PROPOSAL_TYPES } from '../utils/proposalUtils';
+import {
+  PROPOSAL_TYPES,
+  MINION_ACTION_FUNCTION_NAMES,
+} from '../utils/proposalUtils';
 import { UBERHAUS_DATA } from '../utils/uberhaus';
+import { LOCAL_ABI } from '../utils/abi';
+import { createContract } from '../utils/contract';
+import { transactionByProposalType } from '../utils/txHelpers';
 
 const MinionExecute = ({ proposal, early }) => {
   const { daochain } = useParams();
-  const {
-    errorToast,
-    successToast,
-    setProposalModal,
-    setTxInfoModal,
-  } = useOverlay();
-  const { address, injectedProvider } = useInjectedProvider();
-  const { cachePoll, resolvePoll } = useUser();
-  const { refreshDao } = useTX();
+  const { injectedProvider } = useInjectedProvider();
+  const { submitTransaction, refreshDao } = useTX();
+  const { refreshMinionVault } = useDao();
 
   const [loading, setLoading] = useState(false);
   const [minionDetails, setMinionDetails] = useState(null);
@@ -33,74 +28,49 @@ const MinionExecute = ({ proposal, early }) => {
   const [needsHausApproval, setNeedsHausApproval] = useState(false);
   const [minionBalance, setMinionBalance] = useState(null);
 
+  const isCorrectChain =
+    daochain === injectedProvider?.currentProvider?.chainId;
+
   useEffect(() => {
     const getMinionDetails = async () => {
       setLoading(true);
       try {
-        if (
-          proposal.proposalType === PROPOSAL_TYPES.MINION_VANILLA ||
-          proposal.proposalType === PROPOSAL_TYPES.MINION_NIFTY
-        ) {
-          const action = await MinionService({
-            minion: proposal?.minionAddress,
-            chainID: daochain,
-          })('getAction')({ proposalId: proposal?.proposalId });
-          setMinionDetails(action);
-          setShouldFetch(false);
-          setLoading(false);
-        } else if (proposal.proposalType === PROPOSAL_TYPES.MINION_SUPERFLUID) {
-          const action = await SuperfluidMinionService({
-            minion: proposal?.minionAddress,
-            chainID: daochain,
-          })('getStream')({ proposalId: proposal?.proposalId });
-          setMinionDetails(action);
-          setShouldFetch(false);
-          setLoading(false);
-        } else if (
-          proposal.proposalType === PROPOSAL_TYPES.MINION_UBER_STAKE ||
-          proposal.proposalType === PROPOSAL_TYPES.MINION_UBER_RQ
-        ) {
-          const action = await UberHausMinionService({
-            uberHausMinion: proposal.minionAddress,
-            chainID: daochain,
-          })('getAction')({ proposalId: proposal?.proposalId });
+        const tx = transactionByProposalType(proposal.proposalType);
+        const abi = LOCAL_ABI[tx.contract.abiName];
+        const web3Contract = createContract({
+          address: proposal.minionAddress,
+          abi,
+          chainID: daochain,
+          web3: injectedProvider,
+        });
 
-          console.log(
-            proposal.proposalType === PROPOSAL_TYPES.MINION_UBER_STAKE,
+        const action = await web3Contract.methods[
+          MINION_ACTION_FUNCTION_NAMES[tx.contract.abiName]
+        ](proposal.proposalId).call();
+
+        if (proposal.proposalType === PROPOSAL_TYPES.MINION_UBER_STAKE) {
+          const hausService = await TokenService({
+            chainID: daochain,
+            tokenAddress: UBERHAUS_DATA.STAKING_TOKEN,
+            is32: false,
+          });
+
+          const amountApproved = await hausService('allowance')({
+            accountAddr: proposal?.minionAddress,
+            contractAddr: UBERHAUS_DATA.ADDRESS,
+          });
+
+          const minionBalance = await hausService('balanceOf')(
+            proposal.minionAddress,
           );
 
-          if (proposal.proposalType === PROPOSAL_TYPES.MINION_UBER_STAKE) {
-            const hausService = await TokenService({
-              chainID: daochain,
-              tokenAddress: UBERHAUS_DATA.STAKING_TOKEN,
-              is32: false,
-            });
-
-            const amountApproved = await hausService('allowance')({
-              accountAddr: proposal?.minionAddress,
-              contractAddr: UBERHAUS_DATA.ADDRESS,
-            });
-
-            const minionBalance = await hausService('balanceOf')(
-              proposal.minionAddress,
-            );
-
-            setMinionBalance(minionBalance);
-            setNeedsHausApproval(+amountApproved < +minionBalance);
-          }
-
-          setMinionDetails(action);
-          setShouldFetch(false);
-          setLoading(false);
-        } else if (proposal.proposalType === PROPOSAL_TYPES.MINION_UBER_DEL) {
-          const action = await UberHausMinionService({
-            uberHausMinion: proposal.minionAddress,
-            chainID: daochain,
-          })('getAppointment')({ proposalId: proposal?.proposalId });
-          setShouldFetch(false);
-          setMinionDetails(action);
-          setLoading(false);
+          setMinionBalance(minionBalance);
+          setNeedsHausApproval(+amountApproved < +minionBalance);
         }
+
+        setMinionDetails(action);
+        setShouldFetch(false);
+        setLoading(false);
       } catch (err) {
         setShouldFetch(false);
         setLoading(false);
@@ -118,100 +88,25 @@ const MinionExecute = ({ proposal, early }) => {
     }
   }, [proposal, daochain, shouldFetch]);
 
-  const executeMinion = async () => {
+  const handleExecute = async () => {
     if (!proposal?.minion) return;
     setLoading(true);
+
     const args = [proposal.proposalId];
-    try {
-      const poll = createPoll({ action: 'minionExecuteAction', cachePoll })({
-        chainID: daochain,
+    await submitTransaction({
+      tx: transactionByProposalType(proposal.proposalType),
+      args,
+      localValues: {
         minionAddress: proposal.minionAddress,
         proposalId: proposal.proposalId,
-        proposalType: proposal?.proposalType,
-        actions: {
-          onError: (error, txHash) => {
-            errorToast({
-              title: 'There was an error.',
-            });
-            resolvePoll(txHash);
-            console.error(`Could not find a matching proposal: ${error}`);
-            setLoading(false);
-          },
-          onSuccess: txHash => {
-            successToast({
-              title: 'Minion action executed.',
-            });
-            resolvePoll(txHash);
-            setShouldFetch(true);
-            refreshDao();
-          },
-        },
-      });
-      const onTxHash = () => {
-        setProposalModal(false);
-        setTxInfoModal(true);
-      };
-      if (
-        proposal.proposalType === PROPOSAL_TYPES.MINION_VANILLA ||
-        proposal.proposalType === PROPOSAL_TYPES.MINION_NIFTY
-      ) {
-        await MinionService({
-          web3: injectedProvider,
-          minion: proposal.minionAddress,
-          chainID: daochain,
-        })('executeAction')({
-          args,
-          address,
-          poll,
-          onTxHash,
-        });
-      } else if (proposal.proposalType === PROPOSAL_TYPES.MINION_SUPERFLUID) {
-        await SuperfluidMinionService({
-          web3: injectedProvider,
-          minion: proposal.minionAddress,
-          chainID: daochain,
-        })('executeAction')({
-          args,
-          address,
-          poll,
-          onTxHash,
-        });
-      } else if (
-        proposal.proposalType === PROPOSAL_TYPES.MINION_UBER_STAKE ||
-        proposal.proposalType === PROPOSAL_TYPES.MINION_UBER_RQ
-      ) {
-        await UberHausMinionService({
-          web3: injectedProvider,
-          uberHausMinion: proposal.minionAddress,
-          chainID: daochain,
-        })('executeAction')({
-          args,
-          address,
-          poll,
-          onTxHash,
-        });
-      } else if (proposal.proposalType === PROPOSAL_TYPES.MINION_UBER_DEL) {
-        await UberHausMinionService({
-          web3: injectedProvider,
-          uberHausMinion: proposal.minionAddress,
-          chainID: daochain,
-        })('executeAppointment')({
-          args,
-          address,
-          poll,
-          onTxHash,
-        });
-      } else {
-        console.error('Could not find minion type');
-      }
-    } catch (err) {
-      console.log('error: ', err);
-      setLoading(false);
-    }
+        proposalType: proposal.proposalType,
+      },
+    });
+    await refreshMinionVault(proposal.minionAddress);
+    refreshDao();
+    setShouldFetch(true);
+    setLoading(false);
   };
-
-  const isCorrectChain =
-    daochain === injectedProvider?.currentProvider?.chainId;
 
   const getMinionAction = () => {
     if (minionDetails?.executed) return <Box>Executed</Box>;
@@ -232,7 +127,7 @@ const MinionExecute = ({ proposal, early }) => {
     ) {
       return (
         <Flex alignItems='center' flexDir='column'>
-          <Button onClick={executeMinion} mb={4} disabled={!isCorrectChain}>
+          <Button onClick={handleExecute} mb={4} disabled={!isCorrectChain}>
             Execute Minion
           </Button>
           <Box>
@@ -244,7 +139,7 @@ const MinionExecute = ({ proposal, early }) => {
     }
 
     return (
-      <Button onClick={executeMinion} disabled={!isCorrectChain}>
+      <Button onClick={handleExecute} disabled={!isCorrectChain}>
         {early && 'Early '}Execute Minion
       </Button>
     );

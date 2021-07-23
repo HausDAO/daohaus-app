@@ -91,7 +91,7 @@ const OverviewCard = ({ daoOverview, members, currentDaoTokens }) => {
           <Button
             variant='outline'
             mr={6}
-            onClick={() => history.push(`/dao/${daochain}/${daoid}/bank`)}
+            onClick={() => history.push(`/dao/${daochain}/${daoid}/vaults`)}
             value='bank'
             title={getTitle(customTerms, 'Bank')}
           >

@@ -29,7 +29,7 @@ const Proposal = ({
     : null;
   // console.log(currentProposal);
 
-  const testRefreshDao = () => {
+  const handleRefreshDao = () => {
     refreshDao();
   };
 
@@ -81,7 +81,7 @@ const Proposal = ({
                 p={0}
                 size='sm'
                 variant='outline'
-                onClick={testRefreshDao}
+                onClick={handleRefreshDao}
               />
             </Flex>
             <Stack pt={6} spacing={6}>
