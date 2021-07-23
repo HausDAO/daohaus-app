@@ -5,8 +5,9 @@ import { RiAddFill } from 'react-icons/ri';
 import { useDao } from '../contexts/DaoContext';
 import { useOverlay } from '../contexts/OverlayContext';
 import GenericModal from '../modals/genericModal';
+import FieldWrapper from './fieldWrapper';
 
-const NftSelect = ({ label }) => {
+const NftSelect = ({ label, ...props }) => {
   const { setGenericModal } = useOverlay();
   const { daoVaults } = useDao();
   const [nftData, setNftData] = useState();
@@ -96,7 +97,7 @@ const NftSelect = ({ label }) => {
   );
 
   return (
-    <>
+    <FieldWrapper {...props}>
       <Box>
         <Text mb={3}>{label}</Text>
         {selected ? (
@@ -124,7 +125,7 @@ const NftSelect = ({ label }) => {
         )}
       </Box>
       {selectModal}
-    </>
+    </FieldWrapper>
   );
 };
 
