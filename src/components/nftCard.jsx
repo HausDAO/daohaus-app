@@ -8,7 +8,7 @@ import { useOverlay } from '../contexts/OverlayContext';
 import { hydrateNftCard } from '../utils/nftVaults';
 import NftCardActionMenu from './nftCardActionMenu';
 
-const NftCard = ({ nft }) => {
+const NftCard = ({ nft, isMember }) => {
   const { setNftViewModal } = useOverlay();
 
   const hydratedNft = useMemo(() => {
@@ -42,7 +42,7 @@ const NftCard = ({ nft }) => {
         >
           View
         </Box>
-        <NftCardActionMenu nft={hydratedNft} />
+        <NftCardActionMenu nft={hydratedNft} isMember={isMember} />
       </Flex>
       <Flex justify='center' w='100%' mb={5}>
         <Image

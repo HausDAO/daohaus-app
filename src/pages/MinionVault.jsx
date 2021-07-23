@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
-import { Box, Button, Flex, Spinner, useToast } from '@chakra-ui/react';
+import { Box, Button, Flex, useToast } from '@chakra-ui/react';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
 
 import { useToken } from '../contexts/TokenContext';
@@ -10,12 +10,13 @@ import MainViewLayout from '../components/mainViewLayout';
 import TextBox from '../components/TextBox';
 import NftCard from '../components/nftCard';
 import CrossDaoInternalBalanceList from '../components/crossDaoInternalBalanceList';
+import Loading from '../components/loading';
 import { fetchMinionInternalBalances } from '../utils/theGraph';
 import { fetchNativeBalance } from '../utils/tokenExplorerApi';
 import { supportedChains } from '../utils/chain';
 import { vaultConfigByType } from '../data/vaults';
 
-const MinionVault = ({ overview, customTerms, daoVaults }) => {
+const MinionVault = ({ overview, customTerms, daoVaults, isMember }) => {
   const { daoid, daochain, minion } = useParams();
   const { currentDaoTokens } = useToken();
   const toast = useToast();
@@ -118,7 +119,7 @@ const MinionVault = ({ overview, customTerms, daoVaults }) => {
       headerEl={vault ? ctaButton : null}
       isDao
     >
-      {!vault && <Spinner />}
+      {!vault && <Loading message='Fetching treasury holdings...' />}
       {vault && (
         <Flex wrap='wrap'>
           <Box
@@ -167,7 +168,7 @@ const MinionVault = ({ overview, customTerms, daoVaults }) => {
                   </TextBox>
                 </Flex>
                 {vault.nfts.map((nft, i) => (
-                  <NftCard nft={nft} key={i} />
+                  <NftCard nft={nft} key={i} isMember={isMember} />
                 ))}
               </>
             )}
