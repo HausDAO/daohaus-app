@@ -264,7 +264,7 @@ const DaoMetaForm = ({ metadata, handleUpdate }) => {
                     </InputGroup>
                   </FormControl>
 
-                  <FormControl id='medium' mb={4}>
+                  <FormControl id='other' mb={4}>
                     <InputGroup>
                       <InputLeftAddon bg='transparent'>
                         <AiFillQuestionCircle />

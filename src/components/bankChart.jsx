@@ -208,7 +208,7 @@ const BankChart = ({ overview, daoVaults, balanceData, visibleVaults }) => {
             align='center'
             justify='center'
           >
-            <TextBox>Waiting on more balance data.</TextBox>
+            <TextBox>--</TextBox>
           </Flex>
         )}
       </Box>

@@ -58,7 +58,7 @@ const NewMinionForm = ({ minionType }) => {
             resolvePoll(txHash);
             setStep(1);
           },
-          onSuccess: txHash => {
+          onSuccess: async txHash => {
             const title = values.details
               ? `${values.details} Lives!`
               : 'Minion Lives!';

@@ -1,8 +1,10 @@
 import React from 'react';
 import { Flex, Text, Box } from '@chakra-ui/react';
+
 import TextBox from './TextBox';
 import ContentBox from './ContentBox';
 import BalanceCard from './balanceCard';
+import MinionVaultRefreshButton from './minionVaultRefreshButton';
 
 const BalanceList = ({
   balances,
@@ -14,11 +16,14 @@ const BalanceList = ({
 }) => {
   return (
     <ContentBox mt={6}>
-      <TextBox size='xs' mb={6}>
-        {isNativeToken
-          ? `Network Token Balance`
-          : `${vaultConfig.balanceListTitle}`}
-      </TextBox>
+      <Flex justify='space-between'>
+        <TextBox size='xs' mb={6}>
+          {isNativeToken
+            ? `Network Token Balance`
+            : `${vaultConfig.balanceListTitle}`}
+        </TextBox>
+        <MinionVaultRefreshButton />
+      </Flex>
       <Flex>
         <Box w='25%' d={['none', null, null, 'inline-block']}>
           <TextBox size='xs'>Asset</TextBox>

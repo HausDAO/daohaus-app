@@ -46,6 +46,7 @@ export const MINION_TYPES = {
   UBER: 'UberHaus minion',
   SUPERFLUID: 'Superfluid minion',
   RARIBLE: 'Rarible minion',
+  NEAPOLITAN: 'Neapolitan minion',
 };
 
 export const inQueue = proposal => {

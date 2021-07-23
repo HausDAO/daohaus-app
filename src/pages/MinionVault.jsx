@@ -8,7 +8,7 @@ import BankChart from '../components/bankChart';
 import BalanceList from '../components/balanceList';
 import MainViewLayout from '../components/mainViewLayout';
 import TextBox from '../components/TextBox';
-import VaultNftCard from '../components/vaultNftCard';
+import NftCard from '../components/nftCard';
 import CrossDaoInternalBalanceList from '../components/crossDaoInternalBalanceList';
 import { fetchMinionInternalBalances } from '../utils/theGraph';
 import { fetchNativeBalance } from '../utils/tokenExplorerApi';
@@ -48,6 +48,12 @@ const MinionVault = ({ overview, customTerms, daoVaults }) => {
       const vaultMatch = daoVaults.find(vault => {
         return vault.address === minion;
       });
+
+      if (!vaultMatch) {
+        console.log('no vault found');
+        return;
+      }
+
       // TODO: shape this on the api side and remove formatting here
       const tempFormattedVaultData = vaultMatch.erc20s.map(token => {
         return {
@@ -151,15 +157,17 @@ const MinionVault = ({ overview, customTerms, daoVaults }) => {
                 <Flex direction='row' justify='space-between'>
                   <TextBox w='100%'>NFTS</TextBox>
                   <TextBox w='100%' fontcolor='secondary'>
-                    <Link
-                      to={`/dao/${daochain}/${daoid}/gallery/minion/${minion}`}
-                    >
-                      View Gallery
-                    </Link>
+                    {false && (
+                      <Link
+                        to={`/dao/${daochain}/${daoid}/gallery/minion/${minion}`}
+                      >
+                        View Gallery
+                      </Link>
+                    )}
                   </TextBox>
                 </Flex>
                 {vault.nfts.map((nft, i) => (
-                  <VaultNftCard nft={nft} key={i} />
+                  <NftCard nft={nft} key={i} />
                 ))}
               </>
             )}

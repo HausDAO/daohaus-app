@@ -22,6 +22,8 @@ import { MinionService } from '../services/minionService';
 import { SuperfluidMinionService } from '../services/superfluidMinionService';
 import { UberHausMinionService } from '../services/uberHausMinionService';
 import { TX_HASH } from '../graphQL/general';
+import { createContract } from '../utils/contract';
+import { getContractABI } from '../utils/abi';
 
 export const pollTXHash = async ({ chainID, txHash }) => {
   return graphQuery({
@@ -112,6 +114,41 @@ export const pollMinionProposal = async ({
       createdAt,
     },
   });
+};
+
+export const pollMinionExecuteAction = async ({
+  chainID,
+  minionAddress,
+  proposalId,
+  tx,
+}) => {
+  try {
+    const web3Contract = createContract({
+      address: minionAddress,
+      abi: await getContractABI({ tx }),
+      chainID,
+    });
+    console.log(web3Contract);
+
+    if (tx.contract.abiName === 'VANILLA_MINION') {
+      const actionValue = await web3Contract.methods.actions(proposalId).call();
+      return actionValue.executed;
+    }
+    if (tx.contract.abiName === 'UBERHAUS_MINION') {
+      const actionValue = await web3Contract.methods
+        .appointments(proposalId)
+        .call();
+      return actionValue.executed;
+    }
+    if (tx.contract.abiName === 'SUPERFLUID_MINION') {
+      const actionValue = await web3Contract.methods.streams(proposalId).call();
+      return actionValue.executed;
+    }
+    return null;
+  } catch (error) {
+    console.error(error);
+    throw new Error('Error caught in Poll block of TX');
+  }
 };
 
 export const pollMinionExecute = async ({

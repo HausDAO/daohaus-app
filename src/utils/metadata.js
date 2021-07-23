@@ -40,6 +40,19 @@ export const fetchApiVaultData = async (network, minions) => {
   }
 };
 
+export const putRefreshApiVault = async (network, minionAddress) => {
+  try {
+    const response = await fetch(`${metadataApiUrl}/dao/refresh-vault`, {
+      method: 'PUT',
+      body: JSON.stringify({ network, minionAddress }),
+    });
+
+    return response.json();
+  } catch (err) {
+    throw new Error(err);
+  }
+};
+
 export const formatBoosts = boostsArr =>
   boostsArr.reduce((obj, boost) => {
     return {

@@ -17,6 +17,7 @@ import { TXProvider } from './TXContext';
 import { DaoMemberProvider } from './DaoMemberContext';
 import { useUser } from './UserContext';
 import { UBERHAUS_DATA } from '../utils/uberhaus';
+import { putRefreshApiVault } from '../utils/metadata';
 
 export const DaoContext = createContext();
 
@@ -117,7 +118,7 @@ export const DaoProvider = ({ children }) => {
         chainID: daochain,
       },
       getSetters: [
-        { getter: 'getOverview', setter: setDaoOverview },
+        { getter: 'getOverview', setter: { setDaoOverview, setDaoVaults } },
         {
           getter: 'getActivities',
           setter: { setDaoProposals, setDaoActivities },
@@ -128,6 +129,12 @@ export const DaoProvider = ({ children }) => {
     };
     currentDao.current = null;
     bigGraphQuery(bigQueryOptions);
+  };
+
+  const refreshMinionVault = async minionAddress => {
+    const networkName = supportedChains[daochain].network;
+    const res = await putRefreshApiVault(networkName, minionAddress);
+    console.log('refresh res', res);
   };
 
   // TODO: refetch vaults - either add above or a new one that can trigger a api rerun on a specific dao
@@ -170,6 +177,7 @@ export const DaoProvider = ({ children }) => {
         setIsUberHaus,
         isCorrectNetwork,
         refetch,
+        refreshMinionVault,
         hasPerformedBatchQuery, // Ref, not state
       }}
     >
@@ -198,6 +206,7 @@ export const useDao = () => {
     isUberHaus,
     isCorrectNetwork,
     refetch,
+    refreshMinionVault,
     hasPerformedBatchQuery, // Ref, not state
   } = useContext(DaoContext);
   return {
@@ -210,6 +219,7 @@ export const useDao = () => {
     daoVaults,
     isCorrectNetwork,
     refetch,
+    refreshMinionVault,
     hasPerformedBatchQuery,
   };
 };
