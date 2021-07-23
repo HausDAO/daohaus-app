@@ -10,41 +10,52 @@ import TextBox from '../components/TextBox';
 import { ALL_FORMS, CORE_FORMS, PLAYLISTS } from '../data/forms';
 import { submitVoteTest } from '../polls/tests';
 import { useOverlay } from '../contexts/OverlayContext';
-
-const playlistActions = {
-  edit() {},
-  delete() {},
-  add() {},
-  // async submit() {},
-};
+import { createPlaylist } from '../utils/playlists';
 
 const ProposalTypes = ({ customTerms }) => {
-  const { displayFormModal } = useOverlay();
-  const [playLists, setPlaylists] = useState(PLAYLISTS);
+  const { displayFormModal, setFormModal } = useOverlay();
+  const [playlists, setPlaylists] = useState(PLAYLISTS);
   const [selectedList, setSelectedList] = useState(ALL_FORMS);
 
-  const selectList = value => {
-    if (!value) return;
-    if (value === 'all') {
+  const selectList = id => {
+    if (!id) return;
+    if (id === 'all') {
       setSelectedList(ALL_FORMS);
-    } else if (value === selectedList?.value) {
+    } else if (id === selectedList?.id) {
       setSelectedList(null);
     } else {
-      setSelectedList(PLAYLISTS.find(list => list.value === value));
+      setSelectedList(playlists.find(list => list.id === id));
     }
   };
 
-  const handleEditPlaylist = (e, value, params) => {
-    e.stopPropagation();
-    displayFormModal(CORE_FORMS.EDIT_PLAYLIST);
+  const handleEditPlaylist = id => {
+    displayFormModal({
+      ...CORE_FORMS.EDIT_PLAYLIST,
+      onSubmit: ({ values }) => {
+        const name = values?.title;
+        if (name && id) {
+          setPlaylists(prevState =>
+            prevState.map(list => (list.id === id ? { ...list, name } : list)),
+          );
+          setFormModal(false);
+        }
+      },
+    });
   };
-  const handleDeletePlaylist = (e, value) => {
-    e.stopPropagation();
-    // displayFormModal(CONFIRMATION.DELETE_PLAYLIST);
-  };
-  const handleAddPlaylist = value => {
-    console.log('fired');
-    displayFormModal(CORE_FORMS.ADD_PLAYLIST);
+  const handleDeletePlaylist = id =>
+    setPlaylists(prevState => prevState.filter(list => list.id !== id));
+
+  const handleAddPlaylist = () => {
+    displayFormModal({
+      ...CORE_FORMS.ADD_PLAYLIST,
+      onSubmit: daoState => {
+        const newPlaylist = createPlaylist({
+          name: daoState?.values?.title,
+        });
+        setPlaylists(prevState => [...prevState, newPlaylist]);
+        setFormModal(false);
+      },
+    });
   };
 
   return (
@@ -52,7 +63,7 @@ const ProposalTypes = ({ customTerms }) => {
       <Flex w='100%'>
         <PlaylistSelector
           allForms={ALL_FORMS}
-          playlists={playLists}
+          playlists={playlists}
           selectedList={selectedList}
           selectList={selectList}
           handleAddPlaylist={handleAddPlaylist}
@@ -71,9 +82,9 @@ const PlaylistSelector = ({
   playlists,
   selectedList,
   selectList,
-  handleAddPlaylist,
   handleEditPlaylist,
   handleDeletePlaylist,
+  handleAddPlaylist,
 }) => {
   return (
     <ContentBox p='0' minW='250px' maxW='400px' w='100%' border='none' mb={6}>
@@ -89,16 +100,16 @@ const PlaylistSelector = ({
         </TextBox>
         {playlists.map(list => (
           <PlaylistItem
-            key={list.value}
+            key={list.id}
             {...list}
             isMutable
-            isSelected={selectedList?.value === list.value}
+            isSelected={selectedList?.id === list.id}
             selectList={selectList}
             handleEditPlaylist={handleEditPlaylist}
             handleDeletePlaylist={handleDeletePlaylist}
           />
         ))}
-        <Button variant='outline' m={6}>
+        <Button variant='outline' m={6} onClick={handleAddPlaylist}>
           <TextBox color='secondary.400'>create new list</TextBox>
         </Button>
       </Flex>
@@ -109,7 +120,7 @@ const PlaylistSelector = ({
 const PlaylistItem = ({
   name,
   forms,
-  value,
+  id,
   isMutable,
   isSelected,
   selectList,
@@ -118,7 +129,15 @@ const PlaylistItem = ({
 }) => {
   const displayActions = isSelected && isMutable;
   const handleClick = () => {
-    selectList(value);
+    selectList(id);
+  };
+  const handleClickEdit = e => {
+    e.stopPropagation();
+    handleEditPlaylist(id);
+  };
+  const handleClickDelete = e => {
+    e.stopPropagation();
+    handleDeletePlaylist(id);
   };
 
   return (
@@ -156,20 +175,20 @@ const PlaylistItem = ({
         <Flex zIndex='10'>
           <Icon
             as={VscGear}
-            color='primary.100'
+            color='secondary.400'
             w='20px'
             h='20px'
             mr={4}
             cursor='pointer'
-            onClick={handleEditPlaylist}
+            onClick={handleClickEdit}
           />
           <Icon
             as={FiTrash2}
-            color='primary.100'
+            color='secondary.400'
             w='20px'
             h='20px'
             cursor='pointer'
-            onClick={handleDeletePlaylist}
+            onClick={handleClickDelete}
           />
         </Flex>
       )}

@@ -10,7 +10,13 @@ export const CORE_FORMS = {
     layout: 'singleColumn',
     type: PROPOSAL_TYPES.CORE,
     required: ['title'],
-    fields: [{ ...FIELD.TITLE, helperText: 'Max 100 characters' }],
+    fields: [
+      {
+        ...FIELD.TITLE,
+        helperText: 'Max 100 characters',
+        placeholder: 'Playlist Title',
+      },
+    ],
   },
   ADD_PLAYLIST: {
     id: 'ADD_PLAYLIST',
@@ -18,7 +24,13 @@ export const CORE_FORMS = {
     layout: 'singleColumn',
     type: PROPOSAL_TYPES.CORE,
     required: ['selectedMinion'],
-    fields: [{ ...FIELD.TITLE, helperText: 'Max 100 characters' }],
+    fields: [
+      {
+        ...FIELD.TITLE,
+        helperText: 'Max 100 characters',
+        placeholder: 'Playlist Title',
+      },
+    ],
   },
 };
 
@@ -225,8 +237,7 @@ export const FORM = {
 
 export const COMMON_FORMS = {
   name: 'Favourites',
-  description: 'Top DAO hits',
-  value: 'common',
+  id: 'common',
   forms: [
     FORM.BUY_SHARES,
     // FORM.LOOT_GRAB,
@@ -238,8 +249,7 @@ export const COMMON_FORMS = {
 
 export const CLASSIC_FORMS = {
   name: 'The Classics',
-  description: 'Proposals we know and love.',
-  value: 'classics',
+  id: 'classics',
   forms: [
     FORM.MEMBER,
     FORM.FUNDING,
@@ -254,6 +264,6 @@ export const CLASSIC_FORMS = {
 export const PLAYLISTS = [COMMON_FORMS, CLASSIC_FORMS];
 export const ALL_FORMS = {
   name: 'All Proposals',
-  value: 'all',
+  id: 'all',
   forms: Object.values(FORM),
 };

@@ -14,7 +14,12 @@ import {
 } from '../utils/formBuilder';
 
 const FormBuilder = props => {
-  const { submitTransaction, handleCustomValidation, modifyFields } = useTX();
+  const {
+    submitTransaction,
+    handleCustomValidation,
+    modifyFields,
+    submitCallback,
+  } = useTX();
   const { fields, additionalOptions = null, required = [] } = props;
 
   const [loading, setLoading] = useState(false);
@@ -96,6 +101,19 @@ const FormBuilder = props => {
       updateErrors(customValErrors);
       return;
     }
+    //  checks if submit is not a contract interaction and is a callback
+    if (props.onSubmit && !props.tx && typeof props.onSubmit === 'function') {
+      try {
+        return await submitCallback({
+          values: modifiedValues,
+          formData: props,
+          onSubmit: props.onSubmit,
+        });
+      } catch (error) {
+        console.error(error);
+        setLoading(false);
+      }
+    }
 
     try {
       setLoading(true);
@@ -114,6 +132,7 @@ const FormBuilder = props => {
       setLoading(false);
     }
   };
+
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
       <Flex flexDir='column'>
