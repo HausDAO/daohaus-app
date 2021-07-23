@@ -17,7 +17,12 @@ import CrossDaoInternalBalanceListCard from './crossDaoInternalBalanceListCard';
 const CrossDaoInternalBalanceList = ({ tokens, currentDaoTokens }) => {
   return (
     <ContentBox mt={6}>
-      <Accordion allowToggle defaultIndex={0} border='none' borderWidth='0'>
+      <Accordion
+        allowToggle
+        defaultIndex={tokens?.length > 0 ? 0 : null}
+        border='none'
+        borderWidth='0'
+      >
         <AccordionItem border='none'>
           <AccordionButton>
             <Flex direction='row' width='100%' justify='space-between'>
@@ -38,7 +43,7 @@ const CrossDaoInternalBalanceList = ({ tokens, currentDaoTokens }) => {
               <Box w='20%' d={['none', null, null, 'inline-block']}>
                 <TextBox size='xs'>Asset</TextBox>
               </Box>
-              <Box w={['25%', null, null, '25%']}>
+              <Box w={['40%', null, null, '25%']}>
                 <TextBox size='xs'>Balance</TextBox>
               </Box>
 

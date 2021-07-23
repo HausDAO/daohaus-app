@@ -5,16 +5,15 @@ import { Box, Flex, Text, Badge } from '@chakra-ui/react';
 import ContentBox from './ContentBox';
 import TextBox from './TextBox';
 import VaultCardTokenList from './vaultCardTokenList';
+import CopyButton from './copyButton';
 import { numberWithCommas } from '../utils/general';
 import { vaultUrlPart } from '../utils/vaults';
-import CopyButton from './copyButton';
 import { tallyUSDs } from '../utils/tokenValue';
 
 const VaultCard = ({ vault, currentDaoTokens, vaultConfig }) => {
   const { daoid, daochain } = useParams();
 
   const bgImgUrl = vault.nfts[0]?.imageUrl;
-
   const currentVaultBalance =
     vault.type === 'treasury'
       ? tallyUSDs(currentDaoTokens)

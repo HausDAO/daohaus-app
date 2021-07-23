@@ -132,12 +132,16 @@ export const DaoProvider = ({ children }) => {
   };
 
   const refreshMinionVault = async minionAddress => {
-    const networkName = supportedChains[daochain].network;
-    const res = await putRefreshApiVault(networkName, minionAddress);
+    const { network } = supportedChains[daochain];
+    const res = await putRefreshApiVault({ network, minionAddress });
     console.log('refresh res', res);
   };
 
-  // TODO: refetch vaults - either add above or a new one that can trigger a api rerun on a specific dao
+  const refreshAllDaoVaults = async () => {
+    const { network } = supportedChains[daochain];
+    const res = await putRefreshApiVault({ network, molochAddress: daoid });
+    console.log('refresh dao res', res);
+  };
 
   useEffect(() => {
     if (apiData && daoMembers && uberMinionData) {
@@ -178,6 +182,7 @@ export const DaoProvider = ({ children }) => {
         isCorrectNetwork,
         refetch,
         refreshMinionVault,
+        refreshAllDaoVaults,
         hasPerformedBatchQuery, // Ref, not state
       }}
     >
@@ -207,6 +212,7 @@ export const useDao = () => {
     isCorrectNetwork,
     refetch,
     refreshMinionVault,
+    refreshAllDaoVaults,
     hasPerformedBatchQuery, // Ref, not state
   } = useContext(DaoContext);
   return {
@@ -220,6 +226,7 @@ export const useDao = () => {
     isCorrectNetwork,
     refetch,
     refreshMinionVault,
+    refreshAllDaoVaults,
     hasPerformedBatchQuery,
   };
 };

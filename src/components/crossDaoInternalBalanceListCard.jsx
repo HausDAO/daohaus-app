@@ -9,14 +9,16 @@ import { useInjectedProvider } from '../contexts/InjectedProviderContext';
 import MinionInternalBalanceActionMenu from './minionInternalBalanceActionMenu';
 import { daoConnectedAndSameChain } from '../utils/general';
 import { chainByName } from '../utils/chain';
-import { TX } from '../data/contractTX';
 import { displayBalance } from '../utils/tokenValue';
+import { TX } from '../data/contractTX';
 
 const CrossDaoInternalBalanceListCard = ({ token, currentDaoTokens }) => {
   const { minion, daochain } = useParams();
   const { address, injectedChain } = useInjectedProvider();
 
-  // TODO: this is not great. maybe make 2 different components for in/outside daos
+  // TODO: refactor so we're not hijacking the context.
+  // - maybe make 2 different components for in/outside daos
+  // - note: the tx is not used outside of the dao context right now
   const { submitTransaction } = daochain
     ? useTX()
     : { submitTransaction: null };
@@ -53,7 +55,6 @@ const CrossDaoInternalBalanceListCard = ({ token, currentDaoTokens }) => {
       },
     });
 
-    // TODO: handle the after effects - refresh dao
     setLoading(false);
   };
 
@@ -77,7 +78,7 @@ const CrossDaoInternalBalanceListCard = ({ token, currentDaoTokens }) => {
         </Flex>
       </Box>
 
-      <Box w={['25%', null, null, '25%']}>
+      <Box w={['40%', null, null, '25%']}>
         <Skeleton isLoaded={token.tokenBalance}>
           <Box fontFamily='mono'>
             {token.tokenBalance ? (

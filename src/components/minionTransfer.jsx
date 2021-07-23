@@ -22,14 +22,18 @@ const MinionTransfer = ({ isMember, isNativeToken, minion, token }) => {
   const openSendModal = () => {
     const modalName = isNativeToken
       ? 'minionSendNativeToken'
-      : 'minionSendToken';
+      : `minionSendToken-${token.tokenAddress}`;
     setGenericModal({ [modalName]: true });
   };
 
   return (
     <>
       <GenericModal
-        modalId={isNativeToken ? 'minionSendNativeToken' : 'minionSendToken'}
+        modalId={
+          isNativeToken
+            ? 'minionSendNativeToken'
+            : `minionSendToken-${token.tokenAddress}`
+        }
         formLego={{
           ...transferFormLego,
           localValues: {

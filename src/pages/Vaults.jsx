@@ -3,12 +3,12 @@ import { useParams, Link } from 'react-router-dom';
 import { Box, Button, Flex } from '@chakra-ui/react';
 import { RiAddFill } from 'react-icons/ri';
 
-import BankChart from '../components/bankChart';
-import MainViewLayout from '../components/mainViewLayout';
 import { useInjectedProvider } from '../contexts/InjectedProviderContext';
-import { daoConnectedAndSameChain } from '../utils/general';
+import MainViewLayout from '../components/mainViewLayout';
+import BankChart from '../components/bankChart';
 import VaultCard from '../components/vaultCard';
 import ListFilter from '../components/listFilter';
+import { daoConnectedAndSameChain } from '../utils/general';
 import { vaultFilterOptions, vaultConfigByType } from '../data/vaults';
 
 const Vaults = ({

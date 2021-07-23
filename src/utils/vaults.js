@@ -1,4 +1,5 @@
 import { ethers } from 'ethers';
+import { supportedChains } from './chain';
 import { isSameAddress } from './general';
 
 export const getReadableBalance = tokenData => {
@@ -65,4 +66,21 @@ export const getCurrentPrices = vaults => {
     });
     return priceMap;
   }, {});
+};
+
+export const formatNativeData = (daochain, balance) => {
+  return [
+    {
+      isNative: true,
+      totalUSD: 0,
+      usd: 0,
+      id: daochain,
+      logoUri: '',
+      tokenAddress: daochain,
+      tokenBalance: balance,
+      decimals: '18',
+      tokenName: supportedChains[daochain].nativeCurrency,
+      symbol: supportedChains[daochain].nativeCurrency,
+    },
+  ];
 };
