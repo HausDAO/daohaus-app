@@ -32,6 +32,15 @@ export const CORE_FORMS = {
       },
     ],
   },
+  UPDATE_DELEGATE: {
+    id: 'UPDATE_DELEGATE',
+    title: 'UPDATE DELEGATE ADDRESS',
+    layout: 'singleColumn',
+    img: swordImg,
+    required: ['delegateAddress'],
+    tx: TX.UPDATE_DELEGATE,
+    fields: [FIELD.DELEGATE_ADDRESS],
+  },
 };
 
 export const FORM = {
@@ -197,15 +206,7 @@ export const FORM = {
       { ...FIELD.DESCRIPTION, h: '10' },
     ],
   },
-  UPDATE_DELEGATE: {
-    id: 'UPDATE_DELEGATE',
-    title: 'UPDATE DELEGATE ADDRESS',
-    layout: 'singleColumn',
-    img: swordImg,
-    required: ['delegateAddress'],
-    tx: TX.UPDATE_DELEGATE,
-    fields: [FIELD.DELEGATE_ADDRESS],
-  },
+
   LOOT_GRAB: {
     id: 'LOOT_GRAB',
     title: 'Loot Grab proposal',
