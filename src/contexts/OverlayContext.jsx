@@ -1,10 +1,13 @@
 import React, { createContext, useState, useContext } from 'react';
-import { useToast } from '@chakra-ui/react';
+import { Box, Flex, useToast } from '@chakra-ui/react';
+import Button from '../themes/core/button';
 
 export const OverlayContext = createContext();
 
 export const OverlayProvider = ({ children }) => {
   const toast = useToast();
+  const [modal, setModal] = useState(false);
+  // console.log('modal', modal);
   const [daoSwitcherModal, setDaoSwitcherModal] = useState(false);
   const [hubAccountModal, setHubAccountModal] = useState(false);
   const [daoAccountModal, setDaoAccountModal] = useState(false);
@@ -47,13 +50,17 @@ export const OverlayProvider = ({ children }) => {
     });
   };
 
-  const displayFormModal = params => {
-    setFormModal(params);
-  };
+  // const useAppModal = params => {
+  //   setModal(params);
+  // };
+
+  const closeModal = () => setModal(false);
 
   return (
     <OverlayContext.Provider
       value={{
+        modal,
+        setModal,
         daoSwitcherModal,
         setDaoSwitcherModal,
         hubAccountModal,
@@ -77,7 +84,7 @@ export const OverlayProvider = ({ children }) => {
         setGenericModal,
         proposalSelector,
         setProposalSelector,
-        displayFormModal,
+        closeModal,
       }}
     >
       {children}
@@ -89,6 +96,8 @@ export default OverlayProvider;
 
 export const useOverlay = () => {
   const {
+    modal,
+    setModal,
     daoSwitcherModal,
     setDaoSwitcherModal,
     hubAccountModal,
@@ -112,9 +121,10 @@ export const useOverlay = () => {
     setGenericModal,
     proposalSelector,
     setProposalSelector,
-    displayFormModal,
   } = useContext(OverlayContext);
   return {
+    modal,
+    setModal,
     daoSwitcherModal,
     setDaoSwitcherModal,
     daoAccountModal,
@@ -138,6 +148,61 @@ export const useOverlay = () => {
     setGenericModal,
     proposalSelector,
     setProposalSelector,
-    displayFormModal,
+  };
+};
+
+export const useConfirmation = () => {
+  const { setModal, closeModal } = useContext(OverlayContext);
+
+  return {
+    openConfirmation({
+      title,
+      body,
+      width = '500px',
+      onCancel,
+      onSubmit,
+      header,
+      overrideFooter,
+      loading,
+    }) {
+      setModal({
+        isConfirmation: true,
+        title,
+        header,
+        body,
+        width,
+        onCancel,
+        onSubmit,
+        overrideFooter,
+        loading,
+      });
+    },
+    closeModal,
+  };
+};
+
+// export const useFormModal = ({}) => {
+
+// }
+export const useFormModal = () => {
+  const { setModal, errorToast, closeModal } = useContext(OverlayContext);
+  return {
+    openFormModal({ lego, onSubmit, onCancel }) {
+      //  TODO once TX Context is ready on Hub level
+      //  get url info from useParams  and conditionally load the correct
+      //  modal based on scope. Same pattern can be used for other scoped modals
+      if (lego && onSubmit && !lego?.tx) {
+        console.log('fired');
+        setModal({ lego, onSubmit, onCancel });
+      } else if (lego) {
+        setModal({ lego, onCancel });
+      } else {
+        errorToast({
+          title: 'Modal Error',
+          description: 'Did not receive valid Form lego',
+        });
+      }
+    },
+    closeModal,
   };
 };

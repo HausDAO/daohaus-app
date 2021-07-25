@@ -1,23 +1,26 @@
 import React, { useState } from 'react';
 
-import { Box, Icon, Flex, Button, Text } from '@chakra-ui/react';
+import { Box, Icon, Flex, Button } from '@chakra-ui/react';
 import { VscGear } from 'react-icons/vsc';
 import { FiTrash2 } from 'react-icons/fi';
-import { add } from 'date-fns/esm';
+
+import { RiMore2Line } from 'react-icons/ri';
 import ContentBox from '../components/ContentBox';
 import MainViewLayout from '../components/mainViewLayout';
 import TextBox from '../components/TextBox';
 import { ALL_FORMS, CORE_FORMS, PLAYLISTS } from '../data/forms';
-import { submitVoteTest } from '../polls/tests';
-import { useOverlay } from '../contexts/OverlayContext';
+
+import { useConfirmation, useFormModal } from '../contexts/OverlayContext';
 import { createPlaylist } from '../utils/playlists';
 
-const ProposalTypes = ({ customTerms }) => {
-  const { displayFormModal, setFormModal } = useOverlay();
+const ProposalTypes = () => {
+  const { openFormModal, closeModal } = useFormModal();
+  const { openConfirmation } = useConfirmation();
   const [playlists, setPlaylists] = useState(PLAYLISTS);
   const [selectedList, setSelectedList] = useState(ALL_FORMS);
-
+  console.log(selectedList);
   const selectList = id => {
+    console.log(id);
     if (!id) return;
     if (id === 'all') {
       setSelectedList(ALL_FORMS);
@@ -29,38 +32,46 @@ const ProposalTypes = ({ customTerms }) => {
   };
 
   const handleEditPlaylist = id => {
-    displayFormModal({
-      ...CORE_FORMS.EDIT_PLAYLIST,
+    openFormModal({
+      lego: CORE_FORMS.EDIT_PLAYLIST,
       onSubmit: ({ values }) => {
         const name = values?.title;
         if (name && id) {
           setPlaylists(prevState =>
             prevState.map(list => (list.id === id ? { ...list, name } : list)),
           );
-          setFormModal(false);
+          closeModal();
         }
       },
     });
   };
-  const handleDeletePlaylist = id =>
-    setPlaylists(prevState => prevState.filter(list => list.id !== id));
+  const handleDeletePlaylist = id => {
+    openConfirmation({
+      title: 'Delete Playlist',
+      header: `Are you sure you want to delete ${selectedList?.name}?`,
+      onSubmit() {
+        setPlaylists(prevState => prevState.filter(list => list.id !== id));
+        closeModal();
+      },
+    });
+  };
 
   const handleAddPlaylist = () => {
-    displayFormModal({
-      ...CORE_FORMS.ADD_PLAYLIST,
+    openFormModal({
+      lego: CORE_FORMS.ADD_PLAYLIST,
       onSubmit: daoState => {
         const newPlaylist = createPlaylist({
           name: daoState?.values?.title,
         });
         setPlaylists(prevState => [...prevState, newPlaylist]);
-        setFormModal(false);
+        closeModal();
       },
     });
   };
 
   return (
     <MainViewLayout isDao header='Proposal Types'>
-      <Flex w='100%'>
+      <Flex w='auto'>
         <PlaylistSelector
           allForms={ALL_FORMS}
           playlists={playlists}
@@ -70,6 +81,7 @@ const ProposalTypes = ({ customTerms }) => {
           handleEditPlaylist={handleEditPlaylist}
           handleDeletePlaylist={handleDeletePlaylist}
         />
+        <ProposalList forms={selectedList?.forms} />
       </Flex>
     </MainViewLayout>
   );
@@ -87,12 +99,21 @@ const PlaylistSelector = ({
   handleAddPlaylist,
 }) => {
   return (
-    <ContentBox p='0' minW='250px' maxW='400px' w='100%' border='none' mb={6}>
+    <ContentBox
+      p='0'
+      minW='250px'
+      maxW='400px'
+      w='100%'
+      border='none'
+      mb={6}
+      mr={12}
+      height='fit-content'
+    >
       <Flex flexDir='column'>
         <PlaylistItem
           {...allForms}
           selectList={selectList}
-          isSelected={selectedList?.value === 'all'}
+          isSelected={selectedList?.id === 'all'}
           isMutable={false}
         />
         <TextBox ml={6} my={6}>
@@ -193,5 +214,40 @@ const PlaylistItem = ({
         </Flex>
       )}
     </Flex>
+  );
+};
+
+const ProposalList = ({ forms }) => {
+  console.log(`forms`, forms);
+  return (
+    <Flex flexDir='column' w='60%'>
+      {forms?.map(form => (
+        <ProposalListItem {...form} key={form.id} />
+      ))}
+    </Flex>
+  );
+};
+
+const ProposalListItem = ({ title, description }) => {
+  return (
+    <ContentBox mb={4} maxW='1200px' minW='250px'>
+      <Flex justifyContent='space-between'>
+        {/* <Image h='70px' minW='70px' mb={6} /> */}
+        <Box>
+          <TextBox mb={2}>{title}</TextBox>
+          <Box fontFamily='body' size='sm' color='whiteAlpha.800'>
+            {description}
+          </Box>
+        </Box>
+        <Icon
+          as={RiMore2Line}
+          color='white'
+          w='20px'
+          h='20px'
+          cursor='pointer'
+          // onClick={handleClickDelete}
+        />
+      </Flex>
+    </ContentBox>
   );
 };

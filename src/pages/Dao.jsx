@@ -5,7 +5,7 @@ import DaoRouter from '../routers/daoRouter';
 import DaoAccountModal from '../modals/daoAccountModal';
 import { DaoProvider } from '../contexts/DaoContext';
 import ProposalSelector from '../modals/proposalSelector';
-import FormModal from '../modals/proposalModal';
+import DaoModal from '../modals/daoModal';
 
 const Dao = () => {
   const { daoid } = useParams();
@@ -13,7 +13,7 @@ const Dao = () => {
     <>
       <DaoAccountModal />
       <ProposalSelector />
-      <FormModal />
+      <DaoModal />
     </>
   );
 

@@ -10,25 +10,21 @@ import {
   Flex,
   Select,
   Divider,
-  Icon,
 } from '@chakra-ui/react';
 
 import { rgba } from 'polished';
-import { VscGear } from 'react-icons/vsc';
+
 import { Link as RouterLink, useParams } from 'react-router-dom';
 
-import { useOverlay } from '../contexts/OverlayContext';
+import { useFormModal, useOverlay } from '../contexts/OverlayContext';
 import { useCustomTheme } from '../contexts/CustomThemeContext';
 import TextBox from '../components/TextBox';
 
 import { FORM, COMMON_FORMS, PLAYLISTS } from '../data/forms';
 
 const ProposalSelector = () => {
-  const {
-    proposalSelector,
-    setProposalSelector,
-    displayFormModal,
-  } = useOverlay();
+  const { proposalSelector, setProposalSelector } = useOverlay();
+  const { openFormModal } = useFormModal();
   const { theme } = useCustomTheme();
 
   const [currentPlaylist, setCurrentPlaylists] = useState(COMMON_FORMS);
@@ -42,12 +38,12 @@ const ProposalSelector = () => {
     if (!currentPlaylist) return;
     const selectedForm = FORM[id];
     handleClose();
-    displayFormModal(selectedForm);
+    openFormModal({ lego: selectedForm });
   };
 
-  const selectPlaylist = value => {
-    if (!value) return;
-    setCurrentPlaylists(PLAYLISTS.find(list => list.value === value));
+  const selectPlaylist = id => {
+    if (!id) return;
+    setCurrentPlaylists(PLAYLISTS.find(list => list.id === id));
   };
 
   return (
@@ -76,18 +72,18 @@ const ProposalSelector = () => {
             </TextBox>
           </Flex>
         </ModalHeader>
-        <PlaylistSelect
-          sets={PLAYLISTS}
-          selectPlaylist={selectPlaylist}
-          handleClose={handleClose}
-        />
-        <ModalCloseButton color='white' />
         <ModalBody
           flexDirection='column'
           display='flex'
           maxH='650px'
           overflowY='auto'
         >
+          <PlaylistSelect
+            sets={PLAYLISTS}
+            selectPlaylist={selectPlaylist}
+            handleClose={handleClose}
+          />
+          <ModalCloseButton color='white' />
           {currentPlaylist?.forms?.map(form => (
             <ProposalOption
               form={form}
@@ -107,20 +103,13 @@ const PlaylistSelect = ({ sets, selectPlaylist, handleClose }) => {
   const { daochain, daoid } = useParams();
   const handleChange = e => {
     if (!e?.target?.value) return;
-    const { value } = e.target;
-    selectPlaylist(value);
+    selectPlaylist(e.target.value);
   };
   return (
     <Flex>
-      <Select
-        mb={8}
-        ml={4}
-        width='60%'
-        onChange={handleChange}
-        fontFamily='accessory'
-      >
+      <Select mb={8} width='60%' onChange={handleChange} fontFamily='accessory'>
         {sets.map(set => (
-          <option key={set.value} value={set.value}>
+          <option key={set.value} value={set.id}>
             {set.name}
           </option>
         ))}
