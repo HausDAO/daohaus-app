@@ -1,10 +1,24 @@
 import React, { useState } from 'react';
 
-import { Box, Icon, Flex, Button } from '@chakra-ui/react';
+import {
+  Box,
+  Icon,
+  Flex,
+  Button,
+  MenuIcon,
+  MenuList,
+  useMenuList,
+  Menu,
+  MenuItem,
+  MenuButton,
+  MenuOptionGroup,
+  MenuItemOption,
+} from '@chakra-ui/react';
 import { VscGear } from 'react-icons/vsc';
 import { FiTrash2 } from 'react-icons/fi';
 
 import { RiMore2Line } from 'react-icons/ri';
+import { HiPencil } from 'react-icons/hi';
 import ContentBox from '../components/ContentBox';
 import MainViewLayout from '../components/mainViewLayout';
 import TextBox from '../components/TextBox';
@@ -81,7 +95,7 @@ const ProposalTypes = () => {
           handleEditPlaylist={handleEditPlaylist}
           handleDeletePlaylist={handleDeletePlaylist}
         />
-        <ProposalList forms={selectedList?.forms} />
+        <ProposalList forms={selectedList?.forms} playlists={playlists} />
       </Flex>
     </MainViewLayout>
   );
@@ -217,18 +231,17 @@ const PlaylistItem = ({
   );
 };
 
-const ProposalList = ({ forms }) => {
-  console.log(`forms`, forms);
+const ProposalList = ({ forms, playlists }) => {
   return (
     <Flex flexDir='column' w='60%'>
       {forms?.map(form => (
-        <ProposalListItem {...form} key={form.id} />
+        <ProposalListItem {...form} key={form.id} playlists={playlists} />
       ))}
     </Flex>
   );
 };
 
-const ProposalListItem = ({ title, description }) => {
+const ProposalListItem = ({ title, description, playlists }) => {
   return (
     <ContentBox mb={4} maxW='1200px' minW='250px'>
       <Flex justifyContent='space-between'>
@@ -239,14 +252,28 @@ const ProposalListItem = ({ title, description }) => {
             {description}
           </Box>
         </Box>
-        <Icon
-          as={RiMore2Line}
-          color='white'
-          w='20px'
-          h='20px'
-          cursor='pointer'
-          // onClick={handleClickDelete}
-        />
+        <Menu>
+          <MenuButton alignItems='start'>
+            <Icon
+              as={RiMore2Line}
+              color='white'
+              w='20px'
+              h='20px'
+              cursor='pointer'
+            />
+          </MenuButton>
+          <MenuList p={4}>
+            <MenuItem icon={<Icon w='20px' h='20px' as={HiPencil} />}>
+              Edit Proposal Details
+            </MenuItem>
+            <TextBox size='xs' p={3}>
+              Add/Remove From Playlist
+            </TextBox>
+            {playlists?.map(list => (
+              <MenuItemOption key={list.id}>{list.name}</MenuItemOption>
+            ))}
+          </MenuList>
+        </Menu>
       </Flex>
     </ContentBox>
   );
