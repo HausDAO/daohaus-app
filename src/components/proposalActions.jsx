@@ -280,8 +280,10 @@ const ProposalVote = ({
                     Cancel
                   </Button>
                 )}
-              {proposal?.proposer === address?.toLowerCase() &&
-                proposal?.minionAddress && <MinionCancel proposal={proposal} />}
+              {proposal?.minionAddress &&
+                proposal?.proposer === proposal?.minionAddress && (
+                  <MinionCancel proposal={proposal} />
+                )}
             </Flex>
           </Flex>
         )}
