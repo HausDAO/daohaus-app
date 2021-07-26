@@ -70,8 +70,6 @@ const Treasury = ({
     }
   }, [currentDaoTokens, daoMember, delegate]);
 
-  console.log('currentDaoTokens', currentDaoTokens);
-
   return (
     <MainViewLayout
       header='Treasury'
