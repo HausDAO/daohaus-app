@@ -16,13 +16,16 @@ const BalanceList = ({
   isTreasury,
 }) => {
   const balanceListTitle = useMemo(() => {
-    if (isNativeToken) {
-      return 'Network Token Balance';
+    if (vault) {
+      if (isNativeToken) {
+        return 'Network Token Balance';
+      }
+      if (vault.type === 'treasury') {
+        return 'Whitelisted Token Balances';
+      }
+      return 'ERC20 Token Balances';
     }
-    if (vault.type === 'treasury') {
-      return 'Whitelisted Token Balances';
-    }
-    return 'ERC20 Token Balances';
+    return null;
   }, [isNativeToken, vault]);
 
   return (
