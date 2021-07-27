@@ -125,7 +125,8 @@ export const filterObject = (object, callback) => {
   }
   return newObj;
 };
-export const getObjectLength = object => Object.keys(object).length;
+export const getObjectLength = object =>
+  object ? Object.keys(object).length : 0;
 export const isObjectEmpty = object => getObjectLength(object) === 0;
 
 export const numberWithCommas = num => {

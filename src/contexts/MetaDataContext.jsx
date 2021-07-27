@@ -4,11 +4,14 @@ import React, {
   createContext,
   useEffect,
   useRef,
+  useReducer,
 } from 'react';
 
 import { useParams } from 'react-router-dom';
+import { proposalConfigReducer } from '../reducers/proposalConfig';
 import { daosquareCcoTheme } from '../themes/defaultTheme';
 import { fetchMetaData } from '../utils/metadata';
+import { generatePlaylists } from '../utils/playlists';
 
 import { useCustomTheme } from './CustomThemeContext';
 import { useUser } from './UserContext';
@@ -22,6 +25,10 @@ export const MetaDataProvider = ({ children }) => {
 
   const [customTerms, setCustomTerms] = useState(null);
   const [daoMetaData, setDaoMetaData] = useState(null);
+  const [daoProposals, dispatchPropConfig] = useReducer(
+    proposalConfigReducer,
+    null,
+  );
 
   const hasFetchedMetadata = useRef(false);
   const shouldUpdateTheme = useRef(true);
@@ -51,6 +58,10 @@ export const MetaDataProvider = ({ children }) => {
           setCustomTerms(daoMeta.customTerms);
         }
         setDaoMetaData(daoMeta);
+        dispatchPropConfig({
+          action: 'INIT',
+          payload: daoMeta.proposalConfig,
+        });
         shouldUpdateTheme.current = false;
       }
     }
@@ -72,6 +83,7 @@ export const MetaDataProvider = ({ children }) => {
             setCustomTerms(data.customTerms);
           }
           setDaoMetaData(data);
+          dispatchPropConfig({ action: 'INIT', payload: data.proposalConfig });
           shouldUpdateTheme.current = false;
         }
       } catch (error) {
@@ -98,6 +110,7 @@ export const MetaDataProvider = ({ children }) => {
           setCustomTerms(data.customTerms);
         }
         setDaoMetaData(data);
+        dispatchPropConfig({ action: 'INIT', payload: data.proposalConfig });
         shouldUpdateTheme.current = false;
       }
     } catch (error) {
@@ -116,6 +129,8 @@ export const MetaDataProvider = ({ children }) => {
       value={{
         daoMetaData,
         customTerms,
+        daoProposals,
+        dispatchPropConfig,
         hasFetchedMetadata,
         shouldUpdateTheme,
         refetchMetaData,
@@ -129,14 +144,18 @@ export const MetaDataProvider = ({ children }) => {
 export const useMetaData = () => {
   const {
     daoMetaData,
+    daoProposals,
     hasFetchedMetadata,
+    dispatchPropConfig,
     shouldUpdateTheme,
     customTerms,
     refetchMetaData,
   } = useContext(MetaDataContext);
   return {
     daoMetaData,
+    daoProposals,
     hasFetchedMetadata,
+    dispatchPropConfig,
     shouldUpdateTheme,
     customTerms,
     refetchMetaData,

@@ -20,18 +20,22 @@ import { useFormModal, useOverlay } from '../contexts/OverlayContext';
 import { useCustomTheme } from '../contexts/CustomThemeContext';
 import TextBox from '../components/TextBox';
 
-import { FORM, COMMON_FORMS, PLAYLISTS } from '../data/forms';
+import { FORM } from '../data/forms';
+
+const favorites = null;
+
+// PLAYLISTS.find(list => list.id === 'favorites');
 
 const ProposalSelector = () => {
   const { proposalSelector, setProposalSelector } = useOverlay();
   const { openFormModal } = useFormModal();
   const { theme } = useCustomTheme();
 
-  const [currentPlaylist, setCurrentPlaylists] = useState(COMMON_FORMS);
+  const [currentPlaylist, setCurrentPlaylists] = useState(favorites);
 
   const handleClose = () => {
     setProposalSelector(false);
-    setCurrentPlaylists(COMMON_FORMS);
+    // setCurrentPlaylists(COMMON_FORMS);
   };
 
   const selectProposal = id => {
@@ -42,8 +46,8 @@ const ProposalSelector = () => {
   };
 
   const selectPlaylist = id => {
-    if (!id) return;
-    setCurrentPlaylists(PLAYLISTS.find(list => list.id === id));
+    // if (!id) return;
+    // setCurrentPlaylists(PLAYLISTS.find(list => list.id === id));
   };
 
   return (
@@ -79,7 +83,7 @@ const ProposalSelector = () => {
           overflowY='auto'
         >
           <PlaylistSelect
-            sets={PLAYLISTS}
+            // sets={PLAYLISTS}
             selectPlaylist={selectPlaylist}
             handleClose={handleClose}
           />

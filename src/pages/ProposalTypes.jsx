@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
 import {
   Box,
@@ -13,89 +13,70 @@ import {
   MenuButton,
   MenuOptionGroup,
   MenuItemOption,
+  Spinner,
 } from '@chakra-ui/react';
 import { VscGear } from 'react-icons/vsc';
 import { FiTrash2 } from 'react-icons/fi';
 
-import { RiMore2Line } from 'react-icons/ri';
+import { RiMore2Line, RiStarFill, RiStarLine } from 'react-icons/ri';
 import { HiPencil } from 'react-icons/hi';
 import ContentBox from '../components/ContentBox';
 import MainViewLayout from '../components/mainViewLayout';
 import TextBox from '../components/TextBox';
-import { ALL_FORMS, CORE_FORMS, PLAYLISTS } from '../data/forms';
+import { CORE_FORMS, FORM } from '../data/forms';
 
 import { useConfirmation, useFormModal } from '../contexts/OverlayContext';
-import { createPlaylist } from '../utils/playlists';
+import {
+  createPlaylist,
+  defaultProposals,
+  generatePlaylists,
+} from '../utils/playlists';
+
+import { useMetaData } from '../contexts/MetaDataContext';
+import { isObjectEmpty } from '../utils/general';
+
+const getFormPlaylists = playlists =>
+  Object.keys(playlists).filter(key => playlists[key]);
+
+const applyCustomData = (playlist, customData) => playlist;
 
 const ProposalTypes = () => {
-  const { openFormModal, closeModal } = useFormModal();
-  const { openConfirmation } = useConfirmation();
-  const [playlists, setPlaylists] = useState(PLAYLISTS);
-  const [selectedList, setSelectedList] = useState(ALL_FORMS);
-  console.log(selectedList);
+  const { daoProposals } = useMetaData();
+
+  const { playlists, customData } = daoProposals || {};
+  const [selectedList, setSelectedList] = useState(defaultProposals);
+
   const selectList = id => {
-    console.log(id);
     if (!id) return;
-    if (id === 'all') {
-      setSelectedList(ALL_FORMS);
-    } else if (id === selectedList?.id) {
+    if (id === selectedList?.id) {
       setSelectedList(null);
+    } else if (id === 'all') {
+      setSelectedList(defaultProposals);
     } else {
-      setSelectedList(playlists.find(list => list.id === id));
+      setSelectedList(playlists?.find(list => list.id === id));
     }
-  };
-
-  const handleEditPlaylist = id => {
-    openFormModal({
-      lego: CORE_FORMS.EDIT_PLAYLIST,
-      onSubmit: ({ values }) => {
-        const name = values?.title;
-        if (name && id) {
-          setPlaylists(prevState =>
-            prevState.map(list => (list.id === id ? { ...list, name } : list)),
-          );
-          closeModal();
-        }
-      },
-    });
-  };
-  const handleDeletePlaylist = id => {
-    openConfirmation({
-      title: 'Delete Playlist',
-      header: `Are you sure you want to delete ${selectedList?.name}?`,
-      onSubmit() {
-        setPlaylists(prevState => prevState.filter(list => list.id !== id));
-        closeModal();
-      },
-    });
-  };
-
-  const handleAddPlaylist = () => {
-    openFormModal({
-      lego: CORE_FORMS.ADD_PLAYLIST,
-      onSubmit: daoState => {
-        const newPlaylist = createPlaylist({
-          name: daoState?.values?.title,
-        });
-        setPlaylists(prevState => [...prevState, newPlaylist]);
-        closeModal();
-      },
-    });
   };
 
   return (
     <MainViewLayout isDao header='Proposal Types'>
       <Flex w='auto'>
-        <PlaylistSelector
-          allForms={ALL_FORMS}
-          playlists={playlists}
-          selectedList={selectedList}
-          selectList={selectList}
-          handleAddPlaylist={handleAddPlaylist}
-          handleEditPlaylist={handleEditPlaylist}
-          handleDeletePlaylist={handleDeletePlaylist}
-        />
-        <ProposalList forms={selectedList?.forms} playlists={playlists} />
+        {daoProposals ? (
+          <>
+            <PlaylistSelector
+              allForms={defaultProposals}
+              playlists={playlists}
+              selectedList={selectedList}
+              selectList={selectList}
+            />
+            <ProposalList
+              forms={selectedList?.forms}
+              playlists={playlists}
+              // toggleFavorite={toggleFavorite}
+            />
+          </>
+        ) : (
+          <Spinner />
+        )}
       </Flex>
     </MainViewLayout>
   );
@@ -108,10 +89,45 @@ const PlaylistSelector = ({
   playlists,
   selectedList,
   selectList,
-  handleEditPlaylist,
-  handleDeletePlaylist,
-  handleAddPlaylist,
 }) => {
+  const { openFormModal, closeModal } = useFormModal();
+  const { openConfirmation } = useConfirmation();
+  const { dispatchPropConfig } = useMetaData();
+
+  const handleEditPlaylist = id => {
+    openFormModal({
+      lego: CORE_FORMS.EDIT_PLAYLIST,
+      onSubmit: ({ values }) => {
+        const name = values?.title;
+        if (name && id) {
+          dispatchPropConfig({ action: 'EDIT_PLAYLIST', id, name });
+          closeModal();
+        }
+      },
+    });
+  };
+
+  const handleDeletePlaylist = id => {
+    openConfirmation({
+      title: 'Delete Playlist',
+      header: `Are you sure you want to delete ${selectedList?.name}?`,
+      onSubmit() {
+        dispatchPropConfig({ action: 'DELETE_PLAYLIST', id });
+        closeModal();
+      },
+    });
+  };
+
+  const handleAddPlaylist = () => {
+    openFormModal({
+      lego: CORE_FORMS.ADD_PLAYLIST,
+      onSubmit: ({ values }) => {
+        dispatchPropConfig({ action: 'ADD_PLAYLIST', name: values.title });
+        closeModal();
+      },
+    });
+  };
+
   return (
     <ContentBox
       p='0'
@@ -133,7 +149,7 @@ const PlaylistSelector = ({
         <TextBox ml={6} my={6}>
           Playlists
         </TextBox>
-        {playlists.map(list => (
+        {playlists?.map(list => (
           <PlaylistItem
             key={list.id}
             {...list}
@@ -231,17 +247,29 @@ const PlaylistItem = ({
   );
 };
 
-const ProposalList = ({ forms, playlists }) => {
+const ProposalList = ({ forms, playlists, toggleFavorite }) => {
   return (
     <Flex flexDir='column' w='60%'>
-      {forms?.map(form => (
-        <ProposalListItem {...form} key={form.id} playlists={playlists} />
+      {forms?.map(formId => (
+        <ProposalListItem
+          {...FORM[formId]}
+          key={formId}
+          allPlaylists={playlists}
+          toggleFavorite={toggleFavorite}
+        />
       ))}
     </Flex>
   );
 };
 
-const ProposalListItem = ({ title, description, playlists }) => {
+const ProposalListItem = ({ title, description, playlists, allPlaylists }) => {
+  // const playlistList = getFormPlaylists(playlists);
+  const { openFormModal, closeModal } = useFormModal();
+
+  const handleEditProposal = () => {
+    console.log('fired');
+    openFormModal({ lego: CORE_FORMS.EDIT_PLAYLIST });
+  };
   return (
     <ContentBox mb={4} maxW='1200px' minW='250px'>
       <Flex justifyContent='space-between'>
@@ -252,28 +280,46 @@ const ProposalListItem = ({ title, description, playlists }) => {
             {description}
           </Box>
         </Box>
-        <Menu>
-          <MenuButton alignItems='start'>
+        <Flex>
+          {/* {playlistList?.length > 0 && (
             <Icon
-              as={RiMore2Line}
+              as={RiStarFill}
               color='white'
               w='20px'
               h='20px'
+              mt={1}
+              mr={3}
               cursor='pointer'
             />
-          </MenuButton>
-          <MenuList p={4}>
-            <MenuItem icon={<Icon w='20px' h='20px' as={HiPencil} />}>
-              Edit Proposal Details
-            </MenuItem>
-            <TextBox size='xs' p={3}>
-              Add/Remove From Playlist
-            </TextBox>
-            {playlists?.map(list => (
-              <MenuItemOption key={list.id}>{list.name}</MenuItemOption>
-            ))}
-          </MenuList>
-        </Menu>
+          )} */}
+          <Menu>
+            <MenuButton alignItems='start'>
+              <Icon
+                as={RiMore2Line}
+                color='white'
+                w='20px'
+                h='20px'
+                cursor='pointer'
+              />
+            </MenuButton>
+            <MenuList p={4}>
+              <MenuItem
+                onClick={handleEditProposal}
+                icon={<Icon w='20px' h='20px' as={HiPencil} />}
+              >
+                Edit Proposal Details
+              </MenuItem>
+              <TextBox size='xs' p={3}>
+                Add/Remove From Playlist
+              </TextBox>
+              {allPlaylists?.map(list => (
+                <MenuItem icon={<RiStarFill />} key={list.id}>
+                  {list.name}
+                </MenuItem>
+              ))}
+            </MenuList>
+          </Menu>
+        </Flex>
       </Flex>
     </ContentBox>
   );
