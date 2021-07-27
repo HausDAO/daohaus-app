@@ -5,6 +5,7 @@ import { FORM } from '../data/forms';
 // - daohaus marketplace
 // - example without a form modal - just fire  transaction
 // - example with a link out to platform
+// - move to config to data folder
 
 const defaultConfig = {
   platform: 'unknown',

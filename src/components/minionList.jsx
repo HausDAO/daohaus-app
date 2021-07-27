@@ -9,7 +9,7 @@ import { useDao } from '../contexts/DaoContext';
 import ContentBox from './ContentBox';
 import TextBox from './TextBox';
 import { truncateAddr } from '../utils/general';
-import { MINION_TYPES } from '../utils/proposalUtils';
+import { getVaultListData } from '../utils/vaults';
 
 const MinionList = () => {
   const { daoOverview } = useDao();
@@ -23,51 +23,51 @@ const MinionList = () => {
     }
   }, [daoOverview]);
 
-  const getMinionData = minion => {
-    if (!minion?.minionType) return 'minon';
-    switch (minion.minionType) {
-      case MINION_TYPES.SUPERFLUID:
-        return {
-          badgeColor: 'green',
-          badgeTextColor: 'white',
-          badgeName: 'SF',
-          badgeVariant: 'solid',
-          url: `/dao/${daochain}/${daoid}/settings/superfluid-minion/${minion.minionAddress}`,
-        };
-      case MINION_TYPES.UBER:
-        return {
-          badgeColor: 'purple',
-          badgeTextColor: 'white',
-          badgeName: 'UHS',
-          badgeVariant: 'solid',
-          url: `/dao/${daochain}/${daoid}/allies`,
-        };
-      case MINION_TYPES.NIFTY:
-        return {
-          badgeColor: 'orange',
-          badgeTextColor: 'white',
-          badgeName: 'NIFTY',
-          badgeVariant: 'solid',
-          url: `/dao/${daochain}/${daoid}/vaults/minion/${minion.minionAddress}`,
-        };
-      case MINION_TYPES.NEAPOLITAN:
-        return {
-          badgeColor: 'pink',
-          badgeTextColor: '#632b16',
-          badgeName: 'NEAPOLITAN',
-          badgeVariant: 'outline',
-          url: `/dao/${daochain}/${daoid}/vaults/minion/${minion.minionAddress}`,
-        };
-      default:
-        return {
-          badgeColor: 'white',
-          badgeTextColor: 'black',
-          badgeName: 'Vanilla',
-          badgeVariant: 'solid',
-          url: `/dao/${daochain}/${daoid}/vaults/minion/${minion.minionAddress}`,
-        };
-    }
-  };
+  // const getMinionData = minion => {
+  //   if (!minion?.minionType) return 'minon';
+  //   switch (minion.minionType) {
+  //     case MINION_TYPES.SUPERFLUID:
+  //       return {
+  //         badgeColor: 'green',
+  //         badgeTextColor: 'white',
+  //         badgeName: 'SF',
+  //         badgeVariant: 'solid',
+  //         url: `/dao/${daochain}/${daoid}/settings/superfluid-minion/${minion.minionAddress}`,
+  //       };
+  //     case MINION_TYPES.UBER:
+  //       return {
+  //         badgeColor: 'purple',
+  //         badgeTextColor: 'white',
+  //         badgeName: 'UHS',
+  //         badgeVariant: 'solid',
+  //         url: `/dao/${daochain}/${daoid}/allies`,
+  //       };
+  //     case MINION_TYPES.NIFTY:
+  //       return {
+  //         badgeColor: 'orange',
+  //         badgeTextColor: 'white',
+  //         badgeName: 'NIFTY',
+  //         badgeVariant: 'solid',
+  //         url: `/dao/${daochain}/${daoid}/vaults/minion/${minion.minionAddress}`,
+  //       };
+  //     case MINION_TYPES.NEAPOLITAN:
+  //       return {
+  //         badgeColor: 'pink',
+  //         badgeTextColor: '#632b16',
+  //         badgeName: 'NEAPOLITAN',
+  //         badgeVariant: 'outline',
+  //         url: `/dao/${daochain}/${daoid}/vaults/minion/${minion.minionAddress}`,
+  //       };
+  //     default:
+  //       return {
+  //         badgeColor: 'white',
+  //         badgeTextColor: 'black',
+  //         badgeName: 'Vanilla',
+  //         badgeVariant: 'solid',
+  //         url: `/dao/${daochain}/${daoid}/vaults/minion/${minion.minionAddress}`,
+  //       };
+  //   }
+  // };
 
   const copiedToast = () => {
     toast({
@@ -79,8 +79,6 @@ const MinionList = () => {
     });
   };
 
-  console.log('minions', minions);
-
   return (
     <ContentBox d='flex' flexDirection='column' position='relative'>
       <Stack spacing={3}>
@@ -91,7 +89,7 @@ const MinionList = () => {
             badgeName,
             badgeVariant,
             url,
-          } = getMinionData(minion);
+          } = getVaultListData(minion, daochain, daoid);
 
           return (
             <Flex

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import { Link as RouterLink, useParams } from 'react-router-dom';
 import { Box, Flex, Text, Badge } from '@chakra-ui/react';
 
@@ -6,11 +6,11 @@ import ContentBox from './ContentBox';
 import TextBox from './TextBox';
 import VaultCardTokenList from './vaultCardTokenList';
 import CopyButton from './copyButton';
-import { numberWithCommas } from '../utils/general';
-import { vaultUrlPart } from '../utils/vaults';
+import { capitalize, numberWithCommas } from '../utils/general';
+import { vaultUrlPart, getVaultListData } from '../utils/vaults';
 import { tallyUSDs } from '../utils/tokenValue';
 
-const VaultCard = ({ vault, currentDaoTokens, vaultConfig }) => {
+const VaultCard = ({ vault, currentDaoTokens }) => {
   const { daoid, daochain } = useParams();
 
   const bgImgUrl = vault.nfts[0]?.imageUrl;
@@ -18,6 +18,28 @@ const VaultCard = ({ vault, currentDaoTokens, vaultConfig }) => {
     vault.type === 'treasury'
       ? tallyUSDs(currentDaoTokens)
       : vault.currentBalance;
+
+  const vaultBadge = useMemo(() => {
+    if (vault.type !== 'treasury') {
+      const {
+        badgeColor,
+        badgeTextColor,
+        badgeName,
+        badgeVariant,
+      } = getVaultListData(vault, daochain, daoid);
+      return (
+        <Badge
+          ml={2}
+          variant={badgeVariant}
+          bg={badgeColor}
+          color={badgeTextColor}
+        >
+          {badgeName}
+        </Badge>
+      );
+    }
+    return null;
+  }, [vault]);
 
   return (
     <ContentBox
@@ -36,19 +58,9 @@ const VaultCard = ({ vault, currentDaoTokens, vaultConfig }) => {
       >
         <Flex direction='row'>
           <TextBox size='xs' color='whiteAlpha.900'>
-            {vaultConfig.typeDisplay}
+            {capitalize(vault.type)}
           </TextBox>
-          {vaultConfig?.badge && (
-            <Badge
-              ml={2}
-              variant=''
-              bg={vaultConfig.badge.badgeColor}
-              color={vaultConfig.badge.badgeTextColor}
-            >
-              {vaultConfig.badge.badgeName}
-            </Badge>
-          )}
-
+          {vaultBadge}
           <CopyButton text={vault.address} iconProps={{ color: 'grey' }} />
         </Flex>
         <RouterLink
@@ -72,7 +84,7 @@ const VaultCard = ({ vault, currentDaoTokens, vaultConfig }) => {
       <Flex direction='column' align='start'>
         <VaultCardTokenList tokens={vault.erc20s} />
 
-        {vaultConfig.canHoldNft && vault.nfts.length > 0 && (
+        {vault.nfts.length > 0 && (
           <Box fontSize='sm' mr={3} mt={2}>
             {vault.nfts.length} nft{vault.nfts.length > 1 ? 's' : ''}
           </Box>

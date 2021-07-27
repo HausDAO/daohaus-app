@@ -14,7 +14,6 @@ import CrossDaoInternalBalanceList from '../components/crossDaoInternalBalanceLi
 import Loading from '../components/loading';
 import { fetchMinionInternalBalances } from '../utils/theGraph';
 import { fetchNativeBalance } from '../utils/tokenExplorerApi';
-import { vaultConfigByType } from '../data/vaults';
 import { formatNativeData } from '../utils/vaults';
 
 const MinionVault = ({ overview, customTerms, daoVaults, isMember }) => {
@@ -81,7 +80,6 @@ const MinionVault = ({ overview, customTerms, daoVaults, isMember }) => {
 
       setVault({
         ...vaultMatch,
-        config: vaultConfigByType[vaultMatch.type],
       });
       setErc20Balances(erc20sWithTotalUsd);
       setInternalBalances(internalBalanceData);
@@ -127,10 +125,10 @@ const MinionVault = ({ overview, customTerms, daoVaults, isMember }) => {
               tokens={internalBalances}
               currentDaoTokens={currentDaoTokens}
             />
-            <BalanceList vaultConfig={vault.config} balances={erc20Balances} />
+            <BalanceList vault={vault} balances={erc20Balances} />
             {nativeBalance && (
               <BalanceList
-                vaultConfig={vault.config}
+                vault={vault}
                 balances={nativeBalance}
                 isNativeToken
               />
