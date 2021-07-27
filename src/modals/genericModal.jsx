@@ -7,6 +7,7 @@ import {
   ModalOverlay,
   ModalHeader,
   Box,
+  Image,
 } from '@chakra-ui/react';
 import { rgba } from 'polished';
 
@@ -57,12 +58,20 @@ const GenericModal = ({
           </Box>
         </ModalHeader>
         <ModalCloseButton />
+        {formLego?.localValues?.nftImage && (
+          <Image src={formLego?.localValues?.nftImage} />
+        )}
         <ModalBody
           flexDirection='column'
           display='flex'
           maxH='600px'
           overflow='auto'
         >
+          {formLego?.subtitle && (
+            <Box fontSize='sm' mb={6}>
+              {formLego.subtitle}
+            </Box>
+          )}
           {formLego ? <FormBuilder {...formLego} /> : children}
         </ModalBody>
       </ModalContent>

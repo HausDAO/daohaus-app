@@ -17,6 +17,7 @@ import { TXProvider } from './TXContext';
 import { DaoMemberProvider } from './DaoMemberContext';
 import { useUser } from './UserContext';
 import { UBERHAUS_DATA } from '../utils/uberhaus';
+import { putRefreshApiVault } from '../utils/metadata';
 
 export const DaoContext = createContext();
 
@@ -117,7 +118,7 @@ export const DaoProvider = ({ children }) => {
         chainID: daochain,
       },
       getSetters: [
-        { getter: 'getOverview', setter: setDaoOverview },
+        { getter: 'getOverview', setter: { setDaoOverview, setDaoVaults } },
         {
           getter: 'getActivities',
           setter: { setDaoProposals, setDaoActivities },
@@ -130,7 +131,17 @@ export const DaoProvider = ({ children }) => {
     bigGraphQuery(bigQueryOptions);
   };
 
-  // TODO: refetch vaults - either add above or a new one that can trigger a api rerun on a specific dao
+  const refreshMinionVault = async minionAddress => {
+    const { network } = supportedChains[daochain];
+    const res = await putRefreshApiVault({ network, minionAddress });
+    console.log('refresh res', res);
+  };
+
+  const refreshAllDaoVaults = async () => {
+    const { network } = supportedChains[daochain];
+    const res = await putRefreshApiVault({ network, molochAddress: daoid });
+    console.log('refresh dao res', res);
+  };
 
   useEffect(() => {
     if (apiData && daoMembers && uberMinionData) {
@@ -170,6 +181,8 @@ export const DaoProvider = ({ children }) => {
         setIsUberHaus,
         isCorrectNetwork,
         refetch,
+        refreshMinionVault,
+        refreshAllDaoVaults,
         hasPerformedBatchQuery, // Ref, not state
       }}
     >
@@ -198,6 +211,8 @@ export const useDao = () => {
     isUberHaus,
     isCorrectNetwork,
     refetch,
+    refreshMinionVault,
+    refreshAllDaoVaults,
     hasPerformedBatchQuery, // Ref, not state
   } = useContext(DaoContext);
   return {
@@ -210,6 +225,8 @@ export const useDao = () => {
     daoVaults,
     isCorrectNetwork,
     refetch,
+    refreshMinionVault,
+    refreshAllDaoVaults,
     hasPerformedBatchQuery,
   };
 };

@@ -7,7 +7,6 @@ export const USER_MEMBERSHIPS = gql`
       memberAddress
       moloch {
         id
-        title
         version
       }
     }

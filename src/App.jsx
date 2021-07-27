@@ -12,8 +12,6 @@ import DaoSwitcherModal from './modals/daoSwitcherModal';
 import TxInfoModal from './modals/TxInfoModal';
 import FourOhFour from './pages/404';
 import HubBalances from './pages/HubBalances';
-import { DaosquareContextProvider } from './contexts/DaosquareCcoContext';
-import DaosquareCco from './pages/DaosquareCco';
 
 function App() {
   const AppScopedModals = () => (
@@ -48,11 +46,6 @@ function App() {
         </Route>
         <Route exact path='/hub-balances'>
           <HubBalances />
-        </Route>
-        <Route exact path='/daosquare-incubator'>
-          <DaosquareContextProvider>
-            <DaosquareCco />
-          </DaosquareContextProvider>
         </Route>
         <Route
           path='/dao/:daochain/:daoid'

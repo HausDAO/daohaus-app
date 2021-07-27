@@ -1,3 +1,5 @@
+import Web3 from 'web3';
+
 import { detailsToJSON } from './general';
 import { valToDecimalString } from './tokenValue';
 import { safeEncodeHexFunction, getABIsnippet, getContractABI } from './abi';
@@ -5,6 +7,8 @@ import { collapse } from './formBuilder';
 import { getContractBalance, getTokenData } from './vaults';
 import { createContract } from './contract';
 import { validate } from './validation';
+import { PROPOSAL_TYPES } from './proposalUtils';
+import { TX } from '../data/contractTX';
 
 // const isSearchPath = string => string[0] === '.';
 
@@ -25,6 +29,7 @@ const searchData = (data, fields, shouldThrow = true) => {
   const newData = data[fields[0]];
   if (newData == null) {
     if (shouldThrow) {
+      console.log('searchData error', data, fields);
       throw new Error(`txHelpers => searchData()`);
     } else {
       return false;
@@ -218,7 +223,7 @@ export const getArgs = data => {
 //   });
 // };
 
-const getContractAddress = data => {
+export const getContractAddress = data => {
   const { contractAddress } = data.tx.contract;
   if (contractAddress[0] === '.') {
     const path = getPath(contractAddress);
@@ -321,12 +326,23 @@ export const fieldModifiers = Object.freeze({
   },
   addMinionVaultDecimals(fieldValue, data) {
     if (!fieldValue) return null;
+
+    if (data.formData.localValues?.tokenAddress) {
+      return getContractBalance(
+        fieldValue,
+        data.formData.localValues.tokenDecimals,
+      );
+    }
     const { daoVaults } = data.contextData;
     const { minionToken, selectedMinion } = data.values;
     return getContractBalance(
       fieldValue,
       getTokenData(daoVaults, selectedMinion, minionToken).decimals,
     );
+  },
+  addWeiDecimals(fieldValue) {
+    if (!fieldValue) return null;
+    return Web3.utils.toWei(fieldValue);
   },
 });
 
@@ -346,4 +362,14 @@ export const handleFieldModifiers = appData => {
     }
   });
   return newValues;
+};
+
+export const transactionByProposalType = proposal => {
+  if (proposal.proposalType === PROPOSAL_TYPES.MINION_UBER_DEL) {
+    return TX.UBERHAUS_MINION_EXECUTE_APPOINTMENT;
+  }
+  if (proposal.proposalType === PROPOSAL_TYPES.MINION_SUPERFLUID) {
+    return TX.SUPERFLUID_MINION_EXECUTE;
+  }
+  return TX.MINION_SIMPLE_EXECUTE;
 };

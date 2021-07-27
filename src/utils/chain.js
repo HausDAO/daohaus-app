@@ -18,17 +18,17 @@ export const supportedChains = {
     stats_graph_url:
       'https://api.thegraph.com/subgraphs/name/odyssy-automaton/daohaus-stats',
     boosts_graph_url:
-      'https://api.thegraph.com/subgraphs/name/odyssy-automaton/daohaus-transmutation',
+      'https://api.thegraph.com/subgraphs/name/odyssy-automaton/daohaus-boosts',
     minion_factory_addr: '0x88207Daf515e0da1A32399b3f92D128B1BF45294',
     moloch_factory_addr: '0x38064F40B20347d58b326E767791A6f79cdEddCe',
     dai_contract: '0x6b175474e89094c44da98b954eedeac495271d0f',
     wrapper_contract: '0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2',
-    wrap_n_zap_factory_addr: '0x',
+    wrap_n_zap_factory_addr: '0x4e521FF388c83b4c945a33984ba42Efb73Cc04e6',
     block_explorer: 'https://etherscan.io',
   },
   '0x4': {
     name: 'Ethereum Rinkeby',
-    short_name: 'rin',
+    short_name: 'rinkeby',
     nativeCurrency: 'ETH',
     network: 'rinkeby',
     network_id: 4,
@@ -65,7 +65,7 @@ export const supportedChains = {
   },
   '0x2a': {
     name: 'Ethereum Kovan',
-    short_name: 'kov',
+    short_name: 'kovan',
     nativeCurrency: 'ETH',
     network: 'kovan',
     network_id: 42,

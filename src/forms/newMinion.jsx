@@ -26,7 +26,7 @@ const NewMinionForm = ({ minionType }) => {
   const [loading, setLoading] = useState(false);
   const { daochain, daoid } = useParams();
   const { address, injectedProvider, injectedChain } = useInjectedProvider();
-  const { daoOverview, refetch } = useDao();
+  const { daoOverview, refetch, refreshAllDaoVaults } = useDao();
   const { cachePoll, resolvePoll } = useUser();
   const { errorToast, successToast } = useOverlay();
   const { handleSubmit, register } = useForm();
@@ -58,13 +58,14 @@ const NewMinionForm = ({ minionType }) => {
             resolvePoll(txHash);
             setStep(1);
           },
-          onSuccess: txHash => {
+          onSuccess: async txHash => {
             const title = values.details
               ? `${values.details} Lives!`
               : 'Minion Lives!';
             successToast({
               title,
             });
+            await refreshAllDaoVaults();
             refetch();
             resolvePoll(txHash);
             setStep('success');

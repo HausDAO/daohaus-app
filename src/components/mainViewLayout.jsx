@@ -2,19 +2,11 @@ import { Box } from '@chakra-ui/react';
 import React from 'react';
 import PageHeader from './pageHeader';
 
-const MainViewLayout = ({
-  children,
-  header,
-  headerEl,
-  customTerms,
-  isDao,
-  isDaosquare,
-}) => {
+const MainViewLayout = ({ children, header, headerEl, customTerms, isDao }) => {
   return (
     <>
       <PageHeader
         isDao={isDao}
-        isDaosquare={isDaosquare}
         header={header}
         headerEl={headerEl}
         customTerms={customTerms}

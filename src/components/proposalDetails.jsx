@@ -244,7 +244,7 @@ const MinionBox = ({ proposal, daoOverview }) => {
         label='minion'
         tooltip
         tooltipText={TIP_LABELS.MINION_PROPOSAL}
-        link={`/dao/${daochain}/${daoid}/settings/minion/${proposal.minionAddress}`}
+        link={`/dao/${daochain}/${daoid}/vaults/minion/${proposal.minionAddress}`}
         shouldFetchProfile={false}
         name={minionName}
       />
