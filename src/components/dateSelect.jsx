@@ -1,9 +1,15 @@
 import React from 'react';
 import styled from '@emotion/styled';
-import { Box } from '@chakra-ui/react';
+import { Box, Flex, Icon } from '@chakra-ui/react';
 import DatePicker from 'react-datepicker';
+import { RiArrowRightLine, RiArrowLeftLine } from 'react-icons/ri';
 
 const CustomWrapper = styled(Box)`
+  .react-datepicker {
+    display: flex;
+    flex-direction: row;
+  }
+
   input {
     width: 100%;
     transition: all 200ms;
@@ -27,6 +33,7 @@ const CustomWrapper = styled(Box)`
   }
 
   .react-datepicker-popper {
+    z-index: 3;
     padding: var(--chakra-space-1);
     margin-top: var(--chakra-space-3);
     background: var(--chakra-colors-blackAlpha-600);
@@ -35,9 +42,10 @@ const CustomWrapper = styled(Box)`
   }
 
   .react-datepicker__navigation {
+    border: solid 1px rgba(0, 0, 0, 0);
     position: relative;
     span:hover {
-      background-color: var(--chakra-colors-secondary-500);
+      border: solid 1px var(--chakra-colors-secondary-500);
       border-radius: var(--chakra-radii-md);
     }
   }
@@ -47,11 +55,9 @@ const CustomWrapper = styled(Box)`
   }
 
   .react-datepicker__navigation--next {
-    align-self: flex-end;
   }
 
   .react-datepicker__navigation--previous {
-    align-self: flex-start;
   }
 
   .react-datepicker__current-month {
@@ -64,15 +70,21 @@ const CustomWrapper = styled(Box)`
     flex-direction: row;
   }
 
+  .react-datepicker__day-names {
+    opacity: 0.6;
+  }
+
   .react-datepicker__day-name,
   .react-datepicker__day {
     width: calc(var(--chakra-fontSizes-md) * 2);
     border-radius: var(--chakra-radii-md);
     text-align: center;
+    border-width: 1px;
+    border-color: rgba(0, 0, 0, 0);
   }
 
   .react-datepicker__day:hover {
-    background-color: var(--chakra-colors-secondary-500);
+    border: solid 1px var(--chakra-colors-secondary-500);
   }
 
   .react-datepicker__day--disabled {
@@ -84,8 +96,68 @@ const CustomWrapper = styled(Box)`
     }
   }
 
-  .react-datepicker__input-time-container {
-    padding: var(--chakra-space-1);
+  .react-datepicker__day--selected {
+    background-color: var(--chakra-colors-secondary-800);
+  }
+
+  .react-datepicker__header--time {
+    padding: var(--chakra-space-2);
+  }
+
+  .react-datepicker-time__header {
+    text-align: center;
+  }
+
+  .react-datepicker__time-container {
+    padding-left: var(--chakra-space-5);
+    height: var(--chakra-sizes-3xs);
+    box-sizing: border-box;
+
+    .react-datepicker__time-box {
+      overflow-y: scroll;
+
+      &::-webkit-scrollbar {
+        display: block;
+        width: 4px;
+      }
+
+      &::-webkit-scrollbar-thumb {
+        background: var(--chakra-colors-whiteAlpha-500);
+        border-radius: 999px;
+      }
+
+      ul {
+        list-style-type: none;
+        padding: 0px;
+
+        .react-datepicker__time-list-item--selected {
+          background-color: var(--chakra-colors-secondary-800);
+        }
+
+        .react-datepicker__time-list-item--disabled {
+          opacity: 0.5;
+          &:hover {
+            border-color: rgba(0, 0, 0, 0);
+            cursor: auto;
+          }
+        }
+
+        li {
+          border-radius: var(--chakra-radii-md);
+          width: 100%;
+          padding-left: var(--chakra-space-1);
+          padding-right: var(--chakra-space-1);
+          text-align: right;
+          border: solid 1px rgba(0, 0, 0, 0);
+
+          &:hover {
+            border-color: var(--chakra-colors-secondary-500);
+            border-radius: var(--chakra-radii-md);
+            cursor: pointer;
+          }
+        }
+      }
+    }
   }
 `;
 
@@ -95,18 +167,59 @@ const DateSelect = ({
   selected,
   onChange,
   minDate,
+  minTime,
   maxDate,
+  maxTime,
   ...props
 }) => {
+  const renderHeader = ({
+    date,
+    decreaseMonth,
+    increaseMonth,
+    prevMonthButtonDisabled,
+    nextMonthButtonDisabled,
+  }) => (
+    <Flex p={2} direction='row' align='center' justify='space-between'>
+      <Icon
+        as={RiArrowLeftLine}
+        onClick={prevMonthButtonDisabled ? null : decreaseMonth}
+        opacity={prevMonthButtonDisabled ? 0.5 : 1}
+        _hover={{
+          cursor: prevMonthButtonDisabled ? null : 'pointer',
+          color: nextMonthButtonDisabled ? null : 'secondary.500',
+        }}
+      />
+      <p>
+        {date.toLocaleString('en-US', {
+          month: 'long',
+          year: 'numeric',
+        })}
+      </p>
+      <Icon
+        as={RiArrowRightLine}
+        onClick={nextMonthButtonDisabled ? null : increaseMonth}
+        opacity={nextMonthButtonDisabled ? 0.5 : 1}
+        _hover={{
+          cursor: nextMonthButtonDisabled ? null : 'pointer',
+          color: nextMonthButtonDisabled ? null : 'secondary.500',
+        }}
+      />
+    </Flex>
+  );
+
   return (
     <CustomWrapper {...props}>
       <DatePicker
         placeholderText={placeholderText}
-        showTimeInput={showTimeInput}
+        showTimeSelect
+        renderCustomHeader={renderHeader}
         selected={selected}
         onChange={onChange}
         minDate={minDate}
+        minTime={minTime}
+        dateFormat='dd/MM/yyyy h:mm aa'
         maxDate={maxDate}
+        maxTime={maxTime}
       />
     </CustomWrapper>
   );

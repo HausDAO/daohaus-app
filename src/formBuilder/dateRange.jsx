@@ -1,11 +1,23 @@
-import React, { useState } from 'react';
-import { Flex, Box, Input, Text } from '@chakra-ui/react';
+import React, { useState, useEffect } from 'react';
+import { Flex } from '@chakra-ui/react';
 import DateSelect from '../components/dateSelect';
 import FieldWrapper from './fieldWrapper';
 
-const DateRange = props => {
-  const [startDate, setStartDate] = useState();
+const DateRange = ({ maxDays }) => {
+  const today = new Date();
+  const [startDate, setStartDate] = useState(null);
   const [endDate, setEndDate] = useState();
+  const [maxDate, setMaxDate] = useState();
+
+  useEffect(() => {
+    if (!startDate) {
+      setMaxDate(null);
+    } else {
+      const newDate = new Date(startDate);
+      newDate.setDate(newDate.getDate() + maxDays);
+      setMaxDate(newDate);
+    }
+  }, [startDate]);
 
   return (
     <FieldWrapper>
@@ -16,10 +28,9 @@ const DateRange = props => {
           showTimeInput
           selected={startDate}
           onChange={date => {
-            console.log(date);
             setStartDate(date);
           }}
-          minDate={new Date()}
+          minDate={today}
         />
         <DateSelect
           width='48%'
@@ -29,6 +40,8 @@ const DateRange = props => {
           onChange={date => {
             setEndDate(date);
           }}
+          minDate={startDate}
+          maxDate={maxDate}
         />
       </Flex>
     </FieldWrapper>
