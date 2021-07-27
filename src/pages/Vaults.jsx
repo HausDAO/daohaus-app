@@ -9,7 +9,7 @@ import BankChart from '../components/bankChart';
 import VaultCard from '../components/vaultCard';
 import ListFilter from '../components/listFilter';
 import { daoConnectedAndSameChain } from '../utils/general';
-import { vaultFilterOptions, vaultConfigByType } from '../data/vaults';
+import { vaultFilterOptions } from '../utils/vaults';
 
 const Vaults = ({
   overview,
@@ -38,9 +38,7 @@ const Vaults = ({
         setChartBalances(daoVaults.flatMap(vault => vault.balanceHistory));
       } else {
         const filteredVaults = daoVaults.filter(vault => {
-          return filter.valueMatches
-            ? filter.valueMatches.includes(vault.type)
-            : vault.type === filter.value;
+          return vault.type === filter.value;
         });
         setListVaults(filteredVaults);
         setChartBalances(filteredVaults.flatMap(vault => vault.balanceHistory));
@@ -111,7 +109,6 @@ const Vaults = ({
                 key={i}
                 vault={vault}
                 currentDaoTokens={currentDaoTokens}
-                vaultConfig={vaultConfigByType[vault.type]}
               />
             );
           })}
