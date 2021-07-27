@@ -2,7 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 
 import './index.css';
-import { BrowserRouter } from 'react-router-dom';
+import { HashRouter } from 'react-router-dom';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 import { InjectedProvider } from './contexts/InjectedProviderContext';
@@ -14,13 +14,13 @@ window.onunload = () => {
 
 ReactDOM.render(
   <React.StrictMode>
-    <BrowserRouter>
+    <HashRouter>
       <CustomThemeProvider>
         <InjectedProvider>
           <App />
         </InjectedProvider>
       </CustomThemeProvider>
-    </BrowserRouter>
+    </HashRouter>
   </React.StrictMode>,
   document.getElementById('root'),
 );
