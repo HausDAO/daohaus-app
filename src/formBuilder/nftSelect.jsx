@@ -97,7 +97,7 @@ const NftSelect = ({ label, ...props }) => {
   );
 
   return (
-    <FieldWrapper {...props}>
+    <FieldWrapper>
       <Box>
         <Text mb={3}>{label}</Text>
         {selected ? (

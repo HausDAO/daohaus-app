@@ -10,11 +10,13 @@ export const FORM = {
     required: ['title', 'sharesRequested'], // Use name key from proposal type object
     tx: TX.SUBMIT_PROPOSAL,
     fields: [
-      FIELD.TITLE,
-      FIELD.SHARES_REQUEST,
-      FIELD.DESCRIPTION,
-      FIELD.TRIBUTE,
-      FIELD.LINK,
+      [
+        FIELD.TITLE,
+        FIELD.SHARES_REQUEST,
+        FIELD.DESCRIPTION,
+        FIELD.TRIBUTE,
+        FIELD.LINK,
+      ],
     ],
     additionalOptions: [
       FIELD.APPLICANT,
@@ -29,11 +31,13 @@ export const FORM = {
     required: ['title', 'applicant'], // Use name key from proposal type object
     tx: TX.SUBMIT_PROPOSAL,
     fields: [
-      FIELD.TITLE,
-      FIELD.APPLICANT,
-      FIELD.DESCRIPTION,
-      FIELD.PAYMENT_REQUEST,
-      FIELD.LINK,
+      [
+        FIELD.TITLE,
+        FIELD.APPLICANT,
+        FIELD.DESCRIPTION,
+        FIELD.PAYMENT_REQUEST,
+        FIELD.LINK,
+      ],
     ],
     additionalOptions: [
       FIELD.SHARES_REQUEST,
@@ -49,10 +53,12 @@ export const FORM = {
     required: ['title', 'tokenAddress'], // Use name key from proposal type object
     tx: TX.WHITELIST_TOKEN_PROPOSAL,
     fields: [
-      FIELD.TITLE,
-      { ...FIELD.ONLY_ERC20, name: 'tokenAddress' },
-      FIELD.LINK,
-      FIELD.DESCRIPTION,
+      [
+        FIELD.TITLE,
+        { ...FIELD.ONLY_ERC20, name: 'tokenAddress' },
+        FIELD.LINK,
+        FIELD.DESCRIPTION,
+      ],
     ],
   },
   TRADE: {
@@ -62,11 +68,13 @@ export const FORM = {
     required: ['title'],
     tx: TX.SUBMIT_PROPOSAL,
     fields: [
-      FIELD.TITLE,
-      FIELD.TRIBUTE,
-      FIELD.DESCRIPTION,
-      FIELD.PAYMENT_REQUEST,
-      FIELD.LINK,
+      [
+        FIELD.TITLE,
+        FIELD.TRIBUTE,
+        FIELD.DESCRIPTION,
+        FIELD.PAYMENT_REQUEST,
+        FIELD.LINK,
+      ],
     ],
     additionalOptions: [
       FIELD.APPLICANT,
@@ -81,21 +89,23 @@ export const FORM = {
     required: ['title', 'applicant'], // Use name key from proposal type object
     tx: TX.GUILDKICK_PROPOSAL,
     fields: [
-      FIELD.TITLE,
-      {
-        ...FIELD.APPLICANT,
-        label: 'Member to Kick',
-        info: INFO_TEXT.ADDR_KICK,
-      },
-      FIELD.DESCRIPTION,
-      FIELD.LINK,
+      [
+        FIELD.TITLE,
+        {
+          ...FIELD.APPLICANT,
+          label: 'Member to Kick',
+          info: INFO_TEXT.ADDR_KICK,
+        },
+        FIELD.DESCRIPTION,
+        FIELD.LINK,
+      ],
     ],
   },
   SIGNAL: {
     type: PROPOSAL_TYPES.SIGNAL,
     tx: TX.SUBMIT_PROPOSAL,
     required: ['title'], // Use name key from proposal type object
-    fields: [FIELD.TITLE, FIELD.DESCRIPTION, FIELD.LINK],
+    fields: [[FIELD.TITLE, FIELD.DESCRIPTION, FIELD.LINK]],
   },
   MINION: {
     title: 'Minion Proposal',
@@ -105,10 +115,12 @@ export const FORM = {
     minionType: MINION_TYPES.VANILLA,
     tx: TX.MINION_PROPOSE_ACTION,
     fields: [
-      FIELD.TITLE,
-      FIELD.MINION_SELECT,
-      FIELD.TARGET_CONTRACT,
-      FIELD.ABI_INPUT,
+      [
+        FIELD.TITLE,
+        FIELD.MINION_SELECT,
+        FIELD.TARGET_CONTRACT,
+        FIELD.ABI_INPUT,
+      ],
     ],
     additionalOptions: [
       FIELD.MINION_PAYMENT,
@@ -120,7 +132,7 @@ export const FORM = {
     layout: 'singleRow',
     required: ['delegateAddress'],
     tx: TX.UPDATE_DELEGATE,
-    fields: [FIELD.DELEGATE_ADDRESS],
+    fields: [[FIELD.DELEGATE_ADDRESS]],
   },
   LOOT_GRAB: {
     title: 'Loot Grab proposal',
@@ -128,7 +140,7 @@ export const FORM = {
     subtitle: 'Request loot with a tribute',
     required: ['tributeOffered'],
     tx: TX.LOOT_GRAB_PROPOSAL,
-    fields: [FORM_DISPLAY.LOOT_REQUEST, FIELD.TRIBUTE],
+    fields: [[FORM_DISPLAY.LOOT_REQUEST, FIELD.TRIBUTE]],
   },
   PAYROLL: {
     title: 'Payroll Proposal',
@@ -139,10 +151,12 @@ export const FORM = {
     minionType: MINION_TYPES.VANILLA,
     tx: TX.PAYROLL,
     fields: [
-      FIELD.MINION_SELECT,
-      FIELD.MINION_PAYMENT,
-      FIELD.APPLICANT,
-      FIELD.DESCRIPTION,
+      [
+        FIELD.MINION_SELECT,
+        FIELD.MINION_PAYMENT,
+        FIELD.APPLICANT,
+        FIELD.DESCRIPTION,
+      ],
     ],
   },
   MINION_SEND_NETWORK_TOKEN: {
@@ -153,7 +167,7 @@ export const FORM = {
     required: ['minionPayment', 'applicant', 'description'],
     minionType: MINION_TYPES.VANILLA,
     tx: TX.MINION_SEND_NETWORK_TOKEN,
-    fields: [FIELD.MINION_PAYMENT, FIELD.APPLICANT, FIELD.DESCRIPTION],
+    fields: [[FIELD.MINION_PAYMENT, FIELD.APPLICANT, FIELD.DESCRIPTION]],
   },
   MINION_SEND_ERC20_TOKEN: {
     title: 'ERC20 Token Transfer',
@@ -163,7 +177,7 @@ export const FORM = {
     required: ['minionPayment', 'applicant'],
     minionType: MINION_TYPES.VANILLA,
     tx: TX.MINION_SEND_ERC20_TOKEN,
-    fields: [FIELD.MINION_PAYMENT, FIELD.APPLICANT, FIELD.DESCRIPTION],
+    fields: [[FIELD.MINION_PAYMENT, FIELD.APPLICANT, FIELD.DESCRIPTION]],
   },
   SELL_NFT: {
     title: 'Sell NFT on Rarible',
@@ -171,7 +185,7 @@ export const FORM = {
     type: PROPOSAL_TYPES.SELL_NFT,
     minionType: MINION_TYPES.RARIBLE,
     tx: null,
-    fields: [FIELD.NFT_SELECT, FIELD.DATE_RANGE, FIELD.SET_PRICE],
+    fields: [[FIELD.NFT_SELECT], [FIELD.SET_PRICE, FIELD.DATE_RANGE]],
   },
   MINION_SEND_ERC721_TOKEN: {
     title: 'ERC721 Token Transfer',
@@ -181,7 +195,7 @@ export const FORM = {
     required: ['applicant'],
     minionType: MINION_TYPES.VANILLA,
     tx: TX.MINION_SEND_ERC721_TOKEN,
-    fields: [FIELD.APPLICANT, FIELD.DESCRIPTION],
+    fields: [[FIELD.APPLICANT, FIELD.DESCRIPTION]],
   },
   MINION_SELL_NIFTY: {
     title: 'Sell Nifty ERC721',
@@ -191,6 +205,6 @@ export const FORM = {
     required: ['price'],
     minionType: MINION_TYPES.VANILLA,
     tx: TX.MINION_NIFTY_SET_PRICE,
-    fields: [FIELD.NFT_PRICE, FIELD.DESCRIPTION],
+    fields: [[FIELD.NFT_PRICE, FIELD.DESCRIPTION]],
   },
 };

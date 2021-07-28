@@ -5,6 +5,7 @@ import InputSelect from './inputSelect';
 import { ModButton } from './staticElements';
 
 import { handleDecimals } from '../utils/general';
+import FieldWrapper from './fieldWrapper';
 
 const getMaxBalance = (tokenData, tokenAddress) => {
   //  Uses token select data structure
