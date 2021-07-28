@@ -21,21 +21,24 @@ import { useCustomTheme } from '../contexts/CustomThemeContext';
 import TextBox from '../components/TextBox';
 
 import { FORM } from '../data/forms';
-
-const favorites = null;
+import { useMetaData } from '../contexts/MetaDataContext';
 
 // PLAYLISTS.find(list => list.id === 'favorites');
 
 const ProposalSelector = () => {
+  const { daoProposals } = useMetaData();
   const { proposalSelector, setProposalSelector } = useOverlay();
   const { openFormModal } = useFormModal();
   const { theme } = useCustomTheme();
 
-  const [currentPlaylist, setCurrentPlaylists] = useState(favorites);
+  const { playlists, customData } = daoProposals || {};
+  const startingList = playlists?.[0];
+
+  const [currentPlaylist, setCurrentPlaylist] = useState(startingList);
 
   const handleClose = () => {
     setProposalSelector(false);
-    // setCurrentPlaylists(COMMON_FORMS);
+    setCurrentPlaylist(startingList);
   };
 
   const selectProposal = id => {
@@ -46,8 +49,8 @@ const ProposalSelector = () => {
   };
 
   const selectPlaylist = id => {
-    // if (!id) return;
-    // setCurrentPlaylists(PLAYLISTS.find(list => list.id === id));
+    if (!id || !playlists) return;
+    setCurrentPlaylist(playlists.find(list => list.id === id));
   };
 
   return (
@@ -83,15 +86,16 @@ const ProposalSelector = () => {
           overflowY='auto'
         >
           <PlaylistSelect
-            // sets={PLAYLISTS}
+            playlists={playlists}
             selectPlaylist={selectPlaylist}
             handleClose={handleClose}
           />
           <ModalCloseButton color='white' />
-          {currentPlaylist?.forms?.map(form => (
+          {currentPlaylist?.forms?.map(formId => (
             <ProposalOption
-              form={form}
-              key={form.id}
+              form={FORM[formId]}
+              customFormData={customData?.[formId]}
+              key={formId}
               selectProposal={selectProposal}
             />
           ))}
@@ -103,7 +107,7 @@ const ProposalSelector = () => {
 
 export default ProposalSelector;
 
-const PlaylistSelect = ({ sets, selectPlaylist, handleClose }) => {
+const PlaylistSelect = ({ playlists, selectPlaylist, handleClose }) => {
   const { daochain, daoid } = useParams();
   const handleChange = e => {
     if (!e?.target?.value) return;
@@ -112,9 +116,9 @@ const PlaylistSelect = ({ sets, selectPlaylist, handleClose }) => {
   return (
     <Flex>
       <Select mb={8} width='60%' onChange={handleChange} fontFamily='accessory'>
-        {sets.map(set => (
-          <option key={set.value} value={set.id}>
-            {set.name}
+        {playlists?.map(list => (
+          <option key={list.id} value={list.id}>
+            {list.name}
           </option>
         ))}
       </Select>
@@ -130,7 +134,7 @@ const PlaylistSelect = ({ sets, selectPlaylist, handleClose }) => {
   );
 };
 
-const ProposalOption = ({ form, selectProposal }) => {
+const ProposalOption = ({ form, selectProposal, customFormData }) => {
   const { title, description, id } = form;
   const handleClick = () => selectProposal(id);
   return (
@@ -146,10 +150,10 @@ const ProposalOption = ({ form, selectProposal }) => {
             mb={2}
             color='white'
           >
-            {title}
+            {customFormData?.title || title}
           </TextBox>
           <Box fontFamily='body' size='sm' mb={6} color='whiteAlpha.800'>
-            {description}
+            {customFormData?.description || description}
           </Box>
         </Box>
       </Flex>
