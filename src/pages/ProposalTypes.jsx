@@ -1,59 +1,43 @@
-import React, { useEffect, useState } from 'react';
+import React, { useMemo, useState } from 'react';
 
 import {
   Box,
   Icon,
   Flex,
   Button,
-  MenuIcon,
   MenuList,
-  useMenuList,
   Menu,
   MenuItem,
   MenuButton,
-  MenuOptionGroup,
-  MenuItemOption,
   Spinner,
 } from '@chakra-ui/react';
 import { VscGear } from 'react-icons/vsc';
 import { FiTrash2 } from 'react-icons/fi';
 
-import { RiMore2Line, RiStarFill, RiStarLine } from 'react-icons/ri';
-import { HiPencil } from 'react-icons/hi';
+import { RiMore2Line, RiStarFill } from 'react-icons/ri';
+import { HiPencil, HiRefresh } from 'react-icons/hi';
 import ContentBox from '../components/ContentBox';
 import MainViewLayout from '../components/mainViewLayout';
 import TextBox from '../components/TextBox';
 import { CORE_FORMS, FORM } from '../data/forms';
 
 import { useConfirmation, useFormModal } from '../contexts/OverlayContext';
-import {
-  createPlaylist,
-  defaultProposals,
-  generatePlaylists,
-} from '../utils/playlists';
+import { defaultProposals } from '../utils/playlists';
 
 import { useMetaData } from '../contexts/MetaDataContext';
-import { isObjectEmpty } from '../utils/general';
-
-const getFormPlaylists = playlists =>
-  Object.keys(playlists).filter(key => playlists[key]);
-
-const applyCustomData = (playlist, customData) => playlist;
 
 const ProposalTypes = () => {
   const { daoProposals } = useMetaData();
 
   const { playlists, customData } = daoProposals || {};
-  const [selectedList, setSelectedList] = useState(defaultProposals);
+  const [selectedList, setSelectedList] = useState('all');
 
   const selectList = id => {
     if (!id) return;
-    if (id === selectedList?.id) {
+    if (id === selectedList) {
       setSelectedList(null);
-    } else if (id === 'all') {
-      setSelectedList(defaultProposals);
     } else {
-      setSelectedList(playlists?.find(list => list.id === id));
+      setSelectedList(id);
     }
   };
 
@@ -71,6 +55,8 @@ const ProposalTypes = () => {
             <ProposalList
               forms={selectedList?.forms}
               playlists={playlists}
+              customData={customData}
+              selectedList={selectedList}
               // toggleFavorite={toggleFavorite}
             />
           </>
@@ -143,7 +129,7 @@ const PlaylistSelector = ({
         <PlaylistItem
           {...allForms}
           selectList={selectList}
-          isSelected={selectedList?.id === 'all'}
+          isSelected={selectedList === 'all'}
           isMutable={false}
         />
         <TextBox ml={6} my={6}>
@@ -154,7 +140,7 @@ const PlaylistSelector = ({
             key={list.id}
             {...list}
             isMutable
-            isSelected={selectedList?.id === list.id}
+            isSelected={selectedList === list.id}
             selectList={selectList}
             handleEditPlaylist={handleEditPlaylist}
             handleDeletePlaylist={handleDeletePlaylist}
@@ -207,7 +193,6 @@ const PlaylistItem = ({
         bottom='0'
         zIndex='0'
         opacity='0.7'
-        // rounded='lg'
         bg={isSelected ? 'primary.600' : 'transparent'}
         _hover={{ bg: 'primary.600' }}
       />
@@ -247,80 +232,164 @@ const PlaylistItem = ({
   );
 };
 
-const ProposalList = ({ forms, playlists, toggleFavorite }) => {
+const ProposalList = ({
+  playlists,
+  toggleFavorite,
+  customData,
+  selectedList,
+}) => {
+  const { openFormModal, closeModal } = useFormModal();
+  const { dispatchPropConfig } = useMetaData();
+
+  const forms = useMemo(() => {
+    if (!playlists || !selectedList) return [];
+    if (selectedList === 'all') {
+      return defaultProposals.forms;
+    }
+    return playlists.find(list => list.id === selectedList)?.forms;
+  }, [selectedList, playlists]);
+
+  const handleEditProposal = formId => {
+    openFormModal({
+      lego: CORE_FORMS.EDIT_PROPOSAL,
+      onSubmit: ({ values }) => {
+        dispatchPropConfig({
+          action: 'EDIT_PROPOSAL',
+          title: values.title,
+          description: values.description,
+          formId,
+        });
+        closeModal();
+      },
+    });
+  };
+  const handleRestoreProposal = formId => {
+    openFormModal({
+      lego: CORE_FORMS.EDIT_PROPOSAL,
+      onSubmit: () => {
+        dispatchPropConfig({ action: 'EDIT_PROPOSAL', formId });
+        closeModal();
+      },
+    });
+  };
+
+  const handleTogglePlaylist = (formId, listId, isListed) => {
+    dispatchPropConfig({ action: 'TOGGLE_PLAYLIST', listId, formId, isListed });
+  };
+
   return (
     <Flex flexDir='column' w='60%'>
       {forms?.map(formId => (
         <ProposalListItem
           {...FORM[formId]}
           key={formId}
-          allPlaylists={playlists}
+          customFormData={customData?.[formId]}
           toggleFavorite={toggleFavorite}
+          handleEditProposal={handleEditProposal}
+          handleRestoreProposal={handleRestoreProposal}
+          handleTogglePlaylist={handleTogglePlaylist}
+          playlists={playlists}
         />
       ))}
     </Flex>
   );
 };
 
-const ProposalListItem = ({ title, description, playlists, allPlaylists }) => {
-  // const playlistList = getFormPlaylists(playlists);
-  const { openFormModal, closeModal } = useFormModal();
-
-  const handleEditProposal = () => {
-    console.log('fired');
-    openFormModal({ lego: CORE_FORMS.EDIT_PLAYLIST });
-  };
+const ProposalListItem = ({
+  title,
+  id,
+  description,
+  customFormData,
+  handleEditProposal,
+  handleRestoreProposal,
+  handleTogglePlaylist,
+  playlists,
+}) => {
   return (
     <ContentBox mb={4} maxW='1200px' minW='250px'>
       <Flex justifyContent='space-between'>
         {/* <Image h='70px' minW='70px' mb={6} /> */}
         <Box>
-          <TextBox mb={2}>{title}</TextBox>
+          <TextBox mb={2}>{customFormData?.title || title}</TextBox>
           <Box fontFamily='body' size='sm' color='whiteAlpha.800'>
-            {description}
+            {customFormData?.description || description}
           </Box>
         </Box>
         <Flex>
-          {/* {playlistList?.length > 0 && (
-            <Icon
-              as={RiStarFill}
-              color='white'
-              w='20px'
-              h='20px'
-              mt={1}
-              mr={3}
-              cursor='pointer'
-            />
-          )} */}
-          <Menu>
-            <MenuButton alignItems='start'>
-              <Icon
-                as={RiMore2Line}
-                color='white'
-                w='20px'
-                h='20px'
-                cursor='pointer'
-              />
-            </MenuButton>
-            <MenuList p={4}>
-              <MenuItem
-                onClick={handleEditProposal}
-                icon={<Icon w='20px' h='20px' as={HiPencil} />}
-              >
-                Edit Proposal Details
-              </MenuItem>
-              <TextBox size='xs' p={3}>
-                Add/Remove From Playlist
-              </TextBox>
-              {allPlaylists?.map(list => (
-                <MenuItem icon={<RiStarFill />} key={list.id}>
-                  {list.name}
-                </MenuItem>
-              ))}
-            </MenuList>
-          </Menu>
+          <ProposalMenuList
+            handleEditProposal={handleEditProposal}
+            handleRestoreProposal={handleRestoreProposal}
+            handleTogglePlaylist={handleTogglePlaylist}
+            playlists={playlists}
+            formId={id}
+          />
         </Flex>
       </Flex>
     </ContentBox>
+  );
+};
+const ProposalMenuList = ({
+  handleEditProposal,
+  handleRestoreProposal,
+  handleTogglePlaylist,
+  formId,
+  playlists,
+}) => {
+  const formCentricPlaylistData = useMemo(() => {
+    if (playlists) {
+      return playlists?.map(list => ({
+        ...list,
+        isListed: list.forms.some(form => form === formId),
+      }));
+    }
+  }, [playlists]);
+  const handleClickEdit = () => handleEditProposal(formId);
+  const handleClickReset = () => handleRestoreProposal(formId);
+  const handleClickToggle = e => {
+    if (!e?.target?.value) return;
+    const selectedList = formCentricPlaylistData.find(
+      list => list.id === e.target.value,
+    );
+    handleTogglePlaylist(formId, selectedList.id, selectedList.isListed);
+  };
+  return (
+    <Menu isLazy>
+      <MenuButton alignItems='start'>
+        <Icon
+          as={RiMore2Line}
+          color='white'
+          w='20px'
+          h='20px'
+          cursor='pointer'
+        />
+      </MenuButton>
+      <MenuList p={4}>
+        <MenuItem
+          onClick={handleClickEdit}
+          icon={<Icon w='20px' h='20px' as={HiPencil} />}
+        >
+          Edit Proposal Details
+        </MenuItem>
+        <MenuItem
+          onClick={handleClickReset}
+          icon={<Icon w='20px' h='20px' as={HiRefresh} />}
+        >
+          Reset Proposal Details
+        </MenuItem>
+        <TextBox size='xs' p={3}>
+          Add/Remove From Playlist
+        </TextBox>
+        {formCentricPlaylistData?.map(list => (
+          <MenuItem
+            key={list.id}
+            icon={list.isListed ? <RiStarFill /> : <RiStarFill opacity={0} />}
+            onClick={handleClickToggle}
+            value={list.id}
+          >
+            {list.name}
+          </MenuItem>
+        ))}
+      </MenuList>
+    </Menu>
   );
 };

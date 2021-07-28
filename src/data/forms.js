@@ -39,6 +39,25 @@ export const CORE_FORMS = {
     tx: TX.UPDATE_DELEGATE,
     fields: [FIELD.DELEGATE_ADDRESS],
   },
+  EDIT_PROPOSAL: {
+    id: 'EDIT_PROPOSAL',
+    title: 'Edit Proposal',
+    layout: 'singleColumn',
+    type: PROPOSAL_TYPES.CORE,
+    required: ['title', 'description'],
+    fields: [
+      {
+        ...FIELD.TITLE,
+        helperText: 'Max 30 characters',
+        placeholder: 'Proposal Title',
+      },
+      {
+        ...FIELD.DESCRIPTION,
+        helperText: 'Max 100 characters',
+        placeholder: 'proposal Title',
+      },
+    ],
+  },
 };
 
 export const FORM = {

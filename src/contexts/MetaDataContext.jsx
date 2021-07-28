@@ -11,7 +11,6 @@ import { useParams } from 'react-router-dom';
 import { proposalConfigReducer } from '../reducers/proposalConfig';
 import { daosquareCcoTheme } from '../themes/defaultTheme';
 import { fetchMetaData } from '../utils/metadata';
-import { generatePlaylists } from '../utils/playlists';
 
 import { useCustomTheme } from './CustomThemeContext';
 import { useUser } from './UserContext';

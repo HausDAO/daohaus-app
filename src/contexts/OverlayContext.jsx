@@ -1,6 +1,5 @@
 import React, { createContext, useState, useContext } from 'react';
-import { Box, Flex, useToast } from '@chakra-ui/react';
-import Button from '../themes/core/button';
+import { useToast } from '@chakra-ui/react';
 
 export const OverlayContext = createContext();
 

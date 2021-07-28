@@ -46,7 +46,6 @@ const DaoModal = () => {
     isConfirmation,
     loading,
   } = modal;
-  const topLabel = lego?.title || title;
 
   const handleClose = () => setModal(false);
 

@@ -1,3 +1,4 @@
+import { FORM } from '../data/forms';
 import { createPlaylist } from '../utils/playlists';
 
 const DEFAULT_PLAYLISTS = [
@@ -39,10 +40,45 @@ const handleDeletePlaylist = (state, params) => {
   return { ...state, playlists: newPlaylists };
 };
 
-const handleAddPlaylist = (state, params) => {
+const handleAddPlaylist = (state, params) => ({
+  ...state,
+  playlists: [...state.playlists, createPlaylist({ name: params.name })],
+});
+
+const handleAddCustomData = (state, params) => ({
+  ...state,
+  customData: {
+    ...state.customData,
+    [params.formId]: { title: params.title, description: params.description },
+  },
+});
+
+const handleRemoveCustomData = (state, params) => ({
+  ...state,
+  customData: {
+    ...state.customData,
+    [params.formId]: null,
+  },
+});
+const handleAddToPlaylist = (state, params) => {
+  console.log(params);
+  console.log(state);
+  const newPlaylists = state.playlists.map(list => {
+    console.log(`list`, list);
+    if (list.id === params.listId) {
+      return {
+        ...list,
+        forms: params?.isListed
+          ? list.forms.filter(formId => formId !== params.formId)
+          : [...list.forms, params.formId],
+      };
+    }
+    return list;
+  });
+  console.log(`newPlaylists`, newPlaylists);
   return {
     ...state,
-    playlists: [...state.playlists, createPlaylist({ name: params.name })],
+    playlists: newPlaylists,
   };
 };
 
@@ -54,4 +90,8 @@ export const proposalConfigReducer = (state, params) => {
   if (action === 'EDIT_PLAYLIST') return handleEditPlaylist(state, params);
   if (action === 'DELETE_PLAYLIST') return handleDeletePlaylist(state, params);
   if (action === 'ADD_PLAYLIST') return handleAddPlaylist(state, params);
+  if (action === 'EDIT_PROPOSAL') return handleAddCustomData(state, params);
+  if (action === 'RESTORE_PROPOSAL')
+    return handleRemoveCustomData(state, params);
+  if (action === 'TOGGLE_PLAYLIST') return handleAddToPlaylist(state, params);
 };
