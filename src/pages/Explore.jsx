@@ -1,14 +1,22 @@
-import React, { useState, useContext } from 'react';
+import React, { useEffect, useState, useContext } from 'react';
 import ExploreFilters from '../components/exploreFilters';
 import ExploreList from '../components/exploreList';
 import Layout from '../components/layout';
 import Loading from '../components/loading';
+import { CustomThemeContext } from '../contexts/CustomThemeContext';
 import { ExploreContext } from '../contexts/ExploreContext';
 import MainViewLayout from '../components/mainViewLayout';
 
 const Explore = () => {
+  const { theme, resetTheme } = useContext(CustomThemeContext);
   const { hasLoadedExploreData } = useContext(ExploreContext);
   const [daoCount, setDaoCount] = useState(0);
+
+  useEffect(() => {
+    if (theme.active) {
+      resetTheme();
+    }
+  }, [theme, resetTheme]);
 
   return (
     <Layout>
