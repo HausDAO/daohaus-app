@@ -3,13 +3,13 @@ import { useParams, Link } from 'react-router-dom';
 import { Box, Button, Flex } from '@chakra-ui/react';
 import { RiAddFill } from 'react-icons/ri';
 
-import BankChart from '../components/bankChart';
-import MainViewLayout from '../components/mainViewLayout';
 import { useInjectedProvider } from '../contexts/InjectedProviderContext';
-import { daoConnectedAndSameChain } from '../utils/general';
+import MainViewLayout from '../components/mainViewLayout';
+import BankChart from '../components/bankChart';
 import VaultCard from '../components/vaultCard';
 import ListFilter from '../components/listFilter';
-import { vaultFilterOptions, vaultConfigByType } from '../data/vaults';
+import { daoConnectedAndSameChain } from '../utils/general';
+import { vaultFilterOptions } from '../utils/vaults';
 
 const Vaults = ({
   overview,
@@ -38,9 +38,7 @@ const Vaults = ({
         setChartBalances(daoVaults.flatMap(vault => vault.balanceHistory));
       } else {
         const filteredVaults = daoVaults.filter(vault => {
-          return filter.valueMatches
-            ? filter.valueMatches.includes(vault.type)
-            : vault.type === filter.value;
+          return vault.type === filter.value;
         });
         setListVaults(filteredVaults);
         setChartBalances(filteredVaults.flatMap(vault => vault.balanceHistory));
@@ -111,7 +109,6 @@ const Vaults = ({
                 key={i}
                 vault={vault}
                 currentDaoTokens={currentDaoTokens}
-                vaultConfig={vaultConfigByType[vault.type]}
               />
             );
           })}

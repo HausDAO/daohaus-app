@@ -1,15 +1,15 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
-import { Button, Flex, useToast } from '@chakra-ui/react';
+import { Button, Flex, Icon, useToast } from '@chakra-ui/react';
 import { RiAddFill } from 'react-icons/ri';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
 
+import { BiArrowBack } from 'react-icons/bi';
 import { useInjectedProvider } from '../contexts/InjectedProviderContext';
 import BalanceList from '../components/balanceList';
 import BankChart from '../components/bankChart';
 import MainViewLayout from '../components/mainViewLayout';
 import { daoConnectedAndSameChain } from '../utils/general';
-import { VAULT } from '../data/vaults';
 
 const Treasury = ({
   overview,
@@ -25,7 +25,6 @@ const Treasury = ({
   const [needsSync, setNeedsSync] = useState(false);
 
   const treasuryVaultData = daoVaults?.find(vault => vault.type === 'treasury');
-  const vaultConfig = VAULT.TREASURY;
 
   const handleCopy = () => {
     toast({
@@ -76,6 +75,15 @@ const Treasury = ({
       headerEl={ctaButton}
       isDao
     >
+      <Flex
+        as={Link}
+        to={`/dao/${daochain}/${daoid}/vaults`}
+        align='center'
+        mb={3}
+      >
+        <Icon as={BiArrowBack} color='secondary.500' mr={2} />
+        All Vaults
+      </Flex>
       <BankChart
         overview={overview}
         customTerms={customTerms}
@@ -84,9 +92,10 @@ const Treasury = ({
         visibleVaults={[treasuryVaultData]}
       />
       <BalanceList
-        vaultConfig={vaultConfig}
+        vault={treasuryVaultData}
         balances={currentDaoTokens}
         needsSync={needsSync}
+        isTreasury
       />
     </MainViewLayout>
   );

@@ -1,5 +1,7 @@
 import { ethers } from 'ethers';
+import { supportedChains } from './chain';
 import { isSameAddress } from './general';
+import { MINION_TYPES } from './proposalUtils';
 
 export const getReadableBalance = tokenData => {
   if (tokenData?.balance && tokenData.decimals) {
@@ -65,4 +67,82 @@ export const getCurrentPrices = vaults => {
     });
     return priceMap;
   }, {});
+};
+
+export const formatNativeData = (daochain, balance) => {
+  return [
+    {
+      isNative: true,
+      totalUSD: 0,
+      usd: 0,
+      id: daochain,
+      logoUri: '',
+      tokenAddress: daochain,
+      tokenBalance: balance,
+      decimals: '18',
+      tokenName: supportedChains[daochain].nativeCurrency,
+      symbol: supportedChains[daochain].nativeCurrency,
+    },
+  ];
+};
+
+export const vaultFilterOptions = [
+  {
+    name: 'All Vaults',
+    value: 'all',
+  },
+  {
+    name: 'Treasury',
+    value: 'treasury',
+  },
+  {
+    name: 'Minion',
+    value: 'minion',
+  },
+];
+
+export const getVaultListData = (minion, daochain, daoid) => {
+  if (!minion?.minionType) return 'minon';
+  switch (minion.minionType) {
+    case MINION_TYPES.SUPERFLUID:
+      return {
+        badgeColor: 'green',
+        badgeTextColor: 'white',
+        badgeName: 'SF',
+        badgeVariant: 'solid',
+        url: `/dao/${daochain}/${daoid}/settings/superfluid-minion/${minion.minionAddress}`,
+      };
+    case MINION_TYPES.UBER:
+      return {
+        badgeColor: 'purple',
+        badgeTextColor: 'white',
+        badgeName: 'UHS',
+        badgeVariant: 'solid',
+        url: `/dao/${daochain}/${daoid}/allies`,
+      };
+    case MINION_TYPES.NIFTY:
+      return {
+        badgeColor: 'orange',
+        badgeTextColor: 'white',
+        badgeName: 'NIFTY',
+        badgeVariant: 'solid',
+        url: `/dao/${daochain}/${daoid}/vaults/minion/${minion.minionAddress}`,
+      };
+    case MINION_TYPES.NEAPOLITAN:
+      return {
+        badgeColor: 'pink',
+        badgeTextColor: '#632b16',
+        badgeName: 'NEAPOLITAN',
+        badgeVariant: 'outline',
+        url: `/dao/${daochain}/${daoid}/vaults/minion/${minion.minionAddress}`,
+      };
+    default:
+      return {
+        badgeColor: 'white',
+        badgeTextColor: 'black',
+        badgeName: 'Vanilla',
+        badgeVariant: 'solid',
+        url: `/dao/${daochain}/${daoid}/vaults/minion/${minion.minionAddress}`,
+      };
+  }
 };

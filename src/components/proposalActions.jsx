@@ -221,7 +221,9 @@ const ProposalVote = ({
                     <Tooltip
                       shouldWrapChildren
                       placement='bottom'
-                      label={`Insufficient Funds: You only have ${daoMember?.depositTokenBalance} ${overview?.depositToken?.symbol}`}
+                      label={`Insufficient Funds: You only have ${Number(
+                        daoMember?.depositTokenBalance,
+                      )?.toFixed(3)} ${overview?.depositToken?.symbol}`}
                     >
                       <Icon
                         color='red.500'
@@ -278,8 +280,10 @@ const ProposalVote = ({
                     Cancel
                   </Button>
                 )}
-              {proposal?.proposer === address?.toLowerCase() &&
-                proposal?.minionAddress && <MinionCancel proposal={proposal} />}
+              {proposal?.minionAddress &&
+                proposal?.proposer === proposal?.minionAddress && (
+                  <MinionCancel proposal={proposal} />
+                )}
             </Flex>
           </Flex>
         )}

@@ -5,12 +5,12 @@ import { Flex, Box, Skeleton, Button, Avatar } from '@chakra-ui/react';
 import makeBlockie from 'ethereum-blockies-base64';
 import { useMetaData } from '../contexts/MetaDataContext';
 import { getTerm, getTitle, themeImagePath } from '../utils/metadata';
-import BankTotal from './bankTotal';
 import TextBox from './TextBox';
 import ContentBox from './ContentBox';
 import { getActiveMembers } from '../utils/dao';
+import VaultTotal from './vaultTotal';
 
-const OverviewCard = ({ daoOverview, members, currentDaoTokens }) => {
+const OverviewCard = ({ daoOverview, members, daoVaults }) => {
   const { daochain, daoid } = useParams();
   const { daoMetaData, customTerms } = useMetaData();
   const [activeMembers, setActiveMembers] = useState(null);
@@ -82,10 +82,14 @@ const OverviewCard = ({ daoOverview, members, currentDaoTokens }) => {
           </Box>
         </Flex>
         <Box mt={6}>
-          <TextBox size='sm' title={getTitle(customTerms, 'Bank')}>
-            {getTerm(customTerms, 'bank')}
-          </TextBox>
-          <BankTotal tokenBalances={currentDaoTokens} />
+          {daoVaults && (
+            <>
+              <TextBox size='sm' title={getTitle(customTerms, 'Bank')}>
+                {getTerm(customTerms, 'vault total')}
+              </TextBox>
+              <VaultTotal vaults={daoVaults} />
+            </>
+          )}
         </Box>
         <Flex mt={6}>
           <Button

@@ -9,17 +9,21 @@ import { useInjectedProvider } from '../contexts/InjectedProviderContext';
 import MinionInternalBalanceActionMenu from './minionInternalBalanceActionMenu';
 import { daoConnectedAndSameChain } from '../utils/general';
 import { chainByName } from '../utils/chain';
-import { TX } from '../data/contractTX';
 import { displayBalance } from '../utils/tokenValue';
+import { TX } from '../data/contractTX';
+import { useDao } from '../contexts/DaoContext';
 
 const CrossDaoInternalBalanceListCard = ({ token, currentDaoTokens }) => {
   const { minion, daochain } = useParams();
   const { address, injectedChain } = useInjectedProvider();
+  const { refreshMinionVault } = useDao();
 
-  // TODO: this is not great. maybe make 2 different components for in/outside daos
-  const { submitTransaction } = daochain
+  // TODO: refactor so we're not hijacking the context.
+  // - maybe make 2 different components for in/outside daos
+  // - note: the tx is not used outside of the dao context right now
+  const { submitTransaction, refreshDao } = daochain
     ? useTX()
-    : { submitTransaction: null };
+    : { submitTransaction: null, refreshDao: null };
   const { isMember } = daochain ? useDaoMember() : { isMember: null };
 
   const [tokenWhitelisted, setTokenWhitelisted] = useState();
@@ -53,7 +57,11 @@ const CrossDaoInternalBalanceListCard = ({ token, currentDaoTokens }) => {
       },
     });
 
-    // TODO: handle the after effects - refresh dao
+    if (!options.transfer) {
+      await refreshMinionVault(minion);
+      refreshDao();
+    }
+
     setLoading(false);
   };
 
@@ -77,7 +85,7 @@ const CrossDaoInternalBalanceListCard = ({ token, currentDaoTokens }) => {
         </Flex>
       </Box>
 
-      <Box w={['25%', null, null, '25%']}>
+      <Box w={['40%', null, null, '25%']}>
         <Skeleton isLoaded={token.tokenBalance}>
           <Box fontFamily='mono'>
             {token.tokenBalance ? (

@@ -36,10 +36,15 @@ export const CONTRACTS = {
     abiName: 'ERC_721',
     contractAddress: '.localValues.contractAddress',
   },
-  LOCAL_VANILLA_MINION: {
+  LOCAL_VANILLA_MINION_FORM: {
     location: 'local',
     abiName: 'VANILLA_MINION',
     contractAddress: '.formData.localValues.minionAddress',
+  },
+  LOCAL_VANILLA_MINION: {
+    location: 'local',
+    abiName: 'VANILLA_MINION',
+    contractAddress: '.localValues.minionAddress',
   },
   LOCAL_ERC_20: {
     location: 'local',
@@ -320,7 +325,7 @@ export const TX = {
     ],
   },
   MINION_SEND_ERC20_TOKEN: {
-    contract: CONTRACTS.LOCAL_VANILLA_MINION,
+    contract: CONTRACTS.LOCAL_VANILLA_MINION_FORM,
     name: 'proposeAction',
     poll: 'subgraph',
     onTxHash: ACTIONS.GENERIC_MODAL,
@@ -343,7 +348,7 @@ export const TX = {
     ],
   },
   MINION_WITHDRAW: {
-    contract: CONTRACTS.VANILLA_MINION,
+    contract: CONTRACTS.LOCAL_VANILLA_MINION,
     name: 'crossWithdraw',
     poll: 'subgraph',
     onTxHash: ACTIONS.GENERIC_MODAL,
@@ -352,7 +357,7 @@ export const TX = {
     successMsg: 'Balance Transferred!',
   },
   MINION_SEND_NETWORK_TOKEN: {
-    contract: CONTRACTS.LOCAL_VANILLA_MINION,
+    contract: CONTRACTS.LOCAL_VANILLA_MINION_FORM,
     name: 'proposeAction',
     poll: 'subgraph',
     onTxHash: ACTIONS.GENERIC_MODAL,
@@ -370,7 +375,7 @@ export const TX = {
     ],
   },
   MINION_SEND_ERC721_TOKEN: {
-    contract: CONTRACTS.LOCAL_VANILLA_MINION,
+    contract: CONTRACTS.LOCAL_VANILLA_MINION_FORM,
     name: 'proposeAction',
     poll: 'subgraph',
     onTxHash: ACTIONS.GENERIC_MODAL,
@@ -397,7 +402,7 @@ export const TX = {
     ],
   },
   MINION_NIFTY_SET_PRICE: {
-    contract: CONTRACTS.LOCAL_VANILLA_MINION,
+    contract: CONTRACTS.LOCAL_VANILLA_MINION_FORM,
     name: 'proposeAction',
     poll: 'subgraph',
     onTxHash: ACTIONS.GENERIC_MODAL,

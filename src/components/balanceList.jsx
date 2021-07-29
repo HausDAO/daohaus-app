@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import { Flex, Text, Box } from '@chakra-ui/react';
 
 import TextBox from './TextBox';
@@ -11,24 +11,38 @@ const BalanceList = ({
   profile,
   hasBalance,
   needsSync,
-  vaultConfig,
+  vault,
   isNativeToken,
+  isTreasury,
 }) => {
+  const balanceListTitle = useMemo(() => {
+    if (vault) {
+      if (isNativeToken) {
+        return 'Network Token Balance';
+      }
+      if (vault.type === 'treasury') {
+        return 'Whitelisted Token Balances';
+      }
+      return 'ERC20 Token Balances';
+    }
+    return null;
+  }, [isNativeToken, vault]);
+
   return (
     <ContentBox mt={6}>
       <Flex justify='space-between'>
         <TextBox size='xs' mb={6}>
-          {isNativeToken
-            ? `Network Token Balance`
-            : `${vaultConfig.balanceListTitle}`}
+          {balanceListTitle}
         </TextBox>
-        <MinionVaultRefreshButton />
+        {!isNativeToken && !isTreasury && balances?.length && (
+          <MinionVaultRefreshButton />
+        )}
       </Flex>
-      <Flex>
+      <Flex w='100%'>
         <Box w='25%' d={['none', null, null, 'inline-block']}>
           <TextBox size='xs'>Asset</TextBox>
         </Box>
-        <Box w={['25%', null, null, '40%']}>
+        <Box w={['40%', null, null, '40%']}>
           <TextBox size='xs'>{profile ? 'Internal Bal.' : 'Balance'}</TextBox>
         </Box>
 
@@ -42,7 +56,7 @@ const BalanceList = ({
             </Box>
           </>
         )}
-        <Box w={['10%', null, null, '30%']} />
+        <Box w={[null, null, null, '30%']} />
       </Flex>
       {balances ? (
         balances

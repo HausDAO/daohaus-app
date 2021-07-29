@@ -38,7 +38,7 @@ const CrossDaoInternalBalanceList = ({ tokens, currentDaoTokens }) => {
               <Box w='20%' d={['none', null, null, 'inline-block']}>
                 <TextBox size='xs'>Asset</TextBox>
               </Box>
-              <Box w={['25%', null, null, '25%']}>
+              <Box w={['40%', null, null, '25%']}>
                 <TextBox size='xs'>Balance</TextBox>
               </Box>
 

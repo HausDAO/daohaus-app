@@ -31,7 +31,9 @@ export const initTokenData = async (graphTokenData, tokenPriceSetter) => {
       const { token, tokenBalance } = tokenObj;
 
       const usdVal = tokenData[token.tokenAddress]?.price || 0;
-      const symbol = tokenData[token.tokenAddress]?.symbol || null;
+      // TODO: overriding due to dupe grt found in cache job
+      const symbol = tokenData[token.tokenAddress]?.symbol || token.symbol;
+      // const symbol = tokenData[token.tokenAddress]?.symbol || null;
       const logoUri = tokenData[token.tokenAddress]?.logoURI || null;
       const tokenName = tokenData[token.tokenAddress]?.name || null;
       const tokenDataObj = {

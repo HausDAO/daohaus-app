@@ -1,11 +1,11 @@
 import { FORM } from '../data/forms';
 
-// TODO: example without a form modal - just fire  transaction
-// TODO: example with a link out to platform
-
 // NEXT STEPS:
 // - Rarible default actions - added if on mainnet?
 // - daohaus marketplace
+// - example without a form modal - just fire  transaction
+// - example with a link out to platform
+// - move to config to data folder
 
 const defaultConfig = {
   platform: 'unknown',
@@ -27,7 +27,6 @@ const nftConfig = {
     platform: 'nifty ink',
     fields: {
       creator: 'getNiftyCreator',
-      // lastPrice: null,
     },
     actions: {
       ...defaultConfig.actions,
@@ -46,16 +45,18 @@ const nftConfig = {
 export const attributeModifiers = Object.freeze({
   getNiftyCreator(nft) {
     const { description } = nft.metadata;
+    if (!description) {
+      return null;
+    }
     return description.split(' ')[4];
   },
 });
 
 export const hydrateNftCard = nft => {
   const config = nftConfig[nft.contractAddress] || defaultConfig;
-
   // TODO: need a better way to get passed in values if it's deeper than 1 level on nft object
   // - maybe searchTerm like in tx gather args?
-  // - also now adding one from the component so this is hard to reason about
+  // - also now adding one from the component so this is a little hard to reason about
   const hydratedActions = Object.keys(config.actions).map(key => {
     const action = config.actions[key];
     const localValues =
